@@ -63,7 +63,10 @@ def seated_parts(s: Settlement) -> list[tuple[Poly, Pt | None, str]]:
     kind): each household's house, threshing yard, beds, well, shed, byre and fixtures from its seated geometry (a persimmon
     by its trunk), and its wood seats as octagons of the reach a lane keeps off them (`seat_walls`).
 
-    Research: nothing built on a lane - research/questions/0081-village-lanes.drawing.html: the track out keeps off every homestead's house, yard, beds, well, sheds and fixtures as they will be drawn"""
+    Research:
+        nothing built on a lane - research/questions/0081-village-lanes.drawing.html: the track out keeps off every homestead's house, yard, beds, well, sheds and fixtures as they will be drawn
+        the track off the wood seats - UNRESEARCHED: each seat an octagon of the reach a lane keeps off it (`seat_walls`)
+        a persimmon by its trunk alone - GUESS: held off by `TRUNK_FT`, the crown free to overhang the track"""
     out: list[tuple[Poly, Pt | None, str]] = []
     for h in s.M.get("houses") or []:
         boxes = (h.get("geom") or {}).get("boxes") or {}
@@ -81,18 +84,23 @@ def seated_parts(s: Settlement) -> list[tuple[Poly, Pt | None, str]]:
 
 
 def near_the_cluster(s: Settlement, track: Poly, margin: float) -> list[tuple[Pt, Pt]]:
-    """The legs of `track` within `margin` of the seated homesteads' extent, each clipped to it (`region._clip`): the stretch the
-    households' ways are laid to - the rest runs on off the map, where no way is sought, and would only widen the gap raster.
+    """The legs of `track` within `margin` of the seated homesteads' extent and the track's start, each clipped to it (`region._clip`): the stretch the
+    households' ways are laid to. The stages ask it at the gap pass's farther join reach (`gap_ways.JOIN_FAR_FT`): at the
+    raster's 160 ft margin a household's way joined the track 26 ft past the cropped frame, two paths leaving the map side by
+    side (Inashiro's glyph check, feature 320) - the frame is cropped later, about the homesteads' own extent.
 
     Research: plumbing - NONE: the search's window on the track"""
     boxes = list(getattr(s, "placed", None) or [])
     if not boxes:
         return list(zip(track, track[1:], strict=False))
+    # ...AND THE TRACK'S START, its gateway off the cluster's edge: Kuwabata's stood 51 ft off its homesteads and ran on along
+    # them, so a window of the homesteads alone held none of the track and no way could be laid
+    g = track[0] if track else (boxes[0][0], boxes[0][1])
     box = (
-        min(b[0] - b[2] / 2 for b in boxes) - margin,
-        min(b[1] - b[3] / 2 for b in boxes) - margin,
-        max(b[0] + b[2] / 2 for b in boxes) + margin,
-        max(b[1] + b[3] / 2 for b in boxes) + margin,
+        min(g[0], *(b[0] - b[2] / 2 for b in boxes)) - margin,
+        min(g[1], *(b[1] - b[3] / 2 for b in boxes)) - margin,
+        max(g[0], *(b[0] + b[2] / 2 for b in boxes)) + margin,
+        max(g[1], *(b[1] + b[3] / 2 for b in boxes)) + margin,
     )
     out = []
     for a, b in zip(track, track[1:], strict=False):

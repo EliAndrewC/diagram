@@ -71,8 +71,8 @@ def test_the_homesteads_as_seated_are_every_households_parts_and_its_wood_seats(
 
 
 def test_the_ways_are_laid_to_the_tracks_stretch_about_the_cluster() -> None:
-    """`near_the_cluster`: each leg of the track clipped to the placed boxes' extent grown by the margin; a leg wholly
-    outside, or touching it at a point, is left out; with nothing placed, every leg."""
+    """`near_the_cluster`: each leg of the track clipped to the placed boxes' extent and the track's start, grown by the
+    margin; a leg wholly outside is left out; with nothing placed, every leg."""
     s = _open()
     track = [(100.0, 100.0), (100.0, 300.0), (500.0, 300.0), (500.0, 900.0)]
     s.placed = []
@@ -80,8 +80,9 @@ def test_the_ways_are_laid_to_the_tracks_stretch_about_the_cluster() -> None:
     s.placed = [(100.0, 100.0, 40.0, 40.0), (200.0, 200.0, 20.0, 20.0)]  # extent 80..210 either way; grown by 10, 70..220
     got = hw.near_the_cluster(s, track, 10.0)
     assert got == [((100.0, 100.0), (100.0, 220.0))], "the first leg clipped; the rest beyond the extent"
-    corner = hw.near_the_cluster(s, [(230.0, 210.0), (210.0, 230.0)], 10.0)  # touches the grown extent's corner (220, 220) only
-    assert corner == [], "a leg meeting the extent at a point is no stretch"
+    # ...AND THE TRACK'S START WIDENS IT (Kuwabata: a gateway 51 ft off the homesteads, the track running on along them)
+    off = hw.near_the_cluster(s, [(100.0, 260.0), (400.0, 260.0)], 10.0)  # start 40 past the extent: the window takes it in
+    assert off == [((100.0, 260.0), (220.0, 260.0))], "the track's first stretch kept, clipped at the extent's far side"
 
 
 def test_the_track_is_chosen_with_the_homesteads_as_seated_standing_in_and_they_are_cleared_after(monkeypatch: pytest.MonkeyPatch) -> None:

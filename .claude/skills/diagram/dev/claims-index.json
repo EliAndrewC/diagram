@@ -6593,14 +6593,14 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::grow_the_margin#nearer the field breaking ties": {
-  "code": "07c01e7a532184e6",
+  "code": "ed6c2ac92782ca51",
   "core": "97ae2e753552fb72",
   "date": "2026-10-04",
-  "note": "the account names a GM ruling (2026-10-03, feature 318 amendment 3), so the label should be CANON, not UNRESEARCHED; the heap key does put field distance before distance within a ring, as claimed",
+  "note": "CANON names the GM's ruling; the heap key orders ring, then field distance, then distance, as the claim says; no cited question covers tie order",
   "pages": {},
   "research": "",
   "rests": [],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::grow_the_margin#the growth's widening": {
   "code": "d4b9a1739a5a312e",
@@ -6783,59 +6783,14 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/household_ways.py::CANVAS_INSET_PX#plumbing": {
-  "code": "a5a955385569fa47",
-  "core": "e558226d98ba699d",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/household_ways.py::TRUNK_FT#a persimmon by its trunk alone": {
+  "code": "08fb0170b22c7f89",
+  "core": "eab5cc0df856d783",
   "date": "2026-10-04",
-  "note": "",
+  "note": "the bundle is silent on a trunk's footprint",
   "pages": {},
   "research": "",
   "rests": [],
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/household_ways.py::GATE_CLEAR_FT#gate clear of the homesteads": {
-  "code": "ce835ea281ecae6e",
-  "core": "ffee4490a92ad90e",
-  "date": "2026-10-04",
-  "note": "the page gives no distance",
-  "pages": {},
-  "research": "",
-  "rests": [
-   "0081-village-lanes.drawing.html:1d1cd0e6baf3f834"
-  ],
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/household_ways.py::GATE_STEPS#plumbing": {
-  "code": "e4b79c379957638c",
-  "core": "bc7ded00d0f7d2b4",
-  "date": "2026-10-04",
-  "note": "",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/household_ways.py::GATE_STEP_PX#plumbing": {
-  "code": "0055ef5b12bb47d4",
-  "core": "5efeb905b7d48b3f",
-  "date": "2026-10-04",
-  "note": "",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/household_ways.py::ROOT_FT#the ways gather at the gate": {
-  "code": "361e5844424d16de",
-  "core": "4f6abb3ccbbe5fc1",
-  "date": "2026-10-04",
-  "note": "",
-  "pages": {},
-  "research": "",
-  "rests": [
-   "0081-village-lanes.drawing.html:1d1cd0e6baf3f834",
-   "0081-village-lanes.drawing.html:df26f73dd5ee96d2"
-  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/household_ways.py::box_poly#plumbing": {
@@ -6848,39 +6803,29 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/household_ways.py::clear_of_the_seats#the track off the wood seats": {
-  "code": "3824c860e248b630",
-  "core": "e60dbe5bee6414dd",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/household_ways.py::chose_the_track#the track out decided once": {
+  "code": "54bad1d630fae0cf",
+  "core": "d291fccddec9ff0f",
   "date": "2026-10-04",
-  "note": "record keeps copse off the road only; the reverse is unresearched",
-  "pages": {},
-  "research": "",
+  "note": "chosen once the last house stands; the ways are laid to it",
+  "pages": {
+   "0081-village-lanes.drawing.html": "64f892eec56cb0e6"
+  },
+  "research": "28eb27d8637b4dbb",
   "rests": [
-   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:b504bfc778e63907"
+   "0081-village-lanes.drawing.html:1d1cd0e6baf3f834",
+   "0081-village-lanes.drawing.html:d6c0546677319ff7"
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/household_ways.py::on_the_canvas#plumbing": {
-  "code": "ed1f7aac50539e2a",
-  "core": "c6fae513fac7dcd6",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/household_ways.py::near_the_cluster#plumbing": {
+  "code": "54cebca0c7c08c03",
+  "core": "56fe88c5de241104",
   "date": "2026-10-04",
-  "note": "",
+  "note": "the search window only",
   "pages": {},
   "research": "",
   "rests": [],
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/household_ways.py::root_at_the_gate#the ways gather at the gate": {
-  "code": "19e1541bfe2b4764",
-  "core": "91ebb71349125617",
-  "date": "2026-10-04",
-  "note": "",
-  "pages": {},
-  "research": "",
-  "rests": [
-   "0081-village-lanes.drawing.html:1d1cd0e6baf3f834",
-   "0081-village-lanes.drawing.html:df26f73dd5ee96d2"
-  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/household_ways.py::seat_walls#the track off the wood seats": {
@@ -6896,20 +6841,41 @@
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/household_ways.py::way_out_gate#the gate on the cluster's edge": {
-  "code": "7fa238beec72334e",
-  "core": "7b54dc6eac0c6ca1",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/household_ways.py::seated_parts#a persimmon by its trunk alone": {
+  "code": "35db436d60ef3dc9",
+  "core": "e2eafd2fee3c4ec0",
   "date": "2026-10-04",
-  "note": "",
+  "note": "the code swaps the persimmon fixture's box for a TRUNK_FT x TRUNK_FT (4 ft) trunk box, and the crown is not seated; 0081's drawing page never mentions a persimmon, trunk, crown, overhang or tree, so GUESS is the right label",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/household_ways.py::seated_parts#nothing built on a lane": {
+  "code": "24de029381d77077",
+  "core": "e2eafd2fee3c4ec0",
+  "date": "2026-10-04",
+  "note": "the house, yard, beds, well, sheds and fixtures are kept off",
   "pages": {
    "0081-village-lanes.drawing.html": "64f892eec56cb0e6"
   },
   "research": "28eb27d8637b4dbb",
   "rests": [
-   "0081-village-lanes.drawing.html:1d1cd0e6baf3f834",
-   "0081-village-lanes.drawing.html:43b635b1ca75125b"
+   "0081-village-lanes.drawing.html:4ed077ab6fed558d"
   ],
-  "triaged": "2026-10-04",
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/household_ways.py::seated_parts#the track off the wood seats": {
+  "code": "3e638dd2912d6524",
+  "core": "e2eafd2fee3c4ec0",
+  "date": "2026-10-04",
+  "note": "the lanes page names house, yard, beds, well, sheds and fixtures but not wood seats, so UNRESEARCHED is right; the octagon is plumbing",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0081-village-lanes.drawing.html:4ed077ab6fed558d",
+   "0081-village-lanes.drawing.html:8648abc7a601036d"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/persimmon_reseat.py::_turned#plumbing": {
@@ -8333,60 +8299,56 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::stage_homesteads#a grove farm's own bamboo": {
-  "code": "975bdeba32a80b52",
-  "core": "898cb85c933388b9",
+  "code": "eef599cccd9ced92",
+  "core": "b37a9217a1a303fe",
   "date": "2026-10-04",
-  "note": "`_household_bamboo` is on exactly when the `bamboo` knob is homestead or both, which is the attested knob; the three-in-five share and the patch are decided downstream",
+  "note": "drawn where the knob is homestead or both",
   "pages": {
    "0075-bamboo-groves-chikurin.drawing.html": "bc675938aae67039"
   },
   "research": "0511f4b8f09dd539",
   "rests": [
    "0075-bamboo-groves-chikurin.drawing.html:79b7211c72484f93",
-   "0075-bamboo-groves-chikurin.drawing.html:e7c00c0357d35ec7",
    "0075-bamboo-groves-chikurin.drawing.html:f787bbf24ccbb0bd"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::stage_homesteads#a yard's south sun": {
-  "code": "0b331919a3c24a32",
-  "core": "898cb85c933388b9",
+  "code": "57a116145be26916",
+  "core": "b37a9217a1a303fe",
   "date": "2026-10-04",
-  "note": "`sun_corridor(39.0)` covers yards and beds, matching the 39 ft for the 9-to-3 window",
+  "note": "39 ft south of each yard and bed",
   "pages": {
    "0038-sunlight-and-shade-on-the-farm.drawing.html": "13e15817d311d368"
   },
   "research": "4c4e1b01edd744e8",
   "rests": [
    "0038-sunlight-and-shade-on-the-farm.drawing.html:1744d5d384a63127",
-   "0038-sunlight-and-shade-on-the-farm.drawing.html:3cf9dd5c14103b6d",
    "0038-sunlight-and-shade-on-the-farm.drawing.html:bb2acd2b2da1f7af",
    "0038-sunlight-and-shade-on-the-farm.drawing.html:fb011b8973aa73bf"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::stage_homesteads#houses before lanes": {
-  "code": "711923ac99c746cf",
-  "core": "898cb85c933388b9",
+  "code": "da41076b97548317",
+  "core": "b37a9217a1a303fe",
   "date": "2026-10-04",
-  "note": "all households are seated before any way exists; then the gate and its root are set on the cluster's edge, `lay_the_ways` lays each household's way to it, and pinch/reached-across households are handled as the page says",
+  "note": "every house is seated before any way; the track out and the households' ways come after the last house",
   "pages": {
    "0081-village-lanes.drawing.html": "64f892eec56cb0e6"
   },
   "research": "28eb27d8637b4dbb",
   "rests": [
    "0081-village-lanes.drawing.html:1d1cd0e6baf3f834",
-   "0081-village-lanes.drawing.html:9dcd87510d217672",
-   "0081-village-lanes.drawing.html:d6c0546677319ff7",
-   "0081-village-lanes.drawing.html:f0a411a544083965"
+   "0081-village-lanes.drawing.html:d6c0546677319ff7"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::stage_homesteads#the belt's afternoon lane": {
-  "code": "cdab7bf8435d8331",
-  "core": "898cb85c933388b9",
+  "code": "cd75c7fb8aa25a2a",
+  "core": "b37a9217a1a303fe",
   "date": "2026-10-04",
-  "note": "`west_sun_lane(50.0)` matches the 50 ft clear west and southwest of a plot",
+  "note": "50 ft west and southwest",
   "pages": {
    "0038-sunlight-and-shade-on-the-farm.drawing.html": "13e15817d311d368"
   },
@@ -8398,10 +8360,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::stage_homesteads#the declared cluster shape": {
-  "code": "4d2aa3d4cb701783",
-  "core": "898cb85c933388b9",
+  "code": "903c54382f201395",
+  "core": "b37a9217a1a303fe",
   "date": "2026-10-04",
-  "note": "the shape is a rolled knob resolved against the drawn aspect; no bundled question answers cluster shape, so GUESS stands",
+  "note": "the bundle is silent",
   "pages": {},
   "research": "",
   "rests": [],
@@ -13255,38 +13217,47 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/fabric.py::_homestead_polys#a path leaves its own yard": {
-  "code": "b53746a3342e464c",
-  "core": "1447f2649822c87b",
-  "date": "2026-10-03",
-  "note": "no question gives it",
+  "code": "b18757b58f676531",
+  "core": "ae6e731dcb754cb2",
+  "date": "2026-10-04",
+  "note": "0081 answers this, so it is not UNRESEARCHED: the way \"leaves its dooryard round its own garden beds and fixtures\", and the walk crosses no \"garden bed, shed or fixture of either\". The label should cite 0081. The bed and shed exemption the claim describes (the owner's gardens and sheds are not walls to its own path) then contradicts that finding: keep only the dooryard (yard) exemption, or record a DEVIATION",
+  "pages": {},
   "research": "",
-  "verdict": "IN-STEP"
+  "rests": [
+   "0081-village-lanes.drawing.html:9dcd87510d217672",
+   "0081-village-lanes.drawing.html:f0a411a544083965"
+  ],
+  "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/fabric.py::_homestead_polys#no lane through a farm's grove": {
-  "code": "1e2b5a1675338131",
-  "core": "1447f2649822c87b",
-  "date": "2026-10-03",
-  "note": "no question gives it",
+  "code": "ff05fe79617680a4",
+  "core": "ae6e731dcb754cb2",
+  "date": "2026-10-04",
+  "note": "the bundle is silent on groves as lane fabric",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/fabric.py::_homestead_polys#nothing built on a lane": {
-  "code": "f1cfa1fa6ca15b71",
-  "core": "1447f2649822c87b",
-  "date": "2026-10-03",
-  "note": "houses, yards, beds, sheds, wells and fixtures are all fabric",
+  "code": "86bcb1b38dcd4614",
+  "core": "ae6e731dcb754cb2",
+  "date": "2026-10-04",
+  "note": "the houses, yards, beds, sheds, wells and fixtures are fabric",
   "pages": {
    "0081-village-lanes.drawing.html": "64f892eec56cb0e6"
   },
   "research": "28eb27d8637b4dbb",
-  "triaged": "2026-10-04",
+  "rests": [
+   "0081-village-lanes.drawing.html:4ed077ab6fed558d"
+  ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/fabric.py::_homestead_polys#village groves and the grazing commons as fabric a lane keeps off (steading_footprints says \"a lane crosses them\")": {
-  "code": "1447f2649822c87b",
-  "core": "1447f2649822c87b",
-  "date": "2026-10-03",
-  "note": "village groves and the grazing commons as fabric a lane keeps off (steading_footprints says \"a lane crosses them\")",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/fabric.py::_homestead_polys#the village groves and the commons treated as ground a lane keeps off": {
+  "code": "ae6e731dcb754cb2",
+  "core": "ae6e731dcb754cb2",
+  "date": "2026-10-04",
+  "note": "the village groves and the commons treated as ground a lane keeps off",
   "research": "",
   "verdict": "UNCLAIMED"
  },
@@ -17941,6 +17912,21 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::choose_track_out#the track out decided once": {
+  "code": "2f4650d828e7ce20",
+  "core": "626b599273315aac",
+  "date": "2026-10-04",
+  "note": "leaves downslope out of the field, off the wet, and runs off the frame",
+  "pages": {
+   "0081-village-lanes.drawing.html": "64f892eec56cb0e6"
+  },
+  "research": "28eb27d8637b4dbb",
+  "rests": [
+   "0081-village-lanes.drawing.html:16df95fc169329f7",
+   "0081-village-lanes.drawing.html:43b635b1ca75125b"
+  ],
+  "verdict": "IN-STEP"
+ },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::connector_dry_exit#brook not crossed": {
   "code": "21ee23d9bbbd293e",
   "core": "09b986b965591009",
@@ -18084,11 +18070,11 @@
   "triaged": "2026-10-04",
   "verdict": "NEEDS-RESEARCH"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::recorded_root#the track out from the gate": {
-  "code": "b8d8da0f65c2d5ab",
-  "core": "f3e60445963b7fb9",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::recorded_track#the track out decided once": {
+  "code": "277340541013daf8",
+  "core": "ac002b7e4d747e82",
   "date": "2026-10-04",
-  "note": "the ways join the track out",
+  "note": "draws the track the ways were laid to",
   "pages": {
    "0081-village-lanes.drawing.html": "64f892eec56cb0e6"
   },
@@ -18096,7 +18082,6 @@
   "rests": [
    "0081-village-lanes.drawing.html:1d1cd0e6baf3f834"
   ],
-  "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::spur_cut_at_the_fold#a folded spur's reach": {
@@ -18173,10 +18158,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#field spur tip on the bund": {
-  "code": "075f4dd949675467",
-  "core": "26e765afe6e1d9c7",
+  "code": "8b131cf1b32ce80f",
+  "core": "407491363c5640b4",
   "date": "2026-10-04",
-  "note": "joins the outer bund",
+  "note": "the tip is set on the worked ground's edge, twice",
   "pages": {
    "0014-bunds-between-the-paddies-aze.drawing.html": "c748f2d0daa6ac21"
   },
@@ -18187,10 +18172,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#lanes after the farmhouses": {
-  "code": "0b1b2470425e445b",
-  "core": "26e765afe6e1d9c7",
+  "code": "d9cc338936bd5524",
+  "core": "407491363c5640b4",
   "date": "2026-10-04",
-  "note": "houses first",
+  "note": "drawn after every house",
   "pages": {
    "0081-village-lanes.drawing.html": "64f892eec56cb0e6"
   },
@@ -18198,26 +18183,26 @@
   "rests": [
    "0081-village-lanes.drawing.html:d6c0546677319ff7"
   ],
-  "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#polder has no spur": {
-  "code": "971382e3c7679ffb",
-  "core": "26e765afe6e1d9c7",
+  "code": "2dbdd311ceae5386",
+  "core": "407491363c5640b4",
   "date": "2026-10-04",
-  "note": "not a GUESS: 0014 drawing says \"the field path runs from the hamlet to the paddy's outer bund\", and where no path is left, \"the hamlet's nearest lane runs on to the bund\"; dropping the spur on a polder should be DEVIATION 0014 drawing, and the page must record the polder exception",
+  "note": "a question in the bundle answers this, so it is not a GUESS: 0014 says \"the field path runs from the hamlet to the paddy's outer bund\", and 0081 calls the spur and the track out \"one through-route\". Dropping the spur on a polder departs from both, and neither drawing page records the departure. It should be a DEVIATION written on the 0014 drawing page, or the spur should be drawn",
   "pages": {},
   "research": "",
   "rests": [
-   "0014-bunds-between-the-paddies-aze.drawing.html:c42980a9ce869e6c"
+   "0014-bunds-between-the-paddies-aze.drawing.html:c42980a9ce869e6c",
+   "0081-village-lanes.drawing.html:df440690bbce9cb6"
   ],
   "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#row road": {
-  "code": "8dd72e55141cfcc1",
-  "core": "26e765afe6e1d9c7",
+  "code": "63b909c93059df9b",
+  "core": "407491363c5640b4",
   "date": "2026-10-04",
-  "note": "street runs on off the map",
+  "note": "the street runs on off the map",
   "pages": {
    "0033-row-villages-resson.drawing.html": "5b109c17a425e58e"
   },
@@ -18228,8 +18213,8 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#row road width": {
-  "code": "42f99de919efaa88",
-  "core": "26e765afe6e1d9c7",
+  "code": "d4ebc5bfb1cf1295",
+  "core": "407491363c5640b4",
   "date": "2026-10-04",
   "note": "6 ft",
   "pages": {
@@ -18242,10 +18227,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#spur bow": {
-  "code": "ba83f1f56b61b2bd",
-  "core": "26e765afe6e1d9c7",
+  "code": "766d0fa74190c094",
+  "core": "407491363c5640b4",
   "date": "2026-10-04",
-  "note": "`(_mx + ax * 14, _my + ay * 14)` bows the spur 14 ft so it \"reads as walked rather than ruled\", but the cited page says the opposite: \"Every lane is pulled taut like a string\", \"as few turns as the plots allow\". The page does not back the bow, so either drop it or relabel it UNRESEARCHED/GUESS",
+  "note": "0081 does not attest a bow. It says \"Every lane is pulled taut like a string. It runs straight from point to point\", but `(_mx + ax * 14, _my + ay * 14)` puts a deliberate kink in a straight run. The swing also runs along the seat's `along` axis, not sideways to the run as the claim says. Drop the bow, or record it as a DEVIATION",
   "pages": {
    "0081-village-lanes.drawing.html": "64f892eec56cb0e6"
   },
@@ -18254,56 +18239,56 @@
    "0081-village-lanes.drawing.html:18dffe2b3b52b18c",
    "0081-village-lanes.drawing.html:b2d689a290fad644"
   ],
-  "triaged": "2026-10-04",
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#spur clip margin": {
-  "code": "77e1732f74544a5d",
-  "core": "26e765afe6e1d9c7",
+  "code": "fe2832012d05fa2a",
+  "core": "407491363c5640b4",
   "date": "2026-10-04",
-  "note": "this is labeled UNRESEARCHED, but 0081 answers it: a lane \"may touch a plot's boundary\" and the spur \"stops at the hem's edge\". Clipping the spur 12 ft off the dry plots departs from that, so it should be a DEVIATION recorded on 0081, or a CONVENTION/GUESS stated there",
+  "note": "the bundle gives no clearance figure",
   "pages": {},
   "research": "",
   "rests": [
-   "0081-village-lanes.drawing.html:5f5891dc66e3fb7b",
-   "0081-village-lanes.drawing.html:f2368e271306e3c2"
+   "0081-village-lanes.drawing.html:5f5891dc66e3fb7b"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#spur kept however short": {
-  "code": "0cb9a04ce29b3953",
-  "core": "26e765afe6e1d9c7",
+  "code": "2fcd74182657ba58",
+  "core": "407491363c5640b4",
   "date": "2026-10-04",
-  "note": "\"however short\", floor at the 5 ft tread",
+  "note": "the floor is the 5 ft tread",
   "pages": {
    "0014-bunds-between-the-paddies-aze.drawing.html": "c748f2d0daa6ac21"
   },
   "research": "b23b14a8548c443f",
   "rests": [
-   "0014-bunds-between-the-paddies-aze.drawing.html:c42980a9ce869e6c"
+   "0014-bunds-between-the-paddies-aze.drawing.html:c42980a9ce869e6c",
+   "0081-village-lanes.drawing.html:91a5765af6230403"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#spur over the brook at a ford": {
-  "code": "b45cd526d0ee1326",
-  "core": "26e765afe6e1d9c7",
+  "code": "4610806a8371028a",
+  "core": "407491363c5640b4",
   "date": "2026-10-04",
-  "note": "crossed square at a crossing place",
+  "note": "crosses at a crossing place",
   "pages": {
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "c23a085a43372c2c"
   },
   "research": "d47738a05844fe19",
   "rests": [
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:03433651c0627577",
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:93969c06f800b0d5"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:93969c06f800b0d5",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:d643c23f456119bc"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#spur to the field": {
-  "code": "70ce75ce5d1323ab",
-  "core": "26e765afe6e1d9c7",
+  "code": "bd5809feae4a2bc3",
+  "core": "407491363c5640b4",
   "date": "2026-10-04",
-  "note": "off crops and wet, stops at the paddy",
+  "note": "the least crossing, then the shortest; clipped off the crop and the marsh",
   "pages": {
    "0081-village-lanes.drawing.html": "64f892eec56cb0e6"
   },
@@ -18311,32 +18296,30 @@
   "rests": [
    "0081-village-lanes.drawing.html:43b635b1ca75125b",
    "0081-village-lanes.drawing.html:5f5891dc66e3fb7b",
-   "0081-village-lanes.drawing.html:bd66b84c6bda826f"
+   "0081-village-lanes.drawing.html:bd66b84c6bda826f",
+   "0081-village-lanes.drawing.html:f2368e271306e3c2"
   ],
-  "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#track off the map": {
-  "code": "3bba36ef4d34b6e0",
-  "core": "26e765afe6e1d9c7",
+  "code": "ba4ebcbff2fa390e",
+  "core": "407491363c5640b4",
   "date": "2026-10-04",
-  "note": "runs off the map from the gate",
+  "note": "the recorded or chosen track runs to the frame",
   "pages": {
    "0081-village-lanes.drawing.html": "64f892eec56cb0e6"
   },
   "research": "28eb27d8637b4dbb",
   "rests": [
-   "0081-village-lanes.drawing.html:16df95fc169329f7",
-   "0081-village-lanes.drawing.html:1d1cd0e6baf3f834"
+   "0081-village-lanes.drawing.html:16df95fc169329f7"
   ],
-  "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#track off the wet": {
-  "code": "ab70ed76c4b41d89",
-  "core": "26e765afe6e1d9c7",
+  "code": "eb05992614a0effc",
+  "core": "407491363c5640b4",
   "date": "2026-10-04",
-  "note": "keeps off wet ground",
+  "note": "the toe band and the marshes are wet",
   "pages": {
    "0081-village-lanes.drawing.html": "64f892eec56cb0e6"
   },
@@ -18344,7 +18327,6 @@
   "rests": [
    "0081-village-lanes.drawing.html:43b635b1ca75125b"
   ],
-  "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::wet_grown_by_the_lane#track plumbing": {
@@ -18353,21 +18335,6 @@
   "date": "2026-10-03",
   "note": "plumbing",
   "research": "",
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::with_the_root#the track out from the gate": {
-  "code": "5a76dd16d6dd5dab",
-  "core": "762cf92f6999aa22",
-  "date": "2026-10-04",
-  "note": "the ways join the track out",
-  "pages": {
-   "0081-village-lanes.drawing.html": "64f892eec56cb0e6"
-  },
-  "research": "28eb27d8637b4dbb",
-  "rests": [
-   "0081-village-lanes.drawing.html:1d1cd0e6baf3f834"
-  ],
-  "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::CARRY_FT#end set on its host": {
@@ -18457,10 +18424,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::_root#access tree plumbing": {
-  "code": "6066e0bd2fbd4974",
-  "core": "8b42a47967de439f",
+  "code": "53761da2ee9705a0",
+  "core": "cf81728b45aa205a",
   "date": "2026-10-04",
-  "note": "plumbing",
+  "note": "picks the tree's root only",
   "pages": {},
   "research": "",
   "rests": [],

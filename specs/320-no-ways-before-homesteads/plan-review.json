@@ -1,38 +1,44 @@
 {
  "feature": "320-no-ways-before-homesteads",
- "plan_sha256": "a33170dfac2b5d305a16fd5fcc802a23b6330263327cbc674f841fe497b9b516",
+ "plan_sha256": "5ea1f558d8069fe0876ba573d0af4e0a03020aebb12ae325abb66e44c9d6fc34",
  "reviewed": "2026-10-04",
  "declared": "spec-fidelity",
  "decisions": [
   {
    "id": "D1",
-   "summary": "Nucleated seating with no start_tree corridor, no access_exit, no reserve_field_corridor; exit_bearing kept as a ground test that refuses a margin; an empty AccessTree for bookkeeping; SeatRegion._reached flooded from a private anchor past the seat band on the way-out bearing, never painted, reserved or recorded",
+   "summary": "Nucleated seating with no start_tree corridor, no access_exit, no reserve_field_corridor; exit_bearing kept only as a test of ground that refuses a margin with no way out; an empty AccessTree for bookkeeping; SeatRegion._reached flooded from a private anchor past the seat band on the way-out side, never reserved, painted or recorded",
    "class": "within",
-   "why": "FR-001 removes both reservations; the bearing test is the spec's edge case and Decisions Recorded (asked of the margin, answered by ground, nothing reserved); the anchor is the mechanism FR-002 names (ground connected to open country on the way-out side). It stays within only while it refuses no seat: painted into buildable or the registry it would be the strip again."
+   "why": "FR-001 removes both reservations; the bearing test is the spec's edge case and Decisions Recorded, and FR-008's parenthetical permits it as fixing nothing of the track's course. Checked in code: choose_track_out never reads _way_out_bearing or the anchor, so the bearing chooses no part of the lane. The anchor is FR-002's 'connected to the open country on the side the way out will leave'."
   },
   {
    "id": "D2",
-   "summary": "lay_the_ways moves to stage_track after the connector (stage_track directly follows stage_homesteads in driver STAGES); ways join the connector; corridor reservations made when the ways are laid, wood seats still at the end of the homesteads stage",
+   "summary": "Once the last house stands, inside stage_homesteads and before any farmstead is drawn, the track out's whole course is chosen once by choose_track_out (gateway, gateway_track/connector_track, connector_through) against the homesteads as seated and the wood seats, recorded as way_out_track; the ways are laid to it; stage_track draws the recorded track and chooses nothing; the row and dispersed forms, which record none, choose it in stage_track as before; no gate or first leg is decided apart from it",
    "class": "within",
-   "why": "FR-003 verbatim: the track out first from the cluster's edge once the last house stands, then each household's way joined to it. Wood seats are not ways."
+   "why": "FR-008 and Amendment 2 verbatim ('collapsing the multiple decisions into a single decision regarding the lane'); FR-003's order (track out first, then the ways joined to it). The row/dispersed branch is still one decision per map and those forms never had the strip. way_out_gate is the first point of the recorded track, derived and not decided separately."
   },
   {
    "id": "D3",
-   "summary": "The field path is left to the web (settle_field, field_runs); an unreached field is fixed in the web's search, never by a reservation",
+   "summary": "The field path left to the web (settle_field, field_runs); an unreached field is fixed in the web's search, never by a reservation before the houses",
    "class": "within",
-   "why": "FR-003's 'then the field path as the web lays it' and FR-004's field reached; it forbids the reservation the GM asked removed."
+   "why": "FR-003 'then the field path as the web lays it' and FR-004's field reached; it forbids the reservation the GM asked removed."
   },
   {
    "id": "D4",
-   "summary": "Every branch reading access_exit or the field corridor deleted; the row and dispersed forms' fallback becomes the only path",
+   "summary": "Every branch reading access_exit or the strip deleted (start_tree corridor, reserve_field_corridor, the strip gateway, on_the_strip, folds_on_the_strip, connector_through's strip fallback, web and joints strip exceptions, tree strip helpers, reserve_the_seating's strip, placement_stages' strip); the row and dispersed forms' path becomes the only path",
    "class": "within",
-   "why": "access_exit is written only by start_tree, called only on the nucleated form, so the deletions touch no row village's planned streets (FR-001's parenthetical); removing dead branches is the removal itself."
+   "why": "Deleting the branches of a removed thing is the removal (FR-001); access_exit was written only on the nucleated form, so a row village's planned streets are untouched."
   },
   {
    "id": "D5",
-   "summary": "Page 0081's drawing page already says houses first with no strip exception; claims citing the strip or field corridor rewritten; owed checks run via claims-triage",
+   "summary": "Page 0081's drawing page already says houses first; claims citing the strip or field corridor rewritten with the code; owed checks run through claims-triage",
    "class": "within",
-   "why": "Premise checked: the drawing page carries no 'strip' or field-way exception (grep 2026-10-04); the DEVIATION lives only in the code claims. FR-006 is still owed in full under T07: line 33's 'connected to the track out' and 'not close by a way' must be read against the empty-tree seating."
+   "why": "FR-006 and SC-005."
+  },
+  {
+   "id": "D6",
+   "summary": "A fourth, short component in the marsh outline's wave (WAVE_SHORT_FT, weighted by WAVE_WEIGHTS) so no shaped stretch runs straight past the visible-edge bar; one-shot measurement 160 ft to 85 ft over laid and short-ended strips, 40 seeds each",
+   "class": "within",
+   "why": "FR-007 and Amendment 1 ('Fix marsh ends first'); the bar is the existing guarantee test SC-006 names. The figures carry a one-shot label (date and method)."
   }
  ],
  "verdict": "CLEAR"

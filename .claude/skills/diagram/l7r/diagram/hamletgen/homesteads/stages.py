@@ -16,7 +16,7 @@ from l7r.diagram.settlement.homestead_parts.wood_share import COPSE_CLUMP_BS, in
 from l7r.diagram.settlement.land.wet import marsh_ground
 from l7r.diagram.settlement.rolling.access import ACCESS_HALF_FT, AccessTree, exit_bearing
 from l7r.diagram.settlement.rolling.bearing import COMMON_BEARING_DEG, MarginBearing, wrap_line_deg
-from l7r.diagram.settlement.rolling.gap_ways import GAP_MARGIN_PX, lay_the_ways
+from l7r.diagram.settlement.rolling.gap_ways import JOIN_FAR_FT, lay_the_ways
 from l7r.diagram.settlement.rolling.lot import HouseholdLots
 from l7r.diagram.settlement.rolling.passage import passage_budget, passage_share
 from l7r.diagram.settlement.shrines_wells.byres import COMMONS_BYRE_FRACTION, COMMONS_BYRE_GAP, commons_byre_target, household_byre_form
@@ -217,7 +217,7 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
         track = chose_the_track(s, plan)
         s.M["way_out_track"] = [[round(q[0], 1), round(q[1], 1)] for q in track]
         s.M["way_out_gate"] = list(s.M["way_out_track"][0])
-        for a, b in near_the_cluster(s, track, s.px(GAP_MARGIN_PX)):
+        for a, b in near_the_cluster(s, track, s.px(JOIN_FAR_FT)):
             s._access.add(a, b)
     s.M["meta"]["passage_revoked"], s.M["meta"]["pinch_passages"] = lay_the_ways(s)
     s.M["meta"]["passage_reached"] = sum(1 for h in s.M.get("houses") or [] if h.get("reached_across"))  # ...reached across a yard

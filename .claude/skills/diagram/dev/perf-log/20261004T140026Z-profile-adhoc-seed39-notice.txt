@@ -1,0 +1,36 @@
+perf-profile seed 39 stage notice: 2.2s under cProfile (the stages before it took 3.8s unprofiled; cProfile itself is ~+225%, research R2)
+raw: dev/perf-raw/20261004T140026Z-seed39-notice.prof (gitignored; archive: configured (https://github.com/EliAndrewC/mapgen-perflogs))
+
+         3783459 function calls (3783059 primitive calls) in 2.124 seconds
+
+   Ordered by: cumulative time
+   List reduced from 257 to 25 due to restriction <25>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.002    0.002    2.159    2.159 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/frame.py:65(stage_notice)
+        1    0.000    0.000    2.157    2.157 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py:129(place_kosatsuba)
+        1    0.000    0.000    2.105    2.105 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/board_seat.py:277(site_board)
+        3    0.000    0.000    2.105    0.702 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py:217(<lambda>)
+        3    0.001    0.000    2.105    0.702 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py:381(_board_for)
+        3    0.000    0.000    2.000    0.667 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py:195(sample)
+        3    0.000    0.000    2.000    0.667 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py:243(_board_seats)
+       34    0.080    0.002    2.000    0.059 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py:264(_route_seats)
+     7951    0.120    0.000    1.138    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/houses.py:300(_fits)
+     7826    0.044    0.000    0.425    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/hard_ground.py:58(_hard_clear)
+      971    0.160    0.000    0.333    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/_geom/overlap.py:115(quad_hits_poly)
+     7826    0.021    0.000    0.268    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/houses.py:109(_wall_on_the_bund)
+    39255    0.035    0.000    0.262    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/rolling/fit.py:154(_field_blocks_point)
+     7951    0.051    0.000    0.225    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/houses.py:126(_in_blocked)
+    39130    0.021    0.000    0.221    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/houses.py:124(<genexpr>)
+     4427    0.011    0.000    0.197    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/board_seat.py:99(turn)
+     4063    0.003    0.000    0.193    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/core.py:336(admits)
+     4063    0.005    0.000    0.190    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/overlap/registry.py:312(admits)
+     4064    0.047    0.000    0.185    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/overlap/registry.py:262(conflicts)
+     4427    0.039    0.000    0.178    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/board_seat.py:86(_near)
+    39255    0.123    0.000    0.159    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/_geom/primitives.py:393(chain_violated)
+317718/317318    0.077    0.000    0.119    0.000 {built-in method builtins.min}
+    59548    0.084    0.000    0.108    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/_geom/indexes.py:267(near)
+     7984    0.014    0.000    0.107    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py:101(fixture_clear_of_water)
+    16216    0.101    0.000    0.103    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/_geom/primitives.py:32(point_in_poly)
+
+

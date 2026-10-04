@@ -23,6 +23,8 @@ CLAIMS_OK naming this file.
 - `l7r/diagram/settlement/rolling/access.py::exit_bearing#track out leaves away from the field` (MISLABELED): 0081 says
   the track out leaves downslope past the wet foot, on the cluster's flank; cite it, and check "away from the field"
   agrees with "downslope"
-- `l7r/diagram/hamletgen/homesteads/growth.py::grow_the_margin#nearer the field breaking ties` (MISLABELED): the GM's
-  ruling (2026-10-03); the claim vocabulary has no label for a ruling the record does not carry - record the ruling on
-  0004's drawing page, or add the label
+- `l7r/diagram/hamletgen/ways/fabric.py::_homestead_polys#a path leaves its own yard` (MISLABELED): 0081 lets a way leave its
+  dooryard round its own beds and fixtures; the exemption of the owner's gardens and sheds as walls to its own path departs from
+  it - keep only the yard's exemption, or record a DEVIATION; and the village groves and the commons kept off are unclaimed
+- `l7r/diagram/hamletgen/ways/track.py::stage_track#spur bow` (DRIFTED): the field spur's 14 ft bow along the seat axis; 0081
+  pulls every lane taut - drop the bow or record it
