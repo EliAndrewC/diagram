@@ -170,7 +170,7 @@ def _route(start: Pt, goal: Pt, hard: list[Poly], walls: Sequence[Poly], water: 
     Dijkstra on a coarse lattice, then string-pulled. The lattice is the INDEX - it decides nothing,
     because every shortcut is re-tested against the real geometry by `_clear_link` before it is
     taken, so the drawn path is exactly as legal as one drawn by hand. 12 ft cells because the gaps
-    these paths thread are `MIN_WEB_GAP` (16 ft) at their narrowest, and a lattice coarser than the
+    these paths thread are `MIN_WEB_GAP` (18 ft) at their narrowest, and a lattice coarser than the
     gap cannot see the gap.
 
     Returns [] when there is genuinely no way through - which is a real answer, and better than the

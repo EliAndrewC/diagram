@@ -45,8 +45,11 @@ def test_a_footprint_holds_the_envelope_the_wood_and_the_sun_its_yard_and_beds_a
     assert footprint(_s(), bare) == (5.0, 5.0, 5.0, 5.0), "no yard, no beds, no wood: the envelope alone"
 
 
-def test_the_gap_between_footprints_is_a_paths_whole_strip() -> None:
-    assert grow_gap(_s()) == 2 * 7.0 + 2.0
+def test_the_gap_between_footprints_is_a_lanes_threading_gap_and_the_parting() -> None:
+    """FR-011 (feature 318): `MIN_WEB_GAP` (a lane 7 ft off each garden fence and its 4 ft tread) and the 2 ft parting."""
+    from l7r.diagram.hamletgen.consts import MIN_WEB_GAP
+
+    assert grow_gap(_s()) == MIN_WEB_GAP + 2.0 == 20.0
 
 
 class _Ground:
@@ -115,19 +118,40 @@ def test_past_the_table_the_growth_widens_one_ring_at_a_time() -> None:
     assert growth.grow_level(len(GROW_LEVELS)) == (16, (last + 0.5,)) and growth.grow_level(len(GROW_LEVELS) + 2) == (16, (last + 1.5,))
 
 
-def test_of_a_levels_seats_the_nearest_the_field_is_tried_first(monkeypatch: pytest.MonkeyPatch) -> None:
-    """SC-002a (feature 318, the GM's ruling): with the field along the line y = 300, the seats one level offers round the first
-    house are tried nearest the field first - never a farther one before a nearer."""
-    monkeypatch.setattr(growth, "free_seats", lambda s, c, step=None: [(0.0, 0.0)])
+def test_the_growth_tries_the_nearest_ring_first_and_the_field_breaks_ties_within_a_ring() -> None:
+    """SC-002a (feature 318, Amendments 2 and 3): seats are ordered by their ring of distance from the seat center (`TIE_RING_FT`
+    wide), the nearer the field first only WITHIN a ring - a seat in a farther ring is never tried first for being nearer the
+    field; and the growth's breadth is main's."""
     s = _Ground(room=40.0)
     s._site_chains = [[((-1000.0, 300.0), (1000.0, 300.0), (0.0, -1.0))]]
-    seat = s.try_place
-    monkeypatch.setattr(s, "try_place", lambda x, y, k: seat(x, y, k) if not s.M["houses"] else s.asked.append((x, y)) or False)
-    grow_the_margin(s, _plan(3), 0, (46.0, 28.0))  # type: ignore[arg-type]
-    first_level = s.asked[1:9]  # after the first house, the first eight seats its level offers, in the order tried
-    assert first_level and [300.0 - y for _x, y in first_level] == sorted(300.0 - y for _x, y in first_level), first_level
-    s2 = _Ground(room=40.0)
-    assert growth.field_distance(s2, (0.0, 0.0)) == 0.0, "no field installed: no order of its own"
+    ring = s.px(growth.TIE_RING_FT)
+    near_field_far_ring = growth.grow_key(s, (0.0, ring * 2.5), (0.0, 0.0))
+    far_field_near_ring = growth.grow_key(s, (0.0, -ring * 0.5), (0.0, 0.0))
+    assert far_field_near_ring < near_field_far_ring, "the nearer ring first, however near the field the farther lies"
+    a, b = growth.grow_key(s, (0.0, ring * 0.6), (0.0, 0.0)), growth.grow_key(s, (0.0, -ring * 0.4), (0.0, 0.0))
+    assert a[0] == b[0] and a < b, "within one ring the nearer the field first, though farther from the seat"
+    assert growth.GROW_LEVELS == ((8, (1.0,)), (12, (1.0, 1.5)), (16, (1.25, 1.75, 2.0))), "main's breadth"
+    assert growth.field_distance(_Ground(room=40.0), (0.0, 0.0)) == 0.0, "no field installed: no order of its own"
+
+
+def test_a_pop_the_tie_break_reordered_is_counted() -> None:
+    """`growth.tie_reordered` (SC-002a's count): a seat popped ahead of one in its own ring nearer the seat center is counted; one
+    whose ring holds none nearer, or only seats in another ring, is not."""
+    popped = (1, 5.0, 30.0, 0)
+    assert growth.tie_reordered([(1, 9.0, 25.0, 1)], popped), "the same ring, nearer the seat: the field reordered them"
+    assert not growth.tie_reordered([(1, 9.0, 35.0, 1), (2, 1.0, 10.0, 2)], popped), "nothing nearer in its own ring"
+
+
+def test_a_box_keeps_the_threading_gap_from_every_standing_footprint_but_its_tight_neighbor() -> None:
+    """`growth.keeps_every_gap` (FR-011, pairwise): a box nearer than the gap to any standing footprint is refused - but the one
+    it is a tight seat against is held only to the parting."""
+    rec_a, rec_b = {"x": 0.0}, {"x": 100.0}
+    standing = [((0.0, 0.0), (10.0, 10.0, 10.0, 10.0), rec_a), ((100.0, 0.0), (10.0, 10.0, 10.0, 10.0), rec_b)]
+    box = (30.0, 0.0, 20.0, 20.0)  # its west edge 10 px from a's east edge, 50 from b's
+    assert not growth.keeps_every_gap(box, standing, 20.0), "10 px from a: under the gap"
+    assert growth.keeps_every_gap(box, standing, 20.0, tight=rec_a), "a tight seat against a, by more than the parting"
+    assert growth.keeps_every_gap((50.0, 0.0, 20.0, 20.0), standing, 20.0), "30 px from each"
+    assert not growth.keeps_every_gap((0.0, 30.0, 20.0, 20.0), standing, 20.0), "10 px south of a: the gap on the other axis too"
 
 
 def test_a_margin_with_no_free_ground_or_nothing_owed_seats_no_one(monkeypatch: pytest.MonkeyPatch) -> None:

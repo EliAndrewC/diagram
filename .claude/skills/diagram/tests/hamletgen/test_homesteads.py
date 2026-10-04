@@ -432,17 +432,17 @@ def test_a_rank_round_that_seats_nothing_grows_the_cluster_along_the_field(monke
         return real(x, y, *a, **kw)
 
     s.try_place = spy  # type: ignore[method-assign]
-    with pytest.raises(SiteRefused, match=r"seated \d+ of 13 households on margin 1; no house is taken back"):
-        stage_homesteads(s, plan)
+    stage_homesteads(s, plan)  # ...no way searched while houses are seated (feature 318): the ends' seats are taken, all 13 stand
+    assert len(s.M["houses"]) == 13
     ss = s._seat_search
     assert ss["rounds"] >= 1, "the ranks ran"
-    # ...AND THE SEATS OFFERED PAST THE RANK'S ENDS, along the field: whether one is TAKEN is the corridor's to say (feature
-    # 287 M8 - here every run from an end to the access tree passes a front-row homestead's parts, which the overlap matrix
-    # keeps a way off), and the rule under test is that they are offered once the back is refused
+    # ...AND THE SEATS OFFERED PAST THE RANK'S ENDS, along the field, once the back is refused: every house past the front row's own
+    # count stands along it, beyond the front row's reach
+    front = ss["front"]
+    assert front < 13, "the front row alone could not hold them"
     row = [(float(h["x"]) - cx) * ax + (float(h["y"]) - cy) * ay for h in s.M["houses"]]
-    reach = max(abs(u) for u in row) if row else 0.0
-    along = [(x - cx) * ax + (y - cy) * ay for x, y in tried]
-    assert any(abs(u) >= reach + BUNDLE_PITCH * 0.9 for u in along), "a seat a pitch past the rank's end was offered"
+    reach = max(abs(u) for u in row[:front])
+    assert any(abs(u) >= reach + BUNDLE_PITCH * 0.9 for u in row[front:]), "a house a pitch past the rank's end"
 
 
 def test_an_accretion_hamlets_ranks_stand_off_their_lines_and_a_planned_ones_do_not(monkeypatch: pytest.MonkeyPatch) -> None:

@@ -17,8 +17,9 @@ from l7r.diagram.settlement.homestead_parts.wood_share import COPSE_CLUMP_BS, in
 from l7r.diagram.settlement.land.wet import marsh_ground
 from l7r.diagram.settlement.rolling.access import ACCESS_HALF_FT, exit_bearing, start_tree
 from l7r.diagram.settlement.rolling.bearing import COMMON_BEARING_DEG, MarginBearing, wrap_line_deg
+from l7r.diagram.settlement.rolling.gap_ways import lay_the_ways
 from l7r.diagram.settlement.rolling.lot import HouseholdLots
-from l7r.diagram.settlement.rolling.passage import passage_budget, passage_share, recheck_passages
+from l7r.diagram.settlement.rolling.passage import passage_budget, passage_share
 from l7r.diagram.settlement.shrines_wells.byres import COMMONS_BYRE_FRACTION, COMMONS_BYRE_GAP, commons_byre_target, household_byre_form
 
 from ..cluster import seat_has_dry_exit
@@ -206,7 +207,10 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     s.M["meta"].update(_declared)
     plan.cluster_shape = _declared["cluster_shape"]  # the knob as resolved over what the band draws (plan D4)
     s.M["meta"]["seat_search"] = dict(s._seat_search)  # the guesses counted (feature 226 FR-003): candidates, placer calls, positions, rectangles
-    s.M["meta"]["passage_revoked"] = recheck_passages(s)  # feature 317: a way of its own on the finished seating ends a passage
+    # EVERY WAY LAID ONCE, IN THE GAPS, NOW THE LAST HOUSE STANDS (feature 318, FR-014, `settlement/rolling/gap_ways.py`): a
+    # passage the laid ways make unnecessary is ended in place (FR-001), and a household no way reaches is reached across the
+    # nearest neighbor's yard - the pinch
+    s.M["meta"]["passage_revoked"], s.M["meta"]["pinch_passages"] = lay_the_ways(s)
     s.M["meta"]["passage_reached"] = sum(1 for h in s.M.get("houses") or [] if h.get("reached_across"))  # ...reached across a yard
     s._site_chains = None  # the boundary is the homestead stage's; every later placer runs the fit test's own path
     s._site_corridors = None

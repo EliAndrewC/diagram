@@ -310,8 +310,9 @@ class PlacerMixin:
             if hit is not None:
                 continue
             if (cx, cy) == (x, y):  # the seat's corridor, asked once for all its unmoved sides (a moved side is another seat)
-                if _reaches is None:
-                    _reaches = seat_reaches_tree(self, geom)
+                if _reaches is None:  # ...its yard onto lane ground where a seat region stands (feature 318), else a corridor candidate
+                    region = getattr(self, "_seat_region", None)
+                    _reaches = region.opens(geom) if region is not None else seat_reaches_tree(self, geom)
                 if not _reaches:
                     continue
             self._seat_search["parts"] = self._seat_search.get("parts", 0) + 1

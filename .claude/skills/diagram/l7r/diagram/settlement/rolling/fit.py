@@ -15,7 +15,7 @@ from ..farm_fixtures import PERSIMMON_CROWN_FT
 from ..homestead_parts.tree_shade import CANOPY_SHADE_FT, crown_shades
 from .access import access_corridor, legs
 from .lot import bundle_admitted, watered
-from .passage import passage_of
+from .passage import opens, passage_of
 
 if TYPE_CHECKING:
     from ..core import Settlement
@@ -328,14 +328,15 @@ class BundleFitMixin:
     def _parts_fit(self: Settlement, geom: Any) -> bool:  # type: ignore[misc]
         """The rules that read the PARTS of a homestead laid inside an envelope the ground already admitted
         (feature 227): the household's water; no part over another household's reserved wood seat;
-        the yard's and the gardens' sun; the corridor from its door to the access tree (`access_corridor` - routed round
-        what stands where the tree routes); the house's wall rule against the paddy; no part across a stream; the exact
+        the yard's and the gardens' sun; its yard opening onto lane ground connected to the way out (`SeatRegion.opens`, feature
+        318: no path is searched while houses are seated; a roll with no seat region keeps `access_corridor`); the house's wall rule against the paddy; no part across a stream; the exact
         tests of the parts the envelope's nine points can miss - the yard and the fixtures off the paddy, the beds off the
         ditches; the registry's admission of every part; the house off a tread, its eave gap and reachable ground; and its share of the wood floor (`WoodShares.share`).
 
         Research: whole farmstead off the fields - research/questions/0124-farmsteads-at-a-town.drawing.html: the yard and fixtures held off every paddy polygon, the beds off every ditch
             persimmon held off the paddy by its trunk - UNRESEARCHED: a 4 ft trunk box held off every field polygon, its crown free to overhang
-            a tight seat only by passage - research/questions/0081-village-lanes.html, research/questions/0081-village-lanes.drawing.html: admitted only with a walk across the neighbor's yard, refused where it finds a straight or round-the-gable corridor of its own (no routed one sought: the GM's ruling of 2026-10-03)"""
+            a tight seat only by passage - research/questions/0081-village-lanes.html, research/questions/0081-village-lanes.drawing.html: admitted only with a walk across the neighbor's yard, refused where its yard opens onto lane ground of its own (`passage.opens`)
+            no path searched while houses are seated - CANON: the GM's ruling of 2026-10-03 (feature 318, Amendment 2), "This does let us drop the search entirely"; the yard's opening onto lane ground the one check"""
         # A LAYOUT WHOSE LOT FOUND NO SEAT FOR A PART IS NOT THE HOUSEHOLD'S (feature 294 B10, the review's "declared forms drawn"
         # class): `_bundle_side_fits` refuses an `unlaid` layout, and the nucleated placer judges its layouts here instead, so a
         # household whose bath room found no wall was seated with none of its fixtures - Kuwabata drew 3 of its 16 households
@@ -385,15 +386,24 @@ class BundleFitMixin:
             passage = passage_of(self, geom)
             if passage is None:
                 return False
-            if access_corridor(self, geom, routed=False) is not None:  # ...a straight one or one round the gable (`landlocked`)
+            if opens(self, geom):  # ...a yard onto lane ground connected to the way out (`landlocked`'s question)
                 tight["own_way"] = True
                 return False
             geom["passage"] = passage
         elif tree is not None:
-            corridor = access_corridor(self, geom)
-            if corridor is None:
-                return False
-            geom["access"] = corridor
+            # ...AND NO PATH SEARCHED WHILE HOUSES ARE SEATED (feature 318, FR-012, FR-013): the household's yard opens onto lane
+            # ground connected to the way out (`SeatRegion.opens`), the one cheap check; its way is laid in the gaps once the last
+            # house stands (`gap_ways.lay_the_ways`). A roll with no seat region (a village's) keeps the corridor search.
+            region = getattr(self, "_seat_region", None)
+            if region is not None:
+                if not region.opens(geom):
+                    return False
+                geom["opens"] = True
+            else:
+                corridor = access_corridor(self, geom)
+                if corridor is None:
+                    return False
+                geom["access"] = corridor
         turn = self._turn_at(house[0], house[1])
         if self._wall_on_the_bund(house[0], house[1], house[2], house[3], turn):
             return False

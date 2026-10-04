@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from types import SimpleNamespace
+
 import pytest
 
 from l7r.diagram.settlement import Settlement
@@ -196,9 +198,9 @@ def test_the_placer_seats_a_tight_household_only_by_passage_and_records_it(monke
     monkeypatch.setattr(fit, "passage_of", lambda s, g: None)
     assert not s.try_place(1000.0, 1100.0, "plain"), "this layout's walk: none - refused"
     monkeypatch.setattr(fit, "passage_of", lambda s, g: {"walk": walk, "of": (600.0, 700.0), "depth": 1})
-    monkeypatch.setattr(fit, "access_corridor", lambda s, g, routed=True: ((1000.0, 1080.0), (1000.0, 450.0)))
-    assert not s.try_place(1000.0, 1100.0, "plain"), "a corridor of its own from this layout: refused"
-    monkeypatch.setattr(fit, "access_corridor", lambda s, g, routed=True: None)
+    monkeypatch.setattr(fit, "opens", lambda s, g: True)
+    assert not s.try_place(1000.0, 1100.0, "plain"), "a way of its own from this layout: refused"
+    monkeypatch.setattr(fit, "opens", lambda s, g: False)
     s._tight_of = {**tight, "own_way": False}  # a fresh seat's word, as the growth gives each seat
     assert s.try_place(1000.0, 1100.0, "plain"), "a passage and no corridor: seated"
     rec = s.M["houses"][-1]
@@ -208,31 +210,16 @@ def test_the_placer_seats_a_tight_household_only_by_passage_and_records_it(monke
     assert not s._access.covers_box((1020.0, 1300.0, 4.0, 4.0))
 
 
-def test_a_household_with_a_way_of_its_own_on_the_finished_seating_loses_its_passage(monkeypatch: pytest.MonkeyPatch) -> None:
-    """`recheck_passages` (the farmhouse glyph check, feature 317): asked again once every household is seated, its own box
-    set aside as when it was first asked, a household that now finds a corridor is seated by it and is no longer reached
-    across its neighbor's yard; one that finds none keeps its passage."""
+def test_a_way_of_its_own_is_the_seat_regions_word_where_one_stands(monkeypatch: pytest.MonkeyPatch) -> None:
+    """`passage.opens` (feature 318, FR-013): the seat region's one predicate where a region stands; a roll with none keeps the
+    straight or round-the-gable corridor test. And `depth_of` counts a household seated with its yard open (`opens`) as reached."""
     s = _open()
-    nb, geom, _tight = _pair(s)
-    assert passage.recheck_passages(s) == 0, "no household reached across a yard"
-    rec = {"x": 500.0, "y": 700.0, "geom": geom, "reached_across": [600.0, 700.0], "passage_depth": 1, "passage": [[500.0, 690.0], [590.0, 690.0]]}
-    s.M["houses"] = [nb, rec]
-    s.placed.append(geom["bbox"])
-    asked: list[bool] = []
-
-    def corridor(s: Settlement, g: dict, routed: bool = True) -> tuple | None:
-        asked.append(all(b is not g["bbox"] for b in s.placed) and not routed)  # ...and as `landlocked` asks it, unrouted
-        return ((500.0, 680.0), (500.0, 450.0)) if len(asked) > 1 else None
-
-    monkeypatch.setattr(passage, "access_corridor", corridor)
-    assert passage.recheck_passages(s) == 0 and rec["reached_across"] == [600.0, 700.0], "no way of its own: still reached across"
-    assert passage.recheck_passages(s) == 1, "a way of its own now"
-    assert asked == [True, True], "asked with its own homestead set aside"
-    assert any(b is geom["bbox"] for b in s.placed), "...and put back"
-    assert "reached_across" not in rec and "passage" not in rec and rec["geom"]["access"] == ((500.0, 680.0), (500.0, 450.0))
-    assert s.M["access_corridors"][-1]["of"] == [500.0, 700.0], "its corridor reserved for the web to draw"
-    s._access = None
-    assert passage.recheck_passages(s) == 0, "no tree: nothing to ask"
+    s._seat_region = SimpleNamespace(opens=lambda g: g["id"] == "a")
+    assert passage.opens(s, {"id": "a"}) and not passage.opens(s, {"id": "b"})
+    s._seat_region = None
+    monkeypatch.setattr(passage, "access_corridor", lambda s_, g, routed=True: None if routed else ((0.0, 0.0), (1.0, 0.0)))
+    assert passage.opens(s, {"id": "b"}), "no region: an unrouted corridor"
+    assert passage.depth_of({"geom": {"opens": True}}) == 0 and passage.depth_of({"geom": {}}) is None
 
 
 def _seated_passage(s: Settlement) -> tuple[dict, dict, dict, tuple]:
@@ -268,7 +255,7 @@ def test_a_seat_where_one_layout_has_a_way_of_its_own_is_refused_for_every_layou
     s._passage_left = 1
     asked: list[int] = []
     monkeypatch.setattr(fit, "passage_of", lambda s, g: asked.append(1) or {"walk": ((0.0, 0.0), (1.0, 0.0)), "of": (600.0, 700.0), "depth": 1})
-    monkeypatch.setattr(fit, "access_corridor", lambda s, g, routed=True: ((0.0, 0.0), (0.0, -1.0)))
+    monkeypatch.setattr(fit, "opens", lambda s, g: True)
     assert not s._parts_fit(geom) and tight["own_way"] and asked == [1], "a way of its own from this layout"
     assert not s._parts_fit(geom) and asked == [1], "...so the next is refused without its walk asked"
 

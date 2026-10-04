@@ -5,13 +5,13 @@ THE CUSTOM (research/questions/0081-village-lanes.html): passage over a neighbor
 (Wigmore 1892, Part V Section 8; seven provinces, three of them towns) - and as a chain, Echigo's plot C passing over both B's
 and A's. No page read states that every house in a clustered village fronted a lane of its own.
 
-WHERE IT CAN ARISE: the grown cluster parts every two homesteads by a path's whole strip (`growth.grow_gap`), so no household
+WHERE IT CAN ARISE: the grown cluster parts every two homesteads by a lane's threading gap (`growth.grow_gap`), so no household
 stood behind a neighbor's land and the custom's condition never arose (research R3: the nearest neighbor's yard 64 ft at the
 least from any door refused a path). So, within the settlement's rolled share (`passage_budget`), each standing house also
 offers TIGHT seats - at the parting with no path's strip (`hamletgen/homesteads/growth.py`) - and a household offered one is
-seated there only by passage: it asks for a straight or round-the-gable corridor first (`access.access_corridor`, `routed`
-False - no path bending round the homesteads is searched for, the GM's ruling of 2026-10-03), a household that finds one is
-refused the tight seat, and one that finds none is admitted where:
+seated there only by passage: it asks first whether it has a way of its own (`opens`: its yard onto lane ground connected to
+the way out, feature 318 - no path is searched while houses are seated), a household that has one is refused the tight seat,
+and one that has none is admitted where:
 
 - its own ground ADJOINS the neighbor's: its land (the reach the growth parted its seat by, `growth.settled_seat`'s allotted
   reach over every garden layout, carried with its house) within the parting and `PASSAGE_ADJOIN_FT` of the neighbor's land
@@ -35,7 +35,6 @@ Research: passage machinery - NONE: box geometry, the chain's bookkeeping and th
 from __future__ import annotations
 
 import math
-from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any
 
 from .._geom import Pt
@@ -84,11 +83,26 @@ def passage_budget(share: float, households: int) -> int:
 
 
 def depth_of(rec: Any) -> int | None:
-    """How many passages lie between a seated household and a corridor: 0 for one with a corridor of its own, its passage's
-    depth for one reached across a yard, None for one with neither (no household the tree reaches)."""
+    """How many passages lie between a seated household and a way of its own: 0 for one with a corridor of its own or a yard
+    that opened onto lane ground when it was seated (`geom["opens"]`, feature 318), its passage's depth for one reached across
+    a yard, None for one with neither (no household the tree reaches)."""
     if rec.get("passage_depth") is not None:
         return int(rec["passage_depth"])
-    return 0 if (rec.get("geom") or {}).get("access") is not None else None
+    geom = rec.get("geom") or {}
+    return 0 if geom.get("access") is not None or geom.get("opens") else None
+
+
+def opens(s: Settlement, geom: Any) -> bool:
+    """Has the household laid as `geom` a way of its own: its yard opening onto lane ground connected to the way out (the seat
+    region's one predicate, `SeatRegion.opens`, feature 318 FR-013) - or, on a roll with no seat region, a straight or
+    round-the-gable corridor (`access.access_corridor`, `routed` False)?
+
+    Research: a way of its own - research/questions/0081-village-lanes.drawing.html: a yard opening onto the ground the lanes are laid in; no bending path looked for
+    """
+    region = getattr(s, "_seat_region", None)
+    if region is not None:
+        return bool(region.opens(geom))
+    return access_corridor(s, geom, routed=False) is not None
 
 
 def crossable(rec: Any) -> bool:
@@ -230,8 +244,8 @@ def walk_of(s: Settlement, geom: Any, rec: Any, door: Pt, yard: Any, lands: Any,
 
 def landlocked(s: Settlement, layouts: Any) -> bool:
     """Is the household at a tight seat on land the custom covers - some garden layout here with a walk to the neighbor's yard
-    (`passage_of`) and none with a straight or round-the-gable corridor of its own (`access.access_corridor`, `routed`
-    False)? The household's LAND, not one layout: a household lays its beds where its way can run. Judged a layout at a
+    (`passage_of`) and none with a way of its own (`opens`: its yard onto lane ground connected to the way out, feature 318)?
+    The household's LAND, not one layout: a household lays its beds where its way can run. Judged a layout at a
     time, 10 of the 13 passages at 15 households on 13 settlements, and 6 of the 20 at 40 on four, were households another
     layout at the seat would have given a way of its own (research R8).
 
@@ -242,11 +256,11 @@ def landlocked(s: Settlement, layouts: Any) -> bool:
     none of them reaches.
 
     Research:
-        no way of its own - research/questions/0081-village-lanes.html, research/questions/0081-village-lanes.drawing.html: judged by the whole holding - a walk under some layout, a corridor under none
+        no way of its own - research/questions/0081-village-lanes.html, research/questions/0081-village-lanes.drawing.html: judged by the whole holding - a walk under some layout, a yard opening onto lane ground under none
         no routed search for one - CANON: the GM's ruling of 2026-10-03, a path that must bend round other homesteads is not sought
     """
     lays = [g for g in layouts if g is not None and not g.get("unlaid")]
-    if any(access_corridor(s, g, routed=False) is not None for g in lays):
+    if any(opens(s, g) for g in lays):
         return False
     return any(passage_of(s, g) is not None for g in lays)
 
@@ -287,60 +301,6 @@ def passage_of(s: Settlement, geom: Any) -> dict[str, Any] | None:
             break
     walks[id(geom)] = got
     return got
-
-
-def own_corridor(s: Settlement, rec: Mapping[str, Any], geom: Any) -> tuple[Pt, ...] | None:
-    """The straight or round-the-gable corridor of its own the household `rec` would have laid as `geom`, its own homestead
-    set aside (as it stood unseated when its seat was judged), or None - `landlocked`'s question, asked of a seated household.
-
-    Research: a way of its own on the finished seating - research/questions/0081-village-lanes.drawing.html: a straight path or one round the house's gable, no bending path looked for (`access.access_corridor`, `routed` False), as `landlocked` asks it
-    """
-    own = (rec.get("geom") or {}).get("bbox")
-    k = next((i for i, b in enumerate(s.placed) if b is own), None)
-    if k is not None:
-        s.placed.pop(k)
-    try:
-        return access_corridor(s, geom, routed=False)
-    finally:
-        if k is not None:
-            s.placed.insert(k, own)
-
-
-def recheck_passages(s: Settlement) -> int:
-    """Ask each household reached across a yard again, once every household is seated, whether its DRAWN layout has a way of
-    its own now - a straight or round-the-gable corridor (`own_corridor`, as `landlocked` asks it), its own homestead set
-    aside, as it stood unseated when first asked; one that has is given it in place (`reserve`), its passage ended, and no
-    house moves. Repeated until none is ended, an ended passage's corridor being a way another may now reach. Returns the
-    count of passages so ended.
-
-    THE CUSTOM'S CONDITION HOLDS ON THE FINISHED MAP, NOT ONLY AT THE SEAT (the farmhouse glyph check on Inashiro, feature
-    317): `landlocked` judged the household when it was seated, and a later household's corridor, reserved past its beds,
-    drew a lane within a few feet of it - a household with a way of its own, reached across its neighbor's yard. Its other
-    layouts are no longer asked, nor is it re-laid with one (feature 318: no seated house is taken back and seated again).
-
-    Research:
-        no way of its own on the finished map - research/questions/0081-village-lanes.html, research/questions/0081-village-lanes.drawing.html: a household whose drawn layout has a way of its own on the finished map is reached by it, its passage ended in place
-    """
-    if getattr(s, "_access", None) is None:
-        return 0
-    revoked = 0
-    while True:
-        found = 0
-        for rec in list(s.M.get("houses") or []):
-            if not rec.get("reached_across"):
-                continue
-            geom = rec.get("geom") or {}
-            corridor = own_corridor(s, rec, geom)
-            if corridor is None:
-                continue
-            reserve(s, corridor, (float(rec["x"]), float(rec["y"])))
-            geom["access"] = corridor
-            for key in ("reached_across", "passage_depth", "passage"):
-                rec.pop(key, None)
-            found += 1
-        revoked += found
-        if not found:
-            return revoked
 
 
 def reserve_way(s: Settlement, rec: dict[str, Any], geom: Any, at: Pt) -> None:
