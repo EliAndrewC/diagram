@@ -8,7 +8,7 @@
 A clustered (nucleated) hamlet fixes two ways before any farmhouse is seated: the EXIT STRIP, a straight corridor from the
 cluster's center outward that every house keeps off and the map later draws as the start of the track out; and, on a brook
 map, the FIELD WAY, the hamlet's path to its field, routed and reserved before seating. Both go. The farmhouses are seated
-with nothing laid or reserved for a way; the room feature 318 already keeps between neighbors (a lane's room, 20 ft) is
+with nothing laid or reserved for a way; the room feature 318 already keeps between neighbors (a lane's room, `growth.grow_gap`: `MIN_WEB_GAP` plus the parting) is
 what keeps a way possible; the track out and the ways are laid after the houses stand. The GM: *"we should eliminate both
 the exit strip and the field way as things placed in advance of the homesteads being placed, because the space we've
 already allocated can serve the same function"*; kept only *"if it makes things significantly faster"*, as an optimization.
@@ -35,9 +35,9 @@ track out or the field path; the claims of the code that seats and lays them cit
 
 ## Requirements
 
-- **FR-001**: On every settlement form, no way, strip or corridor MUST be reserved, drawn or recorded before the last
-  farmhouse is seated; the exit strip (`access.start_tree`'s corridor, `access_exit`) and the field's corridor
-  (`stages.reserve_field_corridor`) are removed.
+- **FR-001**: The exit strip (`access.start_tree`'s corridor, `access_exit`) and the field's corridor
+  (`stages.reserve_field_corridor`) MUST be removed, and nothing reserved, drawn or recorded in their place before the last
+  farmhouse is seated. (A row village's planned streets, page 0033's planned colony, are not touched.)
 - **FR-002**: While houses are seated, "a way of its own" (feature 318's `SeatRegion.opens`) MUST mean a dooryard opening onto
   lane ground connected to the open country on the side the way out will leave - ground, not a way; a household beyond water
   or walled in by its neighbors is not counted open.
@@ -45,8 +45,9 @@ track out or the field path; the claims of the code that seats and lays them cit
   in the gaps (feature 318's gap pass), joined to the track out or an earlier way, then the field path as the web lays it.
 - **FR-004**: Every rule a map is held to today MUST hold after: every household reached (by a way or across a neighbor's yard),
   the track out off the map, the field reached on a brook map, the cohort passing every seed main passes.
-- **FR-005**: Performance MUST be measured against main (the bookends); were the strip shown to make the hamlet significantly
-  faster, the GM's words allow keeping it as an optimization - the measurement decides, and is put to the GM.
+- **FR-005**: Performance MUST be measured against main (the bookends, which measure the two removals together); were the
+  exit strip or the field's corridor shown to make the hamlet significantly faster, the GM's words allow keeping it as an
+  optimization - the measurement decides, and is put to the GM.
 - **FR-006**: Page 0081's drawing page and the claims of every changed unit MUST say what the map does; the record checks and
   claims checks the edits owe are run (feature 318's scoped re-check).
 
@@ -73,4 +74,5 @@ track out or the field path; the claims of the code that seats and lays them cit
 
 ## Review history
 
-- (none yet)
+- Round 1 (spec-fidelity, 2026-10-04): CHANGES REQUIRED - FR-001 narrowed to the two named reservations (a row village's
+  streets untouched), FR-005 covers both, the Summary's room named by its constant; applied.
