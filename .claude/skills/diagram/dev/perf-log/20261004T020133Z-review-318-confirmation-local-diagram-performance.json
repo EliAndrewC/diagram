@@ -1,0 +1,62 @@
+{
+  "band": 2,
+  "base": {
+    "commit": "ddb924e01",
+    "label": "318-start",
+    "utc": "20261003T171426Z"
+  },
+  "binding": "8727a39194f95ce991e4a4538f2b9ae2ad2b0870c43a21f181cb37cd898d441a",
+  "end": {
+    "commit": "cdd1bc379",
+    "label": "318-end",
+    "utc": "20261004T015841Z"
+  },
+  "environment": "local",
+  "feature": "318-grow-outward-no-restart",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "bf917120-9a91-46b2-b9b1-10b792b1a311",
+    "utc": "20261004T020133Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": -3.3,
+          "39": -3.2,
+          "4": 2.9,
+          "47": 6.7
+        },
+        "total_pct": 0.8
+      },
+      "20": {
+        "seeds": {
+          "25": -16.0,
+          "39": 3.6,
+          "4": -1.5,
+          "47": 17.2
+        },
+        "total_pct": -0.4
+      },
+      "40": {
+        "seeds": {
+          "25": -14.1,
+          "39": 0.7,
+          "4": -11.4,
+          "47": -18.9
+        },
+        "total_pct": -11.5
+      }
+    },
+    "seeds": {
+      "25": 2.6,
+      "39": 2.6,
+      "4": 17.6,
+      "47": -10.2
+    },
+    "total_pct": 3.4
+  },
+  "note": "Consistent with the bookend and the control. Control perf-318-control-gap-pass exists and is my own counterfactual (same subjects, gap pass stubbed; main grow_gap with the pass kept). Seed 4 +17.6 pct is web +0.38 s, hinterland +0.26 s, notice +0.14 s, homesteads only +0.05 s; with main gap the control returns web to 0.56 s and hinterland to 0.90 s, so that is layout, not work. Seeds 25/39 grow in homesteads only (+0.40/+0.24 s), the pass. The round-4 list reads (cdd1bc379, diff checked: flood on lists with a dict pred, way_out/trace on dist.tolist()/pred.tolist(), laid kept an array) took homesteads at 15 hh from 1.59/1.62/1.28/1.48 to 1.43/1.37/1.15/1.36 s (-0.66 s summed) between end records 014912Z and 015841Z, the size I measured for the flood alone. 20/47 notice +0.7 s and 40/39 notice +2.2 s are the layout swing the control shows going both ways. test_gap_ways passes (12).",
+  "verdict": "consistent"
+}

@@ -37128,10 +37128,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/gap_ways.py::flood#a way keeps to the middle of its gap": {
-  "code": "ca62fb9c0631a915",
-  "core": "8361008e37ee4107",
+  "code": "8141d08ea0873fa1",
+  "core": "9089392b73ee76ea",
   "date": "2026-10-03",
-  "note": "\"along the gaps, keeping to their middle\"",
+  "note": "the page says \"keeping to their middle\" but gives no figure, so CENTER_CELLS and CENTER_WEIGHT are a fair guess",
   "research": "10d6e651e3fb0112",
   "verdict": "IN-STEP"
  },
@@ -37152,51 +37152,59 @@
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/gap_ways.py::lay_the_ways#a household no way reaches is pinched across its nearest reached neighbor's yard": {
-  "code": "47ed83e1e2e5efee",
-  "core": "a168fd64f8948e29",
+  "code": "4f2e5b4e274e9a58",
+  "core": "a2abcb237e31a9ce",
   "date": "2026-10-03",
-  "note": "\"reached across the yard of its nearest neighbor with a way\"",
+  "note": "matches \"reached across the yard of its nearest neighbor with a way\"",
   "research": "10d6e651e3fb0112",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/gap_ways.py::lay_the_ways#a later way's join reach": {
-  "code": "2478f6d1fecf765e",
-  "core": "a168fd64f8948e29",
+  "code": "45294ce15f4b8bf4",
+  "core": "a2abcb237e31a9ce",
   "date": "2026-10-03",
-  "note": "the page gives no join radius",
+  "note": "the page says \"to an earlier way\" and gives no reach; its 25 ft rule is about lane ends, a different thing",
   "research": "",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/gap_ways.py::lay_the_ways#a passage a laid way makes unnecessary is ended": {
-  "code": "37b0478ed0510893",
-  "core": "a168fd64f8948e29",
+  "code": "a7a14e9168dd01f0",
+  "core": "a2abcb237e31a9ce",
   "date": "2026-10-03",
-  "note": "\"one that a way reaches is given it\", and no house is moved",
+  "note": "matches \"is given it and is no longer reached across its neighbor\"",
   "research": "10d6e651e3fb0112",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/gap_ways.py::lay_the_ways#a way's search ring": {
-  "code": "a1aa2477c582deb1",
-  "core": "a168fd64f8948e29",
+  "code": "8cbe26745954a01d",
+  "core": "a2abcb237e31a9ce",
   "date": "2026-10-03",
-  "note": "a search bound",
+  "note": "a limit on the search, plumbing",
   "research": "",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/gap_ways.py::lay_the_ways#each household's way laid once every house stands": {
-  "code": "99a9f8469cf111e0",
-  "core": "a168fd64f8948e29",
+  "code": "368e4e589ab7e222",
+  "core": "a2abcb237e31a9ce",
   "date": "2026-10-03",
-  "note": "the page records the gaps reading as a GUESS",
+  "note": "matches \"seat every farmhouse before they lay any lane\"",
   "research": "10d6e651e3fb0112",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/gap_ways.py::lay_the_ways#households' ways laid in order, nearest the way out first": {
-  "code": "00e7c0ac7a4c34c8",
-  "core": "a168fd64f8948e29",
+  "code": "7c7fa6194b5a7357",
+  "core": "a2abcb237e31a9ce",
   "date": "2026-10-03",
-  "note": "nothing in the bundle answers the order",
+  "note": "the record says nothing on the order, so GUESS is right",
   "research": "",
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/rolling/gap_ways.py::lay_the_ways#laid in the gaps between the house plots": {
+  "code": "e147f30afe03c5fb",
+  "core": "a2abcb237e31a9ce",
+  "date": "2026-10-03",
+  "note": "the page records \"lanes are the gaps left between its house plots\" as a GUESS",
+  "research": "10d6e651e3fb0112",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/gap_ways.py::mark_laid#plumbing": {
@@ -37216,28 +37224,28 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/gap_ways.py::trace#join reach": {
-  "code": "bf8e121eae5934f8",
-  "core": "ac91c42bca2a982e",
+  "code": "6b017820308bf5e6",
+  "core": "32b691cd9f4a0f1c",
   "date": "2026-10-03",
-  "note": "the page says ways are \"joined at a T\" but gives no reach; its 25 ft is for lane ends that nearly meet, not for this join",
+  "note": "the page gives no reach for joining an earlier way",
   "research": "",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/gap_ways.py::trace#ways join at a T": {
-  "code": "73414487fe5d374f",
-  "core": "ac91c42bca2a982e",
+  "code": "7c1fd240bfde43ec",
+  "core": "32b691cd9f4a0f1c",
   "date": "2026-10-03",
-  "note": "follows the flood to the way out or joins an earlier way at its foot; matches \"joined at a T\"",
+  "note": "the code joins at the nearest point on the way, which matches \"joined at a T\"",
   "research": "10d6e651e3fb0112",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/gap_ways.py::way_out#a way leaves its own homestead from its dooryard": {
-  "code": "6cfd39a43f602f6b",
-  "core": "0adbf376b141af41",
+  "code": "78fb85fd06222d66",
+  "core": "c6fd9626d100f842",
   "date": "2026-10-03",
-  "note": "searches from the dooryard doors over its own admitted cells; matches \"laid from its dooryard\"",
+  "note": "the code matches \"leaves its dooryard round its own garden beds and fixtures\", but the drawing page never names the forecourt, the yard's far edge or the flanks past the gable that the claim lists; need the research page 0081-village-lanes.html or the code that picks the doors",
   "research": "10d6e651e3fb0112",
-  "verdict": "IN-STEP"
+  "verdict": "CANNOT-TELL"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/lot.py::BUNDLE_PART_KEYS#quota, record and registry plumbing": {
   "code": "a94714d47790c95e",
@@ -37672,12 +37680,20 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/passage.py::reserve_way#the corridor reserved as it is seated": {
-  "code": "90af12c0241b5916",
+  "code": "6eae734906adf970",
   "core": "95292eddacb0058b",
   "date": "2026-10-03",
-  "note": "reserving the corridor while the houses are seated is the deviation the page records (\"Older village maps still find each path as they seat a house\"), so it should be DEVIATION 0081-village-lanes.drawing.html. Split off the walk's no-build reservation as UNRESEARCHED",
+  "note": "the page records \"Older village maps still find each path as they seat a house\" as a deliberate deviation",
+  "research": "10d6e651e3fb0112",
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/rolling/passage.py::reserve_way#the walk reserved as it is seated": {
+  "code": "6a6715549a4d5a21",
+  "core": "95292eddacb0058b",
+  "date": "2026-10-03",
+  "note": "the page does not say whether later houses must keep off the walk",
   "research": "",
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/passage.py::reserve_way#walk not drawn as a lane": {
   "code": "90ae717eccba12c4",

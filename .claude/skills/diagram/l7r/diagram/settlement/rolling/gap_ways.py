@@ -246,7 +246,7 @@ def way_out(L: Layers, dist: Any, doors: Sequence[Pt], area: tuple[int, int, int
     to the flood's cells, 8-way with no corner cut. Returns its exits `(walk + flood, i, j)`, cheapest first, and each cell's
     step back (a door's cell steps back to the door itself).
 
-    Research: a way leaves its own homestead from its dooryard - research/questions/0081-village-lanes.drawing.html: forecourt, the yard's far edge, the flanks past the gable; off its own house, beds and fixtures
+    Research: a way leaves its own homestead from its dooryard - research/questions/0081-village-lanes.drawing.html: from the doors it is given (`access.doors_of` picks them), round its own house, beds and fixtures
     """
     i0, i1, j0, j1 = area
     seen: dict[tuple[int, int], bool] = {}
