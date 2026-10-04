@@ -1,0 +1,7 @@
+# 0029 farmhouses: pre-existing record points left after feature 318's final check round
+- drawing: add kotobank-minka-27 after "the magariya from northern Miyagi to southern Iwate" (the range is that note's, not magariya-jawiki-21's)
+- drawing: "The L-shaped house belongs in the north" - the record's kotobank-minka-26 has the winged form as tsunoya in western Japan too; GM to choose: a drawing choice (say so) or allow the western tsunoya
+- drawing: "The straight house, under one roof, is the plain form." - carry kotobank-minka-26 onto the drawing page or link the main page's bullet
+- main: add sakamoto-tsubaki-1985-omoya-muki-2 after "the point either side of it," in the first paragraph (the 87% that makes it "most")
+- drawing: the bunto house "on the Pacific side" - kotobank-minka-28 also has it numerous in the 18th century inland near Utsunomiya; say so (as the main page does)
+- drawing: "The straight house, under one roof, is the plain form." - kotobank-minka-23 fits; carry it onto the drawing page
