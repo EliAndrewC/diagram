@@ -27,10 +27,12 @@ two sentences. (inferred)
 
 ## The tabs
 
-**M4. Three tabs: About, Guesses, References.** About is the write-up. Guesses is a bulleted list of what this project had to
-guess, and is absent when there is nothing guessed. References lists the research questions the write-up rests on (M14).
+**M4. Four tabs: About, Guesses, Depiction, References.** About is the write-up. Guesses is a bulleted list of what this
+project had to guess, and is absent when there is nothing guessed. Depiction says how the map draws the thing (D1-D6), and is
+absent when there is nothing to say and no drawing page. References lists the research questions the write-up rests on (M14).
 (GM: *"we could have an overview tab and a guesses tab and a references tab ... not everything would necessarily have a
-guesses tab"*; the name "About", GM 2026-10-03)
+guesses tab"*; the name "About", GM 2026-10-03; the Depiction tab, GM 2026-10-04: *"I want 'How we draw it' things on its own
+tab"*)
 
 ## What the About tab answers
 
@@ -86,25 +88,53 @@ things that we had to guess about"*)
 evidence class `reading`), About may state it with an honest hedge ("most", "probably", "seems to have") and it is not a guess
 bullet. Where the page calls it a guess, it is a bullet. The page's evidence comment decides. (inferred)
 
-**M13. A deviation or a convention is told in About, where it applies.** A deliberate deviation - the setting differing from
-the history - is said in the paragraph it changes, plainly as the setting's ("In Rokugan, ..."). A map drawing convention - a
-mark drawn at another size or color so the map reads - is said in the look paragraph as a fact about the drawing, with the
-real thing's size or color: "The map draws the beans as dark beads so they show; the plants were ..." Neither goes on the
-Guesses tab, and neither opens the modal. Nothing is announced as historically accurate: that is presumed (feature 156).
-(inferred; the presumption is GM 2026-08-29)
+**M13. A deviation is told in About; how the map draws it is the Depiction tab's.** A deliberate deviation - the setting
+differing from the history - is said in the paragraph it changes, plainly as the setting's ("In Rokugan, ..."). A map drawing
+convention and any statement about how the map draws the thing go on the Depiction tab (D1-D6), not in About (amended
+2026-10-04; until then a convention was said in About's look paragraph). Neither goes on the Guesses tab, and neither opens
+the modal. Nothing is announced as historically accurate: that is presumed (feature 156). (GM 2026-10-04 for the Depiction
+tab; the presumption is GM 2026-08-29)
 
 ## References
 
 **M14. References are exactly what the write-up covers.** The References tab lists the research questions a statement in About
 or a guess bullet rests on - every one of them, and no other. A question the modal does not draw on is not listed, however
 close its subject; the reader finds it through the research site's navigation and cross-links. A drawing page ("How our maps
-draw ...") is listed only when a statement rests on it (a convention, a drawn figure). The question the modal draws on most is
-listed first. (GM: *"link specifically to the things which relate to what we decided to cover in the write-up, and then simply
+draw ...") is never listed here: it is the Depiction tab's (D5). The question the modal draws on most is listed first. (GM: *"link specifically to the things which relate to what we decided to cover in the write-up, and then simply
 not link to things which are not covered"*)
 
 **M15. The record is searched for what the modal leaves open.** A standard question (M5-M7) answered "not recorded" or by a
 guess is checked against the record's other questions on the same subject; a question that answers it is used and listed.
 (GM: *"I'm actually a little surprised to see as few references as we are seeing"*)
+
+## Depiction
+
+**D1. What the tab is for.** The reader who wonders why the thing looks as it does on the map - why every one alike, why so
+bold, why that color - is told here: how the map draws it, and how that differs from the real thing. (GM 2026-10-04: *"'How we
+draw it' things on its own tab"*)
+
+**D2. A convention, with the real thing.** Each map drawing convention the glyph uses - a mark drawn larger, bolder or in
+another color so it reads - is told as a fact about the drawing together with what the real thing was like: "The map draws the
+beans as dark beads so they show; the plants were low and green." (the GM's form, feature 183)
+
+**D3. A standardization, with why - only where it is recorded as one.** Where the map shows one form for something the record
+says varied, and the drawing page records that as a deliberate convention, say so and why ("one roof form, so a farmhouse reads
+as a farmhouse"). Where the record makes the variety a knob and the engine does not roll it - a drift the claims report lists -
+do NOT present the single form as deliberate: leave it unsaid here, and the drift stays on the claims report to be fixed. (GM
+2026-10-04, of the farmhouse's single roof: *"NOT a deliberate convention ... as long as it ends up on that list for later"*)
+
+**D4. What varies by settlement.** One clause at most, pointing to the title card, where a settlement's choices are told (M9).
+(inferred)
+
+**D5. The drawing pages, linked.** The tab ends with the "how our maps draw it" pages the modal's Depiction rests on - every
+one of them, and no other - as links (the `Drawing:` list). (GM: *"things which are currently linked on the References tab which
+are about how something is drawn would be moved to this tab"*)
+
+**D6. Links alone, or no tab.** With nothing notable to explain, the tab is the links alone; with no drawing page and nothing to
+explain, there is no tab. (GM: *"In cases where there is nothing noteable to explain, then we would simply link to the 'How we
+draw it' sections; in cases where no such sections exist we would omit the tab entirely"*)
+
+Voice, units and terms as M16-M19; record talk is as barred here as in About - say what the map does, not what a page says.
 
 ## Voice
 

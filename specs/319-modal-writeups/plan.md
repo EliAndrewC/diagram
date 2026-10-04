@@ -35,10 +35,10 @@ parser keeps them for `About:` only). `Guesses:` is a list: each line opening `-
 data tags `Name:`, `Covers:`, `Sources:`, `Entry:` stay required; `Form: particular` is optional (default `standard`) and says
 which guidelines and checks hold the modal. `FeatureClass` gains `about: tuple[str, ...]`, `guesses: tuple[str, ...]`, `form`;
 `label` becomes `Label | None` (None in the new form - the classification is per statement: a guess is a bullet, a deviation
-and a convention are said in the About text, the evidence classes stay on the research pages). Both forms parse until the
+is said in the About text, a convention on the Depiction tab since D13, the evidence classes stay on the research pages). Both forms parse until the
 rollout ends; the last rollout task removes the old form and its tests. (FR-002, FR-005)
 
-**D2 - The tabbed modal.** One dialog; a tab strip `About` / `Guesses` / `References` of buttons (`role="tablist"`), a tab with
+**D2 - The tabbed modal.** One dialog; a tab strip `About` / `Guesses` / `Depiction` (D13) / `References` of buttons (`role="tablist"`), a tab with
 nothing to show is not drawn, the dialog opens on About every time. About: the new form's paragraphs, then the sibling line;
 an old-form class shows its lead, what, why, caveat and on-this-map lines there unchanged, so every modal is tabbed from the
 first commit. Guesses: a bulleted list. References: the lead-in line and the question links, as the references dialog has them
