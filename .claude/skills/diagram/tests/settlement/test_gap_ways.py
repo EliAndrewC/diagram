@@ -87,6 +87,7 @@ def test_lane_ground_holds_off_the_homesteads_the_wood_seats_and_the_sites_taken
     state[1, :] = 2  # the next surely clear
     s._free_ground = SimpleNamespace(x0=0.0, y0=0.0, cell=40.0, nx=40, ny=40, _state=state, lines_edge_points=lambda lines: [])
     s._site_corridors = SimpleNamespace(hit_points=lambda pts: pts[0][1] > 800.0)  # the uncertain ground south of 800 taken
+    s._site_chains = [[((0.0, 850.0), (1400.0, 850.0), (0.0, -1.0))]]  # ...and south of 850 on the field side of a chord, decided at once
     L = gw.lane_layers(s, list(s.placed), list(s._access.segs), 7.0)
     c = L.cell_of((box[0], box[1]))
     assert c is not None and L.cover[c] == 1 and L.blocked()[c]
@@ -100,6 +101,10 @@ def test_lane_ground_holds_off_the_homesteads_the_wood_seats_and_the_sites_taken
     off_wood = (L.cx[:, None] - wx) ** 2 + (L.cy[None, :] - wy) ** 2 > 20.0**2
     north = (k[0] > 1) & (np.broadcast_to(L.cy[None, :], L.site.shape) < 790.0) & clear & off_wood
     assert south.any() and L.site[south].all() and not L.site[north].any(), "uncertain: asked exactly"
+    s._site_corridors = None
+    deep = (k[0] > 1) & (np.broadcast_to(L.cy[None, :], L.site.shape) > 855.0) & clear
+    L2 = gw.lane_layers(s, list(s.placed), list(s._access.segs), 7.0)
+    assert deep.any() and L2.site[deep].all() and not L2.site[south & ~deep & (np.broadcast_to(L.cy[None, :], L.site.shape) < 845.0)].any(), "the chords alone"
     assert L.cell_of((-50.0, 0.0)) is None
 
 

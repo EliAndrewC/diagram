@@ -412,6 +412,31 @@ def chain_violated(px: float, py: float, chains: Sequence[Sequence[Chord]], gap:
     return False
 
 
+def chain_violated_many(xs: Any, ys: Any, chains: Sequence[Sequence[Chord]], gap: float) -> Any:
+    """`chain_violated` for every point of the arrays `(xs, ys)` at once - the same tests, vectorized (feature 318, the
+    perf-audit's third round: `gap_ways.lane_layers` asked ~35k cells one at a time).
+
+    Research: plumbing - NONE: the same answers, asked in one call
+    """
+    import numpy as np
+
+    xs = np.asarray(xs, dtype=np.float64)
+    ys = np.asarray(ys, dtype=np.float64)
+    bad = np.zeros(xs.shape, dtype=bool)
+    for chain in chains:
+        for (ax, ay), (bx, by), (nx, ny) in chain:
+            ex, ey = bx - ax, by - ay
+            el2 = ex * ex + ey * ey
+            if el2 <= 1e-12:
+                continue
+            t = ((xs - ax) * ex + (ys - ay) * ey) / el2
+            on = (t >= 0.0) & (t <= 1.0)
+            qx = np.where(t < 0.0, ax, bx)
+            qy = np.where(t < 0.0, ay, by)
+            bad |= np.where(on, (xs - ax) * nx + (ys - ay) * ny < gap, np.hypot(xs - qx, ys - qy) < gap)
+    return bad
+
+
 def chain_distance(px: float, py: float, chains: Sequence[Sequence[Chord]]) -> float:
     """The distance from (px, py) to the nearest chord (unsigned)."""
     best = float("inf")

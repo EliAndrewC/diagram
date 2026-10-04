@@ -12,7 +12,7 @@ stands this module lays every household's way ONCE, in the gaps:
 
 1. LANE GROUND as one raster over the cluster (`lane_layers`): the homesteads held off by the corridor's half-width - counted
    per cell, so a household's own search can lift its own - the reserved wood seats by the lane gap, and the site's ground by
-   the free-ground raster, its uncertain cells asked exactly (`access.site_samples_clear` via the corridor's own test).
+   the free-ground raster, its uncertain cells asked exactly (`access.site_samples_clear`'s two tests, the chords for all of them at once).
 2. ONE FLOOD from the way out (the exit strip, the field's corridor): the cheapest walk to every cell, each step dearer beside
    blocked ground so a way keeps to the middle of its gap (`flood`).
 3. Each household, nearest the way out first: a small search out of its own homestead from its dooryard doors, off its house,
@@ -37,8 +37,8 @@ import math
 from collections.abc import Sequence
 from typing import TYPE_CHECKING, Any
 
-from .._geom import Pt, seg_closest
-from .access import _standing_memo, admitted, doors_of, doubles_back, fixtures_clear, house_clear, house_gap, legs, parts_clear, reserve, site_samples_clear, standing_ground
+from .._geom import Pt, chain_violated_many, seg_closest
+from .access import _standing_memo, admitted, doors_of, doubles_back, fixtures_clear, house_clear, house_gap, legs, parts_clear, reserve, standing_ground
 from .route import taut
 
 if TYPE_CHECKING:
@@ -165,9 +165,17 @@ def lane_layers(s: Settlement, boxes: Sequence[Any], segs: Sequence[tuple[Pt, Pt
         state = np.zeros((L.nx, L.ny), np.int8)
         state[inside] = fg._state[gi[inside], gj[inside]]
         L.site |= state == 1
-        for a, b in zip(*np.nonzero((state == 0) & ~L.site), strict=True):
-            if not site_samples_clear(s, [L.at((int(a), int(b)))]):
-                L.site[a, b] = True
+        ia, ib = np.nonzero((state == 0) & ~L.site)
+        if len(ia):  # `site_samples_clear`'s two tests: the chords for every uncertain cell at once (perf-audit round 3), then the corridors
+            chains, corr = getattr(s, "_site_chains", None), getattr(s, "_site_corridors", None)
+            if chains:
+                bad = chain_violated_many(L.cx[ia], L.cy[ib], chains, 0.0)
+                L.site[ia[bad], ib[bad]] = True
+                ia, ib = ia[~bad], ib[~bad]
+            if corr is not None:
+                for a, b in zip(ia.tolist(), ib.tolist(), strict=True):
+                    if corr.hit_points([L.at((a, b))]):
+                        L.site[a, b] = True
     return L
 
 
