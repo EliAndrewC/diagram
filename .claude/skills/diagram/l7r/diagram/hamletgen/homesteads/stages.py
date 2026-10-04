@@ -96,8 +96,9 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     on the canvas; each next house offered from a house already standing, in a ring of
     directions round it, at the distance where the two homesteads' footprints part - the envelope, the woodlot, the path
     out, and to the south the sun its yard and beds are owed - jittered by a hash of the standing house's position; wider
-    rings while households are left. A grown house's path to the access tree is laid as it is placed, straight where one
-    clears and routed round what stands where none does (`settlement/rolling/route.py`). A DISPERSED hamlet keeps the older
+    rings while households are left. No path is searched while a house is seated (feature 318): its yard must open onto lane
+    ground (`SeatRegion.opens`), and every household's way is laid in the gaps once the last house stands
+    (`settlement/rolling/gap_ways.py`), routed round what stands where no straight way clears. A DISPERSED hamlet keeps the older
     passes - the front row along the paddy's chords, the ranks behind in a brick pattern, the rescue cloud, then the
     exhaustive pass - and a row village seats its rows (`rows.seat_rows`); neither runs on this map, so neither is a step here.
 
@@ -140,7 +141,7 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     Research:
         a yard's south sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: switched on here, `SUN_CORRIDOR_FT` (39 ft) clear south of every yard and bed
         the belt's afternoon lane - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: switched on here, `WEST_SUN_FT` (50 ft) west and southwest of a plot
-        houses before lanes - research/questions/0081-village-lanes.drawing.html: every household seated while no lane stands on the map
+        houses before lanes - research/questions/0081-village-lanes.drawing.html: every household seated while no lane stands on the map and no way is sought for it; each household's way laid once the last house stands (`gap_ways.lay_the_ways`)
         the declared cluster shape - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the knob as the drawing resolves it, written to the manifest and the plan
         a grove farm's own bamboo - research/questions/0075-bamboo-groves-chikurin.drawing.html: drawn in its grove where the `bamboo` knob is homestead or both
     """
@@ -423,7 +424,7 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
         the seating band - UNRESEARCHED: `SEATING_GROUND_FT` of band per household, the whole ground and wood floor of one holding
         the front row's size - UNRESEARCHED: the square root of the households times the rolled shape's aspect band, at least 6
         the step between ranks - UNRESEARCHED: an envelope's depth
-        a lane's room between ranks - research/questions/0081-village-lanes.drawing.html: `MIN_WEB_GAP`, a lane 7 ft clear of a garden fence on each side
+        a lane's room between ranks - UNRESEARCHED: `MIN_WEB_GAP` between the dispersed form's ranks (a dispersed hamlet has no lanes between its farmhouses, research/questions/0081-village-lanes.drawing.html)
         a yard's sun between ranks - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: `SUN_CORRIDOR_FT` more where the ranks climb north
     """
     seat = plan.seat
@@ -549,7 +550,7 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
         _out = exit_bearing(s, (float(seat["cx"]), float(seat["cy"])), (float(ox), float(oy)), _length)
         if _out is None:
             return 0, 0
-        start_tree(s, (float(seat["cx"]), float(seat["cy"])), _out, _length).routed = grows(plan)  # a grown house's path may be routed (308 D3)
+        start_tree(s, (float(seat["cx"]), float(seat["cy"])), _out, _length).routed = grows(plan)  # a way laid by the gap pass may be routed (308 D3, 318)
         if not reserve_field_corridor(s):
             return 0, 0  # ...AND ITS FIELD'S CORRIDOR (ways W03): a margin with no lawful way on to its field seats no one here
     # THE SEAT REGION (feature 297, FR-001, plan B1): built once the exit strip and the field's corridor stand, kept current as

@@ -80,7 +80,7 @@ GROW_LEVELS: tuple[tuple[int, tuple[float, ...]], ...] = ((8, (1.0,)), (12, (1.0
 #: is never exactly equal (an exact tie would never fire); a ring wide enough to hold several steps would make the field the
 #: primary order again, which the GM ruled out.
 TIE_RING_FT = 20.0
-"""Research: seats counted equal - GUESS: within one 20 ft ring of distance from the seat center, about the parting between neighbors"""
+"""Research: seats counted equal - GUESS: within one 20 ft ring of distance from the seat center, about the threading gap between neighbors (`grow_gap`)"""
 #: Half a woodlot clump's width about a reserved wood seat, in px: the copse's clump (`COPSE_CLUMP_BS` at hamlet scale is 24)
 WOOD_CLUMP_PX = 12.0
 #: How many times a seat is moved out to clear its own envelope rolled where it stands (`settled_seat`) before it is dropped:
@@ -245,7 +245,7 @@ def keeps_every_gap(box: Sequence[float], standing: Sequence[tuple[Pt, Reach, An
 TIGHT_GAP_PX = 2.0
 """Research:
     household against its neighbor's land - research/questions/0081-village-lanes.html: land with no way of its own to the road, reached by passage over a neighbor's
-    the parting - GUESS research/questions/0081-village-lanes.drawing.html: the 2 ft the growth leaves between neighbors, with no path's strip
+    the parting - research/questions/0081-village-lanes.drawing.html: the 2 ft the cluster's growth leaves between neighbors, with no path's strip
 """
 
 
@@ -382,7 +382,7 @@ def grow_the_margin(s: Settlement, plan: SitePlan, placed: int, largest: tuple[f
     `grow_took` and `grow_level` (the widening levels it needed).
 
     Research:
-        cluster grown house by house - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.html, research/questions/0032-how-our-maps-pack-a-clustered-villages-houses.drawing.html: each next house where two footprints part by a lane's threading gap, jittered, nearest the seat first, nearer the field breaking ties (`grow_key`)
+        cluster grown house by house - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.html, research/questions/0032-how-our-maps-pack-a-clustered-villages-houses.drawing.html, research/questions/0081-village-lanes.drawing.html: each next house where two footprints part by a lane's threading gap, jittered, nearest the seat first, nearer the field breaking ties (`grow_key`)
         first house against the field - UNRESEARCHED: the free ground nearest the seat's center
         tight seats for a passage household - research/questions/0081-village-lanes.drawing.html: offered round each house a passage may cross while the settlement's share has room, beside the ordinary seats
         a neighbor's land - research/questions/0081-village-lanes.drawing.html: its footprint as the growth parts it (`land_box`), which the household's land must adjoin

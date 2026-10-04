@@ -26,7 +26,7 @@ offered what free ground already rules out. Painting is conservative (`Region`),
 refused, and one it does not offer is one whose smallest homestead would stand on painted ground - the map moves where the
 margin bites (the GM, 2026-09-30: maps "do NOT need to remain identical in output"; the spec's Decisions).
 
-Research: seat region - NONE: rasters that prune the seats offered; the placer decides every seat
+Research: seat region - NONE: rasters that prune the seats offered, kept current as houses stand
 """
 
 from __future__ import annotations
@@ -51,6 +51,12 @@ class SeatRegion:
     """The buildable and reachable rasters over one seat band (see the module docstring)."""
 
     def __init__(self, s: Settlement, window: tuple[float, float, float, float], cell: float = SEAT_REGION_CELL) -> None:
+        """The two rasters over `window` (the module's account).
+
+        Research:
+            no way of its own across a water course within its clearance - research/questions/0081-village-lanes.drawing.html: a track keeps off wet ground; the courses painted onto lane ground at the corridor test's own clearance
+            a way of its own decided on lane ground - research/questions/0081-village-lanes.drawing.html: a dooryard that opens onto the ground the lanes are laid in, connected to the track out
+        """
         self.s, self.window, self.cell = s, window, cell
         fg = getattr(s, "_free_ground", None)
         if fg is not None:  # ON FREEGROUND'S OWN GRID, so each of its surely-taken cells is one cell here, painted exactly
@@ -77,7 +83,10 @@ class SeatRegion:
 
     def sync(self) -> None:
         """Paint what has come to stand since the last call - the tree's new corridors, newly seated homesteads and the wood
-        seats their households reserved - and drop the reachable raster, recomputed on its next read."""
+        seats their households reserved - and drop the reachable raster, recomputed on its next read.
+
+        Research: reserved wood seats bar lane ground - research/questions/0081-village-lanes.drawing.html: nothing built on a lane; a household's reserved wood seats are no ground its way runs on
+        """
         s = self.s
         tree = getattr(s, "_access", None)
         nseg, nhouse = (len(tree.segs) if tree is not None else 0), len(s.M.get("houses") or ())

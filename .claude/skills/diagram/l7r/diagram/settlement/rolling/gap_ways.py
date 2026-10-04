@@ -68,7 +68,10 @@ GAP_TRIES = 6
 """Research: ways out tried - NONE: a search breadth, measured (research R4)"""
 #: The most legs a way may take (`route.taut`): a gap way bends at plot corners, more often than a straight path does.
 GAP_LEGS = 12
-"""Research: a way bends at plot corners - GUESS research/questions/0081-village-lanes.drawing.html: "a lane runs straight between plot corners and bends at one"; at most twelve bends"""
+"""Research:
+    a way bends at plot corners - research/questions/0081-village-lanes.html: the record's own reading, "a lane runs straight between plot corners and bends at one"
+    at most twelve legs - NONE: a search breadth, the taut pull's cap
+"""
 #: A way coming within this of a way already laid joins it there, at a T, rather than running beside it: under the shadow rule's
 #: 30 ft (`WEB_SHADOW_FT`, a way beside another past a pitch), MEASURED (research R4: 10 of 14 refusals were the doubled band).
 JOIN_FT = 25.0
@@ -76,9 +79,10 @@ JOIN_FT = 25.0
 #: ...and where a way joined there breaks the tree's lane law, it is tried joined farther off (`JOIN_FAR_FT`), then run on to the way
 #: out, the first the law admits taken (MEASURED, research R5).
 JOIN_FAR_FT = 45.0
-"""Research: a farther join - NONE: a search breadth, the lane law decides"""
+"""Research: a farther join - GUESS research/questions/0081-village-lanes.drawing.html: a way joins a way laid before it at a T; tried 45 ft off where the nearer join breaks the lane law"""
 
 _STEPS = ((-1, 0, 1.0), (1, 0, 1.0), (0, -1, 1.0), (0, 1, 1.0), (-1, -1, math.sqrt(2.0)), (1, 1, math.sqrt(2.0)), (-1, 1, math.sqrt(2.0)), (1, -1, math.sqrt(2.0)))
+"""Research: plumbing - NONE: the eight steps between raster cells and their lengths"""
 
 
 class Layers:
@@ -89,6 +93,7 @@ class Layers:
     """
 
     def __init__(self, x0: float, y0: float, nx: int, ny: int, cell: float) -> None:
+        """Research: plumbing - NONE: the raster's arrays, empty"""
         import numpy as np
 
         self.x0, self.y0, self.nx, self.ny, self.cell = x0, y0, nx, ny, cell
@@ -99,20 +104,28 @@ class Layers:
         self.spans: dict[int, tuple[int, int, int, int]] = {}
 
     def span(self, x0: float, y0: float, x1: float, y1: float) -> tuple[int, int, int, int]:
-        """The cells whose centers lie in the box."""
+        """The cells whose centers lie in the box.
+
+        Research: plumbing - NONE: raster indexing
+        """
         import numpy as np
 
         return int(np.searchsorted(self.cx, x0)), int(np.searchsorted(self.cx, x1)), int(np.searchsorted(self.cy, y0)), int(np.searchsorted(self.cy, y1))
 
     def cell_of(self, p: Pt) -> tuple[int, int] | None:
-        """The cell holding `p`, or None off the raster."""
+        """The cell holding `p`, or None off the raster.
+
+        Research: plumbing - NONE: raster indexing
+        """
         i, j = int((p[0] - self.x0) // self.cell), int((p[1] - self.y0) // self.cell)
         return (i, j) if 0 <= i < self.nx and 0 <= j < self.ny else None
 
     def at(self, c: tuple[int, int]) -> Pt:
+        """Research: plumbing - NONE: a cell's center"""
         return (float(self.cx[c[0]]), float(self.cy[c[1]]))
 
     def blocked(self) -> Any:
+        """Research: plumbing - NONE: the two layers combined"""
         return self.site | (self.cover > 0)
 
 
@@ -274,7 +287,10 @@ def trace(L: Layers, dist: Any, pred: Any, laid: Any, start: tuple[int, int], tr
 
 
 def mark_laid(L: Layers, laid: Any, run: Sequence[Pt], r: int) -> None:
-    """Mark the cells within `r` cells of the way `run` as laid (a later way joins it there)."""
+    """Mark the cells within `r` cells of the way `run` as laid (a later way joins it there).
+
+    Research: plumbing - NONE: raster marking for `trace`'s join
+    """
     for a, b in legs(tuple(run)):
         n = max(1, int(math.dist(a, b) / L.cell) + 1)
         for t in range(n + 1):
@@ -305,7 +321,9 @@ def lay_the_ways(s: Settlement) -> tuple[int, int]:
     """Lay every household's way in the gaps, once every house stands (the module's account). Returns (passages ended, pinches).
     Nothing where no access tree stands (a form that builds none).
 
-    Research: each household's way laid once every house stands - GUESS research/questions/0081-village-lanes.drawing.html: the lanes as the gaps between the house plots, worn after the houses; the corridor's own tests and the tree's lane law admit each
+    Research:
+        each household's way laid once every house stands - GUESS research/questions/0081-village-lanes.drawing.html: the lanes as the gaps between the house plots, worn after the houses; the corridor's own tests and the tree's lane law admit each
+        households' ways laid in order, nearest the way out first - NONE: a search order, so a nearer household's way is there for a farther one to join
     """
     tree = getattr(s, "_access", None)
     houses = [h for h in (s.M.get("houses") or []) if h.get("geom") and h["geom"].get("bbox") is not None]
@@ -352,7 +370,12 @@ def _way_for(
 ) -> tuple[Pt, ...] | None:
     """The household `rec`'s admitted way: up to `GAP_TRIES` distinct exits from its own homestead (`way_out`), each traced
     (`trace`) joined near, joined far and run on to the way out (`lays`), pulled taut and admitted (`access.admitted`); its own
-    homestead set aside from what stands while it is asked."""
+    homestead set aside from what stands while it is asked.
+
+    Research:
+        joined near, then far, then run on to the way out - GUESS research/questions/0081-village-lanes.drawing.html: each household's way runs along the gaps to the track out or to a way laid before it, which it joins at a T
+        a way leaves its own homestead from its dooryard - research/questions/0081-village-lanes.drawing.html: its way leaves its dooryard round its own garden beds and fixtures
+    """
     geom = rec["geom"]
     own = geom["bbox"]
     sp = L.spans.get(id(own))

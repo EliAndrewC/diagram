@@ -41,7 +41,7 @@ Poly = Sequence[Sequence[float]]
 
 #: The classes a corridor is kept clear of: built and worked ground. A way runs along it; water and a deck cross it.
 CORRIDOR_KEEPERS = frozenset({"SOLID", "ANNEX", "GROUND"})
-"""Research: a lane to every house - research/questions/0081-village-lanes.drawing.html: built and worked ground keeps off a household's access corridor"""
+"""Research: a lane to every house - research/questions/0081-village-lanes.drawing.html: built and worked ground keeps off a household's access corridor; the paddy is no keeper because no corridor is laid on it (`access.corridor_clear` keeps every corridor off the field)"""
 
 #: The records whose occupancy disc a copse clump may not stand in (`village_grove`'s `occ`), the kura among them - a crown
 #: may not stand on a store either (`CANOPY_STRUCT_KEYS`).

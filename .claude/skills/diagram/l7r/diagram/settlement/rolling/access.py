@@ -80,7 +80,7 @@ def seg_box_within(a: Pt, b: Pt, box: Any, t: float) -> bool:
 class AccessTree:
     """The reserved corridors: segments `(a, b)` a footpath wide (`half` either side), indexed by their widened boxes.
 
-    Research: every house reached by a path - research/questions/0081-village-lanes.html, research/questions/0081-village-lanes.drawing.html: a corridor reserved from each door to the tree, no later homestead covering it - but for the few households reached across a neighbor's yard, whose walk is held clear the same way (`bar`)
+    Research: every house reached by a path - research/questions/0081-village-lanes.html, research/questions/0081-village-lanes.drawing.html: the exit strip and the field's corridor while houses are seated, then each household's way laid in the gaps once the last house stands (`gap_ways.lay_the_ways`), no later homestead covering it - but for the few households reached across a neighbor's yard
     """
 
     __slots__ = ("_along", "_targets", "bars", "grid", "half", "routed", "segs", "tried")
@@ -455,8 +455,9 @@ def access_corridor(s: Settlement, geom: Any, routed: bool = True) -> tuple[Pt, 
     that a clear strip reaches (`corridor_clear`) - straight, or, where the tree lies behind the house, from a flank door
     carried past the gable first (`round_the_gable`), two legs, or - on a tree that routes (`AccessTree.routed`, the
     nucleated seating's) - routed round what stands (`route.routed_corridors`), at most `ROUTE_LEGS` legs. None when none
-    of these is admitted - the seat is refused (the ONE predicate the placer reads and its test reads). `routed` False asks
-    the straight and round-the-gable corridors alone: the passage's question of a way of its own (`passage.landlocked`).
+    of these is admitted. ASKED ONLY ON A ROLL WITH NO SEAT REGION (a village's: `fit._parts_fit`, `passage.opens`) - the
+    hamlet's seating searches no path while houses are seated (feature 318) and lays every way in the gaps after the last
+    house stands (`gap_ways`). `routed` False asks the straight and round-the-gable corridors alone.
 
     THE SEARCH IS SHARED BY THE HOMESTEADS THAT SHARE ITS HOUSE AND YARD, while nothing standing changes (`_standing_memo`):
     the four garden sides of one seat have the same doors, the same gable and the same house, and differ only in their
@@ -465,8 +466,8 @@ def access_corridor(s: Settlement, geom: Any, routed: bool = True) -> tuple[Pt, 
     the corridor the search would have returned (seed 44: 610,000 strips asked for 12,215 searches, nearly all refused).
 
     Research:
-        seat refused without a path - research/questions/0081-village-lanes.drawing.html: every farmhouse is served by a lane but the few reached across a neighbor's yard, for whom finding none is the custom's condition (`passage.landlocked`)
-        routed where none is straight - research/questions/0081-village-lanes.drawing.html: after the straight and round-the-gable corridors, on the nucleated tree, round what stands (`route.routed_corridors`)
+        seat refused without a path - research/questions/0081-village-lanes.drawing.html: on a roll with no seat region (a village's) only; a hamlet seeks no way for a household while it is seated
+        routed where none is straight - research/questions/0081-village-lanes.drawing.html: after the straight and round-the-gable corridors, round what stands (`route.routed_corridors`), on a roll with no seat region only
         a way of its own without the routed search - CANON: the GM's ruling of 2026-10-03, the passage asks the straight and round-the-gable corridors alone (`routed` False)
     """
     tree = getattr(s, "_access", None)
@@ -517,9 +518,10 @@ def seat_reaches_tree(s: Settlement, core: Any) -> bool:
     """Has this house and yard ANY corridor candidate to the access tree - a door whose strip clears the house and the standing
     ground (`_house_candidates`)? The seat's own question (feature 297, FR-002), asked of the house-and-yard core before any
     layout is built: the memo entry `access_corridor` keys on the same house and yard is the one created and peeked here, so a
-    layout's corridor search continues from it rather than starting again. True where no tree is installed.
+    layout's corridor search continues from it rather than starting again. True where no tree is installed. ASKED ONLY WHERE
+    NO SEAT REGION STANDS (a village's roll): a hamlet's seat asks `SeatRegion.opens` instead (feature 318).
 
-    Research: seat refused without a path - research/questions/0081-village-lanes.drawing.html: every farmhouse is served by a lane but the few reached across a neighbor's yard, where a False is the custom's condition
+    Research: seat refused without a path - research/questions/0081-village-lanes.drawing.html: on a roll with no seat region (a village's) only; a hamlet seeks no way for a household while it is seated
     """
     tree = getattr(s, "_access", None)
     if tree is None:
@@ -604,9 +606,10 @@ def tree_admits(s: Settlement, corridor: tuple[Pt, ...], geom: Any) -> bool:
     """Would the access tree, drawn as lanes with this corridor added, keep the whole lane law among its lanes? THE WAYS' OWN
     PREDICATE (`hamletgen/ways/tree.py:tree_admits`), installed on the settlement by the hamlet's seating as `_corridor_tree`
     - the settlement package cannot import the hamlet generator. Remembered per corridor while nothing standing changes.
-    With none installed (a village roll) every corridor is admitted, as the ground test is.
+    With none installed (a village roll) every corridor is admitted, as the ground test is. Asked by the gap pass of each
+    household's way once the last house stands (`gap_ways`, feature 318), never while a house is seated.
 
-    Research: lane law over the whole tree - research/questions/0081-village-lanes.drawing.html: a corridor is admitted only where the tree drawn as lanes keeps the lane law
+    Research: lane law over the whole tree - research/questions/0081-village-lanes.drawing.html: each household's way, laid once the last house stands, admitted only where the tree drawn as lanes keeps the lane law
     """
     judge = getattr(s, "_corridor_tree", None)
     if judge is None:

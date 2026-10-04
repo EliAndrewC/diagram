@@ -436,9 +436,13 @@ def short_fragments(M: Mapping[str, Any], ground: WorkedGround | None = None) ->
     `ground` is the worked ground where the caller has it; it is built at most once here (the perf-audit of feature 308:
     each `dangling_lane_ends` built it again, though a lane taken away changes no ground - seven builds a web on seed 47 at
     20 households, the map byte-identical with one).
-    Research: debris - UNRESEARCHED: a lane under 30 ft that earns no house, join, target or end"""
+    Research:
+        debris - UNRESEARCHED: a lane under 30 ft that earns no house, join, target or end
+        a household's own way never debris - research/questions/0081-village-lanes.drawing.html: every other farmhouse is served by a lane of its own"""
     lanes = M.get("lanes") or []
-    short = [i for i, ln in enumerate(lanes) if not ln.get("connector") and not ln.get("spur") and len(ln.get("pts") or []) >= 2 and polyline_len(lane_pts(ln)) < FRAGMENT_FT]
+    # ...NOR A HOUSEHOLD'S OWN WAY, however short (feature 318, FR-014): it is the lane its household is served by (`tree.owed`),
+    # and dropped as earning nothing it was drawn again next round, until the settle refused the web (cohort seed 10)
+    short = [i for i, ln in enumerate(lanes) if not ln.get("connector") and not ln.get("spur") and not ln.get("of") and len(ln.get("pts") or []) >= 2 and polyline_len(lane_pts(ln)) < FRAGMENT_FT]
     if not short:
         return []
     reached, nets, targets, field = len(unreached_houses(M)), lane_networks(M), len(unreached_targets(M)), field_unreached(M)

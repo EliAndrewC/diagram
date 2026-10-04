@@ -89,7 +89,7 @@ GROSS_ACRES_PER_HOUSEHOLD = 1.3
 # returns to the cluster costs nothing. (At 32 the cohort drops to 21/24: the lane checks stay
 # green, but a corridor that tight re-packs the cluster into gardens and crops.)
 LANE_CLEARANCE = 40.0
-"""Research: fronting lane's corridor - research/questions/0081-village-lanes.drawing.html: farmsteads front a lane, nothing built on it; 40 ft"""
+"""Research: fronting lane's corridor - UNRESEARCHED: a 40 ft no-build corridor about a fronting lane, where the page says only that farmsteads front a lane and nothing is built on it"""
 
 # HOW FAR ALONG THE FIELD OUTLINE THE CLUSTER ACTUALLY REACHES, as a multiple of the seat band's own
 # lateral half-extent. ONE definition, read by `front_row` (which samples outline vertices out to
@@ -105,7 +105,7 @@ LANE_CLEARANCE = 40.0
 # lateral coverage failure, not the depth failure the ledger had assumed. See
 # specs/123-lane-web-and-cluster-shape/research.md R2.
 CLUSTER_SPAN_FACTOR = 1.6
-"""Research: cluster's reach along the field edge - research/questions/0032-how-our-maps-pack-a-clustered-villages-houses.drawing.html: 1.6 of the band's half-extent"""
+"""Research: cluster's reach along the field edge - UNRESEARCHED: 1.6 of the band's half-extent"""
 
 CLUSTER_ROW_SPAN = {"round": 1.2, "crescent": 1.6, "elongated": 2.6, "split": 1.6}
 """How far the FRONT ROW wraps along the field outline, per rolled `cluster_shape`, as a multiple of
@@ -299,7 +299,7 @@ LANE_FRONTAGE_STANDOFF = 70.0
 """How far off a lane's centerline a frontage seat is offered.
 
 Research:
-    farmsteads front a lane - research/questions/0081-village-lanes.drawing.html
+    farmsteads front a lane - UNRESEARCHED: a seat offered off a lane, which the page gives no figure for
     frontage seat off the lane - UNRESEARCHED: 70 ft off the centerline, with a dooryard's working margin the page does not give
 """
 

@@ -257,7 +257,7 @@ def landlocked(s: Settlement, layouts: Any) -> bool:
 
     Research:
         no way of its own - research/questions/0081-village-lanes.html, research/questions/0081-village-lanes.drawing.html: judged by the whole holding - a walk under some layout, a yard opening onto lane ground under none
-        no routed search for one - CANON: the GM's ruling of 2026-10-03, a path that must bend round other homesteads is not sought
+        no routed search for one - research/questions/0081-village-lanes.drawing.html: no path is looked for while it is seated; a long way round is not counted as a way of its own
     """
     lays = [g for g in layouts if g is not None and not g.get("unlaid")]
     if any(opens(s, g) for g in lays):

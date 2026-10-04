@@ -126,7 +126,7 @@ class MarginBearing:
         axis folded square (`wrap_square_deg`), in full within `FOLLOW_FULL_PX` of it and fading to 0.0 at
         `FOLLOW_REACH_PX`; 0.0 out of its reach.
 
-        Research: lane turn folded square and faded - research/questions/0029-farmhouses-minka.drawing.html: a house square to its lane by front or gable, the turn in full near the margin and fading behind
+        Research: lane turn folded square and faded - UNRESEARCHED: a house square to its lane by front or gable, the turn in full near the margin and fading behind
         """
         k = self.nearest(x, y)
         if k is None or len(self.samples) < 3:

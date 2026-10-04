@@ -184,7 +184,7 @@ def path_violations(path: Poly, avoid: Sequence[Poly], pond: tuple[float, float,
         off the crop - research/questions/0081-village-lanes.drawing.html: no segment through an avoid polygon
         square over water - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: no crossing under
             42 degrees
-        no deck on crop - research/questions/0081-village-lanes.drawing.html: a crossing within 14 ft of a crop polygon fouls
+        no deck on crop - UNRESEARCHED: a crossing within 14 ft of a crop polygon fouls
         two decks too close - CONVENTION: crossings under 46 ft apart counted, decks drawn over each other"""
     bad = 0
     for i in range(len(path) - 1):
@@ -239,7 +239,7 @@ class PathChecker:
             off the crop - research/questions/0081-village-lanes.drawing.html: no segment through an avoid polygon
             square over water - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: no crossing
                 under 42 degrees
-            no deck on crop - research/questions/0081-village-lanes.drawing.html: a crossing within 14 ft of a crop fouls
+            no deck on crop - UNRESEARCHED: a crossing within 14 ft of a crop fouls
             two decks too close - CONVENTION: crossings under 46 ft apart counted
         """
         bad = 0
@@ -292,7 +292,7 @@ def crossing_lands_on_crop(a: Pt, b: Pt, p: Pt, q: Pt, crops: Sequence[Poly], pa
     (`features_do_not_overlap` reports it as a dry_plots/bridges pair). The way is free to cross the
     same ditch a little further along where the crop stops - which is where the bund is anyway.
 
-    Research: no deck on crop - research/questions/0081-village-lanes.drawing.html: within 14 ft of a dry plot"""
+    Research: no deck on crop - UNRESEARCHED: within 14 ft of a dry plot"""
     hit = seg_intersect(a, b, p, q)
     if hit is None:
         return False
