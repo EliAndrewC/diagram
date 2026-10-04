@@ -792,6 +792,8 @@ dry runs	wet run
 dry-field	hatake
 dry-field conditions	kanden
 dry-field conversion	kanden
+drying yard	drying yard
+drying yards	drying yard
 ds/m	dS/m
 duck landing	duck landing
 duck landings	duck landing
