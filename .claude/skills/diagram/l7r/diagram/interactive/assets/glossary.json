@@ -11764,7 +11764,8 @@
  "seri": {
   "def": "Japanese water dropwort, a creeping herb of wet ground and paddy margins, eaten as a spring green.",
   "variants": [
-   "seri"
+   "seri",
+   "water dropwort"
   ]
  },
  "shungiku": {
@@ -15453,6 +15454,43 @@
   "variants": [
    "litter",
    "litters"
+  ]
+ },
+ "acanthopanax": {
+  "def": "A thorny East Asian shrub (the Japanese ukogi), planted in hedges to keep out intruders; its young shoots were also eaten as a vegetable.",
+  "variants": [
+   "acanthopanax"
+  ]
+ },
+ "trifoliate orange": {
+  "def": "A small thorny tree related to citrus (the Japanese karatachi), with three-part leaves and long spines, grown in China and Japan as a hedge to keep out intruders.",
+  "variants": [
+   "trifoliate orange",
+   "trifoliate oranges"
+  ]
+ },
+ "shakushina": {
+  "def": "A leaf green of the turnip family with broad, spoon-shaped stalks, also called hiraguki, grown for a household's own table.",
+  "variants": [
+   "shakushina"
+  ]
+ },
+ "oona": {
+  "def": "A local name for takana, a large-leaved mustard green, grown for a household's own table and often salted.",
+  "variants": [
+   "oona"
+  ]
+ },
+ "nebuka": {
+  "def": "A long, white-stemmed green onion, a kind of negi grown for its blanched stem.",
+  "variants": [
+   "nebuka"
+  ]
+ },
+ "kujuna": {
+  "def": "A local name for the young leaves of kusagi, a shrub (harlequin glorybower) whose leaves were gathered wild, boiled and dried as a vegetable.",
+  "variants": [
+   "kujuna"
   ]
  }
 }

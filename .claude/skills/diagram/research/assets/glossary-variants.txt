@@ -14,6 +14,7 @@ aburaya-machi	Aburayamachi
 aburayamachi	Aburayamachi
 abutment	abutment
 abutments	abutment
+acanthopanax	acanthopanax
 across the beams	ridge span
 adept	adept
 adepts	adept
@@ -2042,6 +2043,7 @@ kuchiireya	hitoyado
 kuchimai	kuchimai
 kui	kui
 kujiba	kujiba
+kujuna	kujuna
 kumi	kumi
 kumi-chi	kumi-chi
 kumi-yashiki	kumi-yashiki
@@ -2491,6 +2493,7 @@ nawabari	nawabari
 nawate	nawate
 naya	naya
 near-monospecific	monospecific
+nebuka	nebuka
 negi	negi
 nehan	Nehan gate
 nehan gate	Nehan gate
@@ -2635,6 +2638,7 @@ onin war	Onin war
 onkura	kura
 onmyodo	onmyodo
 ooku	ooku
+oona	oona
 open-ended dike	open-ended dike
 open-ended dikes	open-ended dike
 ordination platform	ordination platform
@@ -3219,6 +3223,7 @@ shaka nyorai	Shaka Nyorai
 shake-machi	shake-machi
 shaku	shaku
 shakuhachi	shakuhachi
+shakushina	shakushina
 shakyamuni	Shakyamuni
 shakyamuni buddha	Shakyamuni
 shallow-water lotus	shallow-water lotus
@@ -3826,6 +3831,8 @@ trevis	ox-shoeing frame
 trial stand	forest stand
 trial stands	forest stand
 tributary	tributary
+trifoliate orange	trifoliate orange
+trifoliate oranges	trifoliate orange
 trigram	eight trigrams
 trigrams	eight trigrams
 true duty	water duty
@@ -4029,6 +4036,7 @@ watch-house	jishinban
 water caltrop	water caltrop
 water caltrops	water caltrop
 water country	water country
+water dropwort	seri
 water duty	water duty
 water gate	water gate
 water gates	water gate
