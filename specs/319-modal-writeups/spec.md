@@ -102,6 +102,27 @@ then simply not link to things which are not covered"*.
 
 ---
 
+### User Story 3b - The Depiction tab says how the map draws the thing (Priority: P1)
+
+A reader who wonders why every farmhouse looks alike, or why a mark is so bold, opens the Depiction tab and is told how the map
+draws the thing - what is drawn larger or bolder so it reads and what it really was like, what is shown one way where reality
+varied and why - and finds the "how our maps draw it" pages linked there.
+
+**Why this priority**: the GM, 2026-10-04: *"I think I want 'How we draw it' things on its own tab."*
+
+**Independent Test**: open the farmhouse modal: its Depiction tab links its drawing pages and says nothing the map does not draw;
+`modal-depiction` passes it.
+
+**Acceptance Scenarios**:
+
+1. **Given** a kind with drawing pages and nothing notable to explain, **When** its Depiction tab is opened, **Then** it lists
+   those pages alone.
+2. **Given** a kind with neither, **When** its modal opens, **Then** there is no Depiction tab.
+3. **Given** a single drawn form where the research records a variety the engine does not draw, **When** the tab is checked,
+   **Then** it is not presented as a deliberate convention, and the drift is a finding in the claims report.
+
+---
+
 ### User Story 4 - A title card lists the choices that made this settlement (Priority: P2)
 
 A reader clicks a hamlet's title card and sees what was chosen for this settlement - the settlement form, the field form, the
@@ -201,11 +222,13 @@ when a rewrite is accepted with no changes are the rest rewritten.
 **The modal**
 
 - **FR-005**: A modal MUST be tabs: a first tab carrying the write-up named "About" (the GM's choice, 2026-10-03, FR-013), a
-  "Guesses" tab with a bulleted list of what was guessed - shown only when there is a guess - and a "References" tab, shown
-  only when there is a reference. A modal MUST NOT open with "This is a guess" because one of its details is guessed; a guess is
-  a property of a statement, not of the feature. A deliberate deviation is said in the write-up where it applies; a map drawing
-  convention is said in the write-up's appearance part (a colored or symbolic mark explained as a mark), with the true figure.
-- **FR-006**: The References tab MUST list exactly the research questions the modal's statements rest on (US3).
+  "Guesses" tab with a bulleted list of what was guessed - shown only when there is a guess - a "Depiction" tab (FR-014) and a
+  "References" tab, shown only when there is a reference. A modal MUST NOT open with "This is a guess" because one of its details
+  is guessed; a guess is a property of a statement, not of the feature. A deliberate deviation is said in the write-up where it
+  applies; how the map draws the thing - a map drawing convention with the true figure, a standardization - is the Depiction
+  tab's (amended 2026-10-04: until then a convention was said in the write-up's appearance part).
+- **FR-006**: The References tab MUST list exactly the research questions the modal's statements rest on (US3); the "how our
+  maps draw it" pages are the Depiction tab's (FR-014), not the References tab's.
 - **FR-007**: The sibling distinction ("Not to be confused with ...") and the glossary tooltips MUST keep working in the new
   form.
 
@@ -234,6 +257,18 @@ when a rewrite is accepted with no changes are the rest rewritten.
   particular sheet kind and every per-sheet `### Features` entry on the pool's magistracy and shrine sheets (reviewed under
   FR-003).
 - **FR-012**: Nothing but this spec claim lands on main until the rollout is done; the GM reviews pilots in the clone.
+- **FR-014**: A modal MUST carry a "Depiction" tab (the GM's name, 2026-10-04) saying how the map draws the thing: each map
+  drawing convention the glyph uses (a size or color changed so it reads) with what the real thing was like; each way the glyph
+  is standardized where the reality varied, with why; and links to the "how our maps draw it" pages the modal rests on. Where
+  there is nothing notable to explain, the tab is those links alone; where there are no such pages and nothing to explain, the
+  tab is absent. A standardization is written there only where it is a recorded convention; where the research records a
+  variety the engine does not draw (a knob the code does not roll), the tab MUST NOT present the single form as deliberate, and
+  the gap stays a finding in the claims report (the GM, 2026-10-04, of the farmhouse's single roof: *"NOT a deliberate
+  convention ... as long as it ends up on that list for later"*). The guidelines MUST say how the tab is written, and a defined
+  check (`modal-depiction`, under FR-008's terms - a pinned tier, a bundle, owed by a changed modal or drawing page and enforced
+  at the push) MUST judge whether the tab explains and caveats the rendering as drawn: every convention and standardization the
+  glyph uses is told with its real counterpart, nothing is claimed that is not drawn, and its links are exactly the drawing
+  pages the modal rests on.
 - **FR-013**: The session MUST pitch the GM alternative names for the first tab (at least three candidates, Overview among
   them, a line on each) no later than the hand-off of the farmhouse pilot; the GM's choice is applied to the guidelines and
   the pilot before the rollout starts. (Done 2026-10-03: the GM chose "About".)
@@ -252,6 +287,8 @@ when a rewrite is accepted with no changes are the rest rewritten.
   after a pilot's first rewrite is accepted with no changes.
 - **SC-006** (FR-007, FR-011): every class, knob value and sheet kind is rewritten and checked; `make page-check` is green,
   its browser test holding the sibling links on the About tab and the glossary tooltips on every tab.
+- **SC-008** (FR-014): every rewritten modal whose kind has a drawing page or a convention carries a Depiction tab that has
+  passed `modal-depiction`, recorded in the review ledger with cost; no References tab lists a "how our maps draw it" page.
 - **SC-007** (FR-012, FR-013): nothing but the spec claim is on main until the rollout's last task; the GM's choice of the
   first tab's name is recorded in the spec's Decisions table before the rollout starts.
 
@@ -262,6 +299,8 @@ when a rewrite is accepted with no changes are the rest rewritten.
 | A guess is a property of a statement, listed on a guesses tab; the feature-level guess lead goes | presentation (the four classes of constitution XII are kept, per statement) | the GM: the garden's lead *"is extremely misleading"* | this spec; the guidelines; `interactive/CLAUDE.md` |
 | Per-settlement facts move from the feature modals to the title card | presentation | the GM: settlement maps *"all pull from a standardized set of modals ... not ... customized modals. For anything"* | this spec; the guidelines |
 | A drawing convention is told in the write-up's appearance part, not the guesses tab | presentation | a convention is not a guess, and the reader needs it where they read about the look | this spec; the guidelines |
+| The how-it-is-drawn tab is "Depiction" | presentation | the GM, 2026-10-04: *"For the name I do like 'Depiction' so let's use that"* | this spec; the guidelines |
+| The farmhouse's single roof is not presented as a convention | presentation; the drift itself stays in the claims report (DRIFTED, `houses.py` `HousesMixin.house`) | the GM, 2026-10-04: *"The single roof is NOT a deliberate convention"*, to be fixed with the other recorded drifts later | this spec; the claims report |
 | The first tab is "About" | presentation | pitched About / Overview / At a glance / What it was; the GM, 2026-10-03: *"I like 'About' better than overview. So about guesses and references does seem pretty good"* | this spec; the guidelines |
 
 ## Assumptions
@@ -278,3 +317,4 @@ when a rewrite is accepted with no changes are the rest rewritten.
   changes (FR-010, US6, SC-005); per-sheet facts on general kinds held to the particular guidelines (Context, FR-003, US5,
   FR-011); the research pass before a guess (Assumptions). All four applied.
 - Round 2 (spec-fidelity, 2026-10-03): ACCEPT (FAITHFUL) - all four round-1 changes confirmed against the diff.
+- Amendment 2026-10-04 (the GM's Depiction tab): FR-005, FR-006 amended, FR-014, US3b, SC-008 and two Decisions added.
