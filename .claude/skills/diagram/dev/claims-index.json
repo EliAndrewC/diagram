@@ -13319,6 +13319,14 @@
   "research": "10d6e651e3fb0112",
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py::theirs#the dooryards it arrives among": {
+  "code": "22f99ac504493e12",
+  "core": "4405a46a6aa4b956",
+  "date": "2026-10-03",
+  "note": "the page gives no reach within which the dooryards a lane arrives among are exempt from the fence clearance; the 80 ft is unresearched",
+  "research": "",
+  "verdict": "IN-STEP"
+ },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py::with_edits#settle plumbing": {
   "code": "f5b886a25aded7eb",
   "core": "95c405b6068db7cf",
@@ -37135,6 +37143,14 @@
   "research": "10d6e651e3fb0112",
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/settlement/rolling/gap_ways.py::lane_layers#the half-width from the way's line": {
+  "code": "db5e5feb8b142e32",
+  "core": "6df2847c6606618b",
+  "date": "2026-10-03",
+  "note": "the page answers this, so it is not a GUESS: \"A lane keeps 7 ft clear of a garden fence\" (a drawing convention). 7 ft from the line leaves a 3 ft tread's edge 5.5 ft off the fence. Either pass half=8.5 ft, or label it DEVIATION once 0081's drawing page records the 5.5 ft",
+  "research": "",
+  "verdict": "DRIFTED"
+ },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/gap_ways.py::lay_the_ways#a household no way reaches is pinched across its nearest reached neighbor's yard": {
   "code": "47ed83e1e2e5efee",
   "core": "a168fd64f8948e29",
@@ -37199,13 +37215,13 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/rolling/gap_ways.py::trace#JOIN_FT, how near a household's way must come to an earlier way before it joins it": {
-  "code": "ac91c42bca2a982e",
+ ".claude/skills/diagram/l7r/diagram/settlement/rolling/gap_ways.py::trace#join reach": {
+  "code": "bf8e121eae5934f8",
   "core": "ac91c42bca2a982e",
   "date": "2026-10-03",
-  "note": "JOIN_FT, how near a household's way must come to an earlier way before it joins it",
+  "note": "the page says ways are \"joined at a T\" but gives no reach; its 25 ft is for lane ends that nearly meet, not for this join",
   "research": "",
-  "verdict": "UNCLAIMED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/gap_ways.py::trace#ways join at a T": {
   "code": "73414487fe5d374f",
@@ -37623,6 +37639,14 @@
   "research": "10d6e651e3fb0112",
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/settlement/rolling/passage.py::opens#the village roll's corridor": {
+  "code": "861c854f89bba9f6",
+  "core": "720e0e180b883869",
+  "date": "2026-10-03",
+  "note": "recorded as a deliberate deviation: \"Older village maps still find each path as they seat a house\"",
+  "research": "10d6e651e3fb0112",
+  "verdict": "IN-STEP"
+ },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/passage.py::passage_budget#share reached by passage": {
   "code": "9922cfb0302ed3e4",
   "core": "ae3bddb41eb85c60",
@@ -37647,13 +37671,13 @@
   "research": "10d6e651e3fb0112",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/rolling/passage.py::reserve_way#reserving the seated household's corridor (`access.reserve`) as a no-build way while houses are still being seated": {
-  "code": "95292eddacb0058b",
+ ".claude/skills/diagram/l7r/diagram/settlement/rolling/passage.py::reserve_way#the corridor reserved as it is seated": {
+  "code": "90af12c0241b5916",
   "core": "95292eddacb0058b",
   "date": "2026-10-03",
-  "note": "reserving the seated household's corridor (`access.reserve`) as a no-build way while houses are still being seated",
+  "note": "reserving the corridor while the houses are seated is the deviation the page records (\"Older village maps still find each path as they seat a house\"), so it should be DEVIATION 0081-village-lanes.drawing.html. Split off the walk's no-build reservation as UNRESEARCHED",
   "research": "",
-  "verdict": "UNCLAIMED"
+  "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/passage.py::reserve_way#walk not drawn as a lane": {
   "code": "90ae717eccba12c4",
@@ -42036,6 +42060,14 @@
   "core": "4390f906eed6b11b",
   "date": "2026-10-03",
   "note": "no figure in the record",
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/water_ways/_helpers.py::junction_floor#a crossing at 20 degrees": {
+  "code": "fc2bde833ae65857",
+  "core": "a7b9f4043342622d",
+  "date": "2026-10-03",
+  "note": "the page gives 140/50/90 degree limits but no figure for what angle counts as a crossing; 20 degrees is unresearched",
   "research": "",
   "verdict": "IN-STEP"
  },
