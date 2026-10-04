@@ -372,3 +372,19 @@ def test_a_corridor_keeps_off_its_own_well_pocket_and_its_own_fixtures() -> None
     assert access.fixtures_clear(s, (200.0, 360.0), (400.0, 360.0), own), "well clear of it"
     assert not access.fixtures_clear(s, (450.0, 300.0), (550.0, 300.0), own), "through its own privy"
     assert access.fixtures_clear(s, (200.0, 300.0), (400.0, 300.0), {"boxes": {}}), "no pocket, no fixtures"
+
+
+def test_the_site_raster_is_asked_of_a_searchs_lines_at_once_and_each_line_once() -> None:
+    """`access.prime_site`: the lines not yet asked go to the free-ground raster in one call, each answer remembered; a line
+    already remembered is not asked again, and with no raster nothing is asked."""
+    from types import SimpleNamespace
+
+    s = _open()
+    start_tree(s, (600.0, 450.0), (1.0, 0.0), 400.0)
+    access.prime_site(s, [((0.0, 0.0), (10.0, 0.0))])  # no raster: a no-op
+    calls: list[int] = []
+    s._free_ground = SimpleNamespace(lines_edge_points=lambda lines: calls.append(len(lines)) or [None] * len(lines))
+    a, b = (0.0, 0.0), (40.0, 0.0)
+    access.prime_site(s, [(a, b), (a, b), (b, a)])
+    access.prime_site(s, [(a, b)])
+    assert calls == [2, 0] and access._standing_memo(s)[1][("site", a, b)] is None

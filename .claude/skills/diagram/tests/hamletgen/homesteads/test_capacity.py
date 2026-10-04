@@ -50,6 +50,26 @@ def test_no_distance_from_the_field_refuses_a_seat() -> None:
     assert s._parts_fit(far), "760 px from the field, seated as the near one is"
 
 
+def test_with_a_seat_region_a_homestead_is_admitted_only_where_its_yard_opens_onto_lane_ground() -> None:
+    """Feature 318 (FR-012, FR-013): with an access tree and a seat region, `_parts_fit` asks no corridor - the region's one
+    predicate admits the seat, and marks the household as having a way of its own (`opens`)."""
+    from types import SimpleNamespace
+
+    from l7r.diagram.settlement.rolling.access import start_tree
+
+    s, plan = _toy(10)
+    hg.homesteads.boundary.install_site_boundary(s, plan)
+    s._seat_search = {"candidates": 0, "placer_calls": 0, "positions": 0, "rects": 0, "rounds": 0}
+    ax, ay = plan.seat["anchor"]
+    ox, oy = plan.seat["out"]
+    start_tree(s, (ax, ay), (ox, oy), 100.0)
+    near = s._bundle_geom(ax + ox * 150.0, ay + oy * 150.0, 46.0, 28.0, "SE")
+    s._seat_region = SimpleNamespace(opens=lambda g: False)
+    assert not s._parts_fit(near), "its yard closed off from the way out"
+    s._seat_region = SimpleNamespace(opens=lambda g: True)
+    assert s._parts_fit(near) and near["opens"] and "access" not in near, "admitted, no corridor searched"
+
+
 def test_free_seats_are_the_free_ground_nearest_the_seat_first() -> None:
     """H14's grid: no seat in a cell the static ground surely refuses, none on a standing house; ordered center-out; and the
     whole canvas searched (feature 318: no reach from the field bounds it)."""
