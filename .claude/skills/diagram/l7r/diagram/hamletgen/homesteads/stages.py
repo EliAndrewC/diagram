@@ -380,7 +380,8 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
         the step between ranks - UNRESEARCHED: an envelope's depth
         a lane's room between ranks - GUESS: `MIN_WEB_GAP` kept between the dispersed form's ranks as a spacing only - no lane is laid there
         rank depth jitter - UNRESEARCHED: a rank seat moved up to half of `RANK_DEPTH_JITTER` of a pitch nearer or farther, in the rounds before the rescue, on an alleys hamlet only
-        a rank grown along the field - UNRESEARCHED: once a round seats no one behind, the rank grows along the field - its ends a pitch out, half-seats half a pitch behind
+        a rank grown along the field - UNRESEARCHED: once a round seats no one behind, the rank grows along the field - its ends a pitch out, half-seats half a pitch out along it at the rank's depth
+        the rescue's offer along the field - UNRESEARCHED: in the rescue rounds the seats along the field are offered first - a pitch beyond each end house, half-seats half a pitch out at that house's own depth and a `_rank_step` more
         a yard's sun between ranks - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: `SUN_CORRIDOR_FT` more where the ranks climb north
     """
     seat = plan.seat

@@ -7984,14 +7984,14 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#a rank grown along the field": {
-  "code": "d3b6ad1425d1ba28",
+  "code": "02b8d375ce1187c6",
   "core": "d4b283a8909eb106",
   "date": "2026-10-04",
-  "note": "the label is right (no bundle question answers it) and the trigger matches the loop exit (rounds 0-3, a round that seats no one behind), but the account misstates where the half-seats go: the code puts them half a pitch OUT along the field at the rank's depth, `_seat_at(_us[0] - BUNDLE_PITCH/2)`, and in the rescue at pitch/2 along plus `_rank_step` out, not \"half a pitch behind\"; reword to \"half-seats half a pitch out, a rank behind\"",
+  "note": "the code does what the claim says: the ends are offered only after a round seats no one behind (`_along_the_field`), a full pitch beyond each end house, and the half-seats are `_seat_at(_us[0] - BUNDLE_PITCH/2)` / `_seat_at(_us[-1] + BUNDLE_PITCH/2)`, half a pitch out at the rank's depth (even rounds only). None of the cited questions speaks to it, so UNRESEARCHED is the right label.",
   "pages": {},
   "research": "",
   "rests": [],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#a row village's rows": {
   "code": "6fbbd03c99df96fa",
@@ -8148,6 +8148,16 @@
    "0081-village-lanes.drawing.html:9dcd87510d217672"
   ],
   "triaged": "2026-10-04",
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#the rescue's offer along the field": {
+  "code": "1c9095e5af70f591",
+  "core": "d4b283a8909eb106",
+  "date": "2026-10-04",
+  "note": "the code does what the claim says: in the rescue rounds (`attempt >= 4`), seats a full `BUNDLE_PITCH` past each end house, and half-pitch seats a `_rank_step` behind each end house, are put ahead of the cloud. No cited question covers where these rescue seats go (0031's drawing page gives no rank or rescue geometry), so UNRESEARCHED is the right label",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#the seating band": {
