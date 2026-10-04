@@ -15,3 +15,15 @@ introduced (their question changed under them); they land with CLAIMS_OK naming 
 - `l7r/diagram/settlement/rolling/access.py::ACCESS_HALF_FT#corridor room` (DRIFTED): the page says "7 ft clear of each garden fence, the tread between", which is 8.5 ft from the line for a 3 ft tread; the code reserves 7 ft from the line
 - `l7r/diagram/settlement/rolling/access.py::parts_clear#path off its own beds and outbuildings` (DRIFTED): the code keeps the tread 0.5 ft off garden beds, but the page says "A lane keeps 7 ft clear of a garden fence"; the code should keep 7 ft, or the page should record an exception for the household's own beds
 - `l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.lane#a worn earth track` (DRIFTED): the default worn=False draws "the legacy wide dashed lane", but the page says "never a wide, two-lane road" and "no line down its middle"
+
+## Final round (2026-10-04): code figures the page does not record
+
+Pre-existing code (not changed by feature 318) whose claims the feature reworded; the judge accepts neither UNRESEARCHED
+nor CONVENTION where page 0081 states a figure, so each needs either a DEVIATION recorded on 0081's drawing page or a
+code change. Each 0081 edit re-owes ~370 claims, so these are batched for one later pass:
+
+- `bund.turns_back`: any run-on leg turning more than 60 deg is refused at any length; the page's hook is 12 ft / 90 deg.
+- `geom._stop_at_network`: a join link is cut at its first meeting whatever the tail; the page cuts a tail under 40 ft.
+- `track.spur_cut_at_the_fold`: a folded spur is cut at the fold whatever the returning leg; the page cuts under 40 ft.
+- `access.ACCESS_HALF_FT` (and `gap_ways.lane_layers`): 7 ft from the way's line, so a 3 ft tread's edge stands 5.5 ft
+  off a fence the page holds 7 ft clear. Fix: 8.5 ft from the line, or the page says "7 ft from the tread's line".

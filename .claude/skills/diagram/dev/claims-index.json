@@ -5544,12 +5544,12 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::grow_the_margin#cluster grown house by house": {
-  "code": "39b3b902401710dc",
+  "code": "3ca7a2fc5bcba85a",
   "core": "6eb3a52d029ee1b7",
   "date": "2026-10-03",
-  "note": "0032's drawing page says the program \"pulls every homestead in to hug the paddy edge and then packs it along that edge\"; the code grows ring by ring from the house nearest the seat's center; update 0032 or drop it from the pointer (0081's lane-room gap and 0031's \"gathered irregularly\" do bear)",
-  "research": "db2fcfe58fb9d2cc",
-  "verdict": "DRIFTED"
+  "note": "0081 backs only the parting (\"parts every two homesteads by a lane's room\"); neither page gives the up-to-12% distance jitter (GROW_JITTER_FRAC), nearest-the-seat-first order or the nearer-field tiebreak, so split those out as UNRESEARCHED; also check whether grow_gap rolls between 0031's two attested forms (\"dense... side by side\" vs \"houses set well apart\") - not visible here",
+  "research": "da540ff75d9310ed",
+  "verdict": "NEEDS-RESEARCH"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::grow_the_margin#first house against the field": {
   "code": "d87770a195c92455",
@@ -9648,12 +9648,12 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::turns_back#no hook onto the bund": {
-  "code": "62c27c2bda13bf21",
+  "code": "61ef57ec6668ab34",
   "core": "122ea09cf724d71d",
   "date": "2026-10-03",
-  "note": "RUN_ON_TURN_DEG 60 refuses any run-on leg turning more than 60 deg, at any length; the page's only hook limit is \"a last leg of 12 ft or less turning 90 degrees or more\"; record 60 deg on the drawing page or relabel CONVENTION",
-  "research": "10d6e651e3fb0112",
-  "verdict": "DRIFTED"
+  "note": "a lane's turn is the way's own shape, not how it is shown, and 0081 rules on it (\"none of them sharp\"; hook = \"last leg of 12 ft or less turning 90 degrees or more\"); should cite 0081.drawing, where refusing any >60 deg turn at any length differs from the page's 90 deg/12 ft figure and would be DRIFTED unless the page records it",
+  "research": "",
+  "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::water_between#plumbing": {
   "code": "3142e85e8180f0d3",
@@ -11096,12 +11096,12 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/geom.py::_stop_at_network#no stub past a junction": {
-  "code": "b4f3c39f97bdab91",
+  "code": "212424733e245a3a",
   "core": "16df75eeda9cfdb3",
   "date": "2026-10-03",
-  "note": "code cuts the link at its first meeting whatever the tail's length; page cuts only \"A tail of under 40 ft beyond a crossing\" - add the 40 ft bar, or record this as a DEVIATION for join links",
-  "research": "10d6e651e3fb0112",
-  "verdict": "DRIFTED"
+  "note": "0081 answers this (\"A tail of under 40 ft beyond a crossing is cut\"); should cite 0081.drawing, and the code cutting at any length differs from the page's under-40 ft, so either DEVIATION recorded on the page or DRIFTED",
+  "research": "",
+  "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/geom.py::_trim_to_service#an outlying house keeps its way": {
   "code": "ffc3844d5d835847",
@@ -13288,12 +13288,12 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py::theirs#a lane arrives at its own dooryard": {
-  "code": "8d5b91d421dd9fb8",
+  "code": "8592ca1de5bc0fda",
   "core": "4405a46a6aa4b956",
   "date": "2026-10-03",
-  "note": "0081 answers this (\"A lane keeps 7 ft clear of a garden fence\"; \"Its way leaves its dooryard round its own garden beds and fixtures\"), so it should cite 0081.drawing; the page never exempts neighbors' steadings, but every steading within DOORSTEP_FT (80 ft) of either end gets the exemption",
-  "research": "",
-  "verdict": "MISLABELED"
+  "note": "own steading exempt from fence clearance, as in \"its way leaves its dooryard round its own garden beds\"",
+  "research": "10d6e651e3fb0112",
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py::with_edits#settle plumbing": {
   "code": "f5b886a25aded7eb",
@@ -14200,12 +14200,12 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tails.py::_sweep_doubled_tails#narrower tail cut": {
-  "code": "2104bc08bdc572e6",
+  "code": "b3b1ed29d4d43bcf",
   "core": "d968038d6455765f",
   "date": "2026-10-03",
-  "note": "0081 ranks widths but nowhere says the narrower of two side-by-side tails is cut so the through-route keeps its width; should be UNRESEARCHED",
-  "research": "10d6e651e3fb0112",
-  "verdict": "NEEDS-RESEARCH"
+  "note": "neither page says which of two side-by-side tails to cut",
+  "research": "",
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tails.py::along_tail#doubled tail plumbing": {
   "code": "9f97041b491ab302",
@@ -14615,21 +14615,21 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::spur_cut_at_the_fold#a folded spur's arm within SPUR_REACH_FT 60 ft of the field counts as reaching it": {
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::spur_cut_at_the_fold#a folded spur still counts as reaching the field within SPUR_REACH_FT (60 ft) of it": {
   "code": "bd05d9259d32773f",
   "core": "bd05d9259d32773f",
   "date": "2026-10-03",
-  "note": "a folded spur's arm within SPUR_REACH_FT 60 ft of the field counts as reaching it",
+  "note": "a folded spur still counts as reaching the field within SPUR_REACH_FT (60 ft) of it",
   "research": "",
   "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::spur_cut_at_the_fold#spur fold cut": {
-  "code": "9d09f3ec8b3a6c09",
+  "code": "f3604c0b32c6047f",
   "core": "bd05d9259d32773f",
   "date": "2026-10-03",
-  "note": "the page says \"a returning leg under 40 ft is cut\", but `cut = pts[: fold + 1]` cuts the returning leg at any length. Gate the cut on a leg under 40 ft or record the departure",
-  "research": "10d6e651e3fb0112",
-  "verdict": "DRIFTED"
+  "note": "0081 answers this (\"where a lane turns back on itself, a returning leg under 40 ft is cut\", hairpin \"more than 140 degrees\"); should cite 0081.drawing, and cutting whatever the returning leg's length (with `>= _HAIRPIN_DEG`) departs from the page's under-40 ft, so either DEVIATION recorded on the page or DRIFTED",
+  "research": "",
+  "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_seat#brook crossed only at crossing places": {
   "code": "6824ab71d4044712",
@@ -35248,12 +35248,12 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/access.py::ACCESS_HALF_FT#corridor room": {
-  "code": "812c05ba4e6c1d21",
+  "code": "6ecdd3f77b2ab04d",
   "core": "2c48ea6cfc2004e2",
   "date": "2026-10-03",
-  "note": "the page says \"A lane keeps 7 ft clear of a garden fence\" / \"7 ft clear of each garden fence, the tread between\", but 7.0 measured from the tread's line leaves the tread's edge 5.5 ft from the fence; set the half to 8.5, or reword the page to \"7 ft from the tread's line\"",
-  "research": "10d6e651e3fb0112",
-  "verdict": "DRIFTED"
+  "note": "not a GUESS: 0081 gives the room (\"7 ft clear of each garden fence, the tread between, and a 2 ft parting\"); the claim itself admits a 3 ft tread's edge stands 5.5 ft off, so it should cite 0081.drawing as DEVIATION (page doesn't record one, so DRIFTED) or the corridor should hold 7 ft from the tread's edge",
+  "research": "",
+  "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/access.py::AccessTree#every house reached by a path": {
   "code": "82cc712c67b1ca0f",
@@ -35320,12 +35320,12 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/access.py::HAIRPIN_DEG#hairpin turn": {
-  "code": "cad46cde31a87744",
+  "code": "c0cf24c9f14041e2",
   "core": "3fca66fc5f29f78e",
   "date": "2026-10-03",
-  "note": "boundary only: the page says \"A turn of more than 140 degrees\"; the claim says \"140 or more\" and doubles_back tests >= 140; align the comparison or the wording",
+  "note": "140 deg matches \"a turn of more than 140 degrees is a hairpin\"",
   "research": "10d6e651e3fb0112",
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/access.py::PART_MARGIN_FT#corridor geometry, memo and search plumbing": {
   "code": "6c5d4eebd33fc674",
@@ -42008,12 +42008,12 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/water_ways/_helpers.py::junction_floor#junction kept": {
-  "code": "f30e0bfc664f897b",
+  "code": "0aa3811f247e1bdb",
   "core": "a7b9f4043342622d",
   "date": "2026-10-03",
-  "note": "the page backs \"one network, joined\" but not the 20-degree crossing test; `trim_lane_stubs` labels the same rule UNRESEARCHED; this claim should say UNRESEARCHED too",
+  "note": "protects up to the last crossing, as in \"one network\"",
   "research": "10d6e651e3fb0112",
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/water_ways/_helpers.py::vertex_behind#lane geometry": {
   "code": "67667826c155f27f",
