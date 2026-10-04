@@ -449,7 +449,7 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
             may cross a shelter belt, the planting resuming on both sides, but not run its length
         door path reach - GUESS: DOOR_REACH_FT 40 ft, STEADING_ARRIVAL_FT 12 ft on a row
         web cut spacing - UNRESEARCHED: every house within WEB_REACH_FT (100 ft) of a cut, so the cuts stand up to about twice that apart
-        a cut's room - research/questions/0081-village-lanes.drawing.html: MIN_WEB_GAP, a lane 7 ft clear of a garden fence on each side of its tread
+        a cut's room - research/questions/0081-village-lanes.drawing.html: MIN_WEB_GAP, 7 ft clear of a garden fence on each side and a 4 ft tread, within the page's 3 ft footpath to 5 ft spine
         a web lane's span - UNRESEARCHED: only the houses within 1.5 times WEB_REACH_FT of its cut
         web lanes off the hard ground - UNRESEARCHED: WEB_HARD_GAP 8 ft off the field, the crop and the marsh
         row streets laid - research/questions/0033-row-villages-resson.drawing.html

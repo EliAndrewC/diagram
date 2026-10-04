@@ -241,7 +241,7 @@ class PlacerMixin:
             left or right garden - UNRESEARCHED: within a tier the side is decided by position, about even
             one computed move off a neighbor - NONE: the measured overlap plus 2 px, once
             a tight seat only on landlocked land - research/questions/0081-village-lanes.html, research/questions/0081-village-lanes.drawing.html: taken only where some layout walks to the neighbor's yard and none has a way of its own (`passage.landlocked`)
-            a seat refused unless its yard opens onto lane ground - research/questions/0081-village-lanes.drawing.html: no way is sought for a household while it is seated; its dooryard must open onto the ground the lanes are laid in (`SeatRegion.opens`); a roll with no seat region (a village's) asks for a corridor candidate instead (`seat_reaches_tree`)
+            a seat refused unless its yard opens onto lane ground - DEVIATION research/questions/0081-village-lanes.drawing.html: no way is sought for a household while it is seated; its dooryard must open onto the ground the lanes are laid in (`SeatRegion.opens`); a roll with no seat region (a village's) asks for a corridor candidate instead (`seat_reaches_tree`)
             a seat refused where the household is not watered - research/questions/0196-communal-wells-ido.drawing.html: its own pocket, or a well or open water within reach (`lot.watered`)
         """
         self._seat_search["placer_calls"] += 1

@@ -241,9 +241,9 @@ class WoodShares:
         """The reservations' state for one seating.
 
         Research:
-            sun strip default - UNRESEARCHED: copies `village_grove`'s own `_sun_depth` (22 px where the map declares no sun corridor), so
-                the reservation keeps what the planting keeps; the strip itself is judged at `copse_keepouts`
-            afternoon lane as the copse plants - UNRESEARCHED: the map's
+            sun strip default - NONE: copies `village_grove`'s own `_sun_depth` (22 px where the map declares no sun corridor), so
+                the reservation keeps what the planting keeps; the page's sun rule (research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html) is judged at `copse_keepouts`
+            afternoon lane as the copse plants - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: the copse keeps a plot's afternoon sun; the map's
                 `west_sun_lane`, none where it declares none
             seat off a lane - UNRESEARCHED: the corridor's half plus the copse's lane buffer
         """

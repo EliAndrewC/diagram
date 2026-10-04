@@ -298,7 +298,7 @@ def parts_clear(s: Settlement, a: Pt, b: Pt, own: Any) -> bool:
     The tread, not the corridor's reserved strip, keeps off them: the strip is the web's room to draw in, and the line is
     what it draws. The yard is the door's own ground; the web leaves it at its edge (`corridors.door_ends`).
 
-    Research: path off its own beds and outbuildings - research/questions/0081-village-lanes.drawing.html: a lane never crosses row crops and nothing is built on it; the tread 0.5 ft clear
+    Research: path off its own beds and outbuildings - research/questions/0081-village-lanes.drawing.html: a lane never crosses row crops and nothing is built on it; the tread's 0.5 ft margin is UNRESEARCHED
     """
     boxes = own.get("boxes") or {}
     gap = s.px(TREAD_HALF_FT + PART_MARGIN_FT)
@@ -466,8 +466,8 @@ def access_corridor(s: Settlement, geom: Any, routed: bool = True) -> tuple[Pt, 
     the corridor the search would have returned (seed 44: 610,000 strips asked for 12,215 searches, nearly all refused).
 
     Research:
-        seat refused without a path - research/questions/0081-village-lanes.drawing.html: on a roll with no seat region (a village's) only; a hamlet seeks no way for a household while it is seated
-        routed where none is straight - research/questions/0081-village-lanes.drawing.html: after the straight and round-the-gable corridors, round what stands (`route.routed_corridors`), on a roll with no seat region only
+        seat refused without a path - DEVIATION research/questions/0081-village-lanes.drawing.html: on a roll with no seat region (a village's) only; a hamlet seeks no way for a household while it is seated
+        routed where none is straight - DEVIATION research/questions/0081-village-lanes.drawing.html: after the straight and round-the-gable corridors, round what stands (`route.routed_corridors`), on a roll with no seat region only
         a way of its own without the routed search - CANON: the GM's ruling of 2026-10-03, the passage asks the straight and round-the-gable corridors alone (`routed` False)
     """
     tree = getattr(s, "_access", None)
@@ -521,7 +521,7 @@ def seat_reaches_tree(s: Settlement, core: Any) -> bool:
     layout's corridor search continues from it rather than starting again. True where no tree is installed. ASKED ONLY WHERE
     NO SEAT REGION STANDS (a village's roll): a hamlet's seat asks `SeatRegion.opens` instead (feature 318).
 
-    Research: seat refused without a path - research/questions/0081-village-lanes.drawing.html: on a roll with no seat region (a village's) only; a hamlet seeks no way for a household while it is seated
+    Research: seat refused without a path - DEVIATION research/questions/0081-village-lanes.drawing.html: on a roll with no seat region (a village's) only; a hamlet seeks no way for a household while it is seated
     """
     tree = getattr(s, "_access", None)
     if tree is None:

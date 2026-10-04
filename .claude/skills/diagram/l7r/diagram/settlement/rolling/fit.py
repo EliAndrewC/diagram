@@ -336,7 +336,7 @@ class BundleFitMixin:
         Research: whole farmstead off the fields - research/questions/0124-farmsteads-at-a-town.drawing.html: the yard and fixtures held off every paddy polygon, the beds off every ditch
             persimmon held off the paddy by its trunk - UNRESEARCHED: a 4 ft trunk box held off every field polygon, its crown free to overhang
             a tight seat only by passage - research/questions/0081-village-lanes.html, research/questions/0081-village-lanes.drawing.html: admitted only with a walk across the neighbor's yard, refused where its yard opens onto lane ground of its own (`passage.opens`)
-            no path searched while houses are seated - research/questions/0081-village-lanes.drawing.html: no way is sought for a household while it is seated; the yard's opening onto lane ground the one check; a roll with no seat region (a village's) keeps the corridor search"""
+            no path searched while houses are seated - DEVIATION research/questions/0081-village-lanes.drawing.html: no way is sought for a household while it is seated; the yard's opening onto lane ground the one check; a roll with no seat region (a village's) keeps the corridor search"""
         # A LAYOUT WHOSE LOT FOUND NO SEAT FOR A PART IS NOT THE HOUSEHOLD'S (feature 294 B10, the review's "declared forms drawn"
         # class): `_bundle_side_fits` refuses an `unlaid` layout, and the nucleated placer judges its layouts here instead, so a
         # household whose bath room found no wall was seated with none of its fixtures - Kuwabata drew 3 of its 16 households

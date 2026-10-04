@@ -84,7 +84,7 @@ class LanesMixin:
         See research/questions/0081-village-lanes.html.
 
         Research:
-            a worn earth track - research/questions/0081-village-lanes.html, research/questions/0081-village-lanes.drawing.html: narrow, packed earth, no centerline
+            a worn earth track - research/questions/0081-village-lanes.html, research/questions/0081-village-lanes.drawing.html: narrow, packed earth, no centerline; every hamlet caller passes `worn=True`, the dashed default is the town tier's
             lane width - research/questions/0081-village-lanes.drawing.html: the caller's width, 16 px by default
             nothing built on a lane - research/questions/0081-village-lanes.drawing.html: a no-build corridor of the clearance, 22 px by default
             the track out runs off the map - research/questions/0081-village-lanes.drawing.html: the connector flag

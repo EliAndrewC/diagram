@@ -54,7 +54,7 @@ class SeatRegion:
         """The two rasters over `window` (the module's account).
 
         Research:
-            no way of its own across a water course within its clearance - research/questions/0081-village-lanes.drawing.html: a track keeps off wet ground; the courses painted onto lane ground at the corridor test's own clearance
+            no way of its own across a water course within its clearance - UNRESEARCHED: the courses painted onto lane ground at the corridor test's own clearance
             a way of its own decided on lane ground - research/questions/0081-village-lanes.drawing.html: a dooryard that opens onto the ground the lanes are laid in, connected to the track out
         """
         self.s, self.window, self.cell = s, window, cell
@@ -85,7 +85,7 @@ class SeatRegion:
         """Paint what has come to stand since the last call - the tree's new corridors, newly seated homesteads and the wood
         seats their households reserved - and drop the reachable raster, recomputed on its next read.
 
-        Research: reserved wood seats bar lane ground - research/questions/0081-village-lanes.drawing.html: nothing built on a lane; a household's reserved wood seats are no ground its way runs on
+        Research: reserved wood seats bar lane ground - UNRESEARCHED: a household's reserved wood seats are no ground its way runs on
         """
         s = self.s
         tree = getattr(s, "_access", None)
@@ -148,7 +148,10 @@ class SeatRegion:
     def offer(self, pts: Sequence[Pt]) -> list[bool]:
         """For each candidate seat (a house center), whether it is offered: a side's envelope clear, and - where an access tree is
         installed - its yard's box touching the reachable ground. A seat outside the region's window is offered unjudged (feature
-        318: the window bounds the rasters' cost, never where a house may stand; the placer's own tests decide)."""
+        318: the window bounds the rasters' cost, never where a house may stand; the placer's own tests decide).
+
+        Research: a way of its own - research/questions/0081-village-lanes.drawing.html: a seat is offered only where its yard opens onto the ground the lanes are laid in, connected to the track out
+        """
         import numpy as np
 
         self.sync()

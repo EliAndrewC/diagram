@@ -133,7 +133,7 @@ def theirs(p: Poly, yards: Yards, houses: Sequence[Mapping[str, Any]]) -> list[P
     stands at (within `law.DOORSTEP_FT`) - a door path leaves its own dooryard, and is exempt from that steading alone
     (`law.fouls_fabric`'s `own`).
 
-    Research: a lane arrives at its own dooryard - research/questions/0081-village-lanes.drawing.html: that steading alone exempt"""
+    Research: a lane arrives at its own dooryard - UNRESEARCHED: every steading within `DOORSTEP_FT` of either end exempt from the fence clearance, the dooryards it arrives among"""
     own = [(float(h["x"]), float(h["y"])) for h in houses if min(math.dist(p[0], (float(h["x"]), float(h["y"]))), math.dist(p[-1], (float(h["x"]), float(h["y"])))) <= law.DOORSTEP_FT]
     return [poly for poly, owner in yards if owner is None or all(math.dist(owner, c) > 1.0 for c in own)]
 

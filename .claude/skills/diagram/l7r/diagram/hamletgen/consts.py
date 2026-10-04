@@ -228,7 +228,7 @@ WEB_SHADOW_FT = 30.0
 """Research: two ways read apart - CONVENTION: 30 ft at fit zoom"""
 
 MIN_WEB_GAP = 2.0 * WEB_FABRIC_GAP + 4.0  # 18 ft: both neighbors' clearance, plus the tread between them
-"""Research: least gap a lane threads - research/questions/0081-village-lanes.drawing.html: 18 ft between two steadings"""
+"""Research: least gap a lane threads - research/questions/0081-village-lanes.drawing.html: 7 ft clear of each garden fence and a 4 ft tread between, within the page's 3 ft footpath to 5 ft spine; the 2 ft parting is added by `growth.grow_gap`"""
 
 # THE REACH A FARMHOUSE IS ENTITLED TO: every house center must be within this of some drawn way
 # (`farmhouses_reach_a_way`). It is BUNDLE_PITCH, deliberately and by reference rather than by

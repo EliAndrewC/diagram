@@ -75,11 +75,11 @@ GAP_LEGS = 12
 #: A way coming within this of a way already laid joins it there, at a T, rather than running beside it: under the shadow rule's
 #: 30 ft (`WEB_SHADOW_FT`, a way beside another past a pitch), MEASURED (research R4: 10 of 14 refusals were the doubled band).
 JOIN_FT = 25.0
-"""Research: ways join at a T - research/questions/0081-village-lanes.drawing.html: lanes meet at a T, never run beside another; under the 30 ft shadow"""
+"""Research: ways join at a T - UNRESEARCHED: a 25 ft join radius, under the 30 ft shadow; the T itself is the drawing page's"""
 #: ...and where a way joined there breaks the tree's lane law, it is tried joined farther off (`JOIN_FAR_FT`), then run on to the way
 #: out, the first the law admits taken (MEASURED, research R5).
 JOIN_FAR_FT = 45.0
-"""Research: a farther join - GUESS research/questions/0081-village-lanes.drawing.html: a way joins a way laid before it at a T; tried 45 ft off where the nearer join breaks the lane law"""
+"""Research: a farther join - UNRESEARCHED: a way joins a way laid before it at a T; tried 45 ft off where the nearer join breaks the lane law"""
 
 _STEPS = ((-1, 0, 1.0), (1, 0, 1.0), (0, -1, 1.0), (0, 1, 1.0), (-1, -1, math.sqrt(2.0)), (1, 1, math.sqrt(2.0)), (-1, 1, math.sqrt(2.0)), (1, -1, math.sqrt(2.0)))
 """Research: plumbing - NONE: the eight steps between raster cells and their lengths"""
@@ -89,7 +89,7 @@ class Layers:
     """Lane ground over the cluster (`lane_layers`): cell centers `cx`, `cy`; `cover`, how many homesteads hold each cell off;
     `spans`, each homestead box's cell span (`id(box)` keyed); `site`, the site's ground and the wood seats.
 
-    Research: lane ground - research/questions/0081-village-lanes.drawing.html: a lane keeps its clearance off every homestead, crop, water and the woodlots' seats
+    Research: lane ground - research/questions/0081-village-lanes.drawing.html: a lane keeps its clearance off every homestead, crop and water (the woodlots' seats: UNRESEARCHED)
     """
 
     def __init__(self, x0: float, y0: float, nx: int, ny: int, cell: float) -> None:
@@ -132,7 +132,7 @@ class Layers:
 def lane_layers(s: Settlement, boxes: Sequence[Any], segs: Sequence[tuple[Pt, Pt]], half: float, cell: float = GAP_CELL) -> Layers:
     """Lane ground over the homesteads `boxes` (`(cx, cy, w, h)`) and the way out `segs`, `GAP_MARGIN_PX` round them.
 
-    Research: lane ground - research/questions/0081-village-lanes.drawing.html: a way keeps the corridor's half-width off every homestead, the lane gap off the woodlots' seats, and to ground the site admits
+    Research: lane ground - research/questions/0081-village-lanes.drawing.html: a way keeps the corridor's half-width off every homestead and to ground the site admits; the lane gap off the woodlots' seats is UNRESEARCHED
     """
     import numpy as np
 
@@ -323,7 +323,9 @@ def lay_the_ways(s: Settlement) -> tuple[int, int]:
 
     Research:
         each household's way laid once every house stands - GUESS research/questions/0081-village-lanes.drawing.html: the lanes as the gaps between the house plots, worn after the houses; the corridor's own tests and the tree's lane law admit each
-        households' ways laid in order, nearest the way out first - NONE: a search order, so a nearer household's way is there for a farther one to join
+        households' ways laid in order, nearest the way out first - GUESS: a search order, so a nearer household's way is there for a farther one to join
+        a household no way reaches is pinched across its nearest reached neighbor's yard - research/questions/0081-village-lanes.drawing.html: reached across a neighbor's land, whose own way is always drawn
+        a passage a laid way makes unnecessary is ended - research/questions/0081-village-lanes.drawing.html: one that a way reaches is given it and is no longer reached across its neighbor
     """
     tree = getattr(s, "_access", None)
     houses = [h for h in (s.M.get("houses") or []) if h.get("geom") and h["geom"].get("bbox") is not None]
