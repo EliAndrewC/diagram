@@ -5,3 +5,4 @@
 - main: add sakamoto-tsubaki-1985-omoya-muki-2 after "the point either side of it," in the first paragraph (the 87% that makes it "most")
 - drawing: the bunto house "on the Pacific side" - kotobank-minka-28 also has it numerous in the 18th century inland near Utsunomiya; say so (as the main page does)
 - drawing: "The straight house, under one roof, is the plain form." - kotobank-minka-23 fits; carry it onto the drawing page
+- 0029's main page sits at its 20,000-byte prose cap after feature 318's edits: the next addition needs the page split along its topics (check-question-size.py)
