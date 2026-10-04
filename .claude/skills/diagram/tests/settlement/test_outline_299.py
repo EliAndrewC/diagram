@@ -179,3 +179,23 @@ def test_the_reeds_reach_a_streams_edge_and_a_bank_band_lines_it() -> None:
     t.commons([(300.0, 100.0), (900.0, 100.0), (900.0, 500.0), (300.0, 500.0)], role="pasture")
     t.flush_covers()
     assert "reed-bank" not in _slot(t, ("grass", None)), "no bank band in the scrub"
+
+
+def test_no_stretch_of_a_shaped_outline_runs_straight_for_the_share_a_visible_edge_may_not_pass() -> None:
+    """Feature 320 (`WAVE_SHORT_FT`; the GM: "Fix marsh ends first"): a laid strip's short end and its corners took the slow
+    waves' ramp, a straight run of up to 160 ft (Kuwabata's waterside marsh, 124 ft on 301 ft of visible edge). With the short
+    component no stretch of the shaped ring, read every 2 ft as the gate reads a visible edge, lies within the brook's
+    `RULED_TOL_FT` of its chord for 0.4 of 300 ft - the length past which a visible edge could break the rule."""
+    from l7r.diagram.hamletgen.water.brook_rules import RULED_MIN_LEN_FT, RULED_SHARE, RULED_TOL_FT, straightest_run
+
+    bar = RULED_SHARE * RULED_MIN_LEN_FT
+    worst = 0.0
+    for laid in ([(0.0, 0.0), (330.0, 0.0), (330.0, 1700.0), (0.0, 1700.0)], [(0.0, 0.0), (1500.0, 0.0), (1500.0, 300.0), (0.0, 300.0)]):
+        for seed in range(6):
+            pts = outline.natural_outline(laid, seed)
+            dense = []
+            for a, b in zip(pts, [*pts[1:], pts[0]], strict=True):
+                n = max(1, int(math.dist(a, b) // 2))
+                dense += [(a[0] + (b[0] - a[0]) * k / n, a[1] + (b[1] - a[1]) * k / n) for k in range(n)]
+            worst = max(worst, straightest_run(dense + dense[: len(dense) // 4], RULED_TOL_FT))
+    assert 0.0 < worst < bar, f"a {worst:.0f} ft straight stretch"
