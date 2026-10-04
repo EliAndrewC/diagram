@@ -1,94 +1,137 @@
 {
  "feature": "319-modal-writeups",
- "plan_sha256": "39df3fab07847f22a5d963089953d430c32e96a6bae60e5588d5f3540d16ed88",
- "reviewed": "2026-10-03",
+ "plan_sha256": "bffcb685ecd97cdc90a1f562bd3c55ced8953f2d300fb14361f0e6a9a0fee972",
+ "reviewed": "2026-10-04",
  "declared": "spec-fidelity",
  "decisions": [
   {
    "id": "D1",
-   "summary": "New docstring form: About: paragraphs and a Guesses: bullet list; no feature-level Label: (None in the new form); Form: particular optional; old form parses until the last rollout task removes it",
+   "summary": "About-form docstring/file form; the classification per statement - a deviation in About, a convention on the Depiction tab since D13; old form parses until the rollout's last task",
    "class": "within",
-   "why": "FR-005 makes a guess a property of a statement and the spec's Decisions table keeps the four classes per statement; FR-002 (nothing announced as accurate) holds. Removing the old form at the end serves FR-011. Text unchanged by the amendment (diff 270e71721..8630c01f1 adds D12 only)."
+   "why": "Brought in step with the amended FR-005 (a convention is the Depiction tab's, a deviation stays in the write-up). Otherwise unchanged from the CLEAR record of 2026-10-03."
   },
   {
    "id": "D2",
-   "summary": "One tabbed dialog About / Guesses / References; empty tabs not drawn; the References tab replaces the separate references dialog; the place card gets the same tabs; old-form classes shown on About until rewritten",
+   "summary": "One tabbed dialog About / Guesses / Depiction / References; empty tabs not drawn; References tab replaces the references dialog; old-form classes shown on About until rewritten",
    "class": "within",
-   "why": "FR-005, FR-006, FR-007 and the GM's 'about guesses and references'. The old-form display is transitional and never lands (FR-012); FR-011 rewrites every class. Text unchanged by the amendment (diff 270e71721..8630c01f1 adds D12 only)."
+   "why": "FR-005 as amended names the four tabs; FR-014 makes Depiction absent when it has nothing. Tab order is not set by the GM ('an About tab and a Guesses tab and a References tab and then also a tab') and is a design choice. Old-form display stays transitional and never lands (FR-012)."
   },
   {
    "id": "D3",
-   "summary": "The two guideline documents are the checks' single contract, copied into each bundle, rules numbered and findings naming their rule; GM-asked changes go there first",
+   "summary": "Guidelines are the checks' single contract, copied into each bundle; numbered rules; GM changes there first",
    "class": "within",
-   "why": "FR-001, FR-003, FR-010 and SC-001. Text unchanged by the amendment (diff 270e71721..8630c01f1 adds D12 only)."
+   "why": "Unchanged; FR-001, FR-003, FR-010, SC-001."
   },
   {
    "id": "D4",
-   "summary": "Two agents: modal-form (form) and modal-research, which reports THREE verdicts (accuracy, references, gaps), each its own owed unit (modal-accuracy, modal-references, modal-gaps) and its own ledger row; particulars use the same two agents with the particular rules and the canon answer",
+   "summary": "modal-form and modal-research (three verdicts, three owed units, three ledger rows)",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "FR-008 says 'Each check is a defined agent' and SC-003 'the three checks', so one agent carrying accuracy and references departs from the letter. Round 1 ruled it legitimate on condition that the three remain separately measurable; the amended D4 meets that condition exactly: three verdicts, three owed units, three ledger rows, so SC-003's 'passed the three checks, recorded in the review ledger with cost' is measured per check. Every criterion FR-008 (b) and (c) names is still checked by an agent independent of the author, owed and enforced at the push, and the GM's own words leave the packaging open ('maybe there's a subagent check specifically for deciding which research things should be linked. I'm not sure'). The purpose is untouched. Text unchanged by the amendment; ruling stands."
+   "why": "Unchanged by the amendment; the ruling of 2026-10-03 stands (three checks separately measured, SC-003 met per check; the GM left the packaging open)."
   },
   {
    "id": "D5",
-   "summary": "Prepass and bundle; the gap candidates are the UNION of every question sharing ANY subject tag with the Entry pages and every question whose words carry the kind's name or a glossary variant; ranking orders and never cuts; modal-research may grep the whole record copy; 0004 named as the test",
+   "summary": "Prepass and bundle; gap candidates by union of shared subject tags and kind terms, never cut",
    "class": "within",
-   "why": "Round 1 ruled the AND-on-primary-subject filter NOT LEGITIMATE because it excluded 0004, the spec's own Context example. The amendment takes the union, forbids cutting, and lets the agent search the whole record beyond the list - which is US3 scenario 2's 'searched the record ... (by tag and by term)' and FR-008(c) without narrowing. Measured this round on the tags comment lines: 0004 carries 'subject=tiers,households', 0029 and 0028 carry 'subject=homesteads,buildings,households', so 0004 meets the union through 'households' and D7's required finding is reachable. research/assets/glossary-variants.txt exists. No longer a narrowing."
+   "why": "Unchanged; ruling of 2026-10-03 stands."
   },
   {
    "id": "D6",
-   "summary": "modal-form and the three modal-research units owed per new-form class when About/Guesses/Entry text changes; modal-research also owed when an Entry page changes; replaces entry-drift for new-form classes; enforced by entry-gate at the push",
+   "summary": "modal-form and the three modal-research units owed per changed About-form class and per changed Entry page; entry-drift replaced for new-form classes; enforced at the push",
    "class": "within",
-   "why": "FR-008: owed by a changed modal and enforced at the push 'as entry-drift is'. Precision note, not a fidelity finding: the Entry-page trigger still names a unit 'modal-research:<key>', which is no longer one of the three units D4 and D6 define; when built it should owe the three units (at least modal-accuracy), so that entry-drift's question - does the modal still agree with its pages - stays owed for new-form classes. Read either way nothing the spec asks goes unchecked. Unchanged by the amendment; D12 makes _modal_owed read the modal file rather than the docstring, which changes where the text is read, not what is owed."
+   "why": "Unchanged; FR-008. The Depiction check's own owed trigger is D13-owed below."
   },
   {
    "id": "D7",
-   "summary": "Both checks first run on the current farmhouse and garden text and must report the farmhouse's missing materials and occupancy, the garden's guess-led opening, and 0004 as a gap",
+   "summary": "Checks proved on the old text first",
    "class": "within",
-   "why": "Enforcement of FR-008 (a check proved to fire on the motivating defects); serves the request rather than adding scope. With D5's union it is now reachable. Text unchanged by the amendment (diff 270e71721..8630c01f1 adds D12 only)."
+   "why": "Unchanged; enforcement of FR-008."
   },
   {
    "id": "D8",
-   "summary": "The farmhouse's standard questions answered from the record first (0029, 0028, 0004, 0048, 0030); unanswered ones get the full research pass before becoming a guess; research: physical tasks",
+   "summary": "Research pass before a guess for the farmhouse's standard questions",
    "class": "within",
-   "why": "Spec Assumptions (research pass before a guess), US1 scenario 1 and the research doctrine. Text unchanged by the amendment (diff 270e71721..8630c01f1 adds D12 only)."
+   "why": "Unchanged; spec Assumptions, US1-1."
   },
   {
    "id": "D9",
-   "summary": "Pilot hand-off: rewrite, both checks green (two rounds), regenerate Inashiro in the clone, give the GM the path; verdict in tasks.md; farmhouse then garden, a further feature only if the garden's first rewrite needs changes; rollout waits for the go-ahead",
+   "summary": "Pilot hand-off and GM verdict per pilot; rollout waits for the go-ahead",
    "class": "within",
-   "why": "FR-010, FR-012, US6 and the GM's sequence. Text unchanged by the amendment (diff 270e71721..8630c01f1 adds D12 only)."
+   "why": "Unchanged; FR-010, FR-012, US6."
   },
   {
    "id": "D10",
-   "summary": "Title card choices (sketch, settled after the pilots): a declared choices.json listing EVERY per-settlement choice, rolled, declared or pinned, with a test holding every declared knob and every meta key a ### Features fact came from; each value a standardized modal in a new registry; ### Features facts become choices or counts; a test holds no hamlet feature modal differs between maps",
+   "summary": "Title card choices (sketch)",
    "class": "within",
-   "why": "FR-004, FR-009 ('every per-settlement choice ... each knob's value, and the per-map facts now in ### Features'), US4 and the pinned-knob edge case. Round 1's condition (every choice listed, the table only separating knobs from other meta) is now stated and enforced. Precision note, measured this round: the KNOBS registry lives in settlement/_knobs.py, but only 16 knobs are registered in that file; seven more (family_form, weir_form, fan_middle, footbridge_form, winter_crop, paddy_rest, windbreak_belt) register into it from other modules. The test must read the populated KNOBS registry, not the 16 register_knob lines of the file (the spec's Context count), or 'leaves no knob off' is not what it enforces. Non-knob per-settlement values such as harvest_weather (declared on the plan, never rolled) and hamlet_burial reach the table through the ### Features half of the test. Unchanged by the amendment. Consistency note for when the sketch is settled: D10 says each choice value is a class in a new registry interactive/choices/; under D12 its text would live as a file like every other modal - a design matter, not fidelity."
+   "why": "Unchanged; precision notes of 2026-10-03 stand."
   },
   {
    "id": "D11",
-   "summary": "Sheets after the hamlet rollout: each compound kind tagged particular (particulars.py membership, or setting-particular content even when on several sheets) or standard; each sheet's ### Features entries reviewed under the particular guidelines; canon answer in the particular bundle",
+   "summary": "Sheets after the hamlet rollout, tagged particular or standard",
    "class": "within",
-   "why": "FR-003, FR-011, US5 and the spec's edge case that reuse across sheets does not make a kind general. Text unchanged by the amendment (diff 270e71721..8630c01f1 adds D12 only)."
+   "why": "Unchanged; FR-003, FR-011."
   },
   {
    "id": "D12",
-   "summary": "One file per modal: each Kind's text (both forms, same tags) moved by script to interactive/assets/modals/<hamlet|sheet>/<slug>.md with a field-for-field registry test; Kind keeps key and # comments and reads its file; render fingerprint widened to all of interactive/assets/; every reader of a modal docstring (_modal_owed, _modal_bundle, _entry_owed, _bundle_owed, _check_bundle, _apply_edits) follows the text to its file",
+   "summary": "One file per modal under interactive/assets/modals/",
    "class": "within",
-   "why": "Where modal text is stored is something neither the request nor the accepted spec settles (the spec's Context describes the docstring as the current state; no FR requires it), so the move narrows nothing asked. Checked against each requirement it could touch: FR-004/FR-011 - every modal moves, none exempted (155 files = 56 hamlet classes + 99 sheet kinds, measured this round), and the field-for-field test holds that no text is lost or altered; FR-005/FR-007 - both forms and every tag, siblings included, move intact; FR-008 - the owed/bundle/apply-edits tooling and entry-drift follow the text to its file, so the checks stay owed and enforced at the push; FR-012 - the clone is 19 commits ahead of origin/main, nothing landed. The GM approved the change in words on 2026-10-03 and set aside feature 189's docstring rationale himself. It serves the request's iterate-with-the-GM loop (D9) by making a single modal editable and quotable by the checkers."
+   "why": "Unchanged; ruling of 2026-10-03 stands."
   },
   {
-   "id": "TC-tiers",
-   "summary": "Both new agents pinned on Opus at medium effort, omitClaudeMd true",
+   "id": "D13-form",
+   "summary": "Modal file gains Depiction: (paragraphs) and Drawing: (the .drawing.html pages); Entry: keeps research questions alone",
    "class": "within",
-   "why": "FR-008 asks for defined agents on pinned tiers; the tier is a cost/design matter, not fidelity. Text unchanged by the amendment (diff 270e71721..8630c01f1 adds D12 only)."
+   "why": "FR-006 (drawing pages are the Depiction tab's, not References') and FR-014 (the tab's prose and its links); the GM: 'things which are currently linked on the References tab which are about how something is drawn would be moved to this tab'."
   },
   {
-   "id": "Risks-count",
-   "summary": "The rollout is 56 hamlet classes, the choice values and 99 sheet kinds, each with the checks; parallel writer agents on disjoint modules after the go-ahead",
+   "id": "D13-refusal",
+   "summary": "A .drawing.html listed under Entry: is refused at parse, the message naming Drawing:",
    "class": "within",
-   "why": "Not a narrowing: every class, value and kind is in scope (FR-011). The figure now carries its method and date; re-run this round, '^class .*(Kind)' across compound_kinds/*.py counts 99 (particulars 18, shrine 16, grounds 22, household 27, office 16). Re-run this amendment round: compound_kinds still 99 Kind classes (22+18+16+27+16), and interactive/assets/modals/ holds 56 hamlet + 99 sheet files = 155, matching D12's commit (no kind dropped by the move)."
+   "why": "Enforcement test: a guard that REFUSES, so its reach was measured. _base.py:331 sits inside _about_feature, so it refuses only an About-form modal (the 149 old-form files still listing drawing pages under Entry: today parse untouched), and only on the '.drawing.html' substring of Entry:, which is exactly the set of 'how our maps draw it' pages. Entry: is what sources.research_questions puts on the References tab, so the refusal enforces FR-006 and SC-008 ('no References tab lists a how our maps draw it page') and nothing else; delete that requirement and the refusal has nothing to check. Refusing at import is the established form for every other About-form error (Label:, old prose tags). No reach beyond the request."
+  },
+  {
+   "id": "D13-tab",
+   "summary": "Fourth tab 'Depiction' between Guesses and References: Depiction paragraphs then the drawing links; absent when both empty; shares the panels' grid cell",
+   "class": "within",
+   "why": "FR-014 (links alone when nothing notable; absent when neither) and the GM's name. Position is unspecified by the GM. One size for every tab is the GM's 2026-10-03 ruling already in force."
+  },
+  {
+   "id": "D13-guidelines",
+   "summary": "dev/modals.md section 'Depiction' rules D1-D6 and M13 amended (a convention leaves About); a single form called deliberate only where a drawing page records a convention, never where the research makes it an unrolled knob",
+   "class": "within",
+   "why": "FR-014 ('The guidelines MUST say how the tab is written'; the single-form clause verbatim in substance) and the GM's 'The single roof is NOT a deliberate convention'. D4 (one clause pointing to the title card) serves FR-004."
+  },
+  {
+   "id": "D13-agent",
+   "summary": "New defined agent modal-depiction, Opus medium, omitClaudeMd, reporting COVERAGE, TRUTH, LINKS",
+   "class": "within",
+   "why": "FR-014's check, its three criteria one for one ('every convention and standardization ... told with its real counterpart, nothing is claimed that is not drawn, and its links are exactly the drawing pages'); the GM asked for 'a specification for the subagent check'. Tier is a design matter; FR-014 asks only that it be pinned."
+  },
+  {
+   "id": "D13-crop",
+   "summary": "The modal-depiction bundle carries a screenshot crop of the glyph on a pool page (fixed zoom, the page tests' browser); a kind on no pool map bundled without one, saying so",
+   "class": "within",
+   "why": "Enforcement test: an INPUT to the requested check, not new behavior - it refuses, blocks and rewrites nothing. FR-014 asks the check to judge the tab 'as drawn' and that 'nothing is claimed that is not drawn'; the drawing pages say what the rules are, the crop is the only thing in the bundle that shows what the glyph actually looks like. Delete the Depiction check and the crop has nothing to serve. The session pitched 'a crop of the glyph' to the GM before his 2026-10-04 reply, which raised no objection. The no-crop fallback does not skip the check (pages and claims rows still go in)."
+  },
+  {
+   "id": "D13-claims",
+   "summary": "The bundle carries the claims-index rows whose cited pages include the kind's drawing pages",
+   "class": "within",
+   "why": "Enforcement of FR-014's 'MUST NOT present the single form as deliberate' and US3b-3. Does it do what it says: measured in dev/claims-index.json, the farmhouse's DRIFTED rows (HousesMixin.house#farmhouse glyph, #ridge at 0.6 of the length - the roof shape knob, #big farmhouse wing) all cite 0029-farmhouses-minka.drawing.html, so the filter reaches the single-roof drift the plan names."
+  },
+  {
+   "id": "D13-research-scope",
+   "summary": "modal-research no longer reads the drawing pages; its Entry is research questions only",
+   "class": "within",
+   "why": "Follows FR-006: References now holds research questions alone, so modal-research's REFERENCES check against drawing pages would test a list the spec moved away. Nothing FR-008 or FR-014 asks goes unchecked: Depiction statements and links are judged by modal-depiction against the drawing pages, the crop and the claims rows; a drawing page that changes owes modal-depiction (D13); About statements still rest on research questions (M13/M14). Not a narrowing. Housekeeping for T20: .claude/agents/modal-research.md line 42 still says 'A drawing page is listed only if a statement rests on it'."
+  },
+  {
+   "id": "D13-owed",
+   "summary": "modal-depiction owed when the modal's Depiction or Drawing changed or a page under Drawing: changed (implemented in scripts/_modal_owed.py:249 only for a modal that HAS the tab: 'a converted modal without one never owes')",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "FR-014 owes the check 'by a changed modal or drawing page'; SC-008 requires 'every rewritten modal whose kind has a drawing page or a convention carries a Depiction tab that has passed modal-depiction'. The plan owes it only when Depiction/Drawing moved, and the code gates it on the tab existing. The failure is concrete and is the rollout itself: 149 old-form modals list drawing pages under Entry: today; a conversion that drops them and writes no Depiction: leaves Depiction/Drawing empty-to-empty, so modal-depiction is never owed, modal-research no longer reads drawing pages, modal-form cannot know a drawing page exists - and the modal lands with no Depiction tab, its drawing pages and conventions silently gone, every check green. That is the exact case FR-014's COVERAGE criterion and SC-008 exist for, and T20's own proof ('it must flag the missing tab') is a finding the owed machinery would never dispatch the check to make. Not physically impossible (owe it on any change to an About-form modal file, and on conversion), not implied by the GM's words, and the literal reading defeats nothing. Required change: owe modal-depiction for every About-form modal on ANY change to its file (including new to the About form) and when a page under Drawing: changes, whether or not the tab exists - FR-014's trigger as written - and drop the m.depiction.strip() gate."
   }
  ],
- "verdict": "CLEAR"
+ "verdict": "BLOCKED"
 }

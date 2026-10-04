@@ -112,7 +112,7 @@ def test_a_class_new_to_the_about_form_owes_all_four_units(tmp_path: pathlib.Pat
     root = _tree(tmp_path)
     base = subprocess.run(["git", "-C", str(root), "rev-parse", "HEAD"], capture_output=True, text=True, check=True).stdout.strip()
     slugs = [s for s, _w, _f in mo.owed(root, base)]
-    assert slugs == ["modal-form:hamlet/farmhouse", "modal-accuracy:hamlet/farmhouse", "modal-references:hamlet/farmhouse", "modal-gaps:hamlet/farmhouse"]
+    assert slugs == ["modal-form:hamlet/farmhouse", "modal-accuracy:hamlet/farmhouse", "modal-references:hamlet/farmhouse", "modal-gaps:hamlet/farmhouse", "modal-depiction:hamlet/farmhouse"], "the Depiction check is owed whether or not the modal has the tab (D13)"
 
 
 def test_nothing_is_owed_while_nothing_moved_and_a_moved_entry_page_owes_only_the_research_units(tmp_path: pathlib.Path) -> None:

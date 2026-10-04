@@ -39,7 +39,8 @@ contradicts the GM's canon the bundle carries, and nothing reads as GM-only.
 
 **REFERENCES** (M14). The References tab lists the pages in `entry/`. Each must support at least one statement or guess; a page
 nothing rests on is a finding (remove it). Each statement's support must be listed; a statement resting on an unlisted page is
-a finding (add it). A drawing page is listed only if a statement rests on it. The page the modal draws on most comes first.
+a finding (add it). A drawing page ("how our maps draw it") is never listed here: it is the Depiction tab's, judged by
+`modal-depiction` (feature 319 D13); one under `Entry:` is a finding. The page the modal draws on most comes first.
 
 **GAPS** (M15; standardized modals only - a particular modal answers `GAPS: not owed (particular)`). For each of the kind's
 standard questions (M5-M7) the modal answers as unrecorded, leaves out, or answers only with a guess: grep `record/` and read

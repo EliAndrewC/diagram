@@ -147,7 +147,9 @@ the glyph on a pool page (`interactive/assets` page screenshot at a fixed zoom a
 bundle script with the browser the page tests already use; a kind on no pool map is bundled without a crop and says so). It reports
 COVERAGE (every convention and standardization the glyph shows is told, with the real counterpart), TRUTH (nothing told that the
 crop and the pages do not show; nothing presented as deliberate that a claim calls DRIFTED), LINKS (exactly the drawing pages the
-tab rests on). Owed unit `modal-depiction:<uid>`, when the modal's Depiction or Drawing changed or a page under `Drawing:` changed;
+tab rests on). Owed unit `modal-depiction:<uid>`, on ANY change to an About-form modal (new to the form, its About, Guesses, Entry, Depiction
+or Drawing) and when a page under `Drawing:` changed - whether or not the modal has the tab, so a conversion that drops its
+drawing pages and writes no Depiction is still checked (the plan review, 2026-10-04);
 `modal-research` no longer reads the drawing pages (its Entry is research questions only). The farmhouse is rewritten into the
 form as the tab's first example and goes back to the GM.
 

@@ -244,14 +244,15 @@ def owed(root: pathlib.Path, base: str) -> list[tuple[str, str, str]]:
         elif moved_pages:
             why = f"a page its Entry names moved ({' '.join(pathlib.Path(f).name for f in moved_pages)})"
             rows += [(f"{c}:{m.uid}", why, fp_research) for c in RESEARCH_CHECKS]
-        # THE DEPICTION TAB (plan D13): owed when its words or its Drawing: list moved, or a page that list names did - and
-        # only for a modal that has the tab (Depiction: or Drawing:), which a converted modal without one never owes
-        if m.depiction.strip():
-            moved_drawing = [f for f in m.drawing_files() if f"{SKILL}/{f}" in changed_pages]
-            if was is None or was.depiction != m.depiction or was.prose != m.prose:
-                rows.append((f"{DEPICTION_CHECK}:{m.uid}", "its Depiction tab is new or changed", depiction_fingerprint(root, m)))
-            elif moved_drawing:
-                rows.append((f"{DEPICTION_CHECK}:{m.uid}", f"a page its Drawing: names moved ({' '.join(pathlib.Path(f).name for f in moved_drawing)})", depiction_fingerprint(root, m)))
+        # THE DEPICTION TAB (plan D13): owed by ANY change to the modal - new to the About form, its About, Guesses, Entry,
+        # Depiction or Drawing - and by a page its Drawing: names moving, WHETHER OR NOT the modal has the tab (the plan review,
+        # 2026-10-04: a conversion that dropped its drawing pages from Entry: and wrote no Depiction: would otherwise land with
+        # its conventions and drawing links silently gone, every check green - the case FR-014 and SC-008 exist to catch)
+        moved_drawing = [f for f in m.drawing_files() if f"{SKILL}/{f}" in changed_pages]
+        if moved_text or was.depiction != m.depiction:
+            rows.append((f"{DEPICTION_CHECK}:{m.uid}", "new to the About form" if was is None else "the modal or its Depiction tab changed", depiction_fingerprint(root, m)))
+        elif moved_drawing:
+            rows.append((f"{DEPICTION_CHECK}:{m.uid}", f"a page its Drawing: names moved ({' '.join(pathlib.Path(f).name for f in moved_drawing)})", depiction_fingerprint(root, m)))
     return rows
 
 
