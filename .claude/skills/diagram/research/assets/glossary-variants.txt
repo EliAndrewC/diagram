@@ -1405,6 +1405,7 @@ hereditary temples	hereditary temple
 hexi	Hexi Corridor
 hexi corridor	Hexi Corridor
 hidenin	hidenin
+hidetada	Hidetada
 hideyoshi	Hideyoshi
 high loom	high loom
 high looms	high loom
@@ -3741,6 +3742,7 @@ toki no kane	toki no kane
 tokonoma	tokonoma
 tokorobarai	tokorobarai
 tokugawa	Tokugawa
+tokugawa hidetada	Hidetada
 tokugawa ieyasu	Ieyasu
 tokugawa tsunayoshi	Tsunayoshi
 tokugawa yoshimune	Yoshimune
