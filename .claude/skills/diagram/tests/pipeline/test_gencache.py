@@ -206,6 +206,15 @@ def test_a_skip_render_page_is_not_filed_and_a_stale_one_is_evicted(tmp_path, mo
     monkeypatch.setenv("DIAGRAM_SKIP_RENDER", "1")
     page.write_text("<vector-only page>")
     gencache.store(str(gen), deps)
+    assert (entry / "toy.html").read_text() == "<full page>" and (entry / "toy.png").exists(), (
+        "feature 319: a skip-render roll at the SAME key keeps the render filed under it - else the next hit deletes a current page"
+    )
+    assert gencache.load(str(gen)) is True and page.read_text() == "<full page>" and png.exists(), "the hit restores the render"
+    # an EARLIER key's render is still evicted: the stored key no longer matches what the entry advertises
+    meta = entry / "meta.json"
+    meta.write_text(meta.read_text().replace(json.loads(meta.read_text())["key"], "an-earlier-key"))
+    page.write_text("<vector-only page>")
+    gencache.store(str(gen), deps)
     assert not (entry / "toy.html").exists() and not (entry / "toy.png").exists(), "evicted, not filed"
     assert (entry / "toy.json").exists(), "the manifest is filed regardless"
     assert gencache.load(str(gen)) is True
