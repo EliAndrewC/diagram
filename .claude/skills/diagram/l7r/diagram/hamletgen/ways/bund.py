@@ -41,7 +41,7 @@ RUN_ON_REACH_FT = WAY_END_REACH_FT
 # A run-on may turn the path this far off the way it was walking, and no further: a path bends as it is walked, and a bund
 # behind the end is not one it runs on to (a map drawing convention, well inside the 90 degree hook `joints.py` removes).
 RUN_ON_TURN_DEG = 60.0
-"""Research: run-on turn limit - research/questions/0081-village-lanes.drawing.html: at most 60 degrees off the way walked"""
+"""Research: run-on turn limit - DEVIATION research/questions/0081-village-lanes.drawing.html: a lane run on to a bund turns no more than 60 degrees anywhere"""
 # The nearest lane is sampled every this many feet when a field path must branch off it (a map drawing convention).
 BRANCH_STEP_FT = 8.0
 # The branch is drawn at the field spur's own tread (`stage_track`: width 5, worn).

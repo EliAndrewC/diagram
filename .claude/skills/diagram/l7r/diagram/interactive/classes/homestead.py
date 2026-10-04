@@ -18,32 +18,32 @@ class Farmhouse(Kind):
     slightly raised ground the homesteads share, its work yard and garden beside it and, where a farm stands
     alone, its own yashikirin sheltering it.
 
-    Why: On this map every house in a nucleated hamlet is reached by a lane, and each stands close to the paddy - up against it, but
+    Why: On this map every house in a nucleated hamlet is reached by a lane of its own, but for the few reached across a neighbor's land, and each stands close to the paddy - up against it, but
     never on the bund. HOW that access is delivered is not settled: alleys cut off the spine, each household
     having made its own way to the road as this map reads it, and a laid-out back lane serving a regular row are
     both seen in villages read, so
-    this map rolls between the two forms per settlement and guarantees only that every farmhouse is served.
+    this map rolls between the two forms per settlement and guarantees only that every farmhouse is served, by its own lane or across a neighbor's yard.
     No two farmhouses face exactly the same way. A survey of the houses of 27 Okinawan villages found most of them
     facing within three points of the compass about their village's commonest bearing, the smaller turns where the
     streets curve - and curving streets, which its surveyors suppose follow the contours, are seen on the land-survey maps of a village moved to its site in 1736, though which of them were laid before 1868 the paper does not say. So
-    each settlement rolls a common bearing near south, and each house turns a little with the lane and the field edge it
-    stands on, never more than about 30 degrees; no house is turned a quarter away. Its work yard and garden beds turn
+    each settlement rolls a common bearing near south, and each house turns a little with the field edge it stands near
+    (its lane is laid only after every house stands, though a village-scale map finds each house's path as it seats it), never more than about 30 degrees; no house is turned a quarter away. Its work yard and garden beds turn
     with it: this project draws them always lined up with their house. About one farm in eight carries a storehouse
     against its back wall, a village headman's always.
 
-    Note: Placement follows the read record, except that as a clustered settlement grows each next household takes the open place nearest the cluster, and of two about as near the one nearer the fields - a preference, all else being equal, never a limit, and this map's rule, not the record's; neighbors stand a lane's width apart, so a lane can always pass between them, also this map's rule; that every house in a nucleated cluster is reached by a lane is this map's rule, not the record's: no page states it, and in Japan a household with no way of its own to the road could cross a neighbor's land by custom (an 1892 edition of local customs, mostly of plots or land and partly of towns); the alleys-off-the-spine form is read in one surveyed twentieth-century Manchu village on the dry northern plain and in Enoshima, whose houses behind its street were reached by the narrowest of alleys, the back lane only for planned English villages, and that alleys mean a village grew while a back lane means it was planned is this record's reading, not a source's. The setback from the paddy is stated in feet by no source:
+    Note: Placement follows the read record, except that as a clustered settlement grows each next household takes the open place nearest the cluster, and of two about as near the one nearer the fields - a preference, all else being equal, never a limit, and this map's rule, not the record's; neighbors stand a lane's width apart, so a lane can always pass between them, but a household reached across a neighbor's yard stands 2 ft from that neighbor alone, also this map's rule; that every house in a nucleated cluster is reached by a lane is this map's rule, not the record's: no page states it, and in Japan a household with no way of its own to the road could cross a neighbor's land by custom (an 1892 edition of local customs, mostly of plots or land and partly of towns); the alleys-off-the-spine form is read in one surveyed twentieth-century Manchu village on the dry northern plain and in Enoshima, whose houses behind its street were reached by the narrowest of alleys, the back lane only for planned English villages, and that alleys mean a village grew while a back lane means it was planned is this record's reading, not a source's. The setback from the paddy is stated in feet by no source:
     it is built from a bund width that is sourced (one to two shaku), a levee path and an eave overhang that
     are both unsourced GUESSES, and one part that is
     read for a house facing a watercourse and extended to the paddy by this record, so the 6 ft floor beneath
     it is a soft threshold rather than a measured minimum - and the map draws 10 to 13 ft, well clear of it,
     close enough that the household works its own ground. No count of house bearings from before 1868 was found: the
     survey is one island region's houses in 1985, and the one tenth it found turned to the right is not drawn. How far a
-    house turns with its lane, and rolling the common bearing within about 11 degrees of due south, are guesses, as is that the 1736 village's houses turned with its streets. The plain farmhouse is drawn 46 by 28 ft, the size of the well-off houses that survive and about twice the usual house of one village's count of 1885.
+    house turns with the field edge it stands near, and rolling the common bearing within about 11 degrees of due south, are guesses, and that it turns with the field edge, its lane not yet laid, is a deviation of this map's, as is a village-scale map's finding each house's path as it seats it; as is that the 1736 village's houses turned with its streets. The plain farmhouse is drawn 46 by 28 ft, the size of the well-off houses that survive and about twice the usual house of one village's count of 1885.
 
     Caveat: the 6 ft floor beneath it is a soft threshold rather than a measured minimum - and the map draws
     10 to 13 ft, well clear of it, close enough that the household works its own ground. No count of house bearings from
     before 1868 was found: the survey is one island region's houses in 1985, and the one tenth it found turned to the
-    right is not drawn. How far a house turns with its lane, and rolling the common bearing within about 11 degrees of
+    right is not drawn. How far a house turns with the field edge it stands near (that it turns with the field edge, its lane not yet laid, is a deviation of this map's, as is a village-scale map's finding each house's path as it seats it), and rolling the common bearing within about 11 degrees of
     due south, are guesses, as is that the 1736 village's houses turned with its streets.
 
     Name: farmhouse

@@ -179,7 +179,7 @@ class LaneGround:
     """The lane raster (`SeatRegion.lane`) as the flood reads it (`flood_from`): its taken cells grown by one cell on every side -
     about a corridor's half-width at the free-ground grid's cell - so ground a lane cannot pass at its width is not free.
 
-    Research: lane ground - research/questions/0081-village-lanes.drawing.html: a lane keeps its clearance; the site's taken ground grown by a cell
+    Research: lane ground - NONE: the lane raster grown one cell for the flood to read; the clearance itself is painted in `SeatRegion.__init__` (its own claim)
     """
 
     def __init__(self, region: Region) -> None:

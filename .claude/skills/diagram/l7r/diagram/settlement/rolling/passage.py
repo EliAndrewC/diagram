@@ -254,8 +254,8 @@ def landlocked(s: Settlement, layouts: Any) -> bool:
     NO ROUTED SEARCH FOR A WAY OF ITS OWN (the GM, 2026-10-03: *"we don't need to be rigorous because people cut through their
     neighbors yards all the time"*, and *"even if there IS a lane you might do it anyway if it was faster or more direct"*).
     Proving that no path bending round the homesteads reached the tree ran the route search to the end of its reach at every
-    tight seat (the passage's cost, research R9). So the corridors are asked first now, the cheaper, and the walks only of land
-    none of them reaches.
+    tight seat (the passage's cost, research R9). So the yard's opening onto lane ground is asked first now (`opens`, feature 318), the cheaper, and the
+    walks only of land that opens onto none.
 
     Research:
         no way of its own - research/questions/0081-village-lanes.html, research/questions/0081-village-lanes.drawing.html: judged by the whole holding - a walk under some layout, a yard opening onto lane ground under none

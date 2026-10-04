@@ -33,7 +33,7 @@ def _clear_link(a: Pt, b: Pt, hard: list[Poly], walls: Sequence[Poly], water: li
     it meets, so a junction is drawn as a touch without the touch crossing anything.
 
     Research:
-        link clear of the fabric - research/questions/0081-village-lanes.drawing.html: 7 ft off a garden fence
+        link clear of the fabric - DEVIATION research/questions/0081-village-lanes.drawing.html: the link's line 7 ft off a garden fence, its edge 5.5 ft
         link clear of the crop and wet ground - research/questions/0081-village-lanes.drawing.html: 8 ft off, 14 ft off water"""
     span = math.dist(a, b)
     if span < 1.0:

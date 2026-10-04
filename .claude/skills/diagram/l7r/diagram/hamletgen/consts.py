@@ -167,7 +167,7 @@ WEB_CLEARANCE = 28.0
 # thread, and a house sat 296 ft from any way with no route found at all. The two are now derived
 # from each other and cannot contradict again.
 WEB_FABRIC_GAP = 7.0
-"""Research: web lane off a plot - research/questions/0081-village-lanes.drawing.html: 7 ft clear of a garden fence"""
+"""Research: web lane off a plot - DEVIATION research/questions/0081-village-lanes.drawing.html: 7 ft from the lane's line, so a tread's edge may pass 5.5 ft off a fence"""
 
 # HOW FAR A TRACK KEEPS OFF A STEADING, as opposed to how far the WEB does (feature 128).
 #

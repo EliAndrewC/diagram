@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-04T03:22:42Z",
+  "target": "record-checked",
+  "commit": "077e08d0d",
+  "why": "record-format on record-format:0081: this round's check read the page before the one-word heading fix it was handed by quote-check ('only' to 'largely'), which adds no word a reader must look up"
+}
