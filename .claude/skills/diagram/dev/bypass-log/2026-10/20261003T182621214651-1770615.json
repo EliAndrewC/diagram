@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-03T18:26:21Z",
+  "target": "review-accept",
+  "commit": "3ea65af49",
+  "outcome": "permitted",
+  "why": "review-accept glyph-check--village-lane F3: a confirmation from the prior PASS round of feature 317, nothing to fix"
+}

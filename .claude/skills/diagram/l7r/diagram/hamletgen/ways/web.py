@@ -330,10 +330,10 @@ def tidy_lane_ends(s: Settlement, envelope: Poly, streets: bool = False) -> None
         # are named so the tidy-up cannot strand one (cohort seed 39's farmhouse, `_trim_to_service`).
         # ...never a household reached across a neighbor's yard, which is owed no way of its own (`geom.lane_houses`, feature 317)
         _keep = [_h for _h in _owed if all(seg_dist(_h[0], _h[1], _a, _b) > WEB_REACH_FT for _a, _b in _others)]
-        # ...BUT A CONNECTOR THAT STARTS ON THE EXIT STRIP STAYS THERE (feature 287 wave 6): the web draws the strip as a tree lane
-        # up to the connector's start where a house or the field is owed it (`tree.strip_run`), and pulled back to service the
-        # start left the strip 8 ft off on cohort seed 37 (the strip ended in a hook) and 300 ft down the track on seed 34
-        if _ln.get("connector") and s.M.get("access_exit"):
+        # ...BUT A CONNECTOR THAT STARTS AT THE WAY OUT'S GATE STAYS THERE (feature 320; the exit strip's rule before it, feature
+        # 287 wave 6): every household's way reaches the track out at the gate, and pulled back to service the start left them
+        # all off the network (the reference hamlet: 85 ft)
+        if _ln.get("connector") and s.M.get("way_out_gate"):
             continue
         _kept = (
             kept_connector(_pts, _pull_back_to_service(_pts, _others, _final_houses, _inside, _fabric_now), _solid_now)
@@ -449,7 +449,7 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
             may cross a shelter belt, the planting resuming on both sides, but not run its length
         door path reach - GUESS: DOOR_REACH_FT 40 ft, STEADING_ARRIVAL_FT 12 ft on a row
         web cut spacing - UNRESEARCHED: every house within WEB_REACH_FT (100 ft) of a cut, so the cuts stand up to about twice that apart
-        a cut's room - research/questions/0081-village-lanes.drawing.html: MIN_WEB_GAP, a lane 7 ft clear of a garden fence on each side of its tread
+        a cut's room - research/questions/0081-village-lanes.drawing.html: MIN_WEB_GAP, 7 ft clear of a garden fence on each side and a 4 ft tread, within the page's 3 ft footpath to 5 ft spine
         a web lane's span - UNRESEARCHED: only the houses within 1.5 times WEB_REACH_FT of its cut
         web lanes off the hard ground - UNRESEARCHED: WEB_HARD_GAP 8 ft off the field, the crop and the marsh
         row streets laid - research/questions/0033-row-villages-resson.drawing.html

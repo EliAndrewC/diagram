@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-04T12:21:58Z",
+  "target": "review-accept",
+  "commit": "1912b7d8b",
+  "outcome": "permitted",
+  "why": "review-accept glyph-check--village-lane F2: the first-leg-on-the-track's-bearing fix was measured and withdrawn (12 Kuwabata houses off the network, needle joins); the hairpin across the track's 40 ft first leg goes to the GM with the lane law's gap (connector_hairpin_ends reads only a lane's own short last leg)"
+}

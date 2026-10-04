@@ -378,6 +378,8 @@ def near_misses(M: Mapping[str, Any]) -> list[tuple[int, int, Pt]]:
         for end, q, b in ((-1, p[-1], p[-2]), (0, p[0], p[1])):
             if not free_end(ways, i, q, boxes) or math.dist(q, b) < 1e-6:
                 continue
+            if end == 0 and ln.get("of"):  # ...a household's own way's DOOR end serves its house (feature 318): not a join that stops short
+                continue
             head = ((q[0] - b[0]) / math.dist(q, b), (q[1] - b[1]) / math.dist(q, b))
             best: tuple[float, int, Pt] | None = None
             for k, o in enumerate(ways):
@@ -436,9 +438,13 @@ def short_fragments(M: Mapping[str, Any], ground: WorkedGround | None = None) ->
     `ground` is the worked ground where the caller has it; it is built at most once here (the perf-audit of feature 308:
     each `dangling_lane_ends` built it again, though a lane taken away changes no ground - seven builds a web on seed 47 at
     20 households, the map byte-identical with one).
-    Research: debris - UNRESEARCHED: a lane under 30 ft that earns no house, join, target or end"""
+    Research:
+        debris - UNRESEARCHED: a lane under 30 ft that earns no house, join, target or end
+        a household's own way never debris - research/questions/0081-village-lanes.drawing.html: every other farmhouse is served by a lane of its own"""
     lanes = M.get("lanes") or []
-    short = [i for i, ln in enumerate(lanes) if not ln.get("connector") and not ln.get("spur") and len(ln.get("pts") or []) >= 2 and polyline_len(lane_pts(ln)) < FRAGMENT_FT]
+    # ...NOR A HOUSEHOLD'S OWN WAY, however short (feature 318, FR-014): it is the lane its household is served by (`tree.owed`),
+    # and dropped as earning nothing it was drawn again next round, until the settle refused the web (cohort seed 10)
+    short = [i for i, ln in enumerate(lanes) if not ln.get("connector") and not ln.get("spur") and not ln.get("of") and len(ln.get("pts") or []) >= 2 and polyline_len(lane_pts(ln)) < FRAGMENT_FT]
     if not short:
         return []
     reached, nets, targets, field = len(unreached_houses(M)), lane_networks(M), len(unreached_targets(M)), field_unreached(M)
@@ -709,15 +715,15 @@ def breaks_through(pts: Sequence[Pt], solid: Sequence[tuple[float, float, float,
 
 def breaks_mid_run(M: Mapping[str, Any]) -> list[tuple[int, int]]:
     """The midpoints of lane segments longer than `BREAK_SPAN_FT` that stand inside a building's box (`breaks_through`)."""
-    solid = solid_boxes(M)
-    return [(round(mid[0]), round(mid[1])) for p in _ways(M) for _k, mid in breaks_through(p, solid)]
+    return [(round(mid[0]), round(mid[1])) for solid in (solid_boxes(M),) for p in _ways(M) for _k, mid in breaks_through(p, solid)]
 
 
 def fouls_fabric(pts: Poly, width: float, houses: Sequence[Mapping[str, Any]], fabric: Sequence[tuple[Poly, Pt | None, str]], own: Pt | None = None) -> bool:
-    """Does a lane of this width along `pts` put ink on a farmhouse (`house_hit`), or pass within `_TOUCH_GAP` of another
-    household's threshing yard or garden (`_crosses_fabric`)? `fabric` is `_homestead_polys`' (polygon, owner, kind); a door
-    path is exempt only from its OWN steading's yard and garden (`own`, its house's center).
-    Research: nothing built on a lane - research/questions/0081-village-lanes.drawing.html: 4 ft off another's yard or bed"""
+    """Does a lane of this width along `pts` put ink on a farmhouse (`house_hit`), or pass within `_TOUCH_GAP` of another household's
+    threshing yard or garden (`_crosses_fabric`)? `fabric`: `_homestead_polys`'; a door path is exempt from its OWN (`own`).
+    Research:
+        nothing built on a lane - research/questions/0081-village-lanes.drawing.html: no tread on another household's yard or bed
+        foul margin - UNRESEARCHED: within 4 ft of another's yard or bed"""
     if house_hit(pts, width, houses):
         return True
     theirs = [poly for poly, owner, kind in fabric if kind in ("threshing_yards", "gardens") and (own is None or owner != own)]

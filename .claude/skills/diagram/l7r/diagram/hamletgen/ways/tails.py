@@ -160,7 +160,7 @@ def _sweep_doubled_tails(s: Settlement) -> int:
 
     Research:
         doubled tail cut - UNRESEARCHED: a lane running on beside the way it met ends where it came alongside
-        narrower tail cut - research/questions/0081-village-lanes.drawing.html: the through-route keeps its width"""
+        narrower tail cut - UNRESEARCHED: of two tails side by side the narrower is cut, so the through-route keeps its width"""
     lanes = s.M.get("lanes") or []
     fixed = 0
     # THE NARROWER TAIL IS CUT, NEVER THE WIDER (settlement-review of Sawada, feature 261): a 6 ft track and a 3 ft

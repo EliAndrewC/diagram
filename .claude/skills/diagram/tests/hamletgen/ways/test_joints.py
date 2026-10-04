@@ -4,7 +4,7 @@ import math
 
 import pytest
 
-from l7r.diagram.hamletgen.ways.joints import joints, keeps_the_web, oriented, pulled, straighten_joints, tee, unhooked
+from l7r.diagram.hamletgen.ways.joints import as_walked, joints, keeps_the_web, oriented, pulled, straighten_joints, tee, unhooked
 
 from ._builders import _webbed
 
@@ -202,16 +202,17 @@ def test_a_connector_fold_whose_new_first_leg_runs_through_a_building_is_refused
     assert fold_the_connector_hairpin(s) == 0 and s.M["lanes"][0]["pts"][0] == [2055.3, 25.3]
 
 
-def test_a_connector_starting_on_the_exit_strip_is_not_moved_off_it_by_a_hairpin_fold() -> None:
-    """Feature 287 wave 6 (cohort seed 37): the web draws the exit strip as a tree lane up to the connector's start, and the
-    fold that started the connector at a lane's vertex left the strip ending in a hook - where a strip is reserved the
-    connector stands, and the settle re-aims the lane's end instead (`law.connector_hairpin_ends`)."""
+def test_a_connector_starting_at_the_way_outs_gate_is_not_moved_off_it_by_a_hairpin_fold() -> None:
+    """Feature 287 wave 6 (cohort seed 37), as feature 320 keeps it: the households' ways reach the root at the connector's
+    start, and a fold that started the connector at a lane's vertex would leave them ending off it - where the homesteads
+    stage recorded the way out's gate the connector stands, and the settle re-aims the lane's end instead
+    (`law.connector_hairpin_ends`)."""
     from l7r.diagram.hamletgen.ways.joints import fold_the_connector_hairpin
 
     from ._builders import _StubSettlement
 
     s = _StubSettlement(lanes=[[(2055.3, 25.3), (1408.0, -20.4)], [(1929.1, 56.4), (2054.3, 40.0), (2055.3, 25.3)]])
-    s.M["access_exit"] = [[2300.0, 25.3], [2055.3, 25.3]]
+    s.M["way_out_gate"] = [2055.3, 25.3]
     assert fold_the_connector_hairpin(s) == 0 and s.M["lanes"][0]["pts"][0] == [2055.3, 25.3]
 
 
@@ -292,3 +293,32 @@ def test_two_lanes_meeting_end_to_end_are_never_pulled_into_a_kink(monkeypatch: 
     s = _webbed([{"pts": x, "w": 3}, {"pts": y, "w": 3}])
     straighten_joints(s, [], [], [])
     assert len(_lanes(s)) == 2 and all(not law.kinks([tuple(p) for p in pts]) for pts in _lanes(s)), "not taken: no kink made"
+
+
+def test_lanes_met_end_to_end_are_walked_as_one_way() -> None:
+    """`as_walked` (feature 318): two records meeting end to end at a joint are one way, in walking order whichever way each
+    was drawn; a lane a third way touches at its end, and a lane of one point, stand alone."""
+    lanes = [
+        {"pts": [[0.0, 0.0], [100.0, 0.0]]},
+        {"pts": [[200.0, 0.0], [100.0, 0.0]]},  # drawn backwards, met end to end at (100, 0)
+        {"pts": [[500.0, 0.0], [600.0, 0.0]]},
+        {"pts": [[600.0, 0.0], [700.0, 0.0]]},
+        {"pts": [[600.0, -50.0], [600.0, 50.0]]},  # a third way through the second joint: no joint there
+        {"pts": [[900.0, 900.0]]},
+    ]
+    ways, owner = as_walked(lanes)
+    assert owner[0] == owner[1] and ways[owner[0]] in ([(0.0, 0.0), (100.0, 0.0), (200.0, 0.0)], [(200.0, 0.0), (100.0, 0.0), (0.0, 0.0)])
+    assert len({owner[2], owner[3], owner[4]}) == 3, "a joint a third way touches is no joint"
+    assert ways[owner[5]] == [(900.0, 900.0)] and len(ways) == 5
+    loop = [{"pts": [[0.0, 0.0], [100.0, 0.0], [100.0, 100.0]]}, {"pts": [[100.0, 100.0], [0.0, 100.0], [0.0, 0.0]]}]
+    ways, owner = as_walked(loop)
+    assert len(ways) == 2 and owner == [0, 1], "two lanes meeting at both ends are a loop, not a joint"
+
+
+def test_a_chain_met_at_its_first_lane_s_start_is_walked_back_to_its_true_first_lane() -> None:
+    """`as_walked` (feature 320): a walk starting at a lane whose START is a joint walks back along the chain to the lane
+    with a free end first, so the chain reads as ONE way from that free end, both records mapped to it."""
+    lanes = [{"pts": [[10.0, 0.0], [20.0, 0.0]]}, {"pts": [[0.0, 0.0], [10.0, 0.0]]}]
+    assert joints(lanes) == [(0, 0, 1, -1)]
+    ways, owner = as_walked(lanes)
+    assert owner == [0, 0] and ways == [[(0.0, 0.0), (10.0, 0.0), (20.0, 0.0)]], "one way, walked from lane 1's free end"

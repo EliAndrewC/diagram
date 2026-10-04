@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-03T20:52:29Z",
+  "target": "review-accept",
+  "commit": "cc146e2cd",
+  "outcome": "permitted",
+  "why": "review-accept glyph-check--village-lane F8: pre-existing lane-page mismatch carried to the lane follow-up feature"
+}

@@ -40,7 +40,7 @@ def test_the_boundary_path_refuses_the_hem_the_marsh_the_pond_the_stream_and_adm
     from l7r.diagram.hamletgen.homesteads.boundary import install_site_boundary
 
     s = _site()
-    plan = type("P", (), {"seat": {"cx": 500.0, "cy": 150.0}})()
+    plan = type("P", (), {"seat": {"cx": 500.0, "cy": 150.0}, "spec": type("S", (), {"households": 10})()})()
     install_site_boundary(s, plan)  # type: ignore[arg-type]
     assert s._site_chains is not None and "site_boundary" in s.M and s.M["site_boundary"]["chords"]
     assert s._site_blocks_rect((500.0, 290.0, 40.0, 28.0)), "a house on the hem strip"
@@ -68,7 +68,7 @@ def test_the_reed_marsh_toe_is_in_the_boundary_before_it_is_drawn() -> None:
     s.M["meta"]["down_deg"] = 90  # downhill is +y, so the toe lies below the paddy
     toe = s.toe_band()
     assert toe and min(p[1] for p in toe) == 700.0 - 90.0, "the band's inner edge is the pad above the crop's lowest point"
-    plan = type("P", (), {"seat": {"cx": 150.0, "cy": 500.0}})()
+    plan = type("P", (), {"seat": {"cx": 150.0, "cy": 500.0}, "spec": type("S", (), {"households": 10})()})()
     install_site_boundary(s, plan)  # type: ignore[arg-type]
     assert not s._site_blocks_rect((250.0, 500.0, 40.0, 28.0)), "open ground beside the paddy, uphill of the toe"
     assert s._site_blocks_rect((250.0, 660.0, 40.0, 28.0)), "the same column in the toe band (the band is as wide as the crop plus its pad): refused before the reeds are drawn"
@@ -296,3 +296,43 @@ def test_the_lines_asked_together_answer_as_each_sample_asked_alone() -> None:
         want = [p for p, c in zip(pts, cells, strict=True) if c not in fg.clear]
         assert edge is not None and list(edge) == want and len(edge) == len(want)
     assert 30 < refused < 270
+
+
+def test_free_ground_decides_a_cell_past_its_bounds_as_one_inside() -> None:
+    """Feature 318: rasterized over a window, the grid decides a cell beyond it by the same two tests, lazily and once - so
+    the window bounds its cost and never changes an answer. A wide water corridor down x = 300: a cell inside the window
+    and one far beyond it answer alike."""
+    from l7r.diagram.hamletgen.homesteads.boundary import FreeGround
+
+    water = ([((300.0, 0.0), (300.0, 1000.0), 40.0)], [])
+    whole = FreeGround([], water, None, (0.0, 0.0, 1000.0, 1000.0))
+    small = FreeGround([], water, None, (0.0, 0.0, 200.0, 200.0))
+    for x, y in ((300.0, 100.0), (300.0, 900.0), (600.0, 900.0), (330.0, 900.0), (150.0, 100.0)):
+        assert small.point_taken(x, y) == whole.point_taken(x, y) and small.point_clear(x, y) == whole.point_clear(x, y), (x, y)
+    assert small.point_taken(300.0, 900.0) and small.point_clear(600.0, 900.0) and not small.point_clear(330.0, 900.0)
+    assert len(small._beyond) == 4, "the four cells beyond the window, each asked once"
+    small.point_taken(300.0, 900.0)
+    assert len(small._beyond) == 4
+    bare = FreeGround([], ([], []), None, (0.0, 0.0, 100.0, 100.0))
+    assert not bare.point_taken(500.0, 500.0) and bare.point_clear(500.0, 500.0), "no ground at all: clear everywhere"
+
+
+def test_cells_past_the_window_decided_in_one_call_answer_as_one_at_a_time() -> None:
+    """`FreeGround.decide_beyond` (feature 318, the perf-audit's second round): the cells past the grid's window decided in one
+    vectorized call answer exactly as `_cell_beyond` does one at a time; cells inside, and cells already decided, are left."""
+    from l7r.diagram.hamletgen.homesteads.boundary import FreeGround
+
+    water = ([((300.0, 0.0), (300.0, 1000.0), 40.0)], [])
+    pts = [(x, y) for x in range(4, 1000, 37) for y in range(4, 1000, 53)]
+    one = FreeGround([], water, None, (0.0, 0.0, 200.0, 200.0))
+    want = {(x, y): (one.point_taken(x, y), one.point_clear(x, y)) for x, y in pts}
+    batch = FreeGround([], water, None, (0.0, 0.0, 200.0, 200.0))
+    batch.decide_beyond([p[0] for p in pts], [p[1] for p in pts])
+    n = len(batch._beyond)
+    assert n == len(one._beyond) > 0 and all((batch.point_taken(x, y), batch.point_clear(x, y)) == want[(x, y)] for x, y in pts)
+    assert len(batch._beyond) == n, "every cell past the window was decided by the batch"
+    batch.decide_beyond([50.0, float(pts[-1][0])], [50.0, float(pts[-1][1])])
+    assert len(batch._beyond) == n, "inside the window, and already decided: nothing more asked"
+    bare = FreeGround([], ([], []), None, (0.0, 0.0, 100.0, 100.0))
+    bare.decide_beyond([500.0], [500.0])
+    assert bare._beyond[(62, 62)] == (False, True)

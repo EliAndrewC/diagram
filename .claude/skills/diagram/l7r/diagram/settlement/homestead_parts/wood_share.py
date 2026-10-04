@@ -241,13 +241,12 @@ class WoodShares:
         """The reservations' state for one seating.
 
         Research:
-            sun strip default - NONE: copies `village_grove`'s own `_sun_depth` (22 px where the map declares no sun corridor), so
-                the reservation keeps what the planting keeps; the strip itself is judged at `copse_keepouts`
-            afternoon lane as the copse plants - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: the map's
+            sun strip default - GUESS: 22 ft where the map declares no sun corridor, copied from `village_grove`'s `_sun_depth`, so
+                the reservation keeps what the planting keeps; the 39 ft and 50 ft sun rules (research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html) are held at `copse_keepouts`
+            afternoon lane as the copse plants - NONE: passes through the map's
                 `west_sun_lane`, none where it declares none
             seat off a lane - UNRESEARCHED: the corridor's half plus the copse's lane buffer
         """
-        self.params = (floor_ft2, reach_ft, corridor_half)  # ...kept for a state rebuilt without one household (`without`)
         self.clump = COPSE_CLUMP_BS * s.bscale
         self.cr = round(self.clump / 2.0, 1)  # the radius the planted copse records and `wood_canopy` counts at
         self.pitch = SEAT_PITCH_BS * s.bscale
@@ -399,21 +398,6 @@ class WoodShares:
         """File keep-outs every later seat is read against."""
         self.bars.extend([("c", cx, cy, r, cx - r, cy - r, cx + r, cy + r) for cx, cy, r in circles])
         self.bars.extend([("r", x0, y0, x1, y1, x0, y0, x1, y1) for x0, y0, x1, y1 in rects])
-
-    def without(self, s: Settlement, rec: Mapping[str, Any]) -> WoodShares:
-        """The reservations as they would stand had `rec` never been admitted: a fresh state, every other household with a
-        share filed again from its record (`wood_share`) - for a household re-laid once the seating is done
-        (`passage.recheck_passages`), whose old keep-outs and seats must not refuse its new layout.
-
-        Research: reservations plumbing - NONE: the same filing, `rec` left out
-        """
-        fresh = WoodShares(s, *self.params)
-        for h in s.M.get("houses") or []:
-            share = h.get("wood_share")
-            if h is rec or not share or not h.get("geom"):
-                continue
-            fresh.commit(h["geom"], [(float(p[0]), float(p[1])) for p in share.get("seats") or ()])
-        return fresh
 
     def commit(self, geom: Mapping[str, Any], seats: Sequence[tuple[float, float]]) -> float:
         """File an admitted homestead: its keep-outs, its seats and their crowns. Returns the ground the seats cover (px^2)."""

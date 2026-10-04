@@ -1409,6 +1409,7 @@ hereditary temples	hereditary temple
 hexi	Hexi Corridor
 hexi corridor	Hexi Corridor
 hidenin	hidenin
+hidetada	Hidetada
 hideyoshi	Hideyoshi
 high loom	high loom
 high looms	high loom
@@ -2156,6 +2157,8 @@ lion-dogs	lion-dog
 lishe	gongxiefang
 litchi	litchi
 litchis	litchi
+litter	litter
+litters	litter
 littoral	littoral
 liubu	liubu
 liuchu	liuchu
@@ -3758,6 +3761,7 @@ toki no kane	toki no kane
 tokonoma	tokonoma
 tokorobarai	tokorobarai
 tokugawa	Tokugawa
+tokugawa hidetada	Hidetada
 tokugawa ieyasu	Ieyasu
 tokugawa tsunayoshi	Tsunayoshi
 tokugawa yoshimune	Yoshimune

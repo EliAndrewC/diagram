@@ -1,0 +1,62 @@
+{
+  "band": 3,
+  "base": {
+    "commit": "ddb924e01",
+    "label": "318-start",
+    "utc": "20261003T171426Z"
+  },
+  "binding": "e89dcf4b0fe0be0483ce24c69bb6c07cba85eb49bc859b5a15c4d31391ae86a0",
+  "end": {
+    "commit": "76749e380",
+    "label": "318-end",
+    "utc": "20261004T012326Z"
+  },
+  "environment": "local",
+  "feature": "318-grow-outward-no-restart",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "bf917120-9a91-46b2-b9b1-10b792b1a311",
+    "utc": "20261004T014455Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": 3.3,
+          "39": 0.0,
+          "4": 11.4,
+          "47": 10.0
+        },
+        "total_pct": 6.3
+      },
+      "20": {
+        "seeds": {
+          "25": -9.3,
+          "39": 10.9,
+          "4": 4.5,
+          "47": 24.1
+        },
+        "total_pct": 6.3
+      },
+      "40": {
+        "seeds": {
+          "25": -9.2,
+          "39": 7.4,
+          "4": -5.7,
+          "47": -13.1
+        },
+        "total_pct": -5.7
+      }
+    },
+    "seeds": {
+      "25": 12.8,
+      "39": 7.9,
+      "4": 27.5,
+      "47": -4.1
+    },
+    "total_pct": 11.3
+  },
+  "note": "Core attribution holds, the stage story does not. Reviewer counterfactual at 76749e380, detached worktrees of both bookends, medians of 3, wall s (scratchpad pa318e.jsonl): with lay_the_ways stubbed, homesteads at 15 hh is 0.93/0.73/0.67/0.81 vs main 1.35/0.97/0.89/1.21 and as landed 1.72/1.72/1.36/1.61, so the homesteads growth is the gap pass (0.7-1.0 s a map). With main grow_gap (2 x ACCESS_HALF_FT + 2 px), the 20 ft gap alone removed: notice 20hh/47 1.00 to 0.22 (main 0.25), 40hh/39 2.34 to 0.26 (main 0.24), seed 4 hinterland 1.18 to 0.90 (main 0.92), seed 4 web 1.13 to 0.56 (main 0.69). What the explanation gets wrong: (1) it says nothing about hinterland +0.3 s on seed 4, the seed that crossed 20 pct; (2) notice is put down to a looser cluster, but the houses bbox shrank (20/47 859 to 725 px, 40/39 1221 to 1095). The real cause is the moved layout sending the board search elsewhere, which also cuts notice 0.61 to 0.11 on 15/47 and raises it to 0.77 on 15/4 under the main-gap control; (3) the seed 4 web rise is put down to every household way being drawn and kept, but with main gap and every way still drawn the web is 0.56 s, below main; (4) the 40-hh -5.7 pct is credited to the tie-break, but the web fell on all four seeds (-3.8 s summed) and seed 47 homesteads fell 2.8 s, while homesteads rose on 25 and 39. Rewrite citing these runs as the control.",
+  "verdict": "inconsistent"
+}

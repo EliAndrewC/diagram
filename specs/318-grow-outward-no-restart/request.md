@@ -23,3 +23,64 @@ Ah, I see. I had misunderstood about the 700 feet thing. Um, yeah, in that case,
 
 Asked which limit was meant, the GM chose: "700 ft hard, floor soft" - the 700 ft field reach stays the one hard limit; the
 quarter-built floor becomes a reported measurement that blocks nothing.
+
+## Amendment (GM, 2026-10-03, verbatim)
+
+The session found that seed 18 (cohort spec, 15 households) cannot seat everyone within 700 ft of its field on its first
+margins, offered three options, and the GM chose "overflow to the next site", adding:
+
+Let's overflow to the next site. The seven hundred feet is based on real research, but my understanding of that research is not that in literally every single farming community in all of Japan, that this was always the case 100% of the time, merely that this was the norm, this is what was expected, therefore this is what we try to do. Does that sound right? If so, then please go with that. If my understanding of the research differs from yours, then we should talk more. But otherwise, you can proceed with option A.
+
+The session then read the record and corrected itself: the 700 ft is not research. Page 0029's drawing page: "No farmhouse
+is held to a maximum distance from its fields"; page 0032's: the 700 ft is the back-row distance its own drawn villages showed,
+"which reads as the back of a compact village rather than as a stranded arc". It recommended keeping growing at the edge. The GM:
+
+Gotcha. Uh, yeah, let's just keep going at the edge then. I mean, I guess if we have multiple options in our placement, and one option is closer to the fields, then we should take the one that is closer to the fields, because people generally did not want to have to walk a long way. to get to the fields, but that is not any kind of a limit. And it sounds like we can get rid of these 700 feet measurement completely, because really what we're just talking about is how we grow the settlement. I don't know. Does that make sense? If so, then go with that. Like, do you think there's even a reason to keep the 700 feet as a measurement? If that's some kind of useful thing in our implementation, then I'm not opposed to it in principle. I just am not sure what it's even doing for us at this point, you know?
+
+## Amendment 2 (GM, 2026-10-03, verbatim)
+
+The session explained the band-3 slowdown (+11.9%) as the nearest-the-field order, implemented as the growth's primary
+key with sixteen directions at three rings offered at once, the near-field seats refused only after the access-corridor
+search. The GM:
+
+Okay, so a couple of things:
+-> My "ruling" on preferring to stay close was not a hard requirement; merely an "all else being equal, try this first".  I don't see why that would add time.
+-> You keep talking about the need to calculate the access-path search, but I feel like there's probably a better way.  Like what if we just added a slightly higher minimum distance from your neighbors?  Wouldn't that guarantee space for an access path?
+
+Don't make any changes, just tell me what you think about this.
+
+The session agreed the order should be a tie-break; on the gap, that homesteads kept a path's width apart cannot enclose a
+pocket on their own, but the paddy, water and the map's edge can, and proposed a reachability raster as the cheap check.
+The GM:
+
+But if there is a minimum distance between homesteads then doesn't that guarantee that it will **always** be possible to put a lane connecting the path to the lane network?
+
+The session answered: yes among homesteads alone; the exceptions are pockets against the paddy, water or the map's edge;
+the gap plus a cheap raster check would let the seating drop the path search. The GM:
+
+I would like this folded into 318, both the field preference being made a true tie-breaker and the lane spacing.  This is not going to spread things out by enough to make the map appear too dispersed and I'm not concerned about the other lane-blocking map features because we already know it's okay for people to cut through neighbors' yards in a pinch.  So with this in mind, I think we can do the gap rule plus some kind of cheap check; the lane layout is expensive and could be made relatively cheap if we guaranteed space for lanes during homestead placement.  This does let us drop the search entirely, as you say, which will also be helpful.
+
+## Amendment 3 (GM, 2026-10-03, verbatim)
+
+The session reported that option A (lanes laid in the gaps after the seating) is in line with page 0081's reading and
+consistent with the record (Smith 1899 supports houses first, paths worn after; no source states lanes as the gaps between
+plots, so that stays a GUESS), and measured it on nine nucleated seeds: homesteads stage main 9.85 s, the field preference
+as a tie-break alone 9.96 s, option A 14.38 s (+45%), eight of nine maps reaching every house. It recommended the tie-break
+alone and dropping A. The GM:
+
+Yes, I still want A for how it shapes the map, based on that research finding.  But yes please also implement the tie-break thing for the real speedup.
+
+## Amendment 4 (GM, 2026-10-04, verbatim)
+
+The session reported that every edit to a research page re-owes every claim citing it (about 370 for 0081's drawing page),
+whatever part of the page the claim rests on; that its own 0081 edits bore on about a dozen of those claims; that between two
+full re-check rounds 49 of 363 verdicts changed, 25-29 of them with nothing relevant changed (three of the four findings then
+blocking the push among them); and proposed (1) re-owing a claim only when a block it relies on changes, with a cheap triage
+of new or changed blocks against the claims citing the page, and (2) a verdict that flips with nothing changed counting as
+unconfirmed until a second check agrees. The GM asked first:
+
+Whoa, 370 claims need to be re-checked because of every single edit to that page?  Yikes.  Do we think that should be how it works?  Or are your edits minor enough to not need those re-checks?
+
+and then:
+
+Go ahead and fix that as part of 318 so that you can have it be done prior to doing the rechecks to ensure the rechecks are appropriately scoped.

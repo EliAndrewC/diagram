@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-04T00:58:08Z",
+  "target": "review-accept",
+  "commit": "9b08b773d",
+  "outcome": "permitted",
+  "why": "review-accept glyph-check--village-lane F6: fixed in this round: tree.owed now owes every household's laid way and prune_the_tree never prunes one, so every household's way is drawn; the next round judges it"
+}

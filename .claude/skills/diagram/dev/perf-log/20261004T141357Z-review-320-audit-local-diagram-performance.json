@@ -1,0 +1,67 @@
+{
+  "band": 3,
+  "base": {
+    "commit": "c817f9387",
+    "label": "320-start",
+    "utc": "20261004T043603Z"
+  },
+  "binding": "4f5bb344d2bfc42c7527860d476a310d906ca6bf44cd93433a8832d115a4b8e3",
+  "criteria": {
+    "commensurate": "No. The whole +6.9 s (115.7 -> 122.6 s, +6.0%, clean batch) is the notice stage's entrance search. It buys no board on 11 of 16 runs, and the entrance seat on the other 2 that use it. Reservations: with the entrance search out of both legs, start and end are within 0.6%, so keeping the reservations would not make the generator significantly faster. The GM's condition for keeping them is not met.",
+    "necessary": "Mostly not. The GM ordered the homesteads and web change (amendment 2), and it is net neutral. With the entrance search held out of both legs, the 16 runs sum to 110.7 s at start and 110.0 s at end (homesteads -5.2 s, web +6.1 s). The +7 s notice growth is not necessary. It is the entrance placement's widened-band search (proof 0, widen=True), which samples every web lane across the whole 60 ft band. On 11 of 16 runs it finds nothing, and the board goes up on center anyway.",
+    "no_way_around": "A cheap, output-identical fix exists. An entrance seat farther than (KOSATSUBA_ENTRANCE_REACH_FT + KOSATSUBA_ANCHOR_BAND_FT) from the anchor is refused by entrance_seat_ok anyway. So for placement == entrance, skip every route segment whose seg_dist to the anchor exceeds that plus KOSATSUBA_WAY_REACH_FT before sampling it (_route_seats), and key the sample cache on it. Prototyped as a monkeypatch: notice summed 16.96 -> 5.06 s at end (9.16 -> 4.86 s at start), the widen call 0.4-1.8 s -> 0.1-0.4 s, and boards, rotations, chosen and seat identical on 32 of 32 runs. That takes the end to about the start's time. Apply it and re-bookend."
+  },
+  "end": {
+    "commit": "3d5d36ff4",
+    "label": "320-end",
+    "utc": "20261004T135807Z"
+  },
+  "environment": "local",
+  "feature": "320-no-ways-before-homesteads",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "bf917120-9a91-46b2-b9b1-10b792b1a311",
+    "utc": "20261004T141357Z"
+  },
+  "kind": "audit",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": 18.5,
+          "39": 16.7,
+          "4": 11.1,
+          "47": -3.1
+        },
+        "total_pct": 10.4
+      },
+      "20": {
+        "seeds": {
+          "25": 30.2,
+          "39": 14.0,
+          "4": 7.5,
+          "47": -13.2
+        },
+        "total_pct": 9.0
+      },
+      "40": {
+        "seeds": {
+          "25": 16.7,
+          "39": 9.0,
+          "4": 9.0,
+          "47": -2.1
+        },
+        "total_pct": 7.7
+      }
+    },
+    "seeds": {
+      "25": 5.0,
+      "39": 15.0,
+      "4": 0.0,
+      "47": 9.1
+    },
+    "total_pct": 6.5
+  },
+  "note": "",
+  "verdict": "not-justified"
+}

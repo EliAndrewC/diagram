@@ -78,6 +78,43 @@ def joints(lanes: Sequence[Mapping[str, Any]]) -> list[tuple[int, int, int, int]
     return out
 
 
+def as_walked(lanes: Sequence[Mapping[str, Any]]) -> tuple[list[Poly], list[int]]:
+    """The ways a walker reads: every chain of lanes met end to end at a `joints` joint joined into one polyline (two records
+    meeting end to end are one way, the module's rule), and each lane's index into them. A lane of under two points is a way
+    of its own, as it stands.
+
+    Research: lanes met end to end are one - research/questions/0081-village-lanes.drawing.html: read as one way"""
+    n = len(lanes)
+    link: dict[tuple[int, int], tuple[int, int]] = {}
+    for i, ei, j, ej in joints(lanes):
+        link[(i, ei)], link[(j, ej)] = (j, ej), (i, ei)
+    owner = [-1] * n
+    ways: list[Poly] = []
+    for start in range(n):
+        if owner[start] >= 0:
+            continue
+        # ...walk back to the chain's first lane (one end free of a joint), or round once where the chain is a loop
+        cur, free_end = start, 0
+        seen = {start}
+        while (cur, free_end) in link and link[(cur, free_end)][0] not in seen:
+            nxt, at = link[(cur, free_end)]
+            cur, free_end = nxt, -1 - at
+            seen.add(cur)
+        way: Poly = []
+        k = len(ways)
+        while True:
+            owner[cur] = k
+            p = _pts(lanes[cur]) if len(lanes[cur].get("pts") or []) >= 2 else [tuple(q) for q in lanes[cur].get("pts") or []]
+            p = p if free_end == 0 else p[::-1]
+            way = [*way, *p[1:]] if way else list(p)
+            nxt = link.get((cur, -1 - free_end))
+            if nxt is None or owner[nxt[0]] >= 0:
+                break
+            cur, free_end = nxt[0], nxt[1]
+        ways.append(way)
+    return ways, owner
+
+
 def oriented(lanes: Sequence[Mapping[str, Any]], i: int, ei: int, j: int, ej: int) -> tuple[Poly, Poly]:
     """The two lanes of a joint as one walk: `x` ENDS at the joint and `y` STARTS there."""
     x, y = _pts(lanes[i]), _pts(lanes[j])
@@ -127,7 +164,7 @@ def keeps_the_web(lanes: Sequence[Mapping[str, Any]], mine: set[int], old: Poly,
 
     Research:
         one network - research/questions/0081-village-lanes.drawing.html: no rewrite splits the web
-        every farmhouse served - research/questions/0081-village-lanes.drawing.html: within 100 ft"""
+        every farmhouse served - GUESS research/questions/0081-village-lanes.drawing.html: within 100 ft, how close counts as serving"""
     others = [_pts(ln) for k, ln in enumerate(lanes) if k not in mine and len(ln.get("pts") or []) >= 2]
     for n, p in enumerate(others):
         rest_segs = [sg for m, o in enumerate(others) if m != n for sg in _segs(o)]
@@ -486,10 +523,9 @@ def fold_the_connector_hairpin(s: Settlement, fabric: Sequence[Poly] = ()) -> in
     from .law import breaks_through, solid_boxes  # the law sits above this layer (it reads `hairpin_over_a_short_leg`)
 
     lanes: list[dict[str, Any]] = s.M.get("lanes") or []
-    # ...NOT WHERE THE CONNECTOR STARTS ON THE EXIT STRIP (feature 287 wave 6): the strip is drawn up to that start as a tree
-    # lane (`tree.strip_run`), and moved off it the strip ended in a hook (cohort seed 37); the settle re-aims the lane's end
-    # instead (`law.connector_hairpin_ends`)
-    conn = [] if s.M.get("access_exit") else [(k, o) for k, o in enumerate(lanes) if o.get("connector") and len(o.get("pts") or []) >= 2]
+    # ...NOT WHERE THE CONNECTOR STARTS AT THE WAY OUT'S GATE (feature 320; the exit strip's rule before it): the households'
+    # ways reach it there, and moved off it they stood off the network; the settle re-aims the lane's end instead
+    conn = [] if s.M.get("way_out_gate") else [(k, o) for k, o in enumerate(lanes) if o.get("connector") and len(o.get("pts") or []) >= 2]
     folds = 0
     for ci, co in conn:
         cp = _pts(co)

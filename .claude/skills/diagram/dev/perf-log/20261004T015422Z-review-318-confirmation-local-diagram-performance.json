@@ -1,0 +1,62 @@
+{
+  "band": 3,
+  "base": {
+    "commit": "ddb924e01",
+    "label": "318-start",
+    "utc": "20261003T171426Z"
+  },
+  "binding": "a3b12e7389f8b2d6458ad2dc81fdbb8b6ab9e09b572414a7365e792291a9fd0d",
+  "end": {
+    "commit": "12614b777",
+    "label": "318-end",
+    "utc": "20261004T014912Z"
+  },
+  "environment": "local",
+  "feature": "318-grow-outward-no-restart",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "bf917120-9a91-46b2-b9b1-10b792b1a311",
+    "utc": "20261004T015422Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": 0.0,
+          "39": 0.0,
+          "4": 8.6,
+          "47": 13.3
+        },
+        "total_pct": 5.6
+      },
+      "20": {
+        "seeds": {
+          "25": -13.3,
+          "39": 5.5,
+          "4": 0.0,
+          "47": 19.0
+        },
+        "total_pct": 1.6
+      },
+      "40": {
+        "seeds": {
+          "25": -12.7,
+          "39": 0.7,
+          "4": -10.3,
+          "47": -18.3
+        },
+        "total_pct": -10.7
+      }
+    },
+    "seeds": {
+      "25": 12.8,
+      "39": 5.3,
+      "4": 21.6,
+      "47": -8.2
+    },
+    "total_pct": 7.9
+  },
+  "note": "The cause matches the control and the bookend. Control perf-318-control-gap-pass, my own runs: with lay_the_ways stubbed, homesteads at 15 hh is 3.14 s against 6.41 s as landed and 4.42 s on main. With main grow_gap, seed 4 web and hinterland go back to main (0.56/0.90 s) and the notice swings either way. The bookend move from +11.3 to +7.9 is the chord test: comparing the end records 012326Z and 014912Z, homesteads accounts for -0.46 s of the -0.6 s (-0.16/-0.07/-0.10/-0.13 s by seed). Reviewer timing at 12614b777: chain_violated_many is 3-6 ms a map and lane_layers is 0.12-0.17 s. Seed 25 +0.7 s homesteads equals the pass (0.85 s on 25). The 40 hh claim is true (web -0.55/-0.87/-1.51/-0.95 s) but incomplete: 40/47 homesteads -3.41 s is the largest single fall, and 40/47 notice +1.8 s and 40/39 notice +2.1 s are the layout lottery the explanation names.",
+  "verdict": "consistent"
+}

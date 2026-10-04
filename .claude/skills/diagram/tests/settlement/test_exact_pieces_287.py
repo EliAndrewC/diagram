@@ -157,7 +157,7 @@ def test_a_house_box_refused_on_growing_grounds_refuses_every_box_that_holds_it(
     placed homesteads - each refuses every box holding the house's box (`_envelope_blocked` returns True, never the one box
     a move is made from); one placed homestead alone does not refuse it (the placer's move may clear it)."""
     from l7r.diagram.settlement import Settlement
-    from l7r.diagram.settlement.rolling.access import start_tree
+    from tests.settlement._builders import seed_tree
 
     s = Settlement(1400, 1400, seed=3)
     s.meta(name="V", scale="hamlet", ftpx=1, toscale=True, households=10, down_deg=90, water_flow=90, nucleated=True)
@@ -177,5 +177,5 @@ def test_a_house_box_refused_on_growing_grounds_refuses_every_box_that_holds_it(
         assert s._envelope_blocked(grown) is True
     t = Settlement(1400, 1400, seed=3)
     t.meta(name="V", scale="hamlet", ftpx=1, toscale=True, households=10, down_deg=90, water_flow=90, nucleated=True)
-    start_tree(t, (700.0, 600.0), (0.0, 1.0), 300.0)
+    seed_tree(t, (700.0, 600.0), (0.0, 1.0), 300.0)
     assert t._house_box_refused(t._house_box(700.0, 700.0, hw, hh)), "over a reserved corridor"

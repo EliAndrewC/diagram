@@ -1,0 +1,67 @@
+{
+  "band": 3,
+  "base": {
+    "commit": "ddb924e01",
+    "label": "318-start",
+    "utc": "20261003T171426Z"
+  },
+  "binding": "e89dcf4b0fe0be0483ce24c69bb6c07cba85eb49bc859b5a15c4d31391ae86a0",
+  "criteria": {
+    "commensurate": "Yes, for the design. Measured medians are 17.42 to 19.47 s over the four reference seeds (+11.8 pct; the bookend shows +11.3). The GM accepted +45 pct on the homesteads stage for the map shape (prototype 9.85 to 14.38 s), and here the stage is +30 pct (5.42 to 6.41 s), which is within that. The layout effects are a lottery, not a trend: notice +0.75/+2.1 s on 20/47 and 40/39 against -0.5 s on 15/47.",
+    "necessary": "Yes. The 20 ft gap (grow_gap, FR-011) and the gap pass (gap_ways.lay_the_ways, FR-014) are what the GM asked for in Amendment 3 (request.md: I still want A for how it shapes the map), with the cost accepted in FR-015. The counterfactual puts the whole rise on option A. At 15 hh the pass takes 0.71-0.99 s a map, while the rest of the homesteads stage runs 0.22-0.42 s cheaper than main. The 20 ft gap moves the layout, and that accounts for the notice, hinterland and web changes.",
+    "no_way_around": "No: a cheaper implementation exists and was measured. gap_ways.lane_layers asks each of about 35k uncertain FreeGround cells site_samples_clear one point at a time. chain_violated walks every chord for every cell, which is shape one in dev/performance.md and the same pattern 318 already fixed once (FreeGround.decide_beyond, perf-318-control-cells). Vectorizing just the chord test in numpy, with corridor hits still per point, gives a raster identical to the shipped one at half the cost: 0.258/0.229/0.168/0.194 s down to 0.12/0.12/0.09/0.10 s at 15 hh and 0.62 to 0.31 s at 40/39 (scratchpad pa318vec.py and pa318vec2.py, both orders). Batching hit_points as well should take most of the rest. The flood is a pure-Python heapq Dijkstra at 0.32-0.42 s a map (1.1 s at 40/39) and is the next thing to look at. Apply the batching, re-take the bookends, and re-explain."
+  },
+  "end": {
+    "commit": "76749e380",
+    "label": "318-end",
+    "utc": "20261004T012326Z"
+  },
+  "environment": "local",
+  "feature": "318-grow-outward-no-restart",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "bf917120-9a91-46b2-b9b1-10b792b1a311",
+    "utc": "20261004T014505Z"
+  },
+  "kind": "audit",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": 3.3,
+          "39": 0.0,
+          "4": 11.4,
+          "47": 10.0
+        },
+        "total_pct": 6.3
+      },
+      "20": {
+        "seeds": {
+          "25": -9.3,
+          "39": 10.9,
+          "4": 4.5,
+          "47": 24.1
+        },
+        "total_pct": 6.3
+      },
+      "40": {
+        "seeds": {
+          "25": -9.2,
+          "39": 7.4,
+          "4": -5.7,
+          "47": -13.1
+        },
+        "total_pct": -5.7
+      }
+    },
+    "seeds": {
+      "25": 12.8,
+      "39": 7.9,
+      "4": 27.5,
+      "47": -4.1
+    },
+    "total_pct": 11.3
+  },
+  "note": "Reviewer measurements at 76749e380 and ddb924e01, detached worktrees, medians of 3 (scratchpad pa318e.jsonl, pa318split.py, pa318vec.py). Band 3: the GM sign-off (make perf-signoff) is still owed and is outside what this agent can grant.",
+  "verdict": "not-justified"
+}

@@ -1,0 +1,35 @@
+{
+  "utc": "2026-10-03T20:48:32Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 239,
+  "result": "failed: test-full",
+  "commit": "dcdf2eda5",
+  "first_failure_s": 51.2,
+  "last_failure_s": 51.2,
+  "failed_tests": 2,
+  "host": {
+    "load": [
+      11.5,
+      14.04
+    ],
+    "mem_avail_mb": [
+      4899,
+      4841
+    ],
+    "cpu_temp_c": [
+      96.0,
+      80.0
+    ],
+    "stall_s": {
+      "cpu": 5.5,
+      "io": 1.6,
+      "io_full": 1.1,
+      "memory": 0.5
+    },
+    "throttle_ms": {
+      "core": 5766,
+      "package": 1189
+    }
+  }
+}

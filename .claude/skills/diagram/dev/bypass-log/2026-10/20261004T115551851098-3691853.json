@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-04T11:55:51Z",
+  "target": "perf-explain",
+  "commit": "1c0cc474b",
+  "outcome": "permitted",
+  "why": "perf-explain UNVERIFIED: no control run: the removed reservation cannot be restored without reverting the feature the GM asked for; the stage deltas (web, notice) locate the cost"
+}

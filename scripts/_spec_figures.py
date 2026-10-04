@@ -55,6 +55,9 @@ _ROUND_LABEL = re.compile(r"\b(?:round \d+|this round)'s own run\b", re.I)
 # case-INSENSITIVE: a label that opens a sentence - "(Observed 2026-09-12; method: ...)" - is the same label, and
 # the first version refused it (found by feature 240's review, which had to lower its own two labels)
 _ONE_SHOT = re.compile(r"\bobserved \d{4}-\d{2}-\d{2}\b", re.I)
+# GUARD_EDIT_OK: feature 320 - STRICTER, not looser: a spec whose FRs sit under a plain `## Requirements` (no `### Functional
+# Requirements`) had every FR line unchecked (spec-fidelity on feature 320, 2026-10-04); a paragraph directly under it is
+# read, a later non-operative subsection of it (`### Key Entities`) still is not.
 _OPERATIVE = ("summary", "functional requirements", "success criteria", "decisions recorded")
 _HEADING = re.compile(r"^(#{2,})\s+(.*?)\s*$", re.M)
 
@@ -106,7 +109,7 @@ def paragraphs_in_scope(spec_dir: pathlib.Path) -> list[tuple[pathlib.Path, int,
                 sub = head.group(2).lower()
             if not whole_file:
                 kind = ("review" if top.startswith("review history")
-                        else "operative" if top.startswith(_OPERATIVE) or sub.startswith(_OPERATIVE) else "")
+                        else "operative" if top.startswith(_OPERATIVE) or sub.startswith(_OPERATIVE) or (top == "requirements" and not sub) else "")
             if kind and block.strip():
                 out.append((path, line, block, kind))
             line += block.count("\n")

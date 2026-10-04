@@ -527,6 +527,23 @@ def test_keepout_ring_and_facing_chains_degenerate_and_all_facing() -> None:
     assert chain_distance(5.0, -4.0, zero) == 4.0
 
 
+def test_chain_violated_many_answers_as_chain_violated_does() -> None:
+    """Feature 318: the vectorized form gives the scalar test's answer at every point - on a chord, past its ends, on the
+    field side, and over a zero-length chord."""
+    import random
+
+    from l7r.diagram.settlement._geom.primitives import chain_violated, chain_violated_many, facing_chains
+
+    ring = [(0.0, 0.0), (120.0, 0.0), (140.0, 60.0), (60.0, 110.0), (-10.0, 70.0)]
+    chains = facing_chains(ring, (60.0, -300.0), 0.5) + [[((0.0, 0.0), (0.0, 0.0), (0.0, -1.0))]]
+    rng = random.Random(318)
+    pts = [(rng.uniform(-80, 220), rng.uniform(-120, 160)) for _ in range(400)]
+    for gap in (0.0, 6.0):
+        many = chain_violated_many([p[0] for p in pts], [p[1] for p in pts], chains, gap)
+        assert [bool(v) for v in many] == [chain_violated(x, y, chains, gap) for x, y in pts]
+        assert any(many) and not all(many)
+
+
 def test_aabb_gap_forest_reveal_organic_bbox_flat_edge() -> None:
     from l7r.diagram.settlement._geom.curves import organic_bbox
     from l7r.diagram.settlement._geom.extents import forest_reveal_x

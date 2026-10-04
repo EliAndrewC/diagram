@@ -1,10 +1,10 @@
-"""The access tree's roles and the runs the seating reserves (feature 287, plan M3; ways W01, W03).
+"""The access tree's roles and the runs the web lays for it (feature 287, plan M3; ways W01, W03; feature 320).
 
-The seating reserves, for every house it admits, a corridor a footpath wide from its door to a tree rooted at the EXIT
-STRIP (`settlement/rolling/access.py`), and the field's corridor from the tree to the bund (`field_runs`,
-`routed_field_runs`, threaded by `field_router`); no homestead seated after may cover one. The tree is judged whole as
-lanes when each corridor is admitted, and drawn where the web owes it (`tree.py`). A TREE LANE (`is_tree`: the connector,
-the exit strip, a corridor, a way target's spur, the field way) is never cut by a settle repair; an ordinary lane that breaks
+Once the last house stands, each household's way is laid in the gaps to the track out's first leg (`settlement/rolling/
+gap_ways.py`) and judged whole as lanes (`tree.py`); where no way reaches the field, the settle draws the field way from
+the network to the bund (`field_runs`, `routed_field_runs`, threaded by `field_router`; `settle.settle_field`). Nothing is
+reserved for a way before the houses (feature 320). A TREE LANE (`is_tree`: the connector, a household's way, a way
+target's spur, the field way) is never cut by a settle repair; an ordinary lane that breaks
 a rule against one is cut instead (`tree.settle_defer`), and one the map no longer needs is pruned (`tree.prune_the_tree`).
 
 Research: roles and indexing - NONE
@@ -43,12 +43,10 @@ TARGET_ROLE = "way target"
 """The `role` of a spur drawn to a way target (`meta.way_targets`: a burial ground's near edge) - a tree lane."""
 
 FIELD_ROLE = "field way"
-"""The `role` of the field's reserved corridor drawn where no way of the hamlet's reaches the field - a tree lane."""
+"""The `role` of the field way the settle draws where no way reaches the field (`settle.settle_field`) - a tree lane, drawn
+once the houses stand (feature 320: no longer reserved before them)."""
 
-STRIP_ROLE = "exit strip"
-"""The `role` of the exit strip drawn as a lane, from its innermost attachment out to the connector - a tree lane."""
-
-TREE_ROLES = (ACCESS_ROLE, TARGET_ROLE, FIELD_ROLE, STRIP_ROLE)
+TREE_ROLES = (ACCESS_ROLE, TARGET_ROLE, FIELD_ROLE)
 
 SPUR_TRIES = 120
 """How many spurs, shortest first, are offered to a way target or the field before the web says it has none: they leave
@@ -106,16 +104,6 @@ def strands_only_ordinary(M: Mapping[str, Any], i: int) -> bool:
         return False
     trial = {**M, "lanes": [ln for k, ln in enumerate(lanes) if k != i and k not in lost]}
     return len(unreached_houses(trial)) <= len(unreached_houses(M))
-
-
-def _pt(q: Sequence[float]) -> Pt:
-    return (float(q[0]), float(q[1]))
-
-
-def connector_start(M: Mapping[str, Any]) -> Pt | None:
-    """Where the connector begins - the root the exit strip leads to."""
-    con = next((ln for ln in M.get("lanes") or [] if ln.get("connector") and len(ln.get("pts") or []) >= 2), None)
-    return None if con is None else _pt(con["pts"][0])
 
 
 def _dedup(run: Poly) -> Poly:
@@ -269,6 +257,7 @@ def field_runs(segs: Sequence[tuple[Pt, Pt]], grounds: Sequence[WorkedGround], h
         dry hem after the paddy - research/questions/0081-village-lanes.drawing.html: the spur stops at the hem's edge, offered only after the paddy's"""
     out: list[Poly] = []
     pts = samples_along(segs)
+    brook = tuple((float(x), float(y)) for x, y in brook)  # hashable: `ford_crossing` finds each ford's segment once
     for ground in grounds:
         runs: list[Poly] = []
         for q in pts:
@@ -293,19 +282,44 @@ keeps the law - each a router call on the web's own lattice, so a handful (cohor
 network fouled a steading or met its lane at a needle)."""
 
 
+ROUTED_FIELD_STARTS = 6
+"""How many points of the network, nearest a ford's near landing and `ROUTED_START_GAP_FT` apart, a routed field way is tried
+from (`routed_field_runs`). From the nearest alone (feature 320, cohort seed 26), every run's first leg left the network
+against a neighbor's yard: with no field's corridor reserved before the houses, the network's nearest point to a ford can
+stand among the steadings. Six starts at the four nearest fords found four lawful runs there (0.36 s, asked only once no
+straight run keeps the law).
+
+Research: field path from the network - UNRESEARCHED: six starts 30 ft apart, a search breadth"""
+
+ROUTED_START_GAP_FT = 30.0
+"""How far apart the starts a routed field way is tried from stand (`ROUTED_FIELD_STARTS`): a farmstead's yard width, so two
+starts do not leave from the same dooryard.
+
+Research: field path from the network - UNRESEARCHED: 30 ft between starts, a search breadth"""
+
+
 def routed_field_runs(
-    segs: Sequence[tuple[Pt, Pt]], ground: WorkedGround, half: float, route: Callable[[Pt, Pt], Poly], brook: Sequence[Pt] = (), fords: Sequence[Pt] = (), limit: int = ROUTED_FIELD_TRIES
+    segs: Sequence[tuple[Pt, Pt]],
+    ground: WorkedGround,
+    half: float,
+    route: Callable[[Pt, Pt], Poly],
+    brook: Sequence[Pt] = (),
+    fords: Sequence[Pt] = (),
+    limit: int = ROUTED_FIELD_TRIES,
+    starts: int = 1,
 ) -> list[Poly]:
     """Field ways threaded by the web's router (`route`, `route._route` over the steadings and the hard ground): from the
     network to the near landing of each of the `limit` fords nearest it, over the ford square, and on from the far landing
     to the bund - or, with no brook, from the network point nearest the ground straight to its run-on target, threaded.
-    Legs the router finds no way for are left out.
+    Each ford is left for from the `starts` network points nearest its landing, `ROUTED_START_GAP_FT` apart, nearest first;
+    the far leg is routed once a ford. Legs the router finds no way for are left out.
 
     Research:
         field path to the bund - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: threaded round the
             steadings when no straight run keeps the law
         over the brook at a ford - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: the
-            fords nearest the network, crossed square"""
+            fords nearest the network, crossed square
+        ford landing - UNRESEARCHED: 22 ft each side of the brook (`FORD_LANDING_FT`)"""
     pts = samples_along(segs)
     if not pts:
         return []
@@ -321,13 +335,19 @@ def routed_field_runs(
         nx, ny = -(v[1] - u[1]) / d, (v[0] - u[0]) / d
         ends = [(f[0] + nx * FORD_LANDING_FT, f[1] + ny * FORD_LANDING_FT), (f[0] - nx * FORD_LANDING_FT, f[1] - ny * FORD_LANDING_FT)]
         near, far = sorted(ends, key=lambda e: min(math.dist(e, q) for q in pts))
-        q = min(pts, key=lambda p: math.dist(p, near))
         tgt = run_on_target(far, ground, half, reach=math.inf)
-        if tgt is None:
+        leg3 = route(far, tgt) if tgt is not None else []
+        if len(leg3) < 2:
             continue
-        leg1, leg3 = route(q, near), route(far, tgt)
-        if len(leg1) >= 2 and len(leg3) >= 2:
-            out.append(_dedup([*leg1, *leg3]))
+        chosen: list[Pt] = []
+        for q in sorted(pts, key=lambda p: math.dist(p, near)):
+            if len(chosen) >= starts:
+                break
+            if all(math.dist(q, o) > ROUTED_START_GAP_FT for o in chosen):
+                chosen.append(q)
+                leg1 = route(q, near)
+                if len(leg1) >= 2:
+                    out.append(_dedup([*leg1, *leg3]))
     return out
 
 

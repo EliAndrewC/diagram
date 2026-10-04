@@ -97,10 +97,13 @@ what you are here to catch.
 The session records your reply with one command (`make claims-checked`), which reads ONLY lines of exactly these two shapes,
 each on its own line, with no backticks needed:
 
-    VERDICT <key, exactly as the MANIFEST prints it> <IN-STEP|DRIFTED|NEEDS-RESEARCH|MISLABELED|CANNOT-TELL> - <one-line note>
+    VERDICT <key, exactly as the MANIFEST prints it> <IN-STEP|DRIFTED|NEEDS-RESEARCH|MISLABELED|CANNOT-TELL> - <one-line note> [§N, ...]
     UNCLAIMED <path>::<qualname> - <the decision, in a few words, as a claim label would name it>
 
 - The FIRST line is the counts, e.g. `impl-drift: 41 claims - IN-STEP 37, DRIFTED 1, MISLABELED 2, CANNOT-TELL 1; UNCLAIMED 3`.
+- END EVERY VERDICT NOTE with the blocks of the cited questions it rests on, as the question files number them: `[§3, §12]`,
+  or `[§]` when the questions are silent on the claim. A later page edit re-checks a claim only when a block it rests on
+  changes (feature 318), so name every block your verdict reads - a block you leave out is a change you will not be shown.
 - One VERDICT line for EVERY key in the bundle - a key with no line stays owed. An IN-STEP note is a few words; a finding's note
   says what is wrong and what the claim or the code should be, in one line.
 - Nothing else is needed: no restated code, no reasoning for a pass. Every character stays in the session's context.

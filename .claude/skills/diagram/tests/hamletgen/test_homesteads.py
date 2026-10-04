@@ -245,7 +245,7 @@ def test_a_linear_hamlet_stands_in_rows_along_its_streets_and_never_in_ranks() -
             try:
                 stage_homesteads(s, plan)
             except capacity.SiteRefused as refused:
-                assert "no margin seats all 10" in str(refused), "refused by name, never shipped short"
+                assert "of 10 households on margin" in str(refused), "refused by name, never shipped short"
             else:
                 assert len(s.M["houses"]) == 10, "nucleated: every household seated"
             assert not s.M.get("row_street_plans"), "nucleated: no row planned"
@@ -269,7 +269,7 @@ def test_a_row_village_whose_streets_cannot_hold_every_farm_is_refused(monkeypat
     s._nucleated = False
     s.field_polys.append(list(plan.envelope))
     monkeypatch.setattr(rows, "seat_rows", lambda s_, plan_, frame, allowed=None: 0)  # the streets hold nobody
-    with pytest.raises(capacity.SiteRefused, match="no margin seats all 10"):
+    with pytest.raises(capacity.SiteRefused, match=r"seated 0 of 10 households on margin 1; no house is taken back"):
         st.stage_homesteads(s, plan)
 
 
@@ -366,7 +366,7 @@ def test_a_quota_the_ranks_cannot_seat_reaches_the_rescue_rounds(monkeypatch: py
     plan.seat["ladder"] = []  # this margin alone: the refusal below is the chosen margin's
     # ...AND A QUOTA THE GROUND CANNOT HOLD IS REFUSED, NEVER SHIPPED SHORT (feature 287, homes H14 and plan D2): the
     # rescue and then the exhaustive pass over every free point within reach ran, and still the ground was full
-    with pytest.raises(SiteRefused, match="no margin seats all 20 households"):
+    with pytest.raises(SiteRefused, match=r"seated \d+ of 20 households on margin 1; no house is taken back"):
         stage_homesteads(s, plan)
     assert s._seat_search["rounds"] >= 5, "the rescue ran"
     assert s._seat_search["exhaustive_offered"] > 0, "...and the exhaustive pass after it"
@@ -414,13 +414,18 @@ def test_a_rank_round_that_seats_nothing_grows_the_cluster_along_the_field(monke
     ax, ay = plan.seat["along"]
     ox, oy = plan.seat["out"]
     cx, cy = float(plan.seat["cx"]), float(plan.seat["cy"])
-    back = [
-        (cx + ox * 40 - ax * 5000, cy + oy * 40 - ay * 5000),
-        (cx + ox * 40 + ax * 5000, cy + oy * 40 + ay * 5000),
-        (cx + ox * 5000 + ax * 5000, cy + oy * 5000 + ay * 5000),
-        (cx + ox * 5000 - ax * 5000, cy + oy * 5000 - ay * 5000),
-    ]
-    s.block_polys.append(back)
+    # ...LEAVING A SLOT OPEN ALONG THE BEARING OUT (feature 320): the way out's side is open ground, as on every real map - the
+    # seating's reach is seeded there (`_way_out_anchor`), and a back blocked across it seeds none, so no front-row dooryard opens
+    slot = 20.0
+    for a0, a1 in ((-5000.0, -slot), (slot, 5000.0)):
+        s.block_polys.append(
+            [
+                (cx + ox * 40 + ax * a0, cy + oy * 40 + ay * a0),
+                (cx + ox * 40 + ax * a1, cy + oy * 40 + ay * a1),
+                (cx + ox * 5000 + ax * a1, cy + oy * 5000 + ay * a1),
+                (cx + ox * 5000 + ax * a0, cy + oy * 5000 + ay * a0),
+            ]
+        )
     # ...AND A STRIP THAT CANNOT HOLD THE QUOTA IS REFUSED, NAMED (feature 287, homes H14 and H32: every household with its
     # fixtures, or the site refused) - asserted, not suppressed: the ends were offered and taken before the refusal
     plan.seat["ladder"] = []
@@ -432,17 +437,17 @@ def test_a_rank_round_that_seats_nothing_grows_the_cluster_along_the_field(monke
         return real(x, y, *a, **kw)
 
     s.try_place = spy  # type: ignore[method-assign]
-    with pytest.raises(SiteRefused, match="no margin seats all 13 households"):
-        stage_homesteads(s, plan)
+    stage_homesteads(s, plan)  # ...no way searched while houses are seated (feature 318): the ends' seats are taken, all 13 stand
+    assert len(s.M["houses"]) == 13
     ss = s._seat_search
     assert ss["rounds"] >= 1, "the ranks ran"
-    # ...AND THE SEATS OFFERED PAST THE RANK'S ENDS, along the field: whether one is TAKEN is the corridor's to say (feature
-    # 287 M8 - here every run from an end to the access tree passes a front-row homestead's parts, which the overlap matrix
-    # keeps a way off), and the rule under test is that they are offered once the back is refused
+    # ...AND THE SEATS OFFERED PAST THE RANK'S ENDS, along the field, once the back is refused: every house past the front row's own
+    # count stands along it, beyond the front row's reach
+    front = ss["front"]
+    assert front < 13, "the front row alone could not hold them"
     row = [(float(h["x"]) - cx) * ax + (float(h["y"]) - cy) * ay for h in s.M["houses"]]
-    reach = max(abs(u) for u in row) if row else 0.0
-    along = [(x - cx) * ax + (y - cy) * ay for x, y in tried]
-    assert any(abs(u) >= reach + BUNDLE_PITCH * 0.9 for u in along), "a seat a pitch past the rank's end was offered"
+    reach = max(abs(u) for u in row[:front])
+    assert any(abs(u) >= reach + BUNDLE_PITCH * 0.9 for u in row[front:]), "a house a pitch past the rank's end"
 
 
 def test_an_accretion_hamlets_ranks_stand_off_their_lines_and_a_planned_ones_do_not(monkeypatch: pytest.MonkeyPatch) -> None:

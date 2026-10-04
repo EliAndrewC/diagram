@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-04T14:20:56Z",
+  "target": "review-accept",
+  "commit": "356ccaf8c",
+  "outcome": "permitted",
+  "why": "review-accept glyph-check--village-lane F1: fixed: the ways join the track only within the homesteads' extent and the track's start at the farther join reach; no lane end off the frame on any pool map"
+}

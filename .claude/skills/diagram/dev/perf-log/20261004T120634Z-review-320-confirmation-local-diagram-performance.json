@@ -1,0 +1,62 @@
+{
+  "band": 2,
+  "base": {
+    "commit": "c817f9387",
+    "label": "320-start",
+    "utc": "20261004T043603Z"
+  },
+  "binding": "def3b7b4edfcea214ecb072c5c765277222398e639b96c172e6c9a265aa46f7d",
+  "end": {
+    "commit": "1c0cc474b",
+    "label": "320-end",
+    "utc": "20261004T115325Z"
+  },
+  "environment": "local",
+  "feature": "320-no-ways-before-homesteads",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "bf917120-9a91-46b2-b9b1-10b792b1a311",
+    "utc": "20261004T120634Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": 3.7,
+          "39": 20.0,
+          "4": -2.8,
+          "47": 18.7
+        },
+        "total_pct": 9.6
+      },
+      "20": {
+        "seeds": {
+          "25": 17.5,
+          "39": -3.5,
+          "4": 3.0,
+          "47": -10.3
+        },
+        "total_pct": 1.6
+      },
+      "40": {
+        "seeds": {
+          "25": 20.0,
+          "39": 3.7,
+          "4": 13.5,
+          "47": -15.2
+        },
+        "total_pct": 5.0
+      }
+    },
+    "seeds": {
+      "25": 7.5,
+      "39": 7.5,
+      "4": -18.3,
+      "47": 2.3
+    },
+    "total_pct": -2.2
+  },
+  "note": "Web half verified by the reviewer's own control (end commit, settle_field timed and disabled, worktrees): settle_field is 0.26/0.56/0.27 s of the +0.42/+0.45/+0.41 s web growth on main seeds 25/39/47, 0.92 s (two calls) of +0.66 s at 10hh/39, 1.13 s of +1.37 s at 40hh/4, 1.57 s of +2.5 s at 40hh/39 (remaining ~0.6-0.9 s at 20hh/25 and 40hh/39 is elsewhere in web, untested). The NOTICE half is wrong: at 40hh/25 (+20%, a crossed seed) settle_field never runs and web did not grow (1.33 -> 1.17 s), yet notice went 0.27 -> 1.97 s because the board siting on the new layout tries 76 candidates / 18,749 _fits against 42 / 1,502; notice also FELL 2.37 -> 0.19 s at 40hh/39 and rose 0.08 -> 0.66 s at 10hh/47 - a layout-dependent swing in the kosatsuba search the explanation attributes to the field way. Also, a control was not impossible: disabling settle_field is one line (every brook seed then refuses, field unreached).",
+  "verdict": "inconsistent"
+}

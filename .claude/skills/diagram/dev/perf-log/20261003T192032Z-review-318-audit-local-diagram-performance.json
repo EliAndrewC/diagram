@@ -1,0 +1,67 @@
+{
+  "band": 3,
+  "base": {
+    "commit": "ddb924e01",
+    "label": "318-start",
+    "utc": "20261003T171426Z"
+  },
+  "binding": "ea77292cf101f7519ba729ea0c6b8dd79ed7b172f2367ae77bb3e64dfd7c3036",
+  "criteria": {
+    "commensurate": "For D4, yes: +1.9 s at 15 hh (~+10% of the 17.7 s total) buys mean house-to-field 384/367/394/355 ft against 637/400/585/442 for the order without it, which is the GM's stated behavior. For the windows, no: +2.4 s (+14% of the total, more than D4 itself) buys no change on any reference seed. Only cohort-style seeds that grow past the field-reach box (seed 18, farthest 817 ft) can need ground outside it.",
+    "necessary": "Partly. D4 (nearest-the-field order, 16 directions x 3 rings at once) is the GM's canon ruling of 2026-10-03 (plan D4, research R1: the three-level table crept 637/400/585/442 ft from the field). It costs 1.9 s of homestead CPU at 15 hh (9.02 -> 7.13 with D4 off, 5 reps) and about 13.5 s at 40 hh (bookend: control 21.9 vs end 35.4). The canvas-wide FreeGround grid and SeatRegion window (plan D3) are NOT necessary: with main's reach-sized boxes restored at the end commit, all four seeds seat byte-identical houses, with and without D4, at 2.4 s less (9.02 -> 6.54; 7.13 -> 4.71 = main 4.38 + 0.3). The 40-hh web growth (seed 4 1.58 -> 2.97 s CPU) is unexplained, so its necessity cannot be judged.",
+    "no_way_around": "There is a cheaper way for the windows. D3's own docstrings say the box bounds the cost, never the answer, but SeatRegion refuses an out-of-window seat (box_clear_many returns False outside), so the box must cover every seat the growth can queue, not the whole canvas. Size FreeGround and SeatRegion to the standing cluster's extent plus the widest ring (2.0 x the least distance, plus a house), and regrow them on the rare queue past the edge. That keeps FR-003's 'no distance is a limit' and returns roughly the 2.4 s. D4 has no cheaper equivalent among those measured (research R1: 12 directions 29.6 s, quarter rings 44.6 s, chosen 32.7 s). The 40-hh web growth needs an explanation and a counterfactual before anything can be said about it."
+  },
+  "end": {
+    "commit": "d7f9f9c6a",
+    "label": "318-end",
+    "utc": "20261003T190120Z"
+  },
+  "environment": "local",
+  "feature": "318-grow-outward-no-restart",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "bf917120-9a91-46b2-b9b1-10b792b1a311",
+    "utc": "20261003T192032Z"
+  },
+  "kind": "audit",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": 16.7,
+          "39": 22.6,
+          "4": 42.9,
+          "47": 36.7
+        },
+        "total_pct": 30.2
+      },
+      "20": {
+        "seeds": {
+          "25": 2.7,
+          "39": 38.2,
+          "4": 31.3,
+          "47": 27.6
+        },
+        "total_pct": 23.5
+      },
+      "40": {
+        "seeds": {
+          "25": 64.1,
+          "39": 33.3,
+          "4": 39.4,
+          "47": -7.4
+        },
+        "total_pct": 30.6
+      }
+    },
+    "seeds": {
+      "25": 33.3,
+      "39": 34.2,
+      "4": 35.3,
+      "47": 2.0
+    },
+    "total_pct": 25.4
+  },
+  "note": "",
+  "verdict": "not-justified"
+}

@@ -10,7 +10,7 @@ from typing import TYPE_CHECKING, Any
 
 from .._geom import Indexed, Pt, point_in_poly
 from .access import seat_reaches_tree
-from .fit import part_box, within_field_reach
+from .fit import part_box
 from .lot import watered
 from .passage import landlocked
 
@@ -241,6 +241,9 @@ class PlacerMixin:
             left or right garden - UNRESEARCHED: within a tier the side is decided by position, about even
             one computed move off a neighbor - NONE: the measured overlap plus 2 px, once
             a tight seat only on landlocked land - research/questions/0081-village-lanes.html, research/questions/0081-village-lanes.drawing.html: taken only where some layout walks to the neighbor's yard and none has a way of its own (`passage.landlocked`)
+            a seat refused unless its yard opens onto lane ground - research/questions/0081-village-lanes.drawing.html: no way is sought for a household while it is seated; its dooryard must open onto the ground the lanes are laid in (`SeatRegion.opens`)
+            the village roll's corridor - DEVIATION research/questions/0081-village-lanes.drawing.html: a roll with no seat region (a village's) asks for a corridor candidate instead (`seat_reaches_tree`)
+            a seat refused where the household is not watered - research/questions/0196-communal-wells-ido.drawing.html: its own pocket, or a well or open water within reach (`lot.watered`)
         """
         self._seat_search["placer_calls"] += 1
         # THE UNION FIRST, ONE RECTANGLE: the box around every configuration (`_bundle_envelope`). Where it fits - the
@@ -262,11 +265,11 @@ class PlacerMixin:
         # laying the household's fixtures, were built for nothing on a third of the exhaustive pass's offers.
         if self._house_box_refused(self._house_box(x, y, hw, hh)):
             return None
-        # THE SEAT'S OWN QUESTIONS, ONCE (feature 297, FR-002, plan C, amended by research R10): the field's reach and the water
-        # depend only on where the house stands - asked here, before any layout; the corridor to the access tree depends on the
-        # house and its yard, common to all four garden sides (558 of 558 seats measured, research R6) - asked ONCE per seat
+        # THE SEAT'S OWN QUESTIONS, ONCE (feature 297, FR-002, plan C, amended by research R10): the water depends only on
+        # where the house stands (no distance from the field refuses a seat, feature 318) - asked here, before any layout; the
+        # corridor to the access tree depends on the house and its yard, common to all four garden sides (558 of 558 seats measured, research R6) - asked ONCE per seat
         # below, after the envelope (the cheaper refusal: asked first, it ran the costliest search on every offered seat, R10).
-        if not within_field_reach(self, x, y) or (getattr(self, "_household_watered", False) and not watered(self, x, y, bool(getattr(self, "_household_well", False)))):
+        if getattr(self, "_household_watered", False) and not watered(self, x, y, bool(getattr(self, "_household_well", False))):
             return None
         # THE FOUR CONFIGURATIONS BUILT ONCE (dev/performance.md): the envelope is their union, and the loop below judges
         # each at this seat - it built all four again (seed 17: 25,000 bundles, half of them rebuilt)
@@ -276,10 +279,8 @@ class PlacerMixin:
         # A TIGHT SEAT IS JUDGED BY ITS LAND, NOT ONE LAYOUT (feature 317, `passage.landlocked`): the custom is for land with no
         # way of its own, and a household lays its beds where its way can run - so the seat is taken only where some layout here
         # has a walk to the neighbor's yard and none has a corridor of its own
-        if getattr(self, "_tight_of", None) is not None:
-            if not landlocked(self, list(_at.values())):
-                return None
-            self._tight_of["layouts"] = list(_at.values())  # ...kept for the recheck on the finished seating (`recheck_passages`)
+        if getattr(self, "_tight_of", None) is not None and not landlocked(self, list(_at.values())):
+            return None
         best: Any = None
         _reaches: bool | None = None
         for rank, side in enumerate(self._NUC_SIDES):
@@ -312,8 +313,9 @@ class PlacerMixin:
             if hit is not None:
                 continue
             if (cx, cy) == (x, y):  # the seat's corridor, asked once for all its unmoved sides (a moved side is another seat)
-                if _reaches is None:
-                    _reaches = seat_reaches_tree(self, geom)
+                if _reaches is None:  # ...its yard onto lane ground where a seat region stands (feature 318), else a corridor candidate
+                    region = getattr(self, "_seat_region", None)
+                    _reaches = region.opens(geom) if region is not None else seat_reaches_tree(self, geom)
                 if not _reaches:
                     continue
             self._seat_search["parts"] = self._seat_search.get("parts", 0) + 1

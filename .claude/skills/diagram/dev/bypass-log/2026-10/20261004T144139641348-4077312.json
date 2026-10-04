@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-04T14:41:39Z",
+  "target": "perf-explain",
+  "commit": "0e445be1b",
+  "outcome": "permitted",
+  "why": "perf-explain UNVERIFIED: the audit's profile (lay_the_ways 3.58 -> 5.14 s, _way_for 2.13 -> 4.76 s) is the evidence; laying the ways to a 40 ft leg is the removed design, not a control this feature can run"
+}

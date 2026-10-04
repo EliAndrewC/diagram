@@ -1,0 +1,62 @@
+{
+  "band": 3,
+  "base": {
+    "commit": "ddb924e01",
+    "label": "318-start",
+    "utc": "20261003T171426Z"
+  },
+  "binding": "ea77292cf101f7519ba729ea0c6b8dd79ed7b172f2367ae77bb3e64dfd7c3036",
+  "end": {
+    "commit": "d7f9f9c6a",
+    "label": "318-end",
+    "utc": "20261003T190120Z"
+  },
+  "environment": "local",
+  "feature": "318-grow-outward-no-restart",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "bf917120-9a91-46b2-b9b1-10b792b1a311",
+    "utc": "20261003T192022Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": 16.7,
+          "39": 22.6,
+          "4": 42.9,
+          "47": 36.7
+        },
+        "total_pct": 30.2
+      },
+      "20": {
+        "seeds": {
+          "25": 2.7,
+          "39": 38.2,
+          "4": 31.3,
+          "47": 27.6
+        },
+        "total_pct": 23.5
+      },
+      "40": {
+        "seeds": {
+          "25": 64.1,
+          "39": 33.3,
+          "4": 39.4,
+          "47": -7.4
+        },
+        "total_pct": 30.6
+      }
+    },
+    "seeds": {
+      "25": 33.3,
+      "39": 34.2,
+      "4": 35.3,
+      "47": 2.0
+    },
+    "total_pct": 25.4
+  },
+  "note": "Reference split verified by reviewer counterfactuals (homestead CPU, 4 seeds at 15 hh, medians of 5: main 4.38, end 9.02, D4 off 7.13, main-sized FreeGround/SeatRegion boxes 6.54, both 4.71, corridor fix off 8.96): D4 1.9 s, the canvas-wide windows 2.4 s (the largest part, not 'the rest'), other 0.3 s, corridor fix ~0; other stages flat. But the explanation does not mention the 40-household leg's web growth (bookend +2.6 s, +31%; re-timed: seed 4 web 1.58 -> 2.97 s CPU, seed 25 2.17 -> 2.46, two reps each, also present in the D4 control), so it does not account for a stage that grew in a band-3 leg",
+  "verdict": "inconsistent"
+}

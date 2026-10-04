@@ -1,0 +1,67 @@
+{
+  "band": 2,
+  "base": {
+    "commit": "ddb924e01",
+    "label": "318-start",
+    "utc": "20261003T171426Z"
+  },
+  "binding": "8727a39194f95ce991e4a4538f2b9ae2ad2b0870c43a21f181cb37cd898d441a",
+  "criteria": {
+    "commensurate": "Yes. The bookend is +3.4 pct total (17.7 to 18.3 s, +0.6 s). Homesteads at 15 hh are +0.80 s summed (4.51 to 5.31 s), which is the pass less what the tie-break saves. 40 hh is -11.5 pct, 20 hh -0.4 pct, 10 hh +0.8 pct. Seed 4 +17.6 pct (crosses the 10 pct seed line, not 20 pct) is web/hinterland/notice, the layout effect of the 20 ft gap. The control shows this effect going both ways (15/4 and 15/39 notice rise with main gap). It is not added work, and homesteads on seed 4 is only +0.05 s.",
+    "necessary": "Yes. The 20 ft homestead gap (grow_gap, FR-011) and the gap pass (gap_ways.lay_the_ways, FR-014) are option A, which the GM chose in Amendment 3 for the shape of the map. The control perf-318-control-gap-pass puts the rise on them: with the pass stubbed, homesteads at 15 hh fall below main (3.14 s against 4.42 s), and with main's gap seed 4 web and hinterland return to main.",
+    "no_way_around": "None left that I would hold the verdict on. The round-4 remedy (flood, way_out and trace reading lists, byte-identical: diff reviewed, test_gap_ways 12 pass) is in at cdd1bc379. It took 0.66 s off the 15 hh homesteads between end records 014912Z and 015841Z, as I measured for the flood. The pass is now about 0.4-0.6 s a map. What remains is the corridor loop in lane_layers, 0.075-0.107 s a map (25-35k hit_points calls). It could be vectorized as a mask beside hit_points, about 0.1 s a map or 2 pct of the total. That is recommended, not owed. Seed 4 has nothing left to cut, because its growth is in web, hinterland and notice."
+  },
+  "end": {
+    "commit": "cdd1bc379",
+    "label": "318-end",
+    "utc": "20261004T015841Z"
+  },
+  "environment": "local",
+  "feature": "318-grow-outward-no-restart",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "bf917120-9a91-46b2-b9b1-10b792b1a311",
+    "utc": "20261004T020142Z"
+  },
+  "kind": "audit",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": -3.3,
+          "39": -3.2,
+          "4": 2.9,
+          "47": 6.7
+        },
+        "total_pct": 0.8
+      },
+      "20": {
+        "seeds": {
+          "25": -16.0,
+          "39": 3.6,
+          "4": -1.5,
+          "47": 17.2
+        },
+        "total_pct": -0.4
+      },
+      "40": {
+        "seeds": {
+          "25": -14.1,
+          "39": 0.7,
+          "4": -11.4,
+          "47": -18.9
+        },
+        "total_pct": -11.5
+      }
+    },
+    "seeds": {
+      "25": 2.6,
+      "39": 2.6,
+      "4": 17.6,
+      "47": -10.2
+    },
+    "total_pct": 3.4
+  },
+  "note": "",
+  "verdict": "justified"
+}

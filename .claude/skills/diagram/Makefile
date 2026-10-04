@@ -1184,6 +1184,17 @@ claims-coverage: ## [project] every unit with no research claim, a malformed cla
 claims-report: ## [project] the claims index: counts by verdict, every finding (drifted, needs research, mislabeled, unclaimed, undecided) and every UNRESEARCHED claim
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/_claims.py" --root "$$(git rev-parse --show-toplevel)" report
 
+# GUARD_EDIT_OK: feature 318 amendment 4 - three operations scoping a re-check to the blocks a claim rests on; the push's refusal is unchanged (claims-gate.sh).
+claims-triage: ## [project] the claims owed only a TRIAGE (a page they cite moved, the blocks they rest on stand): one bundle of the new or changed blocks for one agent   [OUT=<dir>]
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_claims.py" --root "$$(git rev-parse --show-toplevel)" triage $(if $(OUT),--out "$(abspath $(OUT))",)
+
+claims-triaged: ## [project] record a triage reply: a claim it names (TOUCHES) is owed impl-drift, every other claim of the bundle is cleared   BUNDLE=<dir> REPLY=<file>
+	@if [ -z "$(BUNDLE)" ] || [ -z "$(REPLY)" ]; then printf 'make claims-triaged: BUNDLE=<dir> and REPLY=<file> are required\n' >&2; exit 2; fi
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_claims.py" --root "$$(git rev-parse --show-toplevel)" triaged --bundle "$(abspath $(BUNDLE))" --reply "$(abspath $(REPLY))"
+
+claims-backfill: ## [project] give every index row checked at today's research the pages it was checked at, so a later edit to them is triaged, not re-judged in full
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/_claims.py" --root "$$(git rev-parse --show-toplevel)" backfill
+
 # GUARD_EDIT_OK: feature 303 - Q= replaces PAGE= SECTION= on this read-only operation; no guard changes.
 translation-owed: ## [project] the translated quotations new or changed since the merge base - each owes a translation-check   [Q=0412]
 	@python3 "$$(git rev-parse --show-toplevel)/scripts/_translation_owed.py" --root "$$(git rev-parse --show-toplevel)" $(if $(Q),--q "$(Q)",)
@@ -1510,7 +1521,9 @@ quick:           ## [tests] tier 2: lint, types and every test that rolls no map
 	  root=$$(git rev-parse --show-toplevel); \
 	  if [ "$$warm" = yes ] && [ -z "$(ALL)" ]; then python3 "$$root/scripts/_ratchet.py" quick "$$el" || exit 1; \
 	  elif [ $$el -ge 15 ]; then printf '\nquick took %ss, but this run was %s - not judged against the 15s bar (feature 171).\n' "$$el" "$$([ "$$warm" = yes ] && echo "ALL=1, so unselective" || echo "COLD: it built .testmondata")"; fi; \
-	  if [ $$el -gt $(QUICK_BUDGET) ]; then \
+	  : "(GUARD_EDIT_OK: feature 318 found it - the BUDGET judges the same runs the ratchet does, a warm selective one;"; \
+	  : " ALL=1 ran 9,247 tests in 78 s, every one passing, and failed here as 'something slow is running')"; \
+	  if [ "$$warm" = yes ] && [ -z "$(ALL)" ] && [ $$el -gt $(QUICK_BUDGET) ]; then \
 	    printf '\n\033[1mquick took %ss, over its %ss budget.\033[0m\n' "$$el" "$(QUICK_BUDGET)"; \
 	    printf 'Something slow is running that should not be. Find it:  \033[1mmake durations\033[0m\n'; \
 	    printf 'A test near the top of that list without @pytest.mark.rolls_map is the cause.\n\n'; \
@@ -1860,7 +1873,9 @@ QUICK_TREE = tests --ignore=tests/tier_town --ignore=tests/tier_city --ignore=te
 # and nothing ever stopped (five daemons, 2.3 GB, one for a session that had ended). pyrefly checks the whole engine
 # cold in ~0.6 s (ty: ~0.5 s, but it has no rule for a missing annotation, research 142 R3), so there is nothing to
 # keep warm and no sweep to run. Same command on CodeBuild. Measurements: specs/142-rust-type-checker/research.md R2.
-TYPECHECK = pyrefly check
+# GUARD_EDIT_OK: feature 318 found it - pyrefly picks a `.venv` beside the engine before the interpreter make runs, and an
+# empty one (a tool's, 2026-10-03) turned 0 errors into 171 missing imports (pytest, shapely); pinned to make's own python3.
+TYPECHECK = pyrefly check --python-interpreter-path "$$(command -v python3)"
 # THE GATE IS ALWAYS EXHAUSTIVE (constitution v2.9.0, GM 2026-08-26): `make quick` runs each test's quick form,
 # `make done` its full form - the corpus, the full matrices, the full-size canvases, the tooling tests.
 GATE_EXHAUSTIVE_ENV = L7R_TESTS_EXHAUSTIVE=1 $(if $(COV_FLOORS),L7R_COV_FLOORS=1,)  # GUARD_EDIT_OK: feature 133 T92's env, kept for any test that reads it; feature 135's own full-run signal is L7R_TESTS_FULL

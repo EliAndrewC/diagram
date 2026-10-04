@@ -347,6 +347,29 @@ def test_the_entrance_is_the_last_join_on_the_way_out_and_every_route_walks_to_t
     assert outermost_join([(0.0, 0.0), (0.0, 50.0)], [[(500.0, 500.0), (600.0, 500.0)]]) is None
 
 
+def test_a_track_from_the_gate_the_ways_join_along_hands_over_at_its_last_join() -> None:
+    # feature 320 (perf-audit, 11 of 16 bookend runs lost their entrance board): the households' ways join the track along
+    # its stretch by the cluster and none meets its inner end at the gate; read as a through-track, the handover was the join
+    # nearest the houses - the innermost, which a way joining farther out never passes. With the gate recorded, it is the
+    # last join walked in from the outer end.
+    from l7r.diagram.settlement.structures.fixtures._helpers import kosatsuba_handover
+
+    M = {
+        "houses": [{"x": 0.0, "y": 0.0}, {"x": 300.0, "y": 0.0}],
+        "lanes": [
+            {"pts": [[40, 0], [40, 150], [0, 150]]},  # a way meeting the track along it, near the houses
+            {"pts": [[300, 0], [300, 250], [0, 250]]},  # a way meeting it farther out
+            {"pts": [[0, 100], [0, 400], [0, 2000]], "connector": True},  # from the gate: no way meets its inner end
+        ],
+        "way_out_gate": [0.0, 100.0],
+    }
+    hand = kosatsuba_handover(M)
+    assert hand is not None and abs(hand[1] - 250.0) <= 12.0, f"the last join on the way out, not the innermost: {hand}"
+    del M["way_out_gate"]
+    inner = kosatsuba_handover(M)
+    assert inner is not None and abs(inner[1] - 150.0) <= 12.0, "without the gate the track reads as a through-track"
+
+
 def test_a_roadside_farm_that_steps_onto_the_track_is_where_the_entrance_is() -> None:
     """Feature 291 (Mizuguchi rolled linear): a farm with no lane of its own joins the track out beyond the lanes' handover,
     so the entrance - the first join walked in from the edge - is where IT joins, and a board there is passed by all."""

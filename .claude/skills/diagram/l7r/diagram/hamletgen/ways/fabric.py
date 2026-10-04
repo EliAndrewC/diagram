@@ -213,6 +213,9 @@ def _homestead_polys(s: Settlement) -> list[tuple[Poly, Pt | None, str]]:
         for r in s.M.get("farm_fixtures", [])
         if all(k in r for k in ("x", "y", "w", "h"))
     )
+    # ...AND, ONCE THE LAST HOUSE STANDS AND BEFORE ANY FARMSTEAD IS DRAWN, THE HOMESTEADS AS SEATED (feature 320,
+    # `household_ways.seated_parts`): the track out is chosen then, and must keep off what will be drawn
+    out += list(getattr(s, "_seated_parts", None) or ())
     return out
 
 

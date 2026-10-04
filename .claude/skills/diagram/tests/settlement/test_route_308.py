@@ -6,8 +6,9 @@ import pytest
 
 from l7r.diagram.settlement import Settlement
 from l7r.diagram.settlement.rolling import access, route
-from l7r.diagram.settlement.rolling.access import access_corridor, start_tree
+from l7r.diagram.settlement.rolling.access import access_corridor
 from l7r.diagram.settlement.rolling.route import search, taut
+from tests.settlement._builders import seed_tree
 
 
 def _open(W: float = 1400.0) -> Settlement:
@@ -46,7 +47,7 @@ def test_a_route_is_pulled_taut_through_the_leg_test_and_refused_when_it_cannot_
 
 def _hemmed(s: Settlement) -> dict:
     """A homestead whose every straight and round-the-gable run to the exit strip crosses one wide neighbor."""
-    start_tree(s, (700.0, 450.0), (1.0, 0.0), 300.0)
+    seed_tree(s, (700.0, 450.0), (1.0, 0.0), 300.0)
     s.placed.append((700.0, 560.0, 500.0, 40.0))
     return s._bundle_geom(700.0, 700.0, 46.0, 28.0, "SE", rot=0.0)
 
@@ -211,7 +212,7 @@ def test_a_door_with_no_branch_of_the_tree_in_reach_is_not_searched(monkeypatch:
     assert not route.tree_in_reach(segs, (700.0, 150.0), 150.0) and not route.tree_in_reach([], (0.0, 0.0), 1e9)
     s = Settlement(1400.0, 1400.0, seed=3)
     s.meta(name="V", scale="hamlet", ftpx=1, toscale=True, households=10, down_deg=90, water_flow=90, nucleated=True)
-    tree = start_tree(s, (600.0, 450.0), (1.0, 0.0), 100.0)
+    tree = seed_tree(s, (600.0, 450.0), (1.0, 0.0), 100.0)
     asked: list[int] = []
     monkeypatch.setattr(route, "_cells_to_tree", lambda *a: asked.append(1) or None)
     far = (600.0 + route.ROUTE_REACH_PX + 200.0, 1300.0)

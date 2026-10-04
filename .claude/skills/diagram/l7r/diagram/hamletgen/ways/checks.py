@@ -5,6 +5,7 @@ Research: plumbing - NONE
 
 from __future__ import annotations
 
+import functools
 import math
 from collections.abc import Mapping, Sequence
 from typing import Any
@@ -105,6 +106,23 @@ def brook_fords(brook: Sequence[Pt], spacing: float, bend_deg: float) -> list[Pt
     return out
 
 
+@functools.lru_cache(maxsize=64)
+def brook_boxes(brook: tuple[Pt, ...]) -> tuple[tuple[Pt, Pt, float, float, float, float], ...]:
+    """Each leg of the brook with its bounding box (x0, x1, y0, y1) - built once a brook (`ford_crossing`'s prefilter).
+
+    Research: plumbing - NONE: a memo of the legs' boxes"""
+    return tuple((a, b, min(a[0], b[0]), max(a[0], b[0]), min(a[1], b[1]), max(a[1], b[1])) for a, b in zip(brook, brook[1:], strict=False))
+
+
+@functools.lru_cache(maxsize=256)
+def ford_leg(f: Pt, brook: tuple[Pt, ...]) -> tuple[Pt, Pt]:
+    """The brook's segment nearest the ford `f` - asked once a ford (feature 320, perf-audit: `settle_field` asked it of
+    every network point, 703k `seg_dist` calls on cohort seed 39 at 10 households, half the step's time).
+
+    Research: plumbing - NONE: a memo of the nearest segment"""
+    return min(zip(brook, brook[1:], strict=False), key=lambda ab: seg_dist(f[0], f[1], ab[0], ab[1]))
+
+
 def ford_crossing(start: Pt, end: Pt, brook: Sequence[Pt], fords: Sequence[Pt], landing: float = 22.0) -> list[Pt]:
     """The two landings of a square crossing at the ford that makes start -> ford -> end shortest, ordered from the
     start's bank - or nothing, when the straight run from `start` to `end` does not cross the brook (or there is no
@@ -115,11 +133,17 @@ def ford_crossing(start: Pt, end: Pt, brook: Sequence[Pt], fords: Sequence[Pt], 
         square at the ford - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: the ford
             that makes the walk shortest, landings square to the reach
         landing 22 px off the brook - NONE: fitted to the router's water margin and the ford's gap"""
-    legs = list(zip(brook, brook[1:], strict=False))
-    if not fords or not any(segments_cross(start, end, a, b) for a, b in legs):
+    if not fords:
+        return []
+    x0, x1, y0, y1 = min(start[0], end[0]), max(start[0], end[0]), min(start[1], end[1]), max(start[1], end[1])
+    # ...ASKED ONLY OF THE LEGS WHOSE BOX MEETS THE RUN'S (`brook_boxes`, once a brook): a leg whose box misses the run's
+    # cannot cross it (feature 320, perf-audit: 484k crossing tests a seed against a brook that never changes)
+    if not any(
+        segments_cross(start, end, a, b) for a, b, bx0, bx1, by0, by1 in brook_boxes(brook if isinstance(brook, tuple) else tuple(brook)) if bx0 <= x1 and bx1 >= x0 and by0 <= y1 and by1 >= y0
+    ):
         return []
     f = min(fords, key=lambda c: math.dist(start, c) + math.dist(c, end))
-    a, b = min(legs, key=lambda ab: seg_dist(f[0], f[1], ab[0], ab[1]))
+    a, b = ford_leg((float(f[0]), float(f[1])), brook if isinstance(brook, tuple) else tuple(brook))
     ux, uy = unit(b[0] - a[0], b[1] - a[1])
     nx, ny = -uy, ux  # square to the reach
     p1, p2 = (f[0] + nx * landing, f[1] + ny * landing), (f[0] - nx * landing, f[1] - ny * landing)
@@ -184,7 +208,7 @@ def path_violations(path: Poly, avoid: Sequence[Poly], pond: tuple[float, float,
         off the crop - research/questions/0081-village-lanes.drawing.html: no segment through an avoid polygon
         square over water - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: no crossing under
             42 degrees
-        no deck on crop - research/questions/0081-village-lanes.drawing.html: a crossing within 14 ft of a crop polygon fouls
+        no deck on crop - UNRESEARCHED: a crossing within 14 ft of a crop polygon fouls
         two decks too close - CONVENTION: crossings under 46 ft apart counted, decks drawn over each other"""
     bad = 0
     for i in range(len(path) - 1):
@@ -239,7 +263,7 @@ class PathChecker:
             off the crop - research/questions/0081-village-lanes.drawing.html: no segment through an avoid polygon
             square over water - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: no crossing
                 under 42 degrees
-            no deck on crop - research/questions/0081-village-lanes.drawing.html: a crossing within 14 ft of a crop fouls
+            no deck on crop - UNRESEARCHED: a crossing within 14 ft of a crop fouls
             two decks too close - CONVENTION: crossings under 46 ft apart counted
         """
         bad = 0
@@ -292,7 +316,7 @@ def crossing_lands_on_crop(a: Pt, b: Pt, p: Pt, q: Pt, crops: Sequence[Poly], pa
     (`features_do_not_overlap` reports it as a dry_plots/bridges pair). The way is free to cross the
     same ditch a little further along where the crop stops - which is where the bund is anyway.
 
-    Research: no deck on crop - research/questions/0081-village-lanes.drawing.html: within 14 ft of a dry plot"""
+    Research: no deck on crop - UNRESEARCHED: within 14 ft of a dry plot"""
     hit = seg_intersect(a, b, p, q)
     if hit is None:
         return False

@@ -11,7 +11,7 @@ adds nothing) and waved by moving each point of it INWARD by a depth that rises 
 the rounded outline. So the shaped marsh lies within the laid one, and every rule that reads the marsh - a lane's end off it, a
 house off it, its no-build ground - holds as before; the scrub fills what the marsh gives up.
 
-Research: marsh edge shape - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: corners rounded at up to 60 ft, edges waved inward up to 40 ft, within the laid band"""
+Research: marsh edge shape - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: corners rounded at up to 60 ft, edges waved inward up to 40 ft with a short ripple of 60-90 ft among the slow waves, within the laid band"""
 
 from __future__ import annotations
 
@@ -28,7 +28,7 @@ ROUND_KEEP = 0.85
 #: to read as a scallop.
 WAVE_DEPTH_FT = 40.0
 WAVE_LENGTH_FT = (180.0, 480.0)
-#: The wave's three components: a LEAD of length 180-240 ft weighted 2, and two slower ones of 240-480 ft weighted 0.5 each for
+#: The wave's first three components: a LEAD of length 180-240 ft weighted 2, and two slower ones of 240-480 ft weighted 0.5 each for
 #: the irregularity. Three equal components rolled anywhere in the range could all come out long or cancel each other, and a
 #: slow sine near its inflection lies within the 1 ft simplify of a straight line for 150 ft and more: Inashiro's toe, regenerated
 #: under feature 302, drew a 165 ft ruled stretch on its left edge. Measured on that laid marsh over 200 seeds (2026-10-01): the
@@ -36,7 +36,15 @@ WAVE_LENGTH_FT = (180.0, 480.0)
 #: shortest length), 225 ft with all three in 180-300 ft, and 113 ft with this lead (none over) - the lead's own bend over any
 #: 120 ft window, half its length at most, is more than the slower two can straighten.
 WAVE_LEAD_FT = 240.0
-WAVE_WEIGHTS = (2.0, 0.5, 0.5)
+#: A SHORT FOURTH COMPONENT, 60-90 ft weighted 1.5 (feature 320, the GM 2026-10-04: "Fix marsh ends first"). An edge shorter
+#: than the slow waves - a strip's ~330 ft end, or a corner where the lead wave's ramp cancels the turn - took a ramp rather than
+#: a bend: measured on three laid strips and a 330 ft end over 40 seeds each, the median outline carried a 125 ft stretch
+#: within 3.1 ft of straight (the brook's `RULED_TOL_FT`) and the longest 160 ft, and Kuwabata's waterside marsh showed 124 ft
+#: of it on 301 ft of visible edge, past the gate's 40% share. With this component the longest was 85 ft (median 60): under the
+#: 120 ft (`RULED_SHARE` of `RULED_MIN_LEN_FT`) at which a visible edge could break the rule. Weight 1.0 left 2-6 of 40 over it
+#: (a 5 ft ripple sampled every `WAVE_STEP_FT` can lie within the tolerance); a rounding of 150 ft made it worse.
+WAVE_SHORT_FT = (60.0, 90.0)
+WAVE_WEIGHTS = (2.0, 0.5, 0.5, 1.5)
 #: The spacing of the points the wave moves (a dozen to the shortest wave), and the tolerance the waved outline is simplified to:
 #: every reader of the marsh walks its ring - the title pocket's box test point by point - and at 8 ft unsimplified a large
 #: marsh carried about a thousand vertices where its laid strips had a handful, which made Sawada's ground-cover stage 0.45 ->
@@ -46,8 +54,8 @@ SIMPLIFY_FT = 1.0
 
 
 def natural_outline(poly: Any, seed: int, bs: float = 1.0) -> list[tuple[float, float]]:
-    """`poly`'s outline rounded and waved - within `poly` (the module's note). The wave's three lengths and phases are rolled from
-    `seed` (a lead and two slower ones, `WAVE_LEAD_FT`); each length is fitted to a whole number of waves round the outline, so it closes without a step. Returns the shaped
+    """`poly`'s outline rounded and waved - within `poly` (the module's note). The wave's four lengths and phases are rolled from
+    `seed` (a lead, two slower ones, `WAVE_LEAD_FT`, and a short one, `WAVE_SHORT_FT`); each length is fitted to a whole number of waves round the outline, so it closes without a step. Returns the shaped
     exterior, or `poly` itself where shapely cannot read it as an area."""
     import numpy as np
     from shapely.geometry import Polygon
@@ -73,8 +81,8 @@ def natural_outline(poly: Any, seed: int, bs: float = 1.0) -> list[tuple[float, 
     xy = np.array([ring.interpolate(float(v)).coords[0] for v in s])
     rng = np.random.default_rng(seed)
     wave = np.zeros(n)
-    lengths = np.array([rng.uniform(WAVE_LENGTH_FT[0], WAVE_LEAD_FT), *rng.uniform(WAVE_LEAD_FT, WAVE_LENGTH_FT[1], 2)]) * bs
-    for wl, ph, wt in zip(lengths, rng.uniform(0.0, 2.0 * math.pi, 3), WAVE_WEIGHTS, strict=True):
+    lengths = np.array([rng.uniform(WAVE_LENGTH_FT[0], WAVE_LEAD_FT), *rng.uniform(WAVE_LEAD_FT, WAVE_LENGTH_FT[1], 2), rng.uniform(*WAVE_SHORT_FT)]) * bs
+    for wl, ph, wt in zip(lengths, rng.uniform(0.0, 2.0 * math.pi, len(WAVE_WEIGHTS)), WAVE_WEIGHTS, strict=True):
         k = max(1, round(length / wl))  # whole waves round the ring: it closes without a step
         wave += wt * np.sin(2.0 * math.pi * k * s / length + ph)
     depth = WAVE_DEPTH_FT * bs * (0.5 + 0.5 * wave / sum(WAVE_WEIGHTS))

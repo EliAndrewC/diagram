@@ -50,17 +50,15 @@ from l7r.diagram.settlement.water_ways.lanes import behind_house, reaches_doorya
 from ..consts import WAY_END_REACH_FT, WEB_CLEARANCE, Poly, Pt
 from . import law
 from .arcs import arc_at, cut_around, sub_run  # noqa: F401 - re-exported: `settle.sub_run` and the rest are what tree.py and the tests name
-from .checks import served_network, square_crossings, unreached_houses
+from .checks import square_crossings, unreached_houses
 from .clearance import kink_spans
 from .corridors import (
     ACCESS_WIDTH,
-    TARGET_ROLE,
     GroundIndex,
     _poly_box,
     building_quads,
     is_tree,
     round_the_gable,
-    spur_runs,
     strands_only_ordinary,
     through_a_building,
 )
@@ -68,6 +66,7 @@ from .fabric import _crosses_fabric, _homestead_polys, house_hit
 from .geom import _TOUCH_GAP, _components, _trim_to_service, memo_ground, polyline_len, steading_footprints, worked_ground
 from .joints import joints
 from .keeper import NOT_THE_SETTLES, unsettled  # noqa: F401 - re-exported: `settle.unsettled` is the exit question callers name
+from .reach import _draw_tree_lane, settle_field, settle_targets  # noqa: F401 - re-exported: callers and tests name these as `settle.<name>`
 from .serve import shadowed_by
 from .squaring import SQUARE_MARGIN_FT, SQUARE_PASSES, _pts, square_every_crossing, square_run, square_waters  # noqa: F401 - re-exported: callers and tests name these as `settle.<name>`
 from .sweeps import _DOUBLED_DEG, along_tail, cut_at_tail
@@ -129,11 +128,11 @@ def _fabric(s: Any) -> tuple[Yards, list[Mapping[str, Any]]]:
 
 
 def theirs(p: Poly, yards: Yards, houses: Sequence[Mapping[str, Any]]) -> list[Poly]:
-    """The yards and gardens a lane along `p` may not come near: every household's but those of a house one of its ENDS
-    stands at (within `law.DOORSTEP_FT`) - a door path leaves its own dooryard, and is exempt from that steading alone
-    (`law.fouls_fabric`'s `own`).
+    """The yards and gardens a lane along `p` may not come near: all but those within `law.DOORSTEP_FT` of one of its ENDS.
 
-    Research: a lane arrives at its own dooryard - research/questions/0081-village-lanes.drawing.html: that steading alone exempt"""
+    Research:
+        a lane arrives at its own dooryard - research/questions/0081-village-lanes.drawing.html: its way leaves its dooryard round its own beds and fixtures
+        the dooryards it arrives among - UNRESEARCHED: every steading within `DOORSTEP_FT` of either end exempt from the fence clearance, the dooryards it arrives among"""
     own = [(float(h["x"]), float(h["y"])) for h in houses if min(math.dist(p[0], (float(h["x"]), float(h["y"]))), math.dist(p[-1], (float(h["x"]), float(h["y"])))) <= law.DOORSTEP_FT]
     return [poly for poly, owner in yards if owner is None or all(math.dist(owner, c) > 1.0 for c in own)]
 
@@ -149,7 +148,7 @@ def fouled_segment(
 
     Research:
         no tread on a farmhouse - research/questions/0081-village-lanes.drawing.html
-        off another household's yard or garden - research/questions/0081-village-lanes.drawing.html: within `_TOUCH_GAP`, 4 ft
+        off another household's yard or garden - UNRESEARCHED: within `_TOUCH_GAP`, 4 ft
         no long leg through a building - research/questions/0081-village-lanes.drawing.html: `law.breaks_through`
         off the fixtures - research/questions/0081-village-lanes.drawing.html: its own household's too
         what the overlap matrix forbids - NONE: each pair is claimed in the matrix"""
@@ -561,8 +560,8 @@ def settle_joins(s: Any) -> int:
     an end it closes is no longer free. Before the network rule, so a piece the ink tolerance would drop is joined first.
 
     Research:
-        ends that nearly meet are joined - research/questions/0081-village-lanes.drawing.html: carried onto the way; an
-            ordinary end whose join breaks a rule against a tree lane taken back instead"""
+        ends that nearly meet are joined - research/questions/0081-village-lanes.drawing.html: carried onto the way
+        a join taken back - UNRESEARCHED: an ordinary end whose join breaks a rule against a tree lane, or the overlap matrix refuses, taken back 5 ft past the join's reach (`JOIN_BACK_PAD_FT`), the settle's trims then pulling it to what it serves"""
     edits: dict[int, list[Poly]] = {}
     # A TREE LANE'S END IS CARRIED ONTO ITS WAY AS ANY LANE'S IS: the span only adds tread, over walkable ground, meeting the
     # way clean (`law.near_misses`), and the lane it reaches is an ordinary one the tree's joint then binds
@@ -574,13 +573,25 @@ def settle_joins(s: Any) -> int:
         joined = [*p, f] if end == -1 else [f, *p]
         # ...BUT AN ORDINARY LANE WHOSE JOIN WOULD BREAK A RULE AGAINST A TREE LANE DEFERS: it is taken back out of the join's
         # reach instead - the deference would cut the join again, and the two passes took turns until the rounds ran out
-        # (cohort seed 25 under the probes)
-        if not is_tree(lanes[i]) and any(k == i for k, _q in tree_faults(with_edits(s.M, {i: [joined]}))):
+        # (cohort seed 25 under the probes). AND SO DOES ONE WHOSE JOIN THE OVERLAP MATRIX REFUSES (feature 318, Kuwabata): the
+        # law's walkable span reads the centerline 4 ft off a yard or garden, the matrix the whole tread, so a span the law
+        # called walkable was refused at the write (`reshape_lane`) every round and the end left short of its way until the
+        # web was refused - an end whose span is blocked is two ways, each ending at what it serves (`law.near_misses`)
+        if not is_tree(lanes[i]) and (not _join_admitted(s, lanes[i], joined) or any(k == i for k, _q in tree_faults(with_edits(s.M, {i: [joined]})))):
             seq = _as_end(p, end)
             edits[i] = [_back(sub_run(seq, 0.0, polyline_len(seq) - law.JOIN_REACH_FT - JOIN_BACK_PAD_FT), end)]
             continue
         edits[i] = [joined]
     return apply_pieces(s, edits) if edits else 0
+
+
+def _join_admitted(s: Any, ln: Mapping[str, Any], joined: Poly) -> bool:
+    """Would the overlap matrix admit lane `ln` rewritten along `joined` - the question `reshape_lane` asks at the write,
+    asked first so a refused join is taken back rather than left short (`settle_joins`, feature 318).
+
+    Research: plumbing - NONE: the registry's own admission, at the record's 0.1 px
+    """
+    return bool(s.admits("lanes", {**ln, "pts": [[round(float(x), 1), round(float(y), 1)] for x, y in joined]}, ignore=ln))
 
 
 JOIN_BACK_PAD_FT = 5.0
@@ -881,44 +892,20 @@ def corridor_on_lawful_ground(M: Mapping[str, Any], run: Poly, width: float = AC
     return ix.on_lawful_ground(ix.squared(run), width)  # `squared`: `square_run`, skipped where no water comes near the run
 
 
-def _draw_tree_lane(s: Any, run: Poly, width: float, role: str, **extra: Any) -> None:
-    s.lane(_rounded(run), width=width, clearance=WEB_CLEARANCE, worn=True)
-    s.M["lanes"][-1].update({"role": role, **extra})
-
-
-def settle_targets(s: Any, lawful: Lawful) -> int:
-    """Step 4b (homes H36): a spur from the network to every way target it does not reach (`law.unreached_targets` - a
-    burial ground's near edge), the shortest straight run that keeps the law (`Lawful`), drawn as a tree lane, once. A
-    target no such run reaches stays unreached - never drawn to by a least-bad spur (FR-005) - and the settle's report
-    names it.
-
-    Research: a path runs to the graves - UNRESEARCHED: the shortest lawful straight spur from the network, once"""
-    M = s.M
-    done = {tuple(ln["to"]) for ln in M.get("lanes") or [] if ln.get("role") == TARGET_ROLE and ln.get("to")}
-    n = 0
-    for t in law.unreached_targets(M):
-        key = (round(t[0], 1), round(t[1], 1))
-        if key in done:
-            continue
-        run = next((r for r in spur_runs(served_network(M.get("lanes") or []), t) if lawful(r, ACCESS_WIDTH)), None)
-        if run is not None:
-            _draw_tree_lane(s, run, ACCESS_WIDTH, TARGET_ROLE, to=list(key))
-            n += 1
-    return n
-
-
 def settle_reach(s: Any) -> int:
-    """Step 4: the reach the web owes - the access tree's lanes to every farmhouse it does not reach and to the field where
-    no way reaches it, drawn as the seating judged them and the ordinary lanes deferring to them (`tree.settle_tree`), and a
-    spur to each way target (`settle_targets`).
+    """Step 4: the reach the web owes - every household's way (laid in the gaps, `gap_ways`, feature 318), drawn as the gap
+    pass judged them (`tree.settle_tree`); a spur to each way target (`settle_targets`); and the field way where no way
+    reaches the field (`settle_field`).
 
     Research:
-        every farmhouse served - research/questions/0081-village-lanes.drawing.html: the reserved corridors drawn
-        the field reached - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: the field's corridor drawn
+        every farmhouse served - research/questions/0081-village-lanes.drawing.html: every household's way, laid once the last house stands, drawn as a lane of its own
+        the field reached - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a way runs to the field's bund
         a path runs to the graves - UNRESEARCHED: claimed at `settle_targets`"""
+    drawn = settle_tree(s)  # every household's way, reached or not (feature 318, `tree.owed`); each drawn once
     if not (unreached_houses(s.M) or law.unreached_targets(s.M) or law.field_unreached(s.M)):
-        return 0
-    return settle_tree(s) + settle_targets(s, Lawful(s, tree=True))
+        return drawn
+    lawful = Lawful(s, tree=True)
+    return drawn + settle_tree(s) + settle_targets(s, lawful) + settle_field(s, lawful)
 
 
 def settle_husks(s: Any) -> int:

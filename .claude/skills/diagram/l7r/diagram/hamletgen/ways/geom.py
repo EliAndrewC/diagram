@@ -143,7 +143,7 @@ def _stop_at_network(link: Poly, others: list[tuple[Pt, Pt]]) -> Poly:
     ways in the touch pass - never the piece's own component: a piece is often several lanes, and
     cutting at one of them left the reference hamlet's web in pieces on the first try.
 
-    Research: no stub past a junction - research/questions/0081-village-lanes.drawing.html: a link ends where it meets"""
+    Research: no stub past a junction - DEVIATION research/questions/0081-village-lanes.drawing.html: a joining link ends where it first meets a lane, whatever the tail"""
     if not others or len(link) < 2:
         return list(link)
     out = [link[0]]
@@ -204,7 +204,7 @@ def _unretrace(pts: Poly) -> Poly:
 # corner - clear of the footprint, inside the tread's ink (`features_do_not_overlap`, lanes vs
 # gardens, feature 133 T41). A junction link may still brush a fence; it may not paint on it.
 _TOUCH_GAP = 4.0
-"""Research: a junction link may brush a fence - research/questions/0081-village-lanes.drawing.html: 4 ft off footprints"""
+"""Research: a junction link may brush a fence - UNRESEARCHED: 4 ft off footprints"""
 
 
 def _components(ways: Sequence[Poly], touch: float) -> list[int]:
@@ -480,7 +480,7 @@ def end_serves(
     Research:
         an end reaches something seen - research/questions/0081-village-lanes.drawing.html: a way or farmhouse within 60 ft
         reached on the bund - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: within 6 ft of its edge
-        arrived at a steading - research/questions/0081-village-lanes.drawing.html: within 12 ft of its built ground"""
+        arrived at a steading - GUESS research/questions/0081-village-lanes.drawing.html: within 12 ft of its built ground, how close counts as serving"""
     if any(seg_dist(q[0], q[1], a, b) <= WAY_END_REACH_FT for a, b in segs):
         return True
     if any(math.dist(q, h) <= WAY_END_REACH_FT for h in houses):
@@ -517,7 +517,7 @@ def _trim_to_service(run: Poly, segs: Sequence[tuple[Pt, Pt]], houses: Sequence[
     Research:
         pulled back to the last house served - research/questions/0081-village-lanes.drawing.html: ends trimmed to what
             serves, 4 ft at a time
-        an outlying house keeps its way - research/questions/0081-village-lanes.drawing.html: every farmhouse served, 100 ft"""
+        an outlying house keeps its way - GUESS research/questions/0081-village-lanes.drawing.html: every farmhouse served, 100 ft how close counts as serving"""
 
     # ARRIVING AT THE FIELD IS SERVICE. A field spur exists to reach the crop, and it is the one way on
     # the map whose whole purpose is served by something that is neither a house nor another lane. Without

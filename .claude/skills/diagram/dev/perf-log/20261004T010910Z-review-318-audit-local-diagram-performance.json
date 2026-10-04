@@ -1,0 +1,67 @@
+{
+  "band": 3,
+  "base": {
+    "commit": "ddb924e01",
+    "label": "318-start",
+    "utc": "20261003T171426Z"
+  },
+  "binding": "a608fa56c95c9e8670a51f33015c305cfa9cdf56fbf668cadb58c5bcc959546e",
+  "criteria": {
+    "commensurate": "Homesteads, yes: the GM accepted +45% on that stage (prototype 9.85 to 14.38 s over nine seeds); measured here the reference total is +9.7% (17.81 to 19.54 s, medians of 3), and +11.3% in the bookend. Web at 40 households, no: +5.0 s summed over four seeds (+33% to +120% of the stage) is larger than the homesteads change at that size (-1.75 s), was never measured in the prototype the GM accepted, and buys nothing, since the ways laid are then pruned and last_resort drops none.",
+    "necessary": "The gap pass, yes: FR-014/FR-015 and request.md Amendment 3 verbatim ('I still want A for how it shapes the map') replace the per-seat corridor search with it, and the counterfactual shows it is the homesteads growth (+0.37 to +0.67 s a reference map; the pass 0.69-0.94 s; the rest of the stage 0.21-0.45 s cheaper than main). The web's extra cost at 40 households is not necessary: prune_the_tree removing households' own laid ways one a round until the 8 rounds run out, then last_resort dropping nothing, is work the feature did not ask for, and the session's own later commit 25bdd8c3a forbids it ('pruned never').",
+    "no_way_around": "There is a way around the web part: lay no way the web will prune, or never prune a household's laid way (25bdd8c3a does the latter, but at that HEAD the 40-household seed 4 roll is now WebRefused joins_short, so it must be re-measured on a new bookend). In the gap pass itself, flood() is a pure-Python heapq Dijkstra that indexes numpy cells one scalar at a time (research R4: about 0.4 s of the pass's 0.5-0.9 s), and lane_layers calls site_samples_clear once per uncertain cell; both are candidates, neither demonstrated here."
+  },
+  "end": {
+    "commit": "8606058c5",
+    "label": "318-end",
+    "utc": "20261004T003755Z"
+  },
+  "environment": "local",
+  "feature": "318-grow-outward-no-restart",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "bf917120-9a91-46b2-b9b1-10b792b1a311",
+    "utc": "20261004T010910Z"
+  },
+  "kind": "audit",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": 3.3,
+          "39": 3.2,
+          "4": 5.7,
+          "47": 13.3
+        },
+        "total_pct": 6.3
+      },
+      "20": {
+        "seeds": {
+          "25": -2.7,
+          "39": 12.7,
+          "4": 3.0,
+          "47": 24.1
+        },
+        "total_pct": 8.2
+      },
+      "40": {
+        "seeds": {
+          "25": 3.5,
+          "39": 22.2,
+          "4": 7.4,
+          "47": -2.3
+        },
+        "total_pct": 7.0
+      }
+    },
+    "seeds": {
+      "25": 12.8,
+      "39": 10.5,
+      "4": 23.5,
+      "47": -2.0
+    },
+    "total_pct": 11.3
+  },
+  "note": "Measured pair 318-end 8606058c5 vs 318-start ddb924e01; HEAD has since moved to 25bdd8c3a with engine changes, so this bookend no longer represents the code to be pushed.",
+  "verdict": "not-justified"
+}

@@ -4,14 +4,16 @@
 
 **Created**: 2026-10-03
 
-**Status**: Draft
+**Status**: Draft (amended 2026-10-03)
 
 **Input**: the GM's request, verbatim in `request.md`: *"we should eliminate the throwaway and then redraw logic for farmhouses
 specifically"*; *"it probably makes sense to get rid of this pattern completely"*; *"we can start with a nucleation and then just
-keep placing houses outside of the boundary when that happens within the seven hundred foot field reach"*; and, asked which limit
-stays hard, *"700 ft hard, floor soft"*.
+keep placing houses outside of the boundary"*; and, once the record showed the 700 ft is no researched limit: *"let's just keep
+going at the edge ... if we have multiple options in our placement, and one option is closer to the fields, then we should take
+the one that is closer to the fields ... but that is not any kind of a limit ... we can get rid of these 700 feet measurement
+completely"*.
 
-## Context (observed 2026-10-03, method: the session's read of the engine and the record; a read-only survey of the generator)
+## Context (observed 2026-10-03, method: the session's read of the engine and the record; a read-only survey of the generator; `margin_census.py`, `margin_trace.py` and `refuse_trace.py` in the session's scratchpad)
 
 A clustered (nucleated) hamlet is seated on a chosen margin of its field: the cluster grows from its first house, each standing
 house offering seats round it, widening through three levels while households are left. Every seat must stand within a radius
@@ -30,8 +32,14 @@ gives a clustered village's built share of its ground, its houses to the hectare
 that a clustered village of a dozen houses or more keeps at least a quarter of the ground inside its outline built, is that
 calibration. And `research/questions/0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.drawing.html` already
 states the opposite of what the code does: *"When the placer cannot fit enough farmhouses, it searches wider ground rather than
-starting over ... so the houses already placed stay where they are."* The one research-backed limit on how far a house stands is
-the field reach: within the field reach (`FIELD_REACH_FT`), held as a maximum (pages 0029 and 0032).
+starting over ... so the houses already placed stay where they are."*
+
+Nor does the record support a distance from the field. Every seat on every form is also refused past 700 ft of its field
+(`FIELD_REACH_FT`), its claim citing pages 0029 and 0032, but 0029's drawing page says *"No farmhouse is held to a maximum
+distance from its fields"*, and 0032's 700 ft is the back-row distance its own drawn villages showed. Of the cohort's 30 seeds,
+29 seat on their first margin; nucleated seed 18 (15 households) seats on its twelfth, because its first eleven held 7-12
+homesteads within that reach: on its first margin, with the radius and the growth unbounded, the reach refused 1,996 offered
+seats and the crop, water and marsh 1,065, and it seated 12.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -39,22 +47,28 @@ the field reach: within the field reach (`FIELD_REACH_FT`), held as a maximum (p
 
 A clustered hamlet seats its households as tightly as the ground allows, nearest the cluster first; when the seats near it run
 out, later households are seated further out - at the cluster's edge, as a late arrival in a real village set up beside the
-houses already there - never by moving a house already seated.
+houses already there - never by moving a house already seated, and never refused for its distance from the field. All else
+being equal - of seats in the same ring of distance from the margin's seat center - the one nearer the field is taken first. Neighbors stand a
+lane's threading gap apart, and once every house stands the lanes are laid in the gaps between them.
 
 **Why this priority**: it is the GM's request, and the record (0004) already states it as the rule.
 
-**Independent Test**: roll a nucleated hamlet whose households do not fit within the old radius (the reference spec at 40
-households, seed 47) and read the manifest: every household seated on the chosen margin, the overflow beyond the old radius,
-every house within the field reach of its field, no house seated twice.
+**Independent Test**: roll the reference spec at 40 households, seed 47, and cohort seed 18, and read the manifests: every
+household seated on the chosen margin, the overflow beyond the old radius, no house seated twice.
 
 **Acceptance Scenarios**:
 
 1. **Given** a nucleated hamlet whose chosen margin seated every household before, **When** it is rolled, **Then** it seats
    the same households on the same margin (its houses may move only where a removed rule had refused or re-laid one).
 2. **Given** a nucleated hamlet whose households overflow the old radius, **When** it is rolled, **Then** the overflow stands
-   beyond that radius at the cluster's edge, every house within the field reach of its field, and no seated house is taken back.
-3. **Given** a site where no ground within the field reach of the field can hold every household, **When** it is rolled, **Then** the map
-   is refused with the households it could seat named - not reseated elsewhere.
+   beyond that radius at the cluster's edge, and no seated house is taken back.
+3. **Given** two seats a growth level offers in the same ring of distance from the cluster's seat, **When** the next household is
+   seated, **Then** the one nearer the field is tried first; a seat in a nearer ring is tried before either, however near the
+   field it lies.
+4. **Given** a seated nucleated cluster, **When** its ways are laid, **Then** each runs from its dooryard out into the gap
+   beside its homestead and along the gaps to the way out or to another household's way, joining it at a T.
+5. **Given** a site where no free ground on the whole map can hold every household, **When** it is rolled, **Then** the map is
+   refused with the households it could seat named - not reseated elsewhere.
 
 ---
 
@@ -73,14 +87,16 @@ seating, on every form, across the cohort.
 1. **Given** any form (nucleated, dispersed, linear), **When** a hamlet is seated, **Then** the count of seated houses never
    falls during the seating.
 2. **Given** a household reached across a neighbor's yard at its seat, **When** the seating finishes, **Then** it keeps its
-   seat and its passage (no recheck re-lays it).
+   seat - no recheck re-lays it; a passage the finished map makes unnecessary (the household now has a straight or
+   round-the-gable way of its own) is ended in place, the household keeping its house where it stands.
 
 ---
 
 ### User Story 3 - The record says what the maps now do (Priority: P2)
 
-The drawing pages say the cluster grows at its edge within the field reach, that the packing figure is reported rather than
-enforced, and that a passage is judged at its seat only.
+The drawing pages say the cluster grows at its edge, nearer the field preferred all else being equal but never limited by it,
+that neighbors stand a lane's threading gap apart and the ways are laid in the gaps once every house stands, that the packing
+figure is reported rather than enforced, and how a passage is judged on the finished map.
 
 **Why this priority**: every rendering decision is recorded (constitution XII); the record must not describe a rule the
 engine no longer keeps.
@@ -90,15 +106,23 @@ engine no longer keeps.
 **Acceptance Scenarios**:
 
 1. **Given** the 0032 drawing page, **When** read, **Then** its quarter-built figure is a measurement the maps report, not a
-   rule they keep.
-2. **Given** the 0081 drawing page, **When** read, **Then** nothing in it says a passage is asked again once all are seated.
+   rule they keep, and the field reach is no limit.
+2. **Given** the 0081 drawing page, **When** read, **Then** it says a passage the finished map makes unnecessary (its drawn
+   layout given a way of its own) is ended in place, and nothing in it says a household is re-laid with another layout.
+3. **Given** the 0029 drawing page, **When** read, **Then** it says that, all else being equal, the seat nearer the field is
+   taken first, and that no distance from the field is a limit.
+4. **Given** the 0081 drawing page, **When** read, **Then** it says neighbors stand a lane's threading gap apart, no way is
+   searched for a household while it is seated, the ways are laid in the gaps once every house stands (the record's own reading
+   of lanes as the gaps between plots, a GUESS), and a household no way reaches is reached across a neighbor's yard; and the
+   claims in the engine that say a corridor is searched and reserved per seat say what the code now does.
 
 ### Edge Cases
 
 - A margin with no dry way out is skipped before any house is seated - a check, not a take-back - and the next margin is tried.
-- The overflow reaches the field reach (`FIELD_REACH_FT`) on every side: the map is refused, naming the shortfall.
-- A cluster grown past the old radius on a narrow strip of dry ground draws a long cluster: allowed (the 12:1 refusal goes); the
-  declared cluster shape records what was drawn.
+- A cluster on a narrow strip of dry ground (cohort seed 18) grows along and away from the field until everyone is seated.
+- No free ground is left on the whole map: the map is refused, naming the shortfall.
+- A cluster grown past the old radius on a narrow strip draws a long cluster: allowed (the 12:1 refusal goes); the declared
+  cluster shape records what was drawn.
 - The cluster grows past the old radius and its houses thin: the quarter-built figure is reported, not enforced.
 - Households reached across a yard stand at tight seats while the share has room, and are never taken back.
 
@@ -107,32 +131,109 @@ engine no longer keeps.
 ### Functional Requirements
 
 - **FR-001**: The seating MUST NOT take back any farmhouse it has seated - no margin ladder take-back, no rescue re-search of a
-  seated margin, no re-seat with the passage withheld, no recheck re-laying a household after the seating.
+  seated margin, no re-seat with the passage withheld, no recheck re-laying a household after the seating. The check that ends
+  a passage once the finished seating gives the household a way of its own (moving no house) MUST stay: it holds page 0081's
+  condition, "seated only where it has no way of its own".
 - **FR-002**: A nucleated cluster MUST keep growing outward from its standing houses, nearest first, while households are left
-  and seats remain within the field reach; the old seat radius MUST NOT refuse a seat (it may order the offers).
-- **FR-003**: The hard limits on where a house may stand MUST be the research-backed ones and the existing per-house rules: within
-  the field reach of its field (pages 0029, 0032), on dry ground, nothing on crop or water, and every rule a seat already asks.
+  and free ground remains; the old seat radius MUST NOT refuse a seat (it may order the offers).
+- **FR-003**: No distance from the field MUST refuse a seat, on any form, and the field reach (`FIELD_REACH_FT`) MUST be removed
+  (the GM: "we can get rid of these 700 feet measurement completely"). Every use MUST be deleted or re-based on something that
+  is not that figure: the predicate `within_field_reach` (the growth's seat test, the nucleated placer, the dispersed form's
+  exhaustive pass, the fit test) deleted; the seat window the growth's seat region is built over and the free-ground grid's box
+  re-based on the cost window below (not on the reach), the manifest's `site_boundary.window` sized from the map's own extent; the placement-stages page's legend and the tests
+  pinning the figure updated. The hard limits that remain are every rule a seat asks today, with the field reach and the per-seat
+  path search the exceptions (FR-013): dry ground, nothing on crop or water, the canvas, the exit strip and the field's corridor
+  (the only corridors reserved while houses are seated), the standing homesteads and the threading gap (FR-011), the household's
+  water, and FR-012's check that its yard opens onto lane ground connected to the way out. The rasters that answer these are
+  built over a cost window about the seat (twice the households' seating radius, clipped to the canvas); every answer past it
+  is decided exactly or counted open, so the window bounds the cost, never where a house may stand.
+- **FR-003a** (Amendments 2 and 3): Nearness to the field MUST be a tie-break only - "all else being equal, try this first" (the
+  GM, Amendment 2). The growth's order is main's (level by level, nearest the margin's seat center first), with "equal" taken as
+  the same ring of distance from the seat center, rings `TIE_RING_FT` wide (a GUESS: about the parting between two
+  neighbors' houses, so a ring holds the seats one step of growth offers and no more); within a ring, the seat nearer the field
+  is tried first. A distance on a continuous scale is almost never exactly equal, so an exact tie would never fire; a ring
+  wide enough to hold several levels would make field distance the primary order again. Field distance MUST NOT outrank the
+  ring, and the growth's search breadth MUST be main's (the GM: "the tie-break thing for the real speedup").
+- **FR-011** (Amendment 2): Every two homesteads the growth seats MUST stand at least a lane's threading gap apart - the room the
+  web needs to lay a lane between two steadings (`MIN_WEB_GAP`: a lane's clearance from each garden fence and its tread) -
+  so a way can always be laid between neighbors. The exemption is PAIRWISE: a household reached across a neighbor's yard (feature
+  317's tight seat) stands against that one neighbor by design, and keeps the gap from every other homestead.
+- **FR-012** (Amendment 2): A seat MUST be admitted by a cheap check in place of a path search: its yard opens onto LANE GROUND
+  connected to the way out - ground a lane can pass at its width, clear of the site's taken ground grown by about a corridor's
+  half-width and of the households' wood seats - flooded from the exit strip and the field's corridor, a raster asked by lookup
+  and kept current as houses stand. Between homesteads the width is FR-011's to guarantee (the raster's cell cannot resolve a
+  20 ft gap), so the raster answers where the paddy, the water and the map's edge close ground off; a household it admits that
+  no way then reaches is FR-014's pinch, counted.
+- **FR-013** (Amendment 2): WHILE HOUSES ARE SEATED the seating MUST search no path for a household - no access corridor is
+  searched for, judged against the lane law, or reserved per house ("This does let us drop the search entirely"); FR-014's single
+  pass, after the last household stands, is the one place a household's way is laid, judged and kept clear. Once per map, the exit strip and the
+  field's corridor stay. Feature 317's condition for a tight seat - the household has no way of its own - is asked of FR-012's
+  predicate: a way of its own is a yard opening onto lane ground connected to the way out, so one predicate admits an ordinary
+  seat and refuses a tight one. FR-001's end-in-place check runs after the ways are laid (FR-014), against the tree they make.
+- **FR-014** (Amendments 2 and 3): Each household's way MUST be laid once every house stands, in the gaps FR-011 leaves (the GM
+  chose this "for how it shapes the map, based on that research finding": page 0081's reading of lanes as the gaps between
+  the house plots): out of its own homestead from its dooryard, then along the gaps - keeping to their middle - to the way out
+  or to a way laid before it, joining at a T; under the lane law the ways keep today. Laid at the seating's end and before the
+  homesteads' other parts are placed, they are kept clear of what is placed after, as the seating's corridors were. A household
+  no lawful way reaches MUST be reached across a neighbor's yard (canon, the GM: "it's okay for people to cut through
+  neighbors' yards in a pinch") rather than the map refused for want of a way.
+- **FR-015** (Amendment 3): The cost is accepted. Option A measured slower than the seating it replaces (homesteads stage +45%, observed 2026-10-03, method: the
+  scratch prototype timed per stage on nine nucleated seeds); the GM chose it for the map's shape, and the tie-break (FR-003a) for the speed. FR-010's measurement
+  is still owed, and the band it reaches still owes its records.
 - **FR-004**: The site (margin) choice MUST be kept; a margin that cannot start (no dry way out) MUST still be skipped before any
   house is seated on it.
-- **FR-005**: Where the field reach cannot hold every household, the map MUST be refused, naming the households seated and the
-  margin, never seated on another margin after houses were placed.
+- **FR-005**: Where no free ground on the map can hold every household, the map MUST be refused, naming the households seated
+  and the margin, never seated on another margin after houses were placed. The other forms seat in their own passes (a
+  dispersed hamlet's exhaustive pass, a row village's rows), now unbounded by the field reach, and are refused the same way where
+  those run short; the premise, measured 2026-10-03 (`margin_census.py`, the cohort's specs, seeds 1-30): none of the 15
+  non-nucleated cohort seeds (8 dispersed, 7 linear) nor the pool's two row villages seated past its first margin.
 - **FR-006**: The cluster-shape refusal (a seating past 12:1) MUST go; the drawn shape MUST still be recorded.
 - **FR-007**: Page 0032's quarter-built figure MUST be reported for each nucleated map (built share inside the houses' outline)
   and MUST NOT refuse or alter a seating.
-- **FR-008**: The drawing pages MUST state what the maps now do (0004 already does; 0032 and 0081 as above), each value in its class.
+- **FR-008**: The drawing pages MUST state what the maps now do (0004 already does; 0029, 0032 and 0081 as above), each value in
+  its class, and every code claim citing the field reach as a researched maximum MUST be corrected or removed with it.
 - **FR-009**: No pool map or cohort seed may fail a rule it passed before or seat fewer households; maps may move within the rules
   (GM 2026-09-30, feature 297).
+- **FR-016** (Amendment 4): A claim's re-check MUST be scoped to the research it rests on. Each verdict names the blocks of
+  the cited questions it rests on (the bundle numbers them); the index keeps those blocks' digests per row and each cited page's
+  block digests at the check. After a page edit, a claim is owed a re-check when a block it rests on changed or was removed;
+  a claim whose blocks all stand is owed only a TRIAGE: one cheap check of the new, changed and removed blocks against the
+  claims citing that page, which names the claims a change could bear on. Those go to `impl-drift`; the rest are recorded as
+  cleared at the new page without a re-judge. A row checked before this rule (no blocks recorded) is triaged the same way once
+  its page snapshot exists; the existing index is backfilled with snapshots of today's pages for rows whose
+  recorded research fingerprint matches today's; a row that does not stays owed in full.
 - **FR-010**: The homesteads stage MUST be timed against main at 15 and 40 households, alternated per seed, and recorded; the
-  larger maps' spread MUST be measured (the farthest house from the cluster's first house, and the quarter-built figure).
+  larger maps' spread MUST be measured (the farthest house from the cluster's first house and from the field, and the
+  quarter-built figure).
 
 ## Success Criteria *(mandatory)*
 
 ### Measurable Outcomes
 
 - **SC-001** (FR-001): a test fails if the seated-house count falls during any seating; it passes on the cohort and the pool.
-- **SC-002** (FR-002, FR-003): on the reference spec at 40 households, seeds 4, 25, 39 and 47, every household is seated on the
-  chosen margin and every house stands within the field reach of its field.
-- **SC-003** (FR-005): a constructed site with too little ground within the field reach is refused with the shortfall named.
+- **SC-002** (FR-002, FR-003): on the reference spec at 40 households, seeds 4, 25, 39 and 47, and on cohort seed 18, every
+  household is seated on the chosen margin; no seat is refused for its distance from the field; no `FIELD_REACH_FT` remains in
+  `settlement/rolling/fit.py` and nothing imports it; the ways law's own reach of a way to the field (`ways/law.py`'s `FIELD_REACH_FT`) is unchanged.
+- **SC-002a** (FR-003a): a test fails if field distance outranks the ring (a seat in a farther ring tried before one in a nearer
+  ring for being nearer the field), or if, of two seats in one ring, the farther from the field is tried first; and the
+  growth's breadth equals main's (`GROW_LEVELS`). On the cohort and the pool, the number of seats the tie-break tried in another
+  order than the distance alone would (`seat_search.tie_reordered`) is recorded and is greater than zero; zero sends the ring's
+  width back to the GM.
+- **SC-007** (FR-011): a test fails if two homesteads the growth seats (neither reached across the other) stand closer than the
+  threading gap; measured on the cohort and the pool.
+- **SC-008** (FR-012, FR-013): a test fails if an access corridor is searched, judged or reserved for a household before the last
+  household stands (no corridor search is called while houses are seated); FR-014's pass after it is the only caller. A tight
+  seat's walk across its neighbor's yard is still barred as it is seated (feature 317) - not a corridor.
+- **SC-009** (FR-014): the cohort and the pool reach every household by a way or across a neighbor's yard, and no map is
+  refused for want of a way.
+- **SC-010** (FR-010, FR-015): the bookends against main recorded with the spread and the house-to-field distances, the perf records owed
+  by the band the change reaches.
+- **SC-011** (FR-016): on a constructed tree, an edit to one block re-owes only the claims resting on it, sends the claims
+  whose blocks stand to triage, and a triage reply clears the claims it does not name; a row with no recorded blocks is triaged.
+- **SC-003** (FR-005): a constructed site with too little free ground is refused with the shortfall named.
+- **SC-003a** (FR-004): a test fails if a margin that seated no house is not followed by the next, or a margin with no dry way out
+  is seated.
+- **SC-003b** (FR-006): a test fails if a seating drawn past every cluster shape's band is refused or seated again.
 - **SC-004** (FR-007, FR-008): the record checks owed by the page edits answer clean; each nucleated pool map's manifest carries
   its quarter-built figure.
 - **SC-005** (FR-009): the cohort passes every seed main passes; the pool passes its rules.
@@ -143,10 +244,13 @@ engine no longer keeps.
 
 | Decision | Class | Why | Recorded at |
 |---|---|---|---|
-| A cluster grows at its edge; no house is moved for a late one | historically accurate in the record's reading (0004's rule); the GM's understanding of how farming communities grew | the GM's request; 0004 | 0004's drawing page; this spec; the seating's comment |
-| The field reach (`FIELD_REACH_FT`) the one hard extent | historically accurate (0029, 0032: the back-row tolerance held as a maximum) | the GM chose it as the one hard limit | 0032's drawing page |
+| A cluster grows at its edge; no house is moved for a late one | canon: the GM's ruling of 2026-10-03 ("when someone else moved in, everyone did not move their houses"), as 0004's drawing page already states the maps' rule | the GM's request | 0004's drawing page; this spec; the seating's comment |
+| No distance from the field refuses a seat; nearer the field preferred | the record holds no maximum (0029: "No farmhouse is held to a maximum distance from its fields"); the preference is canon, the GM's ruling of 2026-10-03 | the field reach was the drawn villages' back row, not a source's figure | 0029's and 0032's drawing pages |
+| Nearness to the field a tie-break of main's growth order (Amendment 2; the earlier primary order with every direction at once withdrawn) | canon: the GM's "all else being equal, try this first" | the GM's correction of the first reading | `growth.py`, plan D4 |
+| Neighbors a lane's threading gap apart; the seating searches no path; each way laid in the gaps once the houses stand, a household none reaches reached across a neighbor's yard | GUESS (0081's own reading: "if the lanes are the gaps left between the house plots"; no source states it - search of 2026-10-03), with canon for the fallback (the GM, Amendment 2: "cut through neighbors' yards in a pinch"); the gap the web's own threading figure (`MIN_WEB_GAP`) | the GM chose it for the map's shape (Amendment 3) | 0081's drawing page, `growth.grow_gap`, the gap pass, plan D9-D12 |
+| Equal for the tie-break: the same `TIE_RING_FT` ring of distance from the seat center | GUESS: about the parting between neighbors' houses | an exact tie never fires on a continuous distance | `growth.TIE_RING_FT`, plan D4 |
 | The quarter-built figure reported, not enforced | calibration against the drawn villages (0032 says so) | the GM chose it as soft | 0032's drawing page |
-| A passage judged at its seat only | canon: the GM's ruling of 2026-10-03 (feature 317), cutting through a yard is no great matter | the recheck was a take-back | 0081's drawing page |
+| A passage no longer re-laid after the seating; one the finished map makes unnecessary ended in place | historically accurate for the condition (0081: "seated only where it has no way of its own"); the re-lay removed as a take-back (the GM's request) | the re-lay moved a seated house | 0081's drawing page |
 
 ## Assumptions
 
@@ -155,3 +259,39 @@ engine no longer keeps.
   the settle rounds are a separate redesign the GM was told of).
 
 ## Review history
+- Round 1 (spec-fidelity, 2026-10-03): CHANGES REQUIRED, 3 items - the passage recheck's in-place ending is not a take-back and
+  holds 0081's condition (kept; only the re-lay goes); the other forms' behavior without the ladder unstated (FR-005: the
+  measured premise, refused the same way); the growth model labeled historically accurate where it is the GM's ruling (canon).
+- Round 2 (spec-fidelity-verify, 2026-10-03): FAITHFUL - the three items confirmed against the diff; aside: the 0081 sentence
+  for US3 scenario 2 says the finished map's check asks the drawn layout only.
+- Amendment (2026-10-03, the GM's rulings in `request.md`): the field reach removed as a limit on every form, nearness
+  to the field a preference; cohort seed 18 grows on its first margin. The review counter restarts with this amendment.
+- Amendment round 1 (spec-fidelity, 2026-10-03): CHANGES REQUIRED, 3 items - FR-003 left the reach's constant alive (every use
+  now listed and deleted or re-based; seed 18 seats on its first margin only once the window and the grid box are re-based too,
+  observed 2026-10-03, method: `bound_probe.py` in the session's scratchpad with the constant enlarged); "otherwise equal" a tie that never occurs (FR-003a: the nearest the
+  field first among a growth level's seats, with SC-002a); 0029's statement unspecified (US3 scenario 3).
+- Amendment round 2 (spec-fidelity-verify, 2026-10-03): CHANGES REQUIRED, 2 small items - SC-002's name check caught the ways
+  law's unrelated reach of a way to the field (scoped to the seating's constant); FR-003's closed list of remaining limits left out the
+  household's water and its way to the tree (every rule a seat asks today but the reach).
+- Amendment round 3 (spec-fidelity-verify, 2026-10-03): FAITHFUL - both items confirmed; the amended spec accepted.
+- Amendment round 4 (spec-fidelity, 2026-10-03): FAITHFUL - SC-003a and SC-003b name FR-004 and FR-006, and the decision row
+  (every adjacent seat at once, nearest the field first) is plan D4 as ruled CLEAR; aside: SC-003b could also fail when the
+  drawn shape goes unrecorded.
+- Amendment 2 (the GM's three messages in `request.md`, 2026-10-03): the field preference a true tie-break (FR-003a rewritten),
+  the threading gap between neighbors (FR-011), a cheap reachability check in place of the path search (FR-012, FR-013), the
+  web laying each way after the houses with a neighbor's yard the fallback (FR-014). The review counter restarts.
+- Amendment 3 (the GM, 2026-10-03, `request.md`): option A kept for the map's shape, the tie-break for the speed; FR-015 records
+  the accepted cost. Spec-fidelity round 1 of Amendment 2 applied: the tie-break's equal class (FR-003a), FR-003's remaining
+  limits, US1/US3 restated, FR-008/US3 carry 0081 and the claims, FR-011 pairwise, FR-012 lane ground, FR-013 the own-way target.
+- Amendment 2, spec-fidelity round 2 (2026-10-03): CHANGES REQUIRED - SC-002a's measured count of reordered seats, US1's ring
+  from the seat center, FR-013/SC-008 against FR-014; applied (deb46e536).
+- Amendment 2, spec-fidelity round 3 (2026-10-03): FAITHFUL.
+- After the plan review (MODE 4, BLOCKED on D2): FR-003 states the cost window as built (the perf audit's correction); FR-012
+  states what the lane raster holds (homesteads guaranteed by FR-011, not painted); SC-008 scoped to access corridors. A verify
+  round is owed on these three.
+- Verify round on the three (2026-10-03): CHANGES REQUIRED - FR-003's old window clause removed, FR-012's lane ground worded as
+  clear of the blocked ground; applied.
+- Amendment 4 (the GM, 2026-10-04, `request.md`): claim re-checks scoped to the blocks a claim rests on, with a triage for
+  the rest (FR-016, SC-011). The review counter restarts.
+- Amendment round 1 (spec-fidelity-verify, 2026-10-04): CHANGES REQUIRED - FR-017 (a flipped verdict unconfirmed) cut as not
+  asked for, to be raised with the GM; FR-016's backfill limited to rows whose research still matches.

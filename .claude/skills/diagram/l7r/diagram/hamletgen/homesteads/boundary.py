@@ -31,10 +31,9 @@ if TYPE_CHECKING:  # shapely's names for the type checker; `_load_shapely` binds
 from l7r.diagram.settlement._geom.indexes import PointGrid, RingIndex
 from l7r.diagram.settlement._geom.primitives import FIELD_KEEPOUT_EPS, facing_chains, seg_dist
 from l7r.diagram.settlement.land.wet import marsh_ground
-from l7r.diagram.settlement.rolling.fit import FIELD_REACH_FT
 from l7r.diagram.sitegen.geom import crop_polys
 
-from ..consts import BUNDLE_PITCH, WEB_HARD_GAP, WEB_REACH_FT
+from ..consts import SEATING_GROUND_FT, WEB_HARD_GAP, WEB_REACH_FT
 
 if TYPE_CHECKING:
     from l7r.diagram.settlement import Settlement
@@ -239,6 +238,9 @@ def _vertex_grid(ring: Any) -> PointGrid:
 
 #: The side of a block of `FreeGround` cells asked as one box before its cells are (`FreeGround.__init__`), in cells.
 _BLOCK_CELLS = 8
+#: The free-ground grid's cell, px, on the canvas's own origin: a window snapped to it holds the canvas-wide grid's cells exactly
+FREE_GROUND_CELL = 8.0
+"""Research: plumbing - NONE: a raster's cell"""
 
 
 class EdgeSamples:
@@ -270,9 +272,9 @@ class FreeGround:
 
     Where no site boundary is installed there is no FreeGround (the placer asks the placed-box index alone)."""
 
-    __slots__ = ("_state", "cell", "clear", "nx", "ny", "taken", "x0", "y0")
+    __slots__ = ("_beyond", "_grown", "_region", "_state", "cell", "clear", "nx", "ny", "taken", "x0", "y0")
 
-    def __init__(self, chains: Any, corridors: Any, outline: Any, bounds: tuple[float, float, float, float], cell: float = 8.0) -> None:
+    def __init__(self, chains: Any, corridors: Any, outline: Any, bounds: tuple[float, float, float, float], cell: float = FREE_GROUND_CELL) -> None:
         _load_shapely()
         import shapely
 
@@ -297,6 +299,14 @@ class FreeGround:
         nx_, ny_ = int((x1 - x0) // cell) + 1, int((y1 - y0) // cell) + 1
         self.nx, self.ny = nx_, ny_
         self._state: Any = None
+        # ...AND PAST ITS BOUNDS, THE SAME TWO TESTS ASKED OF A CELL WHEN ASKED (feature 318): rasterized over the seating
+        # window (`seating_window`, snapped to the canvas's own cell grid), a cell beyond it is decided as one inside is,
+        # lazily and once - so the window bounds the grid's cost and never changes an answer (a grid that said only "not
+        # taken" out there, or whose cells were shifted off the canvas's, let the growth's settle stop elsewhere, and
+        # Kuwabata and Sawada seated other houses)
+        self._region: Any = None
+        self._grown: Any = None
+        self._beyond: dict[tuple[int, int], tuple[bool, bool]] = {}
         # ...AND THE SURELY CLEAR CELLS (feature 287): a cell no point of which the same union, GROWN by half a pixel,
         # reaches - every test of `_site_blocks_rect`'s points passes a point there. The seating's corridors are sampled
         # every 8 px against the same tests (`access.on_site_ground`, seed 44: 6.7 million points), and a sample in a
@@ -311,6 +321,7 @@ class FreeGround:
         region = union.buffer(-0.5)
         if not region.is_empty:
             shapely.prepare(region)
+        self._grown, self._region = grown, (None if region.is_empty else region)
         # BLOCKS OF CELLS FIRST (feature 287): a block the grown union misses holds only clear cells, and a block the
         # shrunk union contains only taken ones - so only the cells of a block the union's edge crosses are asked one by
         # one. The same two tests decide every cell; a block only answers for cells inside it (seed 44: four boundaries of
@@ -338,12 +349,51 @@ class FreeGround:
         if not region.is_empty:
             self.taken.update(k for k, t in zip(ask, shapely.contains(region, cells).tolist(), strict=True) if t)
 
+    def _cell_beyond(self, k: tuple[int, int]) -> tuple[bool, bool]:
+        """(taken, clear) of cell `k` past the grid's bounds, by the two tests that decide a cell inside it, once."""
+        got = self._beyond.get(k)
+        if got is None:
+            import shapely
+
+            box = shapely.box(self.x0 + k[0] * self.cell, self.y0 + k[1] * self.cell, self.x0 + (k[0] + 1) * self.cell, self.y0 + (k[1] + 1) * self.cell)
+            taken = bool(self._region is not None and shapely.contains(self._region, box))
+            clear = self._grown is None or bool(shapely.disjoint(self._grown, box))
+            got = self._beyond[k] = (taken, clear)
+        return got
+
+    def decide_beyond(self, xs: Any, ys: Any) -> None:
+        """Decide at once every cell past the grid's bounds the points `(xs, ys)` stand in and no call has yet decided - the
+        same two tests `_cell_beyond` asks one cell at a time, vectorized (feature 318, the perf-audit's second round: the
+        first house's candidates asked 110,873 such cells, one shapely call each, 1.3 s of a 15-household seating).
+
+        Research: plumbing - NONE: the same answers, asked in one call
+        """
+        import numpy as np
+        import shapely
+
+        ki = np.floor_divide(np.asarray(xs, dtype=np.float64) - self.x0, self.cell).astype(np.int64)
+        kj = np.floor_divide(np.asarray(ys, dtype=np.float64) - self.y0, self.cell).astype(np.int64)
+        out = ~((ki >= 0) & (ki < self.nx) & (kj >= 0) & (kj < self.ny))
+        ks = [k for k in set(zip(ki[out].tolist(), kj[out].tolist(), strict=True)) if k not in self._beyond]
+        if not ks:
+            return
+        a = np.asarray(ks, dtype=np.float64)
+        boxes = shapely.box(self.x0 + a[:, 0] * self.cell, self.y0 + a[:, 1] * self.cell, self.x0 + (a[:, 0] + 1) * self.cell, self.y0 + (a[:, 1] + 1) * self.cell)
+        taken = shapely.contains(self._region, boxes) if self._region is not None else np.zeros(len(ks), dtype=bool)
+        clear = shapely.disjoint(self._grown, boxes) if self._grown is not None else np.ones(len(ks), dtype=bool)
+        self._beyond.update(zip(ks, zip(np.asarray(taken, dtype=bool).tolist(), np.asarray(clear, dtype=bool).tolist(), strict=True), strict=True))
+
+    def _inside(self, k: tuple[int, int]) -> bool:
+        return 0 <= k[0] < self.nx and 0 <= k[1] < self.ny
+
     def point_taken(self, x: float, y: float) -> bool:
-        return (int((x - self.x0) // self.cell), int((y - self.y0) // self.cell)) in self.taken
+        k = (int((x - self.x0) // self.cell), int((y - self.y0) // self.cell))
+        return k in self.taken if self._inside(k) else self._cell_beyond(k)[0]
 
     def point_clear(self, x: float, y: float) -> bool:
         """Does (x, y) stand in a cell every point of which the site's ground tests pass?"""
-        return (int((x - self.x0) // self.cell), int((y - self.y0) // self.cell)) in self.clear
+        k = (int((x - self.x0) // self.cell), int((y - self.y0) // self.cell))
+        return k in self.clear if self._inside(k) else self._cell_beyond(k)[1]
 
     def lines_edge_points(self, lines: Any) -> list[EdgeSamples | None]:
         """For each line `(a, b, n)`, its `n + 1` points `a + (b - a) * k / n`: None where one stands in a surely taken
@@ -396,17 +446,6 @@ class FreeGround:
         return any(self.point_taken(px, py) for px, py in ((x0, y0), (x1, y0), (x1, y1), (x0, y1), (cx, y0), (x1, cy), (cx, y1), (x0, cy), (cx, cy)))
 
 
-def free_ground_bounds(chains: Any, reach: float, W: float, H: float) -> tuple[float, float, float, float]:
-    """The box FreeGround's grid covers: the paddy chords' extent grown by `reach`, inside the canvas (feature 287, homes
-    H31). No seat is offered past the field's reach (`within_field_reach`), and a cell outside the grid is only never
-    PRUNED - the fit test still asks it - so the box bounds the cost, never the answer. The canvas grew for the seat's
-    room and the belt's; gridding all of it doubled the grid for ground no seat can reach."""
-    pts = [p for ch in chains or () for a, b, _n in ch for p in (a, b)]
-    if not pts:
-        return (0.0, 0.0, W, H)
-    return (max(0.0, min(p[0] for p in pts) - reach), max(0.0, min(p[1] for p in pts) - reach), min(W, max(p[0] for p in pts) + reach), min(H, max(p[1] for p in pts) + reach))
-
-
 class UnreachableGround:
     """The ground where a farmhouse would stand beyond any way's reach (feature 278, FR-005).
 
@@ -454,6 +493,23 @@ def web_hard_ground(s: Settlement, plan: SitePlan) -> list[Any]:
     return [*([env] if len(env) >= 3 else []), *crop_polys(s), *([toe] if len(toe) >= 3 else []), *wet]
 
 
+def seating_window(s: Settlement, seat: tuple[float, float], households: int) -> tuple[float, float, float, float]:
+    """The box the seat region is rasterized over: the margin's seat, out twice the radius the households' own seating ground
+    would fill (`SEATING_GROUND_FT` each), clipped to the canvas. A COST WINDOW, NEVER AN ANSWER (feature 318, the perf-audit's
+    correction): a seat whose boxes leave it is offered for the placer to judge (`SeatRegion.offer`), and the reach flood is
+    seeded at its inner edges (`SeatRegion._reached`), so no seat is refused for where it stands - the pool's houses are the
+    ones the canvas-wide region seated. The free-ground grid is rasterized over it too, and decides a cell past it as one
+    inside (`FreeGround._cell_beyond`). SNAPPED TO THE CANVAS'S OWN CELL GRID (`FREE_GROUND_CELL`), so every cell is the one a
+    canvas-wide grid would have: the growth's settle stops where a cell says "not surely taken", so cells shifted off the
+    canvas's grid settled seats elsewhere and Kuwabata and Sawada seated other houses.
+
+    Research: plumbing - NONE: a raster's extent, which bounds its cost and no seat
+    """
+    r = s.px(2.0 * SEATING_GROUND_FT * math.sqrt(max(households, 1) / math.pi))
+    c = FREE_GROUND_CELL
+    return (max(0.0, math.floor((seat[0] - r) / c) * c), max(0.0, math.floor((seat[1] - r) / c) * c), min(float(s.W), seat[0] + r), min(float(s.H), seat[1] + r))
+
+
 def install_site_boundary(s: Settlement, plan: SitePlan) -> None:
     """Compute the boundary for this roll's seat and set it on the settlement for the fit test (`_site_chains`,
     `_site_corridors`), recording it in the manifest for the gate and the measurement - no page element (FR-001).
@@ -474,7 +530,7 @@ def install_site_boundary(s: Settlement, plan: SitePlan) -> None:
     chains, corridors, outline = site_boundary(s, seat)
     s._site_chains = chains
     s._site_corridors = SiteCorridors(corridors, outline)
-    s._free_ground = FreeGround(chains, corridors, outline, free_ground_bounds(chains, s.px(FIELD_REACH_FT) + 2.0 * BUNDLE_PITCH, float(s.W), float(s.H)))
+    s._free_ground = FreeGround(chains, corridors, outline, seating_window(s, seat, plan.spec.households))
     s._unreachable = UnreachableGround(web_hard_ground(s, plan))
     s.M["site_boundary"] = {
         "chords": [[[round(a[0], 1), round(a[1], 1)], [round(b[0], 1), round(b[1], 1)], [round(n[0], 4), round(n[1], 4)]] for ch in chains for a, b, n in ch],

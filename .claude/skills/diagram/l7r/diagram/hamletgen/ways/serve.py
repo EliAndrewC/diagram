@@ -295,8 +295,7 @@ def to_first_arrival(path: Sequence[Pt], segs: Sequence[tuple[Pt, Pt]], touch: f
     one of Kashikawa's routed along its street before meeting it, a doubled tail and a sliver of grass the settle refused).
 
     Research:
-        a door path meets its way as a T - research/questions/0081-village-lanes.drawing.html: ended square at its first
-            arrival"""
+        a door path meets its way as a T - research/questions/0081-village-lanes.drawing.html: joined at a T, ended square at its first arrival"""
     import numpy as np  # bound here, not at import (feature 237)
 
     pts = list(path)

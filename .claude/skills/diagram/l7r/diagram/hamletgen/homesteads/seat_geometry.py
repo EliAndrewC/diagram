@@ -14,7 +14,7 @@ from l7r.diagram.settlement import Settlement, seg_dist
 from l7r.diagram.settlement.rolling.bearing import turned_reach
 
 from ..consts import CLUSTER_DRAWN_ASPECT, CLUSTER_SHAPES, Pt
-from ..plan import SitePlan, _roll
+from ..plan import _roll
 from .seats import cluster_aspect
 
 
@@ -86,28 +86,13 @@ def in_a_shapes_band(houses: Sequence[dict[str, Any]]) -> bool:
     """THE ONE PREDICATE of `test_the_cluster_draws_inside_the_band_of_the_shape_it_declared` (feature 287, homes wave 5):
     do the houses draw an aspect (`cluster_aspect`) some shape's band holds (`CLUSTER_DRAWN_ASPECT`)? Every aspect is at
     least round's floor, so the one way out is past the longest band's ceiling - elongated's 12:1 - where `shapes_drawn_at`
-    could only name the nearest band, which the drawing breaks. `seat_every_household` keeps no seating that fails it.
+    could only name the nearest band, which the drawing breaks. Nothing is refused for it (feature 318: the 12:1 refusal that
+    took a seating back went with every other take-back); the declared shape records what was drawn (`declare_cluster_shape`).
 
-    Research: a cluster's longest draw - UNRESEARCHED: past the longest band's ceiling (`CLUSTER_DRAWN_ASPECT`, 12:1) no seating is kept
+    Research: a cluster's longest draw - UNRESEARCHED: past the longest band's ceiling (`CLUSTER_DRAWN_ASPECT`, 12:1), read and refusing nothing
     """
     drawn = cluster_aspect([h["x"] for h in houses] or [0.0], [h["y"] for h in houses] or [0.0])
     return any(lo <= drawn <= hi for lo, hi in CLUSTER_DRAWN_ASPECT.values())
-
-
-def drawn_in_band(s: Settlement, plan: SitePlan) -> bool:
-    """Does this seating draw a shape's band - or is it a row village, which is no cluster and takes no band?
-
-    A ROW VILLAGE IS A ROW (the GM, 2026-10-01, tripwire seed 33): its farms stand one frontage apart along their street,
-    54 to 240 ft on the measured planned rows (research/questions/0033-row-villages-resson.html), so ten farms run 490 to
-    2,160 ft - 5:1 to 22:1 against one homestead's depth - and the 12:1 ceiling, a CLUSTER's (`CLUSTER_DRAWN_ASPECT`),
-    refused every margin of a ten-farm row. The linear form's row is held by `row_rules` (each farm on its street, none
-    behind another); the band holds the forms that draw a cluster.
-
-    Research:
-        a row takes no band - research/questions/0033-row-villages-resson.html, research/questions/0033-row-villages-resson.drawing.html: the linear form exempt from the cluster band
-        a cluster draws a shape's band - UNRESEARCHED: every other form held to `in_a_shapes_band`
-    """
-    return plan.settlement_form == "linear" or in_a_shapes_band(s.M.get("houses") or [])
 
 
 def declare_cluster_shape(houses: Sequence[dict[str, Any]], shape: str | None, seed: int) -> dict[str, Any]:

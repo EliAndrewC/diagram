@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-03T20:52:28Z",
+  "target": "review-accept",
+  "commit": "cc146e2cd",
+  "outcome": "permitted",
+  "why": "review-accept glyph-check--farmhouse F5: confirmation or no-norm nitpick from the round-4 PASS, nothing to fix"
+}

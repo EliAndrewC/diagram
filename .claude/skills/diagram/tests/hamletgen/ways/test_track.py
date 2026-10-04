@@ -234,21 +234,18 @@ def test_a_bearing_that_only_clips_the_field_is_kept_for_route_around() -> None:
     assert hg.path_violations(track, fence, None, []) > 0 and track[0] == (700.0, 200.0)
 
 
-def test_the_gateway_stands_on_the_exit_strip_the_seating_reserved() -> None:
-    """Feature 287, plan M4b: the connector leaves along the exit strip, measured from the strip's own start (the seat's
-    center) rather than the cloud's mean, so a corridor the web draws along the strip meets the track."""
+def test_the_gateway_stands_abreast_of_the_cloud_past_its_downslope_edge() -> None:
+    """Feature 287, plan M4b, as feature 320 leaves it (no exit strip): the gateway is measured from the placed houses - abreast
+    of the cloud's mean, past its downslope edge."""
     from l7r.diagram.hamletgen.ways import _cluster_gateway
-    from l7r.diagram.settlement import Settlement, seg_dist
+    from l7r.diagram.settlement import Settlement
 
     s = Settlement(1000, 1000, seed=1)
     s.meta(name="G", scale="hamlet", ftpx=1, down_deg=90)
     seat = {"cx": 500.0, "cy": 500.0, "along": (1.0, 0.0), "out": (0.0, 1.0), "half": 200.0, "depth": 80.0}
     s.M["houses"] += [{"x": 560.0, "y": 520.0, "w": 50.0, "h": 30.0}, {"x": 640.0, "y": 470.0, "w": 50.0, "h": 30.0}]
-    off = _cluster_gateway(s, seat, (0.0, 0.0))
-    assert off[0] == 600.0, "without a strip, abreast of the cloud's mean"
-    s.M["access_exit"] = [[500.0, 500.0], [500.0, 900.0]]
-    on = _cluster_gateway(s, seat, (0.0, 0.0))
-    assert seg_dist(on[0], on[1], (500.0, 500.0), (500.0, 900.0)) < 1e-9 and on[1] > 520.0, "on the strip, past the cloud"
+    g = _cluster_gateway(s, seat, (0.0, 0.0))
+    assert g[0] == 600.0 and g[1] > 520.0, "abreast of the cloud's mean, past its downslope edge"
 
 
 def _box_on(a, b):
@@ -303,47 +300,85 @@ def test_a_connector_through_a_building_or_over_the_brook_twice_takes_the_dry_ex
     assert track.connector_through(s, plan, run, [], [], [], []) == dry
 
 
-def test_the_gateway_stands_past_every_corridor_on_the_strip_and_on_it_clear_of_the_field() -> None:
-    """Feature 287 wave 6: the web draws the exit strip as a tree lane from its innermost attachment to the connector's start
-    (`tree.strip_run`), so the connector starts ON the strip - along the strip's own bearing where it was turned off the
-    seat's outward one - no nearer the center than the farthest corridor hanging from it, and walked out along the strip
-    until the field's envelope leaves it clear (`gate_on_the_strip`)."""
+def test_the_connector_starts_clear_of_the_field() -> None:
+    """`gate_out_of_the_field`: the connector's start pushed out of the field's envelope by `SPUR_SETBACK`; a start already
+    clear stays."""
     from l7r.diagram.hamletgen.ways import track
-    from l7r.diagram.settlement import Settlement, seg_dist
 
-    s = Settlement(1000, 1000, seed=1)
-    s.meta(name="G", scale="hamlet", ftpx=1, down_deg=90)
-    seat = {"cx": 500.0, "cy": 500.0, "along": (1.0, 0.0), "out": (0.0, 1.0), "half": 200.0, "depth": 80.0}
-    s.M["houses"] += [{"x": 560.0, "y": 520.0, "w": 50.0, "h": 30.0}]
-    s.M["access_exit"] = [[500.0, 500.0], [900.0, 900.0]]  # turned 45 degrees off the seat's outward bearing
-    s.M["access_corridors"] = [{"pts": [[600.0, 700.0], [650.0, 650.0]], "of": [620.0, 720.0]}, {"pts": [[1.0, 1.0]]}]
-    g = track._cluster_gateway(s, seat, (0.0, 0.0))
-    assert seg_dist(g[0], g[1], (500.0, 500.0), (900.0, 900.0)) < 1e-6 and g[0] > 650.0, "on the strip, past the corridor at (650, 650)"
     field = [(650.0, 650.0), (760.0, 650.0), (760.0, 760.0), (650.0, 760.0)]
-    on = track.gate_on_the_strip(s, field, (700.0, 703.0))
-    assert on == track.push_out_of(field, on, track.SPUR_SETBACK) and abs(on[0] - on[1]) < 1e-9 and on[0] > 760.0, "walked out along it"
-    assert track.gate_on_the_strip(s, [(0.0, 0.0), (1000.0, 0.0), (1000.0, 1000.0), (0.0, 1000.0)], (600.0, 600.0)) == (900.0, 900.0), "to its end at most"
-    del s.M["access_exit"]
-    assert track.gate_on_the_strip(s, field, (700.0, 703.0)) == track.push_out_of(field, (700.0, 703.0), track.SPUR_SETBACK)
+    on = track.gate_out_of_the_field(field, (700.0, 703.0))
+    assert on == track.push_out_of(field, (700.0, 703.0), track.SPUR_SETBACK) and on != (700.0, 703.0)
+    assert track.gate_out_of_the_field(field, (100.0, 100.0)) == (100.0, 100.0)
 
 
-def test_a_connector_start_a_few_feet_off_the_strip_is_set_back_on_it_and_one_folding_on_it_is_refused() -> None:
-    """The threading can move the connector's start a few feet off the strip (cohort seed 37: 8 ft), and the strip drawn up
-    to it ended in a hook: `on_the_strip` sets it back on its foot where the connector still keeps the law. And a connector
-    leaving the strip turned back on it is refused (`folds_on_the_strip`): the fold at the two tree lanes' joint no repair
-    could mend."""
+def test_the_recorded_track_is_the_track_out_the_homesteads_stage_chose() -> None:
+    """Feature 320 (FR-008): `recorded_track` reads the track out the homesteads stage chose once the last house stood
+    (`way_out_track`); none where it is absent or under two points."""
+    from types import SimpleNamespace
+
     from l7r.diagram.hamletgen.ways import track
 
-    M = {"meta": {"ftpx": 1.0}, "access_exit": [[0.0, 0.0], [400.0, 0.0]]}
-    assert track.on_the_strip(M, [(300.0, 8.0), (300.0, 900.0)]) == [(300.0, 0.0), (300.0, 900.0)]
-    assert track.on_the_strip(M, [(300.0, 30.0), (300.0, 900.0)]) == [(300.0, 30.0), (300.0, 900.0)], "too far off: as it came"
-    assert track.on_the_strip(M, [(300.0, 0.0), (300.0, 900.0)]) == [(300.0, 0.0), (300.0, 900.0)]
-    assert track.on_the_strip({"meta": {}}, [(1.0, 1.0), (2.0, 2.0)]) == [(1.0, 1.0), (2.0, 2.0)]
-    assert track.on_the_strip(M, [(300.0, 5.0), (0.0, 5.0), (-10.0, -500.0)]) == [(300.0, 5.0), (0.0, 5.0), (-10.0, -500.0)], "moved it would fold"
-    assert track.folds_on_the_strip(M, [(400.0, 0.0), (10.0, 5.0)]) and not track.folds_on_the_strip(M, [(400.0, 0.0), (900.0, 50.0)])
-    assert not track.folds_on_the_strip(M, [(400.0, 50.0), (0.0, 50.0)]), "off the strip"
-    assert not track.folds_on_the_strip(M, [(400.0, 0.0), (400.0, 0.0)]) and not track.folds_on_the_strip({}, [(0.0, 0.0), (1.0, 1.0)])
-    assert not track.connector_keeps_the_law(M, [(400.0, 0.0), (10.0, 5.0)])
+    assert track.recorded_track(SimpleNamespace(M={"way_out_track": [[0.0, 0.0], [40.0, 0.0]]})) == [(0.0, 0.0), (40.0, 0.0)]
+    assert track.recorded_track(SimpleNamespace(M={})) is None and track.recorded_track(SimpleNamespace(M={"way_out_track": [[0.0, 0.0]]})) is None
+
+
+def _the_choice_watched(monkeypatch, polder: bool):  # type: ignore[no-untyped-def]
+    """`choose_track_out` on the walled settlement with its sweeps replaced by recorders: (track, calls)."""
+    from l7r.diagram.hamletgen.consts import POLDER_ARCHETYPES
+    from l7r.diagram.hamletgen.ways import gateway, track
+
+    s, plan = _walled_settlement()
+    plan.seat = hg.seat_cluster(plan)
+    if polder:
+        plan.field_archetype = sorted(POLDER_ARCHETYPES)[0]
+    calls: dict = {}
+
+    def swept(name):  # type: ignore[no-untyped-def]
+        def run(*a, **k):  # type: ignore[no-untyped-def]
+            calls[name] = (a, k)
+            return [(1.0, 2.0), (3.0, 4.0)]
+
+        return run
+
+    monkeypatch.setattr(track, "connector_track", swept("connector_track"))
+    monkeypatch.setattr(gateway, "gateway_track", swept("gateway_track"))
+    monkeypatch.setattr(track, "connector_through", lambda s, plan, run, *a: [*run, (9.0, 9.0)])
+    return track.choose_track_out(s, plan), calls, s, plan
+
+
+def test_the_track_out_is_chosen_once_by_the_gateway_on_a_valley_and_the_sweep_on_a_polder(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """Feature 320 (FR-008): `choose_track_out` is the track's whole course in one choice - the gateway's track on a valley,
+    the connector's sweep from the gate on a polder - then threaded through the steadings (`connector_through`); the gate is
+    the cluster's gateway out of the field, and the grove bands are handed to the dry exit."""
+    from l7r.diagram.hamletgen.ways import track
+
+    got, calls, s, plan = _the_choice_watched(monkeypatch, polder=False)
+    assert got == [(1.0, 2.0), (3.0, 4.0), (9.0, 9.0)] and set(calls) == {"gateway_track"}, "a valley: the gateway's track, threaded"
+    gate = calls["gateway_track"][0][4]
+    assert gate == track.gate_out_of_the_field(plan.envelope, gate), "the gate stands out of the field"
+    assert plan.grove_bands == [p for p, _o, k in track._homestead_polys(s) if k == "groves"]
+    got, calls, s, plan = _the_choice_watched(monkeypatch, polder=True)
+    assert got == [(1.0, 2.0), (3.0, 4.0), (9.0, 9.0)] and set(calls) == {"connector_track"}, "a polder: the sweep from the gate"
+    assert calls["connector_track"][1]["avoid"][0] == list(plan.envelope)
+
+
+@pytest.mark.parametrize("polder", [False, True])
+def test_stage_track_draws_the_recorded_track_as_chosen_on_both_branches(monkeypatch, polder: bool) -> None:  # type: ignore[no-untyped-def]
+    """Feature 320 (FR-008): where the homesteads stage recorded the track out, `stage_track` draws exactly it as the connector
+    and chooses nothing again - on the valley branch and the polder branch alike."""
+    from l7r.diagram.hamletgen.consts import POLDER_ARCHETYPES
+    from l7r.diagram.hamletgen.ways import track
+
+    s, plan = _walled_settlement()
+    plan.seat = hg.seat_cluster(plan)
+    if polder:
+        plan.field_archetype = sorted(POLDER_ARCHETYPES)[0]
+    s.M["way_out_track"] = [[1384.0, 700.0], [1500.0, 700.0], [1600.0, 700.0]]
+    monkeypatch.setattr(track, "choose_track_out", lambda *a: pytest.fail("chosen again"))
+    monkeypatch.setattr(track, "connector_dry_exit", lambda *a: [(1384.0, 700.0), (1600.0, 700.0)])
+    track.stage_track(s, plan)
+    con = [ln for ln in s.M.get("lanes") or [] if ln.get("connector")]
+    assert len(con) == 1 and [tuple(q) for q in con[0]["pts"]] == [(1384.0, 700.0), (1500.0, 700.0), (1600.0, 700.0)]
 
 
 def test_a_point_is_pushed_clear_of_every_band_it_stands_in_or_near() -> None:
@@ -357,15 +392,13 @@ def test_a_point_is_pushed_clear_of_every_band_it_stands_in_or_near() -> None:
     assert clear_of_bands((100.0, 200.0), [band], 12.0) == (100.0, 200.0)
 
 
-def test_a_walled_in_gateway_is_left_by_the_strip_or_a_turned_bearing(monkeypatch) -> None:  # type: ignore[no-untyped-def]
-    """Feature 315 (cohort seed 19): where the sweep from the gateway finds no dry way out, the track runs out along the exit
-    strip from its end (`track_from_the_strip_end`), or - with no strip - from the first gateway on a bearing turned off the
-    downslope whose sweep finds one (`turned_gateway_track`); none, and it is refused."""
+def test_a_walled_in_gateway_is_left_on_a_turned_bearing(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """Feature 315 (cohort seed 19): where the sweep from the gateway finds no dry way out, the track leaves from the first
+    gateway on a bearing turned off the downslope whose sweep finds one (`turned_gateway_track`); none, and it is refused."""
     from l7r.diagram.hamletgen.ways import gateway as tr
 
     class _S:
-        def __init__(self, strip):  # type: ignore[no-untyped-def]
-            self.M = {"access_exit": strip}
+        M: dict = {}
 
     walled = {(0.0, 0.0)}
 
@@ -375,12 +408,6 @@ def test_a_walled_in_gateway_is_left_by_the_strip_or_a_turned_bearing(monkeypatc
         return [start, (start[0] + 500.0, start[1])]
 
     monkeypatch.setattr(tr, "connector_track", sweep)
-    out = tr.track_from_the_strip_end(_S([(0.0, 0.0), (40.0, 0.0)]), None, (10.0, 0.0), [], [], [], [])  # type: ignore[arg-type]
-    assert out == [(10.0, 0.0), (40.0, 0.0), (540.0, 0.0)], "out along the strip, then the sweep from its end"
-    assert tr.track_from_the_strip_end(_S([(0.0, 0.0), (10.0, 0.0)]), None, (10.0, 0.0), [], [], [], [])[:2] == [(10.0, 0.0), (510.0, 0.0)], "the gateway at the strip's end"  # type: ignore[arg-type]
-    with pytest.raises(tr.NoDryExit):
-        tr.track_from_the_strip_end(_S([]), None, (10.0, 0.0), [], [], [], [])  # type: ignore[arg-type]
-
     turns: list[float] = []
 
     def gateway(s, seat, band, deg=0.0):  # type: ignore[no-untyped-def]
@@ -388,38 +415,34 @@ def test_a_walled_in_gateway_is_left_by_the_strip_or_a_turned_bearing(monkeypatc
         return (0.0, 0.0) if deg != -60.0 else (5.0, 5.0)
 
     monkeypatch.setattr(tr, "_cluster_gateway", gateway)
-    monkeypatch.setattr(tr, "gate_on_the_strip", lambda s, env, g: g)
+    monkeypatch.setattr(tr, "gate_out_of_the_field", lambda env, g: g)
 
     class _P:
         envelope: list = []
 
-    got = tr.turned_gateway_track(_S(None), _P(), {}, (0.0, 0.0), [], [], [], [])  # type: ignore[arg-type]
+    got = tr.turned_gateway_track(_S(), _P(), {}, (0.0, 0.0), [], [], [], [])  # type: ignore[arg-type]
     assert got[0] == (5.0, 5.0) and turns == [30.0, -30.0, 60.0, -60.0], "the nearest turn whose sweep is dry"
     walled.add((5.0, 5.0))
     with pytest.raises(tr.NoDryExit):
-        tr.turned_gateway_track(_S(None), _P(), {}, (0.0, 0.0), [], [], [], [])  # type: ignore[arg-type]
+        tr.turned_gateway_track(_S(), _P(), {}, (0.0, 0.0), [], [], [], [])  # type: ignore[arg-type]
 
 
 def test_the_gateway_track_falls_back_only_when_the_sweep_is_walled(monkeypatch) -> None:  # type: ignore[no-untyped-def]
-    """Feature 315: `gateway_track` - the sweep's track where it is dry; walled, the strip's end where the seating reserved a
-    strip, else a turned bearing."""
+    """Feature 315: `gateway_track` - the sweep's track where it is dry; walled, a turned bearing."""
     from l7r.diagram.hamletgen.ways import gateway as tr
 
     class _S:
-        def __init__(self, strip):  # type: ignore[no-untyped-def]
-            self.M = {"access_exit": strip}
+        M: dict = {}
 
-    monkeypatch.setattr(tr, "track_from_the_strip_end", lambda *a: ["strip"])
     monkeypatch.setattr(tr, "turned_gateway_track", lambda *a: ["turned"])
     monkeypatch.setattr(tr, "connector_track", lambda plan, start, **k: [start])
-    assert tr.gateway_track(_S(None), None, {}, (0.0, 0.0), (1.0, 1.0), [], [], [], []) == [(1.0, 1.0)]  # type: ignore[arg-type]
+    assert tr.gateway_track(_S(), None, {}, (0.0, 0.0), (1.0, 1.0), [], [], [], []) == [(1.0, 1.0)]  # type: ignore[arg-type]
 
     def walled(plan, start, **k):  # type: ignore[no-untyped-def]
         raise tr.NoDryExit("walled")
 
     monkeypatch.setattr(tr, "connector_track", walled)
-    assert tr.gateway_track(_S([(0, 0), (1, 1)]), None, {}, (0.0, 0.0), (1.0, 1.0), [], [], [], []) == ["strip"]  # type: ignore[arg-type]
-    assert tr.gateway_track(_S(None), None, {}, (0.0, 0.0), (1.0, 1.0), [], [], [], []) == ["turned"]  # type: ignore[arg-type]
+    assert tr.gateway_track(_S(), None, {}, (0.0, 0.0), (1.0, 1.0), [], [], [], []) == ["turned"]  # type: ignore[arg-type]
 
 
 def test_a_turned_gateway_leaves_the_cloud_on_its_own_bearing() -> None:

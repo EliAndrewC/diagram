@@ -160,6 +160,15 @@ OUT=$(syncmain "$D" sync-in); check "sync-in with a stale origin" 0 $?
 expect_out "origin of"
 [ "$(git -C "$D/main/.clones/c" remote get-url origin)" = "$D/github.git" ] && PASS=$((PASS+1)) || { echo "FAIL  origin not re-pointed"; FAIL=$((FAIL+1)); }
 
+echo "8b. the MIRROR's origin is the GM's: never re-pointed, and the mirror still refreshes by URL (2026-10-03)"
+D=$(topology h2)
+git -C "$D/main" remote set-url origin "ssh://git@example.invalid/gm-own-remote.git"
+( cd "$D/seed" && echo more > g && git add -A && git commit -qm upstream && git push -q "$D/github.git" HEAD:main )
+OUT=$(syncmain "$D" sync-in); check "sync-in with the GM's SSH origin on the mirror" 0 $?
+[ "$(git -C "$D/main" remote get-url origin)" = "ssh://git@example.invalid/gm-own-remote.git" ] && PASS=$((PASS+1)) || { echo "FAIL  the mirror's origin was re-pointed"; FAIL=$((FAIL+1)); }
+[ "$(git -C "$D/main" rev-parse HEAD)" = "$(git -C "$D/github.git" rev-parse main)" ] && PASS=$((PASS+1)) || { echo "FAIL  mirror did not fast-forward by URL"; FAIL=$((FAIL+1)); }
+[ "$(git -C "$D/main" rev-parse origin/main)" = "$(git -C "$D/github.git" rev-parse main)" ] && PASS=$((PASS+1)) || { echo "FAIL  the mirror's origin/main was not refreshed"; FAIL=$((FAIL+1)); }
+
 echo "9. the build's push line is a compare-and-swap: main moved between fetch and push -> rejected, nothing lands (R3, T036)"
 D=$(topology i)
 git clone -q "$D/github.git" "$D/build"; git clone -q "$D/github.git" "$D/other"

@@ -36,15 +36,12 @@ def _cluster_gateway(s: Settlement, seat: Mapping[str, object], fallback: Pt, tu
     threshold the retired `houses_off_corridors` check measured - and no amount of routing around the fabric fixed it,
     because the route's own start was in the middle of it.
 
-    So: where the seating reserved an exit strip, the gateway is ON it - along the strip from its start, past the
-    farthest house and corridor that hangs on it (feature 287 M4b; `gate_on_the_strip`). Where there is none, take the
-    cloud's own extent along the seat axes and put the gateway on its DOWNSLOPE edge, clear of the last house. The fallback is the old band point, for the case where no house has been
+    So: take the cloud's own extent along the seat axes and put the gateway on its DOWNSLOPE edge, clear of the last house. The fallback is the old band point, for the case where no house has been
     placed yet - which cannot happen in the shipped order, but a helper that assumes its caller is
     the failure mode this file has met repeatedly.
 
     Research:
-        track leaves downslope - research/questions/0081-village-lanes.drawing.html: from the cluster's downslope edge (or a bearing turned off it), or along
-            the exit strip
+        track leaves downslope - research/questions/0081-village-lanes.drawing.html: from the cluster's downslope edge (or a bearing turned off it)
         gateway clear of what stands - UNRESEARCHED: `TRACK_FABRIC_GAP` plus 8 px past the farthest house, well or yard
     """
     hs = s.M.get("houses") or []
@@ -61,23 +58,6 @@ def _cluster_gateway(s: Settlement, seat: Mapping[str, object], fallback: Pt, tu
     # how far the cloud actually reaches, along each seat axis
     out_reach = max((x - cx) * ox + (y - cy) * oy for x, y in zip(xs, ys, strict=False))
     along_mid = sum((x - cx) * ax + (y - cy) * ay for x, y in zip(xs, ys, strict=False)) / len(xs)
-    # THE GATEWAY STANDS ON THE EXIT STRIP (feature 287, plan M4b): where the seating reserved one, the track leaves along
-    # it - measured from the strip's own start (the seat's center) rather than from the cloud's mean - so the reserved tree
-    # every corridor hangs from runs on into the connector, and a corridor the web draws along the strip meets it
-    # (`corridors.corridor_chain`). Off the strip, a corridor walked to the track would cross unreserved ground.
-    exit_strip = s.M.get("access_exit")
-    if exit_strip:
-        cx, cy = float(exit_strip[0][0]), float(exit_strip[0][1])
-        # ...ALONG THE STRIP ITSELF, AND PAST EVERY CORRIDOR HANGING FROM IT (feature 287 wave 6): the web draws the strip as a
-        # tree lane from its innermost attachment to where the connector starts (`tree.strip_run`), and the seating judged it
-        # to its end - so the connector starts ON it (the strip is turned off the outward bearing where that was refused,
-        # `access.exit_bearing`) and no nearer the center than the farthest corridor on it
-        (ex, ey), d = (float(exit_strip[1][0]) - cx, float(exit_strip[1][1]) - cy), math.dist(exit_strip[0], exit_strip[1]) or 1.0
-        ox, oy = ex / d, ey / d
-        ends = [c["pts"][-1] for c in s.M.get("access_corridors") or [] if len(c.get("pts") or ()) >= 2]
-        on = [(float(q[0]) - cx) * ox + (float(q[1]) - cy) * oy for q in ends if abs(-(float(q[0]) - cx) * oy + (float(q[1]) - cy) * ox) <= 1.5]
-        out_reach = max([(x - cx) * ox + (y - cy) * oy for x, y in zip(xs, ys, strict=False)] + on)
-        along_mid = 0.0
     # THE CLOUD IS NOT ONLY THE HOUSES. Wells, byres, sheds and yards are seated in
     # `stage_appurtenances`, which runs BEFORE the track, and some of them stand outside the house
     # extent. A gateway measured from houses alone landed 3.6 px from a well on the reference hamlet
@@ -90,32 +70,13 @@ def _cluster_gateway(s: Settlement, seat: Mapping[str, object], fallback: Pt, tu
     return push_clear_of_fabric((cx + ax * along_mid, cy + ay * along_mid), (ox, oy), out_reach + TRACK_FABRIC_GAP + 8.0, fabric)
 
 
-STRIP_STEP_PX = 6.0
-"""The step a gateway on the exit strip is walked out along it until it clears the field's envelope (`gate_on_the_strip`):
-`push_clear_of_fabric`'s own step."""
-
-
-def gate_on_the_strip(s: Settlement, envelope: Poly, gate: Pt) -> Pt:
-    """The connector's start: `gate` pushed out of the field's `envelope` (`push_out_of`, the rule the track has always kept),
-    but where the seating reserved an exit strip, ON it - walked out along the strip until the envelope leaves it clear, to
-    the strip's end at most - since the web draws the strip as a tree lane up to the connector's start (`tree.strip_run`,
-    feature 287 wave 6), and a start pushed a few feet off it left the strip ending in a hook (cohort seed 37: 8 ft).
+def gate_out_of_the_field(envelope: Poly, gate: Pt) -> Pt:
+    """The connector's start: `gate` pushed out of the field's `envelope` (`push_out_of`, the rule the track has always kept).
 
     Research:
         connector starts off the crop - research/questions/0081-village-lanes.drawing.html: the start pushed out of the field envelope
-        start on the exit strip - research/questions/0081-village-lanes.drawing.html: walked along the strip so the lane up to it ends in no hook
         setback from the field - UNRESEARCHED: `SPUR_SETBACK` 17 ft clear of the field envelope"""
-    strip = s.M.get("access_exit")
-    if not strip:
-        return push_out_of(envelope, gate, SPUR_SETBACK)
-    a, b = (float(strip[0][0]), float(strip[0][1])), (float(strip[1][0]), float(strip[1][1]))
-    d = math.dist(a, b) or 1.0
-    t = min(d, max(0.0, ((gate[0] - a[0]) * (b[0] - a[0]) + (gate[1] - a[1]) * (b[1] - a[1])) / d))
-    while True:
-        g = (a[0] + (b[0] - a[0]) * t / d, a[1] + (b[1] - a[1]) * t / d)
-        if push_out_of(envelope, g, SPUR_SETBACK) == g or t >= d:
-            return g
-        t = min(d, t + STRIP_STEP_PX)
+    return push_out_of(envelope, gate, SPUR_SETBACK)
 
 
 def _cluster_edge_toward(s: Settlement, target: Pt, fallback: Pt) -> Pt:

@@ -22,7 +22,7 @@ from l7r.diagram.settlement.city.bridges import flooded_ground
 from . import law
 from .checks import unreached_houses
 from .clearance import kink_spans
-from .corridors import FIELD_ROLE, is_tree
+from .corridors import is_tree
 from .geom import memo_ground, worked_ground
 from .settle import (
     _crossing_fault,
@@ -39,7 +39,7 @@ from .settle import (
     settle_widths,
     unsettled,
 )
-from .tree import prune_the_tree, settle_defer, tree_faults, tree_records
+from .tree import prune_the_tree, settle_defer, tree_faults
 
 LAST_RESORT_PASSES = 8
 """How many times the last resort drops and re-asks before it refuses. Each pass drops at least one ordinary lane, or it
@@ -166,7 +166,7 @@ def refuse_unreached(M: Mapping[str, Any]) -> None:
     why = []
     if far := unreached_houses(M):
         why.append(f"{len(far)} farmhouse(s) stand off the connected way network, at {[(x, y) for x, y, _d in far[:4]]}")
-    if law.field_unreached(M) and any(r["role"] == FIELD_ROLE for r in tree_records(M)):
-        why.append("the field its reserved corridor runs to is reached by no way")
+    if law.field_unreached(M):  # ...on a brook map, whatever was reserved: none is, since feature 320 (FR-004)
+        why.append("the field is reached by no way")
     if why:
         raise WebRefused("the settled web leaves unreached what the seating reserved a way for: " + "; ".join(why))
