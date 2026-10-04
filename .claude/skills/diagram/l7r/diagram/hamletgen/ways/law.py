@@ -715,14 +715,12 @@ def breaks_through(pts: Sequence[Pt], solid: Sequence[tuple[float, float, float,
 
 def breaks_mid_run(M: Mapping[str, Any]) -> list[tuple[int, int]]:
     """The midpoints of lane segments longer than `BREAK_SPAN_FT` that stand inside a building's box (`breaks_through`)."""
-    solid = solid_boxes(M)
-    return [(round(mid[0]), round(mid[1])) for p in _ways(M) for _k, mid in breaks_through(p, solid)]
+    return [(round(mid[0]), round(mid[1])) for solid in (solid_boxes(M),) for p in _ways(M) for _k, mid in breaks_through(p, solid)]
 
 
 def fouls_fabric(pts: Poly, width: float, houses: Sequence[Mapping[str, Any]], fabric: Sequence[tuple[Poly, Pt | None, str]], own: Pt | None = None) -> bool:
-    """Does a lane of this width along `pts` put ink on a farmhouse (`house_hit`), or pass within `_TOUCH_GAP` of another
-    household's threshing yard or garden (`_crosses_fabric`)? `fabric` is `_homestead_polys`' (polygon, owner, kind); a door
-    path is exempt only from its OWN steading's yard and garden (`own`, its house's center).
+    """Does a lane of this width along `pts` put ink on a farmhouse (`house_hit`), or pass within `_TOUCH_GAP` of another household's
+    threshing yard or garden (`_crosses_fabric`)? `fabric`: `_homestead_polys`'; a door path is exempt from its OWN (`own`).
     Research:
         nothing built on a lane - research/questions/0081-village-lanes.drawing.html: no tread on another household's yard or bed
         foul margin - UNRESEARCHED: within 4 ft of another's yard or bed"""
