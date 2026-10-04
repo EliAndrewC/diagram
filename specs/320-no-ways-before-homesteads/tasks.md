@@ -1,6 +1,6 @@
 # Tasks: no ways placed before the homesteads (feature 320)
 
-**Input**: plan.md (D1-D5)
+**Input**: plan.md (D1-D6)
 
 ## Occasions
 
@@ -22,4 +22,8 @@
 - [ ] T06 the bookends and the perf records their band owes; put to the GM were the reservations faster (FR-005, SC-004)
       research: rendering
 - [ ] T07 the record and the claims: 0081's drawing page, the changed units' claims, their checks; the occasions' reviews (D5, FR-006, SC-005)
+      research: rendering
+- [ ] T08 the marsh ends (Amendment 1): the short ripple in the shaped outline and its guarantee test (D6, FR-007, SC-006)
+      research: rendering
+- [ ] T09 one decision for the track out (Amendment 2): chosen once the last house stands against the homesteads as seated, recorded, the ways laid to it, drawn as chosen (D2, FR-008, SC-007)
       research: rendering

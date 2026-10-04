@@ -83,12 +83,12 @@ def test_the_records_are_read_as_runs_and_each_hangs_from_the_earliest_it_stands
     assert tree.hosts([{"pts": [(0.0, 900.0), (5.0, 900.0)]}], None) == [None], "on nothing: no host"
 
 
-def test_the_root_is_the_track_out_as_drawn_else_the_stretch_from_the_gate() -> None:
-    """`_root` (feature 320): the connector's points where it is drawn; before that, the stretch of it from the way out's gate
-    the households' ways are laid to (`way_out_root`); neither, none. `lanes_of` draws no lane of its own for the root."""
+def test_the_root_is_the_track_out_as_drawn_else_the_track_as_chosen() -> None:
+    """`_root` (feature 320): the connector's points where it is drawn; before that, the track out as chosen once the last
+    house stood, which the households' ways are laid to (`way_out_track`); neither, none. `lanes_of` draws no lane of its own for the root."""
     M = _tree()
     assert tree._root(M) == [(400.0, 0.0), (0.0, 0.0), (-1000.0, 0.0)]
-    assert tree._root({"lanes": [], "way_out_root": [[5.0, 5.0], [6.0, 5.0]]}) == [(5.0, 5.0), (6.0, 5.0)]
+    assert tree._root({"lanes": [], "way_out_track": [[5.0, 5.0], [6.0, 5.0]]}) == [(5.0, 5.0), (6.0, 5.0)]
     assert tree._root({"lanes": []}) is None
     recs = tree.tree_records(M)
     host = tree.hosts(recs, tree._root(M))

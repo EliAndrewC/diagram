@@ -311,24 +311,74 @@ def test_the_connector_starts_clear_of_the_field() -> None:
     assert track.gate_out_of_the_field(field, (100.0, 100.0)) == (100.0, 100.0)
 
 
-def test_the_connector_runs_on_from_the_root_the_households_ways_reach() -> None:
-    """Feature 320: the connector is swept from the far end of the root the homesteads stage recorded (`recorded_root`), and
-    drawn with the root before it (`with_the_root`) - the gate, then along the root - joined by a leg where the sweep began
-    elsewhere; kept only where the whole keeps the connector's law, else the run as it came."""
+def test_the_recorded_track_is_the_track_out_the_homesteads_stage_chose() -> None:
+    """Feature 320 (FR-008): `recorded_track` reads the track out the homesteads stage chose once the last house stood
+    (`way_out_track`); none where it is absent or under two points."""
     from types import SimpleNamespace
 
     from l7r.diagram.hamletgen.ways import track
 
-    assert track.recorded_root(SimpleNamespace(M={"way_out_root": [[0.0, 0.0], [40.0, 0.0]]})) == [(0.0, 0.0), (40.0, 0.0)]
-    assert track.recorded_root(SimpleNamespace(M={})) is None and track.recorded_root(SimpleNamespace(M={"way_out_root": [[0.0, 0.0]]})) is None
-    M = {"meta": {"ftpx": 1.0}}
-    root = [(0.0, 0.0), (40.0, 0.0)]
-    assert track.with_the_root(M, root, [(40.0, 0.0), (900.0, 0.0)]) == [(0.0, 0.0), (40.0, 0.0), (900.0, 0.0)], "on from its end"
-    assert track.with_the_root(M, root, [(40.0, 30.0), (900.0, 30.0)]) == [(0.0, 0.0), (40.0, 0.0), (40.0, 30.0), (900.0, 30.0)], "joined by a leg"
-    assert track.with_the_root(M, None, [(1.0, 1.0), (2.0, 2.0)]) == [(1.0, 1.0), (2.0, 2.0)] and track.with_the_root(M, root, [(5.0, 5.0)]) == [(5.0, 5.0)]
-    twice = {"streams": [{"poly": [[20.0, -50.0], [20.0, 50.0], [100.0, 50.0], [100.0, -50.0]]}]}  # the root and the run each cross it
-    assert track.connector_keeps_the_law(twice, [(40.0, 0.0), (900.0, 0.0)]), "the run alone crosses it once"
-    assert track.with_the_root(twice, root, [(40.0, 0.0), (900.0, 0.0)]) == [(40.0, 0.0), (900.0, 0.0)], "over it twice: the run as it came"
+    assert track.recorded_track(SimpleNamespace(M={"way_out_track": [[0.0, 0.0], [40.0, 0.0]]})) == [(0.0, 0.0), (40.0, 0.0)]
+    assert track.recorded_track(SimpleNamespace(M={})) is None and track.recorded_track(SimpleNamespace(M={"way_out_track": [[0.0, 0.0]]})) is None
+
+
+def _the_choice_watched(monkeypatch, polder: bool):  # type: ignore[no-untyped-def]
+    """`choose_track_out` on the walled settlement with its sweeps replaced by recorders: (track, calls)."""
+    from l7r.diagram.hamletgen.consts import POLDER_ARCHETYPES
+    from l7r.diagram.hamletgen.ways import gateway, track
+
+    s, plan = _walled_settlement()
+    plan.seat = hg.seat_cluster(plan)
+    if polder:
+        plan.field_archetype = sorted(POLDER_ARCHETYPES)[0]
+    calls: dict = {}
+
+    def swept(name):  # type: ignore[no-untyped-def]
+        def run(*a, **k):  # type: ignore[no-untyped-def]
+            calls[name] = (a, k)
+            return [(1.0, 2.0), (3.0, 4.0)]
+
+        return run
+
+    monkeypatch.setattr(track, "connector_track", swept("connector_track"))
+    monkeypatch.setattr(gateway, "gateway_track", swept("gateway_track"))
+    monkeypatch.setattr(track, "connector_through", lambda s, plan, run, *a: [*run, (9.0, 9.0)])
+    return track.choose_track_out(s, plan), calls, s, plan
+
+
+def test_the_track_out_is_chosen_once_by_the_gateway_on_a_valley_and_the_sweep_on_a_polder(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """Feature 320 (FR-008): `choose_track_out` is the track's whole course in one choice - the gateway's track on a valley,
+    the connector's sweep from the gate on a polder - then threaded through the steadings (`connector_through`); the gate is
+    the cluster's gateway out of the field, and the grove bands are handed to the dry exit."""
+    from l7r.diagram.hamletgen.ways import track
+
+    got, calls, s, plan = _the_choice_watched(monkeypatch, polder=False)
+    assert got == [(1.0, 2.0), (3.0, 4.0), (9.0, 9.0)] and set(calls) == {"gateway_track"}, "a valley: the gateway's track, threaded"
+    gate = calls["gateway_track"][0][4]
+    assert gate == track.gate_out_of_the_field(plan.envelope, gate), "the gate stands out of the field"
+    assert plan.grove_bands == [p for p, _o, k in track._homestead_polys(s) if k == "groves"]
+    got, calls, s, plan = _the_choice_watched(monkeypatch, polder=True)
+    assert got == [(1.0, 2.0), (3.0, 4.0), (9.0, 9.0)] and set(calls) == {"connector_track"}, "a polder: the sweep from the gate"
+    assert calls["connector_track"][1]["avoid"][0] == list(plan.envelope)
+
+
+@pytest.mark.parametrize("polder", [False, True])
+def test_stage_track_draws_the_recorded_track_as_chosen_on_both_branches(monkeypatch, polder: bool) -> None:  # type: ignore[no-untyped-def]
+    """Feature 320 (FR-008): where the homesteads stage recorded the track out, `stage_track` draws exactly it as the connector
+    and chooses nothing again - on the valley branch and the polder branch alike."""
+    from l7r.diagram.hamletgen.consts import POLDER_ARCHETYPES
+    from l7r.diagram.hamletgen.ways import track
+
+    s, plan = _walled_settlement()
+    plan.seat = hg.seat_cluster(plan)
+    if polder:
+        plan.field_archetype = sorted(POLDER_ARCHETYPES)[0]
+    s.M["way_out_track"] = [[1384.0, 700.0], [1500.0, 700.0], [1600.0, 700.0]]
+    monkeypatch.setattr(track, "choose_track_out", lambda *a: pytest.fail("chosen again"))
+    monkeypatch.setattr(track, "connector_dry_exit", lambda *a: [(1384.0, 700.0), (1600.0, 700.0)])
+    track.stage_track(s, plan)
+    con = [ln for ln in s.M.get("lanes") or [] if ln.get("connector")]
+    assert len(con) == 1 and [tuple(q) for q in con[0]["pts"]] == [(1384.0, 700.0), (1500.0, 700.0), (1600.0, 700.0)]
 
 
 def test_a_point_is_pushed_clear_of_every_band_it_stands_in_or_near() -> None:

@@ -16,7 +16,7 @@ from l7r.diagram.settlement.homestead_parts.wood_share import COPSE_CLUMP_BS, in
 from l7r.diagram.settlement.land.wet import marsh_ground
 from l7r.diagram.settlement.rolling.access import ACCESS_HALF_FT, AccessTree, exit_bearing
 from l7r.diagram.settlement.rolling.bearing import COMMON_BEARING_DEG, MarginBearing, wrap_line_deg
-from l7r.diagram.settlement.rolling.gap_ways import lay_the_ways
+from l7r.diagram.settlement.rolling.gap_ways import GAP_MARGIN_PX, lay_the_ways
 from l7r.diagram.settlement.rolling.lot import HouseholdLots
 from l7r.diagram.settlement.rolling.passage import passage_budget, passage_share
 from l7r.diagram.settlement.shrines_wells.byres import COMMONS_BYRE_FRACTION, COMMONS_BYRE_GAP, commons_byre_target, household_byre_form
@@ -29,7 +29,7 @@ from .capacity import SiteRefused, margin_ladder, seat_the_rest, seating_mark, u
 from .fixtures import farmstead_fixtures, fixture_forms, fixture_quota
 from .growth import built_share, grow_the_margin, grows
 from .holds import hold_laid_parts
-from .household_ways import root_at_the_gate, way_out_gate
+from .household_ways import chose_the_track, near_the_cluster
 from .region import SeatRegion
 from .retirement import retirement_houses, retirement_quota
 from .seat_geometry import bank_of, declare_cluster_shape, in_a_shapes_band, shapes_drawn_at, turn_the_seat, water_push  # noqa: F401 - re-exported where callers import it
@@ -80,9 +80,9 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     """The farmhouses.
 
     Every household is seated here, and at this moment there is NOT ONE LANE ANYWHERE ON THE MAP: the houses
-    answer to the field, the water and each other, and nothing else has taken ground before them. Every way on the
-    finished map - the connector, the field spur, the cluster's spine and the alleys - is laid after this plate and
-    positioned from where these houses actually landed.
+    answer to the field, the water and each other, and nothing else has taken ground before them. Once the last house
+    stands, this stage sets the way out's gate and lays each household's way in the gaps (feature 320); every other
+    way - the track out, the field spur, the alleys - is laid after this plate, from where these houses landed.
 
     The ground is asked ONCE. Before the first seat, the site boundary is computed from everything the map holds:
     the paddy's outline as a few facing chords, everything else - the hem, the marshes, the ponds, the dry plots, the reed
@@ -133,7 +133,7 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
         l7r.diagram.settlement.rolling.lot.record_parts
         l7r.diagram.settlement.rolling.access.reserve
         l7r.diagram.hamletgen.homesteads.seat_geometry.declare_cluster_shape
-        l7r.diagram.hamletgen.homesteads.household_ways.way_out_gate
+        l7r.diagram.hamletgen.homesteads.household_ways.chose_the_track
         l7r.diagram.settlement.rolling.gap_ways.lay_the_ways
         l7r.diagram.hamletgen.homesteads.stages.reserve_the_seating
         l7r.diagram.settlement.Settlement.farmsteads
@@ -208,17 +208,17 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     s.M["meta"].update(_declared)
     plan.cluster_shape = _declared["cluster_shape"]  # the knob as resolved over what the band draws (plan D4)
     s.M["meta"]["seat_search"] = dict(s._seat_search)  # the guesses counted (feature 226 FR-003): candidates, placer calls, positions, rectangles
-    # THE WAY OUT'S GATE, DECIDED NOW THE LAST HOUSE STANDS, AND EVERY HOUSEHOLD'S WAY LAID TO IT IN THE GAPS (feature 320,
-    # plan D2; feature 318, FR-014, `settlement/rolling/gap_ways.py`): nothing of a way stood while the houses were seated; the
-    # gate is on the cluster's edge on the bearing out the seating found lawful, the track out is drawn from it
-    # (`stage_track`), and the ways reach it before any farmstead is drawn. A passage the laid ways make unnecessary is ended
+    # THE TRACK OUT, CHOSEN ONCE NOW THE LAST HOUSE STANDS, AND EVERY HOUSEHOLD'S WAY LAID TO IT IN THE GAPS (feature 320,
+    # plan D2, FR-008; feature 318, FR-014, `settlement/rolling/gap_ways.py`): nothing of a way stood while the houses were
+    # seated; the track's whole course is chosen here by its own search against the homesteads as seated, `stage_track`
+    # draws it as chosen, and the ways reach it before any farmstead is drawn. A passage the laid ways make unnecessary is ended
     # in place, and a household no way reaches is reached across the nearest neighbor's yard - the pinch
     if getattr(s, "_access", None) is not None and getattr(s, "_way_out_bearing", None) is not None:
-        gate = way_out_gate(s, plan, s._way_out_bearing)
-        s.M["way_out_gate"] = [round(gate[0], 1), round(gate[1], 1)]
-        root = root_at_the_gate(s, gate, s._way_out_bearing)
-        s.M["way_out_root"] = [[round(q[0], 1), round(q[1], 1)] for q in root]
-        s._access.add(*root)
+        track = chose_the_track(s, plan)
+        s.M["way_out_track"] = [[round(q[0], 1), round(q[1], 1)] for q in track]
+        s.M["way_out_gate"] = list(s.M["way_out_track"][0])
+        for a, b in near_the_cluster(s, track, s.px(GAP_MARGIN_PX)):
+            s._access.add(a, b)
     s.M["meta"]["passage_revoked"], s.M["meta"]["pinch_passages"] = lay_the_ways(s)
     s.M["meta"]["passage_reached"] = sum(1 for h in s.M.get("houses") or [] if h.get("reached_across"))  # ...reached across a yard
     s._site_chains = None  # the boundary is the homestead stage's; every later placer runs the fit test's own path

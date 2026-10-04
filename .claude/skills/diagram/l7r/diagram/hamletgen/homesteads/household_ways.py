@@ -1,11 +1,15 @@
-"""THE WAY OUT'S GATE, DECIDED ONCE THE LAST HOUSE STANDS, AND THE HOUSEHOLDS' WAYS LAID TO IT (feature 320, plan D2).
+"""THE TRACK OUT, CHOSEN ONCE THE LAST HOUSE STANDS, AND THE HOUSEHOLDS' WAYS LAID TO IT (feature 320, plan D2, FR-008).
 
 The GM, 2026-10-04, of the exit strip and the field's corridor the seating used to reserve before any house: *"we should
 eliminate both ... because the space we've already allocated can serve the same function"*. So nothing of a way is laid or
 reserved while the farmhouses are seated - the lane's room between neighbors (feature 318) is what keeps a way possible.
-Once the last house stands, the GATE is decided: the point on the cluster's edge, on the bearing out the seating found
-lawful, where the track out will leave. Each household's way is laid in the gaps to it (`gap_ways.lay_the_ways`), before the
-farmsteads are drawn, and the track out is drawn from it (`stage_track`).
+
+Once the last house stands, the track out's whole course is chosen ONCE (`track.choose_track_out`), the GM: *"collapsing the
+multiple decisions into a single decision regarding the lane"* - a first leg decided on the seating's bearing apart from the
+track's own route met a household's way in a nub. No farmstead is drawn yet (the overlap registry would refuse a way on a
+drawn yard), so the homesteads as seated stand in for them (`seated_parts`, read by `fabric._homestead_polys`), with every
+household's wood seats. Each household's way is then laid in the gaps to the track's stretch about the cluster
+(`near_the_cluster`, `gap_ways.lay_the_ways`), and `stage_track` draws the track as chosen.
 
 Research: houses before lanes - research/questions/0081-village-lanes.drawing.html: every farmhouse seated before any way is laid; the track out leaves from the cluster's edge and each household's way joins it
 """
@@ -16,53 +20,25 @@ import math
 from collections.abc import Sequence
 from typing import TYPE_CHECKING
 
-from l7r.diagram.settlement import seg_dist
 from l7r.diagram.settlement.homestead_parts.groves import crown_lift
 from l7r.diagram.settlement.homestead_parts.stands import crown_reach
 from l7r.diagram.settlement.homestead_parts.wood_share import COPSE_CLUMP_BS
 
 from ..consts import Poly, Pt
-from ..ways.cluster_edge import gate_out_of_the_field
-from ..ways.geom import push_clear_of_fabric
+from .region import _clip
 
 if TYPE_CHECKING:
     from l7r.diagram.settlement import Settlement
 
     from ..plan import SitePlan
 
-GATE_CLEAR_FT = 24.0
-"""How far past the farthest homestead box, along the bearing out, the gate stands: the track's own gap off the steadings
-(`track.TRACK_FABRIC_GAP`, 16 ft) and the 8 ft the gateway has always been walked past it (`_cluster_gateway`).
-
-Research: gate clear of the homesteads - UNRESEARCHED: 16 ft and 8 ft past the farthest homestead box"""
-
-ROOT_FT = 40.0
-"""The first leg of the track out, from the gate along the bearing out: the stretch the households' ways are laid to and join
-at a T, as they joined the exit strip before it (feature 318) - and the leg the track out is drawn along from the gate
-(`track.with_the_root`). A single point gathered every way into a knot of needle joins and doubled tails (cohort seeds 9,
-17, 21, feature 320).
-
-Research: the ways gather at the gate - UNRESEARCHED: a 40 ft first leg, past the 25 ft a way joins within"""
-
 
 def box_poly(b: Sequence[float]) -> Poly:
-    """A homestead's box `(cx, cy, w, h)` as its four corners.
+    """A box `(cx, cy, w, h)` as its four corners.
 
     Research: plumbing - NONE: a box's corners"""
     x0, y0, x1, y1 = b[0] - b[2] / 2, b[1] - b[3] / 2, b[0] + b[2] / 2, b[1] + b[3] / 2
     return [(x0, y0), (x1, y0), (x1, y1), (x0, y1)]
-
-
-GATE_STEP_PX = 6.0
-"""The step the gate is walked out along the bearing until its first leg clears every household's wood seat
-(`clear_of_the_seats`): `push_clear_of_fabric`'s own step.
-
-Research: plumbing - NONE: a search step"""
-
-GATE_STEPS = 40
-"""How many steps the gate is walked at most before it is left where it stands (the connector's law then decides).
-
-Research: plumbing - NONE: a search bound"""
 
 
 def seat_walls(s: Settlement) -> tuple[list[Pt], float]:
@@ -76,60 +52,65 @@ def seat_walls(s: Settlement) -> tuple[list[Pt], float]:
     return seats, reach
 
 
-def clear_of_the_seats(gate: Pt, bearing: Pt, length: float, seats: Sequence[Pt], reach: float) -> Pt:
-    """`gate` walked out along `bearing` until its first leg (`length` on along the bearing) passes no wood seat within `reach`;
-    at most `GATE_STEPS` steps of `GATE_STEP_PX`, then the last point tried.
+TRUNK_FT = 4.0
+"""A persimmon's trunk box, the part of it a way keeps off (`access.fixtures_clear` holds it the same).
 
-    Research: the track off the wood seats - UNRESEARCHED: the gate walked out until the track's first leg clears every copse seat; the record keeps the copse off the main road, not the reverse"""
-    n = math.hypot(*bearing) or 1.0
-    ux, uy = bearing[0] / n, bearing[1] / n
-    g = gate
-    for _ in range(GATE_STEPS):
-        end = (g[0] + ux * length, g[1] + uy * length)
-        if all(seg_dist(p[0], p[1], g, end) > reach for p in seats):
-            return g
-        g = (g[0] + ux * GATE_STEP_PX, g[1] + uy * GATE_STEP_PX)
-    return g
+Research: a persimmon by its trunk alone - GUESS: held off by a 4 ft trunk box, the crown free to overhang the path"""
 
 
-CANVAS_INSET_PX = 12.0
-"""How far inside the canvas's edge the gate and its first leg are held (`on_the_canvas`): past two of the gap raster's cells,
-so the households' search finds them on its grid.
+def seated_parts(s: Settlement) -> list[tuple[Poly, Pt | None, str]]:
+    """The homesteads as seated, before any is drawn, as `fabric._homestead_polys` reads the drawn ones - (polygon, owner,
+    kind): each household's house, threshing yard, beds, well, shed, byre and fixtures from its seated geometry (a persimmon
+    by its trunk), and its wood seats as octagons of the reach a lane keeps off them (`seat_walls`).
 
-Research: plumbing - NONE: the raster's own reach"""
+    Research: nothing built on a lane - research/questions/0081-village-lanes.drawing.html: the track out keeps off every homestead's house, yard, beds, well, sheds and fixtures as they will be drawn"""
+    out: list[tuple[Poly, Pt | None, str]] = []
+    for h in s.M.get("houses") or []:
+        boxes = (h.get("geom") or {}).get("boxes") or {}
+        own = (float(h["x"]), float(h["y"]))
+        for key, kind in (("house", "houses"), ("yard", "threshing_yards"), ("well", "wells"), ("shed", "sheds"), ("byre", "sheds")):
+            if boxes.get(key) is not None:
+                out.append((box_poly(boxes[key]), own, kind))
+        out += [(box_poly(b), own, "gardens") for b in boxes.get("gardens") or ()]
+        for name, b in (boxes.get("fixtures") or {}).items():
+            out.append((box_poly(b if name != "persimmon" else (b[0], b[1], s.px(TRUNK_FT), s.px(TRUNK_FT))), own, "fixtures"))
+    seats, reach = seat_walls(s)
+    ring = [(math.cos(k * math.pi / 4.0), math.sin(k * math.pi / 4.0)) for k in range(8)]
+    out += [([(p[0] + c * reach, p[1] + d * reach) for c, d in ring], None, "wood seats") for p in seats]
+    return out
 
 
-def on_the_canvas(s: Settlement, p: Pt) -> Pt:
-    """`p` held `CANVAS_INSET_PX` inside the canvas: a cluster by the edge with its bearing out over it sent the gate off the map,
-    where no way could be searched to it (feature 320).
+def near_the_cluster(s: Settlement, track: Poly, margin: float) -> list[tuple[Pt, Pt]]:
+    """The legs of `track` within `margin` of the seated homesteads' extent, each clipped to it (`region._clip`): the stretch the
+    households' ways are laid to - the rest runs on off the map, where no way is sought, and would only widen the gap raster.
 
-    Research: plumbing - NONE: kept on the canvas"""
-    m = CANVAS_INSET_PX
-    return (min(max(p[0], m), float(s.W) - m), min(max(p[1], m), float(s.H) - m))
-
-
-def way_out_gate(s: Settlement, plan: SitePlan, bearing: Pt) -> Pt:
-    """Where the track out leaves the cluster: from the houses' center along `bearing` (the seating's lawful bearing out),
-    past the farthest homestead box by `GATE_CLEAR_FT`, clear of every box (`push_clear_of_fabric`), its first leg clear of
-    every household's wood seat (`clear_of_the_seats`), and out of the field's envelope (`gate_out_of_the_field`) - decided
-    from the homesteads as seated, before any is drawn.
-
-    Research: the gate on the cluster's edge - research/questions/0081-village-lanes.drawing.html: the track out leaves the cluster once its houses stand"""
+    Research: plumbing - NONE: the search's window on the track"""
     boxes = list(getattr(s, "placed", None) or [])
-    hs = s.M.get("houses") or []
-    cx = sum(float(h["x"]) for h in hs) / max(1, len(hs))
-    cy = sum(float(h["y"]) for h in hs) / max(1, len(hs))
-    ux, uy = bearing
-    reach = max([((x - cx) * ux + (y - cy) * uy) for b in boxes for x, y in box_poly(b)], default=0.0)
-    gate = push_clear_of_fabric((cx, cy), (ux, uy), reach + s.px(GATE_CLEAR_FT), [box_poly(b) for b in boxes])
-    seats, seat_reach = seat_walls(s)
-    return on_the_canvas(s, gate_out_of_the_field(plan.envelope, clear_of_the_seats(gate, (ux, uy), s.px(ROOT_FT), seats, seat_reach)))
+    if not boxes:
+        return list(zip(track, track[1:], strict=False))
+    box = (
+        min(b[0] - b[2] / 2 for b in boxes) - margin,
+        min(b[1] - b[3] / 2 for b in boxes) - margin,
+        max(b[0] + b[2] / 2 for b in boxes) + margin,
+        max(b[1] + b[3] / 2 for b in boxes) + margin,
+    )
+    out = []
+    for a, b in zip(track, track[1:], strict=False):
+        span = _clip(a, b, box)
+        if span is not None and span[1] > span[0]:
+            out.append(((a[0] + (b[0] - a[0]) * span[0], a[1] + (b[1] - a[1]) * span[0]), (a[0] + (b[0] - a[0]) * span[1], a[1] + (b[1] - a[1]) * span[1])))
+    return out
 
 
-def root_at_the_gate(s: Settlement, gate: Pt, bearing: Pt) -> tuple[Pt, Pt]:
-    """The stretch of the way out the households' ways join: `ROOT_FT` from the gate along `bearing`.
+def chose_the_track(s: Settlement, plan: SitePlan) -> Poly:
+    """The track out chosen once the last house stands (`track.choose_track_out`), with the homesteads as seated standing in
+    for the farmsteads not yet drawn (`seated_parts`).
 
-    Research: the ways gather at the gate - UNRESEARCHED: the first leg of the track out from the gate"""
-    d = s.px(ROOT_FT)
-    n = math.hypot(*bearing) or 1.0
-    return gate, on_the_canvas(s, (gate[0] + bearing[0] / n * d, gate[1] + bearing[1] / n * d))
+    Research: the track out decided once - research/questions/0081-village-lanes.drawing.html: each household's way joins the track out"""
+    from ..ways.track import choose_track_out  # the ways' layer sits above the homesteads; asked here once the houses stand
+
+    s._seated_parts = seated_parts(s)  # type: ignore[attr-defined]
+    try:
+        return choose_track_out(s, plan)
+    finally:
+        s._seated_parts = None  # type: ignore[attr-defined]

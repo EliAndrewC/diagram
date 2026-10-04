@@ -6838,30 +6838,6 @@
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/household_ways.py::TRACK_FALL_WEIGHT#leaning downslope": {
-  "code": "a85640136e2f7290",
-  "core": "13a60bd68a444539",
-  "date": "2026-10-04",
-  "note": "the record gives the direction but no weights",
-  "pages": {},
-  "research": "",
-  "rests": [
-   "0081-village-lanes.drawing.html:43b635b1ca75125b"
-  ],
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/household_ways.py::TRACK_OUT_WEIGHT#leaning downslope": {
-  "code": "edab5ec84ec8ece2",
-  "core": "d986abd1b26bbbcf",
-  "date": "2026-10-04",
-  "note": "the record gives the direction but no weights",
-  "pages": {},
-  "research": "",
-  "rests": [
-   "0081-village-lanes.drawing.html:43b635b1ca75125b"
-  ],
-  "verdict": "IN-STEP"
- },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/household_ways.py::box_poly#plumbing": {
   "code": "f75e11c6932fc11f",
   "core": "eeda40b64eb42fb6",
@@ -6917,21 +6893,6 @@
   "rests": [
    "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:5267e319c5872785",
    "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:b504bfc778e63907"
-  ],
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/household_ways.py::track_bearing#track out off the wet": {
-  "code": "54d7be14e3be5b25",
-  "core": "053cd4037ed60307",
-  "date": "2026-10-04",
-  "note": "away from the field and downslope, on the cluster's own flank",
-  "pages": {
-   "0081-village-lanes.drawing.html": "64f892eec56cb0e6"
-  },
-  "research": "28eb27d8637b4dbb",
-  "rests": [
-   "0081-village-lanes.drawing.html:1d1cd0e6baf3f834",
-   "0081-village-lanes.drawing.html:43b635b1ca75125b"
   ],
   "verdict": "IN-STEP"
  },
@@ -7116,15 +7077,16 @@
   "code": "fe428caf7910581a",
   "core": "c32bee3d70efae78",
   "date": "2026-10-04",
-  "note": "",
+  "note": "the code checks whether the yard (or the house where there is no yard), grown by the corridor half-width and one cell, touches lane ground reachable from the way out, counting any reachable ground however far round; the window-edge pass and the cell tolerance are plumbing",
   "pages": {
-   "0081-village-lanes.drawing.html": "b6a4ff551129a6ea"
+   "0081-village-lanes.drawing.html": "64f892eec56cb0e6"
   },
-  "research": "a7766bfa3807e78c",
+  "research": "28eb27d8637b4dbb",
   "rests": [
-   "0081-village-lanes.drawing.html:9dcd87510d217672"
+   "0081-village-lanes.drawing.html:9dcd87510d217672",
+   "0081-village-lanes.drawing.html:ab698a7b15fb7e8e",
+   "0081-village-lanes.drawing.html:f0a411a544083965"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/region.py::SeatRegion.sync#reserved wood seats bar lane ground": {
@@ -8371,25 +8333,26 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::stage_homesteads#a grove farm's own bamboo": {
-  "code": "a931d2527e80de0c",
-  "core": "44f2a7ec391371bc",
+  "code": "975bdeba32a80b52",
+  "core": "898cb85c933388b9",
   "date": "2026-10-04",
-  "note": "follows the knob's homestead and both values",
+  "note": "`_household_bamboo` is on exactly when the `bamboo` knob is homestead or both, which is the attested knob; the three-in-five share and the patch are decided downstream",
   "pages": {
    "0075-bamboo-groves-chikurin.drawing.html": "bc675938aae67039"
   },
   "research": "0511f4b8f09dd539",
   "rests": [
+   "0075-bamboo-groves-chikurin.drawing.html:79b7211c72484f93",
    "0075-bamboo-groves-chikurin.drawing.html:e7c00c0357d35ec7",
    "0075-bamboo-groves-chikurin.drawing.html:f787bbf24ccbb0bd"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::stage_homesteads#a yard's south sun": {
-  "code": "480f2c43c68a02b5",
-  "core": "44f2a7ec391371bc",
+  "code": "0b331919a3c24a32",
+  "core": "898cb85c933388b9",
   "date": "2026-10-04",
-  "note": "39 ft south of yard and bed",
+  "note": "`sun_corridor(39.0)` covers yards and beds, matching the 39 ft for the 9-to-3 window",
   "pages": {
    "0038-sunlight-and-shade-on-the-farm.drawing.html": "13e15817d311d368"
   },
@@ -8397,30 +8360,33 @@
   "rests": [
    "0038-sunlight-and-shade-on-the-farm.drawing.html:1744d5d384a63127",
    "0038-sunlight-and-shade-on-the-farm.drawing.html:3cf9dd5c14103b6d",
-   "0038-sunlight-and-shade-on-the-farm.drawing.html:bb2acd2b2da1f7af"
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:bb2acd2b2da1f7af",
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:fb011b8973aa73bf"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::stage_homesteads#houses before lanes": {
-  "code": "fa2e80f97431874a",
-  "core": "44f2a7ec391371bc",
+  "code": "711923ac99c746cf",
+  "core": "898cb85c933388b9",
   "date": "2026-10-04",
-  "note": "the gate is set on the cluster's edge after the last house stands, then the ways are laid",
+  "note": "all households are seated before any way exists; then the gate and its root are set on the cluster's edge, `lay_the_ways` lays each household's way to it, and pinch/reached-across households are handled as the page says",
   "pages": {
    "0081-village-lanes.drawing.html": "64f892eec56cb0e6"
   },
   "research": "28eb27d8637b4dbb",
   "rests": [
    "0081-village-lanes.drawing.html:1d1cd0e6baf3f834",
-   "0081-village-lanes.drawing.html:d6c0546677319ff7"
+   "0081-village-lanes.drawing.html:9dcd87510d217672",
+   "0081-village-lanes.drawing.html:d6c0546677319ff7",
+   "0081-village-lanes.drawing.html:f0a411a544083965"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::stage_homesteads#the belt's afternoon lane": {
-  "code": "fa573beb7ba3e722",
-  "core": "44f2a7ec391371bc",
+  "code": "cdab7bf8435d8331",
+  "core": "898cb85c933388b9",
   "date": "2026-10-04",
-  "note": "50 ft west and southwest",
+  "note": "`west_sun_lane(50.0)` matches the 50 ft clear west and southwest of a plot",
   "pages": {
    "0038-sunlight-and-shade-on-the-farm.drawing.html": "13e15817d311d368"
   },
@@ -8432,17 +8398,14 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::stage_homesteads#the declared cluster shape": {
-  "code": "2195e2a960f2afad",
-  "core": "44f2a7ec391371bc",
+  "code": "4d2aa3d4cb701783",
+  "core": "898cb85c933388b9",
   "date": "2026-10-04",
-  "note": "this should not be a GUESS, because 0031's drawing page (in the bundle) answers the question: \"What shape does a village's cluster take? The shape of its dry ground\", and \"A hamlet leaves none of these to chance\". The code still declares a rolled `plan.cluster_shape` for a hamlet. Either label it DEVIATION 0031 drawing, once that page records the rolled hamlet shape as a deliberate choice, or treat it as DRIFTED and make the shape follow the dry ground",
+  "note": "the shape is a rolled knob resolved against the drawn aspect; no bundled question answers cluster shape, so GUESS stands",
   "pages": {},
   "research": "",
-  "rests": [
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:48f61ba4c0f57e55",
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:b0d4f27ae1dbec07"
-  ],
-  "verdict": "MISLABELED"
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/wells.py::BEND_LOOK_FT#well arithmetic": {
   "code": "542d37c64c9cc3e7",
@@ -17935,7 +17898,7 @@
   "code": "2c418cbbfca4e6b2",
   "core": "9875b889226888b8",
   "date": "2026-10-04",
-  "note": "this is labelled a DEVIATION, but the drawing page records no 16 ft track gap off footprints and no 4 ft gap off grove bands. It gives only the lane's 7 ft off a garden fence and the 3 ft footpath's edge deviation. Either record both gaps on the page or relabel them GUESS/CONVENTION",
+  "note": "this is labeled a DEVIATION, but the drawing page records no 16 ft track gap off footprints and no 4 ft gap off grove bands. It gives only the lane's 7 ft off a garden fence and the 3 ft footpath's edge deviation. Either record both gaps on the page or relabel them GUESS/CONVENTION",
   "pages": {
    "0081-village-lanes.drawing.html": "64f892eec56cb0e6"
   },
@@ -18298,7 +18261,7 @@
   "code": "77e1732f74544a5d",
   "core": "26e765afe6e1d9c7",
   "date": "2026-10-04",
-  "note": "this is labelled UNRESEARCHED, but 0081 answers it: a lane \"may touch a plot's boundary\" and the spur \"stops at the hem's edge\". Clipping the spur 12 ft off the dry plots departs from that, so it should be a DEVIATION recorded on 0081, or a CONVENTION/GUESS stated there",
+  "note": "this is labeled UNRESEARCHED, but 0081 answers it: a lane \"may touch a plot's boundary\" and the spur \"stops at the hem's edge\". Clipping the spur 12 ft off the dry plots departs from that, so it should be a DEVIATION recorded on 0081, or a CONVENTION/GUESS stated there",
   "pages": {},
   "research": "",
   "rests": [

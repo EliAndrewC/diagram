@@ -91,12 +91,11 @@ def _on(q: Pt, run: Poly) -> bool:
 
 
 def _root(M: Mapping[str, Any]) -> Poly | None:
-    """The tree's root (feature 320): the track out as drawn, from the gate the households' ways reach; before it is drawn,
-    the stretch of it from the gate the ways are laid to (`way_out_root`, `household_ways.root_at_the_gate`). None where
-    neither stands."""
+    """The tree's root (feature 320): the track out as drawn; before it is drawn, the track as chosen once the last house
+    stood (`way_out_track`, `household_ways.chose_the_track`). None where neither stands."""
     con = next((law.lane_pts(ln) for ln in M.get("lanes") or [] if ln.get("connector") and len(ln.get("pts") or []) >= 2), None)
     if con is None:
-        con = M.get("way_out_root")
+        con = M.get("way_out_track")
     return [_pt(q) for q in con] if con else None
 
 

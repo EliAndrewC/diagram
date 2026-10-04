@@ -1,4 +1,4 @@
-"""Feature 320: no ways placed before the homesteads - the gate decided once the last house stands (`household_ways`), the
+"""Feature 320: no ways placed before the homesteads - the track out chosen once the last house stands (`household_ways`), the
 seating's reach seeded from the way-out side (`region.anchor_in_window`), and nothing of a way reserved or recorded while
 the houses are seated (SC-001, SC-002)."""
 
@@ -26,24 +26,11 @@ def _open(W: float = 1000.0) -> Settlement:
     return s
 
 
-# ---- the gate and its root ---------------------------------------------------------------------------------------------
+# ---- the track out, chosen once --------------------------------------------------------------------------------------------
 
 
 def test_a_box_is_its_four_corners() -> None:
     assert hw.box_poly((10.0, 20.0, 4.0, 6.0)) == [(8.0, 17.0), (12.0, 17.0), (12.0, 23.0), (8.0, 23.0)]
-
-
-def test_the_gate_is_walked_out_until_its_first_leg_clears_every_wood_seat() -> None:
-    """`clear_of_the_seats`: a leg already clear stays; a seat beside the leg walks the gate on in `GATE_STEP_PX` steps until it
-    clears by `reach`; a seat the leg never clears leaves the gate `GATE_STEPS` steps out, the last point tried."""
-    assert hw.GATE_STEP_PX == 6.0 and hw.GATE_STEPS == 40
-    assert hw.clear_of_the_seats((0.0, 0.0), (1.0, 0.0), 40.0, [(0.0, 100.0)], 20.0) == (0.0, 0.0), "clear as it stands"
-    g = hw.clear_of_the_seats((0.0, 0.0), (2.0, 0.0), 40.0, [(20.0, 10.0)], 20.0)  # the bearing need not be a unit
-    assert g[1] == 0.0 and g[0] > 20.0 and g[0] % hw.GATE_STEP_PX == 0.0, "walked past the seat, in whole steps"
-    assert seg_dist(20.0, 10.0, g, (g[0] + 40.0, 0.0)) > 20.0 >= seg_dist(20.0, 10.0, (g[0] - 6.0, 0.0), (g[0] + 34.0, 0.0)), "the first step that clears"
-    walled = [(x, 0.0) for x in range(0, 400, 10)]  # seats all the way along: none clears
-    assert hw.clear_of_the_seats((0.0, 0.0), (1.0, 0.0), 40.0, walled, 5.0) == (hw.GATE_STEPS * hw.GATE_STEP_PX, 0.0)
-    assert hw.clear_of_the_seats((5.0, 5.0), (0.0, 0.0), 40.0, [(100.0, 100.0)], 5.0) == (5.0, 5.0), "no bearing: the gate as it is"
 
 
 def test_the_seat_walls_are_every_households_wood_seats_and_the_lanes_reach_off_them() -> None:
@@ -54,42 +41,77 @@ def test_the_seat_walls_are_every_households_wood_seats_and_the_lanes_reach_off_
     assert hw.seat_walls(_open()) == ([], reach), "no houses: no seats, the same reach"
 
 
-def test_a_point_is_held_inside_the_canvas() -> None:
+def test_the_homesteads_as_seated_are_every_households_parts_and_its_wood_seats() -> None:
+    """`seated_parts`: each household's house, yard, well, shed, byre, gardens and fixtures from its seated boxes - a persimmon
+    by its `TRUNK_FT` trunk alone - owned by its house; every wood seat an octagon of the reach a lane keeps off it, owned by
+    none. A household with no geometry yet gives only its seats."""
     s = _open()
-    m = hw.CANVAS_INSET_PX
-    assert m == 12.0 and hw.on_the_canvas(s, (500.0, 500.0)) == (500.0, 500.0)
-    assert hw.on_the_canvas(s, (-50.0, 2000.0)) == (m, 1000.0 - m) and hw.on_the_canvas(s, (1000.0, 0.0)) == (1000.0 - m, m)
+    assert hw.TRUNK_FT == 4.0
+    boxes = {
+        "house": (100.0, 100.0, 40.0, 20.0),
+        "yard": (100.0, 130.0, 30.0, 30.0),
+        "well": (130.0, 100.0, 6.0, 6.0),
+        "shed": None,
+        "byre": (70.0, 100.0, 10.0, 10.0),
+        "gardens": [(100.0, 170.0, 20.0, 10.0)],
+        "fixtures": {"persimmon": (150.0, 150.0, 30.0, 30.0), "kiln": (60.0, 60.0, 8.0, 8.0)},
+    }
+    s.M["houses"] = [{"x": 100, "y": 100, "geom": {"boxes": boxes}, "wood_share": {"seats": [[300, 300]]}}, {"x": 5, "y": 5}]
+    parts = hw.seated_parts(s)
+    kinds = [k for _p, _o, k in parts]
+    assert kinds == ["houses", "threshing_yards", "wells", "sheds", "gardens", "fixtures", "fixtures", "wood seats"], "no shed seated: none drawn"
+    assert all(o == (100.0, 100.0) for _p, o, _k in parts[:-1]) and parts[-1][1] is None
+    assert parts[0][0] == hw.box_poly(boxes["house"]) and parts[4][0] == hw.box_poly(boxes["gardens"][0])
+    assert parts[5][0] == hw.box_poly((150.0, 150.0, 4.0, 4.0)), "a persimmon by its trunk"
+    assert parts[6][0] == hw.box_poly(boxes["fixtures"]["kiln"]), "any other fixture by its box"
+    _seats, reach = hw.seat_walls(s)
+    ring = parts[-1][0]
+    assert len(ring) == 8 and all(math.dist(q, (300.0, 300.0)) == pytest.approx(reach) for q in ring), "an octagon of the reach"
+    assert hw.seated_parts(_open()) == [], "nothing seated: nothing"
 
 
-def test_the_root_is_the_track_outs_first_leg_from_the_gate_held_on_the_canvas() -> None:
+def test_the_ways_are_laid_to_the_tracks_stretch_about_the_cluster() -> None:
+    """`near_the_cluster`: each leg of the track clipped to the placed boxes' extent grown by the margin; a leg wholly
+    outside, or touching it at a point, is left out; with nothing placed, every leg."""
     s = _open()
-    assert hw.ROOT_FT == 40.0
-    assert hw.root_at_the_gate(s, (500.0, 500.0), (0.0, 2.0)) == ((500.0, 500.0), (500.0, 540.0))
-    assert hw.root_at_the_gate(s, (500.0, 980.0), (0.0, 1.0)) == ((500.0, 980.0), (500.0, 1000.0 - hw.CANVAS_INSET_PX)), "held on the canvas"
-    assert hw.root_at_the_gate(s, (500.0, 500.0), (0.0, 0.0)) == ((500.0, 500.0), (500.0, 500.0)), "no bearing: no length"
-
-
-def test_the_gate_stands_past_the_farthest_homestead_clear_of_the_seats_and_out_of_the_field() -> None:
-    """`way_out_gate`: from the houses' center along the bearing, past the farthest homestead box by `GATE_CLEAR_FT`; a wood
-    seat beside its first leg walks it on; a field over it pushes it out; the canvas holds it."""
-    s = _open()
-    s.M["houses"] = [{"x": 400.0, "y": 500.0}, {"x": 600.0, "y": 500.0}]
-    s.placed = [(400.0, 500.0, 60.0, 40.0), (600.0, 520.0, 60.0, 40.0)]
-    plan = SimpleNamespace(envelope=[(0.0, 0.0), (40.0, 0.0), (40.0, 40.0), (0.0, 40.0)])  # a field far off
-    g = hw.way_out_gate(s, plan, (0.0, 1.0))
-    assert g[0] == 500.0 and g[1] >= 540.0 + hw.GATE_CLEAR_FT, "past the farthest box's edge (y 540) by the clearance"
-    s.M["houses"][0]["wood_share"] = {"seats": [[500.0, g[1] + 20.0]]}
-    walked = hw.way_out_gate(s, plan, (0.0, 1.0))
-    _, reach = hw.seat_walls(s)
-    assert walked[0] == 500.0 and walked[1] > g[1] and seg_dist(500.0, g[1] + 20.0, walked, (500.0, walked[1] + hw.ROOT_FT)) > reach
-    field = [(0.0, walked[1] - 10.0), (1000.0, walked[1] - 10.0), (1000.0, walked[1] + 60.0), (0.0, walked[1] + 60.0)]
-    out = hw.way_out_gate(s, SimpleNamespace(envelope=field), (0.0, 1.0))
-    assert out == gate_out_of_the_field(field, walked), "pushed out of the field's envelope"
-    s.placed.append((960.0, 500.0, 60.0, 40.0))  # a homestead by the canvas's east edge, the bearing out over it
-    assert hw.way_out_gate(s, plan, (1.0, 0.0))[0] == 1000.0 - hw.CANVAS_INSET_PX, "held on the canvas"
-    s.M["houses"] = []
+    track = [(100.0, 100.0), (100.0, 300.0), (500.0, 300.0), (500.0, 900.0)]
     s.placed = []
-    assert hw.way_out_gate(s, plan, (0.0, 1.0)) == (hw.CANVAS_INSET_PX, hw.GATE_CLEAR_FT), "nothing seated: from the corner, off the field and back on the canvas"
+    assert hw.near_the_cluster(s, track, 10.0) == list(zip(track, track[1:], strict=False)), "nothing placed: every leg"
+    s.placed = [(100.0, 100.0, 40.0, 40.0), (200.0, 200.0, 20.0, 20.0)]  # extent 80..210 either way; grown by 10, 70..220
+    got = hw.near_the_cluster(s, track, 10.0)
+    assert got == [((100.0, 100.0), (100.0, 220.0))], "the first leg clipped; the rest beyond the extent"
+    corner = hw.near_the_cluster(s, [(230.0, 210.0), (210.0, 230.0)], 10.0)  # touches the grown extent's corner (220, 220) only
+    assert corner == [], "a leg meeting the extent at a point is no stretch"
+
+
+def test_the_track_is_chosen_with_the_homesteads_as_seated_standing_in_and_they_are_cleared_after(monkeypatch: pytest.MonkeyPatch) -> None:
+    """`chose_the_track`: `choose_track_out` asked with the seated parts on `s._seated_parts` (so `fabric._homestead_polys`
+    reads them), and cleared after - even when the choice raises."""
+    from l7r.diagram.hamletgen.ways import fabric, track
+
+    s = _open()
+    s.M["houses"] = [{"x": 100, "y": 100, "geom": {"boxes": {"house": (100.0, 100.0, 40.0, 20.0)}}}]
+    drawn = [{"x": 100, "y": 100, "w": 40, "h": 20}]  # the farmhouses as `fabric._homestead_polys` reads them, swapped in to ask it
+    plan = SimpleNamespace()
+    seen: list = []
+
+    def choose(st: Settlement, pl: object) -> list:
+        assert pl is plan
+        seen.append([k for _p, _o, k in fabric._homestead_polys(SimpleNamespace(M={}, _seated_parts=st._seated_parts))])
+        return [(1.0, 1.0), (2.0, 2.0)]
+
+    monkeypatch.setattr(track, "choose_track_out", choose)
+    assert hw.chose_the_track(s, plan) == [(1.0, 1.0), (2.0, 2.0)]
+    assert seen == [["houses"]] and s._seated_parts is None, "read while chosen, cleared after"
+    assert [k for _p, _o, k in fabric._homestead_polys(SimpleNamespace(M={"houses": drawn}, _seated_parts=s._seated_parts))] == ["houses"], "once cleared, only the drawn"
+
+    def fails(st: Settlement, pl: object) -> list:
+        raise RuntimeError("no way out")
+
+    monkeypatch.setattr(track, "choose_track_out", fails)
+    with pytest.raises(RuntimeError):
+        hw.chose_the_track(s, plan)
+    assert s._seated_parts is None, "cleared even when the choice raises"
 
 
 def test_the_gate_is_pushed_out_of_the_field_and_a_gate_clear_of_it_stays() -> None:
@@ -130,9 +152,9 @@ def test_the_anchor_seeds_the_reach_inside_the_window_or_at_its_edge_or_not_at_a
 
 def test_sc001_nothing_is_reserved_or_recorded_for_a_way_while_the_houses_are_seated(monkeypatch: pytest.MonkeyPatch) -> None:
     """SC-001: on a nucleated roll, every time the seating asks whether a homestead opens onto lane ground the access tree is
-    empty, the registry holds no corridor, the manifest records no way, no gate and no root - and the anchor is painted into
-    no buildable cell (what the buildable raster takes, the lane raster takes too). Once the last house stands the gate and
-    its root are recorded and no exit strip ever is."""
+    empty, the registry holds no corridor, the manifest records no way, no gate and no track out - and the anchor is painted into
+    no buildable cell (what the buildable raster takes, the lane raster takes too). Once the last house stands the track
+    out is recorded, its first point the gate, and no exit strip ever is."""
     plan = a_plan(households=10)
     plan.envelope = list(CROWN)
     plan.seat = __import__("l7r.diagram.hamletgen", fromlist=["seat_cluster"]).seat_cluster(plan)
@@ -148,7 +170,7 @@ def test_sc001_nothing_is_reserved_or_recorded_for_a_way_while_the_houses_are_se
         st = self.s
         assert st._access is not None and st._access.segs == [], "the tree is empty while houses are seated"
         assert st.M["access_corridors"] == [] and not st.standing.reserved.corridors, "no way recorded or reserved"
-        assert not {"access_exit", "way_out_gate", "way_out_root"} & set(st.M), "no strip, no gate, no root"
+        assert not {"access_exit", "way_out_gate", "way_out_track"} & set(st.M), "no strip, no gate, no track"
         got = opens(self, geom)
         assert not ((self.buildable.array() != 0) & (self.lane.array() == 0)).any(), "the anchor painted into no buildable cell"
         seen.append(len(st.M["houses"]))
@@ -157,7 +179,47 @@ def test_sc001_nothing_is_reserved_or_recorded_for_a_way_while_the_houses_are_se
     monkeypatch.setattr(SeatRegion, "opens", watched)
     stages.stage_homesteads(s, plan)
     assert seen and len(s.M["houses"]) == 10, "the seating asked, and seated every household"
-    assert "access_exit" not in s.M and len(s.M["way_out_root"]) == 2 and s.M["way_out_root"][0] == s.M["way_out_gate"]
+    assert "access_exit" not in s.M and len(s.M["way_out_track"]) >= 2 and s.M["way_out_track"][0] == s.M["way_out_gate"]
+
+
+# ---- SC-007: the track drawn is the track chosen, and every household's way ends on it --------------------------------
+
+
+def _on_a_run(q: tuple[float, float], runs: list[list[tuple[float, float]]], tol: float) -> bool:
+    """Whether `q` lies within `tol` of any leg of any of `runs`."""
+    return any(seg_dist(q[0], q[1], a, b) <= tol for run in runs for a, b in zip(run, run[1:], strict=False))
+
+
+def test_sc007_the_connector_drawn_is_the_track_chosen_and_every_way_ends_on_it_or_an_earlier_way() -> None:
+    """SC-007 (feature 320, FR-008): on a nucleated roll, the track out chosen once the last house stood (`way_out_track`) is
+    the connector `stage_track` draws, point for point; and every household's way, in the order laid, ends on that track or
+    on a way laid before it - no way is laid to a track that is then drawn somewhere else."""
+    from l7r.diagram.hamletgen import seat_cluster
+    from l7r.diagram.hamletgen.ways import track as tr
+
+    plan = a_plan(households=10)
+    plan.envelope = list(CROWN)
+    plan.seat = seat_cluster(plan)
+    plan.settlement_form = "nucleated"
+    s = Settlement(1400, 1400, seed=3)
+    s.meta(name="V", scale="hamlet", ftpx=1, toscale=True, households=10, down_deg=90, water_flow=90, nucleated=True)
+    s._nucleated = True
+    s.field_polys.append(list(plan.envelope))
+    stages.stage_homesteads(s, plan)
+    chosen = [tuple(q) for q in s.M["way_out_track"]]
+    assert len(chosen) >= 2 and list(chosen[0]) == s.M["way_out_gate"], "the track chosen, its first point the gate"
+    ways: list[list[tuple[float, float]]] = []
+    for leg in s.M["access_corridors"]:  # a record per leg, door first; a household's first leg names its house (`access.reserve`)
+        a, b = ((float(q[0]), float(q[1])) for q in leg["pts"])
+        if "of" in leg:
+            ways.append([a])
+        ways[-1].append(b)
+    assert ways and len(ways) == sum(1 for h in s.M["houses"] if h["geom"].get("access")), "every household's way was laid, and read back"
+    for k, way in enumerate(ways):
+        assert _on_a_run(way[-1], [chosen, *ways[:k]], 1.0), f"way {k} ends at {way[-1]}, on neither the track nor an earlier way"
+    tr.stage_track(s, plan)
+    drawn = [ln for ln in s.M["lanes"] if ln.get("connector")]
+    assert len(drawn) == 1 and [tuple(q) for q in drawn[0]["pts"]] == chosen, "the connector drawn is the track chosen, exactly"
 
 
 # ---- SC-002: a dooryard opening only onto ground cut off from the anchor is not open ---------------------------------------

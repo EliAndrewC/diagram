@@ -51,6 +51,15 @@ track out or the field path; the claims of the code that seats and lays them cit
 - **FR-006**: Page 0081's drawing page and the claims of every changed unit MUST say what the map does; the record checks and
   claims checks the edits owe are run (feature 318's scoped re-check).
 
+- **FR-007** (Amendment 1): a marsh's shaped outline MUST NOT run straight (within the brook's `RULED_TOL_FT`) past what a
+  visible edge may (`RULED_SHARE` of `RULED_MIN_LEN_FT`), short ends and corners included - the marsh ends fixed before the feature lands.
+- **FR-008** (Amendment 2): the track out's whole course MUST be ONE decision, made once the last house stands: chosen from the
+  cluster's edge by the track's own route search, against the seated homesteads (their parts as seated) and the households'
+  wood seats, and drawn as chosen; each household's way is laid to that track. No first leg, gate or bearing OF THE TRACK OUT is decided
+  separately (the margin's way-out test before seating, Edge cases and Decisions Recorded, answers only whether a way out
+  exists and fixes nothing of the track's course), and the track stage draws the recorded track rather than choosing again (Inashiro's nub at the track out's
+  start, the glyph check's error, came from two decisions disagreeing).
+
 ## Success Criteria
 
 - **SC-001** (FR-001): a test fails if any way, corridor or strip is reserved or recorded before the last house is seated on a
@@ -61,6 +70,10 @@ track out or the field path; the claims of the code that seats and lays them cit
   seeds reach every household; no map's field goes unreached.
 - **SC-004** (FR-005): the bookends against main recorded, with the perf records their band owes.
 - **SC-005** (FR-006): the record and claims checks owed answer clean, or their findings are filed.
+
+- **SC-006** (FR-007): a test of the shaping over seeded laid strips holds every outline's straightest stretch under `RULED_SHARE` x `RULED_MIN_LEN_FT`.
+- **SC-007** (FR-008): a test fails if the track the track stage draws differs from the one recorded when the last house stood,
+  or if any way's join is to a point not on that track or an earlier way; Inashiro's glyph check passes its hairpin finding.
 
 ## Decisions Recorded
 

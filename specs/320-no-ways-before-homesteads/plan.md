@@ -27,11 +27,14 @@ keeps privately, never a corridor, never on the manifest. A household whose door
 flood does not reach (beyond water, walled in) is not open (FR-002; the over-count 318 measured from the window's edge,
 cohort seed 13, is why the anchor is on the way-out side only).
 
-**D2 - The track out first, then the households' ways (FR-003).** `lay_the_ways` moves from the end of `stage_homesteads` to
-`stage_track`, after the connector is laid: the connector's legs (from its start, within the gap raster's window) become the
-tree the flood starts from and the ways join (`AccessTree.add`). The seating's reservations split: the wood seats stay
-reserved at the end of the homesteads stage; the corridors are reserved when the ways are laid (`reserve_the_seating`'s
-corridor half, called from the gap pass's caller). `tree.hosts` reads "on the connector" where it read "on the strip".
+**D2 - The track out first, then the households' ways (FR-003, FR-008).** Once the last house stands, inside
+`stage_homesteads` and before any farmstead is drawn (the overlap registry refuses a lane on a drawn yard), the track out's
+whole course is chosen ONCE by the track's own search (`track.choose_track_out`, lifted from `stage_track`: the cluster
+gateway, `gateway_track` / `connector_track`, `connector_through`), its fabric the homesteads as seated (`seated_fabric`: each
+household's house, yard, beds, well, sheds and fixtures from its seated geometry) and the wood seats. It is recorded
+(`way_out_track`); its stretch within the gap raster's window is the tree the flood starts from and the ways join; the wood
+seats are reserved after the parts are drawn. `stage_track` draws the recorded track and chooses nothing; a map with no
+recorded track (the row and dispersed forms) chooses it there as before. No gate or first leg is decided apart from it.
 
 **D3 - The field path laid by the web (FR-003, FR-004).** With no field's corridor, the web's own field path (`settle.
 settle_field`, `corridors.field_runs`) is what reaches the field on a brook map - as it did before feature 287 W03 reserved it.
@@ -43,6 +46,11 @@ reading `access_exit`: `gateway.track_from_the_strip_end`, `cluster_edge`'s stri
 `track.on_the_strip`, `track.folds_on_the_strip`, `track._connector_through`'s strip fallback, `web`'s keep-on-the-strip skip,
 `joints`' strip exception, `tree.strip_run` / `_strip` / `_along` / `_at`, `reserve_the_seating`'s strip, and
 `tools/placement_stages`' strip. Each fallback they guarded (the row and dispersed forms' path) becomes the only path.
+
+**D6 - The marsh ends (FR-007).** A fourth, short component in the marsh outline's wave (`WAVE_SHORT_FT`, weighted as
+`WAVE_WEIGHTS` gives it); observed 2026-10-04 (exact 2 ft `straightest_run` over three laid strips and a short-ended strip,
+40 seeds each, scratchpad `marshvar2.py`): the longest straight stretch fell from 160 ft to 85 ft, under the bar
+`test_no_stretch_of_a_shaped_outline_runs_straight_for_the_share_a_visible_edge_may_not_pass` holds.
 
 **D5 - The record (FR-006).** Page 0081's drawing page already says houses first, ways after; the claims that cited the strip
 or the field's corridor are rewritten with the code; the claims and record checks owed are run through feature 318's scoped

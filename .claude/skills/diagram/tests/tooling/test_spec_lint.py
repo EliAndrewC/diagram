@@ -258,6 +258,13 @@ def test_check_5_reaches_a_level_three_functional_requirements_section(tmp_path:
     assert len(got) == 1 and "144 ms" in got[0]
 
 
+def test_check_5_reaches_requirements_with_no_subsection(tmp_path: pathlib.Path) -> None:
+    """Feature 320's spec put its FRs directly under `## Requirements`, and none was read (spec-fidelity, 2026-10-04)."""
+    body = "## Requirements\n\n- **FR-001** It costs 144 ms.\n\n### Key Entities\n\nA 3 s thing.\n"
+    got = figs.check_measured_figures(_measured(tmp_path, body, _ENTRY))
+    assert len(got) == 1 and "144 ms" in got[0]
+
+
 def test_check_5_a_round_label_passes_in_the_review_history_only(tmp_path: pathlib.Path) -> None:
     body = "## Review history\n\nIt measured 145 ms on round 2's own run.\n"
     assert figs.check_measured_figures(_measured(tmp_path, body, _ENTRY)) == []
