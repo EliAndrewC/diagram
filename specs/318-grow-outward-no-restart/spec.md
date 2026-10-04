@@ -139,8 +139,8 @@ engine no longer keeps.
 - **FR-003**: No distance from the field MUST refuse a seat, on any form, and the field reach (`FIELD_REACH_FT`) MUST be removed
   (the GM: "we can get rid of these 700 feet measurement completely"). Every use MUST be deleted or re-based on something that
   is not that figure: the predicate `within_field_reach` (the growth's seat test, the nucleated placer, the dispersed form's
-  exhaustive pass, the fit test) deleted; the seat window the growth's seat region is built over, the free-ground grid's box and
-  the manifest's `site_boundary.window` sized from the map's own extent; the placement-stages page's legend and the tests
+  exhaustive pass, the fit test) deleted; the seat window the growth's seat region is built over and the free-ground grid's box
+  re-based on the cost window below (not on the reach), the manifest's `site_boundary.window` sized from the map's own extent; the placement-stages page's legend and the tests
   pinning the figure updated. The hard limits that remain are every rule a seat asks today, with the field reach and the per-seat
   path search the exceptions (FR-013): dry ground, nothing on crop or water, the canvas, the exit strip and the field's corridor
   (the only corridors reserved while houses are seated), the standing homesteads and the threading gap (FR-011), the household's
@@ -159,8 +159,8 @@ engine no longer keeps.
   so a way can always be laid between neighbors. The exemption is PAIRWISE: a household reached across a neighbor's yard (feature
   317's tight seat) stands against that one neighbor by design, and keeps the gap from every other homestead.
 - **FR-012** (Amendment 2): A seat MUST be admitted by a cheap check in place of a path search: its yard opens onto LANE GROUND
-  connected to the way out - ground a lane can pass at its width: the site's taken ground grown by about a corridor's
-  half-width and the households' wood seats, flooded from the exit strip and the field's corridor, a raster asked by lookup
+  connected to the way out - ground a lane can pass at its width, clear of the site's taken ground grown by about a corridor's
+  half-width and of the households' wood seats - flooded from the exit strip and the field's corridor, a raster asked by lookup
   and kept current as houses stand. Between homesteads the width is FR-011's to guarantee (the raster's cell cannot resolve a
   20 ft gap), so the raster answers where the paddy, the water and the map's edge close ground off; a household it admits that
   no way then reaches is FR-014's pinch, counted.
@@ -279,4 +279,5 @@ engine no longer keeps.
 - After the plan review (MODE 4, BLOCKED on D2): FR-003 states the cost window as built (the perf audit's correction); FR-012
   states what the lane raster holds (homesteads guaranteed by FR-011, not painted); SC-008 scoped to access corridors. A verify
   round is owed on these three.
-
+- Verify round on the three (2026-10-03): CHANGES REQUIRED - FR-003's old window clause removed, FR-012's lane ground worded as
+  clear of the blocked ground; applied.
