@@ -81,11 +81,13 @@ def imports() -> list[tuple[pathlib.Path, str, str]]:
     return _from_imports()
 
 
+@pytest.mark.xdist_group("engine_ast")  # one worker holds the parsed engine, not five (tests/_heap.py)
 def test_the_census_found_the_tree(imports: list[tuple[pathlib.Path, str, str]]) -> None:
     """A zero-result scan would make every assertion below vacuously true."""
     assert len(imports) > 300, f"only {len(imports)} first-party from-imports found - wrong root?"
 
 
+@pytest.mark.xdist_group("engine_ast")  # one worker holds the parsed engine, not five (tests/_heap.py)
 def test_every_imported_name_resolves_on_its_module(imports: list[tuple[pathlib.Path, str, str]]) -> None:
     """The invariant a package split must preserve, checked against the live module.
 

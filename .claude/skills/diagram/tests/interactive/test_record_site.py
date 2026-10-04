@@ -41,6 +41,10 @@ def _named(node: dict) -> set[str]:
 # ------------------------------------------------------------------------------------------------- the real record
 
 
+# ONE worker builds the real site, not eight: each build is 230-480 MB (tests/_heap.py has the measurement)
+pytestmark = pytest.mark.xdist_group("record_site")
+
+
 @pytest.fixture(scope="module")
 def built() -> dict[str, str]:
     return site.build(RESEARCH_DIR)

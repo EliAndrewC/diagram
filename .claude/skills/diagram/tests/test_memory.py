@@ -42,6 +42,7 @@ def test_trim_is_a_courtesy_never_an_error(monkeypatch: pytest.MonkeyPatch) -> N
 HEAVY = ("shapely", "numpy", "PIL")  # 21.7, 17.9 and 2.3 MiB a worker - the three that are worth deferring
 
 
+@pytest.mark.xdist_group("engine_ast")  # one worker holds the parsed engine, not five (tests/_heap.py)
 def test_no_engine_module_imports_a_heavy_library_at_import_time() -> None:
     """The surface is DERIVED, never a list in a spec (feature 237, FR-010 for shapely; NUMPY added at the GM's
     request on 2026-09-13, and PIL on the session's own judgment, which spec D9 discloses with its cost -

@@ -152,13 +152,35 @@ def test_a_fragment_without_its_heading_is_skipped(tmp_path: pathlib.Path) -> No
     assert [q.anchor for q in oq.questions(root)] == ["how-long-was-a-rack", "did-a-village-rack-by-the-house"]
 
 
+CALIBRATION = "s = 0\nfor i in range(4_000_000):\n    s += i * i\n"
+CALIBRATION_QUIET = 0.44  # its CPU seconds on the GM's laptop, quiet (0.43-0.51 over five runs, 2026-10-04)
+
+
+def _calibration_cpu() -> float:
+    """CPU seconds of the fixed calibration loop in a child, now."""
+    before = resource.getrusage(resource.RUSAGE_CHILDREN)
+    subprocess.run([sys.executable, "-c", CALIBRATION], check=True)
+    after = resource.getrusage(resource.RUSAGE_CHILDREN)
+    return (after.ru_utime - before.ru_utime) + (after.ru_stime - before.ru_stime)
+
+
 def test_the_real_tree() -> None:
     # ...ITS CPU TIME, NOT THE WALL CLOCK (feature 315): the gate runs it beside four other sessions under one 10 GB cap, and a
-    # 2.3 s run read 12.4 s while the machine stalled on memory - the bound is on the work, which contention does not change
+    # 2.3 s run read 12.4 s while the machine stalled on memory - the bound is on the work.
+    # BUT CPU TIME IS NOT IMMUNE TO CONTENTION EITHER (2026-10-04): the GM's laptop is a hybrid Core Ultra 7 155H (P- and
+    # E-cores, two threads a core), and with every core busy the same 3.4 s of work read 8-13 s of CPU - it failed a
+    # test-full at 10.0003 s, and ran 9-11 s in every full run measured that day. So the CPU time is SCALED by a
+    # calibration loop run beside it: `CALIBRATION_QUIET` s of CPU on a quiet machine, and its lesser reading of the
+    # two around the run says how much slower this machine is right now. Measured under 22 busy loops: the scaled
+    # reading was 3.4 / 2.5 / 3.9 s against 3.4 s quiet - the 10 s bound (SC-003, a quiet-machine target) still
+    # catches a 3x regression and no longer flakes on a loaded gate.
+    calibrated = _calibration_cpu()
     before = resource.getrusage(resource.RUSAGE_CHILDREN)
     out = subprocess.run([sys.executable, str(REPO / "scripts/_open_questions.py"), "--root", str(REPO)], capture_output=True, text=True, check=True).stdout
     after = resource.getrusage(resource.RUSAGE_CHILDREN)
     took = (after.ru_utime - before.ru_utime) + (after.ru_stime - before.ru_stime)
+    slowdown = max(1.0, min(calibrated, _calibration_cpu()) / CALIBRATION_QUIET)
+    took /= slowdown
     rack = out[out.index("## How our maps draw rice-drying racks (hasa, hasagi)") :]
     rack = rack[: rack.index("\n## ")]
     assert "map features: threshing yard" in rack
