@@ -205,7 +205,7 @@ def command(u: ru.Unit, now: ru.Record | None = None) -> str:
         keys = keys or ["<the note's key>"]
         return " ; ".join(f"make check-bundle KEY={k} WHOLE=1" for k in dict.fromkeys(keys)) + f"  then  make record-checked CHECK=source-reader Q={q} NOTES={note}"
     if check.startswith("modal-"):  # feature 319: a modal's units; the three research units are one modal-research dispatch
-        agent = "modal-form" if check == "modal-form" else "modal-research"
+        agent = check if check in ("modal-form", "modal-depiction") else "modal-research"
         return f"make modal-bundle KIND=\"{u.subject}\" FOR={agent}  then  make record-checked CHECK={check} BUNDLE=<its bundle> RESULT=..."
     if check == "entry-drift":  # its subject is the modal's key, not a question: the section it moved under is named in the occasion
         sec = re.search(r"\((\d{4})-", u.occasion)

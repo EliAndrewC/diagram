@@ -1290,7 +1290,8 @@ page-session: ## [project] start ONE page's work in a FRESH headless session, de
 	@cd "$$(git rev-parse --show-toplevel)" && scripts/page-session.sh "$(BRIEF)" "$(NAME)" "$(MODEL)" "$(EFFORT)" "$(AGENTS)"
 
 # GUARD_EDIT_OK: feature 319 - two new operations (a modal check's bundle and its prepass); no guard changes.
-modal-bundle: ## [project] the files a modal check reads (modal-form or modal-research), copied out of the repository with the prepass and, for modal-research, the Entry pages, the candidates and the question record for grep - feature 319   KIND=<class or key> FOR=modal-form|modal-research [OUT=<dir>]
+# GUARD_EDIT_OK: feature 319 D13 - the help line names the third check, modal-depiction; an operation's text, no guard changes.
+modal-bundle: ## [project] the files a modal check reads (modal-form, modal-research or modal-depiction), copied out of the repository with the prepass and, for modal-research, the Entry pages, the candidates and the question record for grep; for modal-depiction, the drawing pages, the claims citing them and a crop of the glyph - feature 319   KIND=<class or key> FOR=modal-form|modal-research|modal-depiction [OUT=<dir>]
 	@if [ -z "$(KIND)" ]; then printf 'make modal-bundle: KIND=<class name or key> is required - e.g. make modal-bundle KIND=Farmhouse FOR=modal-form\n' >&2; exit 2; fi
 	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/_modal_bundle.py "$(KIND)" --for "$(or $(FOR),modal-form)" $(if $(OUT),--out "$(OUT)",)
 

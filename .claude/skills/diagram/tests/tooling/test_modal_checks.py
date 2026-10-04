@@ -184,3 +184,25 @@ def test_a_modal_in_its_own_file_is_read_from_the_file_and_owed_by_its_edits(tmp
     assert [s for s, _w, _f in mo.owed(root, base)][0] == "modal-form:hamlet/farmhouse"
     sheet = mo.modal_file(".claude/skills/diagram/l7r/diagram/interactive/compound_kinds/household.py", "well")
     assert sheet.endswith("/modals/sheet/well.md"), "a sheet's well and a hamlet's well are two files"
+
+
+def test_the_depiction_tab_owes_its_own_check_and_its_bundle_carries_the_drawing_and_the_claims(tmp_path: pathlib.Path) -> None:
+    """Plan D13 (GM 2026-10-04): a modal with a Depiction tab owes `modal-depiction`, again when a page its Drawing: names
+    moves; its bundle carries that page whole and the claims-index rows citing it (a DRIFTED one with its note)."""
+    import json
+
+    root = _tree(tmp_path, FARMHOUSE.replace("    Name: farmhouse", "    Depiction: The map draws every house alike.\n\n    Name: farmhouse").replace(
+        "    Entry: research/questions/0029-farmhouses-minka.html", "    Entry: research/questions/0029-farmhouses-minka.html\n    Drawing: research/questions/0029-farmhouses-minka.drawing.html"))
+    q = root / SKILL / "research" / "questions"
+    (q / "0029-farmhouses-minka.drawing.html").write_text('<h2 id="how-our-maps-draw-farmhouses">How our maps draw farmhouses</h2>\n<p>The roof shape is a knob.</p>\n', encoding="utf-8")
+    (root / SKILL / "dev" / "claims-index.json").write_text(json.dumps({".claude/skills/diagram/l7r/diagram/settlement/houses.py::HousesMixin.house#ridge": {"verdict": "DRIFTED", "note": "always hipped", "pages": "{'0029-farmhouses-minka.drawing.html': 'x'}"}}), encoding="utf-8")
+    base = _commit(root)
+    assert [s for s, _w, _f in mo.owed(root, base)] == [], "nothing moved"
+    (q / "0029-farmhouses-minka.drawing.html").write_text('<h2 id="how-our-maps-draw-farmhouses">How our maps draw farmhouses</h2>\n<p>The roof shape is one.</p>\n', encoding="utf-8")
+    assert [s for s, _w, _f in mo.owed(root, base)] == ["modal-depiction:hamlet/farmhouse"], "a moved drawing page owes the tab's check alone"
+    out = tmp_path / "dep"
+    assert mb.bundle(root, "Farmhouse", "modal-depiction", str(out)) == 0
+    manifest = (out / "MANIFEST.md").read_text(encoding="utf-8")
+    assert "drawing/0029-farmhouses-minka.drawing.html" in manifest and "DRIFTED | `settlement/houses.py::HousesMixin.house#ridge` | always hipped" in manifest
+    assert "## Depiction" in manifest and "The map draws every house alike." in manifest and "no crop" in manifest, "no pool page in the fixture"
+    assert "unit: modal-depiction:hamlet/farmhouse " in manifest and "owed-checks: modal-depiction" in manifest

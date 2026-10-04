@@ -121,7 +121,15 @@ def render(root: pathlib.Path, m: mo.Modal) -> str:
     lines.append("(The page adds the generated sibling line - 'Not to be confused with ...' - at the foot of About.)\n")
     guesses = [g[2:] for g in m.tags.get("Guesses", "").splitlines() if g.strip()]
     lines += ["## Guesses", ""] + ([f"- {g}" for g in guesses] if guesses else ["(no Guesses tab - nothing guessed)"]) + [""]
-    lines += ["## References", ""]
+    dep = [p for p in m.tags.get("Depiction", "").split("\n\n") if p.strip()]
+    lines += ["## Depiction", ""]
+    lines += [p + "\n" for p in dep] if dep else ["(no Depiction paragraphs)\n"]
+    for f in m.drawing_files():
+        p = root / SKILL / f
+        lines.append(f"- {heading(p.read_text(encoding='utf-8')) if p.is_file() else '(MISSING FILE)'}  - `{f}`")
+    if not dep and not m.drawing_files():
+        lines.append("(no Depiction tab - nothing to say and no drawing page)")
+    lines += ["", "## References", ""]
     for f in m.entry_files():
         p = root / SKILL / f
         lines.append(f"- {heading(p.read_text(encoding='utf-8')) if p.is_file() else '(MISSING FILE)'}  - `{f}`")
@@ -150,12 +158,100 @@ def prepass(root: pathlib.Path, m: mo.Modal) -> str:
     return "\n".join(out) + "\n"
 
 
+CLAIMS_INDEX = SKILL / "dev" / "claims-index.json"
+#: the pool pages a glyph is cropped from, hamlets first (the standardized kinds), then the sheets (feature 319 plan D13)
+POOL_PAGES = (SKILL / "pool" / "hamlets", SKILL / "pool" / "magistracies", SKILL / "pool" / "country-shrines")
+
+
+def claims_citing(root: pathlib.Path, files: Sequence[str]) -> list[str]:
+    """The claims-index rows whose cited pages include any of `files` - the engine's own account of how it draws the kind,
+    each with its verdict (a DRIFTED row is a variety the record names and the code does not draw - plan D13)."""
+    import json  # noqa: PLC0415
+
+    path = root / CLAIMS_INDEX
+    if not path.is_file() or not files:
+        return []
+    names = {pathlib.Path(f).name for f in files}
+    out = []
+    for key, row in sorted(json.loads(path.read_text(encoding="utf-8")).items()):
+        if any(n in str(row.get("pages", "")) for n in names):
+            out.append(f"- {row.get('verdict', '?')} | `{key.split('/l7r/diagram/', 1)[-1]}` | {row.get('note', '')}")
+    return out
+
+
+def pool_page_with(root: pathlib.Path, key: str) -> pathlib.Path | None:
+    """The first pool page that draws the kind `key` (its page carries `data-k="<key>"`), hamlets first."""
+    mark = f'data-k="{key}"'
+    for d in POOL_PAGES:
+        for page in sorted((root / d).glob("*/*.html")):
+            with open(page, encoding="utf-8", errors="replace") as fh:
+                if mark in fh.read():
+                    return page
+    return None
+
+
+_CROP = """
+import sys
+from playwright.sync_api import sync_playwright
+page_path, key, out = sys.argv[1], sys.argv[2], sys.argv[3]
+with sync_playwright() as p:
+    b = p.chromium.launch(); pg = b.new_page(viewport={"width": 1200, "height": 900})
+    pg.goto("file://" + page_path); pg.wait_for_timeout(2500)
+    sel = 'g.f[data-k="' + key + '"]'
+    def rect():
+        return pg.evaluate("(s) => { const g = document.querySelector(s); if (!g) return null; const r = g.getBoundingClientRect(); return [r.x, r.y, r.width, r.height]; }", sel)
+    for _ in range(14):
+        x, y, w, h = rect()
+        if w > 200 or h > 200: break
+        pg.mouse.move(x + w / 2, y + h / 2)
+        pg.keyboard.down("Control"); pg.mouse.wheel(0, -240); pg.keyboard.up("Control")
+        pg.wait_for_timeout(200)
+    x, y, w, h = rect()
+    pg.mouse.move(2, 2); pg.wait_for_timeout(150)  # off the glyph, so it is not drawn lit
+    cx, cy = x + w / 2, y + h / 2
+    pg.screenshot(path=out, clip={"x": max(0, cx - 300), "y": max(0, cy - 250), "width": 600, "height": 500})
+    b.close()
+"""
+
+
+def glyph_crop(page: pathlib.Path, key: str, out: pathlib.Path) -> bool:
+    """A 600 x 500 crop of the kind's first glyph on a pool page, zoomed until it is about 200 px across - what
+    `modal-depiction` compares the tab with (plan D13). False when the browser is not there or the glyph cannot be found."""
+    import subprocess  # noqa: PLC0415
+
+    got = subprocess.run([sys.executable, "-c", _CROP, str(page), key, str(out)], capture_output=True, text=True, check=False, timeout=180)
+    return got.returncode == 0 and out.is_file()
+
+
+def depiction_parts(root: pathlib.Path, m: mo.Modal, put, out: pathlib.Path, grep_targets: list[str]) -> None:  # noqa: ANN001
+    """What `modal-depiction` reads beyond the modal and the rules: each drawing page whole, the claims citing them, and the
+    glyph's crop (plan D13)."""
+    for f in m.drawing_files():
+        p = root / SKILL / f
+        if p.is_file():
+            put(f"drawing/{p.name}", p.read_text(encoding="utf-8"), str(SKILL / f), "a page the modal's Drawing: names - how our maps draw it")
+    rows = claims_citing(root, m.drawing_files())
+    put("claims.md", "# The engine's research claims citing these drawing pages (verdict | unit | note)\n\n" + ("\n".join(rows) if rows else "(none)") + "\n",
+        str(CLAIMS_INDEX), "the code's own account of how it draws the kind - a DRIFTED row is a variety the record names and the code does not draw")
+    page = pool_page_with(root, m.key)
+    crop = out / "glyph.png"
+    if page is not None and glyph_crop(page, m.key, crop):
+        grep_targets.append("glyph.png")
+        put("glyph.txt", f"glyph.png beside this MANIFEST: the kind `{m.key}` as drawn on `{page.relative_to(root)}`, zoomed until its first glyph is about 200 px across; Read it as an image.\n",
+            str(page.relative_to(root)), "where the crop came from - Read glyph.png")
+    else:
+        put("glyph.txt", f"no crop: the kind `{m.key}` is on no pool page, or the browser was not available - judge from the drawing pages and the claims, and say so.\n",
+            "scripts/_modal_bundle.py", "why there is no crop")
+
+
 def owed_lines(root: pathlib.Path, m: mo.Modal, for_: str) -> str:
     """The MANIFEST's owed section in `_bundle_owed`'s shape: `owed-checks:` for the dispatch guard, `unit:` lines for
     `make record-checked BUNDLE=` - each unit this bundle answers, at the fingerprint of the words copied."""
     fp_form, fp_research = mo.fingerprints(root, m)
     if for_ == "modal-form":
         units = [(f"{mo.FORM_CHECK}:{m.uid}", fp_form)]
+    elif for_ == mo.DEPICTION_CHECK:
+        units = [(f"{mo.DEPICTION_CHECK}:{m.uid}", mo.depiction_fingerprint(root, m))]
     else:
         units = [(f"{c}:{m.uid}", fp_research) for c in mo.RESEARCH_CHECKS]
     return "## Owed (feature 311)\n\n" + f"owed-checks: {for_}\n" + "".join(f"unit: {s} {fp}\n" for s, fp in units)
@@ -186,6 +282,8 @@ def bundle(root: pathlib.Path, kind: str, for_: str, out_arg: str) -> int:
     put("guidelines.md", (root / guide).read_text(encoding="utf-8"), str(guide), "the rules - your contract; name a rule (M#/P#) in every finding")
     put("prepass.txt", prepass(root, m), "scripts/_modal_bundle.py", "the mechanical findings - rule on each")
     grep_targets: list[str] = []
+    if for_ == mo.DEPICTION_CHECK:
+        depiction_parts(root, m, put, out, grep_targets)
     if for_ == "modal-research":
         for f in m.entry_files():
             p = root / SKILL / f
@@ -234,7 +332,7 @@ def bundle(root: pathlib.Path, kind: str, for_: str, out_arg: str) -> int:
 def main(argv: Sequence[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("kind")
-    ap.add_argument("--for", dest="for_", default="modal-form", choices=("modal-form", "modal-research"))
+    ap.add_argument("--for", dest="for_", default="modal-form", choices=("modal-form", "modal-research", "modal-depiction"))
     ap.add_argument("--out", default="")
     ap.add_argument("--root", default=".")
     ap.add_argument("--prepass", action="store_true")

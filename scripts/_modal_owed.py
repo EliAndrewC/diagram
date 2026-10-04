@@ -38,9 +38,12 @@ MODAL_DIRS = (f"{SKILL}/l7r/diagram/interactive/classes", f"{SKILL}/l7r/diagram/
 RESEARCH = f"{SKILL}/research"
 FORM_CHECK = "modal-form"
 RESEARCH_CHECKS = ("modal-accuracy", "modal-references", "modal-gaps")
+#: the Depiction tab's check (plan D13): owed by the tab's words, its Drawing: list, or a page that list names
+DEPICTION_CHECK = "modal-depiction"
 #: the defined agent that answers the three research units (plan D4)
 RESEARCH_AGENT = "modal-research"
-_TAG = re.compile(r"^(What|Why|Note|Caveat|About|Guesses|Name|Covers|Label|Sources|Entry|Form):\s?(.*)$")
+_TAG = re.compile(r"^(What|Why|Note|Caveat|About|Guesses|Depiction|Name|Covers|Label|Sources|Entry|Drawing|Form):\s?(.*)$")
+_PARAGRAPHED = ("About", "Depiction")
 _PATH = re.compile(r"research/questions/[^\s,;]+?\.html")
 
 
@@ -76,6 +79,14 @@ class Modal:
     def entry_files(self) -> list[str]:
         return list(dict.fromkeys(_PATH.findall(self.entry)))
 
+    @property
+    def depiction(self) -> str:
+        """The Depiction tab's words and its drawing pages (plan D13) - what `modal-depiction` reads of the modal."""
+        return "\n".join(self.tags.get(t, "") for t in ("Depiction", "Drawing"))
+
+    def drawing_files(self) -> list[str]:
+        return list(dict.fromkeys(_PATH.findall(self.tags.get("Drawing", ""))))
+
 
 def parse_tags(doc: str) -> dict[str, str]:
     """A class docstring's tags, each value its lines - `About:` keeps a blank line between paragraphs as `\\n\\n` and
@@ -88,11 +99,11 @@ def parse_tags(doc: str) -> dict[str, str]:
         if m:
             cur = m.group(1)
             out[cur] = [m.group(2)] if m.group(2) else []
-        elif cur is not None and (line or cur == "About"):
+        elif cur is not None and (line or cur in _PARAGRAPHED):
             out[cur].append(line)
     joined = {}
     for tag, lines in out.items():
-        if tag == "About":
+        if tag in _PARAGRAPHED:
             joined[tag] = re.sub(r"\n{3,}", "\n\n", "\n".join(lines)).strip()
             joined[tag] = "\n\n".join(" ".join(p.split()) for p in joined[tag].split("\n\n") if p.strip())
         elif tag == "Guesses":
@@ -201,10 +212,18 @@ def digest(parts: Sequence[str]) -> str:
     return hashlib.sha256("\x1f".join(parts).encode()).hexdigest()[:16]
 
 
+def _pages(root: pathlib.Path, files: Sequence[str]) -> list[str]:
+    return [page_words((root / SKILL / f).read_text(encoding="utf-8")) if (root / SKILL / f).is_file() else "" for f in files]
+
+
 def fingerprints(root: pathlib.Path, m: Modal) -> tuple[str, str]:
     """(the form units' fingerprint, the research units' fingerprint): the modal's words, and those plus its Entry pages'."""
-    pages = [page_words((root / SKILL / f).read_text(encoding="utf-8")) if (root / SKILL / f).is_file() else "" for f in m.entry_files()]
-    return digest([m.uid, m.prose, m.entry]), digest([m.uid, m.prose, m.entry, *pages])
+    return digest([m.uid, m.prose, m.entry]), digest([m.uid, m.prose, m.entry, *_pages(root, m.entry_files())])
+
+
+def depiction_fingerprint(root: pathlib.Path, m: Modal) -> str:
+    """The Depiction unit's fingerprint (plan D13): the modal's About and Depiction words, its Drawing: list and those pages."""
+    return digest([m.uid, m.prose, m.depiction, *_pages(root, m.drawing_files())])
 
 
 def owed(root: pathlib.Path, base: str) -> list[tuple[str, str, str]]:
@@ -225,6 +244,14 @@ def owed(root: pathlib.Path, base: str) -> list[tuple[str, str, str]]:
         elif moved_pages:
             why = f"a page its Entry names moved ({' '.join(pathlib.Path(f).name for f in moved_pages)})"
             rows += [(f"{c}:{m.uid}", why, fp_research) for c in RESEARCH_CHECKS]
+        # THE DEPICTION TAB (plan D13): owed when its words or its Drawing: list moved, or a page that list names did - and
+        # only for a modal that has the tab (Depiction: or Drawing:), which a converted modal without one never owes
+        if m.depiction.strip():
+            moved_drawing = [f for f in m.drawing_files() if f"{SKILL}/{f}" in changed_pages]
+            if was is None or was.depiction != m.depiction or was.prose != m.prose:
+                rows.append((f"{DEPICTION_CHECK}:{m.uid}", "its Depiction tab is new or changed", depiction_fingerprint(root, m)))
+            elif moved_drawing:
+                rows.append((f"{DEPICTION_CHECK}:{m.uid}", f"a page its Drawing: names moved ({' '.join(pathlib.Path(f).name for f in moved_drawing)})", depiction_fingerprint(root, m)))
     return rows
 
 
