@@ -15,7 +15,7 @@ from ..consts import WEB_CLEARANCE, Poly
 from . import law
 from .bund import BRANCH_WIDTH, paddy_ground
 from .checks import served_network
-from .corridors import ACCESS_WIDTH, FIELD_ROLE, TARGET_ROLE, field_router, field_runs, routed_field_runs, spur_runs
+from .corridors import ACCESS_WIDTH, FIELD_ROLE, ROUTED_FIELD_STARTS, TARGET_ROLE, field_router, field_runs, routed_field_runs, spur_runs
 from .geom import memo_ground, worked_ground
 
 Judge = Callable[..., bool]
@@ -54,7 +54,7 @@ def settle_targets(s: Any, lawful: Judge) -> int:
 
 def settle_field(s: Any, lawful: Judge) -> int:
     """Step 4c: THE FIELD WAY, where no way of the hamlet's own reaches the field on a brook map (`law.field_unreached`): the
-    first run from the network on to the bund that keeps the law (`Lawful`, as a tree lane) - straight, or over the brook
+    first run from the network on to the bund that keeps the law (`Lawful`, as a tree lane, squared at its crossings) - straight, or over the brook
     square at a ford (`field_runs`), then threaded round the steadings by the web's router (`routed_field_runs`,
     `field_router`), the paddy's ground first and then the worked ground's - drawn as a tree lane (`FIELD_ROLE`), so no
     repair cuts it. Returns 1 where one is drawn, else 0, and the settle refuses a field left unreached
@@ -81,9 +81,12 @@ def settle_field(s: Any, lawful: Judge) -> int:
         yield from field_runs(segs, grounds, BRANCH_WIDTH / 2.0, brook, fords)
         route = field_router(s, brook)
         for ground in grounds:
-            yield from routed_field_runs(segs, ground, BRANCH_WIDTH / 2.0, route, brook, fords)
+            yield from routed_field_runs(segs, ground, BRANCH_WIDTH / 2.0, route, brook, fords, starts=ROUTED_FIELD_STARTS)
 
-    run = next((r for r in candidates() if len(r) >= 2 and lawful(r, BRANCH_WIDTH)), None)
+    # ...EACH SQUARED AT ITS WATER CROSSINGS before it is judged and drawn (`Lawful.squared`, as the seating judged the field's
+    # corridor until feature 320): a run over the brook at a ford is judged as the web draws it
+    square = getattr(lawful, "squared", lambda r: r)
+    run = next((q for r in candidates() if len(r) >= 2 and lawful(q := square(r), BRANCH_WIDTH)), None)
     if run is None:
         return 0
     _draw_tree_lane(s, run, BRANCH_WIDTH, FIELD_ROLE)

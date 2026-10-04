@@ -101,3 +101,22 @@ def test_a_lane_whose_drop_strands_only_ordinary_lanes_and_no_house() -> None:
     assert not co.strands_only_ordinary({**M, "lanes": [conn, link, {**spur, "street": True}]}, 1), "a tree lane is never stranded"
     farm = {"x": 100.0, "y": 330.0, "w": 40.0, "h": 28.0, "rot": 0.0}
     assert not co.strands_only_ordinary({**M, "houses": [farm], "meta": {"generated_by": "hamletgen"}}, 1), "the farm's only way"
+
+
+def test_a_routed_field_way_is_tried_from_several_starts_apart_and_a_ford_with_no_far_leg_is_passed() -> None:
+    """Feature 320 (`ROUTED_FIELD_STARTS`, cohort seed 26): each ford is left for from the network points nearest its landing,
+    `ROUTED_START_GAP_FT` apart and at most `starts` of them; a ford whose far leg the router finds no way for is passed."""
+    ground = WorkedGround([[(300.0, -300.0), (500.0, -300.0), (500.0, 300.0), (300.0, 300.0)]])
+    brook = [(100.0, -500.0), (100.0, 500.0)]
+    segs = [((0.0, 0.0), (0.0, -200.0))]
+    froms = []
+
+    def route(a, b):
+        froms.append(a)
+        return [a, b]
+
+    runs = co.routed_field_runs(segs, ground, 1.0, route, brook, [(100.0, 0.0)], starts=3)
+    starts = froms[1:]  # the far leg first, once
+    assert len(runs) == 3 and len(starts) == 3
+    assert all(math.dist(p, q) > co.ROUTED_START_GAP_FT for i, p in enumerate(starts) for q in starts[:i]), "starts stand apart"
+    assert co.routed_field_runs(segs, ground, 1.0, lambda a, b: [], brook, [(100.0, 0.0)], starts=3) == [], "no far leg: the ford is passed"

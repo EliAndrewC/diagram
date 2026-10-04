@@ -291,13 +291,37 @@ keeps the law - each a router call on the web's own lattice, so a handful (cohor
 network fouled a steading or met its lane at a needle)."""
 
 
+ROUTED_FIELD_STARTS = 6
+"""How many points of the network, nearest a ford's near landing and `ROUTED_START_GAP_FT` apart, a routed field way is tried
+from (`routed_field_runs`). From the nearest alone (feature 320, cohort seed 26), every run's first leg left the network
+against a neighbor's yard: with no field's corridor reserved before the houses, the network's nearest point to a ford can
+stand among the steadings. Six starts at the four nearest fords found four lawful runs there (0.36 s, asked only once no
+straight run keeps the law).
+
+Research: field path from the network - UNRESEARCHED: six starts 30 ft apart, a search breadth"""
+
+ROUTED_START_GAP_FT = 30.0
+"""How far apart the starts a routed field way is tried from stand (`ROUTED_FIELD_STARTS`): a farmstead's yard width, so two
+starts do not leave from the same dooryard.
+
+Research: field path from the network - UNRESEARCHED: 30 ft between starts, a search breadth"""
+
+
 def routed_field_runs(
-    segs: Sequence[tuple[Pt, Pt]], ground: WorkedGround, half: float, route: Callable[[Pt, Pt], Poly], brook: Sequence[Pt] = (), fords: Sequence[Pt] = (), limit: int = ROUTED_FIELD_TRIES
+    segs: Sequence[tuple[Pt, Pt]],
+    ground: WorkedGround,
+    half: float,
+    route: Callable[[Pt, Pt], Poly],
+    brook: Sequence[Pt] = (),
+    fords: Sequence[Pt] = (),
+    limit: int = ROUTED_FIELD_TRIES,
+    starts: int = 1,
 ) -> list[Poly]:
     """Field ways threaded by the web's router (`route`, `route._route` over the steadings and the hard ground): from the
     network to the near landing of each of the `limit` fords nearest it, over the ford square, and on from the far landing
     to the bund - or, with no brook, from the network point nearest the ground straight to its run-on target, threaded.
-    Legs the router finds no way for are left out.
+    Each ford is left for from the `starts` network points nearest its landing, `ROUTED_START_GAP_FT` apart, nearest first;
+    the far leg is routed once a ford. Legs the router finds no way for are left out.
 
     Research:
         field path to the bund - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: threaded round the
@@ -319,13 +343,19 @@ def routed_field_runs(
         nx, ny = -(v[1] - u[1]) / d, (v[0] - u[0]) / d
         ends = [(f[0] + nx * FORD_LANDING_FT, f[1] + ny * FORD_LANDING_FT), (f[0] - nx * FORD_LANDING_FT, f[1] - ny * FORD_LANDING_FT)]
         near, far = sorted(ends, key=lambda e: min(math.dist(e, q) for q in pts))
-        q = min(pts, key=lambda p: math.dist(p, near))
         tgt = run_on_target(far, ground, half, reach=math.inf)
-        if tgt is None:
+        leg3 = route(far, tgt) if tgt is not None else []
+        if len(leg3) < 2:
             continue
-        leg1, leg3 = route(q, near), route(far, tgt)
-        if len(leg1) >= 2 and len(leg3) >= 2:
-            out.append(_dedup([*leg1, *leg3]))
+        chosen: list[Pt] = []
+        for q in sorted(pts, key=lambda p: math.dist(p, near)):
+            if len(chosen) >= starts:
+                break
+            if all(math.dist(q, o) > ROUTED_START_GAP_FT for o in chosen):
+                chosen.append(q)
+                leg1 = route(q, near)
+                if len(leg1) >= 2:
+                    out.append(_dedup([*leg1, *leg3]))
     return out
 
 
