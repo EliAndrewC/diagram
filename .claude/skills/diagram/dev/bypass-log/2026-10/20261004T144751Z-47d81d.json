@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-04T14:47:51Z",
+  "target": "claims-gate",
+  "commit": "d5ab2ba76",
+  "why": "CLAIMS_OK: pre-existing mislabels on code feature 320 touched, surfaced when page 0081 changed: filed in specs/320-no-ways-before-homesteads/claims-followup.md for their own feature (0081 at its size cap), as feature 318 landed its list"
+}

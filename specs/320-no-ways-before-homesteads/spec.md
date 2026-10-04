@@ -89,3 +89,13 @@ track out or the field path; the claims of the code that seats and lays them cit
 
 - Round 1 (spec-fidelity, 2026-10-04): CHANGES REQUIRED - FR-001 narrowed to the two named reservations (a row village's
   streets untouched), FR-005 covers both, the Summary's room named by its constant; applied.
+- Round 2 (spec-fidelity, 2026-10-04): FAITHFUL - the applied changes verified; the plan reviewed CLEAR (D1-D5).
+- Amendments 1 and 2, round 1 (spec-fidelity, 2026-10-04): NOT-REVIEWABLE - figures in FR-007, SC-006 and D6 carried no
+  label, and the checker missed a plain `## Requirements` section; the figures named by their constants, D6 labeled as a
+  one-shot observation, the checker fixed (`scripts/_spec_figures.py`).
+- Amendments, round 2 (spec-fidelity-verify, 2026-10-04): FR-007, SC-006 and SC-007 FAITHFUL; FR-008 faithful in substance,
+  CHANGES REQUIRED on one wording - it must forbid a separate decision of the TRACK's course only, not the margin's way-out
+  test before seating; applied.
+- Amendments, plan review (spec-fidelity MODE 4, 2026-10-04): CLEAR on D1-D6, and FR-008's applied wording confirmed -
+  status FAITHFUL.
+
