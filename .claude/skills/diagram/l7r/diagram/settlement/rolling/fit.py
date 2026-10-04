@@ -71,6 +71,8 @@ class BundleFitMixin:
     # (`rolling/access.py`), the well pockets laid so far, the households' lots and the byre form their bundles reserve a
     # stall for (`rolling/lot.py`), and - for the one household being sought a seat - which of those parts its bundle carries
     _access: Any = None
+    _way_out_anchor: Any = None  # the seating's reach seed past the seat band (feature 320 D1, `stages._seat_households`)
+    _way_out_bearing: Any = None  # ...and its lawful bearing out, the gate's (feature 320 D2)
     _pockets: Any = None
     _lots: Any = None
     _byre_form: str | None = None

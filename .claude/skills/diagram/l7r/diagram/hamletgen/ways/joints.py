@@ -523,10 +523,9 @@ def fold_the_connector_hairpin(s: Settlement, fabric: Sequence[Poly] = ()) -> in
     from .law import breaks_through, solid_boxes  # the law sits above this layer (it reads `hairpin_over_a_short_leg`)
 
     lanes: list[dict[str, Any]] = s.M.get("lanes") or []
-    # ...NOT WHERE THE CONNECTOR STARTS ON THE EXIT STRIP (feature 287 wave 6): the strip is drawn up to that start as a tree
-    # lane (`tree.strip_run`), and moved off it the strip ended in a hook (cohort seed 37); the settle re-aims the lane's end
-    # instead (`law.connector_hairpin_ends`)
-    conn = [] if s.M.get("access_exit") else [(k, o) for k, o in enumerate(lanes) if o.get("connector") and len(o.get("pts") or []) >= 2]
+    # ...NOT WHERE THE CONNECTOR STARTS AT THE WAY OUT'S GATE (feature 320; the exit strip's rule before it): the households'
+    # ways reach it there, and moved off it they stood off the network; the settle re-aims the lane's end instead
+    conn = [] if s.M.get("way_out_gate") else [(k, o) for k, o in enumerate(lanes) if o.get("connector") and len(o.get("pts") or []) >= 2]
     folds = 0
     for ci, co in conn:
         cp = _pts(co)

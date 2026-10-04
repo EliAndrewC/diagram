@@ -10,7 +10,7 @@ from collections.abc import Mapping, Sequence
 from typing import Any
 
 from l7r.diagram.overlap.registry import forbidden_segment
-from l7r.diagram.settlement import Settlement, edge_dist, point_in_poly, seg_closest, seg_dist, segments_cross, skeleton_layout
+from l7r.diagram.settlement import Settlement, edge_dist, point_in_poly, segments_cross, skeleton_layout
 from l7r.diagram.settlement._geom import ring_offset
 from l7r.diagram.settlement.land.wet import marsh_ground
 from l7r.diagram.sitegen.geom import centroid, crop_polys, pull_clear, unit
@@ -34,7 +34,7 @@ from . import law
 from .bund import RunOnBlocks, tip_onto_the_bund
 from .checks import PathChecker, brook_fords, drawn_water_segs, ford_crossing, gap_segments, stream_segs
 from .clearance import _HAIRPIN_DEG, clip_to_clear, route_around
-from .cluster_edge import STRIP_STEP_PX, _cluster_edge_toward, _cluster_gateway, gate_on_the_strip  # noqa: F401 - re-exported: `gateway.py`, `ways/__init__.py` and the tests reach them here
+from .cluster_edge import _cluster_edge_toward, _cluster_gateway, gate_out_of_the_field  # noqa: F401 - re-exported: `gateway.py`, `ways/__init__.py` and the tests reach them here
 from .dry_exit import EXIT_CELL_FT, GROVE_EXIT_CELL_FT, clear_of_bands, dry_exit
 from .fabric import _crosses_fabric, _fabric_hits, _homestead_polys
 from .geom import _turn_deg, memo_ground, polyline_len, push_clear_of_fabric, push_out_of, worked_ground
@@ -324,6 +324,15 @@ def stage_seat(s: Settlement, plan: SitePlan) -> None:
         s.field_face = (float(plan.seat["cx"]), float(plan.seat["cy"]))
 
 
+def recorded_gate(s: Settlement) -> Pt | None:
+    """The way out's gate the homesteads stage decided once the last house stood (`household_ways.way_out_gate`, feature 320),
+    where every household's way reaches the track out - None on a form that records none.
+
+    Research: the track out from the gate - research/questions/0081-village-lanes.drawing.html: each household's way joins the track out"""
+    g = s.M.get("way_out_gate")
+    return (float(g[0]), float(g[1])) if g else None
+
+
 def stage_track(s: Settlement, plan: SitePlan) -> None:
     """The connector and the field spur.
 
@@ -440,7 +449,7 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
         toe = s.toe_band()
         drawn_wet = marsh_ground(s.M, but=("defense",))
         _band_gate = to_screen((float(layout["gateway"][0]), float(layout["gateway"][1])))
-        gate_pt = gate_on_the_strip(s, plan.envelope, _cluster_gateway(s, seat, _band_gate))
+        gate_pt = recorded_gate(s) or gate_out_of_the_field(plan.envelope, _cluster_gateway(s, seat, _band_gate))
         track = connector_track(plan, gate_pt, avoid=[list(plan.envelope), *crops], wet=([toe] if toe else []) + drawn_wet, waters=drawn_water_segs(s), fabric=fabric)
         s.lane(
             connector_through(s, plan, track, [list(plan.envelope), *crops], ([toe] if toe else []) + drawn_wet, [*plan.watercourses, *drawn_water_segs(s)], fabric),
@@ -591,7 +600,7 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
         s.lane(_thread_the_fabric(s, plan, _out), width=6, clearance=LANE_CLEARANCE, worn=True, connector=True)
         return
     _band_gate = to_screen((float(layout["gateway"][0]), float(layout["gateway"][1])))
-    gate = gate_on_the_strip(s, plan.envelope, _cluster_gateway(s, seat, _band_gate))
+    gate = recorded_gate(s) or gate_out_of_the_field(plan.envelope, _cluster_gateway(s, seat, _band_gate))  # ...from the gate the households' ways reach (feature 320)
     # THE TRACK LEAVES CLEAR OF THE WET TOE (GM 2026-08-12: "there's supposed to be a rule that
     # paths don't pass through marshland"). The marsh is not drawn until `stage_hinterland`, long
     # after this, so the router asks the ENGINE where it will be - `toe_band` is the same derivation
@@ -758,34 +767,13 @@ def wet_grown_by_the_lane(w: Poly) -> Poly:
 
 
 def connector_through(s: Settlement, plan: SitePlan, track: Poly, avoid: Sequence[Poly], wet: Sequence[Poly], waters: Sequence[tuple[Pt, Pt]], fabric: Sequence[Poly]) -> Poly:
-    """The connector as drawn (`_connector_through`), its start set back on the exit strip where the threading moved it a
-    few feet off (`on_the_strip`), rounded to the record's 0.1 ft."""
-    run = on_the_strip(s.M, _connector_through(s, plan, track, avoid, wet, waters, fabric))
+    """The connector as drawn (`_connector_through`), rounded to the record's 0.1 ft."""
+    run = _connector_through(s, plan, track, avoid, wet, waters, fabric)
     # ...AT THE RECORD'S 0.1 FT, as every other lane is written (`reshape_lane`): a start left unrounded stood a hair off the
-    # rounded copies of it the web's lanes and the strip end on, and the three closed a face of no area (cohort seed 20)
+    # rounded copies of it the web's lanes end on, and they closed a face of no area (cohort seed 20)
     return [(round(x, 1), round(y, 1)) for x, y in run]
 
 
-STRIP_SNAP_PX = 20.0
-"""How far off the exit strip a connector's start may have been moved by its threading and still be set back on it
-(`on_the_strip`): cohort seed 37's was 8 ft off, and the web's strip ended in a hook to reach it."""
-
-
-def on_the_strip(M: Mapping[str, Any], run: Poly) -> Poly:
-    """`run` with its start set on its foot on the exit strip, where it stands off the strip by no more than `STRIP_SNAP_PX`
-    and the connector so moved still keeps the law (`connector_keeps_the_law`); else as it came. The web draws the strip as
-    a tree lane up to the connector's start (`tree.strip_run`, feature 287 wave 6), and a start a few feet off it left the
-    strip's last leg a hook."""
-    strip = M.get("access_exit")
-    if not strip or len(run) < 2:
-        return run
-    a, b = (float(strip[0][0]), float(strip[0][1])), (float(strip[1][0]), float(strip[1][1]))
-    foot = seg_closest(run[0][0], run[0][1], a, b)
-    off = math.dist(foot, run[0])
-    if off < 1e-6 or off > STRIP_SNAP_PX:
-        return run
-    moved = [foot, *run[1:]]
-    return moved if connector_keeps_the_law(M, moved) else run
 
 
 def _connector_through(s: Settlement, plan: SitePlan, track: Poly, avoid: Sequence[Poly], wet: Sequence[Poly], waters: Sequence[tuple[Pt, Pt]], fabric: Sequence[Poly]) -> Poly:
@@ -799,7 +787,6 @@ def _connector_through(s: Settlement, plan: SitePlan, track: Poly, avoid: Sequen
     Research:
         connector round the field and the steadings - research/questions/0081-village-lanes.drawing.html: bent and threaded,
             else the dry exit
-        out along the exit strip - UNRESEARCHED: swept again from the strip's outer end
         gives up a wood seat as last resort - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:
             the seats the way out crosses are released"""
     from .settle import square_run  # the web's last pass sits above this layer
@@ -809,19 +796,6 @@ def _connector_through(s: Settlement, plan: SitePlan, track: Poly, avoid: Sequen
     run = square_run(s.M, run) if len(run) >= 2 else run
     if len(run) >= 2 and connector_keeps_the_law(s.M, run):
         return run
-    # ...ELSE OUT ALONG THE EXIT STRIP (feature 287 M8): the seating reserved the strip from the cluster's center outward, and
-    # every household's wood seat keeps its lane buffer and more off it (`WoodShares.lane_gap`); a track swept from the
-    # gateway across the seats (cohort seeds 3, 12, 17: the first leg over a reserved seat) is swept again from the strip's
-    # outer end - the connector starts at its end (plan M3) - bent and threaded as the first
-    strip = [(float(q[0]), float(q[1])) for q in s.M.get("access_exit") or []]
-    foot = seg_closest(track[0][0], track[0][1], strip[0], strip[1]) if len(strip) >= 2 else None
-    if foot is not None:
-        out = connector_track(plan, strip[1], avoid=avoid, wet=wet, waters=waters, fabric=fabric)
-        around = route_around(plan.envelope, out, SPUR_SETBACK)
-        tail = _thread_the_fabric(s, plan, around) if around is not None else []
-        run = square_run(s.M, _dedup_run([track[0], foot, *tail])) if len(tail) >= 2 else []
-        if len(run) >= 2 and connector_keeps_the_law(s.M, run):
-            return run
     # THE DRY EXIT IS WALLED BY WHAT THE REGISTRY OF WHAT STANDS FORBIDS A WAY ON (feature 287 M8): the overlap matrix's
     # extents and the households' reserved wood seats (`Reservations.seat_walls`, the copse's lane buffer about each)
     st = getattr(s.M, "standing", None)
@@ -830,15 +804,6 @@ def _connector_through(s: Settlement, plan: SitePlan, track: Poly, avoid: Sequen
     seats = [e[1] for e in forbid if e[0] == "wood seat"]
     with contextlib.suppress(NoDryExit):
         return connector_dry_exit(plan, track[0], [*avoid, *matrix, *seats], wet, waters, fabric)
-    # ...AND FROM THE EXIT STRIP'S OUTER END where the gateway is walled in by the seats: the strip is the corridor the seating
-    # reserved from the cluster's center outward, every seat kept its lane buffer and more off it (`WoodShares.lane_gap`), so
-    # the connector runs out along it and the fill starts where the cluster ends (plan M3: the connector starts at its end)
-    if foot is not None:
-        with contextlib.suppress(NoDryExit):
-            tail = connector_dry_exit(plan, strip[1], [*avoid, *matrix, *seats], wet, waters, fabric)
-            run = square_run(s.M, _dedup_run([track[0], foot, strip[1], *tail[1:]]))
-            if connector_keeps_the_law(s.M, run):
-                return run
     # ...AND ONLY THEN OVER A RESERVED SEAT, WHICH THE WAY OUT TAKES: a gateway the seats wall in on every side has one way out,
     # and the seats it crosses are given up by name (`meta.wood_seats_to_the_connector`) rather than the hamlet left with none
     run = connector_dry_exit(plan, track[0], [*avoid, *matrix], wet, waters, fabric)
@@ -853,10 +818,6 @@ CONNECTOR_WIDTH = 6.0
 """The connector's tread, px: the cart track out to the wider world, drawn wider than the web's footpaths.
 
 Research: connector width - research/questions/0081-village-lanes.drawing.html: 6 ft"""
-
-
-def _dedup_run(p: Poly) -> Poly:
-    return [q for k, q in enumerate(p) if k == 0 or math.dist(q, p[k - 1]) > 1e-6]
 
 
 def connector_keeps_the_law(M: Mapping[str, Any], run: Poly) -> bool:
@@ -875,29 +836,7 @@ def connector_keeps_the_law(M: Mapping[str, Any], run: Poly) -> bool:
         return False
     if forbidden_segment(M, "lanes", run, CONNECTOR_WIDTH) is not None:
         return False  # ...and it lies on nothing the overlap matrix forbids a way on (feature 287 M8): a dry plot, a well
-    if folds_on_the_strip(M, run):
-        return False
     return all(len(law.crossing_points(run, brook)) <= 1 for brook in law._brooks(M))
-
-
-def folds_on_the_strip(M: Mapping[str, Any], run: Poly) -> bool:
-    """Does the connector `run`, starting on the exit strip, leave it turning back on it - `law.DOUBLE_BACK_DEG` or more off
-    the strip's outward bearing? The web draws the strip as a tree lane up to the connector's start (`tree.strip_run`) and
-    no repair cuts either, so the fold at their joint is refused here (feature 287 wave 6). False off the strip.
-
-    Research: no hairpin at the strip - research/questions/0081-village-lanes.drawing.html: `law.DOUBLE_BACK_DEG` off its bearing"""
-    strip = M.get("access_exit")
-    if not strip or len(run) < 2:
-        return False
-    (ax, ay), (bx, by) = (float(strip[0][0]), float(strip[0][1])), (float(strip[1][0]), float(strip[1][1]))
-    if seg_dist(run[0][0], run[0][1], (ax, ay), (bx, by)) > 1.5:
-        return False
-    first = next((q for q in run[1:] if math.dist(q, run[0]) > 1e-6), None)
-    if first is None:
-        return False
-    u, v = (bx - ax, by - ay), (first[0] - run[0][0], first[1] - run[0][1])
-    cos = (u[0] * v[0] + u[1] * v[1]) / ((math.hypot(*u) or 1.0) * (math.hypot(*v) or 1.0))
-    return math.degrees(math.acos(max(-1.0, min(1.0, cos)))) >= law.DOUBLE_BACK_DEG
 
 
 class NoDryExit(ValueError):

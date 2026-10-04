@@ -114,7 +114,10 @@ class SeatRegion:
             import numpy as np
 
             tree = getattr(self.s, "_access", None)
-            segs = list(tree.segs) if tree is not None else []
+            # ...FROM THE WAY OUT'S SIDE (feature 320 D1): the tree has no legs while houses are seated, so the open ground past
+            # the seat band on the bearing out (`_way_out_anchor`) is where reachable ground starts - a seed, nothing reserved
+            anchor = getattr(self.s, "_way_out_anchor", None)
+            segs = list(tree.segs) if tree is not None and tree.segs else ([anchor] if anchor is not None else [])
             # ...AND NOT FROM THE WINDOW'S EDGE (feature 318): seeded there, ground that might reach the tree round the outside of
             # the window was counted reached - an over-count the seat's corridor search once settled. With no search while houses
             # are seated, it admitted a group of households beyond a brook that no way then reached (cohort seed 13: four of

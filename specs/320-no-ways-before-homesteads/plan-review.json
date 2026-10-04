@@ -1,0 +1,39 @@
+{
+ "feature": "320-no-ways-before-homesteads",
+ "plan_sha256": "a33170dfac2b5d305a16fd5fcc802a23b6330263327cbc674f841fe497b9b516",
+ "reviewed": "2026-10-04",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "Nucleated seating with no start_tree corridor, no access_exit, no reserve_field_corridor; exit_bearing kept as a ground test that refuses a margin; an empty AccessTree for bookkeeping; SeatRegion._reached flooded from a private anchor past the seat band on the way-out bearing, never painted, reserved or recorded",
+   "class": "within",
+   "why": "FR-001 removes both reservations; the bearing test is the spec's edge case and Decisions Recorded (asked of the margin, answered by ground, nothing reserved); the anchor is the mechanism FR-002 names (ground connected to open country on the way-out side). It stays within only while it refuses no seat: painted into buildable or the registry it would be the strip again."
+  },
+  {
+   "id": "D2",
+   "summary": "lay_the_ways moves to stage_track after the connector (stage_track directly follows stage_homesteads in driver STAGES); ways join the connector; corridor reservations made when the ways are laid, wood seats still at the end of the homesteads stage",
+   "class": "within",
+   "why": "FR-003 verbatim: the track out first from the cluster's edge once the last house stands, then each household's way joined to it. Wood seats are not ways."
+  },
+  {
+   "id": "D3",
+   "summary": "The field path is left to the web (settle_field, field_runs); an unreached field is fixed in the web's search, never by a reservation",
+   "class": "within",
+   "why": "FR-003's 'then the field path as the web lays it' and FR-004's field reached; it forbids the reservation the GM asked removed."
+  },
+  {
+   "id": "D4",
+   "summary": "Every branch reading access_exit or the field corridor deleted; the row and dispersed forms' fallback becomes the only path",
+   "class": "within",
+   "why": "access_exit is written only by start_tree, called only on the nucleated form, so the deletions touch no row village's planned streets (FR-001's parenthetical); removing dead branches is the removal itself."
+  },
+  {
+   "id": "D5",
+   "summary": "Page 0081's drawing page already says houses first with no strip exception; claims citing the strip or field corridor rewritten; owed checks run via claims-triage",
+   "class": "within",
+   "why": "Premise checked: the drawing page carries no 'strip' or field-way exception (grep 2026-10-04); the DEVIATION lives only in the code claims. FR-006 is still owed in full under T07: line 33's 'connected to the track out' and 'not close by a way' must be read against the empty-tree seating."
+  }
+ ],
+ "verdict": "CLEAR"
+}

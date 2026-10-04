@@ -330,10 +330,10 @@ def tidy_lane_ends(s: Settlement, envelope: Poly, streets: bool = False) -> None
         # are named so the tidy-up cannot strand one (cohort seed 39's farmhouse, `_trim_to_service`).
         # ...never a household reached across a neighbor's yard, which is owed no way of its own (`geom.lane_houses`, feature 317)
         _keep = [_h for _h in _owed if all(seg_dist(_h[0], _h[1], _a, _b) > WEB_REACH_FT for _a, _b in _others)]
-        # ...BUT A CONNECTOR THAT STARTS ON THE EXIT STRIP STAYS THERE (feature 287 wave 6): the web draws the strip as a tree lane
-        # up to the connector's start where a house or the field is owed it (`tree.strip_run`), and pulled back to service the
-        # start left the strip 8 ft off on cohort seed 37 (the strip ended in a hook) and 300 ft down the track on seed 34
-        if _ln.get("connector") and s.M.get("access_exit"):
+        # ...BUT A CONNECTOR THAT STARTS AT THE WAY OUT'S GATE STAYS THERE (feature 320; the exit strip's rule before it, feature
+        # 287 wave 6): every household's way reaches the track out at the gate, and pulled back to service the start left them
+        # all off the network (the reference hamlet: 85 ft)
+        if _ln.get("connector") and s.M.get("way_out_gate"):
             continue
         _kept = (
             kept_connector(_pts, _pull_back_to_service(_pts, _others, _final_houses, _inside, _fabric_now), _solid_now)

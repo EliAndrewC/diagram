@@ -5,8 +5,7 @@ from __future__ import annotations
 
 import math
 import random
-from collections.abc import Callable, Iterator
-from types import SimpleNamespace
+from collections.abc import Callable
 from typing import Any
 
 from l7r.diagram.settlement import Settlement
@@ -15,7 +14,7 @@ from l7r.diagram.settlement.homestead_parts.groves import HOMESTEAD_WOOD_FT2, cr
 from l7r.diagram.settlement.homestead_parts.stands import crown_reach
 from l7r.diagram.settlement.homestead_parts.wood_share import COPSE_CLUMP_BS, install_wood_shares
 from l7r.diagram.settlement.land.wet import marsh_ground
-from l7r.diagram.settlement.rolling.access import ACCESS_HALF_FT, exit_bearing, start_tree
+from l7r.diagram.settlement.rolling.access import ACCESS_HALF_FT, AccessTree, exit_bearing
 from l7r.diagram.settlement.rolling.bearing import COMMON_BEARING_DEG, MarginBearing, wrap_line_deg
 from l7r.diagram.settlement.rolling.gap_ways import lay_the_ways
 from l7r.diagram.settlement.rolling.lot import HouseholdLots
@@ -30,6 +29,7 @@ from .capacity import SiteRefused, margin_ladder, seat_the_rest, seating_mark, u
 from .fixtures import farmstead_fixtures, fixture_forms, fixture_quota
 from .growth import built_share, grow_the_margin, grows
 from .holds import hold_laid_parts
+from .household_ways import root_at_the_gate, way_out_gate
 from .region import SeatRegion
 from .retirement import retirement_houses, retirement_quota
 from .seat_geometry import bank_of, declare_cluster_shape, in_a_shapes_band, shapes_drawn_at, turn_the_seat, water_push  # noqa: F401 - re-exported where callers import it
@@ -120,8 +120,6 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
         l7r.diagram.hamletgen.homesteads.boundary.install_site_boundary
         l7r.diagram.hamletgen.homesteads.boundary.site_boundary
         l7r.diagram.settlement.homestead_parts.wood_share.install_wood_shares
-        l7r.diagram.settlement.rolling.access.start_tree
-        l7r.diagram.hamletgen.homesteads.stages.reserve_field_corridor
         l7r.diagram.hamletgen.homesteads.growth.grow_the_margin
         l7r.diagram.settlement.rolling.lot.household_parts
         l7r.diagram.settlement.Settlement.try_place
@@ -135,13 +133,15 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
         l7r.diagram.settlement.rolling.lot.record_parts
         l7r.diagram.settlement.rolling.access.reserve
         l7r.diagram.hamletgen.homesteads.seat_geometry.declare_cluster_shape
+        l7r.diagram.hamletgen.homesteads.household_ways.way_out_gate
+        l7r.diagram.settlement.rolling.gap_ways.lay_the_ways
         l7r.diagram.hamletgen.homesteads.stages.reserve_the_seating
         l7r.diagram.settlement.Settlement.farmsteads
 
     Research:
         a yard's south sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: switched on here, `SUN_CORRIDOR_FT` (39 ft) clear south of every yard and bed
         the belt's afternoon lane - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: switched on here, `WEST_SUN_FT` (50 ft) west and southwest of a plot
-        houses before lanes - research/questions/0081-village-lanes.drawing.html: every household seated while no lane stands on the map and no way is sought for it; each household's way laid once the last house stands (`gap_ways.lay_the_ways`)
+        houses before lanes - research/questions/0081-village-lanes.drawing.html: every household seated while no lane stands on the map, none is reserved and no way is sought for it; the way out's gate decided once the last house stands, and each household's way laid to it (`household_ways`, `gap_ways.lay_the_ways`)
         the declared cluster shape - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the knob as the drawing resolves it, written to the manifest and the plan
         a grove farm's own bamboo - research/questions/0075-bamboo-groves-chikurin.drawing.html: drawn in its grove where the `bamboo` knob is homestead or both
     """
@@ -208,22 +208,31 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     s.M["meta"].update(_declared)
     plan.cluster_shape = _declared["cluster_shape"]  # the knob as resolved over what the band draws (plan D4)
     s.M["meta"]["seat_search"] = dict(s._seat_search)  # the guesses counted (feature 226 FR-003): candidates, placer calls, positions, rectangles
-    # EVERY WAY LAID ONCE, IN THE GAPS, NOW THE LAST HOUSE STANDS (feature 318, FR-014, `settlement/rolling/gap_ways.py`): a
-    # passage the laid ways make unnecessary is ended in place (FR-001), and a household no way reaches is reached across the
-    # nearest neighbor's yard - the pinch
+    # THE WAY OUT'S GATE, DECIDED NOW THE LAST HOUSE STANDS, AND EVERY HOUSEHOLD'S WAY LAID TO IT IN THE GAPS (feature 320,
+    # plan D2; feature 318, FR-014, `settlement/rolling/gap_ways.py`): nothing of a way stood while the houses were seated; the
+    # gate is on the cluster's edge on the bearing out the seating found lawful, the track out is drawn from it
+    # (`stage_track`), and the ways reach it before any farmstead is drawn. A passage the laid ways make unnecessary is ended
+    # in place, and a household no way reaches is reached across the nearest neighbor's yard - the pinch
+    if getattr(s, "_access", None) is not None and getattr(s, "_way_out_bearing", None) is not None:
+        gate = way_out_gate(s, plan, s._way_out_bearing)
+        s.M["way_out_gate"] = [round(gate[0], 1), round(gate[1], 1)]
+        root = root_at_the_gate(s, gate, s._way_out_bearing)
+        s.M["way_out_root"] = [[round(q[0], 1), round(q[1], 1)] for q in root]
+        s._access.add(*root)
     s.M["meta"]["passage_revoked"], s.M["meta"]["pinch_passages"] = lay_the_ways(s)
     s.M["meta"]["passage_reached"] = sum(1 for h in s.M.get("houses") or [] if h.get("reached_across"))  # ...reached across a yard
     s._site_chains = None  # the boundary is the homestead stage's; every later placer runs the fit test's own path
     s._site_corridors = None
     s._free_ground = None
-    s._seat_region = None
-    s._unreachable = None
-    s._access = None  # the access tree is the seating's; the manifest keeps it (`access_exit`, `access_corridors`)
-    s._pockets = None  # the pockets are drawn by `place_wells` from the house records (`well_pocket`)
+    s._access = None  # the access tree is the seating's; the manifest keeps it (`access_corridors`, `way_out_gate`)
     s._corridor_ground = None  # the corridors' ground test is the seating's
     setattr(s, "_corridor_tree", None)  # noqa: B010 - ...and so is the tree's (`ways/tree.py`); read by `access.tree_admits` with a default
     setattr(s, "_corridor_drawn", None)  # noqa: B010 - ...and its drawing (`tree.seating_drawn`, read by `access.reserve`)
     s._wood = None  # the reservations are the seating's; each household's record keeps its own (`wood_share`)
+    s._way_out_anchor = s._way_out_bearing = None  # type: ignore[attr-defined]
+    s._seat_region = None
+    s._unreachable = None
+    s._pockets = None  # the pockets are drawn by `place_wells` from the house records (`well_pocket`)
     s._lots = None  # the lots are the seating's (the byre form stays: `draft_byres` draws the stalls it reserved)
     # THE ROLLED SHAPE MUST LEAVE A TRACE EVEN WHEN THE CLOUD NEVER RUNS (known-open ledger
     # 2026-08-16, Kashikawa: the front rows + lane frontage seated all 20 households, the
@@ -245,7 +254,7 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
 
         s.M["meta"]["row_holdings_drawn"] = draw_holdings(s)
     hold_laid_parts(s, s.M.get("houses") or [])  # the pockets and fixtures stand for the ways laid before they are drawn (M8)
-    reserve_the_seating(s)  # ...and the corridors and wood seats it reserved, for every placer after it (M8, `overlap/reserved.py`)
+    reserve_the_seating(s)  # ...and the laid ways and the wood seats, for every placer after it (M8, `overlap/reserved.py`)
     # how many farmhouses stand a quarter turn off the common bearing (269 B18; none since the turn was dropped) - measured on
     # what was drawn, so the share is a count, not a hope
     s.M["meta"]["house_quarter_turns"] = sum(1 for h in s.M.get("houses") or [] if abs(wrap_line_deg(float(h.get("rot", 0.0)) - (s._house_bearing or 0.0))) > 45.0)
@@ -304,25 +313,24 @@ def seat_every_household(s: Settlement, plan: SitePlan) -> tuple[int, int]:
 
 
 def reserve_the_seating(s: Settlement) -> None:
-    """THE SEATING'S RESERVATIONS, HANDED TO THE REGISTRY OF WHAT STANDS (feature 287 M8; plan M3's keep-out, woods W25): the
-    access corridors (each leg at the corridor's half-width, for the household whose door it leaves - the legs a house's
-    corridor records follow its first, which names the house; the field's corridor and the exit strip are nobody's) and
+    """THE LAID WAYS AND THE WOOD SEATS, HANDED TO THE REGISTRY OF WHAT STANDS (feature 287 M8; woods W25): each household's way
+    (each leg at the corridor's half-width, for the household whose door it leaves - the legs a house's way records follow its
+    first, which names the house) and each leg as the web will draw it where the two differ (`access_drawn`, feature 318), and
     every household's wood seats, with the clump the copse plants them at and the copse's own lane buffer about a lane
-    (`crown_reach` at the drawn lift, `village_grove`'s). Every placer after the seating then keeps off them by asking the
-    registry (`Settlement.admits`), and one that did not is refused at record time."""
+    (`crown_reach` at the drawn lift, `village_grove`'s). Every placer after keeps off them (`Settlement.admits`).
+
+    Research:
+        a lane to every house - research/questions/0081-village-lanes.drawing.html: nothing built on a laid way
+        wood seats reserved - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: a household's copse seats kept for its planting
+    """
     res = s.standing.reserved
     half = s.px(ACCESS_HALF_FT)
     owner: Any = None
     for c in s.M.get("access_corridors") or []:
-        owner = c["of"] if c.get("of") else (None if c.get("field") else owner)
+        owner = c["of"] if c.get("of") else owner
         pts = c.get("pts") or []
         if len(pts) >= 2:
             res.reserve_corridor(pts[0], pts[1], half, owner)
-    exit_seg = s.M.get("access_exit")
-    if exit_seg and len(exit_seg) >= 2:
-        res.reserve_corridor(exit_seg[0], exit_seg[1], half, None)
-    # ...AND EACH CORRIDOR'S LEGS AS THE WEB WILL DRAW THEM where they differ (feature 318, `access.reserve`'s `access_drawn`):
-    # a bend in the water squared out of a corridor moves its tread, and a later placer kept off the reserved legs alone
     for c in s.M.get("access_drawn") or []:
         res.reserve_corridor(c["pts"][0], c["pts"][1], half, c.get("of"))
     clump = COPSE_CLUMP_BS * s.bscale
@@ -345,59 +353,6 @@ def corridor_ground(s: Settlement) -> Callable[[list[Pt]], bool]:
     return ground
 
 
-def reserve_field_corridor(s: Settlement) -> bool:
-    """THE FIELD'S CORRIDOR, reserved with the exit strip (feature 287, ways W03; homes wave 5): on a brook map a way of the
-    hamlet's own must reach its field (`law.field_unreached`), and the web used to look for one only among what the seating
-    had left - reported where none kept the law, never refused. So the run the web draws first is reserved before any house
-    stands: the ways' own field paths from the tree, the straight ones and then the ones the web's router threads
-    (`corridors.field_runs`, `routed_field_runs`: on to the bund, over the brook at a ford where it lies between) - the
-    first on lawful ground (`settle.corridor_on_lawful_ground`, the seating's question of every corridor). It joins the
-    tree, so no envelope covers it (`AccessTree.covers_box`) and no share of the wood floor stands on it
-    (`WoodShares.share`), and it is recorded as the tree's legs are (`field` on each), oriented toward the tree, for the web
-    to draw where no way of its own reaches the field (`settle.settle_field`), bowed round a shed on it as a house's
-    corridor is. True where one is reserved or the rule asks none (no brook, no field); False where no lawful run reaches
-    the field from this margin - `_seat_households` then seats no one on it and the ladder offers the next.
-
-    Research: field way before the houses - DEVIATION research/questions/0081-village-lanes.drawing.html: the field way's run reserved before any house stands, against houses before lanes; a margin without one seats nobody
-    """
-    from ..ways import law
-    from ..ways.bund import BRANCH_WIDTH, paddy_ground
-    from ..ways.corridors import FIELD_ROLE, field_router, field_runs, routed_field_runs
-    from ..ways.geom import memo_ground, worked_ground
-    from ..ways.settle import Lawful, corridor_on_lawful_ground
-    from ..ways.tree import admits, seating_law
-
-    tree = getattr(s, "_access", None)
-    brook = next(iter(law._brooks(s.M)), [])
-    if tree is None or len(brook) < 2:
-        return True
-    grounds = [g for g in (paddy_ground(s), memo_ground(s, "worked", worked_ground)) if g.edge is not None]
-    if not grounds:
-        return True
-    fords = [(float(x), float(y)) for x, y in (s.M.get("meta") or {}).get("brook_fords") or []]
-    segs = list(tree.segs)
-
-    def candidates() -> Iterator[list[Pt]]:
-        yield from field_runs(segs, grounds, BRANCH_WIDTH / 2.0, brook, fords)
-        route = field_router(s, brook)
-        for ground in grounds:
-            yield from routed_field_runs(segs, ground, BRANCH_WIDTH / 2.0, route, brook, fords)
-
-    # ...AND WHERE THE TREE STAYS LAWFUL WITH IT (feature 287 wave 6, `tree.admits`): the web draws it as a tree lane, never
-    # cut, so its joint with the exit strip is judged here with every other rule of the lane law
-    # ...THE GROUND READ ONCE for every candidate (`corridor_on_lawful_ground`'s `lawful`): nothing stands or moves while they are tried
-    lawful = Lawful(SimpleNamespace(M=s.M))
-    run = next(
-        (r for r in candidates() if len(r) >= 2 and corridor_on_lawful_ground(s.M, r, BRANCH_WIDTH, lawful) and admits(seating_law(s), s.M, [(float(x), float(y)) for x, y in r[::-1]], FIELD_ROLE)),
-        None,
-    )
-    if run is None:
-        return False
-    back = [(float(x), float(y)) for x, y in run[::-1]]
-    for a, b in zip(back, back[1:], strict=False):
-        tree.add(a, b)
-        s.M.setdefault("access_corridors", []).append({"pts": [[round(a[0], 1), round(a[1], 1)], [round(b[0], 1), round(b[1], 1)]], "field": True})
-    return True
 
 
 def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
@@ -549,10 +504,17 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
         _length = bound * 1.5 + BUNDLE_PITCH
         _out = exit_bearing(s, (float(seat["cx"]), float(seat["cy"])), (float(ox), float(oy)), _length)
         if _out is None:
-            return 0, 0
-        start_tree(s, (float(seat["cx"]), float(seat["cy"])), _out, _length).routed = grows(plan)  # a way laid by the gap pass may be routed (308 D3, 318)
-        if not reserve_field_corridor(s):
-            return 0, 0  # ...AND ITS FIELD'S CORRIDOR (ways W03): a margin with no lawful way on to its field seats no one here
+            return 0, 0  # a margin with no lawful bearing out seats no one here - a test of ground, nothing reserved (feature 320 D1)
+        # NOTHING RESERVED FOR A WAY BEFORE THE HOUSES (feature 320, the GM 2026-10-04: "the space we've already allocated can
+        # serve the same function"): an EMPTY tree for the seating's bookkeeping, its legs laid once the track out stands
+        # (`stage_household_ways`), and the region's reach flooded from the open ground past the seat band on the way-out side -
+        # the ANCHOR, ground the region alone reads, never a corridor, never buildable ground taken, never on the manifest
+        s._access = AccessTree(s.px(ACCESS_HALF_FT))
+        s._access.routed = grows(plan)  # a way laid by the gap pass may be routed (308 D3, 318)
+        s.M["access_corridors"] = []  # each household's way, recorded as the gap pass lays it (`access.reserve`)
+        _c = (float(seat["cx"]), float(seat["cy"]))
+        s._way_out_bearing = _out  # type: ignore[attr-defined]
+        s._way_out_anchor = ((_c[0] + _out[0] * bound, _c[1] + _out[1] * bound), (_c[0] + _out[0] * _length, _c[1] + _out[1] * _length))
     # THE SEAT REGION (feature 297, FR-001, plan B1): built once the exit strip and the field's corridor stand, kept current as
     # houses are seated; every round below offers only the seats it holds (`region.SeatRegion`)
     s._seat_region = SeatRegion(s, seating_window(s, (float(seat["cx"]), float(seat["cy"])), plan.spec.households)) if getattr(s, "_nucleated", False) else None

@@ -206,23 +206,6 @@ def exit_bearing(s: Settlement, center: Pt, out: Pt, length: float) -> Pt | None
     return None
 
 
-def start_tree(s: Settlement, center: Pt, out: Pt, length: float) -> AccessTree:
-    """The tree's first corridor, the EXIT STRIP: from the cluster's center outward along `out` for `length` px (the
-    connector starts at its outer end). Installed on the settlement for the seat pass and recorded on the manifest. The
-    caller asks `exit_bearing` for an `out` whose strip stands on lawful ground.
-
-    Research: exit strip from the cluster's center - research/questions/0081-village-lanes.drawing.html: the track out begins at its outer end
-    """
-    tree = AccessTree(s.px(ACCESS_HALF_FT))
-    s.__dict__.pop("_corridor_memo", None)  # a new tree is a new seating: nothing remembered of the last one's ground
-    end = (center[0] + out[0] * length, center[1] + out[1] * length)
-    tree.add(center, end)
-    s._access = tree
-    s.M["access_corridors"] = []
-    s.M["access_exit"] = [[round(center[0], 1), round(center[1], 1)], [round(end[0], 1), round(end[1], 1)]]
-    return tree
-
-
 def corridor_clear(s: Settlement, a: Pt, b: Pt, own: Any) -> bool:
     """May a corridor run a-b? Its strip clears every placed homestead box but its own (`own`, the candidate's bbox, whose
     house it may not cross either), and its line stands on ground the site boundary admits - not on the field's side of a

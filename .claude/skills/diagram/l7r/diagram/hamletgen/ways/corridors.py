@@ -45,10 +45,7 @@ TARGET_ROLE = "way target"
 FIELD_ROLE = "field way"
 """The `role` of the field's reserved corridor drawn where no way of the hamlet's reaches the field - a tree lane."""
 
-STRIP_ROLE = "exit strip"
-"""The `role` of the exit strip drawn as a lane, from its innermost attachment out to the connector - a tree lane."""
-
-TREE_ROLES = (ACCESS_ROLE, TARGET_ROLE, FIELD_ROLE, STRIP_ROLE)
+TREE_ROLES = (ACCESS_ROLE, TARGET_ROLE, FIELD_ROLE)
 
 SPUR_TRIES = 120
 """How many spurs, shortest first, are offered to a way target or the field before the web says it has none: they leave

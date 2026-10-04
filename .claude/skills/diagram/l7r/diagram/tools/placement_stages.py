@@ -470,12 +470,11 @@ def _plate(snap: Settlement, out_dir: str, stem: str, width: int, overlay: dict[
 def homestead_overlay(s: Settlement) -> dict[str, Any]:
     """What the homesteads plate draws over itself (features 227, 287): the site boundary the homesteads were seated
     against, and the ground the seating RESERVED as it seated them - each house's access corridor (`access_corridors`,
-    at its half-width), the exit strip the tree starts from (`access_exit`), and every household's wood-share seats
+    at its half-width), and every household's wood-share seats
     (each house's `wood_share`, at the crown radius it reserved). A reservation no plate showed was a rule no reader could
     check against the picture."""
     out: dict[str, Any] = dict(s.M.get("site_boundary") or {})
     out["access"] = [rec["pts"] for rec in s.M.get("access_corridors") or [] if len(rec.get("pts") or []) >= 2]
-    out["exit"] = s.M.get("access_exit")
     out["access_half"] = s.px(ACCESS_HALF_FT)
     out["wood"] = [[float(p[0]), float(p[1]), float((h.get("wood_share") or {}).get("r") or 0.0)] for h in s.M.get("houses") or [] for p in (h.get("wood_share") or {}).get("seats") or ()]
     return out
@@ -558,22 +557,21 @@ def draw_boundary(im: Any, overlay: dict[str, Any], x0: float, y0: float, sc: fl
     return base.convert("RGB")
 
 
-RESERVATION_COLORS = {"access": (235, 135, 20, 110), "exit": (45, 45, 55, 170), "wood": (25, 110, 35, 255)}
-"""The reservations' inks on the homesteads plate: the access corridors a translucent orange band, the exit strip a
-dark gray band (it was magenta, and the GM read it as the boundary's red, 2026-10-02), the wood-share seats a dark green ring - none of them a color the map itself uses for ground."""
+RESERVATION_COLORS = {"access": (235, 135, 20, 110), "wood": (25, 110, 35, 255)}
+"""The reservations' inks on the homesteads plate: the access corridors a translucent orange band, the wood-share seats a
+dark green ring - none of them a color the map itself uses for ground."""
 
 
 def draw_reservations(im: Any, overlay: dict[str, Any], x0: float, y0: float, sc: float) -> Any:
     """Draw `homestead_overlay`'s reservations over a plate at scale `sc` from the view's corner (x0, y0): the corridor
-    and exit bands at their true width, composited translucent so the map shows through, then the wood seats' rings."""
+    bands at their true width, composited translucent so the map shows through, then the wood seats' rings."""
     from PIL import Image, ImageDraw
 
     layer = Image.new("RGBA", im.size, (0, 0, 0, 0))
     draw = ImageDraw.Draw(layer)
     band = max(2, round(2 * float(overlay.get("access_half") or 0.0) * sc))
-    for key, segs in (("access", overlay.get("access") or []), ("exit", [overlay["exit"]] if overlay.get("exit") else [])):
-        for pts in segs:
-            draw.line([((p[0] - x0) * sc, (p[1] - y0) * sc) for p in pts], fill=RESERVATION_COLORS[key], width=band, joint="curve")
+    for pts in overlay.get("access") or []:
+        draw.line([((p[0] - x0) * sc, (p[1] - y0) * sc) for p in pts], fill=RESERVATION_COLORS["access"], width=band, joint="curve")
     for x, y, r in overlay.get("wood") or []:
         cx, cy, rr = (x - x0) * sc, (y - y0) * sc, max(2.0, r * sc)
         draw.ellipse((cx - rr, cy - rr, cx + rr, cy + rr), outline=RESERVATION_COLORS["wood"], width=max(2, round(sc * 2)))
@@ -733,10 +731,8 @@ def homestead_legend(window_ft: tuple[float, float] | None) -> str:
     """The homesteads plate's legend: what `draw_boundary` and `draw_reservations` drew over it, and - where the seating
     recorded its window - the window's size in feet."""
     reserved = (
-        "Over that, the ground the seating reserved as it seated them: each house's access corridor in orange (bending where it was "
-        "routed round what stands), the exit strip in dark gray - the start of the hamlet's way out, reserved before any house so "
-        "every house's path can join it - and each household's wood-share seats as "
-        "dark green rings."
+        "Over that, what the seating reserved as it seated them: each household's wood-share seats as dark green rings. No way is "
+        "reserved before the houses; each house's way, in orange where a plate shows it, is laid once the track out stands."
     )
     if window_ft is None:
         return (
