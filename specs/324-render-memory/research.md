@@ -33,3 +33,17 @@ time: 22 jobs peak 1,459 MB, p90 889 MB, 57 s; `--jobs 4` peak 1,219 MB, p90 448
 
 Not taken (it is not a straightforward change): giving each tile only the elements inside its box - `drop_offmap` works on the
 page's element strings before the SVG is assembled, and the tiles are cut from the assembled text.
+
+## R3 - The final code (after T02)
+
+Observed 2026-10-05, method: the 50 ms sampler over the same rendered 20-household hamlet, two runs: peak 571 / 580 MB (983 /
+962 MB before, R1), the picture child 188 / 190 MB (300 MB before), at most five resvg processes alive (eleven before: three
+tiles, the PNG render and the id map), the render span 3.60 / 3.21 s (2.14 / 2.19 s before) - the first run includes the
+changed modules' first import. The PNG and the page are byte-identical to the baseline run's (`cmp`, string equality).
+SC-001 (child at least 80 MB lower: 111 MB) and SC-002 (map peak at least 300 MB lower: ~395 MB; span at most +1.5 s:
++1.0 to +1.4 s) hold; the span's first run came within 0.1 s of its bound.
+
+Observed 2026-10-05, method: the 100 ms sampler over `make render-sync` (the 11 live maps regenerated, the new default of four
+generators): peak 1,121 MB, p90 434 MB, 91 s - against 1,725 MB, p90 737 MB, 60 s for the unmodified code at 22 (R1). The load
+average rose from 2.4 to 6.8 during the run (the container's other sessions), which the wall time carries; the prototype's
+4-job run on a quieter machine was 72 s (R2). SC-003 holds.
