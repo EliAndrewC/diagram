@@ -57,3 +57,15 @@ Okay, so I think I want "How we draw it" things on its own tab.  So basically we
 The session pitched "Depiction" (with Symbol, Legend and Mapping as weaker one-word options), a separate `modal-depiction` check reading the drawing pages, the engine's research claims for the kind and a crop of the glyph, and noted that the single farmhouse roof is not recorded as a convention: the drawing page makes roof shape a knob and the claims report lists the code's single hipped roof as DRIFTED. The GM:
 
 Ah gotcha.  The single roof is NOT a deliberate convention, so we can have that on our list of known deviations which need to be addressed later when we eventually make a speckit feature to fix all of the places where we have observed our implememntation to nto match our research; the last time I checked the makefile target for this said there were between three and four hundred.  So we don't have to fix this now as long as it ends up on that list for later.  For the name I do like "Depiction" so let's use that, thanks for the suggestion.
+
+## Follow-up (GM, 2026-10-05, verbatim) - items that depend on a settlement's knobs
+
+On the windbreak's guess "That a clustered village sheltered behind one shared wood, rather than a grove for each house: ...",
+the GM asked:
+
+Here's a question: would we still have this entry: "That a clustered village sheltered behind one shared wood, rather than a grove for each house: no source says which a village of farmhouses packed close together kept; in the loosely clustered villages of eastern Japan each house stood in a grove of its own." under Guesses for a non-clustered village?
+
+The session answered that a hamlet modal is the same on every map (M9), so yes, and proposed moving it to the title card's
+settlement-form modal. The GM:
+
+Could we make that kind of item still automatic but dependent on the "knobs" for a settlement in cases where that is relevant?  That seems scriptable and automatable.

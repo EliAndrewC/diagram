@@ -269,6 +269,11 @@ when a rewrite is accepted with no changes are the rest rewritten.
   at the push) MUST judge whether the tab explains and caveats the rendering as drawn: every convention and standardization the
   glyph uses is told with its real counterpart, nothing is claimed that is not drawn, and its links are exactly the drawing
   pages the modal rests on.
+- **FR-015**: An item of a hamlet modal - a guess bullet, or a paragraph of About or Depiction - MAY carry a condition on the
+  settlement's knobs (the GM, 2026-10-05: *"make that kind of item still automatic but dependent on the "knobs" for a settlement
+  in cases where that is relevant"*), and the page MUST show it only on a map whose recorded knob value meets the condition;
+  every other item is the same on every map. A condition names a registered knob and values that knob can take, and a modal
+  naming any other is refused when it is read; the checks MUST read each conditional item with its condition.
 - **FR-013**: The session MUST pitch the GM alternative names for the first tab (at least three candidates, Overview among
   them, a line on each) no later than the hand-off of the farmhouse pilot; the GM's choice is applied to the guidelines and
   the pilot before the rollout starts. (Done 2026-10-03: the GM chose "About".)
@@ -289,6 +294,8 @@ when a rewrite is accepted with no changes are the rest rewritten.
   its browser test holding the sibling links on the About tab and the glossary tooltips on every tab.
 - **SC-008** (FR-014): every rewritten modal whose kind has a drawing page or a convention carries a Depiction tab that has
   passed `modal-depiction`, recorded in the review ledger with cost; no References tab lists a "how our maps draw it" page.
+- **SC-009** (FR-015): a guess bullet conditioned on `settlement_form` is on a nucleated pool map's page and absent from a
+  dispersed one's (a page test on two synthetic maps); a condition naming an unknown knob or value fails when the modal is read.
 - **SC-007** (FR-012, FR-013): nothing but the spec claim is on main until the rollout's last task; the GM's choice of the
   first tab's name is recorded in the spec's Decisions table before the rollout starts.
 
@@ -302,6 +309,7 @@ when a rewrite is accepted with no changes are the rest rewritten.
 | The how-it-is-drawn tab is "Depiction" | presentation | the GM, 2026-10-04: *"For the name I do like 'Depiction' so let's use that"* | this spec; the guidelines |
 | The farmhouse's single roof is not presented as a convention | presentation; the drift itself stays in the claims report (DRIFTED, `houses.py` `HousesMixin.house`) | the GM, 2026-10-04: *"The single roof is NOT a deliberate convention"*, to be fixed with the other recorded drifts later | this spec; the claims report |
 | The first tab is "About" | presentation | pitched About / Overview / At a glance / What it was; the GM, 2026-10-03: *"I like 'About' better than overview. So about guesses and references does seem pretty good"* | this spec; the guidelines |
+| An item of a modal may depend on the settlement's knobs, shown only where the map's knob value meets it | presentation | the GM, 2026-10-05: *"still automatic but dependent on the \"knobs\" for a settlement in cases where that is relevant"* | this spec; the guidelines (M9, M22) |
 
 ## Assumptions
 
@@ -318,3 +326,4 @@ when a rewrite is accepted with no changes are the rest rewritten.
   FR-011); the research pass before a guess (Assumptions). All four applied.
 - Round 2 (spec-fidelity, 2026-10-03): ACCEPT (FAITHFUL) - all four round-1 changes confirmed against the diff.
 - Amendment 2026-10-04 (the GM's Depiction tab): FR-005, FR-006 amended, FR-014, US3b, SC-008 and two Decisions added; one Decisions row amended (the convention's place).
+- Amendment 2026-10-05 (the GM's knob-dependent items): FR-015, SC-009 and one Decisions row added.

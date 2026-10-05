@@ -156,6 +156,18 @@ drawing pages and writes no Depiction is still checked (the plan review, 2026-10
 `modal-research` no longer reads the drawing pages (its Entry is research questions only). The farmhouse is rewritten into the
 form as the tab's first example and goes back to the GM.
 
+### D14. An item that depends on the settlement's knobs (FR-015, amendment 2026-10-05)
+
+A guess bullet, or a paragraph of About or Depiction, may open with a condition in brackets: `[settlement_form=nucleated]`,
+or several values `[settlement_form=nucleated|linear]`. `_base.py` parses it off the item, checks the knob is in the populated
+`KNOBS` registry and every value among its forms (else `ValueError` naming the knob's forms - a typo fails at import, as M21's
+refusal does), and keeps it on the item. The page writer, which already reads the map's manifest `meta` for the windbreak's
+side, keeps a conditional item when `meta[knob]` is among its values and drops it otherwise - a map that records no value for
+the knob shows none of that knob's conditional items, since nothing says they hold there. The condition never reaches the
+reader. The check bundles render each conditional item with "(only where <knob> is <value>)" so `modal-form`, `modal-research`
+and `modal-depiction` judge it with its condition; the guidelines amend M9 and add M22. First use: the windbreak's shared-wood
+guess, under `settlement_form=nucleated`.
+
 ## Constitution Check
 
 - I, II: N/A - no gm-assistant UI; the map pages are this repository's own artifact under feature 134's rules.
