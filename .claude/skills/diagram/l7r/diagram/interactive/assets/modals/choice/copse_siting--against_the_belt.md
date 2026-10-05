@@ -1,14 +1,13 @@
 About: In a clustered village, the households' trees could stand at the village's back, against its windbreak wood, rather
 than among the houses. Villages in the hills of southern China kept a grove on the slope immediately behind the houses, the
 back grove of their fengshui woods, and the hills behind kept off the winter wind. Villagers planted trees of practical use in
-these woods, fruit trees, camphor and bamboo among them, and in Hong Kong fruit trees and other useful plants grew on a
-village wood's edges. A Japanese homestead's own trees gave firewood, timber and fallen leaves for the hearth and for manure.
+these woods, fruit trees, camphor and bamboo among them. A Japanese homestead's own trees gave firewood, timber and fallen leaves for the hearth and for manure.
 
-The back grove stood behind the village, in Hong Kong typically in a crescent, with the useful trees at its edge. A mature
+The back grove stood behind the village, in Hong Kong typically in a crescent. A mature
 back grove was tall and dense, its top story often over 66 ft (20 m), its interior shaded.
 
 In one Edo-period register, three households' woods covered about 6,000, 10,700 and 28,000 sq ft. Whether villages kept their
-trees at the back grove's edge rather than among their houses, and how many did, is not recorded.
+trees against the back grove rather than among their houses, and how many did, is not recorded.
 
 Guesses:
 - That a clustered village's trees stand against its back grove or among its houses at even odds: no account describes where

@@ -1,35 +1,30 @@
-What: The shrine every administrative compound keeps inside its walls - a modest hall, Inari's by default,
-standing in a corner of the compound's ground with a tree beside it. Where a plan draws its altars, or a torii before a hall set in
-its own grove, each is its own feature; where a compound serves a second kami, it may give that kami a small
-shrine of its own on the same ground.
+About: A government office kept a shrine inside its walls, as a household kept the god of its own ground in a corner of its
+lot. Even the shogunate's branch post at Jōge, with three officials at the end of the shogunate, had an Inari shrine and a
+Tenjin shrine within its walls, and a Chinese county office at Neixiang kept shrines to the god of the office, the god of the
+land and the god of its jail. A shrine was part of an office's equipment, not the mark of a pious official; what differed was
+how many an office kept and which gods they served. A samurai house, too, could keep an Inari shrine in its grounds.
 
-Why: Even the shogunate's post at Jōge, an outpost of three officials, had shrines inside its walls - an
-Inari shrine and a Tenjin shrine among them - and a full Chinese county yamen kept three, so a shrine is part
-of the equipment of any office, not a sign of a pious magistrate; what varies is its size and its
-dedication. A shrine keeping more than one kami was the ordinary case, by the word of an encyclopedia article
-that flags itself as short of sources, and a kami brought in from elsewhere
-could be kept in the main hall or given its own small shrine inside the precinct. The shrine stands in the
-inner court with the household and stays smaller than the residence - a worship hall is small even at a
-great shrine.
+What an office's shrine looked like is not recorded. A household's god was kept in a small shrine, or at an old tree or a stone
+taken as the god's seat. A shrine often kept more than one kami: several could share one hall, or a kami brought in from
+elsewhere could be given a small shrine of its own on the same ground. A village shrine's worship hall ran about 21 to 35 ft on
+a side, its sanctuary behind it often a single bay, about 6 ft square at one rural shrine.
 
-Note: A modest shrine inside the walls of a post of any size is a recorded finding, read on the 1869 drawing
-of the Jōge post and on a Chinese yamen's three shrines, and a second kami in a small shrine of its own is one
-of three forms the record found, two of them attested and the single altar in one hall a guess; the program classes the shrine as accurate, with a hall-shrine ceiling of about 36
-by 30 ft subordinate to the residence, a ceiling that is this project's guess, since no page read measures a
-worship hall. One shrine is drawn however many a real office kept - Jōge two, Neixiang shrines to three gods - and a
-garden around it is a guess, no page read describing one. Making it Inari's by default is a guess resting on
-that one post, whose shrines are known from the drawing alone: the excavation found the post's walls, steps
-and foundation stones, not its shrines. The ranking below the residence, and the small worship hall it rests
-on, are the record's own reading, no page read giving a worship hall's size or ranking a compound's buildings.
+How large an office's shrine was is not recorded, nor whether a garden was laid out around it.
 
-Caveat: One shrine is drawn however many a real office kept - Jōge two, Neixiang shrines to three gods - and a garden
-around it is a guess, no page read describing one. Making it Inari's by default is a guess resting on that one post, whose shrines are known from the
-drawing alone: the excavation found the post's walls, steps and foundation stones, not its shrines. The
-ranking below the residence, and the small worship hall it rests on, are the record's own reading, no page
-read giving a worship hall's size or ranking a compound's buildings.
+Guesses:
+- That a compound's shrine serves Inari unless its plan says otherwise: an Inari shrine was among the Jōge post's, the one
+  Japanese office whose shrines are known, and that from a drawing alone, since the dig on the site found none.
+- That the shrine hall is kept smaller than the residence: no size of an office's shrine was found, and no account ranks a
+  compound's buildings against one another.
+- A garden around the shrine, wherever a plan draws one: no account describes a garden around a household's or an office's
+  shrine.
+
+Depiction: The plan draws one shrine however many a real office kept, since what held across offices is that every one had a
+shrine. It stands in a corner of the grounds beside a tree, where a household kept its god. Where its hall serves more than one
+kami, each altar is drawn as a feature of its own, and so is any torii before it.
 
 Name: compound shrine
 Covers: the shrine hall or halls, their edging and dividing rail, and the shrine labels
-Label: accurate
-Sources: fuchu-joge-pamphlet, neixiang-yamen-zhwiki, henan-neixiang, jawiki-saijin, jawiki-goshi, kotobank-aidono, hokora-jawiki, nara-nagao-jinja
-Entry: research/questions/0090-magistrates-compounds-jinya-and-yamen.html, research/questions/0218-the-compounds-own-shrine-yashikigami.html, research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html; research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html; research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html, research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html; research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html
+Sources: fuchu-joge-pamphlet, henan-neixiang, neixiang-yamen-zhwiki, kotobank-yashikigami, boso-no-mura-takei, kotobank-aidono, jawiki-saijin, jawiki-goshi, ehime-pref-honden-56, saitama-kannonji-kannondo, nagare-zukuri-enwiki, the-compounds-own-shrine-yashikigami, shrine-garden-absence, how-our-maps-size-a-compound-and-its-buildings
+Entry: research/questions/0218-the-compounds-own-shrine-yashikigami.html, research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html, research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html
+Drawing: research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html, research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html, research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html

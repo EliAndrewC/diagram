@@ -1,18 +1,16 @@
-What: Bales of charcoal stacked on Ubame's weighing floor, waiting to be weighed.
+About: Bales of charcoal stacked on Ubame's weighing floor, waiting to be weighed and tallied. Charcoal is the great trade of the
+Fox forest - its burners outnumber its farmers - and it travels in bales.
 
-Why: Charcoal traveled in straw bales, most woven into a cylinder like the rice bale (one great charcoal district shipped its charcoal in square ones), and a bale had no standard
-size before the modern period - not even for rice, whose bale held anything from 2 to 5 to by time and place.
-Charcoal was packed at a weight set by its grade: in one charcoal district, at a date its source does not give, 4 kan for the best and 8 or 10 for
-the lower grades. A bale of no standard size cannot be traded by count, which is why, in our reading (no page we read says a dealer weighed the bales at sale), every bale is weighed
-before it is tallied.
+Charcoal was carried in straw bales (tawara), most woven into a cylinder like the rice bale, though one great charcoal district,
+Iburi in Hokkaido, shipped its charcoal in square ones. A bale had no standard size before modern times. In Iburi, at a date not
+recorded, the best charcoal was packed at 4 kan to the bale, about 33 lb (15 kg), and lower grades at 8 or 10 kan, about 66 or
+83 lb. A mid-twentieth-century charcoal bale measures about 2 by 1.3 by 1 ft; no older one has been found measured.
 
-Note: we have drawn each bale about 4 ft long, in order to make it read on the plan; a charcoal bale is about
-2 by 1.3 ft, as a mid-20th-century one in a museum measures, and no page read measures one of the Edo period.
-Scaled from its capacity, an Edo rice bale would be within a tenth of today's - a guess; the charcoal bale has no
-older measure.
+Depiction: The plan draws the bales larger than life so that they read; a real one was about 2 ft long.
 
 Name: charcoal bales
 Covers: the stacked bales on the weighing floor
-Label: convention
 Sources: tawara-jawiki, tawara-unit-jawiki, edo-tokyo-sumidawara
-Entry: research/questions/0199-straw-bales-of-rice-and-charcoal-tawara.html, research/questions/0197-charcoal-yards-and-charcoal-stores.html; research/questions/0199-straw-bales-of-rice-and-charcoal-tawara.drawing.html, research/questions/0197-charcoal-yards-and-charcoal-stores.drawing.html
+Entry: research/questions/0199-straw-bales-of-rice-and-charcoal-tawara.html
+Drawing: research/questions/0199-straw-bales-of-rice-and-charcoal-tawara.drawing.html
+Form: particular

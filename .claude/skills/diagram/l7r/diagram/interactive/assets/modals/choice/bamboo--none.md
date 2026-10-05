@@ -1,7 +1,7 @@
 About: Some farming settlements had no bamboo at all. Bamboo is frost-tender at the edge of its range: across
 northern Japan the timber bamboos moso and madake were limited mainly by the cold, with no stands where the mean yearly
-minimum fell below about 2°F (-16.8°C), and moso cannot stand much below about 0°F (-18°C). They probably reached little
-further north than central Honshu and the coasts of the north. So a cold upland
+minimum fell below about 2°F (-17°C), and moso cannot stand much below about 0°F (-18°C). They probably reached little
+further north than central Honshu and the coasts of northern Honshu. So a cold upland
 settlement could have none, while a lowland one in a milder province would usually have had some.
 
 Such a settlement showed no bamboo on its farmsteads and no thicket by its houses, where elsewhere a stand stood low in

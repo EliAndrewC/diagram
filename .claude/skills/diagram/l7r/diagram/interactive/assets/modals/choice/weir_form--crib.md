@@ -1,9 +1,11 @@
 About: A crib weir was a frame of timber packed with stone and set across a brook to raise its water to a ditch's mouth.
 Up to the late 16th century most intake works in Japan were small ones of this kind. A hamlet built one where its brook
-fell too low for the intake to draw from it, of the timber and stone that lay near. The same build served on great rivers:
-the Tatai weir on the Takahashi River, built in 1183, was of timber frames packed with stone, and its upper frame at the
-deep channel was taken out after each irrigation season and set in anew each year. The Edo period's large weirs joined
-their timbers with mortise and tenon into a square, set it in the river and fixed it with stones thrown in from above.
+fell too low for the intake to draw from it, of the timber and stone that lay near.
+
+The same build served on great rivers: the Tatai weir on the Takahashi River, built in 1183, was of timber frames packed
+with stone, and its upper frame at the deep channel was taken out after each irrigation season and set in anew each year.
+Some of the Edo period's large river weirs were frames of timber joined with mortise and tenon into a square, set in the
+river and fixed with stones thrown in from above.
 
 A visitor saw a squat bar of timbers and piled stone across the water, often slanting upstream from the intake mouth, as
 many old weirs ran: set so, it dammed the shallow riffle and stood off the fastest flood water. Old weirs mostly closed
@@ -23,6 +25,6 @@ slants upstream from the intake mouth.
 
 Name: The weir: a crib of logs and stone
 Covers: `meta.weir_form = crib`
-Sources: shimane-toshuko-lecture, maff-toshuko-history, hrr-agagawa-dento, jsidre-miwa-2023
+Sources: shimane-toshuko-lecture, maff-toshuko-history, hrr-agagawa-dento, jsidre-miwa-2023, suido-ishizue-iseki
 Entry: research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.html
 Drawing: research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html

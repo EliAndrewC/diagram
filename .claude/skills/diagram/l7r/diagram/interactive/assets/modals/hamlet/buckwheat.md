@@ -26,7 +26,7 @@ Guesses:
 Depiction: The map draws the dry fields as a hem of small rectangular plots just above the supply canal along the
 paddy's high edge, where the paddy water stops, each squared to the canal behind a bare bank. On some maps an alluvial
 fan's dry middle is left to scrub and the plots keep to its toe. No grain plot is drawn beside a house: the plot a
-household worked there was its kitchen bed. Every plot is furrowed, and neighboring plots form a tract whose rows run
+household worked there was most likely its kitchen bed. Every plot is furrowed, and neighboring plots form a tract whose rows run
 one way, each tract turned well apart from the next so the strips can be told apart. Buckwheat is drawn pale with reddish
 stems, as it looked in flower; in high summer, the season of the paddies, a field might be in flower or still bare ground
 awaiting its autumn sowing.

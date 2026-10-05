@@ -1,18 +1,18 @@
 About: Across Japan's farming country a farmhouse often stood inside a small wood of its own, the yashikirin, "homestead
-grove". It was first a windbreak, so it stood on the side the winter wind came from; it also guarded against thieves and
+grove". It was first a windbreak, so it stood on the winter wind's side; it also guarded against thieves and
 a neighbor's fire, and gave the household firewood from its branches, timber from thinning, and fallen leaves for the
-hearth and for manure. The groves are old: in the 1600s one domain already controlled the cutting of homestead trees.
+hearth and manure. The groves are old: in the 1600s one domain already controlled the cutting of homestead trees.
 
 Which sides it took differed by region: the north and west on the Sendai plain, often leaving the south or east open;
 every side but the house's front on the Tonami plain, where the thin east front held the entrance and garden; and all
 four on the Izumo plain before 1868, on an earth bank against floods. At Tonami tall cedar, oak and zelkova stood
 from the south round to the west, hackberry and alder with a little bamboo from the west round to the north, and
-persimmon and fig at the front. Nearly half were cedar, among many other kinds, 36 to 92 ft
-(11 to 28 m) tall, with a bamboo stand and an understory of saplings and shrubs beneath.
+persimmon and fig at the front. Nearly half its trees were cedar, among many other kinds, 36 to 92 ft
+(11 to 28 m) tall, with bamboo and an understory of saplings and shrubs beneath.
 
-In the 1980s one Tonami hamlet's groves held about 33 good-sized trees a household; one recent Sendai-plain grove held
-356. Early in the Edo period three households' woods covered about 6,000, 10,700 and 28,000 sq ft, and groves varied in
-form, size and kinds of tree.
+In the 1980s one Tonami hamlet's groves held about 33 good-sized trees a household; three recent Sendai-plain groves,
+counted another way, held 122 to 356. Early in the Edo period three households' woods covered about 6,000, 10,700
+and 28,000 sq ft, and groves varied in form, size and kinds of tree.
 
 Guesses:
 - How many trees a grove holds, set from the late 20th-century count: no count from before 1868 was found, though

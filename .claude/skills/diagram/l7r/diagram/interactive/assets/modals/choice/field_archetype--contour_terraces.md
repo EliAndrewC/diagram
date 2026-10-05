@@ -16,10 +16,11 @@ acres (75 ha).
 Depiction: The map draws the rice as stacked steps along the contour, stepping down the slope, each step divided along the
 contour into small paddies. A slope carries at least eight steps, a count set for the drawing rather than taken from any
 one hillside. A supply channel brings the water down and spills it from step to step into a drain at the foot, a route
-drawn so the map shows where the water goes. The wall stands higher where the ground is steeper.
+drawn so the map shows where the water goes. The wall stands higher where the ground is steeper. The lowest steps are tinted blue-green as wet paddies,
+ground that stayed waterlogged; which plots take the tint is a convention of the drawing, not a survey.
 
 Name: Terraces along the contour
 Covers: `meta.field_archetype = contour_terraces`
 Sources: tanada-jawiki, kotobank-tanada, suido-ishizue-tanada, titian-zhwiki, sakaori-ishizumi, bunka-shiroyone, chikuma-obasute, bench-terrace-riser
 Entry: research/questions/0021-terraced-and-valley-paddies-tanada-yachida.html, research/questions/0005-rice-paddies-and-their-plots-suiden.html
-Drawing: research/questions/0021-terraced-and-valley-paddies-tanada-yachida.drawing.html, research/questions/0070-sloping-ground-and-hillsides.drawing.html
+Drawing: research/questions/0021-terraced-and-valley-paddies-tanada-yachida.drawing.html, research/questions/0070-sloping-ground-and-hillsides.drawing.html, research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html, research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html, research/questions/0060-field-drains-akusuiro.drawing.html

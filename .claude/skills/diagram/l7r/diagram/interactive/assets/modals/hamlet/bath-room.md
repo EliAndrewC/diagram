@@ -13,6 +13,10 @@ Around 1770 only a very few village houses had a bath, of about half a tsubo (3 
 the Edo period, two or three houses in ten had one, of 1 to 2 tsubo, about 6 by 6 to 6 by 12 ft. The bath shed standing
 apart in the yard is not known before the Meiji period, from 1868.
 
+Guesses:
+- That a headman's house has its bath joined to its floored rooms: two of the three such baths found were in headmen's
+  houses, but no record says every headman's bath stood there.
+
 Depiction: The map draws a bath room as a small room joined to the farmhouse - beside its main door, at the far end of its
 stable wing or against its floored rooms - and never as a shed standing apart in the yard. A tub is drawn inside it so the
 room reads as a bath from above; the real tub stood under the house's roof, unseen.

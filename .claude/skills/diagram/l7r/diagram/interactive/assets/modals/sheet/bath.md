@@ -1,23 +1,27 @@
-What: The residence's bath, the yudono: a small room added on to the house on its service side, by the kitchen
-and its well, drawn with a curl of steam rising above it.
+About: The bath, the yudono, was a household's own bath room, and a mark of rank: hot water at home meant a well, fuel and a
+risk of fire. Through most of the Edo period only a few upper-rank samurai houses had one; middle and lower samurai washed
+from a tub or went to the public bath, and home baths spread only late in the period, as coopered tubs that could hold hot
+water came to be mass-produced. The intendant's residence at Takayama had its own bath, listed with its earth floor and
+kitchen and its well.
 
-Why: A bath of one's own was a mark of rank. In the Edo period a bath room was built in the few shoin-style
-residences of upper-rank samurai, while middle and lower samurai washed from a tub or went to the public
-bath; around 1600 a warrior family's bath was a one-person tub in a corner of the doma, the earth-floored part
-of the house. At a posting the bath went with the residence: the Takayama residence had its earth floor and
-kitchen, a well and a bath, and a middle-rank house's bath was meant to be added on.
+Around 1600 a warrior family's bath was a tub one person could get into, with a hearth built on, in a corner of the doma,
+the earth-floored part of the house, and it was seldom used, for fear of fire and for the cost of fuel. Later a bath was a
+room of the house or an addition to it: one domain's houses for its middle-rank retainers were planned from the start for a
+bath to be added on. No samurai bath is known as a building of its own.
 
-Note: The bath as a room of the residence or a small addition to it is a recorded finding; a bath standing as
-a building of its own was not found, and a house of middle rank or below may have none. Placing it on the
-service side, with the doma, the kitchen and the well, is this project's reading of the Takayama list and of
-the bath in a corner of the doma, and its size is a guess: nothing read gives the size of a residence's bath.
+How big a residence's bath was is not recorded.
 
-Caveat: Placing it on the service side, with the doma, the kitchen and the well, is this project's reading of
-the Takayama list and of the bath in a corner of the doma, and its size is a guess: nothing read gives the
-size of a residence's bath.
+Guesses:
+- Its size on the plan, about 10 by 8 ft: no source gives one, so it is drawn small enough that the whole house keeps to the
+  size of a district magistrate's.
+
+Depiction: The plan draws the bath as a small addition to the house on its service side, abutting the kitchen, with the
+kitchen's well beyond it - setting the three together is a reading of the Takayama list and the bath in the doma's corner -
+and never as a pavilion in a garden or a court. A curl of steam above it marks it as the bath, and a fire-water tub stands
+on its yard side against its hearth.
 
 Name: bath
 Covers: the bath, its steam mark and its label
-Label: accurate
-Sources: furo-kotobank, yokushitsu-kotobank, shirobito-1717-takayama, kanagawa-hatamoto-kaso, sayama-jinya-uematsu
-Entry: research/questions/0105-baths-furo.html; research/questions/0105-baths-furo.drawing.html
+Sources: furo-kotobank, yokushitsu-kotobank, shirobito-1717-takayama, sayama-jinya-uematsu
+Entry: research/questions/0105-baths-furo.html
+Drawing: research/questions/0105-baths-furo.drawing.html

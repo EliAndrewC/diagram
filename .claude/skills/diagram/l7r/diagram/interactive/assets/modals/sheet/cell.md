@@ -1,31 +1,31 @@
-What: A small cage-like holding room with barred sides, where one or two of the accused wait for their
-case to be heard and judged. It is a place of waiting, not of punishment.
+About: The cell was where the accused waited to be heard and judged. A jail of the Edo period held the accused until
+judgment and the condemned until their sentence was carried out - nearer a detention house than a prison, for
+confinement as a sentence was imposed only by exception; flogging, tattooing and beheading were carried out at Edo's
+great jail. A magistracy that judged cases kept a temporary cell inside its own compound for those called before its
+court, and Edo's town magistracy kept its cell in the quarter that held its court rooms. An intendant's compound
+generally held a jail too, though Takayama's stood in the town. In Rokugan torture to win a confession is forbidden by
+Imperial decree and torturers are very rare, so a magistracy keeps no room built for interrogation.
 
-Why: Edo jails held the accused pending judgment; the sentences were exile, flogging, fines or death -
-not, in the ordinary case, time in prison - and light offenders were sent home to their villages.
-The largest jail, Edo's Tenmachō, was a walled and moated compound of its own; most others stood at
-magistrates' and daikan offices, and a magistracy that judged cases kept a temporary cell inside its own
-compound for those called before its court. So a county magistracy keeps a cell or two for remand and no
-prison block - and in Rokugan, where torture is unusual, no room built for interrogation either.
+The cells that were measured are the great jails', rooms reckoned in tatami mats; at Edo's Tenmacho jail each had a
+privy about 3 ft across. What a magistracy's temporary cell looked like is not recorded.
 
-Note: Small remand cells follow the record, though holding only one or two is a guess (and no page read
-names exile or fines as sentences, or says light offenders were sent home), and so does a temporary cell
-inside the office's own compound. Drawing no room for interrogation is this setting's own departure
-from Edo, whose jails had one. The
-size of such a cell was not found, so the drawn size is a guess within the span of the single cell rooms
-read, from Osaka's 6-mat cell (about 12 by 9 ft) to Tenmacho's 18-mat room (about 18 by 18 ft): about 12
-by 10 ft, at the small end, because a county cell holds only a few until their hearing. That a cell may
-stand anywhere in the compound is this setting's own: Chinese regulation put the county jail on the
-south side (Neixiang's stood in its southwest), and Rokugan keeps no such rule.
+The single cell rooms measured run from Osaka's 6 mats, about 12 by 9 ft, to the 18 mats, about 18 by 18 ft, of Edo's
+Tenmacho jail, each shared by several prisoners; Edo's great cell of 30 mats held over a hundred. The size of a
+magistracy's own cell is not recorded.
 
-Caveat: The size of such a cell was not found, so the drawn size is a guess within the span of the single
-cell rooms read, from Osaka's 6-mat cell (about 12 by 9 ft) to Tenmacho's 18-mat room (about 18 by 18
-ft): about 12 by 10 ft, at the small end, because a county cell holds only a few until their hearing.
-That a cell may stand anywhere in the compound is this setting's own: Chinese regulation put the county
-jail on the south side (Neixiang's stood in its southwest), and Rokugan keeps no such rule.
+Guesses:
+- That a county cell holds one or two of the accused: no account counts them; a county holds only a few until their
+  hearing.
+- Its size on the plan, about 12 by 10 ft: no account gives a magistracy's temporary cell, so it is set at the small end
+  of the single cell rooms measured.
+
+Depiction: The plan draws the cell as a small building with bars across its front, in the office's outer court. It may
+stand on any side of the compound: a Chinese county office set its jail to the south by rule, and Rokugan keeps no such
+rule. No room for interrogation is drawn; questioning happens in the day office or the hearing court, like any other
+business.
 
 Name: cell
 Covers: the barred holding cell and its label
-Label: accurate
-Sources: agariya-jawiki, roya-kotobank, edo-ashigaru-bugyosho, tenmacho-jawiki, chuo-royashiki, neixiang-yamen-zhwiki, henan-neixiang, takayama-jinya-city
-Entry: research/questions/0096-holding-cells-agariya-and-roya.html; research/questions/0096-holding-cells-agariya-and-roya.drawing.html
+Sources: tenmacho-jawiki, roya-kotobank, edo-ashigaru-bugyosho, jinya-kotobank, takayama-jinya-official, agariya-jawiki
+Entry: research/questions/0096-holding-cells-agariya-and-roya.html
+Drawing: research/questions/0096-holding-cells-agariya-and-roya.drawing.html

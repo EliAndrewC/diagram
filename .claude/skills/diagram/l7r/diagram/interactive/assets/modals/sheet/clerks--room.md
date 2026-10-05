@@ -1,29 +1,27 @@
-What: The workroom of the county's few hired clerks, a room of the office hall beside the day office,
-where the tax rolls and case papers are copied and kept in order. It is a place of work, never lodging.
+About: The clerks' room was the workroom inside the office hall where an office's papers were drawn up, copied and
+kept. In Japan an intendant's paperwork was done by clerks, the tedai, chosen from the peasants and townsmen versed in
+rural administration; most were the children of village and town officials, taken on first as scribes. At Takayama the
+room of the officials hired from the district, the goyoba, was partitioned off beside the room where the officials
+sent by the shogunate worked, and a room used only for writing, where the documents sent to the shogunate were drawn
+up, had a binding room beside it. It was a place of work, not of lodging: an intendant's staff lived in huts and
+rowhouses elsewhere in the compound, and no Japanese intendant's clerks are known to have had a building of their own
+to work in.
 
-Why: At the Takayama intendant's office the clerks worked in rooms of the office: the workroom of the
-officials hired from the district was partitioned off beside the room where the shogunate's own officials
-worked, and a room used only for writing, where the documents sent to the shogunate were drawn up, had a
-binding room beside it. At the Edo town magistracy, too, the duty rooms of two of its record sections
-stood in the quarter of the compound that held its court. What stood apart as buildings of their own were
-the staff's houses; no page read gives the clerks a building of their own to work in. In Japan the
-paperwork was run by clerks, the tedai, chosen from the peasants and townsmen versed in rural
-administration, under officials sent by the shogunate; a Chinese county kept its clerks in six chambers
-of a few men each. Scaled to a county of this setting, that is three or four clerks, scribes by caste
-(heimen), who live in town and come in to the manor each day - and who, as permanent locals, are the
-office's memory under one magistrate after another, this project's reading of the entrenched clerks of
-China's offices.
+What the room looked like beyond its partitions is not recorded.
 
-Note: The clerks' room as a room of the office hall follows the record. Their number of three or four is
-this project's scaling from a Chinese county population the record gives no source for, and the room's
-size, about 28 by 18 ft for three or four clerks, is a guess with no measured example behind it.
+A Chinese county office kept its clerks in six chambers, by statute two or three men to each, though in practice a
+chamber often ran past that, even to more than a hundred. In Rokugan a county office's clerks are three or four heimen
+scribes hired from the county town, who live in town and come in each day; as the office's permanent staff they carry
+its business from one magistrate to the next. How large a clerks' room was is not recorded.
 
-Caveat: Their number of three or four is this project's scaling from a Chinese county population the
-record gives no source for, and the room's size, about 28 by 18 ft for three or four clerks, is a guess
-with no measured example behind it.
+Guesses:
+- Its size on the plan, about 30 by 20 ft for three or four clerks: no measured clerks' room was found.
+
+Depiction: The plan draws the clerks' room as a room at one end of the office hall, beside the day office, its floor
+drawn in the hall's own color. No building of their own is drawn for the clerks, to work or to live in.
 
 Name: clerks' room
 Covers: the clerks' room inside the office hall, its floor and its label
-Label: accurate
-Sources: mapple-takayama-jinya, edo-ashigaru-bugyosho, jinya-kotobank, tedai-jawiki, xuli-zhwiki
-Entry: research/questions/0113-the-office-hall-and-its-clerks-goyakusho.html; research/questions/0113-the-office-hall-and-its-clerks-goyakusho.drawing.html
+Sources: tedai-jawiki, mapple-takayama-jinya, jinya-kotobank, neixiang-yamen
+Entry: research/questions/0113-the-office-hall-and-its-clerks-goyakusho.html
+Drawing: research/questions/0113-the-office-hall-and-its-clerks-goyakusho.drawing.html

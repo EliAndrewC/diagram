@@ -1,8 +1,8 @@
-About: Before the open lowland was developed, rice was grown up the small valleys, and the houses went with it. On two estates of the late Heian period,
-in Satsuma and Bingo, the paddies lay almost without exception in small valleys, fed by springs and rain, and one house or a
+About: Rice was once grown up the small valleys among the hills, and the houses went with it. On two estates of the late Heian period,
+in Satsuma and Bingo, the paddies lay almost without exception in small valleys, and one house or a
 few probably stood beside each small valley paddy, dotted up each narrow branching valley. A valley's head was also where a
 reservoir pond could be made, by closing the valley with an earthen dike, its water set above the fields it served. A lump
-of houses grew at the foot of a hill or plateau, where water could be got.
+of houses grew at the foot of a hill or plateau, or on other narrow ground where water could be got.
 
 A visitor climbing the valley found the houses tucked into its head, near where the water came in, the fields stepping down
 the valley below them.

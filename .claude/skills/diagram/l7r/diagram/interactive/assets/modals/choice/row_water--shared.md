@@ -16,11 +16,12 @@ Guesses:
   did, and Santome's deep shared wells answered a water-poor upland.
 - How far apart the shared wells stand, each serving a stretch of row about 1,220 ft long: no source spaces a row's wells.
 
-Depiction: The map sets the shared wells along the street, each at the middle of its stretch of the row, so that along the
-row no farm is more than about 610 ft from one. The well is drawn as a marker larger than life so a reader can find it.
+Depiction: The map sets the shared wells along the street, each at the middle of its stretch of the row, so that no farm
+along the row lies far from one. The well is drawn as a marker larger than life, about 19 ft across, so a reader can find
+it; a real well's curb was a frame only a few feet across round a shaft about 3 ft wide.
 
 Name: Wells shared along the way
 Covers: `meta.row_water = shared`
-Sources: kotobank-santome-shinden, ido-jawiki, kotobank-tsurube-ido, idobata-kaigi-jawiki, seiyo-karihama-ido, kotobank-tsujiido, saijo-mizu-rekishikan, kotobank-kurumaido
-Entry: research/questions/0033-row-villages-resson.html, research/questions/0196-communal-wells-ido.html
+Sources: kotobank-santome-shinden, ido-jawiki, kotobank-tsurube-ido, idobata-kaigi-jawiki, seiyo-karihama-ido, kotobank-tsujiido, saijo-mizu-rekishikan, kotobank-kurumaido, koshigaya-shishi-noumin-jukyo
+Entry: research/questions/0033-row-villages-resson.html, research/questions/0196-communal-wells-ido.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.html
 Drawing: research/questions/0033-row-villages-resson.drawing.html, research/questions/0196-communal-wells-ido.drawing.html

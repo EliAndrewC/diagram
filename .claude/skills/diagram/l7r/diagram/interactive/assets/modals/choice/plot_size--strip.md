@@ -3,10 +3,11 @@ out on a plan, roads, fields and house plots together, so their form came out re
 the Kanto plain the houses lined both sides of the road, and behind each lay its land in a strip of equal area.
 
 On the Musashino plateau those strips were dry field and woodland, long and narrow behind a row of houses, allotted
-nearly equally at the start, and in the plateau's south they ran the way of the canals dug along the roads. Whether such
-strips elsewhere were paddy is not recorded.
+nearly equally at the start, and in the plateau's south they ran the way of the canals dug along the roads. No row
+village is recorded with its paddy in strips behind the houses.
 
-The strips could be very long. At Santome, a planned new-field colony, the farmhouses stood along both sides of a road
+The strips could be very long. On the planned rows measured, a farm's strip fronted its road for about 54 to 240 ft.
+At Santome, a planned new-field colony, the farmhouses stood along both sides of a road
 about 36 ft wide; in Kamitome each house had a frontage of about 240 ft and a depth of about 2,240 ft, some 12 acres
 (about 5 ha) running back in one strip.
 
@@ -22,6 +23,6 @@ grid.
 
 Name: The paddy plots' size: long strips
 Covers: `meta.plot_size = strip`
-Sources: shinden-shuraku-kotobank, ishizue-musashino, santome-shinden-jawiki, rice-paddies-and-their-plots-suiden, how-our-maps-draw-rice-paddies-and-their-plots-suiden
-Entry: research/questions/0005-rice-paddies-and-their-plots-suiden.html, research/questions/0031-clustered-and-scattered-villages-shuson-sanson.html
+Sources: shinden-shuraku-kotobank, ishizue-musashino, santome-shinden-jawiki, rice-paddies-and-their-plots-suiden, how-our-maps-draw-rice-paddies-and-their-plots-suiden, saitama-santome-history, ome-shinmachi-machinami, row-villages-resson
+Entry: research/questions/0005-rice-paddies-and-their-plots-suiden.html, research/questions/0031-clustered-and-scattered-villages-shuson-sanson.html, research/questions/0033-row-villages-resson.html
 Drawing: research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html, research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html

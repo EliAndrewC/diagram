@@ -8,8 +8,7 @@ zelkova and white oak lined Santome's road as an avenue. A row facing another ac
 south of its road grew its bamboo on its south side, its owners said, because the row of grove farms across the road already
 broke the wind from the north.
 
-Ome Shinmachi, opened on the Ome road in 1596-1615, had 33 lots on each side, each about 54 ft wide; Santome held between 172
-and 180 farms in its three villages. Whether one side or both was the commoner form is not recorded.
+Ome Shinmachi, opened on the Ome road in 1596-1615, had 33 lots on each side, 66 in all, each about 54 ft wide. Whether one side or both was the commoner form is not recorded.
 
 Guesses:
 - That a row's farms take both sides of the way or one at even odds: both are attested, and neither is counted against the
@@ -20,12 +19,11 @@ Guesses:
   gate is not recorded.
 
 Depiction: The map stands the farms on both sides of the street, one farmstead apart, lot against lot. The far row has its
-holding drawn behind each farm as dry field; the near row, between the paddy and the street, has none. Each farm keeps its
-grove on its windward sides, whichever side the street runs, and a near-row farm walled from the street by its grove reaches
-it by a path round the trees.
+holding drawn behind each farm as dry field; the near row, between the paddy and the street, has none. A near-row farm walled
+from the street by its grove reaches it by a path round the trees.
 
 Name: Both sides of the way
 Covers: `meta.row_sides = both`
-Sources: ndl-yajima-shuraku, saitama-santome-history, kawashima-1986-santome, akiyama-1992-tama-yashikirin, ome-shinmachi-machinami, miyoshi-santome-shinden
+Sources: ndl-yajima-shuraku, saitama-santome-history, kawashima-1986-santome, akiyama-1992-tama-yashikirin, ome-shinmachi-machinami
 Entry: research/questions/0033-row-villages-resson.html
 Drawing: research/questions/0033-row-villages-resson.drawing.html

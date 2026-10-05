@@ -1,26 +1,24 @@
-What: The genkan, the formal entrance with its shikidai, the low board step where guests were bowed in and
-out: a stepped-up porch where a guest of rank's palanquin is set down against the step. Where office and
-residence share the compound it stands on the office hall, and the way to the residence runs on through the
-office.
+About: The genkan was a samurai house's formal entrance, kept for the head of the household and honored guests; the rest of
+the household came and went by an inner entrance, and the kitchen had a door of its own. In the Edo period the word meant an
+entrance with a shikidai, the low board step where guests were bowed in and seen off.
 
-Why: Arrival of rank was staged - through the gate, across open ground, to the step - and the palanquin was
-brought right alongside the step so that its rider went into the building without setting foot on the
-ground; the main genkan was kept for the head of the house and honored guests. At Takayama, the one jin'ya
-whose principal parts survive, a visitor enters by the genkan and goes round the rooms of the office on to the
-residence.
+A guest of rank came by palanquin, and the palanquin was brought right alongside the step, so that its rider went into the
+building without setting foot on the ground. So an arrival was staged: the gate, then open ground a palanquin could cross, then
+the step. On a drawing of 1869, the branch office at Jōge has its entrance with its step facing the open ground inside its main
+gate. Where an intendant's office and residence shared a compound, at Takayama, a visitor came in by the genkan and went round
+the rooms of the office on to the residence.
 
-Note: The genkan with its shikidai, the staged arrival that leads to it, and the genkan on the office where
-office and residence share a compound are recorded findings. Two approaches are attested and each sheet takes
-one: the genkan, the senior house's form, or no genkan with a shikidai, where a middle gate and a walled garden path
-lead a guest to the zashiki's veranda, attested at a middle-rank house; a sheet that takes the second draws no
-genkan. The Takayama page describes a visitor's route, not how the office and the residence were laid out
-against each other.
+Not every house had one. The houses of senior retainers did; a middle-rank house could do without, and bring its guest
+through a middle gate in a wall and along a walled garden path straight to the veranda of the principal reception room. How
+large a genkan was is not recorded.
 
-Caveat: The Takayama page describes a visitor's route, not how the office and the residence were laid out
-against each other.
+Depiction: Where the office and the residence share a compound, the plan draws the genkan on the office hall, and the way to
+the residence runs on through the office; where the residence stands alone, the genkan is on the residence. A guest's door
+always opens onto open ground a palanquin can cross, never onto the street or against the side of a building. A plan whose
+house brings its guests in by a garden path draws no genkan.
 
 Name: genkan
 Covers: the entry porch at the formal entrance
-Label: accurate
-Sources: genkan-jawiki, bukeyashiki-wiki, shirobito-1717-takayama, shiroishi-koseki, kotobank-shikidai, kominkai-genkan, jaanus-uchigenkan, fuchu-joge-pamphlet, takayama-jinya-jawiki, takayama-jinya-city
-Entry: research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html; research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html
+Sources: jaanus-uchigenkan, kotobank-katteguchi, genkan-jawiki, kotobank-shikidai, kominkai-genkan, fuchu-joge-pamphlet, shirobito-1717-takayama, bukeyashiki-wiki, shiroishi-koseki
+Entry: research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html
+Drawing: research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html

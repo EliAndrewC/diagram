@@ -1,22 +1,23 @@
-What: The posts that raise the granary's floor off the ground, drawn as small dark blocks at its foot, where
-the granary is a storehouse on posts.
+About: The stilts were the posts that raised a granary's floor off the ground, in the storehouse on posts, the takakura.
+The high floor kept rats from the grain, with rat-guards fitted against them, and let the air pass beneath against damp.
+Neither reason has to do with a river's floods, so a raised floor most likely served grain wherever it was kept, away
+from the water as well as beside it. Such storehouses were still built into modern times on the islands of Amami Oshima
+and Hachijojima and among the Ainu of Hokkaido.
 
-Why: The storehouse on posts, the takakura, kept its floor high to keep rats from the grain, with guards
-against them, and to let the air through against damp. Neither reason is a river's, so both hold for a
-granary away from the water as well as for one beside it.
-Such storehouses were still built in Japan on Amami Oshima, on
-Hachijojima and among the Ainu into modern times.
+It was one of a granary's two forms. The other, an earth-walled kura like the rice store of the Takayama intendancy, its
+walls set with gaps for ventilation, stood on no posts that are recorded: how far such a kura's floor sat above the
+ground, and whether on posts or on a stone base, is not recorded.
 
-Note: The floor raised on posts follows the record as one of a granary's two forms, though it is attested for the southern islands and the Ainu north, not for an intendancy's store; the other, an
-earth-walled kura like the Takayama intendancy's rice store, is drawn with no posts. That rats and damp
-hold away from a river is this project's reading of the reasons given, and how an earth-walled kura's
-floor was raised was not found, so posts under one would be a guess.
+How tall a takakura's posts stood, and how many held up its floor, is not recorded either.
 
-Caveat: That rats and damp hold away from a river is this project's reading of the reasons given, and how
-an earth-walled kura's floor was raised was not found, so posts under one would be a guess.
+Guesses:
+- The number and size of the posts the plan draws: no account read gives a takakura's posts.
+
+Depiction: The plan draws the posts as small dark blocks at the granary's foot, only under a granary on posts; the
+earth-walled kura is drawn with none.
 
 Name: granary stilts
 Covers: the posts at the granary's foot
-Label: accurate
-Sources: takayukashiki-jawiki, takayama-onkura-heritage, kuramae-jawiki, wheatbaku-asakusa-okura
-Entry: research/questions/0098-storehouses-for-the-tax-rice.html; research/questions/0098-storehouses-for-the-tax-rice.drawing.html; research/questions/0142-rice-storehouses-and-the-rice-brokers-in-a-capital-kura-fudasashi.html
+Sources: takayukashiki-jawiki, takayama-onkura-heritage
+Entry: research/questions/0098-storehouses-for-the-tax-rice.html
+Drawing: research/questions/0098-storehouses-for-the-tax-rice.drawing.html

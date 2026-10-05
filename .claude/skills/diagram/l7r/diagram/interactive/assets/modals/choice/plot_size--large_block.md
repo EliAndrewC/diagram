@@ -10,14 +10,16 @@ quarter-acre rectangles is modern: Meiji land consolidation made the one-tan plo
 projects begun in 1963 grew it to blocks of about three-quarters of an acre.
 
 The paddy lots of the 1602 register run up to about 0.44 acre (1,800 sq m); the one parcel quoted from a 1684 register
-of Kami-Baba village is about 0.14 acre. No average plot of before modern times was found.
+of Kami-Baba village is about 0.14 acre. No average plot of before modern times was found, and whether a register's lot
+was one walled basin or several is not recorded.
 
 Guesses:
 - How often a settlement's paddies come out large rather than small, middling or in strips: no source counts how many
   villages had which.
 
 Depiction: The map draws a large-plotted field's basins about a third larger than the ordinary basin, about 0.07 acre,
-half the Kami-Baba parcel, and as irregular as any other: never at the quarter-acre block of Meiji consolidation.
+half the Kami-Baba parcel, and never at the quarter-acre block of Meiji consolidation; how regular their lines are is a
+separate choice on the title card.
 
 Name: The paddy plots' size: large blocks
 Covers: `meta.plot_size = large_block`

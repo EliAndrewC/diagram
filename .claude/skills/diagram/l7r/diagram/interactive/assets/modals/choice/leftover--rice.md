@@ -20,4 +20,4 @@ Name: Rice left between the ponds
 Covers: `meta.leftover = rice`
 Sources: guangdong-xinyu-22, wanli-fishpond-summary, isis-dykepond, sdlib-shunde-jitang, gmrb-2024-sangji, minle-dou-people
 Entry: research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.html, research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html
-Drawing: research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html
+Drawing: research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html, research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html

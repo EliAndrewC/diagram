@@ -1,18 +1,24 @@
-What: A small shrine at the head of the landing, to the guardian spirit of the boats that work the river.
+About: A small shrine ashore at the head of the landing, to the boats' guardian spirit, the funadama, kept by the crews who work
+the river.
 
-Why: A boat's own guardian, the funadama, lives aboard, at the foot of the mast, and is sometimes given a shrine
-on land, and that shrine is the one drawn here. The water god's shrine that river boatmen are recorded keeping, a
-Suitengu, is undated in its one source, a twentieth-century record that dates nothing before the late 1920s,
-and nothing read places boatmen keeping one before modern times, so it is not drawn.
+A boat's guardian lived aboard: dolls, copper coins, human hair, the five grains, dice and the like were set at the foot of the
+boat's post, and some boats carried only a talisman from a shrine or temple, pasted on. The guardian was sometimes also given a
+shrine on land; fishermen and shipwrights were its chief worshippers. Where on land that shrine stood, and how big it was, is not
+recorded.
 
-Note: The boats' guardian and its shrine on land are read. The shrine is not recorded standing at a landing
-itself, or with a size, so its place at the head of the landing and its size are a guess.
+River boatmen are also known to have kept a shrine to a water god, with a festival of their own on their boats, but only in the
+twentieth century.
 
-Caveat: The shrine is not recorded standing at a landing itself, or with a size, so its place at the head of the
-landing and its size are a guess.
+Guesses:
+- Its place at the head of the landing, and its size, about 3 by 5 ft: the guardian's shrine on land is recorded neither at a
+  landing nor with a size.
+
+Depiction: The plan draws the shrine small and vermilion at the land edge of the bank street, and draws no water-god shrine,
+since the boatmen's is known only from modern times.
 
 Name: boatmen's altar
 Covers: the altar on the bank and its label
-Label: accurate
-Sources: funadama-jawiki, kotobank-funadama, kotobank-suitengu
-Entry: research/questions/0225-the-boatmens-shrine-at-the-landing-funadama-suijin.html; research/questions/0225-the-boatmens-shrine-at-the-landing-funadama-suijin.drawing.html
+Sources: funadama-jawiki, kotobank-funadama, katsushika-suijin
+Entry: research/questions/0225-the-boatmens-shrine-at-the-landing-funadama-suijin.html
+Drawing: research/questions/0225-the-boatmens-shrine-at-the-landing-funadama-suijin.drawing.html
+Form: particular

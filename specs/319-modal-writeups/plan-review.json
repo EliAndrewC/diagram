@@ -1,7 +1,7 @@
 {
  "feature": "319-modal-writeups",
- "plan_sha256": "66644da68f5da7c6e9921f51f1c227074caa217d14dfeffeec52e0b61d548786",
- "reviewed": "2026-10-04",
+ "plan_sha256": "2e722d1e1fa9c30e82eed372a92c4b3caa7e75726de5a84c8f5689053d1380d7",
+ "reviewed": "2026-10-05",
  "declared": "spec-fidelity",
  "decisions": [
   {
@@ -60,10 +60,56 @@
    "why": "Unchanged; FR-010, FR-012, US6."
   },
   {
-   "id": "D10",
-   "summary": "Title card choices (sketch)",
+   "id": "D10-table",
+   "summary": "choices.json lists every REGISTERED knob (22) plus two declared choices (harvest_weather, hamlet_burial); its test reads the populated registry and the pool manifests",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "FR-009 asks for EVERY per-settlement choice the map made, US4-1 'rolled from the seed or set by its declaration', the GM 'what the different tunable knobs were set to create this specific settlement'; the CLEAR sketch said 'rolled, declared or pinned'. The 'measured first' premise measured the register_knob registry, not the set of choices: hamletgen rolls per-settlement forms by _roll(spec.seed, ...) / knob_rng that are not registered - grove_sides, grove_flank, manure_form (heap|pit), farm_water (channel|well), row_line, row_sides, row_water (shared|own), intake (weir|open), copse_siting, kosatsuba_siting, dike_crop, fry_form, pond_layout, leftover (hamletgen/plan.py:518-538), bath_seat (homesteads/fixtures.py:209), and the field grave form island|corner (settlement/fields/features.py:32 grave_form, not even in meta). All but grave form are in the pool manifests' meta today. None is in choices.json and the test cannot fail on them. Not physically impossible, not implied by the GM, and it guts the purpose: the card would omit a large share of what made the settlement."
+  },
+  {
+   "id": "D10-degree",
+   "summary": "A knob that is a degree along a continuum (grain_drift, -12..12 by 4) takes one modal for the knob, its value shown as the card's label; every other key one modal per value",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "The GM asks that clicking a setting open 'the modal that pops up that explains that'; constitution XII (the project's ratified doctrine) makes a degree a calibration, not a choice between forms, so one standardized text explaining the turn explains every step of it, and seven texts would differ only by the number the card already shows. One case only (grain_drift) is so marked; adjudicated alone. Holds only while the one modal says what the shown value means (which way 'one way' and 'the other way' are, what 0 is)."
+  },
+  {
+   "id": "D10-modals",
+   "summary": "Choice modals as files under assets/modals/choice/, About form, same parser, registry choice:<key>=<value>, same guidelines and checks",
    "class": "within",
-   "why": "Unchanged; precision notes of 2026-10-03 stand."
+   "why": "FR-009 (written to FR-001 and FR-005), FR-008, FR-011 'every knob value's modal'."
+  },
+  {
+   "id": "D10-card-facts",
+   "summary": "place_card gains choices (name, value label, modal key, opening in the same dialog) and facts: the windbreak's side and why, where the lanes lead, the retirement count from meta",
+   "class": "within",
+   "why": "FR-004 'no per-map text in a feature modal ... A settlement's own facts and choices go on its title card'; the Decisions row 'Per-settlement facts move from the feature modals to the title card'; US4-3's 'a count of this settlement'. The GM's 'not ... customized modals. For anything' is what moves them."
+  },
+  {
+   "id": "D10-grove-sides",
+   "summary": "Which sides the farm groves take moves from the homestead grove modal to the card as a fact sentence",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "grove_sides is a per-settlement ROLL (hamletgen/plan.py:518, settlement/homestead_parts/groves.py:400; 2 or 3 in the pool meta, 2/3/4 per feature 291), so FR-009 makes it a choice whose value opens a standardized modal. As a fact sentence it opens nothing. Moving it off the feature modal is right (FR-004); demoting a rolled choice to a fact with no modal is not."
+  },
+  {
+   "id": "D10-features-removal",
+   "summary": "On a hamlet the page reads no ### Features and writes no on_this_map; the five blocks are removed from the notes as covered by harvest weather, where the dead lie and the retirement count; two (Inashiro's, Kashikawa's own burial grounds) stale",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "US4-3: each per-map fact now in ### Features becomes a title-card entry (a choice or a count). The coverage claim is false: Kashikawa's block carries '**grave island**: Kashikawa's field grave takes the Japanese form ... (each hamlet takes one form)' - the rolled grave_form (fields/features.py:32), which is in no choice, no count and not in meta. Removing the block drops it from every surface. The stale burial claims check out (all five meta record hamlet_burial=village_ground) and their removal is within; so is the retirement count (Kuwabata's block says 4 of 16 where meta records 7, a third stale entry the card's reading of meta corrects)."
+  },
+  {
+   "id": "D10-other-tiers",
+   "summary": "Other tiers keep reading ### Features until standardized",
+   "class": "within",
+   "why": "The pool's settlement maps are hamlets alone; the other Features blocks are on magistracy and country-shrine sheets, whose per-sheet text FR-003 keeps on the sheet and FR-011 reviews under the particular guidelines."
+  },
+  {
+   "id": "D10-test",
+   "summary": "A test holds every hamlet class's explanation identical across the five pool maps' meta, FR-015's conditioned items set aside",
+   "class": "within",
+   "why": "Enforces FR-004 and SC-004 as amended."
   },
   {
    "id": "D11",
@@ -168,5 +214,5 @@
    "why": "The GM's own case (SC-009: on a nucleated map, absent from a dispersed one). The guess concerns 'a clustered village'; 0033 line 56 reads 'A row farm kept its grove like any other farm' (grepped). No pool linear map carries a windbreak (manifest grep, 2026-10-04), so excluding linear hides nothing a pool map draws. Content correctness of the condition is the modal checks' to judge on the rollout."
   }
  ],
- "verdict": "CLEAR"
+ "verdict": "BLOCKED"
 }

@@ -1,23 +1,26 @@
-What: A cluster of old pines in the inner garden, drawn as three canopies and labeled.
+About: Pines stood in the garden of a samurai residence. The Japanese black pine (kuromatsu) was the lead tree of the
+Japanese garden, and a pine also had a set place at the garden's edge: planted by the wall so that it could be seen from
+outside, a custom already named in a dictionary of 1603-04, at the start of the Edo period.
 
-Why: The Japanese black pine is the lead tree of the Japanese garden, and a garden pine is a tended one, its
-new shoots pinched and thinned twice a year; a pine planted at the edge of the wall to be seen from outside
-is named already in a dictionary of 1603-04. The garden of a long-held posting was likely kept by generations of
-magistrates, and its pines would likely be older trees, though no page read says how old.
+A garden pine was a tended tree, not a wild one. Twice a year its new shoots, which stick up in early spring, were pinched
+and the tree further worked, and a pine whose care was neglected lost its worth as a garden tree. One way of training it
+was called "gate-covering".
 
-Note: Pines in a residence garden follow the record, and so does a pine by the wall seen from outside. Their
-crown size is a guess: no page read gives the crown of a pruned garden pine, though left to grow the tree
-reaches 15 to 40 m. The drawn crowns of 4 to 6 ft read as young or closely pruned trees, while a garden kept
-by generations would likely hold older trees with wider crowns; a crown of 15 to 30 ft would be no less a
-guess.
+Left to grow, the black pine is a tall tree, some 50 to 130 ft (15 to 40 m). How tall a garden pine was kept, and how wide
+its crown was, is not recorded.
 
-Caveat: Their crown size is a guess: no page read gives the crown of a pruned garden pine, though left to
-grow the tree reaches 15 to 40 m. The drawn crowns of 4 to 6 ft read as young or closely pruned trees, while
-a garden kept by generations would likely hold older trees with wider crowns; a crown of 15 to 30 ft would be
-no less a guess.
+Guesses:
+- The crowns, about 4 to 6 ft across, the size of young or closely pruned trees: no record gives the crown of a pruned
+  garden pine.
+- That pruning held a garden pine well below its wild height, and that an old garden's pines were wider than drawn,
+  perhaps 15 to 30 ft across even when pruned: a garden kept up for generations would hold old trees, but no figure for
+  either was found.
+
+Depiction: The plan draws the pines as a cluster of three round crowns in the inner garden, with a label, each crown
+drawn to the size given above.
 
 Name: garden pines
 Covers: the old pines' canopies and their label
-Label: accurate
 Sources: uekipedia-kuromatsu, kotobank-mikoshi-no-matsu
-Entry: research/questions/0076-black-pines-in-japanese-gardens-kuromatsu.html; research/questions/0076-black-pines-in-japanese-gardens-kuromatsu.drawing.html
+Entry: research/questions/0076-black-pines-in-japanese-gardens-kuromatsu.html
+Drawing: research/questions/0076-black-pines-in-japanese-gardens-kuromatsu.drawing.html

@@ -1,6 +1,8 @@
 About: A notice board (kosatsuba) was the wooden frame on which the shogunate and the domains posted standing law, so that
 everyone would know it. It stood where the most passers-by would see it: at a village's center or its way in, before the
-gate of a village official's house, at a crossroads or at the foot of a bridge. Most wells were shared, a whole village or a group of its households
+gate of a village official's house, at a crossroads or at the foot of a bridge.
+
+Most wells were shared, a whole village or a group of its households
 drawing from one. In the cities the neighbors met at the shared well to draw water, do the washing and talk, and a village's
 wellside was probably such a meeting place too; a well by the roadside had a name of its own, the wayside well (tsuji-ido).
 
@@ -23,6 +25,6 @@ broadside to it, and is placed last, once everything else stands.
 
 Name: Facing the place water is drawn
 Covers: `meta.kosatsuba_siting = waterside`
-Sources: kosatsu-jawiki, adachi-kosatsu, mlit-tokaido-kosatsuba, mlit-tokaido-qa-kosatsuba, idobata-kaigi-jawiki, kotobank-tsujiido, kotobank-tsurube-ido, seiyo-karihama-ido
+Sources: kosatsu-jawiki, adachi-kosatsu, mlit-tokaido-kosatsuba, mlit-tokaido-qa-kosatsuba, ido-jawiki, idobata-kaigi-jawiki, kotobank-tsujiido, kotobank-tsurube-ido, seiyo-karihama-ido
 Entry: research/questions/0190-notice-boards-kosatsuba.html, research/questions/0196-communal-wells-ido.html
 Drawing: research/questions/0190-notice-boards-kosatsuba.drawing.html

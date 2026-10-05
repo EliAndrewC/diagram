@@ -1,16 +1,19 @@
-What: A bay of the residence closed behind its storm shutters - rooms no longer lived in, drawn darker with the
-shutters across them.
+About: A wing of the residence closed behind its storm shutters in daylight, its rooms no longer lived in. Whose rooms they were,
+and why the household keeps them shut rather than turning them to another use, is this house's own story.
 
-Why: A household one of whose members has gone may keep those rooms closed rather than give them to another
-use; whose they were is the map's own story. The storm shutters themselves, the amado, were board doors
-running on a one-groove sill along the veranda, stowed by day in a box at the end of their run and shut at
-night against wind and rain and for security.
+The shutters themselves, the amado, were board doors running in a one-groove sill along the edge of the veranda. They were shut
+at night and against wind and rain, to guard the house and keep it warm, and by day they were stowed in a box at the end of
+their run, so a wing still shuttered at midday stands out as one no one opens.
 
-Note: The storm shutters are recorded. A wing drawn with its shutters closed in daylight because its rooms
-stand unused is a guess: nothing read says an unused wing was kept shut up.
+Guesses:
+- That a household kept the shutters of rooms it no longer used shut by day: the accounts say the shutters were closed at night
+  and against wind and rain and stowed by day, and none that unused rooms stayed shut.
 
+Depiction: The plan draws the wing darker than the rest of the house, with its shutters across it.
+
+Form: particular
 Name: shuttered wing
 Covers: the shuttered bay, its shutters and its labels
-Label: guess
-Sources: amado-kotobank
-Entry: research/questions/0102-verandas-and-storm-shutters-engawa-and-amado.html; research/questions/0102-verandas-and-storm-shutters-engawa-and-amado.drawing.html
+Sources: amado-kotobank, shut-wing-absence
+Entry: research/questions/0102-verandas-and-storm-shutters-engawa-and-amado.html
+Drawing: research/questions/0102-verandas-and-storm-shutters-engawa-and-amado.drawing.html

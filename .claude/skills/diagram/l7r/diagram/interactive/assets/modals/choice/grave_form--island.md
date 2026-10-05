@@ -14,6 +14,7 @@ Guesses:
 - That about three paddy maps in ten draw a grave in their fields: no source gives a rate.
 - That a field grave is an island inside a plot about half the time and in a plot's corner the other half: both are placements of one thing, and no source weighs one against the other.
 - The mound's size, about half the plot's width, with two or three stones: no size of a field grave was found.
+- That the grave stands in a flooded paddy plot: the field graves of the Yangzi delta stood in working fields, but no source says what those fields grew.
 
 Depiction: The map draws the grave as a small raised mound of earth in the middle of a paddy plot, with two or three stones set
 one behind another, unequal in height. The plot's bunds are carried round the

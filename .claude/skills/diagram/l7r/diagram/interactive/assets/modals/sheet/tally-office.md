@@ -1,20 +1,23 @@
-What: A small office on the route goods take through the compound, where they are counted or weighed, the
-seal is set and the tally written: the record of goods the office supervises but does not own.
+About: The tally office was where goods passing through an office's hands were counted or weighed, sealed and written
+into a tally - the written account of goods the office oversaw but did not own. No account describes such an office as a building
+of its own; it is known from the trade it served. On the sea route to Edo the shogunate's tax rice went on ships it hired
+directly, flying an official pennant, and the intendants set up stations at the ports of call to protect the ships and
+inspect their loads strictly. In Japan bulk goods passed through the ton'ya, wholesalers who were also warehouse-keepers
+and shipping agents. An office's hold on goods it neither carried nor owned was most likely a written one: counts, seals
+and records. A bale of charcoal, of no standard size, showed nothing of how much it held until it was weighed, which is
+what made a sealed tally worth having.
 
-Why: The magistracy's hold on moving goods is documentary. The shogunate's tax rice went by sea on ships it hired directly, flying
-an official pennant and inspected at the ports of call, the office owning no hulls - and a charcoal store
-is drawn on our maps as a supervised, tallied depot, its goods sealed there and never owned. So the post that writes the tally
-stands where the goods pass, between the store and the way out.
+What a tally office looked like, how large it was and how many worked in it are not recorded.
 
-Note: That the shogunate's tax rice went by sea on hired hulls under an official pennant and port inspection is read, and that the office owned no hulls of its own, and carrying that to a county's river, are this project's own; that the
-office's hold on it was documentary is this project's reading, and drawing a charcoal store as a supervised, tallied depot is this project's decision, not a finding. No source describes the tally office as a
-building of its own; the room where the seal and the tally are made is inferred from them.
+Guesses:
+- That the tally was made in an office or shed of its own on the goods' way out: no account describes one; it is
+  inferred from the seals and tallies the trade needed.
 
-Caveat: No source describes the tally office as a building of its own; the room where the seal and the
-tally are made is inferred from them.
+Depiction: The plan draws the tally office as a small building on the route goods take, between the store and the way
+out, with the weighing floor beside it where there is one.
 
 Name: tally office
 Covers: the tally office or tally shed and its label
-Label: accurate
-Sources: nishimawari-koro-jawiki, wagner-ming-iron, tonya-enwiki, economy-song-enwiki
-Entry: research/questions/0098-storehouses-for-the-tax-rice.html; research/questions/0098-storehouses-for-the-tax-rice.drawing.html; research/questions/0197-charcoal-yards-and-charcoal-stores.html; research/questions/0197-charcoal-yards-and-charcoal-stores.drawing.html
+Sources: nishimawari-koro-jawiki, tonya-enwiki, tawara-unit-jawiki
+Entry: research/questions/0098-storehouses-for-the-tax-rice.html, research/questions/0197-charcoal-yards-and-charcoal-stores.html
+Drawing: research/questions/0098-storehouses-for-the-tax-rice.drawing.html, research/questions/0197-charcoal-yards-and-charcoal-stores.drawing.html

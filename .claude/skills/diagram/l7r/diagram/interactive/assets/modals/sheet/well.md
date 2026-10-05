@@ -1,22 +1,28 @@
-What: A private well inside the compound's walls - a shaft with a stone curb - drawn as a square curb with a
-dark mouth: one at or in the kitchen, one in the garden, one beside the stables, sometimes a fourth.
+About: A household well inside the compound's walls was where the residence, its kitchen and its stables drew their water.
+Most wells in premodern Japan were shared, because digging one cost a great deal - an account of 1814 put it at as much as
+200 ryo, until a boring method cut it to about 3 - but a samurai household could have one of its own: the samurai houses
+that survive at Kakunodate draw their water inside their own fences, and the residence at Takayama listed a well with its
+kitchen and bath. In Edo, where the aqueduct served the samurai districts first, the difference was one of priority as much
+as of a private well.
 
-Why: Samurai and government households drew their water from wells inside their own walled compounds,
-not from the communal wells where commoners gathered, though in Edo, where the aqueduct served the samurai
-districts first, the difference was one of priority as much as of a private well. The kitchen well is the busiest; the stables well
-waters the horses; the garden well serves the family. The kitchen well sits in the service ground rather
-than in a court meant for ceremony.
+A well was a shaft dug by hand about 3 ft (1 m) across, with a frame of wood or stone, the curb, round its mouth; the one
+curb found measured is about 4 ft square. The bucket came up on a counterweighted pole, the sweep, where the water stood
+shallow, and on a rope over a pulley where it lay deep, and some wells had a roof on posts over them. At Kakunodate a
+roofed well stands just inside one samurai house's gate, and a middle-ranking family's house has a sweep well.
 
-Note: we have drawn each well as a stone-curb marker about 7 ft square, larger than the curb itself, in
-order to mark where the well stands without claiming that its pixels are the well's size. A hand-dug
-well's shaft is about 1 m across; the one curb frame found measured, a bucket well photographed for a modern
-book of old implements, is 118 cm (about 4 ft) square, but the book does not date it and no page read
-measures a premodern curb, so the 3 to 4 ft curb is fitted round the premodern shaft and its exact figure
-is a guess. That official households drew from wells inside their own walls is the record's
-reading.
+How many wells a residence kept is not recorded.
+
+Guesses:
+- Where in the grounds a residence's wells stood - one by the kitchen, one by the stables, one in the garden: no source
+  places a well in a samurai house's grounds.
+- The curb's exact size, 3 to 4 ft: the one measured curb is undated, so the figure is fitted round a premodern shaft.
+
+Depiction: The plan draws each well as a square curb with a dark mouth, a marker larger than the curb itself so that it
+shows where the well stands; the real curb was about 4 ft across. The kitchen's well stands past the bath, and the well by
+the stables serves the horses and the kennel in the service yard.
 
 Name: well
 Covers: every well curb glyph and its label
-Label: convention
-Sources: kanda-josui-jawiki, nagaya-jawiki, saijo-mizu-rekishikan, kotobank-idoyakata, ido-jawiki, shoinzukuri-jawiki
-Entry: research/questions/0196-communal-wells-ido.html; research/questions/0196-communal-wells-ido.drawing.html; research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html; research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html
+Sources: ido-jawiki, fujiclean-ido, jta-aoyagi-kakunodate, semboku-bukeyashiki, shirobito-1717-takayama, kanda-josui-jawiki, saijo-mizu-rekishikan, ndl-crd-tsurube-ido, yamaguchi-ouchi-ido, kotobank-tsurube-ido, kotobank-kurumaido, kotobank-idoyakata
+Entry: research/questions/0118-samurai-house-lots-and-houses-by-rank-bukeyashiki.html, research/questions/0196-communal-wells-ido.html, research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html
+Drawing: research/questions/0196-communal-wells-ido.drawing.html, research/questions/0105-baths-furo.drawing.html, research/questions/0111-hunting-dogs-and-kennels-inugoya.drawing.html, research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html

@@ -1,8 +1,8 @@
 About: A notice board (kosatsuba) was the wooden frame on which the shogunate and the domains posted standing law - the ban on
 Christians, the rules on coin, fire and packhorse charges - so that everyone would know it. The shogunate ordered boards set at
 the entrances and centers of towns and villages, and every village of the Edo period, more than 60,000 of them, had a site
-for one. A board stood where the traffic was heaviest, and a village's center was one of the commonest places: boards were
-most often set where people passed, at the village center or at a crossroads of main highways. Nakatsugawa's board stood at a crossroads, some
+for one. A board stood where the traffic was heaviest, most often at the village center
+or at a crossroads of main highways. Nakatsugawa's board stood at a crossroads, some
 66 ft (20 m) up the slope from its replica today, so that more passers-by would see it.
 
 The boards measured at two post towns were frames about 10 ft high and 16 to 18 ft along the road; the one rebuilt at Kanagawa

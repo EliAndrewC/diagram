@@ -12,6 +12,10 @@ How many plants a bund carried, or how far one spread, is not recorded. Bund bea
 consolidation, weedkillers and damage by animals took most of them in modern times, and the village of Asuka still grows
 them.
 
+Guesses:
+- How many plants a bund carried and how close they stood: no record of a row's length or spacing was found, so how many
+  beads the map sets along a bund is a guess.
+
 Depiction: The map draws each bean plant as a round bead about 3 ft across, in a single row on some of the bunds, with at least
 two beads on any stretch that carries them, since a single bead does not read as a row. The beads are a deep pine green,
 darker than the real plant's medium green, so they show against the rice; the bead marks where a plant stands, not how far

@@ -1,29 +1,27 @@
-What: An altar inside a compound shrine's hall to one of the setting's own kami, drawn as a small glyph
-standing for the kami it serves - a rice-straw figure, a fox's torii, a flame, a wave - with its name where
-the plan gives one.
+About: An altar in a shrine's hall was the place of one of the kami the shrine served. A Japanese shrine ordinarily kept several
+kami, one of them the main one and the rest secondary. Keeping two or more in one hall had a name of its own, aidono, and the
+secondary kami were in many cases honored below the main one. In Rokugan the kami an altar serves are the setting's own, such
+as Inari, the Fortune of rice and of foxes.
 
-Why: A compound keeps a shrine as standard equipment, and the kami it serves is where a magistracy's shrine
-differs. A shrine keeping several kami was the ordinary case, with a name of its own, aidono, and one form
-gave each kami a bay of the hall side by side, as a two-bay hall with two doors or small halls joined under
-one roof, the main kami in the middle as on a household's three-shrine shelf. Some kept the lesser kami (for a hall, a guess from the household shelf) behind
-the main one's altar, or gave a kami a small shrine of its own inside the precinct.
+Some halls gave each kami a bay of its own: a hall built as two bays joined into one, with two doors, or two or more small
+halls joined under a single roof. A household's altar shelf set its talismans side by side in rank, the highest in the middle,
+the next on its right as you face it and the third on its left; a shelf for one shrine stood them in one place, ranked from
+front to back. A kami brought in from elsewhere could instead be given a small shrine of its own on the same ground.
 
-Note: Several kami in one hall, and their altars side by side, a bay to each, are recorded findings at shrines, though no page read describes one kept inside an official's compound; which of
-the three forms a compound takes is rolled per map, and each map's note says which. A compound's shrine
-serving more than one kami is a deviation of ours, drawn at Ochiba alone because its magistrate is also a
-priest; any other compound's shrine serves one. The single altar with the others behind it is attested for a
-household shelf only, so for a hall it is a guess. What the pages attest is a hall of two bays or small halls joined under one roof, not separate altars inside one undivided
-hall, so drawing them in one undivided hall is a guess. What each altar serves is the setting's or the map's
-own, and each glyph is drawn as a marker, not the altar at its size.
+Which of these ways was usual is not recorded, nor what an altar inside a hall looked like or how large it was.
 
-Caveat: A compound's shrine serving more than one kami is a deviation of ours, drawn at Ochiba alone because its
-magistrate is also a priest; any other compound's shrine serves one. The single altar with the others behind
-it is attested for a household shelf only, so for a hall it is a guess. What the pages attest is a hall of two bays or small halls joined under one roof, not separate altars
-inside one undivided hall, so drawing them in one undivided hall is a guess. What each altar serves is the
-setting's or the map's own, and each glyph is drawn as a marker, not the altar at its size.
+Guesses:
+- Altars side by side in one undivided hall, where a plan draws them so: what is recorded is a hall of two bays, or small halls
+  joined under one roof, not separate altars in one open hall.
+- A single altar for the main kami with the others kept behind it, where a plan takes that form: it is recorded on a household's
+  altar shelf, not in a hall.
+
+Depiction: The plan draws each altar as a small mark standing for the kami it serves - a rice-straw figure, a fox's torii, a
+flame, a wave - not as the altar at its size, with the kami's name where the plan gives one. Where the altars stand side by
+side, the main kami's is in the middle or on the right as you face it.
 
 Name: shrine altar
 Covers: each altar glyph inside a shrine hall, with its name and sublabels
-Label: accurate
-Sources: kotobank-aidono, jawiki-saijin, genbu-honden-styles, jawiki-goshi, tokyo-jinjacho-kamidana
-Entry: research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html; research/questions/0218-the-compounds-own-shrine-yashikigami.html; research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html; research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html
+Sources: jawiki-saijin, kotobank-aidono, genbu-honden-styles, tokyo-jinjacho-kamidana, jawiki-goshi, inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai
+Entry: research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html
+Drawing: research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html, research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html

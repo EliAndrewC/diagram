@@ -1,20 +1,25 @@
-What: The kitchen's cooking fire - a kamado, a clay range with fire-mouths, drawn as a dark block with a spot
-of flame - standing on a small earth-floored doma at the kitchen's edge or on the kitchen's board floor.
+About: A samurai household cooked on a kamado, a clay range with fire-mouths, in its kitchen, the daidokoro. The sunken
+fire-pit cut into the floor, the irori, was the common house's hearth; none is recorded in a samurai kitchen.
 
-Why: A samurai's kitchen cooked on a kamado. The rule for houses of the period was the kamado on the doma,
-but modern accounts say a samurai house's smaller doma sometimes put its kamado on the kitchen's
-board floor instead. The sunken fire-pit, the irori, is the common house's hearth, and none was found in a
-samurai kitchen. With fire burning from morning to night, the kitchen's fire is the compound's top ignition
-source, which is why the kitchen keeps two fire-water tubs where every other hall keeps one.
+A samurai house was matted in nearly every room, but its kitchen was board-floored, with an earth-floored part, the doma,
+smaller than a farmhouse's. As a rule in the Edo period the kamado stood on the doma. Modern accounts say a samurai house's
+narrow doma sometimes sent it up onto the board floor instead, and one museum's reproduction of a middle-rank retainer's house
+has a movable kamado there, under ceiling boards set with gaps to let the smoke out; no account from before 1868 puts it there.
+In a commoner's tenement of the Edo period a movable kamado could stand on the boards, its base boxed in boards on four legs
+about 4 in high.
 
-Note: The kamado range and its seat on a small doma are recorded findings; before 1868 a kamado on legs on the boards is recorded only in a commoner's tenement, and in a samurai house only in modern accounts, no source from before 1868 being found; each sheet takes one seat. The kamado on the kitchen's board floor is a guess by analogy with the Edo tenement. Ranking the kitchen's fire the compound's top fire risk, and
-so giving the kitchen a second tub, is this project's reasoning, on no page read.
+How many fire-mouths a samurai kitchen's kamado had, and how large it was, is not recorded.
 
-Caveat: The kamado on the kitchen's board floor is a guess by analogy with the Edo tenement. Ranking the kitchen's fire the compound's top fire risk, and so giving the kitchen a second tub, is
-this project's reasoning, on no page read.
+Guesses:
+- A kamado on the kitchen's board floor, wherever a plan sets it there: only modern accounts put one in a samurai kitchen, so
+  it rests on them and on the commoner's tenement of the Edo period.
+
+Depiction: The plan draws the kamado as a dark block with a spot of flame, so the kitchen's fire reads at a glance, either on
+the small doma at the kitchen's edge or on the kitchen's board floor; each plan takes one of the two. No plan draws a sunken
+hearth in the kitchen.
 
 Name: hearth
 Covers: the fire glyph in each kitchen
-Label: accurate
-Sources: boso-no-mura-takei, liq-takayasu-daidokoro, matsue-bukeyashiki, irori-jawiki, tfd-hongou-fire-history, edo-no-kaji-jawiki, machibikeshi-jawiki, thepaper-taipinggang
-Entry: research/questions/0107-kitchens-daidokoro.html, research/questions/0100-fire-and-the-fireproof-storehouses-dozo.html; research/questions/0107-kitchens-daidokoro.drawing.html, research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html
+Sources: liq-takayasu-daidokoro, irori-jawiki, samurai-irori-absence, boso-no-mura-takei, board-kamado-absence, cleanup-edo-hettsui
+Entry: research/questions/0107-kitchens-daidokoro.html
+Drawing: research/questions/0107-kitchens-daidokoro.drawing.html

@@ -1,28 +1,30 @@
-What: A torii, the gateway arch over a shrine's approach - a compound's small shrine, or a village's - standing a
-short way in front of the hall.
+About: A torii was the open gateway that marked where a shrine's sacred ground began; the ground inside it was revered as the
+kami's. A shrine's approach passed under one or more on its way to the hall, the first standing where the approach entered the
+shrine's grounds; where there were several they were counted from the outermost in, the first, second and third. A village
+shrine most likely had a single arch. A small shrine below a shrine's rank had none, or a very small one, and a household's
+shrine seldom had one: one carefully kept "may even have" an arch, a mark of care rather than a fixture. Two shrines on one
+ground could share the arch at its edge, which marked everything inside it, or a lesser shrine could have its own.
 
-Why: A torii stands at the boundary between the shrine and the world outside, so how far it stands from the
-hall is how deep the shrine's ground is in front of it, and a compound shrine's ground is small. An arch is a
-mark of care, not a fixture: a household shrine that is carefully kept "may even have" one, and a compound
-shrine may have none. Two shrines on one ground may share the arch at its entrance, since it marks everything
-inside it, or each may have its own. Rows of arches, each a worshipper's gift, belong to the Inari shrines, and
-at an ordinary shrine are attested only in modern times - the exception, not the rule.
+An arch was a gift, from a shrine's parishioners together or from one donor. From the Edo period worshippers gave arches in
+thanks for a prayer answered, and at the great Inari shrine of Fushimi, where each bears its giver's name, rows of them grew
+to some 10,000 on its mountain paths today; before 1868 every dated arch found at an ordinary shrine is a single gate. In Rokugan
+an ordinary shrine's approach may run under one, three or seven arches, numbers that carry power in the setting, seven most
+of all.
 
-Note: The arch at the boundary of the shrine's ground, and both a shared arch and one to each shrine, are
-recorded findings; each sheet takes one. How far the arch stands from its hall is a guess, kept short because
-a compound shrine's ground is small - about 5 ft where the plan is tight, up to the 12 ft at which a village shrine's
-innermost arch stands where there is room (by this project's choice): no page read gives a distance from any torii to its hall.
-Before a country shrine, a row of one, three or seven arches is a deliberate deviation: before 1868 an ordinary
-shrine's arch was a single gate.
+How tall an ordinary arch stood is not recorded, nor how far one stood before its hall.
 
-Caveat: How far the arch stands from its hall is a guess, kept short because a compound shrine's ground is
-small - about 5 ft where the plan is tight, up to the 12 ft at which a village shrine's innermost arch stands where there is
-room (by this project's choice): no page read gives a distance from any torii to its hall. Before a country
-shrine, a row of one, three or seven arches is a deliberate deviation: before 1868 an ordinary shrine's arch was
-a single gate.
+Guesses:
+- How far a compound shrine's arch stands before its hall, about 5 ft where the plan is tight and up to 12 ft where there is
+  room: no distance from any torii to its hall was found.
+- That a row of arches before a country shrine stands 12 ft apart, its innermost 12 ft off the hall: the one small rural row
+  whose spacing can be estimated stood about 10 to 14 ft apart, and no distance from an innermost arch to its hall was found.
+
+Depiction: The plan draws a compound shrine's arch a short way before its hall, at the edge of its small ground; where two
+shrines share one ground, a plan gives them one arch between them or one each, and a compound shrine may have none. Before a
+country shrine the first arch stands where the approach enters the shrine's wood, and the row runs up to the hall's face.
 
 Name: torii
 Covers: the approach torii before a compound shrine or a country shrine
-Label: accurate
-Sources: jinjahoncho-keidai, jawiki-torii, jawiki-yashikigami, torii-enwiki, fushimi-inari-jawiki, fushimi-inari-senbon, hokora-jawiki, nara-nagao-jinja, jinja-jawiki
-Entry: research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html, research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html; research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html, research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html
+Sources: jinjahoncho-keidai, torii-enwiki, kokugakuin-eos-torii, jawiki-torii, hokora-jawiki, jawiki-yashikigami, fushimi-inari-senbon, fushimi-inari-jawiki, kudamatsu-stone-torii, shrine-gateways-and-the-approach-to-the-hall-torii-sando, manzo-inari-note
+Entry: research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html
+Drawing: research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html, research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html

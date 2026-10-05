@@ -1,20 +1,24 @@
-What: Standing timbers on the practice ground (tategi), upright posts struck hard with a wooden sword in drill,
-drawn as small location markers with their label.
+About: Striking posts (tategi, "standing timbers") were posts set upright in a practice ground and struck hard with a
+wooden sword in drill. The Jigen-ryu school of Satsuma, founded by Togo Shigetaka (1561-1643), a retainer of the Shimazu,
+trained by striking the post from left and right with a shout, over and over, as its basic technique. A second school,
+Nodachi Jigen-ryu, made it its main practice, barefoot on a ground open to the sky.
 
-Why: The swordsmanship of Satsuma trains by striking a standing timber from left and right with a shout, over
-and over, on a practice ground that can be open to the sky. In its main line the post is a log a little over
-2 m long set about 70 cm into the ground, so that a little over 4 ft stands above it, struck from shoulder height
-down to the stomach. A knee-high bundle of branches laid across is found only in the modern period, first dated
-some time after 1946; what is said of it before then is undated hearsay, so it is not drawn. A county seat draws no dojo here, and what marks its open ground as a place of daily keiko is the
-gear that stands on it.
+In the main line the post was a log a little over 7 ft (2 m) long, set about 28 in (70 cm) into the ground, so that a
+little over 4 ft (1.3 m) stood above it, and it was struck with diagonal cuts from one's own shoulder down to the pit of
+the stomach. A knee-high bundle of branches struck in its place is found only in modern times, the earliest dated some
+time after 1946.
 
-Note: we have drawn the striking posts as small markers of where each stands rather than at their own size,
-in order to mark the open ground as a practice ground by its gear, this project's convention for these plans; a
-real upright post stood a little over 4 ft above the ground. The upright post is Satsuma practice, its school's founder of 1561-1643;
-carrying it to a practice ground outside that line is a guess, and so is the count.
+How many posts a practice ground kept, and whether schools outside Satsuma kept any, is not recorded.
+
+Guesses:
+- That a practice ground outside the Satsuma schools kept striking posts, and how many: no account says either.
+
+Depiction: The plan draws each post as a small marker of where it stands, with a label, rather than at its own size, so
+the open ground reads as a practice ground by the gear on it; a real post stood a little over 4 ft high. Only upright posts
+are drawn, never the bundle of branches.
 
 Name: striking posts
 Covers: the standing posts on the practice ground and their label
-Label: convention
-Sources: jigen-ryu-jawiki, kotobank-tategi-uchi, nodachi-jigen-ryu, bujutsukarate-tategi, jinya-jawiki, dojo-jawiki
-Entry: research/questions/0165-martial-training-grounds-and-dojo.html; research/questions/0165-martial-training-grounds-and-dojo.drawing.html
+Sources: jigen-ryu-jawiki, kotobank-tategi-uchi, nodachi-jigen-ryu, bujutsukarate-tategi, aikidoshibuya-yokogi
+Entry: research/questions/0165-martial-training-grounds-and-dojo.html
+Drawing: research/questions/0165-martial-training-grounds-and-dojo.drawing.html

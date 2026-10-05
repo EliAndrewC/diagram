@@ -1,5 +1,5 @@
-About: A clustered village took the shape of the dry ground it stood on, and that ground could bend with the land: the edge
-of a fan, the foot of a hill, the bank of a river's old channel. On a river's lowland a village on the natural levee could
+About: A clustered village took the shape of the dry ground it stood on, and that ground could bend with the land: the foot
+of a fan, the bank of a river's old channel. On a river's lowland a village on the natural levee could
 run in a curve beside the old channel, and at the foot of one alluvial fan in Iyo, where the water sunk into the fan rose
 again as springs, many villages lined up in an arc.
 

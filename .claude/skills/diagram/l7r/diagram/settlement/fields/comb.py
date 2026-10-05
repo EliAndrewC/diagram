@@ -483,7 +483,8 @@ class CombMixin:
 
         Research:
             resting plots - research/questions/0013-paddies-left-to-rest-kataarashi.drawing.html: whole basins neither low nor blue, along the fan's fall; none on a dike-pond block
-            blue plot class - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: the flooded tint is drawn and classed as wet paddy"""
+            blue plot class - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html, research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html: every
+                FLOODED-fill plot classed wet paddy, the random freshly flooded plot of `fields/paddy.py` included, though the tint marks ground, not season"""
         from l7r.diagram.waterfields import AZE  # noqa: I001 - FLOODED is aliased for the picture record below
         from l7r.diagram.waterfields import FLOODED as _WF_FLOODED
         from l7r.diagram.waterfields import aze_w

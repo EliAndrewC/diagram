@@ -15,8 +15,8 @@ transplanting was done in seven to ten days around the summer solstice. How much
 recorded.
 
 Guesses:
-- That a settlement's paddies carry a winter crop at even odds: its drainage and the nearness of a town, whose manure the
-  second crop needed, set the odds, but no source says how much each counts.
+- How a settlement's drainage and the nearness of a town, whose manure the second crop needed, weigh against each other in
+  whether its paddies carry a winter crop: both set the odds, but no source says how much each counts.
 - That a drained paddy's winter barley spares an equal area of dry field for the hamlet's coarse grain: no source gives a
   winter barley crop's yield.
 
@@ -28,4 +28,4 @@ Name: The paddies in winter: sown with barley
 Covers: `meta.winter_crop = barley`
 Sources: kotobank-nimosaku, nimosaku-jawiki, kotobank-kanden, omugi-jawiki, hakubaku-omugi-ichinen, obata-1977-taue, where-a-farming-hamlet-grew-its-coarse-grain
 Entry: research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.html, research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.html, research/questions/0006-dry-fields-and-their-crops-hatake.html
-Drawing: research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html, research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html
+Drawing: research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html, research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html, research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html, research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html

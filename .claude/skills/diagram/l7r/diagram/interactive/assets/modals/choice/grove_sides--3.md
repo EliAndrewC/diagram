@@ -15,6 +15,8 @@ Guesses:
   source counts farms by the shape of their grove.
 - That the third side's band beside the house closes only the house's own side, leaving the yard and garden in the sun, and
   is one tree deep: no source says how far it ran or how deep it was.
+- How deep the windward stand runs, about one and a half house depths: no source gives a grove's depth, so it is reckoned
+  from tree counts and crown sizes.
 
 Depiction: Every farm in the settlement takes the same shape of grove, since the shape went by region. The map draws each tree
 at its real size, the windward sides as a deep stand and the third side as a thinner band of lesser trees, one tree deep,

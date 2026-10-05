@@ -1,8 +1,7 @@
 About: In a clustered village the houses did not all stand on the main lane, and those set back from it had to be reached
 some other way. One answer was a back lane: a second way running behind the house plots, parallel to the main lane, so that
 the houses stood between the two. Planned villages in medieval England had one, framing the village with the main street in
-a rectangle and often parting the houses from the fields. A back lane suggests a village laid out at once, with regular
-plots, rather than one that grew a plot at a time.
+a rectangle and often parting the houses from the fields.
 
 Like any village lane it was a strip of bare earth, trodden hard and muddy in rain, made for feet, carrying poles and the odd
 barrow or packhorse rather than carts. How wide a village lane ran is not recorded; the one old figure for a field road is
@@ -19,8 +18,8 @@ Guesses:
 
 Depiction: The map lays the back lane after the houses are seated, running the length of the settlement behind a row of
 houses, in the gaps between their plots, and joined to the rest of the lanes at a T. A few households may be reached across a
-neighbor's yard with no way of their own. Every lane is drawn as a narrow track of bare earth, pulled as straight as the plots
-allow.
+neighbor's yard with no way of their own. The back lane is drawn as a narrow track of bare earth, a few feet wide, pulled as
+straight as the plots allow; its width is chosen, since no lane in a wet-rice village was measured.
 
 Name: A back lane
 Covers: `meta.lane_web = back_lane`

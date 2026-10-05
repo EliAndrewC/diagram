@@ -3,7 +3,7 @@ others. It was a regional form, found on the Tonami, Sanuki and Izumo plains and
 Tonami plain, an alluvial fan whose river sank underground and left the water table deep, the farmers built their houses in
 the middle of their own rice fields so that each could manage the water for those fields; the domain lord's terms for
 reclaimed land, which let the peasant who opened a field farm it themselves, are thought a major reason too. Long before, in
-the late Heian period, the narrow valleys of the southwest probably held one house or a few, each beside its own small
+the late Heian period, the narrow valleys of western Japan probably held one house or a few, each beside its own small
 paddy.
 
 A visitor to Tonami saw farm after farm standing alone in the paddy, each wrapped in its own grove, the kainyo, against the
@@ -24,7 +24,8 @@ the road out joins the settlement to the world, and the field paths join the far
 is drawn, since each farm has its own grove. A scattered settlement needs about twice the ground per farm that a clustered
 one does, so the map gives it a roomier field rather than squeezing its farms together; that is a rule for fitting the
 drawing, not a measure of how far apart real farms stood. Each farm's water is a channel led off the nearest irrigation
-ditch into its dooryard, drawn at the narrowest width the map shows legibly, or a well in its dooryard.
+ditch into its dooryard, drawn at the narrowest width the map shows legibly (how wide a real one ran is not recorded), or a
+well in its dooryard.
 
 Name: How the houses stand: scattered, each farm on its own (dispersed)
 Covers: `meta.settlement_form = dispersed`

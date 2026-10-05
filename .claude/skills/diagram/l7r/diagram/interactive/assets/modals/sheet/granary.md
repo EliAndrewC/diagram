@@ -1,35 +1,29 @@
-What: A vented storehouse where the tax paid in grain waits on its way to the governor: rice in straw
-bales above all, with a share of other grain beside it. It takes one of two forms - a timber storehouse
-raised on posts, or an earth-walled kura set with gaps for ventilation.
+About: The granary was the storehouse where the tax paid in grain waited on its way out. A village's tax rice went first
+to its own store, the gokura, and on to the lord's storehouses in the castle town or to a river landing to be shipped;
+an intendant's office kept a rice storehouse of its own. What waited in an office's store was probably rice in transit,
+with some held back as a local reserve. Nobody lived in it.
 
-Why: Both forms are attested. The storehouse on posts, the takakura, kept its floor high against rats and
-damp; the rice storehouse of the Takayama intendancy is an earth-walled kura, its walls set with gaps for
-ventilation, and a kura guarded its grain against fire, damp and theft. Tax rice flowed from the village granaries through the magistrate's compound toward central stores,
-so the office kura holds grain in transit plus a local reserve; and since an intendant's seat was also where the year's tax was stored, a county seat's granary stands inside
-the compound rather than in the town. Where water gives a county a way out, the grain waits in a row of storehouses at its river landing and moves on; a remote
-county, where transport costs more, keeps it in the office's own storehouse instead. The lord's kura held the paddy tax as brown rice in straw
-bales, with a corner of unhulled rice kept against famine.
+It took one of two forms. The storehouse on posts, the takakura, kept its floor high to keep rats from the grain, with
+rat-guards, and let the air through against damp; such storehouses were still built on outlying islands and among the
+Ainu into modern times. The other was an earth-walled kura like Takayama's rice store, its walls sloping inward and set
+with gaps for ventilation, guarding its grain against fire, damp and theft.
 
-Note: The kura, its rice and its place inside the compound follow the record; that a county with water ships its grain on while a remote one keeps it in the office's storehouse is this map's reading and partly a guess: the storehouses at a county's landing are inferred from a great domain's store at the river port of Kawashiri, and no source says Takayama's rows held all of Hida's rice. The kura is drawn at about 43 to 50 by
-25 to 27 ft and set by guess, since no source gives a county office's storehouse size, between the 440 to 740 sq ft of a three-village store's storehouses and a tenth of Takayama's 11,222 sq ft; its two forms follow the record, each sheet taking one. The
-storehouse on posts is attested in Japan for the southern islands and the Ainu north rather than for an
-intendant's office, whose grain store on the Takayama model is the earth-walled kura. The staging - tax rice passing through the compound and
-held there in transit beside a local reserve - is this map's own reading, which no source states, and the
-famine corner of unhulled rice is a simplification: Edo kept that reserve in separate community granaries,
-and one granary is drawn instead of two. That more of the dry-field tax arrives in kind - soybeans and
-barley in bales beside the rice - than it did in Edo Japan is this setting's own economics: Rokugan is
-rich in goods and poor in coin.
+It held the paddy tax as brown rice in straw bales, while much of the dry-field tax was paid in coin. In Rokugan, rich in
+goods and poor in coin, more of that share arrives in kind, as bales of soybeans and barley beside the rice. A store
+shared by three villages had storehouses of about 440 to 740 sq ft each; Takayama's, which held a whole province's rice,
+covers about 11,200 sq ft. A county office's granary is not recorded.
 
-Caveat: The storehouse on posts is attested in Japan for the southern islands and the Ainu north rather
-than for an intendant's office, whose grain store on the Takayama model is the earth-walled kura. The
-staging - tax rice passing through the compound and held there in transit beside a local reserve - is
-this map's own reading, which no source states, and the famine corner of unhulled rice is a
-simplification: Edo kept that reserve in separate community granaries, and one granary is drawn instead of
-two. That more of the dry-field tax arrives in kind - soybeans and barley in bales beside the rice - than
-it did in Edo Japan is this setting's own economics: Rokugan is rich in goods and poor in coin.
+Guesses:
+- Its size on the plan, about 43 to 50 by 25 to 27 ft: no account gives the size of a county office's grain storehouse or
+  how many it kept, so it is set above the village stores and at about a tenth of Takayama's.
+
+Depiction: The plan draws one of the two forms: the storehouse on posts, its posts drawn at its foot, or the earth-walled
+kura, drawn with no posts, since how such a kura's floor was raised is not recorded. It is labeled a granary, not a rice
+granary. The plan draws one granary, with a corner of unhulled rice against famine, where Edo kept its emergency reserve
+in separate community granaries. A wooden granary may have a fire-water tub beside it; an earth-walled one has none.
 
 Name: granary
 Covers: the granary, on posts or earth-walled, and its label
-Label: accurate
-Sources: takayukashiki-jawiki, takayama-onkura-heritage, dozo-jawiki, takayama-jinya-city, takayama-jinya-jawiki, nishimawari-koro-jawiki, gokura-jawiki, hatakata-men-jawiki, kuramai-jawiki, kakoimai-jawiki
-Entry: research/questions/0098-storehouses-for-the-tax-rice.html; research/questions/0098-storehouses-for-the-tax-rice.drawing.html; research/questions/0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html; research/questions/0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.drawing.html
+Sources: gokura-jawiki, tomiyama-1961-gokura, jinya-kotobank, takayukashiki-jawiki, takayama-onkura-heritage, dozo-jawiki, kuramai-jawiki, hatakata-men-jawiki, sagami-2012-gogurasho, takayama-jinya-gifu
+Entry: research/questions/0098-storehouses-for-the-tax-rice.html
+Drawing: research/questions/0098-storehouses-for-the-tax-rice.drawing.html, research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html, research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html

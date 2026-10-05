@@ -1,34 +1,30 @@
-What: The butsuma alcove at the residence's formal end, beside or behind the reception room, holding the
-memorial tablets (ihai) of the house's dead - at a lineage-held posting, the magistrates of that house who
-held the post before. A place within the house, not a hall of its own.
+About: The ancestral alcove was the butsuma, the room of a house's Buddhist altar, where the household kept its Buddha
+images and its ihai, the memorial tablets of its dead. It was a place within the house, not a hall of its own. In one of
+the two Japanese kinds of tablet veneration, a house kept, in principle, the tablets of its own successive heads and their
+spouses, following the same line as its property.
 
-Why: A house kept its Buddha images and the tablets of its dead in the butsuma, set either beside the alcove
-of the zashiki or in a small room behind the zashiki or the inner room - in both, at the formal end of the
-house; no source read puts it among the family's private rooms. One of the two kinds of Japanese tablet veneration keeps, in principle, the tablets of a house's successive heads
-along its line of inheritance, so - this project's guess from that - the alcove follows the house, not the post: where one lineage holds the
-magistracy across generations, the past magistrates are the present one's kin - held father to son, its own
-forebears - and the alcove is literally ancestral, and at a posting filled by appointment, whose past holders
-are not the incumbent's kin, the map draws no ancestral alcove.
+In farmhouses the altar was often built out beyond a room. In a house with formal rooms it was set beside the tokonoma, the
+display alcove, of the zashiki, the formal room, or, where faith ran strong, given a room of its own of about six mats
+(some 100 sq ft) behind the inner room or the zashiki - in both, at the formal end of the house. None is known among the family's
+private rooms.
 
-Note: The butsuma at the formal end, by or behind the zashiki, is a recorded finding; the two places for it
-are both attested, and each sheet takes one. A house keeping the tablets of its own successive heads is
-recorded, and that some magistrate's posts are held by a provincial lineage is the setting's ruling. Nothing
-read says tablets of predecessors in office were kept at an office or its residence, in Japan or at a Chinese
-county seat; the state hall for meritorious local officials that the record quotes stood at the Confucian
-temple, not inside the office. So past holders stand in the alcove only if they were heads of the incumbent's
-own house, and whether they were is a question of the setting; the Ubame plan's lineage alcove, holding kin
-who held the post cousin to cousin but were not the house's own forebears, is this project's deliberate
-extension beyond the record.
+No tablets of the officials who had held a post before are known to have been kept at an office or its residence, in Japan
+or at a Chinese county seat; China honored its meritorious past officials in a state hall at the Confucian temple. In
+Rokugan some provinces are held by one lineage from generation to generation, and where that lineage holds a magistracy its
+past magistrates are the present one's forebears, so the alcove is ancestral in the plain sense; at a posting filled by
+appointment there is none.
 
-Caveat: Nothing read says tablets of predecessors in office were kept at an office or its residence, in Japan
-or at a Chinese county seat; the state hall for meritorious local officials that the record quotes stood at
-the Confucian temple, not inside the office. So past holders stand in the alcove only if they were heads of
-the incumbent's own house, and whether they were is a question of the setting; the Ubame plan's lineage
-alcove, holding kin who held the post cousin to cousin but were not the house's own forebears, is this
-project's deliberate extension beyond the record.
+Guesses:
+- That the alcove follows the house, not the post, so that past magistrates stand in it only where they were heads of the
+  magistrate's own house: no source says whose tablets an official's residence held, so this is reasoned from a house
+  keeping the tablets of its own line.
+
+Depiction: The plan marks the alcove at the residence's formal end, by the reception room - beside it, or in a small room
+behind it, each plan taking one of the two attested places - and never among the family's rooms. A plan of a posting filled
+by appointment draws none.
 
 Name: ancestral alcove
 Covers: the alcove's tablets label at the residence's formal end (a lineage alcove where the tablets are a lineage's)
-Label: accurate
 Sources: butsuma-kotobank, sosen-saishi-kotobank, mingguanci-zhwiki
-Entry: research/questions/0239-household-altar-rooms-and-ancestral-tablets-butsuma-and-ihai.html; research/questions/0239-household-altar-rooms-and-ancestral-tablets-butsuma-and-ihai.drawing.html
+Entry: research/questions/0239-household-altar-rooms-and-ancestral-tablets-butsuma-and-ihai.html
+Drawing: research/questions/0239-household-altar-rooms-and-ancestral-tablets-butsuma-and-ihai.drawing.html

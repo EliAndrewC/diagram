@@ -3,10 +3,10 @@
 Research:
     settlement_form forms - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.html, research/questions/0033-row-villages-resson.html, research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: nucleated, linear, dispersed, water_town, dike_top
     field_archetype forms - research/questions/0021-terraced-and-valley-paddies-tanada-yachida.html, research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.html, research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html: valley_paddy, contour_terraces, polder_grid, ribbon_valley, mulberry_dike_fishpond
-    land_use_overlay forms - research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.html: none, mulberry_fishpond, lotus, tea_fringe
+    land_use_overlay forms - research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.html, research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html: none, mulberry_fishpond, lotus, tea_fringe; bund tea, the second tea form, is never rolled
     kosatsuba_seat forms - research/questions/0190-notice-boards-kosatsuba.html, research/questions/0190-notice-boards-kosatsuba.drawing.html: center, entrance, frontage
     cluster_position forms - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: high_margin, flank, mid_margin, valley_mouth, valley_head, on_rise
-    cluster_shape forms - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: round, elongated, crescent, split
+    cluster_shape forms - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html, research/questions/0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.drawing.html: round, elongated, crescent, split; a village rolls split as one shape among four, so most villages draw a single cluster
     lane_web forms - research/questions/0081-village-lanes.html, research/questions/0081-village-lanes.drawing.html: side alleys or a back lane, rolled evenly
     bamboo forms - research/questions/0075-bamboo-groves-chikurin.html, research/questions/0075-bamboo-groves-chikurin.drawing.html: none, homestead, thicket, both
     lane_skeleton forms - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: spine, T, Y, cross, waterside
@@ -16,7 +16,7 @@ Research:
     grain_drift range - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: -12 to 12 degrees off the fall line in 4 degree steps
     byre_form forms - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.html, research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: the inner stable, a yard shed, a detached commons shed
     byre_form weights - GUESS: 0.6 inner, 0.3 yard shed, 0.1 commons
-    caravan_inn_form forms - research/questions/0184-inns-hatago-and-carters-inns.html, research/questions/0185-travelers-inns-and-cheap-lodging-houses-hatago-dian-kichin-yado.html: wagon or hatago, rolled evenly
+    caravan_inn_form forms - research/questions/0184-inns-hatago-and-carters-inns.html, research/questions/0185-travelers-inns-and-cheap-lodging-houses-hatago-dian-kichin-yado.html, research/questions/0184-inns-hatago-and-carters-inns.drawing.html: wagon or hatago, rolled evenly, never by the settlement's house form
     hamlet knobs unrolled - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: a hamlet leaves none of these to chance and draws each knob's default
     hamlet default values - UNRESEARCHED: high_margin, round, spine, corner_NW, medium plots, organic, 0 drift, alleys, homestead bamboo
 """

@@ -2,15 +2,15 @@ About: A gabion (jakago) was a long, round basket woven of bamboo and packed wit
 word is in a Japanese-Portuguese dictionary of 1603-04. Gabions shored up riverbanks, built groynes and weighted the timber
 frames of river weirs, and before modern materials weirs were built of timber frames, gabions and brushwood, singly or
 together and covered with earth and gravel. A hamlet needed a weir where its brook fell too low for the intake to draw from
-it; the gabions found damming water were all on large rivers, so a course of them across a small brook is the least
+it; gabions are known to have dammed water only on large rivers, so a course of them across a small brook is the least
 certain of a weir's forms.
 
-A visitor saw a low bar of fat, stone-filled baskets laid end to end across the water, often slanting upstream from the
+A visitor saw a low bar of fat, stone-filled baskets across the water, often slanting upstream from the
 intake mouth, as many old weirs ran: set so, it dammed the shallow riffle and stood off the fastest flood water. Old weirs
 mostly closed only half a stream.
 
-A basket was mostly about 16 to 24 in (40 to 60 cm) across and 13 to 33 ft (4 to 10 m) long, so a course of them stood
-about one basket thick. How many small intakes had a weir at all is not recorded.
+A basket was mostly about 16 to 24 in (40 to 60 cm) across and 13 to 33 ft (4 to 10 m) long, so a single course would have
+stood about one basket thick. How many small intakes had a weir at all is not recorded.
 
 Guesses:
 - That a course of gabions was laid across a brook at all: the only gabions found damming water were on large rivers.

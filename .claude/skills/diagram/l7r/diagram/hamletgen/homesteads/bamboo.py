@@ -87,6 +87,8 @@ def household_bamboo(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str
         strip off the copse seats - UNRESEARCHED: off every household's reserved copse seats by the bamboo keep-out
         strip on its house's bank - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: refused across a stream
         strip seated after the lanes - research/questions/0075-bamboo-groves-chikurin.drawing.html: seated after the web, the lanes laid before it
+        row farm's bamboo to the south - research/questions/0033-row-villages-resson.drawing.html: never drawn; a row farm's bamboo
+            stands in its full windward grove, never set south where a row of grove farms across the road broke the wind
     """
     out: list[Poly] = []
     if plan.bamboo not in ("homestead", "both") or not houses:

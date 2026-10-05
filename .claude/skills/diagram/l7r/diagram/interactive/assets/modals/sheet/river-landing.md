@@ -1,18 +1,25 @@
-What: The compound's landing on the river: steps cut into a stone-faced bank, the tax barge moored
-alongside it, a watch post over the water and a small altar for the boatmen - each its own feature, lit with
-the landing.
+About: The compound's landing on the river, where the county's tax grain is loaded for the run downstream: a flight of steps cut
+into the stone-faced bank across the bank street, reached from a gate in the compound's wall, with a hired barge moored
+alongside, a watch hut over the water and a small shrine for the boatmen.
 
-Why: Tax grain went downstream on boats the shogunate hired directly, flying an official pennant and inspected at the
-ports of call - the magistracy owned no hulls, and its hold on the cargo was documentary - so a posting on
-a navigable river keeps a landing of its own where the grain is loaded.
+In Edo-period Japan a river landing (kashi) was its boat moorings and an unloading ground, and from the Edo period on wholesalers
+and their storehouses gathered at one; new landings were set up under the lords to ship the tax rice to Edo and Osaka. The
+shogunate's own rice went by sea on ships it hired directly, flying an official pennant and inspected at the ports of call. A
+county office most likely did the same on its river, owning no boats and keeping its hold on the grain by counts and records.
 
-Note: That the tax grain went on hired boats under an official pennant, inspected at the ports of call,
-follows the record of the shogunate's rice shipped to Edo, and carrying it to a county is this project's own; that the magistracy owned no hulls of its own and that its hold on the cargo was documentary, a matter of counts and records, and that it passed through the compound and so was loaded at the compound's own landing,
-is this project's reading. No page read describes an official's compound with a landing of its own, so that
-the landing is the compound's own is a guess.
+Samurai residences on Hiroshima's rivers stood back from the bank behind their walls, and are thought to have had no gate
+opening straight onto the steps.
+
+Guesses:
+- That the landing is the compound's own rather than a public one: no account of an official's compound with a landing of its
+  own was found.
+
+Depiction: The label names the landing as a whole; its steps, its faced bank, the barge, the watch hut and the boatmen's shrine
+are each drawn as their own feature.
 
 Name: river landing
 Covers: the landing label - its dock, revetment, barge, watch post and altar are each their own kind
-Label: accurate
-Sources: nishimawari-koro-jawiki, kashi-jawiki, gangi-kowan-jawiki, takasebune-jawiki, kotobank-takasebune, matou-zhwiki, kuramae-jawiki, chinaknowledge-caoyun
-Entry: research/questions/0098-storehouses-for-the-tax-rice.html; research/questions/0098-storehouses-for-the-tax-rice.drawing.html; research/questions/0176-wharves-and-landings-piers-quays-and-stepped-landings-kashi-gangi.html; research/questions/0142-rice-storehouses-and-the-rice-brokers-in-a-capital-kura-fudasashi.html; research/questions/0082-moving-goods-carts-packhorses-and-river-landings-kashi.html; research/questions/0082-moving-goods-carts-packhorses-and-river-landings-kashi.drawing.html; research/questions/0176-wharves-and-landings-piers-quays-and-stepped-landings-kashi-gangi.drawing.html
+Sources: kashi-jawiki, nishimawari-koro-jawiki, gangi-hiroshima-jawiki
+Entry: research/questions/0176-wharves-and-landings-piers-quays-and-stepped-landings-kashi-gangi.html, research/questions/0098-storehouses-for-the-tax-rice.html, research/questions/0082-moving-goods-carts-packhorses-and-river-landings-kashi.html
+Drawing: research/questions/0176-wharves-and-landings-piers-quays-and-stepped-landings-kashi-gangi.drawing.html, research/questions/0098-storehouses-for-the-tax-rice.drawing.html, research/questions/0082-moving-goods-carts-packhorses-and-river-landings-kashi.drawing.html
+Form: particular

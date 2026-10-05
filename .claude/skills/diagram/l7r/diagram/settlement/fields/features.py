@@ -348,7 +348,7 @@ class FieldFeaturesMixin:
         source. Drawn OVER the plot (so it carries no bund grid) with a reed fringe; recorded in
         M['field_ponds']. Returns False - drawing and recording nothing - when no legible pond fits (`_pond_fit`).
 
-        Research: field pond glyph - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: open water with a ring of eight reed ticks"""
+        Research: field pond glyph - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html, research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.html, research/questions/0061-reservoir-ponds-tameike.drawing.html: open water with a ring of eight reed ticks, no embankment drawn round it"""
         fit = self._pond_fit(plot, rings)
         if fit is None:
             return False

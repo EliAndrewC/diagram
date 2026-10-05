@@ -1,24 +1,25 @@
-What: The dock at Hayakawa's landing: a flight of steps cut into the faced bank across the bank street from
-the compound's wall, reached from a gate in that wall, where barges come alongside to load.
+About: The landing's steps: a flight cut into the faced bank across the bank street from the compound's wall, reached from a gate
+in that wall, where barges come alongside to load.
 
-Why: A river's level rises and falls through the year, so the usual landing is steps cut into a faced bank,
-which meet a moored hull at whatever height the water stands; a pier is the exception, by this project's guess,
-for a bank that shelves too gently. Where samurai residences stood on a river, as on Hiroshima's, they were built back from
-the revetment and walled, and it is thought no gated landing opened from them onto the steps, so the compound reaches
-its steps from a gate in its wall, across the street. The early-modern stepped landings were built where boats
-berthed and goods came ashore, above all in the townsmen's quarters; a private landing, a merchant's back gate onto
-the steps among them, is dated only to the modern period.
+A river's level rose and fell with the seasons, and a moored boat's side with it. A flight of steps met the boat at whatever
+height the water stood, where a quay wall at one height would not, and a gangplank was laid onto them; such stepped landings were
+found at many landings before modern times. The Chinese wharf (matou) took the same form, or that of a long solid pier, which
+earned its place by reaching out to deeper water.
 
-Note: The steps across the bank street, reached from a gate in the compound's wall rather than a back gate
-onto the steps, follow the record of samurai residences built back from the bank and walled, thought to have
-had no gated landing. No page read describes an official's compound with a landing of its own, so that these
-steps are the compound's own rather than a public landing is a guess.
+Samurai residences on a river stood back from the bank behind their walls and are thought to have had no gated landing. Before
+1868 the stepped landings stood where boats berthed and goods came ashore, above all in the townsmen's quarters; the private
+landing behind a merchant's back gate came only later.
 
-Caveat: No page read describes an official's compound with a landing of its own, so that these steps are the
-compound's own rather than a public landing is a guess.
+Guesses:
+- That these steps are the compound's own rather than a public landing: no account of an official's compound with a landing of
+  its own was found.
+
+Depiction: The plan draws the dock as steps notched into the faced bank and gives it no pier: an official's landing gets one only
+where its bank shelves off into shallow water.
 
 Name: dock
 Covers: the landing steps in the faced bank
-Label: accurate
-Sources: gangi-hiroshima-jawiki, gangi-kowan-jawiki, pier-enwiki, matou-zhwiki
-Entry: research/questions/0176-wharves-and-landings-piers-quays-and-stepped-landings-kashi-gangi.html; research/questions/0176-wharves-and-landings-piers-quays-and-stepped-landings-kashi-gangi.drawing.html
+Sources: gangi-kowan-jawiki, gangi-hiroshima-jawiki, matou-zhwiki, pier-enwiki
+Entry: research/questions/0176-wharves-and-landings-piers-quays-and-stepped-landings-kashi-gangi.html
+Drawing: research/questions/0176-wharves-and-landings-piers-quays-and-stepped-landings-kashi-gangi.drawing.html
+Form: particular

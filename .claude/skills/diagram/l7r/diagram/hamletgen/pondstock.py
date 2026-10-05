@@ -176,7 +176,9 @@ def stage_pond_stock(s: Settlement, plan: SitePlan) -> None:
         l7r.diagram.settlement.Settlement.pig_sty
 
     Research:
-        sties at the dike-pond only - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.html: the pig as the dike-pond district's animal
+        sties at the dike-pond only - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.html, research/questions/0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html: the pig as the dike-pond district's animal; no sty on a plain paddy hamlet
+        privy over the sty - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: the sty drawn alone, never
+            with a privy built over it
         no duck pen - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.html: ducks herded in the rice, the pen modern
         sty count - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html: a quarter to a half of households
         at least one sty - UNRESEARCHED: the floor of one is not on the page

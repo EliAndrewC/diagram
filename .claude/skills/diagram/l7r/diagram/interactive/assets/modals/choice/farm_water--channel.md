@@ -17,7 +17,7 @@ Guesses:
   where a channel was taken from, or whether neighbors shared one.
 - That it ends in the dooryard, a step off the threshing yard: no account says where it ended.
 
-Depiction: The map leads each farm's channel off the nearest irrigation ditch it draws, never the drain, round the buildings,
+Depiction: The map leads each farm's channel off the nearest irrigation ditch it draws, or the brook where that is nearer, never the drain, round the buildings,
 yards and gardens and through the farm's own grove into its dooryard. Where the channel left the grounds again is not recorded, so it
 is not drawn. It is drawn about 2.5 ft wide, the narrowest water the map shows legibly; how wide the real channel ran is not
 recorded. A farm that no channel can reach is given a well of its own.

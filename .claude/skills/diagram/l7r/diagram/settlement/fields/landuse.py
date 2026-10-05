@@ -32,7 +32,7 @@ DIKE_CROP_CLASS = {"mulberry": "mulberry dike", "fruit": "fruit dike", "tea": "t
 # water leaves about six parts in ten of a parcel water, the reading of Qu Dajun's figures for Jiujiang (1678) - the
 # oldest there are; every ratio written as a number is modern. It was 11 ft, which left 80%, wetter than any figure read.
 DIKEPOND_WATER_INSET = 23.0
-"""Research: pond bank width - research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html: 23 ft, about six parts in ten of a parcel water"""
+"""Research: pond bank width - research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html, research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html: 23 ft, about six parts in ten of a parcel water on every map; the dike-heavy split the record also gives is never rolled"""
 
 # A FRY VILLAGE'S NURSERY SHARE (feature 280 M60, research/questions/0024-fish-fry-and-nursery-ponds-yumiao.drawing.html): Qu Dajun (1678) has seven parts in ten of the pond water at Jiujiang raising fry. Read as a share of the block's pond AREA - the record's reading, the smallest ponds first.
 FRY_VILLAGE_SHARE = 0.7

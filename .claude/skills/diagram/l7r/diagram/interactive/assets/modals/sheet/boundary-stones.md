@@ -1,17 +1,19 @@
-What: Stone pillars set on a border line, one on each side of the crossing, drawn stone-gray - a pair that
-marks the line rather than wards it.
+About: Two stone pillars set on the border line, one north and one south of the parley room, so that the line can be read on the
+ground. They mark the border; they do not ward it, as the Fox Clan's vermilion threshold stones ward the Imperial road.
 
-Why: Boundary markers were common under the Tokugawa, and a border exists where it has been agreed and
-marked; the pillars stand ON the line, north and south of the crossing, so that the line itself can be
-read on the ground.
+Boundary markers were common under the Tokugawa. The large ones were earth mounds, like the hundred and more that Morioka and
+Sendai raised along their border after agreeing it in 1642, large and far apart at first and smaller and closer together later.
+What a boundary pillar of the period looked like is not recorded.
 
-Note: we have drawn the boundary stones at about 3 by 3.7 ft, in order to mark where each stands on the
-line. The record estimates a boundary pillar's shaft at about 1 to 1.5 ft, up to about 3 ft with a plinth -
-an estimate rather than a read figure - and the period's large border markers were earthen mounds, which
-are not what is drawn.
+Guesses:
+- A pillar's size, a shaft of about 1 to 1.5 ft, up to about 3 ft with its plinth: no source gives one, so it is an estimate.
+
+Depiction: The plan draws each pillar as a small stone-gray block standing on the dashed line itself; the earth mounds that marked
+a real border are not drawn.
 
 Name: boundary stones
 Covers: the two border pillars and their label
-Label: convention
-Sources: nanbu-date-mounds-enwiki, kuniezu-enwiki, kotobank-genroku-kuniezu, mukoyama-linear-borders
-Entry: research/questions/0083-clan-borders-and-their-markers.html; research/questions/0083-clan-borders-and-their-markers.drawing.html
+Sources: nanbu-date-mounds-enwiki, mukoyama-linear-borders
+Entry: research/questions/0083-clan-borders-and-their-markers.html
+Drawing: research/questions/0083-clan-borders-and-their-markers.drawing.html
+Form: particular

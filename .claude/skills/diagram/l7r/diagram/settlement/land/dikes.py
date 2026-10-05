@@ -350,7 +350,9 @@ class DikeMixin:
 
         Research:
             sluice at every cut - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a gate at each gap, along the crest across the water
-            gate span - UNRESEARCHED: 6 ft"""
+            gate span - UNRESEARCHED: 6 ft
+            gate glyph at the polder cut - research/questions/0179-water-gates-and-sluices-shuimen.drawing.html: the field sluice glyph
+                at its default ~11 ft frame; the 6 ft span passed only ever widens a frame, so no gate is drawn at 6 ft"""
         n_gates = 0
         for dk in self.M.get("dikes", []):
             crest = [(float(c[0]), float(c[1])) for c in dk.get("crest") or []]

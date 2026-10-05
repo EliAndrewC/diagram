@@ -162,6 +162,8 @@ def stage_hinterland(s: Settlement, plan: SitePlan) -> None:
         no scrub under a worked wood - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: brush and pine stop at every wood's line
         bare ground as rough grazing - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: rough grazing on dry marginal ground
         share clothed as grazing - UNRESEARCHED: holes in the view filled
+        grass ground form - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: one form, rough
+            grazing on the leftover ground; the grass hill, the floodplain and the small plot beside a paddy are never rolled
         stage order - NONE
     """
     # THE PLANTED DIKES' TREES GIVE WAY TO THE PLOTS' SUN (feature 310, GM 2026-10-02: "no canopy trees should be exempt"): the
@@ -252,7 +254,10 @@ def stage_woodland(s: Settlement, plan: SitePlan) -> None:
     Steps:
         l7r.diagram.settlement.Settlement.commons
 
-    Research: coppice on the scanned parcels - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: each parcel stocked as a worked wood
+    Research:
+        coppice on the scanned parcels - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: each parcel stocked as a worked wood
+        woodland forms - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: the worked coppice
+            only; the straight strip woods of a planned dry-upland village and the abandoned coppice gone to brush are never drawn
     """
 
     # The patches were SCANNED in `stage_hinterland` (T35) - before the scrub, so the scrub kept out

@@ -1,5 +1,5 @@
 About: Before it was threshed, cut rice was dried in the sheaf, and how a region dried it followed, above all, its harvest
-weather. Where the autumn was settled the rice dried out on the fields. Sheaves were laid on the paddy floor, a little
+weather. Where the autumn was settled the rice seems to have dried out on the fields. Sheaves were laid on the paddy floor, a little
 everywhere, or stacked in heaps, from the Inland Sea coast to northern Kyushu; at a national farm conference of 1881,
 farmers reported drying on the ground in the far west of Honshu, southern Shikoku and Kyushu. Where racks were used, most
 were put up on the fields after the harvest. In one district of Chiba, racks were used only for wet paddies or when rain

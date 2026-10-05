@@ -15,6 +15,8 @@ Guesses:
   counts farms by the shape of their grove, and the rise follows the Izumo ring's stated cause.
 - That the sides away from the wind are a band of lesser trees one tree deep, carrying the Tonami pattern round the ring: no
   source describes the lee sides of a ring.
+- How deep the windward stand runs, about one and a half house depths: no source gives a grove's depth, so it is reckoned
+  from tree counts and crown sizes.
 - That the ring is broken once, at the middle of its front, for a way in about 36 ft wide: a farm must be reached, but no
   source says where in a ring its opening stood or how wide it was.
 

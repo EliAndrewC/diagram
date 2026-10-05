@@ -1,4 +1,4 @@
-About: A paddy was watered by gravity, so its water came in at the top. A hamlet's brook came down off the high ground and was tapped at an intake on its bank, on the side of the fields it served; in this form the water came in in the middle of the head of the fields. Where along the bank it stood was chosen for the water it could take: where the current's deepest line ran against the bank, in a straight reach or on the outside of a bend, and a Japanese treatise of 1902 put the head works where the river left the mountains.
+About: A paddy was watered by gravity, so its water came in at the top. A hamlet's brook came down off the high ground and was tapped at an intake on its bank, on the side of the fields it served; in this form the water came in in the middle of the head of the fields. Where along the bank it stood was chosen for the water it could take: where the current's deepest line ran against the bank, in a straight reach or on the outside of a bend, and Japanese engineering of the early twentieth century put the head works where the river left the mountains.
 
 Where the brook ran high enough, the intake was only an opening in its bank; where its level fell, a low weir of stakes and brushwood, timber or stone was set across it to raise the water. The brook ran on past the intake, tapped rather than swallowed. From the intake mouth a head race ran down to the head of the fields and forked into the supply canals, each narrowing as smaller ditches drew water off it.
 
@@ -12,6 +12,6 @@ Depiction: The map draws the brook coming down off the high ground past the head
 
 Name: Water in at the head of the fields
 Covers: `meta.water_source_position = head_center`
-Sources: shimane-toshuko-lecture, fao-irrigation-manual-m7, maff-toshuko-history, suido-ishizue-iseki, jawiki-seki, tabayashi-1987, zhouli-zhushu-suiren
+Sources: shimane-toshuko-lecture, fao-irrigation-manual-m7, maff-toshuko-history, suido-ishizue-iseki, jawiki-seki, tabayashi-1987, jsslkx-002-2021
 Entry: research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.html, research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.html
 Drawing: research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html, research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html

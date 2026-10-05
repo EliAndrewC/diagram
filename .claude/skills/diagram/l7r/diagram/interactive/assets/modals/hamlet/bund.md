@@ -9,8 +9,8 @@ the hoe (azenuri), so that it held the water. Water came in and went out through
 was no longer bare: grass grew on it, cut for manure or fodder, and often a row of beans.
 
 In the Edo period a bund between paddies was reckoned for tax at one shaku, about a foot, wide, and a field laid out
-soon after had bunds of two. Japan's earliest paddies had bunds a few inches to a foot high, and the larger ones
-along their canals ran 2.5 to 5 ft wide and seem also to have served as paths. How wide a bund built for walking was in
+soon after had bunds of two. One of Japan's earliest paddies had bunds a few inches to a foot high, and the larger ones
+along its canal ran 2.5 to 5 ft wide and seem also to have served as paths. How wide a bund built for walking was in
 later times is not recorded.
 
 Guesses:

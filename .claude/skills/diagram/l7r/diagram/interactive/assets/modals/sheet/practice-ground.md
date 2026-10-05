@@ -1,37 +1,32 @@
-What: A patch of open earth in the outer court, marked by the gear that stands on it: the place where the
-compound's samurai keep up their daily practice.
+About: The practice ground was a patch of open earth in the outer court where a magistracy's samurai kept up their daily
+practice with sword and spear. In Japan formal training was given at a domain's school - nearly every domain came to keep
+one, and many attached a practice hall to it - and at private halls kept by masters, which flourished late in the Edo
+period in every part of the country. Before the middle of the period, practice was often held outdoors or on an earthen
+floor. One small domain's seat laid out a drill ground inside its rampart; no hall is named among an intendant's office's
+buildings. In Rokugan a county seat holds about fifteen samurai, no body of pupils and no living for a teacher, so its
+magistracy trains on open ground in its own compound, and the dojo stand in the cities.
 
-Why: Formal martial training was given at the domains' schools and at private halls. A domain taught the martial arts at its school, built
-in its own territory and in the castle town as a rule, and many domains attached a practice hall to it;
-the great enrolled halls grew in Edo, where the pupils were. Private halls, kept by masters at their own
-houses, did reach every part of the country, but late - they flourished at the end of the Edo period, with
-townsmen and farmers training beside samurai - and before the mid-Edo period practice was often held
-outdoors or on an earthen floor. So rural samurai most likely trained at home in an earthen yard, in a hall
-cleared for the purpose, or on shrine grounds. A county seat holds about fifteen samurai - no student body and no living for a teacher -
-so its magistracy trains on open ground in its own compound, and what marks that ground is the gear
-practice leaves behind, not a building. It is sized to the samurai who drill there, about 90 to 135 sq ft
-each.
+It was bare earth, marked by the gear practice left on it. In Satsuma's school of swordsmanship a standing timber, a little
+over 4 ft high, was struck hard from left and right, over and over; whether other schools kept such posts, or how many,
+is not recorded. Swords in a guardroom lay level on a rack of forked supports, and the long arrest weapons kept at guard
+posts were stood in a row in the open.
 
-Note: Courtyard keiko in place of a dojo follows the record only in part: the famous private fencing
-dojos read on stood in Edo, and practice before the mid-Edo period was held outdoors or on earthen floors. Private halls did reach every part of the country late in the period, so that a county seat keeps none is the map's own calibration, counted on its samurai alone though townsmen and farmers trained at them too.
-The one martial ground the pages read on an intendant's office name there is a riding ground, and the
-drill ground read on stood at a small domain's jin'ya - a different kind of seat, though the word jin'ya
-covers both - so the practice ground rests on that analogy, and no page read describes rural practice or
-its gear. Marking the ground by its gear is a map convention, and its 90 to 135 sq ft a samurai is a
-guess no page read gives. That domain
-schools stood in castle towns and cities as a rule (the two read, Hagi's and Mito's, stood inside their
-castles), that rural samurai trained in yards, cleared halls or on shrine grounds, and that a Chinese
-county yamen had no training hall are guesses no page read confirms. That a
-rural intendant's office kept no martial hall is a guess from the silence of the pages read on one, which
-list its buildings without one but never say it had none.
+How much ground a practice ground took is not recorded.
 
-Caveat: That domain schools stood in castle towns and cities as a rule (the two read, Hagi's and Mito's,
-stood inside their castles), that rural samurai trained in yards, cleared halls or on shrine grounds, and
-that a Chinese county yamen had no training hall are guesses no page read confirms. That a rural intendant's office kept no martial hall is a guess from the silence of
-the pages read on one, which list its buildings without one but never say it had none.
+Guesses:
+- Its size, about 90 to 135 sq ft for each samurai drilling on it: a solo form needs a square of about 8 to 10 ft and
+  paired work roughly doubles it; no floor area for each person training was found.
+- That striking posts stood on a practice ground outside Satsuma, and how many: no record says.
+- The weapon rack at its edge, about 8 by 2 ft: joined from the guardroom's sword rack and the arrest weapons stood in the
+  open, since no rack for practice weapons, or its size, was found.
+
+Depiction: The plan marks the ground by its gear rather than a building: a weapon rack at its edge and striking posts. Each
+post is drawn as a small marker of where it stands, though a real post stood a little over 4 ft high, and only upright
+posts are drawn, since the knee-high bundle of branches struck today is not known before 1868. The ground lies beside the
+guards' quarters.
 
 Name: practice ground
 Covers: the keiko patch and its label
-Label: accurate
-Sources: hanko-jawiki, hagi-meirinkan-guide, kodokan-mito-jawiki, edo-three-dojos-jawiki, jinya-jawiki, dojo-jawiki, genbukan-jawiki, kotobank-machidojo
-Entry: research/questions/0165-martial-training-grounds-and-dojo.html; research/questions/0165-martial-training-grounds-and-dojo.drawing.html
+Sources: hanko-jawiki, dojo-jawiki, kotobank-machidojo, jinya-jawiki, jigen-ryu-jawiki, kotobank-tategi-uchi, bujutsukarate-tategi, kotobank-katanakake, kotobank-mitsu-dogu
+Entry: research/questions/0165-martial-training-grounds-and-dojo.html
+Drawing: research/questions/0165-martial-training-grounds-and-dojo.drawing.html

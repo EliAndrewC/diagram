@@ -1,18 +1,20 @@
-What: A bay of the residence's private rooms at the far end from the reception, beyond the lord's and the
-family's rooms.
+About: In a lord's palace the private rooms, the oku, lay at the far end from the front where guests were received, beyond the
+lord's own rooms. They held the lord's private rooms and the quarters of the lord's wife, and because women of high status lived
+there, who came and went was strictly limited; at Edo the shogun's great oku was walled off from the rest of the palace and
+joined to it by a single corridor. A chief retainer's great house at Aizu ran from the hall where the lord was received through
+the office rooms and the inner rooms to the kitchen and the bath.
 
-Why: A samurai residence grouped its rooms by use under one roof, and in a lord's palace the private rooms,
-the oku, lay beyond the lord's own, at the far end from the front where guests were received. The house's
-memorial alcove is not among them: the butsuma was set at the formal end, by or behind the zashiki, and none
-was found among the family's private rooms.
+The household's altar room, the butsuma, where it kept its Buddha images and the memorial tablets of its dead, was not among
+them. Where a house gave it a place of its own, it stood by the formal rooms: beside the alcove of the zashiki, or in a small
+room behind the inner room or the zashiki. None is recorded among a family's private rooms.
 
-Note: A lord's palace grouping its private rooms at the far end from its formal ones follows the record; the one smaller house whose order we read, the Kuchiba house at Hagi, runs the other way on this project's reading, its zashiki deepest in, so drawing a provincial residence in the palace's order is a choice. The bay's
-contents are the drawing's own.
+What the inner rooms held room by room, and how large they were, is not recorded.
 
-Caveat: The bay's contents are the drawing's own.
+Depiction: The plan draws the inner rooms as one labeled bay standing for several rooms, at the far end of the residence from
+the reception, beyond the master's and the family's rooms, in the palace's order. No altar room is drawn among them.
 
 Name: inner rooms
 Covers: the innermost bay of the residence, its floor and its label
-Label: accurate
-Sources: shirobito-612-omote-oku, edojo-kotobank, butsuma-kotobank, aizu-bukeyashiki-jawiki
-Entry: research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html, research/questions/0239-household-altar-rooms-and-ancestral-tablets-butsuma-and-ihai.html; research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html; research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html, research/questions/0239-household-altar-rooms-and-ancestral-tablets-butsuma-and-ihai.drawing.html
+Sources: shirobito-612-omote-oku, edojo-kotobank, aizu-bukeyashiki-jawiki, butsuma-kotobank, household-altar-rooms-and-ancestral-tablets-butsuma-and-ihai
+Entry: research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html, research/questions/0239-household-altar-rooms-and-ancestral-tablets-butsuma-and-ihai.html, research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html
+Drawing: research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html, research/questions/0239-household-altar-rooms-and-ancestral-tablets-butsuma-and-ihai.drawing.html

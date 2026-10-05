@@ -9,7 +9,7 @@ its replica stands today but some 66 ft (20 m) up the slope, at the crossroads w
 would see it. Every site known is on a road or street, and none seems to have stood on open ground set back from it.
 
 How many villages turned their board to the busiest frontage rather than to some other mark is not recorded; traffic was not
-the only reason, for a village divided between two lords set its board about as far from each half's headman's house.
+the only reason, for a village divided between two lords set its board at about the same distance from each half's headman's house.
 
 Guesses:
 - That a settlement's board seeks the busiest frontage or the place water is drawn at even odds: no source counts where

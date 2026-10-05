@@ -1,25 +1,23 @@
-What: A stone lantern (ishidoro) - stacked stone parts, from the top a jewel, a cap, the fire-box that holds
-the light, a platform, a post and a base - standing in a garden or a receiving court, drawn as a small gray
-glyph.
+About: A stone lantern (ishidoro) was a light housed in stone. It came to Japan from China and Korea with Buddhism, as a
+votive light offered at shrines and temples, where a single lantern stood at the center of the front. From the Momoyama
+period it was set in tea gardens, to light gatherings held in the evening, and in ordinary gardens too, where it became one
+of a garden's usual furnishings beside the stepping stones and the fences.
 
-Why: The stone lantern came to Japan with Buddhism as a votive light, a single lantern standing at the center
-of the front of a shrine or temple. From the Momoyama period it was set in tea gardens, to light gatherings
-held in the evening, and in ordinary gardens, until it was one of a garden's usual furnishings beside the
-stepping stones and the fences.
+It was built of six stacked stone parts: from the top, a jewel, a cap, the fire-box that held the light, a middle platform,
+a post and a base. It came in many named kinds, according to their use - the Kasuga, the snow-viewing (yukimi), the Enshu
+and the Oribe among them.
 
-Note: A lantern in a residence garden follows the record. It came in many kinds - the Kasuga, the
-snow-viewing, the Enshu and the Oribe among them - and all are drawn as one small glyph, a drawing
-convention. How many a garden holds, and where, are a guess. A lantern in a court where guests are received
-is a guess, described on no page read and borrowed from the shrine and temple use, so one drawn there
-stands singly on the line of approach.
+How tall a garden lantern stood, and how many a residence garden held, are not recorded.
 
-Caveat: It came in many kinds - the Kasuga, the snow-viewing, the Enshu and the Oribe among them - and all
-are drawn as one small glyph, a drawing convention. How many a garden holds, and where, are a guess. A
-lantern in a court where guests are received is a guess, described on no page read and borrowed from the
-shrine and temple use, so one drawn there stands singly on the line of approach.
+Guesses:
+- How many lanterns a garden holds, and where they stand in it: no account gives either for a residence garden.
+- A lantern in a court where guests were received, where a plan draws one: no lantern outside a garden is described, so
+  one drawn there borrows the older shrine and temple use and stands alone on the line of approach.
+
+Depiction: The plan draws every lantern alike, as one small gray mark, though real lanterns came in many shapes.
 
 Name: stone lantern
 Covers: each stone-lantern glyph in a garden or the border court
-Label: accurate
 Sources: kotobank-ishidoro, kotobank-teien
-Entry: research/questions/0103-ornamental-gardens-ponds-and-stone-lanterns-teien.html; research/questions/0103-ornamental-gardens-ponds-and-stone-lanterns-teien.drawing.html
+Entry: research/questions/0103-ornamental-gardens-ponds-and-stone-lanterns-teien.html
+Drawing: research/questions/0103-ornamental-gardens-ponds-and-stone-lanterns-teien.drawing.html

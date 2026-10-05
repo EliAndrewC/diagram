@@ -9,18 +9,21 @@ within, their top story often over 65 ft (20 m), their crowns plain from outside
 They stand thick, about one stem to every 32 sq ft.
 
 A Fujian village commonly kept about two such woods. A Hong Kong village's back wood covers about 2.5 acres (1 ha), and some
-in Fujian run over 50 acres (20 ha). Every size known was measured on a wood that survives today.
+in Fujian run to 50 acres (20 ha) and more.
 
 Guesses:
 - That this form is as likely as the conifer-led belt: no source says which was commoner.
 - That a surviving wood keeps the extent it had before modern times: no older record gives a wood's size.
 
-Depiction: The map draws the belt as an irregular wood of rounded crowns of mixed sizes, a few large crowns over many small,
-like the woods around it, with a little bamboo between the crowns shown by paired strokes since a real culm is too slim to
-see. Only the crowns are drawn, at their real size; the dense undergrowth beneath them is hidden, as from above.
+Depiction: The map draws the belt as an irregular wood of rounded crowns like the woods around it, with a little bamboo
+between the crowns shown by paired strokes since a real culm is too slim to see. Only the crowns are drawn, at their real
+size; the dense undergrowth beneath them is hidden, as from above. Its outline is drawn ragged, deepest in the middle and
+tapering at the corners, never a ruled wall, and never thinner than about 80 ft, so that it reads as a wood rather than a
+row of trees; no source gives a grove's depth. No tree of it stands where its afternoon shade would fall on a yard or a
+kitchen garden.
 
 Name: Windbreak trees, mixed broadleaf
 Covers: `meta.windbreak_belt = mixed_broadleaf`
 Sources: fengshui-woodland-enwiki, coggins-minor-2018, fengshuilin-zhwiki, hu-2011-fengshui-patches, hk-herbarium-fsw, forests-2020, afcd-ncsc-9-06
 Entry: research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.html, research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.html
-Drawing: research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html, research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html, research/questions/0075-bamboo-groves-chikurin.drawing.html
+Drawing: research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html, research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html, research/questions/0075-bamboo-groves-chikurin.drawing.html, research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html, research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html

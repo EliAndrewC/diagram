@@ -22,8 +22,9 @@ Depiction: The number on the title card is how many degrees the map turns the ro
 the contour of its slope. At 0 the rows start from the contour itself; a positive number turns them clockwise as the map
 is seen, a negative one counterclockwise. Every dry field on the map takes the same turn, so two settlements on like
 ground do not draw the same furrows. From that heading, each tract of two to four strips runs its rows either along it
-or down the slope, turned a little to suit its own ground, and neighboring tracts differ by enough of a turn that the
-strips can be told apart.
+or down the slope, turned a little to suit its own ground, and neighboring tracts differ by enough of a turn that the strips can be told apart. That
+difference is a drawing convention: on the ground, neighbors on one slope probably ran their rows alike. On steep ground every
+tract runs the contour.
 
 Name: The dry fields' rows: their turn off the slope
 Covers: `meta.grain_drift`

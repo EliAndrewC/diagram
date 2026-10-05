@@ -1,24 +1,28 @@
-What: The bench's own board, just outside the main gate, where the court posts what it produces -
-verdicts, edicts and bounties - for those who come to it.
+About: The notice board at a magistracy's gate was where the court posted what it produced for those who came to it. In
+Japan the boards that are recorded, the kosatsuba, posted the state's standing law - the ban on Christians, the rules on
+coin, fires and packhorse charges, a ban on gamblers - where traffic was heaviest: at crossroads, town entrances, bridge
+ends, barriers and ports, and before the gates of village officials' houses. In China the splayed walls flanking a
+county office's gate carried the emperor's edicts and, beside them, the magistrate's own notices and bans, among them
+notices to arrest fleeing murderers and escaped convicts, with rulings on complaints and verdicts. No board is known at
+the gate of a Japanese intendant's office; laws were posted at the gates of courts and prefectural offices only after
+the boards were abolished, in the Meiji period.
 
-Why: Every Edo town and village kept an official edict board, the kosatsuba, hung high where traffic
-was heavy: at crossroads in a town's center, at its entrances, at bridge ends, barriers and ports, and
-before the gate of the village officials' houses. That board, where the town posts the state's standing
-law, is the attested one. Laws came to be posted at the gates of courts and offices only after the boards
-were abolished, in the Meiji period, and the likely counterpart of a court's own board, the posting walls
-at a Chinese county office's gate, carried edicts, the magistrate's own notices and bans, wanted notices
-among them, and verdicts. A magistracy's board stands at its own gate, on the
-way everyone who has business with the court must come.
+The notices were boards about a foot high, hung high, even in two tiers, so they looked down over the passers-by. The
+reconstructed board at Kanagawa stands on a stone base inside a fence, under a roof against wind and rain, and a
+board's site was closed in by a palisade, a stone wall or a bank of turf.
 
-Note: The board and its roadside seat follow the record, which sets it before the gate of village
-officials' houses, though no page read puts a post town's board at its transport office; every village's board is attested, and that every town kept
-one is a reading of the sources, not their words. Notices at an office's own gate are read too, in a modern popular
-history whose dates are thin - a Chinese county office posted edicts, its own notices and bans on the splayed walls at its gate. A freestanding board at the gate,
-rather than the gate's walls, is a guess joined from the Chinese walls and the Japanese village officials' boards;
-no board at a Japanese intendant's office was found.
+The frames measured at two post towns on the Tokaido stood about 10 to 11 ft high, 16 to 18 ft along the road and 5 to
+6 ft deep. A smaller board, a village's or an office's, was never measured.
+
+Guesses:
+- That a magistracy kept a freestanding board at its own gate: it joins the Japanese board to the Chinese office's gate
+  walls, since no board at a Japanese office was found.
+
+Depiction: The plan stands the board just outside the main gate, within a few paces of the gateway, where everyone who
+comes to the court passes it.
 
 Name: notice board
 Covers: the board outside the main gate and its label
-Label: guess
-Sources: kosatsu-jawiki, ogose-kosatsuba, adachi-kosatsu, kosatsu-enwiki, shoya-jawiki
-Entry: research/questions/0190-notice-boards-kosatsuba.html; research/questions/0190-notice-boards-kosatsuba.drawing.html
+Sources: kosatsu-jawiki, adachi-kosatsu, gmw-tianxia-yamen, mlit-tokaido-kosatsuba, mlit-tokaido-qa-kosatsuba, kotobank-kosatsu
+Entry: research/questions/0190-notice-boards-kosatsuba.html
+Drawing: research/questions/0190-notice-boards-kosatsuba.drawing.html, research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html

@@ -5,7 +5,7 @@ the line of two crops a year ran across central Japan, from the north of the Kan
 snow and wet paddies kept the paddy to rice alone.
 
 After the harvest such a paddy lay as reaped ground through the winter. The threshed straw was stacked in ricks on the
-reaped paddy or its banks, and in one account of farm life from the Meiji era into the early Showa period the ricks stood
+reaped paddy or its banks, and in at least one village, from the Meiji era into the early Showa period, the ricks stood
 into the next year.
 
 A farming hamlet ate its rice and, for about a third of its diet, coarse grain such as barley and millet. A household
@@ -14,15 +14,16 @@ whose middle was often left wild, had little dry ground to hand for it. How much
 grain is not recorded.
 
 Guesses:
-- That a settlement's paddies lie bare over the winter at even odds: its drainage and the nearness of a town set the odds,
-  but no source says how much each counts.
+- How a settlement's drainage and the nearness of a town, whose manure a second crop needed, weigh against each other in
+  whether its paddies lie bare over the winter: both set the odds, but no source says how much each counts.
 - That a hamlet needs about 0.85 acre of dry field a household for its coarse grain: reckoned from the grain a household
   ate and the yields the land surveys assessed, not found as a figure.
 - [fan_middle=wild] That the dry fields are cleared up into the fan's wild middle, from the plots nearest the toe first:
   no source says a hamlet at a fan's toe cleared its grain fields there, nor from which end.
 
 Depiction: The map is set in high summer, so this settlement's paddies are drawn under rice; the bare winter is not
-shown. A settlement takes this form only where the dry ground about it can grow its whole coarse grain.
+shown, and no straw ricks are drawn, since the map sets aside what belongs to other seasons. A settlement takes this form
+only where the dry ground about it can grow its whole coarse grain.
 
 [fan_middle=wild] Where the fan's middle is wild, the map draws the dry fields climbing from the toe into it, plot by
 plot, until they hold the grain the hamlet needs, and no further.

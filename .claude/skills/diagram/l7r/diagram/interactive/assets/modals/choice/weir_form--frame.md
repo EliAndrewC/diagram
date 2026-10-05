@@ -1,8 +1,8 @@
-About: A frame weir held a brook back with a framework of stakes and logs, its gaps packed with clay. The best-known is
-one dug up at the Kodera site, from the Kofun period: stakes driven at a slant into the stream
+About: A frame weir held a brook back with a framework of stakes and logs, its gaps packed with clay. One was dug up
+at the Kodera site, from the Kofun period: stakes driven at a slant into the stream
 bed, logs laid along them and more stakes driven to hold the logs, the joints tied with wisteria vine and the gaps packed
-with clay and gravel, the clay held down with woven grass. A history of Japanese irrigation reads a fence in an
-8th-century poem as the same build. A hamlet set such a weir in its brook where the water fell too low for the intake to
+with clay and gravel, the clay held down with woven grass. A fence in an 8th-century poem may
+have been the same build. A hamlet set such a weir in its brook where the water fell too low for the intake to
 draw it, and built it of the wood and earth that lay near; the first weirs were too fragile to stand anywhere but on small
 streams.
 

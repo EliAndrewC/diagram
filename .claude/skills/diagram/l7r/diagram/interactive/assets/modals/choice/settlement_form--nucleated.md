@@ -9,7 +9,7 @@ houses set well apart. Two clustered villages could look nothing alike, because 
 density and its roads.
 
 The clustered village was the general form in Japan, the scattered village a regional one, but no count or share of either
-survives for any period. A clustered village's houses always stood closer together than a scattered village's, though by
+is recorded for any period. A clustered village's houses always stood closer together than a scattered village's, though by
 no fixed measure, and how far apart they stood before 1868 is not recorded.
 
 Guesses:
@@ -18,12 +18,14 @@ Guesses:
   higher, and the odds are kept flatter so the rarer forms appear at all.
 
 Depiction: The map gathers the houses into one cluster on the dry ground at the edge of the fields, each house reached by a
-lane, and shelters the whole cluster behind one belt of trees along its windward edge rather than a grove at each farm. How
-tightly the houses pack is set by eye against drawn villages, since no figure for a real village's density was found. The
-title card says where this cluster sits and what shape it takes.
+lane, and shelters the whole cluster behind one belt of trees along its windward edge rather than a grove at each farm;
+clumps of trees, the dooryard copse, stand in the gaps between the farms. A village of a dozen houses or more is drawn with
+at least a quarter of the ground inside its houses' outline built, a hamlet looser: no figure for a real village's density
+was found, so that quarter is set to make a village read as compact. The title card says where this cluster sits and what
+shape it takes.
 
 Name: How the houses stand: clustered together (nucleated)
 Covers: `meta.settlement_form = nucleated`
 Sources: kotobank-shuson, shizen-teibo-jawiki, kotobank-sonraku, shuson-jawiki, sonraku-jawiki, kotobank-sanson
 Entry: research/questions/0031-clustered-and-scattered-villages-shuson-sanson.html
-Drawing: research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html, research/questions/0032-how-our-maps-pack-a-clustered-villages-houses.drawing.html, research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html
+Drawing: research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html, research/questions/0032-how-our-maps-pack-a-clustered-villages-houses.drawing.html, research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html, research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html

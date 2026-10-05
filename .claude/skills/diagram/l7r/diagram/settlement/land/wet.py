@@ -339,6 +339,8 @@ class WetGroundMixin:
             reeds off the dooryards - UNRESEARCHED: no reed inside the urban-clearance halo round dooryards
             edge shaped - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: rounded and waved, a pond fringe left as laid
             reeds to the water and the paddy - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: reeds stand at the water's edge and meet the paddy
+            marsh edge form - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: every edge cut and
+                open; the uncut edge's alder and willow carr is never rolled
             reeds off the mounds - research/questions/0061-reservoir-ponds-tameike.drawing.html: no reed or tint on a dike crest or a pond bank
             no-build marsh - research/questions/0058-ground-too-wet-to-build-on.drawing.html: every marsh but a pond fringe is no-build ground
             reed tile - CONVENTION: the drawn ground filled with the reed tile"""

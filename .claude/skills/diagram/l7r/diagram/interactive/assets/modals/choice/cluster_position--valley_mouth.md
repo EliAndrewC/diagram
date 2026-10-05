@@ -3,14 +3,14 @@ the settlements of the Shuso plain often sat at a fan's head, where the valley o
 had sunk into the fan rose again as springs; villages and paddy gathered along such a spring line from ancient times, because
 water was easy to get there. A lump of houses also grew where a highway crossed.
 
-A visitor coming up from the plain met the houses where the valley opened, on dry ground to one side, the fields
-reaching back up the valley behind them.
+A visitor coming up from the plain met the houses where the valley opened. Like other old settlements, they kept to
+the higher, drier ground beside their paddy.
 
 How often a village sat at its valley's mouth, and how large such a village was, are not recorded.
 
 Guesses:
-- That a village may sit low, at its valley's mouth, and how often each seat comes up: which edge was driest depended on the
-  valley, and no count of village seats was found.
+- How often a village sits at its valley's mouth rather than at another edge of its fields: which edge was driest depended
+  on the valley, and no count of village seats was found.
 
 Depiction: The map seats the cluster toward the low end of the fields, where the valley opens, but on the dry shoulder to one
 side, and off any drawn marsh.

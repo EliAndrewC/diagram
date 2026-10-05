@@ -1,17 +1,18 @@
-What: A small altar to the kami of the wood, no bigger than a shed, with no torii before it, standing in the
-shrine grove beside the compound's proper shrine.
+About: A small altar to the kami of the wood, no bigger than a shed, standing a few steps from Ubame's Inari shrine in its grove,
+with no torii of its own. It is public - anyone may pray at it - but a private hand keeps it up, and no one from the Ministry of
+Rites stands behind it.
 
-Why: Small altars below the rank of a shrine far outnumbered real shrines, and most stood without an arch, or with only a very small one;
-this one stands in the shrine grove, among the trees it is kept for. It is kept up by a private hand,
-though anyone may pray at it.
+An altar below the rank of a shrine, a hokora, had no torii, or only a very small one. The nearest kin on record, a household's
+shrine to the god of its own ground, was most often a small shrine of stone or of wood; one measured stone shrine is about 16 in
+(40 cm) wide, deep and high.
 
-Note: the altar's dedication to the kami of the wood, and its keeping by a private hand with no monk
-behind it, are its map's story, a departure made by the map's design. Its form - a small altar with
-no torii, below the rank of a shrine - is the historical one; its size is not: it is drawn about 6 ft square,
-larger than life so that it can be seen, where the one measured stone shrine is about 40 cm (~16 in) a side.
+Depiction: The plan draws the altar about 6 ft square, larger than life so that it can be seen, in plain wood color rather than
+a shrine's vermilion. It stands beside the shrine's approach, off its axis, so that the shrine's torii does not read as the
+altar's own.
 
 Name: wood-kami altar
 Covers: the altar and its label with the "personally maintained" sublabel
-Label: deviation
-Sources: hokora-jawiki, tokushima-yashikigami, jawiki-yashikigami
-Entry: research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html; research/questions/0219-household-shrines-yashikigami.html
+Sources: hokora-jawiki, jawiki-yashikigami, tokushima-yashikigami
+Entry: research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html, research/questions/0219-household-shrines-yashikigami.html
+Drawing: research/questions/0219-household-shrines-yashikigami.drawing.html
+Form: particular

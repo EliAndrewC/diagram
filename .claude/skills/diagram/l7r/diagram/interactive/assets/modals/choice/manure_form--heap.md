@@ -10,8 +10,8 @@ the bath, and where there were many beasts their dung was piled layer on layer l
 farmers spread night soil, bran and ash with leaves, straw and turf on their dry fields.
 
 How big a heap was and where in the yard it stood are not recorded, nor how many farms kept one before modern times; the
-manuals called for a manure house on every farm, and a count of 1972 in northeastern Japan found about one compost shed to
-every four of the older farmhouses.
+manuals called for a manure house on every farm, and in northeastern Japan in 1972 about one of every four of the older
+farmhouses had a compost shed.
 
 Guesses:
 - That a settlement keeps its muck in heaps or in sunk jars at even odds: both forms are recorded, but not how many villages

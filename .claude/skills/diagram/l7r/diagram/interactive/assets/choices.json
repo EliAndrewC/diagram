@@ -74,7 +74,7 @@
    "values": {
     "high_margin": "on the high edge of the fields",
     "flank": "on a flank of the fields",
-    "mid_margin": "midway along the fields' edge",
+    "mid_margin": "partway along the fields' upper edge",
     "valley_mouth": "at the valley's mouth",
     "valley_head": "at the valley's head",
     "on_rise": "on a rise among the fields"
@@ -343,7 +343,7 @@
    "values": {
     "center": "at the center",
     "entrance": "at the way in",
-    "frontage": "before the headman's gate"
+    "frontage": "before a village official's gate"
    }
   },
   {

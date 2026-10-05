@@ -19,4 +19,4 @@ Name: Where the houses sit: on a rise among the fields
 Covers: `meta.cluster_position = on_rise`
 Sources: shizen-teibo-jawiki, kohai-shicchi-jawiki, ishizue-waju, maff-waju-mizuya, waju-jawiki
 Entry: research/questions/0066-flood-defenses-of-river-plain-villages-ring-dikes-and-refuge-mounds-waju-and-mizuka.html, research/questions/0031-clustered-and-scattered-villages-shuson-sanson.html, research/questions/0057-marshes-and-wetlands-shitchi.html
-Drawing: research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html, research/questions/0058-ground-too-wet-to-build-on.drawing.html
+Drawing: research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html, research/questions/0058-ground-too-wet-to-build-on.drawing.html, research/questions/0066-flood-defenses-of-river-plain-villages-ring-dikes-and-refuge-mounds-waju-and-mizuka.drawing.html

@@ -42,7 +42,7 @@ ALDER_GREENS = ("#5E7F6A", "#6B8A74")  # the alder crowns' tint (a map drawing c
 # (hamletgen/homesteads/bamboo.py carries the full note). Here since feature 291, because a farm with its own grove carries
 # its bamboo IN that grove, so the grove drawer makes the same roll.
 HOUSEHOLD_BAMBOO_PREVALENCE = 0.6
-"""Research: farms with bamboo - research/questions/0075-bamboo-groves-chikurin.drawing.html: three in five"""
+"""Research: farms with bamboo - research/questions/0075-bamboo-groves-chikurin.drawing.html, research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.html: three in five"""
 GROVE_CLUMP_CROWNS = 28  # the most crowns one `_draw_grove` clump throws
 """Research: crowns a clump throws - UNRESEARCHED: at most 28"""
 GROVE_CROWN_AREA = 48.0  # sq px of clump per crown at the town grain (~one 5 m crown); scaled by (bscale / 0.82) ** 2
@@ -59,7 +59,8 @@ def band_clumps(cx: float, cy: float, w: float, h: float, cap_area: float) -> li
 
 
 GROVE_BAMBOO_SHARE = 0.08  # of a windbreak clump's items, the bamboo under its crowns: a GUESS (269 B29, research/questions/0075-bamboo-groves-chikurin.html)
-"""Research: bamboo in a windbreak clump - research/questions/0075-bamboo-groves-chikurin.drawing.html: 8% of its items"""
+"""Research: bamboo in a windbreak clump - research/questions/0075-bamboo-groves-chikurin.drawing.html: 8% of its items, in the
+village belt even where the bamboo knob rolled none (only the farm groves check `_farm_rolls_bamboo`)"""
 
 GROVE_BAMBOO_PATCH_FT = (22.0, 16.0)
 """A farm's household bamboo, where it rolled a stand and keeps it in its own grove (feature 291, research/questions/0075-bamboo-groves-chikurin.html): a patch

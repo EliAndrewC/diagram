@@ -20,10 +20,11 @@ Guesses:
 Depiction: The map draws the stable as a small one-room shed of about 16 by 11 ft, open-fronted under a plank roof, standing
 on its own in the homestead near the farmhouse, only at the households that keep a beast. It is kept small, near the
 surviving frame and under the surviving stables' full area, so it reads as a shelter for a beast or two rather than a barn of
-many stalls.
+many stalls. It is drawn the same whether the settlement keeps an ox, a water buffalo or a horse: the beast changes what the
+stable held, not how it looks from above.
 
 Name: A shed in the yard
 Covers: `meta.byre_form = yard_shed`
 Sources: nakanishi-1994-kogyu-koba, buck-1930-farm-economy, kotobank-umaya, bunka-ueno-umaya, bunka-okamoto-umaya, okayama-chikusanshi-shiyo, oamishirasato-choshi-kaoku, koshigaya-shishi-noumin-jukyo
 Entry: research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.html
-Drawing: research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html
+Drawing: research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html

@@ -1,36 +1,32 @@
-What: The compound's ornamental ground - planting, laid out to be looked at: the inner garden at the heart of
-the private court and, where a plan has them, a walled garden path to the reception room's veranda, a garden
-around the shrine or one kept for guests.
+About: The garden was the compound's ornamental ground, laid out to be looked at from the formal rooms, seated in the room
+or on its veranda. In a samurai house the formal garden lay on the sunny south side, before the reception rooms. At
+Takayama, the one intendant's office whose buildings survive, a single garden was seen both from the great hall of the
+office and from the intendant's own room, with stepping stones into it from each, so the private rooms looked onto the one
+garden rather than one of their own. A middle-rank house with no formal entrance might bring its guest through a middle
+gate and along a walled garden path, the roji, straight to the veranda of the reception room.
 
-Why: A samurai house's prized formal garden lay on the sunny south side, facing the reception rooms. At
-Takayama, the one intendant's office whose buildings survive, a single garden is seen both from the great
-hall of the office and from the room where the intendant lived, with stepping stones into it from each, so
-the private rooms look onto the one garden rather than a garden of their own. A garden was
-one of two kinds beside samurai rooms: a pond garden built around real water, or a dry garden of stones and
-white gravel standing for water. A guest reached the house in one of two ways: by a formal entrance on the
-office where office and residence share one compound, as at Takayama, and otherwise on the residence, or, at a middle-rank house with no such entrance, through a middle gate in a wall
-and along a walled garden path (roji) straight to the veranda of the reception room. The household's god
-was kept in a corner of the lot, in a small shrine or at an old tree beside it.
+A Japanese garden was made of a pond and its water, set stones, made hills and planting, furnished with stepping stones,
+paving, stone lanterns and fences. Beside samurai rooms it took one of two forms: a pond garden built around real water, as
+at Takayama and at a small domain's seat at Okutono, or a dry garden of stones and gravel standing for water, as six of the
+seven protected samurai-house gardens at Chiran are. The stone lantern, first a votive light before shrines and temples,
+came into ordinary gardens from the Momoyama period.
 
-Note: The pond garden and the dry garden are both attested beside samurai rooms, and each sheet takes one;
-so are the two ways a guest reached the house. A separate small garden for the private rooms was found at no
-posting, and sharing the one garden is read from Takayama, its rooms rebuilt to an Edo-period plan of 1830 that no source says draws the garden, and carrying it from there to other, humbler postings is a guess. The pond's form and
-size are a guess: no page read gives the size of a residence garden's pond. A garden where a court
-would stand between gate and entrance, as where a guests' door opens into a guest garden, is a guess: the
-ground a guest crossed was an open court, and no page read says it was ever a garden. A fenced forecourt
-before the entrance rests on nothing found and is a guess. The shrine in a corner and a tree beside it are
-attested, but an ornamental garden planted around a compound's shrine is described on no page read and is a
-guess.
+How large a residence garden or its pond was is not recorded; a temple's dry garden beside its reception room, at the
+Daisen-in, is about 1,100 sq ft (100 sq m).
 
-Caveat: The pond's form and size are a guess: no page read gives the size of a residence garden's pond. A
-garden where a court would stand between gate and entrance, as where a guests' door opens into a
-guest garden, is a guess: the ground a guest crossed was an open court, and no page read says it was ever a
-garden. A fenced forecourt before the entrance rests on nothing found and is a guess. The shrine in a corner
-and a tree beside it are attested, but an ornamental garden planted around a compound's shrine is described
-on no page read and is a guess.
+Guesses:
+- The pond's form and size: no record gives a residence garden's pond.
+- That the private rooms share the one garden at humbler postings too: it is recorded at Takayama alone.
+- A garden drawn where a guest crosses from a gate to an entrance, or round a compound's shrine: the ground a guest crossed
+  was an open court, and no garden round a household's shrine was found.
+- How many stone lanterns a garden held, and where: no record gives either.
+
+Depiction: The plan draws one ornamental garden in each compound, before the great hall, with the private rooms reaching it
+by stepping stones of their own. Its water is a small pond or a dry garden, each plan taking one. Every kind of stone
+lantern is drawn as one small gray mark.
 
 Name: garden
 Covers: the inner garden, a garden path, a shrine garden and a guest garden, and their labels
-Label: accurate
-Sources: oniwa-takayama-jinya, kotobank-teien, okutono-jinya-garden, chiran-bukeyashiki-gardens, genkan-jawiki, shirobito-1717-takayama, shiroishi-koseki, kotobank-shikidai, kominkai-genkan, fuchu-joge-pamphlet, kotobank-yashikigami, jawiki-yashikigami, shoinzukuri-jawiki
-Entry: research/questions/0103-ornamental-gardens-ponds-and-stone-lanterns-teien.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html, research/questions/0218-the-compounds-own-shrine-yashikigami.html, research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html; research/questions/0103-ornamental-gardens-ponds-and-stone-lanterns-teien.drawing.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html, research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html, research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html
+Sources: kotobank-teien, shoinzukuri-jawiki, oniwa-takayama-jinya, takayama-jinya-jawiki, shiroishi-koseki, okutono-jinya-garden, chiran-bukeyashiki-gardens, kotobank-ishidoro, fuchu-joge-pamphlet
+Entry: research/questions/0103-ornamental-gardens-ponds-and-stone-lanterns-teien.html, research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html, research/questions/0218-the-compounds-own-shrine-yashikigami.html
+Drawing: research/questions/0103-ornamental-gardens-ponds-and-stone-lanterns-teien.drawing.html, research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html, research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html

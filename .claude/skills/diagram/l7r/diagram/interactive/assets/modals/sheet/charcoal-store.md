@@ -1,19 +1,25 @@
-What: A sealed storehouse for charcoal - a kura with thick plastered earthen walls - where the charcoal a
-county takes in is held under the office's seal, standing at the ordinary spacing of the buildings around it.
+About: A sealed storehouse (kura) where the county office keeps the charcoal that passes through its hands, under its seal and
+its tally. Charcoal is the great trade of the Fox forest across the border - its burners outnumber its farmers - and Ubame is one
+of Rokugan's iron districts.
 
-Why: Charcoal was an industrial fuel moved at state scale, and this map keeps a store of it as a supervised, tallied depot
-rather than a back room. A plastered storehouse was built to protect what it held against fire, damp and
-theft - its walls often a foot thick, its outer doors sometimes faced with earth and plaster, and gunpowder among what
-such stores kept - so the store stands at the ordinary spacing of the buildings round it. The charcoal comes to it
-already cooled: before modern times charcoal was cooled at the kiln - black charcoal in the sealed kiln, white
-charcoal smothered beside it - and reached a town cooled and baled.
+A plastered storehouse was built to guard what it held against fire, damp and theft. Its walls were often a foot thick, its
+outer doors might be faced with earth and plaster and shut in a fire, and such stores kept even gunpowder. The charcoal reached
+it already cooled: black charcoal was put out in the sealed kiln, white charcoal drawn red-hot and smothered beside it under damp
+ash and sand.
 
-Note: No page read says charcoal was kept in a plastered storehouse, or gives a spacing between a storehouse
-and its neighbors, so keeping it in one, at ordinary spacing with no fire gap, is a guess resting on the
-storehouse's recorded purpose.
+Charcoal was an industrial fuel on a state's scale elsewhere too: in Song-dynasty China the state supplied it to iron-smelting
+households it oversaw.
+
+Guesses:
+- That charcoal was kept in a plastered storehouse, at no more than the ordinary spacing of the buildings round it: no source
+  says so or gives a spacing; it rests on the storehouse's purpose, since it kept gunpowder behind its wall.
+
+Depiction: The plan draws a plastered storehouse at the ordinary spacing of its neighbors, with no fire gap round it: its own wall
+does for the charcoal what a gap would do for an open stack.
 
 Name: charcoal store
 Covers: the sealed charcoal kura and its labels
-Label: guess
-Sources: dozo-jawiki, kotobank-dozozukuri, wagner-ming-iron, fao-charcoal-safety
-Entry: research/questions/0197-charcoal-yards-and-charcoal-stores.html; research/questions/0197-charcoal-yards-and-charcoal-stores.drawing.html
+Sources: dozo-jawiki, kotobank-dozozukuri, mokutan-jawiki, jifpro-seitan, economy-song-enwiki
+Entry: research/questions/0197-charcoal-yards-and-charcoal-stores.html
+Drawing: research/questions/0197-charcoal-yards-and-charcoal-stores.drawing.html
+Form: particular

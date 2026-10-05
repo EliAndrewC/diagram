@@ -1,19 +1,25 @@
-What: A small detached study standing apart in the inner garden, a room where the magistrate
-does their own writing, away from both the office and the house.
+About: A study, the shosai, was a room in a private house for reading and writing - whichever room or building held the
+built-in writing desk, called for that a shoin or a "place of learning". It could be a room of the house or a building made for
+the purpose, standing on its own.
 
-Why: A study could be a room or a building of its own. Rai San'yō, a scholar and poet of the late Edo period,
-built a detached study-cum-tea room on his Kyoto estate in 1828, its garden on its west side, and in China
-the study drew apart from the living rooms into a quiet part of the compound, beside the rear garden where there was one. The
-office hall is where the county's business is done and the residence is the family's; a pavilion set apart
-in the garden gives its owner a room that belongs to neither.
+One detached study survives in Kyoto. Rai San'yō, a Confucian scholar, poet and historian of the late Edo period, built it on
+his estate in 1828 as a study and tea room, with its garden on its west side; the estate's other buildings were lost, and the
+study alone stands. In China, too, the study drew apart from the living rooms over time, into a quiet part of the house
+compound, and where there was a rear garden it always stood beside it.
 
-Note: A study standing apart in the garden as a building of its own is a recorded form, at a scholar's
-estate in Kyoto; in the Chinese compound the study drew apart from the living rooms, beside the rear garden where there was one. Giving one to a magistrate, in the inner garden of the posting,
-is a guess by extension from those, and so is its size of about 18 by 14 ft: no page read describes a
-detached study at an official's compound or gives a detached study's size.
+Both of these were private homes. Whether a magistrate or any other official had a detached study at the office is not
+recorded, and neither is how large one was or what it was built of beyond its desk.
+
+Guesses:
+- That a magistrate has a writing pavilion of their own in the inner garden of the posting: it extends the two recorded
+  studies, a Kyoto scholar's and a Chinese house compound's, to an official's compound, where none was found.
+- Its size, about 18 by 14 ft: no detached study's size was found.
+
+Depiction: The plan draws the pavilion as a small building of its own in the inner garden, set apart from both the office hall,
+where the county's business is done, and the family's house.
 
 Name: writing pavilion
 Covers: the pavilion and its label
-Label: guess
-Sources: shosai-kotobank, kyoto-ga-sanshisuimeisho, chinesepen-shuzhai
-Entry: research/questions/0112-detached-studies-shosai.html; research/questions/0112-detached-studies-shosai.drawing.html
+Sources: shosai-kotobank, kyoto-ga-sanshisuimeisho, chinesepen-shuzhai, detached-study-absence
+Entry: research/questions/0112-detached-studies-shosai.html
+Drawing: research/questions/0112-detached-studies-shosai.drawing.html

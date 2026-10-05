@@ -10,12 +10,13 @@ grew a culm about 66 ft (20 m) tall and at most about 4 in (10 cm) across. On th
 part of a grove of cedar and black pine; on the Tonami plain it grew from the west round to the north of the house.
 
 How many farmsteads kept bamboo, and how much of a grove it took, is not recorded. On the Tonami plain the groves once held
-many stands - madake, moso, hachiku and yadake - and bamboo is named among a grove's lesser plants after cedar, so it was
-probably common but not universal.
+many stands - madake, moso, hachiku and yadake - and bamboo was among a grove's lesser plants, after cedar; in one hamlet
+there in modern times every homestead kept a stand. So it was probably common.
 
 Guesses:
-- That about three farmsteads in five keep a stand of their own: no source gives a share, and bamboo named as one of several
-  lesser plants of the grove reads as common but not universal.
+- That about three farmsteads in five keep a stand of their own: no source gives a share before modern times; bamboo named as
+  one of several lesser plants of the grove reads as common but not universal, and the only count found is modern and of a
+  single hamlet, where every homestead kept one.
 - A farm's stand, about 22 by 16 ft: no source gives one's size.
 - Which side of the house the stand takes - behind it most often, then the windward side, then beside the shed, least often
   the other flank: the sources give bamboo with the storehouses, at a wet edge and on the wind side, with no share for each,
@@ -32,6 +33,6 @@ left out.
 
 Name: Bamboo: stands at the farmsteads
 Covers: `meta.bamboo = homestead`
-Sources: take-jawiki, chikurin-jawiki, phyllostachys-enwiki, sendai-igune-modelplan, yashikirin-jawiki, tonami-yashikirin-haichi, tsuijimatsu, pmc5723622-bamboo-range, qimin-yaoshu-zhongzhu
-Entry: research/questions/0075-bamboo-groves-chikurin.html
+Sources: take-jawiki, chikurin-jawiki, phyllostachys-enwiki, sendai-igune-modelplan, yashikirin-jawiki, tonami-yashikirin-haichi, tsuijimatsu, pmc5723622-bamboo-range, qimin-yaoshu-zhongzhu, kashima-kainyo-1987
+Entry: research/questions/0075-bamboo-groves-chikurin.html, research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.html
 Drawing: research/questions/0075-bamboo-groves-chikurin.drawing.html

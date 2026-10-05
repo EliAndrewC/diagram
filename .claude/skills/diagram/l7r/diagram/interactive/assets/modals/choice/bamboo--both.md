@@ -1,6 +1,6 @@
 About: A farming settlement below the frost line could keep bamboo in two places at once: a stand on a household's own
 farmstead, and a thicket apart from the houses, the take-yabu. On the farmstead it grew in the household's grove, low
-under the tall trees on the windward side, beside the storehouses on some farms, or where its roots held a riverbank. In
+under the tall trees on the windward side, beside the storehouses on some farms, or, at houses by rivers, where its roots held the soil. In
 the Edo period settlements round Kyoto stood ringed by bamboo, and the villages of one district southwest of the city owed
 bamboo as a tax and managed their own groves.
 
@@ -9,8 +9,8 @@ out almost everything beneath it. Madake, the common timber bamboo, grew a culm 
 4 in (10 cm) across. It went into baskets, tools and building, and its shoots were eaten.
 
 How many farmsteads kept their own bamboo before modern times, and how large a village thicket was, are not recorded. On
-the Tonami plain the farmstead groves once held many stands, and in a modern survey of one hamlet there every homestead
-kept one, so a farm's own bamboo was common.
+the Tonami plain the farmstead groves once held many stands, and in one hamlet there in modern times every homestead
+kept one, so a farm's own bamboo was probably common.
 
 Guesses:
 - That about three farmsteads in five keep a stand of their own, about 22 by 16 ft: no source gives a stand's size, and

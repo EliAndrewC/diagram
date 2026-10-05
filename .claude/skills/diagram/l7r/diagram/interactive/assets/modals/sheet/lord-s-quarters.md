@@ -1,25 +1,22 @@
-What: The magistrate's own rooms in the residence - a room for working by day and a bedroom - several rooms
-under one label, named on the plan for the magistrate who holds the posting, standing behind the reception
-and before the family's rooms.
+About: A lord's own rooms were a room for the day's work and a bedroom. In a lord's palace they lay behind the omote, the front
+where the lord received retainers and envoys and held audiences and ceremonies, and before the oku, the family's private rooms
+beyond; they are called the naka-oku today, though the name is not strictly a historical one, and drawings of the Edo period
+count the shogun's own office and bedroom as part of the omote.
 
-Why: A lord's palace ran from front to back: the omote in front, with the entrance and the halls where the
-lord met retainers and envoys; behind it the lord's own rooms, a room for work by day and a bedroom; and
-beyond them the oku, the family's private rooms. So the master's rooms stand between the reception and the
-family, adjoining both, though Edo-period drawings count the lord's office and bedroom as part of the omote - and official
-business is done in the office hall and not here.
+A samurai house was matted in nearly every room but its kitchen. At a house in Matsue lived in by turns by retainers of about
+500 to 1,000 koku, the master's living room was finished playfully, in contrast to the zashiki where guests were received,
+which was built for formality. A chief retainer's great house at Aizu, rebuilt from a view of the house lost to fire in the civil war of 1868-69, falls
+into four groups of rooms: the reception suite for the lord, the retainers' office and guard rooms, the family's rooms, and the
+rooms of the maids and servants.
 
-Note: The lord's rooms as a working room and a bedroom, behind the reception and before the family, follow
-the record, as does the private study on the far side of the line between office and home. Two room orders
-are attested: this palace order, and a small house's (one house, as this project reads its plan), with the formal zashiki deepest in and the living rooms
-between it and the entrance; in both the reception sits at one end, and these plans follow the palace order.
-The suite's naming by its occupant is this project's convention for these plans, and the name the lord's rooms go
-by today, the naka-oku, is a modern one.
+A smaller house could run the other way, its formal room deepest in and the living rooms between it and the entrance. How
+large the master's rooms were is not recorded.
 
-Caveat: The suite's naming by its occupant is this project's convention for these plans, and the name the lord's
-rooms go by today, the naka-oku, is a modern one.
+Depiction: The plan draws the master's rooms as one labeled bay standing for several rooms, named for the magistrate who holds
+the posting, behind the reception and before the family's rooms, in the palace's order.
 
 Name: lord's quarters
 Covers: the lord's suite in the residence, its floor and its labels
-Label: accurate
-Sources: shirobito-612-omote-oku, edojo-kotobank, shoinzukuri-kotobank, matsue-bukeyashiki, touken-world-buke-madori, takayama-jinya-jawiki, takayama-jinya-city, aizu-bukeyashiki-jawiki
-Entry: research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html, research/questions/0099-the-hearing-court-shirasu.html; research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html, research/questions/0099-the-hearing-court-shirasu.drawing.html; research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html
+Sources: shirobito-612-omote-oku, edojo-kotobank, liq-takayasu-daidokoro, matsue-bukeyashiki, aizu-bukeyashiki-guide, touken-world-buke-madori
+Entry: research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html, research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html, research/questions/0107-kitchens-daidokoro.html
+Drawing: research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html

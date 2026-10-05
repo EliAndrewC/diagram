@@ -3,13 +3,13 @@ too. In it a farming household enshrined the guardian god of its clan, its ances
 it held in particular faith. In some places every house had one; in others only certain old families did.
 
 Most were small shrines (hokora) of stone or of wood, some with a thatched roof, and almost never with a hall of the kind
-an ordinary shrine had. Few had a torii before them: an arch, and sometimes a small hall, marked a shrine its household kept
-with particular care. Some households marked the god's place with a tree or a stone instead. The shrine stood in a corner of
+an ordinary shrine had. Few had a torii before them: one its household kept with particular care might be given a small hall,
+and even a torii. Some households marked the god's place with a tree or a stone instead. The shrine stood in a corner of
 the plot - most often the northwest or the northeast, though in one region usually the southwest.
 
 A stone shrine was a small box: one in Tokushima stands about 16 in (40 cm) wide, deep and high, with a round stone inside
-held to be the god's own body. By the twentieth century they had grown rare: in a town in the northeast in 1972, about one
-house in a hundred had one.
+held to be the god's own body. In the twentieth century they were rare, at least in the northeast: in a town there in 1972,
+about one house in a hundred had one.
 
 Guesses:
 - How often each corner is drawn - the northwest 45 times in 100, the northeast 35 and the southwest 20: all three are

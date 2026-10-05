@@ -19,10 +19,11 @@ Guesses:
 
 Depiction: A stall under the house's own roof cannot be seen from above, so the map draws it as a shed of about 16 by 11 ft
 set against the farmhouse, an open-fronted stall under a plank roof; the beast really lived inside, in a corner of the earth
-floor. Only the households that keep a beast have one.
+floor. Where a farmhouse is drawn L-shaped, its stable is the wing of the house's own plan instead. Only the households that
+keep a beast have one, and the shed is drawn the same whether the settlement keeps an ox, a water buffalo or a horse.
 
 Name: The beast inside the farmhouse
 Covers: `meta.byre_form = courtyard`
 Sources: nakanishi-1994-kogyu-koba, buck-1930-farm-economy, kotobank-umaya, okayama-chikusanshi-shiyo, agrinews-2023-tajima-maya, magariya-jawiki, siheyuan-zhwiki, koshigaya-shishi-noumin-jukyo
 Entry: research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.html
-Drawing: research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html
+Drawing: research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html

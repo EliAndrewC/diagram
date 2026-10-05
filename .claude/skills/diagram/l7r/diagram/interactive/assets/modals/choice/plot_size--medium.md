@@ -1,6 +1,6 @@
 About: Most of Japan's paddy before modern times lay in irregular plots of every size, fitted to the land and its water as
-it was opened piece by piece, and a household's paddy was scattered over many of them. A middling plot was the ordinary
-run of these, neither the tiny beds of a terraced slope nor the planned blocks of later times.
+it was opened piece by piece, and a household's paddy was scattered over many of them. Between the tiny beds of a
+terraced slope and the planned blocks of later times lay the ordinary run of these plots, of no recorded average size.
 
 On the ground the field was a patchwork of level basins, each walled by a low bank heaped from its own mud so that the
 rice stood in water at an even depth. A land survey set down each parcel of paddy on a line of its own, whatever its
@@ -17,8 +17,9 @@ Guesses:
 - How often a settlement's paddies come out middling rather than small, large or in strips: no source counts how many
   villages had which.
 
-Depiction: The map draws the field as a patchwork of irregular basins at their real size in feet, never a grid of equal
-rectangles, and never at the quarter-acre block that land consolidation laid out after 1868.
+Depiction: The map draws the field's basins at their real size in feet, never at the quarter-acre block that land
+consolidation laid out after 1868; whether their lines follow the ground or a surveyed grid is a separate choice on the
+title card.
 
 Name: The paddy plots' size: middling
 Covers: `meta.plot_size = medium`

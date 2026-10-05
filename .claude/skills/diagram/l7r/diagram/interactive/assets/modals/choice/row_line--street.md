@@ -9,17 +9,17 @@ wide were laid lengthwise and crosswise and the lots set along them. Ome Shinmac
 to be meant for a market the village was to hold.
 
 A farm on a planned row fronted its road for about 54 to 240 ft, and at Santome its strip ran back about 2,240 ft. Santome
-held between 172 and 180 farms, on many roads rather than one long row. Whether a road laid first or the land's own line was
+held between 172 and 180 farms, probably on many roads rather than one long row. Whether a road laid first or the land's own line was
 the commoner is not recorded.
 
 Guesses:
-- That a row follows a street laid first or the dry edge of its ground at even odds: both are attested, and none is counted
+- That a row follows a street laid first or the dry edge of its ground at even odds: both are attested, and neither is counted
   against the other.
 - That a far farm's holding runs back three lots deep: Santome's strips ran about 2,240 ft in a dry-field colony, and how deep
   a paddy row's strips ran is not recorded.
 
 Depiction: The map draws the street straight, as a surveyed road is, and runs it on off the map as the road the row stands
-on. It is drawn 6 ft wide so it reads; Santome's real roads were about 36 ft. On low ground behind dikes a row never takes
+on. It is drawn 6 ft wide, wider than the lanes off it; Santome's real roads were about 36 ft. On low ground behind dikes a row never takes
 this form: there it follows the dry edge, which stands for the dike. Where the farms stand on both sides, each farm across the
 street from the paddy has its holding drawn behind it as a strip of dry field one lot wide. When a street is full, the map
 lays another beside it with its own row, as a planned colony grew more roads.

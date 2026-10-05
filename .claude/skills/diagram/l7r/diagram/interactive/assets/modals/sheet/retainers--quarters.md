@@ -1,29 +1,28 @@
-What: Housing inside the walls for the magistrate's retainers - samurai of the working platoon, and on some
-postings their families - drawn as a long single-story range of rooms under one roof, a rowhouse.
+About: The retainers' quarters housed the magistrate's samurai inside the compound - the working platoon, and on some
+postings their families. A rural intendant's office kept the huts and rowhouses of its junior officials on its own grounds,
+and a small domain's seat laid out its retainers' residences among its halls and storehouses; the great town magistracy of
+Edo instead housed its constables in a district of their own.
 
-Why: A rural administrative compound housed its staff on the grounds; it was the great city magistrate's
-offices that sent their constables to live in a district of their own. Where lower-ranking samurai and foot
-soldiers lived as households, they lived in terraced ranges - one surviving ashigaru rowhouse holds eight
-households under one thatched roof, 143 by 24 ft - so a range, not a cluster of small houses, is the form.
-Even a chief retainer's great house at Aizu, rebuilt in 1975 from a bird's-eye view of the lost original, 38 rooms under one roof, keeps its retainers' dwellings in a
-one-sided range beside the front gate.
+The form was the rowhouse, the nagaya: a long, narrow, single-story building under one roof, divided along its length into
+dwellings. Each dwelling was an earth-floored entry for leaving shoes and a raised plank floor, and each had an entrance of
+its own, closed by a lattice door. No bed or bunk is known in a rowhouse before modern times.
 
-Note: Retainers' official residences laid out inside a small domain's jin'ya are recorded, and the city
-magistracy's separate constables' district and ranked households in terraced ranges rest on recorded
-findings. A source counts the huts and rowhouses of a rural intendant's office's junior officials among its
-parts on the grounds, and names a storehouse keepers' rowhouse there; that the rest of its staff lived there too
-is the record's reconstruction, no source giving a count of the staff or saying who else lived inside; the
-record places ranks of small household dwellings at the town's edge, outside an elite quarter, rather than
-inside its walls.
+The rowhouses measured run about 80 to 145 ft long and 12 to 24 ft deep, built of bays about 12 to 18 ft wide. A row at
+Shibata of 1842, 143 by 24 ft, held eight households under one thatched roof; at Obata each dwelling was about 12 by 21 ft,
+one room, an entrance and a kitchen. How many unmarried men usually shared a dwelling is not recorded: in 1860 three
+retainers on duty in Edo shared one, the two juniors cooking by turns.
 
-Caveat: A source counts the huts and rowhouses of a rural intendant's office's junior officials among its
-parts on the grounds, and names a storehouse keepers' rowhouse there; that the rest of its staff lived there too
-is the record's reconstruction, no source giving a count of the staff or saying who else lived inside; the
-record places ranks of small household dwellings at the
-town's edge, outside an elite quarter, rather than inside its walls.
+Guesses:
+- That a county office's whole staff lived on its grounds: an intendant's office is known to have kept its junior officials'
+  quarters and a storehouse keepers' rowhouse there, but no source counts its staff or says who else lived inside.
+- That a few men share each dwelling, and so how many bays the rowhouse runs to: the one case found is three retainers to a
+  dwelling.
+
+Depiction: The plan draws the quarters as a rowhouse, long and narrow, never a square block, divided into dwellings of a few
+men each, and draws nothing in it as a bunk or a bunk room.
 
 Name: retainers' quarters
 Covers: the senior retainers' quarters, a family rowhouse for married retainers, and their labels
-Label: accurate
-Sources: hatchobori-jawiki, jinya-jawiki, takayama-jinya-jawiki, shibata-ashigaru-nagaya, hikone-ashigaru, aizu-bukeyashiki-guide
-Entry: research/questions/0097-staff-rowhouses-and-barracks-nagaya.html; research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html; research/questions/0097-staff-rowhouses-and-barracks-nagaya.drawing.html
+Sources: jinya-kotobank, jinya-jawiki, hatchobori-jawiki, edo-hantei-jawiki, mitamura-nagaya-tcpip, hoppou-shibata-ashigaru, omori-daikansho-kunishitei, kaibara-jinya-tamba, shibata-ashigaru-nagaya, kanra-ashigaru-nagaya, sakai-hanshiro-bakumatsu, takayama-jinya-jawiki
+Entry: research/questions/0097-staff-rowhouses-and-barracks-nagaya.html
+Drawing: research/questions/0097-staff-rowhouses-and-barracks-nagaya.drawing.html

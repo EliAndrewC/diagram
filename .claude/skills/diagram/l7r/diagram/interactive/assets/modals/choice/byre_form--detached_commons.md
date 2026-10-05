@@ -8,7 +8,7 @@ half did, and fewer as time went on. In the mid-1600s some beasts there were pla
 one headman's household of the early 1800s owned about a thousand cattle and placed them with borrowers near and far; and
 Sanuki, short of cattle at plowing time, hired them from the mountain villages of neighboring Awa for a fee in rice.
 
-The two free-standing stables of the Edo period that survive with their sizes are single-story buildings under tile
+Two free-standing stables of the Edo period that survive with their sizes are single-story buildings under tile
 roofs, of about 320 and 370 sq ft (30 and 34 sq m).
 
 Guesses:
@@ -16,7 +16,9 @@ Guesses:
 - That a settlement takes this form about one time in ten, the rarest of the three: no source counts the forms.
 
 Depiction: The map draws each shared shed as a small one-room shed of about 16 by 11 ft, open-fronted under a plank roof, on
-open ground among the houses where several households can reach it, never alone beyond the last house.
+open ground among the houses where several households can reach it, never alone beyond the last house. It is kept small,
+under the full area of the surviving Edo stables, so it does not read as a barn of many stalls, and it is drawn the same
+whether the settlement keeps an ox, a water buffalo or a horse.
 
 Name: A shared shed on common ground
 Covers: `meta.byre_form = detached_commons`

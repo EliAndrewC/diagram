@@ -4,8 +4,8 @@ behind it, the "back mountain", and called the hill across the river "the facing
 foot of a hill beside its stream. In the north of Japan in the Edo period, the Nanbu domain forbade new branch households to build
 on the cultivated land and allowed them only vacant plots, the edge of the fields, or the roads at the foot of the hills.
 
-A visitor found the houses strung along the side of the valley floor, the slope at their backs and the fields stretching
-across in front.
+A visitor found the houses gathered on one side of the valley floor, the rising ground at their backs and the fields
+stretching across in front.
 
 How often a village sat on a side of its fields rather than at their head is not recorded.
 

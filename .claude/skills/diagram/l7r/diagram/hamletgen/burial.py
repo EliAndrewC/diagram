@@ -37,6 +37,8 @@ def stage_burial(s: Settlement, plan: SitePlan) -> None:
     Research:
         where the dead lie - research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html: the village's ground, off the map
         no hamlet ground drawn - research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.html: own ground attested only in modern records
+        farmstead graves - research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html:
+            no farmstead draws a grave of its own on any hamlet map; the household-grave knob is never rolled
     """
     if not s.M.get("houses") or s.M["meta"].get("scale") != "hamlet":
         return

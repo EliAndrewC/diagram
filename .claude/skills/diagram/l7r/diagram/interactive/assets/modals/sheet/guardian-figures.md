@@ -1,15 +1,25 @@
-What: A pair of stone guardian figures facing each other across the approach - lion-dogs, or at a Bishamon shrine
-his tigers.
+About: Guardian figures were a pair of stone beasts set at a shrine's entrance, the komainu, the guardian lion-dogs.
+Before a temple of Bishamon a pair of stone tigers took their place, "unlike the more common guardian lion-dogs", at least at
+the city temple where they are known; whether a village shrine of Bishamon had them is not recorded. In Rokugan Bishamon is
+the Fortune of Strength.
 
-Why: Stone guardian pairs were commoners' donations, multiplying from the Edo period on, so a shrine has them only as its parish
-grows richer; at average wealth there are none.
+They were gifts. Most of what stood in a shrine's precinct besides its halls was given to it piece by piece, and commoners
+gave stone guardian pairs from the Edo period on, in growing numbers and in ever more varied forms; so a shrine probably had
+them only once its parishioners could afford them.
 
-Note: The donations and their date are read, as are Bishamon's tigers at named temples; that the tigers reach a village shrine is a guess, and which shrines carry them is the wealth knob.
+How big they were, and how many village shrines had a pair, are not recorded.
 
-Caveat: that the tigers reach a village shrine is a guess, and which shrines carry them is the wealth knob.
+Guesses:
+- That a village shrine has its guardian pair only where its parish is richer than average: no count says how many village
+  shrines kept one.
+- That a village shrine of Bishamon sets tigers in place of lion-dogs, as the temples where they are known do: no village
+  example was found.
+
+Depiction: The plan draws the pair only at a shrine whose parish is richer than average, one beast on each side of the
+approach, and at a shrine of Bishamon draws them as tigers.
 
 Name: guardian figures
 Covers: the guardian pair beside the approach
-Label: accurate
 Sources: komainu-jawiki, gltjp-zenkokuji, darumamuseum-bishamonten
-Entry: research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html; research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html
+Entry: research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html
+Drawing: research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html

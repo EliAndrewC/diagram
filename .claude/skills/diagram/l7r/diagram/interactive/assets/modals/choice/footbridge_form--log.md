@@ -1,6 +1,6 @@
 About: The simplest crossing over small water was a single log, or a single board, laid from bank to bank. In Japan the log bridge was "just a single log laid across", and the one-log bridge one laid
 across a brook or a mountain stream; the Chinese single-log bridge, of one tree trunk or one board, let walkers or livestock cross narrow
-rivers and gorges. A farm household could lay one itself: in a Chinese rice village of modern times, criss-crossed by
+rivers and gorges. A farm household could lay its own log crossing: in a Chinese rice village of modern times, criss-crossed by
 ditches, a grandfather found four log sections and laid them across a canal as a simple bridge, a common practice there.
 What crossed a paddy ditch in older times, a log, a plank or earth over logs, is not recorded.
 

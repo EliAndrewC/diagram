@@ -1,24 +1,21 @@
-What: A pair of river-stones painted with cinnabar fox-tracks, set one on each side of the road just outside
-the main gate, with a Pact-Bowl buried beneath: a small lacquer bowl holding rice, three copper coins and a
-tuft of fox fur, renewed every seventh year in a ceremony attended by the magistrate and an emissary of
-the Fox.
+About: The vermilion threshold stones (akami no sakai-ishi) are one of the three markers of the Fox Clan's road wardings:
+river-stones the size of two fists, painted with cinnabar fox-tracks and set at intervals along every stretch of Imperial road
+in or beside Fox lands. At a County Magistrate's checkpoint beside those lands a Pact-Bowl lies buried beneath the stone: a small
+lacquer bowl holding rice, three copper coins and a tuft of fox fur, renewed every seventh year in a ceremony the magistrate
+attends with an emissary of the Fox.
 
-Why: They are part of the Fox Clan's warding of the Emperor's road. Threshold stones stand along every
-stretch of Imperial road in or beside Fox lands, and a Pact-Bowl lies beneath the stone at each County
-Magistrate's checkpoint adjoining those lands: a traveler who passes the threshold has, by Fox reckoning,
-accepted the wood's hospitality, and one who then preys on another traveler owes the wood a debt. The
-stones flank the road rather than stand in it, because a threshold stone stands above ground - something
-to walk between, not to roll a cart over.
+The wardings are not a punishment but markers, the means by which the forest learns a name. A traveler who passes the threshold
+has, by Fox reckoning, taken a grain of the rice and accepted the wood's hospitality; one who then waylays another traveler has
+taken without giving, and owes the wood a debt it collects in its own currency: time, sleep, memory, luck.
 
-Note: the threshold stones and the Pact-Bowl are the Fox Clan's road wardings, from the campaign's own
-canon, a departure made by the setting with no historical counterpart. Canon sets one stone at each
-checkpoint; the flanking pair is this project's choice for this drawing, a stone on each side of the road so
-that neither stands in it. And the pair is drawn larger than canon's stones on purpose - canon makes each
-stone a river-stone the size of two fists, and Ochiba's pair stands about 3.3 by 4.7 ft, because Ochiba is
-where the threshold stones are made and painted (by this project's choice).
+The County Magistrate of Ochiba, a Fox priest, keeps the wardings, and Ochiba is where the stones are made and painted.
+
+Depiction: The plan sets a pair just outside the main gate, one stone on each side of the road, so that neither stands in the
+cart track; the service gate has none. Each is drawn vermilion and about 3.3 by 4.7 ft, far larger than a two-fist stone,
+because the stones are made at Ochiba. The buried bowl is not drawn: the label names it.
 
 Name: threshold stones
 Covers: the vermilion pair outside the main gate and their label with the "buried Pact-Bowl" sublabel
-Label: deviation
 Sources: not recorded
 Entry: research/contents.json#compounds (no dedicated entry - recorded as silent)
+Form: particular

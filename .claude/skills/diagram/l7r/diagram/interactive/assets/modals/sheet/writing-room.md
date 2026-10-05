@@ -1,21 +1,23 @@
-What: A small room along the dwelling's front where the district's registers are kept and written - a desk and a
-record chest, in the monk's own house.
+About: The writing room was where the shrine's records were kept and written up: a room of the monk's own house, not an
+office of its own. In Rokugan the country monk answers for the village district's records of births, deaths, marriages and
+travel, so the district's registers are kept here.
 
-Why: The monk keeps the district's registers, as a temple certified its parishioners under the Edo registration,
-and a small shrine often had no office of its own, its business done at the keeper's home: so the books live in
-the dwelling, never in a separate hall. So the writing room is a room of the monk's house, near its entrance, where
-the villagers who come on business are met.
+Edo Japan had the like. Each household was registered with a temple, which certified it as its parishioner, and a household
+needed that certificate to travel or to move house; the household paid its temple for the rites of its dead. The yearly
+register of every household and its temple was compiled not by the temple but by the village headmen. A temple's dwelling,
+the kuri, often served as its office as well, and at a small shrine business was often done at the keeper's own home.
 
-Note: That a small shrine often had no office of its own, its business done at the keeper's home, is read; the
-yearly register itself was compiled by the village headmen, so that the monk's house holds the district's
-registers is this project's choice; the room itself, its size and its place along the front are a guess.
+What such a room held, and how big it was, is not recorded.
 
-Caveat: the yearly register itself was compiled by the village headmen, so that the monk's house holds the
-district's registers is this project's choice; the room itself, its size and its place along the front are a
-guess.
+Guesses:
+- The room itself, set aside along the front of the monk's dwelling for the registers, and its size: no account describes
+  where in a keeper's house a small shrine's or temple's business was done.
+
+Depiction: The plan draws the writing room as a room of the monk's dwelling, near its door, inside the one building; no
+office building is drawn.
 
 Name: writing room
 Covers: the writing room in the dwelling
-Label: accurate
-Sources: terauke-seido-jawiki, shumon-ninbetsu-jawiki, jaanus-shamusho
-Entry: research/questions/0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html; research/questions/0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html
+Sources: terauke-seido-jawiki, danka-seido-jawiki, shumon-ninbetsu-jawiki, kuri-jawiki, jaanus-shamusho
+Entry: research/questions/0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html
+Drawing: research/questions/0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html

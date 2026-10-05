@@ -1,20 +1,19 @@
-What: The border between the Fox Clan's lands and a neighboring clan's, drawn as a dashed line with no
-width, running off the sheet at both ends.
+About: The border where the Fox Clan's lands meet a neighbor's. A border exists where two authorities have agreed it, and the
+frontier magistracy at Ubame is built on this one: its east wall stands on the line, and its parley room straddles it.
 
-Why: Agreed, marked borders between domains were real: two neighboring domains settled a boundary of about
-130 km in 1642 after half a century of dispute and marked it with a line of earth mounds, and every
-province's map made in the Genroku revision drew its district boundaries clearly, though those were lines between districts, not between domains. A border exists where
-two authorities have agreed it, so the plan draws the agreed line itself, which nothing on the ground need
-stand clear of.
+Agreed, marked borders between domains were real in the Edo period. Morioka and Sendai settled theirs in 1642, after more than
+fifty years of dispute, and marked its 130 km (about 80 miles) with more than a hundred earth mounds, large and far apart at
+first, smaller and closer together later; markers of the kind were common under the Tokugawa. Frontiers that had been broad,
+fuzzy zones were becoming drawn lines, though not everywhere.
 
-Note: The agreed border line is a recorded finding; drawing it with no width is a convention, as the period's provincial maps drew their boundaries as lines, and leaving out the mounds that marked it is a deliberate deviation. The period's large border markers were earthen
-mounds, and the plan draws the line alone; a compound standing on the line is its map's story.
-
-Caveat: The period's large border markers were earthen mounds, and the plan draws the line alone; a compound
-standing on the line is its map's story.
+Depiction: The plan draws the border as a dashed line with no width, running off the sheet at both ends: it takes up no ground,
+and nothing need stand clear of it, as the period's provincial maps drew their district boundaries as lines. The earth mounds
+that marked a real border are left out on purpose: a mound is a structure everything else would have to keep clear of, and the
+magistracy stands its wall on the line.
 
 Name: fox border
 Covers: the border line, its labels and the border note box
-Label: accurate
-Sources: nanbu-date-mounds-enwiki, kuniezu-enwiki, kotobank-genroku-kuniezu, mukoyama-linear-borders
-Entry: research/questions/0083-clan-borders-and-their-markers.html; research/questions/0083-clan-borders-and-their-markers.drawing.html
+Sources: mukoyama-linear-borders, nanbu-date-mounds-enwiki, kotobank-genroku-kuniezu, kuniezu-enwiki
+Entry: research/questions/0083-clan-borders-and-their-markers.html
+Drawing: research/questions/0083-clan-borders-and-their-markers.drawing.html
+Form: particular

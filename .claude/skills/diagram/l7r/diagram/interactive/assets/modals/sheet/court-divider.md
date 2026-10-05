@@ -1,16 +1,24 @@
-What: The lighter wall that splits the compound into its outer and inner courts, broken by one narrow
-household door, the nakamon.
+About: A magistrate's compound was also the magistrate's home. A Chinese official and their immediate family commonly
+lived in a residence attached to the yamen, the county office, and a Japanese town magistrate's residence stood inside the
+magistracy. In China regulation set the two apart in the ancient order of court in front, sleeping quarters behind: the
+office in front, the household behind it.
 
-Why: The split between the courts is the split between state and home: the office and its public business
-in front, the household behind, with only the one door between them.
+A wall between the courts divided them, broken by one gate, the inner residence gate, the last of the five gates of the
+yamen at Neixiang. Official business stayed before it, and the household lived beyond it.
 
-Note: The internal wall between the two courts follows the Chinese record, where regulation put the office in front and the residence behind an inner residence gate; for Japanese compounds that front-and-rear order is on no page read, and at Takayama the residence stood beside the office rather than behind it, so drawing a Japanese compound's residence behind its office is a deliberate simplification. No source measures the divider: the wall's
-2 ft thickness is this project's own figure.
+In Japan no such front-and-rear order is recorded. At Takayama, the one intendant's office that survives, the residence
+stood on the lot to the west, beside the office rather than behind it. What a dividing wall was built of, how high it
+stood and how thick it was are not recorded.
 
-Caveat: No source measures the divider: the wall's 2 ft thickness is this project's own figure.
+Guesses:
+- Its thickness, about 2 ft: no wall between a compound's courts is measured.
+
+Depiction: Every plan draws two courts, the office in front and the residence behind, divided by this wall, which is drawn
+lighter than the compound's outer wall. For a Japanese compound that order is a deliberate simplification, since a
+residence might stand beside its office, as at Takayama.
 
 Name: court divider
 Covers: the internal wall's strokes
-Label: accurate
-Sources: neixiang-yamen-zhwiki, machi-bugyo-jawiki, yamen-enwiki
-Entry: research/questions/0090-magistrates-compounds-jinya-and-yamen.html; research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html
+Sources: yamen-enwiki, machi-bugyo-jawiki, neixiang-yamen-zhwiki, takayama-jinya-city
+Entry: research/questions/0090-magistrates-compounds-jinya-and-yamen.html
+Drawing: research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html

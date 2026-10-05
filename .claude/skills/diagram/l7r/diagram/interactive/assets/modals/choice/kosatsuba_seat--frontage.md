@@ -18,8 +18,8 @@ Guesses:
 Depiction: Only a settlement whose map draws its official's house takes this seat. The map seats the board last, once
 everything else stands, on the way before that house, a few feet off the way's edge and turned broadside to it. It is drawn as a roofed frame on a stone footing inside a fence.
 
-Name: The notice board before the headman's gate
+Name: The notice board before a village official's gate
 Covers: `meta.kosatsuba_seat = frontage`
-Sources: kosatsu-jawiki, adachi-kosatsu, mlit-tokaido-kosatsuba, mlit-tokaido-qa-kosatsuba, ogose-kosatsuba, shiojiri-iwadare-kosatsuba, shoya-jawiki
+Sources: kosatsu-jawiki, adachi-kosatsu, mlit-tokaido-kosatsuba, mlit-tokaido-qa-kosatsuba, shiojiri-iwadare-kosatsuba, shoya-jawiki
 Entry: research/questions/0190-notice-boards-kosatsuba.html
 Drawing: research/questions/0190-notice-boards-kosatsuba.drawing.html

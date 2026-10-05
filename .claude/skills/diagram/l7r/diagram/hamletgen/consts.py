@@ -378,7 +378,7 @@ WEST_SUN_FT = 50.0
 # dike-pond differs from the rice polder only in its PARCEL FABRIC (`POLDER_FABRIC`), the overlay
 # applied after the grid is drawn, and the ring-canal crossing caps.
 FIELD_ARCHETYPES = ("valley_paddy", "polder_grid", "mulberry_dike_fishpond")
-"""Research: field forms drawn - research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html, research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html, research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html: valley fan, rice polder, dike-pond"""
+"""Research: field forms drawn - research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html, research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html, research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html, research/questions/0014-bunds-between-the-paddies-aze.drawing.html: valley fan, rice polder, dike-pond; no plain ruled on the jori grid, so that form is never rolled"""
 POLDER_ARCHETYPES = ("polder_grid", "mulberry_dike_fishpond")
 """Research: dike-pond built as a polder - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html, research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html"""
 
@@ -422,7 +422,7 @@ POLDER_FABRIC: dict[str, dict[str, Any]] = {
 # is why the mosaic is the more common roll. `build_polder(mosaic=)` is the engine's dial: 0.0 is
 # the grid, 0.5 the mosaic Kuwabata was drawn with (the GM saw and accepted that map's ponds).
 POND_LAYOUTS = ("mosaic",)
-"""Research: dike-pond layout - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the mosaic only"""
+"""Research: dike-pond layout - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html, research/questions/0024-fish-fry-and-nursery-ponds-yumiao.html: the mosaic only; the chessboard grid is never rolled"""
 
 # THE FRY FORM - which nursery a dike-pond hamlet keeps (feature 280 M60, research/archetypes/200 and 172): the ordinary
 # delta hamlet raised grown fish and BOUGHT its fry, with no nursery ponds; the fry village of Jiujiang raised fry in seven
@@ -449,7 +449,8 @@ MANURE_FORMS = ("heap", "pit")
 # gathered racks are one region's form - this project's decision, as the regional wind is) draws none at the house.
 # research/questions/0016-rice-drying-racks-hasa-hasagi.html; the rule at research/questions/0016-rice-drying-racks-hasa-hasagi.drawing.html.
 HARVEST_WEATHERS = ("settled", "changeable")
-"""Research: harvest weather - research/questions/0016-rice-drying-racks-hasa-hasagi.drawing.html: declared, never rolled; racks by the house where changeable"""
+"""Research: harvest weather - research/questions/0016-rice-drying-racks-hasa-hasagi.drawing.html: declared, never rolled; racks by the house where changeable
+standing rack forms - research/questions/0016-rice-drying-racks-hasa-hasagi.html, research/questions/0016-rice-drying-racks-hasa-hasagi.drawing.html: no map draws Niigata's living alder rack posts on the bunds or Ehime's permanent roofed racks"""
 DEFAULT_HARVEST_WEATHER = "settled"
 """Research: harvest weather when undeclared - research/questions/0016-rice-drying-racks-hasa-hasagi.drawing.html: settled"""
 # TWO SUPPORTABLE ANSWERS BECOME A KNOB (constitution XII), not a picked one. Both were named by a
@@ -488,7 +489,7 @@ LEFTOVER_FORMS = ("rice", "pond")
 
 Research:
     dike-ponds throughout - research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html: a wholesale village
-    dike-pond leftover parcels - UNRESEARCHED: rice or none, even odds
+    dike-pond leftover parcels - research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html: rice or none, even odds
 """
 POND_LAYOUT_MOSAIC = 0.5
 """Research: mosaic strength - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: 0.5, the lattice bent out of line"""
@@ -898,8 +899,10 @@ FARM_WATERS = ("channel", "well")
 # temperate lowland hamlet usually has one - the research puts bamboo below the frost line as a
 # matter of course - and "none" is the cold-upland minority. Read the knob's note in `_knobs.py`.
 BAMBOO_FORMS = ("homestead", "homestead", "thicket", "both", "none")
-"""Research: where the bamboo stands - research/questions/0075-bamboo-groves-chikurin.drawing.html: farmsteads, a thicket, both or none"""
+"""Research: where the bamboo stands - research/questions/0075-bamboo-groves-chikurin.drawing.html: farmsteads, a thicket, both or none, weighted homestead 2 in 5 and
+    the others 1 in 5, where the registry's knob rolls the four evenly"""
 PLOT_SIZES = ("small_irregular", "medium", "medium", "large_block")
 """Research: paddy plot size - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: small 1, medium 2, large block 1"""
 GRAIN_DRIFTS = (-8, -4, 0, 0, 4, 8)
-"""Research: furrow drift - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: -8 to 8 degrees off the contour"""
+"""Research: furrow drift - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html, research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: -8 to 8 degrees off the contour, turning
+    only the dry fields' furrow rows (carve.py theta0); the paddy grain never drifts, and the registry's grain_drift runs -12 to 12"""

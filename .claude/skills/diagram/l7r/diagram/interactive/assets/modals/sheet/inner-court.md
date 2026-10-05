@@ -1,28 +1,29 @@
-What: The private half of the compound, behind the internal wall: the magistrate's residence and
-household, its garden and the compound's shrine, with the kitchen, the servants' quarters and the
-service ground that keep the household running.
+About: The inner court was the private half of a magistrate's compound, behind the office: the magistrate's residence and
+household, the garden its formal rooms looked onto, the compound's shrine, and the kitchen and service ground that kept the
+household running. The office was also a home, and this was the home. In a Chinese county office the last of its gates, the
+inner residence gate, divided it from the office; in Japan the intendant's household lived inside the compound too, though
+at Takayama the residence stood beside the office rather than behind it.
 
-Why: The chief's household living inside the working compound is the point of the institution - the
-office is a household, and the wall between the two courts is the hinge between state and home. So the
-inner court lies behind the office hall, away from the gate, reached from the outer court only by the
-household's own door. The record's ideal puts its prized formal garden on the sunny south side, facing
-the reception rooms, and a plan seats it there where its buildings allow; the household's service
-economy fills the shady rear.
+Its ground was divided by the sun. The formal garden lay on the south side, before the reception rooms; at Takayama the
+great hall of the office and the intendant's own room looked onto one garden. The house itself was one block under one
+roof, with its guest rooms inside it. Behind it, on the shady side, lay the household's working ground: at one samurai
+house at Matsushiro the storehouse stood beyond open ground behind the main house. Where a house kept its well, its family
+privy and its servants' rooms is not recorded.
 
-Note: The household inside the compound follows the record; the residence-behind-the-office order is
-Chinese regulation (Neixiang), while the Japanese pages read show no front-and-rear order - at Takayama the
-residence stood beside the office, to the west, so drawing it behind in a Japanese-led plan is a deliberate
-simplification. The two-court split and the formal garden south of the
-reception rooms follow the record. That a household's storehouse stood behind the house is read, at the Higuchi
-house; the rest of the service strip along the shady north rear is this record's own reasoning from where the
-formal garden sat, not something a source describes.
+Its size went with the house it held: a district magistrate's house built in 1794 at Matsushiro covered about 1,700 sq ft,
+on grounds of about 0.8 acre.
 
-Caveat: That a household's storehouse stood behind the house is read, at the Higuchi house; the rest of the
-service strip along the shady north rear is this record's own reasoning from where the formal garden sat, not
-something a source describes.
+Guesses:
+- That the well, the family privy and any servants' range stood in the shady rear with the storehouses: no record places
+  them, so they are reasoned from the garden's place in the sunny south.
+- That the gate between the two courts was guarded: no record says so.
+
+Depiction: The plan always sets the inner court behind the office hall, reached through a gate between the courts; for a
+Japanese office that is a simplification, since at Takayama the residence stood beside the office. Its earth shows through
+unfilled, and the service ground behind the house is drawn as a narrow strip or alley, never a wide empty band.
 
 Name: inner court
 Covers: the inner court's ground and its label
-Label: accurate
-Sources: neixiang-yamen-zhwiki, takayama-jinya-jawiki, machi-bugyo-jawiki, jinya-jawiki, yamen-enwiki, shoinzukuri-jawiki
-Entry: research/questions/0090-magistrates-compounds-jinya-and-yamen.html, research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html; research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html, research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html
+Sources: neixiang-yamen-zhwiki, yamen-enwiki, machi-bugyo-jawiki, takayama-jinya-city, shoinzukuri-jawiki, oniwa-takayama-jinya, boso-no-mura-takei, kojodan-higuchi, matsushiro-bukeyashiki
+Entry: research/questions/0090-magistrates-compounds-jinya-and-yamen.html, research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html, research/questions/0103-ornamental-gardens-ponds-and-stone-lanterns-teien.html
+Drawing: research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html, research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html

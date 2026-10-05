@@ -77,7 +77,8 @@ KURA_PARTS: dict[str, tuple[float, float, float, float]] = {"N": (0.0, -0.675, 0
 
 Research:
     north annex - research/questions/0052-farm-sheds-and-barns-naya.html: 0.46 of the house's length by 0.45 of its depth, on the back wall
-    west annex - DEVIATION research/questions/0052-farm-sheds-and-barns-naya.html: 0.32 x 0.56 of the house (~15 x 16 ft on a 46 x 28 ft house), near square and attached to its west wall, for the dispersed farms, against a shed of 18 to 27 ft at 1.5 to 1.8 to one built apart
+    west annex - DEVIATION research/questions/0052-farm-sheds-and-barns-naya.html, research/questions/0040-farm-storehouses-kura.drawing.html: 0.32 x 0.56 of the house (~15 x 16 ft on a 46 x 28 ft house), near square and attached to its west wall, for the dispersed farms, against a shed of 18 to 27 ft at 1.5 to 1.8 to one built apart
+    free-standing storage shed - research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html: only the storehouse annex is drawn; no farm carries a storage shed standing free of the house
 """
 
 
