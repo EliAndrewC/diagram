@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-05T08:16:28Z",
+  "target": "record-checked",
+  "commit": "29845e09a",
+  "why": "source-reader on source-reader:0236#henriot-shanghai-graves-3: only the first letter of a quoted passage was capitalized to match the page ('There were two main types...'), at quote-check's fetch of the page this round"
+}

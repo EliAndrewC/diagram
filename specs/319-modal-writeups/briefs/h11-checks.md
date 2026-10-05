@@ -1,0 +1,6 @@
+- round 1, quote-check: 0008.drawing unfootnoted 0; 0028 ido-jawiki SUPPORTS 2, unfootnoted 0; 0082.drawing unfootnoted 2 (water-town canals now cite l7r-budgets; the plan's silence given an absence note, narrowed to a farming water village); 0019 and 0236 bundles held no unmarked blocks under NOTES=unfootnoted, re-run in round 2
+- round 1, record-format: 0008, 0019, 0236 clean (0008's missing period added); 0028 VOCABULARY 1 (row village, row villages added as variants of ressen); 0082 SESSION NOTE 1 (the generator sentence dropped)
+- round 1, translation-check 0236: FAITHFUL 3 (gloss, nakajima-2006-huizhou, kawazoe-2010-ryobosei-9)
+- round 2, source-reader 0082.drawing kashi-2: an absence note, no page to read, answered with REASON
+- round 2, quote-check: 0008 clean; 0082 l7r-budgets SUPPORTS, absence held, unfootnoted 0; 0019.drawing unfootnoted 0 (dike-top rules GUESS-labeled); 0236 and 0236.drawing unfootnoted 0 (setting canon; corner-grave step a convention, bund a GUESS; its link to 0236 confirmed); record-format 0008 and 0082 clean
+- record-owed UNANSWERED=1 owes nothing on 0008, 0019, 0028, 0082, 0236; the four record tests 3848 passed, 1 failed (test_record_format unused glossary terms 'catena' and 'planted collar', failing at HEAD before this session)

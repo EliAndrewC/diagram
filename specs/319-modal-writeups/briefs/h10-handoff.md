@@ -1,0 +1,10 @@
+# H10 handoff - session 1 (write), 2026-10-05
+
+- SECTION=0221/the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri - the body and the drawing page now give 0229's one small measured kuri (Rishōin's Kōshin hall in Onga, 2 x 2.5 ken, ~12 x 15 ft; new note `onga-choshi-jiin` on both pages, copied from 0229's verified -4 note) and narrow the absence (-2) to an ordinary village parish temple's kuri; the drawing page's registers bullet now rests on the canon (the country monk keeps births, deaths, marriages and travel records) and calls the Edo headmen's register a deviation, no longer "this project's choice".
+- SECTION=0071/groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse - the drawing page's sun bullet now holds the back grove, the water-mouth grove and the copse (bamboo included) 50 ft east, west or south of a yard or bed, as 0038's drawing page and the code do; the question page carries the fengshui-wood edge planting with a new note `afcd-hkbio-8-2`.
+- SECTION=0023/the-dike-pond-hamlet-its-houses-boats-and-manure-jars - already said no CHINESE jar's size was found (H4); both pages now point to 0042 for the Japanese jar's 1-1.5 m mouth.
+- SECTION=0042/manure-heaps-and-compost-kyuhi - a new bullet "How big was a manure heap?" with absence note `manure-heaps-and-compost-kyuhi-3` (searched 2026-10-05, JP/EN/ZH; only modern compost guidance turned up, unread and uncited); the drawing page's size bullet now cites a matching absence (`how-our-maps-place-manure-heaps-kyuhi-3`) instead of the placement note.
+
+Owed for session 2: source-reader / quote-check on the new notes (`onga-choshi-jiin` x2 in 0221, `afcd-hkbio-8-2`, the two -3 absences), record-format on all four, entry-drift where `make record-owed` names it.
+
+Pre-existing failures seen, not from these edits: `test_every_glossary_term_is_used_by_a_modal_or_a_record_page` (unused terms `catena`, `planted collar`), and `check-question-size.py` (0072 at 20,013 bytes, untouched here).
