@@ -52,12 +52,15 @@ def root_of(here: str) -> str:
     return "../" * here.count("/")
 
 
-def shell(title: str, here: str, open_keys: str, body: str, *, lazy_glossary: bool = False) -> str:
-    """A site page: the head, the navigation the script draws, the content. `open_keys` names the sections of the
-    navigation open on this page; `lazy_glossary` marks the single page, whose glossary hover `record.js` wraps a
-    heading's run at a time as it nears the screen (feature 301 research R8)."""
+def frame(title: str, here: str, open_keys: str, *, lazy_glossary: bool = False) -> tuple[str, str]:
+    """The text a site page writes before its content and after it: the head, the navigation the script draws, and
+    `<main>` around the content. `open_keys` names the sections of the navigation open on this page; `lazy_glossary`
+    marks the single page, whose glossary hover `record.js` wraps a heading's run at a time as it nears the screen
+    (feature 301 research R8).
+
+    Research: page frame - NONE: process plumbing"""
     root = root_of(here)
-    return (
+    head = (
         "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n"
         '<meta name="viewport" content="width=device-width, initial-scale=1">\n'
         f"<title>{html.escape(title)}</title>\n"
@@ -70,8 +73,26 @@ def shell(title: str, here: str, open_keys: str, body: str, *, lazy_glossary: bo
         f'<body class="site" data-root="{root}" data-part="{html.escape(open_keys)}" data-page="{html.escape(here)}"{" data-lazy-glossary" if lazy_glossary else ""}>\n'
         '<div class="layout">\n<nav id="sidebar" aria-label="Contents">'
         f'<noscript><p><a href="{root}index.html">Contents</a> - <a href="{root}all.html">the whole record on one page</a></p></noscript></nav>\n'
-        f"<main>\n{linkify(body)}\n</main>\n</div>\n</body>\n</html>\n"
+        "<main>\n"
     )
+    return head, "\n</main>\n</div>\n</body>\n</html>\n"
+
+
+def shell(title: str, here: str, open_keys: str, body: str | list[str], *, lazy_glossary: bool = False) -> str:
+    """A site page: its frame (`frame`) around its content, every bare URL in the content made a link.
+
+    A LIST is the content in pieces, and is CONSUMED (feature 323): each piece is made links in place and the page is
+    joined once, so only the pieces and the finished page are ever held. The single page (`all.html`, 42 MB as Python
+    text) was a string joined from its pieces, linkified - which splits it whole into parts - and copied into the page:
+    four to five copies at once, 312 MB at the build's peak against 236 MB this way, every file byte-identical
+    (specs/323-site-build-peak/research.md R1, R2). A piece is a whole fragment, so linking each finds what linking
+    the whole would."""
+    head, tail = frame(title, here, open_keys, lazy_glossary=lazy_glossary)
+    if isinstance(body, str):
+        return head + linkify(body) + tail
+    for i, part in enumerate(body):
+        body[i] = linkify(part)
+    return "".join([head, *body, tail])
 
 
 def half_title(half: str) -> str:

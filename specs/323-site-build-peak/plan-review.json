@@ -1,0 +1,45 @@
+{
+ "feature": "323-site-build-peak",
+ "plan_sha256": "7a9f80cb645588060e309ed528786f96826a8f03c4a105436948b06a27c0b0dd",
+ "reviewed": "2026-10-04",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "A frame(title, here, open_keys, *, lazy_glossary) function returns the text before <main>\\n and from \\n</main> on; shell with a string body is head + linkify(body) + tail.",
+   "class": "within",
+   "why": "The mechanism FR-001 needs (the page's frame without a rendered body), held to FR-002's byte identity for every shell caller; replaces the prototype's NUL split. Adds no behavior and narrows nothing."
+  },
+  {
+   "id": "D2",
+   "summary": "shell given a list linkifies each piece in place and returns one join of head, the pieces and tail; _single passes its out list with heading and table of contents at the front; the list is consumed.",
+   "class": "within",
+   "why": "This is FR-001 as written: only the pieces and the finished page are held, with no joined body, linkified copy or f-string copy. Consuming the caller's list touches only _single's local list, so FR-003 holds."
+  },
+  {
+   "id": "D3",
+   "summary": "Linkifying per piece equals linkifying the whole because each _single piece is a whole fragment, so no link, comment, script or style spans two pieces; proven by the real-record file comparison and a unit test.",
+   "class": "within",
+   "why": "Restates the spec's own Assumption, measured on the prototype (R2: 2,698 files byte-identical) and held by SC-002. It does not narrow the edge case that every URL on every page is linked, because byte identity with main is the acceptance test."
+  },
+  {
+   "id": "D4",
+   "summary": "build still returns the path-to-text dictionary; the other shell callers pass a string.",
+   "class": "within",
+   "why": "This is FR-003 and the spec's edge case that the other pages are built as before."
+  },
+  {
+   "id": "D5",
+   "summary": "frame carries a Research NONE (process plumbing) claim; shell and _single owe impl-drift only if make claims-owed says so.",
+   "class": "within",
+   "why": "Project process for a new code unit. It changes nothing the GM asked for."
+  },
+  {
+   "id": "Tests/Verification",
+   "summary": "Unit tests that list-form shell equals the joined string form and that the fixture's single page links its URLs; SC-001 and SC-002 run once over the real record and recorded in research.md rather than as a permanent gate test; make done; bookends.",
+   "class": "within",
+   "why": "The unit tests enforce FR-002 and the spec's edge case, and SC-002 names the small-record test itself. The one-shot real-record comparison is what SC-001 and SC-002 ask for and narrows neither. The bookends are constitution VI."
+  }
+ ],
+ "verdict": "CLEAR"
+}
