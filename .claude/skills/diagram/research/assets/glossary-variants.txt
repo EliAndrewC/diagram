@@ -4182,6 +4182,8 @@ weir	weir
 weirs	weir
 weitian	weitian
 well curb	curb
+well house	well-house
+well houses	well-house
 well sweep	jiegao
 well-house	well-house
 well-houses	well-house
