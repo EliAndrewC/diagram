@@ -6,5 +6,13 @@
     "unit": "primitive calls in the homesteads stage under cProfile, the clone (feature 324) - equal to the base engine's",
     "quantity": "alternated base (/tmp/base324 at 8c61b03ae) and clone, two runs each, 2026-10-05 01:0x, load 7-10: homesteads base 3,403,625 / 3,403,780 calls in 3.971 / 4.179 s, clone 3,403,625 / 3,403,625 in 3.770 / 3.821 s; web base 3,082,228 / 3,082,225 in 2.767 / 2.860 s, clone 3,082,225 / 3,082,225 in 2.479 / 2.309 s. The stages execute the same code (the base's own runs differ by warm-up calls); the snapshot times only the roll's stages, and feature 324 changes the picture's render (raster.py) and the render step (render_cache.py), neither run by a roll stage. Whole-snapshot alternation under the same load was inconclusive (15 households: base 43.0 / 22.3 s, clone 33.1 / 25.9 s).",
     "command": "make perf-profile SEED=25 STAGE=homesteads|web, alternated in /tmp/base324 and the clone"
+  },
+  "perf-control-324-roll-ab": {
+    "verifies": "the band-3 readings of 324-end against 324-start - three pairs, the last re-taken back to back (start in /tmp/base324, end in the clone) in a window the other session in the container held clear; that pair read 10/20/40 households -27% / -23% / -8% (band 0) and band 3 on seed 4 at 15 households alone (+23.7%)",
+    "subject": "the whole roll (every stage before labels, unprofiled) of the perf reference spec, seeds 25 and 47, 15 households",
+    "value": 5.6,
+    "unit": "s, the clone's mean whole-roll time over rounds 1-2 (base 5.8 s)",
+    "quantity": "alternated base (/tmp/base324 at 8c61b03ae) and clone, 2026-10-05 ~06:00, load ~6-7 in rounds 1-2: base seed 25 5.6 / 6.1 s, seed 47 5.1 / 6.4 s; clone seed 25 5.1 / 5.6 s, seed 47 5.9 / 5.8 s. Round 3 (load to 15) slowed both. The unmodified base engine itself now rolls seeds 25 and 47 in 5-6 s against 3.9 / 4.1 s in the 04:21 start bookend: the machine's state, not the code, moved between the bookends. Every quiet bookend of the night at 15 households (322-start to 324-start, the same roll code) read 16.8-17.4 s.",
+    "command": "make perf-profile SEED=25|47 STAGE=labels, alternated in /tmp/base324 and the clone ('the stages before it took Xs unprofiled')"
   }
 }

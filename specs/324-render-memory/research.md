@@ -55,3 +55,13 @@ while another session ran headless-Chromium modal checks in the container, read 
 10 and 20 households). The snapshot times only the roll's stages, which feature 324 does not touch. The control
 (`measurements.json` `perf-control-324-stage-calls`): the homesteads and web stages make the same calls on the base engine and
 the clone (3,403,625 and 3,082,225 primitive calls), the clone no slower. The end bookend is re-taken once the container is quiet.
+
+## R5 - The bookends that landed (2026-10-05)
+
+Observed 2026-10-05, method: `make perf` and `make perf-gate` back to back in a window the other session in the container held
+clear - the 324-start re-taken retroactively in /tmp/base324 at 8c61b03ae (060216Z), the 324-end right after (060545Z): band 0
+at 10/20/40 households (-27.2 / -23.0 / -8.1%), band 3 on seed 4 at 15 households alone (+23.7%, field). The load fell from 13
+to 4 across the pair; the unmodified engine itself read 48% slower at 06:02 than at 04:21. Explained with the controls
+(`perf-control-324-stage-calls`, `perf-control-324-roll-ab`); perf-audit confirmed it consistent and audited it justified,
+re-running seed 4 six times alternated (6.05 s on both); the GM signed off, 2026-10-05. The two earlier 324-end bookends,
+taken under other sessions' load, measured that load and are not committed.

@@ -17,5 +17,6 @@
 - [x] T03 the measurements: the child's and the map's peak and render span on the reference render, the render step's peak and wall time, the byte comparison (SC-001 to SC-004)
       research: rendering
       verify: DONE. child 300 -> 188/190 MB; map peak ~970 -> 571/580 MB; span 2.2 -> 3.2-3.6 s; PNG and page byte-identical; render step 1,725 -> 1,121 MB, p90 737 -> 434 MB, 91 s under load (research.md R3)
-- [ ] T04 make done; the 324-end bookend taken alone and the records its band owes; claims owed answered (FR-005, SC-005)
+- [x] T04 make done; the 324-end bookend taken alone and the records its band owes; claims owed answered (FR-005, SC-005)
       research: rendering
+      verify: DONE. make done green (278 s); 324 bookends re-taken back to back in an agreed quiet window: band 0 at 10/20/40, band 3 on seed 4 at 15; explained with controls, perf-audit consistent + justified, the GM signed off 2026-10-05; claims IN-STEP 8/8 (research.md R5)
