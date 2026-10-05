@@ -1377,7 +1377,6 @@ hari-ma	hari-ma
 hasa	hazakake
 hasagi	hazakake
 hashi	hashi
-hata	hatake
 hata-ei	hata-ei
 hatago	hatago
 hatagoya	hatago
