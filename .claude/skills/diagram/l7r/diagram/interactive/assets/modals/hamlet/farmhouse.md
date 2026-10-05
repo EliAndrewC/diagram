@@ -15,12 +15,12 @@ and many under 360; the better-off houses that survive cover 1,100 to 1,600 sq f
 
 Name: farmhouse
 Covers: `houses` - the dwelling of each household
-Sources: kotobank-minka, morse-1886-homes, miyoshi-kurashi-mingu-1998, oamishirasato-choshi-kaoku
+Sources: kotobank-minka, morse-1886-homes, miyoshi-kurashi-mingu-1998
 Entry: research/questions/0029-farmhouses-minka.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.html, research/questions/0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html, research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.html, research/questions/0244-farmhouse-walls.html, research/questions/0107-kitchens-daidokoro.html, research/questions/0117-doorways-and-doors-to.html
-Depiction: The map draws one farmhouse for each household, each turned a little from its neighbors so a row of them
+Depiction: The map draws a farmhouse for each household, or very nearly, each turned a little from its neighbors so a row of them
 reads as built rather than surveyed. Its roof is drawn in two shades, one for each slope, with a pale line along the ridge, so
 its pitch reads from above; the thatch on both slopes was alike. Each house's length and depth vary a little, so no two
-farmsteads are copies. Where a household keeps its ox or horse indoors, the map draws the stall as a shed of about 16 by 11 ft
+farmsteads are copies. Where a settlement's households keep their ox or horse indoors (the title card says whether this one does), the map draws the stall as a shed of about 16 by 11 ft
 set against the house, since a stall under the house's own roof cannot be seen from above; the beast really lived inside, in a corner of the
 earth floor.
 
