@@ -7948,7 +7948,8 @@
   "def": "Mulberry trained on a short trunk and cut back to it for its leaves, so it stands between a full tree and a root-cut bush; planted about 300 a mu in the late-Qing Yangtze delta, and 400 to 600 to ten ares in Japanese mid-cut fields.",
   "variants": [
    "mid-trunk",
-   "mid-cut"
+   "mid-cut",
+   "medium trunk"
   ]
  },
  "fan palm": {
@@ -15788,6 +15789,13 @@
   "def": "An official of the Northern Song dynasty. In a reply to the emperor setting out ten matters, he described each of Jiangnan's polders as several tens of li square, \"like a great city\".",
   "variants": [
    "Fan Zhongyan"
+  ]
+ },
+ "Nobi plain": {
+  "def": "The low river plain in central Japan, the Mino side of its rivers among it, where the waju were built: villages and their fields ringed by their own dikes.",
+  "variants": [
+   "Nobi plain",
+   "Nobi"
   ]
  }
 }

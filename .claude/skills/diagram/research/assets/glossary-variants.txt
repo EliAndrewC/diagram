@@ -2303,6 +2303,7 @@ mayasaki	mayasaki
 meander	meander
 meandering	meander
 medake	medake
+medium trunk	mid-trunk
 meibutsu	meibutsu
 meiji	Meiji
 meiji restoration	Restoration
@@ -2582,6 +2583,8 @@ niter beds	nitre bed
 nitre bed	nitre bed
 nitre beds	nitre bed
 niwa	niwa
+nobi	Nobi plain
+nobi plain	Nobi plain
 noborigama	noborigama
 nodame	nodame
 node-head	node-head
