@@ -4228,6 +4228,7 @@ wu ding	Wu Ding
 wubei zhi	Wubei Zhi
 wudu	wudu
 wujing zongyao	Wujing Zongyao
+wusong	Wusong
 xianfeng	Xianfeng
 xiang	xiang
 xiang river	Xiang River
