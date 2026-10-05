@@ -168,8 +168,8 @@ the check for its class.
 
 ### User Story 6 - The guidelines are proved one feature at a time, then rolled out (Priority: P1)
 
-The guidelines are written, the checks built, the farmhouse rewritten and iterated with the GM, then a second feature, and only
-when a rewrite is accepted with no changes are the rest rewritten.
+The guidelines are written, the checks built, the farmhouse rewritten and iterated with the GM, then a second feature (and, as it
+turned out, a third), and on the GM's go-ahead of 2026-10-05 the rest are rewritten.
 
 **Why this priority**: the GM's sequence.
 
@@ -359,3 +359,4 @@ closed the pilot phase (FR-010).
 - Amendment 2026-10-05, round 2 (spec-fidelity, 2026-10-05): ACCEPT (FAITHFUL) - all three round-1 changes confirmed against the diff (FR-004, SC-004, US4 Why and scenario 3, the per-settlement Decisions row allow FR-015's items; FR-015 makes References follow what is shown, SC-009 tests it; SC-009 names the windbreak's shared-wood guess).
 - Amendment 2026-10-05b (the GM's go-ahead): FR-016 and SC-010 added; T12 met by the go-ahead.
 - Amendment 2026-10-05b, round 1 (spec-fidelity, 2026-10-05): CHANGES REQUIRED - FR-016 and SC-010 carry the go-ahead's clauses (no change to what maps draw, contradictions to the claims report, GM-only rulings to a separate feature without a review per entry, no example sign-offs), but FR-010, US6 (Independent Test, scenarios 1-3), SC-005, FR-012, the tasks header and the edge case on a new guideline set still prescribe pilots, verdicts and a further pilot, contradicting FR-016's last sentence; FR-016's parenthetical makes a silent record enough for a GM ruling, though the guidelines settle a silence as a labeled guess; FR-016's route reaches only engine claims, not the hand-authored magistracy and shrine sheets T16 rolls out; T23's push from this clone, and the push of FR-016's newly DRIFTED claims, are refused by sync-with-main's open-task rule and claims-gate's introduced-finding rule, and the spec names no route.
+- Amendment 2026-10-05b, round 2 (spec-fidelity verify, 2026-10-05): FAITHFUL - all four round-1 changes confirmed against the diff: the pilot phase closed by the go-ahead in FR-010, FR-012, US6 (Independent Test, scenarios 2-3), SC-005, the edge case and the tasks header; FR-016 defines a ruling as a decision the guidelines leave to the GM, a silent record settled by a labeled guess, and SC-010 asks why a guess is not enough; a hand-authored sheet's contradiction goes on the governing Mode A procedure's claim in `buildings.md`/`buildings/` (within the claims scope) or one added to its section; T23 is pushed from a separate clone, and the deliberately recorded drifts pass the final push by `CLAIMS_OK` with a reason citing FR-016.
