@@ -362,7 +362,6 @@ castle-rice	castle rice
 catalpa	catalpa
 catalpas	catalpa
 catchment	catchment
-catena	catena
 catty	jin
 causeway	causeway
 causeways	causeway
@@ -1954,6 +1953,7 @@ kenchicho	kenchicho
 kengyo	kengyō
 kengyō	kengyō
 kenmonshu	Kenmonshu
+kenrei shuchi	Kenrei Shuchi
 kera	kera
 kesa	kesa
 kesa cut	kesa
@@ -2810,8 +2810,6 @@ pivot-hung	pivot-hung
 placer	placer
 plankton	plankton
 plant association	plant association
-planted collar	planted collar
-planted collars	planted collar
 pleasure quarter	pleasure quarter
 pleasure quarters	pleasure quarter
 pledged land	pledged land

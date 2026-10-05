@@ -77,9 +77,10 @@ def test_record_style_is_owed_by_its_sweep_not_by_the_delta(owing) -> None:  # n
     assert bo.owed_for_question(REPO, "0094", "record-style", "") == ([], "record-style", "")
 
 
-def test_quote_check_is_cut_to_the_owed_notes_unless_the_unfootnoted_reading_is_owed() -> None:
+def test_quote_check_is_cut_to_the_owed_notes_and_whole_only_when_the_unfootnoted_reading_is_all_that_is_owed() -> None:
     assert bo.owed_notes([U("quote-check:0094#a", ""), U("quote-check:0094.drawing#b", ""), U("record-format:0094", "")]) == {"a", "b"}
-    assert bo.owed_notes([U("quote-check:0094#a", ""), U("quote-check:0094#unfootnoted", "")]) == frozenset()
+    assert bo.owed_notes([U("quote-check:0094#a", ""), U("quote-check:0094#unfootnoted", "")]) == {"a"}, "the unmarked blocks ride in as `bare`"
+    assert bo.owed_notes([U("quote-check:0094#unfootnoted", "")]) == frozenset()
 
 
 def test_a_key_bundle_is_owed_by_its_write_up_or_a_note_citing_it_or_a_declared_new_claim(owing, monkeypatch) -> None:  # noqa: ANN001

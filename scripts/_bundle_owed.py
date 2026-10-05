@@ -132,10 +132,11 @@ def unfootnoted_owed(units: list[ru.Unit]) -> bool:
 
 
 def owed_notes(units: list[ru.Unit]) -> frozenset[str]:
-    """The notes a `FOR=quote-check` bundle with no NOTES= is cut to - none (the whole question) when its unfootnoted
-    reading is owed, which needs every block of the page."""
-    keys = [u.subject.partition("#")[2] for u in units if u.check == "quote-check"]
-    return frozenset() if "unfootnoted" in keys else frozenset(keys)
+    """The notes a `FOR=quote-check` bundle with no NOTES= is cut to - none (the whole question) only when the unfootnoted
+    reading is ALL that is owed. Beside owed notes it is the excerpt's `bare` blocks (feature 314), not the whole question:
+    319 H2 found one changed note and one unmarked block of 0059 batched as the whole question's 140 notes, five agents."""
+    keys = {u.subject.partition("#")[2] for u in units if u.check == "quote-check"}
+    return frozenset(keys - {"unfootnoted"})
 
 
 # --- the intro-check bundle (plan D4) --------------------------------------------------------------------------------------

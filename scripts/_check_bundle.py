@@ -527,7 +527,7 @@ def main(argv: list[str] | None = None) -> int:
                               bo.manifest_lines(bo.batch_units(units, frozenset(b)), checks, args.not_owed_ok), bare)
                  for i, b in enumerate(batches, start=1)]
         return max(codes)
-    return entry_bundle(root, q, out, args.extra, not args.no_quotes, args.kind, wanted, args.for_, owed)
+    return entry_bundle(root, q, out, args.extra, not args.no_quotes, args.kind, wanted, args.for_, owed, bare)
 
 
 def fragments_for_q(root: pathlib.Path, q: str) -> list[str]:
