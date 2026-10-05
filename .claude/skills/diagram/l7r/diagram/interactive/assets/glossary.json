@@ -15829,5 +15829,67 @@
    "Wanchun polder",
    "Wanchun"
   ]
+ },
+ "Tsingtao": {
+  "def": "The older English spelling of Qingdao, a port city on the coast of Shandong in north China.",
+  "variants": [
+   "Tsingtao"
+  ]
+ },
+ "Soochow": {
+  "def": "The older English spelling of Suzhou, the city of the Lower Yangzi.",
+  "variants": [
+   "Soochow"
+  ]
+ },
+ "yumiao": {
+  "def": "Chinese for fish fry: the young fish raised in nursery ponds and sold to stock the fish ponds. Raising fry was a trade of its own, and most villages bought theirs.",
+  "variants": [
+   "yumiao"
+  ]
+ },
+ "OCR": {
+  "def": "Optical character recognition: the machine reading of a scanned page into text, which often garbles letters. In a note, the word after \"OCR:\" is what the garbled text says.",
+  "variants": [
+   "OCR"
+  ]
+ },
+ "running head": {
+  "def": "The line printed across the top of a book's page, giving the chapter or book title and the page number. A note quotes it where a passage runs across a page break.",
+  "variants": [
+   "running head",
+   "running heads"
+  ]
+ },
+ "bakushu": {
+  "def": "\"Barley autumn\": early summer, when the ripening barley turns its field pale brown, like a rice field in autumn.",
+  "variants": [
+   "bakushu"
+  ]
+ },
+ "alley cropping": {
+  "def": "Growing field crops in the strips between rows of trees or hedges, which hold the soil on sloping land.",
+  "variants": [
+   "alley cropping"
+  ]
+ },
+ "Zhengzhou": {
+  "def": "A city on the north China plain, in Henan province near the Yellow River, where a salvage excavation found a square chicken coop of the late Ming dynasty.",
+  "variants": [
+   "Zhengzhou"
+  ]
+ },
+ "Nanking": {
+  "def": "The older English spelling of Nanjing, a city on the lower Yangzi; the University of Nanking was where John Lossing Buck ran his survey of Chinese farms in the 1920s and 1930s.",
+  "variants": [
+   "Nanking",
+   "Nanjing"
+  ]
+ },
+ "Later Wei": {
+  "def": "Another name for the Northern Wei dynasty, used in the title line of the Qimin Yaoshu, the farming manual written under it.",
+  "variants": [
+   "Later Wei"
+  ]
  }
 }

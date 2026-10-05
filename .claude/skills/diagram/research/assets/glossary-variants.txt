@@ -44,6 +44,7 @@ akiba	Akiba
 akusui	akusui
 akusuiro	akusui
 alexandrian laurel	Alexandrian laurel
+alley cropping	alley cropping
 alluvial	alluvial
 alluvial fan	alluvial fan
 alluvial fans	alluvial fan
@@ -136,6 +137,7 @@ baileys	bailey
 bakufu	bakufu
 bakuhan	bakuhan
 bakumatsu	bakumatsu
+bakushu	bakushu
 bald hill	bald hill
 bald hills	bald hill
 bamboo grass	sasa
@@ -2140,6 +2142,7 @@ land-sharing system	warichi
 landrace	landrace
 landraces	landrace
 later hojo	Later Hojo
+later wei	Later Wei
 lateral	lateral
 laterals	lateral
 lath	lath
@@ -2516,6 +2519,8 @@ nanbokucho	Northern and Southern Courts
 nanbu	Tohoku
 nando	nando
 nando-gamae	nando-gamae
+nanjing	Nanking
+nanking	Nanking
 nanmu	nanmu
 nanohana	rape
 nanushi	shoya
@@ -2635,6 +2640,7 @@ oblique weir	oblique weir
 oblique weirs	oblique weir
 obon	Bon
 ochiba	ochiba
+ocr	OCR
 odo	ōdo
 odoi	Odoi
 odoko	odoko
@@ -3095,6 +3101,8 @@ rowhouse gates	nagayamon
 roya	roya
 ruiju sandai kyaku	Ruiju Sandai Kyaku
 runners	yayi
+running head	running head
+running heads	running head
 rural town	zaigomachi
 rural towns	zaigomachi
 ryo	ryo
@@ -3465,6 +3473,7 @@ song dynasty	Song dynasty
 song yingxing	Song Yingxing
 song-dynasty	Song dynasty
 sonsha	sonsha
+soochow	Soochow
 soroban	soroban
 sortie	sortie
 sorties	sortie
@@ -3918,6 +3927,7 @@ true duty	water duty
 trunk streets	trunk street
 tsinan	Tsinan
 tsinan's	Tsinan
+tsingtao	Tsingtao
 tsubo	tsubo
 tsubo-niwa	tsubo-niwa
 tsuchinoe-ne	sexagenary year
@@ -4312,6 +4322,7 @@ yui	yui
 yukaku	yukaku
 yukimi	yukimi
 yulin wei	yulin wei
+yumiao	yumiao
 yuzui	fish mouth
 yw	yu
 yōrō code	Yōrō code
@@ -4334,6 +4345,7 @@ zhengde	Zhengde
 zhengguo canal	Zhengguo canal
 zhengtong	Zhengtong
 zhengyi	Zhengyi
+zhengzhou	Zhengzhou
 zhili	Zhili
 zhizhai shulu jieti	Zhizhai Shulu jieti
 zhonggulou	gulou
