@@ -79,8 +79,8 @@ The note at `TILE_MPX` claims the stitched picture is the single render pixel fo
   its margin included), and nothing else.
 - **FR-002** (Amendment 1): The tile grid MUST stay as it is (`TILE_MPX` unchanged, 3 x 3 on the reference render).
 - **FR-003** (Amendment 2): Every picture MUST be visually identical to before - checked on every live pool map, clipped tiles against
-  unclipped: identical, or differing only by the renderer's anti-aliasing on a trimmed path (a few dozen channel values, a few levels),
-  the counts recorded.
+  unclipped: identical, or differing only by the renderer's anti-aliasing on a trimmed path, the counts recorded (observed
+  2026-10-05, method: research.md R4 - at most 34 channel values on a map, at most 10 levels, as the GM accepted).
 - **FR-005** (Amendment 1): The note at `TILE_MPX` MUST state what tiling does to the pixels as measured (research.md R3), not that
   the stitched picture is the single render pixel for pixel.
 - **FR-004**: No map's content moves; no test may fail that passed before.
@@ -128,3 +128,5 @@ None: no map draws or states anything differently; the picture is visually ident
 - Amendment 1, round 3 (verify, 2026-10-05): FAITHFUL - round 2's item resolved; the amendment accepted.
 - Amendment 2 (2026-10-05): the pool check found trimming not byte-identical on 2 maps (anti-aliasing, R4); the GM chose it as visually
   identical over whole-line clipping. FR-003 and SC-003 rewritten. The amendment resets the review count.
+- Amendment 2, round 1 (2026-10-05): CHANGES REQUIRED - tasks.md T03 still said byte identity; FR-003's tolerance understated the
+  accepted result. Both corrected (T03 visual identity; FR-003 as R4 measured).
