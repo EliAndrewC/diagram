@@ -2037,6 +2037,9 @@ koraimon	koraimon
 kori	kori
 kosatsu	kosatsuba
 kosatsuba	kosatsuba
+koshiate	koshiate-mori
+koshiate forest	koshiate-mori
+koshiate-mori	koshiate-mori
 koshin	Kōshin
 koshin tower	koshin tower
 koshin towers	koshin tower
@@ -2076,6 +2079,7 @@ kuruwa	kuruwa
 kusa-no-ma	kusa-no-ma
 kusaba	kusaba
 kusakariba	magusaba
+kusatimui	koshiate-mori
 kusatsu	Kusatsu
 kusayama	kusayama
 kuwabata	Kuwabata
