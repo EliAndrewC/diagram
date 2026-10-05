@@ -2424,6 +2424,7 @@ monospecific	monospecific
 montane	montane
 monto	monto
 monzen	monzen
+mori ogai	Mori Ogai
 morijio	morijio
 morisada manko	Morisada manko
 morisada mankō	Morisada manko
@@ -2638,6 +2639,8 @@ offtake	offtake
 offtakes	offtake
 ofumi	Ofumi
 ofuregaki	ofuregaki
+ogai	Mori Ogai
+ogai's	Mori Ogai
 ogashoya	ogashoya
 ohaguro dobu	ohaguro-dobu
 ohaguro-dobu	ohaguro-dobu
@@ -3308,6 +3311,8 @@ shibai-goya	shibai-goya
 shiboku sanso	four trees
 shichido garan	garan
 shichidō garan	garan
+shichiri	Shichiri ferry
+shichiri ferry	Shichiri ferry
 shichiya	shichiya
 shide	shide
 shifting cultivation	shifting cultivation
