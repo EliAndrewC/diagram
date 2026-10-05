@@ -1,0 +1,45 @@
+{
+ "feature": "324-render-memory",
+ "plan_sha256": "c2b3ad33649da064acf1a88b0c395250cf9e90ffdb5b8131739b87b4fe74fd22",
+ "reviewed": "2026-10-05",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "the picture child opens tiles lazily, sizes the canvas from their headers, then pops, converts, pastes and closes each tile in turn; the pickled bytes dropped once opened",
+   "class": "within",
+   "why": "fix 1 of the GM's table verbatim ('decode, paste, free'); same pixels at the same offsets in the same order, so FR-004's byte identity holds by construction"
+  },
+  {
+   "id": "D2",
+   "summary": "TILE_WORKERS = 3 beside TILE_MPX with its measurement; max_workers=min(len(boxes), TILE_WORKERS)",
+   "class": "within",
+   "why": "fix 2 ('cap simultaneous tile renders at 3'); the min leaves a picture of three tiles or fewer as now (spec edge case); only scheduling changes, so output is unchanged"
+  },
+  {
+   "id": "D3",
+   "summary": "RENDER_JOBS = 4 in render_cache; max_workers=jobs or min(RENDER_JOBS, os.cpu_count() or 4); --jobs and jobs= keep their meaning",
+   "class": "within",
+   "why": "fix 3 ('cap the post-landing render step at 4 parallel maps'); a cap of 4 is an upper bound, and the min with the core count keeps the existing never-more-than-cores behavior the spec's FR-003 and edge case already settle; --jobs untouched is no narrowing"
+  },
+  {
+   "id": "D4",
+   "summary": "TILE_WORKERS and RENDER_JOBS carry a 'NONE: process plumbing' Research claim if claims-coverage asks; impl-drift only where claims-owed says",
+   "class": "within",
+   "why": "the project's standing claims machinery applied to two new constants; adds no behavior and narrows nothing"
+  },
+  {
+   "id": "Tests",
+   "summary": "a picture above the tile cap equals its single render; tile renders alive at once never exceed TILE_WORKERS; regen_pool with no jobs observes max_workers <= RENDER_JOBS; SC-001..SC-004 measured once",
+   "class": "within",
+   "why": "each test only fails when a requested fix (or FR-004's byte identity) is absent - enforcement of the request, not scope"
+  },
+  {
+   "id": "Bookends",
+   "summary": "324-start on unmodified code, 324-end alone at the last commit, perf-report against the start",
+   "class": "within",
+   "why": "constitution VI process; measures, decides nothing about what is built"
+  }
+ ],
+ "verdict": "CLEAR"
+}

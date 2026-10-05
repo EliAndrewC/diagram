@@ -77,6 +77,12 @@ PICTURE_MIME = "image/jpeg"
 #: `n` is the smallest count putting each tile under TILE_MPX megapixels - every resvg process parses the whole
 #: document (~0.3 s), so tiles cost parse time in proportion; 8 puts a hamlet at 2 x 2 and a city at 3 x 3.
 TILE_MPX = 8.0
+#: AT MOST THREE TILES RENDER AT ONCE (feature 324, GM 2026-10-05: "yes please do all 3 as a single feature"). Every tile's
+#: resvg parses the whole document, so a tile costs ~100 MB whatever its size, and starting all of a hamlet's tiles at once
+#: put ten of them in memory together - a 20-household render peaked at ~970 MB. Measured (specs/324-render-memory/
+#: research.md R2): 3 at once ~540 MB, the render 2.2 -> 3.2 s; 4 at once ~635 MB for the same time; 2 at once ~450 MB
+#: but 4.3 s. Only the scheduling changes - each tile is the same render - so the picture is byte-identical.
+TILE_WORKERS = 3
 _VIEWBOX_ATTR = re.compile(r'viewBox="[^"]*"')
 #: How far past the viewBox an element may lie and still be kept - wider than any stroke width or blob
 #: radius the writer emits, so a mark reaching in by a pixel is never lost (spec D6).
@@ -269,7 +275,7 @@ def picture(svg_text: str, r: float = RASTER_R, tiles: int | None = None) -> byt
         png = resvg_png(svg_text, "--zoom", f"{r:g}", *RESVG_FONT_ARGS)
         return None if png is None else encode_picture([(0, 0, png)])
     boxes = tile_boxes(vb, n)
-    with ThreadPoolExecutor(max_workers=len(boxes)) as pool:
+    with ThreadPoolExecutor(max_workers=min(len(boxes), TILE_WORKERS)) as pool:
         jobs = [
             (i, j, pool.submit(resvg_png, _VIEWBOX_ATTR.sub(f'viewBox="{tx:g} {ty:g} {tw:g} {th:g}"', svg_text, count=1), "--zoom", f"{r:g}", *RESVG_FONT_ARGS)) for i, j, (tx, ty, tw, th) in boxes
         ]
@@ -288,11 +294,15 @@ def picture(svg_text: str, r: float = RASTER_R, tiles: int | None = None) -> byt
 # so the make-only guard has nothing to say and coverage nothing to measure (the snippet is data here).
 # The picture is opaque (its alpha channel is 255 everywhere - the sheet is drawn), so the RGB conversion JPEG
 # needs loses nothing. (Feature 203's lossless method 0 over method 4 - 2.2 s vs 9.6 s - is history since 222.)
+# ONE TILE DECODED AT A TIME (feature 324): the child opens every tile lazily (a PNG's size is in its header), then pops,
+# converts, pastes and closes each in turn - holding every decoded tile to the end took it to 300 MB on a 20-household
+# hamlet, one at a time ~185 MB, the same canvas and so the same JPEG (specs/324-render-memory/research.md R2).
 _PICTURE_CHILD = (
     "import io, pickle, sys\n"
     "from PIL import Image\n"
     "tiles = pickle.load(sys.stdin.buffer)\n"
     "ims = {(c, r): Image.open(io.BytesIO(b)) for c, r, b in tiles}\n"
+    "del tiles\n"
     "cols, rows = sorted({c for c, _r in ims}), sorted({r for _c, r in ims})\n"
     "ws, hs = [ims[(c, rows[0])].width for c in cols], [ims[(cols[0], r)].height for r in rows]\n"
     "out = Image.new('RGB', (sum(ws), sum(hs)))\n"
@@ -300,7 +310,11 @@ _PICTURE_CHILD = (
     "for r, h in zip(rows, hs):\n"
     "    x = 0\n"
     "    for c, w in zip(cols, ws):\n"
-    "        out.paste(ims[(c, r)].convert('RGB'), (x, y))\n"
+    "        im = ims.pop((c, r))\n"
+    "        rgb = im.convert('RGB')\n"
+    "        im.close()\n"
+    "        out.paste(rgb, (x, y))\n"
+    "        del im, rgb\n"
     "        x += w\n"
     "    y += h\n"
     "buf = io.BytesIO()\n"

@@ -1,0 +1,36 @@
+perf-profile seed 25 stage web: 2.5s under cProfile (the stages before it took 3.6s unprofiled; cProfile itself is ~+225%, research R2)
+raw: dev/perf-raw/20261005T050308Z-seed25-web.prof (gitignored; archive: configured (https://github.com/EliAndrewC/mapgen-perflogs))
+
+         3108956 function calls (3082225 primitive calls) in 2.479 seconds
+
+   Ordered by: cumulative time
+   List reduced from 763 to 25 due to restriction <25>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.002    0.002    2.504    2.504 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py:399(stage_web)
+        1    0.000    0.000    1.181    1.181 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py:942(settle_the_web)
+ 2964/390    0.005    0.000    0.886    0.002 {built-in method builtins.sum}
+       34    0.001    0.000    0.878    0.026 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py:956(<genexpr>)
+        5    0.001    0.000    0.791    0.158 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/ways/route.py:160(_route)
+        5    0.236    0.047    0.604    0.121 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/ways/route.py:81(lattice_search)
+        1    0.003    0.003    0.596    0.596 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py:59(_lay_skeleton)
+        2    0.000    0.000    0.552    0.276 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py:895(settle_reach)
+2898/2887    0.001    0.000    0.348    0.000 {built-in method builtins.next}
+        1    0.000    0.000    0.331    0.331 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/ways/reach.py:60(settle_field)
+        2    0.000    0.000    0.324    0.162 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/ways/reach.py:94(<genexpr>)
+        1    0.001    0.001    0.283    0.283 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/ways/keeper.py:58(unsettled)
+    18069    0.060    0.000    0.265    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/decorators.py:73(wrapped)
+       23    0.000    0.000    0.265    0.012 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/clearance.py:102(fabric_index)
+       12    0.072    0.006    0.239    0.020 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/clearance.py:122(__init__)
+       12    0.000    0.000    0.229    0.019 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/ways/reach.py:85(candidates)
+        1    0.005    0.005    0.229    0.229 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/ways/corridors.py:245(field_runs)
+6475/5849    0.012    0.000    0.207    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/decorators.py:171(wrapper)
+        1    0.000    0.000    0.203    0.203 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py:248(a_way_onto_the_bund)
+        3    0.000    0.000    0.201    0.067 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py:396(settle_tree)
+   762892    0.199    0.000    0.199    0.000 {method 'get' of 'dict' objects}
+157263/133763    0.080    0.000    0.198    0.000 {built-in method builtins.min}
+       19    0.000    0.000    0.197    0.010 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/ways/geom.py:431(memo_ground)
+        2    0.000    0.000    0.197    0.098 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py:239(paddy_ground)
+        1    0.004    0.004    0.197    0.197 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py:233(_build_paddy_ground)
+
+

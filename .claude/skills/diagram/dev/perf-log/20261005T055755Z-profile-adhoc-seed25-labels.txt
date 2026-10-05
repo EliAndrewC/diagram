@@ -1,0 +1,36 @@
+perf-profile seed 25 stage labels: 0.0s under cProfile (the stages before it took 5.1s unprofiled; cProfile itself is ~+225%, research R2)
+raw: dev/perf-raw/20261005T055755Z-seed25-labels.prof (gitignored; archive: configured (https://github.com/EliAndrewC/mapgen-perflogs))
+
+         66825 function calls in 0.031 seconds
+
+   Ordered by: cumulative time
+   List reduced from 59 to 25 due to restriction <25>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    0.034    0.034 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/frame.py:261(stage_labels)
+        1    0.000    0.000    0.034    0.034 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/structures/captions.py:187(place_labels)
+        1    0.000    0.000    0.034    0.034 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/boards.py:132(_draw_board_caption)
+        1    0.000    0.000    0.033    0.033 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/structures/captions.py:271(_draw_placement)
+        1    0.002    0.002    0.033    0.033 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/structures/captions.py:300(label_obstacles)
+        1    0.000    0.000    0.025    0.025 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/labels/obstacles.py:82(__init__)
+     1454    0.004    0.000    0.018    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/labels/obstacles.py:95(add)
+       29    0.004    0.000    0.007    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/labels/obstacles.py:104(add_way)
+     1454    0.003    0.000    0.007    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/labels/obstacles.py:288(level_rect)
+     1896    0.003    0.000    0.005    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/labels/obstacles.py:74(_cells)
+     6934    0.003    0.000    0.004    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/labels/obstacles.py:290(<genexpr>)
+     1326    0.001    0.000    0.003    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/labels/obstacles.py:283(circle_obstacle)
+     1454    0.002    0.000    0.003    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/labels/geom.py:21(bbox)
+    12999    0.002    0.000    0.002    0.000 {method 'append' of 'list' objects}
+     9590    0.001    0.000    0.001    0.000 {built-in method math.floor}
+     8285    0.001    0.000    0.001    0.000 {built-in method builtins.abs}
+     4676    0.001    0.000    0.001    0.000 {built-in method builtins.min}
+     4681    0.001    0.000    0.001    0.000 {built-in method builtins.max}
+     5226    0.001    0.000    0.001    0.000 {built-in method builtins.isinstance}
+     3423    0.000    0.000    0.000    0.000 {built-in method builtins.len}
+        1    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/structures/captions.py:90(tree_crown_discs)
+      565    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/structures/captions.py:315(<genexpr>)
+      127    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/labels/geom.py:15(rect)
+     1205    0.000    0.000    0.000    0.000 {method 'get' of 'dict' objects}
+      389    0.000    0.000    0.000    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/structures/captions.py:317(<genexpr>)
+
+
