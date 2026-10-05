@@ -130,3 +130,4 @@ None: no map draws or states anything differently; the picture is visually ident
   identical over whole-line clipping. FR-003 and SC-003 rewritten. The amendment resets the review count.
 - Amendment 2, round 1 (2026-10-05): CHANGES REQUIRED - tasks.md T03 still said byte identity; FR-003's tolerance understated the
   accepted result. Both corrected (T03 visual identity; FR-003 as R4 measured).
+- Amendment 2, round 2 (verify, 2026-10-05): FAITHFUL - both items fixed; the amendment accepted.
