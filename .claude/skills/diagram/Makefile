@@ -418,6 +418,12 @@ map:            ## [maps] regenerate ONE gen and gate it   GEN=pool/hamlets/inas
 	  $(patsubst @%,%,$(RUN)).pipeline.regen --no-cache "$$g"; \
 	  : "GUARD_EDIT_OK: RUN carries make s leading at-sign, which inside a shell line is a command name, so it is stripped here"; \
 	fi
+	@: "GUARD_EDIT_OK: feature 319 - a CACHED map kept a STALE PAGE after a modal-text edit: the roll cache keys on engine code (a prose edit must not cost the gate), so nothing re-wrote the page. When a file under interactive/assets is newer than the page, the map is rolled uncached so the page carries the edit"
+	@g="$(or $(GEN),pool/hamlets/inashiro/inashiro.gen.py)"; s="$${g%.gen.py}"; \
+	if [ -f "$$s.html" ] && [ -n "$$(find l7r/diagram/interactive/assets -type f -newer "$$s.html" -print -quit)" ]; then \
+	  echo "map: a modal or page asset changed since the page was written - rolling it uncached to write the page again"; \
+	  $(patsubst @%,%,$(RUN)).pipeline.regen --no-cache "$$g"; \
+	fi
 	@$(MAKE) --no-print-directory pool-index-if-stale
 
 # GUARD_EDIT_OK: a NEW OPERATION, nothing loosened - `cohort_audit` has taken `--seed` (the FIRST seed)
