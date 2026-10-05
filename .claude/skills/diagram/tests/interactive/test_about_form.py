@@ -147,3 +147,29 @@ def test_a_drawing_page_under_entry_is_refused_with_the_tag_it_belongs_under() -
             Probe.feature()
     finally:
         Kind.registry.remove(Probe)
+
+
+@pytest.mark.parametrize(
+    "said",
+    ["Except on the older hand-drawn maps, it is kept", "the hand-drawn maps keep the higher share", "On the legacy maps it is not",
+     "the frozen pool draws it", "an earlier hamlet map", "the hand-authored maps"],
+)
+def test_a_modal_naming_the_older_maps_is_refused_with_the_fix(said: str) -> None:
+    """GM 2026-10-04: the older hand-drawn maps will all be scripted before anyone else reads a modal, so no modal mentions
+    them - a mechanical check, not an agent's (M21). Each tab is read; the message says what to write instead."""
+    for tab in ("About: a.\n\n{}.\n\n", "About: a.\n\nGuesses:\n- {}.\n\n", "About: a.\n\nDepiction: {}.\n\n"):
+        Probe = _probe(tab.format(said) + _DATA)
+        try:
+            with pytest.raises(ValueError, match="names the older maps .* say what the scripted maps do"):
+                Probe.feature()
+        finally:
+            Kind.registry.remove(Probe)
+
+
+def test_a_sheets_hand_drawn_plans_and_an_old_house_are_not_the_older_maps() -> None:
+    """Building plans stay, and "old" alone is history, not the pool: neither is refused."""
+    Probe = _probe("About: The hand-drawn plans give it a room; an older house had one; an old map of the county shows it.\n\n" + _DATA)
+    try:
+        assert Probe.feature().about
+    finally:
+        Kind.registry.remove(Probe)

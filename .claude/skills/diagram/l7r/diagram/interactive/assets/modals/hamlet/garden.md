@@ -23,7 +23,7 @@ Guesses:
 
 Depiction: The map draws a household's garden as one or two beds of tilled earth with three rows of greens, so a bed reads as
 worked ground at a glance, and bends each bed a little out of square so it reads as hand-worked; how a real bed's rows and
-outline ran is not recorded. The beds are drawn to scale. Except on the older hand-drawn maps, they are kept in the
+outline ran is not recorded. The beds are drawn to scale, and kept in the
 sun, clear of the shade a house, a tree or bamboo casts in late autumn.
 
 Name: garden

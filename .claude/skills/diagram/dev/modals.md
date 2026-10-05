@@ -129,8 +129,7 @@ do NOT present the single form as deliberate: leave it unsaid here, and the drif
 2026-10-04, of the farmhouse's single roof: *"NOT a deliberate convention ... as long as it ends up on that list for later"*)
 
 **D4. What varies by settlement.** One clause at most, pointing to the title card, where a settlement's choices are told (M9).
-(inferred) A rule the older hand-drawn maps were not held to is said with that exception ("except on the older hand-drawn maps"),
-since the modal is the same on every map. (inferred, the garden pilot's modal-depiction check, 2026-10-04)
+(inferred) A rule the older hand-drawn maps were not held to is told as the scripted maps keep it, with no exception (M21).
 
 **D5. The drawing pages, linked.** The tab ends with the "how our maps draw it" pages the modal and its kind rest on - every
 one of them, and no other - as links (the `Drawing:` list). A kind's drawing page is usually the one beside a research question
@@ -163,3 +162,9 @@ household, its family, its inhabitants. (project house style)
 
 **M20. Not to be confused with.** The sibling line closes the About tab, as it does today; it is generated, not written in the
 docstring. (inferred, feature 134's sibling links)
+
+**M21. The older maps are never mentioned.** No tab names the older hand-drawn maps - "older", "earlier", "legacy",
+"frozen" or "hand-drawn" maps, or the frozen pool - nor makes an exception for them: say what the scripted maps do. A sheet's
+hand-drawn building plans are not these maps. Refused when the modal is read (`_base.py` `OLDER_MAPS`), so no agent judges
+it. (GM 2026-10-04: *"by the time any one other than me looks at these, then those older hand-drawn maps will no longer exist.
+They will have all been replaced by scripted maps. Therefore, one of our rules should be that this does not get mentioned"*)

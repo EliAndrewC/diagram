@@ -313,6 +313,15 @@ class Kind:
         )
 
 
+#: THE OLDER MAPS ARE NEVER MENTIONED (the GM, 2026-10-04, of the garden's "Except on the older hand-drawn maps": *"by the time
+#: any one other than me looks at these, then those older hand-drawn maps will no longer exist. They will have all been replaced
+#: by scripted maps ... that can probably be a mechanical check"*). The ways a write-up has named them: older, earlier, legacy,
+#: frozen or hand-drawn/-authored MAPS, and the frozen or legacy POOL. A sheet's "hand-drawn plans" are building plans, which
+#: stay, so the pattern wants "map" or "pool"; `dev/modals.md` M21.
+OLDER_MAPS = re.compile(r"\b(?:older|earlier|legacy|frozen|hand[- ](?:drawn|authored|made))\b(?:[ -]\w+){0,2}[ -](?:maps?|pool)\b", re.I)
+"""Research: older maps unmentioned - NONE"""
+
+
 def _about_feature(name: str, key: str, parts: dict[str, str]) -> FeatureClass:
     """A class in the About form (feature 319): its paragraphs, its guesses, no feature-level label (`dev/modals.md` M11).
     The old prose tags and `Label:` are refused rather than ignored, so a half-converted class fails at import.
@@ -330,6 +339,10 @@ def _about_feature(name: str, key: str, parts: dict[str, str]) -> FeatureClass:
         raise ValueError(f"{name}: Form: {form!r} is not one of {sorted(FORMS)}")
     if ".drawing.html" in parts["Entry"]:
         raise ValueError(f"{name}: a 'how our maps draw it' page belongs under Drawing:, not Entry: (the Depiction tab - dev/modals.md D-rules)")
+    for tag in ("About", "Guesses", "Depiction"):
+        hit = OLDER_MAPS.search(parts.get(tag, ""))
+        if hit:
+            raise ValueError(f"{name}: {tag}: names the older maps ({hit.group(0)!r}) - they will all be scripted before anyone else reads this; say what the scripted maps do and drop the exception (dev/modals.md M21)")
     raw_guesses = parts.get("Guesses", "")
     if raw_guesses and not all(line.startswith("- ") for line in raw_guesses.splitlines()):
         raise ValueError(f"{name}: each guess is a bullet - start every line under Guesses: with '- '")
