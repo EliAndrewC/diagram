@@ -661,6 +661,7 @@ daqing gate	Daqing gate
 daqingmen	Daqing gate
 dashigeta	dashigeta
 datang	great hall
+daub	wattle and daub
 daxiangguo	Daxiangguo
 dazaifu	Dazaifu
 db	dBA
@@ -916,6 +917,7 @@ fan head	alluvial fan
 fan palm	fan palm
 fan palms	fan palm
 fan plain	alluvial fan
+fan zhongyan	Fan Zhongyan
 fan's foot	fan foot
 fan's head	alluvial fan
 fan-foot	fan foot
@@ -1303,6 +1305,7 @@ gun bugyo	gun-bugyo
 gun-bugyo	gun-bugyo
 gun-dai	gundai
 gundai	gundai
+guoji	guoji
 gyosho	Gyosho
 gyosho edition	Gyosho
 gyozui	gyozui
@@ -1736,6 +1739,7 @@ jiangren	Jiangren
 jiaochang	jiaochang
 jiaqing	Jiaqing
 jiaxing	Huzhou-Jiaxing
+jiayou	Jiayou
 jiegao	jiegao
 jiguchi-sen	jiguchi-sen
 jikata hanreiroku	Jikata hanreiroku
@@ -1833,6 +1837,7 @@ kaie-ji	Kaie-ji
 kaie-ji's	Kaie-ji
 kaifeng	Kaifeng
 kaigisho	kaigisho
+kaihsienkung	Kaixiangong
 kaine	kainyo
 kainyo	kainyo
 kainyu	kainyo
@@ -1840,6 +1845,7 @@ kaisho	kaisho
 kaishochi	kaishochi
 kaison	kaison
 kaiu wall	Kaiu Wall
+kaixiangong	Kaixiangong
 kaji-ya	kaji-ya
 kajimachi	kajimachi
 kajiya	kaji-ya
@@ -2578,6 +2584,8 @@ nitre beds	nitre bed
 niwa	niwa
 noborigama	noborigama
 nodame	nodame
+node-head	node-head
+node-heads	node-head
 nogu benriron	Nogu benriron
 nogyo zensho	Nogyo Zensho
 noh	noh
@@ -2873,6 +2881,8 @@ public monasteries	public monastery
 public monastery	public monastery
 puddled	puddling
 puddling	puddling
+pupa	pupae
+pupae	pupae
 purlin	purlin
 purlins	purlin
 purple robe	purple robe
@@ -2983,6 +2993,8 @@ rent-collection bursary	rent bursary
 republican	Republican era
 republican era	Republican era
 republican-era	Republican era
+rescript	rescript
+rescripts	rescript
 ressen	ressen
 resson	ressen
 rest stop	tateba
@@ -3136,6 +3148,7 @@ sand-field	shatian
 sando	sando
 sandō	sando
 sangai banrei	three-worlds-myriad-spirits
+sangji	sangji
 sangji yutang	dike-pond
 sanheyuan	sanheyuan
 sanjūbanshin	thirty guardian deities
@@ -3873,6 +3886,8 @@ training retreat	training retreat
 training retreats	training retreat
 transect	transect
 transects	transect
+transport commissioner	transport commissioner
+transport commissioners	transport commissioner
 tread	tread
 treadle pestle	treadle pestle
 treadle pestles	treadle pestle
@@ -4120,6 +4135,8 @@ water-watch station	mizubansho
 water-watch stations	mizubansho
 watershed divide	watershed divide
 watershed divides	watershed divide
+wattle	wattle and daub
+wattle and daub	wattle and daub
 wayside hall	tsujido
 wayside halls	tsujido
 wazi	wazi

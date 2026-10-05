@@ -15722,5 +15722,72 @@
    "Tango-no-kami"
   ],
   "cased": true
+ },
+ "rescript": {
+  "def": "A written reply or order from the emperor, answering a question or petition put to him.",
+  "variants": [
+   "rescript",
+   "rescripts"
+  ]
+ },
+ "Jiayou": {
+  "def": "A Song-dynasty reign era that began in 1056; \"Jiayou 6\" is its sixth year, 1061.",
+  "variants": [
+   "Jiayou"
+  ]
+ },
+ "transport commissioner": {
+  "def": "A Song-dynasty official over a circuit, a province-sized region, who saw its tax grain shipped to the capital and oversaw its finances.",
+  "variants": [
+   "transport commissioner",
+   "transport commissioners"
+  ]
+ },
+ "Kaixiangong": {
+  "def": "The Jiangnan village the anthropologist Fei Xiaotong studied; Kaihsienkung is the older spelling his book uses.",
+  "variants": [
+   "Kaixiangong",
+   "Kaihsienkung"
+  ]
+ },
+ "node-head": {
+  "def": "The jointed end of a lotus root, where its shoots grow; dug up at the start of spring and planted in the mud of a pond, it starts a new lotus plant.",
+  "variants": [
+   "node-head",
+   "node-heads"
+  ]
+ },
+ "wattle and daub": {
+  "def": "A way of building a wall: a lattice of woven rods, such as willow withies, is plastered over with wet clay, mud or dung.",
+  "variants": [
+   "wattle and daub",
+   "wattle",
+   "daub"
+  ]
+ },
+ "sangji": {
+  "def": "A mulberry dike: the bank of a fish pond planted with mulberry, whose leaves fed silkworms.",
+  "variants": [
+   "sangji"
+  ]
+ },
+ "guoji": {
+  "def": "A fruit dike: the bank of a fish pond planted with fruit trees, such as lychee, longan or oranges, instead of mulberry.",
+  "variants": [
+   "guoji"
+  ]
+ },
+ "pupae": {
+  "def": "Silkworms in their resting stage inside the cocoon; with the worms' droppings, they were fed to the fish of a dike-pond.",
+  "variants": [
+   "pupae",
+   "pupa"
+  ]
+ },
+ "Fan Zhongyan": {
+  "def": "An official of the Northern Song dynasty. In a reply to the emperor setting out ten matters, he described each of Jiangnan's polders as several tens of li square, \"like a great city\".",
+  "variants": [
+   "Fan Zhongyan"
+  ]
  }
 }
