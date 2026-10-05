@@ -1,9 +1,9 @@
 About: The dais was the raised floor at the front of the office hall from which a magistrate heard a case, while the
-parties sat below on the floor of the hearing court (shirasu). The court was not a stage of its own: at Takayama the
-examination room and its roofed court were rebuilt in 1816 as parts of the office, so the magistrate heard cases in the
-same building where the day's paperwork was done.
+parties sat below on the floor of the hearing court (shirasu). The court was roofed, and it was probably no stage of its own:
+at Takayama the examination room beside it was rebuilt as one part of the office, with its working office and great
+hall, so the magistrate most likely heard cases in the same building where the office's daily business was done.
 
-At Edo's South Town Magistracy, by a plan of 1810, the court was a stepped hall. Its top level was a tatami room,
+At the South Town Magistracy in Edo, the shogun's capital, in the early nineteenth century, the court was a stepped hall. Its top level was a tatami room,
 divided into three: the magistrate sat in the innermost room, the examining officer and a clerk in the middle one, and a
 witnessing officer in the room nearest the court. Along its front ran a board veranda about 3 ft wide, with a stair of
 three steps, about 6 ft wide, at its middle; below lay the gravel floor where the parties knelt on straw mats. Samurai,

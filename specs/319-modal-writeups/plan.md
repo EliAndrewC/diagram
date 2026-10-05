@@ -111,18 +111,29 @@ changeable, `hamletgen/consts.py` `HARVEST_WEATHERS`) and `hamlet_burial` (villa
   XII's distinction: `grain_drift`, the field's turn in degrees) takes ONE modal for the knob, written once, its value shown
   as the label; every other key takes one modal per value. A test reads the populated registry and the pool manifests and
   fails on a knob, a value or a modal file the table or the modal directory lacks.
+- **Every per-settlement roll, not only the knobs** (the plan review of D10, round 1: the table missed rolls no knob
+  registers). A hamlet also picks forms from its seed - a row's line, sides and water, a scattered farm's water, the farm
+  grove's sides, the copse's siting, the manure's form, the bath's seat, the dike-pond's crop, leftover ground, fry ponds and
+  layout, the intake, the drained water's sink, the field grave's form. Each is a choice in the table; one that belongs to one
+  settlement form names it in `when` (`[settlement_form=linear]`, the modal conditions' form), and the card lists it only
+  where that condition holds, since a map records some of them whatever its form. A roll that is not a choice of form - the
+  slope's direction, a share, a count, which flank a grove's open side faces - is named in the table's `not_choices` with why.
+  A test scans the hamlet generator's roll sites (`_roll(spec.seed, "<key>")`, `knob_rng(seed, "<key>")`) and fails on a roll
+  that is neither. The field grave's form, which the generator rolled but did not record, is now recorded in `meta.grave_form`
+  (`settlement/fields/features.py`), so Kashikawa's `### Features` sentence on it is carried by the choice.
 - **The modals.** `interactive/assets/modals/choice/<key>--<value>.md` (or `<key>.md` for a degree), in the About form, read by
   the same parser; a registry `interactive/choices.py` keyed `choice:<key>=<value>` (or `choice:<key>`); written to the same
   guidelines and checks as a feature modal (the modal checks discover them by their files, `choice/<slug>`, beside
   `hamlet/` and `sheet/`).
 - **The card.** `place_card` gains `choices` - each of the map's recorded choices with its name, its value's label and the key
   of its modal - and `facts`, this settlement's own sentences: the windbreak's side and why (the GM's wording of 2026-10-05,
-  moved from the windbreak modal), where the lanes lead (moved from the lane modal), which sides the farm groves take (moved
-  from the homestead grove modal), and "10 of its 15 homesteads have a retirement house" from `meta.retirement_houses`. The
+  moved from the windbreak modal), where the lanes lead (moved from the lane modal), and "10 of its 15 homesteads have a
+  retirement house" from `meta.retirement_houses`. Which sides the farm groves take is a CHOICE (`grove_sides`, two, three or
+  four sides, rolled per settlement: the plan review's round 1), not a fact, and opens its own modal. The
   page draws the choices as a list on the card's About tab, each value a link opening its modal in the same dialog, the facts
   beneath. The choice modals ride in the page's data like a class's, with no ink to light.
 - **The `### Features` facts.** On a hamlet the page reads no `### Features` and writes no `on_this_map`: the five hamlets'
-  facts are covered by the choices (harvest weather, where the dead lie) and the retirement count; the blocks are removed from
+  facts are covered by the choices (harvest weather, where the dead lie, the field grave's form) and the retirement count; the blocks are removed from
   their notes (two of them - Inashiro's and Kashikawa's own burial grounds - were stale: `burial.py` draws no hamlet ground and
   records `village_ground`). Other tiers keep reading theirs until they are standardized. A test holds that the explanations of
   every hamlet class are identical across the five pool maps' `meta` once FR-015's conditioned items are set aside (FR-004,

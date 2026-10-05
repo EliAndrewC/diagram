@@ -1,7 +1,7 @@
 About: This is the planting of the Japanese farmhouse grove: tall conifers, cedar first among them, with many lesser trees
 round them, set on the side the winter wind came from. Over Japan that wind blows from the northwest, and on the Sendai plain
 the groves stand on the north or the west of the house, often leaving the south or the east open, as they have for
-several hundred years: the domain's first lord encouraged planting them in many layers when homesteads were built on newly
+several hundred years: the Sendai domain's first lord encouraged planting them in many layers when homesteads were built on newly
 opened plains. It was the planting of a single farmhouse's grove; a belt planted so for a whole village is not
 recorded.
 

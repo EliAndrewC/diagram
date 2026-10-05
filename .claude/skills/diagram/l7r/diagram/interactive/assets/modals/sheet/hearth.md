@@ -13,8 +13,11 @@ How many fire-mouths a samurai kitchen's kamado had, and how large it was, is no
 Guesses:
 - A kamado on the kitchen's board floor, wherever a plan sets it there: only modern accounts put one in a samurai kitchen, so
   it rests on them and on the commoner's tenement of the Edo period.
+- Two fire-mouths, in a kamado about 6 ft long and 3 ft deep: how many fire-mouths a samurai kitchen's kamado had, and its
+  size, were searched for and not found.
 
-Depiction: The plan draws the kamado as a dark block with a spot of flame, so the kitchen's fire reads at a glance, either on
+Depiction: The plan draws the kamado as a dark block with two spots of flame, one at each fire-mouth, so the kitchen's fire
+reads at a glance; the real one was a clay range, its fire burning inside its mouths. It stands either on
 the small doma at the kitchen's edge or on the kitchen's board floor; each plan takes one of the two. No plan draws a sunken
 hearth in the kitchen.
 

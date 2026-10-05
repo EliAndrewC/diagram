@@ -3,9 +3,9 @@ and it spread widely among the daimyo, the dogs driving the game out of the thic
 dog-handlers under the chief falconer. Raising hunting dogs was a trade of its own, and in the Kii mountains boar was hunted
 with packs of dogs, three or four to each hunter.
 
-What a household's kennel looked like, how big it was and where it stood are not recorded. The only dog houses known are
-the shogunate's shelters for sick and ownerless dogs, the first of them inside an official's compound at Kitami: in 1693
-about forty dogs were kept there, in a care house, a nursing house and sleeping quarters for sick dogs and pups. Those were
+What a household's kennel looked like, how big it was, where it stood and how many dogs it held are not recorded. The only
+dog houses known are the shogunate's shelters for sick and ownerless dogs, the first of them inside an official's compound
+at Kitami: in 1693, in the Edo period, about forty dogs were kept there, in a care house, a nursing house and sleeping quarters for sick dogs and pups. Those were
 dogs in care, not a hunting pack.
 
 Guesses:

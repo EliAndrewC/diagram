@@ -22,7 +22,8 @@ Guesses:
   a drain must carry off after a storm, not from a period figure.
 
 Depiction: The map keeps supply and drainage in separate ditches, a collector along the low line of each field and its
-run onward - to the passing brook, to a pond at the field's foot, or off the edge of the map - so every hamlet has a
+run onward - to the passing brook, or else to a pond at the field's foot or off the edge of the map, as the title
+card says - so every hamlet has a
 drain between its plots; the older forms, water passing from paddy to paddy or one channel both feeding and draining,
 are not drawn. A drain is drawn at its true width, starting as narrow as the ditches that water the paddies end - its
 finest stretch held to a floor of about 1.5 ft so it shows - and widening to its outfall, too gently to see along the

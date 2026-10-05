@@ -8,7 +8,7 @@ After the harvest such a paddy lay as reaped ground through the winter. The thre
 reaped paddy or its banks, and in at least one village, from the Meiji era into the early Showa period, the ricks stood
 into the next year.
 
-A farming hamlet ate its rice and, for about a third of its diet, coarse grain such as barley and millet. A household
+A farming hamlet ate coarse grain such as barley and millet beside its rice. A household
 whose paddy lay bare grew that grain in dry fields on higher ground instead, and a hamlet at the toe of an alluvial fan,
 whose middle was often left wild, had little dry ground to hand for it. How much ground a household gave its coarse
 grain is not recorded.
@@ -16,6 +16,8 @@ grain is not recorded.
 Guesses:
 - How a settlement's drainage and the nearness of a town, whose manure a second crop needed, weigh against each other in
   whether its paddies lie bare over the winter: both set the odds, but no source says how much each counts.
+- That coarse grain was about a third of a hamlet's diet: no source gives its share, so it is set between a delta
+  district's pot of one part barley to four of rice and a Shinano village's midday meal three parts in five not rice.
 - That a hamlet needs about 0.85 acre of dry field a household for its coarse grain: reckoned from the grain a household
   ate and the yields the land surveys assessed, not found as a figure.
 - [fan_middle=wild] That the dry fields are cleared up into the fan's wild middle, from the plots nearest the toe first:
@@ -30,6 +32,6 @@ plot, until they hold the grain the hamlet needs, and no further.
 
 Name: The paddies in winter: left bare
 Covers: `meta.winter_crop = none`
-Sources: nimosaku-jawiki, kotobank-nimosaku, kotobank-warazuka, hirogawa-genryu-noka, senjochi-kotobank, kokumori-jawiki, where-a-farming-hamlet-grew-its-coarse-grain
-Entry: research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.html, research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.html
+Sources: nimosaku-jawiki, kotobank-nimosaku, kotobank-warazuka, hirogawa-genryu-noka, senjochi-kotobank, kokumori-jawiki, where-a-farming-hamlet-grew-its-coarse-grain, katemeshi-jawiki, ndl-crd-katemeshi
+Entry: research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.html, research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.html, research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.html
 Drawing: research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html, research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html

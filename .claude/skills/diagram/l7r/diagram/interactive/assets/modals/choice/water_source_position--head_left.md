@@ -14,4 +14,4 @@ Name: Water in at the head of the fields, to one side
 Covers: `meta.water_source_position = head_left`
 Sources: shimane-toshuko-lecture, fao-irrigation-manual-m7, maff-toshuko-history, suido-ishizue-iseki, jawiki-seki, tabayashi-1987, jsslkx-002-2021
 Entry: research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.html, research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.html
-Drawing: research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html, research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html
+Drawing: research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html, research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html, research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html

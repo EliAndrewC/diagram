@@ -1,6 +1,6 @@
 About: The compound's landing on the river, where the county's tax grain is loaded for the run downstream: a flight of steps cut
 into the stone-faced bank across the bank street, reached from a gate in the compound's wall, with a hired barge moored
-alongside, a watch hut over the water and a small shrine for the boatmen.
+alongside, a watch hut at the head of the steps and a small shrine for the boatmen.
 
 In Edo-period Japan a river landing (kashi) was its boat moorings and an unloading ground, and from the Edo period on wholesalers
 and their storehouses gathered at one; new landings were set up under the lords to ship the tax rice to Edo and Osaka. The
@@ -14,8 +14,8 @@ Guesses:
 - That the landing is the compound's own rather than a public one: no account of an official's compound with a landing of its
   own was found.
 
-Depiction: The label names the landing as a whole; its steps, its faced bank, the barge, the watch hut and the boatmen's shrine
-are each drawn as their own feature.
+Depiction: The label names the landing as a whole; its faced bank with the steps cut into it, the pier, the barge, the watch
+hut and the boatmen's shrine are each drawn as their own feature.
 
 Name: river landing
 Covers: the landing label - its dock, revetment, barge, watch post and altar are each their own kind

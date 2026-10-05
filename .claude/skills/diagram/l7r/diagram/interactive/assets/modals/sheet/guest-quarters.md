@@ -9,6 +9,10 @@ such an entrance: its guest passed through a middle gate and along a walled gard
 zashiki. No guest house standing apart is known at a samurai house; a traveling lord or official lodged instead at a honjin,
 a post town's house for guests of rank, with its raised room of honor.
 
+The guest room was the house's formal room, finished for formality where the master's own living room could be finished
+playfully. Like nearly every room of such a house but the kitchen, it was matted, and a wide veranda ran between it and the
+garden, which lay to the south before the formal rooms.
+
 How large a guest room was is not recorded.
 
 Guesses:
@@ -23,6 +27,6 @@ of a building.
 
 Name: guest quarters
 Covers: the guest room of the residence with its floor and label, or a detached guest house and its label
-Sources: shirobito-1717-takayama, boso-no-mura-takei, kotobank-shikidai, kominkai-genkan, fuchu-joge-pamphlet, shiroishi-koseki, honjin-jawiki
-Entry: research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html
+Sources: shirobito-1717-takayama, boso-no-mura-takei, kotobank-shikidai, kominkai-genkan, fuchu-joge-pamphlet, shiroishi-koseki, honjin-jawiki, matsue-bukeyashiki, shoinzukuri-jawiki, liq-takayasu-daidokoro, engawa-kotobank
+Entry: research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html, research/questions/0107-kitchens-daidokoro.html, research/questions/0102-verandas-and-storm-shutters-engawa-and-amado.html
 Drawing: research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html

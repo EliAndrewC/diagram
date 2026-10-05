@@ -29,7 +29,7 @@ Guesses:
 
 Depiction: The map lays a crossing square across a ditch where a bund path meets water too wide to step over, with a short
 abutment at each end; no path leads to it, since the way to it is the bund. Both its ends land on ground worth crossing to,
-farmed ground, the settlement or a walked dike, never marsh or scrub. It is drawn about 4 ft wide and 8 ft long, single
+farmed ground, the settlement or a walked dike, never marsh or scrub. It is drawn narrow and short, single
 file, so it does not read as a road bridge. All of a settlement's ditch crossings take one form; the title card says which.
 
 [footbridge_form=plank] The planked form is drawn with its seams running across the deck, so the boards read as laid from

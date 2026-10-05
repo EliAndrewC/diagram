@@ -1,11 +1,12 @@
 About: A manure pit was an earthenware jar sunk in the ground, in which a household kept its night soil to rot before it
-went out to the fields; fresh night soil harmed the crop, and human manure was the most important fertilizer a farm had.
+went out to the fields; fresh night soil harmed the crop, and in the silk villages human manure was a farm's most important fertilizer.
 Some households used a plastered pit instead, which looked like a well. The jars stood behind the houses, about the farm
 and along paths and roads, where a laborer or a passer-by could use one. Some were kept out by the fields instead: in
 south China a brick-lined pit at the head of the field by the 1300s, and in Japan a pit by the fields, probably moved out
 from beside the privy to make manuring easier.
 
-What showed was the jar's open mouth at the ground, some jars buried to the rim, others half buried. The jar was often
+What showed was the jar's open mouth: some jars were buried to the rim, others only half buried, their upper half standing
+above the ground. The jar was often
 unglazed earthenware, and it had to hold its liquid without leaking.
 
 Its mouth was often about 3 to 5 ft (1 to 1.5 m) across, and one Ming-dynasty farm manual wanted its pits deep and large.

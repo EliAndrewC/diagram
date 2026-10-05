@@ -3,7 +3,7 @@ before the magistrate, who sat above them in the hall. At Edo the plaintiffs and
 the court's gravel, and so did the peasants, townsmen and lesser ronin called before it, while samurai, priests and
 monks sat on the hall's verandas instead. The accused sat at the center, roped, a servant holding the rope's end; behind
 them sat the town officials, headmen and landlords on straw matting to one side, and the plaintiff to the other. In
-China the county court at Neixiang marked only two places, with kneeling stones of the Ming dynasty: the plaintiff's to
+China the county court at Neixiang marked two places, with kneeling stones of the Ming dynasty: the plaintiff's to
 the east, and the defendant's.
 
 The mats lay on the court's floor, which in the oldest courts was bare earth and later white gravel; at Takayama, in a
@@ -24,4 +24,4 @@ Name: kneeling positions
 Covers: the straw mats on the hearing court and their label
 Sources: oshirasu-jawiki, shirasu-kotobank, henan-neixiang, takayama-gh-shirasu
 Entry: research/questions/0099-the-hearing-court-shirasu.html, research/questions/0090-magistrates-compounds-jinya-and-yamen.html
-Drawing: research/questions/0099-the-hearing-court-shirasu.drawing.html
+Drawing: research/questions/0099-the-hearing-court-shirasu.drawing.html, research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html

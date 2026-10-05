@@ -10,7 +10,7 @@ Stone was the terrace builder's material in western Japan, where the walls betwe
 withstand the slope; in one valley the steep side's walls were of small stones and the gentle side's of big ones. Eastern
 Japan, which built fewer terraces, raised gentle earth banks instead.
 
-How big a rock in a paddy stood is not recorded. The paddies round it were small: a terrace paddy ran from about 215 sq ft
+How big a rock in a paddy stood is not recorded. Hill paddies were small: a terrace paddy ran from about 215 sq ft
 (20 sq m) to a few thousand square feet, smaller the steeper the ground.
 
 Guesses:

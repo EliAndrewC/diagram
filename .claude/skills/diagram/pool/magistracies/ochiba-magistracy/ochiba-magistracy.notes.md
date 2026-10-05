@@ -98,18 +98,16 @@
 
 ### Features
 
-- **compound shrine**: Ochiba's shrine is a full hall rather than the modest shrine a magistracy usually keeps - a deliberate departure: the County Magistrate of Ochiba is a Fox priest, who keeps the Fox Clan's road wardings. Even so, the hall stays smaller than the residence.
-- **threshold stones**: Drawn larger than the canon's two-fist field stones on purpose: Ochiba is where the threshold stones are made and painted. This map frames the pair as the senior checkpoint of the Fox road wardings - the sheet's own framing, since the canon makes the County Magistrate of Ochiba, a Fox priest, the keeper of all the wardings along the road rather than of one checkpoint above the others. The service gate has none.
-- **cinnabar workshop**: The workshop where the threshold stones are painted with their cinnabar fox-tracks adjoins the shrine hall.
-- **residence**: There is no ancestral alcove - Ochiba is not held by one lineage, and what passes down here passes with the office.
+- **compound shrine**: Ochiba's shrine is a full hall rather than the small shrine a magistracy usually keeps, because the County Magistrate of Ochiba is a Fox priest and keeps the Fox Clan's road wardings.
+- **threshold stones**: Ochiba's own pair stands outside its main gate, and the stones for the whole road are painted a few steps away, in the workshop beside the shrine hall.
+- **residence**: One house under one roof, two rows deep: the guest room and the reception (at the east end) along the garden, the family's rooms and Tatsuya's behind them, the kitchen an ell on the west end. There is no ancestral alcove: Ochiba is not held by one lineage, and what passes down here passes with the office.
 - **garden**: The inner garden lies before the reception and the guest room, across the veranda, its pond before the reception and a stepping stone at the reception's veranda on the line up from the household gate.
-- **genkan**: The genkan is at the office hall's southeast corner, opening south onto the forecourt, where a palanquin can be set down beside it. A guest of rank enters here and is taken on through the office's rear door, the household gate and the garden to the stone at the reception's veranda; whether that way ran indoors at Takayama is not recorded.
-- **residence**: One house under one roof, two rows deep: the guest room and the reception (at the east end) along the garden, the family's rooms and Tatsuya's behind them, the kitchen an ell on the west end.
+- **genkan**: The genkan is at the office hall's southeast corner, opening south onto the forecourt, where a palanquin can be set down beside it. A guest of rank enters here and is taken on through the office's rear door, the household gate and the garden to the stone at the reception's veranda.
 - **guest quarters**: Ochiba keeps no guest house; the guest room is a room of the residence beside the reception.
 - **retainers' quarters**: The whole working platoon lives on the grounds: the senior retainers in these quarters by the stables, the junior samurai and the standing ashigaru in the barracks.
 - **practice ground**: The practice ground lies west of the office hall, beside the senior retainers' quarters, where part of the platoon lodges; the barracks stands well away from it, in the southeast of the outer court.
-- **granary**: Ochiba has no river and no landing: it is a land county on the Imperial road, and its tax grain is staged by cart along the road toward Nagahara, so it keeps a single staging kura rather than a row of granaries - an earth-walled one, plastered white, on the ground.
-- **fire-water tubs**: Ten tubs, two of them at the kitchen - inside the program's band of about eight to twelve, weighted to the institutional, fire-prone buildings. Ochiba's deliberate exceptions: the plaster tax archive and the plaster granary carry none, because a kura is built not to burn, and neither do the karo's house and the senior retainers' quarters.
-- **vegetable garden**: The household's bed stands in the inner court below the karo's house, within the inner garden and clear of the garden's arm to the shrine: the west and the rear lie in the shade of the house and the kitchen, so the sunny south is the one seat left.
-- **storehouse**: Two household storehouses behind the house, beside the rear yard, where the vegetable garden could not grow: a household kept its own storehouses, and the rear strip behind the house carried its service economy.
-- **rear yard**: The ground behind the karo's house and the way beside the house is open working ground, beside the household's storehouses.
+- **granary**: Ochiba has no river and no landing: it is a land county on the Imperial road, and its tax grain waits in this one earth-walled kura, plastered white, before it is carted along the road to the provincial city.
+- **fire-water tubs**: Ten tubs, two of them at the kitchen, set at the wooden buildings most given to fire. The karo's house and the senior retainers' quarters carry none.
+- **vegetable garden**: The household's bed stands in the inner court below the karo's house, within the inner garden and clear of its arm to the shrine.
+- **storehouse**: Ochiba keeps two, side by side behind the house, in the shade where the vegetable garden could not grow.
+- **rear yard**: Ochiba's rear yard is the open ground behind the karo's house, beside the household's storehouses.

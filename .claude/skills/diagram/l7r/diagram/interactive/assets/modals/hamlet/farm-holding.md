@@ -13,17 +13,18 @@ about 12 acres; across the Musashino new fields a farm was given about 2.5 acres
 ran from about 54 to 240 ft.
 
 Guesses:
-- That only the farms across the street from the paddy hold a strip behind them, and the farms between the street and
-  the paddy hold none: no source says which farms of a lowland row held dry field.
+- That on a row with farms on both sides of the street only the farms across the street from the paddy hold a strip
+  behind them, and the farms between the street and the paddy hold none: no source says which farms of a lowland row
+  held dry field.
 - That the holding is dry field rather than paddy: the measured strips were dry field, but no lowland row's were measured.
 - [row_line=street] The strip's depth, three lots: Santome's strips ran far deeper, but in a dry-field colony, and no
   lowland row's strip was measured.
 - [row_line=edge] The compact holding's depth, one lot: a dike row's land is said only to lie near the house, and no
   levee or dike row's holding was measured.
 
-Depiction: The map draws a holding behind each farm across the street from the paddy, and none behind the farms between
-the street and the paddy. Its plots are drawn in the four dry crops in turn - barley, millet, buckwheat and soybean -
-furrowed down the strip, each in its ripest color, though those colors came months apart, barley's in May and millet's
+Depiction: Where the farms stand on both sides of the street, the map draws a holding behind each farm across the street
+from the paddy, and none behind the farms between the street and the paddy; a row on one side of its street has none.
+Its plots are drawn in the four dry crops - barley, millet, buckwheat and soybean - furrowed down the strip, each in its ripest color, though those colors came months apart, barley's in May and millet's
 in autumn.
 
 [row_line=street] Behind a street laid out first the holding is a strip one lot wide, cut into plots about 150 ft deep, a

@@ -1,5 +1,5 @@
-About: The notice board at a magistracy's gate was where the court posted what it produced for those who came to it. In
-Japan the boards that are recorded, the kosatsuba, posted the state's standing law - the ban on Christians, the rules on
+About: A notice board was a wooden frame on which the authorities posted law and notices for everyone to read. In
+Japan the boards, the kosatsuba, posted the state's standing law - the ban on Christians, the rules on
 coin, fires and packhorse charges, a ban on gamblers - where traffic was heaviest: at crossroads, town entrances, bridge
 ends, barriers and ports, and before the gates of village officials' houses. In China the splayed walls flanking a
 county office's gate carried the emperor's edicts and, beside them, the magistrate's own notices and bans, among them
@@ -12,7 +12,7 @@ reconstructed board at Kanagawa stands on a stone base inside a fence, under a r
 board's site was closed in by a palisade, a stone wall or a bank of turf.
 
 The frames measured at two post towns on the Tokaido stood about 10 to 11 ft high, 16 to 18 ft along the road and 5 to
-6 ft deep. A smaller board, a village's or an office's, was never measured.
+6 ft deep. How big a village's or an office's board was is not recorded.
 
 Guesses:
 - That a magistracy kept a freestanding board at its own gate: it joins the Japanese board to the Chinese office's gate

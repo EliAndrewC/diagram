@@ -108,26 +108,24 @@
 
 ### Features
 
-- **compound shrine**: Hayakawa keeps two modest shrines. The Fire Dragon shrine was converted from a shrine of Ebisu; the river-kami shrine takes Magistrate Hida no Reiji Hajime's daily offerings against flood and drowning.
-- **shrine altar**: The Fire Dragon's flame and the river kami's wave are the dedications of the setting: the Fire Dragon is one of the Five Elemental Dragons, the incarnate divinities of the elements, and the river's many small kami are addressed as one, "Hayakawa-no-kami". The small square in the Fire Dragon shrine's corner is Ebisu's altar, kept from the shrine it was before.
-- **torii**: The two shrines share this one torii at the edge of their shrine ground, as one torii at a precinct's boundary covers the lesser shrines inside it.
-- **ancestral alcove**: Hayakawa is held by a lineage - its past magistrates are Hajime's own forebears - so the alcove beside the reception holds their tablets. This is the case the rule was written for.
-- **bath**: Hajime enlarged the bath, an addition on the kitchen range: at about 18 by 12 ft it is larger than the rest of the house would need.
-- **guest quarters**: A rich posting, Hayakawa has a detached guest house in an annex added by the ninth magistrate. Its guests - provincial inspectors, the lineage's chancellors - outrank a county magistrate, and the setting's etiquette lodges a superior in the private depth of the household, so the house stands in the inner court. Guests arrive by their own river door into the guest garden. The annex has no privy: the household staff serve its guests of rank with chamber pots.
-- **river**: The Hayakawa is a swift river with a history of floods. The sheet shows only its near-bank reach, a margin of a wider river; most barges go on downstream to Nagahara city.
-- **river landing**: The county's tax grain goes down to Nagahara city from here, carried out of the east gate, across the bank street and down the landing steps. No customs are collected at the landing - tariffs are taken at the city's gates downstream.
-- **residence**: Two halls joined by a corridor, one set back from the other: the lineage has added to the house over generations, and the later hall holds Hajime's rooms and the reception at its far end.
+- **compound shrine**: Hayakawa keeps two modest shrines. The Fire Dragon shrine was converted from a shrine of Ebisu, the Fortune of honest work; the river-kami shrine takes Magistrate Hida no Reiji Hajime's daily offerings against flood and drowning.
+- **shrine altar**: The flame is the Fire Dragon's, one of the Five Elemental Dragons, the incarnate divinities of the elements; the wave is the river's many small kami, addressed together as one, "Hayakawa-no-kami". The small square in the Fire Dragon shrine's corner is Ebisu's altar, kept from the shrine it was before.
+- **torii**: The two shrines share this one torii, at the west edge of the shrine grove where the way in enters.
+- **ancestral alcove**: Hayakawa has stayed in Hajime's own line, so the alcove beside the reception holds the tablets of its past magistrates, his forebears.
+- **bath**: Hajime enlarged the bath: at about 18 by 12 ft it is larger than a house this size would need.
+- **guest quarters**: A rich posting, Hayakawa lodges its guests in a guest house of their own, in the annex the ninth magistrate added; it stands in the inner court, the private depth of the household, because its guests - imperial inspectors, the lineage's chancellors - outrank a county magistrate. They come and go by their own river door into the guest garden. The annex has no privy: the household staff serve its guests with chamber pots.
+- **river**: The Hayakawa, the "swift river", has a history of floods. The county lies upstream of Nagahara city, and most barges on the river go on down to the city.
+- **river landing**: The county's tax grain leaves for Nagahara city from here, carried out of the east landing gate and down the steps. No customs are collected at the landing: tariffs are taken at the city's gates downstream, where goods are sold.
+- **residence**: The lineage has added to the house over generations: the later of its two halls holds the reception at its east end, with Hajime's rooms behind it.
 - **garden**: A guest of rank takes no genkan here: from the middle gate a path of stepping stones crosses the garden to a stone at the reception's veranda.
-- **latrine**: The guests' privy stands at the rear of the reception along a board veranda; the family's is at the corridor end, toward their own rooms. The servants share one at the west end of their range, by the kitchen postern the night soil goes out by.
+- **latrine**: The family's privy stands at the corridor end, toward their own rooms. The servants share one at the west end of their range, by the kitchen postern the night soil goes out by.
 - **hearing court**: Its floor is the river's own cobbles.
 - **gatehouse**: The gate range is a long gatehouse standing in the wall line, with the main gate's passage through it toward its east end; the guardroom opens onto the passage from the west side, the gatekeepers lodge in the long room beyond it, and a store takes the east end.
-- **cart yard**: The open ground inside the west service gate, where the horses are led out and the carts stand; and the ground below the granary, where the bale carts wait their turn; they load at the granary's one door, on its north face, from the bale yard the practice ground doubles as.
+- **cart yard**: Hayakawa has two: the open ground inside the west service gate, where the horses are led out and the carts stand, and the ground below the granary, where the bale carts wait their turn. They load at the granary's one door, on its north face, from the bale yard the practice ground doubles as.
 - **residence corridor**: Besides the corridor between the two halls, a short covered way joins the kitchen to the house.
-- **granary**: Raised on posts against rats and the damp of the river bank; its door is on the face toward the bale yard and the landing gate.
-- **tax barge**: A hired boatman's barge, carrying the grain to Nagahara city under the office's seals.
-- **river watch**: The watch looks for boats slipping downriver past Nagahara's tariff gates.
-- **boatmen's altar**: A small shrine ashore to the boats' guardian, the funadama, kept by the crews who work the swift river.
-- **revetment**: The stone facing holds the bank against a swift river's floods.
+- **granary**: Hayakawa's granary stands on posts beside the tally office, its one door toward the bale yard and the landing gate.
+- **tax barge**: Bound for Nagahara city, carrying the county's grain under the office's seals.
+- **river watch**: The watch looks out for gate-runners: cargo meant for sale in Nagahara city, put ashore upstream to be carried in around the city's tariff gates.
 - **servants' quarters**: About ten domestic servants - cooks, grooms and cleaners - lodge in this range along the north wall, its doors on the service alley behind the house; the senior retainers keep their own houses in town, and the barracks holds only the duty watch.
-- **vegetable garden**: The household's bed stands in the inner court's garden before Hajime's own rooms, the pond and the old pines kept before the reception across the guests' path: the west and the rear of the house lie in the shade of the kitchen and the house, so the garden south of the house is the one seat left.
-- **storehouse**: Two household storehouses in the shady rear, where the vegetable garden could not grow: a household kept its own storehouses, and the rear strip behind the house carried its service economy.
+- **vegetable garden**: The bed stands before Hajime's own rooms, with the guests' stepping-stone path between it and the pond and old pines before the reception.
+- **storehouse**: Hayakawa keeps two, across the service alley in the shady strip behind the house, ground too dark for the vegetable garden.

@@ -21,7 +21,8 @@ Guesses:
   winter barley crop's yield.
 
 Depiction: The map is set in high summer, so this settlement's drained paddies are drawn under rice, and its barley is not
-shown; the paddies that never drain are drawn as wet ground that could not carry it. Because the paddy grows the coarse
+shown. The paddies that never drain, which could not carry it, are tinted blue-green as wet ground, though on a comb
+field only a sample of them wears the tint. Because the paddy grows the coarse
 grain, the dry fields stay on their narrow hem above the supply canal.
 
 Name: The paddies in winter: sown with barley

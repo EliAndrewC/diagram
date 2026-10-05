@@ -62,11 +62,11 @@
 
 ### Features
 
-- **torii**: Seven arches at the 12 ft pitch, the innermost one pitch off the hall's face, the outermost at the precinct's edge where the approach enters the shrine's ground. A village shrine at average wealth would carry one; this one carries seven because its country monk is a stickler for the potent number seven and raised the extra six himself - the setting's particular, since no page read shows a village shrine with a row of arches before 1868.
-- **shrine grove**: Here the wood stands behind the hall and down both its sides - from the well at its back edge round to ragged tips beside the forecourt, the lower approach open: on a slope a shrine's wood stands behind the hall, at its sides, or both, and this one's roll gave both. No fence and no wall: the arch and the wood mark the shrine's ground.
-- **well**: The shrine's one well, its water point, stands 108 ft behind the hall at the wood's back edge, where the village map sites it, reached by the household's footpath through the wood from the kitchen side. Never under an arch. Its curb is drawn 5 ft square.
+- **torii**: Seven arches stand on the approach, the outermost at the precinct's edge where the approach enters the shrine's ground, the innermost before the hall's step. A village shrine at average wealth would carry one; this one carries seven because its country monk is a stickler for the potent number seven and raised the extra six himself.
+- **shrine grove**: The hall stands midway on an even slope, and its wood stands behind it and down both its sides, from the well at its back edge round to ragged tips beside the forecourt. The lower approach is open ground, where the sacred tree stands alone.
+- **well**: The shrine's one well stands at the wood's back edge, about 90 ft behind the hall, reached by the household's footpath through the wood from the kitchen side.
 - **kitchen**: The kitchen is the earthen-floored west end of the one building that is both the villagers' hall and the monk's home - a farmhouse's doma with its hearth, its yard door on the west gable onto the kitchen yard.
 - **genkan**: Not a formal entrance for guests of rank but the dwelling's own entry: a 4 ft earthen-floored vestibule inside the east door, beside the writing room.
 - **latrine**: One privy, the monk's household's, at the west gable's back corner off the kitchen door, near the path to the well.
-- **vegetable garden**: The monk's household bed, 14 by 23 ft, in the open ground below the forecourt, west of the approach - the one ground near the house its sun reaches: it gets 9.5 hours in the autumn shoulder month, where the yard by the kitchen door, between the hall and the wood, got 2.5 (research homesteads 044).
-- **fire-water tubs**: One at each of the building's four corners, gutter-fed against the wall - the tubs of a wooden hall, as at the magistracy.
+- **vegetable garden**: The monk's household bed, 14 by 23 ft, lies in the open ground below the forecourt, west of the approach, the one ground near the house that gets its sun: about 9.5 hours of it in autumn, where the yard by the kitchen door, shaded by the hall and the wood, gets 2.5.
+- **fire-water tubs**: One at each of the building's four corners, against the wall: the one building is hall, kitchen and dwelling at once, so its four tubs serve all three.

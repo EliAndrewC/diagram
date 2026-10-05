@@ -1,10 +1,11 @@
-About: The practice ground was a patch of open earth in the outer court where a magistracy's samurai kept up their daily
-practice with sword and spear. In Japan formal training was given at a domain's school - nearly every domain came to keep
-one, and many attached a practice hall to it - and at private halls kept by masters, which flourished late in the Edo
-period in every part of the country. Before the middle of the period, practice was often held outdoors or on an earthen
-floor. One small domain's seat laid out a drill ground inside its rampart; no hall is named among an intendant's office's
-buildings. In Rokugan a county seat holds about fifteen samurai, no body of pupils and no living for a teacher, so its
-magistracy trains on open ground in its own compound, and the dojo stand in the cities.
+About: The practice ground was a patch of open earth in the compound where a magistracy's samurai kept up their practice
+with sword and spear. In Rokugan a county seat holds about fifteen samurai, no body of pupils and no living for a teacher,
+so its magistracy trains on open ground in its own compound, and the dojo stand in the cities.
+
+In Japan formal training was given at a domain's school - nearly every domain came to keep one, and many attached a
+practice hall to it - and at private halls kept by masters, which flourished late in the Edo period in every part of the
+country. Before the middle of the period, practice was often held outdoors or on an earthen floor. One small domain's seat
+laid out a drill ground inside its rampart; an intendant's office is not known to have kept a hall.
 
 It was bare earth, marked by the gear practice left on it. In Satsuma's school of swordsmanship a standing timber, a little
 over 4 ft high, was struck hard from left and right, over and over; whether other schools kept such posts, or how many,

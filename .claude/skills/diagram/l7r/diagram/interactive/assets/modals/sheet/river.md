@@ -2,15 +2,16 @@ About: A navigable river runs beside the compound: the county's road to the rest
 Japan the tax rice went by water, and new river landings were set up under the lords to carry it and other goods from the
 provinces to Edo and Osaka; in Ming China it went up the Grand Canal to the capital.
 
-A county on such a river is probably a staging point rather than a store. A village kept its tax rice only a short while before
-it was carried on to the lord's storehouses or to a river landing to be shipped, and a county office on the water most likely
+A county on such a river is probably a staging point rather than a store. A village's store held its tax rice only a short while, or in
+places through the winter, before it was carried on to the lord's storehouses or to a river landing to be shipped, and a county office on the water most likely
 sends its grain on downstream the same way, on boats hired for the run.
 
 In Rokugan a canal is a domain's work, dug only where an inland river is worth canalizing, as the Lion Clan's from Toshi Ranbo
 to the Drowned Merchant River is, so for most counties the river is the way.
 
 Depiction: The plan shows only the river's near-bank reach, the margin of a wider river, as a band of water along the
-compound's side, with the landing cut into its bank.
+compound's side behind a strip of bank, with the landing's jetty running out over the water; the chevrons on the water show
+which way the current runs.
 
 Name: river
 Covers: the river band and its labels

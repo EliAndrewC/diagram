@@ -30,4 +30,4 @@ Name: fry pond
 Covers: the dug water of a `dikeponds[]` parcel recorded `kind: fry` - a fry village's smallest ponds
 Sources: nongzheng-quanshu-41, guangdong-xinyu-22, cssn-sangyuanwei, pwsannong-zhusanjiao-nongyeshi, zhwiki-guangdong-xinyu, zhwiki-nongzheng-quanshu
 Entry: research/questions/0024-fish-fry-and-nursery-ponds-yumiao.html, research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html
-Drawing: research/questions/0024-fish-fry-and-nursery-ponds-yumiao.drawing.html
+Drawing: research/questions/0024-fish-fry-and-nursery-ponds-yumiao.drawing.html, research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html

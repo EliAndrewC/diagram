@@ -5,7 +5,7 @@ built in the Edo period than in any other, together with the ditches of newly op
 once the good sites ran out, even flat farmland was dug into ponds.
 
 The shallow dish ponds of the plains were ringed with reed, wild rice and cattail, as they are today, with water chestnut
-and water lilies over their surface. The plants grew inside the embankment, never on it; the bank was kept bare and firm for
+and water lilies over their surface. The plants grew inside the embankment, never on it; the bank was kept clear and firm for
 strength, and is mown and burned today.
 
 The smallest ponds, about 33 ft on a side, were owned and kept by one person; the largest covered several hectares
@@ -24,6 +24,6 @@ terraces, a narrow valley strip or a polder - and none among the fish ponds of d
 
 Name: field pond
 Covers: `field_ponds` - the in-field pond sunk into one low paddy
-Sources: tameike-jawiki, kagawa-tameike-data, inamino-saraike, inamino-tameike-museum
+Sources: tameike-jawiki, kagawa-tameike-data, inamino-saraike, inamino-tameike-museum, maoshi-zhengyi-juan7, chenfu-nongshu-juanshang
 Entry: research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.html, research/questions/0061-reservoir-ponds-tameike.html
 Drawing: research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html
