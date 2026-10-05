@@ -726,14 +726,6 @@
   "research": "f6f01652a6a060e2",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#striking posts 1-2 per ground at ~1 ft diameter": {
-  "code": "9c51922e2f237fa0",
-  "core": "9c51922e2f237fa0",
-  "date": "2026-10-03",
-  "note": "striking posts 1-2 per ground at ~1 ft diameter",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#tax archive size": {
   "code": "4a3e59afac38a355",
   "core": "9c51922e2f237fa0",
@@ -5286,14 +5278,6 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/bamboo.py::household_bamboo#strip kept out of every plot's sun at BAMBOO_SHADE_FT 50 ft (0038 drawing)": {
-  "code": "44d2a88189f5c4d8",
-  "core": "44d2a88189f5c4d8",
-  "date": "2026-10-03",
-  "note": "strip kept out of every plot's sun at BAMBOO_SHADE_FT 50 ft (0038 drawing)",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/bamboo.py::household_bamboo#strip off the copse seats": {
   "code": "63a9a68c450a3c64",
   "core": "44d2a88189f5c4d8",
@@ -5312,14 +5296,6 @@
   },
   "research": "d47738a05844fe19",
   "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/bamboo.py::household_bamboo#strip on its house's side of every lane": {
-  "code": "44d2a88189f5c4d8",
-  "core": "44d2a88189f5c4d8",
-  "date": "2026-10-03",
-  "note": "strip on its house's side of every lane",
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/bamboo.py::household_bamboo#strip seated after the lanes": {
   "code": "c59ad93f2309af5e",
@@ -19305,6 +19281,106 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/interactive/choices.py::CHOICE_DIR#choice plumbing": {
+  "code": "edb7a5d05730372a",
+  "core": "b19defb2e61c2610",
+  "date": "2026-10-05",
+  "note": "file paths, table reads and card listing, nothing physical",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/interactive/choices.py::TABLE#choice plumbing": {
+  "code": "1fda2a51faab3ad8",
+  "core": "762d0fa42a38c0cb",
+  "date": "2026-10-05",
+  "note": "file paths, table reads and card listing, nothing physical",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/interactive/choices.py::applies#choice plumbing": {
+  "code": "94247b56950b18c9",
+  "core": "43a9f37095f87f90",
+  "date": "2026-10-05",
+  "note": "file paths, table reads and card listing, nothing physical",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/interactive/choices.py::made#choice plumbing": {
+  "code": "185d5ab8bb048054",
+  "core": "6f6bc849bdc97482",
+  "date": "2026-10-05",
+  "note": "file paths, table reads and card listing, nothing physical",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/interactive/choices.py::modal#choice plumbing": {
+  "code": "c6e196eb5f0ad951",
+  "core": "029e567aca4a82b1",
+  "date": "2026-10-05",
+  "note": "file paths, table reads and card listing, nothing physical",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/interactive/choices.py::modal_file#choice plumbing": {
+  "code": "262451b9c4c50783",
+  "core": "5d0036c71049ca5e",
+  "date": "2026-10-05",
+  "note": "file paths, table reads and card listing, nothing physical",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/interactive/choices.py::modal_key#choice plumbing": {
+  "code": "9cd21755591c1345",
+  "core": "0c9e5ce0bfb9fbec",
+  "date": "2026-10-05",
+  "note": "file paths, table reads and card listing, nothing physical",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/interactive/choices.py::not_choices#choice plumbing": {
+  "code": "466eb62546862264",
+  "core": "7019fb5a683ace73",
+  "date": "2026-10-05",
+  "note": "file paths, table reads and card listing, nothing physical",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/interactive/choices.py::registry_for#choice plumbing": {
+  "code": "2b2cb54f1159b5a9",
+  "core": "de16f0e939001a8e",
+  "date": "2026-10-05",
+  "note": "file paths, table reads and card listing, nothing physical",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/interactive/choices.py::table#choice plumbing": {
+  "code": "bf1315b01e8b26a1",
+  "core": "7ef179347270945a",
+  "date": "2026-10-05",
+  "note": "file paths, table reads and card listing, nothing physical",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  ".claude/skills/diagram/l7r/diagram/interactive/classes/__init__.py::CLASSES#class registry plumbing": {
   "code": "a23d32d6d9e5f320",
   "core": "d4420fdc4d3a57f6",
@@ -19329,52 +19405,44 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/interactive/classes/_base.py::ANNOUNCED#highlighting rulings": {
-  "code": "520b599214b2c625",
-  "core": "afceaa22580bdcfe",
-  "date": "2026-10-03",
-  "note": "inherited module convention; no physical decision",
+ ".claude/skills/diagram/l7r/diagram/interactive/classes/_base.py::FORMS#highlighting rulings": {
+  "code": "ff1bf3d4022cc0ae",
+  "core": "cdbbc4bef85b405b",
+  "date": "2026-10-05",
+  "note": "this unit is modal-text plumbing and decides no ink lit or ruled out on hover; the inherited CONVENTION claim should not apply, NONE alone covers it (move the claim off the module docstring onto the units that rule ink, e.g. NOT_HIGHLIGHTED)",
+  "pages": {},
   "research": "",
-  "verdict": "IN-STEP"
+  "rests": [],
+  "verdict": "MISLABELED"
  },
- ".claude/skills/diagram/l7r/diagram/interactive/classes/_base.py::ANNOUNCED#modal vocabulary plumbing": {
-  "code": "f058fa7329dc55be",
-  "core": "afceaa22580bdcfe",
-  "date": "2026-10-03",
-  "note": "plumbing",
+ ".claude/skills/diagram/l7r/diagram/interactive/classes/_base.py::FORMS#modal vocabulary plumbing": {
+  "code": "9b6b6fd872959e02",
+  "core": "cdbbc4bef85b405b",
+  "date": "2026-10-05",
+  "note": "plumbing; decides nothing physical or visual",
+  "pages": {},
   "research": "",
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/interactive/classes/_base.py::CONVENTION_LEAD#highlighting rulings": {
-  "code": "8ba878f3eb936f5c",
-  "core": "1beebe35ea432c90",
-  "date": "2026-10-03",
-  "note": "inherited module convention; no physical decision",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/interactive/classes/_base.py::CONVENTION_LEAD#modal vocabulary plumbing": {
-  "code": "84142bf977b000e1",
-  "core": "1beebe35ea432c90",
-  "date": "2026-10-03",
-  "note": "plumbing",
-  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/classes/_base.py::FeatureClass#highlighting rulings": {
-  "code": "0040eced13864c96",
-  "core": "97864ccbf84c69c5",
-  "date": "2026-10-03",
-  "note": "inherited module convention; no physical decision",
+  "code": "85a6b60de2dc31ec",
+  "core": "7a5f16ac96485217",
+  "date": "2026-10-05",
+  "note": "the highlightable kind record keyed by the tag the page lights; presentation only",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/classes/_base.py::FeatureClass#modal vocabulary plumbing": {
-  "code": "0a6f2d99c9c8e071",
-  "core": "97864ccbf84c69c5",
-  "date": "2026-10-03",
-  "note": "plumbing",
+  "code": "bcc5d98f9e8fc840",
+  "core": "7a5f16ac96485217",
+  "date": "2026-10-05",
+  "note": "plumbing; decides nothing physical or visual",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/classes/_base.py::Kind#highlighting rulings": {
@@ -19386,11 +19454,13 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/classes/_base.py::Kind#modal vocabulary plumbing": {
-  "code": "c010d219925d5ec9",
+  "code": "437ccdd9a13cc0bd",
   "core": "f9dee153c118e569",
-  "date": "2026-10-03",
-  "note": "plumbing",
+  "date": "2026-10-05",
+  "note": "plumbing; decides nothing physical or visual",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/classes/_base.py::Kind.__init_subclass__#highlighting rulings": {
@@ -19402,27 +19472,53 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/classes/_base.py::Kind.__init_subclass__#modal vocabulary plumbing": {
-  "code": "233200e56b772dcf",
+  "code": "08814df947670ff4",
   "core": "e47cd546ca2ee81a",
-  "date": "2026-10-03",
-  "note": "plumbing",
+  "date": "2026-10-05",
+  "note": "plumbing; decides nothing physical or visual",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/classes/_base.py::Kind.feature#highlighting rulings": {
-  "code": "1d2633abbb6dda43",
-  "core": "f56208e7890b85b7",
-  "date": "2026-10-03",
-  "note": "inherited module convention; no physical decision",
+  "code": "d79798b2495dade8",
+  "core": "8aa310818e7c28bf",
+  "date": "2026-10-05",
+  "note": "this unit is modal-text plumbing and decides no ink lit or ruled out on hover; the inherited CONVENTION claim should not apply, NONE alone covers it (move the claim off the module docstring onto the units that rule ink, e.g. NOT_HIGHLIGHTED)",
+  "pages": {},
   "research": "",
-  "verdict": "IN-STEP"
+  "rests": [],
+  "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/classes/_base.py::Kind.feature#modal vocabulary plumbing": {
-  "code": "115137ca782bd7a1",
-  "core": "f56208e7890b85b7",
-  "date": "2026-10-03",
-  "note": "plumbing",
+  "code": "d2fddb3c8bf24d03",
+  "core": "8aa310818e7c28bf",
+  "date": "2026-10-05",
+  "note": "plumbing; decides nothing physical or visual",
+  "pages": {},
   "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/interactive/classes/_base.py::MODALS_DIR#highlighting rulings": {
+  "code": "c9c319d6f40da2f5",
+  "core": "262497a37b541806",
+  "date": "2026-10-05",
+  "note": "this unit is modal-text plumbing and decides no ink lit or ruled out on hover; the inherited CONVENTION claim should not apply, NONE alone covers it (move the claim off the module docstring onto the units that rule ink, e.g. NOT_HIGHLIGHTED)",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "MISLABELED"
+ },
+ ".claude/skills/diagram/l7r/diagram/interactive/classes/_base.py::MODALS_DIR#modal vocabulary plumbing": {
+  "code": "0e83f02ef93e3a87",
+  "core": "262497a37b541806",
+  "date": "2026-10-05",
+  "note": "plumbing; decides nothing physical or visual",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/classes/_base.py::NOT_HIGHLIGHTED#highlighting rulings": {
@@ -19434,11 +19530,13 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/classes/_base.py::NOT_HIGHLIGHTED#modal vocabulary plumbing": {
-  "code": "4729c48399202293",
+  "code": "fb6ed7d1501c8828",
   "core": "b02c696010ee3786",
-  "date": "2026-10-03",
-  "note": "plumbing",
+  "date": "2026-10-05",
+  "note": "plumbing; decides nothing physical or visual",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/classes/_base.py::NOT_HIGHLIGHTED_OVERTURNED#highlighting rulings": {
@@ -19450,11 +19548,13 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/classes/_base.py::NOT_HIGHLIGHTED_OVERTURNED#modal vocabulary plumbing": {
-  "code": "6e33db3b57847ac6",
+  "code": "4be748ed99f5d2f1",
   "core": "ba280fc3ffee24f0",
-  "date": "2026-10-03",
-  "note": "plumbing",
+  "date": "2026-10-05",
+  "note": "plumbing; decides nothing physical or visual",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/classes/_base.py::NOT_HIGHLIGHTED_RULINGS#highlighting rulings": {
@@ -19466,11 +19566,23 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/classes/_base.py::NOT_HIGHLIGHTED_RULINGS#modal vocabulary plumbing": {
-  "code": "1e2e54b2fc3d642c",
+  "code": "c0efb7a6a2ab840b",
   "core": "7eb7af6da6339daa",
-  "date": "2026-10-03",
-  "note": "plumbing",
+  "date": "2026-10-05",
+  "note": "plumbing; decides nothing physical or visual",
+  "pages": {},
   "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/interactive/classes/_base.py::OLDER_MAPS#older maps unmentioned": {
+  "code": "1fd3526c19481d4a",
+  "core": "0248b75decc53df9",
+  "date": "2026-10-05",
+  "note": "plumbing; decides nothing physical or visual",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/classes/_base.py::PLACE#highlighting rulings": {
@@ -19482,75 +19594,153 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/classes/_base.py::PLACE#modal vocabulary plumbing": {
-  "code": "a6a91245685a81dd",
+  "code": "0c1737205543bafa",
   "core": "a41ae185c1939afb",
-  "date": "2026-10-03",
-  "note": "plumbing",
+  "date": "2026-10-05",
+  "note": "plumbing; decides nothing physical or visual",
+  "pages": {},
   "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/interactive/classes/_base.py::_ABOUT_DATA_TAGS#highlighting rulings": {
+  "code": "e41e2aa74b4c741e",
+  "core": "e03721d76e130577",
+  "date": "2026-10-05",
+  "note": "this unit is modal-text plumbing and decides no ink lit or ruled out on hover; the inherited CONVENTION claim should not apply, NONE alone covers it (move the claim off the module docstring onto the units that rule ink, e.g. NOT_HIGHLIGHTED)",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "MISLABELED"
+ },
+ ".claude/skills/diagram/l7r/diagram/interactive/classes/_base.py::_ABOUT_DATA_TAGS#modal vocabulary plumbing": {
+  "code": "01b5864272d0e09b",
+  "core": "e03721d76e130577",
+  "date": "2026-10-05",
+  "note": "plumbing; decides nothing physical or visual",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/classes/_base.py::_DATA_TAGS#highlighting rulings": {
-  "code": "deb89e5f1a0cc137",
-  "core": "c1ac9b794abf567c",
-  "date": "2026-10-03",
-  "note": "inherited module convention; no physical decision",
+  "code": "c08c0170b00ad758",
+  "core": "05fed4432ea8a03b",
+  "date": "2026-10-05",
+  "note": "this unit is modal-text plumbing and decides no ink lit or ruled out on hover; the inherited CONVENTION claim should not apply, NONE alone covers it (move the claim off the module docstring onto the units that rule ink, e.g. NOT_HIGHLIGHTED)",
+  "pages": {},
   "research": "",
-  "verdict": "IN-STEP"
+  "rests": [],
+  "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/classes/_base.py::_DATA_TAGS#modal vocabulary plumbing": {
-  "code": "8e62650405361d86",
-  "core": "c1ac9b794abf567c",
-  "date": "2026-10-03",
-  "note": "plumbing",
+  "code": "1d918c8273158a27",
+  "core": "05fed4432ea8a03b",
+  "date": "2026-10-05",
+  "note": "plumbing; decides nothing physical or visual",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/interactive/classes/_base.py::_LABEL_WORDS#highlighting rulings": {
-  "code": "64e0c039072a5611",
-  "core": "9ce2ebb7571afc72",
-  "date": "2026-10-03",
-  "note": "inherited module convention; no physical decision",
+ ".claude/skills/diagram/l7r/diagram/interactive/classes/_base.py::_PARA#highlighting rulings": {
+  "code": "ee09a98b1fbf99d8",
+  "core": "962efb1895da4e7b",
+  "date": "2026-10-05",
+  "note": "this unit is modal-text plumbing and decides no ink lit or ruled out on hover; the inherited CONVENTION claim should not apply, NONE alone covers it (move the claim off the module docstring onto the units that rule ink, e.g. NOT_HIGHLIGHTED)",
+  "pages": {},
   "research": "",
+  "rests": [],
+  "verdict": "MISLABELED"
+ },
+ ".claude/skills/diagram/l7r/diagram/interactive/classes/_base.py::_PARA#modal vocabulary plumbing": {
+  "code": "dba3c2b5a396f786",
+  "core": "962efb1895da4e7b",
+  "date": "2026-10-05",
+  "note": "plumbing; decides nothing physical or visual",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/interactive/classes/_base.py::_LABEL_WORDS#modal vocabulary plumbing": {
-  "code": "bc9b3947f3b25b19",
-  "core": "9ce2ebb7571afc72",
-  "date": "2026-10-03",
-  "note": "plumbing",
+ ".claude/skills/diagram/l7r/diagram/interactive/classes/_base.py::_PARAGRAPHED#highlighting rulings": {
+  "code": "c2be36958bf47020",
+  "core": "27b57bad4074de1b",
+  "date": "2026-10-05",
+  "note": "this unit is modal-text plumbing and decides no ink lit or ruled out on hover; the inherited CONVENTION claim should not apply, NONE alone covers it (move the claim off the module docstring onto the units that rule ink, e.g. NOT_HIGHLIGHTED)",
+  "pages": {},
   "research": "",
+  "rests": [],
+  "verdict": "MISLABELED"
+ },
+ ".claude/skills/diagram/l7r/diagram/interactive/classes/_base.py::_PARAGRAPHED#modal vocabulary plumbing": {
+  "code": "09400dd105a0c688",
+  "core": "27b57bad4074de1b",
+  "date": "2026-10-05",
+  "note": "plumbing; decides nothing physical or visual",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/interactive/classes/_base.py::_RETIRED#highlighting rulings": {
+  "code": "cfaee0efa139384d",
+  "core": "b4421cec6bb1b439",
+  "date": "2026-10-05",
+  "note": "this unit is modal-text plumbing and decides no ink lit or ruled out on hover; the inherited CONVENTION claim should not apply, NONE alone covers it (move the claim off the module docstring onto the units that rule ink, e.g. NOT_HIGHLIGHTED)",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "MISLABELED"
+ },
+ ".claude/skills/diagram/l7r/diagram/interactive/classes/_base.py::_RETIRED#modal vocabulary plumbing": {
+  "code": "81111246c4c90197",
+  "core": "b4421cec6bb1b439",
+  "date": "2026-10-05",
+  "note": "plumbing; decides nothing physical or visual",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/classes/_base.py::_TAGS#highlighting rulings": {
-  "code": "29107c6f50264793",
-  "core": "670d4df6c622d424",
-  "date": "2026-10-03",
-  "note": "inherited module convention; no physical decision",
+  "code": "4d3bac6e7f8bb6a7",
+  "core": "220e6489e4f1f139",
+  "date": "2026-10-05",
+  "note": "this unit is modal-text plumbing and decides no ink lit or ruled out on hover; the inherited CONVENTION claim should not apply, NONE alone covers it (move the claim off the module docstring onto the units that rule ink, e.g. NOT_HIGHLIGHTED)",
+  "pages": {},
   "research": "",
-  "verdict": "IN-STEP"
+  "rests": [],
+  "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/classes/_base.py::_TAGS#modal vocabulary plumbing": {
-  "code": "63ec26045de05f30",
-  "core": "670d4df6c622d424",
-  "date": "2026-10-03",
-  "note": "plumbing",
+  "code": "d90df0629400754e",
+  "core": "220e6489e4f1f139",
+  "date": "2026-10-05",
+  "note": "plumbing; decides nothing physical or visual",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/classes/_base.py::_TAG_LINE#highlighting rulings": {
-  "code": "471c95b436c6b384",
-  "core": "8fa2a066e0acdc15",
-  "date": "2026-10-03",
-  "note": "inherited module convention; no physical decision",
+  "code": "f079d060a3f287ca",
+  "core": "155fc1d3473597ad",
+  "date": "2026-10-05",
+  "note": "this unit is modal-text plumbing and decides no ink lit or ruled out on hover; the inherited CONVENTION claim should not apply, NONE alone covers it (move the claim off the module docstring onto the units that rule ink, e.g. NOT_HIGHLIGHTED)",
+  "pages": {},
   "research": "",
-  "verdict": "IN-STEP"
+  "rests": [],
+  "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/classes/_base.py::_TAG_LINE#modal vocabulary plumbing": {
-  "code": "55b01c22a4f71111",
-  "core": "8fa2a066e0acdc15",
-  "date": "2026-10-03",
-  "note": "plumbing",
+  "code": "e2cddd543f786ad0",
+  "core": "155fc1d3473597ad",
+  "date": "2026-10-05",
+  "note": "plumbing; decides nothing physical or visual",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/classes/_base.py::_TEXT#highlighting rulings": {
@@ -19562,11 +19752,53 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/classes/_base.py::_TEXT#modal vocabulary plumbing": {
-  "code": "4ac71a77403fbcef",
+  "code": "ce07517e23f332d3",
   "core": "0f0fc8e3af42040f",
-  "date": "2026-10-03",
-  "note": "plumbing",
+  "date": "2026-10-05",
+  "note": "plumbing; decides nothing physical or visual",
+  "pages": {},
   "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/interactive/classes/_base.py::_about_feature#modal vocabulary plumbing": {
+  "code": "5615831e2b0635c9",
+  "core": "763a85c0d977ec95",
+  "date": "2026-10-05",
+  "note": "plumbing; decides nothing physical or visual",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/interactive/classes/_base.py::_join#modal vocabulary plumbing": {
+  "code": "2a382babb7153998",
+  "core": "0be71d5d8d99dbd1",
+  "date": "2026-10-05",
+  "note": "plumbing; decides nothing physical or visual",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/interactive/classes/_base.py::about_paragraphs#modal vocabulary plumbing": {
+  "code": "32c8b326914b7814",
+  "core": "4fe4cd1ec8136aea",
+  "date": "2026-10-05",
+  "note": "plumbing; decides nothing physical or visual",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/interactive/classes/_base.py::guess_bullets#modal vocabulary plumbing": {
+  "code": "35d5abc8559175cb",
+  "core": "9f184cc7942daad7",
+  "date": "2026-10-05",
+  "note": "plumbing; decides nothing physical or visual",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/classes/_base.py::install_siblings#highlighting rulings": {
@@ -19578,59 +19810,53 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/classes/_base.py::install_siblings#modal vocabulary plumbing": {
-  "code": "aad66f0908cda03f",
+  "code": "20fcca08469a7800",
   "core": "d8cf7d7031db046e",
-  "date": "2026-10-03",
-  "note": "plumbing",
+  "date": "2026-10-05",
+  "note": "plumbing; decides nothing physical or visual",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/interactive/classes/_base.py::label_phrase#highlighting rulings": {
-  "code": "628d184611f736f3",
-  "core": "e523a775b29c625a",
-  "date": "2026-10-03",
-  "note": "inherited module convention; no physical decision",
+ ".claude/skills/diagram/l7r/diagram/interactive/classes/_base.py::modal_path#modal vocabulary plumbing": {
+  "code": "89d925bb48f1c23c",
+  "core": "2c8efb8fe059b5a8",
+  "date": "2026-10-05",
+  "note": "plumbing; decides nothing physical or visual",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/interactive/classes/_base.py::label_phrase#modal vocabulary plumbing": {
-  "code": "1b948af1e09f66a1",
-  "core": "e523a775b29c625a",
-  "date": "2026-10-03",
-  "note": "plumbing",
+ ".claude/skills/diagram/l7r/diagram/interactive/classes/_base.py::modal_text#modal vocabulary plumbing": {
+  "code": "4f54395490dc5814",
+  "core": "aa7bdd7d13fa602a",
+  "date": "2026-10-05",
+  "note": "plumbing; decides nothing physical or visual",
+  "pages": {},
   "research": "",
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/interactive/classes/_base.py::lead_sentence#highlighting rulings": {
-  "code": "bf30b20efbedb86f",
-  "core": "19d71bc394f63e05",
-  "date": "2026-10-03",
-  "note": "inherited module convention; no physical decision",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/interactive/classes/_base.py::lead_sentence#modal vocabulary plumbing": {
-  "code": "c3ff2901b899a8e8",
-  "core": "19d71bc394f63e05",
-  "date": "2026-10-03",
-  "note": "plumbing",
-  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/classes/_base.py::parse_explanation#highlighting rulings": {
-  "code": "b21fc12141045b3d",
-  "core": "5425c01281ac57ff",
-  "date": "2026-10-03",
-  "note": "inherited module convention; no physical decision",
+  "code": "4b6b4831d89601a8",
+  "core": "b395fe2c53ee185a",
+  "date": "2026-10-05",
+  "note": "this unit is modal-text plumbing and decides no ink lit or ruled out on hover; the inherited CONVENTION claim should not apply, NONE alone covers it (move the claim off the module docstring onto the units that rule ink, e.g. NOT_HIGHLIGHTED)",
+  "pages": {},
   "research": "",
-  "verdict": "IN-STEP"
+  "rests": [],
+  "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/classes/_base.py::parse_explanation#modal vocabulary plumbing": {
-  "code": "27dfe3003f94ba4c",
-  "core": "5425c01281ac57ff",
-  "date": "2026-10-03",
-  "note": "plumbing",
+  "code": "0bd582d07f81bc04",
+  "core": "b395fe2c53ee185a",
+  "date": "2026-10-05",
+  "note": "plumbing; decides nothing physical or visual",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/classes/_base.py::slug#highlighting rulings": {
@@ -19642,11 +19868,13 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/classes/_base.py::slug#modal vocabulary plumbing": {
-  "code": "088d939632d68255",
+  "code": "cd5f9314da50d526",
   "core": "bfa8043157d6a236",
-  "date": "2026-10-03",
-  "note": "plumbing",
+  "date": "2026-10-05",
+  "note": "plumbing; decides nothing physical or visual",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/classes/dikepond.py::FishPond#modal explanation": {
@@ -20121,6 +20349,126 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/interactive/conditions.py::AFTER_PATH#modal condition plumbing": {
+  "code": "e492b600d00c98fe",
+  "core": "d2b7617d63af92e8",
+  "date": "2026-10-05",
+  "note": "parsing and matching of modal conditions, nothing physical",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/interactive/conditions.py::LEAD#modal condition plumbing": {
+  "code": "e7ef85b30b389e22",
+  "core": "33f98abcc434b2a1",
+  "date": "2026-10-05",
+  "note": "parsing and matching of modal conditions, nothing physical",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/interactive/conditions.py::LOOSE#modal condition plumbing": {
+  "code": "e8c1565c20f1efa5",
+  "core": "d1bcff537bdde3a7",
+  "date": "2026-10-05",
+  "note": "parsing and matching of modal conditions, nothing physical",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/interactive/conditions.py::check#modal condition plumbing": {
+  "code": "cf7c14a96584a8ec",
+  "core": "bd97cae349efbcdc",
+  "date": "2026-10-05",
+  "note": "parsing and matching of modal conditions, nothing physical",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/interactive/conditions.py::entry_conditions#modal condition plumbing": {
+  "code": "e927646bf97b8bda",
+  "core": "9c2dc902705c9644",
+  "date": "2026-10-05",
+  "note": "parsing and matching of modal conditions, nothing physical",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/interactive/conditions.py::holds#modal condition plumbing": {
+  "code": "7230d4ced74fb30b",
+  "core": "4fda2ac01c1156d8",
+  "date": "2026-10-05",
+  "note": "parsing and matching of modal conditions, nothing physical",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/interactive/conditions.py::knobs#modal condition plumbing": {
+  "code": "7b175de2559695a1",
+  "core": "10817ce92ed52d38",
+  "date": "2026-10-05",
+  "note": "parsing and matching of modal conditions, nothing physical",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/interactive/conditions.py::label#modal condition plumbing": {
+  "code": "3bd77b692b3c4854",
+  "core": "b0b8e186b3f1b36b",
+  "date": "2026-10-05",
+  "note": "parsing and matching of modal conditions, nothing physical",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/interactive/conditions.py::shown#modal condition plumbing": {
+  "code": "4a295914727e852f",
+  "core": "4a2051ab6180905c",
+  "date": "2026-10-05",
+  "note": "parsing and matching of modal conditions, nothing physical",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/interactive/conditions.py::shown_entry#modal condition plumbing": {
+  "code": "fbb6df99a8fdac4d",
+  "core": "4ee0499b75c5cfa4",
+  "date": "2026-10-05",
+  "note": "parsing and matching of modal conditions, nothing physical",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/interactive/conditions.py::split#modal condition plumbing": {
+  "code": "377b788f9219406e",
+  "core": "e7953c4e63e5d93d",
+  "date": "2026-10-05",
+  "note": "parsing and matching of modal conditions, nothing physical",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/interactive/conditions.py::strip_entry#modal condition plumbing": {
+  "code": "2c9efb9beb75cb13",
+  "core": "1d835ab7ed99971b",
+  "date": "2026-10-05",
+  "note": "parsing and matching of modal conditions, nothing physical",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  ".claude/skills/diagram/l7r/diagram/interactive/content.py::ASSETS#plumbing": {
   "code": "60288c6297394b97",
   "core": "88adb861008e629c",
@@ -20313,22 +20661,6 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/interactive/page.py::CAVEAT_LEAD#hover and modal presentation": {
-  "code": "b943604275fa39ed",
-  "core": "1b3618f25f5847ef",
-  "date": "2026-10-03",
-  "note": "hover/hit/modal presentation only",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/interactive/page.py::CAVEAT_LEAD#page plumbing": {
-  "code": "c749e5edc7ad0740",
-  "core": "1b3618f25f5847ef",
-  "date": "2026-10-03",
-  "note": "presentation only, covered by its CONVENTION claim; nothing physical",
-  "research": "",
-  "verdict": "IN-STEP"
- },
  ".claude/skills/diagram/l7r/diagram/interactive/page.py::HIT_KEEP_CLEAR#hover and modal presentation": {
   "code": "6e7a9453c5685e9b",
   "core": "dcef3b9dd29b1a35",
@@ -20441,6 +20773,26 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/interactive/page.py::NOT_RENDERED#hover and modal presentation": {
+  "code": "bbb75a86b3161806",
+  "core": "de1f3d344aad422a",
+  "date": "2026-10-05",
+  "note": "what the page and modal show, no claim about the place",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/interactive/page.py::NOT_RENDERED#page plumbing": {
+  "code": "7e11661d563e0721",
+  "core": "de1f3d344aad422a",
+  "date": "2026-10-05",
+  "note": "assembly, scanning and I/O; decides nothing physical",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  ".claude/skills/diagram/l7r/diagram/interactive/page.py::PLAIN_CURSOR#hover and modal presentation": {
   "code": "954da85cbe2ce0fe",
   "core": "89cc6473d8e9972e",
@@ -20452,22 +20804,6 @@
  ".claude/skills/diagram/l7r/diagram/interactive/page.py::PLAIN_CURSOR#page plumbing": {
   "code": "082b4c3d6dbfd3be",
   "core": "89cc6473d8e9972e",
-  "date": "2026-10-03",
-  "note": "presentation only, covered by its CONVENTION claim; nothing physical",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/interactive/page.py::REFERENCES_LEAD#hover and modal presentation": {
-  "code": "dacbbdc2c5286c58",
-  "core": "31ccf5f48a2f4559",
-  "date": "2026-10-03",
-  "note": "hover/hit/modal presentation only",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/interactive/page.py::REFERENCES_LEAD#page plumbing": {
-  "code": "d27e1e29f399990e",
-  "core": "31ccf5f48a2f4559",
   "date": "2026-10-03",
   "note": "presentation only, covered by its CONVENTION claim; nothing physical",
   "research": "",
@@ -21002,35 +21338,43 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/page.py::explanations#hover and modal presentation": {
-  "code": "2c79b470bd22bba0",
-  "core": "31526fd4432691f0",
-  "date": "2026-10-03",
-  "note": "hover/hit/modal presentation only",
+  "code": "f2e01326cc1485b1",
+  "core": "5419619d7498c0a7",
+  "date": "2026-10-05",
+  "note": "what the page and modal show, no claim about the place",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/page.py::explanations#page plumbing": {
-  "code": "cef6d2ee18771d7e",
-  "core": "31526fd4432691f0",
-  "date": "2026-10-03",
-  "note": "presentation only, covered by its CONVENTION claim; nothing physical",
+  "code": "9ee049dc637ee4db",
+  "core": "5419619d7498c0a7",
+  "date": "2026-10-05",
+  "note": "assembly, scanning and I/O; decides nothing physical",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/page.py::glossary_for#hover and modal presentation": {
-  "code": "e1e569d13c880e1c",
-  "core": "86896e0ffb318f75",
-  "date": "2026-10-03",
-  "note": "no presentation decision here, NONE covers it; nothing physical",
+  "code": "0fafb63ed631c11f",
+  "core": "58779068fbfbd915",
+  "date": "2026-10-05",
+  "note": "what the page and modal show, no claim about the place",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/page.py::glossary_for#page plumbing": {
-  "code": "65275e3033a0b176",
-  "core": "86896e0ffb318f75",
-  "date": "2026-10-03",
-  "note": "plumbing",
+  "code": "7de2a348318f30ca",
+  "core": "58779068fbfbd915",
+  "date": "2026-10-05",
+  "note": "assembly, scanning and I/O; decides nothing physical",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/page.py::hit_copies#hover and modal presentation": {
@@ -21162,19 +21506,33 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/page.py::render_page#hover and modal presentation": {
-  "code": "9db9eb43734955d9",
-  "core": "cf6f33c48f86194d",
-  "date": "2026-10-03",
-  "note": "hover/hit/modal presentation only",
+  "code": "60ffd7caa0dafc93",
+  "core": "2231b8f7ca71b176",
+  "date": "2026-10-05",
+  "note": "what the page and modal show, no claim about the place",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/page.py::render_page#page plumbing": {
-  "code": "302e04ee9532924b",
-  "core": "cf6f33c48f86194d",
-  "date": "2026-10-03",
-  "note": "presentation only, covered by its CONVENTION claim; nothing physical",
+  "code": "d82ddb19ca3e7f73",
+  "core": "2231b8f7ca71b176",
+  "date": "2026-10-05",
+  "note": "assembly, scanning and I/O; decides nothing physical",
+  "pages": {},
   "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/interactive/page.py::rendered_text#plumbing": {
+  "code": "bb023fde5f22b92d",
+  "core": "d7c07772248e563d",
+  "date": "2026-10-05",
+  "note": "joins an entry's rendered strings",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/page.py::unregistered_classes#hover and modal presentation": {
@@ -21210,19 +21568,23 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/page.py::write_html#hover and modal presentation": {
-  "code": "ad65f1c70990e559",
-  "core": "d09f9c7962c4df15",
-  "date": "2026-10-03",
-  "note": "no presentation decision here, NONE covers it; nothing physical",
+  "code": "cb0318fb46293645",
+  "core": "8c6931d6ccc6c03d",
+  "date": "2026-10-05",
+  "note": "what the page and modal show, no claim about the place",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/page.py::write_html#page plumbing": {
-  "code": "3c34cc4b73eb8e72",
-  "core": "d09f9c7962c4df15",
-  "date": "2026-10-03",
-  "note": "plumbing",
+  "code": "a1dbfc111be9b7e8",
+  "core": "8c6931d6ccc6c03d",
+  "date": "2026-10-05",
+  "note": "assembly, scanning and I/O; decides nothing physical",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/place.py::BASIS#card plumbing": {
@@ -21454,11 +21816,30 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/place.py::place_card#card plumbing": {
-  "code": "8b6ea1d16ab87503",
-  "core": "4a7d9270f1085e81",
-  "date": "2026-10-03",
-  "note": "plumbing, decides nothing physical",
+  "code": "d8c10eefa9d596a2",
+  "core": "79799d3dc1cfb27d",
+  "date": "2026-10-05",
+  "note": "assembles the card from meta, notes and record text; decides nothing physical",
+  "pages": {},
   "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/interactive/place.py::retirement_fact#card plumbing": {
+  "code": "533f6e3d81c34f67",
+  "core": "07d3e889ab868dff",
+  "date": "2026-10-05",
+  "note": "states the map's recorded retirement-house count; the form is attested and the share is not this unit's decision",
+  "pages": {
+   "0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html": "79bfdbd47894e24f"
+  },
+  "research": "b37378277cb6d3b4",
+  "rests": [
+   "0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html:06805d774621cf15",
+   "0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html:4e8eca4577e50161",
+   "0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html:650b1e356fcc1032",
+   "0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html:7635ea597e9a19db"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/place.py::size_sentence#households named beside farmhouses": {
@@ -21492,15 +21873,23 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/place.py::windbreak_default#windbreak toward the winter wind": {
-  "code": "665a43589ee078a3",
-  "core": "20f11d4d3dc9487b",
-  "date": "2026-10-03",
-  "note": "northwest unless a local wind is declared",
+  "code": "65d3bdba6d616820",
+  "core": "385bb0e9f644e2e0",
+  "date": "2026-10-05",
+  "note": "regional northwest winter wind unless a local wind is declared, as the record and drawing page say",
   "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "056170f37ce7086e",
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.html": "d66bff05f8dd56a6"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fbd35c7766637fc3",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.html": "90bbc0b95e50dee7"
   },
-  "research": "132fedeecf73a9cd",
+  "research": "30a23397fc874fe8",
+  "rests": [
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:0c9dba0334c6fdfb",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:43aedefed41c4f79",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:c36f0698d70588dc",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.html:18514af267f0ae81",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.html:5de26ce128fcb5a3",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.html:8fdc88b4a2df56ca"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/raster.py::OFFMAP_MARGIN#low-zoom picture": {
@@ -33486,14 +33875,6 @@
   "research": "a9a8377184fbd08b",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_source#a stream source's brook drawn 7 wide": {
-  "code": "4bf06e4cfcbfe199",
-  "core": "4bf06e4cfcbfe199",
-  "date": "2026-10-03",
-  "note": "a stream source's brook drawn 7 wide",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_source#feeder brook": {
   "code": "a06e83365931c3a6",
   "core": "4bf06e4cfcbfe199",
@@ -35027,38 +35408,6 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/finish.py::FinishMixin._blank_label_spot#geometry, parsing and I/O": {
-  "code": "cd75c0a301273029",
-  "core": "47c04c2c63d60acb",
-  "date": "2026-10-03",
-  "note": "plumbing",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/settlement/finish.py::FinishMixin._blank_label_spot#map finishing": {
-  "code": "4177608bcea4433b",
-  "core": "47c04c2c63d60acb",
-  "date": "2026-10-03",
-  "note": "how it is shown",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/settlement/finish.py::FinishMixin._box_clear#geometry, parsing and I/O": {
-  "code": "925a7b32411c2578",
-  "core": "e7baf79e44afaf72",
-  "date": "2026-10-03",
-  "note": "plumbing",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/settlement/finish.py::FinishMixin._box_clear#map finishing": {
-  "code": "1214a20e9c0e693b",
-  "core": "e7baf79e44afaf72",
-  "date": "2026-10-03",
-  "note": "how it is shown",
-  "research": "",
-  "verdict": "IN-STEP"
- },
  ".claude/skills/diagram/l7r/diagram/settlement/finish.py::FinishMixin._caption_lines#geometry, parsing and I/O": {
   "code": "7d62beac301c8902",
   "core": "827262ec1c798702",
@@ -35102,38 +35451,6 @@
  ".claude/skills/diagram/l7r/diagram/settlement/finish.py::FinishMixin._text_width#map finishing": {
   "code": "89f29b896eb2c8a3",
   "core": "23a20e404a0905c4",
-  "date": "2026-10-03",
-  "note": "how it is shown",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/settlement/finish.py::FinishMixin._title_band#geometry, parsing and I/O": {
-  "code": "371be10f146f8f78",
-  "core": "95c0b494eb4d167f",
-  "date": "2026-10-03",
-  "note": "plumbing",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/settlement/finish.py::FinishMixin._title_band#map finishing": {
-  "code": "e1728353fb168cce",
-  "core": "95c0b494eb4d167f",
-  "date": "2026-10-03",
-  "note": "how it is shown",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/settlement/finish.py::FinishMixin._title_obstacles#geometry, parsing and I/O": {
-  "code": "366b404e0339616b",
-  "core": "5833905872d257b5",
-  "date": "2026-10-03",
-  "note": "plumbing",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/settlement/finish.py::FinishMixin._title_obstacles#map finishing": {
-  "code": "2713fe2fab3de463",
-  "core": "5833905872d257b5",
   "date": "2026-10-03",
   "note": "how it is shown",
   "research": "",
@@ -35214,38 +35531,6 @@
  ".claude/skills/diagram/l7r/diagram/settlement/finish.py::FinishMixin.render_png#map finishing": {
   "code": "50bffcbed70fa979",
   "core": "5dfb46550ca7ab10",
-  "date": "2026-10-03",
-  "note": "how it is shown",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/settlement/finish.py::FinishMixin.title#geometry, parsing and I/O": {
-  "code": "1e3deb7ddbf41e72",
-  "core": "458e32d8baadd6b9",
-  "date": "2026-10-03",
-  "note": "plumbing",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/settlement/finish.py::FinishMixin.title#map finishing": {
-  "code": "041adc9059e87575",
-  "core": "458e32d8baadd6b9",
-  "date": "2026-10-03",
-  "note": "how it is shown",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/settlement/finish.py::FinishMixin.title_clear#geometry, parsing and I/O": {
-  "code": "a0427e56aeba5201",
-  "core": "b551a5fb212fdf4a",
-  "date": "2026-10-03",
-  "note": "plumbing",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/settlement/finish.py::FinishMixin.title_clear#map finishing": {
-  "code": "d92b26b066cae3a0",
-  "core": "b551a5fb212fdf4a",
   "date": "2026-10-03",
   "note": "how it is shown",
   "research": "",
@@ -39937,14 +40222,6 @@
   },
   "research": "f1a38c9708a60be9",
   "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/settlement/land/cover.py::GroundCoverMixin.commons#scrub pine's crown reach PINE_SPREAD_BS (4.6 bs) used as its shade crown": {
-  "code": "c1ac6e6e73a7628f",
-  "core": "c1ac6e6e73a7628f",
-  "date": "2026-10-03",
-  "note": "scrub pine's crown reach PINE_SPREAD_BS (4.6 bs) used as its shade crown",
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/land/cover.py::GroundCoverMixin.commons#scrub pines": {
   "code": "17addb2a14054ee2",
@@ -48876,6 +49153,116 @@
    "0187-theater-stages-on-shrine-ground-miyaji-shibai.drawing.html": "1b7c6e1df4abc928"
   },
   "research": "6336b727dd21d3aa",
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/title.py::PLACARD_PAD#placard padding": {
+  "code": "a4674c6ca632873f",
+  "core": "e558226d98ba699d",
+  "date": "2026-10-05",
+  "note": "padding of the title card, pure map furniture",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/title.py::PLACARD_TEXT_SCALE#placard text size": {
+  "code": "d4f6455a5c84a2a4",
+  "core": "233bdca142f022b6",
+  "date": "2026-10-05",
+  "note": "text size of the title card, map furniture; bar stays 100 map-px",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/title.py::TitleMixin#map finishing": {
+  "code": "73424ab37ea1c31f",
+  "core": "45d47d15b58c96af",
+  "date": "2026-10-05",
+  "note": "title placement and obstacle geometry, map furniture and plumbing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/title.py::TitleMixin._blank_label_spot#map finishing": {
+  "code": "27a174b90ad44f69",
+  "core": "47c04c2c63d60acb",
+  "date": "2026-10-05",
+  "note": "title placement and obstacle geometry, map furniture and plumbing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/title.py::TitleMixin._box_clear#map finishing": {
+  "code": "04c1440c09690edb",
+  "core": "e7baf79e44afaf72",
+  "date": "2026-10-05",
+  "note": "title placement and obstacle geometry, map furniture and plumbing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/title.py::TitleMixin._title_band#map finishing": {
+  "code": "c96fb5afa417e75d",
+  "core": "95c0b494eb4d167f",
+  "date": "2026-10-05",
+  "note": "title placement and obstacle geometry, map furniture and plumbing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/title.py::TitleMixin._title_obstacles#map finishing": {
+  "code": "424f66b08ec1ddcc",
+  "core": "5833905872d257b5",
+  "date": "2026-10-05",
+  "note": "title placement and obstacle geometry, map furniture and plumbing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/title.py::TitleMixin.placard_size#placard size": {
+  "code": "0421759370ab2e49",
+  "core": "f0f69440bc53289b",
+  "date": "2026-10-05",
+  "note": "card sized from its measured text, map furniture",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/title.py::TitleMixin.title#map finishing": {
+  "code": "5187609cd7d87dfa",
+  "core": "f72bbc3b3eca5f26",
+  "date": "2026-10-05",
+  "note": "title placement and obstacle geometry, map furniture and plumbing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/title.py::TitleMixin.title_clear#map finishing": {
+  "code": "9261d5b39e771cb0",
+  "core": "b551a5fb212fdf4a",
+  "date": "2026-10-05",
+  "note": "title placement and obstacle geometry, map furniture and plumbing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/title.py::placard_height#placard size": {
+  "code": "5309a61623e79148",
+  "core": "b907febdcd46eaa7",
+  "date": "2026-10-05",
+  "note": "card sized from its measured text, map furniture",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/town_ways.py::TownWaysMixin#town ways plumbing": {

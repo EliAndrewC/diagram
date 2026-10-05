@@ -119,23 +119,23 @@ verdict or example is owed (FR-010, FR-016).
       research: rendering
       verify: DONE. The garden's first rewrite took one change (M21, the older maps never mentioned); the windbreak was piloted as the further feature (T11/T12's terms), its knob-conditioned guess built as T22; the GM 2026-10-05: "I'm pretty happy with this", then the go-ahead (request.md, "The go-ahead")
 
-- [ ] T23 [US6] The rulings feature (FR-016): claimed with `make claim`, its spec a short request.md (the GM's go-ahead) and a
+- [x] T23 [US6] The rulings feature (FR-016): claimed with `make claim`, its spec a short request.md (the GM's go-ahead) and a
   `rulings.md` list, one numbered entry per ruling only the GM can give, each with what the record and the guidelines say and
   why neither they nor a labeled guess settle it; filed and pushed from a SEPARATE clone (this clone's push carries 319's
   unlanded delta and is refused while tasks are open), as feature 321 was. Entries are added by the rollout as found, in this
   clone's copy until 319 lands, without a review per entry
       research: rendering
-      verify:
+      verify: DONE. feature 325 filed from clone diagram-html-rulings and landed on main (e112eab38); R1 the crop season; every other candidate decided under the guidelines
 
 ## Phase 4 - the title card's choices (after the go-ahead)
 
-- [ ] T13 [US4] D10 settled into `plan.md` and re-reviewed: `interactive/assets/choices.json` over EVERY per-settlement
+- [x] T13 [US4] D10 settled into `plan.md` and re-reviewed: `interactive/assets/choices.json` over EVERY per-settlement
   choice - a test reads the POPULATED `KNOBS` registry (23 knobs, seven registered from other modules - the plan review's
   note), not `_knobs.py`'s lines, and every `### Features` source key; the choice-value modals in a new registry in the About
   form; the title card lists the choices, each value opening its modal; the hamlets' `### Features` facts moved; a test that
   no hamlet feature modal differs between two pool maps (FR-004, FR-009, SC-004)
       research: rendering
-      verify:
+      verify: DONE. choices.json over every per-settlement roll (when conditions, not_choices, the wider scan); the card lists choices each opening its modal; water_sink/grain_drift/grave_form recorded in meta and the pool regenerated; Features facts moved; plan review of D10 CLEAR (round 3); test_choices 7 passed
 
 ## Phase 5 - the rollout (after the go-ahead)
 
@@ -148,14 +148,14 @@ verdict or example is owed (FR-010, FR-016).
       - [ ] quote-check confirmed
       - [ ] source-applicability confirmed
       verify:
-- [ ] T15 [US4] Every choice value's modal written and checked (FR-011)
+- [x] T15 [US4] Every choice value's modal written and checked (FR-011)
       research: rendering
-      verify:
-- [ ] T16 [US5] The sheets: every compound kind classed standard or `Form: particular` (plan D11); the general kinds rewritten
+      verify: DONE. 119 choice-value modals written in the About form, two combined check rounds (form, research, depiction) applied
+- [x] T16 [US5] The sheets: every compound kind classed standard or `Form: particular` (plan D11); the general kinds rewritten
   under `modals.md`, the particulars and every sheet's `### Features` entries under `modals-particular.md`, the canon answer in
   the `modal-research` bundle; checked (FR-003, FR-011)
       research: rendering
-      verify:
+      verify: DONE. 99 sheet kinds standard or Form: particular, two combined check rounds applied (crops from the GM's sheets, the SVG where a crop missed); the four sheets' ### Features entries checked under modals-particular.md; sheet drifts registered as Mode A procedure claims
 - [ ] T17 The old form retired: the What/Why/Note/Caveat parser, the label lead, the caveat machinery and their tests; the
   docs; `make page-check` and `make done` green; the pool pages regenerated; the push (FR-012, SC-006)
       research: rendering
