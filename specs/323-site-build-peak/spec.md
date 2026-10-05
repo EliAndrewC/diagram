@@ -73,5 +73,5 @@ None: no map draws or states anything differently, and no page of the record cha
 
 ## Review history
 
-- Round 1 (initial acceptance, MODE 2, 2026-10-04): FAITHFUL. No findings; the reviewer noted the 148 MB result as the larger
+- Round 1 (initial acceptance, MODE 2, 2026-10-04): FAITHFUL. No findings; the reviewer noted the build's result as the larger
   lever, outside a straightforward change (a different return type).
