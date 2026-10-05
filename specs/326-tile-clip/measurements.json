@@ -1,0 +1,10 @@
+{
+  "perf-control-326-roll-ab": {
+    "verifies": "the band-3 reading of 326-end against the back-to-back 326-start (15 households +15.6%, seeds 39 and 47 +27% / +29%; 10 households +14.9%; 20 and 40 households -15.5% / -19.6%), taken in a window the container's other session held clear, load falling 4.5 -> 1.5",
+    "subject": "the whole roll (every stage before labels, unprofiled) of the perf reference spec at 15 households, seeds 39 and 47 - the seeds that crossed",
+    "value": 3.8,
+    "unit": "s, seed 39's whole roll on the clone (both runs); the base 4.0 / 3.8 s",
+    "quantity": "alternated base (/tmp/base326 at b8b20e690) and clone, 2026-10-05 ~13:40, load ~2-3.7: seed 39 base 4.0 / 3.8 s, clone 3.8 / 3.8 s; seed 47 base 4.1 / 4.2 s, clone 4.2 / 4.1 s. Feature 326 changes raster.py (the picture's tiles), which no roll stage runs.",
+    "command": "make perf-profile SEED=39|47 STAGE=labels, alternated in /tmp/base326 and the clone ('the stages before it took Xs unprofiled')"
+  }
+}

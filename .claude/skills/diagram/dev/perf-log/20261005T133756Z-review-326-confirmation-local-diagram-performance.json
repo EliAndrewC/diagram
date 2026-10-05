@@ -1,0 +1,62 @@
+{
+  "band": 3,
+  "base": {
+    "commit": "b8b20e690",
+    "label": "326-start",
+    "utc": "20261005T132948Z"
+  },
+  "binding": "09807ca197fda11d06af53110e6ec0202752ac5ea04e22e25217a5736646df48",
+  "end": {
+    "commit": "48431abbe",
+    "label": "326-end",
+    "utc": "20261005T133303Z"
+  },
+  "environment": "local",
+  "feature": "326-tile-clip",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "ce387434-fe83-4bcf-ae29-3db97f8d2f56",
+    "utc": "20261005T133756Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": 23.1,
+          "39": 10.0,
+          "4": 25.7,
+          "47": 0.0
+        },
+        "total_pct": 14.9
+      },
+      "20": {
+        "seeds": {
+          "25": -22.7,
+          "39": -31.5,
+          "4": 4.2,
+          "47": -6.8
+        },
+        "total_pct": -15.5
+      },
+      "40": {
+        "seeds": {
+          "25": -23.1,
+          "39": -22.6,
+          "4": -13.7,
+          "47": -19.7
+        },
+        "total_pct": -19.6
+      }
+    },
+    "seeds": {
+      "25": 7.7,
+      "39": 27.0,
+      "4": 2.0,
+      "47": 29.3
+    },
+    "total_pct": 15.6
+  },
+  "note": "No roll stage runs the changed code: the diff is raster.py only (tile_doc/render_tile, reached only via picture(), which nothing in the roll calls); the auditor trapped all three in a roll and saw zero calls. Control perf-control-326-roll-ab checked (4 profile files on both legs, identical labels call counts); the auditor's own alternated runs base vs clone: 10h seed 4 3.7/3.7 vs 3.9/3.6 s, seed 25 2.7/2.5 vs 2.5/2.6 s, 15h seed 39 3.7/3.8 vs 3.8/3.8 s. The +15.6%/+14.9% vs -15.5%/-19.6% split across legs, with growth spread thinly over every stage, is machine load, as stated.",
+  "verdict": "consistent"
+}

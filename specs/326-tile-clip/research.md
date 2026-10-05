@@ -62,3 +62,12 @@ Observed 2026-10-05, method: the same check with WHOLE-line clipping (a classed 
 off-map rule, otherwise kept untouched): all 5 tiled maps byte-identical; on the reference render, peak 420 / 393 MB against
 537 / 533 MB unclipped (about 130 MB less, against trimming's about 170 MB), render span 4.36 / 3.99 s against 3.25 / 3.82 s
 under load. The GM chose trimming (Amendment 2): visually identical, the larger saving.
+
+## R5 - The bookends (2026-10-05)
+
+Observed 2026-10-05, method: `make perf` in /tmp/base326 at the pre-feature commit b8b20e690 and `make perf-gate` in the clone,
+back to back in a window the container's other session held clear (load 4.5 -> 1.5 across the pair): band 3 - 15 households
++15.6% (seeds 39 and 47 +27% / +29%), 10 households +14.9%, but 20 households -15.5% and 40 households -19.6%. The snapshot
+times only the roll's stages, which feature 326 does not touch (raster.py). Control (`measurements.json`
+`perf-control-326-roll-ab`): the two seeds that crossed, whole roll alternated base and clone - 4.0 / 3.8 against 3.8 / 3.8 s and
+4.1 / 4.2 against 4.2 / 4.1 s. The pair's spread is the machine, both ways, as feature 324 found (its R5).

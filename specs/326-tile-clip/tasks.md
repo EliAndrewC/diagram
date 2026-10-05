@@ -17,5 +17,6 @@
 - [x] T03 visual identity over every live pool map's picture: clipped tiles against unclipped, each difference counted and bisected, recorded (D3, FR-003, SC-003)
       research: rendering
       verify: DONE. pool: 6 of 11 maps one tile, 3 identical, 2 differ by 34 and 29 channel values at most 10 levels - bisected to anti-aliasing on trimmed paths, visually identical as the GM accepted (R4)
-- [ ] T04 make done; both bookends back to back in an arranged window and the records their band owes; claims owed answered (FR-004, SC-004)
+- [x] T04 make done; both bookends back to back in an arranged window and the records their band owes; claims owed answered (FR-004, SC-004)
       research: rendering
+      verify: DONE. make done green; claims IN-STEP 8/8; 326 bookends back to back in an arranged window: band 3 both ways under falling load, control and perf-audit (consistent, justified), the GM signed off 2026-10-05 (research.md R5)
