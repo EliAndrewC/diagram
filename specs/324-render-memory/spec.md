@@ -102,3 +102,6 @@ None: no map draws or states anything differently; the output is byte-identical.
   render step (`request.md`).
 
 ## Review history
+
+- Round 1 (initial acceptance, MODE 2, 2026-10-05): FAITHFUL. No findings; the reviewer noted that SC-001 and SC-002 bound
+  more loosely than the proposal promised (noise allowances), and asked that a measured cost near the bound be reported.
