@@ -7,3 +7,7 @@
 - round 2, record-format 0038: VOCABULARY 2 - solar time and Seiryoki glossed (Seiryoki's definition carries the after-1701 dating); a pre-existing duplicate glossary variant (Bu Nongshu) removed, test_glossary_source green
 - round 2, source-reader 0038: READ 1, NOT-FOUND 1 (absence holds), CONTRADICTED 1 - the book itself discusses suitable land and two headings name a vegetable garden; pass text rescoped to the lists as the prefectural history prints them, the garden headings not saying where it lay
 - round 2, entry-drift: Windbreak IN-STEP; Garden answered by REASON again (the modal is 319's to rewrite)
+- round 3, quote-check 0038: SUPPORTS 9, PARTIAL 1 - kurita-2019-igune's 11-22 m rested on numbers in a parenthesis; the table's measured row now quoted cell by cell (its 実測 in the originals); unfootnoted 0
+- round 3, record-format 0038: 55 words ruled, clean
+- round 3, source-reader 0038: READ 2, NOT-FOUND 1 - both absences hold and the rescoped pass text is honest
+- round 3, entry-drift: Windbreak IN-STEP; Garden answered by REASON (319 rewrites garden.md)
