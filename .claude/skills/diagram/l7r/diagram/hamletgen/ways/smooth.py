@@ -32,13 +32,13 @@ _STUB_REACH_FT = 48.0  # the post-smoothing touch: a cut stub may stand a little
 # past 90 ft the arm is reaching ground the rest of the lane cannot, so it is a lane in its own right
 # and not an arm, and it stays (the bends check then fires on it honestly, as it did before).
 _LONG_ARM_FT = 90.0
-"""Research: hairpin arm cut length - UNRESEARCHED: an arm up to 90 ft is cut where no house loses its way; 0081 gives only the 40 ft returning leg"""
+"""Research: hairpin arm cut length - research/questions/0081-village-lanes.drawing.html: a returning leg under 40 ft is cut; the code cuts an arm up to 90 ft where no house loses its way"""
 # `lanes_reach_something`'s two figures, so a cut never trades one failure for the other: after the
 # cut the tip is the lane's END, and an end must reach another way or a farmhouse.
 _END_WAY_FT = 40.0
-"""Research: lane end reaches a way - GUESS: within 40 ft (sweeps.py _REACH_FT holds 60 ft for the same reach)"""
+"""Research: lane end reaches a way - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within 40 ft where the page says 60 ft (sweeps.py _REACH_FT holds 60 ft)"""
 _END_HOUSE_FT = 90.0
-"""Research: lane end reaches a house - GUESS: within 90 ft"""
+"""Research: lane end reaches a house - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within 90 ft where the page says 60 ft, and a lane runs about 30 ft past its last house"""
 _JOG_FT = 6.0  # a vertex this close to the chord that replaces it was a jog, not a bend
 """Research: jog chorded - research/questions/0081-village-lanes.drawing.html: a vertex within 6 ft of the chord is a jog"""
 _KNOT_FT = 25.0  # ends of different lanes this close are one junction, not several

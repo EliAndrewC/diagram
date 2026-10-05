@@ -445,7 +445,7 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
         dispersed hamlet draws no web - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html
         lane form knob - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: side lanes or a back lane, rolled per map
         lanes after the houses - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html
-        lane runs past its last steading - GUESS: 30 ft
+        lane runs past its last steading - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: about 30 ft
         back lane ties - research/questions/0081-village-lanes.html: cross-ways frame the back lanes
         back lane tie spacing - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the ties about three pitches (3 x BUNDLE_PITCH) apart
         belt crossed not followed - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: a lane

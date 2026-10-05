@@ -111,7 +111,7 @@ def _lay_web_lane(s: Settlement, run: Poly, hard: list[Poly], walls: list[Poly],
         a tail past the junction cut - research/questions/0081-village-lanes.drawing.html: under 40 ft
         link reach - UNRESEARCHED: a link up to 200 ft to the network
         a link takes its way's width - CONVENTION
-        web lane width - UNRESEARCHED: a web lane drawn 3 ft wide"""
+        web lane width - research/questions/0081-village-lanes.drawing.html: a web lane drawn 3 ft wide, the footpath's tread"""
     segs = _net_segs(s)
     if len(run) < 2:
         return False

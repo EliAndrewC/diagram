@@ -261,3 +261,14 @@ def test_an_entry_drift_unit_names_its_sections_number_and_its_answer() -> None:
     cmd = ro.command(u)
     assert "Q=0038 FOR=entry-drift" in cmd and 'CHECK=entry-drift KIND="vegetable garden"' in cmd
     assert "Q=<its section>" in ro.command(ru.Unit("entry-drift:well", "its section's findings moved ()"))
+
+
+def test_kind_names_several_modals_at_once(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 319: answering 248 modals one `make record-checked KIND=` at a time took over an hour (every call
+    recomputes the owed tree), so KIND takes a comma-separated list and one call answers them all."""
+    from types import SimpleNamespace
+
+    us = [SimpleNamespace(check="modal-form", subject=s, slug=f"modal-form:{s}", fingerprint="fp") for s in ("hamlet/a", "choice/b--T", "sheet/c")]
+    monkeypatch.setattr(ro, "units", lambda root: us)
+    assert ro.answer(tmp_path, "modal-form", "ok", kind="hamlet/a,choice/b--T") == ["modal-form:hamlet/a", "modal-form:choice/b--T"]
+    assert ro.answer(tmp_path, "modal-form", "ok", kind="sheet/c") == ["modal-form:sheet/c"], "one unit, as before"

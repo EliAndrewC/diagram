@@ -139,15 +139,15 @@ verdict or example is owed (FR-010, FR-016).
 
 ## Phase 5 - the rollout (after the go-ahead)
 
-- [ ] T14 [US6] Every hamlet class rewritten in the About form, by writer agents on disjoint modules, each class checked from
+- [x] T14 [US6] Every hamlet class rewritten in the About form, by writer agents on disjoint modules, each class checked from
   its own bundles; research passes where a standard question is open (FR-011)
       research: physical
-      - [ ] research pass
-      - [ ] source-reader confirmed
-      - [ ] recorded and cited
-      - [ ] quote-check confirmed
-      - [ ] source-applicability confirmed
-      verify:
+      - [x] research pass
+      - [x] source-reader confirmed
+      - [x] recorded and cited
+      - [x] quote-check confirmed
+      - [x] source-applicability confirmed
+      verify: DONE. 56 hamlet modals in the About form (writers on disjoint modules), two combined check rounds applied (form, research, depiction); research passes in page sessions G1-G6 (open standard questions) and H1-H16 (the record conflicts the checks found), each checked by source-reader, quote-check, record-format, translation-check and source-applicability; make record-owed UNANSWERED=1: no research check unanswered
 - [x] T15 [US4] Every choice value's modal written and checked (FR-011)
       research: rendering
       verify: DONE. 119 choice-value modals written in the About form, two combined check rounds (form, research, depiction) applied

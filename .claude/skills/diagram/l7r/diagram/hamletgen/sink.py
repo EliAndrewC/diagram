@@ -521,7 +521,7 @@ def pond_seat(plan: SitePlan, out: Pt, prx: float, pry: float, heading: Pt | Non
         pond in a pocket below the fields - research/questions/0060-field-drains-akusuiro.drawing.html: the pond at the field's foot
         sways across the fall - UNRESEARCHED: 0.9 and 1.8 long radii
         set-back limit - UNRESEARCHED: POND_SETBACK_LIMIT
-        ditch runs downhill, not over the brook - research/questions/0060-field-drains-akusuiro.drawing.html"""
+        ditch runs downhill, not over the brook - research/questions/0060-field-drains-akusuiro.drawing.html, research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html"""
     for sway in (0.0, -0.9 * prx, 0.9 * prx, -1.8 * prx, 1.8 * prx):
         moved = (out[0] - plan.fall[1] * sway, out[1] + plan.fall[0] * sway)
         back = pond_setback(plan, moved, prx, pry)

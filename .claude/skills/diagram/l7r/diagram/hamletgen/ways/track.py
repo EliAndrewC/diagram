@@ -644,7 +644,8 @@ def connector_track(plan: SitePlan, start: Pt, avoid: Sequence[Poly] = (), reach
         leaning downslope - UNRESEARCHED: the ideal bearing weighs 0.55 away from the field and 0.85 downslope
         wet, then steadings, then crop - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: wet ground and crop refused (0081), no tread on a steading (0246)
         the three ranked - NONE: search order; wet and steaded bearings are both refused in the end
-        track's wander - research/questions/0081-village-lanes.drawing.html: bowed 34 and 46 px either side of the bearing"""
+        track's wander - research/questions/0081-village-lanes.drawing.html: bowed 34 and 46 px either side of the bearing
+        track off the steadings - UNRESEARCHED: kept `TRACK_FABRIC_GAP` (16 ft) off the steadings"""
     dx, dy = plan.fall
     ox, oy = plan.seat["out"]
     base = math.degrees(math.atan2(0.55 * oy + 0.85 * dy, 0.55 * ox + 0.85 * dx))

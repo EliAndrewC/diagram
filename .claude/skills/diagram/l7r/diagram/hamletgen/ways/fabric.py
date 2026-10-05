@@ -310,7 +310,7 @@ def _draw_web(s: Settlement, pts: Poly, width: int = 3, houses: Sequence[Pt] = (
         web lanes seat no house - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the farmhouses placed first, the lanes
             among them after
         web lane's no-build corridor - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: `WEB_CLEARANCE` 28 ft recorded beside the lane
-        web lane width - UNRESEARCHED: 3 ft by default"""
+        web lane width - research/questions/0081-village-lanes.drawing.html: 3 ft by default, the footpath's tread"""
     if len(pts) < 2:
         return False
     # A JOIN LINK IS EXEMPT FROM THE DEBRIS FLOOR (feature 134 T50, 2026-08-29). The floor asks what a

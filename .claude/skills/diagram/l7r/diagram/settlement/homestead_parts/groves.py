@@ -716,6 +716,8 @@ class GrovesMixin:
             windbreak conifer share - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.html: 38% of a
                 windbreak clump's items, against 54% broadleaf, where the grove is led by cedar
             crowns per clump floor - UNRESEARCHED: at least 5 crowns thrown per clump
+            crowns per clump - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: one crown per `GROVE_CROWN_AREA` of clump (48 sq px at the town grain)
+            crowns per clump ceiling - UNRESEARCHED: at most `GROVE_CLUMP_CROWNS` (28)
             bamboo under the crowns - research/questions/0075-bamboo-groves-chikurin.drawing.html: 8% of a windbreak clump,
                 inked only in the gaps; none in the dooryard or alder mixes
             dooryard mix - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:

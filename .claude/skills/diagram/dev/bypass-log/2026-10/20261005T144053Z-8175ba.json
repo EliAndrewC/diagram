@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-05T14:40:53Z",
+  "target": "record-checked",
+  "commit": "0da47ebae",
+  "why": "modal-depiction on modal-depiction:choice/lane_skeleton--spine: feature 319 rollout: round 1 checked and applied, round 2 confirmed and applied what remained; one combined agent per modal under all three contracts"
+}

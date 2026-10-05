@@ -265,7 +265,7 @@ def answer(root: pathlib.Path, check: str, result: str, bundle: str = "", q: str
         if u.check != check:
             continue
         subject_note = u.subject.partition("#")[2]
-        if (q and ru.question(u.subject) == q.zfill(4) and (not wanted or subject_note in wanted)) or (key and u.subject == key) or (kind and u.subject == kind):
+        if (q and ru.question(u.subject) == q.zfill(4) and (not wanted or subject_note in wanted)) or (key and u.subject == key) or (kind and u.subject in kind.split(",")):
             write_answer(s, u.slug, u.fingerprint, result)
             done.append(u.slug)
     return done

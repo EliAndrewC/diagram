@@ -168,8 +168,7 @@ def lanes_that_kink(M: Mapping[str, Any]) -> list[tuple[str, int, int]]:
 
 
 def hooked(pts: Sequence[Pt]) -> list[int]:
-    """Which ends of a run are hooked, as -1 (its last) and 0 (its first): a leg of `_HOOK_FT` or less turning `_HOOK_DEG`
-    or more.
+    """Which ends of a run are hooked, as -1 (its last) and 0 (its first): a leg of `_HOOK_FT` or less turning `_HOOK_DEG` or more.
     Research: a lane's end loses its hook - research/questions/0081-village-lanes.drawing.html: 12 ft, 90 degrees"""
     p = list(pts)
     if len(p) < 3:
@@ -410,8 +409,7 @@ Research: needle of grass - CONVENTION: a web face under 20 ft mean width"""
 
 def needle_loops(M: Mapping[str, Any]) -> list[tuple[Any, list[int]]]:
     """(face, the lanes bounding it) for every face of the drawn lane web (the treads noded where they cross, then
-    polygonized) whose mean width is under `NEEDLE_LOOP_FT` - two ways laid round a sliver of ground, or along the same
-    ground (a face of no area at all)."""
+    polygonized) whose mean width is under `NEEDLE_LOOP_FT` - two ways laid round a sliver of ground, or along the same ground (a face of no area at all)."""
     from shapely.geometry import LineString
     from shapely.ops import polygonize, unary_union
 
@@ -514,7 +512,9 @@ def dangling_lane_ends(M: Mapping[str, Any], ground: WorkedGround | None = None)
     end stands on: the other ways' segments are asked, less those within `_TOUCH_GAP` of the lane's far end. `ground` is the
     worked ground where the caller has it built already (`memo_ground`). A way target (`meta.way_targets`, a burial ground's
     near edge) is something worth walking to, as a farmhouse is (homes H36: a path runs to the graves).
-    Research: an end reaches something seen - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: walked toward it"""
+    Research:
+        an end reaches something seen - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: walked toward it
+        a burial ground's edge a lane end's destination - UNRESEARCHED: a way target counts as a farmhouse does"""
     ways = _ways(M)
     centers = [(float(h["x"]), float(h["y"])) for h in M.get("houses") or []] + way_targets(M)
     steadings = steading_footprints(M)

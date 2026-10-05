@@ -72,7 +72,7 @@ def settle_field(s: Any, lawful: Judge) -> int:
     Research:
         the field reached - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a way runs from the network to the field's bund
         over the brook at a ford - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: square, at the ford that makes the walk shortest
-        field way width - UNRESEARCHED: drawn `BRANCH_WIDTH` (5 ft) wide"""
+        field way width - research/questions/0081-village-lanes.drawing.html: drawn `BRANCH_WIDTH` (5 ft) wide, the field spur's tread"""
     M = s.M
     if not law.field_unreached(M):
         return 0
