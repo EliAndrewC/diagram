@@ -8,7 +8,7 @@ study alone stands. In China, too, the study drew apart from the living rooms ov
 compound, and where there was a rear garden it always stood beside it.
 
 Both of these were private homes. Whether a magistrate or any other official had a detached study at the office is not
-recorded, and neither is how large one was or what it was built of beyond its desk.
+recorded, and neither is how large one was or what it was built of.
 
 Guesses:
 - That a magistrate has a writing pavilion of their own in the inner garden of the posting: it extends the two recorded

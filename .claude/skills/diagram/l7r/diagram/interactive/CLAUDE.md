@@ -1,12 +1,12 @@
 # interactive/ - the HTML target (feature 134)
 
 The map as a page a player can use: hover a feature and every feature OF ITS KIND lights up; click
-it and a modal opens on three TABS (feature 319, GM 2026-10-03): **About** - what the thing was, written to the guidelines in
-`dev/modals.md` (a deviation or a map drawing convention told where it applies); **Guesses** - a bulleted list of what this
-project guessed, absent when nothing was; **References** - the QUESTIONS the research asked that the write-up rests on, each
+it and a modal opens on its TABS (feature 319, GM 2026-10-03): **About** - what the thing was, written to the guidelines in
+`dev/modals.md` (a deviation told where it applies); **Guesses** - a bulleted list of what this
+project guessed, absent when nothing was; **Depiction** - how the map draws it, its conventions and the "how our maps draw
+it" pages (plan D13); **References** - the QUESTIONS the research asked that the write-up rests on, each
 linking to its answer, since feature 301 the question's own small page in the record's built site, `research/site/` (feature
-180; local since feature 194 - see below). A class not yet rewritten in the About form shows its old what / why / caveat on the
-About tab, with its old label lead. **Every tab is the same size** (GM 2026-10-03: *"it is disorienting to see it resized when clicking between tabs"*): the panels share one grid cell and a hidden one is invisible, not removed (`page.css` `#x-panels`), and the browser test pins the dialog's box across tabs.
+180; local since feature 194 - see below). **Every tab is the same size** (GM 2026-10-03: *"it is disorienting to see it resized when clicking between tabs"*): the panels share one grid cell and a hidden one is invisible, not removed (`page.css` `#x-panels`), and the browser test pins the dialog's box across tabs.
 Written by `Settlement.finish()` beside the `.svg`, `.png` and `.json` of every Mode B map. The
 GM's request, verbatim, and the spec: `specs/134-interactive-html-map/`.
 
@@ -17,11 +17,11 @@ PNG is byte-identical by construction; the page is a second serialization of the
 | file | look here when |
 |---|---|
 | `tags.py` | you need the tag shapes: a `str` class, `Parts` (one string, several classes - a farmhouse and its shed), `Split` (one element, fill and stroke in different classes - a paddy and its bund), `"-"` (ruled not highlighted), `None` (nobody ruled) |
-| [`classes/`](classes/CLAUDE.md) | you are adding a KIND of feature (a class in its family module), changing what a modal SAYS (its FILE, `assets/modals/<hamlet|sheet>/<kind>.md`, since feature 319 - before that its DOCSTRING, feature 189: the explanation is the docstring, `What:` / `Why:` / `Note:` / `Caveat:`, parsed at import; a prose edit owes `make page-check`, not the gate), or adding a sibling distinction (`siblings.py`). The vocabulary is the spec's FR-007 table; every entry is written FROM a `research/` entry and carries its label; `NOT_HIGHLIGHTED_RULINGS` is the record of what was ruled out and by whom, and `NOT_HIGHLIGHTED_OVERTURNED` of what was ruled out and later let back in (`_base.py`) |
+| [`classes/`](classes/CLAUDE.md) | you are adding a KIND of feature (a class in its family module), changing what a modal SAYS (its FILE, `assets/modals/<hamlet|sheet>/<kind>.md`, in the About form since feature 319; an edit owes `make page-check`, not the gate), or adding a sibling distinction (`siblings.py`). The vocabulary is the spec's FR-007 table; every entry is written FROM a `research/` entry; `NOT_HIGHLIGHTED_RULINGS` is the record of what was ruled out and by whom, and `NOT_HIGHLIGHTED_OVERTURNED` of what was ruled out and later let back in (`_base.py`) |
 | `notes.py` | a fact you wrote into a map's `.notes.md` is not reaching its page, or you are adding a key the block understands. The reader has no error path ON PURPOSE - see below |
 | `place.py` and `assets/place.json` | the title card says something wrong, or you are describing a new tier. The per-tier text, the crop table and the basis the card owes its reader are the JSON (feature 207); the sentence builders and the demographic constants are the module |
 | `assets/glossary/NNNN-<term>.json`, one file per term (feature 259) - never the assembled `assets/glossary.json` (about 420 KB, written by `make glossary`, loaded by `glossary.py`; find a word with a grep of `research/assets/glossary-variants.txt`) | you are adding a term the explanations use, or a definition reads wrong - every occurrence of a term in a modal is a hover tooltip; a test proves each term is used and each explanation's terms are defined. A content edit owes `make page-check`, not the gate (feature 207). **It is the research record's glossary too** (feature 209, GM 2026-09-07: the same tooltip rules on the research pages): `record_glossary_js()` is the derived asset `research/assets/glossary.js`, written by `make glossary`, that `research/assets/record.js` wraps over every page's visible text; a term may live in the record alone, and `tests/interactive/test_record_format.py` proves the asset is in sync and every term used somewhere |
-| `content.py` and `assets/*.json` | you are wondering WHY the page's prose is JSON rather than Python constants - the why is in `content.py`'s docstring (feature 207: a wording edit must not be an engine change). `glossary.json`, `siblings.json`, `place.json`, `page-text.json`; the registry's data went into its docstrings |
+| `content.py` and `assets/*.json` | you are wondering WHY the page's prose is JSON rather than Python constants - the why is in `content.py`'s docstring (feature 207: a wording edit must not be an engine change). `glossary.json`, `siblings.json`, `place.json`, `page-text.json`; the registry's data went into its modal files (`assets/modals/`) |
 | `citations.py` | the WORKS a question's notes cite (feature 211, GM 2026-09-07; its per-page citations pages retired with the page directories, feature 303): the works block at the foot of each question's page of the site, derived from the registry's two write-ups per work (citation line; what it is; why it applies, and its limits), and the footnote classifier (`footnote_form`) the gate and `make footnote-census` share. The site carries each question's notes at its own foot (`record/site_notes.py`). Look here when a works list is wrong or a new key is refused for want of a write-up |
 | `sources.py` | a modal's references look wrong - they are READ FROM THE RECORD at page-write time: `research_questions()` resolves the class's `entry` - since feature 301 a list of FRAGMENT paths (`entry_fragments`) - to the questions it names, each linking its small page in the record's site (`SITE_PAGES + q/<heading id>.html`, flat whatever section the question is in - feature 303); `research_sources()` / `registry()` read the keys a question's footnotes cite and the registry. `record_text()` is THE reader of a page of the record - the registry assembled, a question's page with its cross-link and confusables written in - because nothing built is committed (every reader in the engine, the tools and the tests asks it). It also holds the ONE body of feature 190's link classifier (`citation_lines`, `not_read`, `link_target`) and `registry_entries()` |
 | `page.py` - `merge_primitives` | the page draws too many elements, or a merge changed the picture. It gathers same-styled `<line>`/`<circle>`/`<ellipse>` into one `<path>` WHEREVER the reorder is invisible - an element joins an earlier bucket only if nothing it must pass overlaps it, and neither a TRANSLUCENT nor an OUTLINED element merges with one it overlaps (0.85 blobs stack darker than one merged fill - feature 148 R3; and a path paints every subpath fill before its stroke, so merged crowns show each other's outlines - feature 153 R5). A line has no fill and so is never outlined - getting that wrong un-merges every scatter. An extent it cannot compute counts as being in the way, and a circle's is tested as a circle. **A merged scatter is written as ONE PATH PER 400 px CELL, not one path** (feature 199, GM 2026-09-07: Kuwabata's page "a lot more noticeably sluggish"): a bucket of `TILE_MIN` (200) or more members is split by the cell of each member's anchor at emit time - Chromium replays every display item whose box touches a screen tile, and one 87,000-subpath path whose box spans the map was replayed for every tile on every hover; measured 57 ms per pointer move on Kuwabata's opening view against 17 tiled, 99-129 ms on Kashikawa and Sawada zoomed (`specs/199` research.md R1-R3). Which elements join a bucket is untouched, so the picture is unchanged (0-17 px of 1.4 M, R4). The guards it shipped with - every 200+-subpath path on the reference page in one cell, Kuwabata's mean pointer-move cost under 40 ms (on the MEAN, because the cost lands on the one move in five that crosses into the scrub and the median cannot see it, R6) - were RETIRED by the GM on 2026-09-07 with every browser test over a rolled page ("Verifying", below); the measurements stand in `specs/199` research.md |
@@ -39,7 +39,7 @@ pairs, so they are read back out of the drawing:
 | file | look here when |
 |---|---|
 | `sheet.py` | a magistracy page lights the wrong thing, or the census names ink with no kind. Every element or group carries `data-kind="<key>"` (the nearest one wins; `"-"` rules it out); the reader tokenizes the sheet (never an XML round trip - the page carries the sheet's own bytes) and re-opens a group's opening tag around each differently-tagged piece, so a transform or inherited fill still applies. `element_kinds` is what the pack audit reads to find a program item by its tag |
-| [`compound_kinds/`](compound_kinds/__init__.py) | a magistracy modal says something wrong, or a new kind is drawn. The hamlet form exactly (docstring `What:` / `Why:` / `Note:` / `Caveat:` and the data tags), a SEPARATE registry (`COMPOUND_CLASSES`, passed as `render_page(registry=)`) because a compound's well is written about a compound. Every label is CARRIED from an existing finding (`specs/262-interactive-magistracy-pages/coverage.md` is the measurement); a kind no research section covers says `(no dedicated entry - recorded as silent)` and so lists no references - the gap the GM can see. The magistracies program in `buildings/types.json` names these kinds and states no class or why of its own (`buildings.types.classification`) |
+| [`compound_kinds/`](compound_kinds/__init__.py) | a magistracy modal says something wrong, or a new kind is drawn. The hamlet form exactly (one About-form file per kind under `assets/modals/sheet/`), a SEPARATE registry (`COMPOUND_CLASSES`, passed as `render_page(registry=)`) because a compound's well is written about a compound. Every kind is written from an existing finding; a kind no research section covers says `(no dedicated entry - recorded as silent)` and so lists no references - the gap the GM can see. The magistracies program in `buildings/types.json` names these kinds and states no class or why of its own: `programs.md` and the audit read the kind's guesses (`buildings.types.classification`) |
 
 **A part is its own kind and lights with its parent** (feature 264, GM 2026-09-27: *"individual features inside of
 buildings or other features to get their own individual highlighting"*). A hearth, a pond, a genkan, a labeled room,
@@ -56,61 +56,35 @@ so a label never answers as its neighbor in the palette; hamlet id maps are unto
 Each pool magistracy's `.gen.py` calls `write_sheet_page(svg, COMPOUND_CLASSES)` after its PNG and fails if the census
 is not clean; the placer's `emit_svg` writes the kinds itself (`BuildingSpec.feature`). A map's own facts go in its
 notes' "Map notes / Features" block keyed by kind, as for a hamlet. `tests/interactive/test_compound_kinds.py` holds
-every sheet complete, the registry closed over the five maps, and the GM's two examples (the threshold stones lead
-with the deviation; the hearing court announces nothing and lists its questions).
+every sheet complete, the registry closed over the five maps, and the GM's two examples (the threshold stones say
+they are the setting's; the hearing court lists its questions).
 
-## The presumption of accuracy (feature 156)
+## No class-level label, lead or caveat (features 156, 183, 319)
 
-**Feature 319 retires this section class by class.** An About-form class (`About:` / `Guesses:`) has no feature-level label and
-no lead: a guess is a bullet on the Guesses tab, never the modal's opening (the GM, 2026-10-03, of the garden's *"This is a
-guess"* lead: *"extremely misleading"*), and a deviation or a convention is told in the About text where it applies
-(`dev/modals.md` M11-M13). What follows is the old form's mechanism, kept until the rollout's last task deletes it.
+The page never tells a reader that a feature is historically accurate. The GM, 2026-08-29: *"I want the presumption to be
+that things are always historically accurate unless stated otherwise. In other words, we should call out liberties that we
+have taken."* Feature 319 retired the label lead ("This is a guess - ...", "Note: we have rendered ...") and the caveat with
+the old `What:`/`Why:`/`Note:`/`Caveat:` form: the classification is per statement in the About text (`dev/modals.md`
+M11-M13) - a guess is a bullet on the Guesses tab, a deviation (the SETTING differing from history) is said in About where it
+applies, and a map drawing convention (a glyph scaled or colored for the eye - the GM's line, feature 183) is told on the
+Depiction tab with its real counterpart. Don't re-add a lead: a "This is a guess" opening on a modal that is mostly record read
+as the whole modal being a guess (the GM, 2026-10-03: *"extremely misleading"*). The title card keeps its own basis line
+(`place.BASIS_LEAD`, `x-basis`), which says where the card's claims come from.
 
-The page never tells a reader that a feature is historically accurate. The GM, 2026-08-29: *"we
-almost always say that it is historically accurate ... I want the presumption to be that things are
-always historically accurate unless stated otherwise. In other words, we should call out liberties
-that we have taken."* A claim made about nearly every feature carries no information; a liberty does.
+## The references are QUESTIONS, not sources (feature 180)
 
-The classification (three-way then, four-way since feature 183) is still recorded on every class
-(constitution XII) - `accurate` is just not announced. What a modal prints:
-
-| the record says | the modal leads with | and below the why |
-|---|---|---|
-| `accurate` | nothing - what the feature IS | `caveat`, when its record discloses a liberty |
-| `deviation` | "This is a deliberate deviation - ..." - the SETTING differs from history (canon, a ruling of the GM's about their world) | nothing (the lead already carried it) |
-| `convention` | "Note: we have rendered <the feature> ... in order to ... <the real size or color>" - a MAP DRAWING CONVENTION, a glyph scaled or colored for the eye (feature 183, GM 2026-09-05: *"this is not a 'deviation'. This is a map rendering convention, and we should distinguish in our write up between these"*); the note is written in the GM's form and ends with the figure the record holds, or says in so many words that it was not found | nothing |
-| `guess` | "This is a guess - ..." | nothing |
-
-`caveat` is the LIBERTY HALF of `label_note`, verbatim - the drawing convention, the derived number,
-the sub-guess ("the crop mix per map is rolled from the seed and is a GUESS at the proportions"). The
-other half - "Topology, taper and true-size width are read" - is the accuracy claim in other words
-and is NOT rendered; four classes whose whole note is that get no caveat at all, and a test lists
-them so a fifth is a decision rather than an omission. Both halves stay in the record, and the
-questions - and through them the sources - stay one click away.
-
-## The references modal lists QUESTIONS, not sources (feature 180)
-
-**Since feature 319 the references are a TAB of the one dialog**, not a second dialog: the "See references (N)" link, the
-references dialog, its `behind` class and its "Return to <X> writeup" button are gone (the tab strip is the way back). Which
-questions are listed is `dev/modals.md` M14 - exactly those the write-up rests on - held by `modal-research`. The rows below
-that name the old dialog are history.
-
-The GM, 2026-09-05, looking at the hamlet pages: *"instead of listing individual sources on the
-references modal, we will list the questions which we asked and researched - those pages are themselves
-sourced with links, so a user who wants to follow through and read the original sources can do so."*
-The audience is a casual RPG enthusiast, and *"they are not immediately presented with an overwhelming
-amount of third party sources."* The whole sensibility - who the reader is, the four-step chain from
-map to sources, what it asks of a research heading - is written in `research/CLAUDE.md`, "Who the
-record is for"; this section is the mechanics.
+The References tab of the one dialog (feature 319) lists the questions the write-up rests on - `dev/modals.md` M14, held by
+`modal-research`. The GM, 2026-09-05: *"instead of listing individual sources on the references modal, we will list the
+questions which we asked and researched - those pages are themselves sourced with links, so a user who wants to follow
+through and read the original sources can do so."* The audience is a casual RPG enthusiast, and *"they are not immediately
+presented with an overwhelming amount of third party sources."* The sensibility is `research/CLAUDE.md`, "Who the record is
+for"; this section is the mechanics.
 
 | on the page | where it comes from |
 |---|---|
-| the explanation's footer has NO `Record: research/...` line | removed (the GM: *"I don't think we need lines like [that] on our main modal"*); `FeatureClass.entry` stays in the registry as the record |
-| *"See references (N)"* - N questions; hidden when the entry resolves to none (only `fallow` today) | `page.js` `open()`, off `d.questions` |
-| the references modal: one link per question (the lead-in line, `page.REFERENCES_LEAD`, retired 2026-10-05: the GM, *"the links are self-explanatory"*), opening in a new tab | `sources.research_questions(entry)` - the questions the entry's FRAGMENT paths name (feature 301), in the ENTRY's order (the author's primary question first), text = heading less its dated `(researched ...)` parenthetical, URL = the question's small page, `SITE_PAGES + "q/<heading id>.html"` |
-| the button reads *"Return to Farmhouse writeup"* (the settlement's name on the place card) | `page.js` `openRefs()`; the GM: *"just saying close might make it seem like we are closing all of the modals"* |
-| the references REPLACE the explanation while open - it is HIDDEN (class `behind`), not closed, so the shade and the pinned highlight stay; it reappears however the references close (feature 181, GM 2026-09-05: two stacked boxes *"just looks really weird"* when the top one is smaller) | `page.js` `openRefs()` adds the class; the references dialog's `close` listener removes it - the one place every way back runs through |
-| the title reads *"Farmhouse references"*, the name a link that does exactly what the button does (feature 181) | `page.js` `openRefs()` builds `#r-back`; it and `#r-close` call one `returnToWriteup()` |
+| NO `Record: research/...` line (the GM: *"I don't think we need lines like [that] on our main modal"*) | `FeatureClass.entry` stays in the registry as the record |
+| the References tab, hidden when the entry resolves to none | `page.js` `open()`, off `d.questions` |
+| one link per question, no lead-in line (retired 2026-10-05: the GM, *"the links are self-explanatory"*), opening in a new tab | `sources.research_questions(entry)` - the questions the entry's FRAGMENT paths name (feature 301), in the ENTRY's order (the author's primary question first), text = heading less its dated `(researched ...)` parenthetical, URL = `SITE_PAGES + "q/<heading id>.html"` |
 
 **The anchor rule is GitHub's, reproduced** (`github_anchor`): lowercase, drop everything but letters,
 digits, combining marks, spaces, hyphens and underscores, spaces to hyphens (so ` - ` is `---`), and a
@@ -122,7 +96,7 @@ renamed heading moves all three, which `make fragment-move` does with every poin
 re-renders at each landing so its links follow.
 
 **A class naming a question nobody can find shows no link and no error** - `research_questions` is quiet
-like everything else here, and `scripts/check-entry-headings.py` is what refuses it at the push. So when you add a class, open its page and click "See references" once.
+like everything else here, and `scripts/check-entry-headings.py` is what refuses it at the push. So when you add a class, open its page and click its References tab once.
 
 ## The blue plot is its own class (feature 159)
 
@@ -249,7 +223,7 @@ the page's behavior rulings.
 **...AND THEY ARE SKIPPED WHILE NOTHING THEY READ CHANGED (feature 206, GM 2026-09-07: *"Do we have logic in
 place to skip them if the content which they are testing has not changed? ... this is about saving memory,
 not saving time"*).** `gate-stamp.py` keeps a `browser` key over everything the synthetic tests read - every
-module here, the two assets, the test package, `research/*.html` (the references modal's links), and the
+module here, the two assets, the test package, `research/*.html` (the References tab's links), and the
 installed Playwright and Chromium - and the gate's test phase leaves the package out while the stamp matches,
 saying so in one line. The stamp is earned only by a run that ran the package green: `make page-check`, or a
 `make done` whose test phase included it. It is a skip key, never a push obligation: the push's `--check`

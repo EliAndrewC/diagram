@@ -5,12 +5,12 @@ shrine most likely had a single arch. A small shrine below a shrine's rank had n
 shrine seldom had one; an arch there was a mark of care, not a fixture. Two shrines on one ground could share the arch at its
 edge, which marked everything inside it, or a lesser shrine could have its own.
 
-An arch could be of stone: the oldest dated ones at ordinary shrines are stone gates of the 1600s or a little before. How
+An arch could be of stone: early dated ones at ordinary shrines are stone gates of the 1600s, one perhaps older. How
 tall an ordinary arch stood is not recorded, nor how far one stood before its hall.
 
 An arch was a gift, from a shrine's parishioners together or from one donor. From the Edo period worshippers gave arches in
 thanks for a prayer answered; at the great Inari shrine of Fushimi, each bearing its giver's name, they now number some
-10,000 along its mountain paths. An ordinary shrine's arches stood singly before 1868; rows there are modern. In Rokugan an
+10,000 along its mountain paths. An ordinary shrine's known arches before 1868 stood singly; rows there are modern. In Rokugan an
 ordinary shrine's approach may run under one, three or seven arches, numbers that carry power in the setting, seven most of
 all.
 

@@ -63,14 +63,14 @@ def test_the_prose_key_is_derived_and_ignores_the_data_tags():
     sys.path.insert(0, str(SKILL))
     from l7r.diagram.interactive.classes import _base
 
-    def src(why: str, entry: str) -> str:
-        return f'class K:\n    """\n    What: a thing.\n    Why: {why}\n    Note: GUESS: a note.\n    Name: k\n    Covers: c\n    Label: guess\n    Sources: s\n    Entry: {entry}\n    """\n\n    key = "k"\n'
+    def src(about: str, entry: str) -> str:
+        return f'class K:\n    """\n    About: a thing, {about}\n\n    Guesses:\n    - a guess.\n\n    Name: k\n    Covers: c\n    Sources: s\n    Entry: {entry}\n    """\n\n    key = "k"\n'
 
     base = eo.classes_in(src("because.", "research/questions/0001-a.html"), _base)
     same_prose = eo.classes_in(src("because.", "research/questions/0002-b.html"), _base)
     moved_prose = eo.classes_in(src("for another reason.", "research/questions/0001-a.html"), _base)
     assert base == same_prose, "a data-tag edit must leave the prose key untouched"
-    assert base != moved_prose, "a Why: edit must move it"
+    assert base != moved_prose, "an About: edit must move it"
 
 
 def test_the_class_parser_still_finds_the_registry():

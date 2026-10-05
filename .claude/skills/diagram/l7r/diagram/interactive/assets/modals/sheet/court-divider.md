@@ -1,10 +1,10 @@
-About: A magistrate's compound was also the magistrate's home. A Chinese official and their immediate family commonly
-lived in a residence attached to the yamen, the county office, and a Japanese town magistrate's residence stood inside the
-magistracy. In China regulation set the two apart in the ancient order of court in front, sleeping quarters behind: the
-office in front, the household behind it.
+About: A wall with a gate through it parted a magistrate's office from the magistrate's home, for the compound was
+both. A Chinese official and their immediate family commonly lived in a residence attached to the yamen, the county
+office, and a Japanese town magistrate's residence stood inside the magistracy. In China regulation set the two apart in
+the ancient order of court in front, sleeping quarters behind: the office in front, the household behind it.
 
-A wall between the courts divided them, with a gate through it, the inner residence gate, the last of the five gates of the
-yamen at Neixiang. Official business stayed before it, and the household lived beyond it.
+At the yamen at Neixiang the gate through that wall was the inner residence gate, the last of its five gates. Official
+business stayed before it, and the household lived beyond it.
 
 In Japan no such front-and-rear order is recorded. At Takayama, the one intendant's office that survives, the residence
 stood on the lot to the west, beside the office rather than behind it. What a dividing wall was built of, how high it

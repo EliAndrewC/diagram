@@ -319,7 +319,10 @@ def _predict_k(pts: list[tuple[float, float]], target: float, lo: float, hi: flo
 
 
 HEAD_OFFSETS: tuple[tuple[str, float], ...] = (("head_left", -0.24), ("head_center", -0.05), ("head_center", 0.05), ("head_right", 0.24))
-"""Research: intake offset on the head margin - UNRESEARCHED: left, center or right, at -0.24, +/-0.05 or +0.24 of the field span across the fall"""
+"""Research:
+    intake offset on the head margin - UNRESEARCHED: left, center or right, at -0.24, +/-0.05 or +0.24 of the field span across the fall
+    water source position rolled - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: every hamlet rolls where its water comes in (head_left, head_center, head_right, weighted 1:2:1 by the tuple's entries)
+"""
 
 
 def head_sluice(plan: SitePlan) -> tuple[Pt, str]:

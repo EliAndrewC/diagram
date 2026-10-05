@@ -97,7 +97,7 @@ def test_a_key_bundle_is_owed_by_its_write_up_or_a_note_citing_it_or_a_declared_
 def test_the_intro_bundle_holds_the_body_the_drawing_page_and_the_map_elements(owing, tmp_path: pathlib.Path) -> None:  # noqa: ANN001
     text = bo.intro_bundle_text(REPO, "0094")
     assert "--- the research page" in text and "Kyakhta" in text and "<!--" not in text
-    assert "--- how our maps draw it" in text and "- parley room (label: deviation)" in text
+    assert "--- how our maps draw it" in text and "- parley room\n" in text + "\n" and "(label:" not in text
     assert bo.intro_bundle_text(REPO, "9999") == ""
     owing()
     assert cb.main(["--for", "intro-check", "--qs", "0094 0083", "--out", str(tmp_path / "b"), "--root", str(REPO)]) == 3

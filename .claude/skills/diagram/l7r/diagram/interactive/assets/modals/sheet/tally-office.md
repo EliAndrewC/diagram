@@ -4,9 +4,9 @@ goods it neither carried nor owned was probably a written one: counts, seals and
 
 The trade it served is better known. On the sea route to Edo the shogunate's tax rice went on ships it hired directly,
 flying an official pennant, and the intendants set up stations at the ports of call to protect the ships and inspect
-their loads strictly. In Japan bulk goods passed through the ton'ya, wholesalers who were also warehouse-keepers and
-shipping agents. A bale of charcoal had no standard size, so charcoal was probably sold by weight, and a sealed record
-of what a load weighed was worth having.
+their loads strictly. In Japan the ton'ya were wholesalers who were also warehouse-keepers and
+shipping agents, and charcoal was probably their stock. A bale of charcoal had no standard size, so charcoal was probably sold by weight, and a sealed record
+of what a load weighed was probably worth having.
 
 Whether a tally office was a building of its own, what it looked like, how large it was and how many worked in it are
 not recorded.

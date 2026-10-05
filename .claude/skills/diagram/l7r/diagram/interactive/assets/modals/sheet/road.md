@@ -15,7 +15,6 @@ such as Hakone; most of the Five Highways ran about 18 to 24 ft. Through Hiroshi
 Guesses:
 - A lane to a side or cart gate about 6 ft wide where carts use it: no lane's width was found, and the Edo hand cart's bed
   was about 8 by 2.5 ft, so six feet leaves room for the wheels.
-- Any wider ground before a compound's gate, where a plan draws one: no account gives the width of the road there.
 
 Depiction: The plan draws the road as a band of bare ground running from the sheet's edge to the main gate, and narrower
 lanes to the lesser gates. A highway is drawn in the same earth tone as a lesser road: its dressing of sand and gravel was

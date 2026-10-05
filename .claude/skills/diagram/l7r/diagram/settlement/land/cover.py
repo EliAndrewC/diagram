@@ -385,6 +385,8 @@ class GroundCoverMixin:
 
         Research:
             commons beyond the grove - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: open scrub and rough grazing, not forest
+            scrub ground color - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: the scrub's tufts drawn over a solid straw-gold ground
+            grass ground forms - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: one form only, the scrub past the grove; the floodplain and the small grass plot beside one paddy are never drawn or rolled
             coppice stocking - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: one crown to COMMONS_SPACING_FT squared, COMMONS_CROWN_R_FT across
             no crown under another - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: a crown centered under one already seated is not drawn
             scrub pines - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: one to 6,000 sq ft, at least two, none on pasture

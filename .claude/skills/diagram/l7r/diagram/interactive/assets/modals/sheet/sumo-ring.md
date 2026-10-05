@@ -1,9 +1,9 @@
-About: A sumo ring, the dohyo, was the ring the wrestlers met in. Sumo was offered at shrines across Japan, and there
-too the rite that consecrates a ring is performed in the same way as for any other bout of sumo. In Rokugan sumo bouts
+About: A sumo ring, the dohyo, was the ring in which two wrestlers met and fought. Sumo was offered at shrines across Japan, and there
+the rite that consecrated a ring was performed in the same way as elsewhere. In Rokugan, sumo bouts
 are held on the 30th day of the seventh month, to protect the rice harvest and to honor the rice god.
 
 What a village shrine's ring was like - what it was made of, how it was raised, whether it stood all year or was made for the day - is not
-recorded, nor when sumo at village shrines began.
+recorded, nor when sumo was first offered at village shrines.
 
 How big a village's ring was, and how many village shrines kept one, are not recorded.
 

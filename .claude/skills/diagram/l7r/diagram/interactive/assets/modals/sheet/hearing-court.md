@@ -6,7 +6,7 @@ road checkpoints kept such courts as well as the magistracies, and Takayama kept
 for criminal cases. In Rokugan, where torture is rare and never used to force a confession, a magistracy keeps no room
 built for interrogation, so questioning happens here or in the day office.
 
-It was roofed - under a roof built over it, or as an earth floor inside the building - not the open court of white sand
+It was roofed - under a roof built over it, or as an earth floor inside the building - not the open court of white gravel
 seen in period dramas. Its floor was bare earth in the oldest times and white gravel later; at Takayama, in a province
 short of white sand, it was laid with river cobbles, and built indoors because an open court would be buried in winter
 snow. At Edo a board veranda about 3 ft wide, with a stair of three steps, ran along the front of the magistrate's room

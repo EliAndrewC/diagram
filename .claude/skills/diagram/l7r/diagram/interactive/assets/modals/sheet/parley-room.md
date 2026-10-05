@@ -11,6 +11,9 @@ No such room is known from history. Where two powers dealt regularly across a bo
 Qing China did at Kyakhta, or one kept a compound on the other's ground, as Tsushima's officers did at the Japan House
 in Pusan, with the Korean side's banquet hall beside it.
 
+Guesses:
+- The room's size, about 26 by 22 ft: nothing sets it, since no such room is known.
+
 Depiction: The plan builds the room into the border wall, astride the dashed line, with a door at each end; its kneeling mats are
 their own feature.
 

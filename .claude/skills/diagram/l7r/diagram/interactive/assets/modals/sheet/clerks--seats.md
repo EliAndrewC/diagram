@@ -9,8 +9,7 @@ The middle room was a tatami room like the magistrate's, the hall's board verand
 At Edo one clerk sat there; how large a clerk's place was is not recorded.
 
 Guesses:
-- The size of the seats the plan draws, from about 8 by 5 ft to about 27 by 7 ft each: no account gives how much room a
-  clerk's place took.
+- The size of the seats the plan draws, about 27 by 7 ft each: no account gives how much room a clerk's place took.
 
 Depiction: The plan seats the clerks to either side of the magistrate, level with the dais, rather than in a room of
 their own below it as at Edo - a simplification.

@@ -150,13 +150,13 @@ def _modal_docs(root: pathlib.Path) -> tuple[tuple[str, str], ...]:
 
 
 def modals_for(root: pathlib.Path, page: str) -> list[str]:
-    """The `Name:` and `Label:` of every modal whose `Entry:` names this question page - what the map draws from it."""
+    """The `Name:` of every modal whose `Entry:` names this question page - what the map draws from it (the class-level
+    `Label:` went with the old form, feature 319)."""
     out = []
     for cls, doc in _modal_docs(root):
         if re.search(rf"^\s*Entry:.*\b{re.escape(page)}", doc, re.M):
             name = re.search(r"^\s*Name:\s*(.+)$", doc, re.M)
-            label = re.search(r"^\s*Label:\s*(.+)$", doc, re.M)
-            out.append(f"- {name.group(1).strip() if name else cls}" + (f" (label: {label.group(1).strip()})" if label else ""))
+            out.append(f"- {name.group(1).strip() if name else cls}")
     return out
 
 

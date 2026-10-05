@@ -4,7 +4,7 @@ three squad sergeants, of Rank 4 and 16 koku each. At a daimyo's court the karo 
 near the lord's residence or inside the castle; the Saigo, hereditary karo to the lords of Aizu, had a mansion of 38 rooms,
 about 10,000 sq ft, on a site of about two acres.
 
-A shogunal intendant's office, the kind of office a county magistracy follows, was run differently. Its staff lived
+A shogunal intendant's office was run differently. Its staff lived
 inside the compound's walls, in small houses (koya) and long-houses (nagaya), and the intendant lived there with their
 family too. The head of that staff was the motojime; whether the motojime lived apart from the rest is not recorded, and no
 chief retainer's own house inside the lord's compound is known.
@@ -19,7 +19,8 @@ Guesses:
   staff's long-house: no source sets the head of an intendant's staff apart from the rest.
 - The size of the karo's quarters and where in the compound they stand: no source gives either.
 
-Depiction: The plan lodges the karo inside the walls, in a bay of the senior retainers' long-house with a door of its own or
+Depiction: The plans follow the scale of a shogunal intendant's office, the kind of office the magistracies are modeled on,
+so each plan lodges the karo inside the walls, in a bay of the senior retainers' long-house with a door of its own or
 in a small house of their own in the residence court, never in the magistrate's own wing. Every plan labels it with the
 gloss "the house elder", so the word is met with its meaning.
 

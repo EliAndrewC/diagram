@@ -13,13 +13,13 @@ How much a corner tub held is uncertain: either some 285 gallons (1,080 liters) 
 liters).
 
 Guesses:
-- A tub at every major wooden building, and two at the kitchen, whose cooking fire burned all day: the habit and the town
-  order are recorded, but not a rule for every building or a ranking of buildings by risk.
+- Which buildings get a tub, and how many, the kitchen, whose cooking fire burned all day, among the first: the habit and
+  the town order are recorded, but not a rule for every building or a ranking of buildings by risk.
 - A tub's size, about 2.5 ft across: no source gives a rain tub's width.
 
-Depiction: The plan draws each tub as a small blue disc, the water seen from above: one at each major wooden building, two
-at the kitchen, one on the bath's yard side against its hearth, at most one at a wooden granary, and none at an earth-walled
-storehouse, which was built not to burn. The tubs are drawn only on building plans: at a town's scale a tub is too small to
+Depiction: The plan draws each tub as a small blue disc, the water seen from above, beside the wooden buildings: at the
+kitchen, on the bath's yard side against its hearth, at most one at a wooden granary, and none at an earth-walled storehouse,
+which was built not to burn. The tubs are drawn only on building plans: at a town's scale a tub is too small to
 draw, and a walled town or city map shows its fire defense as a watchtower instead.
 
 Name: fire-water tubs

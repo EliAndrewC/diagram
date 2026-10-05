@@ -1,7 +1,8 @@
 About: A farmers' stage was a permanent stage a village built for the plays it put on, kabuki and puppet plays, most
 often on its shrine's ground, sometimes at a temple, and seldom on a site of its own. Plays came to farming villages across
-Japan from the 1750s to the 1780s, and permanent stages are said to have been set up from the early 1800s. In Rokugan the
-county's acting troupes, who earn most on market day, often spend the rest of the week performing in its villages. In China,
+Japan from the 1750s to the 1780s, and permanent stages are said to have been set up from the early 1800s.
+
+In Rokugan the county's acting troupes, who earn most on market day, often spend the rest of the week performing in its villages. In China,
 too, villages staged plays of thanks for their gods, chiefly for the gods themselves, so the stage was often built facing
 the temple.
 

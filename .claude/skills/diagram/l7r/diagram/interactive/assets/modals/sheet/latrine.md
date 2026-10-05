@@ -10,13 +10,13 @@ around Kanazawa a household of seven to ten sold its year's night soil for about
 collectors from outside; around Edo, farmers supplied firewood and charcoal to the castle and the daimyo estates for the
 right to empty their privies.
 
-What a samurai house's privy was built of, and how big it was, is not recorded.
+What a samurai house's privy was built of, and how big it was, is not recorded. A farm's privy, counted in one village in 1885, ran from 5 ft square to about 27 by 15 ft, most of them 18 by 12 ft or smaller.
 
 Guesses:
 - That the family's privy stood apart from the guests', toward the family's rooms: no source places a family privy in a
   samurai house before 1868, so this follows later town houses and a daimyo's retainers' row houses.
 - About one privy to each part of the compound, three or four at a county office: no source counts them.
-- Its size, 5 ft square for one seat: no source gives a privy's size.
+- Its size, 5 ft square for one seat: no source gives a samurai house's privy's size, so it takes the smallest farm privy counted.
 - A hatch through the wall behind a privy that stands against the compound wall, for the collector: none is recorded.
 - That a privy stands at least 15 ft from any well: no separation distance is recorded.
 - A privy at a village shrine's dwelling for its country monk: no source names one at a village shrine, so it follows the
@@ -31,6 +31,6 @@ country monk's dwelling.
 
 Name: latrine
 Covers: every privy building and its label
-Sources: kotobank-benjo, sinyoken-madori, nagano-shishi-yokota, sayama-jinya-uematsu, guernica-night-soil, tajima-2007-night-soil
-Entry: research/questions/0101-privies-setchin.html
+Sources: kotobank-benjo, sinyoken-madori, nagano-shishi-yokota, sayama-jinya-uematsu, guernica-night-soil, tajima-2007-night-soil, oamishirasato-choshi-kaoku
+Entry: research/questions/0101-privies-setchin.html, research/questions/0047-farm-privies-and-their-night-soil-benjo.html
 Drawing: research/questions/0101-privies-setchin.drawing.html, research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html, research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html

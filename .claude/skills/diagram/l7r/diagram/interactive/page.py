@@ -510,7 +510,9 @@ def explanations(present: set[str], notes: MapNotes = EMPTY, registry: dict[str,
             continue
         # THE KNOB-CONDITIONED ITEMS (FR-015, plan D14): an item, or an Entry path, carrying [knob=value] is kept only where
         # this map's manifest records that value; the knob and values are checked against the populated registry here
-        conds = [conditions.split(i)[0] for i in (*fc.about, *fc.depiction, *fc.guesses)] + list(conditions.entry_conditions(fc.entry).values()) + list(conditions.entry_conditions(fc.drawing).values())
+        conds = (
+            [conditions.split(i)[0] for i in (*fc.about, *fc.depiction, *fc.guesses)] + list(conditions.entry_conditions(fc.entry).values()) + list(conditions.entry_conditions(fc.drawing).values())
+        )
         conditions.check(fc.name, conds)
         entry = conditions.shown_entry(fc.entry, knobs) if conditions.entry_conditions(fc.entry) else fc.entry
         out[key] = {

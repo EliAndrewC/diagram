@@ -16,12 +16,12 @@ Guesses:
 - That a compound's shrine serves Inari unless its plan says otherwise: an Inari shrine was among the Jōge post's, the one
   Japanese office whose shrines are known, and that from a drawing alone, since the dig on the site found none.
 - That the shrine hall is kept smaller than the residence: no size of an office's shrine was found, and no account ranks a
-  compound's buildings against one another.
+  shrine among a compound's buildings.
 - A garden around the shrine, wherever a plan draws one: no account describes a garden around a household's or an office's
   shrine.
 
-Depiction: The plan draws one shrine however many a real office kept, since what held across offices is that every one had a
-shrine. It stands in a corner of the grounds beside a tree, where a household kept its god. Where its hall serves more than one
+Depiction: The plan draws a shrine inside every compound, since what held across offices is that every one had a shrine, not
+how many it kept. It stands in a corner of the grounds, where a household kept its god. Where its hall serves more than one
 kami, they are housed in one of the ways a real shrine housed them - altars side by side, one altar for the main kami, or a
 second small shrine - and each altar is drawn as a feature of its own, as is any torii before it.
 

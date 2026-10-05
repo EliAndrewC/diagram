@@ -5,8 +5,8 @@ Chinese county office listed its plot behind the residence gate, after the kitch
 varied - west of the house at one middle-rank house, south of its pond, where a garden is now, at another, on a
 parcel entered apart from the residence lot at a daikan's office - and none is known to have lain north of a Japanese house.
 
-At the Takei house the plot was called the soup-greens field and was planted mainly with leafy greens, and farmers from
-nearby came to work it. Whether a plot was fenced, or screened from a formal garden beside it, is not recorded.
+Whether a plot was fenced, or screened from a formal garden beside it, is not recorded. At the Takei house the plot was
+called the soup-greens field and was planted mainly with leafy greens, and farmers from nearby came to work it.
 
 Its size ran from about 1,100 sq ft (100 sq m) at the Takei house to about half of the Yokota house's grounds of some
 36,000 sq ft (3,340 sq m); the daikan's field was about 180 by 120 ft.
@@ -18,7 +18,8 @@ Guesses:
   bed is fenced: no record says either way.
 - Where a country shrine's resident keeper grew vegetables, and how much: no record says.
 
-Depiction: The plan draws the garden as beds in rows. Its size and its site are each one of the forms recorded, each plan
+Depiction: The plan draws the garden as beds in rows inside a dashed line, which marks the plot's edge and is not a
+fence. Its size and its site are each one of the forms recorded, each plan
 taking its own, and it is kept where it gets its sun: where the west and the rear lie in the shade of the house and the
 kitchen, it stands in the inner court beside the formal garden. At a country shrine the keeper's plot stands near the hall,
 on open ground in the sun.

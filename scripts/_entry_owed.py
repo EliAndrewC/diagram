@@ -28,7 +28,7 @@ supplies the judgment in writing, and it is auditable.
 THE PROSE HALF IS DERIVED, NEVER RESTATED. "Explanation prose" is `_TAGS` less `_DATA_TAGS`, asked of
 the engine, so a tag added or moved there cannot leave this script quietly checking the wrong thing. The
 exemption is keyed on the prose and NOT on the whole docstring: the docstring also carries
-`Name:`/`Covers:`/`Label:`/`Sources:`/`Entry:` (feature 207), so re-pointing an `Entry:` or fixing a
+`Name:`/`Covers:`/`Sources:`/`Entry:` (feature 207), so re-pointing an `Entry:` or fixing a
 house-style slip would otherwise silence the check for that class while the words a reader sees stood
 untouched.
 

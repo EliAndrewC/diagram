@@ -22,7 +22,8 @@ Depiction: The plan draws the hall and the monk's dwelling as one long building 
 the approach with the small sanctuary behind it on the same line. The kitchen, the monk's rooms and the writing room are
 drawn as parts of it. The one roof is the maps' standing choice, because at a village shrine one building serves as both the
 monk's home and the place the villagers come to; in history a temple's dwelling usually stood apart, and the one-roof form
-is known only once.
+is known only once. The building stands in a small cleared opening in the shrine's wood, drawn clear of the canopy rather
+than under it so that it shows.
 
 Name: hall and dwelling
 Covers: the one-roof building, its outline, its roof and its caption

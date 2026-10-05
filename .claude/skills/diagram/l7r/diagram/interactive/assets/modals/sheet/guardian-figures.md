@@ -1,4 +1,4 @@
-About: Guardian figures were a pair of stone beasts set at a shrine's entrance, the komainu, the guardian lion-dogs.
+About: Guardian figures were a pair of stone beasts that stood guard over a shrine, the komainu, the guardian lion-dogs.
 Before temples of Bishamon a pair of stone tigers often took their place, as at one city temple of his;
 whether a village shrine of Bishamon had them too is not recorded. In Rokugan Bishamon is
 the Fortune of Strength.
@@ -15,8 +15,7 @@ Guesses:
 - That a village shrine of Bishamon sets tigers in place of lion-dogs, as the temples where they are known do: no village
   example was found.
 
-Depiction: The plan draws the pair only at a shrine whose parish is richer than average, one beast on each side of the
-approach, and at a shrine of Bishamon draws them as tigers.
+Depiction: The plan draws the pair only at a shrine whose parish is richer than average, and at a shrine of Bishamon draws them as tigers.
 
 Name: guardian figures
 Covers: the guardian pair beside the approach

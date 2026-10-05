@@ -45,7 +45,8 @@ the map.
 settlement's lanes branch off as side lanes or run behind as a back lane is on the title card.
 
 [settlement_form=linear] A row village's street is drawn straight where it was laid out first, or along the field's dry
-edge, standing for a levee or a fan's foot, and runs on off the map as the road the row stands on.
+edge, standing for a levee or a fan's foot, and runs on off the map as the road the row stands on. The street is drawn
+about 6 ft wide, though the roads of the planned rows were laid about 36 ft wide.
 
 Name: village lane
 Covers: `lanes` - every lane on the map: the web, the internal skeleton, a row village's streets, the connector to the off-map road and the field spur

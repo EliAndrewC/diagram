@@ -2,7 +2,9 @@ About: A samurai household cooked on a kamado, a clay range with fire-mouths, in
 fire-pit cut into the floor, the irori, was the common house's hearth; none is recorded in a samurai kitchen.
 
 A samurai house was matted in nearly every room, but its kitchen was board-floored, with an earth-floored part, the doma,
-smaller than a farmhouse's. As a rule in the Edo period the kamado stood on the doma. Modern accounts say a samurai house's
+smaller than a farmhouse's.
+
+As a rule in the Edo period the kamado stood on the doma. Modern accounts say a samurai house's
 narrow doma sometimes sent it up onto the board floor instead, and one museum's reproduction of a middle-rank retainer's house
 has a movable kamado there, under ceiling boards set with gaps to let the smoke out; no account from before 1868 puts it there.
 In a commoner's tenement of the Edo period a movable kamado could stand on the boards, its base boxed in boards on four legs

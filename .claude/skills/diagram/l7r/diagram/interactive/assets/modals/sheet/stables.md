@@ -16,9 +16,8 @@ Guesses:
 - How deep a stall is, and so its area: only a stall's width is recorded.
 - That the stable stays smaller than the barracks: no source says where a stable ranked among an office's buildings.
 
-Depiction: The plan draws the stable a few bays long, its stalls about 6 ft wide - a bay taken as one ken by convention - on
-board floors, with the passage before them. It stands in the service yard by a service gate, away from the forecourt, with
-a well beside it.
+Depiction: The plan draws the stable as a small building divided into three stalls. It stands in a corner of the outer
+court, against the compound wall.
 
 Name: stables
 Covers: the stable building, its stall divisions and its label

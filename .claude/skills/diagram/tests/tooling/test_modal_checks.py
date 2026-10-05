@@ -112,7 +112,9 @@ def test_a_class_new_to_the_about_form_owes_all_four_units(tmp_path: pathlib.Pat
     root = _tree(tmp_path)
     base = subprocess.run(["git", "-C", str(root), "rev-parse", "HEAD"], capture_output=True, text=True, check=True).stdout.strip()
     slugs = [s for s, _w, _f in mo.owed(root, base)]
-    assert slugs == ["modal-form:hamlet/farmhouse", "modal-accuracy:hamlet/farmhouse", "modal-references:hamlet/farmhouse", "modal-gaps:hamlet/farmhouse", "modal-depiction:hamlet/farmhouse"], "the Depiction check is owed whether or not the modal has the tab (D13)"
+    assert slugs == ["modal-form:hamlet/farmhouse", "modal-accuracy:hamlet/farmhouse", "modal-references:hamlet/farmhouse", "modal-gaps:hamlet/farmhouse", "modal-depiction:hamlet/farmhouse"], (
+        "the Depiction check is owed whether or not the modal has the tab (D13)"
+    )
 
 
 def test_nothing_is_owed_while_nothing_moved_and_a_moved_entry_page_owes_only_the_research_units(tmp_path: pathlib.Path) -> None:
@@ -191,11 +193,26 @@ def test_the_depiction_tab_owes_its_own_check_and_its_bundle_carries_the_drawing
     moves; its bundle carries that page whole and the claims-index rows citing it (a DRIFTED one with its note)."""
     import json
 
-    root = _tree(tmp_path, FARMHOUSE.replace("    Name: farmhouse", "    Depiction: The map draws every house alike.\n\n    Name: farmhouse").replace(
-        "    Entry: research/questions/0029-farmhouses-minka.html", "    Entry: research/questions/0029-farmhouses-minka.html\n    Drawing: research/questions/0029-farmhouses-minka.drawing.html"))
+    root = _tree(
+        tmp_path,
+        FARMHOUSE.replace("    Name: farmhouse", "    Depiction: The map draws every house alike.\n\n    Name: farmhouse").replace(
+            "    Entry: research/questions/0029-farmhouses-minka.html", "    Entry: research/questions/0029-farmhouses-minka.html\n    Drawing: research/questions/0029-farmhouses-minka.drawing.html"
+        ),
+    )
     q = root / SKILL / "research" / "questions"
     (q / "0029-farmhouses-minka.drawing.html").write_text('<h2 id="how-our-maps-draw-farmhouses">How our maps draw farmhouses</h2>\n<p>The roof shape is a knob.</p>\n', encoding="utf-8")
-    (root / SKILL / "dev" / "claims-index.json").write_text(json.dumps({".claude/skills/diagram/l7r/diagram/settlement/houses.py::HousesMixin.house#ridge": {"verdict": "DRIFTED", "note": "always hipped", "pages": "{'0029-farmhouses-minka.drawing.html': 'x'}"}}), encoding="utf-8")
+    (root / SKILL / "dev" / "claims-index.json").write_text(
+        json.dumps(
+            {
+                ".claude/skills/diagram/l7r/diagram/settlement/houses.py::HousesMixin.house#ridge": {
+                    "verdict": "DRIFTED",
+                    "note": "always hipped",
+                    "pages": "{'0029-farmhouses-minka.drawing.html': 'x'}",
+                }
+            }
+        ),
+        encoding="utf-8",
+    )
     base = _commit(root)
     assert [s for s, _w, _f in mo.owed(root, base)] == [], "nothing moved"
     (q / "0029-farmhouses-minka.drawing.html").write_text('<h2 id="how-our-maps-draw-farmhouses">How our maps draw farmhouses</h2>\n<p>The roof shape is one.</p>\n', encoding="utf-8")
@@ -230,7 +247,9 @@ def test_a_drawing_page_the_old_form_listed_at_the_base_is_a_candidate_after_the
     old = FARMHOUSE.replace("Farmhouse(Kind)", "Farmhouse(Kind)").split('"""')
     old_doc = "\n    What: old form.\n    Why: old form.\n    Name: farmhouse\n    Covers: houses\n    Label: accurate\n    Sources: not recorded\n    Entry: research/questions/0029-farmhouses-minka.html, research/questions/0038-yards.drawing.html\n    "
     root = _tree(tmp_path, old[0] + '"""' + old_doc + '"""' + '"""'.join(old[2:]))
-    (root / SKILL / "research" / "questions" / "0038-yards.drawing.html").write_text('<h2 id="how-our-maps-draw-yards">How our maps draw yards</h2>\n<p>Each house drawn turned.</p>\n', encoding="utf-8")
+    (root / SKILL / "research" / "questions" / "0038-yards.drawing.html").write_text(
+        '<h2 id="how-our-maps-draw-yards">How our maps draw yards</h2>\n<p>Each house drawn turned.</p>\n', encoding="utf-8"
+    )
     _commit(root)
     assert mo.find(root, "farmhouse") is None, "the base holds the old form only"
     (root / CLASSES / "homestead.py").write_text(FARMHOUSE, encoding="utf-8")
@@ -241,7 +260,12 @@ def test_a_drawing_page_the_old_form_listed_at_the_base_is_a_candidate_after_the
 def test_a_drawing_page_a_listed_one_links_to_is_a_candidate(tmp_path: pathlib.Path) -> None:
     """The windbreak's round 1: 0072's drawing page sends its reader to 0080 for the crowns it draws, and the check was never
     shown 0080. A drawing page a LISTED one links to is handed over as a CANDIDATE."""
-    root = _tree(tmp_path, FARMHOUSE.replace("    Entry: research/questions/0029-farmhouses-minka.html", "    Entry: research/questions/0029-farmhouses-minka.html\n    Drawing: research/questions/0029-farmhouses-minka.drawing.html"))
+    root = _tree(
+        tmp_path,
+        FARMHOUSE.replace(
+            "    Entry: research/questions/0029-farmhouses-minka.html", "    Entry: research/questions/0029-farmhouses-minka.html\n    Drawing: research/questions/0029-farmhouses-minka.drawing.html"
+        ),
+    )
     q = root / SKILL / "research" / "questions"
     (q / "0029-farmhouses-minka.drawing.html").write_text('<p>Crowns are at <a href="0080-crowns.drawing.html">crowns</a>.</p>\n', encoding="utf-8")
     (q / "0080-crowns.drawing.html").write_text("<p>Crowns drawn 17 ft.</p>\n", encoding="utf-8")

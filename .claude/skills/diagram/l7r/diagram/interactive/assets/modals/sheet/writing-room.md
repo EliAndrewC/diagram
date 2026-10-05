@@ -10,8 +10,8 @@ the kuri, often served as its office as well, and at a small shrine business was
 What such a room held, and how big it was, is not recorded.
 
 Guesses:
-- The room itself, set aside along the front of the monk's dwelling for the registers, and its size: no account describes
-  where in a keeper's house a small shrine's or temple's business was done.
+- The room itself, set aside along the front of the monk's dwelling for the registers, and its size, about 17 by 11 ft: no
+  account describes where in a keeper's house a small shrine's or temple's business was done.
 
 Depiction: The plan draws the writing room as a room of the monk's dwelling, near its door, inside the one building; no
 office building is drawn.

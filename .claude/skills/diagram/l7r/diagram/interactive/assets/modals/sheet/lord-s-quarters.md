@@ -11,7 +11,10 @@ rooms of the maids and servants.
 A smaller house could run the other way, its formal room deepest in and the living rooms between it and the entrance. How
 large the master's rooms were is not recorded.
 
-Depiction: The plan draws the master's rooms as one labeled bay standing for several rooms, behind the reception and before the family's rooms, in the palace's order.
+Guesses:
+- How much of the house the master's rooms take on the plan: no source measures them.
+
+Depiction: The plan draws the master's rooms as one labeled bay standing for several rooms, a work room and a bedroom among them, behind the reception and before the family's rooms, in the palace's order.
 
 Name: lord's quarters
 Covers: the lord's suite in the residence, its floor and its labels

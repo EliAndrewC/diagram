@@ -17,10 +17,12 @@ Guesses:
 - Its size on the plan, about 43 to 50 by 25 to 27 ft: no account gives the size of a county office's grain storehouse or
   how many it kept, so it is set above the village stores and at about a tenth of Takayama's.
 
-Depiction: The plan draws one of the two forms: the storehouse on posts, its posts drawn at its foot, or the earth-walled
-kura, drawn with no posts, since how such a kura's floor was raised is not recorded. It is labeled a granary, not a rice
-granary. The plan draws one granary, with a corner of unhulled rice against famine, where Edo kept its emergency reserve
-in separate community granaries. A wooden granary may have a fire-water tub beside it; an earth-walled one has none.
+Depiction: The plan draws one of the two forms: the storehouse on posts, drawn slatted for its timber walls, with its posts
+as dark blocks at its edge, or the earth-walled kura, drawn plastered white with no posts, since how such a kura's floor was
+raised is not recorded. It is labeled a granary, not a rice granary, because other grain was stored beside the rice. The
+plan draws one granary, with a corner of unhulled rice against famine, where in the Edo period the emergency reserve was
+kept apart in community and charity granaries. A wooden granary may have a fire-water tub beside it; an earth-walled one
+has none.
 
 Name: granary
 Covers: the granary, on posts or earth-walled, and its label

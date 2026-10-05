@@ -26,7 +26,9 @@ Guesses:
 
 Depiction: The plan draws one ornamental garden in each compound, before the great hall, with the private rooms reaching it
 by stepping stones of their own. Its water is a small pond or a dry garden, each plan taking one, as its note says. The garden is
-kept open ground, never filled with buildings. Every kind of stone lantern is drawn as one small gray mark; the real
+kept open ground, never filled with buildings. A plan whose guest comes in with no formal entrance draws a garden path from a middle gate
+to the reception room's veranda, and some plans also lay garden ground where a guest crosses to the entrance, or round the
+compound's shrine. Every kind of stone lantern is drawn as one small gray mark; the real
 lanterns came in many named kinds, the Kasuga, the snow-viewing and others, each built of six stacked stone parts.
 
 Name: garden

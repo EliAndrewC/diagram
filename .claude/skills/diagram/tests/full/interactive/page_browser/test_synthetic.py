@@ -5,7 +5,7 @@ verified). Playwright drives headless Chromium over a plain `file://` open.
 
 ONE tier since 2026-09-07. The SYNTHETIC page is a hand-built map of a dozen classed primitives: it proves
 the mechanics - hover lights every group of a class and none of another, a label and its subject
-are one class, a click opens the modal with the label words and the present siblings only, Escape
+are one class, a click opens the modal with its About text and the present siblings only, Escape
 / the close button / the backdrop close it, zero console errors, zero network requests - and every
 behavior ruling the GM has made about the page since. The REFERENCE HAMLET tier (a rolled Inashiro, the
 same mechanics on the real page, the SC-004 timings) and the Kuwabata speed tier (features 199-203's caps)
@@ -18,7 +18,8 @@ from __future__ import annotations
 
 import pytest
 
-from l7r.diagram.interactive.classes import PLACE
+from l7r.diagram.interactive import conditions
+from l7r.diagram.interactive.classes import CLASSES, PLACE
 from l7r.diagram.interactive.sources import SITE_PAGES
 from tests.full.interactive.page_browser._driver import Page, _mechanics
 
@@ -277,7 +278,8 @@ def test_glossary_terms_carry_their_definition_and_the_references_are_a_tab(synt
     shown = "() => ({ about: !document.getElementById('p-about').hidden, guesses: !document.getElementById('p-guesses').hidden, refs: !document.getElementById('p-refs').hidden, explain: document.getElementById('explain').open, shade: !document.getElementById('shade').hidden, tabs: Array.from(document.querySelectorAll('#x-tabs button')).filter(b => !b.hidden).map(b => b.textContent) })"
     state = synthetic.js(shown)
     assert state["about"] and not state["refs"] and state["explain"] and state["shade"], "the dialog opens on About"
-    assert state["tabs"][0] == "About" and state["tabs"][-1] == "References" and "Guesses" not in state["tabs"], "an old-form class has no guesses tab"
+    assert state["tabs"][0] == "About" and state["tabs"][-1] == "References", state["tabs"]
+    assert ("Guesses" in state["tabs"]) == bool(conditions.shown(CLASSES["bund"].guesses, {})), "the Guesses tab is drawn only when there is a guess"
     synthetic.js("() => document.getElementById('t-refs').click()")
     synthetic.page.wait_for_timeout(30)
     state = synthetic.js(shown)

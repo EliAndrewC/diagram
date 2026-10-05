@@ -130,11 +130,7 @@ def test_an_about_form_without_a_data_tag_fails_loudly_naming_the_class(missing:
 def test_the_depiction_tab_has_its_paragraphs_and_its_drawing_pages() -> None:
     """Plan D13 (GM 2026-10-04: "I want 'How we draw it' things on its own tab"): `Depiction:` keeps its paragraphs as About
     does, and `Drawing:` names the "how our maps draw it" pages, which leave `Entry:`."""
-    Probe = _probe(
-        "About: a.\n\nDepiction: The map draws it bold.\n\nIt was pale.\n\n"
-        + _DATA
-        + "Drawing: research/questions/0001-x.drawing.html\n"
-    )
+    Probe = _probe("About: a.\n\nDepiction: The map draws it bold.\n\nIt was pale.\n\n" + _DATA + "Drawing: research/questions/0001-x.drawing.html\n")
     try:
         fc = Probe.feature()
         assert fc.depiction == ("The map draws it bold.", "It was pale.") and fc.drawing == "research/questions/0001-x.drawing.html"
@@ -153,8 +149,14 @@ def test_a_drawing_page_under_entry_is_refused_with_the_tag_it_belongs_under() -
 
 @pytest.mark.parametrize(
     "said",
-    ["Except on the older hand-drawn maps, it is kept", "the hand-drawn maps keep the higher share", "On the legacy maps it is not",
-     "the frozen pool draws it", "an earlier hamlet map", "the hand-authored maps"],
+    [
+        "Except on the older hand-drawn maps, it is kept",
+        "the hand-drawn maps keep the higher share",
+        "On the legacy maps it is not",
+        "the frozen pool draws it",
+        "an earlier hamlet map",
+        "the hand-authored maps",
+    ],
 )
 def test_a_modal_naming_the_older_maps_is_refused_with_the_fix(said: str) -> None:
     """GM 2026-10-04: the older hand-drawn maps will all be scripted before anyone else reads a modal, so no modal mentions

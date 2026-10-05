@@ -5,10 +5,10 @@ have one of its own: the samurai houses that survive at Kakunodate draw their wa
 Takayama listed a well with its kitchen and bath. In Edo, where the aqueduct served the samurai districts first, the
 difference was one of priority as much as of a private well.
 
-A well was a shaft dug by hand about 3 ft (1 m) across, with a frame of wood or stone, the curb, about 4 ft square round
-its mouth. The bucket came up on a counterweighted pole, the sweep, where the water stood shallow, and on a rope over a
+A well was a shaft dug by hand about 3 ft (1 m) across, with a frame of wood or stone, the curb, round its mouth; the one
+old curb measured, of unknown date, is about 4 ft square. The bucket came up on a counterweighted pole, the sweep, where the water stood shallow, and on a rope over a
 pulley where it lay deep, and some wells had a roof on posts over them. At Kakunodate a roofed well stands just inside one
-samurai house's gate, and a middle-ranking family's house has a sweep well.
+samurai house's gate, and another has a sweep well.
 
 How many wells a residence kept is not recorded.
 
@@ -18,7 +18,7 @@ Guesses:
 - The curb's exact size, 3 to 4 ft: the one measured curb is undated, so the figure is fitted round a premodern shaft.
 
 Depiction: The plan draws each well as a square curb with a dark mouth, a marker larger than the curb itself so that it
-shows where the well stands; the real curb was about 4 ft across. Where a plan has a kitchen and stables, the kitchen's
+shows where the well stands; a real curb was some 3 to 4 ft across. Where a plan has a kitchen and stables, the kitchen's
 well stands past the bath, and the well by the stables serves the horses and the kennel in the service yard.
 
 Name: well

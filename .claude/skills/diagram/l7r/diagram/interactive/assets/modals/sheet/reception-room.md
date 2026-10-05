@@ -13,6 +13,10 @@ sunny south side. A house's altar room could stand beside the zashiki's alcove, 
 
 How large a zashiki was is not recorded.
 
+Guesses:
+- The size the plan gives the reception bay: no zashiki's size is recorded, so the bay is reckoned within a house sized
+  to a district magistrate's house of 1794.
+
 Depiction: The plan draws the reception as one labeled bay at the end of the residence nearest the approach, in the palace's
 order, and never between the master's rooms and the family's. It faces the garden where the plan's buildings allow, and
 otherwise the court or the service ground before its block. Where one lineage holds the posting, the household's altar alcove

@@ -7,7 +7,7 @@ How wide a village path ran is not recorded, in Japan or in China, where the cou
 traditional figure of uncertain date.
 
 Guesses:
-- That a worn path runs from the kitchen side of the building to the shrine's well: no account describes a shrine's path to
+- That a worn path runs from the kitchen end of the shrine's hall to its well: no account describes a shrine's path to
   its well; it is reckoned from the water a household carried every day.
 - Its width on the plan, about 4 ft: no village path's width was found measured.
 

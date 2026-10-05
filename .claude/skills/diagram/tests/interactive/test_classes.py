@@ -115,6 +115,7 @@ def test_the_gm_s_line_between_deviation_and_convention() -> None:
     for key in ("bund beans", "well", "weir", "threshing yard"):
         assert CLASSES[key].depiction, f"{key}: its drawing convention is told on the Depiction tab"
 
+
 def test_siblings_are_closed_over_the_vocabulary_and_symmetric() -> None:
     for key, fc in CLASSES.items():
         for other, text in fc.siblings.items():

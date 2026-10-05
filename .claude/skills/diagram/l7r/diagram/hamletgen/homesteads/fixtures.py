@@ -122,6 +122,8 @@ Research:
     coop share - research/questions/0045-chickens-and-chicken-coops.drawing.html: 0.72-0.92
     household shrine share - research/questions/0219-household-shrines-yashikigami.drawing.html: 0.03-0.08
     persimmon share - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html: 0.80-0.95
+    household grave - research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html: no household-grave kind; no farmstead draws a grave of its own on any hamlet
+    pig sty against the house - research/questions/0049-pigs-and-ducks-in-south-china-rice-villages.drawing.html: no sty kind; no farmstead on a plain paddy hamlet draws a sty against its house
 """
 # THE FOUR ATTESTED PRIVY SEATS (269 B10, research/questions/0047-farm-privies-and-their-night-soil-benjo.html "Farm privies and their night soil (benjo)"): under the eaves by the
 # stable beside the entrance (sinyoken), a separate outhouse in the yard (sinyoken), the front yard (Sugiura 1977, northern

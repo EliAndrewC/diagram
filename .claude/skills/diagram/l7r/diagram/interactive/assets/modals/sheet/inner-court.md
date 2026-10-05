@@ -1,8 +1,8 @@
 About: The inner court was the private half of a magistrate's compound, behind the office: the magistrate's residence and
 household, the garden its formal rooms looked onto, the household's shrine in a corner of its ground, and the kitchen and
 service ground that kept the household running. The office was also a home, and this was the home. In a Chinese county office the last of its gates, the
-inner residence gate, divided it from the office; in Japan the intendant's household lived inside the compound too, though
-at Takayama the residence stood beside the office rather than behind it.
+inner residence gate, divided it from the office; in Japan a town magistrate's residence stood inside the magistracy too, though
+at the intendant's office at Takayama the residence stood beside the office rather than behind it.
 
 Its ground was divided by the sun. The formal garden lay on the south side, before the reception rooms; at Takayama the
 great hall of the office and the intendant's own room looked onto one garden. The house itself was one block under one
@@ -21,7 +21,7 @@ Guesses:
 
 Depiction: The plan always sets the inner court behind the office hall, reached through a gate between the courts; for a
 Japanese office that is a simplification, since at Takayama the residence stood beside the office. Its ground is kept
-open, its earth showing through unfilled, and the service ground behind the house is drawn as a narrow strip or alley, never a wide empty band.
+open, its earth showing through unfilled, and the service ground behind the house is drawn as a service strip or a narrow alley, never a wide empty band.
 
 Name: inner court
 Covers: the inner court's ground and its label

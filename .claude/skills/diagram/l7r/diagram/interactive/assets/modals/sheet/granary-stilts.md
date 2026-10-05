@@ -11,11 +11,12 @@ posts or on a stone base, is not recorded.
 How tall a takakura's posts stood, and how many held up its floor, is not recorded either.
 
 Guesses:
-- The number and size of the posts the plan draws: no account read gives a takakura's posts.
+- The posts the plan draws, three or four of them about 3 ft square: no account read gives how many posts held up a
+  takakura or how thick they were.
 
-Depiction: The plan draws the posts as small dark blocks at the granary's foot, only under a granary on posts; the
-earth-walled kura is drawn with none, since how its floor was raised is not recorded and posts under it would be a
-guess.
+Depiction: The plan draws the posts as small dark blocks at the granary's corners or along its edge, so that they show;
+the real posts stood beneath the raised floor. Only a granary on posts has them: the earth-walled kura is drawn with none,
+since how its floor was raised is not recorded and posts under it would be a guess.
 
 Name: granary stilts
 Covers: the posts at the granary's foot

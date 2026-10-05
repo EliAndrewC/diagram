@@ -12,7 +12,7 @@ Guesses:
 - That a village shrine has lanterns only where its parish is richer than average: no count says how many village shrines
   kept them.
 
-Depiction: The plan draws lanterns beside the approach only at a shrine whose parish is richer than average. Every kind
+Depiction: The plan draws lanterns only at a shrine whose parish is richer than average, as a gift such a parish gave. Every kind
 of stone lantern is drawn as the same small mark; the real ones came in many named kinds.
 
 Name: lanterns

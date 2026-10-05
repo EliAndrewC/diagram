@@ -1,15 +1,15 @@
 About: Soybean (daizu) grew as a crop of its own in the dry fields (hatake), farmland that was never flooded, and
-was also sown in a row along the paddy bunds. A farming household ate its soybeans at home: in Ehime in the late Meiji
-and Taisho years they were made into tofu or boiled. Near Kyoto a tenth of the shogun's land tax was reckoned in
-soybeans. In Edo-period Echizen soybean was harvested in the gaps between the tasks of the rice harvest. The
-dry fields mostly took the higher, well-drained ground the paddy water could not reach, such as river levees and
-terraces.
+was also sown in a row along the paddy bunds. The dry fields mostly took the higher, well-drained ground the paddy
+water could not reach, such as river levees and terraces. A farming household ate its soybeans at home, in Ehime in the
+late Meiji and Taisho years as tofu or boiled beans; near Kyoto a tenth of the shogun's land tax was reckoned in
+soybeans, though paid in silver.
 
 A dry field was worked in ridges and furrows, its crop growing in rows: ridges were the core of dry farming in north
 China by the sixth century, with rules for soybeans and millet, and Edo-period Japanese farmers still weeded along the
 ridges. A soybean plant is an erect, branching bush, knee to waist high, with broad, pointed,
 medium-green leaflets. In a modern field its top leaves stood near 3 ft (80 cm) in late August, and by September the
-field was turning from deep green to yellow-brown.
+field was turning from deep green to yellow-brown; in Edo-period Echizen soybean was harvested in the gaps of the
+rice harvest.
 
 Single dry fields of the late sixteenth and seventeenth centuries averaged a tenth to a sixth of an acre, ranging
 from under a twentieth to about a third. A farm family of the early 1900s worked about 2.5 acres of

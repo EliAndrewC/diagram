@@ -14,7 +14,7 @@ Guesses:
 
 Depiction: The plan draws the facing as a gray band along the water's edge, following the river's own line: a line along the
 bank, as a towpath is drawn, rather than a structure with a footprint of its own. The landing's steps are notched into it as one
-flight of four treads, the count every flight on our maps takes; a real flight had as many steps as its bank was high.
+flight of four treads, the count every flight on our maps takes; how many steps a real flight had is not recorded.
 
 Name: revetment
 Covers: the stone facing along the landing's bank

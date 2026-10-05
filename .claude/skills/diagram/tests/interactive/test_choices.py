@@ -11,9 +11,9 @@ import json
 import os
 
 from l7r.diagram.interactive import choices, conditions
+from l7r.diagram.interactive.classes import PLACE
 from l7r.diagram.interactive.notes import MapNotes
 from l7r.diagram.interactive.page import render_page
-from l7r.diagram.interactive.classes import PLACE
 
 SKILL = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 POOL_HAMLETS = sorted(p for p in glob.glob(os.path.join(SKILL, "pool", "hamlets", "*", "*.json")) if os.path.basename(p)[:-5] == os.path.basename(os.path.dirname(p)))

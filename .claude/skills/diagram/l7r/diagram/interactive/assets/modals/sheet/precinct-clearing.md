@@ -4,9 +4,9 @@ open ground about the hall was a clearing among kept trees, probably with no fen
 the shrine's festivals: farmers often built a stage for plays on shrine ground, permanent ones from the early 1800s, and
 sumo was offered at shrines across the country.
 
-What its surface was like is not recorded. Gravel laid along the approach was meant to purify the ground it covered; that
-the ground about a hall was swept is told only in folklore recorded in modern times, where a shrine's own households chose
-from among themselves who would clean it.
+What its surface was like is not recorded. Gravel laid along the approach was meant to purify the ground it covered.
+Whether the ground about the hall was swept is not recorded either; folklore recorded in modern times tells only that a
+shrine's own households chose from among themselves who would clean the shrine.
 
 A village shrine's precinct typically ran to some 150 to 650 tsubo, about 5,000 to 23,000 sq ft, and its halls covered only
 a fortieth to a seventh of it. How the rest divided between wood and open ground is not recorded.

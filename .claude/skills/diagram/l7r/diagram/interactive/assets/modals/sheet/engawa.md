@@ -11,12 +11,11 @@ one face to the next: at the Katsura villa one veranda is a ken wide on its east
 the corner. A general width for the outer veranda is not recorded.
 
 Guesses:
-- That the garden face is drawn at the wider end of the range, where a plan does so: the one veranda that changes width, at
-  Katsura, is wider on one face than the next, but no rule is recorded for which face was wider.
+- Its drawn width, about 3 ft, the narrow end of the range: no general width for the outer veranda is recorded, so the width
+  is chosen within the half ken to one ken of Katsura's verandas.
 
-Depiction: The plan draws the veranda as a pale strip along the residence's garden face, and some plans carry it round one or
-two further faces; none rings all four, the great mansions' form. It is drawn open, the shutters stowed, as a house stood by
-day.
+Depiction: The plan draws the veranda as a pale strip along the residence's garden face, and one plan runs a short one out to
+a privy; none rings all four faces, the great mansions' form. It is drawn open, the shutters stowed, as a house stood by day.
 
 Name: engawa
 Covers: the veranda strip along the residence's garden face

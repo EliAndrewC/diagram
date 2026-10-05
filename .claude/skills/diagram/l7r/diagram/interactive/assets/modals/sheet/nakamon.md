@@ -10,7 +10,7 @@ How wide such a gate was, how it was built, and who might pass it are not record
 
 Guesses:
 - That the gate was guarded: no account says so.
-- Its width, about 8 ft: no gate between a compound's courts is measured.
+- Its width, about 6 to 8 ft between its posts: no gate between a compound's courts is measured.
 
 Depiction: The plan draws the gate as a pair of posts in the wall between the outer and inner courts. Every plan sets the office in front and the residence behind, the Chinese order, as a simplification: at the one Japanese office whose layout survives, the residence stood beside the office, not behind it.
 

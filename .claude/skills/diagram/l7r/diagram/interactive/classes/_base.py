@@ -39,11 +39,10 @@ from __future__ import annotations
 import inspect
 import os
 import re
-
-from .. import conditions
 from dataclasses import dataclass, field
 from typing import ClassVar
 
+from .. import conditions
 from ..content import content
 
 #: The page's fixed phrases and the rulings record - DATA in `assets/page-text.json` (feature 207; see `content.py`).
@@ -258,7 +257,9 @@ def _about_feature(name: str, key: str, parts: dict[str, str]) -> FeatureClass:
     for tag in ("About", "Guesses", "Depiction"):
         hit = OLDER_MAPS.search(parts.get(tag, ""))
         if hit:
-            raise ValueError(f"{name}: {tag}: names the older maps ({hit.group(0)!r}) - they will all be scripted before anyone else reads this; say what the scripted maps do and drop the exception (dev/modals.md M21)")
+            raise ValueError(
+                f"{name}: {tag}: names the older maps ({hit.group(0)!r}) - they will all be scripted before anyone else reads this; say what the scripted maps do and drop the exception (dev/modals.md M21)"
+            )
     raw_guesses = parts.get("Guesses", "")
     if raw_guesses and not all(line.startswith("- ") for line in raw_guesses.splitlines()):
         raise ValueError(f"{name}: each guess is a bullet - start every line under Guesses: with '- '")

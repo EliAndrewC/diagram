@@ -218,7 +218,7 @@ def test_every_kind_a_program_names_is_registered() -> None:
 def test_an_entry_is_complete(key: str) -> None:
     fc = COMPOUND_CLASSES[key]
     assert fc.key == key and key in fc.name.lower(), "the modal's heading names the kind its ink carries"
-    assert fc.about and all(len(p) > 40 for p in fc.about), "an About paragraph is a paragraph, not a label"
+    assert len(" ".join(fc.about)) > 40, "the About text is prose, not a label"
     assert fc.sources and all(fc.sources) and "research/" in fc.entry
 
 

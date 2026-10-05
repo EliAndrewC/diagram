@@ -92,6 +92,7 @@ Standard features with rough SVG conventions. New diagrams should reuse this voc
 <!-- Research: cart yard as a charcoal fire gap - research/questions/0197-charcoal-yards-and-charcoal-stores.drawing.html, research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: Ubame's cart yard drawn as the charcoal store's fire gap, ~13-14 ft and 29 ft wide -->
 <!-- Research: charcoal bales - research/questions/0199-straw-bales-of-rice-and-charcoal-tawara.drawing.html: Ubame's sheet draws each bale ~6 x 3 ft -->
 <!-- Research: archery bank - research/questions/0164-drill-grounds-archery-ranges-and-riding-grounds-jiaochang-yaba-baba.html: optional azuchi with a ~90 ft lane -->
+<!-- Research: forecourt - research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html: Hayakawa's sheet labels "forecourt" the strip between the office hall and the inner-court wall, while the open ground just inside the main gate is labeled OUTER COURT -->
 
 - **Office hall (with dais band)** - the working block (~360×84) along the north edge of the outer court, backing onto the divider wall. Rear rooms behind a dashed screen-line: the **day office** (tax and case business) and the **official study** (the magistrate's working desk). Front band on the court face: the magistrate's tatami dais centered, two clerk positions flanking. The courtroom is a room OF the office block, not a freestanding stage (see grounding).
 - **Hearing court** - a ROOFED court immediately south of the office hall's dais band (research/questions/0099-the-hearing-court-shirasu.html - the open white court is the period-drama image; Takayama's is river cobbles under a roof): its floor white gravel or the local river cobbles (a knob), drawn with a solid outline and posts along its open side, leaving a cart-passable slot (~25-30 px) between its south edge and anything at the wall. Its size is a guess - no roofed court's measurements were found. Straw mats on the floor ('Who sat where at a hearing, and on what?'): the accused's at the center (~6×3 ft), the plaintiff's behind to one side, the village officials' behind to the other.
@@ -117,6 +118,7 @@ Standard features with rough SVG conventions. New diagrams should reuse this voc
 <!-- Research: bath - research/questions/0105-baths-furo.html: a room or small addition on the service side by kitchen and well, 12-15 ft a guess -->
 <!-- Research: kitchen corridor tagged residence corridor - research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html: Hayakawa's sheet tags its kitchen-to-house covered way as a residence corridor -->
 <!-- Research: inner garden - research/questions/0103-ornamental-gardens-ponds-and-stone-lanterns-teien.html: central stipple with optional pond and lanterns -->
+<!-- Research: room order - research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html: every sheet drawn so far takes the palace order (reception in front, the master's rooms, the family's beyond); the small house's order is never taken -->
 
 - **Residence** - the lord's family dwelling along the north range, with internal soft-divisions (dashed lines) separating rooms. The historical rules the interior-audit added (2026-07), as feature 267's research revised them:
   - **Never one long bar, one room deep** - a single long rectangle reads as a nagaya (barracks) or honjin guest range. Two massings are attested (research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html): ONE BLOCK under one roof, two rows of rooms front and back (the Kuchiba house's six-room plan) - the ordinary form below a daimyo's scale; or halls in ECHELON (gankō, "flying geese") joined by corridors - the great house's form, or a house added to hall by hall over generations. Draw echelon only where the sheet's story is accretion.
@@ -136,6 +138,7 @@ Standard features with rough SVG conventions. New diagrams should reuse this voc
 <!-- Research: garden well - UNRESEARCHED: in the inner garden -->
 <!-- Research: stables well - UNRESEARCHED: just outside the stables for watering -->
 <!-- Research: bath-area well - research/questions/0105-baths-furo.drawing.html: optional, the kitchen well usually serves the bath -->
+<!-- Research: well glyph - research/questions/0196-communal-wells-ido.drawing.html: Hoshigaoka's sheet draws a plain square curb and mouth, with no sweep or pulley frame and no roof -->
 
 A compound housing ~50 people plus horses needs 2-4 wells, distributed by use:
 

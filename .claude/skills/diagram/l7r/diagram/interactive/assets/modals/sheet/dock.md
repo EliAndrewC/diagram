@@ -16,7 +16,8 @@ Guesses:
   its own was found.
 
 Depiction: The plan draws the dock as steps notched into the faced bank and gives it no pier: an official's landing gets one only
-where its bank shelves off into shallow water.
+where its bank shelves off into shallow water. The flight is drawn with four treads, as every landing on our maps is, a map
+drawing convention: no count of a real flight's steps was found.
 
 Name: dock
 Covers: the landing steps in the faced bank

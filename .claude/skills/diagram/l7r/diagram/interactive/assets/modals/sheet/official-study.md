@@ -1,6 +1,6 @@
 About: The official study was the magistrate's own working room in the office hall, where the office's papers were read
 and answered. At Takayama, the one intendant's office that survives, the entrance hall, examination room, working office
-and great hall were rebuilt together in 1816, most likely as one block. The officials sent by the shogunate worked in a
+and great hall were rebuilt together in the Edo period, most likely as one block. The officials sent by the shogunate worked in a
 room of the office, partitioned from the room of those hired from the district, and the documents sent to the shogunate
 were drawn up in a room used only for writing and bound in the room beside it. An intendant governed with about ten
 retainers of the shogunate and a few local hires.

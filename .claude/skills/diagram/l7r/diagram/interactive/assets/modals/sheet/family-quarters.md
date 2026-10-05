@@ -10,6 +10,9 @@ Matsue had a family room and the wife's living room besides its zashiki, and a c
 counted the family's rooms as one of its four groups, with the lord's reception suite, the retainers' office and the servants'
 rooms.
 
+A samurai house was built in the shoin style with nearly every room matted, only its kitchen board-floored, so the family's
+rooms were most likely laid with mats.
+
 How many rooms the family had, and how large, is not recorded.
 
 Guesses:
@@ -22,6 +25,6 @@ Takayama it stood beside it.
 
 Name: family quarters
 Covers: the family's bay of the residence, its floor and its labels
-Sources: yamen-enwiki, machi-bugyo-jawiki, neixiang-yamen-zhwiki, takayama-jinya-city, edojo-kotobank, shirobito-612-omote-oku, matsue-bukeyashiki, aizu-bukeyashiki-guide, matsushiro-bukeyashiki, nagano-shishi-yokota
-Entry: research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html, research/questions/0090-magistrates-compounds-jinya-and-yamen.html, research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html
+Sources: yamen-enwiki, machi-bugyo-jawiki, neixiang-yamen-zhwiki, takayama-jinya-city, edojo-kotobank, shirobito-612-omote-oku, matsue-bukeyashiki, aizu-bukeyashiki-guide, matsushiro-bukeyashiki, nagano-shishi-yokota, liq-takayasu-daidokoro
+Entry: research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html, research/questions/0090-magistrates-compounds-jinya-and-yamen.html, research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html, research/questions/0107-kitchens-daidokoro.html
 Drawing: research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html, research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html
