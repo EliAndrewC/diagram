@@ -1,0 +1,10 @@
+# Handoff - feature 319, H8 (session 1: write)
+
+- SECTION=0031/how-our-maps-choose-and-draw-clustered-and-scattered-villages-shuson-sanson - the farm channel is now drawn 2.5 ft "as a delivery ditch is where it leaves its canal", not "the narrowest water", and links 0068's 1.5 ft floor; the hamlet now rolls cluster shape, lanes, plot size and dry-row drift (plan.py), never even rows; grain drift turns only the dry fields' furrow rows (carve.py), the paddy's field grain held to the fall as a deviation; the surveyed plots are even rows, never the jori squares, matching 0005.
+- SECTION=0005/how-our-maps-draw-rice-paddies-and-their-plots-suiden - the hamlet basin is about 48 by 26-36 ft (1,488 sq ft) on the legacy grain plot_texture keeps, not "39 ft square"; the patchwork bullet says a planned field draws even rows but never the jori squares (0031).
+- SECTION=0005/rice-paddies-and-their-plots-suiden - Senmaida's 1,004 paddies (preservation council, JSIDRE) set beside the national cultural-properties database's about 800 at 18-20 m2, with a new note `bunka-shiroyone` copied verbatim from 0021's; owes source-reader, quote-check, translation-check and record-format.
+- SECTION=0196/how-our-maps-place-and-draw-wells-ido - the watering reach is 760 real ft on hamlet and village maps alike (WATER_REACH_FT, converted by s.px), not 380 ft at 1 ft/px; links 0033's row-village well spacing, which already said 760.
+- SECTION=0075/bamboo-groves-chikurin - not rewritten: the bamboo conflict (behind the house, Ogawa's south side) was already settled by H5; only the takehara-2004-yashikirin link was taken out of an absence note (test_footnotes failed on main) into a comment.
+- 0033 not touched: its 760 ft was the right side of the 0196 conflict.
+
+Owed beyond the record checks: impl-drift on the code claims citing 0031 (farm_water.py's FARM_CHANNEL_W_FT docstring still says "legibility floor"; consts.py GRAIN_DRIFTS, plan.py knob rolls, houses.py plot_texture), 0005 (PADDY_CELL_ACRES, PLOT_SIZES) and 0196 (wells.py, lot.py WATER_REACH_FT); entry-drift on the modals written from these drawing sections. No engine code, map or modal was changed.
