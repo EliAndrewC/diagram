@@ -1151,10 +1151,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings.md::Sacred features#hall and dwelling": {
-  "code": "4ead4c36cbe14735",
+  "code": "ecc13642143a1fd2",
   "core": "36b5c41144d104a5",
   "date": "2026-10-05",
-  "note": "one roof by default, the kitchen and the writing room are 0221's (§147, §151, §153, §124), but no 0221 block names a privy at the dwelling (the latrine kind's note calls it a guess that follows the farmhouse); split the privy off as its own GUESS claim",
+  "note": "one-roof default, the farmhouse-size separate house left to the sheet's author as the drawing page allows; writing room for the records",
   "pages": {
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html": "5e8ac2e778e0e69b",
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html": "53e6b30a3e84d65c"
@@ -1164,10 +1164,10 @@
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html:3c6c34f741caa79c",
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html:47b50699d36be383",
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html:7950922e6a0cab34",
-   "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html:8fedbcfb447d4dc1",
+   "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html:7d3c2032a9987c33",
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html:f24d361f0a0d9421"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings.md::Sacred features#hall and dwelling order": {
   "code": "edeef73d5f1814a4",
@@ -1198,6 +1198,16 @@
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html:d89c58633b72e2d1"
   ],
   "verdict": "DRIFTED"
+ },
+ ".claude/skills/diagram/buildings.md::Sacred features#kitchen garden at the dwelling": {
+  "code": "60cf29ff645856f6",
+  "core": "36b5c41144d104a5",
+  "date": "2026-10-05",
+  "note": "no cited question places a garden at a monk's dwelling",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings.md::Sacred features#modest compound shrine": {
   "code": "0f8a0eb84d0a7e07",
@@ -1245,6 +1255,16 @@
    "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html:d284e5af358a3a1f"
   ],
   "verdict": "DRIFTED"
+ },
+ ".claude/skills/diagram/buildings.md::Sacred features#privy at the dwelling": {
+  "code": "aa5a92ec52b8a24b",
+  "core": "36b5c41144d104a5",
+  "date": "2026-10-05",
+  "note": "no cited question places a privy",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings.md::Sacred features#sanctuary": {
   "code": "ab58ce5503767d07",
@@ -11058,19 +11078,21 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/sink.py::pond_seat#ditch runs downhill, not over the brook": {
-  "code": "eb237e24c025adb4",
+  "code": "ff9f665b465fc35f",
   "core": "9a30decae224a91b",
   "date": "2026-10-05",
-  "note": "downhill is 0060's (§919), but 0060 is silent on crossing the brook; add research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html (no channel crosses another) to the pointer",
+  "note": "runs_downhill and no mid-run brook crossing match the water-only-downhill and no-channel-crosses rules",
   "pages": {
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "790c57e2a1c0ab27",
    "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
   },
-  "research": "8ff7ceb036c4856e",
+  "research": "f7e80a6e0f99e6a7",
   "rests": [
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:34fdf73fd25acb82",
+   "0060-field-drains-akusuiro.drawing.html:2ae22b1c1cd7eb3e",
    "0060-field-drains-akusuiro.drawing.html:5430b16d81429901"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/sink.py::pond_seat#pond in a pocket below the fields": {
   "code": "101b566ea2436824",
@@ -14873,17 +14895,19 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/fabric.py::_draw_web#web lane width": {
-  "code": "5c0d3edcb20863d8",
+  "code": "5dadeb6f12bfe14a",
   "core": "0a8a74c90d0ccf39",
   "date": "2026-10-05",
-  "note": "0081's drawing page sets the footpath at 3 ft (a convention on the 3-shaku field road); cite research/questions/0081-village-lanes.drawing.html, not UNRESEARCHED",
-  "pages": {},
-  "research": "",
+  "note": "default width 3, the 3 ft footpath",
+  "pages": {
+   "0081-village-lanes.drawing.html": "9e27759395199abd"
+  },
+  "research": "ebd72aaa6a0eb9af",
   "rests": [
    "0081-village-lanes.drawing.html:8ee2be2b6c83fe7f",
    "0081-village-lanes.drawing.html:91a5765af6230403"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/fabric.py::_draw_web#web lane's no-build corridor": {
   "code": "83a39223f382a5d0",
@@ -16409,6 +16433,18 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::dangling_lane_ends#a burial ground's edge a lane end's destination": {
+  "code": "15fdbc69f54ab7d1",
+  "core": "c52fb57ec726ad5f",
+  "date": "2026-10-05",
+  "note": "the bundle names no burial ground among a lane end's destinations",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461"
+  ],
+  "verdict": "IN-STEP"
+ },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::dangling_lane_ends#an end reaches something seen": {
   "code": "be0cd5808fa32bc2",
   "core": "c52fb57ec726ad5f",
@@ -17000,17 +17036,19 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/reach.py::settle_field#field way width": {
-  "code": "c607c32f85162522",
+  "code": "e757f44c7074d5ce",
   "core": "1cfc4f1e9fcbb0a9",
   "date": "2026-10-05",
-  "note": "0081's drawing page draws the spur to the fields 5 ft wide (a convention); cite research/questions/0081-village-lanes.drawing.html, not UNRESEARCHED",
-  "pages": {},
-  "research": "",
+  "note": "BRANCH_WIDTH 5, the field spur's 5 ft",
+  "pages": {
+   "0081-village-lanes.drawing.html": "9e27759395199abd"
+  },
+  "research": "ebd72aaa6a0eb9af",
   "rests": [
    "0081-village-lanes.drawing.html:8ee2be2b6c83fe7f",
    "0081-village-lanes.drawing.html:91a5765af6230403"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/reach.py::settle_field#over the brook at a ford": {
   "code": "eab200bddb13f1cc",
@@ -17229,6 +17267,14 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#a run arriving within _LANE_JOIN_FT (30 ft) of the network counts as joined, with no link drawn": {
+  "code": "548dd72a6597f1e2",
+  "core": "548dd72a6597f1e2",
+  "date": "2026-10-05",
+  "note": "a run arriving within _LANE_JOIN_FT (30 ft) of the network counts as joined, with no link drawn",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#a tail past the junction cut": {
   "code": "b5f768941d5b13ee",
   "core": "548dd72a6597f1e2",
@@ -17287,17 +17333,18 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#web lane width": {
-  "code": "2806eacfba7507bc",
+  "code": "1b2af531de8bc831",
   "core": "548dd72a6597f1e2",
   "date": "2026-10-05",
-  "note": "0081's drawing page sets the footpath at 3 ft; cite research/questions/0081-village-lanes.drawing.html, not UNRESEARCHED",
-  "pages": {},
-  "research": "",
+  "note": "_draw_web(s, run, 3), the 3 ft footpath",
+  "pages": {
+   "0081-village-lanes.drawing.html": "9e27759395199abd"
+  },
+  "research": "ebd72aaa6a0eb9af",
   "rests": [
-   "0081-village-lanes.drawing.html:8ee2be2b6c83fe7f",
    "0081-village-lanes.drawing.html:91a5765af6230403"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py::door_off_fixtures#no path from inside a fixture": {
   "code": "f1499ca250f01e2d",
@@ -18285,20 +18332,33 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/smooth.py::_END_HOUSE_FT#lane end reaches a house": {
-  "code": "9bd44d94ff98ea4e",
+  "code": "be24d2efa68fc5d6",
   "core": "33ed5702fb519815",
-  "date": "2026-10-03",
-  "note": "0081 calls how close counts as serving a house a GUESS",
-  "research": "",
-  "verdict": "IN-STEP"
+  "date": "2026-10-05",
+  "note": "_END_HOUSE_FT = 90.0 where the page's guess is \"within 60 ft of the house\"; the page records no 90 ft departure, so set it to 60 or record a DEVIATION on the 0246 drawing page",
+  "pages": {
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
+  },
+  "research": "7b40c2c01cfba682",
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:98954044baf5b50b"
+  ],
+  "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/smooth.py::_END_WAY_FT#lane end reaches a way": {
-  "code": "e49b62d4bd1644c9",
+  "code": "a6e24f34253523fd",
   "core": "4f6abb3ccbbe5fc1",
-  "date": "2026-10-03",
-  "note": "GUESS per 0081 (the 40 vs 60 ft split is disclosed in the claim)",
-  "research": "",
-  "verdict": "IN-STEP"
+  "date": "2026-10-05",
+  "note": "_END_WAY_FT = 40.0 where the page counts \"reaching another way within 60 ft\"; set it to 60 or record a DEVIATION on the 0246 drawing page",
+  "pages": {
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
+  },
+  "research": "7b40c2c01cfba682",
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461"
+  ],
+  "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/smooth.py::_JOG_FT#jog chorded": {
   "code": "ef43386bf7c2b586",
@@ -18325,17 +18385,19 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/smooth.py::_LONG_ARM_FT#hairpin arm cut length": {
-  "code": "d70d85571afd8b1f",
+  "code": "09dbd7df7dd4d3a3",
   "core": "33ed5702fb519815",
   "date": "2026-10-05",
-  "note": "0081's drawing page does answer this: \"a returning leg under 40 ft is cut\" (a convention, §874); the 90 ft cut should be labeled DEVIATION research/questions/0081-village-lanes.drawing.html with the 90 ft recorded there, or held to 40 ft",
-  "pages": {},
-  "research": "",
+  "note": "the code cuts a hairpin arm up to 90 ft where the page says \"a returning leg under 40 ft is cut\" (its only exception the folded field spur); set it to 40 or record the 90 ft cut on the 0081 drawing page",
+  "pages": {
+   "0081-village-lanes.drawing.html": "9e27759395199abd"
+  },
+  "research": "ebd72aaa6a0eb9af",
   "rests": [
    "0081-village-lanes.drawing.html:3b9a5312c92335d3",
    "0081-village-lanes.drawing.html:65ad16eace199d92"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/smooth.py::_STUB_REACH_FT#stub link reach": {
   "code": "1e931490d176d5a3",
@@ -19174,13 +19236,20 @@
   "triaged": "2026-10-05",
   "verdict": "NEEDS-RESEARCH"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_sweep_dangling_ends#a house within _SERVE_FT (100 ft) of a lane counts as served by it, so the lane is kept": {
-  "code": "df8f004272294cf1",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_sweep_dangling_ends#a house served": {
+  "code": "3c6cb37dc7e7da55",
   "core": "df8f004272294cf1",
   "date": "2026-10-05",
-  "note": "a house within _SERVE_FT (100 ft) of a lane counts as served by it, so the lane is kept",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "note": "100 ft from a lane is the page's own house-to-lane figure (\"every farmhouse within 100 ft\"); the 60 ft the claim compares it to is the end-reach figure",
+  "pages": {
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
+  },
+  "research": "7b40c2c01cfba682",
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c4049193a04d9dd0"
+  ],
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_sweep_dangling_ends#a whittled lane emptied": {
   "code": "ce5745642cf6b209",
@@ -19228,13 +19297,20 @@
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_sweep_debris#a house within _SERVE_FT (100 ft) of a lone fragment keeps it": {
-  "code": "b2888d1c0eb05b8f",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_sweep_debris#a house served": {
+  "code": "cdf6531ed4f8b314",
   "core": "b2888d1c0eb05b8f",
   "date": "2026-10-05",
-  "note": "a house within _SERVE_FT (100 ft) of a lone fragment keeps it",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "note": "100 ft is the page's house-to-lane figure, not a departure from the 60 ft end reach",
+  "pages": {
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
+  },
+  "research": "7b40c2c01cfba682",
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c4049193a04d9dd0"
+  ],
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_sweep_debris#debris length": {
   "code": "01e198e7567214b7",
@@ -19657,21 +19733,20 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#a house within _SERVE_FT (100 ft) of a lane counts as served by it": {
-  "code": "b3fe12c6036486e0",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#a house served": {
+  "code": "6008142c683ac48a",
   "core": "b3fe12c6036486e0",
   "date": "2026-10-05",
-  "note": "a house within _SERVE_FT (100 ft) of a lane counts as served by it",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#an orphan piece linked to the network from up to _ORPHAN_REACH (150 ft)": {
-  "code": "b3fe12c6036486e0",
-  "core": "b3fe12c6036486e0",
-  "date": "2026-10-05",
-  "note": "an orphan piece linked to the network from up to _ORPHAN_REACH (150 ft)",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "note": "100 ft is the page's house-to-lane figure, not a departure from the 60 ft end reach",
+  "pages": {
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
+  },
+  "research": "7b40c2c01cfba682",
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c4049193a04d9dd0"
+  ],
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#connector never dropped": {
   "code": "4f0e1c81d5e31d86",
@@ -19726,16 +19801,20 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#join reach": {
-  "code": "fede03690321eeb9",
+  "code": "22fb6e797424847b",
   "core": "b3fe12c6036486e0",
   "date": "2026-10-05",
-  "note": "the bundle's 0081 drawing page sets the end-to-end join: \"Ends within 25 ft of one another are joined at a single point\"; the end-meets-end branch joins at 30 ft (48 on the final pass), so cite research/questions/0081-village-lanes.drawing.html and record 30/48 there as a DEVIATION (UNRESEARCHED fits only the end-to-side join)",
-  "pages": {},
-  "research": "",
+  "note": "reach=_LANE_JOIN_FT 30 ft (48 ft on the final pass), which also moves another lane's end onto this one, where the page joins ends \"within 25 ft\"; use 25 or record the 30/48 ft reach on the 0081 drawing page",
+  "pages": {
+   "0081-village-lanes.drawing.html": "9e27759395199abd"
+  },
+  "research": "ebd72aaa6a0eb9af",
   "rests": [
-   "0081-village-lanes.drawing.html:df26f73dd5ee96d2"
+   "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
+   "0081-village-lanes.drawing.html:df26f73dd5ee96d2",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:048ef93cf5c5c59f"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#orphan piece dropped": {
   "code": "20ca5ae35d187ef5",
@@ -19751,6 +19830,16 @@
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:ab698a7b15fb7e8e",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:f0a411a544083965"
   ],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#orphan reach": {
+  "code": "4257c23528dd89f6",
+  "core": "b3fe12c6036486e0",
+  "date": "2026-10-05",
+  "note": "nothing cited gives a reach for linking a stranded piece",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::CONNECTOR_WIDTH#connector width": {
@@ -20043,13 +20132,18 @@
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::connector_track#the track out kept TRACK_FABRIC_GAP (16 ft) off the steadings": {
-  "code": "caa4a69f1a4915b3",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::connector_track#track off the steadings": {
+  "code": "8b3967d03a8344ed",
   "core": "caa4a69f1a4915b3",
   "date": "2026-10-05",
-  "note": "the track out kept TRACK_FABRIC_GAP (16 ft) off the steadings",
+  "note": "the page sets only a 7 ft floor from a garden fence; 16 ft stays above it and is otherwise unanswered",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c5daec1a445d35bf"
+  ],
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::connector_track#track out off the wet": {
   "code": "1cc8266083e69989",
@@ -21191,11 +21285,18 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#lane runs past its last steading": {
-  "code": "fb0556b7a4c72770",
+  "code": "2596e07023f23ea5",
   "core": "8aa914b6b5fbaa23",
-  "date": "2026-10-03",
-  "note": "the page records it as a GUESS",
-  "research": "",
+  "date": "2026-10-05",
+  "note": "pad = 30.0, the page's \"about 30 ft past the last of them\", recorded as a guess",
+  "pages": {
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
+  },
+  "research": "7b40c2c01cfba682",
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:98954044baf5b50b"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#lanes after the houses": {
@@ -40176,6 +40277,14 @@
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#a conifer-led clump throws only LESSER_ROLL_SHARE (10%) of its crowns as lesser broadleaf": {
+  "code": "6c8742525572767b",
+  "core": "6c8742525572767b",
+  "date": "2026-10-05",
+  "note": "a conifer-led clump throws only LESSER_ROLL_SHARE (10%) of its crowns as lesser broadleaf",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#alder in the marsh": {
   "code": "ccb43d5a29d191b6",
   "core": "6c8742525572767b",
@@ -40258,6 +40367,32 @@
   "triaged": "2026-10-05",
   "verdict": "MISLABELED"
  },
+ ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#crowns per clump": {
+  "code": "14aa3d9311ee0ce0",
+  "core": "6c8742525572767b",
+  "date": "2026-10-05",
+  "note": "48 px^2 at 2 ft/px is 192 sq ft a crown, the page's ~180 sq ft; but the count scales by bscale/0.82, not ftpx (the bug the radius once had), so I need the hamlet's bscale to confirm it stays ~180 sq ft at 1 ft/px",
+  "pages": {
+   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html": "605417d79e0e0561"
+  },
+  "research": "f1a38c9708a60be9",
+  "rests": [
+   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:2f5a6f0369f5b0db",
+   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:7f54cfe8dba1be5f",
+   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:e0f372bc46e81fac"
+  ],
+  "verdict": "CANNOT-TELL"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#crowns per clump ceiling": {
+  "code": "9210c6de55cb9abd",
+  "core": "6c8742525572767b",
+  "date": "2026-10-05",
+  "note": "no cited question caps crowns per clump",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#crowns per clump floor": {
   "code": "3fb6ca5336bc74c7",
   "core": "6c8742525572767b",
@@ -40265,14 +40400,6 @@
   "note": "unresearched floor",
   "research": "",
   "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#crowns per clump: one per GROVE_CROWN_AREA (48 bscale px sq), at most GROVE_CLUMP_CROWNS (28)": {
-  "code": "6c8742525572767b",
-  "core": "6c8742525572767b",
-  "date": "2026-10-05",
-  "note": "crowns per clump: one per GROVE_CROWN_AREA (48 bscale px sq), at most GROVE_CLUMP_CROWNS (28)",
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#dooryard mix": {
   "code": "142aca5bdd70a2c4",
@@ -40287,6 +40414,14 @@
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:16f2c2d8419164c1"
   ],
   "verdict": "DRIFTED"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#lesser broadleaf crown size LESSER_BROADLEAF_S 0.6-0.85 of the mean radius": {
+  "code": "6c8742525572767b",
+  "core": "6c8742525572767b",
+  "date": "2026-10-05",
+  "note": "lesser broadleaf crown size LESSER_BROADLEAF_S 0.6-0.85 of the mean radius",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#thin band end to end": {
   "code": "d7c06f04cfdb1623",
@@ -53736,12 +53871,18 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.trim_lane_stubs#meeting another way": {
-  "code": "0b54f00232eb67ae",
+  "code": "27425f035972f078",
   "core": "515cea92a2124e6b",
-  "date": "2026-10-03",
-  "note": "no bundle page gives the threshold",
-  "research": "",
-  "verdict": "IN-STEP"
+  "date": "2026-10-05",
+  "note": "way_reach=40.0 where the page counts an end reaching another way \"within 60 ft\"; set it to 60 or record a DEVIATION on the 0246 drawing page",
+  "pages": {
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
+  },
+  "research": "7b40c2c01cfba682",
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461"
+  ],
+  "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.trim_lane_stubs#one end per house and bearing": {
   "code": "258ea1be8983dac4",
