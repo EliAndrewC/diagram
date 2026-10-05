@@ -2509,6 +2509,8 @@ nagewatashi weir	throw-across weir
 nagewatashi-zeki	throw-across weir
 naginata	naginata
 nago	nago
+nail cover	nail cover
+nail covers	nail cover
 naka-bori	middle moat
 naka-oku	naka-oku
 naka-shoin	Naka-shoin
