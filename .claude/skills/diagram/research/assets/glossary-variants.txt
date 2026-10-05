@@ -410,6 +410,7 @@ chigaya	chigaya
 chikaraishi	chikaraishi
 chikugo	Chikugo
 chikugo province	Chikugo
+chikurin	take-yabu
 chimei	chimei
 chinese toon	toon
 chinese-leaning	Chinese-leaning village
@@ -1478,6 +1479,7 @@ hitch rails	hitching rail
 hitching rail	hitching rail
 hitching rails	hitching rail
 hitoyado	hitoyado
+hitsu	hitsu
 hiyokechi	hiyokechi
 hiyoza	hiyoza
 hizen	Hizen
@@ -1680,6 +1682,7 @@ inu-bashiri	inu-bashiri
 inugoya	inugoya
 inverted siphon	inverted siphon
 inverted siphons	inverted siphon
+ippitsu	hitsu
 iriai	iriai
 irikawa	irikawa
 irikawa-en	irikawa
@@ -1774,6 +1777,7 @@ jizo-san	jizo
 jizobon	Jizo-bon
 jizō	jizo
 jizō-bon	Jizo-bon
+jiégāo	jiegao
 jo	jo
 jobikeshi	jobikeshi
 jobo	jobo
@@ -2240,6 +2244,7 @@ lushi chunqiu	Lushi chunqiu
 lychee	litchi
 lychees	litchi
 lying willow	lying willow
+lùlu	lulu
 lüshi chunqiu	Lushi chunqiu
 machi	machi
 machi-bikeshi	machi-bikeshi

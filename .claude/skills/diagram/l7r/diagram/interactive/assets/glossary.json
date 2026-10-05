@@ -2037,6 +2037,7 @@
   "def": "A shadoof: a counterweighted lever that lifts a bucket from a well or a channel.",
   "variants": [
    "jiegao",
+   "jiégāo",
    "shadoof",
    "shaduf",
    "well sweep"
@@ -2612,7 +2613,8 @@
  "lulu": {
   "def": "A windlass on a frame over a well, the usual water-lifting gear of north China.",
   "variants": [
-   "lulu"
+   "lulu",
+   "lùlu"
   ]
  },
  "machi": {
@@ -3758,6 +3760,7 @@
  "take-yabu": {
   "def": "A bamboo thicket: a clonal stand of bamboo, in most cases of nearly a single species, cut for its canes and shoots like a coppice.",
   "variants": [
+   "chikurin",
    "take-yabu",
    "takeyabu"
   ]
@@ -15748,6 +15751,13 @@
   "def": "The slow change of a wood's trees over decades when it is left uncut, one kind giving way to the next; in western Japan an uncut coppice turns into dense, dark evergreen laurel forest.",
   "variants": [
    "succession"
+  ]
+ },
+ "hitsu": {
+  "def": "One lot of paddy, dry field or house land as a survey register wrote it, a line of its own whatever its size; the word is ippitsu, \"one stroke of the brush\".",
+  "variants": [
+   "hitsu",
+   "ippitsu"
   ]
  }
 }
