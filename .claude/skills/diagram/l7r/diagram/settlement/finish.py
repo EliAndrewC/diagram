@@ -15,7 +15,7 @@ from typing import TYPE_CHECKING, Any
 
 from l7r.diagram.interactive.classes import PLACE
 from l7r.diagram.interactive.page import ink_census, unregistered_classes, write_html
-from l7r.diagram.interactive.raster import OFFMAP_MARGIN, RESVG_FONT_ARGS
+from l7r.diagram.interactive.raster import OFFMAP_MARGIN, RESVG_FONT_ARGS, RESVG_SLOTS
 from l7r.diagram.interactive.tags import ClsTag
 
 from ..labels import cut
@@ -991,4 +991,5 @@ class FinishMixin:
             sys.stderr.write(f'warning: resvg not found (sudo apt-get install -y resvg fonts-dejavu-extra); {basepath}.png not refreshed\n')
             return
         # the font mapping is ONE definition, shared with the page's raster (interactive/raster.py, feature 200)
-        subprocess.run([exe, '--width', str(width), *RESVG_FONT_ARGS, basepath + '.svg', basepath + '.png'], check=True)
+        with RESVG_SLOTS:
+            subprocess.run([exe, '--width', str(width), *RESVG_FONT_ARGS, basepath + '.svg', basepath + '.png'], check=True)

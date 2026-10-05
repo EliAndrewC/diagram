@@ -1,0 +1,45 @@
+{
+ "feature": "327-lean-site-fast-clip",
+ "plan_sha256": "532454ee0bb8da4e6219c16dfc0b87c5ac33b29fbe416521efcb65441ef030d7",
+ "reviewed": "2026-10-05",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "SiteFiles: a MutableMapping[str, str] whose store is UTF-8 bytes (encode on set, decode on get); __eq__ compares stores between two SiteFiles; raw(path); Build fills one and build returns it; write writes bytes in binary mode for a SiteFiles, text as before otherwise",
+   "class": "within",
+   "why": "This is option 1 of the session's answer, which the GM approved and spec FR-001 requires: pages held as UTF-8 bytes, decoded on read (the 'modest wrapper'). It is still a path-to-text mapping, so callers and tests read what they read before, including record_build's files[STAMP] = ... assignment. On Linux, text mode with encoding utf-8 and no newline translation writes exactly the encoded bytes, so the binary write gives the same files (FR-002). The store-to-store __eq__ is how 'compared with another build' (US1 scenario 2) avoids decoding, and raw() is how write reaches the bytes. Nothing beyond option 1 is added, and option 2 (streaming) is not brought in."
+  },
+  {
+   "id": "D2",
+   "summary": "drop_offmap split into prepare_offmap (one parse into fixed text, shapes with boxes, merged paths with per-subpath boxes) and assemble_offmap (per-box keep or drop by drop_offmap's own rules); drop_offmap becomes the two in a row; a transform line prepares to one fixed part; paths matched before shapes",
+   "class": "within",
+   "why": "FR-003 requires each line's droppable elements and their extents to be parsed once and give output byte-identical to drop_offmap's. This is the GM-approved follow-up ('measuring each line's extent once'). The keep rules are restated, not changed: margin, subpaths, the whole path dropped when none survives, the transform and outside-grammar lines and unreadable shapes left whole (spec edge cases). Paths are matched before shapes, as drop_offmap substitutes them. page.write_html keeps calling drop_offmap, so the page's own clip is unchanged (spec edge case)."
+  },
+  {
+   "id": "D3",
+   "summary": "picture prepares the classed lines once (prepare_doc) and each tile's tile_doc assembles from them, the viewBox set as now; the prepared form's memory measured against the render peak",
+   "class": "within",
+   "why": "This is the request's own words: 'Measuring each line's extent once and reusing it for every tile.' Tiles render in threads (a ThreadPoolExecutor), so they share the prepared form without copying it. The GM's 'with no memory cost' is FR-004's 'peak MUST NOT rise', and the plan measures the prepared form against that peak (SC-004) rather than assuming it."
+  },
+  {
+   "id": "D4",
+   "summary": "new units inherit their modules' Research: claims; make claims-owed decides what is owed",
+   "class": "within",
+   "why": "Standing project procedure (feature 316) applied to new code. It adds no scope and narrows nothing."
+  },
+  {
+   "id": "Tests",
+   "summary": "assemble(prepare(line), box) held equal to a reference copy of the old drop_offmap over a real page fixture and many boxes, plus edge cases; tile_doc from prepared lines equals it from text; SiteFiles round-trip, equality, iteration and length; write gives the same bytes from a SiteFiles as from a dict",
+   "class": "within",
+   "why": "These enforce what was asked (SC-002, SC-003): each test fails only when byte-identity or the unchanged mapping is broken. That is enforcement of the request, not unrequested scope."
+  },
+  {
+   "id": "Bookends",
+   "summary": "make perf 327-start in a detached worktree at 06fea4766 and make perf-gate in the clone, back to back at the end, in a window arranged with the other session",
+   "class": "within",
+   "why": "Constitution VI procedure. It adds no behavior and narrows nothing the GM asked for."
+  }
+ ],
+ "verdict": "CLEAR"
+}

@@ -39,6 +39,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import threading
 from collections.abc import Sequence
 from concurrent.futures import ThreadPoolExecutor
 
@@ -91,6 +92,14 @@ TILE_MPX = 8.0
 #: research.md R2): 3 at once ~540 MB, the render 2.2 -> 3.2 s; 4 at once ~635 MB for the same time; 2 at once ~450 MB
 #: but 4.3 s. Only the scheduling changes - each tile is the same render - so the picture is byte-identical.
 TILE_WORKERS = 3
+#: AT MOST FOUR RESVG PROCESSES AT ONCE IN THIS PROCESS (feature 327). A map renders its PNG (`finish`), its picture's tiles
+#: and its id map from threads of one process, each a resvg subprocess of 60-100 MB; the tiles' clip had been slow enough
+#: (0.9 s of Python) to stagger them, and once it was parsed once (`prepare_doc`) they started together and the render's peak
+#: rose ~370 -> ~420 MB. One shared cap holds it: measured over five alternated rounds on a 20-household hamlet, peak 374.6 MB
+#: before the feature and 370.6 MB with it, the render span 3.55 -> 3.21 s (specs/327-lean-site-fast-clip/research.md R3).
+#: Only the scheduling changes, so every image is the same bytes. Three slots measured the same; four keeps the tiles and one
+#: whole-map render together.
+RESVG_SLOTS = threading.BoundedSemaphore(4)
 _VIEWBOX_ATTR = re.compile(r'viewBox="[^"]*"')
 #: How far past the viewBox an element may lie and still be kept - wider than any stroke width or blob
 #: radius the writer emits, so a mark reaching in by a pixel is never lost (spec D6).
@@ -150,74 +159,127 @@ def viewbox_of(svg_open: str) -> Viewbox | None:
     return (float(m.group(1)), float(m.group(2)), float(m.group(3)), float(m.group(4))) if m else None
 
 
+#: A box as `prepare_offmap` keeps it: x min, x max, y min, y max.
+Box = tuple[float, float, float, float]
+#: One part of a prepared line: ("t", text) kept whole; ("s", text, box) a shape; ("p", opening, [(subpath, box), ...], closing)
+#: a merged path.
+Part = tuple
+
+
+def _box(xs: Sequence[float], ys: Sequence[float]) -> Box:
+    return (min(xs), max(xs), min(ys), max(ys))
+
+
+def _shape_box(tag: str, attrs: str) -> Box | None:
+    """The extent `drop_offmap` judges a shape by, or None for one it does not judge (kept whole)."""
+    fast = _FAST.get(tag)
+    fm = fast.match(attrs) if fast else None
+    if fm is not None:  # the writer's order: the numbers straight from the match
+        g = [float(v) for v in fm.groups()]
+        if tag == "circle":
+            return _box([g[0] - g[2], g[0] + g[2]], [g[1] - g[2], g[1] + g[2]])
+        if tag == "ellipse":
+            return _box([g[0] - g[2], g[0] + g[2]], [g[1] - g[3], g[1] + g[3]])
+        if tag == "line":
+            return _box([g[0], g[2]], [g[1], g[3]])
+        return _box([g[0], g[0] + g[2]], [g[1], g[1] + g[3]])
+    at = dict(_ATTRS.findall(attrs))
+    try:
+        if tag == "circle":
+            cx, cy, r = float(at["cx"]), float(at["cy"]), float(at["r"])
+            xs, ys = [cx - r, cx + r], [cy - r, cy + r]
+        elif tag == "ellipse":
+            cx, cy, rx, ry = float(at["cx"]), float(at["cy"]), float(at["rx"]), float(at["ry"])
+            xs, ys = [cx - rx, cx + rx], [cy - ry, cy + ry]
+        elif tag == "line":
+            xs, ys = [float(at["x1"]), float(at["x2"])], [float(at["y1"]), float(at["y2"])]
+        elif tag == "rect":
+            x, y, w, h = float(at["x"]), float(at["y"]), float(at["width"]), float(at["height"])
+            xs, ys = [x, x + w], [y, y + h]
+        else:
+            nums = [float(v) for v in _NUM.findall(at["points"])]
+            xs, ys = nums[0::2], nums[1::2]
+        if not xs or not ys:
+            return None
+    except KeyError, ValueError:  # a shape the writer does not emit: not judged
+        return None
+    return _box(xs, ys)
+
+
+def _subpath_box(sp: str) -> Box:
+    nums = [float(v) for v in _NUM.findall(sp)]
+    xs, ys = nums[0::2], nums[1::2]
+    if "a" in sp:  # an arc subpath starts a radius left of its center: its box is the disc
+        r = float(_NUM.findall(sp.split("a", 1)[1])[0])
+        xs, ys = [xs[0], xs[0] + 2 * r], [ys[0] - r, ys[0] + r]
+    return _box(xs, ys)
+
+
+def prepare_offmap(s: str) -> list[Part]:
+    """One record string as the parts the off-map rule judges, each with its extent, parsed ONCE (feature 327, the GM 2026-10-05:
+    "the render speed follow-up"). A picture's tiles each clipped the whole page text afresh - 0.89 s of Python for 9 tiles
+    (specs/327-lean-site-fast-clip/research.md R1); now the parse is paid once and each tile only compares boxes
+    (`assemble_offmap`). A string carrying a `transform` is one whole part; so is a path outside the merge grammar and a shape the
+    rule does not read - exactly what `drop_offmap` always left whole."""
+    if "transform=" in s:
+        return [("t", s)]
+    found = [(m.start(), m.end(), "p", m) for m in _PATH.finditer(s)]
+    paths = [(a, b) for a, b, _k, _m in found]
+    for m in _SHAPE.finditer(s):  # a shape never sits inside a path's tag, but say so rather than assume it
+        if not any(a <= m.start() < b for a, b in paths):
+            found.append((m.start(), m.end(), "s", m))
+    found.sort(key=lambda f: f[0])
+    parts: list[Part] = []
+    at = 0
+    for a, b, kind, m in found:
+        if a > at:
+            parts.append(("t", s[at:a]))
+        if kind == "p":
+            d = m.group(2)
+            if _MERGE_GRAMMAR.fullmatch(d):
+                parts.append(("p", m.group(1), [(sp, _subpath_box(sp)) for sp in _SUBPATH.findall(d)], m.group(3)))
+            else:
+                parts.append(("t", m.group(0)))
+        else:
+            box = _shape_box(m.group(1), m.group(2))
+            parts.append(("t", m.group(0)) if box is None else ("s", m.group(0), box))
+        at = b
+    if at < len(s):
+        parts.append(("t", s[at:]))
+    return parts
+
+
+def assemble_offmap(parts: Sequence[Part], vb: Viewbox) -> str:
+    """A prepared string less every part, and every merged subpath, lying wholly outside the viewBox plus OFFMAP_MARGIN; a merged
+    path none of whose subpaths stays is dropped whole. Only comparisons - the parse was `prepare_offmap`'s."""
+    x0, y0 = vb[0] - OFFMAP_MARGIN, vb[1] - OFFMAP_MARGIN
+    x1, y1 = vb[0] + vb[2] + OFFMAP_MARGIN, vb[1] + vb[3] + OFFMAP_MARGIN
+
+    def inside(b: Box) -> bool:
+        return not (b[1] < x0 or b[0] > x1 or b[3] < y0 or b[2] > y1)
+
+    out: list[str] = []
+    for part in parts:
+        if part[0] == "t":
+            out.append(part[1])
+        elif part[0] == "s":
+            if inside(part[2]):
+                out.append(part[1])
+        else:
+            keep = [sp for sp, b in part[2] if inside(b)]
+            if keep:
+                out.append(part[1] + "".join(keep) + part[3])
+    return "".join(out)
+
+
 def drop_offmap(s: str, vb: Viewbox) -> str:
     """One record string less every element or merged subpath that lies wholly outside the viewBox plus
     OFFMAP_MARGIN. A string carrying a `transform` is returned untouched - its coordinates are local - and
     so is any path outside the merge's own M/L and M/a grammar, whose extent is not a matter of reading
-    numbers. Invisible by construction: the viewBox clips what is dropped (spec FR-001)."""
-    if "transform=" in s:
-        return s
-    x0, y0 = vb[0] - OFFMAP_MARGIN, vb[1] - OFFMAP_MARGIN
-    x1, y1 = vb[0] + vb[2] + OFFMAP_MARGIN, vb[1] + vb[3] + OFFMAP_MARGIN
-
-    def outside(xs: Sequence[float], ys: Sequence[float]) -> bool:
-        return max(xs) < x0 or min(xs) > x1 or max(ys) < y0 or min(ys) > y1
-
-    def fix_path(m: re.Match[str]) -> str:
-        d = m.group(2)
-        if not _MERGE_GRAMMAR.fullmatch(d):
-            return m.group(0)
-        keep = []
-        for sp in _SUBPATH.findall(d):
-            nums = [float(v) for v in _NUM.findall(sp)]
-            xs, ys = nums[0::2], nums[1::2]
-            if "a" in sp:  # an arc subpath starts a radius left of its center: its box is the disc
-                r = float(_NUM.findall(sp.split("a", 1)[1])[0])
-                xs, ys = [xs[0], xs[0] + 2 * r], [ys[0] - r, ys[0] + r]
-            if not outside(xs, ys):
-                keep.append(sp)
-        if not keep:
-            return ""
-        return m.group(1) + "".join(keep) + m.group(3)
-
-    def fix_shape(m: re.Match[str]) -> str:
-        tag, attrs = m.group(1), m.group(2)
-        fast = _FAST.get(tag)
-        fm = fast.match(attrs) if fast else None
-        if fm is not None:  # the writer's order: the numbers straight from the match
-            g = [float(v) for v in fm.groups()]
-            if tag == "circle":
-                xs, ys = [g[0] - g[2], g[0] + g[2]], [g[1] - g[2], g[1] + g[2]]
-            elif tag == "ellipse":
-                xs, ys = [g[0] - g[2], g[0] + g[2]], [g[1] - g[3], g[1] + g[3]]
-            elif tag == "line":
-                xs, ys = [g[0], g[2]], [g[1], g[3]]
-            else:
-                xs, ys = [g[0], g[0] + g[2]], [g[1], g[1] + g[3]]
-            return "" if outside(xs, ys) else m.group(0)
-        at = dict(_ATTRS.findall(attrs))
-        try:
-            if tag == "circle":
-                cx, cy, r = float(at["cx"]), float(at["cy"]), float(at["r"])
-                xs, ys = [cx - r, cx + r], [cy - r, cy + r]
-            elif tag == "ellipse":
-                cx, cy, rx, ry = float(at["cx"]), float(at["cy"]), float(at["rx"]), float(at["ry"])
-                xs, ys = [cx - rx, cx + rx], [cy - ry, cy + ry]
-            elif tag == "line":
-                xs, ys = [float(at["x1"]), float(at["x2"])], [float(at["y1"]), float(at["y2"])]
-            elif tag == "rect":
-                x, y, w, h = float(at["x"]), float(at["y"]), float(at["width"]), float(at["height"])
-                xs, ys = [x, x + w], [y, y + h]
-            else:
-                nums = [float(v) for v in _NUM.findall(at["points"])]
-                xs, ys = nums[0::2], nums[1::2]
-            if not xs or not ys:
-                return m.group(0)
-        except KeyError, ValueError:  # a shape the writer does not emit: not judged
-            return m.group(0)
-        return "" if outside(xs, ys) else m.group(0)
-
-    return _SHAPE.sub(fix_shape, _PATH.sub(fix_path, s))
+    numbers. Invisible by construction: the viewBox clips what is dropped (spec FR-001). The parse and the
+    judgment are two steps since feature 327 (`prepare_offmap`, `assemble_offmap`), so a picture parses a line once
+    for all its tiles."""
+    return assemble_offmap(prepare_offmap(s), vb)
 
 
 def resvg_png(doc: str, *args: str) -> bytes | None:
@@ -247,7 +309,8 @@ def resvg_png(doc: str, *args: str) -> bytes | None:
         src, out = f"{d}/r.svg", f"{d}/r.png"
         with open(src, "w", encoding="utf-8") as fh:
             fh.write(doc)
-        subprocess.run([exe, *args, src, out], check=True, capture_output=True)  # its font warnings are noise here
+        with RESVG_SLOTS:
+            subprocess.run([exe, *args, src, out], check=True, capture_output=True)  # its font warnings are noise here
         with open(out, "rb") as fh:
             return fh.read()
 
@@ -270,20 +333,28 @@ def tile_boxes(vb: Viewbox, n: int) -> list[tuple[int, int, Viewbox]]:
 _CLASSED_LINE = '<g class="f '  # how `page.wrap` opens a classed string - the strings the page itself clips to its viewBox
 
 
-def tile_doc(svg_text: str, box: Viewbox) -> str:
+def prepare_doc(svg_text: str) -> list[str | list[Part]]:
+    """The picture's text a line at a time, each classed line prepared for the off-map rule ONCE (feature 327): the tiles then
+    only compare boxes (`tile_doc`)."""
+    return [prepare_offmap(line) if line.startswith(_CLASSED_LINE) else line for line in svg_text.split("\n")]
+
+
+def tile_doc(doc: str | list[str | list[Part]], box: Viewbox) -> str:
     """The page's text as one tile renders it (feature 326, GM 2026-10-05: "go ahead and file that as a feature"): the tile's
     window as the viewBox, and every CLASSED line - a record string as `page.wrap` writes it, one a line - less what lies wholly
     outside that window, by the page's own off-map rule (`drop_offmap`, its margin included). The sheet, the defs and unclassed
     ink are left whole, as the page leaves them. A tile's resvg parses only its share: on a 20-household hamlet the render's
     peak fell ~540 -> ~370 MB (specs/326-tile-clip/research.md R2). The picture is visually identical - the window clips what
-    was dropped - though a trimmed path can move resvg's anti-aliasing by a few levels on a few pixels (the note at TILE_MPX)."""
-    doc = _VIEWBOX_ATTR.sub(f'viewBox="{box[0]:g} {box[1]:g} {box[2]:g} {box[3]:g}"', svg_text, count=1)
-    return "\n".join(drop_offmap(line, box) if line.startswith(_CLASSED_LINE) else line for line in doc.split("\n"))
+    was dropped - though a trimmed path can move resvg's anti-aliasing by a few levels on a few pixels (the note at TILE_MPX).
+    `doc` is the text, or `prepare_doc`'s form of it, which a picture builds once for all its tiles (feature 327)."""
+    lines = prepare_doc(doc) if isinstance(doc, str) else doc
+    text = "\n".join(line if isinstance(line, str) else assemble_offmap(line, box) for line in lines)
+    return _VIEWBOX_ATTR.sub(f'viewBox="{box[0]:g} {box[1]:g} {box[2]:g} {box[3]:g}"', text, count=1)
 
 
-def render_tile(svg_text: str, box: Viewbox, r: float) -> bytes | None:
+def render_tile(doc: str | list[str | list[Part]], box: Viewbox, r: float) -> bytes | None:
     """One tile: its document built HERE, in the worker, so only the tiles rendering hold one (not every tile's at once)."""
-    return resvg_png(tile_doc(svg_text, box), "--zoom", f"{r:g}", *RESVG_FONT_ARGS)
+    return resvg_png(tile_doc(doc, box), "--zoom", f"{r:g}", *RESVG_FONT_ARGS)
 
 
 def picture(svg_text: str, r: float = RASTER_R, tiles: int | None = None) -> bytes | None:
@@ -302,8 +373,9 @@ def picture(svg_text: str, r: float = RASTER_R, tiles: int | None = None) -> byt
         png = resvg_png(svg_text, "--zoom", f"{r:g}", *RESVG_FONT_ARGS)
         return None if png is None else encode_picture([(0, 0, png)])
     boxes = tile_boxes(vb, n)
+    prepared = prepare_doc(svg_text)  # once for every tile (feature 327)
     with ThreadPoolExecutor(max_workers=min(len(boxes), TILE_WORKERS)) as pool:
-        jobs = [(i, j, pool.submit(render_tile, svg_text, box, r)) for i, j, box in boxes]
+        jobs = [(i, j, pool.submit(render_tile, prepared, box, r)) for i, j, box in boxes]
     rendered = [(i, j, job.result()) for i, j, job in jobs]
     if any(png is None for _i, _j, png in rendered):
         return None

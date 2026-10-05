@@ -78,21 +78,28 @@ def frame(title: str, here: str, open_keys: str, *, lazy_glossary: bool = False)
     return head, "\n</main>\n</div>\n</body>\n</html>\n"
 
 
-def shell(title: str, here: str, open_keys: str, body: str | list[str], *, lazy_glossary: bool = False) -> str:
-    """A site page: its frame (`frame`) around its content, every bare URL in the content made a link.
-
-    A LIST is the content in pieces, and is CONSUMED (feature 323): each piece is made links in place and the page is
-    joined once, so only the pieces and the finished page are ever held. The single page (`all.html`, 42 MB as Python
-    text) was a string joined from its pieces, linkified - which splits it whole into parts - and copied into the page:
-    four to five copies at once, 312 MB at the build's peak against 236 MB this way, every file byte-identical
-    (specs/323-site-build-peak/research.md R1, R2). A piece is a whole fragment, so linking each finds what linking
-    the whole would."""
+def shell(title: str, here: str, open_keys: str, body: str, *, lazy_glossary: bool = False) -> str:
+    """A site page: its frame (`frame`) around its content, every bare URL in the content made a link."""
     head, tail = frame(title, here, open_keys, lazy_glossary=lazy_glossary)
-    if isinstance(body, str):
-        return head + linkify(body) + tail
-    for i, part in enumerate(body):
-        body[i] = linkify(part)
-    return "".join([head, *body, tail])
+    return head + linkify(body) + tail
+
+
+def shell_utf8(title: str, here: str, open_keys: str, body: list[str], *, lazy_glossary: bool = False) -> bytes:
+    """`shell` for a page given in PIECES, as its UTF-8 bytes - the single page's form; the list is CONSUMED.
+
+    Feature 323: the single page (`all.html`, 42 MB as Python text) had been joined whole, linkified - which splits it whole
+    into parts - and copied into the page, four to five copies at once; linking each piece in place and joining once took the
+    build's peak 312 -> 236 MB, every file byte-identical (specs/323-site-build-peak/research.md R1, R2). A piece is a whole
+    fragment, so linking each finds what linking the whole would. Feature 327: the site holds its pages as UTF-8, so each
+    piece is linked AND encoded in place and the bytes joined - the 42 MB of text is never one string, and the page goes into
+    the site as it will be written (specs/327-lean-site-fast-clip/research.md R2)."""
+    head, tail = frame(title, here, open_keys, lazy_glossary=lazy_glossary)
+    body.reverse()
+    encoded = [head.encode("utf-8")]
+    while body:  # each piece leaves the list as it is encoded, so its text is freed with it
+        encoded.append(linkify(body.pop()).encode("utf-8"))
+    encoded.append(tail.encode("utf-8"))
+    return b"".join(encoded)
 
 
 def half_title(half: str) -> str:

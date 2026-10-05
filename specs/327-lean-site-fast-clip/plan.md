@@ -30,9 +30,20 @@ meets the viewBox plus `OFFMAP_MARGIN`, keeps a path's subpaths that do and drop
 The paths are matched before the shapes, as `drop_offmap` substituted them, and the two never overlap (a shape element cannot sit
 inside a path's tag).
 
-**D3 - A picture's lines prepared once (FR-003, FR-004).** `picture` prepares the classed lines once (`prepare_doc`: per line, its
-parts or None for a line left whole) and each tile's `tile_doc` assembles from them; the tile's viewBox set as now. The prepared form
+**D3 - A picture's lines prepared once (FR-003, FR-004).** `picture` prepares the classed lines once (`prepare_doc`: a classed line as its
+parts, any other line as its text) and each tile's `tile_doc` assembles from them; the tile's viewBox set as now. The prepared form
 holds the line's text in pieces plus a box per droppable element - measured against the render's peak (SC-004).
+
+**D5 - One cap on resvg processes (FR-004).** Measured (research.md R3): with the clip parsed once the tiles no longer stagger,
+start together and overlap the PNG and the id map, and the render's peak rose. A module-level `RESVG_SLOTS =
+threading.BoundedSemaphore(4)` in `raster` is held around every resvg launch in the process - `resvg_png` (the tiles, the id map)
+and `finish.render_png` (the PNG) - so at most four run at once; only the scheduling changes. Four, not three: both measured the
+same, and four keeps the tiles and one whole-map render together.
+
+**D6 - The single page built as bytes (FR-001, SC-001).** Measured (research.md R2): holding the pages as UTF-8 alone raised the
+build's peak, because the single page was joined as 42 MB of text and then encoded. `site_pages.shell_utf8` links and encodes the
+single page's pieces one at a time and joins the bytes; `SiteFiles.set_raw` takes them. `shell` keeps its text form for every
+other page.
 
 **D4 - Research claims.** New units inherit their modules' claims; `make claims-owed` decides what is owed.
 
@@ -41,7 +52,8 @@ holds the line's text in pieces plus a box per droppable element - measured agai
 - `tests/interactive/test_raster.py`: `assemble_offmap(prepare_offmap(line), box)` equals a REFERENCE copy of the old
   `drop_offmap` (kept in the test) for every line of a real page fixture and many boxes, including transform lines, paths outside
   the grammar, shapes in both attribute orders and lines whose every part drops; `tile_doc` from prepared lines equals it from text.
-- `tests/interactive/test_record_site.py`: `SiteFiles` round-trips text, compares equal and unequal without decoding, iterates and
+- `tests/interactive/test_raster.py`: never more than four resvg processes at once, the picture the same bytes.
+- `tests/interactive/test_record_site.py`: `shell_utf8` of a page's pieces equals `shell` of their join, encoded; `SiteFiles` round-trips text, compares equal and unequal without decoding, iterates and
   measures like a dict; `write` writes the same bytes from a `SiteFiles` as from a dict.
 - SC-001, SC-002 and SC-004 measured once, recorded in research.md.
 

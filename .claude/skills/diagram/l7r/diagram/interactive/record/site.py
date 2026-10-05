@@ -21,6 +21,7 @@ import os
 import re
 import shutil
 import tempfile
+from collections.abc import Iterator, MutableMapping
 
 from l7r.diagram.interactive.record import archive, store
 from l7r.diagram.interactive.record import contents as ct
@@ -168,6 +169,50 @@ def _as_title(item_html: str) -> str:
     return item_html[: m.start()] + f'<h1 id="{m.group(2)}">{m.group(3)}</h1>' + item_html[m.end() :]
 
 
+class SiteFiles(MutableMapping[str, str]):
+    """The built site, a path-to-text mapping that HOLDS each page as UTF-8 (feature 327, the GM 2026-10-05: "Memory has been tight
+    even after our changes"). Every page carries Japanese text, so Python held the site at two bytes a character: 148 MB for its
+    72.6 M characters (specs/327-lean-site-fast-clip/research.md R1). A page is encoded when it is set and decoded when it is read,
+    so the build's text lives only while its page is made; a caller reads text as before. Two builds compare their bytes without
+    decoding a page, and `write` writes the bytes as they are."""
+
+    def __init__(self) -> None:
+        self._pages: dict[str, bytes] = {}
+
+    def __setitem__(self, path: str, text: str) -> None:
+        self._pages[path] = text.encode("utf-8")
+
+    def __getitem__(self, path: str) -> str:
+        return self._pages[path].decode("utf-8")
+
+    def __delitem__(self, path: str) -> None:
+        del self._pages[path]
+
+    def __iter__(self) -> Iterator[str]:
+        return iter(self._pages)
+
+    def __len__(self) -> int:
+        return len(self._pages)
+
+    def __contains__(self, path: object) -> bool:
+        return path in self._pages
+
+    def __eq__(self, other: object) -> bool:
+        if isinstance(other, SiteFiles):
+            return self._pages == other._pages
+        return super().__eq__(other)
+
+    __hash__ = None  # type: ignore[assignment] - a mapping is not hashable
+
+    def raw(self, path: str) -> bytes:
+        """The page's bytes as they will be written."""
+        return self._pages[path]
+
+    def set_raw(self, path: str, data: bytes) -> None:
+        """A page already encoded - the single page, built as bytes so its text is never held whole (`site_pages.shell_utf8`)."""
+        self._pages[path] = data
+
+
 class Build:
     """One build of the site: the files it writes, and every refusal it found, gathered so one run names them all."""
 
@@ -188,7 +233,7 @@ class Build:
         self.entries = registry_entries(record_dir)
         self.archive = archive.load(record_dir)
         self.notes: dict[str, dict[str, str]] = {}
-        self.files: dict[str, str] = {}
+        self.files = SiteFiles()
         self.errors: list[str] = list(self.catalog.errors)
 
     def rewrite(self, markup: str, own: str | None, here: str, where: str, *, single: bool = False) -> str:
@@ -205,7 +250,7 @@ class Build:
                 self.notes[page.file] = {}
         return self.notes[page.file]
 
-    def run(self) -> dict[str, str]:
+    def run(self) -> SiteFiles:
         for half, _label in sp.HALVES:
             for section in ct.walk(self.record.sections):
                 if self.record.holds(section, half):
@@ -458,8 +503,8 @@ class Build:
         out.append("</section>\n")
         toc.append("</ul></nav>\n")
         head = f'<h1 id="record">{TITLE}</h1>\n<p><em>Every question the maps were researched from, every note behind them and every source they cite, on one page. The same record, a page per question: <a href="index.html">the contents</a>.</em></p>\n'
-        out[:0] = [head, "".join(toc)]  # the page handed over in its pieces, which shell consumes (feature 323: the build's peak)
-        self.files["all.html"] = sp.shell(TITLE + " - the whole record", "all.html", "", out, lazy_glossary=True)
+        out[:0] = [head, "".join(toc)]  # the page handed over in its pieces, which shell_utf8 consumes (features 323, 327: the build's peak)
+        self.files.set_raw("all.html", sp.shell_utf8(TITLE + " - the whole record", "all.html", "", out, lazy_glossary=True))
 
 
 def _nav_row(item: sp.Item) -> list[str]:
@@ -491,7 +536,7 @@ def _home_source(node: dict) -> str:
     return f'<li><details><summary><a href="{node["href"]}">{html.escape(node["title"])}</a></summary>{works(node["items"])}' + (f"<ul>{kinds}</ul>" if kinds else "") + "</details></li>"
 
 
-def build(record_dir: str = RESEARCH_DIR) -> dict[str, str]:
+def build(record_dir: str = RESEARCH_DIR) -> SiteFiles:
     """Every file of the site, by its path under `site/`. Raises `RecordError` naming every refusal."""
     from l7r.diagram.interactive.glossary import record_glossary_js  # noqa: PLC0415 - the glossary loads the map's assets
 
@@ -504,17 +549,21 @@ def build(record_dir: str = RESEARCH_DIR) -> dict[str, str]:
     return files
 
 
-def write(files: dict[str, str], out_dir: str) -> None:
+def write(files: MutableMapping[str, str], out_dir: str) -> None:
     """Write the site to `out_dir` whole: built beside it and swapped in, so a reader never meets a half-written site
     and a page the record no longer has does not linger."""
     parent = os.path.dirname(os.path.abspath(out_dir))
     os.makedirs(parent, exist_ok=True)
     fresh = tempfile.mkdtemp(prefix=".site-", dir=parent)
-    for rel, text in files.items():
+    for rel in files:
         path = os.path.join(fresh, rel)
         os.makedirs(os.path.dirname(path), exist_ok=True)
-        with open(path, "w", encoding="utf-8") as fh:
-            fh.write(text)
+        if isinstance(files, SiteFiles):  # its bytes as they are: the UTF-8 the text would have been written as
+            with open(path, "wb") as fh:
+                fh.write(files.raw(rel))
+        else:
+            with open(path, "w", encoding="utf-8") as fh:
+                fh.write(files[rel])
     os.chmod(fresh, 0o755)
     old = None
     if os.path.exists(out_dir):

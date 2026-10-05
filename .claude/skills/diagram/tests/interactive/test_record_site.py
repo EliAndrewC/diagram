@@ -480,8 +480,8 @@ def test_a_page_given_in_pieces_is_the_page_given_whole() -> None:
     ]
     whole = sp.shell("T", "all.html", "", "".join(pieces), lazy_glossary=True)
     given = list(pieces)
-    assert sp.shell("T", "all.html", "", given, lazy_glossary=True) == whole
-    assert '<a href="https://example.org/one" target="_blank" rel="noopener">' in given[0], "the list is consumed, each piece linked"
+    assert sp.shell_utf8("T", "all.html", "", given, lazy_glossary=True) == whole.encode("utf-8")
+    assert given == [], "the list is consumed"
     assert whole.count("https://example.org/two") == 2 and whole.count("<!-- https://example.org/three -->") == 1
     assert sp.shell("T", "q/x.html", "k", "<p>x</p>") == "".join((sp.frame("T", "q/x.html", "k")[0], "<p>x</p>", sp.frame("T", "q/x.html", "k")[1]))
 
@@ -492,3 +492,41 @@ def test_the_single_page_links_a_sources_url(tmp_path: pathlib.Path) -> None:
     fr.edit_entry(rec, "0010-alpha.html", "(https://a)", "(https://example.org/alpha)")
     page = site.build(str(rec))["all.html"]
     assert '<a href="https://example.org/alpha" target="_blank" rel="noopener">https://example.org/alpha</a>' in page
+
+
+# ---------------------------------------------------------------- the site held as UTF-8 (feature 327)
+
+
+def test_the_site_holds_each_page_as_utf8_and_reads_back_its_text() -> None:
+    """Feature 327 FR-001: a page is held as its UTF-8 bytes and read back as the same text; the mapping is a dict to its readers."""
+    files = site.SiteFiles()
+    files["a.html"] = "<p>稲代 - Inashiro</p>"
+    files["b.js"] = "plain"
+    assert files["a.html"] == "<p>稲代 - Inashiro</p>" and files.raw("a.html") == "<p>稲代 - Inashiro</p>".encode()
+    assert sorted(files) == ["a.html", "b.js"] and len(files) == 2 and "b.js" in files and "c" not in files
+    assert dict(files.items()) == {"a.html": "<p>稲代 - Inashiro</p>", "b.js": "plain"}
+    del files["b.js"]
+    assert list(files) == ["a.html"]
+    with pytest.raises(KeyError):
+        files["b.js"]
+
+
+def test_two_sites_compare_by_their_bytes_and_a_site_against_a_dict_by_text() -> None:
+    """Feature 327 D1: equal and unequal builds are told apart without decoding; a dict of the same text is equal too."""
+    a, b = site.SiteFiles(), site.SiteFiles()
+    a["x"] = b["x"] = "稲"
+    assert a == b and a == {"x": "稲"} and a != {"x": "y"}
+    b["x"] = "y"
+    assert a != b
+
+
+def test_writing_a_held_site_writes_the_bytes_the_text_would_have(tmp_path: pathlib.Path) -> None:
+    """Feature 327 FR-002: `write` from a SiteFiles and from a dict of the same text leave the same files."""
+    text = {"index.html": "<p>稲代\nline</p>\n", "q/x.html": "x", "assets/a.js": "var a = 1;\n"}
+    held = site.SiteFiles()
+    for k, v in text.items():
+        held[k] = v
+    site.write(held, str(tmp_path / "held"))
+    site.write(dict(text), str(tmp_path / "plain"))
+    for k in text:
+        assert (tmp_path / "held" / k).read_bytes() == (tmp_path / "plain" / k).read_bytes() == text[k].encode()

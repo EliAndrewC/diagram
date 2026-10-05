@@ -18,7 +18,7 @@ from __future__ import annotations
 import hashlib
 import os
 import sys
-from collections.abc import Callable, Iterable
+from collections.abc import Callable, Iterable, MutableMapping
 
 #: Where the stamp lives: inside the site, so a site deleted by hand takes its stamp with it and is rebuilt.
 STAMP = ".stamp"
@@ -85,8 +85,8 @@ def read_stamp(site_dir: str) -> str:
 
 def rebuild_if_stale(
     skill_dir: str,
-    build: Callable[[str], dict[str, str]] | None = None,
-    write: Callable[[dict[str, str], str], None] | None = None,
+    build: Callable[[str], MutableMapping[str, str]] | None = None,
+    write: Callable[[MutableMapping[str, str], str], None] | None = None,
     modules: Iterable[str] | None = None,
 ) -> bool:
     """Build the site when its stamp differs from its inputs; True when it built. `build`, `write` and `modules` are the

@@ -11,6 +11,7 @@ if TYPE_CHECKING:  # annotations only; the runtime import sits in the tests that
     from PIL import Image
 
 import io
+import pathlib
 import re
 
 import pytest
@@ -396,3 +397,117 @@ def test_a_tiled_picture_of_clipped_tiles_is_the_single_render() -> None:
     single render byte for byte. On a real map the comparison is clipped against unclipped tiles, visually identical (SC-003, R4)."""
     assert picture(CORNERED, 2.0, tiles=2) == picture(CORNERED, 2.0, tiles=1)
     assert picture(CORNERED, 2.0, tiles=4) == picture(CORNERED, 2.0, tiles=1)
+
+
+# ------------------------------------------------------------------- the clip parsed once (feature 327)
+
+OFFMAP_LINES = pathlib.Path(__file__).resolve().parents[1] / "fixtures" / "offmap_lines.txt"
+
+
+def _reference_drop_offmap(s: str, vb: tuple[float, float, float, float]) -> str:
+    """`drop_offmap` as it stood before feature 327 split it in two - the reference the split is held to, byte for byte."""
+    if "transform=" in s:
+        return s
+    x0, y0 = vb[0] - raster.OFFMAP_MARGIN, vb[1] - raster.OFFMAP_MARGIN
+    x1, y1 = vb[0] + vb[2] + raster.OFFMAP_MARGIN, vb[1] + vb[3] + raster.OFFMAP_MARGIN
+
+    def outside(xs: list[float], ys: list[float]) -> bool:
+        return max(xs) < x0 or min(xs) > x1 or max(ys) < y0 or min(ys) > y1
+
+    def fix_path(m: re.Match[str]) -> str:
+        d = m.group(2)
+        if not raster._MERGE_GRAMMAR.fullmatch(d):
+            return m.group(0)
+        keep = []
+        for sp in raster._SUBPATH.findall(d):
+            nums = [float(v) for v in raster._NUM.findall(sp)]
+            xs, ys = nums[0::2], nums[1::2]
+            if "a" in sp:
+                r = float(raster._NUM.findall(sp.split("a", 1)[1])[0])
+                xs, ys = [xs[0], xs[0] + 2 * r], [ys[0] - r, ys[0] + r]
+            if not outside(xs, ys):
+                keep.append(sp)
+        if not keep:
+            return ""
+        return m.group(1) + "".join(keep) + m.group(3)
+
+    def fix_shape(m: re.Match[str]) -> str:
+        box = raster._shape_box(m.group(1), m.group(2))
+        if box is None:
+            return m.group(0)
+        return "" if outside([box[0], box[1]], [box[2], box[3]]) else m.group(0)
+
+    return raster._SHAPE.sub(fix_shape, raster._PATH.sub(fix_path, s))
+
+
+SYNTHETIC_LINES = [
+    '<g class="f a" data-k="a"><path d="M10,10 C20,20 30,30 40,40" fill="none"/></g>',  # outside the merge grammar: whole
+    '<g class="f a" data-k="a"><circle r="5" cy="900" cx="900" fill="red"/></g>',  # attributes out of the writer's order
+    '<g class="f a" data-k="a"><rect x="5" y="5" fill="red"/></g>',  # a rect the rule cannot read: whole
+    '<g class="f a" data-k="a"><polygon points="" fill="red"/></g>',  # no points: whole
+    '<g class="f a" data-k="a"><path d="M10,10L20,20M900,900L910,910" stroke="red"/><circle cx="905" cy="905" r="3" fill="blue"/></g>',
+    '<g class="f a" data-k="a"><ellipse cx="50" cy="50" rx="4" ry="2" fill="red"/><line x1="0" y1="0" x2="2000" y2="0" stroke="red"/></g>',
+    '<g class="f a" data-k="a" transform="translate(5,5)"><circle cx="9000" cy="9000" r="1"/></g>',
+]
+
+
+def _boxes() -> list[tuple[float, float, float, float]]:
+    out = []
+    for x in (-500.0, 0.0, 800.0, 1650.0, 2500.0, 4000.0):
+        for y in (1200.0, 1656.0, 2400.0, 3300.0, 4500.0):
+            for w, h in ((40.0, 40.0), (600.0, 500.0), (3316.0, 2427.0)):
+                out.append((x, y, w, h))
+    return out
+
+
+def test_the_clip_parsed_once_is_drop_offmap_byte_for_byte() -> None:
+    """Feature 327 FR-003, SC-003: over real classed lines (a frozen sample of a 20-household hamlet's picture, every kind of element
+    the writer emits) and constructed edge cases, at boxes inside, across and outside the map, `assemble_offmap(prepare_offmap(..))`
+    and `drop_offmap` both equal the reference."""
+    lines = OFFMAP_LINES.read_text(encoding="utf-8").splitlines() + SYNTHETIC_LINES
+    assert len(lines) > 50, "non-vacuity"
+    dropped = kept = 0
+    for line in lines:
+        prepared = raster.prepare_offmap(line)
+        for box in _boxes():
+            want = _reference_drop_offmap(line, box)
+            assert raster.assemble_offmap(prepared, box) == want, (line[:80], box)
+            assert raster.drop_offmap(line, box) == want
+            dropped += want != line
+            kept += want == line
+    assert dropped > 100 and kept > 100, "the boxes both clip and keep (non-vacuity)"
+
+
+def test_a_tile_doc_from_prepared_lines_is_the_one_from_text() -> None:
+    """Feature 327 D3: a picture prepares its lines once; each tile's document is the same text it was built from afresh."""
+    doc = CORNERED
+    prepared = raster.prepare_doc(doc)
+    for box in ((0.0, 0.0, 100.0, 50.0), (100.0, 50.0, 100.0, 50.0), (0.0, 0.0, 200.0, 100.0)):
+        assert raster.tile_doc(prepared, box) == raster.tile_doc(doc, box)
+
+
+def test_no_more_than_four_resvg_processes_run_at_once(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 327: the PNG, the tiles and the id map share one cap of four resvg processes (`RESVG_SLOTS`), so a faster clip
+    cannot pile them up; the picture is the same bytes."""
+    import threading  # noqa: PLC0415
+    import time  # noqa: PLC0415
+
+    alive, most, lock = [0], [0], threading.Lock()
+    real = raster.subprocess.run
+
+    def counted(cmd, *a, **k):  # type: ignore[no-untyped-def]
+        with lock:
+            alive[0] += 1
+            most[0] = max(most[0], alive[0])
+        time.sleep(0.05)
+        try:
+            return real(cmd, *a, **k)
+        finally:
+            with lock:
+                alive[0] -= 1
+
+    single = picture(TINY, 3.0, tiles=1)
+    monkeypatch.setattr(raster, "TILE_WORKERS", 9)  # more tile workers than slots: the cap, not the pool, must hold them
+    monkeypatch.setattr(raster.subprocess, "run", counted)
+    assert picture(TINY, 3.0, tiles=3) == single
+    assert most[0] == 4, most[0]
