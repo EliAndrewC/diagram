@@ -2072,6 +2072,7 @@ kotai-yoriai	kotaiyoriai
 kotaiyoriai	kotaiyoriai
 kotobank	kotobank
 koya	koya
+koyasan	Kōyasan
 kozashi	kozashi
 kuai	kuai
 kuchi-agariya	agariya
@@ -2133,6 +2134,7 @@ kōri	kori
 kōsatsu	kosatsuba
 kōsatsu-ba	kosatsuba
 kōshin	Kōshin
+kōyasan	Kōyasan
 lacey	Lacey
 lake biwa	Lake Biwa
 lake tai	Lower Yangzi
@@ -2445,6 +2447,7 @@ mortise and tenon	mortise and tenon
 moso	moso
 moto-kiba	Eitaijima
 motojime	motojime
+mount koya	Kōyasan
 mozi	Mozi
 mu	mu
 muen	muenzuka
