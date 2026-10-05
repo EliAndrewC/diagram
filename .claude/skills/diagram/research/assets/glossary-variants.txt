@@ -1769,6 +1769,7 @@ jitter	jitter
 jittered	jitter
 jittering	jitter
 jitō	jito
+jiujiang	Jiujiang
 jiwari	warichi
 jizo	jizo
 jizo-bon	Jizo-bon
