@@ -81,6 +81,7 @@ def household_bamboo(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str
 
     Research:
         which farms keep bamboo - research/questions/0075-bamboo-groves-chikurin.drawing.html: `HOUSEHOLD_BAMBOO_PREVALENCE` by each house's position hash
+        strip size - research/questions/0075-bamboo-groves-chikurin.drawing.html: `HOUSEHOLD_BAMBOO_FT`, a strip 22 x 16 ft
         side rolled, then the others - research/questions/0075-bamboo-groves-chikurin.drawing.html: the weighted side first, the rest in listed order
         a grove farm's bamboo in its grove - research/questions/0075-bamboo-groves-chikurin.drawing.html: no strip, counted for the grove
         strip clearances - UNRESEARCHED: 6 ft off the walls and every lane, a second seat one strip's depth further out

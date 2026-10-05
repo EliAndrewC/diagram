@@ -396,6 +396,7 @@ class GroundCoverMixin:
             crown and pine ink - CONVENTION: flat crown discs, a scraggly three-branch pine
             claimed but undrawn - CONVENTION: a bare render records the ground and draws nothing
             woodland no-build - UNRESEARCHED: a woodland parcel made no-build ground
+            woodland stocked to read - CONVENTION: a woodland parcel carries at least `WOODLAND_MIN_CROWNS` (5) crowns, so it reads as a wood
             no crown in a yard's sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: no coppice crown or scrub pine in a yard's or bed's sun"""
         # EVERY RECORDED MARSH IS A KEEP-OUT FOR SCRUB (GM 2026-08-26, feature 133 T12: *"do we mean to
         # show ... small pine trees and such growing out of the marshland in exactly the same pattern as

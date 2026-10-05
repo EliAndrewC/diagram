@@ -378,7 +378,12 @@ WEST_SUN_FT = 50.0
 # dike-pond differs from the rice polder only in its PARCEL FABRIC (`POLDER_FABRIC`), the overlay
 # applied after the grid is drawn, and the ring-canal crossing caps.
 FIELD_ARCHETYPES = ("valley_paddy", "polder_grid", "mulberry_dike_fishpond")
-"""Research: field forms drawn - research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html, research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html, research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html, research/questions/0014-bunds-between-the-paddies-aze.drawing.html: valley fan, rice polder, dike-pond; no plain ruled on the jori grid, so that form is never rolled"""
+"""The field forms a hamlet may roll.
+
+Research:
+    field forms drawn - research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html, research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html, research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html: valley fan, rice polder, dike-pond
+    no jori grid rolled - DEVIATION research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html, research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: no plain ruled on the jori grid, so that form is never rolled
+"""
 POLDER_ARCHETYPES = ("polder_grid", "mulberry_dike_fishpond")
 """Research: dike-pond built as a polder - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html, research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html"""
 
@@ -489,7 +494,7 @@ LEFTOVER_FORMS = ("rice", "pond")
 
 Research:
     dike-ponds throughout - research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html: a wholesale village
-    dike-pond leftover parcels - research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html: rice or none, even odds
+    dike-pond leftover parcels - UNRESEARCHED: rice or pond, even odds
 """
 POND_LAYOUT_MOSAIC = 0.5
 """Research: mosaic strength - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: 0.5, the lattice bent out of line"""

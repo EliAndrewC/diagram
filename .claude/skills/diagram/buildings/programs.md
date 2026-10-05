@@ -14,9 +14,10 @@ Per-building-type specs: the required program every instance shares, the knobs t
 
 ### Magistrate's manor (county magistracy)
 
-<!-- Research: walled enclosure - research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html: a wall with a formal main gate and gatehouse -->
+<!-- Research: walled enclosure - research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html, research/questions/0097-staff-rowhouses-and-barracks-nagaya.html: a wall with a formal main gate, the gatehouse the office's gate range as at Omori and Kaibara -->
 <!-- Research: inner-court postern - research/questions/0107-kitchens-daidokoro.html, research/questions/0101-privies-setchin.drawing.html: a kitchen and night-soil door serving the inner court -->
-<!-- Research: outer service gate - UNRESEARCHED: a small gate for muck, night-soil and prisoners in a busy outer court -->
+<!-- Research: outer service gate - GUESS research/questions/0101-privies-setchin.drawing.html: a small gate for the night-soil collectors, no such gate named at a samurai house, the merchant's back gate the nearest -->
+<!-- Research: outer service gate for muck and prisoners - UNRESEARCHED: the same gate taking muck and prisoner transfers from a busy outer court -->
 <!-- Research: wall display - UNRESEARCHED: most impressive on the public approach, plainer at the rear -->
 <!-- Research: guest doors feed courts - research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html, research/questions/0103-ornamental-gardens-ponds-and-stone-lanterns-teien.drawing.html: guests step into a court or garden, service doors into work space; Ubame's border court drawn with garden stipple and a stone lantern -->
 <!-- Research: two-court zoning - research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html: office court in front, residence behind a divider -->
@@ -28,10 +29,11 @@ Per-building-type specs: the required program every instance shares, the knobs t
 <!-- Research: residence entrances - research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html: one genkan, informal doors elsewhere -->
 <!-- Research: rear service strip - research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html, research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html: servants' nagaya, stores, rear yard or alley on the north -->
 <!-- Research: universal shrine - research/questions/0218-the-compounds-own-shrine-yashikigami.html, research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html: one shrine, Inari by default, subordinate to the residence; Hayakawa's sheet keeps two -->
-<!-- Research: wells by use - UNRESEARCHED: kitchen, garden, stables -->
+<!-- Research: wells by use - GUESS research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html: kitchen, garden, stables; no page places a residence's wells -->
+<!-- Research: sand hearing court - research/questions/0099-the-hearing-court-shirasu.drawing.html: a gravel court below the dais, the parties kneeling on mats in the Edo arrangement -->
 <!-- Research: latrines by zone - research/questions/0101-privies-setchin.html: one per zone, residence privy attached, the rest by service gates -->
 <!-- Research: fire-water tubs - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: ~8-12, kitchen 2, none at the kura -->
-<!-- Research: notice board at the gate - research/questions/0190-notice-boards-kosatsuba.html: the bench's board just outside the main gate, apart from the town's kosatsuba -->
+<!-- Research: notice board at the gate - GUESS research/questions/0190-notice-boards-kosatsuba.drawing.html: the bench's freestanding board just outside the main gate, apart from the town's kosatsuba - the Japanese board joined to the Chinese office's gate -->
 <!-- Research: practice ground - research/questions/0165-martial-training-grounds-and-dojo.html: no dojo -->
 <!-- Research: practice ground placement and gear - GUESS: in the outer court beside the watch, striking posts and a weapon rack -->
 <!-- Research: mostly open compound - research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: jin'ya coverage band, court spine open -->
@@ -41,9 +43,9 @@ Per-building-type specs: the required program every instance shares, the knobs t
 <!-- Research: posting wealth knob - research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html: rich to poor, poor shown as deferred maintenance -->
 <!-- Research: granary weight knob - research/questions/0098-storehouses-for-the-tax-rice.html: one staging kura or a terminal granary row -->
 <!-- Research: garrison emphasis knob - UNRESEARCHED: armory and watchtower in bandit country -->
-<!-- Research: staff housing knob - research/questions/0097-staff-rowhouses-and-barracks-nagaya.html, research/questions/0170-a-citys-garrison-foot-soldiers-houses-barracks-and-the-armory.drawing.html: all on grounds, plus family rowhouses, or duty watch only; Ubame's family rowhouse stands inside the walls -->
+<!-- Research: staff housing knob - research/questions/0097-staff-rowhouses-and-barracks-nagaya.html: all on grounds, plus family rowhouses, or duty watch only; Ubame's family rowhouse stands inside the walls -->
 <!-- Research: tenure character knob - UNRESEARCHED: continuity accretes alcove, gardens, oddities -->
-<!-- Research: resident particulars knob - NONE: designed per manor with the GM -->
+<!-- Research: resident particulars knob - CANON: dedication by county type, a relic, a workshop, a dojo, designed per manor with the GM -->
 <!-- Research: justice-front furniture knob - UNRESEARCHED: petition window, grievance drum or bell -->
 
 The seat of a County Magistrate (Rank 5): a walled compound in the county town combining court, tax office, granary, garrison, and the magistrate's household. [`pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg`](../pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg) is the worked example - it is this generic program plus Ochiba's particulars (the hall-scale two-altar Inari shrine, the Akami-fude and Fox-Fire Lantern relics, the cinnabar workshop colonnade, the Pact-Bowl threshold stone). A new magistracy should read as the same institution while sharing none of those particulars. [`pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg`](../pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg) is the validation instance: the same program with every knob set differently (rich river-landing county, staff-housing option (c), guest-wing annex, two modest shrines, cell by the gatehouse).
@@ -114,19 +116,21 @@ Each item names the Mode A kind it is (feature 262): the sheet's own `data-kind`
 <!-- Research: unswept precinct ground - research/questions/0224-ground-swept-clear-around-shrines-and-graves.html: plain fill, not claimed swept -->
 <!-- Research: precinct size - research/questions/0215-village-shrines-where-they-stand-and-how-big-their-grounds-are.html: register figures 50-2,700 tsubo, buildings 2-14% -->
 <!-- Research: sanctuary on the axis - research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html: arch, hall, then sanctuary behind -->
-<!-- Research: outermost arch at the precinct edge - research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html: innermost one pitch off the hall -->
+<!-- Research: outermost arch at the precinct edge - research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html: the outermost at the ground's edge -->
+<!-- Research: innermost arch one pitch off the hall - CONVENTION: the map drawing convention 0220's drawing page records -->
 <!-- Research: arch count - DEVIATION research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html -->
 <!-- Research: arch pitch - research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html: 12 ft -->
 <!-- Research: hall largest and monk's home - research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html, research/questions/0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html: the hall the largest building and the monk's home -->
 <!-- Research: one-roof ends' order - GUESS: villagers' end toward the arch, dwelling end behind -->
 <!-- Research: hall in the middle of the one roof - research/questions/0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html: Hoshigaoka's sheet puts the villagers' hall in the center, the kitchen at one end and the monk's rooms at the other -->
-<!-- Research: dwelling kitchen floor - research/questions/0107-kitchens-daidokoro.drawing.html: Hoshigaoka's sheet stipples the whole kitchen as earth floor with the kamado in its middle -->
+<!-- Research: dwelling kitchen floor - UNRESEARCHED: Hoshigaoka's sheet stipples the whole kitchen as earth floor with the kamado in its middle -->
 <!-- Research: dwelling entry tagged genkan - research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html: Hoshigaoka's sheet tags its dwelling's plain earth-floored entry vestibule as genkan -->
 <!-- Research: dwelling privy - research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html: the dwelling end's privy, behind with the dwelling -->
 <!-- Research: two-building form - research/questions/0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html: a farmhouse-class kuri beside the hall -->
 <!-- Research: kitchen garden by the sun - research/questions/0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html, research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: near the dwelling where it gets six hours -->
 <!-- Research: basin beside the approach - research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html: plain stone basin, never on the way or under an arch -->
-<!-- Research: sacred tree - research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html: roped, beside the approach -->
+<!-- Research: sacred tree - research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html, research/questions/0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html: roped, beside the approach -->
+<!-- Research: well and basin both drawn - UNRESEARCHED: where a map sites the shrine's well elsewhere, the well and the basin are both drawn -->
 <!-- Research: donated stonework - research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html: guardian figures, lanterns, strength stones on the wealth knob, none at average -->
 <!-- Research: no subsidiary buildings - research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html: no subsidiary shrines, office, plaque hall or portable-shrine store -->
 <!-- Research: burial ground beside the precinct - DEVIATION research/questions/0226-shrines-temples-and-graves-in-each-size-of-settlement.drawing.html -->
@@ -134,7 +138,7 @@ Each item names the Mode A kind it is (feature 262): the sheet's own `data-kind`
 <!-- Research: tax-free fields off the sheet - research/questions/0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html -->
 <!-- Research: fire-water - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: a tub at the hall's corners, one at the dwelling end -->
 <!-- Research: hall-and-dwelling form knob - DEVIATION research/questions/0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html: one roof default, set against the sources' rare on the GM's word -->
-<!-- Research: bell tower knob - research/questions/0227-city-temples-the-precinct-its-halls-bell-tower-and-pagoda-garan.html: absent by default -->
+<!-- Research: bell tower knob - research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html: absent by default -->
 <!-- Research: dedication knob - CANON: Inari the ordinary rural dedication, a GM ruling of 2026-09-20 -->
 <!-- Research: Bishamon tigers - research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html: tigers at a Bishamon shrine -->
 <!-- Research: grove and burial side knob - NONE: follows the declared map -->

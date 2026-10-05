@@ -337,7 +337,8 @@ def _bund_beans(R: random.Random, plots: list[dict[str, Any]], frac: float, spac
 
     Research:
         beaded bunds - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a single row of beads along one or two edges of about `frac` of the plots
-        bead spacing - research/questions/0014-bunds-between-the-paddies-aze.html: 9.5 px apart, an edge of two to three spacings carrying two beads at its thirds
+        bead spacing - CONVENTION: a symbolic bead every 9.5 px
+        two beads at least - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: an edge of two to three spacings carrying two beads at its thirds
         buried beads dropped - CONVENTION: a bead under a later plot's paint or a ditch's stroke is not drawn
     """
     runs: list[Poly] = []

@@ -626,7 +626,8 @@ class CombMixin:
             fringe and margin widths - UNRESEARCHED: 40 px of reed fringe, a 10 px no-build margin
             pond feeder width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: the feeder stream drawn 6 px wide
             planted pond bank - research/questions/0061-reservoir-ponds-tameike.drawing.html: every bank drawn bare; the bank planted sparsely with mulberry and cudrania is never rolled
-            feeder brook - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: a stream from the map's edge to the sluice, on past it where `to` says"""
+            feeder brook - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: a stream from the map's edge to the sluice, on past it where `to` says
+            feeder brook width - UNRESEARCHED: the brook drawn 7 px wide"""
         pond_rec: Any = None
         if source.get("kind") == "pond":
             pcx, pcy, prx, pry = source["pond"]
