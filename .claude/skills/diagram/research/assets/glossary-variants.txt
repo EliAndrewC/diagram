@@ -1,7 +1,10 @@
 10-mat	tatami
 1868	1868
 3-mat	tatami
+4 mats	tatami
+6 mats	tatami
 6-mat	tatami
+8 mats	tatami
 8-mat	tatami
 abatis	abatis
 ablution well	ablution well
