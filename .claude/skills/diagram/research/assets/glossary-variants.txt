@@ -3876,8 +3876,8 @@ three-bay two-corridor houses	three-bay two-corridor house
 three-squads	three-squads courtyard
 three-squads courtyard	three-squads courtyard
 three-worlds-myriad-spirits	three-worlds-myriad-spirits
-three-worlds-myriad-spirits stone	three-worlds-myriad-spirits stone
-three-worlds-myriad-spirits stones	three-worlds-myriad-spirits stone
+three-worlds-myriad-spirits stone	three-worlds-myriad-spirits
+three-worlds-myriad-spirits stones	three-worlds-myriad-spirits
 threshing comb	senbakoki
 threshing combs	senbakoki
 threshing yard	threshing yard
