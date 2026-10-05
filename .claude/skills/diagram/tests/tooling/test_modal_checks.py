@@ -236,3 +236,14 @@ def test_a_drawing_page_the_old_form_listed_at_the_base_is_a_candidate_after_the
     (root / CLASSES / "homestead.py").write_text(FARMHOUSE, encoding="utf-8")
     m = mo.find(root, "farmhouse")
     assert m.drawing_files() == [] and "research/questions/0038-yards.drawing.html" in mb.drawing_candidates(root, m)
+
+
+def test_a_drawing_page_a_listed_one_links_to_is_a_candidate(tmp_path: pathlib.Path) -> None:
+    """The windbreak's round 1: 0072's drawing page sends its reader to 0080 for the crowns it draws, and the check was never
+    shown 0080. A drawing page a LISTED one links to is handed over as a CANDIDATE."""
+    root = _tree(tmp_path, FARMHOUSE.replace("    Entry: research/questions/0029-farmhouses-minka.html", "    Entry: research/questions/0029-farmhouses-minka.html\n    Drawing: research/questions/0029-farmhouses-minka.drawing.html"))
+    q = root / SKILL / "research" / "questions"
+    (q / "0029-farmhouses-minka.drawing.html").write_text('<p>Crowns are at <a href="0080-crowns.drawing.html">crowns</a>.</p>\n', encoding="utf-8")
+    (q / "0080-crowns.drawing.html").write_text("<p>Crowns drawn 17 ft.</p>\n", encoding="utf-8")
+    _commit(root)
+    assert "research/questions/0080-crowns.drawing.html" in mb.drawing_candidates(root, mo.find(root, "farmhouse"))

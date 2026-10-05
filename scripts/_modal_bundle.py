@@ -257,6 +257,12 @@ def drawing_candidates(root: pathlib.Path, m: mo.Modal) -> list[str]:
     was = mo.modals_at(root, base, about_only=False).get(m.uid) if base else None
     if was is not None:
         out += [f for f in (*was.entry_files(), *was.drawing_files()) if f.endswith(".drawing.html")]
+    # ...and every drawing page a LISTED one links to: the windbreak's 0072 sends its reader to 0080 for the crowns it draws,
+    # and the check was never shown 0080 (feature 319, the windbreak's modal-depiction round 1)
+    for f in m.drawing_files():
+        p = root / SKILL / f
+        if p.is_file():
+            out += [f"research/questions/{h}" for h in re.findall(r'href="(?:[^"]*/)?(\d{4}-[^"/#]+\.drawing\.html)', p.read_text(encoding="utf-8"))]
     listed = set(m.drawing_files())
     return [f for f in dict.fromkeys(out) if f not in listed and (root / SKILL / f).is_file()]
 
