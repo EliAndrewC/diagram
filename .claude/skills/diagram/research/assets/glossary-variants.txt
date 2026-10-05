@@ -3676,6 +3676,7 @@ tang-dynasty	Tang dynasty
 tang-song	Tang dynasty
 tangible cultural properties	Tangible Cultural Property
 tangible cultural property	Tangible Cultural Property
+tango-no-kami	Tango-no-kami
 tangpu	tangpu
 tani-ike	valley pond
 taper law	taper law
@@ -3704,8 +3705,11 @@ temple fair	miaohui
 temple fairs	miaohui
 temple registration	temple registration
 temple-certification system	terauke
+ten'ei	Tenei
 ten-volume wamyosho	Wamyosho
+tenbun	Tenbun
 tendai	Tendai
+tenei	Tenei
 tenjin	Tenjin
 tenjin shrine	Tenjin
 tenjogawa	raised-bed river
@@ -3721,6 +3725,7 @@ tenmangū	Tenmangu
 tenmei	Tenmei
 tenmei era	Tenmei
 tenmei famine	Tenmei
+tenmon	Tenbun
 tenna	Tenna
 tenon	mortise and tenon
 tenpo	Tenpo era

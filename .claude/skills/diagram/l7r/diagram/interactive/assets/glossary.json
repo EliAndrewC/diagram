@@ -15700,5 +15700,28 @@
    "Fujiwara no Tamenari",
    "Tamenari"
   ]
+ },
+ "Tenei": {
+  "def": "A Japanese era name of the late Heian period, 1110 to 1113; Tenei 1 is the year 1110.",
+  "variants": [
+   "Tenei",
+   "Ten'ei"
+  ],
+  "cased": true
+ },
+ "Tenbun": {
+  "def": "A Japanese era name of the late Muromachi period, 1532 to 1555; Tenbun 6 is the year 1537.",
+  "variants": [
+   "Tenbun",
+   "Tenmon"
+  ],
+  "cased": true
+ },
+ "Tango-no-kami": {
+  "def": "Governor of Tango province, a court title; in the title of a poem collection it names the governor whose house the collection was made for.",
+  "variants": [
+   "Tango-no-kami"
+  ],
+  "cased": true
  }
 }
