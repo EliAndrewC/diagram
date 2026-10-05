@@ -29,8 +29,9 @@ The site build holds each page as UTF-8 bytes from the moment it is built; a rea
 **Why this priority**: the first follow-up - option 1 of the two the session described ("Hold pages as UTF-8 bytes"). Option 1 is
 taken over option 2 (streaming pages to disk) because it is the contained one the session described as "a modest wrapper": it
 changes nothing a caller or a test reads, and it lowers the memory both where `make record` holds the site before writing it and
-where the tests hold the built site; option 2 changes what the build is ("a bigger rewrite of the build and of the test helpers")
-and still assembles the single page in memory.
+where the tests hold the built site; option 2 changes what the build is ("a bigger rewrite of the build and of the test helpers"),
+though by the session's estimate it would cut more of `make record`'s peak. The difference is how much each changes, not that
+one assembles the single page in memory (both do).
 
 **Independent Test**: the build's result size and peak, before and after, on the real record; every file the same text.
 
@@ -100,3 +101,6 @@ None: no map draws or states anything differently; every picture and every page 
 - A page read from the built site briefly exists as text again while it is read; that is the reader's cost, not the build's.
 
 ## Review history
+
+- Round 1 (initial acceptance, MODE 2, 2026-10-05): FAITHFUL. The aside applied as a wording fix to User Story 1's rationale (option
+  2 would cut more of `make record`'s peak; the choice rests on how much each changes); to be told the GM at landing.
