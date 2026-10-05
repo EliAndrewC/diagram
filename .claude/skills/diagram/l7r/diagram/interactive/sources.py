@@ -29,6 +29,10 @@ import os
 import re
 import unicodedata
 from functools import cache
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from l7r.diagram.interactive.record.questions import Record
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
 RESEARCH_DIR = os.path.normpath(os.path.join(_HERE, "..", "..", "..", "research"))
@@ -66,7 +70,7 @@ def _record_text(research_dir: str, rel: str) -> str:
     if rel == "SOURCES.html" and os.path.isdir(os.path.join(research_dir, store.REGISTRY_DIR)):
         return store.registry_html(research_dir)
     if rel.startswith(QUESTIONS + "/") and os.path.isfile(os.path.join(research_dir, rel)):
-        record = store.load(research_dir)
+        record = _loaded(research_dir)
         return store.page_html(record, record.by_file[rel[len(QUESTIONS) + 1 :]], research_dir)
     try:
         with open(os.path.join(research_dir, rel), encoding="utf-8") as fh:
@@ -75,10 +79,25 @@ def _record_text(research_dir: str, rel: str) -> str:
         return ""
 
 
+@cache
+def _loaded(research_dir: str) -> Record:
+    """The record of `research_dir`, loaded once per process until `clear_caches()` (feature 322).
+
+    A question page is rendered from the whole record (its cross-links and confusables), and `_record_text` loaded it
+    afresh on every page it had not read: a caller reading all 475 pages loaded the record 475 times, 42 s of a 44 s
+    test (specs/322-record-load-once/research.md R1). Keyed by the directory `record_text` normalizes, as the pages are.
+
+    Research: record load cache - NONE: process plumbing"""
+    from l7r.diagram.interactive.record import store  # noqa: PLC0415 - the record imports this module
+
+    return store.load(research_dir)
+
+
 def clear_caches() -> None:
-    """Forget every page read so far - what a build calls first, so a fragment edited since the last read in this
-    process is read again (a long-lived process, or a test that edits and builds twice)."""
-    for f in (_record_text, _page_notes, registry, registry_entries):
+    """Forget every page read so far, and the records they were rendered from - what a build calls first, so a fragment
+    edited since the last read in this process is read again (a long-lived process, or a test that edits and builds
+    twice)."""
+    for f in (_record_text, _loaded, _page_notes, registry, registry_entries):
         f.cache_clear()
 
 
