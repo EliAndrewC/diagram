@@ -1,0 +1,10 @@
+- round 1, entry-drift 0028 x8: StorageShed, Privy, WoodShed, ManureHeap, BathRoom, HenCoop, HouseholdShrine IN-STEP; Byre DRIFTED (said the stable wing was deliberately not drawn, Tohoku only) - byre.md rewritten: the wing is drawn with the L-shaped plan, Nanbu-in-Iwate and the 1824 Saitama village
+- round 1, quote-check 0028 (3 batches): magariya-jawiki-4 1 SUPPORTS, 1 PARTIAL (old Nanbu domain wider than the quote's Iwate part) - drawing page scoped to Iwate; 0 unfootnoted
+- round 1, record-format 0028: 1 VOCABULARY (Sugiura's kyo/ko unexplained) - gloss added; 0 SESSION NOTE, 0 HISTORY
+- round 2, entry-drift 0028 x7 IN-STEP; Byre second round (NOT_OWED_OK) drift fixed, 1 CANNOT-TELL (the "horses' worth" reading) - restated as 0028's cold reading; the headman clause rests on 0048 (read: magariya-jawiki, upper farm households)
+- round 2, quote-check 0028: 2 gloss errors (Table 2 does name kyo and ko), 1 PARTIAL (-5's coop column); research page's Nanbu sentence scoped to Iwate - all fixed
+- round 2, source-reader sugiura-1973-fuzoku: 12 READ, 2 CONTRADICTED (the same kyo/ko gloss) - fixed
+- round 2, record-format 0028: 2 VOCABULARY (inner stable; table symbols drew wrong tooltips) - inner stable explained where it stands, symbols in <code>
+- round 3, entry-drift 0028 x7 IN-STEP; quote-check 2 batches all SUPPORTS; record-format 1 VOCABULARY (Jizo-san variant), 1 SESSION NOTE (a note id shown) - fixed; source-reader 4 READ, 2 NOT-FOUND ("miscellaneous shed" not the key's word) - fixed
+- round 4, quote-check 0028 2 batches all SUPPORTS; record-format 0/0/0; source-reader 2 READ; make record-owed UNANSWERED=1: no record check is owed
+- tooling fixed: a KIND= entry-drift bundle carried every owed entry-drift unit (answering the byre's answered the windbreak's and the vegetable garden's text; those two were already answered at that content, their result text notes the overwrite); a bare <code> in a note was read as a cited source key

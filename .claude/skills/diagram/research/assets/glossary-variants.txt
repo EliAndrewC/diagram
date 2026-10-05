@@ -1756,6 +1756,7 @@ jitō	jito
 jiwari	warichi
 jizo	jizo
 jizo-bon	Jizo-bon
+jizo-san	jizo
 jizobon	Jizo-bon
 jizō	jizo
 jizō-bon	Jizo-bon
