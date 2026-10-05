@@ -81,12 +81,16 @@ def household_bamboo(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str
 
     Research:
         which farms keep bamboo - research/questions/0075-bamboo-groves-chikurin.drawing.html: `HOUSEHOLD_BAMBOO_PREVALENCE` by each house's position hash
+        strip size - research/questions/0075-bamboo-groves-chikurin.drawing.html: `HOUSEHOLD_BAMBOO_FT`, a strip 22 x 16 ft
         side rolled, then the others - research/questions/0075-bamboo-groves-chikurin.drawing.html: the weighted side first, the rest in listed order
         a grove farm's bamboo in its grove - research/questions/0075-bamboo-groves-chikurin.drawing.html: no strip, counted for the grove
         strip clearances - UNRESEARCHED: 6 ft off the walls and every lane, a second seat one strip's depth further out
+        strip out of the sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: kept 50 ft (bamboo's reach) off every yard's and bed's sun
         strip off the copse seats - UNRESEARCHED: off every household's reserved copse seats by the bamboo keep-out
         strip on its house's bank - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: refused across a stream
         strip seated after the lanes - research/questions/0075-bamboo-groves-chikurin.drawing.html: seated after the web, the lanes laid before it
+        row farm's bamboo to the south - research/questions/0033-row-villages-resson.drawing.html: never drawn; a row farm's bamboo
+            stands in its full windward grove, never set south where a row of grove farms across the road broke the wind
     """
     out: list[Poly] = []
     if plan.bamboo not in ("homestead", "both") or not houses:

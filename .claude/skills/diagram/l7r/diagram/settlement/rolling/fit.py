@@ -337,9 +337,9 @@ class BundleFitMixin:
 
         Research: whole farmstead off the fields - research/questions/0124-farmsteads-at-a-town.drawing.html: the yard and fixtures held off every paddy polygon, the beds off every ditch
             persimmon held off the paddy by its trunk - UNRESEARCHED: a 4 ft trunk box held off every field polygon, its crown free to overhang
-            a tight seat only by passage - research/questions/0081-village-lanes.html, research/questions/0081-village-lanes.drawing.html: admitted only with a walk across the neighbor's yard, refused where its yard opens onto lane ground of its own (`passage.opens`)
-            no path searched while houses are seated - research/questions/0081-village-lanes.drawing.html: no way is sought for a household while it is seated; the yard's opening onto lane ground the one check
-            the village roll's corridor search - DEVIATION research/questions/0081-village-lanes.drawing.html: a roll with no seat region (a village's) keeps the corridor search"""
+            a tight seat only by passage - research/questions/0081-village-lanes.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: admitted only with a walk across the neighbor's yard, refused where its yard opens onto lane ground of its own (`passage.opens`)
+            no path searched while houses are seated - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: no way is sought for a household while it is seated; the yard's opening onto lane ground the one check
+            the village roll's corridor search - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a roll with no seat region (a village's) keeps the corridor search"""
         # A LAYOUT WHOSE LOT FOUND NO SEAT FOR A PART IS NOT THE HOUSEHOLD'S (feature 294 B10, the review's "declared forms drawn"
         # class): `_bundle_side_fits` refuses an `unlaid` layout, and the nucleated placer judges its layouts here instead, so a
         # household whose bath room found no wall was seated with none of its fixtures - Kuwabata drew 3 of its 16 households
@@ -538,7 +538,7 @@ class BundleFitMixin:
         threshing yard may lie - which no check currently makes and which would re-pack every
         nucleated map to enforce - so it is deliberately out of scope here.
 
-        Research: no house corner on a lane - research/questions/0081-village-lanes.drawing.html: the house as drawn, at its rake, off every tread"""
+        Research: no house corner on a lane - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the house as drawn, at its rake, off every tread"""
         cx, cy, w, h = rect
         return self._on_a_tread(cx, cy, w, h, rot=self._house_rot(cx, cy))
 
@@ -635,7 +635,7 @@ class BundleFitMixin:
         asked, and Mizuguchi's first roll on feature 287 laid a farm's fixture across the exit strip, which the registry
         then refused at record time (feature 291 on 287).
 
-        Research: nothing built on a path - research/questions/0081-village-lanes.drawing.html: no part of a homestead on a reserved corridor"""
+        Research: nothing built on a path - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: no part of a homestead on a reserved corridor"""
         tree = getattr(self, "_access", None)
         if tree is None:
             return False
@@ -761,7 +761,7 @@ class BundleFitMixin:
         yard, a north kura, the windward grove (dispersed only), and the yard sun-corridor. Same for every
         garden side at a given position, so it is tested once per position.
 
-        Research: no grove on a lane - research/questions/0081-village-lanes.drawing.html: a farm's grove bands off every drawn tread"""
+        Research: no grove on a lane - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a farm's grove bands off every drawn tread"""
         if not self._candidate_watered(geom):
             return False
         if (

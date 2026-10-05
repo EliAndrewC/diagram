@@ -1,0 +1,45 @@
+# Checks log - feature 319, H8 session 2 (0005, 0031, 0075, 0196; 0033 owed nothing)
+- round 1, quote-check 0005: 7 VERBATIM, 6 SUPPORTS, 1 PARTIAL - senmaida-2 now opens on the Noto peninsula; the journal quote's stray ellipsis removed
+- round 1, record-format 0005: 1 VOCABULARY (hitsu glossed), 2 SESSION NOTE and 3 HISTORY applied
+- round 1, source-reader 0005 bunka-shiroyone: 1 READ
+- round 1, quote-check 0031: 3 VERBATIM, 3 SUPPORTS; 3 unfootnoted (scattered-farm lanes, water, channel route) pointed at the record or labeled GUESS
+- round 1, record-format 0031: 1 VOCABULARY - the Chinese allotment system said plainly
+- round 1, quote-check 0196: 1 VERBATIM, 1 SUPPORTS
+- round 1, record-format 0196: well-sweep tooltip, a session note cut, a full stop; jiégāo and lùlu variants; Han declined (the han term is cased); hudou left - its key is reserved in diagram-html-3
+- round 1, quote-check 0075: 16 VERBATIM, 15 SUPPORTS, 1 PARTIAL (yashikirin-jawiki-5 most -> many); the old-map sentence put on the cited bullet
+- round 1, record-format 0075: 1 VOCABULARY - chikurin a take-yabu variant
+- round 1, source-reader 0075 bamboo-groves-chikurin: 2 READ, 1 NOT-FOUND, 1 SUMMARY-ONLY (tonami-yashikirin-haichi read from its archive copy: no share); the absence note now says what the institute's page and Sendai's plan do say
+- round 2, quote-check 0005: 7 VERBATIM, 7 SUPPORTS; puddled dropped from the basin's definition
+- round 2, record-format 0005: Inashiro named one of the four; the 2,777 basins said to be counted once the fields were carved
+- round 2, translation-check 0005: FAITHFUL 1, LOOSE 1 - senmaida-2 translated whole (both designations, no bracket)
+- round 2, source-reader 0005 senmaida-2, senmaida-3: 3 READ (the journal's two clauses run on)
+- round 2, quote-check 0031: -5's absence note extended to the channel's route
+- round 2, record-format 0031: back lowland a back marsh variant, fan's foot, a fetch verdict into a comment
+- round 2, quote-check 0196: 1 unfootnoted - the irrigation well's siting labeled GUESS, the question page's sentence cited to the windlass
+- round 2, record-format 0196: impoundment glossed
+- round 2, quote-check 0075: 28 VERBATIM, 28 SUPPORTS, nothing to act on
+- round 2, record-format 0075: 0 findings
+- round 3, quote-check 0005: 6 VERBATIM, 6 SUPPORTS
+- round 3, record-format 0005: mizucho glossed; a quoted narrow and small no source says dropped from the drawing gloss
+- round 3, translation-check 0005: FAITHFUL 2
+- round 3, quote-check 0031: 4 VERBATIM, 4 SUPPORTS, nothing to act on
+- round 3, record-format 0031: stacked pond glossed
+- round 3, source-reader 0031 -5 (museum, Toyama, MAFF, JR West): 4 READ, 1 SUMMARY-ONLY - the JR West feature fetched garbled and was taken off the absence note
+- round 3, source-reader 0031 senjochi-jawiki: 2 READ - the passage is the fan's middle; sentence and gloss narrowed, settlement most often at the fan's foot
+- round 3, quote-check 0196: 1 PARTIAL - the sweep no longer placed in north China's dry farmland
+- round 3, record-format 0196: wellheads a curb variant
+- round 4, quote-check 0005: 1 PARTIAL - the jori plains named as the paper's three districts; Senmaida for the most famous paddies
+- round 4, record-format 0005: 0 findings
+- round 4, quote-check 0031: 1 PARTIAL - visit-toyama-sankyoson-3 given the page's alluvial-fan sentence
+- round 4, record-format 0031: JR West taken off -4 too; round village (inside a quote) left, a definition needs a source
+- round 4, quote-check 0196: 2 PARTIAL - the 400-800 mm region quoted with its scope, dry farmland dropped; the dry plots' water a GUESS
+- round 4, record-format 0196: hata removed from hatake, so Hata village is no dry-field tooltip
+- round 5, quote-check 0005: 1 PARTIAL - areas of the plains, the first passage under the Kofun and Nara heading
+- round 5, record-format 0005, quote-check 0031, record-format 0031: 0 findings each
+- round 5, quote-check 0196: concentrated in the summer; servants among the commoners a rule of our maps
+- round 5, record-format 0196: Karihama's five to ten houses a dug well's, not a common well's
+- round 6, quote-check 0005: 10 VERBATIM, 10 SUPPORTS; record-format 0005: 0 findings
+- round 6, source-reader 0005 tabayashi-1987-22: 3 READ (pp. 57-58); the question page's through the medieval period made into
+- round 6, quote-check 0196: SUPPORTS throughout (the script's DIFFERS on seiyo-karihama-ido#2 is its misalignment); record-format 0196: one readability fix
+- round 7, quote-check and record-format on 0005 and 0196: 0 findings; source-readers whose quotes were unchanged or already read (0005 rice-paddies-...-suiden, senmaida, tabayashi-22 r5; 0031 -2, -4, visit-toyama-sankyoson-3; 0196 plos) answered with REASON
+- end: record-owed UNANSWERED=1 owes nothing on 0005, 0031, 0033, 0075 or 0196; no entry-drift owed (no garden modal finding); the four record tests green (4318 passed); impl-drift on the engine claims citing 0005, 0031 and 0196 is left for the push, as the brief says

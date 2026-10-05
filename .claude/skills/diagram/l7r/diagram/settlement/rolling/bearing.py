@@ -127,7 +127,7 @@ class MarginBearing:
         `FOLLOW_REACH_PX`; 0.0 out of its reach.
 
         Research:
-            lane turn from the margin - DEVIATION research/questions/0081-village-lanes.drawing.html: a farmhouse turns with its lane, but every house stands before any lane, so the curve of the field's margin stands in
+            lane turn from the margin - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a farmhouse turns with its lane, but every house stands before any lane, so the curve of the field's margin stands in
             folded square and faded - UNRESEARCHED: a house square to the margin by front or gable, the turn in full near it and fading behind
         """
         k = self.nearest(x, y)

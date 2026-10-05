@@ -191,10 +191,22 @@ def test_the_magistracy_program_is_folded_into_the_registry() -> None:
             assert item.kind in COMPOUND_CLASSES, item.id
             assert item.label is None and item.cls == "" and item.why == "", item.id
             fc = COMPOUND_CLASSES[item.kind]
-            assert bt.classification(item) == (fc.label, fc.label_note)
+            assert bt.classification(item) == (bt.PER_STATEMENT, " ".join(fc.guesses) if fc.guesses else bt.NOTHING_GUESSED)
 
 
 def test_a_kind_the_registry_does_not_know_is_refused_by_name() -> None:
     item = bt.parse_types([{"tier": "t", "title": "T", "program": "p", "hand_drawn": True, "checks": [], "required": [{"id": "x", "kind": "no such kind", "band_ft": {}}]}])[0].required[0]
     with pytest.raises(ValueError, match="no such kind"):
         bt.classification(item)
+
+
+def test_a_kind_with_no_guesses_says_so_in_the_program(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 319: a kind item's class is `per statement` (its modal classifies each statement) and its why the kind's
+    guesses - or `nothing guessed` when the modal lists none."""
+    from dataclasses import replace
+
+    from l7r.diagram.interactive import compound_kinds
+
+    item = bt.parse_types([{"tier": "t", "title": "T", "program": "p", "hand_drawn": True, "checks": [], "required": [{"id": "x", "kind": "granary", "band_ft": {}}]}])[0].required[0]
+    monkeypatch.setitem(compound_kinds.COMPOUND_CLASSES, "granary", replace(compound_kinds.COMPOUND_CLASSES["granary"], guesses=()))
+    assert bt.classification(item) == ("per statement", "nothing guessed")

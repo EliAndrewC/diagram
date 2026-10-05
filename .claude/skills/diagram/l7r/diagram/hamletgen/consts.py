@@ -167,7 +167,7 @@ WEB_CLEARANCE = 28.0
 # thread, and a house sat 296 ft from any way with no route found at all. The two are now derived
 # from each other and cannot contradict again.
 WEB_FABRIC_GAP = 7.0
-"""Research: web lane off a plot - DEVIATION research/questions/0081-village-lanes.drawing.html: 7 ft from the lane's line, so a tread's edge may pass 5.5 ft off a fence"""
+"""Research: web lane off a plot - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: 7 ft from the lane's line, so a tread's edge may pass 5.5 ft off a fence"""
 
 # HOW FAR A TRACK KEEPS OFF A STEADING, as opposed to how far the WEB does (feature 128).
 #
@@ -201,7 +201,7 @@ TRACK_FABRIC_GAP = 16.0
 # its neighbors' plots were simply narrower than a lane-and-two-margins. A footpath is the one way on
 # the map that is walked in single file, and this is the width that says so.
 FOOTPATH_FABRIC_GAP = 4.0
-"""Research: footpath off a plot - research/questions/0081-village-lanes.drawing.html: 4 ft, single file"""
+"""Research: footpath off a plot - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: 4 ft, single file"""
 
 # HOW FAR A WEB LANE STAYS OFF THE CROP, THE TOE AND THE MARSH, in feet.
 #
@@ -228,7 +228,7 @@ WEB_SHADOW_FT = 30.0
 """Research: two ways read apart - CONVENTION: 30 ft at fit zoom"""
 
 MIN_WEB_GAP = 2.0 * WEB_FABRIC_GAP + 4.0  # 18 ft: both neighbors' clearance, plus the tread between them
-"""Research: least gap a lane threads - research/questions/0081-village-lanes.drawing.html: 7 ft clear of each garden fence and a 4 ft tread between, within the page's 3 ft footpath to 5 ft spine; the 2 ft parting is added by `growth.grow_gap`"""
+"""Research: least gap a lane threads - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: 7 ft clear of each garden fence and a 4 ft tread between, within the page's 3 ft footpath to 5 ft spine; the 2 ft parting is added by `growth.grow_gap`"""
 
 # THE REACH A FARMHOUSE IS ENTITLED TO: every house center must be within this of some drawn way
 # (`farmhouses_reach_a_way`). It is BUNDLE_PITCH, deliberately and by reference rather than by
@@ -237,13 +237,13 @@ MIN_WEB_GAP = 2.0 * WEB_FABRIC_GAP + 4.0  # 18 ft: both neighbors' clearance, pl
 # space by the adjoining house". The same number sets the web's lane spacing, so the requirement and
 # the geometry that satisfies it cannot drift apart.
 #
-# Grounding: research/questions/0081-village-lanes.html, and research/questions/0081-village-lanes.drawing.html - a house
+# Grounding: research/questions/0081-village-lanes.html, and research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html - a house
 # in a nucleated cluster is reached by a way, but for the few reached across a neighbor's land (feature 317), which
 # `ways/checks.py` `unreached_houses` counts reached through their neighbor. The previous 90 ft in
 # `lanes_reach_something` was flagged in future-work/ as a number nobody had justified; this one is
 # derived from a researched constant instead of chosen to make today's maps pass.
 WEB_REACH_FT = 100.0  # == BUNDLE_PITCH; asserted in tests rather than imported, since BUNDLE_PITCH is defined below
-"""Research: every farmhouse reached by a way - GUESS research/questions/0081-village-lanes.drawing.html: within 100 ft, how close counts as serving a house; but the few reached across a neighbor's land"""
+"""Research: every farmhouse reached by a way - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within 100 ft, how close counts as serving a house; but the few reached across a neighbor's land"""
 
 WAY_END_REACH_FT = 60.0
 """How near a lane's END must come to another way, a farmhouse or the field before the path is one somebody wore.
@@ -256,7 +256,7 @@ band was trimmed to a position the gate then failed, and nothing said so until a
 pair of numbers, which is how the drift survived: the check had been tightened and the placer had not. The bar itself
 is the check's - a path exists because somebody had a reason to walk to its end.
 
-Research: a lane end reaches something - research/questions/0081-village-lanes.drawing.html: within 60 ft"""
+Research: a lane end reaches something - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within 60 ft"""
 
 STEADING_ARRIVAL_FT = 12.0
 """How near a lane end must stand to a steading's own built ground - house, byre, shed, threshing yard or garden -
@@ -277,7 +277,7 @@ reaches a boundary records its last point 7-11 ft off it and cannot record it ne
 at 7.8 and 6.9 ft from the garden they stop at, Inashiro's byre arm at 8.4, against the next-nearest built ground on any
 of those three maps at 24 ft. Anything past 12 is a tread that stopped somewhere else.
 
-Research: a lane end arrives at a steading - research/questions/0081-village-lanes.drawing.html: within 12 ft of its built ground"""
+Research: a lane end arrives at a steading - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within 12 ft of its built ground"""
 
 
 # How close two drawn treads must come to count as ONE network (feature 166, lifted out of the retired
@@ -287,7 +287,7 @@ Research: a lane end arrives at a steading - research/questions/0081-village-lan
 # the same fact from opposite ends, and letting them disagree would let a lane be connected for one and
 # isolated for the other.
 LANE_JOIN_FT = 40.0
-"""Research: two lanes as one network - research/questions/0081-village-lanes.drawing.html: treads within 40 ft count as one network (the page joins ends within 25 ft)"""
+"""Research: two lanes as one network - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: treads within 40 ft count as one network (the page joins ends within 25 ft)"""
 
 # How far off a lane's centerline a frontage seat is offered. This is a PLACEMENT decision and is
 # deliberately not derived from LANE_CLEARANCE, which is the corridor rule: fronting a lane excuses
@@ -378,7 +378,12 @@ WEST_SUN_FT = 50.0
 # dike-pond differs from the rice polder only in its PARCEL FABRIC (`POLDER_FABRIC`), the overlay
 # applied after the grid is drawn, and the ring-canal crossing caps.
 FIELD_ARCHETYPES = ("valley_paddy", "polder_grid", "mulberry_dike_fishpond")
-"""Research: field forms drawn - research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html, research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html, research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html: valley fan, rice polder, dike-pond"""
+"""The field forms a hamlet may roll.
+
+Research:
+    field forms drawn - research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html, research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html, research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html: valley fan, rice polder, dike-pond
+    no jori grid rolled - DEVIATION research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html, research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: no plain ruled on the jori grid, so that form is never rolled
+"""
 POLDER_ARCHETYPES = ("polder_grid", "mulberry_dike_fishpond")
 """Research: dike-pond built as a polder - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html, research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html"""
 
@@ -422,7 +427,7 @@ POLDER_FABRIC: dict[str, dict[str, Any]] = {
 # is why the mosaic is the more common roll. `build_polder(mosaic=)` is the engine's dial: 0.0 is
 # the grid, 0.5 the mosaic Kuwabata was drawn with (the GM saw and accepted that map's ponds).
 POND_LAYOUTS = ("mosaic",)
-"""Research: dike-pond layout - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the mosaic only"""
+"""Research: dike-pond layout - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html, research/questions/0024-fish-fry-and-nursery-ponds-yumiao.html: the mosaic only; the chessboard grid is never rolled"""
 
 # THE FRY FORM - which nursery a dike-pond hamlet keeps (feature 280 M60, research/archetypes/200 and 172): the ordinary
 # delta hamlet raised grown fish and BOUGHT its fry, with no nursery ponds; the fry village of Jiujiang raised fry in seven
@@ -449,7 +454,8 @@ MANURE_FORMS = ("heap", "pit")
 # gathered racks are one region's form - this project's decision, as the regional wind is) draws none at the house.
 # research/questions/0016-rice-drying-racks-hasa-hasagi.html; the rule at research/questions/0016-rice-drying-racks-hasa-hasagi.drawing.html.
 HARVEST_WEATHERS = ("settled", "changeable")
-"""Research: harvest weather - research/questions/0016-rice-drying-racks-hasa-hasagi.drawing.html: declared, never rolled; racks by the house where changeable"""
+"""Research: harvest weather - research/questions/0016-rice-drying-racks-hasa-hasagi.drawing.html: declared, never rolled; racks by the house where changeable
+standing rack forms - research/questions/0016-rice-drying-racks-hasa-hasagi.html, research/questions/0016-rice-drying-racks-hasa-hasagi.drawing.html: no map draws Niigata's living alder rack posts on the bunds or Ehime's permanent roofed racks"""
 DEFAULT_HARVEST_WEATHER = "settled"
 """Research: harvest weather when undeclared - research/questions/0016-rice-drying-racks-hasa-hasagi.drawing.html: settled"""
 # TWO SUPPORTABLE ANSWERS BECOME A KNOB (constitution XII), not a picked one. Both were named by a
@@ -488,7 +494,7 @@ LEFTOVER_FORMS = ("rice", "pond")
 
 Research:
     dike-ponds throughout - research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html: a wholesale village
-    dike-pond leftover parcels - UNRESEARCHED: rice or none, even odds
+    dike-pond leftover parcels - UNRESEARCHED: rice or pond, even odds
 """
 POND_LAYOUT_MOSAIC = 0.5
 """Research: mosaic strength - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: 0.5, the lattice bent out of line"""
@@ -648,7 +654,7 @@ FAN_ASPECTS = (0.88, 0.95, 1.0, 1.08, 1.16)
 FALL_BEARINGS = (0.0, 45.0, 90.0, 135.0, 180.0, 225.0, 270.0, 315.0)
 """Research: land's fall - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: declared, else rolled among eight points"""
 CARDINAL_BEARINGS = (0.0, 90.0, 180.0, 270.0)  # the survey grid a polder is laid to; see plan_site
-"""Research: polder grid's orientation - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: laid to the four cardinal bearings, never tilted"""
+"""Research: polder grid's orientation - DEVIATION research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: laid to the four cardinal bearings, never tilted"""
 
 # WHICH WAY THE COLD WIND COMES FROM: THE NORTHWEST, UNLESS THE MAP DECLARES A LOCAL WIND (feature 261).
 #
@@ -687,7 +693,7 @@ WIND_BACK_MIN_DOT = 0.7071
 # convention on the record's words, not a finding. The against-the-belt copse reads as one wood with the belt when its
 # crowns stand within a crown or two of the belt's: 60 ft, the same kind of convention.
 COPSE_HOUSE_REACH_FT = 90.0
-"""Research: copse among the houses - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: within 90 ft of a house"""
+"""Research: copse among the houses - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: within 90 ft of a house"""
 COPSE_BELT_REACH_FT = 60.0
 """Research: copse against the belt - CONVENTION: within 60 ft of the belt, a crown or two; the 0071 drawing page has no belt-side copse"""
 
@@ -799,12 +805,15 @@ duplicated, and a duplicated table with no pin is a table that drifts.
 
 Research: drawn aspect a shape is declared at - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: round up to 2.0"""
 LANE_SKELETONS = ("spine", "T", "Y", "cross")
-"""Research: lane skeleton - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: spine, T, Y or cross"""
+"""Research:
+    lane skeleton - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: spine, T, Y or cross
+    lane along the water - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the fifth lane shape, a lane along the water, is never rolled; only spine, T, Y or cross
+"""
 # The two attested forms of making every house reachable. NOT weighted: the research supports both
 # equally, so an even roll is the honest one, and the two read differently enough at a glance
 # (a laid-out double row vs. a grown spine-and-alleys) to be worth a full half of the cohort each.
 LANE_WEBS = ("alleys", "back_lane")
-"""Research: lane web form - research/questions/0081-village-lanes.drawing.html: side lanes or a back lane, even odds"""
+"""Research: lane web form - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: side lanes or a back lane, even odds"""
 # THE SETTLEMENT FORM - which KIND of settlement this is, not merely what shape its cluster takes.
 # Three forms, and the roll is DELIBERATELY flatter than real-world frequency would be. Read that
 # sentence twice before re-weighting this tuple, because the departure is the decision.
@@ -898,8 +907,10 @@ FARM_WATERS = ("channel", "well")
 # temperate lowland hamlet usually has one - the research puts bamboo below the frost line as a
 # matter of course - and "none" is the cold-upland minority. Read the knob's note in `_knobs.py`.
 BAMBOO_FORMS = ("homestead", "homestead", "thicket", "both", "none")
-"""Research: where the bamboo stands - research/questions/0075-bamboo-groves-chikurin.drawing.html: farmsteads, a thicket, both or none"""
+"""Research: where the bamboo stands - research/questions/0075-bamboo-groves-chikurin.drawing.html: farmsteads, a thicket, both or none, weighted homestead 2 in 5 and
+    the others 1 in 5, where the registry's knob rolls the four evenly"""
 PLOT_SIZES = ("small_irregular", "medium", "medium", "large_block")
 """Research: paddy plot size - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: small 1, medium 2, large block 1"""
 GRAIN_DRIFTS = (-8, -4, 0, 0, 4, 8)
-"""Research: furrow drift - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: -8 to 8 degrees off the contour"""
+"""Research: furrow drift - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html, research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: -8 to 8 degrees off the contour, turning
+    only the dry fields' furrow rows (carve.py theta0); the paddy grain never drifts, and the registry's grain_drift runs -12 to 12"""

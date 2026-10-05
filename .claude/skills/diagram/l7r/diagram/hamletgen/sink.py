@@ -521,7 +521,7 @@ def pond_seat(plan: SitePlan, out: Pt, prx: float, pry: float, heading: Pt | Non
         pond in a pocket below the fields - research/questions/0060-field-drains-akusuiro.drawing.html: the pond at the field's foot
         sways across the fall - UNRESEARCHED: 0.9 and 1.8 long radii
         set-back limit - UNRESEARCHED: POND_SETBACK_LIMIT
-        ditch runs downhill, not over the brook - research/questions/0060-field-drains-akusuiro.drawing.html"""
+        ditch runs downhill, not over the brook - research/questions/0060-field-drains-akusuiro.drawing.html, research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html"""
     for sway in (0.0, -0.9 * prx, 0.9 * prx, -1.8 * prx, 1.8 * prx):
         moved = (out[0] - plan.fall[1] * sway, out[1] + plan.fall[0] * sway)
         back = pond_setback(plan, moved, prx, pry)
@@ -584,6 +584,8 @@ def stage_sink(s: Settlement, plan: SitePlan) -> None:
         brook rounded - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: bends on a radius
     """
     lay_sink(s, plan)
+    # the sink as DRAWN, after a pond the canvas cannot hold fell back to off-map: a choice on the title card (feature 319 plan D10)
+    s.M["meta"]["water_sink"] = plan.water_sink
     round_the_brooks(s)
 
 
@@ -595,6 +597,10 @@ def lay_sink(s: Settlement, plan: SitePlan) -> None:
         brook first, then off the frame - research/questions/0060-field-drains-akusuiro.drawing.html
         off-map route search - NONE: swings, junction distances and run lengths under route_refusals
         pond area - research/questions/0061-reservoir-ponds-tameike.drawing.html: held below two or three tenths of its paddy
+        pond's role - research/questions/0061-reservoir-ponds-tameike.drawing.html: the pond is laid at the drain's foot as the
+            field's sink, not as a reservoir that waters the paddy
+        pond bank form - research/questions/0061-reservoir-ponds-tameike.drawing.html: every bank bare; the second attested form,
+            a bank planted sparsely with mulberry and cudrania, is never rolled
         pond reference size - UNRESEARCHED: 116 x 74 ft radii at 15 households, scaled by the square root
         too far below, no pond - UNRESEARCHED: past POND_SETBACK_LIMIT the field drains off the frame
         reed fringe - research/questions/0061-reservoir-ponds-tameike.drawing.html: a fringe of reeds at the shore

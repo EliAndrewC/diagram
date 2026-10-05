@@ -4,5 +4,6 @@
  "variants": [
   "Mao commentary",
   "Mao"
- ]
+ ],
+ "cased": true
 }

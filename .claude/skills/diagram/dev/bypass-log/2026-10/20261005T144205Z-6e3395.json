@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-05T14:42:05Z",
+  "target": "record-checked",
+  "commit": "0da47ebae",
+  "why": "modal-gaps on modal-gaps:choice/lane_skeleton--T modal-gaps:choice/lane_skeleton--Y modal-gaps:choice/water_source_position--corner_NE modal-gaps:choice/water_source_position--corner_NW modal-gaps:choice/water_source_position--corner_SE modal-gaps:choice/water_source_position--corner_SW modal-gaps:choice/water_source_position--edge_E modal-gaps:choice/water_source_position--edge_N modal-gaps:choice/water_source_position--edge_S modal-gaps:choice/water_source_position--edge_W: feature 319 rollout: round 1 checked and applied, round 2 confirmed and applied what remained; one combined agent per modal under all three contracts"
+}

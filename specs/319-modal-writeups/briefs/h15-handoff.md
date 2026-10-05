@@ -1,0 +1,9 @@
+# Handoff - feature 319, H15 (session 1: write)
+
+All three were TRIMMED of repetition; none was split. No finding, note or absence note was removed; no engine code and no modal file changed.
+
+- SECTION=0081/village-lanes - now 19,937 bytes. Trimmed instead of split: splitting off the lanes among the houses would have moved about 15 engine `Research:` pointers (passage, access, gap_ways, _knobs, web, touch, clearance) and the lane_web/lane_skeleton modals' `Entry:` lines, which this brief rules out changing. Three repetitions went: the opening's 3-shaku sentence (it is the lead of its own bullet), the restated wheelbarrow and carriage evidence after "In neither country was an ordinary village lane a wide, two-lane road" (that sentence keeps both its notes), and the Manchu village sentence in "Was every house ... reached by a lane?" (its 2 to 4 m alleys are in the width bullet and the side-lane bullet; its two or three east-west main streets and north-south supplemental roads moved, with the same note, into the northern-plain bullet under the back lane).
+- SECTION=0091/samurai-residences-and-their-rooms-buke-yashiki - now 19,989 bytes: the well/privy/servants bullet no longer opens with "The servants at Matsue lived in the gate range", which is the bullet just above it, word for word, with the same note.
+- SECTION=0196/communal-wells-ido - now 19,921 bytes: the opening's "In the north of China a well could also water the crop" went, because the last section's opening paragraph and its windlass bullet say it (its note yannopoulos-2015-water-lifting-2 is still cited at the Ming-Qing windlass bullet).
+
+Also fixed: `specs/319-modal-writeups/plan.md:196` gave an elided pointer (an elided 0031 pointer), the one failure of `check-research-pointers.py`. It now names the full file.

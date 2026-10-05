@@ -64,7 +64,7 @@ def is_tree(ln: Mapping[str, Any]) -> bool:
     farms unreached.
 
     Research:
-        the access tree kept - research/questions/0081-village-lanes.drawing.html: every farmhouse served, the track out
+        the access tree kept - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every farmhouse served, the track out
             and the field way kept whole
         a row's streets kept - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: in a row
             village the road comes before the houses"""
@@ -94,7 +94,7 @@ def strands_only_ordinary(M: Mapping[str, Any], i: int) -> bool:
     could not fire: the door path it doubles is laid after it.
 
     Research:
-        one network - research/questions/0081-village-lanes.drawing.html: lanes stranded off the connector's network
+        one network - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: lanes stranded off the connector's network
             dropped where no farmhouse loses its way (`unreached_houses`, which counts a household reached across a neighbor's
             land reached through its neighbor's chain)"""
     lanes = M.get("lanes") or []
@@ -125,7 +125,7 @@ def through_a_building(run: Poly, quads: Sequence[Poly]) -> bool:
     CORNERS or center come near the tread, so a leg passing clean through a house between its corners reads as clear (a
     gable carry through a neighbor's house did, measured on a constructed pair) - a tree lane is asked this as well.
 
-    Research: nothing built on a lane - research/questions/0081-village-lanes.drawing.html: no leg through a building"""
+    Research: nothing built on a lane - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: no leg through a building"""
     for quad in quads:
         if any(point_in_poly(p[0], p[1], quad) for p in run):
             return True
@@ -206,7 +206,7 @@ def round_the_gable(pts: Poly, house: Mapping[str, Any], far: bool = False, keep
     last point and runs on from it instead - the stretch before it may carry other ways' junctions (cohort seed 31).
 
     Research:
-        a path reaches the front - research/questions/0081-village-lanes.drawing.html: a lane ends at the dooryard
+        a path reaches the front - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane ends at the dooryard
         round the nearer gable by its back corner - UNRESEARCHED"""
     th = math.radians(float(house.get("rot") or 0.0))
     c, sn = math.cos(th), math.sin(th)
@@ -369,7 +369,7 @@ def field_router(s: Any, brook: Poly) -> Callable[[Pt, Pt], Poly]:
         off the crop and marsh - research/questions/0081-village-lanes.drawing.html: the field, the dry hem and the marsh hard
         across ground cover - UNRESEARCHED: the commons and the groves are not walls to a path
         the brook at its fords - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html
-        nothing built on a lane - research/questions/0081-village-lanes.drawing.html: every steading part a wall but the
+        nothing built on a lane - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every steading part a wall but the
             path's own dooryard"""
     M = s.M
     hard = [[(float(a), float(b)) for a, b in f["outline"]] for f in M.get("fields") or [] if f.get("outline")]
@@ -407,4 +407,4 @@ FIELD_ROUTE_GAP_FT = BRANCH_WIDTH / 2.0 + 3.0
 by, and a foot to spare - at the footpath's own 4 ft the router drew a 5 ft path 4.3 ft off a house corner and the law
 (`fouled_segment`) refused it.
 
-Research: field way off the steadings - research/questions/0081-village-lanes.drawing.html: 5.5 ft, the half-tread and 3 ft"""
+Research: field way off the steadings - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: 5.5 ft, the half-tread and 3 ft"""

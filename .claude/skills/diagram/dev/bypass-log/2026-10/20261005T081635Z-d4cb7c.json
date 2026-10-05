@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-05T08:16:35Z",
+  "target": "record-checked",
+  "commit": "29845e09a",
+  "why": "translation-check on translation-check:0236#gloss translation-check:0236#nakajima-2006-huizhou translation-check:0236.drawing#kawazoe-2010-ryobosei-9: the \u7551\u5730 gloss is unchanged; re-owed only because its notes file changed elsewhere"
+}

@@ -3,5 +3,6 @@
  "def": "One of the numbered books a Chinese work is divided into, like a volume or chapter.",
  "variants": [
   "juan"
- ]
+ ],
+ "cased": true
 }

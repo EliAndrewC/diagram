@@ -8,15 +8,10 @@ the engine tags ink with a class KEY (`Settlement.add(..., cls=...)`), the page 
 every key present on the map, and nothing hamlet-specific is written anywhere - the explanations are
 per KIND, not per map.
 
-THE EXPLANATION IS THE DOCSTRING (feature 189, GM 2026-09-05: *"why [is] a modal's explanation stored
-in a string constant rather than being stored in a docstring ... the documentation within the code is
-literally the documentation that is visible in the user interface"*). Each class is a small Python
-class deriving from `Kind`; its docstring carries `What:`, `Why:`, `Note:` and an optional `Caveat:`,
-parsed at import into the `FeatureClass` the page reads. Two things follow. The gate's key is the
-docstring-stripped AST (`gate-stamp.py semantic_bytes`), so rewording an explanation no longer re-opens
-the nine-minute gate: it owes `make page-check` (the registry's tests and the browser test, ~26 s),
-which the `page` stamp demands at push. And both caches still see the edit - the generation cache hashes
-a class body by its source text and the render fingerprint hashes bytes - so the page regenerates.
+THE EXPLANATION IS A TAGGED TEXT, ONE FILE PER KIND (feature 189 made it the docstring; feature 319, plan D12, moved it
+to `assets/modals/`): `About:` paragraphs, an optional `Guesses:` list, an optional `Depiction:` and `Drawing:`, then the
+data tags `Name:` / `Covers:` / `Sources:` / `Entry:` and an optional `Form:`, parsed into the `FeatureClass` the page
+reads. Page content, not engine: an edit owes `make page-check`, not the gate.
 
 The vocabulary is the spec's FR-007 table (`specs/134-interactive-html-map/spec.md`), verbatim:
 those rows are the GM's judgment calls, listed so any can be overruled BY NAME. The distinguishing
@@ -24,9 +19,10 @@ text is keyed by SIBLING PAIR and is SYMMETRIC (if A names B, B names A - the fi
 round-1 finding), and the page includes a sibling paragraph only when BOTH classes are on the map,
 so a hamlet with no woodland commons never claims the windbreak differs from one.
 
-Every explanation is written FROM a `research/` entry and carries that entry's label; where the
-record is silent the entry says GUESS in so many words. The record's rule (in its README until the GM retired it,
-2026-10-01): "an entry that presents reasoning as a finding is the one failure".
+Every explanation is written FROM a `research/` entry. Constitution XII's classification is PER STATEMENT (feature 319,
+`dev/modals.md` M11-M13): a guess is a Guesses bullet, a deviation is said in the About text, a convention on the Depiction
+tab. The class-level label, its lead sentence and the caveat (features 156, 183) were retired with the old
+`What:`/`Why:`/`Note:`/`Caveat:` form; those tags and `Label:` are refused by name, so a stale file fails at import.
 
 `NOT_HIGHLIGHTED` is the pseudo-class for ink the GM has ruled OUT of highlighting (FR-002:
 "judgment calls to make about what things get highlighted and which things do not"). It is a
@@ -34,40 +30,23 @@ ruling, not an omission: the census in `page.py` reports only ink that carries N
 a `"-"` tag keeps the frame off the report while a forgotten tag still fails the gate.
 
 Research:
-    modal vocabulary plumbing - NONE: the FeatureClass, the labels, the lead sentence, the docstring parser
+    modal vocabulary plumbing - NONE: the FeatureClass and the modal text's parser
     highlighting rulings - CONVENTION: which ink the page lights on hover, and which it rules out
 """
 
 from __future__ import annotations
 
 import inspect
+import os
 import re
 from dataclasses import dataclass, field
-from typing import ClassVar, Literal, cast
+from typing import ClassVar
 
+from .. import conditions
 from ..content import content
 
 #: The page's fixed phrases and the rulings record - DATA in `assets/page-text.json` (feature 207; see `content.py`).
 _TEXT = content("page-text.json")
-
-#: FOUR labels since feature 183 (GM 2026-09-05). The GM's line between the two in the middle, verbatim:
-#: a DEVIATION is *"our fictional setting being different from the actual history and historical places
-#: it is based on"*; a map drawing CONVENTION is *"rendering glyphs on a map which are differently scaled
-#: or differently colored than what the features would be in order to make the map more readable and
-#: legible to human eyes."* Until then both wore `deviation`, and the bund beans' modal opened with "This
-#: is a deliberate deviation - ... the bead color is a deliberate deviation" - *"But this is not a
-#: 'deviation', This is a map rendering convention, and we should distinguish in our write up between
-#: these."* A convention's `label_note` is written in the GM's form (see `lead_sentence`).
-Label = Literal["accurate", "deviation", "convention", "guess"]
-
-#: The labels the PAGE announces. `accurate` is not among them, and that is the whole of feature 156's
-#: first change (GM 2026-08-29): *"I would like to not explicitly say that things are historically
-#: accurate when they are because I want the presumption to be that things are always historically
-#: accurate unless stated otherwise. In other words, we should call out liberties that we have taken."*
-#: A claim made about nearly every feature on the map carries no information; a liberty does. The
-#: three-way classification itself is UNCHANGED and still recorded on every class (constitution XII) -
-#: only its presentation changed, and it still reaches the page as `data-label`.
-ANNOUNCED: frozenset[Label] = frozenset({"deviation", "convention", "guess"})
 
 #: The pseudo-class of ink ruled out of highlighting. Recorded, never wrapped, never reported.
 NOT_HIGHLIGHTED = "-"
@@ -93,49 +72,20 @@ class FeatureClass:
     key: str  # the tag the engine writes; also the CSS token (`f-<key>` after slugging)
     name: str  # the class's display name - FR-007's row name, verbatim
     covers: str  # which manifest features it draws - documentation for the next reader
-    what: str  # what the thing IS
-    why: str  # why it stands where it does on the map
-    label: Label  # constitution XII: accurate | deviation | convention | guess
-    label_note: str  # the one line that justifies the label (a deviation says what deviates; a convention says what is drawn otherwise and what the real thing is; a guess says what is silent)
     sources: tuple[str, ...]  # `research/sources/` keys, or ("not recorded",)
     entry: str  # the research/ entry (file + heading) the text was written FROM
-    # THE LIBERTY HALF of `label_note`, and only that (feature 156, GM 2026-08-29). An `accurate`
-    # class's note usually says two things at once - which parts are READ, and which parts are a
-    # drawing convention, a derived number or a sub-guess. The first half is the accuracy claim in
-    # other words and the page no longer prints it; the second is exactly what the GM asked to have
-    # called out, so it survives, shown AFTER the what and the why instead of ahead of them. Always a
-    # verbatim substring of `label_note` (a registry test proves it, so the two cannot drift), and
-    # empty both for a class whose note discloses no liberty at all and for every `deviation` or
-    # `guess`, whose lead sentence already carries theirs.
-    caveat: str = ""
     siblings: dict[str, str] = field(default_factory=dict)  # sibling key -> how THIS class differs from it
-
-
-_LABEL_WORDS: dict[Label, str] = {cast(Label, label): words for label, words in _TEXT["label_words"].items()}
-
-#: What a convention's lead-in is (feature 183): the GM's own example opens *"Note: we have rendered the
-#: bund beans as larger and darker in color than they actually are, in order to make them visible on the
-#: map at this this scale. <More information about the actual size and color goes here.>"* - so the note
-#: itself is written as that sentence and this is all that precedes it.
-CONVENTION_LEAD: str = _TEXT["convention_lead"]
-
-
-def label_phrase(label: Label) -> str:
-    """The words the modal uses for a label - constitution XII's three, in the GM's own phrasing."""
-    return _LABEL_WORDS[label]
-
-
-def lead_sentence(label: Label, note: str) -> str:
-    """The sentence a modal OPENS with, or "" when there is nothing to announce.
-
-    Only a liberty is announced (`ANNOUNCED`). An `accurate` class returns "" and its modal leads
-    with what the feature IS - the presumption of accuracy the GM asked for, which is enforced HERE,
-    at the one place the sentence is built, rather than by asking every caller to remember it."""
-    if label not in ANNOUNCED:
-        return ""
-    if label == "convention":
-        return CONVENTION_LEAD + note
-    return "This is " + _LABEL_WORDS[label] + (" - " + note if note else ".")
+    # THE ABOUT FORM (feature 319, GM 2026-10-03: *"we could have an overview tab and a guesses tab and a references tab"*,
+    # the first named "About"). `about` is the About tab's paragraphs, `guesses` the Guesses tab's bullets (empty: no tab),
+    # `form` which guidelines hold it - `dev/modals.md` (standard) or `dev/modals-particular.md` (particular). There is no
+    # class-level label: the classification is per statement (`dev/modals.md` M11-M13).
+    about: tuple[str, ...] = ()
+    guesses: tuple[str, ...] = ()
+    form: str = "standard"
+    # THE DEPICTION TAB (feature 319 plan D13, GM 2026-10-04): how the map draws the thing - its paragraphs, and the "how our
+    # maps draw it" pages it rests on (`Drawing:`, in the form `Entry:` takes), which leave the References tab
+    depiction: tuple[str, ...] = ()
+    drawing: str = ""
 
 
 def slug(key: str) -> str:
@@ -151,20 +101,38 @@ def slug(key: str) -> str:
 
 # ---- the class form (feature 189) -----------------------------------------------------------------
 
-#: The prose tags, then the DATA tags (feature 207: `Name:`, `Covers:`, `Label:`, `Sources:`, `Entry:` moved
-#: from class attributes into the docstring, so a relabeling or a repointed research entry is a page-content
-#: edit like any rewording - `make page-check`, not the gate; only `key` stays code, being what the engine
-#: writes on the ink and what the stylesheet matches).
-_TAGS: tuple[str, ...] = ("What", "Why", "Note", "Caveat", "Name", "Covers", "Label", "Sources", "Entry")
-_TAG_LINE = re.compile(r"^(What|Why|Note|Caveat|Name|Covers|Label|Sources|Entry):\s?(.*)$")
-_DATA_TAGS: tuple[str, ...] = ("Name", "Covers", "Label", "Sources", "Entry")
+#: The prose tags, then the DATA tags (feature 207: the data moved from class attributes into the text, so a repointed
+#: research entry is a page-content edit like any rewording - `make page-check`, not the gate; only `key` stays code, being
+#: what the engine writes on the ink and what the stylesheet matches).
+_TAGS: tuple[str, ...] = ("About", "Guesses", "Depiction", "Name", "Covers", "Sources", "Entry", "Drawing", "Form")
+"""Research: modal vocabulary plumbing - NONE"""
+_DATA_TAGS: tuple[str, ...] = ("Name", "Covers", "Sources", "Entry", "Drawing", "Form")
+"""Research: modal vocabulary plumbing - NONE"""
+#: THE RETIRED TAGS (feature 319): the old form's prose and its class-level label. Still recognized so a file that carries
+#: one is REFUSED by name, never read as part of the paragraph above it - don't drop them from the pattern, because an
+#: unrecognized `Why:` line would silently join the About text.
+_RETIRED: tuple[str, ...] = ("What", "Why", "Note", "Caveat", "Label")
+"""Research: modal vocabulary plumbing - NONE"""
+_TAG_LINE = re.compile(r"^(" + "|".join(_TAGS + _RETIRED) + r"):\s?(.*)$")
+"""Research: modal vocabulary plumbing - NONE"""
+#: the tags whose blank lines are paragraph breaks (the About and Depiction tabs)
+_PARAGRAPHED: frozenset[str] = frozenset({"About", "Depiction"})
+"""Research: modal vocabulary plumbing - NONE"""
+#: The required data tags; `Form:` is optional (default `standard`) and `Drawing:` too (plan D13).
+_ABOUT_DATA_TAGS: tuple[str, ...] = ("Name", "Covers", "Sources", "Entry")
+"""Research: modal vocabulary plumbing - NONE"""
+FORMS: frozenset[str] = frozenset({"standard", "particular"})
+"""Research: modal vocabulary plumbing - NONE"""
+#: A paragraph break inside `About:` - a blank line, kept (only there) so the About tab has paragraphs (`dev/modals.md` M2).
+_PARA = "\n\n"
+"""Research: modal vocabulary plumbing - NONE"""
 
 
 def parse_explanation(doc: str | None, name: str) -> dict[str, str]:
-    """The tagged sections of a `Kind`'s docstring: `What:`, `Why:`, `Note:` and an optional `Caveat:`,
-    each tag at the start of a line, each value running to the next tag, wrapped lines joined with one
-    space. A missing docstring or a missing required tag raises, naming the class - a registry error is
-    loud, never a blank modal (spec 189 FR-001)."""
+    """The tagged sections of a modal's text (`_TAGS`), each tag at the start of a line, each value running to the next
+    tag, wrapped lines joined with one space. A missing text or a missing `About:` raises, naming the class - a registry
+    error is loud, never a blank modal (spec 189 FR-001).
+    Research: modal vocabulary plumbing - NONE"""
     if not doc or not doc.strip():
         raise ValueError(f"{name}: the explanation is the docstring, and there is none")
     out: dict[str, list[str]] = {}
@@ -177,15 +145,78 @@ def parse_explanation(doc: str | None, name: str) -> dict[str, str]:
             out[cur] = [m.group(2)] if m.group(2) else []
             continue
         if not line:
+            if cur in _PARAGRAPHED and out[cur]:
+                out[cur].append("")  # a paragraph break, kept for the About tab
             continue
         if cur is None:
-            raise ValueError(f"{name}: text before the first tag ({line[:40]!r}) - every line belongs to What/Why/Note/Caveat")
+            raise ValueError(f"{name}: text before the first tag ({line[:40]!r}) - every line belongs to a tag, About: first")
         out[cur].append(line)
-    got = {k: " ".join(v).strip() for k, v in out.items()}
-    for required in ("What", "Why", "Note"):
-        if not got.get(required):
-            raise ValueError(f"{name}: the docstring has no {required}: section")
+    got = {k: _join(k, v) for k, v in out.items()}
+    if not got.get("About"):
+        raise ValueError(f"{name}: the docstring has no About: section")
     return got
+
+
+def _join(tag: str, lines: list[str]) -> str:
+    """One tag's value: wrapped lines joined with one space; `About:` keeps its paragraph breaks and `Guesses:` its
+    bullets, one to a line.
+    Research: modal vocabulary plumbing - NONE"""
+    if tag in _PARAGRAPHED:
+        paras: list[list[str]] = [[]]
+        for line in lines:
+            if line:
+                paras[-1].append(line)
+            elif paras[-1]:
+                paras.append([])
+        return _PARA.join(" ".join(p) for p in paras if p).strip()
+    if tag == "Guesses":
+        bullets: list[list[str]] = []
+        for line in lines:
+            if line.startswith("- ") or not bullets:
+                bullets.append([line])
+            else:
+                bullets[-1].append(line)
+        return "\n".join(" ".join(b) for b in bullets).strip()
+    return " ".join(lines).strip()
+
+
+def about_paragraphs(text: str) -> tuple[str, ...]:
+    """The About tab's paragraphs from a parsed `About:` value.
+    Research: modal vocabulary plumbing - NONE"""
+    return tuple(" ".join(p.split()) for p in text.split(_PARA) if p.strip())
+
+
+def guess_bullets(text: str) -> tuple[str, ...]:
+    """The Guesses tab's bullets from a parsed `Guesses:` value, each without its `- `.
+    Research: modal vocabulary plumbing - NONE"""
+    return tuple(line[2:].strip() for line in text.splitlines() if line.strip())
+
+
+#: WHERE A MODAL'S TEXT LIVES (feature 319, plan D12, GM 2026-10-03: *"Yes, I agree with that. So please go ahead and make
+#: that change now"*): one file per kind, `assets/modals/<hamlet|sheet>/<slug of its key>.md`, in the docstring's tagged form.
+#: It was the class docstring (feature 189); editing one modal then meant reading a module of 14 to 27, and a check could not
+#: quote a docstring's line breaks. Under `assets/` the text is page content - gate-stamp's `page` area, the render
+#: fingerprint, a gen child's recorded reads - exactly as the glossary is.
+MODALS_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "assets", "modals")
+"""Research: modal vocabulary plumbing - NONE"""
+
+
+def modal_path(module: str, key: str) -> str:
+    """The modal file of the kind `key` defined in `module`: a Mode A sheet's kinds (`compound_kinds`) under `sheet/`, the
+    hamlet vocabulary under `hamlet/` - two registries, so a sheet's `well` and a hamlet's `well` are two files.
+    Research: modal vocabulary plumbing - NONE"""
+    registry = "sheet" if ".compound_kinds" in module else "hamlet"
+    return os.path.join(MODALS_DIR, registry, slug(key) + ".md")
+
+
+def modal_text(cls: type) -> str | None:
+    """A kind's modal text: its file, or - for a class with no file, a test's probe - its docstring.
+    Research: modal vocabulary plumbing - NONE"""
+    path = modal_path(cls.__module__, getattr(cls, "key", ""))
+    if os.path.isfile(path):
+        with open(path, encoding="utf-8") as fh:
+            return fh.read()
+    return cls.__doc__
 
 
 class Kind:
@@ -203,25 +234,64 @@ class Kind:
 
     @classmethod
     def feature(cls) -> FeatureClass:
-        """The `FeatureClass` the page reads, built from the class attributes and the parsed docstring."""
-        parts = parse_explanation(cls.__doc__, cls.__name__)
-        for tag in _DATA_TAGS:
-            if not parts.get(tag):
-                raise ValueError(f"{cls.__name__}: the docstring has no {tag}: section")
-        if parts["Label"] not in _LABEL_WORDS:
-            raise ValueError(f"{cls.__name__}: Label: {parts['Label']!r} is not one of {sorted(_LABEL_WORDS)}")
-        return FeatureClass(
-            key=cls.key,
-            name=parts["Name"],
-            covers=parts["Covers"],
-            what=parts["What"],
-            why=parts["Why"],
-            label=cast(Label, parts["Label"]),
-            label_note=parts["Note"],
-            sources=tuple(s.strip() for s in parts["Sources"].split(",") if s.strip()),
-            entry=parts["Entry"],
-            caveat=parts.get("Caveat", ""),
-        )
+        """The `FeatureClass` the page reads, built from the class attributes and the parsed docstring.
+        Research: modal vocabulary plumbing - NONE"""
+        return _about_feature(cls.__name__, cls.key, parse_explanation(modal_text(cls), cls.__name__))
+
+
+#: THE OLDER MAPS ARE NEVER MENTIONED (the GM, 2026-10-04, of the garden's "Except on the older hand-drawn maps": *"by the time
+#: any one other than me looks at these, then those older hand-drawn maps will no longer exist. They will have all been replaced
+#: by scripted maps ... that can probably be a mechanical check"*). The ways a write-up has named them: older, earlier, legacy,
+#: frozen or hand-drawn/-authored MAPS, and the frozen or legacy POOL. A sheet's "hand-drawn plans" are building plans, which
+#: stay, so the pattern wants "map" or "pool"; `dev/modals.md` M21.
+OLDER_MAPS = re.compile(r"\b(?:older|earlier|legacy|frozen|hand[- ](?:drawn|authored|made))\b(?:[ -]\w+){0,2}[ -](?:maps?|pool)\b", re.I)
+"""Research: older maps unmentioned - NONE"""
+
+
+def _about_feature(name: str, key: str, parts: dict[str, str]) -> FeatureClass:
+    """A kind's `FeatureClass` from its parsed text (feature 319): its paragraphs, its guesses, no feature-level label
+    (`dev/modals.md` M11). The retired tags are refused rather than ignored, so a stale file fails at import.
+    Research: modal vocabulary plumbing - NONE"""
+    for tag in _ABOUT_DATA_TAGS:
+        if not parts.get(tag):
+            raise ValueError(f"{name}: the docstring has no {tag}: section")
+    if "Label" in parts:
+        raise ValueError(f"{name}: the About form takes no Label: - a guess is a bullet under Guesses: (dev/modals.md M11)")
+    old = [t for t in _RETIRED if t in parts and t != "Label"]
+    if old:
+        raise ValueError(f"{name}: the About form replaces What/Why/Note/Caveat - remove {', '.join(t + ':' for t in old)}")
+    form = parts.get("Form", "standard")
+    if form not in FORMS:
+        raise ValueError(f"{name}: Form: {form!r} is not one of {sorted(FORMS)}")
+    if ".drawing.html" in parts["Entry"]:
+        raise ValueError(f"{name}: a 'how our maps draw it' page belongs under Drawing:, not Entry: (the Depiction tab - dev/modals.md D-rules)")
+    for tag in ("About", "Guesses", "Depiction"):
+        hit = OLDER_MAPS.search(parts.get(tag, ""))
+        if hit:
+            raise ValueError(
+                f"{name}: {tag}: names the older maps ({hit.group(0)!r}) - they will all be scripted before anyone else reads this; say what the scripted maps do and drop the exception (dev/modals.md M21)"
+            )
+    raw_guesses = parts.get("Guesses", "")
+    if raw_guesses and not all(line.startswith("- ") for line in raw_guesses.splitlines()):
+        raise ValueError(f"{name}: each guess is a bullet - start every line under Guesses: with '- '")
+    # A KNOB CONDITION (FR-015, plan D14) opens an item: its form is checked here, its knob and values when a page is written
+    for item in (*about_paragraphs(parts["About"]), *about_paragraphs(parts.get("Depiction", "")), *guess_bullets(raw_guesses)):
+        try:
+            conditions.split(item)
+        except ValueError as err:
+            raise ValueError(f"{name}: {err}") from None
+    return FeatureClass(
+        key=key,
+        name=parts["Name"],
+        covers=parts["Covers"],
+        sources=tuple(s.strip() for s in parts["Sources"].split(",") if s.strip()),
+        entry=parts["Entry"],
+        about=about_paragraphs(parts["About"]),
+        depiction=about_paragraphs(parts.get("Depiction", "")),
+        drawing=parts.get("Drawing", ""),
+        guesses=guess_bullets(raw_guesses),
+        form=form,
+    )
 
 
 def install_siblings(defs: list[FeatureClass], pairs: dict[tuple[str, str], str]) -> dict[str, FeatureClass]:

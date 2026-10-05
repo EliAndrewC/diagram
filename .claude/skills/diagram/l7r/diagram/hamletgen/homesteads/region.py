@@ -55,7 +55,7 @@ class SeatRegion:
 
         Research:
             no way of its own across a water course within its clearance - UNRESEARCHED: the courses painted onto lane ground at the corridor test's own clearance
-            a way of its own decided on lane ground - research/questions/0081-village-lanes.drawing.html: a dooryard that opens onto the ground the lanes are laid in, connected to the track out
+            a way of its own decided on lane ground - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a dooryard that opens onto the ground the lanes are laid in, connected to the track out
         """
         self.s, self.window, self.cell = s, window, cell
         fg = getattr(s, "_free_ground", None)
@@ -111,7 +111,7 @@ class SeatRegion:
     def _reached(self) -> tuple[Any, Any]:
         """The reachable cells and their summed-area table, built together once per change to what stands.
 
-        Research: a way of its own decided on lane ground - research/questions/0081-village-lanes.drawing.html: reached ground flooded from the open ground on the track out's side
+        Research: a way of its own decided on lane ground - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: reached ground flooded from the open ground on the track out's side
         """
         if self._reach is None:
             import numpy as np
@@ -139,7 +139,7 @@ class SeatRegion:
         (`fit._parts_fit`, `place._place_bundle_nucleated`), a tight seat only where it does not (`passage.landlocked`). A yard
         past the window's edge is counted open (the window bounds the rasters' cost, never an answer).
 
-        Research: a way of its own - research/questions/0081-village-lanes.drawing.html: a household whose yard opens onto the ground the lanes are laid in, connected to the way out; one with none is the custom's land reached across a neighbor's
+        Research: a way of its own - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a household whose yard opens onto the ground the lanes are laid in, connected to the way out; one with none is the custom's land reached across a neighbor's
         """
         self.sync()
         boxes = geom.get("boxes") or {}
@@ -157,7 +157,7 @@ class SeatRegion:
         installed - its yard's box touching the reachable ground. A seat outside the region's window is offered unjudged (feature
         318: the window bounds the rasters' cost, never where a house may stand; the placer's own tests decide).
 
-        Research: a way of its own - research/questions/0081-village-lanes.drawing.html: a seat is offered only where its yard opens onto the ground the lanes are laid in, connected to the track out
+        Research: a way of its own - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a seat is offered only where its yard opens onto the ground the lanes are laid in, connected to the track out
         """
         import numpy as np
 
@@ -255,7 +255,7 @@ def anchor_in_window(anchor: Any, window: tuple[float, float, float, float], cel
     the open ground on the way out's side at its edge (feature 320: an anchor wholly off the canvas seeded nothing, and no
     seat counted open). None where the bearing out never enters the window.
 
-    Research: a way of its own decided on lane ground - research/questions/0081-village-lanes.drawing.html: a dooryard that opens onto the ground the lanes are laid in, on the way out's side"""
+    Research: a way of its own decided on lane ground - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a dooryard that opens onto the ground the lanes are laid in, on the way out's side"""
     c, near, far = ((float(q[0]), float(q[1])) for q in anchor)
     box = (window[0] + cell, window[1] + cell, window[2] - cell, window[3] - cell)
     span = _clip(near, far, box)

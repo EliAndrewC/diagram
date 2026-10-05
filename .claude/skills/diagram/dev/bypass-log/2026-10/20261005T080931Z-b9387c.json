@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-05T08:09:31Z",
+  "target": "record-checked",
+  "commit": "4984991f1",
+  "why": "source-reader on source-reader:0236#nakajima-2006-huizhou: only the word 'brothers' (\u5144\u5f1f\u304c in the stored original) was restored to the English translation, at quote-check's reading of the J-STAGE PDF's p.8 this round; the original and the claim are unchanged"
+}

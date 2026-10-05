@@ -109,7 +109,7 @@ def _bridge_collinear_breaks(s: Settlement, hard: list[Poly], walls: Sequence[Po
         a short gap closed at any bearing - research/questions/0081-village-lanes.drawing.html: ends that nearly meet are joined - a break of `_LANE_JOIN_FT` (30 ft) or less, whatever the two ways' bearings
         a bridge as direct as a path - UNRESEARCHED: refused where its route runs over `_PATH_DIRECTNESS` (2) times the gap
         bridge width - UNRESEARCHED: drawn at the wider of the two ways' widths
-        bridge clearance fallback - DEVIATION research/questions/0081-village-lanes.drawing.html: 4 ft off the fabric where 7 ft finds no route"""
+        bridge clearance fallback - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: 4 ft off the fabric where 7 ft finds no route"""
     made = 0
     # TWELVE PASSES, not four. Each closure adds a lane whose own ends sit beside existing ones, so a
     # map with several breaks needs several rounds - and Sawada ran out at four with three breaks
@@ -262,10 +262,11 @@ def _join_orphan_ways(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wa
     map (`WebRefused`).
 
     Research:
-        orphan joined to the network - research/questions/0081-village-lanes.drawing.html: one network
+        orphan joined to the network - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: one network
         link crosses the brook at a crossing place - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html
         no out-and-back over the brook - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: a link crossing the brook twice is refused
-        link width - research/questions/0081-village-lanes.drawing.html: the width of the way it joins"""
+        link width - research/questions/0081-village-lanes.drawing.html: the width of the way it joins
+        orphan link directness - UNRESEARCHED: a link up to `_LINK_DIRECTNESS` (4) times the gap"""
     made = 0
     for _ in range(6):
         ways = [[(float(x), float(y)) for x, y in ln["pts"]] for ln in s.M.get("lanes", [])]
@@ -454,8 +455,8 @@ def _sweep_doubled_remnants(s: Settlement) -> int:
 
     Research:
         doubled lane dropped - CONVENTION: a lane within 8 ft of another for half its length reads as one band
-        no house stranded - research/questions/0081-village-lanes.drawing.html: every farmhouse is served but the few reached across a neighbor's land, owed none (`geom.lane_houses`)
-        web kept one network - research/questions/0081-village-lanes.drawing.html
+        no house stranded - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every farmhouse is served but the few reached across a neighbor's land, owed none (`geom.lane_houses`)
+        web kept one network - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html
     """
     lanes = s.M.get("lanes") or []
     ways = [[(float(x), float(y)) for x, y in (ln.get("pts") or [])] for ln in lanes]
@@ -522,7 +523,7 @@ def _sweep_steading_fouls(s: Settlement) -> int:
     `_sweep_debris`'s rule to finish. A house left unserved is `farmhouses_reach_a_way`'s honest verdict; a
     tread drawn across someone's floor is a map that looks finished and is wrong.
 
-    Research: nothing built on a lane - research/questions/0081-village-lanes.drawing.html: an end on a farmhouse is pulled back
+    Research: nothing built on a lane - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: an end on a farmhouse is pulled back
     """
     lanes = s.M.get("lanes") or []
     fixed = 0
@@ -664,10 +665,11 @@ def _sweep_dangling_ends(s: Settlement, fields: Sequence[Poly] = ()) -> int:
     `_sweep_debris`'s rule to finish. A connector is exempt: it leaves the map by design.
 
     Research:
-        lane end reaches something - research/questions/0081-village-lanes.drawing.html: pulled back until it serves a way, the field or a house - never one reached across a neighbor's land, owed none (`geom.lane_houses`)
-        end carried to the dooryard - research/questions/0081-village-lanes.drawing.html: a lane a house needs ends at its dooryard - never a household reached across a neighbor's land, owed none (`geom.lane_houses`)
+        lane end reaches something - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: pulled back until it serves a way, the field or a house - never one reached across a neighbor's land, owed none (`geom.lane_houses`)
+        end carried to the dooryard - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane a house needs ends at its dooryard - never a household reached across a neighbor's land, owed none (`geom.lane_houses`)
         dooryard carry reach - GUESS: up to 120 ft (2 x _REACH_FT)
-        a whittled lane emptied - UNRESEARCHED: a lane pulled back under `_WEB_MIN_FT` (30 ft) is emptied, for the debris sweep to finish"""
+        a whittled lane emptied - UNRESEARCHED: a lane pulled back under `_WEB_MIN_FT` (30 ft) is emptied, for the debris sweep to finish
+        a house served - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a house within `_SERVE_FT` (100 ft) of a lane counts as served, so the lane is kept, where the page says 60 ft"""
     lanes = s.M.get("lanes") or []
     owed = lane_houses(s.M)  # the houses an end serves, is kept for or carried to: a household reached across a yard is owed none (feature 317)
     # THE ONE END RULE (269 B04/B17): `end_serves`, the body the trims and the gate read - this sweep kept its own copy, and
@@ -777,7 +779,7 @@ def carry_to_dooryard(q: Pt, houses: Sequence[Pt], steadings: Sequence[Sequence[
     the thin east band of the farm it served).
 
     Research:
-        end carried to the dooryard - research/questions/0081-village-lanes.drawing.html: stopping short of the wall
+        end carried to the dooryard - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: stopping short of the wall
         grove band not crossed - research/questions/0033-row-villages-resson.drawing.html: a farm's grove is walked round"""
     near = [h for h in houses if 0.0 < math.dist(q, h) <= reach]
     if not near:
@@ -813,8 +815,10 @@ def _sweep_debris(s: Settlement) -> int:
     because a stranded house is the worse failure and `farmhouses_reach_a_way` should say so.
 
     Research:
-        isolated fragment dropped - research/questions/0081-village-lanes.drawing.html: one network
-        no house stranded - research/questions/0081-village-lanes.drawing.html: every farmhouse is served but the few reached across a neighbor's land, owed none (`geom.lane_houses`)"""
+        isolated fragment dropped - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: one network
+        no house stranded - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every farmhouse is served but the few reached across a neighbor's land, owed none (`geom.lane_houses`)
+        debris length - UNRESEARCHED: a lone fragment dropped only under `_WEB_MIN_FT` (30 ft)
+        a house served - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a house within `_SERVE_FT` (100 ft) of a lone fragment keeps it, where the page says 60 ft"""
     lanes = s.M.get("lanes") or []
     ways = [[(float(x), float(y)) for x, y in ln.get("pts") or []] for ln in lanes]
     live = [i for i in range(len(lanes)) if len(ways[i]) >= 2]

@@ -63,14 +63,14 @@ def test_the_prose_key_is_derived_and_ignores_the_data_tags():
     sys.path.insert(0, str(SKILL))
     from l7r.diagram.interactive.classes import _base
 
-    def src(why: str, entry: str) -> str:
-        return f'class K:\n    """\n    What: a thing.\n    Why: {why}\n    Note: GUESS: a note.\n    Name: k\n    Covers: c\n    Label: guess\n    Sources: s\n    Entry: {entry}\n    """\n\n    key = "k"\n'
+    def src(about: str, entry: str) -> str:
+        return f'class K:\n    """\n    About: a thing, {about}\n\n    Guesses:\n    - a guess.\n\n    Name: k\n    Covers: c\n    Sources: s\n    Entry: {entry}\n    """\n\n    key = "k"\n'
 
     base = eo.classes_in(src("because.", "research/questions/0001-a.html"), _base)
     same_prose = eo.classes_in(src("because.", "research/questions/0002-b.html"), _base)
     moved_prose = eo.classes_in(src("for another reason.", "research/questions/0001-a.html"), _base)
     assert base == same_prose, "a data-tag edit must leave the prose key untouched"
-    assert base != moved_prose, "a Why: edit must move it"
+    assert base != moved_prose, "an About: edit must move it"
 
 
 def test_the_class_parser_still_finds_the_registry():
@@ -80,8 +80,11 @@ def test_the_class_parser_still_finds_the_registry():
     from l7r.diagram.interactive.classes import CLASSES, _base
 
     found: dict[str, str] = {}
+    repo = SKILL.parents[2]
     for path in sorted((SKILL / "l7r/diagram/interactive/classes").glob("*.py")):
-        found |= eo.classes_in(path.read_text(encoding="utf-8"), _base)
+        # feature 319 (plan D12): a kind's text is its modal file, read by repository-relative path
+        rel = str(path.relative_to(repo))
+        found |= eo.classes_in(path.read_text(encoding="utf-8"), _base, read=lambda f: (repo / f).read_text(encoding="utf-8") if (repo / f).is_file() else None, py=rel)
     assert set(found) == set(CLASSES), "the ast parser and the engine disagree about what a Kind is"
     assert len(found) > 40, f"only {len(found)} classes parsed - the surface has gone quiet"
 

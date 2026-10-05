@@ -385,6 +385,8 @@ class GroundCoverMixin:
 
         Research:
             commons beyond the grove - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: open scrub and rough grazing, not forest
+            scrub ground color - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: the scrub's tufts drawn over a solid straw-gold ground
+            grass ground forms - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: one form only, the scrub past the grove; the floodplain and the small grass plot beside one paddy are never drawn or rolled
             coppice stocking - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: one crown to COMMONS_SPACING_FT squared, COMMONS_CROWN_R_FT across
             no crown under another - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: a crown centered under one already seated is not drawn
             scrub pines - research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html: one to 6,000 sq ft, at least two, none on pasture
@@ -394,6 +396,7 @@ class GroundCoverMixin:
             crown and pine ink - CONVENTION: flat crown discs, a scraggly three-branch pine
             claimed but undrawn - CONVENTION: a bare render records the ground and draws nothing
             woodland no-build - UNRESEARCHED: a woodland parcel made no-build ground
+            woodland stocked to read - CONVENTION: a woodland parcel carries at least `WOODLAND_MIN_CROWNS` (5) crowns, so it reads as a wood
             no crown in a yard's sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: no coppice crown or scrub pine in a yard's or bed's sun"""
         # EVERY RECORDED MARSH IS A KEEP-OUT FOR SCRUB (GM 2026-08-26, feature 133 T12: *"do we mean to
         # show ... small pine trees and such growing out of the marshland in exactly the same pattern as

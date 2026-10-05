@@ -4,7 +4,7 @@ understanding ... you could keep it by having it be hidden. Like, this is in an 
 a human reading this later, you should not refer to this as a GM ruling. Rather, you should describe it the way this
 project has chosen to render the variety of settlements that we know existed historically."*).
 
-A modal IS its class's docstring (feature 189), so its visible text is every docstring field a reader sees. A ruling,
+A modal IS its kind's modal text (features 189, 319), so its visible text is every tab a reader sees. A ruling,
 its date and its words belong in a `#` comment above the class, which the page never shows; the visible text says what
 the decision is, as this project's choice. The setting's own notes are "the setting's notes", not the GM's.
 """
@@ -13,7 +13,7 @@ from __future__ import annotations
 
 import re
 
-from l7r.diagram.interactive.classes import CLASSES
+from l7r.diagram.interactive.classes import CLASSES, FeatureClass
 from l7r.diagram.interactive.compound_kinds import COMPOUND_CLASSES
 
 _GM = re.compile(r"\bGM\b")
@@ -24,8 +24,8 @@ def visible_gm(text: str) -> list[str]:
     return [s.strip() for s in re.split(r"(?<=[.!?])\s+", text) if _GM.search(s)]
 
 
-def _visible(fc: object) -> str:
-    return " ".join(str(getattr(fc, f, "") or "") for f in ("what", "why", "label_note", "caveat", "name"))
+def _visible(fc: FeatureClass) -> str:
+    return " ".join([fc.name, *fc.about, *fc.guesses, *fc.depiction])
 
 
 def test_no_modal_shows_a_ruling_of_the_gm() -> None:

@@ -1,0 +1,42 @@
+- intro-check 0244: NO-INTRO-NEEDED 1 - recorded
+- entry-drift Door (0117): IN-STEP 1 - recorded; no modal edit owed (the farm back-entrance attestation leaves the compound kitchen's second door a guess)
+- translation-check 0244: FAITHFUL 9 - recorded (the two source typos 本舞 and 牡嘱 are the page's own, kept)
+- translation-check 0117: FAITHFUL 9, LOOSE 1 - 'locked' became 'secured'; recorded
+- record-format 0029: VOCABULARY 4, SESSION NOTE 1 - Meiji teens and rizi-pisciculture glossed, net-owner's fishing house; the grounds-note rewrite rejected (it broke the required 'no source is owed:' form; record-format.md now says so)
+- record-format 0117: SESSION NOTE 1 - the door check moved to a comment; the drawn-door widths softened to 'mostly'
+- record-format 0244: VOCABULARY 2 - konnyaku glossed, 'storehouse style' a variant of dozo-zukuri
+- quote-check 0029 (4 batches, unfootnoted owed): PARTIAL 11, DOES-NOT-SUPPORT 1 - magariya to Iwate, Huizhou roofs, the quarter-turn cut, the 67-degree footnote moved, Mumun-period, fengshui reading labeled, the Hirayama house's place and date quoted, the rice-and-bund line and 'no two farmsteads' cut, the bunto line widened
+- quote-check 0117: PARTIAL 4 - the Ikegami house a folk house of a farming district (quoted), Morse's chair quoted from the title page, the big door 'such as a board door', pivot-hung leaves
+- quote-check 0244: PARTIAL 1, unfootnoted 2 - the same Ikegami and Morse fixes; fn-4's DIFFERS is a line-break artifact
+- source-applicability morse-1886-homes, miyoshi-kurashi-mingu-1998, miyoshi-ikegami-house: APPLICABLE-WITH-LIMITS 3 - limits rewritten (bark wall southern and poor, plaster not durable, wealth inferred, the house unusual, the resident's memory scoped)
+- source-reader round 1 (ikegami, mingu, morse, kotobank whole reads): READ 23, NOT-FOUND 9 - write-up fixes applied (kotobank 'count' -> most/many/few, mingu's date and 'rich' moved to the ikegami page, Morse's Restoration inference cut and Satow's 'plastered wattles' named); NOT recorded - the WHOLE bundles held no owed note text (fixed in _check_bundle.py), so round 2 re-reads them
+- round 2, entry-drift Door (0117): DRIFTED 1 - 'about 3 ft' made 'no wider than about 3 ft' in compound_kinds/grounds.py (Note and Caveat); recorded
+- round 2, quote-check 0029 (4 batches): PARTIAL 1, unfootnoted 4 - 'large farmhouses' for 'better-off', the curving-road cause footnoted on both pages, 'we read', the plot edge and long-axis growth labeled as this project's
+- round 2, quote-check 0117 (2 batches): PARTIAL 3, unfootnoted 2 - kannon-biraki glossed as paired, storehouse leaves 'could be' by the end of Edo, 'estimated to have been built', the drawing paragraph footnoted
+- round 2, quote-check 0244: PARTIAL 3 - the folk-house gloss cut, the Ikegami note on the opening, 'its museum's estimate'
+- round 2, record-format 0029 clean; 0117 and 0244 VOCABULARY 1 - miscanthus a variant of susuki
+- round 2, source-applicability: ikegami HONEST, morse HONEST (one sentence merged), mingu HONEST (alcove and smoke vent named), kotobank What it is and one limit fixed
+- round 2, source-reader (the claims now in the bundle): ikegami READ 9, mingu READ 4 (the veranda item scoped to 'such a veranda'), morse READ 4 + absence held, nihon-no-minka READ 4 ('frontage' -> 'along its ridge'); the 0244 absence held against all three pages
+- round 2, translation-check: 0029 FAITHFUL 2; 0244 FAITHFUL 8, LOOSE 1 ('ample economic means'); 本舞 and 牡嘱 are the page's own misprints, kept verbatim
+- page-check: the Door modal edit's interactive tests pass; test_synthetic_page_mechanics fails on the hamlet registry's label assertion (_driver.py:110) - T09's About-form Farmhouse has no label lead, not this session's to change
+- round 3, quote-check 0029 (5 page batches): PARTIAL 1, unfootnoted 3 - the Ota house glossed, '27 Okinawan villages' footnoted to -2, minka defined from the Heibonsha entry (new note kotobank-minka-29), the south-facing sentence made a pointer to 0037/0038, the bund line pointed at 0014
+- round 3, quote-check 0117 (2 pages): SUPPORTS 14, PARTIAL 1 - 'usually' restored to the one-ken door; 0244: PARTIAL 1 - the note's translation now says lime plaster (漆喰)
+- round 3, record-format 0029/0117/0244: clean
+- round 3, source-applicability: kotobank MISSING 1 (its regional forms are well-off houses, few older than the late 1600s) applied; mingu and morse HONEST
+- round 3, source-reader: nihon-no-minka READ 4; minami-alps READ 5, NOT-FOUND 1 (the kannon-biraki gloss, reworded as the name's meaning); ikegami READ 5 (the well-off house hedged 'by its museum's reckoning'); the 0244 absence note recorded with REASON (no key, held against every page it names)
+- round 3, translation-check: 0029 FAITHFUL 3, 0244 FAITHFUL 9, 0117 LOOSE 2 ('Against this background ... around', 'wheat or barley straw') applied in 0117 and 0244
+- tooling: a one-page bundle (Q=<page>.html) listed the other page's owed units and so would have answered checks it never carried; _bundle_owed.py now cuts a page bundle to its page (test_a_one_page_bundle_carries_only_that_pages_units)
+- round 4, quote-check: 0029 page SUPPORTS (bunto glossed as this project's reading; the 'did not all face' lead kept, it sums up the survey items); 0029 drawing PARTIAL 3 ('permitted to move' in 1736, feng shui hedged; 'a quarter' kept, the project's own drawing rule); 0117 PARTIAL 1 ('big doorway', no 'front'); 0117 drawing and 0244 clean
+- round 4, record-format: 0117 and 0244 clean; 0029 VOCABULARY 1 - 'net-owner' dropped from the prose
+- round 4, source-applicability kotobank: MISSING 1 (Heibonsha's caution on one national series, 'almost all' plans) and OVERSTATED 1 ('two' not 'several') applied
+- round 4, source-reader: kotobank READ 4 (0244's 'between the posts / over them' cut to the page's posts-shown / posts-plastered-in); nihonminkaen-kanto READ 2 (the cut projection named in the gloss, 'beside it' cut); minami-alps READ 5 (the gloss honest); ikegami READ 4; mingu READ 4
+- round 4, translation-check: 0117 and 0244 FAITHFUL; 0029 LOOSE 1 - 'the house of an upper-class farming family' applied
+- round 5, quote-check: 0029 page PARTIAL 1 (the survivors' size range scoped to the five Nihon Minka-en houses); 0029 drawing clean (a missing space between two yamamoto quotes fixed); 0117 PARTIAL 1 ('heavy' cut - neither storehouse was both heavy and plastered); 0244 clean
+- round 5, record-format 0029/0117/0244 clean; translation-check 0029 FAITHFUL 4; source-reader nihon-no-minka READ 4, nihonminkaen-kanto READ 2 (its 二つ屋根の家 could replace the bunto reading later - optional)
+- round 5, source-applicability kotobank: MISSING 1 - small farmhouses kept simple, often one-room plans - applied
+- round 6: quote-check 0029 PARTIAL 1 ('neighboring bearings inside the spread'), the 'did not all face' lead kept again (the 87/11/1/1 items follow it); record-format 0117 VOCABULARY 1 (pivot-hung glossed); kotobank applicability HONEST; everything else clean
+- round 7: quote-check 0029 PARTIAL 1 ('the study's earlier count'); record-format 0029 VOCABULARY 1 declined - 'the land survey project' stays undated: the paper's 土地調査事業 is not the 1899 土地整理事業 it names elsewhere
+- rounds 8-9: record-format 0029 clean; quote-check 0029 asked for three footnote marks on the survey block (the -2 note on 'Most', the method note on 'Most' and on the sixteen points), applied as its own EDIT blocks; the mark-only re-owing recorded with REASON (bypass log)
+- source-reader 0029.drawing#yamamoto: recorded with REASON - only a space between two quoted passages changed
+- open, not this session's: modal-accuracy, modal-gaps and modal-references for farmhouse (T09's About-form rewrite); test_synthetic_page_mechanics fails on the About-form Farmhouse's missing label (_driver.py:110)
+- tooling: _apply_edits.py now reads a report whose markup was escaped in a task notification (test_a_report_saved_with_its_markup_escaped_is_applied)

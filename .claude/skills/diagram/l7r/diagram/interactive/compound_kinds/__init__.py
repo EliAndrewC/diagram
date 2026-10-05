@@ -2,9 +2,8 @@
 
 The GM, 2026-09-26: *"see write-ups of what these things were and the extent to which this is indeed based on
 real historical research or is a thing specific to this fictional setting"*. This package is the hamlet
-vocabulary's twin (`../classes/`): the same `Kind` base, the same docstring form (`What:` / `Why:` / `Note:` /
-optional `Caveat:`, then `Name:` / `Covers:` / `Label:` / `Sources:` / `Entry:`), parsed at import into the
-`FeatureClass` the page reads. A sheet says WHERE a thing is and what KIND it is with `data-kind` on the drawn
+vocabulary's twin (`../classes/`): the same `Kind` base, the same About form (one file per kind under
+`assets/modals/sheet/`, feature 319), parsed at import into the `FeatureClass` the page reads. A sheet says WHERE a thing is and what KIND it is with `data-kind` on the drawn
 element (`../sheet.py`); this says what that kind of thing is, ONCE, for every magistracy that draws one.
 
 A SEPARATE REGISTRY, not rows added to `CLASSES`, because a compound's well and a hamlet's well are written
@@ -12,15 +11,14 @@ about different places: the key may coincide and each page reads its own vocabul
 The hamlet registry is untouched (spec FR-011).
 
 EVERY WRITE-UP IS WRITTEN FROM THE EXISTING RECORD (spec FR-005, the GM: *"for now, I only want to tie into
-existing research findings that already exist"*). A kind keeps the classification an existing finding already
-gave it - a research section, or the `buildings/types.json` program item folded into it (FR-003a: the item's
-class and why are stated here, once, and the audit and `programs.md` read them back from here). A kind no
-research section covers names no question in its `Entry:`, so the page's missing references show the gap. The
-measurement behind every label is `specs/262-interactive-magistracy-pages/coverage.md`.
+existing research findings that already exist"*). A `buildings/types.json` program item folded into a kind states
+nothing of its own (FR-003a): the audit and `programs.md` read the kind's guesses from here
+(`buildings.types.classification`). A kind no research section covers names no question in its `Entry:`, so the
+page's missing references show the gap.
 
-Look here when: a magistracy modal says something wrong (the kind's docstring), a new kind of thing is drawn
+Look here when: a magistracy modal says something wrong (the kind's modal file), a new kind of thing is drawn
 on a sheet (a class in the family it belongs to, and its tag on the sheet), or the program audit reports a
-class or why (they come from here).
+guess (it comes from here).
 """
 
 from __future__ import annotations

@@ -112,12 +112,18 @@ def test_the_page_area_is_the_assets_and_the_registry_and_the_gate_s_area_holds_
     # repository has paid for: the property is that nothing UNEXPECTED is in the page area, and a term
     # file is expected - an edit to one changes a tooltip, which is exactly what owes `make page-check`.
     terms = sorted(f for f in page if "/assets/glossary/" in f)
-    assets = [a for a in assets if not any(a in t for t in terms)]
-    assert assets == ["glossary.json", "page-text.json", "page.css", "page.js", "place.json", "siblings.json"], assets  # feature 207: the content files are assets
+    # ...AND ONE FILE PER MODAL since feature 319 (plan D12): `assets/modals/<hamlet|sheet>/<kind>.md`, a modal's text - an
+    # edit to one changes what a modal says, which owes `make page-check` exactly as a term file does
+    modals = sorted(f for f in page if "/assets/modals/" in f)
+    assets = [a for a in assets if not any(a in t for t in terms) and not any(a in m for m in modals)]
+    assert assets == ["choices.json", "glossary.json", "page-text.json", "page.css", "page.js", "place.json", "siblings.json"], (
+        assets
+    )  # feature 207: the content files are assets; feature 319 plan D10: the title card's choices table
     assert len(terms) > 500 and all(t.endswith(".json") for t in terms), f"{len(terms)} term files"
     registry = sorted(f.rsplit("/", 1)[1] for f in page if "/classes/" in f)
     assert "homestead.py" in registry and "_base.py" in registry and all(f.endswith(".py") for f in registry), registry
-    assert len(page) == len(assets) + len(terms) + len(registry), "nothing else is in the page area"
+    assert len(modals) >= 155 and all(m.endswith(".md") for m in modals), f"{len(modals)} modal files"
+    assert len(page) == len(assets) + len(terms) + len(modals) + len(registry), "nothing else is in the page area"
     # EVERY FILE IN AN AREA IS A FILE (feature 259). `git ls-files` QUOTES a path with a non-ASCII byte
     # unless asked for `-z`, and a quoted name opens nothing: the stamp hashed no bytes for it, so an
     # edit to it did not invalidate the area. Eight glossary terms carry a macron, which is how it

@@ -1,0 +1,16 @@
+About: A village's water could come from a reservoir pond (tameike), an embanked pond set higher than the paddies so that its water reached them by gravity. One kind stood at the head of a valley, made by closing the valley mouth with an earthen dike, and a Chinese farming manual of 1149 has the farmer of a high field dig a pond where the water gathered, big enough to hold the rains of late spring. In this form the pond's water came into the fields at their southwest corner, on their high side.
+
+A plains pond was a shallow dish ringed by its embankment, the bank kept clear of growth and trodden firm, with reed, wild rice and cattail standing in the shallows at its shore. Its water was drawn off through an inclined or vertical pipe into a conduit under the embankment, and probably left by one ditch that forked below it as it reached the fields.
+
+The same manual has the farmer give up two or three parts in every ten of a high field to its pond, so a pond that alone watered its paddy was a quarter to over two-fifths its size; how much water it held for each acre is not recorded. Japan's ponds ran from about 33 ft (10 m) on a side, small enough for one owner to keep, to several hectares (a hectare is about 2.5 acres).
+
+Guesses:
+- That the pond stands at this corner rather than another, or midway along an edge: no source says where on a village's high ground its pond lay, so the place is chosen by chance among those above the fields.
+
+Depiction: The map draws the pond just beyond the southwest corner of the fields, uphill of them, and the water comes into the fields there. A pond is only ever drawn where its water could run down onto the fields: one below the fields it feeds is never drawn, because water does not run uphill. Reeds stand on wet ground at the pond's shore, and one ditch leaves it for the fields.
+
+Name: Water from a pond at the southwest corner
+Covers: `meta.water_source_position = corner_SW`
+Sources: tabayashi-1987, chenfu-nongshu-juanshang, kotobank-chenfu-nongshu, kagawa-tameike-structure, inamino-tameike-museum, maff-tameike-shizen, inamino-saraike
+Entry: research/questions/0061-reservoir-ponds-tameike.html, research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.html, research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.html
+Drawing: research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html, research/questions/0061-reservoir-ponds-tameike.drawing.html, research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html

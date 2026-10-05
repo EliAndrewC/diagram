@@ -196,3 +196,23 @@ def test_the_scatter_overhang() -> None:
     view = (70.0, 50.0, 800.0, 900.0)  # 30 past the frame's left, 50 past its top, 50 past its bottom
     assert scatter_overhang(frame, (0.0, 0.0, 1000.0, 1000.0), view) == [30.0, 50.0, -30.0, 50.0]
     assert scatter_overhang(frame, (2000.0, 2000.0, 2100.0, 2100.0), view) is None
+
+
+def test_the_placard_text_is_set_for_reading_and_the_bar_keeps_its_scale() -> None:
+    """Feature 319 (GM 2026-10-03: "the same thing with the title card as well. At least the text on it - obviously the map
+    scale of one pixel per foot will not change"): the name and the bar's two captions are 1.5 times their old 30, 12 and
+    10 px, the card is sized from them by the one formula the hamlet's pocket and band also read, and the bar is still 100
+    map-px."""
+    import re
+
+    from l7r.diagram.settlement.title import PLACARD_TEXT_SCALE, placard_height
+
+    s = _crop_settlement()
+    s.title("Bandton")
+    svg = " ".join(s.toplabels)
+    sizes = sorted(float(v) for v in re.findall(r'font-size="([0-9.]+)"', svg))
+    assert PLACARD_TEXT_SCALE == 1.5 and {45.0, 18.0, 15.0} <= set(sizes), sizes
+    x0, y0, x1, y1 = s.M["title"]["placard"]
+    assert round(y1 - y0) == round(placard_height()) and (x1 - x0) == s.placard_size("Bandton")[2]
+    bx0, _by0, bx1, _by1 = s.M["scalebar"]["bbox"]
+    assert bx1 - bx0 == 100.0 and s.M["scalebar"]["ft"] == 100 * s.ftpx, "the scale bar keeps its 100 map-px"

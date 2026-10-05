@@ -83,7 +83,7 @@ Research: ends one house may absolve - UNRESEARCHED: two"""
 BREAK_SPAN_FT = 60.0
 """A lane segment longer than this whose midpoint stands in a building's box has run straight through it
 (`lanes_do_not_break_mid_run`): the tread was drawn across the solid, or it vanished there and resumed beyond.
-Research: no tread through a building - research/questions/0081-village-lanes.drawing.html: a segment over 60 ft"""
+Research: no tread through a building - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a segment over 60 ft"""
 
 FIELD_REACH_FT = 60.0
 """On a brook map one of the hamlet's own ways (not the track out) comes this near the field - its paddy or its dry hem -
@@ -113,7 +113,7 @@ JOIN_REACH_FT = _LANE_JOIN_FT
 reach (`fabric._LANE_JOIN_FT`, 30 ft), ONE tolerance for the placer that draws a join and the rule that asks whether it
 touched. Future-work 2c measured every stopped-short join in the pool inside it (16.7, 28.0, 28.1, 29.2, 29.6 ft) - the
 dead band between the generator's 30 ft and the ink's 4 ft that neither half owned.
-Research: a join that stops short - research/questions/0081-village-lanes.drawing.html: within 30 ft"""
+Research: a join that stops short - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within 30 ft"""
 
 FRAGMENT_FT = _WEB_MIN_FT
 """A lane shorter than this that earns nothing is debris (`short_fragments`) - the web's own debris floor (`_WEB_MIN_FT`),
@@ -168,8 +168,7 @@ def lanes_that_kink(M: Mapping[str, Any]) -> list[tuple[str, int, int]]:
 
 
 def hooked(pts: Sequence[Pt]) -> list[int]:
-    """Which ends of a run are hooked, as -1 (its last) and 0 (its first): a leg of `_HOOK_FT` or less turning `_HOOK_DEG`
-    or more.
+    """Which ends of a run are hooked, as -1 (its last) and 0 (its first): a leg of `_HOOK_FT` or less turning `_HOOK_DEG` or more.
     Research: a lane's end loses its hook - research/questions/0081-village-lanes.drawing.html: 12 ft, 90 degrees"""
     p = list(pts)
     if len(p) < 3:
@@ -324,7 +323,7 @@ def span_walkable(M: Mapping[str, Any], p: Pt, q: Pt, skip: Sequence[int] = ()) 
     """May a short span of tread be laid from `p` to `q`: across no water (`bridge_crossed_waters`), no crop or marsh, no
     farmhouse (`house_hit`), no household's yard or garden, and not along another way (its middle within `JOIN_TOL` of a
     way other than the lanes `skip` - a span that doubles a tread rather than meeting it)?
-    Research: a walkable span - research/questions/0081-village-lanes.drawing.html: off water, crop, marsh, houses and yards"""
+    Research: a walkable span - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: off water, crop, marsh, houses and yards"""
     for wpts, _w in bridge_crossed_waters(M):
         wp = [(float(a[0]), float(a[1])) for a in wpts]
         if any(segments_cross(p, q, u, v) for u, v in zip(wp, wp[1:], strict=False)):
@@ -410,8 +409,7 @@ Research: needle of grass - CONVENTION: a web face under 20 ft mean width"""
 
 def needle_loops(M: Mapping[str, Any]) -> list[tuple[Any, list[int]]]:
     """(face, the lanes bounding it) for every face of the drawn lane web (the treads noded where they cross, then
-    polygonized) whose mean width is under `NEEDLE_LOOP_FT` - two ways laid round a sliver of ground, or along the same
-    ground (a face of no area at all)."""
+    polygonized) whose mean width is under `NEEDLE_LOOP_FT` - two ways laid round a sliver of ground, or along the same ground (a face of no area at all)."""
     from shapely.geometry import LineString
     from shapely.ops import polygonize, unary_union
 
@@ -440,7 +438,7 @@ def short_fragments(M: Mapping[str, Any], ground: WorkedGround | None = None) ->
     20 households, the map byte-identical with one).
     Research:
         debris - UNRESEARCHED: a lane under 30 ft that earns no house, join, target or end
-        a household's own way never debris - research/questions/0081-village-lanes.drawing.html: every other farmhouse is served by a lane of its own"""
+        a household's own way never debris - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every other farmhouse is served by a lane of its own"""
     lanes = M.get("lanes") or []
     # ...NOR A HOUSEHOLD'S OWN WAY, however short (feature 318, FR-014): it is the lane its household is served by (`tree.owed`),
     # and dropped as earning nothing it was drawn again next round, until the settle refused the web (cohort seed 10)
@@ -472,7 +470,7 @@ def width_steps(lanes: Lanes) -> list[tuple[int, int]]:
 def lane_networks(M: Mapping[str, Any]) -> int:
     """How many networks the drawn lanes fall into at the ink tolerance (`JOIN_TOL`): one, or you cannot walk between
     them.
-    Research: one network - research/questions/0081-village-lanes.drawing.html: joined at 4 ft"""
+    Research: one network - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: joined at 4 ft"""
     ways = [p for p in _ways(M) if len(p) >= 2]
     return len(set(_components(ways, JOIN_TOL)))
 
@@ -514,7 +512,9 @@ def dangling_lane_ends(M: Mapping[str, Any], ground: WorkedGround | None = None)
     end stands on: the other ways' segments are asked, less those within `_TOUCH_GAP` of the lane's far end. `ground` is the
     worked ground where the caller has it built already (`memo_ground`). A way target (`meta.way_targets`, a burial ground's
     near edge) is something worth walking to, as a farmhouse is (homes H36: a path runs to the graves).
-    Research: an end reaches something seen - research/questions/0081-village-lanes.drawing.html: walked toward it"""
+    Research:
+        an end reaches something seen - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: walked toward it
+        a burial ground's edge a lane end's destination - UNRESEARCHED: a way target counts as a farmhouse does"""
     ways = _ways(M)
     centers = [(float(h["x"]), float(h["y"])) for h in M.get("houses") or []] + way_targets(M)
     steadings = steading_footprints(M)
@@ -526,11 +526,9 @@ def dangling_lane_ends(M: Mapping[str, Any], ground: WorkedGround | None = None)
             continue
         others = [sg for k, o in enumerate(ways) if k != i and len(o) >= 2 for sg in zip(o, o[1:], strict=False)]
         for e, end, far in ((-1, p[-1], p[0]), (0, p[0], p[-1])):
-            # ...AND A WAY IS REACHED ONLY WHERE THE END GOT NEARER TO IT THAN THE LANE'S FAR END ALREADY STOOD (feature 293,
-            # settlement-review of Inashiro): a 32 ft skeleton stub left the connector at the entrance and ended in the
-            # windbreak, 58 ft from the exit strip's end at that same junction - inside `WAY_END_REACH_FT`, so it "reached" the
-            # junction it had left. The nearest point of each other way is asked: nearer the far end than the end, the lane
-            # walked away from it, not to it.
+            # ...AND A WAY IS REACHED ONLY WHERE THE END GOT NEARER TO IT THAN THE LANE'S FAR END ALREADY STOOD (feature 293, settlement-review of Inashiro): a 32 ft skeleton
+            # stub left the connector at the entrance and ended in the windbreak, 58 ft from the exit strip's end at that same junction - inside `WAY_END_REACH_FT`, so it
+            # "reached" the junction it had left. The nearest point of each other way is asked: nearer the far end than the end, the lane walked away from it, not to it.
             segs = [sg for sg in others if seg_dist(far[0], far[1], sg[0], sg[1]) > _TOUCH_GAP and _walked_to(end, far, sg)]
             if not end_serves(end, segs, centers, ground, steadings):
                 out.append((i, e))
@@ -573,9 +571,9 @@ def ends_behind(M: Mapping[str, Any], ground: WorkedGround | None = None) -> lis
     """(lane index, end, house index) for every free lane end (the connector's aside; an end within `JOIN_TOL` of another
     way is a junction) that stands within `WAY_END_REACH_FT` of a farmhouse, BEHIND the nearest such house - past its back
     wall, abreast of it (`behind_house`) - and at no house's dooryard (`reaches_dooryard`), nor on the bund (water W57; 269
-    B17, research/questions/0081-village-lanes.drawing.html: a lane that serves a farmhouse ends at its dooryard, and a lane end behind a house's back
+    B17, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane that serves a farmhouse ends at its dooryard, and a lane end behind a house's back
     wall does not count as reaching it - Kuwabata's lane 5, 11 ft behind house 1 and 43 ft from its yard).
-    Research: a lane ends at the dooryard - research/questions/0081-village-lanes.drawing.html: never behind the house"""
+    Research: a lane ends at the dooryard - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: never behind the house"""
     ways = _ways(M)
     houses = M.get("houses") or []
     if not houses:
@@ -658,7 +656,7 @@ def over_a_fixture(pts: Sequence[Pt], width: float, quads: Sequence[Poly]) -> in
     """The first segment of a lane along `pts`, drawn `width` wide, whose tread meets a farmstead fixture (`fixture_quads`) -
     crosses it, stands in it, or passes within its half-width and `FIXTURE_PAD_FT` of it; None where it meets none. THE ONE
     PREDICATE: the web's settle cuts what it names, a tree lane is refused by it, and the finished-map rule reads it.
-    Research: off the fixtures - research/questions/0081-village-lanes.drawing.html: nothing stands on a tread"""
+    Research: off the fixtures - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: nothing stands on a tread"""
     gap = width / 2.0 + FIXTURE_PAD_FT
     for k, (a, b) in enumerate(zip(pts, pts[1:], strict=False)):
         for q in quads:
@@ -702,7 +700,9 @@ def breaks_through(pts: Sequence[Pt], solid: Sequence[tuple[float, float, float,
     the `solid` boxes (`solid_boxes`) - a tread drawn straight through a building. THE ONE PREDICATE of the rule: the
     finished-map reading (`breaks_mid_run`), the web's foul test (`settle.fouled_segment`) and the connector's placer
     (`track.connector_through`) all ask it.
-    Research: no tread through a building - research/questions/0081-village-lanes.drawing.html"""
+    Research:
+        no tread through a building - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html
+        a leg long enough to break - UNRESEARCHED: only a leg over `BREAK_SPAN_FT` (60 ft) with its midpoint in a building counts"""
     out = []
     for k, (a, b) in enumerate(zip(pts, pts[1:], strict=False)):
         if math.dist(a, b) <= BREAK_SPAN_FT:
@@ -722,8 +722,8 @@ def fouls_fabric(pts: Poly, width: float, houses: Sequence[Mapping[str, Any]], f
     """Does a lane of this width along `pts` put ink on a farmhouse (`house_hit`), or pass within `_TOUCH_GAP` of another household's
     threshing yard or garden (`_crosses_fabric`)? `fabric`: `_homestead_polys`'; a door path is exempt from its OWN (`own`).
     Research:
-        nothing built on a lane - research/questions/0081-village-lanes.drawing.html: no tread on another household's yard or bed
-        foul margin - UNRESEARCHED: within 4 ft of another's yard or bed"""
+        nothing built on a lane - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: no tread on another household's yard or bed
+        foul margin - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within 4 ft of another's yard or bed"""
     if house_hit(pts, width, houses):
         return True
     theirs = [poly for poly, owner, kind in fabric if kind in ("threshing_yards", "gardens") and (own is None or owner != own)]

@@ -3,11 +3,11 @@
 Research:
     settlement_form forms - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.html, research/questions/0033-row-villages-resson.html, research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: nucleated, linear, dispersed, water_town, dike_top
     field_archetype forms - research/questions/0021-terraced-and-valley-paddies-tanada-yachida.html, research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.html, research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html: valley_paddy, contour_terraces, polder_grid, ribbon_valley, mulberry_dike_fishpond
-    land_use_overlay forms - research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.html: none, mulberry_fishpond, lotus, tea_fringe
+    land_use_overlay forms - DEVIATION research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html: none, mulberry_fishpond, lotus, tea_fringe; bund tea, the second tea form, is never rolled
     kosatsuba_seat forms - research/questions/0190-notice-boards-kosatsuba.html, research/questions/0190-notice-boards-kosatsuba.drawing.html: center, entrance, frontage
     cluster_position forms - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: high_margin, flank, mid_margin, valley_mouth, valley_head, on_rise
-    cluster_shape forms - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: round, elongated, crescent, split
-    lane_web forms - research/questions/0081-village-lanes.html, research/questions/0081-village-lanes.drawing.html: side alleys or a back lane, rolled evenly
+    cluster_shape forms - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html, research/questions/0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.drawing.html: round, elongated, crescent, split; a village rolls split as one shape among four, so most villages draw a single cluster
+    lane_web forms - research/questions/0081-village-lanes.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: side alleys or a back lane, rolled evenly
     bamboo forms - research/questions/0075-bamboo-groves-chikurin.html, research/questions/0075-bamboo-groves-chikurin.drawing.html: none, homestead, thicket, both
     lane_skeleton forms - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: spine, T, Y, cross, waterside
     water_source_position forms - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: four corners, mid-margin, a pond chain, or a stream entering on one of four edges
@@ -16,7 +16,7 @@ Research:
     grain_drift range - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: -12 to 12 degrees off the fall line in 4 degree steps
     byre_form forms - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.html, research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: the inner stable, a yard shed, a detached commons shed
     byre_form weights - GUESS: 0.6 inner, 0.3 yard shed, 0.1 commons
-    caravan_inn_form forms - research/questions/0184-inns-hatago-and-carters-inns.html, research/questions/0185-travelers-inns-and-cheap-lodging-houses-hatago-dian-kichin-yado.html: wagon or hatago, rolled evenly
+    caravan_inn_form forms - research/questions/0184-inns-hatago-and-carters-inns.html, research/questions/0185-travelers-inns-and-cheap-lodging-houses-hatago-dian-kichin-yado.html, research/questions/0184-inns-hatago-and-carters-inns.drawing.html: wagon or hatago, rolled evenly, never by the settlement's house form
     hamlet knobs unrolled - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: a hamlet leaves none of these to chance and draws each knob's default
     hamlet default values - UNRESEARCHED: high_margin, round, spine, corner_NW, medium plots, organic, 0 drift, alleys, homestead bamboo
 """
@@ -170,7 +170,7 @@ def _water_source_ok(v: Any, ctx: Mapping[str, Any]) -> bool:
 # The two attested ways of making every house in a nucleated cluster reachable. Defined up here
 # rather than beside `web_cuts` because the knob catalog below registers against it at import.
 LANE_WEBS = ("alleys", "back_lane")
-"""Research: two lane webs - research/questions/0081-village-lanes.html, research/questions/0081-village-lanes.drawing.html: side lanes between the plots or a back lane behind them"""
+"""Research: two lane webs - research/questions/0081-village-lanes.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: side lanes between the plots or a back lane behind them"""
 
 
 def _cluster_shape_ok(v: Any, ctx: Mapping[str, Any]) -> bool:
@@ -343,7 +343,7 @@ register_knob(
 )
 register_knob(Knob("plot_size", ["small_irregular", "medium", "large_block", "strip"], default="medium"))
 register_knob(Knob("plot_regularity", ["organic", "grid"], default="organic", typing_rule=_plot_regularity_ok))
-register_knob(Knob("grain_drift", [-12, -8, -4, 0, 4, 8, 12], default=0))  # degrees of paddy-grain drift off the fall-line
+register_knob(Knob("grain_drift", [-12, -8, -4, 0, 4, 8, 12], default=0))  # degrees of dry-field furrow drift off the fall-line (the paddy grain never drifts)
 
 # THE OX SLEEPS IN TWO PLACES AND THE RECORD SUPPORTS BOTH, so this is a knob rather than a ruling
 # (constitution Principle XII's two-supportable-answers rule; 2026-08-18). A draft byre is either an
@@ -420,8 +420,8 @@ def web_cuts(coords: Sequence[float], reach: float, gap: float) -> list[float]:
     house unreachable because its neighbors are packed tight.
 
     Research:
-        every house within reach of a way - research/questions/0081-village-lanes.drawing.html: the fewest cuts that cover every house the caller gives (the web gives every one but those reached across a neighbor's land, `hamletgen/ways/web.py`)
-        a cut in the widest gap - GUESS research/questions/0081-village-lanes.drawing.html: lanes as the gaps between plots, never through a house; reach * 0.5 ahead when no gap fits
+        every house within reach of a way - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the fewest cuts that cover every house the caller gives (the web gives every one but those reached across a neighbor's land, `hamletgen/ways/web.py`)
+        a cut in the widest gap - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: lanes as the gaps between plots, never through a house; reach * 0.5 ahead when no gap fits
     """
     xs = sorted(float(c) for c in coords)
     if not xs:

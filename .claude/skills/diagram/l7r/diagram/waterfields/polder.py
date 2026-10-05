@@ -91,12 +91,13 @@ def build_polder(
 
     Research:
         polder layout - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a diked block, a ring canal inside the dike, water crossing only at an inlet and an outfall sluice
-        module size - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: `cell` px modules, 150 by default
+        module size - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: `cell` px modules, 150 by default, 150 ft at the polder's 1 ft/px where the page's modules are about 190 ft
         polder size - UNRESEARCHED: 11 rows by 6 columns of modules by default
         parcel mix - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: most modules split into two or three strips, a few merged along the fall
         gaps - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: a walking bund between rows and between strips, a ditch corridor between columns
         low rows wet - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: every parcel of the two lowest rows tinted
         toe ends on the trunk - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: each toe end snapped onto the nearer trunk and run 3 ft on along its centerline
+        acreage reckoned - UNRESEARCHED: the cropped acreage worked at 2 ft/px (area x 4 / 43560) though the polder is drawn at 1 ft/px, so it reads four times the drawn ground
     """
     R = random.Random(seed)
     dx, dy = math.cos(math.radians(down_deg)), math.sin(math.radians(down_deg))  # downhill (row) unit

@@ -1,0 +1,18 @@
+# H15 checks - 0081, 0091, 0196 (feature 319, 2026-10-05)
+- round 1, quote-check 0081: 37 notes, 29 VERBATIM, 3 UNFETCHABLE (ushijima, Wiley 403; read from the GM's copy), 2 PARTIAL fixed (two-lane sentence marked the record's reading; lowtech quote extended to Hommel's south-and-center sentence); England lead line dismissed (restates its cited bullet)
+- round 1, quote-check 0091: 28 notes, 28 SUPPORTS (adachi DIFFERS = PDF line breaks); 'town history' fixed to city history; lodging lead and 1868 date dismissed
+- round 1, quote-check 0196: 11 notes, 2 PARTIAL fixed (curb size told as the one measured; kurumaido date as the dictionary's), 1 unfootnoted fixed (nagaya-jawiki-2 cited); idoyakata NOT-ON-PAGE a quote-verbatim false alarm (originals are stored)
+- round 1, record-format 0081: 115 of 115, 0/0/0
+- round 1, record-format 0091: 1 VOCABULARY fixed (inner rooms placed behind the master's and family's, as compound.py draws them), 1 contradiction fixed (family privy attached to the house, as compound_parts.py seats it)
+- round 1, record-format 0196: 106 of 106, 0/0/0; 'well house(s)' added as variants of glossary 9660-well-house
+- round 1, source-reader 0081: 5 READ, 3 absence; drawing note's 'second bullet' pointer named
+- round 1, source-reader 0091: 5 READ
+- round 1, source-reader 0196: 2 READ, 1 absence
+- round 1, translation-check 0081: 1 FAITHFUL
+- round 1, translation-check 0091: 11 FAITHFUL, 1 LOOSE fixed (kaminoyama-miwa-ke#5 'rebuilt [or remodeled; 改築 covers both]', prose to 'rebuilt or remodeled')
+- round 2, quote-check 0081: 3 SUPPORTS, 2 absence, ushijima UNFETCHABLE (GM's browser); record-format 0081: 116 of 116, 0/0/0; source-reader 0081: 6 READ, pointer resolves
+- round 2, quote-check 0091: 13 SUPPORTS; open for a write session: the Matsue paper's ledger plan puts the chugen rooms in the front gate range, which the rear-servants GUESS does not mention (needs a new translated quotation)
+- round 2, record-format 0091: 0/0/0, round 1's fixes confirmed; source-reader 0091: 6 READ; translation-check 0091: 11 FAITHFUL, 1 CANNOT-TELL resolved - 'Nobufuru' confirmed (jawiki 松平信古 (上山藩主): のぶふる, 11th of the Fujii-Matsudaira line), no edit
+- round 2, quote-check 0196: 1 PARTIAL fixed (tenement-well lead: Edo, the well shared, the privy in the alley); record-format 0196: 0/0/0; source-reader 0196: 5 READ
+- round 3, quote-check 0196: lead SUPPORTS; opening paragraph's 'tenements of the cities' PARTIAL fixed to Edo, gloss names the Edo-period section; record-format 0196: 0/0/0
+- round 4, quote-check 0196: 5 VERBATIM, 5 SUPPORTS; record-format 0196: 0/0/0; source-reader 0196: 2 READ. record-owed UNANSWERED=1 empty for 0081, 0091, 0196; the four record tests green (3855 passed); all three under the size cap

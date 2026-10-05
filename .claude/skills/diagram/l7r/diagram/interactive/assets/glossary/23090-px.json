@@ -1,0 +1,9 @@
+{
+ "term": "px",
+ "def": "A pixel, one dot of a map image on screen. Our maps give their scale in pixels to the foot: a compound plan is drawn at 3 px to the foot, a hamlet or town map at 1 px to the foot.",
+ "variants": [
+  "px",
+  "pixel",
+  "pixels"
+ ]
+}

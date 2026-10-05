@@ -163,8 +163,8 @@ def keeps_the_web(lanes: Sequence[Mapping[str, Any]], mine: set[int], old: Poly,
     pieces as it was, and every farmhouse some way served must still be served.
 
     Research:
-        one network - research/questions/0081-village-lanes.drawing.html: no rewrite splits the web
-        every farmhouse served - GUESS research/questions/0081-village-lanes.drawing.html: within 100 ft, how close counts as serving"""
+        one network - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: no rewrite splits the web
+        every farmhouse served - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within 100 ft, how close counts as serving"""
     others = [_pts(ln) for k, ln in enumerate(lanes) if k not in mine and len(ln.get("pts") or []) >= 2]
     for n, p in enumerate(others):
         rest_segs = [sg for m, o in enumerate(others) if m != n for sg in _segs(o)]

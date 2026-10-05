@@ -175,6 +175,8 @@ def farm_channel(s: Settlement, h: Mapping[str, Any], courses: Sequence[Sequence
         a channel into the grounds - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.html, research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the shortest route found from the nearest sources
         no way back drawn - DEVIATION research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the channel stops in the dooryard
         crosses no other water - UNRESEARCHED: a route crossing other drawn water more than 6 ft past its mouth is refused
+        where the channel ends - GUESS research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: in the dooryard, `DOORYARD_STEP_FT` (6 ft) off the yard, out to 3.5 steps
+        channel corridor - UNRESEARCHED: a 4 ft no-build corridor along each channel
     """
     from ..ways.route import _route  # local: the ways are a later stage
 
@@ -262,6 +264,8 @@ def farm_channels(s: Settlement, houses: Sequence[Mapping[str, Any]]) -> list[Ma
         farms nearest the water first - UNRESEARCHED: the order channels are laid
         led off an earlier channel - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: each drawn channel a source for the next
         a farm no channel reaches - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: returned for a well of its own
+        washing places - research/questions/0065-washing-places-at-the-waters-edge.drawing.html: no washing place drawn by the
+            stream, a ditch or a farm's channel, shared or one at each house; the knob is never rolled
     """
     from ..ways.checks import drawn_water_segs  # local: the ways are a later stage
 

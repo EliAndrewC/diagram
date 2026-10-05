@@ -141,7 +141,7 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     Research:
         a yard's south sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: switched on here, `SUN_CORRIDOR_FT` (39 ft) clear south of every yard and bed
         the belt's afternoon lane - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: switched on here, `WEST_SUN_FT` (50 ft) west and southwest of a plot
-        houses before lanes - research/questions/0081-village-lanes.drawing.html: every household seated while no lane stands on the map, none is reserved and no way is sought for it; the track out chosen once the last house stands, and each household's way laid to it (`household_ways`, `gap_ways.lay_the_ways`)
+        houses before lanes - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every household seated while no lane stands on the map, none is reserved and no way is sought for it; the track out chosen once the last house stands, and each household's way laid to it (`household_ways`, `gap_ways.lay_the_ways`)
         the track's stretch the ways join - UNRESEARCHED: within `JOIN_FAR_FT` of the homesteads' extent and the track's start, so no way joins it past the frame
         the declared cluster shape - GUESS: the cluster's shape rolled as a knob and declared as the drawing resolves it, where the record has a hamlet's shape follow its dry ground
         a grove farm's own bamboo - research/questions/0075-bamboo-groves-chikurin.drawing.html: drawn in its grove where the `bamboo` knob is homestead or both
@@ -321,7 +321,7 @@ def reserve_the_seating(s: Settlement) -> None:
     (`crown_reach` at the drawn lift, `village_grove`'s). Every placer after keeps off them (`Settlement.admits`).
 
     Research:
-        a lane to every house - research/questions/0081-village-lanes.drawing.html: nothing built on a laid way
+        a lane to every house - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: nothing built on a laid way
         wood seats reserved - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: a household's copse seats kept for its planting
         a lane's buffer about a copse seat - UNRESEARCHED: the crown's reach at the drawn lift, at least 0.45 of the clump and 4 ft
     """
@@ -373,7 +373,7 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
         the front row's gaps and the rescue's widening - UNRESEARCHED: a front-row gap over 1.45 pitches filled at the row's depth; the rescue band widened 22% and 16% a round
         a pushed front seat's retry - UNRESEARCHED: a front seat pushed across the brook retried a quarter pitch either way along the row
         the front row's offer - UNRESEARCHED: at most 12 front-row seats offered on a form other than a row
-        the passage share - research/questions/0081-village-lanes.drawing.html: each clustered (grown) settlement rolls its share of households reached across a neighbor's land; the other forms roll none
+        the passage share - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: each clustered (grown) settlement rolls its share of households reached across a neighbor's land; the other forms roll none
         the seating's reach - UNRESEARCHED: a homestead within `FORM_BOUND` (1.15, 2.5 for a row) times the band's half-diagonal of the seat, 1.3 times that for the front row
         the seating band - UNRESEARCHED: `SEATING_GROUND_FT` of band per household, the whole ground and wood floor of one holding
         the front row's size - UNRESEARCHED: the square root of the households times the rolled shape's aspect band, at least 6

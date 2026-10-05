@@ -47,20 +47,20 @@ def _house_frame(house: Any, q: Pt) -> tuple[float, float]:
 
 def behind_house(house: Any, q: Pt) -> bool:
     """Does `q` stand BEHIND the house - past its back wall, abreast of it (feature 287, water W57)?
-    Research: behind the back wall is not the dooryard - research/questions/0081-village-lanes.drawing.html: within the house's width plus its depth, past the back wall"""
+    Research: behind the back wall is not the dooryard - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within the house's width plus its depth, past the back wall"""
     lx, ly = _house_frame(house, q)
     return ly < -float(house["h"]) / 2 and abs(lx) <= float(house["w"]) / 2 + float(house["h"])
 
 
 def reaches_dooryard(house: Any, q: Pt, reach: float = DOORYARD_REACH_FT) -> bool:
-    """THE RULE (feature 287, water W57; 269 B17, research/questions/0081-village-lanes.drawing.html): a lane end reaches a farmhouse at its DOORYARD -
+    """THE RULE (feature 287, water W57; 269 B17, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html): a lane end reaches a farmhouse at its DOORYARD -
     within `reach` of its threshing yard or its dooryard beds, or in the band `reach` deep in front of its front face.
 
     Never by distance to the house itself: 12 ft of the drawn house counted a lane ending behind the BACK wall as
     arrived (Kuwabata's lane 5, 11 ft behind house 1 and 43 ft from its yard - future-work, "A lane end behind a house
     counts as its dooryard"). `trim_lane_stubs` judges its ends with this, and the test of it reads it.
 
-    Research: a lane reaches the dooryard - research/questions/0081-village-lanes.drawing.html: within the reach of the yard or beds, or in the band before the front face"""
+    Research: a lane reaches the dooryard - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within the reach of the yard or beds, or in the band before the front face"""
     rot = float(house.get("rot") or 0.0)
     g = house.get("geom") or {}
     for r in [g[k] for k in ("yard",) if g.get(k) is not None] + list(g.get("gardens") or ()):
@@ -86,7 +86,7 @@ class LanesMixin:
         Research:
             a worn earth track - research/questions/0081-village-lanes.html, research/questions/0081-village-lanes.drawing.html: narrow, packed earth, no centerline; every hamlet caller passes `worn=True`, the dashed default is the town tier's
             lane width - NONE: the caller's width; the 16 px default is the town tier's, every hamlet caller passes its own
-            nothing built on a lane - research/questions/0081-village-lanes.drawing.html: a no-build corridor of the clearance the caller passes (the 22 px default is the town tier's)
+            nothing built on a lane - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a no-build corridor of the clearance the caller passes (the 22 px default is the town tier's)
             the track out runs off the map - research/questions/0081-village-lanes.drawing.html: the connector flag
         """
         # a lane KEEPS ITSELF RECORDED (feature 287 M8): the web reshapes lanes in place, and each reshape is asked of the
@@ -238,7 +238,7 @@ class LanesMixin:
         houses - by rewriting the ink in the stream slots the lane already owns: the lane keeps its exact draw position and
         nothing re-layers. It also drops an internal lane shorter than `_LANE_MIN_FT` (71 ft).
 
-        A FARMHOUSE IS REACHED AT ITS DOORYARD (269 B17, research/questions/0081-village-lanes.drawing.html: "a lane that serves a farmhouse ends at
+        A FARMHOUSE IS REACHED AT ITS DOORYARD (269 B17, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: "a lane that serves a farmhouse ends at
         that house's dooryard ... a lane end that reaches nothing is pulled back to the last house it serves"). An end serves
         a house when it stands within `dooryard_reach` of the house's drawn footprint, yard or beds, or within `house_reach`
         of its center while the house still lies ahead of it - never past it. It was 90 ft from the CENTER, in any
@@ -258,10 +258,10 @@ class LanesMixin:
         requires it to reach the frame; a path stopping mid-landscape is the defect, not the cure.
 
         Research:
-            an end reaching nothing is pulled back - research/questions/0081-village-lanes.drawing.html: to the last house, way or bund it serves
-            served at the dooryard - research/questions/0081-village-lanes.drawing.html: within 12 ft of the dooryard, or within 60 ft of the center and not past or behind the house
+            an end reaching nothing is pulled back - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: to the last house, way or bund it serves
+            served at the dooryard - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within 12 ft of the dooryard, or within 60 ft of the center and not past or behind the house
             arrival at the bund - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: within 6 ft of a field's or dry plot's edge
-            meeting another way - UNRESEARCHED: within 40 ft of it, at 20 degrees or more
+            meeting another way - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within 40 ft of it where the page says 60 ft, at 20 degrees or more
             one end per house and bearing - UNRESEARCHED: a second end within 60 ft and 25 degrees of another fronting the same house is trimmed
             short lanes dropped - UNRESEARCHED: an internal lane under 71 ft
             the track out and the field spur stay whole - research/questions/0081-village-lanes.drawing.html

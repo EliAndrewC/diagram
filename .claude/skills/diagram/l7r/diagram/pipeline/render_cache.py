@@ -109,7 +109,10 @@ def engine_fingerprint(skill_dir: str = SKILL_DIR) -> str:
             # THE ENGINE'S DATA FILES TOO (2026-10-02): `buildings/types.json` decides the building kinds a sheet's page
             # writes up (`interactive/compound_kinds`), and nothing hashed it while every sheet re-ran each time anyway.
             # Every `.json`, `.css` and `.js` under `l7r/` - a superset again (the pool index's own files ride along).
-            is_asset = os.path.basename(dirpath) == "assets" and os.path.basename(os.path.dirname(dirpath)) == "interactive"
+            # ...AT ANY DEPTH (feature 319, plan D12): the modals are `assets/modals/<hamlet|sheet>/<kind>.md`, one file each, and
+            # a top-level-only test would have left a reworded modal's pages "cached (fresh)" - feature 187's failure again.
+            dirs = rel_dir.split(os.sep)
+            is_asset = any(dirs[i : i + 2] == ["interactive", "assets"] for i in range(len(dirs) - 1))
             is_asset = is_asset or (rel_dir.split(os.sep)[0] == "l7r" and name.endswith((".json", ".css", ".js")))
             if not is_asset and (not name.endswith(".py") or name.startswith("test_") or name == os.path.basename(__file__)):
                 continue

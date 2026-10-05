@@ -263,7 +263,7 @@ class HousesMixin:
         It defaults to 0.0 because most callers seat something genuinely unrotated; a caller that knows its rake passes it,
         and the bundle placer gets it from `_house_rot`. GAP VERDICT family (this skill's dev/placement.md, "CENTER vs
         FOOTPRINT"): real rotated corners, never a center, never a circumscribed radius.
-        Research: no building corner on a lane - research/questions/0081-village-lanes.drawing.html: the tread's edge `TREAD_WALL_FT` clear of every corner"""
+        Research: no building corner on a lane - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the tread's edge `TREAD_WALL_FT` clear of every corner"""
         if not self.treads:
             return False
         quad = rot_rect(x, y, w, h, rot)
@@ -906,7 +906,7 @@ class HousesMixin:
         long-and-narrow (aspect > 1). The ft/px=1 HAMLETS (the only maps that reach this at that scale, via
         roll_village and the scripted hamlet's `stage_field`) stay on the LEGACY px grain: they already render in-band (~0.02-0.06 acre) and the GM
         asked to leave them untouched, so recalibrating them would only reshuffle vetted maps for no gain.
-        Research: paddy plot size and regularity - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html, research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html: 0.72 / 1.0 / 1.35 of the plot norm or a strip, a grid narrowing the row spread"""
+        Research: paddy plot size and regularity - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html, research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html, research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html, research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: 0.72 / 1.0 / 1.35 of the plot norm or a strip, a grid only narrowing the row spread; no jori grid is drawn"""
         from l7r.diagram.waterfields import PADDY_CELL_ACRES, paddy_grain
 
         if plot_size not in ("small_irregular", "medium", "large_block", "strip"):

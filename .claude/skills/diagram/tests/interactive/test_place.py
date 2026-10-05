@@ -299,15 +299,15 @@ def test_the_card_on_the_reference_hamlet() -> None:
     assert "no headsman of its own" in card["what"], "one spelling of the office - l7r.md's own"
     assert "The flooded fields grow rice." in card["why"]
     assert "village district of Hoshigaoka, which lies east" in card["why"]
-    assert card["lead"] == "", "the card does not announce accuracy either (spec FR-001)"
+    assert "lead" not in card and "label" not in card, "the card does not announce accuracy either (spec FR-001)"
 
 
 def test_the_card_states_the_basis_for_what_it_takes_from_canon() -> None:
     """Spec FR-008a - the GM's liberty rule applied to this surface. Without it the card would print
     a self-declared deliberate deviation under a page-wide presumption of accuracy."""
     card = place_card(HAMLET, PADDY, NOTES, M15)
-    assert card is not None and card["caveat"] == BASIS_LEAD + BASIS
-    assert card["caveat"].startswith("What this rests on: "), "NOT 'On the drawing:' - this is sourcing, not drawing"
+    assert card is not None and card["basis"] == BASIS_LEAD + BASIS
+    assert card["basis"].startswith("What this rests on: "), "NOT 'On the drawing:' - this is sourcing, not drawing"
     assert "Rokugan's own arithmetic" in BASIS
     assert "the Edo record has branch hamlets that kept their own officials" in BASIS
 
@@ -358,7 +358,7 @@ def test_an_unknown_tier_gets_no_card_rather_than_a_wrong_one() -> None:
 
 def test_only_a_hamlet_carries_the_hamlet_basis() -> None:
     card = place_card({"scale": "village", "name": "Hoshigaoka", "households": 70}, PADDY, EMPTY, {"houses": [{"x": 0.0, "y": 0.0}] * 70})
-    assert card is not None and card["caveat"] == ""
+    assert card is not None and card["basis"] == ""
 
 
 def test_an_unnamed_settlement_does_not_produce_a_blank_sentence() -> None:
@@ -405,9 +405,10 @@ def test_the_windbreak_says_it_stands_on_the_north_and_west_for_the_regional_win
     """The GM, on Kashikawa's belt: "I don't see any, any explanation for that." Every map that records its wind
     says which side the belt is on and why."""
     assert (
-        windbreak_default({"windward": "NW", "wind_source": "regional"})
-        == "Here the belt stands toward the northwest of the houses, the side the winter wind across this region blows from; no local wind is recorded for this place."
+        windbreak_default({"windward": "NW", "wind_source": "regional", "name": "Inashiro"})
+        == "Here the belt stands toward the northwest of the houses, the side the winter wind across this region blows from; Inashiro has no local wind patterns that would call for a different orientation from the norm."
     )
+    assert "This settlement has no local wind" in windbreak_default({"windward": "NW", "wind_source": "regional"}), "a map with no name still reads"
 
 
 def test_a_declared_local_wind_is_named_as_a_departure_from_the_regional_one() -> None:

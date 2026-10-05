@@ -3,7 +3,7 @@
 research/questions/0014-bunds-between-the-paddies-aze.drawing.html: the field path runs from the
 hamlet to the paddy's outer bund and joins it, however short that leaves the path; it never ends in open ground short of
 the bund and never passes through a gap in it; where no path is left to draw, the hamlet's nearest lane runs on to the bund.
-research/questions/0081-village-lanes.drawing.html: a lane ends at a dooryard, or runs on
+research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane ends at a dooryard, or runs on
 to something a reader can see - a field path, a bund, another way. That the path joins the bund at the point nearest the
 hamlet is the record's GUESS.
 
@@ -37,11 +37,11 @@ TIP_MARGIN_FT = 1.0
 # How far an end that reaches nothing may be carried on to the bund: the gate's own reach to another way, the distance at
 # which the old rule counted the field as reached - so an end the old rule passed as "near the field" is carried onto it.
 RUN_ON_REACH_FT = WAY_END_REACH_FT
-"""Research: run-on reach - GUESS research/questions/0081-village-lanes.drawing.html: an end within 60 ft of the field is carried on"""
+"""Research: run-on reach - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: an end within 60 ft of the field is carried on"""
 # A run-on may turn the path this far off the way it was walking, and no further: a path bends as it is walked, and a bund
 # behind the end is not one it runs on to (a map drawing convention, well inside the 90 degree hook `joints.py` removes).
 RUN_ON_TURN_DEG = 60.0
-"""Research: run-on turn limit - DEVIATION research/questions/0081-village-lanes.drawing.html: a lane run on to a bund turns no more than 60 degrees anywhere"""
+"""Research: run-on turn limit - research/questions/0081-village-lanes.drawing.html: a lane run on to a bund turns no more than 60 degrees anywhere"""
 # The nearest lane is sampled every this many feet when a field path must branch off it (a map drawing convention).
 BRANCH_STEP_FT = 8.0
 # The branch is drawn at the field spur's own tread (`stage_track`: width 5, worn).
@@ -100,7 +100,7 @@ def turns_back(prev: Pt, end: Pt, tgt: Pt) -> bool:
     """Would carrying `end` on to `tgt` turn the path more than `RUN_ON_TURN_DEG` off the way it was walking? A bund that
     lies behind the end is not one the path runs ON to, and the turn draws a hook (`lanes_end_in_no_hook`).
 
-    Research: no hook onto the bund - DEVIATION research/questions/0081-village-lanes.drawing.html: a run-on leg turning more than `RUN_ON_TURN_DEG` (60 degrees) is refused at any length"""
+    Research: no hook onto the bund - research/questions/0081-village-lanes.drawing.html: a run-on leg turning more than `RUN_ON_TURN_DEG` (60 degrees) is refused at any length"""
     u, v = (end[0] - prev[0], end[1] - prev[1]), (tgt[0] - end[0], tgt[1] - end[1])
     nu, nv = math.hypot(*u), math.hypot(*v)
     if nu <= 1e-9 or nv <= 1e-9:
@@ -135,7 +135,7 @@ class RunOnBlocks:
             water crossed only by plank - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: every
                 drawn course blocks, a crossing between fords needs a plank
             off the wet ground - research/questions/0081-village-lanes.drawing.html: the marsh and the wet toe block
-            off the steadings - research/questions/0081-village-lanes.drawing.html: nothing built on a lane, the built ground blocks
+            off the steadings - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: nothing built on a lane, the built ground blocks
             off the crop - research/questions/0081-village-lanes.drawing.html: the dry plots block
             across commons and village groves - UNRESEARCHED: left out of the blocking fabric, crossed freely"""
         self.s = s
@@ -160,7 +160,7 @@ class RunOnBlocks:
                 `over_water` courses, each bridged by the crossings stage
             off the wet ground - research/questions/0081-village-lanes.drawing.html: no marsh, no wet toe
             off the crop - research/questions/0081-village-lanes.drawing.html: never across a dry plot
-            off the steadings - research/questions/0081-village-lanes.drawing.html: nothing built on a lane, 4 ft footpath gap"""
+            off the steadings - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: nothing built on a lane, 4 ft footpath gap"""
         if not off_the_fixtures(self.s, [a, b], width):
             return False
         if sum(1 for c, d in self.water if segments_cross(a, b, c, d)) > over_water:
@@ -181,7 +181,7 @@ def off_the_fixtures(s: Settlement, pts: Sequence[Pt], width: float) -> bool:
     path, a tree lane no settle repair may cut, was carried on to the bund past its own farm's persimmon trunk, and the web was
     refused for a fault the run on had written.
 
-    Research: off the fixtures - research/questions/0081-village-lanes.drawing.html: no fixture stands on a lane's tread"""
+    Research: off the fixtures - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: no fixture stands on a lane's tread"""
     from .law import fixture_quads, over_a_fixture  # local: the law sits above the run on
 
     return over_a_fixture(list(pts), width, fixture_quads(s.M)) is None
@@ -199,7 +199,7 @@ def run_lanes_on_to_the_bund(s: Settlement, ground: WorkedGround, blocks: RunOnB
     lane's ink is rewritten with its record.
 
     Research:
-        lane end runs on to the bund - research/questions/0081-village-lanes.drawing.html,
+        lane end runs on to the bund - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html,
             research/questions/0014-bunds-between-the-paddies-aze.drawing.html: an end reaching nothing carried onto the field
         connector left alone - research/questions/0081-village-lanes.drawing.html: the track out runs off the map"""
     lanes = s.M.get("lanes") or []
@@ -347,8 +347,9 @@ def carry_on(s: Settlement, i: int, e: int, q: Pt, to: Pt) -> bool:
     nothing is drawn, where it refuses.
 
     Research:
-        a junction stays a T - research/questions/0081-village-lanes.drawing.html: one network, so the step is its own
-            field path"""
+        a junction stays a T - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: one network, so the step is its own
+            field path
+        stepped spur's corridor - UNRESEARCHED: the no-build corridor `LANE_CLEARANCE`, 40 ft"""
     lanes = s.M.get("lanes") or []
     step = squared_step(q, to, drawn_water_segs(s))
     if not off_the_fixtures(s, [q, *step], float(lanes[i].get("w") or 3)):
@@ -413,7 +414,7 @@ def cut_past_the_junction(s: Settlement, touch: float = 4.0) -> int:
     FOUND AT THE 269 LANDING (settlement-review of Mizuguchi, rounds 1 and 2): the field spur began on the brook bank and
     ran 28 ft to the junction where another lane met it, then turned over the bridge - a stub reaching nothing, which the
     end rule counted as served because it stood within reach of the very lane it had just met, and which
-    `trim_free_stub` misses because its corner is a single turn, not a kink (research/questions/0081-village-lanes.drawing.html: a lane ends at the
+    `trim_free_stub` misses because its corner is a single turn, not a kink (research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane ends at the
     last house it serves).
 
     Research: no stub past a junction - research/questions/0081-village-lanes.drawing.html: a free end's short run cut back"""

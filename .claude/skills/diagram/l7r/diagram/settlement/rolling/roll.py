@@ -219,6 +219,10 @@ class RollVillageMixin:
 
         Research:
             source pond and stream - UNRESEARCHED: a pond 88 x 56 px set 66 px above the sluice, or a stream 380 px long into it
+            source pond size - research/questions/0061-reservoir-ponds-tameike.drawing.html: a fixed 88 x 56 px, never sized to the
+                paddy it waters (two or three parts in ten)
+            pond chain - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: a rolled chain is drawn as
+                one pond at mid_margin's spot, no chain of ponds
             land-use overlay - NONE: rolled by its own knob in `apply_land_use`
         """
         from l7r.diagram.waterfields import build_comb
@@ -268,6 +272,8 @@ class RollVillageMixin:
 
         Research:
             cluster on the dry margin - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the position knob's margin, leaning away from the sluice
+            positions told apart - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: mid_margin,
+                valley_head and on_rise take near-identical seat biases (along -1.0, lateral 0.55-0.6), and on_rise draws no rise
             band sized from the households - UNRESEARCHED: `BUNDLE_PITCH_FT` squared per household, a ~3:1 band, depth 112-240 px, length 240-1,500 px; 0032 gives only the coverage floor
             band standoff from the rice - UNRESEARCHED: its center beyond the drawn rice by the band's depth plus 30 px
         """
@@ -341,7 +347,7 @@ class RollVillageMixin:
 
         Research:
             lane skeleton - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: one of five shapes of our own choosing, laid before the houses
-            lane width and clearance - research/questions/0081-village-lanes.drawing.html: 5 px wide, 40 px cleared
+            lane width and clearance - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: 5 px wide, 40 px cleared
             lane stops at the reeds - research/questions/0081-village-lanes.drawing.html: trimmed off the marsh
             headman at the skeleton's prime spot - research/questions/0030-the-headmans-house-and-the-rich-farmers-homestead-shoya-gono.drawing.html: at the junction or a ring of offsets round it
             seed pool - NONE: households x 6 + 30 candidates

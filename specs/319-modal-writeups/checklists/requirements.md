@@ -13,7 +13,7 @@
 
 ## Requirement Completeness
 
-- [x] No [NEEDS CLARIFICATION] markers remain - the first tab's name is a working name pending the GM's pick (Decisions Recorded)
+- [x] No [NEEDS CLARIFICATION] markers remain - the first tab is "About", the GM's pick (Decisions Recorded)
 - [x] Requirements are testable and unambiguous
 - [x] Success criteria are measurable
 - [x] Success criteria are technology-agnostic (no implementation details)

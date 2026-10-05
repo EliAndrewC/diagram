@@ -49,6 +49,9 @@ TIERS: dict[str, tuple[str, str]] = {
     "translation-check": ("opus", "medium"),  # feature 292: judgment of meaning; no seeded downgrade run yet
     "intro-check": ("opus", "medium"),  # feature 311: judgment about a reader; seeded runs on Opus only (plan D4)
     "impl-drift": ("opus", "medium"),  # feature 316: entry-drift's comparison, code against research; seeded runs on Opus only (plan D11)
+    "modal-form": ("opus", "medium"),  # feature 319: a modal's form against dev/modals.md; proved on the old farmhouse and garden (plan D7)
+    "modal-research": ("opus", "medium"),  # feature 319: accuracy, references and gaps against the research; entry-drift's question and more (plan D4)
+    "modal-depiction": ("opus", "medium"),  # feature 319 D13: the Depiction tab against the glyph, the drawing pages and the claims
     "escalation-check": ("opus", "medium"),
     "spec-fidelity-verify": ("opus", "high"),  # medium tried and missed: research R5
     "spec-fidelity": ("opus", "high"),

@@ -517,6 +517,14 @@ def load(gen: str) -> bool:
     return True
 
 
+def _entry_key(entry: str) -> str | None:
+    """The key an entry's meta.json advertises, or None where there is no readable one."""
+    try:
+        return json.loads(Path(os.path.join(entry, "meta.json")).read_text(encoding="utf-8")).get("key")
+    except OSError, ValueError:
+        return None
+
+
 def store(gen: str, deps: dict[str, Any], *, gen_cpu_s: float | None = None, coverage_data: str | None = None) -> None:
     """Write an entry so that a CONCURRENT reader never sees a half-made one.
 
@@ -548,6 +556,13 @@ def store(gen: str, deps: dict[str, Any], *, gen_cpu_s: float | None = None, cov
     # their manifests were current. The entry is simply PNG-less; `load` deletes any standing PNG
     # rather than restoring one, and the next render regenerates it.
     _skip_render = bool(os.environ.get("DIAGRAM_SKIP_RENDER"))
+    key = compute_key(gen, deps)
+    # ...UNLESS THE RENDER IN THE ENTRY IS THIS KEY'S OWN (feature 319, 2026-10-04: the reference hamlet's page and picture
+    # vanished twice in a day). A `make map` filed the rendered page and PNG at key K; a test roll of the same map at the same
+    # K under DIAGRAM_SKIP_RENDER then evicted them, and the next hit deleted the pool's copies as outputs the entry lacked -
+    # so a current page disappeared after every test run that rolled it. Generation is deterministic, so a render filed under
+    # the key being stored IS this key's render; the eviction is for a render from an EARLIER key, and only that is evicted.
+    _kept_render = _entry_key(entry) == key
     for out in _outputs(gen, deps):
         # ...AND THE PAGE IS A RENDER TOO (feature 208): under DIAGRAM_SKIP_RENDER the page is written WITHOUT
         # its raster picture - the vector-only `"r": 0` form - so filing it would bless a degraded page as this
@@ -566,6 +581,8 @@ def store(gen: str, deps: dict[str, Any], *, gen_cpu_s: float | None = None, cov
             # pre-feature-126 roll, on all four scripted hamlets, and reviewed the wrong image before
             # noticing. That is the second time this class of bug has cost review rounds.
             stale = os.path.join(entry, os.path.basename(out))
+            if _kept_render and os.path.isfile(stale):
+                continue
             if os.path.isfile(stale):
                 os.remove(stale)
             # ...BUT THE VECTOR PAGE IS KEPT APART, for the gate to read (feature 294 B6: who answers the pointer over each
@@ -595,7 +612,6 @@ def store(gen: str, deps: dict[str, Any], *, gen_cpu_s: float | None = None, cov
     #
     # So an entry never carries coverage it did not just record. Dropping it costs one regeneration the next
     # time the gate wants this map, and buys a floor that means what it says.
-    key = compute_key(gen, deps)
     if coverage_data is not None and os.path.isfile(coverage_data):
         place(Path(coverage_data).read_bytes(), os.path.join(entry, COVERAGE_NAME))
         # ...STAMPED WITH THE KEY IT WAS RECORDED UNDER. Dropping stale coverage above is enough going

@@ -675,8 +675,12 @@ def test_the_sink_stage_finishes_the_water_after_the_sink(monkeypatch: pytest.Mo
     calls: list[str] = []
     monkeypatch.setattr(hg.sink, "lay_sink", lambda s_, plan_: calls.append("sink"))
     monkeypatch.setattr(hg.sink, "round_the_brooks", lambda s_: calls.append("round"))
-    hg.sink.stage_sink(None, None)  # type: ignore[arg-type]
+    from types import SimpleNamespace
+
+    s = SimpleNamespace(M={"meta": {}})
+    hg.sink.stage_sink(s, SimpleNamespace(water_sink="offmap"))  # type: ignore[arg-type]
     assert calls == ["sink", "round"]
+    assert s.M["meta"]["water_sink"] == "offmap", "the sink as drawn is recorded for the title card (feature 319 plan D10)"
     names = [st.__name__ for st in hg.driver.STAGES]
     assert names.index("stage_sink") + 1 == names.index("stage_seat"), "nothing reads the water between the sink and the seat"
 

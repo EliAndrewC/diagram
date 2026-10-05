@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-05T08:06:04Z",
+  "target": "record-checked",
+  "commit": "37f794e32",
+  "why": "source-reader on source-reader:0031#visit-toyama-sankyoson-3: the added sentence is the same page's, already quoted verbatim in visit-toyama-sankyoson-2 and read by quote-check round 4"
+}

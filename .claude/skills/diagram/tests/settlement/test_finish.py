@@ -214,8 +214,11 @@ def test_a_map_too_full_for_a_blank_title_spot_takes_a_clean_corner():
     def _rect(x0, y0, x1, y1):
         return {"x": (x0 + x1) / 2, "y": (y0 + y1) / 2, "w": x1 - x0, "h": y1 - y0, "rot": 0, "kind": "plain"}
 
-    # every part of the sheet is built on except a pocket that exactly holds the top-left corner seat
-    s.M["houses"] = [_rect(157, 0, 1000, 1000), _rect(0, 125, 157, 1000), _rect(0, 0, 27, 125), _rect(27, 0, 157, 13)]
+    # every part of the sheet is built on except a pocket that exactly holds the top-left corner seat (30, 16) - sized from
+    # the placard itself (`placard_size`; a 157 x 125 pocket until feature 319 set the placard's text for reading)
+    bw, bh = s.placard_size("V")[2:4]
+    px1, py1 = 30 + bw + 3, 16 + bh + 3
+    s.M["houses"] = [_rect(px1, 0, 1000, 1000), _rect(0, py1, px1, 1000), _rect(0, 0, 27, py1), _rect(27, 0, px1, 13)]
     s.title("V")
     assert s.M["title"]["bbox"][0] == 30 and s.M["title"]["bbox"][1] == 16, "seated in the corner, not on a band"
     assert s.M["title"]["bbox"][1] >= 0, "the band rung (a negative y, above the map) was not needed"

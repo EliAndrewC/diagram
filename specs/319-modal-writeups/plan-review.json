@@ -1,0 +1,229 @@
+{
+ "feature": "319-modal-writeups",
+ "plan_sha256": "b27012770d4ac94c874badb75bcdf8f33f12d86ed381692931f130180682d142",
+ "reviewed": "2026-10-05",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "About-form docstring/file form; the classification per statement - a deviation in About, a convention on the Depiction tab since D13; old form parses until the rollout's last task",
+   "class": "within",
+   "why": "Brought in step with the amended FR-005 (a convention is the Depiction tab's, a deviation stays in the write-up). Otherwise unchanged from the CLEAR record of 2026-10-03."
+  },
+  {
+   "id": "D2",
+   "summary": "One tabbed dialog About / Guesses / Depiction / References; empty tabs not drawn; References tab replaces the references dialog; old-form classes shown on About until rewritten",
+   "class": "within",
+   "why": "FR-005 as amended names the four tabs; FR-014 makes Depiction absent when it has nothing. Tab order is not set by the GM ('an About tab and a Guesses tab and a References tab and then also a tab') and is a design choice. Old-form display stays transitional and never lands (FR-012)."
+  },
+  {
+   "id": "D3",
+   "summary": "Guidelines are the checks' single contract, copied into each bundle; numbered rules; GM changes there first",
+   "class": "within",
+   "why": "Unchanged; FR-001, FR-003, FR-010, SC-001."
+  },
+  {
+   "id": "D4",
+   "summary": "modal-form and modal-research (three verdicts, three owed units, three ledger rows)",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Unchanged by the amendment; the ruling of 2026-10-03 stands (three checks separately measured, SC-003 met per check; the GM left the packaging open)."
+  },
+  {
+   "id": "D5",
+   "summary": "Prepass and bundle; gap candidates by union of shared subject tags and kind terms, never cut",
+   "class": "within",
+   "why": "Unchanged; ruling of 2026-10-03 stands."
+  },
+  {
+   "id": "D6",
+   "summary": "modal-form and the three modal-research units owed per changed About-form class and per changed Entry page; entry-drift replaced for new-form classes; enforced at the push",
+   "class": "within",
+   "why": "Unchanged; FR-008. The Depiction check's own owed trigger is D13-owed below."
+  },
+  {
+   "id": "D7",
+   "summary": "Checks proved on the old text first",
+   "class": "within",
+   "why": "Unchanged; enforcement of FR-008."
+  },
+  {
+   "id": "D8",
+   "summary": "Research pass before a guess for the farmhouse's standard questions",
+   "class": "within",
+   "why": "Unchanged; spec Assumptions, US1-1."
+  },
+  {
+   "id": "D9",
+   "summary": "Pilot hand-off and GM verdict per pilot; rollout waits for the go-ahead",
+   "class": "within",
+   "why": "Unchanged; FR-010, FR-012, US6."
+  },
+  {
+   "id": "D10-table",
+   "summary": "choices.json lists every registered knob, the declared choices and (amendment) every per-settlement roll of a form, with not_choices for the rest; the card lists each choice the map's meta records; a test scans the roll sites",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Round 3: round 2's three required changes confirmed in the clone, 2026-10-05. (1) water_sink: hamletgen/sink.py stage_sink writes meta['water_sink'] = plan.water_sink AFTER lay_sink returns, so the value recorded is the final one after all three offmap fallbacks (the two that re-enter stage_sink and the one that re-enters lay_sink). (2) grain_drift: hamletgen/water/comb.py stage_field writes meta['grain_drift'] after the polder hand-off; polder.py reads none of grain_drift, intake or plot_size (grep), so the polder exemption in the test is the literal reading, not a carve-out. (3) The pool hamlets are regenerated: all five record water_sink (pond: Inashiro, Kuwabata, Mizuguchi; offmap: Kashikawa, Sawada), the four comb fields record grain_drift (-4, 4, 0, -4), grave_form where a grave is drawn (Inashiro island, Kashikawa corner); the manifests before f57a4a2ed carried neither key (git show), so the new meta test would have been red on them. Read every table key against the five metas: each is recorded wherever the map made that choice; the nulls are cluster_position and caravan_inn_form (never resolved in hamletgen/, grep), weir_form where no weir is drawn (Sawada open intake, Kuwabata polder), windbreak_belt on the two linear maps (no windbreak), and the comb-only keys on Kuwabata. The roll scan is '(?:_roll|knob_rng)\\([\\w.]*seed, \"...\"' over hamletgen/ and settlement/; every key it finds is in the table or not_choices, and the ten newly named not_choices (brook_approach, brook_wander, byre_share, passage_share, pit_field_share, house_bearing, head_offset, mulberry_fishpond, pond_stock, cremation_seat) are each geometry, a degree, a share, placement, or a roll no hamlet makes - none a choice of form (consistent with D10-not-choices). Rolls in other spellings (random.Random(self.seed * k ...) in castle_civic, compounds, trades, the torii counts; paddy_rest's f-string key) are counts at town tiers or a registered knob already in the table. test_every_choice_a_hamlet_rolls_reaches_its_map_s_meta does what round 2 required: every table key hamletgen/plan.py rolls or declares is checked against every pool hamlet's meta, gated by the entry's when. grave_form, rolled outside plan.py, is recorded exactly when a grave is drawn. The grove-sides sentence is off the hamlet card's facts (page.py; other tiers keep it under 'not hamlet', D10-other-tiers). make test-file FILE=tests/interactive/test_choices.py: 7 passed. With every choice a hamlet makes now on its meta, listing what meta records lists every choice the map made (US4-1, FR-009); the decision no longer drops anything."
+  },
+  {
+   "id": "D10-degree",
+   "summary": "A knob that is a degree along a continuum (grain_drift, -12..12 by 4) takes one modal for the knob, its value shown as the card's label; every other key one modal per value",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "The GM asks that clicking a setting open 'the modal that pops up that explains that'; constitution XII (the project's ratified doctrine) makes a degree a calibration, not a choice between forms, so one standardized text explaining the turn explains every step of it, and seven texts would differ only by the number the card already shows. One case only (grain_drift) is so marked; adjudicated alone. Holds only while the one modal says what the shown value means (which way 'one way' and 'the other way' are, what 0 is)."
+  },
+  {
+   "id": "D10-modals",
+   "summary": "Choice modals as files under assets/modals/choice/, About form, same parser, registry choice:<key>=<value>, same guidelines and checks",
+   "class": "within",
+   "why": "FR-009 (written to FR-001 and FR-005), FR-008, FR-011 'every knob value's modal'."
+  },
+  {
+   "id": "D10-card-facts",
+   "summary": "place_card gains choices (name, value label, modal key, opening in the same dialog) and facts: the windbreak's side and why, where the lanes lead, the retirement count from meta",
+   "class": "within",
+   "why": "FR-004 'no per-map text in a feature modal ... A settlement's own facts and choices go on its title card'; the Decisions row 'Per-settlement facts move from the feature modals to the title card'; US4-3's 'a count of this settlement'. The GM's 'not ... customized modals. For anything' is what moves them."
+  },
+  {
+   "id": "D10-grove-sides",
+   "summary": "Which sides the farm groves take is a CHOICE (grove_sides 2/3/4) opening its own modal, listed where settlement_form is dispersed or linear",
+   "class": "within",
+   "why": "Round 2: resolved. choices.json carries grove_sides with three values and grove_sides--2/3/4.md exist. The when [settlement_form=dispersed|linear] matches the engine: plan.py:216-217 'drawn only where the farms carry their own grove (not nucleated)', grove_rules.py:67 and place.py:360 skip nucleated; hamlet SETTLEMENT_FORMS are nucleated, dispersed, linear only (consts.py:865). Aside, not a ruling: page.py:839 still adds homestead_grove_default's sentence to the card's facts, where the plan now says 'a CHOICE ... not a fact' - a duplicate, not an omission."
+  },
+  {
+   "id": "D10-features-removal",
+   "summary": "On a hamlet the page reads no ### Features; the five blocks are removed as carried by harvest weather, where the dead lie, the field grave's form and the retirement count; two stale burial claims",
+   "class": "within",
+   "why": "Round 2: resolved. Every sentence in the five blocks (read in full) is now a card entry: threshing yard -> harvest_weather; burial ground -> hamlet_burial (Inashiro's and Kashikawa's own grounds stale, all five record village_ground); retirement house -> retirement_fact from meta (Kuwabata's '4 of 16' stale, meta 7); Kashikawa's grave island -> grave_form, now written to meta at settlement/fields/features.py:333 only when a grave is drawn, with grave_form--corner/island.md. Holds on the order of work: no pool manifest records grave_form yet (all five ABSENT, not regenerated), so Kashikawa's block must not go before its manifest is regenerated with it - which the final task's pool regeneration provides."
+  },
+  {
+   "id": "D10-other-tiers",
+   "summary": "Other tiers keep reading ### Features until standardized",
+   "class": "within",
+   "why": "The pool's settlement maps are hamlets alone; the other Features blocks are on magistracy and country-shrine sheets, whose per-sheet text FR-003 keeps on the sheet and FR-011 reviews under the particular guidelines."
+  },
+  {
+   "id": "D10-when",
+   "summary": "A choice belonging to one settlement or field form carries a `when` condition; the card lists it only where the condition holds, since meta records some of them whatever the form",
+   "class": "within",
+   "why": "New in the amendment. FR-009 lists the choices the map MADE; a value recorded but never used is not one. Measured: row_line/sides/water feed only hamletgen/homesteads/rows.py (the linear form) and are recorded on nucleated Inashiro; farm_water_drawn is null on both linear maps; copse_clumps appears only on the three nucleated maps though copse_siting is recorded on all five; dike_crop, leftover, fry_form and pond_layout are forced to defaults off the dike-pond archetype (plan.py:471, 531-533). Each gate removes nothing a map draws. test_a_choice_of_one_settlement_form_is_not_listed_on_another enforces it."
+  },
+  {
+   "id": "D10-not-choices",
+   "summary": "Per-settlement rolls that are not a choice of form - geometry, a degree, a share, a count - named in not_choices with why, and not listed on the card",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "New in the amendment; adjudicated per class. FR-009 defines the choices as 'each knob's value, and the per-map facts now in ### Features', and the project's ratified doctrine (constitution XII, CLAUDE.md: 'A degree along a continuum is calibrated liberty; a choice between distinct forms is a knob') is what makes an unregistered roll of a FORM a knob - the basis of round 1's ruling. The same doctrine says a degree is not one. Geometry (down_deg, water_flow, brook_side, grove_flank - a mirror pair, inert under the pool's NW wind): the map's orientation, drawn on the map, with no per-value explanation to open. Degrees and shares (fan_aspect, head_lead, persimmon_front, privy_seats, farm_fixtures): calibrated liberty, unregistered; the registered degree grain_drift stays on the card (D10-degree). Counts (woodland_patches) and retirement_share/retirement_house: the latter is ON the card as the count fact, so nothing is dropped. cluster_aspect_drawn is a measurement, not a roll. None guts the purpose: no feature modal carries per-map text for any of them, and none is a choice between forms."
+  },
+  {
+   "id": "D10-test",
+   "summary": "A test holds every hamlet class's explanation identical across the five pool maps' meta, FR-015's conditioned items set aside",
+   "class": "within",
+   "why": "Enforces FR-004 and SC-004 as amended."
+  },
+  {
+   "id": "D11",
+   "summary": "Sheets after the hamlet rollout, tagged particular or standard",
+   "class": "within",
+   "why": "Unchanged; FR-003, FR-011."
+  },
+  {
+   "id": "D12",
+   "summary": "One file per modal under interactive/assets/modals/",
+   "class": "within",
+   "why": "Unchanged; ruling of 2026-10-03 stands."
+  },
+  {
+   "id": "D13-form",
+   "summary": "Modal file gains Depiction: (paragraphs) and Drawing: (the .drawing.html pages); Entry: keeps research questions alone",
+   "class": "within",
+   "why": "FR-006 (drawing pages are the Depiction tab's, not References') and FR-014 (the tab's prose and its links); the GM: 'things which are currently linked on the References tab which are about how something is drawn would be moved to this tab'."
+  },
+  {
+   "id": "D13-refusal",
+   "summary": "A .drawing.html listed under Entry: is refused at parse, the message naming Drawing:",
+   "class": "within",
+   "why": "Enforcement test: a guard that REFUSES, so its reach was measured. _base.py:331 sits inside _about_feature, so it refuses only an About-form modal (the 149 old-form files still listing drawing pages under Entry: today parse untouched), and only on the '.drawing.html' substring of Entry:, which is exactly the set of 'how our maps draw it' pages. Entry: is what sources.research_questions puts on the References tab, so the refusal enforces FR-006 and SC-008 ('no References tab lists a how our maps draw it page') and nothing else; delete that requirement and the refusal has nothing to check. Refusing at import is the established form for every other About-form error (Label:, old prose tags). No reach beyond the request."
+  },
+  {
+   "id": "D13-tab",
+   "summary": "Fourth tab 'Depiction' between Guesses and References: Depiction paragraphs then the drawing links; absent when both empty; shares the panels' grid cell",
+   "class": "within",
+   "why": "FR-014 (links alone when nothing notable; absent when neither) and the GM's name. Position is unspecified by the GM. One size for every tab is the GM's 2026-10-03 ruling already in force."
+  },
+  {
+   "id": "D13-guidelines",
+   "summary": "dev/modals.md section 'Depiction' rules D1-D6 and M13 amended (a convention leaves About); a single form called deliberate only where a drawing page records a convention, never where the research makes it an unrolled knob",
+   "class": "within",
+   "why": "FR-014 ('The guidelines MUST say how the tab is written'; the single-form clause verbatim in substance) and the GM's 'The single roof is NOT a deliberate convention'. D4 (one clause pointing to the title card) serves FR-004."
+  },
+  {
+   "id": "D13-agent",
+   "summary": "New defined agent modal-depiction, Opus medium, omitClaudeMd, reporting COVERAGE, TRUTH, LINKS",
+   "class": "within",
+   "why": "FR-014's check, its three criteria one for one ('every convention and standardization ... told with its real counterpart, nothing is claimed that is not drawn, and its links are exactly the drawing pages'); the GM asked for 'a specification for the subagent check'. Tier is a design matter; FR-014 asks only that it be pinned."
+  },
+  {
+   "id": "D13-crop",
+   "summary": "The modal-depiction bundle carries a screenshot crop of the glyph on a pool page (fixed zoom, the page tests' browser); a kind on no pool map bundled without one, saying so",
+   "class": "within",
+   "why": "Enforcement test: an INPUT to the requested check, not new behavior - it refuses, blocks and rewrites nothing. FR-014 asks the check to judge the tab 'as drawn' and that 'nothing is claimed that is not drawn'; the drawing pages say what the rules are, the crop is the only thing in the bundle that shows what the glyph actually looks like. Delete the Depiction check and the crop has nothing to serve. The session pitched 'a crop of the glyph' to the GM before his 2026-10-04 reply, which raised no objection. The no-crop fallback does not skip the check (pages and claims rows still go in)."
+  },
+  {
+   "id": "D13-claims",
+   "summary": "The bundle carries the claims-index rows whose cited pages include the kind's drawing pages",
+   "class": "within",
+   "why": "Enforcement of FR-014's 'MUST NOT present the single form as deliberate' and US3b-3. Does it do what it says: measured in dev/claims-index.json, the farmhouse's DRIFTED rows (HousesMixin.house#farmhouse glyph, #ridge at 0.6 of the length - the roof shape knob, #big farmhouse wing) all cite 0029-farmhouses-minka.drawing.html, so the filter reaches the single-roof drift the plan names."
+  },
+  {
+   "id": "D13-research-scope",
+   "summary": "modal-research no longer reads the drawing pages; its Entry is research questions only",
+   "class": "within",
+   "why": "Follows FR-006: References holds research questions alone; modal-research.md says a drawing page is never listed on References. Not a narrowing in itself; the coverage it hands to modal-depiction is complete only once D13-links reaches what it states."
+  },
+  {
+   "id": "D13-owed",
+   "summary": "modal-depiction owed on ANY change to an About-form modal (new to the form, About, Guesses, Entry, Depiction, Drawing) and when a page under Drawing: changed, whether or not the modal has the tab",
+   "class": "within",
+   "why": "Unchanged since round 2 and confirmed then: owed on ANY change to an About-form modal, tab or not, and on a changed Drawing: page (scripts/_modal_owed.py:251-255). FR-014: 'owed by a changed modal or drawing page'."
+  },
+  {
+   "id": "D13-links",
+   "summary": "LINKS judged against 'the drawing pages the modal and its KIND rest on'; the bundle carries CANDIDATE drawing pages beyond Drawing: - (a) the sibling of each Entry question and (b) any drawing page the modal listed at the merge base (scripts/_modal_bundle.py drawing_candidates)",
+   "class": "within",
+   "why": "Round 3's required change, applied and confirmed in round 4. scripts/_modal_owed.py modals_at gains about_only (default True) and passes it to modals_in; scripts/_modal_bundle.py drawing_candidates now reads the base with modals_at(root, base, about_only=False), so an old-form docstring at the merge base is read and every .drawing.html under its Entry: (or Drawing:) becomes a candidate - leg (b) is live for the conversion case FR-012 makes universal. Both legs now reach what the decision states: (a) the sibling drawing page of each Entry question, (b) any drawing page the base listed in either form. test_a_drawing_page_the_old_form_listed_at_the_base_is_a_candidate_after_the_conversion isolates leg (b): the base is an old-form Farmhouse listing 0038-yards.drawing.html, the head cites only 0029 (whose drawing page does not exist in the fixture tree) with no Drawing:, so the candidate can come from the base read alone, and with about_only=True it would be skipped. Re-run in round 4: make test-file green, 10,989 passed. LINKS is judged against the drawing pages the modal and its KIND rest on (FR-014, SC-008, the GM: 'in cases where no such sections exist we would omit the tab'). No narrowing remains."
+  },
+  {
+   "id": "D14-syntax",
+   "summary": "A guess bullet, About or Depiction paragraph opens with [knob=value|value]; parsed in _base.py and validated against the populated KNOBS registry and the knob's forms, ValueError at import otherwise",
+   "class": "within",
+   "why": "FR-015: a condition names a registered knob and values it can take, and a modal naming any other is refused when read; SC-009's unknown-knob/value failure. The bracket syntax is form, not scope."
+  },
+  {
+   "id": "D14-filter",
+   "summary": "The page writer keeps a conditional item when the manifest meta[knob] is among its values; a map recording no value for the knob shows none of that knob's conditional items; the condition never reaches the reader",
+   "class": "within",
+   "why": "FR-015: shown 'only on a map whose recorded knob value meets the condition' - no recorded value meets none, so this is the literal reading, not a carve-out. The GM asked for the item to be 'still automatic but dependent on the knobs'. Premise measured: all five pool hamlet manifests record settlement_form (3 nucleated, 2 linear, read 2026-10-04)."
+  },
+  {
+   "id": "D14-bundles",
+   "summary": "Check bundles render each conditional item with '(only where <knob> is <value>)' for modal-form, modal-research and modal-depiction; guidelines amend M9 and add M22",
+   "class": "within",
+   "why": "FR-015: the checks MUST read each conditional item with its condition; M9 (same on every map) must follow FR-015's one variation (FR-004/SC-004 as amended). Enforcement of the request, not added scope."
+  },
+  {
+   "id": "D14-entry",
+   "summary": "An Entry: path may carry the same condition and is dropped from References where it fails",
+   "class": "within",
+   "why": "FR-015: References MUST follow what is shown, a question resting only on a hidden item is not listed; SC-009 tests it."
+  },
+  {
+   "id": "D14-first-use",
+   "summary": "The windbreak's shared-wood guess conditioned on settlement_form=nucleated, with 0031 conditioned the same; linear excluded on 0033",
+   "class": "within",
+   "why": "The GM's own case (SC-009: on a nucleated map, absent from a dispersed one). The guess concerns 'a clustered village'; 0033 line 56 reads 'A row farm kept its grove like any other farm' (grepped). No pool linear map carries a windbreak (manifest grep, 2026-10-04), so excluding linear hides nothing a pool map draws. Content correctness of the condition is the modal checks' to judge on the rollout."
+  }
+ ],
+ "verdict": "CLEAR"
+}

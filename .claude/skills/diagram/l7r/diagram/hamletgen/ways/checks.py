@@ -364,7 +364,7 @@ def lanes_share_tread(p: Poly, q: Poly, join: float = LANE_JOIN_FT) -> bool:
     Lifted from the check's own inner `_fw_touch` so it can be tested with two lists of tuples instead
     of a settlement (the project's standing rule on closures that are hard to reach).
 
-    Research: one network at 40 ft - research/questions/0081-village-lanes.drawing.html: joined where their treads meet, judged as within 40 ft (`LANE_JOIN_FT`)"""
+    Research: one network at 40 ft - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: joined where their treads meet, judged as within 40 ft (`LANE_JOIN_FT`)"""
     return any(seg_dist(v[0], v[1], a, b) <= join for v in p for a, b in zip(q, q[1:], strict=False)) or any(seg_dist(v[0], v[1], a, b) <= join for v in q for a, b in zip(p, p[1:], strict=False))
 
 
@@ -376,7 +376,7 @@ def served_network(lanes: Sequence[Mapping[str, Any]], join: float = LANE_JOIN_F
     is not served. The component is grown from the connector if one is drawn, else from the longest lane;
     a check satisfiable by an island rewards drawing an island.
 
-    Research: one network - research/questions/0081-village-lanes.drawing.html: grown from the connector"""
+    Research: one network - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: grown from the connector"""
     ways = [[(float(x), float(y)) for x, y in (ln.get("pts") or [])] for ln in lanes]
     seed = next((i for i, ln in enumerate(lanes) if ln.get("connector")), None)
     if seed is None and ways:
@@ -406,7 +406,7 @@ def unreached_houses(M: Mapping[str, Any], reach: float = WEB_REACH_FT) -> list[
     no form keeps its old treatment.
 
     Research:
-        every farmhouse served - research/questions/0081-village-lanes.drawing.html: within 100 ft of the network
+        every farmhouse served - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within 100 ft of the network
         dispersed hamlet exempt - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: no
             lanes among its farms"""
     meta = M.get("meta") or {}

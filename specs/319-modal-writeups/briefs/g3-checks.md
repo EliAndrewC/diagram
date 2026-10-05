@@ -1,0 +1,15 @@
+- round 1, quote-check 0038: SUPPORTS 6, PARTIAL 1 (the drawing page's half-shade 'all day' restored), unfootnoted 3 - the six hours and daikon footnoted, the elm-height claim given qimin-yaoshu-zhongzhu-3, the grove heights rewritten to the section's 10 to 22 m with kurita-2019-igune and yashikirin-jawiki-3
+- round 1, record-format 0038: 56 words ruled, clean
+- round 1, translation-check 0038 (ehime-kenshi-seiryoki): FAITHFUL 4
+- round 1, source-reader 0038: READ 1, both absences hold; the farm book's date hedged ('an Edo-period farm book, perhaps from its first decades'), 'a household ate' -> 'to take and eat', both pass texts now name the planting lists
+- round 1, entry-drift: Windbreak IN-STEP; Persimmon DRIFTED, applied (the Tonami fruit trees at the open front, silent on the drying yard; tonami-yashikirin-haichi added to Sources); ThreshingYard DRIFTED, applied (the farmyard persimmon named among the trees); Garden DRIFTED (the daikon-bed GUESS missing), NOT applied - feature 319 rewrites assets/modals/hamlet/garden.md; answered by record-checked with REASON
+- round 2, quote-check 0038: SUPPORTS 10, PARTIAL 1 - the opening's 'a tree's shade' narrowed to 'the elm's shade'; kurita-2019-igune read from J-STAGE and supports 10 to 22 m; unfootnoted 0
+- round 2, record-format 0038: VOCABULARY 2 - solar time and Seiryoki glossed (Seiryoki's definition carries the after-1701 dating); a pre-existing duplicate glossary variant (Bu Nongshu) removed, test_glossary_source green
+- round 2, source-reader 0038: READ 1, NOT-FOUND 1 (absence holds), CONTRADICTED 1 - the book itself discusses suitable land and two headings name a vegetable garden; pass text rescoped to the lists as the prefectural history prints them, the garden headings not saying where it lay
+- round 2, entry-drift: Windbreak IN-STEP; Garden answered by REASON again (the modal is 319's to rewrite)
+- round 3, quote-check 0038: SUPPORTS 9, PARTIAL 1 - kurita-2019-igune's 11-22 m rested on numbers in a parenthesis; the table's measured row now quoted cell by cell (its 実測 in the originals); unfootnoted 0
+- round 3, record-format 0038: 55 words ruled, clean
+- round 3, source-reader 0038: READ 2, NOT-FOUND 1 - both absences hold and the rescoped pass text is honest
+- round 3, entry-drift: Windbreak IN-STEP; Garden answered by REASON (319 rewrites garden.md)
+- round 4 (kurita-2019-igune's table row): quote-check SUPPORTS 1 (read from the page images); record-format 55 words, clean; translation-check FAITHFUL 5 (実測 -> measured); source-reader READ 2 (the measured row 22.0-11.0 m, Minami's 9-16 m)
+- record tests green each round (3854 passed); record-owed UNANSWERED=1: no record check is owed. Left for 319's rewrite: the garden modal's daikon-bed GUESS (entry-drift DRIFTED, round 1); a Research: claim citing 0038 is owed impl-drift at the push

@@ -328,6 +328,9 @@ class FieldFeaturesMixin:
         # own candidate loop. Seating it carves the rings (`carve_around_grave`).
         if arch in self._PADDY_GRAVE_KINDS and rng.random() < 0.3:
             start = plots.index(rng.choice(plots))
+            # THE FORM ON THE RECORD (feature 319, plan D10): the title card lists it as this settlement's choice, and a
+            # modal item may depend on it - the form the seed already chose, recorded, nothing drawn differently
+            self.M.setdefault("meta", {})["grave_form"] = grave_form(self.seed)
             seat = self._plot_grave_island if grave_form(self.seed) == "island" else self._plot_corner_grave
             for k in range(len(plots)):
                 if seat(plots[(start + k) % len(plots)], rng, net, ink):
@@ -345,7 +348,7 @@ class FieldFeaturesMixin:
         source. Drawn OVER the plot (so it carries no bund grid) with a reed fringe; recorded in
         M['field_ponds']. Returns False - drawing and recording nothing - when no legible pond fits (`_pond_fit`).
 
-        Research: field pond glyph - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: open water with a ring of eight reed ticks"""
+        Research: field pond glyph - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html, research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.html, research/questions/0061-reservoir-ponds-tameike.drawing.html: open water with a ring of eight reed ticks, no embankment drawn round it"""
         fit = self._pond_fit(plot, rings)
         if fit is None:
             return False

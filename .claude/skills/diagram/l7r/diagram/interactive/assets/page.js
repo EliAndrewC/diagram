@@ -132,33 +132,66 @@
 
   function setText(id, s) { document.getElementById(id).textContent = s || ""; }
   function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
-  var refsDialog = document.getElementById("references");
   function open(key) {
     var d = data[key];
     if (!d) return;
-    if (refsDialog.open) refsDialog.close();
     setText("x-name", cap(d.name));
-    // THE PRESUMPTION OF ACCURACY (feature 156, GM 2026-08-29). `lead` is empty for everything the
-    // record calls accurate, so the modal opens with what the feature IS; a deviation, a convention or a guess
-    // still leads with its liberty, because that is the case worth a reader's attention. The
-    // caveat - the liberty an accurate class's own record discloses - goes AFTER the why.
-    var label = document.getElementById("x-label");
-    fillText(label, d.lead);
-    label.hidden = !d.lead;
-    fillText(document.getElementById("x-what"), d.what);
-    fillText(document.getElementById("x-why"), d.why);
+    // THE ABOUT FORM (feature 319): the About tab's paragraphs; the title card has none and shows its what and why
+    var about = document.getElementById("x-about");
+    about.textContent = "";
+    (d.about || []).forEach(function (para) { var p = document.createElement("p"); fillText(p, para); about.appendChild(p); });
+    about.hidden = !(d.about && d.about.length);
+    var guesses = document.getElementById("x-guesses");
+    guesses.textContent = "";
+    (d.guesses || []).forEach(function (g) { var li = document.createElement("li"); fillText(li, g); guesses.appendChild(li); });
+    document.getElementById("t-guesses").hidden = !(d.guesses && d.guesses.length);
+    document.getElementById("t-refs").hidden = !d.questions.length;
+    fillLinks("r-list", d.questions);
+    // THE DEPICTION TAB (feature 319 plan D13): its paragraphs, then the "how our maps draw it" pages; absent when both are empty
+    var dep = document.getElementById("x-depiction");
+    dep.textContent = "";
+    (d.depiction || []).forEach(function (para) { var p = document.createElement("p"); fillText(p, para); dep.appendChild(p); });
+    fillLinks("d-list", d.drawing || []);
+    document.getElementById("t-depict").hidden = !((d.depiction && d.depiction.length) || (d.drawing && d.drawing.length));
+    // NO LEAD (feature 319): a class's classification is per statement in its own text, so nothing is announced above
+    // it. The title card's body is its what and why (`place.place_card`); a class has neither.
+    fillText(document.getElementById("x-what"), d.what || "");
+    fillText(document.getElementById("x-why"), d.why || "");
     // WHAT IS TRUE OF THIS MAP ONLY (feature 156): authored in the settlement's own .notes.md and
     // headed so it cannot be read as a general fact about the kind. Absent on nearly every class of
     // nearly every map, and then the section is not there at all.
+    // THE TITLE CARD'S CHOICES AND FACTS (feature 319, plan D10): each choice this settlement made, its value a link that opens
+    // the value's own modal in this dialog; then the settlement's own sentences. Only the card carries them.
+    var choicesEl = document.getElementById("x-choices");
+    choicesEl.textContent = "";
+    (d.choices || []).forEach(function (c) {
+      var p = document.createElement("p");
+      p.appendChild(document.createTextNode(c.name + ": "));
+      if (c.k && data[c.k]) {
+        var a = document.createElement("a");
+        a.href = "#" + c.k;
+        a.className = "choice";
+        a.setAttribute("data-k", c.k);
+        a.textContent = c.value;
+        a.addEventListener("click", function (e) { e.preventDefault(); open(c.k); });
+        p.appendChild(a);
+      } else {
+        p.appendChild(document.createTextNode(c.value));
+      }
+      choicesEl.appendChild(p);
+    });
+    choicesEl.hidden = !(d.choices && d.choices.length);
+    var factsEl = document.getElementById("x-facts");
+    factsEl.textContent = "";
+    (d.facts || []).forEach(function (f) { var p = document.createElement("p"); fillText(p, f); factsEl.appendChild(p); });
+    factsEl.hidden = !(d.facts && d.facts.length);
     var onmap = document.getElementById("x-onmap");
     fillText(onmap, d.on_this_map || "");
     onmap.hidden = !d.on_this_map;
-    // VERBATIM - the lead-in is part of the string now (page.py CAVEAT_LEAD, place.py BASIS_LEAD).
-    // A renderer that prepended "On the drawing:" to every caveat also prepended it to the place
-    // card's basis, which is about where the card's claims come from and not about the drawing.
-    var caveat = document.getElementById("x-caveat");
-    fillText(caveat, d.caveat || "");
-    caveat.hidden = !d.caveat;
+    // THE TITLE CARD'S BASIS (spec 156 FR-008a), VERBATIM - its lead-in is part of the string (place.py BASIS_LEAD)
+    var basis = document.getElementById("x-basis");
+    fillText(basis, d.basis || "");
+    basis.hidden = !d.basis;
     // SIBLINGS ARE LINKS (GM 2026-08-28): "Not to be confused with the X" - hovering X lights X on
     // the map (the pinned highlight yields while the pointer is on the link), clicking X opens X's
     // modal in place of this one. Each modal's own text stays its own.
@@ -182,13 +215,8 @@
       p.appendChild(document.createTextNode("."));
       sib.appendChild(p);
     }
-    // THE LINK COUNTS QUESTIONS (feature 180): what the references modal will list. The "Record: ..."
-    // footer that used to follow it is gone (GM 2026-09-05) - the pointer stays in the registry.
-    var refs = document.getElementById("x-refs");
-    refs.hidden = !d.questions.length;
-    refs.textContent = d.questions.length ? "See references (" + d.questions.length + ")" : "";
+    showTab("about");
     dialog.setAttribute("data-k", key);
-    dialog.setAttribute("data-label", d.label);
     // NOT showModal(): a modal dialog makes the rest of the document inert, and Chromium re-styles
     // all ~175,000 elements of the map on every open and close - measured ~1 s and ~50 MB per cycle
     // on Inashiro, enough to crash the tab in the browser test on a tight machine. A non-modal
@@ -200,40 +228,34 @@
   }
   // hideTip() here as well as in the `close` listener: `close()` dispatches its event on a later task,
   // and the box should not outlive the dialog by even a frame (feature 182)
-  function closeDialog() { if (refsDialog.open) refsDialog.close(); hideTip(); dialog.close(); shade.hidden = true; unpin(); }
+  function closeDialog() { hideTip(); dialog.close(); shade.hidden = true; unpin(); }
   // a sibling link's hover lights the OTHER class while the pointer is on it; the pin resumes after
   function peek(other) { var keep = pinned; pinned = null; highlight(other); pinned = keep; }
   function unpeek() { var keep = pinned; pinned = null; highlight(keep); pinned = keep; }
-  // THE REFERENCES MODAL (GM 2026-08-28): a second dialog. SINCE FEATURE 180 (GM 2026-09-05) IT LISTS
-  // QUESTIONS, NOT SOURCES: one link per research section the class was written from, to that section
-  // on the public GitHub rendering of the record - "a list of questions we've asked with links to the
-  // appropriate places". The sources are one click further, on the page that answers the question; a
-  // casual reader is not met with a wall of them.
-  // IT REPLACES THE EXPLANATION RATHER THAN STACKING ON IT (feature 181, GM 2026-09-05: "when it is
-  // smaller, it just looks really weird. So I think that the original modal should disappear. But then
-  // if I click on the 'Return to Farmhouse writeup' button, then the current modal closes and the
-  // original modal reappears"). HIDDEN, not closed: the explanation's `close` event is what releases the
-  // pinned highlight and the shade, and the reader has not left the feature - they have gone one level
-  // deeper into it - so the map stays lit and shaded behind (spec D1/FR-002). The class comes off in the
-  // references dialog's own `close` listener below, which every way back runs through: the button, the
-  // title link, Escape, `closeDialog`, and a fresh `open()`.
-  function openRefs() {
-    var key = dialog.getAttribute("data-k");
-    var d = data[key];
-    if (!d || !d.questions.length) return;
-    // THE TITLE IS THE WAY BACK (feature 181): "<Name> references", the name a link doing exactly what
-    // the return button does - one handler, two triggers (spec D2). Only the word is the link (D3).
-    var title = document.getElementById("r-name");
-    title.textContent = "";
-    var back = document.createElement("a");
-    back.id = "r-back"; back.href = "#"; back.className = "back";
-    back.textContent = cap(d.name);
-    back.addEventListener("click", function (e) { e.preventDefault(); returnToWriteup(); });
-    title.appendChild(back);
-    title.appendChild(document.createTextNode(" references"));
-    var list = document.getElementById("r-list");
+  // THE TABS (feature 319, GM 2026-10-03): About, Guesses, References in ONE dialog. A tab with nothing to show is not
+  // drawn; the dialog opens on About every time. The references used to be a second dialog that replaced this one
+  // (features 180, 181) with a "Return to <X> writeup" button; the tab strip is the way back now.
+  var tabs = { about: "t-about", guesses: "t-guesses", depict: "t-depict", refs: "t-refs" };
+  var panels = { about: "p-about", guesses: "p-guesses", depict: "p-depict", refs: "p-refs" };
+  function showTab(name) {
+    Object.keys(tabs).forEach(function (t) {
+      var on = t === name;
+      var b = document.getElementById(tabs[t]);
+      b.setAttribute("aria-selected", on ? "true" : "false");
+      b.classList.toggle("on", on);
+      document.getElementById(panels[t]).hidden = !on;
+    });
+    hideTip();  // the word it pointed at may be on the panel just hidden
+  }
+  Object.keys(tabs).forEach(function (t) {
+    document.getElementById(tabs[t]).addEventListener("click", function () { showTab(t); });
+  });
+  // THE REFERENCES ARE QUESTIONS (feature 180, GM 2026-09-05): one link per research question the class was written
+  // from, opening its answer in the record's site in a new tab; the sources are one click further, on that page.
+  function fillLinks(id, qs) {
+    var list = document.getElementById(id);
     list.textContent = "";
-    d.questions.forEach(function (q) {
+    qs.forEach(function (q) {
       var p = document.createElement("p");
       var a = document.createElement("a");
       a.href = q.url; a.target = "_blank"; a.rel = "noopener"; a.className = "q";
@@ -241,19 +263,7 @@
       p.appendChild(a);
       list.appendChild(p);
     });
-    // THE BUTTON SAYS WHERE IT GOES (GM 2026-09-05: "just saying close might make it seem like we are
-    // closing all of the modals instead of just this one").
-    setText("r-close", "Return to " + cap(d.name) + " writeup");
-    hideTip();  // the word it pointed at is about to be hidden with its dialog
-    dialog.classList.add("behind");
-    refsDialog.show();
   }
-  function returnToWriteup() { refsDialog.close(); }
-  document.getElementById("x-refs").addEventListener("click", function (e) { e.preventDefault(); openRefs(); });
-  document.getElementById("r-close").addEventListener("click", returnToWriteup);
-  refsDialog.addEventListener("cancel", function (e) { e.preventDefault(); returnToWriteup(); });
-  // ...and however the references close, the explanation comes back (feature 181)
-  refsDialog.addEventListener("close", function () { dialog.classList.remove("behind"); });
   svg.addEventListener("click", function (e) {
     if (mode() === "raster") return;  // the stage's own click handler answers from the id map
     var key = keyAt(e.target);
@@ -366,7 +376,6 @@
   // "it would be better if there was only one way of zooming"). The browser's menu zoom cannot be
   // intercepted from a page; the keyboard and Ctrl+wheel can.
   document.addEventListener("keydown", function (e) {
-    if (refsDialog.open) { if (e.key === "Escape") { e.preventDefault(); refsDialog.close(); } return; }
     if (dialog.open) { if (e.key === "Escape") closeDialog(); return; }
     var c = center();
     if (e.key === "+" || e.key === "=") { e.preventDefault(); zoomAt(2, c[0], c[1]); }
@@ -437,7 +446,7 @@
     current: function () { return current; },
     cursor: function () { return stage.style.cursor || "auto"; },
     pinned: function () { return pinned; },
-    openRefs: openRefs,
+    showTab: showTab,
     classes: Object.keys(groups),
     count: function (key) { return (groups[key] || []).length; },
     zoom: function () { return view.s / view.fit; },

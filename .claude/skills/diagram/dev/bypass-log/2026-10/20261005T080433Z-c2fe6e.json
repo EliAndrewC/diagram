@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-05T08:04:33Z",
+  "target": "record-checked",
+  "commit": "7285b6005",
+  "why": "source-reader on source-reader:0235#kimura-1934-bochi-menseki-3: only a stray space before a semicolon was removed between two quoted passages (record-format's punctuation fix); no quotation or claim changed"
+}

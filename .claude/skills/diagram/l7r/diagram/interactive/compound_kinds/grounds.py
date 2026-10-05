@@ -1,10 +1,8 @@
 """The compound's grounds and its bounds - the courts, the gardens, the wall and its gates, the ways that reach it.
 
-Each class's DOCSTRING is its explanation - `What:`, `Why:`, `Note:`, optional `Caveat:`, then the data tags -
-parsed by `..classes._base.parse_explanation` (feature 189). Every kind is written FROM the existing record
-(feature 262, FR-005): the sections its `Entry:` names, and the `buildings/types.json` program item folded into
-it where there is one (the item's class and why are carried here, not re-decided). The measurement behind each
-label is `specs/262-interactive-magistracy-pages/coverage.md`.
+Each class's modal text is its own file, `assets/modals/sheet/<slug of its key>.md`, in the About form (feature 319),
+parsed by `..classes._base.parse_explanation`. Every kind is written FROM the existing record (feature 262, FR-005): the
+sections its `Entry:` names.
 """
 
 from __future__ import annotations
@@ -13,497 +11,63 @@ from ..classes import Kind
 
 
 class OuterCourt(Kind):
-    """
-    What: The public half of the compound, just inside the main gate: an open forecourt where arrivals
-    gather, the office hall with its hearing court, and the working buildings of the office - stores,
-    stables, the watch's lodging - set around its edges.
-
-    Why: Chinese county offices put the office in front and the residence behind, and this setting follows
-    them: Chinese regulation required it of a county office, and Japanese offices likewise kept the chief's
-    household inside the working compound, though no source read sets it behind the office. So
-    whoever comes on business - a petitioner, a taxpayer, a prisoner - is dealt with here, near the gate,
-    and goes no deeper. Its open ground is not wasted space: a jin'ya left most of its site open - at Takayama
-    the floors of all its buildings come to about three-tenths of the site, and the plaza in front alone is
-    about an eighth of it - and its forecourt and hearing court were features of the plan in their own right.
-
-    Note: The two-court split follows the Chinese record, and the open forecourt follows the record; no
-    codification of the split was found, and at Takayama the residence stood beside the office rather than
-    behind it. No Japanese source read shows the residence behind the office; how much of a jin'ya's site stood
-    open is read at Takayama alone, and the most our plans build on, about 42%, is this project's own estimate
-    from plans. On these plans the buildings stand somewhat further apart than in a real jin'ya, which joined its
-    functions into a few long connected ranges, so that each reads as its own labeled footprint.
-
-    Caveat: No Japanese source read shows the residence behind the office; how much of a jin'ya's site stood
-    open is read at Takayama alone, and the most our plans build on, about 42%, is this project's own estimate
-    from plans. On these plans the buildings stand somewhat further apart than in a real jin'ya, which joined its
-    functions into a few long connected ranges, so that each reads as its own labeled footprint.
-
-    Name: outer court
-    Covers: the outer court's ground and its labels, the forecourt among them
-    Label: accurate
-    Sources: neixiang-yamen-zhwiki, takayama-jinya-jawiki, takayama-jinya-city, takayama-jinya-gifu, machi-bugyo-jawiki, jinya-jawiki, yamen-enwiki, neixiang-xianya-zhwiki
-    Entry: research/questions/0090-magistrates-compounds-jinya-and-yamen.html, research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html; research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html, research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html
-    """
-
     key = "outer court"
 
 
 class InnerCourt(Kind):
-    """
-    What: The private half of the compound, behind the internal wall: the magistrate's residence and
-    household, its garden and the compound's shrine, with the kitchen, the servants' quarters and the
-    service ground that keep the household running.
-
-    Why: The chief's household living inside the working compound is the point of the institution - the
-    office is a household, and the wall between the two courts is the hinge between state and home. So the
-    inner court lies behind the office hall, away from the gate, reached from the outer court only by the
-    household's own door. The record's ideal puts its prized formal garden on the sunny south side, facing
-    the reception rooms, and a plan seats it there where its buildings allow; the household's service
-    economy fills the shady rear.
-
-    Note: The household inside the compound follows the record; the residence-behind-the-office order is
-    Chinese regulation (Neixiang), while the Japanese pages read show no front-and-rear order - at Takayama the
-    residence stood beside the office, to the west, so drawing it behind in a Japanese-led plan is a deliberate
-    simplification. The two-court split and the formal garden south of the
-    reception rooms follow the record. That a household's storehouse stood behind the house is read, at the Higuchi
-    house; the rest of the service strip along the shady north rear is this record's own reasoning from where the
-    formal garden sat, not something a source describes.
-
-    Caveat: That a household's storehouse stood behind the house is read, at the Higuchi house; the rest of the
-    service strip along the shady north rear is this record's own reasoning from where the formal garden sat, not
-    something a source describes.
-
-    Name: inner court
-    Covers: the inner court's ground and its label
-    Label: accurate
-    Sources: neixiang-yamen-zhwiki, takayama-jinya-jawiki, machi-bugyo-jawiki, jinya-jawiki, yamen-enwiki, shoinzukuri-jawiki
-    Entry: research/questions/0090-magistrates-compounds-jinya-and-yamen.html, research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html; research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html, research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html
-    """
-
     key = "inner court"
 
 
 class BorderCourt(Kind):
-    """
-    What: A receiving court kept apart from the hearing court: a swept court that visitors of rank step into
-    when they arrive by a door of their own, before they are shown into the room where they are received. On a
-    border posting it is where a delegation from across the border is met.
-
-    Why: A domain kept guard posts where its roads crossed into a neighbor's land, to watch the people and goods
-    going in and out and sometimes to tax them. At Nuruyu, one of the few that survive, the front gate stood
-    across the road and the inspection hall faced it, so the ground between gate and hall was where everyone
-    crossing passed before the officers. Arrival of rank, too, was staged: through the gate, across open ground,
-    then up the step of the formal entrance - a guest never stepped from the road straight into a room. So a
-    guests' door opens into a court fit to receive them, and not onto the hearing court where the accused kneel.
-
-    Note: a court between the gate on the road and the inspection hall is the ground those crossing really
-    passed over, and a formal reception room in a border officer's house is attested even at a plain post.
-    Keeping that court for delegations of rank from across a clan border, received there with ceremony, is this
-    setting's own, a departure built on the examining ground: no page read describes a border post that kept a
-    court for receiving officials of the neighboring domain.
-
-    Name: border court
-    Covers: the receiving court behind a border posting's parley door, and its label
-    Label: deviation
-    Sources: kotobank-bansho, bunka-nuruyu-bansho, bansho-jawiki, kotobank-shikidai, kominkai-genkan
-    Entry: research/questions/0110-border-posts-and-their-crossing-court-kuchidome-bansho.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html; research/questions/0110-border-posts-and-their-crossing-court-kuchidome-bansho.drawing.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html
-    """
-
     key = "border court"
 
 
 class HearingCourt(Kind):
-    """
-    What: The oshirasu: the roofed court directly before the office hall's dais where the parties to a case knelt
-    to be heard and judged, the magistrate above them on the raised floor. Its floor is spread with white gravel,
-    or with cobbles from the local riverbed.
-
-    Why: A magistracy's court was roofed, either under a roof built over it or as an earth floor spread with
-    gravel inside the building; the open-air court of white sand is the image of the period dramas, not the
-    history. The one that survives at an intendant's office, Takayama's, is paved with river cobbles, because
-    its province had not enough white sand, and was made inside the building because an open court would be
-    buried in winter snow; Takayama keeps two such courts, one for suits and petitions and one for criminal
-    cases. Takayama rebuilt its examination room in 1816 as one part of the office, with its entrance hall,
-    working office and great hall, which we read as one block, so the hearing court lies against
-    the front of the hall where the magistrate sits. In Rokugan, where torture is unusual, a magistracy keeps no
-    room built for interrogation, so questioning happens here or in the day office like any other business.
-
-    Note: What covers the floor is one of two attested forms, white gravel or cobbles from the local riverbed
-    where white sand is scarce, and each sheet takes one. The posts along the court's open side stand two ken
-    apart, a spacing that is this project's own guess. That a jin'ya was laid out around the hearing court and
-    the forecourt as open features is this project's reading of plans, which no readable source measures. No
-    roofed court's size was found, so the size each sheet draws is a guess.
-
-    Caveat: That a jin'ya was laid out around the hearing court and the forecourt as open features is this
-    project's reading of plans, which no readable source measures. No roofed court's size was found, so the size
-    each sheet draws is a guess.
-
-    Name: hearing court (oshirasu)
-    Covers: the roofed court before the dais and its label
-    Label: accurate
-    Sources: oshirasu-jawiki, takayama-jinya-city, takayama-gh-shirasu, shirasu-imidas, takayama-jinya-official, takayama-jinya-jawiki
-    Entry: research/questions/0099-the-hearing-court-shirasu.html, research/questions/0096-holding-cells-agariya-and-roya.html, research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html; research/questions/0099-the-hearing-court-shirasu.drawing.html, research/questions/0096-holding-cells-agariya-and-roya.drawing.html, research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html
-    """
-
     key = "hearing court"
 
 
 class PracticeGround(Kind):
-    """
-    What: A patch of open earth in the outer court, marked by the gear that stands on it: the place where the
-    compound's samurai keep up their daily practice.
-
-    Why: Formal martial training was given at the domains' schools and at private halls. A domain taught the martial arts at its school, built
-    in its own territory and in the castle town as a rule, and many domains attached a practice hall to it;
-    the great enrolled halls grew in Edo, where the pupils were. Private halls, kept by masters at their own
-    houses, did reach every part of the country, but late - they flourished at the end of the Edo period, with
-    townsmen and farmers training beside samurai - and before the mid-Edo period practice was often held
-    outdoors or on an earthen floor. So rural samurai most likely trained at home in an earthen yard, in a hall
-    cleared for the purpose, or on shrine grounds. A county seat holds about fifteen samurai - no student body and no living for a teacher -
-    so its magistracy trains on open ground in its own compound, and what marks that ground is the gear
-    practice leaves behind, not a building. It is sized to the samurai who drill there, about 90 to 135 sq ft
-    each.
-
-    Note: Courtyard keiko in place of a dojo follows the record only in part: the famous private fencing
-    dojos read on stood in Edo, and practice before the mid-Edo period was held outdoors or on earthen floors. Private halls did reach every part of the country late in the period, so that a county seat keeps none is the map's own calibration, counted on its samurai alone though townsmen and farmers trained at them too.
-    The one martial ground the pages read on an intendant's office name there is a riding ground, and the
-    drill ground read on stood at a small domain's jin'ya - a different kind of seat, though the word jin'ya
-    covers both - so the practice ground rests on that analogy, and no page read describes rural practice or
-    its gear. Marking the ground by its gear is a map convention, and its 90 to 135 sq ft a samurai is a
-    guess no page read gives. That domain
-    schools stood in castle towns and cities as a rule (the two read, Hagi's and Mito's, stood inside their
-    castles), that rural samurai trained in yards, cleared halls or on shrine grounds, and that a Chinese
-    county yamen had no training hall are guesses no page read confirms. That a
-    rural intendant's office kept no martial hall is a guess from the silence of the pages read on one, which
-    list its buildings without one but never say it had none.
-
-    Caveat: That domain schools stood in castle towns and cities as a rule (the two read, Hagi's and Mito's,
-    stood inside their castles), that rural samurai trained in yards, cleared halls or on shrine grounds, and
-    that a Chinese county yamen had no training hall are guesses no page read confirms. That a rural intendant's office kept no martial hall is a guess from the silence of
-    the pages read on one, which list its buildings without one but never say it had none.
-
-    Name: practice ground
-    Covers: the keiko patch and its label
-    Label: accurate
-    Sources: hanko-jawiki, hagi-meirinkan-guide, kodokan-mito-jawiki, edo-three-dojos-jawiki, jinya-jawiki, dojo-jawiki, genbukan-jawiki, kotobank-machidojo
-    Entry: research/questions/0165-martial-training-grounds-and-dojo.html; research/questions/0165-martial-training-grounds-and-dojo.drawing.html
-    """
-
     key = "practice ground"
 
 
 class CompoundGarden(Kind):
-    """
-    What: The compound's ornamental ground - planting, laid out to be looked at: the inner garden at the heart of
-    the private court and, where a plan has them, a walled garden path to the reception room's veranda, a garden
-    around the shrine or one kept for guests.
-
-    Why: A samurai house's prized formal garden lay on the sunny south side, facing the reception rooms. At
-    Takayama, the one intendant's office whose buildings survive, a single garden is seen both from the great
-    hall of the office and from the room where the intendant lived, with stepping stones into it from each, so
-    the private rooms look onto the one garden rather than a garden of their own. A garden was
-    one of two kinds beside samurai rooms: a pond garden built around real water, or a dry garden of stones and
-    white gravel standing for water. A guest reached the house in one of two ways: by a formal entrance on the
-    office where office and residence share one compound, as at Takayama, and otherwise on the residence, or, at a middle-rank house with no such entrance, through a middle gate in a wall
-    and along a walled garden path (roji) straight to the veranda of the reception room. The household's god
-    was kept in a corner of the lot, in a small shrine or at an old tree beside it.
-
-    Note: The pond garden and the dry garden are both attested beside samurai rooms, and each sheet takes one;
-    so are the two ways a guest reached the house. A separate small garden for the private rooms was found at no
-    posting, and sharing the one garden is read from Takayama, its rooms rebuilt to an Edo-period plan of 1830 that no source says draws the garden, and carrying it from there to other, humbler postings is a guess. The pond's form and
-    size are a guess: no page read gives the size of a residence garden's pond. A garden where a court
-    would stand between gate and entrance, as where a guests' door opens into a guest garden, is a guess: the
-    ground a guest crossed was an open court, and no page read says it was ever a garden. A fenced forecourt
-    before the entrance rests on nothing found and is a guess. The shrine in a corner and a tree beside it are
-    attested, but an ornamental garden planted around a compound's shrine is described on no page read and is a
-    guess.
-
-    Caveat: The pond's form and size are a guess: no page read gives the size of a residence garden's pond. A
-    garden where a court would stand between gate and entrance, as where a guests' door opens into a
-    guest garden, is a guess: the ground a guest crossed was an open court, and no page read says it was ever a
-    garden. A fenced forecourt before the entrance rests on nothing found and is a guess. The shrine in a corner
-    and a tree beside it are attested, but an ornamental garden planted around a compound's shrine is described
-    on no page read and is a guess.
-
-    Name: garden
-    Covers: the inner garden, a garden path, a shrine garden and a guest garden, and their labels
-    Label: accurate
-    Sources: oniwa-takayama-jinya, kotobank-teien, okutono-jinya-garden, chiran-bukeyashiki-gardens, genkan-jawiki, shirobito-1717-takayama, shiroishi-koseki, kotobank-shikidai, kominkai-genkan, fuchu-joge-pamphlet, kotobank-yashikigami, jawiki-yashikigami, shoinzukuri-jawiki
-    Entry: research/questions/0103-ornamental-gardens-ponds-and-stone-lanterns-teien.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html, research/questions/0218-the-compounds-own-shrine-yashikigami.html, research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html; research/questions/0103-ornamental-gardens-ponds-and-stone-lanterns-teien.drawing.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html, research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html, research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html
-    """
-
     key = "garden"
 
 
 class RearYard(Kind):
-    """
-    What: The open ground behind the house, between it and the household's storehouses: working ground, not a garden.
-
-    Why: At the Higuchi house at Matsushiro the storehouse stands beyond the ground behind the main house; the source's
-    word for that ground, niwa, is a yard as much as a garden, and the formal garden took the sunny south.
-
-    Note: Open ground behind the house, with the storehouse beyond it, follows the record, drawn as the court's own earth.
-
-    Name: rear yard
-    Covers: the rear yard and its label
-    Label: accurate
-    Sources: kojodan-higuchi, matsushiro-kankou-higuchi
-    Entry: research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html; research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html
-    """
-
     key = "rear yard"
 
 
 class VegetableGarden(Kind):
-    """
-    What: A vegetable garden for the household's own table, set where it gets its sun.
-
-    Why: Samurai grew their own vegetables, on anything from a kitchen plot to half their grounds. The
-    Boso-no-mura house of a middle-rank samurai family, as the museum reconstructs it, has a soup-greens plot of
-    about 1,076 sq ft (100 m²), planted mainly with leafy greens, on the west side of the house; at Matsushiro a
-    150-koku retainer's house keeps about half its grounds in vegetable field today, and the Higuchi house's field
-    lay south of its pond, where its formal garden is now. A jin'ya had a vegetable garden inside its grounds, a
-    daikan's office a field entered apart from its residence lot, and a Chinese county office listed its plot behind
-    the residence gate after the kitchen and the stable. A bed of vegetables that want full sun needs about six hours
-    of direct sun a day.
-
-    Note: At a residence or a walled compound its size is one of two attested forms, a soup-greens plot or a field
-    over about half the grounds, and each sheet takes its own; its site is one of four - west of the house, south
-    beside the formal garden, or a parcel of its own, each recorded in Japan, and the rear service ground, recorded
-    only at a Chinese county office ("How our maps draw vegetable gardens at samurai houses and government offices
-    (saien)"). The sun rules out a site where the bed gets under
-    its six hours in the autumn - the six hours is modern growing advice, and counting them in autumn, with an hour
-    counted when half the bed is lit, and each shadow cast at the least height recorded for what casts it (a tree at a working windbreak's 33 ft, below a full-grown persimmon), is a guess ("Sunlight and shade on the farm"; a sheet may declare a
-    half-shade bed, which needs three). Where the west and the rear lie in the shade of the house and the kitchen, the
-    bed stands in the inner court beside the formal garden; at a country shrine it is the resident keeper's plot, near
-    the dwelling on whatever open ground gets its sun. A plot beside the formal garden is drawn in rows with no fence
-    or hedge between them, beyond the formal garden where the court has room, and no bed is fenced on its own. That a
-    plot beside the formal garden stands unscreened and beyond it, that no single bed is fenced, and that a household
-    chose its site by the sun are guesses, and so are a country shrine keeper's plot's place and size: no source read
-    names a screen or a fence round a single plot, gives a household's reason, or places or measures a keeper's plot.
-
-    Caveat: That a plot beside the formal garden stands unscreened and beyond it, that no single bed is fenced, and
-    that a household chose its site by the sun are guesses, and so are a country shrine keeper's plot's place and
-    size: no source read names a screen or a fence round a single plot, gives a household's reason, or places or
-    measures a keeper's plot.
-
-    Name: vegetable garden
-    Covers: the kitchen garden's beds and label
-    Label: accurate
-    Sources: boso-no-mura-takei, matsushiro-bukeyashiki, sanada-higuchi, kasama-iwama-jinya, kotobank-kisaku-daikansho, gujin-xie-yamen, atariya-nisho
-    Entry: research/questions/0109-vegetable-gardens-at-a-samurai-residence-saien.html; research/questions/0038-sunlight-and-shade-on-the-farm.html; research/questions/0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html; research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html
-    """
-
     key = "vegetable garden"
 
 
 class ShrineGrove(Kind):
-    """
-    What: The shrine's own sacred wood: kept trees standing on the sides of the hall its ground gives them, round a
-    cleared opening where the hall stands.
-
-    Why: A Japanese shrine's setting was a deliberately preserved grove, the chinju no mori - a wood kept and
-    tended around the sanctuary, the approach and the place of worship, so that the shrine stands among
-    kept trees. Which sides of the hall it stands on follows the ground: all around on a
-    rise or in the paddy plain; on a slope behind the hall, at its sides, or both.
-
-    Note: The grove as the setting of a shrine follows the record, as do the forms it takes by the ground, though behind only and at the sides only rest on one modern survey of 27 Tokyo shrines, which speaks to which forms occur and not how often; that the village's own households answered for the shrine's cleaning is recorded only in modern times, and that its clearing was a swept surface is general reading with no page found, so no swept collar is drawn around the hall or its arches. How much of the precinct the wood covers, some or nearly all of it with the rest open ground, is a guess: no source read splits a precinct into buildings, wood and open ground. A hall midway on an even slope, with no break of slope at it, may take any of the slope's three forms, a guess. Where a wood in the paddy plain meets its fields, its foot is either the fields' straight line, as one modern photograph shows, or its crowns' ragged edge. Its edge, where it meets scrub or slope, is drawn irregular, a guess, as is the even roll between a straight and a ragged foot where it meets paddy, and which of two or three forms a slope takes is rolled with equal weights, a guess; everything the record holds is about a village shrine standing in its own wood, and nothing covers a grove kept inside a compound wall.
-
-    Caveat: Its edge, where it meets scrub or slope, is drawn irregular, a guess, as is the even roll between a straight and a ragged foot where it meets paddy, and which of two or three forms a slope takes is rolled with equal weights, a guess; everything the record holds is about a village shrine standing in its own wood, and nothing covers a grove kept inside a compound wall.
-
-    Name: shrine grove (chinju no mori)
-    Covers: the grove's ground and its tree canopies
-    Label: accurate
-    Sources: chinju-no-mori-jawiki, fengshui-woodland-enwiki, jinja-jawiki, short-2012-sacred-groves, fujita-2007-shaso-slopes
-    Entry: research/questions/0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html, research/questions/0224-ground-swept-clear-around-shrines-and-graves.html, research/questions/0215-village-shrines-where-they-stand-and-how-big-their-grounds-are.html, research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html; research/questions/0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.drawing.html, research/questions/0215-village-shrines-where-they-stand-and-how-big-their-grounds-are.drawing.html, research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html, research/questions/0224-ground-swept-clear-around-shrines-and-graves.drawing.html
-    """
-
     key = "shrine grove"
 
 
 # The GM's ruling: the compound wall is drawn 3 ft thick, the heavier of the two real forms.
 class CompoundWall(Kind):
-    """
-    What: The heavy wall around the whole compound: earth rammed or laid up thick, under its own
-    tiled coping, broken only at the gates. Buildings back onto it, but none stands in it.
-
-    Why: A walled enclosure is the grammar every administrative compound shares, Japanese or Chinese. A wall
-    of this class is a building in its own right - thick enough to carry the
-    tiles that keep its earth core dry - so the ground under it is occupied, and the buildings ringing a
-    court back onto it with their eaves nearly touching, a foot or two off so that the wall stays reachable
-    for patching.
-
-    Note: we have drawn the compound wall 3 ft thick, the heavier of the two real forms, in order to make its
-    stroke read on the plan (by this project's choice). Two forms of earth wall are attested: the lighter wall of earth or
-    clay laid up without a frame, or plastered over posts, about 1 to 2 ft thick - a surviving late-Edo neribei
-    measures 0.6 m, about 2 ft, across its base - and the rammed-earth tsuijibei, built up to about 1 m (3.3 ft)
-    thick. In Kanazawa, samurai of middle rank and above walled their land with earth while foot soldiers kept
-    hedges; no page read measures the wall of a magistrate's post itself. How near the buildings stand to the wall, eaves nearly touching and a foot or two
-    off, is our own reasoning; no source we found describes it.
-
-    Name: compound wall
-    Covers: the outer wall's strokes
-    Label: convention
-    Sources: kunishitei-toyonaga-neribei, kojodan-dobei, hei-jokaku-jawiki, mlit-kanazawa-dobei, tsuijibei-jawiki
-    Entry: research/questions/0092-compound-walls-neribei-and-tsuijibei.html, research/questions/0090-magistrates-compounds-jinya-and-yamen.html; research/questions/0092-compound-walls-neribei-and-tsuijibei.drawing.html, research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html
-    """
-
     key = "compound wall"
 
 
 class MainGate(Kind):
-    """
-    What: The compound's formal entrance in the front wall, with the forecourt beyond: either a gate of one bay
-    between heavy posts, or an opening through a gate range (nagaya-mon) whose rooms flank it. It is the widest
-    of the compound's doors, and the one meant for visitors on business.
-
-    Why: A Japanese post's gate took one of two forms. The nagaya-mon, a gate opened through a range of rooms,
-    arose as the gate of castles, jin'ya and samurai residences, its design fixed by the house's standing; a
-    registered one opens in its central two ken, about 12 ft. The one-bay gate (yakuimon) measures about 6 to
-    9 ft across its frontage in registered examples. A Chinese county office's gate was instead a roofed
-    building, three bays wide by law. A magistrate's manor faces what it fronts - the town it governs or the road
-    it stands beside - and its gate opens onto that way; where nothing else decides it, the gate faces south,
-    the formal orientation a Chinese county office took by regulation. Behind it, where the house has a formal entrance (a middle-rank house could do without one and lead its guest through a middle gate and along a walled garden path instead), a guest's arrival is staged: the gate,
-    then open ground a palanquin can cross, then the step of the formal entrance, so no visitor steps from the
-    road into a room.
-
-    Note: The one-bay gate and the nagaya-mon are both attested, and each sheet takes one; their widths come
-    from registered gates whose pages do not say whose house they served, and no page read gives the doorway of
-    a jin'ya's gate. A yamen's gate drawn
-    as a roofed building of three bays follows the record, but its 18 to 24 ft width is a guess, since no page
-    read gives one. Facing what it fronts, the town or the road, is this project's own siting, calibrated against
-    the drawn maps; only the southern fallback rests on a source, and that one is Chinese.
-
-    Caveat: A yamen's gate drawn as a roofed building of three bays follows the record, but its 18 to 24 ft
-    width is a guess, since no page read gives one. Facing what it fronts, the town or the road, is this
-    project's own siting, calibrated against the drawn maps; only the southern fallback rests on a source, and
-    that one is Chinese.
-
-    Name: main gate
-    Covers: the posts flanking the main opening
-    Label: accurate
-    Sources: nagayamon-jawiki, tamba-kashiwara-jinya, bunka-saito-nagayamon, bunka-adachi-yakuimon, bunka-omi-yakuimon, bunka-fujioka-yakuimon, sohu-yamen-gate, bjd-qing-yamen, neixiang-xianya-zhwiki, kotobank-shikidai, kominkai-genkan
-    Entry: research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html; research/questions/0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html; research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html, research/questions/0092-compound-walls-neribei-and-tsuijibei.drawing.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html; research/questions/0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.drawing.html
-    """
-
     key = "main gate"
 
 
 class SideGate(Kind):
-    """
-    What: A lesser door in the compound wall: the kitchen postern for deliveries and night soil, a service
-    gate by the stables or the stores, a landing gate to the water, or a guests' door of its own. Each is
-    narrower than the main gate.
-
-    Why: Service traffic is the deliberate inverse of a guest's arrival: the kitchen postern opens straight
-    into work space, so deliveries, muck and the night-soil carters never cross the courts where the office
-    does its business or the household lives. Night soil was a paid-for commodity emptied by outside carters,
-    so the pits sit toward a service wall or gate a cart can reach. A door meant for guests, by contrast,
-    opens onto open ground before an entrance, the way a guest of rank arrived. In this setting wagons and carts
-    use the roads between towns, so a compound that ships or receives bulk goods keeps a gate a cart can use.
-
-    Note: The service doors follow the record, though the dictionary names only the kitchen door and that it
-    opens into work space is this record's reading, and a guests' door opening into a garden rather than a court is a guess, since no page read puts a garden before an entrance. That a night-soil collector never has to cross the inner
-    court is this record's own rule rather than a finding. A cart gate or landing gate that carts pass is the
-    setting's own: carts were kept to the towns and off the highways in Edo Japan, and the setting's notes put
-    wagons and carts on the roads.
-
-    Caveat: That a night-soil collector never has to cross the inner court is this record's own rule rather
-    than a finding. A cart gate or landing gate that carts pass is the setting's own: carts were kept to the
-    towns and off the highways in Edo Japan, and the setting's notes put wagons and carts on the roads.
-
-    Name: side gate
-    Covers: the posts of the posterns, service gates, landing gate, cart gate and guests' door
-    Label: accurate
-    Sources: kotobank-katteguchi, tajima-2007-night-soil, guernica-night-soil, kotobank-benjo, kotobank-shikidai, kominkai-genkan, kotobank-daihachiguruma, l7r-wagons
-    Entry: research/questions/0082-moving-goods-carts-packhorses-and-river-landings-kashi.html; research/questions/0082-moving-goods-carts-packhorses-and-river-landings-kashi.drawing.html; research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html, research/questions/0101-privies-setchin.html; research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html, research/questions/0101-privies-setchin.drawing.html
-    """
-
     key = "side gate"
 
 
 class CourtDivider(Kind):
-    """
-    What: The lighter wall that splits the compound into its outer and inner courts, broken by one narrow
-    household door, the nakamon.
-
-    Why: The split between the courts is the split between state and home: the office and its public business
-    in front, the household behind, with only the one door between them.
-
-    Note: The internal wall between the two courts follows the Chinese record, where regulation put the office in front and the residence behind an inner residence gate; for Japanese compounds that front-and-rear order is on no page read, and at Takayama the residence stood beside the office rather than behind it, so drawing a Japanese compound's residence behind its office is a deliberate simplification. No source measures the divider: the wall's
-    2 ft thickness is this project's own figure.
-
-    Caveat: No source measures the divider: the wall's 2 ft thickness is this project's own figure.
-
-    Name: court divider
-    Covers: the internal wall's strokes
-    Label: accurate
-    Sources: neixiang-yamen-zhwiki, machi-bugyo-jawiki, yamen-enwiki
-    Entry: research/questions/0090-magistrates-compounds-jinya-and-yamen.html; research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html
-    """
-
     key = "court divider"
 
 
 class ApproachRoad(Kind):
-    """
-    What: The ways that bring traffic to the compound: the road or town street up to the main gate, and the
-    lanes that serve its lesser doors.
-
-    Why: On the Japanese model a magistrate's manor stands at the edge of the settlement it administers, on the Chinese model inside the wall on the main street, and its gate faces what it
-    fronts - the town, or the road it sits beside - opening onto the roadbed; where a manor fronts a road at
-    an angle, the whole compound turns so its front wall runs parallel to the way. So a road always arrives at
-    the main gate. A planned Chinese capital was a grid of avenues keyed to its gates, and a county seat's
-    streets linked its gates, but a main avenue running from the principal gate to the government office is a
-    guess, found on no page read, and in neither Japan nor China was a country lane a wide road. The road at a compound's front gate is the road
-    the compound stands on, at that road's width: Japan's great highways ran about 18 to 30 ft wide away from the mountains, about 13 to 23 ft in them and 12 ft at a pass such as Hakone, set to about 30 ft
-    by an order of 1605, and one through a castle town about 15 ft, so a compound on the Imperial road opens onto its
-    30 ft and one on a lesser highway onto 15 to 24 ft.
-
-    Note: the roads here carry carts and wagons, the setting's own departure from Edo Japan, where carts were
-    kept to the towns and barred from the highways; the setting's notes put wagons and carts on the roads between
-    towns. The road at the gate is drawn at the width of the road the compound stands on: 30 ft where it is the
-    Imperial road, as it is drawn everywhere, even in the mountains and at a pass, where the record reads it narrower, about 13 to 23 ft and 12 ft, and 15 to 24 ft where it is a lesser highway, as read; no page read gives the width of the road before an official's gate, so any wider ground
-    before the gate is a guess, and so is a lane to a side or cart gate, drawn at about 6 ft where carts use it.
-    The record read sets a Japanese seat beside the settlement it administers, which this project reads as the town's edge, and a Chinese county yamen inside its town on the main street, and gives a south-facing gate for a Chinese county office; that the manor's gate faces what it fronts
-    and opens onto the road it stands on is this project's own calibration, set against the drawn
-    maps rather than read from a source.
-
-    Name: road
-    Covers: the approach road or town street, the lanes to the lesser doors, and a road across a border
-    Label: deviation
-    Sources: ctie-michi-nazenaze, hiroshima-saigoku-kaido, mlit-kinsei-michi, kotobank-daihachiguruma, l7r-wagons, neixiang-xianya-zhwiki, song-architecture-enwiki, jokamachi-jawiki, lowtech-chinese-wheelbarrow, toyama-1988-road-undevelopment, jinya-jawiki, tamba-kashiwara-jinya, sina-neixiang-xianya, bjd-qing-yamen
-    Entry: research/questions/0088-highways-and-what-lines-them-kaido.html, research/questions/0082-moving-goods-carts-packhorses-and-river-landings-kashi.html, research/questions/0081-village-lanes.html; research/questions/0088-highways-and-what-lines-them-kaido.drawing.html, research/questions/0082-moving-goods-carts-packhorses-and-river-landings-kashi.drawing.html; research/questions/0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html, research/questions/0121-town-plans-the-street-town-gaison-the-planned-grid-and-the-castle-town.html; research/questions/0121-town-plans-the-street-town-gaison-the-planned-grid-and-the-castle-town.drawing.html, research/questions/0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.drawing.html
-    """
-
     key = "road"
 
 
 class CartYard(Kind):
-    """
-    What: An open loading apron inside a cart gate, where goods carts stand to load and unload beside the
-    stores; the apron is working ground, not a fire gap kept round stores that can burn.
-
-    Why: In this setting wagons and carts use the roads between towns, so a compound that ships or receives bulk
-    goods - rice bales, charcoal - has a cart gate, a cart yard and a lane a cart can use. A compound keeps such
-    open ground as a working feature, not as slack. Charcoal was cooled at the kiln before it came to a store, and
-    no measured gap round a charcoal store is found before modern times, so the yard is working ground, not a fire
-    gap of a set width.
-
-    Note: carts at a county compound are the setting's own departure from Edo Japan, where carts were kept to the
-    towns and barred from the highways to the end of the shogunate, though the hand cart, its bed about 8 by 2.5
-    ft, spread through the castle towns and beyond them by late Edo; the setting's notes put wagons and carts on the
-    roads between towns. The apron's 15 to 20 ft width is this record's own calibration, which no source read
-    states; how far a store stands from other buildings is a guess, the 30 ft once derived here resting on modern
-    fire guidance.
-
-    Name: cart yard
-    Covers: the loading apron inside the cart gate
-    Label: deviation
-    Sources: kotobank-daihachiguruma, mlit-kinsei-michi, l7r-wagons, fao-charcoal-safety, tonya-enwiki
-    Entry: research/questions/0082-moving-goods-carts-packhorses-and-river-landings-kashi.html, research/questions/0081-village-lanes.html; research/questions/0082-moving-goods-carts-packhorses-and-river-landings-kashi.drawing.html; research/questions/0197-charcoal-yards-and-charcoal-stores.html; research/questions/0197-charcoal-yards-and-charcoal-stores.drawing.html; research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html; research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html
-    """
-
     key = "cart yard"
 
 
@@ -511,217 +75,28 @@ class CartYard(Kind):
 
 
 class GardenPond(Kind):
-    """
-    What: The garden's centerpiece, within sight of the rooms that face it: a small ornamental pond, an open oval
-    of water set among the planting - or, where a sheet takes the other form, a dry garden of white gravel
-    and set stones standing for water. Each map's note says which it draws.
-
-    Why: The formal garden of a samurai house lay beside its reception rooms, to be looked at from them, and
-    water - real, or stones and gravel standing for it - is one of the things such a garden was made to hold for
-    the eye.
-
-    Note: A residence garden was either a pond garden or a dry garden of stones and white gravel standing for
-    water, both attested beside samurai rooms, and each sheet takes one. The two offices whose gardens can be read
-    today, Takayama and Okutono, kept pond gardens, but both were far grander than a county post, an office of the shogunate's intendants and the seat of a domain, so a pond is the
-    grander of the two forms for a small posting. The weight between the forms is a guess. No page read gives
-    a residence pond's size: its form and size are a guess, drawn small enough to sit within sight of the rooms
-    that face the garden. A pond set on the line from the gate to the entrance rests on nothing found and
-    is a guess.
-
-    Caveat: The weight between the forms is a guess. No page read gives a residence pond's size: its form and
-    size are a guess, drawn small enough to sit within sight of the rooms that face the garden. A pond set on the
-    line from the gate to the entrance rests on nothing found and is a guess.
-
-    Name: garden pond
-    Covers: the pond, or the dry garden, in the inner garden
-    Label: accurate
-    Sources: kotobank-teien, oniwa-takayama-jinya, okutono-jinya-garden, chiran-bukeyashiki-gardens, shiroishi-koseki
-    Entry: research/questions/0103-ornamental-gardens-ponds-and-stone-lanterns-teien.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html; research/questions/0103-ornamental-gardens-ponds-and-stone-lanterns-teien.drawing.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html
-    """
-
     key = "garden pond"
 
 
 class StoneLantern(Kind):
-    """
-    What: A stone lantern (ishidoro) - stacked stone parts, from the top a jewel, a cap, the fire-box that holds
-    the light, a platform, a post and a base - standing in a garden or a receiving court, drawn as a small gray
-    glyph.
-
-    Why: The stone lantern came to Japan with Buddhism as a votive light, a single lantern standing at the center
-    of the front of a shrine or temple. From the Momoyama period it was set in tea gardens, to light gatherings
-    held in the evening, and in ordinary gardens, until it was one of a garden's usual furnishings beside the
-    stepping stones and the fences.
-
-    Note: A lantern in a residence garden follows the record. It came in many kinds - the Kasuga, the
-    snow-viewing, the Enshu and the Oribe among them - and all are drawn as one small glyph, a drawing
-    convention. How many a garden holds, and where, are a guess. A lantern in a court where guests are received
-    is a guess, described on no page read and borrowed from the shrine and temple use, so one drawn there
-    stands singly on the line of approach.
-
-    Caveat: It came in many kinds - the Kasuga, the snow-viewing, the Enshu and the Oribe among them - and all
-    are drawn as one small glyph, a drawing convention. How many a garden holds, and where, are a guess. A
-    lantern in a court where guests are received is a guess, described on no page read and borrowed from the
-    shrine and temple use, so one drawn there stands singly on the line of approach.
-
-    Name: stone lantern
-    Covers: each stone-lantern glyph in a garden or the border court
-    Label: accurate
-    Sources: kotobank-ishidoro, kotobank-teien
-    Entry: research/questions/0103-ornamental-gardens-ponds-and-stone-lanterns-teien.html; research/questions/0103-ornamental-gardens-ponds-and-stone-lanterns-teien.drawing.html
-    """
-
     key = "stone lantern"
 
 
 class GardenPines(Kind):
-    """
-    What: A cluster of old pines in the inner garden, drawn as three canopies and labeled.
-
-    Why: The Japanese black pine is the lead tree of the Japanese garden, and a garden pine is a tended one, its
-    new shoots pinched and thinned twice a year; a pine planted at the edge of the wall to be seen from outside
-    is named already in a dictionary of 1603-04. The garden of a long-held posting was likely kept by generations of
-    magistrates, and its pines would likely be older trees, though no page read says how old.
-
-    Note: Pines in a residence garden follow the record, and so does a pine by the wall seen from outside. Their
-    crown size is a guess: no page read gives the crown of a pruned garden pine, though left to grow the tree
-    reaches 15 to 40 m. The drawn crowns of 4 to 6 ft read as young or closely pruned trees, while a garden kept
-    by generations would likely hold older trees with wider crowns; a crown of 15 to 30 ft would be no less a
-    guess.
-
-    Caveat: Their crown size is a guess: no page read gives the crown of a pruned garden pine, though left to
-    grow the tree reaches 15 to 40 m. The drawn crowns of 4 to 6 ft read as young or closely pruned trees, while
-    a garden kept by generations would likely hold older trees with wider crowns; a crown of 15 to 30 ft would be
-    no less a guess.
-
-    Name: garden pines
-    Covers: the old pines' canopies and their label
-    Label: accurate
-    Sources: uekipedia-kuromatsu, kotobank-mikoshi-no-matsu
-    Entry: research/questions/0076-black-pines-in-japanese-gardens-kuromatsu.html; research/questions/0076-black-pines-in-japanese-gardens-kuromatsu.drawing.html
-    """
-
     key = "garden pines"
 
 
 class StrikingPosts(Kind):
-    """
-    What: Standing timbers on the practice ground (tategi), upright posts struck hard with a wooden sword in drill,
-    drawn as small location markers with their label.
-
-    Why: The swordsmanship of Satsuma trains by striking a standing timber from left and right with a shout, over
-    and over, on a practice ground that can be open to the sky. In its main line the post is a log a little over
-    2 m long set about 70 cm into the ground, so that a little over 4 ft stands above it, struck from shoulder height
-    down to the stomach. A knee-high bundle of branches laid across is found only in the modern period, first dated
-    some time after 1946; what is said of it before then is undated hearsay, so it is not drawn. A county seat draws no dojo here, and what marks its open ground as a place of daily keiko is the
-    gear that stands on it.
-
-    Note: we have drawn the striking posts as small markers of where each stands rather than at their own size,
-    in order to mark the open ground as a practice ground by its gear, this project's convention for these plans; a
-    real upright post stood a little over 4 ft above the ground. The upright post is Satsuma practice, its school's founder of 1561-1643;
-    carrying it to a practice ground outside that line is a guess, and so is the count.
-
-    Name: striking posts
-    Covers: the standing posts on the practice ground and their label
-    Label: convention
-    Sources: jigen-ryu-jawiki, kotobank-tategi-uchi, nodachi-jigen-ryu, bujutsukarate-tategi, jinya-jawiki, dojo-jawiki
-    Entry: research/questions/0165-martial-training-grounds-and-dojo.html; research/questions/0165-martial-training-grounds-and-dojo.drawing.html
-    """
-
     key = "striking posts"
 
 
 class WeaponRack(Kind):
-    """
-    What: A rack for practice weapons standing at the edge of the practice ground, flush against the wall of the
-    building beside it.
-
-    Why: Like the striking posts, the rack is the durable gear that marks open ground as the place where the
-    compound's samurai drill every day, in place of a hall built for it. Two real racks lie behind it: the sword
-    rack, which holds swords lying level on forked supports, usually in two tiers, and was kept in a guardroom;
-    and the long arrest weapons kept at checkpoints and guard posts, which a painting shows stood in a row in the
-    open beside a theater's entrance, probably as symbols of order and authority.
-
-    Note: A rack for practice weapons at the edge of a practice ground is described on no page read; it is a
-    guess joined from the guardroom's sword rack and the guard post's long weapons, and its size of about 8 by 2
-    ft is a guess too. Standing long weapons upright in the open at a post's front is itself a guess, drawn from
-    a painting of them standing at a theater's entrance.
-
-    Name: weapon rack
-    Covers: the rack at the practice ground's edge and its label
-    Label: guess
-    Sources: kotobank-katanakake, kotobank-mitsu-dogu
-    Entry: research/questions/0165-martial-training-grounds-and-dojo.html; research/questions/0165-martial-training-grounds-and-dojo.drawing.html
-    """
-
     key = "weapon rack"
 
 
 class Nakamon(Kind):
-    """
-    What: The nakamon - the one narrow household door in the wall between the outer and inner courts, set
-    directly behind the office hall.
-
-    Why: The internal gate between the courts is the hinge between state and home. Official business stops at the
-    office hall; the family, its servants and the household's own guests of rank pass this door into the private
-    court, and the hall standing in front of it screens that court from the public one.
-
-    Note: The gate between the two courts follows the Chinese record, where the inner residence gate is one
-    of Neixiang's five; no Japanese page read gives the front-and-rear order, and at Takayama the residence
-    stood beside the office, not behind it. Who passes the gate, and the hall screening the private court,
-    are this project's own reading; no page read says either. Our plans keep no fixed central axis. Its seat
-    directly behind the office hall is the drawing program's own placement, not a recorded custom, and no source
-    measures the household door: its 8 ft width is this project's own figure.
-
-    Caveat: Its seat directly behind the office hall is the drawing program's own placement, not
-    a recorded custom, and no source measures the household door: its 8 ft width is this project's own figure.
-
-    Name: nakamon
-    Covers: the posts of the household door in the court divider
-    Label: accurate
-    Sources: neixiang-yamen-zhwiki, machi-bugyo-jawiki, yamen-enwiki
-    Entry: research/questions/0090-magistrates-compounds-jinya-and-yamen.html; research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html
-    """
-
     key = "nakamon"
 
 
 class Door(Kind):
-    """
-    What: A building's own door, drawn as a small block at its wall: the kitchen door (katteguchi) on the
-    kitchen's earth floor, the doors of the lodgings and the servants' row, the karo's side door, the heavy doors
-    of a plastered storehouse, and the entry of a guest house or a room where visitors are received.
-
-    Why: Every building has a way in. A senior samurai house had three (a middle-rank one could do without the first, bringing its guest in through a garden): the formal entrance for its head and honored guests, an inner
-    entrance for the family and the household to come and go by, and the kitchen door, the way in from
-    outside to the kitchen - a word the dictionaries date from 1666; who came in by it is told only
-    by pages of today, so the map says nothing of it. A guest's arrival
-    comes across open ground to its door; a servants' row turns its doors inward, into the compound; and a
-    plastered storehouse might face its outer doors in earth and plaster, and in the great fires of the Edo
-    period fire often never reached inside.
-
-    Note: The kitchen door, the inward-facing doors of a servants' row, the plastered storehouse doors and a
-    guest's door onto open ground follow the record; a guest's door drawn opening into a garden instead of a court is a guess. The kitchen door's place on its earth floor, a second outside door on a kitchen, and the route by which food reached the
-    rooms, are a guess, and a door of a room that the setting or a map's story made is as much the drawing's own
-    as its room. A drawn door's width is a drawing convention, not a measurement: the working doors are drawn two
-    to three times the width of an ordinary door so that they read at the sheet's scale. A real ordinary door was
-    about 3 ft wide (half a ken, this project's reading of how the big door was defined), a farmhouse's one-ken
-    main sliding door about 6 ft with a low wicket in it; a storehouse's paired leaves are attested at the end of
-    the Edo period, but the only width found for a leaf, about 3.5 ft, is today's standard.
-
-    Caveat: The kitchen door's place on its earth floor, a second outside door on a kitchen, and the route by which food reached the rooms, are a guess, and a
-    door of a room that the setting or a map's story made is as much the drawing's own as its room. A drawn
-    door's width is a drawing convention, not a measurement: the working doors are drawn two to three times the
-    width of an ordinary door so that they read at the sheet's scale. A real ordinary door was about 3 ft wide
-    (half a ken, this project's reading of how the big door was defined), a farmhouse's one-ken main sliding door
-    about 6 ft with a low wicket in it; a storehouse's paired leaves are attested at the end of the Edo period, but
-    the only width found for a leaf, about 3.5 ft, is today's standard.
-
-    Name: door
-    Covers: every small door glyph on a building's wall
-    Label: accurate
-    Sources: madoken-odoguchi, hongofuji-koiwai, s-kent-kuratomae, kotobank-katteguchi, kotobank-uchigenkan, matsue-bukeyashiki, homes-jin-bukeyashiki, dozo-jawiki, gogura-jawiki, nagayamon-jawiki, jta-nagayamon
-    Entry: research/questions/0117-doorways-and-doors-to.html, research/questions/0107-kitchens-daidokoro.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html; research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html; research/questions/0117-doorways-and-doors-to.drawing.html, research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html, research/questions/0107-kitchens-daidokoro.drawing.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html; research/questions/0203-fire-watch-towers-and-firefighting-gear-hinomi-yagura.html; research/questions/0203-fire-watch-towers-and-firefighting-gear-hinomi-yagura.html
-    """
-
     key = "door"

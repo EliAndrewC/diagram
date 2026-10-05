@@ -104,13 +104,14 @@ def _lay_web_lane(s: Settlement, run: Poly, hard: list[Poly], walls: list[Poly],
     there.
 
     Research:
-        a web lane joins the network - research/questions/0081-village-lanes.drawing.html: one network, or not drawn
+        a web lane joins the network - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: one network, or not drawn
         no way drawn twice - CONVENTION: over 60% of the run, or a bundle pitch unbroken, beside a way
         not along a shelter belt - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:
             over 60 ft inside a belt refused
         a tail past the junction cut - research/questions/0081-village-lanes.drawing.html: under 40 ft
         link reach - UNRESEARCHED: a link up to 200 ft to the network
-        a link takes its way's width - CONVENTION"""
+        a link takes its way's width - CONVENTION
+        web lane width - research/questions/0081-village-lanes.drawing.html: a web lane drawn 3 ft wide, the footpath's tread"""
     segs = _net_segs(s)
     if len(run) < 2:
         return False
@@ -261,7 +262,7 @@ def door_off_fixtures(door: Pt, house: Pt, quads: Sequence[Poly], gap: float, st
     the middle of the yard's front, where the door is, and Kashikawa's door paths began inside its trunk); the door itself
     where it is clear, None where no step within `tries` is.
 
-    Research: no path from inside a fixture - research/questions/0081-village-lanes.drawing.html: the door stepped along the front"""
+    Research: no path from inside a fixture - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the door stepped along the front"""
     from l7r.diagram.settlement import edge_dist
 
     fx, fy = door[0] - house[0], door[1] - house[1]
@@ -295,7 +296,7 @@ def to_first_arrival(path: Sequence[Pt], segs: Sequence[tuple[Pt, Pt]], touch: f
     one of Kashikawa's routed along its street before meeting it, a doubled tail and a sliver of grass the settle refused).
 
     Research:
-        a door path meets its way as a T - research/questions/0081-village-lanes.drawing.html: joined at a T, ended square at its first arrival"""
+        a door path meets its way as a T - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: joined at a T, ended square at its first arrival"""
     import numpy as np  # bound here, not at import (feature 237)
 
     pts = list(path)
@@ -354,8 +355,8 @@ def lay_door_paths(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water
             a 3 ft footpath where the door stands past the reach
         round the grove to the street - research/questions/0033-row-villages-resson.drawing.html: a path round the grove,
             a GUESS there
-        off the fixtures and grove bands - research/questions/0081-village-lanes.drawing.html, research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: walls to the path
-        no path to a household reached across a yard - research/questions/0081-village-lanes.drawing.html: it shows no lane of its own
+        off the fixtures and grove bands - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html, research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: walls to the path
+        no path to a household reached across a yard - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: it shows no lane of its own
         a flank door only where the front has none - UNRESEARCHED: a door path leaves from a flank of the dooryard only where no lawful path leaves the front"""
     from .checks import served_network  # local: checks sits above serve in this package's layers
     from .law import fixture_quads  # local: the law sits above serve too
@@ -425,7 +426,7 @@ def street_arrives(h: Mapping[str, Any], door: Pt, segs: Sequence[tuple[Pt, Pt]]
     counts, the settle cut it back a frame, and the farm stood off every way (2026-10-01).
 
     Research:
-        the street serves the farm - GUESS research/questions/0081-village-lanes.drawing.html: within 60 ft of the house or
+        the street serves the farm - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within 60 ft of the house or
             12 ft of its built ground"""
     if street is None:
         return True

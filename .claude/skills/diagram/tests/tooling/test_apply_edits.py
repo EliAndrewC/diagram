@@ -65,6 +65,16 @@ def test_a_report_is_applied_block_by_block_and_refused_where_it_cannot_be_sure(
     assert "already a glossary term" in out
 
 
+def test_a_report_saved_with_its_markup_escaped_is_applied(tmp_path, capsys) -> None:
+    """Feature 319: reports saved from task notifications carry `&lt;&lt;&lt;`, and every block read as no block."""
+    q = _tree(tmp_path)
+    report = tmp_path / "returned.md"
+    block = _report(str(q.relative_to(tmp_path)), "the gloss said stipend", "the gloss said A &amp; B")
+    report.write_text(block.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;"), encoding="utf-8")
+    assert ae.main([str(report), "--root", str(tmp_path)]) == 0
+    assert "the gloss said A &amp; B" in q.read_text(encoding="utf-8"), "unescaped once: a record's own &amp; survives"
+
+
 def test_skip_and_dry_run_write_nothing(tmp_path, capsys) -> None:
     q = _tree(tmp_path)
     report = tmp_path / "r.md"

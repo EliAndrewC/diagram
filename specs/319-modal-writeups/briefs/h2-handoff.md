@@ -1,0 +1,11 @@
+# 319 H2 handoff - the bund conflicts and the intake roll (session 1: write, 2026-10-05)
+
+- SECTION=0014/bunds-between-the-paddies-aze - The Hattori large bunds now convert as 80-150 cm (~2.6-4.9 ft), as at 0055 (heading "large ones up to 5 ft"); the drawing page's height bullet no longer calls a one-foot bund modern only (Hattori's large bunds stood 15-30 cm, up to a foot; only a foot as a set standard is modern, and no Edo height was found); the jori bullet now says the record shows two forms a map should choose between and that every map draws only the patchwork, a known gap (the engine does not roll it; no engine claim names jori). Two comments that restated retired code were shortened so the drawing page fits the 20,000-byte cap.
+- SECTION=0073/scrub-and-rough-grass-at-the-edges-of-fields-and-channels - The opening no longer gives the bund's foot of height as history: the ridge held water and was walked (pmc7538448-levee), and "today's standard bund" is a foot tall and a foot or two across its top (aze-standard); the Evidence comment classes the size as modern only and points to 0014 for the older height.
+- SECTION=0059/how-our-maps-draw-the-intake-and-its-weir-toshuko-and-seki - New bullet and spec clause: the intake stands at the left, center or right of the fan's head, rolled per settlement 1:2:1 (HEAD_OFFSETS in hamletgen/water/fit.py), a GUESS, with a new absence note (-10, searched 2026-10-05); Grounds and Evidence comments updated.
+
+Not done here, for whoever owns them:
+- 0055 already converts Hattori as ~2.6-4.9 ft (H1's work), so it was only read, not edited.
+- 0031's drawing page says a hamlet leaves where its water comes in to no chance, yet the engine's HEAD_OFFSETS docstring cites 0031 for that roll on hamlets: a record conflict between 0031 and the engine's claim (and now 0059).
+- tests/interactive/test_record_format.py::test_every_glossary_term_is_used_by_a_modal_or_a_record_page fails before and after this work: the glossary terms catena and planted collar appear only in HTML comments (0006, 0025).
+- Checks owed by these edits (make record-owed): record-format, quote-check on the reworded blocks of 0014, 0073 and 0059's drawing page; source-reader and quote-check on the new absence note; entry-drift for the bund and intake modals.

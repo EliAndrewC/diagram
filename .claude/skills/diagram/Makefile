@@ -11,7 +11,7 @@
 # GUARD_EDIT_OK: feature 197 - `claim` joins the phony list (a new operation).
 # (GUARD_EDIT_OK: feature 204 - guard-log joins .PHONY beside audit; a target with a recipe and no
 # .PHONY entry is shadowed by any file of that name)
-.PHONY: done docs static format typecheck test test-full guard perf perf-report maps _reference bypass-audit quick durations test-file page-check tick claim audit guard-log perf-gate hooks-test explain citations fragment-move \
+.PHONY: modal-bundle modal-prepass done docs static format typecheck test test-full guard perf perf-report maps _reference bypass-audit quick durations test-file page-check tick claim audit guard-log perf-gate hooks-test explain citations fragment-move \
 	 switches ci-off ci-on _switch \
 	 map cohort hamlet cache-audit placement-stages pool-index pool-index-if-stale compound render-sync idle-tests \
 	 why-placed   pack-audit     help \
@@ -417,6 +417,12 @@ map:            ## [maps] regenerate ONE gen and gate it   GEN=pool/hamlets/inas
 	  echo "map: the cached entry carries no render (a gate filed it with rendering skipped) - rolling it uncached to draw one"; \
 	  $(patsubst @%,%,$(RUN)).pipeline.regen --no-cache "$$g"; \
 	  : "GUARD_EDIT_OK: RUN carries make s leading at-sign, which inside a shell line is a command name, so it is stripped here"; \
+	fi
+	@: "GUARD_EDIT_OK: feature 319 - a CACHED map kept a STALE PAGE after a modal-text edit: the roll cache keys on engine code (a prose edit must not cost the gate), so nothing re-wrote the page. When a file under interactive/assets is newer than the page, the map is rolled uncached so the page carries the edit"
+	@g="$(or $(GEN),pool/hamlets/inashiro/inashiro.gen.py)"; s="$${g%.gen.py}"; \
+	if [ -f "$$s.html" ] && [ -n "$$(find l7r/diagram/interactive/assets -type f -newer "$$s.html" -print -quit)" ]; then \
+	  echo "map: a modal or page asset changed since the page was written - rolling it uncached to write the page again"; \
+	  $(patsubst @%,%,$(RUN)).pipeline.regen --no-cache "$$g"; \
 	fi
 	@$(MAKE) --no-print-directory pool-index-if-stale
 
@@ -1288,6 +1294,16 @@ effort-blind: ## [project] feature 293: export one task's two outputs, stripped 
 page-session: ## [project] start ONE page's work in a FRESH headless session, detached, from written briefs, one after another - absolute paths; a then:<script> step queues the briefs it prints (feature 250 D7, R3); a write brief over four questions is refused (feature 274)   BRIEF="<file> then:<script>" [NAME=<session name, default this clone's>] [MODEL=<model>] [EFFORT=<level>] [AGENTS=<agents.json>] [WRITE_CAP_OK='<reason>']
 	@if [ -z "$(BRIEF)" ]; then printf 'make page-session: BRIEF=<file> is required - e.g. make page-session BRIEF=specs/250-close-the-record-checks/briefs/homesteads.md\n' >&2; exit 2; fi
 	@cd "$$(git rev-parse --show-toplevel)" && scripts/page-session.sh "$(BRIEF)" "$(NAME)" "$(MODEL)" "$(EFFORT)" "$(AGENTS)"
+
+# GUARD_EDIT_OK: feature 319 - two new operations (a modal check's bundle and its prepass); no guard changes.
+# GUARD_EDIT_OK: feature 319 D13 - the help line names the third check, modal-depiction; an operation's text, no guard changes.
+modal-bundle: ## [project] the files a modal check reads (modal-form, modal-research or modal-depiction), copied out of the repository with the prepass and, for modal-research, the Entry pages, the candidates and the question record for grep; for modal-depiction, the drawing pages, the claims citing them and a crop of the glyph - feature 319   KIND=<class or key> FOR=modal-form|modal-research|modal-depiction [OUT=<dir>]
+	@if [ -z "$(KIND)" ]; then printf 'make modal-bundle: KIND=<class name or key> is required - e.g. make modal-bundle KIND=Farmhouse FOR=modal-form\n' >&2; exit 2; fi
+	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/_modal_bundle.py "$(KIND)" --for "$(or $(FOR),modal-form)" $(if $(OUT),--out "$(OUT)",)
+
+modal-prepass: ## [project] the mechanical half of the modal checks for one About-form modal - word band, barred phrases, guesses, Entry files - feature 319   KIND=<class or key>
+	@if [ -z "$(KIND)" ]; then printf 'make modal-prepass: KIND=<class name or key> is required - e.g. make modal-prepass KIND=Farmhouse\n' >&2; exit 2; fi
+	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/_modal_bundle.py "$(KIND)" --prepass
 
 # GUARD_EDIT_OK: feature 250 - a new operation (copy what one check reads out of the repository, so the harness attaches no CLAUDE.md to the agent); no guard changes.
 # GUARD_EDIT_OK: feature 303 - Q= (a question by number or page file) replaces PAGE= SECTION=; no guard changes.

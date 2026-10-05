@@ -1,0 +1,406 @@
+{
+ "_comment": "Feature 319 plan D10: every per-settlement choice a map's manifest meta records, in the order the title card lists them - each knob of the populated registry, the declared choices harvest_weather and hamlet_burial, and each value a pool manifest gives. `name` is the card's label, each value's label is what the card shows; every value opens assets/modals/choice/<key>--<value>.md, and a knob marked `degree` (a turn along a continuum, not a choice between forms) opens one modal, assets/modals/choice/<key>.md. tests/interactive/test_choices.py holds the table against the registry, the manifests and the modal files.",
+ "choices": [
+  {
+   "key": "settlement_form",
+   "name": "How the houses stand",
+   "values": {
+    "nucleated": "clustered together",
+    "linear": "in a row along a way",
+    "dispersed": "scattered, each farm on its own",
+    "water_town": "along the water, a water town",
+    "dike_top": "along the top of a dike"
+   }
+  },
+  {
+   "key": "row_line",
+   "name": "What the row follows",
+   "when": "[settlement_form=linear]",
+   "values": {
+    "street": "a street laid first",
+    "edge": "the dry edge of the ground"
+   }
+  },
+  {
+   "key": "row_sides",
+   "name": "Which sides of the way the farms take",
+   "when": "[settlement_form=linear]",
+   "values": {
+    "one": "one side",
+    "both": "both sides"
+   }
+  },
+  {
+   "key": "row_water",
+   "name": "The row's water",
+   "when": "[settlement_form=linear]",
+   "values": {
+    "own": "each farm its own well",
+    "shared": "wells shared along the way"
+   }
+  },
+  {
+   "key": "farm_water",
+   "name": "Each scattered farm's water",
+   "when": "[settlement_form=dispersed]",
+   "values": {
+    "channel": "a small channel led into its grounds",
+    "well": "its own well"
+   }
+  },
+  {
+   "key": "grove_sides",
+   "name": "Which sides of each farm its grove takes",
+   "when": "[settlement_form=dispersed|linear]",
+   "values": {
+    "2": "two sides",
+    "3": "three sides",
+    "4": "all four sides"
+   }
+  },
+  {
+   "key": "cluster_shape",
+   "name": "The cluster's shape",
+   "values": {
+    "round": "round",
+    "elongated": "elongated",
+    "crescent": "a crescent",
+    "split": "split in two"
+   }
+  },
+  {
+   "key": "cluster_position",
+   "name": "Where the houses sit",
+   "values": {
+    "high_margin": "on the high edge of the fields",
+    "flank": "on a flank of the fields",
+    "mid_margin": "partway along the fields' upper edge",
+    "valley_mouth": "at the valley's mouth",
+    "valley_head": "at the valley's head",
+    "on_rise": "on a rise among the fields"
+   }
+  },
+  {
+   "key": "lane_skeleton",
+   "name": "The lanes' layout",
+   "values": {
+    "spine": "one spine lane",
+    "T": "a T of lanes",
+    "Y": "a Y of lanes",
+    "cross": "a crossroads",
+    "waterside": "along the water",
+    "none": "none; the farms reached by the field paths"
+   }
+  },
+  {
+   "key": "lane_web",
+   "name": "How each house is reached",
+   "values": {
+    "alleys": "by side alleys",
+    "back_lane": "by a back lane"
+   }
+  },
+  {
+   "key": "copse_siting",
+   "name": "Where the village's trees stand",
+   "when": "[settlement_form=nucleated]",
+   "values": {
+    "among_the_houses": "among the houses",
+    "against_the_belt": "against the windbreak"
+   }
+  },
+  {
+   "key": "family_form",
+   "name": "Where the old couple lives",
+   "values": {
+    "one_roof": "under the family's one roof",
+    "retirement_house": "in a retirement house of their own"
+   }
+  },
+  {
+   "key": "byre_form",
+   "name": "Where the ox or horse is kept",
+   "values": {
+    "courtyard": "inside the farmhouse",
+    "yard_shed": "in a shed in the yard",
+    "detached_commons": "in a shared shed on common ground"
+   }
+  },
+  {
+   "key": "manure_form",
+   "name": "The farms' manure",
+   "values": {
+    "heap": "a heap in the yard",
+    "pit": "a pit"
+   }
+  },
+  {
+   "key": "bath_seat",
+   "name": "Where the bath room stands",
+   "values": {
+    "main_door": "by the main door",
+    "stable_end": "at the stable end of the house"
+   }
+  },
+  {
+   "key": "bamboo",
+   "name": "Bamboo",
+   "values": {
+    "none": "none",
+    "homestead": "stands at the farmsteads",
+    "thicket": "a village thicket",
+    "both": "stands at the farmsteads and a village thicket"
+   }
+  },
+  {
+   "key": "windbreak_belt",
+   "name": "The windbreak's trees",
+   "values": {
+    "conifer_led": "led by conifers",
+    "mixed_broadleaf": "mixed broadleaf"
+   }
+  },
+  {
+   "key": "field_archetype",
+   "name": "The fields",
+   "values": {
+    "valley_paddy": "paddies filling a valley",
+    "contour_terraces": "terraces along the contour",
+    "polder_grid": "a diked polder",
+    "ribbon_valley": "a ribbon of paddy along a narrow valley",
+    "mulberry_dike_fishpond": "fishponds ringed by mulberry dikes"
+   }
+  },
+  {
+   "key": "land_use_overlay",
+   "name": "Other crops on the rice land",
+   "values": {
+    "none": "none",
+    "mulberry_fishpond": "mulberry and fishponds",
+    "lotus": "lotus",
+    "tea_fringe": "tea on the hillside above the rice"
+   }
+  },
+  {
+   "key": "dike_crop",
+   "name": "What the pond dikes grow",
+   "when": "[field_archetype=mulberry_dike_fishpond]",
+   "values": {
+    "mulberry": "mulberry",
+    "fruit": "fruit trees",
+    "tea": "tea"
+   }
+  },
+  {
+   "key": "leftover",
+   "name": "Ground left over between the ponds",
+   "when": "[field_archetype=mulberry_dike_fishpond]",
+   "values": {
+    "rice": "rice",
+    "pond": "more ponds"
+   }
+  },
+  {
+   "key": "fry_form",
+   "name": "Fry ponds",
+   "when": "[field_archetype=mulberry_dike_fishpond]",
+   "values": {
+    "none": "none",
+    "fry_village": "a fry-raising village's ponds"
+   }
+  },
+  {
+   "key": "pond_layout",
+   "name": "How the ponds are laid out",
+   "when": "[field_archetype=mulberry_dike_fishpond]",
+   "values": {
+    "mosaic": "a mosaic",
+    "grid": "a grid"
+   }
+  },
+  {
+   "key": "plot_size",
+   "name": "The paddy plots' size",
+   "values": {
+    "small_irregular": "small and irregular",
+    "medium": "middling",
+    "large_block": "large blocks",
+    "strip": "long strips"
+   }
+  },
+  {
+   "key": "plot_regularity",
+   "name": "The paddy plots' lines",
+   "values": {
+    "organic": "following the ground",
+    "grid": "laid out in a grid"
+   }
+  },
+  {
+   "key": "grain_drift",
+   "name": "The dry fields' rows: their turn off the slope",
+   "degree": true,
+   "values": {
+    "-12": "12 degrees one way",
+    "-8": "8 degrees one way",
+    "-4": "4 degrees one way",
+    "0": "straight down the slope",
+    "4": "4 degrees the other way",
+    "8": "8 degrees the other way",
+    "12": "12 degrees the other way"
+   }
+  },
+  {
+   "key": "fan_middle",
+   "name": "The middle of the fan below the hills",
+   "values": {
+    "wild": "left wild",
+    "cleared": "cleared for dry fields"
+   }
+  },
+  {
+   "key": "winter_crop",
+   "name": "The paddies in winter",
+   "values": {
+    "barley": "sown with barley",
+    "none": "left bare"
+   }
+  },
+  {
+   "key": "paddy_rest",
+   "name": "Paddies left to rest",
+   "values": {
+    "settled": "none; every plot cropped every year",
+    "unsettled": "a few plots each year"
+   }
+  },
+  {
+   "key": "harvest_weather",
+   "name": "The harvest weather",
+   "values": {
+    "settled": "settled; the rice dried on racks out in the fields",
+    "changeable": "changeable; the rice dried on racks by the houses"
+   }
+  },
+  {
+   "key": "water_source_position",
+   "name": "Where the water comes in",
+   "values": {
+    "head_left": "at the head of the fields, to one side",
+    "head_center": "at the head of the fields",
+    "head_right": "at the head of the fields, to the other side",
+    "corner_high": "at the high corner",
+    "corner_NW": "at the northwest corner",
+    "corner_NE": "at the northeast corner",
+    "corner_SW": "at the southwest corner",
+    "corner_SE": "at the southeast corner",
+    "mid_margin": "midway along the high edge",
+    "chain": "down a chain of ponds",
+    "edge_N": "from the north edge",
+    "edge_E": "from the east edge",
+    "edge_S": "from the south edge",
+    "edge_W": "from the west edge"
+   }
+  },
+  {
+   "key": "intake",
+   "name": "How the water is taken from the stream",
+   "values": {
+    "weir": "behind a weir",
+    "open": "through an open intake"
+   }
+  },
+  {
+   "key": "water_sink",
+   "name": "Where the drained water goes",
+   "values": {
+    "pond": "into a pond below the fields",
+    "offmap": "on to the brook or off the map"
+   }
+  },
+  {
+   "key": "weir_form",
+   "name": "The weir",
+   "values": {
+    "fence": "a fence of stakes and brush",
+    "gabion": "stone-filled bamboo baskets",
+    "frame": "a timber frame",
+    "crib": "a crib of logs and stone"
+   }
+  },
+  {
+   "key": "footbridge_form",
+   "name": "The footbridges",
+   "values": {
+    "log": "logs",
+    "earthen": "earth on a timber bed",
+    "plank": "planks"
+   }
+  },
+  {
+   "key": "kosatsuba_seat",
+   "name": "Where the notice board stands",
+   "values": {
+    "center": "at the center",
+    "entrance": "at the way in",
+    "frontage": "before a village official's gate"
+   }
+  },
+  {
+   "key": "kosatsuba_siting",
+   "name": "Where the notice board seeks to stand",
+   "values": {
+    "frontage": "the busiest frontage",
+    "waterside": "the place water is drawn"
+   }
+  },
+  {
+   "key": "grave_form",
+   "name": "The graves in the fields",
+   "values": {
+    "island": "on a small island inside a plot",
+    "corner": "in a plot's corner, against its bunds"
+   }
+  },
+  {
+   "key": "hamlet_burial",
+   "name": "Where the dead lie",
+   "values": {
+    "village_ground": "in the main village's ground"
+   }
+  },
+  {
+   "key": "caravan_inn_form",
+   "name": "The inns",
+   "values": {
+    "wagon": "wagon yards",
+    "hatago": "travelers' inns (hatago)"
+   }
+  }
+ ],
+ "not_choices": {
+  "down_deg": "the slope's direction - geometry of the site, not a form",
+  "water_flow": "the water's direction - geometry",
+  "fan_aspect": "the alluvial fan's proportions - a degree along a continuum",
+  "head_lead": "how far the head race leads - a degree",
+  "brook_side": "which bank of the brook - geometry",
+  "grove_flank": "which flank of a farm its grove's open side faces - geometry",
+  "woodland_patches": "how many woodland patches - a count of the map, not a form",
+  "privy_seats": "the shares of privy seats - degrees, told by the privy modal",
+  "farm_fixtures": "the shares of farm fixtures - degrees, told by each fixture's modal",
+  "persimmon_front": "the share of front-yard persimmons - a degree",
+  "retirement_share": "the share of homesteads with a retirement house - the card's count fact",
+  "cluster_aspect_drawn": "a measurement of the drawn cluster",
+  "retirement_house": "which homesteads keep a retirement house - the card's count fact",
+  "brook_approach": "the brook's wobble on its way to the intake - geometry",
+  "brook_wander": "the brook's wander down its course - geometry",
+  "byre_share": "the share of farms with a byre - a degree, told by the byre modal",
+  "passage_share": "the share of houses with a through passage - a degree",
+  "pit_field_share": "the share of manure pits dug out in the fields - a degree",
+  "house_bearing": "the turn the houses share off true south - a degree along a continuum",
+  "head_offset": "where across the field's head the water comes in - recorded as the water_source_position choice (head_left, head_center, head_right)",
+  "mulberry_fishpond": "the seed of the overlay's layout - geometry; the overlay itself is the land_use_overlay choice",
+  "pond_stock": "which ponds nearest the houses take a sty - placement; the sty is the pig-sty modal's",
+  "cremation_seat": "where a village's cremation ground stands - a village's roll; no hamlet draws one, the hamlet_burial choice says where its dead go"
+ }
+}

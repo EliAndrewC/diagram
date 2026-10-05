@@ -28,7 +28,7 @@ supplies the judgment in writing, and it is auditable.
 THE PROSE HALF IS DERIVED, NEVER RESTATED. "Explanation prose" is `_TAGS` less `_DATA_TAGS`, asked of
 the engine, so a tag added or moved there cannot leave this script quietly checking the wrong thing. The
 exemption is keyed on the prose and NOT on the whole docstring: the docstring also carries
-`Name:`/`Covers:`/`Label:`/`Sources:`/`Entry:` (feature 207), so re-pointing an `Entry:` or fixing a
+`Name:`/`Covers:`/`Sources:`/`Entry:` (feature 207), so re-pointing an `Entry:` or fixing a
 house-style slip would otherwise silence the check for that class while the words a reader sees stood
 untouched.
 
@@ -97,28 +97,30 @@ def prose_of(doc: str | None, name: str, _base) -> str:  # noqa: ANN001
     return "␟".join(parts.get(t, "") for t in _base._TAGS if t not in _base._DATA_TAGS)
 
 
-def classes_in(text: str, _base, lines: dict[str, int] | None = None) -> dict[str, str]:  # noqa: ANN001
+def classes_in(text: str, _base, lines: dict[str, int] | None = None, read=None, py: str = "", at: dict[str, str] | None = None) -> dict[str, str]:  # noqa: ANN001
     """key -> explanation prose, for every `Kind` subclass in one `classes/*.py` SOURCE TEXT. Parsed
     with `ast` so the old side of a delta can be read straight out of a git blob. `lines`, when given,
-    collects key -> the class's line number, which is what a report has to hand a reader (FR-005)."""
+    collects key -> the class's line number, which is what a report has to hand a reader (FR-005).
+    Since feature 319 (plan D12) a kind's text is its modal FILE: `read(<repository-relative path>)` returns it (None
+    where there is none - a revision before the move), and `at` collects key -> that file, where the prose now lives."""
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    import _modal_owed as mo  # noqa: PLC0415
+
     out: dict[str, str] = {}
     lines = {} if lines is None else lines
-    for node in ast.walk(ast.parse(text)):
-        if not isinstance(node, ast.ClassDef):
-            continue
-        key = None
-        for st in node.body:
-            if isinstance(st, ast.Assign) and isinstance(st.value, ast.Constant) and isinstance(st.value.value, str):
-                if any(isinstance(tg, ast.Name) and tg.id == "key" for tg in st.targets):
-                    key = st.value.value
-        doc = ast.get_docstring(node)
-        if not key or not doc:
+    for name, key, lineno, doc in mo.kinds_in(text):
+        modal = mo.modal_file(py, key) if py else ""
+        found = read(modal) if (read and modal) else None
+        body = found if found is not None else doc
+        if not body:
             continue
         try:
-            out[key] = prose_of(doc, node.name, _base)
+            out[key] = prose_of(body, name, _base)
         except ValueError:
             continue  # not a Kind - no tagged explanation
-        lines[key] = node.lineno
+        lines[key] = lineno
+        if at is not None and found is not None:
+            at[key] = modal
     return out
 
 
@@ -218,11 +220,12 @@ def owed(root: Path) -> tuple[str, list[str]]:
         for path in sorted((root / directory).glob("*.py")):
             rel = os.path.relpath(path, root)
             here: dict[str, int] = {}
-            now |= classes_in(path.read_text(encoding="utf-8"), _base, here)
-            at |= {k: f"{rel}:{n}" for k, n in here.items()}
+            files: dict[str, str] = {}
+            now |= classes_in(path.read_text(encoding="utf-8"), _base, here, read=lambda f: (root / f).read_text(encoding="utf-8") if (root / f).is_file() else None, py=rel, at=files)
+            at |= {k: files.get(k, f"{rel}:{n}") for k, n in here.items()}
             old_text = _git(root, "show", f"{base}:{rel}")
             if old_text is not None:
-                was |= classes_in(old_text, _base)
+                was |= classes_in(old_text, _base, read=lambda f: _git(root, "show", f"{base}:{f}"), py=rel)
         anchors = {key: set(sources.entry_fragments(fc.entry)) for key, fc in registry.items()}
         pairs += named_pairs(moved, anchors, now, was, at)
     return desc, pairs

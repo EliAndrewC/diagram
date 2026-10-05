@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-05T14:41:54Z",
+  "target": "record-checked",
+  "commit": "0da47ebae",
+  "why": "modal-accuracy on modal-accuracy:choice/lane_skeleton--T modal-accuracy:choice/lane_skeleton--Y modal-accuracy:choice/water_source_position--corner_NE modal-accuracy:choice/water_source_position--corner_NW modal-accuracy:choice/water_source_position--corner_SE modal-accuracy:choice/water_source_position--corner_SW modal-accuracy:choice/water_source_position--edge_E modal-accuracy:choice/water_source_position--edge_N modal-accuracy:choice/water_source_position--edge_S modal-accuracy:choice/water_source_position--edge_W: feature 319 rollout: round 1 checked and applied, round 2 confirmed and applied what remained; one combined agent per modal under all three contracts"
+}

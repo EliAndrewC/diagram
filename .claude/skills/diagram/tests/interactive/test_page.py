@@ -15,14 +15,12 @@ import re
 
 import pytest
 
+from l7r.diagram.interactive import conditions
 from l7r.diagram.interactive.classes import CLASSES, PLACE
-from l7r.diagram.interactive.glossary import GLOSSARY
 from l7r.diagram.interactive.notes import EMPTY, MapNotes
 from l7r.diagram.interactive.page import (
-    CAVEAT_LEAD,
     PLAIN_CURSOR,
     explanations,
-    glossary_for,
     hit_layer,
     ink_census,
     merge_primitives,
@@ -135,18 +133,13 @@ def test_explanations_hold_only_present_classes_and_present_siblings() -> None:
     assert set(data) == {"windbreak", "copse", "farmhouse", "notice board"}
     assert data["windbreak"]["siblings"] == ["copse"], "woodland commons is absent from this map, so it is not claimed; siblings are link keys now"
     assert data["farmhouse"]["siblings"] == [], "storage shed and byre are absent"
-    # the presumption of accuracy (feature 156): an accurate class announces nothing, and the liberty
-    # its record discloses rides in `caveat` instead, to be shown after the what and the why
-    assert data["windbreak"]["label"] == "accurate", "the classification is still recorded (constitution XII)"
-    assert data["windbreak"]["lead"] == "", "an accurate class leads with what the feature is, not with a claim"
-    # the notice board is the one class whose record discloses no liberty, so it shows no caveat at all
-    # (settlement-review, 2026-08-29); the windbreak was one too until feature 269 K3 disclosed its two forms' guesses
-    assert data["notice board"]["caveat"] == "", "the notice board discloses no liberty - see test_classes"
-    assert data["windbreak"]["caveat"] == CAVEAT_LEAD + CLASSES["windbreak"].caveat and CLASSES["windbreak"].caveat
-    assert data["copse"]["caveat"] == CAVEAT_LEAD + CLASSES["copse"].caveat and CLASSES["copse"].caveat
+    # feature 319: no feature-level label, lead or caveat rides on the page - the classification is per statement
+    assert not {"label", "lead", "caveat", "what", "why"} & set(data["copse"]) and data["copse"]["about"]
+    assert data["windbreak"]["guesses"], "the windbreak's guesses are bullets of their own"
     # the references are QUESTIONS (feature 180): the sections the entry names, linked to the local page; the
     # cited keys, the citation text and the entry pointer no longer ride on the page at all
-    assert data["windbreak"]["questions"] == research_questions(CLASSES["windbreak"].entry)
+    # a map recording no knobs lists no knob-conditioned question (FR-015): the windbreak's 0031 rests on a nucleated-only guess
+    assert data["windbreak"]["questions"] == research_questions(conditions.shown_entry(CLASSES["windbreak"].entry, {}))
     assert any(
         q["text"].startswith("Groves around a southern Chinese village") and q["url"].startswith(SITE_PAGES + "q/groves-around-a-southern-chinese-village") for q in data["windbreak"]["questions"]
     )
@@ -192,10 +185,12 @@ def test_the_questions_come_in_the_entry_s_order_and_every_class_that_names_a_se
     that resolved to nothing was `fallow`, whose link was hidden already - until feature 269 (K1) wrote it from
     0013, so now every class names a findable section."""
     qs = research_questions(CLASSES["farmhouse"].entry)
-    assert [q["text"][:30] for q in qs] == ["Farmhouses (minka)", "The farmstead and what stood o", "Village lanes", "How our maps draw farmhouses (", "How our maps draw the farmstea"], qs
+    # feature 319 rewrote the farmhouse's Entry to exactly what its About rests on (dev/modals.md M14): 0029 first, then 0028
+    # and 0004, though 0004 sorts first by file - the entry's order wins
+    assert [q["text"][:30] for q in qs][:3] == ["Farmhouses (minka)", "The farmstead and what stood o", "Households: how many live in a"], qs
     # feature 301: a question links its own small page in the record's site
     assert all(q["url"].startswith(SITE_PAGES + "q/") for q in qs), "flat, whatever section the question is in (feature 303)"
-    assert qs[2]["url"] == SITE_PAGES + "q/village-lanes.html"
+    assert qs[2]["url"] == SITE_PAGES + "q/households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html"
     assert qs[0]["url"].endswith("/farmhouses-minka.html")
     # file order would put the farmstead topic before the farmhouse topic; the entry's order wins (the lane entry moved to the ways page in the feature 292 sweep)
     assert [q["url"] for q in research_questions(CLASSES["farmhouse"].entry)] == [q["url"] for q in qs], "deterministic"
@@ -211,28 +206,27 @@ def test_the_questions_come_in_the_entry_s_order_and_every_class_that_names_a_se
 def test_the_page_carries_the_questions_and_no_record_line() -> None:
     """Spec FR-001 (no `Record:` footer), FR-008 (the lead-in), FR-009 (the button is set by the script),
     FR-011 (the JSON shape)."""
-    from l7r.diagram.interactive.page import REFERENCES_LEAD
-
     html_text = render_page([RECT], ["farmhouse"], "T")
     # the MARKUP, before the data and the script (the script's comments name the old footer to say it is gone)
     markup = html_text.split('<script id="classes"')[0]
     assert "x-entry" not in markup and "Record:" not in markup
     assert "x-entry" not in html_text.split("<script>")[1], "and the script touches no such element"
-    assert f'<p id="r-intro" class="intro">{REFERENCES_LEAD}</p>' in html_text and REFERENCES_LEAD == "Topics we researched for this map feature:"
-    assert '<button id="r-close" type="button">Return to writeup</button>' in html_text
+    # the References tab opens on its links alone (the GM, 2026-10-05: "the links are self-explanatory")
+    assert 'id="r-intro"' not in html_text and "Topics we researched" not in html_text
     blob = json.loads(re.search(r'<script id="classes" type="application/json">(.*?)</script>', html_text, re.S).group(1).replace("<\\/", "</"))
     farmhouse = blob["classes"]["farmhouse"]
     assert farmhouse["questions"] and set(farmhouse["questions"][0]) == {"text", "url"}
     assert not {"sources", "refs", "entry"} & set(farmhouse)
-    assert 'd.questions.length ? "See references (" + d.questions.length + ")"' in html_text, "the count is the number of questions (spec D3)"
-    assert '"Return to " + cap(d.name) + " writeup"' in html_text
-    # feature 181: the references REPLACE the explanation (hidden by a class the stylesheet knows, cleared
-    # when the references close), and the title's name is a link sharing the button's handler
-    assert "dialog#explain.behind { display: none; }" in html_text
-    assert 'dialog.classList.add("behind")' in html_text and 'dialog.classList.remove("behind")' in html_text
-    assert 'back.id = "r-back"' in html_text and 'document.createTextNode(" references")' in html_text
-    # feature 182: the glossary tooltip is ONE element outside both dialogs, placed by the script
-    assert '<div id="tip" role="tooltip" hidden></div>' in markup and markup.index('id="tip"') > markup.index('id="references"')
+    # feature 319: the modal is TABS - About, Guesses, References - in one dialog; the references dialog, its return button
+    # and the "See references (N)" link are gone (they were features 180 and 181's), and a tab with nothing to show is hidden
+    assert '<nav id="x-tabs" role="tablist">' in markup and all(f'id="t-{t}"' in markup for t in ("about", "guesses", "depict", "refs"))
+    assert [m for m in re.findall(r'role="tab" id="t-\w+" data-tab="\w+" aria-controls="p-\w+">(\w+)<', markup)] == ["About", "Guesses", "Depiction", "References"]
+    assert 'id="references"' not in markup and "r-close" not in html_text and "See references" not in html_text
+    assert "behind" not in html_text.split("<style>")[1].split("</style>")[0], "no stylesheet rule hides the explanation any more"
+    assert 'document.getElementById("t-guesses").hidden = !(d.guesses && d.guesses.length)' in html_text
+    assert 'document.getElementById("t-refs").hidden = !d.questions.length' in html_text
+    # feature 182: the glossary tooltip is ONE element outside the dialog, placed by the script
+    assert '<div id="tip" role="tooltip" hidden></div>' in markup and markup.index('id="tip"') > markup.index('id="explain"')
     assert ".gl:hover::after" not in html_text and "#tip { position: fixed;" in html_text
 
 
@@ -242,11 +236,10 @@ def test_the_wet_paddy_is_explained_apart_from_the_paddy_and_only_when_present()
     plot must show neither the class nor a sibling paragraph claiming a distinction from an absent one."""
     both = explanations({"paddy", "wet paddy"})
     assert set(both) == {"paddy", "wet paddy"}
-    assert both["paddy"]["what"] != both["wet paddy"]["what"], "two kinds, two explanations"
+    assert both["paddy"]["about"] != both["wet paddy"]["about"], "two kinds, two explanations"
     assert both["wet paddy"]["siblings"] == ["paddy"] and "wet paddy" in both["paddy"]["siblings"]
-    # the disclosure the GM's reader needs: on a comb field the tint marks a SHARE of the wet ground.
-    # It rides in the caveat, so the modal leads with what the plot is (feature 156).
-    assert both["wet paddy"]["caveat"], "the drawing liberty reaches the modal"
+    # the disclosure the GM's reader needs - how the map tints the wet ground - is the Depiction tab's (feature 319)
+    assert both["wet paddy"]["depiction"], "the drawing liberty reaches the modal"
     green_only = explanations({"paddy"})
     assert set(green_only) == {"paddy"}
     assert "wet paddy" not in green_only["paddy"]["siblings"], "a map with no blue plot claims no distinction"
@@ -263,7 +256,7 @@ def test_a_blue_plot_and_a_green_one_carry_different_classes_on_the_same_polygon
 
 def test_explanations_stub_an_unregistered_class_rather_than_dropping_it() -> None:
     data = explanations({"flying castle"})
-    assert data["flying castle"]["label"] == "guess" and "no entry" in data["flying castle"]["what"]
+    assert "no entry" in data["flying castle"]["about"][0] and "label" not in data["flying castle"]
 
 
 def _page() -> str:
@@ -411,25 +404,6 @@ def test_every_class_cites_what_its_entry_cites_and_the_uncited_are_the_known_fo
     for k, fc in CLASSES.items():
         for key in research_sources(fc.entry):
             assert key in registry(), f"{k} cites {key}, which SOURCES.md does not register"
-
-
-def test_the_glossary_is_well_formed_and_used() -> None:
-    for term, (variants, definition) in GLOSSARY.items():
-        assert variants and len(definition) > 30 and "\u2014" not in definition, term
-    used = {g["term"] for g in glossary_for(explanations(set(CLASSES)))}
-    assert {"bund", "coppice", "iriai", "tameike", "yashikirin", "kosatsuba", "hokora"} <= used
-    # Since feature 209 the glossary serves the research record too, so a term no modal uses may still be live:
-    # `tests/interactive/test_record_format.py` holds the widened rule (used by a modal OR a record page).
-    assert "kainyo" in GLOSSARY and "kainyo" not in used, "a record-only term is in the table and not on the map (non-vacuity of the split)"
-
-
-def test_glossary_for_defines_tsubo_where_an_explanation_counts_in_it() -> None:
-    """Feature 205 (GM 2026-09-07): the word is a tooltip wherever a modal uses it, and nowhere else."""
-    counted = {"yard": {"what": "an ordinary yard is 20 to 30 tsubo", "why": "", "lead": "", "caveat": "", "on_this_map": ""}}
-    entry = [g for g in glossary_for(counted) if g["term"] == "tsubo"]
-    assert entry and entry[0]["variants"] == ["tsubo"] and "two straw mats" in entry[0]["def"]
-    uncounted = {"yard": {"what": "an ordinary yard is 66 to 99 sq m", "why": "", "lead": "", "caveat": "", "on_this_map": ""}}
-    assert not [g for g in glossary_for(uncounted) if g["term"] == "tsubo"]
 
 
 def test_every_registered_source_carries_a_link_or_says_why_not() -> None:
@@ -726,22 +700,23 @@ def test_the_placard_opens_the_place_card() -> None:
     card = data[PLACE]
     assert card["name"] == "Inashiro" and "is a hamlet of 15 farmhouses, population ~75" in card["what"]
     assert "village district of Hoshigaoka, which lies east" in card["why"]
-    assert card["lead"] == "" and card["caveat"], "no accuracy claim; the basis is stated (FR-001, FR-008a)"
+    assert "lead" not in card and "label" not in card and card["basis"], "no accuracy claim; the basis is stated (FR-001, FR-008a)"
 
 
 def test_the_lane_default_names_the_village_the_notes_name() -> None:
     notes = MapNotes(place={"district": "Hoshigaoka", "district direction": "east"}, features={})
     data = _render([PLACE, "village lane"], {"scale": "hamlet", "name": "Inashiro", "households": 15}, notes)
-    assert (
-        data["village lane"]["on_this_map"]
-        == "The connector track leads out of the hamlet toward Hoshigaoka, the main village of the district it belongs to; the lanes between the farmsteads feed it."
-    )
+    # feature 319 (plan D10): a hamlet's own sentence is the title card's, never the lane modal's
+    assert data["village lane"]["on_this_map"] == ""
+    assert "The connector track leads out of the hamlet toward Hoshigaoka, the main village of the district it belongs to; the lanes between the farmsteads feed it." in data[PLACE]["facts"]
 
 
 def test_an_authored_lane_annotation_beats_the_default() -> None:
     notes = MapNotes(place={"district": "Hoshigaoka"}, features={"village lane": "This one climbs the spur first."})
     data = _render([PLACE, "village lane"], {"scale": "hamlet", "name": "Inashiro", "households": 15}, notes)
-    assert data["village lane"]["on_this_map"] == "This one climbs the spur first."
+    assert data["village lane"]["on_this_map"] == "", "feature 319: a hamlet reads no `### Features`"
+    town = _render([PLACE, "village lane"], {"scale": "town", "name": "Ubame", "households": 400}, notes)
+    assert town["village lane"]["on_this_map"] == "This one climbs the spur first.", "a tier not yet standardized keeps its notes"
 
 
 def test_a_tier_the_vocabulary_does_not_describe_gets_no_card() -> None:
@@ -760,9 +735,7 @@ def test_no_rendered_page_tells_a_reader_a_feature_is_historically_accurate() ->
     assert "historically accurate" not in page
     data = json.loads(re.search(r'<script id="classes" type="application/json">(.*?)</script>', page, re.S).group(1).replace("<\\/", "</"))["classes"]
     for key, d in data.items():
-        if d["label"] == "accurate":
-            assert d["lead"] == "", key
-            assert not re.search(r"\bare read\b|\bis read\b|\bat its true\b|\btrue size\b", d["caveat"]), key
+        assert "lead" not in d and "label" not in d, key  # feature 319: nothing class-level is announced
 
 
 def test_an_element_with_no_extent_is_treated_as_touching_everything() -> None:
@@ -890,24 +863,6 @@ def test_a_page_without_its_raster_never_calls_the_encoder_and_is_the_vector_onl
     assert 'id="raster"' in full and '"r": 0' not in full
 
 
-def test_glossary_for_with_the_substring_prefilter_is_the_regex_scan() -> None:
-    """Feature 224: a variant absent as a substring cannot match with word boundaries, so the `in` test first changes
-    no term - checked against the pure regex form over the real GLOSSARY on a text that holds some variants whole,
-    one only inside a longer word (not a match either way), and one split across a boundary."""
-    from l7r.diagram.interactive.glossary import GLOSSARY
-    from l7r.diagram.interactive.page import glossary_for
-
-    terms = list(GLOSSARY.items())
-    whole = [v for _t, (vs, _d) in terms[:6] for v in vs][:6]
-    inside = [v for _t, (vs, _d) in terms[6:9] for v in vs][:2]
-    text = " ".join(whole) + " " + " ".join(f"x{v}y" for v in inside) + " sluice-gate paddy"
-    data = {"a": {"what": text, "why": "", "lead": "", "caveat": "", "on_this_map": ""}}
-    got = {e["term"] for e in glossary_for(data)}
-    low = text.lower()
-    want = {t for t, (vs, _d) in terms if any(re.search(r"\b" + re.escape(v.lower()) + r"\b", low) for v in vs)}
-    assert got == want and got, "the same terms as the regex scan alone"
-
-
 def test_merge_primitives_returns_a_string_with_under_two_elements_untouched_without_scanning() -> None:
     """Feature 225 FR-005: the C-speed count runs before the element scan; one element is never merged."""
     one = '<circle cx="1" cy="2" r="3" fill="#2F6B35"/>'
@@ -920,9 +875,10 @@ def test_the_windbreak_pop_up_names_its_side_and_an_authored_note_beats_it() -> 
     """Feature 261: the windbreak's `on_this_map` says which side the belt is on and why, unless the notes say."""
     meta = {"scale": "hamlet", "name": "Kashikawa", "households": 20, "windward": "NW", "wind_source": "regional"}
     data = _render([PLACE, "windbreak"], meta)
-    assert data["windbreak"]["on_this_map"].startswith("Here the belt stands toward the northwest of the houses")
+    # feature 319 (plan D10): the side and its reason are the title card's fact, and a hamlet reads no `### Features`
+    assert data["windbreak"]["on_this_map"] == "" and any(f.startswith("Here the belt stands toward the northwest of the houses") for f in data[PLACE]["facts"])
     notes = MapNotes(place={}, features={"windbreak": "This one is planted on the old dike."})
-    assert _render([PLACE, "windbreak"], meta, notes)["windbreak"]["on_this_map"] == "This one is planted on the old dike."
+    assert _render([PLACE, "windbreak"], meta, notes)["windbreak"]["on_this_map"] == "", "a hamlet's modal is the same on every map"
 
 
 def test_the_merges_bucket_grids_change_no_byte(monkeypatch):
@@ -976,3 +932,25 @@ def test_an_unreadable_extent_is_refused_by_any_bucket_holding_something():
     t = bucket(translucent=True)
     _file_extent(t, None)
     assert t["ext_none"] is True and _refused(t, (500.0, 500.0, 2.0)) is True
+
+
+def test_a_hamlet_card_states_its_grove_sides_as_a_choice_not_a_fact() -> None:
+    """Feature 319 (plan D10): the farm grove's sides are a CHOICE on the title card (`choices.json` `grove_sides`), so the
+    card's facts never repeat them as a sentence."""
+    from l7r.diagram.interactive.place import homestead_grove_default
+
+    meta = {"scale": "hamlet", "name": "Kashikawa", "households": 20, "grove_sides": 3, "settlement_form": "dispersed"}
+    sentence = homestead_grove_default(meta)
+    data = _render([PLACE, "homestead grove"], meta)
+    assert sentence and sentence not in data[PLACE]["facts"]
+    assert data["homestead grove"]["on_this_map"] == ""
+
+
+def test_a_village_map_keeps_its_grove_sides_sentence_on_the_grove_modal() -> None:
+    """Feature 319: only a HAMLET's card carries its choices; a tier not yet standardized (a village) keeps the farm grove's
+    sides as the grove modal's own sentence (feature 291, FR-009)."""
+    from l7r.diagram.interactive.place import homestead_grove_default
+
+    meta = {"scale": "village", "name": "V", "households": 40, "grove_sides": 3, "settlement_form": "dispersed"}
+    data = _render(["homestead grove"], meta)
+    assert data["homestead grove"]["on_this_map"] == homestead_grove_default(meta) != ""

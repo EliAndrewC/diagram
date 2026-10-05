@@ -88,3 +88,22 @@ def test_a_hand_written_conflict_alone_still_names_the_file(tmp_path) -> None:
     _change(q, "note.txt", "note from the queue\n")
     got = _run(a)
     assert got.returncode == 1 and "research/note.txt" in got.stderr
+
+
+def test_the_queue_s_record_check_answers_come_back(tmp_path) -> None:
+    """Feature 319: an answer lives in the clone's git dir, which a pull never carries - three queues' answered checks came
+    back owed. A unit only the queue answered is copied; one both answered keeps every fingerprint and the newer record."""
+    import json
+
+    a, q = _world(tmp_path)
+    (a / ".git" / "record-checks").mkdir()
+    (q / ".git" / "record-checks").mkdir()
+    (q / ".git" / "record-checks" / "only-q.json").write_text(json.dumps({"unit": "only-q", "fingerprint": "f1", "answered": ["f1"], "result": "q", "utc": "2026-10-05T02:00:00Z"}), encoding="utf-8")
+    (a / ".git" / "record-checks" / "both.json").write_text(json.dumps({"unit": "both", "fingerprint": "a1", "answered": ["a1"], "result": "a", "utc": "2026-10-05T01:00:00Z"}), encoding="utf-8")
+    (q / ".git" / "record-checks" / "both.json").write_text(json.dumps({"unit": "both", "fingerprint": "q1", "answered": ["q1"], "result": "q", "utc": "2026-10-05T03:00:00Z"}), encoding="utf-8")
+    _change(q, "note.txt", "note from the queue\n")
+    got = _run(a)
+    assert got.returncode == 0, got.stderr
+    assert json.loads((a / ".git" / "record-checks" / "only-q.json").read_text(encoding="utf-8"))["answered"] == ["f1"]
+    both = json.loads((a / ".git" / "record-checks" / "both.json").read_text(encoding="utf-8"))
+    assert both["answered"] == ["a1", "q1"] and both["fingerprint"] == "q1" and both["result"] == "q"

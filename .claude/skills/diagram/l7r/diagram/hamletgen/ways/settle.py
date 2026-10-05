@@ -131,7 +131,7 @@ def theirs(p: Poly, yards: Yards, houses: Sequence[Mapping[str, Any]]) -> list[P
     """The yards and gardens a lane along `p` may not come near: all but those within `law.DOORSTEP_FT` of one of its ENDS.
 
     Research:
-        a lane arrives at its own dooryard - research/questions/0081-village-lanes.drawing.html: its way leaves its dooryard round its own beds and fixtures
+        a lane arrives at its own dooryard - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: its way leaves its dooryard round its own beds and fixtures
         the dooryards it arrives among - UNRESEARCHED: every steading within `DOORSTEP_FT` of either end exempt from the fence clearance, the dooryards it arrives among"""
     own = [(float(h["x"]), float(h["y"])) for h in houses if min(math.dist(p[0], (float(h["x"]), float(h["y"]))), math.dist(p[-1], (float(h["x"]), float(h["y"])))) <= law.DOORSTEP_FT]
     return [poly for poly, owner in yards if owner is None or all(math.dist(owner, c) > 1.0 for c in own)]
@@ -147,10 +147,10 @@ def fouled_segment(
     ground - its own household's too, since a path arrives at its dooryard and does not cross it).
 
     Research:
-        no tread on a farmhouse - research/questions/0081-village-lanes.drawing.html
-        off another household's yard or garden - UNRESEARCHED: within `_TOUCH_GAP`, 4 ft
-        no long leg through a building - research/questions/0081-village-lanes.drawing.html: `law.breaks_through`
-        off the fixtures - research/questions/0081-village-lanes.drawing.html: its own household's too
+        no tread on a farmhouse - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html
+        off another household's yard or garden - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within `_TOUCH_GAP`, 4 ft
+        no long leg through a building - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: `law.breaks_through`
+        off the fixtures - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: its own household's too
         what the overlap matrix forbids - NONE: each pair is claimed in the matrix"""
     near = theirs(p, yards, houses)
     over = law.over_a_fixture(p, width, fixtures) if fixtures else None
@@ -353,7 +353,7 @@ def settle_ends(s: Any) -> int:
         lanes met end to end read as one - research/questions/0081-village-lanes.drawing.html: a needle, fold or hairpin re-laid as a T
         no doubled tail - CONVENTION: the end cut back to where it came alongside the way
         no fan of stubs at a door - UNRESEARCHED: past two ends at one house, the farther cut back past the doorstep
-        a lane ends at the dooryard - research/questions/0081-village-lanes.drawing.html: an end behind a house carried round
+        a lane ends at the dooryard - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: an end behind a house carried round
             its gable where lawful, else backed off (`off_the_back`)"""
     M = s.M
     lanes = M.get("lanes") or []
@@ -445,7 +445,7 @@ def off_the_back(seq: Poly, house: Mapping[str, Any], others: Sequence[tuple[Pt,
     where no such point is left (the lane stands wholly behind the house).
 
     Research:
-        a lane ends at the dooryard - research/questions/0081-village-lanes.drawing.html: backed off to beside the house,
+        a lane ends at the dooryard - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: backed off to beside the house,
             its dooryard, 60 ft from it or its last junction"""
     c, total = (float(house["x"]), float(house["y"])), polyline_len(seq)
     walk = total
@@ -464,7 +464,7 @@ def settle_dangling(s: Any) -> int:
     `_trim_to_service` stops it at its closest approach). No exemption for a house the lane alone reaches - that house is
     the corridor's. A lane the law still calls dangling after its trim goes whole.
 
-    Research: an end reaches something seen - research/questions/0081-village-lanes.drawing.html: trimmed to service, else dropped"""
+    Research: an end reaches something seen - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: trimmed to service, else dropped"""
     M = s.M
     lanes = M.get("lanes") or []
     ground, steadings = memo_ground(s, "worked", worked_ground), steading_footprints(M)
@@ -526,7 +526,7 @@ def settle_street_ends(s: Any) -> int:
     the law stopped counting a way an end walked away from; the knot dropped, the street's end served nothing and the web
     was refused).
 
-    Research: an end reaches something seen - research/questions/0081-village-lanes.drawing.html: a street's dangling end cut to its last joint"""
+    Research: an end reaches something seen - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a street's dangling end cut to its last joint"""
     from .street import end_to_its_joint  # street.py imports this module's `Lawful`; imported where it is used
 
     M = s.M
@@ -647,7 +647,7 @@ def keeps_the_network(M: Mapping[str, Any], i: int, pieces: Sequence[Poly]) -> b
     stretch it moves is left hanging otherwise (cohort seed 31: a backbone's end carried round a gable took the tread three
     lanes stood on, and nine lanes fell off the network with thirteen houses).
 
-    Research: one network - research/questions/0081-village-lanes.drawing.html: a repair splits nothing and strands no farmhouse"""
+    Research: one network - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a repair splits nothing and strands no farmhouse"""
     lanes = M.get("lanes") or []
     joined = connector_component(lanes)
     others = [k for k in range(len(lanes)) if k != i]
@@ -735,7 +735,7 @@ def settle_widths(s: Any) -> int:
 def settle_network(s: Any) -> int:
     """Step 5 (ways W17): drop every lane not in the connector's network at the ink tolerance (`law.JOIN_TOL`).
 
-    Research: one network - research/questions/0081-village-lanes.drawing.html: a lane off the connector's network dropped"""
+    Research: one network - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane off the connector's network dropped"""
     lanes = s.M.get("lanes") or []
     live = [i for i, ln in enumerate(lanes) if len(ln.get("pts") or []) >= 2]
     labels = _components([_pts(lanes[i]) for i in live], law.JOIN_TOL)
@@ -834,7 +834,7 @@ class Lawful:
         Research:
             bends like a path - research/questions/0081-village-lanes.drawing.html: no kink or hook
             crossings - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: `_crossing_fault`
-            nothing built on a lane - research/questions/0081-village-lanes.drawing.html: no foul of house, yard, building, fixture
+            nothing built on a lane - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: no foul of house, yard, building, fixture
             off crop and marsh - research/questions/0081-village-lanes.drawing.html: no field, dry plot or marsh underfoot"""
         if len(run) < 2 or law.hooked(run) or kink_spans(run):
             return False
@@ -852,7 +852,7 @@ class Lawful:
 
         Research:
             lanes meet as a T - research/questions/0081-village-lanes.drawing.html: no needle, fold or hairpin at either end
-            an end reaches something seen - research/questions/0081-village-lanes.drawing.html: no dangling end, none behind a house
+            an end reaches something seen - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: no dangling end, none behind a house
             no doubled tail - CONVENTION: either way round
             no way out over and back - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: tree lanes"""
         M = self.M
@@ -898,7 +898,7 @@ def settle_reach(s: Any) -> int:
     reaches the field (`settle_field`).
 
     Research:
-        every farmhouse served - research/questions/0081-village-lanes.drawing.html: every household's way, laid once the last house stands, drawn as a lane of its own
+        every farmhouse served - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every household's way, laid once the last house stands, drawn as a lane of its own
         the field reached - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a way runs to the field's bund
         a path runs to the graves - UNRESEARCHED: claimed at `settle_targets`"""
     drawn = settle_tree(s)  # every household's way, reached or not (feature 318, `tree.owed`); each drawn once

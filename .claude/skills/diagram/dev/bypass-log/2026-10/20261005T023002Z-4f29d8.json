@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-05T02:30:02Z",
+  "target": "record-checked",
+  "commit": "585edb08a",
+  "why": "entry-drift on entry-drift:copse: round 4 changed one word ('while' to 'and', joining the Herbarium's and HKFP's ages) in this block; the round-4 check read the same sentence otherwise; the sentence is about the back grove's age, which the copse modal does not use"
+}

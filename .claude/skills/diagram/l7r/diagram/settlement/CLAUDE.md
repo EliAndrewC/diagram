@@ -39,7 +39,8 @@ Two invariants the split does NOT touch:
 | `houses.py` | house drawing + placement machinery (corridors, keepouts, treads, `_fits`, frontage), `try_place`, cluster seeds, plot texture, water-source anchors |
 | `hard_ground.py` | the hard no-build ground (`_hard_ground`: crop, pond, bog, a field's own ditches, read from the manifest) and the footprint test against it (`_hard_clear`, from `_hard_index`'s box grid); split out of `houses.py` by feature 278 (`HardGroundMixin`) |
 | `rolling/` | the rolling / homestead-solver subsystem - a PACKAGE with its own [`CLAUDE.md`](rolling/CLAUDE.md) index since feature 118. Unlike the residue-bucket packages this one is a CHAIN, and its six modules are its links: read that index first, then load one of `roll.py` (`roll_village` and its seven stages - knobs, field, cluster band, lanes/headman/seeds, wells, windbreak, civic), `seeds.py` (the settlement-FORM seed generators and the perimeter ring), `bundle.py` (what a homestead bundle IS - pure geometry), `fit.py` (may it stand here? every keep-out predicate and the two caches), `place.py` (the spiral searches and compaction slides - the package's hub), `farmsteads.py` (the deferred flush: what gets DRAWN, and in what order) |
-| `finish.py` | labels + titles, blank-spot search, `finish()` (layer assembly + svg write + the ink census and the interactive `.html`, feature 134), `render_png` |
+| `finish.py` | labels, `finish()` (layer assembly + svg write + the ink census and the interactive `.html`, feature 134), `render_png` |
+| `title.py` | the title placard (feature 319 split it out of `finish.py`): its size (`placard_size`, `placard_height` - the one formula the hamlet's title pocket and band allowance derive from), its seat, the band grown for it, the blank-spot search and the title-clearance test |
 
 ## Mixins and mypy
 

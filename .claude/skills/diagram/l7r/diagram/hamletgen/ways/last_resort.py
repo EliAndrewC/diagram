@@ -161,7 +161,7 @@ def refuse_unreached(M: Mapping[str, Any]) -> None:
     lawful corridor for each, and the web draws it as the tree, so neither is ever shipped unreached (ways W01, W03).
 
     Research:
-        every farmhouse served - research/questions/0081-village-lanes.drawing.html: every farmhouse but the few reached across a neighbor's land, which `unreached_houses` counts reached through their neighbor's chain
+        every farmhouse served - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every farmhouse but the few reached across a neighbor's land, which `unreached_houses` counts reached through their neighbor's chain
         the field reached - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: some way joins the bund"""
     why = []
     if far := unreached_houses(M):

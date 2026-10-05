@@ -331,7 +331,9 @@ def main(argv: Sequence[str] | None = None) -> int:
     classes, research_questions, question_text = _engine(root)
     qs = questions(root)
     # a question's link is its small page in the record's site, named for its anchor (feature 301)
-    entries = {k: [q["url"].rsplit("/", 1)[1].removesuffix(".html") for q in research_questions(fc.entry)] for k, fc in classes.items()}
+    # ...and the DRAWING pages a modal rests on: since feature 319 (plan D13) a "how our maps draw it" page is listed under
+    # `Drawing:`, not `Entry:`, and reading the entry alone left every drawing page "no map feature found depending on it"
+    entries = {k: [q["url"].rsplit("/", 1)[1].removesuffix(".html") for q in research_questions(", ".join(p for p in (fc.entry, fc.drawing) if p))] for k, fc in classes.items()}
     routes = class_routes(entries, qs)
     names = tracked(root)
     engine = {rel: (root / SKILL / rel).read_text(encoding="utf-8") for rel in names if rel.startswith("l7r/") and rel.endswith(".py")}

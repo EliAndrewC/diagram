@@ -47,16 +47,16 @@ if TYPE_CHECKING:
 #: How far beyond the growth's 2 px parting a household's envelope may stand from its neighbor's land and still ADJOIN it, in
 #: feet: a GUESS - a foot of tolerance for the placer's rounding; the custom's condition is land against land, not a reach.
 PASSAGE_ADJOIN_FT = 1.0
-"""Research: land against land - GUESS research/questions/0081-village-lanes.drawing.html: a foot beyond the growth's 2 px parting"""
+"""Research: land against land - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a foot beyond the growth's 2 px parting"""
 #: The longest chain of passages from a household to a corridor: a GUESS citing Wigmore's Echigo entry, where plot C passes over
 #: both B's and A's to the highway - the longest chain the record reads.
 PASSAGE_CHAIN = 2
-"""Research: chain of passages - GUESS research/questions/0081-village-lanes.drawing.html: across one neighbor reached across another and no farther, the Echigo chain"""
+"""Research: chain of passages - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: across one neighbor reached across another and no farther, the Echigo chain"""
 #: The share of a nucleated settlement's households that may be reached by passage, rolled per settlement: a GUESS - the record
 #: attests the custom, not how common it was, and a clustered village whose rear households all walked through their neighbors'
 #: yards is not what its entries describe (alleys to the rear houses, Morse; blind alleys to the houses, the Manchu survey).
 PASSAGE_SHARE_BAND = (0.0, 0.25)
-"""Research: share reached by passage - GUESS research/questions/0081-village-lanes.drawing.html: from none up to a quarter of the households"""
+"""Research: share reached by passage - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: from none up to a quarter of the households"""
 #: The pitch the walk is sampled at to ask that it stays on the two households' land, in px.
 WALK_STEP_PX = 4.0
 """Research: walk sampling pitch - NONE: 4 px"""
@@ -68,7 +68,7 @@ def passage_share(seed: int) -> float:
     """The settlement's share of households that may be reached by passage, rolled from the map's seed within
     `PASSAGE_SHARE_BAND` (the knob doctrine: it depends on the seed and the knob's name, never on draw order).
 
-    Research: share reached by passage - GUESS research/questions/0081-village-lanes.drawing.html: rolled per settlement within the band
+    Research: share reached by passage - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: rolled per settlement within the band
     """
     lo, hi = PASSAGE_SHARE_BAND
     return round(lo + knob_rng(seed, "passage_share").random() * (hi - lo), 3)
@@ -77,7 +77,7 @@ def passage_share(seed: int) -> float:
 def passage_budget(share: float, households: int) -> int:
     """How many of a settlement's `households` may be reached by passage at its rolled `share`.
 
-    Research: share reached by passage - GUESS research/questions/0081-village-lanes.drawing.html: rounded down to whole households
+    Research: share reached by passage - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: rounded down to whole households
     """
     return int(math.floor(share * households))
 
@@ -98,8 +98,8 @@ def opens(s: Settlement, geom: Any) -> bool:
     round-the-gable corridor (`access.access_corridor`, `routed` False)?
 
     Research:
-        a way of its own - research/questions/0081-village-lanes.drawing.html: a yard opening onto the ground the lanes are laid in; no bending path looked for
-        the village roll's corridor - DEVIATION research/questions/0081-village-lanes.drawing.html: a roll with no seat region seeks a corridor while it seats (`access_corridor`)
+        a way of its own - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a yard opening onto the ground the lanes are laid in; no bending path looked for
+        the village roll's corridor - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a roll with no seat region seeks a corridor while it seats (`access_corridor`)
     """
     region = getattr(s, "_seat_region", None)
     if region is not None:
@@ -111,7 +111,7 @@ def crossable(rec: Any) -> bool:
     """May a passage cross to this seated household - reached within the chain (`depth_of` under `PASSAGE_CHAIN`), with a
     threshing yard to arrive on?
 
-    Research: chain of passages - GUESS research/questions/0081-village-lanes.drawing.html: a neighbor reached within the chain, with a threshing yard to arrive on
+    Research: chain of passages - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a neighbor reached within the chain, with a threshing yard to arrive on
     """
     depth = depth_of(rec)
     return depth is not None and depth < PASSAGE_CHAIN and ((rec.get("geom") or {}).get("boxes") or {}).get("yard") is not None
@@ -148,7 +148,7 @@ def adjoins(own: Any, land: Any, tol: float) -> bool:
 def on_their_land(a: Pt, b: Pt, lands: Any, step: float) -> bool:
     """Does every point of the walk a-b, sampled every `step`, lie on one of the `lands` (boxes `(cx, cy, w, h)`)?
 
-    Research: walk on the two holdings - research/questions/0081-village-lanes.drawing.html: the walk keeps to the two households' land
+    Research: walk on the two holdings - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the walk keeps to the two households' land
     """
     n = max(1, int(math.ceil(math.dist(a, b) / step)))
     for k in range(n + 1):
@@ -164,7 +164,7 @@ def walk_clear(s: Settlement, door: Pt, foot: Pt, geom: Any, rec: Any, hgap: flo
     leg tests; of the neighbor's house, beds, sheds and fixtures by the same (its yard is the ground the walk arrives on); of
     every other placed homestead whole; of the static ground the site refuses; of the reserved wood seats.
 
-    Research: walk crosses nothing standing - research/questions/0081-village-lanes.drawing.html: no house, garden bed, shed or fixture of either household; every other homestead, the refused ground and the wood seats kept clear as a corridor keeps them
+    Research: walk crosses nothing standing - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: no house, garden bed, shed or fixture of either household; every other homestead, the refused ground and the wood seats kept clear as a corridor keeps them
     """
     if not (house_clear(door, foot, geom, hgap) and fixtures_clear(s, door, foot, geom) and parts_clear(s, door, foot, geom)):
         return False
@@ -191,7 +191,7 @@ def walk_of(s: Settlement, geom: Any, rec: Any, door: Pt, yard: Any, lands: Any,
     other placed homestead, the site's taken ground and the reserved wood seats, and pulled taut through `walk_clear` and
     `on_their_land`; its last point on the yard's edge. None where no walk is found.
 
-    Research: walk to the neighbor's threshing yard - research/questions/0081-village-lanes.drawing.html: from the household's dooryard to the neighbor's yard, on the two lands, round what stands
+    Research: walk to the neighbor's threshing yard - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: from the household's dooryard to the neighbor's yard, on the two lands, round what stands
     """
     from .access import doubles_back
     from .route import ROUTE_LEGS, ROUTE_STEP_PX, ROUTE_WEIGHT, own_parts, search, taut
@@ -258,8 +258,8 @@ def landlocked(s: Settlement, layouts: Any) -> bool:
     walks only of land that opens onto none.
 
     Research:
-        no way of its own - research/questions/0081-village-lanes.html, research/questions/0081-village-lanes.drawing.html: judged by the whole holding - a walk under some layout, a yard opening onto lane ground under none
-        no routed search for one - research/questions/0081-village-lanes.drawing.html: no path is looked for while it is seated; any lane ground its dooryard opens onto counts, however far round
+        no way of its own - research/questions/0081-village-lanes.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: judged by the whole holding - a walk under some layout, a yard opening onto lane ground under none
+        no routed search for one - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: no path is looked for while it is seated; any lane ground its dooryard opens onto counts, however far round
     """
     lays = [g for g in layouts if g is not None and not g.get("unlaid")]
     if any(opens(s, g) for g in lays):
@@ -273,7 +273,7 @@ def passage_of(s: Settlement, geom: Any) -> dict[str, Any] | None:
     `{"walk", "of", "depth"}`, the walk from its first dooryard door that has one (`walk_of`). None off a tight seat, past the
     settlement's share (`s._passage_left`), or where the chain would run past `PASSAGE_CHAIN`.
 
-    Research: passage across a neighbor's yard - research/questions/0081-village-lanes.html, research/questions/0081-village-lanes.drawing.html: a household against a reached neighbor's land, within the settlement's share and the chain, with a walk to the neighbor's threshing yard
+    Research: passage across a neighbor's yard - research/questions/0081-village-lanes.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a household against a reached neighbor's land, within the settlement's share and the chain, with a walk to the neighbor's threshing yard
     """
     tight = getattr(s, "_tight_of", None)
     tree = getattr(s, "_access", None)
@@ -312,8 +312,8 @@ def reserve_way(s: Settlement, rec: dict[str, Any], geom: Any, at: Pt) -> None:
     depth and the walk.
 
     Research:
-        walk not drawn as a lane - GUESS research/questions/0081-village-lanes.drawing.html: the walk is recorded and kept clear, never drawn
-        the corridor reserved as it is seated - DEVIATION research/questions/0081-village-lanes.drawing.html: the older village maps find, and so reserve, each path as they seat a house
+        walk not drawn as a lane - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the walk is recorded and kept clear, never drawn
+        the corridor reserved as it is seated - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the older village maps find, and so reserve, each path as they seat a house
         the walk reserved as it is seated - UNRESEARCHED: the walk kept as no-build ground while the houses are seated, so later houses keep off it
     """
     if geom.get("access") is not None:

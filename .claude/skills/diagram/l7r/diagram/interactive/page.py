@@ -24,17 +24,17 @@ import json
 import math
 import os
 import re
-from collections.abc import Iterator, Sequence
+from collections.abc import Iterator, Mapping, Sequence
 from concurrent.futures import ThreadPoolExecutor
 from typing import Any
 
-from . import raster
-from .classes import CLASSES, NOT_HIGHLIGHTED, PLACE, FeatureClass, lead_sentence, slug
+from . import choices, conditions, raster
+from .classes import CLASSES, NOT_HIGHLIGHTED, PLACE, FeatureClass, slug
 from .content import content
 from .extents import Extent, _BoxGrid, _file_extent, _refused
 from .glossary import CASED, GLOSSARY
 from .notes import EMPTY, MapNotes, read_map_notes
-from .place import HOMESTEAD_GROVE, LANE, WINDBREAK, homestead_grove_default, lane_default, place_card, windbreak_default
+from .place import HOMESTEAD_GROVE, LANE, WINDBREAK, homestead_grove_default, lane_default, place_card, retirement_fact, windbreak_default
 from .sources import research_questions
 from .tags import ClsTag, Planted, Split
 
@@ -51,15 +51,11 @@ _ATTR_FILL = re.compile(r'\sfill="[^"]*"')
 #: How many unclassed snippets the manifest keeps - enough to find the emit site, not the whole map.
 UNCLASSED_CAP = 20
 
-#: What introduces a feature class's caveat. The place card's basis gets its OWN lead-in
-#: (`place.BASIS_LEAD`) because it is not about the drawing - see `explanations`.
 _TEXT = content("page-text.json")  # the page's fixed phrases are DATA (feature 207) - see content.py
-CAVEAT_LEAD: str = _TEXT["caveat_lead"]
 
 #: The one line above the references list (feature 180, spec FR-008 / D8). A bare list of research
 #: headings under the word "References" does not tell a casual reader what the lines are, or that each
 #: is a link to a written answer with its sources. "Questions" is the GM's own word for them.
-REFERENCES_LEAD: str = _TEXT["references_lead"]
 
 #: The BROAD kinds, over which the cursor stays the normal arrow (GM 2026-09-26: *"very large things don't need to
 #: turn the mouse into a pointer"* - grassland, marshland, paddies, copses, windbreak forests and woodland commons).
@@ -498,37 +494,41 @@ def present_classes(tags: Sequence[ClsTag]) -> set[str]:
     return keys
 
 
-def explanations(present: set[str], notes: MapNotes = EMPTY, registry: dict[str, FeatureClass] = CLASSES, caveat_lead: str = CAVEAT_LEAD) -> dict[str, dict[str, Any]]:
+def explanations(present: set[str], notes: MapNotes = EMPTY, registry: dict[str, FeatureClass] = CLASSES, meta: Mapping[str, Any] | None = None) -> dict[str, dict[str, Any]]:
     """The embedded data: one entry per present class, in vocabulary order, with only the sibling
     paragraphs whose OTHER class is also present (spec US4 scenario 4 - an absent sibling is never
     claimed). A present key the registry does not know gets a stub that says so, never silence.
-    `registry` is the hamlet vocabulary unless a Mode A sheet passes its own (feature 262), and `caveat_lead` the words
-    the caveat opens with - a Mode A caveat is as often about the research as the drawing (building-review, feature 262)."""
+    `registry` is the hamlet vocabulary unless a Mode A sheet passes its own (feature 262).
+
+    NO LABEL, NO LEAD, NO CAVEAT (feature 319): the classification is per statement in the modal's own text (`dev/modals.md`
+    M11-M13), so nothing class-level is announced - don't re-add a lead sentence, because a "This is a guess" opening on a
+    modal that is mostly record read as the whole modal being a guess (the GM, 2026-10-03: *"extremely misleading"*)."""
     out: dict[str, dict[str, Any]] = {}
+    knobs = meta or {}
     for key, fc in registry.items():
         if key not in present:
             continue
+        # THE KNOB-CONDITIONED ITEMS (FR-015, plan D14): an item, or an Entry path, carrying [knob=value] is kept only where
+        # this map's manifest records that value; the knob and values are checked against the populated registry here
+        conds = (
+            [conditions.split(i)[0] for i in (*fc.about, *fc.depiction, *fc.guesses)] + list(conditions.entry_conditions(fc.entry).values()) + list(conditions.entry_conditions(fc.drawing).values())
+        )
+        conditions.check(fc.name, conds)
+        entry = conditions.shown_entry(fc.entry, knobs) if conditions.entry_conditions(fc.entry) else fc.entry
         out[key] = {
             "name": fc.name,
-            "what": fc.what,
-            "why": fc.why,
-            # `lead` is empty for an `accurate` class (feature 156) - see `classes.lead_sentence`.
-            # `caveat` is the liberty its record discloses, shown after the why; `label` stays so the
-            # classification is still readable on the page (`data-label`), per constitution XII.
-            "label": fc.label,
-            "lead": lead_sentence(fc.label, fc.label_note),
-            # THE LEAD-IN IS PART OF THE ENTRY (settlement-review, 2026-08-29). It used to be
-            # prepended by `page.js`, which meant one renderer put "On the drawing:" in front of
-            # every caveat - including the place card's, which is about where the card's claims come
-            # from and not about the drawing at all. A renderer cannot tell those apart; the writer of
-            # the string can.
-            "caveat": (caveat_lead + fc.caveat) if fc.caveat else "",
+            # THE ABOUT FORM (feature 319): the About tab's paragraphs and the Guesses tab's bullets
+            "about": conditions.shown(fc.about, knobs),
+            "guesses": conditions.shown(fc.guesses, knobs),
+            # THE DEPICTION TAB (plan D13): how the map draws it, and the "how our maps draw it" pages, as links
+            "depiction": conditions.shown(fc.depiction, knobs),
+            "drawing": research_questions(conditions.shown_entry(fc.drawing, knobs) if conditions.entry_conditions(fc.drawing) else fc.drawing) if fc.drawing else [],
             # THE REFERENCES ARE QUESTIONS, READ FROM THE RECORD (feature 180, GM 2026-09-05): the
             # research sections the class's entry names, each linking to its anchor on GitHub. The
             # sources those sections cite no longer ride on the page - a reader reaches them through
             # the question's own page - and neither does the entry pointer, which the modal used to
             # print as a "Record:" footer. Both stay in the registry as the record (constitution XII).
-            "questions": research_questions(fc.entry),
+            "questions": research_questions(entry),
             # siblings are LINKS now (hover lights the other class, click opens its modal); the
             # distinguishing texts stay in the registry as the record, not on the page
             "siblings": [other for other in fc.siblings if other in present],
@@ -545,14 +545,12 @@ def explanations(present: set[str], notes: MapNotes = EMPTY, registry: dict[str,
     for key in sorted(present - registry.keys() - {PLACE}):
         out[key] = {
             "name": key,
-            "what": "This kind of feature has no entry in the class registry yet (interactive/classes/).",
-            "why": "",
-            "label": "guess",
-            # the stub follows the same contract as a real entry, so its announcement survives
-            # (settlement-review nitpick, 2026-08-29: it still carried the pre-154 keys, which
-            # nothing reads, and had silently lost its lead)
-            "lead": lead_sentence("guess", "unregistered class - the gate reports it"),
-            "caveat": "",
+            # the stub follows the same contract as a real entry (settlement-review nitpick, 2026-08-29: it once carried
+            # keys nothing read), and says what it is on the About tab
+            "about": ["This kind of feature has no entry in the class registry yet (interactive/classes/); the gate reports it."],
+            "guesses": [],
+            "depiction": [],
+            "drawing": [],
             "questions": [],
             "siblings": [],
             "on_this_map": "",
@@ -560,16 +558,38 @@ def explanations(present: set[str], notes: MapNotes = EMPTY, registry: dict[str,
     return out
 
 
+#: The keys of an entry that are NOT reader-facing words: the cursor flag, the sibling KEYS (the
+#: page renders their NAMES, which are other entries' `name`, scanned there), and the questions (link text the page does
+#: not wrap). Everything else an entry carries is text the modal shows, so it is scanned - a DENY list, never an allow
+#: list: an allow list of five keys missed the About form's `about` and `guesses` when feature 319 added them (the GM,
+#: 2026-10-03: "any tooltip'ed thing in the research should be automatically tooltipped in the interactive HTML map
+#: modals").
+NOT_RENDERED: frozenset[str] = frozenset({"plain", "siblings", "questions"})
+
+
+def rendered_text(entry: dict[str, Any]) -> str:
+    """Every word an entry shows its reader, whatever key it rides on: strings, and the strings inside lists (the About
+    tab's paragraphs, the Guesses tab's bullets).
+    Research: plumbing - NONE"""
+    parts: list[str] = []
+    for key, value in entry.items():
+        if key in NOT_RENDERED:
+            continue
+        if isinstance(value, str):
+            parts.append(value)
+        elif isinstance(value, list):
+            parts.extend(v for v in value if isinstance(v, str))
+    return " ".join(parts)
+
+
 def glossary_for(data: dict[str, dict[str, Any]]) -> list[dict[str, Any]]:
     """The glossary entries whose terms occur in the present explanations - variants and definition,
     longest variants first so "head race" wins over "head". The page wraps each occurrence.
 
-    IT READS WHAT THE PAGE RENDERS, and nothing else. That used to include `label_note`; since
-    feature 156 the note itself is not rendered - only the `lead` built from it for a liberty, and
-    the `caveat` split out of it for an accurate class - so those two are what is scanned. Scanning
-    a string the reader never sees would define terms that never appear, which the companion test
-    in `test_page.py` catches from the other direction."""
-    raw = " ".join(" ".join(str(d.get(k, "")) for k in ("what", "why", "lead", "caveat", "on_this_map")) for d in data.values())
+    IT READS WHAT THE PAGE RENDERS, and nothing else - `rendered_text`, every key but `NOT_RENDERED` (feature 319: the
+    allow list it replaced missed the About and Guesses tabs). Scanning a string the reader never sees would define
+    terms that never appear, which the companion test in `test_page.py` catches from the other direction."""
+    raw = " ".join(rendered_text(d) for d in data.values())
     text = raw.lower()
     out: list[dict[str, Any]] = []
     # A SUBSTRING TEST FIRST (feature 224): 729 word-boundary searches over the whole text cost 0.28 s per page and
@@ -720,7 +740,6 @@ def render_page(
     notes: MapNotes = EMPTY,
     with_raster: bool = True,
     registry: dict[str, FeatureClass] = CLASSES,
-    caveat_lead: str = CAVEAT_LEAD,
     within: Sequence[tuple[str, ...]] | None = None,
 ) -> str:
     """The whole page as one string - `write_html` writes it; tests read it.
@@ -777,23 +796,41 @@ def render_page(
     # instead of in sequence"): each is a resvg subprocess this process only waits on, so two threads overlap them - and since
     # feature 297 this thread's own work (the explanations, the place card, the defaults) runs while they render.
     f_id = pool.submit(raster.id_map, svg, raster.class_keys(svg), within is not None) if pool is not None else None
-    data = explanations(present, notes, registry, caveat_lead)
+    # A HAMLET'S FEATURE MODALS ARE THE SAME ON EVERY MAP (feature 319, FR-004, plan D10): its notes' `### Features` facts
+    # and the per-map sentences below go on the title card, so a hamlet's explanations read no notes features at all
+    hamlet = str((meta or {}).get("scale") or "") == "hamlet"
+    data = explanations(present, MapNotes(place=notes.place, features={}) if hamlet else notes, registry, meta)
     # THE PLACE CARD rides in the same map, under the placard's own reserved key, so the page opens it
     # through the one modal every other feature uses (feature 156). None for a tier the vocabulary does
     # not describe - and then the placard simply has nothing to open, exactly as before.
     card = place_card(meta or {}, present, notes, manifest or {})
     if card is not None:
         data[PLACE] = card
+    if hamlet and card is not None:
+        # THE CHOICES AND THE FACTS ON THE CARD (plan D10): each choice the map made, its value a link to its modal, whose
+        # entry rides in the data like a class's (no ink to light); then this settlement's own sentences
+        card["choices"] = choices.made(meta or {})
+        reg = choices.registry_for(meta or {})
+        data.update(explanations(set(reg), registry=reg, meta=meta))
+        card["facts"] = [
+            f
+            for f in (
+                windbreak_default(meta or {}) if WINDBREAK in present else "",
+                lane_default("hamlet", notes.place) if LANE in present else "",
+                retirement_fact(meta or {}),
+            )
+            if f
+        ]
     # THE LANE'S DEFAULT DESTINATION (spec FR-021). An explicit annotation always wins - this only
     # fills in where the notes named a district but said nothing about the lanes, which is the case
     # on every hamlet in the pool.
-    if LANE in data and not data[LANE]["on_this_map"]:
+    if LANE in data and not data[LANE]["on_this_map"] and not hamlet:
         data[LANE]["on_this_map"] = lane_default(str((meta or {}).get("scale") or ""), notes.place)
     # THE WINDBREAK'S SIDE AND ITS REASON (feature 261), on the same terms: the notes' own entry wins.
-    if WINDBREAK in data and not data[WINDBREAK]["on_this_map"]:
+    if WINDBREAK in data and not data[WINDBREAK]["on_this_map"] and not hamlet:
         data[WINDBREAK]["on_this_map"] = windbreak_default(meta or {})
     # ...AND THE FARMSTEAD GROVE'S SIDES AND WHY (feature 291, FR-009): the settlement's own roll, read from the map.
-    if HOMESTEAD_GROVE in data and not data[HOMESTEAD_GROVE]["on_this_map"]:
+    if HOMESTEAD_GROVE in data and not data[HOMESTEAD_GROVE]["on_this_map"] and not hamlet:
         data[HOMESTEAD_GROVE]["on_this_map"] = homestead_grove_default(meta or {})
     if pool is not None and f_pic is not None and f_id is not None:
         try:
@@ -823,20 +860,31 @@ def render_page(
         '<button type="button" data-z="fit" title="fit the whole map (0)">fit</button></nav>\n'
         '<div id="shade" hidden></div>\n'
         '<dialog id="explain" aria-labelledby="x-name"><article>'
-        '<header><h2 id="x-name"></h2><p id="x-label" class="label"></p></header>'
-        '<section id="x-what"></section><section id="x-why"></section>'
-        '<section id="x-onmap" class="onmap" hidden></section><section id="x-caveat" class="caveat" hidden></section>'
-        '<section id="x-siblings"></section>'
-        # NO "Record:" LINE (feature 180, GM 2026-09-05: "I don't think we need lines like [Record: ...]
-        # on our main modal") - the entry pointer is bookkeeping a reader of the map does not need; the
-        # references modal below carries what it pointed at, as questions.
-        '<footer><p><a id="x-refs" href="#references">See references</a></p><button id="x-close" type="button">Close</button></footer>'
+        # THE TABS (feature 319, GM 2026-10-03: *"we could have an overview tab and a guesses tab and a references tab"*,
+        # the first named "About"): one dialog, a tab with nothing to show is not drawn (page.js `open`), and the
+        # references are a tab - the separate references dialog and its "Return to <X> writeup" button went with it.
+        '<header><h2 id="x-name"></h2><nav id="x-tabs" role="tablist">'
+        '<button type="button" role="tab" id="t-about" data-tab="about" aria-controls="p-about">About</button>'
+        '<button type="button" role="tab" id="t-guesses" data-tab="guesses" aria-controls="p-guesses">Guesses</button>'
+        '<button type="button" role="tab" id="t-depict" data-tab="depict" aria-controls="p-depict">Depiction</button>'
+        '<button type="button" role="tab" id="t-refs" data-tab="refs" aria-controls="p-refs">References</button></nav></header>'
+        # THE PANELS SHARE ONE GRID CELL (GM 2026-10-03: *"I would like for the tabs to keep the modal the same size because
+        # it is disorienting to see it resized when clicking between tabs"*): a hidden panel keeps its place, invisible, so
+        # the dialog is always the size of its largest panel (page.css `#x-panels`). `x-what`, `x-why` and `x-basis` are the
+        # title card's (`place.place_card`): a class's About tab is its paragraphs alone.
+        '<div id="x-panels"><div id="p-about" role="tabpanel" aria-labelledby="t-about">'
+        '<section id="x-about"></section><section id="x-what"></section><section id="x-why"></section>'
+        '<section id="x-choices" class="choices" hidden></section><section id="x-facts" class="facts" hidden></section>'
+        '<section id="x-onmap" class="onmap" hidden></section><section id="x-basis" class="basis" hidden></section>'
+        '<section id="x-siblings"></section></div>'
+        '<div id="p-guesses" role="tabpanel" aria-labelledby="t-guesses" hidden><ul id="x-guesses"></ul></div>'
+        # THE DEPICTION TAB (plan D13, GM 2026-10-04: "I want 'How we draw it' things on its own tab"): how the map draws the
+        # thing, then the "how our maps draw it" pages, which leave the References tab
+        '<div id="p-depict" role="tabpanel" aria-labelledby="t-depict" hidden><section id="x-depiction"></section><section id="d-list"></section></div>'
+        # NO "Record:" LINE (feature 180, GM 2026-09-05) - the references tab lists the QUESTIONS the entry names.
+        f'<div id="p-refs" role="tabpanel" aria-labelledby="t-refs" hidden><section id="r-list"></section></div></div>'
+        '<footer><button id="x-close" type="button">Close</button></footer>'
         "</article></dialog>\n"
-        # THE REFERENCES MODAL lists the QUESTIONS the research asked, linked to their answers (feature
-        # 180); its button says where it goes ("Return to <Name> writeup", set by page.js), because a bare
-        # "Close" could be read as closing every modal at once.
-        f'<dialog id="references" aria-labelledby="r-name"><article><header><h2 id="r-name"></h2><p id="r-intro" class="intro">{REFERENCES_LEAD}</p></header><section id="r-list"></section>'
-        '<footer><button id="r-close" type="button">Return to writeup</button></footer></article></dialog>\n'
         # THE GLOSSARY TOOLTIP, a sibling of the dialogs rather than a child of a word (feature 182): a box
         # inside a dialog is clipped by the dialog's own scrolling edge; page.js places this one.
         '<div id="tip" role="tooltip" hidden></div>\n'
@@ -860,7 +908,6 @@ def write_html(
     manifest: dict[str, Any] | None = None,
     with_raster: bool = True,
     registry: dict[str, FeatureClass] = CLASSES,
-    caveat_lead: str = CAVEAT_LEAD,
     within: Sequence[tuple[str, ...]] | None = None,
 ) -> None:
     """`<base>.html`, beside the map's other outputs. The map's `<base>.notes.md` is read here if it
@@ -869,4 +916,4 @@ def write_html(
     render condition (feature 208) - see `render_page`; `registry` the vocabulary (feature 262)."""
     notes = read_map_notes(path[: -len(".html")] + ".notes.md") if path.endswith(".html") else EMPTY
     with open(path, "w", encoding="utf-8") as fh:
-        fh.write(render_page(strings, tags, name, meta, manifest, notes, with_raster=with_raster, registry=registry, caveat_lead=caveat_lead, within=within))
+        fh.write(render_page(strings, tags, name, meta, manifest, notes, with_raster=with_raster, registry=registry, within=within))

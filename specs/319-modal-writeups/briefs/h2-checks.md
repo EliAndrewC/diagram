@@ -1,0 +1,11 @@
+- round 1, quote-check 0014: 10 SUPPORTS, 2 absence, unfootnoted clean (tabayashi-1987-2's scanned PDF read by eye) - no edit
+- round 1, quote-check 0059: the new intake-placement absence note (-10) and the unmarked spec block - clean
+- round 1, quote-check 0073: 7 SUPPORTS; aze-standard's gloss named a sheet that does not exist - now sheet A-01, 畦畔工, under its heading 注意事項
+- round 1, record-format 0014: 71 ruled, clean (Keiko the poet raises no tooltip: the keiko term is cased)
+- round 1, record-format 0059: 2 VOCABULARY - Kenrei Shuchi added to the glossary (23080); seki raises no wrong tooltip (the post-town Seki term is cased)
+- round 1, record-format 0073: Sado now Sado Island, the karishiki-4 gloss names Sekai Daihyakka Jiten, 'our maps draw nothing on open water'; the scythe blade range harmonized (60-90 cm, up to 100 cm for a long mowing blade, read on en.wikipedia Scythe)
+- round 1, source-reader 0014: nabunken-azemame READ 3, nougyoudoboku-keihan READ 2, tabayashi-1987 READ 4 (from the archive copy; the scanned PDF has no text layer); 0059's -10 absence answered with REASON (no key)
+- round 1, translation-check 0014: FAITHFUL 2 (nabunken-azemame-2, -4)
+- round 2 (0073): quote-check 9 SUPPORTS clean; translation-check FAITHFUL 2 (the sheet glosses); source-reader kotobank-karishiki READ 1, aze-standard READ 5 with its registry write-up CONTRADICTED (crest is 40/60 cm, not 30; toe berm from 1 m) - 0590-aze-standard corrected; record-format: the drawing absence note narrowed to 'a channel bank's grass before modern times'
+- round 3 (0073): quote-check clean, record-format clean, source-applicability aze-standard APPLICABLE-WITH-LIMITS, HONEST; record-owed UNANSWERED=1 owes nothing on 0014, 0059 or 0073; no entry-drift was owed
+- also fixed: check-bundle cut a quote-check owing #unfootnoted to the WHOLE question (0059: 5 batches for 1 note) - now the owed notes plus every unmarked block (_bundle_owed.owed_notes, bare passed on the single-bundle path, test updated); catena and planted collar retired from the glossary (used only in comments), so test_record_format is green

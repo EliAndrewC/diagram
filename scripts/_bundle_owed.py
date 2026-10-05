@@ -15,7 +15,6 @@ one `unit: <slug> <fingerprint>` line per unit it carries, at the content copied
 
 from __future__ import annotations
 
-import ast
 import functools
 import pathlib
 import re
@@ -50,6 +49,9 @@ def owed_for_question(root: pathlib.Path, q: str, for_: str, not_owed_ok: str, e
     qn = question_of(q)
     every = ro.units(root) if every is None else every
     units = [u for u in every if ru.question(u.subject) == qn or (u.check == "entry-drift" and for_ in ("entry-drift", "all"))]
+    if q.endswith(".html"):  # ONE page (feature 303): its units only - feature 319 recorded a research page's bundle as
+        drawing = ".drawing." in q  # answering the drawing page's units, which that bundle never carried
+        units = [u for u in units if "#" not in u.subject or (".drawing" in u.subject.partition("#")[0]) == drawing]
     if for_ != "all":
         units = [u for u in units if u.check == for_]
     if units:
@@ -118,16 +120,23 @@ def batch_units(units: list[ru.Unit], batch: frozenset[str]) -> list[ru.Unit]:
     return [u for u in units if u.subject.partition("#")[2] in batch or u.subject.partition("#")[2] == "unfootnoted"]
 
 
+def kind_units(units: list[ru.Unit], key: str) -> list[ru.Unit]:
+    """The owed units ONE modal's entry-drift bundle can answer: that modal's own. Feature 319 (G4): every KIND= bundle
+    carried every owed entry-drift unit, so the byre's answer recorded the windbreak's, which no agent had read."""
+    return [u for u in units if u.check != "entry-drift" or u.subject == key]
+
+
 def unfootnoted_owed(units: list[ru.Unit]) -> bool:
     """Is a quote-check of the page's unfootnoted blocks among the owed units (`quote-check:<stem>#unfootnoted`)?"""
     return any(u.check == "quote-check" and u.subject.partition("#")[2] == "unfootnoted" for u in units)
 
 
 def owed_notes(units: list[ru.Unit]) -> frozenset[str]:
-    """The notes a `FOR=quote-check` bundle with no NOTES= is cut to - none (the whole question) when its unfootnoted
-    reading is owed, which needs every block of the page."""
-    keys = [u.subject.partition("#")[2] for u in units if u.check == "quote-check"]
-    return frozenset() if "unfootnoted" in keys else frozenset(keys)
+    """The notes a `FOR=quote-check` bundle with no NOTES= is cut to - none (the whole question) only when the unfootnoted
+    reading is ALL that is owed. Beside owed notes it is the excerpt's `bare` blocks (feature 314), not the whole question:
+    319 H2 found one changed note and one unmarked block of 0059 batched as the whole question's 140 notes, five agents."""
+    keys = {u.subject.partition("#")[2] for u in units if u.check == "quote-check"}
+    return frozenset(keys - {"unfootnoted"})
 
 
 # --- the intro-check bundle (plan D4) --------------------------------------------------------------------------------------
@@ -136,24 +145,19 @@ def owed_notes(units: list[ru.Unit]) -> frozenset[str]:
 @functools.cache
 def _modal_docs(root: pathlib.Path) -> tuple[tuple[str, str], ...]:
     """(class name, docstring) of every modal, parsed once a run - a batch of 24 questions parsed them 24 times."""
-    out = []
-    for d in MODAL_DIRS:
-        for path in sorted((root / d).glob("*.py")):
-            for node in ast.walk(ast.parse(path.read_text(encoding="utf-8"))):
-                doc = ast.get_docstring(node) if isinstance(node, ast.ClassDef) else None
-                if doc:
-                    out.append((node.name, doc))
-    return tuple(out)
+    import _modal_owed as mo  # noqa: PLC0415 - feature 319 (plan D12): a modal's text is its own file
+
+    return tuple((m.cls.split(".", 1)[1], m.doc) for m in mo.modals_now(root, about_only=False))
 
 
 def modals_for(root: pathlib.Path, page: str) -> list[str]:
-    """The `Name:` and `Label:` of every modal whose `Entry:` names this question page - what the map draws from it."""
+    """The `Name:` of every modal whose `Entry:` names this question page - what the map draws from it (the class-level
+    `Label:` went with the old form, feature 319)."""
     out = []
     for cls, doc in _modal_docs(root):
         if re.search(rf"^\s*Entry:.*\b{re.escape(page)}", doc, re.M):
             name = re.search(r"^\s*Name:\s*(.+)$", doc, re.M)
-            label = re.search(r"^\s*Label:\s*(.+)$", doc, re.M)
-            out.append(f"- {name.group(1).strip() if name else cls}" + (f" (label: {label.group(1).strip()})" if label else ""))
+            out.append(f"- {name.group(1).strip() if name else cls}")
     return out
 
 

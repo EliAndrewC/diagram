@@ -192,7 +192,9 @@ def thread(path: Sequence[Pt], walls: Sequence[Poly], hard: list[Poly], water: l
     (`_route`, a footpath's gap) between the clear vertices either side; a vertex whose tread meets one is dropped. The
     street stays one way. (Tested at the centerline, a street grazed a grove band with its drawn tread - cohort seed 904.)
 
-    Research: street threaded round the steadings - research/questions/0081-village-lanes.drawing.html: nothing is built on a lane"""
+    Research:
+        street threaded round the steadings - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: nothing is built on a lane
+        street's berth off the steadings - UNRESEARCHED: routed half a tread plus 1 ft (5 ft), then 7 ft, off the steadings"""
     clear = [p for p in path if not _crosses_fabric([p, p], walls, half)]
     if len(clear) < 2:
         return list(clear)
@@ -214,7 +216,9 @@ def join_to(path: list[Pt], network: Sequence[tuple[Pt, Pt]], hard: list[Poly], 
     """`path` extended from whichever of its ends is nearer the `network` to the nearest point on it, routed round the
     steadings; unchanged when the network is empty, already touched, or no route is found.
 
-    Research: street joined to the network - research/questions/0081-village-lanes.drawing.html: one network"""
+    Research:
+        street joined to the network - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: one network
+        joining leg's berth - UNRESEARCHED: routed `FOOTPATH_FABRIC_GAP` (4 ft) off the fabric"""
     if len(path) < 2 or not network:
         return path
 
@@ -332,7 +336,7 @@ def to_its_joints(street: Sequence[Pt], ends: Sequence[Pt], touch: float) -> lis
     it. Past its last farm's path a street serves nothing the lane law counts (`end_serves`: a farmhouse stands most of a
     frame off its street), and the settle refuses a tree lane with a dangling end (feature 291 on 287, Mizuguchi).
 
-    Research: street cut to its outermost joints - research/questions/0081-village-lanes.drawing.html: an end reaching nothing is pulled back"""
+    Research: street cut to its outermost joints - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: an end reaching nothing is pulled back"""
     arc, at = joints_along(street, ends, touch)
     if not at:
         return list(street)
@@ -367,7 +371,7 @@ def end_to_its_joint(street: Sequence[Pt], ends: Sequence[Pt], touch: float, end
     joint on that side), the other end left as it is; the street as it is where no joint stands on it. The settle asks it of
     a street end the lane law calls dangling (`settle_dangling`).
 
-    Research: street end cut to its joint - research/questions/0081-village-lanes.drawing.html: an end reaching nothing is pulled back"""
+    Research: street end cut to its joint - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: an end reaching nothing is pulled back"""
     arc, at = joints_along(street, ends, touch)
     if not at:
         return list(street)
@@ -393,7 +397,7 @@ def trim_streets(s: Settlement, touch: float, doors: Sequence[Pt] = (), reach: f
     lays none within that reach): cut to its paths' joints alone, Mizuguchi's street stopped a frame short of its end farm,
     whose door stood 12 ft off it, and the farm was left off every way (2026-10-01). Returns the streets cut.
 
-    Research: street cut to its joints - research/questions/0081-village-lanes.drawing.html: pulled back to the last way or door it serves"""
+    Research: street cut to its joints - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: pulled back to the last way or door it serves"""
     lanes = s.M.get("lanes") or []
     n = 0
     for i, ln in enumerate(lanes):

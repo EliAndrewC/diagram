@@ -42,7 +42,7 @@ ALDER_GREENS = ("#5E7F6A", "#6B8A74")  # the alder crowns' tint (a map drawing c
 # (hamletgen/homesteads/bamboo.py carries the full note). Here since feature 291, because a farm with its own grove carries
 # its bamboo IN that grove, so the grove drawer makes the same roll.
 HOUSEHOLD_BAMBOO_PREVALENCE = 0.6
-"""Research: farms with bamboo - research/questions/0075-bamboo-groves-chikurin.drawing.html: three in five"""
+"""Research: farms with bamboo - research/questions/0075-bamboo-groves-chikurin.drawing.html, research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.html: three in five"""
 GROVE_CLUMP_CROWNS = 28  # the most crowns one `_draw_grove` clump throws
 """Research: crowns a clump throws - UNRESEARCHED: at most 28"""
 GROVE_CROWN_AREA = 48.0  # sq px of clump per crown at the town grain (~one 5 m crown); scaled by (bscale / 0.82) ** 2
@@ -59,7 +59,8 @@ def band_clumps(cx: float, cy: float, w: float, h: float, cap_area: float) -> li
 
 
 GROVE_BAMBOO_SHARE = 0.08  # of a windbreak clump's items, the bamboo under its crowns: a GUESS (269 B29, research/questions/0075-bamboo-groves-chikurin.html)
-"""Research: bamboo in a windbreak clump - research/questions/0075-bamboo-groves-chikurin.drawing.html: 8% of its items"""
+"""Research: bamboo in a windbreak clump - research/questions/0075-bamboo-groves-chikurin.drawing.html: 8% of its items, in the
+village belt even where the bamboo knob rolled none (only the farm groves check `_farm_rolls_bamboo`)"""
 
 GROVE_BAMBOO_PATCH_FT = (22.0, 16.0)
 """A farm's household bamboo, where it rolled a stand and keeps it in its own grove (feature 291, research/questions/0075-bamboo-groves-chikurin.html): a patch
@@ -715,9 +716,11 @@ class GrovesMixin:
             windbreak conifer share - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.html: 38% of a
                 windbreak clump's items, against 54% broadleaf, where the grove is led by cedar
             crowns per clump floor - UNRESEARCHED: at least 5 crowns thrown per clump
+            crowns per clump - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: one crown per `GROVE_CROWN_AREA` of clump (48 sq px at the town grain)
+            crowns per clump ceiling - UNRESEARCHED: at most `GROVE_CLUMP_CROWNS` (28)
             bamboo under the crowns - research/questions/0075-bamboo-groves-chikurin.drawing.html: 8% of a windbreak clump,
                 inked only in the gaps; none in the dooryard or alder mixes
-            dooryard mix - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:
+            dooryard mix - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:
                 fruit broadleaf, no conifer
             crown size - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: the
                 mean crown radius, 0.72-1.05 or a quarter 1.25-1.7 of it, a conifer 15% wider

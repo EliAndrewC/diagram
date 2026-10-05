@@ -127,29 +127,25 @@ Ubame's wealth is charcoal and the iron smelted beside it, not rice, so the oute
 
 ### Features
 
-- **residence**: Successive households of the lineage have moved in and out without taking their fittings, so the house reads as layered and half-furnished - two halls joined by a corridor, the later one set forward, as a house added to over generations.
+- **residence**: Successive households of the lineage have added to the house, so it stands as two halls joined by a corridor, the later one set forward of the first.
 - **shuttered wing**: The westernmost bay of the west block is shuttered - rooms no longer lived in, at the far end from the reception.
-- **ancestral alcove**: Moriguchi is a dynasty province - the only one in its domain, the rest being stewardship provinces - so the magistracy of Ubame always stays within the same lineage (the GM, 2026-09-28), and the alcove beside the reception, at the formal end of the house, holds that lineage's tablets: it is labeled a lineage alcove. A house keeps the tablets of its own line, so tablets of kin who held the post but were not the house's own forebears are the map's own extension.
-- **retainers' quarters**: Married sergeants keep a family rowhouse inside the walls, abutting the barracks: the lineage that holds the province is long settled, and its sergeants marry in the county rather than rotating through it. The record puts ranks of small household dwellings at a town's edge, outside an elite quarter, so a rowhouse inside the walls rests on this map's story.
+- **ancestral alcove**: Moriguchi is a dynasty province, the only one in its domain, so the magistracy of Ubame always stays within the same lineage, and the alcove beside the reception holds that whole lineage's tablets: it is labeled a lineage alcove.
+- **retainers' quarters**: Married sergeants keep a family rowhouse inside the walls, abutting the barracks: the lineage that holds the province is long settled, and its sergeants marry in the county rather than rotating through it.
 - **guest quarters**: Ubame keeps no guest house; the guest room is a room of the residence, between Koharu's quarters and the reception.
-- **kennel**: Koharu's boar hounds, beside the stables.
-- **writing pavilion**: Koharu's own study, at the garden's west edge before his rooms and set apart from both the office hall and the house: the county's business is done in the hall, and his own here.
-- **compound shrine**: A modest standalone Inari shrine in a grove, with a single approach torii. Inari is the ordinary dedication for a magistracy's shrine; here she is also the Fortune of foxes, which nobody in this county treats as a coincidence.
-- **wood-kami altar**: A public altar that a private hand keeps up, a few steps from the Inari shrine: anyone may pray at it, and no one from the Ministry of Rites stands behind it.
+- **kennel**: The kennel holds Koharu's boar hounds.
+- **writing pavilion**: Koharu's own study stands at the inner garden's west edge, before his rooms.
+- **compound shrine**: A modest standalone Inari shrine in a grove, with a single approach torii. Inari is the Fortune of rice and of foxes, and on the Fox border nobody in this county treats that as a coincidence.
 - **notice board**: A second, roofed board beside the bench's own carries a single bill: 100 koku for the hermit Shoda, the magistrate's bounty, which has eaten this year's spending. Bounties on fugitives are common across the Empire.
-- **granary**: Ubame is a terminal store - an upland county with no water carriage - but its tax arrives mostly as charcoal, bar iron and forest goods, so the granary is a single modest kura, raised on posts against rats and damp, and the stored wealth shows in the sealed charcoal store instead.
-- **charcoal store**: It holds shrine-grade white charcoal, the county's most valuable movable good, prized across the Empire for its odorless, nearly smokeless burn. It must stay bone dry, and it is bought for burning without smell, so no privy stands near its doors. A sealed plaster storehouse is built against fire, so it stands at ordinary spacing, across the cart yard from the tally range.
-- **fox border**: Ubame's east wall stands on the border itself: its outside face is Fox soil, and crossing the parley room's threshold enters or leaves Fox lands. The drawn line is attested history; a compound built on it is this map's story.
-- **parley room**: The border runs across the room's floor: the Kitsune kneel on Fox ground and the Scorpion's officers on Scorpion ground, and the charcoal tallies are agreed without either side leaving its own soil. Its inner door opens into the border court, never the hearing court.
-- **boundary stones**: Stone-gray, set on the line north and south of the parley room - a pair that reads the line, not a pair that wards it.
+- **granary**: Ubame is an upland county with no water carriage, so what it stores waits for the overland carts; but its tax arrives mostly as charcoal, bar iron and forest goods, so the granary is a single modest storehouse on posts, and the county's stored wealth lies in the sealed charcoal store.
+- **charcoal store**: It holds shrine-grade white charcoal, the county's most valuable movable good, prized across the Empire for its odorless, nearly smokeless burn. It must stay bone dry, and it is bought for burning without smell, so no privy stands near its doors.
+- **fox border**: Outside Ubame's east wall the ground is Fox Clan land, and the Kitsune Mori lies 15 miles east.
+- **parley room**: The Kitsune kneel on Fox ground and the Scorpion's officers on Scorpion ground, and the charcoal tallies are agreed here. Its inner door opens into the border court, never the hearing court.
 - **garden pond**: This garden has no water: a dry garden of raked gravel and set stones stands for it, before the reception.
-- **garden**: A guest of rank comes up the east walk from the forecourt, through the middle gate at its head, and along a short stepping-stone path walled in an L by a low earthen wall to a stone at the reception's veranda - there is no porch; the writing pavilion stands before Koharu's own rooms.
+- **garden**: There is no formal entrance: a guest of rank comes up the east walk from the forecourt, through the middle gate at its head, and along a short stepping-stone path walled in an L by a low earthen wall to a stone at the reception's veranda.
 - **gatehouse**: The gate range stands in the wall line with the main gate's 12 ft passage running through it, the guardroom on one side and a gate-keepers' room on the other, each with its door onto it.
 - **kitchen**: The kamado stands on a small earth floor (doma) inside the kitchen, where the service door opens; a short covered corridor joins the kitchen to the family quarters.
-- **hearing court**: White gravel under the court's roof.
-- **striking posts**: Two upright posts, the Jigen-ryu form; the knee-high bundle of branches is attested only as a present-day practice and is not drawn.
-- **steelyard**: The charcoal bales are weighed on a steelyard, a 6 ft beam hung near its hook end, before the tally is written.
+- **hearing court**: Its floor is white gravel, under the court's roof.
+- **striking posts**: Two upright posts stand at the practice ground.
 - **fire-water tubs**: Nineteen tubs for about nineteen wooden buildings, two of them at the kitchen; the plaster kura - the tax archive, the charcoal store and the two household storehouses - carry none.
-- **vegetable garden**: The kitchen garden stands in the inner garden before Koharu's quarters and the guest room, beside the writing pavilion: the west and the rear lie in the shade of the house and the kitchen, and this is the one ground in the walls with its sun.
-- **storehouse**: Two household storehouses in the shady rear, where the kitchen garden could not grow: a household kept its own storehouses, and the rear strip behind the house carried its service economy.
-- **rear yard**: Behind the house lies open working ground, with the household's storehouses beyond it on the north wall.
+- **vegetable garden**: The kitchen garden stands in the inner garden before Koharu's quarters and the guest room, beside the writing pavilion: it is the one ground within the walls that gets its sun.
+- **storehouse**: Two household storehouses stand on the north wall in the shady rear, ground too dark for the kitchen garden.

@@ -28,6 +28,7 @@ from .shrines_wells import ShrinesWellsMixin
 from .shrines_wells.forest import ForestMixin
 from .structures import StructuresMixin
 from .structures.urban_fixtures import UrbanFixturesMixin
+from .title import TitleMixin
 from .town_ways import TownWaysMixin
 from .trades import TradesMixin
 from .water_ways import WaterWaysMixin
@@ -52,6 +53,7 @@ class Settlement(
     HardGroundMixin,  # feature 278: the hard no-build ground, out of houses.py
     RollingMixin,
     FinishMixin,
+    TitleMixin,  # feature 319: the title placard, out of finish.py
     FarmFixturesMixin,
     PondStockMixin,
 ):

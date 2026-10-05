@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-05T02:14:04Z",
+  "target": "record-checked",
+  "commit": "aadc84930",
+  "why": "entry-drift on entry-drift:windbreak: feature 319 is rewriting the windbreak modal from the record as it now stands; the drift is fixed by that rewrite"
+}

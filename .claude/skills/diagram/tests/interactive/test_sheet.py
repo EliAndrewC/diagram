@@ -23,10 +23,7 @@ def _fc(key: str) -> FeatureClass:
         key=key,
         name=key.title(),
         covers="-",
-        what="What it is.",
-        why="Why it is here.",
-        label="accurate",
-        label_note="Read.",
+        about=("What it is, and why it is here.",),
         sources=("not recorded",),
         entry="research/contents.json#compounds (no dedicated entry - recorded as silent)",
     )
@@ -168,21 +165,19 @@ def test_the_render_condition_picks_the_raster_default(tmp_path: pytest.TempPath
         assert '"raster": {"r": 0}' in fh.read()
 
 
-def test_a_mode_a_caveat_opens_with_the_research_lead_not_the_drawing_lead(tmp_path: pytest.TempPathFactory) -> None:
-    """Building-review, feature 262: a compound caveat is as often a rule of the setting or a research gap as a drawing
-    note, so the sheet's page opens it with its own words, never the hamlet's "On the drawing:"."""
+def test_a_mode_a_guess_is_a_bullet_with_no_lead_in(tmp_path: pytest.TempPathFactory) -> None:
+    """Feature 319 retired the caveat and its lead-ins (the hamlet's "On the drawing:", feature 262's "Where this rests on
+    less than the research:"): what a kind guessed is a Guesses bullet, carried as written."""
     from dataclasses import replace
-
-    from l7r.diagram.interactive.sheet import CAVEAT_LEAD
 
     path = os.path.join(str(tmp_path), "c.svg")
     with open(path, "w", encoding="utf-8") as fh:
         fh.write(HEAD + '<g data-kind="granary"><rect x="1" y="1" width="5" height="5" fill="#C00"/></g></svg>')
-    reg = {"granary": replace(_fc("granary"), label_note="Read. The size is unmeasured.", caveat="The size is unmeasured.")}
+    reg = {"granary": replace(_fc("granary"), guesses=("The size is unmeasured.",))}
     write_sheet_page(path, reg, with_raster=False)
     with open(path[:-4] + ".html", encoding="utf-8") as fh:
         page = fh.read()
-    assert CAVEAT_LEAD + "The size is unmeasured." in page and "On the drawing: " not in page and CAVEAT_LEAD.startswith("Where this rests")
+    assert '"guesses": ["The size is unmeasured."]' in page and "On the drawing: " not in page and "Where this rests" not in page
 
 
 def test_a_sheet_page_marks_its_map_so_lit_labels_keep_their_ink(tmp_path: pytest.TempPathFactory) -> None:

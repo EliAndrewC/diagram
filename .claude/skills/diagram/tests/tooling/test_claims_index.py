@@ -270,3 +270,13 @@ def test_a_class_is_shown_as_its_own_statements_and_each_method_under_its_own_he
     manifest = cx.bundle(tmp_path, cur, keys, tmp_path / "b").read_text()
     head, _sep, method = manifest.partition("## UNIT .claude/skills/diagram/l7r/diagram/hamletgen/rows.py::Farm.lay")
     assert "SIZE = 3" in head and "return self.SIZE" not in head and "return self.SIZE * 2" in method
+
+
+def test_a_shortened_pointer_in_a_verdict_note_gets_its_full_name() -> None:
+    """Feature 319: impl-drift wrote `0236-...-home-plot.drawing.html` into four notes, and the index then failed the pointer
+    check. A unique stem is expanded; a number with no question, or two, is left for a person."""
+    stems = ["0236-a-hamlets-home-plot", "0031-clustered", "0019-polders", "0019-polder-two"]
+    reply = "VERDICT k DRIFTED - see 0236-...-home-plot.drawing.html and 0031-...html; 0019-...-x.html; 9999-...html [§]"
+    got = cx.unelide(reply, stems)
+    assert "0236-a-hamlets-home-plot.drawing.html" in got and "0031-clustered.html" in got
+    assert "0019-...-x.html" in got and "9999-...html" in got, "ambiguous or unknown numbers stay as written"

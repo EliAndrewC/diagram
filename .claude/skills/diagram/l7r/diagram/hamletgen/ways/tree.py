@@ -191,7 +191,7 @@ def admits(base: Any, M: Mapping[str, Any], run: Poly, role: str = ACCESS_ROLE, 
     asks it of each household's way once the last house stands (`gap_ways`, feature 318), before it admits the way.
 
     Research:
-        tree keeps the lane law - research/questions/0081-village-lanes.drawing.html: each household's way, laid once the last house stands, admitted with no hook, fold, hairpin or dangling end among the tree's lanes
+        tree keeps the lane law - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: each household's way, laid once the last house stands, admitted with no hook, fold, hairpin or dangling end among the tree's lanes
         no sliver between the tree's lanes - UNRESEARCHED: no needle (`needle_loops`), asked of the tree with its ends joined as the settle joins them (`as_joined`), and no doubled tail
         way out crosses each brook once - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html
         no doubled band - UNRESEARCHED: an access lane may not run beside another past a pitch
@@ -353,7 +353,7 @@ def left_to_the_tree(M: Mapping[str, Any], i: int) -> bool:
     band stayed; that house had no corridor drawn only because the stray lane reached it first. Its way was laid and judged
     lawful by the gap pass, so the band goes and the house is reached by its own way.
 
-    Research: every farmhouse served - research/questions/0081-village-lanes.drawing.html: a stray lane goes where the house's own way, laid in the gaps once the last house stands, will reach it"""
+    Research: every farmhouse served - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a stray lane goes where the house's own way, laid in the gaps once the last house stands, will reach it"""
     from .corridors import _on_the_connector
 
     lanes = M.get("lanes") or []
@@ -376,8 +376,8 @@ def owed(M: Mapping[str, Any]) -> list[int]:
     left undrawn, their dooryards 26-78 ft from any lane, glyph-check 2026-10-04) - with every run each hangs from.
 
     Research:
-        every farmhouse served - research/questions/0081-village-lanes.drawing.html: every other farmhouse is served by a lane of its own, its way leaving its dooryard; a household reached across a neighbor's yard has none
-        the way of a household another is reached across - research/questions/0081-village-lanes.drawing.html: owed with every household's way, its own way always drawn
+        every farmhouse served - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every other farmhouse is served by a lane of its own, its way leaving its dooryard; a household reached across a neighbor's yard has none
+        the way of a household another is reached across - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: owed with every household's way, its own way always drawn
     """
     recs = tree_records(M)
     host = hosts(recs, _root(M))
@@ -398,7 +398,7 @@ def settle_tree(s: Any) -> int:
     once - and then the ordinary lanes that break a rule against
     them cut (`settle_defer`). Returns the lanes drawn or re-laid.
 
-    Research: every farmhouse served - research/questions/0081-village-lanes.drawing.html: every household's way, laid in the gaps once the last house stands, drawn as a lane of its own"""
+    Research: every farmhouse served - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every household's way, laid in the gaps once the last house stands, drawn as a lane of its own"""
     M = s.M
     need = owed(M)
     if not need:
@@ -527,8 +527,8 @@ def prune_the_tree(s: Any) -> int:
     A household's own way never goes (feature 318), so what may is a way target's spur or the field way, which nothing hangs from. One a round, as a fragment: two can each be redundant only while the other stands.
 
     Research:
-        redundant tree lane pruned - UNRESEARCHED: no more corridors than the map needs; never a household's own way (research/questions/0081-village-lanes.drawing.html: every other farmhouse is served by a lane of its own)
-        the way of a household another is reached across - research/questions/0081-village-lanes.drawing.html: its corridor never pruned, as no household's own way is
+        redundant tree lane pruned - UNRESEARCHED: no more corridors than the map needs; never a household's own way (research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every other farmhouse is served by a lane of its own)
+        the way of a household another is reached across - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: its corridor never pruned, as no household's own way is
         street and door path never pruned - research/questions/0033-row-villages-resson.drawing.html: the way a row's farms are reached by"""
     M = s.M
     lanes = M.get("lanes") or []
@@ -689,7 +689,7 @@ def seating_judge(s: Any) -> Any:
     (`access.tree_admits`, `gap_ways`, feature 318), installed on the settlement as `_corridor_tree` - the settlement package
     cannot import the hamlet generator.
 
-    Research: a corridor judged as the web will lay it - research/questions/0081-village-lanes.drawing.html: each household's way, laid once the last house stands, refused where its squared run crosses its own household's house, beds, sheds or fixtures (`own_clear`) or another standing homestead (`others_clear`), nothing built on a lane
+    Research: a corridor judged as the web will lay it - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: each household's way, laid once the last house stands, refused where its squared run crosses its own household's house, beds, sheds or fixtures (`own_clear`) or another standing homestead (`others_clear`), nothing built on a lane
     """
 
     def judge(corridor: Sequence[Pt], geom: Mapping[str, Any]) -> bool:
@@ -717,7 +717,7 @@ def seating_drawn(s: Any) -> Any:
     as `_corridor_drawn` for `access.reserve` - the settlement package cannot import the hamlet generator. Reserved as the gap
     pass lays each household's way once the last house stands (`gap_ways`, feature 318), so what is placed after keeps off it.
 
-    Research: a corridor kept clear as the web will lay it - research/questions/0081-village-lanes.drawing.html: nothing built on a lane; each household's way laid once the last house stands
+    Research: a corridor kept clear as the web will lay it - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: nothing built on a lane; each household's way laid once the last house stands
     """
 
     def drawn(corridor: Sequence[Pt]) -> Poly:
@@ -730,7 +730,7 @@ def others_clear(s: Any, run: Poly) -> bool:
     """Does every leg of `run` clear the homesteads already standing, by the corridor's own test of them
     (`access.standing_clear`) - the leg onto the tree passing unasked where it has no length?
 
-    Research: nothing built on a lane - research/questions/0081-village-lanes.drawing.html: a way clears every other homestead, as the web will lay it
+    Research: nothing built on a lane - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a way clears every other homestead, as the web will lay it
     """
     from l7r.diagram.settlement.rolling import access as A
 
@@ -742,7 +742,7 @@ def own_clear(s: Any, run: Poly, geom: Mapping[str, Any]) -> bool:
     """Does every leg of `run` clear the household's own house, beds, sheds and fixtures, by the corridor's own leg tests
     (`access.house_clear`, `fixtures_clear`, `parts_clear`) - the leg onto the tree passing unasked where it has no length?
 
-    Research: a lane clear of its own household - research/questions/0081-village-lanes.drawing.html: nothing built on a lane; a path routed round its own beds and fixtures, at the corridor's own leg gaps
+    Research: a lane clear of its own household - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: nothing built on a lane; a path routed round its own beds and fixtures, at the corridor's own leg gaps
     """
     from l7r.diagram.settlement.rolling import access as A
 

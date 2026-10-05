@@ -1,0 +1,3 @@
+- SECTION=0072/shelter-belts-on-a-villages-windward-side-bofurin
+
+0072's conifer-share bullet now gives the 1987 Kashima count from 0036 (cedar 48% of one Tonami hamlet's farmhouse-grove trees, note `kashima-kainyo-1987` reused verbatim on both pages, linking 0036), keeps the absence and the GUESS for a village belt (the `-4` absence notes on both pages narrowed to that), and the `Evidence:` comments follow; source-reader read the passage (READ), and its two registry-wording NOT-FOUNDs in `6430-kashima-kainyo-1987.html` were fixed, then source-applicability ran (APPLICABLE-WITH-LIMITS, two wording fixes applied and recorded) - the check session owes quote-check and record-format on 0072, and a second source-applicability round if the push asks for one on those fixes.

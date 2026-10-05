@@ -662,6 +662,10 @@ def county_magistracy_program() -> CompoundProgram:
     consolidate into a few large masses); the spine (garden -> oshirasu -> forecourt, plus
     the practice ground beside the barracks) sits clear of the wall rows so the placer never
     has to overlap it.
+
+    Research:
+        tax archive size - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: a 34 x 34 ft kura (~1,160 sq ft)
+        barracks size - research/questions/0097-staff-rowhouses-and-barracks-nagaya.drawing.html: a 45 x 34 ft range, 34 ft deep
     """
     # The main gate is a one-bay yakuimon with an 8 ft passage - R26's knob, the one-bay form (6-8.5 ft, research
     # 0093); it was a 13 ft opening, the carriage gate the vocabulary once drew. The postern in the west wall,

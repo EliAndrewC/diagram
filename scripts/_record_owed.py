@@ -121,16 +121,27 @@ def _translation_units(root: pathlib.Path, now: ru.Record) -> list[ru.Unit]:
 
 def _entry_units(root: pathlib.Path, now: ru.Record) -> list[ru.Unit]:
     import _entry_owed as eo  # noqa: PLC0415
+    import _modal_owed as mo  # noqa: PLC0415
 
     _, lines = eo.owed(root)
+    about = mo.about_keys(root)  # feature 319: an About-form modal owes modal-accuracy instead (plan D6)
     units = []
     for line in lines:
         key, _, rest = line.partition(" - ")
+        if key in about:
+            continue
         hits = rest.split(" - ", 1)[0].split()
         stems = [ru._subject(m) for h in hits if (m := ru._STEM.match(h))]
         fp = ru.digest([key, *(b.words for s in stems for b in now.pages.get(s, ru.Page()).blocks if not b.intro)])
         units.append(ru.Unit(f"entry-drift:{key}", f"its section's findings moved ({' '.join(hits)})", fp))
     return units
+
+
+def _modal_units(root: pathlib.Path, base: str) -> list[ru.Unit]:
+    """The About-form modals' units (feature 319, plan D6): `modal-form`, and the three `modal-research` answers."""
+    import _modal_owed as mo  # noqa: PLC0415
+
+    return [ru.Unit(slug, why, fp) for slug, why, fp in mo.owed(root, base)]
 
 
 def units(root: pathlib.Path, base: str | None = None, head: str | None = None) -> list[ru.Unit]:
@@ -140,7 +151,7 @@ def units(root: pathlib.Path, base: str | None = None, head: str | None = None) 
     now = read_at(root, head, touched)
     out = ru.owed(now, read_at(root, base, touched) if base else ru.Record({}, {}, {}, {}))
     if head is None:
-        out += _translation_units(root, now) + _entry_units(root, now)
+        out += _translation_units(root, now) + _entry_units(root, now) + _modal_units(root, base)
     return sorted(out, key=lambda u: u.slug)
 
 
@@ -193,6 +204,9 @@ def command(u: ru.Unit, now: ru.Record | None = None) -> str:
         keys = list(now.cites.get(stem, {}).get(note, ())) if now else []
         keys = keys or ["<the note's key>"]
         return " ; ".join(f"make check-bundle KEY={k} WHOLE=1" for k in dict.fromkeys(keys)) + f"  then  make record-checked CHECK=source-reader Q={q} NOTES={note}"
+    if check.startswith("modal-"):  # feature 319: a modal's units; the three research units are one modal-research dispatch
+        agent = check if check in ("modal-form", "modal-depiction") else "modal-research"
+        return f"make modal-bundle KIND=\"{u.subject}\" FOR={agent}  then  make record-checked CHECK={check} BUNDLE=<its bundle> RESULT=..."
     if check == "entry-drift":  # its subject is the modal's key, not a question: the section it moved under is named in the occasion
         sec = re.search(r"\((\d{4})-", u.occasion)
         return f"make check-bundle Q={sec.group(1) if sec else '<its section>'} FOR=entry-drift KIND=<the class of {u.subject}>  then  make record-checked CHECK=entry-drift KIND=\"{u.subject}\" RESULT=..."
@@ -251,7 +265,7 @@ def answer(root: pathlib.Path, check: str, result: str, bundle: str = "", q: str
         if u.check != check:
             continue
         subject_note = u.subject.partition("#")[2]
-        if (q and ru.question(u.subject) == q.zfill(4) and (not wanted or subject_note in wanted)) or (key and u.subject == key) or (kind and u.subject == kind):
+        if (q and ru.question(u.subject) == q.zfill(4) and (not wanted or subject_note in wanted)) or (key and u.subject == key) or (kind and u.subject in kind.split(",")):
             write_answer(s, u.slug, u.fingerprint, result)
             done.append(u.slug)
     return done

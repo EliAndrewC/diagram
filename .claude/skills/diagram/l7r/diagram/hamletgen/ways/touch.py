@@ -130,11 +130,14 @@ def _touch_junctions(
     door path ends at its door. `lanes_form_one_network` holds the line. Returns the ends closed.
 
     Research:
-        ends touch the way they near - research/questions/0081-village-lanes.drawing.html: one network, joined where treads meet
+        ends touch the way they near - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: one network, joined where treads meet
         end meets end - research/questions/0081-village-lanes.drawing.html: two lanes meeting end to end are one
-        orphan piece dropped - research/questions/0081-village-lanes.drawing.html: unless it is a farmhouse's only way, a household reached across a neighbor's land owed none (`geom.lane_houses`)
+        orphan piece dropped - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: unless it is a farmhouse's only way, a household reached across a neighbor's land owed none (`geom.lane_houses`)
         connector never dropped - research/questions/0081-village-lanes.drawing.html: the track out runs off the map
-        final overrun cut - research/questions/0081-village-lanes.drawing.html: on the final pass a tail of 6-40 ft past the way it meets is cut"""
+        final overrun cut - research/questions/0081-village-lanes.drawing.html: on the final pass a tail of 6-40 ft past the way it meets is cut
+        join reach - research/questions/0081-village-lanes.drawing.html: ends within 25 ft are joined; the code extends a free end within 30 ft (48 ft on the final pass) of another way to it
+        orphan reach - UNRESEARCHED: a stranded piece linked back to the network from up to `_ORPHAN_REACH` (150 ft)
+        a house served - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a house within `_SERVE_FT` (100 ft) of a lane counts as served by it, where the page says 60 ft"""
     # A TOUCH MAY NOT PUSH A LANE INTO THE FABRIC IT WAS DRAWN CLEAR OF (feature 134 T50, 2026-08-29).
     # Every rung here tests the LINK it is about to draw, and none of them looks at the lane that comes
     # out - so a link that is itself legal, spliced on by `_unjog`/`_unretrace` or by moving another

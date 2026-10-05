@@ -400,6 +400,8 @@ def bath_room_seats(first: str, hw: float, hh: float, w: float, d: float, yard: 
 
     Research:
         three attested walls - research/questions/0044-baths-on-the-farm-furo.drawing.html: the rolled wall first
+        bath room seat fallback - research/questions/0044-baths-on-the-farm-furo.drawing.html: the floored rooms only where
+            neither wall has room
         places along each wall - UNRESEARCHED: 0.22 of the house either side of the door or just past the yard; an end
             wall's middle and quarters"""
     front, side = hh / 2 + d / 2, hw / 2 + d / 2

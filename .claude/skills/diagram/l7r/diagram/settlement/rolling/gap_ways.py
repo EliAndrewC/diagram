@@ -26,7 +26,7 @@ stands this module lays every household's way ONCE, in the gaps:
 A household seated at a tight seat (feature 317) is tried too: a way laid for it ends its passage where it stands (FR-001).
 
 Research:
-    the ways laid in the gaps - GUESS research/questions/0081-village-lanes.drawing.html: the lanes as the gaps left between the house plots, the record's own reading, no page stating it
+    the ways laid in the gaps - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the lanes as the gaps left between the house plots, the record's own reading, no page stating it
     raster, flood and search plumbing - NONE: the cells, steps and marks the passes above are built from
 """
 
@@ -89,7 +89,7 @@ class Layers:
     """Lane ground over the cluster (`lane_layers`): cell centers `cx`, `cy`; `cover`, how many homesteads hold each cell off;
     `spans`, each homestead box's cell span (`id(box)` keyed); `site`, the site's ground and the wood seats.
 
-    Research: lane ground - research/questions/0081-village-lanes.drawing.html: a lane keeps its clearance off every homestead, crop and water (the woodlots' seats: UNRESEARCHED)
+    Research: lane ground - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane keeps its clearance off every homestead, crop and water (the woodlots' seats: UNRESEARCHED)
     """
 
     def __init__(self, x0: float, y0: float, nx: int, ny: int, cell: float) -> None:
@@ -133,8 +133,8 @@ def lane_layers(s: Settlement, boxes: Sequence[Any], segs: Sequence[tuple[Pt, Pt
     """Lane ground over the homesteads `boxes` (`(cx, cy, w, h)`) and the way out `segs`, `GAP_MARGIN_PX` round them.
 
     Research:
-        lane ground - research/questions/0081-village-lanes.drawing.html: a way keeps the corridor's half-width off every homestead and to ground the site admits; the lane gap off the woodlots' seats is UNRESEARCHED
-        the half-width from the way's line - DEVIATION research/questions/0081-village-lanes.drawing.html: lane ground held 7 ft from the way's line, so a footpath's edge may pass 5.5 ft off a fence
+        lane ground - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a way keeps the corridor's half-width off every homestead and to ground the site admits; the lane gap off the woodlots' seats is UNRESEARCHED
+        the half-width from the way's line - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: lane ground held 7 ft from the way's line, so a footpath's edge may pass 5.5 ft off a fence
     """
     import numpy as np
 
@@ -185,7 +185,7 @@ def flood(L: Layers, segs: Sequence[tuple[Pt, Pt]], rings: Sequence[tuple[int, i
     no diagonal cutting a blocked corner, each step dearer beside blocked ground (`CENTER_WEIGHT`); stopped `FLOOD_PAST_PX` past
     the first time every ring (a homestead's cell span) has been reached.
 
-    Research: a way keeps to the middle of its gap - GUESS research/questions/0081-village-lanes.drawing.html: a worn path takes the shortest or easiest way; the open middle of the ground between plots
+    Research: a way keeps to the middle of its gap - GUESS research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a worn path takes the shortest or easiest way; the open middle of the ground between plots
     """
     import numpy as np
 
@@ -246,7 +246,7 @@ def way_out(L: Layers, dist: Any, doors: Sequence[Pt], area: tuple[int, int, int
     to the flood's cells, 8-way with no corner cut. Returns its exits `(walk + flood, i, j)`, cheapest first, and each cell's
     step back (a door's cell steps back to the door itself).
 
-    Research: a way leaves its own homestead from its dooryard - research/questions/0081-village-lanes.drawing.html: from the doors it is given (`access.doors_of` picks them), round its own house, beds and fixtures
+    Research: a way leaves its own homestead from its dooryard - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: from the doors it is given (`access.doors_of` picks them), round its own house, beds and fixtures
     """
     i0, i1, j0, j1 = area
     seen: dict[tuple[int, int], bool] = {}
@@ -291,7 +291,7 @@ def trace(L: Layers, dist: Any, pred: Any, laid: Any, start: tuple[int, int], tr
     the point on the tree it joins.
 
     Research:
-        ways join at a T - research/questions/0081-village-lanes.drawing.html: a lane meets another at a T, never beside it
+        ways join at a T - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane meets another at a T, never beside it
         join reach - UNRESEARCHED: a way joins an earlier one it comes within `JOIN_FT` of
     """
     path: list[Pt] = []
@@ -342,11 +342,11 @@ def lay_the_ways(s: Settlement) -> tuple[int, int]:
     Nothing where no access tree stands (a form that builds none).
 
     Research:
-        each household's way laid once every house stands - research/questions/0081-village-lanes.drawing.html: the homesteads built first and the lanes after; the corridor's own tests and the tree's lane law admit each
-        laid in the gaps between the house plots - GUESS research/questions/0081-village-lanes.drawing.html: the record's own reading, that the lanes are the gaps left between the plots
+        each household's way laid once every house stands - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the homesteads built first and the lanes after; the corridor's own tests and the tree's lane law admit each
+        laid in the gaps between the house plots - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the record's own reading, that the lanes are the gaps left between the plots
         households' ways laid in order, nearest the way out first - GUESS: a search order, so a nearer household's way is there for a farther one to join
-        a household no way reaches is pinched across its nearest reached neighbor's yard - research/questions/0081-village-lanes.drawing.html: reached across a neighbor's land, whose own way is always drawn
-        a passage a laid way makes unnecessary is ended - research/questions/0081-village-lanes.drawing.html: one that a way reaches is given it and is no longer reached across its neighbor
+        a household no way reaches is pinched across its nearest reached neighbor's yard - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: reached across a neighbor's land, whose own way is always drawn
+        a passage a laid way makes unnecessary is ended - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: one that a way reaches is given it and is no longer reached across its neighbor
         a later way's join reach - UNRESEARCHED: an earlier way within `JOIN_FT` (25 ft), then `JOIN_FAR_FT` (45 ft)
         a way's search ring - NONE: each way sought within the corridor's half-width and `RING_CELLS` cells round its homestead, a bound on the search
     """
@@ -399,8 +399,8 @@ def _way_for(
     homestead set aside from what stands while it is asked.
 
     Research:
-        joined near, then far, then run on to the way out - GUESS research/questions/0081-village-lanes.drawing.html: each household's way runs along the gaps to the track out or to a way laid before it, which it joins at a T
-        a way leaves its own homestead from its dooryard - research/questions/0081-village-lanes.drawing.html: its way leaves its dooryard round its own garden beds and fixtures
+        joined near, then far, then run on to the way out - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: each household's way runs along the gaps to the track out or to a way laid before it, which it joins at a T
+        a way leaves its own homestead from its dooryard - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: its way leaves its dooryard round its own garden beds and fixtures
     """
     geom = rec["geom"]
     own = geom["bbox"]

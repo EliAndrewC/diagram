@@ -1,0 +1,7 @@
+- round 3, quote-check 0071 (3 batches): SUPPORTS 18, PARTIAL 2 - Zhongshan now 'in the Pearl River Delta of Guangdong', 'in Huizhou' cut from Wangkou's stele (not in the quote); the drawing's 'median' kept (0071 computes one); 1912 left as common knowledge
+- round 3, quote-check 0072: VERBATIM 6, SUPPORTS 6 (the script's DIFFERS is PDF line wrapping); 0245: SUPPORTS 9, VERBATIM 17, reign dates left
+- round 3, record-format 0071/0072/0245: cassia-laurel (香桂, checked in the original), Shuri and covenant association glossed; 0071's grove ages attributed to the Herbarium and the 2025 HKFP piece
+- round 3, translation-check 0072: FAITHFUL 16; source-reader bian READ 8 (Wangkou's theft after 1778 and the 1785 stele separated; Yeyuan's fallen tree 'taken in common'), maff READ 6 (koshiate wood scoped to its tall trees; the pre-1972 patrols as one ward head's account); absence notes 0071 and 0072 (3) recorded with REASON
+- round 3, entry-drift copse: IN-STEP (0036 half not in the bundle, not owed)
+- round 4, quote-check 0071/0072/0245, record-format 0071/0072/0245, entry-drift copse: clean but a doubled 'while' (0071), tomb hill glossed (0245), and the Sendai groves' open side given a footnote (0072)
+- round 5, quote-check 0072: PARTIAL 1 - the Sendai sentence now says only what irie-2020-igune-2 states (planted on the north and the west); its re-owed units and two one-word changes answered by REASON. Record tests green (3844 passed); record-owed UNANSWERED=1 owes no record check (only the farmhouse and windbreak modal checks, not this session's)
