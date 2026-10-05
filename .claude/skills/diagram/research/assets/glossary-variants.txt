@@ -47,6 +47,7 @@ alexandrian laurel	Alexandrian laurel
 alluvial	alluvial
 alluvial fan	alluvial fan
 alluvial fans	alluvial fan
+alluvium	alluvial
 alnus	Alnus
 along the contour	contour
 along the ridge	ridge span
@@ -2772,6 +2773,8 @@ person-years	person-year
 petuntse	petuntse
 phalansteries	phalanstery
 phalanstery	phalanstery
+phoenix	Phoenix Clan
+phoenix clan	Phoenix Clan
 phragmites	Phragmites
 phragmites australis	Phragmites
 phytoplankton	phytoplankton
@@ -2886,6 +2889,7 @@ qingming shanghe tu	Qingming Shanghe Tu
 qiu	qiu
 qu dajun	Qu Dajun
 qu dajun's	Qu Dajun
+quan	quan
 quay	quay
 quays	quay
 quercus acutissima	kunugi
@@ -3148,6 +3152,7 @@ sapeck	sapeck
 sapecks	sapeck
 sapper	sapper
 sappers	sapper
+sara ike	sara-ike
 sara-ike	sara-ike
 sarae	sarae
 sasa	sasa

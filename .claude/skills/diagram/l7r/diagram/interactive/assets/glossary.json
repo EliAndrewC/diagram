@@ -3363,6 +3363,7 @@
   "def": "A 'dish pond': a shallow lowland reservoir ringed by embankments, as against the valley-head pond behind one dam.",
   "variants": [
    "sara-ike",
+   "sara ike",
    "dish ponds",
    "dish pond"
   ]
@@ -7774,7 +7775,8 @@
  "alluvial": {
   "def": "Laid down by a river: alluvial ground is the silt and sand a river spreads over its floodplain, and alluvial woodland is the wet forest, in Japan alder and willow, that grows on it.",
   "variants": [
-   "alluvial"
+   "alluvial",
+   "alluvium"
   ]
  },
  "ukiyagara": {
@@ -12649,7 +12651,8 @@
   "variants": [
    "Mao commentary",
    "Mao"
-  ]
+  ],
+  "cased": true
  },
  "Qin": {
   "def": "The state in northwest China whose king unified China in 221 BC and became its first emperor; \"pre-imperial Qin\" is that state before the unification.",
@@ -15641,5 +15644,19 @@
    "tomb hill",
    "tomb hills"
   ]
+ },
+ "quan": {
+  "def": "The smallest field channel of the Rites of Zhou: the cut a pair of spades makes, 1 chi wide and 1 chi deep - about a foot or less.",
+  "variants": [
+   "quan"
+  ]
+ },
+ "Phoenix Clan": {
+  "def": "A Great Clan of the setting; this record counts its home provinces, with the Crane's, among the setting's old heartland of long-settled plains villages.",
+  "variants": [
+   "Phoenix Clan",
+   "Phoenix"
+  ],
+  "cased": true
  }
 }
