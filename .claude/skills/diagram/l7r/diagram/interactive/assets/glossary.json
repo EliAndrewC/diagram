@@ -7947,7 +7947,8 @@
   "def": "Mulberry trained on a short trunk and cut back to it for its leaves, so it stands between a full tree and a root-cut bush; planted about 300 a mu in the late-Qing Yangtze delta, and 400 to 600 to ten ares in Japanese mid-cut fields.",
   "variants": [
    "mid-trunk",
-   "mid-cut"
+   "mid-cut",
+   "medium trunk"
   ]
  },
  "fan palm": {
@@ -13089,7 +13090,9 @@
    "ressen",
    "retsuson",
    "linear village",
-   "linear villages"
+   "linear villages",
+   "row village",
+   "row villages"
   ]
  },
  "shirakashi": {
@@ -15027,7 +15030,9 @@
   "variants": [
    "Toshogu",
    "Tosho-gu",
-   "Nikko Toshogu"
+   "Nikko Toshogu",
+   "Tōshōgū",
+   "Nikkō Tōshōgū"
   ]
  },
  "drip line": {
@@ -15738,6 +15743,48 @@
    "dian"
   ]
  },
+ "rescript": {
+  "def": "A written reply or order from the emperor, answering a question or petition put to him.",
+  "variants": [
+   "rescript",
+   "rescripts"
+  ]
+ },
+ "Jiayou": {
+  "def": "A Song-dynasty reign era that began in 1056; \"Jiayou 6\" is its sixth year, 1061.",
+  "variants": [
+   "Jiayou"
+  ]
+ },
+ "transport commissioner": {
+  "def": "A Song-dynasty official over a circuit, a province-sized region, who saw its tax grain shipped to the capital and oversaw its finances.",
+  "variants": [
+   "transport commissioner",
+   "transport commissioners"
+  ]
+ },
+ "Kaixiangong": {
+  "def": "The Jiangnan village the anthropologist Fei Xiaotong studied; Kaihsienkung is the older spelling his book uses.",
+  "variants": [
+   "Kaixiangong",
+   "Kaihsienkung"
+  ]
+ },
+ "node-head": {
+  "def": "The jointed end of a lotus root, where its shoots grow; dug up at the start of spring and planted in the mud of a pond, it starts a new lotus plant.",
+  "variants": [
+   "node-head",
+   "node-heads"
+  ]
+ },
+ "wattle and daub": {
+  "def": "A way of building a wall: a lattice of woven rods, such as willow withies, is plastered over with wet clay, mud or dung.",
+  "variants": [
+   "wattle and daub",
+   "wattle",
+   "daub"
+  ]
+ },
  "upright book": {
   "def": "A Japanese register bound in the tall format, its pages taller than wide (tatecho) - the usual form of a village's survey register.",
   "variants": [
@@ -15763,10 +15810,42 @@
    "chotojiba"
   ]
  },
+ "sangji": {
+  "def": "A mulberry dike: the bank of a fish pond planted with mulberry, whose leaves fed silkworms.",
+  "variants": [
+   "sangji"
+  ]
+ },
+ "guoji": {
+  "def": "A fruit dike: the bank of a fish pond planted with fruit trees, such as lychee, longan or oranges, instead of mulberry.",
+  "variants": [
+   "guoji"
+  ]
+ },
+ "pupae": {
+  "def": "Silkworms in their resting stage inside the cocoon; with the worms' droppings, they were fed to the fish of a dike-pond.",
+  "variants": [
+   "pupae",
+   "pupa"
+  ]
+ },
+ "Fan Zhongyan": {
+  "def": "An official of the Northern Song dynasty. In a reply to the emperor setting out ten matters, he described each of Jiangnan's polders as several tens of li square, \"like a great city\".",
+  "variants": [
+   "Fan Zhongyan"
+  ]
+ },
  "egress": {
   "def": "A way out; in a property custom, the right to pass out from one's land to a road or street.",
   "variants": [
    "egress"
+  ]
+ },
+ "Nobi plain": {
+  "def": "The low river plain in central Japan, the Mino side of its rivers among it, where the waju were built: villages and their fields ringed by their own dikes.",
+  "variants": [
+   "Nobi plain",
+   "Nobi"
   ]
  },
  "Manchu": {
@@ -15783,6 +15862,18 @@
    "Imperial waystations"
   ]
  },
+ "leaf mulberry": {
+  "def": "Mulberry grown for its leaves, which are fed to silkworms, rather than for its fruit; it is cut back hard to a low bush or a short trunk so the leaves can be picked by hand.",
+  "variants": [
+   "leaf mulberry"
+  ]
+ },
+ "Chongning": {
+  "def": "A reign era of the Song emperor Huizong, 1102-1106; the record dates the Pearl delta's earliest polder, the Sangyuan polder, to its second through fifth years.",
+  "variants": [
+   "Chongning"
+  ]
+ },
  "Mori Ogai": {
   "def": "A Japanese writer whose Nagashi of 1913 the Nihon Kokugo Daijiten cites as the earliest written use of umayado for an inn that stables a traveler's own horse.",
   "variants": [
@@ -15796,6 +15887,26 @@
   "variants": [
    "Shichiri ferry",
    "Shichiri"
+  ]
+ },
+ "Jiujiang": {
+  "def": "A township of the Pearl River delta, in the far south of China, whose land was given over to fish ponds; in 1678 Qu Dajun likened it to a chessboard, its dikes the black lines and its ponds the squares.",
+  "variants": [
+   "Jiujiang"
+  ]
+ },
+ "Sangyuan polder": {
+  "def": "A large polder of the Pearl River delta, in Nanhai near Foshan in Guangdong. Its villagers watered and drained their land through its dikes, creeks and many sluice gates (dou), among them the Minle dou in Xiqiao town, and the mulberry-dike fish pond grew up inside it.",
+  "variants": [
+   "Sangyuan polder",
+   "Sangyuan"
+  ]
+ },
+ "Wanchun polder": {
+  "def": "A great polder in Wuhu county on the lower Yangzi, restored from 1061 under the Northern Song; Shen Kuo's record gives its dike as six zhang broad, one zhang two chi high and 84 li long, with mulberry flanking its ridge and willows and reeds on its water side.",
+  "variants": [
+   "Wanchun polder",
+   "Wanchun"
   ]
  },
  "Kenrei Shuchi": {
@@ -15820,6 +15931,68 @@
    "track out's"
   ]
  },
+ "Tsingtao": {
+  "def": "The older English spelling of Qingdao, a port city on the coast of Shandong in north China.",
+  "variants": [
+   "Tsingtao"
+  ]
+ },
+ "Soochow": {
+  "def": "The older English spelling of Suzhou, the city of the Lower Yangzi.",
+  "variants": [
+   "Soochow"
+  ]
+ },
+ "yumiao": {
+  "def": "Chinese for fish fry: the young fish raised in nursery ponds and sold to stock the fish ponds. Raising fry was a trade of its own, and most villages bought theirs.",
+  "variants": [
+   "yumiao"
+  ]
+ },
+ "OCR": {
+  "def": "Optical character recognition: the machine reading of a scanned page into text, which often garbles letters. In a note, the word after \"OCR:\" is what the garbled text says.",
+  "variants": [
+   "OCR"
+  ]
+ },
+ "running head": {
+  "def": "The line printed across the top of a book's page, giving the chapter or book title and the page number. A note quotes it where a passage runs across a page break.",
+  "variants": [
+   "running head",
+   "running heads"
+  ]
+ },
+ "bakushu": {
+  "def": "\"Barley autumn\": early summer, when the ripening barley turns its field pale brown, like a rice field in autumn.",
+  "variants": [
+   "bakushu"
+  ]
+ },
+ "alley cropping": {
+  "def": "Growing field crops in the strips between rows of trees or hedges, which hold the soil on sloping land.",
+  "variants": [
+   "alley cropping"
+  ]
+ },
+ "Zhengzhou": {
+  "def": "A city on the north China plain, in Henan province near the Yellow River, where a salvage excavation found a square chicken coop of the late Ming dynasty.",
+  "variants": [
+   "Zhengzhou"
+  ]
+ },
+ "Nanking": {
+  "def": "The older English spelling of Nanjing, a city on the lower Yangzi; the University of Nanking was where John Lossing Buck ran his survey of Chinese farms in the 1920s and 1930s.",
+  "variants": [
+   "Nanking",
+   "Nanjing"
+  ]
+ },
+ "Later Wei": {
+  "def": "Another name for the Northern Wei dynasty, used in the title line of the Qimin Yaoshu, the farming manual written under it.",
+  "variants": [
+   "Later Wei"
+  ]
+ },
  "succession": {
   "def": "The slow change of a wood's trees over decades when it is left uncut, one kind giving way to the next; in western Japan an uncut coppice turns into dense, dark evergreen laurel forest.",
   "variants": [
@@ -15842,11 +16015,48 @@
    "man-rations"
   ]
  },
+ "household-register district": {
+  "def": "A district Japan set up in 1871 for registering its population, each grouping some twenty villages and about a thousand households; that year's rule gave each one district shrine.",
+  "variants": [
+   "household-register district",
+   "household-register districts"
+  ]
+ },
+ "site coefficient": {
+  "def": "In cemetery planning, the factor a cemetery's total plot area is multiplied by to allow for its roads, buildings and open space; a 1934 Japanese planner's paper advises 1.5 to 2.",
+  "variants": [
+   "site coefficient",
+   "site coefficients"
+  ]
+ },
+ "three-worlds-myriad-spirits stone": {
+  "def": "A stone monument or tower set at the entrance of a Japanese graveyard or temple for the spirits of all the dead; with the six jizo, a representative stone monument of an Edo-period graveyard.",
+  "variants": [
+   "three-worlds-myriad-spirits stone",
+   "three-worlds-myriad-spirits stones"
+  ]
+ },
  "hokonin": {
   "def": "A hired servant: one taken into a household's service for pay, as a samurai household hired its menservants and maids.",
   "variants": [
    "hokonin",
    "hōkōnin"
+  ]
+ },
+ "crude death rate": {
+  "def": "The deaths in a population in one year for every 1,000 of its inhabitants; in three Edo farming villages it ran at about 18 to 30.",
+  "variants": [
+   "crude death rate",
+   "crude death rates",
+   "CDR",
+   "CDRs"
+  ]
+ },
+ "summer siege": {
+  "def": "The war that left Osaka's townscape damaged, after which Matsudaira Tadaaki remade the city and gathered its scattered graveyards to its outer rim.",
+  "variants": [
+   "summer siege",
+   "summer siege of Osaka"
   ]
  },
  "hitsu": {
@@ -15856,10 +16066,35 @@
    "ippitsu"
   ]
  },
+ "Matsudaira Tadaaki": {
+  "def": "The lord who ruled Osaka after the summer siege and rebuilt the war-damaged city, gathering its scattered graveyards to the town's outer rim.",
+  "variants": [
+   "Matsudaira Tadaaki",
+   "Tadaaki"
+  ]
+ },
  "impoundment": {
   "def": "Water held back and left standing on ground that cannot drain it; on the Noubi plain the drainage from the upper villages' artesian wells stood on the lower villages' paddy and damaged it.",
   "variants": [
    "impoundment"
+  ]
+ },
+ "Cai Jing": {
+  "def": "Chief minister to the Song emperor Huizong, who in 1104 proposed the state's pauper burial grounds (louzeyuan), where the unclaimed and the destitute were buried on government land.",
+  "variants": [
+   "Cai Jing"
+  ]
+ },
+ "Xianfeng": {
+  "def": "The reign of a Qing emperor in which the Taiping war was fought.",
+  "variants": [
+   "Xianfeng"
+  ]
+ },
+ "Tongzhi": {
+  "def": "The Qing reign that followed Xianfeng's; in its early years Jiangnan's local society was rebuilt after the Taiping war.",
+  "variants": [
+   "Tongzhi"
   ]
  },
  "mizucho": {
@@ -15882,6 +16117,33 @@
   "variants": [
    "nail cover",
    "nail covers"
+  ]
+ },
+ "Wusong": {
+  "def": "A town about fourteen miles north of Shanghai, the start of the 1842 march into the city that reported graves in every field.",
+  "variants": [
+   "Wusong"
+  ]
+ },
+ "Kōyasan": {
+  "def": "Mount Kōya, in Wakayama, the mountain headquarters of the Shingon school of Buddhism and one of Japan's largest temple complexes.",
+  "variants": [
+   "Kōyasan",
+   "Koyasan",
+   "Mount Koya"
+  ]
+ },
+ "kinoe-saru": {
+  "def": "One of the sixty named years of the cycle Japan used to date years beside its era names. 1584 (Tenshō 12) was a kinoe-saru year.",
+  "variants": [
+   "kinoe-saru",
+   "kinoe saru"
+  ]
+ },
+ "Nanhai": {
+  "def": "A county of the Pearl River delta, beside Shunde, where farmers under the Qing dynasty gave up rice to grow mulberry on the banks of their fish ponds.",
+  "variants": [
+   "Nanhai"
   ]
  }
 }
