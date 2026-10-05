@@ -121,3 +121,4 @@ None: no map draws or states anything differently; the picture is byte-identical
 - Amendment 1, round 2 (verify): item resolved; CHANGES REQUIRED on a new Context sentence that said smaller tiles saved nothing more
   (R2 measured a small further saving, every finer grid over the span bound) - corrected; round 3 NOT-REVIEWABLE (that sentence's
   figure unlabeled) - labeled, no round used.
+- Amendment 1, round 3 (verify, 2026-10-05): FAITHFUL - round 2's item resolved; the amendment accepted.
