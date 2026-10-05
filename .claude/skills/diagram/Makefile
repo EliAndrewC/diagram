@@ -1835,6 +1835,9 @@ REFERENCE_TIER = hamlet
 # measurement: a gate's peak 2.5 / 3.1 / 3.85 / 4.5 / 5.0 GB at 4 / 6 / 8 / 10 / 12 (process-tree RSS, ~300 MB a
 # worker, not the 175 MB a worker starts at), quick's 1.8 / 2.0 / 2.4 / 2.85 / 3.7 GB - six gives back ~1.4 GB a gate
 # under the 10 GB cap the containers share.
+# DO NOT PICK THE COUNT FROM THE LOAD AT LAUNCH (GUARD_EDIT_OK: a recorded rejection; GM 2026-10-04): 10 is faster on a
+# quiet machine, but "when I have five or six concurrent sessions running, then the load can go from very low to very
+# high very quickly. And so nothing that we pick at the beginning of the run will be reliable" - six is locked in.
 CPU_COUNT ?= $(shell nproc 2>/dev/null || echo 8)
 # THE SCHEDULER IS A VARIABLE so the choice is MEASURED rather than argued (2026-09-12). `worksteal` has no
 # `xdist_group` support at all - checked in the installed xdist 3.8.0's own scheduler source, where the word does

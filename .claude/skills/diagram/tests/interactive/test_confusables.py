@@ -12,8 +12,9 @@ import pytest
 
 from l7r.diagram.interactive.record import confusables, store
 from l7r.diagram.interactive.record import questions as qs
-from l7r.diagram.interactive.sources import RESEARCH_DIR, record_text
+from l7r.diagram.interactive.sources import RESEARCH_DIR
 from tests import _flat_record as fr
+from tests._record_pages import text_of
 
 
 def _record(tmp: pathlib.Path, pairs: list[dict[str, str]] | None = None) -> pathlib.Path:
@@ -99,7 +100,7 @@ def test_every_page_carries_both_entries_of_every_pair() -> None:
     for d in _data():
         for here, there in ((d["a"], d["b"]), (d["b"], d["a"])):
             file, anchor = here.split("#")
-            text = record_text(f"questions/{file}")
+            text = text_of(f"questions/{file}")
             m = re.search(rf'<h2 id="{re.escape(anchor)}">.*?</h2>\n<div class="confusables">(.*?)</div>', text, re.S)
             assert m, f"{here}: no list under its heading"
             assert f'href="{there.split("#")[0]}"' in m.group(1), f"{here}: no entry for {there}"

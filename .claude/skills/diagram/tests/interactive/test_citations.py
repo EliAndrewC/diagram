@@ -114,7 +114,8 @@ def test_every_canon_entry_links_its_notes_on_github_and_none_says_url_none() ->
     """307 FR-007, SC-005: the GM's campaign-note entries cite the notes' public home, each quoted section at an anchor."""
     import re  # noqa: PLC0415
 
-    lines = {k: e["line"] for k, e in registry_entries().items() if k in canon_keys()}
+    canon = canon_keys()  # once: called inside the comprehension it re-scanned the registry for every entry - 54 s (2026-10-04)
+    lines = {k: e["line"] for k, e in registry_entries().items() if k in canon}
     assert len(lines) >= 16, "non-vacuity"
     for key, line in lines.items():
         assert "URL: none" not in line, key
