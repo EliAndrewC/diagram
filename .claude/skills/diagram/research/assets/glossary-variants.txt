@@ -274,6 +274,8 @@ buke-chi	buke-chi
 buke-yashiki	buke-yashiki
 bukechi	buke-chi
 bukeyashiki	buke-yashiki
+bulbil	bulbil
+bulbils	bulbil
 bund	bund
 bund tea	keihan-cha
 bunded	bund
