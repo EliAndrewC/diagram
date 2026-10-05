@@ -17,5 +17,6 @@
 - [x] T03 the measurements: the site's result and peak, every file against main's site; the clip's CPU, the render's span and peak alternated, every pool picture against today's (SC-001, SC-002, SC-004)
       research: rendering
       verify: DONE. site: peak 236 -> 165 MB, held 148 -> 84 MB, 2,698 files identical to main; clip CPU 0.82-0.92 -> 0.11-0.12 s; render 5 rounds alternated: peak 374.6 -> 370.6 MB mean, span 3.55 -> 3.21 s, PNG and page identical; 5 tiled pool pictures identical (research.md R2, R3)
-- [ ] T04 make done; both bookends back to back in an arranged window and the records their band owes; claims owed answered (FR-005, SC-005)
+- [x] T04 make done; both bookends back to back in an arranged window and the records their band owes; claims owed answered (FR-005, SC-005)
       research: rendering
+      verify: DONE. make done green (209 s); claims IN-STEP 26/26; 327 bookends back to back in an arranged window: band 3 at 20 households under falling load, control and perf-audit (consistent, justified), the GM signed off 2026-10-05 (research.md R4)

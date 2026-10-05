@@ -1,0 +1,62 @@
+{
+  "band": 3,
+  "base": {
+    "commit": "06fea4766",
+    "label": "327-start",
+    "utc": "20261005T141623Z"
+  },
+  "binding": "12be9666468cf1459ed59b963d4ef9f2946922fefd0a49811c4a36cbb6a59b20",
+  "end": {
+    "commit": "de604579c",
+    "label": "327-end",
+    "utc": "20261005T141935Z"
+  },
+  "environment": "local",
+  "feature": "327-lean-site-fast-clip",
+  "granted_by": {
+    "declared": "GM",
+    "session_id": "ce387434-fe83-4bcf-ae29-3db97f8d2f56",
+    "utc": "20261005T230515Z"
+  },
+  "kind": "signoff",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": 8.0,
+          "39": 3.3,
+          "4": 0.0,
+          "47": 0.0
+        },
+        "total_pct": 2.5
+      },
+      "20": {
+        "seeds": {
+          "25": 13.2,
+          "39": 53.6,
+          "4": 7.9,
+          "47": 30.4
+        },
+        "total_pct": 25.1
+      },
+      "40": {
+        "seeds": {
+          "25": 2.4,
+          "39": -1.6,
+          "4": 8.2,
+          "47": 12.4
+        },
+        "total_pct": 5.4
+      }
+    },
+    "seeds": {
+      "25": 2.5,
+      "39": -2.6,
+      "4": 0.0,
+      "47": -2.4
+    },
+    "total_pct": -0.6
+  },
+  "note": "The GM, 2026-10-05, in conversation: 'yes, you have my sign-off, thank you'. Band 3 on the 327-end against the back-to-back 327-start 141623Z: 20 households +25.1% with seeds 39 and 47 at +54% and +30%, while 10 and 40 households read +2.5% and +5.4%. Recorded by the session at the GM's go-ahead; perf-audit band 1 consistent and band 2 justified (142834Z, 142849Z): none of the feature's code runs in a roll, and the crossed seeds rerun alternated time the same on base and clone.",
+  "verdict": "signed"
+}

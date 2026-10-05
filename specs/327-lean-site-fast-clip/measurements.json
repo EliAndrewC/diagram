@@ -1,0 +1,10 @@
+{
+  "perf-control-327-roll-ab": {
+    "verifies": "the band-3 reading of 327-end against the back-to-back 327-start (20 households +25.1%, seeds 39 +53.6% and 47 +30.4%; 10 households +2.5%, 40 households +5.4%), taken in a window the container's other session held clear, load 4.6 -> 2.5",
+    "subject": "the whole roll of the reference settings at 20 households (Ctl, down 90, pond sink, nucleated, no render), seeds 39 and 47 - the seeds that crossed",
+    "value": 5.45,
+    "unit": "s, seed 39's whole roll on the clone (mean of two; the base 5.6)",
+    "quantity": "alternated base (/tmp/base327 at 06fea4766) and clone, 2026-10-05 ~14:25, load ~2.5-3.4: seed 39 base 5.6 / 5.6 s, clone 5.4 / 5.5 s; seed 47 base 5.9 / 6.4 s, clone 6.5 / 6.3 s. Feature 327 changes raster.py (the picture's clip and the resvg cap), settlement/finish.render_png (the cap) and the record site's build - none run by a roll stage.",
+    "command": "make hamlet PROFILE=1 ARGS=\"--name Ctl --seed 39|47 --households 20 --down-deg 90 --sink pond --form nucleated --no-render\", alternated in /tmp/base327 and the clone"
+  }
+}

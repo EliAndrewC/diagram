@@ -35,3 +35,12 @@ Observed 2026-10-05, method: the same, with one cap shared by every resvg launch
 alternated over five rounds: old peak 411 / 359 / 380 / 359 / 364 MB (mean 374.6), span 3.41 / 3.34 / 3.51 / 3.45 / 4.05 s (mean
 3.55); new with four slots peak 362 / 356 / 397 / 387 / 351 MB (mean 370.6), span 3.14 / 3.36 / 3.16 / 3.17 / 3.24 s (mean 3.21);
 three slots measured 364 / 349 MB, 3.19 / 3.26 s. The PNG and the page byte-identical to the old code's.
+
+## R4 - The bookends (2026-10-05)
+
+Observed 2026-10-05, method: `make perf` in /tmp/base327 at the pre-feature commit 06fea4766 and `make perf-gate` in the clone,
+back to back in a window the container's other session held clear (load 4.6 -> 2.5): band 3 - 20 households +25.1% (seeds 39
++53.6%, 47 +30.4%), 10 households +2.5%, 40 households +5.4%. The snapshot times only the roll's stages; feature 327's code runs
+in the render and the record site, neither in a roll. Control (`measurements.json` `perf-control-327-roll-ab`): the crossed seeds
+at 20 households, whole roll alternated base and clone - seed 39 5.6 / 5.6 against 5.4 / 5.5 s, seed 47 5.9 / 6.4 against
+6.5 / 6.3 s, inside the base's own spread. The same machine drift features 324 and 326 recorded (their R5).

@@ -1,0 +1,62 @@
+{
+  "band": 3,
+  "base": {
+    "commit": "06fea4766",
+    "label": "327-start",
+    "utc": "20261005T141623Z"
+  },
+  "binding": "12be9666468cf1459ed59b963d4ef9f2946922fefd0a49811c4a36cbb6a59b20",
+  "end": {
+    "commit": "de604579c",
+    "label": "327-end",
+    "utc": "20261005T141935Z"
+  },
+  "environment": "local",
+  "feature": "327-lean-site-fast-clip",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "ce387434-fe83-4bcf-ae29-3db97f8d2f56",
+    "utc": "20261005T142834Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": 8.0,
+          "39": 3.3,
+          "4": 0.0,
+          "47": 0.0
+        },
+        "total_pct": 2.5
+      },
+      "20": {
+        "seeds": {
+          "25": 13.2,
+          "39": 53.6,
+          "4": 7.9,
+          "47": 30.4
+        },
+        "total_pct": 25.1
+      },
+      "40": {
+        "seeds": {
+          "25": 2.4,
+          "39": -1.6,
+          "4": 8.2,
+          "47": 12.4
+        },
+        "total_pct": 5.4
+      }
+    },
+    "seeds": {
+      "25": 2.5,
+      "39": -2.6,
+      "4": 0.0,
+      "47": -2.4
+    },
+    "total_pct": -0.6
+  },
+  "note": "Consistent. The diff (raster.py clip and RESVG_SLOTS, finish.render_png, record site, record_build annotations) touches nothing perf_snapshot.measure runs: it rolls in-process with no render or site build, and every leg did identical work on both commits (same placer_calls and houses). The 20-household growth is spread over every roll stage at once (seed 39: homesteads +0.75, web +0.56, windbreak +0.52, hinterland +0.46, field +0.44 s), the signature of contention, not code. The control perf-control-327-roll-ab matches the subject and is borne out by the reviewer's own A/B in two detached worktrees (06fea4766 vs de604579c), 20-household leg alternated 3 rounds at load 1.0-2.8: medians seed 39 5.6/5.6, 47 5.6/5.6, 25 6.6/6.6, 4 6.3/6.4 s, and base itself spiked to 9.0 s on seed 25 under load; 40 households seeds 47/4 alternated 2 rounds: 11.5/11.5-11.7 and 15.1-15.3/15.2-15.3 s.",
+  "verdict": "consistent"
+}

@@ -1,0 +1,67 @@
+{
+  "band": 3,
+  "base": {
+    "commit": "06fea4766",
+    "label": "327-start",
+    "utc": "20261005T141623Z"
+  },
+  "binding": "12be9666468cf1459ed59b963d4ef9f2946922fefd0a49811c4a36cbb6a59b20",
+  "criteria": {
+    "commensurate": "The roll's cost from the code is nil within resolution: the reviewer's alternated worktree A/B (3 rounds) gives a 20-household leg median of 24.0 s base against 24.3 s end (about +1.2%, made of single 0.1 s steps on seeds 39, 25 and 4 at the snapshot's 0.1 s rounding), seeds 39 and 47 at a median 5.6 s on both, against the snapshot's 8.6 and 7.3 s; 40 households, seeds 47 and 4, equal within 0.2 s. Meanwhile the render span fell 3.55 to 3.21 s at equal peak memory and the site build's peak fell 236 to 165 MB (research R2, R3). This record supersedes 20261005T142834Z-review-327-audit, whose commensurate line misattributed the 0.1 s steps to seed 4 alone.",
+    "necessary": "No feature-327 work is on the timed path: the snapshot times the roll's stages only, and the feature changes the picture's raster (clip parsed once, a four-slot resvg cap) and the record site's build, neither run in a roll. Both commits roll identical work (equal placer_calls and houses in every leg). The work that IS added (prepare_offmap/assemble_offmap, SiteFiles UTF-8) is what specs/327 tasks T01-T02 asked for.",
+    "no_way_around": "There is nothing to get around: the +25.1% / +53.6% / +30.4% and +5.4% / +12.4% do not reproduce under alternation in identical worktrees, and the base code itself showed a same-sized spike (seed 25 6.5 to 9.0 s) when load rose, the machine drift features 324 and 326 recorded (their R5). No profile was warranted, as no stage grew under A/B."
+  },
+  "end": {
+    "commit": "de604579c",
+    "label": "327-end",
+    "utc": "20261005T141935Z"
+  },
+  "environment": "local",
+  "feature": "327-lean-site-fast-clip",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "ce387434-fe83-4bcf-ae29-3db97f8d2f56",
+    "utc": "20261005T142849Z"
+  },
+  "kind": "audit",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": 8.0,
+          "39": 3.3,
+          "4": 0.0,
+          "47": 0.0
+        },
+        "total_pct": 2.5
+      },
+      "20": {
+        "seeds": {
+          "25": 13.2,
+          "39": 53.6,
+          "4": 7.9,
+          "47": 30.4
+        },
+        "total_pct": 25.1
+      },
+      "40": {
+        "seeds": {
+          "25": 2.4,
+          "39": -1.6,
+          "4": 8.2,
+          "47": 12.4
+        },
+        "total_pct": 5.4
+      }
+    },
+    "seeds": {
+      "25": 2.5,
+      "39": -2.6,
+      "4": 0.0,
+      "47": -2.4
+    },
+    "total_pct": -0.6
+  },
+  "note": "Band 3 crossed on 327-end vs 327-start (20 households total +25.1%, seed 39 +53.6%, seed 47 +30.4%); the GM's personal sign-off (make perf-signoff) is still owed and is not this agent's to give.",
+  "verdict": "justified"
+}
