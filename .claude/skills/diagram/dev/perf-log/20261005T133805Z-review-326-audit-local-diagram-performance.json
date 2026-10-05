@@ -1,0 +1,67 @@
+{
+  "band": 3,
+  "base": {
+    "commit": "b8b20e690",
+    "label": "326-start",
+    "utc": "20261005T132948Z"
+  },
+  "binding": "09807ca197fda11d06af53110e6ec0202752ac5ea04e22e25217a5736646df48",
+  "criteria": {
+    "commensurate": "Cost to the roll: none measurable. Alternated base vs clone: 15h seed 39 4.0/3.8 vs 3.8/3.8 s and seed 47 4.1/4.2 vs 4.2/4.1 s (the session's control); 10h seed 4 3.7/3.7 vs 3.9/3.6 s, seed 25 2.7/2.5 vs 2.5/2.6 s, 15h seed 39 3.7/3.8 vs 3.8/3.8 s (the auditor's runs, load 4.3-5.4). Gain: the render's tile peak memory fell ~540 -> ~370 MB on a 20-household hamlet (research R2), at a visually identical picture the GM accepted (R4).",
+    "necessary": "The measured stages do no new work. The only change, raster.py's per-tile clip (tile_doc, render_tile), was asked for by the GM in feature 326 (spec/tasks T01-T03) and runs only inside picture(), which the roll never calls (the auditor trapped it during a roll: zero calls). The +15.6% (15h) and +14.9% (10h) is not work that needed to happen. It is machine load, which also drove 20h -15.5% and 40h -19.6% in the same pair.",
+    "no_way_around": "Nothing to work around in the roll: zero cost there. Outside the snapshot, the one cheaper variant (drop whole lines only, byte-identical) was measured and saved ~130 MB to trimming's ~170 MB (raster.py note, R4). The GM chose trimming. tile_doc is one linear pass over the document's lines per tile, inside the worker, not a repeated scan of unchanging geometry."
+  },
+  "end": {
+    "commit": "48431abbe",
+    "label": "326-end",
+    "utc": "20261005T133303Z"
+  },
+  "environment": "local",
+  "feature": "326-tile-clip",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "ce387434-fe83-4bcf-ae29-3db97f8d2f56",
+    "utc": "20261005T133805Z"
+  },
+  "kind": "audit",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": 23.1,
+          "39": 10.0,
+          "4": 25.7,
+          "47": 0.0
+        },
+        "total_pct": 14.9
+      },
+      "20": {
+        "seeds": {
+          "25": -22.7,
+          "39": -31.5,
+          "4": 4.2,
+          "47": -6.8
+        },
+        "total_pct": -15.5
+      },
+      "40": {
+        "seeds": {
+          "25": -23.1,
+          "39": -22.6,
+          "4": -13.7,
+          "47": -19.7
+        },
+        "total_pct": -19.6
+      }
+    },
+    "seeds": {
+      "25": 7.7,
+      "39": 27.0,
+      "4": 2.0,
+      "47": 29.3
+    },
+    "total_pct": 15.6
+  },
+  "note": "",
+  "verdict": "justified"
+}

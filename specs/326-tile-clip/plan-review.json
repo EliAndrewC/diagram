@@ -1,0 +1,63 @@
+{
+ "feature": "326-tile-clip",
+ "plan_sha256": "af1f94101be9693b4ff4a04cd6b63c7f4a3ca5b7dda16d377211bcc49509021b",
+ "reviewed": "2026-10-05",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "Summary",
+   "summary": "The clip per tile; the grid kept at 3 x 3 with TILE_MPX unchanged (D2, Amendment 1); the note at TILE_MPX corrected (D5).",
+   "class": "within",
+   "why": "Amendment 1 is clipping only at 3x3 with no grid change, and Amendment 2 does not touch the grid. The Summary makes no identity claim that Amendment 2 would contradict."
+  },
+  {
+   "id": "D1",
+   "summary": "tile_doc(text, box) does one pass over the lines: each line opening '<g class=\"f ' goes through drop_offmap against the tile box, and every other line is untouched.",
+   "class": "within",
+   "why": "This is FR-001 as written, the page's own rule with its margin applied to classed strings only. The spec's round 1 ruled the classed-only scope LEGITIMATE. Amendment 2 kept trimming (option A) over whole-line clipping, and D1 still trims via drop_offmap, which is what the GM chose."
+  },
+  {
+   "id": "D2",
+   "summary": "The grid stays 3 x 3 and TILE_MPX is unchanged. SC-002 is R2's clipped-against-unclipped A/B.",
+   "class": "within",
+   "why": "This is FR-002 and SC-002 after Amendment 1 ('yes please' to clipping only at 3x3). Amendment 2 left it unchanged."
+  },
+  {
+   "id": "D3",
+   "summary": "One-shot run over every live pool map: the picture from clipped tiles against the picture from unclipped tiles, each difference counted and bisected to its cause, recorded in research.md R4.",
+   "class": "within",
+   "why": "This is FR-003 and SC-003 as amended: every live pool map, clipped against unclipped, each difference counted. The bisection to cause is what tells SC-003's admissible kind (anti-aliasing on a trimmed path) from its failing kind (a lost or moved element), so it enforces the accepted bar and adds no scope. The old byte-for-byte bar is gone, matching the GM's acceptance of 'visually identical, measured'."
+  },
+  {
+   "id": "D5",
+   "summary": "The note at TILE_MPX states R3's numbers (4,319 pixels at 3 x 3, about 80% within two levels, none above 39), says a grid change is therefore never byte-identical, and says the clip is visually identical but can move anti-aliasing slightly on a trimmed path (R4).",
+   "class": "within",
+   "why": "The R3 part is FR-005 and the GM-approved 'correct that comment to state the measured truth'. The new clip sentence replaces the round-1 plan's 'the clip changes no pixel', which R4 proved false on 2 pool maps. Keeping that sentence would have planted a new false claim in the note FR-005 exists to make true. The new sentence restates what the GM accepted in Amendment 2 and adds no scope."
+  },
+  {
+   "id": "D4",
+   "summary": "tile_doc inherits the module's Research claims, with impl-drift only where make claims-owed asks.",
+   "class": "within",
+   "why": "Project process. It adds nothing to the request and narrows nothing."
+  },
+  {
+   "id": "Tests",
+   "summary": "tile_doc drops an outside classed line, keeps an inside one and never touches an unclassed line. On a synthetic page with classed ink in one corner, the tiled picture equals its single render.",
+   "class": "within",
+   "why": "These enforce FR-001 and the synthetic-page half of SC-001, which the spec names explicitly. A synthetic equality still holds after Amendment 2, which relaxed only the real-map comparison."
+  },
+  {
+   "id": "Bookends",
+   "summary": "Both perf bookends are taken back to back at the end: the start in a detached worktree at b8b20e690, then perf-gate in the clone.",
+   "class": "within",
+   "why": "Constitution VI process plus SC-004. It adds nothing to the request."
+  },
+  {
+   "id": "Constitution Check",
+   "summary": "No map draws or states anything differently; output visually identical, measured; no Decisions Recorded entries.",
+   "class": "within",
+   "why": "This matches the spec's Decisions Recorded ('None ... visually identical (SC-003)') and the GM's Amendment 2 words. The earlier byte-identical claim has been replaced with what was accepted."
+  }
+ ],
+ "verdict": "CLEAR"
+}

@@ -1,0 +1,62 @@
+{
+  "band": 3,
+  "base": {
+    "commit": "b8b20e690",
+    "label": "326-start",
+    "utc": "20261005T132948Z"
+  },
+  "binding": "09807ca197fda11d06af53110e6ec0202752ac5ea04e22e25217a5736646df48",
+  "end": {
+    "commit": "48431abbe",
+    "label": "326-end",
+    "utc": "20261005T133303Z"
+  },
+  "environment": "local",
+  "feature": "326-tile-clip",
+  "granted_by": {
+    "declared": "GM",
+    "session_id": "ce387434-fe83-4bcf-ae29-3db97f8d2f56",
+    "utc": "20261005T133926Z"
+  },
+  "kind": "signoff",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": 23.1,
+          "39": 10.0,
+          "4": 25.7,
+          "47": 0.0
+        },
+        "total_pct": 14.9
+      },
+      "20": {
+        "seeds": {
+          "25": -22.7,
+          "39": -31.5,
+          "4": 4.2,
+          "47": -6.8
+        },
+        "total_pct": -15.5
+      },
+      "40": {
+        "seeds": {
+          "25": -23.1,
+          "39": -22.6,
+          "4": -13.7,
+          "47": -19.7
+        },
+        "total_pct": -19.6
+      }
+    },
+    "seeds": {
+      "25": 7.7,
+      "39": 27.0,
+      "4": 2.0,
+      "47": 29.3
+    },
+    "total_pct": 15.6
+  },
+  "note": "The GM, 2026-10-05, in conversation: 'Yes, I sign off. Thank you.' Band 3 on the 326-end against the back-to-back 326-start 132948Z: 15 households +15.6% with seeds 39 and 47 near +28%, 10 households +14.9%, while 20 and 40 households read -15.5% and -19.6%. Recorded by the session at the GM's go-ahead; perf-audit band 1 consistent and band 2 justified (133756Z, 133805Z): the changed code is never called in a roll, and the crossed seeds rerun alternated time the same on base and clone.",
+  "verdict": "signed"
+}

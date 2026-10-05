@@ -369,3 +369,30 @@ def test_no_more_than_tile_workers_tiles_render_at_once(monkeypatch: pytest.Monk
     monkeypatch.setattr(raster, "resvg_png", counted)
     assert picture(TINY, 3.0, tiles=3) == single
     assert most[0] == TILE_WORKERS == 3, most[0]
+
+
+CORNERED = (
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100">\n'
+    '<rect x="0" y="0" width="200" height="100" fill="#EEE"/>\n'
+    '<g class="f a" data-k="a"><rect x="10" y="10" width="20" height="20" fill="#C33"/></g>\n'
+    '<g class="f b" data-k="b"><rect x="160" y="60" width="20" height="20" fill="#33C"/></g>\n'
+    '<rect x="160" y="10" width="10" height="10" fill="#3C3"/>\n'
+    "</svg>"
+)
+
+
+def test_a_tile_renders_only_the_classed_ink_in_its_window() -> None:
+    """Feature 326 FR-001: a classed line wholly outside the tile's window (plus OFFMAP_MARGIN) is dropped, one inside is
+    kept, and an unclassed line - the sheet, or ink the page does not class - is never touched, however far outside."""
+    doc = raster.tile_doc(CORNERED, (0.0, 0.0, 100.0, 50.0))
+    assert 'viewBox="0 0 100 50"' in doc
+    assert 'fill="#C33"' in doc and 'fill="#33C"' not in doc, "the classed rect at (160, 60) lies past the window and its margin"
+    assert 'fill="#3C3"' in doc and 'fill="#EEE"' in doc, "unclassed lines are left whole"
+    assert len(raster.tile_doc(CORNERED, (100.0, 50.0, 100.0, 50.0))) < len(CORNERED) + 40
+
+
+def test_a_tiled_picture_of_clipped_tiles_is_the_single_render() -> None:
+    """Feature 326 SC-001 (the synthetic-page half): with each tile clipped, the stitched picture of a small page is still the
+    single render byte for byte. On a real map the comparison is clipped against unclipped tiles, visually identical (SC-003, R4)."""
+    assert picture(CORNERED, 2.0, tiles=2) == picture(CORNERED, 2.0, tiles=1)
+    assert picture(CORNERED, 2.0, tiles=4) == picture(CORNERED, 2.0, tiles=1)

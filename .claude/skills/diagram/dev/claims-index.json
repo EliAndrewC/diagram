@@ -23104,6 +23104,26 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/interactive/raster.py::_CLASSED_LINE#low-zoom picture": {
+  "code": "2057345991746620",
+  "core": "3f17301216d805b1",
+  "date": "2026-10-05",
+  "note": "a string prefix that marks the lines the page clips; it decides nothing about the place",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/interactive/raster.py::_CLASSED_LINE#raster plumbing": {
+  "code": "b47bb22eda0d94ac",
+  "core": "3f17301216d805b1",
+  "date": "2026-10-05",
+  "note": "parsing marker only",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  ".claude/skills/diagram/l7r/diagram/interactive/raster.py::_FAST#low-zoom picture": {
   "code": "37c27004b90b259e",
   "core": "315ebf2feacd039a",
@@ -23465,20 +23485,40 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/raster.py::picture#low-zoom picture": {
-  "code": "ab1572ffaaa4738b",
-  "core": "d8d59b31a599af89",
+  "code": "88b269e852253c35",
+  "core": "5b551cd38d52048d",
   "date": "2026-10-05",
-  "note": "it makes one image of the whole picture at RASTER_R px per map px",
+  "note": "renders the whole picture at r (RASTER_R) px per map px; a display scale only",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/raster.py::picture#raster plumbing": {
-  "code": "428666a89201450c",
-  "core": "d8d59b31a599af89",
+  "code": "63abce074fd5e5ba",
+  "core": "5b551cd38d52048d",
   "date": "2026-10-05",
-  "note": "the tile count, the thread pool and the single render at a fractional zoom are plumbing",
+  "note": "tile count, worker pool, the fallback to a single render and encoding are plumbing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/interactive/raster.py::render_tile#low-zoom picture": {
+  "code": "7a628e67f9437175",
+  "core": "f6e0383317758b40",
+  "date": "2026-10-05",
+  "note": "renders one tile at the same zoom and fonts as a single render",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/interactive/raster.py::render_tile#raster plumbing": {
+  "code": "11cad216fa5fc848",
+  "core": "f6e0383317758b40",
+  "date": "2026-10-05",
+  "note": "per-worker document build and render",
   "pages": {},
   "research": "",
   "rests": [],
@@ -23530,6 +23570,26 @@
   "date": "2026-10-03",
   "note": "plumbing, decides nothing physical",
   "research": "",
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/interactive/raster.py::tile_doc#low-zoom picture": {
+  "code": "169d1e95fabf0497",
+  "core": "f593634b298c8639",
+  "date": "2026-10-05",
+  "note": "sets the viewBox to the tile window; the picture is unchanged",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/interactive/raster.py::tile_doc#raster plumbing": {
+  "code": "d472e08b187b1364",
+  "core": "f593634b298c8639",
+  "date": "2026-10-05",
+  "note": "drops off-window lines with the page's own drop_offmap margin; no new physical figure",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/raster.py::viewbox_of#low-zoom picture": {
