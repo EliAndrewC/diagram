@@ -7,14 +7,16 @@
 **Status**: Draft - Amendment 1 (2026-10-05, the GM: "yes please" - clipping only, at 3 x 3; request.md)
 
 **Input**: the GM's request, verbatim in `request.md`: *"sure, go shead and file that as a feature and then work the feaure, thanks"* -
-the session's proposal quoted there: clip each tile's map to its own window, and render more, smaller tiles.
+the session's proposal quoted there: clip each tile's map to its own window, and render more, smaller tiles. Amendment 1 (the GM,
+"yes please") superseded the smaller tiles: clipping only, at 3 x 3.
 
 ## Context
 
 A map's picture is rendered as tiles, three at a time since feature 324, each by a resvg process handed the WHOLE map with only its
 window changed. Measured standalone (research.md R1, observed 2026-10-05, method: resvg under `/usr/bin/time`): a 3 x 3 tile holds
 ~103 MB; clipped to its window ~79 MB on average; a 5 x 5 tile clipped ~52 MB. Most of a tile's memory scales with its pixels, so the
-proposal paired clipping with smaller tiles: the render's peak from ~575 MB to roughly 425 MB at about today's render time.
+proposal paired clipping with smaller tiles: the render's peak from ~575 MB to roughly 425 MB at about today's render time. Measured in
+the pipeline (research.md R2), clipping alone did more, and smaller tiles nothing more; Amendment 1 keeps the 3 x 3 grid.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -47,7 +49,7 @@ picture byte-identical. The GM chose clipping only, at 3 x 3 (request.md, Amendm
 
 **Acceptance Scenarios**:
 
-1. **Given** the reference render, **When** it is rendered, **Then** it is 3 x 3 as today, its peak lower by SC-002's target, its
+1. **Given** the reference render, **When** it is rendered, **Then** it is 3 x 3 as today, its peak at SC-002's target, its
    render span within the bound in SC-002, and its picture byte-identical to today's.
 
 ---
@@ -86,8 +88,9 @@ The note at `TILE_MPX` claims the stitched picture is the single render pixel fo
 - **SC-001** (FR-001): the tiles' documents together are smaller than the whole map times the tile count, measured on the reference
   render; a test holds that a clipped tile drops what lies outside its window and that, on a synthetic page, the stitched picture equals the
   single render (on a real map the comparison is with unclipped tiles, SC-003 - research.md R3).
-- **SC-002** (FR-002, Amendment 1): on the reference render, clipped against unclipped at 3 x 3 alternated, the peak is about 150 MB
-  or more lower and the render span within 3.81 s - feature 324's mean span 3.41 s plus 0.4 s (observed 2026-10-05, method:
+- **SC-002** (FR-002, Amendment 1): on the reference render, clipped against unclipped at 3 x 3 alternated, the peak is about 170 MB
+  lower, to roughly 370 MB - the GM's approved outcome (request.md, Amendment 1), within a tolerance of 20 MB - and the render span
+  within 3.81 s - feature 324's mean span 3.41 s plus 0.4 s (observed 2026-10-05, method:
   process-tree sampling at 50 ms, feature 324 research.md R3, and this feature's research.md R2:
   unclipped 551 / 528 MB and 3.13 / 3.22 s, clipped 371 / 365 MB and 3.57 / 3.37 s; the bounds are targets).
 - **SC-003** (FR-003, Amendment 1): every live pool map's picture rendered with clipped tiles equals its picture rendered with
@@ -112,3 +115,5 @@ None: no map draws or states anything differently; the picture is byte-identical
 - Round 2 (initial acceptance, verify, 2026-10-05): FAITHFUL - both round-1 items fixed; nothing new introduced.
 - Amendment 1 (2026-10-05): the GM chose clipping only, at 3 x 3 (request.md) after SC-002's shortfall report; FR-002, SC-002,
   SC-003 rewritten, FR-005 / SC-005 added (feature 223's note). The amendment resets the review count.
+- Amendment 1, round 1 (2026-10-05): NOT-REVIEWABLE (two unlabeled figures; three passages still equated tiled and single
+  renders) - fixed, no round used. Then CHANGES REQUIRED: SC-002 targeted the superseded saving - set to the approved one.
