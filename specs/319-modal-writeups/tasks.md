@@ -156,7 +156,7 @@ verdict or example is owed (FR-010, FR-016).
   the `modal-research` bundle; checked (FR-003, FR-011)
       research: rendering
       verify: DONE. 99 sheet kinds standard or Form: particular, two combined check rounds applied (crops from the GM's sheets, the SVG where a crop missed); the four sheets' ### Features entries checked under modals-particular.md; sheet drifts registered as Mode A procedure claims
-- [ ] T17 The old form retired: the What/Why/Note/Caveat parser, the label lead, the caveat machinery and their tests; the
+- [x] T17 The old form retired: the What/Why/Note/Caveat parser, the label lead, the caveat machinery and their tests; the
   docs; `make page-check` and `make done` green; the pool pages regenerated; the push (FR-012, SC-006)
       research: rendering
-      verify:
+      verify: DONE. old form retired (parser, label lead, caveat machinery, their tests and docs); make page-check green (5126 passed, browser included); make done green (10,770+ tests, every coverage floor at 100%); pool hamlets regenerated with the choices recorded in meta (pages rebuilt by render-sync at landing); every modal and record check answered, no claim owed; the push carries the drift findings FR-016 registers (CLAIMS_OK)
