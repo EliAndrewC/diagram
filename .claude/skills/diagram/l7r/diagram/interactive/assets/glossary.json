@@ -15613,5 +15613,40 @@
    "screen hill",
    "screen hills"
   ]
+ },
+ "koshiate-mori": {
+  "def": "On Tarama, the wood at the settlement's back, to the north, beyond the village belt that closes its west, south and east; called kusatimui there, a tall-tree wood mainly of Alexandrian laurel.",
+  "variants": [
+   "koshiate-mori",
+   "koshiate",
+   "koshiate forest",
+   "kusatimui"
+  ]
+ },
+ "Shuri": {
+  "def": "The royal capital of the Ryukyu kingdom, on Okinawa, where its royal government sat and where the islands' officials sent their reports.",
+  "variants": [
+   "Shuri"
+  ]
+ },
+ "covenant association": {
+  "def": "In Ming- and Qing-era villages, the households bound by a village covenant: a written set of rules for conduct that they agreed on and enforced together. It met in a hall of its own.",
+  "variants": [
+   "covenant association",
+   "covenant associations"
+  ]
+ },
+ "cassia-laurel": {
+  "def": "Here the Chinese xianggui (\"fragrant cassia\"), an evergreen broadleaved tree of the cinnamon genus, a relative of camphor.",
+  "variants": [
+   "cassia-laurel"
+  ]
+ },
+ "tomb hill": {
+  "def": "A hillside where a lineage buried its ancestors and kept trees to shade the graves. Lineage rules in Huizhou forbade selling any part of one or cutting its trees.",
+  "variants": [
+   "tomb hill",
+   "tomb hills"
+  ]
  }
 }
