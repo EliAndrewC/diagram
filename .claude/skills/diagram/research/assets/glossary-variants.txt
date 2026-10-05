@@ -43,6 +43,7 @@ aki monto	monto
 akiba	Akiba
 akusui	akusui
 akusuiro	akusui
+alexandrian laurel	Alexandrian laurel
 alluvial	alluvial
 alluvial fan	alluvial fan
 alluvial fans	alluvial fan
@@ -231,6 +232,7 @@ board-clapper	clapper-board
 bobana	bobana
 bochi	bochi
 bodaiji	bodaiji
+bofurin	bofurin
 boji	boji
 bojikui	bojikui
 bomori	bomori
@@ -701,6 +703,7 @@ dilou	dilou
 diluvial	diluvial upland
 diluvial upland	diluvial upland
 diluvial uplands	diluvial upland
+dioecious	dioecious
 diospyros kaki	Diospyros kaki
 dipeng	dipeng
 discharge	discharge
@@ -857,6 +860,8 @@ enclosed houses	weilongwu
 endorheic	endorheic
 endorheic basin	endorheic
 endorheic lakes	endorheic
+endospermum	Endospermum
+endospermum chinense	Endospermum
 enemy platform	mamian
 enemy platforms	mamian
 enemy tower	enemy tower
@@ -2141,6 +2146,8 @@ liberties	liberty
 liberty	liberty
 licensed quarter	yukaku
 licensed quarters	yukaku
+licentiate	licentiate
+licentiates	licentiate
 lifang	lifang
 light bamboo	light bamboo
 lijia	lijia
@@ -2371,6 +2378,7 @@ mizuguchi	mizuguchi
 mizujiri	shirimito
 mizuka	mizuya
 mizunara	mizunara
+mizunoe	mizunoe
 mizunomi	mizunomi
 mizunoto-u	mizunoto-u
 mizuya	mizuya
@@ -2382,6 +2390,7 @@ module	module
 mogao	Mogao caves
 mogao caves	Mogao caves
 mokoshi	mokoshi
+mokutachibana	mokutachibana
 momi	momi
 momiage	momiage
 momoyama	Momoyama
@@ -3060,6 +3069,7 @@ ryobu	ryobu
 ryudosui	ryudosui
 ryukyu	Ryukyu kingdom
 ryukyu kingdom	Ryukyu kingdom
+ryukyu-koku yuraiki	Ryukyu-koku yuraiki
 ryukyus	Ryukyu kingdom
 rōjū	Roju
 rōnin	ronin
@@ -3142,9 +3152,13 @@ scattered farmstead	sankyoson
 scattered village	sankyoson
 scattered villages	sankyoson
 scattered-farmstead	sankyoson
+schima	Schima
+schima superba	Schima
 scour	scour
 screen gate	screen gate
 screen gates	screen gate
+screen hill	screen hill
+screen hills	screen hill
 screen wall	screen wall
 screen walls	screen wall
 se	se
@@ -3240,7 +3254,7 @@ shallow-water lotus	shallow-water lotus
 shandong	Shantung
 shanhai pass	Shanhaiguan
 shanhaiguan	Shanhaiguan
-shannon-wiener index	SWI
+shannon-wiener index	Shannon-Wiener index
 shantung	Shantung
 shanxi merchant houses	Shanxi merchants
 shanxi merchants	Shanxi merchants
@@ -3578,14 +3592,16 @@ sweep well	well-sweep
 sweep-type well	well-sweep
 swept collar	swept collar
 swept ground	swept collar
-swi	SWI
+swi	Shannon-Wiener index
 sword hunt	sword hunt
 sword hunts	sword hunt
 sōchinju	sōchinju
 sōja	soja
 sōtō	Sōtō
 sōzu	sōzu
+tabu	tabu
 tabune	field boat
+tabunoki	tabu
 tachimuba	tachimuba
 tagoshi	tagoshi kangai
 tagoshi kangai	tagoshi kangai
@@ -3700,6 +3716,7 @@ terakoya	terakoya
 teramachi	teramachi
 terauke	terauke
 terauke seido	terauke
+terihaboku	Alexandrian laurel
 terrace of	row house
 terrace riser	terrace riser
 terrace risers	terrace riser

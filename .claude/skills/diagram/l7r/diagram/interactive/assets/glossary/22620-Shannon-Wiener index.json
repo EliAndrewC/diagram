@@ -1,0 +1,8 @@
+{
+ "term": "Shannon-Wiener index",
+ "def": "A measure of a forest's diversity that rises with both the number of kinds of tree and how evenly the trees are shared among them.",
+ "variants": [
+  "Shannon-Wiener index",
+  "SWI"
+ ]
+}
