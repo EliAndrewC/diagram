@@ -18,7 +18,7 @@ Of the woods that survive, a Fujian village commonly keeps about two, a Hong Kon
 28,000 sq ft.
 
 Guesses:
-- [settlement_form=nucleated] That a clustered village sheltered behind one shared wood, rather than a grove for each house: no source says which a
+- [settlement_form=nucleated] That a clustered village sheltered behind one shared wood, rather than a grove for each house: no source says which a Japanese
   village of farmhouses packed close together kept; in the loosely clustered villages of eastern Japan each house stood in a grove of its own.
 - That a settlement's wood is conifer-led or broadleaf at even odds, that conifers outnumber the other trees in the conifer-led form, and
   that bamboo is about one plant in twelve: no source gives a village belt's share (in one Tonami hamlet's farmhouse groves
