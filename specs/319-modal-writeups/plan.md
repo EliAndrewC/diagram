@@ -193,7 +193,7 @@ side, keeps a conditional item when `meta[knob]` is among its values and drops i
 the knob shows none of that knob's conditional items, since nothing says they hold there. The condition never reaches the
 reader. The check bundles render each conditional item with "(only where <knob> is <value>)" so `modal-form`, `modal-research`
 and `modal-depiction` judge it with its condition; the guidelines amend M9 and add M22. An `Entry:` path may carry the same
-condition, written after it - `research/questions/0031-...html [settlement_form=nucleated]` - and is dropped from References
+condition, written after it - `research/questions/0031-clustered-and-scattered-villages-shuson-sanson.html [settlement_form=nucleated]` - and is dropped from References
 on a map where it fails, so a question resting only on a hidden item is not linked (FR-006, the spec review of the amendment).
 First use: the windbreak's shared-wood guess, under `settlement_form=nucleated`, with 0031 conditioned the same. Row villages
 (`linear`) are not in it: 0033 records that "a row farm kept its grove like any other farm".
