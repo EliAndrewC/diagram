@@ -98,15 +98,15 @@ done (FR-012).
 
 ## Phase 3 - the garden pilot (and a further pilot only if needed)
 
-- [ ] T11 [US2] The garden rewritten from the (amended) guidelines - M6 settled on it - with its research pass where a
+- [x] T11 [US2] The garden rewritten from the (amended) guidelines - M6 settled on it - with its research pass where a
   standard question is open; both checks; the page regenerated
       research: physical
-      - [ ] research pass
-      - [ ] source-reader confirmed
-      - [ ] recorded and cited
-      - [ ] quote-check confirmed
-      - [ ] source-applicability confirmed
-      verify:
+      - [x] research pass
+      - [x] source-reader confirmed
+      - [x] recorded and cited
+      - [x] quote-check confirmed
+      - [x] source-applicability confirmed
+      verify: DONE. garden rewritten from 0039 (G1: research pass, source-reader, cited, quote-check, source-applicability, six check rounds); M6 settled; modal-form, modal-research, modal-depiction two rounds each, applied; Inashiro regenerated
 - [ ] T12 [US6] THE GM'S VERDICT on the garden's FIRST rewrite. Accepted with no changes and the GM's go-ahead: the rollout
   starts. Otherwise: changes to the guidelines, then the garden; a further feature is piloted as T11/T12 (FR-010, SC-005)
       research: rendering
