@@ -22,7 +22,7 @@ Guesses:
   village of farmhouses packed close together kept; in the loosely clustered villages of eastern Japan each house stood in a grove of its own.
 - That a settlement's wood is conifer-led or broadleaf at even odds, that conifers outnumber the other trees in the conifer-led form, and
   that bamboo is about one plant in twelve: no source gives a village belt's share (in one Tonami hamlet's farmhouse groves
-  nearly half the trees were cedar), and every survey of the conifer-led form is of one farmhouse's grove, not a village's.
+  nearly half the trees were cedar), and every survey of the conifer-led form is of farmhouse groves, not of a belt for a whole village.
 
 Depiction: The map draws a belt along the windward edge of each cluster of houses, not a grove at each house (a guess: see Guesses),
 on the one or two sides the winter wind comes from - the northwest unless the place has a wind of its own - and never carries it round the houses. It is drawn in one of two
@@ -33,7 +33,7 @@ dense undergrowth of bamboo and shrubs beneath them. The rows are spaced so a re
 as a wood rather than a row of trees, its edge uneven as a real wood's was, standing where the ground let it; the one village belt whose width is recorded, in the Ryukyu islands, was about 50 ft wide, and how far apart
 real rows stood is not recorded. The
 belt is planted unbroken along its side, since a gap would funnel the wind, runs on past the edge of the map, its
-planting resumes on both sides of a lane that crosses it, and its trees are kept
+planting resumes on both sides of a lane that crosses it, though no record says how a lane passed through a real belt, and its trees are kept
 off the sun of the farmyards and kitchen beds.
 
 Name: windbreak forest
