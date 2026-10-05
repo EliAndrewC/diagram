@@ -2284,7 +2284,8 @@
   "def": "Daily martial practice; a solo set-form (kata) needs a square of eight to ten feet.",
   "variants": [
    "keiko"
-  ]
+  ],
+  "cased": true
  },
  "ken": {
   "def": "A Japanese unit of length of about 1.8 meters - the bay between two posts of a building, and the unit a lot's frontage was measured in.",
@@ -15722,5 +15723,30 @@
    "Tango-no-kami"
   ],
   "cased": true
+ },
+ "upright book": {
+  "def": "A Japanese register bound in the tall format, its pages taller than wide (tatecho) - the usual form of a village's survey register.",
+  "variants": [
+   "upright book"
+  ]
+ },
+ "discharge channel": {
+  "def": "The channel that carries a collector drain's water away from its field, onward to the passing brook, a pond at the field's foot, or the edge of the map.",
+  "variants": [
+   "discharge channel",
+   "discharge channels"
+  ]
+ },
+ "Kanamori": {
+  "def": "The daimyo house that ruled Hida province, where Takayama lies, until 1692, when the shogunate took the province under its own intendants.",
+  "variants": [
+   "Kanamori"
+  ]
+ },
+ "chotojiba": {
+  "def": "A room for binding documents: at the Takayama Jin'ya, the room beside the writing room, where the documents drawn up for the shogunate were bound.",
+  "variants": [
+   "chotojiba"
+  ]
  }
 }

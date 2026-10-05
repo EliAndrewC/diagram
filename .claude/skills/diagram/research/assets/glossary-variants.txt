@@ -439,6 +439,7 @@ chonin	chonin
 chonin-chi	buke-chi
 chori	chori
 choriboshi	chori
+chotojiba	chotojiba
 chotsuke	chōtsuke
 choyo	Double Ninth
 choyo festival	Double Ninth
@@ -711,6 +712,8 @@ dioecious	dioecious
 diospyros kaki	Diospyros kaki
 dipeng	dipeng
 discharge	discharge
+discharge channel	discharge channel
+discharge channels	discharge channel
 dish pond	sara-ike
 dish ponds	sara-ike
 dispersed farmstead	dispersed settlement
@@ -1863,6 +1866,7 @@ kan'ei	Kan'ei
 kan'ei period	Kan'ei
 kan'en	Kan'en
 kanagashi	kanagashi
+kanamori	Kanamori
 kanbun	Kanbun
 kanden	kanden
 kang	kang
@@ -4003,6 +4007,7 @@ upper privies	upper privy
 upper privy	upper privy
 upper residence	kami-yashiki
 upper residences	kami-yashiki
+upright book	upright book
 ura-nagaya	ura-nagaya
 uradana	back tenement
 urajiro	urajiro

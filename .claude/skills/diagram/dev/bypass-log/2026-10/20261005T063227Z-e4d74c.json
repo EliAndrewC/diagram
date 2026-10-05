@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-05T06:32:27Z",
+  "target": "record-checked",
+  "commit": "5e4941858",
+  "why": "source-reader on source-reader:0014#nougyoudoboku-keihan-6: record-format moved a stale visible gloss into an HTML comment; the quoted passage is unchanged"
+}
