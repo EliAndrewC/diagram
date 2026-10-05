@@ -1557,6 +1557,8 @@ house manager	yamori
 house manager's	yamori
 house pad	house pad
 house pads	house pad
+household-register district	household-register district
+household-register districts	household-register district
 houseman	gokenin
 housemen	gokenin
 houzhaofang	houzhaofang
@@ -3438,6 +3440,8 @@ simpson index	SI
 single range	main range
 single straight range	main range
 sishu	sishu
+site coefficient	site coefficient
+site coefficients	site coefficient
 six chambers	Six Chambers
 six fang	Six Chambers
 six ministries	Six Ministries
@@ -3806,8 +3810,8 @@ three-bay two-corridor houses	three-bay two-corridor house
 three-squads	three-squads courtyard
 three-squads courtyard	three-squads courtyard
 three-worlds-myriad-spirits	three-worlds-myriad-spirits
-three-worlds-myriad-spirits stone	three-worlds-myriad-spirits
-three-worlds-myriad-spirits stones	three-worlds-myriad-spirits
+three-worlds-myriad-spirits stone	three-worlds-myriad-spirits stone
+three-worlds-myriad-spirits stones	three-worlds-myriad-spirits stone
 threshing comb	senbakoki
 threshing combs	senbakoki
 threshing yard	threshing yard

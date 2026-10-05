@@ -15891,5 +15891,26 @@
   "variants": [
    "Later Wei"
   ]
+ },
+ "household-register district": {
+  "def": "A district Japan set up in 1871 for registering its population, each grouping some twenty villages and about a thousand households; that year's rule gave each one district shrine.",
+  "variants": [
+   "household-register district",
+   "household-register districts"
+  ]
+ },
+ "site coefficient": {
+  "def": "In cemetery planning, the factor a cemetery's total plot area is multiplied by to allow for its roads, buildings and open space; a 1934 Japanese planner's paper advises 1.5 to 2.",
+  "variants": [
+   "site coefficient",
+   "site coefficients"
+  ]
+ },
+ "three-worlds-myriad-spirits stone": {
+  "def": "A stone monument or tower set at the entrance of a Japanese graveyard or temple for the spirits of all the dead; with the six jizo, a representative stone monument of an Edo-period graveyard.",
+  "variants": [
+   "three-worlds-myriad-spirits stone",
+   "three-worlds-myriad-spirits stones"
+  ]
  }
 }
