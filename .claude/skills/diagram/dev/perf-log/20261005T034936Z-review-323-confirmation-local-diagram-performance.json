@@ -1,0 +1,62 @@
+{
+  "band": 1,
+  "base": {
+    "commit": "cc4ba1e18",
+    "label": "323-start",
+    "utc": "20261005T033114Z"
+  },
+  "binding": "76d68163309f204765d66882af2a120a675b4aa33d4fb5e0db618f8e1de80cb4",
+  "end": {
+    "commit": "86aea3448",
+    "label": "323-end",
+    "utc": "20261005T034536Z"
+  },
+  "environment": "local",
+  "feature": "323-site-build-peak",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "ce387434-fe83-4bcf-ae29-3db97f8d2f56",
+    "utc": "20261005T034936Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": -3.7,
+          "39": -6.3,
+          "4": -10.0,
+          "47": -3.3
+        },
+        "total_pct": -6.2
+      },
+      "20": {
+        "seeds": {
+          "25": -5.6,
+          "39": -3.4,
+          "4": -4.5,
+          "47": -5.0
+        },
+        "total_pct": -4.7
+      },
+      "40": {
+        "seeds": {
+          "25": -3.8,
+          "39": -4.0,
+          "4": -3.1,
+          "47": -4.8
+        },
+        "total_pct": -3.9
+      }
+    },
+    "seeds": {
+      "25": 2.5,
+      "39": -2.6,
+      "4": -3.8,
+      "47": -2.4
+    },
+    "total_pct": -1.7
+  },
+  "note": "Seed 25/15hh +2.5% is field 0.68->0.78s, the only stage that moved; the diff touches only record/site.py and site_pages.py (all.html assembly, reached via render_cache->record_build, never by a roll). Control perf-control-seed25-15-field checks out: six profile files on disk, base /tmp/base323 clean at cc4ba1e18 1.556/1.501/1.466s vs clone 1.542/1.522/1.500s, identical 2,193,040 primitive calls - same code, +1.4% median inside the spread; seed 25 fell 3.7-5.6% at 10/20/40hh. Noise.",
+  "verdict": "consistent"
+}
