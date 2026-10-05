@@ -94,3 +94,4 @@ None: no map draws or states anything differently; the picture is byte-identical
 - Round 1 (initial acceptance, MODE 2, 2026-10-05): CHANGES REQUIRED - FR-002 could keep 3 x 3, SC-002 set half the approved
   saving with no consequence, and its span bound named no reference. Applied: finer grids only, the approved outcome as the target,
   a shortfall reported to the GM, the bound from feature 324's mean span (3.81 s). The classed-only carve-out ruled LEGITIMATE.
+- Round 2 (initial acceptance, verify, 2026-10-05): FAITHFUL - both round-1 items fixed; nothing new introduced.
