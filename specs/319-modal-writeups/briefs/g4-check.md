@@ -10,7 +10,7 @@ You are a FRESH session for one part of feature 319. This brief is the whole of 
 
 ## The procedure (check, apply)
 
-1. `make record-owed` (in `.claude/skills/diagram`) names every unit the delta owes. In the background, in one message, one agent
+1. `make record-owed` (in `.claude/skills/diagram`) names every unit the delta owes. In the FOREGROUND, in one message (a headless session is never woken by a background agent), one agent
    per owed unit, each from its own bundle (`make check-bundle Q=<NNNN> FOR=<check>`, `make check-bundle KEY=<key>
    FOR=source-applicability` for a key owed it, and `make check-bundle Q=<NNNN> FOR=entry-drift KIND=<class>` for each modal
    entry-drift is owed for), each naming its own MANIFEST.md. Do NOT edit any modal class for an entry-drift finding about the

@@ -69,7 +69,10 @@ on. The research record's own `CLAUDE.md` still loads when you touch `research/`
 ## Agents
 
 - The defined checks (`source-reader`, `quote-check`, `record-format`, `source-applicability`, `entry-drift`,
-  `intro-check`) run on their pinned tiers; dispatch them in the background, each naming its bundle's MANIFEST.
+  `intro-check`) run on their pinned tiers; dispatch them in ONE message in the FOREGROUND, each naming its bundle's
+  MANIFEST - several Agent calls in one message still run side by side. A page session is headless, and a headless session
+  is never woken by a background agent's notification: a background dispatch sits idle until the runner's 5-minute stall
+  nudge (feature 319, 2026-10-04: one check session stalled six times, each round losing up to five minutes).
 - A check runs only where the words it reads changed (feature 311): `make record-owed` names every unit your edits owe,
   and `make check-bundle` refuses a bundle for a check nothing owes. When a check returns, record it -
   `make record-checked CHECK=<check> BUNDLE=<dir> RESULT="<counts>"` - or the push refuses the unit. A source-reader
