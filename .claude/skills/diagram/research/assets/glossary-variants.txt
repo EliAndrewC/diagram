@@ -325,6 +325,7 @@ cadastral register	cadastre
 cadastral survey	cadastre
 cadastre	cadastre
 cadastres	cadastre
+cai jing	Cai Jing
 caishen	Caishen
 calamagrostis	Calamagrostis
 calendar calibration	calendar calibration
@@ -3872,6 +3873,7 @@ ton'ya	ton'ya
 tonami	Tonami plain
 tonami plain	Tonami plain
 tongdian	Tongdian
+tongzhi	Tongzhi
 tonya	ton'ya
 toon	toon
 toons	toon
@@ -4226,6 +4228,7 @@ wu ding	Wu Ding
 wubei zhi	Wubei Zhi
 wudu	wudu
 wujing zongyao	Wujing Zongyao
+xianfeng	Xianfeng
 xiang	xiang
 xiang river	Xiang River
 xiang seven, li three	Lingqu
