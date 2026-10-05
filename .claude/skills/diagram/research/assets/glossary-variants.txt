@@ -3156,6 +3156,8 @@ sandō	sando
 sangai banrei	three-worlds-myriad-spirits
 sangji	sangji
 sangji yutang	dike-pond
+sangyuan	Sangyuan polder
+sangyuan polder	Sangyuan polder
 sanheyuan	sanheyuan
 sanjūbanshin	thirty guardian deities
 sankin-kotai	alternate attendance
