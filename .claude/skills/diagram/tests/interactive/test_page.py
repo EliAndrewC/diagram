@@ -944,3 +944,13 @@ def test_a_hamlet_card_states_its_grove_sides_as_a_choice_not_a_fact() -> None:
     data = _render([PLACE, "homestead grove"], meta)
     assert sentence and sentence not in data[PLACE]["facts"]
     assert data["homestead grove"]["on_this_map"] == ""
+
+
+def test_a_village_map_keeps_its_grove_sides_sentence_on_the_grove_modal() -> None:
+    """Feature 319: only a HAMLET's card carries its choices; a tier not yet standardized (a village) keeps the farm grove's
+    sides as the grove modal's own sentence (feature 291, FR-009)."""
+    from l7r.diagram.interactive.place import homestead_grove_default
+
+    meta = {"scale": "village", "name": "V", "households": 40, "grove_sides": 3, "settlement_form": "dispersed"}
+    data = _render(["homestead grove"], meta)
+    assert data["homestead grove"]["on_this_map"] == homestead_grove_default(meta) != ""

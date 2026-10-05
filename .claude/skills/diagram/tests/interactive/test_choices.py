@@ -122,3 +122,10 @@ def test_a_choice_of_one_settlement_form_is_not_listed_on_another() -> None:
     row = choices.made({"settlement_form": "linear", "row_line": "street", "copse_siting": "among_the_houses"})
     assert "What the row follows" not in [c["name"] for c in near] and "What the row follows" in [c["name"] for c in row]
     assert "Where the village's trees stand" in [c["name"] for c in near] and "Where the village's trees stand" not in [c["name"] for c in row]
+
+
+def test_a_value_whose_modal_is_not_written_opens_none() -> None:
+    """The card lists a value with no modal file by its label and an empty key (`made`), so a gap shows rather than breaks."""
+    entry = {"key": "no_such_choice", "name": "None", "values": {"x": "x"}}
+    assert choices.modal(entry, "x") is None
+    assert choices.made({"no_such_choice": "x"}) == [] and choices.registry_for({"no_such_choice": "x"}) == {}, "not in the table"
