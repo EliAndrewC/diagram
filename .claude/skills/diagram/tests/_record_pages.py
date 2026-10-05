@@ -10,11 +10,33 @@ gives the same page with its references numbered from 1 and its notes by number,
 
 from __future__ import annotations
 
+import functools
 import os
 import pathlib
 
 from l7r.diagram.interactive.record import site_notes, store
 from l7r.diagram.interactive.sources import RESEARCH_DIR, record_text
+
+
+@functools.cache
+def _real_record() -> store.qs.Record:
+    return store.load(RESEARCH_DIR)
+
+
+@functools.cache
+def text_of(rel: str) -> str:
+    """`rel` as `sources.record_text` reads it, with the real record LOADED ONCE per test process (2026-10-04).
+
+    `record_text` caches each page's text, but a miss on a question page calls `store.load` - the whole record, ~90 ms -
+    so the tests that read every page loaded the record 475 times: 42 s of a 44 s test, measured by cProfile, and
+    three such tests were a quarter of a full `make quick`. A question page is the same two calls the engine makes
+    (`store.load`, then `store.page_html`) on one record; anything else goes through `record_text` as before."""
+    if rel.startswith("questions/"):
+        record = _real_record()
+        name = rel[len("questions/") :]
+        if name in record.by_file:
+            return store.page_html(record, record.by_file[name], RESEARCH_DIR)
+    return record_text(rel)
 
 
 class RecordPath(pathlib.PosixPath):
@@ -24,10 +46,10 @@ class RecordPath(pathlib.PosixPath):
         return os.path.relpath(self, RESEARCH_DIR).replace(os.sep, "/")
 
     def read_text(self, encoding: str | None = "utf-8", errors: str | None = None, newline: str | None = None) -> str:  # noqa: ARG002 - pathlib's signature
-        return record_text(self._rel())
+        return text_of(self._rel())
 
     def exists(self, *, follow_symlinks: bool = True) -> bool:  # noqa: ARG002 - pathlib's signature
-        return bool(record_text(self._rel()))
+        return bool(text_of(self._rel()))
 
 
 def page(rel: str) -> RecordPath:

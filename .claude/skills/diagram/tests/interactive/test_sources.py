@@ -27,6 +27,7 @@ from l7r.diagram.interactive.sources import (
     research_sources,
     section_sources,
 )
+from tests._record_pages import text_of
 
 
 def test_an_entry_names_a_question_page_and_links_its_small_page() -> None:
@@ -81,7 +82,7 @@ def research_pages() -> list[tuple[str, str]]:
     out = []
     root = pathlib.Path(RESEARCH_DIR) / "questions"
     for page in store.load(RESEARCH_DIR).pages():
-        out.append((record_text(f"questions/{page.file}"), page.file))
+        out.append((text_of(f"questions/{page.file}"), page.file))
         notes = root / page.notes_file
         if notes.is_file():
             out.append((notes.read_text(encoding="utf-8"), page.notes_file))
