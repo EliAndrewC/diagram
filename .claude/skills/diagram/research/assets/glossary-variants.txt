@@ -368,6 +368,8 @@ catena	catena
 catty	jin
 causeway	causeway
 causeways	causeway
+cdr	crude death rate
+cdrs	crude death rate
 celestial order	Celestial Order
 censorate	Censorate
 centipede lane	centipede lane
@@ -594,6 +596,8 @@ crown fire	crown fire
 crown fires	crown fire
 crown shyness	crown shyness
 crowns	crown
+crude death rate	crude death rate
+crude death rates	crude death rate
 crude drug	crude drug
 crude drugs	crude drug
 cryptomeria	sugi
@@ -3612,6 +3616,8 @@ suji-bei	suji-bei
 sujibei	suji-bei
 sukego	sukego
 sumigama	sumigama
+summer siege	summer siege
+summer siege of osaka	summer siege
 summer-green	summer-green
 summer-green broadleaf forest	summer-green
 summer-green forest	summer-green

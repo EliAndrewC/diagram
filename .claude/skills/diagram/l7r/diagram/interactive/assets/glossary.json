@@ -15912,5 +15912,21 @@
    "three-worlds-myriad-spirits stone",
    "three-worlds-myriad-spirits stones"
   ]
+ },
+ "crude death rate": {
+  "def": "The deaths in a population in one year for every 1,000 of its inhabitants; in three Edo farming villages it ran at about 18 to 30.",
+  "variants": [
+   "crude death rate",
+   "crude death rates",
+   "CDR",
+   "CDRs"
+  ]
+ },
+ "summer siege": {
+  "def": "The war that left Osaka's townscape damaged, after which Matsudaira Tadaaki remade the city and gathered its scattered graveyards to its outer rim.",
+  "variants": [
+   "summer siege",
+   "summer siege of Osaka"
+  ]
  }
 }
