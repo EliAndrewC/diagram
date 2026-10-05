@@ -143,17 +143,23 @@ def plan(root: str, name: str, projects: str, extra: list[str], items: list[str]
     return queue
 
 
-def dispatcher(root: str) -> str:
-    """The session whose claim on `root` was written last - the one dispatching this queue into its own clone.
+def dispatcher(root: str, own: str = "") -> str:
+    """The session dispatching this queue into its own clone: `own` (the caller's `CLAUDE_CODE_SESSION_ID`) where it claims
+    `root`, else the session whose claim on `root` was written last.
 
     WHY (feature 250 D14, 2026-09-26): the clone guard refuses an edit in a clone a LIVE other session claims, and
     the dispatcher is live, waiting on the queue - so a queued session was refused whenever the dispatcher's tree
-    was clean. Its id goes to each session as `L7R_DISPATCHER`, which the guard lets through and nothing else."""
+    was clean. Its id goes to each session as `L7R_DISPATCHER`, which the guard lets through and nothing else.
+    ...AND THE CALLER FIRST (feature 319, 2026-10-04): every queued session claims the clone too, so after one queue the
+    newest claim was a FINISHED page session's, not the dispatcher's (claimed once, hours before). The next queue named
+    that dead session, and its check session was refused every edit by the live dispatcher it was meant to let through."""
     parts = root.rstrip("/").split("/")
     if ".clones" not in parts:
         return ""
     mapdir = pathlib.Path("/".join(parts[: parts.index(".clones") + 1])) / ".session-clones"
     claims = [m for m in mapdir.glob("*") if m.is_file() and m.read_text(encoding="utf-8", errors="replace").strip() == root.rstrip("/")]
+    if own and any(m.name == own for m in claims):
+        return own
     return max(claims, key=lambda m: m.stat().st_mtime).name if claims else ""
 
 
@@ -176,7 +182,7 @@ def work(root: str, name: str, extra: list[str], queue: list[dict], run_log: str
     never held open) was declared dead after two minutes while the sessions ran on."""
     index = os.path.join(root, ".git", "page-sessions", "index.txt")
     runlog = open(run_log, "a", buffering=1)  # noqa: SIM115 - held open on purpose for the whole queue
-    env = headless_env(os.environ, dispatcher(root))
+    env = headless_env(os.environ, dispatcher(root, os.environ.get("CLAUDE_CODE_SESSION_ID", "")))
     while queue:
         item = queue.pop(0)
         if "then" in item:

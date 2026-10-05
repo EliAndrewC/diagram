@@ -111,6 +111,14 @@ def test_each_session_is_told_its_dispatcher_the_one_claimant_the_clone_guard_le
     (claims / "sid-elsewhere").write_text(str(tmp_path / ".clones" / "other"), encoding="utf-8")
     assert ps.dispatcher(str(root)) == "sid-dispatcher"
     assert ps.dispatcher(str(tmp_path / "not-a-clone")) == ""
+    # 319 (2026-10-04): a finished page session's claim is newer than the dispatcher's; the caller's own id wins
+    os.utime(claims / "sid-dispatcher", (time.time() - 3600, time.time() - 3600))
+    (claims / "sid-finished-page-session").write_text(str(root), encoding="utf-8")
+    assert ps.dispatcher(str(root)) == "sid-finished-page-session", "without the caller's id, the newest claim"
+    assert ps.dispatcher(str(root), "sid-dispatcher") == "sid-dispatcher"
+    assert ps.dispatcher(str(root), "sid-elsewhere") == "sid-finished-page-session", "a caller claiming another clone is not it"
+    (claims / "sid-finished-page-session").unlink()
+    os.utime(claims / "sid-dispatcher", None)
     assert ps.dispatcher(str(tmp_path / ".clones" / "unclaimed")) == ""
     seen: list[str] = []
     monkeypatch.setattr(ps.subprocess, "run", lambda cmd, **kw: (seen.append(kw["env"]["L7R_DISPATCHER"]), ps.subprocess.CompletedProcess(cmd, 0))[1])
