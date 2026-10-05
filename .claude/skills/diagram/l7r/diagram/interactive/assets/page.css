@@ -142,7 +142,9 @@ a.sib { color: #5A3F1E; text-decoration: none; }
 a.sib:hover { color: var(--hl-stroke); }
 /* THE TABS (feature 319, GM 2026-10-03): About, Guesses, References along the head of the one dialog; a tab with nothing
    to show is not drawn. The chosen tab is underlined in the rule color, the rest muted - the look of the page's links. */
-#x-tabs { display: flex; gap: 0.2rem; margin: 0.4rem 0 0.8rem; border-bottom: 1px solid #BCAA7E; }
+/* the strip WRAPS on a narrow screen: four tabs at the modal's 1.5x text overflowed a 420 px window and gave the dialog a
+   horizontal scroll bar (the browser test's tooltip case, feature 182) */
+#x-tabs { display: flex; flex-wrap: wrap; gap: 0.2rem; margin: 0.4rem 0 0.8rem; border-bottom: 1px solid #BCAA7E; }
 #x-tabs button { margin: 0; border: 0; border-bottom: 2px solid transparent; background: none; color: var(--muted); padding: 0.3em 0.8em; font-size: 0.95em; }
 #x-tabs button.on { color: var(--ink); border-bottom-color: var(--rule); font-weight: 600; }
 /* the dialog focuses its first button when it opens, which drew a focus box round About whatever tab was chosen: the

@@ -20,6 +20,6 @@ where the county's business is done, and the family's house.
 
 Name: writing pavilion
 Covers: the pavilion and its label
-Sources: shosai-kotobank, kyoto-ga-sanshisuimeisho, chinesepen-shuzhai, detached-study-absence
+Sources: shosai-kotobank, kyoto-ga-sanshisuimeisho, chinesepen-shuzhai
 Entry: research/questions/0112-detached-studies-shosai.html
 Drawing: research/questions/0112-detached-studies-shosai.drawing.html

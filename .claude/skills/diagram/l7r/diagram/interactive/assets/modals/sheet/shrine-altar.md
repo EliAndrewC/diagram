@@ -23,6 +23,6 @@ by side, one altar with the others behind it, or a second small shrine on the sa
 
 Name: shrine altar
 Covers: each altar glyph inside a shrine hall, with its name and sublabels
-Sources: jawiki-saijin, kotobank-aidono, genbu-honden-styles, tokyo-jinjacho-kamidana, jawiki-goshi, inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai
+Sources: jawiki-saijin, kotobank-aidono, genbu-honden-styles, tokyo-jinjacho-kamidana, jawiki-goshi
 Entry: research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html
 Drawing: research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html, research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html

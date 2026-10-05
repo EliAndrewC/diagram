@@ -29,6 +29,6 @@ its own door - and never as dwellings walled off from one another behind one sha
 
 Name: servants' quarters
 Covers: the servants' nagaya and its label
-Sources: buke-hokonin-wiki, kotobank-degawari, kotobank-hitoyado, fukui-bushi-jutaku, kotobank-nagayamon, jta-nagayamon, matsue-bukeyashiki, kotobank-bukeyashiki, kotobank-chugen, shinke-nagayamon-kanazawa, mitamura-nagaya-tcpip, hoppou-shibata-ashigaru, nando-jawiki, shoinzukuri-jawiki, shibata-ashigaru-nagaya-71
+Sources: buke-hokonin-wiki, kotobank-degawari, kotobank-hitoyado, fukui-bushi-jutaku, kotobank-nagayamon, jta-nagayamon, matsue-bukeyashiki, kotobank-bukeyashiki, kotobank-chugen, shinke-nagayamon-kanazawa, mitamura-nagaya-tcpip, hoppou-shibata-ashigaru, nando-jawiki, shoinzukuri-jawiki, shibata-ashigaru-nagaya
 Entry: research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html, research/questions/0097-staff-rowhouses-and-barracks-nagaya.html, research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html
 Drawing: research/questions/0097-staff-rowhouses-and-barracks-nagaya.drawing.html, research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html

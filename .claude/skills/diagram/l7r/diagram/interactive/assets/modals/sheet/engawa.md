@@ -19,6 +19,6 @@ a privy; none rings all four faces, the great mansions' form. It is drawn open, 
 
 Name: engawa
 Covers: the veranda strip along the residence's garden face
-Sources: engawa-kotobank, irikawa-kotobank, amado-kotobank, shoinzukuri-kotobank, katsura-rikyu-jawiki, nure-en-width-absence
+Sources: engawa-kotobank, irikawa-kotobank, amado-kotobank, shoinzukuri-kotobank, katsura-rikyu-jawiki
 Entry: research/questions/0102-verandas-and-storm-shutters-engawa-and-amado.html
 Drawing: research/questions/0102-verandas-and-storm-shutters-engawa-and-amado.drawing.html

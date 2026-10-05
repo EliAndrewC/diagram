@@ -58,7 +58,8 @@ Standard features with rough SVG conventions. New diagrams should reuse this voc
 <!-- Research: threshold stones - UNRESEARCHED: the setting's own invention, ~3.3x4.7 ft at Ochiba, a pair flanking the road outside the opening, never in the passage -->
 <!-- Research: divider wall - UNRESEARCHED: ~2 ft true-thickness wall with its own gate -->
 <!-- Research: structures abut walls - research/questions/0092-compound-walls-neribei-and-tsuijibei.drawing.html: ~2 ft off a compound wall, ~1.5 ft off a divider, privies and curbs included -->
-<!-- Research: gatehouse - research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html: freestanding 18 x 12 ft beside the opening, or in the gate range -->
+<!-- Research: gatehouse - research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html, research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html: freestanding 18 x 12 ft beside the opening (Ochiba), or in the gate range (Hayakawa and Ubame 14 ft deep) -->
+<!-- Research: main gate posts - research/questions/0092-compound-walls-neribei-and-tsuijibei.drawing.html: the sheets draw each main-gate post ~2.7-5.3 x 4.7 ft -->
 <!-- Research: threshold wards - research/questions/0240-salt-heaps-at-doorways-morijio.html: a pair outside each opening -->
 
 - **Compound wall** - 4-segment heavy stroke in `#2D2A24`. Draw each side as its own `<line>` so gate-openings are gaps. Don't use a single `<rect>`.
@@ -81,6 +82,8 @@ Standard features with rough SVG conventions. New diagrams should reuse this voc
 <!-- Research: tax archive size - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: sealed kura ~32-36 ft, larger than the ~450 sq ft records store the drawing page caps it at -->
 <!-- Research: tax archive strongroom role - UNRESEARCHED: ledgers plus coin and in-kind valuables in one kura -->
 <!-- Research: stables - research/questions/0108-stables-umaya.html: few-horse umaya ~28-32 x 16-22 ft, 2-4 horses -->
+<!-- Research: stable stall width - research/questions/0108-stables-umaya.drawing.html: all three magistracy sheets draw 3 stalls ~9.3-9.7 ft wide -->
+<!-- Research: stable passage and grooms' quarters - research/questions/0108-stables-umaya.drawing.html: no sheet draws an earth-floored passage before the stalls or quarters for the grooms -->
 <!-- Research: stable below barracks - research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html: stable drawn smaller than the barracks -->
 <!-- Research: cell - research/questions/0096-holding-cells-agariya-and-roya.html: ~12 x 10 ft remand cell, small end of the 6-18 mat span -->
 <!-- Research: barracks - research/questions/0097-staff-rowhouses-and-barracks-nagaya.html, research/questions/0097-staff-rowhouses-and-barracks-nagaya.drawing.html: on-grounds rowhouse or common room, no bunks, ~27-53 ft wide; the county example's range 45 x 34 ft, 34 ft deep -->
@@ -91,6 +94,7 @@ Standard features with rough SVG conventions. New diagrams should reuse this voc
 <!-- Research: practice ground area - UNRESEARCHED: ~90-135 sq ft per drilling samurai -->
 <!-- Research: cart yard as a charcoal fire gap - research/questions/0197-charcoal-yards-and-charcoal-stores.drawing.html, research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: Ubame's cart yard drawn as the charcoal store's fire gap, ~13-14 ft and 29 ft wide -->
 <!-- Research: charcoal bales - research/questions/0199-straw-bales-of-rice-and-charcoal-tawara.drawing.html: Ubame's sheet draws each bale ~6 x 3 ft -->
+<!-- Research: charcoal weighing floor - research/questions/0197-charcoal-yards-and-charcoal-stores.drawing.html: Ubame's sheet draws the weighing floor ~27 ft square -->
 <!-- Research: archery bank - research/questions/0164-drill-grounds-archery-ranges-and-riding-grounds-jiaochang-yaba-baba.html: optional azuchi with a ~90 ft lane -->
 <!-- Research: forecourt - research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html: Hayakawa's sheet labels "forecourt" the strip between the office hall and the inner-court wall, while the open ground just inside the main gate is labeled OUTER COURT -->
 
@@ -110,7 +114,7 @@ Standard features with rough SVG conventions. New diagrams should reuse this voc
 <!-- Research: formal reception room - research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html: zashiki kept even beside an office hall -->
 <!-- Research: senior retainers housed apart - research/questions/0106-the-chief-retainers-house-karo-yashiki.html: karo in a separate house -->
 <!-- Research: suites as labeled zones - CONVENTION: each labeled area compresses several rooms -->
-<!-- Research: engawa - research/questions/0102-verandas-and-storm-shutters-engawa-and-amado.html: ~8 px strip along the garden-facing south face -->
+<!-- Research: engawa - research/questions/0102-verandas-and-storm-shutters-engawa-and-amado.html, research/questions/0102-verandas-and-storm-shutters-engawa-and-amado.drawing.html: ~8 px strip along the garden-facing south face; all three magistracy sheets draw only a ~3 ft strip on the garden face, the faces never rolled as a knob -->
 <!-- Research: genkan - research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html: on the office hall or none with a roji path, a knob; other blocks by informal doors -->
 <!-- Research: genkan porch size - UNRESEARCHED: ~40x14 px, ~13x4.7 ft -->
 <!-- Research: kitchen - research/questions/0107-kitchens-daidokoro.html, research/questions/0107-kitchens-daidokoro.drawing.html: part of the house ~40x33 ft, kamado range, smaller than a living block -->
@@ -193,6 +197,7 @@ A **rear service strip** organizes all of this: the residence's formal garden si
 ### Sacred features
 
 <!-- Research: modest compound shrine - research/questions/0218-the-compounds-own-shrine-yashikigami.html: small wooden hall -->
+<!-- Research: compound shrine tree - research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html: Ochiba's sheet sets its shrine with a garden and no tree beside it -->
 <!-- Research: compound shrine arch - research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html: a torii always drawn nearby, shared by adjacent shrines allowed -->
 <!-- Research: hall shrine ceiling - research/questions/0218-the-compounds-own-shrine-yashikigami.html, research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html: at most ~36x30 ft, under half a residence block -->
 <!-- Research: more than one kami in a hall - research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html: Hayakawa's Fire Dragon hall keeps an Ebisu altar beside its own -->
@@ -230,6 +235,7 @@ A **rear service strip** organizes all of this: the residence's formal garden si
 <!-- Research: canopy glyph - CONVENTION: canopy-green circles on open ground only, touching at most -->
 <!-- Research: road at the gate - research/questions/0088-highways-and-what-lines-them-kaido.drawing.html: sheets draw Ochiba's Imperial road 8 ft, Hayakawa's street and Ubame's road 12 ft -->
 <!-- Research: cart lane to a side gate - research/questions/0088-highways-and-what-lines-them-kaido.drawing.html, research/questions/0082-moving-goods-carts-packhorses-and-river-landings-kashi.drawing.html: sheets draw Ubame's cart lane 9 ft and Hayakawa's 10.7 ft -->
+<!-- Research: notice board size - research/questions/0190-notice-boards-kosatsuba.drawing.html: the sheets draw the gate board ~7 x 3 ft and Ubame's roofed bounty board ~9 x 4 ft -->
 <!-- Research: boundary pillars - research/questions/0083-clan-borders-and-their-markers.drawing.html: Ubame's sheet draws each pillar ~3 x 3.7 ft -->
 
 - **Road to gate** - two stacked paths (solid translucent + dashed darker) for ~150 px into the gate from the appropriate cardinal direction, running OFF the viewBox edge. NO direction caption: every manor road leads to town and thence the Imperial road, so `to the Imperial road` / `to the town's main street` is always-true clutter - the road glyph leaving the map already says a road departs here.

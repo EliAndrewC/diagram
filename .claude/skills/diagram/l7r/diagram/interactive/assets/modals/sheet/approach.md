@@ -26,6 +26,6 @@ a real innermost arch stood from its hall is not recorded.
 
 Name: approach
 Covers: the path from the precinct's edge to the hall
-Sources: chinju-no-mori-jawiki, jinjahoncho-keidai, torii-enwiki, sando-enwiki, kokugakuin-eos-torii, jawiki-torii, sando-jawiki, jinja-jawiki, kudamatsu-stone-torii, kato-kawataka-torii, fushimi-inari-senbon, fushimi-inari-senbon-map, nara-nagao-jinja, village-shrines-where-they-stand-and-how-big-their-grounds-are, rokusha-jinja-fuchu
+Sources: chinju-no-mori-jawiki, jinjahoncho-keidai, torii-enwiki, sando-enwiki, kokugakuin-eos-torii, jawiki-torii, sando-jawiki, jinja-jawiki, kudamatsu-stone-torii, kato-kawataka-torii, fushimi-inari-senbon, fushimi-inari-senbon-map, nara-nagao-jinja, rokusha-jinja-fuchu
 Entry: research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html, research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html, research/questions/0224-ground-swept-clear-around-shrines-and-graves.html, research/questions/0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html, research/questions/0215-village-shrines-where-they-stand-and-how-big-their-grounds-are.html
 Drawing: research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html, research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html, research/questions/0224-ground-swept-clear-around-shrines-and-graves.drawing.html

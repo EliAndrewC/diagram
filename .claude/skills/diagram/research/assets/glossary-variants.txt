@@ -2387,7 +2387,7 @@ mizubune	mizubune
 mizugaki	mizugaki
 mizugashira	mizugashira
 mizuguchi	mizuguchi
-mizujiri	shirimito
+mizujiri	mizujiri
 mizuka	mizuya
 mizunara	mizunara
 mizunoe	mizunoe
@@ -3332,7 +3332,6 @@ shinshu	Jodo Shinshu
 shinshū	Jodo Shinshu
 shirakashi	shirakashi
 shirasu	oshirasu
-shirimito	shirimito
 shironameshi	shironameshi
 shiroyone senmaida	senmaida
 shiso	shiso

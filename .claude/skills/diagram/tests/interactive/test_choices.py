@@ -94,11 +94,15 @@ def test_every_per_settlement_roll_is_a_choice_or_accounted_for() -> None:
     assert not missing, f"rolled per settlement but neither a choice in assets/choices.json nor in its not_choices: {missing}"
 
 
+COMB_ONLY = ("grain_drift", "intake", "plot_size")
+
+
 def test_every_choice_a_hamlet_rolls_reaches_its_map_s_meta() -> None:
     """The plan review of D10, round 2: the card lists only what a map's `meta` records, so a choice the hamlet plan rolls
     and the map never records (`water_sink`, `grain_drift` before this test) is a choice no card could show. Every pool
     hamlet records each rolled choice the table holds, wherever the choice applies to it. The one exception, with why:
-    `grain_drift` turns a COMB field's dry rows, and a polder has none."""
+    `grain_drift`, `intake` and `plot_size` are read only on a COMB field (`hamletgen/water/comb.py` `stage_field` hands a polder to
+    `stage_polder` before any of them), so a polder records none of the three."""
     import re
 
     with open(os.path.join(SKILL, "l7r", "diagram", "hamletgen", "plan.py"), encoding="utf-8") as fh:
@@ -108,7 +112,7 @@ def test_every_choice_a_hamlet_rolls_reaches_its_map_s_meta() -> None:
     assert {"water_sink", "grain_drift", "manure_form"} <= set(owed), "the plan's roll sites are found"
     for meta in _metas():
         polder = meta.get("field_archetype") in ("polder_grid", "mulberry_dike_fishpond")
-        missing = [k for k in owed if choices.applies(table[k], meta) and meta.get(k) is None and not (k == "grain_drift" and polder)]
+        missing = [k for k in owed if choices.applies(table[k], meta) and meta.get(k) is None and not (k in COMB_ONLY and polder)]
         assert not missing, f"{meta.get('name')}: rolled but not recorded in meta: {missing} - write `s.M['meta'][<key>]` where the value is settled"
 
 

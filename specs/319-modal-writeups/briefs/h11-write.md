@@ -25,6 +25,7 @@ The conflicts, as the checks reported them:
 - 0028 drawing says the maps' wells are shared ones, not one to a farm; 0033 drawing rolls a row's water own (a well at every farm) or shared at even odds - make 0028.drawing say the shared well holds except where a row village rolls its own
 - 0019 drawing: the dike-top row's three rules the engine follows (each house on a widened stretch of crest, no house over a sluice notch, no yard or garden on the crest - settlement/land/dikes.py dike_top_houses, UNRESEARCHED) are on no drawing page; record them as how our maps draw it, each a guess where no source says so
 - water town: no drawing page records how a water town is drawn (houses alternating bank to bank, evenly spaced, beside their fields - settlement seeds waterfront_seeds, UNRESEARCHED); add a section to 0082.drawing stating it, as a guess
+- 0236: the country monk performing a hamlet's funerary rites (canon) is on 0236's drawing page only; put it on the question page (canon, no citation)
 
 ## The procedure (session 1: write)
 

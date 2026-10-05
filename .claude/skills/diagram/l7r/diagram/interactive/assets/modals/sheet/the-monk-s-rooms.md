@@ -18,7 +18,7 @@ Guesses:
   the dwelling is reckoned from the farmhouse it resembled.
 
 Depiction: The plan draws the monk's rooms at one end of the one building, under the same roof as the villagers' hall,
-because at a village shrine one building serves as both the monk's home and the place the villagers come to; a hall and
+with the hall between them and the kitchen end, because at a village shrine one building serves as both the monk's home and the place the villagers come to; a hall and
 dwelling under one roof is on record, though rarely. The district's registers are kept in a writing room in the dwelling,
 so no office building is drawn.
 

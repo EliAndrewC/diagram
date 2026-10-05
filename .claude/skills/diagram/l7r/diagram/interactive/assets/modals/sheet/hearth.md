@@ -25,6 +25,6 @@ hearth in the kitchen.
 
 Name: hearth
 Covers: the fire glyph in each kitchen
-Sources: liq-takayasu-daidokoro, irori-jawiki, samurai-irori-absence, boso-no-mura-takei, board-kamado-absence, cleanup-edo-hettsui
+Sources: liq-takayasu-daidokoro, irori-jawiki, boso-no-mura-takei, cleanup-edo-hettsui
 Entry: research/questions/0107-kitchens-daidokoro.html
 Drawing: research/questions/0107-kitchens-daidokoro.drawing.html

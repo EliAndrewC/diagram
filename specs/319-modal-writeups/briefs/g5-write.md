@@ -13,7 +13,7 @@ protected a VILLAGE grove, what a village could take from it, how tall and dense
 before you cite it - `make archive-find` first, then `make source-pages`, then the `source-reader` agent from a bundle on every
 passage you will quote, in the FOREGROUND; the translations below are the pass's and must be your own, marked as translations):
 
-- 卞利《明清时期徽州森林保护禁碑研究》 (Anhui University Huizhou Studies Centre), open PDF at
+- 卞利《明清时期徽州森林保护禁碑研究》 (Anhui University Huizhou Studies Center), open PDF at
   `https://crlhd.xmu.edu.cn/virtual_attach_file.vsb?...oid=2097398489&tid=1037&nid=5175&e=.pdf` (find the full URL by
   searching the title; the pass reached it from a first search result). Ming-Qing Huizhou village and lineage groves (water
   mouth, dragon hill, tomb shade), thirty steles mostly Qianlong to Daoguang. Passages:

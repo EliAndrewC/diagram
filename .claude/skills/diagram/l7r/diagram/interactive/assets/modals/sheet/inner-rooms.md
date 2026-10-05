@@ -21,6 +21,6 @@ the reception, beyond the master's and the family's rooms, in the palace's order
 
 Name: inner rooms
 Covers: the innermost bay of the residence, its floor and its label
-Sources: shirobito-612-omote-oku, edojo-kotobank, aizu-bukeyashiki-jawiki, butsuma-kotobank, household-altar-rooms-and-ancestral-tablets-butsuma-and-ihai, touken-world-buke-madori, liq-takayasu-daidokoro
+Sources: shirobito-612-omote-oku, edojo-kotobank, aizu-bukeyashiki-jawiki, butsuma-kotobank, touken-world-buke-madori, liq-takayasu-daidokoro
 Entry: research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html, research/questions/0239-household-altar-rooms-and-ancestral-tablets-butsuma-and-ihai.html, research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html, research/questions/0107-kitchens-daidokoro.html
 Drawing: research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html, research/questions/0239-household-altar-rooms-and-ancestral-tablets-butsuma-and-ihai.drawing.html

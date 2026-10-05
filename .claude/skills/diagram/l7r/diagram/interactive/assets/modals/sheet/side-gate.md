@@ -29,6 +29,6 @@ the household lives.
 
 Name: side gate
 Covers: the posts of the posterns, service gates, landing gate, cart gate and guests' door
-Sources: jaanus-uchigenkan, kotobank-katteguchi, tajima-2007-night-soil, guernica-night-soil, l7r-wagons, toyama-1988-road-undevelopment, kominkai-genkan, fuchu-joge-pamphlet, gate-width-absence, gangi-hiroshima-jawiki
+Sources: jaanus-uchigenkan, kotobank-katteguchi, tajima-2007-night-soil, guernica-night-soil, l7r-wagons, toyama-1988-road-undevelopment, kominkai-genkan, fuchu-joge-pamphlet, gangi-hiroshima-jawiki
 Entry: research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html, research/questions/0101-privies-setchin.html, research/questions/0082-moving-goods-carts-packhorses-and-river-landings-kashi.html, research/questions/0081-village-lanes.html, research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html, research/questions/0176-wharves-and-landings-piers-quays-and-stepped-landings-kashi-gangi.html
 Drawing: research/questions/0101-privies-setchin.drawing.html, research/questions/0082-moving-goods-carts-packhorses-and-river-landings-kashi.drawing.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html, research/questions/0176-wharves-and-landings-piers-quays-and-stepped-landings-kashi-gangi.drawing.html

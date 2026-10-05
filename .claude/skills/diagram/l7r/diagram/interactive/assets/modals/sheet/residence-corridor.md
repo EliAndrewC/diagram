@@ -20,6 +20,6 @@ veranda.
 
 Name: residence corridor
 Covers: the covered corridors between a residence's blocks, and from its kitchen to the house
-Sources: watariroka-kotobank, irikawa-kotobank, boso-no-mura-takei, katsura-rikyu-jawiki, how-our-maps-lay-out-the-residence, kitchen-two-doors-absence
+Sources: watariroka-kotobank, irikawa-kotobank, boso-no-mura-takei, katsura-rikyu-jawiki
 Entry: research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html, research/questions/0107-kitchens-daidokoro.html
 Drawing: research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html, research/questions/0107-kitchens-daidokoro.drawing.html

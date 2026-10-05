@@ -27,6 +27,6 @@ second small shrine - and each altar is drawn as a feature of its own, as is any
 
 Name: compound shrine
 Covers: the shrine hall or halls, their edging and dividing rail, and the shrine labels
-Sources: fuchu-joge-pamphlet, henan-neixiang, neixiang-yamen-zhwiki, kotobank-yashikigami, jawiki-yashikigami, tokushima-yashikigami, boso-no-mura-takei, kotobank-aidono, jawiki-saijin, jawiki-goshi, ehime-pref-honden-56, saitama-kannonji-kannondo, nagare-zukuri-enwiki, the-compounds-own-shrine-yashikigami, shrine-garden-absence, how-our-maps-size-a-compound-and-its-buildings
+Sources: fuchu-joge-pamphlet, henan-neixiang, neixiang-yamen-zhwiki, kotobank-yashikigami, jawiki-yashikigami, tokushima-yashikigami, boso-no-mura-takei, kotobank-aidono, jawiki-saijin, jawiki-goshi, ehime-pref-honden-56, saitama-kannonji-kannondo, nagare-zukuri-enwiki
 Entry: research/questions/0218-the-compounds-own-shrine-yashikigami.html, research/questions/0219-household-shrines-yashikigami.html, research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html, research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html
 Drawing: research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html, research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html, research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html, research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html

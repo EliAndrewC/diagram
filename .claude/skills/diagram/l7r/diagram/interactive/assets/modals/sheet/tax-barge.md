@@ -12,8 +12,8 @@ being a tenth of a koku, by time and place. Today's 132 lb (60 kg) rice bale is 
 Guesses:
 - The size of a bale before modern times: none was found measured; scaled from what the recorded bales held, one would be within
   a tenth of today's size.
-- That a county's grain went downriver on boats hired for the run, as the shogunate's rice went by sea on hired ships: a
-  county's rice is known to have gone to a river landing to be shipped, but no account says whose boats carried it.
+- That a county's grain went downriver on boats hired for the run, as the shogunate's rice went by sea on hired ships: tax
+  rice is known to have been carried to river landings to be shipped, but no account says whose boats took it on.
 
 Depiction: The plan draws the barge about 47 by 7 ft, within the river boats' recorded range, lying along the bank and tied to
 it. The bales aboard are drawn about 4 ft long so that they read; a real rice bale was about 2.5 ft long.

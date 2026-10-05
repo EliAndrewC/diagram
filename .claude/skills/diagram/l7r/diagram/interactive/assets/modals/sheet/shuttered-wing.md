@@ -14,6 +14,6 @@ Depiction: The plan draws the wing darker than the rest of the house, with its s
 Form: particular
 Name: shuttered wing
 Covers: the shuttered bay, its shutters and its labels
-Sources: amado-kotobank, shut-wing-absence
+Sources: amado-kotobank
 Entry: research/questions/0102-verandas-and-storm-shutters-engawa-and-amado.html
 Drawing: research/questions/0102-verandas-and-storm-shutters-engawa-and-amado.drawing.html

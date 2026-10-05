@@ -23,6 +23,6 @@ monk who keeps the shrine.
 
 Name: sanctuary
 Covers: the sanctuary behind the hall
-Sources: jaanus-honden, jaanus-haiden, jawiki-saijin, kotobank-aidono, nagarezukuri-jawiki, nagare-zukuri-enwiki, shinto-architecture-jawiki, ehime-pref-honden-56, hie-jinja-kurihara-jawiki, iwashimizu-mizugaki, iwakiyama-mizugaki, shrine-woods-and-fences-chinju-no-mori-tamagaki, shinshiro-yahira-jinja, shirahata-jinja-tamagaki
+Sources: jaanus-honden, jaanus-haiden, jawiki-saijin, kotobank-aidono, nagarezukuri-jawiki, nagare-zukuri-enwiki, shinto-architecture-jawiki, ehime-pref-honden-56, hie-jinja-kurihara-jawiki, iwashimizu-mizugaki, iwakiyama-mizugaki, shinshiro-yahira-jinja, shirahata-jinja-tamagaki
 Entry: research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html, research/questions/0215-village-shrines-where-they-stand-and-how-big-their-grounds-are.html, research/questions/0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html
 Drawing: research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html, research/questions/0215-village-shrines-where-they-stand-and-how-big-their-grounds-are.drawing.html, research/questions/0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.drawing.html
