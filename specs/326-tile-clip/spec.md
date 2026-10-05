@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-05
 
-**Status**: Draft - Amendment 1 (2026-10-05, the GM: "yes please" - clipping only, at 3 x 3; request.md)
+**Status**: Draft - Amendment 2 (2026-10-05, the GM: visually identical accepted, request.md); Amendment 1 (2026-10-05, the GM: "yes please" - clipping only, at 3 x 3; request.md)
 
 **Input**: the GM's request, verbatim in `request.md`: *"sure, go shead and file that as a feature and then work the feaure, thanks"* -
 the session's proposal quoted there: clip each tile's map to its own window, and render more, smaller tiles. Amendment 1 (the GM,
@@ -28,13 +28,14 @@ rule the page already uses to drop the ink outside the whole map.
 
 **Why this priority**: the first half of the proposal.
 
-**Independent Test**: a tile's document is smaller than the whole map's; the picture from clipped tiles is byte-identical to the picture
-from unclipped tiles (today's).
+**Independent Test**: a tile's document is smaller than the whole map's; the picture from clipped tiles is visually identical to the picture
+from unclipped tiles (today's), measured (SC-003).
 
 **Acceptance Scenarios**:
 
 1. **Given** a tiled picture, **When** a tile is rendered, **Then** its document lacks the elements wholly outside its window, and
-   the stitched picture equals the one stitched from unclipped tiles.
+   the stitched picture is visually identical to the one stitched from
+   unclipped tiles (SC-003).
 
 ---
 
@@ -51,7 +52,7 @@ picture byte-identical. The GM chose clipping only, at 3 x 3 (request.md, Amendm
 **Acceptance Scenarios**:
 
 1. **Given** the reference render, **When** it is rendered, **Then** it is 3 x 3 as today, its peak at SC-002's target, its
-   render span within the bound in SC-002, and its picture byte-identical to today's.
+   render span within the bound in SC-002, and its picture visually identical to today's (SC-003).
 
 ---
 
@@ -77,7 +78,9 @@ The note at `TILE_MPX` claims the stitched picture is the single render pixel fo
 - **FR-001**: Each tile's document MUST omit the classed elements wholly outside its window by the page's own rule (`drop_offmap`,
   its margin included), and nothing else.
 - **FR-002** (Amendment 1): The tile grid MUST stay as it is (`TILE_MPX` unchanged, 3 x 3 on the reference render).
-- **FR-003**: Every picture MUST be byte-identical to before - checked on every live pool map, clipped tiles against unclipped.
+- **FR-003** (Amendment 2): Every picture MUST be visually identical to before - checked on every live pool map, clipped tiles against
+  unclipped: identical, or differing only by the renderer's anti-aliasing on a trimmed path (a few dozen channel values, a few levels),
+  the counts recorded.
 - **FR-005** (Amendment 1): The note at `TILE_MPX` MUST state what tiling does to the pixels as measured (research.md R3), not that
   the stitched picture is the single render pixel for pixel.
 - **FR-004**: No map's content moves; no test may fail that passed before.
@@ -94,14 +97,15 @@ The note at `TILE_MPX` claims the stitched picture is the single render pixel fo
   within 3.81 s - feature 324's mean span 3.41 s plus 0.4 s (observed 2026-10-05, method:
   process-tree sampling at 50 ms, feature 324 research.md R3, and this feature's research.md R2:
   unclipped 551 / 528 MB and 3.13 / 3.22 s, clipped 371 / 365 MB and 3.57 / 3.37 s; the bounds are targets).
-- **SC-003** (FR-003, Amendment 1): every live pool map's picture rendered with clipped tiles equals its picture rendered with
-  unclipped tiles - today's picture - byte for byte (rendered whole it differs by tiling's own tiny seam differences, R3).
+- **SC-003** (FR-003, Amendment 2): every live pool map's picture from clipped tiles against its picture from unclipped tiles, each
+  difference counted (observed 2026-10-05, method: research.md R4 - 3 of the 5 tiled maps identical, 2 differing in 34 and 29
+  channel values of 20+ million pixels, at most 10 levels); a difference beyond that kind - a lost or moved element - fails it.
 - **SC-005** (FR-005): the note at `TILE_MPX` carries R3's measurement.
 - **SC-004** (FR-004): `make done` green.
 
 ## Decisions Recorded *(mandatory for any feature that changes what a map draws or states)*
 
-None: no map draws or states anything differently; the picture is byte-identical.
+None: no map draws or states anything differently; the picture is visually identical (SC-003).
 
 ## Assumptions
 
@@ -122,3 +126,5 @@ None: no map draws or states anything differently; the picture is byte-identical
   (R2 measured a small further saving, every finer grid over the span bound) - corrected; round 3 NOT-REVIEWABLE (that sentence's
   figure unlabeled) - labeled, no round used.
 - Amendment 1, round 3 (verify, 2026-10-05): FAITHFUL - round 2's item resolved; the amendment accepted.
+- Amendment 2 (2026-10-05): the pool check found trimming not byte-identical on 2 maps (anti-aliasing, R4); the GM chose it as visually
+  identical over whole-line clipping. FR-003 and SC-003 rewritten. The amendment resets the review count.

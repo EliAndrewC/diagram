@@ -27,12 +27,14 @@ tested directly.
 finer grids saved 10-20 MB more and broke the span bound, and moved tiling's seam differences (R3); the GM chose clipping only, at
 3 x 3. SC-002 is the clipped-against-unclipped A/B of R2.
 
-**D3 - Byte identity on the pool (FR-003).** A one-shot run over every live pool map's picture text: the picture from clipped tiles
-against the picture from unclipped tiles (today's), byte for byte, recorded in research.md.
+**D3 - Visual identity on the pool (FR-003, Amendment 2).** A one-shot run over every live pool map's picture text: the picture from
+clipped tiles against the picture from unclipped tiles (today's), each difference counted and bisected to its cause, recorded in
+research.md (R4).
 
 **D5 - Feature 223's note (FR-005, Amendment 1).** The note at `TILE_MPX` says what R3 measured: the stitched picture differs from the
 single render by tiling's own seam differences - 4,319 pixels on the reference render at 3 x 3, most (about 80%) within two levels,
-none above 39 (research.md R3) - which is why a grid change is never byte-identical; the clip changes no pixel.
+none above 39 (research.md R3) - which is why a grid change is never byte-identical; and that the clip is visually identical but
+can move anti-aliasing slightly on a trimmed path (R4, Amendment 2).
 
 **D4 - Research claims.** `tile_doc` inherits the module's claims; owed `impl-drift` only if `make claims-owed` says so.
 
@@ -47,5 +49,5 @@ none above 39 (research.md R3) - which is why a grid change is never byte-identi
 
 ## Constitution Check
 
-No map draws or states anything differently; output byte-identical (no Decisions Recorded entries). Not a research question.
+No map draws or states anything differently; output visually identical, measured (no Decisions Recorded entries). Not a research question.
 100% coverage for the new lines from the tests above.

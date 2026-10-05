@@ -4,7 +4,7 @@
 
 ## Occasions
 
-- none: no map draws or places anything differently - the picture is byte-identical (spec, Decisions Recorded)
+- none: no map draws or places anything differently - the picture is visually identical, measured (spec, Decisions Recorded)
 
 ## Tasks
 

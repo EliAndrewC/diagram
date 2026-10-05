@@ -36,3 +36,16 @@ answering the session's measured recommendation, verbatim:
 > comment to state the measured truth, and leave the tiling itself alone, since the differences are invisible.
 >
 > Shall I amend it that way and land it?
+
+## Amendment 2 (2026-10-05) - the GM, verbatim
+
+> I'm okay with A given the savings and the fact that it is visually identical, so let's go with that, thanks
+
+answering the session's report, verbatim:
+
+> | option | saves | output | time |
+> |---|---|---|---|
+> | **A. Trim clip** (what you approved) | ~170 MB | differs from today on 2 of the 11 pool maps, by 29-34 color values in 20+ million pixels, max 10 levels out of 255 (the renderer's anti-aliasing precision moving when a path is trimmed); invisible | ~+0.3 s |
+> | **B. Whole-line clip** | ~130 MB | byte-identical on every pool map | ~+0.3-0.6 s, likely reducible by parsing each line's extent once instead of once per tile |
+>
+> The spec requires byte-identical output, so A can't land as written. You'd have to accept "visually identical, measured" instead.

@@ -48,3 +48,17 @@ stitched in-process and compared with the single render: the clipped and unclipp
 stitched picture "is the single render pixel for pixel" held only on its test's tiny synthetic page. A new grid moves these
 differences, so a grid change cannot leave the picture byte-identical to today's. The clip cost (`tile_doc` in Python, measured in
 the same test): 0.89 s for 9 tiles, 1.47 s for 16, 2.04 s for 25.
+
+## R4 - The pool, clipped against unclipped (2026-10-05)
+
+Observed 2026-10-05, method: every live pool map's picture input captured during a `make render-sync` in the clone, each rendered
+from clipped and from unclipped tiles and the JPEGs compared byte for byte: 6 of the 11 render as one tile (nothing clipped); of
+the 5 tiled, 3 identical and 2 different. Bisecting the changed lines found the cause in both: a classed line whose far subpaths
+the clip trimmed (a woodland-commons blob path; a perimeter dike's planted group) - not a lost element: the tile's pixels against
+the unclipped tile's differ in 34 and 29 channel values of 20+ million pixels, at most 10 and 4 levels. Trimming a path moves
+resvg's anti-aliasing slightly.
+
+Observed 2026-10-05, method: the same check with WHOLE-line clipping (a classed line dropped only when nothing of it survives the
+off-map rule, otherwise kept untouched): all 5 tiled maps byte-identical; on the reference render, peak 420 / 393 MB against
+537 / 533 MB unclipped (about 130 MB less, against trimming's about 170 MB), render span 4.36 / 3.99 s against 3.25 / 3.82 s
+under load. The GM chose trimming (Amendment 2): visually identical, the larger saving.
