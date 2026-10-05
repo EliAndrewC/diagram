@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-05
 
-**Status**: Draft
+**Status**: Draft - Amendment 1 (2026-10-05, the GM: "yes please" - clipping only, at 3 x 3; request.md)
 
 **Input**: the GM's request, verbatim in `request.md`: *"sure, go shead and file that as a feature and then work the feaure, thanks"* -
 the session's proposal quoted there: clip each tile's map to its own window, and render more, smaller tiles.
@@ -34,18 +34,30 @@ rule the page already uses to drop the ink outside the whole map.
 
 ---
 
-### User Story 2 - Smaller tiles (Priority: P1)
+### User Story 2 - The grid stays 3 x 3 (Priority: P1) - Amendment 1
 
-The picture is cut into more, smaller tiles, the grid chosen by measurement.
+The grid is not changed. Measured (research.md R2, R3): with the clip in place the peak is no longer set by the tiles, so finer grids
+save 10-20 MB more while breaking the span bound, and a new grid moves tiling's tiny seam differences, so no finer grid can leave the
+picture byte-identical. The GM chose clipping only, at 3 x 3 (request.md, Amendment 1).
 
-**Why this priority**: the second half - the larger lever (R1).
+**Why this priority**: the GM's ruling on the shortfall SC-002 sent them.
 
-**Independent Test**: the render's peak and span on the reference render at each candidate grid.
+**Independent Test**: `TILE_MPX` unchanged; the reference render's peak and span, clipped against unclipped.
 
 **Acceptance Scenarios**:
 
-1. **Given** the reference render, **When** it is rendered with the chosen grid, **Then** it is finer than feature 324's 3 x 3, its peak
-   lower by about the approved 150 MB, and its render span within the bound in SC-002.
+1. **Given** the reference render, **When** it is rendered, **Then** it is 3 x 3 as today, its peak about 150 MB or more lower, its
+   render span within the bound in SC-002, and its picture byte-identical to today's.
+
+---
+
+### User Story 3 - Feature 223's note says what tiling does (Priority: P2) - Amendment 1
+
+The note at `TILE_MPX` claims the stitched picture is the single render pixel for pixel; it states the measured truth instead.
+
+**Why this priority**: a pre-existing claim found false, corrected where found (research.md R3).
+
+**Independent Test**: the note reads R3's measurement.
 
 ### Edge Cases
 
@@ -60,9 +72,10 @@ The picture is cut into more, smaller tiles, the grid chosen by measurement.
 
 - **FR-001**: Each tile's document MUST omit the classed elements wholly outside its window by the page's own rule (`drop_offmap`,
   its margin included), and nothing else.
-- **FR-002**: The tile grid MUST be finer than feature 324's 3 x 3, chosen by measurement among the finer grids (4 x 4, 5 x 5 and
-  finer as measured): the lowest render peak whose render span is within the SC-002 bound.
-- **FR-003**: Every picture MUST be byte-identical to before - checked on every live pool map.
+- **FR-002** (Amendment 1): The tile grid MUST stay as it is (`TILE_MPX` unchanged, 3 x 3 on the reference render).
+- **FR-003**: Every picture MUST be byte-identical to before - checked on every live pool map, clipped tiles against unclipped.
+- **FR-005** (Amendment 1): The note at `TILE_MPX` MUST state what tiling does to the pixels as measured (research.md R3), not that
+  the stitched picture is the single render pixel for pixel.
 - **FR-004**: No map's content moves; no test may fail that passed before.
 
 ## Success Criteria *(mandatory)*
@@ -71,13 +84,12 @@ The picture is cut into more, smaller tiles, the grid chosen by measurement.
 
 - **SC-001** (FR-001): the tiles' documents together are smaller than the whole map times the tile count, measured on the reference
   render; a test holds that a clipped tile drops what lies outside its window and the stitched picture equals the single render.
-- **SC-002** (FR-002): on the reference render, the chosen grid's peak meets the approved outcome - about 150 MB lower, to roughly
-  425 MB - with its render span no more than 0.4 s over feature 324's mean (observed 2026-10-05, method: process-tree sampling at
-  50 ms, feature 324 research.md R3: peaks 571 / 580 MB, spans 3.60 / 3.21 s, mean 3.41 s - so the bound is 3.81 s; 425 MB and
-  150 MB are the proposal's estimate, the 0.4 s a target). If no finer grid keeps the span within the bound, or the measured saving
-  falls clearly short of the approved figure (under 100 MB), the measurements go to the GM in the landing report: it is not settled
-  by keeping 3 x 3 or by shipping a smaller saving as if it were the one approved.
-- **SC-003** (FR-003): every live pool map's picture rendered with the change equals its picture rendered whole (one tile).
+- **SC-002** (FR-002, Amendment 1): on the reference render, clipped against unclipped at 3 x 3 alternated, the peak is about 150 MB
+  or more lower and the render span within 3.81 s (observed 2026-10-05, method: process-tree sampling at 50 ms, research.md R2:
+  unclipped 551 / 528 MB and 3.13 / 3.22 s, clipped 371 / 365 MB and 3.57 / 3.37 s; the bounds are targets).
+- **SC-003** (FR-003, Amendment 1): every live pool map's picture rendered with clipped tiles equals its picture rendered with
+  unclipped tiles - today's picture - byte for byte (rendered whole it differs by tiling's own tiny seam differences, R3).
+- **SC-005** (FR-005): the note at `TILE_MPX` carries R3's measurement.
 - **SC-004** (FR-004): `make done` green.
 
 ## Decisions Recorded *(mandatory for any feature that changes what a map draws or states)*
@@ -93,5 +105,7 @@ None: no map draws or states anything differently; the picture is byte-identical
 
 - Round 1 (initial acceptance, MODE 2, 2026-10-05): CHANGES REQUIRED - FR-002 could keep 3 x 3, SC-002 set half the approved
   saving with no consequence, and its span bound named no reference. Applied: finer grids only, the approved outcome as the target,
-  a shortfall reported to the GM, the bound from feature 324's mean span (3.81 s). The classed-only carve-out ruled LEGITIMATE.
+  a shortfall reported to the GM, the bound from feature 324's mean span. The classed-only carve-out ruled LEGITIMATE.
 - Round 2 (initial acceptance, verify, 2026-10-05): FAITHFUL - both round-1 items fixed; nothing new introduced.
+- Amendment 1 (2026-10-05): the GM chose clipping only, at 3 x 3 (request.md) after SC-002's shortfall report; FR-002, SC-002,
+  SC-003 rewritten, FR-005 / SC-005 added (feature 223's note). The amendment resets the review count.

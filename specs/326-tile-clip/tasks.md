@@ -10,7 +10,7 @@
 
 - [ ] T01 the clip per tile (tile_doc) and its tests (D1, D4, FR-001, SC-001)
       research: rendering
-- [ ] T02 the grid by measurement - 3x3, 4x4, 5x5 on the reference render - and TILE_MPX set with its measurement (D2, FR-002, SC-002)
+- [ ] T02 the grid measured (4x4 to 7x7 against 3x3) and, by Amendment 1, kept at 3x3; the clipped-against-unclipped A/B; feature 223's note corrected (D2, D5, FR-002, FR-005, SC-002, SC-005)
       research: rendering
 - [ ] T03 byte identity over every live pool map's picture, recorded (D3, FR-003, SC-003)
       research: rendering

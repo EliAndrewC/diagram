@@ -21,3 +21,30 @@ Observed 2026-10-05, method: reading `page.py` `write_html` - the picture is ren
 raster.without_text("\n".join(wrapped)))`), one record string a line, a classed string wrapped in `<g class="f ...">`; the page
 already clips classed strings to the whole viewBox (`drop_offmap`, feature 200) and leaves the sheet and unclassed strings whole.
 The standalone measurement clipped the PNG's SVG instead, so the pipeline's own numbers are taken in T03.
+
+## R2 - The grids in the pipeline (2026-10-05, after T01)
+
+Observed 2026-10-05, method: the 50 ms process-tree sampler over the rendered 20-household hamlet (seed 4), `TILE_MPX` set to give
+each grid, two interleaved rounds, load 3-5 (the container's other session working):
+
+| grid, clipped (observed 2026-10-05, method: as above) | peak | render span |
+|---|---|---|
+| 3 x 3 | 367 / 372 MB | 3.51 / 4.51 s |
+| 4 x 4 | 363 / 352 MB | 7.85 / 4.90 s |
+| 5 x 5 | 350 / 349 MB | 6.03 / 5.98 s |
+| 6 x 6 | 352 / 348 MB | 7.88 / 6.91 s |
+| 7 x 7 | 350 / 352 MB | 9.53 / 11.02 s |
+
+Observed 2026-10-05, method: the same sampler, unclipped against clipped 3 x 3 alternated on a normal machine (each run ~9.5 s):
+unclipped peak 551 / 528 MB, span 3.13 / 3.22 s; clipped peak 371 / 365 MB, span 3.57 / 3.37 s. With the clip the peak is set by the
+generator process and the stitch child, not the tiles, so finer grids save 10-20 MB more and every one breaks the 3.81 s span bound.
+
+## R3 - What tiling and clipping do to the pixels (2026-10-05)
+
+Observed 2026-10-05, method: a one-shot test on the picture's own input text (captured from that render), each grid's tiles
+stitched in-process and compared with the single render: the clipped and unclipped tiles give the same canvas at 3 x 3, 4 x 4 and
+5 x 5 - the clip changes no pixel. Tiling itself does: 4,319 pixels differ from the single render at 3 x 3 (6,037 at 4 x 4, 7,765 at
+5 x 5), 482 of them within 2 px of a seam; by level 1: 2,344, 2: 1,108, 3: 206, ..., none above 39. Feature 223's note that the
+stitched picture "is the single render pixel for pixel" held only on its test's tiny synthetic page. A new grid moves these
+differences, so a grid change cannot leave the picture byte-identical to today's. The clip cost (`tile_doc` in Python, measured in
+the same test): 0.89 s for 9 tiles, 1.47 s for 16, 2.04 s for 25.

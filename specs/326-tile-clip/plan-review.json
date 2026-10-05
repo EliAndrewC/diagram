@@ -1,0 +1,45 @@
+{
+ "feature": "326-tile-clip",
+ "plan_sha256": "3b43b54673bd1b32e6c18d47e866b608eec2f1a4bba8e5e91c381183d4f8d062",
+ "reviewed": "2026-10-05",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "In the tiled path of raster.picture, each tile's text has every line starting with '<g class=\"f ' passed through drop_offmap against the tile's box; every other line untouched; held in a tile_doc wrapper.",
+   "class": "within",
+   "why": "FR-001 verbatim: the page's own rule (drop_offmap, OFFMAP_MARGIN included) applied to the classed strings only, and nothing else. The line prefix is how page.wrap opens a classed string (_open), so it selects what write_html already clips by tag. The one way the type allows a gap (a Parts tag whose first piece is unclassed) leaves that line whole - under-clipping, never a changed pixel - and no classifier was found producing one. Single-tile and fractional-zoom renders keep their own untouched branch (the spec's edge cases)."
+  },
+  {
+   "id": "D2",
+   "summary": "Grid chosen on the 20-household seed-4 hamlet with D1 in place: peak and span at 4x4, 5x5, 6x6 (two runs each, 3x3 clipped as reference); pick the lowest peak with span <= 3.81 s; TILE_MPX set to land the reference there; none qualifying or a saving under 100 MB goes to the GM.",
+   "class": "within",
+   "why": "Is FR-002 and SC-002's rule as accepted: finer grids only, lowest peak within the 3.81 s bound, the shortfall to the GM rather than settled by keeping 3x3. The candidate list brackets the GM's own named 5x5. One condition the spec's 'and finer as measured' carries: if 6x6 is the pick, it is not yet shown to be the lowest among the finer grids, and 7x7 is measured before TILE_MPX is set. tasks.md T02 lists 3x3, 4x4, 5x5 and drops the plan's 6x6 - the task must match the plan."
+  },
+  {
+   "id": "D3",
+   "summary": "One-shot run over every live pool map: tiled picture against tiles=1, recorded in research.md.",
+   "class": "within",
+   "why": "SC-003 literally (equal to the picture rendered whole), which carries FR-003 because the single-render branch is untouched."
+  },
+  {
+   "id": "D4",
+   "summary": "tile_doc inherits the module's Research claims; impl-drift only if make claims-owed asks.",
+   "class": "within",
+   "why": "Project process, no change to what is asked."
+  },
+  {
+   "id": "Tests",
+   "summary": "tile_doc drops an outside classed line, keeps an inside one, never touches an unclassed line; a corner-ink tiled picture equals its single render; existing tiled-equals-single and tile_count tests updated to the new TILE_MPX.",
+   "class": "within",
+   "why": "Enforcement of FR-001 and SC-001's test half; nothing else is verified."
+  },
+  {
+   "id": "Bookends",
+   "summary": "Both perf bookends taken back to back at the end (start in a detached worktree at b8b20e690, perf-gate in the clone), in a window arranged with the other session.",
+   "class": "within",
+   "why": "Constitution VI's standing process and SC-004's make done; adds no scope to the request."
+  }
+ ],
+ "verdict": "CLEAR"
+}
