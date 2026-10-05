@@ -16,7 +16,7 @@ A map's picture is rendered as tiles, three at a time since feature 324, each by
 window changed. Measured standalone (research.md R1, observed 2026-10-05, method: resvg under `/usr/bin/time`): a 3 x 3 tile holds
 ~103 MB; clipped to its window ~79 MB on average; a 5 x 5 tile clipped ~52 MB. Most of a tile's memory scales with its pixels, so the
 proposal paired clipping with smaller tiles: the render's peak from ~575 MB to roughly 425 MB at about today's render time. Measured in
-the pipeline (research.md R2), clipping alone did more, and smaller tiles saved only 10-20 MB more while every finer grid broke the
+the pipeline (research.md R2, observed 2026-10-05, method: the 50 ms process-tree sampler), clipping alone did more, and smaller tiles saved only 10-20 MB more while every finer grid broke the
 3.81 s span bound; Amendment 1 keeps the 3 x 3 grid.
 
 ## User Scenarios & Testing *(mandatory)*
@@ -119,4 +119,5 @@ None: no map draws or states anything differently; the picture is byte-identical
 - Amendment 1, round 1 (2026-10-05): NOT-REVIEWABLE (two unlabeled figures; three passages still equated tiled and single
   renders) - fixed, no round used. Then CHANGES REQUIRED: SC-002 targeted the superseded saving - set to the approved one.
 - Amendment 1, round 2 (verify): item resolved; CHANGES REQUIRED on a new Context sentence that said smaller tiles saved nothing more
-  (R2: 10-20 MB more, every finer grid over the span bound) - corrected.
+  (R2 measured a small further saving, every finer grid over the span bound) - corrected; round 3 NOT-REVIEWABLE (that sentence's
+  figure unlabeled) - labeled, no round used.
