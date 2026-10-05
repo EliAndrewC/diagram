@@ -45,9 +45,13 @@ moves tiling's seam differences, specs/326 R2-R3); clipping whole lines only (by
 the GM chose trimming, which is visually but not byte-identical, specs/326 R4); choosing the worker count from the load
 at launch (the GM: the load "can go from very low to very high very quickly", the Makefile note).
 
-If render time is the ask, the honest starting points that cost NO memory: `tile_doc`'s Python (~0.9 s of CPU per render
-at 3 x 3, run once per tile - parsing each line's extent once instead would cut most of it, specs/326 R3), and the
-stitch's JPEG encode of a 32-megapixel picture.
+If render time is the ask: feature 327 already took the clip's no-memory saving - each line's extent parsed once per picture
+(`raster.prepare_doc`), the clip's CPU ~0.9 -> ~0.12 s, the render span 3.55 -> 3.21 s - and found that a faster clip lets the
+tiles start together and RAISES the peak unless the renders are capped; `raster.RESVG_SLOTS` (four resvg processes per
+process) holds it level (374.6 -> 370.6 MB mean; specs/327-lean-site-fast-clip R3). Raising that cap is a time-for-memory trade
+like the rows above. The next no-memory starting point is the stitch's JPEG encode of a 32-megapixel picture. The record site's
+build holds its pages as UTF-8 since feature 327 (`site.SiteFiles`, the single page built as bytes): its peak 236 -> 165 MB, its
+result 148 -> 84 MB.
 
 ## Shape one: a per-candidate scan of geometry that does not change during the scan
 
