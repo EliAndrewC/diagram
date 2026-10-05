@@ -1339,6 +1339,8 @@ hanchō	hancho
 hane-tsurube	hanetsurube
 hanebashi	hanebashi
 hanetsurube	hanetsurube
+hang white chrysanthemum	Hang white chrysanthemum
+hang white chrysanthemums	Hang white chrysanthemum
 hangtu	rammed earth
 hanko	hanko
 hankō	hanko
