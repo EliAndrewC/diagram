@@ -25,19 +25,20 @@ rule the page already uses to drop the ink outside the whole map.
 
 **Why this priority**: the first half of the proposal.
 
-**Independent Test**: a tile's document is smaller than the whole map's; the stitched picture is byte-identical to the single render.
+**Independent Test**: a tile's document is smaller than the whole map's; the picture from clipped tiles is byte-identical to the picture
+from unclipped tiles (today's).
 
 **Acceptance Scenarios**:
 
 1. **Given** a tiled picture, **When** a tile is rendered, **Then** its document lacks the elements wholly outside its window, and
-   the stitched picture equals the picture rendered whole.
+   the stitched picture equals the one stitched from unclipped tiles.
 
 ---
 
 ### User Story 2 - The grid stays 3 x 3 (Priority: P1) - Amendment 1
 
-The grid is not changed. Measured (research.md R2, R3): with the clip in place the peak is no longer set by the tiles, so finer grids
-save 10-20 MB more while breaking the span bound, and a new grid moves tiling's tiny seam differences, so no finer grid can leave the
+The grid is not changed. Measured (observed 2026-10-05, method: the 50 ms process-tree sampler, research.md R2, R3): with the clip
+in place the peak is no longer set by the tiles, so finer grids save 10-20 MB more while breaking the span bound, and a new grid moves tiling's tiny seam differences, so no finer grid can leave the
 picture byte-identical. The GM chose clipping only, at 3 x 3 (request.md, Amendment 1).
 
 **Why this priority**: the GM's ruling on the shortfall SC-002 sent them.
@@ -46,7 +47,7 @@ picture byte-identical. The GM chose clipping only, at 3 x 3 (request.md, Amendm
 
 **Acceptance Scenarios**:
 
-1. **Given** the reference render, **When** it is rendered, **Then** it is 3 x 3 as today, its peak about 150 MB or more lower, its
+1. **Given** the reference render, **When** it is rendered, **Then** it is 3 x 3 as today, its peak lower by SC-002's target, its
    render span within the bound in SC-002, and its picture byte-identical to today's.
 
 ---
@@ -83,9 +84,11 @@ The note at `TILE_MPX` claims the stitched picture is the single render pixel fo
 ### Measurable Outcomes
 
 - **SC-001** (FR-001): the tiles' documents together are smaller than the whole map times the tile count, measured on the reference
-  render; a test holds that a clipped tile drops what lies outside its window and the stitched picture equals the single render.
+  render; a test holds that a clipped tile drops what lies outside its window and that, on a synthetic page, the stitched picture equals the
+  single render (on a real map the comparison is with unclipped tiles, SC-003 - research.md R3).
 - **SC-002** (FR-002, Amendment 1): on the reference render, clipped against unclipped at 3 x 3 alternated, the peak is about 150 MB
-  or more lower and the render span within 3.81 s (observed 2026-10-05, method: process-tree sampling at 50 ms, research.md R2:
+  or more lower and the render span within 3.81 s - feature 324's mean span 3.41 s plus 0.4 s (observed 2026-10-05, method:
+  process-tree sampling at 50 ms, feature 324 research.md R3, and this feature's research.md R2:
   unclipped 551 / 528 MB and 3.13 / 3.22 s, clipped 371 / 365 MB and 3.57 / 3.37 s; the bounds are targets).
 - **SC-003** (FR-003, Amendment 1): every live pool map's picture rendered with clipped tiles equals its picture rendered with
   unclipped tiles - today's picture - byte for byte (rendered whole it differs by tiling's own tiny seam differences, R3).
