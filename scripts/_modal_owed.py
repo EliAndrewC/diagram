@@ -34,7 +34,10 @@ sys.path.insert(0, str(HERE))
 sys.dont_write_bytecode = True
 
 SKILL = ".claude/skills/diagram"
-MODAL_DIRS = (f"{SKILL}/l7r/diagram/interactive/classes", f"{SKILL}/l7r/diagram/interactive/compound_kinds")
+MODAL_DIRS = (
+    f"{SKILL}/l7r/diagram/interactive/classes",
+    f"{SKILL}/l7r/diagram/interactive/compound_kinds",
+)
 RESEARCH = f"{SKILL}/research"
 FORM_CHECK = "modal-form"
 RESEARCH_CHECKS = ("modal-accuracy", "modal-references", "modal-gaps")
@@ -42,7 +45,9 @@ RESEARCH_CHECKS = ("modal-accuracy", "modal-references", "modal-gaps")
 DEPICTION_CHECK = "modal-depiction"
 #: the defined agent that answers the three research units (plan D4)
 RESEARCH_AGENT = "modal-research"
-_TAG = re.compile(r"^(What|Why|Note|Caveat|About|Guesses|Depiction|Name|Covers|Label|Sources|Entry|Drawing|Form):\s?(.*)$")
+_TAG = re.compile(
+    r"^(What|Why|Note|Caveat|About|Guesses|Depiction|Name|Covers|Label|Sources|Entry|Drawing|Form):\s?(.*)$"
+)
 _PARAGRAPHED = ("About", "Depiction")
 _PATH = re.compile(r"research/questions/[^\s,;]+?\.html")
 
@@ -61,14 +66,22 @@ class Modal:
     def uid(self) -> str:
         """`<hamlet|sheet>/<slug>` - the modal's file stem under its registry, and the subject of its owed units: two
         registries may share a key (a sheet's `well`, a hamlet's `well`), never a uid."""
-        if "/modals/choice/" in self.origin:  # a title-card choice's modal (plan D10): no class, its file is its name
+        if (
+            "/modals/choice/" in self.origin
+        ):  # a title-card choice's modal (plan D10): no class, its file is its name
             return f"choice/{pathlib.Path(self.origin).stem}"
-        registry = "sheet" if ("/modals/sheet/" in self.origin or "compound_kinds" in self.origin) else "hamlet"
+        registry = (
+            "sheet"
+            if ("/modals/sheet/" in self.origin or "compound_kinds" in self.origin)
+            else "hamlet"
+        )
         return f"{registry}/{re.sub(r'[^a-z0-9-]', '-', self.key.lower())}"
 
     @property
     def prose(self) -> str:
-        return "\n".join(self.tags.get(t, "") for t in ("Name", "About", "Guesses", "Form"))
+        return "\n".join(
+            self.tags.get(t, "") for t in ("Name", "About", "Guesses", "Form")
+        )
 
     @property
     def entry(self) -> str:
@@ -107,7 +120,9 @@ def parse_tags(doc: str) -> dict[str, str]:
     for tag, lines in out.items():
         if tag in _PARAGRAPHED:
             joined[tag] = re.sub(r"\n{3,}", "\n\n", "\n".join(lines)).strip()
-            joined[tag] = "\n\n".join(" ".join(p.split()) for p in joined[tag].split("\n\n") if p.strip())
+            joined[tag] = "\n\n".join(
+                " ".join(p.split()) for p in joined[tag].split("\n\n") if p.strip()
+            )
         elif tag == "Guesses":
             bullets: list[list[str]] = []
             for line in lines:
@@ -137,13 +152,27 @@ def kinds_in(source: str) -> list[tuple[str, str, int, str]]:
     for node in ast.parse(source).body:
         if not isinstance(node, ast.ClassDef):
             continue
-        key = next((n.value.value for n in node.body if isinstance(n, ast.Assign) and any(isinstance(t, ast.Name) and t.id == "key" for t in n.targets) and isinstance(n.value, ast.Constant)), None)
+        key = next(
+            (
+                n.value.value
+                for n in node.body
+                if isinstance(n, ast.Assign)
+                and any(isinstance(t, ast.Name) and t.id == "key" for t in n.targets)
+                and isinstance(n.value, ast.Constant)
+            ),
+            None,
+        )
         if isinstance(key, str):
             out.append((node.name, key, node.lineno, ast.get_docstring(node) or ""))
     return out
 
 
-def modals_in(source: str, path: str, read: Callable[[str], str | None] = lambda _f: None, about_only: bool = True) -> list[Modal]:
+def modals_in(
+    source: str,
+    path: str,
+    read: Callable[[str], str | None] = lambda _f: None,
+    about_only: bool = True,
+) -> list[Modal]:
     """The modals of one module's source - each kind's text from its modal file (`read` it, by repository-relative path),
     or its docstring where it has no file (a revision before plan D12). `about_only`: only the About form's."""
     out = []
@@ -162,17 +191,26 @@ def modals_in(source: str, path: str, read: Callable[[str], str | None] = lambda
 
 
 def _git(root: pathlib.Path, *args: str) -> str:
-    p = subprocess.run(["git", "-C", str(root), *args], capture_output=True, text=True, check=False)
+    p = subprocess.run(
+        ["git", "-C", str(root), *args], capture_output=True, text=True, check=False
+    )
     return p.stdout if p.returncode == 0 else ""
 
 
 def _read_now(root: pathlib.Path) -> Callable[[str], str | None]:
-    return lambda f: (root / f).read_text(encoding="utf-8") if (root / f).is_file() else None
+    return lambda f: (
+        (root / f).read_text(encoding="utf-8") if (root / f).is_file() else None
+    )
 
 
 def _read_at(root: pathlib.Path, rev: str) -> Callable[[str], str | None]:
     def read(f: str) -> str | None:
-        p = subprocess.run(["git", "-C", str(root), "show", f"{rev}:{f}"], capture_output=True, text=True, check=False)
+        p = subprocess.run(
+            ["git", "-C", str(root), "show", f"{rev}:{f}"],
+            capture_output=True,
+            text=True,
+            check=False,
+        )
         return p.stdout if p.returncode == 0 else None
 
     return read
@@ -191,22 +229,36 @@ def modals_now(root: pathlib.Path, about_only: bool = True) -> list[Modal]:
     out = []
     for d in MODAL_DIRS:
         for p in sorted((root / d).glob("*.py")):
-            out += modals_in(p.read_text(encoding="utf-8"), str(p.relative_to(root)), _read_now(root), about_only)
+            out += modals_in(
+                p.read_text(encoding="utf-8"),
+                str(p.relative_to(root)),
+                _read_now(root),
+                about_only,
+            )
     for p in sorted((root / MODALS / "choice").glob("*.md")):
-        m = choice_modal(str(p.relative_to(root)), p.read_text(encoding="utf-8"), about_only)
+        m = choice_modal(
+            str(p.relative_to(root)), p.read_text(encoding="utf-8"), about_only
+        )
         if m is not None:
             out.append(m)
     return out
 
 
-def modals_at(root: pathlib.Path, rev: str, about_only: bool = True) -> dict[str, Modal]:
+def modals_at(
+    root: pathlib.Path, rev: str, about_only: bool = True
+) -> dict[str, Modal]:
     """The modals at `rev`, keyed by uid; `about_only=False` takes the old form's too (the drawing pages a docstring listed)."""
     out = {}
     for d in MODAL_DIRS:
         for name in _git(root, "ls-tree", "--name-only", rev, d + "/").split():
             if name.endswith(".py"):
                 # keyed by registry and key: a sheet's `well` and a hamlet's `well` are two modals
-                for m in modals_in(_git(root, "show", f"{rev}:{name}"), name, _read_at(root, rev), about_only):
+                for m in modals_in(
+                    _git(root, "show", f"{rev}:{name}"),
+                    name,
+                    _read_at(root, rev),
+                    about_only,
+                ):
                     out[m.uid] = m
     for name in _git(root, "ls-tree", "--name-only", rev, MODALS + "/choice/").split():
         if name.endswith(".md"):
@@ -234,12 +286,19 @@ def digest(parts: Sequence[str]) -> str:
 
 
 def _pages(root: pathlib.Path, files: Sequence[str]) -> list[str]:
-    return [page_words((root / SKILL / f).read_text(encoding="utf-8")) if (root / SKILL / f).is_file() else "" for f in files]
+    return [
+        page_words((root / SKILL / f).read_text(encoding="utf-8"))
+        if (root / SKILL / f).is_file()
+        else ""
+        for f in files
+    ]
 
 
 def fingerprints(root: pathlib.Path, m: Modal) -> tuple[str, str]:
     """(the form units' fingerprint, the research units' fingerprint): the modal's words, and those plus its Entry pages'."""
-    return digest([m.uid, m.prose, m.entry]), digest([m.uid, m.prose, m.entry, *_pages(root, m.entry_files())])
+    return digest([m.uid, m.prose, m.entry]), digest(
+        [m.uid, m.prose, m.entry, *_pages(root, m.entry_files())]
+    )
 
 
 def depiction_fingerprint(root: pathlib.Path, m: Modal) -> str:
@@ -250,8 +309,38 @@ def depiction_fingerprint(root: pathlib.Path, m: Modal) -> str:
 def owed(root: pathlib.Path, base: str) -> list[tuple[str, str, str]]:
     """(slug, occasion, fingerprint) for every unit an About-form modal owes against `base`."""
     before = modals_at(root, base) if base else {}
-    changed_pages = set(_git(root, "diff", "--name-only", base, "--", f"{RESEARCH}/questions").split()) if base else set()
-    changed_pages |= set(_git(root, "ls-files", "--others", "--exclude-standard", "--", f"{RESEARCH}/questions").split())
+    changed_pages = (
+        set(
+            _git(
+                root, "diff", "--name-only", base, "--", f"{RESEARCH}/questions"
+            ).split()
+        )
+        if base
+        else set()
+    )
+    changed_pages |= set(
+        _git(
+            root,
+            "ls-files",
+            "--others",
+            "--exclude-standard",
+            "--",
+            f"{RESEARCH}/questions",
+        ).split()
+    )
+    # A PAGE MOVED WHEN ITS WORDS DID (2026-10-05): the units' fingerprints read `page_words`, but a page counted as moved on any
+    # byte - a comment or a re-wrap made every modal naming it owed, and `test-entry-gate.sh`'s "a comment and a re-wrap owe
+    # nothing" went red on main. A page changed in git is moved only if its words differ from the base's.
+    if base:
+        then = _read_at(root, base)
+        changed_pages = {
+            f
+            for f in changed_pages
+            if page_words(then(f) or "")
+            != page_words(
+                (root / f).read_text(encoding="utf-8") if (root / f).is_file() else ""
+            )
+        }
     rows = []
     for m in modals_now(root):
         was = before.get(m.uid)
@@ -259,7 +348,11 @@ def owed(root: pathlib.Path, base: str) -> list[tuple[str, str, str]]:
         moved_text = was is None or was.prose != m.prose or was.entry != m.entry
         moved_pages = [f for f in m.entry_files() if f"{SKILL}/{f}" in changed_pages]
         if moved_text:
-            why = "new to the About form" if was is None else "its About, Guesses or Entry changed"
+            why = (
+                "new to the About form"
+                if was is None
+                else "its About, Guesses or Entry changed"
+            )
             rows.append((f"{FORM_CHECK}:{m.uid}", why, fp_form))
             rows += [(f"{c}:{m.uid}", why, fp_research) for c in RESEARCH_CHECKS]
         elif moved_pages:
@@ -269,11 +362,27 @@ def owed(root: pathlib.Path, base: str) -> list[tuple[str, str, str]]:
         # Depiction or Drawing - and by a page its Drawing: names moving, WHETHER OR NOT the modal has the tab (the plan review,
         # 2026-10-04: a conversion that dropped its drawing pages from Entry: and wrote no Depiction: would otherwise land with
         # its conventions and drawing links silently gone, every check green - the case FR-014 and SC-008 exist to catch)
-        moved_drawing = [f for f in m.drawing_files() if f"{SKILL}/{f}" in changed_pages]
+        moved_drawing = [
+            f for f in m.drawing_files() if f"{SKILL}/{f}" in changed_pages
+        ]
         if moved_text or was.depiction != m.depiction:
-            rows.append((f"{DEPICTION_CHECK}:{m.uid}", "new to the About form" if was is None else "the modal or its Depiction tab changed", depiction_fingerprint(root, m)))
+            rows.append(
+                (
+                    f"{DEPICTION_CHECK}:{m.uid}",
+                    "new to the About form"
+                    if was is None
+                    else "the modal or its Depiction tab changed",
+                    depiction_fingerprint(root, m),
+                )
+            )
         elif moved_drawing:
-            rows.append((f"{DEPICTION_CHECK}:{m.uid}", f"a page its Drawing: names moved ({' '.join(pathlib.Path(f).name for f in moved_drawing)})", depiction_fingerprint(root, m)))
+            rows.append(
+                (
+                    f"{DEPICTION_CHECK}:{m.uid}",
+                    f"a page its Drawing: names moved ({' '.join(pathlib.Path(f).name for f in moved_drawing)})",
+                    depiction_fingerprint(root, m),
+                )
+            )
     return rows
 
 
