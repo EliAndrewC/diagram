@@ -110,7 +110,8 @@ def _lay_web_lane(s: Settlement, run: Poly, hard: list[Poly], walls: list[Poly],
             over 60 ft inside a belt refused
         a tail past the junction cut - research/questions/0081-village-lanes.drawing.html: under 40 ft
         link reach - UNRESEARCHED: a link up to 200 ft to the network
-        a link takes its way's width - CONVENTION"""
+        a link takes its way's width - CONVENTION
+        web lane width - UNRESEARCHED: a web lane drawn 3 ft wide"""
     segs = _net_segs(s)
     if len(run) < 2:
         return False

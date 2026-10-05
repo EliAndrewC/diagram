@@ -702,7 +702,9 @@ def breaks_through(pts: Sequence[Pt], solid: Sequence[tuple[float, float, float,
     the `solid` boxes (`solid_boxes`) - a tread drawn straight through a building. THE ONE PREDICATE of the rule: the
     finished-map reading (`breaks_mid_run`), the web's foul test (`settle.fouled_segment`) and the connector's placer
     (`track.connector_through`) all ask it.
-    Research: no tread through a building - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html"""
+    Research:
+        no tread through a building - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html
+        a leg long enough to break - UNRESEARCHED: only a leg over `BREAK_SPAN_FT` (60 ft) with its midpoint in a building counts"""
     out = []
     for k, (a, b) in enumerate(zip(pts, pts[1:], strict=False)):
         if math.dist(a, b) <= BREAK_SPAN_FT:
@@ -723,7 +725,7 @@ def fouls_fabric(pts: Poly, width: float, houses: Sequence[Mapping[str, Any]], f
     threshing yard or garden (`_crosses_fabric`)? `fabric`: `_homestead_polys`'; a door path is exempt from its OWN (`own`).
     Research:
         nothing built on a lane - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: no tread on another household's yard or bed
-        foul margin - UNRESEARCHED: within 4 ft of another's yard or bed"""
+        foul margin - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within 4 ft of another's yard or bed"""
     if house_hit(pts, width, houses):
         return True
     theirs = [poly for poly, owner, kind in fabric if kind in ("threshing_yards", "gardens") and (own is None or owner != own)]

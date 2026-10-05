@@ -256,7 +256,7 @@ band was trimmed to a position the gate then failed, and nothing said so until a
 pair of numbers, which is how the drift survived: the check had been tightened and the placer had not. The bar itself
 is the check's - a path exists because somebody had a reason to walk to its end.
 
-Research: a lane end reaches something - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within 60 ft"""
+Research: a lane end reaches something - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within 60 ft"""
 
 STEADING_ARRIVAL_FT = 12.0
 """How near a lane end must stand to a steading's own built ground - house, byre, shed, threshing yard or garden -
@@ -277,7 +277,7 @@ reaches a boundary records its last point 7-11 ft off it and cannot record it ne
 at 7.8 and 6.9 ft from the garden they stop at, Inashiro's byre arm at 8.4, against the next-nearest built ground on any
 of those three maps at 24 ft. Anything past 12 is a tread that stopped somewhere else.
 
-Research: a lane end arrives at a steading - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within 12 ft of its built ground"""
+Research: a lane end arrives at a steading - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within 12 ft of its built ground"""
 
 
 # How close two drawn treads must come to count as ONE network (feature 166, lifted out of the retired
@@ -654,7 +654,7 @@ FAN_ASPECTS = (0.88, 0.95, 1.0, 1.08, 1.16)
 FALL_BEARINGS = (0.0, 45.0, 90.0, 135.0, 180.0, 225.0, 270.0, 315.0)
 """Research: land's fall - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: declared, else rolled among eight points"""
 CARDINAL_BEARINGS = (0.0, 90.0, 180.0, 270.0)  # the survey grid a polder is laid to; see plan_site
-"""Research: polder grid's orientation - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: laid to the four cardinal bearings, never tilted"""
+"""Research: polder grid's orientation - DEVIATION research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: laid to the four cardinal bearings, never tilted"""
 
 # WHICH WAY THE COLD WIND COMES FROM: THE NORTHWEST, UNLESS THE MAP DECLARES A LOCAL WIND (feature 261).
 #
@@ -693,7 +693,7 @@ WIND_BACK_MIN_DOT = 0.7071
 # convention on the record's words, not a finding. The against-the-belt copse reads as one wood with the belt when its
 # crowns stand within a crown or two of the belt's: 60 ft, the same kind of convention.
 COPSE_HOUSE_REACH_FT = 90.0
-"""Research: copse among the houses - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: within 90 ft of a house"""
+"""Research: copse among the houses - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: within 90 ft of a house"""
 COPSE_BELT_REACH_FT = 60.0
 """Research: copse against the belt - CONVENTION: within 60 ft of the belt, a crown or two; the 0071 drawing page has no belt-side copse"""
 

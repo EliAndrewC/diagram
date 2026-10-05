@@ -189,6 +189,7 @@ class Sectors:
                 a warped lattice of row bunds crossing column bunds
             no jori grid on the old plains - DEVIATION research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:
                 the warped lattice on every valley_paddy map, the long-settled western plains included; never the jori grid
+            tip row dropped - UNRESEARCHED: a row at the tip narrower than `MIN_ROW` (0.45) of a plot width is dropped
         """
         F, g, R, row_step, across = self.F, self.g, self.R, self.row_step, self.plot_across
         f_lo = max(_root_f(A, F), _root_f(B, F)) + 6 * g

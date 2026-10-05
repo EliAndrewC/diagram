@@ -43,11 +43,11 @@ _LANE_MIN_FT = 71.0  # one homestead's frontage: below this a lane can front nob
 # grass. The figure is hamletgen's `STEADING_ARRIVAL_FT`, derived there from the clip (a tread that reaches a plot records
 # its last point 7-11 ft off it), and a test holds the two equal; the settlement engine cannot import the scripted tier.
 DOORYARD_REACH_FT = 12.0
-"""Research: dooryard reach - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: an end within 12 ft of the yard or beds serves the house"""
+"""Research: dooryard reach - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: an end within 12 ft of the yard or beds serves the house"""
 # ...or stands beside the house, within this of its center and not past it: the scripted tier's `WAY_END_REACH_FT`, the gate's
 # own reach for an end (a test holds the two equal). It was 90 here, the looser figure feature 227 retired everywhere else.
 HOUSE_SERVE_FT = 60.0
-"""Research: beside-the-house reach - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: an end within 60 ft of the house's center, not past it, serves it"""
+"""Research: beside-the-house reach - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: an end within 60 ft of the house's center, not past it, serves it"""
 # An end has walked past a house when the foot of the perpendicular from the house falls more than this far back along
 # its last segment - the 4 ft grain `_trim_to_service` walks in, and the `_stop_at_closest_approach` cut's own.
 PAST_GRAIN_FT = 4.0

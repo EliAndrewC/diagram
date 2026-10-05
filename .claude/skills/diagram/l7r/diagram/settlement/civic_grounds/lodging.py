@@ -124,7 +124,7 @@ class LodgingMixin:
         Research:
             inn form knob - research/questions/0185-travelers-inns-and-cheap-lodging-houses-hatago-dian-kichin-yado.drawing.html, research/questions/0184-inns-hatago-and-carters-inns.html: wagon (one story) or hatago (two)
             inn footprint - research/questions/0184-inns-hatago-and-carters-inns.drawing.html: 66 x 48 ft
-            carters' yard - research/questions/0184-inns-hatago-and-carters-inns.drawing.html: the wagon inn drawn as one building,
+            carters' yard - DEVIATION research/questions/0184-inns-hatago-and-carters-inns.drawing.html: the wagon inn drawn as one building,
                 never as a fenced carters' yard with lodging houses, stable and hay inside
             hatago beside a stable - research/questions/0185-travelers-inns-and-cheap-lodging-houses-hatago-dian-kichin-yado.drawing.html: the
                 hatago form drawn wherever the caller seats the inn, beside a town's stables and cart yard too

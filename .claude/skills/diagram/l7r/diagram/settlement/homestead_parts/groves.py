@@ -718,7 +718,7 @@ class GrovesMixin:
             crowns per clump floor - UNRESEARCHED: at least 5 crowns thrown per clump
             bamboo under the crowns - research/questions/0075-bamboo-groves-chikurin.drawing.html: 8% of a windbreak clump,
                 inked only in the gaps; none in the dooryard or alder mixes
-            dooryard mix - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:
+            dooryard mix - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:
                 fruit broadleaf, no conifer
             crown size - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: the
                 mean crown radius, 0.72-1.05 or a quarter 1.25-1.7 of it, a conifer 15% wider

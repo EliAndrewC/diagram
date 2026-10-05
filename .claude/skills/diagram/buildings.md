@@ -206,7 +206,8 @@ A **rear service strip** organizes all of this: the residence's formal garden si
 <!-- Research: shrine vermilion edging - CONVENTION: the compound shrine and the hall shrine edged vermilion, the shrine color 0219's drawing page records as a drawing convention -->
 <!-- Research: workshop colonnade - UNRESEARCHED: open hatched craft area attached to a shrine -->
 <!-- Research: sanctuary - research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html: one-bay honden ~6 ft square at the back on the approach axis -->
-<!-- Research: hall and dwelling - research/questions/0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html: one roof, hall end toward the arch, dwelling with kitchen, writing room and privy behind -->
+<!-- Research: hall and dwelling - research/questions/0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html, research/questions/0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html: one roof, the dwelling with its kitchen, writing room and privy -->
+<!-- Research: hall and dwelling order - GUESS: the hall end toward the arch, the dwelling end behind -->
 <!-- Research: arch in plan - research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html: 12 ft pitch -->
 <!-- Research: arch dimensions - UNRESEARCHED: 15 ft beam, 1.2 ft posts, 10.3 ft clear -->
 <!-- Research: approach width - UNRESEARCHED: gravel strip ~10 ft wide -->

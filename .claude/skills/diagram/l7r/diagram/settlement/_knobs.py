@@ -3,7 +3,7 @@
 Research:
     settlement_form forms - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.html, research/questions/0033-row-villages-resson.html, research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: nucleated, linear, dispersed, water_town, dike_top
     field_archetype forms - research/questions/0021-terraced-and-valley-paddies-tanada-yachida.html, research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.html, research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html: valley_paddy, contour_terraces, polder_grid, ribbon_valley, mulberry_dike_fishpond
-    land_use_overlay forms - research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.html, research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html: none, mulberry_fishpond, lotus, tea_fringe; bund tea, the second tea form, is never rolled
+    land_use_overlay forms - DEVIATION research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html: none, mulberry_fishpond, lotus, tea_fringe; bund tea, the second tea form, is never rolled
     kosatsuba_seat forms - research/questions/0190-notice-boards-kosatsuba.html, research/questions/0190-notice-boards-kosatsuba.drawing.html: center, entrance, frontage
     cluster_position forms - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: high_margin, flank, mid_margin, valley_mouth, valley_head, on_rise
     cluster_shape forms - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html, research/questions/0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.drawing.html: round, elongated, crescent, split; a village rolls split as one shape among four, so most villages draw a single cluster
@@ -343,7 +343,7 @@ register_knob(
 )
 register_knob(Knob("plot_size", ["small_irregular", "medium", "large_block", "strip"], default="medium"))
 register_knob(Knob("plot_regularity", ["organic", "grid"], default="organic", typing_rule=_plot_regularity_ok))
-register_knob(Knob("grain_drift", [-12, -8, -4, 0, 4, 8, 12], default=0))  # degrees of paddy-grain drift off the fall-line
+register_knob(Knob("grain_drift", [-12, -8, -4, 0, 4, 8, 12], default=0))  # degrees of dry-field furrow drift off the fall-line (the paddy grain never drifts)
 
 # THE OX SLEEPS IN TWO PLACES AND THE RECORD SUPPORTS BOTH, so this is a knob rather than a ruling
 # (constitution Principle XII's two-supportable-answers rule; 2026-08-18). A draft byre is either an

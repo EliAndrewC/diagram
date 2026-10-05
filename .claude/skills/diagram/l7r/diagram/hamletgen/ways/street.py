@@ -192,7 +192,9 @@ def thread(path: Sequence[Pt], walls: Sequence[Poly], hard: list[Poly], water: l
     (`_route`, a footpath's gap) between the clear vertices either side; a vertex whose tread meets one is dropped. The
     street stays one way. (Tested at the centerline, a street grazed a grove band with its drawn tread - cohort seed 904.)
 
-    Research: street threaded round the steadings - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: nothing is built on a lane"""
+    Research:
+        street threaded round the steadings - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: nothing is built on a lane
+        street's berth off the steadings - UNRESEARCHED: routed half a tread plus 1 ft (5 ft), then 7 ft, off the steadings"""
     clear = [p for p in path if not _crosses_fabric([p, p], walls, half)]
     if len(clear) < 2:
         return list(clear)
@@ -214,7 +216,9 @@ def join_to(path: list[Pt], network: Sequence[tuple[Pt, Pt]], hard: list[Poly], 
     """`path` extended from whichever of its ends is nearer the `network` to the nearest point on it, routed round the
     steadings; unchanged when the network is empty, already touched, or no route is found.
 
-    Research: street joined to the network - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: one network"""
+    Research:
+        street joined to the network - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: one network
+        joining leg's berth - UNRESEARCHED: routed `FOOTPATH_FABRIC_GAP` (4 ft) off the fabric"""
     if len(path) < 2 or not network:
         return path
 

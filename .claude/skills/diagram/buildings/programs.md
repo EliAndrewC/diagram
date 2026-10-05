@@ -27,9 +27,10 @@ Per-building-type specs: the required program every instance shares, the knobs t
 <!-- Research: office hall rooms - GUESS: day office and study behind, dais band over the hearing court -->
 <!-- Research: commuting clerks - research/questions/0113-the-office-hall-and-its-clerks-goyakusho.html: a workroom for 3-4 heimen clerks, no clerk housing -->
 <!-- Research: residence entrances - research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html: one genkan, informal doors elsewhere -->
-<!-- Research: rear service strip - research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html, research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html: servants' nagaya, stores, rear yard or alley on the north -->
+<!-- Research: rear service strip - GUESS research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html: servants' nagaya, stores, rear yard or alley on the north; 0115 puts servants along the street, in the gate range or under the main roof -->
 <!-- Research: universal shrine - research/questions/0218-the-compounds-own-shrine-yashikigami.html, research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html: one shrine, Inari by default, subordinate to the residence; Hayakawa's sheet keeps two -->
-<!-- Research: wells by use - GUESS research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html: kitchen, garden, stables; no page places a residence's wells -->
+<!-- Research: wells by use - research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html, research/questions/0105-baths-furo.drawing.html: the kitchen well by the kitchen, where 0091 places a house's wells and 0105's drawing page keeps it with the kitchen and bath -->
+<!-- Research: garden and stables wells - GUESS research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html: a well for the garden and one for the stables; no page places them -->
 <!-- Research: sand hearing court - research/questions/0099-the-hearing-court-shirasu.drawing.html: a gravel court below the dais, the parties kneeling on mats in the Edo arrangement -->
 <!-- Research: latrines by zone - research/questions/0101-privies-setchin.html: one per zone, residence privy attached, the rest by service gates -->
 <!-- Research: fire-water tubs - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: ~8-12, kitchen 2, none at the kura -->

@@ -642,7 +642,8 @@ def connector_track(plan: SitePlan, start: Pt, avoid: Sequence[Poly] = (), reach
         track out off the wet - research/questions/0081-village-lanes.drawing.html: away from the field leaning downslope, wet
             ground refused first, run past the frame
         leaning downslope - UNRESEARCHED: the ideal bearing weighs 0.55 away from the field and 0.85 downslope
-        wet, then steadings, then crop - research/questions/0081-village-lanes.drawing.html: ranked in that order
+        wet, then steadings, then crop - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: wet ground and crop refused (0081), no tread on a steading (0246)
+        the three ranked - NONE: search order; wet and steaded bearings are both refused in the end
         track's wander - research/questions/0081-village-lanes.drawing.html: bowed 34 and 46 px either side of the bearing"""
     dx, dy = plan.fall
     ox, oy = plan.seat["out"]
@@ -786,7 +787,8 @@ def _connector_through(s: Settlement, plan: SitePlan, track: Poly, avoid: Sequen
         connector round the field and the steadings - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: bent and threaded,
             else the dry exit
         gives up a wood seat as last resort - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:
-            the seats the way out crosses are released"""
+            the seats the way out crosses are released
+        connector's berth off the field - UNRESEARCHED: bent round the field at `SPUR_SETBACK`, 17 ft off its envelope"""
     from .settle import square_run  # the web's last pass sits above this layer
 
     around = route_around(plan.envelope, track, SPUR_SETBACK)

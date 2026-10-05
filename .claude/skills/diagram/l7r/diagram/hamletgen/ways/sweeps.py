@@ -265,7 +265,8 @@ def _join_orphan_ways(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wa
         orphan joined to the network - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: one network
         link crosses the brook at a crossing place - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html
         no out-and-back over the brook - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: a link crossing the brook twice is refused
-        link width - research/questions/0081-village-lanes.drawing.html: the width of the way it joins"""
+        link width - research/questions/0081-village-lanes.drawing.html: the width of the way it joins
+        orphan link directness - UNRESEARCHED: a link up to `_LINK_DIRECTNESS` (4) times the gap"""
     made = 0
     for _ in range(6):
         ways = [[(float(x), float(y)) for x, y in ln["pts"]] for ln in s.M.get("lanes", [])]
@@ -814,7 +815,8 @@ def _sweep_debris(s: Settlement) -> int:
 
     Research:
         isolated fragment dropped - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: one network
-        no house stranded - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every farmhouse is served but the few reached across a neighbor's land, owed none (`geom.lane_houses`)"""
+        no house stranded - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every farmhouse is served but the few reached across a neighbor's land, owed none (`geom.lane_houses`)
+        debris length - UNRESEARCHED: a lone fragment dropped only under `_WEB_MIN_FT` (30 ft)"""
     lanes = s.M.get("lanes") or []
     ways = [[(float(x), float(y)) for x, y in ln.get("pts") or []] for ln in lanes]
     live = [i for i in range(len(lanes)) if len(ways[i]) >= 2]

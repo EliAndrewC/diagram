@@ -155,7 +155,8 @@ def _homestead_polys(s: Settlement) -> list[tuple[Poly, Pt | None, str]]:
         nothing built on a lane - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: houses, yards, beds, sheds, wells and
             fixtures are fabric a lane keeps off
         no lane through a farm's grove - UNRESEARCHED: the grove band is fabric, but for its own farm's path
-        a path leaves its own yard - UNRESEARCHED: the owner's yard, bed and shed are not walls to its own path"""
+        a path leaves its own yard - UNRESEARCHED: the owner's yard, bed and shed are not walls to its own path
+        village groves and commons as fabric - UNRESEARCHED: a village grove and a grazing common count as fabric a lane keeps off"""
     out: list[tuple[Poly, Pt | None, str]] = []
     for h in s.M.get("houses", []):
         c = (float(h["x"]), float(h["y"]))
@@ -308,7 +309,8 @@ def _draw_web(s: Settlement, pts: Poly, width: int = 3, houses: Sequence[Pt] = (
         no join link through a house - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: nothing built on a lane
         web lanes seat no house - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the farmhouses placed first, the lanes
             among them after
-        web lane's no-build corridor - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: `WEB_CLEARANCE` 28 ft recorded beside the lane"""
+        web lane's no-build corridor - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: `WEB_CLEARANCE` 28 ft recorded beside the lane
+        web lane width - UNRESEARCHED: 3 ft by default"""
     if len(pts) < 2:
         return False
     # A JOIN LINK IS EXEMPT FROM THE DEBRIS FLOOR (feature 134 T50, 2026-08-29). The floor asks what a

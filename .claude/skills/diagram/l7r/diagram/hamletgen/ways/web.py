@@ -80,7 +80,8 @@ def _lay_skeleton(s: Settlement, plan: SitePlan, frame: _margin_frame, arcs: Seq
         skeleton form - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the rolled lane shape
         clear of crop, wet and water - UNRESEARCHED: 20 ft off the crop, the marsh and the ditches
         routed round the steadings - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: nothing is built on a lane
-        skeleton width - research/questions/0081-village-lanes.drawing.html: 5 ft"""
+        skeleton width - research/questions/0081-village-lanes.drawing.html: 5 ft
+        skeleton span floor - UNRESEARCHED: the span floored at one bundle pitch (100 ft) each way; a piece under 30 ft not laid"""
     if len(arcs) < 2:
         return []
     arc0 = (min(arcs) + max(arcs)) / 2.0
@@ -390,7 +391,9 @@ def served_arm(s: Settlement, arm: Poly) -> Poly:
     ended 81-97 ft from the nearest house), against the houses alone; an arm left under `_WEB_MIN_FT` is no arm. Lifted from
     `_lay_skeleton` (feature 308): the re-grown pool no longer leaves an arm that short, so it is tested on plain inputs.
 
-    Research: skeleton arm trimmed to service - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: its ends pulled back to the houses it serves"""
+    Research:
+        skeleton arm trimmed to service - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: its ends pulled back to the houses it serves
+        shortest arm - UNRESEARCHED: an arm under 30 ft (`_WEB_MIN_FT`) is not drawn"""
     if len(arm) >= 2:
         arm = _trim_to_service(arm, [], [(float(h["x"]), float(h["y"])) for h in s.M.get("houses", [])], steadings=steading_footprints(s.M))
     return [] if len(arm) >= 2 and polyline_len(arm) < _WEB_MIN_FT else arm
@@ -444,11 +447,11 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
         lanes after the houses - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html
         lane runs past its last steading - GUESS: 30 ft
         back lane ties - research/questions/0081-village-lanes.html: cross-ways frame the back lanes
-        back lane tie spacing - UNRESEARCHED: the ties about three pitches (3 x BUNDLE_PITCH) apart
+        back lane tie spacing - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the ties about three pitches (3 x BUNDLE_PITCH) apart
         belt crossed not followed - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: a lane
             may cross a shelter belt, the planting resuming on both sides, but not run its length
         door path reach - GUESS: DOOR_REACH_FT 40 ft, STEADING_ARRIVAL_FT 12 ft on a row
-        web cut spacing - UNRESEARCHED: every house within WEB_REACH_FT (100 ft) of a cut, so the cuts stand up to about twice that apart
+        web cut spacing - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every house within WEB_REACH_FT (100 ft) of a cut, so the cuts stand up to about twice that apart
         a cut's room - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: MIN_WEB_GAP, 7 ft clear of a garden fence on each side and a 4 ft tread, within the page's 3 ft footpath to 5 ft spine
         a web lane's span - UNRESEARCHED: only the houses within 1.5 times WEB_REACH_FT of its cut
         web lanes off the hard ground - UNRESEARCHED: WEB_HARD_GAP 8 ft off the field, the crop and the marsh

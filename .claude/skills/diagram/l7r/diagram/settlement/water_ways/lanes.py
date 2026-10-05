@@ -259,7 +259,7 @@ class LanesMixin:
 
         Research:
             an end reaching nothing is pulled back - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: to the last house, way or bund it serves
-            served at the dooryard - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within 12 ft of the dooryard, or within 60 ft of the center and not past or behind the house
+            served at the dooryard - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within 12 ft of the dooryard, or within 60 ft of the center and not past or behind the house
             arrival at the bund - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: within 6 ft of a field's or dry plot's edge
             meeting another way - UNRESEARCHED: within 40 ft of it, at 20 degrees or more
             one end per house and bearing - UNRESEARCHED: a second end within 60 ft and 25 degrees of another fronting the same house is trimmed

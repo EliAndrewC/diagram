@@ -119,6 +119,7 @@ def carve_comb(
         default paddy grain - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: strips 48 px across, rows 26-36 px apart
         default hem depth - UNRESEARCHED: the dry hem 70-132 px deep
         default bund-bean share - UNRESEARCHED: 0.28 of the bunds carry a bean row
+        fan middle - UNRESEARCHED: the fan's middle takes the "cleared" form by default (`fan_middle`)
     """
     R = random.Random(seed)
     F = _Frame(down_deg)

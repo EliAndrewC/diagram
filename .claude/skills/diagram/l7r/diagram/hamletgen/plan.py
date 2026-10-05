@@ -146,7 +146,7 @@ class HamletSpec:
 
         Research:
             hamlet household band - research/questions/0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.drawing.html: 10 to 20 households
-            pond layout values - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the mosaic only
+            pond layout values - DEVIATION research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the mosaic only
             water sink values - research/questions/0060-field-drains-akusuiro.drawing.html: a pond at the foot or off the map
             knob values - NONE: each table carries its own claim in consts
         """
@@ -445,7 +445,7 @@ def plan_site(spec: HamletSpec) -> SitePlan:
 
     Research:
         polder on the survey grid - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a surveyed grid
-        polder grid's orientation - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: falls from the four cardinals only, the dike-pond mosaic too, never tilted
+        polder grid's orientation - DEVIATION research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: falls from the four cardinals only, the dike-pond mosaic too, never tilted
         dike-pond knobs only on a dike-pond - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a rice polder's layout fixed to the grid
         regional wind - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: DEFAULT_WINDWARD unless declared
         rolled fall backs the wind - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: only falls leaving a windward margin

@@ -41,7 +41,7 @@ RUN_ON_REACH_FT = WAY_END_REACH_FT
 # A run-on may turn the path this far off the way it was walking, and no further: a path bends as it is walked, and a bund
 # behind the end is not one it runs on to (a map drawing convention, well inside the 90 degree hook `joints.py` removes).
 RUN_ON_TURN_DEG = 60.0
-"""Research: run-on turn limit - DEVIATION research/questions/0081-village-lanes.drawing.html: a lane run on to a bund turns no more than 60 degrees anywhere"""
+"""Research: run-on turn limit - research/questions/0081-village-lanes.drawing.html: a lane run on to a bund turns no more than 60 degrees anywhere"""
 # The nearest lane is sampled every this many feet when a field path must branch off it (a map drawing convention).
 BRANCH_STEP_FT = 8.0
 # The branch is drawn at the field spur's own tread (`stage_track`: width 5, worn).
@@ -100,7 +100,7 @@ def turns_back(prev: Pt, end: Pt, tgt: Pt) -> bool:
     """Would carrying `end` on to `tgt` turn the path more than `RUN_ON_TURN_DEG` off the way it was walking? A bund that
     lies behind the end is not one the path runs ON to, and the turn draws a hook (`lanes_end_in_no_hook`).
 
-    Research: no hook onto the bund - DEVIATION research/questions/0081-village-lanes.drawing.html: a run-on leg turning more than `RUN_ON_TURN_DEG` (60 degrees) is refused at any length"""
+    Research: no hook onto the bund - research/questions/0081-village-lanes.drawing.html: a run-on leg turning more than `RUN_ON_TURN_DEG` (60 degrees) is refused at any length"""
     u, v = (end[0] - prev[0], end[1] - prev[1]), (tgt[0] - end[0], tgt[1] - end[1])
     nu, nv = math.hypot(*u), math.hypot(*v)
     if nu <= 1e-9 or nv <= 1e-9:
@@ -348,7 +348,8 @@ def carry_on(s: Settlement, i: int, e: int, q: Pt, to: Pt) -> bool:
 
     Research:
         a junction stays a T - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: one network, so the step is its own
-            field path"""
+            field path
+        stepped spur's corridor - UNRESEARCHED: the no-build corridor `LANE_CLEARANCE`, 40 ft"""
     lanes = s.M.get("lanes") or []
     step = squared_step(q, to, drawn_water_segs(s))
     if not off_the_fixtures(s, [q, *step], float(lanes[i].get("w") or 3)):

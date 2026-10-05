@@ -32,7 +32,7 @@ _STUB_REACH_FT = 48.0  # the post-smoothing touch: a cut stub may stand a little
 # past 90 ft the arm is reaching ground the rest of the lane cannot, so it is a lane in its own right
 # and not an arm, and it stays (the bends check then fires on it honestly, as it did before).
 _LONG_ARM_FT = 90.0
-"""Research: hairpin arm cut length - research/questions/0081-village-lanes.drawing.html: an arm up to 90 ft is cut where no house loses its way"""
+"""Research: hairpin arm cut length - UNRESEARCHED: an arm up to 90 ft is cut where no house loses its way; 0081 gives only the 40 ft returning leg"""
 # `lanes_reach_something`'s two figures, so a cut never trades one failure for the other: after the
 # cut the tip is the lane's END, and an end must reach another way or a farmhouse.
 _END_WAY_FT = 40.0

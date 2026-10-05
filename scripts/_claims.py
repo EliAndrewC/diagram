@@ -371,6 +371,22 @@ def parse_reply(text: str) -> tuple[dict[str, tuple[str, str]], list[tuple[str, 
 _RESTS = re.compile(r"\[(§[^\]]*)\]\s*$")
 
 
+_ELIDED = re.compile(r"\b(\d{4})-[\w-]*\.\.\.?[\w-]*?((?:\.drawing)?\.html)")
+
+
+def unelide(reply: str, stems: list[str]) -> str:
+    """The reply with each pointer a check wrote shortened (`0236-...-home-plot.drawing.html`) given its full file name, so a
+    verdict note written into the index never fails `check-research-pointers.py` (feature 319: four did, and the index had to
+    be hand-repaired). `stems` are the question stems (`0236-shrine-...`); a number with no question, or with more than one
+    stem, is left as written for a person to see."""
+
+    def full(m: re.Match[str]) -> str:
+        hits = [s for s in stems if s.startswith(m.group(1) + "-")]
+        return f"{hits[0]}{m.group(2)}" if len(hits) == 1 else m.group(0)
+
+    return _ELIDED.sub(full, reply)
+
+
 def rests_of(note: str, numbered: Mapping[str, str]) -> tuple[str, list[str] | None]:
     """A verdict note without its closing `[§3, §12]`, and the `page:digest` of each block it names (feature 318, FR-016): `[§]`
     is an empty list (the questions are silent on the claim), no tag at all None (either way any change on its pages is
@@ -830,7 +846,8 @@ def main(argv: Sequence[str] | None = None) -> int:
             print(f"claims-bundle: re-check of {len(not_owed)} claim(s) not owed, because: {args.reason}")
         return 0
     units = json.loads((Path(args.bundle) / "units.json").read_text(encoding="utf-8"))
-    reply = Path(args.reply).read_text(encoding="utf-8")
+    stems = sorted({p.name.split(".")[0] for p in (root / QUESTIONS).glob("[0-9][0-9][0-9][0-9]-*.html")})
+    reply = unelide(Path(args.reply).read_text(encoding="utf-8"), stems)
     blocks_file = Path(args.bundle) / "blocks.json"
     blocks = json.loads(blocks_file.read_text(encoding="utf-8")) if blocks_file.is_file() else {"numbered": {}, "snapshots": {}}
     new, msgs = record(index, units, reply, datetime.date.today().isoformat(), blocks["numbered"])

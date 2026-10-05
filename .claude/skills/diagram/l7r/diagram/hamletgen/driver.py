@@ -158,6 +158,8 @@ Research:
     track before the wells - UNRESEARCHED: a well dug where the track already runs
     web after everything that reserves ground - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the web drawn last, round what stood first; each household's own way is laid and reserved at the end of the homesteads stage, once the last house stands, so the later stages keep off it
     notice board last - research/questions/0190-notice-boards-kosatsuba.drawing.html: placed once everything else stands
+    notice board after the frame - CANON: the GM's ruling of 2026-08-29, the board the very last thing put on the map, after the frame
+    waterward fringe before the houses - UNRESEARCHED: a polder's reed fringe outside the dike laid before the houses and the track, which treat it as wet ground
     labels last - CONVENTION
 """
 

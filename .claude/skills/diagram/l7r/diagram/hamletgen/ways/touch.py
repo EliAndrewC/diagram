@@ -134,7 +134,8 @@ def _touch_junctions(
         end meets end - research/questions/0081-village-lanes.drawing.html: two lanes meeting end to end are one
         orphan piece dropped - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: unless it is a farmhouse's only way, a household reached across a neighbor's land owed none (`geom.lane_houses`)
         connector never dropped - research/questions/0081-village-lanes.drawing.html: the track out runs off the map
-        final overrun cut - research/questions/0081-village-lanes.drawing.html: on the final pass a tail of 6-40 ft past the way it meets is cut"""
+        final overrun cut - research/questions/0081-village-lanes.drawing.html: on the final pass a tail of 6-40 ft past the way it meets is cut
+        join reach - UNRESEARCHED: a free end within 30 ft (48 ft on the final pass) of another way is extended to it"""
     # A TOUCH MAY NOT PUSH A LANE INTO THE FABRIC IT WAS DRAWN CLEAR OF (feature 134 T50, 2026-08-29).
     # Every rung here tests the LINK it is about to draw, and none of them looks at the lane that comes
     # out - so a link that is itself legal, spliced on by `_unjog`/`_unretrace` or by moving another
