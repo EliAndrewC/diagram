@@ -1,44 +1,56 @@
 {
  "feature": "327-lean-site-fast-clip",
- "plan_sha256": "532454ee0bb8da4e6219c16dfc0b87c5ac33b29fbe416521efcb65441ef030d7",
+ "plan_sha256": "015ae2f1ca67aae21eb57694f3f0bac6065ad07f33130155cc6261b238f4517c",
  "reviewed": "2026-10-05",
  "declared": "spec-fidelity",
  "decisions": [
   {
    "id": "D1",
-   "summary": "SiteFiles: a MutableMapping[str, str] whose store is UTF-8 bytes (encode on set, decode on get); __eq__ compares stores between two SiteFiles; raw(path); Build fills one and build returns it; write writes bytes in binary mode for a SiteFiles, text as before otherwise",
+   "summary": "SiteFiles: a MutableMapping[str, str] holding UTF-8 bytes (encode on set, decode on get); store-to-store __eq__; raw(path); Build fills one and build returns it; write writes the bytes in binary mode for a SiteFiles, text as before otherwise",
    "class": "within",
-   "why": "This is option 1 of the session's answer, which the GM approved and spec FR-001 requires: pages held as UTF-8 bytes, decoded on read (the 'modest wrapper'). It is still a path-to-text mapping, so callers and tests read what they read before, including record_build's files[STAMP] = ... assignment. On Linux, text mode with encoding utf-8 and no newline translation writes exactly the encoded bytes, so the binary write gives the same files (FR-002). The store-to-store __eq__ is how 'compared with another build' (US1 scenario 2) avoids decoding, and raw() is how write reaches the bytes. Nothing beyond option 1 is added, and option 2 (streaming) is not brought in."
+   "why": "Unchanged since round 1 (CLEAR). Option 1 of the session's answer, which the GM approved; FR-001 and FR-002 as written. Callers and tests still read a path-to-text mapping."
   },
   {
    "id": "D2",
-   "summary": "drop_offmap split into prepare_offmap (one parse into fixed text, shapes with boxes, merged paths with per-subpath boxes) and assemble_offmap (per-box keep or drop by drop_offmap's own rules); drop_offmap becomes the two in a row; a transform line prepares to one fixed part; paths matched before shapes",
+   "summary": "drop_offmap split into prepare_offmap (one parse) and assemble_offmap (per-box keep/drop by drop_offmap's own rules); drop_offmap is the two in a row",
    "class": "within",
-   "why": "FR-003 requires each line's droppable elements and their extents to be parsed once and give output byte-identical to drop_offmap's. This is the GM-approved follow-up ('measuring each line's extent once'). The keep rules are restated, not changed: margin, subpaths, the whole path dropped when none survives, the transform and outside-grammar lines and unreadable shapes left whole (spec edge cases). Paths are matched before shapes, as drop_offmap substitutes them. page.write_html keeps calling drop_offmap, so the page's own clip is unchanged (spec edge case)."
+   "why": "Unchanged since round 1 (CLEAR). The request's 'Measuring each line's extent once and reusing it for every tile'; FR-003's byte-identity to drop_offmap is held by a test against a reference copy of the old function. page.write_html still calls drop_offmap, so the page's own clip is unchanged (spec edge case)."
   },
   {
    "id": "D3",
-   "summary": "picture prepares the classed lines once (prepare_doc) and each tile's tile_doc assembles from them, the viewBox set as now; the prepared form's memory measured against the render peak",
+   "summary": "picture prepares the classed lines once (prepare_doc: a classed line as its parts, any other line as its text) and each tile's tile_doc assembles from them; the prepared form measured against the render's peak",
    "class": "within",
-   "why": "This is the request's own words: 'Measuring each line's extent once and reusing it for every tile.' Tiles render in threads (a ThreadPoolExecutor), so they share the prepared form without copying it. The GM's 'with no memory cost' is FR-004's 'peak MUST NOT rise', and the plan measures the prepared form against that peak (SC-004) rather than assuming it."
+   "why": "Wording corrected to match the code (any other line kept as its text, not None); the decision is the one ruled within in round 1. The viewBox is now substituted after assembly instead of before; the first viewBox is on the svg opening line, which is never a classed line, so the result is the same text, and the plan's test holds tile_doc from prepared lines equal to tile_doc from text."
   },
   {
    "id": "D4",
    "summary": "new units inherit their modules' Research: claims; make claims-owed decides what is owed",
    "class": "within",
-   "why": "Standing project procedure (feature 316) applied to new code. It adds no scope and narrows nothing."
+   "why": "Unchanged; standing procedure, adds and narrows nothing."
+  },
+  {
+   "id": "D5",
+   "summary": "a module-level RESVG_SLOTS = threading.BoundedSemaphore(4) in raster, held around every resvg launch in the process (raster.resvg_png for the tiles, the unsplit picture and the id map; settlement/finish.render_png for the PNG), so at most four resvg processes run at once",
+   "class": "within",
+   "why": "The GM approved the clip follow-up as recovering the time 'with no memory cost'; spec FR-004 makes that 'its peak MUST NOT rise'. research.md R3 measured that D2/D3 alone broke it (the tiles stopped staggering and overlapped the PNG and id map; peak 372-382 MB old against 384-467 MB new), so without a mechanism the accepted spec is not met. The cap is that mechanism: it changes only when a resvg process starts, not what it renders, so FR-004's byte-identity is untouched, and research.md R3 records the peak no higher (mean 370.6 against 374.6 MB) with the span still shorter (3.55 -> 3.21 s), which keeps the request's speed purpose. Its reach beyond the render: it is per process (the pool's generators run as separate processes via render_cache and regen, so maps are not throttled against each other); within one process the only other concurrent launchers are placement_stages (already at most 4 threads) and picture_diff (one call). No slot is held while another is acquired, so it cannot deadlock. It narrows nothing the GM asked for and adds no behavior the GM would notice beyond the requested memory and speed. The cap test ('never more than four resvg processes at once, the picture the same bytes') only fails when FR-004's mechanism or byte-identity is lost: enforcement of the request."
+  },
+  {
+   "id": "D6",
+   "summary": "site_pages.shell_utf8 links and encodes the single page's (all.html) pieces one at a time and joins the bytes, stored via SiteFiles.set_raw; shell keeps its text form for every other page (its list form removed, the single page being its only list caller)",
+   "class": "within",
+   "why": "FR-001 requires each page held as UTF-8 once built, and SC-001 requires the build's traced peak no higher than 236 MB. research.md R2 measured D1 alone raising it to 249 MB (the 42 MB single page joined as text, then encoded, both alive), so D1 alone does not meet the accepted spec; D6 is how it is met (165 MB). UTF-8 of a concatenation equals the concatenation of the pieces' UTF-8, and each piece is linkified exactly as feature 323 already did, so the page is the same bytes (FR-002; R2 records all 2,698 files byte-identical to main's). It is still option 1 - the single page is assembled in memory, as the spec's User Story 1 says both options do - and does not drift into option 2 (streaming to disk). The test that shell_utf8 of the pieces equals shell of their join, encoded, enforces FR-002."
   },
   {
    "id": "Tests",
-   "summary": "assemble(prepare(line), box) held equal to a reference copy of the old drop_offmap over a real page fixture and many boxes, plus edge cases; tile_doc from prepared lines equals it from text; SiteFiles round-trip, equality, iteration and length; write gives the same bytes from a SiteFiles as from a dict",
+   "summary": "reference-equality of the clip; tile_doc from prepared equals from text; the resvg cap test; shell_utf8 against shell; SiteFiles round-trip, equality, iteration, length; write's bytes from a SiteFiles and a dict",
    "class": "within",
-   "why": "These enforce what was asked (SC-002, SC-003): each test fails only when byte-identity or the unchanged mapping is broken. That is enforcement of the request, not unrequested scope."
+   "why": "Each fails only when byte-identity (FR-002, FR-003, FR-004), the unchanged mapping (FR-001) or the peak mechanism (FR-004) is broken: enforcement of what was asked, not unrequested scope."
   },
   {
    "id": "Bookends",
-   "summary": "make perf 327-start in a detached worktree at 06fea4766 and make perf-gate in the clone, back to back at the end, in a window arranged with the other session",
+   "summary": "make perf 327-start in a detached worktree at 06fea4766 and make perf-gate in the clone, back to back, in an arranged window",
    "class": "within",
-   "why": "Constitution VI procedure. It adds no behavior and narrows nothing the GM asked for."
+   "why": "Constitution VI procedure; unchanged since round 1."
   }
  ],
  "verdict": "CLEAR"

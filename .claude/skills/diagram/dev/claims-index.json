@@ -21663,6 +21663,26 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/interactive/raster.py::RESVG_SLOTS#low-zoom picture": {
+  "code": "cc97414cd059b16f",
+  "core": "eb424cec641e0eab",
+  "date": "2026-10-05",
+  "note": "process concurrency cap; the image comes out the same, so it makes no display decision",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/interactive/raster.py::RESVG_SLOTS#raster plumbing": {
+  "code": "f36284f143fbb468",
+  "core": "eb424cec641e0eab",
+  "date": "2026-10-05",
+  "note": "scheduling only; nothing physical",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  ".claude/skills/diagram/l7r/diagram/interactive/raster.py::TILE_MPX#low-zoom picture": {
   "code": "3845007b5c2496d2",
   "core": "232d3ac8ac8b4b8c",
@@ -21947,6 +21967,26 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/interactive/raster.py::_box#low-zoom picture": {
+  "code": "c13053f84a676cd5",
+  "core": "5755fb7366daa361",
+  "date": "2026-10-05",
+  "note": "min/max extent; makes no display decision",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/interactive/raster.py::_box#raster plumbing": {
+  "code": "48f031f4255c94ac",
+  "core": "5755fb7366daa361",
+  "date": "2026-10-05",
+  "note": "geometry plumbing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  ".claude/skills/diagram/l7r/diagram/interactive/raster.py::_recolor_group#low-zoom picture": {
   "code": "98f1d01999ac116b",
   "core": "612d08fb7354bb17",
@@ -21963,6 +22003,46 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/interactive/raster.py::_shape_box#low-zoom picture": {
+  "code": "5a403a81e2ca5afc",
+  "core": "b5e436916a020b63",
+  "date": "2026-10-05",
+  "note": "reads the extent of shapes for the off-map drop; makes no display decision",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/interactive/raster.py::_shape_box#raster plumbing": {
+  "code": "ead72bedd1ba7742",
+  "core": "b5e436916a020b63",
+  "date": "2026-10-05",
+  "note": "parsing and geometry; nothing physical",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/interactive/raster.py::_subpath_box#low-zoom picture": {
+  "code": "85924cf322fb389e",
+  "core": "cde2de5cf17aeaa4",
+  "date": "2026-10-05",
+  "note": "subpath extent for the drop; makes no display decision",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/interactive/raster.py::_subpath_box#raster plumbing": {
+  "code": "f479b78a9d65a62e",
+  "core": "cde2de5cf17aeaa4",
+  "date": "2026-10-05",
+  "note": "parsing and geometry; nothing physical",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  ".claude/skills/diagram/l7r/diagram/interactive/raster.py::_unpaint#low-zoom picture": {
   "code": "8edabe9a5bd26382",
   "core": "7ff797e00608c127",
@@ -21977,6 +22057,26 @@
   "date": "2026-10-03",
   "note": "plumbing, decides nothing physical",
   "research": "",
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/interactive/raster.py::assemble_offmap#low-zoom picture": {
+  "code": "ef47c7800f8dbe90",
+  "core": "0473e8e835657cc2",
+  "date": "2026-10-05",
+  "note": "viewBox-clipped drop, invisible by construction; OFFMAP_MARGIN is not a fact about the place",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/interactive/raster.py::assemble_offmap#raster plumbing": {
+  "code": "20bd0c3b8e202865",
+  "core": "0473e8e835657cc2",
+  "date": "2026-10-05",
+  "note": "the off-map drop, as the label says",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/raster.py::class_keys#low-zoom picture": {
@@ -22012,19 +22112,23 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/raster.py::drop_offmap#low-zoom picture": {
-  "code": "a2ae399c4953d281",
-  "core": "fcad9046deaa37e1",
-  "date": "2026-10-03",
-  "note": "how the low-zoom picture is shown",
+  "code": "8503b96048157cee",
+  "core": "aaeeeacfc054b3c8",
+  "date": "2026-10-05",
+  "note": "wrapper over prepare and assemble; makes no display decision",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/raster.py::drop_offmap#raster plumbing": {
-  "code": "fcdd52b485737fc5",
-  "core": "fcad9046deaa37e1",
-  "date": "2026-10-03",
-  "note": "plumbing, decides nothing physical",
+  "code": "2b4f91bbfd61b3dd",
+  "core": "aaeeeacfc054b3c8",
+  "date": "2026-10-05",
+  "note": "the off-map drop",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/raster.py::encode_picture#low-zoom picture": {
@@ -22096,59 +22200,103 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/raster.py::picture#low-zoom picture": {
-  "code": "88b269e852253c35",
-  "core": "5b551cd38d52048d",
+  "code": "b656054602dbaaec",
+  "core": "0a203ee62ade3d5d",
   "date": "2026-10-05",
-  "note": "renders the whole picture at r (RASTER_R) px per map px; a display scale only",
+  "note": "whole picture at RASTER_R px per map px, exactly the convention",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/raster.py::picture#raster plumbing": {
-  "code": "63abce074fd5e5ba",
-  "core": "5b551cd38d52048d",
+  "code": "1b2bb84c2ef90ba1",
+  "core": "0a203ee62ade3d5d",
   "date": "2026-10-05",
-  "note": "tile count, worker pool, the fallback to a single render and encoding are plumbing",
+  "note": "tiling, threads and encoding",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/interactive/raster.py::prepare_doc#low-zoom picture": {
+  "code": "d5d46d96129d9b44",
+  "core": "1e8808722e8a9858",
+  "date": "2026-10-05",
+  "note": "parses each line once; makes no display decision",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/interactive/raster.py::prepare_doc#raster plumbing": {
+  "code": "bcbaff1a08a7e99a",
+  "core": "1e8808722e8a9858",
+  "date": "2026-10-05",
+  "note": "parsing plumbing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/interactive/raster.py::prepare_offmap#low-zoom picture": {
+  "code": "1fd017bebc5268bc",
+  "core": "38e15819441393ec",
+  "date": "2026-10-05",
+  "note": "splits a string into judged parts; makes no display decision",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/interactive/raster.py::prepare_offmap#raster plumbing": {
+  "code": "1deb8b502feb045f",
+  "core": "38e15819441393ec",
+  "date": "2026-10-05",
+  "note": "parsing for the off-map drop",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/raster.py::render_tile#low-zoom picture": {
-  "code": "7a628e67f9437175",
-  "core": "f6e0383317758b40",
+  "code": "f328961f79cf0451",
+  "core": "0bfac1719c788a48",
   "date": "2026-10-05",
-  "note": "renders one tile at the same zoom and fonts as a single render",
+  "note": "one tile at zoom r; part of the low-zoom picture convention",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/raster.py::render_tile#raster plumbing": {
-  "code": "11cad216fa5fc848",
-  "core": "f6e0383317758b40",
+  "code": "f75075c0195e7c74",
+  "core": "0bfac1719c788a48",
   "date": "2026-10-05",
-  "note": "per-worker document build and render",
+  "note": "tiling plumbing",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/raster.py::resvg_png#low-zoom picture": {
-  "code": "23c45443c8a256e1",
-  "core": "e94da1057bb9460c",
-  "date": "2026-10-03",
-  "note": "how the low-zoom picture is shown",
+  "code": "30f7c13d67843d0d",
+  "core": "22a7c434b8c68afa",
+  "date": "2026-10-05",
+  "note": "subprocess call, test refusal and slot; makes no display decision",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/raster.py::resvg_png#raster plumbing": {
-  "code": "3b18d0ca5c4ffba0",
-  "core": "e94da1057bb9460c",
-  "date": "2026-10-03",
-  "note": "plumbing, decides nothing physical",
+  "code": "f6fdee2ea8195cdf",
+  "core": "22a7c434b8c68afa",
+  "date": "2026-10-05",
+  "note": "I/O and scheduling",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/raster.py::tile_boxes#low-zoom picture": {
@@ -22184,20 +22332,20 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/raster.py::tile_doc#low-zoom picture": {
-  "code": "169d1e95fabf0497",
-  "core": "f593634b298c8639",
+  "code": "6c3a5ef0cd9f3b21",
+  "core": "338ba6c22c89dc1f",
   "date": "2026-10-05",
-  "note": "sets the viewBox to the tile window; the picture is unchanged",
+  "note": "tile window as the viewBox plus the clipped drop; looks identical",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/raster.py::tile_doc#raster plumbing": {
-  "code": "d472e08b187b1364",
-  "core": "f593634b298c8639",
+  "code": "cda36dfc8557f6cd",
+  "core": "338ba6c22c89dc1f",
   "date": "2026-10-05",
-  "note": "drops off-window lines with the page's own drop_offmap margin; no new physical figure",
+  "note": "tiling and the off-map drop",
   "pages": {},
   "research": "",
   "rests": [],
@@ -35296,19 +35444,23 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/finish.py::FinishMixin.render_png#geometry, parsing and I/O": {
-  "code": "d0f89d79b1301253",
-  "core": "5dfb46550ca7ab10",
-  "date": "2026-10-03",
-  "note": "plumbing",
+  "code": "f9ee72ee63c0e931",
+  "core": "235ad7caf7cbaf2b",
+  "date": "2026-10-05",
+  "note": "resvg subprocess I/O under the shared slot",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/finish.py::FinishMixin.render_png#map finishing": {
-  "code": "50bffcbed70fa979",
-  "core": "5dfb46550ca7ab10",
-  "date": "2026-10-03",
-  "note": "how it is shown",
+  "code": "2a440858d13b1a7c",
+  "core": "235ad7caf7cbaf2b",
+  "date": "2026-10-05",
+  "note": "the render; the 2600px width and font mapping are how it is shown",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/finish.py::FinishMixin.title#geometry, parsing and I/O": {
