@@ -12061,7 +12061,8 @@
   "def": "One of the numbered books a Chinese work is divided into, like a volume or chapter.",
   "variants": [
    "juan"
-  ]
+  ],
+  "cased": true
  },
  "sheng": {
   "def": "A Chinese unit of grain volume, a tenth of a dou; ten he make one sheng.",
@@ -15656,6 +15657,40 @@
   "variants": [
    "Phoenix Clan",
    "Phoenix"
+  ],
+  "cased": true
+ },
+ "flow-through irrigation": {
+  "def": "Irrigation in which water is left running on through a paddy, in at its inlet and out at its outlet, rather than held standing in it; a 1948 essay gives it as most of Japan's irrigation before the land-consolidation law was amended in 1910.",
+  "variants": [
+   "flow-through irrigation",
+   "kakenagashi"
+  ]
+ },
+ "ponded-storage irrigation": {
+  "def": "Irrigation that holds the water standing in each paddy at a set depth, the practice a 1948 essay says replaced flow-through irrigation once paddy plots and their channels were consolidated after 1910.",
+  "variants": [
+   "ponded-storage irrigation"
+  ]
+ },
+ "watershed divide": {
+  "def": "The ridge line between two drainage basins, from which water runs off to either side; a modern Chinese guideline lays main and branch canals along such divides or along the contours.",
+  "variants": [
+   "watershed divide",
+   "watershed divides"
+  ]
+ },
+ "sub-commentary": {
+  "def": "A commentary on an earlier commentary: for the Rites of Zhou, Jia Gongyan's Tang-dynasty explanation of Zheng Xuan's Han-dynasty notes on the classic.",
+  "variants": [
+   "sub-commentary",
+   "sub-commentaries"
+  ]
+ },
+ "Kishu": {
+  "def": "The Kii domain, home of a branch of the Tokugawa house; the shogun Yoshimune came from it, and in 1722 summoned its engineer Izawa Yasobei from it to the Kanto plain.",
+  "variants": [
+   "Kishu"
   ],
   "cased": true
  }

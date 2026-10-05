@@ -1035,6 +1035,7 @@ floodways	floodway
 flophouse	kichin-yado
 flophouses	kichin-yado
 flora	flora
+flow-through irrigation	flow-through irrigation
 flowing-roof	nagare-zukuri
 flowing-roof style	nagare-zukuri
 flume	kakehi
@@ -1843,6 +1844,7 @@ kajimachi	kajimachi
 kajiya	kaji-ya
 kakaemoto	hitoyado
 kakehi	kakehi
+kakenagashi	flow-through irrigation
 kaki	Diospyros kaki
 kakoigura	kakoigura
 kamado	kamado
@@ -1978,6 +1980,7 @@ kinki region	Kinki
 kirime-en	kirime-en
 kirisute-gomen	kirisute-gomen
 kirizuma	gabled roof
+kishu	Kishu
 kishu school	Kishu school
 kishu-school	Kishu school
 kizuma	kizuma
@@ -2819,6 +2822,7 @@ pollarded	pollard
 pollards	pollard
 polygonum	Polygonum thunbergii
 polygonum thunbergii	Polygonum thunbergii
+ponded-storage irrigation	ponded-storage irrigation
 pool map	the pool
 pool maps	the pool
 post station	shukuba
@@ -3538,6 +3542,8 @@ stupa	stupa
 stupas	stupa
 sub-branch hall	branch hall
 sub-branch halls	branch hall
+sub-commentaries	sub-commentary
+sub-commentary	sub-commentary
 sub-prefect	sub-prefect
 sub-prefects	sub-prefect
 sub-temple	sub-temple
@@ -4106,6 +4112,8 @@ water-mouth	water-mouth
 water-tail	water-mouth
 water-watch station	mizubansho
 water-watch stations	mizubansho
+watershed divide	watershed divide
+watershed divides	watershed divide
 wayside hall	tsujido
 wayside halls	tsujido
 wazi	wazi
