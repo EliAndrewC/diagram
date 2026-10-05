@@ -20,8 +20,9 @@ returning `store.load(research_dir)`, called by `_record_text`'s question branch
 `os.path.normpath`'d directory `record_text` already passes `_record_text`, so a directory named two ways is one record and two
 directories never share one (the page cache's own keying). A process that reads no question page never calls it.
 
-**D2 - Forgotten with the pages (FR-003).** `_loaded` joins the tuple `clear_caches()` clears. No other staleness is added: every page
-rendered from the held record was already held in `_record_text` on the same terms (spec Assumptions).
+**D2 - Forgotten with the pages (FR-003).** `_loaded` joins the tuple `clear_caches()` clears. What changes (spec Assumptions): a page not
+yet read is rendered from the record as loaded since the last `clear_caches()`, not from the files at that moment - safe because every
+caller that edits fragments calls `clear_caches()` first (the site build), and the scripts only read.
 
 **D3 - Byte-identical pages (FR-004).** The question branch still calls `store.page_html(record, record.by_file[name], research_dir)`
 with the same arguments, only on a record loaded once; SC-004 compares every page before and after in one run (the base read with a

@@ -61,7 +61,7 @@ The test helper added as the workaround reads pages through `record_text` again 
 
 **Why this priority**: one reader, so the tests test what the engine does.
 
-**Independent Test**: the helper's body is a call to `record_text`; the four tests it sped up stay as fast.
+**Independent Test**: the helper's body is a call to `record_text`; the three tests it sped up stay as fast.
 
 **Acceptance Scenarios**:
 
@@ -103,7 +103,8 @@ The test helper added as the workaround reads pages through `record_text` again 
 - **SC-003** (FR-003): a test edits a fixture fragment after a read, calls `clear_caches()`, and reads the edit.
 - **SC-004** (FR-004): every page of the real record, read before and after, is byte-identical (compared over all 475 question pages
   and the registry).
-- **SC-005** (FR-005, FR-006): `make done` green; the four record tests the workaround sped up stay within 2x of their workaround times
+- **SC-005** (FR-005, FR-006): `make done` green; the four record tests commit d8851588e sped up (three through `text_of`, one through its `canon_keys` hoist) stay within 2x of
+  their workaround times
   (observed 2026-10-04, method: per-test pytest timing, commit d8851588e, research.md R1: 0.2 / 3.8 / 1.0 / 0.3 s; the 2x bound is a target).
 
 ## Decisions Recorded *(mandatory for any feature that changes what a map draws or states)*
@@ -112,9 +113,16 @@ None: no map draws or states anything differently. The cache is process plumbing
 
 ## Assumptions
 
-- The page cache's existing semantics - a record does not change under a process between `clear_caches()` calls - are the contract;
-  holding the loaded record adds no new staleness, because every page rendered from it was already cached on the same terms.
+- The page cache's existing semantics - a record does not change under a process between `clear_caches()` calls - are the contract.
+  What changes: a page not yet read is now rendered from the record as loaded at the first question-page read since the last
+  `clear_caches()`, not from the files at the moment it is read. That is safe because no caller edits a fragment and then reads
+  without `clear_caches()`: the site build calls it when it starts (`record/site.py`), the prepass and quote scripts are
+  short-lived readers, and each test fixture is its own directory (FR-002).
 - Memory: holding one loaded record per directory costs what one `store.load` costs while it lives; a test process already held one
   through the workaround.
 
 ## Review history
+
+- Round 1 (initial acceptance, MODE 2, 2026-10-04): FAITHFUL. Two non-blocking notes applied: the staleness assumption reworded to
+  name the real change and why it is safe; SC-005's four tests attributed (three via `text_of`, one via the `canon_keys` hoist).
+  (An earlier dispatch mislabeled MODE 1 returned NOT-REVIEWABLE on unlabeled figures and used no round.)
