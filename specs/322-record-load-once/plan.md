@@ -29,7 +29,7 @@ with the same arguments, only on a record loaded once; SC-004 compares every pag
 fresh `store.load` per page, as the old code did).
 
 **D4 - The test helper (FR-005).** `text_of` becomes `record_text(rel)`; its `_real_record` goes. Its callers keep the name, so the
-four record tests read through the engine.
+three record tests that use it read through the engine.
 
 **D5 - Research claims.** `_loaded` carries `Research: record load cache - NONE: process plumbing` (feature 316's form, as
 `_memory.trim_heap` does); `_record_text` and `clear_caches` keep theirs, owed an `impl-drift` check only if `make claims-owed` says so.
