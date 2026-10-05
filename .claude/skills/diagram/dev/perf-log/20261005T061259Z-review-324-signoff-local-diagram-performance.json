@@ -1,0 +1,62 @@
+{
+  "band": 3,
+  "base": {
+    "commit": "8c61b03ae",
+    "label": "324-start",
+    "utc": "20261005T060216Z"
+  },
+  "binding": "394ce9efc5e787a4e211b5cbdb73f367016bed6fef062a79a7e50edf50bb5bae",
+  "end": {
+    "commit": "1833871ef",
+    "label": "324-end",
+    "utc": "20261005T060545Z"
+  },
+  "environment": "local",
+  "feature": "324-render-memory",
+  "granted_by": {
+    "declared": "GM",
+    "session_id": "ce387434-fe83-4bcf-ae29-3db97f8d2f56",
+    "utc": "20261005T061259Z"
+  },
+  "kind": "signoff",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": -37.7,
+          "39": -15.2,
+          "4": -35.1,
+          "47": -17.4
+        },
+        "total_pct": -27.2
+      },
+      "20": {
+        "seeds": {
+          "25": -24.2,
+          "39": -19.1,
+          "4": -28.7,
+          "47": -16.9
+        },
+        "total_pct": -23.0
+      },
+      "40": {
+        "seeds": {
+          "25": -11.5,
+          "39": -9.1,
+          "4": -7.6,
+          "47": -3.7
+        },
+        "total_pct": -8.1
+      }
+    },
+    "seeds": {
+      "25": 4.1,
+      "39": -33.9,
+      "4": 23.7,
+      "47": -50.0
+    },
+    "total_pct": -18.1
+  },
+  "note": "The GM, 2026-10-05, in conversation: 'Yes, that is fine. I sign off on this. Thanks.' Band 3 on the 324-end 060545Z against the back-to-back 324-start 060216Z: seed 4 at 15 households +23.7% in field, every other leg band 0, -27/-23/-8% at 10/20/40. Recorded by the session at the GM's go-ahead; band 1 consistent and band 2 justified by perf-audit, 061056Z and 061104Z: the feature's code runs in no timed stage, the stages make the same calls on base and clone, and seed 4 re-run six times alternated averaged 6.05 s on both.",
+  "verdict": "signed"
+}
