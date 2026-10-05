@@ -97,13 +97,14 @@ The test helper added as the workaround reads pages through `record_text` again 
 
 - **SC-001** (FR-001): reading all 475 question pages of the real record in a fresh process loads the record once (counted), and
   `test_every_registry_key_cited_in_a_research_page_is_a_link_to_the_right_target` stays under 3 s with the helper reading through
-  `record_text` (it ran 44 s before the workaround, 1.0 s with it).
+  `record_text` (observed 2026-10-04, method: per-test pytest timing and cProfile, commit d8851588e, research.md R1: it ran 44 s before the
+  workaround, 1.0 s with it; the 3 s bound is a target).
 - **SC-002** (FR-002): a test reading a fixture record and the real record in one process gets each page from its own record.
 - **SC-003** (FR-003): a test edits a fixture fragment after a read, calls `clear_caches()`, and reads the edit.
 - **SC-004** (FR-004): every page of the real record, read before and after, is byte-identical (compared over all 475 question pages
   and the registry).
 - **SC-005** (FR-005, FR-006): `make done` green; the four record tests the workaround sped up stay within 2x of their workaround times
-  (0.2 / 3.8 / 1.0 / 0.3 s).
+  (observed 2026-10-04, method: per-test pytest timing, commit d8851588e, research.md R1: 0.2 / 3.8 / 1.0 / 0.3 s; the 2x bound is a target).
 
 ## Decisions Recorded *(mandatory for any feature that changes what a map draws or states)*
 
