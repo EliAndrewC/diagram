@@ -1,6 +1,6 @@
 {
  "feature": "319-modal-writeups",
- "plan_sha256": "1276d2d536d949efa919b33c1864bcfa75c045d26bebb077ac985131cc8daa00",
+ "plan_sha256": "66644da68f5da7c6e9921f51f1c227074caa217d14dfeffeec52e0b61d548786",
  "reviewed": "2026-10-04",
  "declared": "spec-fidelity",
  "decisions": [
@@ -136,6 +136,36 @@
    "summary": "LINKS judged against 'the drawing pages the modal and its KIND rest on'; the bundle carries CANDIDATE drawing pages beyond Drawing: - (a) the sibling of each Entry question and (b) any drawing page the modal listed at the merge base (scripts/_modal_bundle.py drawing_candidates)",
    "class": "within",
    "why": "Round 3's required change, applied and confirmed in round 4. scripts/_modal_owed.py modals_at gains about_only (default True) and passes it to modals_in; scripts/_modal_bundle.py drawing_candidates now reads the base with modals_at(root, base, about_only=False), so an old-form docstring at the merge base is read and every .drawing.html under its Entry: (or Drawing:) becomes a candidate - leg (b) is live for the conversion case FR-012 makes universal. Both legs now reach what the decision states: (a) the sibling drawing page of each Entry question, (b) any drawing page the base listed in either form. test_a_drawing_page_the_old_form_listed_at_the_base_is_a_candidate_after_the_conversion isolates leg (b): the base is an old-form Farmhouse listing 0038-yards.drawing.html, the head cites only 0029 (whose drawing page does not exist in the fixture tree) with no Drawing:, so the candidate can come from the base read alone, and with about_only=True it would be skipped. Re-run in round 4: make test-file green, 10,989 passed. LINKS is judged against the drawing pages the modal and its KIND rest on (FR-014, SC-008, the GM: 'in cases where no such sections exist we would omit the tab'). No narrowing remains."
+  },
+  {
+   "id": "D14-syntax",
+   "summary": "A guess bullet, About or Depiction paragraph opens with [knob=value|value]; parsed in _base.py and validated against the populated KNOBS registry and the knob's forms, ValueError at import otherwise",
+   "class": "within",
+   "why": "FR-015: a condition names a registered knob and values it can take, and a modal naming any other is refused when read; SC-009's unknown-knob/value failure. The bracket syntax is form, not scope."
+  },
+  {
+   "id": "D14-filter",
+   "summary": "The page writer keeps a conditional item when the manifest meta[knob] is among its values; a map recording no value for the knob shows none of that knob's conditional items; the condition never reaches the reader",
+   "class": "within",
+   "why": "FR-015: shown 'only on a map whose recorded knob value meets the condition' - no recorded value meets none, so this is the literal reading, not a carve-out. The GM asked for the item to be 'still automatic but dependent on the knobs'. Premise measured: all five pool hamlet manifests record settlement_form (3 nucleated, 2 linear, read 2026-10-04)."
+  },
+  {
+   "id": "D14-bundles",
+   "summary": "Check bundles render each conditional item with '(only where <knob> is <value>)' for modal-form, modal-research and modal-depiction; guidelines amend M9 and add M22",
+   "class": "within",
+   "why": "FR-015: the checks MUST read each conditional item with its condition; M9 (same on every map) must follow FR-015's one variation (FR-004/SC-004 as amended). Enforcement of the request, not added scope."
+  },
+  {
+   "id": "D14-entry",
+   "summary": "An Entry: path may carry the same condition and is dropped from References where it fails",
+   "class": "within",
+   "why": "FR-015: References MUST follow what is shown, a question resting only on a hidden item is not listed; SC-009 tests it."
+  },
+  {
+   "id": "D14-first-use",
+   "summary": "The windbreak's shared-wood guess conditioned on settlement_form=nucleated, with 0031 conditioned the same; linear excluded on 0033",
+   "class": "within",
+   "why": "The GM's own case (SC-009: on a nucleated map, absent from a dispersed one). The guess concerns 'a clustered village'; 0033 line 56 reads 'A row farm kept its grove like any other farm' (grepped). No pool linear map carries a windbreak (manifest grep, 2026-10-04), so excluding linear hides nothing a pool map draws. Content correctness of the condition is the modal checks' to judge on the rollout."
   }
  ],
  "verdict": "CLEAR"
