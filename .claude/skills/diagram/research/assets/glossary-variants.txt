@@ -844,6 +844,7 @@ edo-period	Edo period
 eel's bed	eel's bed
 eel's-bed	eel's bed
 eel's-bed plot	eel's bed
+egress	egress
 egune	igune
 egune's	igune
 eight trigrams	eight trigrams

@@ -15735,5 +15735,11 @@
   "variants": [
    "dian"
   ]
+ },
+ "egress": {
+  "def": "A way out; in a property custom, the right to pass out from one's land to a road or street.",
+  "variants": [
+   "egress"
+  ]
  }
 }
