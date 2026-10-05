@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-05T02:29:56Z",
+  "target": "record-checked",
+  "commit": "585edb08a",
+  "why": "quote-check on quote-check:0071#hk-herbarium-fsw-2 quote-check:0071#hkfp-fengshui-2025: round 4 changed one word ('while' to 'and', joining the Herbarium's and HKFP's ages) in this block; the round-4 check read the same sentence otherwise"
+}

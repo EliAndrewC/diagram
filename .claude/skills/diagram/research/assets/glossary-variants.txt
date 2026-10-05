@@ -3807,6 +3807,8 @@ tokugawa hidetada	Hidetada
 tokugawa ieyasu	Ieyasu
 tokugawa tsunayoshi	Tsunayoshi
 tokugawa yoshimune	Yoshimune
+tomb hill	tomb hill
+tomb hills	tomb hill
 ton'ya	ton'ya
 tonami	Tonami plain
 tonami plain	Tonami plain
