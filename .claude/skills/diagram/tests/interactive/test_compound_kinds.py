@@ -17,7 +17,7 @@ import pytest
 
 from l7r.diagram import compound
 from l7r.diagram.buildings.types import load_types
-from l7r.diagram.interactive.classes import NOT_HIGHLIGHTED, lead_sentence
+from l7r.diagram.interactive.classes import NOT_HIGHLIGHTED
 from l7r.diagram.interactive.compound_kinds import COMPOUND_CLASSES
 from l7r.diagram.interactive.notes import read_map_notes
 from l7r.diagram.interactive.page import explanations, present_classes
@@ -218,30 +218,8 @@ def test_every_kind_a_program_names_is_registered() -> None:
 def test_an_entry_is_complete(key: str) -> None:
     fc = COMPOUND_CLASSES[key]
     assert fc.key == key and key in fc.name.lower(), "the modal's heading names the kind its ink carries"
-    assert len(fc.what) > 40 and len(fc.why) > 40, "an explanation is a paragraph, not a label"
-    assert fc.label_note and fc.sources and all(fc.sources) and "research/" in fc.entry
-
-
-@pytest.mark.parametrize("key", sorted(COMPOUND_CLASSES))
-def test_each_label_speaks_in_its_own_form(key: str) -> None:
-    """The same rules the hamlet vocabulary keeps (constitution XII, features 156 and 183)."""
-    fc = COMPOUND_CLASSES[key]
-    note = fc.label_note
-    # the modal's lead already says "This is a guess - " or "This is a deliberate deviation - " (feature 264, building
-    # review: nine notes that opened "this is a guess - " printed it twice)
-    assert not re.match(r"\s*(this is\b|a guess\b|a deliberate deviation\b)", note, re.I), "the lead announces the label; the note must not repeat it"
-    assert not re.match(r"\s*the [\w' ]+ (is|are) a (deliberate )?deviation", note, re.I), "the lead announces the deviation"
-    if fc.label == "guess":
-        assert re.search(r"\bguess", note, re.I), "a guess is labeled a guess in its own words"
-    if fc.label == "deviation":
-        assert re.search(r"deviat|departure|liberty|drawn", note, re.I) and "legibility" not in note.lower()
-    if fc.label == "convention":
-        assert re.match(r"we have (rendered|drawn) ", note) and "in order to" in note and "deviation" not in note.lower()
-        assert re.search(r"\d", note) or "not found" in note
-    if fc.caveat:
-        assert fc.label == "accurate", "a liberty is announced in the lead; only an accurate kind carries a caveat"
-        assert fc.caveat in note, "the caveat is a verbatim half of the note"
-        assert not re.search(r"\b(at its |at )?true(-| )size\b", fc.caveat), "true size is accuracy, not a liberty"
+    assert fc.about and all(len(p) > 40 for p in fc.about), "an About paragraph is a paragraph, not a label"
+    assert fc.sources and all(fc.sources) and "research/" in fc.entry
 
 
 @pytest.mark.parametrize("key", sorted(COMPOUND_CLASSES))
@@ -259,20 +237,20 @@ def test_house_style_in_the_prose() -> None:
     dashes = (chr(0x2014), chr(0x2013))
     british = re.compile(r"\b(" + "|".join(["col" + "our", "cen" + "tre", "gr" + "ey", "hon" + "our", "label" + "led", "neighb" + "our", "behavi" + "our", "stor" + "ey", "demes" + "ne"]) + r")\b")
     for fc in COMPOUND_CLASSES.values():
-        for text in (fc.what, fc.why, fc.label_note, fc.caveat, *fc.siblings.values()):
+        for text in (*fc.about, *fc.guesses, *fc.depiction, *fc.siblings.values()):
             assert not any(d in text for d in dashes), fc.key
             assert not british.search(text), fc.key
 
 
 def test_the_gm_s_two_examples_hold_on_the_ochiba_page() -> None:
-    """SC-002: the threshold stones are the setting's and say so first; the hearing court rests on research, announces
-    no liberty and lists the questions it was written from. And the two courts are two kinds, each with ground."""
+    """SC-002: the threshold stones are the setting's and say so in their About text; the hearing court rests on research
+    and lists the questions it was written from; neither opens with a class-level lead (feature 319). And the two courts are two kinds, each with ground."""
     strings, tags = flatten(SHEETS["ochiba-magistracy"])
     notes = read_map_notes(os.path.join(MAGI, "ochiba-magistracy", "ochiba-magistracy.notes.md"))
     data = explanations(present_classes(tags), notes, registry=COMPOUND_CLASSES)
     stones, court = data["threshold stones"], data["hearing court"]
-    assert stones["lead"].startswith("This is a deliberate deviation") and stones["on_this_map"], "FR-010: the map's own note rides along"
-    assert court["lead"] == "" and court["questions"]
+    assert stones["about"] and stones["on_this_map"], "FR-010: the map's own note rides along"
+    assert "lead" not in stones and "lead" not in court and court["questions"], "nothing class-level is announced (feature 319)"
     grounds = {t for s, t in zip(strings, tags, strict=True) if s.startswith("<rect") and 'id="precinct"' in s}
     assert grounds == {"inner court", "outer court"}
     assert NOT_HIGHLIGHTED not in data
@@ -284,4 +262,3 @@ def test_a_kind_with_no_section_shows_its_gap_as_no_references() -> None:
     assert silent, "the measurement found kinds no section covers; the registry must show them"
     data = explanations(set(silent), registry=COMPOUND_CLASSES)
     assert all(data[k]["questions"] == [] for k in silent)
-    assert all(data[k]["lead"] == lead_sentence(COMPOUND_CLASSES[k].label, COMPOUND_CLASSES[k].label_note) for k in silent)

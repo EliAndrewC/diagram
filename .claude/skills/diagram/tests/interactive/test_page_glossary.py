@@ -37,10 +37,10 @@ def test_the_glossary_is_well_formed_and_used() -> None:
 
 def test_glossary_for_defines_tsubo_where_an_explanation_counts_in_it() -> None:
     """Feature 205 (GM 2026-09-07): the word is a tooltip wherever a modal uses it, and nowhere else."""
-    counted = {"yard": {"what": "an ordinary yard is 20 to 30 tsubo", "why": "", "lead": "", "caveat": "", "on_this_map": ""}}
+    counted = {"yard": {"what": "an ordinary yard is 20 to 30 tsubo", "why": "", "on_this_map": ""}}
     entry = [g for g in glossary_for(counted) if g["term"] == "tsubo"]
     assert entry and entry[0]["variants"] == ["tsubo"] and "two straw mats" in entry[0]["def"]
-    uncounted = {"yard": {"what": "an ordinary yard is 66 to 99 sq m", "why": "", "lead": "", "caveat": "", "on_this_map": ""}}
+    uncounted = {"yard": {"what": "an ordinary yard is 66 to 99 sq m", "why": "", "on_this_map": ""}}
     assert not [g for g in glossary_for(uncounted) if g["term"] == "tsubo"]
 
 
@@ -49,7 +49,7 @@ def test_a_term_only_in_the_about_or_guesses_tab_is_still_a_tooltip() -> None:
     interactive HTML map modals"): the terms a page ships are read from EVERY word a modal shows. The five-key allow
     list this replaced never read the About form's `about` paragraphs or `guesses` bullets, so a term used only there
     shipped no definition and was never wrapped."""
-    about = {"yard": {"about": ["Before 1868 a yard was swept daily."], "guesses": ["its size, 20 to 30 tsubo"], "label": None, "questions": [], "siblings": []}}
+    about = {"yard": {"about": ["Before 1868 a yard was swept daily."], "guesses": ["its size, 20 to 30 tsubo"], "questions": [], "siblings": []}}
     terms = {g["term"] for g in glossary_for(about)}
     assert {"1868", "tsubo"} <= terms, terms
 
@@ -62,7 +62,7 @@ def test_every_key_a_modal_carries_is_scanned_for_terms_or_ruled_not_rendered() 
     data = explanations(set(CLASSES))
     keys = {k for d in data.values() for k in d}
     assert keys >= NOT_RENDERED, NOT_RENDERED - keys
-    assert {"about", "guesses", "what", "why", "lead", "caveat", "on_this_map"} <= keys - NOT_RENDERED
+    assert {"about", "guesses", "depiction", "on_this_map"} <= keys - NOT_RENDERED
     farmhouse = rendered_text(data["farmhouse"])
     assert CLASSES["farmhouse"].about[0] in farmhouse and "farmhouses-minka" not in farmhouse, "the paragraphs, not the links"
 
@@ -78,7 +78,7 @@ def test_glossary_for_with_the_substring_prefilter_is_the_regex_scan() -> None:
     whole = [v for _t, (vs, _d) in terms[:6] for v in vs][:6]
     inside = [v for _t, (vs, _d) in terms[6:9] for v in vs][:2]
     text = " ".join(whole) + " " + " ".join(f"x{v}y" for v in inside) + " sluice-gate paddy"
-    data = {"a": {"what": text, "why": "", "lead": "", "caveat": "", "on_this_map": ""}}
+    data = {"a": {"what": text, "why": "", "on_this_map": ""}}
     got = {e["term"] for e in glossary_for(data)}
     low = text.lower()
     want = {t for t, (vs, _d) in terms if any(re.search(r"\b" + re.escape(v.lower()) + r"\b", low) for v in vs)}

@@ -1,4 +1,5 @@
-About: A walled compound had lesser gates beside its main one, for its work rather than its guests. The formal entrance
+About: A walled compound had lesser gates beside its main one, for its work rather than its guests: even a magistrate's
+branch office of three officials, at the end of the shogunate, had a small gate beside its main gate. The formal entrance
 was kept for the head of the household and honored guests, the family came and went by an inner entrance, and the
 kitchen had its own door from outside, the katteguchi.
 
@@ -16,14 +17,16 @@ right alongside the entrance step. How wide a side gate was, and how it was buil
 Guesses:
 - A guests' door that opens into a garden rather than an open court, where a plan draws one: no account puts a garden
   between a gate and a guest's entrance.
+- That a side gate is a pair of posts, narrower than the main gate: no account gives a side gate's width or how it was
+  built.
 
 Depiction: The plan draws each side gate as a pair of posts in the compound wall, narrower than the main gate: a kitchen
 postern, a service gate by the stables or the stores, a gate to a river landing, a cart gate, or a guests' door. Service
-gates are set so that deliveries and the night-soil collectors reach the outer privies and the stores without crossing
-the inner court where the household lives.
+gates are set where the night-soil collectors reach the outer privies from outside without crossing the inner court where
+the household lives.
 
 Name: side gate
 Covers: the posts of the posterns, service gates, landing gate, cart gate and guests' door
-Sources: jaanus-uchigenkan, kotobank-katteguchi, tajima-2007-night-soil, guernica-night-soil, l7r-wagons, toyama-1988-road-undevelopment, kominkai-genkan, fuchu-joge-pamphlet
-Entry: research/questions/0101-privies-setchin.html, research/questions/0082-moving-goods-carts-packhorses-and-river-landings-kashi.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html, research/questions/0081-village-lanes.html
+Sources: jaanus-uchigenkan, kotobank-katteguchi, tajima-2007-night-soil, guernica-night-soil, l7r-wagons, toyama-1988-road-undevelopment, kominkai-genkan, fuchu-joge-pamphlet, gate-width-absence
+Entry: research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html, research/questions/0101-privies-setchin.html, research/questions/0082-moving-goods-carts-packhorses-and-river-landings-kashi.html, research/questions/0081-village-lanes.html, research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html
 Drawing: research/questions/0101-privies-setchin.drawing.html, research/questions/0082-moving-goods-carts-packhorses-and-river-landings-kashi.drawing.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html

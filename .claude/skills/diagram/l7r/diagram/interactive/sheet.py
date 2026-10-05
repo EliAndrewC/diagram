@@ -28,7 +28,6 @@ from collections.abc import Iterator, Sequence
 from dataclasses import dataclass, field
 
 from .classes import NOT_HIGHLIGHTED, FeatureClass
-from .content import content
 from .page import ink_census, unregistered_classes, write_html
 from .tags import ClsTag
 
@@ -38,10 +37,6 @@ _NAME = re.compile(r"</?\s*([A-Za-z][\w:.-]*)")
 _KIND = re.compile(r'\sdata-kind="([^"]*)"')
 _PART_OF = re.compile(r'\sdata-part-of="([^"]*)"')
 _ID = re.compile(r'\sid="[^"]*"')
-
-#: What a Mode A caveat opens with (feature 262, building-review): "On the drawing:", the hamlet lead, labeled every
-#: caveat as a drawing note, and a compound's caveats are as often a rule of the setting or a gap in the research.
-CAVEAT_LEAD: str = content("page-text.json")["compound_caveat_lead"]
 
 #: The element whose content is never ink: patterns, gradients and clip paths are referenced, not drawn.
 DEFS = "defs"
@@ -247,6 +242,6 @@ def write_sheet_page(svg_path: str, registry: dict[str, FeatureClass], with_rast
     # label gold with its fill hid it. `data-sheet` lets the stylesheet keep a sheet's lit text in the map's ink
     # (page.css); a hamlet's captions sit beside their features and keep their gold.
     strings[0] = strings[0].replace("<svg ", '<svg data-sheet="mode-a" ', 1)
-    write_html(svg_path[: -len(".svg")] + ".html", strings, tags, name=title_of(svg_path), with_raster=with_raster, registry=registry, caveat_lead=CAVEAT_LEAD, within=[p[2] for p in ps])
+    write_html(svg_path[: -len(".svg")] + ".html", strings, tags, name=title_of(svg_path), with_raster=with_raster, registry=registry, within=[p[2] for p in ps])
     counts, unclassed = ink_census(strings, tags)
     return Census(counts, unclassed, unregistered_classes(counts, registry))

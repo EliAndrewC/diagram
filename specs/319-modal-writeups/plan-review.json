@@ -1,6 +1,6 @@
 {
  "feature": "319-modal-writeups",
- "plan_sha256": "2e722d1e1fa9c30e82eed372a92c4b3caa7e75726de5a84c8f5689053d1380d7",
+ "plan_sha256": "3818a3eea81a552ca778c75d2d20457f39ddd2d236d1e2f165ee1f7a9801242b",
  "reviewed": "2026-10-05",
  "declared": "spec-fidelity",
  "decisions": [
@@ -61,10 +61,10 @@
   },
   {
    "id": "D10-table",
-   "summary": "choices.json lists every REGISTERED knob (22) plus two declared choices (harvest_weather, hamlet_burial); its test reads the populated registry and the pool manifests",
+   "summary": "choices.json lists every registered knob, the declared choices and (amendment) every per-settlement roll of a form, with not_choices for the rest; the card lists each choice the map's meta records; a test scans the roll sites",
    "class": "narrowing",
    "ruling": "NOT LEGITIMATE",
-   "why": "FR-009 asks for EVERY per-settlement choice the map made, US4-1 'rolled from the seed or set by its declaration', the GM 'what the different tunable knobs were set to create this specific settlement'; the CLEAR sketch said 'rolled, declared or pinned'. The 'measured first' premise measured the register_knob registry, not the set of choices: hamletgen rolls per-settlement forms by _roll(spec.seed, ...) / knob_rng that are not registered - grove_sides, grove_flank, manure_form (heap|pit), farm_water (channel|well), row_line, row_sides, row_water (shared|own), intake (weir|open), copse_siting, kosatsuba_siting, dike_crop, fry_form, pond_layout, leftover (hamletgen/plan.py:518-538), bath_seat (homesteads/fixtures.py:209), and the field grave form island|corner (settlement/fields/features.py:32 grave_form, not even in meta). All but grave form are in the pool manifests' meta today. None is in choices.json and the test cannot fail on them. Not physically impossible, not implied by the GM, and it guts the purpose: the card would omit a large share of what made the settlement."
+   "why": "Round 2. Round 1's missing forms are now in the table with modals: grove_sides, manure_form, farm_water, row_line/sides/water, intake, copse_siting, kosatsuba_siting, dike_crop, fry_form, pond_layout, leftover, bath_seat, water_sink, grave_form (119 choice modal files). Remaining gap, measured 2026-10-05 in the clone: the card lists only what meta RECORDS (choices.made skips a key not in meta), and two choices in the table are recorded by NO hamlet. (1) water_sink: rolled at hamletgen/plan.py:511 or DECLARED in all five pool gen.py files (pond for Inashiro/Mizuguchi, offmap for Sawada/Kashikawa), and decides whether a tameike is drawn, yet no code writes meta['water_sink'] (grep) and no pool manifest has it. (2) grain_drift: rolled per hamlet at plan.py:535 and passed to the furrows at water/fit.py:247, not in any pool meta. So US4-1's 'every per-settlement choice the map made (rolled from the seed or set by its declaration)' fails on every hamlet card, and D10-degree's one grain_drift modal is never opened. (3) The test does not do what the plan sentence says ('fails on a roll that is neither'): it checks table membership, not that a choice reaches meta, and its regex '(?:_roll\\(spec\\.seed|knob_rng\\((?:spec\\.)?seed)' over hamletgen/ alone misses every roll written knob_rng(s.seed...), knob_rng(plan.spec.seed...), _roll(plan.spec.seed...), knob_rng(self.seed...) or outside hamletgen/: pond_stock, pit_field_share, house_bearing, retirement_house@171, head_offset, brook_wander, brook_approach, mulberry_fishpond, and settlement/ grove_sides, grove_flank, byre_share, passage_share, paddy_rest, water_source_position, cremation_seat. None of those misses is a FORM missing from the table today (all degrees, shares, geometry streams, or cremation_seat which no hamlet records), but grove_sides itself is found only because plan.py also rolls it. Required: record water_sink (its FINAL value, after sink.py's offmap fallbacks at 789-816) and grain_drift in a hamlet's meta as grave_form now is; add a test that every table key a hamlet plan rolls or declares is in a generated hamlet's meta; widen the scan to '[\\w.]*seed' over hamletgen/ and settlement/ and name the newly found non-form rolls in not_choices (or the test fails on them)."
   },
   {
    "id": "D10-degree",
@@ -87,23 +87,34 @@
   },
   {
    "id": "D10-grove-sides",
-   "summary": "Which sides the farm groves take moves from the homestead grove modal to the card as a fact sentence",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "grove_sides is a per-settlement ROLL (hamletgen/plan.py:518, settlement/homestead_parts/groves.py:400; 2 or 3 in the pool meta, 2/3/4 per feature 291), so FR-009 makes it a choice whose value opens a standardized modal. As a fact sentence it opens nothing. Moving it off the feature modal is right (FR-004); demoting a rolled choice to a fact with no modal is not."
+   "summary": "Which sides the farm groves take is a CHOICE (grove_sides 2/3/4) opening its own modal, listed where settlement_form is dispersed or linear",
+   "class": "within",
+   "why": "Round 2: resolved. choices.json carries grove_sides with three values and grove_sides--2/3/4.md exist. The when [settlement_form=dispersed|linear] matches the engine: plan.py:216-217 'drawn only where the farms carry their own grove (not nucleated)', grove_rules.py:67 and place.py:360 skip nucleated; hamlet SETTLEMENT_FORMS are nucleated, dispersed, linear only (consts.py:865). Aside, not a ruling: page.py:839 still adds homestead_grove_default's sentence to the card's facts, where the plan now says 'a CHOICE ... not a fact' - a duplicate, not an omission."
   },
   {
    "id": "D10-features-removal",
-   "summary": "On a hamlet the page reads no ### Features and writes no on_this_map; the five blocks are removed from the notes as covered by harvest weather, where the dead lie and the retirement count; two (Inashiro's, Kashikawa's own burial grounds) stale",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "US4-3: each per-map fact now in ### Features becomes a title-card entry (a choice or a count). The coverage claim is false: Kashikawa's block carries '**grave island**: Kashikawa's field grave takes the Japanese form ... (each hamlet takes one form)' - the rolled grave_form (fields/features.py:32), which is in no choice, no count and not in meta. Removing the block drops it from every surface. The stale burial claims check out (all five meta record hamlet_burial=village_ground) and their removal is within; so is the retirement count (Kuwabata's block says 4 of 16 where meta records 7, a third stale entry the card's reading of meta corrects)."
+   "summary": "On a hamlet the page reads no ### Features; the five blocks are removed as carried by harvest weather, where the dead lie, the field grave's form and the retirement count; two stale burial claims",
+   "class": "within",
+   "why": "Round 2: resolved. Every sentence in the five blocks (read in full) is now a card entry: threshing yard -> harvest_weather; burial ground -> hamlet_burial (Inashiro's and Kashikawa's own grounds stale, all five record village_ground); retirement house -> retirement_fact from meta (Kuwabata's '4 of 16' stale, meta 7); Kashikawa's grave island -> grave_form, now written to meta at settlement/fields/features.py:333 only when a grave is drawn, with grave_form--corner/island.md. Holds on the order of work: no pool manifest records grave_form yet (all five ABSENT, not regenerated), so Kashikawa's block must not go before its manifest is regenerated with it - which the final task's pool regeneration provides."
   },
   {
    "id": "D10-other-tiers",
    "summary": "Other tiers keep reading ### Features until standardized",
    "class": "within",
    "why": "The pool's settlement maps are hamlets alone; the other Features blocks are on magistracy and country-shrine sheets, whose per-sheet text FR-003 keeps on the sheet and FR-011 reviews under the particular guidelines."
+  },
+  {
+   "id": "D10-when",
+   "summary": "A choice belonging to one settlement or field form carries a `when` condition; the card lists it only where the condition holds, since meta records some of them whatever the form",
+   "class": "within",
+   "why": "New in the amendment. FR-009 lists the choices the map MADE; a value recorded but never used is not one. Measured: row_line/sides/water feed only hamletgen/homesteads/rows.py (the linear form) and are recorded on nucleated Inashiro; farm_water_drawn is null on both linear maps; copse_clumps appears only on the three nucleated maps though copse_siting is recorded on all five; dike_crop, leftover, fry_form and pond_layout are forced to defaults off the dike-pond archetype (plan.py:471, 531-533). Each gate removes nothing a map draws. test_a_choice_of_one_settlement_form_is_not_listed_on_another enforces it."
+  },
+  {
+   "id": "D10-not-choices",
+   "summary": "Per-settlement rolls that are not a choice of form - geometry, a degree, a share, a count - named in not_choices with why, and not listed on the card",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "New in the amendment; adjudicated per class. FR-009 defines the choices as 'each knob's value, and the per-map facts now in ### Features', and the project's ratified doctrine (constitution XII, CLAUDE.md: 'A degree along a continuum is calibrated liberty; a choice between distinct forms is a knob') is what makes an unregistered roll of a FORM a knob - the basis of round 1's ruling. The same doctrine says a degree is not one. Geometry (down_deg, water_flow, brook_side, grove_flank - a mirror pair, inert under the pool's NW wind): the map's orientation, drawn on the map, with no per-value explanation to open. Degrees and shares (fan_aspect, head_lead, persimmon_front, privy_seats, farm_fixtures): calibrated liberty, unregistered; the registered degree grain_drift stays on the card (D10-degree). Counts (woodland_patches) and retirement_share/retirement_house: the latter is ON the card as the count fact, so nothing is dropped. cluster_aspect_drawn is a measurement, not a roll. None guts the purpose: no feature modal carries per-map text for any of them, and none is a choice between forms."
   },
   {
    "id": "D10-test",

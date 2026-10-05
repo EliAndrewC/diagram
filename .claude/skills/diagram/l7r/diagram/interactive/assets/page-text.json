@@ -1,6 +1,4 @@
 {
-  "caveat_lead": "On the drawing: ",
-  "compound_caveat_lead": "Where this rests on less than the research: ",
   "plain_cursor": [
     "scrub and rough grazing",
     "marsh",
@@ -10,13 +8,6 @@
     "windbreak",
     "woodland commons"
   ],
-  "convention_lead": "Note: ",
-  "label_words": {
-    "accurate": "historically accurate",
-    "deviation": "a deliberate deviation",
-    "convention": "a map drawing convention",
-    "guess": "a guess"
-  },
   "not_highlighted_rulings": [
     [
       "the background sheet",

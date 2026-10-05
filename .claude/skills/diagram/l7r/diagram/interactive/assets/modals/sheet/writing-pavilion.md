@@ -1,6 +1,6 @@
-About: A study, the shosai, was a room in a private house for reading and writing - whichever room or building held the
-built-in writing desk, called for that a shoin or a "place of learning". It could be a room of the house or a building made for
-the purpose, standing on its own.
+About: The writing pavilion is a study standing on its own. A study, the shosai, was the place in a private house for reading
+and writing - whichever room or building held the built-in writing desk, called for that a shoin or a "place of learning" - and
+it could be a room of the house or a building made for the purpose.
 
 One detached study survives in Kyoto. Rai San'yō, a Confucian scholar, poet and historian of the late Edo period, built it on
 his estate in 1828 as a study and tea room, with its garden on its west side; the estate's other buildings were lost, and the

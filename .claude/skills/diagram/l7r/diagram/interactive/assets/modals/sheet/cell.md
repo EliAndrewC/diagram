@@ -4,7 +4,7 @@ confinement as a sentence was imposed only by exception. A magistracy that judge
 own compound for those called before its court, and Edo's town magistracy kept its cell in the quarter that held its
 court rooms. An intendant's compound generally held a jail too, though Takayama's stood in the town.
 
-In Rokugan torture to win a confession is forbidden by Imperial decree and torturers are very rare, so a magistracy
+In Rokugan torture to win a confession is forbidden by the written law and torturers are very rare, so a magistracy
 keeps no room built for interrogation.
 
 What a magistracy's temporary cell looked like is not recorded. The great jails' cells were rooms reckoned in tatami

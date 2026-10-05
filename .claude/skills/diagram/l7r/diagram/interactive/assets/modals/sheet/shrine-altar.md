@@ -18,7 +18,8 @@ Guesses:
 
 Depiction: The plan draws each altar as a small mark standing for the kami it serves - a rice-straw figure, a fox's torii, a
 flame, a wave - not as the altar at its size, with the kami's name where the plan gives one. Where the altars stand side by
-side, the main kami's is in the middle or on the right as you face it.
+side, the main kami's is in the middle or on the right as you face it. Which way a hall keeps more than one kami - altars side
+by side, one altar with the others behind it, or a second small shrine on the same ground - is chosen for each map.
 
 Name: shrine altar
 Covers: each altar glyph inside a shrine hall, with its name and sublabels

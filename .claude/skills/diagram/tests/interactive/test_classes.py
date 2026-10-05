@@ -1,7 +1,7 @@
 """The class registry is complete, closed and symmetric (feature 134, spec FR-007 / FR-008, SC-007).
 
-Every class the spec's table names is here; every entry says what, why, which of the three
-constitution-XII labels applies and where the text came from; every sibling names a class in the
+Every class the spec's table names is here; every entry has its About paragraphs and says where the text came from
+(the classification is per statement since feature 319); every sibling names a class in the
 table and is named back. The page (`test_page.py`) and the browser test build on this - a registry
 hole would surface there as a reader told nothing, which is the failure this file exists to catch
 first.
@@ -13,7 +13,7 @@ import re
 
 import pytest
 
-from l7r.diagram.interactive.classes import ANNOUNCED, CLASSES, NOT_HIGHLIGHTED, NOT_HIGHLIGHTED_OVERTURNED, NOT_HIGHLIGHTED_RULINGS, FeatureClass, label_phrase, lead_sentence, slug
+from l7r.diagram.interactive.classes import CLASSES, NOT_HIGHLIGHTED, NOT_HIGHLIGHTED_OVERTURNED, NOT_HIGHLIGHTED_RULINGS, FeatureClass, slug
 
 # The spec's FR-007 vocabulary, verbatim (plus `field pond`, added at implementation and recorded
 # in the spec table). A row added to the spec without an entry here fails this test; an entry here
@@ -100,31 +100,9 @@ def test_an_entry_is_complete(key: str) -> None:
     # reads it. So the rule is that a heading exists and still names the thing the ink is tagged with,
     # not that the two strings are identical.
     assert fc.name and key in fc.name, "the modal's heading names the class its ink carries"
-    if fc.about:  # feature 319's About form: paragraphs and guesses, no feature-level label (dev/modals.md M11)
-        assert fc.label is None and all(len(p) > 40 for p in fc.about), "an About paragraph is a paragraph, not a label"
-    else:
-        assert len(fc.what) > 40 and len(fc.why) > 40, "an explanation is a paragraph, not a label"
-        assert fc.label in ("accurate", "deviation", "convention", "guess")
-        assert fc.label_note, "the label is justified in one line"
+    assert fc.about and all(len(p) > 40 for p in fc.about), "an About paragraph is a paragraph, not a label"
     assert fc.sources and all(fc.sources), "a sources line, or 'not recorded'"
     assert "research/" in fc.entry, "written FROM a research entry"
-
-
-@pytest.mark.parametrize("key", SPEC_CLASSES)
-def test_a_guess_says_so_in_its_note(key: str) -> None:
-    fc = CLASSES[key]
-    if fc.label == "guess":
-        assert re.search(r"\bguess", fc.label_note, re.I), "a guess is labeled a guess in its own words"
-    if fc.label == "deviation":
-        assert re.search(r"deviat|departure|liberty|drawn", fc.label_note, re.I), "a deviation says what deviates"
-        assert "legibility" not in fc.label_note.lower(), "legibility is a map drawing CONVENTION, not a deviation (feature 183)"
-    if fc.label == "convention":
-        # THE GM'S FORM (feature 183): "we have rendered <it> ... in order to ... <the real size or color>" -
-        # and where the record was searched and is silent on a figure, the note says so in so many words
-        assert re.match(r"we have (rendered|drawn) ", fc.label_note), f"{key}: a convention opens in the GM's form"
-        assert "in order to" in fc.label_note, f"{key}: a convention states its purpose"
-        assert re.search(r"\d", fc.label_note) or "not found" in fc.label_note, f"{key}: a figure, or the words 'not found'"
-        assert "deviation" not in fc.label_note.lower(), f"{key}: a convention is not called a deviation"
 
 
 def test_the_gm_s_line_between_deviation_and_convention() -> None:
@@ -134,7 +112,6 @@ def test_the_gm_s_line_between_deviation_and_convention() -> None:
     as a bullet (dev/modals.md M11-M13, D1-D6). The nine conventions this test listed (the bund beans, the homestead bamboo,
     the household shrine, the shared bamboo grove, the storage shed, the stream, the threshing yard, the weir, the well) each
     tell their convention on that tab now."""
-    assert sorted(k for k, fc in CLASSES.items() if fc.label is not None) == []
     for key in ("bund beans", "well", "weir", "threshing yard"):
         assert CLASSES[key].depiction, f"{key}: its drawing convention is told on the Depiction tab"
 
@@ -173,73 +150,6 @@ def test_the_distinctions_the_gm_named_are_written(a: str, b: str) -> None:
         assert b in CLASSES[a].siblings and a in CLASSES[b].siblings
 
 
-def test_label_phrases_are_the_constitutions_four() -> None:
-    assert label_phrase("accurate") == "historically accurate"
-    assert label_phrase("deviation") == "a deliberate deviation"
-    assert label_phrase("convention") == "a map drawing convention"
-    assert label_phrase("guess") == "a guess"
-
-
-# --- the presumption of accuracy (feature 156, GM 2026-08-29) ---
-
-
-def test_only_a_liberty_is_announced() -> None:
-    """The GM: don't say a thing is historically accurate; call out the liberties. So `accurate`
-    produces no lead sentence at all, and the other two are unchanged."""
-    assert lead_sentence("accurate", "Plot form and the irregular patchwork are read.") == ""
-    assert lead_sentence("deviation", "drawn larger") == "This is a deliberate deviation - drawn larger"
-    assert lead_sentence("guess", "") == "This is a guess."
-    # a convention opens in the GM's own form (feature 183): "Note: we have rendered ..."
-    assert (
-        lead_sentence("convention", "we have rendered the beads darker, in order to see them. Real leaves are medium green.")
-        == "Note: we have rendered the beads darker, in order to see them. Real leaves are medium green."
-    )
-    assert {"deviation", "convention", "guess"} == ANNOUNCED
-
-
-@pytest.mark.parametrize("key", SPEC_CLASSES)
-def test_the_caveat_is_a_verbatim_half_of_the_record(key: str) -> None:
-    """`caveat` is rendered and `label_note` is not, so the two must not be allowed to drift: the
-    caveat is always a literal slice of the note it was split out of."""
-    fc = CLASSES[key]
-    if fc.caveat:
-        assert fc.caveat in fc.label_note, f"{key}: the caveat must be verbatim from its own record"
-
-
-@pytest.mark.parametrize("key", SPEC_CLASSES)
-def test_only_an_accurate_class_carries_a_caveat(key: str) -> None:
-    """A deviation and a guess already lead with their liberty; a second copy below the why would
-    say it twice."""
-    fc = CLASSES[key]
-    if fc.label != "accurate":
-        assert fc.caveat == "", f"{key}: a {fc.label} announces its liberty in the lead"
-
-
-def test_no_caveat_says_a_thing_is_drawn_at_its_TRUE_size() -> None:
-    """Drawn at true size is ACCURACY, not a liberty - the trap `bund` and `notice board` fell into,
-    and the one a later editor is likeliest to re-open, because "the drawn stroke" sounds like a
-    drawing note (settlement-review, 2026-08-29)."""
-    for key, fc in CLASSES.items():
-        if fc.caveat:
-            assert not re.search(r"\b(at its |at )?true(-| )size\b|\bat its true\b", fc.caveat), f"{key}: true size is accuracy, not a liberty"
-
-
-def test_no_caveat_merely_reasserts_accuracy() -> None:
-    """The point of the split (spec-fidelity round 1): "Topology, taper and true-size width are
-    read" is the accuracy claim in other words, and moving it below the why would keep the GM's
-    complaint alive on most of the map. A caveat says what was DRAWN rather than what was read."""
-    for key, fc in CLASSES.items():
-        if not fc.caveat:
-            continue
-        opener = fc.caveat.split(";")[0]
-        assert not re.search(r"\bare read\b|\bis read\b|\bare attested\b", opener), f"{key}: the caveat's first clause is a provenance claim, not a liberty"
-
-
-def test_every_accurate_class_without_a_caveat_is_deliberate() -> None:
-    """Feature 156's caveat (the liberty an accurate class's record discloses) belonged to the old form. Since feature 319's
-    rollout every hamlet class is in the About form: none carries a caveat, and what it guessed is a Guesses bullet."""
-    assert {k for k, fc in CLASSES.items() if fc.caveat} == set()
-
 def test_slug_is_a_css_token() -> None:
     for key in CLASSES:
         assert re.fullmatch(r"[a-z][a-z-]*", slug(key)), key
@@ -270,7 +180,7 @@ def test_house_style_in_the_prose() -> None:
     dashes = (chr(0x2014), chr(0x2013))
     british = re.compile(r"\b(" + "|".join(["col" + "our", "cen" + "tre", "gr" + "ey", "hon" + "our", "label" + "led", "neighb" + "our", "behavi" + "our", "stor" + "ey"]) + r")\b")
     for fc in CLASSES.values():
-        for text in (fc.what, fc.why, fc.label_note, *fc.siblings.values()):
+        for text in (*fc.about, *fc.guesses, *fc.depiction, *fc.siblings.values()):
             assert not any(d in text for d in dashes), fc.key
             assert not british.search(text), fc.key
 

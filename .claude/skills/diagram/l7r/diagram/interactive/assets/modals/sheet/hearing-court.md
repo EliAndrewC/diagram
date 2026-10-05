@@ -1,8 +1,8 @@
 About: The hearing court (shirasu) was the floor before a magistrate's hall where the parties to a case were heard and
 judged, the magistrate and officials sitting above them in the hall. Peasants, townsmen and lesser ronin knelt on straw
-mats on its floor, the accused roped at the center with the plaintiff behind on one side and the headmen and village
-officials on the other; samurai, priests and monks sat instead on the hall's verandas. Intendants' offices and road
-checkpoints kept such courts as well as the town magistracies, and Takayama kept two, one for suits and petitions and one
+mats on its floor, the accused roped at the center with the plaintiff behind on one side and the town officials,
+headmen and landlords on the other; samurai, priests and monks sat instead on the hall's verandas. Intendants' offices and
+road checkpoints kept such courts as well as the magistracies, and Takayama kept two, one for suits and petitions and one
 for criminal cases. In Rokugan, where torture is rare and never used to force a confession, a magistracy keeps no room
 built for interrogation, so questioning happens here or in the day office.
 
@@ -30,4 +30,4 @@ Name: hearing court (oshirasu)
 Covers: the roofed court before the dais and its label
 Sources: oshirasu-jawiki, shirasu-kotobank, shirasu-imidas, takayama-jinya-official, takayama-jinya-city, takayama-gh-shirasu, takayama-jinya-jawiki
 Entry: research/questions/0099-the-hearing-court-shirasu.html, research/questions/0096-holding-cells-agariya-and-roya.html
-Drawing: research/questions/0099-the-hearing-court-shirasu.drawing.html, research/questions/0096-holding-cells-agariya-and-roya.drawing.html
+Drawing: research/questions/0099-the-hearing-court-shirasu.drawing.html, research/questions/0096-holding-cells-agariya-and-roya.drawing.html, research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html

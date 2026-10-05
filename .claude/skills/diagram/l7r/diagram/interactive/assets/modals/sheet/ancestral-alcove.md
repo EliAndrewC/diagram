@@ -20,7 +20,8 @@ Guesses:
   keeping the tablets of its own line.
 
 Depiction: The plan marks the alcove at the residence's formal end, by the reception room - beside it, or in a small room
-behind it, each plan taking one of the two attested places - and never among the family's rooms. Where the post passes cousin to
+behind it, each plan taking one of the two attested places - and never among the family's rooms. The farmhouse's altar
+built out beyond a room is not drawn: a magistrate's residence is drawn as a samurai house, with formal rooms. Where the post passes cousin to
 cousin, the plan labels it a lineage alcove. A plan of a posting filled by appointment draws none.
 
 Name: ancestral alcove

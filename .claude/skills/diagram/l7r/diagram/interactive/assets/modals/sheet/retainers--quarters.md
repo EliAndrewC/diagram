@@ -1,5 +1,5 @@
-About: The retainers' quarters housed the magistrate's samurai inside the compound - the working platoon, and on some
-postings their families. A rural intendant's office kept the huts and rowhouses of its junior officials on its own grounds,
+About: The retainers' quarters housed the magistrate's retainers inside the compound, in dwellings that held a few single
+men or a household. A rural intendant's office kept the huts and rowhouses of its junior officials on its own grounds,
 and a small domain's seat laid out its retainers' residences among its halls and storehouses; the great town magistracy of
 Edo instead housed its constables in a district of their own.
 

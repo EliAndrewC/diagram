@@ -1,10 +1,8 @@
 """The compound's grounds and its bounds - the courts, the gardens, the wall and its gates, the ways that reach it.
 
-Each class's DOCSTRING is its explanation - `What:`, `Why:`, `Note:`, optional `Caveat:`, then the data tags -
-parsed by `..classes._base.parse_explanation` (feature 189). Every kind is written FROM the existing record
-(feature 262, FR-005): the sections its `Entry:` names, and the `buildings/types.json` program item folded into
-it where there is one (the item's class and why are carried here, not re-decided). The measurement behind each
-label is `specs/262-interactive-magistracy-pages/coverage.md`.
+Each class's modal text is its own file, `assets/modals/sheet/<slug of its key>.md`, in the About form (feature 319),
+parsed by `..classes._base.parse_explanation`. Every kind is written FROM the existing record (feature 262, FR-005): the
+sections its `Entry:` names.
 """
 
 from __future__ import annotations

@@ -800,7 +800,10 @@ duplicated, and a duplicated table with no pin is a table that drifts.
 
 Research: drawn aspect a shape is declared at - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: round up to 2.0"""
 LANE_SKELETONS = ("spine", "T", "Y", "cross")
-"""Research: lane skeleton - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: spine, T, Y or cross"""
+"""Research:
+    lane skeleton - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: spine, T, Y or cross
+    lane along the water - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the fifth lane shape, a lane along the water, is never rolled; only spine, T, Y or cross
+"""
 # The two attested forms of making every house reachable. NOT weighted: the research supports both
 # equally, so an even roll is the honest one, and the two read differently enough at a glance
 # (a laid-out double row vs. a grown spine-and-alleys) to be worth a full half of the cohort each.

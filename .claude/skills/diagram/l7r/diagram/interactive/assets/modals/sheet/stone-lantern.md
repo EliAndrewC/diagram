@@ -10,7 +10,7 @@ and the Oribe among them.
 How tall a garden lantern stood, and how many a residence garden held, are not recorded.
 
 Guesses:
-- How many lanterns a garden holds, and where they stand in it: no account gives either for a residence garden.
+- How many lanterns a garden holds (the plans draw one or more) and where they stand in it: no account gives either for a residence garden.
 - A lantern in a court where guests were received, where a plan draws one: no lantern outside a garden is described, so
   one drawn there borrows the older shrine and temple use and stands alone on the line of approach.
 

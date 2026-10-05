@@ -7,7 +7,7 @@ rivers. Where the draining stopped, the ground stayed wetland, and paddy let go 
 
 A marsh did not end in a line: from open water it graded through reed, then sedge and wet meadow, to dry ground. On
 Lake Biwa the reed was cut each winter and its stubble burned in spring, and the cutting kept the bed open; left uncut,
-old reed built up into soil and willow and alder grew on it. A village's own marsh was very likely worked the same way.
+old reed built up into soil and trees such as willow grew on it. A village's own marsh was very likely worked the same way.
 At a reservoir pond the reed, cattail and wild rice stood in the shallows and stopped at the foot of the embankment,
 which was kept clear for its strength; a tended pond carried more kinds of water plant, not fewer.
 

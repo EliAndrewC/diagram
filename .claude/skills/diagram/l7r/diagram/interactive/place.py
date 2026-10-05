@@ -26,7 +26,7 @@ WHAT THE CARD IS NOT ALLOWED TO SAY, and why it is worth knowing (spec `research
     citing a source for something adjacent to what it says. The card says this hamlet farms rice
     because the map draws rice.
   * Where it rests on canon that the historical record contradicts or is silent on, it SAYS SO, in
-    the caveat (spec FR-008a). That is the GM's own liberty rule - *"we should call out liberties
+    its basis line (spec FR-008a). That is the GM's own liberty rule - *"we should call out liberties
     that we have taken when we have chosen to deviate from historical accuracy"* - applied to this
     surface. A hamlet having no headman of its own is the case: it is Rokugan's rule, and the Edo
     record has branch hamlets that did have one.
@@ -153,9 +153,8 @@ ENTRY: str = _CONTENT["entry"]
 #: meets them (settlement-review, 2026-08-29 - the basis block had grown longer than the card).
 BASIS: str = _CONTENT["basis"]
 
-#: What introduces the basis on the card. NOT "On the drawing:", which is what a class's caveat gets:
-#: this paragraph is about where the card's claims COME FROM, not about how anything was drawn, and a
-#: renderer that decides the lead-in for both cannot tell them apart (settlement-review, 2026-08-29).
+#: What introduces the basis on the card: this paragraph is about where the card's claims COME FROM, not about how
+#: anything was drawn (settlement-review, 2026-08-29), so the lead-in is part of the string, never the renderer's.
 BASIS_LEAD: str = _CONTENT["basis_lead"]
 
 
@@ -417,9 +416,8 @@ def place_card(meta: dict[str, Any], present: set[str], notes: MapNotes, manifes
         "name": name,
         "what": what,
         "why": why,
-        "label": "accurate",
-        "lead": "",  # the card never announces accuracy either (spec FR-001)
-        "caveat": BASIS_LEAD + BASIS if kind.noun == "hamlet" else "",
+        # the card never announces accuracy (spec FR-001); its basis is fine print below the body (FR-008a)
+        "basis": BASIS_LEAD + BASIS if kind.noun == "hamlet" else "",
         # the card's references are the QUESTIONS its own entry names, like any class's (feature 180)
         "questions": research_questions(ENTRY),
         "siblings": [],

@@ -137,8 +137,10 @@ def _item(raw: Any, where: str) -> RequiredItem:
 
 
 def classification(item: RequiredItem) -> tuple[str, str]:
-    """(class, why) for a program item: its own for a label-regex item, its KIND's label and note for a kind item
-    (feature 262 - stated once, in the registry). A kind the registry does not know is refused by name."""
+    """(class, why) for a program item: its own for a label-regex item; for a kind item (feature 262 - stated once, in the
+    registry) `per statement` and its KIND's guesses. Since feature 319 a kind carries no class-level label - its modal
+    classifies each statement (`dev/modals.md` M11-M13) - and what a reviewer of a size needs is what was guessed, which is
+    the kind's Guesses list. A kind the registry does not know is refused by name."""
     if item.kind is None:
         return item.cls, item.why
     from ..interactive.compound_kinds import COMPOUND_CLASSES  # lazy: the registry imports the page stack
@@ -146,7 +148,13 @@ def classification(item: RequiredItem) -> tuple[str, str]:
     fc = COMPOUND_CLASSES.get(item.kind)
     if fc is None:
         raise ValueError(f"program item {item.id!r} names the kind {item.kind!r}, which the Mode A registry does not know")
-    return fc.label, fc.label_note
+    return PER_STATEMENT, " ".join(fc.guesses) if fc.guesses else NOTHING_GUESSED
+
+
+#: The class column of a kind item (feature 319): the classification lives per statement in the kind's modal.
+PER_STATEMENT = "per statement"
+#: The why of a kind item whose modal lists no guess.
+NOTHING_GUESSED = "nothing guessed"
 
 
 def parse_types(data: Any) -> tuple[BuildingType, ...]:

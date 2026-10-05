@@ -1,7 +1,7 @@
 About: Millet grew in the dry fields (hatake), farmland that was never flooded. Foxtail, proso and barnyard millet were
 among the coarse grains a farming household grew for its own table: left out of the tax, cooked in with its rice, and,
-away from the capital where rice gathered, often the staple itself. One domain's village famine stores held barnyard and
-foxtail millet. The dry fields took the higher, well-drained ground the paddy water could not
+away from Edo, where rice gathered, often the staple itself. One domain's village famine stores held barnyard and
+foxtail millet. The dry fields mostly took the higher, well-drained ground the paddy water could not
 reach, such as a river's natural levees and its terraces, though the dry middle of an alluvial fan was often left wild
 until the end of the Edo period.
 

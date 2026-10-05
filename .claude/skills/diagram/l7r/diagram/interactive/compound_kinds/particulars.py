@@ -3,14 +3,14 @@
 Ochiba's Fox wardings (the threshold stones and their buried Pact-Bowl, the cinnabar workshop), Hayakawa's river
 and landing, and Ubame's Fox border, parley room,
 boundary stones, charcoal store and wood-kami altar. A kind the SETTING makes - with no historical counterpart
-the record covers - is `deviation`, written from the GM's canon (`/host-l7r-repo/setting/l7r.md`, which needs no
-citation, so `Sources: not recorded`) and the map's design notes. A kind the record DOES cover (the river, the
-landing, the drawn border line) keeps the record's classification, and what its one map
-adds is in that map's `.notes.md` "Map notes" block.
+the record covers - says so in its About text, written from the GM's canon (`/host-l7r-repo/setting/l7r.md`, which needs
+no citation, so `Sources: not recorded`) and the map's design notes. A kind the record DOES cover (the river, the
+landing, the drawn border line) is written from the record, and what its one map adds is in that map's `.notes.md`
+"Map notes" block.
 
 A page shows nothing drawn from the GM-only notes of an Obsidian Portal record - not now and not ever (the GM,
 2026-09-28): the Fox-Fire Lantern, the fox relics and Hayakawa's salt wards came from those notes and were taken off
-the pages; a note the GM wants shown, they move to a visible place first. The measurement behind every label is `specs/262-interactive-magistracy-pages/coverage.md`.
+the pages; a note the GM wants shown, they move to a visible place first.
 """
 
 from __future__ import annotations

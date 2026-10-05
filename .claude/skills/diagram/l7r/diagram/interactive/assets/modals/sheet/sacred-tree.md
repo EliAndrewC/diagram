@@ -1,10 +1,10 @@
-About: The sacred tree, the shinboku, was a tree in a shrine's precinct revered as the kami's, marked by a straw rope
-strung round its trunk. By one account, which its own encyclopedia flags as short of sources, almost every shrine in Japan was
-first built where such a tree or a wood already stood as a seat of the kami, so the tree came before the shrine.
+About: The sacred tree, the shinboku, was a tree in a shrine's precinct revered as the kami's, marked by a straw rope,
+the shimenawa, strung round its trunk. Almost every shrine in Japan may first have been built where such a tree or a wood
+already stood as a seat of the kami, so that the tree came before the shrine.
 
-A shrine's big trees probably stood in two places: a grove behind the main building and around its sides, and single trees,
-often held especially sacred, in front of the buildings or along the approach. Its rope, the shimenawa, was of straw. What
-kind of tree it was is not recorded.
+A shrine's big trees probably stood in two places: a grove behind the main building and around its sides, and single trees in
+front of the buildings or along the approach. The grove was in many cases what was left of the forest that grew there
+before. What kind of tree the sacred one was is not recorded.
 
 How many village shrines kept a sacred tree, and how big one grew, are not recorded.
 

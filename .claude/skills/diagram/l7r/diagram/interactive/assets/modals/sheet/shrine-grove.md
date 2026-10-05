@@ -2,15 +2,16 @@ About: A Japanese shrine stood in its own wood, the chinju no mori, kept within 
 the sanctuary, the approach and the place of worship. Many such woods were what was left of the forest that stood there
 before, left to grow behind and around the shrine's buildings; many others were planted. In Japan a household's own god,
 too, was kept in a corner of its lot, in a small shrine or at an old tree; whether a compound's shrine stood in a grove of
-its own is not recorded.
+its own is not recorded. Caretakers chosen from among a shrine's parish households answered for its cleaning, in custom
+recorded in modern times.
 
 A shrine's big trees stood in two places: single trees before the hall and along the approach, and the grove behind the
 main building and round its sides. Which sides it took followed the ground - all round on a rise or amid the paddy of the
 plain; on a slope, behind the hall, at its sides, or both. In the rice country a shrine wood with paddy all round it is
-still a common sight. Writers picture a clearly bounded patch of broad-leaved wood, though many real shrine woods are
-planted conifers. Its parish's households answered for the shrine's cleaning, in custom recorded in modern times.
+still a common sight. Such a wood is usually pictured as a clearly bounded patch of broad-leaved trees, though many real
+shrine woods were planted conifers.
 
-A village shrine's precinct ran to a few hundred tsubo, about 5,000 to 23,000 sq ft, and its halls covered only a small
+A village shrine's precinct typically ran to a few hundred tsubo, about 5,000 to 23,000 sq ft, and its halls covered only a small
 part of it; how much of the rest the wood covered is not recorded.
 
 Guesses:
@@ -22,7 +23,8 @@ Guesses:
   follows its crowns: neither is recorded.
 
 Depiction: The map draws the grove as a wood of crowns on the sides of the hall its ground gives it, round a cleared opening
-where the hall stands; which sides is picked from the forms the ground allows. Where it meets scrub or slope its edge
+where the hall stands - drawn clear of the canopy so the hall shows, though a real shrine's wood grew close behind and
+around its buildings; which sides is picked from the forms the ground allows. Where it meets scrub or slope its edge
 follows the crowns, never a ruled line; where it meets paddy its foot runs either straight along the fields or ragged along
 its crowns. No fence is drawn round the precinct or the sanctuary, and no swept collar round the hall.
 

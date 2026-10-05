@@ -19,7 +19,6 @@ from l7r.diagram.interactive import conditions
 from l7r.diagram.interactive.classes import CLASSES, PLACE
 from l7r.diagram.interactive.notes import EMPTY, MapNotes
 from l7r.diagram.interactive.page import (
-    CAVEAT_LEAD,
     PLAIN_CURSOR,
     explanations,
     hit_layer,
@@ -134,14 +133,9 @@ def test_explanations_hold_only_present_classes_and_present_siblings() -> None:
     assert set(data) == {"windbreak", "copse", "farmhouse", "notice board"}
     assert data["windbreak"]["siblings"] == ["copse"], "woodland commons is absent from this map, so it is not claimed; siblings are link keys now"
     assert data["farmhouse"]["siblings"] == [], "storage shed and byre are absent"
-    # the presumption of accuracy (feature 156): an accurate class announces nothing, and the liberty
-    # its record discloses rides in `caveat` instead, to be shown after the what and the why
-    # feature 319: every hamlet class is in the About form - no feature-level label, no lead
-    assert data["copse"]["label"] is None and data["copse"]["lead"] == "" and data["copse"]["about"]
-    # feature 319: the windbreak is in the About form - no feature-level label, its guesses bullets of their own
-    assert data["windbreak"]["label"] is None and data["windbreak"]["guesses"] and data["windbreak"]["caveat"] == ""
-    # the notice board is the one class whose record discloses no liberty, so it shows no caveat at all
-    # (settlement-review, 2026-08-29); the windbreak was one too until feature 269 K3 disclosed its two forms' guesses
+    # feature 319: no feature-level label, lead or caveat rides on the page - the classification is per statement
+    assert not {"label", "lead", "caveat", "what", "why"} & set(data["copse"]) and data["copse"]["about"]
+    assert data["windbreak"]["guesses"], "the windbreak's guesses are bullets of their own"
     # the references are QUESTIONS (feature 180): the sections the entry names, linked to the local page; the
     # cited keys, the citation text and the entry pointer no longer ride on the page at all
     # a map recording no knobs lists no knob-conditioned question (FR-015): the windbreak's 0031 rests on a nucleated-only guess
@@ -262,7 +256,7 @@ def test_a_blue_plot_and_a_green_one_carry_different_classes_on_the_same_polygon
 
 def test_explanations_stub_an_unregistered_class_rather_than_dropping_it() -> None:
     data = explanations({"flying castle"})
-    assert data["flying castle"]["label"] == "guess" and "no entry" in data["flying castle"]["what"]
+    assert "no entry" in data["flying castle"]["about"][0] and "label" not in data["flying castle"]
 
 
 def _page() -> str:
@@ -706,7 +700,7 @@ def test_the_placard_opens_the_place_card() -> None:
     card = data[PLACE]
     assert card["name"] == "Inashiro" and "is a hamlet of 15 farmhouses, population ~75" in card["what"]
     assert "village district of Hoshigaoka, which lies east" in card["why"]
-    assert card["lead"] == "" and card["caveat"], "no accuracy claim; the basis is stated (FR-001, FR-008a)"
+    assert "lead" not in card and "label" not in card and card["basis"], "no accuracy claim; the basis is stated (FR-001, FR-008a)"
 
 
 def test_the_lane_default_names_the_village_the_notes_name() -> None:
@@ -741,9 +735,7 @@ def test_no_rendered_page_tells_a_reader_a_feature_is_historically_accurate() ->
     assert "historically accurate" not in page
     data = json.loads(re.search(r'<script id="classes" type="application/json">(.*?)</script>', page, re.S).group(1).replace("<\\/", "</"))["classes"]
     for key, d in data.items():
-        if d["label"] == "accurate":
-            assert d["lead"] == "", key
-            assert not re.search(r"\bare read\b|\bis read\b|\bat its true\b|\btrue size\b", d["caveat"]), key
+        assert "lead" not in d and "label" not in d, key  # feature 319: nothing class-level is announced
 
 
 def test_an_element_with_no_extent_is_treated_as_touching_everything() -> None:
@@ -940,3 +932,15 @@ def test_an_unreadable_extent_is_refused_by_any_bucket_holding_something():
     t = bucket(translucent=True)
     _file_extent(t, None)
     assert t["ext_none"] is True and _refused(t, (500.0, 500.0, 2.0)) is True
+
+
+def test_a_hamlet_card_states_its_grove_sides_as_a_choice_not_a_fact() -> None:
+    """Feature 319 (plan D10): the farm grove's sides are a CHOICE on the title card (`choices.json` `grove_sides`), so the
+    card's facts never repeat them as a sentence."""
+    from l7r.diagram.interactive.place import homestead_grove_default
+
+    meta = {"scale": "hamlet", "name": "Kashikawa", "households": 20, "grove_sides": 3, "settlement_form": "dispersed"}
+    sentence = homestead_grove_default(meta)
+    data = _render([PLACE, "homestead grove"], meta)
+    assert sentence and sentence not in data[PLACE]["facts"]
+    assert data["homestead grove"]["on_this_map"] == ""

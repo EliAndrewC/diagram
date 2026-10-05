@@ -113,11 +113,8 @@ svg#map[data-mode="raster"] g.f.on.f-bund-beans :is(path, circle):not([fill="non
    The map's own labels and glyphs are unchanged. */
 dialog { font-size: 1.5rem; position: fixed; top: 50%; left: 0; right: 0; transform: translateY(-50%); margin: 0 auto; width: fit-content; z-index: 10; max-width: min(63rem, calc(100vw - 2rem)); max-height: 90vh; overflow: auto; border: 2px solid var(--rule); border-radius: 8px; background: var(--card); color: var(--ink); padding: 1.5rem 2.1rem; font-family: inherit; }
 dialog h2 { margin: 0 0 0.2em; font-size: 1.3em; }
-dialog .label { font-style: italic; color: var(--muted); margin: 0 0 0.8rem; }
-dialog .label[hidden] { display: none; }  /* an accurate class announces nothing (feature 156) */
-/* The caveat: the liberty an accurate class's own record discloses, set quieter than the
-   explanation and BELOW it - it qualifies the drawing, it does not introduce the feature. */
-dialog .caveat { font-size: 0.9em; color: var(--muted); border-left: 2px solid var(--rule); padding-left: 0.7rem; }
+/* The title card's basis: where its claims come from, set quieter than the body and BELOW it (spec 156 FR-008a). */
+dialog .basis { font-size: 0.9em; color: var(--muted); border-left: 2px solid var(--rule); padding-left: 0.7rem; }
 /* "On this map": a fact authored for THIS settlement in its own notes file, headed so it cannot be
    mistaken for something true of the kind everywhere (feature 156). */
 dialog .onmap::before { content: "On this map: "; font-variant: small-caps; letter-spacing: 0.03em; color: var(--muted); }

@@ -20,7 +20,9 @@ Guesses:
 Depiction: The map draws these canals as the network the ponds lie among, not as a rice field's irrigation ditches. The
 block's lattice of canals is bent out of line by a smooth drift that fades toward its outer edge, so the canals between
 the ponds become winding creeks while each pond stays four-sided; how strongly they bend is a degree chosen to read well. The main canal
-starts at a pond outside the dike and enters through the inlet gate. No boat or landing is drawn: not every dike-pond
+starts at a pond outside the dike and enters through the inlet gate. A canal is drawn round the inside foot of the dike:
+channels ran inside a polder's dike, but no single one ringing it at its foot is known, so that ring is a drawing
+convention. No boat or landing is drawn: not every dike-pond
 hamlet need have had water a boat could travel.
 
 Name: pond canal

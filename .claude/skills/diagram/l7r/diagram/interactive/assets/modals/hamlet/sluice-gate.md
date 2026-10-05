@@ -1,6 +1,6 @@
 About: A sluice gate was the opening where water crossed a polder's dike, shut with a board so the polder's farmers could
 let water in or keep it out. A polder lay below the water outside it at least part of the year, so its dike probably ran
-all the way round, water crossing only at its gates. In the Song, a polder's gates were opened in drought to draw the river in and
+all the way round, water crossing only at its gates. In Song-dynasty China, a polder's gates were opened in drought to draw the river in and
 shut in flood; they let a waterlogged polder drain when the river fell. In Japan's
 ring-diked communities the intake stood at the ring's upstream head and the outlet at its downstream tail, and a
 culvert through the dike was shut while the river stood high and opened when it fell.

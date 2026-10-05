@@ -584,6 +584,8 @@ def stage_sink(s: Settlement, plan: SitePlan) -> None:
         brook rounded - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: bends on a radius
     """
     lay_sink(s, plan)
+    # the sink as DRAWN, after a pond the canvas cannot hold fell back to off-map: a choice on the title card (feature 319 plan D10)
+    s.M["meta"]["water_sink"] = plan.water_sink
     round_the_brooks(s)
 
 

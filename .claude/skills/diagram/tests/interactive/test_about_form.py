@@ -48,8 +48,7 @@ def test_a_kind_in_the_about_form_builds_its_feature_class_with_no_label() -> No
         fc = Probe.feature()
         assert isinstance(fc, FeatureClass)
         assert fc.about == ("What it was.", "What it looked like.") and fc.guesses == ("its size.",)
-        assert fc.label is None and fc.form == "standard", "the classification is per statement in the About form (M11-M13)"
-        assert fc.what == "" and fc.why == "" and fc.label_note == "" and fc.caveat == ""
+        assert fc.form == "standard" and not hasattr(fc, "label"), "the classification is per statement in the About form (M11-M13)"
     finally:
         Kind.registry.remove(Probe)
 
@@ -69,9 +68,11 @@ def test_the_guesses_are_optional_and_the_form_may_be_particular() -> None:
         ("Label: guess\n", "no Label:"),
         ("Why: b.\n", "What/Why/Note/Caveat"),
         ("Note: c.\n", "What/Why/Note/Caveat"),
+        ("What: a.\n", "What/Why/Note/Caveat"),
+        ("Caveat: d.\n", "What/Why/Note/Caveat"),
         ("Form: odd\n", "Form: 'odd'"),
     ],
-    ids=["label", "why", "note", "form"],
+    ids=["label", "why", "note", "what", "caveat", "form"],
 )
 def test_the_about_form_refuses_the_old_tags_and_an_unknown_form(extra: str, why: str) -> None:
     Probe = _probe("About: a.\n\n" + extra + _DATA)

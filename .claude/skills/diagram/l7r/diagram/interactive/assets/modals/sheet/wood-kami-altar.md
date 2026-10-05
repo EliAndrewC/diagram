@@ -1,6 +1,6 @@
 About: A small altar to the kami of the wood, no bigger than a shed, standing a few steps from Ubame's Inari shrine in its grove,
 with no torii of its own. It is public - anyone may pray at it - but a private hand keeps it up, and no one from the Ministry of
-Rites stands behind it.
+Rites stands behind it. It stands in the grove because the wood is its kami's own, and it is kept small and tidy.
 
 An altar below the rank of a shrine, a hokora, had no torii, or only a very small one. The nearest kin on record, a household's
 shrine to the god of its own ground, was most often a small shrine of stone or of wood; one measured stone shrine is about 16 in

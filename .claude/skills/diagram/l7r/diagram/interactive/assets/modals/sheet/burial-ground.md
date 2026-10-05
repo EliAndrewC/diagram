@@ -2,11 +2,11 @@ About: Where a village buried its dead in its shrine's yard, the burial ground w
 hall. In Edo Japan each household was registered with a temple, which gave its members their funerals and memorial rites, and
 temple graveyards spread as temples multiplied; one village temple in a Fukuoka farming town had its graveyard inside its
 precinct. A real Shinto shrine was another matter: death was a defilement its priests were bound to avoid. In Rokugan the
-country monk who keeps the village's shrine performs the funerary rites, so the shrine plays the part of the parish temple,
-and its yard may hold the village's one burial ground.
+country monk who keeps the village's shrine also keeps the district's death records, so the shrine does the parish temple's
+work, and its yard may hold the village's one burial ground.
 
 The graves were small, the simplest at one excavated Edo temple graveyard mostly under 5 ft long, and at another temple's
-ground space was so short that burials overlapped. No commoner's ground was laid out to a surveyed plan: some were divided
+ground space was so short that burials overlapped. No surveyed plan of a commoner's ground is recorded: some were divided
 by household or by age, others kept no rule. Where the dead had two graves, the body's was marked with no more than a
 stone. Six stone jizo often stood in a row at a graveyard's entrance. In Rokugan, families weed and clean their
 ancestors' graves at the spring and autumn festivals.

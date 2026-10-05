@@ -6,7 +6,7 @@ grain making up the rest. A household's paddy lay scattered over many plots.
 Before modern times the paddies were small, irregular plots, fitted to the land and its water as they were opened piece
 by piece; the tidy grid of rectangles came only with land consolidation from the 1870s, though the western plains kept
 the ancient jori grid. The rice was transplanted into the flooded mud in no ruled rows. A sixth-century Chinese manual
-already drains the paddy to firm the roots and again before the rice ripens, and some Edo-period farmers drained it in
+already had the paddy drained to firm the roots and again before the rice ripened, and some Edo-period farmers drained it in
 midsummer. After the harvest the straw went into ricks, and a paddy that drained well carried winter barley or wheat; a
 wet one grew rice alone.
 

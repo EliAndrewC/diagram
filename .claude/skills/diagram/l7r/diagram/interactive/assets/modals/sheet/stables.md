@@ -7,8 +7,9 @@ the length of the building before the stalls, and a matted room, the tozamurai, 
 stables of the 16th and 17th centuries were three, five or seven bays long, the most formal of them three bays and entered
 at the gable end; none of them survives.
 
-A lord's stable could be far larger: Hikone castle's is L-shaped, of 21 bays, with a grooms' rest room at the end. How deep
-a stall was, and how many horses a county magistrate's post kept, are not recorded.
+A lord's stable could be far larger: Hikone castle's, built about 1700, is two single-story wings joined in an L, about 83
+and 102 ft long and 19 ft deep, with places for 19 to 21 horses and a grooms' room at the end. How deep a warrior's stall
+was, what a stable's walls and roof were made of, and how many horses a county magistrate's post kept, are not recorded.
 
 Guesses:
 - How many horses the stable holds, two to four: no source gives a county post's horses.
@@ -21,6 +22,6 @@ a well beside it.
 
 Name: stables
 Covers: the stable building, its stall divisions and its label
-Sources: jaanus-umaya, kotobank-umaya
-Entry: research/questions/0108-stables-umaya.html, research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html
+Sources: jaanus-umaya, kotobank-umaya, hikone-umaya-bunka, hikone-umaya-city
+Entry: research/questions/0108-stables-umaya.html, research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html, research/questions/0188-relay-stations-the-imperial-waystation-the-relay-office-and-their-stables-umaya-toiyaba.html
 Drawing: research/questions/0108-stables-umaya.drawing.html, research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html, research/questions/0111-hunting-dogs-and-kennels-inugoya.drawing.html

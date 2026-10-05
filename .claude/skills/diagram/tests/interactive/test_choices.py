@@ -82,13 +82,34 @@ def test_every_per_settlement_roll_is_a_choice_or_accounted_for() -> None:
     import re
 
     rolled: set[str] = set()
-    for path in glob.glob(os.path.join(SKILL, "l7r", "diagram", "hamletgen", "**", "*.py"), recursive=True):
-        with open(path, encoding="utf-8") as fh:
-            rolled |= set(re.findall(r'(?:_roll\(spec\.seed|knob_rng\((?:spec\.)?seed), "([a-z_]+)"', fh.read()))
-    assert {"manure_form", "row_line", "grove_sides"} <= rolled, "the roll sites are found"
+    for tree in ("hamletgen", "settlement"):
+        for path in glob.glob(os.path.join(SKILL, "l7r", "diagram", tree, "**", "*.py"), recursive=True):
+            with open(path, encoding="utf-8") as fh:
+                # every spelling of the seed: `spec.seed`, `plan.spec.seed`, `s.seed`, `self.seed`, a bare `seed` (the plan
+                # review of D10, round 2: the narrower pattern missed 17 sites)
+                rolled |= set(re.findall(r'(?:_roll|knob_rng)\([\w.]*seed, "([a-z_]+)"', fh.read()))
+    assert {"manure_form", "row_line", "grove_sides", "house_bearing", "grove_flank"} <= rolled, "the roll sites are found"
     known = {e["key"] for e in choices.table()} | set(choices.not_choices())
     missing = sorted(rolled - known)
     assert not missing, f"rolled per settlement but neither a choice in assets/choices.json nor in its not_choices: {missing}"
+
+
+def test_every_choice_a_hamlet_rolls_reaches_its_map_s_meta() -> None:
+    """The plan review of D10, round 2: the card lists only what a map's `meta` records, so a choice the hamlet plan rolls
+    and the map never records (`water_sink`, `grain_drift` before this test) is a choice no card could show. Every pool
+    hamlet records each rolled choice the table holds, wherever the choice applies to it. The one exception, with why:
+    `grain_drift` turns a COMB field's dry rows, and a polder has none."""
+    import re
+
+    with open(os.path.join(SKILL, "l7r", "diagram", "hamletgen", "plan.py"), encoding="utf-8") as fh:
+        rolled = set(re.findall(r'_roll\(spec\.seed, "([a-z_]+)"', fh.read()))
+    table = {e["key"]: e for e in choices.table()}
+    owed = sorted(rolled & set(table))
+    assert {"water_sink", "grain_drift", "manure_form"} <= set(owed), "the plan's roll sites are found"
+    for meta in _metas():
+        polder = meta.get("field_archetype") in ("polder_grid", "mulberry_dike_fishpond")
+        missing = [k for k in owed if choices.applies(table[k], meta) and meta.get(k) is None and not (k == "grain_drift" and polder)]
+        assert not missing, f"{meta.get('name')}: rolled but not recorded in meta: {missing} - write `s.M['meta'][<key>]` where the value is settled"
 
 
 def test_a_choice_of_one_settlement_form_is_not_listed_on_another() -> None:

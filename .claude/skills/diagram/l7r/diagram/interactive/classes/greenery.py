@@ -1,7 +1,7 @@
 """The planted and the wild green - bamboo, the windbreak, copses, the commons, scrub and marsh.
 
-Each class's DOCSTRING is its explanation - `What:`, `Why:`, `Note:`, optional `Caveat:` - parsed by
-`_base.parse_explanation` (feature 189). Edit the prose here and the page changes; the gate does not re-open.
+Each class's modal text is its own file, `assets/modals/hamlet/<slug of its key>.md`, in the About form (feature 319),
+parsed by `_base.parse_explanation`. Edit the file and the page changes; the gate does not re-open.
 
 Research: modal explanation - NONE: the explanation's research is its Entry:, checked by entry-drift
 """

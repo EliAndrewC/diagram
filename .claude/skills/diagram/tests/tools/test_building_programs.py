@@ -14,7 +14,7 @@ def test_render_lists_every_item_with_its_label_band_class_and_why() -> None:
     shrine = bt.by_tier("country-shrines")
     assert shrine is not None
     table = bp.render(shrine)
-    assert "| `sanctuary` |" in table and "4-10 by 4-10 ft" in table and "| accurate |" in table
+    assert "| `sanctuary` |" in table and "4-10 by 4-10 ft" in table and "| per statement |" in table
     assert "under `one roof`: 2100-3600 sq ft" in table and "under `one roof`: absent" in table
     assert "optional, a knob" in table and shrine.notes in table
     magi = bt.by_tier("magistracies")
@@ -63,4 +63,4 @@ def test_a_kind_item_renders_its_tag_and_its_kind_s_class_and_why() -> None:
     assert magi is not None
     table = bp.render(magi)
     granary = COMPOUND_CLASSES["granary"]
-    assert '`data-kind="granary"`' in table and f"| {granary.label} | {granary.label_note} |" in table
+    assert '`data-kind="granary"`' in table and f"| per statement | {' '.join(granary.guesses)} |" in table and granary.guesses

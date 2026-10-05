@@ -30,8 +30,9 @@ Guesses:
 Depiction: The map draws a well as a marker much larger than life, its curb about 19 ft across, so a reader can find it:
 the marker shows where the well stands, not how much ground it takes. It is a round curb on a square paved pad. Wells stand
 among the houses they serve, never in the fields or on open common ground, and the map draws more of them than a real
-village counted, so that no household is left far from water. A shrine set apart from the houses keeps a well of its own,
-and a hilltop shrine none.
+village counted, so that no household is left far from water. A shrine set apart from the houses keeps a well of its own
+beside its hall, and a hilltop shrine none; the shrine's water is drawn as a well rather than a ditch or a pond by the map's
+convention, since which waters a shrine drew on is not known.
 
 [settlement_form=dispersed] A scattered farm draws its own water, a well in its dooryard or a small channel led off the
 nearest irrigation ditch into its grounds; the title card says which.

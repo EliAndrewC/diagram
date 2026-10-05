@@ -1,18 +1,18 @@
-About: The shrine's one building held two things: the hall where the villagers came to pray to the shrine's kami, and the
+About: The shrine's one building held two things: the hall where the villagers prayed to its kami, and the
 home of the monk who kept it. Before 1868 many shrines had a Buddhist temple attached, whose monk lived there and performed
 the shrine's rites in Buddhist form. In Rokugan every village district has a country monk, living on a plot of tax-free land,
 who keeps its shrine and its records of births, deaths, marriages and travel.
 
 A monk's dwelling, the kuri, began as a kitchen, and at an ordinary temple it was much like an ordinary house: one
-resembles its region's farmhouse, and at another the head priest's living room was a room of twelve mats. A hall and a
-dwelling under one roof are known once, at Kaie-ji, a temple in the city of Sakai, where the form was called unusual. One
+resembles its region's farmhouse, and at another the head priest's living room was twelve mats. A hall and a
+dwelling under one roof are known once, at Kaie-ji, a city temple in Sakai, where the form was called unusual. One
 measured hall of a village's size, a temple's Kannon hall, was thatched.
 
 Who lived there besides the monk is little recorded: in the Edo period only one sect's temple heads could marry, and a
 village temple's kuri is now described as where its head priest lived with his family. In Rokugan the monk may have a few
 acolytes, lent part-time by the village's larger families to help farm the shrine's land. Measured worship halls and small
 temple halls run about 21 to 35 ft on a side, and a village temple's main hall about 24 to 36 ft; Kaie-ji's hall and
-dwelling together are 83 ft long and 26 to 43 ft deep, about 2,150 to 3,550 sq ft.
+dwelling together cover about 2,150 to 3,550 sq ft.
 
 Guesses:
 - Where the building's size falls inside the band set by Kaie-ji, the one hall and dwelling known under one roof: that

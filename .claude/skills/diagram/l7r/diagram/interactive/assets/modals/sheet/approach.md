@@ -11,14 +11,14 @@ donated arches is known only at the great Inari shrine of Fushimi, where the cus
 shrine's approach may pass under one arch or a row of three or seven, numbers that carry power in the setting, seven most of
 all.
 
-How long or how wide a village shrine's approach ran is not recorded. The approach of Nagao Shrine in Nara, a great shrine,
-is a little over 23 ft wide; it was once a course for mounted archery.
+How long or how wide a village shrine's approach ran is not recorded; the whole precinct it crossed typically ran to
+roughly a tenth to half an acre. The approach of Nagao Shrine in Nara, a great shrine, is a little over 23 ft wide.
 
 Guesses:
 - Its width on the plan, about 10 ft: no village shrine's approach was found measured, and the one width found is a great
   shrine's.
 
-Depiction: The plan draws the approach as a straight band of bare ground from the outermost arch to the hall's step, on the
+Depiction: The plan draws the approach as a band of bare ground from the outermost arch to the hall's step, on the
 line of the hall and its sanctuary; that it runs on that line is a drawing convention, since where a village shrine's approach
 ran is not recorded, and its course is drawn to fit the ground it crosses. Its arches stand evenly spaced along it, the
 innermost as far off the hall's face as the arches stand from one another, so that the avenue reads as that hall's; how far
@@ -26,6 +26,6 @@ a real innermost arch stood from its hall is not recorded.
 
 Name: approach
 Covers: the path from the precinct's edge to the hall
-Sources: chinju-no-mori-jawiki, jinjahoncho-keidai, torii-enwiki, sando-enwiki, kokugakuin-eos-torii, jawiki-torii, sando-jawiki, jinja-jawiki, kudamatsu-stone-torii, kato-kawataka-torii, fushimi-inari-senbon, fushimi-inari-senbon-map, nara-nagao-jinja
-Entry: research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html, research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html, research/questions/0224-ground-swept-clear-around-shrines-and-graves.html, research/questions/0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html
+Sources: chinju-no-mori-jawiki, jinjahoncho-keidai, torii-enwiki, sando-enwiki, kokugakuin-eos-torii, jawiki-torii, sando-jawiki, jinja-jawiki, kudamatsu-stone-torii, kato-kawataka-torii, fushimi-inari-senbon, fushimi-inari-senbon-map, nara-nagao-jinja, village-shrines-where-they-stand-and-how-big-their-grounds-are, rokusha-jinja-fuchu
+Entry: research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html, research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html, research/questions/0224-ground-swept-clear-around-shrines-and-graves.html, research/questions/0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html, research/questions/0215-village-shrines-where-they-stand-and-how-big-their-grounds-are.html
 Drawing: research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html, research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html, research/questions/0224-ground-swept-clear-around-shrines-and-graves.drawing.html

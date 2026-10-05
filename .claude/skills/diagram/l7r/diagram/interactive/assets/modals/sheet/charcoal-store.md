@@ -1,14 +1,15 @@
 About: A sealed storehouse (kura) where the county office keeps the charcoal that passes through its hands, under its seal and
-its tally. Charcoal is the great trade of the Fox forest across the border - its burners outnumber its farmers - and Ubame is one
+its tally. Its stock is shrine-grade white charcoal, the Fox burners' specialty, made from sacred oak and prized for a
+flame almost without smoke or smell. Charcoal is the great trade of the Fox forest across the border - its burners outnumber its farmers - and Ubame is one
 of Rokugan's iron districts.
 
 A plastered storehouse was built to guard what it held against fire, damp and theft. Its walls were often a foot thick, its
-outer doors might be faced with earth and plaster and shut in a fire, and such stores kept even gunpowder. The charcoal reached
+outer doors might be faced with earth and plaster, and one kind slid shut in a fire; such stores kept even gunpowder. The charcoal reached
 it already cooled: black charcoal was put out in the sealed kiln, white charcoal drawn red-hot and smothered beside it under damp
 ash and sand.
 
-Charcoal was an industrial fuel on a state's scale elsewhere too: in Song-dynasty China the state supplied it to iron-smelting
-households it oversaw.
+Charcoal was an industrial fuel on a state's scale elsewhere too: in Song-dynasty China the state supplied it to some of the
+iron-smelting households it oversaw.
 
 Guesses:
 - That charcoal was kept in a plastered storehouse, at no more than the ordinary spacing of the buildings round it: no source

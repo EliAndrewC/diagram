@@ -14,7 +14,7 @@ Guesses:
   landing nor with a size.
 
 Depiction: The plan draws the shrine small and vermilion at the land edge of the bank street, and draws no water-god shrine,
-since the boatmen's is known only from modern times.
+since a water-god shrine at a landing is known only from modern records.
 
 Name: boatmen's altar
 Covers: the altar on the bank and its label

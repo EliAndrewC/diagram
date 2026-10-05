@@ -391,6 +391,16 @@
   "persimmon_front": "the share of front-yard persimmons - a degree",
   "retirement_share": "the share of homesteads with a retirement house - the card's count fact",
   "cluster_aspect_drawn": "a measurement of the drawn cluster",
-  "retirement_house": "which homesteads keep a retirement house - the card's count fact"
+  "retirement_house": "which homesteads keep a retirement house - the card's count fact",
+  "brook_approach": "the brook's wobble on its way to the intake - geometry",
+  "brook_wander": "the brook's wander down its course - geometry",
+  "byre_share": "the share of farms with a byre - a degree, told by the byre modal",
+  "passage_share": "the share of houses with a through passage - a degree",
+  "pit_field_share": "the share of manure pits dug out in the fields - a degree",
+  "house_bearing": "the turn the houses share off true south - a degree along a continuum",
+  "head_offset": "where across the field's head the water comes in - recorded as the water_source_position choice (head_left, head_center, head_right)",
+  "mulberry_fishpond": "the seed of the overlay's layout - geometry; the overlay itself is the land_use_overlay choice",
+  "pond_stock": "which ponds nearest the houses take a sty - placement; the sty is the pig-sty modal's",
+  "cremation_seat": "where a village's cremation ground stands - a village's roll; no hamlet draws one, the hamlet_burial choice says where its dead go"
  }
 }

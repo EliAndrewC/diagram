@@ -1,11 +1,8 @@
 """The office and its works - the hall and the bench, the clerks, the stores, the cell, the watch, the tally.
 
-Each class's DOCSTRING is its explanation - `What:`, `Why:`, `Note:`, optional `Caveat:`, then the data tags -
-parsed by `..classes._base.parse_explanation` (feature 189). Every kind is written FROM the existing record
-(feature 262, FR-005): the sections its `Entry:` names, and the `buildings/types.json` program item folded into
-it where there is one - the item's class and why are carried here, not re-decided: a size band the item calls a
-guess is the kind's caveat (office hall, barracks), and a presence-only item's class is the kind's label (clerks'
-room, gatehouse). The measurement behind each label is `specs/262-interactive-magistracy-pages/coverage.md`.
+Each class's modal text is its own file, `assets/modals/sheet/<slug of its key>.md`, in the About form (feature 319),
+parsed by `..classes._base.parse_explanation`. Every kind is written FROM the existing record (feature 262, FR-005): the
+sections its `Entry:` names.
 """
 
 from __future__ import annotations

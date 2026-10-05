@@ -10,7 +10,7 @@ charcoal was cooled at the kiln before it traveled, and no fire gap of a set wid
 before modern times.
 
 How large a compound's cart yard was is not recorded. At the one intendant's office measured, the buildings covered
-about three-tenths of the ground and the rest lay open, and its largest building was its rice storehouse, about 11,200 sq
+at most about three-tenths of the ground and the rest lay open, and its largest building was its rice storehouse, about 11,200 sq
 ft.
 
 Guesses:

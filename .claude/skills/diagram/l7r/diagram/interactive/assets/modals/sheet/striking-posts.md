@@ -1,5 +1,5 @@
-About: Striking posts (tategi, "standing timbers") were posts set upright in a practice ground and struck hard with a
-wooden sword in drill. The Jigen-ryu school of Satsuma, founded by Togo Shigetaka (1561-1643), a retainer of the Shimazu,
+About: Striking posts (tategi, "standing timbers") were posts set upright in a practice ground and struck hard in
+sword drill. The Jigen-ryu school of Satsuma, founded by Togo Shigetaka (1561-1643), a retainer of the Shimazu,
 trained by striking the post from left and right with a shout, over and over, as its basic technique. A second school,
 Nodachi Jigen-ryu, made it its main practice, barefoot on a ground open to the sky.
 
@@ -11,7 +11,8 @@ time after 1946.
 How many posts a practice ground kept, and whether schools outside Satsuma kept any, is not recorded.
 
 Guesses:
-- That a practice ground outside the Satsuma schools kept striking posts, and how many: no account says either.
+- That a practice ground outside the Satsuma schools kept striking posts at all, and the number the plan draws: no
+  account says whether other schools kept any, or how many posts a ground kept.
 
 Depiction: The plan draws each post as a small marker of where it stands, with a label, rather than at its own size, so
 the open ground reads as a practice ground by the gear on it; a real post stood a little over 4 ft high. Only upright posts

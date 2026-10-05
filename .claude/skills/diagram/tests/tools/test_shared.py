@@ -390,4 +390,4 @@ def test_a_kind_item_is_found_by_the_sheet_s_tag_not_by_its_label_text() -> None
     from l7r.diagram.interactive.compound_kinds import COMPOUND_CLASSES
 
     found = L.check_bands(big, types, None)
-    assert len(found) == 1 and "`store` (granary) is 30 x 15 ft" in found[0] and COMPOUND_CLASSES["granary"].label_note in found[0]
+    assert len(found) == 1 and "`store` (granary) is 30 x 15 ft" in found[0] and "(per statement: " + " ".join(COMPOUND_CLASSES["granary"].guesses) in found[0]

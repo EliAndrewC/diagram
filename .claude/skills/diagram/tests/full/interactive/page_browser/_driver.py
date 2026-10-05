@@ -75,7 +75,7 @@ class Page:
 
     def dialog(self) -> dict[str, Any]:
         return self.js(
-            "() => { const d = document.getElementById('explain'); return { open: d.open, k: d.getAttribute('data-k'), label: d.getAttribute('data-label'), name: document.getElementById('x-name').textContent, labeltext: document.getElementById('x-label').textContent, caveat: document.getElementById('x-caveat').textContent, siblings: document.getElementById('x-siblings').textContent, sources: document.getElementById('t-refs').hidden ? '' : document.getElementById('r-list').children.length + ' references', about: document.getElementById('x-about').textContent, guesses: Array.from(document.querySelectorAll('#x-guesses li')).map(li => li.textContent) }; }"
+            "() => { const d = document.getElementById('explain'); return { open: d.open, k: d.getAttribute('data-k'), label: d.getAttribute('data-label'), name: document.getElementById('x-name').textContent, basis: document.getElementById('x-basis').textContent, siblings: document.getElementById('x-siblings').textContent, sources: document.getElementById('t-refs').hidden ? '' : document.getElementById('r-list').children.length + ' references', about: document.getElementById('x-about').textContent, guesses: Array.from(document.querySelectorAll('#x-guesses li')).map(li => li.textContent) }; }"
         )
 
     def close(self) -> None:
@@ -108,27 +108,11 @@ def _mechanics(page: Page, present: list[str]) -> None:
         # the test reads the registry the page reads. The KEY is still pinned separately, above,
         # because that is what the ink carries and what `all_ink_is_ruled_on` reads.
         assert d["open"] and d["k"] == key and d["name"].lower() == CLASSES[key].name.lower()
-        if CLASSES[key].about:
-            # FEATURE 319's ABOUT FORM: no feature-level label and no lead; the About tab carries the paragraphs and the
-            # Guesses tab exactly the guesses (dev/modals.md M11)
-            assert d["label"] is None and d["labeltext"] == "", f"{key}: an About-form class announces no label"
-            assert CLASSES[key].about[0][:30] in d["about"] and d["guesses"] == conditions.shown(CLASSES[key].guesses, {})
-            for other in CLASSES[key].siblings:
-                assert (("the " + CLASSES[other].name) in d["siblings"]) == (other in present), (key, other)
-            page.page.keyboard.press("Escape")
-            assert not page.dialog()["open"]
-            continue
-        assert d["label"] == CLASSES[key].label, "the classification still reaches the page (constitution XII)"
-        # THE PRESUMPTION OF ACCURACY (feature 156): an accurate class says nothing about accuracy at
-        # all - the lead line is empty and hidden - while a deviation or a guess still opens with its
-        # liberty. The caveat, where the record discloses one, sits below the why instead.
-        if CLASSES[key].label == "accurate":
-            assert d["labeltext"] == "", f"{key}: an accurate class announced itself"
-        else:
-            assert CLASSES[key].label_note[:30] in d["labeltext"]
-            assert any(w in d["labeltext"] for w in ("deliberate deviation", "a guess", "Note: we have"))
-        assert "historically accurate" not in d["labeltext"]
-        assert (CLASSES[key].caveat[:30] in d["caveat"]) if CLASSES[key].caveat else (d["caveat"] == "")
+        # FEATURE 319's ABOUT FORM: no feature-level label, no lead and no caveat; the About tab carries the paragraphs and
+        # the Guesses tab exactly the guesses (dev/modals.md M11)
+        assert d["label"] is None and d["basis"] == "", f"{key}: a class announces no label and carries no basis line"
+        assert CLASSES[key].about[0][:30] in d["about"] and d["guesses"] == conditions.shown(CLASSES[key].guesses, {})
+        assert "historically accurate" not in d["about"]
         for other in CLASSES[key].siblings:
             assert (("the " + CLASSES[other].name) in d["siblings"]) == (other in present), (key, other)
         page.page.keyboard.press("Escape")

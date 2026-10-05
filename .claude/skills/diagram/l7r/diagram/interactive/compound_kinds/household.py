@@ -2,13 +2,10 @@
 
 The magistrate's household lives inside the working compound, behind the office - the residence, the
 dwellings of the karo, the retainers and the servants, the guest quarters, and the kitchen, bath, wells,
-privies, stables, fire-water and shrine that serve them. Each class is written from the research section
-its `Entry:` names, or says the record has no entry; where a `buildings/types.json` program item classified
-the kind or its size band, that class and its reason are carried into the `Note:` (and, for a size the item
-called a guess or a convention, into the `Caveat:`), not re-decided. What is true of one map only (Ochiba's
-two-altar Inari hall, Hayakawa's enlarged bath, Ubame's shuttered wing) lives in that map's `.notes.md`
-"Map notes" block, not here. The measurement behind every label is
-`specs/262-interactive-magistracy-pages/coverage.md`.
+privies, stables, fire-water and shrine that serve them. Each class's modal text (`assets/modals/sheet/`, the About
+form) is written from the research section its `Entry:` names, or says the record has no entry. What is true of one map
+only (Ochiba's two-altar Inari hall, Hayakawa's enlarged bath, Ubame's shuttered wing) lives in that map's `.notes.md`
+"Map notes" block, not here.
 """
 
 from __future__ import annotations

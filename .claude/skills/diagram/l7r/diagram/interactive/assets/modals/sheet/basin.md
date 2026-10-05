@@ -6,7 +6,7 @@ Saitama whose following reached across the Kanto, both given by a donor living i
 Whether a village shrine's basin stood in the open before 1868 is not recorded; many shrines today, unstaffed ones in the
 provinces especially, have no pavilion at all.
 
-A basin was a gift. In 1828 the whole body of Nagao Shrine's parishioners, in Kawasaki, gave it a stone basin inscribed
+A basin could be a gift. In 1828 the whole body of Nagao Shrine's parishioners, in Kawasaki, gave it a stone basin inscribed
 with their gift. How big a village shrine's basin was is not recorded.
 
 Guesses:
@@ -15,10 +15,10 @@ Guesses:
 - Its size on the plan, about 3 ft square: no basin's size was found.
 
 Depiction: The plan draws the basin as a small square of stone holding a disc of water, beside the approach near the
-innermost arch, with no roof over it; it is kept off the hall and out from under the arches.
+innermost arch, with no roof over it.
 
 Name: basin
 Covers: the stone basin by the approach
 Sources: jinja-jawiki, liga-temizuya, yakyu-inari-temizuya, ubusuna-jinja-ameblo, kawasaki-nagao-chozubachi
 Entry: research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html
-Drawing: research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html, research/questions/0215-village-shrines-where-they-stand-and-how-big-their-grounds-are.drawing.html
+Drawing: research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html

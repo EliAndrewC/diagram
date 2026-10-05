@@ -6,7 +6,7 @@ seven virtues, long life and much shade first.
 
 Most stood in front of the house; some stood behind it, one in the bamboo grove behind a farmhouse. The persimmon was not the
 yard's only fruit tree: plum and persimmon were planted in the homestead grove to be eaten from, and fruit trees in part of
-the yard, and in the north chestnut was among the commonest trees of the farmstead. How many fruit trees a farm had is not
+the yard, and in two northern districts chestnut was among the commonest trees of the farmstead. How many fruit trees a farm had is not
 recorded.
 
 A full-grown persimmon is a large tree, about 40 ft (12 m) tall and 23 ft (7 m) across, and the species ranges from about 10

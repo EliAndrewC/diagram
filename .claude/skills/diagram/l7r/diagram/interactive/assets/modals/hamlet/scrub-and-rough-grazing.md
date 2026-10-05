@@ -28,8 +28,8 @@ glance as different ground from the dense, dark canopy of the back grove. The sc
 the settlement and off the edge of the map, since the real ground was far larger than the map, and its edge is drawn
 under the grove's so the two meet with no bare seam. It stops a little short of the fields and the dug channels,
 leaving bare the strip that stands for the bund and its cut grass, and runs to the water's edge along a natural brook.
-Its brush and pines stay out of the woods and the marsh; only its grass reaches a few feet in under a wood's edge and
-thins out into the reeds.
+Its brush and pines stay out of the marsh, and its pines out of the woods; its grass reaches a few feet in under a
+wood's edge and thins out into the reeds.
 
 Name: scrub and rough grazing
 Covers: `commons[role=grazing]`

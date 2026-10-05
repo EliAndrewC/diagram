@@ -2,8 +2,8 @@ About: A vegetable garden fed the household of a samurai house or a government o
 for their own table, on anything from a small kitchen plot to half their grounds, and offices kept vegetable ground too: one
 jin'ya had a garden of about half an acre inside its bamboo fence, its officials said to have worked it themselves, and a
 Chinese county office listed its plot behind the residence gate, after the kitchen and the stable. Where the plot lay
-varied - west of the house at one middle-rank house, south of the pond where the formal garden is now at another, on a
-parcel entered apart from the residence lot at a daikan's office - and none is recorded north of a Japanese house.
+varied - west of the house at one middle-rank house, south of its pond, where a garden is now, at another, on a
+parcel entered apart from the residence lot at a daikan's office - and none is known to have lain north of a Japanese house.
 
 At the Takei house the plot was called the soup-greens field and was planted mainly with leafy greens, and farmers from
 nearby came to work it. Whether a plot was fenced, or screened from a formal garden beside it, is not recorded.
