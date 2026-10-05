@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-05T07:57:38Z",
+  "target": "record-checked",
+  "commit": "7b11be96d",
+  "why": "source-reader on source-reader:0031#clustered-and-scattered-villages-shuson-sanson-2: only a fetch verdict moved from visible text into a comment; the absence claim is unchanged"
+}
