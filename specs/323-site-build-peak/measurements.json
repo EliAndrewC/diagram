@@ -1,0 +1,10 @@
+{
+  "perf-control-seed25-15-field": {
+    "verifies": "the band-1 reading of 323-end against 323-start on seed 25 at 15 households (+2.5%, field +0.1 s)",
+    "subject": "perf bookend reference spec (perf_snapshot.REFERENCE), seed 25, 15 households, the field stage",
+    "value": 1.501,
+    "unit": "s, the field stage under cProfile on the base engine (median of three)",
+    "quantity": "three alternated runs each of `make perf-profile SEED=25 STAGE=field`, 2026-10-04 23:48, load 2-3: the base engine (/tmp/base323 at cc4ba1e18, before the feature) 1.556 / 1.501 / 1.466 s; the clone (feature 323) 1.542 / 1.522 / 1.500 s. The same 2,193,040 primitive calls on both (the base's first run 2,195,888, its first-call warm-up): the stage executes the same code. Feature 323 changes how the record site's single page is assembled (record/site.py, site_pages.py), which no roll imports.",
+    "command": "make perf-profile SEED=25 STAGE=field (alternated: /tmp/base323 at cc4ba1e18, then the clone)"
+  }
+}

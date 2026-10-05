@@ -1,0 +1,36 @@
+perf-profile seed 25 stage field: 1.5s under cProfile (the stages before it took 0.0s unprofiled; cProfile itself is ~+225%, research R2)
+raw: dev/perf-raw/20261005T034821Z-seed25-field.prof (gitignored; archive: configured (https://github.com/EliAndrewC/mapgen-perflogs))
+
+         2226779 function calls (2193040 primitive calls) in 1.500 seconds
+
+   Ordered by: cumulative time
+   List reduced from 1374 to 25 due to restriction <25>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.001    0.001    1.511    1.511 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/water/comb.py:21(stage_field)
+        1    0.000    0.000    1.142    1.142 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/water/fit.py:45(fit_field)
+        1    0.000    0.000    0.871    0.871 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/water/fit.py:126(_finish_first_admissible)
+        1    0.002    0.002    0.864    0.864 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/waterfields/comb.py:190(finish_comb)
+        1    0.000    0.000    0.477    0.477 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/waterfields/settle.py:215(settle_cells)
+        1    0.002    0.002    0.402    0.402 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/waterfields/settle.py:137(__init__)
+    25944    0.053    0.000    0.345    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/decorators.py:73(wrapped)
+      693    0.001    0.000    0.337    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/waterfields/settle.py:153(judge)
+      693    0.005    0.000    0.336    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/waterfields/settle.py:57(verdict)
+      660    0.001    0.000    0.330    0.001 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/waterfields/settle.py:156(add)
+        1    0.000    0.000    0.271    0.271 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/water/fit.py:177(_fit_at_aspect)
+        3    0.000    0.000    0.268    0.089 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/waterfields/comb.py:86(carve_comb)
+      701    0.005    0.000    0.267    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/waterfields/ring_rules.py:472(ring_violations)
+9096/8578    0.011    0.000    0.232    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/decorators.py:171(wrapper)
+        1    0.000    0.000    0.207    0.207 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/water/brook.py:516(feed_brook)
+        3    0.000    0.000    0.157    0.052 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/waterfields/comb.py:719(_comb_canal_pieces)
+        3    0.000    0.000    0.155    0.052 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/waterfields/twins.py:130(drop_twin_deliveries)
+        1    0.000    0.000    0.154    0.154 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/fields/comb.py:285(draw_comb_field)
+        1    0.001    0.001    0.145    0.145 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/waterfields/partition.py:384(cut)
+    136/4    0.001    0.000    0.126    0.031 <frozen importlib._bootstrap>:1360(_find_and_load)
+    136/4    0.001    0.000    0.125    0.031 <frozen importlib._bootstrap>:1308(_find_and_load_unlocked)
+    129/4    0.001    0.000    0.125    0.031 <frozen importlib._bootstrap>:914(_load_unlocked)
+    122/4    0.000    0.000    0.124    0.031 <frozen importlib._bootstrap_external>:753(exec_module)
+    431/6    0.000    0.000    0.124    0.021 <frozen importlib._bootstrap>:483(_call_with_frames_removed)
+    122/4    0.001    0.000    0.124    0.031 {built-in method builtins.exec}
+
+

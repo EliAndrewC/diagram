@@ -458,7 +458,8 @@ class Build:
         out.append("</section>\n")
         toc.append("</ul></nav>\n")
         head = f'<h1 id="record">{TITLE}</h1>\n<p><em>Every question the maps were researched from, every note behind them and every source they cite, on one page. The same record, a page per question: <a href="index.html">the contents</a>.</em></p>\n'
-        self.files["all.html"] = sp.shell(TITLE + " - the whole record", "all.html", "", head + "".join(toc) + "".join(out), lazy_glossary=True)
+        out[:0] = [head, "".join(toc)]  # the page handed over in its pieces, which shell consumes (feature 323: the build's peak)
+        self.files["all.html"] = sp.shell(TITLE + " - the whole record", "all.html", "", out, lazy_glossary=True)
 
 
 def _nav_row(item: sp.Item) -> list[str]:

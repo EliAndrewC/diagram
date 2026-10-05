@@ -466,3 +466,29 @@ def test_the_shell_and_the_trail() -> None:
     assert "data-lazy-glossary" not in sp.shell("T", "index.html", "", "x")
     assert sp.open_keys("research", None) == "" and sp.crumbs("index.html", []) == '<p class="crumbs"><a href="index.html">The research record</a></p>\n'
     assert sp.nav_js({"a": 1}).startswith("// DERIVED FILE")
+
+
+# ------------------------------------------------------------------------------- the single page in pieces (feature 323)
+
+
+def test_a_page_given_in_pieces_is_the_page_given_whole() -> None:
+    """323 FR-002: a URL made a link, one already in a link left, one in a comment left - piece by piece as on the whole."""
+    pieces = [
+        "<h1 id=a>A</h1>\n<p>see https://example.org/one for it</p>\n",
+        '<p><a href="https://example.org/two">https://example.org/two</a></p>\n',
+        "<!-- https://example.org/three --><p>plain</p>\n",
+    ]
+    whole = sp.shell("T", "all.html", "", "".join(pieces), lazy_glossary=True)
+    given = list(pieces)
+    assert sp.shell("T", "all.html", "", given, lazy_glossary=True) == whole
+    assert '<a href="https://example.org/one" target="_blank" rel="noopener">' in given[0], "the list is consumed, each piece linked"
+    assert whole.count("https://example.org/two") == 2 and whole.count("<!-- https://example.org/three -->") == 1
+    assert sp.shell("T", "q/x.html", "k", "<p>x</p>") == "".join((sp.frame("T", "q/x.html", "k")[0], "<p>x</p>", sp.frame("T", "q/x.html", "k")[1]))
+
+
+def test_the_single_page_links_a_sources_url(tmp_path: pathlib.Path) -> None:
+    """323 SC-002 on a small record: the single page, assembled in pieces, still makes a registry entry's URL a link."""
+    rec = fr.write(tmp_path)
+    fr.edit_entry(rec, "0010-alpha.html", "(https://a)", "(https://example.org/alpha)")
+    page = site.build(str(rec))["all.html"]
+    assert '<a href="https://example.org/alpha" target="_blank" rel="noopener">https://example.org/alpha</a>' in page
