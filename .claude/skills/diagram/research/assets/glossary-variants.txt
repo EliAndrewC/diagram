@@ -352,6 +352,7 @@ cascade fan	cascade
 cascades	cascade
 case-hill	case-hill
 case-hills	case-hill
+cassia-laurel	cassia-laurel
 castanopsis	Castanopsis
 castle rice	castle rice
 castle town	jokamachi
@@ -566,6 +567,8 @@ coursing line	coursing
 court of the imperial stud	Court of the Imperial Stud
 courtesy name	courtesy name
 courtesy names	courtesy name
+covenant association	covenant association
+covenant associations	covenant association
 covering house	ōiya
 cpc	CPC
 crab clan	Crab Clan
@@ -3376,6 +3379,7 @@ shunchengjie	shunchengjie
 shunde	Shunde
 shungiku	shungiku
 shunzhi	Shunzhi
+shuri	Shuri
 shuson	shuson
 shōtoku	Shotoku era
 shōtoku era	Shotoku era
