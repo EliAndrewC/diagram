@@ -1,6 +1,6 @@
 {
  "feature": "319-modal-writeups",
- "plan_sha256": "3818a3eea81a552ca778c75d2d20457f39ddd2d236d1e2f165ee1f7a9801242b",
+ "plan_sha256": "b27012770d4ac94c874badb75bcdf8f33f12d86ed381692931f130180682d142",
  "reviewed": "2026-10-05",
  "declared": "spec-fidelity",
  "decisions": [
