@@ -1,0 +1,7 @@
+- quote-check 0060 (drawing unfootnoted): 0 unfootnoted, 0 edits
+- record-format 0060: 36 of 36 words; 2 VOCABULARY rejected as false positives (sui: Sui dynasty is a cased term, so the lowercase channel never wraps; dry-field conditions/conversion are kanden variants, which the longest-first glossary match picks over hatake's dry-field), 0 SESSION NOTE, 0 HISTORY
+- quote-check 0071 (drawing afcd-hkbio-8, copse absence note, unfootnoted): 2 VERBATIM, 2 SUPPORTS, 1 absence; 1 unfootnoted finding rejected (median is right: 0071 computes median about 1 ha, mean 1.1 ha over the AFCD Annex's 115 rows). Raised, not acted on: the copse note's 10 m tree height does not mention hk-herbarium-fsw-3's more than 20 m top trees
+- record-format 0071: 110 of 110 words, 2 of 2 prepass; 0 VOCABULARY, 0 SESSION NOTE, 0 HISTORY
+- quote-check 0246 (drawing village-lanes-3, unfootnoted): 1 absence, 0 unfootnoted; round 2 after the record-format fix: the same
+- record-format 0246: 1 wording fix applied (the run-out bullet called the whole steading its dooryard; now 12 ft of the steading's built ground); round 2: 6 of 6 words, 0 findings
+- no entry-drift owed (no modal written from these pages changed), no translation-check, no source-applicability; record-owed UNANSWERED=1 owes no record check outside the hamlet/choice/sheet modal units; record tests green (3855 passed)
