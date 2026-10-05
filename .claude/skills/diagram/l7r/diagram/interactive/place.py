@@ -311,7 +311,10 @@ def windbreak_default(meta: dict[str, Any]) -> str:
     if quarter not in WIND_NAMES or source not in ("regional", "declared"):
         return ""
     if source == "regional":
-        return f"Here the belt stands toward the {WIND_NAMES[quarter]} of the houses, the side the winter wind across this region blows from; no local wind is recorded for this place."
+        # the GM, 2026-10-05: "<settlement-name> has no local wind patterns which would necessitate a different orientation
+        # from the norm" - named, in place of "no local wind is recorded for this place"
+        name = str(meta.get("name") or "This settlement")
+        return f"Here the belt stands toward the {WIND_NAMES[quarter]} of the houses, the side the winter wind across this region blows from; {name} has no local wind patterns that would call for a different orientation from the norm."
     return f"Here the belt stands toward the {WIND_NAMES[quarter]} of the houses, because this place has a local wind from the {WIND_NAMES[quarter]} that departs from the region's northwesterly winter wind."
 
 

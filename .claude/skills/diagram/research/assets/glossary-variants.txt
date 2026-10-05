@@ -3261,7 +3261,7 @@ shallow-water lotus	shallow-water lotus
 shandong	Shantung
 shanhai pass	Shanhaiguan
 shanhaiguan	Shanhaiguan
-shannon-wiener index	Shannon-Wiener index
+shannon-wiener index	SWI
 shantung	Shantung
 shanxi merchant houses	Shanxi merchants
 shanxi merchants	Shanxi merchants
@@ -3600,7 +3600,7 @@ sweep well	well-sweep
 sweep-type well	well-sweep
 swept collar	swept collar
 swept ground	swept collar
-swi	Shannon-Wiener index
+swi	SWI
 sword hunt	sword hunt
 sword hunts	sword hunt
 sōchinju	sōchinju

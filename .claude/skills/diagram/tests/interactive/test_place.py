@@ -405,9 +405,10 @@ def test_the_windbreak_says_it_stands_on_the_north_and_west_for_the_regional_win
     """The GM, on Kashikawa's belt: "I don't see any, any explanation for that." Every map that records its wind
     says which side the belt is on and why."""
     assert (
-        windbreak_default({"windward": "NW", "wind_source": "regional"})
-        == "Here the belt stands toward the northwest of the houses, the side the winter wind across this region blows from; no local wind is recorded for this place."
+        windbreak_default({"windward": "NW", "wind_source": "regional", "name": "Inashiro"})
+        == "Here the belt stands toward the northwest of the houses, the side the winter wind across this region blows from; Inashiro has no local wind patterns that would call for a different orientation from the norm."
     )
+    assert "This settlement has no local wind" in windbreak_default({"windward": "NW", "wind_source": "regional"}), "a map with no name still reads"
 
 
 def test_a_declared_local_wind_is_named_as_a_departure_from_the_regional_one() -> None:

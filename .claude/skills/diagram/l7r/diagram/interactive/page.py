@@ -59,7 +59,6 @@ CAVEAT_LEAD: str = _TEXT["caveat_lead"]
 #: The one line above the references list (feature 180, spec FR-008 / D8). A bare list of research
 #: headings under the word "References" does not tell a casual reader what the lines are, or that each
 #: is a link to a written answer with its sources. "Questions" is the GM's own word for them.
-REFERENCES_LEAD: str = _TEXT["references_lead"]
 
 #: The BROAD kinds, over which the cursor stays the normal arrow (GM 2026-09-26: *"very large things don't need to
 #: turn the mouse into a pointer"* - grassland, marshland, paddies, copses, windbreak forests and woodland commons).
@@ -876,7 +875,7 @@ def render_page(
         # thing, then the "how our maps draw it" pages, which leave the References tab
         '<div id="p-depict" role="tabpanel" aria-labelledby="t-depict" hidden><section id="x-depiction"></section><section id="d-list"></section></div>'
         # NO "Record:" LINE (feature 180, GM 2026-09-05) - the references tab lists the QUESTIONS the entry names.
-        f'<div id="p-refs" role="tabpanel" aria-labelledby="t-refs" hidden><p id="r-intro" class="intro">{REFERENCES_LEAD}</p><section id="r-list"></section></div></div>'
+        f'<div id="p-refs" role="tabpanel" aria-labelledby="t-refs" hidden><section id="r-list"></section></div></div>'
         '<footer><button id="x-close" type="button">Close</button></footer>'
         "</article></dialog>\n"
         # THE GLOSSARY TOOLTIP, a sibling of the dialogs rather than a child of a word (feature 182): a box

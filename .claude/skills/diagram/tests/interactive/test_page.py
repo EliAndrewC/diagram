@@ -135,12 +135,13 @@ def test_explanations_hold_only_present_classes_and_present_siblings() -> None:
     assert data["farmhouse"]["siblings"] == [], "storage shed and byre are absent"
     # the presumption of accuracy (feature 156): an accurate class announces nothing, and the liberty
     # its record discloses rides in `caveat` instead, to be shown after the what and the why
-    assert data["windbreak"]["label"] == "accurate", "the classification is still recorded (constitution XII)"
-    assert data["windbreak"]["lead"] == "", "an accurate class leads with what the feature is, not with a claim"
+    assert data["copse"]["label"] == "accurate", "the classification is still recorded (constitution XII)"
+    assert data["copse"]["lead"] == "", "an accurate class leads with what the feature is, not with a claim"
+    # feature 319: the windbreak is in the About form - no feature-level label, its guesses bullets of their own
+    assert data["windbreak"]["label"] is None and data["windbreak"]["guesses"] and data["windbreak"]["caveat"] == ""
     # the notice board is the one class whose record discloses no liberty, so it shows no caveat at all
     # (settlement-review, 2026-08-29); the windbreak was one too until feature 269 K3 disclosed its two forms' guesses
     assert data["notice board"]["caveat"] == "", "the notice board discloses no liberty - see test_classes"
-    assert data["windbreak"]["caveat"] == CAVEAT_LEAD + CLASSES["windbreak"].caveat and CLASSES["windbreak"].caveat
     assert data["copse"]["caveat"] == CAVEAT_LEAD + CLASSES["copse"].caveat and CLASSES["copse"].caveat
     # the references are QUESTIONS (feature 180): the sections the entry names, linked to the local page; the
     # cited keys, the citation text and the entry pointer no longer ride on the page at all
@@ -211,14 +212,13 @@ def test_the_questions_come_in_the_entry_s_order_and_every_class_that_names_a_se
 def test_the_page_carries_the_questions_and_no_record_line() -> None:
     """Spec FR-001 (no `Record:` footer), FR-008 (the lead-in), FR-009 (the button is set by the script),
     FR-011 (the JSON shape)."""
-    from l7r.diagram.interactive.page import REFERENCES_LEAD
-
     html_text = render_page([RECT], ["farmhouse"], "T")
     # the MARKUP, before the data and the script (the script's comments name the old footer to say it is gone)
     markup = html_text.split('<script id="classes"')[0]
     assert "x-entry" not in markup and "Record:" not in markup
     assert "x-entry" not in html_text.split("<script>")[1], "and the script touches no such element"
-    assert f'<p id="r-intro" class="intro">{REFERENCES_LEAD}</p>' in html_text and REFERENCES_LEAD == "Topics we researched for this map feature:"
+    # the References tab opens on its links alone (the GM, 2026-10-05: "the links are self-explanatory")
+    assert 'id="r-intro"' not in html_text and "Topics we researched" not in html_text
     blob = json.loads(re.search(r'<script id="classes" type="application/json">(.*?)</script>', html_text, re.S).group(1).replace("<\\/", "</"))
     farmhouse = blob["classes"]["farmhouse"]
     assert farmhouse["questions"] and set(farmhouse["questions"][0]) == {"text", "url"}
