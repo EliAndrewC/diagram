@@ -1822,6 +1822,19 @@ REFERENCE_TIER = hamlet
 # raster out of the workers; two gates at 10 workers are 3.1 + 2 x 1.4 = 5.9 GiB, under the GM's 8 (the container's
 # cap is 10 GiB). The GM's "near 30 s" was not reached: 40 s, because past ten workers the suite's tail (a 5 s
 # glossary scan, a 3 s seating, the browser test) and each worker's ~0.2 s spawn-and-collect bound it, not the cores.
+# SIX AGAIN SINCE 2026-10-04 (GUARD_EDIT_OK: a measured default, the same rule; GM 2026-10-04: "pick one and go with it"
+# after the RAM profile). The suite is now 10,926 tests and ~4 min, and the laptop is a Core Ultra 7 155H - SIX
+# P-cores, the rest E-cores and second threads - shared with the other sessions' gates. test-full's pytest wall over
+# 23 runs, interleaved, with the 1-min load beside each: 4 workers 239-243 s whatever the load (median 240); 6 workers
+# 227-309 (244); 8 workers 215-285 (235); 10 workers 188-191 QUIET but 209-313 BUSY (223); 12 workers 241. Ten wins only
+# on a quiet machine, by ~20% (189 vs ~230 s); under the load these sessions actually run at (7-13) it is no faster and
+# swings widest, because workers past the P-cores share cores with every other gate. `make quick ALL=1`, two runs each:
+# 4 153 s, 6 132 s, 8 177 s, 10 124 s, 12 155 s. The rule (the smallest count within 10% of the fastest median) picks 6
+# for both - 4 is where quick turns noticeably slower (+16% on 6, +23% on 10), so one setting serves both and the
+# incremental gate (a 45-test selection: 2.5-3.5 s at every count) does not care. Memory, the reason for the
+# measurement: a gate's peak 2.5 / 3.1 / 3.85 / 4.5 / 5.0 GB at 4 / 6 / 8 / 10 / 12 (process-tree RSS, ~300 MB a
+# worker, not the 175 MB a worker starts at), quick's 1.8 / 2.0 / 2.4 / 2.85 / 3.7 GB - six gives back ~1.4 GB a gate
+# under the 10 GB cap the containers share.
 CPU_COUNT ?= $(shell nproc 2>/dev/null || echo 8)
 # THE SCHEDULER IS A VARIABLE so the choice is MEASURED rather than argued (2026-09-12). `worksteal` has no
 # `xdist_group` support at all - checked in the installed xdist 3.8.0's own scheduler source, where the word does
@@ -1836,7 +1849,8 @@ DIST ?= loadgroup
 # binds under loadgroup and is ignored outright by worksteal. The 2026-08-26 measurement that chose worksteal
 # (quick 27.5 s -> 22.0 s) stands for what it measured; the gate's suite has changed shape since - 3,700 mostly
 # short tests rather than a few long rolls - and on today's suite the schedulers are indistinguishable.
-XDIST_WORKERS = $(if $(CODEBUILD_BUILD_ID),auto,$(shell [ "$(CPU_COUNT)" -lt 10 ] && echo "$(CPU_COUNT)" || echo 10))
+# GUARD_EDIT_OK: the worker default 10 -> 6, measured (the 2026-10-04 note above); the small-box branch keeps nproc
+XDIST_WORKERS = $(if $(CODEBUILD_BUILD_ID),auto,$(shell [ "$(CPU_COUNT)" -lt 6 ] && echo "$(CPU_COUNT)" || echo 6))
 # EXHAUSTIVE=1 (GM 2026-08-26, T19): tests that sweep seeds / kinds / cardinals run the FULL sweep instead of
 # their documented quick subset (tests/_scope.py). `make quick EXHAUSTIVE=1`; `make done EXHAUSTIVE=1`.
 EXHAUSTIVE_ENV = $(if $(EXHAUSTIVE),L7R_TESTS_EXHAUSTIVE=1,)
