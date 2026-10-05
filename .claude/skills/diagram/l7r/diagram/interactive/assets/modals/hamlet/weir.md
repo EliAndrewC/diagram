@@ -1,6 +1,6 @@
 About: A weir (seki) was a low bar set across a brook at the intake of a hamlet's irrigation ditch. Where a brook ran
 high enough all season, the intake was only an opening in its bank; where its level fell, something had to be set in
-the stream to hold the water back and raise it to the height the fields needed. It did not take the whole brook: old
+the stream to hold the water back and raise it. It did not take the whole brook: old
 weirs mostly closed only half a stream, and the water ran over the crest when the brook ran high.
 
 The first weirs were built of whatever wood and stone lay near, too fragile to stand anywhere but on small streams.
@@ -10,8 +10,8 @@ water.
 [weir_form=fence] This one is a fence: stakes driven into the stream with brushwood or bamboo woven onto them, a form
 known by the 8th century.
 
-[weir_form=frame] This one is a frame, like a Kofun-period weir dug up at Kodera: slanting stakes, logs laid along them,
-the joints tied with wisteria vine and the gaps packed with clay and gravel.
+[weir_form=frame] This one is a frame, like a Kofun-period weir about 14 ft across dug up at Kodera: slanting stakes,
+logs laid along them, the joints tied with wisteria vine and the gaps packed with clay and gravel.
 
 [weir_form=crib] This one is a crib of timber packed with stone, the form of most intake works until the late 16th
 century.
@@ -22,9 +22,6 @@ across.
 How thick a village weir was is not recorded, nor how many small intakes had one.
 
 Guesses:
-- That a hamlet's intake has a weir at all, at even odds with a bare opening: which a brook needed followed its level
-  through the season, and no source counts the two.
-- Which of the four forms it takes, at even odds: no source counts them.
 - [weir_form=gabion] A course of gabions across a brook: the only gabions found damming water were on large rivers.
 - [weir_form=frame|crib] Its thickness, about 5 ft: no thickness of a village weir was found, only of river works.
 

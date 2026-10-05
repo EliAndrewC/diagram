@@ -1,5 +1,4 @@
-About: A farming village took the higher, drier ground beside its paddy, where its houses stayed out of the wet and its water
-could run down to the fields. The old ideal of a site, from China, set a house with its back to the hill and its face to the
+About: A farming village took the higher, drier ground beside its paddy, where its houses stayed out of the wet. The old ideal of a site, from China, set a house with its back to the hill and its face to the
 sun and the water, where the hills encircled and the water embraced; a farmhouse probably stood close up against its paddy
 in just that way. On a river's lowland the old villages stood on the natural levee, a slight rise that drained well above the
 wet ground behind it, and a lump of houses grew at the foot of a hill or plateau or on a river terrace.
@@ -15,7 +14,7 @@ Guesses:
   driest depended on the valley, and no count of village seats was found.
 
 Depiction: The map seats the cluster along the upper edge of the fields, centered on it, with its back to the rising ground
-and to the winter wind, and keeps it off the wet ground below the fields' drain.
+and to the winter wind, and keeps it off any drawn marsh.
 
 Name: Where the houses sit: on the high edge of the fields
 Covers: `meta.cluster_position = high_margin`

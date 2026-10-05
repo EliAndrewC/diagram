@@ -1,6 +1,6 @@
 About: A clustered village's shape followed its ground and its roads. A village gathered in a lump grew at a hill's foot, on
 a river terrace, or at a crossing of highways; others strung out in a line along a levee or a road. A crossroads of lanes is
-two ways crossing in the middle of the houses. A traditional village of China's northern plain, as one book describes it,
+two ways crossing in the middle of the houses. A traditional village of China's northern plain
 ran two or three main streets east and west with lesser roads north and south, and small blind alleys off the streets to the
 houses.
 
@@ -16,11 +16,11 @@ Guesses:
 - How often each shape comes up: no source counts them.
 
 Depiction: The map seats the houses first and lays the crossroads after, fitted to where they stand: two lanes crossing in
-the cluster; the households' own ways join them. Each lane is drawn as a track of bare earth a little wider than a footpath,
-pulled as straight as the plots allow.
+the cluster; the households' own ways join them. Each lane is drawn as a track of bare earth a little wider than a footpath -
+a width of the map's choosing, since no lane in a wet-rice village was measured - pulled as straight as the plots allow.
 
 Name: A crossroads
 Covers: `meta.lane_skeleton = cross`
-Sources: shuson-jawiki, sonraku-jawiki, shizen-teibo-jawiki, ushijima-2020-manchu, jarimichi-jawiki, lowtech-chinese-wheelbarrow, mlit-tokaido-michi
+Sources: shuson-jawiki, sonraku-jawiki, shizen-teibo-jawiki, ushijima-2020-manchu, jarimichi-jawiki, ishidatami-jawiki, lowtech-chinese-wheelbarrow, mlit-tokaido-michi
 Entry: research/questions/0031-clustered-and-scattered-villages-shuson-sanson.html, research/questions/0081-village-lanes.html
 Drawing: research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html, research/questions/0081-village-lanes.drawing.html

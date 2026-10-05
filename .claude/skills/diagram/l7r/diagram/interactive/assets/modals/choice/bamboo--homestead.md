@@ -1,4 +1,4 @@
-About: A farming household kept bamboo on its own farmstead wherever the winters were mild enough for it to grow. It
+About: Many a farming household kept bamboo on its own farmstead where the winters were mild enough for it to grow. It
 stood in the household's grove of trees, low under the tall trees on the side the wind came from, where it stopped the
 wind beneath their branches; on some farms it stood beside the storehouses, and at houses by rivers or on ground that
 flooded it was planted for its roots, which held the soil. The household cut it for baskets, tools and building, and ate
@@ -24,12 +24,13 @@ Guesses:
 
 Depiction: A bamboo culm is far too slim to see at the map's scale, so the map draws each stand as an area, its place and
 size to scale, filled with paired culm strokes and a leafy fork in jade green over a light jade wash - a mark taken from
-modern map legends, which stands for the bamboo and does not count it. A farm's stand is a strip set among its sheds and
-garden, kept off the lanes and wells; a farm drawn with its own grove keeps the patch inside the grove, on the house side of
+modern map legends, which stands for the bamboo and does not count it. A farm's stand is a strip beside the house, clear of
+the lanes; a farm drawn with its own grove keeps the patch inside the grove, on the house side of
 its windward band, where it shows only between the tree crowns, as real bamboo grew under them. No stand is drawn on a paddy,
-since bamboo dies in standing water.
+since bamboo dies in standing water, and a stand too narrow to read at the map's full view is
+left out.
 
-Name: Bamboo: a stand at each farm
+Name: Bamboo: stands at the farmsteads
 Covers: `meta.bamboo = homestead`
 Sources: take-jawiki, chikurin-jawiki, phyllostachys-enwiki, sendai-igune-modelplan, yashikirin-jawiki, tonami-yashikirin-haichi, tsuijimatsu, pmc5723622-bamboo-range, qimin-yaoshu-zhongzhu
 Entry: research/questions/0075-bamboo-groves-chikurin.html

@@ -4,7 +4,7 @@ Kishu, on Japan's Pacific coast, the village taxed as one unit was mostly a sing
 in the mountains, more of them the deeper the valley. In Rokugan, a village is several clusters of farmhouses around larger
 fields.
 
-A village of two parts showed two groups of houses on two patches of dry ground, the fields between or around them. How far
+A village of two parts would show two groups of houses, each on its own patch of dry ground, the fields between or around them. How far
 apart the parts stood, and how many households each held, are not recorded.
 
 How common such a village was is not recorded beyond the Kishu district, where it was commoner in the mountains.
@@ -21,4 +21,4 @@ Name: The cluster's shape: split in two
 Covers: `meta.cluster_shape = split`
 Sources: edago-ja, ndl-hongo-edago, jstage-admin-natural-village, l7r-budgets
 Entry: research/questions/0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.html, research/questions/0031-clustered-and-scattered-villages-shuson-sanson.html
-Drawing: research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html
+Drawing: research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html, research/questions/0032-how-our-maps-pack-a-clustered-villages-houses.drawing.html

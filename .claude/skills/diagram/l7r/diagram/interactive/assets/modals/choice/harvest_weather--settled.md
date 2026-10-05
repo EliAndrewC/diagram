@@ -7,11 +7,11 @@ threatened at harvest; in fine weather the rice dried on the banks or the grass.
 
 A rack in the fields stood a little above head height, poles, bamboo or rope laid across posts, and a single-level rack
 could run as long as 330 ft (100 m), straight, zigzag or bent into three sides. The sheaves hung on it slowly, usually
-twenty to thirty days, and then the rack came down.
+twenty to thirty days.
 
 Where the harvest had many clear days, the rack was taken up less readily: in Kyushu, where climate and habit held it
-back, it spread only after 1868. A region's way of drying was the same from village to village, not a choice each made
-for itself. Settled weather probably kept the racks out on the fields, away from the houses.
+back, it spread only after 1868. A region's way of drying seems to have held from village to village, not chosen by each
+village. Settled weather probably kept the racks out on the fields, away from the houses.
 
 Depiction: The map draws no drying rack by the houses. It draws none out on the fields either, since there they stood only
 for the month or so after the harvest and the map shows no particular season. A settlement whose harvest weather is not

@@ -1,14 +1,14 @@
-About: Some farming settlements had no bamboo at all. Bamboo is frost-tender at the edge of its range: a survey across
-northern Japan found the timber bamboos moso and madake limited mainly by temperature, with no stands where the mean yearly
-minimum fell below about 2°F (-16.8°C), and moso is held unable to stand much below about 0°F. Even in a climate
-warmer than today's they would keep south of the plains of central Honshu and the coasts of the north. So a cold upland
+About: Some farming settlements had no bamboo at all. Bamboo is frost-tender at the edge of its range: across
+northern Japan the timber bamboos moso and madake were limited mainly by the cold, with no stands where the mean yearly
+minimum fell below about 2°F (-16.8°C), and moso cannot stand much below about 0°F (-18°C). They probably reached little
+further north than central Honshu and the coasts of the north. So a cold upland
 settlement could have none, while a lowland one in a milder province would usually have had some.
 
 Such a settlement showed no bamboo on its farmsteads and no thicket by its houses, where elsewhere a stand stood low in
 a farm's grove and a thicket of the village's own stood apart from the houses.
 
-How many settlements went without bamboo is not recorded. Below the frost line bamboo was common in the countryside of
-farming villages, though no source counts it.
+How many settlements went without bamboo is not recorded. Below the frost line bamboo was probably common in the
+countryside of farming villages.
 
 Guesses:
 - That a settlement has no bamboo about one time in five, whatever its climate: no source counts settlements without

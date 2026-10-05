@@ -13,10 +13,10 @@ Guesses:
   depended on the place, and no count of village seats was found.
 
 Depiction: The map seats the cluster at a high corner of the fields, a little out from their upper edge, standing for a dry
-rise, and off the wet ground below the fields' drain; the rise itself is not drawn as raised ground.
+rise, and off any drawn marsh; the rise itself is not drawn as raised ground.
 
 Name: Where the houses sit: on a rise among the fields
 Covers: `meta.cluster_position = on_rise`
 Sources: shizen-teibo-jawiki, kohai-shicchi-jawiki, ishizue-waju, maff-waju-mizuya, waju-jawiki
-Entry: research/questions/0031-clustered-and-scattered-villages-shuson-sanson.html, research/questions/0066-flood-defenses-of-river-plain-villages-ring-dikes-and-refuge-mounds-waju-and-mizuka.html, research/questions/0057-marshes-and-wetlands-shitchi.html
+Entry: research/questions/0066-flood-defenses-of-river-plain-villages-ring-dikes-and-refuge-mounds-waju-and-mizuka.html, research/questions/0031-clustered-and-scattered-villages-shuson-sanson.html, research/questions/0057-marshes-and-wetlands-shitchi.html
 Drawing: research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html, research/questions/0058-ground-too-wet-to-build-on.drawing.html

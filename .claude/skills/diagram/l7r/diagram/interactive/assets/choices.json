@@ -89,7 +89,7 @@
     "Y": "a Y of lanes",
     "cross": "a crossroads",
     "waterside": "along the water",
-    "none": "none; each farm reached by its own path"
+    "none": "none; the farms reached by the field paths"
    }
   },
   {
@@ -147,9 +147,9 @@
    "name": "Bamboo",
    "values": {
     "none": "none",
-    "homestead": "a stand at each farm",
-    "thicket": "a shared thicket",
-    "both": "a stand at each farm and a shared thicket"
+    "homestead": "stands at the farmsteads",
+    "thicket": "a village thicket",
+    "both": "stands at the farmsteads and a village thicket"
    }
   },
   {
@@ -178,7 +178,7 @@
     "none": "none",
     "mulberry_fishpond": "mulberry and fishponds",
     "lotus": "lotus",
-    "tea_fringe": "tea along the edges"
+    "tea_fringe": "tea on the hillside above the rice"
    }
   },
   {
@@ -315,7 +315,7 @@
    "name": "Where the drained water goes",
    "values": {
     "pond": "into a pond below the fields",
-    "offmap": "on down its brook"
+    "offmap": "on to the brook or off the map"
    }
   },
   {
@@ -348,7 +348,7 @@
   },
   {
    "key": "kosatsuba_siting",
-   "name": "What the notice board faces",
+   "name": "Where the notice board seeks to stand",
    "values": {
     "frontage": "the busiest frontage",
     "waterside": "the place water is drawn"

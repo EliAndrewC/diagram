@@ -3,7 +3,7 @@ retirement house (inkyoya) of their own. The custom was strong from the Pacific 
 Kyushu and Shikoku, and thin in the northeast and along the Sea of Japan, where the generations stayed under one roof. The two
 households often kept separate meals and purses - one family living as two.
 
-Most retirement houses stood inside the family's own house plot, with an entrance of their own: a second, smaller roof in
+Most retirement houses stood inside the family's own house plot, with an entrance of their own: a second roof in
 the yard beside the farmhouse. In one windswept village of Shiga, the retirement houses and storehouses stood to the west
 and southwest of the house, sheltering the work yard before its door. How big a retirement house was is not recorded.
 
@@ -13,11 +13,10 @@ households kept a retirement house. Across a whole region the share is not recor
 Guesses:
 - That between three and seven in ten of a settlement's farmsteads keep one: no regional share was found, and a household held a retired couple for only part of its life.
 - Its size, about 18 by 15 ft, a room or two and an earth-floored entry: no measure of a farm's retirement house was found.
-- Where it stands in the yard, and how far from the farmhouse: no source gives either.
+- Where in the yard it stands, and how far from the farmhouse: beyond one windswept village's bearings, no source gives either.
 - That a settlement keeps retirement houses or one roof at even odds: no source weighs the two forms against each other.
 
-Depiction: The map draws the retirement house as a small house in the same homestead as its farmhouse, off the farmhouse's
-back wall or one of its sides, never on the work yard and garden in front. It is a second roof of the same family, so it is
+Depiction: The map draws the retirement house as a small house in the same homestead as its farmhouse. It is a second roof of the same family, so it is
 not counted as a household.
 
 Name: A retirement house

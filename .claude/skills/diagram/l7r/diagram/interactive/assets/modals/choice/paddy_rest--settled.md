@@ -1,5 +1,7 @@
-About: Settled paddy was cropped every year, and no plot of it rested. It was the paddy of stable ground. In the early
-medieval period much land was unstable for want of water or soil, and each year the plots to work were chosen anew; from
+About: Settled paddy was cropped every year, and no plot of it rested. It was the paddy of stable ground, with water and
+soil enough to carry every plot every year.
+
+In the early medieval period much land was unstable for want of water or soil, and each year the plots to work were chosen anew; from
 the Kamakura period on, the advanced farming regions improved their water works and fields until the land could be
 worked every year. As villages gathered into nucleated settlements, around the late thirteenth and fourteenth centuries
 in the Kinai and a century or so later in the east and on Kyushu, the old extensive farming of land chosen anew each

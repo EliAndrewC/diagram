@@ -1,25 +1,25 @@
 About: A tea dike was the bank round a fish pond planted with tea, a planting the dike-pond country kept beside its
-mulberry and its fruit trees. In 1678 the villages of Guangzhou's large counties often gave up good fields to make dikes
-and planted them with trees: lychee most, tea and mulberry next, then mandarin and orange.
+mulberry and its fruit trees. In 1678, early in the Qing dynasty, the villages of Guangzhou's large counties often gave up
+good fields to make dikes and planted them with trees: lychee most, tea and mulberry next, then mandarin and orange.
 
-How the bushes stood on a dike is not recorded: tea is only named in that list. In Japan, by way of comparison, tea was
-often grown as a single row along the banks of paddies and dry fields, where it also marked the boundary with the
-neighbor, broke the wind and held the soil. The bank itself was heaped from the pond's mud, and raised again with the mud
-dredged up each time the pond was drained.
+The bank was heaped from the pond's mud, and raised again with the mud dredged up each time the pond was drained. How the
+tea bushes stood on it is not recorded: tea is only named in that list. In Japan, by way of comparison, tea was often
+grown as a single row along the banks of paddies and dry fields, where it also marked the boundary with the neighbor,
+broke the wind and held the soil.
 
-How many bushes a dike carried is not recorded. Modern pond dikes are about 20 to 33 ft (6 to 10 m) wide; a dike's width
-before modern times is not recorded.
+How many bushes a dike carried is not recorded. Modern pond dikes are about 20 to 33 ft (6 to 10 m) wide and stand 2 to 3
+ft above the water; a dike's width before modern times is not recorded.
 
 Guesses:
 - The tea's form on the map, two clipped hedges along the bank, each about 3 ft wide and broken every 7.5 ft or so: no
   account says how tea stood on a pond dike, so the hedges are drawn from the tea bush's own habit.
 
-Depiction: The map draws the tea dike as two clipped hedges running along each bank, broken into short runs so they read
+Depiction: The map draws the tea dike as two clipped hedges running along the bank, broken into short runs so they read
 as bushes set end to end, and so a reader can tell them at a glance from the mulberry's rows of round bushes and the fruit
 dike's single line of trees. Every dike of a hamlet carries the same crop, so each hamlet reads as one kind of dike-pond
-village, though in 1678 tea, fruit and mulberry were named on the same villages' dikes; the title card says which crop
-this one plants. The bank is drawn as a ring round the water, so pointing at a dike lights the bank and not the pond
-inside it.
+village, though in the early Qing tea, fruit and mulberry were named on the same villages' dikes; the title card says
+which crop this one plants. The bank is drawn as a ring round the water, so pointing at a dike lights the bank and not
+the pond inside it.
 
 Name: tea dike
 Covers: the bank ring of every `dikeponds[]` parcel on a hamlet whose `meta.dike_crop` is tea, and its bushes

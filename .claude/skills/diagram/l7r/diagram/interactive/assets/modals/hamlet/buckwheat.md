@@ -1,15 +1,15 @@
 About: Buckwheat grew in the dry fields (hatake), farmland that was never flooded, as one of the crops a farming household
 raised beside its rice. It was quick: ready 70 to 80 days after sowing, with a crop sown in spring for the summer and
 another sown in summer for the autumn. In the Edo farm year of Echizen, buckwheat and soybean were harvested in the gaps
-between the tasks of the rice harvest. The dry fields took the higher, well-drained ground the paddy water could not
-reach, such as a river's natural levees and its terraces, though the dry middle of an alluvial fan was often left wild
+between the tasks of the rice harvest. The dry fields mostly took the higher, well-drained ground the paddy water could
+not reach, such as a river's natural levees and its terraces, though the dry middle of an alluvial fan was often left wild
 until the end of the Edo period.
 
-A dry field was worked in ridges and furrows, its crop growing in rows; a Japanese farming manual of 1697 still weeds
-along the ridges. Buckwheat stood 2 to 4 ft tall (60 to 130 cm) on green, pale red or deep red stems, and in flower it
+A dry field was worked in ridges and furrows, its crop growing in rows and weeded along the ridges, as it still was in
+the Edo period. Buckwheat stood 2 to 4 ft tall (60 to 130 cm) on green, pale red or deep red stems, and in flower it
 was covered in small blossoms, white, pale red or red, each about a quarter inch (6 mm) across.
 
-Single dry fields in two land registers of 1591 and 1678 averaged a tenth to a sixth of an acre, the smallest under a
+Single dry fields of the late sixteenth and seventeenth centuries averaged a tenth to a sixth of an acre, the smallest under a
 twentieth of an acre and the largest about a third. A farm family of the early 1900s worked about 2.5 acres of paddy and
 dry field together; how much of a household's dry field was buckwheat is not recorded.
 
@@ -39,4 +39,4 @@ Name: buckwheat
 Covers: `dry_plots[crop=buckwheat]` and their furrows
 Sources: fukui-kenshi-noji, soba-jawiki, shizen-teibo-jawiki, dankyu-kotobank, senjochi-kotobank, king-forty-centuries, nogyo-zensho-joun-sera, hanshu-daitian-wikisource, qimin-yaoshu-juan1, komonjyo-kenchi, zuozhuan-chenggong, kokumori-jawiki, kateisaien-jawiki, dry-fields-and-their-crops-hatake, where-a-farming-hamlet-grew-its-coarse-grain
 Entry: research/questions/0006-dry-fields-and-their-crops-hatake.html, research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.html, research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.html [winter_crop=none]
-Drawing: research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html, research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html [winter_crop=none]
+Drawing: research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html, research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html, research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html [winter_crop=none]

@@ -1,5 +1,5 @@
-About: On unsettled land a village left some of its paddy to rest each year. In the late Heian and early medieval periods,
-the age of great land clearance, much farmland was unstable for want of irrigation water or soil, and each year the
+About: On unsettled land a village left some of its paddy to rest each year. In the late Heian period and the early medieval
+age of great land clearance, much farmland was unstable for want of irrigation water or soil, and each year the
 plots to work were chosen anew from the cropped and the resting ground, to let the soil recover and to fit the planting
 to the water to hand. A plot left out of crop for a year was a kataarashi; whether a plot rested every other year or only
 now and then, accounts differ. In Rokugan a paddy once made can be cropped for centuries without tiring its soil, so a

@@ -5,13 +5,13 @@ or hired one.
 
 Across most of Japan the stall was a corner of the farmhouse's earth-floored work space, under the house's own roof;
 elsewhere it was a stable of its own. In the L-shaped farmhouses of the north it was a wing of the house, warmed by the air
-from the kitchen hearth. Two free-standing stables of the Edo period that survive are single-story buildings under tile
-roofs.
+from the kitchen hearth. Its floor was spread with straw and fallen leaves, which the beast trod with its dung into manure
+for the fields. Two free-standing Edo-period stables survive, single-story and tile-roofed, one recorded as timber.
 
 Not every household had a beast: in one western province from the early 1700s about half did, and fewer as time went on,
-though one village near Edo had a stable at 50 of its 76 houses in 1824. Of the two surviving Edo stables, one has a frame
-of about 15 by 12 ft, and the two cover about 320 and 370 sq ft under their roofs; how big an ordinary smallholder's stall
-was is not recorded.
+though one village near Edo had a stable at 50 of its 76 houses in 1824, most of them a wing of the house. A Chinese farm
+kept a draft animal or two. One surviving Edo stable has a frame of about 15 by 12 ft, and the two cover about 320 and
+370 sq ft under their roofs; how big an ordinary smallholder's stall was is not recorded.
 
 Guesses:
 - [byre_form=detached_commons] A shed on common ground among the houses, shared by several households: no account found
@@ -33,6 +33,6 @@ stall under the house's own roof cannot be seen from above; the beast really liv
 
 Name: byre
 Covers: `byres` - the draft-animal sheds
-Sources: kotobank-umaya, nakanishi-1994-kogyu-koba, buck-1930-farm-economy, okayama-chikusanshi-shiyo, ndl-crd-shakkogyu, magariya-jawiki, bunka-ueno-umaya, bunka-okamoto-umaya, koshigaya-shishi-noumin-jukyo
-Entry: research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.html
+Sources: kotobank-umaya, nakanishi-1994-kogyu-koba, buck-1930-farm-economy, okayama-chikusanshi-shiyo, ndl-crd-shakkogyu, magariya-jawiki, bunka-ueno-umaya, bunka-okamoto-umaya, koshigaya-shishi-noumin-jukyo, kyuhi-jawiki, cambridge-animals-china
+Entry: research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.html, research/questions/0042-manure-heaps-and-compost-kyuhi.html, research/questions/0045-chickens-and-chicken-coops.html
 Drawing: research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html

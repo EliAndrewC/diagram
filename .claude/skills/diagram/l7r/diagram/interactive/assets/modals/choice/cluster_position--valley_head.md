@@ -1,4 +1,4 @@
-About: The oldest rice was grown up the small valleys, and the houses went with it. On two estates of the late Heian period,
+About: Before the open lowland was developed, rice was grown up the small valleys, and the houses went with it. On two estates of the late Heian period,
 in Satsuma and Bingo, the paddies lay almost without exception in small valleys, fed by springs and rain, and one house or a
 few probably stood beside each small valley paddy, dotted up each narrow branching valley. A valley's head was also where a
 reservoir pond could be made, by closing the valley with an earthen dike, its water set above the fields it served. A lump
@@ -14,7 +14,7 @@ Guesses:
   driest depended on the valley, and no count of village seats was found.
 
 Depiction: The map seats the cluster along the upper edge of the fields, tucked toward one corner, keeps it clear of the
-water coming in, and keeps it off the wet ground below the fields' drain.
+water coming in, and keeps it off any drawn marsh.
 
 Name: Where the houses sit: at the valley's head
 Covers: `meta.cluster_position = valley_head`

@@ -7,7 +7,7 @@ Over a brook or a narrow stream a crossing was made in one of three ways: a sing
 by side under trodden earth, or a planked deck.
 
 [footbridge_form=log] The single log or board was the simplest crossing, laid across a brook or a mountain stream; in China
-such a bridge let walkers or livestock cross narrow streams and gorges. Logs laid across a ditch were slippery in the rain.
+such a bridge let walkers or livestock cross narrow streams and gorges. Logs laid across a farm canal were slippery in the rain.
 
 [footbridge_form=earthen] The earthen bridge (dobashi, "earth bridge") was logs laid side by side with no gaps, then earth
 thrown over them and trodden down until the surface was level. Until the Edo period it was by far the commonest bridge over
@@ -35,8 +35,7 @@ file, so it does not read as a road bridge. All of a settlement's ditch crossing
 [footbridge_form=plank] The planked form is drawn with its seams running across the deck, so the boards read as laid from
 bank to bank.
 
-Where a lane or a road crosses water, the map draws one timber deck as wide as the way, always planked whatever form the
-settlement's ditch crossings take, and never two decks at one point; over real rivers, logs under earth were the likelier.
+Where a lane or a road crosses water, the map draws one deck as wide as the way, and never two decks at one point.
 
 Name: footbridge
 Covers: `bridges[foot]` - every plank and deck over water

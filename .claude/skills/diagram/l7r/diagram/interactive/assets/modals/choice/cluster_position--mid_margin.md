@@ -14,7 +14,7 @@ Guesses:
   depended on the valley, and no count of village seats was found.
 
 Depiction: The map seats the cluster along the upper edge of the fields but drawn off to one side of its middle, keeping it on
-the side away from where the water comes in, and off the wet ground below the fields' drain.
+the side away from where the water comes in, and off any drawn marsh.
 
 Name: Where the houses sit: midway along the fields' edge
 Covers: `meta.cluster_position = mid_margin`

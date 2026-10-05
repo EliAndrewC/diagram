@@ -13,9 +13,11 @@ How old such dike-top houses were is not recorded, nor how many households a dik
 
 Guesses:
 - That ten to twenty households shared a small polder: no figure for a small polder's households was found.
-- That each house stood on a stretch of crest widened for it, with spoil piled from the ditches: no survey of a house pad's
-  size was found, so the platform is a reconstruction.
-- How far apart the houses stand along the crest: no figure was found.
+- That each house stood on its own stretch of crest widened for it, with spoil piled from the ditches: the margin is
+  recorded as wider where the houses stood, but no account of a house's ground or its size was found, so the platform is a
+  reconstruction.
+- That the houses stand at least a little more than a house's width apart along the crest: no figure for their spacing was
+  found.
 
 Depiction: The map seats the farmhouses in single file on the crest of the polder's dike, each on a widened stretch of bank so
 the dike bulges at every house instead of the house overhanging the water. No house is set over a sluice notch. The crest

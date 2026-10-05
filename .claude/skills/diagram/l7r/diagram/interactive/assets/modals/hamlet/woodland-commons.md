@@ -1,17 +1,17 @@
 About: A Japanese village's fuel wood was common land, iriai, "shared entry": held by the village and cut under its own
 rules on who might take what, when and how much, most of them set up in the Edo period. From it came firewood and
 charcoal wood, timber, fodder, and the fallen leaves and undergrowth that manured the paddies and fed the cattle. It
-stood beyond the fields from the houses, on the nearest and lowest hill ground round the settlement, the satoyama.
-A boundary with the next village's wood, once settled at law, was a drawn line that bent.
+stood beyond the fields, on the nearest and lowest hill ground round the settlement, the satoyama.
+A boundary with the next village's wood, once settled at law, was a drawn line that could bend.
 
-It was a worked wood, a coppice. Its oaks, konara and kunugi, were cut every fifteen to forty years or so and grew
+It was a worked wood, a coppice. Its oaks, konara and kunugi, were cut every fifteen to forty years and grew
 back from the stump in many shoots, so the wood stood as clumps of thin, low stems. Its
 leaves were raked up, its shrubs cut and its undergrowth carried off, so the sun reached the floor and herbs and
 wildflowers grew there, not brush.
 
-No count of a worked wood's stems from before modern times is known. Counted in the 20th century, konara woods of 15 to
+How thickly a worked wood stood before modern times is not recorded. Counted in the 20th century, konara woods of 15 to
 23 years stood at about 1,000 to 2,000 stems an acre (2,500 to 5,000 a hectare), and woods of 26 to 31 years at about
-600 to 800 an acre; one stand of 29 years was about 47 ft (14 m) tall, its trunks about 6 in (15 cm) thick. How much
+600 to 800 an acre (1,500 to 2,000 a hectare); one stand of 29 years was about 47 ft (14 m) tall, its trunks about 6 in (15 cm) thick. How much
 ground a village's wood covered is not recorded.
 
 Guesses:
@@ -21,12 +21,12 @@ Guesses:
 - That a wood's edge followed what bounded it on the ground, a brook, a lane or a field: no source on village commons or
   their boundaries says so.
 
-Depiction: The map draws the commons as a few patches of coppice on the nearest rising ground beyond the fields, on ground
-higher than the field beside it, or on the level past the fields where there is no higher ground; never below the
-houses. Every crown is drawn at its real size, about 1,700 to the hectare (about 690 an acre), the count of a stand at
-the old end of the cutting cycle, so the wood may read a little more open than one at its cutting. No brush or pines
-stand inside. Each patch's edge wanders smoothly, a convention: no surveyed rectangle of coppice is recorded, and a
-ruled boundary bent.
+Depiction: The map draws the commons as a few patches of coppice, on the nearest rising ground above the fields where
+there is any, and never below the houses. Every crown is drawn at its real size, about 690 to the acre (1,700 a
+hectare), the count of a stand at the old end of the cutting cycle, so the wood may read a little more open than one at
+its cutting. No crown is drawn wholly under another's, a convention: the map draws the canopy, and neighboring crowns
+may overlap at their edges. No brush or pines stand inside. Each patch's edge wanders smoothly, a convention: a
+boundary settled at law between two villages' woods could bend, and the map draws no wood as a ruled rectangle.
 
 Name: woodland commons
 Covers: `commons[role=woodland]` - the coppice patches

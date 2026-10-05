@@ -510,7 +510,7 @@ def explanations(present: set[str], notes: MapNotes = EMPTY, registry: dict[str,
             continue
         # THE KNOB-CONDITIONED ITEMS (FR-015, plan D14): an item, or an Entry path, carrying [knob=value] is kept only where
         # this map's manifest records that value; the knob and values are checked against the populated registry here
-        conds = [conditions.split(i)[0] for i in (*fc.about, *fc.depiction, *fc.guesses)] + list(conditions.entry_conditions(fc.entry).values())
+        conds = [conditions.split(i)[0] for i in (*fc.about, *fc.depiction, *fc.guesses)] + list(conditions.entry_conditions(fc.entry).values()) + list(conditions.entry_conditions(fc.drawing).values())
         conditions.check(fc.name, conds)
         entry = conditions.shown_entry(fc.entry, knobs) if conditions.entry_conditions(fc.entry) else fc.entry
         out[key] = {
@@ -523,7 +523,7 @@ def explanations(present: set[str], notes: MapNotes = EMPTY, registry: dict[str,
             "guesses": conditions.shown(fc.guesses, knobs),
             # THE DEPICTION TAB (plan D13): how the map draws it, and the "how our maps draw it" pages, as links
             "depiction": conditions.shown(fc.depiction, knobs),
-            "drawing": research_questions(fc.drawing) if fc.drawing else [],
+            "drawing": research_questions(conditions.shown_entry(fc.drawing, knobs) if conditions.entry_conditions(fc.drawing) else fc.drawing) if fc.drawing else [],
             # `lead` is empty for an `accurate` class (feature 156) - see `classes.lead_sentence`.
             # `caveat` is the liberty its record discloses, shown after the why; `label` stays so the
             # classification is still readable on the page (`data-label`), per constitution XII.

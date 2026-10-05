@@ -1,16 +1,17 @@
 About: Barley was the winter grain of the dry fields (hatake), farmland that was never flooded, and with millet it was
-among the coarse grains a farming household grew for its own table, left out of the tax.
-It was also grown on the paddy itself: where a paddy drained, it was worked as a dry field after the rice harvest and sown
-to barley or wheat, two crops a year, a practice known since the Heian period. A
+among the coarse grains a farming household grew for its own table, left out of the tax and cooked in with its rice.
+It was also grown on the paddy itself: a paddy that drained was worked as a dry field after the rice harvest and sown
+to barley or wheat, two crops a year, since Heian times. A
 wet paddy could not carry it, and a second crop needed manure that in medieval times only places near densely settled
-districts could find. The dry fields took the higher, well-drained ground the paddy water could not reach.
+districts could find. The dry fields mostly took the higher, well-drained ground the paddy water could not reach.
 
-A dry field was worked in ridges and furrows, its crop growing in rows. Barley was sown in autumn, between the autumn
-equinox and early October in the Edo farm year of Echizen; it stood through the winter as young plants, headed in
+A dry field was worked in ridged rows. Barley was sown in autumn, between the autumn
+equinox and early October; it stood through the winter as young plants, headed in
 spring, and turned gold in May, when a ripening field looked like a rice field in autumn: early summer was called the
-"barley autumn". It was cut around June, so by high summer the field was stubble or bare ground.
+"barley autumn". It was cut around June, so by high summer the field was probably stubble or bare ground.
 
-Single dry fields in two land registers of 1591 and 1678 averaged a tenth to a sixth of an acre. A farm family of the
+A single dry field averaged a tenth to a sixth of an acre in the late sixteenth and seventeenth centuries,
+the smallest under a twentieth and the largest a third. A farm family of the
 early 1900s worked about 2.5 acres of paddy and dry field together; how much of it bore barley is not recorded.
 
 Guesses:
@@ -28,7 +29,7 @@ Guesses:
 Depiction: The map draws the dry fields as a hem of small rectangular plots just above the supply canal along the
 paddy's high edge, where the paddy water stops, each squared to the canal behind a bare bank. On some maps an alluvial
 fan's dry middle is left to scrub and the plots keep to its toe. No grain plot is drawn beside a house: the plot a
-household worked there was its kitchen bed. Every plot is furrowed, and neighboring plots form a tract whose rows run
+household worked there was most likely its kitchen bed. Every plot is furrowed, and neighboring plots form a tract whose rows run
 one way, each tract turned well apart from the next so the strips can be told apart. Barley is drawn in the tan-gold of
 its ripening in May, though in high summer, the season of the paddies, it had already been cut.
 

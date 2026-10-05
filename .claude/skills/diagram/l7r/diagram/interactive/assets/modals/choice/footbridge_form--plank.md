@@ -15,9 +15,8 @@ Guesses:
   rarer than earth over logs.
 
 Depiction: Every ditch crossing on the map takes this form, drawn as a timber deck with its seams running across it, so
-the boards read as laid from bank to bank. Each is drawn about 4 ft wide and 8 ft long so it reads as a single-file
-crossing and not a road bridge. Where a lane or a road crosses water, the map draws a planked deck as wide as the way;
-over real rivers, logs under earth were the likelier.
+the boards read as laid from bank to bank. Each is drawn narrow and about 8 ft long,
+so it reads as a single-file crossing and not a road bridge.
 
 Name: The footbridges: planks
 Covers: `meta.footbridge_form = plank`

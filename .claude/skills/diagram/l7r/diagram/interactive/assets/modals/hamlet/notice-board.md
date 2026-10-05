@@ -8,10 +8,11 @@ at the foot of a bridge, or at a crossroads, where more passers-by would see it.
 circulars into a ledger and passed them on, and had to read and write; whether the notices were also read aloud is not
 recorded.
 
-The notices themselves were boards about a foot high, hung high enough, even in two tiers, to look down over the passers-by.
-The frames measured at two post towns stood about 10 to 11 ft high, 16 to 18 ft along the road and 5 to 6 ft deep, on a stone
-base under a roof against wind and rain, and a board's site was closed in with a palisade, a stone wall or a bank of turf. No
-village board is recorded measured, though one that survives is large, on a stone base, under a sound roof.
+The notices themselves were boards about a foot (30 to 40 cm) high, hung high enough, even in two tiers, to look down over
+the passers-by. The frames measured at two post towns stood about 10 to 11 ft high, 16 to 18 ft along the road and 5 to 6 ft
+deep; the one rebuilt at Kanagawa stands on a stone base under a roof. A board's site was closed in with a palisade, a stone
+wall or a bank of turf. No village board is recorded measured, though one that survives is large, on a stone base, under a
+sound roof.
 
 Guesses:
 - That a hamlet's board is as large as a post town's, 16 by 6 ft: no village board was found measured.
@@ -19,11 +20,11 @@ Guesses:
   reader a board needs.
 
 Depiction: The map gives every settlement, down to a hamlet, a board beside its busiest main road or street, its face turned
-broadside to the traffic; where no way is a main one, it stands where the most buildings stand nearby. It is placed last,
-once everything else stands, weighing the passers-by it would meet, as those who set up a real board did. It is drawn as a
-roofed frame on a stone footing inside a fence, at the size measured at two post towns. It clears no ground and may stand
-under a tree's crown, since its label is drawn above every crown; whether a real board ever stood under a tree is not
-recorded.
+broadside to the traffic; where no way is a main one, it stands where the most buildings stand nearby. The title card says
+where this settlement's board stands and which frontage it faces. It is placed last, once everything else stands, weighing
+the passers-by it would meet, as those who set up a real board did. It is drawn as a small roofed frame, its long side along
+the road. It may stand under a tree's crown, since its label is drawn above every crown; whether a real board ever stood
+under a tree is not recorded.
 
 Name: notice board
 Covers: `kosatsuba`, with its label

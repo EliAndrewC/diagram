@@ -1,17 +1,18 @@
 About: A village with hillside above its rice could grow tea there. A traveler in north China in the 1840s found the tea
 plantations always on the lower and most fertile sides of the hills, never on the low land, and the farms smallholders'
-gardens: every cottager with a little tea garden of their own. In Japan tea was also grown another way, as a single row
+gardens: every cottager with a little tea garden of their own. In Japan tea was also often grown another way, as a single row
 planted along the banks between paddies and dry fields, which marked the boundary with the neighbor, broke the wind and kept
 the soil from washing away; what the household did not drink was sometimes sold.
 
-The hillside gardens were rows of bushes about four feet apart, so a slope carried many small gardens rather than one
-block.
+The hillside gardens were rows of bushes about four feet apart.
 
 A tea farm ran from one to four or five acres. How much of a village's ground went to tea is not recorded.
 
 Guesses:
 - That tea grew on the open slope, not on neat contour terraces: terraces of tea are taken to be a form of the later 20th
   century, though no source dates them.
+- That a slope carried many small gardens rather than one block: reckoned from the smallholders' gardens of one to five
+  acres, though no source maps how the gardens lay on a hillside.
 - How often a settlement grows this crop rather than ponds, lotus or none: no source counts them, so the choices come up
   evenly where the ground allows them.
 

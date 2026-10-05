@@ -7,12 +7,12 @@ Which sides it took differed by region: the north and west on the Sendai plain, 
 every side but the house's front on the Tonami plain, where the thin east front held the entrance and garden; and all
 four on the Izumo plain before 1868, on an earth bank against floods. At Tonami tall cedar, oak and zelkova stood
 from the south round to the west, hackberry and alder with a little bamboo from the west round to the north, and
-persimmon and fig at the front. Nearly half the trees were cedar, among many other kinds, 36 to 92 ft
-tall, with a bamboo stand and an understory of saplings and shrubs beneath.
+persimmon and fig at the front. Nearly half were cedar, among many other kinds, 36 to 92 ft
+(11 to 28 m) tall, with a bamboo stand and an understory of saplings and shrubs beneath.
 
-A late 20th-century survey of one Tonami hamlet counted about 33 good-sized trees a household; large groves elsewhere
-held a few hundred. In one register of 1684, three households' woods covered about 6,000, 10,700 and 28,000 sq ft;
-form, size and kinds of tree varied.
+In the 1980s one Tonami hamlet's groves held about 33 good-sized trees a household; one recent Sendai-plain grove held
+356. Early in the Edo period three households' woods covered about 6,000, 10,700 and 28,000 sq ft, and groves varied in
+form, size and kinds of tree.
 
 Guesses:
 - How many trees a grove holds, set from the late 20th-century count: no count from before 1868 was found, though
@@ -26,13 +26,14 @@ Guesses:
 - That a third or fourth side's band closes only the house's own side, leaving the yard and garden in the sun: no
   source says how a grove met a farm's yard.
 
-Depiction: The map draws every tree of a grove at its real size, on real spacing, so a grove reads as the dense stand it
-was; only the crowns show, not the understory beneath them. Every farm in a settlement takes the same shape of grove,
-two, three or four sides, chosen for each settlement. The windward sides are the deep stand and the other planted sides a
-thinner band of lesser trees; a three-sided grove leaves open the front away from the wind, and a ring is broken once at
-its front for the way in. The stand is set back from the house's back wall and windward end, leaving a strip for the wood
-shed and the bath room, and neighbors' groves are kept far enough apart for a lane to reach each door. A grove's bamboo
-is drawn by its own mark, between the crowns.
+Depiction: The map draws a grove tree by tree, every canopy tree a crown of its own, so a grove reads as the dense stand
+it was; only the crowns show, not the understory beneath them. Every farm in a settlement takes the same shape of grove,
+two, three or four sides, and the title card says which. The windward sides are the deep stand and the other planted
+sides a thinner band of lesser trees; a three-sided grove leaves open the front away from the wind, and a ring is broken
+once at its front for the way in. No grove tree stands in a yard's or garden's sun, and neighbors' groves are kept far
+enough apart for a lane to reach each door. Where a farm keeps bamboo, its stems far too thin to see at this scale, it is
+drawn as a patch of jade culm marks that stand for the stand rather than count it, showing only between the crowns, as
+real bamboo grew low beneath the trees.
 
 Name: homestead grove
 Covers: `groves`
