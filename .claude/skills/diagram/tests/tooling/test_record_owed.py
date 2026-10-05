@@ -94,6 +94,13 @@ def test_a_changed_note_owes_the_source_reader_and_quote_check_on_it_and_record_
     assert _units(_q(), now) == ["quote-check:0094#kyakhta", "record-format:0094", "source-reader:0094#kyakhta"]
 
 
+def test_a_note_cites_its_linked_keys_and_never_a_bare_code_symbol() -> None:
+    """Feature 319 (G4): Sugiura's table letters went into `<code>` to keep the glossary's tooltips off them, and
+    `make record-owed` then asked for a source-reader bundle of a source named `be`."""
+    notes = '<li data-note="kyakhta"><a href="https://x.org/k"><code>kyakhta</code></a> - 「privy <code>be</code>」</li>\n'
+    assert ru.Record.of({"0094-rooms.notes.html": notes}, {}).cites["0094"] == {"kyakhta": ("kyakhta",)}
+
+
 def test_a_reworded_noted_block_owes_quote_check_on_its_notes_and_record_format() -> None:
     now = _q(page=PAGE.replace("built theirs at the border", "built their post at the border"))
     assert _units(_q(), now) == ["quote-check:0094#kyakhta", "record-format:0094"]

@@ -56,7 +56,9 @@ _ORIG_TOKEN = re.compile(r'<span class="orig" data-orig="([^"]+)"></span>')
 _ORIG_STORED = re.compile(r'<li data-orig="([^"]+)">(.*?)</li>', re.S)
 _STEM = re.compile(r"^(\d{4})-([^.]+)(\.drawing)?\.html$")
 _INTRO = re.compile(r'\bclass="intro"')
-_CODE = re.compile(r"<code>([a-z0-9][a-z0-9-]*)</code>")
+#: a cited key is LINKED (`<a href=...><code>key</code></a>`, "a key is never bare"): a bare `<code>` in a note is a symbol
+#: kept out of the glossary's tooltips - Sugiura's table letters `be`, `mo` - and named no source (feature 319, G4)
+_CODE = re.compile(r'<a href="[^"]*"(?: [^>]*)?>\s*<code>([a-z0-9][a-z0-9-]*)</code>\s*</a>')
 
 #: the checks this module decides, in the order a report lists them
 CHECKS = ("intro-check", "record-format", "source-reader", "quote-check", "source-applicability")
