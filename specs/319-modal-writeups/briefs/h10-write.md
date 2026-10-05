@@ -1,7 +1,7 @@
 # Brief - feature 319, H10: record conflicts the modal checks found - the monk's house, the copse, manure jars and heaps. Session 1: write
 
 You are a FRESH session for one part of feature 319. This brief is the whole of what you need; do not read the feature's spec or
-plan. Work in this clone (`/diagram/.clones/diagram-html`); the project's CLAUDE.md files apply to you, the research record's
+plan. Work in this clone (`/diagram/.clones/diagram-html-3`); the project's CLAUDE.md files apply to you, the research record's
 `CLAUDE.md` above all.
 
 **Why.** Feature 319's modal checks (2026-10-05) compared every map modal with the research record and found places where two
