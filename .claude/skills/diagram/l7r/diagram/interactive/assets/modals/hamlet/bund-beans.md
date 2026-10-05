@@ -1,18 +1,24 @@
-What: Soybeans planted along the tops of the paddy bunds - azemame - drawn as dark green beads.
+About: Bund beans (azemame) were soybeans grown along the tops of the paddy bunds. A household sowed them in a row on the
+bund after the rice was transplanted and harvested them at the same time as the rice, so the narrow ridge that held the
+water in also bore a crop. They seem to have been grown as food, not to feed the paddy's soil: the paddy took its green
+manure from a vetch sown in it over the winter. Beans were often grown on the bunds, beside the grass that was cut there
+for manure or fodder.
 
-Why: The beans were a food crop of their own, sown along the bund tops after transplanting and harvested with
-the rice. Once grown across Japan, most disappeared with land consolidation, herbicide and damage by
-animals. A share of the bunds is planted, rolled per map.
+A soybean plant is an erect bush, branching from a central stem, knee to waist high, about 2 to 4 ft (50 to 125 cm),
+with broad, pointed, medium-green leaflets. In Asuka, as the rice cutting neared, the beans stood in a long, unbroken row along the
+bund.
 
-Note: we have rendered the bund beans as round beads about 3 ft across in a deep pine green, darker than the
-plant, in order to make them visible on the map at this scale against the pale rice, and any stretch of
-bund that carries them shows at least two, because a single bead does not read as a row. A soybean is an
-erect, bushy annual 50 to 125 cm tall (roughly 2 to 4 ft) with medium-green leaflets, sown in a row
-along the bund after transplanting and harvested with the rice; how wide one plant stands on the bund
-was not found, so the bead's width is not compared to it. The practice is attested.
+How many plants a bund carried, or how far one spread, is not recorded. Bund beans were once grown across Japan; land
+consolidation, weedkillers and damage by animals took most of them in modern times, and the village of Asuka still grows
+them.
+
+Depiction: The map draws each bean plant as a round bead about 3 ft across, in a single row on the bund, with at least
+two beads on any stretch that carries them, since a single bead does not read as a row. The beads are a deep pine green,
+darker than the real plant's medium green, so they show against the rice; the bead marks where a plant stands, not how far
+it spread.
 
 Name: bund beans
 Covers: the bead run along the bunds (`bund_beans`)
-Label: convention
-Sources: nabunken-azemame, wikipedia-soybean, cropfarming-soybeans
-Entry: research/questions/0005-rice-paddies-and-their-plots-suiden.html, research/questions/0014-bunds-between-the-paddies-aze.html; research/questions/0014-bunds-between-the-paddies-aze.drawing.html; waterfields/palette.py BEAN_GREEN (the color decision)
+Sources: nabunken-azemame, kotobank-aze-sekai-daihyakka, genge-jawiki, wikipedia-soybean, cropfarming-soybeans, bunds-between-the-paddies-aze
+Entry: research/questions/0014-bunds-between-the-paddies-aze.html, research/questions/0005-rice-paddies-and-their-plots-suiden.html
+Drawing: research/questions/0014-bunds-between-the-paddies-aze.drawing.html, research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html

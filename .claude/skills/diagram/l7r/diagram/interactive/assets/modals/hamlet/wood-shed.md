@@ -1,24 +1,26 @@
-What: The household's firewood, kept in a wood shed of its own: a roofed shed a step off the house, its open front
-showing the log ends.
+About: Firewood was a farm's fuel, and before 1868 many farms kept it in a wood shed (kigoya) of their own, a building
+for the household's firewood and charcoal standing apart from the house on its plot.
 
-Why: Firewood was the fuel, and before modern times it was kept in a shed: in one village's house-by-house record
-of 1824 many houses had a firewood shed or a storage shed standing apart from the main house, and in another
-village's count, which its historian reads back to the last years of the shogunate, six households of sixteen had
-one, seven sheds in all, three of them 4 by 2 ken. So a wood shed stands on about four farmsteads in ten, the larger houses first, 24 by 12 ft. An open stack
-under the eaves is found only on a present-day page, and the stack along the windbreak only in descriptions
-of today and of farms of the past with no date, so neither is drawn.
+What a farm's wood shed was built of is not recorded. A village headman's homestead planned in 1849 had a firewood barn
+among the buildings scattered over its plot. In the cold north in the twentieth century, firewood was also stacked under a
+farm's windbreak grove as a wall, some stacks roofed with straw, and present-day pages stack it in the open under the eaves;
+neither is recorded before 1868.
 
-Note: The shed, its share and its size are read (Hasuda 1824, the Kakimochi count), and giving it to the larger
-houses first is this project's reading of the same history's finding that the houses with the most outbuildings
-had the largest main houses; the share is one village's, a calibration, and where on the plot the shed stands - a
-step off the back wall or a flank - is a guess.
+In one village of sixteen households, counted just after the Edo period and read back to its last years, six had a wood
+shed, seven sheds in all. They ran from about 9 by 9 ft to 30 by 12 ft, and three of the seven were about 24 by 12 ft. The
+houses with the most outbuildings there had the largest main houses.
 
-Caveat: the share is one village's, a calibration, and where on the plot the shed stands - a step off the back wall
-or a flank - is a guess.
+Guesses:
+- Where on the plot the shed stands, behind or beside the house a short step off a wall: no source says where on the plot a
+  wood shed stood.
 
+Depiction: The map draws a wood shed on about four farmsteads in ten, the larger houses first, every one at the commonest
+size, 24 by 12 ft. It is drawn as a roof with a band of log ends along its open front so it reads as a wood shed, though a
+real roof would hide the wood from above. On a farm without one the firewood is not drawn: no open stack and no stack along
+a grove, since neither is recorded before modern times.
 
 Name: wood shed
 Covers: `farm_fixtures[kind=woodpile]` - the wood shed
-Label: accurate
-Sources: boso-no-mura-kigoya, koshigaya-shishi-noumin-jukyo, oamishirasato-choshi-kaoku
-Entry: research/questions/0043-firewood-stacks-and-sheds-kigoya.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.html; research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html
+Sources: boso-no-mura-kigoya, koshigaya-shishi-noumin-jukyo, oamishirasato-choshi-kaoku, suido-ishizue-kizuma, 326woods-stack
+Entry: research/questions/0043-firewood-stacks-and-sheds-kigoya.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.html
+Drawing: research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html

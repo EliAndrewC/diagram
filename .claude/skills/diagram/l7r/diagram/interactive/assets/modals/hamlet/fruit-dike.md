@@ -1,30 +1,30 @@
-What: The raised dike around a fish pond planted with fruit trees - the 果基魚塘 type of the dike-pond system:
-lychee above all, with longan, mandarin and orange, standing in a single line along the bank's crest.
+About: A fruit dike, guoji, "fruit dike", was the bank round a fish pond planted with fruit trees instead of mulberry, a
+field in its own right with the pond below it. It was the oldest planting of the dike-pond: fruit dikes arose first, in
+Nanhai and Shunde in the Pearl River delta in the middle of the Ming dynasty, and the mulberry dike took their place in
+the late Ming and early Qing. In 1678 the villages of Guangzhou's large counties still often gave up good fields to make
+dikes planted with fruit trees.
 
-Why: The fruit dike is the oldest dike-pond planting read. Qu Dajun, writing of Guangdong in the late
-seventeenth century, says the villages of Guangzhou's large counties often gave up good fields to make
-dikes and planted them with fruit trees - lychee most, tea and mulberry next, then mandarin and orange -
-with a pond for fish below the dike. A modern history of the delta's farming dates the order: fruit-dike
-fish ponds arose first, in Nanhai and Shunde in the mid-Ming, and the mulberry dike replaced them in the
-late Ming and early Qing and became the dominant type in the Qing. So in Qu Dajun's day the fruit dike
-still stood beside the mulberry, and a hamlet may roll it as its dike crop, as it may mulberry or tea. One
-hamlet is one planting, so a fruit hamlet plants fruit on every dike.
+Lychee stood on those dikes most, tea and mulberry next, then mandarin and orange; longan grew mostly beside the houses,
+but on the dikes as well, and the embankments of Guangzhou were all planted with lychee and longan. The bank itself was
+heaped from the pond's mud and raised again with the mud dredged up each time the pond was drained.
 
-Note: The fruit dike, its age and its fruit are read. How thickly the trees stood is known only for a
-field turned to orchard - twenty-odd lychee to a mu, about one tree to 300 square feet - and nothing read
-gives the spacing along a dike, so the trees drawn about eighteen feet apart on the crest are this
-project's own, and so is how often a hamlet rolls fruit, about two in six. So is one planting to a
-hamlet: Qu Dajun names the fruit, tea and mulberry of the villages' dikes together, and only the modern
-gazetteer's succession of dike types puts one type to a place.
+How closely the trees stood along a dike is not recorded. Turned to orchard, a field took twenty-odd lychee to the mu, or
+twice as many longan, each on a mound of silt about 2 ft high against the floods: about one lychee to 300 sq ft. Modern
+pond dikes are about 20 to 33 ft (6 to 10 m) wide; a dike's width before modern times is not recorded.
 
-Caveat: nothing read
-gives the spacing along a dike, so the trees drawn about eighteen feet apart on the crest are this
-project's own, and so is how often a hamlet rolls fruit, about two in six. So is one planting to a
-hamlet: Qu Dajun names the fruit, tea and mulberry of the villages' dikes together, and only the modern
-gazetteer's succession of dike types puts one type to a place.
+Guesses:
+- The trees' spacing on the map, about 18 ft apart in a single line along the middle of the bank: no spacing along a
+  dike was found, so it is reckoned from the orchard figure of one lychee to about 300 sq ft.
+- Each tree's crown, 8 to 10 ft across: no account gives the crown of a lychee, longan or orange tree on a dike.
+
+Depiction: The map draws the fruit dike as a single line of round-crowned trees along the middle of each bank, so a
+reader can tell it at a glance from the mulberry's rows of bushes and the tea's clipped hedges. Every dike of a hamlet
+carries the same crop, so each hamlet reads as one kind of dike-pond village, though in 1678 fruit, tea and mulberry were
+named on the same villages' dikes; the title card says which crop this one plants. The bank is drawn as a ring round the
+water, so pointing at a dike lights the bank and not the pond inside it.
 
 Name: fruit dike
 Covers: the bank ring of every `dikeponds[]` parcel on a hamlet whose `meta.dike_crop` is fruit, and its trees
-Label: accurate
-Sources: guangdong-xinyu-22, guangdong-xinyu-25, pwsannong-zhusanjiao-nongyeshi, gd-gazetteer-sangji
-Entry: research/questions/0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.html, research/questions/0023-the-dike-pond-hamlet-its-houses-boats-and-manure-jars.html; research/questions/0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html, research/questions/0023-the-dike-pond-hamlet-its-houses-boats-and-manure-jars.drawing.html
+Sources: pwsannong-zhusanjiao-nongyeshi, guangdong-xinyu-22, guangdong-xinyu-25, zhwiki-guangdong-xinyu, sdlib-shunde-jitang, isis-dykepond
+Entry: research/questions/0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.html, research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.html, research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html
+Drawing: research/questions/0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.drawing.html, research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html

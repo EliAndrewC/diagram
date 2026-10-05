@@ -318,6 +318,21 @@ def windbreak_default(meta: dict[str, Any]) -> str:
     return f"Here the belt stands toward the {WIND_NAMES[quarter]} of the houses, because this place has a local wind from the {WIND_NAMES[quarter]} that departs from the region's northwesterly winter wind."
 
 
+def retirement_fact(meta: dict[str, Any]) -> str:
+    """How many of THIS settlement's homesteads keep a retirement house (feature 319, plan D10): the count that was a
+    `### Features` fact on four hamlets, read from the map. Empty where the settlement keeps the old couple under one roof.
+
+    Research:
+        card plumbing - research/questions/0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html: the count
+            the map records, said as a count of this settlement
+    """
+    n, households = meta.get("retirement_houses"), meta.get("households")
+    if meta.get("family_form") != "retirement_house" or not isinstance(n, int) or not n or not isinstance(households, int):
+        return ""
+    name = str(meta.get("name") or "This settlement")
+    return f"{n} of {name}'s {households} homesteads have a retirement house."
+
+
 HOMESTEAD_GROVE = "homestead grove"
 
 _SIDES_WORDS = {

@@ -128,32 +128,15 @@ def test_a_guess_says_so_in_its_note(key: str) -> None:
 
 
 def test_the_gm_s_line_between_deviation_and_convention() -> None:
-    """Feature 183 (GM 2026-09-05): a deviation is the SETTING differing from history; a map drawing
-    convention is a glyph scaled or colored for the eye. Six of the seven old deviations were the second."""
-    assert sorted(k for k, fc in CLASSES.items() if fc.label == "deviation") == []  # the grave island became accurate as the Chinese form (feature 267)
-    # `weir` joined them on 2026-09-12 (feature 230): the bar is drawn closing the brook bank to bank
-    # because a half-river closure - the common old form - is a pixel or two at a 7 ft brook.
-    # `threshing yard` joined them on 2026-09-28 (feature 282): about half the straw mats that covered a harvest yard are
-    # drawn, so each reads as a mat rather than the floor as a texture.
-    # `storage shed` joined them on 2026-10-01 (feature 292, closing pass C3): the storehouse is drawn as an annex on a
-    # fixed wall at a farm shed's size, where the storehouses recorded stood free of the house and were smaller - the
-    # rendering section's own label for the annex (0040).
-    assert sorted(k for k, fc in CLASSES.items() if fc.label == "convention") == [
-        "bund beans",
-        "homestead bamboo",
-        "household shrine",
-        "shared bamboo grove",
-        "storage shed",
-        "stream",
-        "threshing yard",
-        "weir",
-        "well",
-    ]
-    beans = CLASSES["bund beans"].label_note
-    assert beans.startswith("we have rendered the bund beans as") and "50 to 125 cm" in beans and "medium-green" in beans and "not found" in beans
-    well = CLASSES["well"].label_note
-    assert "about 1 m across" in well and "not found" in well, "the curb's width was searched for and not read"
-
+    """Feature 183 (GM 2026-09-05): a deviation is the SETTING differing from history; a map drawing convention is a glyph
+    scaled or colored for the eye. Since feature 319's rollout (GM 2026-10-05) no hamlet class carries a feature-level
+    label: a deviation is said in About where it applies, a convention on the Depiction tab with its real counterpart, a guess
+    as a bullet (dev/modals.md M11-M13, D1-D6). The nine conventions this test listed (the bund beans, the homestead bamboo,
+    the household shrine, the shared bamboo grove, the storage shed, the stream, the threshing yard, the weir, the well) each
+    tell their convention on that tab now."""
+    assert sorted(k for k, fc in CLASSES.items() if fc.label is not None) == []
+    for key in ("bund beans", "well", "weir", "threshing yard"):
+        assert CLASSES[key].depiction, f"{key}: its drawing convention is told on the Depiction tab"
 
 def test_siblings_are_closed_over_the_vocabulary_and_symmetric() -> None:
     for key, fc in CLASSES.items():
@@ -253,36 +236,9 @@ def test_no_caveat_merely_reasserts_accuracy() -> None:
 
 
 def test_every_accurate_class_without_a_caveat_is_deliberate() -> None:
-    """The classes whose record discloses no liberty at all. Listed so adding one more is a decision
-    someone makes on purpose rather than an omission nobody notices.
-
-    Four were there from the split (their whole note is provenance). Three joined on 2026-08-29 when
-    settlement-review read the rendered page: `bund` ("the drawn stroke is at true size") and
-    `notice board` ("drawn at its true 12 x 5 ft") were the accuracy claim in other words, under an
-    "On the drawing:" heading that promises a disclosure and delivered none; `windbreak` ("the belt's
-    shape follows the terrain and the cluster") discloses nothing either way.
-
-    `paddy` LEFT the list on 2026-08-29 (feature 160). It now discloses that its water depths and the
-    drying stages between them are MODERN extension figures with no pre-modern record behind them -
-    a real liberty, and the reason the GM asked for the number to be confirmed or labeled. This
-    assertion is what made that a deliberate act rather than a quiet edit.
-
-    `field ditch` LEFT the list on 2026-09-12 (feature 230) by splitting: the irrigation ditch discloses that
-    its head race's length is derived from the fan, the record giving no distance, and the drainage ditch
-    that its sink is the map's declared one."""
-    bare = {k for k, fc in CLASSES.items() if fc.label == "accurate" and not fc.caveat}
-    # `pond` LEFT the list on 2026-09-12 (feature 230, settlement-review pass 10): its explanation said "an irrigation
-    # reservoir above the fields" and then "on this map the pond is the field's drainage sink", on every map. Rewritten
-    # to cover both parts a pond plays, it now discloses that a pond at the field's foot is the map's declared sink with
-    # no surveyed bank or outlet behind it.
-    # `bund` LEFT the list on 2026-09-28 (feature 269 K1): 0014 reads the dividing bund's one to two shaku, and
-    # the walking bund's two to five feet is now disclosed as a GUESS held between that and the one-ken farm road.
-    # `windbreak` and `marsh` LEFT the list on 2026-09-28 (feature 269 K3): the windbreak discloses that its
-    # conifer-led form is drawn at village scale from farmstead surveys and that the odds, the rows' spacing and the
-    # conifer's lead are guesses (rendering/vegetation, "How our maps draw the shelter belt"); the marsh that a village's own cutting of its toe is carried across
-    # from thatch fields and Lake Biwa (vegetation/280), with the carr form left undrawn and sedge-for-fodder unsourced.
-    assert bare == {"notice board"}
-
+    """Feature 156's caveat (the liberty an accurate class's record discloses) belonged to the old form. Since feature 319's
+    rollout every hamlet class is in the About form: none carries a caveat, and what it guessed is a Guesses bullet."""
+    assert {k for k, fc in CLASSES.items() if fc.caveat} == set()
 
 def test_slug_is_a_css_token() -> None:
     for key in CLASSES:

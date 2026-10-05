@@ -1,25 +1,34 @@
-What: The cut-over fuel and fodder land around the settlement: grass with a few scraggly pines, grazed and
-cut.
+About: Beyond its fields a village kept common grass ground, the magusaba, "fodder ground", as a rule the commons of
+one village. Its inhabitants cut fodder there for their animals, grass for thatch, fuel, and the green manure their
+paddies needed, plowed into the fields in early spring. It lay on hills kept bare of trees for their grass, the
+kusayama or grass hills, and on river floodplains; a village with no hills borrowed another's. As new paddies spread,
+villages fought over what grass ground was left.
 
-Why: Everything the paddy and the homesteads do not take is the hamlet's rough ground, and it is worked. The
-grass of a paddy bund was cut several times a season, and cut ground does not go over to scrub, so scrub stands
-6 ft off every field edge - the bund and the cut strip beside it; off open water; and off the banks of the
-irrigation channels, taken here to be kept like the bunds, though not off a natural brook, whose bank is grown to
-the water's edge.
+Its cover ran from open grass to a thin wood, chiefly of pine, up to about 10 to 13 ft tall; by the early modern
+period most village hills were red pine wood, grass hill or bare hill, and cutting brush stripped some to the ground.
+The cutting is what kept it open: cleared land no longer cut goes over to scrub and then to woodland. A paddy's bund
+and the strip beside it were cut too, keeping a band of grass between the crop and the rough ground, while a natural
+stream's banks stayed grown with water-loving plants.
 
-Note: That bund grass is cut several times a season today, and that cut land does not go over to scrub, are read;
-that it was cut before modern times, for green manure, is read, and that it was cut as often then is a guess, no page giving the old rate;
-the 6 ft is this record's choice, wider than the one old figure found, and it is a flat-ground figure: on terraced ground the
-kept-cut slope face below a field is wider, at times wider than the field itself, and the map does not set that
-width. The channel bank takes the same 6 ft by this project's choice, and that a bank was kept like a bund at all is this
-record's analogy, no page read speaking of a channel bank; nothing describes how
-the clumps sit within them, so the grass is drawn as one small block repeated, to read as rough grazing rather than as any surveyed pattern.
+It was far larger than the fields: in the middle and late Edo period grass ground more than ten times their area is
+said to have been needed for enough manure and fodder. In Aso, on Kyushu, a settlement of 50 to 60
+households kept about 50 to 75 acres (20 to 30 ha) of thatch meadow.
 
-Caveat: nothing describes how the clumps sit within them, so the grass is drawn as one small block repeated, to read as rough grazing
-rather than as any surveyed pattern.
+Guesses:
+- That scrub stands 6 ft off every field's edge, for the bund and its cut strip: no record before 1868 gives the
+  width of the cut ground, and the one old figure, a land survey's 1726 reckoning of about 1.5 ft a field, is
+  narrower; on terraced ground the kept slope below a field was far wider.
+- That a dug channel's bank is kept cut like a bund, by the same 6 ft: no source speaks of a channel's bank.
+
+Depiction: The map draws the commons' grass and brush as one small block of tufts and dots repeated across its ground,
+with no outline, the way a map's legend shows a kind of ground; the scraggly pines are drawn one by one. It draws the
+middle of the range the hills ran, open scrub with a few pines, between open grass and bare hill. The scrub runs as one
+band round the settlement and off the edge of the map, since the real ground was far larger than the map; it stops
+short of the fields and the dug channels by a strip of cut grass, runs to the water's edge along a natural brook, and
+keeps its brush and pines out of the woods and the marsh.
 
 Name: scrub and rough grazing
 Covers: `commons[role=grazing]`
-Label: accurate
-Sources: pmc7538448-levee, meadow-enwiki, nonoichi-keihanritsu, hiroshima-keihan-manual
-Entry: research/questions/0073-scrub-and-rough-grass-at-the-edges-of-fields-and-channels.html; research/questions/0073-scrub-and-rough-grass-at-the-edges-of-fields-and-channels.drawing.html
+Sources: kotobank-magusaba, fuchu-magusaba-jawiki, satoyama-jawiki, kitamoto-magusaba, takamori-karishiki, kotobank-karishiki, biodic-kusayama, biwahaku-hageyama-2024, meadow-enwiki, pmc7538448-levee, riparian-zone-enwiki, aso-kayaba, kotobank-azebiki, hiroshima-keihan-manual
+Entry: research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.html, research/questions/0073-scrub-and-rough-grass-at-the-edges-of-fields-and-channels.html
+Drawing: research/questions/0078-grass-hills-and-fodder-meadows-kusayama-magusaba.drawing.html, research/questions/0073-scrub-and-rough-grass-at-the-edges-of-fields-and-channels.drawing.html, research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html, research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html

@@ -1,30 +1,31 @@
-What: A simple pig shed on the bank of a fish pond, a railed yard beside it along the bank, on the bank nearest
-the houses.
+About: A pig sty on a dike-pond hamlet was a household's small shed with a railed pen, standing on the bank of a fish
+pond. The pig was the dike-pond country's animal: in the Pearl River delta in the Qing, feed raised on the pond's surface
+went to the pigs, and their dung, with the pond mud, went to manure the mulberry on the banks. A pen on a fish-pond bank,
+its dung swept into the water each morning to feed the fish, is in a farming compendium printed in 1639, though that pen
+held sheep. The delta's ducks were not penned at the ponds: they were herded in the rice fields. A pig penned at a fish
+pond was a Chinese way; Japan, outside Okinawa, seems to have let its pigs feed loose.
 
-Why: A pen on a fish-pond bank is an old form: a farming compendium printed in 1639, written far to the north in
-Shanghai, advises penning a flock of sheep - the form, not the pig - on the bank of a fish pond and sweeping its dung
-into the water each morning to feed the fish, and a modern history of the Pearl River delta's farming names
-pig-raising as the dike-pond district's stock, as duck-raising was the sand fields', and puts the pig inside the Qing
-loop - fed from the pond, its dung and the pond mud manuring the mulberry. So the sty stands on the bank, near its
-pond. A shed built so its waste runs straight into the pond, and the reasoning that the manure raises the plankton,
-are found only in modern manuals, so nothing is drawn to carry the waste into the water. A pig penned on a pond bank
-is a Chinese form. Japan kept pigs - outside Okinawa, a recent survey says, seemingly loose in the forest, and their
-bones are excavated at the Satsuma domain's Edo residence, at Osaka castle,
-at Hakata and at Nagasaki harbor - but nothing read links a Japanese pig to a pond at all, so the FORM belongs to
-this kind of hamlet and to no other on these maps.
+What a sty was built of is not recorded. A sixth-century Chinese farm manual wanted a pig pen small, since a small pen
+fattened the pigs fast, and not too clean, since mud and muck let them escape the heat. Sheds built over the water, or
+built so that their waste ran straight into the pond, are found only in modern times.
 
-Note: The sty is read - the pig as the dike-pond village's animal and the pen on the pond bank. Nothing read gives
-how many households kept a sty: the quarter to half of the households drawn with one, rolled per hamlet, is a guess.
-The width a modern manual sets for a shed-carrying dike, five to ten meters, is modern and is not a rule the map
-follows; no older width was found. Where a sty stands is this project's choice: one sty to a grow-out pond, the
-ponds nearest the houses first, on the half of the bank facing them, and none more than 320 ft from a farmhouse -
-each a guess.
+How many households kept a sty, how many pigs it held and how big it was are not recorded. In the 1920s, in the
+rice-growing provinces of east-central China, hogs were kept on nearly two farms in three.
 
-Caveat: Nothing read gives how many households kept a sty: the quarter to half of the households drawn with one,
-rolled per hamlet, is a guess.
+Guesses:
+- That a quarter to a half of a hamlet's households keep a sty, the share differing by hamlet: no count of the households
+  that kept a pig in a dike-pond village was found.
+- That each sty takes a grow-out pond of its own, the ponds nearest the houses first, and none more than 320 ft from a
+  farmhouse: no account says how a household's sty and its pond went together, or how far a household walked to its pigs.
+- Its size on the map, about 8 by 6 ft for shed and pen together: no size for a sty was found.
+
+Depiction: The map draws a sty as a small ridged shed with a railed pen beside it, standing on the bank itself, on the
+half of its pond's bank that faces the houses, so that it reads as a household's. Nothing is drawn to carry its waste
+into the water, and no foul patch of water beside it. No duck pen is drawn. A sty at a fish pond is drawn on a dike-pond
+hamlet only.
 
 Name: pig sty
 Covers: every `pig_sties[]` record - a shed with its railed pen on a pond bank
-Label: accurate
-Sources: qimin-yaoshu-yangzhu, isis-dykepond, pwsannong-zhusanjiao-nongyeshi, nongzheng-quanshu-41, fao-ac264e
-Entry: research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.html, research/questions/0023-the-dike-pond-hamlet-its-houses-boats-and-manure-jars.html; research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html, research/questions/0023-the-dike-pond-hamlet-its-houses-boats-and-manure-jars.drawing.html
+Sources: pwsannong-zhusanjiao-nongyeshi, nongzheng-quanshu-41, zhwiki-nongzheng-quanshu, guangdong-xinyu-20, hudson-munoz-2023, qimin-yaoshu-yangzhu, qimin-yaoshu-enwiki, fao-ac264e, buck-1930-farm-economy
+Entry: research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.html, research/questions/0049-pigs-and-ducks-in-south-china-rice-villages.html
+Drawing: research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html, research/questions/0023-the-dike-pond-hamlet-its-houses-boats-and-manure-jars.drawing.html

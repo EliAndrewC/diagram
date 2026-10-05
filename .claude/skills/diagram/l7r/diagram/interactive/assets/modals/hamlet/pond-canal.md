@@ -1,21 +1,29 @@
-What: The canals of a dike-pond settlement: the main canal that carries water in from the reservoir and the laterals
-between the rows of ponds, among which the ponds lie.
+About: The canals of a dike-pond block were the waterways its ponds lay among: a main canal bringing water in from outside
+the polder's dike, and lesser canals running between the rows of ponds. A pond was not a sealed basin. The polders south
+of the Yangtze had channels within the dike and gates through it, and in the Pearl River delta the villagers watered and
+drained their land through the dikes, the creeks and the gates, reworking ponds to raise fish. Around Lake
+Tai the houses stood along the streams, because the boat was how the villagers traveled, and nearly every household had
+one.
 
-Why: A dike-pond is not a sealed basin and its canals are not a paddy's supply net. The polder's own dike was pierced
-by sluices, the dou of the Pearl delta - one carved with its name in 1878 - and the villagers watered and drained
-through the dikes, the creeks and those gates; the ponds lie among the creeks and canals the gates feed. The ring
-drain around the block takes everything to the outfall.
+In the Pearl River delta of old, the ponds lay in a mosaic among winding natural rivers, the line between dug water and
+natural water blurred. On the Lake Tai plain, by contrast, the great polders were laid out on a planned grid of channels,
+cross channels and long channels at regular intervals.
 
-Note: The polder's gates and the creeks the ponds lie in are read. A sluice through each pond's own dike, and a pond
-taking water in at its high side and out at its low side, are not found before 1912: the first only in a modern manual,
-the second on no page this project read, so neither is drawn. The ring drain around the block is this map's own layout, borrowed from
-the rice polder's inner ring canal: no source the record cites describes a ring drain on a dike-pond.
+How wide or deep the canals between the ponds ran is not recorded.
 
-Caveat: The ring drain around the block is this map's own layout, borrowed from the rice polder's inner ring canal:
-no source the record cites describes a ring drain on a dike-pond.
+Guesses:
+- That the water runs in from one inlet high on the block and out at an outfall low on it: that is how Japan's
+  ring-diked communities set their intake and outlet, but no account from before 1912 describes a dike-pond block's
+  water running so.
+
+Depiction: The map draws these canals as the network the ponds lie among, not as a rice field's irrigation ditches. The
+block's lattice of canals is bent out of line by a smooth drift that fades toward its outer edge, so the canals between
+the ponds become winding creeks while each pond stays four-sided; how strongly they bend is a degree chosen to read well. The main canal
+starts at a pond outside the dike and enters through the inlet gate. No boat or landing is drawn: not every dike-pond
+hamlet need have had water a boat could travel.
 
 Name: pond canal
 Covers: `field_ditches` whose role is not `drain` on a dike-pond field - the main from the reservoir and the laterals between the ponds
-Label: accurate
-Sources: minle-dou-people, cssn-sangyuanwei, cssn-jiangnan-weitian
-Entry: research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html; research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html
+Sources: minle-dou-people, cssn-jiangnan-weitian, fei-1939, tian-dike-pond, ishizue-waju
+Entry: research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html, research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.html, research/questions/0023-the-dike-pond-hamlet-its-houses-boats-and-manure-jars.html
+Drawing: research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html, research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html, research/questions/0023-the-dike-pond-hamlet-its-houses-boats-and-manure-jars.drawing.html

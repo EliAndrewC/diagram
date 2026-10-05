@@ -253,3 +253,7 @@ def test_a_check_reads_each_conditioned_item_with_its_condition() -> None:
     """FR-015: the bundle shows `[settlement_form=nucleated]` as words a check reads, on a bullet and on a paragraph."""
     got = mb._conditions_shown("- [settlement_form=nucleated|linear] A guess.\n[byre_form=courtyard] A paragraph.\nPlain.")
     assert got == "- (only where settlement_form is nucleated or linear) A guess.\n(only where byre_form is courtyard) A paragraph.\nPlain."
+
+
+def test_several_conditions_read_as_one_clause() -> None:
+    assert mb._conditions_shown("- [settlement_form=nucleated][lane_web=alleys] A.") == "- (only where settlement_form is nucleated and lane_web is alleys) A."

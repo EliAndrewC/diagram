@@ -1,32 +1,33 @@
-What: The homesteads' own trees in the open ground among the houses - bamboo and fruit trees, useful trees, not
-shelter.
+About: Among the houses of a clustered village stood the households' own trees, clumps of bamboo and fruit trees in the
+gaps between the farms, the dooryard copse. A Japanese homestead's wood was its own, grown on the lot where its house
+stood, and it was a store as much as a shelter: it gave firewood from its branches, timber from thinning, and fallen
+leaves for the hearth and for manure. In southern China, too, villagers planted fruit trees and bamboo among the trees
+of their village groves for their use.
 
-Why: The leafy greenery scattered through the gaps of a nucleated cluster is the third of the village's grove
-roles, after the back belt and the water-mouth grove; it threads between the dwellings and never stands
-on a roof, a yard or a crop. In the Japanese record the grove that stands with a house is that homestead's own
-wood, formed on its lot, and the one period measurement of one - a 1684 register of hill land in the Mito
-domain - lists three households' woods of about 6,100, 10,700 and 27,800 sq ft; an encyclopedia account says their
-size varied. A 1910 account of the Musashino upland puts cedar, bamboo, evergreen-oak and zelkova woods round the
-main house and outbuildings of one farm, and a survey of the Tonami groves finds persimmon among the three
-commonest trees, so the bamboo and fruit trees are the homestead wood's own. So the copse is sized by its
-homesteads: each rolls a wood of between about 6,000 and 28,000 sq ft, its windward grove and its share of the
-copse counted together, and the copse is filled to what their own groves and the belt leave of their sum.
+Round the main house and outbuildings of one farm on the Musashino upland stood woods of cedar, bamboo, evergreen oak
+and zelkova, by an account of 1910; in the farm groves of the Tonami plain persimmon was among the three commonest
+trees, and persimmon, fig and flowering trees stood at a house's front. Bamboo grew as thickets of its own, not as stems
+scattered among the trees.
 
-Note: That fruit trees and bamboo were the useful species planted in a fengshui wood, and that a homestead's wood
-was its own and ran from about 6,000 to 28,000 sq ft, are read; that they fill the gaps throughout the cluster is
-this project's reading, on no page read. The range is a calibration against one register of three households, not a
-survey, and its low end rests on an entry whose sides (9 by 9 ken) do not match its stated area; counting the grove
-and the copse as one wood is this project's decision, because the record knows the wood that stands with a house
-as that homestead's own, on its lot. How the rolls spread across that range is a guess, and a clump stands only
-within a dooryard's reach of a house (90 ft), so where the ground near the houses is used up a copse is drawn
-short of its homesteads' woods - on some maps by nearly half - rather than pushed further out.
+In one register of 1684, three households' woods covered about 6,000, 10,700 and 28,000 sq ft; homestead woods varied
+in form, size and kinds of tree. Whether a village kept a wood of its own among its houses, apart from each farm's, is
+not recorded.
 
-Caveat: How the rolls spread across that range is a guess, and a clump stands only within a dooryard's reach of a
-house (90 ft), so where the ground near the houses is used up a copse is drawn short of its homesteads' woods - on
-some maps by nearly half - rather than pushed further out.
+Guesses:
+- That the copse fills the gaps throughout the cluster: no account describes the trees among a clustered village's
+  houses, in Japan or in southern China.
+- That each farm's wood, its share of the copse and any grove of its own counted together, runs between about 6,000 and
+  28,000 sq ft, chosen for each farm: the range is that of the one register of three households, not a survey, and how
+  the sizes spread across it is guessed.
+
+Depiction: The map draws the copse as clumps of trees, every crown at its real size, standing against the houses but
+never on a roof, a yard, a garden or a shed, and kept off the drying yards and the main road. A clump stands only within
+a dooryard's reach of its house, so where the ground near the houses is used up, the copse is drawn smaller than its
+households' woods. A household's bamboo, where it keeps any, is drawn as a stand of its own; the title card says
+whether this settlement's farms keep bamboo.
 
 Name: copse
 Covers: `village_groves[role=copse]`
-Label: accurate
-Sources: forests-2020, yashikirin-jawiki, miura-2019-yashikiyama, kotobank-yashikirin-heibonsha, takehara-2004-yashikirin
-Entry: research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.html; research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html; research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.html; research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html
+Sources: yashikirin-jawiki, tonami-kainyoclub, fengshuilin-zhwiki, miura-2019-yashikiyama, takehara-2004-yashikirin, kashima-kainyo-1987, tonami-yashikirin-haichi, chikurin-jawiki, shakkanho-jawiki, kotobank-yashikirin-heibonsha
+Entry: research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.html, research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.html, research/questions/0075-bamboo-groves-chikurin.html
+Drawing: research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html, research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html, research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html, research/questions/0075-bamboo-groves-chikurin.drawing.html

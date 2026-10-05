@@ -1,41 +1,38 @@
-What: The stall of a household's ox, water buffalo or horse - a roof over a shaded stall, drawn against its
-keeper's farmhouse or standing as a small shed of its own in the keeper's yard.
+About: A byre was the stall of a farm's plow beast: an ox, a water buffalo or a horse. In Japan horses plowed in the
+east and cattle in the west, with both in Kyushu and Shikoku; in China's rice country it was the ox and the water buffalo.
+The beast lived with the household that kept it, whether bought or placed in its care, and a household with none borrowed
+or hired one.
 
-Why: The beast lived with the household that kept it. Across much of the country the farmhouse stabled it
-inside, in a corner of the earth-floored work space - the inner stable - and elsewhere in a stable standing on
-its own, the outer stable. Not every household had a beast: in Bizen from the early eighteenth
-century only about half the farm households kept an ox or a horse, and fewer as time went on, and a household
-without one borrowed or hired a beast, which then lived with whoever had it. So each settlement rolls one of the
-two forms (or, rarely, a shed shared on common ground), though where its farmhouses are L-shaped the stable is
-the house's own wing, and a byre stands in the homesteads of somewhat under half its households. The vernacular put the
-animal close to the house, and the record finds no old rule that kept a beast away from the well it drank at.
+Across most of Japan the stall was a corner of the farmhouse's earth-floored work space, under the house's own roof;
+elsewhere it was a stable of its own. In the L-shaped farmhouses of the north it was a wing of the house, warmed by the air
+from the kitchen hearth. Two free-standing stables of the Edo period that survive are single-story buildings under tile
+roofs.
 
-Note: The two forms, the beast living with its keeper and the share of households keeping one are read. The
-inner stable is drawn against the farmhouse because a stall under the house's own roof cannot be seen from
-above - a map drawing convention; how much commoner the inner roll is, and the share drawn (35 to 50 of every
-100 households), are a calibration, not a count: the share follows one province's 'about half, and fewer later',
-though one village of Saitama district had a stable at 50 of its 76 houses in 1824; a third, rare roll - a shed out
-on the ground the homesteads share, reached by several households - is a guess, found on no page read and kept
-only until the record finds it or rules it out; the attached stable wing (magariya), recorded over almost
-all of the old Nanbu domain in what is now Iwate, its stable warmed from the kitchen hearth, and the form of most
-of that Saitama village's stables, is drawn as part of the house wherever the house's plan is L-shaped - that the
-form answered the cold is this record's own reading, and the form was common among the upper farm households,
-such as a headman's. The animal's nearness to the
-house is read; its nearness to
-the wellhead is not on any page read, and that it drank at the household's well is a guess, as is the outer
-stable's distance off the farmhouse wall, 6 to 12 ft.
+Not every household had a beast: in one western province from the early 1700s about half did, and fewer as time went on,
+though one village near Edo had a stable at 50 of its 76 houses in 1824. Of the two surviving Edo stables, one has a frame
+of about 15 by 12 ft, and the two cover about 320 and 370 sq ft under their roofs; how big an ordinary smallholder's stall
+was is not recorded.
 
-Caveat: The inner stable is drawn against the farmhouse because a stall under the house's own roof cannot be
-seen from above - a map drawing convention; how much commoner the inner roll is, and the share drawn (35 to 50
-of every 100 households), are a calibration, not a count: the share follows one province's 'about half, and
-fewer later', though one village of Saitama district had a stable at 50 of its 76 houses in 1824; a third, rare roll - a
-shed out on the ground the homesteads share, reached by several households - is a guess, found on no page read
-and kept only until the record finds it or rules it out; the attached stable wing (magariya), recorded over
-almost all of the old Nanbu domain in what is now Iwate, its stable warmed from the kitchen hearth, and the form
-of most of that Saitama village's stables, is drawn as part of the house wherever the house's plan is L-shaped
+Guesses:
+- [byre_form=detached_commons] A shed on common ground among the houses, shared by several households: no account found
+  describes one, and every arrangement recorded ties a beast to one keeper.
+- [byre_form=yard_shed] How far a stable of its own stood from the farmhouse: no source gives it.
+- That a beast drank at its household's well, so a byre may stand near one: no source says where a beast was watered, and
+  no old rule was found that kept the two apart.
+
+Depiction: The map draws a byre as a small one-room shed of about 16 by 11 ft, near the frame of a surviving Edo stable, with
+a plank roof and a dark open front to its stall so it reads apart from the storehouse and the dwellings; the surviving
+stables were tiled, and could be nearly twice that size under their roofs. It is drawn the same for an ox, a buffalo or a
+horse; the title card says which beast and which form this settlement's byres take. Where a farmhouse is drawn L-shaped,
+its stable is the house's own wing.
+
+[byre_form=courtyard] Where the beast lives indoors, the map draws its stall as a shed set against the farmhouse, since a
+stall under the house's own roof cannot be seen from above; the beast really lived inside, in a corner of the earth floor.
+
+[byre_form=detached_commons] Here one shed on common ground among the houses serves several households.
 
 Name: byre
 Covers: `byres` - the draft-animal sheds
-Label: accurate
-Sources: cambridge-animals-china, okayama-chikusanshi-shiyo, agrinews-2023-tajima-maya, ndl-crd-shakkogyu, kotobank-umaya, magariya-jawiki, koshigaya-shishi-noumin-jukyo
-Entry: research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.html; research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html
+Sources: kotobank-umaya, nakanishi-1994-kogyu-koba, buck-1930-farm-economy, okayama-chikusanshi-shiyo, ndl-crd-shakkogyu, magariya-jawiki, bunka-ueno-umaya, bunka-okamoto-umaya, koshigaya-shishi-noumin-jukyo
+Entry: research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.html
+Drawing: research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html

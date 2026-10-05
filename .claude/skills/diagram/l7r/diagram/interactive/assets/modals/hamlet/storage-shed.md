@@ -1,27 +1,30 @@
-What: A storehouse (kura): a farm's fireproof store, walled in thick earth under a tile roof, which a farm built
-once money had accumulated - drawn as an annex against the farmhouse wall on the largest farms.
+About: A storehouse (kura) was a farm's fireproof store, built to keep a household's goods safe from fire and theft;
+one on Sado island held grain. Nobody lived in it, and it came to be a sign of wealth.
 
-Why: Before modern times a farmstead carried far fewer outbuildings than the twentieth century's counts: a village
-count of 1885, which its historian reads back to the last years of the shogunate, gives about one and a half
-besides the privy and the retirement house, and a storehouse on only two farms in sixteen, both in households the
-historian places among the village's powerful ones, the second with a "probably". So on the hamlets our generator
-lays out a storehouse stands against about one farmhouse in eight, the largest of them, and a village headman's
-house always has one; the hand-drawn maps keep the higher share they were drawn with. It is drawn in the size band
-of the two farm sheds measured from the end of the Edo period or just after, 18 to 27 ft long and 1.5 to 1.8 times
-as long as deep, though the storehouses recorded were smaller, about 12 to 15 by 18 ft.
+It was a small, solid block, commonly two stories high. Its walls were earth, laid coat after coat on a lattice of bamboo
+and palm rope to 8 to 12 in thick and finished in lime plaster. The storehouses described were roofed in tile, and one was
+entered at its gable end, its earthen roof under the tiles. Most stood free of the farmhouse, in front of it or behind, and
+few against it.
 
-Note: we have drawn the storehouse as a tiled annex against the farmhouse's west or north wall, 18 to 27 ft long,
-the size of a farm shed, in order to leave the sunny walls to the garden and every generated hamlet's houses where
-they stand. The storehouses recorded stood free of the house, in front of it or behind, and were smaller, about 12
-to 15 by 18 ft. Giving the storehouses strictly to the largest houses is this project's rule, stricter than the
-record (Kakimochi's largest house had none), and which of two farmhouses of one size gets it is a guess; the count
-is one village's, so the share is a calibration; that every
-storehouse is tiled is this project's reading of two examples. The Hannan shed's 18 ft is our arithmetic from its
-3 by 2 ken, and its registered area suggests it may have been somewhat larger. The larger barns built after 1868,
-and the 4.4 outbuildings a household of a 1972 survey, are not drawn.
+The commonest size, in one district west of Edo, was about 15 by 18 ft; a village east of Edo had two of about 12 by 18
+ft. A farm built one only once money had accumulated, so most farms had none. In that village of sixteen households, counted
+just after the Edo period and read back to its last years, two had a storehouse, both among its leading families and with
+the second and third largest houses, though the largest house had none. West of Edo, farms are said to have owned
+storehouses only from the last years of the shogunate.
+
+Guesses:
+- Which of two farmhouses of the same size has the storehouse: nothing found says what set one household's storehouse
+  apart from another's of the same size.
+
+Depiction: The map gives a storehouse to about one farmhouse in eight, always the largest, so a well-off farm shows at a
+glance; in the one village counted, the storehouses went to large houses but not strictly to the largest. It draws the
+storehouse as a tiled annex against the farmhouse's shaded north wall or its west wall, leaving the sunny walls to the
+garden, though real storehouses mostly stood free of the house. It is drawn at about a farm shed's size, so on a long
+house it can be up to half again as long as a real storehouse. Every storehouse is tiled, even beside a thatched house, as
+the ones described were.
 
 Name: storage shed
 Covers: `houses[].shed` (the storehouse against a farmhouse) and `farm_sheds` (its record)
-Label: convention
-Sources: oamishirasato-choshi-kaoku, koshigaya-shishi-noumin-jukyo, bunka-minami-naya, nerima-mitome-naya
-Entry: research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.html, research/questions/0040-farm-storehouses-kura.html, research/questions/0052-farm-sheds-and-barns-naya.html; research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html, research/questions/0040-farm-storehouses-kura.drawing.html
+Sources: sekkei-sya-sayama-kura, kotobank-dozo, bunka-sado-tsuchiya-dozo, dozo-jawiki, boso-no-mura-kazusa, oamishirasato-choshi-kaoku
+Entry: research/questions/0040-farm-storehouses-kura.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.html
+Drawing: research/questions/0040-farm-storehouses-kura.drawing.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html

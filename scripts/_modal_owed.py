@@ -61,6 +61,8 @@ class Modal:
     def uid(self) -> str:
         """`<hamlet|sheet>/<slug>` - the modal's file stem under its registry, and the subject of its owed units: two
         registries may share a key (a sheet's `well`, a hamlet's `well`), never a uid."""
+        if "/modals/choice/" in self.origin:  # a title-card choice's modal (plan D10): no class, its file is its name
+            return f"choice/{pathlib.Path(self.origin).stem}"
         registry = "sheet" if ("/modals/sheet/" in self.origin or "compound_kinds" in self.origin) else "hamlet"
         return f"{registry}/{re.sub(r'[^a-z0-9-]', '-', self.key.lower())}"
 
@@ -176,11 +178,24 @@ def _read_at(root: pathlib.Path, rev: str) -> Callable[[str], str | None]:
     return read
 
 
+def choice_modal(path: str, text: str, about_only: bool = True) -> Modal | None:
+    """A title-card choice's modal (plan D10) from its file: no class defines it, so its file stem is its key."""
+    tags = parse_tags(text)
+    if not tags or (about_only and "About" not in tags):
+        return None
+    stem = pathlib.Path(path).stem
+    return Modal(f"choice.{stem}", stem, path, tags, text)
+
+
 def modals_now(root: pathlib.Path, about_only: bool = True) -> list[Modal]:
     out = []
     for d in MODAL_DIRS:
         for p in sorted((root / d).glob("*.py")):
             out += modals_in(p.read_text(encoding="utf-8"), str(p.relative_to(root)), _read_now(root), about_only)
+    for p in sorted((root / MODALS / "choice").glob("*.md")):
+        m = choice_modal(str(p.relative_to(root)), p.read_text(encoding="utf-8"), about_only)
+        if m is not None:
+            out.append(m)
     return out
 
 
@@ -193,6 +208,11 @@ def modals_at(root: pathlib.Path, rev: str, about_only: bool = True) -> dict[str
                 # keyed by registry and key: a sheet's `well` and a hamlet's `well` are two modals
                 for m in modals_in(_git(root, "show", f"{rev}:{name}"), name, _read_at(root, rev), about_only):
                     out[m.uid] = m
+    for name in _git(root, "ls-tree", "--name-only", rev, MODALS + "/choice/").split():
+        if name.endswith(".md"):
+            m = choice_modal(name, _git(root, "show", f"{rev}:{name}"), about_only)
+            if m is not None:
+                out[m.uid] = m
     return out
 
 

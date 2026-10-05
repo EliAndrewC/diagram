@@ -116,11 +116,16 @@ def candidates(root: pathlib.Path, m: mo.Modal) -> list[tuple[int, str, str, lis
 
 #: a knob condition opening a modal item (FR-015, plan D14), shown to a check as "(only where <knob> is <value>)" - the
 #: same form `interactive/conditions.py` reads; this is tooling, so it does not import the engine
-_COND = re.compile(r"(^|^- )\[([a-z_]+)=([a-z_]+(?:\|[a-z_]+)*)\]\s*", re.M)
+_COND = re.compile(r"(^|^- )((?:\[[a-z_]+=[a-z_0-9-]+(?:\|[a-z_0-9-]+)*\])+)\s*", re.M)
+_ONE = re.compile(r"\[([a-z_]+)=([a-z_0-9-]+(?:\|[a-z_0-9-]+)*)\]")
 
 
 def _conditions_shown(text: str) -> str:
-    return _COND.sub(lambda m: f"{m.group(1)}(only where {m.group(2)} is {' or '.join(m.group(3).split('|'))}) ", text)
+    def words(m: re.Match[str]) -> str:
+        parts = [f"{k} is {' or '.join(v.split('|'))}" for k, v in _ONE.findall(m.group(2))]
+        return f"{m.group(1)}(only where {' and '.join(parts)}) "
+
+    return _COND.sub(words, text)
 
 
 def render(root: pathlib.Path, m: mo.Modal) -> str:

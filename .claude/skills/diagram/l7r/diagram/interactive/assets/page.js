@@ -165,6 +165,31 @@
     // WHAT IS TRUE OF THIS MAP ONLY (feature 156): authored in the settlement's own .notes.md and
     // headed so it cannot be read as a general fact about the kind. Absent on nearly every class of
     // nearly every map, and then the section is not there at all.
+    // THE TITLE CARD'S CHOICES AND FACTS (feature 319, plan D10): each choice this settlement made, its value a link that opens
+    // the value's own modal in this dialog; then the settlement's own sentences. Only the card carries them.
+    var choicesEl = document.getElementById("x-choices");
+    choicesEl.textContent = "";
+    (d.choices || []).forEach(function (c) {
+      var p = document.createElement("p");
+      p.appendChild(document.createTextNode(c.name + ": "));
+      if (c.k && data[c.k]) {
+        var a = document.createElement("a");
+        a.href = "#" + c.k;
+        a.className = "choice";
+        a.setAttribute("data-k", c.k);
+        a.textContent = c.value;
+        a.addEventListener("click", function (e) { e.preventDefault(); open(c.k); });
+        p.appendChild(a);
+      } else {
+        p.appendChild(document.createTextNode(c.value));
+      }
+      choicesEl.appendChild(p);
+    });
+    choicesEl.hidden = !(d.choices && d.choices.length);
+    var factsEl = document.getElementById("x-facts");
+    factsEl.textContent = "";
+    (d.facts || []).forEach(function (f) { var p = document.createElement("p"); fillText(p, f); factsEl.appendChild(p); });
+    factsEl.hidden = !(d.facts && d.facts.length);
     var onmap = document.getElementById("x-onmap");
     fillText(onmap, d.on_this_map || "");
     onmap.hidden = !d.on_this_map;

@@ -167,3 +167,7 @@ a.sib:hover { color: var(--hl-stroke); }
 #x-depiction p { margin: 0 0 0.5em; line-height: 1.45; }
 a.q { color: #5A3F1E; text-decoration: none; }
 a.q:hover { color: var(--hl-stroke); }
+/* the title card's choices and facts (feature 319, plan D10) */
+#x-choices p, #x-facts p { margin: 0 0 0.35em; }
+#x-choices { margin: 0.6em 0; }
+#x-facts { margin: 0.6em 0; color: var(--muted); }

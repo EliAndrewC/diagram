@@ -108,7 +108,8 @@ def test_every_modal_is_its_own_file_and_no_class_carries_its_text() -> None:
     assert all(os.path.isfile(p) for p in paths), sorted(p for p in paths if not os.path.isfile(p))
     tagged = [k.__name__ for k in kinds if k.__doc__ and re.search(r"^\s*(What|About|Name):", k.__doc__, re.M)]
     assert tagged == [], f"modal text left in a class docstring: {tagged}"
-    files = set(glob.glob(os.path.join(MODALS_DIR, "*", "*.md")))
+    # the title card's choice modals (plan D10) have no class: their files are their names, held by test_choices.py
+    files = set(glob.glob(os.path.join(MODALS_DIR, "*", "*.md"))) - set(glob.glob(os.path.join(MODALS_DIR, "choice", "*.md")))
     assert files == paths, f"orphan modal files: {sorted(files - paths)}"
 
 

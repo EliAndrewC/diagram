@@ -1,22 +1,24 @@
-What: Alder at the reed edge - where the village's shelter belt runs down into the marsh, its trees are the wet
-ground's own: alder, drawn a blue-gray green apart from the belt's cedar and broadleaf.
+About: Alder was the tree of Japan's wettest ground: it grew where the ground was excessively wet and was one of the few
+trees that could grow tall in a mire. Where a village's shelter belt ran down onto the wet ground at a marsh's edge, its
+trees there were probably alder. Farming households also planted alder, with bamboo, at houses by rivers and on
+flood-prone ground, to keep the soil from washing away, and it grew among the cedar of farmhouse groves on the
+Tonami plain.
 
-Why: A marsh grades from reed through sedge and grass to dry ground, and where trees stand at a reed edge in
-Japan they are alder - willow joins it only on a reed bed nobody cuts, the sources otherwise placing it on lower-reach sand and mud - and never pine; alder takes the ground as a mire dries, and standing water, very probably, not a
-table that swings below the ground, holds it off.
+A marsh did not end in a line. From open water it graded through reed, then sedge and wet meadow, to dry ground; where
+the reed was left uncut, a wet wood of alder, and willow with it, grew up at the edge, a carr. Standing water held the
+alder off: in one Hokkaido mire it hardly took hold where water stood about 1.3 ft (0.4 m) or more above the ground,
+and as the mire dried it spread from its upstream edge to cover nearly half the mire within about thirty years. Pine,
+a tree of dry ridges and sandy ground, is not recorded there.
 
-Note: The zonation is read (packer-2017-phragmites from reed to alluvial forest; lou-2016-floodplain-zones
-for the sedge and grass between, read on Northeast-China floodplains - the Japanese study naming that step has no public copy), pine's absence from it is the record's reading of
-sources that never stand pine on wet ground, and alder's place in it is read (mlit-vegetation-classes,
-haneishi-2011-kushiro-alder, hotes-wetland-diversity); that a village's belt runs on into the marsh as alder where its ground does is
-this map's reading of them - the alder and willow wood an edge nobody cuts grows is not yet drawn, a shortfall - and the crowns' blue-gray green is a map drawing convention - the real foliage is a
-plain dark green, tinted here so the wet stand reads apart from the belt.
+How wide an alder stand ran at a reed edge is not recorded. In the Sendai plain's groves alder stood with cedar,
+zelkova and black pine as one of four tall trees, 66 ft (20 m) high or more.
 
-Caveat: the crowns' blue-gray green is a map drawing convention - the real foliage is a plain dark green, tinted
-here so the wet stand reads apart from the belt.
+Depiction: The map draws the shelter belt's crowns that stand in the marsh as alder, colored blue-gray green so the wet
+stand reads apart from the belt's other trees; real alder is a plain dark green. Like every crown on the map, each is
+drawn at its real size.
 
 Name: alder
 Covers: `village_groves[role=windbreak]` crowns standing in the marsh
-Label: accurate
-Sources: haneishi-2011-kushiro-alder
-Entry: research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.html; research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html
+Sources: mlit-vegetation-classes, haneishi-2011-kushiro-alder, hotes-wetland-diversity, yashikirin-jawiki, tonami-yashikirin-haichi, udworks-igune, packer-2017-phragmites, lou-2016-floodplain-zones, opal-biwa-yoshi-hara, takao-densiflora, gymnosperm-densiflora
+Entry: research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.html, research/questions/0075-bamboo-groves-chikurin.html, research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.html
+Drawing: research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html, research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html, research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html

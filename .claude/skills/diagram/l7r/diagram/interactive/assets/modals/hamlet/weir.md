@@ -1,31 +1,46 @@
-What: A low bar thrown across the brook at the intake, set at a slant so that it runs diagonally upstream
-from the point where the head race leaves the bank. Each weir hamlet builds it in one of four ways: a fence
-of driven stakes with brushwood woven between them, a frame of stakes and logs packed with clay, a crib of
-timber packed with stone, or a course of stone-filled baskets.
+About: A weir (seki) was a low bar set across a brook at the intake of a hamlet's irrigation ditch. Where a brook ran
+high enough all season, the intake was only an opening in its bank; where its level fell, something had to be set in
+the stream to hold the water back and raise it to the height the fields needed. It did not take the whole brook: old
+weirs mostly closed only half a stream, and the water ran over the crest when the brook ran high.
 
-Why: A weir does not take the brook - it raises its surface a little, so that water enters the canal
-at the height the field needs, and the rest goes on over the crest and down the valley. The slant is
-the old builders' way of leading water to the intake: it dams the shallow riffle, and it also keeps the bar out of the fastest
-water, where a flood is least able to break it. A weir on water this small was built of what lay to hand,
-and the first weirs, of nearby wood and stone, were fragile enough that small streams were the only place
-they could stand. Not every hamlet has one: where the brook kept its level through the season the intake
-was only an opening in the bank, and where the level fell something had to be set in the stream to raise
-it. The map gives a brook no level or season, so each hamlet's roll decides.
+The first weirs were built of whatever wood and stone lay near, too fragile to stand anywhere but on small streams.
+Many old weirs ran slantwise upstream from the intake, damming the shallow riffle and standing off the fastest flood
+water.
 
-Note: we have drawn the weir closing the brook bank to bank, in order to make it visible on the map at
-this scale; half-river closures were the common old form, and across a brook 7 ft wide a half-bar would
-be a line a pixel or two long. Its slant is read in the modern engineering histories, no period drawing
-of a village weir having been read. The four forms are read for small water except the baskets, which the
-record reads only on large rivers, so a course of them across a brook is a guess; which form a hamlet
-builds is rolled per settlement with an even chance, and that evenness is a guess, as is the even chance
-of a weir at all. Each form is drawn at its own thickness: the baskets at their read diameter, about 2 ft;
-the fence at about 1.5 ft, wider than a row of stakes so that it can be seen; the frame and the crib at
-5 ft, a guess, no source read giving the thickness of a village weir. The woven stake fence is ancient - the
-shigarami, stakes woven with brushwood or bamboo across a river, is in the Man'yoshu of the 8th century - but a
-weave of reed is found only in a present-day weir, so the fence is woven with brushwood.
+[weir_form=fence] This one is a fence: stakes driven into the stream with brushwood or bamboo woven onto them, a form
+known by the 8th century.
+
+[weir_form=frame] This one is a frame, like a Kofun-period weir dug up at Kodera: slanting stakes, logs laid along them,
+the joints tied with wisteria vine and the gaps packed with clay and gravel.
+
+[weir_form=crib] This one is a crib of timber packed with stone, the form of most intake works until the late 16th
+century.
+
+[weir_form=gabion] This one is a course of gabions, long baskets of woven bamboo packed with cobbles, about 16 to 24 in
+across.
+
+How thick a village weir was is not recorded, nor how many small intakes had one.
+
+Guesses:
+- That a hamlet's intake has a weir at all, at even odds with a bare opening: which a brook needed followed its level
+  through the season, and no source counts the two.
+- Which of the four forms it takes, at even odds: no source counts them.
+- [weir_form=gabion] A course of gabions across a brook: the only gabions found damming water were on large rivers.
+- [weir_form=frame|crib] Its thickness, about 5 ft: no thickness of a village weir was found, only of river works.
+
+Depiction: The map draws the weir closing the brook from bank to bank so that it can be seen; half-river closures were
+the common old form, and across a brook about 7 ft wide a half-bar would be a line a pixel or two long. It runs slantwise
+upstream from the intake, as the old weirs did, and the title card says which of the four forms this hamlet's takes.
+
+[weir_form=fence] The fence is drawn about 1.5 ft thick, wider than its one row of stakes, so that it shows.
+
+[weir_form=crib] The crib is drawn in stone gray, its timbers marked across it in short strokes and a lip along its
+upstream face, so that it reads as a thing that holds water back and not as a plank bridge.
+
+[weir_form=gabion] The baskets are drawn at one basket's width, about 2 ft.
 
 Name: weir
 Covers: `weirs` - the bar across the brook at a weir hamlet's intake
-Label: convention
-Sources: maff-toshuko-history, jsidre-miwa-2023, jawiki-seki, japanriver-koborebanashi-21, wangzhen-nongshu-18, suido-ishizue-iseki, kotobank-shigarami, hrr-agagawa-dento, kotobank-jakago, people-zhishui-2025, pwsannong-quxi
-Entry: research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.html; research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html
+Sources: suido-ishizue-iseki, maff-toshuko-history, fao-water-sources-u5835e, jsidre-miwa-2023, kotobank-shigarami, suido-ishizue-manyoshu, kotobank-seki, shimane-toshuko-lecture, kotobank-jakago
+Entry: research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.html
+Drawing: research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html

@@ -1,46 +1,46 @@
-What: A dry-field plot under barley - the winter grain, sown in autumn and taken in early summer - worked in
-ridged rows.
+About: Barley was the winter grain of the dry fields (hatake), farmland that was never flooded, and with millet it was
+among the coarse grains a farming household grew for its own table, left out of the tax.
+It was also grown on the paddy itself: where a paddy drained, it was worked as a dry field after the rice harvest and sown
+to barley or wheat, two crops a year, a practice known since the Heian period. A
+wet paddy could not carry it, and a second crop needed manure that in medieval times only places near densely settled
+districts could find. The dry fields took the higher, well-drained ground the paddy water could not reach.
 
-Why: Dry crops take the higher, well-drained ground the paddy water cannot command - terraces, levee crests,
-lower slopes, and on a fan its drier middle, though that was mostly left wild until the end of the Edo period.
-On these maps that is the strip along the field's high edge, just above the supply canal where the paddy water
-stops. The plot a household works beside its own house is its kitchen garden; no source read puts its grain
-there. Neighboring plots on the same lie of land form a tract and share one row direction, each turned a few
-degrees; the direction changes between tracts, along the contour or down to the outfall, never straight down a
-steep slope, and all along the contour where the ground is steep - the land sets it, and the seams read the
-family strips apart.
+A dry field was worked in ridges and furrows, its crop growing in rows. Barley was sown in autumn, between the autumn
+equinox and early October in the Edo farm year of Echizen; it stood through the winter as young plants, headed in
+spring, and turned gold in May, when a ripening field looked like a rice field in autumn: early summer was called the
+"barley autumn". It was cut around June, so by high summer the field was stubble or bare ground.
 
-Note: The catena's elements - paddy, dry field, woodland - are read, and one page read puts the dry fields on
-the slopes around the settlement, for the Yoshino mountains only; that the dry crops take the higher ground
-above the paddy, and share the houses' raised ground, is read for alluvial lowland, where one page puts the old
-settlements and their dry fields on the natural levee and another the paddy in the wet ground behind; on river
-terraces one page puts settlements and dry fields early, many turned to paddy once irrigation reached them, and
-on a fan two put the water-short middle late to clearing and the spring-fed toe early to paddy; elsewhere that
-order is this record's own reading, and one source read puts paddy
-round houses built on slightly higher ground instead; the plot a household works by its own house is named
-for its own consumption, read, and no page read puts grain there. The crop's season, sown in autumn and taken
-in early summer, is read; ridged rows are read - a modern
-history says the Northern Wei Qimin Yaoshu set ridge rules for soybeans and millet, and a Japanese farming
-manual of 1697 weeds its dry fields along the ridges - but no page read says how far apart a pre-modern
-Japanese dry field's rows stood, and the only spacings found are modern, so the row SPACING is a GUESS. That the land sets the row direction tract by tract is this
-record's reading of a classical passage. The crop mix per map is rolled from the seed and is a GUESS at the
-proportions; whether a fan's middle stays wild is rolled per map too, since old heartlands such as Kinki and
-Kofu cleared theirs early, and the odds of that roll are a GUESS; where it stays wild the dry strip keeps to
-the fan's toe, and where on the fall the toe begins is a GUESS; how many plots a tract holds, how far a plot
-turns within one, and that every tract on steep ground runs along the contour are GUESSES - no page read says
-how rows ran there. The plot is drawn in ripe barley's early-summer gold though the map shows high summer, when
-barley is already cut; which season to show is not yet decided.
+Single dry fields in two land registers of 1591 and 1678 averaged a tenth to a sixth of an acre. A farm family of the
+early 1900s worked about 2.5 acres of paddy and dry field together; how much of it bore barley is not recorded.
 
-Caveat: The crop mix per map is rolled from the seed and is a GUESS at the proportions; whether a fan's middle
-stays wild is rolled per map too, since old heartlands such as Kinki and Kofu cleared theirs early, and the
-odds of that roll are a GUESS; where it stays wild the dry strip keeps to the fan's toe, and where on the fall
-the toe begins is a GUESS; how many plots a tract holds, how far a plot turns within one, and that every tract
-on steep ground runs along the contour are GUESSES - no page read says how rows ran there. The plot is drawn in
-ripe barley's early-summer gold though the map shows high summer, when barley is already cut; which season to
-show is not yet decided.
+Guesses:
+- How far apart the furrows are drawn: no source gives the spacing of a Japanese dry field's rows before modern times.
+- The mix of millet, barley, buckwheat and soybean on each map, rolled at random: no source gives the proportions.
+- That neighboring plots on one lie of land ran their rows the same way, and that rows on steep ground ran along the
+  contour: reasoned from a Chinese classic that let the land set a field's rows; no source describes a village's dry
+  fields plot by plot.
+- That an alluvial fan's dry middle is left wild on three maps in four: wild was the usual case, but no figure is given.
+- That a settlement's drainage and the nearness of a town weigh as they do in the roll for its winter crop: both set the
+  odds, but no source says how much each counts.
+- [winter_crop=none] That a hamlet needed about 0.85 acre of dry field a household for its coarse grain: reckoned from
+  the grain a household ate and the yields the land surveys assessed, not found as a figure.
+
+Depiction: The map draws the dry fields as a hem of small rectangular plots just above the supply canal along the
+paddy's high edge, where the paddy water stops, each squared to the canal behind a bare bank. On some maps an alluvial
+fan's dry middle is left to scrub and the plots keep to its toe. No grain plot is drawn beside a house: the plot a
+household worked there was its kitchen bed. Every plot is furrowed, and neighboring plots form a tract whose rows run
+one way, each tract turned well apart from the next so the strips can be told apart. Barley is drawn in the tan-gold of
+its ripening in May, though in high summer, the season of the paddies, it had already been cut.
+
+[winter_crop=barley] This settlement's drained paddies carry barley over the winter after the rice. The map, set in
+summer, shows those paddies under rice.
+
+[winter_crop=none] This settlement's paddies lie bare over the winter, so where its field lies at the toe of a fan whose
+middle is wild, the map draws its dry fields climbing up into that middle until they hold the coarse grain the hamlet
+needs.
 
 Name: barley
 Covers: `dry_plots[crop=barley]` and their furrows
-Label: accurate
-Sources: senjochi-kotobank, zuozhuan-chenggong, fao-aina-ridging, zgkpw-longzuo, nogyo-zensho-joun-sera
-Entry: research/questions/0006-dry-fields-and-their-crops-hatake.html; research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html
+Sources: omugi-jawiki, fukui-kenshi-noji, hakubaku-omugi-ichinen, zakkoku-kotobank, kotobank-nimosaku, nimosaku-jawiki, kotobank-kanden, shizen-teibo-jawiki, king-forty-centuries, nogyo-zensho-joun-sera, hanshu-daitian-wikisource, komonjyo-kenchi, zuozhuan-chenggong, kokumori-jawiki, kateisaien-jawiki, dry-fields-and-their-crops-hatake, where-a-farming-hamlet-grew-its-coarse-grain
+Entry: research/questions/0006-dry-fields-and-their-crops-hatake.html, research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.html, research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.html, research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.html
+Drawing: research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html, research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html, research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html

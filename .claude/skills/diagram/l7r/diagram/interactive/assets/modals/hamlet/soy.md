@@ -1,44 +1,42 @@
-What: A dry-field plot under soybean (daizu) grown as a field crop of its own, worked in ridged rows - drawn a
-soybean green against the tan and ochre grains.
+About: Soybean (daizu) grew as a field crop of its own in the dry fields (hatake), farmland that was never flooded. In
+the Edo farm year of Echizen, soybean and buckwheat were harvested in the gaps between the tasks of the rice harvest, and
+soybeans were also sown in a row along the paddy bunds. The dry fields took the higher, well-drained ground the paddy
+water could not reach, such as a river's natural levees and its terraces, though the dry middle of an alluvial fan was
+often left wild until the end of the Edo period.
 
-Why: Dry crops take the higher, well-drained ground the paddy water cannot command - terraces, levee crests,
-lower slopes, and on a fan its drier middle, though that was mostly left wild until the end of the Edo period.
-On these maps that is the strip along the field's high edge, just above the supply canal where the paddy water
-stops. The plot a household works beside its own house is its kitchen garden; no source read puts its grain
-there. Neighboring plots on the same lie of land form a tract and share one row direction, each turned a few
-degrees; the direction changes between tracts, along the contour or down to the outfall, never straight down a
-steep slope, and all along the contour where the ground is steep - the land sets it, and the seams read the
-family strips apart. The bean fixes its own nitrogen, which is why it also
-went along the bunds.
+A dry field was worked in ridges and furrows, its crop growing in rows: a sixth-century Chinese manual already set ridge
+rules for soybeans and millet, and a Japanese farming manual of 1697 still weeds along the ridges. A soybean plant is an
+erect bush, branching from a central stem, knee to waist high, with broad, pointed, medium-green leaflets. In one modern
+field its top leaves stood near 3 ft (80 cm) in late August, and by September the field was turning from deep green to
+yellow-brown.
 
-Note: The catena's elements - paddy, dry field, woodland - are read, and one page read puts the dry fields on
-the slopes around the settlement, for the Yoshino mountains only; that the dry crops take the higher ground
-above the paddy, and share the houses' raised ground, is read for alluvial lowland, where one page puts the old
-settlements and their dry fields on the natural levee and another the paddy in the wet ground behind; on river
-terraces one page puts settlements and dry fields early, many turned to paddy once irrigation reached them, and
-on a fan two put the water-short middle late to clearing and the spring-fed toe early to paddy; elsewhere that
-order is this record's own reading, and one source read puts paddy
-round houses built on slightly higher ground instead; the plot a household works by its own house is named
-for its own consumption, read, and no page read puts grain there. Apart from the ridging, what is said here of
-the crop itself is not drawn from the sections this entry names; ridged rows are read - a modern
-history says the Northern Wei Qimin Yaoshu set ridge rules for soybeans and millet, and a Japanese farming
-manual of 1697 weeds its dry fields along the ridges - but no page read says how far apart a pre-modern
-Japanese dry field's rows stood, and the only spacings found are modern, so the row SPACING is a GUESS. That the land sets the row direction tract by tract is this
-record's reading of a classical passage. The crop mix per map is rolled from the seed and is a GUESS at the
-proportions; whether a fan's middle stays wild is rolled per map too, since old heartlands such as Kinki and
-Kofu cleared theirs early, and the odds of that roll are a GUESS; where it stays wild the dry strip keeps to
-the fan's toe, and where on the fall the toe begins is a GUESS; how many plots a tract holds, how far a plot
-turns within one, and that every tract on steep ground runs along the contour are GUESSES - no page read says
-how rows ran there.
+Single dry fields in two land registers of 1591 and 1678 averaged a tenth to a sixth of an acre, the smallest under a
+twentieth of an acre and the largest about a third. A farm family of the early 1900s worked about 2.5 acres of paddy and
+dry field together; how much of a household's dry field was soybean is not recorded.
 
-Caveat: The crop mix per map is rolled from the seed and is a GUESS at the proportions; whether a fan's middle
-stays wild is rolled per map too, since old heartlands such as Kinki and Kofu cleared theirs early, and the
-odds of that roll are a GUESS; where it stays wild the dry strip keeps to the fan's toe, and where on the fall
-the toe begins is a GUESS; how many plots a tract holds, how far a plot turns within one, and that every tract
-on steep ground runs along the contour are GUESSES - no page read says how rows ran there.
+Guesses:
+- How far apart the furrows are drawn: no source gives the spacing of a Japanese dry field's rows before modern times.
+- The mix of millet, barley, buckwheat and soybean on each map, rolled at random: no source gives the proportions.
+- That neighboring plots on one lie of land ran their rows the same way, and that rows on steep ground ran along the
+  contour: reasoned from a Chinese classic that let the land set a field's rows; no source describes a village's dry
+  fields plot by plot.
+- That an alluvial fan's dry middle is left wild on three maps in four: wild was the usual case, but no figure is given.
+- [winter_crop=none] That a hamlet needed about 0.85 acre of dry field a household for its coarse grain: reckoned from
+  the grain a household ate and the yields the land surveys assessed, not found as a figure.
+
+Depiction: The map draws the dry fields as a hem of small rectangular plots just above the supply canal along the
+paddy's high edge, where the paddy water stops, each squared to the canal behind a bare bank. On some maps an alluvial
+fan's dry middle is left to scrub and the plots keep to its toe. No grain or bean plot is drawn beside a house: the plot
+a household worked there was its kitchen bed. Every plot is furrowed, and neighboring plots form a tract whose rows run
+one way, each tract turned well apart from the next so the strips can be told apart. Soybean is drawn green, as it stood
+through the summer, against the tan and ochre of the grains.
+
+[winter_crop=none] This settlement's paddies lie bare over the winter, so where its field lies at the toe of a fan whose
+middle is wild, the map draws its dry fields climbing up into that middle until they hold the coarse grain the hamlet
+needs.
 
 Name: soy
 Covers: `dry_plots[crop=soy]` and their furrows
-Label: accurate
-Sources: senjochi-kotobank, zuozhuan-chenggong, fao-aina-ridging, zgkpw-longzuo, nogyo-zensho-joun-sera
-Entry: research/questions/0006-dry-fields-and-their-crops-hatake.html; research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html
+Sources: fukui-kenshi-noji, nabunken-azemame, shizen-teibo-jawiki, dankyu-kotobank, senjochi-kotobank, king-forty-centuries, zgkpw-longzuo, nogyo-zensho-joun-sera, cropfarming-soybeans, wikipedia-soybean, maruyanagi-daizu-hatake, komonjyo-kenchi, zuozhuan-chenggong, kokumori-jawiki, kateisaien-jawiki, dry-fields-and-their-crops-hatake, where-a-farming-hamlet-grew-its-coarse-grain
+Entry: research/questions/0006-dry-fields-and-their-crops-hatake.html, research/questions/0014-bunds-between-the-paddies-aze.html, research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.html, research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.html [winter_crop=none]
+Drawing: research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html, research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html [winter_crop=none]

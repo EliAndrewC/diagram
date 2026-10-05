@@ -1,16 +1,30 @@
-What: A cluster of gray boulders inside a field plot - a bedrock outcrop the terrace risers wrap around.
+About: A field rock is a cluster of boulders standing inside a hillside or narrow valley paddy, rock the field was cut
+around rather than cleared. Whether farmers left rock standing in a paddy, and how often, is not recorded.
 
-Why: The maps treat rock outcrops as a feature of TERRACES and narrow valley strips, bedrock the risers wrap
-around, absent on broad alluvial valley, polder and delta ground; where the archetype allows one it stands off-center in its plot so it reads as
-a natural obstacle.
+The fields that could hold one were small, hand-opened ground. A terrace paddy (tanada) was cut into a hillside, each
+narrow, irregular strip held up by a wall between it and the next; terraces were small work, opened with little more than a
+hoe, on mountainsides reached by steep paths. A valley paddy (yachida) ran as a chain of small paddies along the wet floor
+of a narrow stream valley among hills.
 
-Note: Which archetypes host an outcrop is this project's guess - no source found puts outcrops on terraces and
-off valley, polder and delta ground, and no page we read speaks of rocks kept in a paddy at all - nor does any
-count how many, so a terraced field (and a narrow valley strip about half the time) gets one to three - enough that the reader meets the obstacle the terrace was cut around, few enough
-that the field still reads as worked ground.
+Stone was the terrace builder's material in western Japan, where the walls between the benches were built of stone to
+withstand the slope; in one valley the steep side's walls were of small stones and the gentle side's of big ones. Eastern
+Japan, which built fewer terraces, raised gentle earth banks instead.
+
+How big a rock in a paddy stood is not recorded. The paddies round it were small: a terrace paddy ran from about 215 sq ft
+(20 sq m) to a few thousand square feet, smaller the steeper the ground.
+
+Guesses:
+- That outcrops stood in terraced and narrow valley paddies and never on a broad valley floor, a polder or a delta's
+  dike-pond ground: no account of rock left standing in a paddy was found, so the outcrop is reckoned as bedrock a field cut
+  into a slope would meet.
+- How many a field keeps, one to three in every terraced field and in about half the narrow valley fields: no count was found.
+- Its size, two to four boulders a small part of their plot: no size of a rock left in a field was found.
+
+Depiction: The map draws an outcrop as a cluster of gray boulders set off the middle of its plot, so it reads as an obstacle
+the field was cut around.
 
 Name: field rock
 Covers: `field_rocks` - a bedrock outcrop inside a plot
-Label: guess
-Sources: not recorded
-Entry: research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.html; research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html
+Sources: ponds-rocks-and-graves-in-the-middle-of-the-fields, tanada-jawiki, kotobank-tanada, suido-ishizue-tanada, yachida-jawiki, sakaori-ishizumi, bunka-shiroyone, chikuma-obasute
+Entry: research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.html, research/questions/0021-terraced-and-valley-paddies-tanada-yachida.html
+Drawing: research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html

@@ -1,41 +1,34 @@
-What: A rice basin under a shallow sheet of water behind its bunds - an inch or so for most of the season -
-one plot of the hamlet's comb field. The sheet is not constant: at midsummer the field is drained on
-purpose until the mud cracks underfoot, for about a week, to stand the rice up to the wind and fill its ears -
-done in some places by the Edo period, and before the war only where water was plentiful - and it is
-drained again before the harvest.
+About: A rice paddy (suiden) was a level basin of ground walled by a low bank of its own mud, the bund, so that the
+rice stood in water at an even depth. It was a farming village's chief land: its rice fed the households and paid the
+lord's tax, and a little under a quarter acre of it fed each inhabitant, with millet, barley and other coarse grain making
+up the rest. A household's paddy lay scattered over many plots across the field.
 
-Why: Pre-modern paddies were fitted to land and water by piecemeal reclamation, so the plots are
-odd-sized and odd-shaped; the tidy rectangular grid is a Meiji/Showa land-consolidation artifact, though
-the alluvial plains of the west kept the far older jori grid working through the medieval period, and its
-regular plots stayed widespread there up to Meiji. A paddy's soil was fed from within: in China the water
-fern azolla was grown on the flooded paddy to take nitrogen from the air for the rice, and in Japan a
-winter vetch, renge, was sown in the paddy as a green manure. On the Chinese
-delta the rice fields were also where the ducks fed: Qu Dajun, writing of Guangdong in 1678, says the
-coastal fields of Guangzhou bred small crabs that ate the rice sprouts and only ducks could eat them, so many in
-the villages kept ducks, herded in the fields - on the crabs in spring and summer, on the gleaned rice in autumn.
+Before modern times the paddies were small, irregular plots of every size, fitted to the land and its water as they were
+opened piece by piece; the tidy grid of rectangles came only with land consolidation from the 1870s, though the plains of
+the west kept the ancient jori grid. The rice was transplanted into the flooded mud in no ruled rows. The water came and
+went: a sixth-century Chinese manual already drains the paddy to firm the roots and again before the rice ripens, and
+Edo-period farm books describe a midsummer drain, done in some places.
 
-Note: Plot form and the irregular patchwork are read, and so is the scattering of a household's holding;
-that the bunds meet at T-junctions is a guess no page read states; the rice is drawn as shoots in no ruled
-rows, read, since it was transplanted without rows until Meiji, and how dense the scatter is, a sample of the
-planting, is a convention; drawing the patchwork on the western
-plains, where the jori grid ran, is a deviation; plot sizes are the map's own figures, a basin smaller
-than the register parcels of the 1600s (about 0.09-0.44 acre, read) on the guess that a parcel was split
-into several level basins, placed inside a pre-modern band no page read gives; the field is shown flooded, which is one moment of a cycle that runs
-from flooded to cracked and back - a cycle China's farming manuals give from the sixth century on, a paddy let out
-to sun its roots firm after weeding and drained again before the harvest; the depths behind that choice are modern
-extension figures, and no pre-modern depth was found; the midsummer drain appears in Edo-period farm books, in some places, and before
-the war it had spread only where water was plentiful - a field short of water kept its sheet; that the same
-limit held before modern times is this record's inference, and the week is a modern guide's, not an Edo figure.
+The paddy parcels of two land surveys of the 1600s ran from about a tenth of an acre to under half an acre, and a terraced
+paddy could be far smaller: at one famous slope they average about 200 sq ft (18 sq m). A farm family of the early 1900s
+worked about 2.5 acres, paddy and dry field together.
 
-Caveat: the field is shown flooded, which is one moment of a cycle that runs from flooded to cracked and
-back - a cycle China's farming manuals give from the sixth century on, a paddy let out to sun its roots firm after
-weeding and drained again before the harvest; the depths behind that choice are modern extension figures, and no pre-modern depth was found; the
-midsummer drain appears in Edo-period farm books, in some places, and before the war it had spread only where
-water was plentiful - a field short of water kept its sheet; that the same limit held before modern times is
-this record's inference, and the week is a modern guide's, not an Edo figure.
+Guesses:
+- That a parcel on any slope was split into several level basins, so the map's basins, about 1,500 sq ft (0.03 acre) on a
+  hamlet map, are smaller than a survey's parcel: no source says whether a parcel was one diked basin or several.
+- That a household held about nine plots of 0.02 to 0.25 acre: no source gives either figure, and no average plot size
+  from before modern times was found.
+- That the bunds of the patchwork met mostly in T-junctions rather than crossings: plots opened one after another, each
+  fitted to its own ground, seldom line up across a bund, but no source says so.
+
+Depiction: The map shows the paddies at one moment of the rice year, high summer, the basins flooded and the rice green;
+the midsummer drain, the winter crop and the straw ricks are left for seasonal maps not yet drawn. Each basin is drawn at
+its real size in feet, in a patchwork of irregular plots and never a grid, and none is drawn as a needle-sharp point, an
+arrowhead or a scrap too small to level and wall. The rice is drawn as a loose scatter of shoots in no ruled rows: a
+sample of the planting, since at its real spacing one dot a plant would fill the basin solid.
 
 Name: paddy
 Covers: the wet plots of every `fields[kind=paddy]` - the flooded basins
-Label: accurate
-Sources: maff-suitou-mizu, zennoh-mizukanri, horikawa-2011-nakaboshi, doyoboshi-jawiki, qimin-yaoshu-juan2, chenfu-nongshu-juanshang, guangdong-xinyu-20, pwsannong-zhusanjiao-nongyeshi
-Entry: research/questions/0005-rice-paddies-and-their-plots-suiden.html, research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.html; research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html, research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html; research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.html
+Sources: aze-jawiki, tabayashi-1987, kato-1999-ittanbu-kukaku, iwamuro-kenchicho, yashio-kenchi, senmaida, kochi-seiri-jawiki, kokudaka-jawiki, kokumori-jawiki, gokogomin-kotobank, zakkoku-kotobank, king-forty-centuries, kubota-transplanting, seijoue-kotobank, qimin-yaoshu-juan2, qimin-yaoshu-enwiki, horikawa-2011-nakaboshi, rice-paddies-and-their-plots-suiden, how-our-maps-draw-rice-paddies-and-their-plots-suiden
+Entry: research/questions/0005-rice-paddies-and-their-plots-suiden.html, research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.html, research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.html, research/questions/0012-rice-planted-in-rows-seijoue.html
+Drawing: research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html, research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html

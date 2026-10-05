@@ -1,24 +1,29 @@
-What: A small square roost for a few chickens, against the house's flank or behind it.
+About: A hen coop sheltered a farming household's chickens at night. Chickens were the commonest livestock on a Chinese
+farm: in most regions a farmer kept a pig and some chickens in the yard, beside a draft animal or two, and by day a family's
+chickens wandered its yard and out into the village street. A sixth-century farm manual tells the farmer to shut them at
+night in a coop on the ground with a perch inside: there they crowed less clearly, but were safe from the fox and fattened
+easily, while birds left to roost in the trees wasted or died in a spell of wind and cold.
 
-Why: Chickens were the commonest livestock on a Chinese farm: a survey of 2,866 farms in seven provinces in
-1921-1925 found them on 82 per cent, and the Cambridge history reads farmers in most regions keeping a pig and
-some chickens in their yard. The Qimin Yaoshu says to build the roost as a ground enclosure with a perch,
-because birds left to the trees sicken - so a coop, not a tree - and an excavated late-Ming coop is square.
-Each hamlet rolls its share around the survey's 82%, between about seven and nine farmsteads in ten.
+A coop of the early 1600s, late in the Ming dynasty, dug up at Zhengzhou, was square, with six niche-like openings in its
+west wall and fragments of eggshell inside them. What coops were built of, how they were roofed and how big they were is not
+recorded.
 
-Note: Presence, the ground form and the square plan are read (Buck, Cambridge, the Qimin Yaoshu, the Zhengzhou
-coop). The survey's count was made in the 1920s, and what was seen before 1912 agrees with it; the band's width
-about it is calibrated liberty; that every farm with chickens kept a coop is a guess - no account before 1912
-says where the yard's chickens slept; the 5 x 5 ft size and the seat at the house's flank or back wall are
-guesses - the record says only 'in their yard'.
+In the 1920s, of 2,866 farms counted in seven provinces, 82 in 100 kept chickens, more often in east-central China
+than in the north, and accounts from the empire's last years agree they were already that common: near Suzhou in 1909, a
+doctor said, nearly every family raised a few chickens, but only a few. Whether the yard's chickens of those years slept in
+a coop is not recorded.
 
-Caveat: The survey's count was made in the 1920s, and what was seen before 1912 agrees with it; the band's width
-about it is calibrated liberty; that every farm with chickens kept a coop is a guess - no account before 1912
-says where the yard's chickens slept; the 5 x 5 ft size and the seat at the house's flank or back wall are
-guesses - the record says only 'in their yard'.
+Guesses:
+- That every farm keeping chickens has a coop: the manual says to roost them in one, but no account of the empire's last years
+  says where village chickens slept.
+- Its size on the map, 5 by 5 ft: the excavated coop is square, but its size is not given.
+- That it stands beside the house: the accounts say only that chickens were kept in the yard.
+
+Depiction: The map draws a coop as a small square roost beside the house, on most farmsteads; how many farmsteads in a
+settlement keep one is rolled close to the share of farms with chickens in the 1920s.
 
 Name: hen coop
 Covers: `farm_fixtures[kind=coop]`
-Label: accurate
-Sources: cambridge-animals-china, qimin-yaoshu-yangji, pitt-zhengzhou-coop, buck-1930-farm-economy
-Entry: research/questions/0045-chickens-and-chicken-coops.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.html; research/questions/0045-chickens-and-chicken-coops.drawing.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html
+Sources: buck-1930-farm-economy, cambridge-animals-china, smith-1899-village-life, qimin-yaoshu-yangji, pitt-zhengzhou-coop, king-1911-farmers-forty-centuries, chickens-and-chicken-coops, how-our-maps-draw-chicken-coops
+Entry: research/questions/0045-chickens-and-chicken-coops.html
+Drawing: research/questions/0045-chickens-and-chicken-coops.drawing.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html

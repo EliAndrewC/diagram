@@ -1,31 +1,33 @@
-What: The household privy - on a farm, the urinal and the privy were one small building standing apart from
-the main house.
+About: The privy was a farm household's toilet, and on a farm it was usually a building of its own, apart from the
+house, with the urinal and the privy under one roof. It stood outside because what it gathered was manure for the
+fields: the night soil was kept in a tank beside it, or in a pit out by the fields.
 
-Why: The common case, before modern times as after: most houses of one village in 1824 had a privy outside the
-main house, and every one of another village's sixteen households did; a 1959 survey of farm households in three
-villages found more than nine in ten with an outdoor privy. So the map draws one on 85 to 95 of every 100
-homesteads. The record finds it in four places: under the eaves by the stable beside the entrance, a separate
-outhouse in the yard, the front yard of the main house, and - at several farms of one Miyagi village - inside the
-barn, a tub sunk in its floor with boards laid across it. Each house rolls its seat among the four, and on most
-houses a seat on the sunny side is tried first. Its size is one of the sixteen the village count gives, from 5 by 5
-ft to 27 by 15 ft, most 18 by 12 ft or smaller.
+It stood under the eaves in front of the stable, beside the entrance, or as an outhouse in the yard; in parts of the north
+after 1868, in the front yard. At several farms of one northern village it was only a tub sunk in a barn's floor, with
+boards laid across it. A farm manual of about 1680 sets it southeast of the house, in the sun, so its contents rotted
+quickly, and in one Shiga village nearly three privies in four stood south or southeast of the house. What its walls and
+roof were made of is not recorded.
 
-Note: Presence, the detached form, the four seats and the sizes are read (Hasuda 1824, the Kakimochi count, Suzuki
-1959, Sugiura), and so is the sunny side (Wang and Ochiai found 72.7% of one Shiga village's privies south or
-southeast of the house). How often each seat is drawn is a guess, each hamlet re-weighting them from its seed, and so
-is where in the yard the separate outhouse stands; a privy inside the barn is a tub under its floor, which cannot be
-seen from above, so it is drawn as the privy against the barn's outer wall - a map drawing convention; the size is
-one village's table, a calibration; the sunny side is searched only to 48 ft, this project's choice, so only about
-46 privies in 100 end up there against the 72.7% each house rolls.
+Nearly every farm had one: most houses of one village in 1824, and all sixteen of another just after the Edo period;
+in three villages in 1959 more than nine households in ten had an outdoor privy. In that sixteen-house village
+privies ran from 5 by 5 ft to about 27 by 15 ft, most 18 by 12 ft or smaller. A privy joined to the house came later:
+in six villages, only officials' houses had one until 1771, and about one house in ten by 1824.
 
-Caveat: How often each seat is drawn is a guess, each hamlet re-weighting them from its seed, and so
-is where in the yard the separate outhouse stands; a privy inside the barn is a tub under its floor, which cannot be
-seen from above, so it is drawn as the privy against the barn's outer wall - a map drawing convention; the size is
-one village's table, a calibration; the sunny side is searched only to 48 ft, this project's choice, so only about
-46 privies in 100 end up there against the 72.7% each house rolls.
+Guesses:
+- How often each of the places a privy stood is drawn: no source says how often each was used.
+- Where in the yard an outhouse stood, and how far out from the house a privy in the front yard stood: no source says.
+- How far from its house a privy on the sunny side may stand: no source gives a distance, so it is kept near enough to read
+  as its own house's.
+
+Depiction: The map draws a privy on most farmsteads as a small roofed building with a dark night-soil jar at one end, so it
+does not read as a wood shed; a real roof hid the jar from above. Its size is one of the sixteen of the one village counted.
+It is sought first on the house's sunny side, as about three real privies in four stood, but the work yard takes much of
+that ground, so fewer than half end up there; the rest stand by the stable's eaves, behind the house, in the front yard or
+by the barn. A privy inside a barn, a tub under its floor that cannot be seen from above, is drawn against the barn's outer
+wall.
 
 Name: privy
 Covers: `farm_fixtures[kind=privy]`
-Label: accurate
-Sources: koshigaya-shishi-noumin-jukyo, oamishirasato-choshi-kaoku, suzuki-1959-noson-benjo, sugiura-1977-tohoku, sinyoken-madori, wang-ochiai-2022
-Entry: research/questions/0047-farm-privies-and-their-night-soil-benjo.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.html; research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html
+Sources: kotobank-benjo, suzuki-1959-noson-benjo, sinyoken-madori, sugiura-1977-tohoku, kotobank-hyakusho-denki, sakurasha-hyakusho-denki, wang-ochiai-2022, koshigaya-shishi-noumin-jukyo, oamishirasato-choshi-kaoku, tsuda-1991-nikko-shasan-minka
+Entry: research/questions/0047-farm-privies-and-their-night-soil-benjo.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.html
+Drawing: research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html

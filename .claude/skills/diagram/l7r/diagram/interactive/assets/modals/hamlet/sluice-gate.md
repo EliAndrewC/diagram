@@ -1,17 +1,32 @@
-What: The wooden boards set in the cut of a polder dike where the water comes in or goes out: dropped, they
-hold the block's water; lifted, they let it flow.
+About: A sluice gate was the opening where water crossed a polder's dike, closed with timber so the polder's farmers could
+let water in or keep it out. A polder lay below the water outside it some or all of the time, so its dike must have run all
+the way round, water crossing only at its gates. In the Song, a polder's gates were opened in drought to draw the river in and
+shut in flood to keep it out; when the polder was waterlogged and the river fell, they let the water out. In the Pearl
+River delta a polder's sluice was a dou, and the villagers watered and drained their land through the dikes, the creeks
+and the gates. In Japan's ring-diked communities the intake stood at the upstream head of the ring and the outlet at its
+downstream tail, and a culvert through the dike was shut while the river stood high and opened when it fell.
 
-Why: A polder is enclosed against the flood outside, so its dike is cut only where a gate controls the water
-- at the inlet high on the block and the outfall low on it. The gate is a protected opening closed with
-wooden boards to set the level - opened in drought to draw the river in, shut in flood to keep it out - and it is why the dike can be complete and the block still fed and
-drained.
+Gates on great canal heads were timber at first and later rebuilt in stone; at one weir begun in 1064 the water was set
+by adding or taking out gate boards in cut grooves.
 
-Note: The board form is read only from a modern FAO pond-construction manual, which puts its sluice through a single pond's dike rather than the polder's, and its opening in drought and shutting in flood from a Chinese account of the Jiangnan polders; the dou is read as the polder's own sluice - the Minle dou of the Sangyuan polder is an old sluice gate, its name carved above its opening in 1878; the inlet-high, outfall-low placement is read from an account of the Japanese ring-diked polders, which sets the intake at the ring's upstream head and the outlet at its downstream tail; a large polder had many such openings, drains outnumbering intakes, and drawing a village polder with only two is a guess; the 6 x 3 ft bar is drawn at the size of a whole board set, which the record does not measure; the FAO manual caps the opening itself at 0.80 m, less than half the bar.
+A great Song polder had five water gates. One Japanese ring-diked community had 34 drain culverts and a drain gate against
+four intakes, since an intake strong enough to be safe was hard to build. A village polder's gate count and a gate's size
+are not recorded.
 
-Caveat: the 6 x 3 ft bar is drawn at the size of a whole board set, which the record does not measure; the FAO manual caps the opening itself at 0.80 m, less than half the bar.
+Guesses:
+- That a village polder needed only two gates, an inlet high on it and an outfall low on it: the one count found, for a
+  large Japanese ring-diked community, had many, drains outnumbering intakes.
+- That the board was raised from a crossbeam over the water, by hand or by a windlass: no account describes how a polder
+  gate was worked, so the frame is drawn from how a lifting gate works.
+
+Depiction: The map draws a gate as its frame seen from above: a board between two posts, with a crossbeam over them and a
+windlass drum at its middle, drawn larger than life so it shows. A gate stands at every cut of the polder's dike, laid
+along the crest across the water, at the inlet high on the polder, the outfall low on it, and wherever else a channel
+crosses the dike; none is drawn in a fish pond's own bank, that being found only in a modern manual. Every gate is one
+glyph, with no open or shut form.
 
 Name: sluice gate
 Covers: the board bar of every `sluice_gates[]` record - the gate in each cut of the perimeter dike
-Label: accurate
-Sources: fao-x6708e, cssn-sangyuanwei, shen-kuo, ishizue-waju, wajyu-nogyo
-Entry: research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html, research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.html; research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html, research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html
+Sources: polder-enwiki, cssn-jiangnan-weitian, wuhurec-wanchun, minle-dou-people, ishizue-waju, wajyu-nogyo, pwsannong-gudai-shuili, pwsannong-quxi, thepaper-guangai, fao-x6708e
+Entry: research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.html, research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html, research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.html, research/questions/0179-water-gates-and-sluices-shuimen.html
+Drawing: research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html, research/questions/0179-water-gates-and-sluices-shuimen.drawing.html, research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html, research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html

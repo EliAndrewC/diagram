@@ -1,24 +1,33 @@
-What: A family's grave in the fields: a small raised earthen mound with stone markers, standing either inside a
-paddy plot as an island the flat paddy tiles around, or in a plot's corner against its bunds.
+About: A grave in the fields held a family's dead on its own farmland, apart from any shared burial ground. Around
+Shanghai many villagers buried their dead one by one in the
+middle of the open fields, at a spot a Taoist priest or a geomancer chose. In parts of Japan a household's burial grave once
+stood on its own land beside the bunds of its fields, until an order of 1872 forbade burying the dead at the bund edge of
+one's own fields; in other places a household's grave stood in a corner of its field.
 
-Why: Around Shanghai many villagers buried their dead one by one out in the open fields, wherever a geomancer
-placed the grave, and a column of soldiers in 1842 found graves in every field; far to the north, Henan leveled
-more than two million field graves in 2012. In Japan no grave we read stood out in mid-paddy: some stood beside
-the bunds, until an order of 1872 forbade burying the dead at the bund edge of one's own fields; others stood in a
-field's corner, as in Ibaraki they still do. So the island inside a plot is the Chinese form and the corner grave
-the Japanese one, and each hamlet takes one.
+A column of soldiers marching into Shanghai in 1842 found graves in every field, as mounds of earth. Where a Japanese family
+kept two graves, the body's grave was marked with no more than a stone. Whether any grave stood out in the middle of a
+flooded paddy is not recorded: the Japanese graves stood at a bund's edge or a field's corner, and the Chinese accounts do
+not say what the fields grew.
 
-Note: How often a map draws a field grave at all, about three valley, terrace or ribbon maps in ten, is a degree
-chosen for the maps: no source gives a rate, and the record argues they were common where the custom held. No
-source we read puts a grave in flooded paddy: the Chinese accounts show graves inside working fields without
-naming the crop, so the island in a paddy plot is drawn from graves in fields, not read of paddy.
+In one survey of level farmland in 1920s China, graves took about 2.6 percent of the farm land, and up to 9.1 percent on
+fertile land; where no hill land could take them, they stood anywhere in a field. At one
+Edo-period temple graveyard a grave took about 2 to 8 ft of length. How common graves in the
+fields were is not recorded, though where the custom held they seem to have been common.
 
-Caveat: How often a map draws a field grave at all, about three valley, terrace or ribbon maps in ten, is a
-degree chosen for the maps: no source gives a rate, and the record argues they were common where the custom
-held.
+Guesses:
+- That a grave stood as an island inside a flooded paddy plot: the Chinese accounts show graves inside working fields
+  without naming the crop, and no Japanese grave read stood in mid-paddy.
+- That a hamlet takes the island or the corner form at even odds: no source weighs one against the other.
+- The mound's size on the map, about half its plot's width for an island and smaller in a corner: no size of a grave in the
+  fields was found.
+
+Depiction: The map draws a grave in the fields in one of two forms, and each hamlet takes one: a mound with two or three
+stone markers inside a plot, the paddy's basins cut back to run up round it, which is the Chinese form; or a small mound
+with one or two stones in a plot's corner against its bunds, which is the Japanese. Only some maps of valley, terrace or
+narrow valley paddy draw one, since no rate is known.
 
 Name: grave island
 Covers: `field_graves` - a grave mound inside a paddy plot or in its corner
-Label: accurate
-Sources: henriot-shanghai-graves, henan-grave-removal-enwiki, ryobosei-jawiki, yashikibaka-ibaraki-blog
-Entry: research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.html; research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.html; research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html; research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html
+Sources: henriot-shanghai-graves, ryobosei-jawiki, yashikibaka-ibaraki-blog, kotobank-ryobosei, buck-1930-farm-economy, tanigawa-1992, henriot-shanghai-count, where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot
+Entry: research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.html, research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.html, research/questions/0235-village-burial-grounds-bochi.html
+Drawing: research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html, research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html

@@ -1,40 +1,41 @@
-What: A dry-field (hatake) plot under millet, worked in ridged rows.
+About: Millet grew in the dry fields (hatake), farmland that was never flooded. Foxtail, proso and barnyard millet were
+among the coarse grains a farming household grew for its own table: left out of the tax, cooked in with its rice, and
+away from the great cities often the staple itself. The dry fields took the higher, well-drained ground the paddy water
+could not reach, such as a river's natural levees and its terraces, though the dry middle of an alluvial fan was often
+left wild until the end of the Edo period. A household's plots seldom lay side by side.
 
-Why: The foothill border zone holds paddy, dry fields and woods together in one mosaic, and the map reads it
-as a catena: the paddy holds the flat valley bottom, and dry crops take the higher, well-drained ground the
-water cannot command - terraces, levee crests, lower slopes, and on a fan its drier middle, though that was
-mostly left wild until the end of the Edo period; on these maps the strip along the field's high edge, just
-above the supply canal - with the woods on the slopes, by the early modern period mostly red pine, grass or
-bare hill rather than coppice. Neighboring plots on the same lie of land form a tract and share one row
-direction, each turned a few degrees; the direction changes between tracts, along the contour or down to the
-outfall, never straight down a steep slope, and all along the contour where the ground is steep - the land sets
-it, and the seams read the family strips apart.
+A dry field was worked in ridges and furrows, its crop growing in rows; a Japanese farming manual of 1697 has millet
+first hoed before the seedlings stand as high as the ridge tops. Foxtail millet stood about 5 ft tall, sown in May or
+June, its ears ripening yellow and drooping, and was harvested from late September into October. Proso grew 3 to 7 ft
+tall, its head drooping from summer into autumn like an ear of rice.
 
-Note: The catena's elements - paddy, dry field, woodland - are read, and one page read puts the dry fields on
-the slopes around the settlement, for the Yoshino mountains only; that the old settlements stand on the raised
-ground that is also their dry field, with the paddy in the wet ground behind it, is read too; the rest of the
-order is this record's own reading, and one source read puts paddy round houses built on slightly higher ground
-instead; the plot a household works by its own house is named for its own consumption, read, and no page read puts
-grain there; ridged rows are read - a modern history says the Northern Wei Qimin Yaoshu set ridge rules for
-soybeans and millet, and a Japanese farming manual of 1697 weeds its dry fields along the ridges - but their
-SPACING is a GUESS: no page read says how far apart a pre-modern Japanese dry field's rows stood, and the only
-spacings found are modern. That the land sets
-the row direction tract by tract is this record's reading of a classical passage. The crop MIX on any one map
-(how much millet against buckwheat and barley) is rolled from the seed and is a GUESS at the proportions;
-whether a fan's middle stays wild is rolled per map too, since old heartlands such as Kinki and Kofu cleared
-theirs early, and the odds of that roll are a GUESS; where it stays wild the dry strip keeps to the fan's toe,
-and where on the fall the toe begins is a GUESS; how many plots a tract holds, how far a plot turns within one,
-and that every tract on steep ground runs along the contour are GUESSES - no page read says how rows ran there.
+Single dry fields in two land registers of 1591 and 1678 averaged a tenth to a sixth of an acre, the smallest under a
+twentieth of an acre and the largest about a third. A farm family of the early 1900s worked about 2.5 acres of paddy and
+dry field together; how much of a household's dry field was millet is not recorded.
 
-Caveat: The crop MIX on any one map (how much millet against buckwheat and barley) is rolled from the seed and
-is a GUESS at the proportions; whether a fan's middle stays wild is rolled per map too, since old heartlands
-such as Kinki and Kofu cleared theirs early, and the odds of that roll are a GUESS; where it stays wild the dry
-strip keeps to the fan's toe, and where on the fall the toe begins is a GUESS; how many plots a tract holds, how
-far a plot turns within one, and that every tract on steep ground runs along the contour are GUESSES - no page
-read says how rows ran there.
+Guesses:
+- How far apart the furrows are drawn: no source gives the spacing of a Japanese dry field's rows before modern times.
+- The mix of millet, barley, buckwheat and soybean on each map, rolled at random: no source gives the proportions.
+- That neighboring plots on one lie of land ran their rows the same way, and that rows on steep ground ran along the
+  contour: reasoned from a Chinese classic that let the land set a field's rows; no source describes a village's dry
+  fields plot by plot.
+- That an alluvial fan's dry middle is left wild on three maps in four: wild was the usual case, but no figure is given.
+- [winter_crop=none] That a hamlet needed about 0.85 acre of dry field a household for its coarse grain: reckoned from
+  the grain a household ate and the yields the land surveys assessed, not found as a figure.
+
+Depiction: The map draws the dry fields as a hem of small rectangular plots just above the supply canal along the
+paddy's high edge, where the paddy water stops, each squared to the canal behind a bare bank. On some maps an alluvial
+fan's dry middle is left to scrub and the plots keep to its toe. No grain plot is drawn beside a house: the plot a
+household worked there was its kitchen bed. Every plot is furrowed, and neighboring plots form a tract whose rows run
+one way, each tract turned well apart from the next so the strips can be told apart. Millet is drawn ochre, its ripe
+color, though in high summer, the season of the paddies, it still stood tall and unripe.
+
+[winter_crop=none] This settlement's paddies lie bare over the winter, so where its field lies at the toe of a fan whose
+middle is wild, the map draws its dry fields climbing up into that middle until they hold the coarse grain the hamlet
+needs.
 
 Name: millet
 Covers: `dry_plots[crop=millet]` and their furrows
-Label: accurate
-Sources: senjochi-kotobank, zuozhuan-chenggong, fao-aina-ridging, zgkpw-longzuo, nogyo-zensho-joun-sera
-Entry: research/questions/0006-dry-fields-and-their-crops-hatake.html; research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html
+Sources: ishizue-musashino, fukui-kenshi-noji, zakkoku-kotobank, zakkoku-jawiki, katemeshi-jawiki, shizen-teibo-jawiki, dankyu-kotobank, senjochi-kotobank, king-forty-centuries, nogyo-zensho-joun-sera, hanshu-daitian-wikisource, qimin-yaoshu-juan1, awa-jawiki, kibi-jawiki, komonjyo-kenchi, zuozhuan-chenggong, kokumori-jawiki, kateisaien-jawiki, dry-fields-and-their-crops-hatake, where-a-farming-hamlet-grew-its-coarse-grain
+Entry: research/questions/0006-dry-fields-and-their-crops-hatake.html, research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.html, research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.html [winter_crop=none]
+Drawing: research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html, research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html [winter_crop=none]

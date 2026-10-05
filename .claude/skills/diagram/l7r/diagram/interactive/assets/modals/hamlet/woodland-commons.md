@@ -1,33 +1,35 @@
-What: A worked coppice wood beyond the fields, on the hill ground above them: a thicket of small crowns over a
-floor raked clear of leaf litter.
+About: A Japanese village's fuel wood was common land, iriai, "shared entry": held by the village and cut under its own
+rules on who might take what, when and how much, most of them set up in the Edo period. From it came firewood and
+charcoal wood, timber, fodder, and the fallen leaves and undergrowth that manured the paddies and fed the cattle. It
+stood beyond the fields from the houses, on the nearest and lowest hill ground round the settlement, the satoyama.
+A boundary with the next village's wood, once settled at law, was a drawn line that bent.
 
-Why: The village woods were iriai commons - customary common land held by the village and governed by its own
-rules on who might cut, when, and how much - cut and let regrow from the stump every fifteen to forty years or
-so, for firewood, forage and the leaf litter that fertilized the paddies. The village of the record is its houses
-at the center, its fields around them and hill land beyond, and the nearest hill slope - the satoyama - carried the
-fuel wood; low ground by a river or marsh, below the houses, was the grass and riverbank commons', not the
-forest's. So the wood is seated beyond the fields, on ground higher than the field it adjoins - or, where
-the map has no such ground, on the level past the fields - and never downslope of the houses. A worked wood stood as clumps of thin stems: konara stands at the old end of their cutting cycle held
-about 1,700 stems a hectare, one to about 63 sq ft on centers near 8 ft - a thicket, denser than an old hill wood.
-A cut wood lets sun reach the floor, so herbs grow there, not brush.
+It was a worked wood, a coppice. Its oaks, konara and kunugi, were cut every fifteen to forty years or so and grew
+back from the stump in many shoots, so the wood stood as clumps of thin, low stems. Its
+leaves were raked up, its shrubs cut and its undergrowth carried off, so the sun reached the floor and herbs and
+wildflowers grew there, not brush.
 
-Note: The commons regime, the raked floor, the order of houses, fields and wood, and the stocking are read (the
-Yamaguni study, the satoyama, village-boundary and iriai-land entries, a 1910 forester's account of the Musashino
-upland, the Nagano and Tsukuba konara stands); reading "beyond the fields" as higher than the field a wood adjoins
-is this record's reading of "the slopes around the settlement". Every stem count read was taken in the twentieth century and no record before modern times counts a worked wood's stems, so the stocking is a modern calibration with no older figure beside it; the 1,700 a hectare is calibrated on a planted
-konara stand of 29 years and on Nagano woods of 26-31 that this record reads, the report not saying so, as fuel
-woods left uncut - both at or just past the old end of the cutting cycle - so the wood may read a little more open than it
-stood, and each crown's 8-9 ft width is a guess sized from the spacing, no
-page giving one. A boundary ruled at law was a drawn line, and it bent; no page read describes a hillside lot laid
-out as a surveyed square (the planned Musashino upland villages of the later 1600s did give each household a
-straight-sided strip of wood behind its fields, a form of the whole settlement not drawn here), so the patches are
-irregular, their smoothly wandering edge a drawing convention; that a lot's edge followed ridge, stream and path
-is a guess, no page read saying so.
+No count of a worked wood's stems from before modern times is known. Counted in the 20th century, konara woods of 15 to
+23 years stood at about 1,000 to 2,000 stems an acre (2,500 to 5,000 a hectare), and woods of 26 to 31 years at about
+600 to 800 an acre; one stand of 29 years was about 47 ft (14 m) tall, its trunks about 6 in (15 cm) thick. How much
+ground a village's wood covered is not recorded.
 
-Caveat: each crown's 8-9 ft width is a guess sized from the spacing, no page giving one.
+Guesses:
+- Each crown's width, about 8 to 9 ft: no source gives a crown's width in a worked wood, so it is sized from the
+  spacing, the neighbors just meeting.
+- That grass reaches a few feet in under a wood's first crowns and stops: no source describes a worked wood's edge.
+- That a wood's edge followed what bounded it on the ground, a brook, a lane or a field: no source on village commons or
+  their boundaries says so.
+
+Depiction: The map draws the commons as a few patches of coppice on the nearest rising ground beyond the fields, on ground
+higher than the field beside it, or on the level past the fields where there is no higher ground; never below the
+houses. Every crown is drawn at its real size, about 1,700 to the hectare (about 690 an acre), the count of a stand at
+the old end of the cutting cycle, so the wood may read a little more open than one at its cutting. No brush or pines
+stand inside. Each patch's edge wanders smoothly, a convention: no surveyed rectangle of coppice is recorded, and a
+ruled boundary bent.
 
 Name: woodland commons
 Covers: `commons[role=woodland]` - the coppice patches
-Label: accurate
-Sources: ijc-yamaguni, satoyama-enwiki, satoyama-jawiki, kotobank-murazakai, iriaichi-jawiki, miura-2019-yashikiyama, rinya-satoyama-junkan, katakura-1989-konara-coppice, migita-chiba-konara-canopy
-Entry: research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.html, research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.html; research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html, research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html
+Sources: ijc-yamaguni, iriaichi-jawiki, satoyama-enwiki, satoyama-jawiki, kotobank-murazakai, kanagawa-museum-saikyo-ezu, narumi-2002-sanron-ezu, jiao-2019-satoyama, rinya-satoyama-junkan, niigata-konara-coppice, katakura-1989-konara-coppice, migita-chiba-konara-canopy
+Entry: research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.html, research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.html
+Drawing: research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html, research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html

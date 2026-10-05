@@ -1,29 +1,24 @@
-What: Shitsuden, the wet paddy: a rice basin on ground too poorly drained to dry out, which stays waterlogged
-even in the season when no rice is growing. Its opposite is the kanden, the dry paddy, which empties to
-a dry field when the water is let out. The difference is the ground, not the crop - the same rice grows
-in both - which is why it lasts all year and is worth marking on a map.
+About: A wet paddy (shitsuden) was a rice paddy on ground that drained so badly it stayed waterlogged even when no rice
+was growing. Japanese farmers told it apart from the dry paddy (kanden), which dried out to a field once the water was let
+off. The same rice grew in both: the difference lay in the ground, and it held all year. The paddies of valley bottoms
+were generally wet, and one of deep mud had a name of its own, fukada. In a field, the wettest plots probably lay at its
+foot, since water passed from plot to plot down the slope and the lowest took what the plots above shed.
 
-Why: It lies at the foot of the field, on the drain. Water falls basin to basin down a gravity system, and in
-a traditional paddy no line can be drawn between irrigating and draining, so the plots at the bottom
-take what the plots above shed and never come dry. The dictionaries count what such ground cost: the mud is
-deep, the soil runs colder in summer and shorter of oxygen than a kanden's, no winter crop of wheat or barley
-can follow the rice, and lodging and disease leave the yield unreliable. From Meiji the state drained wet
-paddy into dry as a national undertaking, and more than two thirds of the country's paddies are said to have
-been converted - a program that size is, on our reading, the measure of how much there was, and the reason a
-map of these centuries should carry some.
+It was the poorer ground. Its standing water and deep mud made it hard to work; its soil was cooler in summer than a dry
+paddy's and short of oxygen; and its yield was unsteady, the crop falling flat before the harvest, taking disease or
+growing late. It bore one crop a year: no barley or wheat could follow the rice in winter, as it could on a dry paddy.
 
-Note: The shitsuden and kanden categories, the wetness that defines them and the penalties they carry come
-from the dictionaries, quoted in the entry. Which plots wear the tint is a drawing convention rather
-than a survey: on a comb field a share of the wet rank carries it rather than all of it, and seating the
-wettest ground at the drain foot is inferred from how water falls through the system, not stated by the
-record.
+How much of a village's paddy was wet before modern times is not recorded, but there was enough that draining it was a
+national undertaking. From the Meiji period the state drained wet paddy into dry, and afterward more than two-thirds of
+the country's paddies are said to have been dry.
 
-Caveat: Which plots wear the tint is a drawing convention rather than a survey: on a comb field a share of the
-wet rank carries it rather than all of it, and seating the wettest ground at the drain foot is inferred
-from how water falls through the system, not stated by the record.
+Depiction: The map tints a wet paddy blue-green where the other rice plots are green. The tint marks the ground, not the
+season, and not water seen between the plants. It goes on the low plots at the foot of the field, along the drain: on
+some fields every one of them, on others only some, picked at random, so a green plot beside a blue one at the foot of a
+field may be just as wet.
 
 Name: wet paddy (shitsuden)
 Covers: the plots of a `fields[kind=paddy]` drawn with open water showing - the wettest ground the field has
-Label: accurate
 Sources: kotobank-shitsuden, kotobank-kanden, kotobank-yatsuda, kotobank-fukada, fao-rice-water
-Entry: research/questions/0007-wet-paddies-that-never-drain-shitsuden.html; research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html
+Entry: research/questions/0007-wet-paddies-that-never-drain-shitsuden.html
+Drawing: research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html

@@ -28,13 +28,13 @@ from collections.abc import Iterator, Mapping, Sequence
 from concurrent.futures import ThreadPoolExecutor
 from typing import Any
 
-from . import conditions, raster
+from . import choices, conditions, raster
 from .classes import CLASSES, NOT_HIGHLIGHTED, PLACE, FeatureClass, lead_sentence, slug
 from .content import content
 from .extents import Extent, _BoxGrid, _file_extent, _refused
 from .glossary import CASED, GLOSSARY
 from .notes import EMPTY, MapNotes, read_map_notes
-from .place import HOMESTEAD_GROVE, LANE, WINDBREAK, homestead_grove_default, lane_default, place_card, windbreak_default
+from .place import HOMESTEAD_GROVE, LANE, WINDBREAK, homestead_grove_default, lane_default, place_card, retirement_fact, windbreak_default
 from .sources import research_questions
 from .tags import ClsTag, Planted, Split
 
@@ -815,23 +815,42 @@ def render_page(
     # instead of in sequence"): each is a resvg subprocess this process only waits on, so two threads overlap them - and since
     # feature 297 this thread's own work (the explanations, the place card, the defaults) runs while they render.
     f_id = pool.submit(raster.id_map, svg, raster.class_keys(svg), within is not None) if pool is not None else None
-    data = explanations(present, notes, registry, caveat_lead, meta)
+    # A HAMLET'S FEATURE MODALS ARE THE SAME ON EVERY MAP (feature 319, FR-004, plan D10): its notes' `### Features` facts
+    # and the per-map sentences below go on the title card, so a hamlet's explanations read no notes features at all
+    hamlet = str((meta or {}).get("scale") or "") == "hamlet"
+    data = explanations(present, MapNotes(place=notes.place, features={}) if hamlet else notes, registry, caveat_lead, meta)
     # THE PLACE CARD rides in the same map, under the placard's own reserved key, so the page opens it
     # through the one modal every other feature uses (feature 156). None for a tier the vocabulary does
     # not describe - and then the placard simply has nothing to open, exactly as before.
     card = place_card(meta or {}, present, notes, manifest or {})
     if card is not None:
         data[PLACE] = card
+    if hamlet and card is not None:
+        # THE CHOICES AND THE FACTS ON THE CARD (plan D10): each choice the map made, its value a link to its modal, whose
+        # entry rides in the data like a class's (no ink to light); then this settlement's own sentences
+        card["choices"] = choices.made(meta or {})
+        reg = choices.registry_for(meta or {})
+        data.update(explanations(set(reg), registry=reg, meta=meta))
+        card["facts"] = [
+            f
+            for f in (
+                windbreak_default(meta or {}) if WINDBREAK in present else "",
+                lane_default("hamlet", notes.place) if LANE in present else "",
+                homestead_grove_default(meta or {}) if HOMESTEAD_GROVE in present else "",
+                retirement_fact(meta or {}),
+            )
+            if f
+        ]
     # THE LANE'S DEFAULT DESTINATION (spec FR-021). An explicit annotation always wins - this only
     # fills in where the notes named a district but said nothing about the lanes, which is the case
     # on every hamlet in the pool.
-    if LANE in data and not data[LANE]["on_this_map"]:
+    if LANE in data and not data[LANE]["on_this_map"] and not hamlet:
         data[LANE]["on_this_map"] = lane_default(str((meta or {}).get("scale") or ""), notes.place)
     # THE WINDBREAK'S SIDE AND ITS REASON (feature 261), on the same terms: the notes' own entry wins.
-    if WINDBREAK in data and not data[WINDBREAK]["on_this_map"]:
+    if WINDBREAK in data and not data[WINDBREAK]["on_this_map"] and not hamlet:
         data[WINDBREAK]["on_this_map"] = windbreak_default(meta or {})
     # ...AND THE FARMSTEAD GROVE'S SIDES AND WHY (feature 291, FR-009): the settlement's own roll, read from the map.
-    if HOMESTEAD_GROVE in data and not data[HOMESTEAD_GROVE]["on_this_map"]:
+    if HOMESTEAD_GROVE in data and not data[HOMESTEAD_GROVE]["on_this_map"] and not hamlet:
         data[HOMESTEAD_GROVE]["on_this_map"] = homestead_grove_default(meta or {})
     if pool is not None and f_pic is not None and f_id is not None:
         try:
@@ -874,6 +893,7 @@ def render_page(
         # the dialog is always the size of its largest panel (page.css `#x-panels`).
         '<div id="x-panels"><div id="p-about" role="tabpanel" aria-labelledby="t-about"><p id="x-label" class="label"></p>'
         '<section id="x-about"></section><section id="x-what"></section><section id="x-why"></section>'
+        '<section id="x-choices" class="choices" hidden></section><section id="x-facts" class="facts" hidden></section>'
         '<section id="x-onmap" class="onmap" hidden></section><section id="x-caveat" class="caveat" hidden></section>'
         '<section id="x-siblings"></section></div>'
         '<div id="p-guesses" role="tabpanel" aria-labelledby="t-guesses" hidden><ul id="x-guesses"></ul></div>'

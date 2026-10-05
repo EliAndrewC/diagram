@@ -136,14 +136,12 @@ def test_explanations_hold_only_present_classes_and_present_siblings() -> None:
     assert data["farmhouse"]["siblings"] == [], "storage shed and byre are absent"
     # the presumption of accuracy (feature 156): an accurate class announces nothing, and the liberty
     # its record discloses rides in `caveat` instead, to be shown after the what and the why
-    assert data["copse"]["label"] == "accurate", "the classification is still recorded (constitution XII)"
-    assert data["copse"]["lead"] == "", "an accurate class leads with what the feature is, not with a claim"
+    # feature 319: every hamlet class is in the About form - no feature-level label, no lead
+    assert data["copse"]["label"] is None and data["copse"]["lead"] == "" and data["copse"]["about"]
     # feature 319: the windbreak is in the About form - no feature-level label, its guesses bullets of their own
     assert data["windbreak"]["label"] is None and data["windbreak"]["guesses"] and data["windbreak"]["caveat"] == ""
     # the notice board is the one class whose record discloses no liberty, so it shows no caveat at all
     # (settlement-review, 2026-08-29); the windbreak was one too until feature 269 K3 disclosed its two forms' guesses
-    assert data["notice board"]["caveat"] == "", "the notice board discloses no liberty - see test_classes"
-    assert data["copse"]["caveat"] == CAVEAT_LEAD + CLASSES["copse"].caveat and CLASSES["copse"].caveat
     # the references are QUESTIONS (feature 180): the sections the entry names, linked to the local page; the
     # cited keys, the citation text and the entry pointer no longer ride on the page at all
     # a map recording no knobs lists no knob-conditioned question (FR-015): the windbreak's 0031 rests on a nucleated-only guess
@@ -244,11 +242,10 @@ def test_the_wet_paddy_is_explained_apart_from_the_paddy_and_only_when_present()
     plot must show neither the class nor a sibling paragraph claiming a distinction from an absent one."""
     both = explanations({"paddy", "wet paddy"})
     assert set(both) == {"paddy", "wet paddy"}
-    assert both["paddy"]["what"] != both["wet paddy"]["what"], "two kinds, two explanations"
+    assert both["paddy"]["about"] != both["wet paddy"]["about"], "two kinds, two explanations"
     assert both["wet paddy"]["siblings"] == ["paddy"] and "wet paddy" in both["paddy"]["siblings"]
-    # the disclosure the GM's reader needs: on a comb field the tint marks a SHARE of the wet ground.
-    # It rides in the caveat, so the modal leads with what the plot is (feature 156).
-    assert both["wet paddy"]["caveat"], "the drawing liberty reaches the modal"
+    # the disclosure the GM's reader needs - how the map tints the wet ground - is the Depiction tab's (feature 319)
+    assert both["wet paddy"]["depiction"], "the drawing liberty reaches the modal"
     green_only = explanations({"paddy"})
     assert set(green_only) == {"paddy"}
     assert "wet paddy" not in green_only["paddy"]["siblings"], "a map with no blue plot claims no distinction"
@@ -715,16 +712,17 @@ def test_the_placard_opens_the_place_card() -> None:
 def test_the_lane_default_names_the_village_the_notes_name() -> None:
     notes = MapNotes(place={"district": "Hoshigaoka", "district direction": "east"}, features={})
     data = _render([PLACE, "village lane"], {"scale": "hamlet", "name": "Inashiro", "households": 15}, notes)
-    assert (
-        data["village lane"]["on_this_map"]
-        == "The connector track leads out of the hamlet toward Hoshigaoka, the main village of the district it belongs to; the lanes between the farmsteads feed it."
-    )
+    # feature 319 (plan D10): a hamlet's own sentence is the title card's, never the lane modal's
+    assert data["village lane"]["on_this_map"] == ""
+    assert "The connector track leads out of the hamlet toward Hoshigaoka, the main village of the district it belongs to; the lanes between the farmsteads feed it." in data[PLACE]["facts"]
 
 
 def test_an_authored_lane_annotation_beats_the_default() -> None:
     notes = MapNotes(place={"district": "Hoshigaoka"}, features={"village lane": "This one climbs the spur first."})
     data = _render([PLACE, "village lane"], {"scale": "hamlet", "name": "Inashiro", "households": 15}, notes)
-    assert data["village lane"]["on_this_map"] == "This one climbs the spur first."
+    assert data["village lane"]["on_this_map"] == "", "feature 319: a hamlet reads no `### Features`"
+    town = _render([PLACE, "village lane"], {"scale": "town", "name": "Ubame", "households": 400}, notes)
+    assert town["village lane"]["on_this_map"] == "This one climbs the spur first.", "a tier not yet standardized keeps its notes"
 
 
 def test_a_tier_the_vocabulary_does_not_describe_gets_no_card() -> None:
@@ -885,9 +883,10 @@ def test_the_windbreak_pop_up_names_its_side_and_an_authored_note_beats_it() -> 
     """Feature 261: the windbreak's `on_this_map` says which side the belt is on and why, unless the notes say."""
     meta = {"scale": "hamlet", "name": "Kashikawa", "households": 20, "windward": "NW", "wind_source": "regional"}
     data = _render([PLACE, "windbreak"], meta)
-    assert data["windbreak"]["on_this_map"].startswith("Here the belt stands toward the northwest of the houses")
+    # feature 319 (plan D10): the side and its reason are the title card's fact, and a hamlet reads no `### Features`
+    assert data["windbreak"]["on_this_map"] == "" and any(f.startswith("Here the belt stands toward the northwest of the houses") for f in data[PLACE]["facts"])
     notes = MapNotes(place={}, features={"windbreak": "This one is planted on the old dike."})
-    assert _render([PLACE, "windbreak"], meta, notes)["windbreak"]["on_this_map"] == "This one is planted on the old dike."
+    assert _render([PLACE, "windbreak"], meta, notes)["windbreak"]["on_this_map"] == "", "a hamlet's modal is the same on every map"
 
 
 def test_the_merges_bucket_grids_change_no_byte(monkeypatch):

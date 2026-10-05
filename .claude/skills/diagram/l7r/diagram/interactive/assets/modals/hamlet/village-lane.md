@@ -1,61 +1,48 @@
-What: A trodden earth track - packed dirt with soft worn shoulders, a single narrow way, no paving and no
-center line.
+About: A village lane was a track of bare earth, trodden hard by feet and hooves and turned to mud by rain, made for walkers,
+porters, wheelbarrows and packhorses rather than carts. In a clustered village the lanes ran among the house plots to the
+doors; among the paddies the way ran on along the bunds, the path farmers walked to weed and manure. A household whose land
+had no way to the road crossed a neighbor's land by custom.
 
-Why: Most houses in the clustered villages this record has read about are reached by a lane, but not every one - a household shut off from the road might cross a neighbor's land by custom - and no page
-states it as a rule, and the narrow lateral lanes are taken over as semi-private space by the houses
-beside them, which in this record's reading is why they are narrow and irregular (the one readable case
-is Shanghai's lane housing, a city form standing in for a village's). A lane bends like a line feet wear: as few
-turns as the plots allow, none sharp, never back on itself. The houses came first and the lanes after: a
-village lane is a footpath worn by villagers walking between homesteads already standing, and only an Imperial
-road, a planned work, may run before the houses that front it.
-And the lane leads somewhere: unless this map's notes say otherwise, a village lane runs to the main
-village of the district the settlement belongs to. Past its last farmhouse a lane stops at that house's
-dooryard, or runs on until it reaches something a reader can see - the fields, another way; it never
-trails off into empty ground. The way out to the rice does not stop at the field's edge either: among the
-paddies the way is the bund itself, the path a farmer walks to weed and manure, so the path to the fields
-runs on to the paddy's outer bund and joins it, and where a hamlet stands so close to its paddy that no
-path is left between them, its nearest lane runs on to the bund. In a row village the farms stand along a street
-instead - a street laid out first, or the line the ground gives, a natural levee or a dike.
+[lane_web=alleys] Side lanes might branch off a main lane to the houses behind, as narrow alleys did in a village crowded into a
+ravine; they probably mark a village that grew a household at a time.
 
-Note: That every house on the map is reached by a lane, but for the few reached across a neighbor's land (a share of up to a quarter, a guess, as are the limit of two such crossings in a chain, resting on the one Echigo chain the record reads, and the 3 ft within which its land must adjoin its neighbor's, and fewer once every household stands and the ways are laid, since one a way then reaches is given it; and, in a pinch, one no way can reach is reached across its nearest neighbor's yard), is the map's own simplification, and so is laying each lane in the gaps left between the homesteads, the record's own reading of a clustered village and a guess (on a village-scale map each path is found as its house is seated, before the last house stands, a deviation): the record reads lanes reaching the houses of a surveyed village, but also households with no way of their own crossing a neighbor's land by custom (an 1892 edition of local customs, mostly of plots or land rather than houses, some of them in towns), and no page states every house reached as a rule; of the two
-forms, the planned back lane is read, and alleys off the streets are read only in that surveyed village and in Enoshima, where the narrowest of alleys reached the houses behind its street, no
-general article describing side lanes to a back row; the drawn WIDTHS (3, 5 and 6 ft; a row village's street
-takes the 6 ft, a rank wider than the lanes off it, where Santome's planned roads were 6 ken, about 36 ft) are a
-map drawing CONVENTION: the footpath takes the 3
-shaku given for a field road (a traditional figure of uncertain date, not a measured one), and the spine and
-spur are a rank wider because the whole hamlet walks them, with all three kept under the 9 ft of the one cart
-road the record does measure.
-The record now carries ONE measured figure for a way of this kind - blind alleys of 2 to 4 m, about 6.5 to
-13 ft, reaching the house lots of a surveyed village - and the map deliberately draws below that band,
-because the village measured is a twentieth-century dry-plain one in the north rather than a wet-rice
-hamlet. How far a lane runs past its last farmhouse is a guess: no page read measures it or says whether a
-lane stopped at the dooryard or ran on, so the map's rule - end at the dooryard or reach something seen,
-and a lane end that reaches nothing is pulled back to the last house it serves - is its own, and how close
-counts as serving a house (within 12 ft of its house, yard or beds, or beside it within 60 ft) is a guess
-too, as is the point where the field path joins its bund, the one nearest the hamlet. A row village's street drawn along
-the field's dry edge, standing for a natural levee, a dike or a fan's foot, is this project's reading, since the
-map knows a field's margin and not a levee's line (a row along a fan's foot most of all: the record reads a row of
-villages there, not how the houses lay); its running on as the road the row stands on, and a path from each
-farm's door to it, are map drawing conventions, though where a farm with its street to the north had its gate was
-not found, so its path round the grove is a guess. The
-one width read for a way out to the fields is the one-ken (about 6 ft) farm road of a paddy replanned in
-1869 - a planned layout, not an old way measured.
+[lane_web=back_lane] A back lane might run behind the house plots, parallel to the main lane, as in planned villages; it probably
+marks a village laid out at once.
 
-Caveat: the drawn WIDTHS (3, 5 and 6 ft; a row village's street takes the 6 ft, a rank wider than the lanes
-off it, where Santome's planned roads were 6 ken, about 36 ft) are a map drawing CONVENTION: the footpath takes the 3 shaku given for a field road (a traditional
-figure of uncertain date, not a measured one), and the spine and spur are a rank wider because the whole
-hamlet walks them, with all three kept under the 9 ft of the one cart road the record does measure. The record now
-carries ONE measured figure for a way of this kind - blind alleys of 2 to 4 m, about 6.5 to 13 ft,
-reaching the house lots of a surveyed village - and the map deliberately draws below that band, because
-the village measured is a twentieth-century dry-plain one in the north rather than a wet-rice hamlet. How
-far a lane runs past its last farmhouse is a guess: no page read measures it or says whether a lane stopped
-at the dooryard or ran on, so the map's rule - end at the dooryard or reach something seen, and a lane end
-that reaches nothing is pulled back to the last house it serves - is its own, and how close counts as
-serving a house (within 12 ft of its house, yard or beds, or beside it within 60 ft) is a guess too, as is
-the point where the field path joins its bund, the one nearest the hamlet.
+[settlement_form=linear] In a row village the farms stood along a street, on one side or both: a road laid out first, or
+the line the land gave, a river's natural levee or a dike.
+
+[settlement_form=dispersed] In a scattered settlement the farmhouses stood apart among the fields, probably reached from the
+field paths, with a lane to the settlement and none between the houses.
+
+No measured width for an ordinary village lane is known. The one width given for a field road before 1868 is 3 shaku, about
+3 ft, a traditional figure of uncertain date. How far a lane ran past its last farmhouse is not recorded.
+
+Guesses:
+- [settlement_form=nucleated] That up to a quarter of the households are reached across a neighbor's land, and no more than
+  two in a chain: the custom is recorded, with one two-plot chain, but not how common it was.
+- [settlement_form=nucleated] That the lanes are the gaps left between the house plots: no account describes a village's
+  lanes so.
+- That a lane past its last farmhouse ends at the dooryard or runs on to something a reader can see: no account says how far
+  a lane ran past its last house.
+- That the path to the fields joins the paddy's outer bund at its point nearest the settlement: no account says where.
+- [settlement_form=linear] Where a farm with its grove between it and the street had its gate, and so its path round the
+  grove: not found.
+
+Depiction: The map draws every lane as a narrow single track of bare earth with soft worn edges and no line down its middle.
+A footpath is drawn about 3 ft wide, a settlement's main lane and its spur to the fields about 5 ft, and the track out to the
+wider world, or a row village's street, about 6 ft - widths kept below the one measured village alley, since that village
+was a dry-plain one far from wet-rice country. The houses are placed first and the lanes laid among them after, each pulled
+taut, with as few turns as the plots allow, none sharp, never doubling back. A lane keeps to dry ground and the bunds,
+crosses no crop or marsh, and the path to the fields runs on to the paddy's outer bund; the track out runs off the edge of
+the map. A household reached across a neighbor's yard is drawn with no lane of its own. Whether this settlement's lanes
+branch off as side lanes or run behind as a back lane is on the title card.
+
+[settlement_form=linear] A row village's street is drawn straight where it was laid out first, or along the field's dry
+edge, standing for a levee or a fan's foot, and runs on off the map as the road the row stands on.
 
 Name: village lane
 Covers: `lanes` - every lane on the map: the web, the internal skeleton, a row village's streets, the connector to the off-map road and the field spur
-Label: accurate
-Sources: kotobank-nodo, kotobank-aze-sekai-daihyakka, aze-jawiki, kotobank-keihan, kotobank-nawate, sonraku-jawiki
-Entry: research/questions/0033-row-villages-resson.html; research/questions/0033-row-villages-resson.drawing.html; research/questions/0081-village-lanes.html; research/questions/0081-village-lanes.drawing.html; research/questions/0014-bunds-between-the-paddies-aze.html; research/questions/0014-bunds-between-the-paddies-aze.drawing.html; research/sources/ re-sourcing queue (lane width)
+Sources: jarimichi-jawiki, ishidatami-jawiki, lowtech-chinese-wheelbarrow, danzhang-zhwiki, toyama-1988-road-undevelopment, aze-jawiki, kotobank-azemichi, desire-path-enwiki, wigmore-1892-servitudes, morse-1886-homes, ushijima-2020-manchu, back-lane-enwiki, sanson-jawiki, sonraku-jawiki, shinden-shuraku-kotobank, shizen-teibo-jawiki, ndl-yajima-shuraku, kotobank-ressen, village-lanes, mlit-tokaido-michi, kotobank-keihan, how-our-maps-draw-a-row-village-resson
+Entry: research/questions/0081-village-lanes.html, research/questions/0014-bunds-between-the-paddies-aze.html, research/questions/0033-row-villages-resson.html [settlement_form=linear]
+Drawing: research/questions/0081-village-lanes.drawing.html, research/questions/0014-bunds-between-the-paddies-aze.drawing.html, research/questions/0033-row-villages-resson.drawing.html

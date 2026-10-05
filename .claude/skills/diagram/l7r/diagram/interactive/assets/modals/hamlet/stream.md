@@ -1,21 +1,30 @@
-What: A natural brook off the high ground, feeding the head of the field at an intake on its bank.
+About: A brook came down off the high ground past a farming hamlet, and the hamlet's fields drank from it. Its
+irrigation ditch began at an intake on the brook's bank, but the brook was tapped, not swallowed: the old weirs mostly
+closed only half a stream, the water was divided among the fields on the dug ditch below the intake, and the brook ran
+on down its valley. What the paddies let out went back to it by their drain, to be taken up again by the fields below.
+Villages also built washing places for clothes and vegetables at the edge of a stream or a channel.
 
-Why: A village creek runs about two meters wide, six or so times the width of a field ditch; every
-watercourse on the map declares which way it flows, because downstream is a real constraint on what may
-stand beside it.
+At the size of a brook, a settlement might stand on both banks, its houses joined by small bridges, or beside the
+water on one bank; neither form was the rule. The siting lore of China and Japan wanted flowing water on one side of a
+good site. A larger river ran past a settlement and could be the boundary between villages.
 
-Note: we have drawn the stream's width by its RANK in the water hierarchy rather than by the water it carries, in
-order to keep brook, head race and ditch readable at every zoom - so junctions do not conserve width
-by this project's choice. The two choices behind this modal do not quite agree, and the record
-has not reconciled them: the width ladder (this project's earlier choice) draws a stream feeding a moat
-as wide as the moat, because the water that enters has to be carried, while the later choice sizes
-every stroke by its own rank with no coordination across a junction. The stream's type and place are read. The 2 m is not: no page read gives a village
-creek a width, and the 0.3 m it is measured against is the Rites of Zhou's finest channel, one chi - an
-ideal, not a survey - matched by a 1657 village intake of about 21 cm and by a modern design MINIMUM, the
-narrowest a canal of any grade may be built to; none of the three is a ditch anyone measured.
+How wide a village's brook ran is not recorded. For scale, the dug main canal of a farming district ran from just under
+6 ft to about 36 ft wide, and the finest ditch, the one that watered a single paddy, about a foot.
+
+Guesses:
+- Its width, about 7 ft (2 m): no account, from before modern times or after, gives the width of a village's brook, so
+  the figure is set between the field ditches and the larger canals.
+
+Depiction: The map draws the brook coming down off the high ground, passing the head of the paddies on one side and
+running on down that flank, to leave the map or to take in the fields' drain; the irrigation ditch leaves it at the
+intake, leaning downstream. Every watercourse runs one way, downhill, though the map marks no heights. The brook's
+width shows its rank among the waters - brook, canal, ditch - rather than the water it carries, so where it meets the
+head race the two widths are not matched, and the ditch may look wider than the brook that feeds it. Where the best
+site for the houses straddles the brook, they stand on both banks, each farmstead whole on one side, and the ways cross
+it squarely on plank bridges.
 
 Name: stream
 Covers: `streams` - the brook
-Label: convention
-Sources: jsslkx-002-2021, toro-site
-Entry: research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.html; research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html
+Sources: maff-toshuko-history, tabayashi-1987, maff-nogyoyosui-suiden, gujo-jsce-2017, harie-syozu, hirasawa-murazakai, unesco-xidi-hongcun, ly-likeng, jawiki-shijin-soo, kaogongji-wikisource, ishizue-jugo-yosui, minumadai-jawiki
+Entry: research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.html, research/questions/0035-villages-beside-their-stream-one-bank-or-both.html, research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.html, research/questions/0060-field-drains-akusuiro.html, research/questions/0065-washing-places-at-the-waters-edge.html
+Drawing: research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html, research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html, research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html, research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html

@@ -1,23 +1,33 @@
-What: A nursery pond where carp fry are reared, then grown on as fingerlings, before they are stocked
-into the grow-out ponds - drawn only in a fry village, its water a muddier green than a grow-out pond's.
+About: A fry pond was a nursery pond where young carp, the fry, yumiao, "fish fry", were reared before they went into the
+ponds where fish were grown on. In the Pearl River delta it belonged to one township's trade. The fry households of
+Jiujiang, in Nanhai, held the landings along the West River where the fry were netted wild, granted to them in the
+Hongzhi reign, and sold the fry to the other pond districts: its men, a saying went, traded fish fry while its women fed
+the silkworms. In 1678 fry ponds were found only in Jiujiang; elsewhere the ponds mostly raised grown fish from bought
+fry, and where villages tried to raise fry, the fry did not thrive.
 
-Why: Fry were a trade of their own in the delta, and one township's. The young carp that stocked the ponds
-were netted wild in the West River by the fry households of Jiujiang in Nanhai, who held the fry-catching
-landings on the river - taken up in the Hongzhi reign (1488-1505) - and supplied the other pond
-districts. Qu Dajun, writing in the late seventeenth century, says fry ponds were found only in Jiujiang,
-where seven parts in ten of the pond water raised fry; elsewhere the ponds mostly raised grown fish, and
-where they tried to raise fry the fry did not thrive. So the record holds two kinds of dike-pond village,
-and each hamlet rolls one: most raise grown fish and buy their fry, with no nursery ponds at all; a few are fry
-villages of the Jiujiang kind, where the smallest ponds, up to seven tenths of the pond water, are nursery ponds. Fry water was turbid and grown-fish water clear, so the color of a pond told what it held, and the map draws it so.
+Jiujiang's land lay like a chessboard, its dikes the black lines and its ponds the squares, and the color of a pond's
+water told what it held: the fry water was turbid, the grown-fish water clear. Away from the delta, a late-Ming compendium
+started bought fry about an inch long in a small pond about 10 ft square and 8 ft deep beside the big one, and carried
+them on in early summer to a middle pond 20 to 30 ft square.
 
-Note: The fry trade, the township that held it, the two kinds of village, Jiujiang's seven tenths and its turbid fry water are read, though drawing that share of the water as a share of the pond area is this project's reading and the exact shade is a convention; how many hamlets are fry
-villages is a guess, and so is taking the smallest ponds as the nursery ponds.
+Seven parts in ten of Jiujiang's pond water raised fry and three grown fish. How large its fry ponds were is not
+recorded.
 
-Caveat: drawing that share of the water as a share of the pond area is this project's reading and the exact shade is a convention; how many hamlets are fry villages is a guess, and so is taking the smallest ponds as the nursery ponds.
+Guesses:
+- That about one hamlet in four is a fry village: fry ponds are recorded only in Jiujiang, so the fry village is made the
+  rarer form, and the odds are arbitrary.
+- That a fry village's smallest ponds are its nursery ponds: which of Jiujiang's ponds held the fry is not recorded, so
+  the choice follows the graded ponds of the late-Ming method, where the fry start in the small pond.
 
+Depiction: The map draws nursery ponds only in a hamlet that raises fry for sale; most hamlets buy their fry and have
+none, and the title card says which this one is. In a fry village the smallest ponds are given to fry until they hold up
+to seven-tenths of the pond area, Jiujiang's share of its pond water read as a share of the ponds' area. A fry pond is
+drawn in grayer, muddier water than a grow-out pond, so a fry village reads as one at a glance; the exact shade is a map
+drawing convention. No small nursery pond is drawn beside a big one, that being an inland province's method, and a fry
+pond is whatever size its plot is.
 
 Name: fry pond
 Covers: the dug water of a `dikeponds[]` parcel recorded `kind: fry` - a fry village's smallest ponds
-Label: accurate
-Sources: cssn-sangyuanwei, guangdong-xinyu-22, pwsannong-zhusanjiao-nongyeshi
-Entry: research/questions/0024-fish-fry-and-nursery-ponds-yumiao.html, research/questions/0023-the-dike-pond-hamlet-its-houses-boats-and-manure-jars.html; research/questions/0024-fish-fry-and-nursery-ponds-yumiao.drawing.html
+Sources: nongzheng-quanshu-41, guangdong-xinyu-22, cssn-sangyuanwei, pwsannong-zhusanjiao-nongyeshi, zhwiki-guangdong-xinyu, zhwiki-nongzheng-quanshu
+Entry: research/questions/0024-fish-fry-and-nursery-ponds-yumiao.html
+Drawing: research/questions/0024-fish-fry-and-nursery-ponds-yumiao.drawing.html

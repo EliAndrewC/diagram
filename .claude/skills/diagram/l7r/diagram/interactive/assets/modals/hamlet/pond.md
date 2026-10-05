@@ -1,27 +1,31 @@
-What: A pond of held water behind an earthen bank. It plays one of two parts, and the map shows which by where
-it lies: above the fields and feeding them, it is the reservoir their water is drawn from; at the field's
-low foot, fed by the drainage ditch, it is where the water leaving the paddies is gathered.
+About: A reservoir pond, in Japanese a tameike, held water behind an earthen embankment, most of them to water the
+fields. It stood higher than the paddies it served, so its water reached them by gravity: in the hills a valley closed
+by a dike, often three or four strung in steps along one valley; on the plains a shallow dish pond ringed by
+embankments. Japan came to have over a hundred thousand, more built in the Edo period than in any other. A Chinese
+farming manual of 1149 has the farmer of a high field dig one where the water gathers, big enough to hold the late
+spring rains, to let out onto his crop in a drought.
 
-Why: The reservoir is the Japanese tameike - some made by closing a valley mouth with an earthen dike, each set at an
-elevation above the paddies it serves, with ONE outlet: an inclined or vertical intake pipe feeding a bottom
-conduit through the dam. The spillway is for floods, never for distribution. A pond at the foot of the field keeps the water
-that has passed through the plots, because before modern consolidation that water was used again below
-rather than thrown away.
+A pond's shallow edge carried a belt of tall water plants - reed, cattail and wild rice. The embankment above it was
+kept clear of growth for its strength: the same manual has it trodden firm by cattle, and planted with a few mulberry
+trees to shade them. When a pond was drained, by one later account, its rich mud went onto the vegetable fields and its
+fish were eaten.
 
-Note: Form and siting are read (Tabayashi 1987, the Kagawa tameike documents), and the pond's size, two or three
-parts in every ten of the field it waters, from a Song-dynasty Chinese farming manual of 1149. The SINGLE outlet,
-and the spillway's having no part in sharing the water out, are this record's reading of them: the Kagawa page
-describes the inclined or vertical intake, the bottom conduit and a works that passes heavy-rain inflow safely
-downstream, and does not itself say there is only one way out or that the spillway never serves the fields. And
-where a pond is drawn at a field's foot to gather the water leaving the fields, that siting is how the map ends its
-drainage, and the pond's bank and outlet are not drawn from a surveyed example; a pond a stream also feeds is drawn
-smaller than the manual's measure by a guess at how much; every bank is drawn bare, though the same manual also
-plants a pond's bank with a few trees - a form the map does not yet draw.
+The largest ponds covered several hectares (a hectare is about 2.5 acres); the smallest, about 33 ft on a side, were
+kept by one owner. The manual gave a pond two or three parts in every ten of the field it watered.
 
-Caveat: where a pond is drawn at a field's foot to gather the water leaving the fields, that siting is how the map ends its drainage, and the pond's bank and outlet are not drawn from a surveyed example; a pond a stream also feeds is drawn smaller than the manual's measure by a guess at how much; every bank is drawn bare, though the same manual also plants a pond's bank with a few trees - a form the map does not yet draw.
+Guesses:
+- That a pond with a stream also feeding its fields is drawn smaller than the manual's two or three tenths, and how much
+  smaller: no source says how much a feeding stream saves.
+
+Depiction: Each pond is drawn with a fringe of reeds on ground tinted wet at its shore, and its embankment bare, with no
+reed on it. A bank with a few trees, also recorded, is not drawn: every bank is bare. No reed harvest is drawn, since
+none is recorded at a pond. Each pond has one outlet and one main ditch leaving it, which forks below, on the reading
+that a pond had one way out to its fields. Where the map draws a pond at the foot of the fields, fed by their drain,
+that siting is how the map ends the drainage; a real reservoir pond stood above the fields it watered. Where a channel
+enters a pond the rim opens and the two waters are drawn as one.
 
 Name: pond
 Covers: `pond` - the tameike
-Label: accurate
-Sources: tabayashi-1987, kagawa-tameike, chenfu-nongshu-juanshang
-Entry: research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.html, research/questions/0061-reservoir-ponds-tameike.html; research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html, research/questions/0061-reservoir-ponds-tameike.drawing.html
+Sources: tameike-jawiki, inamino-tameike-museum, inamino-saraike, tabayashi-1987, chenfu-nongshu-juanshang, kotobank-chenfu-nongshu, maff-tameike-shizen, seitai-kobo-kaibori-2017
+Entry: research/questions/0061-reservoir-ponds-tameike.html, research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.html, research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.html
+Drawing: research/questions/0061-reservoir-ponds-tameike.drawing.html, research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html, research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html

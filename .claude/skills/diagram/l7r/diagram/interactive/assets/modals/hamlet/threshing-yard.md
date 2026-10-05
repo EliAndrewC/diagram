@@ -1,32 +1,36 @@
-What: A tamped-earth work floor in front of each farmhouse, drawn as the harvest leaves it: covered in straw
-mats. The rice was threshed here on mats, and the grain was then dried on mats spread over the whole
-yard - a household measured its yard in them, two to the tsubo: about 50 on an ordinary farm. Where the
-harvest weather is changeable, each household also gathers its drying rack by the house, along one side of
-the yard.
+About: The threshing yard (niwa) was the open ground on the sunny south side of a Japanese farmhouse, where the
+household threshed its harvest and dried the grain. The rice was threshed on straw mats, drawn a handful at a time through
+combs set out on them; the grain was then dried on mats spread to fill the yard, for a day to a week, and husked later
+indoors, usually as night work. In south China some households had their own floor before the house, and some villages
+shared one.
 
-Why: Threshing and drying were done per household, in the yard (though some south-China villages shared one drying floor), and the yard needs sun: a thatched roof
-pitched at 45 degrees would put a minka's ridge at about 20-22 feet (a reconstruction: no page gives the pitch or
-the height), so no yard is placed in the 39 ft band of shadow south of a neighbor's wall over a drying day taken,
-as a guess, to run from nine to three, and no canopy tree of whatever stand - the windbreak, a grove, the copse, a wood, an orchard or the farmyard's lone persimmon, the farm's own or a neighbor's - stands within 50 ft to its east, west or south, and no bamboo either, a timber bamboo standing as tall as those trees (holding a farm's own trees to that is this project's choice), and a rack never stands in the yard's southern half. Unless a map allots every household the same yard, as the planned colony at Santome did in 1696, every yard on it is different:
-each is rolled from a right-skewed spread about 25 tsubo, correlated with the household - the barley country's
-count and, in a rice district, a museum's count of about fifty mats a farm for drying the grain. Whether racks stand
-by the houses follows the weather of the region, not a village's taste: racks gathered by the house are recorded for
-a coast of changeable autumn weather, so that the threshing could be done at home, and the drying method followed the
-climate over whole regions - so every settlement in one climate draws the same; a settlement whose harvest weather
-is not stated is drawn as settled, with no rack at the house, which is this project's decision.
+At harvest the yard lay under straw mats, each about 3 by 6 ft. On the San'in coast, where the autumn weather changed
+easily, the rice-drying racks were gathered by the house so the threshing could be done at home; elsewhere they stood
+mostly out on the fields. A south-China floor was hoed level, tamped and washed with cow dung and water a few days before
+each harvest; hardly one household in a hundred laid lime and sand over it.
 
-Note: we have rendered between a third and two thirds of the straw mats that covered a yard (a yard whose
-outline or rack leaves no room for the last ones, a mat or two fewer), each with a little bare
-ground around it, most laid a little askew, as by hand, in order to keep them legible: at this scale dozens of mats laid edge to edge would read as a textured
-floor rather than as mats, so the drawing shows a smaller number to give the impression of many. The real yard at
-harvest was covered, 40 to 60 mats of about 3 by 6 feet each on an ordinary barley-country farm and 100 to 150 on a
-large one. The
-mats' size is read, and the yard's lopsided spread is read from registers of houses and homestead lots, since no survey counts yards; the yard's size rests on two undated records of remembered practice, a calibration and this project's choice; the rows the mats are laid in are a guess - no source read
-says; and where a map draws racks by the houses, which side of the yard a rack takes and how far along it the rack runs are guesses too, and the rack is
-drawn wider than its poles so that it reads.
+A household measured its yard in mats, two to the tsubo: forty to sixty on an ordinary farm, or about 700 to 1,100 sq ft,
+and past a hundred, over 1,800 sq ft, on a few. Most yards were near the middle and a few far larger; a larger household
+had a larger yard, though not in proportion. In one planned colony laid out by 1696, every settler's homestead was the
+same.
+
+Guesses:
+- That no yard is smaller than about 280 sq ft: no source gives the smallest yard a farm kept.
+- That the mats lay in rows: no account says whether they lay edge to edge, in rows or with walkways between.
+- Where a rack stands by the house, which side of the yard it takes and how far along it runs: no source says where a
+  rack stood by a house, or how much rack a household put up.
+
+Depiction: The map draws each yard beside its house as the harvest left it, part-covered in straw mats: between a third and
+two thirds of the mats a real yard held, each with a little bare ground around it and most a little askew, as laid by
+hand, since dozens of mats edge to edge would read as a textured floor rather than as mats. Each yard's size is drawn at
+random about the ordinary middle, a few much larger, a larger household's mostly larger. Every yard is kept in the sun,
+clear of the shade a neighbor's house, a tree or bamboo casts in autumn. Where the harvest weather is changeable (the title
+card says this settlement's), a rice-drying rack stands along one side of each yard, never on its sunny half, drawn wider
+than its poles so it can be seen. No racks are drawn out on the fields, where they stood only in the month after the
+harvest.
 
 Name: threshing yard
 Covers: `threshing_yards` - the floor, its mats, and the rack by the house where the harvest weather is changeable
-Label: convention
-Sources: kitamoto-inakoki-niwa, kitamoto-mushiro-niwa, tobunken-mushiro, nishimura-makino-1959
-Entry: research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.html, research/questions/0016-rice-drying-racks-hasa-hasagi.html; research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html, research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html, research/questions/0016-rice-drying-racks-hasa-hasagi.drawing.html
+Sources: kitamoto-inakoki-niwa, kitamoto-mushiro-niwa, ehime-mushiroboshi, tobunken-mushiro, kotobank-yashiki, wenxuecity-shaigupin, weilongwu-zhwiki, kotobank-hasa-nipponica, nishimura-makino-1959, kamikanai-1771-houses, kikoba-kenchi, santome-shinden-allotment
+Entry: research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.html, research/questions/0016-rice-drying-racks-hasa-hasagi.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.html
+Drawing: research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html, research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html, research/questions/0016-rice-drying-racks-hasa-hasagi.drawing.html

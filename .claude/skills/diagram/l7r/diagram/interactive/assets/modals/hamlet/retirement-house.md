@@ -1,26 +1,29 @@
-What: A small thatched dwelling standing a few paces off its farmhouse, in the same homestead, with a door of its
-own: the retirement house, where the old couple lived once they had handed the farm to their heir.
+About: A retirement house (inkyoya) was where a farm's old couple lived once they had handed the farm to their heir. In
+much of Japan they did not stay under the heir's roof: on retirement, inkyo, they moved out to a house of their own, and the
+two often kept separate meals and purses - one family living as two households.
 
-Why: In much of the country the old couple did not stay under the heir's roof. On inkyo, retirement, they moved
-out to a small house of their own, and most such houses stood inside the family's own house plot, with a separate
-entrance - often with separate meals and purse too, one family living as two households. The custom was strongest
-from the Pacific coast through the Inland Sea, above all in Kyushu and Shikoku; in the northeast and along the Sea
-of Japan coast the generations stayed together under one roof. Both forms are attested, so each settlement rolls one from its seed, and a
-settlement that keeps the custom draws a retirement house in some of its homesteads. It belongs to its farmhouse's
-household: it is not counted as a household of its own, so the map's household count is the farmhouses.
+Most retirement houses stood inside the family's own house plot, with an entrance of their own. What one was built of,
+and how it was laid out inside, is not recorded.
 
-Note: The two family forms, and that the retirement house stood inside the family's own house plot with its own
-entrance, are read, and so is that where the custom was kept thoroughly every house had one; the share of
-homesteads that keep one across a region, how the two forms are weighted in the roll, the house's size (about 18 by
-15 feet), its distance from the farmhouse (one or two ken) and its seat off the back wall or a flank rather than the
-front, and which of those three sides, are guesses: no page read gives them.
+The custom was strong from the Pacific coast through the Inland Sea, above all in Kyushu and Shikoku, and thin in the
+northeast and along the Sea of Japan coast, where the generations stayed together under one roof. Where it was kept
+thoroughly, every house had one; in one village east of Edo, counted just after the Edo period and read back to its last
+years, 8 of 16 households had one. How big a retirement house was is not recorded.
 
-Caveat: the share of homesteads that keep one across a region, how the two forms are weighted in the roll, the
-house's size (about 18 by 15 feet), its distance from the farmhouse (one or two ken) and its seat off the back wall
-or a flank rather than the front, and which of those three sides, are guesses: no page read gives them.
+Guesses:
+- Its size on the map, about 18 by 15 ft: no source gives a retirement house's size, so it is drawn as a room or two with
+  an earth-floored entry, well under the farmhouse.
+- How many of a settlement's homesteads keep one: no share across a region was found, so where the custom is kept the map
+  gives one to some homesteads, not every one, since a household had a retired couple for only part of its life.
+- Which side of the farmhouse it stands on, and how far off: no source gives either.
+
+Depiction: The map draws a retirement house as a small farmhouse, its roof in the farmhouse's own two shades of thatch,
+standing off the back wall or one flank of its farmhouse with its door on the side away from it, its own entrance; what a
+real one's roof was is not recorded. It belongs to its farmhouse's family, so it is not counted as a household; the title
+card says whether this settlement keeps the custom.
 
 Name: retirement house
 Covers: `retirement_houses` - the retired couple's own roof in the homestead
-Label: accurate
-Sources: kotobank-inkyo, kotobank-inkyoya
-Entry: research/questions/0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html; research/questions/0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.drawing.html
+Sources: kotobank-inkyo, oamishirasato-choshi-kaoku
+Entry: research/questions/0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.html
+Drawing: research/questions/0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.drawing.html

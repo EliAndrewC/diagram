@@ -13,12 +13,17 @@ DISPERSED = {"settlement_form": "dispersed"}
 
 
 def test_a_condition_is_read_off_the_item_and_held_against_the_map() -> None:
-    assert conditions.split("[settlement_form=nucleated|linear] A guess.") == (("settlement_form", ("nucleated", "linear")), "A guess.")
+    assert conditions.split("[settlement_form=nucleated|linear] A guess.") == ((("settlement_form", ("nucleated", "linear")),), "A guess.")
+    both = "[settlement_form=nucleated][lane_web=alleys] Both."
+    assert conditions.split(both) == ((("settlement_form", ("nucleated",)), ("lane_web", ("alleys",))), "Both.")
+    assert conditions.shown([both], {"settlement_form": "nucleated", "lane_web": "alleys"}) == ["Both."]
+    assert conditions.shown([both], {"settlement_form": "linear", "lane_web": "alleys"}) == [], "every condition must hold"
     assert conditions.split("A plain guess.") == (None, "A plain guess.")
     assert conditions.shown(["[settlement_form=nucleated] Only here.", "Everywhere."], NUCLEATED) == ["Only here.", "Everywhere."]
     assert conditions.shown(["[settlement_form=nucleated] Only here.", "Everywhere."], DISPERSED) == ["Everywhere."]
     assert conditions.shown(["[settlement_form=nucleated] Only here."], {}) == [], "a map recording no value shows none of the knob's items"
-    assert conditions.label(("settlement_form", ("nucleated", "linear"))) == "(only where settlement_form is nucleated or linear)"
+    assert conditions.label((("settlement_form", ("nucleated", "linear")),)) == "(only where settlement_form is nucleated or linear)"
+    assert conditions.label((("a", ("x",)), ("b", ("y",)))) == "(only where a is x and b is y)"
 
 
 def test_a_malformed_condition_is_refused_rather_than_shown() -> None:
@@ -27,19 +32,21 @@ def test_a_malformed_condition_is_refused_rather_than_shown() -> None:
 
 
 def test_an_entry_path_with_a_condition_is_dropped_where_it_fails() -> None:
-    entry = "research/questions/0072-a.html, research/questions/0031-b.html [settlement_form=nucleated]"
+    entry = "research/questions/0072-a.html, research/questions/0031-b.html [settlement_form=nucleated][lane_web=alleys|back_lane]"
     assert conditions.strip_entry(entry) == "research/questions/0072-a.html, research/questions/0031-b.html"
-    assert conditions.shown_entry(entry, NUCLEATED) == "research/questions/0072-a.html, research/questions/0031-b.html"
+    assert conditions.shown_entry(entry, {**NUCLEATED, "lane_web": "alleys"}) == "research/questions/0072-a.html, research/questions/0031-b.html"
+    assert conditions.shown_entry(entry, NUCLEATED) == "research/questions/0072-a.html", "a map recording no lane_web"
     assert conditions.shown_entry(entry, DISPERSED) == "research/questions/0072-a.html"
 
 
 def test_an_unknown_knob_or_value_is_refused_with_the_registry_s_words() -> None:
     assert "nucleated" in conditions.knobs()["settlement_form"], "the populated registry"
-    conditions.check("x", [None, ("settlement_form", ("nucleated",))])
+    conditions.check("x", [None, (("settlement_form", ("nucleated",)),), (("harvest_weather", ("changeable",)),)])
+    assert "head_center" in conditions.knobs()["water_source_position"], "a manifest value beyond the registry, from the table"
     with pytest.raises(ValueError, match="names no registered knob"):
-        conditions.check("x", [("settlement_shape", ("nucleated",))])
+        conditions.check("x", [(("settlement_shape", ("nucleated",)),)])
     with pytest.raises(ValueError, match=r"\['clustered'\] not among settlement_form's forms"):
-        conditions.check("x", [("settlement_form", ("clustered",))])
+        conditions.check("x", [(("settlement_form", ("clustered",)),)])
 
 
 def test_the_windbreak_s_shared_wood_guess_and_its_question_show_only_on_a_clustered_map() -> None:
