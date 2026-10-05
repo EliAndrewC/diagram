@@ -43,6 +43,8 @@ from __future__ import annotations
 import inspect
 import os
 import re
+
+from .. import conditions
 from dataclasses import dataclass, field
 from typing import ClassVar, Literal, cast
 
@@ -346,6 +348,12 @@ def _about_feature(name: str, key: str, parts: dict[str, str]) -> FeatureClass:
     raw_guesses = parts.get("Guesses", "")
     if raw_guesses and not all(line.startswith("- ") for line in raw_guesses.splitlines()):
         raise ValueError(f"{name}: each guess is a bullet - start every line under Guesses: with '- '")
+    # A KNOB CONDITION (FR-015, plan D14) opens an item: its form is checked here, its knob and values when a page is written
+    for item in (*about_paragraphs(parts["About"]), *about_paragraphs(parts.get("Depiction", "")), *guess_bullets(raw_guesses)):
+        try:
+            conditions.split(item)
+        except ValueError as err:
+            raise ValueError(f"{name}: {err}") from None
     return FeatureClass(
         key=key,
         name=parts["Name"],

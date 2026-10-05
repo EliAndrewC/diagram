@@ -15,6 +15,7 @@ import re
 
 import pytest
 
+from l7r.diagram.interactive import conditions
 from l7r.diagram.interactive.classes import CLASSES, PLACE
 from l7r.diagram.interactive.notes import EMPTY, MapNotes
 from l7r.diagram.interactive.page import (
@@ -145,7 +146,8 @@ def test_explanations_hold_only_present_classes_and_present_siblings() -> None:
     assert data["copse"]["caveat"] == CAVEAT_LEAD + CLASSES["copse"].caveat and CLASSES["copse"].caveat
     # the references are QUESTIONS (feature 180): the sections the entry names, linked to the local page; the
     # cited keys, the citation text and the entry pointer no longer ride on the page at all
-    assert data["windbreak"]["questions"] == research_questions(CLASSES["windbreak"].entry)
+    # a map recording no knobs lists no knob-conditioned question (FR-015): the windbreak's 0031 rests on a nucleated-only guess
+    assert data["windbreak"]["questions"] == research_questions(conditions.shown_entry(CLASSES["windbreak"].entry, {}))
     assert any(
         q["text"].startswith("Groves around a southern Chinese village") and q["url"].startswith(SITE_PAGES + "q/groves-around-a-southern-chinese-village") for q in data["windbreak"]["questions"]
     )

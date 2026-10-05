@@ -18,13 +18,13 @@ Of the woods that survive, a Fujian village commonly keeps about two, a Hong Kon
 28,000 sq ft.
 
 Guesses:
-- That a clustered village sheltered behind one shared wood, rather than a grove for each house: no source says which a
+- [settlement_form=nucleated] That a clustered village sheltered behind one shared wood, rather than a grove for each house: no source says which a
   village of farmhouses packed close together kept; in the loosely clustered villages of eastern Japan each house stood in a grove of its own.
 - That a settlement's wood is conifer-led or broadleaf at even odds, that conifers outnumber the other trees in the conifer-led form, and
   that bamboo is about one plant in twelve: no source gives a village belt's share (in one Tonami hamlet's farmhouse groves
   nearly half the trees were cedar), and every survey of the conifer-led form is of farmhouse groves, not of a belt for a whole village.
 
-Depiction: The map draws a belt along the windward edge of each cluster of houses, not a grove at each house (a guess: see Guesses),
+Depiction: The map draws a belt along the windward edge of each cluster of houses, not a grove at each house,
 on the one or two sides the winter wind comes from - the northwest unless the place has a wind of its own - and never carries it round the houses. It is drawn in one of two
 forms, darker conifers set in rows with broadleaf trees among them or an irregular wood of rounded crowns, with a little bamboo
 between the crowns shown by paired strokes, since a real culm is too slim to see; the title card says which form this
@@ -39,5 +39,5 @@ off the sun of the farmyards and kitchen beds.
 Name: windbreak forest
 Covers: `village_groves[role=windbreak]`
 Sources: afcd-ncsc-9-06, hk-herbarium-fsw, tonami-kainyoclub, miura-2019-yashikiyama, yashikirin-jawiki, irie-2020-igune, forests-2020, hu-2011-fengshui-patches, coggins-minor-2018, takehara-2004-yashikirin, tonami-yashikirin-haichi, sendai-igune-modelplan, bian-li-huizhou-forest-steles, maff-tarama-giahs, kashima-kainyo-1987, jpgreen-byobuzan, kotobank-shuson
-Entry: research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.html, research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.html, research/questions/0245-who-kept-a-southern-chinese-villages-fengshui-woods-and-what-could-villagers-take-from-them.html, research/questions/0075-bamboo-groves-chikurin.html, research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.html, research/questions/0124-farmsteads-at-a-town.html, research/questions/0031-clustered-and-scattered-villages-shuson-sanson.html
+Entry: research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.html, research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.html, research/questions/0245-who-kept-a-southern-chinese-villages-fengshui-woods-and-what-could-villagers-take-from-them.html, research/questions/0075-bamboo-groves-chikurin.html, research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.html, research/questions/0124-farmsteads-at-a-town.html, research/questions/0031-clustered-and-scattered-villages-shuson-sanson.html [settlement_form=nucleated]
 Drawing: research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html, research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html, research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html, research/questions/0075-bamboo-groves-chikurin.drawing.html, research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html

@@ -69,7 +69,8 @@ recorded"), and the figure the map draws is a guess bullet (M11). Never a figure
 
 **M9. One account for every map.** A hamlet modal is the same on every map: nothing in it is true of one settlement only. What
 varies by settlement - nucleated or dispersed, back lane or side alleys, which bamboo, the harvest weather, how many keep a
-retirement house - is on the settlement's title card, where each choice opens its own modal. About may say in a clause that a
+retirement house - is on the settlement's title card, where each choice opens its own modal. The one exception is M22: an item conditioned on the settlement's knobs, shown only where it holds
+- so two maps with the same values for those knobs show the same modal. About may say in a clause that a
 thing varies by settlement and that the title card says how ("how the houses are grouped differs by settlement; the title
 card says how this one is laid out"). (GM: *"our settlement maps to just all pull from a standardized set of modals. And not
 to get customized modals. For anything"*)
@@ -168,3 +169,12 @@ docstring. (inferred, feature 134's sibling links)
 hand-drawn building plans are not these maps. Refused when the modal is read (`_base.py` `OLDER_MAPS`), so no agent judges
 it. (GM 2026-10-04: *"by the time any one other than me looks at these, then those older hand-drawn maps will no longer exist.
 They will have all been replaced by scripted maps. Therefore, one of our rules should be that this does not get mentioned"*)
+
+**M22. An item that holds only for some settlements carries a knob condition.** A guess bullet, a paragraph of About or
+Depiction, or an `Entry:` path that is true only of some settlement forms (or other knob values) opens - a path: ends - with
+`[knob=value]` or `[knob=value|value]`, and the page shows it only on a map whose recorded value of that knob is among them;
+a question resting only on such an item carries the same condition on `Entry:`, so References follow what is shown. Nothing
+else in the item changes: it is written as one standard text, never for one map. The knob and values are checked against the
+registered knobs when a page is written (`interactive/conditions.py`), and the checks read each item with its condition.
+(GM 2026-10-05: *"Could we make that kind of item still automatic but dependent on the "knobs" for a settlement in cases where
+that is relevant?"*)

@@ -24,11 +24,11 @@ import json
 import math
 import os
 import re
-from collections.abc import Iterator, Sequence
+from collections.abc import Iterator, Mapping, Sequence
 from concurrent.futures import ThreadPoolExecutor
 from typing import Any
 
-from . import raster
+from . import conditions, raster
 from .classes import CLASSES, NOT_HIGHLIGHTED, PLACE, FeatureClass, lead_sentence, slug
 from .content import content
 from .extents import Extent, _BoxGrid, _file_extent, _refused
@@ -497,26 +497,32 @@ def present_classes(tags: Sequence[ClsTag]) -> set[str]:
     return keys
 
 
-def explanations(present: set[str], notes: MapNotes = EMPTY, registry: dict[str, FeatureClass] = CLASSES, caveat_lead: str = CAVEAT_LEAD) -> dict[str, dict[str, Any]]:
+def explanations(present: set[str], notes: MapNotes = EMPTY, registry: dict[str, FeatureClass] = CLASSES, caveat_lead: str = CAVEAT_LEAD, meta: Mapping[str, Any] | None = None) -> dict[str, dict[str, Any]]:
     """The embedded data: one entry per present class, in vocabulary order, with only the sibling
     paragraphs whose OTHER class is also present (spec US4 scenario 4 - an absent sibling is never
     claimed). A present key the registry does not know gets a stub that says so, never silence.
     `registry` is the hamlet vocabulary unless a Mode A sheet passes its own (feature 262), and `caveat_lead` the words
     the caveat opens with - a Mode A caveat is as often about the research as the drawing (building-review, feature 262)."""
     out: dict[str, dict[str, Any]] = {}
+    knobs = meta or {}
     for key, fc in registry.items():
         if key not in present:
             continue
+        # THE KNOB-CONDITIONED ITEMS (FR-015, plan D14): an item, or an Entry path, carrying [knob=value] is kept only where
+        # this map's manifest records that value; the knob and values are checked against the populated registry here
+        conds = [conditions.split(i)[0] for i in (*fc.about, *fc.depiction, *fc.guesses)] + list(conditions.entry_conditions(fc.entry).values())
+        conditions.check(fc.name, conds)
+        entry = conditions.shown_entry(fc.entry, knobs) if conditions.entry_conditions(fc.entry) else fc.entry
         out[key] = {
             "name": fc.name,
             "what": fc.what,
             "why": fc.why,
             # THE ABOUT FORM (feature 319): the About tab's paragraphs and the Guesses tab's bullets; empty on an old-form
             # class, which page.js shows in its About tab as before (lead, what, why, caveat)
-            "about": list(fc.about),
-            "guesses": list(fc.guesses),
+            "about": conditions.shown(fc.about, knobs),
+            "guesses": conditions.shown(fc.guesses, knobs),
             # THE DEPICTION TAB (plan D13): how the map draws it, and the "how our maps draw it" pages, as links
-            "depiction": list(fc.depiction),
+            "depiction": conditions.shown(fc.depiction, knobs),
             "drawing": research_questions(fc.drawing) if fc.drawing else [],
             # `lead` is empty for an `accurate` class (feature 156) - see `classes.lead_sentence`.
             # `caveat` is the liberty its record discloses, shown after the why; `label` stays so the
@@ -534,7 +540,7 @@ def explanations(present: set[str], notes: MapNotes = EMPTY, registry: dict[str,
             # sources those sections cite no longer ride on the page - a reader reaches them through
             # the question's own page - and neither does the entry pointer, which the modal used to
             # print as a "Record:" footer. Both stay in the registry as the record (constitution XII).
-            "questions": research_questions(fc.entry),
+            "questions": research_questions(entry),
             # siblings are LINKS now (hover lights the other class, click opens its modal); the
             # distinguishing texts stay in the registry as the record, not on the page
             "siblings": [other for other in fc.siblings if other in present],
@@ -809,7 +815,7 @@ def render_page(
     # instead of in sequence"): each is a resvg subprocess this process only waits on, so two threads overlap them - and since
     # feature 297 this thread's own work (the explanations, the place card, the defaults) runs while they render.
     f_id = pool.submit(raster.id_map, svg, raster.class_keys(svg), within is not None) if pool is not None else None
-    data = explanations(present, notes, registry, caveat_lead)
+    data = explanations(present, notes, registry, caveat_lead, meta)
     # THE PLACE CARD rides in the same map, under the placard's own reserved key, so the page opens it
     # through the one modal every other feature uses (feature 156). None for a tier the vocabulary does
     # not describe - and then the placard simply has nothing to open, exactly as before.

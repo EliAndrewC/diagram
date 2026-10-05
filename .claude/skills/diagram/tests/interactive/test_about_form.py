@@ -173,3 +173,13 @@ def test_a_sheets_hand_drawn_plans_and_an_old_house_are_not_the_older_maps() -> 
         assert Probe.feature().about
     finally:
         Kind.registry.remove(Probe)
+
+
+def test_a_malformed_knob_condition_is_refused_when_the_modal_is_read() -> None:
+    """FR-015: a condition's form is checked at read, so a typo never reaches a reader as text (M22)."""
+    Probe = _probe("About: a.\n\nGuesses:\n- [Settlement Form=nucleated] a guess.\n\n" + _DATA)
+    try:
+        with pytest.raises(ValueError, match=r"written \[knob=value\]"):
+            Probe.feature()
+    finally:
+        Kind.registry.remove(Probe)

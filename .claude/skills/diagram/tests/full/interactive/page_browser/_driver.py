@@ -5,6 +5,7 @@ from __future__ import annotations
 
 from typing import Any
 
+from l7r.diagram.interactive import conditions
 from l7r.diagram.interactive.classes import CLASSES, PLACE
 from l7r.diagram.interactive.tags import Split
 
@@ -111,7 +112,7 @@ def _mechanics(page: Page, present: list[str]) -> None:
             # FEATURE 319's ABOUT FORM: no feature-level label and no lead; the About tab carries the paragraphs and the
             # Guesses tab exactly the guesses (dev/modals.md M11)
             assert d["label"] is None and d["labeltext"] == "", f"{key}: an About-form class announces no label"
-            assert CLASSES[key].about[0][:30] in d["about"] and d["guesses"] == list(CLASSES[key].guesses)
+            assert CLASSES[key].about[0][:30] in d["about"] and d["guesses"] == conditions.shown(CLASSES[key].guesses, {})
             for other in CLASSES[key].siblings:
                 assert (("the " + CLASSES[other].name) in d["siblings"]) == (other in present), (key, other)
             page.page.keyboard.press("Escape")

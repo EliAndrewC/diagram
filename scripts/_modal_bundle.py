@@ -114,6 +114,15 @@ def candidates(root: pathlib.Path, m: mo.Modal) -> list[tuple[int, str, str, lis
     return sorted(out, key=lambda c: (-c[0], c[1]))
 
 
+#: a knob condition opening a modal item (FR-015, plan D14), shown to a check as "(only where <knob> is <value>)" - the
+#: same form `interactive/conditions.py` reads; this is tooling, so it does not import the engine
+_COND = re.compile(r"(^|^- )\[([a-z_]+)=([a-z_]+(?:\|[a-z_]+)*)\]\s*", re.M)
+
+
+def _conditions_shown(text: str) -> str:
+    return _COND.sub(lambda m: f"{m.group(1)}(only where {m.group(2)} is {' or '.join(m.group(3).split('|'))}) ", text)
+
+
 def render(root: pathlib.Path, m: mo.Modal) -> str:
     """The modal as its reader meets it: the heading, each tab's text, and the questions the References tab lists."""
     lines = [f"# {m.tags.get('Name', m.key)}", "", f"class `{m.cls}` (key `{m.key}`), form `{m.form}`, origin `{m.origin}`", "", "## About", ""]
@@ -134,7 +143,7 @@ def render(root: pathlib.Path, m: mo.Modal) -> str:
         p = root / SKILL / f
         lines.append(f"- {heading(p.read_text(encoding='utf-8')) if p.is_file() else '(MISSING FILE)'}  - `{f}`")
     lines += ["", f"Sources: {m.tags.get('Sources', '')}", ""]
-    return "\n".join(lines)
+    return _conditions_shown("\n".join(lines))
 
 
 def prepass(root: pathlib.Path, m: mo.Modal) -> str:
