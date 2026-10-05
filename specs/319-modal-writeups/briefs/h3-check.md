@@ -2,7 +2,7 @@
 # Brief - feature 319 (modal write-ups), H3, session 2: check and apply
 
 You are a FRESH session for one part of feature 319. This brief is the whole of what you need. Work in this clone
-(`/diagram/.clones/diagram-html`); the project's CLAUDE.md files apply to you, the research record's `CLAUDE.md` above all.
+(`/diagram/.clones/diagram-html-2`); the project's CLAUDE.md files apply to you, the research record's `CLAUDE.md` above all.
 
 **What moved.** Session 1 settled record conflicts on dike-ponds and polders (0018, 0019, 0020, 0027). Its handoff is `specs/319-modal-writeups/briefs/h3-handoff.md`. A `Research:` claim in the engine that cites a changed block is owed a claims re-check at the push, not by you: leave it. The `hamlet/...`, `choice/...` and `sheet/...` modal units are not yours.
 
