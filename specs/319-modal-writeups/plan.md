@@ -100,17 +100,33 @@ GM's verdict is recorded in `tasks.md` under the pilot; changes go to the guidel
 apply) before the modal. The farmhouse first, the garden second, a further feature only if the garden's first rewrite needs
 changes; the rollout waits for the GM's go-ahead. (FR-010, FR-012)
 
-**D10 - The title card's choices (phase after the pilots; sketch, settled then).** The manifest's `meta` already holds every
-rolled or declared knob value (`settlement_form`, `lane_web`, `bamboo`, `harvest_weather`, `byre_form`, `hamlet_burial`,
-`family_form` ...). A declared table (`interactive/assets/choices.json`) names which meta keys are choices - EVERY per-settlement choice,
-rolled, declared or pinned (FR-009's "every"); it separates choices from the meta's other keys (measurements, counts) and
-leaves no knob off - a test holds every knob `settlement/_knobs.py` declares and every meta key a `### Features` fact came from
-in the table -
-their reader-facing name, and for each value the key of its modal; each value's modal is a class in a new registry
-(`interactive/choices/`) in the new form, standardized across maps. The per-map `### Features` facts of the five hamlets
-become choices (burial ground form, harvest weather, the retirement-house custom) or a title-card count ("10 of its 15
-homesteads have a retirement house"); the page stops reading `### Features` for a hamlet, and a test holds that no hamlet
-feature modal differs between two pool maps. (FR-004, FR-009)
+**D10 - The title card's choices (settled 2026-10-05, after the go-ahead).** Measured first: the populated knob registry
+holds 22 knobs (`interactive/conditions.knobs()`, which imports every module calling `register_knob(`); the five pool hamlets'
+manifests record 14 to 18 of them in `meta`, plus two declared choices that are not knobs - `harvest_weather` (settled |
+changeable, `hamletgen/consts.py` `HARVEST_WEATHERS`) and `hamlet_burial` (village_ground, `hamletgen/burial.py` `BURIAL_FORMS`);
+`water_source_position` takes hamlet values outside the knob's registry (head_center, head_right, corner_high).
+- **The table.** `interactive/assets/choices.json` lists every choice in reading order: its meta key, its reader-facing name,
+  and its values, each value's reader-facing label. Every registered knob is in it, both declared choices, and every value the
+  registry or a pool manifest gives. A knob that is a DEGREE along a continuum rather than a choice between forms (constitution
+  XII's distinction: `grain_drift`, the field's turn in degrees) takes ONE modal for the knob, written once, its value shown
+  as the label; every other key takes one modal per value. A test reads the populated registry and the pool manifests and
+  fails on a knob, a value or a modal file the table or the modal directory lacks.
+- **The modals.** `interactive/assets/modals/choice/<key>--<value>.md` (or `<key>.md` for a degree), in the About form, read by
+  the same parser; a registry `interactive/choices.py` keyed `choice:<key>=<value>` (or `choice:<key>`); written to the same
+  guidelines and checks as a feature modal (the modal checks discover them by their files, `choice/<slug>`, beside
+  `hamlet/` and `sheet/`).
+- **The card.** `place_card` gains `choices` - each of the map's recorded choices with its name, its value's label and the key
+  of its modal - and `facts`, this settlement's own sentences: the windbreak's side and why (the GM's wording of 2026-10-05,
+  moved from the windbreak modal), where the lanes lead (moved from the lane modal), which sides the farm groves take (moved
+  from the homestead grove modal), and "10 of its 15 homesteads have a retirement house" from `meta.retirement_houses`. The
+  page draws the choices as a list on the card's About tab, each value a link opening its modal in the same dialog, the facts
+  beneath. The choice modals ride in the page's data like a class's, with no ink to light.
+- **The `### Features` facts.** On a hamlet the page reads no `### Features` and writes no `on_this_map`: the five hamlets'
+  facts are covered by the choices (harvest weather, where the dead lie) and the retirement count; the blocks are removed from
+  their notes (two of them - Inashiro's and Kashikawa's own burial grounds - were stale: `burial.py` draws no hamlet ground and
+  records `village_ground`). Other tiers keep reading theirs until they are standardized. A test holds that the explanations of
+  every hamlet class are identical across the five pool maps' `meta` once FR-015's conditioned items are set aside (FR-004,
+  FR-009, SC-004).
 
 **D11 - Sheets (phase after the hamlet rollout).** Every compound kind is tagged `Form: particular` or left standard by
 `particulars.py` membership and by each kind's content (a kind particular to the setting even if on several sheets is
