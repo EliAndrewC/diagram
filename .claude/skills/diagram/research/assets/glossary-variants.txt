@@ -429,6 +429,7 @@ cho-hanare	machi-hanare
 chobu	cho
 chodaigamae	nando-gamae
 chome	chome
+chongning	Chongning
 chongsheng hall	Chongsheng shrine
 chongsheng halls	Chongsheng shrine
 chongsheng shrine	Chongsheng shrine
@@ -2145,6 +2146,7 @@ laths	lath
 laurel forest	laurel forest
 laurel forests	laurel forest
 leaf litter	forest litter
+leaf mulberry	leaf mulberry
 leat	leat
 leats	leat
 legacy of ieyasu	hundred articles
