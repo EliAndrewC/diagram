@@ -4083,6 +4083,8 @@ wallows	wallow
 wamyo ruijusho	Wamyosho
 wamyosho	Wamyosho
 wamyōshō	Wamyosho
+wanchun	Wanchun polder
+wanchun polder	Wanchun polder
 wang zhen	Wang Zhen
 wang zhen's	Wang Zhen
 wanghuolou	wanghuolou
