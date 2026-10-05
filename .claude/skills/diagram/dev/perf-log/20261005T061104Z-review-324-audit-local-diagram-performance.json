@@ -1,0 +1,67 @@
+{
+  "band": 3,
+  "base": {
+    "commit": "8c61b03ae",
+    "label": "324-start",
+    "utc": "20261005T060216Z"
+  },
+  "binding": "394ce9efc5e787a4e211b5cbdb73f367016bed6fef062a79a7e50edf50bb5bae",
+  "criteria": {
+    "commensurate": "The cost in the snapshot is nil: seed 4, the crossing seed, alternated base vs end in worktrees, six rounds each, totals 6.05s vs 6.05s mean and field 1.15s vs 1.08s, against the bookend's 5.9->7.3s and 1.21->1.91s. The base alone moved 16.8->24.9s between its 04:21 and 06:02 bookends. The feature's real costs are outside the snapshot, accepted by the GM on the proposal's numbers: render 2.2->3.2s for a ~970->~540MB peak, render-step 57->72s detached for a p90 889->448MB footprint (research R2).",
+    "necessary": "No work of feature 324 causes the measured increase: a reference roll of seeds 4/25/39/47 at 1833871ef with raster.picture, raster.resvg_png and render_cache.regen_pool rigged to raise completed, so nothing in the diff (raster.py tile scheduling and stitch child, render_cache.py pool width) runs in a timed stage. The feature itself is the GM's 2026-10-05 request (specs/324-render-memory/request.md, all three memory fixes).",
+    "no_way_around": "Nothing to get around in the measured stages, which run the same code (the session's control: 3,403,625 / 3,082,225 primitive calls in homesteads/web, base = clone). The out-of-snapshot render trade was measured at 2, 3 and 4 tiles (R2: 4.3s/450MB, 3.2s/540MB, 3.2s/635MB) - 3 is the cheapest point on that curve for its memory."
+  },
+  "end": {
+    "commit": "1833871ef",
+    "label": "324-end",
+    "utc": "20261005T060545Z"
+  },
+  "environment": "local",
+  "feature": "324-render-memory",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "ce387434-fe83-4bcf-ae29-3db97f8d2f56",
+    "utc": "20261005T061104Z"
+  },
+  "kind": "audit",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": -37.7,
+          "39": -15.2,
+          "4": -35.1,
+          "47": -17.4
+        },
+        "total_pct": -27.2
+      },
+      "20": {
+        "seeds": {
+          "25": -24.2,
+          "39": -19.1,
+          "4": -28.7,
+          "47": -16.9
+        },
+        "total_pct": -23.0
+      },
+      "40": {
+        "seeds": {
+          "25": -11.5,
+          "39": -9.1,
+          "4": -7.6,
+          "47": -3.7
+        },
+        "total_pct": -8.1
+      }
+    },
+    "seeds": {
+      "25": 4.1,
+      "39": -33.9,
+      "4": 23.7,
+      "47": -50.0
+    },
+    "total_pct": -18.1
+  },
+  "note": "",
+  "verdict": "justified"
+}

@@ -1,0 +1,62 @@
+{
+  "band": 3,
+  "base": {
+    "commit": "8c61b03ae",
+    "label": "324-start",
+    "utc": "20261005T060216Z"
+  },
+  "binding": "394ce9efc5e787a4e211b5cbdb73f367016bed6fef062a79a7e50edf50bb5bae",
+  "end": {
+    "commit": "1833871ef",
+    "label": "324-end",
+    "utc": "20261005T060545Z"
+  },
+  "environment": "local",
+  "feature": "324-render-memory",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "ce387434-fe83-4bcf-ae29-3db97f8d2f56",
+    "utc": "20261005T061056Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": -37.7,
+          "39": -15.2,
+          "4": -35.1,
+          "47": -17.4
+        },
+        "total_pct": -27.2
+      },
+      "20": {
+        "seeds": {
+          "25": -24.2,
+          "39": -19.1,
+          "4": -28.7,
+          "47": -16.9
+        },
+        "total_pct": -23.0
+      },
+      "40": {
+        "seeds": {
+          "25": -11.5,
+          "39": -9.1,
+          "4": -7.6,
+          "47": -3.7
+        },
+        "total_pct": -8.1
+      }
+    },
+    "seeds": {
+      "25": 4.1,
+      "39": -33.9,
+      "4": 23.7,
+      "47": -50.0
+    },
+    "total_pct": -18.1
+  },
+  "note": "Consistent: the crossing (seed 4 +23.7%, field +0.7s at 15 households) is the machine, not the diff. Reviewer's checks: (1) a roll of all four reference seeds at the end commit with raster.picture, raster.resvg_png and render_cache.regen_pool rigged to raise completed - the feature's code (tile scheduling, stitch child, render-step pool width) never runs in a snapshot stage; (2) seed 4 alternated base (/tmp/base324, 8c61b03ae) vs end (detached worktree at 1833871ef), six rounds each, load 8.6->5.8: total 6.05s vs 6.05s mean, field 1.15s vs 1.08s - the 1.21->1.91s field jump does not reproduce. The unmodified base read 16.8s (04:21) and 24.9s (06:02) at 15 households, +48% with no engine change; the session's own control covered seeds 25/47 and homesteads/web, and the reviewer's legs supply seed 4 and field.",
+  "verdict": "consistent"
+}

@@ -341,3 +341,31 @@ def test_a_key_with_an_apostrophe_is_read_by_the_id_map_under_its_own_name() -> 
     assert slug("karo's house") == "karo-s-house" and slug("storage shed") == "storage-shed"
     svg = '<svg viewBox="0 0 10 10">' + wrap('<rect x="0" y="0" width="5" height="5" fill="#123456"/>', "karo's house") + "</svg>"
     assert raster.class_keys(svg) == ["karo's house"]
+
+
+def test_no_more_than_tile_workers_tiles_render_at_once(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 324 FR-002, FR-004: nine tiles, never more than TILE_WORKERS resvg renders alive together, and the
+    stitched picture still the single render byte for byte."""
+    import threading  # noqa: PLC0415
+    import time  # noqa: PLC0415
+
+    from l7r.diagram.interactive.raster import TILE_WORKERS  # noqa: PLC0415
+
+    alive, most, lock = [0], [0], threading.Lock()
+    real = raster.resvg_png
+
+    def counted(doc: str, *a: str) -> bytes | None:
+        with lock:
+            alive[0] += 1
+            most[0] = max(most[0], alive[0])
+        time.sleep(0.05)  # long enough that an uncapped pool would overlap all nine
+        try:
+            return real(doc, *a)
+        finally:
+            with lock:
+                alive[0] -= 1
+
+    single = picture(TINY, 3.0, tiles=1)
+    monkeypatch.setattr(raster, "resvg_png", counted)
+    assert picture(TINY, 3.0, tiles=3) == single
+    assert most[0] == TILE_WORKERS == 3, most[0]

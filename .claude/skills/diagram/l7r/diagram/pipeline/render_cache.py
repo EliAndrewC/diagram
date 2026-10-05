@@ -227,6 +227,13 @@ def _is_fresh_sheet(gen_path: str, fingerprint: str) -> bool:
     return stamped == sheet_hash(gen_path, fingerprint)
 
 
+#: AT MOST FOUR MAPS REGENERATE AT ONCE (feature 324, GM 2026-10-05). The post-landing render step ran one generator per
+#: core (22 here), each a roll and a render that peaks near half a gigabyte; measured over the pool's 11 live maps
+#: (specs/324-render-memory/research.md R2): 22 at once peaked at 1,459 MB in 57 s, 4 at once at 1,219 MB in 72 s, its
+#: typical (p90) footprint 889 -> 448 MB. It runs detached, so the 15 s is nobody's wait.
+RENDER_JOBS = 4
+
+
 def regen_pool(
     skill_dir: str,
     main_repo: str,
@@ -285,7 +292,7 @@ def regen_pool(
                 fh.write(value + "\n")
         return gen
 
-    with concurrent.futures.ThreadPoolExecutor(max_workers=jobs or (os.cpu_count() or 4)) as ex:
+    with concurrent.futures.ThreadPoolExecutor(max_workers=jobs or min(RENDER_JOBS, os.cpu_count() or 4)) as ex:
         ran = sorted(ex.map(_run, to_run))
     return skipped, ran, frozen
 
@@ -379,7 +386,7 @@ def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="Regenerate the diagram pool renders, cache-short-circuited.")
     ap.add_argument("--main-repo", default=None, help="git repo whose .gitignore decides Mode A vs B (default: the checkout this file is in)")
     ap.add_argument("--skill-dir", default=SKILL_DIR, help="skill dir holding BOTH pool trees and the engine sources")
-    ap.add_argument("--jobs", type=int, default=None, help="parallelism (default: cpu count)")
+    ap.add_argument("--jobs", type=int, default=None, help="parallelism (default: RENDER_JOBS, at most the cpu count)")
     ap.add_argument("--no-allow-main", action="store_true", help="do not set GM_ASSISTANT_ALLOW_MAIN for the generators")
     ap.add_argument("--page-if-classes", action="store_true", help="only re-plate the placement page if the class registry moved (sync-in; feature 278)")
     args = ap.parse_args(argv)

@@ -576,3 +576,26 @@ def test_main_page_if_classes_reports_and_stops(tmp_path, monkeypatch, capsys):
     monkeypatch.setattr(rc, "replate_if_classes_moved", lambda skill, allow_main=False: False)
     assert rc.main(["--skill-dir", str(tmp_path), "--page-if-classes"]) == 0
     assert "placement page current" in capsys.readouterr().out
+
+
+def test_regen_pool_runs_at_most_render_jobs_maps_by_default(repo, monkeypatch):
+    """Feature 324 FR-003: no `jobs` means RENDER_JOBS generators at once - never more than the cores; `jobs` still sets it."""
+    import concurrent.futures  # noqa: PLC0415
+
+    repo_dir, skill, _pool = repo
+    _make_gen(skill, "villages", "m")
+    seen: list[int] = []
+    real = concurrent.futures.ThreadPoolExecutor
+
+    class Recorded(real):  # type: ignore[misc, valid-type]
+        def __init__(self, max_workers=None, *a, **k):  # type: ignore[no-untyped-def]
+            seen.append(max_workers)
+            super().__init__(max_workers, *a, **k)
+
+    monkeypatch.setattr(concurrent.futures, "ThreadPoolExecutor", Recorded)
+    monkeypatch.setattr(rc.os, "cpu_count", lambda: 22)
+    rc.regen_pool(skill, repo_dir, allow_main=False)
+    monkeypatch.setattr(rc.os, "cpu_count", lambda: 2)
+    rc.regen_pool(skill, repo_dir, allow_main=False)
+    rc.regen_pool(skill, repo_dir, jobs=7, allow_main=False)
+    assert seen == [rc.RENDER_JOBS, 2, 7] and rc.RENDER_JOBS == 4, seen

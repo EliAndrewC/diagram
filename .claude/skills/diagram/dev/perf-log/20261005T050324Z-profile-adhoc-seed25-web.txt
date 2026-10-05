@@ -1,0 +1,36 @@
+perf-profile seed 25 stage web: 2.3s under cProfile (the stages before it took 3.0s unprofiled; cProfile itself is ~+225%, research R2)
+raw: dev/perf-raw/20261005T050324Z-seed25-web.prof (gitignored; archive: configured (https://github.com/EliAndrewC/mapgen-perflogs))
+
+         3108956 function calls (3082225 primitive calls) in 2.309 seconds
+
+   Ordered by: cumulative time
+   List reduced from 763 to 25 due to restriction <25>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.002    0.002    2.329    2.329 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py:399(stage_web)
+        1    0.000    0.000    1.117    1.117 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py:942(settle_the_web)
+ 2964/390    0.005    0.000    0.909    0.002 {built-in method builtins.sum}
+       34    0.001    0.000    0.902    0.027 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py:956(<genexpr>)
+        5    0.001    0.000    0.836    0.167 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/ways/route.py:160(_route)
+        1    0.003    0.003    0.677    0.677 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py:59(_lay_skeleton)
+        5    0.235    0.047    0.658    0.132 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/ways/route.py:81(lattice_search)
+        2    0.000    0.000    0.551    0.275 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py:895(settle_reach)
+2898/2887    0.002    0.000    0.345    0.000 {built-in method builtins.next}
+        1    0.000    0.000    0.329    0.329 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/ways/reach.py:60(settle_field)
+        2    0.000    0.000    0.321    0.161 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/ways/reach.py:94(<genexpr>)
+       23    0.000    0.000    0.257    0.011 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/clearance.py:102(fabric_index)
+   762892    0.243    0.000    0.243    0.000 {method 'get' of 'dict' objects}
+       12    0.073    0.006    0.230    0.019 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/clearance.py:122(__init__)
+       12    0.000    0.000    0.222    0.019 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/ways/reach.py:85(candidates)
+        1    0.005    0.005    0.222    0.222 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/ways/corridors.py:245(field_runs)
+        3    0.000    0.000    0.202    0.067 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py:396(settle_tree)
+        1    0.000    0.000    0.192    0.192 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/ways/keeper.py:58(unsettled)
+157263/133763    0.070    0.000    0.185    0.000 {built-in method builtins.min}
+     1879    0.004    0.000    0.185    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py:52(run_on_target)
+    18069    0.048    0.000    0.185    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/decorators.py:73(wrapped)
+    65923    0.052    0.000    0.167    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/settlement/_geom/primitives.py:54(seg_dist)
+        2    0.001    0.000    0.165    0.082 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py:250(_join_orphan_ways)
+     3144    0.016    0.000    0.146    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/ways/keeper.py:39(keyed)
+    20445    0.030    0.000    0.136    0.000 /diagram/.clones/diagram-performance/.claude/skills/diagram/l7r/diagram/hamletgen/ways/route.py:234(is_free)
+
+
