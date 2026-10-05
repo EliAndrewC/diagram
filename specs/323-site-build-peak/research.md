@@ -28,7 +28,7 @@ before, R1), the result 148 MB as before, all 2,698 files byte-identical. SC-001
 
 ## R4 - The bookends (observed 2026-10-04, method: `make perf-gate` and `make perf-profile`)
 
-The first two 323-end bookends were taken while a full `make done` ran beside them in the same container (a failed gate's
+Observed 2026-10-04, method: `make perf-gate` and `make perf-profile` - the first two 323-end bookends were taken while a full `make done` ran beside them in the same container (a failed gate's
 command went on to the perf gate while the session re-ran the gate) and read band 3 at 40 households (+40.6%, +19.4%); they
 measured that load, not the code, and are not committed. The 323-end re-taken alone (load ~3) reads band 0 at every household
 count (-6.2 / -4.7 / -3.9%) and band 1 on one seed: seed 25 at 15 households +2.5%, field +0.1 s. Its control
