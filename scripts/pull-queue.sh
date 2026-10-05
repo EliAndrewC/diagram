@@ -24,6 +24,21 @@ fi
 [ -z "$(git -C "$Q" status --porcelain)" ] || { echo "pull-queue: $Q has uncommitted work - its queue is still running" >&2; exit 2; }
 [ -z "$(git -C "$ROOT" status --porcelain)" ] || { echo "pull-queue: commit this clone's work first" >&2; exit 2; }
 
+# THE QUEUE'S ANSWERS COME BACK TOO (feature 319, 2026-10-05). A record check's answer lives in the clone's git dir
+# (`.git/record-checks/<unit>.json`, scripts/_record_owed.py `store`), which a pull never carries: three queues' worth
+# of answered quote-checks came back owed. Before the pull, each of the queue's records is merged in - a unit this
+# clone never answered is copied, one both answered keeps every fingerprint either answered and the newer record.
+if [ -d "$Q/.git/record-checks" ]; then
+  mkdir -p "$ROOT/.git/record-checks"
+  for f in "$Q"/.git/record-checks/*.json; do
+    [ -e "$f" ] || continue
+    m="$ROOT/.git/record-checks/$(basename "$f")"
+    if [ ! -f "$m" ]; then cp "$f" "$m"; continue; fi
+    jq -s '.[0] as $m | .[1] as $q | ($m + {answered: ((($m.answered // []) + ($q.answered // [])) | unique)})
+           | if (($q.utc // "") > ($m.utc // "")) then . + {fingerprint: $q.fingerprint, result: $q.result, utc: $q.utc} else . end' \
+      "$m" "$f" > "$m.tmp" && mv "$m.tmp" "$m"
+  done
+fi
 # the files this feature regenerates - rebuilt below, so either side of a conflict in them will do
 GENERATED='(^|/)research/[^/]+\.html$|(^|/)research/site/|(^|/)research/SOURCES\.html$|(^|/)assets/glossary\.(json|js)$|(^|/)research/assets/glossary'
 # the run and bypass logs are NOT in it: nothing rebuilds them, so taking one side would lose the other's entry
