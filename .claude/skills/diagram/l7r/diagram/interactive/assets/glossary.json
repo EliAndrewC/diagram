@@ -2042,6 +2042,7 @@
   "def": "A shadoof: a counterweighted lever that lifts a bucket from a well or a channel.",
   "variants": [
    "jiegao",
+   "jiégāo",
    "shadoof",
    "shaduf",
    "well sweep"
@@ -2616,7 +2617,8 @@
  "lulu": {
   "def": "A windlass on a frame over a well, the usual water-lifting gear of north China.",
   "variants": [
-   "lulu"
+   "lulu",
+   "lùlu"
   ]
  },
  "machi": {
@@ -15794,6 +15796,7 @@
   "def": "A Chinese swing bucket: a bucket on ropes that two people swing between them to lift water a short height, from a well or a river's edge onto a field.",
   "variants": [
    "hudou",
+   "hùdǒu",
    "swing bucket"
   ]
  },
@@ -15803,6 +15806,13 @@
    "man rations",
    "man ration",
    "man-rations"
+  ]
+ },
+ "hokonin": {
+  "def": "A hired servant: one taken into a household's service for pay, as a samurai household hired its menservants and maids.",
+  "variants": [
+   "hokonin",
+   "hōkōnin"
   ]
  }
 }

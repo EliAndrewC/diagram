@@ -1500,6 +1500,7 @@ hoki	Hoki
 hoki province	Hoki
 hokke	Hokke
 hokke sect	Hokke
+hokonin	hokonin
 hokora	hokora
 hokuriku	Hokuriku
 holding jail	holding jail
@@ -1590,8 +1591,10 @@ hyo	hyō
 hyojosho	Hyōjōsho
 hyō	hyō
 hyōjōsho	Hyōjōsho
+hùdǒu	hudou
 hōei	Hoei
 hōin	hōin
+hōkōnin	hokonin
 hōreki	Horeki
 iai	iai
 ichi no torii	ichi-no-torii
@@ -1778,6 +1781,7 @@ jizo-san	jizo
 jizobon	Jizo-bon
 jizō	jizo
 jizō-bon	Jizo-bon
+jiégāo	jiegao
 jo	jo
 jobikeshi	jobikeshi
 jobo	jobo
@@ -2242,6 +2246,7 @@ lushi chunqiu	Lushi chunqiu
 lychee	litchi
 lychees	litchi
 lying willow	lying willow
+lùlu	lulu
 lüshi chunqiu	Lushi chunqiu
 machi	machi
 machi-bikeshi	machi-bikeshi
