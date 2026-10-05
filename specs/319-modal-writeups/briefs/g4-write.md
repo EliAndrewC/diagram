@@ -14,7 +14,7 @@ by canon or a GM ruling (the record's CLAUDE.md, the four classes); no ruling ma
 farmhouse's single roof form, the same kind of case, "NOT a deliberate convention" (2026-10-04) - a drift left on the claims
 report to be fixed.
 
-## Your item (one drawing page; no new registry key)
+## Your items (one drawing page; no new registry key)
 
 - 0028's drawing page: the magariya group says what is true - the stable wing belongs to the L-shaped plan, one of the
   farmhouse's regional plan forms at How our maps draw farmhouses (0029's drawing page, linked), and the maps place the byre in
