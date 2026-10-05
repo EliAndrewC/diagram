@@ -22,6 +22,33 @@ requirement and never a reason to reject or withdraw a lever. The one thing that
 VERIFIES a rule (a gate test): loosening it lets defects through, which is a different matter from a placer drawing a
 lawful map differently (next sections).
 
+## Time traded for memory, deliberately - read before speeding up a render or the tests (2026-10-04/05)
+
+The containers share a 10 GB cap, and several sessions run gates and renders at once; the GM chose, measured, to give up
+some render and test time for memory (session `diagram-performance`: *"we got a huge savings in RAM. And it did add a little
+bit to our render time, but in this case that is fine"*). Each trade below is DELIBERATE. Undoing one buys its time back
+and costs its memory back - put that cost to the GM, with this table, before taking it.
+
+| trade (where it lives) | memory it buys | time it costs | the record |
+|---|---|---|---|
+| A picture renders at most 3 tiles at once (`raster.TILE_WORKERS`) | a 20-household render's peak ~970 -> ~540 MB | render 2.2 -> 3.2 s | specs/324-render-memory R2-R3 |
+| The stitch child decodes one tile at a time (`raster._PICTURE_CHILD`) | the child 300 -> ~185 MB | none measured | specs/324 R2 |
+| The post-landing render step runs at most 4 maps at once (`render_cache.RENDER_JOBS`) | its peak 1.73 -> 1.12 GB, p90 737 -> 434 MB | ~60 -> ~72 s, detached | specs/324 R1-R3 |
+| Each tile renders only its part of the map (`raster.tile_doc`) | that render's peak ~540 -> ~370 MB | ~+0.3 s | specs/326-tile-clip R2, R4 |
+| 6 test workers, not 10 (`XDIST_WORKERS`, the Makefile note) | a gate's peak ~4.5 -> ~3.1 GB | ~20% of the gate's time on a QUIET machine only; none under the sessions' usual load | the Makefile note at XDIST_WORKERS |
+
+Measured with all three render trades in place (observed 2026-10-04/05, method: a 50 ms process-tree RSS sampler over
+`make hamlet ARGS="--name MemTest --seed 4 --households 20 --out <dir>"`): the rendered hamlet peaked ~970 MB before
+feature 324 and ~370 MB after feature 326, its render span ~2.2 s -> ~3.5 s. Levers measured and NOT taken, so they are
+not re-derived: a finer tile grid (4 x 4 to 7 x 7 saved 10-20 MB more and every one broke the time bound; a grid change also
+moves tiling's seam differences, specs/326 R2-R3); clipping whole lines only (byte-identical, ~130 MB instead of ~170 -
+the GM chose trimming, which is visually but not byte-identical, specs/326 R4); choosing the worker count from the load
+at launch (the GM: the load "can go from very low to very high very quickly", the Makefile note).
+
+If render time is the ask, the honest starting points that cost NO memory: `tile_doc`'s Python (~0.9 s of CPU per render
+at 3 x 3, run once per tile - parsing each line's extent once instead would cut most of it, specs/326 R3), and the
+stitch's JPEG encode of a 32-megapixel picture.
+
 ## Shape one: a per-candidate scan of geometry that does not change during the scan
 
 **The one performance bug this engine keeps growing, and how to find it.** Every slow gen ever

@@ -249,6 +249,9 @@ rolled maps. Marking is `@pytest.mark.rolls_map`, guarded by `tests/test_markers
   candidate walks a registry. The index beside the scan that did not use it is the third shape in
   `dev/performance.md`: the windbreak 7.3 s -> 0.5 s and the hinterland 8.1 s -> 1.3 s, byte-identical.
 - Trust the A/B against HEAD, not cProfile's seconds.
+- **Some slowness is bought memory** (GM 2026-10-05): the render's tile cap and per-tile clip, the render step's 4 maps at
+  once and the 6 test workers each trade time for RAM on purpose. Read `dev/performance.md` "Time traded for memory" before
+  undoing one; its table gives the RAM each undo costs, and that cost goes to the GM.
 
 **The pool** ([`dev/pool.md`](../../dev/pool.md))
 
