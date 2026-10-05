@@ -3557,6 +3557,7 @@ subsidiary shrines	subsidiary shrine
 substructure	substructure
 substructures	substructure
 subuta	Blyxa
+succession	succession
 sucker	sucker
 suckers	sucker
 sue ware	Sue ware
