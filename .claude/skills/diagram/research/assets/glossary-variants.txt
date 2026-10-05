@@ -337,6 +337,8 @@ cao wei	Three Kingdoms
 caoshi	caoshi
 caravan ground	caravan ground
 caravan grounds	caravan ground
+caravan inn	caravan inn
+caravan inns	caravan inn
 caravanserai	caravanserai
 caravanserais	caravanserai
 carex	Carex
@@ -700,6 +702,7 @@ dewa province	Dewa
 dharma hall	dharma hall
 dharma halls	dharma hall
 diameter at breast height	DBH
+dian	dian
 digital daijisen	Digital Daijisen
 dike-pond	dike-pond
 dike-ponds	dike-pond

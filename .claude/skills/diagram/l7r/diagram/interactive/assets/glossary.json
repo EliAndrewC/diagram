@@ -15722,5 +15722,18 @@
    "Tango-no-kami"
   ],
   "cased": true
+ },
+ "caravan inn": {
+  "def": "The one inn our maps draw in a town, on its road: chosen for each town at even odds as a one-story wagon inn or a two-story post-station inn.",
+  "variants": [
+   "caravan inn",
+   "caravan inns"
+  ]
+ },
+ "dian": {
+  "def": "A Chinese road inn: in north China, one built around a broad yard with a long stable for the carters' wagons and animals.",
+  "variants": [
+   "dian"
+  ]
  }
 }
