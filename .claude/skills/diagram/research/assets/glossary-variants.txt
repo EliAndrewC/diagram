@@ -544,6 +544,7 @@ coopers	cooper
 coping	coping
 coppice	coppice
 coppiced	coppice
+coppices	coppice
 coppicing	coppice
 copse	copse
 corvee	corvee
