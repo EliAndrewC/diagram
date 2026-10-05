@@ -1,5 +1,5 @@
 About: Most farming villages in Japan were clustered, the shūson: the farmhouses gathered in one limited area and the
-fields lay around them. A village took the best dry ground beside its paddy. On a river's lowland the old villages stood on
+fields lay around them. A village stood on dry ground beside its paddy. On a river's lowland the old villages stood on
 the natural levee, a slight rise that drained well above the wet ground behind it; a lump of houses grew at the foot of a
 hill or plateau, on a river terrace, or where two highways crossed.
 
@@ -20,8 +20,8 @@ Guesses:
 Depiction: The map gathers the houses into one cluster on the dry ground at the edge of the fields, each house reached by a
 lane, and shelters the whole cluster behind one belt of trees along its windward edge rather than a grove at each farm;
 clumps of trees, the dooryard copse, stand in the gaps between the farms. A village of a dozen houses or more is drawn with
-at least a quarter of the ground inside its houses' outline built, a hamlet looser: no figure for a real village's density
-was found, so that quarter is set to make a village read as compact. The title card says where this cluster sits and what
+at least a quarter of the ground inside its houses' outline built, so that it reads as compact, a hamlet looser; how densely
+a real village was built is not recorded. The title card says where this cluster sits and what
 shape it takes.
 
 Name: How the houses stand: clustered together (nucleated)

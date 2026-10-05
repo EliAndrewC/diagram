@@ -5,12 +5,11 @@ plots of a tan, and in Gifu a replanning of 1849 laid out plots of about a tan f
 again.
 
 On the ground a large paddy was still a level basin walled by a low bank of its own mud, holding its water at an even
-depth. The tidy grid of equal
-quarter-acre rectangles is modern: Meiji land consolidation made the one-tan plot its standard from 1902, and the
+depth. The tidy grid of equal quarter-acre rectangles is modern: Meiji land consolidation made the one-tan plot its standard from 1902, and the
 projects begun in 1963 grew it to blocks of about three-quarters of an acre.
 
-The paddy lots of the 1602 register run up to about 0.44 acre (1,800 sq m); the one parcel quoted from a 1684 register
-of Kami-Baba village is about 0.14 acre. No average plot of before modern times was found, and whether a register's lot
+The paddy lots of the 1602 register run up to about 0.44 acre (1,800 sq m); one parcel in a 1684 register of Kami-Baba
+village is about 0.14 acre. No average plot of before modern times was found, and whether a register's lot
 was one walled basin or several is not recorded.
 
 Guesses:

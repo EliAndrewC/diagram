@@ -5,9 +5,9 @@ manure. In southern China, too, villagers planted fruit trees and bamboo among t
 of their village groves for their use.
 
 Round the main house and outbuildings of a farm on the Musashino upland in the early 1900s stood woods of cedar,
-bamboo, evergreen oak and zelkova. In the farm groves of the Tonami plain nearly half the sizable trees were cedar, on
-average about 50 ft tall; persimmon was among the three commonest trees, and persimmon, fig and flowering trees stood at a
-house's front. Bamboo grew as thickets of its own, not as stems
+bamboo, evergreen oak and zelkova. On the Tonami plain, a count of the 1980s found about 33 sizable trees round
+each farmhouse, over saplings and shrubs, about 50 ft tall on average and nearly half of them cedar. Persimmon was among
+the three commonest trees, and persimmon, fig and flowering trees stood at a house's front. Bamboo grew as thickets of its own, not as stems
 scattered among the trees.
 
 In one Edo-period register, three households' woods covered about 6,000, 10,700 and 28,000 sq ft; homestead woods varied

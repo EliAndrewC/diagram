@@ -5,11 +5,10 @@ from the road into a room.
 
 In Japan it took one of two forms. The nagaya-mon was a gate opened through the middle of a long range of rooms, its design
 fixed by the standing of the house; at Kaibara a domain seat's range of 1714 runs about 81 by 12 ft, with a guardroom of
-eight mats on one side of the gate. The yakuimon was a gate of one bay. Gatekeepers sat in a room of the gate range or, as
-at Takayama, in a gatehouse of their own. A Chinese county office's gate was a roofed building, three bays wide by law, with
+eight mats on one side of the gate. The yakuimon was a gate of one bay. Gatekeepers sat in a room of the gate range or, as at Takayama, in a gatehouse of their own, a gabled building of one story; at a samurai house at Matsue the gate range was where the gatekeepers and the household's servants lived. A Chinese county office's gate was a roofed building, three bays wide by law, with
 two black-lacquered leaves in each bay, and a Chinese office faced south by regulation.
 
-A registered nagaya-mon opens in its central two ken, about 12 ft, and three registered one-bay gates measure about 6 to 9
+A registered nagaya-mon opens in its central two ken, about 12 ft, closed by double-leaf board doors, and three registered one-bay gates measure about 6 to 9
 ft across. How wide a Chinese office's gate was is not recorded.
 
 Guesses:
@@ -25,6 +24,6 @@ Its posts are drawn about 2 ft square.
 
 Name: main gate
 Covers: the posts flanking the main opening
-Sources: fuchu-joge-pamphlet, kominkai-genkan, nagayamon-jawiki, tamba-kashiwara-jinya, bunka-saito-nagayamon, bunka-adachi-yakuimon, bunka-omi-yakuimon, bunka-fujioka-yakuimon, takayama-jinya-city, sohu-yamen-gate, neixiang-xianya-zhwiki, kitain-bansho
+Sources: fuchu-joge-pamphlet, kominkai-genkan, nagayamon-jawiki, tamba-kashiwara-jinya, bunka-saito-nagayamon, bunka-adachi-yakuimon, bunka-omi-yakuimon, bunka-fujioka-yakuimon, takayama-jinya-city, matsue-bukeyashiki, sohu-yamen-gate, neixiang-xianya-zhwiki, kitain-bansho
 Entry: research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html, research/questions/0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html
 Drawing: research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html, research/questions/0092-compound-walls-neribei-and-tsuijibei.drawing.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html, research/questions/0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.drawing.html

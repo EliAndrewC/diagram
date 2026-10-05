@@ -6,13 +6,14 @@ scribes, below the magistrate's own room; others did not. The clerks sat in the 
 officers crouched at either side and the parties knelt on straw mats.
 
 The middle room was a tatami room like the magistrate's, the hall's board veranda running along the front below it.
-How large the clerks' place was, and how many clerks sat at a hearing, is not recorded.
+At Edo one clerk sat there; how large a clerk's place was is not recorded.
 
 Guesses:
-- The size of the seats the plan draws: no account gives how much room a clerk's place took.
+- The size of the seats the plan draws, from about 8 by 5 ft to about 27 by 7 ft each: no account gives how much room a
+  clerk's place took.
 
 Depiction: The plan seats the clerks to either side of the magistrate, level with the dais, rather than in a room of
-their own below it as at Edo - a simplification, so the whole bench reads as one band above the court.
+their own below it as at Edo - a simplification.
 
 Name: clerks' seats
 Covers: the two seats flanking the dais and their labels

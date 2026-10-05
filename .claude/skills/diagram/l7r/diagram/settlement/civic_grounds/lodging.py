@@ -126,6 +126,8 @@ class LodgingMixin:
             inn footprint - research/questions/0184-inns-hatago-and-carters-inns.drawing.html: 66 x 48 ft
             carters' yard - research/questions/0184-inns-hatago-and-carters-inns.drawing.html: the wagon inn drawn as one building,
                 never as a fenced carters' yard with lodging houses, stable and hay inside
+            hatago beside a stable - research/questions/0185-travelers-inns-and-cheap-lodging-houses-hatago-dian-kichin-yado.drawing.html: the
+                hatago form drawn wherever the caller seats the inn, beside a town's stables and cart yard too
             fronts the road - research/questions/0185-travelers-inns-and-cheap-lodging-houses-hatago-dian-kichin-yado.drawing.html: the caller's rot, noren to the roadbed
             glyph - CONVENTION: roof band, window rows, noren
             keep-clear margin - UNRESEARCHED: 24 px

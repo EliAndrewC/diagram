@@ -27,7 +27,7 @@ for a levee or a fan's foot; on low ground behind dikes the row always takes the
 stand one farmstead apart, lot against lot, never more than about 240 ft apart. The street is drawn 6 ft wide, a little wider than
 the lanes off it; Santome's real roads were about 36 ft. When a street is full, the map lays another beside it with its own row, never a
 second rank behind the first. On a two-sided row, the far farms have their holding drawn behind them as dry field; each
-farm keeps its grove on its windward sides.
+farm keeps its grove on its windward sides, so no village shelter belt is drawn.
 
 Name: How the houses stand: in a row along a way (linear)
 Covers: `meta.settlement_form = linear`

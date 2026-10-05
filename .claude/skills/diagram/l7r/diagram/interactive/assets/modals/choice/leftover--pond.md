@@ -15,9 +15,11 @@ Guesses:
 - That a wholesale dike-pond hamlet keeps no rice about half the time: no source counts the hamlets of either kind.
 
 Depiction: The map lays the whole block out as dike-ponds and converts every parcel to a pond, so no paddy is left among them.
+Each farmstead still keeps a yard before its house, drawn the same as a rice hamlet's threshing yard; with no rice to thresh,
+what it was used for is a guess, most likely a work yard for sorting cocoons and handling leaves.
 
 Name: Ponds throughout, no rice left
 Covers: `meta.leftover = pond`
 Sources: wanli-fishpond-summary, sdlib-shunde-jitang, guangdong-xinyu-22, minle-dou-people, gd-gazetteer-sangji
 Entry: research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.html, research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html, research/questions/0023-the-dike-pond-hamlet-its-houses-boats-and-manure-jars.html
-Drawing: research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html, research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html
+Drawing: research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html, research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html, research/questions/0023-the-dike-pond-hamlet-its-houses-boats-and-manure-jars.drawing.html

@@ -83,12 +83,14 @@ Standard features with rough SVG conventions. New diagrams should reuse this voc
 <!-- Research: stables - research/questions/0108-stables-umaya.html: few-horse umaya ~28-32 x 16-22 ft, 2-4 horses -->
 <!-- Research: stable below barracks - research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html: stable drawn smaller than the barracks -->
 <!-- Research: cell - research/questions/0096-holding-cells-agariya-and-roya.html: ~12 x 10 ft remand cell, small end of the 6-18 mat span -->
-<!-- Research: barracks - research/questions/0097-staff-rowhouses-and-barracks-nagaya.html: on-grounds rowhouse or common room, no bunks, ~27-53 ft wide -->
+<!-- Research: barracks - research/questions/0097-staff-rowhouses-and-barracks-nagaya.html, research/questions/0097-staff-rowhouses-and-barracks-nagaya.drawing.html: on-grounds rowhouse or common room, no bunks, ~27-53 ft wide; the county example's range 45 x 34 ft, 34 ft deep -->
 <!-- Research: granary forms - research/questions/0098-storehouses-for-the-tax-rice.html: raised on posts or earth-walled kura, ~43-50 x 25-27 ft, a row for a terminal store -->
 <!-- Research: practice ground - research/questions/0165-martial-training-grounds-and-dojo.html: swept multi-use ground with striking posts, no dojo -->
 <!-- Research: practice ground placement - UNRESEARCHED: beside the watch's lodging -->
 <!-- Research: practice ground weapon rack - UNRESEARCHED: ~8x2 ft rack flush against the adjacent wall -->
 <!-- Research: practice ground area - UNRESEARCHED: ~90-135 sq ft per drilling samurai -->
+<!-- Research: cart yard as a charcoal fire gap - research/questions/0197-charcoal-yards-and-charcoal-stores.drawing.html, research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: Ubame's cart yard drawn as the charcoal store's fire gap, ~13-14 ft and 29 ft wide -->
+<!-- Research: charcoal bales - research/questions/0199-straw-bales-of-rice-and-charcoal-tawara.drawing.html: Ubame's sheet draws each bale ~6 x 3 ft -->
 <!-- Research: archery bank - research/questions/0164-drill-grounds-archery-ranges-and-riding-grounds-jiaochang-yaba-baba.html: optional azuchi with a ~90 ft lane -->
 
 - **Office hall (with dais band)** - the working block (~360×84) along the north edge of the outer court, backing onto the divider wall. Rear rooms behind a dashed screen-line: the **day office** (tax and case business) and the **official study** (the magistrate's working desk). Front band on the court face: the magistrate's tatami dais centered, two clerk positions flanking. The courtroom is a room OF the office block, not a freestanding stage (see grounding).
@@ -113,6 +115,7 @@ Standard features with rough SVG conventions. New diagrams should reuse this voc
 <!-- Research: kitchen - research/questions/0107-kitchens-daidokoro.html, research/questions/0107-kitchens-daidokoro.drawing.html: part of the house ~40x33 ft, kamado range, smaller than a living block -->
 <!-- Research: kamado range size - UNRESEARCHED: ~6 x 2.5 ft with two fire mouths -->
 <!-- Research: bath - research/questions/0105-baths-furo.html: a room or small addition on the service side by kitchen and well, 12-15 ft a guess -->
+<!-- Research: kitchen corridor tagged residence corridor - research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html: Hayakawa's sheet tags its kitchen-to-house covered way as a residence corridor -->
 <!-- Research: inner garden - research/questions/0103-ornamental-gardens-ponds-and-stone-lanterns-teien.html: central stipple with optional pond and lanterns -->
 
 - **Residence** - the lord's family dwelling along the north range, with internal soft-divisions (dashed lines) separating rooms. The historical rules the interior-audit added (2026-07), as feature 267's research revised them:
@@ -145,7 +148,7 @@ A compound housing ~50 people plus horses needs 2-4 wells, distributed by use:
 
 <!-- Research: tub glyph - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: ~r5 circle (~3.3 ft), where the drawing page's tub is ~2.5 ft across (r~3.8) -->
 <!-- Research: tub glyph colors - CONVENTION: water-blue circle distinct from square wells -->
-<!-- Research: one tub per wooden building - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: ~8-12 tubs -->
+<!-- Research: one tub per wooden building - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: ~8-12 tubs; Ubame's sheet draws 19, Ochiba's none at its karo's house or senior retainers' quarters -->
 <!-- Research: kitchen weighting - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: 2 tubs at the kitchen -->
 <!-- Research: tub against its wall - UNRESEARCHED: gutter-fed at an eaves corner, within ~3.5 ft of the building -->
 <!-- Research: tub clear of the footprint - UNRESEARCHED: ~2 ft outside the wall face for downspout and bucket line -->
@@ -189,6 +192,8 @@ A **rear service strip** organizes all of this: the residence's formal garden si
 <!-- Research: modest compound shrine - research/questions/0218-the-compounds-own-shrine-yashikigami.html: small wooden hall -->
 <!-- Research: compound shrine arch - research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html: a torii always drawn nearby, shared by adjacent shrines allowed -->
 <!-- Research: hall shrine ceiling - research/questions/0218-the-compounds-own-shrine-yashikigami.html, research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html: at most ~36x30 ft, under half a residence block -->
+<!-- Research: more than one kami in a hall - research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html: Hayakawa's Fire Dragon hall keeps an Ebisu altar beside its own -->
+<!-- Research: grove inside a compound wall - research/questions/0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.drawing.html: three magistracy sheets draw the compound shrine's grove as a stipple rectangle with a dashed edge inside the compound wall -->
 <!-- Research: workshop colonnade - UNRESEARCHED: open hatched craft area attached to a shrine -->
 <!-- Research: sanctuary - research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html: one-bay honden ~6 ft square at the back on the approach axis -->
 <!-- Research: hall and dwelling - research/questions/0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html: one roof, hall end toward the arch, dwelling with kitchen, writing room and privy behind -->
@@ -220,6 +225,9 @@ A **rear service strip** organizes all of this: the residence's formal garden si
 <!-- Research: sheet follows its map - NONE: consistency with the drawn settlement map -->
 <!-- Research: subject sized from the record - research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html: the record's bands, not the map glyph -->
 <!-- Research: canopy glyph - CONVENTION: canopy-green circles on open ground only, touching at most -->
+<!-- Research: road at the gate - research/questions/0088-highways-and-what-lines-them-kaido.drawing.html: sheets draw Ochiba's Imperial road 8 ft, Hayakawa's street and Ubame's road 12 ft -->
+<!-- Research: cart lane to a side gate - research/questions/0088-highways-and-what-lines-them-kaido.drawing.html, research/questions/0082-moving-goods-carts-packhorses-and-river-landings-kashi.drawing.html: sheets draw Ubame's cart lane 9 ft and Hayakawa's 10.7 ft -->
+<!-- Research: boundary pillars - research/questions/0083-clan-borders-and-their-markers.drawing.html: Ubame's sheet draws each pillar ~3 x 3.7 ft -->
 
 - **Road to gate** - two stacked paths (solid translucent + dashed darker) for ~150 px into the gate from the appropriate cardinal direction, running OFF the viewBox edge. NO direction caption: every manor road leads to town and thence the Imperial road, so `to the Imperial road` / `to the town's main street` is always-true clutter - the road glyph leaving the map already says a road departs here.
 - **Town / surroundings outside walls** - by default, leave the surrounding parchment empty. Only add exterior buildings if the surrounding context is itself part of the diagram's subject.

@@ -1,5 +1,6 @@
 About: The border where the Fox Clan's lands meet a neighbor's. A border exists where two authorities have agreed it, and the
-frontier magistracy at Ubame is built on this one: its east wall stands on the line, and its parley room straddles it.
+frontier magistracy at Ubame is built on this one: its east wall stands on the line, and its parley room straddles it,
+so a delegation from across the border is received with each side kneeling on its own ground.
 
 Agreed, marked borders between domains were real in the Edo period. Morioka and Sendai settled theirs in 1642, after more than
 fifty years of dispute, and marked its 130 km (about 80 miles) with more than a hundred earth mounds, large and far apart at

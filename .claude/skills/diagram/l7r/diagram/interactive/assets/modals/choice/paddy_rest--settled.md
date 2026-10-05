@@ -5,7 +5,7 @@ In the early medieval period much land was unstable for want of water or soil, a
 the Kamakura period on, the advanced farming regions improved their water works and fields until the land could be
 worked every year. As villages gathered into nucleated settlements, around the late thirteenth and fourteenth centuries
 in the Kinai and a century or so later in the east and on Kyushu, the old extensive farming of land chosen anew each
-year gave way to intensive farming of the same ground. One rice historian dates the last of the resting to the early
+year gave way to intensive farming of the same ground. The last of the resting may have lingered into the early
 modern period, when the lords' land surveys taxed paddy by its area and a resting plot cost its holder.
 
 In Rokugan a wet-rice paddy, once made, can be cropped for centuries without tiring its soil, and what limits its rice is

@@ -1,17 +1,18 @@
 About: The cell was where the accused waited to be heard and judged. A jail of the Edo period held the accused until
 judgment and the condemned until their sentence was carried out - nearer a detention house than a prison, for
-confinement as a sentence was imposed only by exception; flogging, tattooing and beheading were carried out at Edo's
-great jail. A magistracy that judged cases kept a temporary cell inside its own compound for those called before its
-court, and Edo's town magistracy kept its cell in the quarter that held its court rooms. An intendant's compound
-generally held a jail too, though Takayama's stood in the town. In Rokugan torture to win a confession is forbidden by
-Imperial decree and torturers are very rare, so a magistracy keeps no room built for interrogation.
+confinement as a sentence was imposed only by exception. A magistracy that judged cases kept a temporary cell inside its
+own compound for those called before its court, and Edo's town magistracy kept its cell in the quarter that held its
+court rooms. An intendant's compound generally held a jail too, though Takayama's stood in the town.
 
-The cells that were measured are the great jails', rooms reckoned in tatami mats; at Edo's Tenmacho jail each had a
-privy about 3 ft across. What a magistracy's temporary cell looked like is not recorded.
+In Rokugan torture to win a confession is forbidden by Imperial decree and torturers are very rare, so a magistracy
+keeps no room built for interrogation.
 
-The single cell rooms measured run from Osaka's 6 mats, about 12 by 9 ft, to the 18 mats, about 18 by 18 ft, of Edo's
-Tenmacho jail, each shared by several prisoners; Edo's great cell of 30 mats held over a hundred. The size of a
-magistracy's own cell is not recorded.
+What a magistracy's temporary cell looked like is not recorded. The great jails' cells were rooms reckoned in tatami
+mats; at Edo's Tenmacho jail each had a privy about 3 ft across.
+
+The great jails' single cell rooms ran from Osaka's 6 mats, about 12 by 9 ft, to the 18 mats, about 18 by 18 ft, of
+Edo's Tenmacho jail, each shared by several prisoners; over a hundred could be packed into Edo's great cell of 30 mats.
+The size of a magistracy's own cell is not recorded.
 
 Guesses:
 - That a county cell holds one or two of the accused: no account counts them; a county holds only a few until their

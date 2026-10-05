@@ -12,7 +12,7 @@ How many villages laid their ponds out in a grid before modern times is not reco
 ponds of the Pearl River delta lay as a mosaic.
 
 Depiction: A dike-pond block is drawn as the mosaic, not as a grid of ponds, since ponds set out in straight rows are known
-only from modern times. A rice polder keeps the planned grid of straight canals: its module lines run straight, while the
+only from modern times. A rice polder keeps the planned grid of canals: its module lines run nearly straight, wavering gently, while the
 parcels inside them each take their own shape, never a grid of uniform rectangles.
 
 Name: Ponds laid out in a grid

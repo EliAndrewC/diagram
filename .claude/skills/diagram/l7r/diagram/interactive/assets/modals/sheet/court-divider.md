@@ -3,7 +3,7 @@ lived in a residence attached to the yamen, the county office, and a Japanese to
 magistracy. In China regulation set the two apart in the ancient order of court in front, sleeping quarters behind: the
 office in front, the household behind it.
 
-A wall between the courts divided them, broken by one gate, the inner residence gate, the last of the five gates of the
+A wall between the courts divided them, with a gate through it, the inner residence gate, the last of the five gates of the
 yamen at Neixiang. Official business stayed before it, and the household lived beyond it.
 
 In Japan no such front-and-rear order is recorded. At Takayama, the one intendant's office that survives, the residence
@@ -14,7 +14,7 @@ Guesses:
 - Its thickness, about 2 ft: no wall between a compound's courts is measured.
 
 Depiction: Every plan draws two courts, the office in front and the residence behind, divided by this wall, which is drawn
-lighter than the compound's outer wall. For a Japanese compound that order is a deliberate simplification, since a
+thinner than the compound's outer wall. For a Japanese compound that order is a deliberate simplification, since a
 residence might stand beside its office, as at Takayama.
 
 Name: court divider

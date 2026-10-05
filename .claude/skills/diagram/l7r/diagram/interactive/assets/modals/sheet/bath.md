@@ -16,12 +16,12 @@ Guesses:
   size of a district magistrate's.
 
 Depiction: The plan draws the bath as a small addition to the house on its service side, abutting the kitchen, with the
-kitchen's well beyond it - setting the three together is a reading of the Takayama list and the bath in the doma's corner -
-and never as a pavilion in a garden or a court. A curl of steam above it marks it as the bath, and a fire-water tub stands
+kitchen's well beyond it, the three kept together as the Takayama residence listed its kitchen, well and bath - and never
+as a pavilion in a garden or a court, since no samurai bath is known standing apart. A curl of steam above it marks it as the bath, and a fire-water tub stands
 on its yard side against its hearth.
 
 Name: bath
 Covers: the bath, its steam mark and its label
 Sources: furo-kotobank, yokushitsu-kotobank, shirobito-1717-takayama, sayama-jinya-uematsu
 Entry: research/questions/0105-baths-furo.html
-Drawing: research/questions/0105-baths-furo.drawing.html
+Drawing: research/questions/0105-baths-furo.drawing.html, research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html

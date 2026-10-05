@@ -19,11 +19,12 @@ Guesses:
 - How often a planned field is drawn gridded: no source counts how many villages had which.
 
 Depiction: The map draws the field's rows of basins at an even spacing so the field reads as laid out on a plan, offered
-only for a field laid out on one; how large the basins are is a separate choice on the title card, and they are never
-drawn at the quarter-acre block of Meiji consolidation.
+only for a field laid out on one. It is not the jori grid: no square of roads and waterways is drawn around the
+basins. How large the basins are is a separate choice on the title card, and they are never drawn at the quarter-acre
+block of Meiji consolidation.
 
 Name: The paddy plots' lines: laid out in a grid
 Covers: `meta.plot_regularity = grid`
 Sources: tabayashi-1987, jsidre-kochi-seiri, jori-jawiki, kato-1999-ittanbu-kukaku, kochi-seiri-jawiki, rice-paddies-and-their-plots-suiden, how-our-maps-choose-and-draw-clustered-and-scattered-villages-shuson-sanson, suido-ishizue-jori, japanese-wiki-corpus, gunmaibun-jori
 Entry: research/questions/0005-rice-paddies-and-their-plots-suiden.html, research/questions/0031-clustered-and-scattered-villages-shuson-sanson.html, research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.html
-Drawing: research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html, research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html
+Drawing: research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html, research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html, research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html

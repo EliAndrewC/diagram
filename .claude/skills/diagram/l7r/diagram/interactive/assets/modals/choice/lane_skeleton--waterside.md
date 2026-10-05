@@ -14,8 +14,8 @@ Guesses:
 - How often each shape comes up: no source counts them.
 
 Depiction: Only a settlement with water running along its cluster takes a lane along the water. The map lays it down the
-water's side of the cluster as a track of bare earth a little wider than a footpath - a width of the map's choosing, since no
-village lane's width is recorded - pulled as straight as the plots allow.
+water's side of the cluster as a track of bare earth a little wider than a footpath - a width of the map's choosing, since
+no lane in a wet-rice village was measured - pulled as straight as the plots allow.
 
 Name: A lane along the water
 Covers: `meta.lane_skeleton = waterside`

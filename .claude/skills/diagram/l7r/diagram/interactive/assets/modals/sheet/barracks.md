@@ -5,16 +5,18 @@ magistracy housed its constables apart, in a district of their own, and the lowe
 lord lived in rowhouses inside his residence.
 
 A rowhouse was a long, narrow building of one story, divided along its length into small dwellings, each entered by a
-door of its own: an earth-floored entry for leaving shoes, then a raised plank floor. A standard dwelling was about 9 by
-12 ft. No bed or bunk is known in one before modern times. The servants below the foot soldiers lived instead in large
-common rooms.
+door of its own: an earth-floored entry for leaving shoes, then a raised plank floor. The one row whose roof is known,
+built in 1842, was thatched. A standard dwelling was about 9 by 12 ft. No bed or bunk is known in one before modern times.
+The servants below the foot soldiers lived instead in large common rooms.
 
-The rowhouses measured run about 80 to 145 ft long and 12 to 24 ft deep: one row of 1842 held eight households, and a
+The rowhouses measured run about 80 to 145 ft long and 12 to 24 ft deep: that row of 1842 held eight households, and a
 foot soldier's dwelling in another was about 12 by 21 ft. Takayama's has a floor of about 3,700 sq ft. In 1860 three
 retainers on duty in Edo shared one dwelling of their domain's rowhouse; how many unmarried men usually shared one is not
 recorded.
 
 Guesses:
+- How many men the barracks lodges, about fifteen, within ten to twenty for a small office: no page gives the size of a
+  rural office's staff, so the figure is this project's own.
 - How many men share a dwelling, and so how long the barracks runs: one case, three retainers to a dwelling, is all that
   was found.
 - That the stable stands smaller than the barracks: no account says where a stable ranked among an office's buildings.

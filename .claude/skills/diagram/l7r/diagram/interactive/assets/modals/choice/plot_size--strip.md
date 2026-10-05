@@ -17,7 +17,7 @@ Guesses:
   out in strips.
 - How often a settlement's paddies come out in strips: no source counts how many villages had which.
 
-Depiction: The map draws a strip-plotted field's basins long and narrow, in equal strips rather than a checkerboard:
+Depiction: The map draws a strip-plotted field's basins long and narrow, as strips rather than a checkerboard:
 the planned new-field villages laid their land out in strips, and no Edo reclamation's paddies are known to have been a
 grid.
 

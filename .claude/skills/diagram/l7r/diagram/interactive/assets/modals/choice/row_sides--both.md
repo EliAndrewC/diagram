@@ -1,4 +1,4 @@
-About: A row village could line both sides of its road, the houses facing one another across it. A road village is defined
+About: A row village could take both sides of its road, a line of houses on each side. A road village is defined
 as a farming settlement whose houses stand along a fairly narrow street, on one side of it or on both. On the Musashino
 plateau, Santome's house lots, fields and coppice were set out in strips on both sides of its road, and the Nobidome
 villages of 1661 lay the same way along the Kawagoe road.

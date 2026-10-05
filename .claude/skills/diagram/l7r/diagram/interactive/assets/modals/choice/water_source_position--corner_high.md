@@ -7,7 +7,7 @@ Between 1789 and 1872 the villages of the Fukutsuka waju had four intake culvert
 Guesses:
 - That a village's polder has one inlet and one outfall: the one count found is of a waju shared by several villages, and two openings are reckoned enough for a small polder.
 
-Depiction: The map draws the polder's inlet sluice high on the polder, cut through its dike, with the open water that feeds it just outside the dike beside it, and the outfall low on the polder; water crosses the dike nowhere else. Inside, the water runs into a canal drawn round the inner foot of the dike: channels inside a dike are recorded, but not a single ring at its foot, so where that canal runs is the map's convention.
+Depiction: The map draws the polder's inlet sluice high on the polder, cut through its dike, with the open water that feeds it just outside the dike beside it, and the outfall low on the polder; water crosses the dike nowhere else. Inside, the water runs into a canal drawn round the inner foot of the dike: channels inside a dike are recorded, but not a single ring at its foot, so where that canal runs is the map's convention. It and the channels inside are drawn in long, gently wavering reaches with rounded corners, also the map's convention for a dug canal.
 
 Name: Water in at the polder's high corner
 Covers: `meta.water_source_position = corner_high`

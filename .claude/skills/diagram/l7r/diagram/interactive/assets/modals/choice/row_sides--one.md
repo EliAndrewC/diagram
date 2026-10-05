@@ -7,7 +7,7 @@ Walking such a row, a visitor had the farmhouses on one hand, each in its grove,
 Shimotome's empty side, house lots for second and third sons have since appeared, so a one-sided row could fill in over time.
 
 Shimotome held 49 farms at its opening, by both counts of the Santome villages. Whether one side or both was the commoner
-form is not recorded; the definitions and the Santome survey name rows of both kinds and count neither.
+form is not recorded.
 
 Guesses:
 - That a row's farms take one side of the way or both at even odds: both are attested, and neither is counted against the

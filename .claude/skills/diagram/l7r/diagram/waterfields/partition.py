@@ -187,6 +187,8 @@ class Sectors:
             column wobble - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: each column line bows along the contour by up to 5 px on its own phase
             lattice, not patchwork - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: every sector cut as
                 a warped lattice of row bunds crossing column bunds
+            no jori grid on the old plains - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html, research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html:
+                the warped lattice on every valley_paddy map, the long-settled western plains included; never the jori grid
         """
         F, g, R, row_step, across = self.F, self.g, self.R, self.row_step, self.plot_across
         f_lo = max(_root_f(A, F), _root_f(B, F)) + 6 * g

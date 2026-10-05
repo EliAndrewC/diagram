@@ -17,4 +17,4 @@ Name: No lanes
 Covers: `meta.lane_skeleton = none`
 Sources: sanson-jawiki, visit-toyama-sankyoson, aze-jawiki, kotobank-azemichi, jarimichi-jawiki, lowtech-chinese-wheelbarrow, mlit-tokaido-michi
 Entry: research/questions/0081-village-lanes.html, research/questions/0031-clustered-and-scattered-villages-shuson-sanson.html
-Drawing: research/questions/0081-village-lanes.drawing.html, research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html
+Drawing: research/questions/0081-village-lanes.drawing.html, research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html, research/questions/0014-bunds-between-the-paddies-aze.drawing.html

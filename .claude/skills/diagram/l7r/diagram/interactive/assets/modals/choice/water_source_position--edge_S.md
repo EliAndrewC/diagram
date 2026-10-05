@@ -7,7 +7,7 @@ How far a village's head race ran before it forked is not recorded. Small mounta
 Guesses:
 - That the stream comes in from the south rather than another side: no source says from which side a village's water reached its fields, so the side is chosen by chance among those above the fields.
 
-Depiction: The map draws the stream coming down the slope to the middle of the fields' south side, where it feeds the head of the canals. A stream is only ever drawn coming in where its water could run down onto the fields: one entering below them is never drawn, because water does not run uphill.
+Depiction: The map draws the stream coming down the slope onto the fields' south side, where it feeds the head of the canals. A stream is only ever drawn coming in where its water could run down onto the fields: one entering below them is never drawn, because water does not run uphill.
 
 Name: Water from a stream on the south edge
 Covers: `meta.water_source_position = edge_S`

@@ -3,15 +3,15 @@ to its own store, the gokura, and on to the lord's storehouses in the castle tow
 an intendant's office kept a rice storehouse of its own. What waited in an office's store was probably rice in transit,
 with some held back as a local reserve. Nobody lived in it.
 
-It took one of two forms. The storehouse on posts, the takakura, kept its floor high to keep rats from the grain, with
+It took one of two forms. The timber storehouse on posts, the takakura, kept its floor high to keep rats from the grain, with
 rat-guards, and let the air through against damp; such storehouses were still built on outlying islands and among the
 Ainu into modern times. The other was an earth-walled kura like Takayama's rice store, its walls sloping inward and set
 with gaps for ventilation, guarding its grain against fire, damp and theft.
 
 It held the paddy tax as brown rice in straw bales, while much of the dry-field tax was paid in coin. In Rokugan, rich in
 goods and poor in coin, more of that share arrives in kind, as bales of soybeans and barley beside the rice. A store
-shared by three villages had storehouses of about 440 to 740 sq ft each; Takayama's, which held a whole province's rice,
-covers about 11,200 sq ft. A county office's granary is not recorded.
+shared by three villages had storehouses of about 440 to 740 sq ft each; Takayama's, at the office that ran a whole province,
+covers about 11,200 sq ft. The size of a county office's granary is not recorded.
 
 Guesses:
 - Its size on the plan, about 43 to 50 by 25 to 27 ft: no account gives the size of a county office's grain storehouse or

@@ -6,8 +6,8 @@ boat's post, and some boats carried only a talisman from a shrine or temple, pas
 shrine on land; fishermen and shipwrights were its chief worshippers. Where on land that shrine stood, and how big it was, is not
 recorded.
 
-River boatmen are also known to have kept a shrine to a water god, with a festival of their own on their boats, but only in the
-twentieth century.
+River boatmen are also known to have kept a shrine to a water god, with a festival of their own on their boats, but only from
+records of the twentieth century.
 
 Guesses:
 - Its place at the head of the landing, and its size, about 3 by 5 ft: the guardian's shrine on land is recorded neither at a

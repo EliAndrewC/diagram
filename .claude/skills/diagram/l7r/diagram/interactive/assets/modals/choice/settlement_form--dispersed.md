@@ -6,7 +6,7 @@ reclaimed land, which let the peasant who opened a field farm it themselves, are
 the late Heian period, the narrow valleys of western Japan probably held one house or a few, each beside its own small
 paddy.
 
-A visitor to Tonami saw farm after farm standing alone in the paddy, each wrapped in its own grove, the kainyo, against the
+Across the Tonami plain farm after farm stood alone in the paddy, each wrapped in its own grove, the kainyo, against the
 winter wind and snow and the summer sun. Many drew their water by a small channel led off the irrigation into the house's
 grounds, since a well was hard to dig there.
 

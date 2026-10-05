@@ -17,8 +17,8 @@ Guesses:
 - How often a settlement's paddies come out middling rather than small, large or in strips: no source counts how many
   villages had which.
 
-Depiction: The map draws the field's basins at their real size in feet, never at the quarter-acre block that land
-consolidation laid out after 1868; whether their lines follow the ground or a surveyed grid is a separate choice on the
+Depiction: The map draws the field's basins at their real size in feet, about 39 ft square on a hamlet map and 47 ft on
+a village map, never at the quarter-acre block that land consolidation laid out after 1868; whether their lines follow the ground or a surveyed grid is a separate choice on the
 title card.
 
 Name: The paddy plots' size: middling

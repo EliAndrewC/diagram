@@ -5,9 +5,9 @@ reclaimed from the sea, the farmhouses lined the dike; and in the delta where th
 surges struck and natural levees were few, the houses crowded onto the highest dike inside the village's ring dike. The
 saying handed down there was "if the levee breaks, flee to the levee".
 
-A visitor saw a single line of farmhouses along the bank, the polder's fields spread below on one side and the open water
-on the other. Around Lake Tai the houses stood near the water because the boat was how the villagers traveled, and
-mulberry grew on the raised ground beside them.
+On reclaimed land the farmhouses stood in a line along the dike, the diked fields on one side and the water on the other.
+Around Lake Tai the houses stood near the water because the boat was how the villagers traveled, and nearly every household
+kept one; mulberry grew on the raised ground beside the houses, with vegetables under it and in small gardens close by.
 
 How old such dike-top houses were is not recorded, nor how many households a dike carried or how far apart they stood.
 

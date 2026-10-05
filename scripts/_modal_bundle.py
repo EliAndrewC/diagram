@@ -196,11 +196,15 @@ def claims_citing(root: pathlib.Path, files: Sequence[str]) -> list[str]:
 
 
 def pool_page_with(root: pathlib.Path, key: str) -> pathlib.Path | None:
-    """The first pool page that draws the kind `key` (its page carries `data-k="<key>"`), hamlets first."""
+    """The first pool page that draws the kind `key` (its page carries `data-k="<key>"`), hamlets first, and a sheet the GM
+    drew before a placer's draft: a `-test` page (the round trip of feature 008, whose divergence from the hand sheet is the
+    point of it) is never the crop, and an `-example` page comes after the hand sheets (feature 319, sheet round 1: the
+    cinnabar workshop was judged against the round-trip's plain rect)."""
     mark = f'data-k="{key}"'
     trees = sorted((p for p in (root / POOL).iterdir() if p.is_dir()), key=lambda p: (p.name != HAMLETS, p.name)) if (root / POOL).is_dir() else []
     for d in trees:
-        for page in sorted(d.glob("*/*.html")):
+        pages = [p for p in d.glob("*/*.html") if not p.parent.name.endswith("-test")]
+        for page in sorted(pages, key=lambda p: (p.parent.name.endswith("-example"), p.name)):
             with open(page, encoding="utf-8", errors="replace") as fh:
                 if mark in fh.read():
                     return page

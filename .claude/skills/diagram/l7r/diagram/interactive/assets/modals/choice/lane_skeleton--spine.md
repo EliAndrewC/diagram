@@ -16,7 +16,7 @@ Guesses:
 
 Depiction: The map seats the houses first and lays the spine after, fitted to where they stand, running the length of the
 cluster; the households' own ways join it. It is drawn as a track of bare earth a little wider than a footpath - a width of the
-map's choosing, since no village lane's width is recorded - pulled as straight as the plots allow.
+map's choosing, since no lane in a wet-rice village was measured - pulled as straight as the plots allow.
 
 Name: One spine lane
 Covers: `meta.lane_skeleton = spine`

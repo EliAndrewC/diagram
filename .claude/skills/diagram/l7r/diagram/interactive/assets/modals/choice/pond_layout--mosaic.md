@@ -15,10 +15,10 @@ Depiction: The map lays the block out on a lattice of ditches and bends it out o
 nothing at the block's edge, so the interior ditches meander like creeks and the parcels skew to trapezoids while every pond
 stays four-sided, as most real ones were. How strongly the lattice bends is set by eye, since no source measures how far a
 mosaic strayed from a grid. A uniform grid of ponds is never drawn: ponds set out in straight rows are known only from modern
-times.
+times. Each pond is drawn at about 0.7 acre of water, somewhat smaller than most ponds today.
 
 Name: Ponds laid out as a mosaic
 Covers: `meta.pond_layout = mosaic`
 Sources: isis-dykepond, tian-dike-pond, sdlib-shunde-jitang, gmrb-2024-sangji, cssn-sangji-yutang, minle-dou-people, guangdong-xinyu-22
 Entry: research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.html, research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.html, research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.html
-Drawing: research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html, research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html
+Drawing: research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html, research/questions/0018-dike-ponds-fish-ponds-ringed-by-mulberry-dikes-sangji-yutang.drawing.html, research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html

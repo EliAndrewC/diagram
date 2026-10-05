@@ -1,10 +1,10 @@
 About: Guardian figures were a pair of stone beasts set at a shrine's entrance, the komainu, the guardian lion-dogs.
-Before a temple of Bishamon a pair of stone tigers took their place, "unlike the more common guardian lion-dogs", at least at
-the city temple where they are known; whether a village shrine of Bishamon had them is not recorded. In Rokugan Bishamon is
+Before temples of Bishamon a pair of stone tigers often took their place, as at one city temple of his;
+whether a village shrine of Bishamon had them too is not recorded. In Rokugan Bishamon is
 the Fortune of Strength.
 
-They were gifts. Most of what stood in a shrine's precinct besides its halls was given to it piece by piece, and commoners
-gave stone guardian pairs from the Edo period on, in growing numbers and in ever more varied forms; so a shrine probably had
+They were gifts. Like the stone lanterns a village's parishioners gave their shrine, stone guardian pairs were given by
+commoners from the Edo period on, in growing numbers and in ever more varied forms; so a shrine probably had
 them only once its parishioners could afford them.
 
 How big they were, and how many village shrines had a pair, are not recorded.
@@ -20,6 +20,6 @@ approach, and at a shrine of Bishamon draws them as tigers.
 
 Name: guardian figures
 Covers: the guardian pair beside the approach
-Sources: komainu-jawiki, gltjp-zenkokuji, darumamuseum-bishamonten
+Sources: komainu-jawiki, gltjp-zenkokuji, darumamuseum-bishamonten, niiza-ishigami-lantern
 Entry: research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html
 Drawing: research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html

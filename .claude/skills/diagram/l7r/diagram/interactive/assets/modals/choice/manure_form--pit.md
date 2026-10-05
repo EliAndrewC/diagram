@@ -15,9 +15,10 @@ Guesses:
 - That a settlement keeps its manure in sunk jars or in heaps at even odds: both forms are recorded, but no source says how
   many villages used each.
 - That between about 2 and 85 households in 100 keep their jar out by a field or a road, sought within about 160 ft of the
-  house: the share is Japan's field pits' carried to the jar, since the field-head pits of south China were lined with brick,
+  house: the share is the span found for Japan's field pits, carried over to the jar, since the field-head pits of south China were lined with brick,
   not jars, and no account gives how far out a jar stood.
-- The jar's mouth on the map, 3.5 ft across: no manure jar's size was found.
+- The jar's mouth on the map, 3.5 ft across: no Chinese manure jar's size was found; it falls within the 3 to 5 ft of a
+  buried Japanese jar.
 
 Depiction: The map draws each jar as its mouth seen from above, a dark disc inside a pale rim, flush with the ground, beside
 its household's privy or out at the edge of the household's nearest field or by a road. A jar buried to its rim and one half

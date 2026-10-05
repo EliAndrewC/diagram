@@ -8,7 +8,7 @@ out its bottom. On the plains it was shallow; such ponds are ringed today by ree
 kept clear of growth to keep them strong, and an older Chinese manual had a pond's bank trodden firm by cattle.
 
 Japan came to have over a hundred thousand ponds, more of them built in the Edo period than in any other, and before
-its modern canal the dry Kagawa plain drew most of its farm water from them. The largest covered several hectares (a hectare
+its modern canal Kagawa, on the dry Sanuki plain, drew most of its farm water from them. The largest covered several hectares (a hectare
 is about 2.5 acres); the smallest, about 33 ft (10 m) on a side, were owned and kept by a single owner.
 
 Guesses:

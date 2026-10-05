@@ -1,6 +1,6 @@
 About: Pines stood in the garden of a samurai residence. The Japanese black pine (kuromatsu) was the lead tree of the
 Japanese garden, and a pine also had a set place at the garden's edge: planted by the wall so that it could be seen from
-outside, a custom already named in a dictionary of 1603-04, at the start of the Edo period.
+outside, a custom already named at the start of the Edo period.
 
 A garden pine was a tended tree, not a wild one. Twice a year its new shoots, which stick up in early spring, were pinched
 and the tree further worked, and a pine whose care was neglected lost its worth as a garden tree. One way of training it
@@ -17,7 +17,7 @@ Guesses:
   either was found.
 
 Depiction: The plan draws the pines as a cluster of three round crowns in the inner garden, with a label, each crown
-drawn to the size given above.
+about 4 to 6 ft across, the size of young or closely pruned trees.
 
 Name: garden pines
 Covers: the old pines' canopies and their label
