@@ -279,6 +279,14 @@ when a rewrite is accepted with no changes are the rest rewritten.
   naming any other is refused when it is read; the checks MUST read each conditional item with its condition. The References
   tab MUST follow what is shown: a question resting only on a hidden item is not listed on that map (FR-006; the GM: *"simply
   not link to things which are not covered"*).
+- **FR-016**: The rollout MUST NOT change what any map draws (the GM's go-ahead, 2026-10-05). Where a modal's research shows the
+  map drawing something the record contradicts and `make claims-report` does not already show it, the rollout MUST make the
+  report show it - the engine's `Research:` claim for that decision cites the research that contradicts it, and `impl-drift`
+  records the verdict - so the future feature that fixes every discrepancy finds it. A ruling only the GM can give - one the
+  record and the project's guidelines cannot settle (constitution XII's ladder: research, then a knob where two forms are
+  attested, then the GM only where the record is silent or contradictory) - MUST NOT stop the rollout: the modal states what is
+  known, the open point is a guess bullet, and the question is tracked in a separate feature filed for the GM's rulings, added
+  to it as found, without a spec review per addition. No pilot or example sign-off is owed before a kind is rolled out.
 - **FR-013**: The session MUST pitch the GM alternative names for the first tab (at least three candidates, Overview among
   them, a line on each) no later than the hand-off of the farmhouse pilot; the GM's choice is applied to the guidelines and
   the pilot before the rollout starts. (Done 2026-10-03: the GM chose "About".)
@@ -302,6 +310,10 @@ when a rewrite is accepted with no changes are the rest rewritten.
 - **SC-009** (FR-015): the windbreak's shared-wood guess - the GM's own case - is on a nucleated map's windbreak modal and
   absent from a dispersed map's, and so is the question that guess alone rests on on the References tab (page tests on two
   synthetic maps); a condition naming an unknown knob or value fails when the modal is read.
+- **SC-010** (FR-016): the pool's renders are unchanged by the rollout in everything but the page's modal text; every
+  research-versus-map contradiction a modal check found is a DRIFTED or NEEDS-RESEARCH row of `make claims-report`; every
+  ruling the rollout could not settle is a numbered entry of the rulings feature, each saying what the record and guidelines
+  say and why they do not settle it.
 - **SC-007** (FR-012, FR-013): nothing but the spec claim is on main until the rollout's last task; the GM's choice of the
   first tab's name is recorded in the spec's Decisions table before the rollout starts.
 
@@ -335,3 +347,4 @@ when a rewrite is accepted with no changes are the rest rewritten.
 - Amendment 2026-10-05 (the GM's knob-dependent items): FR-015, SC-009 and one Decisions row added.
 - Amendment 2026-10-05, round 1 (spec-fidelity, 2026-10-05): CHANGES REQUIRED - FR-015 is faithful to the GM's ask and does not conflict with "standardized ... not ... customized" (a conditioned item is still one standard text, chosen automatically), but FR-004, SC-004, US4 (its Why and scenario 3) and the per-settlement Decisions row still say no hamlet feature modal varies by map, which SC-009 now requires; References must follow the items shown (FR-006); the windbreak's shared-wood guess, the GM's case, is named only in the plan.
 - Amendment 2026-10-05, round 2 (spec-fidelity, 2026-10-05): ACCEPT (FAITHFUL) - all three round-1 changes confirmed against the diff (FR-004, SC-004, US4 Why and scenario 3, the per-settlement Decisions row allow FR-015's items; FR-015 makes References follow what is shown, SC-009 tests it; SC-009 names the windbreak's shared-wood guess).
+- Amendment 2026-10-05b (the GM's go-ahead): FR-016 and SC-010 added; T12 met by the go-ahead.

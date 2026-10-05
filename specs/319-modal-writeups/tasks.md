@@ -113,8 +113,15 @@ done (FR-012).
       - [x] quote-check confirmed
       - [x] source-applicability confirmed
       verify: DONE. garden rewritten from 0039 (G1: research pass, source-reader, cited, quote-check, source-applicability, six check rounds); M6 settled; modal-form, modal-research, modal-depiction two rounds each, applied; Inashiro regenerated
-- [ ] T12 [US6] THE GM'S VERDICT on the garden's FIRST rewrite. Accepted with no changes and the GM's go-ahead: the rollout
+- [x] T12 [US6] THE GM'S VERDICT on the garden's FIRST rewrite. Accepted with no changes and the GM's go-ahead: the rollout
   starts. Otherwise: changes to the guidelines, then the garden; a further feature is piloted as T11/T12 (FR-010, SC-005)
+      research: rendering
+      verify: DONE. The garden's first rewrite took one change (M21, the older maps never mentioned); the windbreak was piloted as the further feature (T11/T12's terms), its knob-conditioned guess built as T22; the GM 2026-10-05: "I'm pretty happy with this", then the go-ahead (request.md, "The go-ahead")
+
+- [ ] T23 [US6] The rulings feature (FR-016): claimed with `make claim`, its spec a short request.md (the GM's go-ahead) and a
+  `rulings.md` list, one numbered entry per ruling only the GM can give, each with what the record and the guidelines say and
+  why they do not settle it; committed and pushed as a spec claim. Entries are added by the rollout as found, without a review
+  per entry
       research: rendering
       verify:
 
