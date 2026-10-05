@@ -27,6 +27,7 @@ from l7r.diagram.interactive.sources import (
     research_sources,
     section_sources,
 )
+from tests import _flat_record as fr
 from tests._record_pages import text_of
 
 
@@ -187,3 +188,75 @@ def test_a_section_with_no_roster_takes_its_sources_from_its_footnotes(tmp_path:
     assert research_sources("research/questions/0030-gone.html", str(tmp_path)) == [], "a question that is not there yields nothing"
     assert research_questions("research/questions/0030-gone.html", str(tmp_path)) == []
     assert record_text("questions/0099-none.html", str(tmp_path)) == "" and record_text("SOURCES.html", str(tmp_path)) == ""
+
+
+# ------------------------------------------------------------------------------- the record loaded once (feature 322)
+
+
+def _counted_loads(monkeypatch) -> list[str]:  # type: ignore[no-untyped-def]
+    """Every `store.load` from here on, by directory; the caches start empty and are left empty."""
+    from l7r.diagram.interactive import sources  # noqa: PLC0415
+
+    sources.clear_caches()
+    loads: list[str] = []
+    real = store.load
+
+    def counted(research_dir: str):  # type: ignore[no-untyped-def]
+        loads.append(research_dir)
+        return real(research_dir)
+
+    monkeypatch.setattr(store, "load", counted)
+    return loads
+
+
+def _fresh(rec: pathlib.Path, name: str) -> str:
+    """A question page rendered from a record loaded for it alone - what every read did before feature 322."""
+    record = store.qs.load(str(rec))
+    return store.page_html(record, record.by_file[name], str(rec))
+
+
+def test_reading_every_question_page_loads_the_record_once(tmp_path: pathlib.Path, monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """322 FR-001, FR-004, SC-001: N pages, one load, each page byte-identical to a fresh render."""
+    from l7r.diagram.interactive.sources import clear_caches  # noqa: PLC0415
+
+    rec = fr.write(tmp_path)
+    names = sorted(store.qs.load(str(rec)).by_file)
+    assert len(names) >= 3, "non-vacuity"
+    loads = _counted_loads(monkeypatch)
+    texts = {n: record_text(f"questions/{n}", str(rec)) for n in names}
+    assert loads == [str(rec)], loads
+    assert texts == {n: _fresh(rec, n) for n in names}
+    record_text("SOURCES.html", str(rec))
+    assert len(loads) == 1, "the registry does not load the record"
+    clear_caches()
+
+
+def test_two_record_directories_never_share_a_record(tmp_path: pathlib.Path, monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """322 FR-002, SC-002: each directory is loaded once, and a page comes from its own record."""
+    from l7r.diagram.interactive.sources import clear_caches  # noqa: PLC0415
+
+    (tmp_path / "a").mkdir()
+    (tmp_path / "b").mkdir()
+    a, b = fr.write(tmp_path / "a"), fr.write(tmp_path / "b")
+    fr.edit(b, "0003-rows.html", "Shops in a row.", "Shops in a long row.")
+    loads = _counted_loads(monkeypatch)
+    for rec in (a, b, a, b):
+        for name in ("0001-lanes.html", "0003-rows.html"):
+            assert record_text(f"questions/{name}", str(rec)) == _fresh(rec, name), (rec.name, name)
+    assert sorted(loads) == sorted([str(a), str(b)]), loads
+    assert "long row" in record_text("questions/0003-rows.html", str(b)) and "long row" not in record_text("questions/0003-rows.html", str(a))
+    clear_caches()
+
+
+def test_a_page_not_yet_read_shows_an_edit_made_before_clear_caches(tmp_path: pathlib.Path, monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """322 FR-003, SC-003: the record is held between reads - so an edit is seen after `clear_caches()`, as a build calls it."""
+    from l7r.diagram.interactive.sources import clear_caches  # noqa: PLC0415
+
+    rec = fr.write(tmp_path)
+    loads = _counted_loads(monkeypatch)
+    record_text("questions/0001-lanes.html", str(rec))
+    fr.edit(rec, "0003-rows.html", "Shops in a row.", "Shops in a long row.")
+    clear_caches()
+    assert "long row" in record_text("questions/0003-rows.html", str(rec))
+    assert len(loads) == 2, "loaded again after clear_caches"
+    clear_caches()

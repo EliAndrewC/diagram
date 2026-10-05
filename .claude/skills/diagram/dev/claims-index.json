@@ -23639,6 +23639,16 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/interactive/sources.py::_loaded#record load cache": {
+  "code": "012822ffd20138c9",
+  "core": "492c681c909d887a",
+  "date": "2026-10-04",
+  "note": "per-process record cache, plumbing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  ".claude/skills/diagram/l7r/diagram/interactive/sources.py::_page_notes#plumbing": {
   "code": "1412c999592309db",
   "core": "247ca1310d8cbd66",
@@ -23648,11 +23658,13 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/sources.py::_record_text#plumbing": {
-  "code": "cba91aebc3e41d92",
-  "core": "c7881bbc2d7c14db",
-  "date": "2026-10-03",
-  "note": "plumbing, decides nothing physical",
+  "code": "1648f5606b557393",
+  "core": "5547d129bb4b0f2a",
+  "date": "2026-10-04",
+  "note": "routes a relative path to the registry, a rendered page or the raw file; I/O only",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/sources.py::_url_end#plumbing": {
@@ -23680,11 +23692,13 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/sources.py::clear_caches#plumbing": {
-  "code": "f2e8b68c05c984aa",
-  "core": "3fa3c5f137d857fe",
-  "date": "2026-10-03",
-  "note": "plumbing, decides nothing physical",
+  "code": "a57ca3053e03c609",
+  "core": "d52169d6b8d6f210",
+  "date": "2026-10-04",
+  "note": "clears the caches, plumbing",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/sources.py::entry_fragments#plumbing": {

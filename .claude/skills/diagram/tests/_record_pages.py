@@ -10,7 +10,6 @@ gives the same page with its references numbered from 1 and its notes by number,
 
 from __future__ import annotations
 
-import functools
 import os
 import pathlib
 
@@ -18,24 +17,9 @@ from l7r.diagram.interactive.record import site_notes, store
 from l7r.diagram.interactive.sources import RESEARCH_DIR, record_text
 
 
-@functools.cache
-def _real_record() -> store.qs.Record:
-    return store.load(RESEARCH_DIR)
-
-
-@functools.cache
 def text_of(rel: str) -> str:
-    """`rel` as `sources.record_text` reads it, with the real record LOADED ONCE per test process (2026-10-04).
-
-    `record_text` caches each page's text, but a miss on a question page calls `store.load` - the whole record, ~90 ms -
-    so the tests that read every page loaded the record 475 times: 42 s of a 44 s test, measured by cProfile, and
-    three such tests were a quarter of a full `make quick`. A question page is the same two calls the engine makes
-    (`store.load`, then `store.page_html`) on one record; anything else goes through `record_text` as before."""
-    if rel.startswith("questions/"):
-        record = _real_record()
-        name = rel[len("questions/") :]
-        if name in record.by_file:
-            return store.page_html(record, record.by_file[name], RESEARCH_DIR)
+    """`rel` as its reader sees it - `sources.record_text`, which since feature 322 loads the record once per process (the
+    workaround this helper held, loading it here, went with the engine's fix)."""
     return record_text(rel)
 
 

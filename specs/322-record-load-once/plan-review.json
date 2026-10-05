@@ -1,0 +1,57 @@
+{
+ "feature": "322-record-load-once",
+ "plan_sha256": "bc3b4377cb787f0b7d7c0c4730c23250ade3db9eea3ec854bce91319474b6daf",
+ "reviewed": "2026-10-04",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "A module-level @cache _loaded(research_dir) returning store.load, called by _record_text's question branch in place of store.load, keyed by the normpath'd directory record_text already passes.",
+   "class": "within",
+   "why": "Implements FR-001 (one load per directory per process between clear_caches) and FR-002 (keyed as the page cache keys it) literally; only the question branch calls it, so the spec's never-reads-a-question-page edge case holds. Note, not a narrowing: os.path.normpath unifies a trailing slash but not a relative and an absolute name, so D1's 'a directory named two ways is one record' is true for the first and not the second - the cost is a second load of the same directory, never a page from the wrong record, and FR-002 asks for the page cache's keying, which this is."
+  },
+  {
+   "id": "D2",
+   "summary": "_loaded joins the tuple clear_caches() clears; an unread page is rendered from the record as loaded since the last clear_caches.",
+   "class": "within",
+   "why": "FR-003 verbatim; the staleness change is the one the accepted spec's Assumptions name. The only clear_caches caller is record/site.py (the build), and a grep of the fixture-record tests that call record_text found none that edits a fragment after a read in the same directory; FR-006 and make done hold the rest."
+  },
+  {
+   "id": "D3",
+   "summary": "The question branch still calls store.page_html(record, record.by_file[name], research_dir) with the same arguments; SC-004 compared against a fresh store.load per page.",
+   "class": "within",
+   "why": "FR-004 / SC-004. A per-page fresh load is the right oracle (it is what the old code did, and it would catch a page_html that mutates the shared record). Aside on cost, not a fidelity ruling: as a permanent test it is ~475 loads, the very pattern R1 measured at ~42 s; the spec's SC-004 asks for a comparison before and after, which a one-shot run or the full tier satisfies equally."
+  },
+  {
+   "id": "D4",
+   "summary": "text_of becomes record_text(rel); _real_record is removed; callers keep the name.",
+   "class": "within",
+   "why": "FR-005 and User Story 3 verbatim: the helper's body is a call to record_text, no restated engine calls."
+  },
+  {
+   "id": "D5",
+   "summary": "_loaded carries a 'Research: record load cache - NONE: process plumbing' claim; _record_text and clear_caches keep theirs, re-checked only if make claims-owed owes it.",
+   "class": "within",
+   "why": "Compliance with the repository's standing feature-316 claim rule for a new unit; changes no behavior and narrows nothing asked."
+  },
+  {
+   "id": "Bookends",
+   "summary": "make perf LABEL=322-start on unmodified code and 322-end at the last commit, with perf-report against the start.",
+   "class": "within",
+   "why": "Constitution VI procedure for an engine change; the start bookend is taken on d8851588e-era unmodified code as the plan says."
+  },
+  {
+   "id": "Tests",
+   "summary": "Load-count, two-directory, and edit-after-clear_caches tests on fixture records in test_sources.py; SC-004 over the real record; the four record tests timed and recorded in research.md.",
+   "class": "within",
+   "why": "Each test enforces an FR/SC the accepted spec carries (SC-001 to SC-005); enforcement of what was asked, no new behavior."
+  },
+  {
+   "id": "Verification",
+   "summary": "make quick, make test-file FILE=tests/interactive, make done, the bookends.",
+   "class": "within",
+   "why": "The standard ladder; FR-006."
+  }
+ ],
+ "verdict": "CLEAR"
+}
