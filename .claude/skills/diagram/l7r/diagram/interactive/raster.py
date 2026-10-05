@@ -72,8 +72,16 @@ PICTURE_MIME = "image/jpeg"
 #: document with the tile's viewBox and the same `--zoom`, all at once, and the encode child pastes them into one
 #: image. A tile's viewBox origin is the picture's origin plus a whole number of MAP pixels, and its size a whole
 #: number of map pixels, so at an integer zoom every tile pixel is a whole number of picture pixels from the origin
-#: and resvg rasterizes it from the same geometry-to-pixel mapping the single render used: the stitched picture is
-#: the single render pixel for pixel (`test_a_tiled_picture_is_the_single_render`; the pool's diffed by review).
+#: and resvg rasterizes it from the same geometry-to-pixel mapping the single render used. On a small synthetic page the
+#: stitched picture is the single render pixel for pixel (`test_a_tiled_picture_is_the_single_render`), but NOT on a real
+#: map (feature 326, specs/326-tile-clip/research.md R3): on the 20-household reference render at 3 x 3, 4,319 of its
+#: 32 million pixels differ from the single render, most (about 80%) by one or two levels and none by more than 39 - resvg
+#: renders a tile's canvas a little differently from the whole one. Invisible, but it means a change of GRID is never
+#: byte-identical to the picture before it (the seams move). Clipping each tile's document (`tile_doc`) is visually identical
+#: but not always byte-identical: trimming a path's far subpaths moves resvg's anti-aliasing by a level or few - on 2 of the
+#: pool's 11 maps, 34 and 29 channel values in 20+ million pixels, at most 10 levels (feature 326 R4; the GM: "I'm okay with
+#: A given the savings and the fact that it is visually identical"). Dropping only WHOLE lines was byte-identical but saved
+#: ~130 MB to trimming's ~170 MB.
 #: `n` is the smallest count putting each tile under TILE_MPX megapixels - every resvg process parses the whole
 #: document (~0.3 s), so tiles cost parse time in proportion; 8 puts a hamlet at 2 x 2 and a city at 3 x 3.
 TILE_MPX = 8.0
@@ -259,6 +267,25 @@ def tile_boxes(vb: Viewbox, n: int) -> list[tuple[int, int, Viewbox]]:
     return [(i, j, (vb[0] + xs[i], vb[1] + ys[j], xs[i + 1] - xs[i], ys[j + 1] - ys[j])) for j in range(n) for i in range(n) if xs[i + 1] > xs[i] and ys[j + 1] > ys[j]]
 
 
+_CLASSED_LINE = '<g class="f '  # how `page.wrap` opens a classed string - the strings the page itself clips to its viewBox
+
+
+def tile_doc(svg_text: str, box: Viewbox) -> str:
+    """The page's text as one tile renders it (feature 326, GM 2026-10-05: "go ahead and file that as a feature"): the tile's
+    window as the viewBox, and every CLASSED line - a record string as `page.wrap` writes it, one a line - less what lies wholly
+    outside that window, by the page's own off-map rule (`drop_offmap`, its margin included). The sheet, the defs and unclassed
+    ink are left whole, as the page leaves them. A tile's resvg parses only its share: on a 20-household hamlet the render's
+    peak fell ~540 -> ~370 MB (specs/326-tile-clip/research.md R2). The picture is visually identical - the window clips what
+    was dropped - though a trimmed path can move resvg's anti-aliasing by a few levels on a few pixels (the note at TILE_MPX)."""
+    doc = _VIEWBOX_ATTR.sub(f'viewBox="{box[0]:g} {box[1]:g} {box[2]:g} {box[3]:g}"', svg_text, count=1)
+    return "\n".join(drop_offmap(line, box) if line.startswith(_CLASSED_LINE) else line for line in doc.split("\n"))
+
+
+def render_tile(svg_text: str, box: Viewbox, r: float) -> bytes | None:
+    """One tile: its document built HERE, in the worker, so only the tiles rendering hold one (not every tile's at once)."""
+    return resvg_png(tile_doc(svg_text, box), "--zoom", f"{r:g}", *RESVG_FONT_ARGS)
+
+
 def picture(svg_text: str, r: float = RASTER_R, tiles: int | None = None) -> bytes | None:
     """The whole picture at `r` px per map px, encoded as `PICTURE_FORMAT` (a JPEG since feature 222 - the
     note at `PICTURE_FORMAT`), rendered as `tiles` x `tiles` pixel-aligned tiles in parallel (feature 223, the
@@ -276,9 +303,7 @@ def picture(svg_text: str, r: float = RASTER_R, tiles: int | None = None) -> byt
         return None if png is None else encode_picture([(0, 0, png)])
     boxes = tile_boxes(vb, n)
     with ThreadPoolExecutor(max_workers=min(len(boxes), TILE_WORKERS)) as pool:
-        jobs = [
-            (i, j, pool.submit(resvg_png, _VIEWBOX_ATTR.sub(f'viewBox="{tx:g} {ty:g} {tw:g} {th:g}"', svg_text, count=1), "--zoom", f"{r:g}", *RESVG_FONT_ARGS)) for i, j, (tx, ty, tw, th) in boxes
-        ]
+        jobs = [(i, j, pool.submit(render_tile, svg_text, box, r)) for i, j, box in boxes]
     rendered = [(i, j, job.result()) for i, j, job in jobs]
     if any(png is None for _i, _j, png in rendered):
         return None
