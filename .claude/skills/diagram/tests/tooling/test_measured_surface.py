@@ -116,7 +116,9 @@ def test_the_page_area_is_the_assets_and_the_registry_and_the_gate_s_area_holds_
     # edit to one changes what a modal says, which owes `make page-check` exactly as a term file does
     modals = sorted(f for f in page if "/assets/modals/" in f)
     assets = [a for a in assets if not any(a in t for t in terms) and not any(a in m for m in modals)]
-    assert assets == ["choices.json", "glossary.json", "page-text.json", "page.css", "page.js", "place.json", "siblings.json"], assets  # feature 207: the content files are assets; feature 319 plan D10: the title card's choices table
+    assert assets == ["choices.json", "glossary.json", "page-text.json", "page.css", "page.js", "place.json", "siblings.json"], (
+        assets
+    )  # feature 207: the content files are assets; feature 319 plan D10: the title card's choices table
     assert len(terms) > 500 and all(t.endswith(".json") for t in terms), f"{len(terms)} term files"
     registry = sorted(f.rsplit("/", 1)[1] for f in page if "/classes/" in f)
     assert "homestead.py" in registry and "_base.py" in registry and all(f.endswith(".py") for f in registry), registry

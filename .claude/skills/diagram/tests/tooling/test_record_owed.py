@@ -12,6 +12,8 @@ import pathlib
 import subprocess
 import sys
 
+import pytest
+
 REPO = pathlib.Path(__file__).resolve().parents[5]
 
 
