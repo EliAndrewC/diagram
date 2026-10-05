@@ -9809,6 +9809,8 @@
  "back marsh": {
   "def": "The low, poorly drained ground behind a river's natural levees, often holding ponds and old ox-bow lakes; in Japan it was traditionally cleared and used as paddy.",
   "variants": [
+   "back lowland",
+   "back lowlands",
    "back marsh",
    "back marshes",
    "back swamp",
@@ -15758,6 +15760,12 @@
   "variants": [
    "hitsu",
    "ippitsu"
+  ]
+ },
+ "impoundment": {
+  "def": "Water held back and left standing on ground that cannot drain it; on the Noubi plain the drainage from the upper villages' artesian wells stood on the lower villages' paddy and damaged it.",
+  "variants": [
+   "impoundment"
   ]
  }
 }

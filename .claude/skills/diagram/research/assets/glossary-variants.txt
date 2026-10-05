@@ -113,6 +113,8 @@ baba	baba
 back crop	back crop
 back crops	back crop
 back grove	fengshui grove
+back lowland	back marsh
+back lowlands	back marsh
 back marsh	back marsh
 back marshes	back marsh
 back nagaya	back tenement
@@ -1638,6 +1640,7 @@ important cultural landscape	Important Cultural Landscape
 important cultural landscapes	Important Cultural Landscape
 important cultural properties	Important Cultural Property
 important cultural property	Important Cultural Property
+impoundment	impoundment
 in spate	spate
 in-field pocket pond	pocket pond
 inari	Inari
