@@ -107,6 +107,19 @@ def test_the_intro_bundle_holds_the_body_the_drawing_page_and_the_map_elements(o
     assert cb.main(["--for", "intro-check", "--qs", "9999", "--not-owed-ok", "a seeded run", "--out", str(tmp_path / "c"), "--root", str(REPO)]) == 2
 
 
+def test_a_kind_bundle_carries_only_that_modals_entry_drift_unit(owing, tmp_path: pathlib.Path) -> None:  # noqa: ANN001
+    """Feature 319 (G4): every `KIND=` bundle carried every owed entry-drift unit, so answering the byre's bundle answered
+    the windbreak's too, which no agent had read."""
+    assert [u.subject for u in bo.kind_units([U("entry-drift:byre", "t", "a"), U("entry-drift:windbreak", "t", "b")], "byre")] == ["byre"]
+    assert cb.kind_key(REPO, "Byre") == "byre" and cb.kind_key(REPO, "NoSuchKind") == ""
+    owing("entry-drift:byre", "entry-drift:windbreak")
+    assert cb.main(["0028", "--for", "entry-drift", "--kind", "Byre", "--no-quotes", "--out", str(tmp_path / "b"), "--root", str(REPO)]) == 0
+    manifest = (tmp_path / "b" / "MANIFEST.md").read_text(encoding="utf-8")
+    assert "unit: entry-drift:byre fp-" in manifest and "windbreak" not in manifest.partition("## Owed")[2]
+    owing("entry-drift:windbreak")
+    assert cb.main(["0028", "--for", "entry-drift", "--kind", "Byre", "--no-quotes", "--out", str(tmp_path / "c"), "--root", str(REPO)]) == 3
+
+
 def test_the_refusals_reach_the_command_line(owing, tmp_path: pathlib.Path) -> None:  # noqa: ANN001
     owing()
     assert cb.main(["0094", "--for", "record-format", "--out", str(tmp_path / "q"), "--root", str(REPO)]) == 3

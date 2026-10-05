@@ -92,6 +92,18 @@ def kind_docstring(root: pathlib.Path, name: str) -> tuple[str, str] | None:
     return None
 
 
+def kind_key(root: pathlib.Path, name: str) -> str:
+    """The page key of one modal class (`Byre` -> "byre") - the subject of its `entry-drift` unit; "" for no such class."""
+    import _modal_owed as mo  # noqa: PLC0415
+
+    module, _, cls = name.rpartition(".")
+    for m in mo.modals_now(root, about_only=False):
+        mod, _, here = m.cls.partition(".")
+        if here == cls and (not module or mod == module):
+            return m.key
+    return ""
+
+
 # A block ends at its close tag, or - HTML's implicit close - at the next block or the end of the fragment: a
 # fragment split off an assembled page can end in a `<p>` the next heading used to close, and matching only the
 # close tag emptied a whole re-check bundle without a word (water 170, feature 250 T75).
@@ -496,6 +508,13 @@ def main(argv: list[str] | None = None) -> int:
         return 3
     if args.for_ == "quote-check" and not wanted and not args.not_owed_ok:
         wanted = bo.owed_notes(units)  # only the notes owed a check (feature 311, plan D9)
+    if args.for_ == "entry-drift" and args.kind:
+        # ONE modal's unit (feature 319, G4): the bundle carried every owed entry-drift unit, so answering the byre's
+        # bundle answered the windbreak's too, which no agent had read - the shape feature 317 closed for quote-check
+        units = bo.kind_units(units, kind_key(root, args.kind))
+        if not units and not args.not_owed_ok:
+            print(f"check-bundle: REFUSED - no entry-drift is owed on the modal {args.kind!r} by this delta", file=sys.stderr)
+            return 3
     owed = bo.manifest_lines(units, checks, args.not_owed_ok)
     out = pathlib.Path(args.out or DEFAULT_ROOT / f"q-{slug(args.q)}{'' if args.for_ == 'all' else '-' + args.for_}")
     q = args.q

@@ -120,6 +120,12 @@ def batch_units(units: list[ru.Unit], batch: frozenset[str]) -> list[ru.Unit]:
     return [u for u in units if u.subject.partition("#")[2] in batch or u.subject.partition("#")[2] == "unfootnoted"]
 
 
+def kind_units(units: list[ru.Unit], key: str) -> list[ru.Unit]:
+    """The owed units ONE modal's entry-drift bundle can answer: that modal's own. Feature 319 (G4): every KIND= bundle
+    carried every owed entry-drift unit, so the byre's answer recorded the windbreak's, which no agent had read."""
+    return [u for u in units if u.check != "entry-drift" or u.subject == key]
+
+
 def unfootnoted_owed(units: list[ru.Unit]) -> bool:
     """Is a quote-check of the page's unfootnoted blocks among the owed units (`quote-check:<stem>#unfootnoted`)?"""
     return any(u.check == "quote-check" and u.subject.partition("#")[2] == "unfootnoted" for u in units)
