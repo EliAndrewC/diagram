@@ -1562,6 +1562,7 @@ hsien	hsien
 huanghuali	huanghuali
 huc	Huc
 hucheng he	hucheng he
+hudou	hudou
 hui	hui
 hui (huizhou) style	Hui style
 hui style	Hui style
@@ -2274,8 +2275,11 @@ major axis	major axis
 makomo	makomo
 makusa	makusa
 mamian	mamian
+man ration	man rations
+man rations	man rations
 man'en	Man'en
 man'yoshu	Man'yoshu
+man-rations	man rations
 manchu	Manchu
 manchus	Manchu
 manji	Manji
@@ -2290,6 +2294,7 @@ market god	ichigami
 market-god	ichigami
 martial temple	Martial temple
 martial temples	Martial temple
+massed	massing
 massha	subsidiary shrine
 massing	massing
 master mountain	master-mountain
@@ -3086,8 +3091,10 @@ round divider	cylinder divider
 round dividers	cylinder divider
 row-house	row house
 row-houses	row house
+rowhouse	row house
 rowhouse gate	nagayamon
 rowhouse gates	nagayamon
+rowhouses	row house
 roya	roya
 ruiju sandai kyaku	Ruiju Sandai Kyaku
 runners	yayi
@@ -3628,6 +3635,7 @@ sweep-type well	well-sweep
 swept collar	swept collar
 swept ground	swept collar
 swi	SWI
+swing bucket	hudou
 sword hunt	sword hunt
 sword hunts	sword hunt
 sōchinju	sōchinju
@@ -4154,6 +4162,7 @@ well-house	well-house
 well-houses	well-house
 well-sweep	well-sweep
 wellhead	curb
+wellheads	curb
 weng cheng	wengcheng
 wengcheng	wengcheng
 wenmiao	wenmiao

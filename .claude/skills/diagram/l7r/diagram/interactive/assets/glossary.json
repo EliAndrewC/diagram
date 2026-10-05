@@ -3274,7 +3274,9 @@
    "party wall",
    "party walls",
    "row-house",
-   "row-houses"
+   "row-houses",
+   "rowhouse",
+   "rowhouses"
   ]
  },
  "ryo": {
@@ -5870,7 +5872,8 @@
  "massing": {
   "def": "How a building's parts are arranged as masses: one block under one roof, or separate halls set apart and joined. A residence takes one form or the other.",
   "variants": [
-   "massing"
+   "massing",
+   "massed"
   ]
  },
  "shogun": {
@@ -8880,7 +8883,8 @@
    "curb",
    "curbs",
    "well curb",
-   "wellhead"
+   "wellhead",
+   "wellheads"
   ]
  },
  "town grain": {
@@ -15784,6 +15788,21 @@
   "variants": [
    "track out",
    "track out's"
+  ]
+ },
+ "hudou": {
+  "def": "A Chinese swing bucket: a bucket on ropes that two people swing between them to lift water a short height, from a well or a river's edge onto a field.",
+  "variants": [
+   "hudou",
+   "swing bucket"
+  ]
+ },
+ "man rations": {
+  "def": "A stipend reckoned as the daily rice rations of so many men - a 50-man ration is the rice of fifty - paid besides or instead of a stipend in koku.",
+  "variants": [
+   "man rations",
+   "man ration",
+   "man-rations"
   ]
  }
 }
