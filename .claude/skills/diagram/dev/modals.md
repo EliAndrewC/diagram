@@ -47,11 +47,15 @@ shed, hen coop, a shrine hall.
    when the record gives it. (GM: *"both on average and in terms of the expected 'min' and 'max' ... not in terms of like
    world records"*)
 
-**M6. A ground or a plot that is not a field crop** - the kitchen garden, the threshing yard, a grave ground, a pond. (inferred,
-to be settled on the garden pilot)
-1. **What it was and what it was for**, and who worked or used it.
-2. **What it looked like** - its surface, its edges, what grew or stood on it, by season where the season changes it.
-3. **How much** - its size, typical with a low and a high one; what it yielded or held where the record gives it.
+**M6. A ground or a plot that is not a field crop** - the kitchen garden, the threshing yard, a grave ground, a pond. (inferred;
+settled on the garden pilot's checks, 2026-10-04)
+1. **What it was, what it was for, and where it lay** - for a ground, where it lay is part of what it was (one sentence, M10).
+   Who worked or used it only where the record says; a "who" the record does not give is left out rather than said unknown.
+2. **What it looked like** - its surface and its edges first, then what grew or stood on it, by season where the season
+   changes it.
+3. **How much** - its size, typical with a low and a high one. Where the thing's own size is not recorded, the size of what
+   held it (the house lot it lay in) may stand in, said as such, with the figure the map draws a guess bullet (M11). How
+   many it fed or held, where the record gives it, answers this better than a yield.
 
 **M7. Every other kind** (a field crop, water, a way, vegetation, a fixture such as a well or notice board, a settlement-choice
 value): the same three questions as they fit the kind - what it was and for whom, what it looked like, how big or how many.
@@ -73,7 +77,8 @@ to get customized modals. For anything"*)
 **M10. Where it stands is said only as the reader sees it.** One sentence at most on where the thing is found ("one stands
 beside each farmhouse, on the sunny side of the yard") when that helps a reader find it or picture it. The placement rules -
 bearings, setbacks in feet, shade lanes, how the placer chooses - are on the research drawing pages, not in the modal. (GM, of
-the farmhouse modal's turning and setback rules: *"kind of just like a hodgepodge"*)
+the farmhouse modal's turning and setback rules: *"kind of just like a hodgepodge"*) The Depiction tab is held to the same: it says a placement rule in words ("kept clear of the shade a house or a
+tree casts"), and the feet and bearings stay on the drawing page. (inferred, the garden pilot's checks, 2026-10-04)
 
 ## Guesses, deviations and conventions
 
@@ -124,7 +129,8 @@ do NOT present the single form as deliberate: leave it unsaid here, and the drif
 2026-10-04, of the farmhouse's single roof: *"NOT a deliberate convention ... as long as it ends up on that list for later"*)
 
 **D4. What varies by settlement.** One clause at most, pointing to the title card, where a settlement's choices are told (M9).
-(inferred)
+(inferred) A rule the older hand-drawn maps were not held to is said with that exception ("except on the older hand-drawn maps"),
+since the modal is the same on every map. (inferred, the garden pilot's modal-depiction check, 2026-10-04)
 
 **D5. The drawing pages, linked.** The tab ends with the "how our maps draw it" pages the modal and its kind rest on - every
 one of them, and no other - as links (the `Drawing:` list). A kind's drawing page is usually the one beside a research question

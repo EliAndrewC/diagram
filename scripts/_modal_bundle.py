@@ -201,8 +201,21 @@ with sync_playwright() as p:
     b = p.chromium.launch(); pg = b.new_page(viewport={"width": 1200, "height": 900})
     pg.goto("file://" + page_path); pg.wait_for_timeout(2500)
     sel = 'g.f[data-k="' + key + '"]'
+    # THE FIRST GLYPH, not the class group: the group spans every instance on the map (a hamlet's gardens run its whole
+    # width), so measuring it never zoomed - the garden's crop came out as the whole hamlet (feature 319, the garden pilot).
+    # The first leaf shape with a box on screen is one glyph's part; the group is the fallback.
+    JS = ("(s) => { const g = document.querySelector(s); if (!g) return null;"
+          " const leaf = [...g.querySelectorAll('polygon,rect,path,ellipse,circle,line')].find(e => e.getBoundingClientRect().width > 0);"
+          " const r = (leaf || g).getBoundingClientRect(); return [r.x, r.y, r.width, r.height]; }")
+    # ...AND MEASURED WHILE SHOWN: below the raster scale the page hides every class group (0 x 0), so a measure there found
+    # nothing and the zoom never centered on a glyph. The kind is shown for the measure alone and hidden again for the shot.
+    SHOW = "(s) => { const st = document.createElement('style'); st.id = 'crop-probe'; st.textContent = s + ', ' + s + ' * { display: inline !important; }'; document.head.appendChild(st); }"
+    HIDE = "() => { const st = document.getElementById('crop-probe'); if (st) st.remove(); }"
     def rect():
-        return pg.evaluate("(s) => { const g = document.querySelector(s); if (!g) return null; const r = g.getBoundingClientRect(); return [r.x, r.y, r.width, r.height]; }", sel)
+        pg.evaluate(SHOW, sel)
+        got = pg.evaluate(JS, sel)
+        pg.evaluate(HIDE)
+        return got
     for _ in range(14):
         x, y, w, h = rect()
         if w > 200 or h > 200: break
