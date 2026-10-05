@@ -1,7 +1,10 @@
 10-mat	tatami
 1868	1868
 3-mat	tatami
+4 mats	tatami
+6 mats	tatami
 6-mat	tatami
+8 mats	tatami
 8-mat	tatami
 abatis	abatis
 ablution well	ablution well
@@ -339,6 +342,8 @@ cao wei	Three Kingdoms
 caoshi	caoshi
 caravan ground	caravan ground
 caravan grounds	caravan ground
+caravan inn	caravan inn
+caravan inns	caravan inn
 caravanserai	caravanserai
 caravanserais	caravanserai
 carex	Carex
@@ -704,6 +709,7 @@ dewa province	Dewa
 dharma hall	dharma hall
 dharma halls	dharma hall
 diameter at breast height	DBH
+dian	dian
 digital daijisen	Digital Daijisen
 dike-pond	dike-pond
 dike-ponds	dike-pond
@@ -847,6 +853,7 @@ edo-period	Edo period
 eel's bed	eel's bed
 eel's-bed	eel's bed
 eel's-bed plot	eel's bed
+egress	egress
 egune	igune
 egune's	igune
 eight trigrams	eight trigrams
@@ -1502,6 +1509,7 @@ hoki	Hoki
 hoki province	Hoki
 hokke	Hokke
 hokke sect	Hokke
+hokonin	hokonin
 hokora	hokora
 hokuriku	Hokuriku
 holding jail	holding jail
@@ -1564,6 +1572,7 @@ hsien	hsien
 huanghuali	huanghuali
 huc	Huc
 hucheng he	hucheng he
+hudou	hudou
 hui	hui
 hui (huizhou) style	Hui style
 hui style	Hui style
@@ -1591,8 +1600,10 @@ hyo	hyō
 hyojosho	Hyōjōsho
 hyō	hyō
 hyōjōsho	Hyōjōsho
+hùdǒu	hudou
 hōei	Hoei
 hōin	hōin
+hōkōnin	hokonin
 hōreki	Horeki
 iai	iai
 ichi no torii	ichi-no-torii
@@ -1635,6 +1646,8 @@ imperial road	Imperial road
 imperial roads	Imperial road
 imperial spine	Imperial spine
 imperial stud	Court of the Imperial Stud
+imperial waystation	Imperial waystation
+imperial waystations	Imperial waystation
 important cultural landscape	Important Cultural Landscape
 important cultural landscapes	Important Cultural Landscape
 important cultural properties	Important Cultural Property
@@ -2281,8 +2294,13 @@ major axis	major axis
 makomo	makomo
 makusa	makusa
 mamian	mamian
+man ration	man rations
+man rations	man rations
 man'en	Man'en
 man'yoshu	Man'yoshu
+man-rations	man rations
+manchu	Manchu
+manchus	Manchu
 manji	Manji
 manji era	Manji
 manning	Manning
@@ -2295,6 +2313,7 @@ market god	ichigami
 market-god	ichigami
 martial temple	Martial temple
 martial temples	Martial temple
+massed	massing
 massha	subsidiary shrine
 massing	massing
 master mountain	master-mountain
@@ -2430,6 +2449,7 @@ monospecific	monospecific
 montane	montane
 monto	monto
 monzen	monzen
+mori ogai	Mori Ogai
 morijio	morijio
 morisada manko	Morisada manko
 morisada mankō	Morisada manko
@@ -2504,6 +2524,8 @@ nagewatashi weir	throw-across weir
 nagewatashi-zeki	throw-across weir
 naginata	naginata
 nago	nago
+nail cover	nail cover
+nail covers	nail cover
 naka-bori	middle moat
 naka-oku	naka-oku
 naka-shoin	Naka-shoin
@@ -2644,6 +2666,8 @@ offtake	offtake
 offtakes	offtake
 ofumi	Ofumi
 ofuregaki	ofuregaki
+ogai	Mori Ogai
+ogai's	Mori Ogai
 ogashoya	ogashoya
 ohaguro dobu	ohaguro-dobu
 ohaguro-dobu	ohaguro-dobu
@@ -2818,6 +2842,8 @@ pit privy	pit privy
 pit rank	pit rank
 pit ranks	pit rank
 pivot-hung	pivot-hung
+pixel	px
+pixels	px
 placer	placer
 plankton	plankton
 plant association	plant association
@@ -2891,6 +2917,7 @@ purlins	purlin
 purple robe	purple robe
 purveyor merchant	purveyor merchant
 purveyor merchants	purveyor merchant
+px	px
 qi	qi
 qiandao	qiandao
 qianlong	Qianlong
@@ -3085,8 +3112,10 @@ round divider	cylinder divider
 round dividers	cylinder divider
 row-house	row house
 row-houses	row house
+rowhouse	row house
 rowhouse gate	nagayamon
 rowhouse gates	nagayamon
+rowhouses	row house
 roya	roya
 ruiju sandai kyaku	Ruiju Sandai Kyaku
 runners	yayi
@@ -3313,6 +3342,8 @@ shibai-goya	shibai-goya
 shiboku sanso	four trees
 shichido garan	garan
 shichidō garan	garan
+shichiri	Shichiri ferry
+shichiri ferry	Shichiri ferry
 shichiya	shichiya
 shide	shide
 shifting cultivation	shifting cultivation
@@ -3628,6 +3659,7 @@ sweep-type well	well-sweep
 swept collar	swept collar
 swept ground	swept collar
 swi	SWI
+swing bucket	hudou
 sword hunt	sword hunt
 sword hunts	sword hunt
 sōchinju	sōchinju
@@ -3885,6 +3917,8 @@ toyotomi hideyoshi	Hideyoshi
 tozama	tozama
 tozama daimyo	tozama
 tozamurai	tozamurai
+track out	track out
+track out's	track out
 training retreat	training retreat
 training retreats	training retreat
 transect	transect

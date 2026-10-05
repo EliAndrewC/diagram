@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-05T06:21:41Z",
+  "target": "record-checked",
+  "commit": "461fa266b",
+  "why": "source-reader on source-reader:0081#village-lanes-2 source-reader:0081.drawing#how-our-maps-draw-village-lanes: absence notes carry no source key; the Manchu width they point to is ushijima-2020-manchu-2's, checked by quote-check"
+}

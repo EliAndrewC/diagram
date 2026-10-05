@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-05T06:45:47Z",
+  "target": "record-checked",
+  "commit": "ecbb398ca",
+  "why": "source-reader on source-reader:0081#village-lanes-4: absence note with no source key; its change only scopes 'no other width' to before the Meiji years, as quote-check asked"
+}
