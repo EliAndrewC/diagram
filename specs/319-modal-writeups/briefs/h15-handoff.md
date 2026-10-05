@@ -6,4 +6,4 @@ All three were TRIMMED of repetition; none was split. No finding, note or absenc
 - SECTION=0091/samurai-residences-and-their-rooms-buke-yashiki - now 19,989 bytes: the well/privy/servants bullet no longer opens with "The servants at Matsue lived in the gate range", which is the bullet just above it, word for word, with the same note.
 - SECTION=0196/communal-wells-ido - now 19,921 bytes: the opening's "In the north of China a well could also water the crop" went, because the last section's opening paragraph and its windlass bullet say it (its note yannopoulos-2015-water-lifting-2 is still cited at the Ming-Qing windlass bullet).
 
-Also fixed: `specs/319-modal-writeups/plan.md:196` gave an elided pointer (`research/questions/0031-...html`), the one failure of `check-research-pointers.py`. It now names the full file.
+Also fixed: `specs/319-modal-writeups/plan.md:196` gave an elided pointer (an elided 0031 pointer), the one failure of `check-research-pointers.py`. It now names the full file.

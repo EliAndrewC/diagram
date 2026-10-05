@@ -20,4 +20,4 @@ Name: A T of lanes
 Covers: `meta.lane_skeleton = T`
 Sources: shuson-jawiki, sonraku-jawiki, shizen-teibo-jawiki, aze-jawiki, kotobank-azemichi, jarimichi-jawiki, ishidatami-jawiki, lowtech-chinese-wheelbarrow, mlit-tokaido-michi, ushijima-2020-manchu
 Entry: research/questions/0031-clustered-and-scattered-villages-shuson-sanson.html, research/questions/0081-village-lanes.html
-Drawing: research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html, research/questions/0081-village-lanes.drawing.html
+Drawing: research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html, research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html

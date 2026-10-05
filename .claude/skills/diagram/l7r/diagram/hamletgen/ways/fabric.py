@@ -152,7 +152,7 @@ def _homestead_polys(s: Settlement) -> list[tuple[Poly, Pt | None, str]]:
     convention `rect_corners` uses in the gate); the area features already record an outline.
 
     Research:
-        nothing built on a lane - research/questions/0081-village-lanes.drawing.html: houses, yards, beds, sheds, wells and
+        nothing built on a lane - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: houses, yards, beds, sheds, wells and
             fixtures are fabric a lane keeps off
         no lane through a farm's grove - UNRESEARCHED: the grove band is fabric, but for its own farm's path
         a path leaves its own yard - UNRESEARCHED: the owner's yard, bed and shed are not walls to its own path"""
@@ -268,7 +268,7 @@ def _hits_a_steading(s: Settlement, pts: Poly, width: int) -> bool:
     tread, which is the polyline widened by half its stroke. No tolerance either way - the check allows the
     overlap none, so neither does this.
 
-    Research: no house on a tread - research/questions/0081-village-lanes.drawing.html: half the width plus 2 ft
+    Research: no house on a tread - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: half the width plus 2 ft
     """
     # MIRROR THE CHECK'S WINDOW, NOT JUST ITS FORMULA (this skill's CLAUDE.md). `houses_clear_of_lanes`
     # tests the house's four ROTATED CORNERS PLUS ITS CENTER against each lane segment at
@@ -283,7 +283,7 @@ def house_hit(pts: Poly, width: float, houses: Sequence[Mapping[str, Any]]) -> b
     """`_hits_a_steading`'s body on plain records (feature 287, M1): the lane law (`law.fouls_fabric`) asks it of a
     manifest's houses, the web pass of the settlement's - one predicate, read by both.
 
-    Research: no house on a tread - research/questions/0081-village-lanes.drawing.html: corners and center at half plus 2 ft"""
+    Research: no house on a tread - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: corners and center at half plus 2 ft"""
     half = width / 2.0 + 2.0
     for h in houses:
         quad = rot_rect(float(h["x"]), float(h["y"]), float(h["w"]), float(h["h"]), float(h.get("rot", 0.0)))
@@ -305,10 +305,10 @@ def _draw_web(s: Settlement, pts: Poly, width: int = 3, houses: Sequence[Pt] = (
 
     Research:
         shortest way - UNRESEARCHED: under 30 ft drawn only where it brings a house within 100 ft
-        no join link through a house - research/questions/0081-village-lanes.drawing.html: nothing built on a lane
-        web lanes seat no house - research/questions/0081-village-lanes.drawing.html: the farmhouses placed first, the lanes
+        no join link through a house - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: nothing built on a lane
+        web lanes seat no house - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the farmhouses placed first, the lanes
             among them after
-        web lane's no-build corridor - research/questions/0081-village-lanes.drawing.html: `WEB_CLEARANCE` 28 ft recorded beside the lane"""
+        web lane's no-build corridor - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: `WEB_CLEARANCE` 28 ft recorded beside the lane"""
     if len(pts) < 2:
         return False
     # A JOIN LINK IS EXEMPT FROM THE DEBRIS FLOOR (feature 134 T50, 2026-08-29). The floor asks what a

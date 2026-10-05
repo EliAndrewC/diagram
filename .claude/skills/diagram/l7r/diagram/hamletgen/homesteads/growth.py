@@ -217,7 +217,7 @@ def grow_gap(s: Settlement) -> float:
     from your neighbors? Wouldn't that guarantee space for an access path?"). A corridor's line keeps `ACCESS_HALF_FT` off each
     homestead, so the gap leaves its line a band of `MIN_WEB_GAP` + the parting - 2 x `ACCESS_HALF_FT` to run in.
 
-    Research: a lane's room between homesteads - research/questions/0081-village-lanes.drawing.html: a lane 7 ft clear of a garden fence on each side and its tread, the web's threading gap, and the 2 ft the growth leaves between neighbors
+    Research: a lane's room between homesteads - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane 7 ft clear of a garden fence on each side and its tread, the web's threading gap, and the 2 ft the growth leaves between neighbors
     """
     return s.px(MIN_WEB_GAP) + TIGHT_GAP_PX
 
@@ -226,7 +226,7 @@ def keeps_every_gap(box: Sequence[float], standing: Sequence[tuple[Pt, Reach, An
     """Does the homestead box `(cx, cy, w, h)` clear EVERY standing footprint (`(center, reach, record)`) by `gap` - the one it
     is a tight seat against (`tight`, its record) by `TIGHT_GAP_PX` alone (feature 318, FR-011: the exemption is pairwise)?
 
-    Research: every two homesteads a lane's gap apart - research/questions/0081-village-lanes.drawing.html: the threading gap between any two steadings; a household reached across its neighbor's yard stands against that one neighbor
+    Research: every two homesteads a lane's gap apart - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the threading gap between any two steadings; a household reached across its neighbor's yard stands against that one neighbor
     """
     bx, by, bw, bh = (float(v) for v in box[:4])
     for center, reach, rec in standing:
@@ -245,7 +245,7 @@ def keeps_every_gap(box: Sequence[float], standing: Sequence[tuple[Pt, Reach, An
 TIGHT_GAP_PX = 2.0
 """Research:
     household against its neighbor's land - research/questions/0081-village-lanes.html: land with no way of its own to the road, reached by passage over a neighbor's
-    the parting - research/questions/0081-village-lanes.drawing.html: the 2 ft the cluster's growth leaves between neighbors, with no path's strip
+    the parting - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the 2 ft the cluster's growth leaves between neighbors, with no path's strip
 """
 
 
@@ -256,14 +256,14 @@ TIGHT_GAP_PX = 2.0
 #: households on seeds 1-16, 23 households were reached by passage at either value. A search breadth, not a rule of the custom: a
 #: household behind its neighbor is still seated, by the growth's ordinary seats and a way of its own.
 TIGHT_BEARING_DEG = 90.0
-"""Research: a passage household on its neighbor's yard side - research/questions/0081-village-lanes.drawing.html: offered within 90 degrees of the bearing to the neighbor's threshing yard, the side its yard lies on"""
+"""Research: a passage household on its neighbor's yard side - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: offered within 90 degrees of the bearing to the neighbor's threshing yard, the side its yard lies on"""
 
 
 def yard_side(center: Pt, yard: Pt, angle: float) -> bool:
     """Does the bearing `angle` (radians) from a standing house at `center` stand within `TIGHT_BEARING_DEG` of the bearing to
     its threshing yard at `yard`?
 
-    Research: a passage household on its neighbor's yard side - research/questions/0081-village-lanes.drawing.html: the bearing off the bearing to the yard
+    Research: a passage household on its neighbor's yard side - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the bearing off the bearing to the yard
     """
     to_yard = math.atan2(yard[1] - center[1], yard[0] - center[0])
     off = abs((math.degrees(angle - to_yard) + 180.0) % 360.0 - 180.0)
@@ -364,13 +364,13 @@ def grow_the_margin(s: Settlement, plan: SitePlan, placed: int, largest: tuple[f
     `grow_took` and `grow_level` (the widening levels it needed).
 
     Research:
-        cluster grown house by house - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.html, research/questions/0081-village-lanes.drawing.html: an irregular cluster, each next house where two footprints part by a lane's room
+        cluster grown house by house - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: an irregular cluster, each next house where two footprints part by a lane's room
         the order of growth - GUESS: nearest the seat first (`grow_key`)
         the spacing jitter - GUESS: each seat up to `GROW_JITTER_FRAC` farther than the lane's room, its direction jittered (`grow_jitter`), so the lump is irregular
         nearer the field breaking ties - CANON: the GM's ruling of 2026-10-03 (feature 318 amendment 3) - nearer the field only among seats in the same ring
         first house against the field - UNRESEARCHED: the free ground nearest the seat's center
-        tight seats for a passage household - research/questions/0081-village-lanes.drawing.html: offered round each house a passage may cross while the settlement's share has room, beside the ordinary seats
-        a neighbor's land - research/questions/0081-village-lanes.drawing.html: its footprint as the growth parts it (`land_box`), which the household's land must adjoin
+        tight seats for a passage household - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: offered round each house a passage may cross while the settlement's share has room, beside the ordinary seats
+        a neighbor's land - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: its footprint as the growth parts it (`land_box`), which the household's land must adjoin
         the growth's widening - UNRESEARCHED: 8, then 12, then 16 directions (`GROW_LEVELS`), then one ring further each level, while households are left and the canvas offers seats (`grow_level`)
     """
     want = plan.spec.households

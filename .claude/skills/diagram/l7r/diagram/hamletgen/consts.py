@@ -167,7 +167,7 @@ WEB_CLEARANCE = 28.0
 # thread, and a house sat 296 ft from any way with no route found at all. The two are now derived
 # from each other and cannot contradict again.
 WEB_FABRIC_GAP = 7.0
-"""Research: web lane off a plot - DEVIATION research/questions/0081-village-lanes.drawing.html: 7 ft from the lane's line, so a tread's edge may pass 5.5 ft off a fence"""
+"""Research: web lane off a plot - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: 7 ft from the lane's line, so a tread's edge may pass 5.5 ft off a fence"""
 
 # HOW FAR A TRACK KEEPS OFF A STEADING, as opposed to how far the WEB does (feature 128).
 #
@@ -201,7 +201,7 @@ TRACK_FABRIC_GAP = 16.0
 # its neighbors' plots were simply narrower than a lane-and-two-margins. A footpath is the one way on
 # the map that is walked in single file, and this is the width that says so.
 FOOTPATH_FABRIC_GAP = 4.0
-"""Research: footpath off a plot - research/questions/0081-village-lanes.drawing.html: 4 ft, single file"""
+"""Research: footpath off a plot - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: 4 ft, single file"""
 
 # HOW FAR A WEB LANE STAYS OFF THE CROP, THE TOE AND THE MARSH, in feet.
 #
@@ -228,7 +228,7 @@ WEB_SHADOW_FT = 30.0
 """Research: two ways read apart - CONVENTION: 30 ft at fit zoom"""
 
 MIN_WEB_GAP = 2.0 * WEB_FABRIC_GAP + 4.0  # 18 ft: both neighbors' clearance, plus the tread between them
-"""Research: least gap a lane threads - research/questions/0081-village-lanes.drawing.html: 7 ft clear of each garden fence and a 4 ft tread between, within the page's 3 ft footpath to 5 ft spine; the 2 ft parting is added by `growth.grow_gap`"""
+"""Research: least gap a lane threads - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: 7 ft clear of each garden fence and a 4 ft tread between, within the page's 3 ft footpath to 5 ft spine; the 2 ft parting is added by `growth.grow_gap`"""
 
 # THE REACH A FARMHOUSE IS ENTITLED TO: every house center must be within this of some drawn way
 # (`farmhouses_reach_a_way`). It is BUNDLE_PITCH, deliberately and by reference rather than by
@@ -237,13 +237,13 @@ MIN_WEB_GAP = 2.0 * WEB_FABRIC_GAP + 4.0  # 18 ft: both neighbors' clearance, pl
 # space by the adjoining house". The same number sets the web's lane spacing, so the requirement and
 # the geometry that satisfies it cannot drift apart.
 #
-# Grounding: research/questions/0081-village-lanes.html, and research/questions/0081-village-lanes.drawing.html - a house
+# Grounding: research/questions/0081-village-lanes.html, and research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html - a house
 # in a nucleated cluster is reached by a way, but for the few reached across a neighbor's land (feature 317), which
 # `ways/checks.py` `unreached_houses` counts reached through their neighbor. The previous 90 ft in
 # `lanes_reach_something` was flagged in future-work/ as a number nobody had justified; this one is
 # derived from a researched constant instead of chosen to make today's maps pass.
 WEB_REACH_FT = 100.0  # == BUNDLE_PITCH; asserted in tests rather than imported, since BUNDLE_PITCH is defined below
-"""Research: every farmhouse reached by a way - GUESS research/questions/0081-village-lanes.drawing.html: within 100 ft, how close counts as serving a house; but the few reached across a neighbor's land"""
+"""Research: every farmhouse reached by a way - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within 100 ft, how close counts as serving a house; but the few reached across a neighbor's land"""
 
 WAY_END_REACH_FT = 60.0
 """How near a lane's END must come to another way, a farmhouse or the field before the path is one somebody wore.
@@ -256,7 +256,7 @@ band was trimmed to a position the gate then failed, and nothing said so until a
 pair of numbers, which is how the drift survived: the check had been tightened and the placer had not. The bar itself
 is the check's - a path exists because somebody had a reason to walk to its end.
 
-Research: a lane end reaches something - research/questions/0081-village-lanes.drawing.html: within 60 ft"""
+Research: a lane end reaches something - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within 60 ft"""
 
 STEADING_ARRIVAL_FT = 12.0
 """How near a lane end must stand to a steading's own built ground - house, byre, shed, threshing yard or garden -
@@ -277,7 +277,7 @@ reaches a boundary records its last point 7-11 ft off it and cannot record it ne
 at 7.8 and 6.9 ft from the garden they stop at, Inashiro's byre arm at 8.4, against the next-nearest built ground on any
 of those three maps at 24 ft. Anything past 12 is a tread that stopped somewhere else.
 
-Research: a lane end arrives at a steading - research/questions/0081-village-lanes.drawing.html: within 12 ft of its built ground"""
+Research: a lane end arrives at a steading - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within 12 ft of its built ground"""
 
 
 # How close two drawn treads must come to count as ONE network (feature 166, lifted out of the retired
@@ -287,7 +287,7 @@ Research: a lane end arrives at a steading - research/questions/0081-village-lan
 # the same fact from opposite ends, and letting them disagree would let a lane be connected for one and
 # isolated for the other.
 LANE_JOIN_FT = 40.0
-"""Research: two lanes as one network - research/questions/0081-village-lanes.drawing.html: treads within 40 ft count as one network (the page joins ends within 25 ft)"""
+"""Research: two lanes as one network - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: treads within 40 ft count as one network (the page joins ends within 25 ft)"""
 
 # How far off a lane's centerline a frontage seat is offered. This is a PLACEMENT decision and is
 # deliberately not derived from LANE_CLEARANCE, which is the corridor rule: fronting a lane excuses
@@ -813,7 +813,7 @@ LANE_SKELETONS = ("spine", "T", "Y", "cross")
 # equally, so an even roll is the honest one, and the two read differently enough at a glance
 # (a laid-out double row vs. a grown spine-and-alleys) to be worth a full half of the cohort each.
 LANE_WEBS = ("alleys", "back_lane")
-"""Research: lane web form - research/questions/0081-village-lanes.drawing.html: side lanes or a back lane, even odds"""
+"""Research: lane web form - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: side lanes or a back lane, even odds"""
 # THE SETTLEMENT FORM - which KIND of settlement this is, not merely what shape its cluster takes.
 # Three forms, and the roll is DELIBERATELY flatter than real-world frequency would be. Read that
 # sentence twice before re-weighting this tuple, because the departure is the decision.

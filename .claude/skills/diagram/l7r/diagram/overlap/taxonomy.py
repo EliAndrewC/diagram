@@ -575,7 +575,7 @@ _MATRIX_SAME_CLASS_OK = {
 
 Research:
     watercourses meet - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: at confluences
-    ways meet - research/questions/0081-village-lanes.drawing.html: at junctions, one network
+    ways meet - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: at junctions, one network
     annexes of one household - research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html, research/questions/0040-farm-storehouses-kura.drawing.html: abut one another
 """
 

@@ -23,4 +23,4 @@ Name: Side alleys
 Covers: `meta.lane_web = alleys`
 Sources: morse-1886-homes, ushijima-2020-manchu, lilong-shanghai-enwiki, jarimichi-jawiki, lowtech-chinese-wheelbarrow, wigmore-1892-servitudes
 Entry: research/questions/0081-village-lanes.html
-Drawing: research/questions/0081-village-lanes.drawing.html
+Drawing: research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html

@@ -111,7 +111,7 @@ def cut_keeps_network(lanes: Sequence[Mapping[str, Any]], i: int, before: Sequen
     tail was left 13.7 ft from anything - two lane networks, which `test_every_shipped_hamlets_lanes_are_one_network`
     caught. A tail that carries another lane's junction is not a doubled tail; it is part of the network.
 
-    Research: web kept one network - research/questions/0081-village-lanes.drawing.html"""
+    Research: web kept one network - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html"""
     ways = [[(float(x), float(y)) for x, y in (ln.get("pts") or [])] for ln in lanes]
 
     def pieces(pts: Sequence[Pt]) -> int:

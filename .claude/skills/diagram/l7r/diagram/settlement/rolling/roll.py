@@ -347,7 +347,7 @@ class RollVillageMixin:
 
         Research:
             lane skeleton - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: one of five shapes of our own choosing, laid before the houses
-            lane width and clearance - research/questions/0081-village-lanes.drawing.html: 5 px wide, 40 px cleared
+            lane width and clearance - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: 5 px wide, 40 px cleared
             lane stops at the reeds - research/questions/0081-village-lanes.drawing.html: trimmed off the marsh
             headman at the skeleton's prime spot - research/questions/0030-the-headmans-house-and-the-rich-farmers-homestead-shoya-gono.drawing.html: at the junction or a ring of offsets round it
             seed pool - NONE: households x 6 + 30 candidates

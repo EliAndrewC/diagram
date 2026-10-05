@@ -66,7 +66,7 @@ from .ways import stage_seat, stage_track, stage_web
 # unrealistic for us to place the lanes first." Lanes first was tried before and made the seating harder, not easier; and
 # even a measured speedup would not justify it. A PAVED road is the other case - "planned government projects, which then
 # people build things around" - which is why an Imperial road may be laid before the settlement that fronts it. Recorded
-# for the reader at research/questions/0081-village-lanes.drawing.html.
+# for the reader at research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html.
 #
 # WHY THE TRACK SITS BETWEEN THE HOUSES AND THE APPURTENANCES, rather than after both. The GM's rule
 # is about FARMHOUSES - "farmhouses are rendered after the fields and water, but before any village
@@ -154,9 +154,9 @@ STAGES = (
 
 Research:
     water, then field, then sink - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html, research/questions/0060-field-drains-akusuiro.drawing.html: the field shaped by its water, the drain along its field's low line
-    homesteads before lanes - research/questions/0081-village-lanes.drawing.html: every lane drawn after the farmhouses
+    homesteads before lanes - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every lane drawn after the farmhouses
     track before the wells - UNRESEARCHED: a well dug where the track already runs
-    web after everything that reserves ground - research/questions/0081-village-lanes.drawing.html: the web drawn last, round what stood first; each household's own way is laid and reserved at the end of the homesteads stage, once the last house stands, so the later stages keep off it
+    web after everything that reserves ground - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the web drawn last, round what stood first; each household's own way is laid and reserved at the end of the homesteads stage, once the last house stands, so the later stages keep off it
     notice board last - research/questions/0190-notice-boards-kosatsuba.drawing.html: placed once everything else stands
     labels last - CONVENTION
 """

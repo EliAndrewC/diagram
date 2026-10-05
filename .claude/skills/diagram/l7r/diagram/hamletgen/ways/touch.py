@@ -130,9 +130,9 @@ def _touch_junctions(
     door path ends at its door. `lanes_form_one_network` holds the line. Returns the ends closed.
 
     Research:
-        ends touch the way they near - research/questions/0081-village-lanes.drawing.html: one network, joined where treads meet
+        ends touch the way they near - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: one network, joined where treads meet
         end meets end - research/questions/0081-village-lanes.drawing.html: two lanes meeting end to end are one
-        orphan piece dropped - research/questions/0081-village-lanes.drawing.html: unless it is a farmhouse's only way, a household reached across a neighbor's land owed none (`geom.lane_houses`)
+        orphan piece dropped - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: unless it is a farmhouse's only way, a household reached across a neighbor's land owed none (`geom.lane_houses`)
         connector never dropped - research/questions/0081-village-lanes.drawing.html: the track out runs off the map
         final overrun cut - research/questions/0081-village-lanes.drawing.html: on the final pass a tail of 6-40 ft past the way it meets is cut"""
     # A TOUCH MAY NOT PUSH A LANE INTO THE FABRIC IT WAS DRAWN CLEAR OF (feature 134 T50, 2026-08-29).

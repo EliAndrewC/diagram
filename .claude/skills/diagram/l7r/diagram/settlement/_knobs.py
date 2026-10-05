@@ -7,7 +7,7 @@ Research:
     kosatsuba_seat forms - research/questions/0190-notice-boards-kosatsuba.html, research/questions/0190-notice-boards-kosatsuba.drawing.html: center, entrance, frontage
     cluster_position forms - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: high_margin, flank, mid_margin, valley_mouth, valley_head, on_rise
     cluster_shape forms - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html, research/questions/0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.drawing.html: round, elongated, crescent, split; a village rolls split as one shape among four, so most villages draw a single cluster
-    lane_web forms - research/questions/0081-village-lanes.html, research/questions/0081-village-lanes.drawing.html: side alleys or a back lane, rolled evenly
+    lane_web forms - research/questions/0081-village-lanes.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: side alleys or a back lane, rolled evenly
     bamboo forms - research/questions/0075-bamboo-groves-chikurin.html, research/questions/0075-bamboo-groves-chikurin.drawing.html: none, homestead, thicket, both
     lane_skeleton forms - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: spine, T, Y, cross, waterside
     water_source_position forms - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: four corners, mid-margin, a pond chain, or a stream entering on one of four edges
@@ -170,7 +170,7 @@ def _water_source_ok(v: Any, ctx: Mapping[str, Any]) -> bool:
 # The two attested ways of making every house in a nucleated cluster reachable. Defined up here
 # rather than beside `web_cuts` because the knob catalog below registers against it at import.
 LANE_WEBS = ("alleys", "back_lane")
-"""Research: two lane webs - research/questions/0081-village-lanes.html, research/questions/0081-village-lanes.drawing.html: side lanes between the plots or a back lane behind them"""
+"""Research: two lane webs - research/questions/0081-village-lanes.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: side lanes between the plots or a back lane behind them"""
 
 
 def _cluster_shape_ok(v: Any, ctx: Mapping[str, Any]) -> bool:
@@ -420,8 +420,8 @@ def web_cuts(coords: Sequence[float], reach: float, gap: float) -> list[float]:
     house unreachable because its neighbors are packed tight.
 
     Research:
-        every house within reach of a way - research/questions/0081-village-lanes.drawing.html: the fewest cuts that cover every house the caller gives (the web gives every one but those reached across a neighbor's land, `hamletgen/ways/web.py`)
-        a cut in the widest gap - GUESS research/questions/0081-village-lanes.drawing.html: lanes as the gaps between plots, never through a house; reach * 0.5 ahead when no gap fits
+        every house within reach of a way - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the fewest cuts that cover every house the caller gives (the web gives every one but those reached across a neighbor's land, `hamletgen/ways/web.py`)
+        a cut in the widest gap - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: lanes as the gaps between plots, never through a house; reach * 0.5 ahead when no gap fits
     """
     xs = sorted(float(c) for c in coords)
     if not xs:

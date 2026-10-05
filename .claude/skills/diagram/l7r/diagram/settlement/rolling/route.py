@@ -153,7 +153,7 @@ def routed_corridors(s: Settlement, tree: AccessTree, geom: Any) -> Iterator[tup
     Asked only through `access.access_corridor` on a tree that routes; the hamlet's seating no longer asks it while houses are
     seated (feature 318: its ways are laid by `gap_ways` once the last house stands).
 
-    Research: path routed round what stands - DEVIATION research/questions/0081-village-lanes.drawing.html: a house no straight path reaches gets one bending between the homesteads, from its dooryard; asked while it seats a house only on the village roll, which keeps the older way
+    Research: path routed round what stands - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a house no straight path reaches gets one bending between the homesteads, from its dooryard; asked while it seats a house only on the village roll, which keeps the older way
     """
     from . import access as A
 
@@ -190,7 +190,7 @@ def own_parts(s: Settlement, geom: Any, own: Any, hgap: float, half: float) -> l
     half-width (`fixtures_clear`'s). The corridor's own route keeps off the house alone (`routed_corridors`: searched per
     layout round these parts, it was withdrawn - research R8).
 
-    Research: a walk crosses nothing of either household - research/questions/0081-village-lanes.drawing.html: no house, garden bed, shed or fixture, each kept at its leg test's gap; the persimmon left out of the grid's walls, its trunk held off by every leg's own test (`passage.walk_clear`, `fixtures_clear`)
+    Research: a walk crosses nothing of either household - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: no house, garden bed, shed or fixture, each kept at its leg test's gap; the persimmon left out of the grid's walls, its trunk held off by every leg's own test (`passage.walk_clear`, `fixtures_clear`)
     """
     from .access import PART_MARGIN_FT, TREAD_HALF_FT
 
@@ -247,7 +247,7 @@ def _cells_to_tree(
 ) -> tuple[list[Cell], Pt] | None:
     """The search of one door's route (`search`): the path of grid cells to the tree and the goal's point, or None.
 
-    Research: path kept off what stands - research/questions/0081-village-lanes.drawing.html: nothing built on a lane - off the household's own house and the parts given it, the neighbors' homesteads and the refused ground, on a grid laid from the door
+    Research: path kept off what stands - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: nothing built on a lane - off the household's own house and the parts given it, the neighbors' homesteads and the refused ground, on a grid laid from the door
     """
     from . import access as A
     from .access import seg_box_within

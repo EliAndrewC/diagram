@@ -131,8 +131,8 @@ def _thread_the_fabric(s: Settlement, plan: SitePlan, run: Poly, gap: float = TR
     when its endpoint came from a template.
 
     Research:
-        track round the steadings - research/questions/0081-village-lanes.drawing.html: routed round, else clipped, else none
-        gap off the steadings - DEVIATION research/questions/0081-village-lanes.drawing.html: `TRACK_FABRIC_GAP` 16 ft off every footprint where a lane
+        track round the steadings - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: routed round, else clipped, else none
+        gap off the steadings - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: `TRACK_FABRIC_GAP` 16 ft off every footprint where a lane
             keeps 7 ft of a garden fence (a convention), a footpath's gap off a grove band
         detour swing - UNRESEARCHED: the midpoint swung 40, 80, 140 then 220 px out from the cluster
         never across a grove - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: routed round
@@ -328,7 +328,7 @@ def recorded_track(s: Settlement) -> Poly | None:
     """The track out the homesteads stage chose once the last house stood (`choose_track_out`, feature 320 FR-008) - the
     track every household's way was laid to, drawn here as chosen - None on a form that records none.
 
-    Research: the track out decided once - research/questions/0081-village-lanes.drawing.html: each household's way joins the track out"""
+    Research: the track out decided once - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: each household's way joins the track out"""
     r = s.M.get("way_out_track")
     return [(float(q[0]), float(q[1])) for q in r] if r and len(r) >= 2 else None
 
@@ -410,7 +410,7 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
         l7r.diagram.settlement.Settlement.lane
 
     Research:
-        lanes after the farmhouses - research/questions/0081-village-lanes.drawing.html: connector and spur drawn after every house
+        lanes after the farmhouses - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: connector and spur drawn after every house
         polder has no spur - GUESS: the connector alone, the way into the fields taken to be over the dike's crest where the record runs a field path on to the outer bund
         spur to the field - research/questions/0081-village-lanes.drawing.html: the outline point whose path crosses least, then
             the shortest, clipped off the dry plots and the marsh
@@ -783,7 +783,7 @@ def _connector_through(s: Settlement, plan: SitePlan, track: Poly, avoid: Sequen
     here, since no repair cuts the connector afterwards.
 
     Research:
-        connector round the field and the steadings - research/questions/0081-village-lanes.drawing.html: bent and threaded,
+        connector round the field and the steadings - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: bent and threaded,
             else the dry exit
         gives up a wood seat as last resort - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:
             the seats the way out crosses are released"""
@@ -827,8 +827,8 @@ def connector_keeps_the_law(M: Mapping[str, Any], run: Poly) -> bool:
     box (`stage_track` walls it with `law.solid_quads`).
 
     Research:
-        no building on the connector - research/questions/0081-village-lanes.drawing.html: no leg through a building's box
-        nothing the matrix forbids - research/questions/0081-village-lanes.drawing.html: no dry plot, well or steading part
+        no building on the connector - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: no leg through a building's box
+        nothing the matrix forbids - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: no dry plot, well or steading part
         each brook crossed at most once - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html"""
     if law.breaks_through(run, law.solid_boxes(M)):
         return False

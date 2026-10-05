@@ -116,7 +116,7 @@ def commit_lane(
     Sawada all came out failing `lanes_form_one_network`), and it is the arm a clean roll never enters -
     so it had no test until it could be called with four plain lists.
 
-    Research: web kept one network - research/questions/0081-village-lanes.drawing.html: a rewrite that splits the web is undone
+    Research: web kept one network - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a rewrite that splits the web is undone
     """
     if not admit(lanes[m], new_pts):
         return False
@@ -185,7 +185,7 @@ def _smooth_web(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: l
         bow-tie tail cut - research/questions/0081-village-lanes.drawing.html: a tail run on past a crossing for under the arm length is cut
         knots gathered - research/questions/0081-village-lanes.drawing.html: ends within 25 ft meet at one node
         shadow lane dropped - NONE: a lane lying inside another's stroke is one way recorded twice
-        web kept one network - research/questions/0081-village-lanes.drawing.html: a rewrite that splits the web is refused"""
+        web kept one network - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a rewrite that splits the web is refused"""
     changed = 0
     lanes = s.M.get("lanes") or []
 

@@ -11,7 +11,7 @@ drawn yard), so the homesteads as seated stand in for them (`seated_parts`, read
 household's wood seats. Each household's way is then laid in the gaps to the track's stretch about the cluster
 (`near_the_cluster`, `gap_ways.lay_the_ways`), and `stage_track` draws the track as chosen.
 
-Research: houses before lanes - research/questions/0081-village-lanes.drawing.html: every farmhouse seated before any way is laid; the track out leaves from the cluster's edge and each household's way joins it
+Research: houses before lanes - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every farmhouse seated before any way is laid; the track out leaves from the cluster's edge and each household's way joins it
 """
 
 from __future__ import annotations
@@ -64,7 +64,7 @@ def seated_parts(s: Settlement) -> list[tuple[Poly, Pt | None, str]]:
     by its trunk), and its wood seats as octagons of the reach a lane keeps off them (`seat_walls`).
 
     Research:
-        nothing built on a lane - research/questions/0081-village-lanes.drawing.html: the track out keeps off every homestead's house, yard, beds, well, sheds and fixtures as they will be drawn
+        nothing built on a lane - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the track out keeps off every homestead's house, yard, beds, well, sheds and fixtures as they will be drawn
         the track off the wood seats - UNRESEARCHED: each seat an octagon of the reach a lane keeps off it (`seat_walls`)
         a persimmon by its trunk alone - GUESS: held off by `TRUNK_FT`, the crown free to overhang the track"""
     out: list[tuple[Poly, Pt | None, str]] = []
@@ -114,7 +114,7 @@ def chose_the_track(s: Settlement, plan: SitePlan) -> Poly:
     """The track out chosen once the last house stands (`track.choose_track_out`), with the homesteads as seated standing in
     for the farmsteads not yet drawn (`seated_parts`).
 
-    Research: the track out decided once - research/questions/0081-village-lanes.drawing.html: each household's way joins the track out"""
+    Research: the track out decided once - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: each household's way joins the track out"""
     from ..ways.track import choose_track_out  # the ways' layer sits above the homesteads; asked here once the houses stand
 
     s._seated_parts = seated_parts(s)  # type: ignore[attr-defined]

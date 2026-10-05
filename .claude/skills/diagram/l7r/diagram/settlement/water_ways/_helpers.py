@@ -37,17 +37,17 @@ def _angle_between(run: Any, other: Any) -> float:
 _LANE_MIN_FT = 71.0  # one homestead's frontage: below this a lane can front nobody (see trim_lane_stubs)
 """Research: shortest lane - UNRESEARCHED: an internal lane under 71 ft, one homestead's frontage, is dropped"""
 
-# A LANE THAT SERVES A FARMHOUSE ENDS AT ITS DOORYARD (269 B17, research/questions/0081-village-lanes.drawing.html - "a lane that serves a farmhouse
+# A LANE THAT SERVES A FARMHOUSE ENDS AT ITS DOORYARD (269 B17, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html - "a lane that serves a farmhouse
 # ends at that house's dooryard, or runs on to reach something a reader can see"; how close counts as serving is the
 # record's GUESS). It was 90 ft to the house's CENTER here, which let an end run 60 ft past the last steading into the
 # grass. The figure is hamletgen's `STEADING_ARRIVAL_FT`, derived there from the clip (a tread that reaches a plot records
 # its last point 7-11 ft off it), and a test holds the two equal; the settlement engine cannot import the scripted tier.
 DOORYARD_REACH_FT = 12.0
-"""Research: dooryard reach - research/questions/0081-village-lanes.drawing.html: an end within 12 ft of the yard or beds serves the house"""
+"""Research: dooryard reach - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: an end within 12 ft of the yard or beds serves the house"""
 # ...or stands beside the house, within this of its center and not past it: the scripted tier's `WAY_END_REACH_FT`, the gate's
 # own reach for an end (a test holds the two equal). It was 90 here, the looser figure feature 227 retired everywhere else.
 HOUSE_SERVE_FT = 60.0
-"""Research: beside-the-house reach - research/questions/0081-village-lanes.drawing.html: an end within 60 ft of the house's center, not past it, serves it"""
+"""Research: beside-the-house reach - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: an end within 60 ft of the house's center, not past it, serves it"""
 # An end has walked past a house when the foot of the perpendicular from the house falls more than this far back along
 # its last segment - the 4 ft grain `_trim_to_service` walks in, and the `_stop_at_closest_approach` cut's own.
 PAST_GRAIN_FT = 4.0
@@ -107,8 +107,8 @@ def _pull_back(pts: list[Pt], reaches: Any, step: float = 8.0, keep_frac: float 
     invisible missing lane.
 
     Research:
-        end pulled back to what it serves - research/questions/0081-village-lanes.drawing.html: to the shortest end that still reaches something
-        trim floor - DEVIATION research/questions/0081-village-lanes.drawing.html: never below 40% of the lane's length, which can stop short of the last house served; a lane reaching nothing is left whole, where the page pulls it back to the last house it serves
+        end pulled back to what it serves - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: to the shortest end that still reaches something
+        trim floor - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: never below 40% of the lane's length, which can stop short of the last house served; a lane reaching nothing is left whole, where the page pulls it back to the last house it serves
     """
     full = sum(math.hypot(b[0] - a[0], b[1] - a[1]) for a, b in zip(pts, pts[1:], strict=False))
     # `min_len` is the HARD floor a junction sets - see `_junction_floor`. It is a maximum with the
@@ -176,7 +176,7 @@ def junction_floor(pts: list[Pt], lanes: Any, drop: Any, way_reach: float, me: i
     testability); the inner one delegates here, so there is ONE body.
 
     Research:
-        junction kept - research/questions/0081-village-lanes.drawing.html: one network; a trim never cuts past a junction
+        junction kept - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: one network; a trim never cuts past a junction
         a crossing at 20 degrees - UNRESEARCHED: a way crossing the lane at 20 degrees or more counts as a junction
     """
     acc, keep = 0.0, 0.0

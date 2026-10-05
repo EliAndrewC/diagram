@@ -263,7 +263,7 @@ class HousesMixin:
         It defaults to 0.0 because most callers seat something genuinely unrotated; a caller that knows its rake passes it,
         and the bundle placer gets it from `_house_rot`. GAP VERDICT family (this skill's dev/placement.md, "CENTER vs
         FOOTPRINT"): real rotated corners, never a center, never a circumscribed radius.
-        Research: no building corner on a lane - research/questions/0081-village-lanes.drawing.html: the tread's edge `TREAD_WALL_FT` clear of every corner"""
+        Research: no building corner on a lane - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the tread's edge `TREAD_WALL_FT` clear of every corner"""
         if not self.treads:
             return False
         quad = rot_rect(x, y, w, h, rot)

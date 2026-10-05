@@ -64,7 +64,7 @@ def clear_of_what_stands(s: Settlement, gate: Pt) -> Pt:
     in, and the map was refused) - as the fill's start is stepped out of a grove band (`dry_exit.clear_of_bands`). A
     household's reserved wood seat is not a footprint: the way out may yet take one (`track.connector_through`).
 
-    Research: nothing built on a lane - research/questions/0081-village-lanes.drawing.html: the gateway stepped half the connector's tread off every forbidden footprint"""
+    Research: nothing built on a lane - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the gateway stepped half the connector's tread off every forbidden footprint"""
     st = getattr(s.M, "standing", None)
     if st is None:
         return gate

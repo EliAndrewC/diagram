@@ -76,10 +76,10 @@ def _lay_skeleton(s: Settlement, plan: SitePlan, frame: _margin_frame, arcs: Seq
     Returns the kept arms, for the web to treat as existing network.
 
     Research:
-        skeleton laid after the houses - research/questions/0081-village-lanes.drawing.html: the farmhouses are placed first
+        skeleton laid after the houses - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the farmhouses are placed first
         skeleton form - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the rolled lane shape
         clear of crop, wet and water - UNRESEARCHED: 20 ft off the crop, the marsh and the ditches
-        routed round the steadings - research/questions/0081-village-lanes.drawing.html: nothing is built on a lane
+        routed round the steadings - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: nothing is built on a lane
         skeleton width - research/questions/0081-village-lanes.drawing.html: 5 ft"""
     if len(arcs) < 2:
         return []
@@ -280,10 +280,10 @@ def tidy_lane_ends(s: Settlement, envelope: Poly, streets: bool = False) -> None
     those two and nothing else.
 
     Research:
-        lane end reaches something - research/questions/0081-village-lanes.drawing.html: pulled back to a way, a house or the bund
+        lane end reaches something - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: pulled back to a way, a house or the bund
         end carried on to the bund - research/questions/0014-bunds-between-the-paddies-aze.drawing.html
-        lane serving nothing dropped - research/questions/0081-village-lanes.drawing.html: unless it is the only link in the web
-        a tail kept as a house's only way - research/questions/0081-village-lanes.drawing.html: never for a household reached across a neighbor's land, owed none (`geom.lane_houses`)
+        lane serving nothing dropped - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: unless it is the only link in the web
+        a tail kept as a house's only way - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: never for a household reached across a neighbor's land, owed none (`geom.lane_houses`)
     """
     _final_houses = [(float(h["x"]), float(h["y"])) for h in s.M.get("houses", [])]
     _owed = lane_houses(s.M)  # the houses a lane may be kept as the only way to
@@ -370,7 +370,7 @@ def unsplitting_drops(lanes: Sequence[Mapping[str, Any]], drops: Sequence[int]) 
     """The lanes of `drops` that can go without parting the web: each is dropped only if the lanes left after it fall into
     no more networks (at the 4 ft ink tolerance) than before - tried back to front, each against the drops already taken.
 
-    Research: web kept one network - research/questions/0081-village-lanes.drawing.html"""
+    Research: web kept one network - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html"""
     ways = [[(float(x), float(y)) for x, y in ln.get("pts") or []] for ln in lanes]
     gone: set[int] = set()
 
@@ -390,7 +390,7 @@ def served_arm(s: Settlement, arm: Poly) -> Poly:
     ended 81-97 ft from the nearest house), against the houses alone; an arm left under `_WEB_MIN_FT` is no arm. Lifted from
     `_lay_skeleton` (feature 308): the re-grown pool no longer leaves an arm that short, so it is tested on plain inputs.
 
-    Research: skeleton arm trimmed to service - research/questions/0081-village-lanes.drawing.html: its ends pulled back to the houses it serves"""
+    Research: skeleton arm trimmed to service - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: its ends pulled back to the houses it serves"""
     if len(arm) >= 2:
         arm = _trim_to_service(arm, [], [(float(h["x"]), float(h["y"])) for h in s.M.get("houses", [])], steadings=steading_footprints(s.M))
     return [] if len(arm) >= 2 and polyline_len(arm) < _WEB_MIN_FT else arm
@@ -440,8 +440,8 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
 
     Research:
         dispersed hamlet draws no web - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html
-        lane form knob - research/questions/0081-village-lanes.drawing.html: side lanes or a back lane, rolled per map
-        lanes after the houses - research/questions/0081-village-lanes.drawing.html
+        lane form knob - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: side lanes or a back lane, rolled per map
+        lanes after the houses - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html
         lane runs past its last steading - GUESS: 30 ft
         back lane ties - research/questions/0081-village-lanes.html: cross-ways frame the back lanes
         back lane tie spacing - UNRESEARCHED: the ties about three pitches (3 x BUNDLE_PITCH) apart
@@ -449,11 +449,11 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
             may cross a shelter belt, the planting resuming on both sides, but not run its length
         door path reach - GUESS: DOOR_REACH_FT 40 ft, STEADING_ARRIVAL_FT 12 ft on a row
         web cut spacing - UNRESEARCHED: every house within WEB_REACH_FT (100 ft) of a cut, so the cuts stand up to about twice that apart
-        a cut's room - research/questions/0081-village-lanes.drawing.html: MIN_WEB_GAP, 7 ft clear of a garden fence on each side and a 4 ft tread, within the page's 3 ft footpath to 5 ft spine
+        a cut's room - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: MIN_WEB_GAP, 7 ft clear of a garden fence on each side and a 4 ft tread, within the page's 3 ft footpath to 5 ft spine
         a web lane's span - UNRESEARCHED: only the houses within 1.5 times WEB_REACH_FT of its cut
         web lanes off the hard ground - UNRESEARCHED: WEB_HARD_GAP 8 ft off the field, the crop and the marsh
         row streets laid - research/questions/0033-row-villages-resson.drawing.html
-        every farmhouse served - research/questions/0081-village-lanes.drawing.html: every farmhouse but the few reached across a neighbor's land, which `checks.unreached_houses` counts reached through their neighbor's chain
+        every farmhouse served - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every farmhouse but the few reached across a neighbor's land, which `checks.unreached_houses` counts reached through their neighbor's chain
     """
     _pass("cut")
     """STAGE 5b: the LANE WEB - the lanes that make every farmhouse reachable.
@@ -837,7 +837,7 @@ def _reachable_runs(cands: Sequence[Poly], seed_segs: Sequence[tuple[Pt, Pt]]) -
     passes and killed a cohort worker outright. The prefilter is the index and the stride is the
     resolution; neither decides anything, which is the project's standing rule for both.
 
-    Research: islands never drawn - research/questions/0081-village-lanes.drawing.html: one network grown from the skeleton"""
+    Research: islands never drawn - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: one network grown from the skeleton"""
     runs = [r for r in cands if len(r) >= 2]
     if not runs:
         return []

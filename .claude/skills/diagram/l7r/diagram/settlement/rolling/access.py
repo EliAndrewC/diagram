@@ -29,7 +29,7 @@ if TYPE_CHECKING:
 #: Half the corridor's width, in feet: `WEB_FABRIC_GAP` (7 ft) either side of the tread's line - a footpath's room between
 #: two steadings, the gap the web's own fabric keeps (homes H16: "a footpath-width strip (WEB_FABRIC_GAP x 2)").
 ACCESS_HALF_FT = 7.0
-"""Research: corridor room - DEVIATION research/questions/0081-village-lanes.drawing.html: 7 ft either side of the way's line, so a 3 ft tread's edge may pass 5.5 ft off a fence"""
+"""Research: corridor room - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: 7 ft either side of the way's line, so a 3 ft tread's edge may pass 5.5 ft off a fence"""
 
 #: How far along a corridor its ground is sampled against the site boundary, in px: finer than the thinnest member the
 #: boundary holds a corridor off (a ditch's half-width plus its clearance).
@@ -80,7 +80,7 @@ def seg_box_within(a: Pt, b: Pt, box: Any, t: float) -> bool:
 class AccessTree:
     """The reserved corridors: segments `(a, b)` a footpath wide (`half` either side), indexed by their widened boxes.
 
-    Research: every house reached by a path - research/questions/0081-village-lanes.html, research/questions/0081-village-lanes.drawing.html: no way while houses are seated; once the last house stands, each household's way laid in the gaps to the track out's first leg (`gap_ways.lay_the_ways`), no later homestead covering it - but for the few households reached across a neighbor's yard
+    Research: every house reached by a path - research/questions/0081-village-lanes.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: no way while houses are seated; once the last house stands, each household's way laid in the gaps to the track out's first leg (`gap_ways.lay_the_ways`), no later homestead covering it - but for the few households reached across a neighbor's yard
     """
 
     __slots__ = ("_along", "_targets", "bars", "grid", "half", "routed", "segs", "tried")
@@ -113,7 +113,7 @@ class AccessTree:
         """Keep the walk a-b clear of every later homestead, as a corridor is, without making it a corridor (a passage).
 
         Research:
-            a passage walk kept clear - research/questions/0081-village-lanes.drawing.html: on the two households' land, never drawn as a lane
+            a passage walk kept clear - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: on the two households' land, never drawn as a lane
             the walk's clearance - GUESS: the corridor's own half-width either side
         """
         h = self.half
@@ -162,7 +162,7 @@ def doors_of(geom: Any, half: float = 0.0) -> list[Pt]:
     corridor to a tree behind the house leaves its dooryard and passes the gable rather than crossing the house. A bundle
     with no yard leaves by a step off its front wall.
 
-    Research: path starts in the dooryard - research/questions/0081-village-lanes.drawing.html: forecourt, then the yard's far edge, then the two flanks past the gable; never a back wall
+    Research: path starts in the dooryard - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: forecourt, then the yard's far edge, then the two flanks past the gable; never a back wall
     """
     boxes = geom.get("boxes") or {}
     yard = boxes.get("yard") or geom.get("yard")
@@ -211,7 +211,7 @@ def corridor_clear(s: Settlement, a: Pt, b: Pt, own: Any) -> bool:
     house it may not cross either), and its line stands on ground the site boundary admits - not on the field's side of a
     chord, not within a water course's clearance, not inside the outline of the other ground.
 
-    Research: nothing built on a path - research/questions/0081-village-lanes.drawing.html: the corridor clears every other homestead, the field side and the water's clearance
+    Research: nothing built on a path - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the corridor clears every other homestead, the field side and the water's clearance
     """
     return house_clear(a, b, own, house_gap(s)) and fixtures_clear(s, a, b, own) and parts_clear(s, a, b, own) and standing_clear(s, a, b)
 
@@ -250,9 +250,9 @@ def fixtures_clear(s: Settlement, a: Pt, b: Pt, own: Any) -> bool:
     and the well was refused when it came to be drawn. Held off by the wellhead's box, as the registry holds it.
 
     Research:
-        path clear of its own fixtures - research/questions/0081-village-lanes.drawing.html: routed round its own garden beds and fixtures - the corridor off privy, stack and shed
+        path clear of its own fixtures - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: routed round its own garden beds and fixtures - the corridor off privy, stack and shed
         a persimmon by its trunk alone - GUESS: held off by a 4 ft trunk box, the crown free to overhang the path
-        path clear of its own well - research/questions/0081-village-lanes.drawing.html: nothing built on a lane; the wellhead's own box
+        path clear of its own well - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: nothing built on a lane; the wellhead's own box
     """
     half, trunk = s._access.half, s.px(4.0)
     well = own.get("well")
@@ -281,7 +281,7 @@ def parts_clear(s: Settlement, a: Pt, b: Pt, own: Any) -> bool:
     The tread, not the corridor's reserved strip, keeps off them: the strip is the web's room to draw in, and the line is
     what it draws. The yard is the door's own ground; the web leaves it at its edge (`corridors.door_ends`).
 
-    Research: path off its own beds and outbuildings - research/questions/0081-village-lanes.drawing.html: a lane never crosses row crops and nothing is built on it; the tread's 0.5 ft margin is UNRESEARCHED
+    Research: path off its own beds and outbuildings - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane never crosses row crops and nothing is built on it; the tread's 0.5 ft margin is UNRESEARCHED
     """
     boxes = own.get("boxes") or {}
     gap = s.px(TREAD_HALF_FT + PART_MARGIN_FT)
@@ -449,8 +449,8 @@ def access_corridor(s: Settlement, geom: Any, routed: bool = True) -> tuple[Pt, 
     the corridor the search would have returned (seed 44: 610,000 strips asked for 12,215 searches, nearly all refused).
 
     Research:
-        seat refused without a path - DEVIATION research/questions/0081-village-lanes.drawing.html: on a roll with no seat region (a village's) only; a hamlet seeks no way for a household while it is seated
-        routed where none is straight - DEVIATION research/questions/0081-village-lanes.drawing.html: after the straight and round-the-gable corridors, round what stands (`route.routed_corridors`), on a roll with no seat region only
+        seat refused without a path - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: on a roll with no seat region (a village's) only; a hamlet seeks no way for a household while it is seated
+        routed where none is straight - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: after the straight and round-the-gable corridors, round what stands (`route.routed_corridors`), on a roll with no seat region only
         a way of its own without the routed search - CANON: the GM's ruling of 2026-10-03, the passage asks the straight and round-the-gable corridors alone (`routed` False)
     """
     tree = getattr(s, "_access", None)
@@ -504,7 +504,7 @@ def seat_reaches_tree(s: Settlement, core: Any) -> bool:
     layout's corridor search continues from it rather than starting again. True where no tree is installed. ASKED ONLY WHERE
     NO SEAT REGION STANDS (a village's roll): a hamlet's seat asks `SeatRegion.opens` instead (feature 318).
 
-    Research: seat refused without a path - DEVIATION research/questions/0081-village-lanes.drawing.html: on a roll with no seat region (a village's) only; a hamlet seeks no way for a household while it is seated
+    Research: seat refused without a path - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: on a roll with no seat region (a village's) only; a hamlet seeks no way for a household while it is seated
     """
     tree = getattr(s, "_access", None)
     if tree is None:
@@ -592,7 +592,7 @@ def tree_admits(s: Settlement, corridor: tuple[Pt, ...], geom: Any) -> bool:
     With none installed (a village roll) every corridor is admitted, as the ground test is. Asked by the gap pass of each
     household's way once the last house stands (`gap_ways`, feature 318), never while a house is seated.
 
-    Research: lane law over the whole tree - research/questions/0081-village-lanes.drawing.html: each household's way, laid once the last house stands, admitted only where the tree drawn as lanes keeps the lane law
+    Research: lane law over the whole tree - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: each household's way, laid once the last house stands, admitted only where the tree drawn as lanes keeps the lane law
     """
     judge = getattr(s, "_corridor_tree", None)
     if judge is None:

@@ -275,7 +275,7 @@ def push_clear_of_fabric(base: Pt, unit: Pt, edge: float, fabric: Sequence[Poly]
     caller draws from it anyway rather than returning nothing. No live hamlet is that crowded.
 
     Research:
-        track gateway off the fabric - research/questions/0081-village-lanes.drawing.html: nothing built on a lane, walked out until clear
+        track gateway off the fabric - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: nothing built on a lane, walked out until clear
         gateway clearance - UNRESEARCHED: 16 ft (`TRACK_FABRIC_GAP`) by default
     """
     # EACH POLYGON'S BOX, ONCE (feature 284, FR-009): a point farther than `gap` outside a polygon's box is farther than
@@ -312,7 +312,7 @@ def lane_houses(M: Mapping[str, Any]) -> list[Pt]:
     keeps an arm or a fragment as the only way to a house, or carries a lane's end to a dooryard; where an end merely
     REACHES something (`end_serves`), every house counts.
 
-    Research: who a lane serves - research/questions/0081-village-lanes.drawing.html: every farmhouse but the few reached across a neighbor's land
+    Research: who a lane serves - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every farmhouse but the few reached across a neighbor's land
     """
     return [(float(h["x"]), float(h["y"])) for h in M.get("houses") or [] if not h.get("reached_across")]
 
@@ -333,7 +333,7 @@ def steading_footprints(M: Mapping[str, object]) -> list[Poly]:
     building is its `rot_rect` at its own `rot`.
 
     Research:
-        a lane ends at the dooryard - research/questions/0081-village-lanes.drawing.html: the buildings, yard and garden
+        a lane ends at the dooryard - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the buildings, yard and garden
         ground cover is no destination - UNRESEARCHED: the commons and groves are left out"""
     out: list[Poly] = []
     for key in ("houses", "byres", "farm_sheds", "retirement_houses"):
@@ -471,16 +471,16 @@ def end_serves(
     three (fixed earlier in feature 227 by `WAY_END_REACH_FT`), and then NEITHER of them could see a
     tread that had arrived at a garden fence - the steading clause, at `STEADING_ARRIVAL_FT`. An end served by a house
     alone is cut beside it, at its closest approach, by `_trim_to_service` (the GM's road to nowhere, 2026-09-27; 269 B17,
-    research/questions/0081-village-lanes.drawing.html: "pulled back to the last house it serves").
+    research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: "pulled back to the last house it serves").
 
     THE FIELD IS REACHED ON ITS BUND (269 B04, research/questions/0014-bunds-between-the-paddies-aze.drawing.html: the path "never ends in open ground short of the
     bund"): within `BUND_REACH_FT` of the worked ground's edge, where it used to be anywhere within 60 ft of the field. An
     end short of the bund is carried on to it (`ways/bund.py`) before the trims that read this.
 
     Research:
-        an end reaches something seen - research/questions/0081-village-lanes.drawing.html: a way or farmhouse within 60 ft
+        an end reaches something seen - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a way or farmhouse within 60 ft
         reached on the bund - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: within 6 ft of its edge
-        arrived at a steading - GUESS research/questions/0081-village-lanes.drawing.html: within 12 ft of its built ground, how close counts as serving"""
+        arrived at a steading - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within 12 ft of its built ground, how close counts as serving"""
     if any(seg_dist(q[0], q[1], a, b) <= WAY_END_REACH_FT for a, b in segs):
         return True
     if any(math.dist(q, h) <= WAY_END_REACH_FT for h in houses):
@@ -515,9 +515,9 @@ def _trim_to_service(run: Poly, segs: Sequence[tuple[Pt, Pt]], houses: Sequence[
     arm and would delete the door paths this feature exists to draw.
 
     Research:
-        pulled back to the last house served - research/questions/0081-village-lanes.drawing.html: ends trimmed to what
+        pulled back to the last house served - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: ends trimmed to what
             serves, 4 ft at a time
-        an outlying house keeps its way - GUESS research/questions/0081-village-lanes.drawing.html: every farmhouse served, 100 ft how close counts as serving"""
+        an outlying house keeps its way - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every farmhouse served, 100 ft how close counts as serving"""
 
     # ARRIVING AT THE FIELD IS SERVICE. A field spur exists to reach the crop, and it is the one way on
     # the map whose whole purpose is served by something that is neither a house nor another lane. Without
@@ -596,7 +596,7 @@ def _stop_at_closest_approach(run: Poly, near: Sequence[Pt]) -> Poly:
     An end that meets a way, the field or a steading's built ground is the caller's to leave alone - it has
     arrived somewhere. Cuts under 4 ft are left, the same grain as the walk in `_trim_to_service`.
 
-    Research: no road to nowhere - research/questions/0081-village-lanes.drawing.html: cut at the house's closest approach"""
+    Research: no road to nowhere - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: cut at the house's closest approach"""
     out = list(run)
     while near and len(out) >= 2:
         a, b = out[-2], out[-1]
