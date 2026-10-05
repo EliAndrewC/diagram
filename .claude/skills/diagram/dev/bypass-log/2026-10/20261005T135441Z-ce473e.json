@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-05T13:54:41Z",
+  "target": "record-checked",
+  "commit": "230cb7587",
+  "why": "source-reader on source-reader:0023#gd-gazetteer-sangji-3: one word of the translation changed after source-reader's round-2 READ (drove -> spurred, translation-check's LOOSE finding); translation-check FAITHFUL and quote-check SUPPORTS on the new wording"
+}

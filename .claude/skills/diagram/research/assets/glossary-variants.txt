@@ -2532,6 +2532,7 @@ nanbokucho	Northern and Southern Courts
 nanbu	Tohoku
 nando	nando
 nando-gamae	nando-gamae
+nanhai	Nanhai
 nanjing	Nanking
 nanking	Nanking
 nanmu	nanmu

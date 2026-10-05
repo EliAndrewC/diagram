@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-05T13:54:45Z",
+  "target": "record-checked",
+  "commit": "230cb7587",
+  "why": "source-reader on source-reader:0221#onga-choshi-jiin source-reader:0221.drawing#onga-choshi-jiin: one word changed after source-reader's round-1 READ, on its own finding (a koshin year -> a kinoe-saru year, the page's \u7532\u7533); translation-check FAITHFUL and quote-check SUPPORTS on the new wording"
+}
