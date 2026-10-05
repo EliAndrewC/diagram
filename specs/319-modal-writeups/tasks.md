@@ -3,7 +3,8 @@
 Phases follow the GM's order (spec FR-010): guidelines and checks, the farmhouse pilot, the garden pilot, a further pilot if
 the garden's first rewrite needs changes, then - on the GM's go-ahead - the title card's choices and the rollout. The GM's
 verdict on each pilot round is recorded under its task (SC-005). Nothing but the spec claim lands on main until the rollout is
-done (FR-012).
+done (FR-012). The GM's go-ahead of 2026-10-05 closed the pilot phase: no further pilot,
+verdict or example is owed (FR-010, FR-016).
 
 ## Occasions
 
@@ -120,8 +121,9 @@ done (FR-012).
 
 - [ ] T23 [US6] The rulings feature (FR-016): claimed with `make claim`, its spec a short request.md (the GM's go-ahead) and a
   `rulings.md` list, one numbered entry per ruling only the GM can give, each with what the record and the guidelines say and
-  why they do not settle it; committed and pushed as a spec claim. Entries are added by the rollout as found, without a review
-  per entry
+  why neither they nor a labeled guess settle it; filed and pushed from a SEPARATE clone (this clone's push carries 319's
+  unlanded delta and is refused while tasks are open), as feature 321 was. Entries are added by the rollout as found, in this
+  clone's copy until 319 lands, without a review per entry
       research: rendering
       verify:
 

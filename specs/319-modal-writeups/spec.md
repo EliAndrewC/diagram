@@ -173,15 +173,16 @@ when a rewrite is accepted with no changes are the rest rewritten.
 
 **Why this priority**: the GM's sequence.
 
-**Independent Test**: the tasks show the GM's verdict on each pilot before the rollout starts.
+**Independent Test**: the tasks show the GM's verdict on each pilot before the rollout starts; the GM's go-ahead of 2026-10-05
+closed the pilot phase (FR-010).
 
 **Acceptance Scenarios**:
 
 1. **Given** a pilot rewrite, **When** it is ready, **Then** the session regenerates the pilot hamlet's page in the clone, gives
    the GM its path, and waits for the GM's verdict; nothing lands on main before the feature closes (except this spec claim).
 2. **Given** a pilot whose first rewrite the GM asks to change, **When** it is settled, **Then** a further feature is piloted the
-   same way before any rollout.
-3. **Given** a pilot whose first rewrite the GM accepts with no changes and the GM's go-ahead, **When** the rollout runs, **Then** every hamlet class, every knob value
+   same way before any rollout - until the GM's go-ahead, which ended the pilots (2026-10-05).
+3. **Given** the GM's go-ahead (given 2026-10-05, replacing the "accepted with no changes" condition), **When** the rollout runs, **Then** every hamlet class, every knob value
    and every sheet kind is rewritten and checked.
 
 ### Edge Cases
@@ -189,8 +190,8 @@ when a rewrite is accepted with no changes are the rest rewritten.
 - A feature whose standard question has no answer in the record: the modal says so plainly on the About tab ("no record of ...
   was found") or lists the drawn value as a guess - never silence, never a made-up figure.
 - A feature that is not a building and not a field (a stream, a lane, a notice board): the non-building guidelines decide its
-  questions; where a kind fits neither set, the guidelines grow a set for it during the rollout and the GM sees it with the
-  second pilot or the rollout report.
+  questions; where a kind fits neither set, the guidelines grow a set for it during the rollout and the GM sees it in the
+  rollout report.
 - A feature with no research behind it at all (`fallow` lists no references today): its references tab is absent, and the check
   confirms the record holds nothing on it.
 - A modal's references tab would list a question whose page covers ten things the modal mentions once: it is listed; a question
@@ -255,11 +256,14 @@ when a rewrite is accepted with no changes are the rest rewritten.
   second feature (the garden, the GM's non-building example) rewritten from the guidelines and iterated. If the GM asks for
   changes on a pilot's first rewrite, a further feature is piloted the same way, one at a time. The rollout starts only on the
   GM's go-ahead after a feature's first rewrite is accepted with no changes. Every change the GM asks of a pilot MUST be made in the guidelines (and the checks where they apply) before the
-  modal.
+  modal. **The pilot phase closed with the GM's go-ahead of 2026-10-05**, which replaced the "accepted with no changes" condition
+  (the garden took one change, the windbreak the knob change): no further pilot, verdict or example is owed for any kind,
+  including a kind whose guidelines are first applied in the rollout (FR-016).
 - **FR-011**: The rollout MUST cover every hamlet class (56), every knob value's modal, every general sheet kind, every
   particular sheet kind and every per-sheet `### Features` entry on the pool's magistracy and shrine sheets (reviewed under
   FR-003).
-- **FR-012**: Nothing but this spec claim lands on main until the rollout is done; the GM reviews pilots in the clone.
+- **FR-012**: Nothing but this spec claim lands on main until the rollout is done; the GM reviewed the pilots in the clone (the
+  pilot phase closed 2026-10-05, FR-010).
 - **FR-014**: A modal MUST carry a "Depiction" tab (the GM's name, 2026-10-04) saying how the map draws the thing: each map
   drawing convention the glyph uses (a size or color changed so it reads) with what the real thing was like; each way the glyph
   is standardized where the reality varied, with why; and links to the "how our maps draw it" pages the modal rests on. Where
@@ -283,10 +287,16 @@ when a rewrite is accepted with no changes are the rest rewritten.
   map drawing something the record contradicts and `make claims-report` does not already show it, the rollout MUST make the
   report show it - the engine's `Research:` claim for that decision cites the research that contradicts it, and `impl-drift`
   records the verdict - so the future feature that fixes every discrepancy finds it. A ruling only the GM can give - one the
-  record and the project's guidelines cannot settle (constitution XII's ladder: research, then a knob where two forms are
-  attested, then the GM only where the record is silent or contradictory) - MUST NOT stop the rollout: the modal states what is
-  known, the open point is a guess bullet, and the question is tracked in a separate feature filed for the GM's rulings, added
-  to it as found, without a spec review per addition. No pilot or example sign-off is owed before a kind is rolled out.
+  record and the project's guidelines cannot settle - MUST NOT stop the rollout. A point the record is silent on is NOT a
+  ruling: the guidelines settle it (a labeled guess, or "not recorded", FR-002 and M8/M11). A ruling is a decision the
+  guidelines leave to the GM - whether a single drawn form is a deliberate convention (the 2026-10-04 single-roof call is the
+  example), a contradiction between the GM's canon and the record, a choice of what the setting is; the modal states what is
+  known, and the question is tracked in a separate feature filed for the GM's rulings, added to it as found, without a spec
+  review per addition. No pilot or example sign-off is owed before a kind is rolled out. A contradiction on a HAND-AUTHORED
+  sheet (the magistracy plans have no engine decision) goes on the claim of the Mode A procedure that governs that part of the
+  plan (`buildings.md`, `buildings/`), or, where none governs it, on a claim added to the procedure section the sheet's kind
+  falls under, so `impl-drift` records it. Recording these drifts makes their claims DRIFTED at the push where they were
+  IN-STEP at the base; the push records them with `CLAIMS_OK` and a reason citing FR-016, after every owed claim is checked.
 - **FR-013**: The session MUST pitch the GM alternative names for the first tab (at least three candidates, Overview among
   them, a line on each) no later than the hand-off of the farmhouse pilot; the GM's choice is applied to the guidelines and
   the pilot before the rollout starts. (Done 2026-10-03: the GM chose "About".)
@@ -302,7 +312,7 @@ when a rewrite is accepted with no changes are the rest rewritten.
 - **SC-004** (FR-004, FR-009): every pool hamlet's title card lists its choices; each value opens its modal; no hamlet feature modal
   differs between two pool maps except by items conditioned on a knob whose values the two maps do not share (FR-015).
 - **SC-005** (FR-010, FR-012): the GM's verdict on each pilot round is recorded in `tasks.md`; the rollout starts on the GM's go-ahead
-  after a pilot's first rewrite is accepted with no changes.
+  (given 2026-10-05, T12).
 - **SC-006** (FR-007, FR-011): every class, knob value and sheet kind is rewritten and checked; `make page-check` is green,
   its browser test holding the sibling links on the About tab and the glossary tooltips on every tab.
 - **SC-008** (FR-014): every rewritten modal whose kind has a drawing page or a convention carries a Depiction tab that has
@@ -313,7 +323,7 @@ when a rewrite is accepted with no changes are the rest rewritten.
 - **SC-010** (FR-016): the pool's renders are unchanged by the rollout in everything but the page's modal text; every
   research-versus-map contradiction a modal check found is a DRIFTED or NEEDS-RESEARCH row of `make claims-report`; every
   ruling the rollout could not settle is a numbered entry of the rulings feature, each saying what the record and guidelines
-  say and why they do not settle it.
+  say and why neither they nor a labeled guess can settle it.
 - **SC-007** (FR-012, FR-013): nothing but the spec claim is on main until the rollout's last task; the GM's choice of the
   first tab's name is recorded in the spec's Decisions table before the rollout starts.
 
