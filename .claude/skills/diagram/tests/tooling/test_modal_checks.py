@@ -83,17 +83,13 @@ def _tree(tmp: pathlib.Path, homestead: str = FARMHOUSE) -> pathlib.Path:
         ("0100-lanes.html", Q0100),
     ):
         (q / name).write_text(text, encoding="utf-8")
-    (q / "0029-farmhouses-minka.notes.html").write_text(
-        "<li>notes</li>", encoding="utf-8"
-    )
+    (q / "0029-farmhouses-minka.notes.html").write_text("<li>notes</li>", encoding="utf-8")
     dev = root / SKILL / "dev"
     dev.mkdir(parents=True)
     (dev / "modals.md").write_text("M1. The reader.\n", encoding="utf-8")
     (dev / "modals-particular.md").write_text("P1. Particular.\n", encoding="utf-8")
     (root / SKILL / "research" / "assets").mkdir(parents=True)
-    (root / SKILL / "research" / "assets" / "glossary-variants.txt").write_text(
-        "minka\tfarmhouse\n", encoding="utf-8"
-    )
+    (root / SKILL / "research" / "assets" / "glossary-variants.txt").write_text("minka\tfarmhouse\n", encoding="utf-8")
     _git(root, "init", "-q")
     _git(
         root,
@@ -124,24 +120,12 @@ def _commit(root: pathlib.Path) -> str:
 def test_the_about_form_is_read_and_the_old_form_is_not(tmp_path: pathlib.Path) -> None:
     root = _tree(tmp_path)
     found = mo.modals_now(root)
-    assert [m.key for m in found] == ["farmhouse"], (
-        "only an About-form class owes the modal checks; the byre keeps entry-drift"
-    )
+    assert [m.key for m in found] == ["farmhouse"], "only an About-form class owes the modal checks; the byre keeps entry-drift"
     m = found[0]
-    assert (
-        m.tags["About"]
-        == "A farmhouse was the dwelling of one farming household, who worked on its earth floor.\n\nIt was thatched."
-    )
+    assert m.tags["About"] == "A farmhouse was the dwelling of one farming household, who worked on its earth floor.\n\nIt was thatched."
     assert m.tags["Guesses"] == "- its size on the map: no small house was measured."
-    assert (
-        m.entry_files() == ["research/questions/0029-farmhouses-minka.html"]
-        and m.form == "standard"
-    )
-    assert (
-        mo.find(root, "Farmhouse") == m
-        and mo.find(root, "homestead.Farmhouse") == m
-        and mo.find(root, "farmhouse") == m
-    )
+    assert m.entry_files() == ["research/questions/0029-farmhouses-minka.html"] and m.form == "standard"
+    assert mo.find(root, "Farmhouse") == m and mo.find(root, "homestead.Farmhouse") == m and mo.find(root, "farmhouse") == m
     assert mo.find(root, "Nothing") is None and mo.about_keys(root) == {"farmhouse"}
 
 
@@ -170,12 +154,8 @@ def test_nothing_is_owed_while_nothing_moved_and_a_moved_entry_page_owes_only_th
 ) -> None:
     root = _tree(tmp_path)
     base = _commit(root)
-    assert mo.owed(root, base) == [], (
-        "a formatting-free delta owes nothing (feature 311)"
-    )
-    (root / SKILL / "research/questions/0029-farmhouses-minka.html").write_text(
-        Q0029.replace("one household", "one farming household"), encoding="utf-8"
-    )
+    assert mo.owed(root, base) == [], "a formatting-free delta owes nothing (feature 311)"
+    (root / SKILL / "research/questions/0029-farmhouses-minka.html").write_text(Q0029.replace("one household", "one farming household"), encoding="utf-8")
     rows = mo.owed(root, base)
     assert [s for s, _w, _f in rows] == [
         "modal-accuracy:hamlet/farmhouse",
@@ -193,14 +173,10 @@ def test_a_comment_or_a_rewrap_of_an_entry_page_owes_nothing(
     root = _tree(tmp_path)
     base = _commit(root)
     page = root / SKILL / "research/questions/0029-farmhouses-minka.html"
-    page.write_text(
-        Q0029.replace("one household", "one  <!-- probe -->household"), encoding="utf-8"
-    )
+    page.write_text(Q0029.replace("one household", "one  <!-- probe -->household"), encoding="utf-8")
     assert "probe" in page.read_text(encoding="utf-8")
     assert mo.owed(root, base) == [], "a comment and a re-wrap change no words"
-    page.write_text(
-        Q0029.replace("one household", "one farming household"), encoding="utf-8"
-    )
+    page.write_text(Q0029.replace("one household", "one farming household"), encoding="utf-8")
     assert [s for s, _w, _f in mo.owed(root, base)] == [
         "modal-accuracy:hamlet/farmhouse",
         "modal-references:hamlet/farmhouse",
@@ -228,20 +204,10 @@ def test_the_candidates_are_the_union_and_0004_is_a_farmhouse_candidate(
     """Plan D5 as the plan review ruled it: ANY shared subject tag OR the kind's words - 0004 meets 0029 on `households`;
     0100 shares no tag but names the farmhouse; 0099 shares neither and is not a candidate."""
     root = _tree(tmp_path)
-    cands = [
-        c[1].rsplit("/", 1)[1] for c in mb.candidates(root, mo.find(root, "farmhouse"))
-    ]
-    assert (
-        "0004-households.html" in cands
-        and "0100-lanes.html" in cands
-        and "0099-ponds.html" not in cands
-    )
-    assert "0029-farmhouses-minka.html" not in cands, (
-        "an Entry page is not its own candidate"
-    )
-    assert "minka" in mb.terms_of(root, mo.find(root, "farmhouse")), (
-        "the glossary's variants are the kind's words too"
-    )
+    cands = [c[1].rsplit("/", 1)[1] for c in mb.candidates(root, mo.find(root, "farmhouse"))]
+    assert "0004-households.html" in cands and "0100-lanes.html" in cands and "0099-ponds.html" not in cands
+    assert "0029-farmhouses-minka.html" not in cands, "an Entry page is not its own candidate"
+    assert "minka" in mb.terms_of(root, mo.find(root, "farmhouse")), "the glossary's variants are the kind's words too"
 
 
 def test_the_prepass_rules_on_the_band_the_barred_phrases_and_the_entry(
@@ -249,17 +215,10 @@ def test_the_prepass_rules_on_the_band_the_barred_phrases_and_the_entry(
 ) -> None:
     root = _tree(
         tmp_path,
-        FARMHOUSE.replace(
-            "It was thatched.", "This is a guess - this project drew it."
-        ).replace("0029-farmhouses-minka.html", "0029-missing.html"),
+        FARMHOUSE.replace("It was thatched.", "This is a guess - this project drew it.").replace("0029-farmhouses-minka.html", "0029-missing.html"),
     )
     text = mb.prepass(root, mo.find(root, "farmhouse"))
-    assert (
-        "OUTSIDE THE BAND" in text
-        and "'this project'" in text
-        and "'This is a guess'" in text
-        and "Entry names no file" in text
-    )
+    assert "OUTSIDE THE BAND" in text and "'this project'" in text and "'This is a guess'" in text and "Entry names no file" in text
 
 
 def test_the_bundle_carries_the_modal_the_rules_and_its_owed_units(
@@ -269,34 +228,15 @@ def test_the_bundle_carries_the_modal_the_rules_and_its_owed_units(
     out = tmp_path / "b"
     assert mb.bundle(root, "Farmhouse", "modal-research", str(out)) == 0
     manifest = (out / "MANIFEST.md").read_text(encoding="utf-8")
-    assert (
-        "## `modal.md`" in manifest
-        and "## `guidelines.md` - origin `.claude/skills/diagram/dev/modals.md`"
-        in manifest
-    )
-    assert (
-        "entry/0029-farmhouses-minka.html" in manifest
-        and "Farmhouses (minka)" in manifest
-    )
-    assert (
-        "owed-checks: modal-research" in manifest
-        and "unit: modal-gaps:hamlet/farmhouse " in manifest
-        and "unit: modal-form:" not in manifest
-    )
-    assert (out / "record" / "0004-households.html").is_file() and (
-        out / "cand" / "0004-households.html"
-    ).is_file()
-    assert mb.bundle(root, "Farmhouse", "modal-form", str(out)) == 0, (
-        "a bundle is rebuilt in place"
-    )
-    assert "unit: modal-form:hamlet/farmhouse " in (out / "MANIFEST.md").read_text(
-        encoding="utf-8"
-    )
+    assert "## `modal.md`" in manifest and "## `guidelines.md` - origin `.claude/skills/diagram/dev/modals.md`" in manifest
+    assert "entry/0029-farmhouses-minka.html" in manifest and "Farmhouses (minka)" in manifest
+    assert "owed-checks: modal-research" in manifest and "unit: modal-gaps:hamlet/farmhouse " in manifest and "unit: modal-form:" not in manifest
+    assert (out / "record" / "0004-households.html").is_file() and (out / "cand" / "0004-households.html").is_file()
+    assert mb.bundle(root, "Farmhouse", "modal-form", str(out)) == 0, "a bundle is rebuilt in place"
+    assert "unit: modal-form:hamlet/farmhouse " in (out / "MANIFEST.md").read_text(encoding="utf-8")
     (tmp_path / "notabundle").mkdir()
     (tmp_path / "notabundle" / "x").write_text("x", encoding="utf-8")
-    assert (
-        mb.bundle(root, "Farmhouse", "modal-form", str(tmp_path / "notabundle")) == 2
-    ), "a directory we did not write is never emptied"
+    assert mb.bundle(root, "Farmhouse", "modal-form", str(tmp_path / "notabundle")) == 2, "a directory we did not write is never emptied"
     assert mb.bundle(root, "Nothing", "modal-form", str(tmp_path / "c")) == 2
 
 
@@ -315,17 +255,11 @@ def test_a_modal_in_its_own_file_is_read_from_the_file_and_owed_by_its_edits(
     )
     base = _commit(root)
     m = mo.find(root, "hamlet/farmhouse")
-    assert (
-        m
-        and m.origin == mo.modal_file(str(CLASSES / "homestead.py"), "farmhouse")
-        and m.uid == "hamlet/farmhouse"
-    )
+    assert m and m.origin == mo.modal_file(str(CLASSES / "homestead.py"), "farmhouse") and m.uid == "hamlet/farmhouse"
     assert m.tags["About"].startswith("A farmhouse was") and m.doc.startswith("About:")
     assert mo.owed(root, base) == []
     f.write_text(
-        f.read_text(encoding="utf-8").replace(
-            "It was thatched.", "It was thatched with straw."
-        ),
+        f.read_text(encoding="utf-8").replace("It was thatched.", "It was thatched with straw."),
         encoding="utf-8",
     )
     assert [s for s, _w, _f in mo.owed(root, base)][0] == "modal-form:hamlet/farmhouse"
@@ -333,9 +267,7 @@ def test_a_modal_in_its_own_file_is_read_from_the_file_and_owed_by_its_edits(
         ".claude/skills/diagram/l7r/diagram/interactive/compound_kinds/household.py",
         "well",
     )
-    assert sheet.endswith("/modals/sheet/well.md"), (
-        "a sheet's well and a hamlet's well are two files"
-    )
+    assert sheet.endswith("/modals/sheet/well.md"), "a sheet's well and a hamlet's well are two files"
 
 
 def test_the_depiction_tab_owes_its_own_check_and_its_bundle_carries_the_drawing_and_the_claims(
@@ -378,26 +310,13 @@ def test_the_depiction_tab_owes_its_own_check_and_its_bundle_carries_the_drawing
         '<h2 id="how-our-maps-draw-farmhouses">How our maps draw farmhouses</h2>\n<p>The roof shape is one.</p>\n',
         encoding="utf-8",
     )
-    assert [s for s, _w, _f in mo.owed(root, base)] == [
-        "modal-depiction:hamlet/farmhouse"
-    ], "a moved drawing page owes the tab's check alone"
+    assert [s for s, _w, _f in mo.owed(root, base)] == ["modal-depiction:hamlet/farmhouse"], "a moved drawing page owes the tab's check alone"
     out = tmp_path / "dep"
     assert mb.bundle(root, "Farmhouse", "modal-depiction", str(out)) == 0
     manifest = (out / "MANIFEST.md").read_text(encoding="utf-8")
-    assert (
-        "drawing/0029-farmhouses-minka.drawing.html" in manifest
-        and "DRIFTED | `settlement/houses.py::HousesMixin.house#ridge` | always hipped"
-        in manifest
-    )
-    assert (
-        "## Depiction" in manifest
-        and "The map draws every house alike." in manifest
-        and "no crop" in manifest
-    ), "no pool page in the fixture"
-    assert (
-        "unit: modal-depiction:hamlet/farmhouse " in manifest
-        and "owed-checks: modal-depiction" in manifest
-    )
+    assert "drawing/0029-farmhouses-minka.drawing.html" in manifest and "DRIFTED | `settlement/houses.py::HousesMixin.house#ridge` | always hipped" in manifest
+    assert "## Depiction" in manifest and "The map draws every house alike." in manifest and "no crop" in manifest, "no pool page in the fixture"
+    assert "unit: modal-depiction:hamlet/farmhouse " in manifest and "owed-checks: modal-depiction" in manifest
 
 
 def test_a_modal_with_no_drawing_list_is_still_handed_its_kinds_drawing_page_as_a_candidate(
@@ -413,16 +332,11 @@ def test_a_modal_with_no_drawing_list_is_still_handed_its_kinds_drawing_page_as_
     )
     _commit(root)
     m = mo.find(root, "farmhouse")
-    assert m.drawing_files() == [] and mb.drawing_candidates(root, m) == [
-        "research/questions/0029-farmhouses-minka.drawing.html"
-    ]
+    assert m.drawing_files() == [] and mb.drawing_candidates(root, m) == ["research/questions/0029-farmhouses-minka.drawing.html"]
     out = tmp_path / "dep"
     assert mb.bundle(root, "Farmhouse", "modal-depiction", str(out)) == 0
     manifest = (out / "MANIFEST.md").read_text(encoding="utf-8")
-    assert (
-        "drawing/0029-farmhouses-minka.drawing.html" in manifest
-        and "CANDIDATE - NOT on the modal's Drawing: list" in manifest
-    )
+    assert "drawing/0029-farmhouses-minka.drawing.html" in manifest and "CANDIDATE - NOT on the modal's Drawing: list" in manifest
 
 
 def test_a_drawing_page_the_old_form_listed_at_the_base_is_a_candidate_after_the_conversion(
@@ -442,11 +356,7 @@ def test_a_drawing_page_the_old_form_listed_at_the_base_is_a_candidate_after_the
     assert mo.find(root, "farmhouse") is None, "the base holds the old form only"
     (root / CLASSES / "homestead.py").write_text(FARMHOUSE, encoding="utf-8")
     m = mo.find(root, "farmhouse")
-    assert (
-        m.drawing_files() == []
-        and "research/questions/0038-yards.drawing.html"
-        in mb.drawing_candidates(root, m)
-    )
+    assert m.drawing_files() == [] and "research/questions/0038-yards.drawing.html" in mb.drawing_candidates(root, m)
 
 
 def test_a_drawing_page_a_listed_one_links_to_is_a_candidate(
@@ -466,28 +376,16 @@ def test_a_drawing_page_a_listed_one_links_to_is_a_candidate(
         '<p>Crowns are at <a href="0080-crowns.drawing.html">crowns</a>.</p>\n',
         encoding="utf-8",
     )
-    (q / "0080-crowns.drawing.html").write_text(
-        "<p>Crowns drawn 17 ft.</p>\n", encoding="utf-8"
-    )
+    (q / "0080-crowns.drawing.html").write_text("<p>Crowns drawn 17 ft.</p>\n", encoding="utf-8")
     _commit(root)
-    assert "research/questions/0080-crowns.drawing.html" in mb.drawing_candidates(
-        root, mo.find(root, "farmhouse")
-    )
+    assert "research/questions/0080-crowns.drawing.html" in mb.drawing_candidates(root, mo.find(root, "farmhouse"))
 
 
 def test_a_check_reads_each_conditioned_item_with_its_condition() -> None:
     """FR-015: the bundle shows `[settlement_form=nucleated]` as words a check reads, on a bullet and on a paragraph."""
-    got = mb._conditions_shown(
-        "- [settlement_form=nucleated|linear] A guess.\n[byre_form=courtyard] A paragraph.\nPlain."
-    )
-    assert (
-        got
-        == "- (only where settlement_form is nucleated or linear) A guess.\n(only where byre_form is courtyard) A paragraph.\nPlain."
-    )
+    got = mb._conditions_shown("- [settlement_form=nucleated|linear] A guess.\n[byre_form=courtyard] A paragraph.\nPlain.")
+    assert got == "- (only where settlement_form is nucleated or linear) A guess.\n(only where byre_form is courtyard) A paragraph.\nPlain."
 
 
 def test_several_conditions_read_as_one_clause() -> None:
-    assert (
-        mb._conditions_shown("- [settlement_form=nucleated][lane_web=alleys] A.")
-        == "- (only where settlement_form is nucleated and lane_web is alleys) A."
-    )
+    assert mb._conditions_shown("- [settlement_form=nucleated][lane_web=alleys] A.") == "- (only where settlement_form is nucleated and lane_web is alleys) A."
