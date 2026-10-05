@@ -11,3 +11,5 @@
 - round 3, record-format 0038: 55 words ruled, clean
 - round 3, source-reader 0038: READ 2, NOT-FOUND 1 - both absences hold and the rescoped pass text is honest
 - round 3, entry-drift: Windbreak IN-STEP; Garden answered by REASON (319 rewrites garden.md)
+- round 4 (kurita-2019-igune's table row): quote-check SUPPORTS 1 (read from the page images); record-format 55 words, clean; translation-check FAITHFUL 5 (実測 -> measured); source-reader READ 2 (the measured row 22.0-11.0 m, Minami's 9-16 m)
+- record tests green each round (3854 passed); record-owed UNANSWERED=1: no record check is owed. Left for 319's rewrite: the garden modal's daikon-bed GUESS (entry-drift DRIFTED, round 1); a Research: claim citing 0038 is owed impl-drift at the push
