@@ -3264,7 +3264,9 @@
    "party wall",
    "party walls",
    "row-house",
-   "row-houses"
+   "row-houses",
+   "rowhouse",
+   "rowhouses"
   ]
  },
  "ryo": {
@@ -3805,6 +3807,9 @@
    "6-mat",
    "8-mat",
    "10-mat",
+   "4 mats",
+   "6 mats",
+   "8 mats",
    "four-and-a-half-mat",
    "one-and-a-half-mat"
   ]
@@ -5861,7 +5866,8 @@
  "massing": {
   "def": "How a building's parts are arranged as masses: one block under one roof, or separate halls set apart and joined. A residence takes one form or the other.",
   "variants": [
-   "massing"
+   "massing",
+   "massed"
   ]
  },
  "shogun": {
@@ -15717,6 +15723,19 @@
   ],
   "cased": true
  },
+ "caravan inn": {
+  "def": "The one inn our maps draw in a town, on its road: chosen for each town at even odds as a one-story wagon inn or a two-story post-station inn.",
+  "variants": [
+   "caravan inn",
+   "caravan inns"
+  ]
+ },
+ "dian": {
+  "def": "A Chinese road inn: in north China, one built around a broad yard with a long stable for the carters' wagons and animals.",
+  "variants": [
+   "dian"
+  ]
+ },
  "upright book": {
   "def": "A Japanese register bound in the tall format, its pages taller than wide (tatecho) - the usual form of a village's survey register.",
   "variants": [
@@ -15742,6 +15761,41 @@
    "chotojiba"
   ]
  },
+ "egress": {
+  "def": "A way out; in a property custom, the right to pass out from one's land to a road or street.",
+  "variants": [
+   "egress"
+  ]
+ },
+ "Manchu": {
+  "def": "A people native to northeast China (Manchuria); a Manchu village is one of theirs, like the village of the northern plain that a 2020 survey measured.",
+  "variants": [
+   "Manchu",
+   "Manchus"
+  ]
+ },
+ "Imperial waystation": {
+  "def": "In this setting, the state's relay station on an Imperial road, which keeps the relay horses and their stables, so that a town's inns need not.",
+  "variants": [
+   "Imperial waystation",
+   "Imperial waystations"
+  ]
+ },
+ "Mori Ogai": {
+  "def": "A Japanese writer whose Nagashi of 1913 the Nihon Kokugo Daijiten cites as the earliest written use of umayado for an inn that stables a traveler's own horse.",
+  "variants": [
+   "Mori Ogai",
+   "Ogai",
+   "Ogai's"
+  ]
+ },
+ "Shichiri ferry": {
+  "def": "The Tokaido's crossing by boat between the post station of Miya and Kuwana on the far shore.",
+  "variants": [
+   "Shichiri ferry",
+   "Shichiri"
+  ]
+ },
  "Kenrei Shuchi": {
   "def": "A handbook of local administration, 県令須知 (\"what a county magistrate must know\"), which the Heibonsha encyclopedia's entry on weirs cites for dividing Edo-period weirs into grass weirs and washing weirs.",
   "variants": [
@@ -15749,10 +15803,48 @@
   ],
   "cased": true
  },
+ "px": {
+  "def": "A pixel, one dot of a map image on screen. Our maps give their scale in pixels to the foot: a compound plan is drawn at 3 px to the foot, a hamlet or town map at 1 px to the foot.",
+  "variants": [
+   "px",
+   "pixel",
+   "pixels"
+  ]
+ },
+ "track out": {
+  "def": "The way that leads out of a clustered settlement, starting at the cluster's edge; every household's own way is laid to it or to an earlier way, joined at a T.",
+  "variants": [
+   "track out",
+   "track out's"
+  ]
+ },
  "succession": {
   "def": "The slow change of a wood's trees over decades when it is left uncut, one kind giving way to the next; in western Japan an uncut coppice turns into dense, dark evergreen laurel forest.",
   "variants": [
    "succession"
+  ]
+ },
+ "hudou": {
+  "def": "A Chinese swing bucket: a bucket on ropes that two people swing between them to lift water a short height, from a well or a river's edge onto a field.",
+  "variants": [
+   "hudou",
+   "hùdǒu",
+   "swing bucket"
+  ]
+ },
+ "man rations": {
+  "def": "A stipend reckoned as the daily rice rations of so many men - a 50-man ration is the rice of fifty - paid besides or instead of a stipend in koku.",
+  "variants": [
+   "man rations",
+   "man ration",
+   "man-rations"
+  ]
+ },
+ "hokonin": {
+  "def": "A hired servant: one taken into a household's service for pay, as a samurai household hired its menservants and maids.",
+  "variants": [
+   "hokonin",
+   "hōkōnin"
   ]
  },
  "hitsu": {
@@ -15781,6 +15873,13 @@
    "stacked ponds",
    "kasane-ike",
    "oyako-ike"
+  ]
+ },
+ "nail cover": {
+  "def": "A decorative fitting over the head of a nail driven through a nageshi; at the Matsue samurai residence they are shaped as a bird in the master's living room and bear a nine-star crest in the zashiki.",
+  "variants": [
+   "nail cover",
+   "nail covers"
   ]
  }
 }
