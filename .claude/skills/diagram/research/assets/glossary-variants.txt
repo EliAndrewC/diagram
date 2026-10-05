@@ -3102,6 +3102,8 @@ rotation period	rotation period
 round concrete divider	cylinder divider
 round divider	cylinder divider
 round dividers	cylinder divider
+row village	ressen
+row villages	ressen
 row-house	row house
 row-houses	row house
 rowhouse gate	nagayamon
