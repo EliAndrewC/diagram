@@ -105,25 +105,34 @@ def slug(key: str) -> str:
 #: research entry is a page-content edit like any rewording - `make page-check`, not the gate; only `key` stays code, being
 #: what the engine writes on the ink and what the stylesheet matches).
 _TAGS: tuple[str, ...] = ("About", "Guesses", "Depiction", "Name", "Covers", "Sources", "Entry", "Drawing", "Form")
+"""Research: modal vocabulary plumbing - NONE"""
 _DATA_TAGS: tuple[str, ...] = ("Name", "Covers", "Sources", "Entry", "Drawing", "Form")
+"""Research: modal vocabulary plumbing - NONE"""
 #: THE RETIRED TAGS (feature 319): the old form's prose and its class-level label. Still recognized so a file that carries
 #: one is REFUSED by name, never read as part of the paragraph above it - don't drop them from the pattern, because an
 #: unrecognized `Why:` line would silently join the About text.
 _RETIRED: tuple[str, ...] = ("What", "Why", "Note", "Caveat", "Label")
+"""Research: modal vocabulary plumbing - NONE"""
 _TAG_LINE = re.compile(r"^(" + "|".join(_TAGS + _RETIRED) + r"):\s?(.*)$")
+"""Research: modal vocabulary plumbing - NONE"""
 #: the tags whose blank lines are paragraph breaks (the About and Depiction tabs)
 _PARAGRAPHED: frozenset[str] = frozenset({"About", "Depiction"})
+"""Research: modal vocabulary plumbing - NONE"""
 #: The required data tags; `Form:` is optional (default `standard`) and `Drawing:` too (plan D13).
 _ABOUT_DATA_TAGS: tuple[str, ...] = ("Name", "Covers", "Sources", "Entry")
+"""Research: modal vocabulary plumbing - NONE"""
 FORMS: frozenset[str] = frozenset({"standard", "particular"})
+"""Research: modal vocabulary plumbing - NONE"""
 #: A paragraph break inside `About:` - a blank line, kept (only there) so the About tab has paragraphs (`dev/modals.md` M2).
 _PARA = "\n\n"
+"""Research: modal vocabulary plumbing - NONE"""
 
 
 def parse_explanation(doc: str | None, name: str) -> dict[str, str]:
     """The tagged sections of a modal's text (`_TAGS`), each tag at the start of a line, each value running to the next
     tag, wrapped lines joined with one space. A missing text or a missing `About:` raises, naming the class - a registry
-    error is loud, never a blank modal (spec 189 FR-001)."""
+    error is loud, never a blank modal (spec 189 FR-001).
+    Research: modal vocabulary plumbing - NONE"""
     if not doc or not doc.strip():
         raise ValueError(f"{name}: the explanation is the docstring, and there is none")
     out: dict[str, list[str]] = {}
@@ -189,6 +198,7 @@ def guess_bullets(text: str) -> tuple[str, ...]:
 #: quote a docstring's line breaks. Under `assets/` the text is page content - gate-stamp's `page` area, the render
 #: fingerprint, a gen child's recorded reads - exactly as the glossary is.
 MODALS_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "assets", "modals")
+"""Research: modal vocabulary plumbing - NONE"""
 
 
 def modal_path(module: str, key: str) -> str:
@@ -224,7 +234,8 @@ class Kind:
 
     @classmethod
     def feature(cls) -> FeatureClass:
-        """The `FeatureClass` the page reads, built from the class attributes and the parsed docstring."""
+        """The `FeatureClass` the page reads, built from the class attributes and the parsed docstring.
+        Research: modal vocabulary plumbing - NONE"""
         return _about_feature(cls.__name__, cls.key, parse_explanation(modal_text(cls), cls.__name__))
 
 
