@@ -1908,6 +1908,7 @@ kariyasu	kariyasu
 karo	karo
 karō	karo
 kasagake	kasagake
+kasane-ike	stacked pond
 kasasuge	kasasuge
 kashi	kashi
 kaso-dera	kaso-dera
@@ -2397,6 +2398,7 @@ miyaza	miyaza
 mizu-oobako	Ottelia
 mizubansho	mizubansho
 mizubune	mizubune
+mizucho	mizucho
 mizugaki	mizugaki
 mizugashira	mizugashira
 mizuguchi	mizuguchi
@@ -2731,6 +2733,7 @@ ox-shoeing frames	ox-shoeing frame
 oxbow lake	ox-bow lake
 oxbow lakes	ox-bow lake
 oyaike	oyaike
+oyako-ike	stacked pond
 pacific high	Pacific High
 pacification commission	Pacification Commission
 pacification commissioner	Pacification Commission
@@ -3499,6 +3502,8 @@ spurs	spur
 square keep	shell keep
 square keeps	shell keep
 srtm	SRTM
+stacked pond	stacked pond
+stacked ponds	stacked pond
 staggered shelves	staggered shelves
 staking frame	staking frame
 staking frames	staking frame
@@ -4149,6 +4154,7 @@ well-house	well-house
 well-houses	well-house
 well-sweep	well-sweep
 wellhead	curb
+wellheads	curb
 weng cheng	wengcheng
 wengcheng	wengcheng
 wenmiao	wenmiao

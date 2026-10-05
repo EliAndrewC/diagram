@@ -8872,7 +8872,8 @@
    "curb",
    "curbs",
    "well curb",
-   "wellhead"
+   "wellhead",
+   "wellheads"
   ]
  },
  "town grain": {
@@ -15766,6 +15767,21 @@
   "def": "Water held back and left standing on ground that cannot drain it; on the Noubi plain the drainage from the upper villages' artesian wells stood on the lower villages' paddy and damaged it.",
   "variants": [
    "impoundment"
+  ]
+ },
+ "mizucho": {
+  "def": "Another name for a land survey register, the book in which a village's survey wrote each parcel of paddy, dry field or house land on a line of its own, with its sides, its grade and its area.",
+  "variants": [
+   "mizucho"
+  ]
+ },
+ "stacked pond": {
+  "def": "Several irrigation ponds strung together in a terrace-like series, the water let down from one to the next; in Japanese kasane-ike, also called oyako-ike, \"parent-and-child ponds\".",
+  "variants": [
+   "stacked pond",
+   "stacked ponds",
+   "kasane-ike",
+   "oyako-ike"
   ]
  }
 }
