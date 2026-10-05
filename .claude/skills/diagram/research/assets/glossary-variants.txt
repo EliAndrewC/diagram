@@ -2814,6 +2814,8 @@ pit privy	pit privy
 pit rank	pit rank
 pit ranks	pit rank
 pivot-hung	pivot-hung
+pixel	px
+pixels	px
 placer	placer
 plankton	plankton
 plant association	plant association
@@ -2889,6 +2891,7 @@ purlins	purlin
 purple robe	purple robe
 purveyor merchant	purveyor merchant
 purveyor merchants	purveyor merchant
+px	px
 qi	qi
 qiandao	qiandao
 qianlong	Qianlong
@@ -3882,6 +3885,8 @@ toyotomi hideyoshi	Hideyoshi
 tozama	tozama
 tozama daimyo	tozama
 tozamurai	tozamurai
+track out	track out
+track out's	track out
 training retreat	training retreat
 training retreats	training retreat
 transect	transect

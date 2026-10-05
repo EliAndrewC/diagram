@@ -15770,5 +15770,20 @@
    "Shichiri ferry",
    "Shichiri"
   ]
+ },
+ "px": {
+  "def": "A pixel, one dot of a map image on screen. Our maps give their scale in pixels to the foot: a compound plan is drawn at 3 px to the foot, a hamlet or town map at 1 px to the foot.",
+  "variants": [
+   "px",
+   "pixel",
+   "pixels"
+  ]
+ },
+ "track out": {
+  "def": "The way that leads out of a clustered settlement, starting at the cluster's edge; every household's own way is laid to it or to an earlier way, joined at a T.",
+  "variants": [
+   "track out",
+   "track out's"
+  ]
  }
 }
