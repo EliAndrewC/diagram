@@ -5,7 +5,8 @@
 ## Summary
 
 `raster.picture` hands each tile its text with every classed line (`<g class="f ...`) passed through `drop_offmap` against the
-tile's box; `TILE_MPX` is lowered to the grid the measurement picks.
+tile's box. The grid stays 3 x 3 with `TILE_MPX` unchanged (D2, Amendment 1), and the note at `TILE_MPX` is corrected to what
+tiling measurably does to the pixels (D5).
 
 ## Performance bookends (constitution VI)
 
@@ -19,7 +20,7 @@ message. The snapshot times only the roll's stages, which this feature does not 
 **D1 - The clip, per tile (FR-001).** In `picture`, after the tile's viewBox is set, the text is split on newlines and each line
 starting with `<g class="f ` - a classed string as `page.wrap` writes it, the strings the page itself clips - becomes
 `drop_offmap(line, tile_box)`; every other line (the sheet, unclassed ink, defs) is untouched, and `drop_offmap` itself leaves a
-string with a `transform` or an unreadable path whole. A small, constant-time wrapper `tile_doc(text, box)` holds this, so it is
+string with a `transform` or an unreadable path whole. A small wrapper `tile_doc(text, box)`, one pass over the lines, holds this, so it is
 tested directly.
 
 **D2 - The grid stays 3 x 3 (FR-002, Amendment 1).** `TILE_MPX` is not changed. The grid measurement was taken (research.md R2):
@@ -30,8 +31,8 @@ finer grids saved 10-20 MB more and broke the span bound, and moved tiling's sea
 against the picture from unclipped tiles (today's), byte for byte, recorded in research.md.
 
 **D5 - Feature 223's note (FR-005, Amendment 1).** The note at `TILE_MPX` says what R3 measured: the stitched picture differs from the
-single render by tiling's own seam differences (thousands of pixels, almost all one or two levels), which is why a grid change is
-never byte-identical; the clip changes no pixel.
+single render by tiling's own seam differences - 4,319 pixels on the reference render at 3 x 3, most (about 80%) within two levels,
+none above 39 (research.md R3) - which is why a grid change is never byte-identical; the clip changes no pixel.
 
 **D4 - Research claims.** `tile_doc` inherits the module's claims; owed `impl-drift` only if `make claims-owed` says so.
 

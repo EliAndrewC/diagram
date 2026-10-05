@@ -1,45 +1,58 @@
 {
  "feature": "326-tile-clip",
- "plan_sha256": "3b43b54673bd1b32e6c18d47e866b608eec2f1a4bba8e5e91c381183d4f8d062",
+ "plan_sha256": "8a64ea60217cc45b79d0aea051935b94d256d202a959fc3fcdd899c5038eaf66",
  "reviewed": "2026-10-05",
  "declared": "spec-fidelity",
  "decisions": [
   {
+   "id": "Summary",
+   "summary": "The Summary still says 'TILE_MPX is lowered to the grid the measurement picks.'",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "This contradicts what was asked rather than narrowing it. Amendment 1 is the GM's 'yes please' to 'clipping only, at 3x3 ... no grid change', and FR-002 says TILE_MPX MUST stay unchanged. The sentence is left over from the pre-amendment plan and says the opposite of D2. A plan that tasks are ticked against must not tell the implementer to change the grid. Fix: say that the grid stays 3 x 3 and TILE_MPX is unchanged (D2), and that the note at TILE_MPX is corrected (D5)."
+  },
+  {
    "id": "D1",
-   "summary": "In the tiled path of raster.picture, each tile's text has every line starting with '<g class=\"f ' passed through drop_offmap against the tile's box; every other line untouched; held in a tile_doc wrapper.",
+   "summary": "tile_doc: the tile's viewBox, and every line starting '<g class=\"f ' passed through drop_offmap against the tile's box; other lines untouched; built in the worker (render_tile).",
    "class": "within",
-   "why": "FR-001 verbatim: the page's own rule (drop_offmap, OFFMAP_MARGIN included) applied to the classed strings only, and nothing else. The line prefix is how page.wrap opens a classed string (_open), so it selects what write_html already clips by tag. The one way the type allows a gap (a Parts tag whose first piece is unclassed) leaves that line whole - under-clipping, never a changed pixel - and no classifier was found producing one. Single-tile and fractional-zoom renders keep their own untouched branch (the spec's edge cases)."
+   "why": "This is FR-001 as written: the page's own rule with its margin, applied to classed strings only, and nothing else. The classed-only scope was ruled LEGITIMATE in spec round 1. The single-tile and fractional-zoom branches are untouched (Edge Cases). Building the document inside the worker is a design choice, not a scope change."
   },
   {
    "id": "D2",
-   "summary": "Grid chosen on the 20-household seed-4 hamlet with D1 in place: peak and span at 4x4, 5x5, 6x6 (two runs each, 3x3 clipped as reference); pick the lowest peak with span <= 3.81 s; TILE_MPX set to land the reference there; none qualifying or a saving under 100 MB goes to the GM.",
+   "summary": "The grid stays 3x3, TILE_MPX unchanged; SC-002 is the clipped-against-unclipped A/B of R2.",
    "class": "within",
-   "why": "Is FR-002 and SC-002's rule as accepted: finer grids only, lowest peak within the 3.81 s bound, the shortfall to the GM rather than settled by keeping 3x3. The candidate list brackets the GM's own named 5x5. One condition the spec's 'and finer as measured' carries: if 6x6 is the pick, it is not yet shown to be the lowest among the finer grids, and 7x7 is measured before TILE_MPX is set. tasks.md T02 lists 3x3, 4x4, 5x5 and drops the plan's 6x6 - the task must match the plan."
+   "why": "This is FR-002 and SC-002 after Amendment 1, which is exactly the GM's 'yes please' answer."
   },
   {
    "id": "D3",
-   "summary": "One-shot run over every live pool map: tiled picture against tiles=1, recorded in research.md.",
+   "summary": "One-shot run over every live pool map: clipped tiles against unclipped tiles, byte for byte, recorded in research.md.",
    "class": "within",
-   "why": "SC-003 literally (equal to the picture rendered whole), which carries FR-003 because the single-render branch is untouched."
+   "why": "This is FR-003 and SC-003 as amended: the comparison is with unclipped tiles, which is today's picture, on every live pool map."
+  },
+  {
+   "id": "D5",
+   "summary": "The note at TILE_MPX restated to what R3 measured: the stitched picture differs from the single render by seam differences ('thousands of pixels, almost all one or two levels'); the clip changes no pixel.",
+   "class": "within",
+   "why": "Correcting the note is FR-005 and the GM's approved 'correct that comment to state the measured truth'. But the planned wording misstates R3. Of the 4,319 differing pixels at 3x3, 2,344 are off by one level and 1,108 by two. That is 3,452, about 80 percent, which is 'most', not 'almost all'. Another 867 are off by three or more levels, up to 39. FR-005 exists to replace an overstated claim with the measured one, so the note must not overstate R3 in turn. It should state R3's figures, or 'most within two levels, none above 39', with the pointer to research.md R3."
   },
   {
    "id": "D4",
-   "summary": "tile_doc inherits the module's Research claims; impl-drift only if make claims-owed asks.",
+   "summary": "tile_doc inherits the module's Research claims; impl-drift only where make claims-owed asks.",
    "class": "within",
-   "why": "Project process, no change to what is asked."
+   "why": "Project process; it does not change what was asked."
   },
   {
    "id": "Tests",
-   "summary": "tile_doc drops an outside classed line, keeps an inside one, never touches an unclassed line; a corner-ink tiled picture equals its single render; existing tiled-equals-single and tile_count tests updated to the new TILE_MPX.",
+   "summary": "tile_doc drops an outside classed line, keeps an inside one, never touches an unclassed line; a corner-ink synthetic tiled picture equals its single render.",
    "class": "within",
-   "why": "Enforcement of FR-001 and SC-001's test half; nothing else is verified."
+   "why": "These enforce FR-001 and the test half of SC-001 (a synthetic page, as SC-001 states). The pre-amendment tests that updated TILE_MPX are correctly dropped."
   },
   {
    "id": "Bookends",
-   "summary": "Both perf bookends taken back to back at the end (start in a detached worktree at b8b20e690, perf-gate in the clone), in a window arranged with the other session.",
+   "summary": "Both perf bookends back to back at the end (start in a detached worktree at b8b20e690, perf-gate in the clone), in an arranged window.",
    "class": "within",
-   "why": "Constitution VI's standing process and SC-004's make done; adds no scope to the request."
+   "why": "Constitution VI process plus SC-004's make done. It adds nothing to the request."
   }
  ],
- "verdict": "CLEAR"
+ "verdict": "BLOCKED"
 }
