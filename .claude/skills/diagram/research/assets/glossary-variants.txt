@@ -1995,6 +1995,8 @@ king posts	king post
 king-post	king post
 kinki	Kinki
 kinki region	Kinki
+kinoe saru	kinoe-saru
+kinoe-saru	kinoe-saru
 kirime-en	kirime-en
 kirisute-gomen	kirisute-gomen
 kirizuma	gabled roof
@@ -2586,6 +2588,7 @@ nihonshi shojiten	Yamakawa Nihonshi Shojiten
 nikko kaido	Nikko Kaido
 nikko toshogu	Toshogu
 nikko-kaido	Nikko Kaido
+nikkō tōshōgū	Toshogu
 nimosaku	nimosaku
 ninbetsu aratame cho	shumon aratame cho
 ninjobon	ninjōbon
@@ -3993,6 +3996,7 @@ two-grave villages	two-grave
 tōhoku	Tohoku
 tōkaidō	Tokaido
 tōshukō	toshuko
+tōshōgū	Toshogu
 tōya	miyaza
 tōzamurai	tozamurai
 ubame	Ubame
