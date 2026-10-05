@@ -120,7 +120,7 @@ Standard features with rough SVG conventions. New diagrams should reuse this voc
 <!-- Research: kitchen - research/questions/0107-kitchens-daidokoro.html, research/questions/0107-kitchens-daidokoro.drawing.html: part of the house ~40x33 ft, kamado range, smaller than a living block -->
 <!-- Research: kamado range size - UNRESEARCHED: ~6 x 2.5 ft with two fire mouths -->
 <!-- Research: bath - research/questions/0105-baths-furo.html: a room or small addition on the service side by kitchen and well, 12-15 ft a guess -->
-<!-- Research: kitchen corridor tagged residence corridor - UNRESEARCHED: Hayakawa's sheet tags its kitchen-to-house covered way as a residence corridor -->
+<!-- Research: kitchen corridor tagged residence corridor - research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html: a middle-rank house was one block with almost no corridors, its kitchen projecting from one side; Hayakawa's sheet tags its kitchen-to-house covered way as a residence corridor -->
 <!-- Research: inner garden - research/questions/0103-ornamental-gardens-ponds-and-stone-lanterns-teien.html: central stipple with optional pond and lanterns -->
 <!-- Research: room order - research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html: every sheet drawn so far takes the palace order (reception in front, the master's rooms, the family's beyond); the small house's order is never taken -->
 

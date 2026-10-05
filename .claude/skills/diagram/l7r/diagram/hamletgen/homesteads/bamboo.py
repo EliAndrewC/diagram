@@ -85,6 +85,7 @@ def household_bamboo(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str
         side rolled, then the others - research/questions/0075-bamboo-groves-chikurin.drawing.html: the weighted side first, the rest in listed order
         a grove farm's bamboo in its grove - research/questions/0075-bamboo-groves-chikurin.drawing.html: no strip, counted for the grove
         strip clearances - UNRESEARCHED: 6 ft off the walls and every lane, a second seat one strip's depth further out
+        strip out of the sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: kept 50 ft (bamboo's reach) off every yard's and bed's sun
         strip off the copse seats - UNRESEARCHED: off every household's reserved copse seats by the bamboo keep-out
         strip on its house's bank - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: refused across a stream
         strip seated after the lanes - research/questions/0075-bamboo-groves-chikurin.drawing.html: seated after the web, the lanes laid before it
