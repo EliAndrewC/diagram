@@ -96,11 +96,11 @@ done (FR-012).
       research: rendering
       verify: DONE. GM 2026-10-04: 'That looks good' on the farmhouse with its Depiction tab; four checks answered; Inashiro regenerated
 
-- [ ] T22 [US4] Knob-dependent items (plan D14, FR-015): the condition parsed and checked against `KNOBS` in `_base.py`; the
+- [x] T22 [US4] Knob-dependent items (plan D14, FR-015): the condition parsed and checked against `KNOBS` in `_base.py`; the
   page filtered by the map's `meta`; the bundles render the condition; M9 amended and M22 written; the windbreak's shared-wood
   guess conditioned on `settlement_form=nucleated`; tests red then green (SC-009); `make page-check` green
       research: rendering
-      verify:
+      verify: DONE. conditions.py; _base checks the form at read, the page filters by meta and checks knobs against the populated registry; bundles render conditions; M9/M22; windbreak guess + 0031 on settlement_form=nucleated; SC-009 test; page-check green 5382; plan review CLEAR
 
 ## Phase 3 - the garden pilot (and a further pilot only if needed)
 
