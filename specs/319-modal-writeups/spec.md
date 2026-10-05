@@ -129,7 +129,7 @@ A reader clicks a hamlet's title card and sees what was chosen for this settleme
 lane web, the bamboo, the harvest weather and the rest - each value a link to a modal explaining that form.
 
 **Why this priority**: the GM's Inashiro example; it is where the per-settlement differences go, so the feature modals can be
-the same on every map.
+the same on every map, apart from the items FR-015 conditions on the settlement's knobs.
 
 **Independent Test**: open Inashiro's title card; it lists its choices, among them "nucleated", and clicking "nucleated" opens a
 modal explaining the nucleated form.
@@ -141,7 +141,8 @@ modal explaining the nucleated form.
 2. **Given** a listed value, **When** clicked, **Then** a modal for that value opens, written to the same guidelines, with the
    same tabs, and the same on every map.
 3. **Given** a hamlet's per-map facts now in its notes' `### Features` block, **When** this feature lands, **Then** each is a
-   title-card entry (a choice or a count of this settlement) and no hamlet feature modal varies by map.
+   title-card entry (a choice or a count of this settlement) and no hamlet feature modal varies by map except by FR-015's
+   knob-conditioned items.
 
 ---
 
@@ -216,7 +217,9 @@ when a rewrite is accepted with no changes are the rest rewritten.
   on a magistracy, shrine or estate sheet - and for the particular part of a general kind's modal on such a sheet (its
   `### Features` text), which stays on that sheet's modal: what it explains, how canon is used, how real-world research it draws on is linked,
   and the lighter checking it gets.
-- **FR-004**: Every standardized modal on a settlement map MUST be the same on every map: no per-map text in a feature modal.
+- **FR-004**: Every standardized modal on a settlement map MUST be the same on every map: no per-map text in a feature modal;
+  the one variation is FR-015's - an item conditioned on the settlement's knobs - so two maps with the same values for those
+  knobs show the same modal.
   A settlement's own facts and choices go on its title card (FR-009).
 
 **The modal**
@@ -273,7 +276,9 @@ when a rewrite is accepted with no changes are the rest rewritten.
   settlement's knobs (the GM, 2026-10-05: *"make that kind of item still automatic but dependent on the "knobs" for a settlement
   in cases where that is relevant"*), and the page MUST show it only on a map whose recorded knob value meets the condition;
   every other item is the same on every map. A condition names a registered knob and values that knob can take, and a modal
-  naming any other is refused when it is read; the checks MUST read each conditional item with its condition.
+  naming any other is refused when it is read; the checks MUST read each conditional item with its condition. The References
+  tab MUST follow what is shown: a question resting only on a hidden item is not listed on that map (FR-006; the GM: *"simply
+  not link to things which are not covered"*).
 - **FR-013**: The session MUST pitch the GM alternative names for the first tab (at least three candidates, Overview among
   them, a line on each) no later than the hand-off of the farmhouse pilot; the GM's choice is applied to the guidelines and
   the pilot before the rollout starts. (Done 2026-10-03: the GM chose "About".)
@@ -287,15 +292,16 @@ when a rewrite is accepted with no changes are the rest rewritten.
   guesses tab; a test holds that a guesses tab appears exactly when a modal carries a guess.
 - **SC-003** (FR-006, FR-008): every rewritten modal has passed the three checks, recorded in the review ledger with cost.
 - **SC-004** (FR-004, FR-009): every pool hamlet's title card lists its choices; each value opens its modal; no hamlet feature modal
-  differs between two pool maps.
+  differs between two pool maps except by items conditioned on a knob whose values the two maps do not share (FR-015).
 - **SC-005** (FR-010, FR-012): the GM's verdict on each pilot round is recorded in `tasks.md`; the rollout starts on the GM's go-ahead
   after a pilot's first rewrite is accepted with no changes.
 - **SC-006** (FR-007, FR-011): every class, knob value and sheet kind is rewritten and checked; `make page-check` is green,
   its browser test holding the sibling links on the About tab and the glossary tooltips on every tab.
 - **SC-008** (FR-014): every rewritten modal whose kind has a drawing page or a convention carries a Depiction tab that has
   passed `modal-depiction`, recorded in the review ledger with cost; no References tab lists a "how our maps draw it" page.
-- **SC-009** (FR-015): a guess bullet conditioned on `settlement_form` is on a nucleated pool map's page and absent from a
-  dispersed one's (a page test on two synthetic maps); a condition naming an unknown knob or value fails when the modal is read.
+- **SC-009** (FR-015): the windbreak's shared-wood guess - the GM's own case - is on a nucleated map's windbreak modal and
+  absent from a dispersed map's, and so is the question that guess alone rests on on the References tab (page tests on two
+  synthetic maps); a condition naming an unknown knob or value fails when the modal is read.
 - **SC-007** (FR-012, FR-013): nothing but the spec claim is on main until the rollout's last task; the GM's choice of the
   first tab's name is recorded in the spec's Decisions table before the rollout starts.
 
@@ -304,7 +310,7 @@ when a rewrite is accepted with no changes are the rest rewritten.
 | Decision | Class | Why | Recorded at |
 |---|---|---|---|
 | A guess is a property of a statement, listed on a guesses tab; the feature-level guess lead goes | presentation (the four classes of constitution XII are kept, per statement) | the GM: the garden's lead *"is extremely misleading"* | this spec; the guidelines; `interactive/CLAUDE.md` |
-| Per-settlement facts move from the feature modals to the title card | presentation | the GM: settlement maps *"all pull from a standardized set of modals ... not ... customized modals. For anything"* | this spec; the guidelines |
+| Per-settlement facts move from the feature modals to the title card, apart from FR-015's knob-conditioned items | presentation | the GM: settlement maps *"all pull from a standardized set of modals ... not ... customized modals. For anything"* | this spec; the guidelines |
 | A drawing convention is told on the Depiction tab with its real counterpart, not in the write-up and not on the guesses tab | presentation | a convention is not a guess; the GM, 2026-10-04: *"I think I want 'How we draw it' things on its own tab"* (until 2026-10-04 it was told in the write-up's appearance part) | this spec; the guidelines |
 | The how-it-is-drawn tab is "Depiction" | presentation | the GM, 2026-10-04: *"For the name I do like 'Depiction' so let's use that"* | this spec; the guidelines |
 | The farmhouse's single roof is not presented as a convention | presentation; the drift itself stays in the claims report (DRIFTED, `houses.py` `HousesMixin.house`) | the GM, 2026-10-04: *"The single roof is NOT a deliberate convention"*, to be fixed with the other recorded drifts later | this spec; the claims report |
@@ -327,3 +333,4 @@ when a rewrite is accepted with no changes are the rest rewritten.
 - Round 2 (spec-fidelity, 2026-10-03): ACCEPT (FAITHFUL) - all four round-1 changes confirmed against the diff.
 - Amendment 2026-10-04 (the GM's Depiction tab): FR-005, FR-006 amended, FR-014, US3b, SC-008 and two Decisions added; one Decisions row amended (the convention's place).
 - Amendment 2026-10-05 (the GM's knob-dependent items): FR-015, SC-009 and one Decisions row added.
+- Amendment 2026-10-05, round 1 (spec-fidelity, 2026-10-05): CHANGES REQUIRED - FR-015 is faithful to the GM's ask and does not conflict with "standardized ... not ... customized" (a conditioned item is still one standard text, chosen automatically), but FR-004, SC-004, US4 (its Why and scenario 3) and the per-settlement Decisions row still say no hamlet feature modal varies by map, which SC-009 now requires; References must follow the items shown (FR-006); the windbreak's shared-wood guess, the GM's case, is named only in the plan.
