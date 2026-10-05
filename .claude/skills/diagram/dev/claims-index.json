@@ -21679,6 +21679,26 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/interactive/raster.py::TILE_WORKERS#low-zoom picture": {
+  "code": "5b3a3e502928a744",
+  "core": "c35ad46f1990d395",
+  "date": "2026-10-05",
+  "note": "this unit is part of the one low-zoom picture and changes nothing about how it looks",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/interactive/raster.py::TILE_WORKERS#raster plumbing": {
+  "code": "0eb521bd998f94eb",
+  "core": "c35ad46f1990d395",
+  "date": "2026-10-05",
+  "note": "how many tiles render at once is a scheduling cap with no physical meaning",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  ".claude/skills/diagram/l7r/diagram/interactive/raster.py::_ATTRS#low-zoom picture": {
   "code": "c67a777b33fe1d81",
   "core": "ecbaab1706d52e23",
@@ -21808,19 +21828,23 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/raster.py::_PICTURE_CHILD#low-zoom picture": {
-  "code": "ccd917911b3f935d",
-  "core": "94e11e1a0f98ac95",
-  "date": "2026-10-03",
-  "note": "how the low-zoom picture is shown",
+  "code": "cfef1063c5c463ac",
+  "core": "5df6ec09b843ebb7",
+  "date": "2026-10-05",
+  "note": "the JPEG format, quality 90 and subsampling 0 only set how the picture is shown",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/raster.py::_PICTURE_CHILD#raster plumbing": {
-  "code": "e17172d27ce646b3",
-  "core": "94e11e1a0f98ac95",
-  "date": "2026-10-03",
-  "note": "plumbing, decides nothing physical",
+  "code": "bb738eec2f408ad4",
+  "core": "5df6ec09b843ebb7",
+  "date": "2026-10-05",
+  "note": "pasting the tiles one at a time and encoding them is plumbing",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/raster.py::_SHAPE#low-zoom picture": {
@@ -21984,19 +22008,23 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/raster.py::encode_picture#low-zoom picture": {
-  "code": "479811f8b8ec0a89",
-  "core": "87104e4296133ab6",
-  "date": "2026-10-03",
-  "note": "how the low-zoom picture is shown",
+  "code": "4d33bf2c9305cd5f",
+  "core": "8d17ae105c4e7bc1",
+  "date": "2026-10-05",
+  "note": "it encodes the single picture and decides nothing about how it looks",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/raster.py::encode_picture#raster plumbing": {
-  "code": "bfbe429f57369561",
-  "core": "87104e4296133ab6",
-  "date": "2026-10-03",
-  "note": "plumbing, decides nothing physical",
+  "code": "f988c003f2ed242c",
+  "core": "8d17ae105c4e7bc1",
+  "date": "2026-10-05",
+  "note": "running the child process and handling its errors is plumbing",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/raster.py::id_map#low-zoom picture": {
@@ -22048,19 +22076,23 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/raster.py::picture#low-zoom picture": {
-  "code": "adf2909145ac1678",
-  "core": "43c5ccf5c60d06c2",
-  "date": "2026-10-03",
-  "note": "how the low-zoom picture is shown",
+  "code": "ab1572ffaaa4738b",
+  "core": "d8d59b31a599af89",
+  "date": "2026-10-05",
+  "note": "it makes one image of the whole picture at RASTER_R px per map px",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/raster.py::picture#raster plumbing": {
-  "code": "c88d977c2e135612",
-  "core": "43c5ccf5c60d06c2",
-  "date": "2026-10-03",
-  "note": "plumbing, decides nothing physical",
+  "code": "428666a89201450c",
+  "core": "d8d59b31a599af89",
+  "date": "2026-10-05",
+  "note": "the tile count, the thread pool and the single render at a fractional zoom are plumbing",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/raster.py::resvg_png#low-zoom picture": {

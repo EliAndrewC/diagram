@@ -1,0 +1,10 @@
+{
+  "perf-control-324-stage-calls": {
+    "verifies": "the band-3 reading of the first 324-end against 324-start (every stage grown, +17% to +41% at 10-20 households) - taken at load 7-8.5 while another session ran headless-Chromium modal checks",
+    "subject": "perf bookend reference spec, seed 25, 15 households, the homesteads and web stages (the stages the reading named as grown)",
+    "value": 3403625,
+    "unit": "primitive calls in the homesteads stage under cProfile, the clone (feature 324) - equal to the base engine's",
+    "quantity": "alternated base (/tmp/base324 at 8c61b03ae) and clone, two runs each, 2026-10-05 01:0x, load 7-10: homesteads base 3,403,625 / 3,403,780 calls in 3.971 / 4.179 s, clone 3,403,625 / 3,403,625 in 3.770 / 3.821 s; web base 3,082,228 / 3,082,225 in 2.767 / 2.860 s, clone 3,082,225 / 3,082,225 in 2.479 / 2.309 s. The stages execute the same code (the base's own runs differ by warm-up calls); the snapshot times only the roll's stages, and feature 324 changes the picture's render (raster.py) and the render step (render_cache.py), neither run by a roll stage. Whole-snapshot alternation under the same load was inconclusive (15 households: base 43.0 / 22.3 s, clone 33.1 / 25.9 s).",
+    "command": "make perf-profile SEED=25 STAGE=homesteads|web, alternated in /tmp/base324 and the clone"
+  }
+}

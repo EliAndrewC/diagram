@@ -47,3 +47,11 @@ Observed 2026-10-05, method: the 100 ms sampler over `make render-sync` (the 11 
 generators): peak 1,121 MB, p90 434 MB, 91 s - against 1,725 MB, p90 737 MB, 60 s for the unmodified code at 22 (R1). The load
 average rose from 2.4 to 6.8 during the run (the container's other sessions), which the wall time carries; the prototype's
 4-job run on a quieter machine was 72 s (R2). SC-003 holds.
+
+## R4 - The bookends (2026-10-05)
+
+Observed 2026-10-05, method: `make perf-gate` and alternated `make perf-profile` runs - the first 324-end, taken at load 7-8.5
+while another session ran headless-Chromium modal checks in the container, read band 3 (every roll stage grown, +17% to +41% at
+10 and 20 households). The snapshot times only the roll's stages, which feature 324 does not touch. The control
+(`measurements.json` `perf-control-324-stage-calls`): the homesteads and web stages make the same calls on the base engine and
+the clone (3,403,625 and 3,082,225 primitive calls), the clone no slower. The end bookend is re-taken once the container is quiet.
