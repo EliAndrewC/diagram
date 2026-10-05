@@ -3170,6 +3170,8 @@ seeds	seed
 segi-ita	segi-ita
 seigaiha	seigaiha
 seijoue	seijoue
+seiryoki	Seiryoki
+seiryoki's	Seiryoki
 seisatsu	kosatsuba
 seisatsuba	kosatsuba
 sekai daihyakka jiten	Sekai Daihyakka Jiten
@@ -3403,6 +3405,7 @@ soffits	soffit
 sogamae	sogamae
 soja	soja
 sokohi	sokohi
+solar time	solar time
 solidity	solidity
 son of heaven	Son of Heaven
 song dynasty	Song dynasty

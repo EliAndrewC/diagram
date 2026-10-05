@@ -15497,7 +15497,6 @@
   "def": "A Chinese farm book that Zhang Lüxiang of Tongxiang county, in Zhejiang, completed in 1658, adding to an earlier farm manual his advice on keeping fields, mulberries, a household garden and its hedge.",
   "variants": [
    "Bu nongshu",
-   "Bu Nongshu",
    "Supplement to the Farm Manual"
   ]
  },
@@ -15520,6 +15519,19 @@
   "variants": [
    "bulbil",
    "bulbils"
+  ]
+ },
+ "solar time": {
+  "def": "Time reckoned by the sun rather than the clock, so that noon is the moment the sun stands highest, due south.",
+  "variants": [
+   "solar time"
+  ]
+ },
+ "Seiryoki": {
+  "def": "An early Edo-period Japanese farm book, thought to have been written between 1629 and 1654, and known as the oldest farm book in Japan.",
+  "variants": [
+   "Seiryoki",
+   "Seiryoki's"
   ]
  }
 }
