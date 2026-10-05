@@ -1633,6 +1633,8 @@ imperial road	Imperial road
 imperial roads	Imperial road
 imperial spine	Imperial spine
 imperial stud	Court of the Imperial Stud
+imperial waystation	Imperial waystation
+imperial waystations	Imperial waystation
 important cultural landscape	Important Cultural Landscape
 important cultural landscapes	Important Cultural Landscape
 important cultural properties	Important Cultural Property
@@ -2274,6 +2276,8 @@ makusa	makusa
 mamian	mamian
 man'en	Man'en
 man'yoshu	Man'yoshu
+manchu	Manchu
+manchus	Manchu
 manji	Manji
 manji era	Manji
 manning	Manning
