@@ -171,7 +171,11 @@ def _smooth_web(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: l
         bow-tie tail cut - research/questions/0081-village-lanes.drawing.html: a tail run on past a crossing for under the arm length is cut
         knots gathered - research/questions/0081-village-lanes.drawing.html: ends within 25 ft meet at one node
         shadow lane dropped - NONE: a lane lying inside another's stroke is one way recorded twice
-        web kept one network - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a rewrite that splits the web is refused"""
+        web kept one network - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a rewrite that splits the web is refused
+        a hairpin arm kept as the only contact - DEVIATION research/questions/0081-village-lanes.drawing.html: an arm under 40 ft is kept when its tip is the lane's only contact with another way, so the cut never strands the lane (the page's one exception is the folded field spur)
+        the knot's node on a through lane - research/questions/0081-village-lanes.drawing.html: ends joined at a single point, set on a through lane's tread (4 ft touch) where one runs, so the arriving lane meets its side as a T
+        the knot's node at the centroid - GUESS: where no lane runs through the knot, its node is the ends' centroid
+        the string-pull chord's keep-out - UNRESEARCHED: a chord stays max(4 ft, w/2 + 2 ft) off another lane, a lane with no width taken at 5 ft"""
     changed = 0
     lanes = s.M.get("lanes") or []
 

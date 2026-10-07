@@ -72,7 +72,7 @@ def tail_doubled(p: Sequence[Pt], o: Sequence[Pt]) -> bool:
     """Does an end of way `p` - EITHER end - run on beside way `o` at `_DOUBLED_DEG` (`along_tail`, asked of `p` and of it
     reversed)? The pair test of `law.doubled_tails`, asked pair by pair by a caller that keeps the answers (`knots.WebMemo`).
 
-    Research: no doubled tail - CONVENTION: an end running on beside another way reads as one way drawn twice"""
+    Research: no doubled tail - UNRESEARCHED: an end running on beside another way within _DOUBLED_DEG, 15 deg, is refused; no page we read covers a way drawn twice"""
     return len(o) >= 2 and any(along_tail(q, o, deg=_DOUBLED_DEG) is not None for q in (p, p[::-1]))
 
 

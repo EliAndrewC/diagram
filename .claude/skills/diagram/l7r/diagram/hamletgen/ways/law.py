@@ -74,7 +74,7 @@ ink's), which both network tests read; a looser bar would call a near-miss a jun
 
 DOORSTEP_FT = 80.0
 """A free lane end this near a farmhouse's center is discharged by that house (`lane_ends_front_different_houses`).
-Research: an end discharged by a house - UNRESEARCHED: within 80 ft of its center"""
+Research: an end discharged by a house - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within 80 ft of its center"""
 DOORSTEP_MAX = 2
 """...and one farmhouse may absolve this many of them. Three reads as a fan of stubs pointing at one door (consts.py's
 0611 ruling).
@@ -291,7 +291,7 @@ def doubled_tails(M: Mapping[str, Any]) -> list[int]:
     asked of the lane and of it reversed), whatever the two ways' widths. `along_tail` walks in from a lane's last point, and
     asked only that way it never saw a first end doubled: Mizuguchi's field spur left its street and ran 10-12 ft beside it
     for 210 ft before it turned for the field (feature 293 on 291, the pool's side-by-side test).
-    Research: no doubled tail - CONVENTION: an end running on beside another way reads as one way drawn twice"""
+    Research: no doubled tail - UNRESEARCHED: an end running on beside another way within _DOUBLED_DEG, 15 deg, is refused; no page we read covers a way drawn twice"""
     ways = _ways(M)
     lanes = M.get("lanes") or []
     return [i for i, p in enumerate(ways) if not lanes[i].get("connector") and len(p) >= 2 and any(j != i and tail_doubled(p, o) for j, o in enumerate(ways))]
@@ -539,7 +539,11 @@ def dangling_ends(M: Mapping[str, Any]) -> list[tuple[int, int]]:
 
 def fronting_ends(M: Mapping[str, Any]) -> dict[int, list[tuple[int, int]]]:
     """The free lane ends (the connector's aside; an end within `JOIN_TOL` of another way is discharged by the junction)
-    each farmhouse discharges, as (lane index, end) - an end whose nearest farmhouse center is within `DOORSTEP_FT`."""
+    each farmhouse discharges, as (lane index, end) - an end whose nearest farmhouse center is within `DOORSTEP_FT`.
+
+    Research:
+        an end discharged by a house - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within DOORSTEP_FT, 80 ft of the nearest farmhouse's center
+        an end discharged by a junction - NONE: an end within JOIN_TOL, the touch gap, of another way already meets it"""
     ways = _ways(M)
     houses = M.get("houses") or []
     fronted: dict[int, list[tuple[int, int]]] = {}

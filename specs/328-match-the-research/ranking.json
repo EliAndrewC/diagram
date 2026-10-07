@@ -551,7 +551,7 @@
   "flag": "",
   "found": "wave 3 re-check",
   "tier_as_ranked": "E0",
-  "wave": ""
+  "wave": "4"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/wells.py::BEND_LOOK_FT#well arithmetic",
@@ -675,7 +675,7 @@
   "flag": "",
   "found": "wave 4 re-check of the knot fix",
   "tier_as_ranked": "E0",
-  "wave": ""
+  "wave": "4 (claimed: a lane with no width judged as a footpath)"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#no way drawn twice",
@@ -717,7 +717,7 @@
   "flag": "",
   "found": "wave 4 re-check of the knot fix",
   "tier_as_ranked": "E0",
-  "wave": ""
+  "wave": "4 (claimed; its drift a found row)"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/smooth.py::_smooth_web#the knot's node is placed on a through lane's tread (4 ft touch), else at the ends' centro",
@@ -731,7 +731,7 @@
   "flag": "",
   "found": "wave 4 re-check of the knot fix",
   "tier_as_ranked": "E0",
-  "wave": ""
+  "wave": "4 (claimed)"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/smooth.py::_smooth_web#the string-pull chord's lane keep-out is max(4 ft, w/2 + 2 ft), with a default width of 5 ",
@@ -745,7 +745,7 @@
   "flag": "",
   "found": "wave 4 re-check of the knot fix",
   "tier_as_ranked": "E0",
-  "wave": ""
+  "wave": "4 (claimed)"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/street.py::lay_row_streets#street join width",
@@ -801,7 +801,7 @@
   "flag": "",
   "found": "wave 3 re-check",
   "tier_as_ranked": "E0",
-  "wave": ""
+  "wave": "4"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#door path reach",
@@ -843,7 +843,7 @@
   "flag": "",
   "found": "wave 3 re-check",
   "tier_as_ranked": "E0",
-  "wave": ""
+  "wave": "4"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/interactive/place.py::homestead_grove_default#no side sentence on a nucleated map",
@@ -1289,7 +1289,7 @@
   "flag": "",
   "found": "wave 4 re-check of the knot fix",
   "tier_as_ranked": "E0",
-  "wave": ""
+  "wave": "4 (claimed: a foot gathered at a junction)"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/gap_ways.py::knot_free_foot#a foot slides along the tree at most 2 x the knot reach (50 ft)",
@@ -1303,7 +1303,7 @@
   "flag": "",
   "found": "wave 4 re-check of the knot fix",
   "tier_as_ranked": "E0",
-  "wave": ""
+  "wave": "4 (the slide removed: it drew the knot)"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/shrines_wells/woods.py::TreeStandsMixin._draw_stand#fringe crowns drawn outside the stand's outline (_stand_fringe, outliers)",
@@ -1383,7 +1383,7 @@
   "found": "wave 2 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E2",
   "moved": "T12a: tiered by the work it takes (was provisional, by verdict)",
-  "wave": ""
+  "wave": "4"
  },
  {
   "key": ".claude/skills/diagram/buildings.md::Sacred features#grove crown size",
@@ -1423,7 +1423,7 @@
   "flag": "",
   "found": "wave 3 re-check",
   "tier_as_ranked": "E1",
-  "wave": ""
+  "wave": "4"
  },
  {
   "key": ".claude/skills/diagram/buildings/programs.md::Country shrine (a village district's shrine)#basin beside the approach",
@@ -1497,7 +1497,7 @@
   "found": "wave 2 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E4",
   "moved": "T12a: tiered by the work it takes (was provisional, by verdict)",
-  "wave": ""
+  "wave": "4"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::WET_SHARE_CAP#woods mostly on dry ground",
@@ -1590,7 +1590,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
-  "wave": ""
+  "wave": "4"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/corridors.py::FIELD_ROUTE_GAP_FT#field way off the steadings",
@@ -1603,7 +1603,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
-  "wave": ""
+  "wave": "4"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/fabric.py::_draw_web#web lane's no-build corridor",
@@ -1617,7 +1617,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "NEEDS-RESEARCH",
-  "wave": ""
+  "wave": "4"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/fabric.py::_hits_a_steading#no house on a tread",
@@ -1630,7 +1630,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "NEEDS-RESEARCH",
-  "wave": ""
+  "wave": "4"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/fabric.py::house_hit#no house on a tread",
@@ -1645,7 +1645,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "NEEDS-RESEARCH",
-  "wave": ""
+  "wave": "4"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/joints.py::_MEET_FT#ends that nearly meet",
@@ -1658,7 +1658,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
-  "wave": ""
+  "wave": "4"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/joints.py::meet_end_to_end#ends that nearly meet are joined",
@@ -1673,7 +1673,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
-  "wave": ""
+  "wave": "4"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::JOIN_REACH_FT#a join that stops short",
@@ -1687,7 +1687,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
-  "wave": ""
+  "wave": "4"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/checks.py::lanes_share_tread#one network at 40 ft",
@@ -1702,7 +1702,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
-  "wave": ""
+  "wave": "4 (claim renamed to 25 ft; the drift left is a found row)"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::connector_hairpin_ends#no hairpin at the track",
@@ -1715,7 +1715,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
-  "wave": ""
+  "wave": "4"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::fouls_fabric#foul margin",
@@ -1744,7 +1744,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "MISLABELED",
-  "wave": ""
+  "wave": "4"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/clearance.py::_clear_touch#junction link margin",
@@ -1760,7 +1760,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "MISLABELED",
-  "wave": ""
+  "wave": "4"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::near_misses#ends that nearly meet are joined",
@@ -1805,7 +1805,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
-  "wave": ""
+  "wave": "4"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/smooth.py::_END_HOUSE_FT#lane end reaches a house",
@@ -1818,7 +1818,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
-  "wave": ""
+  "wave": "4 (the constant retired with the hairpin-arm cut it served)"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/geom.py::_trim_to_service#an outlying house keeps its way",
@@ -1833,7 +1833,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
-  "wave": ""
+  "wave": "4"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/smooth.py::_END_WAY_FT#lane end reaches a way",
@@ -1846,7 +1846,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
-  "wave": ""
+  "wave": "4 (the constant retired with the hairpin-arm cut it served)"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/smooth.py::_LONG_ARM_FT#hairpin arm cut length",
@@ -1859,7 +1859,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
-  "wave": ""
+  "wave": "4 (the constant retired with the hairpin-arm cut it served)"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_FREE_STUB_FT#free-end stub past a kink",
@@ -1872,7 +1872,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "MISLABELED",
-  "wave": ""
+  "wave": "4 (claim renamed or split; its parts re-checked)"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_PAST_CONNECTOR_FT#overrun past the connector",
@@ -1885,7 +1885,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
-  "wave": ""
+  "wave": "4"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_ROUTE_JOIN_FT#wide ends joined",
@@ -1900,7 +1900,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
-  "wave": ""
+  "wave": "4"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_bridge_collinear_breaks#a short gap closed at any bearing",
@@ -1915,7 +1915,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
-  "wave": ""
+  "wave": "4"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_bridge_collinear_breaks#bridge clearance fallback",
@@ -1930,7 +1930,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
-  "wave": ""
+  "wave": "4"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::cut_past_connector#overrun past the connector cut",
@@ -1945,7 +1945,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
-  "wave": ""
+  "wave": "4"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::trim_free_stub#only a free-end stub of 20 ft or less (_FREE_STUB_FT) is cut",
@@ -1975,7 +1975,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
-  "wave": ""
+  "wave": "4"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::_thread_the_fabric#gap off the steadings",
@@ -2005,7 +2005,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "MISLABELED",
-  "wave": ""
+  "wave": "4"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#a row street trimmed to end at its outermost door-path joint or last farm door",
@@ -2034,7 +2034,7 @@
   "found": "wave 2 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
   "moved": "wave 3 reading: the claim cannot be made honest without the value (E0 -> E1)",
-  "wave": ""
+  "wave": "4"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#back lane tie spacing",
@@ -2047,7 +2047,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
-  "wave": ""
+  "wave": "4"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#door path distance",
@@ -2061,7 +2061,7 @@
   "flag": "",
   "found": "wave 3 re-check",
   "tier_as_ranked": "E1",
-  "wave": ""
+  "wave": "4"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#orphan stub joined",
@@ -2075,7 +2075,7 @@
   "flag": "",
   "found": "wave 3 re-check",
   "tier_as_ranked": "E1",
-  "wave": ""
+  "wave": "4"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/interactive/place.py::KINDS#what each tier is",
@@ -3617,7 +3617,7 @@
   "flag": "",
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
-  "wave": ""
+  "wave": "4 (IN-STEP on a wave's re-check, no change needed)"
  },
  {
   "key": ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#granary kept under a residence block",
@@ -3713,7 +3713,7 @@
   "flag": "",
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
-  "wave": ""
+  "wave": "4 (IN-STEP on a wave's re-check, no change needed)"
  },
  {
   "key": ".claude/skills/diagram/buildings.md::Walls and gates#threshold wards",
@@ -3856,7 +3856,7 @@
   "flag": "",
   "found": "wave 1 re-check",
   "tier_as_ranked": "E2",
-  "wave": ""
+  "wave": "4 (IN-STEP on a wave's re-check, no change needed)"
  },
  {
   "key": ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#tier knob",
@@ -3955,7 +3955,7 @@
   "flag": "",
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
-  "wave": ""
+  "wave": "4"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py::WEB_HARD_GAP#web lane off crop, toe and marsh",
@@ -4023,7 +4023,7 @@
   "flag": "",
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
-  "wave": ""
+  "wave": "4 (IN-STEP on a wave's re-check, no change needed)"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/stages.py::stage_windbreak#against-the-belt copse clump",
@@ -4346,6 +4346,20 @@
   "wave": ""
  },
  {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::fronting_ends#an end discharged by a house",
+  "verdict": "DRIFTED",
+  "tier": "E2",
+  "fix": "count a lane end as reaching a farmhouse within 60 ft of the house or 12 ft of its steading's built ground (0246.drawing), not within 80 ft of the house's center (DOORSTEP_FT); fronting_ends and lane_ends_front_different_houses both read it",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 4 impl-drift (bundle12): fronting_ends",
+  "tier_as_ranked": "E2",
+  "wave": ""
+ },
+ {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#a run arriving within _LANE_JOIN_FT (30 ft) of the network counts as joined, with no link drawn",
   "tier": "E2",
   "fix": "a run arriving within 25 ft of the network is joined at a single point (link drawn), claim citing 0081",
@@ -4414,6 +4428,20 @@
   "flag": "",
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
+  "wave": ""
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/smooth.py::_smooth_web#a hairpin arm kept as the only contact",
+  "verdict": "DRIFTED",
+  "tier": "E2",
+  "fix": "0081 cuts a returning leg under 40 ft with one recorded exception (the folded field spur); the smoother also keeps an arm whose tip is the lane's only contact. Join the lane elsewhere so the arm can be cut, or, where the record supports keeping it, record the exception on 0081's drawing page (a record edit)",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/smooth.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 4 impl-drift (bundle15): the exception claimed",
+  "tier_as_ranked": "E2",
   "wave": ""
  },
  {
@@ -4497,7 +4525,7 @@
   "flag": "",
   "found": "wave 3 re-check",
   "tier_as_ranked": "E2",
-  "wave": ""
+  "wave": "4"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/interactive/place.py::dwellings_shown#town and city count no farmhouses",
@@ -6298,7 +6326,7 @@
   "flag": "",
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
-  "wave": ""
+  "wave": "4 (IN-STEP on a wave's re-check, no change needed)"
  },
  {
   "key": ".claude/skills/diagram/buildings.md::Latrines and the rear service strip#privy size",
@@ -6723,7 +6751,7 @@
   "flag": "",
   "found": "wave 1 re-check",
   "tier_as_ranked": "E3",
-  "wave": ""
+  "wave": "4 (IN-STEP on a wave's re-check, no change needed)"
  },
  {
   "key": ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#rear service strip",
@@ -6796,7 +6824,7 @@
   "found": "wave 2 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E4",
   "moved": "T12a: tiered by the work it takes (was provisional, by verdict)",
-  "wave": ""
+  "wave": "4 (IN-STEP on a wave's re-check, no change needed)"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py::HARVEST_WEATHERS#standing rack forms",
@@ -7197,7 +7225,7 @@
   "flag": "",
   "found": "wave 2: the row pitch at 92 ft",
   "tier_as_ranked": "E3",
-  "wave": ""
+  "wave": "4"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py::BUNDLE_PITCH#row pitch",
@@ -7366,7 +7394,7 @@
   "found": "wave 2 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E2",
   "moved": "T12a: tiered by the work it takes (was provisional, by verdict)",
-  "wave": ""
+  "wave": "4 (IN-STEP on a wave's re-check, no change needed)"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#a footpath reaches every farmhouse 7 ft off a plot",
@@ -8778,7 +8806,7 @@
   "flag": "",
   "tier_as_ranked": "E4",
   "verdict": "NEEDS-RESEARCH",
-  "wave": ""
+  "wave": "4"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_seat#seat off the reed fringe",

@@ -449,6 +449,7 @@ def _way_for(
     Research:
         joined near, then far, then run on to the way out - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: each household's way runs along the gaps to the track out or to a way laid before it, which it joins at a T
         a way leaves its own homestead from its dooryard - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: its way leaves its dooryard round its own garden beds and fixtures
+        a foot gathered at a junction - research/questions/0081-village-lanes.drawing.html: a household's way's foot is set on a junction within KNOT_FT * KNOT_MARGIN, 25 ft; the foot as traced only where no gathered join is admitted
     """
     geom = rec["geom"]
     own = geom["bbox"]

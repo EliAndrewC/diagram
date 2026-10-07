@@ -334,7 +334,9 @@ def settle_knots(s: Any) -> int:
     the step ends. The web as it stands is asked once a gather is applied, never once a trial; a trial's whole-web questions
     are answered pair by pair, each pair's answer kept by the two lanes' points (`WebMemo`) - the same verdicts.
 
-    Research: lane ends gathered - research/questions/0081-village-lanes.drawing.html: ends within 25 ft are joined at a single point"""
+    Research:
+        lane ends gathered - research/questions/0081-village-lanes.drawing.html: ends within 25 ft are joined at a single point
+        a lane with no width judged as a footpath - research/questions/0081-village-lanes.drawing.html: a lane with no recorded width is judged at the footpath's 3 ft"""
     from .settle import Lawful, apply_pieces  # bound here: `settle` names this step in its STEPS
     from .tree import set_corridor
 
