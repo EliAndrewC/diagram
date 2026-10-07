@@ -84,11 +84,11 @@ def module(k):
 
 for r in rows.values():
     r["wave"] = waves.get(r["key"], "")
-# Amendment 8 (the GM 2026-10-07): each row's SCOPE - `hamlet` and `mode-a` are fixed, `deferred` (code only the legacy
+# Amendment 8 (the GM 2026-10-07): each row's SCOPE - `kept` (executed by a kept map) and `mode-a` are fixed, `deferred` (code only the legacy
 # hand-authored settlements run) is ranked but never taken by a wave (audit/scope.py writes audit/scope.json).
 scopes = json.loads((AUDIT / "scope.json").read_text()) if (AUDIT / "scope.json").exists() else {}
 for r in rows.values():
-    r["scope"] = scopes.get(r["key"], "hamlet")
+    r["scope"] = scopes.get(r["key"], "kept")
 
 # A row closed since the last record takes the tier it has now, once: recorded so a later re-tier never moves it.
 fresh = {k: r["tier"] for k, r in rows.items() if r["wave"] and k not in closed_tiers}

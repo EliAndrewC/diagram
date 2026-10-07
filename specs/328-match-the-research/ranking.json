@@ -342,7 +342,7 @@
   "found": "wave 2 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
   "wave": "3",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/cluster.py::seat_cluster#the seat center set dep + 12 ft out from the field margin",
@@ -357,7 +357,7 @@
   "found": "wave 2 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
   "wave": "3 (claim renamed or split; its parts re-checked)",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py::SPUR_SETBACK#field spur's tip",
@@ -371,7 +371,7 @@
   "tier_as_ranked": "E0",
   "verdict": "MISLABELED",
   "wave": "1",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py::SPUR_SETBACK#path joins the outer bund",
@@ -387,7 +387,7 @@
   "tier_as_ranked": "E0",
   "verdict": "DRIFTED",
   "wave": "1 (claim renamed or split; its parts re-checked)",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/consts_water.py::OFFTAKE_LADDER#canal B's single delivery ditch at 0.55-0.6 (0053 drawing: the second canal feeds at least one)",
@@ -401,7 +401,7 @@
   "tier_as_ranked": "E0",
   "verdict": "UNCLAIMED",
   "wave": "1",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#thicket kept off every household's reserved copse seats",
@@ -415,7 +415,7 @@
   "tier_as_ranked": "E0",
   "verdict": "UNCLAIMED",
   "wave": "1",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#thicket kept out of every plot's sun at BAMBOO_SHADE_FT 50 ft (0038 drawing)",
@@ -429,7 +429,7 @@
   "tier_as_ranked": "E0",
   "verdict": "UNCLAIMED",
   "wave": "1",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#a ring with room for fewer than 5 crowns is refused as a wood",
@@ -444,7 +444,7 @@
   "found": "wave 2 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
   "wave": "3 (claim renamed or split; its parts re-checked)",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#commons legibility floor: a ring under 120 ft is dropped rather than drawn smaller (fewer, never smaller)",
@@ -459,7 +459,7 @@
   "found": "wave 2 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
   "wave": "3 (claim renamed or split; its parts re-checked)",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#line follows its bounds",
@@ -476,7 +476,7 @@
   "e0_basis": "0077 drawing: 'within about 45 ft' (its GUESS) - LOT_BOUND_REACH is 45.0",
   "moved": "T12a: tiered by the work it takes (was provisional, by verdict)",
   "wave": "3",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/stages.py::stage_windbreak#copse on the house's own bank",
@@ -490,7 +490,7 @@
   "tier_as_ranked": "E0",
   "verdict": "MISLABELED",
   "wave": "1",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/bamboo.py::_strip_blocked#what a strip or fixture keeps off",
@@ -504,7 +504,7 @@
   "tier_as_ranked": "E0",
   "verdict": "MISLABELED",
   "wave": "1",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/farm_water.py::farm_channel#how far a channel's source is sought: 20 ft steps, 60 ft spread, widened fourfold",
@@ -519,7 +519,7 @@
   "found": "wave 2 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
   "wave": "3 (claim renamed or split; its parts re-checked)",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/persimmon_reseat.py::reseat_persimmons#the rolled count honored",
@@ -533,7 +533,7 @@
   "tier_as_ranked": "E0",
   "verdict": "MISLABELED",
   "wave": "1",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#at most MAX_STREETS (6) parallel streets",
@@ -547,7 +547,7 @@
   "tier_as_ranked": "E0",
   "verdict": "UNCLAIMED",
   "wave": "1",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#front door's ground: a frame refused without DOOR_ROOM_FT (16 ft) and half LANE_ROOM_FT clear before its front",
@@ -561,7 +561,7 @@
   "tier_as_ranked": "E0",
   "verdict": "UNCLAIMED",
   "wave": "1",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#row step capped at ROW_FRONTAGE_MAX_FT",
@@ -576,7 +576,7 @@
   "found": "wave 1 re-check",
   "tier_as_ranked": "E0",
   "wave": "1 (claim renamed or split; its parts re-checked)",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#front-row standoff from the field set by the homestead core's reach (house, yard, shed, well pocket; garden excluded)",
@@ -591,7 +591,7 @@
   "found": "wave 3 re-check",
   "tier_as_ranked": "E0",
   "wave": "4",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/wells.py::BEND_LOOK_FT#well arithmetic",
@@ -605,7 +605,7 @@
   "tier_as_ranked": "E0",
   "verdict": "MISLABELED",
   "wave": "1",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/wells.py::BEND_WELL_DEG#well arithmetic",
@@ -619,7 +619,7 @@
   "tier_as_ranked": "E0",
   "verdict": "MISLABELED",
   "wave": "1",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/wells.py::place_wells#grove farms take their own water and are left out of the communal wells",
@@ -634,7 +634,7 @@
   "found": "wave 2 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
   "wave": "3 (claim renamed or split; its parts re-checked)",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/wells.py::place_wells#no well past the crop",
@@ -648,7 +648,7 @@
   "tier_as_ranked": "E0",
   "verdict": "MISLABELED",
   "wave": "1",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/wells.py::place_wells#no well seated over a household's reserved wood-floor seats",
@@ -663,7 +663,7 @@
   "found": "wave 2 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
   "wave": "3 (claim renamed or split; its parts re-checked)",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/sink.py::lay_sink#pond's role",
@@ -679,7 +679,7 @@
   "tier_as_ranked": "E0",
   "verdict": "DRIFTED",
   "wave": "1",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/water/brook.py::draw_intake#weir form rolled among four (s.resolve(\"weir_form\")), 0059's four forms at even odds",
@@ -693,7 +693,7 @@
   "tier_as_ranked": "E0",
   "verdict": "UNCLAIMED",
   "wave": "1",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::a_way_onto_the_bund#a lane end within 6 ft (BUND_REACH_FT) of the paddy counts as joined to the bund",
@@ -708,7 +708,7 @@
   "found": "wave 7 re-check",
   "tier_as_ranked": "E0",
   "wave": "8 (claimed under its unit's new label; re-checked)",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::a_way_onto_the_bund#a lane end within 6 ft of the paddy (BUND_REACH_FT) counts as on the bund",
@@ -723,7 +723,7 @@
   "found": "wave 7 re-check",
   "tier_as_ranked": "E0",
   "wave": "8 (claimed under its unit's new label; re-checked)",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::a_way_onto_the_bund#branched field path 5 ft wide (BRANCH_WIDTH)",
@@ -738,7 +738,7 @@
   "found": "wave 7 re-check",
   "tier_as_ranked": "E0",
   "wave": "8 (claimed under its unit's new label; re-checked)",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::a_way_onto_the_bund#field path width",
@@ -755,7 +755,7 @@
   "e0_basis": "T34a: a claim split; the code stands",
   "moved": "T34a (amendment 8): tiered by its work - The spur call on bund.py line 307 already draws 5 ft as 0081 says; only the claim lines in the docstring change.",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::a_way_onto_the_bund#the branched field path 5 ft wide (BRANCH_WIDTH) with the LANE_CLEARANCE corridor",
@@ -770,7 +770,7 @@
   "found": "wave 7 re-check",
   "tier_as_ranked": "E0",
   "wave": "8 (claimed under its unit's new label; re-checked)",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::carry_on#stepped field path 5 ft wide (BRANCH_WIDTH)",
@@ -785,7 +785,7 @@
   "found": "wave 7 re-check",
   "tier_as_ranked": "E0",
   "wave": "8 (claimed under its unit's new label; re-checked)",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::carry_on#the stepped field path drawn 5 ft wide (BRANCH_WIDTH)",
@@ -800,7 +800,7 @@
   "found": "wave 7 re-check",
   "tier_as_ranked": "E0",
   "wave": "8 (claimed under its unit's new label; re-checked)",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/cluster_edge.py::_cluster_edge_toward#origin on the houses' bank",
@@ -816,7 +816,7 @@
   "tier_as_ranked": "E0",
   "verdict": "DRIFTED",
   "wave": "1",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/knots.py::settle_knots#a lane with no width is judged at 3 ft in the lawfulness check",
@@ -831,7 +831,7 @@
   "found": "wave 4 re-check of the knot fix",
   "tier_as_ranked": "E0",
   "wave": "4 (claimed: a lane with no width judged as a footpath)",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::near_misses#a household way's door end is never counted as a join that stops short",
@@ -846,7 +846,7 @@
   "found": "wave 5 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
   "wave": "6 (claimed under its unit's new label; re-checked)",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::near_misses#ends that nearly meet are joined",
@@ -862,7 +862,7 @@
   "moved": "wave 4 re-check: the reach in step, the aim test unclaimed",
   "verdict": "DRIFTED",
   "wave": "5",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law_water.py::oblique_at#square ditch crossing",
@@ -879,7 +879,7 @@
   "e0_basis": "a claim written against the page that answers",
   "moved": "amendment 7 round 1: the claim states the code against its page; the drift is its own row (D8)",
   "wave": "8 (claim written against 0087; its question a found row)",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law_water.py::off_ford_at#how far from a crossing place a brook crossing may stand, FORD_HALF 30 ft",
@@ -896,7 +896,7 @@
   "e0_basis": "T25a: a claim relabel; the code stands",
   "moved": "T25a (amendment 6): tiered by its work - the code already uses FORD_HALF (consts_water.py:170, cited to 0035's 60 ft gap); only a claim line is added to off_ford_at at law_water.py:82",
   "wave": "7 (claimed under its unit's new label; re-checked)",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law_water.py::short_decks#assumed water widths where none is recorded: 3 ft for a ditch or channel, 6 ft for a stream",
@@ -911,7 +911,7 @@
   "found": "wave 6 re-check",
   "tier_as_ranked": "E0",
   "wave": "7 (claimed under its unit's new label; re-checked)",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#a healing link kept if its ends lie within 12 ft of the run and of the network (`_reach < 12.0`, `_net_reach < 12.0`), a",
@@ -926,7 +926,7 @@
   "found": "wave 8 re-check",
   "tier_as_ranked": "E0",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#a run within 25 ft of the network counts as arrived (_LANE_JOIN_FT)",
@@ -941,7 +941,7 @@
   "found": "wave 7 re-check",
   "tier_as_ranked": "E0",
   "wave": "8 (claimed under its unit's new label; re-checked)",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#link kept 8 ft off hard ground, 7 ft off walls",
@@ -956,7 +956,7 @@
   "found": "wave 7 re-check",
   "tier_as_ranked": "E0",
   "wave": "8 (claimed under its unit's new label; re-checked)",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#link off hard ground and walls",
@@ -973,7 +973,7 @@
   "e0_basis": "T34a: a claim split; the code stands",
   "moved": "T34a (amendment 8): tiered by its work - The link call on serve.py line 190 already uses 7 ft at walls as 0246 gives; only the docstring claim is relabeled.",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#no way drawn twice",
@@ -988,7 +988,7 @@
   "found": "wave 2 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
   "wave": "3",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#not along a shelter belt",
@@ -1005,7 +1005,7 @@
   "e0_basis": "T25a: a claim relabel; the code stands",
   "moved": "T25a (amendment 6): tiered by its work - the code (serve.py:160, `> 60.0`) stands; only the claim at serve.py:115-116 is relabeled",
   "wave": "7",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py::shadowed_by#no way drawn twice",
@@ -1020,7 +1020,7 @@
   "found": "wave 2 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
   "wave": "3",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/smooth.py::_smooth_web#a hairpin arm under 40 ft is kept when its tip is the lane's only contact with another way",
@@ -1035,7 +1035,7 @@
   "found": "wave 4 re-check of the knot fix",
   "tier_as_ranked": "E0",
   "wave": "4 (claimed; its drift a found row)",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/smooth.py::_smooth_web#the knot's node is placed on a through lane's tread (4 ft touch), else at the ends' centro",
@@ -1050,7 +1050,7 @@
   "found": "wave 4 re-check of the knot fix",
   "tier_as_ranked": "E0",
   "wave": "4 (claimed)",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/smooth.py::_smooth_web#the string-pull chord's lane keep-out is max(4 ft, w/2 + 2 ft), with a default width of 5 ",
@@ -1065,7 +1065,7 @@
   "found": "wave 4 re-check of the knot fix",
   "tier_as_ranked": "E0",
   "wave": "4 (claimed)",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/street.py::lay_row_streets#street join width",
@@ -1079,7 +1079,7 @@
   "tier_as_ranked": "E0",
   "verdict": "MISLABELED",
   "wave": "1",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/street.py::row_reach#a farm frame taken as 100 ft where none is recorded (0033 gives 220-260 ft)",
@@ -1096,7 +1096,7 @@
   "e0_basis": "a claim written against the page that answers",
   "moved": "amendment 7 round 1: the claim states the code against its page; the drift is its own row (D8)",
   "wave": "8 (claimed under its unit's new label; re-checked)",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/street.py::row_reach#street run past its end farms",
@@ -1113,7 +1113,7 @@
   "e0_basis": "T25a: a claim relabel; the code stands",
   "moved": "T25a (amendment 6): tiered by its work - the code (street.py:46, `fw / 2`) stands; the claim is already UNRESEARCHED and only its wording changes",
   "wave": "7",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/street.py::unhooked_both#lane end loses its hook",
@@ -1129,7 +1129,7 @@
   "tier_as_ranked": "E0",
   "verdict": "CANNOT-TELL",
   "wave": "1",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::_thread_the_fabric#the track's route walled",
@@ -1144,7 +1144,7 @@
   "found": "wave 5 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
   "wave": "6 (claim written; what it states against its page is a found row)",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::_thread_the_fabric#the track's route walled by the field, crop, toe band and wet ground, and kept off drawn water",
@@ -1159,7 +1159,7 @@
   "found": "wave 4 re-check (impl-drift on track.py)",
   "tier_as_ranked": "E0",
   "wave": "5 (claimed; its relabel to 0081 ranked)",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#connector and spur keep a 40 ft no-build clearance (LANE_CLEARANCE)",
@@ -1174,7 +1174,7 @@
   "found": "wave 5 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
   "wave": "6 (claimed under its unit's new label; re-checked)",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#row road",
@@ -1189,7 +1189,7 @@
   "found": "wave 5 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
   "wave": "5 (IN-STEP on a wave's re-check, no change needed)",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#spur clip margin",
@@ -1205,7 +1205,7 @@
   "tier_as_ranked": "E0",
   "moved": "amendment 5 round 1: the claim cites 0081 against the code; no DEVIATION",
   "wave": "6",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#spur tip set back 17 ft (SPUR_SETBACK) off the field outline's vertex",
@@ -1220,7 +1220,7 @@
   "found": "wave 5 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
   "wave": "6 (claimed under its unit's new label; re-checked)",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#valley and polder connector width CONNECTOR_WIDTH 6 ft",
@@ -1235,7 +1235,7 @@
   "found": "wave 5 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
   "wave": "6 (claimed under its unit's new label; re-checked)",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#clear of crop, wet and water",
@@ -1250,7 +1250,7 @@
   "found": "wave 2 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
   "wave": "3",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#each skeleton arm registers the 40 ft LANE_CLEARANCE no-build corridor",
@@ -1265,7 +1265,7 @@
   "found": "wave 7 re-check",
   "tier_as_ranked": "E0",
   "wave": "8 (claimed under its unit's new label; re-checked)",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton arm clipped WEB_FABRIC_GAP (7 ft) off the steadings and trimmed back to the last point serving a house",
@@ -1280,7 +1280,7 @@
   "found": "wave 3 re-check",
   "tier_as_ranked": "E0",
   "wave": "4",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton arm's no-build corridor LANE_CLEARANCE, 7 ft",
@@ -1297,7 +1297,7 @@
   "e0_basis": "a claim written against the page that answers",
   "moved": "amendment 7 round 1: the claim states the code against its page; the drift is its own row (D8)",
   "wave": "8 (claimed under its unit's new label; re-checked)",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#door path reach",
@@ -1312,7 +1312,7 @@
   "found": "wave 2 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
   "wave": "3",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#web lanes off the hard ground",
@@ -1327,7 +1327,7 @@
   "found": "wave 2 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
   "wave": "3",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#web lanes routed round the households' reserved wood seats as fabric",
@@ -1342,7 +1342,7 @@
   "found": "wave 3 re-check",
   "tier_as_ranked": "E0",
   "wave": "4",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/interactive/place.py::KINDS#a hamlet's dead burned and buried at the main village's",
@@ -1357,7 +1357,7 @@
   "found": "wave 5 re-check of the tier text",
   "tier_as_ranked": "E0",
   "wave": "6 (claimed under its unit's new label; re-checked)",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/interactive/place.py::homestead_grove_default#no side sentence on a nucleated map",
@@ -1371,7 +1371,7 @@
   "tier_as_ranked": "E0",
   "verdict": "MISLABELED",
   "wave": "1",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/interactive/place.py::size_sentence#population from households",
@@ -1387,7 +1387,7 @@
   "tier_as_ranked": "E0",
   "verdict": "DRIFTED",
   "wave": "1",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/labels/obstacles.py::GROUP_WORDS#a guard or inspection caption may cover the gate's posts (0243 \u00a79)",
@@ -1402,7 +1402,7 @@
   "found": "wave 8 re-check",
   "tier_as_ranked": "E0",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/labels/obstacles.py::GROUP_WORDS#a shrine caption may cover the temples (0243 \u00a711)",
@@ -1417,7 +1417,7 @@
   "found": "wave 8 re-check",
   "tier_as_ranked": "E0",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/labels/standard.py::REACH_EM#how far the ringed search runs",
@@ -1432,7 +1432,7 @@
   "found": "wave 5 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
   "wave": "6",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/overlap/taxonomy.py::_LABEL_GROUP#an arch is never covered",
@@ -1447,7 +1447,7 @@
   "found": "wave 5 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
   "wave": "6",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/overlap/taxonomy.py::_MATRIX_PERMISSIVE#ground cover takes buildings",
@@ -1463,7 +1463,7 @@
   "tier_as_ranked": "E0",
   "verdict": "DRIFTED",
   "wave": "1 (claim renamed or split; its parts re-checked)",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#annexes abut their house",
@@ -1479,7 +1479,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "3",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#copse and bamboo against a house",
@@ -1495,7 +1495,7 @@
   "tier_as_ranked": "E0",
   "verdict": "DRIFTED",
   "wave": "1",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#pig sty on the dike",
@@ -1511,7 +1511,7 @@
   "tier_as_ranked": "E0",
   "verdict": "DRIFTED",
   "wave": "1",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/_knobs.py::<module>#hamlet knobs unrolled",
@@ -1527,7 +1527,7 @@
   "tier_as_ranked": "E0",
   "verdict": "DRIFTED",
   "wave": "1",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.castle#each bailey's gate turned 90 degrees from its parent's (the dogleg route)",
@@ -1663,7 +1663,7 @@
   "found": "wave 5 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
   "wave": "6 (claimed under its unit's new label; re-checked)",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#assumed water widths when a record has none (DEFAULT_W: streams 9.0, channels 2.5, ditches 4.2)",
@@ -1678,7 +1678,7 @@
   "found": "wave 5 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
   "wave": "6 (claimed under its unit's new label; re-checked)",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#longer plank at a junction",
@@ -1693,7 +1693,7 @@
   "found": "wave 5 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
   "wave": "6 (claim written; what it states against its page is a found row)",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#off dry crops, gardens and groves",
@@ -1708,7 +1708,7 @@
   "found": "wave 5 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
   "wave": "6 (claimed under its unit's new label; re-checked)",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#supply ditches only",
@@ -1725,7 +1725,7 @@
   "e0_basis": "T25a: a claim relabel; the code stands",
   "moved": "T25a (amendment 6): tiered by its work - the code (SUPPLY_ROLES at bridges.py:174, the filter at 617) stands; only the claim line at 543 is split",
   "wave": "7",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/city/bridges.py::crossing_deck#landing past each bank",
@@ -1741,7 +1741,7 @@
   "tier_as_ranked": "E0",
   "verdict": "CANNOT-TELL",
   "wave": "1",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/city/canals.py::CanalsMixin.farmland_ring#head race width",
@@ -1800,7 +1800,7 @@
   "found": "wave 5 re-check of the water gate",
   "tier_as_ranked": "E0",
   "wave": "6 (claimed under its unit's new label; re-checked)",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/city/moat.py::MoatMixin.water_gate#pier depth through the wall, 30 ft",
@@ -1815,7 +1815,7 @@
   "found": "wave 5 re-check of the water gate",
   "tier_as_ranked": "E0",
   "wave": "6 (claimed under its unit's new label; re-checked)",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py::WallsMixin._gate_flanking_buildings#fallback road width px(26) for the verge setback",
@@ -1935,7 +1935,7 @@
   "found": "wave 7 re-check",
   "tier_as_ranked": "E0",
   "wave": "8 (claimed under its unit's new label; re-checked)",
-  "scope": "deferred"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cemetery#stupa height 13 px and its seats (rear corners of a ruled plot, interior of an organic one)",
@@ -1950,7 +1950,7 @@
   "found": "wave 8 re-check",
   "tier_as_ranked": "E0",
   "wave": "",
-  "scope": "deferred"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cremation_ground#cleared ground's depth 0.7 of its width",
@@ -2058,7 +2058,7 @@
   "tier_as_ranked": "E0",
   "verdict": "CANNOT-TELL",
   "wave": "1",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/fields/landuse.py::LandUseMixin._landuse_repaint_leftovers#leftovers as standing rice",
@@ -2072,7 +2072,7 @@
   "tier_as_ranked": "E0",
   "verdict": "MISLABELED",
   "wave": "1",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/farmstead.py::FarmsteadMixin._find_appurtenances#garden on a sunny side",
@@ -2103,7 +2103,7 @@
   "tier_as_ranked": "E0",
   "verdict": "UNCLAIMED",
   "wave": "1 (claim renamed or split; its parts re-checked)",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#seating order: retirement house, bath, wood shed, privy, manure, coop, shrine, persimmon (FIXTURE_ORDER)",
@@ -2117,7 +2117,7 @@
   "tier_as_ranked": "E0",
   "verdict": "UNCLAIMED",
   "wave": "1 (claim renamed or split; its parts re-checked)",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/grove_rules.py::fixtures_on_groves#no fixture in a grove band",
@@ -2131,7 +2131,7 @@
   "tier_as_ranked": "E0",
   "verdict": "MISLABELED",
   "wave": "1",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#crowns out of the plots' sun",
@@ -2145,7 +2145,7 @@
   "tier_as_ranked": "E0",
   "verdict": "MISLABELED",
   "wave": "1",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#dooryard mix",
@@ -2161,7 +2161,7 @@
   "tier_as_ranked": "E0",
   "verdict": "DRIFTED",
   "wave": "1",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/keepouts.py::KeepoutsMixin._canopy_keepouts#no crown on a roof or a wellhead",
@@ -2177,7 +2177,7 @@
   "tier_as_ranked": "E0",
   "verdict": "DRIFTED",
   "wave": "1 (claim renamed or split; its parts re-checked)",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#copse off the bamboo",
@@ -2191,7 +2191,7 @@
   "tier_as_ranked": "E0",
   "verdict": "MISLABELED",
   "wave": "1",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/tree_shade.py::map_trees#which trees are canopy",
@@ -2207,7 +2207,7 @@
   "tier_as_ranked": "E0",
   "verdict": "CANNOT-TELL",
   "wave": "1",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/yards.py::ThreshingYardsMixin._attach_yard#no floor without rice",
@@ -2221,7 +2221,7 @@
   "tier_as_ranked": "E0",
   "verdict": "MISLABELED",
   "wave": "1",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/yards.py::ThreshingYardsMixin._yard_area_ft2#yard median",
@@ -2237,7 +2237,7 @@
   "tier_as_ranked": "E0",
   "verdict": "CANNOT-TELL",
   "wave": "1",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/access.py::_standing_clear#no path corridor within its half-width of any placed footprint",
@@ -2251,7 +2251,7 @@
   "tier_as_ranked": "E0",
   "verdict": "UNCLAIMED",
   "wave": "1",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/access.py::exit_bearing#track out leaves away from the field",
@@ -2265,7 +2265,7 @@
   "tier_as_ranked": "E0",
   "verdict": "MISLABELED",
   "wave": "1",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._lay_fixtures#persimmon may stand in its own grove's bands (fruit=bands; 0046)",
@@ -2279,7 +2279,7 @@
   "tier_as_ranked": "E0",
   "verdict": "UNCLAIMED",
   "wave": "1 (claim renamed or split; its parts re-checked)",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._lay_fixtures#persimmon out of the plots' sun",
@@ -2295,7 +2295,7 @@
   "tier_as_ranked": "E0",
   "verdict": "DRIFTED",
   "wave": "1",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/dispersed.py::clear_east_of_beds#rect helpers",
@@ -2309,7 +2309,7 @@
   "tier_as_ranked": "E0",
   "verdict": "MISLABELED",
   "wave": "1",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/farmsteads.py::FarmsteadFlushMixin._relax_gardens_south#nudged bed's sun ground clear of crowns, promised persimmons and bamboo (CANOPY_SHADE_FT, BAMBOO_SHADE_FT)",
@@ -2323,7 +2323,7 @@
   "tier_as_ranked": "E0",
   "verdict": "UNCLAIMED",
   "wave": "1 (claim renamed or split; its parts re-checked)",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/farmsteads.py::beds_sun_clear#bed sun ground clear of crowns and promised trees at reach, bamboo at bamboo_reach",
@@ -2337,7 +2337,7 @@
   "tier_as_ranked": "E0",
   "verdict": "UNCLAIMED",
   "wave": "1",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/farmsteads.py::beds_sun_clear#draw-order and footprint plumbing",
@@ -2351,7 +2351,7 @@
   "tier_as_ranked": "E0",
   "verdict": "MISLABELED",
   "wave": "1 (claim renamed or split; its parts re-checked)",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/fit.py::BundleFitMixin._field_adjacent#farmland rail",
@@ -2365,7 +2365,7 @@
   "tier_as_ranked": "E0",
   "verdict": "MISLABELED",
   "wave": "1",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/gap_ways.py::_way_for#knotted fallback: a foot is left within 25 ft beside a junction when no gathered or knot-f",
@@ -2380,7 +2380,7 @@
   "found": "wave 4 re-check of the knot fix",
   "tier_as_ranked": "E0",
   "wave": "4 (claimed: a foot gathered at a junction)",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/gap_ways.py::knot_free_foot#a foot slides along the tree at most 2 x the knot reach (50 ft)",
@@ -2395,7 +2395,7 @@
   "found": "wave 4 re-check of the knot fix",
   "tier_as_ranked": "E0",
   "wave": "4 (the slide removed: it drew the knot)",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/shrines_wells/woods.py::TreeStandsMixin._draw_stand#fringe crowns drawn outside the stand's outline (_stand_fringe, outliers)",
@@ -2409,7 +2409,7 @@
   "tier_as_ranked": "E0",
   "verdict": "UNCLAIMED",
   "wave": "1 (claim renamed or split; its parts re-checked)",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_anchor#the approach counts as reaching the houses within KOSATSUBA_ENTRANCE_REACH_FT 100 ft of a dwelling",
@@ -2424,7 +2424,7 @@
   "found": "wave 5 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
   "wave": "6 (claimed under its unit's new label; re-checked)",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_handover#a through track's handover",
@@ -2441,7 +2441,7 @@
   "e0_basis": "a claim fix citing the page that answers",
   "moved": "wave 7 re-check: the fix landed; what the re-check found beyond it",
   "wave": "8",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/structures/servants.py::ServantRangesMixin#servant range depth",
@@ -2469,7 +2469,7 @@
   "tier_as_ranked": "E0",
   "verdict": "MISLABELED",
   "wave": "1",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/buildings.md::Fire-water tubs#tub glyph",
@@ -2635,7 +2635,7 @@
   "tier_as_ranked": "E4",
   "moved": "T12a: tiered by the work it takes (was provisional, by verdict)",
   "wave": "4",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::WET_SHARE_CAP#woods mostly on dry ground",
@@ -2649,7 +2649,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "2",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#mostly dry",
@@ -2665,7 +2665,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "2",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/farm_water.py::farm_channel#where the channel ends",
@@ -2679,7 +2679,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "2",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/fixtures.py::_PRIVY_SEATS#four privy seats",
@@ -2693,7 +2693,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "2",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/wells.py::_WELL_DRAWN_R#wellhead drawn extent",
@@ -2707,7 +2707,7 @@
   "tier_as_ranked": "E1",
   "verdict": "CANNOT-TELL",
   "wave": "2",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/wells.py::well_target#how many wells",
@@ -2721,7 +2721,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "2",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/checks.py::lanes_share_tread#one network at 40 ft",
@@ -2737,7 +2737,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "4 (claim renamed to 25 ft; the drift left is a found row)",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/clearance.py::_clear_touch#junction link margin",
@@ -2754,7 +2754,7 @@
   "tier_as_ranked": "E1",
   "verdict": "MISLABELED",
   "wave": "4",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/clearance.py::clear_runs#threads between steadings",
@@ -2768,7 +2768,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "4",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/clearance.py::may_write#no nearer the fabric",
@@ -2784,7 +2784,7 @@
   "tier_as_ranked": "E1",
   "verdict": "MISLABELED",
   "wave": "4",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/corridors.py::FIELD_ROUTE_GAP_FT#field way off the steadings",
@@ -2798,7 +2798,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "4",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/fabric.py::_draw_web#web lane's no-build corridor",
@@ -2813,7 +2813,7 @@
   "tier_as_ranked": "E1",
   "verdict": "NEEDS-RESEARCH",
   "wave": "4",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/fabric.py::_hits_a_steading#no house on a tread",
@@ -2827,7 +2827,7 @@
   "tier_as_ranked": "E1",
   "verdict": "NEEDS-RESEARCH",
   "wave": "4",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/fabric.py::house_hit#no house on a tread",
@@ -2843,7 +2843,7 @@
   "tier_as_ranked": "E1",
   "verdict": "NEEDS-RESEARCH",
   "wave": "4",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/geom.py::_trim_to_service#an outlying house keeps its way",
@@ -2859,7 +2859,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "4",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/geom.py::push_clear_of_fabric#gateway clearance",
@@ -2876,7 +2876,7 @@
   "tier_as_ranked": "E1",
   "verdict": "MISLABELED",
   "wave": "4",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/joints.py::_MEET_FT#ends that nearly meet",
@@ -2890,7 +2890,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "4",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/joints.py::meet_end_to_end#ends that nearly meet are joined",
@@ -2906,7 +2906,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "4",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::JOIN_REACH_FT#a join that stops short",
@@ -2921,7 +2921,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "4",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::connector_hairpin_ends#no hairpin at the track",
@@ -2935,7 +2935,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "4",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law_water.py::short_decks#assumed water widths",
@@ -2951,7 +2951,7 @@
   "tier_as_ranked": "E0",
   "moved": "T29a (amendment 7): tiered by its work - Two default literals in the d.get('w', ...) fallbacks at law_water.py lines 183 and 185, logic unchanged; the claim line moves with them.",
   "wave": "8 (claimed under its unit's new label; re-checked)",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py::fouled_segment#off another household's yard or garden",
@@ -2967,7 +2967,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "4",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/smooth.py::_END_HOUSE_FT#lane end reaches a house",
@@ -2981,7 +2981,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "4 (the constant retired with the hairpin-arm cut it served)",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/smooth.py::_END_WAY_FT#lane end reaches a way",
@@ -2995,7 +2995,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "4 (the constant retired with the hairpin-arm cut it served)",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/smooth.py::_LONG_ARM_FT#hairpin arm cut length",
@@ -3009,7 +3009,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "4 (the constant retired with the hairpin-arm cut it served)",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/street.py::row_reach#a farm frame where none is recorded",
@@ -3024,7 +3024,7 @@
   "found": "amendment 7 round 1: the drift row 70's claim states (D8)",
   "tier_as_ranked": "E1",
   "wave": "8",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_FREE_STUB_FT#free-end stub past a kink",
@@ -3038,7 +3038,7 @@
   "tier_as_ranked": "E1",
   "verdict": "MISLABELED",
   "wave": "4 (claim renamed or split; its parts re-checked)",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_PAST_CONNECTOR_FT#overrun past the connector",
@@ -3052,7 +3052,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "4",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_ROUTE_JOIN_FT#wide ends joined",
@@ -3068,7 +3068,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "4",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_bridge_collinear_breaks#a short gap closed at any bearing",
@@ -3084,7 +3084,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "4",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_bridge_collinear_breaks#bridge clearance fallback",
@@ -3100,7 +3100,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "4",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::cut_past_connector#overrun past the connector cut",
@@ -3116,7 +3116,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "4",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::trim_free_stub#only a free-end stub of 20 ft or less (_FREE_STUB_FT) is cut",
@@ -3132,7 +3132,7 @@
   "tier_as_ranked": "E0",
   "verdict": "UNCLAIMED",
   "wave": "4 (claim renamed or split; its parts re-checked)",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#join reach",
@@ -3148,7 +3148,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "4",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#a row street trimmed to end at its outermost door-path joint or last farm door",
@@ -3163,7 +3163,7 @@
   "found": "wave 3 re-check",
   "tier_as_ranked": "E1",
   "wave": "5 (the street runs on off the map; its claims re-checked IN-STEP)",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#a web lane's span",
@@ -3179,7 +3179,7 @@
   "tier_as_ranked": "E0",
   "moved": "wave 3 reading: the claim cannot be made honest without the value (E0 -> E1)",
   "wave": "4",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#back lane tie spacing",
@@ -3193,7 +3193,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "4",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#door path distance",
@@ -3208,7 +3208,7 @@
   "found": "wave 3 re-check",
   "tier_as_ranked": "E1",
   "wave": "4",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#orphan stub joined",
@@ -3223,7 +3223,7 @@
   "found": "wave 3 re-check",
   "tier_as_ranked": "E1",
   "wave": "4",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/labels/placer.py::leader_of#when a leader is drawn",
@@ -3237,7 +3237,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "5",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/labels/standard.py::REACH_EM#how far a caption may move",
@@ -3253,7 +3253,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "5 (the leader at twice the gap; the reach's relabel to CONVENTION ranked)",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/overlap/matrix.py::DOJO_RANGE_FT#archery lane",
@@ -3283,7 +3283,7 @@
   "moved": "wave 7 re-check: two narrower groups left",
   "verdict": "DRIFTED",
   "wave": "8",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/_knobs.py::BOUNDARY_MARKER_FT#boundary stone size",
@@ -3297,7 +3297,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "5",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/_knobs.py::execution_ground_ft#execution ground size",
@@ -3311,7 +3311,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "5",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.castle#bailey and masugata sizes",
@@ -3415,7 +3415,7 @@
   "tier_as_ranked": "E1",
   "moved": "T25a (amendment 6): tiered by its work - one value, written twice in channel_footbridges (bridges.py:606 and 624), turned to feet",
   "wave": "7",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#assumed stream and channel widths",
@@ -3431,7 +3431,7 @@
   "tier_as_ranked": "E0",
   "moved": "T25a (amendment 6): tiered by its work - one literal in DEFAULT_W at bridges.py:606 turned to feet, and the claim split into a cited brook line and an UNRESEARCHED channel line",
   "wave": "7 (claimed under its unit's new label; re-checked)",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#plank width",
@@ -3445,7 +3445,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "5",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#short abutment",
@@ -3461,7 +3461,7 @@
   "tier_as_ranked": "E4",
   "moved": "T25a (amendment 6): tiered by its work - one constant (_geom/ways.py:25, 6 px) read at bridges.py:264, 643 and 714; at 2 ft/px it now spans about 15 ft",
   "wave": "7",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/city/canals.py::CanalsMixin.farmland_ring#sluice standoff",
@@ -3504,7 +3504,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "5",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/city/moat.py::MoatMixin.water_gate#glyph size",
@@ -3518,7 +3518,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "5",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py::WallsMixin._gate_caption#ground reserved round the gate tower",
@@ -3806,7 +3806,7 @@
   "tier_as_ranked": "E0",
   "moved": "T29a (amendment 7): tiered by its work - One literal, bm = 8 at funerary.py line 130; the block polygon and _clear_ground(..., 0) already follow.",
   "wave": "8",
-  "scope": "deferred"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cemetery#rows of low markers",
@@ -3821,7 +3821,7 @@
   "moved": "wave 7 re-check: the fix landed; what the re-check found beyond it",
   "verdict": "DRIFTED",
   "wave": "8",
-  "scope": "deferred"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cemetery#six jizo at its entrance",
@@ -3836,7 +3836,7 @@
   "found": "wave 8 re-check (tier provisional, by verdict: a read by its work owed before an E1 wave takes it)",
   "tier_as_ranked": "E1",
   "wave": "",
-  "scope": "deferred"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cremation_ground#fire bed",
@@ -3984,7 +3984,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/farm_fixtures.py::kura_rect#west annex size",
@@ -3999,7 +3999,7 @@
   "found": "wave 1 re-check",
   "tier_as_ranked": "E1",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_ditches#outfall recorded width",
@@ -4013,7 +4013,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#bank beside the source brook",
@@ -4027,7 +4027,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_source#pond feeder width",
@@ -4041,7 +4041,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_source_channel#feed recorded width",
@@ -4055,7 +4055,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin.crescent_pond#placement keep-out",
@@ -4069,7 +4069,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin.pond#pond feeder width",
@@ -4083,7 +4083,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#ripe share",
@@ -4097,7 +4097,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/belt_law.py::MIN_BELT_DEPTH_FT#least belt depth",
@@ -4111,7 +4111,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::FixtureForms#privy seat weights",
@@ -4125,7 +4125,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::PRIVY_FRONT_STEP_FT#front privy off the front wall",
@@ -4139,7 +4139,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::PRIVY_YARD_STEP_FT#yard outhouse off the back wall",
@@ -4153,7 +4153,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::WOODSHED_STEP_FT#wood shed off its wall",
@@ -4167,7 +4167,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::privy_sun_reach_ft#sun-side reach by size",
@@ -4181,7 +4181,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#lesser broadleaf crown size",
@@ -4196,7 +4196,7 @@
   "found": "wave 1 re-check",
   "tier_as_ranked": "E1",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#windbreak conifer share",
@@ -4210,7 +4210,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._grove_fits#off a yard's south strip",
@@ -4224,7 +4224,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#belt deep and whole",
@@ -4238,7 +4238,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#clumps off the gardens' east",
@@ -4253,7 +4253,7 @@
   "found": "wave 1 re-check",
   "tier_as_ranked": "E1",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/grove_rules.py::EAST_REACH_PX#garden's morning sun",
@@ -4269,7 +4269,7 @@
   "tier_as_ranked": "E1",
   "verdict": "NEEDS-RESEARCH",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/wood_share.py::EAST_LANE_PX#bed's morning lane",
@@ -4285,7 +4285,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._shades_a_garden#garden's morning sun",
@@ -4301,7 +4301,7 @@
   "tier_as_ranked": "E1",
   "verdict": "NEEDS-RESEARCH",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/grove_rules.py::gardens_east_shaded#garden's morning sun",
@@ -4317,7 +4317,7 @@
   "tier_as_ranked": "E1",
   "verdict": "NEEDS-RESEARCH",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/houses.py::HousesMixin.frontage#rear row back to back",
@@ -4331,7 +4331,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/land/cover.py::GroundCoverMixin.commons#scrub ground color",
@@ -4345,7 +4345,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/land/cover.py::GroundCoverMixin.reserve_clearing#cleared collar",
@@ -4359,7 +4359,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/land/dikes.py::DikeMixin.dike_gates#gate glyph at the polder cut",
@@ -4373,7 +4373,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/land/wet.py::water_lines#watered by surface water",
@@ -4387,7 +4387,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/land/wet.py::surface_water_dist#watered by surface water",
@@ -4403,7 +4403,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#garden size",
@@ -4417,7 +4417,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#headman keeps an ordinary yard and garden",
@@ -4433,7 +4433,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/fit.py::BundleFitMixin._garden_shaded#garden shaded by a house to its south",
@@ -4447,7 +4447,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/roll.py::RollVillageMixin._roll_civic#shrine hall size at the threshold",
@@ -4461,7 +4461,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "deferred"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/shrines_wells/wells.py::WellsMixin._farm_wells#every farmhouse within reach of a well",
@@ -4475,7 +4475,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/shrines_wells/wells.py::WellsMixin._farm_wells#seated in a steading's dooryard",
@@ -4489,7 +4489,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/shrines_wells/wells.py::WellsMixin._farm_wells#fallback on field-rim ground off the crop",
@@ -4505,7 +4505,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/structures/compounds.py::CompoundsMixin.merchant_estate#court size",
@@ -4519,7 +4519,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "mode-a"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_anchor#reaching the houses",
@@ -4535,7 +4535,7 @@
   "tier_as_ranked": "E1",
   "moved": "T25a (amendment 6): tiered by its work - one constant at _helpers.py:35, read by kosatsuba_anchor and board_seat.py:240",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/board_seat.py::FACING_DEG#board faces its way",
@@ -4549,7 +4549,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/boards.py::BoardsMixin.board_record#board size",
@@ -4563,7 +4563,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/boards.py::BoardsMixin.kosatsuba#board size",
@@ -4579,7 +4579,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_routes#lane fallback width",
@@ -4593,7 +4593,7 @@
   "tier_as_ranked": "E1",
   "verdict": "MISLABELED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._route_seats#least offset off the tread",
@@ -4607,7 +4607,7 @@
   "tier_as_ranked": "E1",
   "verdict": "MISLABELED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin.place_kosatsuba#probe size",
@@ -4623,7 +4623,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/structures/packing.py::PackingMixin.rowpack#eave gap inside a pair",
@@ -4833,7 +4833,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/water_ways/water.py::WaterBodiesMixin.channel#ditch width",
@@ -4847,7 +4847,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/water_ways/water.py::WaterBodiesMixin.river#river width",
@@ -4861,7 +4861,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/water_ways/water.py::WaterBodiesMixin.stream#stream width",
@@ -4875,7 +4875,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/waterfields/banks.py::_WELD_MIN_APEX#weld apex",
@@ -4889,7 +4889,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/waterfields/carve.py::_dry_fields#off the water and the frame",
@@ -4903,7 +4903,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/waterfields/comb.py::_comb_drain#wandering line",
@@ -4917,7 +4917,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/waterfields/hem.py::_comb_dry_and_beans#fork triangle planted dry",
@@ -4931,7 +4931,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/waterfields/hill.py::build_terraces#supply down the flank",
@@ -4959,7 +4959,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/waterfields/polder.py::build_polder#module size",
@@ -4973,7 +4973,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/waterfields/polder.py::unpoint_parcels#no parcel tapers to a point",
@@ -4987,7 +4987,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/waterfields/ring_rules.py::MAX_STEPS#sideways steps",
@@ -5001,7 +5001,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/buildings.md::Fire-water tubs#tub against its wall",
@@ -5349,7 +5349,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/cluster.py::seat_cluster#never below the drain",
@@ -5365,7 +5365,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py::COPSE_SITINGS#village copse siting",
@@ -5380,7 +5380,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py::COPSE_BELT_REACH_FT#copse against the belt",
@@ -5396,7 +5396,7 @@
   "tier_as_ranked": "E0",
   "verdict": "MISLABELED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py::KOSATSUBA_SITINGS#notice board siting",
@@ -5410,7 +5410,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py::LANE_JOIN_FT#two lanes as one network",
@@ -5427,7 +5427,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "4",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py::WEB_HARD_GAP#web lane off crop, toe and marsh",
@@ -5442,7 +5442,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#thicket fallback: THICKET_REACH_FT 220 ft, then anywhere on the page behind the back row (0075 says \"just beyond the back row\")",
@@ -5456,7 +5456,7 @@
   "tier_as_ranked": "E2",
   "verdict": "UNCLAIMED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/belt.py::past_the_lanes#no belt in the marsh",
@@ -5470,7 +5470,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#near side of the field preferred",
@@ -5484,7 +5484,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#nearest seat preferred",
@@ -5500,7 +5500,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "4 (IN-STEP on a wave's re-check, no change needed)",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/stages.py::stage_windbreak#against-the-belt copse clump",
@@ -5515,7 +5515,7 @@
   "found": "wave 1 re-check",
   "tier_as_ranked": "E2",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/stages.py::stage_windbreak#copse among the homes",
@@ -5531,7 +5531,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/capacity.py::free_seats#the exhaustive seat order",
@@ -5547,7 +5547,7 @@
   "tier_as_ranked": "E4",
   "moved": "T25a (amendment 6): tiered by its work - the sort at capacity.py:81 changes rule and free_seats needs the field outline to measure against; one function",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/fixtures.py::BATH_SEATS#bath room wall",
@@ -5561,7 +5561,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/fixtures.py::fixture_forms#bath room wall",
@@ -5577,7 +5577,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/fixtures.py::fixture_quota#count to the share",
@@ -5591,7 +5591,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/persimmon_reseat.py::persimmon_for#under no conifer's crown",
@@ -5606,7 +5606,7 @@
   "found": "wave 1 re-check",
   "tier_as_ranked": "E2",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#far-row dry-field share",
@@ -5620,7 +5620,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#a yard's sun between ranks",
@@ -5636,7 +5636,7 @@
   "tier_as_ranked": "E2",
   "moved": "T25a (amendment 6): tiered by its work - the condition on the sun term in the one expression at stages.py:772 changes",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#the step between ranks",
@@ -5651,7 +5651,7 @@
   "moved": "wave 1: E0 -> E2, the re-check found the code's step (envelope depth + 18 + 39 ft scaled) is not the page's 92 ft: bring _rank_step to 0038 drawing's row spacing",
   "verdict": "MISLABELED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/pondstock.py::_bank_seats#edge midpoints first",
@@ -5665,7 +5665,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/sink.py::drain_run#no-build corridor",
@@ -5679,7 +5679,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/water/brook.py::bend_runs#bend across the fall",
@@ -5693,7 +5693,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/water/brook.py::brook_violations#runs downhill",
@@ -5710,7 +5710,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/water/brook_rules.py::BEND_DIP_FT#bend dip allowance",
@@ -5728,7 +5728,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/water/fit.py::flanks_commanded#both flanks commanded",
@@ -5742,7 +5742,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::stage_polder#reservoir size",
@@ -5756,7 +5756,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::a_way_onto_the_bund#on the bund",
@@ -5772,7 +5772,7 @@
   "tier_as_ranked": "E1",
   "moved": "T34a (amendment 8): tiered by its work - One branch of one function changes (the early `return \"joined\"` at line 275 becomes a carry-on), not a single value: setting `BUND_REACH_FT` to 0 would also move `end_serves` and the shared settlement helper.",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/checks.py::lanes_share_tread#one network at 25 ft",
@@ -5787,7 +5787,7 @@
   "found": "wave 4 re-check",
   "tier_as_ranked": "E2",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/fabric.py::_homestead_polys#a path leaves its own yard",
@@ -5801,7 +5801,7 @@
   "tier_as_ranked": "E2",
   "verdict": "MISLABELED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/fabric.py::_pull_back_to_service#the track meets the lanes",
@@ -5815,7 +5815,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/joints.py::RANK_WIDTHS#the spine at 5 ft",
@@ -5831,7 +5831,7 @@
   "found": "wave 4 glyph-check round 3 (F3)",
   "tier_as_ranked": "E2",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/joints.py::_one_joint#ways of two kinds stay two",
@@ -5845,7 +5845,7 @@
   "tier_as_ranked": "E2",
   "verdict": "MISLABELED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/joints.py::fold_the_connector_hairpin#a hairpin at the track becomes a T",
@@ -5859,7 +5859,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::fronting_ends#an end discharged by a house",
@@ -5874,7 +5874,7 @@
   "found": "wave 4 impl-drift (bundle12): fronting_ends",
   "tier_as_ranked": "E2",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#a run arriving within _LANE_JOIN_FT (30 ft) of the network counts as joined, with no link drawn",
@@ -5890,7 +5890,7 @@
   "tier_as_ranked": "E2",
   "verdict": "UNCLAIMED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#arrived at the network",
@@ -5906,7 +5906,7 @@
   "tier_as_ranked": "E1",
   "moved": "T34a (amendment 8): tiered by its work - Two branches of one function's join logic change (lines 173-179 and 206-213 of serve.py); 25 ft stays as the reach that triggers the join.",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py::_unkinked#no hairpin or zigzag",
@@ -5920,7 +5920,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py::off_the_back#a lane ends at the dooryard",
@@ -5934,7 +5934,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py::settle_ends#a lane ends at the dooryard",
@@ -5950,7 +5950,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py::settle_shapes#no hairpin or zigzag",
@@ -5966,7 +5966,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/smooth.py::_smooth_web#a hairpin arm kept as the only contact",
@@ -5981,7 +5981,7 @@
   "found": "wave 4 impl-drift (bundle15): the exception claimed",
   "tier_as_ranked": "E2",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_drop_end_nubs#nub at a junction dropped",
@@ -5996,7 +5996,7 @@
   "tier_as_ranked": "E2",
   "verdict": "CANNOT-TELL",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::connector_track#track's wander",
@@ -6010,7 +6010,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::lanes_that_kink#bends like a path",
@@ -6026,7 +6026,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#lane clearance",
@@ -6042,7 +6042,7 @@
   "tier_as_ranked": "E1",
   "moved": "wave 7: held at 40 ft - 7 ft as a center test let a building's body stand on the tread; the edge-based test is one rule (E2)",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#spur bow",
@@ -6056,7 +6056,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton arm off the water",
@@ -6071,7 +6071,7 @@
   "found": "wave 3 re-check",
   "tier_as_ranked": "E2",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton margin off the hard ground",
@@ -6087,7 +6087,7 @@
   "tier_as_ranked": "E0",
   "moved": "T29a (amendment 7): tiered by its work - The one clip_to_clear call at web.py line 146 applies a single 20.0 margin to crops, toe, marsh and water together, so the crops must be split into their own zero-margin clip - one rule in one function.",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#web lanes off the water",
@@ -6102,7 +6102,7 @@
   "found": "wave 3 re-check",
   "tier_as_ranked": "E2",
   "wave": "4",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/interactive/place.py::dwellings_shown#town and city count no farmhouses",
@@ -6117,7 +6117,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/labels/placer.py::place#never left off",
@@ -6132,7 +6132,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/overlap/taxonomy.py::_FIXTURE_MOUNTS#gate complex and inspection post",
@@ -6147,7 +6147,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#castle towers on the rampart",
@@ -6162,7 +6162,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#notice board at the roadside",
@@ -6177,7 +6177,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#supply canal along the dry hem",
@@ -6191,7 +6191,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/overlap/taxonomy.py::_MX_FIXTURE_BOX#drawn fixture box",
@@ -6205,7 +6205,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#inspection post on the gate",
@@ -6221,7 +6221,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#wellhead among the houses",
@@ -6236,7 +6236,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#yard, garden and fixtures against the house",
@@ -6251,7 +6251,7 @@
   "found": "wave 1 re-check",
   "tier_as_ranked": "E2",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/_knobs.py::<module>#settlement_form forms",
@@ -6265,7 +6265,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/_knobs.py::_land_use_ok#overlays are permanent uses, tea on hills",
@@ -6279,7 +6279,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.castle#corner yagura and gate towers",
@@ -6355,7 +6355,7 @@
   "tier_as_ranked": "E0",
   "moved": "T29a (amendment 7): tiered by its work - One seat-rejection condition in the seat loop (bridges.py lines 701-716) changes from a 3x-span ceiling to 'no widening at a join'; it rides with the 'longer plank at a junction' drift on the same loop.",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#off dry crops and gardens",
@@ -6371,7 +6371,7 @@
   "tier_as_ranked": "E1",
   "moved": "T25a (amendment 6): tiered by its work - the hard `_wide_enough` filter on the seat list at bridges.py:691 becomes a two-stage ordering in one loop of channel_footbridges",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#only water too wide to step across",
@@ -6385,7 +6385,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/city/bridges.py::crossing_deck#footplank form where the landing meets rice",
@@ -6399,7 +6399,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/city/canals.py::CanalsMixin._ring_upslope#no farmstead below the drain",
@@ -6473,7 +6473,7 @@
   "tier_as_ranked": "E2",
   "moved": "T25a (amendment 6): tiered by its work - the glyph in water_gate (moat.py:172-173) gains a second set of bars and two lining strokes; one function",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/civic.py::CivicWorksMixin.merchant_storehouses#a kura behind the shop",
@@ -6531,7 +6531,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cremation_ground#six jizo at a burial ground's entrance",
@@ -6683,7 +6683,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._coarse_grain_top_up#drained acres",
@@ -6697,7 +6697,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_ditches#outfall corridor",
@@ -6711,7 +6711,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_paddies#blue plot class",
@@ -6725,7 +6725,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::channel_end_on_stream#mouth reaches the water",
@@ -6739,7 +6739,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::outfall_run#drain outfall",
@@ -6753,7 +6753,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_ditches#drain outfall",
@@ -6769,7 +6769,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._plot_pond#field pond glyph",
@@ -6783,7 +6783,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/fields/grain.py::WINTER_CROP#winter-crop weights",
@@ -6797,7 +6797,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/fields/landuse.py::LandUseMixin._pick_overlay_plots#lotus draw",
@@ -6811,7 +6811,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/fields/paddy.py::PaddyMixin._rows#dry rows",
@@ -6825,7 +6825,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#canal widths",
@@ -6839,7 +6839,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#flooded near the ditches",
@@ -6855,7 +6855,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#privy seats",
@@ -6869,7 +6869,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::_wood_shed#wood shed seats",
@@ -6883,7 +6883,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::bath_room_seats#bath room seat fallback",
@@ -6897,7 +6897,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#wood shed's walls",
@@ -6913,7 +6913,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::shed_off_a_wall#wood shed a ken off a wall",
@@ -6930,7 +6930,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/gardens.py::GardensMixin._farm_shed_rect#storehouse as a west annex",
@@ -6944,7 +6944,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/gardens.py::GardensMixin._farm_shed_rect#storehouse size",
@@ -6960,7 +6960,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/gardens.py::GardensMixin._find_garden_spot#garden side",
@@ -6974,7 +6974,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GROVE_CROWN_AREA#grove crown density",
@@ -6988,7 +6988,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#crown size",
@@ -7002,7 +7002,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#crowns per clump",
@@ -7018,7 +7018,7 @@
   "tier_as_ranked": "E2",
   "verdict": "CANNOT-TELL",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._find_grove_arms#windward depth",
@@ -7032,7 +7032,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._thin_arm_seat#thin band off the plots",
@@ -7046,7 +7046,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::LESSER_BROADLEAF_S#lesser broadleaf size",
@@ -7062,7 +7062,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#lesser broadleaf crown size LESSER_BROADLEAF_S 0.6-0.85 of the mean radius",
@@ -7078,7 +7078,7 @@
   "tier_as_ranked": "E1",
   "verdict": "UNCLAIMED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#water-mouth grove drawn in the conifer-backed windbreak mix",
@@ -7095,7 +7095,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/houses.py::HousesMixin._try_place_bundle#storehouse",
@@ -7109,7 +7109,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/houses.py::HousesMixin._try_place_legacy#legacy storehouse share",
@@ -7125,7 +7125,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/land/cover.py::GroundCoverMixin._clear_ground#swept verge",
@@ -7141,7 +7141,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/land/cover.py::GroundCoverMixin.commons#wood edge",
@@ -7155,7 +7155,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/land/nearring.py::NearRingMixin.near_ring_cropland#row direction",
@@ -7169,7 +7169,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/dispersed.py::clear_east_of_beds#band cut a pixel clear of a bed's edge within its east reach; a band shorter than its width left uncut",
@@ -7186,7 +7186,7 @@
   "second_reader": "ranked E0, second reader E2: the higher taken (plan D4)",
   "verdict": "UNCLAIMED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/dispersed.py::dispersed_layout#garden beside the yard when turned",
@@ -7202,7 +7202,7 @@
   "tier_as_ranked": "E0",
   "verdict": "CANNOT-TELL",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/fit.py::BundleFitMixin._parts_fit#whole farmstead off the fields",
@@ -7216,7 +7216,7 @@
   "tier_as_ranked": "E2",
   "verdict": "MISLABELED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/roll.py::RollVillageMixin._roll_field#source pond size",
@@ -7230,7 +7230,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "deferred"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/roll.py::RollVillageMixin._roll_windbreak#communal windbreak behind the cluster",
@@ -7244,7 +7244,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "deferred"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/roll.py::RollVillageMixin.roll_village#notice board",
@@ -7258,7 +7258,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "deferred"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/shrines_wells/byres.py::DraftByresMixin._courtyard_byre_seat#a side wall, toward the work yard",
@@ -7272,7 +7272,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/shrines_wells/byres.py::DraftByresMixin.draft_byres#only plain houses keep a byre",
@@ -7286,7 +7286,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/shrines_wells/shrines.py::ShrineHallsMixin.hill#trees on the hill",
@@ -7300,7 +7300,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/shrines_wells/shrines.py::ShrineHallsMixin.shrine_hall#hall caption",
@@ -7314,7 +7314,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/shrines_wells/shrines.py::ShrineHallsMixin.small_shrine#torii before the hall",
@@ -7328,7 +7328,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/shrines_wells/torii.py::ToriiAvenueMixin._avenue_short_of_walls#avenue stops short of a wall",
@@ -7342,7 +7342,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/shrines_wells/torii.py::ToriiAvenueMixin.torii_even#arches spread over the ascent",
@@ -7358,7 +7358,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/shrines_wells/torii.py::ToriiAvenueMixin.torii_path#arch spacing on the path",
@@ -7374,7 +7374,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/boards.py::BoardsMixin.kosatsuba#stone footing and fence",
@@ -7390,7 +7390,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/boards.py::BoardsMixin.kosatsuba#roof and ridge glyph",
@@ -7406,7 +7406,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/boards.py::BoardsMixin.kosatsuba#no-build margin",
@@ -7422,7 +7422,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_routes#nominal widths",
@@ -7436,7 +7436,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/structures/packing.py::PackingMixin.rowpack#court every few rows",
@@ -7552,7 +7552,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "deferred"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/water_ways/kido.py::KidoMixin.kido#barred opening",
@@ -7582,7 +7582,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/water_ways/lanes.py::behind_house#behind the back wall is not the dooryard",
@@ -7598,7 +7598,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.trim_lane_stubs#served at the dooryard",
@@ -7614,7 +7614,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/water_ways/water.py::WaterBodiesMixin.channel#ditch winding",
@@ -7628,7 +7628,7 @@
   "tier_as_ranked": "E2",
   "verdict": "MISLABELED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/waterfields/banks.py::_WELD_MIN_SOLIDITY#weld lump",
@@ -7642,7 +7642,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/waterfields/banks.py::hem_rings_to_bank#drain with the fall left alone",
@@ -7656,7 +7656,7 @@
   "tier_as_ranked": "E2",
   "verdict": "MISLABELED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/waterfields/banks.py::hem_to_bank#drain with the fall left alone",
@@ -7672,7 +7672,7 @@
   "tier_as_ranked": "E2",
   "verdict": "MISLABELED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/waterfields/banks.py::round_channel_joints#swept bends",
@@ -7686,7 +7686,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/waterfields/carve.py::_dry_fields#crop per plot",
@@ -7700,7 +7700,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/waterfields/comb.py::_canal_ft#canal narrows at each offtake",
@@ -7714,7 +7714,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/waterfields/comb.py::_comb_brook#a brook from the outfall",
@@ -7728,7 +7728,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/waterfields/comb.py::_comb_march#least spacing between ditch threads (GAP 26 px), child offset 0.55 GAP",
@@ -7743,7 +7743,7 @@
   "tier_as_ranked": "E2",
   "verdict": "UNCLAIMED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/waterfields/furrows.py::settle_tract_seams#every seam reads",
@@ -7757,7 +7757,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/waterfields/hill.py::build_ribbon#brook down the middle",
@@ -7829,7 +7829,7 @@
   "tier_as_ranked": "E2",
   "verdict": "MISLABELED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/waterfields/partition.py::Sectors.thread_lines#sector pieces",
@@ -7845,7 +7845,7 @@
   "tier_as_ranked": "E2",
   "verdict": "MISLABELED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/waterfields/polder.py::BERM#bank beside a polder ditch",
@@ -7859,7 +7859,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/waterfields/polder.py::_plots_clear_of_channels#parcel stops at its ditch's bank",
@@ -7875,7 +7875,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/waterfields/polder.py::_polder_channels#channel widths",
@@ -7889,7 +7889,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/waterfields/seams/pockets.py::_outside_command#set-back from the canal",
@@ -7903,7 +7903,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/waterfields/settle.py::settle_cells#unlawful scraps left bare",
@@ -7917,7 +7917,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/waterfields/tint.py::judge_tint#one wet plot at least",
@@ -7931,7 +7931,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/waterfields/tint.py::judge_tint#tint reads as a basin",
@@ -7946,7 +7946,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/waterfields/banks.py::_TINT_MIN_SOLIDITY#lobed plot left green",
@@ -7963,7 +7963,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/waterfields/banks.py::_TINT_MIN_RECTANGULARITY#triangle left green",
@@ -7980,7 +7980,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/waterfields/banks.py::_TINT_MAX_ASPECT#channel-shaped plot left green",
@@ -7997,7 +7997,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/waterfields/banks.py::_TINT_MAX_AREA_RATIO#outsized plot left green",
@@ -8014,7 +8014,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/buildings.md::Approaches and surroundings#boundary pillars",
@@ -8722,7 +8722,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/cluster.py::seat_cluster#belt room on the canvas",
@@ -8738,7 +8738,7 @@
   "tier_as_ranked": "E4",
   "moved": "T12a: tiered by the work it takes (was provisional, by verdict)",
   "wave": "4 (IN-STEP on a wave's re-check, no change needed)",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/cluster.py::seat_cluster#brook across the band",
@@ -8756,7 +8756,7 @@
   "tier_as_ranked": "E2",
   "moved": "T12a: tiered by the work it takes (was provisional, by verdict)",
   "wave": "4 (IN-STEP on a wave's re-check, no change needed)",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py::HARVEST_WEATHERS#standing rack forms",
@@ -8771,7 +8771,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py::LANE_CLEARANCE#fronting lane's corridor",
@@ -8787,7 +8787,7 @@
   "tier_as_ranked": "E1",
   "moved": "T29a (amendment 7): tiered by its work - _near_corridor (settlement/houses.py line 146) takes a bare center point and is called from eight sites in six modules (houses, civic, rolling/fit, yards, gardens, groves, byres), each of which must pass its footprint - a change across modules, not the constant alone.",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py::LANE_SKELETONS#lane along the water",
@@ -8802,7 +8802,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py::POND_LAYOUTS#dike-pond layout",
@@ -8817,7 +8817,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py::ROLLED_ARCHETYPES#field forms rolled",
@@ -8831,7 +8831,7 @@
   "tier_as_ranked": "E3",
   "verdict": "CANNOT-TELL",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/stages.py::stage_hinterland#grass ground form",
@@ -8846,7 +8846,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/stages.py::woodland_on_the_sheet#wood beyond the sheet",
@@ -8864,7 +8864,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/bamboo.py::household_bamboo#strip seated after the lanes",
@@ -8879,7 +8879,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/farm_water.py::farm_channels#washing places",
@@ -8893,7 +8893,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/fixtures.py::FIXTURE_BANDS#pig sty against the house",
@@ -8907,7 +8907,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#row farm faces its street",
@@ -8922,7 +8922,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/bamboo.py::household_bamboo#row farm's bamboo to the south",
@@ -8939,7 +8939,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/seat_geometry.py::declare_cluster_shape#cluster shape knob",
@@ -8954,7 +8954,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#a scattered hamlet's seating",
@@ -8968,7 +8968,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::face_the_houses#house bearing",
@@ -8982,7 +8982,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/wells.py::place_wells#wells among the houses",
@@ -8996,7 +8996,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/wells.py::place_wells#well pockets drawn first",
@@ -9012,7 +9012,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/plan.py::plan_site#rolled fall backs the wind",
@@ -9028,7 +9028,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/plan.py::fall_backs_the_wind#high side and windward side as one",
@@ -9045,7 +9045,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/plan.py::fall_backs_the_wind#fall square to or away from the wind",
@@ -9061,7 +9061,7 @@
   "tier_as_ranked": "E0",
   "verdict": "MISLABELED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/plan.py::plan_site#water flow follows the fall",
@@ -9077,7 +9077,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/pondstock.py::stage_pond_stock#privy over the sty",
@@ -9092,7 +9092,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/pondstock.py::stage_pond_stock#sties at the dike-pond only",
@@ -9107,7 +9107,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/sink.py::lay_sink#pond bank form",
@@ -9122,7 +9122,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::carry_on#stepped spur's corridor",
@@ -9140,7 +9140,7 @@
   "tier_as_ranked": "E1",
   "moved": "T29a (amendment 7): tiered by its work - carry_on (bund.py line 360) only passes LANE_CLEARANCE, so it cannot be IN-STEP until the edge-based corridor (several modules) lands; no code of its own changes.",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/checks.py::shallow_crossing#square over water",
@@ -9156,7 +9156,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/checks.py::path_violations#square over water",
@@ -9172,7 +9172,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/checks.py::PathChecker.violations#square over water",
@@ -9188,7 +9188,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/clearance.py::_clear_link#link clear of the crop and wet ground",
@@ -9204,7 +9204,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/joints.py::_one_joint#a fold or Z at a joint becomes a T",
@@ -9219,7 +9219,7 @@
   "found": "wave 2: the row pitch at 92 ft",
   "tier_as_ranked": "E3",
   "wave": "4",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py::BUNDLE_PITCH#row pitch",
@@ -9236,7 +9236,7 @@
   "moved": "wave 2: at 92 ft (0038) Kuwabata's lanes 3 and 8 zigzag across a joint the engine cannot yet re-route; held back to 100 in wave 2, the row waits for that row",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/knots.py::settle_knots#a knot no lawful gather reaches",
@@ -9252,7 +9252,7 @@
   "found": "wave 4: the knot test, measured",
   "tier_as_ranked": "E3",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/route.py::_route#clear of the crop",
@@ -9268,7 +9268,7 @@
   "tier_as_ranked": "E1",
   "verdict": "MISLABELED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::SPUR_REACH_FT#spur reaches the field",
@@ -9283,7 +9283,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::field_unreached#a way reaches the field",
@@ -9299,7 +9299,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::FIELD_REACH_FT#a way reaches the field",
@@ -9315,7 +9315,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#polder has no spur",
@@ -9331,7 +9331,7 @@
   "tier_as_ranked": "E3",
   "verdict": "MISLABELED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton arm's corridor",
@@ -9349,7 +9349,7 @@
   "tier_as_ranked": "E1",
   "moved": "T34a (amendment 8): tiered by its work - Passing 7 ft in web.py alone would let a building's body stand on the tread because `_near_corridor` (settlement/houses.py) and `SiteCorridors.hit_center` (homesteads/boundary.py) test a center, so the fix is the cross-module corridor-test change.",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#a cluster the brook crosses reached",
@@ -9364,7 +9364,7 @@
   "found": "wave 2: the brook tiebreak at 0.05",
   "tier_as_ranked": "E3",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/cluster.py::seat_cluster#brook penalty weight",
@@ -9381,7 +9381,7 @@
   "moved": "wave 2: at the page's tiebreak (0.05) the 10-household seed 4 seats astride its brook and the web leaves ten farmhouses unreached; held at 3.0, the row waits for the web to reach such a cluster",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/consts_water.py::BROOK_FLANKS#brook's flank",
@@ -9399,7 +9399,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#a footpath reaches every farmhouse 7 ft off a plot",
@@ -9414,7 +9414,7 @@
   "found": "wave 4: FOOTPATH_FABRIC_GAP at 7 ft",
   "tier_as_ranked": "E3",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::_thread_the_fabric#gap off the steadings",
@@ -9431,7 +9431,7 @@
   "moved": "wave 4: waits on the footpath row (held at 4 ft)",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/street.py::join_to#joining leg's berth",
@@ -9448,7 +9448,7 @@
   "found": "wave 4 re-check",
   "tier_as_ranked": "E1",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::RunOnBlocks.clear#off the steadings",
@@ -9466,7 +9466,7 @@
   "moved": "wave 4: reads FOOTPATH_FABRIC_GAP, held at 4 ft; waits with it",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py::FOOTPATH_FABRIC_GAP#footpath off a plot",
@@ -9483,7 +9483,7 @@
   "moved": "wave 4: at 7 ft (0246) Kashikawa refuses; held at 4, the row waits for the found E3 row",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#border as a line",
@@ -9497,7 +9497,7 @@
   "tier_as_ranked": "E3",
   "verdict": "CANNOT-TELL",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#merchant storehouses",
@@ -9512,7 +9512,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#mill beside its stream",
@@ -9529,7 +9529,7 @@
   "tier_as_ranked": "E1",
   "moved": "wave 5: the mill race is a new element (spec-fidelity's note on amendment 4)",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/_knobs.py::<module>#hamlet default values",
@@ -9546,7 +9546,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/_knobs.py::<module>#kosatsuba_seat forms",
@@ -9562,7 +9562,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/_knobs.py::_kosatsuba_seat_ok#bridgehead and shrine withheld",
@@ -9580,7 +9580,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/_knobs.py::_kosatsuba_seat_ok#seats a settlement can site",
@@ -9597,7 +9597,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.wall#a town rampart with a gate",
@@ -9625,7 +9625,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/city/moat.py::MoatMixin.water_gate#one opening",
@@ -9641,7 +9641,7 @@
   "tier_as_ranked": "E1",
   "moved": "T25a (amendment 6): tiered by its work - water_gate (moat.py:149) gains a width and an arcade form, its callers pass the canal's width, and the wall's matching gap (city_wall water_gates) is resized: a new form across modules",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py::WallsMixin._seat_mural_towers#tower onto the berm",
@@ -9718,7 +9718,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/overlap/taxonomy.py::_FIXTURE_MOUNTS#log boom",
@@ -9734,7 +9734,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/civic.py::CivicWorksMixin.granary#tax-rice granary at a transit town",
@@ -9838,7 +9838,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/farm_fixtures.py::KURA_PARTS#north annex",
@@ -9855,7 +9855,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_source#planted pond bank",
@@ -9869,7 +9869,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/fields/landuse.py::DIKEPOND_WATER_INSET#pond bank width",
@@ -9883,7 +9883,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/fields/landuse.py::LandUseMixin._landuse_tea_fringe#tea rows",
@@ -9897,7 +9897,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/fields/paddy.py::PaddyMixin._paddy_plots#bunds along contour and fall",
@@ -9911,7 +9911,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/fields/paddy.py::PaddyMixin.paddy_field#crop mix",
@@ -9925,7 +9925,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#dry where water fails",
@@ -9941,7 +9941,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/farmstead.py::FarmsteadMixin._find_appurtenances#every farm a garden",
@@ -9972,7 +9972,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/yards.py::ThreshingYardsMixin._attach_yard#a yard on every farm",
@@ -9987,7 +9987,7 @@
   "found": "wave 1 re-check",
   "tier_as_ranked": "E3",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/yards.py::ThreshingYardsMixin._attach_yard#every farmhouse a yard",
@@ -10001,7 +10001,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/houses.py::HousesMixin._try_place_bundle#a way reserved while the house is seated (reserve_way); 0081 drawing says no way is sought at seating",
@@ -10016,7 +10016,7 @@
   "tier_as_ranked": "E3",
   "verdict": "UNCLAIMED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/houses.py::HousesMixin._try_place_bundle#farmhouse size",
@@ -10030,7 +10030,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/houses.py::HousesMixin._try_place_legacy#legacy farmhouse size",
@@ -10046,7 +10046,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/houses.py::HousesMixin.frontage#shops face the street",
@@ -10062,7 +10062,7 @@
   "tier_as_ranked": "E0",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/houses.py::HousesMixin.house#farmhouse glyph",
@@ -10077,7 +10077,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/houses.py::HousesMixin.house#big farmhouse wing",
@@ -10093,7 +10093,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/houses.py::HousesMixin.house#ridge at 0.6 of the length",
@@ -10108,7 +10108,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/houses.py::HousesMixin.lane_skeleton#lane skeleton",
@@ -10123,7 +10123,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/land/cover.py::GroundCoverMixin.commons#grass ground forms",
@@ -10138,7 +10138,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/land/cover.py::GroundCoverMixin.commons#marsh edge",
@@ -10154,7 +10154,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/land/dikes.py::DikeMixin.dike_top_houses#dike-top house size",
@@ -10170,7 +10170,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/land/nearring.py::NearRingMixin.near_ring_cropland#dry cropland near a town",
@@ -10184,7 +10184,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/land/nearring.py::NearRingMixin.near_ring_paddy#watered basins only",
@@ -10198,7 +10198,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/land/nearring.py::NearRingMixin.near_ring_paddy#basin size",
@@ -10214,7 +10214,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/land/wet.py::WetGroundMixin.marsh#marsh edge form",
@@ -10231,7 +10231,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/bearing.py::MarginBearing.__call__#lane turn from the margin",
@@ -10246,7 +10246,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/lot.py::household_parts#a role household gets no byre and no farmstead fixtures",
@@ -10262,7 +10262,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/lot.py::household_parts#only plain households held to watered seats and given a well pocket",
@@ -10278,7 +10278,7 @@
   "tier_as_ranked": "E2",
   "verdict": "UNCLAIMED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/roll.py::RollVillageMixin._roll_cluster#lane skeleton",
@@ -10292,7 +10292,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "deferred"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/roll.py::RollVillageMixin._roll_cluster#headman at the skeleton's prime spot",
@@ -10308,7 +10308,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "deferred"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/roll.py::RollVillageMixin._roll_cluster#lane width and clearance",
@@ -10324,7 +10324,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "deferred"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/roll.py::RollVillageMixin._roll_field#pond chain",
@@ -10341,7 +10341,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "deferred"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/roll.py::RollVillageMixin._roll_wells#wells among the houses",
@@ -10355,7 +10355,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "deferred"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/roll.py::RollVillageMixin._roll_windbreak#belt always on one side, a straight strip",
@@ -10371,7 +10371,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "deferred"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/roll.py::RollVillageMixin.roll_village#a rolled village is clustered",
@@ -10385,7 +10385,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "deferred"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/seeds.py::SeedFormsMixin.line_seeds#farms strung along a line",
@@ -10413,7 +10413,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/shrines_wells/byres.py::DraftByresMixin.draft_byres#no free wall falls back",
@@ -10430,7 +10430,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/shrines_wells/byres.py::byre_part#flank away from the garden",
@@ -10446,7 +10446,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/shrines_wells/shrines.py::ShrineHallsMixin.small_shrine#wayside shrine size",
@@ -10460,7 +10460,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/shrines_wells/wells.py::WellsMixin.well#wellhead marker",
@@ -10474,7 +10474,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_anchor#board placements",
@@ -10490,7 +10490,7 @@
   "tier_as_ranked": "E2",
   "moved": "T25a (amendment 6): tiered by its work - a new knob value in _knobs.py:324 with its typing rule, a new anchor case in kosatsuba_anchor (_helpers.py:198) and the board seat search that reads it",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin.place_kosatsuba#placement knob at the lane tiers",
@@ -10504,7 +10504,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/structures/servants.py::ServantRangesMixin.servant_ranges#beside the house, flush with its front",
@@ -10609,7 +10609,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/waterfields/comb.py::_comb_threads#delivery takeoff",
@@ -10623,7 +10623,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/waterfields/comb.py::_comb_threads#canal B delivery takeoff",
@@ -10639,7 +10639,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/waterfields/frame.py::BANK_MARGIN#bund and ditch abut",
@@ -10656,7 +10656,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/waterfields/frame.py::_drain_bank#bunds clear a widening drain",
@@ -10672,7 +10672,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/waterfields/hill.py::build_terraces#retaining wall form",
@@ -10766,7 +10766,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/buildings.md::Latrines and the rear service strip#privies away from water",
@@ -10829,7 +10829,7 @@
   "tier_as_ranked": "E4",
   "verdict": "CANNOT-TELL",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#off crop and water",
@@ -10843,7 +10843,7 @@
   "tier_as_ranked": "E4",
   "verdict": "NEEDS-RESEARCH",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#a footpath's room off the outline",
@@ -10858,7 +10858,7 @@
   "found": "wave 3 re-check",
   "tier_as_ranked": "E4",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/wells.py::place_wells#grove farms take their own water",
@@ -10873,7 +10873,7 @@
   "found": "wave 3 re-check",
   "tier_as_ranked": "E4",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/wells.py::place_wells#neighborhood ladder",
@@ -10887,7 +10887,7 @@
   "tier_as_ranked": "E4",
   "verdict": "NEEDS-RESEARCH",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/wells.py::shared_row_wells#no shared well where the street turns 30 deg or more within 40 ft",
@@ -10904,7 +10904,7 @@
   "tier_as_ranked": "E4",
   "verdict": "UNCLAIMED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/wells.py::shared_row_wells#well seat falls back a half and a quarter lot either way along the street",
@@ -10918,7 +10918,7 @@
   "tier_as_ranked": "E4",
   "verdict": "UNCLAIMED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/water/brook_rules.py::BROOK_DRAWN_W#brook width",
@@ -10932,7 +10932,7 @@
   "tier_as_ranked": "E4",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::polder_crossing_caps#crossings where the village lives",
@@ -10948,7 +10948,7 @@
   "tier_as_ranked": "E0",
   "verdict": "CANNOT-TELL",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::a_way_onto_the_bund#water between is crossed",
@@ -10964,7 +10964,7 @@
   "tier_as_ranked": "E4",
   "moved": "T29a (amendment 7): tiered by its work - The cap is the `for over in (0, 1)` loop at bund.py line 301; no page says whether it should be one, more or none, so the record must answer before the loop or its claim changes.",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/clearance.py::clip_to_clear#default 14 ft off water lines",
@@ -10978,7 +10978,7 @@
   "tier_as_ranked": "E4",
   "verdict": "UNCLAIMED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::fouls_fabric#foul margin",
@@ -10993,7 +10993,7 @@
   "moved": "wave 4 re-check: NEEDS-RESEARCH (the yard margin)",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::span_walkable#a walkable span",
@@ -11010,7 +11010,7 @@
   "moved": "wave 4 re-check: NEEDS-RESEARCH (the yard margin)",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law_water.py::oblique_at#a channel crossing at its way's angle",
@@ -11025,7 +11025,7 @@
   "found": "amendment 7 round 1: the drift row 58's claim states (D8), a question for the record",
   "tier_as_ranked": "E4",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law_water.py::off_ford_at#how far off a crossing place",
@@ -11041,7 +11041,7 @@
   "tier_as_ranked": "E4",
   "moved": "T29a (amendment 7): tiered by its work - FORD_HALF (consts_water) is one constant read by off_ford_at at law_water.py line 79, but no page gives the width it should be, so the record comes first.",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_join_orphan_ways#link width",
@@ -11055,7 +11055,7 @@
   "tier_as_ranked": "E4",
   "verdict": "NEEDS-RESEARCH",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_keep_the_route_wide#through-route keeps its width",
@@ -11069,7 +11069,7 @@
   "tier_as_ranked": "E4",
   "verdict": "NEEDS-RESEARCH",
   "wave": "4",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_seat#seat off the reed fringe",
@@ -11083,7 +11083,7 @@
   "tier_as_ranked": "E4",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/interactive/place.py::KINDS#a city's figure takes in its samurai country estates",
@@ -11099,7 +11099,7 @@
   "tier_as_ranked": "E0",
   "moved": "T29a (amendment 7): tiered by its work - The code (place.json city population_note) already states the GM's ruling; the work is in the record, where 0001 and its l7r-budgets note contradict that canon - no code change until the record is reconciled.",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/interactive/place.py::KINDS#what each tier is",
@@ -11114,7 +11114,7 @@
   "moved": "wave 7 re-check: the fix landed; what the re-check found beyond it",
   "verdict": "CANNOT-TELL",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/city/moat.py::MoatMixin.moat#moat width",
@@ -11129,7 +11129,7 @@
   "moved": "wave 5: the two moat pages contradict each other (spec Edge Case: a NEEDS-RESEARCH question)",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py::WallsMixin._tower#no-build margin",
@@ -11172,7 +11172,7 @@
   "tier_as_ranked": "E4",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#a conifer-led clump throws only LESSER_ROLL_SHARE (10%) of its crowns as lesser broadleaf",
@@ -11186,7 +11186,7 @@
   "tier_as_ranked": "E4",
   "verdict": "UNCLAIMED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#crown over no roof or wellhead",
@@ -11202,7 +11202,7 @@
   "tier_as_ranked": "E0",
   "verdict": "NEEDS-RESEARCH",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._thin_arm_seat#thin band's run halved where the full run does not fit",
@@ -11218,7 +11218,7 @@
   "tier_as_ranked": "E4",
   "verdict": "UNCLAIMED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#belt off the deep marsh",
@@ -11232,7 +11232,7 @@
   "tier_as_ranked": "E4",
   "verdict": "NEEDS-RESEARCH",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/wood_share.py::COPSE_CLUMP_BS#copse clump size",
@@ -11246,7 +11246,7 @@
   "tier_as_ranked": "E4",
   "verdict": "NEEDS-RESEARCH",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/houses.py::HousesMixin._in_blocked#seat set-back from fields, dry plots and hills",
@@ -11261,7 +11261,7 @@
   "second_reader": "ranked E1, second reader E4: the higher taken (plan D4)",
   "verdict": "NEEDS-RESEARCH",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/houses.py::HousesMixin._on_a_tread#no building corner on a lane",
@@ -11275,7 +11275,7 @@
   "tier_as_ranked": "E4",
   "verdict": "NEEDS-RESEARCH",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/land/nearring.py::NearRingMixin.near_ring_cropland#no cropland inside a walled city's wall",
@@ -11289,7 +11289,7 @@
   "tier_as_ranked": "E4",
   "verdict": "UNCLAIMED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/land/nearring.py::NearRingMixin.near_ring_cropland#plots held 3 bs off every road, street and lane corridor",
@@ -11303,7 +11303,7 @@
   "tier_as_ranked": "E4",
   "verdict": "UNCLAIMED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/land/nearring.py::NearRingMixin.near_ring_paddy#basins held 3 bs off every lane corridor",
@@ -11317,7 +11317,7 @@
   "tier_as_ranked": "E4",
   "verdict": "UNCLAIMED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/land/nearring.py::NearRingMixin.near_ring_paddy#no basin inside a walled city's wall",
@@ -11331,7 +11331,7 @@
   "tier_as_ranked": "E4",
   "verdict": "UNCLAIMED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/fit.py::BundleFitMixin._house_too_near_a_neighbor#roofs shed apart",
@@ -11345,7 +11345,7 @@
   "tier_as_ranked": "E4",
   "verdict": "MISLABELED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/roll.py::RollVillageMixin._roll_margin_frame#positions told apart",
@@ -11359,7 +11359,7 @@
   "tier_as_ranked": "E4",
   "verdict": "NEEDS-RESEARCH",
   "wave": "",
-  "scope": "deferred"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/roll.py::RollVillageMixin._roll_windbreak#windbreak standoff and depth",
@@ -11373,7 +11373,7 @@
   "tier_as_ranked": "E4",
   "verdict": "NEEDS-RESEARCH",
   "wave": "",
-  "scope": "deferred"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/shrines_wells/byres.py::COURTYARD_REACH#courtyard byre search reach",
@@ -11387,7 +11387,7 @@
   "tier_as_ranked": "E4",
   "verdict": "NEEDS-RESEARCH",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/trades.py::TradesMixin.farrier#clinker heap beside the shed",
@@ -11444,7 +11444,7 @@
   "tier_as_ranked": "E4",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/waterfields/partition.py::HUG_COL#no strip too thin for a paddy",
@@ -11460,7 +11460,7 @@
   "tier_as_ranked": "E4",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/waterfields/partition.py::HUG_ROW#no strip too thin for a paddy",
@@ -11476,7 +11476,7 @@
   "tier_as_ranked": "E4",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/waterfields/settle.py::verdict#toe discipline",
@@ -11492,6 +11492,6 @@
   "tier_as_ranked": "E4",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "hamlet"
+  "scope": "kept"
  }
 ]

@@ -133,13 +133,17 @@ session's last actions are recording the running checks, a commit, and `scripts/
   mid-wave stop refuses the landing WITHOUT running the gate and pushes the clone's backup branch; the session waits
   for the GM's word to continue. The cap is enforced by the armed per-goal hook (`~/.claude/hooks/usage_cap.py`, whose
   self-test `test-usage-cap.sh` holds exactly that allow/deny set), not by memory.
-- **FR-010 (scope: the code the scripted and permanently hand-drawn maps run - amendment 8, the GM 2026-10-07)**: the
-  feature fixes every finding in code a scripted hamlet executes (the module set `tools/hamlet_floor` derives from the
-  pool's scripted rolls, everything under `hamletgen/`, and any unit `hamletgen/` calls) and in the Mode A procedures and
-  the code that draws the magistracies and country shrines. A finding in code only the legacy hand-authored villages, towns
-  and cities run is DEFERRED: it stays ranked (`scope: deferred`) and no wave takes it, and `make claims-report` shows and
-  counts it DEFERRED, not DRIFTED (`dev/claims-deferred.json`, derived by `audit/scope.py`), so the push's claims gate does
-  not count it either. The legacy settlements' own checks are not fixed. The cap rises to `85%` (the GM's words).
+- **FR-010 (scope: the code the kept maps execute - amendment 8, the GM 2026-10-07)**: the feature fixes every finding in
+  a unit a kept map actually EXECUTES - the scripted hamlets (the five pool maps and the rolls the gate and the perf bookends
+  make, configurations the pool does not roll), the magistracy and country-shrine sheets - measured by the gen cache's
+  execution records (each function that ran, by path and qualified name, the record `tools/hamlet_floor` reads): a function or
+  method a recorded run executed, a class one of whose methods ran, a module-level constant an executed function reads, a
+  check the gate runs against the kept maps' finished output (listed with its reason), and the Mode A procedures. Every other
+  claimed unit - code only the legacy hand-authored villages, towns and cities run - is DEFERRED: its rows stay ranked
+  (`scope: deferred`) and no wave takes them, and every such unit is listed in `dev/claims-deferred.json` (derived over every
+  claimed unit, not only today's findings, by `audit/scope.py`, re-run when a wave lands), so `make claims-report` shows and
+  counts its findings DEFERRED, not DRIFTED, and the push's claims gate does not count them. The legacy settlements' own checks
+  are not fixed. The cap rises to `85%` (the GM's words).
 - **FR-008 (the record of decisions)**: every fix that changes what a map draws or states is recorded in its class
   (accurate, deviation, convention, guess) at the point of change and in this feature's `spec.md` under Decisions
   Recorded, added by the wave's amendment; the claim line is the pointer.

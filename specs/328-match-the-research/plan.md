@@ -6,7 +6,7 @@
 
 Phase 1 ranks every finding of `make claims-report` (565 at `a52ff1bcd`) by the implementation work it takes (tiers
 E0-E4, spec FR-003). Phase 2 fixes them in ranking order, in waves that each land as a verified unit, all inside feature 328:
-only the current wave's rows are task boxes; the next wave's tasks are appended as an amendment once a wave lands (FR-006). The work stops at the armed 75% usage cap (FR-007).
+only the current wave's rows are task boxes; the next wave's tasks are appended as an amendment once a wave lands (FR-006). The work stops at the armed 85% usage cap (FR-007).
 
 ## Technical Context
 
@@ -109,26 +109,27 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 
 ## Scope (amendment 8, the GM 2026-10-07)
 
-- **D9 - the feature fixes what the kept maps run (FR-010)**: every row takes a scope (`audit/scope.py` -> `audit/scope.json`,
-  shown in `ranking.md`): `hamlet` (the module set `tools/hamlet_floor` derives from the pool's scripted rolls, all of
-  `hamletgen/`, and any unit `hamletgen/` calls by name, two comment-only hits struck), `mode-a` (the procedures and the
-  compound placer that draw the magistracies and country shrines) or `deferred` (code only the legacy hand-authored villages,
-  towns and cities run). A wave takes only `hamlet` and `mode-a` rows, still the next contiguous run of those in ranking
-  order (FR-006). A unit with any in-scope row stays in scope; the rest are listed in `dev/claims-deferred.json`, which
-  `scripts/_claims.py` reads so `make claims-report` shows their findings DEFERRED and the push's claims gate skips them.
+- **D9 - the feature fixes what the kept maps execute (FR-010)**: every row takes a scope from the gen cache's execution
+  records (`audit/scope.py` -> `audit/scope.json`, shown in `ranking.md`): `kept` (a unit a kept map's recorded run
+  executed - the pool hamlets, the gate's and the bookends' rolls, the magistracy and shrine sheets - or a constant such a
+  unit reads, or a listed check the gate runs on the kept maps), `mode-a` (the procedures) or `deferred`. A wave takes only
+  `kept` and `mode-a` rows, still the next contiguous run of those in ranking order (FR-006). The deferred list
+  (`dev/claims-deferred.json`) covers every claimed unit the records do not reach, so a legacy-only unit that drifts later
+  reads DEFERRED too; `scripts/_claims.py` reads it for `make claims-report` and the push's claims gate. Re-derived when a wave
+  lands (the cache must hold each kept map's entry).
 - **The cap**: 85% (the GM's words), the armed hook re-armed at 85.
 - **Rows already worked in deferred code stay closed**: waves 5-8 fixed town and city figures before the scope existed; that
   work stands, and its open remainder is deferred.
 
 ## Wave 9 (amendment 8, 2026-10-07)
 
-- **T34a first**: the 5 in-scope found rows wave 8 tiered by verdict alone, tiered by their work (3 moved: the bund's 6 ft
-  reach and the web lane's arrival to E2, the skeleton arm's corridor to E3 after the edge-based corridor row).
-- **Scope**: the 5 open in-scope E0 rows, then the next contiguous run of in-scope E1 (FR-006, FR-010): rows 265-288
-  (24 rows, `tasks.md` Phase 10), the homestead's fixtures, groves and fields; the next open in-scope E1 row is 289.
+- **T34a first**: the 5 found rows wave 8 tiered by verdict alone, tiered by their work (3 moved: the bund's 6 ft reach and
+  the web lane's arrival to E2, the skeleton arm's corridor to E3 after the edge-based corridor row).
+- **Scope**: the 6 open in-scope E0 rows, then the next contiguous run of in-scope E1 (FR-006, FR-010): rows 255-298
+  (28 rows, `tasks.md` Phase 10), the burial ground's jizo, the homestead's fixtures, groves and fields, the cover, the
+  polder gate and the surface water, the bundle's garden and the threshold's hall; the next open in-scope E1 row is 303.
 - **Verification**: Inashiro first (`make map`, the PNG looked at), the pool through the gate; the bookends back to back
-  with nothing else running (wave 8's first pair overlapped a detached run); `impl-drift` on every touched unit; a held value
-  becomes a found row.
+  with nothing else running; `impl-drift` on every touched unit; a held value becomes a found row.
 
 ## Performance bookends (constitution VI)
 
