@@ -362,3 +362,13 @@ def test_a_corridor_is_barred_by_a_seat_within_the_gap_whatever_cells_it_crosses
         assert wood.corridor_bars(a, b) == want, (a, b)
         barred += want
     assert 40 < barred < 360
+
+
+def test_the_lanes_are_in_feet_at_any_grain() -> None:
+    """Feature 328: the morning lane east of a bed and the afternoon lane west are feet, scaled to the map's pixels."""
+    parts = {"house": (100.0, 100.0, 40.0, 30.0), "yard": (100.0, 140.0, 40.0, 20.0), "gardens": [(140.0, 100.0, 20.0, 20.0)], "well": None, "shed": None}
+    _c1, one = copse_keepouts(parts, 22.0, 39.0, 12.0, west_ft=20.0)
+    _c2, half = copse_keepouts(parts, 22.0, 39.0, 12.0, west_ft=20.0, ppf=0.5)
+    east = [r for r in one if r[0] == 150.0 - 13.0 - BAR_MARGIN_PX][0], [r for r in half if r[0] == 150.0 - 13.0 - BAR_MARGIN_PX][0]
+    assert east[0][2] - east[1][2] == 25.0, "50 ft east of the bed at 1 px a foot, 25 px at 2 ft a pixel"
+    assert one[-1][0] - half[-1][0] == -10.0, "20 ft west: 20 px, then 10"

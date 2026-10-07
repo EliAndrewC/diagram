@@ -80,7 +80,9 @@ EAST_LANE_FT = 50.0
 """Research: bed's morning lane - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: no crown within 50 ft east of a bed"""
 
 
-def copse_keepouts(parts: Mapping[str, Any], clump: float, sun_depth: float, well_vr: float, west_ft: float = 0.0) -> tuple[list[tuple[float, float, float]], list[tuple[float, float, float, float]]]:
+def copse_keepouts(
+    parts: Mapping[str, Any], clump: float, sun_depth: float, well_vr: float, west_ft: float = 0.0, ppf: float = 1.0
+) -> tuple[list[tuple[float, float, float]], list[tuple[float, float, float, float]]]:
     """The copse keep-outs of one homestead's parts, as `(circles, rects)`: the discs a clump's center may not enter and
     the open rectangles it may not stand in, each `village_grove`'s own figure (see the module's note) grown by
     `BAR_MARGIN_PX`. `parts` holds `(cx, cy, w, h)` rects - the unturned size at the drawn center, as a record is: `house`,
@@ -112,14 +114,15 @@ def copse_keepouts(parts: Mapping[str, Any], clump: float, sun_depth: float, wel
             rects.append((r[0] - half - m, south - cr - 2.0 - m, r[0] + half + m, south + sun_depth + 2.0 + cr + m))
     for g in parts.get("gardens") or ():  # ...and the morning lane east of a bed
         east, half = g[0] + g[2] / 2.0, g[3] / 2.0 + cr + 2.0
-        rects.append((east - cr - 2.0 - m, g[1] - half - m, east + EAST_LANE_FT + cr + m, g[1] + half + m))
+        rects.append((east - cr - 2.0 - m, g[1] - half - m, east + EAST_LANE_FT * ppf + cr + m, g[1] + half + m))
     # ...AND THE AFTERNOON LANE WEST AND SOUTHWEST OF A YARD OR A BED, where the map declares one (feature 310 put it on the copse,
     # `village_grove`'s `west`, and not here: a seat reserved in it was never planted - the shipped hamlets lost 16-34 seats
     # each, and on Inashiro a neighbor's path routed round two of them bulged 27 ft round bare scrub; feature 317)
+    west = west_ft * ppf  # the lanes are in feet, the parts in pixels (`ppf` pixels a foot)
     for r in [parts.get("yard"), *(parts.get("gardens") or ())] if west_ft > 0.0 else ():
         if r is not None:
             wx0, wy0, wy1 = r[0] - r[2] / 2.0, r[1] - r[3] / 2.0, r[1] + r[3] / 2.0
-            rects.append((wx0 - west_ft - cr - 3.0 - m, wy0 - cr - 1.0 - m, wx0 + cr + 1.0 + m, wy1 + west_ft + cr + 1.0 + m))
+            rects.append((wx0 - west - cr - 3.0 - m, wy0 - cr - 1.0 - m, wx0 + cr + 1.0 + m, wy1 + west + cr + 1.0 + m))
     return circles, rects
 
 
@@ -254,6 +257,7 @@ class WoodShares:
         self.reach = s.px(reach_ft)
         self.cell = 2.0 * s.bscale  # `wood_canopy`'s raster
         self.sun_depth = float(getattr(s, "_sun_corridor_ft", 22.0))
+        self.ppf = s.px(1.0)  # pixels a foot: the lanes below are in feet
         self.west_ft = float(getattr(s, "_west_sun_ft", 0.0))  # the afternoon lane, where the map declares one (`west_sun_lane`)
         self.well_vr = float(s._well_vr())
         # a clump keeps its crown off a lane's tread (`village_grove`'s corridor buffer); a corridor's way runs anywhere in
@@ -283,7 +287,7 @@ class WoodShares:
             self.file([(float(x), float(y), 0.5 * math.hypot(bw, bh) + self.clump / 2.0 + 2.0 + BAR_MARGIN_PX)], [])
 
     def keepouts(self, geom: Mapping[str, Any]) -> tuple[list[tuple[float, float, float]], list[tuple[float, float, float, float]]]:
-        return copse_keepouts(bundle_parts(geom), self.clump, self.sun_depth, self.well_vr, self.west_ft)
+        return copse_keepouts(bundle_parts(geom), self.clump, self.sun_depth, self.well_vr, self.west_ft, self.ppf)
 
     def seat_barred(self, x: float, y: float, house: Pt, own: tuple[Any, Any], corridors: Sequence[tuple[Pt, Pt]], banks: Sequence[tuple[Pt, Pt]] | None = None) -> bool:
         """THE ONE PREDICATE of a reserved seat: may the copse stand a clump at (x, y) for the house at `house`, among its own

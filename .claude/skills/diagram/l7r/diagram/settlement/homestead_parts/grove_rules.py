@@ -132,8 +132,9 @@ def gardens_east_shaded(M: Mapping[str, Any]) -> list[tuple[Pt, Mapping[str, Any
     """Each (garden, band) where a grove band's west edge stands within the east reach of the garden's east edge and
     overlaps its height - the garden's morning sun cut off.
 
-    Research: garden's morning sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: no band of its own farm within `EAST_REACH_FT`, 50 ft, east of a garden across its height
-    a neighbor's band east of a garden - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: held at `NEIGHBOR_REACH_FT`, 22 ft, short of the page's 50 ft (the found row grove_rules.py::gardens_east_shaded#a neighbor's band)"""
+    Research:
+        garden's morning sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: no band of its own farm within `EAST_REACH_FT`, 50 ft, east of a garden across its height
+        a neighbor's band east of a garden - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: held at `NEIGHBOR_REACH_FT`, 22 ft, short of the page's 50 ft (the found row grove_rules.py::gardens_east_shaded#a neighbor's band)"""
     meta = M.get("meta") or {}
     reach = EAST_REACH_FT / float(meta.get("ftpx", 1.0))  # the farm's own bands (`clear_east_of_beds`, the layout's own reach)
     near = NEIGHBOR_REACH_FT / float(meta.get("ftpx", 1.0))  # ...a neighbor's, held (`NEIGHBOR_REACH_FT`)

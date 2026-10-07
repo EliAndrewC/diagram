@@ -22602,40 +22602,68 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::admits#free ends at a house": {
-  "code": "e154b07a157a7e86",
-  "core": "92c77771287305a5",
-  "date": "2026-10-04",
-  "note": "page silent",
+  "code": "84b238085f741d9e",
+  "core": "5b2d373341b0eb64",
+  "date": "2026-10-07",
+  "note": "no page counts the free lane ends at a house",
   "pages": {},
   "research": "",
-  "rests": [],
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::admits#no doubled band": {
-  "code": "9b278fc02b661d8b",
-  "core": "92c77771287305a5",
-  "date": "2026-10-04",
-  "note": "page silent",
+  "code": "dba8c2284633ed1d",
+  "core": "5b2d373341b0eb64",
+  "date": "2026-10-07",
+  "note": "nothing covers two lanes running side by side; §17's \"doubling back\" is about one lane",
   "pages": {},
   "research": "",
-  "rests": [],
+  "rests": [
+   "0081-village-lanes.drawing.html:be608a70af4cfcc5"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::admits#no sliver between the tree's lanes": {
-  "code": "ca69fda9e7b6002f",
-  "core": "92c77771287305a5",
-  "date": "2026-10-04",
-  "note": "page silent",
+  "code": "06c56cd8e2c0a256",
+  "core": "5b2d373341b0eb64",
+  "date": "2026-10-07",
+  "note": "the cited pages say nothing about slivers between lanes",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::admits#no zigzag across a joint": {
+  "code": "e76bb19d4f6f4916",
+  "core": "5b2d373341b0eb64",
+  "date": "2026-10-07",
+  "note": "\"Two lanes that meet end to end are read as one ... a jog across the meeting point is pulled straight\"",
+  "pages": {
+   "0081-village-lanes.drawing.html": "9e27759395199abd"
+  },
+  "research": "ebd72aaa6a0eb9af",
+  "rests": [
+   "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
+   "0081-village-lanes.drawing.html:d30e15716180fbf5",
+   "0081-village-lanes.drawing.html:df26f73dd5ee96d2"
+  ],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::admits#track out's width as judged, the stub's `\"w\": 6.0` (6 ft, which matches 0081 §1)": {
+  "code": "5b2d373341b0eb64",
+  "core": "5b2d373341b0eb64",
+  "date": "2026-10-07",
+  "note": "track out's width as judged, the stub's `\"w\": 6.0` (6 ft, which matches 0081 §1)",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::admits#tree keeps the lane law": {
-  "code": "6a94afe0b447e6ff",
-  "core": "92c77771287305a5",
-  "date": "2026-10-05",
-  "note": "each household's way admitted after the last house, no hook, fold, hairpin or dangling end",
+  "code": "9a0a5308d16519ea",
+  "core": "5b2d373341b0eb64",
+  "date": "2026-10-07",
+  "note": "each household's way is laid once the last house stands and joined to the network; the hook, hairpin and dangling-end rules are the page's",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
@@ -22651,19 +22679,20 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::admits#way out crosses each brook once": {
-  "code": "d954c5b6103120af",
-  "core": "92c77771287305a5",
-  "date": "2026-10-04",
-  "note": "keeps to its own bank",
+  "code": "fe520eba6baffea3",
+  "core": "5b2d373341b0eb64",
+  "date": "2026-10-07",
+  "note": "the page prices a crossing at about 150 ft of walk and spaces crossings, but never limits a way to one crossing per brook; label UNRESEARCHED, or derive the limit from §47 in the claim's account",
   "pages": {
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "c23a085a43372c2c"
   },
   "research": "d47738a05844fe19",
   "rests": [
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:03433651c0627577",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:93969c06f800b0d5",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:d643c23f456119bc"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "NEEDS-RESEARCH"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::as_joined#access tree plumbing": {
   "code": "4661881fdfe73812",
@@ -22688,6 +22717,21 @@
   "note": "plumbing",
   "research": "",
   "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::gathered_zigzag#no zigzag at a joint, ends gathered": {
+  "code": "9cf59536c6c3c875",
+  "core": "6a6494906acea1bf",
+  "date": "2026-10-07",
+  "note": "the reach is `_KNOT_FT * KNOT_MARGIN` with KNOT_MARGIN 1.0, but the bundle never resolves smooth.KNOT_FT; I need its value to confirm it is the page's 25 ft",
+  "pages": {
+   "0081-village-lanes.drawing.html": "9e27759395199abd"
+  },
+  "research": "ebd72aaa6a0eb9af",
+  "rests": [
+   "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
+   "0081-village-lanes.drawing.html:df26f73dd5ee96d2"
+  ],
+  "verdict": "CANNOT-TELL"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::hosts#access tree plumbing": {
   "code": "9ee35e2287a5d9ce",
@@ -23035,6 +23079,21 @@
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "c23a085a43372c2c"
   },
   "research": "d47738a05844fe19",
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::zigzag_joint#no zigzag at a joint": {
+  "code": "d61e110102f81c66",
+  "core": "b998e1c66739b151",
+  "date": "2026-10-07",
+  "note": "two lanes met end to end are read as one way and held to the bend rule",
+  "pages": {
+   "0081-village-lanes.drawing.html": "9e27759395199abd"
+  },
+  "research": "ebd72aaa6a0eb9af",
+  "rests": [
+   "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
+   "0081-village-lanes.drawing.html:d30e15716180fbf5"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::_drop_collapsed#web plumbing": {
@@ -43883,6 +43942,23 @@
   ],
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/grove_rules.py::NEIGHBOR_REACH_FT#a neighbor's band east of a garden": {
+  "code": "7713b48e6e659c9b",
+  "core": "d4a368be4fe88358",
+  "date": "2026-10-07",
+  "note": "the code holds `NEIGHBOR_REACH_FT = 22.0`, but the page keeps every crown 50 ft east of a bed, \"its own farm's or a neighbor's\", and records no hold; fix it to 50 ft, or have the drawing page record the 22 ft and relabel the claim DEVIATION",
+  "pages": {
+   "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03"
+  },
+  "research": "3874df1f1301e65f",
+  "rests": [
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:0f20160d442c6378",
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:106fb9ebea718da7",
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:cef95d825324536e",
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:fb011b8973aa73bf"
+  ],
+  "verdict": "DRIFTED"
+ },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/grove_rules.py::_bands_by_farm#map checks plumbing": {
   "code": "cb4f03ca6b244b5b",
   "core": "0824d630309d31c6",
@@ -43923,19 +43999,27 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/grove_rules.py::gardens_east_shaded#garden's morning sun": {
-  "code": "4df8032749cd07e4",
-  "core": "b8cba203992cfcaa",
+  "code": "80ba03a014eb629d",
+  "core": "b1b12de67387bece",
   "date": "2026-10-07",
-  "note": "no band within 50 ft east across the garden's height",
+  "note": "the 50 ft own-farm reach matches, but the page's clear ground runs \"from the plot's north edge down\" (to 50 ft below the south edge, §77), while the code tests overlap with gy0..gy1 only, so a band southeast of the bed passes; widen the band to the page's span, or name the unit that checks that corner",
   "pages": {
    "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03"
   },
   "research": "3874df1f1301e65f",
   "rests": [
-   "0038-sunlight-and-shade-on-the-farm.drawing.html:0f20160d442c6378",
-   "0038-sunlight-and-shade-on-the-farm.drawing.html:106fb9ebea718da7"
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:106fb9ebea718da7",
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:cf77608be5e193f8"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/grove_rules.py::gardens_east_shaded#neighbor's band reach (`near`, NEIGHBOR_REACH_FT); the docstring's second claim line was not parsed into a KEY": {
+  "code": "b1b12de67387bece",
+  "core": "b1b12de67387bece",
+  "date": "2026-10-07",
+  "note": "neighbor's band reach (`near`, NEIGHBOR_REACH_FT); the docstring's second claim line was not parsed into a KEY",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/grove_rules.py::grove_farms#map checks plumbing": {
   "code": "48a1c98f12fea16e",

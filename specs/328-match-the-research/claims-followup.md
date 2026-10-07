@@ -314,3 +314,11 @@ the changed units found the rows below (`audit/found-wave9.jsonl`), tiered provi
 - `l7r/diagram/settlement/farm_fixtures.py::kura_rect#annex seat` (UNCLAIMED, E0): annex seat: against the north or west wall, and where along that wall (`KURA_PARTS` offsets); 0040's drawing page covers it
 - `l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#default watercourse widths` (UNCLAIMED, E0): default watercourse widths when a record carries none (stream 9, channel 2.5, canal 14)
 - `l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#nothing on a dry plot` (UNCLAIMED, E0): nothing built or planted on a dry plot (plots registered in `block_polys` and `dry_polys`)
+
+The gate held one value (FR-004): `l7r/diagram/settlement/homestead_parts/grove_rules.py::gardens_east_shaded#a neighbor's band` (DRIFTED, E3): keep a neighbor farm's grove band 50 ft east of a bed (0038): at 50 ft a row village's next farm's deep west band stands 38 ft east of the bed (Mizuguchi, three farms), so the row frames or the band's reach re-seat; NEIGHBOR_REACH_FT holds the check at 22 ft until then. And it found a Z across a joint on Kuwabata that no
+joint pass could mend (the settle draws a tree lane as judged): the seating's judge now refuses a corridor the knot pass would
+gather into one (`tree.gathered_zigzag`), and the router lays another.
+- `l7r/diagram/hamletgen/ways/tree.py::admits#way out crosses each brook once` (NEEDS-RESEARCH, E0): label the one-crossing limit UNRESEARCHED (0035 prices a crossing at about 150 ft of walk and spaces crossings, but sets no one-per-brook limit), or derive it in the claim's account
+- `l7r/diagram/hamletgen/ways/tree.py::gathered_zigzag#no zigzag at a joint, ends gathered` (CANNOT-TELL, E0): re-check with gap_ways.KNOT_FT in the bundle (the reach is smooth._KNOT_FT = gap_ways.KNOT_FT, 0081's 25 ft)
+- `l7r/diagram/settlement/homestead_parts/grove_rules.py::gardens_east_shaded#east reach below the bed` (DRIFTED, E2): test the band against the page's clear ground from the bed's north edge down to 50 ft below its south edge (0038 §77), not the bed's own height, so a band southeast of the bed is caught
+- `l7r/diagram/hamletgen/ways/tree.py::admits#track out's width as judged` (UNCLAIMED, E0): the track out's stub judged at 6 ft (0081's track)
