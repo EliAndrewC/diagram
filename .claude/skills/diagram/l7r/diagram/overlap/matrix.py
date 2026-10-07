@@ -184,9 +184,6 @@ DOJO_SAMURAI_FRAC = 0.10
 DOJO_PER_SAMURAI = 200
 """Research: private dojo count - research/questions/0165-martial-training-grounds-and-dojo.drawing.html: one for every 200 resident samurai"""
 
-DOJO_RANGE_FT = 90.0
-"""Research: archery lane - research/questions/0164-drill-grounds-archery-ranges-and-riding-grounds-jiaochang-yaba-baba.drawing.html: 90 ft, the 28 m kyudo shot rounded down"""
-
 DOJO_QUARTER_PX = 260.0
 """Research: dojo near the samurai quarter - research/questions/0165-martial-training-grounds-and-dojo.drawing.html: within 260 px, about 780 ft at the city rung"""
 

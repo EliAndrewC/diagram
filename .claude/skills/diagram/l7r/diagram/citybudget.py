@@ -90,11 +90,11 @@ CIVIC_PROGRAM: tuple[tuple[str, int | None, float], ...] = (
     # forge (GM 2026-07-25) adds ~120 px^2 more (a 28x38 ft shed-plus-apron is 9.3x12.7 px at
     # ftpx=3), so the line is 1,500. Kilns and lumber yards sit OUTSIDE the walls and cost no
     # interior.
-    # Martial training (GM 2026-07-25; research/questions/0165-martial-training-grounds-and-dojo.drawing.html). The state PROVINCIAL MARTIAL HALL is a 130x100 ft walled compound (hall +
-    # sensei's house + a 100 ft archery lane) = 43.3x33.3 px at 3 ft/px = 1,442 px^2; the PRIVATE
-    # dojos are 76x44 ft lots = 372 px^2 each, and the line carries the 2-roll figure so a rolled
-    # second dojo never starves. 1,442 + 2x372 ~ 2,200.
-    ("provincial martial hall + 1-2 private dojos", None, 2_200.0),
+    # Martial training (GM 2026-07-25; research/questions/0165-martial-training-grounds-and-dojo.drawing.html). The state PROVINCIAL MARTIAL HALL is a 130x124 ft walled compound (the
+    # 124 ft hall + sensei's house + a 100 ft archery lane, feature 328 wave 5) = 43.3x41.3 px at 3 ft/px = 1,791 px^2; the
+    # PRIVATE dojos are 76x44 ft lots = 372 px^2 each, and the line carries the 2-roll figure so a rolled second dojo never
+    # starves. 1,791 + 2x372 ~ 2,600.
+    ("provincial martial hall + 1-2 private dojos", None, 2_600.0),
     ("brewery compound", 1, 800.0),
     ("trade works (dye yard, oil press, pawn court, 1-2 bathhouses, farrier)", None, 1_500.0),
 )
@@ -263,7 +263,8 @@ CAPITAL_CIVIC_PROGRAM: tuple[tuple[str, int | None, float], ...] = (
     # One state hall plus the SAME 1-per-200-samurai private roll a provincial city uses (~7-8 at
     # ~1,560 resident samurai). The capital's distinctive institution is the domain school above,
     # not a richer private tail - the machi-dojo boom was a million-person-city event.
-    ("domain martial hall + rolled private dojos", None, 4_400.0),
+    # (1,791 px^2 for the 130 x 124 ft hall compound + ~8 x 372 for the private roll, feature 328 wave 5)
+    ("domain martial hall + rolled private dojos", None, 4_800.0),
     # The josui conduit is BURIED inside the wall (the open cut and the kakehi crossing are both
     # extramural), so it consumes almost no interior ground - this line is its works, not its
     # length. Pricing a surface channel across the interior would have inflated the wall.

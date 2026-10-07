@@ -136,19 +136,19 @@ _TANGO_LINES_PRE_016 = [
     ("minor civic (theater, flophouses, funerary, inspection, kura)", None, 17_440.0),
     ("shops, inns, stables", 21, 4_700.0),
     ("bell-and-drum tower", 1, 250.0),
-    ("provincial martial hall + 1-2 private dojos", None, 2_200.0),
+    ("provincial martial hall + 1-2 private dojos", None, 2_600.0),  # the 130 x 124 ft compound (feature 328 wave 5)
     ("brewery compound", 1, 800.0),
     ("trade works (dye yard, oil press, pawn court, 1-2 bathhouses, farrier)", None, 1_500.0),
     ("adept-monk houses by the temple precincts", 5, 3_450.0),
     ("pond", 1, 2_900.0),
-    ("circulation (trunk + ring road + streets + alleys)", None, 49_089.743590),
-    ("agricultural district (in-wall farms, declared reserve)", None, 105_192.307692),
+    ("circulation (trunk + ring road + streets + alleys)", None, 49_125.641026),
+    ("agricultural district (in-wall farms, declared reserve)", None, 105_269.230769),
 ]
 
 _NAGAHARA_LINES_PRE_016 = [
     *[ln for ln in _TANGO_LINES_PRE_016 if ln[0] not in ("pond", "circulation (trunk + ring road + streets + alleys)", "agricultural district (in-wall farms, declared reserve)")],
     ("cargo canal + dock basin", 1, 2_900.0),
-    ("circulation (trunk + ring road + streets + alleys)", None, 41_172.043011),
+    ("circulation (trunk + ring road + streets + alleys)", None, 41_202.150538),
 ]
 
 
@@ -165,8 +165,8 @@ def _nagahara_program(**kw):
 @pytest.mark.parametrize(
     "program,expected_lines,expected_rx,expected_ry,expected_required",
     [
-        (_tango_program(), _TANGO_LINES_PRE_016, 491.063756, 460.813422, 701_282.051282),
-        (_nagahara_program(), _NAGAHARA_LINES_PRE_016, 452.111512, 420.994525, 588_172.043011),
+        (_tango_program(), _TANGO_LINES_PRE_016, 491.243271, 460.981879, 701_794.871795),
+        (_nagahara_program(), _NAGAHARA_LINES_PRE_016, 452.276788, 421.148426, 588_602.150538),
     ],
     ids=["tango", "nagahara"],
 )
@@ -300,7 +300,7 @@ _CAPITAL_LINES_AS_SHIPPED = [
     ("the Emperor's granaries", 1, pytest.approx(3000.0, abs=1e-6)),
     ('domain school (hanko)', 1, pytest.approx(4000.0, abs=1e-6)),
     ("domain granary + wharf brokers' row", None, pytest.approx(12000.0, abs=1e-6)),
-    ('domain martial hall + rolled private dojos', None, pytest.approx(4400.0, abs=1e-6)),
+    ('domain martial hall + rolled private dojos', None, pytest.approx(4800.0, abs=1e-6)),  # the 130 x 124 ft compound (feature 328 wave 5)
     ('aqueduct in-wall works (the conduit itself is buried)', None, pytest.approx(500.0, abs=1e-6)),
     ('minor civic (theaters, flophouses, funerary, inspection, kura)', None, pytest.approx(30000.0, abs=1e-6)),
     ('shops, inns, stables', 60, pytest.approx(13400.0, abs=1e-6)),
@@ -310,16 +310,16 @@ _CAPITAL_LINES_AS_SHIPPED = [
     ('sovereign temple precincts', 2, pytest.approx(32500.0, abs=1e-6)),
     ('adept-monk houses by the temple precincts', 5, pytest.approx(3450.0, abs=1e-6)),
     ('cargo canal + dock basin', 1, pytest.approx(5800.0, abs=1e-6)),
-    ('circulation (trunk + ring road + streets + alleys)', None, pytest.approx(588499.4117647059, abs=1e-6)),
+    ('circulation (trunk + ring road + streets + alleys)', None, pytest.approx(588570.0, abs=1e-6)),
 ]
 
 
 def test_the_shipped_capital_program_prices_and_orders_exactly_as_recorded():
     b = plan_capital(_cap(river=True), canvas=(3200, 2700))
     assert [(ln.label, ln.count, pytest.approx(ln.area_px2, abs=1e-6)) for ln in b.lines] == _CAPITAL_LINES_AS_SHIPPED
-    assert b.required_interior_px2 == pytest.approx(3923329.411764706, abs=1e-6)  # packed-tight capital: C 950, CIRC 0.15, wharf-hamlet extramural (GM 2026-08-10)
-    assert b.wall.rx == pytest.approx(1168.408561745735, abs=1e-6)  # model minimum; the drawn 1110x1150 at (1400,1313) stands within tolerance
-    assert b.wall.ry == pytest.approx(1086.6199624235335, abs=1e-6)
+    assert b.required_interior_px2 == pytest.approx(3923800.0, abs=1e-6)  # packed-tight capital: C 950, CIRC 0.15, wharf-hamlet extramural (GM 2026-08-10)
+    assert b.wall.rx == pytest.approx(1168.4786326955177, abs=1e-6)  # model minimum; the drawn 1110x1150 at (1400,1313) stands within tolerance
+    assert b.wall.ry == pytest.approx(1086.6851284068316, abs=1e-6)
 
 
 # ---- the variant knobs are validated at DECLARATION time (US3) --------------------------------

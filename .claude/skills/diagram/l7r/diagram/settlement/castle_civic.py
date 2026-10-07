@@ -29,6 +29,28 @@ if TYPE_CHECKING:
     from .core import Settlement
 
 
+
+HONMARU_SQ_FT = 215_000.0
+"""Research: honmaru size - research/questions/0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html: about 2 ha (Nijo's honmaru about 150 m on a side, Hiroshima's upper honmaru about 2.2 ha)"""
+
+
+def honmaru_fracs(w: float, h: float, ftpx: float) -> tuple[float, float]:
+    """The default baileys as fractions of the enceinte's half-sides: the ninomaru at 0.64 and the honmaru at the side that
+    gives it `HONMARU_SQ_FT`, never past 0.34 of a small enceinte.
+
+    Research:
+        honmaru size - research/questions/0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html: about 2 ha
+        ninomaru fraction - UNRESEARCHED: 0.64 of the enceinte"""
+    whole = max(w * h * ftpx * ftpx, 1.0)
+    return (0.64, min(0.34, math.sqrt(HONMARU_SQ_FT / whole)))
+
+
+MARTIAL_HALL_FT = (124.0, 35.0)
+"""Research: hall size - research/questions/0165-martial-training-grounds-and-dojo.drawing.html: one long building about 124 x 35 ft"""
+
+MARTIAL_COMPOUND_FT = (130.0, 124.0)
+"""Research: martial hall compound - UNRESEARCHED: 130 x 124 ft, the hall across its north, the master's house and the archery lane south of it"""
+
 class CastleCivicMixin:
     """The castle, the state offices and schools, the dojos and the caption scorer.
 
@@ -50,7 +72,7 @@ class CastleCivicMixin:
         moat_gap: float | None = None,
         moat_width: float | None = None,
         baileys: bool = False,
-        bailey_fracs: tuple[float, ...] = (0.64, 0.34),
+        bailey_fracs: tuple[float, ...] | None = None,
         label_xy: Pt | None = None,
         karamete_dir: str | None = None,
     ) -> Any:
@@ -92,7 +114,7 @@ class CastleCivicMixin:
         have.
 
         `bailey_fracs` are the inner enclosures as a fraction of the enceinte, outermost first
-        (default: ninomaru at 0.64, honmaru at 0.34). Each bailey's gate turns 90 degrees from its
+        (default: ninomaru at 0.64, the honmaru at about 2 ha, `HONMARU_SQ_FT`). Each bailey's gate turns 90 degrees from its
         parent's, which IS the dogleg: an attacker through the ote-mon must turn twice under fire
         rather than run straight at the keep. A `masugata` box stands outside the main gate - the
         square barbican that makes the first of those turns.
@@ -112,7 +134,8 @@ class CastleCivicMixin:
             yagura and gatehouse sizes - UNRESEARCHED: 62 x 40 ft corners, an 88 x 52 ft gatehouse, a 64 x 40 ft rear gatehouse
             gatehouse passage - UNRESEARCHED: a third of the gatehouse's span
             baileys and masugata off by default - DEVIATION research/questions/0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html: the 1644 plans drew the baileys; when asked for, offset walled rectangles with dogleg gates
-            bailey and masugata sizes - UNRESEARCHED: bailey fracs 0.64 and 0.34, offset from the ote-mon, a masugata box outside the main gate
+            honmaru size - research/questions/0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html: about 2 ha (`HONMARU_SQ_FT`; Nijo's 150 m square, Hiroshima's upper honmaru 2.2 ha), held inside the enceinte
+            ninomaru and masugata sizes - UNRESEARCHED: the ninomaru at 0.64 of the enceinte, offset from the ote-mon, a masugata box outside the main gate
             inner moat - UNRESEARCHED: 0.42 x the moat gap off the honmaru, half the moat width
             ishigaki doubling - CONVENTION: a doubled inner line on the enceinte
             ground reserved - NONE: the moat plus max(36 x bscale, 26) px in both registries
@@ -230,7 +253,8 @@ class CastleCivicMixin:
         cx_, cy_, prx, pry = x, y, hw, hh
         if baileys:
             gdir = gate_dir
-            for k, frac in enumerate(bailey_fracs):
+            fracs = bailey_fracs if bailey_fracs is not None else honmaru_fracs(w, h, self.ftpx)
+            for k, frac in enumerate(fracs):
                 gdir = turn[gdir]
                 rx_, ry_ = hw * frac, hh * frac
                 jog = 0.13 * (1 if k % 2 == 0 else -1)
@@ -384,7 +408,7 @@ class CastleCivicMixin:
         REAL FEET (the sizes are researched, not chosen for legibility - see research/questions/0165-martial-training-grounds-and-dojo.drawing.html). The compound is sized to its
         PROGRAM rather than rounded up: the lane sets the width and the hall-plus-lane sets the
         depth, and everything else is circulation.
-          - the hall              60 x 36 ft = 2,160 sqft = 120 tatami (a mat is 3 x 6 ft). At the
+          - the hall              124 x 35 ft, one long building (0165; feature 328 wave 5 - it was 60 x 36). At the
                                   ~90-135 sqft per drilling samurai that buildings.md already
                                   established for the county practice ground, that floor holds
                                   ~20 pairs at once - the officer cohort plus a school class
@@ -393,7 +417,7 @@ class CastleCivicMixin:
           - the archery lane      100 x 26 ft of swept ground with an AZUCHI (earthen butt) at the
                                   far end. 100 ft covers the kyudo standard 28 m / 92 ft shooting
                                   distance - the same ~90 ft clear lane the Mode A azuchi uses
-          - the walled compound   130 x 100 ft (13,000 sqft, ~0.30 acre) = lane + butt + wall
+          - the walled compound   130 x 124 ft (13,000 sqft, ~0.30 acre) = lane + butt + wall
                                   margins across, hall + lane + circulation deep. Well BELOW a
                                   ministry office compound (224 x 148 ft), which is right: a
                                   ministry is a bureau of clerks and archives, this is one hall and
@@ -405,30 +429,31 @@ class CastleCivicMixin:
 
         Research:
             one state hall per provincial city - research/questions/0165-martial-training-grounds-and-dojo.drawing.html
-            hall program sizes - research/questions/0165-martial-training-grounds-and-dojo.drawing.html: a 60 x 36 ft hall, a 100 x 26 ft lane with its butt, a 130 x 100 ft walled compound
+            hall size - research/questions/0165-martial-training-grounds-and-dojo.drawing.html: one long hall about 124 x 35 ft (`MARTIAL_HALL_FT`)
+            lane and compound sizes - UNRESEARCHED: a 100 x 26 ft lane with its butt, a 130 x 124 ft walled compound (`MARTIAL_COMPOUND_FT`)
             the master's house - research/questions/0165-martial-training-grounds-and-dojo.drawing.html: drawn inside the compound
             master's house size - UNRESEARCHED: 40 x 24 ft
             state violet - CONVENTION
             hall apron - UNRESEARCHED: max(30 x bscale, 14) px, and a reserved caption band
         """
         f = self.px
-        cw, ch = f(130) / 2, f(100) / 2
+        cw, ch = f(MARTIAL_COMPOUND_FT[0]) / 2, f(MARTIAL_COMPOUND_FT[1]) / 2
         g = [f'<g transform="translate({x:.0f},{y:.0f}) rotate({rot:.1f})">']
         g.append(f'<rect x="{-cw:.1f}" y="{-ch:.1f}" width="{cw * 2:.1f}" height="{ch * 2:.1f}" rx="2" fill="#E7E1EC" stroke="#463653" stroke-width="1.7"/>')
-        ly0, ly1 = f(12), f(38)  # the archery lane's south band
+        ly0, ly1 = f(18), f(44)  # the archery lane's south band
         lx0, lx1 = -cw + f(7), -cw + f(107)
         g.append(f'<rect x="{lx0:.1f}" y="{ly0:.1f}" width="{lx1 - lx0:.1f}" height="{ly1 - ly0:.1f}" fill="#E3D9BE" stroke="#B9A57C" stroke-width="0.8"/>')
         g.append(f'<line x1="{lx0 + f(6):.1f}" y1="{ly0:.1f}" x2="{lx0 + f(6):.1f}" y2="{ly1:.1f}" stroke="#8A7448" stroke-width="0.8"/>')  # the shooting line
         g.append(f'<rect x="{lx1:.1f}" y="{ly0:.1f}" width="{f(10):.1f}" height="{ly1 - ly0:.1f}" rx="1" fill="#A98C58" stroke="#6B5228" stroke-width="1.1"/>')  # the azuchi butt
-        self._dojo_hall(g, -cw + f(7), -ch + f(6), f(60), f(36), "#CDBBD6", "#463653", "#6A4A78")
-        g.append(f'<rect x="{f(10):.1f}" y="{-ch + f(6):.1f}" width="{f(40):.1f}" height="{f(24):.1f}" rx="1.5" fill="#DDB87A" stroke="#5A3F1E" stroke-width="1.4"/>')  # the sensei's house
-        self._keiko_gear(g, (-cw + f(10), 0.0), [(-cw + f(32), f(3)), (-cw + f(44), f(3))], "#463653")
+        self._dojo_hall(g, -cw + f(3), -ch + f(6), f(MARTIAL_HALL_FT[0]), f(MARTIAL_HALL_FT[1]), "#CDBBD6", "#463653", "#6A4A78")  # one long hall across the north
+        g.append(f'<rect x="{f(10):.1f}" y="{-ch + f(45):.1f}" width="{f(40):.1f}" height="{f(24):.1f}" rx="1.5" fill="#DDB87A" stroke="#5A3F1E" stroke-width="1.4"/>')  # the sensei's house
+        self._keiko_gear(g, (-cw + f(10), -f(8)), [(-cw + f(32), -f(5)), (-cw + f(44), -f(5))], "#463653")
         g.append('</g>')
         self.add(''.join(g))
         self.M.setdefault("martial_halls", []).append(
-            {"x": round(x, 1), "y": round(y, 1), "w": round(f(130), 1), "h": round(f(100), 1), "rot": round(rot, 1), "label": label, "range_ft": round((lx1 - lx0) * self.ftpx, 1)}
+            {"x": round(x, 1), "y": round(y, 1), "w": round(f(MARTIAL_COMPOUND_FT[0]), 1), "h": round(f(MARTIAL_COMPOUND_FT[1]), 1), "rot": round(rot, 1), "label": label, "range_ft": round((lx1 - lx0) * self.ftpx, 1)}
         )
-        self.placed.append((x, y, f(130), f(100)))
+        self.placed.append((x, y, f(MARTIAL_COMPOUND_FT[0]), f(MARTIAL_COMPOUND_FT[1])))
         # a modest stand-clear apron (14px, the office-abut clearance), NOT the ministries' 26: the
         # hall is not a government office for city_government_offices_dont_abut, and a samurai ward
         # is packed tightly enough that every px of apron costs a house it must not spend

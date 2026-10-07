@@ -621,13 +621,20 @@ def nudge(
     return best
 
 
-def leader_of(ring: int, block: Poly, subject: Subject) -> tuple[Pt, Pt] | None:
-    """The leader a seat off the preferred offset draws: from the caption's block to the nearest point of what it names,
-    trimmed a little at each end. None at ring 0 and for an area, whose name lies inside it.
+LEADERLESS_RINGS = int(round((2 * PREFERRED_OFFSET_EM - PREFERRED_OFFSET_EM) / RING_STEP_EM)) + 1
+"""The rings a caption takes with no leader: the preferred offset and each step out to twice it (rings 0 and 1, 1 em).
 
-    Research: when a leader is drawn - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: every seat off the preferred offset, to the nearest point of the feature
+Research: no leader within twice the usual gap - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: it may go as far as twice the usual gap with nothing more"""
+
+
+def leader_of(ring: int, block: Poly, subject: Subject) -> tuple[Pt, Pt] | None:
+    """The leader a seat past twice the usual gap draws: from the caption's block to the nearest point of what it names,
+    trimmed a little at each end. None within `LEADERLESS_RINGS` (the preferred offset and the step out from it, out to twice
+    the usual gap) and for an area, whose name lies inside it.
+
+    Research: when a leader is drawn - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a caption more than twice the usual gap from its feature is tied to it by a thin leader line, to the nearest point of the feature
     """
-    if ring == 0 or subject.kind == "area":
+    if ring < LEADERLESS_RINGS or subject.kind == "area":
         return None
     a, b = nearest_points(block, list(subject.poly), closed=subject.kind != "line")
     d = math.dist(a, b)

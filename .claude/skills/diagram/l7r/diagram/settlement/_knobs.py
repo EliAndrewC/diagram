@@ -576,8 +576,8 @@ KOSATSUBA_MARKER_MIN_PX = 11.0
 
 PUNISHMENT_SPOT_FT = (30.0, 12.0)  # the cangue frame + post + kneeling stone, true size at every tier
 """Research: punishment ground size - research/questions/0191-execution-and-punishment-grounds-keijo.drawing.html: 30 x 12 ft at every tier"""
-BOUNDARY_MARKER_FT = 3.0  # a real roadside dosojin stone (drawn as a marker - see BOUNDARY_MARKER_MIN_PX)
-"""Research: boundary stone size - research/questions/0217-wayside-shrines-and-stone-figures-dosojin-jizo.drawing.html: 3 ft"""
+BOUNDARY_MARKER_FT = 4.0  # a real roadside dosojin stone (drawn as a marker - see BOUNDARY_MARKER_MIN_PX)
+"""Research: boundary stone size - research/questions/0217-wayside-shrines-and-stone-figures-dosojin-jizo.drawing.html: 4 ft"""
 
 
 #: The scales that draw as a WALLED URBAN RING at the city grain. A domain capital is a bigger
@@ -598,14 +598,16 @@ def execution_ground_ft(scale: str) -> tuple[float, float]:
     SHARED DATA, deliberately: Settlement.execution_ground draws from this, and site_justice.py
     sizes its trial placements from it, so a tool proposing a seat can never disagree with the
     engine about how big the thing it is seating actually is.
-    Research: execution ground size - research/questions/0191-execution-and-punishment-grounds-keijo.drawing.html: 100 x 60 ft at a city or capital, else 60 x 60 ft"""
+    Research: execution ground size - research/questions/0191-execution-and-punishment-grounds-keijo.drawing.html: about 200 x 65 ft at a capital (the page's 150-250 x 50-80 ft), 100 x 60 ft at a provincial city, else 60 x 60 ft"""
+    if scale == "capital":
+        return (200.0, 65.0)
     return (100.0, 60.0) if scale in CITY_TIER_SCALES else (60.0, 60.0)
 
 
 BOUNDARY_MARKER_MIN_PX = 7.0
 """Research: boundary stone legibility floor - CONVENTION: 7 px long axis"""
 # Long-axis floor in px for the DRAWN dosojin stone (see Settlement.boundary_marker). A real
-# roadside boundary stone is ~3 ft, which draws 3 px at town grain and 1 px at city grain - sub-glyph
+# roadside boundary stone is ~4 ft, which draws 4 px at town grain and 1-2 px at city grain - sub-glyph
 # at EVERY tier, so this is a location marker in the wells' sense, never a size claim. 7 px is below
 # the wellhead glyph (~8 px) on purpose: the stone should read as the smallest deliberate mark on the
 # map, because that is what it is.

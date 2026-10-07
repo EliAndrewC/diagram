@@ -26,6 +26,19 @@ onto its group like any other (FR-014).
 Research: named civic buildings - research/questions/0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html: ministry, governor and temple keep full weight against another civic caption
 """
 
+GROUP_WORDS = {"funerary": ("funerary", "cemetery", "graveyard", "cremation", "mausoleum", "ossuary")}
+"""The words that name a caption group, where a group is named by more than its own word (feature 328 wave 5): a caption
+naming a graveyard, a cremation ground, a mausoleum or an ossuary may cover any of the funerary structures.
+
+Research: a funerary caption covers the funerary structures - research/questions/0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html: a graveyard, cremation, mausoleum or ossuary caption may cover any of the funerary structures"""
+
+
+def names_group(group: str | None, words: str) -> bool:
+    """Does a caption's lower-cased text `words` name the caption `group` (its own word, or one of `GROUP_WORDS`)?
+
+    Research: plumbing - NONE"""
+    return bool(group) and any(w in words for w in GROUP_WORDS.get(group or "", (group or "",)))
+
 ASSOCIATION_TIE = 1e-6
 """How much farther than a caption's own subject a neighbor may stand and still claim the caption (labels L6, the
 ASSOCIATION): a tie counts, and this is float slack on the tie only - it decides no seat a rounding-free measure would
@@ -153,7 +166,7 @@ class ObstacleIndex:
                 box_gap = math.hypot(max(0.0, bx0 - x1, x0 - bx1), max(0.0, by0 - y1, y0 - by1))
                 if box_gap >= need - 1e-6 and box_gap > own_lim:
                     continue  # the boxes' gap bounds the outlines' from below: clear by the boxes, clear (feature 286)
-                if not o.weight or (o.group and o.group in words and not (civic and o.named and o.group in CIVIC_GROUPS)) or (subject is not None and not o.inner and part_of(o.poly, subject)):
+                if not o.weight or (names_group(o.group, words) and not (civic and o.named and o.group in CIVIC_GROUPS)) or (subject is not None and not o.inner and part_of(o.poly, subject)):
                     continue
                 # a disc is measured as a disc; two level rectangles are their boxes, so the boxes' gap is theirs (feature
                 # 286: the outline test was nine tenths of placing a hand sheet's captions)
@@ -231,7 +244,7 @@ class ObstacleIndex:
                 box_gap = math.hypot(max(0.0, bx0 - x1, x0 - bx1), max(0.0, by0 - y1, y0 - by1))
                 if box_gap > 0.0 and box_gap >= need - slack:
                     continue  # apart by more than a moved block could close
-                if not o.weight or (o.group and o.group in words and not (civic and o.named and o.group in CIVIC_GROUPS)):
+                if not o.weight or (names_group(o.group, words) and not (civic and o.named and o.group in CIVIC_GROUPS)):
                     continue
                 if subject is not None and not o.inner and part_of(o.poly, subject):
                     continue

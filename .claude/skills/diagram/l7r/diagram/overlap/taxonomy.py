@@ -256,10 +256,10 @@ _LABEL_GROUP = {
     "gate_structs": "gate",
     "merchant_estates": "merchant",
     "manors": "estate",
-    "cemeteries": "cemetery",
-    "mausoleums": "mausoleum",
-    "cremation_grounds": "cremation",
-    "ossuaries": "ossuary",
+    "cemeteries": "funerary",
+    "mausoleums": "funerary",
+    "cremation_grounds": "funerary",
+    "ossuaries": "funerary",
     "breweries": "brewery",
     "dye_yards": "dye works",
     "lumber_yards": "lumber yard",
@@ -309,7 +309,7 @@ _LABEL_GROUP = {
 """Caption groups.
 
 Research:
-    a caption covers its own group - research/questions/0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html: the group word a caption names, and nothing else
+    a caption covers its own group - research/questions/0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html: the group word a caption names, and nothing else; the graveyard, cremation ground, mausoleum and ossuary one funerary group, named by any of their words (`labels.obstacles.GROUP_WORDS`)
     an arch is never covered - CONVENTION: the torii group word is in no caption
 """
 

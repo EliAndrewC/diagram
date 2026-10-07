@@ -128,7 +128,7 @@ class JusticeGroundsMixin:
             caption - CONVENTION
         """
         city = self.M["meta"].get("scale") in CITY_TIER_SCALES
-        _gwft, _ghft = execution_ground_ft("city" if city else "town")
+        _gwft, _ghft = execution_ground_ft(str(self.M["meta"].get("scale") or "town"))
         gw, gh = self.px(_gwft), self.px(_ghft)
         if screened is None:
             screened = city  # a county ground is open to the road on every side; a city ground is hoarded on three
@@ -190,7 +190,7 @@ class JusticeGroundsMixin:
         gives the execution ground its reason for being where it is. The ground is not merely far
         from the houses; it is on the far side of the stone that keeps pollution out.
 
-        A LOCATION MARKER: a real stone is ~3 ft, sub-glyph at every tier, so the true footprint is
+        A LOCATION MARKER: a real stone is ~4 ft, sub-glyph at every tier, so the true footprint is
         recorded in w/h and the drawn box in vw/vh - the wells' and kosatsuba's doctrine exactly
         (SKILL.md "to scale"). Records M['boundary_markers'].
 

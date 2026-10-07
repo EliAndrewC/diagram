@@ -209,6 +209,17 @@
   "moved": "wave 3 reading: the claim cannot be made honest without the value (E0 -> E1)",
   "tier": "E1"
  },
+ ".claude/skills/diagram/l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#mill beside its stream": {
+  "after": [],
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/overlap/taxonomy.py",
+   ".claude/skills/diagram/l7r/diagram/settlement/water_ways/focal.py"
+  ],
+  "fix": "seat the mill in a short mill race led off the stream below the intake (0064), a channel no map draws today, and say so in the exemption: a new element (FR-003 E3), not a value",
+  "flag": "",
+  "moved": "wave 5: the mill race is a new element (spec-fidelity's note on amendment 4)",
+  "tier": "E3"
+ },
  ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/civic.py::CivicWorksMixin.merchant_storehouses#kura size": {
   "fix": "draw each merchant kura square, 14-20 ft (0152/0150 drawing: 'Each storehouse is 14 to 20 ft square')",
   "moved": "wave 1: E0 -> E1, the code draws a 20 x 14 oblong; the page says 14 to 20 ft square",

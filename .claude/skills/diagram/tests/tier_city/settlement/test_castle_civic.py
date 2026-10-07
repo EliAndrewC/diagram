@@ -207,3 +207,14 @@ def test_a_castle_with_BAILEYS_draws_its_outer_wards() -> None:
     walled.meta(name="C", scale="capital")
     walled.castle(800.0, 800.0, 400.0, 320.0, baileys=True)
     assert len(walled.walls) > len(plain.walls), "the outer wards add their own enceintes"
+
+
+def test_the_honmaru_is_about_two_hectares_inside_the_enceinte():
+    """0139: the honmaru about 2 ha (Nijo's 150 m square, Hiroshima's 2.2 ha) - a 50 ha enceinte's honmaru is a fifth of
+    its side, not a third (feature 328 wave 5); a small enceinte's is held to 0.34."""
+    from l7r.diagram.settlement.castle_civic import HONMARU_SQ_FT, honmaru_fracs
+
+    nino, hon = honmaru_fracs(2550.0, 2100.0, 1.0)
+    assert nino == 0.64
+    assert abs((2550.0 * hon) * (2100.0 * hon) - HONMARU_SQ_FT) < 1.0
+    assert honmaru_fracs(300.0, 300.0, 1.0)[1] == 0.34
