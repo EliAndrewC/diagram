@@ -12,7 +12,7 @@
   "found": "wave 13 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
   "wave": "",
-  "scope": "kept"
+  "scope": "mode-a"
  },
  {
   "key": ".claude/skills/diagram/buildings.md::Fire-water tubs#a tub never on a well glyph; moved to another eaves corner",
@@ -221,7 +221,7 @@
   "found": "wave 13 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
   "wave": "",
-  "scope": "kept"
+  "scope": "mode-a"
  },
  {
   "key": ".claude/skills/diagram/buildings.md::Walls and gates#threshold stones",
@@ -236,7 +236,7 @@
   "found": "wave 13 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
   "wave": "",
-  "scope": "kept"
+  "scope": "mode-a"
  },
  {
   "key": ".claude/skills/diagram/buildings/programs.md::Country shrine (a village district's shrine)#approach width about 10 ft",
@@ -281,7 +281,7 @@
   "found": "wave 13 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
   "wave": "",
-  "scope": "kept"
+  "scope": "mode-a"
  },
  {
   "key": ".claude/skills/diagram/buildings/programs.md::Country shrine (a village district's shrine)#dwelling privy",
@@ -311,7 +311,7 @@
   "found": "wave 13 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
   "wave": "",
-  "scope": "kept"
+  "scope": "mode-a"
  },
  {
   "key": ".claude/skills/diagram/buildings/programs.md::Country shrine (a village district's shrine)#innermost arch one pitch off the hall",
@@ -326,7 +326,7 @@
   "found": "wave 13 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
   "wave": "",
-  "scope": "kept"
+  "scope": "mode-a"
  },
  {
   "key": ".claude/skills/diagram/buildings/programs.md::Country shrine (a village district's shrine)#kitchen garden by the sun",
@@ -373,7 +373,7 @@
   "e0_basis": "impl-drift (wave 13 bundle C) names the label itself: 0221 attests exempt fields and is silent on where they lay, 'should be UNRESEARCHED'; the sheet draws nothing off its precinct either way",
   "moved": "T51a: tiered by its work by a fresh reader - Nothing is drawn either way - the sheet crops to the precinct and a sheet on a map shows what the map shows - so no implementation change waits on research; the only fix is the label the impl-drift finding names.",
   "wave": "",
-  "scope": "kept"
+  "scope": "mode-a"
  },
  {
   "key": ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#a detached guest house at a rich posting (0091's drawing page records it as a GUESS)",
@@ -403,7 +403,7 @@
   "found": "wave 13 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
   "wave": "",
-  "scope": "kept"
+  "scope": "mode-a"
  },
  {
   "key": ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#practice ground",
@@ -5826,7 +5826,7 @@
   "found": "wave 13 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E2",
   "wave": "",
-  "scope": "kept"
+  "scope": "mode-a"
  },
  {
   "key": ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#granary forms",
@@ -6005,7 +6005,7 @@
   "found": "wave 13 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E2",
   "wave": "",
-  "scope": "kept"
+  "scope": "mode-a"
  },
  {
   "key": ".claude/skills/diagram/buildings/programs.md::Country shrine (a village district's shrine)#sumo ring knob",
@@ -6020,7 +6020,7 @@
   "found": "wave 13 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E2",
   "wave": "",
-  "scope": "kept"
+  "scope": "mode-a"
  },
  {
   "key": ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#formal visitors and the privacy baffle",
@@ -9572,7 +9572,7 @@
   "tier_as_ranked": "E2",
   "moved": "T51a: tiered by its work by a fresh reader - Measured: Ubame is the only sheet with bales (data-kind='charcoal bales'), and at 6x3 ft it matches neither true size (~2x1.3 ft) nor the ~4 ft convention, so just naming the divergence would still leave the sheet off the record - a hand-drawn sheet redrawn.",
   "wave": "",
-  "scope": "kept"
+  "scope": "mode-a"
  },
  {
   "key": ".claude/skills/diagram/buildings.md::Scale#well location marker",
@@ -9640,7 +9640,7 @@
   "tier_as_ranked": "E2",
   "moved": "T51a: tiered by its work by a fresh reader - Measured with an SVG scan: structures stand 0.5 ft off the compound wall's face on Ochiba (2), Ubame (1) and both generated examples (~10 each), and Hayakawa has one at 1.17 ft, so 'a foot or two' moves hand-drawn sheets and the emitter, not just a paragraph.",
   "wave": "",
-  "scope": "kept"
+  "scope": "mode-a"
  },
  {
   "key": ".claude/skills/diagram/buildings.md::Wells#well curb size",
