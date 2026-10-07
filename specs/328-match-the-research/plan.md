@@ -86,7 +86,7 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 
 ## Wave 7 (amendment 6, 2026-10-07)
 
-- **Scope**: the four open E0 rows, then the next contiguous run of E1 (FR-006): rows 180-230 (26 rows, `tasks.md`
+- **Scope**: the four open E0 rows, then the next contiguous run of E1 (FR-006): rows 180-231 (27 rows, `tasks.md`
   Phase 8). Mostly town and city values; the connector's clearance (0246's 7 ft against `LANE_CLEARANCE`'s 40) and the
   plank's widest-left seat move hamlet maps.
 - **Verification**: as wave 5 - Inashiro first (`make map`, the PNG looked at), the pool through the gate, a town or city

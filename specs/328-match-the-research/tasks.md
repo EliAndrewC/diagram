@@ -17,8 +17,9 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
   size, a width, a count, a reach, a caption's leader); no element is new to a map and no glyph is redrawn.
 
 - none (wave 6): claim lines only (tier E0) - nothing a map draws or where it is placed moves.
-- none (wave 7): each fix moves one value inside a rule that already places or sizes the element (a clearance, a size, a
-  count, a radius, a reach); no element is new to a map and no glyph is redrawn.
+- none (wave 7): on the scripted pool maps each fix moves one value inside a rule that already places or sizes the element
+  (a clearance, a size, a count, a reach); the water gate's opening and the boundary stones' group change a glyph's form, but
+  only the legacy hand-authored cities draw them (`water_gate(`, `boundary_marker(`), and feature 294 exempts legacy maps.
 ## Phase 1 - the audit
 
 - [x] T01 the findings snapshot: `findings.json` = every finding of `make claims-report` at `a52ff1bcd` (565) (FR-001)
@@ -324,10 +325,10 @@ and the departure is a found row tiered by the work it takes (spec Edge Cases), 
       research: rendering
       verify: DONE. DONE. make done green (193 s, every pool map, seeds 41-44); no bookend owed (claim lines and a unit move only); the wave column written
 
-## Phase 8 - wave 7 (the four open E0 claims, then the next run of E1: rows 180-230) - amendment 6, 2026-10-07
+## Phase 8 - wave 7 (the four open E0 claims, then the next run of E1: rows 180-231) - amendment 6, 2026-10-07
 
 The four open E0 rows (wave 6's re-checks) first (SC-003); then the next contiguous run of the ranking's E1 rows
-(FR-006), rows 180-230 in ranking order: the connector's clearance, the tier text's city note, the samurai caption's
+(FR-006), rows 180-231 in ranking order (the brook's assumed width split off its E0 row by amendment 6's first round, row 199): the connector's clearance, the tier text's city note, the samurai caption's
 estates, the castle's inner moat, the town wall's gate ground, the plank's ditch width and its widest-left seat, the river
 tap's sweep, the water gate's opening, the city gate buildings' road and the slid tower, and the civic grounds' sizes,
 counts and reaches (granary, merchant homes and kura, precinct, terrace, cemetery, cremation bed, boundary stones,
@@ -335,17 +336,18 @@ stables, stable yard and its watering). Every `after` these rows carry is a row 
 
   - `l7r/diagram/hamletgen/ways/law_water.py::off_ford_at#how far from a crossing place a brook crossing may stand, FORD_HALF 30 ft` - claim it: how far from a crossing place a brook crossing may stand, FORD_HALF 30 ft
   - `l7r/diagram/hamletgen/ways/law_water.py::short_decks#assumed water widths where none is recorded: 3 ft for a ditch or channel, 6 ft for a stream` - claim it: assumed water widths where none is recorded, 3 ft for a ditch or channel, 6 ft for a stream
-  - `l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.martial_hall#practice gear` - 0165 answers this: the state hall's compound is "its wall and three features inside ... the rest implied", so the drawn rack and posts contradict it; cite 0165 (DRIFTED) or record a DEVIATION
-  - `l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#assumed stream and channel widths` - 0035 in this bundle gives the brook as 7 ft wide, and the code assumes 9 px; cite 0035 and bring the default to 7 ft
+  - `l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.martial_hall#practice gear` - cite 0165 against the code: the state hall's compound holds its wall and three features, the rest implied; the drawn rack and posts depart from it, a found row toward 0165
+  - `l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#assumed stream and channel widths` - cite 0035 for the brook (7 ft wide) against the code's assumed 9 px; the channel default stays UNRESEARCHED; the value change to 7 ft is its own found row
 
   - `l7r/diagram/hamletgen/ways/track.py::stage_track#lane clearance` - 0246 sets a lane's clearance: its middle keeps 7 ft clear of a garden fence, within an 18 ft lane's room, and nothing is built on the tread. The claim should cite 0246.drawing, and the 40 ft no-build corridor should then be judged against that 7 ft
-  - `l7r/diagram/interactive/place.py::KINDS#what each tier is` - wave 5 dropped the hamlet burial hedges and gave the village its one tax-free plot (0001); left: the city's population_note says 'by convention' it takes in the samurai country estates, where 0001 counts only those within the walls - find whether that convention was a GM ruling (then a DEVIATION claim) or align the note
+  - `l7r/diagram/interactive/place.py::KINDS#what each tier is` - the city's population_note says 'by convention' it takes in the samurai country estates, where 0001 counts only those within the walls: align the note with 0001; if the convention proves a GM ruling, the claim is CANON naming that ruling
   - `l7r/diagram/overlap/taxonomy.py::_LABEL_GROUP#a caption covers its own group` - the funerary group is in step (wave 5); what is left: `manors` maps to 'estate', so a samurai caption may not cover the manors 0243 lets it cover ("A samurai caption, the samurai houses and estates") - give the samurai caption the estates
-  - `l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.castle#inner moat width` - `mw * 0.5` (about 40 ft) is below the attested "inner moat 30 to 104 m (~98-341 ft)", and the drawing page calls for "broad water between the baileys"; draw it within 98-341 ft, or relabel it DEVIATION once the drawing page records the choice
+  - `l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.castle#inner moat width` - draw the inner moat within the attested 98-341 ft (Hiroshima's 30 to 104 m) as the broad water between the baileys the drawing page calls for, not `mw * 0.5` (about 40 ft)
   - `l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.wall#ground round the gate structures` - `bm = 32` is a fixed 32 px, against "about 36 ft clear around each"; should be px(36)
   - `l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#assumed ditch width` - `DEFAULT_W["field_ditches"]=4.2` and `d.get("w", 4.2)` are px, about 4 to 13 ft, against "2.5 ft at the head and taper toward 1.2 ft"; the default should be about 2.5 ft in feet
+  - `l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#assumed brook width 7 ft` - bring the assumed stream width to the 7 ft brook of 0035 (the code assumes 9 px where a record has none) (after: l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#assumed stream and channel widths)
   - `l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#off dry crops and gardens` - crops rule a seat out, but the page lays the crossing "at the widest one remaining rather than left off"; the code's hard filter `_wide_enough` leaves the ditch with no plank once every wide seat is ruled out
-  - `l7r/diagram/settlement/city/canals.py::CanalsMixin.farmland_ring#a river tap unswept` - only `src == "moat"` is swept; a river tap's head race leaves on the outward bearing at any angle, against "a canal leaves a river at a slant" at 30 to 45 degrees downstream; sweep river taps too, or record a DEVIATION
+  - `l7r/diagram/settlement/city/canals.py::CanalsMixin.farmland_ring#a river tap unswept` - sweep a river tap downstream as a moat tap is swept: a canal leaves a river at a slant, 30 to 45 degrees downstream (0054)
   - `l7r/diagram/settlement/city/moat.py::MoatMixin.water_gate#one opening` - the code draws one fixed 60 ft opening, where 0179 says "as wide as its canal" and gives a river "a row of arched openings"; size the opening to its canal and draw a row of arches for a river
   - `l7r/diagram/settlement/city/walls.py::WallsMixin._gate_flanking_buildings#fallback road width` - 0147 answers it: the gate's 30 ft "is the width of the trunk road", against px(26); cite 0147 drawing at 30 ft; also, the code reads `road_width`, not a ring road as the claim says
   - `l7r/diagram/settlement/city/walls.py::WallsMixin._seat_mural_towers#a slid tower off a gate` - 0148 answers it: no tower "within 390 ft of a gate"; the 45 px floor lets a slid seat land about 84 px (252 ft at 3 ft/px) from a gate; cite 0148 and hold slid seats to px(390)
@@ -371,8 +373,9 @@ stables, stable yard and its watering). Every `after` these rows carry is a row 
       verify:
 - [ ] T26 the four E0 claims; then the E1 rows, each with the unit tests it moves; proven on the reference hamlet (Inashiro,
       its PNG looked at) and then across the pool and the cohort's bookend seeds; a town or city value no pool map draws is
-      proven by its unit test; a value that makes a map refuse is held and the row takes the tier of the work it needs (FR-004,
-      FR-005, spec Edge Cases)
+      proven by its unit test; each row fixed toward the page it cites, DEVIATION written only after `spec-fidelity` rules it
+      LEGITIMATE on the exception path (a GM ruling is CANON naming it); a value that makes a map refuse is held and the row
+      takes the tier of the work it needs (FR-004, FR-005, spec Edge Cases)
       research: rendering
       verify:
 - [ ] T27 every touched unit re-checked by `impl-drift`; each wave-7 row IN-STEP or re-tiered with its measured reason (FR-005, SC-002)

@@ -1,6 +1,6 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "09ec34d64abd854280dfede7f8de3f1b9893b88bca4457f55b196fb1fb204467",
+ "plan_sha256": "1a603340c0b38862959b1abc7175635a90e0d605edb1356622a13baf453a1262",
  "reviewed": "2026-10-07",
  "declared": "spec-fidelity",
  "decisions": [
@@ -117,6 +117,18 @@
    "summary": "Later waves take their regression baseline on the clone while its engine content is main's, before the wave's first edit",
    "class": "within",
    "why": "A verification method under constitution XIII; it does not touch the scope of what the GM asked."
+  },
+  {
+   "id": "W7-scope",
+   "summary": "Wave 7: the four open E0 rows, then the next contiguous run of E1, global rows 180-230 (26 open rows, tasks.md Phase 8); the run ends at the civic grounds' last row (230), the next open E1 row is 231",
+   "class": "within",
+   "why": "FR-006/SC-003: measured on ranking.json - no open E0 row is left out, the first open E1 row is 180, every open E1 row in 180-230 is in the wave (26), all rows in the span are E1, and the only afters (228, 229 -> 227) are inside the wave. Nothing held back or re-tiered."
+  },
+  {
+   "id": "W7-verification",
+   "summary": "Wave 7 verified as wave 5: Inashiro first (PNG looked at), the pool through the gate, a town or city value by its unit test, bookends back to back, impl-drift on every touched unit, a held value becomes a found row",
+   "class": "within",
+   "why": "FR-005 and the spec's Edge Case for a fix that makes a map fail (held value -> found row, recorded in the ranking); the same verification already ruled within for wave 5."
   }
  ],
  "verdict": "CLEAR"

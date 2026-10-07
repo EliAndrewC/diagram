@@ -224,9 +224,9 @@
   "files": [
    ".claude/skills/diagram/l7r/diagram/interactive/assets/place.json"
   ],
-  "fix": "wave 5 dropped the hamlet burial hedges and gave the village its one tax-free plot (0001); left: the city's population_note says 'by convention' it takes in the samurai country estates, where 0001 counts only those within the walls - find whether that convention was a GM ruling (then a DEVIATION claim) or align the note",
+  "fix": "the city's population_note says 'by convention' it takes in the samurai country estates, where 0001 counts only those within the walls: align the note with 0001; if the convention proves a GM ruling, the claim is CANON naming that ruling",
   "flag": "",
-  "moved": "wave 5 re-check: two of three fixed; the city note's convention to trace",
+  "moved": "amendment 6 round 1: fixed toward the page, no DEVIATION offered",
   "tier": "E1"
  },
  ".claude/skills/diagram/l7r/diagram/overlap/taxonomy.py::_LABEL_GROUP#a caption covers its own group": {
@@ -251,6 +251,27 @@
   "moved": "wave 5: the mill race is a new element (spec-fidelity's note on amendment 4)",
   "tier": "E3"
  },
+ ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.castle#inner moat width": {
+  "after": [],
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py"
+  ],
+  "fix": "draw the inner moat within the attested 98-341 ft (Hiroshima's 30 to 104 m) as the broad water between the baileys the drawing page calls for, not `mw * 0.5` (about 40 ft)",
+  "flag": "",
+  "moved": "amendment 6 round 1: fixed toward the page, no DEVIATION offered",
+  "tier": "E1"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.martial_hall#practice gear": {
+  "after": [],
+  "e0_basis": "a claim fix: the page is cited against the code",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py"
+  ],
+  "fix": "cite 0165 against the code: the state hall's compound holds its wall and three features, the rest implied; the drawn rack and posts depart from it, a found row toward 0165",
+  "flag": "",
+  "moved": "amendment 6 round 1: fixed toward the page, no DEVIATION offered",
+  "tier": "E0"
+ },
  ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.wall#gate opening": {
   "after": [],
   "e0_basis": "impl-drift wave 5: the passage is the page's; the posts are on no page",
@@ -261,6 +282,27 @@
   "flag": "",
   "moved": "wave 5 re-check: only the posts' size is unanswered",
   "tier": "E0"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#assumed stream and channel widths": {
+  "after": [],
+  "e0_basis": "a claim fix: the page is cited against the code",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/city/bridges.py"
+  ],
+  "fix": "cite 0035 for the brook (7 ft wide) against the code's assumed 9 px; the channel default stays UNRESEARCHED; the value change to 7 ft is its own found row",
+  "flag": "",
+  "moved": "amendment 6 round 1: fixed toward the page, no DEVIATION offered",
+  "tier": "E0"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/city/canals.py::CanalsMixin.farmland_ring#a river tap unswept": {
+  "after": [],
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/city/canals.py"
+  ],
+  "fix": "sweep a river tap downstream as a moat tap is swept: a canal leaves a river at a slant, 30 to 45 degrees downstream (0054)",
+  "flag": "",
+  "moved": "amendment 6 round 1: fixed toward the page, no DEVIATION offered",
+  "tier": "E1"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/city/moat.py::MoatMixin.moat#moat width": {
   "after": [],
