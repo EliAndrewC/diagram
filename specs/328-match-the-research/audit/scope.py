@@ -16,7 +16,9 @@ the legacy village roller, unit tests' rolls and stale rolls of older code. A un
   - it is a class executed code constructs or names;
   - it is a module-level (`<module>`) claim on a knob in use - an executed function resolves the registry's knob by name
     (`RESOLVERS`, `KNOBS[...]`), or its typing rule ran - or, naming no knob, on a module a kept map runs;
-  - it is a check the gate runs against the kept maps' finished output (`KEPT_CHECKS`, each with its reason).
+  - it is a check the gate runs against the kept maps' finished output (`KEPT_CHECKS`, each with its reason);
+  - it renders every kept map's page after the traced roll (`RENDER_PATH`), or it is a page Kind whose `key` a kept map's
+    executed code records a feature under (a Kind has no method to run, and the registry finds it without naming it).
 Everything else is DEFERRED, and so is a claim whose value no kept map reads though its unit runs (`DEFERRED_ON_MEASURE`,
 each with its measured reason). The deferred list (`claims-deferred.json`) is derived over EVERY claimed unit, not only the units
 with a finding today, so a legacy-only unit that drifts later reads DEFERRED too; re-run this when a wave lands or the pool
@@ -101,6 +103,62 @@ KEPT_CHECKS = {
 }
 
 
+RENDER_PATH = {
+    # what renders every kept map's page AFTER the roll the gen cache traces (`render_png` and the page's raster tiles), so no
+    # generation record holds it though every kept map runs it (spec-fidelity, amendment 13 round 2)
+    "l7r/diagram/settlement/finish.py::FinishMixin.render_png",
+    "l7r/diagram/interactive/raster.py",
+    # the page vocabulary's own tables, built at import for every kept map's page (the trace records functions, not module code)
+    "l7r/diagram/interactive/classes/__init__.py",
+    "l7r/diagram/interactive/classes/_base.py",
+    "l7r/diagram/interactive/classes/siblings.py",
+}
+
+
+KIND_KEYS: dict[tuple[str, str], str] = {}  # (path, Kind class) -> its `key`, the string a feature is recorded under
+STRINGS_USED: set[str] = set()  # every string literal an executed function passes (`add(..., cls="homestead grove")`)
+
+
+def kind_keys(skill: Path) -> dict[tuple[str, str], str]:
+    """Each Kind class's `key` under `interactive/classes/`: a Kind has no methods to run and the registry finds it without naming
+    it, so it is in use when executed code records a feature under its key."""
+    out: dict[tuple[str, str], str] = {}
+    for f in glob.glob(str(skill / "l7r/diagram/interactive/classes/*.py")):
+        rel = str(Path(f).relative_to(skill))
+        for cls in (n for n in ast.parse(Path(f).read_text()).body if isinstance(n, ast.ClassDef)):
+            for a in (n for n in cls.body if isinstance(n, ast.Assign)):
+                if any(isinstance(t, ast.Name) and t.id == "key" for t in a.targets) and isinstance(a.value, ast.Constant):
+                    out[(rel, cls.name)] = str(a.value.value)
+    return out
+
+
+def strings_used(skill: Path, ran: set[tuple[str, str]], read: set[str] = frozenset()) -> set[str]:
+    """Every string literal inside the executed functions, and in a module constant of theirs they read by name (`FIXTURE_CLASS`
+    maps each farmstead fixture to the key its feature is recorded under)."""
+    out: set[str] = set()
+    for p in {p for p, _q in ran}:
+        try:
+            tree = ast.parse((skill / p).read_text())
+        except (OSError, SyntaxError):
+            continue
+        quals = {q for pp, q in ran if pp == p}
+        for a in (n for n in tree.body if isinstance(n, (ast.Assign, ast.AnnAssign))):
+            targets = a.targets if isinstance(a, ast.Assign) else [a.target]
+            if a.value is not None and any(isinstance(t, ast.Name) and t.id in read for t in targets):
+                out.update(str(n.value) for n in ast.walk(a.value) if isinstance(n, ast.Constant) and isinstance(n.value, str))
+
+        def walk(node: ast.AST, prefix: str) -> None:
+            for child in ast.iter_child_nodes(node):
+                if isinstance(child, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
+                    q = f"{prefix}{child.name}"
+                    if not isinstance(child, ast.ClassDef) and q in quals:
+                        out.update(str(n.value) for n in ast.walk(child) if isinstance(n, ast.Constant) and isinstance(n.value, str))
+                    walk(child, q + ".")
+
+        walk(tree, "")
+    return out
+
+
 DEFERRED_ON_MEASURE = {
     # a claim whose value no kept map reads, though its unit runs: `fixture_forms` passes `privy_seat_weights(seed)`, so only
     # `bundle.py`'s fallback reads the class default (spec-fidelity, amendment 8 round 3)
@@ -175,6 +233,10 @@ def scope_of(uid: str, ran: set[tuple[str, str]], read: set[str], knobs: set[str
         return "kept"  # hamletgen/ is the scripted hamlet's own code: no legacy map reaches it, whatever seed or form runs it
     if (path, unit) in ran or any(p == path and q.startswith(unit + ".") for p, q in ran):
         return "kept"
+    if path in RENDER_PATH or f"{path}::{unit}" in RENDER_PATH:
+        return "kept"  # renders every kept map's page after the traced roll
+    if (path, unit) in KIND_KEYS:
+        return "kept" if KIND_KEYS[(path, unit)] in STRINGS_USED else "deferred"  # a Kind in use: a kept map records a feature under its key
     if unit == "<module>":
         # a module-level claim is judged by the knob it names (`<knob> forms|weights|range`), else by whether the module runs
         first = label.split(" ")[0]
@@ -197,6 +259,8 @@ def main(argv: list[str]) -> int:
     read = names_read(skill, ran)
     knobs = knobs_in_use(skill, ran)
     KNOB_NAMES.update(all_knob_names(skill))
+    KIND_KEYS.update(kind_keys(skill))
+    STRINGS_USED.update(strings_used(skill, ran, read))
 
     def judge(key: str) -> str:
         uid, label = key.rsplit("#", 1)

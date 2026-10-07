@@ -1,46 +1,39 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "15e259b69088faf4068b2f178858d53a10400c0d9fcd1f8bea011fa2b98241a1",
+ "plan_sha256": "17df9a3b3f650dde569ef21f331f2875de9c29e0a9b0ccc6d00da6a8ca7d2faa",
  "reviewed": "2026-10-07",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W13-sort",
-   "summary": "the 18 Mode A E2 rows sorted by a fresh reader measuring the sheets; the 6 whose fix redraws a hand sheet re-tiered E3",
+   "id": "W14-T51a",
+   "summary": "wave 13's 13 found rows tiered by their work by a fresh reader before the run is chosen (3 moved: one to E0 with its basis, two to E3)",
    "class": "within",
-   "why": "FR-003's own definition (a redrawn hand sheet is E3); rows stay ranked and open"
+   "why": "FR-002/FR-003: tiers by implementation work; rows stay ranked and open, none dropped"
   },
   {
-   "id": "W13-scope",
-   "summary": "wave 13 = the two byre claims then the 13 procedure-only Mode A rows; the second-kami row left the wave as E3",
+   "id": "W14-scope",
+   "summary": "the 8 open in-scope E0 rows, all Mode A procedure claims; no procedure text, sheet or engine line changes",
    "class": "within",
-   "why": "FR-006 contiguous run; the second-kami row moved by its measured rolls under FR-003 (ranking.json tier E3, overrides.json moved note), not dropped"
+   "why": "FR-006 contiguous run, E0 first; FR-003 E0 is the claim alone; FR-010 mode-a is in scope. The two re-changed claims are impl-drift MISLABELED fixes: tax-free fields cites 0221's drawing page ('Nothing about the shrine's land or its income is drawn', unedited since 319), the postern a bare GUESS naming what 0101's drawing page searched (no night-soil gate at a samurai house, the merchant's back gate only) - label and wording only, FR-004"
   },
   {
-   "id": "W13-rolls",
-   "summary": "procedures change, each sheet records its roll; a seeded roll with its expression where the page says rolled; a roll off the drawn form makes the row E3",
+   "id": "W14-stack",
+   "summary": "wave 14 starts on unpushed waves 9-13 under the wave-11 exception's condition (6)",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "round-1 condition met: rolls reproduced (random.Random(zlib.crc32(b'<sheet>:<knob>')).choice): hayakawa arch -> shared (drawn), written with its expression; second kami rolls one hall for Hayakawa's river kami and Ubame's wood kami, drawn own shrine, so the row is E3 and out of the wave; no outcome decided in advance"
+   "why": "exception ruled LEGITIMATE on conditions (amendment 10); wave 13 closed at 2e0268412, an ancestor of HEAD, backup pushed, own pair band 1 confirmed by perf-audit; nothing but the GM's sign-off is stated to refuse the push"
   },
   {
-   "id": "W13-bands",
-   "summary": "country shrine size bands widened in types.json and its table",
+   "id": "W14-verify",
+   "summary": "impl-drift on the touched claims, the gate, wave 14's own bookend pair",
    "class": "within",
-   "why": "moves the implementation to the record (0222, 0215); Hoshigaoka's sizes inside"
+   "why": "FR-005"
   },
   {
-   "id": "W13-stack",
-   "summary": "wave 13 starts on unpushed waves 9-12 under the wave-11 exception's condition (6)",
-   "class": "narrowing",
-   "ruling": "LEGITIMATE",
-   "why": "exception ruled LEGITIMATE on conditions (amendment 10); wave 12 closed at c45460dd1, an ancestor of HEAD, backup pushed, own pair band 0"
-  },
-  {
-   "id": "W13-verify",
-   "summary": "impl-drift on touched procedure claims, the gate, wave 13's own bookend pair; no review occasion",
+   "id": "W14-scope-rederive",
+   "summary": "audit/scope.py re-run at the wave: 13 Mode A procedure claims scoped mode-a, kept claims added, 19 units newly deferred",
    "class": "within",
-   "why": "FR-005; no sheet redrawn now that the second-kami row left the wave"
+   "why": "D9/FR-010 as accepted (re-derived from the gen cache's records); every newly deferred unit's claims are IN-STEP, so no finding leaves the wave by it"
   }
  ],
  "verdict": "CLEAR"

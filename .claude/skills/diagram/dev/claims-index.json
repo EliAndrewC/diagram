@@ -1969,14 +1969,6 @@
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/buildings/programs.md::Country shrine (a village district's shrine)#a burial ground in the yard stands outside the grove": {
-  "code": "f885d87bccc32c02",
-  "core": "f885d87bccc32c02",
-  "date": "2026-10-07",
-  "note": "a burial ground in the yard stands outside the grove",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  ".claude/skills/diagram/buildings/programs.md::Country shrine (a village district's shrine)#a well as the purification stop beside the approach (\"the well or basin\"; the required item is `well`)": {
   "code": "5a0f4951a10b6566",
   "core": "f885d87bccc32c02",
@@ -2546,16 +2538,19 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings/programs.md::Country shrine (a village district's shrine)#tax-free fields off the sheet": {
-  "code": "3d1ed44a3e454487",
+  "code": "1db320a222d2a71b",
   "core": "f885d87bccc32c02",
   "date": "2026-10-07",
-  "note": "the 0221 drawing page in the bundle already decides this: \"Nothing about the shrine's land or its income is drawn\"; the claim should cite research/questions/0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html, not UNRESEARCHED",
-  "pages": {},
-  "research": "",
+  "note": "the drawing page says the shrine's land and income are not drawn; the section draws only the kitchen garden and yard",
+  "pages": {
+   "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html": "5e8ac2e778e0e69b"
+  },
+  "research": "a8feb4a94cf5c3b6",
   "rests": [
+   "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html:7950922e6a0cab34",
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html:7d5fbb77122b5326"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings/programs.md::Country shrine (a village district's shrine)#two-building dwelling size": {
   "code": "cf832dda0cc9d295",
@@ -2836,19 +2831,20 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#inner-court postern": {
-  "code": "b5cfbfe570498ee9",
+  "code": "5482112091a14aeb",
   "core": "a958827fdf1316a2",
   "date": "2026-10-07",
-  "note": "the night-soil gate was researched and the record is silent: only a merchant's back gate is found, \"nothing of a samurai house's gate\", and keeping collectors out of the inner court is the project's own rule; should be GUESS research/questions/0101-privies-setchin.drawing.html, like the outer service gate (the 0104 katteguchi aside is correct)",
+  "note": "nothing in the bundle names a night-soil or kitchen gate at a samurai house; the privies page finds only the merchant's back gate and calls keeping collectors out of the inner court the project's own rule; katteguchi is the kitchen's own door",
   "pages": {},
   "research": "",
   "rests": [
    "0101-privies-setchin.drawing.html:22aa0442ff4680a7",
    "0101-privies-setchin.drawing.html:4b9c7b16a2cddbfa",
    "0101-privies-setchin.html:ad7226cc05347e65",
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:3bd3b9974993d277",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:95160ff513e325fa"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#justice-front furniture knob": {
   "code": "48bbe8c9b2eaad9a",
