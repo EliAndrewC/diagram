@@ -182,7 +182,7 @@ def test_no_zigzag_straddles_a_joint(gen: str) -> None:
         assert _bends_badly(x) or _bends_badly(y) or not _bends_badly([*x, *y[1:]]), f"lanes {i} and {j} zigzag across their joint at {x[-1]}"
 
 
-_KNOT_MARGIN = 1.5
+_KNOT_MARGIN = 1.0  # the page's own reach (feature 328); the slide the 1.5 caught is gone
 """Two junctions on one lane this many knot reaches apart still count as a knot: a foot slid along the lane to just past the
 reach is the knot drawn, not gathered (glyph-check round 2 of feature 328 wave 4, Inashiro: lane 13's foot slid 16.7 ft along
 lane 11 to 25.18 ft from lane 11's end, a walker turning 51, 91, 92 and 72 degrees within 45 ft)."""
@@ -232,24 +232,11 @@ def lane_knots(lanes: list[dict]) -> list[tuple[int, tuple[float, float], int, t
     return out
 
 
-def test_lane_knots_counts_a_foot_slid_past_the_reach() -> None:
-    """The sliding form is a knot: a T-foot 30 ft along a lane from where that lane meets a third way (past the 25 ft reach,
-    inside 1.5 reaches) counts; gathered at the one point it does not, nor does a door end 30 ft off or a foot 40 ft on."""
-    track = {"pts": [[0.0, 0.0], [0.0, 100.0]]}
-    lane = {"pts": [[100.0, 50.0], [0.0, 50.0]]}  # T-foot on the track at (0, 50)
-    slid = {"pts": [[30.0, 90.0], [30.0, 50.0]]}  # T-foot on `lane` 30 ft from its end
-    assert lane_knots([track, lane, slid]), "a foot slid to 30 ft from the junction is a knot"
-    assert not lane_knots([track, lane, {"pts": [[60.0, 90.0], [0.0, 50.0]]}]), "gathered at the junction: no knot"
-    assert not lane_knots([track, lane, {"pts": [[40.0, 90.0], [40.0, 50.0]]}]), "40 ft along: a T of its own"
-    assert not lane_knots([track, lane, {"pts": [[30.0, 90.0], [30.0, 52.0]]}]), "an end 2 ft short of the lane is no junction"
-
-
-# THE KNOTS NO LAWFUL GATHER REACHES YET (feature 328 wave 4, measured): on these three maps every single-point gather of the
+# THE KNOTS NO LAWFUL GATHER REACHES YET (feature 328 wave 4, measured): on these two maps every single-point gather of the
 # remaining knots runs a way along another, through a yard, or off the network, so they wait for the ranked found row that
 # re-lays the earlier household's way at seating (specs/328-match-the-research/ranking.json, "a knot no lawful gather
-# reaches"). Main draws the same knots or more (Inashiro 7 end pairs within the reach on main and here, Kuwabata 4 -> 1,
-# Sawada 3 -> 1). STRICT: the day a map's knots are gathered this fails, and its name comes off the list.
-_KNOTS_WAITING = {"inashiro", "kuwabata", "sawada"}
+# reaches"). Main draws the same knots or more (Inashiro 7 end pairs within the reach on main and here, Sawada 3 -> 1). STRICT: the day a map's knots are gathered this fails, and its name comes off the list.
+_KNOTS_WAITING = {"inashiro", "sawada"}
 
 
 @pytest.mark.parametrize(

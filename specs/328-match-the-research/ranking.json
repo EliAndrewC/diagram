@@ -7204,7 +7204,7 @@
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/knots.py::settle_knots#a knot no lawful gather reaches",
   "verdict": "DRIFTED",
   "tier": "E3",
-  "fix": "gather the knots left on Inashiro (lanes 9/11 at 19.1 ft; lane 3 24.1 ft from the track head), Sawada (lanes 9/12, 21.9 ft) and Kuwabata (lanes 9/12/14 within the 1.5x margin) at one point (0081): every single-point gather today runs a way along another, through a yard, or off the network - re-lay the earlier household's way at seating so a lawful gather exists; then drop the map from test_pool_261's _KNOTS_WAITING",
+  "fix": "gather the knots left on Inashiro (lanes 9/11 at 19.1 ft; lane 3 24.1 ft from the track head) and Sawada (lanes 9/12, 21.9 ft) at one point (0081): every single-point gather today runs a way along another, through a yard, or off the network - re-lay the earlier household's way at seating so a lawful gather exists; then drop the map from test_pool_261's _KNOTS_WAITING",
   "files": [
    ".claude/skills/diagram/l7r/diagram/hamletgen/ways/knots.py",
    ".claude/skills/diagram/l7r/diagram/settlement/rolling/gap_ways.py"

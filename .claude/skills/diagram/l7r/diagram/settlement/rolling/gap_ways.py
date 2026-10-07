@@ -90,8 +90,8 @@ KNOT_FT = 25.0
 #: tried where it cannot: a foot a few feet past the reach still reads as the knot (feature 328 wave 4, glyph-check round 2 of
 #: Inashiro: a foot slid to 25.18 ft from a junction drew the knot it was meant to undo; a traced foot 24.2 ft off was DRAWN
 #: 25.8 ft off once pulled taut).
-KNOT_MARGIN = 1.5
-"""Research: a knot's margin - CONVENTION research/questions/0081-village-lanes.drawing.html: ends within 25 ft are joined at a single point, so three lanes never arrive a few feet apart in a knot; the half-reach past it is a map drawing convention, no page measuring it"""
+KNOT_MARGIN = 1.0
+"""Research: a knot's margin - research/questions/0081-village-lanes.drawing.html: ends within 25 ft are joined at a single point - the page's own reach, no margin past it (feature 328: a 1.5 margin went past the page, and the slide it guarded against is gone)"""
 
 _STEPS = ((-1, 0, 1.0), (1, 0, 1.0), (0, -1, 1.0), (0, 1, 1.0), (-1, -1, math.sqrt(2.0)), (1, 1, math.sqrt(2.0)), (-1, 1, math.sqrt(2.0)), (1, -1, math.sqrt(2.0)))
 """Research: plumbing - NONE: the eight steps between raster cells and their lengths"""
