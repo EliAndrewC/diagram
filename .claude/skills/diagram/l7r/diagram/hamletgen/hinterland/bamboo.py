@@ -152,9 +152,10 @@ def stand_samples(cx: float, cy: float, hw: float, hh: float, step: float) -> li
 THICKET_REACH_FT = 220.0
 """How far from its target the thicket's seat is looked for first, in feet (a GUESS, named by feature 293 - the literal
 predates it): the thicket marks the edge of the houses it stands behind, so a seat near them wins over any seat farther
-along the back row. Where none fits within it, the whole page behind the back row is searched (`bamboo_seats`).
+along the back row. Where none fits within it, no thicket is drawn (`bamboo_seats`, feature 328: 0075 seats the thicket just
+beyond the back row, so a stand found anywhere on the page behind it is not the thicket the page draws).
 
-Research: near search reach - GUESS: 220 ft from the target before the whole page behind the row"""
+Research: thicket reach - UNRESEARCHED: 220 ft from the target, else none"""
 
 
 def bamboo_seats(s: Settlement, plan: SitePlan) -> list[Poly]:
@@ -163,9 +164,9 @@ def bamboo_seats(s: Settlement, plan: SitePlan) -> list[Poly]:
     A candidate is a rect on a `BAMBOO_SEAT_STEP_FT` lattice around its target, refused when any sample of a grid over
     the whole stand (`BAMBOO_SAMPLE_FT` apart) stands on a house, yard, garden, shed, byre, well, lane, paddy, marsh, pond, the belt,
     a coppice patch or the other stand (each with its own pad), and the surviving candidate nearest the
-    target wins - behind the back row and on the page, within `THICKET_REACH_FT` of it at full size, then at 70%, and only
-    then anywhere on the page behind the back row, full size then 70%; a stand that fits nowhere is dropped - a hamlet
-    with no room for bamboo draws none rather than a sliver. Outlines are irregular rings inside the
+    target wins - behind the back row and on the page, within `THICKET_REACH_FT` of it at full size, then at 70%; a stand
+    that fits nowhere within that reach is dropped - a hamlet with no room for bamboo just beyond its back row draws none
+    rather than a sliver or a stand far along the row. Outlines are irregular rings inside the
     tested rect (`_parcel_outline`), because a thicket has a hard but not a ruled edge.
 
     Research:
@@ -280,12 +281,11 @@ def bamboo_seats(s: Settlement, plan: SitePlan) -> list[Poly]:
         target = thicket_target
         step = px(BAMBOO_SEAT_STEP_FT)
         best: tuple[float, float, float] | None = None
-        # ...AND OVER THE WHOLE PAGE BEHIND THE ROW, WHEN NOTHING FITS NEAR (feature 293; settlement-reviews of Kashikawa in the
-        # earlier 293 pass): with the seat held behind the back row and on the page, the near search can find no seat within
-        # its reach while open scrub lies farther along the row - "no room" was the search, not the ground. The second search
-        # walks the page behind the back row, on a lattice centered in the band a seat's center may use there.
-        far = max(math.dist(target, c) for c in ((vx0, vy0), (vx1, vy0), (vx0, vy1), (vx1, vy1)))
-        for scale, reach, bounded in ((1.0, px(THICKET_REACH_FT), False), (0.7, px(THICKET_REACH_FT), False), (1.0, far, True), (0.7, far, True)):
+        # ONLY WITHIN THE THICKET'S REACH (feature 328): feature 293 searched the whole page behind the back row when nothing
+        # fitted near, which seated a stand far along the row; 0075's drawing page seats the thicket just beyond the back row,
+        # so where nothing fits within `THICKET_REACH_FT` the hamlet draws no thicket.
+        for scale in (1.0, 0.7):
+            reach = px(THICKET_REACH_FT)
             hw, hh = px(wft) * scale / 2, px(hft) * scale / 2
             # ...AND ONLY BEHIND THE BACK ROW, ON THE PAGE (feature 293): the search walked out from the target in every
             # direction, so where the ground behind the houses was taken the stand walked into the cluster and round a well;
@@ -297,7 +297,6 @@ def bamboo_seats(s: Settlement, plan: SitePlan) -> list[Poly]:
                 reach,
                 step,
                 lambda x, y, hw=hw, hh=hh: y + hh <= north and on_sheet(x, y, hw, hh) and _fits(x, y, hw, hh),
-                box=(vx0 + hw, vy0 + hh, vx1 - hw, north - hh) if bounded else None,
             )
             if best is not None:
                 ring = _parcel_outline(s, best[1], best[2], hw, hh, 1.0, 0.0)

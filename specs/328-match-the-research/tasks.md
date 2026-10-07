@@ -13,6 +13,8 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 - (wave 5, landed and reviewed) placement-changed village lane on kashikawa - wave 5: 0033's row street runs on off the map as the road into it at both ends, where
   the web cut it back to its last joint (`trim_streets`); Kashikawa's and Mizuguchi's far ends now run off the sheet as a
   second way out (every way is inked `village lane`).
+- none (wave 17): the thicket's far search retired moved nothing drawn - measured: Kashikawa's and Mizuguchi's thickets, the two
+  pool maps that roll one, stand within their reach and their manifests are unchanged; the other rows are claims.
 - none (wave 16): the two retired knob forms moved nothing drawn - measured on the regenerated maps against the base: Mizuguchi,
   which declared the belt-side copse, is linear and draws no copse, and Kashikawa's and Sawada's notice boards stand where they
   stood (the drawing-water bid did not decide their seats); only each map's recorded knob changed.
@@ -799,3 +801,22 @@ wave 16 takes the E0, the privacy-baffle paragraph, the copse rows (`COPSE_SITIN
 - [x] T58 every touched claim re-checked by `impl-drift`, the occasions' glyph checks, and the close: wave 16's own bookend pair, `make done` green, the wave column (FR-005, FR-006, SC-002, SC-003)
       research: rendering
       verify: DONE. impl-drift on every touched claim (every wave row IN-STEP at the last round); occasions none, measured; make done green; wave 16's own pair (328-start at 799a0bf4b) band 1, caused by the retired copse form on seeds 39 and 47 at 40 hh (+0.2 s windbreak, timed by perf-audit), total -4.3%, perf-audit consistent; the wave column written
+
+## Phase 18 - wave 17 (amendment 16): wave 16's claims and the thicket's reach
+
+Wave 16's re-checks found 4 rows: one stale (the staff housing knob, IN-STEP on the later round), dropped with its closing wave
+restored; the other 3 are UNCLAIMED decisions, E0 by their verdict - each needs only its claim. Then the E2 run: `WEB_HARD_GAP`
+(410) is measured to be a change across five modules (the hard ground is one list read with one gap by `ways/serve.py`,
+`ways/route.py`, `ways/clearance.py`, `ways/web.py` and `homesteads/boundary.py`) and is E3 by FR-003; the next is the thicket's
+fallback (411). The next open row is the belt in the marsh (412).
+
+  - `l7r/diagram/hamletgen/hinterland/stages.py::stage_windbreak#no copse drawn where there is no belt and no reserved seats` - its claim written (UNRESEARCHED)
+  - `l7r/diagram/hamletgen/plan.py::plan_site#a farmstead grove takes 2, 3 or 4 sides the spec refusal` - its claim written (0036 drawing: two, three or four sides)
+  - `l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._route_seats#farthest seat 60 ft from the road kosatsubawayreachft 0190 2` - its claim written (GUESS 0190 drawing: the project's own figure)
+  - `l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#thicket fallback: THICKET_REACH_FT 220 ft, then anywhere on the page behind the back row (0075 says "just beyond the back row")` - the page-wide search retired: within the reach, else no thicket (0075 drawing)
+
+- [ ] T59 the three claims; the thicket's far search retired with its test; Kashikawa and Mizuguchi regenerated (FR-004, FR-005)
+      research: rendering
+- [ ] T60 every touched claim re-checked by `impl-drift`, and the close: wave 17's own bookend pair, `make done` green, the wave
+      column (FR-005, FR-006, SC-002, SC-003)
+      research: rendering

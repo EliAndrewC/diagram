@@ -6091,16 +6091,15 @@
   "key": ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#staff housing knob",
   "verdict": "DRIFTED",
   "tier": "E2",
-  "fix": "option (c), staff housed in town with only a duty watch inside, is attested only at Edo's great town magistracy; the rural intendant's office \"kept its junior officials' huts and rowhouses on its own grounds\", so (c) at a county post is a form the question does not attest there (Hayakawa takes it)",
+  "fix": "option (c), senior retainers in town, restricted to urban tiers; a county seat keeps its officials' huts and rowhouses on its own grounds (0114)",
   "files": [
    ".claude/skills/diagram/buildings/programs.md"
   ],
   "after": [],
   "flag": "",
-  "found": "wave 16 re-check (tier provisional, by verdict)",
-  "reopened": "closed in wave 4 (IN-STEP on a wave's re-check, no change needed)",
+  "found": "wave 1 re-check",
   "tier_as_ranked": "E2",
-  "wave": "",
+  "wave": "4 (IN-STEP on a wave's re-check, no change needed)",
   "scope": "mode-a"
  },
  {
@@ -6193,21 +6192,6 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "4",
-  "scope": "kept"
- },
- {
-  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py::WEB_HARD_GAP#web lane off crop, toe and marsh",
-  "tier": "E2",
-  "fix": "split WEB_HARD_GAP: against crop the lane runs on the bund and may touch a plot boundary (half-tread, ~1.5 ft), keep a separate toe/marsh gap claimed UNRESEARCHED",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py",
-   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/clearance.py"
-  ],
-  "after": [],
-  "flag": "",
-  "tier_as_ranked": "E2",
-  "verdict": "DRIFTED",
-  "wave": "",
   "scope": "kept"
  },
  {
@@ -10007,6 +9991,22 @@
   "flag": "deviation-tempting: the polder cohort is not green, which is why it stays opt-in",
   "tier_as_ranked": "E3",
   "verdict": "CANNOT-TELL",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py::WEB_HARD_GAP#web lane off crop, toe and marsh",
+  "tier": "E3",
+  "fix": "split WEB_HARD_GAP: against crop the lane runs on the bund and may touch a plot boundary (half-tread, ~1.5 ft), keep a separate toe/marsh gap claimed UNRESEARCHED; the hard ground is one list (crop, toe and marsh) read with the one gap by five modules - ways/serve.py, ways/route.py, ways/clearance.py, ways/web.py and homesteads/boundary.py - so a crop gap apart from the wet gap separates that list in each",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py",
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/clearance.py"
+  ],
+  "after": [],
+  "flag": "",
+  "tier_as_ranked": "E2",
+  "moved": "wave 17 (measured): splitting the gap is a change across five modules, E3 by FR-003",
+  "verdict": "DRIFTED",
   "wave": "",
   "scope": "kept"
  },

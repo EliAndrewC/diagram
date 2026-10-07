@@ -288,6 +288,7 @@ class FixtureSitingMixin:
             traffic radii - UNRESEARCHED: 260 px and 150 px, in pixels at every scale
             nearness tie-break - UNRESEARCHED: score less a third of the offset
             least offset off the tread - research/questions/0190-notice-boards-kosatsuba.drawing.html: 6 ft from the edge of the road
+            farthest seat off the road - GUESS research/questions/0190-notice-boards-kosatsuba.drawing.html: up to 60 ft (KOSATSUBA_WAY_REACH_FT), the project's own figure
             sampling lattice - NONE: 12 px along, 5 px out"""
         lim = KOSATSUBA_WAY_REACH_FT / ftpx
         verge = KOSATSUBA_VERGE_FT / ftpx + 1e-6

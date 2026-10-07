@@ -383,6 +383,17 @@
   "moved": "T29a (amendment 7): tiered by its work - _near_corridor (settlement/houses.py line 146) takes a bare center point and is called from eight sites in six modules (houses, civic, rolling/fit, yards, gardens, groves, byres), each of which must pass its footprint - a change across modules, not the constant alone.",
   "tier": "E3"
  },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py::WEB_HARD_GAP#web lane off crop, toe and marsh": {
+  "after": [],
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py",
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/clearance.py"
+  ],
+  "fix": "split WEB_HARD_GAP: against crop the lane runs on the bund and may touch a plot boundary (half-tread, ~1.5 ft), keep a separate toe/marsh gap claimed UNRESEARCHED; the hard ground is one list (crop, toe and marsh) read with the one gap by five modules - ways/serve.py, ways/route.py, ways/clearance.py, ways/web.py and homesteads/boundary.py - so a crop gap apart from the wet gap separates that list in each",
+  "flag": "",
+  "moved": "wave 17 (measured): splitting the gap is a change across five modules, E3 by FR-003",
+  "tier": "E3"
+ },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#line follows its bounds": {
   "e0_basis": "0077 drawing: 'within about 45 ft' (its GUESS) - LOT_BOUND_REACH is 45.0",
   "fix": "LOT_BOUND_REACH is 45.0, which 0077 drawing's 'within about 45 ft' already states; the claim names the value and keeps the page's GUESS label",

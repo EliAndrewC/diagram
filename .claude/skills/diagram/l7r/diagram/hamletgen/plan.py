@@ -456,7 +456,8 @@ def plan_site(spec: HamletSpec) -> SitePlan:
         woodland patches - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: 2 to 4, rolled
         knob rolls - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: cluster_shape, lane_skeleton, plot_size and grain_drift rolled per hamlet; each table's own claim in consts
         harvest weather default - research/questions/0016-rice-drying-racks-hasa-hasagi.drawing.html: settled unless declared
-        canvas - NONE: the field's square, the fan's overhang and the seat's room, cropped later"""
+        canvas - NONE: the field's square, the fan's overhang and the seat's room, cropped later
+        grove sides refused outside two to four - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: two, three or four sides"""
     # A POLDER IS LAID TO THE CARDINAL SURVEY GRID, so its fall is rolled from the four cardinals
     # rather than the eight compass points. This is not a workaround for `polder_fills_its_bbox`
     # (which a diagonal block fails, correctly - a rotated rectangle cannot fill an axis-aligned

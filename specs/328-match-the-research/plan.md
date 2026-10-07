@@ -238,6 +238,15 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
   backup pushed, its own pair band 1 confirmed); wave 16's own pair opens at 799a0bf4b.
 - **Verification**: `impl-drift` on the touched claims, the gate with the three maps regenerated, wave 16's own bookend pair.
 
+## Wave 17 (amendment 16, 2026-10-07)
+
+- **Scope**: wave 16's three UNCLAIMED rows (claims), then the E2 run: `WEB_HARD_GAP` measured E3 (five modules) and passed, the
+  thicket's fallback taken (`tasks.md` Phase 18). One stale found row dropped (its later round IN-STEP).
+- **Occasions**: none, measured - the two maps that roll a thicket are unchanged.
+- **On the unpushed waves 9-16** under the wave-11 exception's condition (6): (1)-(5) held at wave 16's close (b49a6c221, its
+  backup pushed, its own pair band 1 confirmed); wave 17's own pair opens at b49a6c221.
+- **Verification**: `impl-drift` on the touched claims, the gate, wave 17's own bookend pair.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Each later wave that changes engine behavior takes
