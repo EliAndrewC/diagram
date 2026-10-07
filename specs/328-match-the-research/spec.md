@@ -277,3 +277,8 @@ Each wave's amendment adds its map decisions to this table. The program's decisi
   BLOCKED - round 1's items resolved; the exception split: wave 10 on wave 9 while it waits only for the GM's band-3 sign-off
   LEGITIMATE on conditions, the hold's cost on three scaling rolls NOT the GM's (bisect it by row) - done: the wood shed's
   step held.
+- Amendment 9, round 3 (spec-fidelity, 2026-10-07): CHANGES REQUIRED, plan CLEAR - the ranking not re-merged; shed_off_a_wall
+  after the held shed step. Round 4 (spec-fidelity): FAITHFUL, plan CLEAR. Exception check (spec-fidelity, 2026-10-07): the
+  four DEVIATION relabels NOT LEGITIMATE (floor and ceiling dropped; the bank's forms and the free-standing storehouse E3).
+  Round 5 (spec-fidelity): wave 10 FAITHFUL, plan CLEAR, record CHANGES REQUIRED (Sawada's knot not main's; the berm not a
+  cause; the knot row's fix text). Round 6 (spec-fidelity): FAITHFUL, plan CLEAR.

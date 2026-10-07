@@ -585,15 +585,15 @@ BEGINS ONCE WAVE 9 IS PUSHED (FR-006) - or as the exception check rules (plan, W
 - [x] T38a wave 9's found rows tiered by the work they take, by a fresh reader (FR-002, FR-003, SC-003)
       research: rendering
       verify: DONE. 29 rows tiered by their work by a fresh Opus reader (audit/t38a-out.jsonl): 4 moved (the drain outfall and the wood shed's front seat to E2, the crown size to E2, the feeder brook to E3); T38b, the 18 found after: 14 then 4 (audit/t38b-out.jsonl, audit/t38c-out.jsonl), 3 moved (the bed's east reach below it to E3, the copse's sun strip to E1, the board's traffic floor to E3)
-- [ ] T39 the open in-scope E0 claims, each written or relabeled (a DEVIATION only after the exception path rules it
+- [x] T39 the open in-scope E0 claims, each written or relabeled (a DEVIATION only after the exception path rules it
       LEGITIMATE); then the E1 rows, each fixed toward the page it cites, with the unit tests it moves; proven on the reference
       hamlet (Inashiro, its PNG looked at) and the pool through the gate; a value that makes a map refuse is held and the row
       takes the tier of the work it needs (FR-004, FR-005, spec Edge Cases)
       research: rendering
-      verify:
-- [ ] T40 every touched unit re-checked by `impl-drift`; each wave-10 row IN-STEP or re-tiered with its measured reason (FR-005, SC-002)
+      verify: DONE. the 20 open in-scope E0 claims written and the 20 E1 rows fixed toward their pages (the notice board 16 x 6 ft, a 7 x 3 ft probe, 30 degrees, 6 ft off the road, entrance at 60 ft; 3 ft lane fallback; stubs to 60 ft; a 7 ft brook and feeder; clump crowns at 0080's density, no floor or cap; the fork triangle on a city's grain; the drain's wander in feet; no sideways ring step; the polder's acreage, module and 25 degree apex; the copse's south strip in feet); the four DEVIATION relabels ruled NOT LEGITIMATE and re-tiered; the canal's berm held (Inashiro's toe marsh, bisected), E3; Sawada's strict knot xfail restored (one knot where main has one); Inashiro looked at; the pool through a green make done; the notice board's glyph-check PASS
+- [x] T40 every touched unit re-checked by `impl-drift`; each wave-10 row IN-STEP or re-tiered with its measured reason (FR-005, SC-002)
       research: rendering
-      verify:
+      verify: DONE. impl-drift on every touched unit (bundles A-E, scratchpad/w10, each recorded with make claims-checked); the wave's own stale claim texts corrected and re-checked; every other finding a found row (audit/found-wave10.jsonl)
 - [ ] T41 the bookend pair, back to back, and the close: the band's records, `make done` green, the wave column, landed (FR-005, FR-006, SC-002, SC-003)
       research: rendering
       verify:
