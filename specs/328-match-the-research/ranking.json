@@ -571,6 +571,21 @@
   "scope": "kept"
  },
  {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#thicket size bamboothicketft 84 x 58 ft 0075 20 guess",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "thicket size BAMBOO_THICKET_FT 84 x 58 ft (0075 \u00a720 GUESS)",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 17 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#watercourse margin of half-width  3 ft no page gives the fig",
   "verdict": "UNCLAIMED",
   "tier": "E0",
@@ -6222,6 +6237,21 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "4",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#keep-out pads",
+  "verdict": "DRIFTED",
+  "tier": "E2",
+  "fix": "the claim says 2-30 ft, but these pads run 2-20 ft (woods 20, wells 14, kosatsuba 12, houses and retirement houses 10, lanes and belt 10, yards, gardens, sheds and byres 8, groves 4, persimmons 2). The 30 ft is the pond's pad, under another claim. The claim also leaves out byres, retirement houses and kosatsuba. Correct it to \"2-20 ft\" and name those three",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 17 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E2",
+  "wave": "",
   "scope": "kept"
  },
  {
