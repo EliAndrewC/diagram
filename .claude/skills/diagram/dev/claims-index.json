@@ -40094,24 +40094,39 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#bank beside the source brook": {
-  "code": "348607dedf19cbf8",
-  "core": "b9ce56589ec31620",
+  "code": "0681431fafa56bff",
+  "core": "242b2b262ce32810",
   "date": "2026-10-07",
-  "note": "`7.0 / 2 + 3.0` is in raw pixels and does not scale with the map, while the fallback brook two lines above uses `self.px(7.0)`; 0068 says a channel is \"the same real size on every map\", so at 2 ft/px this margin means 13 ft rather than 6.5; the margin should be px(7)/2 + px(3), or the claim should state pixels on purpose",
+  "note": "3 ft bund margin past a 7 ft brook; the cited material gives no margin beside a brook, so GUESS is right",
   "pages": {},
   "research": "",
   "rests": [
-   "0014-bunds-between-the-paddies-aze.drawing.html:3ba164484a3a465a",
-   "0014-bunds-between-the-paddies-aze.drawing.html:af5d565ccf760fa8",
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:0c50dfc54e196c68"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:25a9d039c229ae5d",
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:b1c3c0e8029a1da5"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#coarse-grain top-up": {
+  "code": "5c62e4f3d2bb76e5",
+  "core": "242b2b262ce32810",
+  "date": "2026-10-07",
+  "note": "reserve plots climb from the toe, under the same refusal rule",
+  "pages": {
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "721212518f833ab1"
+  },
+  "research": "8159982a6874674a",
+  "rests": [
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:05e2fe635af4884d",
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:348cf5c8d3c7cc78",
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:8f4e868ad49f5555"
+  ],
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#dry plot ink": {
-  "code": "dda7954c0eb3c8df",
-  "core": "b9ce56589ec31620",
+  "code": "909c5499fe559e4b",
+  "core": "242b2b262ce32810",
   "date": "2026-10-07",
-  "note": "crop color fill, furrowed",
+  "note": "each crop's own fill, with furrows",
   "pages": {
    "0006-dry-fields-and-their-crops-hatake.drawing.html": "9f1b7fafe06f01fe"
   },
@@ -40124,10 +40139,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#fallback watercourse widths": {
-  "code": "156322cb40a32f38",
-  "core": "b9ce56589ec31620",
+  "code": "9583e9d33527b020",
+  "core": "242b2b262ce32810",
   "date": "2026-10-07",
-  "note": "px(4.5) channel, px(6.0) canal and px(7.0) brook, converted from feet, match 0068's supply canal head and head race and 0059's 7 ft brook. The conflict between brook and head race is already recorded as a found row",
+  "note": "4.5 ft and 6.0 ft are the ladder's supply-canal and head-race rungs; 7 ft is 0059's brook; the conflict between the two pages is already logged at the named row",
   "pages": {
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "20b954e8c3ae0884",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html": "73b09981aa65bd21"
@@ -40135,19 +40150,17 @@
   "research": "43d03d4ffab70ddf",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:b1c3c0e8029a1da5",
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:0c50dfc54e196c68",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:8ab31b5afaea5611",
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:b3d0c7e9f522e493",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:bb9359b7865aa39b",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:e9e1c49b84a3b570"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#hem off rice and water": {
-  "code": "111096d6cb9f6265",
-  "core": "b9ce56589ec31620",
+  "code": "bcd25b380799848c",
+  "core": "242b2b262ce32810",
   "date": "2026-10-07",
-  "note": "drops plots on other rice and on water",
+  "note": "drops plots on other rice, on water or on its own ditch",
   "pages": {
    "0006-dry-fields-and-their-crops-hatake.drawing.html": "9f1b7fafe06f01fe"
   },
@@ -40159,36 +40172,36 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#hem placement": {
-  "code": "8850374f6f94e5e7",
-  "core": "b9ce56589ec31620",
+  "code": "cf805b54c1561f86",
+  "core": "242b2b262ce32810",
   "date": "2026-10-07",
-  "note": "upslope hem as the net lays it",
+  "note": "plots upslope of the supply canal, as the net lays them",
   "pages": {
    "0006-dry-fields-and-their-crops-hatake.drawing.html": "9f1b7fafe06f01fe"
   },
   "research": "eae521ca5e2ccfdd",
   "rests": [
-   "0006-dry-fields-and-their-crops-hatake.drawing.html:25a9d039c229ae5d",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:794454f6ea76b0fc",
-   "0006-dry-fields-and-their-crops-hatake.drawing.html:abb8b4f0d05c6c11"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:abb8b4f0d05c6c11",
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:dde5f2b9d9331f24"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#nothing built or planted on a dry plot": {
-  "code": "059586273c5b540d",
-  "core": "b9ce56589ec31620",
+  "code": "ac2b24a98bcce6f3",
+  "core": "242b2b262ce32810",
   "date": "2026-10-07",
-  "note": "the bundle is silent",
+  "note": "registry keep-off; the questions are silent",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#plot size and crop": {
-  "code": "a492a81815223087",
-  "core": "b9ce56589ec31620",
+  "code": "67e4faa2c59e46ad",
+  "core": "242b2b262ce32810",
   "date": "2026-10-07",
-  "note": "passed through from the net",
+  "note": "passes the net's plots through and decides nothing itself",
   "pages": {},
   "research": "",
   "rests": [],
@@ -50057,6 +50070,22 @@
   ],
   "verdict": "NEEDS-RESEARCH"
  },
+ ".claude/skills/diagram/l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#byre footprint BYRE_FT 16.12 x 10.92 ft": {
+  "code": "ba96e4c83570a50d",
+  "core": "ba96e4c83570a50d",
+  "date": "2026-10-07",
+  "note": "byre footprint BYRE_FT 16.12 x 10.92 ft",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#byre set YARD_SHED_GAP_FT[0], 6 ft, off the house": {
+  "code": "ba96e4c83570a50d",
+  "core": "ba96e4c83570a50d",
+  "date": "2026-10-07",
+  "note": "byre set YARD_SHED_GAP_FT[0], 6 ft, off the house",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#dispersed farm's grove": {
   "code": "e252142bfd9a4025",
   "core": "ba96e4c83570a50d",
@@ -50079,14 +50108,6 @@
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#dispersed grove thin band width THIN_BAND_FT 17 ft": {
-  "code": "ba96e4c83570a50d",
-  "core": "ba96e4c83570a50d",
-  "date": "2026-10-07",
-  "note": "dispersed grove thin band width THIN_BAND_FT 17 ft",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#dispersed well pocket": {
   "code": "6e5b56e7beb29db3",
   "core": "ba96e4c83570a50d",
@@ -50105,6 +50126,20 @@
   "pages": {},
   "research": "",
   "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#frame padded for a lane": {
+  "code": "596066ff37cc3cc8",
+  "core": "ba96e4c83570a50d",
+  "date": "2026-10-07",
+  "note": "16 ft pad each side gives the page's 32 ft guess",
+  "pages": {
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+  },
+  "research": "8e7d7569cc3f687f",
+  "rests": [
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:06616d493b616366"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#garden morning-sun reach": {
@@ -50152,14 +50187,6 @@
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#grove pad of half a lane's room (LANE_ROOM_FT/2, 16 ft)": {
-  "code": "ba96e4c83570a50d",
-  "core": "ba96e4c83570a50d",
-  "date": "2026-10-07",
-  "note": "grove pad of half a lane's room (LANE_ROOM_FT/2, 16 ft)",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#headman keeps an ordinary yard and garden": {
   "code": "2975792fbbe25496",
   "core": "ba96e4c83570a50d",
@@ -50200,13 +50227,19 @@
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#service strip behind the house SERVICE_STRIP_FT 24 ft": {
-  "code": "ba96e4c83570a50d",
+ ".claude/skills/diagram/l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#service strip": {
+  "code": "5bc6392c5b540874",
   "core": "ba96e4c83570a50d",
   "date": "2026-10-07",
-  "note": "service strip behind the house SERVICE_STRIP_FT 24 ft",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "note": "24 ft off the back and windward walls, as the page guesses",
+  "pages": {
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+  },
+  "research": "8e7d7569cc3f687f",
+  "rests": [
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:3828f77fb045b041"
+  ],
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#south band kept off the yard's sun": {
   "code": "cbca17a5b06e7e56",
@@ -50252,13 +50285,34 @@
   ],
   "verdict": "MISLABELED"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#way in through the grove WAY_IN_FT 36 ft": {
-  "code": "ba96e4c83570a50d",
+ ".claude/skills/diagram/l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#thin band": {
+  "code": "a70a401f3931dca2",
   "core": "ba96e4c83570a50d",
   "date": "2026-10-07",
-  "note": "way in through the grove WAY_IN_FT 36 ft",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "note": "17 ft, one tree deep, a guess the page records",
+  "pages": {
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+  },
+  "research": "8e7d7569cc3f687f",
+  "rests": [
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:c2e7b505cf13f306",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:e53d0cfe8f7f0386"
+  ],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#way in through a ring": {
+  "code": "b2c8546c5685f6b9",
+  "core": "ba96e4c83570a50d",
+  "date": "2026-10-07",
+  "note": "36 ft break at the front's middle, a guess the page records",
+  "pages": {
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+  },
+  "research": "8e7d7569cc3f687f",
+  "rests": [
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:61db845851638acd"
+  ],
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#yard before the south wall": {
   "code": "721e5963c738b4cd",
@@ -60326,13 +60380,15 @@
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/waterfields/comb.py::_comb_drain#collector held 40 px above the frame's bottom edge": {
-  "code": "2a5076bc135960ed",
+ ".claude/skills/diagram/l7r/diagram/waterfields/comb.py::_comb_drain#collector above the frame": {
+  "code": "28903645dda2a6d7",
   "core": "2a5076bc135960ed",
   "date": "2026-10-07",
-  "note": "collector held 40 px above the frame's bottom edge",
+  "note": "keeping the collector on the sheet; 0060 gives no figure",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/waterfields/comb.py::_comb_drain#collector on the low line": {
   "code": "f7779b2b6c20d3db",
@@ -62774,20 +62830,20 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/waterfields/polder.py::build_polder#acreage reckoned": {
-  "code": "7abd730bf908e685",
-  "core": "ddec998921f6e43d",
+  "code": "d12792d3ecb9a226",
+  "core": "d51f5c127b6edb32",
   "date": "2026-10-07",
-  "note": "plumbing",
+  "note": "measures area, decides nothing",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/waterfields/polder.py::build_polder#gaps": {
-  "code": "0370b6ac8ff0328b",
-  "core": "ddec998921f6e43d",
+  "code": "1b0bd2abdd6d2654",
+  "core": "d51f5c127b6edb32",
   "date": "2026-10-07",
-  "note": "3 ft bund (strips included), 8 ft corridor, scaled by ftpx",
+  "note": "3 ft bund between rows and strips, 8 ft ditch corridor between columns",
   "pages": {
    "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "b3774c7331266452"
   },
@@ -62801,10 +62857,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/waterfields/polder.py::build_polder#hand-piled outlines": {
-  "code": "b3fb52f93592f3e0",
-  "core": "ddec998921f6e43d",
+  "code": "b322f2b1f9ebb393",
+  "core": "d51f5c127b6edb32",
   "date": "2026-10-07",
-  "note": "I need `_polder_parcels` and `organic` to see whether the 0.05-module fillet varies corner by corner, as the page's \"drawn from a wide spread, from all but square to a broad sweep\" asks, or is fixed",
+  "note": "corners rounded where plots stand apart, from all but square to a broad sweep",
   "pages": {
    "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
   },
@@ -62813,13 +62869,30 @@
    "0014-bunds-between-the-paddies-aze.drawing.html:8dc325794a232600",
    "0014-bunds-between-the-paddies-aze.drawing.html:de5f537983379a58"
   ],
-  "verdict": "CANNOT-TELL"
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/waterfields/polder.py::build_polder#lattice unbent by default": {
+  "code": "85576ba56dcba083",
+  "core": "d51f5c127b6edb32",
+  "date": "2026-10-07",
+  "note": "the rice polder keeps its grid; the dike-pond block passes its own mosaic",
+  "pages": {
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "45bbefa1e8568ae6"
+  },
+  "research": "7e58acaa9e345ce6",
+  "rests": [
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:4141eca659aa9041",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:470adb1b46c06909",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:48a5898890bd6579",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:4cf532f7ce72c2a8"
+  ],
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/waterfields/polder.py::build_polder#low rows wet": {
-  "code": "d7e76e6a871904ab",
-  "core": "ddec998921f6e43d",
+  "code": "653c013af364fb29",
+  "core": "d51f5c127b6edb32",
   "date": "2026-10-07",
-  "note": "the tinting happens in `_polder_parcels`, which is not in the bundle; the claim matches §625 (\"tints every low plot\")",
+  "note": "a polder tints every low plot; two rows is a calibration within that",
   "pages": {
    "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "d28f2aaa854f4f5b"
   },
@@ -62828,58 +62901,57 @@
    "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:4fc3811eb15b4538",
    "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:68a6523772c7cec3"
   ],
-  "verdict": "CANNOT-TELL"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/waterfields/polder.py::build_polder#module line bow": {
-  "code": "1ffcda753bb164b4",
-  "core": "ddec998921f6e43d",
+  "code": "5449eed7777ba8ef",
+  "core": "d51f5c127b6edb32",
   "date": "2026-10-07",
-  "note": "line_wander 0.10, \"up to about a tenth\"",
+  "note": "bow of 0.10 of the module, kept off the boundary lines",
   "pages": {
    "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
   },
   "research": "9c5292e27312fca8",
   "rests": [
-   "0014-bunds-between-the-paddies-aze.drawing.html:9b9af18ba1394922",
-   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:eb2d7af29e23a469"
+   "0014-bunds-between-the-paddies-aze.drawing.html:9b9af18ba1394922"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/waterfields/polder.py::build_polder#module size": {
-  "code": "82ed1e6c8a28aba1",
-  "core": "ddec998921f6e43d",
+  "code": "1321b15dd72a772e",
+  "core": "d51f5c127b6edb32",
   "date": "2026-10-07",
-  "note": "190 ft / ftpx",
+  "note": "190 ft module divided by ftpx",
   "pages": {
    "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "b3774c7331266452"
   },
   "research": "5b339210163f008f",
   "rests": [
-   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:87427868eb3365dc",
-   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:f75d60bdb9784b89"
+   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:87427868eb3365dc"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/waterfields/polder.py::build_polder#parcel mix": {
-  "code": "752c2e0107de1ca6",
-  "core": "ddec998921f6e43d",
+  "code": "25f1e811704eb286",
+  "core": "d51f5c127b6edb32",
   "date": "2026-10-07",
-  "note": "most modules split, about 12% merged; mean parcel about half an acre",
+  "note": "most modules split into 2-3 strips, a few merged; the mean parcel is near half an acre",
   "pages": {
    "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "b3774c7331266452"
   },
   "research": "5b339210163f008f",
   "rests": [
    "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:12a3ae71eb49cdf8",
+   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:87427868eb3365dc",
    "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:eb2d7af29e23a469"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/waterfields/polder.py::build_polder#polder layout": {
-  "code": "215893de9c89023b",
-  "core": "ddec998921f6e43d",
+  "code": "4c5f856a9379ce39",
+  "core": "d51f5c127b6edb32",
   "date": "2026-10-07",
-  "note": "ring canal inside the dike, inlet and outfall sluices",
+  "note": "diked block, ring canal at the inside foot of the dike, inlet and outfall sluices",
   "pages": {
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "45bbefa1e8568ae6"
   },
@@ -62891,37 +62963,30 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/waterfields/polder.py::build_polder#polder size": {
-  "code": "8e8bf8779f0d2735",
-  "core": "ddec998921f6e43d",
+  "code": "34ad3a5c325680ff",
+  "core": "d51f5c127b6edb32",
   "date": "2026-10-07",
-  "note": "unanswered",
+  "note": "11x6 modules; the questions are silent on block size",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/waterfields/polder.py::build_polder#rice polder lattice unbent by default (mosaic 0, edge_wander 0)": {
-  "code": "ddec998921f6e43d",
-  "core": "ddec998921f6e43d",
-  "date": "2026-10-07",
-  "note": "rice polder lattice unbent by default (mosaic 0, edge_wander 0)",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  ".claude/skills/diagram/l7r/diagram/waterfields/polder.py::build_polder#toe ends on the trunk": {
-  "code": "e0cfcb6a9dffbee0",
-  "core": "ddec998921f6e43d",
+  "code": "f345591ccefc2cc0",
+  "core": "d51f5c127b6edb32",
   "date": "2026-10-07",
-  "note": "`along_trunk(_on, _best, ..., 3.0)` passes a raw 3.0 with no /ftpx, while `cell` and `gap` beside it are scaled, so the claimed \"3 ft\" is 3 px (6 ft at 2 ft/px), unless along_trunk scales it itself; it should be 3.0/ftpx",
+  "note": "tips set on the trunk's drawn line and run on inside its width as one body",
   "pages": {
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "790c57e2a1c0ab27"
   },
   "research": "a3b4c3a9112374b7",
   "rests": [
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:1c4ab4cdec854bfe",
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:863892cbd9ede3bd",
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:c7c19378534d318a"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/waterfields/polder.py::clean_polder_parcels#polder plumbing": {
   "code": "ce45142b33715d13",

@@ -65,10 +65,10 @@ def build_polder(
 
     TRUE-SCALE SIZING (GM directive 2026-07-21: no legibility inflation - these maps are perfectly to
     scale, 1 px = 1 ft at hamlet scale; sizes verified by research the same day):
-    - RICE polder (`parcel_mix` default (0.52, 0.16, 0.12)): target mean parcel ~1 mu (~600 m2 ~6,460
-      sq ft; Buck 1929-33: 0.34 ha over 5.6 plots), common range ~0.2-3 mu, square to ~1:3 oblong. A
-      ~110 ft module hits this: whole bay ~1.9 mu, halves ~0.9 mu, thirds ~0.6 mu, rare merges ~3.7 mu.
-      `gap` default (1.5, 4.0): between-row gaps 3 px (~1 m walking bund, attested 20-50 cm + stroke) and
+    - RICE polder (`parcel_mix` default (0.52, 0.16, 0.12)): a mean parcel near half an acre, about 3 mu
+      (research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html; feature 328 moved the module from ~110 ft),
+      square to ~1:3 oblong. The default 190 ft module gives a whole bay ~5 mu, halves ~2.5 mu, thirds ~1.7 mu.
+      `gap` default (1.5, 4.0) px at 1 ft/px, scaled by `ftpx`: between-row gaps 3 px (~1 m walking bund, attested 20-50 cm + stroke) and
       8 px column corridors carrying the 3.2 px lateral (a bang 浜 field ditch + spoil banks, ~2.4 m).
       A GAP IS ONLY AS WIDE AS WHAT RUNS IN IT (`split_gap`, GM 2026-07-24; research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html;
       `mosaic` at research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html, and
