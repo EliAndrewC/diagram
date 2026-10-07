@@ -109,6 +109,7 @@
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_bridge_collinear_breaks#bridge clearance fallback": "4",
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_keep_the_route_wide#through-route keeps its width": "4",
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::cut_past_connector#overrun past the connector cut": "4",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::trim_free_stub#only a free-end stub of 20 ft or less (_FREE_STUB_FT) is cut": "4 (claim renamed or split; its parts re-checked)",
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#join reach": "4",
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#clear of crop, wet and water": "3",
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton arm clipped WEB_FABRIC_GAP (7 ft) off the steadings and trimmed back to the last point serving a house": "4",

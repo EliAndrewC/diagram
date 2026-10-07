@@ -174,6 +174,7 @@ Each wave's amendment adds its map decisions to this table. The program's decisi
 | Sheet-redrawing procedure rows tiered E3, not E1 (wave 2's amendment) | process, FR-003's own definition | the rankers put nine rows that redraw Ubame, Hayakawa, Ochiba or Hoshigaoka in E1; FR-003 tiers a sheet redraw E3 | `audit/overrides.json`, plan D5 |
 | The lane law's 32 rows of `ways/` are one wave (wave 4), with the lane rows found since | process, within FR-003's module grouping | one rule set (0081, 0246) across `hamletgen/ways/`; fixed apart, the network would be half under each law | plan D6 |
 | Waves land inside this feature: only the current wave's rows are task boxes; the next wave is an amendment | process | the GM asked for one feature; the open-task refusal reads only `tasks.md`'s boxes, so a wave lands when its boxes are ticked | FR-006 |
+| The row street's E1 row waits past wave 5 | process, FR-003's own definition | its fix sets 0033 (the street runs on off the map) against 0246 (a way pulled back to the last door it serves), so it is read before it is tiered, not fixed as one value | plan D7 |
 
 ## Assumptions
 

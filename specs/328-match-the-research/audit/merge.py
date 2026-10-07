@@ -57,11 +57,17 @@ for k, r in rows.items():
     if r["tier"] == "E0" and verdict[k] not in ("MISLABELED", "UNCLAIMED") and not r.get("e0_basis") and not r.get("e0_rechecked"):
         r["needs_e0_review"] = True
 
-# A row waits for its dependencies: it takes at least their tier.
+# The wave that closed each row (audit/waves.json: written from the claims index at a wave's close).
+waves = json.loads((AUDIT / "waves.json").read_text()) if (AUDIT / "waves.json").exists() else {}
+
+# A row waits for its dependencies: it takes at least their tier (an open row only - a closed row keeps the tier it was
+# closed at, so re-tiering an open dependency never rewrites a wave's history).
 changed = True
 while changed:
     changed = False
     for r in rows.values():
+        if waves.get(r["key"]):
+            continue
         for d in r["after"]:
             if d in rows and TIERS.index(rows[d]["tier"]) > TIERS.index(r["tier"]):
                 r["tier"] = rows[d]["tier"]
@@ -72,8 +78,6 @@ def module(k):
     return k.split("::")[0]
 
 
-# The wave that closed each row (audit/waves.json: written from the claims index at a wave's close).
-waves = json.loads((AUDIT / "waves.json").read_text()) if (AUDIT / "waves.json").exists() else {}
 for r in rows.values():
     r["wave"] = waves.get(r["key"], "")
 
@@ -83,7 +87,7 @@ pos = {r["key"]: i for i, r in enumerate(ordered)}
 for _ in range(len(ordered)):
     moved = False
     for r in list(ordered):
-        for d in r["after"]:
+        for d in [] if r["wave"] else r["after"]:
             if d in pos and pos[d] > pos[r["key"]]:
                 ordered.remove(r)
                 ordered.insert(ordered.index(rows[d]) + 1, r)

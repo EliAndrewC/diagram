@@ -442,8 +442,8 @@
   "flag": "",
   "found": "wave 2 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E4",
-  "moved": "T12a: tiered by the work it takes (was provisional, by verdict)",
   "e0_basis": "0077 drawing: 'within about 45 ft' (its GUESS) - LOT_BOUND_REACH is 45.0",
+  "moved": "T12a: tiered by the work it takes (was provisional, by verdict)",
   "wave": "3"
  },
  {
@@ -678,6 +678,21 @@
   "wave": "4 (claimed: a lane with no width judged as a footpath)"
  },
  {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::near_misses#ends that nearly meet are joined",
+  "tier": "E0",
+  "fix": "the 25 ft is in step; claim the AIM_DEG 60 deg test that decides which ends count as UNRESEARCHED",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py"
+  ],
+  "after": [],
+  "flag": "",
+  "tier_as_ranked": "E1",
+  "e0_basis": "impl-drift wave 4: the 25 ft reach is the page's; only the AIM_DEG test is unclaimed",
+  "moved": "wave 4 re-check: the reach in step, the aim test unclaimed",
+  "verdict": "DRIFTED",
+  "wave": ""
+ },
+ {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#no way drawn twice",
   "verdict": "MISLABELED",
   "tier": "E0",
@@ -774,6 +789,35 @@
   "tier_as_ranked": "E0",
   "verdict": "CANNOT-TELL",
   "wave": "1"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::trim_free_stub#only a free-end stub of 20 ft or less (_FREE_STUB_FT) is cut",
+  "tier": "E0",
+  "fix": "claim the stub cut citing 0081 a lane's end loses its hook once aligned",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py"
+  ],
+  "after": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_FREE_STUB_FT#free-end stub past a kink"
+  ],
+  "flag": "",
+  "tier_as_ranked": "E0",
+  "verdict": "UNCLAIMED",
+  "wave": "4 (claim renamed or split; its parts re-checked)"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::_thread_the_fabric#the track's route walled by the field, crop, toe band and wet ground, and kept off drawn water",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "claim it: the track's route walled by the field, crop, toe band and wet ground, and kept off drawn water",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 4 re-check (impl-drift on track.py)",
+  "tier_as_ranked": "E0",
+  "wave": ""
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#clear of crop, wet and water",
@@ -1580,6 +1624,37 @@
   "wave": "2"
  },
  {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/checks.py::lanes_share_tread#one network at 40 ft",
+  "tier": "E1",
+  "fix": "treads count as joined only within the 25 ft join reach (0081), not 40 ft",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/checks.py"
+  ],
+  "after": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::JOIN_REACH_FT#a join that stops short"
+  ],
+  "flag": "",
+  "tier_as_ranked": "E1",
+  "verdict": "DRIFTED",
+  "wave": "4 (claim renamed to 25 ft; the drift left is a found row)"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/clearance.py::_clear_touch#junction link margin",
+  "tier": "E1",
+  "fix": "_clear_touch margin off yards and gardens 4 -> 7 ft (_TOUCH_GAP, 0246)",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/clearance.py",
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/geom.py"
+  ],
+  "after": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::fouls_fabric#foul margin"
+  ],
+  "flag": "",
+  "tier_as_ranked": "E1",
+  "verdict": "MISLABELED",
+  "wave": "4"
+ },
+ {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/clearance.py::clear_runs#threads between steadings",
   "tier": "E1",
   "fix": "clear_runs default tight_margin 6.0 -> 7.0 (WEB_FABRIC_GAP)",
@@ -1590,6 +1665,21 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
+  "wave": "4"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/clearance.py::may_write#no nearer the fabric",
+  "tier": "E1",
+  "fix": "may_write bar max(_TOUCH_GAP, w/2+2) -> 7 ft off garden/yard fabric",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/clearance.py"
+  ],
+  "after": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::fouls_fabric#foul margin"
+  ],
+  "flag": "",
+  "tier_as_ranked": "E1",
+  "verdict": "MISLABELED",
   "wave": "4"
  },
  {
@@ -1648,6 +1738,37 @@
   "wave": "4"
  },
  {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/geom.py::_trim_to_service#an outlying house keeps its way",
+  "tier": "E1",
+  "fix": "_trim_to_service keeps an end serving a keep house only within 60 ft (or 12 ft of built ground), not WEB_REACH_FT 100",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/geom.py"
+  ],
+  "after": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/smooth.py::_END_HOUSE_FT#lane end reaches a house"
+  ],
+  "flag": "",
+  "tier_as_ranked": "E1",
+  "verdict": "DRIFTED",
+  "wave": "4"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/geom.py::push_clear_of_fabric#gateway clearance",
+  "tier": "E1",
+  "fix": "TRACK_FABRIC_GAP 16 -> 7 ft in push_clear_of_fabric (0081/0246 lane-to-fence clearance)",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py",
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/geom.py"
+  ],
+  "after": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::_thread_the_fabric#gap off the steadings"
+  ],
+  "flag": "",
+  "tier_as_ranked": "E1",
+  "verdict": "MISLABELED",
+  "wave": "4"
+ },
+ {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/joints.py::_MEET_FT#ends that nearly meet",
   "tier": "E1",
   "fix": "_MEET_FT 11.5 -> 25 ft (0081 ends within 25 ft joined)",
@@ -1690,21 +1811,6 @@
   "wave": "4"
  },
  {
-  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/checks.py::lanes_share_tread#one network at 40 ft",
-  "tier": "E1",
-  "fix": "treads count as joined only within the 25 ft join reach (0081), not 40 ft",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/checks.py"
-  ],
-  "after": [
-   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::JOIN_REACH_FT#a join that stops short"
-  ],
-  "flag": "",
-  "tier_as_ranked": "E1",
-  "verdict": "DRIFTED",
-  "wave": "4 (claim renamed to 25 ft; the drift left is a found row)"
- },
- {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::connector_hairpin_ends#no hairpin at the track",
   "tier": "E1",
   "fix": "connector_hairpin_ends returning-leg figure 25 -> 40 ft (0081 section 1342)",
@@ -1716,81 +1822,6 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "4"
- },
- {
-  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::fouls_fabric#foul margin",
-  "tier": "E1",
-  "fix": "_TOUCH_GAP 4 -> 7 ft off another's yard or garden (0246 lane middle 7 ft off a fence)",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/geom.py",
-   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py"
-  ],
-  "after": [],
-  "flag": "",
-  "tier_as_ranked": "E1",
-  "verdict": "DRIFTED",
-  "wave": ""
- },
- {
-  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/clearance.py::may_write#no nearer the fabric",
-  "tier": "E1",
-  "fix": "may_write bar max(_TOUCH_GAP, w/2+2) -> 7 ft off garden/yard fabric",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/clearance.py"
-  ],
-  "after": [
-   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::fouls_fabric#foul margin"
-  ],
-  "flag": "",
-  "tier_as_ranked": "E1",
-  "verdict": "MISLABELED",
-  "wave": "4"
- },
- {
-  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/clearance.py::_clear_touch#junction link margin",
-  "tier": "E1",
-  "fix": "_clear_touch margin off yards and gardens 4 -> 7 ft (_TOUCH_GAP, 0246)",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/clearance.py",
-   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/geom.py"
-  ],
-  "after": [
-   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::fouls_fabric#foul margin"
-  ],
-  "flag": "",
-  "tier_as_ranked": "E1",
-  "verdict": "MISLABELED",
-  "wave": "4"
- },
- {
-  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::near_misses#ends that nearly meet are joined",
-  "tier": "E1",
-  "fix": "near_misses uses the 25 ft join reach",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py"
-  ],
-  "after": [
-   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::JOIN_REACH_FT#a join that stops short"
-  ],
-  "flag": "",
-  "tier_as_ranked": "E1",
-  "verdict": "DRIFTED",
-  "wave": ""
- },
- {
-  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::span_walkable#a walkable span",
-  "tier": "E1",
-  "fix": "span_walkable keeps yards and gardens 7 ft off the line",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py"
-  ],
-  "after": [
-   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::fouls_fabric#foul margin"
-  ],
-  "flag": "",
-  "tier_as_ranked": "E1",
-  "verdict": "DRIFTED",
-  "wave": ""
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py::fouled_segment#off another household's yard or garden",
@@ -1819,21 +1850,6 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "4 (the constant retired with the hairpin-arm cut it served)"
- },
- {
-  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/geom.py::_trim_to_service#an outlying house keeps its way",
-  "tier": "E1",
-  "fix": "_trim_to_service keeps an end serving a keep house only within 60 ft (or 12 ft of built ground), not WEB_REACH_FT 100",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/geom.py"
-  ],
-  "after": [
-   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/smooth.py::_END_HOUSE_FT#lane end reaches a house"
-  ],
-  "flag": "",
-  "tier_as_ranked": "E1",
-  "verdict": "DRIFTED",
-  "wave": "4"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/smooth.py::_END_WAY_FT#lane end reaches a way",
@@ -1948,21 +1964,6 @@
   "wave": "4"
  },
  {
-  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::trim_free_stub#only a free-end stub of 20 ft or less (_FREE_STUB_FT) is cut",
-  "tier": "E1",
-  "fix": "claim the stub cut citing 0081 a lane's end loses its hook once aligned",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py"
-  ],
-  "after": [
-   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_FREE_STUB_FT#free-end stub past a kink"
-  ],
-  "flag": "",
-  "tier_as_ranked": "E0",
-  "verdict": "UNCLAIMED",
-  "wave": ""
- },
- {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#join reach",
   "tier": "E1",
   "fix": "_touch_junctions reach 25 ft on every pass (30 and final 48 -> 25)",
@@ -1975,36 +1976,6 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
-  "wave": "4"
- },
- {
-  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::_thread_the_fabric#gap off the steadings",
-  "tier": "E1",
-  "fix": "TRACK_FABRIC_GAP 16 -> 7 ft (0246 lane middle 7 ft off a fence)",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py",
-   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py"
-  ],
-  "after": [],
-  "flag": "",
-  "tier_as_ranked": "E1",
-  "verdict": "DRIFTED",
-  "wave": ""
- },
- {
-  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/geom.py::push_clear_of_fabric#gateway clearance",
-  "tier": "E1",
-  "fix": "TRACK_FABRIC_GAP 16 -> 7 ft in push_clear_of_fabric (0081/0246 lane-to-fence clearance)",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py",
-   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/geom.py"
-  ],
-  "after": [
-   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::_thread_the_fabric#gap off the steadings"
-  ],
-  "flag": "",
-  "tier_as_ranked": "E1",
-  "verdict": "MISLABELED",
   "wave": "4"
  },
  {
@@ -3560,6 +3531,23 @@
   "wave": ""
  },
  {
+  "key": ".claude/skills/diagram/buildings.md::Fire-water tubs#one tub per wooden building",
+  "tier": "E2",
+  "fix": "tubs one per major wooden building plus two at the kitchen: Ubame's 19 cut to that rule, a tub added at Ochiba's karo's house / senior retainers' quarters (if they survive)",
+  "files": [
+   ".claude/skills/diagram/buildings.md",
+   ".claude/skills/diagram/pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+   ".claude/skills/diagram/pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg"
+  ],
+  "after": [
+   ".claude/skills/diagram/buildings.md::Inner court (private / sacred)#senior retainers housed apart"
+  ],
+  "flag": "",
+  "tier_as_ranked": "E2",
+  "verdict": "DRIFTED",
+  "wave": "4 (IN-STEP on a wave's re-check, no change needed)"
+ },
+ {
   "key": ".claude/skills/diagram/buildings.md::Fire-water tubs#tub against its wall",
   "verdict": "DRIFTED",
   "tier": "E2",
@@ -3883,6 +3871,23 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": ""
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/cluster.py::seat_cluster#brook across the band",
+  "verdict": "DRIFTED",
+  "tier": "E2",
+  "fix": "the brook crossing only breaks near-ties: drop score -= 3.0*crossed from the score and use crossed as a secondary sort key among margins whose scores are level (within a small epsilon)",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/cluster.py"
+  ],
+  "after": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#a cluster the brook crosses reached"
+  ],
+  "flag": "",
+  "found": "wave 2 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E2",
+  "moved": "T12a: tiered by the work it takes (was provisional, by verdict)",
+  "wave": "4 (IN-STEP on a wave's re-check, no change needed)"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/cluster.py::seat_cluster#never below the drain",
@@ -6312,23 +6317,6 @@
   "wave": ""
  },
  {
-  "key": ".claude/skills/diagram/buildings.md::Fire-water tubs#one tub per wooden building",
-  "tier": "E3",
-  "fix": "tubs one per major wooden building plus two at the kitchen: Ubame's 19 cut to that rule, a tub added at Ochiba's karo's house / senior retainers' quarters (if they survive)",
-  "files": [
-   ".claude/skills/diagram/buildings.md",
-   ".claude/skills/diagram/pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
-   ".claude/skills/diagram/pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg"
-  ],
-  "after": [
-   ".claude/skills/diagram/buildings.md::Inner court (private / sacred)#senior retainers housed apart"
-  ],
-  "flag": "",
-  "tier_as_ranked": "E2",
-  "verdict": "DRIFTED",
-  "wave": "4 (IN-STEP on a wave's re-check, no change needed)"
- },
- {
   "key": ".claude/skills/diagram/buildings.md::Latrines and the rear service strip#privy size",
   "tier": "E3",
   "fix": "privy drawn 5 ft square (15 px), not 14-20 px; oversize privies on Ochiba, Hayakawa, Ubame resized",
@@ -7380,23 +7368,6 @@
   "wave": ""
  },
  {
-  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/cluster.py::seat_cluster#brook across the band",
-  "verdict": "DRIFTED",
-  "tier": "E3",
-  "fix": "the brook crossing only breaks near-ties: drop score -= 3.0*crossed from the score and use crossed as a secondary sort key among margins whose scores are level (within a small epsilon)",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/hamletgen/cluster.py"
-  ],
-  "after": [
-   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#a cluster the brook crosses reached"
-  ],
-  "flag": "",
-  "found": "wave 2 re-check (tier provisional, by verdict)",
-  "tier_as_ranked": "E2",
-  "moved": "T12a: tiered by the work it takes (was provisional, by verdict)",
-  "wave": "4 (IN-STEP on a wave's re-check, no change needed)"
- },
- {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#a footpath reaches every farmhouse 7 ft off a plot",
   "verdict": "DRIFTED",
   "tier": "E3",
@@ -7408,6 +7379,22 @@
   "flag": "",
   "found": "wave 4: FOOTPATH_FABRIC_GAP at 7 ft",
   "tier_as_ranked": "E3",
+  "wave": ""
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::_thread_the_fabric#gap off the steadings",
+  "tier": "E3",
+  "fix": "the grove fallback threads at FOOTPATH_FABRIC_GAP (4 ft); it moves to 7 ft with the footpath row that lets footpaths thread at 7",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py"
+  ],
+  "after": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#a footpath reaches every farmhouse 7 ft off a plot"
+  ],
+  "flag": "",
+  "tier_as_ranked": "E1",
+  "moved": "wave 4: waits on the footpath row (held at 4 ft)",
+  "verdict": "DRIFTED",
   "wave": ""
  },
  {
@@ -8750,6 +8737,36 @@
   "flag": "",
   "tier_as_ranked": "E4",
   "verdict": "UNCLAIMED",
+  "wave": ""
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::fouls_fabric#foul margin",
+  "tier": "E4",
+  "fix": "the lanes keep 7 ft off a garden fence (0246) and that is in step; the same 7 ft off a threshing yard is on no page (0246 calls the yard open ground) - research the margin off a yard first, then set it",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py"
+  ],
+  "after": [],
+  "flag": "",
+  "tier_as_ranked": "E1",
+  "moved": "wave 4 re-check: NEEDS-RESEARCH (the yard margin)",
+  "verdict": "DRIFTED",
+  "wave": ""
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::span_walkable#a walkable span",
+  "tier": "E4",
+  "fix": "as fouls_fabric: the 7 ft off a threshing yard is on no page; research the margin off a yard first",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py"
+  ],
+  "after": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::fouls_fabric#foul margin"
+  ],
+  "flag": "",
+  "tier_as_ranked": "E1",
+  "moved": "wave 4 re-check: NEEDS-RESEARCH (the yard margin)",
+  "verdict": "DRIFTED",
   "wave": ""
  },
  {

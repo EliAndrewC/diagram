@@ -59,6 +59,18 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 - **Verification**: the reference hamlet first (`make map` on Inashiro, the PNG looked at), then the pool through the
   gate; the bookend pair `328-w2-start` / `328-w2-end` and the band's records; `impl-drift` on every touched unit.
 
+## Wave 5 (amendment 4, 2026-10-07)
+
+- **Scope**: the two open E0 rows, then the 23 E1 rows of the homestead and its fixtures (`tasks.md` Phase 6): the
+  fixtures' seats and the privy's reach, the groves' crowns, conifer share and sun corridors (0037, 0038, 0071, 0072, 0080),
+  the belt's least depth, the bundle's garden cap, the kura's west annex (0040), the farm wells' reach and dooryard (0196).
+  Ranking order: the next modules of E1 after the lane law, each module's rows in one claims bundle.
+- **D7 - the row street waits**: its fix sets 0033 (the street runs on off the map) against 0246 (a way pulled back to
+  the last door it serves); it is read before it is tiered, so it is not a one-value fix in this wave.
+- **Verification**: as wave 4 - the reference hamlet first (`make map` on Inashiro, the PNG looked at), then the pool
+  through the gate; the bookends back to back (start in a detached worktree at main, end in the clone); `impl-drift` on
+  every touched unit; a held value becomes a found row (spec Edge Cases).
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Each later wave that changes engine behavior takes

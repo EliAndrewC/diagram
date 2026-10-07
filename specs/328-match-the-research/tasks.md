@@ -10,6 +10,9 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
   within 25 ft, tails and hooks cut at 40 and 12 ft): the lanes are re-placed by substantially different rules.
 - none (wave 2): each fix moves one value inside a rule that already places the element (a weight, a pitch, a share, a
   count's cap, an extent); no element is new to a map, no glyph is redrawn, and no element is re-placed by different rules.
+- none (wave 5): each fix moves one value inside a rule that already places the element (a reach or a corridor in feet, a
+  seat weight, a size band, a crown floor, a share, a cap); no element is new to a map, no glyph is redrawn, and no element
+  is re-placed by different rules.
 
 ## Phase 1 - the audit
 
@@ -208,3 +211,54 @@ way that takes more work than its tier takes that tier and waits on a found row 
       research: rendering
       verify: DONE. DONE. glyph-check on the village lane (Inashiro): round 3 PASS; the later speed-up left every pool map byte-identical, so the round stands (PAIR_OK logged). Back-to-back bookends 328-start (worktree at origin/main) / 328-end: band 2 (40 hh +8.3%, seed 4 +14.4%); explanation with CONTROL=wave4-perf-control-no-gather (the gather 1.1-1.8 s per 40 hh map), perf-audit confirmed and audited JUSTIFIED; make done green; the wave column written
 
+## Phase 6 - wave 5 (two E0 claims, then the E1 rows of the homestead and its fixtures) - amendment 4, 2026-10-07
+
+The two open E0 rows (wave 4's re-checks: an aim test and a track route left unclaimed) come first (SC-003); then the
+E1 rows of the next modules in ranking order, the homestead and what stands in it - its fixtures' seats, its groves and
+belt, its bundle's garden, its kura and its wells (`settlement/homestead_parts/`, `settlement/rolling/bundle.py` and
+`fit.py`, `settlement/farm_fixtures.py`, `settlement/shrines_wells/wells.py`). Every `after` these rows carry is a row
+inside the wave, done first. The row-street row of `hamletgen/ways/web.py` stays for the next wave: 0033 has the street
+run on off the map and 0246 pulls a way back to the last door it serves, so it is read before it is tiered.
+
+  - `l7r/diagram/hamletgen/ways/law.py::near_misses#ends that nearly meet are joined` - the 25 ft is in step; claim the AIM_DEG 60 deg test that decides which ends count as UNRESEARCHED
+  - `l7r/diagram/hamletgen/ways/track.py::_thread_the_fabric#the track's route walled by the field, crop, toe band and wet ground, and kept off drawn water` - claim it: the track's route walled by the field, crop, toe band and wet ground, and kept off drawn water
+
+  - `l7r/diagram/settlement/farm_fixtures.py::KURA_PARTS#west annex` - W annex 0.32 x 0.56 (15 x 16 ft) -> 18-27 ft long, 10-12 ft deep, 1.5-1.8 to one
+  - `l7r/diagram/settlement/farm_fixtures.py::kura_rect#west annex size` - hold the west annex to 0040 drawing's band: 18-27 ft long, 1.5-1.8 times as long as deep, as the north annex is
+  - `l7r/diagram/settlement/homestead_parts/belt_law.py::MIN_BELT_DEPTH_FT#least belt depth` - MIN_BELT_DEPTH_FT 30 -> 80 ft (0071 drawing: never thinner than 80 ft)
+  - `l7r/diagram/settlement/homestead_parts/fixture_seats.py::FixtureForms#privy seat weights` - privy seat weights to stable 35 / yard 30 / front 20 / barn 15 as 0047 drawing lists them
+  - `l7r/diagram/settlement/homestead_parts/fixture_seats.py::PRIVY_FRONT_STEP_FT#front privy off the front wall` - front privy edge 8 ft off the front wall: drop the WALL_GAP_FT from the seat (or PRIVY_FRONT_STEP_FT 4.5)
+  - `l7r/diagram/settlement/homestead_parts/fixture_seats.py::PRIVY_YARD_STEP_FT#yard outhouse off the back wall` - yard privy edge a ken (6 ft) off the back wall: drop the gap (or PRIVY_YARD_STEP_FT 2.5)
+  - `l7r/diagram/settlement/homestead_parts/fixture_seats.py::WOODSHED_STEP_FT#wood shed off its wall` - wood shed edge 6 ft off its wall: drop the gap from the seat (or WOODSHED_STEP_FT 2.5)
+  - `l7r/diagram/settlement/homestead_parts/fixture_seats.py::privy_sun_reach_ft#sun-side reach by size` - cap a sunny-side privy center at 48 ft from its house; drop the size allowance in privy_sun_reach_ft
+  - `l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#lesser broadleaf crown size` - LESSER_BROADLEAF_S floor 0.6 -> 0.75 of the mean radius (0080 drawing: 0.75-1.4), cite 0080
+  - `l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#windbreak conifer share` - windbreak conifer share c_th = b_th + 0.48 (0072/Takehara: 48% cedar, the dominant tree)
+  - `l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._grove_fits#off a yard's south strip` - grove box kept out of the 39 ft south corridor (0037/0038) via px(), not a fixed 22 px strip
+  - `l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#belt deep and whole` - village_grove gap test compares px(_BELT_GAP_FT), 30 ft at every grain
+  - `l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#clumps off the gardens' east` - the east lane 50 ft in feet (0038: no crown within 50 ft east, west or south of a yard or bed), yards included, not 24 px past a garden
+  - `l7r/diagram/settlement/homestead_parts/grove_rules.py::EAST_REACH_PX#garden's morning sun` - EAST_REACH_PX 22 bscale -> 0038's 50 ft east reach via px() (after: l7r/diagram/settlement/homestead_parts/wood_share.py::EAST_LANE_PX#bed's morning lane)
+  - `l7r/diagram/settlement/homestead_parts/wood_share.py::EAST_LANE_PX#bed's morning lane` - EAST_LANE_PX 24 px -> 0038's 50 ft via px() (after: l7r/diagram/settlement/homestead_parts/grove_rules.py::EAST_REACH_PX#garden's morning sun)
+  - `l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._shades_a_garden#garden's morning sun` - _shades_a_garden reach 22 x bscale -> 0038's 50 ft east via px() (after: l7r/diagram/settlement/homestead_parts/grove_rules.py::EAST_REACH_PX#garden's morning sun)
+  - `l7r/diagram/settlement/homestead_parts/grove_rules.py::gardens_east_shaded#garden's morning sun` - same constant: gardens_east_shaded reads the 50 ft reach (0038) via px() (after: l7r/diagram/settlement/homestead_parts/grove_rules.py::EAST_REACH_PX#garden's morning sun)
+  - `l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#garden size` - nucleated garden cap 48 x 34 ft -> a cap whose area stays <= 1,507 sq ft (e.g. 44 x 34 ft), per 0039
+  - `l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#headman keeps an ordinary yard and garden` - headman's garden held to an ordinary farm's: the same lowered cap (<= 1,507 sq ft, near the 592 sq ft typical) applies to a big house (after: l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#garden size)
+  - `l7r/diagram/settlement/rolling/fit.py::BundleFitMixin._garden_shaded#garden shaded by a house to its south` - _garden_shaded reach gh + 4 px -> px(39) south of the bed (0038's 39 ft house-shade corridor)
+  - `l7r/diagram/settlement/shrines_wells/wells.py::WellsMixin._farm_wells#every farmhouse within reach of a well` - farm well reach_ft 500 -> 760 ft (hamlet/village; 870 ft for a city's commoners)
+  - `l7r/diagram/settlement/shrines_wells/wells.py::WellsMixin._farm_wells#seated in a steading's dooryard` - dooryard rings held to 95 ft from the dwelling via px(), not 150 px from the house center
+  - `l7r/diagram/settlement/shrines_wells/wells.py::WellsMixin._farm_wells#fallback on field-rim ground off the crop` - fallback grid scans within 95 ft of the dwelling (0196), via px(), not 156 px (after: l7r/diagram/settlement/shrines_wells/wells.py::WellsMixin._farm_wells#seated in a steading's dooryard)
+
+- [ ] T18 the bookend before the first edit: `make perf LABEL=328-start` in a detached worktree at main's engine, taken back
+      to back with the end bookend (constitution VI; the wave-4 lesson: a pair taken apart reads the host's load)
+      research: rendering
+      verify:
+- [ ] T19 the two E0 claims; then the E1 rows, each with the unit tests it moves; proven on the reference hamlet (Inashiro,
+      its PNG looked at) and then across the pool and the cohort's bookend seeds; a value that makes a map refuse is held at
+      its old value and the row takes the tier of the work it needs, as a found row (FR-004, FR-005, spec Edge Cases)
+      research: rendering
+      verify:
+- [ ] T20 every touched unit re-checked by `impl-drift`; each wave-5 row IN-STEP or re-tiered with its measured reason (FR-005, SC-002)
+      research: rendering
+      verify:
+- [ ] T21 the close: `make perf LABEL=328-end` and the band's records, `make done` green, the wave column, landed (FR-005, FR-006, SC-002, SC-003)
+      research: rendering
+      verify:
