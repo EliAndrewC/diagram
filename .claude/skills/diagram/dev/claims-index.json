@@ -321,22 +321,20 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings.md::Fire-water tubs#a tub never on a well glyph; moved to another eaves corner": {
-  "code": "bbf67793e80413a3",
-  "core": "c7c04e2eef446c6d",
+  "code": "098b3d572ee46833",
+  "core": "9566f0c2425a41fb",
   "date": "2026-10-07",
-  "note": "0100 says nothing about wells, so UNRESEARCHED is honest",
+  "note": "nothing in 0100's drawing page places a tub relative to a well",
   "pages": {},
   "research": "",
-  "rests": [
-   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:3d78982d8d903e9f"
-  ],
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings.md::Fire-water tubs#kitchen weighting": {
-  "code": "58ea4dbe4322e2fc",
-  "core": "c7c04e2eef446c6d",
+  "code": "763dade2a15425e6",
+  "core": "9566f0c2425a41fb",
   "date": "2026-10-07",
-  "note": "two tubs at the kitchen, as the page draws it",
+  "note": "2 at the kitchen, as the page says",
   "pages": {
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "2c4dfd988d663a80"
   },
@@ -349,26 +347,25 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings.md::Fire-water tubs#no tub at the plaster kura": {
-  "code": "92e14737eedf10a6",
-  "core": "c7c04e2eef446c6d",
+  "code": "4e52b252f7778f0e",
+  "core": "9566f0c2425a41fb",
   "date": "2026-10-07",
-  "note": "no tub at the earth-walled kura; one may stand at a wooden granary",
+  "note": "none at the dozo, one may stand at a wooden granary",
   "pages": {
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "2c4dfd988d663a80"
   },
   "research": "5292b7fa7abf1048",
   "rests": [
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:67384625aa76f7e9",
-   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:81eec727dd4e93f2",
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:fe5bcc892cab35bf"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings.md::Fire-water tubs#one tub per wooden building": {
-  "code": "d079f4894b799e02",
-  "core": "c7c04e2eef446c6d",
+  "code": "2ed3e4254f208792",
+  "core": "9566f0c2425a41fb",
   "date": "2026-10-07",
-  "note": "one per major wooden building, about 8-12, the count following from how many buildings there are",
+  "note": "one per major wooden building, about 8-12, the count following from the buildings",
   "pages": {
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "2c4dfd988d663a80"
   },
@@ -381,37 +378,34 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings.md::Fire-water tubs#tub against its wall": {
-  "code": "8ce717b51034e533",
-  "core": "c7c04e2eef446c6d",
+  "code": "7eb6d880b7694c96",
+  "core": "9566f0c2425a41fb",
   "date": "2026-10-07",
-  "note": "the procedure sets every tub \"at a wall/eaves corner\", but the page attests water kept \"at the wooden buildings, at the entrance and on the roof\"; either place the tub at the entrance (or choose between the attested forms), or record the eaves-corner seat as a guess on 0100's drawing page",
+  "note": "the procedure's hard rule seats each tub \"at a wall/eaves corner\" (and a displaced tub moves to \"a different eaves corner\"); the page finds water kept \"at the wooden buildings, at the entrance and on the roof\" and never says corner. Either allow the entrance seat, or label the eaves-corner choice UNRESEARCHED/DEVIATION apart from the entrance finding",
   "pages": {
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "2c4dfd988d663a80"
   },
   "research": "5292b7fa7abf1048",
   "rests": [
-   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:3d78982d8d903e9f",
-   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:a8ace44152bf8182"
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:3d78982d8d903e9f"
   ],
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/buildings.md::Fire-water tubs#tub clear of the footprint": {
-  "code": "12d102d9b9ecbd57",
-  "core": "c7c04e2eef446c6d",
+  "code": "805d55025e890f82",
+  "core": "9566f0c2425a41fb",
   "date": "2026-10-07",
-  "note": "CANON names the GM's ruling; 0100's \"at the wooden buildings, at the entrance\" does not settle inside or outside",
+  "note": "GM ruling named and dated",
   "pages": {},
   "research": "",
-  "rests": [
-   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:3d78982d8d903e9f"
-  ],
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings.md::Fire-water tubs#tub glyph": {
-  "code": "04d7c9cb320d62d0",
-  "core": "c7c04e2eef446c6d",
+  "code": "075db0450b3924ad",
+  "core": "9566f0c2425a41fb",
   "date": "2026-10-07",
-  "note": "~2.5 ft tub (r3.8 at 3 px/ft), which the drawing page records as a guess",
+  "note": "about 2.5 ft across, which the page records as a guess",
   "pages": {
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "2c4dfd988d663a80"
   },
@@ -422,27 +416,24 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings.md::Fire-water tubs#tub glyph colors": {
-  "code": "5ae56418720c8e71",
-  "core": "c7c04e2eef446c6d",
+  "code": "870fcac39b0b5478",
+  "core": "9566f0c2425a41fb",
   "date": "2026-10-07",
-  "note": "how it is shown only",
+  "note": "pure symbol color",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings.md::Fire-water tubs#tub seat off the wall": {
-  "code": "70184b4f0cad044e",
-  "core": "c7c04e2eef446c6d",
+  "code": "a5eca551d514568b",
+  "core": "9566f0c2425a41fb",
   "date": "2026-10-07",
-  "note": "the section gives the standoff a physical meaning: the glyph \"sits ~2 ft clear of the outside wall face ... under the eaves-line ... close enough that a downspout reaches it\" and \"~1.7-2 ft off\". But 2.2 px at 3 px = 1 ft is 0.7 ft, so the text and the claim disagree. 0100 is silent on the distance, so either label it UNRESEARCHED and make the figure agree, or keep CONVENTION (glyph clear of the wall's ink) and drop the stale ~2 ft text and its physical reasoning",
+  "note": "a 2.2 px offset that keeps the outline clear of the wall's ink",
   "pages": {},
   "research": "",
-  "rests": [
-   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:3d78982d8d903e9f",
-   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:4530579a74e75485"
-  ],
-  "verdict": "MISLABELED"
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings.md::Historical grounding#grounding pointer": {
   "code": "753a9cc3c91efcdc",
@@ -1891,22 +1882,16 @@
   "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/buildings/programs.md::Country shrine (a village district's shrine)#approach width about 10 ft": {
-  "code": "c1e250dd0312c192",
+  "code": "800f4a47e57a4ad7",
   "core": "754857caf22cf344",
   "date": "2026-10-07",
-  "note": "the 0220 drawing page does not record a 10 ft approach width as a guess (it says nothing about width). The research page gives only Nagao's ~23 ft. The claim should be bare GUESS or name the page that records the guess",
-  "pages": {
-   "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html": "e385403eda71f0a2"
-  },
-  "research": "187ffe8b48289099",
+  "note": "0220 measures only Nagao's ~23 ft approach, and no village approach width is in the bundle",
+  "pages": {},
+  "research": "",
   "rests": [
-   "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:11a53f93479ca7e0",
-   "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:150b6599eb0096ca",
-   "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:6dbb45d3631d3bee",
-   "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:6e46a236e3d5c3e9",
    "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html:30f48e3afb3b13e1"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings/programs.md::Country shrine (a village district's shrine)#arch count": {
   "code": "036ebca429c28e6f",
