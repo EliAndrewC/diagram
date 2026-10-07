@@ -835,7 +835,8 @@ row is the belt in the marsh (416).
 
   - `l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#thicket size bamboothicketft 84 x 58 ft 0075 20 guess` - the size's claim labeled GUESS on 0075's drawing page, which marks its 84 by 58 ft a GUESS
   - `l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#watercourse margin of half-width  3 ft no page gives the fig` - the margin its own UNRESEARCHED claim; "within 3 ft of a watercourse" out of the 0075 claim
-  - `l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#shrunk stand` - the 70% passes dropped: the thicket at the page's size or none
+  - `l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#off crop and water` - settled by the watercourse margin's fix, by the route this E4 row itself offers (the 3 ft claimed UNRESEARCHED) - spec-fidelity's aside, amendment 17 round 1
+  - `l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#shrunk stand` - the 70% passes dropped: the thicket at the page's size (GUESS on 0075), none where it fits nowhere (UNRESEARCHED)
 
 - [x] T61a wave 17's found rows tiered by the work they take, by a fresh reader (FR-002, FR-003, SC-003)
       research: rendering

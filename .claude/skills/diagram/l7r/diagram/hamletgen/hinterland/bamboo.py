@@ -186,7 +186,8 @@ def bamboo_seats(s: Settlement, plan: SitePlan) -> list[Poly]:
         thicket seat - research/questions/0075-bamboo-groves-chikurin.drawing.html: on dry ground behind the back row, nearest a point 40 ft north of the three northernmost houses
         thicket kept off every household's reserved copse seats - research/questions/0075-bamboo-groves-chikurin.drawing.html: the dooryard copse draws no bamboo; a farm's bamboo is a stand of its own
         thicket kept out of every plot's sun at BAMBOO_SHADE_FT 50 ft (0038 drawing) - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: no clump, bamboo included, within 50 ft east, west or south of a yard or bed (and research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html)
-        no shrunk stand - GUESS research/questions/0075-bamboo-groves-chikurin.drawing.html: the thicket at the page's 84 by 58 ft or none
+        thicket size - GUESS research/questions/0075-bamboo-groves-chikurin.drawing.html: 84 by 58 ft, drawn at full size only
+        no stand where the full stand fits nowhere - UNRESEARCHED
         off crop and water - research/questions/0075-bamboo-groves-chikurin.drawing.html: refused on paddy, marsh and pond, on dry ground
         watercourse margin - UNRESEARCHED: kept a watercourse's half-width plus 3 ft off it
         off the dry plots - UNRESEARCHED: refused on the dry crop's plots too

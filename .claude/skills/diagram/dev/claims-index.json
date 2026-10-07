@@ -5831,15 +5831,17 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py::BAMBOO_THICKET_FT#thicket size": {
-  "code": "e6f1b1333188f812",
+  "code": "ab9ccd7f2b426264",
   "core": "a810ce89c2d756ac",
-  "date": "2026-10-03",
-  "note": "84 x 58 ft, the GUESS 0075 records",
+  "date": "2026-10-07",
+  "note": "84 by 58 ft is the size the drawing page gives and records as a GUESS",
   "pages": {
    "0075-bamboo-groves-chikurin.drawing.html": "d65f38fc7bbc0e20"
   },
   "research": "2e86e0d437d7c9d9",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0075-bamboo-groves-chikurin.drawing.html:19e6e6b416628986"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py::THICKET_REACH_FT#thicket reach": {
@@ -5913,43 +5915,57 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#crop and water pads": {
-  "code": "cd29f441c60715eb",
-  "core": "782e0ea47d9fed33",
+  "code": "48b4dd7aa5037502",
+  "core": "4b83bca7081277a6",
   "date": "2026-10-07",
-  "note": "the code uses 12 ft on paddy and dry plots, 6 ft on marsh and 30 ft on the pond, as claimed; no question answers these",
+  "note": "the page gives no margins; the 12/6/30 ft pads are unresearched",
   "pages": {},
   "research": "",
-  "rests": [],
+  "rests": [
+   "0075-bamboo-groves-chikurin.drawing.html:07017fd50a6b594d",
+   "0075-bamboo-groves-chikurin.drawing.html:e76b74de88c86e77"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#irregular outline": {
-  "code": "bce5ace3a14c6369",
-  "core": "782e0ea47d9fed33",
+  "code": "5ce8fa71892cfa23",
+  "core": "4b83bca7081277a6",
   "date": "2026-10-07",
-  "note": "_parcel_outline draws an irregular ring, a drawing convention only",
+  "note": "an outline style, a drawing convention; neither page gives the thicket's edge form",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#keep-out pads": {
-  "code": "8ddb6361b378f6bc",
-  "core": "782e0ea47d9fed33",
+  "code": "8bf3abe6a0a177e9",
+  "core": "4b83bca7081277a6",
   "date": "2026-10-07",
-  "note": "the code's pads run from 2 ft (persimmons) to 20 ft (woods), within the claimed 2-20 ft; neither cited page gives a thicket's clearance figures (§12 covers the farm strip, not the thicket)",
+  "note": "neither page gives distances from buildings, lanes, belt or woods for a bamboo stand",
   "pages": {},
   "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#no shrunk stand": {
+  "code": "be776482daeb18a1",
+  "core": "4b83bca7081277a6",
+  "date": "2026-10-07",
+  "note": "full page size or none; the size is recorded as a guess and no page attests a smaller stand",
+  "pages": {
+   "0075-bamboo-groves-chikurin.drawing.html": "d65f38fc7bbc0e20"
+  },
+  "research": "2e86e0d437d7c9d9",
   "rests": [
-   "0075-bamboo-groves-chikurin.drawing.html:07017fd50a6b594d",
-   "0075-bamboo-groves-chikurin.drawing.html:a3eaaa1508f4647d"
+   "0075-bamboo-groves-chikurin.drawing.html:19e6e6b416628986"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#off crop and water": {
-  "code": "55246d866b1f88d9",
-  "core": "782e0ea47d9fed33",
+  "code": "193740ff8f575ea2",
+  "core": "4b83bca7081277a6",
   "date": "2026-10-07",
-  "note": "refused on paddy, marsh, pond and water, as \"dry ground\" and \"no bamboo stand is drawn on a paddy\" require; the 3 ft bank pad is a calibrated degree",
+  "note": "no stand on paddy; on dry ground, kept off marsh and pond",
   "pages": {
    "0075-bamboo-groves-chikurin.drawing.html": "d65f38fc7bbc0e20"
   },
@@ -5961,65 +5977,61 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#off the dry plots": {
-  "code": "ad0b50950b9021df",
-  "core": "782e0ea47d9fed33",
+  "code": "6e5fa68c986ffd7a",
+  "core": "4b83bca7081277a6",
   "date": "2026-10-07",
-  "note": "the bundle is silent on dry-crop plots; §22 covers paddy only",
+  "note": "the page speaks to paddy only and is silent on dry crop",
   "pages": {},
   "research": "",
   "rests": [
-   "0075-bamboo-groves-chikurin.drawing.html:07017fd50a6b594d",
    "0075-bamboo-groves-chikurin.drawing.html:e76b74de88c86e77"
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#shrunk stand": {
-  "code": "1913046402487ac1",
-  "core": "782e0ea47d9fed33",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#the thicket's near edge stands within THICKET_ROW_DEPTH_FT 30 ft of the back row, searched out to THICKET_REACH_FT 220 ft": {
+  "code": "4b83bca7081277a6",
+  "core": "4b83bca7081277a6",
   "date": "2026-10-07",
-  "note": "the 84x58 size is a GUESS; nothing in the bundle covers a 70% fallback or dropping the stand",
-  "pages": {},
+  "note": "the thicket's near edge stands within THICKET_ROW_DEPTH_FT 30 ft of the back row, searched out to THICKET_REACH_FT 220 ft",
   "research": "",
-  "rests": [
-   "0075-bamboo-groves-chikurin.drawing.html:1811d507fa09f2f7",
-   "0075-bamboo-groves-chikurin.drawing.html:19e6e6b416628986"
-  ],
-  "verdict": "IN-STEP"
+  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#thicket by the knob": {
-  "code": "ed40334736461fd0",
-  "core": "782e0ea47d9fed33",
+  "code": "a26746e483b40ba5",
+  "core": "4b83bca7081277a6",
   "date": "2026-10-07",
-  "note": "the thicket is drawn only when the knob is thicket or both, as the page's four knob values allow",
+  "note": "a thicket is drawn only for the knob's thicket and both values",
   "pages": {
    "0075-bamboo-groves-chikurin.drawing.html": "d65f38fc7bbc0e20"
   },
   "research": "2e86e0d437d7c9d9",
   "rests": [
+   "0075-bamboo-groves-chikurin.drawing.html:79b7211c72484f93",
    "0075-bamboo-groves-chikurin.drawing.html:f787bbf24ccbb0bd"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#thicket kept off every household's reserved copse seats": {
-  "code": "83d2bf10a60da621",
-  "core": "782e0ea47d9fed33",
+  "code": "8308b5d16da3e2a9",
+  "core": "4b83bca7081277a6",
   "date": "2026-10-07",
-  "note": "the copse draws no bamboo and a stand is one species of its own, so the thicket gives way to the copse seats",
+  "note": "the copse draws no bamboo and a stand is nearly one species, so the stand gives way to the seats",
   "pages": {
    "0075-bamboo-groves-chikurin.drawing.html": "d65f38fc7bbc0e20"
   },
   "research": "2e86e0d437d7c9d9",
   "rests": [
+   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:6d00137e5f270209",
    "0075-bamboo-groves-chikurin.drawing.html:399c3deb721a5928",
    "0075-bamboo-groves-chikurin.drawing.html:482ec6b700c3e1bc"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#thicket kept out of every plot's sun at BAMBOO_SHADE_FT 50 ft (0038 drawing)": {
-  "code": "65468ce1dc993918",
-  "core": "782e0ea47d9fed33",
+  "code": "b6ab0e93f54ba2b5",
+  "core": "4b83bca7081277a6",
   "date": "2026-10-07",
-  "note": "no clump, bamboo included, within 50 ft east, west or south of a yard or bed, via _sun_keepouts at BAMBOO_SHADE_FT=50",
+  "note": "50 ft east, west or south of a yard or bed, bamboo included",
   "pages": {
    "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html": "f32599678d1cb241"
   },
@@ -6030,17 +6042,28 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#thicket seat": {
-  "code": "5408a63d69ae9168",
-  "core": "782e0ea47d9fed33",
+  "code": "3188520775e0165e",
+  "core": "4b83bca7081277a6",
   "date": "2026-10-07",
-  "note": "dry ground just beyond the back row; the target 40 ft north is a calibrated choice, and the page records the side as a GUESS",
+  "note": "on dry ground just beyond the back row; the 40 ft target is a calibration within that, and the side is a recorded guess",
   "pages": {
    "0075-bamboo-groves-chikurin.drawing.html": "d65f38fc7bbc0e20"
   },
   "research": "2e86e0d437d7c9d9",
   "rests": [
-   "0075-bamboo-groves-chikurin.drawing.html:07017fd50a6b594d",
-   "0075-bamboo-groves-chikurin.drawing.html:e76b74de88c86e77"
+   "0075-bamboo-groves-chikurin.drawing.html:07017fd50a6b594d"
+  ],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#watercourse margin": {
+  "code": "f4d2de22feef1098",
+  "core": "4b83bca7081277a6",
+  "date": "2026-10-07",
+  "note": "dry ground is attested, but the half-width plus 3 ft margin is not",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0075-bamboo-groves-chikurin.drawing.html:07017fd50a6b594d"
   ],
   "verdict": "IN-STEP"
  },

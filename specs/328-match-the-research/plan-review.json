@@ -1,6 +1,6 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "25995943a697a7241606374ca6f74eabdd8dd1036c5db8c6083712d67c80a19b",
+ "plan_sha256": "9be4b3f746a4716bd5a1d3fc93baca492e43f7f4a5b25baacee8d2fe7c217c5e",
  "reviewed": "2026-10-07",
  "declared": "spec-fidelity",
  "decisions": [
@@ -40,6 +40,42 @@
    "summary": "(1)-(5) held at b49a6c221; wave 17's pair opens there",
    "class": "within",
    "why": "continues the ruled wave-11 exception"
+  },
+  {
+   "id": "W18-1 T61a first",
+   "summary": "wave 17's 5 found rows tiered by their work by a fresh reader; two already-fixed E0 rows marked wave 17",
+   "class": "within",
+   "why": "FR-002/FR-003: tiers by work; the two rows (keep-out pads, its omitted pads) were fixed by 074a12773, an ancestor of wave 17's close 8c3b5cdef, IN-STEP at its last impl-drift round, and the claim on HEAD names 2-20 ft and kosatsuba/byres/retirement houses as the code pads them"
+  },
+  {
+   "id": "W18-2 scope rows 40, 41, 414",
+   "summary": "the two open E0 claims and the E2 run head (the 70% passes dropped)",
+   "class": "within",
+   "why": "FR-006 contiguous: rows 40 and 41 are the only open in-scope E0 rows, there is no open E1, and 414 is the first open E2 row; the next open row is 416"
+  },
+  {
+   "id": "W18-3 the page size or none",
+   "summary": "the thicket drawn only at 0075 drawing's 84 by 58 ft, never at 70%; none where it fits nowhere",
+   "class": "within",
+   "why": "FR-004: the code moves to the page, which draws one size and records no smaller form; drawing none where the stand fits nowhere is the code's existing last-resort behavior, not a new carve-out, and no research is edited"
+  },
+  {
+   "id": "W18-4 occasions none, measured",
+   "summary": "both pool thickets were seated at full size (drawn 71.0 x 54.8 and 76.9 x 52.1 ft, beyond the 70% rect of 58.8 x 40.6 ft); manifests unchanged",
+   "class": "within",
+   "why": "feature 294: no element new or moved; T61 regenerates both maps, so a moved stand would re-open the occasion"
+  },
+  {
+   "id": "W18-5 condition (6) carried",
+   "summary": "(1)-(5) held at 8c3b5cdef; its backup pushed; wave 18's pair opens there",
+   "class": "within",
+   "why": "continues the ruled wave-11 exception; origin/backup/digram-backlog is at 8c3b5cdef (ls-remote)"
+  },
+  {
+   "id": "W18-6 verification",
+   "summary": "impl-drift on touched claims, the gate, wave 18 own bookend pair",
+   "class": "within",
+   "why": "FR-005"
   }
  ],
  "verdict": "CLEAR"
