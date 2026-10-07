@@ -192,8 +192,9 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 
 - **The Mode A rows sorted** (exception check, 2026-10-07): the Mode A sheets are in scope by the GM's words, so nothing is asked;
   FR-003 makes a row that redraws a hand sheet E3 - 6 rows re-tiered by a fresh reader's measurement of the sheets.
-- **Scope**: wave 12's two byre claims, then the 12 procedure-only Mode A E2 rows in ranking order (`tasks.md` Phase 14); the
-  procedures change, each sheet records its roll in its notes, no sheet is redrawn. The country shrine's size bands widen in
+- **Scope**: wave 12's two byre claims, then the procedure-only Mode A E2 rows in ranking order (`tasks.md` Phase 14); the
+  procedures change, each sheet records its roll in its notes - a seeded roll where the page says rolled, its expression written -
+  and a row whose roll lands on a form the sheet does not draw is E3 (the second kami: Hayakawa's river kami and Ubame's wood kami). The country shrine's size bands widen in
   `types.json` (the generated table follows); Hoshigaoka's drawn sizes fall inside them.
 - **On the unpushed waves 9-12** under the wave-11 exception's condition (6): (1)-(5) held at wave 12's close (c45460dd1, its
   backup pushed, its own pair band 0).

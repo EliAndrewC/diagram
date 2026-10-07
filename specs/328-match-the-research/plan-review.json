@@ -1,40 +1,47 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "29a5c470c3485e53e2cab5cae70b0f7094429fd8f447da12d692d01b030815dd",
+ "plan_sha256": "b576398d30d46e83756153aba0e02fc4bd4e9fde3d52092fd0540e084bffcdfb",
  "reviewed": "2026-10-07",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W12-T46a",
-   "summary": "Wave 11's 12 found rows tiered by their work by a fresh reader before the run is chosen (none moved)",
+   "id": "W13-sort",
+   "summary": "the 18 Mode A E2 rows sorted by a fresh reader measuring the sheets; the 6 whose fix redraws a hand sheet re-tiered E3",
    "class": "within",
-   "why": "FR-002/FR-003: audit/t46a-out.jsonl carries the 12 rows; each tier equals the tier in ranking.json/overrides.json; the two E2 (mixed broadleaf belt's band and bamboo, end plot split at every scale) are logic changes, honestly E2"
+   "why": "FR-003's own definition (a hand-drawn sheet redrawn is E3); the rows stay ranked and open, nothing is dropped; spot-checked measurements (Ochiba barracks 92x100 px, wells 22/24 px, Hoshigaoka 15 px) match audit/modea-sort-out.jsonl"
   },
   {
-   "id": "W12-scope",
-   "summary": "Wave 12 takes wave 11's found E0 and E1 rows - 8 claims and 2 values; next open in-scope row 375 is E2",
+   "id": "W13-scope",
+   "summary": "wave 13 = wave 12's two byre claims (E0), then the 12 open Mode A E2 rows in ranking order; next open row the cluster.py rule",
    "class": "within",
-   "why": "FR-006/FR-010: measured from ranking.json - exactly rows 138,171,172,174,175,192,196,198 (E0) and 305,372 (E1) are open, not deferred, tier E0/E1, all with empty after; row 375 is E2 mode-a"
+   "why": "FR-006 contiguous: the E2 Mode A rows not taken (granary forms, sanctuary fence, precinct unenclosed, staff housing knob) are already IN-STEP; the 12 are the contiguous open run before cluster.py"
   },
   {
-   "id": "W12-exception",
-   "summary": "Wave 12 starts on the unpushed waves 9-11 under the wave-11 exception's condition (6); wave 12's own pair opens at 6760d9bbf",
+   "id": "W13-no-redraw",
+   "summary": "the procedures change, each sheet records its roll in its notes, no sheet is redrawn",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "for the compound shrine arch (shared or own) and the second kami, the pages the rows cite say the form is rolled from the map's seed (0220 drawing: 'Each map chooses one at random from its seed'; 0218 drawing: 'which form Ochiba's takes is rolled from the map's seed'), and the sorter's own evidence made the no-redraw tier conditional on that roll; no roll was made - the notes record the drawn form as the knob's - so 'no sheet is redrawn' decides the roll's outcome in advance. Legitimate once each such form is rolled with its expression recorded (Hoshigaoka's grove-form precedent) or pinned by a quoted GM ruling, and a roll that lands on the undrawn form moves its row to E3"
+  },
+  {
+   "id": "W13-bands",
+   "summary": "the country shrine's size bands widened in types.json (sanctuary 4-20 x 4-12 ft, hall 18-35 x 12-35 ft) and its generated table",
+   "class": "within",
+   "why": "the implementation moves to the record (0222: sanctuary most often one bay or three; 0215: Hie's 2-bay sanctuary ~12 x 6 ft, worship hall ~18 x 12 ft); Hoshigaoka's drawn sizes stay inside"
+  },
+  {
+   "id": "W13-stack",
+   "summary": "wave 13 starts on the unpushed waves 9-12 under the wave-11 exception's condition (6)",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "Narrows FR-006's pushed-before-the-next-begins; condition (6) of the exception ruled LEGITIMATE (amendment 10) names wave 12 if (1)-(5) still hold at wave 11's close. Measured: origin backup/digram-backlog = 6760d9bbf; T44 impl-drift and T45 gate green and band 0 ticked; amendment 10 FAITHFUL and plan CLEAR recorded; the only open boxes besides wave 12's are T38/T41, the landed boxes awaiting the GM's band-3 sign-off; wave 11 declared no occasions; 6760d9bbf is engine-identical to wave 11's closing commit c4137685c. This amendment is the reset-counter review condition (6) requires."
+   "why": "the exception ruled LEGITIMATE on conditions (amendment 10); verified: wave 12 closed at c45460dd1 (an ancestor of HEAD), origin backup/digram-backlog at c45460dd1, T48 records its own pair band 0 and a green gate"
   },
   {
-   "id": "W12-verify",
-   "summary": "Verification as wave 11 (impl-drift on every touched unit, the pool through a green gate, wave 12's own bookend pair)",
+   "id": "W13-verify",
+   "summary": "verification: impl-drift on the touched procedure claims, the gate, wave 13's own bookend pair; no review occasion (no sheet redrawn)",
    "class": "within",
-   "why": "FR-005 restated"
-  },
-  {
-   "id": "W12-occasions",
-   "summary": "No review occasion for wave 12: claim lines and two values in feet inside rules that already place their elements",
-   "class": "within",
-   "why": "FR-005/feature 294: no glyph redrawn, no element new; both value edits are a scale conversion (identical at 1 ft/px)"
+   "why": "FR-005; the occasion holds only while no roll forces a redraw"
   }
  ],
- "verdict": "CLEAR"
+ "verdict": "BLOCKED"
 }

@@ -1,5 +1,20 @@
 [
  {
+  "key": ".claude/skills/diagram/buildings.md::Checklist for a new diagram#practice ground sizing",
+  "verdict": "MISLABELED",
+  "tier": "E0",
+  "fix": "0165's drawing page records ~90-135 sq ft as a GUESS (\"The figure is a GUESS\"); the label should be GUESS research/questions/0165-martial-training-grounds-and-dojo.drawing.html",
+  "files": [
+   ".claude/skills/diagram/buildings.md"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 13 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": ".claude/skills/diagram/buildings.md::Fire-water tubs#a tub never on a well glyph; moved to another eaves corner",
   "verdict": "UNCLAIMED",
   "tier": "E0",
@@ -194,6 +209,36 @@
   "scope": "mode-a"
  },
  {
+  "key": ".claude/skills/diagram/buildings.md::Walls and gates#divider wall",
+  "verdict": "MISLABELED",
+  "tier": "E0",
+  "fix": "0092's lighter wall (~1 shaku, a neribei 0.6 m / ~2 ft at its base) answers a ~2 ft true-thickness wall; cite 0092's drawing page",
+  "files": [
+   ".claude/skills/diagram/buildings.md"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 13 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/buildings.md::Walls and gates#threshold stones",
+  "verdict": "MISLABELED",
+  "tier": "E0",
+  "fix": "this is the GM's canon (Fox road-warding; rulings of 2026-07-25 and 2026-09-26), so the label should be CANON naming those rulings, not UNRESEARCHED",
+  "files": [
+   ".claude/skills/diagram/buildings.md"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 13 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": ".claude/skills/diagram/buildings/programs.md::Country shrine (a village district's shrine)#approach width about 10 ft",
   "verdict": "UNCLAIMED",
   "tier": "E0",
@@ -224,6 +269,21 @@
   "scope": "mode-a"
  },
  {
+  "key": ".claude/skills/diagram/buildings/programs.md::Country shrine (a village district's shrine)#bell tower knob",
+  "verdict": "MISLABELED",
+  "tier": "E0",
+  "fix": "0222 finds nothing on a village shrine's bell (\"No page we read says\"), and the small temple's commonest form is hall plus belfry; \"absent by default\" is the drawing page's guess, so the claim should read GUESS 0222.drawing",
+  "files": [
+   ".claude/skills/diagram/buildings/programs.md"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 13 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": ".claude/skills/diagram/buildings/programs.md::Country shrine (a village district's shrine)#dwelling privy",
   "verdict": "MISLABELED",
   "tier": "E0",
@@ -237,6 +297,36 @@
   "tier_as_ranked": "E0",
   "wave": "3",
   "scope": "mode-a"
+ },
+ {
+  "key": ".claude/skills/diagram/buildings/programs.md::Country shrine (a village district's shrine)#grove and burial side knob",
+  "verdict": "MISLABELED",
+  "tier": "E0",
+  "fix": "0226 covers only the burial yard-or-apart roll; following the declared map (grove and burial side) is the GM's ruling of 2026-09-20, so that half should be CANON",
+  "files": [
+   ".claude/skills/diagram/buildings/programs.md"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 13 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/buildings/programs.md::Country shrine (a village district's shrine)#innermost arch one pitch off the hall",
+  "verdict": "MISLABELED",
+  "tier": "E0",
+  "fix": "12 ft from arch to hall is a physical placement a reader takes as fact, not how something is shown; the research is silent, so the claim should be GUESS 0220.drawing",
+  "files": [
+   ".claude/skills/diagram/buildings/programs.md"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 13 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/buildings/programs.md::Country shrine (a village district's shrine)#kitchen garden by the sun",
@@ -282,6 +372,21 @@
   "tier_as_ranked": "E0",
   "wave": "3",
   "scope": "mode-a"
+ },
+ {
+  "key": ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#inner-court postern",
+  "verdict": "MISLABELED",
+  "tier": "E0",
+  "fix": "0101's drawing page records only a gate near the outer privies for collectors, not a night-soil door into the inner court, and its rule that no collector crosses the inner court bears on one; the label should be UNRESEARCHED, or the guess recorded on that page",
+  "files": [
+   ".claude/skills/diagram/buildings/programs.md"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 13 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#practice ground",
@@ -5692,6 +5797,21 @@
   "scope": "kept"
  },
  {
+  "key": ".claude/skills/diagram/buildings.md::Checklist for a new diagram#size hierarchy",
+  "verdict": "DRIFTED",
+  "tier": "E2",
+  "fix": "the checklist holds \"any shrine/storehouse < the residence\", but the page finds \"a storehouse could out-size every hall\" and the maps \"do not hold every storage building below the residence\"; also, the ranks of kitchen, stable and cell are guesses (\u00a716, \u00a734, \u00a735), not findings of the page cited",
+  "files": [
+   ".claude/skills/diagram/buildings.md"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 13 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E2",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#granary forms",
   "tier": "E2",
   "fix": "granary form (on posts or earth-walled kura) made a knob rolled per plan, each notes file records its roll",
@@ -5780,22 +5900,6 @@
   "scope": "mode-a"
  },
  {
-  "key": ".claude/skills/diagram/buildings.md::Sacred features#more than one kami in a hall",
-  "tier": "E2",
-  "fix": "a second kami's form (one hall or a shrine of its own) made a knob rolled from the seed in the procedure; sheets record their roll",
-  "files": [
-   ".claude/skills/diagram/buildings.md",
-   ".claude/skills/diagram/pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
-   ".claude/skills/diagram/pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg"
-  ],
-  "after": [],
-  "flag": "",
-  "tier_as_ranked": "E2",
-  "verdict": "DRIFTED",
-  "wave": "",
-  "scope": "mode-a"
- },
- {
   "key": ".claude/skills/diagram/buildings.md::Sacred features#precinct unenclosed",
   "tier": "E2",
   "fix": "the 'fence around the sanctuary alone is the wealth knob's' clause dropped: no sanctuary fence at any wealth",
@@ -5808,6 +5912,36 @@
   "verdict": "DRIFTED",
   "wave": "4 (IN-STEP on a wave's re-check, no change needed)",
   "scope": "mode-a"
+ },
+ {
+  "key": ".claude/skills/diagram/buildings.md::Scale#true size for every footprint",
+  "verdict": "DRIFTED",
+  "tier": "E2",
+  "fix": "\"only stroke floors and location markers diverge\" leaves out bales: 0199 draws them ~4 ft long by convention, larger than true, and Ubame's plan draws them ~6x3 ft; name the bale divergence or draw bales true size",
+  "files": [
+   ".claude/skills/diagram/buildings.md"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 13 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E2",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/buildings.md::Walls and gates#structures abut walls",
+  "verdict": "DRIFTED",
+  "tier": "E2",
+  "fix": "~2 ft is measured from the wall's centerline (\"half the ink plus a hair\"), leaving ~0.5 ft off the wall's face, where the page says \"a foot or two\" off the wall",
+  "files": [
+   ".claude/skills/diagram/buildings.md"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 13 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E2",
+  "wave": "",
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/buildings.md::Walls and gates#threshold wards",
@@ -5870,6 +6004,36 @@
   "verdict": "DRIFTED",
   "wave": "",
   "scope": "mode-a"
+ },
+ {
+  "key": ".claude/skills/diagram/buildings/programs.md::Country shrine (a village district's shrine)#no subsidiary buildings",
+  "verdict": "DRIFTED",
+  "tier": "E2",
+  "fix": "the claim says no page places an office at a village shrine, but 0215 lists village-shrine Rokusha's \"office of 30\" tsubo (and Wakukama's offering hall); the claim and the 0222 silence it rests on need reconciling, e.g. as a dated (post-1872) exception",
+  "files": [
+   ".claude/skills/diagram/buildings/programs.md"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 13 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E2",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/buildings/programs.md::Country shrine (a village district's shrine)#sumo ring knob",
+  "verdict": "DRIFTED",
+  "tier": "E2",
+  "fix": "sumo offered at shrines \"across the country\" is attested, yet the ring is fixed absent instead of a seeded roll; roll it, or claim the default as GUESS",
+  "files": [
+   ".claude/skills/diagram/buildings/programs.md"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 13 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E2",
+  "wave": "",
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#formal visitors and the privacy baffle",
@@ -9356,6 +9520,25 @@
   "scope": "mode-a"
  },
  {
+  "key": ".claude/skills/diagram/buildings.md::Sacred features#more than one kami in a hall",
+  "tier": "E3",
+  "fix": "a second kami's form (one hall or a shrine of its own) made a knob rolled from the seed in the procedure; sheets record their roll; the rolls (random.Random(zlib.crc32(b'<sheet>:second kami: <kami>')).choice(['one hall', 'own shrine'])): Hayakawa's river kami and Ubame's wood kami roll ONE HALL where each is drawn in a shrine of its own - both sheets redrawn",
+  "files": [
+   ".claude/skills/diagram/buildings.md",
+   ".claude/skills/diagram/pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+   ".claude/skills/diagram/pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg",
+   ".claude/skills/diagram/pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+   ".claude/skills/diagram/pool/magistracies/ubame-magistracy/ubame-magistracy.svg"
+  ],
+  "after": [],
+  "flag": "",
+  "tier_as_ranked": "E2",
+  "moved": "amendment 12 round 1: the seeded rolls made; two land on a form the sheet does not draw - a redrawn hand sheet, E3 (FR-003)",
+  "verdict": "DRIFTED",
+  "wave": "",
+  "scope": "mode-a"
+ },
+ {
   "key": ".claude/skills/diagram/buildings.md::Sacred features#sanctuary",
   "verdict": "DRIFTED",
   "tier": "E3",
@@ -11952,6 +12135,21 @@
   "verdict": "NEEDS-RESEARCH",
   "wave": "",
   "scope": "mode-a"
+ },
+ {
+  "key": ".claude/skills/diagram/buildings/programs.md::Country shrine (a village district's shrine)#tax-free fields off the sheet",
+  "verdict": "NEEDS-RESEARCH",
+  "tier": "E4",
+  "fix": "0221 attests exempt fields but says nothing on where they lay relative to the precinct; should be UNRESEARCHED",
+  "files": [
+   ".claude/skills/diagram/buildings/programs.md"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 13 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E4",
+  "wave": "",
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#divider gate on the axis",

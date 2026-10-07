@@ -110,6 +110,20 @@
   "moved": "T25a (amendment 6): tiered by its work - the procedure line plus three hand-drawn sheets redrawn",
   "tier": "E3"
  },
+ ".claude/skills/diagram/buildings.md::Sacred features#more than one kami in a hall": {
+  "after": [],
+  "files": [
+   ".claude/skills/diagram/buildings.md",
+   ".claude/skills/diagram/pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+   ".claude/skills/diagram/pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg",
+   ".claude/skills/diagram/pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+   ".claude/skills/diagram/pool/magistracies/ubame-magistracy/ubame-magistracy.svg"
+  ],
+  "fix": "a second kami's form (one hall or a shrine of its own) made a knob rolled from the seed in the procedure; sheets record their roll; the rolls (random.Random(zlib.crc32(b'<sheet>:second kami: <kami>')).choice(['one hall', 'own shrine'])): Hayakawa's river kami and Ubame's wood kami roll ONE HALL where each is drawn in a shrine of its own - both sheets redrawn",
+  "flag": "",
+  "moved": "amendment 12 round 1: the seeded rolls made; two land on a form the sheet does not draw - a redrawn hand sheet, E3 (FR-003)",
+  "tier": "E3"
+ },
  ".claude/skills/diagram/buildings.md::Sacred features#sanctuary": {
   "after": [],
   "files": [

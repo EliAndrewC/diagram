@@ -24,7 +24,7 @@
    - wall: ~3 ft, the heavier rammed-earth form, as the GM's ruling drew it (R27).
    - hearing court: ROOFED, white gravel (R22) - the floor knob's `white gravel` (river cobbles the other form); straw mats for the accused, the plaintiff and the village officials (R23); the cell 12 by 10 ft (R24).
    - garden: a pond garden (R30), the pond before the reception, west of the guests' line from the nakamon to the stone; the striking posts upright (R34).
-   - shrine: several kami in one hall, each at its own altar - an attested form (R36); the second-kami knob's ONE HALL form (a shrine of its own the other; buildings.md, Sacred features; research 0218 drawing).
+   - shrine: several kami in one hall, each at its own altar - an attested form (R36).
    - shrine arch (buildings.md, Sacred features; research 0220 drawing): NO arch - a compound shrine may have none (the torii on the sheet is the Myobu altar's marker inside the hall, not an arch).
    - vegetable garden (feature 283, research 0109 and 405): its SEAT a knob among the attested seats - west of the house, south beside the formal garden, the rear service ground, a parcel of its own - the sun ruling out every seat under six hours in the shoulder month; its SIZE a knob from a soup-greens plot (about 1,070 sq ft) to half the grounds; a SUN bed, not half-shade (the GM, 2026-09-28: "Move them all"). Drawn in rows over the ground it stands on, unscreened (no divider attested, a guess).
      This sheet: seat: the inner court, south of the karo's house, within the inner garden, which runs round it on three sides (within rather than beside, a guess: no source read says which); size: between the two attested forms, about 1,173 sq ft; bed: sun.

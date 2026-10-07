@@ -681,7 +681,7 @@ procedure rows. An exception check (2026-10-07) ruled there is nothing to ask th
 GM's own words - and that FR-003's own definition applies: a row whose fix redraws a hand-drawn sheet is E3. A fresh reader
 sorted the 18 Mode A E2 rows by measuring the sheets (`audit/modea-sort-out.jsonl`): 6 redraw a sheet (the tubs at the entrance,
 the barracks, the clerks at the dais, the well curbs, the country shrine's tubs, the granary's caption) and are E3; these 12
-change only the procedure and record each sheet's roll in its notes. With the two claims, wave 13 is these 14 rows. The next
+change only the procedure and record each sheet's roll in its notes. Amendment 12 round 1: the knobs whose pages say "rolled from the map's seed" were rolled (`random.Random(zlib.crc32(b"<sheet>:<knob>"))`): Hayakawa's shared arch lands on the form drawn; the second kami's rolls for Hayakawa's river kami and Ubame's wood kami land on ONE HALL where each is drawn in a shrine of its own, so that row is E3 (a redrawn sheet) and left this wave. With the two claims, wave 13 is these 13 rows. The next
 open in-scope row is E2, row 393, the first kept-code rule (`hamletgen/cluster.py`).
 
   - `l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#byre footprint` - the byre's footprint `BYRE_FT` 16.12 x 10.92 ft
@@ -691,7 +691,6 @@ open in-scope row is E2, row 393, the first kept-code rule (`hamletgen/cluster.p
   - `buildings.md::Sacred features#burial ground beside the precinct` - burial ground placed by a knob, in the shrine's yard or apart from it, rolled/following the map; DEVIATION label dropped
   - `buildings.md::Sacred features#compound shrine arch` - compound shrine's arch optional (may have none) and shared-or-own a knob rolled per map, in procedure and notes
   - `buildings.md::Sacred features#grove` - grove covers the sides of the hall knob 8 gives (behind, sides, both, all round), not the whole precinct; 'swept' clearing dropped
-  - `buildings.md::Sacred features#more than one kami in a hall` - a second kami's form (one hall or a shrine of its own) made a knob rolled from the seed in the procedure; sheets record their roll
   - `buildings.md::Walls and gates#threshold wards` - threshold wards bullet dropped from Walls and gates (no pair at any official's gate before present-day custom); no sheet still draws them
   - `buildings.md::Scale#salt ward marker` - salt ward marker claim and the Scale paragraph's salt-ward marker text dropped; Hayakawa's wards already off the sheet
   - `buildings/programs.md::Country shrine (a village district's shrine)#building size anchors` - widen the country shrine's size bands to the record: a sanctuary of 1 or 3 ken (Hie's 2-bay about 12 x 6 ft) and worship halls from about 18 ft (Hie about 18 x 12, Rokusha 9 tsubo), in the band, its table and the sheet sizing rule
