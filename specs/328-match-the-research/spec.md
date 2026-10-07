@@ -72,7 +72,8 @@ session's last actions are recording the running checks, a commit, and `scripts/
 **Acceptance Scenarios**:
 
 1. **Given** usage reaches 75% mid-wave, **When** checks are running, **Then** they complete and their verdicts are
-   recorded; nothing new is dispatched; the clone is committed and its backup branch pushed by the stop-work step.
+   recorded; nothing new is dispatched and no gate runs; the clone is committed and its backup branch pushed by the
+   stop-work step, which refuses the landing.
 
 ### Edge Cases
 
@@ -85,8 +86,8 @@ session's last actions are recording the running checks, a commit, and `scripts/
   this is "X except where Y" (constitution XVI). It goes to `spec-fidelity` with the GM's request verbatim; if it agrees,
   it is recorded and raised with the GM once the wave works. The GM's words: *"I'm not sure there's any reason for our
   implementation to not match for anything."*
-- **A finding about a hand-drawn Mode A sheet**: the procedure is fixed, and the sheet is redrawn to it (the sheet IS
-  Mode A's implementation); ranked E3 at least.
+- **A finding about a hand-drawn Mode A sheet**: the procedure is fixed, and the sheet the finding names is redrawn to
+  it (the sheet is what contradicts the page); ranked E3 at least, and governed by FR-009.
 - **A fix that changes many maps**: regenerate the pool; a map whose new layout fails the gate is fixed in the same wave.
 - **A finding that disappears or changes when its neighbor is fixed**: the re-check records what it finds; the ranking is
   not re-sorted mid-wave.
@@ -103,7 +104,9 @@ session's last actions are recording the running checks, a commit, and `scripts/
 - **FR-002 (the measure is implementation work)**: the ranking estimates the work to make the IMPLEMENTATION match the
   cited research - not the work to change the research, and not the finding's importance.
 - **FR-003 (tiers)**: each row takes one tier, easiest first:
-  - **E0 - the claim alone**: the implementation already matches; the claim's label, citation or wording is wrong.
+  - **E0 - the claim alone**: the implementation already matches - `impl-drift` itself says so (MISLABELED), or a page
+    already in the record, not edited for this purpose, already says what the code does - and only the claim's label,
+    citation or wording is wrong. Any other rewrite of a DRIFTED row's claim is the exception path (FR-004).
   - **E1 - one value**: one number, size or count in the code or the procedure changes; the logic stands.
   - **E2 - one rule**: one function's logic, or one procedure paragraph, changes; one module or one section.
   - **E3 - a form or several places**: a new knob or element, a change across modules, or a hand-drawn sheet redrawn.
@@ -116,18 +119,26 @@ session's last actions are recording the running checks, a commit, and `scripts/
 - **FR-005 (verification per fix)**: each fixed finding is re-checked by `impl-drift` (`make claims-bundle` ->
   dispatch -> `make claims-checked`) and is IN-STEP; the gate (`make done`) is green; maps a wave changes are regenerated;
   review occasions it opens are run (feature 294).
-- **FR-006 (waves land)**: the fixes land on main in waves, each wave a contiguous run of the ranking (lowest tier first)
-  that is complete, verified and pushed before the next begins. A wave is its own spec-kit feature claimed with
-  `make claim` (its spec names 328's ranking rows it takes), because a feature with an open task lands nothing (feature
-  133), and 565 fixes held unlanded for weeks would collide with every other session's engine and index edits.
-  Feature 328 itself is the audit, the ranking and the first wave.
+- **FR-006 (waves land, inside this one feature)**: the fixes land on main in waves, each a contiguous run of the
+  ranking (lowest tier first) that is complete, verified and pushed before the next begins. Feature 328 stays the one
+  feature: only the CURRENT wave's rows are task boxes in `tasks.md` (the rest of the ranking stays data in the ranking
+  file), so the wave lands once its boxes are ticked (the open-task refusal reads only `tasks.md`'s boxes); the next
+  wave's tasks are then appended as an amendment, reviewed on a reset counter.
 - **FR-007 (the usage cap)**: the work runs until every finding is fixed or the account's weekly usage reaches 75%. At
-  the cap no new work starts; running subagent checks complete and are recorded; the clone is committed and the
-  stop-work step run; the session waits for the GM's word to continue. The cap is enforced by the armed per-goal hook,
-  not by memory.
+  the cap no new work starts (no agent, no edit in the repository, no build or gate run); the subagent checks already
+  running complete and their verdicts are recorded (the reply saved under `/tmp`, then `make claims-checked` /
+  `claims-triaged` / `record-checked`); the clone is committed and `scripts/sync-with-main.sh done` run, which at a
+  mid-wave stop refuses the landing WITHOUT running the gate and pushes the clone's backup branch; the session waits
+  for the GM's word to continue. The cap is enforced by the armed per-goal hook (`~/.claude/hooks/usage_cap.py`, whose
+  self-test `test-usage-cap.sh` holds exactly that allow/deny set), not by memory.
 - **FR-008 (the record of decisions)**: every fix that changes what a map draws or states is recorded in its class
   (accurate, deviation, convention, guess) at the point of change and in the wave's spec under Decisions Recorded; the
   claim line is the pointer.
+
+- **FR-009 (which hand-drawn maps are touched)**: the frozen hand-rolled settlement maps (Hoshigaoka and the other
+  legacy villages) are never edited (GM 2026-09-28: *"I do not want you to modify hand-rolled maps"*). A Mode A building
+  sheet is redrawn only where a fixed procedure's finding names it; each such sheet is listed by name in its wave's
+  tasks and in the report to the GM.
 
 ### Key Entities
 
@@ -156,9 +167,9 @@ Each wave records its own map decisions in its own spec. This feature's decision
 | Decision | Class | Why | Recorded at |
 |---|---|---|---|
 | The implementation moves to the research; the research moves only on the XVI exception path | GM's ruling | *"I'm not sure there's any reason for our implementation to not match for anything"* | FR-004 |
-| A hand-drawn Mode A sheet a finding names is redrawn to the fixed procedure | deliberate reading of "fix all of it" | the sheet is Mode A's implementation; feature 316 kept the sheets out of the claims, not out of the fixes | FR-003 E3, Edge Cases |
+| A Mode A building sheet a finding names is redrawn to the fixed procedure; the frozen hand-rolled settlement maps are never touched | scope, within the GM's 2026-09-28 ruling | the sheet is what contradicts the page; the ruling asks a feature to say which maps it touches, and the settlement maps stay frozen | FR-009 |
 | The 727 UNRESEARCHED claims are out of scope | scope | they are not findings: the claim honestly says no research backs it; closing them is research, not fixing a mismatch | Context, Assumptions |
-| Waves land as their own features | process | the open-task refusal (feature 133) would hold every fix unlanded until all 565 are done | FR-006 |
+| Waves land inside this feature: only the current wave's rows are task boxes; the next wave is an amendment | process | the GM asked for one feature; the open-task refusal reads only `tasks.md`'s boxes, so a wave lands when its boxes are ticked | FR-006 |
 
 ## Assumptions
 
@@ -172,4 +183,9 @@ Each wave records its own map decisions in its own spec. This feature's decision
 
 ## Review history
 
-(spec-fidelity rounds are recorded here)
+- Round 1 (2026-10-07): REVISE - (1) waves as separate features not legitimate: waves become amendments to 328's
+  `tasks.md` (FR-006); (2) the cap hook refused the recording the spec required: the hook now allows recording a running
+  check (reply under `/tmp`, `make claims-checked` / `claims-triaged` / `record-checked`) and the stop runs no gate
+  (FR-007, self-test 55/55); (3) hand-drawn maps: FR-009 names what is and is not touched; (4) E0 bounded to a match
+  impl-drift or an unedited page already states (FR-003). Points 2 (UNRESEARCHED out of scope), 4 (tiers) and 5 (the
+  stop's intent) passed.
