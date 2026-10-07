@@ -13,10 +13,9 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 - (wave 5, landed and reviewed) placement-changed village lane on kashikawa - wave 5: 0033's row street runs on off the map as the road into it at both ends, where
   the web cut it back to its last joint (`trim_streets`); Kashikawa's and Mizuguchi's far ends now run off the sheet as a
   second way out (every way is inked `village lane`).
-- placement-changed: copse on mizuguchi - wave 16: the against-the-belt copse retired (0071's drawing page draws the copse only
-  among the houses); Mizuguchi's copse is re-placed among its houses.
-- placement-changed: notice board on kashikawa - wave 16: the drawing-water siting retired (0190: the busiest frontage).
-- placement-changed: notice board on sawada - wave 16: the same.
+- none (wave 16): the two retired knob forms moved nothing drawn - measured on the regenerated maps against the base: Mizuguchi,
+  which declared the belt-side copse, is linear and draws no copse, and Kashikawa's and Sawada's notice boards stand where they
+  stood (the drawing-water bid did not decide their seats); only each map's recorded knob changed.
 - none (wave 5, the other rows): each fix moves one value inside a rule that already places or sizes the element (a
   size, a width, a count, a reach, a caption's leader); no element is new to a map and no glyph is redrawn.
 
@@ -788,6 +787,7 @@ wave 16 takes the E0, the privacy-baffle paragraph, the copse rows (`COPSE_SITIN
   - `l7r/diagram/hamletgen/consts.py::COPSE_BELT_REACH_FT#copse against the belt` - retired with the form
   - `l7r/diagram/hamletgen/hinterland/stages.py::stage_windbreak#against-the-belt copse clump` - retired with the form
   - `l7r/diagram/hamletgen/hinterland/stages.py::stage_windbreak#copse among the homes` - the copse only among the houses
+  - `buildings/programs.md::Magistrate's manor (county magistracy)#granary weight knob` - reopened by this wave's re-check (wave 15 had written that an isolated county's storehouse may be the compound's largest building, against 0098's drawing page's single 43-50 x 25-27 ft granary): the clause dropped, the rank left to `buildings.md`'s own GUESS claim
   - `l7r/diagram/hamletgen/consts.py::KOSATSUBA_SITINGS#notice board siting` - the busiest frontage only (0190 drawing); the drawing-water bid, its choice value and modal retired
 
 - [x] T56a wave 15's found rows tiered by the work they take, by a fresh reader (FR-002, FR-003, SC-003)

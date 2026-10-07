@@ -1,57 +1,57 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "f7d4b68cb1350486395d0067f136bf3a9f8b53dc86d1a8a804d8674ee5db172d",
+ "plan_sha256": "80f70f6897b3c244d26b5ecc942c688b5b07d4b5440a74f6adfa370bcca85afb",
  "reviewed": "2026-10-07",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W15-reopen",
-   "summary": "the filer files a finding on a closed row as a found row, takes it out of waves.json and keeps its closing wave in `reopened`; T53a tiers the four reopened rows by their work (granary forms E0, stage, kitchen garden, strongbox E2)",
+   "id": "W16-T56a",
+   "summary": "wave 15's found rows tiered by a fresh reader; the two-building dwelling size row dropped as stale (IN-STEP on its later round)",
    "class": "within",
-   "why": "FR-001/FR-002/FR-003: every finding is ranked and tiered by implementation work; skipping a closed key dropped findings. T53a's tiers fit FR-003 (granary forms: the unedited 0098 drawing page already states the size as GUESS, a claim-only fix; the other three change one procedure paragraph each, no sheet redrawn)."
+   "why": "FR-002/FR-003 tiering by work; Edge Cases: a re-check records what it finds. The two E4 rows whose fix names a page edit are record conflicts (0222 drawing's 21 ft small end vs 0215's Hie hall; 0220 drawing calls the innermost-arch distance a convention at one place and a GUESS at another), and their fix text routes the page edit through the FR-004 exception path when taken"
   },
   {
-   "id": "W15-scope",
-   "summary": "wave 15 = the one open E0 row then the E2 rows in ranking order: six Mode A paragraphs and cluster.py's two drain rows (9 rows)",
+   "id": "W16-scope",
+   "summary": "the open E0 row, then the E2 rows in ranking order: 398, 403, 404, 405 (399-402 closed or IN-STEP)",
    "class": "within",
-   "why": "FR-006/SC-003: measured on ranking.json, the 9 rows are exactly the first 9 open non-deferred rows in ranking order (indices 4, 383, 394, 395, 396, 398, 402, 403, 404); no open E0/E1 row is passed over."
+   "why": "FR-006 contiguous run, lowest tier first; SC-003: the one open E0 row is taken first"
   },
   {
-   "id": "W15-seat-drain",
-   "summary": "seat_cluster's HARD 1 (no seat below the drain) removed for every form; below_drain judged within the drain's span across the slope; the per-farm rule no seat enforced filed E3 (found-wave15.jsonl)",
-   "class": "within",
-   "why": "Literal to 0058's drawing page (unedited since feature 303): 'Farmhouses are kept off the ground below a drain only in a dispersed settlement, not in a nucleated cluster' and 'each farm of a dispersed settlement ... must stand on dry ground on its own', and to row 404's fix ('drop HARD 1'). HARD 1 tested the seat margin's midpoint, never a farmstead, so keeping it at a dispersed seat would enforce a rule the page does not state - an 'X except Y' - rather than the per-farm rule; filing that rule as a new ranked row (E3, a new placement rule across modules) puts it in the queue the request asks to work through."
-  },
-  {
-   "id": "W15-stage-sumo",
-   "summary": "the stage and sumo-ring rows take the finding's second remedy: the absent default claimed as 0222's drawing page's GUESS; the roll tried and withdrawn (knobs, modals and Hoshigaoka notes back to their wave-14 text)",
-   "class": "within",
-   "why": "FR-003/FR-004: 0222's drawing page, unedited, already says what the procedure does ('absent by default ... the maps leave both off unless they are turned on'), so only the claim moves. Rolling would contradict that page and need it edited - the research moving, FR-004's exception path. The net diff 68ee171f4..48967b2ea touches no modal, notes file or research page."
-  },
-  {
-   "id": "W15-mode-a-edits",
-   "summary": "granary claim split (forms on 0098; size GUESS on 0098 drawing; terminal row at the office the question page's GUESS; kura vents CONVENTION); checklist ranks from 0116 drawing; subsidiary-buildings claim on 0222 drawing with 0222/0215 evidence; manor kitchen garden as 0109's site and size knobs; strongbox clause dropped",
-   "class": "within",
-   "why": "Each edit checked against its page: 0098 drawing (size GUESS), 0098.html (large storehouse rows at the office, the project's GUESS), 0116 drawing (office hall > residence > rowhouse; grain store by rice held), 0222.html ('sometimes seen in a precinct'), 0215 (Rokusha 30-tsubo office, 1872), 0109 drawing (four sites, six hours, ~1,076 sq ft to half the grounds), 0098 drawing deviation (dry-field share in kind). No research page changed in the range (FR-004)."
-  },
-  {
-   "id": "W15-scope-script",
-   "summary": "audit/scope.py keeps the page path (render_png, raster tiles, the page vocabulary's tables, each Kind a kept map records)",
-   "class": "within",
-   "why": "FR-010: code the kept maps execute; the page path is executed by every kept map. Committed in b92a441c2, before 68ee171f4 (already in wave 14's close)."
-  },
-  {
-   "id": "W15-stack",
-   "summary": "wave 15 starts on unpushed waves 9-14 under the wave-11 exception's condition (6); its own pair opens at 68ee171f4",
+   "id": "W16-412-413",
+   "summary": "stage_windbreak's two copse rows (412, 413) taken with COPSE_SITINGS (403) ahead of 407-410",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "The same GM-reviewed exception ruled LEGITIMATE at each earlier wave; condition (6) checked at 68ee171f4: wave 14 closed (T51/T52 ticked, impl-drift recorded, gate verified, pair band 1, wave column), and origin's backup/digram-backlog is at 68ee171f4. Wave 15 is its own amendment on a reset counter with this plan review before its first tick."
+   "why": "FR-006 asks for a contiguous run; but 413 records 403 as its dependency and carries 403's own fix, and 412's unit is the code 403's fix deletes, so neither can stay an open row once 403 is fixed. All are E2, so the request's purpose (easiest first) is untouched"
   },
   {
-   "id": "W15-verify",
-   "summary": "impl-drift on the touched claims, the modals' owed record checks, the gate with the pool hamlets regenerated, wave 15's own bookend pair",
+   "id": "W16-retire",
+   "summary": "the copse against the belt and the board at the drawing-water place retired with their code, tests, choices and modals; each knob keeps its one form",
    "class": "within",
-   "why": "FR-005, constitution VI (wave 15 is the first engine change of the stack since wave 13)."
+   "why": "FR-004: the implementation moves to the research. Neither form is on any page: 0071's drawing page puts the copse only in the gaps between the houses (0072 drawing likewise), and 0190's question page names center, entrance, officials' gates and bridge ends, its drawing page the busiest main road; no page puts a board at a well. XII makes a knob of attested forms, so keeping an unattested one is the finding itself. No research page edited"
+  },
+  {
+   "id": "W16-mizuguchi",
+   "summary": "Mizuguchi's copse_siting=against_the_belt declaration dropped",
+   "class": "within",
+   "why": "the declared value no longer exists; Mizuguchi is a scripted hamlet, not a frozen hand-rolled map (FR-009), and FR-005 regenerates the maps a wave changes"
+  },
+  {
+   "id": "W16-occasions",
+   "summary": "three placement-changed occasions (copse on Mizuguchi, board on Kashikawa and Sawada), a glyph check each",
+   "class": "within",
+   "why": "FR-005: review occasions a wave opens are run"
+  },
+  {
+   "id": "W16-cond6",
+   "summary": "waves 9-15 stay unpushed under the wave-11 exception's condition (6); wave 16's pair opens at 799a0bf4b",
+   "class": "within",
+   "why": "continues the ruled exception; verified: origin/backup/digram-backlog is 799a0bf4b, wave 15 closed (T55) at d78d95d6a/799a0bf4b"
+  },
+  {
+   "id": "W16-verify",
+   "summary": "impl-drift on touched claims, glyph checks, the gate with three maps regenerated, wave 16's bookend pair",
+   "class": "within",
+   "why": "FR-005, constitution VI"
   }
  ],
  "verdict": "CLEAR"

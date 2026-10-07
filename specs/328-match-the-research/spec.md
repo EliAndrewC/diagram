@@ -193,6 +193,8 @@ Each wave's amendment adds its map decisions to this table. The program's decisi
 | Code only the legacy hand-authored settlements run is DEFERRED, not fixed (amendment 8) | scope, the GM's ruling of 2026-10-07 | the legacy settlements' checks go when they convert; the scripted hamlets and the permanently hand-drawn magistracies and country shrines are what the maps keep | FR-010 |
 | Waves land inside this feature: only the current wave's rows are task boxes; the next wave is an amendment | process | the GM asked for one feature; the open-task refusal reads only `tasks.md`'s boxes, so a wave lands when its boxes are ticked | FR-006 |
 | A row village's street runs on off the map; 0246's pull-back is not its rule | historically accurate as recorded: 0033's drawing page | 0033 is the page for a row village's street ("runs on off the map as the road into it"); 0246's pull-back to the last house served is a clustered settlement's lane rule | plan D7 |
+| The village copse stands only among the houses; the against-the-belt form is retired (wave 16) | historically accurate as recorded: 0071's drawing page | 0071's drawing page draws the dooryard copse only in the gaps between the houses and no page shows a copse against the belt; it moved nothing drawn - Mizuguchi, the only map that declared it, is linear and draws no copse | `hamletgen/consts.py` `COPSE_SITINGS`, `hinterland/stages.py` `stage_windbreak` |
+| The notice board stands on the busiest frontage; the drawing-water place is retired (wave 16) | historically accurate as recorded: 0190's drawing page | 0190's question page names the village center, entrance, officials' gates and bridge ends, its drawing page the busiest main road, and no page puts a board at a well; it moved nothing drawn - Kashikawa's and Sawada's boards stand where they stood | `hamletgen/consts.py` `KOSATSUBA_SITINGS`, `settlement/structures/fixtures/siting.py` |
 
 ## Assumptions
 
@@ -295,3 +297,6 @@ Each wave's amendment adds its map decisions to this table. The program's decisi
   page, the postern a GUESS saying what was searched); its aside fixed: the scope keeps the page path.
 - Amendment 14, round 1 (spec-fidelity, 2026-10-07): FAITHFUL, plan CLEAR (8 decisions) - removing the seat's drain rule the
   literal reading of 0058 (keeping it at a dispersed seat would be "X except Y"); the stage and sumo defaults within the spec.
+- Amendment 15, round 1 (spec-fidelity, 2026-10-07): CHANGES REQUIRED, plan CLEAR (8 decisions) - the retirements literal
+  (neither form on any page), the 412/413 dependency LEGITIMATE; the Decisions Recorded rows owed (added). Measured since: the
+  retirements moved nothing drawn, so the three placement occasions became `none`.
