@@ -127,10 +127,10 @@
   "moved": "T12a: tiered by the work it takes (was provisional, by verdict)"
  },
  ".claude/skills/diagram/buildings/programs.md::Country shrine (a village district's shrine)#building size anchors": {
-  "tier": "E1",
-  "fix": "the hall-and-dwelling band_ft 18-38 becomes ~21-35 ft (0222's attested halls) in types.json and the programs.md table; the 46x28 dwelling's claim relabeled GUESS 0221 drawing",
+  "tier": "E2",
+  "fix": "the shrine's size bands widened to the record: sanctuary 1 or 3 ken (Hie's 2-bay ~12 x 6 ft), worship halls from ~18 ft (Hie ~18 x 12, Rokusha 9 tsubo) - the band, its table and the sheet sizing rule",
   "flag": "",
-  "moved": "T12a: tiered by the work it takes (was provisional, by verdict)"
+  "moved": "wave 4 re-check: the 21-35 ft prose fixed, but the band itself drifts on two sizes (E1 -> E2)"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#a yard's sun between ranks": {
   "tier": "E2",
