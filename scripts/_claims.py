@@ -606,15 +606,17 @@ def backfill(
 
 
 def load_deferred(path: Path) -> frozenset[str]:
-    """The units whose findings are DEFERRED (`dev/claims-deferred.json`: `units`, a list of `path::qualname`), or none."""
+    """The units (`units`, `path::qualname`) and single claims (`keys`, `path::qualname#label`) whose findings are DEFERRED
+    (`dev/claims-deferred.json`), or none."""
     if not path.is_file():
         return frozenset()
-    return frozenset(json.loads(path.read_text(encoding="utf-8")).get("units", []))
+    doc = json.loads(path.read_text(encoding="utf-8"))
+    return frozenset(doc.get("units", [])) | frozenset(doc.get("keys", []))
 
 
 def shown(key: str, verdict: str, deferred: frozenset[str]) -> str:
     """A finding's verdict as the report shows it: DEFERRED where its unit is deferred, else its own."""
-    return "DEFERRED" if verdict in FINDINGS and key.rsplit("#", 1)[0] in deferred else verdict
+    return "DEFERRED" if verdict in FINDINGS and (key in deferred or key.rsplit("#", 1)[0] in deferred) else verdict
 
 
 def report(

@@ -184,8 +184,9 @@ def test_a_finding_in_a_deferred_unit_is_reported_deferred(tmp_path: pathlib.Pat
     assert "IN-STEP 4, DEFERRED 1" in text and f"DEFERRED       {k} - 296" in text and "DRIFTED" not in text
     assert cx.classify(cx.current(skill), index, {}, {}, tmp_path, deferred) == ([], [])
     f = tmp_path / "deferred.json"
-    f.write_text('{"why": "legacy", "units": ["a::b"]}')
-    assert cx.load_deferred(f) == frozenset({"a::b"}) and cx.load_deferred(tmp_path / "none.json") == frozenset()
+    f.write_text('{"why": "legacy", "units": ["a::b"], "keys": ["c::d#e"]}')
+    assert cx.load_deferred(f) == frozenset({"a::b", "c::d#e"}) and cx.load_deferred(tmp_path / "none.json") == frozenset()
+    assert cx.shown("c::d#e", "DRIFTED", frozenset({"c::d#e"})) == "DEFERRED" and cx.shown("c::d#f", "DRIFTED", frozenset({"c::d#e"})) == "DRIFTED"
 
 
 def _row(cur: dict, key: str, verdict: str, **kw: str) -> dict[str, str]:
