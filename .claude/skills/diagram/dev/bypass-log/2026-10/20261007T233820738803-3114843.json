@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-07T23:38:20Z",
+  "target": "perf-explain",
+  "commit": "7a49ee2e3",
+  "outcome": "permitted",
+  "why": "perf-explain UNVERIFIED: the per-call share of free_seats in seed 25's homesteads not timed apart"
+}
