@@ -6944,6 +6944,26 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#scan seat window": {
+  "code": "cbea2498b7d2f53f",
+  "core": "3d59941c42fea565",
+  "date": "2026-10-07",
+  "note": "the 0.6*half overhang and the 0.8 bbox-inside floor decide only whether a wood shows within the drawn frame, not where it stood; that is a sheet convention, and the page is silent on it",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#title pocket kept clear": {
+  "code": "79bb78e946ba62d3",
+  "core": "3d59941c42fea565",
+  "date": "2026-10-07",
+  "note": "title_pocket is kept as a rectangle no wood's square may enter, which is pure page layout",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#where the fuel wood stands": {
   "code": "ff8939e9af32b139",
   "core": "3d59941c42fea565",
@@ -6959,14 +6979,6 @@
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:d40cad5607ccfe28"
   ],
   "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#woods kept out of the title pocket (title_pocket keep rectangle), a CONVENTION": {
-  "code": "3d59941c42fea565",
-  "core": "3d59941c42fea565",
-  "date": "2026-10-07",
-  "note": "woods kept out of the title pocket (title_pocket keep rectangle), a CONVENTION",
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#woods not in a ruled line": {
   "code": "7c48e799bc3d256d",
