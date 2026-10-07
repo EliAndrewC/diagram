@@ -849,11 +849,14 @@ class Lawful:
         # every test below reads only what stands near the run (`index`, `GroundIndex`): a crossing fault needs a crossing,
         # and each foul a part within its own reach of the run - so the parts beyond it are left out, not the verdict
         ix = self.index
-        if ix.water_near(run, 1.0) and _crossing_fault({**self.M, "lanes": [{"pts": _rounded(run), "w": width}]}, 0, run, self.wet) is not None:
-            return False
         houses = ix.near("houses", run, max(width / 2.0 + 2.0, law.DOORSTEP_FT) + 1.0)  # ...the doorstep's reach: `theirs` reads it
         fouled = fouled_segment(run, width, houses, ix.near("yards", run, WEB_FABRIC_GAP + 1.0), ix.near("solid", run, 1.0), ix.near("fixtures", run, width / 2.0 + law.FIXTURE_PAD_FT + 1.0), self.M)
-        return fouled is None and ix.open_ground(run) and not through_a_building(run, ix.near("buildings", run, 1.0))
+        if fouled is not None or not ix.open_ground(run) or through_a_building(run, ix.near("buildings", run, 1.0)):
+            return False
+        # ...AND THE CROSSING LAST, the one test that solves a deck (feature 328, the perf-audit of wave 10: the field way's
+        # search judged 242 candidates on 20 households seed 4, each solving its crossing first; every test here is pure, so
+        # the order changes no verdict - 8.8 s -> 7.9 s, the output identical)
+        return not (ix.water_near(run, 1.0) and _crossing_fault({**self.M, "lanes": [{"pts": _rounded(run), "w": width}]}, 0, run, self.wet) is not None)
 
     def __call__(self, run: Poly, width: float, skip: int | None = None) -> bool:
         """`skip`: the lane `run` would replace, left out of what it is asked to meet.

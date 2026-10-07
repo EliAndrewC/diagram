@@ -1,0 +1,62 @@
+{
+  "band": 3,
+  "base": {
+    "commit": "6ca2f5ccf",
+    "label": "328-start",
+    "utc": "20261007T180713Z"
+  },
+  "binding": "880424498c9445ee40648be84dea8eb849fc3f1bb80408cf2e524e073e24b7e5",
+  "end": {
+    "commit": "551bf5af8",
+    "label": "328-end",
+    "utc": "20261007T181026Z"
+  },
+  "environment": "local",
+  "feature": "328-match-the-research",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "8d3395e5-fe32-4f85-9c89-80c344d2ac1a",
+    "utc": "20261007T181922Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": 3.4,
+          "39": 14.8,
+          "4": 2.9,
+          "47": 10.0
+        },
+        "total_pct": 7.5
+      },
+      "20": {
+        "seeds": {
+          "25": 0.0,
+          "39": 0.0,
+          "4": 46.7,
+          "47": -3.3
+        },
+        "total_pct": 10.6
+      },
+      "40": {
+        "seeds": {
+          "25": -11.2,
+          "39": -2.5,
+          "4": -3.4,
+          "47": 0.0
+        },
+        "total_pct": -4.3
+      }
+    },
+    "seeds": {
+      "25": 19.5,
+      "39": 0.0,
+      "4": 2.1,
+      "47": 4.9
+    },
+    "total_pct": 6.4
+  },
+  "note": "Right for 20 hh seed 4 and reference seed 25, wrong about 10 hh seed 39. The fork triangle and ring step do account for 20 hh seed 4 and reference seed 25 (both reverted: 6.4-6.5 s and 3.9-4.0 s, against 8.8 and 5.0 s at end). But the explanation says every crossing is wave 10's and that wave 9's yard-step hold no longer crosses. 10 hh seed 39 +14.8% (2.7 to 3.1 s) crosses, and fork+ring reverted leaves it at 3.1 s; with the yard step also released it falls to 2.6 s, as w9-perf-yard-step-released recorded. The 10 hh total +7.5% (12.0 to 12.9 s summed) is 0.7 s fork+ring (12.2 s reverted) plus the yard hold (11.2 s released). The rewrite should name the yard hold for 10 hh seed 39 and its share of the 10 hh total. Reviewer runs: worktrees at 6ca2f5ccf, ce65fa076, ce65fa076 with fork+ring reverted, and with the yard step also released, 2 reps each, agreeing within 0.1 s.",
+  "verdict": "inconsistent"
+}

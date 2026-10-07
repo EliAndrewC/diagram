@@ -1,0 +1,67 @@
+{
+  "band": 3,
+  "base": {
+    "commit": "6ca2f5ccf",
+    "label": "328-start",
+    "utc": "20261007T180713Z"
+  },
+  "binding": "880424498c9445ee40648be84dea8eb849fc3f1bb80408cf2e524e073e24b7e5",
+  "criteria": {
+    "commensurate": "Borderline. These are correctness fixes with no new feature, costing +2.8 s (+47%) on 20 hh seed 4, +0.9 s on reference seed 25 and +0.4 s on 10 hh seed 39. The cost is a side effect of the layout changing, not drawing that was bought with it.",
+    "necessary": "Yes. The work behind the increase is research corrections: the fork triangle on a city's grain only (0010), no sideways ring step (0014), and wave 9's yard-step hold (E3, the re-seat row). No new search was added; the web's existing field-way search (reach.settle_field) runs 242 candidates deep instead of 10 on 20 hh seed 4.",
+    "no_way_around": "A cheaper way exists and was not taken. In Lawful.on_lawful_ground (hamletgen/ways/settle.py), running the cheap foul, open-ground and building tests before _crossing_fault (whose deck solve is the cost per candidate) gives byte-identical lanes, houses, bridges and fields on 20 hh seed 4, reference seed 25, 10 hh seed 47 and 40 hh seed 39. It takes 20 hh seed 4 from 8.8-8.9 s to 7.9 s (web 3.28 to 2.35 s) with every other leg unchanged. The session's two measured ways round (a crossing_deck memo, the ring boxes once at 0.15 s) did not include it. Take the reorder or rule it out with numbers, then re-measure; what remains after it (20 hh seed 4 still about +32%) is what to adjudicate."
+  },
+  "end": {
+    "commit": "551bf5af8",
+    "label": "328-end",
+    "utc": "20261007T181026Z"
+  },
+  "environment": "local",
+  "feature": "328-match-the-research",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "8d3395e5-fe32-4f85-9c89-80c344d2ac1a",
+    "utc": "20261007T181922Z"
+  },
+  "kind": "audit",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": 3.4,
+          "39": 14.8,
+          "4": 2.9,
+          "47": 10.0
+        },
+        "total_pct": 7.5
+      },
+      "20": {
+        "seeds": {
+          "25": 0.0,
+          "39": 0.0,
+          "4": 46.7,
+          "47": -3.3
+        },
+        "total_pct": 10.6
+      },
+      "40": {
+        "seeds": {
+          "25": -11.2,
+          "39": -2.5,
+          "4": -3.4,
+          "47": 0.0
+        },
+        "total_pct": -4.3
+      }
+    },
+    "seeds": {
+      "25": 19.5,
+      "39": 0.0,
+      "4": 2.1,
+      "47": 4.9
+    },
+    "total_pct": 6.4
+  },
+  "note": "Reviewer worktree reord at ce65fa076: the one conjunction reordered, output hashed against end on four rolls, 2 reps.",
+  "verdict": "not-justified"
+}
