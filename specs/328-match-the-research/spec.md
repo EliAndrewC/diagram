@@ -206,3 +206,5 @@ Each wave's amendment adds its map decisions to this table. The program's decisi
   sheets: moved to E3, out of wave 2; (2) archery bank draws no sheet: back to E1, into wave 2 (the plan's D5b ruled NOT
   LEGITIMATE); (3) the count is nine, from `audit/overrides.json`; (4) `FOOTPATH_FABRIC_GAP`'s wait recorded in its
   `after`. The aside on XIII applied: the baseline is the clone at main's engine content before the first edit.
+- Amendment 1, round 2 (spec-fidelity-verify, 2026-10-07): FAITHFUL; plan CLEAR (seven decisions within). Aside: the
+  archery bank is fixed literally at 250 x 8 ft; any move from it goes to the exception path first.

@@ -1,46 +1,51 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "b9520016bdb1c3ff8a7a531996bbb255d7a1ba16732a85f125cdda2526cda269",
+ "plan_sha256": "c98996f5c9ab50e1ce1db7edfc2d93cd2ce246ea7d605a29c05ef569a1320ac5",
  "reviewed": "2026-10-07",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "D5a",
-   "summary": "eight procedure rows whose fix redraws a named Mode A sheet (Ubame, Hayakawa, Ochiba, the Hoshigaoka shrine sheet) re-tiered E1 -> E3",
+   "id": "TC-input/output/check",
+   "summary": "findings.json snapshot; ranking.json + generated ranking.md; tests/test_328_ranking.py holds coverage of every key",
    "class": "within",
-   "why": "FR-003 of the accepted spec tiers a hand-drawn sheet redrawn E3, and each row's own files list names the sheet; ranking by implementation work is what the GM asked for"
+   "why": "FR-001/SC-001 as asked; the test enforces the requested ranking"
   },
   {
-   "id": "D5b",
-   "summary": "the procedure row 'Outer court#archery bank' re-tiered E1 -> E3 under D5's reason ('the fix redraws a hand-drawn Mode A sheet')",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "the row's own fix says 'no sheet draws one' and its files list only buildings.md: it is one value in the procedure (E1). Moving it to E3 defers an easy fix behind harder ones on a premise the row contradicts, against 'go from easiest to hardest' and SC-003"
+   "id": "P1.2-P1.4/D4",
+   "summary": "nine Opus ranking batches; bounded E0 re-check; a dependency-outranked row takes its dependency's tier; a 30-row blind second reader",
+   "class": "within",
+   "why": "how FR-001-FR-003's audit is staffed and checked; drops no finding"
   },
   {
-   "id": "D5c",
-   "summary": "the procedure row 'Walls and gates#main gate posts' kept in E1 and in wave 2 although its files list the Ochiba, Hayakawa and Ubame sheets",
+   "id": "P2-order/D1/D2/D3",
+   "summary": "waves E0..E4, by module within a tier, after-rows wait; only the current wave is task boxes; wave 1 = E0",
    "class": "within",
-   "why": "not a narrowing (it does harder work earlier), but it is inconsistent with D5 and FR-003, and wave 2's tasks neither name those sheets (FR-009) nor declare an occasion for them; reported as a spec-review change"
+   "why": "FR-003, FR-006 and SC-003 as specified; easiest first"
+  },
+  {
+   "id": "P2-exception-path",
+   "summary": "deviation-tempting rows go to spec-fidelity with the request verbatim before any other fix",
+   "class": "within",
+   "why": "FR-004 and XVI"
+  },
+  {
+   "id": "D5",
+   "summary": "nine procedure rows whose fix redraws an Ubame, Hayakawa, Ochiba or Hoshigaoka sheet moved E1 -> E3 (audit/overrides.json; main gate posts among them); archery bank stays E1 in wave 2",
+   "class": "within",
+   "why": "FR-003 tiers a sheet redraw E3; each of the nine overrides carries the FR-003 sheet reason (measured: 9 of the 11 E3 overrides; the other two are wave-1 re-checks), and no E1 row left in ranking.json lists an .svg; the archery row (no sheet) is back in E1 at position 2, removing round 1's NOT LEGITIMATE D5b"
   },
   {
    "id": "D6",
-   "summary": "the 32 E1 rows of hamletgen/ways/ held together as wave 3; consts.py FOOTPATH_FABRIC_GAP waits for that wave",
+   "summary": "the 32 hamletgen/ways/ E1 rows held together as wave 3; FOOTPATH_FABRIC_GAP waits for it via its recorded after",
    "class": "within",
-   "why": "all E1, contiguous in the ranking (measured: E1 indices 17-48), taken as the very next wave, so easiest-first order is kept; FOOTPATH_FABRIC_GAP's fix (4.0 -> 7.0) is the same fix the ways/bund.py::RunOnBlocks.clear row carries, a real dependency (SC-003), though not yet recorded in ranking.json's after field"
+   "why": "contiguous E1 rows taken as the very next wave; the dependency is now in ranking.json's after field (SC-003)"
   },
   {
-   "id": "V2",
-   "summary": "wave 2 verification: Inashiro first via make map with the PNG looked at, then the pool through the gate, bookends 328-w2-start/end, impl-drift on every touched unit",
+   "id": "V2/bookends/XIII",
+   "summary": "wave 2 verified on Inashiro then the pool; 328-w2-start/end bookends; impl-drift on touched units; baseline is the clone at main's engine content before the first edit",
    "class": "within",
-   "why": "carries FR-005 (impl-drift IN-STEP, gate green, maps regenerated) and constitution VI; adds nothing the GM did not ask for"
-  },
-  {
-   "id": "W2",
-   "summary": "wave 2 scope: the first sixteen E1 rows (ranking E1 indices 0-16 less FOOTPATH_FABRIC_GAP)",
-   "class": "within",
-   "why": "a contiguous run at the head of E1 apart from the dependency D6 names; wave size is the spec's construct (FR-006)"
+   "why": "FR-005, constitution VI and XIII; adds no unrequested scope"
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }
