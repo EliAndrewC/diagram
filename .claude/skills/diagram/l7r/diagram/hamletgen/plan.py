@@ -407,7 +407,7 @@ fan as drawn, not from the square."""
 
 def seat_room(households: int, shape: str | None) -> float:
     """The ground the seat and its windbreak need beyond the field, px (feature 287, homes H31 and plan D8): the band's
-    depth and standoff to its center, then the farther of half its length (the band on the canvas, `seat_cluster`'s
+    depth and standoff to its center, then the farther of its half-length `lat` (the band on the canvas, `seat_cluster`'s
     HARD 3) and its windward fringe plus the belt's reach (the belt on the canvas, `belt_off_canvas`). A seat whose back
     is within 45 degrees of the wind has its fringe at most `0.7071 * lat + dep` upwind of its center.
 

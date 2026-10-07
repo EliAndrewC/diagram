@@ -244,18 +244,24 @@ def test_the_canvas_holds_the_seat_and_its_belt_on_the_windward_side(windward: s
 
 
 def test_a_canvas_with_no_room_for_the_belt_refuses_the_site() -> None:
-    """The input `plan_site` never produces: the one wind-facing margin with its band on the canvas (HARD 3 passes) but
-    its belt off the top - the cramped margin is refused (no longer a fallback), and so is the site. Lowered by the
-    seat's room (`seat_room`), the same field seats."""
+    """The input `plan_site` never produces: both wind-facing margins with their bands on the canvas (HARD 3 passes, the
+    seat center a whole `lat` inside the frame - feature 328) but their belts, thrown out diagonally by a northwest
+    wind, off the corner - each cramped margin is refused (no longer a fallback), and so is the site. Moved in by the
+    seat's room (`seat_room`), the same field seats. (A wind square to the frame cannot reach the refusal now: past
+    HARD 3's whole `lat` the belt's 146 ft row stands on the canvas for every band `band_extent` gives.)"""
     plan = a_plan(households=10, cluster_shape="round")
+    plan.windward = "NW"
     dep, lat = band_extent(10, "round")
-    top = lat / 2.0 + dep + SEAT_STANDOFF + 10.0
-    plan.envelope = [(x, y - 400.0 + top) for x, y in SQUARE]
+    corner = lat + dep + SEAT_STANDOFF + 10.0  # each margin's seat center a whole `lat` (and 10 px) inside its frame edge
+    plan.envelope = [(x - 400.0 + corner, y - 400.0 + corner) for x, y in SQUARE]
+    north, west = (corner + 300.0, lat + 10.0), (lat + 10.0, corner + 300.0)
+    assert belt_off_canvas(north, (1.0, 0.0), (0.0, -1.0), lat, dep, plan.wind, plan.W, plan.H) > BELT_ROOM_MAX_OFF, "the premise: the band fits, its belt does not"
+    assert belt_off_canvas(west, (0.0, 1.0), (-1.0, 0.0), lat, dep, plan.wind, plan.W, plan.H) > BELT_ROOM_MAX_OFF
     with pytest.raises(SeatRefused):
         hg.seat_cluster(plan)
     room = seat_room(10, "round")
-    plan.envelope = [(x, y - 400.0 + room + 1.0) for x, y in SQUARE]
-    assert hg.seat_cluster(plan)["out"] == (0.0, -1.0)
+    plan.envelope = [(x - 400.0 + room + 1.0, y - 400.0 + room + 1.0) for x, y in SQUARE]
+    assert hg.seat_cluster(plan)["out"] in ((0.0, -1.0), (-1.0, 0.0))
 
 
 def test_the_band_and_the_seat_room_are_one_derivation() -> None:

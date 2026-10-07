@@ -196,7 +196,9 @@ def test_an_end_is_NOT_moved_onto_a_junction_when_the_rewrite_rule_refuses(monke
     `test_clearance.py` owns."""
     from l7r.diagram.hamletgen.ways import touch as T
 
-    lanes = [[(0.0, 0.0), (0.0, 600.0)], [(60.0, 300.0), (200.0, 300.0)], [(60.0, 330.0), (190.0, 330.0), (200.0, 330.0)]]
+    # the two ends 22 ft apart: inside the join reach (`_LANE_JOIN_FT`, 25 ft since feature 328), so the move is tried
+    lanes = [[(0.0, 0.0), (0.0, 600.0)], [(60.0, 300.0), (200.0, 300.0)], [(60.0, 322.0), (190.0, 322.0), (200.0, 322.0)]]
+    assert math.dist(lanes[1][0], lanes[2][0]) <= touch._LANE_JOIN_FT, "the premise: the ends are within the join reach"
     allowed = _StubSettlement(lanes=[list(ln) for ln in lanes], houses=[(150.0, 320.0)])
     allowed.M.setdefault("meta", {"ftpx": 1})
     T._touch_junctions(allowed, [], [], [])
@@ -300,14 +302,15 @@ def test_a_short_gap_walled_on_both_lattices_is_left_for_the_orphan_rungs() -> N
     from l7r.diagram.hamletgen.ways.route import _route
 
     main = [(0.0, 0.0), (400.0, 0.0)]
-    piece = [(150.0, 120.0), (150.0, 30.0)]  # its free end 30 ft off the main way: inside the 40 ft join distance
+    piece = [(150.0, 120.0), (150.0, 24.0)]  # its free end 24 ft off the main way: inside the 25 ft join distance (feature 328)
     wall = [(-100.0, 10.0), (500.0, 10.0), (500.0, 20.0), (-100.0, 20.0)]  # across the whole sheet: no lattice gets round it
-    q, foot = (150.0, 30.0), (150.0, 0.0)
+    q, foot = (150.0, 24.0), (150.0, 0.0)
+    assert math.dist(q, foot) <= touch._LANE_JOIN_FT, "the premise: a gap inside the join reach earns the second lattice"
     assert not _route(q, foot, [], [wall], [], gap=WEB_FABRIC_GAP, pad_mult=2.0, cell=10.0)
     assert not _route(q, foot, [], [wall], [], gap=WEB_FABRIC_GAP, pad_mult=1.0, cell=5.0), "the fine lattice must fail too, or the branch under test never runs"
     s = _StubSettlement(lanes=[main, piece])
     hg.ways._touch_junctions(s, [], [wall], [])
-    assert s.M["lanes"][1]["pts"][-1] == [150.0, 30.0], "the walled end stays where it was"
+    assert s.M["lanes"][1]["pts"][-1] == [150.0, 24.0], "the walled end stays where it was"
 
 
 def test_an_isolated_field_spur_the_orphan_pass_drops_is_recorded_on_the_map() -> None:

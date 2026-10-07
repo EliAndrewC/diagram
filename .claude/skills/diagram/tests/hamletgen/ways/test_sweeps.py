@@ -102,13 +102,17 @@ def test_a_doubled_remnant_is_dropped_at_BOTH_recorded_distances() -> None:
 def test_a_remnant_that_alone_reaches_a_farmhouse_is_kept() -> None:
     """A visible remnant beats an unreached house: `farmhouses_reach_a_way` should be able to say
     what it sees. This is the clause that makes the structural test safe to apply length-blind."""
+    from l7r.diagram.hamletgen.ways.fabric import _LANE_JOIN_FT
+    from l7r.diagram.hamletgen.ways.geom import shadowing_lane
+
     parent = [(0.0, 0.0), (300.0, 0.0)]
-    remnant = [(100.0, 0.0), (130.0, 29.0)]
-    s = _StubSettlement(lanes=[[(0.0, 900.0), (0.0, 940.0)], parent, remnant], houses=[(135.0, 125.0)])
+    remnant = [(100.0, 0.0), (125.0, 24.0)]  # its far end 24 ft off the parent, inside the join reach: a remnant
+    s = _StubSettlement(lanes=[[(0.0, 900.0), (0.0, 940.0)], parent, remnant], houses=[(130.0, 120.0)])
+    assert shadowing_lane(remnant, [parent], _LANE_JOIN_FT) == 0, "the premise: the lane goes nowhere, so only the stranding clause can keep it"
     # THE FIGURE IS `farmhouses_reach_a_way`'s OWN, and getting it wrong is what stranded the
     # reference hamlet: at `_LANE_JOIN_FT` this house is not even counted as served by the remnant.
-    assert hg.ways._reach((135.0, 125.0), parent) > hg.ways.WEB_REACH_FT, "the house is out of the parent's reach"
-    assert hg.ways._reach((135.0, 125.0), remnant) <= hg.ways.WEB_REACH_FT, "...but the remnant reaches it"
+    assert hg.ways._reach((130.0, 120.0), parent) > hg.ways.WEB_REACH_FT, "the house is out of the parent's reach"
+    assert hg.ways._reach((130.0, 120.0), remnant) <= hg.ways.WEB_REACH_FT, "...but the remnant reaches it"
     assert hg.ways._sweep_doubled_remnants(s) == 0
     assert s.M["lanes"][2]["pts"] != []
 
