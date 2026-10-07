@@ -1,0 +1,99 @@
+{
+ "feature": "328-match-the-research",
+ "plan_sha256": "c8c24a2128be922a19870acf1f6bf7130d3853d33649ed6116193fd21b182166",
+ "reviewed": "2026-10-07",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "TC-input",
+   "summary": "The audit reads dev/claims-index.json and snapshots it as findings.json in the feature directory",
+   "class": "within",
+   "why": "Implements FR-001's 'every finding in make claims-report' and makes SC-001 checkable against the report the audit read."
+  },
+  {
+   "id": "TC-output",
+   "summary": "ranking.json (key, verdict, tier, fix, files, after, flag, wave) plus a generated ranking.md grouped by tier then module",
+   "class": "within",
+   "why": "FR-001 asks for a readable table and countable data; the fields are the spec's Ranking row entity."
+  },
+  {
+   "id": "TC-check",
+   "summary": "tests/test_328_ranking.py holds one row per findings.json key with a tier and a fix, and ranking.md current with the JSON",
+   "class": "within",
+   "why": "Enforcement of FR-001/SC-001, which the spec itself asks for ('a test (or a script check)')."
+  },
+  {
+   "id": "TC-reference",
+   "summary": "Hamlet changes proven first on inashiro.gen.py, then the pool; Mode A sheets are hand SVGs",
+   "class": "within",
+   "why": "Order of verification inside FR-005's 'maps a wave changes are regenerated'; drops nothing."
+  },
+  {
+   "id": "P1.2",
+   "summary": "Nine read-only Opus batches of 47-76 findings grouped by module, from ranking-brief.md",
+   "class": "within",
+   "why": "How the FR-001 audit is staffed; covers every finding; the brief carries FR-002/FR-003/FR-004 and the GM's direction."
+  },
+  {
+   "id": "P1.3-E0-recheck",
+   "summary": "E0 rows tiered on the brief's earlier unbounded wording (E0 not MISLABELED or UNCLAIMED) get a bounded re-check; they stay E0 only with a named page already saying what the code does",
+   "class": "within",
+   "why": "Applies FR-003's bounded E0 to rows produced before the bound; tightens toward the request, narrows nothing."
+  },
+  {
+   "id": "P1.3-dependency-tier",
+   "summary": "A row a dependency outranks takes that dependency's tier",
+   "class": "within",
+   "why": "Implements FR-003 'a row follows any row it depends on' and SC-003's allowance that a row may wait on a dependency; the row is still fixed, only placed after what it needs, which is the real work order for 'easiest to hardest'."
+  },
+  {
+   "id": "P1.4/D4",
+   "summary": "A second Opus reader re-tiers 30 sampled rows blind; more than 5 rows off by more than one tier re-runs the disagreeing batch",
+   "class": "within",
+   "why": "The spec's Assumption that tiers are checked by a second reader on a sample; the numbers are the plan's parameters for it and remove no finding."
+  },
+  {
+   "id": "P2-order/D3",
+   "summary": "Waves E0, E1, E2, E3, E4; within a tier by module so one bundle re-checks a module's rows; 'after' rows wait",
+   "class": "within",
+   "why": "FR-003 ordering and SC-003 as specified."
+  },
+  {
+   "id": "D2-wave1",
+   "summary": "Wave 1 is every E0 row: claim lines corrected, no map change, re-checked by impl-drift by module, gate run, no regeneration owed",
+   "class": "within",
+   "why": "The lowest tier first is what the request and SC-003 require; no map regeneration is owed because nothing drawn moves (FR-005 owes it only for changed maps)."
+  },
+  {
+   "id": "D1-amendments",
+   "summary": "Only the current wave's rows are task boxes; the next wave is appended as an amendment reviewed on a reset counter",
+   "class": "within",
+   "why": "Restates FR-006 exactly."
+  },
+  {
+   "id": "P2-later-waves",
+   "summary": "E1 by module (reference hamlet then pool), E2, E3 including Mode A sheets, E4 with a research pass first",
+   "class": "within",
+   "why": "FR-003 tiers, FR-009 sheets and the spec's E4 edge case, in order; nothing excluded."
+  },
+  {
+   "id": "P2-exception-path",
+   "summary": "Rows flagged deviation-tempting go to spec-fidelity with the request verbatim before any other fix",
+   "class": "within",
+   "why": "FR-004 and the XVI edge case; the flag is the mechanism that routes them, and the brief tiers them by implementation work, so none is skipped."
+  },
+  {
+   "id": "perf-bookends",
+   "summary": "No perf bookend for wave 1; each later wave changing engine behavior takes its own start/end bookend",
+   "class": "within",
+   "why": "Constitution VI applied per wave; wave 1 changes no engine behavior; drops no requested work."
+  },
+  {
+   "id": "CC-XIII",
+   "summary": "Wave 1 behavior-free; later waves take a detached-worktree baseline per wave amendment",
+   "class": "within",
+   "why": "The project's regression rule applied per wave; not a narrowing of the request."
+  }
+ ],
+ "verdict": "CLEAR"
+}
