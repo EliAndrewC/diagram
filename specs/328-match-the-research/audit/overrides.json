@@ -189,5 +189,11 @@
   "tier": "E3",
   "fix": "a compound shrine drawn beside a single tree (0218 drawing), not a stippled grove rectangle - the three magistracy sheets redrawn",
   "moved": "wave 3 reading: the honest fix redraws three sheets (E0 -> E3)"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::RunOnBlocks.clear#off the steadings": {
+  "after": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#a footpath reaches every farmhouse 7 ft off a plot"
+  ],
+  "moved": "wave 4: reads FOOTPATH_FABRIC_GAP, held at 4 ft; waits with it"
  }
 }

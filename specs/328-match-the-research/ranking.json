@@ -1511,20 +1511,6 @@
   "wave": "2"
  },
  {
-  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::RunOnBlocks.clear#off the steadings",
-  "tier": "E1",
-  "fix": "FOOTPATH_FABRIC_GAP 4 -> 7 ft (lane middle at least 7 ft off a garden fence, 0246)",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py",
-   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py"
-  ],
-  "after": [],
-  "flag": "",
-  "tier_as_ranked": "E1",
-  "verdict": "DRIFTED",
-  "wave": ""
- },
- {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/clearance.py::clear_runs#threads between steadings",
   "tier": "E1",
   "fix": "clear_runs default tight_margin 6.0 -> 7.0 (WEB_FABRIC_GAP)",
@@ -4192,6 +4178,20 @@
   "flag": "",
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
+  "wave": ""
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/checks.py::lanes_share_tread#one network at 25 ft",
+  "verdict": "DRIFTED",
+  "tier": "E2",
+  "fix": "two lanes count as one network only where their treads meet (0081), the 25 ft join reach applying to ends that are then joined at one point - not any vertex within 25 ft of another run",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/checks.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 4 re-check",
+  "tier_as_ranked": "E2",
   "wave": ""
  },
  {
@@ -7266,6 +7266,39 @@
   "flag": "",
   "found": "wave 4: FOOTPATH_FABRIC_GAP at 7 ft",
   "tier_as_ranked": "E3",
+  "wave": ""
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/street.py::join_to#joining leg's berth",
+  "verdict": "MISLABELED",
+  "tier": "E3",
+  "fix": "the joining leg's berth at 0246's 7 ft off a garden fence (it reads FOOTPATH_FABRIC_GAP, held at 4 ft); the claim cites 0246",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/street.py"
+  ],
+  "after": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#a footpath reaches every farmhouse 7 ft off a plot"
+  ],
+  "flag": "",
+  "found": "wave 4 re-check",
+  "tier_as_ranked": "E1",
+  "wave": ""
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::RunOnBlocks.clear#off the steadings",
+  "tier": "E3",
+  "fix": "FOOTPATH_FABRIC_GAP 4 -> 7 ft (lane middle at least 7 ft off a garden fence, 0246)",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py",
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py"
+  ],
+  "after": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#a footpath reaches every farmhouse 7 ft off a plot"
+  ],
+  "flag": "",
+  "tier_as_ranked": "E1",
+  "moved": "wave 4: reads FOOTPATH_FABRIC_GAP, held at 4 ft; waits with it",
+  "verdict": "DRIFTED",
   "wave": ""
  },
  {
