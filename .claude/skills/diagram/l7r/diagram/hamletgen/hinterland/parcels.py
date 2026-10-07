@@ -276,6 +276,8 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
         line follows its bounds - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: within LOT_BOUND_REACH (45 ft, the page's "within about 45 ft", its GUESS) of a lane, brook or field the line runs alongside
         mostly dry - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: no sample of the parcel in marsh (WET_SHARE_CAP 0)
         on the page - CONVENTION: WOODLAND_BBOX_FLOOR of the ring inside the view
+        scan seat window - CONVENTION: a seat's center may sit up to 0.6 of the half-size outside the predicted frame, 0.8 of the square's box inside it
+        title pocket kept clear - CONVENTION: the title pocket (frame.title_pocket) is a keep rectangle no wood's square may enter
         woods not in a ruled line - UNRESEARCHED
         nearest seat preferred - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: the nearest slope beyond the fields
         per-parcel size bands - UNRESEARCHED: 0.82-1.18 of the half-size by band, then a 0.84 smaller try

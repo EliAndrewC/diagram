@@ -13,6 +13,7 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 - (wave 5, landed and reviewed) placement-changed village lane on kashikawa - wave 5: 0033's row street runs on off the map as the road into it at both ends, where
   the web cut it back to its last joint (`trim_streets`); Kashikawa's and Mizuguchi's far ends now run off the sheet as a
   second way out (every way is inked `village lane`).
+- none (wave 21): two claims written - no code a map executes changed.
 - placement-changed: woodland commons on kashikawa - wave 20: a wood only where the walk from the houses runs THROUGH the field and
   beyond it, on every tier (0077 drawing: beyond the fields AND higher than them; the woodland glyph check found the slope tier
   admitting the houses' own side) - Kashikawa draws one wood where three stood; Inashiro's and Mizuguchi's woods now fit nowhere
@@ -893,3 +894,20 @@ room's wall (423, 424); the next open row is the fixture count's cap (425).
 - [x] T66 every touched claim re-checked by `impl-drift`, the occasion's review (glyph-check on Mizuguchi's woodland commons: NEEDS-WORK, fixed and measured), and the close: wave 20's own bookend pair, `make done` green, the wave column (FR-005, FR-006, SC-002, SC-003)
       research: rendering
       verify: DONE. impl-drift on every touched claim (five rounds, all IN-STEP at the last); the woodland glyph check NEEDS-WORK fixed and verified by measurement (its two rounds spent); amendment 19 FAITHFUL (round 5); make done green; wave 20's own pair band 1 (total -10.8%), explained from perf-audit's timings and confirmed; the wave column written
+
+## Phase 22 - wave 21 (amendment 20): the woods' two framing claims
+
+Wave 20's re-checks filed three rows: the main-door bath (E3, its review's) and two UNCLAIMED framing decisions in
+`open_ground_patches`, tiered E0 by a fresh reader (T67a, `audit/t67a-out.jsonl`). Wave 21 takes the two claims; the next open
+row is the fixture count's cap (425).
+
+  - `l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#scan seat window 08 of the square's box inside the predicted` - its CONVENTION claim written
+  - `l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#woods kept out of the title pocket titlepocket keep rectangl` - its CONVENTION claim written
+
+- [x] T67a wave 20's found rows tiered by the work they take, by a fresh reader (FR-002, FR-003, SC-003)
+      research: rendering
+      verify: DONE. 2 rows tiered E0 by a fresh Opus reader (audit/t67a-out.jsonl)
+- [ ] T67 the two claims written (FR-004)
+      research: rendering
+- [ ] T68 the claims re-checked by `impl-drift`, and the close: wave 21's own bookend pair, `make done` green, the wave column (FR-005, FR-006)
+      research: rendering

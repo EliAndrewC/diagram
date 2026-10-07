@@ -279,6 +279,14 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
   backup pushed, its own pair band 1 confirmed); wave 20's own pair opens at 43b353361.
 - **Verification**: `impl-drift` on the touched claims, the gate, wave 20's own bookend pair.
 
+## Wave 21 (amendment 20, 2026-10-07)
+
+- **T67a first**: wave 20's two UNCLAIMED rows tiered E0.
+- **Scope**: the two open E0 claims (`tasks.md` Phase 22); no code a map executes changes.
+- **On the unpushed waves 9-20** under the wave-11 exception's condition (6): (1)-(5) held at wave 20's close (2ba8a8154, its
+  backup pushed, its own pair band 1 confirmed); wave 21's own pair opens at 2ba8a8154.
+- **Verification**: `impl-drift` on the two claims, the gate, wave 21's own bookend pair.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Each later wave that changes engine behavior takes
