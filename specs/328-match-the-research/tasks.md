@@ -13,10 +13,10 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 - (wave 5, landed and reviewed) placement-changed village lane on kashikawa - wave 5: 0033's row street runs on off the map as the road into it at both ends, where
   the web cut it back to its last joint (`trim_streets`); Kashikawa's and Mizuguchi's far ends now run off the sheet as a
   second way out (every way is inked `village lane`).
-- placement-changed copse on mizuguchi - wave 16: the against-the-belt copse retired (0071's drawing page draws the copse only
+- placement-changed: copse on mizuguchi - wave 16: the against-the-belt copse retired (0071's drawing page draws the copse only
   among the houses); Mizuguchi's copse is re-placed among its houses.
-- placement-changed notice board on kashikawa - wave 16: the drawing-water siting retired (0190: the busiest frontage).
-- placement-changed notice board on sawada - wave 16: the same.
+- placement-changed: notice board on kashikawa - wave 16: the drawing-water siting retired (0190: the busiest frontage).
+- placement-changed: notice board on sawada - wave 16: the same.
 - none (wave 5, the other rows): each fix moves one value inside a rule that already places or sizes the element (a
   size, a width, a count, a reach, a caption's leader); no element is new to a map and no glyph is redrawn.
 
