@@ -438,19 +438,19 @@ ground's margins and the cemetery's first row. Every `after` these rows carry is
       the wave chooses its rows (FR-002, FR-003, SC-003)
       research: rendering
       verify: DONE. DONE. 14 rows tiered by their work by a fresh Opus reader (audit/t29a-out.jsonl, each reason measured in the code), applied in audit/overrides.json: 11 moved
-- [ ] T30 the bookend pair, back to back: `make perf LABEL=328-start` in a detached worktree at main's engine, then
+- [x] T30 the bookend pair, back to back: `make perf LABEL=328-start` in a detached worktree at main's engine, then
       `LABEL=328-end` in the clone (constitution VI)
       research: rendering
-      verify:
-- [ ] T31 the open E0 claims; then the E1 rows, each fixed toward the page it cites (DEVIATION only through the exception
+      verify: DONE. DONE. 328-start in a detached worktree at origin/main, 328-end in the clone, back to back (a first pair that overlapped a detached run was discarded): band 1 (40 hh +1.3%); explanation UNVERIFIED, perf-audit CONSISTENT by alternating counterfactual runs (the two changed functions called 0 times on the perf seeds)
+- [x] T31 the open E0 claims; then the E1 rows, each fixed toward the page it cites (DEVIATION only through the exception
       path), with the unit tests it moves; proven on the reference hamlet and the pool through the gate, a town or city value
       by its unit test; a value that makes a map refuse is held and the row takes the tier of the work it needs (FR-004,
       FR-005, spec Edge Cases)
       research: rendering
-      verify:
-- [ ] T32 every touched unit re-checked by `impl-drift`; each wave-8 row IN-STEP or re-tiered with its measured reason (FR-005, SC-002)
+      verify: DONE. DONE. The 18 E0 claims (each stating a drift names its found row, D8); the E1 rows: short_decks' widths 2.5/7 ft, ROW_FRAME_FT 240 ft (0033), the temple and gate caption words, the city wall's four exempt stretches, the terrace unit 33 x 30 ft (990 sq ft), the cemetery's and cremation ground's margins 0, the cemetery's first row inside its edge; the pool through the gate, city values by their unit tests
+- [x] T32 every touched unit re-checked by `impl-drift`; each wave-8 row IN-STEP or re-tiered with its measured reason (FR-005, SC-002)
       research: rendering
-      verify:
-- [ ] T33 the close: the band's records, `make done` green, the wave column, landed (FR-005, FR-006, SC-002, SC-003)
+      verify: DONE. DONE. impl-drift on every touched unit (bundles A-C of wave 8; make claims-owed: no claim is owed); 25 rows closed (6 IN-STEP, 19 claimed under their unit's label), 2 more on their re-checks; findings ranked as found rows (found-wave8.jsonl)
+- [x] T33 the close: the band's records, `make done` green, the wave column, landed (FR-005, FR-006, SC-002, SC-003)
       research: rendering
-      verify:
+      verify: DONE. DONE. make done green (202 s); band 1 explained and confirmed; the wave column written

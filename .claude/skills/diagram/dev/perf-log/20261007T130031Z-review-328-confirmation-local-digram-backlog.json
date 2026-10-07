@@ -1,0 +1,62 @@
+{
+  "band": 1,
+  "base": {
+    "commit": "70f7115a9",
+    "label": "328-start",
+    "utc": "20261007T125221Z"
+  },
+  "binding": "2b81152a19258f8fbf8a6241ff00039920b6bc65c2bafb5090040a4a694c239d",
+  "end": {
+    "commit": "b238a622f",
+    "label": "328-end",
+    "utc": "20261007T125533Z"
+  },
+  "environment": "local",
+  "feature": "328-match-the-research",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "8d3395e5-fe32-4f85-9c89-80c344d2ac1a",
+    "utc": "20261007T130031Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": 0.0,
+          "39": 0.0,
+          "4": 0.0,
+          "47": 0.0
+        },
+        "total_pct": 0.0
+      },
+      "20": {
+        "seeds": {
+          "25": -1.4,
+          "39": 0.0,
+          "4": 0.0,
+          "47": -1.7
+        },
+        "total_pct": -0.8
+      },
+      "40": {
+        "seeds": {
+          "25": -0.7,
+          "39": 4.1,
+          "4": -0.6,
+          "47": 3.3
+        },
+        "total_pct": 1.3
+      }
+    },
+    "seeds": {
+      "25": -2.4,
+      "39": -4.8,
+      "4": -2.1,
+      "47": -4.8
+    },
+    "total_pct": -3.5
+  },
+  "note": "40-hh growth (seed 39 web+homesteads +0.2s each, seed 47 spread over homesteads/windbreak/field/web) is host load, not code: reviewer reran the 40-household leg A/B/A/B in detached worktrees at 70f7115a9 and b238a622f - seed 39 12.02/12.03s -> 11.90/11.94s, seed 47 12.08/12.14s -> 12.08/12.11s (no growth); map M and block_polys/placed hashes identical both seeds; short_decks and row_reach called 0 times during generation (instrumented); bookend placer_calls and house counts identical on all 12 legs; the rest of the diff is docstrings, city walls, terrace, label words, funerary margins with no effect on these maps",
+  "verdict": "consistent"
+}

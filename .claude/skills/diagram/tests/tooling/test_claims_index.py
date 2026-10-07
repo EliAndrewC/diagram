@@ -172,6 +172,22 @@ def test_the_report_counts_lists_findings_and_the_open_research(tmp_path: pathli
     assert "UNRESEARCHED claims (the open research): 1" in text
 
 
+def test_a_finding_in_a_deferred_unit_is_reported_deferred(tmp_path: pathlib.Path) -> None:
+    """Feature 328 amendment 8 (the GM 2026-10-07): a finding in code only the legacy hand-authored settlements run is DEFERRED,
+    not DRIFTED - shown and counted so, and never a finding the push's gate classifies."""
+    skill = _tree(tmp_path)
+    index = _all_in_step(tmp_path)
+    k = ".claude/skills/diagram/l7r/diagram/hamletgen/rows.py::far_row#dry share"
+    index[k] |= {"verdict": "DRIFTED", "note": "296"}
+    deferred = frozenset({k.rsplit("#", 1)[0]})
+    text = cx.report(cx.current(skill), index, deferred=deferred)
+    assert "IN-STEP 4, DEFERRED 1" in text and f"DEFERRED       {k} - 296" in text and "DRIFTED" not in text
+    assert cx.classify(cx.current(skill), index, {}, {}, tmp_path, deferred) == ([], [])
+    f = tmp_path / "deferred.json"
+    f.write_text('{"why": "legacy", "units": ["a::b"]}')
+    assert cx.load_deferred(f) == frozenset({"a::b"}) and cx.load_deferred(tmp_path / "none.json") == frozenset()
+
+
 def _row(cur: dict, key: str, verdict: str, **kw: str) -> dict[str, str]:
     r = cur[key]
     return {"verdict": verdict, "code": r.code, "core": r.unit.core, "research": r.research, "note": "n", **kw}

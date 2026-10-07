@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-07T12:57:15Z",
+  "target": "perf-explain",
+  "commit": "b238a622f",
+  "outcome": "permitted",
+  "why": "perf-explain UNVERIFIED: no change on the nucleated perf path to remove for a control: the two fallbacks are not read where every record carries its width"
+}

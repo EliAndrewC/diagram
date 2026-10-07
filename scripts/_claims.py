@@ -61,6 +61,9 @@ import _record_units as ru  # noqa: E402
 
 SKILL = ".claude/skills/diagram"
 INDEX = f"{SKILL}/dev/claims-index.json"
+# GUARD_EDIT_OK: feature 328 amendment 8 (the GM 2026-10-07) - a finding in code only the legacy hand-authored villages, towns
+# and cities run is DEFERRED, not DRIFTED: those checks go when the settlements convert, so they are not worth fixing now.
+DEFERRED = f"{SKILL}/dev/claims-deferred.json"
 STORE = f"{SKILL}/dev/claims-pages.json"  # the page snapshots each row's pages name (feature 318, FR-016)
 QUESTIONS = f"{SKILL}/research/questions"
 FINDINGS = ("DRIFTED", "NEEDS-RESEARCH", "MISLABELED", "UNCLAIMED", "CANNOT-TELL")
@@ -602,21 +605,35 @@ def backfill(
 # ---- the report and the gate ---------------------------------------------------------------------------------------
 
 
+def load_deferred(path: Path) -> frozenset[str]:
+    """The units whose findings are DEFERRED (`dev/claims-deferred.json`: `units`, a list of `path::qualname`), or none."""
+    if not path.is_file():
+        return frozenset()
+    return frozenset(json.loads(path.read_text(encoding="utf-8")).get("units", []))
+
+
+def shown(key: str, verdict: str, deferred: frozenset[str]) -> str:
+    """A finding's verdict as the report shows it: DEFERRED where its unit is deferred, else its own."""
+    return "DEFERRED" if verdict in FINDINGS and key.rsplit("#", 1)[0] in deferred else verdict
+
+
 def report(
     cur: dict[str, Row],
     index: dict[str, dict[str, str]],
     qdir: Path | None = None,
     store: Mapping[str, list[str]] | None = None,
+    deferred: frozenset[str] = frozenset(),
 ) -> str:
-    """Counts by verdict, the owed count, then every finding and every UNRESEARCHED claim (spec FR-011)."""
+    """Counts by verdict, the owed count, then every finding and every UNRESEARCHED claim (spec FR-011); a finding in a
+    deferred unit (`load_deferred`) is shown and counted DEFERRED."""
     rows = live_rows(cur, index)
     due = owed(cur, index, qdir, store)
-    counts = Counter(v["verdict"] for v in rows.values())
-    tally = ", ".join(f"{v} {counts[v]}" for v in VERDICTS if counts[v]) or "no verdicts yet"
+    counts = Counter(shown(k, v["verdict"], deferred) for k, v in rows.items())
+    tally = ", ".join(f"{v} {counts[v]}" for v in (*VERDICTS, "DEFERRED") if counts[v]) or "no verdicts yet"
     lines = [f"claims: {len(cur)} in scope; {tally}; owed {len(due)}"]
     for key, v in sorted(rows.items()):
         if v["verdict"] != "IN-STEP":
-            lines.append(f"  {v['verdict']:<14} {key} - {v.get('note', '')}")
+            lines.append(f"  {shown(key, v['verdict'], deferred):<14} {key} - {v.get('note', '')}")
     unres = sorted(k for k, r in cur.items() if r.claim.backing == "UNRESEARCHED")
     if unres:
         lines.append(f"UNRESEARCHED claims (the open research): {len(unres)}")
@@ -653,6 +670,7 @@ def classify(
     base_index: dict[str, dict[str, str]],
     cores: dict[str, str],
     base_qdir: Path,
+    deferred: frozenset[str] = frozenset(),
 ) -> tuple[list[str], list[str]]:
     """(introduced, pre-existing) finding lines (spec FR-010). `cores` is every unit's core at the merge base (`base_cores`),
     `base_qdir` the base's questions: a first finding is introduced only when its unit's code matches no base unit's (its own
@@ -663,7 +681,7 @@ def classify(
     intro: list[str] = []
     pre: list[str] = []
     for key, v in sorted(live_rows(cur, index).items()):
-        if v["verdict"] not in FINDINGS:
+        if v["verdict"] not in FINDINGS or shown(key, v["verdict"], deferred) == "DEFERRED":
             continue
         was = base_index.get(key)
         line = f"{v['verdict']:<14} {key} - {v.get('note', '')}"
@@ -709,7 +727,7 @@ def gate(root: Path) -> tuple[list[str], list[str]]:
     with tempfile.TemporaryDirectory() as tmp:
         bskill = base_tree(root, mb, Path(tmp)) if mb else Path(tmp)
         cores = base_cores(bskill) if mb else {}
-        intro, pre = classify(cur, index, base_index, cores, bskill / "research" / "questions")
+        intro, pre = classify(cur, index, base_index, cores, bskill / "research" / "questions", load_deferred(root / DEFERRED))
     return refuse + [f"introduced: {x}" for x in intro], [f"pre-existing: {x}" for x in pre]
 
 
@@ -810,7 +828,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         print(f"claims-triaged: {sum(1 for m in msgs if m.startswith('touched'))} of {len(data['units'])} sent on to impl-drift; the rest cleared")
         return 0
     if args.cmd == "report":
-        print(report(cur, index, qdir, store))
+        print(report(cur, index, qdir, store, load_deferred(root / DEFERRED)))
         return 0
     if args.cmd == "bundle":
         due_all = owed(cur, index, qdir, store)

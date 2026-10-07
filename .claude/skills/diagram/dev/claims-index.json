@@ -14177,13 +14177,22 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::a_way_onto_the_bund#a lane end within 6 ft (BUND_REACH_FT) of the paddy counts as joined to the bund": {
-  "code": "3bcffd07196c0847",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::a_way_onto_the_bund#field path width": {
+  "code": "9cb56ada37182378",
   "core": "3bcffd07196c0847",
   "date": "2026-10-07",
-  "note": "a lane end within 6 ft (BUND_REACH_FT) of the paddy counts as joined to the bund",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "note": "the 5 ft spur width matches, but the claim also cites 0081 for the `LANE_CLEARANCE` 40 ft corridor, and 0081 gives no clearance figure; the corridor belongs to 0246 §85 (7 ft from fence to lane middle) as its own claim, which carries the same mismatch as the skeleton corridor",
+  "pages": {
+   "0081-village-lanes.drawing.html": "9e27759395199abd"
+  },
+  "research": "ebd72aaa6a0eb9af",
+  "rests": [
+   "0081-village-lanes.drawing.html:18dffe2b3b52b18c",
+   "0081-village-lanes.drawing.html:8ee2be2b6c83fe7f",
+   "0081-village-lanes.drawing.html:91a5765af6230403",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c5daec1a445d35bf"
+  ],
+  "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::a_way_onto_the_bund#nearest lane runs on": {
   "code": "2d553cf94a188e22",
@@ -14199,6 +14208,21 @@
   ],
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::a_way_onto_the_bund#on the bund": {
+  "code": "497d64984031e26e",
+  "core": "3bcffd07196c0847",
+  "date": "2026-10-07",
+  "note": "`paddy.dist(q) <= BUND_REACH_FT` returns \"joined\" with the end left where it is, so a path can stop up to 6 ft short of the bund in open ground; §21 says the path \"never ends in open ground short of the bund\". The end should be carried on until it touches the bund, and no page gives the 6 ft",
+  "pages": {
+   "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
+  },
+  "research": "9c5292e27312fca8",
+  "rests": [
+   "0014-bunds-between-the-paddies-aze.drawing.html:3ba164484a3a465a",
+   "0014-bunds-between-the-paddies-aze.drawing.html:5b66ec3bfb5ac947"
+  ],
+  "verdict": "DRIFTED"
+ },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::a_way_onto_the_bund#some way joins the bund": {
   "code": "1d693ef20df7b04a",
   "core": "3bcffd07196c0847",
@@ -14212,14 +14236,6 @@
    "0014-bunds-between-the-paddies-aze.drawing.html:5b66ec3bfb5ac947"
   ],
   "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::a_way_onto_the_bund#the branched field path 5 ft wide (BRANCH_WIDTH) with the LANE_CLEARANCE corridor": {
-  "code": "3bcffd07196c0847",
-  "core": "3bcffd07196c0847",
-  "date": "2026-10-07",
-  "note": "the branched field path 5 ft wide (BRANCH_WIDTH) with the LANE_CLEARANCE corridor",
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::a_way_onto_the_bund#water between is crossed": {
   "code": "f437a30182400e90",
@@ -14250,6 +14266,21 @@
   ],
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::carry_on#stepped field path width": {
+  "code": "c4b7978e478e8df8",
+  "core": "ea4191bf3abd1d03",
+  "date": "2026-10-07",
+  "note": "5 ft is the field spur's rank",
+  "pages": {
+   "0081-village-lanes.drawing.html": "9e27759395199abd"
+  },
+  "research": "ebd72aaa6a0eb9af",
+  "rests": [
+   "0081-village-lanes.drawing.html:8ee2be2b6c83fe7f",
+   "0081-village-lanes.drawing.html:91a5765af6230403"
+  ],
+  "verdict": "IN-STEP"
+ },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::carry_on#stepped spur's corridor": {
   "code": "87c4d040ee434346",
   "core": "ea4191bf3abd1d03",
@@ -14263,14 +14294,6 @@
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c5daec1a445d35bf"
   ],
   "verdict": "DRIFTED"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::carry_on#the stepped field path drawn 5 ft wide (BRANCH_WIDTH)": {
-  "code": "ea4191bf3abd1d03",
-  "core": "ea4191bf3abd1d03",
-  "date": "2026-10-07",
-  "note": "the stepped field path drawn 5 ft wide (BRANCH_WIDTH)",
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::cut_past_the_junction#no stub past a junction": {
   "code": "d9a11555d331c35c",
@@ -18361,18 +18384,22 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law_water.py::oblique_at#square ditch crossing": {
-  "code": "abe62aab2cdb26ae",
+  "code": "6696176d9f1fbaf0",
   "core": "5bb421dd3e5f8371",
   "date": "2026-10-07",
-  "note": "0087 answers this: a way may cross water \"at an angle\", and the deck is \"solved for that angle exactly\". The 10-degree squaring rule departs from that, so it should be a DEVIATION recorded on 0087 (or the rule dropped), not UNRESEARCHED",
-  "pages": {},
-  "research": "",
+  "note": "`off_square(...) > FORD_SQUARE_TOL_DEG` flags any lane crossing a channel more than 10 degrees off square, but 0087 says a carried deck runs along its way and \"the crossing is solved for that angle exactly\"; only a footplank (§107) or a brook crossing (0035 §89) is square. Either drop the squaring for channels or relabel it a DEVIATION/UNRESEARCHED, since no page gives the 10 degrees",
+  "pages": {
+   "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html": "c54aace546b26627"
+  },
+  "research": "281143d409996aaf",
   "rests": [
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:93969c06f800b0d5",
-   "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html:2bea76047e1862a0",
-   "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html:367d166bf8fb0b33"
+   "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html:367d166bf8fb0b33",
+   "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html:a2caf9cbb57b7bcc",
+   "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html:e80757a17e964546",
+   "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html:fe15e8d64c04f45e"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law_water.py::oblique_crossings#plumbing and wrappers": {
   "code": "11738ec34dbcd907",
@@ -18466,8 +18493,8 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law_water.py::short_decks#a deck spans its water": {
-  "code": "c0347670c397732d",
-  "core": "b09720d3f747c871",
+  "code": "702354e6f9d3cea1",
+  "core": "c5afad6265e729ba",
   "date": "2026-10-07",
   "note": "the deck runs bank to bank",
   "pages": {
@@ -18480,18 +18507,44 @@
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law_water.py::short_decks#assumed water widths": {
-  "code": "640a08a054a31853",
-  "core": "b09720d3f747c871",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law_water.py::short_decks#assumed brook width": {
+  "code": "08f72a5d26f6c306",
+  "core": "c5afad6265e729ba",
   "date": "2026-10-07",
-  "note": "the bundle gives these widths: delivery ditches 2.5 ft at the head tapering to 1.2 ft (0084), and the brook 7 ft (0035). The 3 ft and 6 ft defaults should cite those pages, and they differ from them",
+  "note": "the brook is 7 ft",
+  "pages": {
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "c23a085a43372c2c"
+  },
+  "research": "d47738a05844fe19",
+  "rests": [
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:54ccb64ee5924653"
+  ],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law_water.py::short_decks#assumed channel width": {
+  "code": "ff084a2aa5a2337f",
+  "core": "c5afad6265e729ba",
+  "date": "2026-10-07",
+  "note": "no cited page gives a drawn channel's width",
   "pages": {},
   "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law_water.py::short_decks#assumed ditch width": {
+  "code": "6c1fd605448362a0",
+  "core": "c5afad6265e729ba",
+  "date": "2026-10-07",
+  "note": "2.5 ft at the head, and the ditch is judged by its widest point",
+  "pages": {
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "0b77fe8191a170cc"
+  },
+  "research": "43cf74757fcb48f3",
   "rests": [
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:54ccb64ee5924653",
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:5fcfb615338f4864",
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:df87d788cf419d16"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law_water.py::unbridged_crossings#every crossing decked": {
   "code": "e6e675c3308deccb",
@@ -18795,6 +18848,14 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#a healing link kept if its ends lie within 12 ft of the run and of the network (`_reach < 12.0`, `_net_reach < 12.0`), a gap left unjoined": {
+  "code": "d028325752dc02e5",
+  "core": "d028325752dc02e5",
+  "date": "2026-10-07",
+  "note": "a healing link kept if its ends lie within 12 ft of the run and of the network (`_reach < 12.0`, `_net_reach < 12.0`), a gap left unjoined",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#a link takes its way's width": {
   "code": "659f33478f185b19",
   "core": "d028325752dc02e5",
@@ -18806,14 +18867,6 @@
    "0081-village-lanes.drawing.html:91a5765af6230403"
   ],
   "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#a run within 25 ft of the network counts as arrived (_LANE_JOIN_FT)": {
-  "code": "d028325752dc02e5",
-  "core": "d028325752dc02e5",
-  "date": "2026-10-07",
-  "note": "a run within 25 ft of the network counts as arrived (_LANE_JOIN_FT)",
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#a tail past the junction cut": {
   "code": "0c272b1bdd9b23a6",
@@ -18845,6 +18898,23 @@
   ],
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#arrived at the network": {
+  "code": "3d8813111e8bdcfb",
+  "core": "d028325752dc02e5",
+  "date": "2026-10-07",
+  "note": "a run passing within 25 ft is counted as arrived without its tread reaching the network: the mid-run branch draws with no snap, and the end branch leaves the gap when `_clear_link` fails. §65 joins ends \"at a single point\" and §84 joins lanes \"where their treads meet\"; 25 ft should be the reach that triggers a join, not a gap that stays open",
+  "pages": {
+   "0081-village-lanes.drawing.html": "9e27759395199abd"
+  },
+  "research": "ebd72aaa6a0eb9af",
+  "rests": [
+   "0081-village-lanes.drawing.html:df26f73dd5ee96d2",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:048ef93cf5c5c59f",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:ab698a7b15fb7e8e"
+  ],
+  "verdict": "DRIFTED"
+ },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#how far inside a belt": {
   "code": "01094ed22a81faba",
   "core": "d028325752dc02e5",
@@ -18858,13 +18928,18 @@
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#link kept 8 ft off hard ground, 7 ft off walls": {
-  "code": "d028325752dc02e5",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#link off hard ground and walls": {
+  "code": "8e784cb33a20daed",
   "core": "d028325752dc02e5",
   "date": "2026-10-07",
-  "note": "link kept 8 ft off hard ground, 7 ft off walls",
+  "note": "the 7 ft off walls (`WEB_FABRIC_GAP`) is 0246's figure, a lane's middle 7 ft clear of a garden fence, so it should cite 0246; only the 8 ft off hard ground stays UNRESEARCHED (0081 §53 lets a lane touch a plot's boundary)",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "rests": [
+   "0081-village-lanes.drawing.html:ff5e303a5a16af8f",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c5daec1a445d35bf"
+  ],
+  "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#link reach": {
   "code": "c84ed991df9ca21a",
@@ -20308,6 +20383,20 @@
   "research": "f407e2a81ba3ed3b",
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/street.py::ROW_FRAME_FT#a row farm's frame where none is recorded": {
+  "code": "7d841c4b4edca071",
+  "core": "355b1644706ce9b7",
+  "date": "2026-10-07",
+  "note": "240 ft sits in the 220 to 260 ft range, at Santome's 40-ken lot",
+  "pages": {
+   "0033-row-villages-resson.drawing.html": "5b109c17a425e58e"
+  },
+  "research": "f407e2a81ba3ed3b",
+  "rests": [
+   "0033-row-villages-resson.drawing.html:a88545fe00a7de6d"
+  ],
+  "verdict": "IN-STEP"
+ },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/street.py::STREET_WIDTH#street width": {
   "code": "7e293f76cea9e9dc",
   "core": "3e65c247a0c8f861",
@@ -20502,37 +20591,43 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/street.py::row_reach#a farm frame taken as 100 ft where none is recorded (0033 gives 220-260 ft)": {
-  "code": "d19853f14d5ae46f",
-  "core": "d19853f14d5ae46f",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/street.py::row_reach#a farm frame where none is recorded": {
+  "code": "3eeba10d6b679f8c",
+  "core": "9743561b1a5e8ff1",
   "date": "2026-10-07",
-  "note": "a farm frame taken as 100 ft where none is recorded (0033 gives 220-260 ft)",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "note": "the default is `ROW_FRAME_FT`",
+  "pages": {
+   "0033-row-villages-resson.drawing.html": "5b109c17a425e58e"
+  },
+  "research": "f407e2a81ba3ed3b",
+  "rests": [
+   "0033-row-villages-resson.drawing.html:a88545fe00a7de6d"
+  ],
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/street.py::row_reach#a farm's own street": {
-  "code": "621e7ed7e659d175",
-  "core": "d19853f14d5ae46f",
+  "code": "fe4f0844dbb177cd",
+  "core": "9743561b1a5e8ff1",
   "date": "2026-10-07",
-  "note": "no bundle page gives how far off its street a row farm may stand",
+  "note": "0033 gives no reach from a farm to its street",
   "pages": {},
   "research": "",
   "rests": [
+   "0033-row-villages-resson.drawing.html:071bd73215fda123",
    "0033-row-villages-resson.drawing.html:a88545fe00a7de6d",
    "0033-row-villages-resson.drawing.html:d41ee4495f2368b5"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/street.py::row_reach#street run past its end farms": {
-  "code": "c5ec1c1275707a6e",
-  "core": "d19853f14d5ae46f",
+  "code": "cfc1420e9e99f343",
+  "core": "9743561b1a5e8ff1",
   "date": "2026-10-07",
-  "note": "no page says how far a lane runs past its last house; the run off the map is a separate step",
+  "note": "0033 gives only the run off the map, not an overrun past the end farms",
   "pages": {},
   "research": "",
   "rests": [
-   "0033-row-villages-resson.drawing.html:8c303daeddea6496",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461"
+   "0033-row-villages-resson.drawing.html:8c303daeddea6496"
   ],
   "verdict": "IN-STEP"
  },
@@ -22941,14 +23036,6 @@
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#each skeleton arm registers the 40 ft LANE_CLEARANCE no-build corridor": {
-  "code": "c26981eddbe1cc55",
-  "core": "c26981eddbe1cc55",
-  "date": "2026-10-07",
-  "note": "each skeleton arm registers the 40 ft LANE_CLEARANCE no-build corridor",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#routed round the steadings": {
   "code": "df40795d8b4ae35e",
   "core": "c26981eddbe1cc55",
@@ -22988,6 +23075,21 @@
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton arm's corridor": {
+  "code": "3f31422749867ff3",
+  "core": "c26981eddbe1cc55",
+  "date": "2026-10-07",
+  "note": "`s.lane(piece, width=5, clearance=LANE_CLEARANCE)` registers a 40 ft center corridor, while 0246 sets the lane's room at 18 ft, \"7 ft at each garden fence\"; the claim itself says the edge-based corridor row still has to fix it. It should be 7 ft from fence to middle, or a recorded DEVIATION",
+  "pages": {
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
+  },
+  "research": "7b40c2c01cfba682",
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c5daec1a445d35bf"
+  ],
+  "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton form": {
   "code": "031df74ba9705f0c",
@@ -28869,10 +28971,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/labels/obstacles.py::GROUP_WORDS#a funerary caption covers the funerary structures": {
-  "code": "94213321a3142573",
-  "core": "2e79cacb01f95a12",
+  "code": "485c00aa5fe82408",
+  "core": "e7d506035e7d11ab",
   "date": "2026-10-07",
-  "note": "funerary and samurai caption groups as 0243 gives them",
+  "note": "the funerary and samurai/estate word sets match the page's group rules; \"cemetery\" is a synonym of graveyard",
   "pages": {
    "0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html": "992902d5f8170994"
   },
@@ -28883,6 +28985,22 @@
    "0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html:980ba3997f32f09c"
   ],
   "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/labels/obstacles.py::GROUP_WORDS#a guard or inspection caption may cover the gate's posts (0243 §9)": {
+  "code": "e7d506035e7d11ab",
+  "core": "e7d506035e7d11ab",
+  "date": "2026-10-07",
+  "note": "a guard or inspection caption may cover the gate's posts (0243 §9)",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ ".claude/skills/diagram/l7r/diagram/labels/obstacles.py::GROUP_WORDS#a shrine caption may cover the temples (0243 §11)": {
+  "code": "e7d506035e7d11ab",
+  "core": "e7d506035e7d11ab",
+  "date": "2026-10-07",
+  "note": "a shrine caption may cover the temples (0243 §11)",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/labels/obstacles.py::Obstacle#obstacle index": {
   "code": "0d59b7db143dcc9d",
@@ -29039,10 +29157,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/labels/obstacles.py::names_group#plumbing": {
-  "code": "43df0b618bd111ab",
-  "core": "4d7ffc5a1bdc28ce",
+  "code": "b5352db00534a54b",
+  "core": "5374db3e1fab15dc",
   "date": "2026-10-07",
-  "note": "string match only",
+  "note": "word matching only; the groups are decided in GROUP_WORDS",
   "pages": {},
   "research": "",
   "rests": [],
@@ -30746,20 +30864,22 @@
   "code": "af35060d4733a24f",
   "core": "dbf31ba5cd42b869",
   "date": "2026-10-07",
-  "note": "the funerary group and the samurai caption covering the estates match the page, but two other groups are narrower than it says. §11 says \"A temple's or shrine's name, the temples\", yet `religious` and `precinct_halls` sit in the group \"temple\", and GROUP_WORDS gives \"temple\" no extra words, so a \"... shrine\" caption cannot cover the temple group. §9 says \"A guard-house or inspection caption, the gate's guard-houses and inspection posts\", yet `gate_structs` sits in the group \"gate\", reachable only by the word \"gate\". Either add \"shrine\" to the temple group's words and \"guard\"/\"inspection\" to the gate group's, or narrow the claim to what the map does. A shrine's caption can still cover its own building through the subject rule (§5).",
+  "note": "a caption may cover only the group it names. Graveyard, cremation-ground, mausoleum and ossuary are one funerary group. manors map to \"estate\", and \"samurai\" is one of the words that names that group. Temples are named by \"shrine\" and gate posts by \"guard\" or \"inspection\". All of this is a map convention, as the page says it is.",
   "pages": {
    "0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html": "992902d5f8170994"
   },
   "research": "9e4dafe248294ff1",
   "rests": [
+   "0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html:0ff01ac2ef2e19c1",
    "0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html:1add67f15e6ee3ba",
    "0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html:1d012e55afaf18e2",
    "0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html:3b5a2455fcb19ab6",
    "0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html:436529fe4697b783",
    "0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html:629c7e0297b53a78",
-   "0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html:980ba3997f32f09c"
+   "0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html:980ba3997f32f09c",
+   "0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html:a6d59837c9fe2612"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/overlap/taxonomy.py::_LABEL_GROUP#an arch is never covered": {
   "code": "b658c3280af86850",
@@ -30773,14 +30893,6 @@
    "0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html:436529fe4697b783"
   ],
   "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/overlap/taxonomy.py::_LABEL_GROUP#no caption may cover a torii arch (group \"torii\" is named by no caption); this is the GM's ruling of 2026-07-27, which 0243 does not cover, so it should be claimed as CANON": {
-  "code": "dbf31ba5cd42b869",
-  "core": "dbf31ba5cd42b869",
-  "date": "2026-10-07",
-  "note": "no caption may cover a torii arch (group \"torii\" is named by no caption); this is the GM's ruling of 2026-07-27, which 0243 does not cover, so it should be claimed as CANON",
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/overlap/taxonomy.py::_LABEL_GROUPS#geometry and bookkeeping": {
   "code": "803125dfdd490b1b",
@@ -36662,10 +36774,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py::WallsMixin._seat_mural_towers#a slid tower off a gate": {
-  "code": "1d5d3792c3965381",
-  "core": "9a01dfae5cd629e0",
+  "code": "986d17e8bde96a3a",
+  "core": "167be4da823a24cd",
   "date": "2026-10-07",
-  "note": "a slid seat is also held 390 ft from a gate",
+  "note": "a slid seat must clear px(390) of every gate",
   "pages": {
    "0148-towers-along-the-city-wall-mamian.drawing.html": "89938d617cc0b450"
   },
@@ -36677,10 +36789,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py::WallsMixin._seat_mural_towers#coverage remediation": {
-  "code": "4e3d37ac57c5321b",
-  "core": "9a01dfae5cd629e0",
+  "code": "c09b19bb022ad0b2",
+  "core": "167be4da823a24cd",
   "date": "2026-10-07",
-  "note": "every wall point within reach of the posture's count of towers",
+  "note": "WALL_DEFENSE gives siege 197/2, garrison 328/2, peaceful 197/1, as the page sets",
   "pages": {
    "0148-towers-along-the-city-wall-mamian.drawing.html": "89938d617cc0b450"
   },
@@ -36688,16 +36800,15 @@
   "rests": [
    "0148-towers-along-the-city-wall-mamian.drawing.html:5e1e027911ac03a8",
    "0148-towers-along-the-city-wall-mamian.drawing.html:9c2c679a82dc69cf",
-   "0148-towers-along-the-city-wall-mamian.drawing.html:ca9016b0b14e0349",
-   "0148-towers-along-the-city-wall-mamian.drawing.html:f7a219b975488f03"
+   "0148-towers-along-the-city-wall-mamian.drawing.html:ca9016b0b14e0349"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py::WallsMixin._seat_mural_towers#exempt stretches": {
-  "code": "93ed080889626d84",
-  "core": "9a01dfae5cd629e0",
+  "code": "7908d9e798450cba",
+  "core": "167be4da823a24cd",
   "date": "2026-10-07",
-  "note": "the coverage sweep exempts only gates (390) and guard buildings (165), but the page says \"Four stretches of wall are left out\", including 135 ft of a water gate and 186 ft of a ward gate; the sweep should exempt all four",
+  "note": "all four bands (390/165/135/186 ft) are skipped in the coverage sweep",
   "pages": {
    "0148-towers-along-the-city-wall-mamian.drawing.html": "89938d617cc0b450"
   },
@@ -36709,13 +36820,13 @@
    "0148-towers-along-the-city-wall-mamian.drawing.html:ec7e78082e19e5d1",
    "0148-towers-along-the-city-wall-mamian.drawing.html:f42a38183d112e63"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py::WallsMixin._seat_mural_towers#no tower in a gate or water-gate opening": {
-  "code": "886147913819fb99",
-  "core": "9a01dfae5cd629e0",
+  "code": "50d8b9be24cb1859",
+  "core": "167be4da823a24cd",
   "date": "2026-10-07",
-  "note": "390 ft of a gate, 135 ft of a water gate",
+  "note": "px(390) of a gate and px(135) of a water gate",
   "pages": {
    "0148-towers-along-the-city-wall-mamian.drawing.html": "89938d617cc0b450"
   },
@@ -36727,10 +36838,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py::WallsMixin._seat_mural_towers#reach counted from the parapet": {
-  "code": "5146fef588d716c5",
-  "core": "9a01dfae5cd629e0",
+  "code": "d85eefd73c2ebe6a",
+  "core": "167be4da823a24cd",
   "date": "2026-10-07",
-  "note": "px(36) added to the reach",
+  "note": "reach is the posture's range + px(36)",
   "pages": {
    "0148-towers-along-the-city-wall-mamian.drawing.html": "89938d617cc0b450"
   },
@@ -36741,10 +36852,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py::WallsMixin._seat_mural_towers#slide off a ward gate or gate works": {
-  "code": "e6092349293ad3b4",
-  "core": "9a01dfae5cd629e0",
+  "code": "6ece57d9c929fea0",
+  "core": "167be4da823a24cd",
   "date": "2026-10-07",
-  "note": "the 186 ft and 165 ft bands, where \"our maps seat no tower\"",
+  "note": "px(186) of a ward gate and px(165) of the guard buildings, both GUESS bands on the page; the 22-46 px slide fan is a calibration (the inline \"~32px\" comment is stale)",
   "pages": {
    "0148-towers-along-the-city-wall-mamian.drawing.html": "89938d617cc0b450"
   },
@@ -36757,56 +36868,51 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py::WallsMixin._seat_mural_towers#spacing by defense posture": {
-  "code": "7b3d8c9722524ec3",
-  "core": "9a01dfae5cd629e0",
+  "code": "c98fa31bf172d02d",
+  "core": "167be4da823a24cd",
   "date": "2026-10-07",
-  "note": "WALL_DEFENSE (197,2) / (328,2) / (197,1) match the page",
+  "note": "the tier comes from meta wall_defense with garrison as the default, a knob as the page says",
   "pages": {
    "0148-towers-along-the-city-wall-mamian.drawing.html": "89938d617cc0b450"
   },
   "research": "f97df7dc77d0a218",
   "rests": [
-   "0148-towers-along-the-city-wall-mamian.drawing.html:5e1e027911ac03a8",
    "0148-towers-along-the-city-wall-mamian.drawing.html:76958251947ec0d6",
-   "0148-towers-along-the-city-wall-mamian.drawing.html:9c2c679a82dc69cf",
-   "0148-towers-along-the-city-wall-mamian.drawing.html:ca9016b0b14e0349",
    "0148-towers-along-the-city-wall-mamian.drawing.html:d568b9cefbaa02c3"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py::WallsMixin._seat_mural_towers#spacing margin": {
-  "code": "3fbb782d8123fae7",
-  "core": "9a01dfae5cd629e0",
+  "code": "355389ae8940d1d0",
+  "core": "167be4da823a24cd",
   "date": "2026-10-07",
-  "note": "the page states no margin; the tightened spacing still meets coverage",
+  "note": "nothing in the page sets a margin under the spacing cap; a calibration",
   "pages": {},
   "research": "",
   "rests": [
-   "0148-towers-along-the-city-wall-mamian.drawing.html:ca9016b0b14e0349",
    "0148-towers-along-the-city-wall-mamian.drawing.html:d568b9cefbaa02c3"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py::WallsMixin._seat_mural_towers#tower onto the berm": {
-  "code": "77233bf82733cac0",
-  "core": "9a01dfae5cd629e0",
+  "code": "0f293b48104d98ac",
+  "core": "167be4da823a24cd",
   "date": "2026-10-07",
-  "note": "`_berm_nudge(..., self.px(40), ...)` puts the tower's CENTER 40 ft out, but a mamian projects \"12 m (~39 ft) from the wall\", so its center belongs about 20 ft out; at 40 ft its face stands about 60 ft out (unless _berm_nudge measures to the face)",
+  "note": "the page's 39 ft is how far the platform projects, not its center's offset; I need to know what _berm_nudge measures from (the wall's centerline or its face) and the wall's drawn thickness to tell whether px(40) places the platform as attested",
   "pages": {
    "0148-towers-along-the-city-wall-mamian.drawing.html": "89938d617cc0b450"
   },
   "research": "f97df7dc77d0a218",
   "rests": [
-   "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html:5b41b6e6412e4b2f",
    "0148-towers-along-the-city-wall-mamian.drawing.html:cff4a0e01c8abde3"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "CANNOT-TELL"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py::WallsMixin._seat_mural_towers#tower separation floor": {
-  "code": "11cb7848c58c70b8",
-  "core": "9a01dfae5cd629e0",
+  "code": "0c1ebf2e0c5b5c76",
+  "core": "167be4da823a24cd",
   "date": "2026-10-07",
-  "note": "0.75 of the cap is stricter than the page's 0.7-of-median rhythm",
+  "note": "the floor of 0.75 x max_spacing (at least 28 px) is stricter than 0.7 of the median, since the median never exceeds max_spacing",
   "pages": {
    "0148-towers-along-the-city-wall-mamian.drawing.html": "89938d617cc0b450"
   },
@@ -37663,13 +37769,18 @@
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/civic.py::CivicWorksMixin.precinct_interior#parish plot seated at the precinct's rear, east of the axis (x+44, 14 px in from the rear edge)": {
-  "code": "af5af1113ad6e23e",
+ ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/civic.py::CivicWorksMixin.precinct_interior#parish plot's seat": {
+  "code": "f057d250f8f982f2",
   "core": "af5af1113ad6e23e",
   "date": "2026-10-07",
-  "note": "parish plot seated at the precinct's rear, east of the axis (x+44, 14 px in from the rear edge)",
+  "note": "0227 places \"the graveyard outside the cloister at the back\", which answers the rear seat; cite 0227 for the rear and keep only the east-of-axis offset (x+44) as GUESS",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "rests": [
+   "0227-city-temples-the-precinct-its-halls-bell-tower-and-pagoda-garan.drawing.html:1ca83b35b5de03e9",
+   "0227-city-temples-the-precinct-its-halls-bell-tower-and-pagoda-garan.drawing.html:6d70b4374954f453"
+  ],
+  "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/civic.py::CivicWorksMixin.precinct_interior#precinct size": {
   "code": "15ef6d0e44e03d9a",
@@ -37713,11 +37824,25 @@
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/civic.py::CivicWorksMixin.terrace#cell count": {
-  "code": "52ce77d24532f1b2",
-  "core": "ed48c14611ecdd2c",
+ ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/civic.py::CivicWorksMixin.terrace#cell area": {
+  "code": "232265b92f0bc66c",
+  "core": "72e90348bdaabe5c",
   "date": "2026-10-07",
-  "note": "eight households under one roof",
+  "note": "the 33 x 30 ft default is 990 sq ft, the drawn unit",
+  "pages": {
+   "0140-where-a-capitals-samurai-live-lineage-compounds-walled-estates-and-retainer-terraces-bukeyashiki.drawing.html": "b7fa62c1564cc3d2"
+  },
+  "research": "e92fbe2409bc6128",
+  "rests": [
+   "0140-where-a-capitals-samurai-live-lineage-compounds-walled-estates-and-retainer-terraces-bukeyashiki.drawing.html:d619213769e15886"
+  ],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/civic.py::CivicWorksMixin.terrace#cell count": {
+  "code": "716d6962049f9df2",
+  "core": "72e90348bdaabe5c",
+  "date": "2026-10-07",
+  "note": "default 8, Shibata's eight households under one roof",
   "pages": {
    "0140-where-a-capitals-samurai-live-lineage-compounds-walled-estates-and-retainer-terraces-bukeyashiki.html": "5d0ac45f18f9d31f"
   },
@@ -37728,52 +37853,35 @@
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/civic.py::CivicWorksMixin.terrace#cell frontage": {
-  "code": "c7609ca2aeb5fb5d",
-  "core": "ed48c14611ecdd2c",
+ ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/civic.py::CivicWorksMixin.terrace#frontage and depth": {
+  "code": "4ab7cc85574d006a",
+  "core": "72e90348bdaabe5c",
   "date": "2026-10-07",
-  "note": "18 x 24 ft gives a 432 sq ft cell, Shibata's lowest-retainer unit, but the drawing page sets the setting's Rank 1-4 terrace at \"a drawn unit of about 990 square feet\", above Shibata's 430; the cell should grow, or the claim should be a DEVIATION the drawing page records",
-  "pages": {
-   "0140-where-a-capitals-samurai-live-lineage-compounds-walled-estates-and-retainer-terraces-bukeyashiki.html": "5d0ac45f18f9d31f"
-  },
-  "research": "47571c66733567cd",
+  "note": "0140 gives the row-house cell's shape, \"about 18 ft of frontage\" on a 24 ft depth (frontage under depth, single-file), but 33 x 30 makes cells wider than deep; cite 0140 §137 and keep that proportion scaled to 990 sq ft (about 27 x 36 ft); the docstring's \"~21 ft deep\" is stale",
+  "pages": {},
+  "research": "",
   "rests": [
    "0140-where-a-capitals-samurai-live-lineage-compounds-walled-estates-and-retainer-terraces-bukeyashiki.drawing.html:d619213769e15886",
-   "0140-where-a-capitals-samurai-live-lineage-compounds-walled-estates-and-retainer-terraces-bukeyashiki.html:476be82facb0faee",
    "0140-where-a-capitals-samurai-live-lineage-compounds-walled-estates-and-retainer-terraces-bukeyashiki.html:b10805aed5972843"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/civic.py::CivicWorksMixin.terrace#one roof over the cells": {
-  "code": "751d7158e3554b49",
-  "core": "ed48c14611ecdd2c",
+  "code": "9c6cd83df3935b08",
+  "core": "72e90348bdaabe5c",
   "date": "2026-10-07",
-  "note": "one continuous range with party-wall seams",
+  "note": "one rect with party-wall seams; the page has eight dwellings in one building",
   "pages": {
    "0140-where-a-capitals-samurai-live-lineage-compounds-walled-estates-and-retainer-terraces-bukeyashiki.drawing.html": "b7fa62c1564cc3d2",
    "0140-where-a-capitals-samurai-live-lineage-compounds-walled-estates-and-retainer-terraces-bukeyashiki.html": "5d0ac45f18f9d31f"
   },
   "research": "7ee7e1297835aa66",
   "rests": [
-   "0140-where-a-capitals-samurai-live-lineage-compounds-walled-estates-and-retainer-terraces-bukeyashiki.drawing.html:454fe3799a19da34",
+   "0140-where-a-capitals-samurai-live-lineage-compounds-walled-estates-and-retainer-terraces-bukeyashiki.drawing.html:d619213769e15886",
+   "0140-where-a-capitals-samurai-live-lineage-compounds-walled-estates-and-retainer-terraces-bukeyashiki.drawing.html:ec736839e5834561",
    "0140-where-a-capitals-samurai-live-lineage-compounds-walled-estates-and-retainer-terraces-bukeyashiki.html:b10805aed5972843"
   ],
   "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/civic.py::CivicWorksMixin.terrace#range depth": {
-  "code": "95374ebc6c4ea0ba",
-  "core": "ed48c14611ecdd2c",
-  "date": "2026-10-07",
-  "note": "Shibata's 24 ft depth gives the 430 sq ft cell; the drawing page wants about 990 sq ft per drawn unit",
-  "pages": {
-   "0140-where-a-capitals-samurai-live-lineage-compounds-walled-estates-and-retainer-terraces-bukeyashiki.html": "5d0ac45f18f9d31f"
-  },
-  "research": "47571c66733567cd",
-  "rests": [
-   "0140-where-a-capitals-samurai-live-lineage-compounds-walled-estates-and-retainer-terraces-bukeyashiki.drawing.html:d619213769e15886",
-   "0140-where-a-capitals-samurai-live-lineage-compounds-walled-estates-and-retainer-terraces-bukeyashiki.html:b10805aed5972843"
-  ],
-  "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/edge_seat.py::ANGLES#bearing order": {
   "code": "ac1be0297669b211",
@@ -37929,10 +38037,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cemetery#a taller memorial stone or two": {
-  "code": "f393e1135cbba9ac",
-  "core": "82807d4c904bbf94",
+  "code": "2aa39a52296ab01d",
+  "core": "72236120606e82b4",
   "date": "2026-10-07",
-  "note": "two taller stones",
+  "note": "two stupas",
   "pages": {
    "0235-village-burial-grounds-bochi.drawing.html": "fa6fc256f086d28d"
   },
@@ -37944,34 +38052,34 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cemetery#caption": {
-  "code": "ab6d31de4c59fc0c",
-  "core": "82807d4c904bbf94",
+  "code": "be227deb0c14313e",
+  "core": "72236120606e82b4",
   "date": "2026-10-07",
-  "note": "label only",
+  "note": "an italic caption above or below the plot, a convention",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cemetery#keep-clear margin": {
-  "code": "7238c415ff6662eb",
-  "core": "82807d4c904bbf94",
+  "code": "75d5cc7c3bbd62e1",
+  "core": "72236120606e82b4",
   "date": "2026-10-07",
-  "note": "the record does speak: \"no cleared band is drawn around it. Other features are placed without regard to the plot's cleared ground\", and no set distance from houses is drawn; the claim should cite 0224/0235, and against them the 8 px block band drifts",
-  "pages": {},
-  "research": "",
+  "note": "bm=0; the block is the plot itself",
+  "pages": {
+   "0224-ground-swept-clear-around-shrines-and-graves.drawing.html": "719a904d62879cf8"
+  },
+  "research": "d5c0ae4d9c14de45",
   "rests": [
-   "0224-ground-swept-clear-around-shrines-and-graves.drawing.html:3f924a063cb2e3bc",
-   "0224-ground-swept-clear-around-shrines-and-graves.drawing.html:42116f3adab8dabf",
-   "0235-village-burial-grounds-bochi.drawing.html:fbaa971508ab156f"
+   "0224-ground-swept-clear-around-shrines-and-graves.drawing.html:3f924a063cb2e3bc"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cemetery#marker heights": {
-  "code": "82b590e278144be9",
-  "core": "82807d4c904bbf94",
+  "code": "b396f02e183e1eb6",
+  "core": "72236120606e82b4",
   "date": "2026-10-07",
-  "note": "drawing only",
+  "note": "the markers are a map drawing convention per the page",
   "pages": {},
   "research": "",
   "rests": [
@@ -37980,10 +38088,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cemetery#no cleared band round the ground": {
-  "code": "f3bbbd8803300adb",
-  "core": "82807d4c904bbf94",
+  "code": "40790e53a8bff482",
+  "core": "72236120606e82b4",
   "date": "2026-10-07",
-  "note": "_clear_ground is called with a margin of 0",
+  "note": "_clear_ground with 0 margin",
   "pages": {
    "0224-ground-swept-clear-around-shrines-and-graves.drawing.html": "719a904d62879cf8"
   },
@@ -37994,19 +38102,11 @@
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cemetery#no six jizo drawn at a burial ground's entrance unless a cremation ground stands beside it": {
-  "code": "82807d4c904bbf94",
-  "core": "82807d4c904bbf94",
-  "date": "2026-10-07",
-  "note": "no six jizo drawn at a burial ground's entrance unless a cremation ground stands beside it",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cemetery#parish plot ruled": {
-  "code": "33afcd5be4ef7d18",
-  "core": "82807d4c904bbf94",
+  "code": "00e129fdbf0b337c",
+  "core": "72236120606e82b4",
   "date": "2026-10-07",
-  "note": "a parish plot is a ruled rect",
+  "note": "parish gives organic=False, so a rect",
   "pages": {
    "0235-village-burial-grounds-bochi.drawing.html": "fa6fc256f086d28d"
   },
@@ -38017,10 +38117,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cemetery#rows of low markers": {
-  "code": "f3fa960849c1386b",
-  "core": "82807d4c904bbf94",
+  "code": "43e8cab151a5fed8",
+  "core": "72236120606e82b4",
   "date": "2026-10-07",
-  "note": "the page wants each marker \"wholly inside the ground's edge\"; on the ruled plot the first row's base is yy = -h/2 + px(9), about 3 px at 3 ft/px, while the marker rises 6-8 px (y = yy - mh), so its top pokes above the rim; the top-inside test runs only for the blob",
+  "note": "sp=px(9); the first row inset by the marker height and blob tops checked keep every marker inside",
   "pages": {
    "0235-village-burial-grounds-bochi.drawing.html": "fa6fc256f086d28d"
   },
@@ -38028,13 +38128,38 @@
   "rests": [
    "0235-village-burial-grounds-bochi.drawing.html:3cdcbc4280308cb8"
   ],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cemetery#six jizo at its entrance": {
+  "code": "72419dc25a8f2d3e",
+  "core": "72236120606e82b4",
+  "date": "2026-10-07",
+  "note": "cemetery draws no jizo at all, but the page has \"Six small stone jizo stand in a row at the entrance of a village's burial ground\"; the claim itself admits it; draw them at the burial ground's entrance here",
+  "pages": {
+   "0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html": "47b8cfda99c75467"
+  },
+  "research": "fdf6aa354ef6d6e1",
+  "rests": [
+   "0235-village-burial-grounds-bochi.drawing.html:35075d3d5f8fd999",
+   "0235-village-burial-grounds-bochi.drawing.html:7a977de34ea42248",
+   "0235-village-burial-grounds-bochi.drawing.html:a2b15867d4cd7350",
+   "0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html:6959ef9775d2f97c"
+  ],
   "verdict": "DRIFTED"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cemetery#unplotted ground for a common burial ground": {
-  "code": "9c350448899008c6",
-  "core": "82807d4c904bbf94",
+ ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cemetery#stupa height 13 px and its seats (rear corners of a ruled plot, interior of an organic one)": {
+  "code": "72236120606e82b4",
+  "core": "72236120606e82b4",
   "date": "2026-10-07",
-  "note": "organic unless parish",
+  "note": "stupa height 13 px and its seats (rear corners of a ruled plot, interior of an organic one)",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cemetery#unplotted ground for a common burial ground": {
+  "code": "632cd8694db1f8d7",
+  "core": "72236120606e82b4",
+  "date": "2026-10-07",
+  "note": "organic = not parish; a common ground is irregular",
   "pages": {
    "0235-village-burial-grounds-bochi.drawing.html": "fa6fc256f086d28d",
    "0235-village-burial-grounds-bochi.html": "e45079639dc7b88f"
@@ -38047,10 +38172,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cremation_ground#cleared ground size": {
-  "code": "6ad8d62e2a71c64b",
-  "core": "2a88cfdb85bb2fa5",
+  "code": "84b8b3b4615ebc8d",
+  "core": "7e27ab1193f62564",
   "date": "2026-10-07",
-  "note": "75 ft and 130 ft are inside the 30-80 ft and up-to-180 ft ranges",
+  "note": "75 ft is within 30-80 for a village or town; 130 ft is within \"up to about 180 ft square\" for a city",
   "pages": {
    "0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html": "47b8cfda99c75467"
   },
@@ -38062,19 +38187,24 @@
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cremation_ground#cleared ground's depth 0.7 of its width": {
-  "code": "2a88cfdb85bb2fa5",
-  "core": "2a88cfdb85bb2fa5",
+ ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cremation_ground#cleared ground's depth": {
+  "code": "cbe29c2d8031c2e9",
+  "core": "7e27ab1193f62564",
   "date": "2026-10-07",
-  "note": "cleared ground's depth 0.7 of its width",
+  "note": "the page gives only extents, not proportions",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "rests": [
+   "0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html:7424e9cc43246f65",
+   "0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html:9ae5cf4ef11103ba"
+  ],
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cremation_ground#fire bed": {
-  "code": "eb37ac076f3e8d2f",
-  "core": "2a88cfdb85bb2fa5",
+  "code": "c321d73f00108258",
+  "core": "7e27ab1193f62564",
   "date": "2026-10-07",
-  "note": "6 x 3 ft, about a coffin's length and a little wider",
+  "note": "px(6) x px(3), a coffin's length and a little wider (the inline comment's \"~12x8 ft\" is stale)",
   "pages": {
    "0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html": "47b8cfda99c75467"
   },
@@ -38084,19 +38214,27 @@
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cremation_ground#fire bed always a stone-framed trench (never an open pyre)": {
-  "code": "2a88cfdb85bb2fa5",
-  "core": "2a88cfdb85bb2fa5",
+ ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cremation_ground#fire bed's form": {
+  "code": "c057a0fc1ee88be2",
+  "core": "7e27ab1193f62564",
   "date": "2026-10-07",
-  "note": "fire bed always a stone-framed trench (never an open pyre)",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "note": "the claim records two attested forms (a firewood stack and a stone-framed trench), yet the code always draws the framed trench and no drawing page records that as a deviation; roll per seed. The cited drawing page names neither form, so the claim should also cite 0238.html",
+  "pages": {
+   "0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html": "47b8cfda99c75467"
+  },
+  "research": "fdf6aa354ef6d6e1",
+  "rests": [
+   "0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html:b166ff8b7936f733",
+   "0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html:ee5c2ac7b4c3d937",
+   "0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html:f7324521b26c50fb"
+  ],
+  "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cremation_ground#jizo drawn size": {
-  "code": "4026476e05d958a6",
-  "core": "2a88cfdb85bb2fa5",
+  "code": "4a2173b2069f17c4",
+  "core": "7e27ab1193f62564",
   "date": "2026-10-07",
-  "note": "the minimum size to be seen is a drawing convention",
+  "note": "the minimum mark size is a convention",
   "pages": {},
   "research": "",
   "rests": [
@@ -38104,24 +38242,48 @@
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cremation_ground#keep-clear margin": {
-  "code": "1d85703ac73a8f04",
-  "core": "2a88cfdb85bb2fa5",
+ ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cremation_ground#jizo true size px(2.0) x px(2.7) ft against 0235 §102's \"about 2 ft tall\", and their 1.4-width pitch": {
+  "code": "7e27ab1193f62564",
+  "core": "7e27ab1193f62564",
   "date": "2026-10-07",
-  "note": "the page answers keep-clear: \"keeps 120 ft clear of houses and wells\", and \"No fire clearance is drawn around a pyre\"; the claim should cite 0238, and the 8 px band (about 24 ft) matches neither",
-  "pages": {},
+  "note": "jizo true size px(2.0) x px(2.7) ft against 0235 §102's \"about 2 ft tall\", and their 1.4-width pitch",
   "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cremation_ground#keep-clear margin": {
+  "code": "da55eeae03aefedf",
+  "core": "7e27ab1193f62564",
+  "date": "2026-10-07",
+  "note": "m=0; 120 ft is held at seating",
+  "pages": {
+   "0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html": "47b8cfda99c75467"
+  },
+  "research": "fdf6aa354ef6d6e1",
   "rests": [
    "0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html:75c4e81c243d0f40",
    "0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html:7a9248c93a16f4ae"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cremation_ground#no walled hut": {
+  "code": "4a98711a858261ff",
+  "core": "7e27ab1193f62564",
+  "date": "2026-10-07",
+  "note": "the page attests \"in snow country, set in a walled hut of about four to six tatami\", but the code rolls only open or roofed and never draws the hut; add it as a form, keyed to snow country",
+  "pages": {
+   "0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html": "47b8cfda99c75467"
+  },
+  "research": "fdf6aa354ef6d6e1",
+  "rests": [
+   "0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html:b166ff8b7936f733"
+  ],
+  "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cremation_ground#pyre ground unwalled": {
-  "code": "d72a50d6f2093015",
-  "core": "2a88cfdb85bb2fa5",
+  "code": "65a769375ddf8660",
+  "core": "7e27ab1193f62564",
   "date": "2026-10-07",
-  "note": "the cited page says \"The pyre stands in a walled yard\", and the code draws no wall; this is an unrecorded departure (0238 itself draws \"an open, cleared ground\"), so the code should draw the wall or the claim should become a DEVIATION that a page records",
+  "note": "0237 has \"The pyre stands in a walled yard\" while the code draws an open ground with no wall and no page records a deviation (0238 §204 says \"an open, cleared ground\", so the pages conflict too); draw the yard wall or label the claim DEVIATION with a page recording it",
   "pages": {
    "0237-burial-grounds-of-towns-and-cities-and-paupers-grounds-yizhong.drawing.html": "9bd072978438f810"
   },
@@ -38133,20 +38295,20 @@
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cremation_ground#ragged outline, bed off center": {
-  "code": "e7f58fee0789ff34",
-  "core": "2a88cfdb85bb2fa5",
+  "code": "597fec9f24c2699e",
+  "core": "7e27ab1193f62564",
   "date": "2026-10-07",
-  "note": "drawing only",
+  "note": "a drawing choice; a ragged edge for ground cleared by use",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cremation_ground#roof size": {
-  "code": "3c10e23fdb12466c",
-  "core": "2a88cfdb85bb2fa5",
+  "code": "586f71f393ad02f6",
+  "core": "7e27ab1193f62564",
   "date": "2026-10-07",
-  "note": "11 ft is inside 10-12 ft, on four posts",
+  "note": "px(11) on four posts, within 10-12 ft square",
   "pages": {
    "0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html": "47b8cfda99c75467"
   },
@@ -38157,10 +38319,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cremation_ground#roofed bed the minority": {
-  "code": "b2df69d695fd001e",
-  "core": "2a88cfdb85bb2fa5",
+  "code": "b6f54df891f9e3a9",
+  "core": "7e27ab1193f62564",
   "date": "2026-10-07",
-  "note": "ROOFED_SHARE 0.25 is a minority, and the share is a GUESS",
+  "note": "ROOFED_SHARE 0.25, a seeded draw",
   "pages": {
    "0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html": "47b8cfda99c75467"
   },
@@ -38171,10 +38333,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cremation_ground#six jizo at a burial ground's entrance": {
-  "code": "f6aa6c3eec8a3185",
-  "core": "2a88cfdb85bb2fa5",
+  "code": "8bc8d1376c007b8f",
+  "core": "7e27ab1193f62564",
   "date": "2026-10-07",
-  "note": "the pages put the six jizo \"at the entrance of a village's burial ground\", shared with a cremation ground beside it; the code seats them on the cremation ground's own north rim (cy - cry - jh), whatever side the burial ground is on",
+  "note": "the stones are seated on the cremation ground's own upper rim (cy - cry - jh), but the page puts them \"at the burial ground's entrance, not at a cremation ground\", shared with a cremation ground beside it; seat them at the burial ground's entrance",
   "pages": {
    "0235-village-burial-grounds-bochi.html": "e45079639dc7b88f",
    "0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html": "47b8cfda99c75467"
@@ -38183,18 +38345,11 @@
   "rests": [
    "0235-village-burial-grounds-bochi.drawing.html:35075d3d5f8fd999",
    "0235-village-burial-grounds-bochi.drawing.html:7a977de34ea42248",
+   "0235-village-burial-grounds-bochi.drawing.html:c61f44e512ef3a12",
    "0235-village-burial-grounds-bochi.html:f681332815e285bc",
    "0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html:6959ef9775d2f97c"
   ],
   "verdict": "DRIFTED"
- },
- ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cremation_ground#snow-country walled hut over the bed never drawn": {
-  "code": "2a88cfdb85bb2fa5",
-  "core": "2a88cfdb85bb2fa5",
-  "date": "2026-10-07",
-  "note": "snow-country walled hut over the bed never drawn",
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.mausoleum#caption": {
   "code": "827d6df67149e98b",
@@ -54957,18 +55112,20 @@
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_handover#a through track's handover": {
-  "code": "b454447d69459908",
+  "code": "0187fe9520777fec",
   "core": "c7fe295d3aaf0362",
   "date": "2026-10-07",
-  "note": "0190 answers this: a board stands at \"the village's center or its entrance\" and at crossroads where people pass. The junction nearest the houses' middle should cite 0190, not UNRESEARCHED",
-  "pages": {},
-  "research": "",
+  "note": "the lane-end junction nearest the houses' centroid is the center or the crossroads where people pass",
+  "pages": {
+   "0190-notice-boards-kosatsuba.html": "d5c6d0418e52d1fa"
+  },
+  "research": "348847d2a9750e4b",
   "rests": [
    "0190-notice-boards-kosatsuba.html:aeb5e9860f97b764",
-   "0190-notice-boards-kosatsuba.html:b465c07b81f6c576",
+   "0190-notice-boards-kosatsuba.html:ebb781f8589560e1",
    "0190-notice-boards-kosatsuba.html:f5973f0b2ea1c6cc"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_handover#entrance is the handover": {
   "code": "7ecb25a6563f15cb",
