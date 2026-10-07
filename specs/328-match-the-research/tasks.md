@@ -434,10 +434,10 @@ ground's margins and the cemetery's first row. Every `after` these rows carry is
   - `l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cemetery#rows of low markers` - start the first row a marker's height inside a ruled plot's edge (or test each marker's top against the plot as against the blob) so every marker stands wholly inside the ground
   - `l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cremation_ground#keep-clear margin` - Set the cremation ground's block band m from 8 px to 0 (0238: no fire clearance is drawn around a pyre), with the 120 ft from houses and wells cited to 0238 where edge_seat holds it (roll.py clear_px=self.px(120)).
 
-- [ ] T29a the found rows tiered provisionally by verdict read and tiered by the work they take, by a fresh reader, before
+- [x] T29a the found rows tiered provisionally by verdict read and tiered by the work they take, by a fresh reader, before
       the wave chooses its rows (FR-002, FR-003, SC-003)
       research: rendering
-      verify:
+      verify: DONE. DONE. 14 rows tiered by their work by a fresh Opus reader (audit/t29a-out.jsonl, each reason measured in the code), applied in audit/overrides.json: 11 moved
 - [ ] T30 the bookend pair, back to back: `make perf LABEL=328-start` in a detached worktree at main's engine, then
       `LABEL=328-end` in the clone (constitution VI)
       research: rendering

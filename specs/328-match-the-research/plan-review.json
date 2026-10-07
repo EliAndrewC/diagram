@@ -1,6 +1,6 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "bf51d87615528be73b58101b2eea9001d44a5b9ab405c5fcd3bf74c7a416f5f3",
+ "plan_sha256": "f0799f3d70b63a2984c724834c0d3e775f57cb3c2d9b3961107ae42e8498cd30",
  "reviewed": "2026-10-07",
  "declared": "spec-fidelity",
  "decisions": [
@@ -138,21 +138,27 @@
   },
   {
    "id": "T29a",
-   "summary": "Before wave 8 chooses its rows, the 14 found rows wave 7's re-checks tiered by verdict alone are tiered by their work by a fresh Opus reader (audit/t29a-out.jsonl, applied in overrides.json)",
+   "summary": "Before wave 8 chooses its rows, the 14 found rows wave 7's re-checks tiered by verdict alone are tiered by their work by a fresh Opus reader (audit/t29a-out.jsonl, applied in overrides.json); 11 moved",
    "class": "within",
-   "why": "FR-002/FR-003 tier by implementation work and SC-003 orders the waves by tier; the same step T25a took, ruled faithful at amendment 6. Measured against the pre-amendment ranking.json: 11 of the 14 changed tier (the plan's '12 moved' and its 'two research gaps to E4' are a miscount, not a narrowing - both gaps were already E4)."
+   "why": "FR-002/FR-003 tier by implementation work and SC-003 orders the waves by tier; the same step as T25a. Re-measured on round 2 against ranking.json at 70f7115a9: 11 of the 14 changed tier (2 to E3, 5 to E2, 1 to E4, 3 to E1), matching the plan's list; the two research gaps were E4 before and after."
+  },
+  {
+   "id": "W8-D8-found-rows",
+   "summary": "Under D8, each wave-8 E0 claim that states a drift names the found row that fixes it: street.py row_reach farm frame (E1, row 192), law_water oblique_at channel crossing (E4, row 713), funerary cremation_ground fire bed's two forms (E3, row 634); row 83 names consts.py::LANE_CLEARANCE (E3, row 570)",
+   "class": "within",
+   "why": "FR-004 moves the implementation to the research and the spec's Edge Cases record a departure as a found row in the tier its work takes; nothing is dropped - each drift is a ranked row (all four present in ranking.json), and the fire bed's two forms become a knob, as the research doctrine requires for two attested forms."
   },
   {
    "id": "W8-scope",
-   "summary": "Wave 8: the 18 open E0 rows, then the contiguous E1 run, global rows 187-246 (8 open rows), ending at the civic grounds' last row; next open E1 row 252",
+   "summary": "Wave 8: the 18 open E0 rows, then the contiguous E1 run, global rows 187-247 (9 open rows, the farm frame at 192 included), ending at the civic grounds' last open row; next open E1 row 253",
    "class": "within",
-   "why": "Measured in ranking.json: every open E0 row (18) and every open E1 row ranked before 252 (187, 208, 230, 241-244, 246) is in the wave; nothing between is skipped. FR-006 contiguous run, lowest tier first."
+   "why": "Measured on round 2 in ranking.json: 18 open E0 rows (48-53, 58, 61, 62, 70, 81, 83, 120-124, 153); open E1 rows before 253 are exactly 187, 192, 209, 231, 242, 243, 244, 245, 247, and tasks.md Phase 9 lists those 27 rows. Nothing between is skipped (FR-006 contiguous run, lowest tier first)."
   },
   {
    "id": "W8-verification",
    "summary": "Wave 8 verified as wave 7: Inashiro first, the pool through the gate, a town or city value by its unit test, bookends back to back, impl-drift on every touched unit, a held value becomes a found row",
    "class": "within",
-   "why": "FR-005 and the spec's Edge Cases (a held value becomes a found row in the tier its work takes)."
+   "why": "FR-005 and the spec's Edge Cases. The occasions line's scope checked on round 2: every scripted pool hamlet's manifest carries empty cemeteries and cremation_grounds, and the pool's other scripted wrappers rasterize hand-authored sheets."
   }
  ],
  "verdict": "CLEAR"

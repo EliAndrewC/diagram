@@ -245,3 +245,5 @@ Each wave's amendment adds its map decisions to this table. The program's decisi
   out of step with T25a's tiers.
 - Amendment 6, round 5 (spec-fidelity-verify, 2026-10-07): FAITHFUL.
 - Amendment 6 landed (wave 7, 2026-10-07): band 0; the lane clearance held with its reason.
+- Amendment 7, round 1 (spec-fidelity, 2026-10-07): CHANGES REQUIRED, plan CLEAR - four E0 claims stating a drift named no
+  row that fixes it (D8); T29a's count. Round 2 (spec-fidelity, 2026-10-07): FAITHFUL; plan CLEAR (26 decisions).
