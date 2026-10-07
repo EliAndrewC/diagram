@@ -828,10 +828,10 @@
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#archery bank": {
-  "code": "016e3b42301e9f3d",
-  "core": "19f36312c8f14b65",
+  "code": "84117d4963241e88",
+  "core": "1869550f29c2c635",
   "date": "2026-10-07",
-  "note": "250 x 8 ft lane with the azuchi at its end; a range inside a residence is attested",
+  "note": "250 x 8 ft lane with the azuchi at its end, as found",
   "pages": {
    "0164-drill-grounds-archery-ranges-and-riding-grounds-jiaochang-yaba-baba.html": "6690901d517f62f4"
   },
@@ -843,10 +843,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#barracks": {
-  "code": "ba2d1a9e20e58a79",
-  "core": "19f36312c8f14b65",
+  "code": "3d5969ef582a44d1",
+  "core": "1869550f29c2c635",
   "date": "2026-10-07",
-  "note": "the claim's \"45 x 34 ft, 34 ft deep\" breaks the drawing page's \"12 to 24 ft deep ... never a square or squat block\"; and \"one large common room for servants\" contradicts \"A compound's servants live apart from its staff\" (the common room is the servants' quarters' form). The barracks should be at most 24 ft deep and divided into dwellings",
+  "note": "the claim's 45 x 34 ft and \"34 ft deep\", and the code's ~80-160 px (~27-53 ft) long, make a squat block; the drawing page says \"never a square or squat block\", 12-24 ft deep and up to ~145 ft long. The code's \"or one large common room\" is the servants' quarters form, not the barracks, which is \"divided into dwellings\"",
   "pages": {
    "0097-staff-rowhouses-and-barracks-nagaya.drawing.html": "d4c70185f30440ae",
    "0097-staff-rowhouses-and-barracks-nagaya.html": "62a5ddbd963f7fc7"
@@ -859,23 +859,22 @@
    "0097-staff-rowhouses-and-barracks-nagaya.drawing.html:6d20e14e8c281ff8",
    "0097-staff-rowhouses-and-barracks-nagaya.drawing.html:921e9524e0a5f213",
    "0097-staff-rowhouses-and-barracks-nagaya.html:38677c449de74f4d",
-   "0097-staff-rowhouses-and-barracks-nagaya.html:6d3c8454a171bb85",
-   "0097-staff-rowhouses-and-barracks-nagaya.html:a82629456d5421eb",
    "0097-staff-rowhouses-and-barracks-nagaya.html:b10862c89c3c5c24"
   ],
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#cart yard as a charcoal fire gap": {
-  "code": "fa971fe11b742f05",
-  "core": "19f36312c8f14b65",
+  "code": "e62b6c4cf2f0bc57",
+  "core": "1869550f29c2c635",
   "date": "2026-10-07",
-  "note": "the section's text draws no cart yard or charcoal store; the claimed ~13-14 ft fire gap contradicts \"keeps no fire gap of a set width\" and the plastered store's \"ordinary spacing\" (0116 gives 6-10 ft as a guess). Drop the gap figure, or record it on the 0197 drawing page as a deviation",
+  "note": "this section draws no cart yard or charcoal store. The claim's 13-14 ft \"fire gap\" contradicts \"keep no fire gap of a set width\" and a plastered store standing \"at the ordinary spacing\", and it is wider than the 6-10 ft kura gap",
   "pages": {
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c2a4ba141b354319",
    "0197-charcoal-yards-and-charcoal-stores.drawing.html": "fba749a9a3f24a9c"
   },
   "research": "fdc09ba7d3987100",
   "rests": [
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:a911be254a00f660",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:db5208a7bd0dcf9d",
    "0197-charcoal-yards-and-charcoal-stores.drawing.html:0ad7edfc766bacb6",
    "0197-charcoal-yards-and-charcoal-stores.drawing.html:7a657acf6f84c329",
@@ -884,10 +883,10 @@
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#cell": {
-  "code": "d4fdb6297d7d646e",
-  "core": "19f36312c8f14b65",
+  "code": "05281b1551789c64",
+  "core": "1869550f29c2c635",
   "date": "2026-10-07",
-  "note": "12 x 10 ft (~6.7 mats) is at the small end of the 6-18 mat span; no page gives a magistracy cell's size; shared by several prisoners",
+  "note": "12 x 10 ft sits at the small end of the 6-18 mat span, as a temporary cell inside the compound",
   "pages": {
    "0096-holding-cells-agariya-and-roya.html": "4426e3559e549311"
   },
@@ -895,26 +894,25 @@
   "rests": [
    "0096-holding-cells-agariya-and-roya.html:46d27721497d60b0",
    "0096-holding-cells-agariya-and-roya.html:937c7af5507a1c15",
-   "0096-holding-cells-agariya-and-roya.html:bc94fea1004fa3d9",
    "0096-holding-cells-agariya-and-roya.html:f1e5972ca3458ff3"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#cell kept well under the barracks": {
-  "code": "6aa34c3dbd51e4f5",
-  "core": "19f36312c8f14b65",
+  "code": "b0efae870c42fa27",
+  "core": "1869550f29c2c635",
   "date": "2026-10-07",
-  "note": "no cited page ranks a cell against a barracks",
+  "note": "no cited page ranks the cell against the barracks",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#charcoal bales": {
-  "code": "c6e1a1e9e45866ff",
-  "core": "19f36312c8f14b65",
+  "code": "4cf1d4405ebffeba",
+  "core": "1869550f29c2c635",
   "date": "2026-10-07",
-  "note": "\"each bale ~6 x 3 ft\" against the page's \"A bale is drawn about 4 ft long, by convention\" (real size ~2 x 1.3 ft); the bale should be ~4 ft long, or the page should record 6 ft",
+  "note": "this section draws no bales, and the claim's ~6 x 3 ft bale is not the page's \"drawn about 4 ft long, by convention\" (real size ~2 x 1.3 ft)",
   "pages": {
    "0199-straw-bales-of-rice-and-charcoal-tawara.drawing.html": "c4e837038c94b2f6"
   },
@@ -926,10 +924,10 @@
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#charcoal weighing floor": {
-  "code": "e82fb2c429e9a5a7",
-  "core": "19f36312c8f14b65",
+  "code": "0e14b0232567a108",
+  "core": "1869550f29c2c635",
   "date": "2026-10-07",
-  "note": "\"~27 ft square\" against the page's \"a weighing floor of 16 by 14 ft\"; the section's text draws no weighing floor",
+  "note": "this section draws no weighing floor, and the claim's ~27 ft square is not the page's \"weighing floor of 16 by 14 ft\"",
   "pages": {
    "0197-charcoal-yards-and-charcoal-stores.drawing.html": "fba749a9a3f24a9c"
   },
@@ -941,10 +939,10 @@
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#clerk positions at the dais": {
-  "code": "00872aee2fdea20a",
-  "core": "19f36312c8f14b65",
+  "code": "4e7ba84205eaeda0",
+  "core": "1869550f29c2c635",
   "date": "2026-10-07",
-  "note": "the 0099 drawing page answers this: clerks \"to either side of the magistrate, level with the dais ... a deliberate deviation\". Label should be DEVIATION 0099-the-hearing-court-shirasu.drawing.html",
+  "note": "0099's drawing page answers this: clerks \"to either side of the magistrate, level with the dais\", a recorded deliberate deviation. Should be DEVIATION research/questions/0099-the-hearing-court-shirasu.drawing.html",
   "pages": {},
   "research": "",
   "rests": [
@@ -954,10 +952,10 @@
   "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#forecourt": {
-  "code": "064577ce4ab0e381",
-  "core": "19f36312c8f14b65",
+  "code": "67b9fbfd4d3ee234",
+  "core": "1869550f29c2c635",
   "date": "2026-10-07",
-  "note": "the research's forecourt is the open ground inside the main gate, before the entrance (\"the entrance with its step faces the open ground inside the main gate\"; the plaza in front of the jin'ya). Labeling the strip behind the office hall \"forecourt\" is not attested; the section's text names no forecourt",
+  "note": "the claim puts \"forecourt\" on the strip behind the office hall. The research's forecourt is the open ground in front, inside the main gate, before the entrance (\"the plaza in front of the jin'ya\"; \"the entrance ... faces the open ground inside the main gate\"). This section draws no forecourt",
   "pages": {
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "bbfebe573bb99b25",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html": "ac75a1e28a361c16"
@@ -966,16 +964,15 @@
   "rests": [
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:00bcfd3abdfc77d8",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:459642a27a3630d1",
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:508d759fa76d492e",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html:294ade5001734dd1"
   ],
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#granary forms": {
-  "code": "963505e335c6a783",
-  "core": "19f36312c8f14b65",
+  "code": "6ee8363e93f20f61",
+  "core": "1869550f29c2c635",
   "date": "2026-10-07",
-  "note": "two attested forms, one per plan; the kura is drawn on the ground with no posts",
+  "note": "two attested forms, one per plan; the kura is drawn without posts",
   "pages": {
    "0098-storehouses-for-the-tax-rice.html": "b0964dae032a23e9"
   },
@@ -990,72 +987,69 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#granary kept under a residence block": {
-  "code": "366f853bca5d3471",
-  "core": "19f36312c8f14b65",
+  "code": "4b66494cc82aef8e",
+  "core": "1869550f29c2c635",
   "date": "2026-10-07",
-  "note": "the drawing page records the rank-by-rice-held rule as a guess, with Takayama as the terminal case",
+  "note": "the drawing page records the rank-follows-rice rule as a GUESS",
   "pages": {
    "0098-storehouses-for-the-tax-rice.drawing.html": "1466a760af61120d",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c2a4ba141b354319"
   },
   "research": "cd73ace0358fe8b6",
   "rests": [
-   "0098-storehouses-for-the-tax-rice.drawing.html:c97a5ce79117b14d",
-   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:50460e872bf52ef6",
-   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html:307e1fa85e603c4f"
+   "0098-storehouses-for-the-tax-rice.drawing.html:d28322fa1bae3655",
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:50460e872bf52ef6"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#granary size": {
-  "code": "8d81d0ca6f4d7065",
-  "core": "19f36312c8f14b65",
+  "code": "6b9a717dc7660c0a",
+  "core": "1869550f29c2c635",
   "date": "2026-10-07",
-  "note": "43-50 x 25-27 ft is recorded as a guess",
+  "note": "43-50 x 25-27 ft, recorded as a GUESS",
   "pages": {
    "0098-storehouses-for-the-tax-rice.drawing.html": "1466a760af61120d"
   },
   "research": "f1206af177a61c95",
   "rests": [
-   "0098-storehouses-for-the-tax-rice.drawing.html:6754f505bb1258be",
-   "0098-storehouses-for-the-tax-rice.html:ba9c123d1799c49c"
+   "0098-storehouses-for-the-tax-rice.drawing.html:6754f505bb1258be"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#hearing cart slot": {
-  "code": "c2744d947c4cf2f1",
-  "core": "19f36312c8f14b65",
+  "code": "56b7a3c6f1784150",
+  "core": "1869550f29c2c635",
   "date": "2026-10-07",
-  "note": "no cited page gives the slot; the apron figure is about something else",
+  "note": "no cited page gives such a slot",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#hearing court": {
-  "code": "211990f83440b1f3",
-  "core": "19f36312c8f14b65",
+  "code": "19734745607d2558",
+  "core": "1869550f29c2c635",
   "date": "2026-10-07",
-  "note": "roofed; white gravel or river cobbles as a knob; against the hall's front; solid outline with posts; size a guess",
+  "note": "roofed, a gravel-or-cobble knob, against the dais front, posts along its open side",
   "pages": {
    "0099-the-hearing-court-shirasu.html": "c0f6b660f7639a81"
   },
   "research": "81ffa6b221f0f767",
   "rests": [
-   "0099-the-hearing-court-shirasu.drawing.html:6f3e1d8136359675",
+   "0099-the-hearing-court-shirasu.drawing.html:36f49b610deb6fb9",
    "0099-the-hearing-court-shirasu.drawing.html:831a7ca5b9c4e9de",
    "0099-the-hearing-court-shirasu.drawing.html:b55c5a1de66c7efa",
    "0099-the-hearing-court-shirasu.html:1c5a6e5edd21f113",
-   "0099-the-hearing-court-shirasu.html:98e6a6b775d2c3b3",
    "0099-the-hearing-court-shirasu.html:9b989aee73ca5a35",
    "0099-the-hearing-court-shirasu.html:fd2431d8cc8f2d5a"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#hearing mat size": {
-  "code": "7b579e700ab930e5",
-  "core": "19f36312c8f14b65",
+  "code": "ac80e0929e2ff01d",
+  "core": "1869550f29c2c635",
   "date": "2026-10-07",
-  "note": "accused's mat 6 x 3 ft is the page's guess",
+  "note": "the accused's mat ~6 x 3 ft is recorded as a GUESS",
   "pages": {
    "0099-the-hearing-court-shirasu.drawing.html": "6e346d062ac74ea6"
   },
@@ -1066,10 +1060,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#hearing mats": {
-  "code": "2819654c12849253",
-  "core": "19f36312c8f14b65",
+  "code": "cffdc3cf9d35923a",
+  "core": "1869550f29c2c635",
   "date": "2026-10-07",
-  "note": "accused at the center, plaintiff and officials behind, as at Edo",
+  "note": "accused at the center, plaintiff and village officials behind",
   "pages": {
    "0099-the-hearing-court-shirasu.html": "c0f6b660f7639a81"
   },
@@ -1082,16 +1076,15 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#office hall": {
-  "code": "7928f64e87ca2413",
-  "core": "19f36312c8f14b65",
+  "code": "d8b6f127e29833f1",
+  "core": "1869550f29c2c635",
   "date": "2026-10-07",
-  "note": "~3,360 sq ft falls within the 2,850-8,100 sq ft bracket (no page gives length or depth); the courtroom is a room of the one block",
+  "note": "~3,360 sq ft lies between the measured 2,850 and 8,100; clerks' rooms are in the hall",
   "pages": {
    "0113-the-office-hall-and-its-clerks-goyakusho.html": "f48c2ca0c1c3bee2"
   },
   "research": "7e9c46821cfb826d",
   "rests": [
-   "0099-the-hearing-court-shirasu.html:2b4df310fcb5d01c",
    "0113-the-office-hall-and-its-clerks-goyakusho.html:3fd2f96b8b3d69aa",
    "0113-the-office-hall-and-its-clerks-goyakusho.html:96b3ae0aeb48709a",
    "0113-the-office-hall-and-its-clerks-goyakusho.html:9bba608484ca0320",
@@ -1100,11 +1093,27 @@
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#practice ground": {
-  "code": "b1d0d322ccfe99d0",
-  "core": "19f36312c8f14b65",
+ ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#one storehouse at the office": {
+  "code": "83e41d7376a8119d",
+  "core": "1869550f29c2c635",
   "date": "2026-10-07",
-  "note": "swept open ground with a rack and posts, no hall; a dojo only as a local particular",
+  "note": "a single storehouse at the office; the landing row is a knob off the sheet",
+  "pages": {
+   "0098-storehouses-for-the-tax-rice.drawing.html": "1466a760af61120d"
+  },
+  "research": "f1206af177a61c95",
+  "rests": [
+   "0098-storehouses-for-the-tax-rice.drawing.html:0dfd560c49d1636d",
+   "0098-storehouses-for-the-tax-rice.drawing.html:c97a5ce79117b14d",
+   "0098-storehouses-for-the-tax-rice.drawing.html:d28322fa1bae3655"
+  ],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#practice ground": {
+  "code": "cb4fcac162b7d9cf",
+  "core": "1869550f29c2c635",
+  "date": "2026-10-07",
+  "note": "swept ground marked by its gear, no hall",
   "pages": {
    "0165-martial-training-grounds-and-dojo.drawing.html": "931bfd2e0737c1a3"
   },
@@ -1118,10 +1127,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#practice ground area": {
-  "code": "f4ab5102ef2321c5",
-  "core": "19f36312c8f14b65",
+  "code": "b8b7785c2dd22b7e",
+  "core": "1869550f29c2c635",
   "date": "2026-10-07",
-  "note": "90-135 sq ft per drilling samurai is the page's guess",
+  "note": "90-135 sq ft per samurai, recorded as a GUESS",
   "pages": {
    "0165-martial-training-grounds-and-dojo.drawing.html": "931bfd2e0737c1a3"
   },
@@ -1132,8 +1141,8 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#practice ground placement": {
-  "code": "2a51819792b44a4e",
-  "core": "19f36312c8f14b65",
+  "code": "8fc737c6f0eb9991",
+  "core": "1869550f29c2c635",
   "date": "2026-10-07",
   "note": "beside the guards' quarters",
   "pages": {
@@ -1146,20 +1155,20 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#practice ground shared with cart staging or muster": {
-  "code": "e92139298db332d3",
-  "core": "19f36312c8f14b65",
+  "code": "0143baee8411777d",
+  "core": "1869550f29c2c635",
   "date": "2026-10-07",
-  "note": "no cited page speaks to sharing the ground",
+  "note": "no cited page answers this",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#practice ground striking posts": {
-  "code": "e2e268f7688cb51c",
-  "core": "19f36312c8f14b65",
+  "code": "42a3f0d939521984",
+  "core": "1869550f29c2c635",
   "date": "2026-10-07",
-  "note": "upright posts only; the count is a guess and the marker a convention",
+  "note": "upright posts only; the marker is a convention and the count a GUESS",
   "pages": {
    "0165-martial-training-grounds-and-dojo.drawing.html": "931bfd2e0737c1a3"
   },
@@ -1171,10 +1180,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#practice ground weapon rack": {
-  "code": "3cf393d2112981d6",
-  "core": "19f36312c8f14b65",
+  "code": "14ed9300080ffeab",
+  "core": "1869550f29c2c635",
   "date": "2026-10-07",
-  "note": "~8 x 2 ft rack is the page's guess",
+  "note": "~8 x 2 ft at the ground's edge, recorded as a GUESS",
   "pages": {
    "0165-martial-training-grounds-and-dojo.drawing.html": "931bfd2e0737c1a3"
   },
@@ -1185,56 +1194,53 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#stable below barracks": {
-  "code": "3eb0af96dfc5337a",
-  "core": "19f36312c8f14b65",
+  "code": "7b5fc2296d5fe1eb",
+  "core": "1869550f29c2c635",
   "date": "2026-10-07",
-  "note": "the drawing page records the stable-under-barracks rank as a guess",
+  "note": "the drawing page records this rank as a GUESS",
   "pages": {
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c2a4ba141b354319"
   },
   "research": "8bb634ee7fbc398f",
   "rests": [
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:1cb5624cb2336cca",
-   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html:8a9c6454630327b1"
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:f04061862f18172a"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#stable passage and grooms' quarters": {
-  "code": "e9be5aff96fcd115",
-  "core": "19f36312c8f14b65",
+  "code": "900b72608f48d997",
+  "core": "1869550f29c2c635",
   "date": "2026-10-07",
-  "note": "the drawing page says our stable is drawn \"with quarters in it for the grooms and an earth-floored passage before the stalls\"; the section draws stalls only. Draw both, or record their omission as a deviation",
+  "note": "the drawing page says our maps draw the stable \"with quarters in it for the grooms and an earth-floored passage before the stalls\". The code draws only stall divisions, and the claim states the opposite of the page",
   "pages": {
    "0108-stables-umaya.drawing.html": "9b263ee6db0a6b95"
   },
   "research": "96ea0c83b210c787",
   "rests": [
-   "0108-stables-umaya.drawing.html:bfffc30811fc7968",
-   "0108-stables-umaya.html:3167887923b3c4cc",
-   "0108-stables-umaya.html:77be2a6a5f39b548"
+   "0108-stables-umaya.drawing.html:bfffc30811fc7968"
   ],
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#stable stall width": {
-  "code": "d43388d72d9fcd1a",
-  "core": "19f36312c8f14b65",
+  "code": "20c1a7df537d9a37",
+  "core": "1869550f29c2c635",
   "date": "2026-10-07",
-  "note": "\"3 stalls ~9.3-9.7 ft wide\" against the page's \"stalls are drawn about one ken (~6 ft) wide\"; stalls should be ~6 ft",
+  "note": "3 stalls ~9.3-9.7 ft wide (84-96 px across 3) against \"stalls are drawn about one ken (~6 ft) wide\"",
   "pages": {
    "0108-stables-umaya.drawing.html": "9b263ee6db0a6b95"
   },
   "research": "96ea0c83b210c787",
   "rests": [
-   "0108-stables-umaya.drawing.html:219e638987c06796",
-   "0108-stables-umaya.html:593523e7ce195b4d"
+   "0108-stables-umaya.drawing.html:219e638987c06796"
   ],
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#stables": {
-  "code": "07c8e7359d7a9ffc",
-  "core": "19f36312c8f14b65",
+  "code": "61b6e036eccefef9",
+  "core": "1869550f29c2c635",
   "date": "2026-10-07",
-  "note": "the research page gives no footprint (\"three bays long\", stalls one bay wide) and no horse count (\"No page we read says\"); the 28-32 x 16-22 ft and 2-4 horses should be GUESS 0108-stables-umaya.drawing.html",
+  "note": "the research gives neither a horse count (\"No page we read says\") nor a stall depth. The 2-4 horses and the 16-22 ft depth should be GUESS citing 0108's drawing page; only the bay count rests on the research",
   "pages": {
    "0108-stables-umaya.html": "e28bb721c804f4bf"
   },
@@ -1245,28 +1251,26 @@
    "0108-stables-umaya.html:12a3224dd5a29b03",
    "0108-stables-umaya.html:41dd4a78c52512c9",
    "0108-stables-umaya.html:593523e7ce195b4d",
+   "0108-stables-umaya.html:a2e7e4f3ce712329",
    "0108-stables-umaya.html:e24e1c344ed689f1"
   ],
   "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#tax archive drawn with white-plaster fill, heavy stroke and dark door mark": {
-  "code": "faf2bae1afbe039b",
-  "core": "19f36312c8f14b65",
+  "code": "67c468f1b2c3b3e4",
+  "core": "1869550f29c2c635",
   "date": "2026-10-07",
-  "note": "fill, stroke and door mark are how the archive is shown; the plastered kura itself is attested",
+  "note": "the fill colour, stroke weight and door glyph only set how the plastered kura looks on the map, apart from the granary slats",
   "pages": {},
   "research": "",
-  "rests": [
-   "0098-storehouses-for-the-tax-rice.html:73d9a0065ef28793",
-   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:67384625aa76f7e9"
-  ],
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#tax archive size": {
-  "code": "50d5bcd5dda563c4",
-  "core": "19f36312c8f14b65",
+  "code": "98c31386ccf7c400",
+  "core": "1869550f29c2c635",
   "date": "2026-10-07",
-  "note": "32-36 ft breaks the page's rule (\"a floor of no more than about 450 sq ft\", e.g. ~24 x 18 ft); the page notes the larger plans but does not class them as a deliberate deviation. Shrink to the cap, or relabel DEVIATION and record it as one on the drawing page",
+  "note": "a 32-36 ft kura exceeds the page's rule \"no more than about 450 sq ft\" (~24 x 18 ft). The page notes the larger drawing but does not record it as a deliberate deviation, so either the code keeps to ≤450 sq ft or the claim becomes DEVIATION once the page records it",
   "pages": {
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "2c4dfd988d663a80"
   },
@@ -1276,45 +1280,29 @@
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:33510cb335904fa2",
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:9ba0f5fcb5d7014a",
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:aea6cd1ed8944b96",
-   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:d9fe33148056a59e",
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:fb5af5b7b0dcb397"
   ],
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#tax archive strongroom role": {
-  "code": "506c0165edbdef15",
-  "core": "19f36312c8f14b65",
+  "code": "2e53f6c8da76c6d2",
+  "core": "1869550f29c2c635",
   "date": "2026-10-07",
-  "note": "no cited page speaks to a combined records-and-strongroom kura",
+  "note": "no cited page answers the combined records-and-strongroom role",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#the earth-walled granary's door placed on the loading apron": {
-  "code": "19f36312c8f14b65",
-  "core": "19f36312c8f14b65",
-  "date": "2026-10-07",
-  "note": "the earth-walled granary's door placed on the loading apron",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#the hearing court drawn with posts along its open side": {
-  "code": "19f36312c8f14b65",
-  "core": "19f36312c8f14b65",
-  "date": "2026-10-07",
-  "note": "the hearing court drawn with posts along its open side",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#the kura granary's vents not drawn": {
-  "code": "3830c1702e8ba4f0",
-  "core": "19f36312c8f14b65",
+  "code": "ace5815a718b64db",
+  "core": "1869550f29c2c635",
   "date": "2026-10-07",
-  "note": "purely how the plan shows a wall",
+  "note": "the vents are attested; leaving them off a plan is a convention",
   "pages": {},
   "research": "",
   "rests": [
+   "0098-storehouses-for-the-tax-rice.drawing.html:7b5dcbded97fb530",
    "0098-storehouses-for-the-tax-rice.html:dd3661cdd179fb46"
   ],
   "verdict": "IN-STEP"
@@ -2770,10 +2758,10 @@
   "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#a detached guest house at a rich posting (0091's drawing page records it as a GUESS)": {
-  "code": "5189ea4438f07ad2",
-  "core": "7f764b9c591316aa",
+  "code": "d832702a27878aec",
+  "core": "b24b061f457cd343",
   "date": "2026-10-07",
-  "note": "drawing page records the county plan's detached guest house as a GUESS",
+  "note": "the drawing page records the separate guest house as a GUESS",
   "pages": {
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html": "2688f28d713d8374"
   },
@@ -2785,20 +2773,20 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#cart route to granary and stables": {
-  "code": "6fc2ce874880c18f",
-  "core": "7f764b9c591316aa",
+  "code": "7f6d2ad7474614c1",
+  "core": "b24b061f457cd343",
   "date": "2026-10-07",
-  "note": "no cited page speaks to an access route",
+  "note": "the bundle is silent on a cart route",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#commuting clerks": {
-  "code": "3388810a894b0a05",
-  "core": "7f764b9c591316aa",
+  "code": "0e4678f6f346e376",
+  "core": "b24b061f457cd343",
   "date": "2026-10-07",
-  "note": "clerks in a room of the hall; 3-4 heimen living in town is the setting's own figure",
+  "note": "a workroom in the hall, and the setting's 3-4 heimen clerks live in town",
   "pages": {
    "0113-the-office-hall-and-its-clerks-goyakusho.html": "f48c2ca0c1c3bee2"
   },
@@ -2812,10 +2800,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#divider gate": {
-  "code": "0ff21936c572024a",
-  "core": "7f764b9c591316aa",
+  "code": "7318ccd01fb5c143",
+  "core": "b24b061f457cd343",
   "date": "2026-10-07",
-  "note": "gate between the two courts",
+  "note": "a gate between the two courts",
   "pages": {
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "8d81fb67fc6be64e"
   },
@@ -2827,111 +2815,106 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#divider gate on the axis": {
-  "code": "d8ab0afa9980cab2",
-  "core": "7f764b9c591316aa",
+  "code": "ec511f95f63c3754",
+  "core": "b24b061f457cd343",
   "date": "2026-10-07",
-  "note": "the program says the gate is \"customarily on the main axis directly BEHIND the office hall\", but the page takes the Japanese form, \"No fixed central axis\" (the axis is the yamen's); drop \"customarily\", or claim the placement as a GUESS/DEVIATION recorded on the page",
+  "note": "the program puts the gate \"customarily on the main axis\" but the page says \"No fixed central axis\" for the jin'ya; label it GUESS/DEVIATION and record it on the 0090 drawing page, or drop the axis rule",
   "pages": {
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "8d81fb67fc6be64e"
   },
   "research": "b9f86fd8593ec1ea",
   "rests": [
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:32affd822563d2d9",
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:45ffe904afced68b",
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:769a88ade68767a9"
   ],
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#divider gate width": {
-  "code": "39e96b4e803743ee",
-  "core": "7f764b9c591316aa",
+  "code": "31946b318da3b85d",
+  "core": "b24b061f457cd343",
   "date": "2026-10-07",
-  "note": "no page gives a middle gate's width",
+  "note": "the bundle gives no width for a nakamon or a divider gate",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#fire-water tubs": {
-  "code": "1fc1374a2f05a281",
-  "core": "7f764b9c591316aa",
+  "code": "f1544d5679b37f42",
+  "core": "b24b061f457cd343",
   "date": "2026-10-07",
-  "note": "~8-12, two at the kitchen, none at the dozo",
+  "note": "8-12 tubs, 2 at the kitchen, none at the dozo",
   "pages": {
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "2c4dfd988d663a80"
   },
   "research": "5292b7fa7abf1048",
   "rests": [
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:3d78982d8d903e9f",
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:67384625aa76f7e9",
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:81eec727dd4e93f2",
-   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:a8ace44152bf8182",
-   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:fe5bcc892cab35bf"
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:a8ace44152bf8182"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#formal visitors and the privacy baffle": {
-  "code": "d70b50e0467d6d4b",
-  "core": "7f764b9c591316aa",
+  "code": "cf8e538f57f08299",
+  "core": "b24b061f457cd343",
   "date": "2026-10-07",
-  "note": "\"Formal visitors are received in the hall and go no deeper\" contradicts the page's \"the way to the residence runs on through the office\" (Takayama's visitor route \"continues on to the residence\"), and the program's own residence bullet (\"the visitors' way runs on through the office to the house\"); drop \"go no deeper\" or record it as a GUESS against §84",
+  "note": "\"Formal visitors are received in the hall and go no deeper\" contradicts the page's \"the way to the residence runs on through the office\"; record it on the 0104 drawing page as a GUESS/deviation, or split it into its own GUESS claim",
   "pages": {
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html": "b2a74a73e3c362a1"
   },
   "research": "2892ce3f903e6811",
   "rests": [
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:116aa236938eb510",
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:7e1a102957652671",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:8df3343eda86262e"
   ],
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#garden and stables wells": {
-  "code": "c80b0d0cf5d06f0b",
-  "core": "7f764b9c591316aa",
+  "code": "f20d4c619cf78b3f",
+  "core": "b24b061f457cd343",
   "date": "2026-10-07",
   "note": "no page places a garden or stable well",
   "pages": {},
   "research": "",
   "rests": [
-   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:598ef8ea7d58c2f4",
-   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:77860a26bb8da90e"
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:598ef8ea7d58c2f4"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#garrison emphasis knob": {
-  "code": "b2d09b31c27da30e",
-  "core": "7f764b9c591316aa",
+  "code": "f6d8f59cb4dc2161",
+  "core": "b24b061f457cd343",
   "date": "2026-10-07",
-  "note": "silent",
+  "note": "the bundle is silent on an armory or watchtower",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#granary weight knob": {
-  "code": "867ce871d6ffbec4",
-  "core": "7f764b9c591316aa",
+  "code": "60829f491993aeeb",
+  "core": "b24b061f457cd343",
   "date": "2026-10-07",
-  "note": "the question finds neither form: a staging store is \"a reconstruction\" and a terminal row at the office is \"this project's GUESS\" (\"Perhaps\"). The drawing page draws the office's granary as one storehouse and puts any row at the river landing, with isolated counties leaning to the office's single store. That is the reverse of \"terminal store keeps a granary row\". Follow §404-405, or label the row a GUESS",
+  "note": "the landing/office knob, one storehouse drawn",
   "pages": {
-   "0098-storehouses-for-the-tax-rice.html": "b0964dae032a23e9"
+   "0098-storehouses-for-the-tax-rice.drawing.html": "1466a760af61120d"
   },
-  "research": "f2e5561095446765",
+  "research": "f1206af177a61c95",
   "rests": [
    "0098-storehouses-for-the-tax-rice.drawing.html:0dfd560c49d1636d",
-   "0098-storehouses-for-the-tax-rice.drawing.html:6754f505bb1258be",
    "0098-storehouses-for-the-tax-rice.drawing.html:c97a5ce79117b14d",
-   "0098-storehouses-for-the-tax-rice.drawing.html:d28322fa1bae3655",
-   "0098-storehouses-for-the-tax-rice.html:234a9d6b4069fc1a",
-   "0098-storehouses-for-the-tax-rice.html:b8fb4a1535a30a42",
-   "0098-storehouses-for-the-tax-rice.html:ba9c123d1799c49c"
+   "0098-storehouses-for-the-tax-rice.drawing.html:d28322fa1bae3655"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#guest doors feed courts": {
-  "code": "68a3769e24dbf6f1",
-  "core": "7f764b9c591316aa",
+  "code": "1f498d71122704a9",
+  "core": "b24b061f457cd343",
   "date": "2026-10-07",
-  "note": "open ground before guest doors; a garden or lantern there is recorded as a GUESS; the kitchen door into work space is the project's reading",
+  "note": "open ground before a guest door; the garden and the lantern are recorded as guesses",
   "pages": {
    "0103-ornamental-gardens-ponds-and-stone-lanterns-teien.drawing.html": "48d206623f86d1e3",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html": "b2a74a73e3c362a1",
@@ -2949,35 +2932,34 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#inner-court postern": {
-  "code": "2da73519bacc0700",
-  "core": "7f764b9c591316aa",
+  "code": "43477fb98e938123",
+  "core": "b24b061f457cd343",
   "date": "2026-10-07",
-  "note": "no samurai-house night-soil gate named; katteguchi is the kitchen's own door",
+  "note": "no samurai-house night-soil gate in the record; the katteguchi is the kitchen's own door",
   "pages": {},
   "research": "",
   "rests": [
    "0101-privies-setchin.drawing.html:22aa0442ff4680a7",
    "0101-privies-setchin.drawing.html:4b9c7b16a2cddbfa",
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:3bd3b9974993d277",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:95160ff513e325fa"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#justice-front furniture knob": {
-  "code": "5297ea94acf37664",
-  "core": "7f764b9c591316aa",
+  "code": "83a01eb46327a6be",
+  "core": "b24b061f457cd343",
   "date": "2026-10-07",
-  "note": "silent on a petition window, drum or bell",
+  "note": "nothing in the bundle on petition windows or drums",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#latrines by zone": {
-  "code": "7295371439845eac",
-  "core": "7f764b9c591316aa",
+  "code": "ed585496f1667659",
+  "core": "b24b061f457cd343",
   "date": "2026-10-07",
-  "note": "the question page finds only the attached house privy and the row houses' shared privy building. \"One per zone\" and \"the rest by service gates\" are the drawing page's GUESS and the project's reading. Should be GUESS research/questions/0101-privies-setchin.drawing.html for those parts",
+  "note": "the research page gives attached house privies and shared row-house privies, never \"one per zone\"; the count and the siting by service gates are the drawing page's GUESS/reading, so the claim should be GUESS research/questions/0101-privies-setchin.drawing.html",
   "pages": {
    "0101-privies-setchin.html": "f772eb2b05990168"
   },
@@ -2985,6 +2967,7 @@
   "rests": [
    "0101-privies-setchin.drawing.html:38960fd9975a6f1c",
    "0101-privies-setchin.drawing.html:4b9c7b16a2cddbfa",
+   "0101-privies-setchin.drawing.html:8299420f832f4bd1",
    "0101-privies-setchin.html:18e84aa2b3f392ce",
    "0101-privies-setchin.html:3e6cdef5ad67f277",
    "0101-privies-setchin.html:989221f59acc042a",
@@ -2993,10 +2976,10 @@
   "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#manor kitchen garden by the sun": {
-  "code": "fee45c3ae5564fcf",
-  "core": "7f764b9c591316aa",
+  "code": "1003ae68741eaea4",
+  "core": "b24b061f457cd343",
   "date": "2026-10-07",
-  "note": "four-site and size knobs, six-hour autumn rule",
+  "note": "four sites, 1,100 sq ft to half the grounds, a six-hour autumn rule",
   "pages": {
    "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03",
    "0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html": "461744888b10dad0"
@@ -3008,6 +2991,7 @@
    "0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html:42bdf96bf8f0f70f",
    "0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html:823e56e337731b1e",
    "0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html:a2d5a204d8ca856d",
+   "0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html:e5e747ae6a1e52b8",
    "0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html:e8e9e70989e5c423",
    "0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html:fc44e5419b7307af",
    "0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html:ff9d9cf36d9635eb"
@@ -3015,16 +2999,17 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#mostly open compound": {
-  "code": "10523a7fb136041b",
-  "core": "7f764b9c591316aa",
+  "code": "8792e46b52a45927",
+  "core": "b24b061f457cd343",
   "date": "2026-10-07",
-  "note": "30-42% coverage, court spine held open, rooms consolidated",
+  "note": "the coverage band, the court spine open, slack consolidated rather than walls shrunk",
   "pages": {
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c2a4ba141b354319"
   },
   "research": "8bb634ee7fbc398f",
   "rests": [
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:5b274ef99f301ef1",
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:c63fb7818cf50fcb",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:e672b523bf8222b2",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:f2129fd621e95512",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:f6879c35848621fc"
@@ -3032,10 +3017,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#notice board at the gate": {
-  "code": "da921c2077fdbf72",
-  "core": "7f764b9c591316aa",
+  "code": "4ea8b6d198d320bc",
+  "core": "b24b061f457cd343",
   "date": "2026-10-07",
-  "note": "freestanding board at the office gate recorded as a GUESS",
+  "note": "the page records the joined Japanese-Chinese bench board as a GUESS",
   "pages": {
    "0190-notice-boards-kosatsuba.drawing.html": "6046a6a69d20be53"
   },
@@ -3047,10 +3032,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#office hall dais band": {
-  "code": "aed0dae8c5be1841",
-  "core": "7f764b9c591316aa",
+  "code": "e6db6710726b7c63",
+  "core": "b24b061f457cd343",
   "date": "2026-10-07",
-  "note": "dais is the front of the hall over the court; flanking clerks a recorded deviation",
+  "note": "the dais is the hall's front, clerks flanking it, over the court",
   "pages": {
    "0099-the-hearing-court-shirasu.drawing.html": "6e346d062ac74ea6"
   },
@@ -3064,10 +3049,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#office hall rooms": {
-  "code": "eaa75528b3b6a9fe",
-  "core": "7f764b9c591316aa",
+  "code": "4eede51cd71ab05c",
+  "core": "b24b061f457cd343",
   "date": "2026-10-07",
-  "note": "no page places a day office or study behind the dais",
+  "note": "no page places rooms behind the dais",
   "pages": {},
   "research": "",
   "rests": [
@@ -3076,19 +3061,11 @@
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#office hall's dais band facing south over the hearing court": {
-  "code": "7f764b9c591316aa",
-  "core": "7f764b9c591316aa",
-  "date": "2026-10-07",
-  "note": "office hall's dais band facing south over the hearing court",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#outer service gate": {
-  "code": "19b0a0053106e669",
-  "core": "7f764b9c591316aa",
+  "code": "8f16a4078dfa2106",
+  "core": "b24b061f457cd343",
   "date": "2026-10-07",
-  "note": "only the merchant's back gate is recorded",
+  "note": "the page records only the merchant's back gate",
   "pages": {
    "0101-privies-setchin.drawing.html": "03968c62149e28e2"
   },
@@ -3099,20 +3076,20 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#outer service gate for muck and prisoners": {
-  "code": "4a26a19996d1fc40",
-  "core": "7f764b9c591316aa",
+  "code": "b9eb4e5c8d635ff9",
+  "core": "b24b061f457cd343",
   "date": "2026-10-07",
-  "note": "silent",
+  "note": "the bundle is silent on prisoner transfers",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#posting wealth knob": {
-  "code": "e030054757e0b4b2",
-  "core": "7f764b9c591316aa",
+  "code": "035ec932161d374e",
+  "core": "b24b061f457cd343",
   "date": "2026-10-07",
-  "note": "poor-office look recorded as a GUESS",
+  "note": "the page records the poor-office look as a GUESS",
   "pages": {
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "8d81fb67fc6be64e"
   },
@@ -3123,10 +3100,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#practice ground": {
-  "code": "46f1a767644b09b9",
-  "core": "7f764b9c591316aa",
+  "code": "bd266f7ecc9c3026",
+  "core": "b24b061f457cd343",
   "date": "2026-10-07",
-  "note": "no hall at a county seat; a map rule",
+  "note": "no hall at a county seat; formal training in the city",
   "pages": {
    "0165-martial-training-grounds-and-dojo.drawing.html": "931bfd2e0737c1a3"
   },
@@ -3134,33 +3111,33 @@
   "rests": [
    "0165-martial-training-grounds-and-dojo.drawing.html:83f6d143094f365e",
    "0165-martial-training-grounds-and-dojo.drawing.html:8496364fd5fb5ba3",
+   "0165-martial-training-grounds-and-dojo.drawing.html:de4325f24196505d",
    "0165-martial-training-grounds-and-dojo.drawing.html:eaaa0e49753241f1"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#practice ground placement and gear": {
-  "code": "f3e0e96cab47c528",
-  "core": "7f764b9c591316aa",
+  "code": "103b2cf69e7f58f4",
+  "core": "b24b061f457cd343",
   "date": "2026-10-07",
-  "note": "beside the guards' quarters, rack and posts, sized per samurai",
+  "note": "beside the guards' quarters, a swept patch, a rack, posts",
   "pages": {
    "0165-martial-training-grounds-and-dojo.drawing.html": "931bfd2e0737c1a3"
   },
   "research": "8b27404bc31588ce",
   "rests": [
    "0165-martial-training-grounds-and-dojo.drawing.html:25d51ab3028051ca",
+   "0165-martial-training-grounds-and-dojo.drawing.html:6b3ccf7746ee08c1",
    "0165-martial-training-grounds-and-dojo.drawing.html:8496364fd5fb5ba3",
-   "0165-martial-training-grounds-and-dojo.drawing.html:87965127e4727867",
-   "0165-martial-training-grounds-and-dojo.drawing.html:d49d656131981f70",
-   "0165-martial-training-grounds-and-dojo.drawing.html:e5d173fb8d7dcb4a"
+   "0165-martial-training-grounds-and-dojo.drawing.html:d49d656131981f70"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#rear service strip": {
-  "code": "0b137e6f1b897336",
-  "core": "7f764b9c591316aa",
+  "code": "441bdd9d34c16cd6",
+  "core": "b24b061f457cd343",
   "date": "2026-10-07",
-  "note": "service strip or 6-10 ft alley recorded as a GUESS; storehouses and rear yard per Higuchi",
+  "note": "the page records the rear strip or alley, the storehouses and the rear yard as GUESS/attested",
   "pages": {
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html": "2688f28d713d8374"
   },
@@ -3175,10 +3152,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#residence entrances": {
-  "code": "25ef740d03106173",
-  "core": "7f764b9c591316aa",
+  "code": "86bd6f0443a6e029",
+  "core": "b24b061f457cd343",
   "date": "2026-10-07",
-  "note": "one genkan, the household using an inner or kitchen door",
+  "note": "one genkan, the household by an inner/informal entrance",
   "pages": {
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "bbfebe573bb99b25"
   },
@@ -3186,16 +3163,15 @@
   "rests": [
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:38ce75614bcb4467",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:6a481055c981d54e",
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:8df3343eda86262e",
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:95160ff513e325fa"
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:8df3343eda86262e"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#resident particulars knob": {
-  "code": "c79d1141ae440c9b",
-  "core": "7f764b9c591316aa",
+  "code": "b7802a7a661a1822",
+  "core": "b24b061f457cd343",
   "date": "2026-10-07",
-  "note": "dojo only as a special feature, a knob",
+  "note": "the dojo only as a knob",
   "pages": {
    "0165-martial-training-grounds-and-dojo.drawing.html": "931bfd2e0737c1a3"
   },
@@ -3206,28 +3182,20 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#resident particulars other than the dojo": {
-  "code": "a763c0522ad955d6",
-  "core": "7f764b9c591316aa",
+  "code": "069b587e943fc56c",
+  "core": "b24b061f457cd343",
   "date": "2026-10-07",
-  "note": "silent on dedication by county type, relics, workshops",
+  "note": "dedication by county type, relics and workshops are unresearched in the bundle",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#road-checkpoint tier staffing and program (2-3 samurai, one office room, a cell, a barrier gate)": {
-  "code": "7f764b9c591316aa",
-  "core": "7f764b9c591316aa",
-  "date": "2026-10-07",
-  "note": "road-checkpoint tier staffing and program (2-3 samurai, one office room, a cell, a barrier gate)",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#sand hearing court": {
-  "code": "d0bf16ee111657e8",
-  "core": "7f764b9c591316aa",
+  "code": "97f637e94839011e",
+  "core": "b24b061f457cd343",
   "date": "2026-10-07",
-  "note": "roofed court, gravel/cobble floor a per-plan knob, mats in the Edo arrangement (GUESS)",
+  "note": "roofed; a gravel/cobble knob; mats in the Edo arrangement",
   "pages": {
    "0099-the-hearing-court-shirasu.drawing.html": "6e346d062ac74ea6"
   },
@@ -3242,10 +3210,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#staff housing knob": {
-  "code": "36ef9d156fe613d1",
-  "core": "7f764b9c591316aa",
+  "code": "9e7d49dd58dd281b",
+  "core": "b24b061f457cd343",
   "date": "2026-10-07",
-  "note": "on grounds (reconstruction), households in rowhouses, staff in a district of their own: attested forms as a knob",
+  "note": "on the grounds, family rows, or outside, each form attested",
   "pages": {
    "0097-staff-rowhouses-and-barracks-nagaya.html": "62a5ddbd963f7fc7"
   },
@@ -3260,30 +3228,41 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#staffing anchors": {
-  "code": "a8f1ea1c726d0e5f",
-  "core": "7f764b9c591316aa",
+  "code": "b337762c094f367b",
+  "core": "b24b061f457cd343",
   "date": "2026-10-07",
-  "note": "names the GM's campaign notes",
+  "note": "the setting's own figures, which the pages also cite as the setting's",
   "pages": {},
   "research": "",
-  "rests": [],
+  "rests": [
+   "0113-the-office-hall-and-its-clerks-goyakusho.html:bfca6b0c572eed52",
+   "0165-martial-training-grounds-and-dojo.drawing.html:83f6d143094f365e"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#tenure character knob": {
-  "code": "28f2514052aabf89",
-  "core": "7f764b9c591316aa",
+  "code": "2314b32c0905f75f",
+  "core": "b24b061f457cd343",
   "date": "2026-10-07",
-  "note": "silent",
+  "note": "nothing in the bundle answers it",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#tier knob": {
-  "code": "04d5ffdd8b114cc3",
-  "core": "7f764b9c591316aa",
+ ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#the office hall's dais band on its south face (the hall's orientation)": {
+  "code": "b24b061f457cd343",
+  "core": "b24b061f457cd343",
   "date": "2026-10-07",
-  "note": "capital staff in or out of the compound both supported; checkpoint end attested",
+  "note": "the office hall's dais band on its south face (the hall's orientation)",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#tier knob": {
+  "code": "28eb4227b33fe76c",
+  "core": "b24b061f457cd343",
+  "date": "2026-10-07",
+  "note": "the capital housing knob is in step, but the checkpoint's \"2-3 samurai, one office room\" has no backing in 0110 (it gives Nuruyu's layout and Hakone's buildings, no staff count); split it off as UNRESEARCHED",
   "pages": {
    "0110-border-posts-and-their-crossing-court-kuchidome-bansho.html": "b3f95cfe064ecbb5",
    "0114-the-imperial-magistrates-compound-in-a-capital.html": "151ec0a20c28dab8"
@@ -3296,28 +3275,29 @@
    "0114-the-imperial-magistrates-compound-in-a-capital.html:a325a11b4634b47d",
    "0114-the-imperial-magistrates-compound-in-a-capital.html:bb14a65377ab7b59"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "NEEDS-RESEARCH"
  },
  ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#two-court zoning": {
-  "code": "a109ae6190c196cf",
-  "core": "7f764b9c591316aa",
+  "code": "17b91d816b13ef38",
+  "core": "b24b061f457cd343",
   "date": "2026-10-07",
-  "note": "office in front, residence behind, recorded as a deliberate simplification",
+  "note": "the page records office-front, residence-behind as a deliberate simplification",
   "pages": {
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "8d81fb67fc6be64e"
   },
   "research": "b9f86fd8593ec1ea",
   "rests": [
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:049a643bfa279d82",
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:45ffe904afced68b",
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:b92fdf4980d4aceb"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#universal shrine": {
-  "code": "4656f57795df8c23",
-  "core": "7f764b9c591316aa",
+  "code": "9ee9b0357c23310d",
+  "core": "b24b061f457cd343",
   "date": "2026-10-07",
-  "note": "the drawing page fixes \"one modest shrine, however many a real office kept\" as a deliberate deviation, yet Hayakawa draws two and the claim cites one shrine as a finding. The record attests one or several (Joge two, Neixiang three), so the count should be a knob recorded on the drawing page, or the claim should say DEVIATION; Inari default is a GUESS",
+  "note": "the drawing page says \"a map draws one, a deliberate deviation\", but the program's validation sheet Hayakawa keeps \"two modest shrines\" and the page does not record that; record two-or-more as a knob on the drawing page, or hold to one",
   "pages": {
    "0218-the-compounds-own-shrine-yashikigami.drawing.html": "30143bd59a2deac9",
    "0218-the-compounds-own-shrine-yashikigami.html": "9599070ed9639df8"
@@ -3328,42 +3308,40 @@
    "0218-the-compounds-own-shrine-yashikigami.drawing.html:1cf5b0fa52131673",
    "0218-the-compounds-own-shrine-yashikigami.drawing.html:d462ca0a1a370798",
    "0218-the-compounds-own-shrine-yashikigami.html:19a8b2635c1b3c76",
-   "0218-the-compounds-own-shrine-yashikigami.html:28d396983ee76947",
-   "0218-the-compounds-own-shrine-yashikigami.html:fdf3650a84cbc5c1"
+   "0218-the-compounds-own-shrine-yashikigami.html:28d396983ee76947"
   ],
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#upland granary contents": {
-  "code": "3ef825010f2f4a78",
-  "core": "7f764b9c591316aa",
+  "code": "74e301135ff3ff27",
+  "core": "b24b061f457cd343",
   "date": "2026-10-07",
-  "note": "soybean and barley bales recorded as a deliberate deviation; upland goods are the project's reading",
+  "note": "the deviation and the upland goods are both recorded",
   "pages": {
    "0098-storehouses-for-the-tax-rice.drawing.html": "1466a760af61120d"
   },
   "research": "f1206af177a61c95",
   "rests": [
    "0098-storehouses-for-the-tax-rice.drawing.html:1ae871342edf3960",
-   "0098-storehouses-for-the-tax-rice.drawing.html:38cdaa6bf4104e0b",
-   "0098-storehouses-for-the-tax-rice.html:1bf32cdbfe515d4e"
+   "0098-storehouses-for-the-tax-rice.drawing.html:38cdaa6bf4104e0b"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#wall display": {
-  "code": "7b9af2f7ce72aaf2",
-  "core": "7f764b9c591316aa",
+  "code": "8951bda23b45a0d1",
+  "core": "b24b061f457cd343",
   "date": "2026-10-07",
-  "note": "silent",
+  "note": "the bundle is silent on the walls' display",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#walled enclosure": {
-  "code": "97c82aae53c7f12b",
-  "core": "7f764b9c591316aa",
+  "code": "e7b024f14221dc38",
+  "core": "b24b061f457cd343",
   "date": "2026-10-07",
-  "note": "the claim makes the gatehouse the office's gate range as at Omori (~108 ft) and Kaibara (~81 ft). The rendered gatehouse kind instead sizes \"a gatehouse of its own, about 18 by 12 ft\" from a temple's, with a band of 14-82 ft that excludes Omori. Size the gatehouse as a gate rowhouse, or drop the Omori/Kaibara pointer",
+  "note": "the claim makes the gatehouse the gate range as at Omori and Kaibara, but the gatehouse band \"14-82 by 6-24 ft\" excludes Omori's ~108 ft range, and the table's gatehouse is a temple-sized building of its own (~18x12); widen the band or drop Omori/the gate-range form",
   "pages": {
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "8d81fb67fc6be64e",
    "0097-staff-rowhouses-and-barracks-nagaya.html": "62a5ddbd963f7fc7"
@@ -3379,10 +3357,10 @@
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#wells by use": {
-  "code": "9469f1c3b83f0085",
-  "core": "7f764b9c591316aa",
+  "code": "679bfab65ed6255d",
+  "core": "b24b061f457cd343",
   "date": "2026-10-07",
-  "note": "kitchen well with bath and kitchen is the project's reading, recorded; 0091's attested sites acknowledged",
+  "note": "the kitchen well with the bath is recorded as the project's reading; 0091 places wells elsewhere",
   "pages": {
    "0105-baths-furo.drawing.html": "3a22b50676fcbd78"
   },

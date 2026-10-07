@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-07T20:32:17Z",
+  "target": "perf-explain",
+  "commit": "4c5db9f85",
+  "outcome": "permitted",
+  "why": "perf-explain UNVERIFIED: the change removes a call; a counterfactual would time the same seats with the call restored"
+}

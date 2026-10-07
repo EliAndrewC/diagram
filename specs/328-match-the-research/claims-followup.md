@@ -452,3 +452,4 @@ pass on the sheet modals, not this feature's ranking - modals are not claims):
 - The manor bundle's aside: the `tax_archive` band (20-48 by 10-36 ft, to ~1,700 sq ft) passes 0100's drawing page's ~450 sq ft
   ceiling - already ranked (the tax archive size row).
 - `buildings/programs.md::Country shrine (a village district's shrine)#donated stonework` (MISLABELED, E0): the research attests the three gifts but not "none at average" (no count of village shrines keeping them); that gating should be GUESS research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html §250
+- `buildings/programs.md::Magistrate's manor (county magistracy)#tier knob` (NEEDS-RESEARCH, E4): the capital housing knob is in step, but the checkpoint's "2-3 samurai, one office room" has no backing in 0110 (it gives Nuruyu's layout and Hakone's buildings, no staff count); split it off as UNRESEARCHED
