@@ -1,0 +1,62 @@
+{
+  "band": 1,
+  "base": {
+    "commit": "b49a6c221",
+    "label": "328-start",
+    "utc": "20261007T213553Z"
+  },
+  "binding": "fc2b14cc426145b96e81049b2ffa9405b93f03bf0b3f8805d88a96dd6ed208b1",
+  "end": {
+    "commit": "652d41065",
+    "label": "328-end",
+    "utc": "20261007T213907Z"
+  },
+  "environment": "local",
+  "feature": "328-match-the-research",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "8d3395e5-fe32-4f85-9c89-80c344d2ac1a",
+    "utc": "20261007T214720Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": -3.2,
+          "39": 0.0,
+          "4": 0.0,
+          "47": 0.0
+        },
+        "total_pct": -0.8
+      },
+      "20": {
+        "seeds": {
+          "25": 2.9,
+          "39": 1.9,
+          "4": 0.0,
+          "47": 1.7
+        },
+        "total_pct": 1.5
+      },
+      "40": {
+        "seeds": {
+          "25": 0.0,
+          "39": 0.0,
+          "4": 0.6,
+          "47": 0.0
+        },
+        "total_pct": 0.2
+      }
+    },
+    "seeds": {
+      "25": 2.1,
+      "39": 0.0,
+      "4": -4.1,
+      "47": 0.0
+    },
+    "total_pct": -0.6
+  },
+  "note": "Reviewer timed base b49a6c221 vs end 652d41065 in detached worktrees, 3 reps, medians: seed 25 at 20 hh rolls bamboo=homestead (no thicket), so bamboo_seats runs no pass at base or end (0.0000 s) and hinterland is 0.873 vs 0.878 s, total 6.93 vs 6.94 s (+0.1%); the only thicket roll on the legs (seed 47 at 20 hh) does fall through to the along-row passes (3 to 4 nearest_fitting calls), but bamboo_seats is 0.0279 vs 0.0278 s; seed 4 at 40 hh web is 2.788 vs 2.803 s (+0.5%), and the diff does not touch the web. So the crossings (+2.9% seed 25, web +0.1 s seed 4) are run-to-run variance, not the thicket band: re-explain as variance, citing these numbers",
+  "verdict": "inconsistent"
+}
