@@ -53,5 +53,6 @@
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/fit.py::BundleFitMixin._field_adjacent#farmland rail": "1",
  ".claude/skills/diagram/l7r/diagram/settlement/shrines_wells/woods.py::TreeStandsMixin._draw_stand#fringe crowns drawn outside the stand's outline (_stand_fringe, outliers)": "1 (claim renamed or split; its parts re-checked)",
  ".claude/skills/diagram/l7r/diagram/settlement/structures/servants.py::ServantRangesMixin#servant range depth": "1",
- ".claude/skills/diagram/l7r/diagram/waterfields/polder.py::_polder_lattice#edge wander": "1"
+ ".claude/skills/diagram/l7r/diagram/waterfields/polder.py::_polder_lattice#edge wander": "1",
+ ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#dooryard mix": "1"
 }

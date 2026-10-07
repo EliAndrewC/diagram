@@ -551,7 +551,7 @@
   "e0_rechecked": true,
   "tier_as_ranked": "E0",
   "verdict": "DRIFTED",
-  "wave": ""
+  "wave": "1"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/keepouts.py::KeepoutsMixin._canopy_keepouts#no crown on a roof or a wellhead",

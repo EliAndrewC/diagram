@@ -41013,16 +41013,17 @@
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#dooryard mix": {
   "code": "142aca5bdd70a2c4",
   "core": "6c8742525572767b",
-  "date": "2026-10-05",
-  "note": "the code is right (dooryard mix: no bamboo, no conifer), but the docstring says \"'dooryard' is bamboo + fruit broadleaf with NO conifer\" (and `village_grove`'s says \"copse = bamboo + fruit\"), against the page's copse of \"fruit and other broadleaf trees, and no bamboo\"; fix both docstrings",
+  "date": "2026-10-07",
+  "note": "In the dooryard mix, `b_th` and `c_th` are both 0, so every crown is broadleaf and none is bamboo or conifer. That matches \"drawn with fruit and other broadleaf trees, and no bamboo\".",
   "pages": {
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
   },
   "research": "8e7d7569cc3f687f",
   "rests": [
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:16f2c2d8419164c1"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:16f2c2d8419164c1",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:c2e7b505cf13f306"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#lesser broadleaf crown size": {
   "code": "0095b4b067da4fc9",
