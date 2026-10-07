@@ -6304,6 +6304,21 @@
   "scope": "kept"
  },
  {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#beyond the fields by a real crossing",
+  "verdict": "UNCLAIMED",
+  "tier": "E2",
+  "fix": "glyph-check of the woodland commons on inashiro (wave 19, F1 questionable): `reached_across` is satisfied when the straight walk from the houses clips a corner of the field (Inashiro: 42, 96 and 0 ft of a 1,381 ft field), so 'beyond the fields' (research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html) barely shows; require a real crossing in that test, or record that on a fan the slope reading governs",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 19's glyph check (F1), tier provisional",
+  "tier_as_ranked": "E2",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#near side of the field preferred",
   "tier": "E2",
   "fix": "invert _near_side: prefer seats ACROSS the field from the houses (0077: the nearest slope beyond the fields; the wood on the far side of the fields)",

@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-07T22:21:00Z",
+  "target": "review-accept",
+  "commit": "3e67a7461",
+  "outcome": "permitted",
+  "why": "review-accept glyph-check--shared-bamboo-grove F3: a confirmation, not a defect"
+}

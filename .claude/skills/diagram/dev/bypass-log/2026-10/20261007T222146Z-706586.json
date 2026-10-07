@@ -1,0 +1,6 @@
+{
+  "utc": "20261007T222146Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "glyph-check of the notice board on inashiro passed twice in this feature (waves 10 and 17); the board did not move in wave 19 (only the engine key changed); a third round is capped at two (feature 294 FR-009) and needs the GM"
+}

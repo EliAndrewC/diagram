@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-07T22:20:59Z",
+  "target": "review-accept",
+  "commit": "3e67a7461",
+  "outcome": "permitted",
+  "why": "review-accept glyph-check--notice-board F1: questionable on a PASS: the footing and fence are ranked rows of feature 328 (boards.py kosatsuba#stone footing and fence, #roof and ridge glyph)"
+}

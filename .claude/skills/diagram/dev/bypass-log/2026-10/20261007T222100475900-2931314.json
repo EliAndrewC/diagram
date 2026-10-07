@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-07T22:21:00Z",
+  "target": "review-accept",
+  "commit": "3e67a7461",
+  "outcome": "permitted",
+  "why": "review-accept glyph-check--shared-bamboo-grove F4: nitpick on a PASS: no rule sets how far a shared stand stands from one farm; the page calls the stand's being held in common a guess"
+}
