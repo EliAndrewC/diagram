@@ -357,8 +357,7 @@ def near_misses(M: Mapping[str, Any]) -> list[tuple[int, int, Pt]]:
     end (`free_end`) with another way within `JOIN_REACH_FT`, the nearest point of which lies within `AIM_DEG` of the end's
     own heading, and a walkable span to it (`span_walkable`) that would meet the way cleanly and bend like a path
     (`meets_clean`, `kinks`). Such an end is a JOIN that stops short - a hole the eye reads in one way, or a T one clearance
-    shy of its lane (homes H37, H38; future-work's "one clearance short" and 2c's corner hole). An end whose span is blocked,
-    or would fold or kink, is not one: the two are separate ways, each ending at what it serves.
+    shy of its lane (homes H37, H38; future-work's "one clearance short" and 2c's corner hole). An end whose span is blocked, or would fold or kink, is not one: the two are separate ways, each ending at what it serves.
     Research:
         ends that nearly meet are joined - research/questions/0081-village-lanes.drawing.html: within 25 ft (`JOIN_REACH_FT`)
         which ends count - UNRESEARCHED: an end counts only where the way it nears lies within `AIM_DEG`, 60 deg, of its heading
