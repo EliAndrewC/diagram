@@ -1,0 +1,62 @@
+{
+  "band": 1,
+  "base": {
+    "commit": "43b353361",
+    "label": "328-start",
+    "utc": "20261007T233434Z"
+  },
+  "binding": "f979f9c927ec8cca7ec1dde657f18e462bca5a742f534446fed896f48b8b4a7c",
+  "end": {
+    "commit": "7a49ee2e3",
+    "label": "328-end",
+    "utc": "20261007T233749Z"
+  },
+  "environment": "local",
+  "feature": "328-match-the-research",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "8d3395e5-fe32-4f85-9c89-80c344d2ac1a",
+    "utc": "20261007T234203Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": -3.4,
+          "39": 0.0,
+          "4": -5.7,
+          "47": -3.0
+        },
+        "total_pct": -3.1
+      },
+      "20": {
+        "seeds": {
+          "25": -4.3,
+          "39": -3.7,
+          "4": -6.2,
+          "47": 1.7
+        },
+        "total_pct": -3.4
+      },
+      "40": {
+        "seeds": {
+          "25": 4.1,
+          "39": 0.8,
+          "4": -3.8,
+          "47": 1.6
+        },
+        "total_pct": 0.2
+      }
+    },
+    "seeds": {
+      "25": -24.0,
+      "39": -7.0,
+      "4": -8.2,
+      "47": -2.3
+    },
+    "total_pct": -10.8
+  },
+  "note": "40hh seed 25 homesteads, worktrees, 3 reps: base 3.57s, end 4.51s (+0.94s). free_seats itself (1 call, 57482 pts) 0.37s -> 0.50s = +0.13s, about 14% of the growth. The same end code with only the old seat order restored runs 3.61s and lays base's map (placer_calls 260, same houses); the live tie key lays a different map (230 calls) whose lay_the_ways (+0.8s under cProfile; gateway connector_track via fabric._fabric_hits/_crosses_fabric 53954 calls, standing_ground 3953->6521 calls) carries the other ~0.8s. The cause is the new order's downstream layout, not free_seats' distance call",
+  "verdict": "inconsistent"
+}

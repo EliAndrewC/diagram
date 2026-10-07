@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-07T23:42:24Z",
+  "target": "perf-explain",
+  "commit": "0a38b0e7a",
+  "outcome": "permitted",
+  "why": "perf-explain UNVERIFIED: the control was perf-audit's own run (old seat order restored at the end commit), not a recorded measurements.json key"
+}
