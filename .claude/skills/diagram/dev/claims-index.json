@@ -17112,10 +17112,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/knots.py::knots#lane ends gathered": {
-  "code": "ebb7290e1b53521d",
-  "core": "6eee7954b6f85bb0",
+  "code": "5062c63f839958aa",
+  "core": "7163eb5891533fd9",
   "date": "2026-10-07",
-  "note": "ends within KNOT_FT (25 ft) times KNOT_MARGIN (1.0) are paired as knots to join, which matches the page's 25 ft; with the margin at 1.0 the junction branch past the reach can never fire, so the docstring's \"a few feet past the reach\" is stale prose, not a drift",
+  "note": "the code joins ends within the page's 25 ft reach; the margin is 1.0, so it adds nothing to the reach, and the page calls these limits drawing conventions",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },
