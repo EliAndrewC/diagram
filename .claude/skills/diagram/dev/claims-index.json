@@ -3579,21 +3579,6 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/cluster.py::BROOK_TIEBREAK#brook tiebreak": {
-  "code": "412382c84e73d03f",
-  "core": "92b08dea04745acd",
-  "date": "2026-10-07",
-  "note": "a tiebreak weight below the wind and upslope terms, which is the project's \"preferred when otherwise equally good\" rule",
-  "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "c23a085a43372c2c"
-  },
-  "research": "d47738a05844fe19",
-  "rests": [
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:09b499b11d9ab875",
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:3ad87e3e98ea5542"
-  ],
-  "verdict": "IN-STEP"
- },
  ".claude/skills/diagram/l7r/diagram/hamletgen/cluster.py::EXIT_BEARINGS#seat geometry": {
   "code": "be9d3f3cbc9d6003",
   "core": "11446c938549e6bb",
@@ -3734,10 +3719,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/cluster.py::seat_cluster#back to the wind": {
-  "code": "9928deb4e7386113",
-  "core": "31cab009e5a82277",
+  "code": "08191abde89ee3e5",
+  "core": "0af192a7bd3da323",
   "date": "2026-10-07",
-  "note": "the seat backs onto plan.wind, which is the northwest unless the map declares its own",
+  "note": "margin facing plan.wind, northwest unless declared, settlement's back to it",
   "pages": {
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fbd35c7766637fc3"
   },
@@ -3750,10 +3735,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/cluster.py::seat_cluster#band area": {
-  "code": "a4fc6882bc9d9164",
-  "core": "31cab009e5a82277",
+  "code": "1110f88ad18ee21c",
+  "core": "0af192a7bd3da323",
   "date": "2026-10-07",
-  "note": "0037 sizes only the threshing yard (about 25 tsubo); it says nothing about how much band ground one homestead takes, so the households-times-ground figure in band_extent rests on no finding there; relabel UNRESEARCHED (0032 calls packing a calibration)",
+  "note": "band_extent's per-household ground is not inline, and 0037 sizes only the yard (~890 sq ft, floor 280), not the house+yard+garden bundle or how the band packs; need band_extent's figures and the cluster-packing question 0031 §38 points to",
   "pages": {
    "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html": "d85e826f35b910f8"
   },
@@ -3763,36 +3748,53 @@
    "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html:9084510422afaec6",
    "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html:f6054c48597f0a34"
   ],
-  "verdict": "NEEDS-RESEARCH"
+  "verdict": "CANNOT-TELL"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/cluster.py::seat_cluster#band must stand clear of the field envelope, probed at 0.5, dep+34 ft and 2x depth across ±0.6 of its length": {
+  "code": "0af192a7bd3da323",
+  "core": "0af192a7bd3da323",
+  "date": "2026-10-07",
+  "note": "band must stand clear of the field envelope, probed at 0.5, dep+34 ft and 2x depth across ±0.6 of its length",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/cluster.py::seat_cluster#band on the canvas": {
-  "code": "79d628c39f298804",
-  "core": "31cab009e5a82277",
+  "code": "70c4793c25615a44",
+  "core": "0af192a7bd3da323",
   "date": "2026-10-07",
-  "note": "a framing rule about the map's edge",
+  "note": "code keeps seat_c at least lat*0.5 from the frame; the band samples at t=±0.9*lat, which suggests lat is the half-length, so this would be a quarter of the length, not \"half the band's length\"; need band_extent's meaning of lat",
   "pages": {},
   "research": "",
   "rests": [],
-  "verdict": "IN-STEP"
+  "verdict": "CANNOT-TELL"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/cluster.py::seat_cluster#band set back 12 ft past its depth from the field margin (seat_c = mid + n*(dep + 12.0))": {
+  "code": "0af192a7bd3da323",
+  "core": "0af192a7bd3da323",
+  "date": "2026-10-07",
+  "note": "band set back 12 ft past its depth from the field margin (seat_c = mid + n*(dep + 12.0))",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/cluster.py::seat_cluster#belt room on the canvas": {
-  "code": "faa24e970c5186b4",
-  "core": "31cab009e5a82277",
+  "code": "201d555005af6b0e",
+  "core": "0af192a7bd3da323",
   "date": "2026-10-07",
-  "note": "0072 says a belt that runs off the frame is sound, and one exhibit has about 28% of its outline off the page (747 ft outline, 537 ft framed). Whether BELT_ROOM_MAX_OFF 0.2 would refuse that depends on what belt_off_canvas measures, which the bundle does not show",
+  "note": "the belt-at-the-frame rule is recorded on 0072 (\"a belt that runs off the edge of the map is sound ... nothing beyond it is counted against the map\"), yet the code scores -2.5*off and refuses past 0.2; cite 0072 drawing as DEVIATION and record the cap there, not CONVENTION",
   "pages": {},
   "research": "",
   "rests": [
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:4bfab2d13dc32e6d",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:9e9583030b309e84",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:dc08f0e1620f3363"
   ],
-  "verdict": "CANNOT-TELL"
+  "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/cluster.py::seat_cluster#brook across the band": {
-  "code": "18410f47107fc37d",
-  "core": "31cab009e5a82277",
+  "code": "43f17cf7ffa9776b",
+  "core": "0af192a7bd3da323",
   "date": "2026-10-07",
-  "note": "a crossed band is scored down and never refused, so the seat may straddle the brook where the site gives it",
+  "note": "0035 makes the uncrossed site a tie-breaker (\"otherwise equally good\") and builds on both banks where the best wind-facing site is crossed; score -= 3.0*crossed outweighs the whole wind term (1.0) and the upslope term (0.8), so a crossed best site always loses; the penalty should only break near-ties",
   "pages": {
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "c23a085a43372c2c"
   },
@@ -3802,57 +3804,56 @@
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:3ad87e3e98ea5542",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:54ccb64ee5924653"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/cluster.py::seat_cluster#brook penalty weight": {
-  "code": "aa977d803377ad8e",
-  "core": "31cab009e5a82277",
+  "code": "d3c0986b9c917efa",
+  "core": "0af192a7bd3da323",
   "date": "2026-10-07",
-  "note": "0.05 x the crossed share, below the 1.0 and 0.8 terms: a tiebreak, as the page decides",
-  "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "c23a085a43372c2c"
-  },
-  "research": "d47738a05844fe19",
+  "note": "0035 answers it: crossing only breaks ties between otherwise equal sites, so the weight should cite 0035 drawing and sit below the wind/upslope spread; 3.0 is not a free GUESS",
+  "pages": {},
+  "research": "",
   "rests": [
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:09b499b11d9ab875"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:09b499b11d9ab875",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:3ad87e3e98ea5542"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/cluster.py::seat_cluster#brook reach on the band": {
-  "code": "6e77974526592b46",
-  "core": "31cab009e5a82277",
+  "code": "7f882481e0ebd646",
+  "core": "0af192a7bd3da323",
   "date": "2026-10-07",
-  "note": "the page is silent on a 30 ft reach",
+  "note": "nothing cited gives a reach",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/cluster.py::seat_cluster#clear ground behind": {
-  "code": "f4d90553b0ece2f6",
-  "core": "31cab009e5a82277",
+  "code": "78f4b9c9dc09b3ee",
+  "core": "0af192a7bd3da323",
   "date": "2026-10-07",
-  "note": "nothing cited gives a 0.30 share",
+  "note": "0.30 back-foul cap unanswered",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/cluster.py::seat_cluster#dry hem penalty": {
-  "code": "83eb6e2657b727cb",
-  "core": "31cab009e5a82277",
+  "code": "7c5fceae669f5316",
+  "core": "0af192a7bd3da323",
   "date": "2026-10-07",
-  "note": "nothing cited gives these weights",
+  "note": "weights unanswered",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/cluster.py::seat_cluster#dry way out": {
-  "code": "a0f2e662096e4811",
-  "core": "31cab009e5a82277",
+  "code": "bc310722b0a258b1",
+  "core": "0af192a7bd3da323",
   "date": "2026-10-07",
-  "note": "a track crosses no wet ground and runs off the map, so a walled-in seat has no way out",
+  "note": "track keeps off wet ground and leaves by a dry flank; a walled-in seat refused",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },
@@ -3864,10 +3865,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/cluster.py::seat_cluster#never below the drain": {
-  "code": "8419da296c9d97f0",
-  "core": "31cab009e5a82277",
+  "code": "971d05a5740912c0",
+  "core": "0af192a7bd3da323",
   "date": "2026-10-07",
-  "note": "the cluster is placed as one block, off the low ground below the drain",
+  "note": "code hard-refuses a cluster margin below_drain, but 0058 scopes the drain rule to dispersed farms, \"not to a nucleated cluster placed as one block\" (the Ueda cluster example); either cite a cluster rule or make it DEVIATION recorded on 0058",
   "pages": {
    "0058-ground-too-wet-to-build-on.drawing.html": "d989d5be5b8d7839"
   },
@@ -3876,15 +3877,15 @@
    "0058-ground-too-wet-to-build-on.drawing.html:0e70f73e1c241a87",
    "0058-ground-too-wet-to-build-on.drawing.html:32fa9821335681fb",
    "0058-ground-too-wet-to-build-on.drawing.html:4250400643e41942",
-   "0058-ground-too-wet-to-build-on.drawing.html:e9a77c81eb42ba81"
+   "0058-ground-too-wet-to-build-on.drawing.html:b9283c4db442e8c6"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/cluster.py::seat_cluster#not in the reed fringe": {
-  "code": "d8b5609f82157ec9",
-  "core": "31cab009e5a82277",
+  "code": "4f6618f85333babb",
+  "core": "0af192a7bd3da323",
   "date": "2026-10-07",
-  "note": "the account \"0058 has no fringe rule\" is false: 0058 says \"A pond's reed fringe does not count as marsh ... this project does not extend the rule to it\". The claim should say the GM ruling of 2026-08-28 overrides 0058 §99 (or be a DEVIATION once 0058 records that ruling)",
+  "note": "\"0058 has no fringe rule\" is false: 0058 says \"A pond's reed fringe does not count as marsh ... this project does not extend the rule to it\"; the GM's ruling departs from that, so it should be DEVIATION 0058 drawing, with the page recording the GM 2026-08-28 ruling",
   "pages": {},
   "research": "",
   "rests": [
@@ -3895,36 +3896,35 @@
   "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/cluster.py::seat_cluster#not on the wet toe": {
-  "code": "0cc92a21d4f3c22a",
-  "core": "31cab009e5a82277",
+  "code": "ca9755a09693216c",
+  "core": "0af192a7bd3da323",
   "date": "2026-10-07",
-  "note": "the seat and the anchor are kept off the drawn marsh below the fields",
+  "note": "seat and anchor refused in the drawn marsh below the fields",
   "pages": {
    "0058-ground-too-wet-to-build-on.drawing.html": "d989d5be5b8d7839"
   },
   "research": "b2af2942f0a54e5d",
   "rests": [
    "0058-ground-too-wet-to-build-on.drawing.html:0e70f73e1c241a87",
-   "0058-ground-too-wet-to-build-on.drawing.html:b4a87b781a7d121a",
    "0058-ground-too-wet-to-build-on.drawing.html:f4e450ab6438f79c"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/cluster.py::seat_cluster#reed-fringe share weight": {
-  "code": "398ff648b0371c1f",
-  "core": "31cab009e5a82277",
+  "code": "27efad3b158175bb",
+  "core": "0af192a7bd3da323",
   "date": "2026-10-07",
-  "note": "nothing cited gives 2.5",
+  "note": "2.5 unanswered",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/cluster.py::seat_cluster#seat on the field's margin": {
-  "code": "05497d18865f6179",
-  "core": "31cab009e5a82277",
+  "code": "a6fb98dd2bde471e",
+  "core": "0af192a7bd3da323",
   "date": "2026-10-07",
-  "note": "the seat is on the envelope margin, scored for upslope and off the drain: higher, drier ground beside the paddy",
+  "note": "higher, drier ground beside the paddy",
   "pages": {
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
   },
@@ -3935,24 +3935,14 @@
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/cluster.py::seat_cluster#the seat center set dep + 12 ft out from the field margin": {
-  "code": "31cab009e5a82277",
-  "core": "31cab009e5a82277",
-  "date": "2026-10-07",
-  "note": "the seat center set dep + 12 ft out from the field margin",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  ".claude/skills/diagram/l7r/diagram/hamletgen/cluster.py::seat_cluster#wind and upslope weights": {
-  "code": "0db40c385b8e7060",
-  "core": "31cab009e5a82277",
+  "code": "49fafd11c95ce042",
+  "core": "0af192a7bd3da323",
   "date": "2026-10-07",
-  "note": "how common the windward high margin was is itself a GUESS in 0031, and no weights are given",
+  "note": "weights unanswered",
   "pages": {},
   "research": "",
-  "rests": [
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:fe3597622484dbd6"
-  ],
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/cluster.py::seat_has_dry_exit#dry way out of the seat": {
