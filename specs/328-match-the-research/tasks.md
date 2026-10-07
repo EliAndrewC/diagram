@@ -22,6 +22,8 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
   only the legacy hand-authored cities draw them (`water_gate(`, `boundary_marker(`), and feature 294 exempts legacy maps.
 - none (wave 8): on the scripted pool maps, claim lines and values inside rules that already place or size the element (a
   width, a margin, a stretch); the cemetery, cremation ground, terrace and city wall are drawn only on exempt legacy maps.
+- none (amendment 8 and wave 9): the scope is a ranking column and a deferred list; wave 9's fixes move values inside rules
+  that already place or size the element (a seat weight, a step off a wall, a reach, a crown floor, a share, a depth, a width).
 ## Phase 1 - the audit
 
 - [x] T01 the findings snapshot: `findings.json` = every finding of `make claims-report` at `a52ff1bcd` (565) (FR-001)
@@ -454,3 +456,73 @@ ground's margins and the cemetery's first row. Every `after` these rows carry is
 - [x] T33 the close: the band's records, `make done` green, the wave column, landed (FR-005, FR-006, SC-002, SC-003)
       research: rendering
       verify: DONE. DONE. make done green (202 s); band 1 explained and confirmed; the wave column written
+
+## Phase 10 - the scope (amendment 8, the GM 2026-10-07), then wave 9 (the open in-scope E0 claims, then in-scope E1 rows 265-288)
+
+The feature now fixes the code the scripted hamlets, the magistracies and the country shrines run (FR-010): every ranked row
+takes a scope (`audit/scope.py` -> `audit/scope.json`, a column of `ranking.md`), the legacy-only units are listed in
+`dev/claims-deferred.json`, and `make claims-report` shows their findings DEFERRED (`scripts/_claims.py`, tested). T34a: the
+5 in-scope found rows wave 8 tiered by verdict alone are tiered by their work by a fresh reader (`audit/t34a-out.jsonl`, 3
+moved). Then the 5 open in-scope E0 rows (SC-003), each a claim written or relabeled (DEVIATION only after the exception
+path rules it LEGITIMATE), and the next contiguous run of in-scope E1 rows (FR-006), rows 265-288 in ranking order: the kura's
+west annex, the comb field's recorded widths and the source brook's bank, the field pond's keep-out and feeder, the paddy's
+ripe share, the belt's least depth, the fixture seats, the groves' crowns, conifer share and sun corridors, the village
+grove's belt and clumps, and the gardens' morning sun (the next open in-scope E1 row is 289). Every `after` these rows carry
+is a row inside the wave or closed.
+
+  - `l7r/diagram/hamletgen/ways/bund.py::a_way_onto_the_bund#field path width` - Split the claim: keep 0081 for the 5 ft `BRANCH_WIDTH` spur, and claim the `LANE_CLEARANCE` corridor separately against 0246 (a lane's middle 7 ft clear of a garden fence), naming the 40 ft center-corridor drift as fixed by the edge-based corridor row (consts.py::LANE_CLEARANCE, E3).
+  - `l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#a healing link kept if its ends lie within 12 ft of the run and of the network (`_reach < 12.0`, `_net_reach < 12.0`), a` - claim it: a healing link kept if its ends lie within 12 ft of the run and of the network (`_reach < 12.0`, `_net_reach < 12.0`), a gap left unjoined
+  - `l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#link off hard ground and walls` - Split the claim: the 7 ft off walls (`tight_margin=WEB_FABRIC_GAP` in the link's `clear_runs`) cites 0246's 7 ft from a garden fence to a lane's middle, and the 8 ft off hard ground (`WEB_HARD_GAP`) stays UNRESEARCHED.
+  - `l7r/diagram/labels/obstacles.py::GROUP_WORDS#a guard or inspection caption may cover the gate's posts (0243 §9)` - claim it: a guard or inspection caption may cover the gate's posts (0243 §9)
+  - `l7r/diagram/labels/obstacles.py::GROUP_WORDS#a shrine caption may cover the temples (0243 §11)` - claim it: a shrine caption may cover the temples (0243 §11)
+
+  - `l7r/diagram/settlement/farm_fixtures.py::KURA_PARTS#west annex` - W annex 0.32 x 0.56 (15 x 16 ft) -> 18-27 ft long, 10-12 ft deep, 1.5-1.8 to one
+  - `l7r/diagram/settlement/farm_fixtures.py::kura_rect#west annex size` - hold the west annex to 0040 drawing's band: 18-27 ft long, 1.5-1.8 times as long as deep, as the north annex is
+  - `l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_ditches#outfall recorded width` - record the outfall's width as the inked _dw, not 2.5
+  - `l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#bank beside the source brook` - measure the bank margin from the 7 px brook actually drawn (7/2 + 3) and label the 3 px a GUESS
+  - `l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_source#pond feeder width` - pond feeder from width=6 to ~3 ft (twice the 1.5 ft floor), converted per map
+  - `l7r/diagram/settlement/fields/comb.py::CombMixin._comb_source_channel#feed recorded width` - record the feed width as 6.0, the head race it traces
+  - `l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin.crescent_pond#placement keep-out` - crescent pond keep-out from the bulge circle (0.45r off, 0.95r) to the full circle the half-disk is cut from (center, r)
+  - `l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin.pond#pond feeder width` - pond feeder stroke from fixed 5 px to ~3 ft converted per map
+  - `l7r/diagram/settlement/fields/paddy.py::PaddyMixin.water_field#ripe share` - ripe threshold from ro > 0.975 to ro > 0.95 (one in twenty)
+  - `l7r/diagram/settlement/homestead_parts/belt_law.py::MIN_BELT_DEPTH_FT#least belt depth` - MIN_BELT_DEPTH_FT 30 -> 80 ft (0071 drawing: never thinner than 80 ft)
+  - `l7r/diagram/settlement/homestead_parts/fixture_seats.py::FixtureForms#privy seat weights` - privy seat weights to stable 35 / yard 30 / front 20 / barn 15 as 0047 drawing lists them
+  - `l7r/diagram/settlement/homestead_parts/fixture_seats.py::PRIVY_FRONT_STEP_FT#front privy off the front wall` - front privy edge 8 ft off the front wall: drop the WALL_GAP_FT from the seat (or PRIVY_FRONT_STEP_FT 4.5)
+  - `l7r/diagram/settlement/homestead_parts/fixture_seats.py::PRIVY_YARD_STEP_FT#yard outhouse off the back wall` - yard privy edge a ken (6 ft) off the back wall: drop the gap (or PRIVY_YARD_STEP_FT 2.5)
+  - `l7r/diagram/settlement/homestead_parts/fixture_seats.py::WOODSHED_STEP_FT#wood shed off its wall` - wood shed edge 6 ft off its wall: drop the gap from the seat (or WOODSHED_STEP_FT 2.5)
+  - `l7r/diagram/settlement/homestead_parts/fixture_seats.py::privy_sun_reach_ft#sun-side reach by size` - cap a sunny-side privy center at 48 ft from its house; drop the size allowance in privy_sun_reach_ft
+  - `l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#lesser broadleaf crown size` - LESSER_BROADLEAF_S floor 0.6 -> 0.75 of the mean radius (0080 drawing: 0.75-1.4), cite 0080
+  - `l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#windbreak conifer share` - windbreak conifer share c_th = b_th + 0.48 (0072/Takehara: 48% cedar, the dominant tree)
+  - `l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._grove_fits#off a yard's south strip` - grove box kept out of the 39 ft south corridor (0037/0038) via px(), not a fixed 22 px strip
+  - `l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#belt deep and whole` - village_grove gap test compares px(_BELT_GAP_FT), 30 ft at every grain
+  - `l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#clumps off the gardens' east` - the east lane 50 ft in feet (0038: no crown within 50 ft east, west or south of a yard or bed), yards included, not 24 px past a garden
+  - `l7r/diagram/settlement/homestead_parts/grove_rules.py::EAST_REACH_PX#garden's morning sun` - EAST_REACH_PX 22 bscale -> 0038's 50 ft east reach via px() (after: l7r/diagram/settlement/homestead_parts/wood_share.py::EAST_LANE_PX#bed's morning lane)
+  - `l7r/diagram/settlement/homestead_parts/wood_share.py::EAST_LANE_PX#bed's morning lane` - EAST_LANE_PX 24 px -> 0038's 50 ft via px() (after: l7r/diagram/settlement/homestead_parts/grove_rules.py::EAST_REACH_PX#garden's morning sun)
+  - `l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._shades_a_garden#garden's morning sun` - _shades_a_garden reach 22 x bscale -> 0038's 50 ft east via px() (after: l7r/diagram/settlement/homestead_parts/grove_rules.py::EAST_REACH_PX#garden's morning sun)
+  - `l7r/diagram/settlement/homestead_parts/grove_rules.py::gardens_east_shaded#garden's morning sun` - same constant: gardens_east_shaded reads the 50 ft reach (0038) via px() (after: l7r/diagram/settlement/homestead_parts/grove_rules.py::EAST_REACH_PX#garden's morning sun)
+
+- [ ] T34 the scope applied: `audit/scope.py` and `audit/scope.json`, the ranking's scope column (`audit/merge.py`),
+      `dev/claims-deferred.json`, and `make claims-report` showing a deferred unit's findings DEFERRED (`scripts/_claims.py`,
+      its test) (FR-010)
+      research: rendering
+      verify:
+- [ ] T34a the in-scope found rows tiered provisionally by verdict read and tiered by the work they take, by a fresh reader
+      (FR-002, FR-003, SC-003)
+      research: rendering
+      verify:
+- [ ] T35 the bookend pair, back to back: `make perf LABEL=328-start` in a detached worktree at main's engine, then
+      `LABEL=328-end` in the clone, nothing else running (constitution VI)
+      research: rendering
+      verify:
+- [ ] T36 the open in-scope E0 claims; then the E1 rows, each fixed toward the page it cites (DEVIATION only through the
+      exception path), with the unit tests it moves; proven on the reference hamlet (Inashiro, its PNG looked at) and the pool
+      through the gate; a value that makes a map refuse is held and the row takes the tier of the work it needs (FR-004,
+      FR-005, spec Edge Cases)
+      research: rendering
+      verify:
+- [ ] T37 every touched unit re-checked by `impl-drift`; each wave-9 row IN-STEP or re-tiered with its measured reason (FR-005, SC-002)
+      research: rendering
+      verify:
+- [ ] T38 the close: the band's records, `make done` green, the wave column, landed (FR-005, FR-006, SC-002, SC-003)
+      research: rendering
+      verify:

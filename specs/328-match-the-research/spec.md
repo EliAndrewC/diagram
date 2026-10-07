@@ -8,7 +8,7 @@
 
 **Input**: the GM's request, verbatim in `request.md`: rank every finding `make claims-report` shows by how much
 implementation work it takes to make the implementation match the research it cites, then fix them from easiest to
-hardest, until the weekly usage reaches `75%`.
+hardest, until the weekly usage reaches `85%`.
 
 ## Context (measured 2026-10-07)
 
@@ -63,15 +63,15 @@ verdict at the new code), the gate is green, and the finding count fell by the w
 
 ### User Story 3 - The work stops at the GM's usage cap, cleanly (Priority: P1)
 
-When the weekly usage reaches `75%`, no new work starts; the subagent checks already running finish and are recorded, the
+When the weekly usage reaches `85%`, no new work starts; the subagent checks already running finish and are recorded, the
 work is committed and the stop-work step run, and the session waits for the GM.
 
-**Independent Test**: the armed cap (`~/.claude/hooks/usage_cap.py`) refuses a new agent, edit or build at `75%`; the
+**Independent Test**: the armed cap (`~/.claude/hooks/usage_cap.py`) refuses a new agent, edit or build at `85%`; the
 session's last actions are recording the running checks, a commit, and `scripts/sync-with-main.sh done`.
 
 **Acceptance Scenarios**:
 
-1. **Given** usage reaches `75%` mid-wave, **When** checks are running, **Then** they complete and their verdicts are
+1. **Given** usage reaches `85%` mid-wave, **When** checks are running, **Then** they complete and their verdicts are
    recorded; nothing new is dispatched and no gate runs; the clone is committed and its backup branch pushed by the
    stop-work step, which refuses the landing.
 
@@ -126,13 +126,20 @@ session's last actions are recording the running checks, a commit, and `scripts/
   feature: only the CURRENT wave's rows are task boxes in `tasks.md` (the rest of the ranking stays data in the ranking
   file), so the wave lands once its boxes are ticked (the open-task refusal reads only `tasks.md`'s boxes); the next
   wave's tasks are then appended as an amendment, reviewed on a reset counter.
-- **FR-007 (the usage cap)**: the work runs until every finding is fixed or the account's weekly usage reaches `75%`. At
+- **FR-007 (the usage cap)**: the work runs until every finding is fixed or the account's weekly usage reaches `85%`. At
   the cap no new work starts (no agent, no edit in the repository, no build or gate run); the subagent checks already
   running complete and their verdicts are recorded (the reply saved under `/tmp`, then `make claims-checked` /
   `claims-triaged` / `record-checked`); the clone is committed and `scripts/sync-with-main.sh done` run, which at a
   mid-wave stop refuses the landing WITHOUT running the gate and pushes the clone's backup branch; the session waits
   for the GM's word to continue. The cap is enforced by the armed per-goal hook (`~/.claude/hooks/usage_cap.py`, whose
   self-test `test-usage-cap.sh` holds exactly that allow/deny set), not by memory.
+- **FR-010 (scope: the code the scripted and permanently hand-drawn maps run - amendment 8, the GM 2026-10-07)**: the
+  feature fixes every finding in code a scripted hamlet executes (the module set `tools/hamlet_floor` derives from the
+  pool's scripted rolls, everything under `hamletgen/`, and any unit `hamletgen/` calls) and in the Mode A procedures and
+  the code that draws the magistracies and country shrines. A finding in code only the legacy hand-authored villages, towns
+  and cities run is DEFERRED: it stays ranked (`scope: deferred`) and no wave takes it, and `make claims-report` shows and
+  counts it DEFERRED, not DRIFTED (`dev/claims-deferred.json`, derived by `audit/scope.py`), so the push's claims gate does
+  not count it either. The legacy settlements' own checks are not fixed. The cap rises to `85%` (the GM's words).
 - **FR-008 (the record of decisions)**: every fix that changes what a map draws or states is recorded in its class
   (accurate, deviation, convention, guess) at the point of change and in this feature's `spec.md` under Decisions
   Recorded, added by the wave's amendment; the claim line is the pointer.
@@ -159,8 +166,8 @@ session's last actions are recording the running checks, a commit, and `scripts/
 - **SC-003** (FR-003, FR-006): waves are taken in tier order: no E(n+1) row is fixed while an E(n) row the session could fix stands open
   (an E(n) row may wait on a dependency, recorded in the ranking).
 - **SC-004** (FR-007): at the GM's usage cap (FR-007), the clone holds no uncommitted work and no unrecorded check verdict.
-- **SC-005** (FR-009, spec-wide): the end state of the whole program is `make claims-report` with 0 DRIFTED, 0 MISLABELED, 0 UNCLAIMED,
-  0 NEEDS-RESEARCH and 0 CANNOT-TELL.
+- **SC-005** (FR-009, FR-010, spec-wide): the end state of the whole program is `make claims-report` with 0 DRIFTED, 0 MISLABELED, 0 UNCLAIMED,
+  0 NEEDS-RESEARCH and 0 CANNOT-TELL outside the DEFERRED units; every finding in a deferred unit reads DEFERRED.
 
 ## Decisions Recorded *(mandatory for any feature that changes what a map draws or states)*
 
@@ -173,6 +180,7 @@ Each wave's amendment adds its map decisions to this table. The program's decisi
 | The 727 UNRESEARCHED claims are out of scope | scope | they are not findings: the claim honestly says no research backs it; closing them is research, not fixing a mismatch | Context, Assumptions |
 | Sheet-redrawing procedure rows tiered E3, not E1 (wave 2's amendment) | process, FR-003's own definition | the rankers put nine rows that redraw Ubame, Hayakawa, Ochiba or Hoshigaoka in E1; FR-003 tiers a sheet redraw E3 | `audit/overrides.json`, plan D5 |
 | The lane law's 32 rows of `ways/` are one wave (wave 4), with the lane rows found since | process, within FR-003's module grouping | one rule set (0081, 0246) across `hamletgen/ways/`; fixed apart, the network would be half under each law | plan D6 |
+| Code only the legacy hand-authored settlements run is DEFERRED, not fixed (amendment 8) | scope, the GM's ruling of 2026-10-07 | the legacy settlements' checks go when they convert; the scripted hamlets and the permanently hand-drawn magistracies and country shrines are what the maps keep | FR-010 |
 | Waves land inside this feature: only the current wave's rows are task boxes; the next wave is an amendment | process | the GM asked for one feature; the open-task refusal reads only `tasks.md`'s boxes, so a wave lands when its boxes are ticked | FR-006 |
 | A row village's street runs on off the map; 0246's pull-back is not its rule | historically accurate as recorded: 0033's drawing page | 0033 is the page for a row village's street ("runs on off the map as the road into it"); 0246's pull-back to the last house served is a clustered settlement's lane rule | plan D7 |
 

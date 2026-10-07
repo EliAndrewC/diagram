@@ -84,6 +84,11 @@ def module(k):
 
 for r in rows.values():
     r["wave"] = waves.get(r["key"], "")
+# Amendment 8 (the GM 2026-10-07): each row's SCOPE - `hamlet` and `mode-a` are fixed, `deferred` (code only the legacy
+# hand-authored settlements run) is ranked but never taken by a wave (audit/scope.py writes audit/scope.json).
+scopes = json.loads((AUDIT / "scope.json").read_text()) if (AUDIT / "scope.json").exists() else {}
+for r in rows.values():
+    r["scope"] = scopes.get(r["key"], "hamlet")
 
 # A row closed since the last record takes the tier it has now, once: recorded so a later re-tier never moves it.
 fresh = {k: r["tier"] for k, r in rows.items() if r["wave"] and k not in closed_tiers}
@@ -123,12 +128,12 @@ lines = [
     "|---|---|",
 ] + [f"| {t} | {c.get(t, 0)} |" for t in TIERS] + [f"| all | {len(ordered)} |", ""]
 for t in TIERS:
-    lines += [f"## {t}", "", "| # | finding | verdict | fix | wave |", "|---|---|---|---|---|"]
+    lines += [f"## {t}", "", "| # | finding | verdict | fix | scope | wave |", "|---|---|---|---|---|---|"]
     for i, r in enumerate([r for r in ordered if r["tier"] == t], 1):
         key = r["key"].replace(".claude/skills/diagram/", "").replace("|", "\\|")
         fix = r["fix"].replace("|", "\\|")
         flag = f" **({r['flag']})**" if r.get("flag") else ""
-        lines.append(f"| {i} | `{r['key']}` | {r['verdict']} | {fix}{flag} | {r['wave']} |")
+        lines.append(f"| {i} | `{r['key']}` | {r['verdict']} | {fix}{flag} | {r['scope']} | {r['wave']} |")
     lines.append("")
 (FEATURE / "ranking.md").write_text("\n".join(lines))
 print(dict(c), "flags:", sum(1 for r in ordered if r.get("flag")), "E0 to review:", sum(1 for r in ordered if r.get("needs_e0_review")))
