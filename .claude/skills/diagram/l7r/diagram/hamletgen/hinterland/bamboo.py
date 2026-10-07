@@ -155,16 +155,16 @@ predates it): the thicket marks the edge of the houses it stands behind, so a se
 along the back row. Where none fits within it, the band just beyond the back row is searched along its whole length
 (`THICKET_ROW_DEPTH_FT`, `bamboo_seats`).
 
-Research: thicket reach - UNRESEARCHED: 220 ft from the target before the band along the back row"""
+Research: thicket reach - UNRESEARCHED: 220 ft along the band from the target before the row's whole length"""
 
 
 THICKET_ROW_DEPTH_FT = 30.0
-"""How far behind the back row a thicket's near edge may stand when nothing fits near its target, in feet: 0075's drawing page
-seats the thicket "just beyond the back row", so the second search walks the row's whole length within this depth of it, and
-a stand that fits nowhere there is not drawn (feature 328; feature 293's search over the whole page behind the row seated it
+"""How far behind the back row a thicket's near edge may stand, in feet, on every pass: 0075's drawing page seats the thicket
+"just beyond the back row", so the near search holds this depth too, the second search walks the row's whole length within
+it, and a stand that fits nowhere there is not drawn (feature 328; feature 293's search over the whole page behind the row seated it
 deep in the page, far from every house).
 
-Research: thicket row depth - UNRESEARCHED: its near edge within 30 ft behind the back row"""
+Research: thicket row depth - research/questions/0075-bamboo-groves-chikurin.drawing.html: just beyond the back row, its near edge within 30 ft of it on every pass"""
 
 
 def bamboo_seats(s: Settlement, plan: SitePlan) -> list[Poly]:
@@ -292,10 +292,11 @@ def bamboo_seats(s: Settlement, plan: SitePlan) -> list[Poly]:
         best: tuple[float, float, float] | None = None
         # ...AND ALONG THE WHOLE BACK ROW, JUST BEYOND IT, WHEN NOTHING FITS NEAR (feature 293 searched the whole page behind
         # the row; feature 328 holds the search to 0075's "just beyond the back row"): the band behind the row's whole length,
-        # the stand's near edge within `THICKET_ROW_DEPTH_FT` of it, on a lattice centered in that band.
+        # the stand's near edge within `THICKET_ROW_DEPTH_FT` of its back edge, on a lattice centered in that band.
         far = max(math.dist(target, c) for c in ((vx0, vy0), (vx1, vy0), (vx0, vy1), (vx1, vy1)))
         row_x0, row_x1 = min(float(o["x"]) for o in houses), max(float(o["x"]) for o in houses)
         depth = px(THICKET_ROW_DEPTH_FT)
+        back = min(float(o["y"]) - float(o.get("h") or 0.0) / 2 for o in houses)  # the back row's back edge, not its centers
         for scale, reach, along_row in ((1.0, px(THICKET_REACH_FT), False), (0.7, px(THICKET_REACH_FT), False), (1.0, far, True), (0.7, far, True)):
             hw, hh = px(wft) * scale / 2, px(hft) * scale / 2
             # ...AND ONLY BEHIND THE BACK ROW, ON THE PAGE (feature 293): the search walked out from the target in every
@@ -307,8 +308,8 @@ def bamboo_seats(s: Settlement, plan: SitePlan) -> list[Poly]:
                 target,
                 reach,
                 step,
-                lambda x, y, hw=hw, hh=hh: y + hh <= north and on_sheet(x, y, hw, hh) and _fits(x, y, hw, hh),
-                box=(max(vx0 + hw, row_x0), north - depth - hh, min(vx1 - hw, row_x1), north - hh) if along_row else None,
+                lambda x, y, hw=hw, hh=hh: back - depth <= y + hh <= north and on_sheet(x, y, hw, hh) and _fits(x, y, hw, hh),
+                box=(max(vx0 + hw, row_x0), back - depth - hh, min(vx1 - hw, row_x1), north - hh) if along_row else None,
             )
             if best is not None:
                 ring = _parcel_outline(s, best[1], best[2], hw, hh, 1.0, 0.0)

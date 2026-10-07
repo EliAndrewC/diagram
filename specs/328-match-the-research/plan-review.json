@@ -1,6 +1,6 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "7770f5a0aa0e3c82946587eac05b5168f99d3dc356e6448b4e91ccbf58a0c937",
+ "plan_sha256": "07ba3cb5918c20a02e1d7c9934d1613f5642d0870ce9979cc7af8b49f6f44a76",
  "reviewed": "2026-10-07",
  "declared": "spec-fidelity",
  "decisions": [
@@ -14,20 +14,20 @@
    "id": "W17-2 three UNCLAIMED claims",
    "summary": "claims for stage_windbreak no-copse (UNRESEARCHED), plan_site grove sides (0036 drawing), board 60 ft farthest seat (GUESS, 0190 drawing)",
    "class": "within",
-   "why": "each label matches its page: 0036 'Two, three or four'; 0190 'The 60 ft is this project's own figure, not a finding'; no page covers the no-copse case"
+   "why": "each label matches its page; FR-004 claims work"
   },
   {
    "id": "W17-3 WEB_HARD_GAP re-tiered E3",
-   "summary": "row moved E2 -> E3 by measurement",
+   "summary": "row moved E2 -> E3 by measurement; the override's files now name all five modules (serve, route, clearance, web, boundary)",
    "class": "within",
-   "why": "verified: web.py builds one hard list [envelope, *crops, toe, *wet] and serve.py, route.py, clearance.py, web.py and boundary.py each apply WEB_HARD_GAP to it; splitting the crop gap is a change across modules, E3 by FR-003. The row stays in the ranking (655), not dropped"
+   "why": "FR-003 tiering by work; round 1's item 2 resolved - overrides.json files list matches its fix text; the row stays ranked"
   },
   {
-   "id": "W17-4 thicket fallback: within reach, else no thicket",
-   "summary": "the page-wide fallback retired; a thicket only within THICKET_REACH_FT (220 ft, UNRESEARCHED) of a point 40 ft north of the three northernmost houses, else none",
+   "id": "W17-4 thicket fallback held to the back-row band",
+   "summary": "near search within THICKET_REACH_FT, then the band behind the row's whole x extent, near edge within THICKET_ROW_DEPTH_FT (30 ft, UNRESEARCHED) of the back row, full size then 70%; no thicket only where none fits in that band",
    "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "0075 drawing seats the thicket 'on dry ground just beyond the back row of houses'; the fix bounds it by radial distance from a three-house target instead of by distance from the back row, and its own test pins no thicket where a fitting seat stands just behind a back-row house (x=1500, same y=800 as the row). The knob rolled a thicket, the page's ground exists, none is drawn: not physically impossible, not in the GM's words, and it moves the code off the page rather than onto it"
+   "ruling": "LEGITIMATE",
+   "why": "round 1's item 1 resolved: the seat is now bounded by distance from the back row along its whole length, which is 0075 drawing's 'just beyond the back row'; the 30 ft depth is a labeled UNRESEARCHED magnitude of 'just beyond'. Dropping a stand that fits nowhere in that band is the page's own placement being physically unavailable, not a carve-out: a seat deep in the page is not the thicket 0075 draws. Both tests pin it (seat behind x=1500 within depth; none when the band is taken though open ground lies deeper) and pass on round 2's own run"
   },
   {
    "id": "W17-5 occasions none",
@@ -39,8 +39,8 @@
    "id": "W17-6 condition (6) carried",
    "summary": "(1)-(5) held at b49a6c221; wave 17's pair opens there",
    "class": "within",
-   "why": "origin/backup/digram-backlog points at b49a6c221; T58 records the pair band 1"
+   "why": "continues the ruled wave-11 exception"
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }

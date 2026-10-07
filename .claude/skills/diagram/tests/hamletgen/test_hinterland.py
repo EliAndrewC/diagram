@@ -890,7 +890,7 @@ def test_a_thicket_is_sought_along_the_back_row_just_beyond_it_when_none_fits_ne
     assert len(seats) == 1, "the thicket is seated along the back row"
     cx = sum(q[0] for q in seats[0]) / len(seats[0])
     south = max(q[1] for q in seats[0])
-    assert cx - 700.0 > THICKET_REACH_FT and 800.0 - THICKET_ROW_DEPTH_FT - 3.0 <= south <= 800.0, "behind the row, just beyond it"
+    assert cx - 700.0 > THICKET_REACH_FT and 786.0 - THICKET_ROW_DEPTH_FT - 3.0 <= south <= 800.0, "behind the row, just beyond its back edge"
 
 
 def test_no_thicket_is_drawn_deep_in_the_page_far_from_the_back_row() -> None:
@@ -898,6 +898,7 @@ def test_no_thicket_is_drawn_deep_in_the_page_far_from_the_back_row() -> None:
     is not the thicket's seat (feature 293's search over the whole page behind the row seated it there): none is drawn."""
     s, plan = _thicket_site(band_taken=True)
     assert hg.hinterland.bamboo_seats(s, plan) == [], "no thicket deep in the page"  # type: ignore[arg-type]
+
 
 def test_the_farm_groves_count_toward_the_homestead_wood() -> None:
     """`farm_grove_area` (feature 291): the farms' own bands, as recorded; a record with no box counts nothing."""

@@ -241,9 +241,9 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 ## Wave 17 (amendment 16, 2026-10-07)
 
 - **Scope**: wave 16's three UNCLAIMED rows (claims), then the E2 run: `WEB_HARD_GAP` measured E3 (five modules) and passed, the
-  thicket's fallback taken - held to the band just beyond the back row along its whole length, with a labeled depth (`tasks.md`
+  thicket's seat taken - every pass held just beyond the back row (its back edge, a labeled depth), the fallback along its whole length (`tasks.md`
   Phase 18). One stale found row dropped (its later round IN-STEP).
-- **Occasions**: none, measured - the two maps that roll a thicket are unchanged.
+- **Occasions**: Kashikawa's thicket re-placed against its back row (a glyph check); Mizuguchi's unchanged (measured).
 - **On the unpushed waves 9-16** under the wave-11 exception's condition (6): (1)-(5) held at wave 16's close (b49a6c221, its
   backup pushed, its own pair band 1 confirmed); wave 17's own pair opens at b49a6c221.
 - **Verification**: `impl-drift` on the touched claims, the gate, wave 17's own bookend pair.
