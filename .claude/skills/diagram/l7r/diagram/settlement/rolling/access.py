@@ -481,14 +481,6 @@ def access_corridor(s: Settlement, geom: Any, routed: bool = True) -> tuple[Pt, 
             return drawn
 
 
-def zigzags(s: Settlement, drawn: tuple[Pt, ...], geom: Any) -> bool:
-    """Would this admitted way zigzag across a joint once the knot pass gathers its foot (the tree's report, kept by the
-    hamlet's judge as `_corridor_zig`)? False where no judge reported one (a village's roll).
-
-    Research: no zigzag at a joint - research/questions/0081-village-lanes.drawing.html: two lanes met end to end are one way, held to the bend rule"""
-    return bool(getattr(s, "_corridor_zig", {}).get((tuple(drawn), tuple(geom["house"])), False))
-
-
 def admitted(s: Settlement, corridor: tuple[Pt, ...], geom: Any, memo: dict[Any, Any]) -> tuple[Pt, ...] | None:
     """The corridor as it will be drawn, where every leg clears the household's own fixtures and beds and the ways' ground test
     and the whole tree stays lawful with it; else None (`access_corridor`'s question of each candidate)."""

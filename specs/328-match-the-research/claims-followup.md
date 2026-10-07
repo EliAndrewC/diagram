@@ -342,9 +342,10 @@ door end (0081: ends within 25 ft are one point), and the two lanes walk as a Z 
 - the shortcut that drops the overshoot crosses the neighbor's forecourt (the overlap matrix)
 - refusing such a way at the seating's judge mends Kuwabata (the household re-seated) but leaves the reference at seed 47
   without its field way (`WebRefused`: two households' ways refused, the field way hosted on them)
-- landed instead: the judge REPORTS the gathered zigzag (`tree.gathered_zigzag`, onto a fixed door end or a junction only)
-  and the gap pass takes such a way only where no other exit is admitted (`gap_ways._way_for`); seed 47 rolls, and
-  Kuwabata's household has no other exit, so its Z stands
+- a preference instead (the judge REPORTS the gathered zigzag, onto a fixed door end or a junction only, and the gap pass
+  takes such a way only where no other exit is admitted): seed 47 rolls, but Kuwabata's household has no other exit, so its Z
+  stands - and the bookends read band 3 (20 households +6.9%, seed 39 +21.8%: every exit tried for a household whose first
+  way zigzags). WITHDRAWN: it mended nothing on the pool at that price
 
 The remaining exits (constitution XIII): a re-seat rule for a household whose only ways zigzag that keeps the field way's host
 (hours of work, sketch: in the gap pass, when only held ways remain, release the household's seat to the seating's re-seat
