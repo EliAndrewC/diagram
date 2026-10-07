@@ -727,6 +727,7 @@ class GrovesMixin:
             crowns out of the plots' sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: every mark held out of the sun ground, bamboo at BAMBOO_SHADE_FT
             crown under no crown - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html
             alder in the marsh - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html
+            mixed broadleaf belt - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: rounded broadleaf crowns in the woods' size mix, no conifer
             conifer crown under a persimmon's crown - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html: a conifer crown refused under a yard persimmon's crown, the grove giving way round it
             lesser crown over an earlier stand's conifer - CONVENTION: a lesser crown refused over an earlier stand's conifer, which decides only paint order (conifers painted last)
             clump glyph - CONVENTION: one disc per crown, conifers dark and painted last, no trunks

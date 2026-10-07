@@ -576,6 +576,7 @@ def _comb_drain(R: random.Random, F: _Frame, threads: list[_Thread], W: float, H
         set below the ditch ends - UNRESEARCHED: 32-48 px below the deepest end, the outfall 40 px past the last
         wandering line - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: sampled every 120-170 ft with up to 6 ft of jitter, at the map's scale
         drain widens - research/questions/0060-field-drains-akusuiro.drawing.html, research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: DRAIN_FT, a thread at its head, full at the outfall
+        straight last leg - UNRESEARCHED: no jittered sample within `DRAIN_MIN_LEG` (84 px) of the outfall
     """
     bots = []
     for t in threads:

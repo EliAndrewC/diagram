@@ -33,7 +33,7 @@ def build_polder(
     cols: int = 6,
     cell: float | None = None,
     parcel_mix: tuple[float, float, float] = (0.52, 0.16, 0.12),
-    gap: tuple[float, float] = (1.5, 4.0),
+    gap: tuple[float, float] | None = None,
     split_gap: float | None = None,
     edge_wander: float = 0.0,
     mosaic: float = 0.0,
@@ -94,8 +94,10 @@ def build_polder(
         module size - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: `cell` px modules, by default the page's 190 ft at the map's `ftpx`
         polder size - UNRESEARCHED: 11 rows by 6 columns of modules by default
         parcel mix - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: most modules split into two or three strips, a few merged along the fall
-        gaps - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: a walking bund between rows and between strips, a ditch corridor between columns
-        low rows wet - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: every parcel of the two lowest rows tinted
+        gaps - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: a walking bund between rows and between strips, a ditch corridor between columns, by default 3 ft and 8 ft at the map's scale
+        low rows wet - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: every low plot tinted - the two lowest rows, no merge straddling the band
+        module line bow - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: each row and column line bowed up to `line_wander` 0.10 of the module, off the boundary lines
+        hand-piled outlines - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: each parcel softened by `organic` (a fillet of 0.05 of the module, a bow of 0.02)
         toe ends on the trunk - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: each toe end snapped onto the nearer trunk and run 3 ft on along its centerline
         acreage reckoned - NONE: the cropped area reckoned at the map's scale (area x ftpx squared / 43560)
     """
@@ -103,6 +105,7 @@ def build_polder(
     dx, dy = math.cos(math.radians(down_deg)), math.sin(math.radians(down_deg))  # downhill (row) unit
     ux, uy = dy, -dx  # cross (column) unit - the grid extends to the +x/+cross side of the origin
     cell = 190.0 / ftpx if cell is None else cell  # the page's ~190 ft module (0022), in pixels
+    gap = (1.5 / ftpx, 4.0 / ftpx) if gap is None else gap  # a 3 ft bund and an 8 ft corridor at the map's scale (0022)
     span_s, span_t = rows * cell, cols * cell
 
     grid, nodes, tt, ss = _polder_lattice(R, seed, origin, (dx, dy), (ux, uy), rows, cols, cell, span_s, span_t, edge_wander, mosaic, line_wander)
@@ -877,7 +880,9 @@ def unpoint_parcels(plots: list[dict[str, Any]]) -> None:
 
 def _apex(ring: list[Pt]) -> int | None:
     """The index of the sharpest CONVEX vertex of `ring` under the needle angle, or None when every needle vertex is
-    reflex (a notch, which dropping its vertex would fill - back over whatever the notch was cut round)."""
+    reflex (a notch, which dropping its vertex would fill - back over whatever the notch was cut round).
+
+    Research: no parcel tapers to a point - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: an apex under `POLDER_APEX_DEG` (25 degrees), the sharpest convex corner taken first"""
     area2 = sum(ring[i][0] * ring[(i + 1) % len(ring)][1] - ring[(i + 1) % len(ring)][0] * ring[i][1] for i in range(len(ring)))
     best: tuple[float, int] | None = None
     for i in range(len(ring)):

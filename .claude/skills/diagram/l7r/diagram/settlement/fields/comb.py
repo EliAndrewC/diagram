@@ -375,7 +375,7 @@ class CombMixin:
             hem off rice and water - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: a plot on an earlier fan's rice, on water or on the field's own ditch is dropped
             bank beside the source brook - GUESS: a bund's width, 3 px, past the drawn 7 px brook's bank (7/2 + 3)
             plot size and crop - NONE: taken from the net as build_comb laid them
-            fallback watercourse widths - UNRESEARCHED: stream 9, channel 2.5, canal 14 px where a record carries no width
+            fallback watercourse widths - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: where a record carries no width, a brook 7 ft, a channel 4.5 ft, a canal 6 ft, at the map's scale
             nothing built or planted on a dry plot - UNRESEARCHED: each drawn hem plot registered as blocked ground (`block_polys`) and dry ground (`dry_polys`)
             dry plot ink - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: the crop's own fill, furrowed, a tan edge"""
         from l7r.diagram.waterfields import hem_on_paddy
@@ -392,7 +392,7 @@ class CombMixin:
         # been authored earlier (Ubame's stream). Now the hem yields to standing water. Maps whose
         # hems touch no water are unaffected, byte for byte, because nothing is skipped there.
         _wet: list[tuple[Any, float]] = []
-        for _wk, _wdw in (("streams", 9.0), ("channels", 2.5), ("canals", 14.0)):
+        for _wk, _wdw in (("streams", self.px(7.0)), ("channels", self.px(4.5)), ("canals", self.px(6.0))):  # 0068, in feet
             for _wr in self.M.get(_wk, []) or []:
                 _wpl = _wr.get("poly") or _wr.get("pts")
                 if _wpl:

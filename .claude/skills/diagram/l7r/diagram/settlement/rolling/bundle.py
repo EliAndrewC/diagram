@@ -273,6 +273,7 @@ class BundleGeomMixin:
             garden side - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: southeast, southwest, east or west of the house
             garden morning-sun reach - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: no grove band within 50 ft (`EAST_REACH_FT`) east of a garden across its height
             forecourt kept on a no-rice farm - UNRESEARCHED: the yard's ground reserved where no threshing floor is drawn
+            dispersed well pocket - UNRESEARCHED: the wellhead plus a 3 ft margin, `2 * _well_vr() + px(6.0)`
             south band off an unkept yard - UNRESEARCHED: `YARD_SUN_STRIP`, 22, unscaled, where the map keeps no sun
             storehouse on the north wall - research/questions/0040-farm-storehouses-kura.drawing.html: a nucleated farm's annex on the shaded back wall
             byre beside the house - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: the keeper's stall on the flank away from the garden
