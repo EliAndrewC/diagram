@@ -1,0 +1,6 @@
+{
+  "utc": "20261007T095358Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "glyph-check round 3 PASSed the village lane on inashiro; since then only a speed-up landed and every pool map is byte-identical, so the PASS still describes the drawn map"
+}

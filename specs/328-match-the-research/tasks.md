@@ -198,13 +198,13 @@ way that takes more work than its tier takes that tier and waits on a found row 
 - [x] T14 the bookend before the first edit: `make perf LABEL=328-start` re-taken on the clone at main's engine (the wave's own pair) (constitution VI)
       research: rendering
       verify: DONE. 328-start taken on the clone at main's engine after waves 2-3 landed, before any wave-4 edit: total 16.4s, median 4.0s, worst 4.9s, no seed refused
-- [ ] T15 the three E0 claims; then the four E1 rows ahead of the lane law (the cell, the building size anchors, the band on the canvas, the purification basin); then the lane law's values, each with the unit tests it moves; proven on the reference hamlet (Inashiro, its PNG looked at) and then across the pool and the cohort's bookend seeds (FR-004, FR-005)
+- [x] T15 the three E0 claims; then the four E1 rows ahead of the lane law (the cell, the building size anchors, the band on the canvas, the purification basin); then the lane law's values, each with the unit tests it moves; proven on the reference hamlet (Inashiro, its PNG looked at) and then across the pool and the cohort's bookend seeds (FR-004, FR-005)
       research: rendering
-      verify:
-- [ ] T16 every touched unit re-checked by `impl-drift`; each wave-4 row IN-STEP or re-tiered with its measured reason (FR-005, SC-002)
+      verify: DONE. DONE. The three E0 claims and the four E1 rows (cell, building size anchors, band on the canvas, purification basin); the lane law: WEB_FABRIC_GAP 7 ft as the foul margin (may_write, _clear_touch, the bridge), TRACK_FABRIC_GAP and FIELD_ROUTE_GAP_FT 7, every join reach 25 ft, _SHORT_LEG_FT and _PAST_CONNECTOR_FT 40, the free stub 12 ft at 90 deg, WEB_CLEARANCE 18, DOOR_REACH_FT 60, lane ends within 25 ft gathered (gap_ways.gathered_foot at seating, knots.settle_knots in the settle), each lane at its rank's width; FOOTPATH_FABRIC_GAP held at 4 ft (at 7 ft Kashikawa refuses; the found row waits). Inashiro's PNG looked at; the pool and the cohort's bookend seeds roll; make done green (10,787 passed; knots strict-xfail on Inashiro and Sawada, the E3 found row)
+- [x] T16 every touched unit re-checked by `impl-drift`; each wave-4 row IN-STEP or re-tiered with its measured reason (FR-005, SC-002)
       research: rendering
-      verify:
-- [ ] T17 the occasion's review (glyph-check on the village lane, one map) on a green gate; the close: `make perf LABEL=328-end` and the band's records, `make done` green, the wave column, landed (FR-005, FR-006, SC-002, SC-003)
+      verify: DONE. DONE. Every touched unit re-checked by impl-drift (bundles 1-16 of wave 4; make claims-owed: no claim is owed). 34 wave-4 rows IN-STEP, 8 more found in step on re-reading, 5 renamed or retired (audit/waves.json); held or drifted rows re-tiered as found rows with their measured reasons (audit/found-wave4.jsonl, claims-followup.md Wave 4)
+- [x] T17 the occasion's review (glyph-check on the village lane, one map) on a green gate; the close: `make perf LABEL=328-end` and the band's records, `make done` green, the wave column, landed (FR-005, FR-006, SC-002, SC-003)
       research: rendering
-      verify:
+      verify: DONE. DONE. glyph-check on the village lane (Inashiro): round 3 PASS; the later speed-up left every pool map byte-identical, so the round stands (PAIR_OK logged). Back-to-back bookends 328-start (worktree at origin/main) / 328-end: band 2 (40 hh +8.3%, seed 4 +14.4%); explanation with CONTROL=wave4-perf-control-no-gather (the gather 1.1-1.8 s per 40 hh map), perf-audit confirmed and audited JUSTIFIED; make done green; the wave column written
 

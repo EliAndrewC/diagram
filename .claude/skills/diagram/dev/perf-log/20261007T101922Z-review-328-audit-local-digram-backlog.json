@@ -1,0 +1,67 @@
+{
+  "band": 2,
+  "base": {
+    "commit": "57ca45ed3",
+    "label": "328-start",
+    "utc": "20261007T095624Z"
+  },
+  "binding": "cb74b080de5e714380a062e1a93ba69ad2175a71c11a393b7e2c2f702d8873ba",
+  "criteria": {
+    "commensurate": "yes, now: reviewer runs in worktrees (2 interleaved, spread <=0.2s) put the gather at 1.55/1.85/1.2s of the 40hh maps (end 17.5/13.15/12.2s vs control 15.95/11.3/11.0s), down from 2.2-2.5s at the last audit; end vs a quiet start is +16.7%/+13.4%/+8.5% on seeds 4/25/47 (was +25%/+20%/+14%), under the 20% band-3 line; the reference roll and the 10/20hh legs move 0.0-0.4s; for this, every knot on every 40hh map is gathered (6-8 per map to none), the research rule kept in full",
+    "necessary": "yes: 0081's 'ends within 25 ft of one another are joined at a single point' (research/questions/0081-village-lanes.drawing.html), and the glyph-checks found real knots (Inashiro, Kashikawa, Kuwabata); on the finished 40hh maps of seeds 4/25/47 the control without the gather leaves 6/8/7 knots (knots.knots), the end commit 0/0/0 - the work happens on every map",
+    "no_way_around": "none found: the three cheaper forms are in (cc226d91d, maps byte-identical), and settle_knots itself is now 0.21-0.37s a 40hh map (was 1.19s on seed 4); the rest is consequence, not rescan - a second full settle the gather's joints trigger via resettle_straightened (seed 25 settle 1.13s vs 0.44s; targeted re-settles were measured slower in feature 297 R12) and the seating's gathered-first candidates (seed 25: 507 runs vs 303, _first_admitted 2.24s vs 1.44s); reviewer tested the seating gather off with settle_knots kept: saves 0.1-0.7s but leaves 1-2 knots per map, so it is no good way around; trying knotted before gathered per exit changes which join wins (maps differ)"
+  },
+  "end": {
+    "commit": "9a89f10ed",
+    "label": "328-end",
+    "utc": "20261007T095926Z"
+  },
+  "environment": "local",
+  "feature": "328-match-the-research",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "8d3395e5-fe32-4f85-9c89-80c344d2ac1a",
+    "utc": "20261007T101922Z"
+  },
+  "kind": "audit",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": 11.1,
+          "39": -6.7,
+          "4": -5.6,
+          "47": 3.4
+        },
+        "total_pct": -0.0
+      },
+      "20": {
+        "seeds": {
+          "25": 4.5,
+          "39": 1.9,
+          "4": -9.0,
+          "47": 5.4
+        },
+        "total_pct": 0.4
+      },
+      "40": {
+        "seeds": {
+          "25": 10.9,
+          "39": -1.6,
+          "4": 14.4,
+          "47": 7.9
+        },
+        "total_pct": 8.3
+      }
+    },
+    "seeds": {
+      "25": 0.0,
+      "39": 7.9,
+      "4": -6.0,
+      "47": 5.0
+    },
+    "total_pct": 1.2
+  },
+  "note": "reviewer data: 40hh leg timings and per-round settle logs taken in detached worktrees at 57ca45ed3, 9a89f10ed and 9a89f10ed-minus-gather; an untested small saving remains - straightening the gather's joints inside the settle loop could spare about one round (~0.16s) per 40hh map",
+  "verdict": "justified"
+}

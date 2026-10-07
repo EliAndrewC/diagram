@@ -1,0 +1,62 @@
+{
+  "band": 2,
+  "base": {
+    "commit": "57ca45ed3",
+    "label": "328-start",
+    "utc": "20261007T095624Z"
+  },
+  "binding": "cb74b080de5e714380a062e1a93ba69ad2175a71c11a393b7e2c2f702d8873ba",
+  "end": {
+    "commit": "9a89f10ed",
+    "label": "328-end",
+    "utc": "20261007T095926Z"
+  },
+  "environment": "local",
+  "feature": "328-match-the-research",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "8d3395e5-fe32-4f85-9c89-80c344d2ac1a",
+    "utc": "20261007T101911Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": 11.1,
+          "39": -6.7,
+          "4": -5.6,
+          "47": 3.4
+        },
+        "total_pct": -0.0
+      },
+      "20": {
+        "seeds": {
+          "25": 4.5,
+          "39": 1.9,
+          "4": -9.0,
+          "47": 5.4
+        },
+        "total_pct": 0.4
+      },
+      "40": {
+        "seeds": {
+          "25": 10.9,
+          "39": -1.6,
+          "4": 14.4,
+          "47": 7.9
+        },
+        "total_pct": 8.3
+      }
+    },
+    "seeds": {
+      "25": 0.0,
+      "39": 7.9,
+      "4": -6.0,
+      "47": 5.0
+    },
+    "total_pct": 1.2
+  },
+  "note": "consistent: the gather (settle_knots in web, gathered_foot in homesteads) is what grew - reviewer reran the 40hh leg interleaved in worktrees (2 runs, spread <=0.2s): end 17.5/13.15/12.2s vs control-without-gather 15.95/11.3/11.0s vs start 15.0/11.6/11.2s on seeds 4/25/47, so the gather is 1.2-1.85s (stated 1.1-1.8s) and the rest of the lane law +0.95s on seed 4 (stated 0.8), -0.3/-0.2s elsewhere; of the gather's web cost settle_knots itself is now 0.21-0.37s, the rest a second full settle (resettle_straightened rewrites a joint the gather made) and the seating's gathered-first candidates (seed 25: 507 runs offered vs 303)",
+  "verdict": "consistent"
+}

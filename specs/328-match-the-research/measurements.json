@@ -31,5 +31,15 @@
   "observed": "2026-10-07",
   "source": ".claude/skills/diagram/pool/hamlets/inashiro/inashiro.json lanes[].w grouped by role, after the regenerate",
   "method": "joints.rank_width / at_rank hold each lane at its role's 0081 width (3 ft footpath, 5 ft spine and field spur, 6 ft track out) and settle_widths keeps it; tests/hamletgen/test_pool_261.py test_every_lane_is_drawn_at_its_own_rank green on all five pool maps"
+ },
+ "wave4-perf-control-no-gather": {
+  "subject": "perf 328-end vs 328-start, band 2 (40 households)",
+  "quantity": "40-household roll time with the knot gather removed (settle_knots out of settle.STEPS, gathered_foot returning no junction), against the bookend pair taken back to back",
+  "value": "seed 4: start 15.3, end 17.5, control 16.1; seed 25: start 11.9, end 13.2, control 11.4; seed 39: 12.2 / 12.0 / 11.2; seed 47: 11.4 / 12.3 / 11.1",
+  "unit": "s",
+  "observed": "2026-10-07",
+  "source": ".claude/skills/diagram/dev/perf-log/20261007T095624Z-328-start-perfbase.json, 20261007T095926Z-328-end-digram-backlog.json, 20261007T100305Z-328-control-perfbase.json",
+  "method": "make perf in a detached worktree at origin/main (start), the clone at 9a89f10ed (end), then the same worktree at 9a89f10ed with the two gather calls removed (control), run one after another on the same host",
+  "finding": "the knot gather is 1.1-1.8 s of each 40-household map (seed 4 1.4 s, seed 25 1.8 s, seed 47 1.2 s); with it removed the lane law alone runs within 0.8 s of the start on every seed, and faster on three of four"
  }
 }
