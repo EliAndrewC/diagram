@@ -1,6 +1,6 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "109d3bfbf71829286af9d29efb9177815de16491877e6695cc6875fe66fa906d",
+ "plan_sha256": "d3487b80a9fb774ee8cf3c24982d7e3e43ceebfa602422d6bec75169a89c6fc3",
  "reviewed": "2026-10-07",
  "declared": "spec-fidelity",
  "decisions": [
@@ -8,56 +8,55 @@
    "id": "W20-1",
    "summary": "T65a: wave 19's found row 417 tiered E2 by a fresh reader",
    "class": "within",
-   "why": "FR-002/FR-003: tiered by implementation work (one predicate, one call site)"
+   "why": "FR-002/FR-003: tiered by implementation work"
   },
   {
    "id": "W20-2",
    "summary": "Scope: rows 417, 422, 423, 424 in ranking order",
    "class": "within",
-   "why": "FR-006/SC-003: the first four open kept rows, contiguous (418-421 already waved), no open E0/E1 row stands"
+   "why": "FR-006/SC-003: the first open kept rows, contiguous"
   },
   {
    "id": "W20-3",
-   "summary": "The real-crossing test on the level tier only; above the fields the slope reading keeps reached_across",
-   "class": "narrowing",
-   "ruling": "LEGITIMATE",
-   "why": "Implied by the research the GM asked the code to match: 0077's drawing page itself reads 'beyond the fields' as 'higher than the fields next to it' where the ground slopes, and gives 'the far side of the fields from the houses' only where there is no higher ground; the row's own fix (T65a) prescribed it. The carve-out does not gut the rule's purpose on tier 0, where the seat is already above the fields."
+   "summary": "The walk through the field (crossed_through) asked on every tier, replacing round 1's level-only test; the seat still ranked higher than the fields where the ground slopes",
+   "class": "within",
+   "why": "FR-004 literal: 0077's drawing page asks both 'on the nearest slope beyond the fields from the houses' and 'on ground higher than the fields beside it'; the round-1 level/slope split (then ruled LEGITIMATE) is withdrawn on the glyph check's evidence that the slope tier admitted the houses' own side - removing a narrowing, not adding one"
   },
   {
    "id": "W20-4",
    "summary": "REAL_CROSSING_SHARE 0.5, labeled UNRESEARCHED",
    "class": "within",
-   "why": "a degree on a continuum the page gives no figure for (calibrated liberty), labeled; it separates a corner clip from a crossing"
+   "why": "calibrated liberty on a continuum the page gives no figure for, labeled"
   },
   {
    "id": "W20-5",
-   "summary": "'about as near' = one grid pitch band, labeled UNRESEARCHED; tie broken by distance to plan.envelope's outline, both callers",
+   "summary": "'about as near' = one grid pitch, UNRESEARCHED; tie toward the field",
    "class": "within",
-   "why": "0029's drawing page gives the tie rule without a figure; row 422's fix names this sort key"
+   "why": "0029 drawing page's tie rule; row 422's fix"
   },
   {
    "id": "W20-6",
    "summary": "bath wall rolled per house, beyond the stable at 0.8",
    "class": "within",
-   "why": "rows 423/424 verbatim; 0044 question page: 17 of 21, 12 of 15"
+   "why": "rows 423/424; 0044: 17 of 21, 12 of 15"
   },
   {
    "id": "W20-7",
-   "summary": "Occasions: placement-changed woodland commons on mizuguchi (one wood where two stood); the other four meta only",
+   "summary": "Occasions: Kashikawa one wood where three stood; Inashiro and Mizuguchi none on the sheet, recorded beyond it (woodland_offsheet N, W); glyph NEEDS-WORK verified by measurement, a third round left to the GM's waiver",
    "class": "within",
-   "why": "FR-005 / feature 294: re-diffed by this review against 43b353361 - mizuguchi commons 2 -> 1 woods (with crowns, scrub, bamboo, ink classes), inashiro/kashikawa/kuwabata/sawada differ in meta only; the occasion is declared and T66 runs its glyph-check"
+   "why": "re-measured on the manifests (HEAD~1 -> HEAD: inashiro 3->0 offsheet N, mizuguchi 1->0 offsheet W, kashikawa 3->1); the off-sheet record is the pre-existing D11, applied where 0077's rule leaves no seat on the sheet; FR-005 occasion declared"
   },
   {
    "id": "W20-8",
    "summary": "Wave 20 on the unpushed waves 9-19 under condition (6)",
    "class": "within",
-   "why": "the wave-11 exception already ruled LEGITIMATE; backup/digram-backlog is at 43b353361 (ls-remote), wave 19's pair band 1 recorded in T64"
+   "why": "the wave-11 exception already ruled LEGITIMATE"
   },
   {
    "id": "W20-9",
-   "summary": "The houses'-side fallback in open_ground_patches retired: only seats beyond the fields are offered; a roll with none records the wood beyond the sheet (woodland_on_the_sheet, existing)",
+   "summary": "The houses'-side fallback retired; a roll with no seat beyond the fields records the wood beyond the sheet",
    "class": "within",
-   "why": "FR-004 literal: 0077's drawing page says 'on the nearest slope beyond the fields from the houses ... not on whatever open ground lies nearest the houses' and records no fallback; the fallback offered exactly the ground the page excludes. No research edited; the off-sheet record is the pre-existing plan D11 deviation, not a new carve-out"
+   "why": "FR-004 literal: 0077 records no fallback to the open ground nearest the houses"
   }
  ],
  "verdict": "CLEAR"

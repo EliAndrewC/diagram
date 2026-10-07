@@ -86,5 +86,17 @@
     "quantity": "woodland rings drawn on the houses' side, measured on the regenerated manifest (the previous close was an acceptance only)",
     "value": 0,
     "unit": "rings"
+  },
+  "kashikawa-glyph-woodland-F1-through": {
+    "verifies": "F1",
+    "subject": "glyph-check--woodland-commons",
+    "answers": "f0a88a5acd8a",
+    "quantity": "share of the walk from the house centroid to Kashikawa's one drawn wood that runs inside the field, of the field's depth along the walk (the drawn outline)",
+    "value": 0.49,
+    "unit": "share",
+    "observed": "2026-10-07",
+    "source": ".claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.json fields[0].outline, commons (role woodland), houses - regenerated after the fix",
+    "method": "400 samples along the straight walk tested in the outline; depth as the outline's extent along the walk",
+    "note": "a drawn wood reached through the field (520 of 1,057 ft): the code's test reads the planning envelope at 0.5; the drawn outline differs slightly from it"
   }
 }
