@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-07T10:57:39Z",
+  "target": "review-accept",
+  "commit": "b5a33c5d7",
+  "outcome": "permitted",
+  "why": "review-accept glyph-check--village-lane F3: the spine at 5 ft is ranked as an E2 found row in specs/328-match-the-research ranking (joints.py RANK_WIDTHS), taken in its wave"
+}

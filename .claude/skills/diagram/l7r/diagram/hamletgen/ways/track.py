@@ -618,12 +618,14 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
         # THE ROAD LEAVES BY THE NEARER EDGE, AND THE STREET RUNS ON OFF THE MAP AT ITS OTHER END TOO (feature 328 wave 5,
         # research/questions/0033-row-villages-resson.drawing.html: "The street runs on off the map as the road into it"): cut
         # back to its last farm's path at the far end, the street stopped where the road it stands for went on
-        for _out in sorted((_a, _b), key=lambda r: r[0]):
+        for _k, _out in enumerate(sorted((_a, _b), key=lambda r: r[0])):
             _out = _out[1]
             # ...AND OVER THE BROOK AT A FORD, as every other way crosses it (`ford_crossing`): run straight on along the
             # street's line, the road crossed the brook 72 ft from the nearest ford (cohort seed 3, 2026-10-01)
             _out = [_out[0], *ford_crossing(_out[0], _out[-1], plan.brook or [], getattr(s, "brook_fords", ())), _out[-1]]
             s.lane(_thread_the_fabric(s, plan, _out), width=6, clearance=LANE_CLEARANCE, worn=True, connector=True)
+            if _k:  # ...the far end's run is the road running on, not the way in: the board stands at the entrance (`run_on`)
+                s.M["lanes"][-1]["run_on"] = True
         return
     # THE TRACK OUT AS CHOSEN ONCE THE LAST HOUSE STOOD (feature 320, FR-008), the households' ways already laid to it; chosen
     # here only on a form that records none

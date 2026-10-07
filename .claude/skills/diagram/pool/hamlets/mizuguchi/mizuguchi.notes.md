@@ -607,7 +607,7 @@ correct the last one - so the numbers a reader can check now come from the artif
 - farmhouses: **12**
 - family form: **retirement_house**, retirement houses **5**
 - farmstead fixtures: bath **3**, coop **10**, pit **8**, privy **11**, shrine **1**, woodpile **5**
-- notice board at **(2081.8, 2250.5)**, **1** of 12 farmhouses within 250 ft
+- notice board at the entrance, **(544.0, 2612.0)**: **12** of 12 households' ways out pass it
 <!-- /census -->
 
 ## 2026-09-09 - feature 220 (the field fitted once)

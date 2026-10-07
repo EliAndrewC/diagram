@@ -164,7 +164,9 @@ class MoatMixin:
         g = [f'<g transform="translate({x:.0f},{y:.0f}) rotate({rot:.1f})">']
         for px0 in (-ho - pw, ho):
             g.append(f'<rect x="{px0:.1f}" y="{-hd:.1f}" width="{pw:.1f}" height="{2 * hd:.1f}" fill="#9C8A66" stroke="{wc}" stroke-width="1.6"/>')  # piers
-        g.append(f'<path d="M{-ho - pw / 4:.1f},{-hd:.1f} C{-ho / 2:.1f},{-hd - ho * 0.55:.1f} {ho / 2:.1f},{-hd - ho * 0.55:.1f} {ho + pw / 4:.1f},{-hd:.1f}" fill="none" stroke="{wc}" stroke-width="3.4"/>')  # the arch
+        g.append(
+            f'<path d="M{-ho - pw / 4:.1f},{-hd:.1f} C{-ho / 2:.1f},{-hd - ho * 0.55:.1f} {ho / 2:.1f},{-hd - ho * 0.55:.1f} {ho + pw / 4:.1f},{-hd:.1f}" fill="none" stroke="{wc}" stroke-width="3.4"/>'
+        )  # the arch
         for gx_ in (-ho * 0.5, 0.0, ho * 0.5):
             g.append(f'<line x1="{gx_:.1f}" y1="{-hd + u:.1f}" x2="{gx_:.1f}" y2="{hd * 0.66:.1f}" stroke="{wc}" stroke-width="1.1" opacity="0.7"/>')  # the grate/sluice bars
         g.append('</g>')

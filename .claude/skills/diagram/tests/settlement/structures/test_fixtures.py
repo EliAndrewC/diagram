@@ -437,3 +437,16 @@ def test_the_bed_segment_index_refuses_exactly_what_the_scan_refused():
         assert got == want
         clear += want
     assert 200 < clear < 3800, "non-vacuity: both verdicts"
+
+
+def test_a_row_streets_far_run_is_not_the_way_in():
+    """Feature 328 wave 5: a row village's street runs on off the map at both ends (0033), the far end's run flagged
+    `run_on`; the board's entrance is still the road's - the run on is neither handed over to nor routed out by (Kashikawa's
+    board fell back to the center when the far run's outer end counted as the way out)."""
+    from l7r.diagram.settlement.structures.fixtures._helpers import kosatsuba_handover
+
+    houses = [{"x": 500.0, "y": 100.0}]
+    street = {"pts": [[0, 0], [1000, 0]]}
+    road = {"pts": [[1000, 0], [1900, 0]], "connector": True}
+    on = {"pts": [[0, 0], [-900, 0]], "connector": True, "run_on": True}
+    assert kosatsuba_handover({"houses": houses, "lanes": [road, on, street]}) == kosatsuba_handover({"houses": houses, "lanes": [road, street]})

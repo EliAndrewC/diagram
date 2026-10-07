@@ -171,7 +171,7 @@ def kosatsuba_handover(M: Any) -> tuple[float, float] | None:
     _others = [[(float(x), float(y)) for x, y in (ln.get("pts") or [])] for ln in (M.get("lanes") or []) if not ln.get("connector")]
     for ln in M.get("lanes") or []:
         pts = [(float(x), float(y)) for x, y in (ln.get("pts") or [])]
-        if not ln.get("connector") or len(pts) < 2:
+        if not ln.get("connector") or ln.get("run_on") or len(pts) < 2:  # a row street's far run is the road going on, not the way in
             continue
         inner = min((pts[0], pts[-1]), key=lambda q: min(math.hypot(q[0] - h[0], q[1] - h[1]) for h in houses))
         # a way meets it at a shared vertex or anywhere along a segment - the router joins at either
@@ -240,7 +240,7 @@ def kosatsuba_anchor(M: Any, placement: str) -> tuple[float, float] | None:
     if M.get("road"):
         runs.append([(float(p[0]), float(p[1])) for p in M["road"]])
     runs += [[(float(p[0]), float(p[1])) for p in (r.get("pts") or [])] for r in (M.get("roads") or [])]
-    runs += [[(float(x), float(y)) for x, y in (ln.get("pts") or [])] for ln in (M.get("lanes") or []) if ln.get("connector")]
+    runs += [[(float(x), float(y)) for x, y in (ln.get("pts") or [])] for ln in (M.get("lanes") or []) if ln.get("connector") and not ln.get("run_on")]
     best: tuple[float, tuple[float, float]] | None = None
     for run in runs:
         if len(run) < 2:
@@ -319,7 +319,7 @@ def departure_routes(M: Any, step: float = 10.0, join: float = 7.0, reach: float
     ends = [
         q
         for ln in M.get("lanes") or []
-        if ln.get("connector") and len(ln.get("pts") or []) >= 2
+        if ln.get("connector") and not ln.get("run_on") and len(ln.get("pts") or []) >= 2
         for q in ((float(ln["pts"][0][0]), float(ln["pts"][0][1])), (float(ln["pts"][-1][0]), float(ln["pts"][-1][1])))
     ]
     outer = max(ends, key=lambda q: min(math.dist(q, h) for h in houses)) if ends and houses else hand

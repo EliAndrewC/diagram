@@ -35849,10 +35849,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/city/moat.py::MoatMixin.water_gate#arch on two piers with a grille": {
-  "code": "42549c622c4185b4",
-  "core": "0eeefb7907dde389",
+  "code": "b5d66d0fb0940d55",
+  "core": "c2fdf479502ee3ac",
   "date": "2026-10-07",
-  "note": "one set of grate bars is drawn, where the page puts \"A grille ... at both the outer and the inner face of the wall\"; the stone-lined passage is not drawn either",
+  "note": "the code draws the arch on two piers but only one set of bars. Those bars are three lines running the depth of the passage, along the flow rather than \"across the water\". The rule says \"A grille crosses the water at both the outer and the inner face of the wall\" and \"The channel between the two grilles is lined with stone on both sides\"; the code draws neither the second grille nor the stone lining. Either draw grilles at both faces (and the stone revetments), or narrow the claim and record the single grille as a deviation",
   "pages": {
    "0179-water-gates-and-sluices-shuimen.drawing.html": "19011b41723432c2"
   },
@@ -35866,10 +35866,10 @@
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/city/moat.py::MoatMixin.water_gate#glyph size": {
-  "code": "1a9c5a8f76682af7",
-  "core": "0eeefb7907dde389",
+  "code": "9178f0349e527e73",
+  "core": "c2fdf479502ee3ac",
   "date": "2026-10-07",
-  "note": "k=px(60)/36 makes the whole glyph 60 ft across, so the opening between piers (18 units) is about 30 ft, narrower than the 36 ft canal; the page has \"60 ft clear, about 12 ft of pier each side\" (about 84 ft overall)",
+  "note": "ho=30, pw=12 gives \"60 ft clear, with about 12 ft of pier on each side\", 84 ft across; the 30 ft pier depth (hd=15) is not covered, see UNCLAIMED",
   "pages": {
    "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html": "49298f0d00bbf69d"
   },
@@ -35878,17 +35878,33 @@
    "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html:8c6e4d1d8109adfa",
    "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html:90b8445289304ed9"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/city/moat.py::MoatMixin.water_gate#no-build block": {
-  "code": "f73f23b857b8dcc3",
-  "core": "0eeefb7907dde389",
+  "code": "dc9af068e9da9c15",
+  "core": "c2fdf479502ee3ac",
   "date": "2026-10-07",
-  "note": "nothing cited sets a water gate's clearance",
+  "note": "nothing cited covers clearance around a water gate (the 36 ft clearance is for the gate's guard buildings)",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/city/moat.py::MoatMixin.water_gate#one opening, always 60 ft wide whatever the canal; 0179 says \"The passage through the wall is as wide as its canal\" and a river gets \"a row of arched openings\" (§4, §7, §8)": {
+  "code": "c2fdf479502ee3ac",
+  "core": "c2fdf479502ee3ac",
+  "date": "2026-10-07",
+  "note": "one opening, always 60 ft wide whatever the canal; 0179 says \"The passage through the wall is as wide as its canal\" and a river gets \"a row of arched openings\" (§4, §7, §8)",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/city/moat.py::MoatMixin.water_gate#pier depth through the wall, 30 ft (hd=15 ft); 0147 gives a water gate's opening and pier width but no depth, and a road gate's piers are 24 ft deep (§21)": {
+  "code": "c2fdf479502ee3ac",
+  "core": "c2fdf479502ee3ac",
+  "date": "2026-10-07",
+  "note": "pier depth through the wall, 30 ft (hd=15 ft); 0147 gives a water gate's opening and pier width but no depth, and a road gate's piers are 24 ft deep (§21)",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py::FLANK_INSET_FT#set on the patrol road": {
   "code": "fcbfcc9b7b65dc28",
