@@ -1,6 +1,6 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "b576398d30d46e83756153aba0e02fc4bd4e9fde3d52092fd0540e084bffcdfb",
+ "plan_sha256": "15e259b69088faf4068b2f178858d53a10400c0d9fcd1f8bea011fa2b98241a1",
  "reviewed": "2026-10-07",
  "declared": "spec-fidelity",
  "decisions": [
@@ -8,40 +8,40 @@
    "id": "W13-sort",
    "summary": "the 18 Mode A E2 rows sorted by a fresh reader measuring the sheets; the 6 whose fix redraws a hand sheet re-tiered E3",
    "class": "within",
-   "why": "FR-003's own definition (a hand-drawn sheet redrawn is E3); the rows stay ranked and open, nothing is dropped; spot-checked measurements (Ochiba barracks 92x100 px, wells 22/24 px, Hoshigaoka 15 px) match audit/modea-sort-out.jsonl"
+   "why": "FR-003's own definition (a redrawn hand sheet is E3); rows stay ranked and open"
   },
   {
    "id": "W13-scope",
-   "summary": "wave 13 = wave 12's two byre claims (E0), then the 12 open Mode A E2 rows in ranking order; next open row the cluster.py rule",
+   "summary": "wave 13 = the two byre claims then the 13 procedure-only Mode A rows; the second-kami row left the wave as E3",
    "class": "within",
-   "why": "FR-006 contiguous: the E2 Mode A rows not taken (granary forms, sanctuary fence, precinct unenclosed, staff housing knob) are already IN-STEP; the 12 are the contiguous open run before cluster.py"
+   "why": "FR-006 contiguous run; the second-kami row moved by its measured rolls under FR-003 (ranking.json tier E3, overrides.json moved note), not dropped"
   },
   {
-   "id": "W13-no-redraw",
-   "summary": "the procedures change, each sheet records its roll in its notes, no sheet is redrawn",
+   "id": "W13-rolls",
+   "summary": "procedures change, each sheet records its roll; a seeded roll with its expression where the page says rolled; a roll off the drawn form makes the row E3",
    "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "for the compound shrine arch (shared or own) and the second kami, the pages the rows cite say the form is rolled from the map's seed (0220 drawing: 'Each map chooses one at random from its seed'; 0218 drawing: 'which form Ochiba's takes is rolled from the map's seed'), and the sorter's own evidence made the no-redraw tier conditional on that roll; no roll was made - the notes record the drawn form as the knob's - so 'no sheet is redrawn' decides the roll's outcome in advance. Legitimate once each such form is rolled with its expression recorded (Hoshigaoka's grove-form precedent) or pinned by a quoted GM ruling, and a roll that lands on the undrawn form moves its row to E3"
+   "ruling": "LEGITIMATE",
+   "why": "round-1 condition met: rolls reproduced (random.Random(zlib.crc32(b'<sheet>:<knob>')).choice): hayakawa arch -> shared (drawn), written with its expression; second kami rolls one hall for Hayakawa's river kami and Ubame's wood kami, drawn own shrine, so the row is E3 and out of the wave; no outcome decided in advance"
   },
   {
    "id": "W13-bands",
-   "summary": "the country shrine's size bands widened in types.json (sanctuary 4-20 x 4-12 ft, hall 18-35 x 12-35 ft) and its generated table",
+   "summary": "country shrine size bands widened in types.json and its table",
    "class": "within",
-   "why": "the implementation moves to the record (0222: sanctuary most often one bay or three; 0215: Hie's 2-bay sanctuary ~12 x 6 ft, worship hall ~18 x 12 ft); Hoshigaoka's drawn sizes stay inside"
+   "why": "moves the implementation to the record (0222, 0215); Hoshigaoka's sizes inside"
   },
   {
    "id": "W13-stack",
-   "summary": "wave 13 starts on the unpushed waves 9-12 under the wave-11 exception's condition (6)",
+   "summary": "wave 13 starts on unpushed waves 9-12 under the wave-11 exception's condition (6)",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "the exception ruled LEGITIMATE on conditions (amendment 10); verified: wave 12 closed at c45460dd1 (an ancestor of HEAD), origin backup/digram-backlog at c45460dd1, T48 records its own pair band 0 and a green gate"
+   "why": "exception ruled LEGITIMATE on conditions (amendment 10); wave 12 closed at c45460dd1, an ancestor of HEAD, backup pushed, own pair band 0"
   },
   {
    "id": "W13-verify",
-   "summary": "verification: impl-drift on the touched procedure claims, the gate, wave 13's own bookend pair; no review occasion (no sheet redrawn)",
+   "summary": "impl-drift on touched procedure claims, the gate, wave 13's own bookend pair; no review occasion",
    "class": "within",
-   "why": "FR-005; the occasion holds only while no roll forces a redraw"
+   "why": "FR-005; no sheet redrawn now that the second-kami row left the wave"
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }

@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-07T19:41:43Z",
+  "target": "perf-explain",
+  "commit": "2f49a8b19",
+  "outcome": "permitted",
+  "why": "perf-explain UNVERIFIED: no counterfactual needed for unchanged code; the diff (c45460dd1..HEAD -- l7r) carries no executable change on the hamlet path"
+}
