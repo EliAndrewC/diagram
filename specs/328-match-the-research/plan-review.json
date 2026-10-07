@@ -1,6 +1,6 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "fbb245568beb815edf76730178b8720f1091656f24965358b5adabe8b762c246",
+ "plan_sha256": "2c14a513991270cd3ef4a7cae73aa40f745ba2ec15f9faafcbc5bf8ea6fa03b5",
  "reviewed": "2026-10-07",
  "declared": "spec-fidelity",
  "decisions": [
@@ -119,11 +119,16 @@
    "why": "A verification method under constitution XIII; it does not touch the scope of what the GM asked."
   },
   {
+   "id": "T25a",
+   "summary": "Before wave 7 chooses its rows, the 34 found rows tiered by verdict alone (waves 4-6 re-checks) are tiered by their work by a fresh Opus reader (audit/t25a-out.jsonl, applied in overrides.json with T25a notes); 18 moved; the folded brook-width row carried by row 203's fix",
+   "class": "within",
+   "why": "Measured: all 34 t25a rows sit in ranking.json at the reader's tier and fix (0 mismatches), every override carries its T25a note, and no other ranking row changed. It enforces FR-002/FR-003 (the order by work) and SC-003; the reasons spot-checked in the code hold (walls.py:432 else 12, :507 >= 45, :532 + 12.0, :540 130/55; castle_civic.py:810 bm = 32; bridges.py DEFAULT_W 9.0/4.2). The folded row's value change (brook to px(7)) is in row 203's fix, so nothing is dropped."
+  },
+  {
    "id": "W7-scope",
-   "summary": "Wave 7: the four open E0 rows, then the next contiguous run of E1, global rows 180-231 (27 open rows, tasks.md Phase 8), ending at the civic grounds last row (231), the next open E1 row 232; the run is chosen on ranking.json tiers as they stand",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "Measured on ranking.json: 22 open found rows of the wave 5 and 6 re-checks still carry a tier assigned by VERDICT, not by work (found: tier provisional) - 11 E1 (180,194,197,200,201,203,208,210,212,225,270), 6 E2 (387,393-396,453), 5 E4 (678,684,685,687,706). The GM asked for the findings ranked by implementation work and done easiest first (FR-002, FR-003, SC-003); the amendment-2 review already required this step (T12a) before an E1 wave chooses its rows. On their own fix lines, 394-396 are one value each (bm=12 -> px(36), <130/<55 -> px(390)/px(165), +12 -> px(36), the twin of row 197 inside the wave) and are left out of the E1 run; 678, 685, 706 are claim relabels (E0 by FR-003) left at E4 while E1 rows are fixed; and 201 (a fallback seat rule), 203 (a sweep condition) and 208 (a row of arches, a new form) are rule or form changes taken into an E1 wave. Not impossible, not implied by the request, and it defeats the request purpose (the order by work). Fix: tier the 22 by their work before the wave chooses its rows, then re-derive the run."
+   "summary": "Wave 7: the 7 open E0 rows, then the contiguous E1 run, global rows 183-234 (27 open rows, tasks.md Phase 8), ending at the civic grounds' last row; next open E1 row 235; 232 and 233 wait on 231 inside the wave",
+   "class": "within",
+   "why": "Measured on ranking.json after T25a: exactly 7 open E0 rows (52,53,54,56,62,98,137); the first open E1 row is 183 and rows 183-234 hold 27 open E1 rows; Phase 8 lists exactly these 34 keys (none missing, none extra); every after is inside the wave. The round-3 objections are answered: the wall literals (now 211,215,217) are in the run, the claim relabels are E0 and in the wave, the fallback seat, the river-tap sweep and the arcade moved to E2/E2/E3 and out. Tier order is monotone over the ranking. FR-006 contiguous run, SC-003 lowest tier first."
   },
   {
    "id": "W7-verification",
@@ -132,5 +137,5 @@
    "why": "FR-005 and the spec's Edge Case for a fix that makes a map fail (held value -> found row, recorded in the ranking); the same verification already ruled within for wave 5."
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }
