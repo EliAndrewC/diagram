@@ -189,22 +189,134 @@ _WHOLE_RULES = ("needle_loops", "doorstep_ends", "doubled_tails", "way_outs", "s
 """The rules of the whole web a gather is asked besides the law of each lane it moves (`settle.Lawful`): no new sliver between
 two ways (the 20-household seed 4 of the reference spec was refused `needle_loops` with the gather in), no house discharging
 more free ends, no tail run on beside a way, no way out crossing a brook again - the tree's own rules (`tree.admits`), since
-a gather may move a household's way - and no way run beside another past a pitch (`shadowed`: Kuwabata, a foot gathered
-onto the junction beside it ran its way 107 ft within 30 ft of another).
+a gather may move a household's way - and no lane but the connector run beside another way past a pitch (`serve.runs_beside`,
+way against way - the pool's finished-map reading of `WEB_SHADOW_FT`: Kuwabata, a foot gathered onto the junction beside it
+ran its way 107 ft within 30 ft of another). Each is counted by `WebMemo.count`.
 
 Research: plumbing - NONE: the law's own rules (`law.LAW`), asked of the web with the gather in"""
 
 
-def shadowed(M: Mapping[str, Any]) -> list[int]:
-    """The lanes (the connector aside) that run beside another way past a pitch (`serve.shadowed_by`, way against way) - the
-    pool's finished-map reading of `WEB_SHADOW_FT`.
+class WebMemo:
+    """The whole web's questions a gather is asked (`settle_knots`), answered pair by pair and KEPT by each lane's points
+    (the perf-audit of feature 328 wave 4: the step asked the whole web again for every trial, 2.2-2.5 s a 40-household map,
+    though a gather moves one to three lanes). Which lanes join (`geom.ends_touch`, at `law.JOIN_TOL`: `law.lane_networks`,
+    `settle.connector_component`), which share a tread (`checks.lanes_share_tread`: `checks.served_network`), how far a
+    farmhouse stands from a lane (`checks.unreached_houses`), whose end runs on beside another way (`tails.tail_doubled`:
+    `law.doubled_tails`) and which runs beside another way (`serve.runs_beside`: `shadowed`) are each a question of two lanes'
+    points, so a trial asks only the pairs a moved lane is in and every other pair's answer is the one already given - the
+    same answers as asking the whole web again, never pruned. A box test passes over a pair whose boxes lie beyond the join
+    reach (no end nor vertex of either can come within it), the same verdict.
 
-    Research: no way drawn twice - UNRESEARCHED: within `WEB_SHADOW_FT` (30 ft), unbroken for more than a bundle pitch"""
-    from .serve import shadowed_by
+    Research: plumbing - NONE: the whole web's rules (`law.LAW`) asked of a trial web, each pair's answer kept"""
 
-    lanes = M.get("lanes") or []
-    ways = [_pts(ln) for ln in lanes]
-    return [i for i, ln in enumerate(lanes) if not ln.get("connector") and len(ways[i]) >= 2 and shadowed_by(ways, i) is not None]
+    def __init__(self) -> None:
+        self._ids: dict[tuple[Pt, ...], int] = {}
+        self._ways: list[Poly] = []
+        self._legs: list[list[tuple[Pt, Pt]]] = []
+        self._boxes: list[tuple[float, float, float, float]] = []
+        self._runs: dict[int, list[Pt]] = {}
+        self._pairs: dict[tuple[str, int, int], bool] = {}
+        self._near: dict[tuple[float, float, int], float] = {}
+
+    def ids(self, ways: Sequence[Poly]) -> list[int]:
+        """Each way's number: one per distinct run of points."""
+        out = []
+        for p in ways:
+            k = tuple(p)
+            n = self._ids.get(k)
+            if n is None:
+                n = self._ids[k] = len(self._ways)
+                self._ways.append(list(p))
+                self._legs.append(list(zip(p, p[1:], strict=False)))
+                self._boxes.append((min(q[0] for q in p), min(q[1] for q in p), max(q[0] for q in p), max(q[1] for q in p)) if p else (math.inf, math.inf, -math.inf, -math.inf))
+            out.append(n)
+        return out
+
+    def _apart(self, a: int, b: int, reach: float) -> bool:
+        ba, bb = self._boxes[a], self._boxes[b]
+        return max(bb[0] - ba[2], ba[0] - bb[2], bb[1] - ba[3], ba[1] - bb[3]) > reach + 1e-6
+
+    def pair(self, kind: str, a: int, b: int) -> bool:
+        """The answer for ways `a` and `b` (numbers from `ids`): "touch" (`ends_touch` at `JOIN_TOL`), "share"
+        (`lanes_share_tread`), "doubled" (`tail_doubled`, `a`'s end beside `b`) or "beside" (`runs_beside`, `a` beside `b`)."""
+        key = (kind, a, b) if kind in ("doubled", "beside") or a <= b else (kind, b, a)
+        got = self._pairs.get(key)
+        if got is None:
+            got = self._pairs[key] = self._ask(kind, a, b)
+        return got
+
+    def _ask(self, kind: str, a: int, b: int) -> bool:
+        from . import law
+        from .checks import LANE_JOIN_FT, lanes_share_tread
+        from .geom import ends_touch
+        from .serve import runs_beside, sampled
+        from .tails import tail_doubled
+
+        p, o = self._ways[a], self._ways[b]
+        if kind == "touch":
+            return not self._apart(a, b, law.JOIN_TOL) and ends_touch(p, o, self._legs[a], self._legs[b], law.JOIN_TOL)
+        if kind == "share":
+            return not self._apart(a, b, LANE_JOIN_FT) and lanes_share_tread(p, o)
+        if kind == "doubled":
+            return tail_doubled(p, o)
+        if a not in self._runs:
+            self._runs[a] = sampled(p)
+        return runs_beside(p, self._runs[a], o)
+
+    def near(self, cx: float, cy: float, k: int) -> float:
+        """How far the point (`cx`, `cy`) stands from way `k`'s nearest leg."""
+        key = (cx, cy, k)
+        d = self._near.get(key)
+        if d is None:
+            d = self._near[key] = min(seg_dist(cx, cy, a, b) for a, b in self._legs[k])
+        return d
+
+    def web(self, M: Mapping[str, Any], ways: Sequence[Poly], ids: Sequence[int]) -> tuple[int, set[int], int]:
+        """For the web `M` (its lanes' points `ways`, numbered `ids`): how many networks its lanes fall into
+        (`law.lane_networks`), the lanes joined to the connector's (`settle.connector_component`), and how many farmhouses it
+        leaves unreached (`checks.unreached_houses`, asked with its served network's distances from here)."""
+        from .checks import unreached_houses
+
+        lanes = M.get("lanes") or []
+        live = [i for i, p in enumerate(ways) if len(p) >= 2]
+        par = {i: i for i in live}
+
+        def find(i: int) -> int:
+            while par[i] != i:
+                par[i] = par[par[i]]
+                i = par[i]
+            return i
+
+        for x, i in enumerate(live):
+            for j in live[x + 1 :]:
+                if self.pair("touch", ids[i], ids[j]):
+                    par[find(i)] = find(j)
+        roots = {find(i) for i in live if lanes[i].get("connector")}
+        joined = {i for i in live if find(i) in roots}
+        seed = next((i for i, ln in enumerate(lanes) if ln.get("connector")), None)
+        if seed is None and ways:
+            seed = max(range(len(ways)), key=lambda i: sum(math.dist(a, b) for a, b in zip(ways[i], ways[i][1:], strict=False)))
+        served = [] if seed is None or len(ways[seed]) < 2 else [seed]  # `served_network`'s growth from its seed
+        seen = set(served)
+        for i in served:
+            for j in live:
+                if j not in seen and self.pair("share", ids[i], ids[j]):
+                    seen.add(j)
+                    served.append(j)
+        unreached = len(unreached_houses(M, near=lambda cx, cy: min(self.near(cx, cy, ids[j]) for j in served))) if served else 0
+        return len({find(i) for i in live}), joined, unreached
+
+    def count(self, name: str, M: Mapping[str, Any], ways: Sequence[Poly], ids: Sequence[int]) -> int:
+        """How many breaches of the whole web's rule `name` (`_WHOLE_RULES`) the web `M` holds - `doubled_tails` and
+        `shadows` answered pair by pair, the rest asked of `M`."""
+        from . import law
+
+        lanes = M.get("lanes") or []
+        if name in ("doubled_tails", "shadows"):
+            kind = "doubled" if name == "doubled_tails" else "beside"
+            return sum(1 for i, p in enumerate(ways) if not lanes[i].get("connector") and len(p) >= 2 and any(j != i and self.pair(kind, ids[i], ids[j]) for j in range(len(ways))))
+        rule = {"needle_loops": law.needle_loops}.get(name) or law.LAW[name]  # the faces themselves: no centroid wanted
+        return len(rule(M) or [])
 
 
 def settle_knots(s: Any) -> int:
@@ -219,28 +331,37 @@ def settle_knots(s: Any) -> int:
     the seating left beside a junction where no gathered join was admitted (`gap_ways._way_for`) is gathered here, with the
     knot's corner taken out of the lane joining the two (`contracted`). Ends the matrix refuses to rewrite (`reshape_lane`)
     are left, and that knot is not asked again this step. Returns the lanes moved. Each gather joins two nodes into one, so
-    the step ends.
+    the step ends. The web as it stands is asked once a gather is applied, never once a trial; a trial's whole-web questions
+    are answered pair by pair, each pair's answer kept by the two lanes' points (`WebMemo`) - the same verdicts.
 
     Research: lane ends gathered - research/questions/0081-village-lanes.drawing.html: ends within 25 ft are joined at a single point"""
-    from . import law
-    from .checks import unreached_houses
-    from .settle import Lawful, apply_pieces, connector_component  # bound here: `settle` names this step in its STEPS
+    from .settle import Lawful, apply_pieces  # bound here: `settle` names this step in its STEPS
     from .tree import set_corridor
 
     lanes = s.M.get("lanes") or []
     lawful = Lawful(s)
+    memo = WebMemo()
     moved = 0
     refused: list[dict[int, Poly]] = []
-    joined: set[int] = set()
-    had: dict[str, int] = {}
+    ways: list[Poly] = []
+    ids: list[int] = []
+    had: dict[str, Any] = {}  # the web as it stands, asked once a gather is applied: it changes only then
 
     def judge(edits: dict[int, Poly]) -> bool:
         if edits in refused:
             return False
+        if "nets" not in had:
+            ways[:] = [_pts(ln) for ln in lanes]
+            ids[:] = memo.ids(ways)
+            had["nets"], had["joined"], had["unreached"] = memo.web(s.M, ways, ids)
         trial = {**s.M, "lanes": [dict(ln) for ln in lanes]}  # judged on a copy: a lane record refuses a write the matrix forbids
+        tw = list(ways)
         for i, p in edits.items():
             trial["lanes"][i]["pts"] = [[x, y] for x, y in p]
-        if not joined <= connector_component(trial["lanes"]) or law.lane_networks(trial) > law.lane_networks(s.M) or len(unreached_houses(trial)) > len(unreached_houses(s.M)):
+            tw[i] = _pts(trial["lanes"][i])
+        ti = memo.ids(tw)
+        nets, joined, unreached = memo.web(trial, tw, ti)
+        if not had["joined"] <= joined or nets > had["nets"] or unreached > had["unreached"]:
             return False
         lawful.M = trial
         try:
@@ -249,15 +370,13 @@ def settle_knots(s: Any) -> int:
         finally:
             lawful.M = s.M
         for name in _WHOLE_RULES:
-            rule = {"needle_loops": law.needle_loops, "shadows": shadowed}.get(name) or law.LAW[name]  # the faces themselves: no centroid wanted
             if name not in had:
-                had[name] = len(rule(s.M) or [])
-            if len(rule(trial) or []) > had[name]:
+                had[name] = memo.count(name, s.M, ways, ids)
+            if memo.count(name, trial, tw, ti) > had[name]:
                 return False
         return True
 
     for _ in range(4 * len(lanes)):
-        joined = connector_component(lanes)
         had.clear()
         edits = next_gather(lanes, judge)
         if edits is None:

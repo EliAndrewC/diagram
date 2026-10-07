@@ -135,6 +135,17 @@ def test_a_house_beyond_the_reach_of_every_lane_has_no_way_out() -> None:
     assert len(routes) == 1 and routes[0][0][0] == 200.0, "the near house walks out; the far one is not routed"
 
 
+def test_a_dwellings_nearest_sample_is_the_first_of_the_nearest() -> None:
+    """`nearest_of` answers as `min(among, key=math.dist)` does: the nearest node, the FIRST of `among`'s order on a tie - the
+    near-ties numpy finds asked again exactly (the perf-audit of feature 328 wave 4)."""
+    from l7r.diagram.settlement.structures.fixtures._helpers import nearest_of, reached_at
+
+    nodes = [(0.0, 0.0), (10.0, 0.0), (-10.0, 0.0), (0.0, 3.0), (0.1 + 0.2, 0.0)]
+    for among in ([0, 1, 2, 3, 4], [2, 1, 0], [1, 2], [4, 3]):
+        for q in ((0.0, 0.0), (5.0, 0.0), (0.0, 10.0), (0.15, 0.0)):
+            assert nearest_of(nodes, among, reached_at(nodes, among), q) == min(among, key=lambda i: math.dist(nodes[i], q))
+
+
 def _sampled(p: list[tuple[float, float]], step: float = 4.0) -> list[tuple[float, float]]:
     """A way's points every `step` ft - the spacing `clear_runs` gives a web run before `_lay_web_lane` judges it."""
     out: list[tuple[float, float]] = []

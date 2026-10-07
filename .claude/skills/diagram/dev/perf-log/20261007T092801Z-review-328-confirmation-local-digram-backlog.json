@@ -1,0 +1,62 @@
+{
+  "band": 2,
+  "base": {
+    "commit": "57ca45ed3",
+    "label": "328-start",
+    "utc": "20261007T090617Z"
+  },
+  "binding": "7486658da85bb449592b4f82f3f3c9ad1b011d8470113085fbd026f4fe98ab90",
+  "end": {
+    "commit": "f52eb0771",
+    "label": "328-end",
+    "utc": "20261007T090934Z"
+  },
+  "environment": "local",
+  "feature": "328-match-the-research",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "8d3395e5-fe32-4f85-9c89-80c344d2ac1a",
+    "utc": "20261007T092801Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": 13.3,
+          "39": 3.3,
+          "4": -7.1,
+          "47": 10.0
+        },
+        "total_pct": 3.8
+      },
+      "20": {
+        "seeds": {
+          "25": 14.7,
+          "39": 8.6,
+          "4": -1.5,
+          "47": 10.3
+        },
+        "total_pct": 7.9
+      },
+      "40": {
+        "seeds": {
+          "25": 5.8,
+          "39": -3.6,
+          "4": 13.1,
+          "47": 7.4
+        },
+        "total_pct": 6.0
+      }
+    },
+    "seeds": {
+      "25": 2.4,
+      "39": 9.3,
+      "4": -5.7,
+      "47": 0.0
+    },
+    "total_pct": 1.1
+  },
+  "note": "reviewer control (detached worktrees, start 57ca45ed3 / end f52eb0771 / end without settle_knots in settle.STEPS / end also without gap_ways.gathered_foot, 2 interleaved runs, spread <=0.1s): the knot gather, not the lane law, is most of the growth that crossed - 40hh seed 4 total 14.95->18.7s (no knots 16.65, no gather 16.4), seed 25 11.8->14.2 (no gather 11.7), seed 47 11.25->12.8 (no gather 11.35), 10hh seed 25 2.75->3.05 (no gather 2.75); and the seating's foot gather (gap_ways._way_for) grows the HOMESTEADS stage (40hh seed 25 4.40->5.49s) and the 20hh seed 25 web (+0.43s with settle_knots moving nothing) - the explanation names only the web and only seed 39's +0.5s, leaves the knot gather's share uncontrolled, and is silent on the homesteads growth",
+  "verdict": "inconsistent"
+}

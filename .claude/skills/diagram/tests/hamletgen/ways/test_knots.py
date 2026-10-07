@@ -151,3 +151,72 @@ def test_a_households_gathered_foot_is_written_into_its_corridor() -> None:
     assert sum(1 for c in legs if c.get("of")) == 2, "each household's record keeps its house"
     assert not set_corridor(s.M, {"pts": [[0.0, 0.0], [1.0, 0.0]]}) and not set_corridor(s.M, {"role": "access", "of": [5.0, 5.0], "pts": [[0.0, 0.0], [1.0, 0.0]]})
     assert not set_corridor(s.M, {"role": "access", "of": [-100.0, 180.0], "pts": [[0.0, 0.0]]}), "a lane of one point"
+
+
+# ---- the perf-audit of feature 328 wave 4: a trial's whole-web questions asked pair by pair, the answers kept ----------
+
+
+def _web(*lanes, houses=((-100.0, 180.0), (3000.0, 3000.0))):
+    return {"lanes": [dict(ln) for ln in lanes], "houses": [{"x": x, "y": y, "w": 40.0, "h": 28.0, "rot": 0.0} for x, y in houses], "meta": {"generated_by": "test", "ftpx": 1.0}}
+
+
+_LANES = (
+    _ln((0.0, 0.0), (-1000.0, 0.0), connector=True),
+    _ln((-100.0, 150.0), (-100.0, 0.0)),  # a T on the connector
+    _ln((-300.0, 100.0), (-300.0, 8.0), (-450.0, 8.0)),  # its end run on beside the connector: a doubled tail, a shadow
+    _ln((-120.0, 150.0), (-120.0, 30.0)),  # beside lane 1 its whole length, joined to nothing
+    _ln((2000.0, 2000.0), (2100.0, 2000.0)),  # an island far off
+    _ln((5.0, 5.0)),  # a lane of one point
+)
+
+
+def _asked_whole(M):
+    from l7r.diagram.hamletgen.ways import law
+    from l7r.diagram.hamletgen.ways.checks import unreached_houses
+    from l7r.diagram.hamletgen.ways.serve import shadowed_by
+    from l7r.diagram.hamletgen.ways.settle import connector_component
+
+    ways = [kn._pts(ln) for ln in M["lanes"]]
+    shadows = [i for i, ln in enumerate(M["lanes"]) if not ln.get("connector") and len(ways[i]) >= 2 and shadowed_by(ways, i) is not None]
+    rules = {
+        "needle_loops": len(law.needle_loops(M)),
+        "doorstep_ends": len(law.doorstep_ends(M)),
+        "doubled_tails": len(law.doubled_tails(M)),
+        "way_outs": len(law.way_outs_crossing(M)),
+        "shadows": len(shadows),
+    }
+    return (law.lane_networks(M), connector_component(M["lanes"]), len(unreached_houses(M))), rules
+
+
+def _asked_pairwise(memo, M):
+    ways = [kn._pts(ln) for ln in M["lanes"]]
+    ids = memo.ids(ways)
+    return memo.web(M, ways, ids), {name: memo.count(name, M, ways, ids) for name in kn._WHOLE_RULES}
+
+
+def test_the_web_asked_pair_by_pair_answers_as_the_whole_web_does() -> None:
+    """`WebMemo`: the networks, the connector's component, the unreached farmhouses and every whole-web rule's count are the
+    whole web's own answers - on the web, on it with a lane moved (the kept pairs reused), with no connector (the longest
+    lane the served network's seed), with a connector of one point (no network served) and with no lanes at all."""
+    memo = kn.WebMemo()
+    M = _web(*_LANES)
+    web, rules = _asked_whole(M)
+    assert web == (4, {0, 1}, 1) and rules["doubled_tails"] >= 1 and rules["shadows"] >= 1, f"non-vacuous: lanes apart, an unreached house, a tail, a shadow: {web} {rules}"
+    assert _asked_pairwise(memo, M) == (web, rules)
+    kept = len(memo._pairs)
+    moved = _web(*_LANES[:3], _ln((-120.0, 150.0), (-120.0, 0.0)), *_LANES[4:])  # lane 3 now meets the connector
+    assert _asked_pairwise(memo, moved) == _asked_whole(moved)
+    assert len(memo._pairs) < 2 * kept, "only the moved lane's pairs asked again"
+    for M2 in (
+        _web(*(dict(ln, connector=False) for ln in _LANES)),
+        _web(_ln((0.0, 0.0), connector=True), *_LANES[1:]),
+        _web(),
+    ):
+        assert _asked_pairwise(kn.WebMemo(), M2) == _asked_whole(M2)
+
+
+def test_a_ways_box_is_its_points_and_none_for_no_points() -> None:
+    memo = kn.WebMemo()
+    a, b = memo.ids([[(0.0, 0.0), (10.0, 5.0)], []])
+    assert memo._boxes[a] == (0.0, 0.0, 10.0, 5.0) and memo._apart(a, b, 1e9), "no points: apart from everything"
+    assert memo.ids([[(0.0, 0.0), (10.0, 5.0)]]) == [a], "one number per run of points"

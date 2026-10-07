@@ -1,0 +1,67 @@
+{
+  "band": 2,
+  "base": {
+    "commit": "57ca45ed3",
+    "label": "328-start",
+    "utc": "20261007T090617Z"
+  },
+  "binding": "7486658da85bb449592b4f82f3f3c9ad1b011d8470113085fbd026f4fe98ab90",
+  "criteria": {
+    "commensurate": "not at scale: reviewer control in detached worktrees (2 interleaved runs, spread <=0.1s) puts the knot gather (settle_knots plus the seating's gathered_foot) at 0.0-0.3s of the reference roll but 2.2-2.5s per 40-household map - 40hh seed 4 14.95->18.7s (+25%; 16.4 without the gather), seed 25 11.8->14.2 (+20%; 11.7 without), seed 47 11.25->12.8 (+14%; 11.35 without) - for 3-6 lanes moved; on a quiet start those two seeds cross the band-3 per-seed line (>20%), which the recorded pair hides (its start bookend ran under load: 40hh seed 4 at 16.8s against 14.95s quiet)",
+    "necessary": "yes: 0081's 'ends within 25 ft are joined at a single point' (research/questions/0081-village-lanes.drawing.html), and the glyph-checks found real knots (Inashiro: four ends within 24 ft at the track head; Kashikawa, Kuwabata); the gather moves 1 lane per reference map and 3-6 per 40-household map (settle_knots moved 6/5/3 on 40hh seeds 4/25/47), so the work happens",
+    "no_way_around": "a cheaper form exists: settle_knots' judge recomputes law.lane_networks(s.M) and unreached_houses(s.M) for every trial though s.M is fixed until a gather applies - hoisted into 'had' it gives identical moves and cuts the step 1.19->0.82s on 40hh seed 4 (web 4.82->4.50s); the rest is whole-web rules (way_outs_crossing/departure_routes 0.8s, doubled_tails 0.3s, shadowed 0.2s, unreached_houses, connector_component) re-asked of the WHOLE trial web per candidate when only 1-3 lanes moved - the per-candidate rescan of unchanged geometry dev/performance.md names; ask them of the moved lanes' neighborhood, and the seating's gathered-then-knotted retry (homesteads 4.40->5.49s on 40hh seed 25) wants the same look"
+  },
+  "end": {
+    "commit": "f52eb0771",
+    "label": "328-end",
+    "utc": "20261007T090934Z"
+  },
+  "environment": "local",
+  "feature": "328-match-the-research",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "8d3395e5-fe32-4f85-9c89-80c344d2ac1a",
+    "utc": "20261007T092811Z"
+  },
+  "kind": "audit",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": 13.3,
+          "39": 3.3,
+          "4": -7.1,
+          "47": 10.0
+        },
+        "total_pct": 3.8
+      },
+      "20": {
+        "seeds": {
+          "25": 14.7,
+          "39": 8.6,
+          "4": -1.5,
+          "47": 10.3
+        },
+        "total_pct": 7.9
+      },
+      "40": {
+        "seeds": {
+          "25": 5.8,
+          "39": -3.6,
+          "4": 13.1,
+          "47": 7.4
+        },
+        "total_pct": 6.0
+      }
+    },
+    "seeds": {
+      "25": 2.4,
+      "39": 9.3,
+      "4": -5.7,
+      "47": 0.0
+    },
+    "total_pct": 1.1
+  },
+  "note": "profile of settle_knots alone, 40hh seed 4: 15 judge calls, 3.4s under cProfile; retake the bookend pair on a quiet host - if 40hh seed 4 still reads >20% this is band 3 and needs the GM's perf-signoff",
+  "verdict": "not-justified"
+}

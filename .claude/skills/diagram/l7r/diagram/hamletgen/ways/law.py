@@ -54,7 +54,7 @@ from .fabric import _LANE_JOIN_FT, _WEB_MIN_FT, _crosses_fabric, house_hit
 from .geom import _TOUCH_GAP, WorkedGround, _components, _turn_deg, end_serves, polyline_len, steading_footprints, worked_ground
 from .joints import _HOOK_DEG, _HOOK_FT, at_rank, hairpin_over_a_short_leg, joints, oriented
 from .keeper import kept
-from .sweeps import _DOUBLED_DEG, along_tail
+from .tails import tail_doubled
 
 Lanes = Sequence[Mapping[str, Any]]
 
@@ -294,11 +294,7 @@ def doubled_tails(M: Mapping[str, Any]) -> list[int]:
     Research: no doubled tail - CONVENTION: an end running on beside another way reads as one way drawn twice"""
     ways = _ways(M)
     lanes = M.get("lanes") or []
-    return [
-        i
-        for i, p in enumerate(ways)
-        if not lanes[i].get("connector") and len(p) >= 2 and any(j != i and len(o) >= 2 and any(along_tail(q, o, deg=_DOUBLED_DEG) is not None for q in (p, p[::-1])) for j, o in enumerate(ways))
-    ]
+    return [i for i, p in enumerate(ways) if not lanes[i].get("connector") and len(p) >= 2 and any(j != i and tail_doubled(p, o) for j, o in enumerate(ways))]
 
 
 def free_end(ways: Sequence[Poly], i: int, q: Pt, boxes: Sequence[tuple[float, float, float, float] | None] | None = None) -> bool:
@@ -554,7 +550,7 @@ def fronting_ends(M: Mapping[str, Any]) -> dict[int, list[tuple[int, int]]]:
         if ln.get("connector") or len(p) < 2:
             continue
         for e, end in ((0, p[0]), (-1, p[-1])):
-            if min((_min_dist(end, o) for k, o in enumerate(ways) if k != i and len(o) >= 2), default=1e9) <= JOIN_TOL:
+            if any(_min_dist(end, o) <= JOIN_TOL for k, o in enumerate(ways) if k != i and len(o) >= 2):  # the first junction answers
                 continue
             best = min(range(len(houses)), key=lambda h: math.hypot(end[0] - houses[h]["x"], end[1] - houses[h]["y"]))
             if math.hypot(end[0] - houses[best]["x"], end[1] - houses[best]["y"]) <= DOORSTEP_FT:

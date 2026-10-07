@@ -221,11 +221,16 @@ def _components(ways: Sequence[Poly], touch: float) -> list[int]:
         for j in range(i + 1, len(ways)):
             if len(ways[i]) < 2 or len(ways[j]) < 2:
                 continue
-            if any(seg_dist(q[0], q[1], a, b) <= touch for q in (ways[i][0], ways[i][-1]) for a, b in segs[j]) or any(
-                seg_dist(q[0], q[1], a, b) <= touch for q in (ways[j][0], ways[j][-1]) for a, b in segs[i]
-            ):
+            if ends_touch(ways[i], ways[j], segs[i], segs[j], touch):
                 par[find(i)] = find(j)
     return [find(i) for i in range(len(ways))]
+
+
+def ends_touch(p: Poly, q: Poly, p_segs: Sequence[tuple[Pt, Pt]], q_segs: Sequence[tuple[Pt, Pt]], touch: float) -> bool:
+    """`_components`' join of two ways (`p_segs`, `q_segs` their legs): an END of either within `touch` of the other's tread.
+
+    Research: plumbing - NONE: `_components`' pair test, asked pair by pair by a caller that keeps the answers (`knots.WebMemo`)"""
+    return any(seg_dist(e[0], e[1], a, b) <= touch for e in (p[0], p[-1]) for a, b in q_segs) or any(seg_dist(e[0], e[1], a, b) <= touch for e in (q[0], q[-1]) for a, b in p_segs)
 
 
 _HOOK_FT = 12.0

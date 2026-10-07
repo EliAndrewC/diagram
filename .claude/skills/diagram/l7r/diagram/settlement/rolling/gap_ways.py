@@ -465,9 +465,17 @@ def _way_for(
     if k is not None:
         s.placed.pop(k)
     try:
+        # ...EACH LEG ASKED ONCE for the household: its exits' runs share their door and their walk out of the homestead, and
+        # nothing standing changes while its way is sought, so a leg the taut pull of one run asked is answered for the next
+        # from here - the same verdict (the perf-audit of feature 328 wave 4: 86,572 legs asked on the 40-household seed 25)
+        asked: dict[tuple[float, float, float, float], bool] = {}
 
         def leg_ok(a: Pt, b: Pt) -> bool:
-            return house_clear(a, b, geom, hgap) and fixtures_clear(s, a, b, geom) and parts_clear(s, a, b, geom) and standing_ground(s, a, b, memo)
+            key = (a[0], a[1], b[0], b[1])
+            got = asked.get(key)
+            if got is None:
+                got = asked[key] = house_clear(a, b, geom, hgap) and fixtures_clear(s, a, b, geom) and parts_clear(s, a, b, geom) and standing_ground(s, a, b, memo)
+            return got
 
         # ...FROM A DOOR A WAY CAN LEAVE: one inside its own fixtures' or beds' keep-out starts no leg `taut` admits, and every
         # exit led back to it (feature 320, glyph-check of Inashiro: a household's nine exits all stuck at a forecourt door by

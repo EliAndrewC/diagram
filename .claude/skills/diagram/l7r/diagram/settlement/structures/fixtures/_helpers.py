@@ -335,8 +335,10 @@ def departure_routes(M: Any, step: float = 10.0, join: float = 7.0, reach: float
                 dist[v], back[v] = d + w, u
                 heapq.heappush(heap, (d + w, v))
     routes: list[list[tuple[float, float]]] = []
+    reached = list(dist)
+    at = reached_at(nodes, reached)
     for h in M.get("houses") or []:
-        s = min(dist, key=lambda i: math.dist(nodes[i], (float(h["x"]), float(h["y"]))))
+        s = nearest_of(nodes, reached, at, (float(h["x"]), float(h["y"])))
         if math.dist(nodes[s], (float(h["x"]), float(h["y"]))) > reach:
             continue
         path: list[tuple[float, float]] = []
@@ -345,6 +347,30 @@ def departure_routes(M: Any, step: float = 10.0, join: float = 7.0, reach: float
             s = back[s]
         routes.append(path)
     return routes
+
+
+def reached_at(nodes: Sequence[tuple[float, float]], among: Sequence[int]) -> Any:
+    """The nodes `among` names, in its order, as one (n, 2) array for `nearest_of`.
+
+    Research: plumbing - NONE: lane samples as an array"""
+    import numpy as np
+
+    return np.asarray([nodes[i] for i in among], dtype=float).reshape(-1, 2)
+
+
+def nearest_of(nodes: Sequence[tuple[float, float]], among: Sequence[int], at: Any, q: tuple[float, float]) -> int:
+    """The first of `among` (indices into `nodes`, in their order; `at` their points, `reached_at`) whose node lies nearest
+    `q` by `math.dist` - what `min(among, key=...)` answers, the distances taken at once by numpy and only the near-ties
+    (within 1e-6 ft of the least, far more than numpy's rounding) asked again exactly, so every node `math.dist` puts nearest
+    is among them and the first is the same (the perf-audit of feature 328: 448,320 `math.dist` calls a 40-household knot
+    step).
+
+    Research: plumbing - NONE: a dwelling's nearest lane sample, the same answer"""
+    import numpy as np
+
+    d = np.hypot(at[:, 0] - q[0], at[:, 1] - q[1])
+    near = np.flatnonzero(d <= d.min() + 1e-6)
+    return min((among[int(k)] for k in near), key=lambda i: math.dist(nodes[i], q))
 
 
 def routes_missed(routes: Sequence[Sequence[tuple[float, float]]], x: float, y: float, near: float) -> int:

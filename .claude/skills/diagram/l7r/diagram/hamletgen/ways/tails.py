@@ -68,6 +68,14 @@ def along_tail(pts: Sequence[Pt], other: Sequence[Pt], step: float = 4.0, deg: f
     return k
 
 
+def tail_doubled(p: Sequence[Pt], o: Sequence[Pt]) -> bool:
+    """Does an end of way `p` - EITHER end - run on beside way `o` at `_DOUBLED_DEG` (`along_tail`, asked of `p` and of it
+    reversed)? The pair test of `law.doubled_tails`, asked pair by pair by a caller that keeps the answers (`knots.WebMemo`).
+
+    Research: no doubled tail - CONVENTION: an end running on beside another way reads as one way drawn twice"""
+    return len(o) >= 2 and any(along_tail(q, o, deg=_DOUBLED_DEG) is not None for q in (p, p[::-1]))
+
+
 def cut_at_tail(pts: Sequence[Pt], k: int, other: Sequence[Pt], step: float = 4.0) -> list[Pt]:
     """`pts` cut at its `k`th sample (the `along_tail` index) and ended on its snap onto `other`: the vertices before the
     cut, the cut point, and the nearest point of `other` to it.

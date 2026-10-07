@@ -7,7 +7,7 @@ from __future__ import annotations
 
 import functools
 import math
-from collections.abc import Mapping, Sequence
+from collections.abc import Callable, Mapping, Sequence
 from typing import Any
 
 from l7r.diagram.settlement import Settlement, point_in_poly, seg_dist, seg_intersect, segments_cross
@@ -394,9 +394,10 @@ def served_network(lanes: Sequence[Mapping[str, Any]], join: float = LANE_JOIN_F
     return [(a, b) for i in sorted(main) for a, b in zip(ways[i], ways[i][1:], strict=False)]
 
 
-def unreached_houses(M: Mapping[str, Any], reach: float = WEB_REACH_FT) -> list[tuple[int, int, int]]:
+def unreached_houses(M: Mapping[str, Any], reach: float = WEB_REACH_FT, near: Callable[[float, float], float] | None = None) -> list[tuple[int, int, int]]:
     """(x, y, distance) for every farmhouse the connected lane network does not reach. [] when the rule
-    does not apply to this map.
+    does not apply to this map. `near`, where the caller keeps it (`knots.WebMemo`), answers a house center's distance to
+    the network (`served_network`'s segments, a network of at least one) in its place - the same nearest segment.
 
     FORM-CONDITIONAL, NOT WAIVED, and the condition is carried verbatim from the check. The rule's own
     justification is about ONE form - every house in the NUCLEATED village is reached by the lane network -
@@ -412,13 +413,15 @@ def unreached_houses(M: Mapping[str, Any], reach: float = WEB_REACH_FT) -> list[
     meta = M.get("meta") or {}
     if not meta.get("generated_by") or meta.get("settlement_form", "nucleated") == "dispersed":
         return []
-    segs = served_network(M.get("lanes") or [])
-    if not segs:
-        return []
+    if near is None:
+        segs = served_network(M.get("lanes") or [])
+        if not segs:
+            return []
+        near = lambda cx, cy: min(seg_dist(cx, cy, a, b) for a, b in segs)  # noqa: E731
     far: dict[tuple[int, int], tuple[int, int, int]] = {}
     for h in M.get("houses") or []:
         cx, cy = float(h["x"]), float(h["y"])  # x, y ARE the center here - the manifest's convention
-        d = min(seg_dist(cx, cy, a, b) for a, b in segs)
+        d = near(cx, cy)
         if d > reach:
             far[(round(cx), round(cy))] = (round(cx), round(cy), round(d))
     # ...AND A HOUSEHOLD REACHED ACROSS A NEIGHBOR'S YARD IS REACHED WHERE ITS NEIGHBOR IS (feature 317, `rolling/passage.py`): the

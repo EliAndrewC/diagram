@@ -65,14 +65,20 @@ def shadowed_by(ways: Sequence[Sequence[Pt]], i: int) -> int | None:
     if len(p) < 2:
         return None
     run = sampled(p)
+    return next((j for j, o in enumerate(ways) if j != i and runs_beside(p, run, o)), None)
+
+
+def runs_beside(p: Sequence[Pt], run: Sequence[Pt], o: Sequence[Pt]) -> bool:
+    """Does way `p` (`run`: its `sampled` points) run beside way `o` - within `WEB_SHADOW_FT`, unbroken, for more than a
+    `BUNDLE_PITCH`? Only a way whose box comes within `WEB_SHADOW_FT` of `p`'s is measured. `shadowed_by`'s pair test, asked
+    pair by pair by a caller that keeps the answers (`knots.WebMemo`).
+
+    Research: no way drawn twice - UNRESEARCHED: within `WEB_SHADOW_FT` (30 ft), unbroken for more than a bundle pitch"""
     x0, y0 = min(q[0] for q in p) - WEB_SHADOW_FT, min(q[1] for q in p) - WEB_SHADOW_FT
     x1, y1 = max(q[0] for q in p) + WEB_SHADOW_FT, max(q[1] for q in p) + WEB_SHADOW_FT
-    for j, o in enumerate(ways):
-        if j == i or len(o) < 2 or max(q[0] for q in o) < x0 or min(q[0] for q in o) > x1 or max(q[1] for q in o) < y0 or min(q[1] for q in o) > y1:
-            continue
-        if shadow_measure(run, list(zip(o, o[1:], strict=False)))[1] > BUNDLE_PITCH:
-            return j
-    return None
+    if len(o) < 2 or max(q[0] for q in o) < x0 or min(q[0] for q in o) > x1 or max(q[1] for q in o) < y0 or min(q[1] for q in o) > y1:
+        return False
+    return shadow_measure(run, list(zip(o, o[1:], strict=False)))[1] > BUNDLE_PITCH
 
 
 def _lay_web_lane(s: Settlement, run: Poly, hard: list[Poly], walls: list[Poly], water: list[tuple[Pt, Pt]], belts: Sequence[Poly] = (), houses: Sequence[Pt] = ()) -> bool:

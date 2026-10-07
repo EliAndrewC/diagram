@@ -242,3 +242,24 @@ def test_a_way_takes_the_foot_as_traced_where_every_join_stands_beside_a_junctio
     _refusing_ends_at(monkeypatch, [j])
     assert gw.lay_the_ways(s) == (0, 0)
     assert houses[0]["geom"]["access"][-1] == _FEET[0], "reached all the same, a few feet beside the junction"
+
+
+def test_a_households_legs_are_each_asked_once(monkeypatch: pytest.MonkeyPatch) -> None:
+    """`_way_for`: its exits' runs share their legs, and each leg is asked once for the household (the perf-audit of feature
+    328 wave 4) - the same ways laid."""
+    s, houses = _site()
+    asked: list[tuple] = []
+    real = gw.house_clear
+
+    def counted(a, b, *r):
+        if a != b:  # a leg; a cell's own test (`open_here`) asks a point
+            asked.append((tuple(a), tuple(b)))
+        return real(a, b, *r)
+
+    monkeypatch.setattr(gw, "house_clear", counted)
+    gw.lay_the_ways(s)
+    assert asked and all("access" in h["geom"] for h in houses)
+    per = {}
+    for leg in asked:
+        per[leg] = per.get(leg, 0) + 1
+    assert max(per.values()) <= len(houses), "a leg asked at most once a household"
