@@ -85,5 +85,11 @@
    ".claude/skills/diagram/l7r/diagram/hamletgen/ways/joints.py::_one_joint#a fold or Z at a joint becomes a T"
   ],
   "moved": "wave 2: at 92 ft (0038) Kuwabata's lanes 3 and 8 zigzag across a joint the engine cannot yet re-route; held back to 100 in wave 2, the row waits for that row"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/cluster.py::seat_cluster#brook penalty weight": {
+  "after": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#a cluster the brook crosses reached"
+  ],
+  "moved": "wave 2: at the page's tiebreak (0.05) the 10-household seed 4 seats astride its brook and the web leaves ten farmhouses unreached; held at 3.0, the row waits for the web to reach such a cluster"
  }
 }

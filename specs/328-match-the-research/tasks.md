@@ -35,7 +35,7 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 
 ## Phase 3 - wave 2 (tier E1: one value) - amendment 1, 2026-10-07
 
-Wave 2 takes the first sixteen E1 rows of `ranking.json`, less the row pitch (see below), (the eight procedure fixes that change only the procedure's
+Wave 2 takes the first sixteen E1 rows of `ranking.json`, less the row pitch and the brook's weight (see below), (the eight procedure fixes that change only the procedure's
 own text, and eight single values of the hamlet generator outside its lane code). The E1 row
 `hamletgen/consts.py::FOOTPATH_FABRIC_GAP` waits for wave 3: it is the same constant as the lane-law rows, and its
 `after` names `ways/bund.py::RunOnBlocks.clear#off the steadings` (spec SC-003). No row of this wave redraws a sheet.
@@ -43,7 +43,12 @@ own text, and eight single values of the hamlet generator outside its lane code)
 The row pitch (`hamletgen/consts.py::BUNDLE_PITCH`, 100 -> 0038's 92 ft) left the wave on measurement (2026-10-07): at
 92 ft Kuwabata's lanes 3 and 8 zigzag across a joint that the engine's joint pass cannot repair (the T's foot falls on
 the joint from both sides; both links that would drop the 36 ft jog skirt a steading and are refused). Held at 100 with
-the regression gone, it now waits (`after`) for the found row that re-routes such a joint (E3). The rows:
+the regression gone, it now waits (`after`) for the found row that re-routes such a joint (E3).
+
+The brook's weight (`hamletgen/cluster.py::seat_cluster#brook penalty weight`, 3.0 -> 0035's tiebreak) left the wave on
+measurement (2026-10-07, the closing bookend): at 0.05 the 10-household seed 4 seated astride its brook and the settled
+web left ten farmhouses off the network (`WebRefused`); restoring 3.0 alone, of the wave's values, rolls it. Held at 3.0
+(`cluster.py` as on main), it waits for the found row that lets the web reach a cluster its brook crosses (E3). The rows:
 
   - `buildings.md::Fire-water tubs#tub glyph` - procedure's tub glyph r5 -> r~3.8 (2.5 ft across); sheets already draw r3.8
   - `buildings.md::Outer court (administrative / public)#archery bank` - archery lane drawn per 0164's yaba ~250 x 8 ft with the azuchi at its end, not ~90 ft (no sheet draws one)
@@ -53,7 +58,6 @@ the regression gone, it now waits (`after`) for the found row that re-routes suc
   - `buildings/programs.md::Country shrine (a village district's shrine)#farmers' stage knob` - procedure knob 6: replace 'none in thirteen' with the record's 1,777 stages nationwide (lost stages and noh/puppet stages included); absent by default stands
   - `buildings/programs.md::Country shrine (a village district's shrine)#precinct size` - procedure precinct sentence: replace the stale 'one Edo set ... 60-240 tsubo' with Saga's Edo returns (lower part of 150-650) and Kami-Nerima 1821 (~10 to ~3,350 tsubo), plus 'a register can also overstate'
   - `buildings/programs.md::Magistrate's manor (county magistracy)#posting wealth knob` - the procedure calls the poor end's look a GUESS (0091 drawing: no page describes how a short-funded office looked); only the shortfall is attested
-  - `l7r/diagram/hamletgen/cluster.py::seat_cluster#brook penalty weight` - brook penalty weight 3.0 -> a tiebreak below the wind/upslope terms (e.g. 0.05 x crossed share), so a crossed site loses only when otherwise level
   - `l7r/diagram/hamletgen/hinterland/parcels.py::WET_SHARE_CAP#woods mostly on dry ground` - WET_SHARE_CAP 0.5 -> ~0 (0077: low ground by a river or marsh is left to grass, not wood)
   - `l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#mostly dry` - same constant: woodland parcels on dry ground only, WET_SHARE_CAP -> ~0
   - `l7r/diagram/hamletgen/homesteads/farm_water.py::farm_channel#where the channel ends` - cap the channel's end at one step (~6 ft) off the threshing yard, not up to 3.5 steps (21 ft)

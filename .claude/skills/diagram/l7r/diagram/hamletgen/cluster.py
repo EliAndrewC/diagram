@@ -145,10 +145,6 @@ class SeatRefused(ValueError):
     is refused at `stage_seat`, naming it, before any house exists - never seated off the wind."""
 
 
-BROOK_TIEBREAK = 0.05
-"""Research: brook tiebreak - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: an uncrossed site is preferred only when two are otherwise level - 0.05 x the crossed share, under the wind (1.0) and upslope (0.8) terms"""
-
-
 def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), drain: Poly | None = None, toe: Poly | None = None, wet: Sequence[Poly] = (), brook: Sequence[Pt] = ()) -> dict[str, Any]:
     """WHERE THE HOUSES GO - the one derivation that decides how the whole map reads.
 
@@ -189,7 +185,7 @@ def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), drain: Poly | N
         wind and upslope weights - UNRESEARCHED: 1.0 for facing the wind, 0.8 for upslope
         dry hem penalty - UNRESEARCHED: 1.6 within two band depths, plus 2.5 times the back's foul
         brook across the band - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: scored down, never refused
-        brook penalty weight - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: BROOK_TIEBREAK 0.05, a tiebreak below the wind and upslope terms
+        brook penalty weight - GUESS: 3.0
         brook reach on the band - UNRESEARCHED: a band point within 30 ft of the brook counts as on the water
         belt room on the canvas - CONVENTION: scored, refused past BELT_ROOM_MAX_OFF
         band on the canvas - CONVENTION: the seat center at least half the band's length inside the frame
@@ -313,14 +309,13 @@ def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), drain: Poly | N
         # map takes the form its site gives it" (0035, "How our maps place a hamlet on its stream"), so
         # which form a hamlet draws follows from where this scorer seats it, not from a roll. The score below is the
         # rendering section's "a site the brook does not cross is still preferred when two are
-        # otherwise level" - this project's decision (a crossing is one more thing to build and keep), so the weight is a
-        # TIEBREAK, 0.05 x the crossed share, below the wind (1.0) and upslope (0.8) terms (feature 328: at 3.0 it
-        # outweighed the wind and the slope together, so a crossed site lost even when it was the better ground). A bank knob, rolling the form, stays deferred (fc:2342) until a roll could choose a site the site does
+        # otherwise level" - this project's decision (a crossing is one more thing to build and keep), and the 3.0 weight
+        # a GUESS. A bank knob, rolling the form, stays deferred (fc:2342) until a roll could choose a site the site does
         # not give.
         if brook:
             _bp = [(mid[0] + nx * d - ny * lat * t, mid[1] + ny * d + nx * lat * t) for d in (dep * 0.5, dep + 34.0, dep * 2.0) for t in (-0.9, -0.45, 0.0, 0.45, 0.9)]
             crossed = sum(1 for q in _bp if nearest_within(brook_index, q[0], q[1], 30.0) < 30.0) / len(_bp)
-            score -= BROOK_TIEBREAK * crossed
+            score -= 3.0 * crossed
         # ...AND A BELT WITH GROUND TO STAND ON (settlement-review of Mizuguchi, feature 261, two rounds). The windbreak
         # stands 36-146 ft upwind of the houses' windward fringe (`belt_polygon`); a seat whose band runs that belt off the
         # canvas left the belt a strip beside the westernmost farmsteads, holed where they stood in it. Scored alone (-2.5

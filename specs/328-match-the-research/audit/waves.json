@@ -54,5 +54,19 @@
  ".claude/skills/diagram/l7r/diagram/settlement/shrines_wells/woods.py::TreeStandsMixin._draw_stand#fringe crowns drawn outside the stand's outline (_stand_fringe, outliers)": "1 (claim renamed or split; its parts re-checked)",
  ".claude/skills/diagram/l7r/diagram/settlement/structures/servants.py::ServantRangesMixin#servant range depth": "1",
  ".claude/skills/diagram/l7r/diagram/waterfields/polder.py::_polder_lattice#edge wander": "1",
- ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#dooryard mix": "1"
+ ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#dooryard mix": "1",
+ ".claude/skills/diagram/buildings.md::Fire-water tubs#tub glyph": "2",
+ ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#archery bank": "2",
+ ".claude/skills/diagram/buildings.md::Sacred features#grove crown size": "2",
+ ".claude/skills/diagram/buildings.md::Scale#main gate passage width": "2",
+ ".claude/skills/diagram/buildings/programs.md::Country shrine (a village district's shrine)#basin beside the approach": "2",
+ ".claude/skills/diagram/buildings/programs.md::Country shrine (a village district's shrine)#farmers' stage knob": "2",
+ ".claude/skills/diagram/buildings/programs.md::Country shrine (a village district's shrine)#precinct size": "2",
+ ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#posting wealth knob": "2",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::WET_SHARE_CAP#woods mostly on dry ground": "2",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#mostly dry": "2",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/farm_water.py::farm_channel#where the channel ends": "2",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/fixtures.py::_PRIVY_SEATS#four privy seats": "2",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/wells.py::_WELL_DRAWN_R#wellhead drawn extent": "2",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/wells.py::well_target#how many wells": "2"
 }
