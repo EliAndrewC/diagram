@@ -1,298 +1,33 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "7dca63c857ad1bf544403a28a547ec636ebb88db2ac52cf9754f1716856759d2",
+ "plan_sha256": "deece272d42d92fd4c0b3d9e7045ee58d0957eb2c900bd0765eb82f1224adc3e",
  "reviewed": "2026-10-07",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "P1-audit",
-   "summary": "Phase 1: findings snapshotted; nine Opus batches by module merged to ranking.json/ranking.md; E0 rows tiered on the brief's earlier wording get a bounded re-check (E0 only with a named page already saying what the code does); a row a dependency outranks takes that tier",
+   "id": "W11-T42a",
+   "summary": "Wave 10's 19 found rows tiered by their work by a fresh reader before the run is chosen (5 moved)",
    "class": "within",
-   "why": "The GM's first step ('rank all of the findings by how much implementation work'); FR-001/FR-003. The bounded re-check holds E0 to FR-003's definition rather than widening it."
+   "why": "FR-002/FR-003: tiers by implementation work; every T42a tier is the tier ranking.json carries"
   },
   {
-   "id": "D4",
-   "summary": "A second Opus reader re-tiers a 30-row sample blind; a batch disagreeing by more than one tier on more than 5 rows is re-run",
+   "id": "W11-scope",
+   "summary": "Wave 11 takes the last 11 open in-scope E0 and E1 rows (8 claims, 3 values); next open in-scope row 365 is E2",
    "class": "within",
-   "why": "Checks that the order the GM asked for is a reproducible estimate (spec Assumptions); it enforces the ranking, it narrows nothing."
+   "why": "FR-006/FR-010: measured from ranking.json - exactly rows 151,169,186,187,188,190,191,192,297,351,361 are open, kept, E0/E1; row 365 is E2 mode-a; ranking is tier-ordered"
   },
   {
-   "id": "wave-order",
-   "summary": "Waves in tier order E0..E4; within a tier by module; a row with `after` waits for its dependency",
-   "class": "within",
-   "why": "'go from easiest to hardest' (request); FR-003's ordering and SC-003's dependency clause."
-  },
-  {
-   "id": "D1",
-   "summary": "Waves as amendments: only the current wave's rows are task boxes; the next wave appended once a wave lands",
-   "class": "within",
-   "why": "FR-006 verbatim; the GM asked for one feature that keeps going."
-  },
-  {
-   "id": "D2",
-   "summary": "Wave 1 is every E0 row, claim lines only, no map regeneration, gate runs",
-   "class": "within",
-   "why": "E0 is the easiest tier, so it is first under 'easiest to hardest'; no row is excluded."
-  },
-  {
-   "id": "D3",
-   "summary": "Re-checks batched by module, several units per claims bundle",
-   "class": "within",
-   "why": "FR-003's module grouping; every row is still re-checked by impl-drift (FR-005)."
-  },
-  {
-   "id": "later-waves-E4",
-   "summary": "E4 rows take a research pass under the record's own checks before any code change",
-   "class": "within",
-   "why": "Spec Edge Cases (a finding the research cannot settle); the code still moves to the research afterward."
-  },
-  {
-   "id": "exception-path",
-   "summary": "A row flagged deviation-tempting goes to spec-fidelity with the request verbatim before any other fix",
-   "class": "within",
-   "why": "FR-004 and the Edge Cases' XVI path; the plan adds no exception of its own."
-  },
-  {
-   "id": "D5",
-   "summary": "Nine procedure rows that redraw a hand-drawn Mode A sheet re-tiered E1 -> E3",
-   "class": "within",
-   "why": "FR-003 tiers a sheet redraw E3; the rows stay in the ranking and are fixed in their tier (FR-009 names the sheets)."
-  },
-  {
-   "id": "D6",
-   "summary": "The 32 E1 rows of hamletgen/ways/ are one wave (wave 4); FOOTPATH_FABRIC_GAP waits for it",
-   "class": "within",
-   "why": "FR-003's module grouping and dependency rule; nothing dropped, the rows are fixed toward 0081/0246."
-  },
-  {
-   "id": "W2-verification",
-   "summary": "Waves 2+ verified on Inashiro first, then the pool through the gate, bookends, impl-drift on every touched unit",
-   "class": "within",
-   "why": "FR-005's verification; adds no behavior."
-  },
-  {
-   "id": "W5-scope",
-   "summary": "Wave 5 is the contiguous run: row 143 (the row street) and rows 148-173, 29 rows",
-   "class": "within",
-   "why": "FR-006's 'contiguous run of the ranking'; the remainder is the next wave."
-  },
-  {
-   "id": "D7",
-   "summary": "The row street follows 0033 (runs on off the map), not 0246's clustered-lane pull-back; trim_streets no longer cuts it back",
-   "class": "within",
-   "why": "The implementation is moved to the page that governs a row village; the research is not changed and no row is excepted (FR-004)."
-  },
-  {
-   "id": "W5-verification",
-   "summary": "A town or city value no scripted map draws is proven by its unit test; bookends back to back; a held value becomes a found row",
-   "class": "within",
-   "why": "FR-005 regenerates the maps a wave changes; a value no map draws changes none. A held value is ranked, not dropped (Edge Cases)."
-  },
-  {
-   "id": "closed-tiers",
-   "summary": "Closed rows keep the tier they closed at (audit/closed-tiers.json); merge.py keeps it",
-   "class": "within",
-   "why": "Bookkeeping of the ranking's history; it moves no open row and changes no fix."
-  },
-  {
-   "id": "W6-scope",
-   "summary": "Wave 6 is the 32 open E0 rows (tasks.md Phase 7), claim lines only",
-   "class": "within",
-   "why": "Measured: ranking.json holds exactly 32 E0 rows with no wave, and Phase 7 lists 32; E0 is the lowest open tier (SC-003)."
-  },
-  {
-   "id": "W6-no-occasion-no-bookend",
-   "summary": "No map regeneration, review occasion or perf bookend for wave 6",
-   "class": "within",
-   "why": "Claim lines change nothing a map draws; FR-005's regeneration and occasions apply to waves that change drawing, and the bookend rule to waves that change engine behavior."
-  },
-  {
-   "id": "D8",
-   "summary": "A claim written or relabeled never carries a code change; where the page it names answers differently from the code, the claim states the code against that page and the departure is ranked as a found row in its own tier",
-   "class": "within",
-   "why": "The rewording only extends the rule from relabels to claims written for UNCLAIMED units, which is the same case (Phase 7 is both). The code still moves to the research (FR-004), in the tier its work takes (FR-003, Edge Cases 'new findings a fix exposes'); the claim stays a drift, not a DEVIATION (T22 allows DEVIATION only via the exception path), so the departure stays a finding until fixed. Nothing is dropped; it is ordered, as the GM asked."
-  },
-  {
-   "id": "XIII-baseline",
-   "summary": "Later waves take their regression baseline on the clone while its engine content is main's, before the wave's first edit",
-   "class": "within",
-   "why": "A verification method under constitution XIII; it does not touch the scope of what the GM asked."
-  },
-  {
-   "id": "T25a",
-   "summary": "Before wave 7 chooses its rows, the 34 found rows tiered by verdict alone (waves 4-6 re-checks) are tiered by their work by a fresh Opus reader (audit/t25a-out.jsonl, applied in overrides.json with T25a notes); 18 moved; the folded brook-width row carried by row 203's fix",
-   "class": "within",
-   "why": "Measured: all 34 t25a rows sit in ranking.json at the reader's tier and fix (0 mismatches), every override carries its T25a note, and no other ranking row changed. It enforces FR-002/FR-003 (the order by work) and SC-003; the reasons spot-checked in the code hold (walls.py:432 else 12, :507 >= 45, :532 + 12.0, :540 130/55; castle_civic.py:810 bm = 32; bridges.py DEFAULT_W 9.0/4.2). The folded row's value change (brook to px(7)) is in row 203's fix, so nothing is dropped."
-  },
-  {
-   "id": "W7-scope",
-   "summary": "Wave 7: the 7 open E0 rows, then the contiguous E1 run, global rows 183-234 (27 open rows, tasks.md Phase 8), ending at the civic grounds' last row; next open E1 row 235; 232 and 233 wait on 231 inside the wave",
-   "class": "within",
-   "why": "Measured on ranking.json after T25a: exactly 7 open E0 rows (52,53,54,56,62,98,137); the first open E1 row is 183 and rows 183-234 hold 27 open E1 rows; Phase 8 lists exactly these 34 keys (none missing, none extra); every after is inside the wave. The round-3 objections are answered: the wall literals (now 211,215,217) are in the run, the claim relabels are E0 and in the wave, the fallback seat, the river-tap sweep and the arcade moved to E2/E2/E3 and out. Tier order is monotone over the ranking. FR-006 contiguous run, SC-003 lowest tier first."
-  },
-  {
-   "id": "W7-verification",
-   "summary": "Wave 7 verified as wave 5: Inashiro first (PNG looked at), the pool through the gate, a town or city value by its unit test, bookends back to back, impl-drift on every touched unit, a held value becomes a found row",
-   "class": "within",
-   "why": "FR-005 and the spec's Edge Case for a fix that makes a map fail (held value -> found row, recorded in the ranking); the same verification already ruled within for wave 5."
-  },
-  {
-   "id": "T29a",
-   "summary": "Before wave 8 chooses its rows, the 14 found rows wave 7's re-checks tiered by verdict alone are tiered by their work by a fresh Opus reader (audit/t29a-out.jsonl, applied in overrides.json); 11 moved",
-   "class": "within",
-   "why": "FR-002/FR-003 tier by implementation work and SC-003 orders the waves by tier; the same step as T25a. Re-measured on round 2 against ranking.json at 70f7115a9: 11 of the 14 changed tier (2 to E3, 5 to E2, 1 to E4, 3 to E1), matching the plan's list; the two research gaps were E4 before and after."
-  },
-  {
-   "id": "W8-D8-found-rows",
-   "summary": "Under D8, each wave-8 E0 claim that states a drift names the found row that fixes it: street.py row_reach farm frame (E1, row 192), law_water oblique_at channel crossing (E4, row 713), funerary cremation_ground fire bed's two forms (E3, row 634); row 83 names consts.py::LANE_CLEARANCE (E3, row 570)",
-   "class": "within",
-   "why": "FR-004 moves the implementation to the research and the spec's Edge Cases record a departure as a found row in the tier its work takes; nothing is dropped - each drift is a ranked row (all four present in ranking.json), and the fire bed's two forms become a knob, as the research doctrine requires for two attested forms."
-  },
-  {
-   "id": "W8-scope",
-   "summary": "Wave 8: the 18 open E0 rows, then the contiguous E1 run, global rows 187-247 (9 open rows, the farm frame at 192 included), ending at the civic grounds' last open row; next open E1 row 253",
-   "class": "within",
-   "why": "Measured on round 2 in ranking.json: 18 open E0 rows (48-53, 58, 61, 62, 70, 81, 83, 120-124, 153); open E1 rows before 253 are exactly 187, 192, 209, 231, 242, 243, 244, 245, 247, and tasks.md Phase 9 lists those 27 rows. Nothing between is skipped (FR-006 contiguous run, lowest tier first)."
-  },
-  {
-   "id": "W8-verification",
-   "summary": "Wave 8 verified as wave 7: Inashiro first, the pool through the gate, a town or city value by its unit test, bookends back to back, impl-drift on every touched unit, a held value becomes a found row",
-   "class": "within",
-   "why": "FR-005 and the spec's Edge Cases. The occasions line's scope checked on round 2: every scripted pool hamlet's manifest carries empty cemeteries and cremation_grounds, and the pool's other scripted wrappers rasterize hand-authored sheets."
-  },
-  {
-   "id": "D9-scope-rule",
-   "summary": "Scope from the kept maps' own gen-cache entries (pool hamlets, magistracy sheets, country shrine): a recorded function or method, a class one of whose methods ran or which executed code constructs or names, a constant an executed function or an in-use knob's registration reads, a knob in use (the registry's knob resolved by name - resolve/resolve_knob/pin_knob/KNOBS[...] - or its typing rule run; not a hamlet's own hamletgen/ table rolled under the same name) and a module-level claim on one, any unit under hamletgen/, KEPT_CHECKS, buildings* as mode-a; a claim whose value no kept map reads though its unit runs deferred with its measured reason; everything else deferred (897 of 3927 units, 14 single claims)",
+   "id": "W11-exception",
+   "summary": "Wave 11 starts on the unpushed waves 9 and 10 under the wave-11 exception (wave 10 closed at 6be618a9e, backup pushed; opening bookend at that commit; stacking stops when anything but the GM's sign-off would refuse)",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "Round 4's item answered: FR-010 and D9 now word a knob in use as scope.py measures it. Reproduced on round 5's own run (audit/scope.py into a scratch copy: scope.json and claims-deferred.json identical; 3160 executed functions, 9 knobs in use - byre_form, family_form, fan_middle, footbridge_form, kosatsuba_seat, paddy_rest, weir_form, windbreak_belt, winter_crop; 274 kept / 60 mode-a / 159 deferred open rows). Each of the 9 is resolved by name inside a function the kept maps' records hold (driver.build, HamletSpec.__post_init__, retirement_houses, stage_field, channel_footbridges, resolve_seat, place_kosatsuba, resting_plots, draw_intake, _windbreak_belt, _coarse_grain_top_up), so the file-level scan admits nothing a kept map does not execute. The two newly deferred registry claims are legitimate on purpose: the hamlet rolls bamboo and settlement_form from its own hamletgen/consts.py tables (BAMBOO_FORMS, SETTLEMENT_FORMS via plan.py _roll, which only seeds knob_rng by name), those tables and their claims stay kept, and no executed function reads the registry's bamboo or settlement_form entry (no literal resolve, no KNOBS subscript; conditions.knobs, the one reader of every entry's value_space, is not in any kept record; the spec pins of the kept maps name only paddy_rest and byre_form). A fix to the registry entry changes no kept map. The remaining narrowing - a value whose unit runs but no kept map reads (row 275's FixtureForms default privy weights) - stands as ruled on round 4."
+   "why": "Narrows FR-006's pushed-before-the-next-begins, as ruled on conditions in the Wave 10 section; condition (1) measured met: T40 impl-drift ticked, gate green at 76b945688 (engine identical to 6be618a9e), glyph-check PASS in the ledger, wave column in waves.json, origin backup/digram-backlog = 6be618a9e; (2) a commit, engine-identical to 3cb19c982, carried by T45; (3) the only escape at 6be618a9e is the feature's standing CLAIMS_OK for found rows; (5) in the plan; (6) this review"
   },
   {
-   "id": "D9-deferred-list-from-current-rows",
-   "summary": "dev/claims-deferred.json derived over every claimed unit (897 of 3927) plus single claims under `keys` (14: the 13 registry knob claims no kept map resolves, bamboo forms now among them, and row 275's privy weights), read by scripts/_claims.py; re-derived when a wave lands",
+   "id": "W11-verification",
+   "summary": "Verification as wave 10: Inashiro first, pool through a green gate, bookends, impl-drift on every touched unit",
    "class": "within",
-   "why": "Reproduced exactly on round 5 (diff empty against the committed file). The `keys` field gained `_knobs.py::<module>#bamboo forms`, which follows from D9-scope-rule's measure."
-  },
-  {
-   "id": "D9-any-in-scope-row-keeps-unit",
-   "summary": "A unit with any in-scope row stays in scope (never listed deferred)",
-   "class": "within",
-   "why": "Prevents deferring code a kept map executes; serves the GM's limit."
-  },
-  {
-   "id": "D9-closed-rows-stand",
-   "summary": "Rows already fixed in now-deferred code (waves 5-8) stay closed; their open remainder is deferred",
-   "class": "within",
-   "why": "The GM: 'finish your current round of in-progress stuff, the[n] edit the feature' - nothing asks the done work undone."
-  },
-  {
-   "id": "cap-85",
-   "summary": "The cap is 85%, the hook re-armed at 85; the plan's Summary now says 85%",
-   "class": "within",
-   "why": "'Please also raise the cap from 75% to 85%'. The plan's Summary says 85%."
-  },
-  {
-   "id": "T34a",
-   "summary": "Before wave 9 chooses its rows, the 5 in-scope found rows tiered by verdict alone are tiered by their work (audit/t34a-out.jsonl; 3 moved, verified against ranking.json)",
-   "class": "within",
-   "why": "FR-002/FR-003's measure is the work; the same step as T12a/T25a/T29a."
-  },
-  {
-   "id": "W9-scope",
-   "summary": "Wave 9: the 5 open in-scope E0 rows (51, 62, 65, 93, 94), then in-scope E1 rows 265-297 (26 rows); next open in-scope E1 row 303",
-   "class": "within",
-   "why": "Re-derived on round 5 from ranking.json and the committed scope.json (identical to round 5's re-run; ranking.json's scope field agrees on every row): open in-scope E0 rows exactly 51, 62, 65, 93, 94; 26 open in-scope E1 rows in 265-297, the deferred ones there 271, 273, 275, 282, 287, 289, 291; the next in-scope E1 row is 303. Unchanged by round 4's correction."
-  },
-  {
-   "id": "W9-verification",
-   "summary": "Inashiro first, the pool through the gate, bookends back to back with nothing else running, impl-drift on every touched unit, a held value becomes a found row",
-   "class": "within",
-   "why": "FR-005's verification; adds no behavior."
-  },
-  {
-   "id": "W9-hold-yard-step",
-   "summary": "Kuwabata's zigzag bisected by row over the pre-wave engine; the yard privy's step held at its pre-wave 6.0 ft (main's value) as its found row (gap_ways.py::_way_for re-seat, E3), its claim stating the drift and naming the row (D8); the front step at the page's value",
-   "class": "within",
-   "why": "The spec's Edge Case ('a map whose new layout fails the gate ... the row takes that work's tier and waits on a found row'), found by row as round 1 asked; no research moved, no row dropped. Verified: fixture_seats.py PRIVY_YARD_STEP_FT 6.0 equals origin/main's; the found row is ranked E3 (t38b-out.jsonl)."
-  },
-  {
-   "id": "W10-T38a",
-   "summary": "T38a: wave 9's 29 found rows tiered by their work by a fresh reader (4 moved)",
-   "class": "within",
-   "why": "FR-002/FR-003; unchanged from round 1."
-  },
-  {
-   "id": "W10-T38b",
-   "summary": "T38b/T38c: the 18 rows found after T38a tiered by their work by a fresh reader (3 moved); a row whose 'after' is a higher tier takes it (P1)",
-   "class": "within",
-   "why": "Round 1's item answered: of found-wave9.jsonl's 49 rows, 47 are in t38a/t38b/t38c; the other two are row 768 (NEEDS-RESEARCH, E4 by the Edge Case) and row 316 (the unit slip T38b's own reader found, E1). Rows 494/504/505/637 no longer sit at a verdict tier. Row 503 (sun strip default) reader E1, ranked E2 by its after on row 501 (E2) - P1's dependency rule; T38a's verify line still reads 'to E1' for it."
-  },
-  {
-   "id": "W10-needs-research-E4",
-   "summary": "Wave 9's NEEDS-RESEARCH rows (84 brook crossing, 159 belt off the deep marsh, 176 byre beside the house; now rows 768, 776, 786) E4, research first",
-   "class": "within",
-   "why": "Round 1's item answered: spec Edge Cases put NEEDS-RESEARCH at E4 with the research pass first; ranking.json holds all three E4 and out of wave 10. Their fix text still names a relabel as the expected outcome; the research decides it."
-  },
-  {
-   "id": "W10-annex-floor",
-   "summary": "The north annex's band row: keep the 18 ft floor (E2), never a named exception",
-   "class": "within",
-   "why": "Round 1's item answered: ranking row 473 E2 with a fix toward 0052's band; the claim-naming option is gone from tasks.md."
-  },
-  {
-   "id": "W10-deviation-path",
-   "summary": "DEVIATION relabels go through the exception path first; T39 says DEVIATION only after LEGITIMATE",
-   "class": "within",
-   "why": "Spec Edge Cases and FR-004."
-  },
-  {
-   "id": "W10-verification",
-   "summary": "Wave 10's verification: Inashiro first, the pool through a green gate (FR-005), bookends back to back, impl-drift on every touched unit, a held value becomes a found row",
-   "class": "within",
-   "why": "Round 1's item answered: the 'Kuwabata's one known failure aside' clause is gone; FR-005 as written."
-  },
-  {
-   "id": "W10-occasion",
-   "summary": "Occasion: the notice board's glyph redrawn (16 x 6 ft, 30 degrees), its rows in the wave",
-   "class": "within",
-   "why": "Feature 294's occasion; the board rows are still in Phase 11."
-  },
-  {
-   "id": "W9-zigzag-preference-withdrawn",
-   "summary": "The gap pass's zigzag preference withdrawn after it mended nothing and read band 3",
-   "class": "within",
-   "why": "A measured design attempt withdrawn; no scope moves."
-  },
-  {
-   "id": "W9-hold-shed-step",
-   "summary": "The three scaling rolls' web refusals bisected by row over the held state to the wood shed's step alone; WOODSHED_STEP_FT held at its pre-wave 6.0 ft, E3 after its found row (last_resort.py::refuse_unreached#every household reached at 20 and 40 households), its claim stating the drift",
-   "class": "within",
-   "why": "Round 2's item 1 answered by the spec's Edge Case route, as wave 2 held the brook's weight. Verified: fixture_seats.py WOODSHED_STEP_FT 6.0 with the drift stated and the row named; overrides.json E3 after the found row; found-wave9.jsonl carries the row; 'GM's to rule' gone from plan.md and claims-followup.md; the newest pair (20261007T162956Z-328-start-perfbase at 6ca2f5ccf, 20261007T163306Z-328-end at 6870097cd) seats every household on all 12 scaling rolls."
-  },
-  {
-   "id": "W10-scope",
-   "summary": "Wave 10 = the 20 open in-scope E0 rows, then in-scope E1 rows 290-354 (20 rows); next open in-scope row 355 is E2",
-   "class": "within",
-   "why": "Re-derived on round 5 from ranking.json: open in-scope rows with no wave are exactly 20 E0 and 20 E1, the E1 at positions 290, 301, 302, 310, 321-327, 342, 345, 347-349, 351-354; the first open in-scope E2+ is 355 (a Mode A row, in scope by FR-010). The six rows that left the E1/E0 count are the four relabels re-tiered E3 (678, 708) with the two annex claims after the storehouse (709, 710), as the exception check ruled - none dropped."
-  },
-  {
-   "id": "W10-hold-wave9",
-   "summary": "Wave 9 closes in full (impl-drift, a green gate, the wave column, no measured regression) and is pushed if band 2 or lower",
-   "class": "within",
-   "why": "Constitution VI/XIII and FR-006; the push's perf check."
-  },
-  {
-   "id": "W10-stack-on-wave9",
-   "summary": "If wave 9's bookends still read band 3, its push waits for the GM's sign-off and wave 10 starts on top of it in the clone, wave 10's opening bookend at wave 9's closing commit, the sign-off question deferred to the end",
-   "class": "narrowing",
-   "ruling": "LEGITIMATE",
-   "why": "Case (a) of round 2, now worded with its conditions in plan.md. It applies: the newest pair reads band 3 on timing alone (one roll over 20%: 40 hh seed 39, 12.0 -> 14.5 s), every scaling roll seats every household, the gate is green; the band is the GM's sign-off under the push's perf check, which the session cannot give, and the GM said to defer questions to the end of the feature. The condition 'wave 9 closed in full' (T37, T38's records) must hold before wave 10's first edit."
-  },
-  {
-   "id": "W10-relabels-ruled",
-   "summary": "The exception check ruled the four DEVIATION relabels NOT LEGITIMATE: the crowns-per-clump floor and ceiling dropped (E1, in this wave), the planted bank's two forms and the free-standing storehouse E3 with the two annex claims after the storehouse row",
-   "class": "within",
-   "why": "Nothing is excepted: each ruling sends the code to the page (FR-004). Verified in ranking.json: rows 301/302 E1 open in the wave, 678 and 708-710 E3 open, scope kept; groves.py drops max(5, ...) and the cap, GROVE_CLUMP_CROWNS kept only for band_clumps and claimed so."
+   "why": "FR-005"
   }
  ],
  "verdict": "CLEAR"

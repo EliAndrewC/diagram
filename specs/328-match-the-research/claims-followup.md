@@ -380,3 +380,19 @@ Wave 10 wrote the open in-scope E0 claims and took the in-scope E1 rows (the not
 The gate held one row (FR-004): the carve's berm (`waterfields/carve.py::_dry_fields#off the water and the frame`), bisected by group - at the canal's bank Inashiro's toe marsh takes a sharp corner on open ground; E3 after `waterfields/carve.py::_dry_fields#a hem that keeps its ground inside the berm`. Sawada carries one lane knot again (lanes 15/17, 8.2 ft), as main carries one there at a different place (lanes 9/12, 21.9 ft): Sawada's strict xfail is restored as main has it; Inashiro, which main also knots (lanes 11/13, 19.1 ft), has none. Bisected with the berm still applied, the rings' steps, the fork triangle and the berm together brought it; the berm is now held and the knot stands, so the two field rows are what re-lay it. It waits on row "a knot no lawful gather reaches".
 - `l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_anchor#reach in feet` (DRIFTED, E1): compare the approach's distance to a house with px(KOSATSUBA_ENTRANCE_REACH_FT), not the bare feet (60 ft only at 1 ft/px)
 - `l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_source#feeder brook width against the ladder` (DRIFTED, E4): research first: 0068's ladder puts a village creek at about 3.5 times the 1.5 ft floor (about 5.25 ft) where 0059 says 7 ft - the record reconciles the two before the code moves
+
+## Wave 11 (2026-10-07)
+
+Wave 11 wrote the last open in-scope E0 claims and took the last E1 values. Its re-check found the rows below (`audit/found-wave11.jsonl`), tiered provisionally by verdict until a read by their work.
+
+- `l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#bank margin in feet` (DRIFTED, E1): the bank margin beside the source brook at the map's scale: px(7)/2 + px(3), not 7/2 + 3 raw pixels
+- `l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#mixed broadleaf belt's sizes and bamboo` (DRIFTED, E2): hold the mixed broadleaf belt's crowns to 0080's 0.75-1.4 and drop or claim its 8% bamboo (0072 names an irregular wood of rounded crowns)
+- `l7r/diagram/waterfields/polder.py::build_polder#toe ends run on 3 ft` (DRIFTED, E1): the toe end's run along the trunk at the map's scale: 3.0 / ftpx, not 3 raw pixels
+- `l7r/diagram/waterfields/polder.py::build_polder#hand-piled outlines` (CANNOT-TELL, E0): re-check with _polder_parcels and organic in the bundle: whether the 0.05-module fillet varies corner by corner (0014: from all but square to a broad sweep)
+- `l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#coarse-grain top-up` (UNCLAIMED, E0): coarse-grain plots topped up after refused plots (`_coarse_grain_top_up`)
+- `l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#thin band width` (UNCLAIMED, E0): the dispersed grove's thin band 17 ft (`THIN_BAND_FT`)
+- `l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#way in through the grove` (UNCLAIMED, E0): the way in through the grove 36 ft (`WAY_IN_FT`)
+- `l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#grove pad` (UNCLAIMED, E0): the grove pad of half a lane's room (`LANE_ROOM_FT` / 2, 16 ft)
+- `l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#service strip` (UNCLAIMED, E0): the service strip behind the house 24 ft (`SERVICE_STRIP_FT`)
+- `l7r/diagram/waterfields/comb.py::_comb_drain#collector above the frame` (UNCLAIMED, E0): the collector held 40 px above the frame's bottom edge
+- `l7r/diagram/waterfields/polder.py::build_polder#lattice unbent by default` (UNCLAIMED, E0): the rice polder's lattice unbent by default (mosaic 0, edge_wander 0)

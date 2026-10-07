@@ -375,7 +375,7 @@ class CombMixin:
             hem off rice and water - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: a plot on an earlier fan's rice, on water or on the field's own ditch is dropped
             bank beside the source brook - GUESS: a bund's width, 3 px, past the drawn 7 px brook's bank (7/2 + 3)
             plot size and crop - NONE: taken from the net as build_comb laid them
-            fallback watercourse widths - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: where a record carries no width, a brook 7 ft, a channel 4.5 ft, a canal 6 ft, at the map's scale
+            fallback watercourse widths - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html, research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: where a record carries no width, a channel 4.5 ft and a canal 6 ft (0068), a brook 7 ft (0059's brook) - at the map's scale; 0068's brook narrower than the head race it feeds is the open conflict, the found row comb.py::CombMixin._comb_draw_source#feeder brook narrower than the head race
             nothing built or planted on a dry plot - UNRESEARCHED: each drawn hem plot registered as blocked ground (`block_polys`) and dry ground (`dry_polys`)
             dry plot ink - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: the crop's own fill, furrowed, a tan edge"""
         from l7r.diagram.waterfields import hem_on_paddy
