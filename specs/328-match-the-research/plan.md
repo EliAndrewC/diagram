@@ -76,6 +76,14 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 - **Closed rows keep their tier**: `audit/closed-tiers.json` records each closed row's tier at its wave's close and
   `audit/merge.py` keeps it, so re-tiering an open row never rewrites a closed one.
 
+## Wave 6 (amendment 5, 2026-10-07)
+
+- **Scope**: the 32 open E0 rows (`tasks.md` Phase 7), every one the re-checks of waves 4 and 5 found: claims to write,
+  relabels to make. Claim lines only, so no map moves, no review occasion and no bookend.
+- **D8 - a relabel never carries a code change**: where the page a relabel names answers the decision differently from the
+  code (the inner moat's width, the rampart strip in px, the plank over a junction), the claim states the code against the
+  page and the departure is ranked as a found row in its own tier, so E0 stays the claim alone (FR-003).
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Each later wave that changes engine behavior takes

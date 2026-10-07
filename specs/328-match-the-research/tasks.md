@@ -16,6 +16,7 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 - none (wave 5, the other rows): each fix moves one value inside a rule that already places or sizes the element (a
   size, a width, a count, a reach, a caption's leader); no element is new to a map and no glyph is redrawn.
 
+- none (wave 6): claim lines only (tier E0) - nothing a map draws or where it is placed moves.
 ## Phase 1 - the audit
 
 - [x] T01 the findings snapshot: `findings.json` = every finding of `make claims-report` at `a52ff1bcd` (565) (FR-001)
@@ -269,3 +270,53 @@ bridges, canals, moat and governor's gate. Every `after` these rows carry is a r
 - [x] T21 the occasion's review (glyph-check on Kashikawa's ways, one map) on a green gate; the close: `make perf LABEL=328-end` and the band's records, `make done` green, the wave column, landed (FR-005, FR-006, SC-002, SC-003)
       research: rendering
       verify: DONE. DONE. glyph-check on Kashikawa's ways PASS (the occasion now names its map, _review_owed.py); the later run_on flag left the lanes identical and restored main's board seat. Bookends back to back: band 0 (total -1.2%, 40 hh -5.8%), nothing owed; make done green; make page-check green; the wave column written
+
+## Phase 7 - wave 6 (tier E0: the claim alone - the open rows) - amendment 5, 2026-10-07
+
+Every open E0 row in ranking order (SC-003): the decisions wave 5's re-checks found unclaimed or mislabeled. Claim lines
+only. Where a relabel names a page that the code then departs from, the claim says what the code does against that page,
+and the departure is a found row tiered by the work it takes (spec Edge Cases), not a code change in this wave.
+
+  - `l7r/diagram/hamletgen/ways/law.py::near_misses#a household way's door end is never counted as a join that stops short` - claim it: a household way's door end is never counted as a join that stops short
+  - `l7r/diagram/hamletgen/ways/track.py::_thread_the_fabric#the track's route walled` - 0246 walls only a back lane's stretches (§63); the track's walls are in 0081 ("never crosses row crops", "stops at the flooded paddy", "keeps off wet ground"), and keeping off drawn water belongs to 0035's crossing rule; repoint to 0081 (and 0035 for the water)
+  - `l7r/diagram/hamletgen/ways/track.py::stage_track#connector and spur keep a 40 ft no-build clearance (LANE_CLEARANCE)` - claim it: connector and spur keep a 40 ft no-build clearance (LANE_CLEARANCE)
+  - `l7r/diagram/hamletgen/ways/track.py::stage_track#spur clip margin` - 0081 answers this: a lane "may touch a plot's boundary", and the path joins the bund; a 12 ft margin off the dry plots is a DEVIATION from §9, not UNRESEARCHED (only the toe-band margin is unanswered)
+  - `l7r/diagram/hamletgen/ways/track.py::stage_track#spur tip set back 17 ft (SPUR_SETBACK) off the field outline's vertex` - claim it: spur tip set back 17 ft (SPUR_SETBACK) off the field outline's vertex
+  - `l7r/diagram/hamletgen/ways/track.py::stage_track#valley and polder connector width CONNECTOR_WIDTH 6 ft` - claim it: valley and polder connector width CONNECTOR_WIDTH 6 ft
+  - `l7r/diagram/interactive/place.py::KINDS#a hamlet's dead burned and buried at the main village's` - claim it: a hamlet has no cremation ground; its dead are burned and buried at the main village's, which holds the district's grounds - cite the burial question (0236)
+  - `l7r/diagram/labels/standard.py::REACH_EM#how far the ringed search runs` - how far a caption is displaced before its leader is how it is shown (0242 calls the gap "our calibration"); the label should be CONVENTION, not UNRESEARCHED
+  - `l7r/diagram/overlap/taxonomy.py::_LABEL_GROUP#an arch is never covered` - this is the GM's ruling (2026-07-27, "never be covered by the 'temple of X' label"), and it overrides 0243's "its own building or compound"; the label should be CANON naming that ruling
+  - `l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.castle#each bailey's gate turned 90 degrees from its parent's (the dogleg route)` - claim it: each bailey's gate turned 90 degrees from its parent's (the dogleg route)
+  - `l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.castle#ground reserved` - the max(36 x bscale, 26) px margin outside the moat is a physical rule for how close buildings stand to the castle works, not plumbing; it should be UNRESEARCHED
+  - `l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.castle#inner moat` - the findings answer the inner moat's width: Hiroshima's "inner moat 30 to 104 m" (~98-341 ft), while the code draws mw*0.5 = 40 ft, below that range; the width should cite 0139.html §51 and be widened, and only the 0.42 x gap offset stays UNRESEARCHED
+  - `l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.martial_hall#the layout: hall across the north, lane on the south band, sensei's house between, azuchi 10 ft deep, shooting line 6 ft` - claim it: the layout: hall across the north, lane on the south band, sensei's house between, azuchi 10 ft deep, shooting line 6 ft from the lane's end
+  - `l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.wall#buildings kept off the rampart` - the cited 0125 drawing page answers this: "a clear strip about 46 ft wide" (the code uses 46 px, not px(46)); 0147 answers the gate buildings' clearance, "about 36 ft clear around each" (the code uses 32 px); both should cite those blocks
+  - `l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.wall#gate opening` - the 13 ft passage is in step (0147); claim the 14 x 48 px gateposts UNRESEARCHED
+  - `l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.wall#guard station and tower` - 0147 answers both: a town gate has "a 13 ft passage under a tower about 40 by 24 ft" and a "small guard room ... about 12 by 18 ft just inside it", but the code draws a 40 x 40 px tower beside the gate and a 96 x 46 px station; the claim should cite 0147, and the code is off from it
+  - `l7r/diagram/settlement/castle_civic.py::honmaru_fracs#the honmaru held to at most 0.34 of a small enceinte's half-sides` - claim it: the honmaru held to at most 0.34 of a small enceinte's half-sides
+  - `l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#a seat nearer a drain or collector than its own ditch refused (plank_on_supply)` - claim it: a seat nearer a drain or collector than its own ditch refused (plank_on_supply)
+  - `l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#assumed water widths when a record has none (DEFAULT_W: streams 9.0, channels 2.5, ditches 4.2)` - claim it: assumed water widths when a record has none (DEFAULT_W: streams 9.0, channels 2.5, ditches 4.2)
+  - `l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#longer plank at a junction` - 0084 answers this: it lists "the joins of ditches" among things that rule a seat out, and holds the span at "about 8 ft" because a longer board "would read as a jetty"; the code instead widens the deck over the junction. Should cite 0084, and against it this is a drift
+  - `l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#off dry crops, gardens and groves` - 0084 answers it ("Houses, crops, other crossings ... can rule out every wide spot"); should cite 0084, not UNRESEARCHED
+  - `l7r/diagram/settlement/city/canals.py::CanalsMixin.farmland_ring#non-moat (river) taps are never swept; the head race leaves on the outward bearing, unaligned with the current` - claim it: non-moat (river) taps are never swept; the head race leaves on the outward bearing, unaligned with the current
+  - `l7r/diagram/settlement/city/canals.py::CanalsMixin.farmland_ring#sluice set radially outward from the city center (or the caller's bearing)` - claim it: sluice set radially outward from the city center (or the caller's bearing)
+  - `l7r/diagram/settlement/city/moat.py::MoatMixin.water_gate#one opening whatever the canal` - claim it: one 60 ft opening whatever the canal; 0179 makes the passage as wide as its canal and gives a river a row of arched openings - claim against 0179 (a drift to rank if the canal is narrower or a river)
+  - `l7r/diagram/settlement/city/moat.py::MoatMixin.water_gate#pier depth through the wall, 30 ft` - claim it: the piers 30 ft deep through the wall, UNRESEARCHED (0147 gives a water gate's opening and pier width, not its depth)
+  - `l7r/diagram/settlement/city/walls.py::WallsMixin._gate_flanking_buildings#fallback road width px(26) for the verge setback` - claim it: fallback road width px(26) for the verge setback
+  - `l7r/diagram/settlement/city/walls.py::WallsMixin._gate_flanking_buildings#guard buildings turned square to the local wall tangent` - claim it: guard buildings turned square to the local wall tangent
+  - `l7r/diagram/settlement/city/walls.py::WallsMixin._seat_mural_towers#a slid tower kept at least 45 px from a gate` - claim it: a slid tower kept at least 45 px from a gate
+  - `l7r/diagram/settlement/city/walls.py::WallsMixin._seat_mural_towers#mural tower nudged outward onto the berm, px(40)` - claim it: mural tower nudged outward onto the berm, px(40)
+  - `l7r/diagram/settlement/civic_grounds/justice.py::JusticeGroundsMixin.boundary_marker#one stone drawn, where 0217 draws a group of one to three at an entrance` - claim it: one stone drawn, where 0217 draws a group of one to three at an entrance
+  - `l7r/diagram/settlement/civic_grounds/justice.py::JusticeGroundsMixin.execution_ground#two post sockets about 3 ft square, and their spacing` - claim it: two post sockets about 3 ft square, and their spacing
+  - `l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_anchor#the approach counts as reaching the houses within KOSATSUBA_ENTRANCE_REACH_FT 100 ft of a dwelling` - claim it: the approach counts as reaching the houses within KOSATSUBA_ENTRANCE_REACH_FT 100 ft of a dwelling
+
+- [ ] T22 every row's claim written or relabeled (cite the page that answers it, CANON for a GM ruling, DEVIATION or GUESS
+      or UNRESEARCHED where the page is silent); a departure a relabel exposes ranked as a found row (FR-003, FR-004)
+      research: rendering
+      verify:
+- [ ] T23 every touched unit re-checked by `impl-drift`; each wave-6 row IN-STEP or re-tiered with its measured reason (FR-005, SC-002)
+      research: rendering
+      verify:
+- [ ] T24 the close: `make done` green, the wave column, landed (no bookend: claim lines move no engine behavior) (FR-005, FR-006)
+      research: rendering
+      verify:
