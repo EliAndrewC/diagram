@@ -87,7 +87,6 @@ The forms the draft takes where the research gives more than one (feature 267 ou
   ~36 x 30 ft is Ochiba's particular, not the generic post's (buildings/programs.md: "The shrine is universal
   equipment ... Scale and dedication are the per-manor particular"). Its arch: NONE - a compound shrine may have
   none (buildings.md, Sacred features; research 0220 drawing); one shrine, so the shared-or-own knob does not arise.
- 
 - **Hearing court floor**: `white gravel`, the floor knob's first form (river cobbles the other; buildings/programs.md,
   research 0099 drawing) - the roofed court keeps its white-gravel fill.
 - **Middle gate**: beside the office hall's east end, not behind it (buildings/programs.md puts it customarily on the
