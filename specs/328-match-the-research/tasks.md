@@ -127,13 +127,13 @@ lines only. The rows:
   - `l7r/diagram/hamletgen/ways/web.py::stage_web#door path reach`
   - `l7r/diagram/hamletgen/ways/web.py::stage_web#web lanes off the hard ground`
   - `l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#annexes abut their house`
-- [ ] T12a the 13 open found rows tiered provisionally above E0 (six E2, one E3, six E4, by verdict) read and tiered by the work they take (FR-002, FR-003), before any E1 wave chooses its rows - a row easier than its provisional tier moves down, and an E0 or E1 row it becomes joins this wave or the next E1 wave in order (SC-003)
+- [x] T12a the 13 open found rows tiered provisionally above E0 (six E2, one E3, six E4, by verdict) read and tiered by the work they take (FR-002, FR-003), before any E1 wave chooses its rows - a row easier than its provisional tier moves down, and an E0 or E1 row it becomes joins this wave or the next E1 wave in order (SC-003)
       research: rendering
-      verify:
-- [ ] T12 every row read and either its claim corrected (cite the page that already says what the code does, relabel, or claim the undecided decision) or re-tiered with the reason; each corrected claim re-checked by `impl-drift` and IN-STEP (FR-003, FR-004, FR-005)
+      verify: DONE. the 13 provisional rows tiered by their work by a fresh Opus reader (audit/t12a-out.jsonl): E0 1, E1 3, E2 3, E3 4, E4 2; the E0 row (line follows its bounds) taken into this wave and closed
+- [x] T12 every row read and either its claim corrected (cite the page that already says what the code does, relabel, or claim the undecided decision) or re-tiered with the reason; each corrected claim re-checked by `impl-drift` and IN-STEP (FR-003, FR-004, FR-005)
       research: rendering
-      verify:
-- [ ] T13 the close: `make done` green; the wave column set from the index; landed (FR-005, FR-006, SC-002, SC-003)
+      verify: DONE. 39 rows read: 33 closed IN-STEP (24 corrected claims, 9 renamed or split and their parts re-checked), 6 re-tiered on reading with the reason (audit/overrides.json, found-wave3.jsonl); five re-check rounds (bundles 1-5)
+- [x] T13 the close: `make done` green; the wave column set from the index; landed (FR-005, FR-006, SC-002, SC-003)
       research: rendering
-      verify:
+      verify: DONE. make done green; the wave column set from the index (audit/waves.json); the claims gate lists nothing introduced; findings 553 -> 525
 

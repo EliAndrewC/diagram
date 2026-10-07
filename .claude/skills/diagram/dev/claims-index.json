@@ -21854,11 +21854,27 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#arm ends pulled back to the last point that serves a house (served_arm), and an arm that serves no one is dropped (0246 §6 lane-end service rule)": {
+  "code": "c26981eddbe1cc55",
+  "core": "c26981eddbe1cc55",
+  "date": "2026-10-07",
+  "note": "arm ends pulled back to the last point that serves a house (served_arm), and an arm that serves no one is dropped (0246 §6 lane-end service rule)",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#arm kept WEB_FABRIC_GAP (7 ft) clear of house, yard, garden and shed footprints (0246 §16 gives 7 ft from a fence to the lane's middle)": {
+  "code": "c26981eddbe1cc55",
+  "core": "c26981eddbe1cc55",
+  "date": "2026-10-07",
+  "note": "arm kept WEB_FABRIC_GAP (7 ft) clear of house, yard, garden and shed footprints (0246 §16 gives 7 ft from a fence to the lane's middle)",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#clear of crop, wet and water": {
   "code": "4ec26b3ee198b9ea",
   "core": "c26981eddbe1cc55",
   "date": "2026-10-07",
-  "note": "keeping off the crop and the wet matches the pages, but clip_to_clear(..., lines=watercourses + drawn_water) also keeps every inner arm from crossing a ditch or the brook, which no cited page addresses (the backing names crops and wet ground only); split the water part off as UNRESEARCHED",
+  "note": "every arm is clipped and routed off the crop, the wet toe, the marsh and the field envelope, then trimmed off the marsh, as the pages find: \"A lane never crosses row crops\", \"A track keeps off wet ground\", \"a stretch that would cross the field, a crop, wet ground ... is cut out\"",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
@@ -21866,10 +21882,11 @@
   "research": "f8c602624f8df558",
   "rests": [
    "0081-village-lanes.drawing.html:43b635b1ca75125b",
+   "0081-village-lanes.drawing.html:bd66b84c6bda826f",
    "0081-village-lanes.drawing.html:ff5e303a5a16af8f",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:8ab9878d6ac1d10b"
   ],
-  "verdict": "NEEDS-RESEARCH"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#routed round the steadings": {
   "code": "df40795d8b4ae35e",
@@ -21885,14 +21902,6 @@
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c5daec1a445d35bf"
   ],
   "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton arm clipped WEB_FABRIC_GAP (7 ft) off the steadings and trimmed back to the last point serving a house": {
-  "code": "c26981eddbe1cc55",
-  "core": "c26981eddbe1cc55",
-  "date": "2026-10-07",
-  "note": "skeleton arm clipped WEB_FABRIC_GAP (7 ft) off the steadings and trimmed back to the last point serving a house",
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton arm off the water": {
   "code": "06f8f59c0f1c8553",

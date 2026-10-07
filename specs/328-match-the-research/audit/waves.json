@@ -100,5 +100,6 @@
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py::shadowed_by#no way drawn twice": "3",
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#door path reach": "3",
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#web lanes off the hard ground": "3",
- ".claude/skills/diagram/l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#annexes abut their house": "3"
+ ".claude/skills/diagram/l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#annexes abut their house": "3",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#clear of crop, wet and water": "3"
 }
