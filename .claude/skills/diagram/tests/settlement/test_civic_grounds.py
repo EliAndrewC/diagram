@@ -316,7 +316,7 @@ def test_boundary_marker_is_a_location_marker():
     s = _town()
     s.boundary_marker(300, 300)
     b = s.M["boundary_markers"][0]
-    assert (b["w"], b["h"]) == (3.0, 3.0)  # TRUE footprint: a real stone is ~3 ft
+    assert (b["w"], b["h"]) == (4.0, 4.0)  # TRUE footprint: a real stone is ~4 ft (0217)
     assert b["vw"] == b["vh"] == settlement.BOUNDARY_MARKER_MIN_PX  # DRAWN at the legibility floor
     assert (300, 300, b["vw"], b["vh"]) in s.placed  # overlap uses the drawn box, like the wells
 

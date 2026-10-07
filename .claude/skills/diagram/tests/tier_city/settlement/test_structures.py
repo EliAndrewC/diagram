@@ -54,12 +54,12 @@ def test_rowpack_respects_canvas_edge_and_bound():
 def test_ministry_auto_label_side_prefers_empty_ground():
     # the GM label doctrine (2026-07): a label that CAN sit in empty ground, should. With no
     # label_below override the ministry scores both spots against what is already placed and
-    # takes the clearer; the default (unpassed) size is the real ~224x148 ft compound.
+    # takes the clearer; the default (unpassed) size is a provincial office's ~125x88 ft compound (0167).
     s = Settlement(1000, 1000, seed=4)
     s.meta(name="C", scale="city", ftpx=3)
-    s.building(500, 462, 90, 24, "civic")  # crowd the ABOVE label spot
+    s.building(500, 474, 90, 24, "civic")  # crowd the ABOVE label spot
     s.ministry(500, 510, "Ministry of Test")
-    assert s.M["ministries"][0]["w"] == s.px(224)
+    assert s.M["ministries"][0]["w"] == s.px(125)
     s.place_labels()  # feature 157: captions are queued and drawn in the LABEL PHASE, so run it before reading them
     lab = next(lb for lb in s.M["labels"] if lb[5] == "Ministry of Test")
     assert (lab[1] + lab[3]) / 2 > 510  # the label went BELOW, into the open ground
@@ -166,3 +166,12 @@ def test_a_dense_row_lines_a_way_that_bends_inside_the_fronted_stretch():
         return s.frontage([(300, 150), (308, 950)], ["merchant"] * 24, width=6, spacing=26, setback=2, both=False, dense=dense)
 
     assert run(True) > run(False), "a dense row must not be refused by the band of the way it lines"
+
+
+@pytest.mark.tiers("city")
+def test_a_capitals_ministry_is_its_larger_compound():
+    """0167: a capital's ministry about 160 x 110 ft, a provincial office 110 x 80 to 140 x 95 ft (feature 328 wave 5)."""
+    s = Settlement(1000, 1000, seed=4)
+    s.meta(name="C", scale="capital", ftpx=3)
+    s.ministry(500, 510, "Ministry of Test")
+    assert (s.M["ministries"][0]["w"], s.M["ministries"][0]["h"]) == (s.px(160), s.px(110))

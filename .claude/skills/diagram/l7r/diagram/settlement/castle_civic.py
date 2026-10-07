@@ -323,12 +323,12 @@ class CastleCivicMixin:
         neighborhood). Official violet roof so it reads apart from housing/commerce.
 
         Research:
-            ministry compound size - research/questions/0167-offices-of-the-six-ministries-liubu.drawing.html: 224 x 148 ft by default
+            ministry compound size - research/questions/0167-offices-of-the-six-ministries-liubu.drawing.html: about 160 x 110 ft at a capital, 125 x 88 ft (the middle of the page's 110 x 80 to 140 x 95 ft) at a provincial city, by default
             official violet - CONVENTION
             office apron - research/questions/0163-the-provincial-governments-seat-the-governors-compound-and-where-it-stands-yamen.drawing.html: about 42 ft clear on the page; the code keeps max(30 x bscale, 26) px
         """
         if w is None:
-            w, h = self.px(224), self.px(148)  # a ministry office compound ~224x148 ft (was 88px at the 0.42-grain city)
+            w, h = (self.px(160), self.px(110)) if self.M["meta"].get("scale") == "capital" else (self.px(125), self.px(88))  # 0167: a capital's ~160 x 110 ft, a provincial office 110 x 80 - 140 x 95 ft
         self.add(f'<rect x="{x - w / 2:.0f}" y="{y - h / 2:.0f}" width="{w}" height="{h}" rx="2" fill="#BCA6C4" stroke="#463653" stroke-width="2"/>')
         self.add(f'<rect x="{x - w / 2:.0f}" y="{y - h / 2:.0f}" width="{w}" height="9" fill="#6A4A78"/>')
         self.add(f'<line x1="{x - w * 0.3:.0f}" y1="{y:.0f}" x2="{x + w * 0.3:.0f}" y2="{y:.0f}" stroke="#463653" stroke-width="0.7" opacity="0.6"/>')
@@ -338,7 +338,7 @@ class CastleCivicMixin:
         self.block_polys.append([(x - w / 2 - bm, y - h / 2 - bm), (x + w / 2 + bm, y - h / 2 - bm), (x + w / 2 + bm, y + h / 2 + bm), (x - w / 2 - bm, y + h / 2 + bm)])
         if label_inside:
             # THE CAPITAL'S MINISTRY CAPTIONS SIT ON THE GLYPH (GM 2026-08-09) - the estate rule
-            # applied to the state offices: the capital's 224x148 ft compound has the room, where
+            # applied to the state offices: the capital's 160x110 ft compound has the room, where
             # a provincial city's tighter fabric keeps the caption beside the box. Two stacked
             # lines, because "Ministry of Retainers" cannot fit the width in one: the shared
             # "Ministry of" runs small above the department's own name. Near-black for
@@ -760,21 +760,22 @@ class CastleCivicMixin:
         Research:
             a town rampart with a gate - research/questions/0125-town-walls-and-which-county-seats-had-one-chengqiang.html: an irregular thick line, gapped at the gate
             guard station and tower - UNRESEARCHED: a 96 x 46 px station and a 40 x 40 px tower beside the gate
-            rampart stroke - research/questions/0125-town-walls-and-which-county-seats-had-one-chengqiang.html, research/questions/0125-town-walls-and-which-county-seats-had-one-chengqiang.drawing.html: drawn 10 to 12 ft thick; the code strokes a fixed 10 px, unscaled
-            gate opening - UNRESEARCHED: 36 px between 14 x 48 px gateposts
+            rampart stroke - research/questions/0125-town-walls-and-which-county-seats-had-one-chengqiang.html, research/questions/0125-town-walls-and-which-county-seats-had-one-chengqiang.drawing.html: drawn 10 to 12 ft thick, 11 ft at the map's scale
+            gate opening - research/questions/0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html: a 13 ft passage, between 14 x 48 px gateposts
             buildings kept off the rampart - UNRESEARCHED: a 46 px corridor, 32 px round the gate structures
         """
         wc = '#3A352C'
         # the rampart renders in the WALL layer (over the ground lanes - a street running into it passes
         # UNDER it), with a genuine gap at the gate so the road shows through the opening
-        dd = self._gapped_ring(pts, [gate] if gate else [], 36, closed=False)
-        ww = self.M["wall_stroke"] = 10.0  # recorded for the same reason as the city rampart's (see city_wall)
+        go = self.px(13)  # the gate's 13 ft passage (0147)
+        dd = self._gapped_ring(pts, [gate] if gate else [], go, closed=False)
+        ww = self.M["wall_stroke"] = self.px(11)  # 10-12 ft at any grain (0125); recorded for the same reason as the city rampart's (see city_wall)
         self.M["wall_z"] = self.add_wall(f'<path d="{dd}" fill="none" stroke="{wc}" stroke-width="{ww:g}" stroke-linejoin="round" stroke-linecap="round"/>')
         self.add_wall(f'<path d="{dd}" fill="none" stroke="#6B5A3A" stroke-width="3" stroke-linejoin="round" opacity="0.5"/>')
         if gate:
             gx, gy = gate
-            self.add_wall(f'<rect x="{gx - 42:.0f}" y="{gy - 24:.0f}" width="14" height="48" fill="{wc}"/>')  # gateposts (frame the opening)
-            self.add_wall(f'<rect x="{gx + 28:.0f}" y="{gy - 24:.0f}" width="14" height="48" fill="{wc}"/>')
+            self.add_wall(f'<rect x="{gx - go / 2 - 14:.0f}" y="{gy - 24:.0f}" width="14" height="48" fill="{wc}"/>')  # gateposts (frame the opening)
+            self.add_wall(f'<rect x="{gx + go / 2:.0f}" y="{gy - 24:.0f}" width="14" height="48" fill="{wc}"/>')
             # the gatehouse (guard station + tower) goes in the TOP layer: a street running
             # through the gate passes UNDER it, not over it
             gz = self.add_top(f'<rect x="{gx - 48:.0f}" y="{gy + 26:.0f}" width="96" height="46" rx="2" fill="#C9A57A" stroke="#5A4326" stroke-width="1.6"/>')  # guard station

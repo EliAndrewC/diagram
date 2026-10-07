@@ -28,8 +28,8 @@ class MoatMixin:
         width: float | None = None,
         river: Any = None,
         river_cut: float = 150,
-        river_inlet_tilt: float = 10.0,
-        river_outlet_tilt: float = 22.0,
+        river_inlet_tilt: float = 0.0,
+        river_outlet_tilt: float = 0.0,
     ) -> list[Pt]:
         """A water moat encircling the city wall - the wall RING pushed outward from its centroid
         by `gap`. Records M['moat']. Feed it from off-map with a stream (AS WIDE as the moat, by
@@ -41,17 +41,16 @@ class MoatMixin:
         ONTO the river, which closes the water ring itself - inlet upstream, outlet downstream,
         so the current flushes the moat (the historical norm; see research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html).
         CONVENTION: `river` pts run UPSTREAM-FIRST (source before mouth) - the junction tilts and
-        the city_moat_junction_angles check both key on it. The two junction feet are NOT square
-        perpendicular tees (that was an rfoot artifact): the INLET (upstream end) shifts upstream
-        by `river_inlet_tilt` degrees off square, the OUTLET sweeps downstream by
-        `river_outlet_tilt` - see research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html for the
-        hydrology (confluences merge at downstream angles; intakes stay near-square for sediment).
+        the city_moat_junction_angles check both key on it. Both ends meet the river SQUARE by default
+        (research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: every reason found for tilting them is modern
+        engineering; feature 328 wave 5 - they were tilted 10 and 22 degrees); a caller may still pass
+        `river_inlet_tilt` (the INLET shifted upstream) and `river_outlet_tilt` (the OUTLET swept downstream).
 
         Research:
             moat width - research/questions/0146-moats-where-their-water-comes-from-and-where-it-goes-hori.drawing.html, research/questions/0151-city-moats-how-wide-and-deep-and-whether-they-ring-the-wall-hori-chenghe.drawing.html: 66 ft
             ring pushed out from the wall - research/questions/0151-city-moats-how-wide-and-deep-and-whether-they-ring-the-wall-hori-chenghe.html: the caller's gap, default 42 px
             open moat on a river bank - research/questions/0151-city-moats-how-wide-and-deep-and-whether-they-ring-the-wall-hori-chenghe.drawing.html: the arc within river_cut of the river dropped, both ends onto it
-            junction tilts - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: inlet 10 deg upstream, outlet 22 deg downstream of square
+            junction tilts - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: both ends meet the river square by default (a tilt is the caller's)
             inlet and outlet recorded - research/questions/0146-moats-where-their-water-comes-from-and-where-it-goes-hori.drawing.html
             solid water with a sheen - research/questions/0146-moats-where-their-water-comes-from-and-where-it-goes-hori.drawing.html: no dashed centerline
             no-build corridor - UNRESEARCHED: 28 px either side
@@ -156,11 +155,12 @@ class MoatMixin:
 
         Research:
             arch on two piers with a grille - research/questions/0179-water-gates-and-sluices-shuimen.drawing.html
-            glyph size - research/questions/0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html: a fixed 36 x 22 px record
+            glyph size - research/questions/0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html: about 60 ft across with piers about 12 ft, drawn at the map's scale
             no-build block - UNRESEARCHED: 16 px round the glyph
         """
         wc = '#3A352C'
-        g = [f'<g transform="translate({x:.0f},{y:.0f}) rotate({rot:.1f})">']
+        k = self.px(60.0) / 36.0  # the 36-unit glyph drawn about 60 ft across, its 8-unit piers about 12 ft (0147)
+        g = [f'<g transform="translate({x:.0f},{y:.0f}) rotate({rot:.1f}) scale({k:.3f})">']
         g.append(f'<rect x="-17" y="-9" width="8" height="18" fill="#9C8A66" stroke="{wc}" stroke-width="1.6"/>')  # piers
         g.append(f'<rect x="9" y="-9" width="8" height="18" fill="#9C8A66" stroke="{wc}" stroke-width="1.6"/>')
         g.append(f'<path d="M-14,-9 C-8,-19 8,-19 14,-9" fill="none" stroke="{wc}" stroke-width="3.4"/>')  # the arch
@@ -168,9 +168,9 @@ class MoatMixin:
             g.append(f'<line x1="{gx_}" y1="-8" x2="{gx_}" y2="6" stroke="{wc}" stroke-width="1.1" opacity="0.7"/>')  # the grate/sluice bars
         g.append('</g>')
         z = self.add_top(''.join(g))
-        self.M.setdefault("water_gates", []).append({"x": round(x, 1), "y": round(y, 1), "w": 36, "h": 22, "rot": round(rot, 1), "z": z})
-        bm = 16
-        self.block_polys.append([(x - 18 - bm, y - 11 - bm), (x + 18 + bm, y - 11 - bm), (x + 18 + bm, y + 11 + bm), (x - 18 - bm, y + 11 + bm)])
+        self.M.setdefault("water_gates", []).append({"x": round(x, 1), "y": round(y, 1), "w": round(36 * k, 1), "h": round(22 * k, 1), "rot": round(rot, 1), "z": z})
+        bm, hx, hy = 16, 18 * k, 11 * k
+        self.block_polys.append([(x - hx - bm, y - hy - bm), (x + hx + bm, y - hy - bm), (x + hx + bm, y + hy + bm), (x - hx - bm, y + hy + bm)])
         return z
 
     def sluice_gate(self: Settlement, x: float, y: float, rot: float = 0.0, label: str | None = None, label_xy: Pt | None = None, span: float | None = None) -> int:  # type: ignore[misc]

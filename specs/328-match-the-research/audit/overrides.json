@@ -220,6 +220,16 @@
   "moved": "wave 5: the mill race is a new element (spec-fidelity's note on amendment 4)",
   "tier": "E3"
  },
+ ".claude/skills/diagram/l7r/diagram/settlement/city/moat.py::MoatMixin.moat#moat width": {
+  "after": [],
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/city/moat.py"
+  ],
+  "fix": "the record disagrees with itself: 0151's drawing page says 35 ft (a Ming treatise's smallest width) 'is the width the maps should draw', while 0146's drawing page draws every moat about 66 ft; reconcile the two pages first, then set the width",
+  "flag": "",
+  "moved": "wave 5: the two moat pages contradict each other (spec Edge Case: a NEEDS-RESEARCH question)",
+  "tier": "E4"
+ },
  ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/civic.py::CivicWorksMixin.merchant_storehouses#kura size": {
   "fix": "draw each merchant kura square, 14-20 ft (0152/0150 drawing: 'Each storehouse is 14 to 20 ft square')",
   "moved": "wave 1: E0 -> E1, the code draws a 20 x 14 oblong; the page says 14 to 20 ft square",

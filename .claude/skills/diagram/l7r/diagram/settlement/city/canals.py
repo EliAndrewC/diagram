@@ -18,6 +18,10 @@ if TYPE_CHECKING:
     from ..core import Settlement
 
 
+
+SLUICE_STANDOFF_FT = 90.0
+"""Research: sluice standoff - research/questions/0146-moats-where-their-water-comes-from-and-where-it-goes-hori.drawing.html: each tap stands about 90 ft outside the moat's rim"""
+
 class CanalsMixin:
     def canal(self: Settlement, pts: Any, width: float | None = None, flow: str = "level") -> float:  # type: ignore[misc]
         """A navigable CARGO CANAL - the one way water legitimately enters a walled city (through
@@ -134,7 +138,7 @@ class CanalsMixin:
         water: Any,
         city_center: Pt,
         rings: Any = ((26, 15), (20, 40)),
-        standoff: float = 30.0,
+        standoff: float | None = None,
         source_point: Any = None,
         tap_choices: Any = None,
         drain_points: Any = None,
@@ -157,7 +161,7 @@ class CanalsMixin:
 
           - the tap is the nearest moat/river VERTEX to the hint (not the nearest point on a
             segment - the vertex is what the pool's fields were sited against)
-          - the sluice sits `standoff` px OUTWARD from the city center, so a fan falls down the
+          - the sluice sits `SLUICE_STANDOFF_FT` past the moat's rim (or `standoff` px from the tap) OUTWARD from the city center, so a fan falls down the
             slope the moat sits on top of rather than back over the rampart
           - a MOAT tap is then swept downstream (`moat_swept_tap`), turning a square offtake into
             the acute downstream one canal practice calls for. The sluice does not move, so the
@@ -176,7 +180,7 @@ class CanalsMixin:
 
         Research:
             farmland rings the city - research/questions/0010-farmland-around-towns-and-cities.drawing.html: a comb field per spec, each a full irrigation system
-            sluice standoff - research/questions/0146-moats-where-their-water-comes-from-and-where-it-goes-hori.drawing.html: 30 px outward from the city center, about 90 ft at 3 ft/px, where each tap stands outside the moat's rim
+            sluice standoff - research/questions/0146-moats-where-their-water-comes-from-and-where-it-goes-hori.drawing.html: `SLUICE_STANDOFF_FT`, about 90 ft outside the moat's rim (from the tap point on any other source, whose width is not recorded), unless the caller sets it
             tap swept downstream - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.html
             tap at the nearest vertex - NONE: the pool's fields were sited against the vertex
             farmhouses around each field - research/questions/0010-farmland-around-towns-and-cities.drawing.html: rings of (26 seats, 15 px) and (20, 40), or the upslope walk
@@ -205,7 +209,10 @@ class CanalsMixin:
             # around that center (the capital's river runs past one flank) supplies its own bearing.
             ux, uy = outward[name](mp, city_center) if isinstance(outward, dict) else outward(name, mp, city_center) if outward else ((mp[0] - city_center[0]), (mp[1] - city_center[1]))
             ol = math.hypot(ux, uy) or 1.0
-            sl = (round(mp[0] + standoff * ux / ol), round(mp[1] + standoff * uy / ol))
+            # ...ABOUT 90 FT OUTSIDE THE MOAT'S RIM (0146), the rim half the moat's width off its centerline: measured from the
+            # centerline, a 90 ft standoff stood only 57 ft past a 66 ft moat's rim
+            reach = standoff if standoff is not None else (float(self.M.get("moat_width") or 0.0) / 2 if src == "moat" else 0.0) + self.px(SLUICE_STANDOFF_FT)
+            sl = (round(mp[0] + reach * ux / ol), round(mp[1] + reach * uy / ol))
             if src == "moat" and self.M.get("moat_flow"):
                 mf = self.M["moat_flow"]
                 mp = moat_swept_tap(wpts, mf["inlet"], mf["outlet"], sl, mp)

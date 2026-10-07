@@ -521,7 +521,7 @@ class BridgesMixin:
         deck["span"] = round(max(float(deck["span"]), 2.0 * math.dist((float(deck["x"]), float(deck["y"])), p) + 2.0), 1)
         self.top[int(deck["z"]) - self.TOPZ] = deck_glyph(float(deck["x"]), float(deck["y"]), float(deck["rot"]), float(deck["span"]), float(deck["w"]), str(deck.get("form", "plank")))
 
-    def channel_footbridges(self: Settlement, spacing: float = 320, min_len: float = 140, plank_w: float = 2.0, seg_caps: Any = None) -> int:  # type: ignore[misc]
+    def channel_footbridges(self: Settlement, spacing: float = 320, min_len: float = 140, plank_w: float | None = None, seg_caps: Any = None) -> int:  # type: ignore[misc]
         """Standalone plank FOOTBRIDGES across the SUPPLY ditches (main, branch, lateral - never the collector, the drain
         or the feeder, `SUPPLY_ROLES`), where field-workers cross a ditch while
         walking the paddy bunds - NOT carried by any lane (people reach them along the earthen bunds, so no
@@ -529,10 +529,9 @@ class BridgesMixin:
         gets one roughly every `spacing` px, evenly spaced along it. Each plank crosses PERPENDICULAR to the
         ditch, spanning its local width plus a short abutment. Call AFTER the field ditches are recorded. Bridges
         draw on the TOP layer (over the water). Records via `bridge()` into M['bridges'] (tagged 'foot'); returns
-        the count. DECK WIDTH: an itabashi footplank is a single-file crossing (~3-4 ft); `plank_w=2.0` px is not scaled,
-        so it is ~4 ft at 2 ft a px and 2 ft on a 1 ft/px hamlet (GM 2026-07-22: was 2.5) - kept just wide enough to read
-        and NARROWER than a cart
-        lane (~5-6 px); the wider `bridges()` carried-way deck matches the lane it carries, but a footplank does not.
+        the count. DECK WIDTH: an itabashi footplank is a single-file crossing (~3-4 ft), drawn 4 ft at the map's scale
+        (`plank_w` defaults to `px(4)`; feature 328 wave 5 - it was a fixed 2 px, 2 ft on a hamlet) and NARROWER than a cart
+        lane (~5-6 ft); the wider `bridges()` carried-way deck matches the lane it carries, but a footplank does not.
         USEFULNESS: a plank is placed only where BOTH banks reach ground someone walks to - cultivated field,
         the village, or a dike (via _plank_reaches_useful_ground); a stretch whose far bank opens onto marsh/scrub/off-map
         carries NO plank (GM 2026-07-22, Hikari no Sato: crossings into the reed marsh).
@@ -547,7 +546,7 @@ class BridgesMixin:
             short stub stepped over - UNRESEARCHED: under 140 px, no plank
             only water too wide to step across - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: worth_planking, a hard filter at the seat
             square across the ditch - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html
-            plank width - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: 2.0 px unscaled
+            plank width - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: about 4 ft (`px(4)`), a single-file crossing
             short abutment - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: the local width plus PLANK_ABUTMENT
             polder crossings by side - UNRESEARCHED: seg_caps, none on the feeder, far toe or drain
             longer plank at a junction - UNRESEARCHED: widened to the water under it
@@ -559,6 +558,7 @@ class BridgesMixin:
             one rolled form - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: FOOTBRIDGE_FORM
             slide resolution - NONE: max(8, length/40) px, the check's own
         """
+        plank_w = self.px(4.0) if plank_w is None else plank_w  # a footplank about 4 ft wide (research/questions/0084-plank-bridges-over-farm-ditches-itabashi.html)
 
         from l7r.diagram.waterfields import taper_w, worth_planking  # local: the engine packages are peers, imported lazily
 

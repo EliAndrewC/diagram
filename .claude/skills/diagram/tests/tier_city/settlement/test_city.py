@@ -25,8 +25,8 @@ def test_city_wall_tower_slides_along_the_wall_for_a_kido():
     pts = [(round(1000 + 400 * m.cos(2 * m.pi * i / 12)), round(700 + 400 * m.sin(2 * m.pi * i / 12))) for i in range(12)]
     s.city_wall(pts, gates=(), tower_skip=[pts[6]])
     ds = [m.hypot(t["x"] - pts[6][0], t["y"] - pts[6][1]) for t in s.M["wall_towers"]]
-    assert all(d > 45 for d in ds)  # the vertex is yielded...
-    assert any(d < 180 for d in ds)  # ...but a tower still stands a short slide away (< a full segment)
+    assert all(d >= s.px(186) - 1e-6 for d in ds)  # the vertex is yielded, past 0148's 186 ft band round a ward gate...
+    assert any(d < s.px(186) + 80 for d in ds)  # ...but a tower still stands a short slide past it (< a full segment)
 
 
 @pytest.mark.tiers("city")
@@ -77,7 +77,7 @@ def test_moat_river_junction_feet_tilt_with_the_current():
     pts = [(round(1000 + 300 * m.cos(2 * m.pi * i / 16)), round(700 + 300 * m.sin(2 * m.pi * i / 16))) for i in range(16)]
     river = [(1360, 100), (1360, 1300)]  # flows top -> bottom (upstream-first)
     for ring in (pts, pts[::-1]):  # both ring orientations: keep[0] lands downstream on one, upstream on the other
-        mo = s.moat(ring, gap=24, river=river)
+        mo = s.moat(ring, gap=24, river=river, river_inlet_tilt=10.0, river_outlet_tilt=22.0)  # a caller's tilt; the default is square (0054)
         (inlet, adj_in), (outlet, adj_out) = sorted([(mo[0], mo[1]), (mo[-1], mo[-2])], key=lambda e: e[0][1])
         in_shift = adj_in[1] - inlet[1]  # upstream (negative-y) shift of the inlet foot off square
         out_shift = outlet[1] - adj_out[1]  # downstream (positive-y) sweep of the outlet foot
@@ -97,12 +97,26 @@ def test_moat_river_junction_tilts_follow_a_reversed_river():
     s.meta(name="RT2", scale="city", walled=True, ftpx=3)
     pts = [(round(1000 + 300 * m.cos(2 * m.pi * i / 16)), round(700 + 300 * m.sin(2 * m.pi * i / 16))) for i in range(16)]
     river = [(1360, 1300), (1360, 100)]  # flows bottom -> top (upstream-first)
-    mo = s.moat(pts, gap=24, river=river)
+    mo = s.moat(pts, gap=24, river=river, river_inlet_tilt=10.0, river_outlet_tilt=22.0)  # a caller's tilt; the default is square (0054)
     (outlet, adj_out), (inlet, adj_in) = sorted([(mo[0], mo[1]), (mo[-1], mo[-2])], key=lambda e: e[0][1])
     in_shift = inlet[1] - adj_in[1]  # upstream is +y now: the inlet foot shifts DOWN off square
     out_shift = adj_out[1] - outlet[1]  # the outlet foot sweeps UP, downstream with the current
     assert in_shift > 0  # inlet tilts upstream, never smoothly flow-aligned
     assert out_shift > in_shift  # the outlet sweeps harder - the researched asymmetry
+
+
+@pytest.mark.tiers("city")
+def test_a_moats_ends_meet_the_river_square_by_default():
+    """0054: both ends of a moat open onto a river meet it at a right angle, leaning neither way - every reason found for
+    tilting them is modern engineering (feature 328 wave 5; the 2026-07-24 tilts are a caller's choice now)."""
+    import math as m
+
+    s = _crop_settlement()
+    s.meta(name="RT3", scale="city", walled=True, ftpx=3)
+    pts = [(round(1000 + 300 * m.cos(2 * m.pi * i / 16)), round(700 + 300 * m.sin(2 * m.pi * i / 16))) for i in range(16)]
+    mo = s.moat(pts, gap=24, river=[(1360, 100), (1360, 1300)])
+    for end, adj in ((mo[0], mo[1]), (mo[-1], mo[-2])):
+        assert abs(end[1] - adj[1]) < 1.0, "a foot square to a vertical river runs level"
 
 
 @pytest.mark.tiers("city")

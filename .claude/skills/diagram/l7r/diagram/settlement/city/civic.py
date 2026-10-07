@@ -16,7 +16,7 @@ if TYPE_CHECKING:
 
 
 class CityCivicMixin:
-    def governor_mansion(self: Settlement, x: float, y: float, w: float = 320, h: float = 210, label: str = "Governor's Mansion", gate_dir: str = "west") -> Any:  # type: ignore[misc]
+    def governor_mansion(self: Settlement, x: float, y: float, w: float = 320, h: float = 210, label: str = "Governor's Mansion", gate_dir: str = "south") -> Any:  # type: ignore[misc]
         """The provincial governor's walled mansion - a large compound, grander than a county
         magistrate's manor. Reuses the manor glyph (walls + gate + empty court; the interior is
         a separate Mode A diagram) and moves the record to M['governor_mansion'].
@@ -34,7 +34,7 @@ class CityCivicMixin:
             compound size - research/questions/0163-the-provincial-governments-seat-the-governors-compound-and-where-it-stands-yamen.drawing.html: the caller's w x h, default 320 x 210 px
             walls, gate and empty court - research/questions/0163-the-provincial-governments-seat-the-governors-compound-and-where-it-stands-yamen.drawing.html: the manor glyph, interior implied
             gate width - research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html: an 18 ft yamen gatehouse
-            gate direction - research/questions/0163-the-provincial-governments-seat-the-governors-compound-and-where-it-stands-yamen.drawing.html: the caller's gate_dir, default west
+            gate direction - research/questions/0163-the-provincial-governments-seat-the-governors-compound-and-where-it-stands-yamen.drawing.html: its gate to the south (the caller's gate_dir, default south)
             caption in the court - CONVENTION: bold, GOVERNOR_CAPTION_FS, optically centered
         """
         self.manor(x, y, w, h, "", gate_dir=gate_dir, gate_ft=18.0)  # a yamen's formal gatehouse passes ~18 real ft; caption below, not manor's

@@ -2116,20 +2116,6 @@
   "wave": ""
  },
  {
-  "key": ".claude/skills/diagram/l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#mill beside its stream",
-  "verdict": "DRIFTED",
-  "tier": "E1",
-  "fix": "the mill seated in a short mill race led off the stream below the intake (0064), and the exemption says so",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/overlap/taxonomy.py"
-  ],
-  "after": [],
-  "flag": "",
-  "found": "wave 1 re-check",
-  "tier_as_ranked": "E1",
-  "wave": ""
- },
- {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/_knobs.py::BOUNDARY_MARKER_FT#boundary stone size",
   "tier": "E1",
   "fix": "BOUNDARY_MARKER_FT 3.0 -> 4.0 per 0217 drawing",
@@ -2264,19 +2250,6 @@
   "key": ".claude/skills/diagram/l7r/diagram/settlement/city/moat.py::MoatMixin.moat#junction tilts",
   "tier": "E1",
   "fix": "river_inlet_tilt and river_outlet_tilt to 0 (right angle)",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/settlement/city/moat.py"
-  ],
-  "after": [],
-  "flag": "",
-  "tier_as_ranked": "E1",
-  "verdict": "DRIFTED",
-  "wave": ""
- },
- {
-  "key": ".claude/skills/diagram/l7r/diagram/settlement/city/moat.py::MoatMixin.moat#moat width",
-  "tier": "E1",
-  "fix": "moat width px(35) (35 ft), not px(66)",
   "files": [
    ".claude/skills/diagram/l7r/diagram/settlement/city/moat.py"
   ],
@@ -7474,6 +7447,22 @@
   "wave": ""
  },
  {
+  "key": ".claude/skills/diagram/l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#mill beside its stream",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "seat the mill in a short mill race led off the stream below the intake (0064), a channel no map draws today, and say so in the exemption: a new element (FR-003 E3), not a value",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/overlap/taxonomy.py",
+   ".claude/skills/diagram/l7r/diagram/settlement/water_ways/focal.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 1 re-check",
+  "tier_as_ranked": "E1",
+  "moved": "wave 5: the mill race is a new element (spec-fidelity's note on amendment 4)",
+  "wave": ""
+ },
+ {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/_knobs.py::<module>#hamlet default values",
   "tier": "E3",
   "fix": "roll lane_web, homestead bamboo and plot size per hamlet from their tables (plots from 0031's three forms, no 'medium'); hamlet defaults become rolled values",
@@ -8835,6 +8824,20 @@
   "after": [],
   "flag": "",
   "tier_as_ranked": "E4",
+  "verdict": "DRIFTED",
+  "wave": ""
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/city/moat.py::MoatMixin.moat#moat width",
+  "tier": "E4",
+  "fix": "the record disagrees with itself: 0151's drawing page says 35 ft (a Ming treatise's smallest width) 'is the width the maps should draw', while 0146's drawing page draws every moat about 66 ft; reconcile the two pages first, then set the width",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/city/moat.py"
+  ],
+  "after": [],
+  "flag": "",
+  "tier_as_ranked": "E1",
+  "moved": "wave 5: the two moat pages contradict each other (spec Edge Case: a NEEDS-RESEARCH question)",
   "verdict": "DRIFTED",
   "wave": ""
  },
