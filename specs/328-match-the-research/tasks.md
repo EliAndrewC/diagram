@@ -744,11 +744,11 @@ the granary forms E0 (a claim split), the farmers' stage, the manor kitchen gard
 no sheet redrawn. The open in-scope run is then the one E0 row and the E2 rows in ranking order, the Mode A paragraphs first and
 then `hamletgen/cluster.py`'s drain rules; wave 15 is these 9 rows.
 
-  - `buildings.md::Outer court (administrative / public)#granary forms` - split: the forms on 0098; the size and the terminal row a GUESS on 0098's drawing page
+  - `buildings.md::Outer court (administrative / public)#granary forms` - split: the forms on 0098; the size a GUESS on 0098's drawing page, the terminal row at the office the question page's GUESS; the kura form's unshown vents a drawing convention
   - `buildings.md::Checklist for a new diagram#size hierarchy` - the checklist's ranks from 0116's drawing page (office hall, residence, rowhouse; the grain storehouse by the rice held); the cell's rank its own GUESS claim
-  - `buildings/programs.md::Country shrine (a village district's shrine)#farmers' stage knob` - by the map, else rolled with equal weights (a GUESS); the stage modal's guess and depiction to it
+  - `buildings/programs.md::Country shrine (a village district's shrine)#farmers' stage knob` - absent by default, claimed as 0222's drawing page's GUESS (the page: "absent by default ... unless they are turned on"); a roll was tried and withdrawn against that page
   - `buildings/programs.md::Country shrine (a village district's shrine)#no subsidiary buildings` - the drawing page's choice, with what the record shows: subsidiary shrines sometimes in a precinct, Rokusha's office in a register of 1872 or after
-  - `buildings/programs.md::Country shrine (a village district's shrine)#sumo ring knob` - by the map, else rolled with equal weights (a GUESS); the sumo modal and Hoshigaoka's notes to it (by its map, which draws none)
+  - `buildings/programs.md::Country shrine (a village district's shrine)#sumo ring knob` - the same claim as the stage's: absent by default, 0222 drawing page's GUESS
   - `buildings/programs.md::Magistrate's manor (county magistracy)#manor kitchen garden by the sun` - the site knob among four and the size knob of 0109's drawing page, in the procedure (each sheet's notes already declare both)
   - `buildings/programs.md::Magistrate's manor (county magistracy)#upland granary strongbox role` - the strongbox clause and its claim dropped
   - `l7r/diagram/hamletgen/cluster.py::below_drain#wet side of the drain` - judged within the drain's span across the slope (0058 drawing): ground past either end is a dry flank
@@ -757,7 +757,7 @@ then `hamletgen/cluster.py`'s drain rules; wave 15 is these 9 rows.
 - [x] T53a the four reopened rows tiered by the work they take, by a fresh reader (FR-002, FR-003, SC-003)
       research: rendering
       verify: DONE. 4 rows tiered by their work by a fresh Opus reader (audit/t53a-out.jsonl): granary forms E0, the rest E2; no sheet redrawn
-- [ ] T53 the Mode A rows changed toward their pages: the claims, the procedure paragraphs, the two sheet modals, the regenerated table and Hoshigaoka's notes (FR-004, FR-005, FR-009)
+- [ ] T53 the Mode A rows changed toward their pages: the claims, the procedure paragraphs and the regenerated table (FR-004, FR-005, FR-009)
       research: rendering
 - [ ] T54 `below_drain`'s span and the seat without the drain rule, with their tests; the pool hamlets regenerated (FR-004, FR-005)
       research: rendering

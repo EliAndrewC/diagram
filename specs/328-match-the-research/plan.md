@@ -216,14 +216,13 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
   `waves.json`, its closing wave kept in `reopened`. T53a tiered the four by their work.
 - **Scope**: the one open E0 row, then the E2 run in ranking order - six Mode A paragraphs and `hamletgen/cluster.py`'s two drain
   rows (`tasks.md` Phase 16). The seat loses its drain refusal (0058: a dispersed farmstead's rule, never a nucleated cluster's);
-  the per-farm rule no seat enforced is filed E3. Two sheet modals (the stage, the sumo ring) follow their knobs, and owe the
-  record checks `make record-owed` names.
+  the per-farm rule no seat enforced is filed E3. The stage and sumo-ring rows take the finding's second remedy - the default
+  claimed as 0222's drawing page's GUESS - since a roll contradicts that page (tried, and withdrawn with its modal edits).
 - **The scope script keeps the page path** (spec-fidelity's aside, amendment 13 round 2): `render_png`, the raster tiles, the page
   vocabulary's tables and every Kind a kept map records a feature under.
 - **On the unpushed waves 9-14** under the wave-11 exception's condition (6): (1)-(5) held at wave 14's close (68ee171f4, its
   backup pushed, its own pair band 1 confirmed); wave 15's own pair opens at 68ee171f4.
-- **Verification**: `impl-drift` on the touched claims, the record checks the modals owe, the gate with the pool hamlets
-  regenerated, wave 15's own bookend pair.
+- **Verification**: `impl-drift` on the touched claims, the gate with the pool hamlets regenerated, wave 15's own bookend pair.
 
 ## Performance bookends (constitution VI)
 
