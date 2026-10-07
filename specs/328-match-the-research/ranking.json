@@ -673,7 +673,7 @@
   "flag": "",
   "found": "wave 16 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
-  "wave": "",
+  "wave": "17",
   "scope": "kept"
  },
  {
@@ -861,7 +861,7 @@
   "flag": "",
   "found": "wave 16 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
-  "wave": "",
+  "wave": "17",
   "scope": "kept"
  },
  {
@@ -3144,7 +3144,7 @@
   "flag": "",
   "found": "wave 16 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
-  "wave": "",
+  "wave": "17",
   "scope": "kept"
  },
  {
@@ -6280,7 +6280,7 @@
   "flag": "",
   "tier_as_ranked": "E2",
   "verdict": "UNCLAIMED",
-  "wave": "",
+  "wave": "17",
   "scope": "kept"
  },
  {

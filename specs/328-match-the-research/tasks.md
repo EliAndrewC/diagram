@@ -816,8 +816,10 @@ fallback (411). The next open row is the belt in the marsh (412).
   - `l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._route_seats#farthest seat 60 ft from the road kosatsubawayreachft 0190 2` - its claim written (GUESS 0190 drawing: the project's own figure)
   - `l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#thicket fallback: THICKET_REACH_FT 220 ft, then anywhere on the page behind the back row (0075 says "just beyond the back row")` - every pass held to 0075's "just beyond the back row" (the near edge within `THICKET_ROW_DEPTH_FT`, 30 ft, of the row's back edge), the fallback walking the row's whole length; no thicket only where none fits there
 
-- [ ] T59 the three claims; the thicket's fallback held to the band just beyond the back row, with its two tests; Kashikawa and Mizuguchi regenerated (FR-004, FR-005)
+- [x] T59 the three claims; the thicket's fallback held to the band just beyond the back row, with its two tests; Kashikawa and Mizuguchi regenerated (FR-004, FR-005)
       research: rendering
-- [ ] T60 every touched claim re-checked by `impl-drift`, the occasion's review (glyph-check on Kashikawa's thicket, one map), and the close: wave 17's own bookend pair, `make done` green, the wave
+      verify: DONE. the three claims written; every thicket pass held just beyond the back row (its back edge, THICKET_ROW_DEPTH_FT 30 ft UNRESEARCHED), the fallback along the row's whole length, with two tests; WEB_HARD_GAP measured E3 (five modules); Kashikawa's thicket re-placed against its row, Mizuguchi's unchanged
+- [x] T60 every touched claim re-checked by `impl-drift`, the occasion's review (glyph-check on Kashikawa's thicket, one map), and the close: wave 17's own bookend pair, `make done` green, the wave
       column (FR-005, FR-006, SC-002, SC-003)
       research: rendering
+      verify: DONE. impl-drift on every touched claim (five rounds; every wave row IN-STEP at the last); the glyph checks PASS (Kashikawa's thicket; Inashiro's notice board, re-owed); make done green; wave 17's own pair (328-start at b49a6c221) band 1, variance by perf-audit's timings, consistent; the wave column written

@@ -1,0 +1,62 @@
+{
+  "band": 1,
+  "base": {
+    "commit": "b49a6c221",
+    "label": "328-start",
+    "utc": "20261007T213553Z"
+  },
+  "binding": "fc2b14cc426145b96e81049b2ffa9405b93f03bf0b3f8805d88a96dd6ed208b1",
+  "end": {
+    "commit": "652d41065",
+    "label": "328-end",
+    "utc": "20261007T213907Z"
+  },
+  "environment": "local",
+  "feature": "328-match-the-research",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "8d3395e5-fe32-4f85-9c89-80c344d2ac1a",
+    "utc": "20261007T214802Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": -3.2,
+          "39": 0.0,
+          "4": 0.0,
+          "47": 0.0
+        },
+        "total_pct": -0.8
+      },
+      "20": {
+        "seeds": {
+          "25": 2.9,
+          "39": 1.9,
+          "4": 0.0,
+          "47": 1.7
+        },
+        "total_pct": 1.5
+      },
+      "40": {
+        "seeds": {
+          "25": 0.0,
+          "39": 0.0,
+          "4": 0.6,
+          "47": 0.0
+        },
+        "total_pct": 0.2
+      }
+    },
+    "seeds": {
+      "25": 2.1,
+      "39": 0.0,
+      "4": -4.1,
+      "47": 0.0
+    },
+    "total_pct": -0.6
+  },
+  "note": "Variance holds on the reviewer's own timings (base b49a6c221 vs end 652d41065, detached worktrees, 3 reps, medians): seed 25 at 20 hh draws no thicket, so bamboo_seats does nothing either side and hinterland is 0.873 vs 0.878 s (total 6.93 vs 6.94 s); seed 47 at 20 hh bamboo_seats 0.0279 vs 0.0278 s; seed 4 at 40 hh web 2.788 vs 2.803 s, and the diff never touches the web. The only code change in l7r/ narrows bamboo_seats' fallback box to the band behind the back row, so it cannot add cost; the rest is docstrings. The explanation quotes these numbers exactly.",
+  "verdict": "consistent"
+}
