@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-07T17:50:26Z",
+  "target": "perf-explain",
+  "commit": "3653bfe51",
+  "outcome": "permitted",
+  "why": "perf-explain UNVERIFIED: no counterfactual taken yet: which of the wave's value groups moves 20 hh seed 4's web is not measured"
+}
