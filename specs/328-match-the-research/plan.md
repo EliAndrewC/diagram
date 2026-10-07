@@ -26,7 +26,10 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 1. Snapshot the findings (`findings.json`, 565 rows).
 2. Nine Opus agents, each one batch of 47-76 findings grouped by module, read-only, with the tier rules and the GM's
    direction in their brief (`ranking-brief.md`, committed). Each returns JSON Lines.
-3. Merge to `ranking.json`; generate `ranking.md`; the test holds coverage of every key.
+3. Merge to `ranking.json`; generate `ranking.md`; the test holds coverage of every key. The E0 rows the batches
+   tiered on the brief's earlier, unbounded wording (any E0 that is not MISLABELED or UNCLAIMED) get a bounded re-check by
+   a fresh Opus reader: each stays E0 only with a named page that already says what the code does, otherwise it is
+   re-tiered by the implementation work. A row a dependency outranks takes that dependency's tier.
 4. A second Opus reader samples 30 rows across tiers and re-tiers them blind; where it disagrees by more than one tier on
    more than 5 rows, the disagreeing batch is re-run (an estimate that does not reproduce does not order the work).
 5. Commit; the ranking is the order of every later wave.

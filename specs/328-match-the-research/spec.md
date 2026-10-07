@@ -195,3 +195,5 @@ Each wave's amendment adds its map decisions to this table. The program's decisi
   a running subagent's calls through and refuses only its dispatching more agents, and sends it no usage note
   (self-test 59/59); (3) the E0 bound copied into `ranking-brief.md`; the batches ran on the earlier wording, so the
   merge sends every E0 row that is not MISLABELED or UNCLAIMED to a bounded re-check.
+- Round 3 (spec-fidelity-verify, 2026-10-07): FAITHFUL - the three round-2 items resolved; `tasks.md` (Phase 1 and
+  wave 1) faithful; the aside (the plan's merge step to name the bounded E0 re-check) applied.
