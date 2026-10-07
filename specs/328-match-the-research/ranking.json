@@ -9785,7 +9785,7 @@
   "tier_as_ranked": "E2",
   "moved": "exception check 2026-10-07 (FR-003: a redrawn hand sheet is E3), sorted by a fresh reader (audit/modea-sort-out.jsonl): Ubame, the one upland sheet, draws the content shift on the sheet: its granary sublabel reads 'grain and in-kind forest goods' and its notes/comment tie the terminal store to in-kind tax, so dropping the shift changes a drawn caption (label-level redraw).",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "15",
   "scope": "mode-a"
  },
  {
