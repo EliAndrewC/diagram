@@ -179,6 +179,15 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
   with each wave's own pair beside it (waves 9 and 10 band 3, wave 11 band 0). A push on wave 11's pair alone would skip the
   sign-off the stack owes.
 
+## Wave 12 (amendment 11, 2026-10-07)
+
+- **T46a first**: wave 11's 12 found rows tiered by their work (none moved).
+- **Scope**: wave 11's found E0 and E1 rows - 8 claims and 2 values (`tasks.md` Phase 13); after them every open in-scope
+  row is E2 or above (the next, row 375).
+- **On the unpushed waves 9-11** under the wave-11 exception's condition (6): (1)-(5) held at wave 11's close (6760d9bbf, its
+  backup pushed, its own pair band 0); wave 12's own pair opens at 6760d9bbf.
+- **Verification**: as wave 11.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Each later wave that changes engine behavior takes

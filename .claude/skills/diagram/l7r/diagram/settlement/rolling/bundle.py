@@ -273,6 +273,10 @@ class BundleGeomMixin:
             garden side - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: southeast, southwest, east or west of the house
             garden morning-sun reach - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: no grove band within 50 ft (`EAST_REACH_FT`) east of a garden across its height
             forecourt kept on a no-rice farm - UNRESEARCHED: the yard's ground reserved where no threshing floor is drawn
+            frame padded for a lane - GUESS research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: half `LANE_ROOM_FT` (16 ft) on every side, so neighbors' groves stand 32 ft apart
+            service strip - GUESS research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the windward stand `SERVICE_STRIP_FT` (24 ft) off the back and windward end walls, sized to seat a wood shed
+            thin band - GUESS research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: a grove side away from the wind one tree deep, `THIN_BAND_FT` 17 ft (two 0080 mean crown radii)
+            way in through a ring - GUESS research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: one `WAY_IN_FT` (36 ft) break at the front band's middle, sized so a lane can be routed through
             dispersed well pocket - UNRESEARCHED: the wellhead plus a 3 ft margin, `2 * _well_vr() + px(6.0)`
             south band off an unkept yard - UNRESEARCHED: `YARD_SUN_STRIP`, 22, unscaled, where the map keeps no sun
             storehouse on the north wall - research/questions/0040-farm-storehouses-kura.drawing.html: a nucleated farm's annex on the shaded back wall

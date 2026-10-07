@@ -29,6 +29,8 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
   30 degrees to its way (from 45); its other rows move values inside rules that already place or size their elements.
 - none (wave 11): claim lines and three values inside rules that already place or size their elements (the hem's fallback
   watercourse widths, the stub's bund reach in pixels, the polder's default gaps in feet); no glyph redrawn, no element new.
+- none (wave 12): claim lines and two values in feet inside rules that already place their elements (the brook's bank margin, the
+  polder toe's run); no glyph redrawn, no element new.
 ## Phase 1 - the audit
 
 - [x] T01 the findings snapshot: `findings.json` = every finding of `make claims-report` at `a52ff1bcd` (565) (FR-001)
@@ -637,3 +639,34 @@ sign-off the only thing between them and main).
       green, the wave column (FR-005, FR-006, SC-002, SC-003)
       research: rendering
       verify: DONE. wave 11's own pair (328-start at 6be618a9e, 328-end at the clone): band 0, owes nothing; make done green; the wave column written; before any push the main-to-HEAD landing pair is retaken as the newest pair (plan, Wave 11)
+
+
+## Phase 13 - wave 12 (amendment 11): wave 11's found E0 and E1 rows
+
+Wave 11's re-checks found 12 rows (`audit/found-wave11.jsonl`), each tiered by its work by a fresh reader (T46a,
+`audit/t46a-out.jsonl`: none moved). The open in-scope E0 and E1 rows are these 10 - 8 claims, then 2 values in feet; after
+them every open in-scope row is E2 or above (the next, row 375). Wave 12 starts on the unpushed waves 9-11 under the wave-11
+exception's condition (6): conditions (1)-(5) still held when wave 11 closed (6760d9bbf, its backup pushed, its own pair band 0).
+
+  - `l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#coarse-grain top-up` - settlement/fields/comb.py _comb_draw_hem docstring (after line 376), add: 'coarse-grain top-up - research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html: the reserve plots `_coarse_grain_top_up` returns are drawn after the refused plots, by the same refusal rule'
+  - `l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#grove pad` - settlement/rolling/bundle.py _bundle_layout docstring, add: 'frame padded for a lane - GUESS research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: half `LANE_ROOM_FT` (16 ft) on every side, so neighbors' groves stand 32 ft apart'
+  - `l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#service strip` - settlement/rolling/bundle.py _bundle_layout docstring, add: 'service strip - GUESS research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the windward stand `SERVICE_STRIP_FT` (24 ft) off the back and windward end walls, sized to seat a wood shed'
+  - `l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#thin band width` - settlement/rolling/bundle.py _bundle_layout docstring, add: 'thin band - GUESS research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: a grove side away from the wind one tree deep, `THIN_BAND_FT` 17 ft (two 0080 mean crown radii)'
+  - `l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#way in through the grove` - settlement/rolling/bundle.py _bundle_layout docstring, add: 'way in through a ring - GUESS research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: one `WAY_IN_FT` (36 ft) break at the front band's middle, sized so a lane can be routed through'
+  - `l7r/diagram/waterfields/comb.py::_comb_drain#collector above the frame` - waterfields/comb.py _comb_drain docstring (after line 579), add: 'collector above the frame - UNRESEARCHED: the fitted collector lifted to stand 40 px (unscaled) above the frame's bottom edge (line 610)'
+  - `l7r/diagram/waterfields/polder.py::build_polder#hand-piled outlines` - re-check: _polder_parcels (polder.py line 373) passes fillet=0.05 * cell to palette.organic_parcel, which draws each corner's two legs independently from fillet * triangular(0.12, 2.2, 0.7) (palette.py line 176) and roughens the arc by the corner's own reach - corner by corner from all but square to a broad sweep, as 0014 says; claim stands: 'hand-piled outlines - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: each parcel softened by `organic` (a fillet of 0.05 of the module, each corner's legs drawn 0.12-2.2x of it, a bow of 0.02)'
+  - `l7r/diagram/waterfields/polder.py::build_polder#lattice unbent by default` - waterfields/polder.py build_polder docstring (after line 99), add: 'lattice unbent by default - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a rice polder keeps its surveyed grid (`mosaic` 0, `edge_wander` 0); the dike-pond block passes its own mosaic'
+
+  - `l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#bank margin in feet` - settlement/fields/comb.py line 407: replace the source brook's margin `7.0 / 2 + 3.0` with `self.px(7.0) / 2 + self.px(3.0)` (the drawn 7 ft brook's half-width plus a 3 ft bund at the map's scale), and reword the claim line 376 to 'a bund's width, 3 ft, past the drawn 7 ft brook's bank, at the map's scale'
+  - `l7r/diagram/waterfields/polder.py::build_polder#toe ends run on 3 ft` - waterfields/polder.py line 144: `along_trunk(_on, _best, ..., 3.0)` becomes `along_trunk(_on, _best, ..., 3.0 / ftpx)` (ftpx is already a build_polder parameter); claim line 101 adds 'at the map's scale'
+
+- [x] T46a wave 11's found rows tiered by the work they take, by a fresh reader (FR-002, FR-003, SC-003)
+      research: rendering
+      verify: DONE. 12 rows tiered by their work by a fresh Opus reader (audit/t46a-out.jsonl): none moved
+- [ ] T47 the claims written and the values fixed toward their pages; the pool through the gate (FR-004, FR-005)
+      research: rendering
+      verify:
+- [ ] T48 every touched unit re-checked by `impl-drift`, and the close: wave 12's own bookend pair, `make done` green, the wave
+      column (FR-005, FR-006, SC-002, SC-003)
+      research: rendering
+      verify:

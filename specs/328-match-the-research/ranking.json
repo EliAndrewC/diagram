@@ -2078,6 +2078,23 @@
   "scope": "kept"
  },
  {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#coarse-grain top-up",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "settlement/fields/comb.py _comb_draw_hem docstring (after line 376), add: 'coarse-grain top-up - research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html: the reserve plots `_coarse_grain_top_up` returns are drawn after the refused plots, by the same refusal rule'",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 11 re-check (tiered by its work at T46a)",
+  "tier_as_ranked": "E0",
+  "e0_basis": "T46a: claim lines only; the code stands",
+  "moved": "T46a: tiered by its work - The behavior is already researched and claimed in the callee; only the call site's claim line is missing.",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#default watercourse widths",
   "verdict": "UNCLAIMED",
   "tier": "E0",
@@ -2297,7 +2314,7 @@
   "tier_as_ranked": "E0",
   "e0_basis": "T42a: claim lines only; the code stands",
   "moved": "T42a: tiered by its work - The code already draws the mixed_broadleaf form as 0072 describes it, so only the claim line is written.",
-  "wave": "",
+  "wave": "11",
   "scope": "kept"
  },
  {
@@ -2588,6 +2605,40 @@
   "tier_as_ranked": "E0",
   "e0_basis": "T42a: claim lines only; the code stands",
   "moved": "T42a: tiered by its work - The pocket already matches the 3 ft margin the claim will state and its twin at bundle.py:412.",
+  "wave": "11",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#grove pad",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "settlement/rolling/bundle.py _bundle_layout docstring, add: 'frame padded for a lane - GUESS research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: half `LANE_ROOM_FT` (16 ft) on every side, so neighbors' groves stand 32 ft apart'",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/rolling/bundle.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 11 re-check (tiered by its work at T46a)",
+  "tier_as_ranked": "E0",
+  "e0_basis": "T46a: claim lines only; the code stands",
+  "moved": "T46a: tiered by its work - The same pad is already claimed in dispersed_layout and on LANE_ROOM_FT; the use site only needs its line.",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#service strip",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "settlement/rolling/bundle.py _bundle_layout docstring, add: 'service strip - GUESS research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the windward stand `SERVICE_STRIP_FT` (24 ft) off the back and windward end walls, sized to seat a wood shed'",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/rolling/bundle.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 11 re-check (tiered by its work at T46a)",
+  "tier_as_ranked": "E0",
+  "e0_basis": "T46a: claim lines only; the code stands",
+  "moved": "T46a: tiered by its work - The value matches its existing claim in dispersed.py line 51; only the call site's claim line is missing.",
   "wave": "",
   "scope": "kept"
  },
@@ -2606,6 +2657,40 @@
   "e0_basis": "T38a: claim lines only; the code stands",
   "moved": "T38a: tiered by its work - Writing a claim line; no behavior changes.",
   "wave": "10",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#thin band width",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "settlement/rolling/bundle.py _bundle_layout docstring, add: 'thin band - GUESS research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: a grove side away from the wind one tree deep, `THIN_BAND_FT` 17 ft (two 0080 mean crown radii)'",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/rolling/bundle.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 11 re-check (tiered by its work at T46a)",
+  "tier_as_ranked": "E0",
+  "e0_basis": "T46a: claim lines only; the code stands",
+  "moved": "T46a: tiered by its work - The constant is already defined and claimed in grove_sides.py with the same value; the use site only needs the claim line.",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#way in through the grove",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "settlement/rolling/bundle.py _bundle_layout docstring, add: 'way in through a ring - GUESS research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: one `WAY_IN_FT` (36 ft) break at the front band's middle, sized so a lane can be routed through'",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/rolling/bundle.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 11 re-check (tiered by its work at T46a)",
+  "tier_as_ranked": "E0",
+  "e0_basis": "T46a: claim lines only; the code stands",
+  "moved": "T46a: tiered by its work - The value matches its existing claim in dispersed.py line 32; only the call site's claim line is missing.",
+  "wave": "",
   "scope": "kept"
  },
  {
@@ -2846,6 +2931,23 @@
   "tier_as_ranked": "E0",
   "e0_basis": "T42a: claim lines only; the code stands",
   "moved": "T42a: tiered by its work - The split is a tiling-artifact guard the code already performs as an honest NONE claim would say.",
+  "wave": "11",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/waterfields/comb.py::_comb_drain#collector above the frame",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "waterfields/comb.py _comb_drain docstring (after line 579), add: 'collector above the frame - UNRESEARCHED: the fitted collector lifted to stand 40 px (unscaled) above the frame's bottom edge (line 610)'",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/waterfields/comb.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 11 re-check (tiered by its work at T46a)",
+  "tier_as_ranked": "E0",
+  "e0_basis": "T46a: claim lines only; the code stands",
+  "moved": "T46a: tiered by its work - No page gives this margin, so an honest UNRESEARCHED claim matches the code as it stands.",
   "wave": "",
   "scope": "kept"
  },
@@ -2863,7 +2965,7 @@
   "tier_as_ranked": "E0",
   "e0_basis": "T42a: claim lines only; the code stands",
   "moved": "T42a: tiered by its work - The code already does what the claim will state and 0060 is silent on the last leg's straightness, so only the claim line is written.",
-  "wave": "",
+  "wave": "11",
   "scope": "kept"
  },
  {
@@ -2880,7 +2982,7 @@
   "tier_as_ranked": "E0",
   "e0_basis": "T42a: claim lines only; the code stands",
   "moved": "T42a: tiered by its work - The code already applies 0005's 25 degree threshold (polder.py:839, :889), so only the claim line changes.",
-  "wave": "",
+  "wave": "11",
   "scope": "kept"
  },
  {
@@ -2898,6 +3000,23 @@
   "scope": "kept"
  },
  {
+  "key": ".claude/skills/diagram/l7r/diagram/waterfields/polder.py::build_polder#hand-piled outlines",
+  "verdict": "CANNOT-TELL",
+  "tier": "E0",
+  "fix": "re-check: _polder_parcels (polder.py line 373) passes fillet=0.05 * cell to palette.organic_parcel, which draws each corner's two legs independently from fillet * triangular(0.12, 2.2, 0.7) (palette.py line 176) and roughens the arc by the corner's own reach - corner by corner from all but square to a broad sweep, as 0014 says; claim stands: 'hand-piled outlines - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: each parcel softened by `organic` (a fillet of 0.05 of the module, each corner's legs drawn 0.12-2.2x of it, a bow of 0.02)'",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/waterfields/polder.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 11 re-check (tiered by its work at T46a)",
+  "tier_as_ranked": "E0",
+  "e0_basis": "T46a: claim lines only; the code stands",
+  "moved": "T46a: tiered by its work - The code matches 0014's corner-by-corner spread once organic_parcel is read, so only the claim line is sharpened.",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": ".claude/skills/diagram/l7r/diagram/waterfields/polder.py::build_polder#interior bund node jitter",
   "verdict": "UNCLAIMED",
   "tier": "E0",
@@ -2911,6 +3030,23 @@
   "tier_as_ranked": "E0",
   "e0_basis": "T42a: claim lines only; the code stands",
   "moved": "T42a: tiered by its work - The organic default is passed through unchanged to the already-claimed parcel softening, so only the claim line is written.",
+  "wave": "11",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/waterfields/polder.py::build_polder#lattice unbent by default",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "waterfields/polder.py build_polder docstring (after line 99), add: 'lattice unbent by default - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a rice polder keeps its surveyed grid (`mosaic` 0, `edge_wander` 0); the dike-pond block passes its own mosaic'",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/waterfields/polder.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 11 re-check (tiered by its work at T46a)",
+  "tier_as_ranked": "E0",
+  "e0_basis": "T46a: claim lines only; the code stands",
+  "moved": "T46a: tiered by its work - 0019 says the rice polder keeps the grid and only the dike-pond block bends, which the defaults already do.",
   "wave": "",
   "scope": "kept"
  },
@@ -2928,7 +3064,7 @@
   "tier_as_ranked": "E0",
   "e0_basis": "T42a: claim lines only; the code stands",
   "moved": "T42a: tiered by its work - The code tints every plot it counts as low, which is what 0007 records for a polder, so only the claim wording changes.",
-  "wave": "",
+  "wave": "11",
   "scope": "kept"
  },
  {
@@ -2945,7 +3081,7 @@
   "tier_as_ranked": "E0",
   "e0_basis": "T42a: claim lines only; the code stands",
   "moved": "T42a: tiered by its work - line_wander 0.10 already matches 0014's 'about a tenth of the grid's spacing', so only the claim line is written.",
-  "wave": "",
+  "wave": "11",
   "scope": "kept"
  },
  {
@@ -4507,6 +4643,22 @@
   "scope": "kept"
  },
  {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#bank margin in feet",
+  "verdict": "DRIFTED",
+  "tier": "E1",
+  "fix": "settlement/fields/comb.py line 407: replace the source brook's margin `7.0 / 2 + 3.0` with `self.px(7.0) / 2 + self.px(3.0)` (the drawn 7 ft brook's half-width plus a 3 ft bund at the map's scale), and reword the claim line 376 to 'a bund's width, 3 ft, past the drawn 7 ft brook's bank, at the map's scale'",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 11 re-check (tiered by its work at T46a)",
+  "tier_as_ranked": "E1",
+  "moved": "T46a: tiered by its work - One literal expression becomes scaled; the logic of the keep-out is unchanged.",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#fallback watercourse widths",
   "verdict": "MISLABELED",
   "tier": "E1",
@@ -4519,7 +4671,7 @@
   "found": "wave 10 re-check (tiered by its work at T42a)",
   "tier_as_ranked": "E1",
   "moved": "T42a: tiered by its work - Three literals in one tuple change; the hem-on-water logic is unchanged.",
-  "wave": "",
+  "wave": "11",
   "scope": "kept"
  },
  {
@@ -5306,7 +5458,7 @@
   "found": "wave 10 re-check (tiered by its work at T42a)",
   "tier_as_ranked": "E1",
   "moved": "T42a: tiered by its work - One comparison value is put on the map's scale and a claim relabeled; the rule's logic is unchanged.",
-  "wave": "",
+  "wave": "11",
   "scope": "kept"
  },
  {
@@ -5448,7 +5600,7 @@
   "found": "wave 10 re-check (tiered by its work at T42a)",
   "tier_as_ranked": "E1",
   "moved": "T42a: tiered by its work - Only the default value's expression changes; the gap logic in _polder_parcels is untouched.",
-  "wave": "",
+  "wave": "11",
   "scope": "kept"
  },
  {
@@ -5463,6 +5615,22 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "10",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/waterfields/polder.py::build_polder#toe ends run on 3 ft",
+  "verdict": "DRIFTED",
+  "tier": "E1",
+  "fix": "waterfields/polder.py line 144: `along_trunk(_on, _best, ..., 3.0)` becomes `along_trunk(_on, _best, ..., 3.0 / ftpx)` (ftpx is already a build_polder parameter); claim line 101 adds 'at the map's scale'",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/waterfields/polder.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 11 re-check (tiered by its work at T46a)",
+  "tier_as_ranked": "E1",
+  "moved": "T46a: tiered by its work - One literal is scaled by a parameter already in hand; the snap logic is unchanged.",
+  "wave": "",
   "scope": "kept"
  },
  {
@@ -7598,6 +7766,22 @@
   "scope": "kept"
  },
  {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#mixed broadleaf belt's sizes and bamboo",
+  "verdict": "DRIFTED",
+  "tier": "E2",
+  "fix": "settlement/homestead_parts/groves.py _draw_grove: at line 789 give mix == 'mixed_broadleaf' its own crown band, uniform(0.75, 1.4) of the mean radius per 0080, instead of the (0.72, 1.05)/(1.25, 1.7) split; at line 760 drop 'mixed_broadleaf' from the bamboo condition (b_th 0.0 for it, since 0072's mixed broadleaf wood names only rounded broadleaf crowns) or keep it with its own GUESS claim; update the 'mixed broadleaf belt' and 'bamboo under the crowns' claims to match",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 11 re-check (tiered by its work at T46a)",
+  "tier_as_ranked": "E2",
+  "moved": "T46a: tiered by its work - Two conditions inside one function's item roll change for one mix (the crown band and the bamboo share), no new form.",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._find_grove_arms#windward depth",
   "tier": "E2",
   "fix": "draw each windward stand a fixed 1.57 house depths deep (0036 drawing), replacing the 1.4-3.6 deepening loop",
@@ -8359,6 +8543,22 @@
   "flag": "",
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/waterfields/carve.py::_dry_fields#end plot split at every scale",
+  "verdict": "DRIFTED",
+  "tier": "E2",
+  "fix": "waterfields/carve.py line 120: drop `g != 1.0 and` from the end-cell split condition so an end cell past 1.35 plot widths is halved at every grain (0006: plots about 92 ft at every scale); reword claim line 83 to drop '(coarse grains only)'; the village maps' hems regenerate",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/waterfields/carve.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 11 re-check (tiered by its work at T46a)",
+  "tier_as_ranked": "E2",
+  "moved": "T46a: tiered by its work - One condition in one function changes, with village-grain maps' output moving.",
   "wave": "",
   "scope": "kept"
  },

@@ -97,8 +97,9 @@ def build_polder(
         gaps - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: a walking bund between rows and between strips, a ditch corridor between columns, by default 3 ft and 8 ft at the map's scale
         low rows wet - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: every low plot tinted - the two lowest rows, no merge straddling the band
         module line bow - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: each row and column line bowed up to `line_wander` 0.10 of the module, off the boundary lines
-        hand-piled outlines - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: each parcel softened by `organic` (a fillet of 0.05 of the module, a bow of 0.02)
-        toe ends on the trunk - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: each toe end snapped onto the nearer trunk and run 3 ft on along its centerline
+        hand-piled outlines - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: each parcel softened by `organic` (a fillet of 0.05 of the module, a bow of 0.02), each corner's legs drawn on their own from all but square to a broad sweep (`palette.organic_parcel`)
+        toe ends on the trunk - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: each toe end snapped onto the nearer trunk and run 3 ft on along its centerline, at the map's scale
+        lattice unbent by default - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a rice polder keeps its surveyed grid (`mosaic` 0, `edge_wander` 0); the dike-pond block passes its own mosaic
         acreage reckoned - NONE: the cropped area reckoned at the map's scale (area x ftpx squared / 43560)
     """
     R = random.Random(seed)
@@ -141,7 +142,7 @@ def build_polder(
                     # that meet where the material changes"). Walked along the trunk it hides under the trunk's bed
                     # and the joint is a confluence ON the centerline, as the feeder/lateral junctions are.
                     _nb = c["pts"][1] if _k == 0 else c["pts"][-2]
-                    c["pts"][_k] = along_trunk(_on, _best, (_best[0] - _nb[0], _best[1] - _nb[1]), 3.0)
+                    c["pts"][_k] = along_trunk(_on, _best, (_best[0] - _nb[0], _best[1] - _nb[1]), 3.0 / ftpx)  # 3 ft at the map's scale
     if clean_parcels:  # after the channels are FINAL - the rounding and the toe snap both move them
         _plots_clear_of_channels(plots, channels)
     unpoint_parcels(plots)  # the LAST ring writer (feature 287, water W19) - whether or not the channel cleanup ran

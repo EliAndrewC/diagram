@@ -373,8 +373,9 @@ class CombMixin:
         Research:
             hem placement - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: the dry plots upslope of the supply canal, as the net lays them
             hem off rice and water - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: a plot on an earlier fan's rice, on water or on the field's own ditch is dropped
-            bank beside the source brook - GUESS: a bund's width, 3 px, past the drawn 7 px brook's bank (7/2 + 3)
+            bank beside the source brook - GUESS: a bund's width, 3 ft, past the drawn 7 ft brook's bank, at the map's scale
             plot size and crop - NONE: taken from the net as build_comb laid them
+            coarse-grain top-up - research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html: the reserve plots `_coarse_grain_top_up` returns are drawn after the refused plots, by the same refusal rule
             fallback watercourse widths - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html, research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: where a record carries no width, a channel 4.5 ft and a canal 6 ft (0068), a brook 7 ft (0059's brook) - at the map's scale; 0068's brook narrower than the head race it feeds is the open conflict, the found row comb.py::CombMixin._comb_draw_source#feeder brook narrower than the head race
             nothing built or planted on a dry plot - UNRESEARCHED: each drawn hem plot registered as blocked ground (`block_polys`) and dry ground (`dry_polys`)
             dry plot ink - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: the crop's own fill, furrowed, a tan edge"""
@@ -409,7 +410,7 @@ class CombMixin:
             # ...with a BUND'S WIDTH of margin beyond the bank (settlement-review, feature 230 pass 11). At the bare half-width a
             # hem plot 5.9 ft from Mizuguchi's centerline was kept, which leaves about half a foot between the water's bank and
             # the plot's plow boundary - the crop stops at the bank, and a bund is the thing that stops it.
-            _wet.append(([(float(q[0]), float(q[1])) for q in _src_brook], 7.0 / 2 + 3.0))  # the drawn 7 px brook's half-width plus a bund (GUESS)
+            _wet.append(([(float(q[0]), float(q[1])) for q in _src_brook], self.px(7.0) / 2 + self.px(3.0)))  # the drawn 7 ft brook's half-width plus a 3 ft bund, at the map's scale (GUESS)
 
         _wet_lines = WetLines(_wet)  # filed once: every hem and reserve plot asks it
 
