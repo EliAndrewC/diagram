@@ -728,8 +728,10 @@ in-scope row is E1 (deferred only) or E2 and above, the next E2 row 393 (`hamlet
 - [x] T51a wave 13's found rows tiered by the work they take, by a fresh reader (FR-002, FR-003, SC-003)
       research: rendering
       verify: DONE. 13 rows tiered by their work by a fresh Opus reader (audit/t51a-out.jsonl): 3 moved (tax-free fields E4 -> E0 with its basis; true size and structures abut walls E2 -> E3)
-- [ ] T51 the 8 claims corrected - label, citation or wording only; no procedure text, sheet or code changes (FR-003 E0, FR-004)
+- [x] T51 the 8 claims corrected - label, citation or wording only; no procedure text, sheet or code changes (FR-003 E0, FR-004)
       research: rendering
-- [ ] T52 every touched claim re-checked by `impl-drift`, and the close: wave 14's own bookend pair, `make done` green, the wave
+      verify: DONE. the 8 claims corrected by label, citation or wording only; impl-drift's re-check moved two (the tax-free fields onto 0221's drawing page, the postern a GUESS stating what 0101's page searched); no procedure text, sheet or engine line changed
+- [x] T52 every touched claim re-checked by `impl-drift`, and the close: wave 14's own bookend pair, `make done` green, the wave
       column (FR-005, FR-006, SC-002, SC-003)
       research: rendering
+      verify: DONE. impl-drift on every touched claim (w14 bundles A-B, 12 recorded, all IN-STEP at the last round); make done green (already verified, no engine change); wave 14's own pair (328-start at 2e0268412) band 1, explained, perf-audit consistent; the wave column written; the scope script now keeps the page path (73 units)

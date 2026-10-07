@@ -1,0 +1,62 @@
+{
+  "band": 1,
+  "base": {
+    "commit": "2e0268412",
+    "label": "328-start",
+    "utc": "20261007T195251Z"
+  },
+  "binding": "c4978210d2c469922a545c9066de1fbddfe5c4cfa3ee35139b14f9c024371346",
+  "end": {
+    "commit": "30ad44ab0",
+    "label": "328-end",
+    "utc": "20261007T195606Z"
+  },
+  "environment": "local",
+  "feature": "328-match-the-research",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "8d3395e5-fe32-4f85-9c89-80c344d2ac1a",
+    "utc": "20261007T195856Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": 0.0,
+          "39": 0.0,
+          "4": 0.0,
+          "47": -2.9
+        },
+        "total_pct": -0.8
+      },
+      "20": {
+        "seeds": {
+          "25": -1.4,
+          "39": 0.0,
+          "4": 0.0,
+          "47": 0.0
+        },
+        "total_pct": -0.4
+      },
+      "40": {
+        "seeds": {
+          "25": -0.8,
+          "39": 0.0,
+          "4": -1.7,
+          "47": -0.8
+        },
+        "total_pct": -0.9
+      }
+    },
+    "seeds": {
+      "25": 2.0,
+      "39": 0.0,
+      "4": -2.1,
+      "47": -2.3
+    },
+    "total_pct": -0.5
+  },
+  "note": "git diff 2e0268412..30ad44ab0 (and ..HEAD) -- l7r is empty; seed 25 +2.0% is one 0.1s rounding step (4.9->5.0), windbreak 0.48->0.55 (+0.07s), inside same-code spread already on record: f52eb0771 three runs windbreak 0.47/0.53/0.57, 6ca2f5ccf five runs seed 25 3.9-4.1s; seeds 4/47 -2%, total -0.5%, every scaling leg fell",
+  "verdict": "consistent"
+}

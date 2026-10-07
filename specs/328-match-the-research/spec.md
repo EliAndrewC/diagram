@@ -290,3 +290,6 @@ Each wave's amendment adds its map decisions to this table. The program's decisi
 - Amendment 12, round 1 (spec-fidelity, 2026-10-07): CHANGES REQUIRED, plan BLOCKED - the seeded rolls never made (made: the
   second kami's two rolls land off the drawn form, so that row is E3). Round 2: CHANGES REQUIRED, plan CLEAR - one notes line
   left. Round 3: FAITHFUL.
+- Amendment 13, round 1 (spec-fidelity-verify, 2026-10-07): FAITHFUL (the plan verdict left to spec-fidelity). Round 2
+  (spec-fidelity): FAITHFUL, plan CLEAR - the two claims impl-drift's re-check moved (the tax-free fields on 0221's drawing
+  page, the postern a GUESS saying what was searched); its aside fixed: the scope keeps the page path.
