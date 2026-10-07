@@ -371,10 +371,10 @@ grounds' sizes, counts and reaches. Every `after` these rows carry is a row insi
   - `l7r/diagram/settlement/civic_grounds/lodging.py::LodgingMixin.animal_ground#caravan ground` - caravan ground default r to reach the 3-trough line (or key trough count on the ground's kind, caravan = 3) (after: l7r/diagram/settlement/civic_grounds/stable_yard.py::StableYardMixin._stable_yard#yard radius)
   - `l7r/diagram/settlement/civic_grounds/stable_yard.py::StableYardMixin._yard_watering#troughs clustered at the nearest well` - well reach from r + 40 px to a well within 40 ft (px(40)) of the yard's edge
 
-- [ ] T25a the found rows tiered provisionally by verdict read and tiered by the work they take, by a fresh reader, before
+- [x] T25a the found rows tiered provisionally by verdict read and tiered by the work they take, by a fresh reader, before
       the wave chooses its rows (FR-002, FR-003, SC-003)
       research: rendering
-      verify:
+      verify: DONE. DONE. 34 rows tiered by their work by a fresh Opus reader (audit/t25a-out.jsonl, each reason measured in the code), applied in audit/overrides.json: 18 moved (E0 6, E1 12, E2 9, E3 7); the follow-up record carries the new tiers
 - [ ] T25 the bookend pair, back to back: `make perf LABEL=328-start` in a detached worktree at main's engine, then
       `LABEL=328-end` in the clone (constitution VI)
       research: rendering

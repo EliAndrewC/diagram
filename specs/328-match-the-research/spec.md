@@ -239,3 +239,8 @@ Each wave's amendment adds its map decisions to this table. The program's decisi
   and boundary stones are drawn only on exempt legacy cities). Aside taken: row 93's value change split into an E1 row.
 - Amendment 6, round 2 (spec-fidelity-verify, 2026-10-07): CHANGES REQUIRED - the follow-up record's wave-6 bullets
   carried the old wording; the plan verdict re-recorded for the run's new bounds (rows 180-231).
+- Amendment 6, round 3 (spec-fidelity, 2026-10-07): CHANGES REQUIRED, plan BLOCKED - the run chosen on tiers set by
+  verdict alone; T25a added (a fresh reader tiers the provisional rows by their work before the wave chooses its rows).
+- Amendment 6, round 4 (spec-fidelity, 2026-10-07): CHANGES REQUIRED, plan CLEAR (22 decisions) - the follow-up record
+  out of step with T25a's tiers.
+- Amendment 6, round 5 (spec-fidelity-verify, 2026-10-07): FAITHFUL.
