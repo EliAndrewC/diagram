@@ -1,6 +1,6 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "07ba3cb5918c20a02e1d7c9934d1613f5642d0870ce9979cc7af8b49f6f44a76",
+ "plan_sha256": "25995943a697a7241606374ca6f74eabdd8dd1036c5db8c6083712d67c80a19b",
  "reviewed": "2026-10-07",
  "declared": "spec-fidelity",
  "decisions": [
@@ -14,26 +14,26 @@
    "id": "W17-2 three UNCLAIMED claims",
    "summary": "claims for stage_windbreak no-copse (UNRESEARCHED), plan_site grove sides (0036 drawing), board 60 ft farthest seat (GUESS, 0190 drawing)",
    "class": "within",
-   "why": "each label matches its page; FR-004 claims work"
+   "why": "FR-004 claims work; labels match their pages"
   },
   {
    "id": "W17-3 WEB_HARD_GAP re-tiered E3",
-   "summary": "row moved E2 -> E3 by measurement; the override's files now name all five modules (serve, route, clearance, web, boundary)",
+   "summary": "row moved E2 -> E3 by measurement; the override names all five modules",
    "class": "within",
-   "why": "FR-003 tiering by work; round 1's item 2 resolved - overrides.json files list matches its fix text; the row stays ranked"
+   "why": "FR-003 tiering by work; the row stays ranked"
   },
   {
-   "id": "W17-4 thicket fallback held to the back-row band",
-   "summary": "near search within THICKET_REACH_FT, then the band behind the row's whole x extent, near edge within THICKET_ROW_DEPTH_FT (30 ft, UNRESEARCHED) of the back row, full size then 70%; no thicket only where none fits in that band",
+   "id": "W17-4 every thicket pass held just beyond the back row",
+   "summary": "near passes (THICKET_REACH_FT) and the row-length fallback alike hold the stand's south edge within THICKET_ROW_DEPTH_FT (30 ft) of the back row's back edge; no thicket only where none fits in that band",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "round 1's item 1 resolved: the seat is now bounded by distance from the back row along its whole length, which is 0075 drawing's 'just beyond the back row'; the 30 ft depth is a labeled UNRESEARCHED magnitude of 'just beyond'. Dropping a stand that fits nowhere in that band is the page's own placement being physically unavailable, not a carve-out: a seat deep in the page is not the thicket 0075 draws. Both tests pin it (seat behind x=1500 within depth; none when the band is taken though open ground lies deeper) and pass on round 2's own run"
+   "why": "FR-004: the near passes let a stand sit far behind the row, off 0075 drawing's 'just beyond the back row'; holding every pass to the band moves the code onto the page. Dropping a stand that fits nowhere in the band stands as ruled in round 2: a seat deep in the page is not the thicket 0075 draws. Measured from the back edge (min over houses of y - h/2) is stricter than the center line, not looser. Kashikawa's manifest confirms: stand south edge 74.5 px north of the back edge before, now overlapping it by 5.6 px within the center line. No research edit (FR-004)"
   },
   {
-   "id": "W17-5 occasions none",
-   "summary": "no review occasion: the two thicket maps regenerated unchanged",
+   "id": "W17-5 occasion declared",
+   "summary": "placement-changed: shared bamboo grove on kashikawa (glyph check); Mizuguchi unchanged",
    "class": "within",
-   "why": "measured, per feature 294"
+   "why": "feature 294 occasion for a re-placed element; the Kashikawa manifest's bamboo_stands moved, Mizuguchi's file not in the commit"
   },
   {
    "id": "W17-6 condition (6) carried",

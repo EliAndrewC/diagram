@@ -164,7 +164,9 @@ THICKET_ROW_DEPTH_FT = 30.0
 it, and a stand that fits nowhere there is not drawn (feature 328; feature 293's search over the whole page behind the row seated it
 deep in the page, far from every house).
 
-Research: thicket row depth - research/questions/0075-bamboo-groves-chikurin.drawing.html: just beyond the back row, its near edge within 30 ft of it on every pass"""
+Research:
+    thicket just beyond the back row - research/questions/0075-bamboo-groves-chikurin.drawing.html: on every pass, measured from the row's back edge
+    thicket row depth figure - UNRESEARCHED: 30 ft, this project's measure of just beyond the row"""
 
 
 def bamboo_seats(s: Settlement, plan: SitePlan) -> list[Poly]:
