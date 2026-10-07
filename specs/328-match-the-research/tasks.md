@@ -457,24 +457,23 @@ ground's margins and the cemetery's first row. Every `after` these rows carry is
       research: rendering
       verify: DONE. DONE. make done green (202 s); band 1 explained and confirmed; the wave column written
 
-## Phase 10 - the scope (amendment 8, the GM 2026-10-07), then wave 9 (the open in-scope E0 claims, then in-scope E1 rows 255-298)
+## Phase 10 - the scope (amendment 8, the GM 2026-10-07), then wave 9 (the open in-scope E0 claims, then in-scope E1 rows 265-297)
 
-The feature now fixes the code the kept maps execute (FR-010): every ranked row takes a scope from the gen cache's execution
-records (`audit/scope.py` -> `audit/scope.json`, a column of `ranking.md`), every claimed unit no kept map's run reaches is
-listed in `dev/claims-deferred.json`, and `make claims-report` shows their findings DEFERRED (`scripts/_claims.py`, tested).
-T34a: the 5 found rows wave 8 tiered by verdict alone are tiered by their work by a fresh reader (`audit/t34a-out.jsonl`, 3
-moved). Then the 6 open in-scope E0 rows (SC-003), each a claim written or relabeled (DEVIATION only after the exception
-path rules it LEGITIMATE), and the next contiguous run of in-scope E1 rows (FR-006), rows 255-298 in ranking order (the next
-open in-scope E1 row is 303). Every `after` these rows carry is a row inside the wave or closed.
+The feature now fixes the code the kept maps execute (FR-010): every ranked row takes a scope from the kept maps' own
+execution records and the `hamletgen/` rule (`audit/scope.py` -> `audit/scope.json`, a column of `ranking.md`), every claimed
+unit outside it is listed in `dev/claims-deferred.json`, and `make claims-report` shows their findings DEFERRED
+(`scripts/_claims.py`, tested). T34a: the 5 found rows wave 8 tiered by verdict alone are tiered by their work by a fresh
+reader (`audit/t34a-out.jsonl`, 3 moved). Then the 5 open in-scope E0 rows (SC-003), each a claim written or relabeled
+(DEVIATION only after the exception path rules it LEGITIMATE), and the next contiguous run of in-scope E1 rows (FR-006), rows
+265-297 in ranking order (the next open in-scope E1 row is 303). Every `after` these rows carry is a row inside the wave or
+closed.
 
   - `l7r/diagram/hamletgen/ways/bund.py::a_way_onto_the_bund#field path width` - Split the claim: keep 0081 for the 5 ft `BRANCH_WIDTH` spur, and claim the `LANE_CLEARANCE` corridor separately against 0246 (a lane's middle 7 ft clear of a garden fence), naming the 40 ft center-corridor drift as fixed by the edge-based corridor row (consts.py::LANE_CLEARANCE, E3).
   - `l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#a healing link kept if its ends lie within 12 ft of the run and of the network (`_reach < 12.0`, `_net_reach < 12.0`), a` - claim it: a healing link kept if its ends lie within 12 ft of the run and of the network (`_reach < 12.0`, `_net_reach < 12.0`), a gap left unjoined
   - `l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#link off hard ground and walls` - Split the claim: the 7 ft off walls (`tight_margin=WEB_FABRIC_GAP` in the link's `clear_runs`) cites 0246's 7 ft from a garden fence to a lane's middle, and the 8 ft off hard ground (`WEB_HARD_GAP`) stays UNRESEARCHED.
   - `l7r/diagram/labels/obstacles.py::GROUP_WORDS#a guard or inspection caption may cover the gate's posts (0243 §9)` - claim it: a guard or inspection caption may cover the gate's posts (0243 §9)
   - `l7r/diagram/labels/obstacles.py::GROUP_WORDS#a shrine caption may cover the temples (0243 §11)` - claim it: a shrine caption may cover the temples (0243 §11)
-  - `l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cemetery#stupa height 13 px and its seats (rear corners of a ruled plot, interior of an organic one)` - claim it: stupa height 13 px and its seats (rear corners of a ruled plot, interior of an organic one)
 
-  - `l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cemetery#six jizo at its entrance` - cemetery draws no jizo at all, but the page has "Six small stone jizo stand in a row at the entrance of a village's burial ground"; the claim itself admits it; draw them at the burial ground's entrance here
   - `l7r/diagram/settlement/farm_fixtures.py::KURA_PARTS#west annex` - W annex 0.32 x 0.56 (15 x 16 ft) -> 18-27 ft long, 10-12 ft deep, 1.5-1.8 to one
   - `l7r/diagram/settlement/farm_fixtures.py::kura_rect#west annex size` - hold the west annex to 0040 drawing's band: 18-27 ft long, 1.5-1.8 times as long as deep, as the north annex is
   - `l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_ditches#outfall recorded width` - record the outfall's width as the inked _dw, not 2.5
@@ -501,7 +500,6 @@ open in-scope E1 row is 303). Every `after` these rows carry is a row inside the
   - `l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#garden size` - nucleated garden cap 48 x 34 ft -> a cap whose area stays <= 1,507 sq ft (e.g. 44 x 34 ft), per 0039
   - `l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#headman keeps an ordinary yard and garden` - headman's garden held to an ordinary farm's: the same lowered cap (<= 1,507 sq ft, near the 592 sq ft typical) applies to a big house (after: l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#garden size)
   - `l7r/diagram/settlement/rolling/fit.py::BundleFitMixin._garden_shaded#garden shaded by a house to its south` - _garden_shaded reach gh + 4 px -> px(39) south of the bed (0038's 39 ft house-shade corridor)
-  - `l7r/diagram/settlement/rolling/roll.py::RollVillageMixin._roll_civic#shrine hall size at the threshold` - threshold seated off the drawn hall px(60) x px(48), not px(62) x px(42) (0215)
 
 - [ ] T34 the scope applied: `audit/scope.py` and `audit/scope.json`, the ranking's scope column (`audit/merge.py`),
       `dev/claims-deferred.json` over every claimed unit, and `make claims-report` showing a deferred unit's findings DEFERRED

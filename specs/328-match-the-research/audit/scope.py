@@ -4,11 +4,12 @@ towns and cities run is DEFERRED: ranked, never taken by a wave, and shown DEFER
 
     python3 specs/328-match-the-research/audit/scope.py <skill dir> <ranking.json> <claims-index.json> <scope.json> <claims-deferred.json>
 
-THE MEASURE IS THE EXECUTION RECORD, not a name: every gen-cache entry under `<skill>/.gencache` (the five pool hamlets, the
-magistracy and country-shrine sheets, and the rolls the gate and the perf bookends make - the cohort seeds and the scaling
-legs, configurations the pool itself does not roll) records each function that RAN as `(path, qualname)`, the record
-`tools/hamlet_floor` reads. A unit is in scope when
+THE MEASURE IS THE EXECUTION RECORD, not a name: each KEPT map's own gen-cache entry (`KEPT_MAPS`: the pool hamlets, the
+magistracy sheets, the country shrine; taken on today's engine with `make map`) records each function that RAN as
+`(path, qualname)`, the record `tools/hamlet_floor` reads. No other entry counts: `.gencache/rolls` holds the gate's tests of
+the legacy village roller, unit tests' rolls and stale rolls of older code. A unit is in scope when
   - it is a Mode A procedure (`buildings.md`, `buildings/**`);
+  - it is under `hamletgen/` - the scripted hamlet's own code, which only a scripted hamlet (any seed, any form) runs;
   - it is a function or method a recorded run executed;
   - it is a class one of whose methods a recorded run executed;
   - it is a module-level constant an executed function of the engine reads by name;
@@ -27,10 +28,19 @@ import sys
 from pathlib import Path
 
 
+KEPT_MAPS = (
+    "pool/hamlets/*/*.gen.py",  # the scripted hamlets
+    "pool/magistracies/*/*.gen.py",  # the magistracy sheets
+    "pool/country-shrines/*/*.gen.py",  # the country shrine
+)
+
+
 def executed(skill: Path) -> set[tuple[str, str]]:
-    """Every `(path, qualname)` a recorded run executed."""
+    """Every `(path, qualname)` a kept map's own gen-cache entry records as executed - never a gate test's roll (the legacy
+    village roller's), a unit test's, or an entry of the code as it stood weeks ago (`.gencache/rolls`, `h10`, `h20`)."""
     out: set[tuple[str, str]] = set()
-    for meta in glob.glob(str(skill / ".gencache" / "*" / "meta.json")) + glob.glob(str(skill / ".gencache" / "rolls" / "*" / "meta.json")):
+    entries = [skill / ".gencache" / Path(g).name[: -len(".gen.py")] / "meta.json" for pat in KEPT_MAPS for g in glob.glob(str(skill / pat))]
+    for meta in (str(e) for e in entries if e.is_file()):
         deps = json.loads(Path(meta).read_text()).get("deps") or {}
         out |= {(str(p), str(q)) for p, q, *_ in deps.get("functions", []) if q != "<module>"}
     return out
@@ -73,8 +83,8 @@ def scope_of(uid: str, ran: set[tuple[str, str]], read: set[str]) -> str:
     path = path.replace(".claude/skills/diagram/", "")
     if path.startswith("buildings"):
         return "mode-a"
-    if f"{path}::{unit}" in KEPT_CHECKS:
-        return "kept"
+    if f"{path}::{unit}" in KEPT_CHECKS or path.startswith("l7r/diagram/hamletgen/"):
+        return "kept"  # hamletgen/ is the scripted hamlet's own code: no legacy map reaches it, whatever seed or form runs it
     if (path, unit) in ran or any(p == path and q.startswith(unit + ".") for p, q in ran):
         return "kept"
     if unit.replace("_", "").isupper():

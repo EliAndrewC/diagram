@@ -1,6 +1,6 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "a31ff62ded47ab14f9ab95f59622f6e62be77940c091c929c900137a8edb01bb",
+ "plan_sha256": "eb3c231c55f1d117f83afe78123ffcd25e1a4b771cd158e400edb1e75ba38380",
  "reviewed": "2026-10-07",
  "declared": "spec-fidelity",
  "decisions": [
@@ -162,17 +162,16 @@
   },
   {
    "id": "D9-scope-rule",
-   "summary": "Every row takes a scope from audit/scope.py: `hamlet` = any unit in a module of tools/hamlet_floor's module set, all of hamletgen/, any unit hamletgen/ calls by name, and (scope.py) any unit of a module one of whose functions hamletgen/ calls by name; `mode-a` = buildings*, or any path containing 'compound'; else `deferred`",
+   "summary": "Scope from the gen cache's execution records: every (path, qualname) recorded under .gencache/*/ and .gencache/rolls/*/ is `kept` (plus classes with a run method, constants an executed function reads, KEPT_CHECKS, and buildings* as mode-a); everything else deferred",
    "class": "narrowing",
    "ruling": "NOT LEGITIMATE",
-   "why": "The GM: 'limit ourselves to code actually executed by magistracies, country shrines, and scripted hamlets; legacy hand-drawn settlements shall have their findings marked as DEFERRED rather than DRIFTED.' Measured against the gencache execution records (deps.functions qualnames) of the five pool hamlets, four magistracy sheets and the country shrine: no deferred unit ran (the deferral side holds), but module granularity and name collisions put legacy-only units in scope, so their findings read DRIFTED, not DEFERRED: nearring.py (8 rows, in by `_blocked(` - the collision FALSE_MODULES strikes for the walls), grove_rules by `_key(`, torii by `along(`, shrines by `fouled(`, moat.py water_gate and city moat, houses.py _try_place_legacy and shop frontage, structures/compounds.py merchant_estate (mode-a by the substring), and in wave 9 itself crescent_pond (called only by the legacy Hoshigaoka village gen), water_field ripe share (no hamletgen caller), _grove_fits and _shades_a_garden (reached only via _farmsteads_legacy -> _solve_homestead). The plan's own wording of D9 ('any unit hamletgen/ calls') and FR-010's do not describe the module-level inclusion scope.py applies. Nothing in the request implies keeping legacy-only units in scope; unit-level execution records exist, so the literal rule is not impossible."
+   "why": "The unit-level measure is right and answers round 1 (crescent_pond, water_field, _grove_fits, _shades_a_garden, merchant_estate, water_gate, _try_place_legacy, nearring.py all read deferred; scope.json and claims-deferred.json reproduce exactly, 963 of 3945). But the records it reads are not the kept maps' runs. Measured on round 2: .gencache/rolls holds 32 entries, none a kept map (tests/rolls.py: the gate rolls ZERO maps of its own since feature 219): three `roll_village:*` gate-test rolls of the legacy feature-005 roller (tests/gate/settlement/test_rolling.py; no pool generator calls roll_village), seven HamletSpec rolls from older engine code (Sep 8-29, their spec repr lacks grove_sides/row_line), and unit-test field rolls. Excluding only the roll_village rolls moves 14 open rows kept->deferred (all of rolling/roll.py plus _knobs._land_use_ok); using only the kept maps' entries and current-code HamletSpec rolls moves 20, including FuneraryGroundsMixin.cemetery, which no current kept map runs (the hamlet burial stage draws nothing; only the Sep 29 rolls record it). Wave 9 takes three of these (cemetery#stupa E0, cemetery#six jizo E1, RollVillageMixin._roll_civic E1). The GM: 'limit ourselves to code actually executed by magistracies, country shrines, and scripted hamlets'. A gate test of the legacy roller and a stale record of old code are neither; the round-1 code itself called roll.py 'the legacy village roller, which no scripted hamlet runs'."
   },
   {
    "id": "D9-deferred-list-from-current-rows",
-   "summary": "dev/claims-deferred.json lists only the units of today's ranked findings whose rows are all deferred",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "A legacy-only unit IN-STEP today that drifts later (a page edit re-owes it) would read DRIFTED and count at the claims gate and against SC-005, against 'legacy hand-drawn settlements shall have their findings marked as DEFERRED'. The rule must cover every legacy-only claimed unit, or be re-derived whenever a finding joins the ranking."
+   "summary": "dev/claims-deferred.json derived over every claimed unit (963 of 3945), re-derived when a wave lands",
+   "class": "within",
+   "why": "Answers round 1: measured, the list is computed over every unit of dev/claims-index.json, not today's findings, and FR-010 and the plan say it is re-run when a wave lands. Its CONTENT inherits D9-scope-rule's measure (990 with the legacy roller's rolls excluded, 1078 on current kept-map records only) and is corrected with it."
   },
   {
    "id": "D9-any-in-scope-row-keeps-unit",
@@ -188,9 +187,9 @@
   },
   {
    "id": "cap-85",
-   "summary": "The cap is 85%, the hook re-armed at 85 (measured: usage_cap.py status shows cap 85%)",
+   "summary": "The cap is 85%, the hook re-armed at 85; the plan's Summary now says 85%",
    "class": "within",
-   "why": "'Please also raise the cap from 75% to 85%'. The plan's Summary line still says 75% - a stale word to correct, not a decision."
+   "why": "'Please also raise the cap from 75% to 85%'. Round 1's stale word is corrected."
   },
   {
    "id": "T34a",
@@ -200,9 +199,9 @@
   },
   {
    "id": "W9-scope",
-   "summary": "Wave 9: the 5 open in-scope E0 rows, then in-scope E1 rows 265-288 (24 rows), next open in-scope E1 row 289",
+   "summary": "Wave 9: the 6 open in-scope E0 rows, then in-scope E1 rows 255-298 (28 rows); next open in-scope E1 row 303",
    "class": "within",
-   "why": "Measured on ranking.json: E0 open in-scope rows are 51, 62, 65, 93, 94; E1 rows 101-124 (global 265-288) are the first open in-scope E1 rows and 125 (289) the next. Contiguous under the scope as written; it must be re-chosen when D9's rule is corrected (four of its rows are legacy-only code)."
+   "why": "Measured on ranking.json: open in-scope E0 rows are 51, 62, 65, 93, 94, 129; open in-scope E1 rows from 255 to 298 are exactly 28 and the next is 303; Phase 10 lists exactly those 34 keys; tier order monotone; every after is inside the wave. Correct arithmetic on the scope as written, but three of its rows are legacy-only code (see D9-scope-rule) and it must be re-chosen once the scope is re-measured."
   },
   {
    "id": "W9-verification",

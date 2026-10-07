@@ -519,7 +519,7 @@
   "found": "wave 2 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
   "wave": "3 (claim renamed or split; its parts re-checked)",
-  "scope": "deferred"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/persimmon_reseat.py::reseat_persimmons#the rolled count honored",
@@ -911,7 +911,7 @@
   "found": "wave 6 re-check",
   "tier_as_ranked": "E0",
   "wave": "7 (claimed under its unit's new label; re-checked)",
-  "scope": "deferred"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#a healing link kept if its ends lie within 12 ft of the run and of the network (`_reach < 12.0`, `_net_reach < 12.0`), a",
@@ -1935,7 +1935,7 @@
   "found": "wave 7 re-check",
   "tier_as_ranked": "E0",
   "wave": "8 (claimed under its unit's new label; re-checked)",
-  "scope": "kept"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cemetery#stupa height 13 px and its seats (rear corners of a ruled plot, interior of an organic one)",
@@ -1950,7 +1950,7 @@
   "found": "wave 8 re-check",
   "tier_as_ranked": "E0",
   "wave": "",
-  "scope": "kept"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cremation_ground#cleared ground's depth 0.7 of its width",
@@ -2679,7 +2679,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "2",
-  "scope": "deferred"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/fixtures.py::_PRIVY_SEATS#four privy seats",
@@ -2951,7 +2951,7 @@
   "tier_as_ranked": "E0",
   "moved": "T29a (amendment 7): tiered by its work - Two default literals in the d.get('w', ...) fallbacks at law_water.py lines 183 and 185, logic unchanged; the claim line moves with them.",
   "wave": "8 (claimed under its unit's new label; re-checked)",
-  "scope": "deferred"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py::fouled_segment#off another household's yard or garden",
@@ -2981,7 +2981,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "4 (the constant retired with the hairpin-arm cut it served)",
-  "scope": "deferred"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/smooth.py::_END_WAY_FT#lane end reaches a way",
@@ -2995,7 +2995,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "4 (the constant retired with the hairpin-arm cut it served)",
-  "scope": "deferred"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/smooth.py::_LONG_ARM_FT#hairpin arm cut length",
@@ -3009,7 +3009,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "4 (the constant retired with the hairpin-arm cut it served)",
-  "scope": "deferred"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/street.py::row_reach#a farm frame where none is recorded",
@@ -3806,7 +3806,7 @@
   "tier_as_ranked": "E0",
   "moved": "T29a (amendment 7): tiered by its work - One literal, bm = 8 at funerary.py line 130; the block polygon and _clear_ground(..., 0) already follow.",
   "wave": "8",
-  "scope": "kept"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cemetery#rows of low markers",
@@ -3821,7 +3821,7 @@
   "moved": "wave 7 re-check: the fix landed; what the re-check found beyond it",
   "verdict": "DRIFTED",
   "wave": "8",
-  "scope": "kept"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cemetery#six jizo at its entrance",
@@ -3836,7 +3836,7 @@
   "found": "wave 8 re-check (tier provisional, by verdict: a read by its work owed before an E1 wave takes it)",
   "tier_as_ranked": "E1",
   "wave": "",
-  "scope": "kept"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cremation_ground#fire bed",
@@ -4461,7 +4461,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "kept"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/shrines_wells/wells.py::WellsMixin._farm_wells#every farmhouse within reach of a well",
@@ -6279,7 +6279,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "kept"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.castle#corner yagura and gate towers",
@@ -6531,7 +6531,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "kept"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cremation_ground#six jizo at a burial ground's entrance",
@@ -7141,7 +7141,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "kept"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/land/cover.py::GroundCoverMixin.commons#wood edge",
@@ -7230,7 +7230,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "kept"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/roll.py::RollVillageMixin._roll_windbreak#communal windbreak behind the cluster",
@@ -7244,7 +7244,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "kept"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/roll.py::RollVillageMixin.roll_village#notice board",
@@ -7258,7 +7258,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "kept"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/shrines_wells/byres.py::DraftByresMixin._courtyard_byre_seat#a side wall, toward the work yard",
@@ -7552,7 +7552,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "kept"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/water_ways/kido.py::KidoMixin.kido#barred opening",
@@ -8893,7 +8893,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "deferred"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/fixtures.py::FIXTURE_BANDS#pig sty against the house",
@@ -9045,7 +9045,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "deferred"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/plan.py::fall_backs_the_wind#fall square to or away from the wind",
@@ -9061,7 +9061,7 @@
   "tier_as_ranked": "E0",
   "verdict": "MISLABELED",
   "wave": "",
-  "scope": "deferred"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/plan.py::plan_site#water flow follows the fall",
@@ -10292,7 +10292,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "kept"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/roll.py::RollVillageMixin._roll_cluster#headman at the skeleton's prime spot",
@@ -10308,7 +10308,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "kept"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/roll.py::RollVillageMixin._roll_cluster#lane width and clearance",
@@ -10324,7 +10324,7 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "kept"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/roll.py::RollVillageMixin._roll_field#pond chain",
@@ -10341,7 +10341,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "kept"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/roll.py::RollVillageMixin._roll_wells#wells among the houses",
@@ -10355,7 +10355,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "kept"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/roll.py::RollVillageMixin._roll_windbreak#belt always on one side, a straight strip",
@@ -10371,7 +10371,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "kept"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/roll.py::RollVillageMixin.roll_village#a rolled village is clustered",
@@ -10385,7 +10385,7 @@
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "kept"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/seeds.py::SeedFormsMixin.line_seeds#farms strung along a line",
@@ -10993,7 +10993,7 @@
   "moved": "wave 4 re-check: NEEDS-RESEARCH (the yard margin)",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "deferred"
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::span_walkable#a walkable span",
@@ -11359,7 +11359,7 @@
   "tier_as_ranked": "E4",
   "verdict": "NEEDS-RESEARCH",
   "wave": "",
-  "scope": "kept"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/roll.py::RollVillageMixin._roll_windbreak#windbreak standoff and depth",
@@ -11373,7 +11373,7 @@
   "tier_as_ranked": "E4",
   "verdict": "NEEDS-RESEARCH",
   "wave": "",
-  "scope": "kept"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/shrines_wells/byres.py::COURTYARD_REACH#courtyard byre search reach",

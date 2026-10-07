@@ -134,11 +134,13 @@ session's last actions are recording the running checks, a commit, and `scripts/
   for the GM's word to continue. The cap is enforced by the armed per-goal hook (`~/.claude/hooks/usage_cap.py`, whose
   self-test `test-usage-cap.sh` holds exactly that allow/deny set), not by memory.
 - **FR-010 (scope: the code the kept maps execute - amendment 8, the GM 2026-10-07)**: the feature fixes every finding in
-  a unit a kept map actually EXECUTES - the scripted hamlets (the five pool maps and the rolls the gate and the perf bookends
-  make, configurations the pool does not roll), the magistracy and country-shrine sheets - measured by the gen cache's
-  execution records (each function that ran, by path and qualified name, the record `tools/hamlet_floor` reads): a function or
-  method a recorded run executed, a class one of whose methods ran, a module-level constant an executed function reads, a
-  check the gate runs against the kept maps' finished output (listed with its reason), and the Mode A procedures. Every other
+  a unit a kept map actually EXECUTES - the scripted hamlets, the magistracy sheets and the country shrine - measured by
+  each kept map's own gen-cache entry on today's engine (each function that ran, by path and qualified name, the record
+  `tools/hamlet_floor` reads; never a gate test's roll of the legacy village roller, a unit test's roll or a stale entry):
+  a function or method a kept map's run executed, a class one of whose methods ran, a module-level constant an executed
+  function reads, any unit under `hamletgen/` (the scripted hamlet's own code, which only a scripted hamlet runs, whatever
+  seed or form), a check the gate runs against the kept maps' finished output (listed with its reason), and the Mode A
+  procedures. Every other
   claimed unit - code only the legacy hand-authored villages, towns and cities run - is DEFERRED: its rows stay ranked
   (`scope: deferred`) and no wave takes them, and every such unit is listed in `dev/claims-deferred.json` (derived over every
   claimed unit, not only today's findings, by `audit/scope.py`, re-run when a wave lands), so `make claims-report` shows and

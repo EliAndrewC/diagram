@@ -110,9 +110,10 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 ## Scope (amendment 8, the GM 2026-10-07)
 
 - **D9 - the feature fixes what the kept maps execute (FR-010)**: every row takes a scope from the gen cache's execution
-  records (`audit/scope.py` -> `audit/scope.json`, shown in `ranking.md`): `kept` (a unit a kept map's recorded run
-  executed - the pool hamlets, the gate's and the bookends' rolls, the magistracy and shrine sheets - or a constant such a
-  unit reads, or a listed check the gate runs on the kept maps), `mode-a` (the procedures) or `deferred`. A wave takes only
+  records (`audit/scope.py` -> `audit/scope.json`, shown in `ranking.md`): `kept` (a unit a kept map's own gen-cache entry -
+  the pool hamlets, the magistracy sheets, the country shrine, on today's engine - records as executed, a constant such a unit
+  reads, any unit under `hamletgen/`, or a listed check the gate runs on the kept maps; never the gate's tests of the legacy
+  village roller, a unit test's roll or a stale entry), `mode-a` (the procedures) or `deferred`. A wave takes only
   `kept` and `mode-a` rows, still the next contiguous run of those in ranking order (FR-006). The deferred list
   (`dev/claims-deferred.json`) covers every claimed unit the records do not reach, so a legacy-only unit that drifts later
   reads DEFERRED too; `scripts/_claims.py` reads it for `make claims-report` and the push's claims gate. Re-derived when a wave
@@ -125,9 +126,9 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 
 - **T34a first**: the 5 found rows wave 8 tiered by verdict alone, tiered by their work (3 moved: the bund's 6 ft reach and
   the web lane's arrival to E2, the skeleton arm's corridor to E3 after the edge-based corridor row).
-- **Scope**: the 6 open in-scope E0 rows, then the next contiguous run of in-scope E1 (FR-006, FR-010): rows 255-298
-  (28 rows, `tasks.md` Phase 10), the burial ground's jizo, the homestead's fixtures, groves and fields, the cover, the
-  polder gate and the surface water, the bundle's garden and the threshold's hall; the next open in-scope E1 row is 303.
+- **Scope**: the 6 open in-scope E0 rows, then the next contiguous run of in-scope E1 (FR-006, FR-010): rows 265-297
+  (26 rows, `tasks.md` Phase 10), the homestead's fixtures, groves and fields, the cover, the polder gate, the surface
+  water and the bundle's garden; the next open in-scope E1 row is 303.
 - **Verification**: Inashiro first (`make map`, the PNG looked at), the pool through the gate; the bookends back to back
   with nothing else running; `impl-drift` on every touched unit; a held value becomes a found row.
 
