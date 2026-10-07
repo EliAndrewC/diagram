@@ -52,5 +52,16 @@
   "observed": "2026-10-07",
   "source": "the perf-audit's detached worktrees at 6870097cd: scratchpad audit11/{start,end,yard}.{0,1}.json, perf_snapshot.measure, 2 reps each",
   "method": "perf_snapshot.measure on the four legs and four seeds, start (6ca2f5ccf), end (6870097cd) and end with PRIVY_YARD_STEP_FT = 6.0 - WALL_GAP_FT, back to back; repeats agree within about 2%"
+ },
+ "w10-perf-fork-and-ring-released": {
+  "verifies": "perf band 3 (wave 10)",
+  "subject": "perf-bookends--328-w10",
+  "answers": "perf-audit of wave 10 (af0a88e0e99ef3f59), scratchpad pa10/res.jsonl",
+  "quantity": "wall time with wave 10's fork-triangle row (hem.py grain < 1.0) and ring-step row (MAX_STEPS 0) reverted, everything else as wave 10",
+  "value": "reference seed 25: 4.0 s (end 5.0, start 4.0); reference seed 39: 3.7 s (end 4.1, start 3.7); 20 hh seed 4: 6.5 s (end 8.8, start 6.5); 20 hh seed 25: 6.3 s (end 7.1, start 6.3); the other seven value groups measure zero",
+  "unit": "s",
+  "observed": "2026-10-07",
+  "source": "the perf-audit's detached worktrees at 9099b942d (start) and 7cf6c9ec0 (end), perf_snapshot.measure, 2-3 rounds, per-leg spread about 0.1 s",
+  "method": "each of wave 10's value groups reverted alone and the fork and ring together; the field-way search (reach.settle_field) ran 242 candidates deep against 10 on 20 hh seed 4; a crossing_deck memo would hit 18 of 245 calls (measured), the rings' bounding boxes computed once recovered 0.15 of 2.4 s"
  }
 }
