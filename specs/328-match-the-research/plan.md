@@ -200,6 +200,15 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
   backup pushed, its own pair band 0).
 - **Verification**: `impl-drift` on the touched procedure claims, the gate, wave 13's own bookend pair.
 
+## Wave 14 (amendment 13, 2026-10-07)
+
+- **T51a first**: wave 13's 13 found rows tiered by their work (3 moved: one to E0 with its basis, two to E3).
+- **Scope**: the 8 open in-scope E0 rows, all claims of the Mode A procedures (`tasks.md` Phase 15); no procedure text, sheet or
+  engine line changes. After them the open in-scope rows are E2 and above (the deferred E1 rows aside).
+- **On the unpushed waves 9-13** under the wave-11 exception's condition (6): (1)-(5) held at wave 13's close (2e0268412, its
+  backup pushed, its own pair band 1 confirmed by perf-audit); wave 14's own pair opens at 2e0268412.
+- **Verification**: `impl-drift` on the touched claims, the gate, wave 14's own bookend pair.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Each later wave that changes engine behavior takes

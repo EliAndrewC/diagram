@@ -54,8 +54,8 @@ Standard features with rough SVG conventions. New diagrams should reuse this voc
 <!-- Research: compound wall stroke - research/questions/0092-compound-walls-neribei-and-tsuijibei.drawing.html: 3 ft heavy stroke, each side its own line -->
 <!-- Research: main gate forms - research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html: yakuimon 6-8.5 ft or nagaya-mon ~12 ft, rolled per plan -->
 <!-- Research: opening ink width - CONVENTION: flanking endpoints pulled back half a stroke -->
-<!-- Research: threshold stones - UNRESEARCHED: the setting's own invention, ~3.3x4.7 ft at Ochiba, a pair flanking the road outside the opening, never in the passage -->
-<!-- Research: divider wall - UNRESEARCHED: ~2 ft true-thickness wall with its own gate -->
+<!-- Research: threshold stones - CANON: the setting's own Fox road-warding, a pair flanking the road outside the opening and never in the passage (the GM's ruling of 2026-07-25), ~3.3x4.7 ft at Ochiba where they are made (the GM's ruling of 2026-09-26) -->
+<!-- Research: divider wall - research/questions/0092-compound-walls-neribei-and-tsuijibei.drawing.html: ~2 ft true-thickness wall with its own gate, the lighter plastered wall of a foot or more -->
 <!-- Research: structures abut walls - research/questions/0092-compound-walls-neribei-and-tsuijibei.drawing.html: ~2 ft off a compound wall, ~1.5 ft off a divider, privies and curbs included -->
 <!-- Research: gatehouse - research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html, research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html: freestanding 18 x 12 ft beside the opening (Ochiba), or in the gate range (Hayakawa and Ubame 14 ft deep) -->
 <!-- Research: main gate posts - research/questions/0092-compound-walls-neribei-and-tsuijibei.drawing.html: the sheets draw each main-gate post ~2.7-5.3 x 4.7 ft -->
@@ -312,7 +312,7 @@ The sweep (`tests/test_mode_a_sheets.py`) picks the tier up from the declaration
 <!-- Research: structures clear of wall ink - research/questions/0092-compound-walls-neribei-and-tsuijibei.drawing.html -->
 <!-- Research: privies and rear strip - research/questions/0101-privies-setchin.html: ~3-4, the residence privy attached -->
 <!-- Research: fire-water tubs - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: ~8-12, kitchen 2, none at the kura -->
-<!-- Research: practice ground sizing - UNRESEARCHED: ~90-135 sq ft per drilling samurai -->
+<!-- Research: practice ground sizing - GUESS research/questions/0165-martial-training-grounds-and-dojo.drawing.html: ~90-135 sq ft per drilling samurai -->
 
 This checklist is for **Mode A** (compound/building plans). **Mode B settlement maps** follow their own loop instead - step 5 of the workflow in [`SKILL.md`](SKILL.md): the gate's tests of the placer must be green, then a persona read of the PNG. (Note the Mode B difference: title is the place name only - no subtitle/summary line. Neither mode carries a key/legend box.)
 

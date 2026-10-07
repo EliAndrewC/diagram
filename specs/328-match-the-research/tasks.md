@@ -707,3 +707,29 @@ open in-scope row is E2, row 393, the first kept-code rule (`hamletgen/cluster.p
       column (FR-005, FR-006, SC-002, SC-003)
       research: rendering
       verify: DONE. impl-drift on every touched claim (w13 bundles A-E, 189 claims recorded; the wave's rows IN-STEP; 13 new findings filed); make done green; wave 13's own pair (328-start at c45460dd1) band 1, explained, perf-audit consistent; the wave column written
+
+## Phase 15 - wave 14 (amendment 13): wave 13's found claims
+
+Wave 13's re-checks of the procedure files found 13 rows (`audit/found-wave13.jsonl`), each tiered by its work by a fresh reader
+(T51a, `audit/t51a-out.jsonl`): 3 moved - the tax-free fields E4 -> E0 (nothing drawn waits on research; the label alone), the
+true-size paragraph and the wall-abutment rule E2 -> E3 (Ubame's bales drawn 6x3 ft, and structures 0.5 ft off a wall on Ubame,
+Ochiba and the generated examples, would be redrawn). The open in-scope E0 rows are these 8 claims; after them every open
+in-scope row is E1 (deferred only) or E2 and above, the next E2 row 393 (`hamletgen/cluster.py`).
+
+  - `buildings.md::Checklist for a new diagram#practice ground sizing` - UNRESEARCHED -> GUESS 0165 drawing (its page: "The figure is a GUESS")
+  - `buildings.md::Walls and gates#divider wall` - UNRESEARCHED -> 0092 drawing (the lighter plastered wall of a foot or more)
+  - `buildings.md::Walls and gates#threshold stones` - UNRESEARCHED -> CANON, the GM's rulings of 2026-07-25 and 2026-09-26
+  - `buildings/programs.md::Country shrine (a village district's shrine)#bell tower knob` - 0222 -> GUESS 0222 drawing (absent by default)
+  - `buildings/programs.md::Country shrine (a village district's shrine)#grove and burial side knob` - CANON (the GM, 2026-09-20) for following the map; the off-map burial roll its own claim on 0226 drawing
+  - `buildings/programs.md::Country shrine (a village district's shrine)#innermost arch one pitch off the hall` - CONVENTION -> GUESS 0220 drawing
+  - `buildings/programs.md::Country shrine (a village district's shrine)#tax-free fields off the sheet` - 0221 -> UNRESEARCHED for the fields' place; the fields themselves their own claim on 0221
+  - `buildings/programs.md::Magistrate's manor (county magistracy)#inner-court postern` - GUESS 0101 drawing -> UNRESEARCHED (the page records no such door)
+
+- [x] T51a wave 13's found rows tiered by the work they take, by a fresh reader (FR-002, FR-003, SC-003)
+      research: rendering
+      verify: DONE. 13 rows tiered by their work by a fresh Opus reader (audit/t51a-out.jsonl): 3 moved (tax-free fields E4 -> E0 with its basis; true size and structures abut walls E2 -> E3)
+- [ ] T51 the 8 claims corrected - label, citation or wording only; no procedure text, sheet or code changes (FR-003 E0, FR-004)
+      research: rendering
+- [ ] T52 every touched claim re-checked by `impl-drift`, and the close: wave 14's own bookend pair, `make done` green, the wave
+      column (FR-005, FR-006, SC-002, SC-003)
+      research: rendering

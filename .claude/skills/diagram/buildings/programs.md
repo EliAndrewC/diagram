@@ -15,7 +15,7 @@ Per-building-type specs: the required program every instance shares, the knobs t
 ### Magistrate's manor (county magistracy)
 
 <!-- Research: walled enclosure - research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html, research/questions/0097-staff-rowhouses-and-barracks-nagaya.html: a wall with a formal main gate, the gatehouse the office's gate range as at Omori and Kaibara -->
-<!-- Research: inner-court postern - GUESS research/questions/0101-privies-setchin.drawing.html: a kitchen and night-soil door serving the inner court (0104's katteguchi is the kitchen's own door, not a gate in the wall) -->
+<!-- Research: inner-court postern - UNRESEARCHED: a kitchen and night-soil door serving the inner court (0104's katteguchi is the kitchen's own door, not a gate in the wall) -->
 <!-- Research: outer service gate - GUESS research/questions/0101-privies-setchin.drawing.html: a small gate for the night-soil collectors, no such gate named at a samurai house, the merchant's back gate the nearest -->
 <!-- Research: outer service gate for muck and prisoners - UNRESEARCHED: the same gate taking muck and prisoner transfers from a busy outer court -->
 <!-- Research: wall display - UNRESEARCHED: most impressive on the public approach, plainer at the rear -->
@@ -126,7 +126,7 @@ Each item names the Mode A kind it is (feature 262): the sheet's own `data-kind`
 <!-- Research: precinct size - research/questions/0215-village-shrines-where-they-stand-and-how-big-their-grounds-are.html: register figures 50-2,700 tsubo, buildings 2-14%; Edo returns: Saga 45-540 tsubo (the lower part of 150-650), Kami-Nerima 1821 about 10 to about 3,350; a register can also overstate -->
 <!-- Research: sanctuary on the axis - research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html: arch, hall, then sanctuary behind -->
 <!-- Research: outermost arch at the precinct edge - research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html: the outermost at the ground's edge -->
-<!-- Research: innermost arch one pitch off the hall - CONVENTION: the map drawing convention 0220's drawing page records -->
+<!-- Research: innermost arch one pitch off the hall - GUESS research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html: the innermost arch 12 ft off the hall's face -->
 <!-- Research: arch count - DEVIATION research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html -->
 <!-- Research: arch pitch - research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html: 12 ft -->
 <!-- Research: hall largest and monk's home - research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html, research/questions/0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html: the hall the largest building and the monk's home -->
@@ -149,13 +149,15 @@ Each item names the Mode A kind it is (feature 262): the sheet's own `data-kind`
 <!-- Research: no subsidiary buildings - research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html: no subsidiary shrines, office, plaque hall or portable-shrine store -->
 <!-- Research: burial ground beside the precinct - research/questions/0226-shrines-temples-and-graves-in-each-size-of-settlement.drawing.html: in the shrine's yard or apart from it, a knob rolled from the seed where no map says otherwise -->
 <!-- Research: no office building - research/questions/0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html: registers in the monk's writing room -->
-<!-- Research: tax-free fields off the sheet - research/questions/0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html -->
+<!-- Research: tax-free fields off the sheet - UNRESEARCHED: where a shrine's exempt fields lay against its precinct (research/questions/0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html attests the fields, not their place); a sheet cropped to its precinct draws none -->
+<!-- Research: tax-free fields exist - research/questions/0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html: the shrine's fields were exempt -->
 <!-- Research: fire-water - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: a tub at the hall's corners, one at the dwelling end -->
 <!-- Research: hall-and-dwelling form knob - DEVIATION research/questions/0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html: one roof default, set against the sources' rare on the GM's word -->
-<!-- Research: bell tower knob - research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html: absent by default -->
+<!-- Research: bell tower knob - GUESS research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html: absent by default -->
 <!-- Research: dedication knob - CANON: Inari the ordinary rural dedication, a GM ruling of 2026-09-20 -->
 <!-- Research: Bishamon tigers - research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html: tigers at a Bishamon shrine -->
-<!-- Research: grove and burial side knob - research/questions/0226-shrines-temples-and-graves-in-each-size-of-settlement.drawing.html: follows the declared map; off a map the burial ground rolls in the yard or apart -->
+<!-- Research: grove and burial side knob - CANON: follows the declared map, the GM's ruling of 2026-09-20 (the diagram view matches what the larger map shows) -->
+<!-- Research: burial ground off a map - research/questions/0226-shrines-temples-and-graves-in-each-size-of-settlement.drawing.html: rolls in the yard or apart -->
 <!-- Research: wealth knob - research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html: donated stonework -->
 <!-- Research: wealth knob roofing - UNRESEARCHED: thatch against tile by wealth -->
 <!-- Research: farmers' stage knob - research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html: absent by default, regional: 1,777 stages nationwide (lost, noh and puppet stages included), over 200 in each of three prefectures -->

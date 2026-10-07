@@ -359,6 +359,23 @@
   "scope": "mode-a"
  },
  {
+  "key": ".claude/skills/diagram/buildings/programs.md::Country shrine (a village district's shrine)#tax-free fields off the sheet",
+  "verdict": "NEEDS-RESEARCH",
+  "tier": "E0",
+  "fix": "programs.md:152 claim becomes `UNRESEARCHED: where a shrine's exempt fields lay against its precinct (research/questions/0221-...kuri.html attests exempt fields, not their place)`; line 182's text stands.",
+  "files": [
+   ".claude/skills/diagram/buildings/programs.md"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 13 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E4",
+  "e0_basis": "impl-drift (wave 13 bundle C) names the label itself: 0221 attests exempt fields and is silent on where they lay, 'should be UNRESEARCHED'; the sheet draws nothing off its precinct either way",
+  "moved": "T51a: tiered by its work by a fresh reader - Nothing is drawn either way - the sheet crops to the precinct and a sheet on a map shows what the map shows - so no implementation change waits on research; the only fix is the label the impl-drift finding names.",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#a detached guest house at a rich posting (0091's drawing page records it as a GUESS)",
   "verdict": "UNCLAIMED",
   "tier": "E0",
@@ -2708,7 +2725,7 @@
   "flag": "",
   "found": "wave 12 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
-  "wave": "",
+  "wave": "13",
   "scope": "kept"
  },
  {
@@ -2723,7 +2740,7 @@
   "flag": "",
   "found": "wave 12 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
-  "wave": "",
+  "wave": "13",
   "scope": "kept"
  },
  {
@@ -5838,7 +5855,7 @@
   "flag": "",
   "found": "wave 3 re-check",
   "tier_as_ranked": "E2",
-  "wave": "",
+  "wave": "13",
   "scope": "mode-a"
  },
  {
@@ -5868,7 +5885,7 @@
   "flag": "",
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "13",
   "scope": "mode-a"
  },
  {
@@ -5882,7 +5899,7 @@
   "flag": "",
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "13",
   "scope": "mode-a"
  },
  {
@@ -5896,7 +5913,7 @@
   "flag": "",
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "13",
   "scope": "mode-a"
  },
  {
@@ -5914,50 +5931,6 @@
   "scope": "mode-a"
  },
  {
-  "key": ".claude/skills/diagram/buildings.md::Scale#true size for every footprint",
-  "verdict": "DRIFTED",
-  "tier": "E2",
-  "fix": "\"only stroke floors and location markers diverge\" leaves out bales: 0199 draws them ~4 ft long by convention, larger than true, and Ubame's plan draws them ~6x3 ft; name the bale divergence or draw bales true size",
-  "files": [
-   ".claude/skills/diagram/buildings.md"
-  ],
-  "after": [],
-  "flag": "",
-  "found": "wave 13 re-check (tier provisional, by verdict)",
-  "tier_as_ranked": "E2",
-  "wave": "",
-  "scope": "kept"
- },
- {
-  "key": ".claude/skills/diagram/buildings.md::Walls and gates#structures abut walls",
-  "verdict": "DRIFTED",
-  "tier": "E2",
-  "fix": "~2 ft is measured from the wall's centerline (\"half the ink plus a hair\"), leaving ~0.5 ft off the wall's face, where the page says \"a foot or two\" off the wall",
-  "files": [
-   ".claude/skills/diagram/buildings.md"
-  ],
-  "after": [],
-  "flag": "",
-  "found": "wave 13 re-check (tier provisional, by verdict)",
-  "tier_as_ranked": "E2",
-  "wave": "",
-  "scope": "kept"
- },
- {
-  "key": ".claude/skills/diagram/buildings.md::Walls and gates#threshold wards",
-  "tier": "E2",
-  "fix": "threshold wards bullet dropped from Walls and gates (no pair at any official's gate before present-day custom); no sheet still draws them",
-  "files": [
-   ".claude/skills/diagram/buildings.md"
-  ],
-  "after": [],
-  "flag": "",
-  "tier_as_ranked": "E2",
-  "verdict": "DRIFTED",
-  "wave": "",
-  "scope": "mode-a"
- },
- {
   "key": ".claude/skills/diagram/buildings.md::Scale#salt ward marker",
   "tier": "E2",
   "fix": "salt ward marker claim and the Scale paragraph's salt-ward marker text dropped; Hayakawa's wards already off the sheet",
@@ -5970,7 +5943,21 @@
   "flag": "",
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "13",
+  "scope": "mode-a"
+ },
+ {
+  "key": ".claude/skills/diagram/buildings.md::Walls and gates#threshold wards",
+  "tier": "E2",
+  "fix": "threshold wards bullet dropped from Walls and gates (no pair at any official's gate before present-day custom); no sheet still draws them",
+  "files": [
+   ".claude/skills/diagram/buildings.md"
+  ],
+  "after": [],
+  "flag": "",
+  "tier_as_ranked": "E2",
+  "verdict": "DRIFTED",
+  "wave": "13",
   "scope": "mode-a"
  },
  {
@@ -5986,7 +5973,7 @@
   "found": "wave 2 re-check (tiered by its work at T25a)",
   "tier_as_ranked": "E2",
   "moved": "T25a (amendment 6): tiered by its work - one procedure section (programs.md, Country shrine, line 120 on) rewritten; a widened band leaves the existing sheets inside it",
-  "wave": "",
+  "wave": "13",
   "scope": "mode-a"
  },
  {
@@ -6002,7 +5989,7 @@
   "flag": "",
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "13",
   "scope": "mode-a"
  },
  {
@@ -6047,7 +6034,7 @@
   "flag": "",
   "found": "wave 3 re-check",
   "tier_as_ranked": "E2",
-  "wave": "",
+  "wave": "13",
   "scope": "mode-a"
  },
  {
@@ -6061,7 +6048,7 @@
   "flag": "",
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "13",
   "scope": "mode-a"
  },
  {
@@ -6090,7 +6077,7 @@
   "flag": "",
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "13",
   "scope": "mode-a"
  },
  {
@@ -9572,6 +9559,22 @@
   "scope": "mode-a"
  },
  {
+  "key": ".claude/skills/diagram/buildings.md::Scale#true size for every footprint",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "Redraw Ubame's two charcoal bales (pool/magistracies/ubame-magistracy/ubame-magistracy.svg lines 403-406, 18x9 px = 6x3 ft) at 12x8 px (~4 ft by 0199.drawing's weighing-floor convention), or 6x4 px (true ~2x1.3 ft); then buildings.md Scale paragraph (line ~21) adds bales on a weighing floor or barge, drawn ~4 ft by convention (0199.drawing), to the sanctioned divergences, and claim line 12 names it.",
+  "files": [
+   ".claude/skills/diagram/buildings.md"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 13 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E2",
+  "moved": "T51a: tiered by its work by a fresh reader - Measured: Ubame is the only sheet with bales (data-kind='charcoal bales'), and at 6x3 ft it matches neither true size (~2x1.3 ft) nor the ~4 ft convention, so just naming the divergence would still leave the sheet off the record - a hand-drawn sheet redrawn.",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": ".claude/skills/diagram/buildings.md::Scale#well location marker",
   "verdict": "DRIFTED",
   "tier": "E3",
@@ -9622,6 +9625,22 @@
   "verdict": "DRIFTED",
   "wave": "",
   "scope": "mode-a"
+ },
+ {
+  "key": ".claude/skills/diagram/buildings.md::Walls and gates#structures abut walls",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "buildings.md 'Structures ABUT a wall' bullet (line ~71): '~2 ft off a compound wall and ~1.5 ft off a divider' (from the centerline) becomes 'a foot or two clear of the wall's FACE (~2.5-3.5 ft from a compound wall's centerline, ~2-3 ft from a divider's)', and claim line 59 says the same; pack_audit structures_on_walls gets the clearance; redraw ochiba-magistracy.svg (the 220x40 px building at x=250,y=156 and the 20x14 px structure at x=206,y=642), ubame-magistracy.svg (the 82x48 px structure at x=794,y=696) and the compound.py emitter behind county-magistracy-example / ochiba-roundtrip-test.",
+  "files": [
+   ".claude/skills/diagram/buildings.md"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 13 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E2",
+  "moved": "T51a: tiered by its work by a fresh reader - Measured with an SVG scan: structures stand 0.5 ft off the compound wall's face on Ochiba (2), Ubame (1) and both generated examples (~10 each), and Hayakawa has one at 1.17 ft, so 'a foot or two' moves hand-drawn sheets and the emitter, not just a paragraph.",
+  "wave": "",
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/buildings.md::Wells#well curb size",
@@ -12135,21 +12154,6 @@
   "verdict": "NEEDS-RESEARCH",
   "wave": "",
   "scope": "mode-a"
- },
- {
-  "key": ".claude/skills/diagram/buildings/programs.md::Country shrine (a village district's shrine)#tax-free fields off the sheet",
-  "verdict": "NEEDS-RESEARCH",
-  "tier": "E4",
-  "fix": "0221 attests exempt fields but says nothing on where they lay relative to the precinct; should be UNRESEARCHED",
-  "files": [
-   ".claude/skills/diagram/buildings/programs.md"
-  ],
-  "after": [],
-  "flag": "",
-  "found": "wave 13 re-check (tier provisional, by verdict)",
-  "tier_as_ranked": "E4",
-  "wave": "",
-  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#divider gate on the axis",
