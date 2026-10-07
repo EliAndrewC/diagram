@@ -1,0 +1,62 @@
+{
+  "band": 1,
+  "base": {
+    "commit": "799a0bf4b",
+    "label": "328-start",
+    "utc": "20261007T205431Z"
+  },
+  "binding": "70abc6ceafd431e5dadfc2b83fa4180b2c36c24e8dd67a728ca14032089bc39c",
+  "end": {
+    "commit": "dabf4d746",
+    "label": "328-end",
+    "utc": "20261007T205744Z"
+  },
+  "environment": "local",
+  "feature": "328-match-the-research",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "8d3395e5-fe32-4f85-9c89-80c344d2ac1a",
+    "utc": "20261007T210422Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": -3.2,
+          "39": -3.2,
+          "4": -2.8,
+          "47": -5.7
+        },
+        "total_pct": -3.8
+      },
+      "20": {
+        "seeds": {
+          "25": -2.8,
+          "39": -1.9,
+          "4": -2.5,
+          "47": -1.7
+        },
+        "total_pct": -2.3
+      },
+      "40": {
+        "seeds": {
+          "25": 0.0,
+          "39": 0.9,
+          "4": -1.7,
+          "47": 2.4
+        },
+        "total_pct": 0.2
+      }
+    },
+    "seeds": {
+      "25": -5.9,
+      "39": -2.3,
+      "4": -6.0,
+      "47": -2.3
+    },
+    "total_pct": -4.3
+  },
+  "note": "windbreak, the copse form: seeds 39 and 47 are the only ones that rolled copse_siting=against_the_belt at 799a0bf4b (4 and 25 rolled among_the_houses at every size), and the diff retires that form, so they now fill among the houses. Reviewer counterfactual, both legs in detached worktrees, 40 hh, x2: base rolled windbreak 39 1.62/1.63 s, 47 1.60/1.60; base with copse_siting pinned among_the_houses 39 1.79/1.78, 47 1.80/1.80; end 39 1.77/1.78, 47 1.79/1.82; seed 25 (form unchanged) control 1.60-1.61 on all three. Pinning the form at base reproduces the whole +0.15/+0.2 s, so the growth recurs and is the form change, not variance",
+  "verdict": "consistent"
+}

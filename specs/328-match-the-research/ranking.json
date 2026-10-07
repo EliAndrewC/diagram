@@ -296,7 +296,7 @@
   "found": "wave 15 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
   "moved": "T56a: tiered by its work by a fresh reader - MISLABELED: the drawing page (line 21) already says 'none is drawn at average wealth' as a knob, and the procedure (line 183) and Hoshigaoka already do that; only the claim's label and citation are wrong.",
-  "wave": "",
+  "wave": "16",
   "scope": "kept"
  },
  {
@@ -617,6 +617,21 @@
   "scope": "kept"
  },
  {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/stages.py::stage_windbreak#no copse drawn where there is no belt and no reserved seats",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "no copse drawn where there is no belt and no reserved seats",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/stages.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 16 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/bamboo.py::_strip_blocked#what a strip or fixture keeps off",
   "tier": "E0",
   "fix": "split the claim: off the paddy cites 0075 drawing; the 2/6/3/20 ft pads labeled UNRESEARCHED",
@@ -787,6 +802,21 @@
   "found": "wave 2 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
   "wave": "3 (claim renamed or split; its parts re-checked)",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/plan.py::plan_site#a farmstead grove takes 2, 3 or 4 sides the spec refusal",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "a farmstead grove takes 2, 3 or 4 sides (the spec refusal)",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/plan.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 16 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E0",
+  "wave": "",
   "scope": "kept"
  },
  {
@@ -3055,6 +3085,21 @@
   "e0_basis": "T38b: claim lines only; the code stands",
   "moved": "T38b: tiered by its work - lines 448-449 apply the 20 ft band exactly as its constant records, and the record is silent on it, so only the claim line is missing.",
   "wave": "10",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._route_seats#farthest seat 60 ft from the road kosatsubawayreachft 0190 2",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "farthest seat 60 ft from the road (KOSATSUBA_WAY_REACH_FT; 0190 \u00a7225)",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 16 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E0",
+  "wave": "",
   "scope": "kept"
  },
  {
@@ -6025,7 +6070,7 @@
   "found": "wave 3 re-check",
   "tier_as_ranked": "E2",
   "moved": "T56a: tiered by its work by a fresh reader - One procedure paragraph's rule changes to agree with 0104's drawing page and with the program's own residence bullet (line 69, 'the visitors' way runs on through the office to the house'); the divider gate still sits behind the hall, so no sheet changes.",
-  "wave": "",
+  "wave": "16",
   "scope": "mode-a"
  },
  {
@@ -6046,15 +6091,16 @@
   "key": ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#staff housing knob",
   "verdict": "DRIFTED",
   "tier": "E2",
-  "fix": "option (c), senior retainers in town, restricted to urban tiers; a county seat keeps its officials' huts and rowhouses on its own grounds (0114)",
+  "fix": "option (c), staff housed in town with only a duty watch inside, is attested only at Edo's great town magistracy; the rural intendant's office \"kept its junior officials' huts and rowhouses on its own grounds\", so (c) at a county post is a form the question does not attest there (Hayakawa takes it)",
   "files": [
    ".claude/skills/diagram/buildings/programs.md"
   ],
   "after": [],
   "flag": "",
-  "found": "wave 1 re-check",
+  "found": "wave 16 re-check (tier provisional, by verdict)",
+  "reopened": "closed in wave 4 (IN-STEP on a wave's re-check, no change needed)",
   "tier_as_ranked": "E2",
-  "wave": "4 (IN-STEP on a wave's re-check, no change needed)",
+  "wave": "",
   "scope": "mode-a"
  },
  {
@@ -6088,21 +6134,6 @@
   "scope": "kept"
  },
  {
-  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py::COPSE_SITINGS#village copse siting",
-  "tier": "E2",
-  "fix": "COPSE_SITINGS -> ('among_the_houses',) and retire the against_the_belt branch: 0071's drawing page draws the copse only in the gaps between the houses",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py",
-   ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/stages.py"
-  ],
-  "after": [],
-  "flag": "deviation-tempting: 0071's own finding (fruit trees on a fengshui wood's edges) could ground the belt-side form",
-  "tier_as_ranked": "E2",
-  "verdict": "DRIFTED",
-  "wave": "",
-  "scope": "kept"
- },
- {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py::COPSE_BELT_REACH_FT#copse against the belt",
   "tier": "E2",
   "fix": "relabel COPSE_BELT_REACH_FT as UNRESEARCHED (a placement distance) and drop the aside that 0071 has no belt-side copse; moot if the against_the_belt form is dropped",
@@ -6115,7 +6146,22 @@
   "flag": "",
   "tier_as_ranked": "E0",
   "verdict": "MISLABELED",
-  "wave": "",
+  "wave": "16",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py::COPSE_SITINGS#village copse siting",
+  "tier": "E2",
+  "fix": "COPSE_SITINGS -> ('among_the_houses',) and retire the against_the_belt branch: 0071's drawing page draws the copse only in the gaps between the houses",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py",
+   ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/stages.py"
+  ],
+  "after": [],
+  "flag": "deviation-tempting: 0071's own finding (fruit trees on a fengshui wood's edges) could ground the belt-side form",
+  "tier_as_ranked": "E2",
+  "verdict": "DRIFTED",
+  "wave": "16",
   "scope": "kept"
  },
  {
@@ -6129,7 +6175,7 @@
   "flag": "",
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "16",
   "scope": "kept"
  },
  {
@@ -6234,7 +6280,7 @@
   "flag": "",
   "found": "wave 1 re-check",
   "tier_as_ranked": "E2",
-  "wave": "",
+  "wave": "16",
   "scope": "kept"
  },
  {
@@ -6250,7 +6296,7 @@
   "flag": "",
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "16",
   "scope": "kept"
  },
  {
@@ -9725,7 +9771,7 @@
   "tier_as_ranked": "E2",
   "moved": "exception check 2026-10-07 (FR-003: a redrawn hand sheet is E3), sorted by a fresh reader (audit/modea-sort-out.jsonl): Ubame, the one upland sheet, draws the content shift on the sheet: its granary sublabel reads 'grain and in-kind forest goods' and its notes/comment tie the terminal store to in-kind tax, so dropping the shift changes a drawn caption (label-level redraw).",
   "verdict": "DRIFTED",
-  "wave": "15",
+  "wave": "16",
   "scope": "mode-a"
  },
  {

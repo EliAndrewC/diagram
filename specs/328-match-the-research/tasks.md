@@ -793,7 +793,9 @@ wave 16 takes the E0, the privacy-baffle paragraph, the copse rows (`COPSE_SITIN
 - [x] T56a wave 15's found rows tiered by the work they take, by a fresh reader (FR-002, FR-003, SC-003)
       research: rendering
       verify: DONE. 6 rows tiered by their work by a fresh Opus reader (audit/t56a-out.jsonl): 1 E0, 1 E2, 1 E3, 3 E4; the stale seventh dropped
-- [ ] T57 the two Mode A rows; the copse and board sitings retired in the engine, their tests, choices and modals; Mizuguchi, Kashikawa and Sawada regenerated (FR-004, FR-005)
+- [x] T57 the two Mode A rows; the copse and board sitings retired in the engine, their tests, choices and modals; Mizuguchi, Kashikawa and Sawada regenerated (FR-004, FR-005)
       research: rendering
-- [ ] T58 every touched claim re-checked by `impl-drift`, the occasions' glyph checks, and the close: wave 16's own bookend pair, `make done` green, the wave column (FR-005, FR-006, SC-002, SC-003)
+      verify: DONE. the donated stonework split; the privacy baffle to 0104; the copse against the belt and the board at the drawing-water place retired (no page behind either), with their code, tests, choice values and modals; the granary-weight clause the re-check reopened dropped; Mizuguchi, Kashikawa and Sawada regenerated - measured, nothing drawn moved (meta only)
+- [x] T58 every touched claim re-checked by `impl-drift`, the occasions' glyph checks, and the close: wave 16's own bookend pair, `make done` green, the wave column (FR-005, FR-006, SC-002, SC-003)
       research: rendering
+      verify: DONE. impl-drift on every touched claim (every wave row IN-STEP at the last round); occasions none, measured; make done green; wave 16's own pair (328-start at 799a0bf4b) band 1, caused by the retired copse form on seeds 39 and 47 at 40 hh (+0.2 s windbreak, timed by perf-audit), total -4.3%, perf-audit consistent; the wave column written
