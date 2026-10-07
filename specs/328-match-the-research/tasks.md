@@ -699,11 +699,11 @@ open in-scope row is E2, row 393, the first kept-code rule (`hamletgen/cluster.p
   - `buildings/programs.md::Magistrate's manor (county magistracy)#sand hearing court` - 'sand hearing court' -> roofed hearing court with a floor knob (white gravel or river cobbles), each plan taking one
   - `buildings/programs.md::Magistrate's manor (county magistracy)#tier knob` - capital tier's staff housing made a knob: outside (Edo yoriki) or inside (a domain's Edo estate)
 
-- [ ] T49 the claims written; the procedures changed toward their pages, each sheet's roll recorded in its notes, no sheet redrawn;
+- [x] T49 the claims written; the procedures changed toward their pages, each sheet's roll recorded in its notes, no sheet redrawn;
       the country shrine's bands widened in `types.json` and its table regenerated (FR-004, FR-005, FR-009)
       research: rendering
-      verify:
-- [ ] T50 every touched claim re-checked by `impl-drift`, and the close: wave 13's own bookend pair, `make done` green, the wave
+      verify: DONE. the two byre claims written; 11 procedure-only Mode A rows changed toward their pages (the granary ceiling, the burial ground knob in buildings.md and programs.md, the shrine arch knob with Hayakawa's seeded roll, the grove's sides, the threshold wards and the salt-ward marker dropped, the country shrine's bands widened in types.json and its table, the office's genkan, the hearing court's floor knob, the capital tier's housing knob), each sheet's form in its notes; no sheet redrawn; the second kami's seeded rolls land off two sheets' drawn forms, so that row is E3
+- [x] T50 every touched claim re-checked by `impl-drift`, and the close: wave 13's own bookend pair, `make done` green, the wave
       column (FR-005, FR-006, SC-002, SC-003)
       research: rendering
-      verify:
+      verify: DONE. impl-drift on every touched claim (w13 bundles A-E, 189 claims recorded; the wave's rows IN-STEP; 13 new findings filed); make done green; wave 13's own pair (328-start at c45460dd1) band 1, explained, perf-audit consistent; the wave column written

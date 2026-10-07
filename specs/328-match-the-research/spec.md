@@ -287,3 +287,6 @@ Each wave's amendment adds its map decisions to this table. The program's decisi
   Exception check for wave 11 on the unpushed waves 9 and 10: LEGITIMATE on six conditions (plan, Wave 10).
 - Amendment 11, round 1 (spec-fidelity, 2026-10-07): CHANGES REQUIRED, plan CLEAR - the polder lattice claim false for every
   drawn map (corrected). Round 2: FAITHFUL.
+- Amendment 12, round 1 (spec-fidelity, 2026-10-07): CHANGES REQUIRED, plan BLOCKED - the seeded rolls never made (made: the
+  second kami's two rolls land off the drawn form, so that row is E3). Round 2: CHANGES REQUIRED, plan CLEAR - one notes line
+  left. Round 3: FAITHFUL.

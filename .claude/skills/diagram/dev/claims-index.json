@@ -1279,63 +1279,68 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings.md::Sacred features#approach width": {
-  "code": "aefa1fd311437b24",
-  "core": "ede1b1b8bd915f43",
+  "code": "bbfaec7c2ed4a446",
+  "core": "cb67cc0c3bb6ea9c",
   "date": "2026-10-07",
-  "note": "the approach's gravel is attested, its width on no page",
+  "note": "no bundle question gives an approach's width; the gravel matches the purifying gravel laid along an approach",
   "pages": {},
   "research": "",
   "rests": [
+   "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:11a53f93479ca7e0",
    "0224-ground-swept-clear-around-shrines-and-graves.html:5b400e21e086078a"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings.md::Sacred features#arch dimensions": {
-  "code": "3f5f43144b50e855",
-  "core": "ede1b1b8bd915f43",
+  "code": "3fb9b376d1f82434",
+  "core": "cb67cc0c3bb6ea9c",
   "date": "2026-10-07",
-  "note": "no bundle page sizes a torii's beam, posts or clear span",
+  "note": "no bundle question gives an arch's beam, post or clear span",
   "pages": {},
   "research": "",
-  "rests": [],
+  "rests": [
+   "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:11a53f93479ca7e0",
+   "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:3f3c47b402c4f41d"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings.md::Sacred features#arch in plan": {
-  "code": "a94b80eb3924101a",
-  "core": "ede1b1b8bd915f43",
+  "code": "8dcac25d6a74aabe",
+  "core": "cb67cc0c3bb6ea9c",
   "date": "2026-10-07",
-  "note": "the 12 ft pitch is the drawing page's figure",
+  "note": "the 12 ft pitch is the drawing page's figure, recorded there as a guess within 10-13 ft",
   "pages": {
    "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html": "e385403eda71f0a2"
   },
   "research": "187ffe8b48289099",
   "rests": [
    "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:11a53f93479ca7e0",
+   "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:3f3c47b402c4f41d",
    "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:6dbb45d3631d3bee"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings.md::Sacred features#bare precinct earth": {
-  "code": "1e81297226981410",
-  "core": "ede1b1b8bd915f43",
+  "code": "4fcf5ace9a7fef6f",
+  "core": "cb67cc0c3bb6ea9c",
   "date": "2026-10-07",
-  "note": "no page gives the precinct's surface, and sweeping is recorded only in modern times",
+  "note": "no swept or raked precinct is attested before 1868, and the raked gravel is only the project's guess, so a plain fill with no rake lines fits",
   "pages": {
    "0224-ground-swept-clear-around-shrines-and-graves.html": "ac45206dd1b05fe0"
   },
   "research": "6466d41a1eb45257",
   "rests": [
+   "0224-ground-swept-clear-around-shrines-and-graves.html:2801a65a88f37333",
    "0224-ground-swept-clear-around-shrines-and-graves.html:55f2714efdadc428",
-   "0224-ground-swept-clear-around-shrines-and-graves.html:898072db4155f25a",
-   "0224-ground-swept-clear-around-shrines-and-graves.html:ede9f63d0b1336c9"
+   "0224-ground-swept-clear-around-shrines-and-graves.html:898072db4155f25a"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings.md::Sacred features#burial ground beside the precinct": {
-  "code": "26774c5d1096214e",
-  "core": "ede1b1b8bd915f43",
+  "code": "b661754d18e5c66f",
+  "core": "cb67cc0c3bb6ea9c",
   "date": "2026-10-07",
-  "note": "yard or apart is a knob, as the page sets it",
+  "note": "yard or apart is a knob, as the table cell says",
   "pages": {
    "0226-shrines-temples-and-graves-in-each-size-of-settlement.drawing.html": "57917dbe10aef8d5"
   },
@@ -1347,10 +1352,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings.md::Sacred features#compound shrine arch": {
-  "code": "defab645fe416f51",
-  "core": "ede1b1b8bd915f43",
+  "code": "361d52536ffebbdb",
+  "core": "cb67cc0c3bb6ea9c",
   "date": "2026-10-07",
-  "note": "optional arch; shared or one each rolled per map",
+  "note": "the arch is optional, and sharing one arch or having one each is a knob rolled per map",
   "pages": {
    "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html": "e385403eda71f0a2"
   },
@@ -1362,10 +1367,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings.md::Sacred features#compound shrine tree": {
-  "code": "cba13502b8ac6502",
-  "core": "ede1b1b8bd915f43",
+  "code": "84b6f621b28c0972",
+  "core": "cb67cc0c3bb6ea9c",
   "date": "2026-10-07",
-  "note": "the claim gives Ochiba's shrine \"no tree beside it\", but the cited page sets every compound shrine \"beside a tree\" (\"give it the tree as well\") and records no deviation; draw the tree or record the deviation on 0218's drawing page",
+  "note": "the cited page sets every compound shrine \"beside a tree\" and records only Ochiba's second kami as a deviation; Ochiba's no-tree sheet is not recorded there, so either draw the tree or record it as a DEVIATION on 0218's drawing page",
   "pages": {
    "0218-the-compounds-own-shrine-yashikigami.drawing.html": "30143bd59a2deac9"
   },
@@ -1373,15 +1378,16 @@
   "rests": [
    "0218-the-compounds-own-shrine-yashikigami.drawing.html:08413de30e1b0f4b",
    "0218-the-compounds-own-shrine-yashikigami.drawing.html:169483752db7d7f8",
-   "0218-the-compounds-own-shrine-yashikigami.drawing.html:49a9e6e92d9dd874"
+   "0218-the-compounds-own-shrine-yashikigami.drawing.html:49a9e6e92d9dd874",
+   "0218-the-compounds-own-shrine-yashikigami.drawing.html:be6049ab7f6ba02d"
   ],
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/buildings.md::Sacred features#grave markers": {
-  "code": "e2a604676074f276",
-  "core": "ede1b1b8bd915f43",
+  "code": "fa6a8dfbcb5da175",
+  "core": "cb67cc0c3bb6ea9c",
   "date": "2026-10-07",
-  "note": "the page attests rows of markers (a convention, at ~9 ft spacing) but gives no ~2x1 ft marker size; label the size GUESS/UNRESEARCHED. The code also omits the page's taller memorial stone and six jizo",
+  "note": "the procedure draws markers only, but the page draws rows \"at about 9 ft spacing\" with \"a taller memorial stone or two\" and six jizo at the entrance, on an irregular patch sized to the population; the ~2x1 ft marker size is on no page",
   "pages": {
    "0235-village-burial-grounds-bochi.drawing.html": "fa6fc256f086d28d"
   },
@@ -1389,20 +1395,24 @@
   "rests": [
    "0235-village-burial-grounds-bochi.drawing.html:3cdcbc4280308cb8",
    "0235-village-burial-grounds-bochi.drawing.html:7a977de34ea42248",
-   "0235-village-burial-grounds-bochi.drawing.html:a2b15867d4cd7350"
+   "0235-village-burial-grounds-bochi.drawing.html:a2b15867d4cd7350",
+   "0235-village-burial-grounds-bochi.drawing.html:d222af3b26079b80",
+   "0235-village-burial-grounds-bochi.drawing.html:d3a2639dad496a56"
   ],
-  "verdict": "NEEDS-RESEARCH"
+  "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/buildings.md::Sacred features#grove": {
-  "code": "c807dfdf2fded0f2",
-  "core": "ede1b1b8bd915f43",
+  "code": "4cf998d7f59556f4",
+  "core": "cb67cc0c3bb6ea9c",
   "date": "2026-10-07",
-  "note": "the four knob forms follow the ground as the survey found",
+  "note": "behind, sides, behind and sides and all around are the attested forms, chosen by a knob following the ground; the roped sacred tree is by the approach",
   "pages": {
    "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html": "81663f30960fa262"
   },
   "research": "3377b10b4014ee4c",
   "rests": [
+   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:4bec9f4f1782de45",
+   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:91892ea39367c5ef",
    "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html:0754094bacfe5b43",
    "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html:11b077a13153a698",
    "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html:2ae7827162453585",
@@ -1412,38 +1422,40 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings.md::Sacred features#grove crown size": {
-  "code": "9852d2e216fc0ab2",
-  "core": "ede1b1b8bd915f43",
+  "code": "b08fcf14d773d74b",
+  "core": "cb67cc0c3bb6ea9c",
   "date": "2026-10-07",
-  "note": "0.75-1.4 x 17 ft, overlaps allowed",
+  "note": "0.75-1.4 x 17 ft is the drawing page's guessed band",
   "pages": {
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html": "605417d79e0e0561"
   },
   "research": "f1a38c9708a60be9",
   "rests": [
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:02347cd7bad4385d",
-   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:a40ebd3a6acb1f87",
-   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:aad44c6751a44f5f"
+   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:9c18680acc256e2e",
+   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:a40ebd3a6acb1f87"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings.md::Sacred features#grove inside a compound wall": {
-  "code": "2295316fc13c0fcf",
-  "core": "ede1b1b8bd915f43",
+  "code": "9f3ddb096261a24d",
+  "core": "cb67cc0c3bb6ea9c",
   "date": "2026-10-07",
-  "note": "no bundle page answers it",
+  "note": "not unresearched: 0218's drawing page gives the compound shrine one tree beside it, not a grove, so the claim should cite it, and the stipple rectangle then departs from it unless the page records it as a DEVIATION; 0223 also finds no source for a wood's plan outline",
   "pages": {},
   "research": "",
   "rests": [
-   "0218-the-compounds-own-shrine-yashikigami.drawing.html:49a9e6e92d9dd874"
+   "0218-the-compounds-own-shrine-yashikigami.drawing.html:08413de30e1b0f4b",
+   "0218-the-compounds-own-shrine-yashikigami.drawing.html:49a9e6e92d9dd874",
+   "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html:64714d0dd61608a5"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/buildings.md::Sacred features#hall and dwelling": {
-  "code": "8b97cde0f9315136",
-  "core": "ede1b1b8bd915f43",
+  "code": "f007a7e57b380263",
+  "core": "cb67cc0c3bb6ea9c",
   "date": "2026-10-07",
-  "note": "one-roof default with the farmhouse-size alternative recorded; kitchen and writing room as on the page",
+  "note": "one roof is the default, the separate house is left to the plan's author, the kitchen follows the kuri's origin and the writing room is on the page",
   "pages": {
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html": "5e8ac2e778e0e69b",
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html": "53e6b30a3e84d65c"
@@ -1455,15 +1467,16 @@
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html:7950922e6a0cab34",
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html:7d3c2032a9987c33",
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html:2c7b940b515976a0",
+   "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html:8fedbcfb447d4dc1",
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html:f24d361f0a0d9421"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings.md::Sacred features#hall and dwelling order": {
-  "code": "4e5d8e44edf07a2b",
-  "core": "ede1b1b8bd915f43",
+  "code": "ed8f8b0b71c05116",
+  "core": "cb67cc0c3bb6ea9c",
   "date": "2026-10-07",
-  "note": "the one hall-and-kuri building gives no order",
+  "note": "the one one-roof example gives no order, so this is a guess",
   "pages": {},
   "research": "",
   "rests": [
@@ -1473,10 +1486,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings.md::Sacred features#hall shrine ceiling": {
-  "code": "299558617251ab60",
-  "core": "ede1b1b8bd915f43",
+  "code": "a639d9ef2ef4e74d",
+  "core": "cb67cc0c3bb6ea9c",
   "date": "2026-10-07",
-  "note": "the ~36 ft ceiling exceeds 0116's shrine worship hall \"3 to 5 ken across\" (~18-30 ft); 0218 gives no size, and \"under half a residence\" is on neither page (0116 §299: no page ranks a shrine). Cite 0222 §383 (21-35 ft) or relabel the ratio GUESS on 0116's drawing page",
+  "note": "a 36 ft ceiling exceeds 0116's worship hall of \"3 to 5 ken across\" (~18-30 ft); 0218 is silent on size and neither question gives the half-a-residence ratio. Cite 0222's 21-35 ft and hold to 35 ft, or record the grand hall as a DEVIATION",
   "pages": {
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html": "ac75a1e28a361c16",
    "0218-the-compounds-own-shrine-yashikigami.html": "9599070ed9639df8"
@@ -1485,58 +1498,68 @@
   "rests": [
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html:69620b1e79461ecf",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html:810821d06441c9f0",
-   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html:d89c58633b72e2d1"
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html:d89c58633b72e2d1",
+   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:9285b92b183caf71"
   ],
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/buildings.md::Sacred features#kitchen garden at the dwelling": {
-  "code": "eaa50553efd6bd2b",
-  "core": "ede1b1b8bd915f43",
+  "code": "e68cb20441f02c0c",
+  "core": "cb67cc0c3bb6ea9c",
   "date": "2026-10-07",
-  "note": "silent",
+  "note": "no bundle question places a garden at a monk's dwelling",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings.md::Sacred features#modest compound shrine": {
-  "code": "1ac8c77d538eb16d",
-  "core": "ede1b1b8bd915f43",
+  "code": "65725236b0391cad",
+  "core": "cb67cc0c3bb6ea9c",
   "date": "2026-10-07",
-  "note": "a small shrine in the lot",
+  "note": "a small shrine, one per compound",
   "pages": {
    "0218-the-compounds-own-shrine-yashikigami.html": "9599070ed9639df8"
   },
   "research": "ba81c28e1330864c",
   "rests": [
+   "0218-the-compounds-own-shrine-yashikigami.drawing.html:08413de30e1b0f4b",
+   "0218-the-compounds-own-shrine-yashikigami.drawing.html:d462ca0a1a370798",
    "0218-the-compounds-own-shrine-yashikigami.html:834a4967c2ef0c57",
    "0218-the-compounds-own-shrine-yashikigami.html:b15f43848fbd0e18"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings.md::Sacred features#more than one kami in a hall": {
-  "code": "58c6384ddcc5e645",
-  "core": "ede1b1b8bd915f43",
+  "code": "26f178f6bc3f99c7",
+  "core": "cb67cc0c3bb6ea9c",
   "date": "2026-10-07",
-  "note": "one-hall aidono or a shrine of its own, rolled from the seed as the drawing page records",
+  "note": "the procedure fixes \"internal rail division for multiple altars\", but the page rolls between several kami in one hall (aidono) and a shrine of its own from the seed; Hayakawa's sheet is on no page. Roll the form, or record Hayakawa as a DEVIATION",
   "pages": {
-   "0218-the-compounds-own-shrine-yashikigami.drawing.html": "30143bd59a2deac9",
-   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html": "4eb9d08db97f2235"
+   "0218-the-compounds-own-shrine-yashikigami.drawing.html": "30143bd59a2deac9"
   },
-  "research": "ed3592c515cac242",
+  "research": "433c01774fd3a16c",
   "rests": [
    "0218-the-compounds-own-shrine-yashikigami.drawing.html:be6049ab7f6ba02d",
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:338c2d041cf07e0d",
-   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:8516c3ef6de75ad2",
+   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:709f1726760b636b",
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:fd750542f277b89e"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
+ },
+ ".claude/skills/diagram/buildings.md::Sacred features#no fence rings the sanctuary alone, at any wealth (lord-built sanctuary fences before 1868 are attested, §201)": {
+  "code": "cb67cc0c3bb6ea9c",
+  "core": "cb67cc0c3bb6ea9c",
+  "date": "2026-10-07",
+  "note": "no fence rings the sanctuary alone, at any wealth (lord-built sanctuary fences before 1868 are attested, §201)",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/buildings.md::Sacred features#precinct unenclosed": {
-  "code": "9cfa3489cfda9787",
-  "core": "ede1b1b8bd915f43",
+  "code": "3b8d9085dde9ed7c",
+  "core": "cb67cc0c3bb6ea9c",
   "date": "2026-10-07",
-  "note": "no precinct fence, and no pre-modern fence round a village sanctuary",
+  "note": "the wood and the arch marked the ground; no village shrine's precinct or sanctuary was found fenced before 1868",
   "pages": {
    "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html": "81663f30960fa262"
   },
@@ -1550,20 +1573,20 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings.md::Sacred features#privy at the dwelling": {
-  "code": "1837e5d80c6b748d",
-  "core": "ede1b1b8bd915f43",
+  "code": "bc2409eb43ba45bb",
+  "core": "cb67cc0c3bb6ea9c",
   "date": "2026-10-07",
-  "note": "silent",
+  "note": "no bundle question places a privy",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings.md::Sacred features#sanctuary": {
-  "code": "e48bc89db6855e77",
-  "core": "ede1b1b8bd915f43",
+  "code": "52885a7f1e692b23",
+  "core": "cb67cc0c3bb6ea9c",
   "date": "2026-10-07",
-  "note": "1 or 3 bays, a ~6 ft bay, Hie's 12x6, at the rear on the axis",
+  "note": "the sizes and the rear-on-axis placement match, but 1, 2 and 3 bays are all attested and the procedure draws \"one bay an 18-20 px rect\" without saying whether the bay count is rolled; the Country shrine knobs in programs.md are needed",
   "pages": {
    "0215-village-shrines-where-they-stand-and-how-big-their-grounds-are.html": "0584c762fce56b9b",
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html": "4eb9d08db97f2235"
@@ -1576,13 +1599,13 @@
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:646f71e0cff55d3c",
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:8645ca661afbf310"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "CANNOT-TELL"
  },
  ".claude/skills/diagram/buildings.md::Sacred features#shrine vermilion edging": {
-  "code": "b7638df948932997",
-  "core": "ede1b1b8bd915f43",
+  "code": "31289e72d388c0c4",
+  "core": "cb67cc0c3bb6ea9c",
   "date": "2026-10-07",
-  "note": "a convention for shrine color",
+  "note": "shrine vermilion is a drawing convention (0219's drawing page is not in the bundle)",
   "pages": {},
   "research": "",
   "rests": [
@@ -1590,32 +1613,23 @@
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/buildings.md::Sacred features#the hall shrine's altar-aspect marks (a torii silhouette east, a straw-doll silhouette west)": {
-  "code": "ede1b1b8bd915f43",
-  "core": "ede1b1b8bd915f43",
-  "date": "2026-10-07",
-  "note": "the hall shrine's altar-aspect marks (a torii silhouette east, a straw-doll silhouette west)",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  ".claude/skills/diagram/buildings.md::Sacred features#the whole sacred complex held to at most ~2/3 of the residence": {
-  "code": "f22c5892a5e6f295",
-  "core": "ede1b1b8bd915f43",
+  "code": "7d0a0bf75f558335",
+  "core": "cb67cc0c3bb6ea9c",
   "date": "2026-10-07",
-  "note": "no page ranks a shrine complex against the residence",
+  "note": "no page we read records how a shrine ranked among a compound's buildings",
   "pages": {},
   "research": "",
   "rests": [
-   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:8e60bf46e6b04c4a",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html:d89c58633b72e2d1"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings.md::Sacred features#workshop colonnade": {
-  "code": "638bef6c2ddc5db2",
-  "core": "ede1b1b8bd915f43",
+  "code": "d392d81bc6345e8f",
+  "core": "cb67cc0c3bb6ea9c",
   "date": "2026-10-07",
-  "note": "silent",
+  "note": "no bundle question bears on it",
   "pages": {},
   "research": "",
   "rests": [],

@@ -1,0 +1,62 @@
+{
+  "band": 1,
+  "base": {
+    "commit": "c45460dd1",
+    "label": "328-start",
+    "utc": "20261007T193633Z"
+  },
+  "binding": "5504393c2e3af0032d5d73e758091c58515794c8d97819ceb21656f9ecc75238",
+  "end": {
+    "commit": "f68286404",
+    "label": "328-end",
+    "utc": "20261007T193949Z"
+  },
+  "environment": "local",
+  "feature": "328-match-the-research",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "8d3395e5-fe32-4f85-9c89-80c344d2ac1a",
+    "utc": "20261007T194304Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": 0.0,
+          "39": 0.0,
+          "4": -2.8,
+          "47": 3.0
+        },
+        "total_pct": 0.0
+      },
+      "20": {
+        "seeds": {
+          "25": -1.4,
+          "39": -1.8,
+          "4": -2.4,
+          "47": -1.7
+        },
+        "total_pct": -1.9
+      },
+      "40": {
+        "seeds": {
+          "25": 0.0,
+          "39": -0.8,
+          "4": -0.6,
+          "47": 0.0
+        },
+        "total_pct": -0.4
+      }
+    },
+    "seeds": {
+      "25": 0.0,
+      "39": -2.3,
+      "4": -4.0,
+      "47": 2.3
+    },
+    "total_pct": -1.1
+  },
+  "note": "Executed-path check, not just diff reading: a 10 hh seed-47 roll at the end commit (4b3fe4f68, run 3x under an open() audit hook) never opens buildings/types.json and never imports l7r.diagram.buildings.types, and the only bundle.py change is two docstring lines; so no wave-13 change runs on the hamlet path. The same code rolled 3.4/3.3/3.3 s with homesteads at 1.12/1.10/1.09 s, matching the start leg's 3.3 s / 1.1 s. That puts the +0.1 s homesteads growth (+3.0% 10 hh, +2.3% reference seed 47) inside run-to-run variance, while every other seed and leg fell or held (total -1.1%).",
+  "verdict": "consistent"
+}
