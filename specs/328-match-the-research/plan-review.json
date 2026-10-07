@@ -1,6 +1,6 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "47eaf19870eb1db896ae46b031abf67cff060004f4bea8999e54336e764b9aad",
+ "plan_sha256": "9ef6a854282b15eec4a32638b6ec740075c8b0e769e21218e14af23c66fba8d4",
  "reviewed": "2026-10-07",
  "declared": "spec-fidelity",
  "decisions": [
@@ -271,9 +271,9 @@
   },
   {
    "id": "W10-scope",
-   "summary": "Wave 10 = the open in-scope E0 rows (plan: 25), then in-scope E1 rows 295-360 (19); next open in-scope row 361 is E2",
+   "summary": "Wave 10 = the 26 open in-scope E0 rows, then in-scope E1 rows 296-358 (18); next open in-scope row 359 is E2",
    "class": "within",
-   "why": "The rule is 'easiest to hardest' and FR-010. The figures are stale: ranking.json was not re-merged after this round's overrides/waves edits; re-merged in scratch (audit/merge.py) the scope is 26 E0 (the front privy step's relabel joins) and E1 rows 296-359 (same 19 keys), next E2 row 360. And shed_off_a_wall#wood shed a ken off a wall (in the E1 run) fixes toward 'g + WOODSHED_STEP_FT (a ken)', which rests on the held step: its dependency is not recorded (spec FR: a row follows any row it depends on; SC-003). Both are CHANGES REQUIRED items in the amendment verdict, not narrowings."
+   "why": "Round 3's item answered and re-derived on this round: audit/merge.py re-run in scratch reproduces ranking.json, ranking.md and closed-tiers.json byte for byte; open in-scope rows with no wave: E0 exactly 26 (the front privy step's GUESS relabel among them), E1 exactly 18 in rows 296-358 (296, 314, 325-331, 346, 349, 351-353, 355-358); row 359 is E2. shed_off_a_wall now carries after = WOODSHED_STEP_FT (held, E3) and takes E3, out of wave 10; tasks.md Phase 11's 44 keys equal the derived set; the only afters inside it (rows 328, 331 on 327) are in the wave. 'easiest to hardest', FR-010 and SC-003's dependency clause."
   },
   {
    "id": "W10-hold-wave9",

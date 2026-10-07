@@ -517,15 +517,15 @@ closed.
       `LABEL=328-end` in the clone, nothing else running (constitution VI)
       research: rendering
       verify: DONE. the pair taken back to back (dev/perf-log 328-start at main, 328-end in the clone): band 3 - total +8.9%, seed 25 +15.0% (notice +0.7 s), 20 hh seed 39 +21.8%; explained (the board's seat search on layouts the wave moved: 3 routes and 7,932 seat fits against 2, a found row to index it), perf-audit dispatched; the GM's sign-off owed (band 3). A first pair with the zigzag preference read band 3 too, and the preference was withdrawn
-- [ ] T36 the open in-scope E0 claims; then the E1 rows, each fixed toward the page it cites (DEVIATION only through the
+- [x] T36 the open in-scope E0 claims; then the E1 rows, each fixed toward the page it cites (DEVIATION only through the
       exception path), with the unit tests it moves; proven on the reference hamlet (Inashiro, its PNG looked at) and the pool
       through the gate; a value that makes a map refuse is held and the row takes the tier of the work it needs (FR-004,
       FR-005, spec Edge Cases)
       research: rendering
-      verify:
-- [ ] T37 every touched unit re-checked by `impl-drift`; each wave-9 row IN-STEP or re-tiered with its measured reason (FR-005, SC-002)
+      verify: DONE. the 5 E0 claims and E1 rows 265-297 fixed toward their pages; held by row where the gate or a measured roll needed it (FR-004): the yard privy's step (Kuwabata's zigzag across a joint, bisected by row) and the wood shed's step (three scaling rolls' web refusals, bisected by row), each E3 after its found row; three rows re-tiered (the commons fill E2, the surface water E4); the front step's label reopened as an E0 relabel (GUESS 0047); the entrance board's widened pass pruned to its reach (lossless, tested); Inashiro looked at; the pool through a green make done
+- [x] T37 every touched unit re-checked by `impl-drift`; each wave-9 row IN-STEP or re-tiered with its measured reason (FR-005, SC-002)
       research: rendering
-      verify:
+      verify: DONE. impl-drift on every touched unit (bundles A-I, scratchpad/w9, each recorded with make claims-checked); every finding a found row tiered by its work (T38a, T38b) or a held row's own stated drift (D8)
 - [ ] T38 the close: the band's records, `make done` green, the wave column, landed (FR-005, FR-006, SC-002, SC-003)
       research: rendering
       verify:
