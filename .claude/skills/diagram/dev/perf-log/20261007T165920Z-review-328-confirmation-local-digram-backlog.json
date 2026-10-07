@@ -1,0 +1,62 @@
+{
+  "band": 3,
+  "base": {
+    "commit": "6ca2f5ccf",
+    "label": "328-start",
+    "utc": "20261007T162956Z"
+  },
+  "binding": "7f7a52182d0613bc2536ac9ed8bfb53c963364998245da6080f0da451e8af55f",
+  "end": {
+    "commit": "6870097cd",
+    "label": "328-end",
+    "utc": "20261007T163306Z"
+  },
+  "environment": "local",
+  "feature": "328-match-the-research",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "8d3395e5-fe32-4f85-9c89-80c344d2ac1a",
+    "utc": "20261007T165920Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": -10.3,
+          "39": 14.8,
+          "4": 5.9,
+          "47": 0.0
+        },
+        "total_pct": 2.5
+      },
+      "20": {
+        "seeds": {
+          "25": -10.0,
+          "39": -1.8,
+          "4": 6.7,
+          "47": -1.7
+        },
+        "total_pct": -2.0
+      },
+      "40": {
+        "seeds": {
+          "25": -7.6,
+          "39": 20.8,
+          "4": -6.3,
+          "47": -5.7
+        },
+        "total_pct": -0.5
+      }
+    },
+    "seeds": {
+      "25": -5.0,
+      "39": -7.5,
+      "4": 4.3,
+      "47": 12.2
+    },
+    "total_pct": 1.2
+  },
+  "note": "Only the 40 hh seed 39 part holds. The other two crossings are the yard hold as well, not layouts the wave moved. Reviewer counterfactual at 6870097cd itself (the cited audit10 run was at eac572da4, with the wood shed at the page's value): detached worktrees at 6ca2f5ccf, 6870097cd, and 6870097cd with PRIVY_YARD_STEP_FT = 6.0 - WALL_GAP_FT; measure() at ref/10/20/40 hh, seeds 4/25/39/47, 2 reps, within about 2%. Wall s / web s for start, held, released: 40 hh seed 39 12.0-12.2/3.0, 14.6-14.8/5.4, 12.6-12.7/3.8 (the hold is about 2.1 of the 2.5 s); ref seed 47 4.0-4.2/0.53-0.62, 4.6-4.7/1.20, 3.8/0.40 (the whole +12.2% is the hold); 10 hh seed 39 2.7/0.44, 3.1-3.2/0.76, 2.6-2.7/0.55 (the whole +14.8% is the hold). The falls the explanation offsets them against (10 and 20 hh seed 25) persist with the hold released, so they are the rest of the wave and not the same layout move. Rewrite: all three crossings are the yard step hold, and CONTROL should name a recorded run of the released state.",
+  "verdict": "inconsistent"
+}

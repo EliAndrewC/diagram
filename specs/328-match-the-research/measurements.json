@@ -41,5 +41,16 @@
   "source": ".claude/skills/diagram/dev/perf-log/20261007T095624Z-328-start-perfbase.json, 20261007T095926Z-328-end-digram-backlog.json, 20261007T100305Z-328-control-perfbase.json",
   "method": "make perf in a detached worktree at origin/main (start), the clone at 9a89f10ed (end), then the same worktree at 9a89f10ed with the two gather calls removed (control), run one after another on the same host",
   "finding": "the knot gather is 1.1-1.8 s of each 40-household map (seed 4 1.4 s, seed 25 1.8 s, seed 47 1.2 s); with it removed the lane law alone runs within 0.8 s of the start on every seed, and faster on three of four"
+ },
+ "w9-perf-yard-step-released": {
+  "verifies": "perf band 3 (wave 9)",
+  "subject": "perf-bookends--328-w9",
+  "answers": "20261007T165934Z-review-328-audit-local-digram-backlog",
+  "quantity": "wall time of the reference at 40 households seed 39, 10 households seed 39 and 15 households seed 47 with the yard privy's step released to the page's value (everything else as 6870097cd)",
+  "value": "40 hh seed 39: 12.6-12.7 s (held 14.6-14.8, start 12.0-12.2); 10 hh seed 39: 2.6-2.7 s (held 3.1-3.2, start 2.7); ref seed 47: 3.8 s (held 4.6-4.7, start 4.0-4.2)",
+  "unit": "s",
+  "observed": "2026-10-07",
+  "source": "the perf-audit's detached worktrees at 6870097cd: scratchpad audit11/{start,end,yard}.{0,1}.json, perf_snapshot.measure, 2 reps each",
+  "method": "perf_snapshot.measure on the four legs and four seeds, start (6ca2f5ccf), end (6870097cd) and end with PRIVY_YARD_STEP_FT = 6.0 - WALL_GAP_FT, back to back; repeats agree within about 2%"
  }
 }

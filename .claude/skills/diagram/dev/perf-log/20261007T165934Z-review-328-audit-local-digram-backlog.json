@@ -1,0 +1,67 @@
+{
+  "band": 3,
+  "base": {
+    "commit": "6ca2f5ccf",
+    "label": "328-start",
+    "utc": "20261007T162956Z"
+  },
+  "binding": "7f7a52182d0613bc2536ac9ed8bfb53c963364998245da6080f0da451e8af55f",
+  "criteria": {
+    "commensurate": "Yes. The cost moves between seeds and the aggregate stays flat. Over all 16 rolls (ref plus 10/20/40 hh, 4 seeds, best of 2): start 108.1 s, end 108.3 s (+0.2%), yard released 107.5 s, both released 108.7 s. Totals are ref +1.2% and legs -2.0% to +2.5%. No roll refuses, and 40 hh seed 4 runs 16.5 s against 17.5 s at start (the previous audit's main objection, three refusals and 15 s of web before one, is gone). The released states have their own seeds near 10%: yard released, 20 hh seed 4 +10% and 40 hh seed 47 +10.5%; both released, 20 hh seed 4 +14% and ref seed 39 +9%. A +0.2% aggregate for a green correctness gate is proportionate.",
+    "necessary": "Yes, as a stopgap the spec allows. All three seed crossings (ref seed 47 +12.2%, 10 hh seed 39 +14.8%, 40 hh seed 39 +20.8%) are the PRIVY_YARD_STEP_FT hold: released alone at 6870097cd they go to 3.8 s, 2.6-2.7 s and 12.6-12.7 s (start 4.0-4.2, 2.7, 12.0-12.2). The hold keeps the pool gate green on Kuwabata (no zigzag across a joint, test_no_zigzag_straddles_a_joint) and clears Inashiro's and Sawada's knots. FR-004 holds a row where the gate needs it, E3 after its found row. The wood shed hold adds no cost: with both released 40 hh total is 54.3-54.4 s against 55.5 s with the shed held, and the three refusals come only with the yard held alone. This is not functionality the feature asks for. It lasts until gap_ways.py::_way_for#a household whose only ways zigzag re-seated lands.",
+    "no_way_around": "No cheaper state keeps the gate green until the re-seat row lands. Releasing the hold reopens Kuwabata's zigzag and saves 0.7% in aggregate. Profile of 40 hh seed 39's web (cProfile 15.1 s held, 10.3 s released): the field-way search (reach.settle_field) judges 245 candidate runs held against 124 released. Each goes through settle._crossing_fault, then bridges.crossing_deck, then _lands_dry, and the joint and knot passes also run more. That is a layout effect, not a new scan. One per-candidate rescan of unchanging geometry exists: _lands_dry recomputes every flooded ring's bounding box on every deck. Hoisting it (reviewer monkeypatch) takes web from 5.23 s to 4.87-4.90 s with the lanes byte-identical. Worth landing, but it leaves the crossing (3.0 s at start)."
+  },
+  "end": {
+    "commit": "6870097cd",
+    "label": "328-end",
+    "utc": "20261007T163306Z"
+  },
+  "environment": "local",
+  "feature": "328-match-the-research",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "8d3395e5-fe32-4f85-9c89-80c344d2ac1a",
+    "utc": "20261007T165934Z"
+  },
+  "kind": "audit",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": -10.3,
+          "39": 14.8,
+          "4": 5.9,
+          "47": 0.0
+        },
+        "total_pct": 2.5
+      },
+      "20": {
+        "seeds": {
+          "25": -10.0,
+          "39": -1.8,
+          "4": 6.7,
+          "47": -1.7
+        },
+        "total_pct": -2.0
+      },
+      "40": {
+        "seeds": {
+          "25": -7.6,
+          "39": 20.8,
+          "4": -6.3,
+          "47": -5.7
+        },
+        "total_pct": -0.5
+      }
+    },
+    "seeds": {
+      "25": -5.0,
+      "39": -7.5,
+      "4": 4.3,
+      "47": 12.2
+    },
+    "total_pct": 1.2
+  },
+  "note": "Reviewer's numbers: detached worktrees at 6ca2f5ccf, 6870097cd, 6870097cd with the yard step at 6.0 - WALL_GAP_FT, and 6870097cd with both steps at 6.0 - WALL_GAP_FT. measure() at ref/10/20/40 hh, seeds 4/25/39/47, 2 reps interleaved, repeating within about 2%; plus cProfile of the web stage of 40 hh seed 39, held and released. Band 3 (40 hh seed 39 +20.8% > 20%) still needs the GM's own perf-signoff, which this record does not grant. The explanation's confirmation is INCONSISTENT and must be rewritten: all three crossings are the yard hold.",
+  "verdict": "justified"
+}
