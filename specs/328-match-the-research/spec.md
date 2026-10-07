@@ -271,3 +271,9 @@ Each wave's amendment adds its map decisions to this table. The program's decisi
   CHANGES REQUIRED, plan BLOCKED - knobs, constructed classes and module-level claims missed. Round 4 (spec-fidelity):
   CHANGES REQUIRED, plan CLEAR (34 decisions) - FR-010's wording of a knob in use; the measure counts resolutions only.
 - Amendment 8, round 5 (spec-fidelity, 2026-10-07): FAITHFUL; plan CLEAR (34 decisions).
+- Amendment 9, round 1 (spec-fidelity, 2026-10-07): CHANGES REQUIRED, plan BLOCKED - 14 found rows tiered by verdict alone;
+  three NEEDS-RESEARCH rows relabeled instead of E4; the annex row's named exception; wave 10 on the unpushed wave 9 and a gate
+  "with one failure aside"; the GM's goal amendment not on record. Round 2 (spec-fidelity, 2026-10-07): CHANGES REQUIRED, plan
+  BLOCKED - round 1's items resolved; the exception split: wave 10 on wave 9 while it waits only for the GM's band-3 sign-off
+  LEGITIMATE on conditions, the hold's cost on three scaling rolls NOT the GM's (bisect it by row) - done: the wood shed's
+  step held.

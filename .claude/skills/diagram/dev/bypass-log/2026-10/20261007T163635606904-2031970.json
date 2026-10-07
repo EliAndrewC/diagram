@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-07T16:36:35Z",
+  "target": "perf-explain",
+  "commit": "cdffbf7f0",
+  "outcome": "permitted",
+  "why": "perf-explain UNVERIFIED: the 40 hh seed 39 counterfactual is the previous perf-audit's (scratchpad audit10/page.json, not a recorded run); the smaller crossings are not counterfactually measured"
+}

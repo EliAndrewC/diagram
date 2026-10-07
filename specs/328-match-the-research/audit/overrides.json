@@ -1020,6 +1020,17 @@
   "moved": "T38a: tiered by its work - No code changes; the claim line is relabeled.",
   "tier": "E0"
  },
+ ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::PRIVY_FRONT_STEP_FT#front privy off the front wall": {
+  "after": [],
+  "e0_basis": "bundle I: the figure matches, the label owes the page's GUESS",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py"
+  ],
+  "fix": "relabel GUESS research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: 8 ft (the page records the 8 ft as its own guess); the code's 8 ft edge stands",
+  "flag": "",
+  "moved": "wave 9 bundle I: MISLABELED after its value moved - the page marks the 8 ft a GUESS",
+  "tier": "E0"
+ },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::PRIVY_YARD_STEP_FT#yard outhouse off the back wall": {
   "after": [
    ".claude/skills/diagram/l7r/diagram/settlement/rolling/gap_ways.py::_way_for#a household whose only ways zigzag re-seated"

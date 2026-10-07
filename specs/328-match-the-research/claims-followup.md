@@ -352,3 +352,4 @@ and 40 households`), its claim stating the drift. Kuwabata stays clean with both
 - `l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_for#anchored board band` (UNCLAIMED, E0): an anchored board within 60 ft of the nearest seat to its anchor (KOSATSUBA_ANCHOR_BAND_FT)
 - `l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_for#handover band` (UNCLAIMED, E0): an entrance board within 20 ft of the nearest seat to the handover (KOSATSUBA_HANDOVER_BAND_FT)
 - `l7r/diagram/settlement/homestead_parts/wood_share.py::copse_keepouts#south strip in feet` (DRIFTED, E1): scale the south strip's `sun_depth` (feet) by `ppf` as the east and west lanes are (copse_keepouts, wood_share.py:114)
+- `l7r/diagram/settlement/homestead_parts/fixture_seats.py::PRIVY_FRONT_STEP_FT#front privy off the front wall` (MISLABELED, E0): relabel GUESS 0047 - the page records its 8 ft as a guess
