@@ -480,6 +480,9 @@ def test_a_corridor_the_knot_pass_would_gather_into_a_zigzag_is_read() -> None:
     house_lane = {"pts": [[3868.7, 1760.0], [3798.9, 1693.7], [3717.9, 1536.9]], "w": 3.0, "role": "access"}
     run = {"pts": [[4042.0, 1765.8], [3918.9, 1808.7], [3848.9, 1783.7], [3865.0, 1756.5]], "w": 3.0, "role": "access"}
     assert gathered_zigzag([house_lane, run])
+    assert not gathered_zigzag([house_lane, {**run, "role": "field way"}]), "an end the gather never moves"
+    foot = {"pts": [[3717.9, 1536.9], [3798.9, 1693.7], [3868.7, 1760.0]], "w": 3.0, "role": "access"}  # its movable foot there
+    assert not gathered_zigzag([foot, run]), "a lone end the gather may move instead"
     assert gathered_zigzag([house_lane, {**run, "pts": [*run["pts"][:-1], [3868.7, 1760.0]]}]), "as it stands"
     far = {"pts": [[4042.0, 1765.8], [3918.9, 1808.7], [3848.9, 1783.7], [3700.0, 1900.0]], "w": 3.0, "role": "access"}
     assert not gathered_zigzag([house_lane, far])

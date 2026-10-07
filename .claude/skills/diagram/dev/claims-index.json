@@ -43998,6 +43998,24 @@
   ],
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/grove_rules.py::gardens_east_shaded#a neighbor's band east of a garden": {
+  "code": "08a908561cd7a52a",
+  "core": "b1b12de67387bece",
+  "date": "2026-10-07",
+  "note": "`NEIGHBOR_REACH_FT` = 22 ft, but the page says no crown \"within 50 ft east ... its own farm's or a neighbor's\" and records no 22 ft departure; the claim names the shortfall but is not a DEVIATION. Either check at 50 ft, or have the drawing page record the 22 ft and label the claim DEVIATION",
+  "pages": {
+   "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03"
+  },
+  "research": "3874df1f1301e65f",
+  "rests": [
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:0f20160d442c6378",
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:106fb9ebea718da7",
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:cef95d825324536e",
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:d3a563a684496e84",
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:fb011b8973aa73bf"
+  ],
+  "verdict": "DRIFTED"
+ },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/grove_rules.py::gardens_east_shaded#garden's morning sun": {
   "code": "80ba03a014eb629d",
   "core": "b1b12de67387bece",
@@ -44012,14 +44030,6 @@
    "0038-sunlight-and-shade-on-the-farm.drawing.html:cf77608be5e193f8"
   ],
   "verdict": "DRIFTED"
- },
- ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/grove_rules.py::gardens_east_shaded#neighbor's band reach (`near`, NEIGHBOR_REACH_FT); the docstring's second claim line was not parsed into a KEY": {
-  "code": "b1b12de67387bece",
-  "core": "b1b12de67387bece",
-  "date": "2026-10-07",
-  "note": "neighbor's band reach (`near`, NEIGHBOR_REACH_FT); the docstring's second claim line was not parsed into a KEY",
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/grove_rules.py::grove_farms#map checks plumbing": {
   "code": "48a1c98f12fea16e",
@@ -46058,28 +46068,60 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/wood_share.py::WoodShares.__init__#afternoon lane as the copse plants": {
-  "code": "06548320137b37ad",
-  "core": "9ea57750001f8af2",
-  "date": "2026-10-03",
-  "note": "passes the map's value through, default 0",
+  "code": "d16d7d4164fd8212",
+  "core": "bbf53cc85534430c",
+  "date": "2026-10-07",
+  "note": "`getattr(s, \"_west_sun_ft\", 0.0)` sets the copse seats' clear ground west of a plot to 0 ft where the map declares no lane, which is a sun decision; the page holds every tree 50 ft west or southwest. The claim should cite 0038, not NONE",
+  "pages": {},
   "research": "",
-  "verdict": "IN-STEP"
+  "rests": [
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:106fb9ebea718da7",
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:cf77608be5e193f8"
+  ],
+  "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/wood_share.py::WoodShares.__init__#seat off a lane": {
-  "code": "3358fb3c3f4af689",
-  "core": "9ea57750001f8af2",
-  "date": "2026-10-03",
-  "note": "no question in the bundle answers it",
+  "code": "0a96b46865e8494c",
+  "core": "bbf53cc85534430c",
+  "date": "2026-10-07",
+  "note": "nothing in the bundle sets a crown's distance from a lane",
+  "pages": {},
   "research": "",
+  "rests": [
+   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:b504bfc778e63907"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/wood_share.py::WoodShares.__init__#sun strip default": {
-  "code": "8293479a9fc75b00",
-  "core": "9ea57750001f8af2",
-  "date": "2026-10-03",
-  "note": "nothing in the bundle answers the 22 ft default",
+  "code": "715bf593dc376ae8",
+  "core": "bbf53cc85534430c",
+  "date": "2026-10-07",
+  "note": "the cited page answers this, so it is not a GUESS: \"no crown ... the copse ... within 50 ft ... south\" (0071 §48 says the same). The 22 ft default feeds `copse_keepouts`' south strip, so the claim's \"held at copse_keepouts\" is false. It should cite 0038, and as written it is DRIFTED from 50 ft",
+  "pages": {},
   "research": "",
-  "verdict": "IN-STEP"
+  "rests": [
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:106fb9ebea718da7",
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:45d116e0d7359762",
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:fb011b8973aa73bf",
+   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:07682c227be39db1"
+  ],
+  "verdict": "MISLABELED"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/wood_share.py::WoodShares.__init__#the drawn size of a copse clump (`COPSE_CLUMP_BS` 22 bs)": {
+  "code": "bbf53cc85534430c",
+  "core": "bbf53cc85534430c",
+  "date": "2026-10-07",
+  "note": "the drawn size of a copse clump (`COPSE_CLUMP_BS` 22 bs)",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/wood_share.py::WoodShares.__init__#the spacing between copse seats (`SEAT_PITCH_BS` 11*sqrt(2) bs)": {
+  "code": "bbf53cc85534430c",
+  "core": "bbf53cc85534430c",
+  "date": "2026-10-07",
+  "note": "the spacing between copse seats (`SEAT_PITCH_BS` 11*sqrt(2) bs)",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/wood_share.py::WoodShares.commit#plumbing": {
   "code": "35922c8d9fdc90bb",
@@ -46134,11 +46176,13 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/wood_share.py::WoodShares.keepouts#plumbing": {
-  "code": "c0c12977e906f055",
-  "core": "044b923582de9983",
-  "date": "2026-10-03",
-  "note": "passes straight through to copse_keepouts",
+  "code": "e58cb49f48e3d1dd",
+  "core": "167cad8b5b7d1176",
+  "date": "2026-10-07",
+  "note": "passes its inputs through to copse_keepouts",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/wood_share.py::WoodShares.seat_barred#on its house's bank": {
@@ -46190,10 +46234,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/wood_share.py::copse_keepouts#clump beside, never on, a building": {
-  "code": "b76a3247e8b431fb",
-  "core": "f978d4eac539d0db",
+  "code": "18ac89b3f04af5f3",
+  "core": "0c6aef1b7ba9d96e",
   "date": "2026-10-07",
-  "note": "the circumscribing radius plus the clump's radius, with a 2 px margin",
+  "note": "the building's circumscribing radius plus the clump's full radius, the page's rule, with a 2 px margin; covers house, yard, gardens, byre and shed",
   "pages": {
    "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html": "f32599678d1cb241"
   },
@@ -46204,20 +46248,20 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/wood_share.py::copse_keepouts#copse off the wellhead": {
-  "code": "f3c6445bd6cd2c34",
-  "core": "f978d4eac539d0db",
+  "code": "88d1c7494351ff31",
+  "core": "0c6aef1b7ba9d96e",
   "date": "2026-10-07",
-  "note": "no cited question bears on it",
+  "note": "no cited question speaks of a well",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/wood_share.py::copse_keepouts#plots' sun strips": {
-  "code": "4059f8dfcee2aaa1",
-  "core": "f978d4eac539d0db",
+  "code": "8511151e26f81371",
+  "core": "0c6aef1b7ba9d96e",
   "date": "2026-10-07",
-  "note": "`east + EAST_LANE_FT + cr + m` adds a figure in feet straight to pixel coordinates (the same sum carries `clump` and `BAR_MARGIN_PX`, both pixels), so the east lane is 50 ft only at 1 ft per pixel; it should be scaled by pixels per foot (`west_ft` probably has the same problem, by its name).",
+  "note": "the south strip uses `sun_depth` (22 ft by default), a yard has no east strip, and the west strip exists only where the map declares a lane. The page holds every crown, the copse's included, 50 ft \"east, west or south of a yard or bed\". Either reserve at 50 ft, or have the page record a lighter reservation than the planting",
   "pages": {
    "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03"
   },
@@ -46226,7 +46270,7 @@
    "0038-sunlight-and-shade-on-the-farm.drawing.html:106fb9ebea718da7",
    "0038-sunlight-and-shade-on-the-farm.drawing.html:45d116e0d7359762",
    "0038-sunlight-and-shade-on-the-farm.drawing.html:cf77608be5e193f8",
-   "0038-sunlight-and-shade-on-the-farm.drawing.html:fb011b8973aa73bf"
+   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:07682c227be39db1"
   ],
   "verdict": "DRIFTED"
  },

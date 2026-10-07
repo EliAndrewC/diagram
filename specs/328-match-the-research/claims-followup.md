@@ -322,3 +322,30 @@ gather into one (`tree.gathered_zigzag`), and the router lays another.
 - `l7r/diagram/hamletgen/ways/tree.py::gathered_zigzag#no zigzag at a joint, ends gathered` (CANNOT-TELL, E0): re-check with gap_ways.KNOT_FT in the bundle (the reach is smooth._KNOT_FT = gap_ways.KNOT_FT, 0081's 25 ft)
 - `l7r/diagram/settlement/homestead_parts/grove_rules.py::gardens_east_shaded#east reach below the bed` (DRIFTED, E2): test the band against the page's clear ground from the bed's north edge down to 50 ft below its south edge (0038 §77), not the bed's own height, so a band southeast of the bed is caught
 - `l7r/diagram/hamletgen/ways/tree.py::admits#track out's width as judged` (UNCLAIMED, E0): the track out's stub judged at 6 ft (0081's track)
+- `l7r/diagram/settlement/homestead_parts/wood_share.py::WoodShares.__init__#afternoon lane as the copse plants` (MISLABELED, E0): cite 0038 (every crown 50 ft west or southwest of a yard or bed) for the copse's west reservation, not NONE
+- `l7r/diagram/settlement/homestead_parts/wood_share.py::WoodShares.__init__#sun strip default` (MISLABELED, E2): the copse seats' south strip at 0038's 50 ft, not the 22 ft default labeled GUESS; with the copse's sun ground below (feature 317 measured seats reserved in the west lane left unplanted)
+- `l7r/diagram/settlement/homestead_parts/wood_share.py::copse_keepouts#plots' sun strips` (DRIFTED, E2): reserve the copse's seats 50 ft east, west and south of every yard and bed (0038), yards' east included, as the planting holds them
+- `l7r/diagram/settlement/homestead_parts/wood_share.py::WoodShares.__init__#copse clump size` (UNCLAIMED, E0): the drawn size of a copse clump (`COPSE_CLUMP_BS` 22 bs)
+- `l7r/diagram/settlement/homestead_parts/wood_share.py::WoodShares.__init__#copse seat pitch` (UNCLAIMED, E0): the spacing between copse seats (`SEAT_PITCH_BS` 11*sqrt(2) bs)
+
+### Wave 9: an open regression held for the GM (Kuwabata's zigzag across a joint)
+
+Wave 9's values move Kuwabata's homesteads: either half of the wave alone (the homestead layout rows, or the grove and field
+rows) produces it, so no single value can be held. On the new layout, house (4051.7, 1727)'s access lane rounds its
+neighbor's forecourt corner and its foot stands 5 ft from that neighbor's door end; the knot pass gathers the foot onto the
+door end (0081: ends within 25 ft are one point), and the two lanes walk as a Z (turns of 110 and 86 degrees within 31 ft) -
+`test_no_zigzag_straddles_a_joint[kuwabata]`. Measured, rule by rule:
+
+- the joint pass's T and its moved-back joint: the T's foot is the joint itself (the foot stands behind the door lane's first
+  leg), and moving the joint drops the door end (`keeps_the_web`); a T on the next leg is a needle join the web refuses; and
+  every joint pass is undone by the settle, which draws a tree lane as judged (`settle_tree`)
+- the shortcut that drops the overshoot crosses the neighbor's forecourt (the overlap matrix)
+- refusing such a way at the seating's judge mends Kuwabata (the household re-seated) but leaves the reference at seed 47
+  without its field way (`WebRefused`: two households' ways refused, the field way hosted on them)
+- landed instead: the judge REPORTS the gathered zigzag (`tree.gathered_zigzag`, onto a fixed door end or a junction only)
+  and the gap pass takes such a way only where no other exit is admitted (`gap_ways._way_for`); seed 47 rolls, and
+  Kuwabata's household has no other exit, so its Z stands
+
+The remaining exits (constitution XIII): a re-seat rule for a household whose only ways zigzag that keeps the field way's host
+(hours of work, sketch: in the gap pass, when only held ways remain, release the household's seat to the seating's re-seat
+queue before the field way is laid), or a GM waiver. Wave 9 stays unpushed in the clone until the GM rules.

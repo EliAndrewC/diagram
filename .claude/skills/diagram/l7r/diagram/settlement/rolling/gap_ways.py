@@ -39,7 +39,7 @@ from collections.abc import Sequence
 from typing import TYPE_CHECKING, Any
 
 from .._geom import Pt, chain_violated_many, seg_closest
-from .access import _standing_memo, admitted, doors_of, doubles_back, fixtures_clear, house_clear, house_gap, legs, parts_clear, reserve, standing_ground
+from .access import _standing_memo, admitted, doors_of, doubles_back, fixtures_clear, house_clear, house_gap, legs, parts_clear, reserve, standing_ground, zigzags
 from .route import taut
 
 if TYPE_CHECKING:
@@ -491,6 +491,9 @@ def _way_for(
         # slid 16.7 ft along lane 11 to 25.18 ft from its end, a walker turning 51, 91, 92 and 72 degrees within 45 ft)
         junctions = junction_points(s._access.segs)
         knotted: list[list[Pt]] = []
+        # ...AND A WAY THE KNOT PASS WOULD GATHER INTO A ZIGZAG ACROSS A JOINT HELD while every other exit is tried, taken only
+        # where none is admitted (feature 328, Kuwabata: a way rounding a forecourt onto its neighbor's door end; `access.zigzags`)
+        held: list[tuple[Pt, ...]] = []
         for _, i, j in exits:
             if len(picked) >= GAP_TRIES:
                 break
@@ -511,21 +514,28 @@ def _way_for(
                 gathered.append(ended_at(pts, foot if g is None else g))
                 if g is not None:
                     knotted.append(ended_at(pts, foot))
-            if (drawn := _first_admitted(s, gathered, leg_ok, geom, memo)) is not None:
+            if (drawn := _first_admitted(s, gathered, leg_ok, geom, memo, held)) is not None:
                 return drawn
-        return _first_admitted(s, knotted, leg_ok, geom, memo)
+        drawn = _first_admitted(s, knotted, leg_ok, geom, memo, held)
+        return drawn if drawn is not None else (held[0] if held else None)
     finally:
         if k is not None:
             s.placed.insert(k, own)
 
 
-def _first_admitted(s: Settlement, runs: Sequence[list[Pt]], leg_ok: Any, geom: Any, memo: dict[Any, Any]) -> tuple[Pt, ...] | None:
+def _first_admitted(s: Settlement, runs: Sequence[list[Pt]], leg_ok: Any, geom: Any, memo: dict[Any, Any], held: list[tuple[Pt, ...]] | None = None) -> tuple[Pt, ...] | None:
     """The first of `runs`, pulled taut, that the corridor's predicate admits (`access.admitted`), as it will be drawn; or None.
+    One that would zigzag across a joint (`access.zigzags`) is put on `held`, where given, and passed over.
 
-    Research: plumbing - NONE: candidates asked in order"""
+    Research:
+        plumbing - NONE: candidates asked in order
+        a zigzag held - research/questions/0081-village-lanes.drawing.html: two lanes met end to end are one way; taken only where no other way is admitted"""
     for q in runs:
         run = taut(q, leg_ok, doubles_back, GAP_LEGS)
         drawn = admitted(s, run, geom, memo) if run is not None else None
+        if drawn is not None and held is not None and zigzags(s, drawn, geom):
+            held.append(drawn)
+            continue
         if drawn is not None:
             return drawn
     return None

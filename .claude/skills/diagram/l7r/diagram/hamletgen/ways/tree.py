@@ -181,7 +181,9 @@ def _trial(M: Mapping[str, Any], **over: Any) -> _Standing:
     return t
 
 
-def admits(base: Any, M: Mapping[str, Any], run: Poly, role: str = ACCESS_ROLE, house: Mapping[str, Any] | None = None, yard: Mapping[str, Any] | None = None) -> bool:
+def admits(
+    base: Any, M: Mapping[str, Any], run: Poly, role: str = ACCESS_ROLE, house: Mapping[str, Any] | None = None, yard: Mapping[str, Any] | None = None, report: dict[str, bool] | None = None
+) -> bool:
     """THE ONE PREDICATE OF THE TREE (feature 287 wave 6): would the access tree on `M`, with `run` added as a corridor of
     `role` (a house's, `house` its record-to-be and `yard` its threshing yard's), keep the lane law among
     its lanes? `base` (a `settle.Lawful` over `M`) is asked of the new lane against the rest, with the track out's root
@@ -196,7 +198,7 @@ def admits(base: Any, M: Mapping[str, Any], run: Poly, role: str = ACCESS_ROLE, 
         way out crosses each brook once - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html
         no doubled band - UNRESEARCHED: an access lane may not run beside another past a pitch
         free ends at a house - UNRESEARCHED: at most DOORSTEP_MAX (2) free lane ends at a house
-        no zigzag across a joint - research/questions/0081-village-lanes.drawing.html: two lanes met end to end walked as one way, the knot pass's gather of its ends included (`gathered_zigzag`)"""
+        no zigzag across a joint - research/questions/0081-village-lanes.drawing.html: two lanes met end to end walked as one way, the knot pass's gather of its ends included (`gathered_zigzag`), reported of a household's way and avoided where another is admitted"""
     recs: list[dict[str, Any]] = [*tree_records(M), {"role": role, "of": (float(house["x"]), float(house["y"])) if house is not None else None, "pts": _dedup([_pt(q) for q in run])}]
     root = _root(M)
     host = hosts(recs, root)
@@ -249,9 +251,11 @@ def admits(base: Any, M: Mapping[str, Any], run: Poly, role: str = ACCESS_ROLE, 
             # ...NOR ZIGZAGS ACROSS A JOINT AS THE WALKER READS IT (feature 328, Kuwabata): an access lane rounding a neighbor's
             # forecourt corner onto its house lane's end turned 110 degrees back onto it and the house lane left at 86 - each
             # record bends like a path, the two met end to end do not, and the settle draws a tree lane as judged, so no joint
-            # pass could mend it (`test_no_zigzag_straddles_a_joint`)
-            if gathered_zigzag(as_joined(_trial(view, lanes=[*lanes, *stub]), lanes)):
-                return False
+            # pass could mend it (`test_no_zigzag_straddles_a_joint`). REPORTED, NOT REFUSED: refused, the reference at seed 47 left
+            # two households without a way and its field way with them (the web refused); the gap pass takes such a way only
+            # where no other exit is admitted (`gap_ways._way_for`)
+            if report is not None and role == ACCESS_ROLE:
+                report["zigzag"] = gathered_zigzag(as_joined(_trial(view, lanes=[*lanes, *stub]), lanes))
     return True
 
 
@@ -261,25 +265,28 @@ def gathered_zigzag(lanes: Sequence[Mapping[str, Any]]) -> bool:
     `settle_knots`, which draws the gather into the corridor)? An end with no other end in reach is read as it stands.
 
     Research: no zigzag at a joint, ends gathered - research/questions/0081-village-lanes.drawing.html: ends within 25 ft are joined at a single point, and two lanes met end to end are one way"""
-    from l7r.diagram.settlement.rolling.gap_ways import KNOT_MARGIN
-
-    from .knots import moved_onto
-    from .smooth import _KNOT_FT
+    from .knots import _fixed, end_nodes, knots, moved_onto
 
     if zigzag_joint(lanes):
         return True
-    last = list(lanes[-1]["pts"])
-    if len(last) < 2:
+    k = len(lanes) - 1
+    pts = [_pt(q) for q in lanes[k].get("pts") or []]
+    if len(pts) < 2:
         return False
-    for e in (0, -1):
-        q = last[e]
-        near = [o["pts"][oe] for o in lanes[:-1] if len(o.get("pts") or []) >= 2 for oe in (0, -1) if 1e-6 < math.dist(o["pts"][oe], q) <= _KNOT_FT * KNOT_MARGIN]
-        if not near:
-            continue
-        node = tuple(min(near, key=lambda p: math.dist(p, q)))
-        forms = moved_onto([tuple(p) for p in last], e, node)
-        if forms and all(zigzag_joint([*lanes[:-1], {**lanes[-1], "pts": [list(p) for p in f]}]) for f in forms):
-            return True
+    nodes = end_nodes(lanes)
+    for a, b, _d in knots(lanes):
+        for mine, other in ((a, b), (b, a)):
+            # ...only a LONE end of this lane that the gather may move (`knots._fixed`): one already at a junction stays
+            if len(nodes[mine][1]) != 1 or nodes[mine][1][0][0] != k or _fixed(lanes[k], nodes[mine][1][0][1]):
+                continue
+            # ...onto a node that cannot come to it instead - a fixed end (a door end) or a junction already: where the other is a
+            # lone end the gather may move, it may be that end that moves (the reference, seed 47: ten corridors refused for a
+            # gather the knot pass would have made the other way, and the field way lost with them)
+            if len(nodes[other][1]) == 1 and not _fixed(lanes[nodes[other][1][0][0]], nodes[other][1][0][1]):
+                continue
+            forms = moved_onto(pts, nodes[mine][1][0][1], _pt(nodes[other][0]))
+            if forms and all(zigzag_joint([*lanes[:-1], {**lanes[k], "pts": [list(p) for p in f]}]) for f in forms):
+                return True
     return False
 
 
@@ -780,7 +787,11 @@ def seating_judge(s: Any) -> Any:
         # legs had cleared the standing homesteads (`access.standing_clear`), the drawn ones were never asked
         if drawn != run and not others_clear(s, drawn):
             return False
-        return admits(base, s.M, run, ACCESS_ROLE, house, yard)
+        rep: dict[str, bool] = {}
+        ok = admits(base, s.M, run, ACCESS_ROLE, house, yard, report=rep)
+        # the zigzag the way would make, read by `access.zigzags`: a preference among the admitted ways
+        s.__dict__.setdefault("_corridor_zig", {})[(tuple(_pt(q) for q in corridor), tuple(geom["house"]))] = rep.get("zigzag", False)
+        return ok
 
     return judge
 
