@@ -1,0 +1,24 @@
+{
+ "inashiro-glyph-lane-F1-knot": {
+  "verifies": "F1",
+  "subject": "glyph-check--village-lane",
+  "answers": "01d76e22140a",
+  "quantity": "lane-end pairs within the knot reach (smooth._KNOT_FT) and not joined, near the track's head (2330, 1750)",
+  "value": 0,
+  "unit": "pairs",
+  "observed": "2026-10-07",
+  "source": ".claude/skills/diagram/pool/hamlets/inashiro/inashiro.json lanes, after the knot fix (gap_ways gather + ways/knots.py)",
+  "method": "tests/hamletgen/test_pool_261.py test_no_lane_ends_knot_short_of_a_join on the regenerated manifest (green): lane 7 gathered onto the track's head; lane 1 is a 15 ft lane from the head to the point lane 3 arrives - one way joining the two, not two arrivals"
+ },
+ "inashiro-glyph-lane-F2-knot": {
+  "verifies": "F2",
+  "subject": "glyph-check--village-lane",
+  "answers": "01d76e22140a",
+  "quantity": "lane-end pairs within the knot reach and not joined, near lane 4's south-west corner (2245, 2150)",
+  "value": 0,
+  "unit": "pairs",
+  "observed": "2026-10-07",
+  "source": ".claude/skills/diagram/pool/hamlets/inashiro/inashiro.json lanes, after the knot fix",
+  "method": "the same test, green; and a direct count of distinct lane ends 1-25 ft apart within 60 ft of the corner: 0 (lane 11's end moved clear of lane 9's)"
+ }
+}

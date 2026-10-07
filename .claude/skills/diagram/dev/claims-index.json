@@ -16987,6 +16987,107 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/knots.py::_fixed#plumbing": {
+  "code": "58e6042aff1beb84",
+  "core": "91684f82742cd0f8",
+  "date": "2026-10-07",
+  "note": "picks which records stay put; plumbing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/knots.py::_pts#plumbing": {
+  "code": "5b644020de3f9e9d",
+  "core": "7fa511812e247b99",
+  "date": "2026-10-07",
+  "note": "point parsing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/knots.py::end_nodes#a joint is one point": {
+  "code": "688378f1a246b54f",
+  "core": "59cc136cb3ea21a6",
+  "date": "2026-10-07",
+  "note": "ends within the 1 ft tolerance count as one point",
+  "pages": {
+   "0081-village-lanes.drawing.html": "9e27759395199abd"
+  },
+  "research": "ebd72aaa6a0eb9af",
+  "rests": [
+   "0081-village-lanes.drawing.html:df26f73dd5ee96d2"
+  ],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/knots.py::knots#lane ends gathered": {
+  "code": "ac2389a578369f35",
+  "core": "916e20813dd785cc",
+  "date": "2026-10-07",
+  "note": "node pairs within 25 ft are knots",
+  "pages": {
+   "0081-village-lanes.drawing.html": "9e27759395199abd"
+  },
+  "research": "ebd72aaa6a0eb9af",
+  "rests": [
+   "0081-village-lanes.drawing.html:df26f73dd5ee96d2"
+  ],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/knots.py::moved_onto#lane ends gathered": {
+  "code": "ff693ac1103e3ee2",
+  "core": "81667b85f6725eeb",
+  "date": "2026-10-07",
+  "note": "the end is re-aimed onto the junction; inner vertices within the knot are dropped",
+  "pages": {
+   "0081-village-lanes.drawing.html": "9e27759395199abd"
+  },
+  "research": "ebd72aaa6a0eb9af",
+  "rests": [
+   "0081-village-lanes.drawing.html:18dffe2b3b52b18c",
+   "0081-village-lanes.drawing.html:df26f73dd5ee96d2"
+  ],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/knots.py::next_gather#lane ends gathered": {
+  "code": "938dc4a759951eb3",
+  "core": "493e1fe2bd66ab43",
+  "date": "2026-10-07",
+  "note": "nearest knot first, both nodes meet at one point",
+  "pages": {
+   "0081-village-lanes.drawing.html": "9e27759395199abd"
+  },
+  "research": "ebd72aaa6a0eb9af",
+  "rests": [
+   "0081-village-lanes.drawing.html:df26f73dd5ee96d2"
+  ],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/knots.py::settle_knots#a lane with no width is judged at 3 ft in the lawfulness check": {
+  "code": "8b638753ff60fa64",
+  "core": "8b638753ff60fa64",
+  "date": "2026-10-07",
+  "note": "a lane with no width is judged at 3 ft in the lawfulness check",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/knots.py::settle_knots#lane ends gathered": {
+  "code": "f04ca2ddd81799f4",
+  "core": "8b638753ff60fa64",
+  "date": "2026-10-07",
+  "note": "every knot is gathered to one node; a gather that splits the network or leaves a house unreached is refused",
+  "pages": {
+   "0081-village-lanes.drawing.html": "9e27759395199abd"
+  },
+  "research": "ebd72aaa6a0eb9af",
+  "rests": [
+   "0081-village-lanes.drawing.html:34425c991aa27503",
+   "0081-village-lanes.drawing.html:df26f73dd5ee96d2",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:ab698a7b15fb7e8e"
+  ],
+  "verdict": "IN-STEP"
+ },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/last_resort.py::LAST_RESORT_PASSES#repair policy": {
   "code": "fdacad3c6113c4cd",
   "core": "fb3833914fdfbf29",
@@ -18784,11 +18885,13 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py::STEPS#settle plumbing": {
-  "code": "d93bc89a148440b3",
-  "core": "681e310a2ec66150",
-  "date": "2026-10-03",
-  "note": "matches the claim",
+  "code": "20a8743e7842a11e",
+  "core": "a9c1333fe1369d71",
+  "date": "2026-10-07",
+  "note": "step order only",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py::TRIM_GRAIN_FT#settle plumbing": {
@@ -19354,11 +19457,13 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py::settle_the_web#settle plumbing": {
-  "code": "765bd2d5f7413b93",
-  "core": "96c32dd70cd5b290",
-  "date": "2026-10-03",
-  "note": "matches the claim",
+  "code": "e0f6795c571c2ede",
+  "core": "3e5a78be1034f233",
+  "date": "2026-10-07",
+  "note": "rounds, bookkeeping and the refusal; the rules are claimed elsewhere",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py::settle_way_outs#no way out over and back": {
@@ -19428,15 +19533,17 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/smooth.py::_KNOT_FT#lane ends gathered": {
-  "code": "0f8de3bcd21ca392",
-  "core": "1956a2a68f21c5fe",
-  "date": "2026-10-03",
-  "note": "\"Ends within 25 ft\"",
+  "code": "ba502523420b1131",
+  "core": "33d192d2c915ce83",
+  "date": "2026-10-07",
+  "note": "25 ft as the page gives it",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },
   "research": "ebd72aaa6a0eb9af",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0081-village-lanes.drawing.html:df26f73dd5ee96d2"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/smooth.py::_STUB_REACH_FT#stub link reach": {
@@ -19453,11 +19560,19 @@
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/smooth.py::_smooth_web#a longer hairpin arm": {
-  "code": "06f5efb082822c39",
-  "core": "82107a449e9e18a6",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/smooth.py::_smooth_web#a hairpin arm under 40 ft is kept when its tip is the lane's only contact with another way; this exception is not in 0081 §19": {
+  "code": "27ab603af8268d0e",
+  "core": "27ab603af8268d0e",
   "date": "2026-10-07",
-  "note": "an arm of 40 ft or more is kept",
+  "note": "a hairpin arm under 40 ft is kept when its tip is the lane's only contact with another way; this exception is not in 0081 §19",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/smooth.py::_smooth_web#a longer hairpin arm": {
+  "code": "47edb5842776e385",
+  "core": "27ab603af8268d0e",
+  "date": "2026-10-07",
+  "note": "an arm of 40 ft or more is kept (`arm_len < _ARM_FT`)",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },
@@ -19468,10 +19583,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/smooth.py::_smooth_web#bow-tie tail cut": {
-  "code": "f9370f6ac335dbc3",
-  "core": "82107a449e9e18a6",
+  "code": "7c35346a58613af3",
+  "core": "27ab603af8268d0e",
   "date": "2026-10-07",
-  "note": "a tail past a crossing is cut back to the crossing (the threshold sits in bowtie_cut)",
+  "note": "a tail past a crossing is cut back to the crossing through `bowtie_cut`; the 40 ft test is inside that helper",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },
@@ -19482,10 +19597,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/smooth.py::_smooth_web#hairpin cut": {
-  "code": "9e87928489813cd8",
-  "core": "82107a449e9e18a6",
+  "code": "fb5a0855081278c3",
+  "core": "27ab603af8268d0e",
   "date": "2026-10-07",
-  "note": "turns of 140 degrees or more lose an arm under 40 ft",
+  "note": "a turn of 140 degrees or more with a shorter arm under 40 ft is cut",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },
@@ -19496,10 +19611,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/smooth.py::_smooth_web#knots gathered": {
-  "code": "3b5639758303bfc9",
-  "core": "82107a449e9e18a6",
+  "code": "f04c8a7d3396fd01",
+  "core": "27ab603af8268d0e",
   "date": "2026-10-07",
-  "note": "ends within 25 ft meet at one node",
+  "note": "ends within 25 ft are moved to one node, and inner vertices there collapse onto it",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },
@@ -19510,10 +19625,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/smooth.py::_smooth_web#lane pulled taut": {
-  "code": "84f9c0a83e24ec0c",
-  "core": "82107a449e9e18a6",
+  "code": "a8169229ee4b22ed",
+  "core": "27ab603af8268d0e",
   "date": "2026-10-07",
-  "note": "string-pull to the furthest clear chord",
+  "note": "string-pulled to the furthest clear chord, with the clearance check delegated to `string_pull_chord_ok`",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },
@@ -19524,25 +19639,42 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/smooth.py::_smooth_web#shadow lane dropped": {
-  "code": "e3d2e231e6e14d58",
-  "core": "82107a449e9e18a6",
+  "code": "da677f7c017d9588",
+  "core": "27ab603af8268d0e",
   "date": "2026-10-07",
-  "note": "removes a duplicate record of the same tread",
+  "note": "a lane lying inside another lane's stroke is one way recorded twice and cannot be seen in the ink",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/smooth.py::_smooth_web#web kept one network": {
-  "code": "16b8dfa0f645c7c5",
-  "core": "82107a449e9e18a6",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/smooth.py::_smooth_web#the knot's node is placed on a through lane's tread (4 ft touch), else at the ends' centroid": {
+  "code": "27ab603af8268d0e",
+  "core": "27ab603af8268d0e",
   "date": "2026-10-07",
-  "note": "a rewrite that splits the web is refused",
+  "note": "the knot's node is placed on a through lane's tread (4 ft touch), else at the ends' centroid",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/smooth.py::_smooth_web#the string-pull chord's lane keep-out is max(4 ft, w/2 + 2 ft), with a default width of 5 ft": {
+  "code": "27ab603af8268d0e",
+  "core": "27ab603af8268d0e",
+  "date": "2026-10-07",
+  "note": "the string-pull chord's lane keep-out is max(4 ft, w/2 + 2 ft), with a default width of 5 ft",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/smooth.py::_smooth_web#web kept one network": {
+  "code": "244270ec37dc5b22",
+  "core": "27ab603af8268d0e",
+  "date": "2026-10-07",
+  "note": "`commit_lane` refuses any rewrite that adds a piece to the web",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
   "research": "7b40c2c01cfba682",
   "rests": [
+   "0081-village-lanes.drawing.html:34425c991aa27503",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:048ef93cf5c5c59f",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:ab698a7b15fb7e8e"
   ],
@@ -48855,6 +48987,20 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/settlement/rolling/gap_ways.py::KNOT_FT#lane ends gathered": {
+  "code": "c22facb9bef05296",
+  "core": "1956a2a68f21c5fe",
+  "date": "2026-10-07",
+  "note": "25 ft as the page gives it",
+  "pages": {
+   "0081-village-lanes.drawing.html": "9e27759395199abd"
+  },
+  "research": "ebd72aaa6a0eb9af",
+  "rests": [
+   "0081-village-lanes.drawing.html:df26f73dd5ee96d2"
+  ],
+  "verdict": "IN-STEP"
+ },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/gap_ways.py::Layers#lane ground": {
   "code": "71d2516ffda52993",
   "core": "45d47d15b58c96af",
@@ -48930,25 +49076,25 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/gap_ways.py::_way_for#a way leaves its own homestead from its dooryard": {
-  "code": "fb8ca60ad967e6a0",
-  "core": "4327e2535823f10b",
-  "date": "2026-10-05",
-  "note": "exits from the dooryard doors round its own beds and fixtures",
+  "code": "74a261363add7ba3",
+  "core": "3fd0a6505078c865",
+  "date": "2026-10-07",
+  "note": "only doors clear of the household's own fixtures and beds are used",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
   "research": "7b40c2c01cfba682",
   "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:f0a411a544083965"
   ],
-  "triaged": "2026-10-05",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/gap_ways.py::_way_for#joined near, then far, then run on to the way out": {
-  "code": "7d2491939749abda",
-  "core": "4327e2535823f10b",
-  "date": "2026-10-05",
-  "note": "joins the track out or an earlier way at a T; join order unrecorded, a GUESS",
+  "code": "3af9084679388784",
+  "core": "3fd0a6505078c865",
+  "date": "2026-10-07",
+  "note": "the page records the gaps reading as a GUESS and is silent on the try order",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
@@ -48956,7 +49102,24 @@
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b"
   ],
-  "triaged": "2026-10-05",
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/rolling/gap_ways.py::_way_for#knotted fallback: a foot is left within 25 ft beside a junction when no gathered or knot-free join is admitted, contrary to 0081 §21 \"three lanes never arrive a few feet apart in a knot\"; the page does not record this as a DEVIATION": {
+  "code": "3fd0a6505078c865",
+  "core": "3fd0a6505078c865",
+  "date": "2026-10-07",
+  "note": "knotted fallback: a foot is left within 25 ft beside a junction when no gathered or knot-free join is admitted, contrary to 0081 §21 \"three lanes never arrive a few feet apart in a knot\"; the page does not record this as a DEVIATION",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/rolling/gap_ways.py::ended_at#plumbing": {
+  "code": "76d08c795f1c23dd",
+  "core": "37206d2de5552634",
+  "date": "2026-10-07",
+  "note": "appends the last point",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/gap_ways.py::flood#a way keeps to the middle of its gap": {
@@ -48972,6 +49135,53 @@
   "rests": [
    "0081-village-lanes.drawing.html:be608a70af4cfcc5",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b"
+  ],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/rolling/gap_ways.py::gathered_foot#lane ends gathered": {
+  "code": "c3b78f2540d49b69",
+  "core": "fc24fde7ae16cff7",
+  "date": "2026-10-07",
+  "note": "the foot moves to the nearest junction within 25 ft",
+  "pages": {
+   "0081-village-lanes.drawing.html": "9e27759395199abd"
+  },
+  "research": "ebd72aaa6a0eb9af",
+  "rests": [
+   "0081-village-lanes.drawing.html:df26f73dd5ee96d2"
+  ],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/rolling/gap_ways.py::junction_points#plumbing": {
+  "code": "130d128f1a0c1645",
+  "core": "ddec2a9caa020590",
+  "date": "2026-10-07",
+  "note": "classifies a segment end as a junction or a bend",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/rolling/gap_ways.py::knot_free_foot#a foot slides along the tree at most 2 x the knot reach (50 ft)": {
+  "code": "c9e75a4fe13b736d",
+  "core": "c9e75a4fe13b736d",
+  "date": "2026-10-07",
+  "note": "a foot slides along the tree at most 2 x the knot reach (50 ft)",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/rolling/gap_ways.py::knot_free_foot#lane ends gathered": {
+  "code": "82ebb04f3df1e5f9",
+  "core": "c9e75a4fe13b736d",
+  "date": "2026-10-07",
+  "note": "the foot is left at least 25 ft from every junction, so no knot forms",
+  "pages": {
+   "0081-village-lanes.drawing.html": "9e27759395199abd"
+  },
+  "research": "ebd72aaa6a0eb9af",
+  "rests": [
+   "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
+   "0081-village-lanes.drawing.html:df26f73dd5ee96d2"
   ],
   "verdict": "IN-STEP"
  },

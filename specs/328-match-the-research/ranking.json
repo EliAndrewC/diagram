@@ -664,6 +664,20 @@
   "wave": "1"
  },
  {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/knots.py::settle_knots#a lane with no width is judged at 3 ft in the lawfulness check",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "claim it: a lane with no width is judged at 3 ft in the lawfulness check",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/knots.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 4 re-check of the knot fix",
+  "tier_as_ranked": "E0",
+  "wave": ""
+ },
+ {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#no way drawn twice",
   "verdict": "MISLABELED",
   "tier": "E0",
@@ -690,6 +704,48 @@
   "found": "wave 2 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
   "wave": "3"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/smooth.py::_smooth_web#a hairpin arm under 40 ft is kept when its tip is the lane's only contact with another way",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "claim it: a hairpin arm under 40 ft is kept when its tip is the lane's only contact with another way; this exception is not in 0081 \u00a719",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/smooth.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 4 re-check of the knot fix",
+  "tier_as_ranked": "E0",
+  "wave": ""
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/smooth.py::_smooth_web#the knot's node is placed on a through lane's tread (4 ft touch), else at the ends' centro",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "claim it: the knot's node is placed on a through lane's tread (4 ft touch), else at the ends' centroid",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/smooth.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 4 re-check of the knot fix",
+  "tier_as_ranked": "E0",
+  "wave": ""
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/smooth.py::_smooth_web#the string-pull chord's lane keep-out is max(4 ft, w/2 + 2 ft), with a default width of 5 ",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "claim it: the string-pull chord's lane keep-out is max(4 ft, w/2 + 2 ft), with a default width of 5 ft",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/smooth.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 4 re-check of the knot fix",
+  "tier_as_ranked": "E0",
+  "wave": ""
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/street.py::lay_row_streets#street join width",
@@ -1220,6 +1276,34 @@
   "tier_as_ranked": "E0",
   "verdict": "MISLABELED",
   "wave": "1"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/gap_ways.py::_way_for#knotted fallback: a foot is left within 25 ft beside a junction when no gathered or knot-f",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "claim it: knotted fallback: a foot is left within 25 ft beside a junction when no gathered or knot-free join is admitted, contrary to 0081 \u00a721 \"three lanes never arrive a few feet apart in a knot\"; the page does not record this as a DEVIATION",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/rolling/gap_ways.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 4 re-check of the knot fix",
+  "tier_as_ranked": "E0",
+  "wave": ""
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/gap_ways.py::knot_free_foot#a foot slides along the tree at most 2 x the knot reach (50 ft)",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "claim it: a foot slides along the tree at most 2 x the knot reach (50 ft)",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/rolling/gap_ways.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 4 re-check of the knot fix",
+  "tier_as_ranked": "E0",
+  "wave": ""
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/shrines_wells/woods.py::TreeStandsMixin._draw_stand#fringe crowns drawn outside the stand's outline (_stand_fringe, outliers)",

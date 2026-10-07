@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-07T07:46:24Z",
+  "target": "review-accept",
+  "commit": "6f5af0b0f",
+  "outcome": "permitted",
+  "why": "review-accept glyph-check--village-lane F5: round 1 recorded it as a confirmation, nothing to fix"
+}
