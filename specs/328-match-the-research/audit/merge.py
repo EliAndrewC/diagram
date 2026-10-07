@@ -60,8 +60,12 @@ for k, r in rows.items():
 # The wave that closed each row (audit/waves.json: written from the claims index at a wave's close).
 waves = json.loads((AUDIT / "waves.json").read_text()) if (AUDIT / "waves.json").exists() else {}
 
-# A row waits for its dependencies: it takes at least their tier (an open row only - a closed row keeps the tier it was
-# closed at, so re-tiering an open dependency never rewrites a wave's history).
+# A closed row keeps the tier it was closed at (audit/closed-tiers.json, written at each wave's close), so re-tiering an
+# open dependency or an override never rewrites a wave's history; only an open row waits for its dependencies.
+closed_tiers = json.loads((AUDIT / "closed-tiers.json").read_text()) if (AUDIT / "closed-tiers.json").exists() else {}
+for k, r in rows.items():
+    if waves.get(k) and k in closed_tiers:
+        r["tier"] = closed_tiers[k]
 changed = True
 while changed:
     changed = False

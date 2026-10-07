@@ -61,15 +61,20 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 
 ## Wave 5 (amendment 4, 2026-10-07)
 
-- **Scope**: the two open E0 rows, then the 23 E1 rows of the homestead and its fixtures (`tasks.md` Phase 6): the
-  fixtures' seats and the privy's reach, the groves' crowns, conifer share and sun corridors (0037, 0038, 0071, 0072, 0080),
-  the belt's least depth, the bundle's garden cap, the kura's west annex (0040), the farm wells' reach and dooryard (0196).
-  Ranking order: the next modules of E1 after the lane law, each module's rows in one claims bundle.
-- **D7 - the row street waits**: its fix sets 0033 (the street runs on off the map) against 0246 (a way pulled back to
-  the last door it serves); it is read before it is tiered, so it is not a one-value fix in this wave.
-- **Verification**: as wave 4 - the reference hamlet first (`make map` on Inashiro, the PNG looked at), then the pool
-  through the gate; the bookends back to back (start in a detached worktree at main, end in the clone); `impl-drift` on
-  every touched unit; a held value becomes a found row (spec Edge Cases).
+- **Scope**: the two open E0 rows, then the next contiguous run of E1 (FR-006): row 143 (the row street) and rows 148-173
+  (`tasks.md` Phase 6) - the tier glossary, the caption leader and its reach, the overlap matrix and taxonomy, the knobbed
+  sizes, the castle, and the city's walls, bridges, canals, moat and governor's gate. 29 rows; the next run (the civic
+  grounds onward) is the next wave.
+- **D7 - the row street is 0033's**: a row village's street "runs on off the map as the road into it" (0033's drawing
+  page); 0246's pull-back to the last house served is the clustered settlement's lane rule and does not govern it. So
+  `trim_streets` no longer cuts a row street back to its last joint; the street runs to the frame. The pages do not
+  conflict, so the row is fixed here, not re-tiered.
+- **Verification**: the reference hamlet first (`make map` on Inashiro), Kashikawa and Mizuguchi for the row street (the
+  PNGs looked at), then the pool through the gate; a town or city value no scripted map draws is proven by its unit test;
+  the bookends back to back (start in a detached worktree at main, end in the clone); `impl-drift` on every touched unit;
+  a held value becomes a found row (spec Edge Cases).
+- **Closed rows keep their tier**: `audit/closed-tiers.json` records each closed row's tier at its wave's close and
+  `audit/merge.py` keeps it, so re-tiering an open row never rewrites a closed one.
 
 ## Performance bookends (constitution VI)
 

@@ -1,51 +1,46 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "8baabbfce56be38434327003780405d6d58b4eba8f28e0f81ec117e42fc06e66",
+ "plan_sha256": "4382a834bc97be3bba920e2fbdfee873681d818ede381602e6be96168fdaa8c1",
  "reviewed": "2026-10-07",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "TC-input/output/check",
-   "summary": "findings.json snapshot; ranking.json + generated ranking.md; tests/test_328_ranking.py holds coverage of every key",
-   "class": "within",
-   "why": "FR-001/SC-001 as asked; the test enforces the requested ranking"
+   "id": "W5-scope",
+   "summary": "Wave 5 = the two open E0 rows, then 23 E1 rows of the homestead modules (farm_fixtures, homestead_parts, rolling/bundle+fit, shrines_wells/wells), described as 'the next modules of E1 after the lane law'",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "Measured on ranking.json at 931839671: the 23 rows sit at positions 187-223, and 55 open E1 rows rank ahead of or between them (142, 147-186, 189-195, 211-216, 220: interactive, labels, overlap, _knobs, castle_civic, city, civic_grounds, fields, houses, land, roll.py). FR-006 makes a wave a contiguous run of the ranking; the plan's premise that these are the next modules is false and no reason for the reorder is recorded. None of the MODE 1 grounds (impossible, implied by the GM, defeats the purpose) is offered."
   },
   {
-   "id": "P1.2-P1.4/D4",
-   "summary": "nine Opus ranking batches; bounded E0 re-check; a dependency-outranked row takes its dependency's tier; a 30-row blind second reader",
-   "class": "within",
-   "why": "how FR-001-FR-003's audit is staffed and checked; drops no finding"
+   "id": "D7",
+   "summary": "The row street's E1 row (0033 vs 0246) waits past wave 5, left at E1, 'read before it is tiered'",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "The spec already supplies the route for this case: a row found harder than ranked moves down and says so (Assumptions), and a real conflict between two cited pages is a NEEDS-RESEARCH question tiered E4 (Edge Cases). D7 instead leaves the row at E1, ahead in the ranking, and skips it with no tier and no next step; reading two pages is the session's own work, not a reason to defer. Re-tier it in overrides.json with the reason (or fix it in wave 5)."
   },
   {
-   "id": "P2-order/D1/D2/D3",
-   "summary": "waves E0..E4, by module within a tier, after-rows wait; only the current wave is task boxes; wave 1 = E0",
-   "class": "within",
-   "why": "FR-003, FR-006 and SC-003 as specified; easiest first"
+   "id": "W5-verify",
+   "summary": "Verification as wave 4: Inashiro first, the pool through the gate, back-to-back bookends, impl-drift on every touched unit, a held value becomes a found row",
+   "class": "within"
   },
   {
-   "id": "P2-exception-path",
-   "summary": "deviation-tempting rows go to spec-fidelity with the request verbatim before any other fix",
+   "id": "W5-occasions",
+   "summary": "Occasions: none (wave 5) - value moves inside existing placing rules",
    "class": "within",
-   "why": "FR-004 and XVI"
+   "why": "Same reasoning as wave 2's accepted line; each row moves a value within the rule that places the element."
   },
   {
-   "id": "D5",
-   "summary": "nine procedure rows whose fix redraws an Ubame, Hayakawa, Ochiba or Hoshigaoka sheet moved E1 -> E3 (audit/overrides.json; main gate posts among them); archery bank stays E1 in wave 2",
+   "id": "retier-wave4-open",
+   "summary": "Wave 4's open lane rows re-tiered: fouls_fabric and span_walkable to E4 (the yard margin is on no page), near_misses to E0 (impl-drift: the 25 ft is in step, only the aim test unclaimed), the track's gap to E3 after the held footpath row",
    "class": "within",
-   "why": "FR-003 tiers a sheet redraw E3; each of the nine overrides carries the FR-003 sheet reason (measured: 9 of the 11 E3 overrides; the other two are wave-1 re-checks), and no E1 row left in ranking.json lists an .svg; the archery row (no sheet) is back in E1 at position 2, removing round 1's NOT LEGITIMATE D5b"
+   "why": "Spec Assumptions (a row found harder moves down and says so), Edge Cases (NEEDS-RESEARCH is E4; a held value waits on a found row) and FR-003's E0 bound (impl-drift says it matches)."
   },
   {
-   "id": "D6",
-   "summary": "the 32 hamletgen/ways/ E1 rows held together as wave 4 (after wave 3's open E0 rows, which tier order takes first); FOOTPATH_FABRIC_GAP waits for it via its recorded after",
+   "id": "merge-closed-rows",
+   "summary": "merge.py no longer raises a closed row's tier through its dependencies",
    "class": "within",
-   "why": "within FR-003's module grouping and SC-003's tier order: the open E0 rows precede it, the rows are taken whole as the next E1 wave, no row dropped; the dependency is in ranking.json's after field"
-  },
-  {
-   "id": "V2/bookends/XIII",
-   "summary": "wave 2 verified on Inashiro then the pool; 328-w2-start/end bookends; impl-drift on touched units; baseline is the clone at main's engine content before the first edit",
-   "class": "within",
-   "why": "FR-005, constitution VI and XIII; adds no unrequested scope"
+   "why": "Bookkeeping of the ranking; narrows nothing the GM asked. Its mechanism does not do what its comment says (it rewrote three closed rows' tiers), reported in the spec review."
   }
  ],
- "verdict": "CLEAR"
+ "verdict": "BLOCKED"
 }

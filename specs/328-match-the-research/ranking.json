@@ -791,21 +791,6 @@
   "wave": "1"
  },
  {
-  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::trim_free_stub#only a free-end stub of 20 ft or less (_FREE_STUB_FT) is cut",
-  "tier": "E0",
-  "fix": "claim the stub cut citing 0081 a lane's end loses its hook once aligned",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py"
-  ],
-  "after": [
-   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_FREE_STUB_FT#free-end stub past a kink"
-  ],
-  "flag": "",
-  "tier_as_ranked": "E0",
-  "verdict": "UNCLAIMED",
-  "wave": "4 (claim renamed or split; its parts re-checked)"
- },
- {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::_thread_the_fabric#the track's route walled by the field, crop, toe band and wet ground, and kept off drawn water",
   "verdict": "UNCLAIMED",
   "tier": "E0",
@@ -1962,6 +1947,21 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "4"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::trim_free_stub#only a free-end stub of 20 ft or less (_FREE_STUB_FT) is cut",
+  "tier": "E1",
+  "fix": "claim the stub cut citing 0081 a lane's end loses its hook once aligned",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py"
+  ],
+  "after": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_FREE_STUB_FT#free-end stub past a kink"
+  ],
+  "flag": "",
+  "tier_as_ranked": "E0",
+  "verdict": "UNCLAIMED",
+  "wave": "4 (claim renamed or split; its parts re-checked)"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#join reach",
@@ -3531,23 +3531,6 @@
   "wave": ""
  },
  {
-  "key": ".claude/skills/diagram/buildings.md::Fire-water tubs#one tub per wooden building",
-  "tier": "E2",
-  "fix": "tubs one per major wooden building plus two at the kitchen: Ubame's 19 cut to that rule, a tub added at Ochiba's karo's house / senior retainers' quarters (if they survive)",
-  "files": [
-   ".claude/skills/diagram/buildings.md",
-   ".claude/skills/diagram/pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
-   ".claude/skills/diagram/pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg"
-  ],
-  "after": [
-   ".claude/skills/diagram/buildings.md::Inner court (private / sacred)#senior retainers housed apart"
-  ],
-  "flag": "",
-  "tier_as_ranked": "E2",
-  "verdict": "DRIFTED",
-  "wave": "4 (IN-STEP on a wave's re-check, no change needed)"
- },
- {
   "key": ".claude/skills/diagram/buildings.md::Fire-water tubs#tub against its wall",
   "verdict": "DRIFTED",
   "tier": "E2",
@@ -3871,23 +3854,6 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": ""
- },
- {
-  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/cluster.py::seat_cluster#brook across the band",
-  "verdict": "DRIFTED",
-  "tier": "E2",
-  "fix": "the brook crossing only breaks near-ties: drop score -= 3.0*crossed from the score and use crossed as a secondary sort key among margins whose scores are level (within a small epsilon)",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/hamletgen/cluster.py"
-  ],
-  "after": [
-   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#a cluster the brook crosses reached"
-  ],
-  "flag": "",
-  "found": "wave 2 re-check (tier provisional, by verdict)",
-  "tier_as_ranked": "E2",
-  "moved": "T12a: tiered by the work it takes (was provisional, by verdict)",
-  "wave": "4 (IN-STEP on a wave's re-check, no change needed)"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/cluster.py::seat_cluster#never below the drain",
@@ -6217,6 +6183,23 @@
   "wave": ""
  },
  {
+  "key": ".claude/skills/diagram/buildings.md::Fire-water tubs#one tub per wooden building",
+  "tier": "E3",
+  "fix": "tubs one per major wooden building plus two at the kitchen: Ubame's 19 cut to that rule, a tub added at Ochiba's karo's house / senior retainers' quarters (if they survive)",
+  "files": [
+   ".claude/skills/diagram/buildings.md",
+   ".claude/skills/diagram/pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+   ".claude/skills/diagram/pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg"
+  ],
+  "after": [
+   ".claude/skills/diagram/buildings.md::Inner court (private / sacred)#senior retainers housed apart"
+  ],
+  "flag": "",
+  "tier_as_ranked": "E2",
+  "verdict": "DRIFTED",
+  "wave": "4 (IN-STEP on a wave's re-check, no change needed)"
+ },
+ {
   "key": ".claude/skills/diagram/buildings.md::Inner court (private / sacred)#bath",
   "tier": "E3",
   "fix": "bath drawn ~10 x 8 ft (30 x 24 px) in the procedure; Ochiba (13 x 11 ft) and Ubame (10 x 11 ft) resized; band 8-22 tightened",
@@ -6811,6 +6794,23 @@
   "flag": "deviation-tempting: the refusal fixed a settlement-review defect (feature 261/287) the page does not speak to",
   "found": "wave 2 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E4",
+  "moved": "T12a: tiered by the work it takes (was provisional, by verdict)",
+  "wave": "4 (IN-STEP on a wave's re-check, no change needed)"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/cluster.py::seat_cluster#brook across the band",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "the brook crossing only breaks near-ties: drop score -= 3.0*crossed from the score and use crossed as a secondary sort key among margins whose scores are level (within a small epsilon)",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/cluster.py"
+  ],
+  "after": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#a cluster the brook crosses reached"
+  ],
+  "flag": "",
+  "found": "wave 2 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E2",
   "moved": "T12a: tiered by the work it takes (was provisional, by verdict)",
   "wave": "4 (IN-STEP on a wave's re-check, no change needed)"
  },

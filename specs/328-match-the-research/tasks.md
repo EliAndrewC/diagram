@@ -10,9 +10,10 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
   within 25 ft, tails and hooks cut at 40 and 12 ft): the lanes are re-placed by substantially different rules.
 - none (wave 2): each fix moves one value inside a rule that already places the element (a weight, a pitch, a share, a
   count's cap, an extent); no element is new to a map, no glyph is redrawn, and no element is re-placed by different rules.
-- none (wave 5): each fix moves one value inside a rule that already places the element (a reach or a corridor in feet, a
-  seat weight, a size band, a crown floor, a share, a cap); no element is new to a map, no glyph is redrawn, and no element
-  is re-placed by different rules.
+- placement-changed (wave 5): row street - 0033's row street runs on off the map as the road into it, where the web
+  cut it back to its last joint (`trim_streets`); Kashikawa's and Mizuguchi's streets are re-placed by that rule.
+- none (wave 5, the other rows): each fix moves one value inside a rule that already places or sizes the element (a
+  size, a width, a count, a reach, a caption's leader); no element is new to a map and no glyph is redrawn.
 
 ## Phase 1 - the audit
 
@@ -211,54 +212,59 @@ way that takes more work than its tier takes that tier and waits on a found row 
       research: rendering
       verify: DONE. DONE. glyph-check on the village lane (Inashiro): round 3 PASS; the later speed-up left every pool map byte-identical, so the round stands (PAIR_OK logged). Back-to-back bookends 328-start (worktree at origin/main) / 328-end: band 2 (40 hh +8.3%, seed 4 +14.4%); explanation with CONTROL=wave4-perf-control-no-gather (the gather 1.1-1.8 s per 40 hh map), perf-audit confirmed and audited JUSTIFIED; make done green; the wave column written
 
-## Phase 6 - wave 5 (two E0 claims, then the E1 rows of the homestead and its fixtures) - amendment 4, 2026-10-07
+## Phase 6 - wave 5 (two E0 claims, then the next run of E1: the row street and rows 148-173) - amendment 4, 2026-10-07
 
 The two open E0 rows (wave 4's re-checks: an aim test and a track route left unclaimed) come first (SC-003); then the
-E1 rows of the next modules in ranking order, the homestead and what stands in it - its fixtures' seats, its groves and
-belt, its bundle's garden, its kura and its wells (`settlement/homestead_parts/`, `settlement/rolling/bundle.py` and
-`fit.py`, `settlement/farm_fixtures.py`, `settlement/shrines_wells/wells.py`). Every `after` these rows carry is a row
-inside the wave, done first. The row-street row of `hamletgen/ways/web.py` stays for the next wave: 0033 has the street
-run on off the map and 0246 pulls a way back to the last door it serves, so it is read before it is tiered.
+next contiguous run of the ranking's E1 rows (FR-006): row 143, the row street - 0033, the page for a row village's
+street, has it run on off the map as the road into it, so the street is no longer cut back to its last joint (0246's
+pull-back is a clustered settlement's lane rule, plan D7) - and rows 148-173, in ranking order: the tier glossary, the
+caption leader and its reach, the overlap matrix and taxonomy, the knobbed sizes, the castle and the city's walls,
+bridges, canals, moat and governor's gate. Every `after` these rows carry is a row inside the wave or closed.
 
   - `l7r/diagram/hamletgen/ways/law.py::near_misses#ends that nearly meet are joined` - the 25 ft is in step; claim the AIM_DEG 60 deg test that decides which ends count as UNRESEARCHED
   - `l7r/diagram/hamletgen/ways/track.py::_thread_the_fabric#the track's route walled by the field, crop, toe band and wet ground, and kept off drawn water` - claim it: the track's route walled by the field, crop, toe band and wet ground, and kept off drawn water
 
-  - `l7r/diagram/settlement/farm_fixtures.py::KURA_PARTS#west annex` - W annex 0.32 x 0.56 (15 x 16 ft) -> 18-27 ft long, 10-12 ft deep, 1.5-1.8 to one
-  - `l7r/diagram/settlement/farm_fixtures.py::kura_rect#west annex size` - hold the west annex to 0040 drawing's band: 18-27 ft long, 1.5-1.8 times as long as deep, as the north annex is
-  - `l7r/diagram/settlement/homestead_parts/belt_law.py::MIN_BELT_DEPTH_FT#least belt depth` - MIN_BELT_DEPTH_FT 30 -> 80 ft (0071 drawing: never thinner than 80 ft)
-  - `l7r/diagram/settlement/homestead_parts/fixture_seats.py::FixtureForms#privy seat weights` - privy seat weights to stable 35 / yard 30 / front 20 / barn 15 as 0047 drawing lists them
-  - `l7r/diagram/settlement/homestead_parts/fixture_seats.py::PRIVY_FRONT_STEP_FT#front privy off the front wall` - front privy edge 8 ft off the front wall: drop the WALL_GAP_FT from the seat (or PRIVY_FRONT_STEP_FT 4.5)
-  - `l7r/diagram/settlement/homestead_parts/fixture_seats.py::PRIVY_YARD_STEP_FT#yard outhouse off the back wall` - yard privy edge a ken (6 ft) off the back wall: drop the gap (or PRIVY_YARD_STEP_FT 2.5)
-  - `l7r/diagram/settlement/homestead_parts/fixture_seats.py::WOODSHED_STEP_FT#wood shed off its wall` - wood shed edge 6 ft off its wall: drop the gap from the seat (or WOODSHED_STEP_FT 2.5)
-  - `l7r/diagram/settlement/homestead_parts/fixture_seats.py::privy_sun_reach_ft#sun-side reach by size` - cap a sunny-side privy center at 48 ft from its house; drop the size allowance in privy_sun_reach_ft
-  - `l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#lesser broadleaf crown size` - LESSER_BROADLEAF_S floor 0.6 -> 0.75 of the mean radius (0080 drawing: 0.75-1.4), cite 0080
-  - `l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#windbreak conifer share` - windbreak conifer share c_th = b_th + 0.48 (0072/Takehara: 48% cedar, the dominant tree)
-  - `l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._grove_fits#off a yard's south strip` - grove box kept out of the 39 ft south corridor (0037/0038) via px(), not a fixed 22 px strip
-  - `l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#belt deep and whole` - village_grove gap test compares px(_BELT_GAP_FT), 30 ft at every grain
-  - `l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#clumps off the gardens' east` - the east lane 50 ft in feet (0038: no crown within 50 ft east, west or south of a yard or bed), yards included, not 24 px past a garden
-  - `l7r/diagram/settlement/homestead_parts/grove_rules.py::EAST_REACH_PX#garden's morning sun` - EAST_REACH_PX 22 bscale -> 0038's 50 ft east reach via px() (after: l7r/diagram/settlement/homestead_parts/wood_share.py::EAST_LANE_PX#bed's morning lane)
-  - `l7r/diagram/settlement/homestead_parts/wood_share.py::EAST_LANE_PX#bed's morning lane` - EAST_LANE_PX 24 px -> 0038's 50 ft via px() (after: l7r/diagram/settlement/homestead_parts/grove_rules.py::EAST_REACH_PX#garden's morning sun)
-  - `l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._shades_a_garden#garden's morning sun` - _shades_a_garden reach 22 x bscale -> 0038's 50 ft east via px() (after: l7r/diagram/settlement/homestead_parts/grove_rules.py::EAST_REACH_PX#garden's morning sun)
-  - `l7r/diagram/settlement/homestead_parts/grove_rules.py::gardens_east_shaded#garden's morning sun` - same constant: gardens_east_shaded reads the 50 ft reach (0038) via px() (after: l7r/diagram/settlement/homestead_parts/grove_rules.py::EAST_REACH_PX#garden's morning sun)
-  - `l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#garden size` - nucleated garden cap 48 x 34 ft -> a cap whose area stays <= 1,507 sq ft (e.g. 44 x 34 ft), per 0039
-  - `l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#headman keeps an ordinary yard and garden` - headman's garden held to an ordinary farm's: the same lowered cap (<= 1,507 sq ft, near the 592 sq ft typical) applies to a big house (after: l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#garden size)
-  - `l7r/diagram/settlement/rolling/fit.py::BundleFitMixin._garden_shaded#garden shaded by a house to its south` - _garden_shaded reach gh + 4 px -> px(39) south of the bed (0038's 39 ft house-shade corridor)
-  - `l7r/diagram/settlement/shrines_wells/wells.py::WellsMixin._farm_wells#every farmhouse within reach of a well` - farm well reach_ft 500 -> 760 ft (hamlet/village; 870 ft for a city's commoners)
-  - `l7r/diagram/settlement/shrines_wells/wells.py::WellsMixin._farm_wells#seated in a steading's dooryard` - dooryard rings held to 95 ft from the dwelling via px(), not 150 px from the house center
-  - `l7r/diagram/settlement/shrines_wells/wells.py::WellsMixin._farm_wells#fallback on field-rim ground off the crop` - fallback grid scans within 95 ft of the dwelling (0196), via px(), not 156 px (after: l7r/diagram/settlement/shrines_wells/wells.py::WellsMixin._farm_wells#seated in a steading's dooryard)
+  - `l7r/diagram/hamletgen/ways/web.py::stage_web#a row street trimmed to end at its outermost door-path joint or last farm door` - the row street runs on off the map as the road into it (0033 drawing), not trimmed at its last farm's path - with the lane law
+  - `l7r/diagram/interactive/place.py::KINDS#what each tier is` - the 0001 figures match (1,296, 216, 40%); drop 'unless the hamlet keeps a burial ground of its own' from the hamlet text (and the village's 'hamlets without their own') per 0236
+  - `l7r/diagram/labels/placer.py::leader_of#when a leader is drawn` - leader_of returns None while the caption is within twice the usual gap (rings 0 and 1, 1.0 em); a leader only past it
+  - `l7r/diagram/labels/standard.py::REACH_EM#how far a caption may move` - leaderless reach capped at twice the usual gap (1 em); REACH_EM's 8 em kept only as the leadered search's outer bound, claimed UNRESEARCHED (after: l7r/diagram/labels/placer.py::leader_of#when a leader is drawn)
+  - `l7r/diagram/overlap/matrix.py::DOJO_RANGE_FT#archery lane` - archery lane to 250 x 8 ft per 0164 (not 90 ft)
+  - `l7r/diagram/overlap/taxonomy.py::_LABEL_GROUP#a caption covers its own group` - give graveyard, cremation, mausoleum and ossuary one shared funerary label group
+  - `l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#mill beside its stream` - the mill seated in a short mill race led off the stream below the intake (0064), and the exemption says so
+  - `l7r/diagram/settlement/_knobs.py::BOUNDARY_MARKER_FT#boundary stone size` - BOUNDARY_MARKER_FT 3.0 -> 4.0 per 0217 drawing
+  - `l7r/diagram/settlement/_knobs.py::execution_ground_ft#execution ground size` - execution_ground_ft: a capital returns about 200 x 65 ft (0191: 150-250 x 50-80), provincial city keeps 100 x 60
+  - `l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.castle#bailey and masugata sizes` - cite 0139 drawing and size the honmaru to about 2 ha (frac ~0.04 of a 50 ha enceinte, not 0.34); masugata stays UNRESEARCHED
+  - `l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.martial_hall#hall program sizes` - martial hall 60 x 36 -> about 124 x 35 ft one long building; label the lane and 130 x 100 compound UNRESEARCHED
+  - `l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.ministry#ministry compound size` - ministry default 224 x 148 -> within 0167: provincial 110x80-140x95 ft, capital about 160 x 110 ft
+  - `l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.wall#gate opening` - gate opening 36 px -> px(13) (0147 drawing: 13 ft passage); cite 0147
+  - `l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.wall#rampart stroke` - rampart stroke fixed 10 px -> px(10..12) so it holds 10-12 ft at any grain
+  - `l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#plank width` - plank width in feet: px(4) (about 4 ft)
+  - `l7r/diagram/settlement/city/canals.py::CanalsMixin.farmland_ring#sluice standoff` - measure the sluice's standoff from the moat's rim (not the tap point / centerline) and set it to about 90 ft (0146 drawing)
+  - `l7r/diagram/settlement/city/civic.py::CityCivicMixin.governor_mansion#gate direction` - governor's compound gate to the south
+  - `l7r/diagram/settlement/city/moat.py::MoatMixin.moat#junction tilts` - river_inlet_tilt and river_outlet_tilt to 0 (right angle)
+  - `l7r/diagram/settlement/city/moat.py::MoatMixin.moat#moat width` - moat width px(35) (35 ft), not px(66)
+  - `l7r/diagram/settlement/city/moat.py::MoatMixin.water_gate#glyph size` - water gate sized in feet via px(): 60 ft with ~12 ft piers, not a fixed 36 x 22 px
+  - `l7r/diagram/settlement/city/walls.py::WallsMixin._gate_caption#ground reserved round the gate tower` - gate-tower apron to ~36 ft (px(36)), not 30 px (~90 ft)
+  - `l7r/diagram/settlement/city/walls.py::WallsMixin._gate_flanking_buildings#set on the patrol road` - set the flanking buildings 105-135 ft inside the opening (ring_inset default 34 px gives ~102 ft); fix the ~20-100 ft comment
+  - `l7r/diagram/settlement/city/walls.py::WallsMixin._seat_mural_towers#no tower in a gate or water-gate opening` - bar towers within 390 ft (px(390)) of a gate and 135 ft of a water gate
+  - `l7r/diagram/settlement/city/walls.py::WallsMixin._seat_mural_towers#slide off a ward gate or gate works` - bar towers within 186 ft of a kido and 165 ft of guard buildings (px), not 32/40 px (after: l7r/diagram/settlement/city/walls.py::WallsMixin._seat_mural_towers#no tower in a gate or water-gate opening)
+  - `l7r/diagram/settlement/city/walls.py::WallsMixin._tower#no-build margin` - no-build margin px(36) in feet; 12*max(bscale,0.5) gives ~18 ft at the city's bscale 1/3
+  - `l7r/diagram/settlement/city/walls.py::WallsMixin._tower#tower footprint` - tower footprint 65 x 40 ft (along_ft 65, ~1.7:1)
+  - `l7r/diagram/settlement/city/walls.py::WallsMixin._tower#tower building on the spur` - floor the tower building on the spur at 30 ft: max(30, min(34, 0.55*along)) (after: l7r/diagram/settlement/city/walls.py::WallsMixin._tower#tower footprint)
 
 - [ ] T18 the bookend before the first edit: `make perf LABEL=328-start` in a detached worktree at main's engine, taken back
       to back with the end bookend (constitution VI; the wave-4 lesson: a pair taken apart reads the host's load)
       research: rendering
       verify:
 - [ ] T19 the two E0 claims; then the E1 rows, each with the unit tests it moves; proven on the reference hamlet (Inashiro,
-      its PNG looked at) and then across the pool and the cohort's bookend seeds; a value that makes a map refuse is held at
+      its PNG looked at; Kashikawa and Mizuguchi for the row street) and then across the pool and the cohort's bookend
+      seeds; a town or city value no pool map draws is proven by its unit test; a value that makes a map refuse is held at
       its old value and the row takes the tier of the work it needs, as a found row (FR-004, FR-005, spec Edge Cases)
       research: rendering
       verify:
 - [ ] T20 every touched unit re-checked by `impl-drift`; each wave-5 row IN-STEP or re-tiered with its measured reason (FR-005, SC-002)
       research: rendering
       verify:
-- [ ] T21 the close: `make perf LABEL=328-end` and the band's records, `make done` green, the wave column, landed (FR-005, FR-006, SC-002, SC-003)
+- [ ] T21 the occasion's review (glyph-check on the row street, one map) on a green gate; the close: `make perf LABEL=328-end` and the band's records, `make done` green, the wave column, landed (FR-005, FR-006, SC-002, SC-003)
       research: rendering
       verify:
