@@ -707,10 +707,26 @@
   "wave": "5"
  },
  {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law_water.py::oblique_at#square ditch crossing",
+  "verdict": "NEEDS-RESEARCH",
+  "tier": "E0",
+  "fix": "claim the channel crossing UNRESEARCHED: squared within FORD_SQUARE_TOL_DEG, 10 degrees (0084 squares only the standalone footplank; 0087 solves a carried deck at its way's angle and gives no tolerance), the brook keeping its 0035 citation",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law_water.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 6 re-check (tier provisional: a drift stated by its claim E1, a claim fix E0, a question E4)",
+  "tier_as_ranked": "E4",
+  "e0_basis": "T25a: a claim relabel; the code stands",
+  "moved": "T25a (amendment 6): tiered by its work - the code (oblique_at, law_water.py:104) stands; only its 0084 claim line at 109 is relabeled",
+  "wave": ""
+ },
+ {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law_water.py::off_ford_at#how far from a crossing place a brook crossing may stand, FORD_HALF 30 ft",
   "verdict": "UNCLAIMED",
   "tier": "E0",
-  "fix": "claim it: how far from a crossing place a brook crossing may stand, FORD_HALF 30 ft",
+  "fix": "claim off_ford_at's reach: how far from a crossing place a brook crossing may stand - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: FORD_HALF, half the 60 ft crossing place, 30 ft",
   "files": [
    ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law_water.py"
   ],
@@ -718,6 +734,8 @@
   "flag": "",
   "found": "wave 6 re-check (tier provisional: a drift stated by its claim E1, a claim fix E0, a question E4)",
   "tier_as_ranked": "E0",
+  "e0_basis": "T25a: a claim relabel; the code stands",
+  "moved": "T25a (amendment 6): tiered by its work - the code already uses FORD_HALF (consts_water.py:170, cited to 0035's 60 ft gap); only a claim line is added to off_ford_at at law_water.py:82",
   "wave": ""
  },
  {
@@ -747,6 +765,22 @@
   "found": "wave 2 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
   "wave": "3"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#not along a shelter belt",
+  "verdict": "NEEDS-RESEARCH",
+  "tier": "E0",
+  "fix": "split the claim: a lane kept through a shelter belt cited to 0072 drawing, and the 60 ft a lane may run inside one claimed UNRESEARCHED",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 2 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E4",
+  "e0_basis": "T25a: a claim relabel; the code stands",
+  "moved": "T25a (amendment 6): tiered by its work - the code (serve.py:160, `> 60.0`) stands; only the claim at serve.py:115-116 is relabeled",
+  "wave": ""
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py::shadowed_by#no way drawn twice",
@@ -816,6 +850,22 @@
   "tier_as_ranked": "E0",
   "verdict": "MISLABELED",
   "wave": "1"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/street.py::row_reach#street run past its end farms",
+  "verdict": "CANNOT-TELL",
+  "tier": "E0",
+  "fix": "reword the claim: half a frame past the end farms at both ends of the span, UNRESEARCHED, the run off the map being street_run_out's road (0033 drawing)",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/street.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 2 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E4",
+  "e0_basis": "T25a: a claim relabel; the code stands",
+  "moved": "T25a (amendment 6): tiered by its work - the code (street.py:46, `fw / 2`) stands; the claim is already UNRESEARCHED and only its wording changes",
+  "wave": ""
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/street.py::unhooked_both#lane end loses its hook",
@@ -1189,22 +1239,6 @@
   "wave": "6 (claimed under its unit's new label; re-checked)"
  },
  {
-  "key": ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.martial_hall#practice gear",
-  "verdict": "MISLABELED",
-  "tier": "E0",
-  "fix": "cite 0165 against the code: the state hall's compound holds its wall and three features, the rest implied; the drawn rack and posts depart from it, a found row toward 0165",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py"
-  ],
-  "after": [],
-  "flag": "",
-  "found": "wave 6 re-check (tier provisional: a drift stated by its claim E1, a claim fix E0, a question E4)",
-  "tier_as_ranked": "E0",
-  "e0_basis": "a claim fix: the page is cited against the code",
-  "moved": "amendment 6 round 1: fixed toward the page, no DEVIATION offered",
-  "wave": ""
- },
- {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.martial_hall#the layout: hall across the north, lane on the south band, sensei's house between, azuchi 10 ft deep, shooting line 6 ft",
   "verdict": "UNCLAIMED",
   "tier": "E0",
@@ -1290,22 +1324,6 @@
   "wave": "6 (claimed under its unit's new label; re-checked)"
  },
  {
-  "key": ".claude/skills/diagram/l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#assumed stream and channel widths",
-  "verdict": "MISLABELED",
-  "tier": "E0",
-  "fix": "cite 0035 for the brook (7 ft wide) against the code's assumed 9 px; the channel default stays UNRESEARCHED; the value change to 7 ft is its own found row",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/settlement/city/bridges.py"
-  ],
-  "after": [],
-  "flag": "",
-  "found": "wave 6 re-check (tier provisional: a drift stated by its claim E1, a claim fix E0, a question E4)",
-  "tier_as_ranked": "E0",
-  "e0_basis": "a claim fix: the page is cited against the code",
-  "moved": "amendment 6 round 1: fixed toward the page, no DEVIATION offered",
-  "wave": ""
- },
- {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#assumed water widths when a record has none (DEFAULT_W: streams 9.0, channels 2.5, ditches 4.2)",
   "verdict": "UNCLAIMED",
   "tier": "E0",
@@ -1346,6 +1364,22 @@
   "found": "wave 5 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
   "wave": "6 (claimed under its unit's new label; re-checked)"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#supply ditches only",
+  "verdict": "NEEDS-RESEARCH",
+  "tier": "E0",
+  "fix": "split the claim: no plank over the collector or drain cited to 0084 drawing (the foot drains and diagonal edge drains), and the feeder's exclusion from SUPPLY_ROLES claimed UNRESEARCHED",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/city/bridges.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 5 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E4",
+  "e0_basis": "T25a: a claim relabel; the code stands",
+  "moved": "T25a (amendment 6): tiered by its work - the code (SUPPLY_ROLES at bridges.py:174, the filter at 617) stands; only the claim line at 543 is split",
+  "wave": ""
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/city/bridges.py::crossing_deck#landing past each bank",
@@ -1870,6 +1904,22 @@
   "found": "wave 5 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
   "wave": "6 (claimed under its unit's new label; re-checked)"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_handover#a through track's handover",
+  "verdict": "NEEDS-RESEARCH",
+  "tier": "E0",
+  "fix": "claim the through track's handover UNRESEARCHED: where both ends are off the sheet, the lane end joining it nearest the houses' middle (0190 says only entrance)",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/_helpers.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 5 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E4",
+  "e0_basis": "T25a: a claim relabel; the code stands",
+  "moved": "T25a (amendment 6): tiered by its work - the code (kosatsuba_handover, _helpers.py:161) stands; only its 0190 claim line at 167 is relabeled",
+  "wave": ""
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/structures/servants.py::ServantRangesMixin#servant range depth",
@@ -2506,7 +2556,7 @@
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#lane clearance",
   "verdict": "DRIFTED",
   "tier": "E1",
-  "fix": "0246 sets a lane's clearance: its middle keeps 7 ft clear of a garden fence, within an 18 ft lane's room, and nothing is built on the tread. The claim should cite 0246.drawing, and the 40 ft no-build corridor should then be judged against that 7 ft",
+  "fix": "LANE_CLEARANCE becomes 7 ft (0246 drawing: a lane's middle keeps 7 ft clear of a garden fence and nothing is built on its tread) in place of the 40 ft corridor, and the claim cites 0246.drawing for it",
   "files": [
    ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py"
   ],
@@ -2514,6 +2564,7 @@
   "flag": "",
   "found": "wave 6 re-check (tier provisional: a drift stated by its claim E1, a claim fix E0, a question E4)",
   "tier_as_ranked": "E1",
+  "moved": "T25a (amendment 6): tiered by its work - one constant at hamletgen/consts.py:91, passed to every s.lane call in stage_track (lines 486, 602, 631, 637); no logic changes",
   "wave": ""
  },
  {
@@ -2696,21 +2747,6 @@
   "wave": "5 (claim renamed or split; its parts re-checked)"
  },
  {
-  "key": ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.castle#inner moat width",
-  "verdict": "DRIFTED",
-  "tier": "E1",
-  "fix": "draw the inner moat within the attested 98-341 ft (Hiroshima's 30 to 104 m) as the broad water between the baileys the drawing page calls for, not `mw * 0.5` (about 40 ft)",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py"
-  ],
-  "after": [],
-  "flag": "",
-  "found": "wave 6 re-check (tier provisional: a drift stated by its claim E1, a claim fix E0, a question E4)",
-  "tier_as_ranked": "E1",
-  "moved": "amendment 6 round 1: fixed toward the page, no DEVIATION offered",
-  "wave": ""
- },
- {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.martial_hall#hall program sizes",
   "tier": "E1",
   "fix": "martial hall 60 x 36 -> about 124 x 35 ft one long building; label the lane and 130 x 100 compound UNRESEARCHED",
@@ -2722,6 +2758,21 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "5 (claim renamed or split; its parts re-checked)"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.martial_hall#practice gear",
+  "verdict": "MISLABELED",
+  "tier": "E1",
+  "fix": "drop the practice gear from the state hall's compound (the `_keiko_gear` call) so it is drawn as its wall and three features, the rest implied, and cite research/questions/0165-martial-training-grounds-and-dojo.drawing.html for it",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 6 re-check (tier provisional: a drift stated by its claim E1, a claim fix E0, a question E4)",
+  "tier_as_ranked": "E0",
+  "moved": "T25a (amendment 6): tiered by its work - one call removed at castle_civic.py:460 (the rack and posts), the claim line re-cited to 0165",
+  "wave": ""
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.ministry#ministry compound size",
@@ -2740,7 +2791,7 @@
   "key": ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.wall#ground round the gate structures",
   "verdict": "DRIFTED",
   "tier": "E1",
-  "fix": "`bm = 32` is a fixed 32 px, against \"about 36 ft clear around each\"; should be px(36)",
+  "fix": "the gate structures' reserved margin becomes self.px(36) (about 36 ft clear around each) in place of the fixed `bm = 32` px",
   "files": [
    ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py"
   ],
@@ -2748,6 +2799,7 @@
   "flag": "",
   "found": "wave 6 re-check (tier provisional: a drift stated by its claim E1, a claim fix E0, a question E4)",
   "tier_as_ranked": "E1",
+  "moved": "T25a (amendment 6): tiered by its work - one literal at castle_civic.py:810",
   "wave": ""
  },
  {
@@ -2764,26 +2816,10 @@
   "wave": "5"
  },
  {
-  "key": ".claude/skills/diagram/l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#assumed brook width 7 ft",
-  "verdict": "DRIFTED",
-  "tier": "E1",
-  "fix": "bring the assumed stream width to the 7 ft brook of 0035 (the code assumes 9 px where a record has none)",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/settlement/city/bridges.py"
-  ],
-  "after": [
-   ".claude/skills/diagram/l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#assumed stream and channel widths"
-  ],
-  "flag": "",
-  "found": "amendment 6 round 1: the value change split off the E0 row (D8)",
-  "tier_as_ranked": "E1",
-  "wave": ""
- },
- {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#assumed ditch width",
   "verdict": "DRIFTED",
   "tier": "E1",
-  "fix": "`DEFAULT_W[\"field_ditches\"]=4.2` and `d.get(\"w\", 4.2)` are px, about 4 to 13 ft, against \"2.5 ft at the head and taper toward 1.2 ft\"; the default should be about 2.5 ft in feet",
+  "fix": "the field ditch's assumed width becomes self.px(2.5) (0084 drawing: 2.5 ft at the head, tapering toward 1.2 ft) in place of 4.2 px, in both `DEFAULT_W[\"field_ditches\"]` and `d.get(\"w\", 4.2)`",
   "files": [
    ".claude/skills/diagram/l7r/diagram/settlement/city/bridges.py"
   ],
@@ -2791,20 +2827,22 @@
   "flag": "",
   "found": "wave 6 re-check (tier provisional: a drift stated by its claim E1, a claim fix E0, a question E4)",
   "tier_as_ranked": "E1",
+  "moved": "T25a (amendment 6): tiered by its work - one value, written twice in channel_footbridges (bridges.py:606 and 624), turned to feet",
   "wave": ""
  },
  {
-  "key": ".claude/skills/diagram/l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#off dry crops and gardens",
-  "verdict": "DRIFTED",
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#assumed stream and channel widths",
+  "verdict": "MISLABELED",
   "tier": "E1",
-  "fix": "crops rule a seat out, but the page lays the crossing \"at the widest one remaining rather than left off\"; the code's hard filter `_wide_enough` leaves the ditch with no plank once every wide seat is ruled out",
+  "fix": "the brook's assumed width becomes self.px(7) (0035 drawing: a brook 7 ft wide) in place of the 9 px `DEFAULT_W[\"streams\"]`, cited to 0035, and the channel's 2.5 px default is claimed UNRESEARCHED",
   "files": [
    ".claude/skills/diagram/l7r/diagram/settlement/city/bridges.py"
   ],
   "after": [],
   "flag": "",
   "found": "wave 6 re-check (tier provisional: a drift stated by its claim E1, a claim fix E0, a question E4)",
-  "tier_as_ranked": "E1",
+  "tier_as_ranked": "E0",
+  "moved": "T25a (amendment 6): tiered by its work - one literal in DEFAULT_W at bridges.py:606 turned to feet, and the claim split into a cited brook line and an UNRESEARCHED channel line",
   "wave": ""
  },
  {
@@ -2821,18 +2859,18 @@
   "wave": "5"
  },
  {
-  "key": ".claude/skills/diagram/l7r/diagram/settlement/city/canals.py::CanalsMixin.farmland_ring#a river tap unswept",
-  "verdict": "DRIFTED",
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#short abutment",
+  "verdict": "CANNOT-TELL",
   "tier": "E1",
-  "fix": "sweep a river tap downstream as a moat tap is swept: a canal leaves a river at a slant, 30 to 45 degrees downstream (0054)",
+  "fix": "PLANK_ABUTMENT becomes a real-feet figure converted at each use (self.px), sized so a deck over a 2.5 ft ditch spans about 8 ft (0084 drawing), in place of 6 px at every grain",
   "files": [
-   ".claude/skills/diagram/l7r/diagram/settlement/city/canals.py"
+   ".claude/skills/diagram/l7r/diagram/settlement/city/bridges.py"
   ],
   "after": [],
   "flag": "",
-  "found": "wave 6 re-check (tier provisional: a drift stated by its claim E1, a claim fix E0, a question E4)",
-  "tier_as_ranked": "E1",
-  "moved": "amendment 6 round 1: fixed toward the page, no DEVIATION offered",
+  "found": "wave 5 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E4",
+  "moved": "T25a (amendment 6): tiered by its work - one constant (_geom/ways.py:25, 6 px) read at bridges.py:264, 643 and 714; at 2 ft/px it now spans about 15 ft",
   "wave": ""
  },
  {
@@ -2889,20 +2927,6 @@
   "wave": "5"
  },
  {
-  "key": ".claude/skills/diagram/l7r/diagram/settlement/city/moat.py::MoatMixin.water_gate#one opening",
-  "verdict": "DRIFTED",
-  "tier": "E1",
-  "fix": "the code draws one fixed 60 ft opening, where 0179 says \"as wide as its canal\" and gives a river \"a row of arched openings\"; size the opening to its canal and draw a row of arches for a river",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/settlement/city/moat.py"
-  ],
-  "after": [],
-  "flag": "",
-  "found": "wave 6 re-check (tier provisional: a drift stated by its claim E1, a claim fix E0, a question E4)",
-  "tier_as_ranked": "E1",
-  "wave": ""
- },
- {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py::WallsMixin._gate_caption#ground reserved round the gate tower",
   "tier": "E1",
   "fix": "gate-tower apron to ~36 ft (px(36)), not 30 px (~90 ft)",
@@ -2916,10 +2940,25 @@
   "wave": "5"
  },
  {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py::WallsMixin._gate_caption#ground reserved round the gate works",
+  "verdict": "DRIFTED",
+  "tier": "E1",
+  "fix": "the guard house and inspection hall's reserved margin becomes self.px(36) (about 36 ft clear around each) in place of the fixed 12 px",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 5 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E2",
+  "moved": "T25a (amendment 6): tiered by its work - one literal at walls.py:432 (`else 12`)",
+  "wave": ""
+ },
+ {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py::WallsMixin._gate_flanking_buildings#fallback road width",
   "verdict": "DRIFTED",
   "tier": "E1",
-  "fix": "0147 answers it: the gate's 30 ft \"is the width of the trunk road\", against px(26); cite 0147 drawing at 30 ft; also, the code reads `road_width`, not a ring road as the claim says",
+  "fix": "the fallback road width becomes self.px(30) (0147 drawing: the gate's 30 ft is the trunk road's width) in place of px(26), and the claim names `road_width`, not a ring road",
   "files": [
    ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py"
   ],
@@ -2927,6 +2966,7 @@
   "flag": "",
   "found": "wave 6 re-check (tier provisional: a drift stated by its claim E1, a claim fix E0, a question E4)",
   "tier_as_ranked": "E1",
+  "moved": "T25a (amendment 6): tiered by its work - one literal at walls.py:286",
   "wave": ""
  },
  {
@@ -2946,7 +2986,7 @@
   "key": ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py::WallsMixin._seat_mural_towers#a slid tower off a gate",
   "verdict": "DRIFTED",
   "tier": "E1",
-  "fix": "0148 answers it: no tower \"within 390 ft of a gate\"; the 45 px floor lets a slid seat land about 84 px (252 ft at 3 ft/px) from a gate; cite 0148 and hold slid seats to px(390)",
+  "fix": "hold a slid mural tower to self.px(390) from every gate (0148 drawing: no tower within 390 ft of a gate) in place of the fixed 45 px",
   "files": [
    ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py"
   ],
@@ -2954,6 +2994,22 @@
   "flag": "",
   "found": "wave 6 re-check (tier provisional: a drift stated by its claim E1, a claim fix E0, a question E4)",
   "tier_as_ranked": "E1",
+  "moved": "T25a (amendment 6): tiered by its work - one literal in the slide test in _seat_mural (walls.py:~506, `>= 45`)",
+  "wave": ""
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py::WallsMixin._seat_mural_towers#exempt stretches",
+  "verdict": "DRIFTED",
+  "tier": "E1",
+  "fix": "the coverage sweep's exempt stretches become self.px(390) of a gate and self.px(165) of its guard buildings in place of the fixed 130 and 55 px",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 5 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E2",
+  "moved": "T25a (amendment 6): tiered by its work - two literals in one test at walls.py:~531; the coverage check that once mirrored them is retired",
   "wave": ""
  },
  {
@@ -2968,6 +3024,21 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "5"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py::WallsMixin._seat_mural_towers#reach counted from the parapet",
+  "verdict": "DRIFTED",
+  "tier": "E1",
+  "fix": "a tower's reach is counted from its parapet at self.px(36) out from its center (0148 drawing) in place of the fixed `+ 12.0` px, and the stale half-footprint comment goes",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 5 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E2",
+  "moved": "T25a (amendment 6): tiered by its work - one literal at walls.py:~525 (`_Rpx`)",
+  "wave": ""
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py::WallsMixin._seat_mural_towers#slide off a ward gate or gate works",
@@ -3117,20 +3188,6 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
-  "wave": ""
- },
- {
-  "key": ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/justice.py::JusticeGroundsMixin.boundary_marker#how many stones",
-  "verdict": "DRIFTED",
-  "tier": "E1",
-  "fix": "the code draws one stone, but the page says \"a map draws a group rather than a single stone\", one to three. The count should be rolled per entrance from 1 to 3",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/justice.py"
-  ],
-  "after": [],
-  "flag": "",
-  "found": "wave 6 re-check (tier provisional: a drift stated by its claim E1, a claim fix E0, a question E4)",
-  "tier_as_ranked": "E1",
   "wave": ""
  },
  {
@@ -3733,7 +3790,7 @@
   "key": ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_anchor#reaching the houses",
   "verdict": "DRIFTED",
   "tier": "E1",
-  "fix": "0246 sets when a way counts as reaching a farmhouse (within 60 ft of the house, a GUESS). The claim should cite that page as GUESS, and the 100 ft `KOSATSUBA_ENTRANCE_REACH_FT` then disagrees with its 60 ft",
+  "fix": "KOSATSUBA_ENTRANCE_REACH_FT becomes 60 ft, cited as GUESS to 0246 drawing (a way reaches a farmhouse within 60 ft of it), in place of 100 ft",
   "files": [
    ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/_helpers.py"
   ],
@@ -3741,6 +3798,7 @@
   "flag": "",
   "found": "wave 6 re-check (tier provisional: a drift stated by its claim E1, a claim fix E0, a question E4)",
   "tier_as_ranked": "E1",
+  "moved": "T25a (amendment 6): tiered by its work - one constant at _helpers.py:35, read by kosatsuba_anchor and board_seat.py:240",
   "wave": ""
  },
  {
@@ -4381,7 +4439,7 @@
   "key": ".claude/skills/diagram/buildings/programs.md::Country shrine (a village district's shrine)#building size anchors",
   "verdict": "DRIFTED",
   "tier": "E2",
-  "fix": "the shrine's size bands widened to the record: sanctuary 1 or 3 ken (Hie's 2-bay ~12 x 6 ft), worship halls from ~18 ft (Hie ~18 x 12, Rokusha 9 tsubo) - the band, its table and the sheet sizing rule",
+  "fix": "widen the country shrine's size bands to the record: a sanctuary of 1 or 3 ken (Hie's 2-bay about 12 x 6 ft) and worship halls from about 18 ft (Hie about 18 x 12, Rokusha 9 tsubo), in the band, its table and the sheet sizing rule",
   "files": [
    ".claude/skills/diagram/buildings/programs.md"
   ],
@@ -4389,7 +4447,7 @@
   "flag": "",
   "found": "wave 2 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E2",
-  "moved": "wave 4 re-check: the 21-35 ft prose fixed, but the band itself drifts on two sizes (E1 -> E2)",
+  "moved": "T25a (amendment 6): tiered by its work - one procedure section (programs.md, Country shrine, line 120 on) rewritten; a widened band leaves the existing sheets inside it",
   "wave": ""
  },
  {
@@ -4675,7 +4733,7 @@
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/capacity.py::free_seats#the exhaustive seat order",
   "verdict": "CANNOT-TELL",
   "tier": "E2",
-  "fix": "grow_the_margin (growth.py) seats its first house from free_seats, so per 0029 drawing the tie among seats about as near the seat breaks by nearer the fields, not by coordinates; sort key becomes (distance, field distance)",
+  "fix": "break the tie among seats about as near the seat by nearer the fields (0029 drawing), not by coordinates: free_seats' sort key becomes (distance band, distance to the field outline)",
   "files": [
    ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/capacity.py"
   ],
@@ -4683,7 +4741,7 @@
   "flag": "",
   "found": "wave 2 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E4",
-  "moved": "T12a: tiered by the work it takes (was provisional, by verdict)",
+  "moved": "T25a (amendment 6): tiered by its work - the sort at capacity.py:81 changes rule and free_seats needs the field outline to measure against; one function",
   "wave": ""
  },
  {
@@ -4758,7 +4816,7 @@
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#a yard's sun between ranks",
   "verdict": "DRIFTED",
   "tier": "E2",
-  "fix": "_rank_step adds s.px(SUN_CORRIDOR_FT) whichever way the ranks run (north or south), not max(0, -oy) * it, so no rank stands within 39 ft south of another rank's yards",
+  "fix": "_rank_step adds s.px(SUN_CORRIDOR_FT) whichever way the ranks run, abs(oy) in place of max(0, -oy), so no rank stands within 39 ft south of another rank's yards (0038 drawing)",
   "files": [
    ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py"
   ],
@@ -4766,7 +4824,7 @@
   "flag": "",
   "found": "wave 2 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E2",
-  "moved": "T12a: tiered by the work it takes (was provisional, by verdict)",
+  "moved": "T25a (amendment 6): tiered by its work - the condition on the sun term in the one expression at stages.py:772 changes",
   "wave": ""
  },
  {
@@ -5336,10 +5394,25 @@
   "wave": ""
  },
  {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.castle#inner moat width",
+  "verdict": "DRIFTED",
+  "tier": "E2",
+  "fix": "draw the inner moat at least 98 ft wide (0139: Hiroshima's inner moat 30 to 104 m) in place of `mw * 0.5`, and move its ring (`ir = gap * 0.42`) out far enough that the broader water clears the honmaru wall",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 6 re-check (tier provisional: a drift stated by its claim E1, a claim fix E0, a question E4)",
+  "tier_as_ranked": "E1",
+  "moved": "T25a (amendment 6): tiered by its work - the stroke width at castle_civic.py:277 and the ring offset at 274 move together: at gap 60 ft the ring sits 25 ft off the honmaru, so a 98 ft stroke alone would cover it",
+  "wave": ""
+ },
+ {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.ministry#office apron",
   "verdict": "DRIFTED",
   "tier": "E2",
-  "fix": "the page says an office \"keeps about 42 ft clear of every other building\", but the code reserves a fixed max(30 x bscale, 26) px, counted from building centers and not tied to feet; it should reserve px(42) of edge clearance, or the claim should say UNRESEARCHED for the px margin",
+  "fix": "reserve the office's 42 ft edge clearance (0163 drawing) in real feet in place of max(30 x bscale, 26) px, re-deriving the 26 px floor kept for the office-abut clearance against the center-tested urban packs",
   "files": [
    ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py"
   ],
@@ -5347,6 +5420,22 @@
   "flag": "",
   "found": "wave 5 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E2",
+  "moved": "T25a (amendment 6): tiered by its work - the margin at castle_civic.py:345 is center-tested by the urban packs and floored for a gate check, so the value and its floor move together",
+  "wave": ""
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#off dry crops and gardens",
+  "verdict": "DRIFTED",
+  "tier": "E2",
+  "fix": "keep the narrow seats as a fallback: offer the seats whose water earns a board first, and when houses, crops, other crossings or joins rule out every one, lay the crossing at the widest seat remaining (0084 drawing) rather than none",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/city/bridges.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 6 re-check (tier provisional: a drift stated by its claim E1, a claim fix E0, a question E4)",
+  "tier_as_ranked": "E1",
+  "moved": "T25a (amendment 6): tiered by its work - the hard `_wide_enough` filter on the seat list at bridges.py:691 becomes a two-stage ordering in one loop of channel_footbridges",
   "wave": ""
  },
  {
@@ -5389,6 +5478,21 @@
   "wave": ""
  },
  {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/city/canals.py::CanalsMixin.farmland_ring#a river tap unswept",
+  "verdict": "DRIFTED",
+  "tier": "E2",
+  "fix": "sweep a river tap downstream as a moat tap is swept (`moat_swept_tap`, read along the river's source-to-mouth order), leaving at 0054's drawn 35 degrees off the downstream heading, not on the outward bearing",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/city/canals.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 6 re-check (tier provisional: a drift stated by its claim E1, a claim fix E0, a question E4)",
+  "tier_as_ranked": "E1",
+  "moved": "T25a (amendment 6): tiered by its work - a new branch beside the moat-only sweep at canals.py:218-220, with moat_swept_tap (knobs.py:51), written for a closed ring, taught an open river",
+  "wave": ""
+ },
+ {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/city/canals.py::CanalsMixin.farmland_ring#tap swept downstream",
   "tier": "E2",
   "fix": "sweep river taps 30-45 deg downstream; cite 0010 drawing for the moat tap",
@@ -5418,7 +5522,7 @@
   "key": ".claude/skills/diagram/l7r/diagram/settlement/city/moat.py::MoatMixin.water_gate#arch on two piers with a grille",
   "verdict": "DRIFTED",
   "tier": "E2",
-  "fix": "one set of grate bars is drawn, where the page puts \"A grille ... at both the outer and the inner face of the wall\"; the stone-lined passage is not drawn either",
+  "fix": "draw a grille at both the outer and the inner face of the wall and the stone-lined channel between them (0179 drawing) in place of one set of bars",
   "files": [
    ".claude/skills/diagram/l7r/diagram/settlement/city/moat.py"
   ],
@@ -5426,48 +5530,7 @@
   "flag": "",
   "found": "wave 5 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E2",
-  "wave": ""
- },
- {
-  "key": ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py::WallsMixin._gate_caption#ground reserved round the gate works",
-  "verdict": "DRIFTED",
-  "tier": "E2",
-  "fix": "the guard house and inspection hall get a fixed `bm = 12` px, which is 36 ft only at 3 ft/px, where the page says \"about 36 ft clear around each\"; should be self.px(36)",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py"
-  ],
-  "after": [],
-  "flag": "",
-  "found": "wave 5 re-check (tier provisional, by verdict)",
-  "tier_as_ranked": "E2",
-  "wave": ""
- },
- {
-  "key": ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py::WallsMixin._seat_mural_towers#exempt stretches",
-  "verdict": "DRIFTED",
-  "tier": "E2",
-  "fix": "fixed `< 130` px and `< 55` px, which match the page's \"within 390 ft of a gate\" and \"165 ft of a gate's guard buildings\" only at 3 ft/px (and _seat_mural itself uses px(390)); should be self.px(390) and self.px(165)",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py"
-  ],
-  "after": [],
-  "flag": "",
-  "found": "wave 5 re-check (tier provisional, by verdict)",
-  "tier_as_ranked": "E2",
-  "wave": ""
- },
- {
-  "key": ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py::WallsMixin._seat_mural_towers#reach counted from the parapet",
-  "verdict": "DRIFTED",
-  "tier": "E2",
-  "fix": "`_Rpx = ... + 12.0` px, where the page says \"taken as 36 ft out from its center\"; 12 px is 36 ft only at 3 ft/px; should be self.px(36), and the comment's \"half-footprint\" reason is stale",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py"
-  ],
-  "after": [],
-  "flag": "",
-  "found": "wave 5 re-check (tier provisional, by verdict)",
-  "tier_as_ranked": "E2",
+  "moved": "T25a (amendment 6): tiered by its work - the glyph in water_gate (moat.py:172-173) gains a second set of bars and two lining strokes; one function",
   "wave": ""
  },
  {
@@ -5507,6 +5570,21 @@
   "flag": "",
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
+  "wave": ""
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/justice.py::JusticeGroundsMixin.boundary_marker#how many stones",
+  "verdict": "DRIFTED",
+  "tier": "E2",
+  "fix": "roll each entrance's stone count from 1 to 3 from the map's seed (0217 drawing: a map draws a group rather than a single stone) and draw and record that many stones as a group",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/justice.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 6 re-check (tier provisional: a drift stated by its claim E1, a claim fix E0, a question E4)",
+  "tier_as_ranked": "E1",
+  "moved": "T25a (amendment 6): tiered by its work - boundary_marker (justice.py:182) draws one stone; it gains a seeded roll and a loop that seats and records each stone of the group",
   "wave": ""
  },
  {
@@ -6233,20 +6311,6 @@
   "flag": "",
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
-  "wave": ""
- },
- {
-  "key": ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_anchor#board placements",
-  "verdict": "DRIFTED",
-  "tier": "E2",
-  "fix": "only center, entrance and frontage (headman's gate) get anchors. The question also attests \"bridge ends\" as a village board's site, an attested form the choice never offers. Add it to the rolled placements, or record its omission as a DEVIATION",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/_helpers.py"
-  ],
-  "after": [],
-  "flag": "",
-  "found": "wave 5 re-check (tier provisional, by verdict)",
-  "tier_as_ranked": "E2",
   "wave": ""
  },
  {
@@ -7211,7 +7275,7 @@
   "key": ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#stables",
   "verdict": "DRIFTED",
   "tier": "E3",
-  "fix": "stable becomes 0108's small warrior stable: three bays long of one-bay (one-ken) stalls, with the kusa-no-ma passage before the stalls and the tozamurai room; procedure's ~84-96 px (28-32 ft) re-derived and the three magistracy sheets' stables redrawn; the 2-4 horse count labeled GUESS (0108: no page says)",
+  "fix": "the stable becomes 0108's small warrior stable: three bays long of one-ken stalls, with the kusa-no-ma passage before the stalls and the tozamurai room, the procedure's ~84-96 px re-derived, the three magistracy sheets' stables redrawn, and the 2-4 horse count labeled GUESS",
   "files": [
    ".claude/skills/diagram/buildings.md"
   ],
@@ -7219,7 +7283,7 @@
   "flag": "",
   "found": "wave 2 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E2",
-  "moved": "T12a: tiered by the work it takes (was provisional, by verdict)",
+  "moved": "T25a (amendment 6): tiered by its work - a procedure paragraph plus three hand-drawn sheets redrawn",
   "wave": ""
  },
  {
@@ -7271,7 +7335,7 @@
   "key": ".claude/skills/diagram/buildings.md::Sacred features#grove inside a compound wall",
   "verdict": "MISLABELED",
   "tier": "E3",
-  "fix": "a compound shrine drawn beside a single tree (0218 drawing), not a stippled grove rectangle - the three magistracy sheets redrawn",
+  "fix": "draw the compound shrine beside a single tree (0218 drawing), not a stippled grove rectangle, and redraw the three magistracy sheets",
   "files": [
    ".claude/skills/diagram/buildings.md"
   ],
@@ -7279,7 +7343,7 @@
   "flag": "",
   "found": "wave 2 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
-  "moved": "wave 3 reading: the honest fix redraws three sheets (E0 -> E3)",
+  "moved": "T25a (amendment 6): tiered by its work - the procedure line plus three hand-drawn sheets redrawn",
   "wave": ""
  },
  {
@@ -7301,7 +7365,7 @@
   "key": ".claude/skills/diagram/buildings.md::Sacred features#sanctuary",
   "verdict": "DRIFTED",
   "tier": "E3",
-  "fix": "sanctuary width becomes a rolled knob, 1 ken (~6 ft) or 3 ken (~18 ft) per 0222; the covering house stays undrawn as 0222 already records; procedure, type band and shrine sheets follow",
+  "fix": "the sanctuary's width becomes a rolled knob, 1 ken (~6 ft) or 3 ken (~18 ft) per 0222, the covering house left undrawn as 0222 records, with the procedure, type band and shrine sheets following",
   "files": [
    ".claude/skills/diagram/buildings.md"
   ],
@@ -7309,7 +7373,7 @@
   "flag": "",
   "found": "wave 2 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E2",
-  "moved": "T12a: tiered by the work it takes (was provisional, by verdict)",
+  "moved": "T25a (amendment 6): tiered by its work - a new knob in the procedure and the type band, and the shrine sheets redrawn",
   "wave": ""
  },
  {
@@ -7332,15 +7396,15 @@
   "key": ".claude/skills/diagram/buildings.md::Scale#well location marker",
   "verdict": "DRIFTED",
   "tier": "E3",
-  "fix": "Mode A wells drawn to 0196's curb: ~4 ft square (12 px at 3 px/ft) on its ~4 ft-wider apron, true size, in place of the 22 px (~7.3 ft) marker; procedure text and every pool sheet's wells redrawn",
+  "fix": "draw Mode A wells at 0196's curb, about 4 ft square (12 px at 3 px/ft) on its about 4 ft-wider apron, true size, in place of the 22 px marker, and redraw every pool sheet's wells",
   "files": [
    ".claude/skills/diagram/buildings.md"
   ],
   "after": [],
-  "flag": "deviation-tempting: the 22 px marker carries a GM-confirmed marker status (2026-07-21) and 0196's marker band is calibrated for map scale, not Mode A",
+  "flag": "",
   "found": "wave 2 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E2",
-  "moved": "T12a: tiered by the work it takes (was provisional, by verdict)",
+  "moved": "T25a (amendment 6): tiered by its work - the procedure text plus every pool sheet's wells redrawn",
   "wave": ""
  },
  {
@@ -8310,6 +8374,36 @@
   "wave": ""
  },
  {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/city/moat.py::MoatMixin.water_gate#one opening",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "size the water gate's opening to its canal's width (0179 drawing) in place of the fixed 60 ft, with the wall's gap following it, and draw a river crossing the wall as a row of arched openings",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/city/moat.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 6 re-check (tier provisional: a drift stated by its claim E1, a claim fix E0, a question E4)",
+  "tier_as_ranked": "E1",
+  "moved": "T25a (amendment 6): tiered by its work - water_gate (moat.py:149) gains a width and an arcade form, its callers pass the canal's width, and the wall's matching gap (city_wall water_gates) is resized: a new form across modules",
+  "wave": ""
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py::WallsMixin._seat_mural_towers#tower onto the berm",
+  "verdict": "CANNOT-TELL",
+  "tier": "E3",
+  "fix": "seat each mural tower so its 40 ft platform stands out past the wall face (0148 drawing: 12 m, about 39 ft, out) in place of nudging it inward to a 6 px outer projection, with the moat's berm made wide enough to keep it dry",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 6 re-check (tier provisional: a drift stated by its claim E1, a claim fix E0, a question E4)",
+  "tier_as_ranked": "E4",
+  "moved": "T25a (amendment 6): tiered by its work - _berm_nudge (walls.py:201-215) pulls the tower's center inward to a 6 px projection for the moat's clearance (city_wall_furniture_clear_of_moat, Tango's 13 px berm), so the moat's standoff moves with it across walls.py and moat.py",
+  "wave": ""
+ },
+ {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py::WallsMixin.city_wall#no barbican",
   "tier": "E3",
   "fix": "give each main road gate of a provincial city a barbican, round or square rolled, 125-230 ft",
@@ -9045,6 +9139,21 @@
   "wave": ""
  },
  {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_anchor#board placements",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "add the bridge end (0190: a village board stands at a bridge end) to the rolled board placements, as a `kosatsuba_seat` option with its own anchor",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/_helpers.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 5 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E2",
+  "moved": "T25a (amendment 6): tiered by its work - a new knob value in _knobs.py:324 with its typing rule, a new anchor case in kosatsuba_anchor (_helpers.py:198) and the board seat search that reads it",
+  "wave": ""
+ },
+ {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin.place_kosatsuba#placement knob at the lane tiers",
   "tier": "E3",
   "fix": "roll town/city board placement among the central crossroads, the entrances and the foot of bridges (a new bridge-foot seat)",
@@ -9516,50 +9625,6 @@
   "wave": ""
  },
  {
-  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law_water.py::oblique_at#square ditch crossing",
-  "verdict": "NEEDS-RESEARCH",
-  "tier": "E4",
-  "fix": "0084 makes only the standalone footplank square (\u00a768) and gives no 10 degree figure; a lane over a channel is a carried deck, which 0087 solves at an oblique angle (\u00a752, \u00a754); claim UNRESEARCHED",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law_water.py"
-  ],
-  "after": [],
-  "flag": "",
-  "found": "wave 6 re-check (tier provisional: a drift stated by its claim E1, a claim fix E0, a question E4)",
-  "tier_as_ranked": "E4",
-  "wave": ""
- },
- {
-  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#not along a shelter belt",
-  "verdict": "NEEDS-RESEARCH",
-  "tier": "E4",
-  "fix": "0072 drawing backs keeping a lane through a belt but gives no length a lane may run inside one; the 60 ft needs a figure the record does not have",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py"
-  ],
-  "after": [],
-  "flag": "",
-  "found": "wave 2 re-check (tier provisional, by verdict)",
-  "tier_as_ranked": "E4",
-  "moved": "T12a: tiered by the work it takes (was provisional, by verdict)",
-  "wave": ""
- },
- {
-  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/street.py::row_reach#street run past its end farms",
-  "verdict": "CANNOT-TELL",
-  "tier": "E4",
-  "fix": "the half-frame pad applies to both ends of the street's span; the run off the map is street_run_out's separate road (0033 drawing), and no page says how far a street runs past its end farms at the inner end",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/street.py"
-  ],
-  "after": [],
-  "flag": "",
-  "found": "wave 2 re-check (tier provisional, by verdict)",
-  "tier_as_ranked": "E4",
-  "moved": "T12a: tiered by the work it takes (was provisional, by verdict)",
-  "wave": ""
- },
- {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/sweeps.py::_join_orphan_ways#link width",
   "tier": "E4",
   "fix": "record silent on a link's width (inherit vs rank 3/5/6 ft)",
@@ -9599,34 +9664,6 @@
   "wave": ""
  },
  {
-  "key": ".claude/skills/diagram/l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#short abutment",
-  "verdict": "CANNOT-TELL",
-  "tier": "E4",
-  "fix": "PLANK_ABUTMENT's value is not in the bundle; I need it in feet, and whether w + PLANK_ABUTMENT (w in px) gives the page's span of about 8 ft",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/settlement/city/bridges.py"
-  ],
-  "after": [],
-  "flag": "",
-  "found": "wave 5 re-check (tier provisional, by verdict)",
-  "tier_as_ranked": "E4",
-  "wave": ""
- },
- {
-  "key": ".claude/skills/diagram/l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#supply ditches only",
-  "verdict": "NEEDS-RESEARCH",
-  "tier": "E4",
-  "fix": "the page attests no crossing over the foot drains and diagonal edge drains (collector and drain), but says nothing of the feeder, which SUPPLY_ROLES also excludes; the feeder exclusion should be UNRESEARCHED",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/settlement/city/bridges.py"
-  ],
-  "after": [],
-  "flag": "",
-  "found": "wave 5 re-check (tier provisional, by verdict)",
-  "tier_as_ranked": "E4",
-  "wave": ""
- },
- {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/city/moat.py::MoatMixin.moat#moat width",
   "tier": "E4",
   "fix": "the record disagrees with itself: 0151's drawing page says 35 ft (a Ming treatise's smallest width) 'is the width the maps should draw', while 0146's drawing page draws every moat about 66 ft; reconcile the two pages first, then set the width",
@@ -9638,20 +9675,6 @@
   "tier_as_ranked": "E1",
   "moved": "wave 5: the two moat pages contradict each other (spec Edge Case: a NEEDS-RESEARCH question)",
   "verdict": "DRIFTED",
-  "wave": ""
- },
- {
-  "key": ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py::WallsMixin._seat_mural_towers#tower onto the berm",
-  "verdict": "CANNOT-TELL",
-  "tier": "E4",
-  "fix": "0148 answers how far a tower stands out (\"12 m (~39 ft) out\"); cite 0148 and check that the px(40) offset of the tower's center gives a 39 ft projection, not one past it",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py"
-  ],
-  "after": [],
-  "flag": "",
-  "found": "wave 6 re-check (tier provisional: a drift stated by its claim E1, a claim fix E0, a question E4)",
-  "tier_as_ranked": "E4",
   "wave": ""
  },
  {
@@ -9892,20 +9915,6 @@
   "flag": "",
   "tier_as_ranked": "E4",
   "verdict": "NEEDS-RESEARCH",
-  "wave": ""
- },
- {
-  "key": ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_handover#a through track's handover",
-  "verdict": "NEEDS-RESEARCH",
-  "tier": "E4",
-  "fix": "0190 says only \"entrance\". It says nothing on where a through road's entrance lies, and the join nearest the houses' centroid reads as the center, not an entrance. Label it UNRESEARCHED or GUESS",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/_helpers.py"
-  ],
-  "after": [],
-  "flag": "",
-  "found": "wave 5 re-check (tier provisional, by verdict)",
-  "tier_as_ranked": "E4",
   "wave": ""
  },
  {

@@ -86,9 +86,13 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 
 ## Wave 7 (amendment 6, 2026-10-07)
 
-- **Scope**: the four open E0 rows, then the next contiguous run of E1 (FR-006): rows 180-231 (27 rows, `tasks.md`
-  Phase 8). Mostly town and city values; the connector's clearance (0246's 7 ft against `LANE_CLEARANCE`'s 40) and the
-  plank's widest-left seat move hamlet maps.
+- **T25a first**: the 34 found rows tiered by verdict alone (waves 4-6's re-checks) are tiered by their work by a fresh
+  reader before the run is chosen, as T12a did before wave 3 (18 moved: three wall literals to E1, five claim relabels to
+  E0, the water gate's arcade and the board's bridge-end seat to E3, the inner moat, the river tap's sweep, the plank's
+  widest-left seat and the stone group to E2).
+- **Scope**: the 7 open E0 rows, then the next contiguous run of E1 (FR-006): rows 183-234 (27 rows, `tasks.md`
+  Phase 8), ending with the civic grounds' last row; the next open E1 row is 235. Mostly town and city values; the
+  connector's clearance (0246's 7 ft against `LANE_CLEARANCE`'s 40) moves hamlet maps.
 - **Verification**: as wave 5 - Inashiro first (`make map`, the PNG looked at), the pool through the gate, a town or city
   value by its unit test; the bookends back to back; `impl-drift` on every touched unit; a held value becomes a found row.
 

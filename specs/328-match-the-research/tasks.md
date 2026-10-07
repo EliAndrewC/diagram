@@ -325,32 +325,37 @@ and the departure is a found row tiered by the work it takes (spec Edge Cases), 
       research: rendering
       verify: DONE. DONE. make done green (193 s, every pool map, seeds 41-44); no bookend owed (claim lines and a unit move only); the wave column written
 
-## Phase 8 - wave 7 (the four open E0 claims, then the next run of E1: rows 180-231) - amendment 6, 2026-10-07
+## Phase 8 - wave 7 (the open E0 claims, then the next run of E1: rows 183-234) - amendment 6, 2026-10-07
 
-The four open E0 rows (wave 6's re-checks) first (SC-003); then the next contiguous run of the ranking's E1 rows
-(FR-006), rows 180-231 in ranking order (the brook's assumed width split off its E0 row by amendment 6's first round, row 199): the connector's clearance, the tier text's city note, the samurai caption's
-estates, the castle's inner moat, the town wall's gate ground, the plank's ditch width and its widest-left seat, the river
-tap's sweep, the water gate's opening, the city gate buildings' road and the slid tower, and the civic grounds' sizes,
-counts and reaches (granary, merchant homes and kura, precinct, terrace, cemetery, cremation bed, boundary stones,
-stables, stable yard and its watering). Every `after` these rows carry is a row inside the wave or closed.
+T25a first: the 34 found rows the re-checks of waves 4-6 tiered by their verdict alone are tiered by the work they take, by a
+fresh reader (`audit/t25a-out.jsonl`, applied in `audit/overrides.json`), as T12a did before wave 3 - so the run below is
+chosen on tiers set by the work. Then the 7 open E0 rows (SC-003); then the next contiguous run of E1 (FR-006), rows
+183-234 in ranking order, ending with the civic grounds' last row (the next open E1 row is 235): the connector's
+clearance, the tier text's city note, the samurai caption's estates, the martial hall's practice gear, the town wall's gate
+ground, the plank's ditch, brook and abutment widths, the city gate's ground, road and towers in feet, and the civic
+grounds' sizes, counts and reaches. Every `after` these rows carry is a row inside the wave or closed.
 
-  - `l7r/diagram/hamletgen/ways/law_water.py::off_ford_at#how far from a crossing place a brook crossing may stand, FORD_HALF 30 ft` - claim it: how far from a crossing place a brook crossing may stand, FORD_HALF 30 ft
+  - `l7r/diagram/hamletgen/ways/law_water.py::oblique_at#square ditch crossing` - claim the channel crossing UNRESEARCHED: squared within FORD_SQUARE_TOL_DEG, 10 degrees (0084 squares only the standalone footplank; 0087 solves a carried deck at its way's angle and gives no tolerance), the brook keeping its 0035 citation
+  - `l7r/diagram/hamletgen/ways/law_water.py::off_ford_at#how far from a crossing place a brook crossing may stand, FORD_HALF 30 ft` - claim off_ford_at's reach: how far from a crossing place a brook crossing may stand - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: FORD_HALF, half the 60 ft crossing place, 30 ft
   - `l7r/diagram/hamletgen/ways/law_water.py::short_decks#assumed water widths where none is recorded: 3 ft for a ditch or channel, 6 ft for a stream` - claim it: assumed water widths where none is recorded, 3 ft for a ditch or channel, 6 ft for a stream
-  - `l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.martial_hall#practice gear` - cite 0165 against the code: the state hall's compound holds its wall and three features, the rest implied; the drawn rack and posts depart from it, a found row toward 0165
-  - `l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#assumed stream and channel widths` - cite 0035 for the brook (7 ft wide) against the code's assumed 9 px; the channel default stays UNRESEARCHED; the value change to 7 ft is its own found row
+  - `l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#not along a shelter belt` - split the claim: a lane kept through a shelter belt cited to 0072 drawing, and the 60 ft a lane may run inside one claimed UNRESEARCHED
+  - `l7r/diagram/hamletgen/ways/street.py::row_reach#street run past its end farms` - reword the claim: half a frame past the end farms at both ends of the span, UNRESEARCHED, the run off the map being street_run_out's road (0033 drawing)
+  - `l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#supply ditches only` - split the claim: no plank over the collector or drain cited to 0084 drawing (the foot drains and diagonal edge drains), and the feeder's exclusion from SUPPLY_ROLES claimed UNRESEARCHED
+  - `l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_handover#a through track's handover` - claim the through track's handover UNRESEARCHED: where both ends are off the sheet, the lane end joining it nearest the houses' middle (0190 says only entrance)
 
-  - `l7r/diagram/hamletgen/ways/track.py::stage_track#lane clearance` - 0246 sets a lane's clearance: its middle keeps 7 ft clear of a garden fence, within an 18 ft lane's room, and nothing is built on the tread. The claim should cite 0246.drawing, and the 40 ft no-build corridor should then be judged against that 7 ft
+  - `l7r/diagram/hamletgen/ways/track.py::stage_track#lane clearance` - LANE_CLEARANCE becomes 7 ft (0246 drawing: a lane's middle keeps 7 ft clear of a garden fence and nothing is built on its tread) in place of the 40 ft corridor, and the claim cites 0246.drawing for it
   - `l7r/diagram/interactive/place.py::KINDS#what each tier is` - the city's population_note says 'by convention' it takes in the samurai country estates, where 0001 counts only those within the walls: align the note with 0001; if the convention proves a GM ruling, the claim is CANON naming that ruling
   - `l7r/diagram/overlap/taxonomy.py::_LABEL_GROUP#a caption covers its own group` - the funerary group is in step (wave 5); what is left: `manors` maps to 'estate', so a samurai caption may not cover the manors 0243 lets it cover ("A samurai caption, the samurai houses and estates") - give the samurai caption the estates
-  - `l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.castle#inner moat width` - draw the inner moat within the attested 98-341 ft (Hiroshima's 30 to 104 m) as the broad water between the baileys the drawing page calls for, not `mw * 0.5` (about 40 ft)
-  - `l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.wall#ground round the gate structures` - `bm = 32` is a fixed 32 px, against "about 36 ft clear around each"; should be px(36)
-  - `l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#assumed ditch width` - `DEFAULT_W["field_ditches"]=4.2` and `d.get("w", 4.2)` are px, about 4 to 13 ft, against "2.5 ft at the head and taper toward 1.2 ft"; the default should be about 2.5 ft in feet
-  - `l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#assumed brook width 7 ft` - bring the assumed stream width to the 7 ft brook of 0035 (the code assumes 9 px where a record has none) (after: l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#assumed stream and channel widths)
-  - `l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#off dry crops and gardens` - crops rule a seat out, but the page lays the crossing "at the widest one remaining rather than left off"; the code's hard filter `_wide_enough` leaves the ditch with no plank once every wide seat is ruled out
-  - `l7r/diagram/settlement/city/canals.py::CanalsMixin.farmland_ring#a river tap unswept` - sweep a river tap downstream as a moat tap is swept: a canal leaves a river at a slant, 30 to 45 degrees downstream (0054)
-  - `l7r/diagram/settlement/city/moat.py::MoatMixin.water_gate#one opening` - the code draws one fixed 60 ft opening, where 0179 says "as wide as its canal" and gives a river "a row of arched openings"; size the opening to its canal and draw a row of arches for a river
-  - `l7r/diagram/settlement/city/walls.py::WallsMixin._gate_flanking_buildings#fallback road width` - 0147 answers it: the gate's 30 ft "is the width of the trunk road", against px(26); cite 0147 drawing at 30 ft; also, the code reads `road_width`, not a ring road as the claim says
-  - `l7r/diagram/settlement/city/walls.py::WallsMixin._seat_mural_towers#a slid tower off a gate` - 0148 answers it: no tower "within 390 ft of a gate"; the 45 px floor lets a slid seat land about 84 px (252 ft at 3 ft/px) from a gate; cite 0148 and hold slid seats to px(390)
+  - `l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.martial_hall#practice gear` - drop the practice gear from the state hall's compound (the `_keiko_gear` call) so it is drawn as its wall and three features, the rest implied, and cite research/questions/0165-martial-training-grounds-and-dojo.drawing.html for it
+  - `l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.wall#ground round the gate structures` - the gate structures' reserved margin becomes self.px(36) (about 36 ft clear around each) in place of the fixed `bm = 32` px
+  - `l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#assumed ditch width` - the field ditch's assumed width becomes self.px(2.5) (0084 drawing: 2.5 ft at the head, tapering toward 1.2 ft) in place of 4.2 px, in both `DEFAULT_W["field_ditches"]` and `d.get("w", 4.2)`
+  - `l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#assumed stream and channel widths` - the brook's assumed width becomes self.px(7) (0035 drawing: a brook 7 ft wide) in place of the 9 px `DEFAULT_W["streams"]`, cited to 0035, and the channel's 2.5 px default is claimed UNRESEARCHED
+  - `l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#short abutment` - PLANK_ABUTMENT becomes a real-feet figure converted at each use (self.px), sized so a deck over a 2.5 ft ditch spans about 8 ft (0084 drawing), in place of 6 px at every grain
+  - `l7r/diagram/settlement/city/walls.py::WallsMixin._gate_caption#ground reserved round the gate works` - the guard house and inspection hall's reserved margin becomes self.px(36) (about 36 ft clear around each) in place of the fixed 12 px
+  - `l7r/diagram/settlement/city/walls.py::WallsMixin._gate_flanking_buildings#fallback road width` - the fallback road width becomes self.px(30) (0147 drawing: the gate's 30 ft is the trunk road's width) in place of px(26), and the claim names `road_width`, not a ring road
+  - `l7r/diagram/settlement/city/walls.py::WallsMixin._seat_mural_towers#a slid tower off a gate` - hold a slid mural tower to self.px(390) from every gate (0148 drawing: no tower within 390 ft of a gate) in place of the fixed 45 px
+  - `l7r/diagram/settlement/city/walls.py::WallsMixin._seat_mural_towers#exempt stretches` - the coverage sweep's exempt stretches become self.px(390) of a gate and self.px(165) of its guard buildings in place of the fixed 130 and 55 px
+  - `l7r/diagram/settlement/city/walls.py::WallsMixin._seat_mural_towers#reach counted from the parapet` - a tower's reach is counted from its parapet at self.px(36) out from its center (0148 drawing) in place of the fixed `+ 12.0` px, and the stale half-footprint comment goes
   - `l7r/diagram/settlement/civic_grounds/civic.py::CivicWorksMixin.granary#store size and count` - default store w x h from fixed 58 x 34 px to px(45) x px(25) ft (one office store) or px-converted stores in the 440-740 sq ft band at a landing
   - `l7r/diagram/settlement/civic_grounds/civic.py::CivicWorksMixin.merchant_residences#how many` - default merchant_residences count from 4 to the page's dozen or so rich merchant families (less the 1-3 walled), ~10
   - `l7r/diagram/settlement/civic_grounds/civic.py::CivicWorksMixin.merchant_storehouses#kura size` - draw each merchant kura square, 14-20 ft (0152/0150 drawing: 'Each storehouse is 14 to 20 ft square')
@@ -359,7 +364,6 @@ stables, stable yard and its watering). Every `after` these rows carry is a row 
   - `l7r/diagram/settlement/civic_grounds/civic.py::CivicWorksMixin.terrace#range depth` - range depth_ft from 21.0 to 24.0 (Shibata's 7.3 m)
   - `l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cemetery#rows of low markers` - cemetery marker spacing from fixed 9 px to px(9) (about 9 ft)
   - `l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cremation_ground#fire bed` - fire bed from px(12) x px(8) to about one coffin length and a little wider (~px(6) x px(3)), inside the 11 ft roof
-  - `l7r/diagram/settlement/civic_grounds/justice.py::JusticeGroundsMixin.boundary_marker#how many stones` - the code draws one stone, but the page says "a map draws a group rather than a single stone", one to three. The count should be rolled per entrance from 1 to 3
   - `l7r/diagram/settlement/civic_grounds/justice.py::JusticeGroundsMixin.boundary_marker#stone size` - BOUNDARY_MARKER_FT from 3.0 to 4.0 and drop the 7 px drawn floor so the stone draws about 4 ft
   - `l7r/diagram/settlement/civic_grounds/lodging.py::LodgingMixin.stables#stall divisions` - stall step from 16 ft to one ken (~6 ft): max(6 * sf, floor)
   - `l7r/diagram/settlement/civic_grounds/stable_yard.py::StableYardMixin._stable_yard#yard radius` - yard radius default from 72 px to px(127.5) (255 ft across), converted per map
@@ -367,6 +371,10 @@ stables, stable yard and its watering). Every `after` these rows carry is a row 
   - `l7r/diagram/settlement/civic_grounds/lodging.py::LodgingMixin.animal_ground#caravan ground` - caravan ground default r to reach the 3-trough line (or key trough count on the ground's kind, caravan = 3) (after: l7r/diagram/settlement/civic_grounds/stable_yard.py::StableYardMixin._stable_yard#yard radius)
   - `l7r/diagram/settlement/civic_grounds/stable_yard.py::StableYardMixin._yard_watering#troughs clustered at the nearest well` - well reach from r + 40 px to a well within 40 ft (px(40)) of the yard's edge
 
+- [ ] T25a the found rows tiered provisionally by verdict read and tiered by the work they take, by a fresh reader, before
+      the wave chooses its rows (FR-002, FR-003, SC-003)
+      research: rendering
+      verify:
 - [ ] T25 the bookend pair, back to back: `make perf LABEL=328-start` in a detached worktree at main's engine, then
       `LABEL=328-end` in the clone (constitution VI)
       research: rendering
