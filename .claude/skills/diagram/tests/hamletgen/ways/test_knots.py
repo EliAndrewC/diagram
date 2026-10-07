@@ -107,13 +107,12 @@ def test_a_households_foot_may_move_its_door_end_never() -> None:
     assert kn._fixed({"role": "field way"}, -1) and kn._fixed({"role": "way target"}, 0) and not kn._fixed({}, 0)
 
 
-def test_two_junctions_on_one_lane_within_the_margin_are_a_knot() -> None:
-    """Past the 25 ft reach, inside `KNOT_MARGIN` reaches: a knot where both are junctions on one lane (glyph-check round 2 of
-    Inashiro, a foot slid to 25.18 ft), not where one is a free end."""
-    lanes = [_ln((0.0, 0.0), (-500.0, 0.0), connector=True), _ln((-100.0, 100.0), (-100.0, 0.0)), _ln((-130.0, 100.0), (-130.0, 0.0))]
-    assert [round(d) for _a, _b, d in kn.knots(lanes)] == [30], "two T's on the connector 30 ft apart"
-    assert kn.knots([lanes[0], lanes[1], _ln((-130.0, 100.0), (-130.0, 2.0))]) == [], "an end 2 ft off the connector is no junction"
-    assert kn.knots([lanes[0], lanes[1], _ln((-140.0, 100.0), (-140.0, 0.0))]) == [], "40 ft apart: two T's"
+def test_two_junctions_on_one_lane_within_the_reach_are_a_knot() -> None:
+    """Two T's on one lane within the page's 25 ft reach are a knot; past it they are two T's - `KNOT_MARGIN` is the page's
+    own reach (feature 328: a 1.5 margin went past the page)."""
+    lanes = [_ln((0.0, 0.0), (-500.0, 0.0), connector=True), _ln((-100.0, 200.0), (-100.0, 0.0)), _ln((-200.0, 200.0), (-120.0, 0.0))]
+    assert [round(d) for _a, _b, d in kn.knots(lanes)] == [20], "two T's on the connector 20 ft apart"
+    assert kn.knots([lanes[0], lanes[1], _ln((-200.0, 200.0), (-130.0, 0.0))]) == [], "30 ft apart: two T's"
 
 
 def test_a_knots_corner_is_taken_out_of_the_lane_joining_its_two_junctions() -> None:
