@@ -6,6 +6,8 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 ## Occasions
 
 - none: wave 1 changes `Research:` claim lines only (tier E0) - nothing a map draws or where it is placed moves.
+- placement-changed: village lane - wave 4 brings the lane law to 0081 and 0246 (7 ft clear of a fence, ends joined
+  within 25 ft, tails and hooks cut at 40 and 12 ft): the lanes are re-placed by substantially different rules.
 - none (wave 2): each fix moves one value inside a rule that already places the element (a weight, a pitch, a share, a
   count's cap, an extent); no element is new to a map, no glyph is redrawn, and no element is re-placed by different rules.
 
@@ -136,4 +138,65 @@ lines only. The rows:
 - [x] T13 the close: `make done` green; the wave column set from the index; landed (FR-005, FR-006, SC-002, SC-003)
       research: rendering
       verify: DONE. make done green; the wave column set from the index (audit/waves.json); the claims gate lists nothing introduced; findings 553 -> 525
+
+## Phase 5 - wave 4 (the lane law: three E0 claims, then the E1 rows of `hamletgen/ways/`) - amendment 3, 2026-10-07
+
+The three open E0 rows (undecided decisions in the lane code and the seating) come first (SC-003); then the 37 E1 rows of
+the lane law, held together since amendment 1 (plan D6), with the lane rows the re-checks found since. One rule set:
+0246's lane middle 7 ft clear of a garden fence, 0081's ends joined within 25 ft, a tail under 40 ft past a crossing cut, a
+hook of 12 ft turning 90 degrees or more cut, a lane end serving a house within 60 ft. A row whose map fails the gate in a
+way that takes more work than its tier takes that tier and waits on a found row (Edge Cases). The rows:
+
+  - `l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#front-row standoff from the field set by the homestead core's reach (house, yard, shed, well pocket; garden excluded)` - claim the front-row standoff by the homestead core's reach
+  - `l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton arm clipped WEB_FABRIC_GAP (7 ft) off the steadings and trimmed back to the last point serving a house` - claim the skeleton arm's 7 ft fabric clip and its trim (0246)
+  - `l7r/diagram/hamletgen/ways/web.py::stage_web#web lanes routed round the households' reserved wood seats as fabric` - claim the wood seats as fabric the web routes round
+  - `l7r/diagram/hamletgen/ways/bund.py::RunOnBlocks.clear#off the steadings` - FOOTPATH_FABRIC_GAP 4 -> 7 ft (lane middle at least 7 ft off a garden fence, 0246)
+  - `l7r/diagram/hamletgen/consts.py::FOOTPATH_FABRIC_GAP#footpath off a plot` - FOOTPATH_FABRIC_GAP 4.0 -> 7.0 (0246: a lane's middle at least 7 ft from a garden fence, footpath included)
+  - `l7r/diagram/hamletgen/ways/clearance.py::clear_runs#threads between steadings` - clear_runs default tight_margin 6.0 -> 7.0 (WEB_FABRIC_GAP)
+  - `l7r/diagram/hamletgen/ways/corridors.py::FIELD_ROUTE_GAP_FT#field way off the steadings` - FIELD_ROUTE_GAP_FT 5.5 -> 7 ft centerline off gardens
+  - `l7r/diagram/hamletgen/ways/fabric.py::_draw_web#web lane's no-build corridor` - WEB_CLEARANCE 28 -> 18 ft, the lane's room between homesteads (0246)
+  - `l7r/diagram/hamletgen/ways/fabric.py::_hits_a_steading#no house on a tread` - drop the 2 ft pad: a house corner is tested against half the tread only (0246 no corner on the tread)
+  - `l7r/diagram/hamletgen/ways/fabric.py::house_hit#no house on a tread` - house_hit window half the tread, no 2 ft pad
+  - `l7r/diagram/hamletgen/ways/joints.py::_MEET_FT#ends that nearly meet` - _MEET_FT 11.5 -> 25 ft (0081 ends within 25 ft joined)
+  - `l7r/diagram/hamletgen/ways/joints.py::meet_end_to_end#ends that nearly meet are joined` - meet_end_to_end joins ends within 25 ft
+  - `l7r/diagram/hamletgen/ways/law.py::JOIN_REACH_FT#a join that stops short` - _LANE_JOIN_FT (JOIN_REACH_FT) 30 -> 25 ft (0081)
+  - `l7r/diagram/hamletgen/ways/checks.py::lanes_share_tread#one network at 40 ft` - treads count as joined only within the 25 ft join reach (0081), not 40 ft
+  - `l7r/diagram/hamletgen/ways/law.py::connector_hairpin_ends#no hairpin at the track` - connector_hairpin_ends returning-leg figure 25 -> 40 ft (0081 section 1342)
+  - `l7r/diagram/hamletgen/ways/law.py::fouls_fabric#foul margin` - _TOUCH_GAP 4 -> 7 ft off another's yard or garden (0246 lane middle 7 ft off a fence)
+  - `l7r/diagram/hamletgen/ways/clearance.py::may_write#no nearer the fabric` - may_write bar max(_TOUCH_GAP, w/2+2) -> 7 ft off garden/yard fabric
+  - `l7r/diagram/hamletgen/ways/clearance.py::_clear_touch#junction link margin` - _clear_touch margin off yards and gardens 4 -> 7 ft (_TOUCH_GAP, 0246)
+  - `l7r/diagram/hamletgen/ways/law.py::near_misses#ends that nearly meet are joined` - near_misses uses the 25 ft join reach
+  - `l7r/diagram/hamletgen/ways/law.py::span_walkable#a walkable span` - span_walkable keeps yards and gardens 7 ft off the line
+  - `l7r/diagram/hamletgen/ways/settle.py::fouled_segment#off another household's yard or garden` - fouled_segment fouls a tread within 7 ft of another's yard or garden
+  - `l7r/diagram/hamletgen/ways/smooth.py::_END_HOUSE_FT#lane end reaches a house` - _END_HOUSE_FT 90 -> 60
+  - `l7r/diagram/hamletgen/ways/geom.py::_trim_to_service#an outlying house keeps its way` - _trim_to_service keeps an end serving a keep house only within 60 ft (or 12 ft of built ground), not WEB_REACH_FT 100
+  - `l7r/diagram/hamletgen/ways/smooth.py::_END_WAY_FT#lane end reaches a way` - _END_WAY_FT 40 -> 60
+  - `l7r/diagram/hamletgen/ways/smooth.py::_LONG_ARM_FT#hairpin arm cut length` - _LONG_ARM_FT 90 -> 40
+  - `l7r/diagram/hamletgen/ways/sweeps.py::_FREE_STUB_FT#free-end stub past a kink` - free-end stub cut aligned to 0081: last leg 12 ft or less turning 90 deg or more (_FREE_STUB_FT 20 -> 12, kink 50 -> 90)
+  - `l7r/diagram/hamletgen/ways/sweeps.py::_PAST_CONNECTOR_FT#overrun past the connector` - _PAST_CONNECTOR_FT 80 -> 40 (0081 tail under 40 ft past a crossing)
+  - `l7r/diagram/hamletgen/ways/sweeps.py::_ROUTE_JOIN_FT#wide ends joined` - _ROUTE_JOIN_FT 30 -> 25
+  - `l7r/diagram/hamletgen/ways/sweeps.py::_bridge_collinear_breaks#a short gap closed at any bearing` - any-bearing bridge band uses the 25 ft join reach
+  - `l7r/diagram/hamletgen/ways/sweeps.py::_bridge_collinear_breaks#bridge clearance fallback` - bridge clearance fallback 4 -> 7 ft line off fabric (no lower fallback)
+  - `l7r/diagram/hamletgen/ways/sweeps.py::cut_past_connector#overrun past the connector cut` - cut_past_connector cuts tails under 40 ft
+  - `l7r/diagram/hamletgen/ways/sweeps.py::trim_free_stub#only a free-end stub of 20 ft or less (_FREE_STUB_FT) is cut` - claim the stub cut citing 0081 a lane's end loses its hook once aligned
+  - `l7r/diagram/hamletgen/ways/touch.py::_touch_junctions#join reach` - _touch_junctions reach 25 ft on every pass (30 and final 48 -> 25)
+  - `l7r/diagram/hamletgen/ways/track.py::_thread_the_fabric#gap off the steadings` - TRACK_FABRIC_GAP 16 -> 7 ft (0246 lane middle 7 ft off a fence)
+  - `l7r/diagram/hamletgen/ways/geom.py::push_clear_of_fabric#gateway clearance` - TRACK_FABRIC_GAP 16 -> 7 ft in push_clear_of_fabric (0081/0246 lane-to-fence clearance)
+  - `l7r/diagram/hamletgen/ways/web.py::stage_web#a row street trimmed to end at its outermost door-path joint or last farm door` - the row street runs on off the map as the road into it (0033 drawing), not trimmed at its last farm's path - with the lane law
+  - `l7r/diagram/hamletgen/ways/web.py::stage_web#a web lane's span` - a back lane's span held to the houses it serves, within WEB_REACH_FT (100 ft, 0246), not 1.5 x WEB_REACH_FT (150 ft); the claim cites 0246
+  - `l7r/diagram/hamletgen/ways/web.py::stage_web#back lane tie spacing` - stage_web passes 1.5 x BUNDLE_PITCH to web_cuts so ties stand about 300 ft apart
+  - `l7r/diagram/hamletgen/ways/web.py::stage_web#door path distance` - DOOR_REACH_FT 40 ft brought to 0246 drawing's GUESS for a way reaching a farmhouse (within 60 ft of the house, or 12 ft of its built ground), the claim citing it
+  - `l7r/diagram/hamletgen/ways/web.py::stage_web#orphan stub joined` - an orphan stub joined only within 0081's 25 ft join reach, not _STUB_REACH_FT 48 ft (with the lane law, wave 4)
+- [ ] T14 the bookend before the first edit: `make perf LABEL=328-start` re-taken on the clone at main's engine (the wave's own pair) (constitution VI)
+      research: rendering
+      verify:
+- [ ] T15 the three E0 claims; then the lane law's values, each with the unit tests it moves; proven on the reference hamlet (Inashiro, its PNG looked at) and then across the pool and the cohort's bookend seeds (FR-004, FR-005)
+      research: rendering
+      verify:
+- [ ] T16 every touched unit re-checked by `impl-drift`; each wave-4 row IN-STEP or re-tiered with its measured reason (FR-005, SC-002)
+      research: rendering
+      verify:
+- [ ] T17 the occasion's review (glyph-check on the village lane, one map) on a green gate; the close: `make perf LABEL=328-end` and the band's records, `make done` green, the wave column, landed (FR-005, FR-006, SC-002, SC-003)
+      research: rendering
+      verify:
 
