@@ -1,0 +1,62 @@
+{
+  "band": 1,
+  "base": {
+    "commit": "322cb9913",
+    "label": "328-start",
+    "utc": "20261007T050851Z"
+  },
+  "binding": "611bb9e9a1eaf53eaedd423664bb3e608b7a93b510280abca7a094520a91705a",
+  "end": {
+    "commit": "99fcf016e",
+    "label": "328-end",
+    "utc": "20261007T060015Z"
+  },
+  "environment": "local",
+  "feature": "328-match-the-research",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "8d3395e5-fe32-4f85-9c89-80c344d2ac1a",
+    "utc": "20261007T060712Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": 8.0,
+          "39": 0.0,
+          "4": 0.0,
+          "47": 0.0
+        },
+        "total_pct": 1.7
+      },
+      "20": {
+        "seeds": {
+          "25": -1.5,
+          "39": 0.0,
+          "4": 6.5,
+          "47": -1.8
+        },
+        "total_pct": 0.8
+      },
+      "40": {
+        "seeds": {
+          "25": -4.9,
+          "39": -1.7,
+          "4": -1.3,
+          "47": -2.5
+        },
+        "total_pct": -2.5
+      }
+    },
+    "seeds": {
+      "25": 0.0,
+      "39": -2.7,
+      "4": -3.9,
+      "47": 2.6
+    },
+    "total_pct": -1.2
+  },
+  "note": "matches reviewer counterfactual (detached worktrees 322cb9913/99fcf016e, medians of 3): end+old _PRIVY_SEATS order returns seed 4@20hh to 6.2s (notice 0.85->0.14) and seed 25@10hh to 2.6s (web 0.51->0.41, hinterland 0.51->0.45); WET_SHARE_CAP, well cap, DOORYARD_STEPS restored change nothing; diff reorders the weights to 0047's stable/yard/front/barn; total -1.2%",
+  "verdict": "consistent"
+}

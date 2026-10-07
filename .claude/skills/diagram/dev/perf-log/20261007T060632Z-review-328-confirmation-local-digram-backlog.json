@@ -1,0 +1,62 @@
+{
+  "band": 1,
+  "base": {
+    "commit": "322cb9913",
+    "label": "328-start",
+    "utc": "20261007T050851Z"
+  },
+  "binding": "611bb9e9a1eaf53eaedd423664bb3e608b7a93b510280abca7a094520a91705a",
+  "end": {
+    "commit": "99fcf016e",
+    "label": "328-end",
+    "utc": "20261007T060015Z"
+  },
+  "environment": "local",
+  "feature": "328-match-the-research",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "8d3395e5-fe32-4f85-9c89-80c344d2ac1a",
+    "utc": "20261007T060632Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": 8.0,
+          "39": 0.0,
+          "4": 0.0,
+          "47": 0.0
+        },
+        "total_pct": 1.7
+      },
+      "20": {
+        "seeds": {
+          "25": -1.5,
+          "39": 0.0,
+          "4": 6.5,
+          "47": -1.8
+        },
+        "total_pct": 0.8
+      },
+      "40": {
+        "seeds": {
+          "25": -4.9,
+          "39": -1.7,
+          "4": -1.3,
+          "47": -2.5
+        },
+        "total_pct": -2.5
+      }
+    },
+    "seeds": {
+      "25": 0.0,
+      "39": -2.7,
+      "4": -3.9,
+      "47": 2.6
+    },
+    "total_pct": -1.2
+  },
+  "note": "reviewer counterfactual (detached worktrees at 322cb9913/99fcf016e, 3 reps, medians): the growth is the privy-seat reorder (fixtures._PRIVY_SEATS), not WET_SHARE_CAP or the well cap. Seed 4@20hh: start 6.2s (notice 0.14), end 6.7s (notice 0.85, web 0.73, homesteads 1.67); end+old privy order 6.2s (notice 0.14) - growth gone; end+WET_SHARE_CAP 0.5 6.6s, end+well cap 6 (3 wells drawn, verified) 6.7s, end+old DOORYARD_STEPS 6.7s - unchanged. Seed 25@10hh: start 2.6s (hinterland 0.45, web 0.41), end 2.8s (0.51, 0.51); end+old privy order 2.6s (0.45, 0.41); wet/well/door restored 2.8s unchanged. The explanation names two causes that removing does not touch and is silent on web +0.1s.",
+  "verdict": "inconsistent"
+}

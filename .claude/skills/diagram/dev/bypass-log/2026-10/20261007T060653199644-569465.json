@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-07T06:06:53Z",
+  "target": "perf-explain",
+  "commit": "c8e7c2c9e",
+  "outcome": "permitted",
+  "why": "perf-explain UNVERIFIED: the control is perf-audit's own run (detached worktrees at the start and end commits, medians of 3: the end commit with the old privy order returns every stage to its start time), recorded in its confirmation note rather than as a measurements.json key"
+}
