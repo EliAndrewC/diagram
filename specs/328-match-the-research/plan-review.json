@@ -1,81 +1,38 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "9be4b3f746a4716bd5a1d3fc93baca492e43f7f4a5b25baacee8d2fe7c217c5e",
+ "plan_sha256": "af680d63f32633dce3fc48b93182cf070bf6aed1cc324d4f7fe53cfe8f9ac2e4",
  "reviewed": "2026-10-07",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W17-1 stale row dropped",
-   "summary": "wave 16's staff-housing found row dropped, its closing wave (4, IN-STEP) restored",
+   "id": "W19-1 scope rows 416, 417",
+   "summary": "the belt into the marsh (416) and the wood beyond the fields (417); next open row 421",
    "class": "within",
-   "why": "the row's later round was IN-STEP; nothing to fix"
+   "why": "FR-006 contiguous run: no open in-scope row before 416; 418-420 already closed (waves 4, 16); 421 next open, as tasks.md says"
   },
   {
-   "id": "W17-2 three UNCLAIMED claims",
-   "summary": "claims for stage_windbreak no-copse (UNRESEARCHED), plan_site grove sides (0036 drawing), board 60 ft farthest seat (GUESS, 0190 drawing)",
+   "id": "W19-2 belt wet guard retired",
+   "summary": "past_the_lanes moves the band past a back lane into the marsh, its trees there alder via the existing village_grove alder mix",
    "class": "within",
-   "why": "FR-004 claims work; labels match their pages"
+   "why": "FR-004: the row's fix verbatim; 0074 drawing: 'Where a village's shelter belt runs down into the marsh, its trees there are drawn as alder'; no research edit; no pool belt moved (manifest diff touches commons/scrub/crowns only)"
   },
   {
-   "id": "W17-3 WEB_HARD_GAP re-tiered E3",
-   "summary": "row moved E2 -> E3 by measurement; the override names all five modules",
+   "id": "W19-3 wood preference inverted",
+   "summary": "open_ground_patches prefers seats reached across the field from the houses, overturning feature 261's settlement-review preference",
    "class": "within",
-   "why": "FR-003 tiering by work; the row stays ranked"
+   "why": "FR-004: the row says 'invert _near_side'; 0077 drawing: 'On the nearest slope beyond the fields from the houses ... not on whatever open ground lies nearest the houses' and 'the far side of the fields on the level'. Feature 261's preference was a review judgment, not research; the GM asked the implementation to match the research. Still a preference (fallback when none across), as before; no research edit"
   },
   {
-   "id": "W17-4 every thicket pass held just beyond the back row",
-   "summary": "near passes (THICKET_REACH_FT) and the row-length fallback alike hold the stand's south edge within THICKET_ROW_DEPTH_FT (30 ft) of the back row's back edge; no thicket only where none fits in that band",
-   "class": "narrowing",
-   "ruling": "LEGITIMATE",
-   "why": "FR-004: the near passes let a stand sit far behind the row, off 0075 drawing's 'just beyond the back row'; holding every pass to the band moves the code onto the page. Dropping a stand that fits nowhere in the band stands as ruled in round 2: a seat deep in the page is not the thicket 0075 draws. Measured from the back edge (min over houses of y - h/2) is stricter than the center line, not looser. Kashikawa's manifest confirms: stand south edge 74.5 px north of the back edge before, now overlapping it by 5.6 px within the center line. No research edit (FR-004)"
+   "id": "W19-4 occasions",
+   "summary": "woodland commons re-placed on Inashiro and Kashikawa, a glyph check each; belt change moved no pool map",
+   "class": "within",
+   "why": "feature 294 occasion for a re-placed element; manifest diffs confirm commons moved on both, no belt key changed"
   },
   {
-   "id": "W17-5 occasion declared",
-   "summary": "placement-changed: shared bamboo grove on kashikawa (glyph check); Mizuguchi unchanged",
+   "id": "W19-5 condition (6) carried",
+   "summary": "(1)-(5) held at 822e44c52; wave 19's pair opens there",
    "class": "within",
-   "why": "feature 294 occasion for a re-placed element; the Kashikawa manifest's bamboo_stands moved, Mizuguchi's file not in the commit"
-  },
-  {
-   "id": "W17-6 condition (6) carried",
-   "summary": "(1)-(5) held at b49a6c221; wave 17's pair opens there",
-   "class": "within",
-   "why": "continues the ruled wave-11 exception"
-  },
-  {
-   "id": "W18-1 T61a first",
-   "summary": "wave 17's 5 found rows tiered by their work by a fresh reader; two already-fixed E0 rows marked wave 17",
-   "class": "within",
-   "why": "FR-002/FR-003: tiers by work; the two rows (keep-out pads, its omitted pads) were fixed by 074a12773, an ancestor of wave 17's close 8c3b5cdef, IN-STEP at its last impl-drift round, and the claim on HEAD names 2-20 ft and kosatsuba/byres/retirement houses as the code pads them"
-  },
-  {
-   "id": "W18-2 scope rows 40, 41, 414",
-   "summary": "the two open E0 claims and the E2 run head (the 70% passes dropped)",
-   "class": "within",
-   "why": "FR-006 contiguous: rows 40 and 41 are the only open in-scope E0 rows, there is no open E1, and 414 is the first open E2 row; the next open row is 416"
-  },
-  {
-   "id": "W18-3 the page size or none",
-   "summary": "the thicket drawn only at 0075 drawing's 84 by 58 ft, never at 70%; none where it fits nowhere",
-   "class": "within",
-   "why": "FR-004: the code moves to the page, which draws one size and records no smaller form; drawing none where the stand fits nowhere is the code's existing last-resort behavior, not a new carve-out, and no research is edited"
-  },
-  {
-   "id": "W18-4 occasions none, measured",
-   "summary": "both pool thickets were seated at full size (drawn 71.0 x 54.8 and 76.9 x 52.1 ft, beyond the 70% rect of 58.8 x 40.6 ft); manifests unchanged",
-   "class": "within",
-   "why": "feature 294: no element new or moved; T61 regenerates both maps, so a moved stand would re-open the occasion"
-  },
-  {
-   "id": "W18-5 condition (6) carried",
-   "summary": "(1)-(5) held at 8c3b5cdef; its backup pushed; wave 18's pair opens there",
-   "class": "within",
-   "why": "continues the ruled wave-11 exception; origin/backup/digram-backlog is at 8c3b5cdef (ls-remote)"
-  },
-  {
-   "id": "W18-6 verification",
-   "summary": "impl-drift on touched claims, the gate, wave 18 own bookend pair",
-   "class": "within",
-   "why": "FR-005"
+   "why": "continues the ruled wave-11 exception: T61/T62 ticked, backup/digram-backlog at 822e44c52 on the remote, this wave its own amendment with a plan review before its first tick"
   }
  ],
  "verdict": "CLEAR"

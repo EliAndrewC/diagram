@@ -471,3 +471,9 @@ pass on the sheet modals, not this feature's ranking - modals are not claims):
 - `l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#keep-out pads` (DRIFTED, E2): the claim says 2-30 ft, but these pads run 2-20 ft (woods 20, wells 14, kosatsuba 12, houses and retirement houses 10, lanes and belt 10, yards, gardens, sheds and byres 8, groves 4, persimmons 2). The 30 ft is the pond's pad, under another claim. The claim also leaves out byres, retirement houses a
 - `l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#thicket size bamboothicketft 84 x 58 ft 0075 20 guess` (UNCLAIMED, E0): thicket size BAMBOO_THICKET_FT 84 x 58 ft (0075 §20 GUESS)
 - `l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#the stand's near edge held within thicketrowdepthft 30 ft be` (UNCLAIMED, E0): the stand's near edge held within THICKET_ROW_DEPTH_FT 30 ft behind the back row's back edge, falling back to anywhere along the row
+
+## Wave 19 (2026-10-07)
+
+- For the GM (spec-fidelity's note, amendment 18): `settlement/homestead_parts/stands.py::deep_marsh` still drops belt clumps
+  deeper than the reed margin, so a belt moved into the marsh draws its alder at the margin and none deeper. A separate claim,
+  not ranked as a finding.
