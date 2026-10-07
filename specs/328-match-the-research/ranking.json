@@ -1251,7 +1251,7 @@
   "tier_as_ranked": "E0",
   "e0_basis": "T38b: claim lines only; the code stands",
   "moved": "T38b: tiered by its work - line 205 judges the stub at w 6.0, exactly 0081's 6 ft track out, so only the claim is missing.",
-  "wave": "",
+  "wave": "10",
   "scope": "kept"
  },
  {
@@ -2091,7 +2091,7 @@
   "tier_as_ranked": "E0",
   "e0_basis": "T38b: claim lines only; the code stands",
   "moved": "T38b: tiered by its work - line 393's fallbacks are the writers' own drawn defaults (water.py draws a stream 9 px), so the claim records what is done without stating a drift.",
-  "wave": "",
+  "wave": "10",
   "scope": "kept"
  },
  {
@@ -2108,22 +2108,7 @@
   "tier_as_ranked": "E0",
   "e0_basis": "T38b: claim lines only; the code stands",
   "moved": "T38b: tiered by its work - lines 444-445 already register every drawn plot in both registries, so the behavior matches and only the claim is written.",
-  "wave": "",
-  "scope": "kept"
- },
- {
-  "key": ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_source#pond feeder from the sluice",
-  "verdict": "UNCLAIMED",
-  "tier": "E0",
-  "fix": "the pond feeder drawn from the sluice to the pond's center, recorded as coming from off the map",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py"
-  ],
-  "after": [],
-  "flag": "",
-  "found": "wave 10 re-check (tier provisional, by verdict)",
-  "tier_as_ranked": "E0",
-  "wave": "",
+  "wave": "10",
   "scope": "kept"
  },
  {
@@ -2158,22 +2143,6 @@
   "scope": "deferred"
  },
  {
-  "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::PRIVY_FRONT_STEP_FT#front privy off the front wall",
-  "tier": "E0",
-  "fix": "relabel GUESS research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: 8 ft (the page records the 8 ft as its own guess); the code's 8 ft edge stands",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py"
-  ],
-  "after": [],
-  "flag": "",
-  "tier_as_ranked": "E1",
-  "e0_basis": "bundle I: the figure matches, the label owes the page's GUESS",
-  "moved": "wave 9 bundle I: MISLABELED after its value moved - the page marks the 8 ft a GUESS",
-  "verdict": "DRIFTED",
-  "wave": "",
-  "scope": "kept"
- },
- {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#manure heap fallback spots",
   "verdict": "UNCLAIMED",
   "tier": "E0",
@@ -2187,7 +2156,7 @@
   "tier_as_ranked": "E0",
   "e0_basis": "T38a: claim lines only; the code stands",
   "moved": "T38a: tiered by its work - Writing a claim line; no behavior changes.",
-  "wave": "",
+  "wave": "10",
   "scope": "kept"
  },
  {
@@ -2204,7 +2173,7 @@
   "tier_as_ranked": "E0",
   "e0_basis": "T38a: claim lines only; the code stands",
   "moved": "T38a: tiered by its work - Writing a claim line; no behavior changes.",
-  "wave": "",
+  "wave": "10",
   "scope": "kept"
  },
  {
@@ -2263,7 +2232,7 @@
   "tier_as_ranked": "E0",
   "e0_basis": "T38a: claim lines only; the code stands",
   "moved": "T38a: tiered by its work - Writing a claim line; no behavior changes.",
-  "wave": "",
+  "wave": "10",
   "scope": "kept"
  },
  {
@@ -2281,7 +2250,7 @@
   "found": "wave 9 re-check (tiered by its work at T38a)",
   "moved": "T38a: tiered by its work - Only the claim line gains a page.",
   "verdict": "MISLABELED",
-  "wave": "",
+  "wave": "10",
   "scope": "kept"
  },
  {
@@ -2318,14 +2287,16 @@
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#mixed broadleaf belt",
   "verdict": "UNCLAIMED",
   "tier": "E0",
-  "fix": "a mixed_broadleaf belt drawn with no conifer, in the woods' crown size mix",
+  "fix": "add a claim to groves.py::_draw_grove: 'mixed broadleaf belt - 0072: rounded broadleaf crowns in the woods' size mix, no conifer'",
   "files": [
    ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py"
   ],
   "after": [],
   "flag": "",
-  "found": "wave 10 re-check (tier provisional, by verdict)",
+  "found": "wave 10 re-check (tiered by its work at T42a)",
   "tier_as_ranked": "E0",
+  "e0_basis": "T42a: claim lines only; the code stands",
+  "moved": "T42a: tiered by its work - The code already draws the mixed_broadleaf form as 0072 describes it, so only the claim line is written.",
   "wave": "",
   "scope": "kept"
  },
@@ -2359,7 +2330,7 @@
   "tier_as_ranked": "E0",
   "e0_basis": "T38a: claim lines only; the code stands",
   "moved": "T38a: tiered by its work - Writing a claim line; no behavior changes.",
-  "wave": "",
+  "wave": "10",
   "scope": "kept"
  },
  {
@@ -2376,7 +2347,7 @@
   "tier_as_ranked": "E0",
   "e0_basis": "T38a: claim lines only; the code stands",
   "moved": "T38a: tiered by its work - Claim lines split; no behavior changes.",
-  "wave": "",
+  "wave": "10",
   "scope": "kept"
  },
  {
@@ -2393,7 +2364,7 @@
   "tier_as_ranked": "E0",
   "e0_basis": "T38a: claim lines only; the code stands",
   "moved": "T38a: tiered by its work - Writing a claim line; no behavior changes.",
-  "wave": "",
+  "wave": "10",
   "scope": "kept"
  },
  {
@@ -2424,7 +2395,7 @@
   "tier_as_ranked": "E0",
   "e0_basis": "T38a: claim lines only; the code stands",
   "moved": "T38a: tiered by its work - Writing a claim line; no behavior changes.",
-  "wave": "",
+  "wave": "10",
   "scope": "kept"
  },
  {
@@ -2441,7 +2412,7 @@
   "tier_as_ranked": "E0",
   "e0_basis": "T38a: claim lines only; the code stands",
   "moved": "T38a: tiered by its work - Writing a claim line; no behavior changes.",
-  "wave": "",
+  "wave": "10",
   "scope": "kept"
  },
  {
@@ -2474,7 +2445,7 @@
   "tier_as_ranked": "E0",
   "e0_basis": "T38b: claim lines only; the code stands",
   "moved": "T38b: tiered by its work - the reservation already reads the same _west_sun_ft the planting reads, set to 0038's 50 ft at stages.py:156, so the behavior matches the page and only the label is wrong.",
-  "wave": "",
+  "wave": "10",
   "scope": "kept"
  },
  {
@@ -2491,7 +2462,7 @@
   "tier_as_ranked": "E0",
   "e0_basis": "T38b: claim lines only; the code stands",
   "moved": "T38b: tiered by its work - line 253 uses COPSE_CLUMP_BS, whose module claim already cites 0036; the unit only lacks its own claim line.",
-  "wave": "",
+  "wave": "10",
   "scope": "kept"
  },
  {
@@ -2508,7 +2479,7 @@
   "tier_as_ranked": "E0",
   "e0_basis": "T38b: claim lines only; the code stands",
   "moved": "T38b: tiered by its work - the pitch is placement geometry (cover without gaps) that the record does not speak to, so a convention claim states it with no behavior change.",
-  "wave": "",
+  "wave": "10",
   "scope": "kept"
  },
  {
@@ -2600,21 +2571,23 @@
   "tier_as_ranked": "E0",
   "e0_basis": "T38a: claim lines only; the code stands",
   "moved": "T38a: tiered by its work - Writing a claim line; no behavior changes.",
-  "wave": "",
+  "wave": "10",
   "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#dispersed well pocket",
   "verdict": "UNCLAIMED",
   "tier": "E0",
-  "fix": "the dispersed farm's well pocket: the wellhead plus a 3 ft margin (px(6.0))",
+  "fix": "add a claim to bundle.py::_bundle_layout: 'dispersed well pocket - UNRESEARCHED: the wellhead plus a 3 ft margin, 2 * _well_vr() + px(6.0)' (bundle.py:390), as _lay_well_pocket's (:412)",
   "files": [
    ".claude/skills/diagram/l7r/diagram/settlement/rolling/bundle.py"
   ],
   "after": [],
   "flag": "",
-  "found": "wave 10 re-check (tier provisional, by verdict)",
+  "found": "wave 10 re-check (tiered by its work at T42a)",
   "tier_as_ranked": "E0",
+  "e0_basis": "T42a: claim lines only; the code stands",
+  "moved": "T42a: tiered by its work - The pocket already matches the 3 ft margin the claim will state and its twin at bundle.py:412.",
   "wave": "",
   "scope": "kept"
  },
@@ -2632,7 +2605,7 @@
   "tier_as_ranked": "E0",
   "e0_basis": "T38a: claim lines only; the code stands",
   "moved": "T38a: tiered by its work - Writing a claim line; no behavior changes.",
-  "wave": "",
+  "wave": "10",
   "scope": "kept"
  },
  {
@@ -2825,7 +2798,7 @@
   "tier_as_ranked": "E0",
   "e0_basis": "T38b: claim lines only; the code stands",
   "moved": "T38b: tiered by its work - line 440 already applies the 60 ft band its constant's own claim (_helpers.py:62) records, and 0190 does not speak to an anchor band, so writing the claim states no drift.",
-  "wave": "",
+  "wave": "10",
   "scope": "kept"
  },
  {
@@ -2842,7 +2815,7 @@
   "tier_as_ranked": "E0",
   "e0_basis": "T38b: claim lines only; the code stands",
   "moved": "T38b: tiered by its work - lines 448-449 apply the 20 ft band exactly as its constant records, and the record is silent on it, so only the claim line is missing.",
-  "wave": "",
+  "wave": "10",
   "scope": "kept"
  },
  {
@@ -2863,14 +2836,16 @@
   "key": ".claude/skills/diagram/l7r/diagram/waterfields/carve.py::_dry_fields#end plot split",
   "verdict": "UNCLAIMED",
   "tier": "E0",
-  "fix": "an end plot split in two when wider than 1.35 plot widths (coarse grains only)",
+  "fix": "add a claim to waterfields/carve.py::_dry_fields: 'end plot split - NONE: an end cell stretched past 1.35 plot widths by the snap to the canal's length is halved, coarse grains only (carve.py:119)'",
   "files": [
    ".claude/skills/diagram/l7r/diagram/waterfields/carve.py"
   ],
   "after": [],
   "flag": "",
-  "found": "wave 10 re-check (tier provisional, by verdict)",
+  "found": "wave 10 re-check (tiered by its work at T42a)",
   "tier_as_ranked": "E0",
+  "e0_basis": "T42a: claim lines only; the code stands",
+  "moved": "T42a: tiered by its work - The split is a tiling-artifact guard the code already performs as an honest NONE claim would say.",
   "wave": "",
   "scope": "kept"
  },
@@ -2878,14 +2853,16 @@
   "key": ".claude/skills/diagram/l7r/diagram/waterfields/comb.py::_comb_drain#straight last leg",
   "verdict": "UNCLAIMED",
   "tier": "E0",
-  "fix": "no jittered sample within DRAIN_MIN_LEG (84 px) of the outfall, so the drain's last leg is straight",
+  "fix": "add a claim to waterfields/comb.py::_comb_drain: 'straight last leg - UNRESEARCHED: no jittered sample within DRAIN_MIN_LEG (84 px) of the outfall' (comb.py:619)",
   "files": [
    ".claude/skills/diagram/l7r/diagram/waterfields/comb.py"
   ],
   "after": [],
   "flag": "",
-  "found": "wave 10 re-check (tier provisional, by verdict)",
+  "found": "wave 10 re-check (tiered by its work at T42a)",
   "tier_as_ranked": "E0",
+  "e0_basis": "T42a: claim lines only; the code stands",
+  "moved": "T42a: tiered by its work - The code already does what the claim will state and 0060 is silent on the last leg's straightness, so only the claim line is written.",
   "wave": "",
   "scope": "kept"
  },
@@ -2893,14 +2870,16 @@
   "key": ".claude/skills/diagram/l7r/diagram/waterfields/polder.py::_apex#polder plumbing",
   "verdict": "MISLABELED",
   "tier": "E0",
-  "fix": "cite 0005 (no parcel tapers to a point): the unit applies the 25 degree threshold and picks the sharpest convex corner first",
+  "fix": "relabel the claim on waterfields/polder.py::_apex: cite 0005 (no basin tapers to a point sharper than 25 degrees), POLDER_APEX_DEG = 25.0 at polder.py:839, the sharpest convex corner taken first",
   "files": [
    ".claude/skills/diagram/l7r/diagram/waterfields/polder.py"
   ],
   "after": [],
   "flag": "",
-  "found": "wave 10 re-check (tier provisional, by verdict)",
+  "found": "wave 10 re-check (tiered by its work at T42a)",
   "tier_as_ranked": "E0",
+  "e0_basis": "T42a: claim lines only; the code stands",
+  "moved": "T42a: tiered by its work - The code already applies 0005's 25 degree threshold (polder.py:839, :889), so only the claim line changes.",
   "wave": "",
   "scope": "kept"
  },
@@ -2922,14 +2901,16 @@
   "key": ".claude/skills/diagram/l7r/diagram/waterfields/polder.py::build_polder#interior bund node jitter",
   "verdict": "UNCLAIMED",
   "tier": "E0",
-  "fix": "the interior bund nodes jittered by organic (0.05, 0.02)",
+  "fix": "add a claim to build_polder: 'hand-piled outlines - 0014: each parcel softened by organic (fillet 0.05 of the module, bow 0.02)' (polder.py:41), the node jitter itself already claimed in _polder_lattice",
   "files": [
    ".claude/skills/diagram/l7r/diagram/waterfields/polder.py"
   ],
   "after": [],
   "flag": "",
-  "found": "wave 10 re-check (tier provisional, by verdict)",
+  "found": "wave 10 re-check (tiered by its work at T42a)",
   "tier_as_ranked": "E0",
+  "e0_basis": "T42a: claim lines only; the code stands",
+  "moved": "T42a: tiered by its work - The organic default is passed through unchanged to the already-claimed parcel softening, so only the claim line is written.",
   "wave": "",
   "scope": "kept"
  },
@@ -2937,30 +2918,33 @@
   "key": ".claude/skills/diagram/l7r/diagram/waterfields/polder.py::build_polder#low rows wet",
   "verdict": "CANNOT-TELL",
   "tier": "E0",
-  "fix": "re-check with _polder_parcels' tint code in the bundle (0007: every low plot, not the two lowest rows)",
+  "fix": "re-check: _polder_parcels flags low = r >= rows - 2 (polder.py:364) and tints every low plot FLOODED (:371), merges never straddle the band (:380); 0007 says a polder tints every low plot (22 of 22 on Enokida) - reword the claim at polder.py:98 and :334 to 'every low plot, the two lowest rows as the drawing's low band'",
   "files": [
    ".claude/skills/diagram/l7r/diagram/waterfields/polder.py"
   ],
   "after": [],
   "flag": "",
-  "found": "wave 10 re-check (tier provisional, by verdict)",
+  "found": "wave 10 re-check (tiered by its work at T42a)",
   "tier_as_ranked": "E0",
+  "e0_basis": "T42a: claim lines only; the code stands",
+  "moved": "T42a: tiered by its work - The code tints every plot it counts as low, which is what 0007 records for a polder, so only the claim wording changes.",
   "wave": "",
-  "needs_e0_review": true,
   "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/waterfields/polder.py::build_polder#module line bow",
   "verdict": "UNCLAIMED",
   "tier": "E0",
-  "fix": "the module lines bowed by line_wander 0.10 of the grid's spacing (0014)",
+  "fix": "add a claim to build_polder: 'module line bow - 0014: each row and column line bowed up to line_wander 0.10 of the module, off the boundary lines' (polder.py:40, applied in _polder_lattice)",
   "files": [
    ".claude/skills/diagram/l7r/diagram/waterfields/polder.py"
   ],
   "after": [],
   "flag": "",
-  "found": "wave 10 re-check (tier provisional, by verdict)",
+  "found": "wave 10 re-check (tiered by its work at T42a)",
   "tier_as_ranked": "E0",
+  "e0_basis": "T42a: claim lines only; the code stands",
+  "moved": "T42a: tiered by its work - line_wander 0.10 already matches 0014's 'about a tenth of the grid's spacing', so only the claim line is written.",
   "wave": "",
   "scope": "kept"
  },
@@ -4526,14 +4510,15 @@
   "key": ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#fallback watercourse widths",
   "verdict": "MISLABELED",
   "tier": "E1",
-  "fix": "cite 0068 and draw its widths where a record carries none: the brook about 7 ft, the supply canal 4.5 ft, the head race 6 ft (not 9, 2.5 and 14 px)",
+  "fix": "settlement/fields/comb.py:395: replace the fallback widths (streams 9.0, channels 2.5, canals 14.0 px) with 0068's in feet at scale (self.px(7.0), self.px(4.5), self.px(6.0)) and relabel the claim at :378 to cite 0068",
   "files": [
    ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py"
   ],
   "after": [],
   "flag": "",
-  "found": "wave 10 re-check (tier provisional, by verdict)",
+  "found": "wave 10 re-check (tiered by its work at T42a)",
   "tier_as_ranked": "E1",
+  "moved": "T42a: tiered by its work - Three literals in one tuple change; the hem-on-water logic is unchanged.",
   "wave": "",
   "scope": "kept"
  },
@@ -4550,7 +4535,7 @@
   "found": "wave 9 re-check (tiered by its work at T38a)",
   "tier_as_ranked": "E1",
   "moved": "T38a: tiered by its work - One literal becomes a scaled value; logic unchanged.",
-  "wave": "",
+  "wave": "10",
   "scope": "kept"
  },
  {
@@ -4652,18 +4637,19 @@
   "scope": "deferred"
  },
  {
-  "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::_wood_shed#wood shed fallback pace",
-  "verdict": "DRIFTED",
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::PRIVY_FRONT_STEP_FT#front privy off the front wall",
   "tier": "E1",
-  "fix": "the fallback seats a further 8 ft out put a shed about 17 ft off its wall against 0043's ken: drop the extra pace, or the page records the departure",
+  "fix": "relabel GUESS research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: 8 ft (the page records the 8 ft as its own guess); the code's 8 ft edge stands",
   "files": [
    ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py"
   ],
   "after": [],
   "flag": "",
-  "found": "wave 10 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E1",
-  "wave": "",
+  "e0_basis": "bundle I: the figure matches, the label owes the page's GUESS",
+  "moved": "wave 9 bundle I: MISLABELED after its value moved - the page marks the 8 ft a GUESS",
+  "verdict": "DRIFTED",
+  "wave": "10",
   "scope": "kept"
  },
  {
@@ -4725,7 +4711,7 @@
   "found": "wave 9 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
   "moved": "amendment 9 exception check (spec-fidelity, 2026-10-07): DEVIATION NOT LEGITIMATE - 0080 records no cap",
-  "wave": "",
+  "wave": "10",
   "scope": "kept"
  },
  {
@@ -4741,7 +4727,7 @@
   "found": "wave 9 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
   "moved": "amendment 9 exception check (spec-fidelity, 2026-10-07): DEVIATION NOT LEGITIMATE - 0080 records no floor",
-  "wave": "",
+  "wave": "10",
   "scope": "kept"
  },
  {
@@ -4860,7 +4846,7 @@
   "flag": "",
   "found": "T38b's reader, reading wood_share.py (a unit slip beside the wave's own fix)",
   "tier_as_ranked": "E1",
-  "wave": "",
+  "wave": "10",
   "scope": "kept"
  },
  {
@@ -5008,21 +4994,6 @@
   "scope": "deferred"
  },
  {
-  "key": ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_anchor#reach in feet",
-  "verdict": "DRIFTED",
-  "tier": "E1",
-  "fix": "compare the approach's distance to a house with px(KOSATSUBA_ENTRANCE_REACH_FT), not the bare feet (60 ft only at 1 ft/px)",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/_helpers.py"
-  ],
-  "after": [],
-  "flag": "",
-  "found": "wave 10 re-check (tier provisional, by verdict)",
-  "tier_as_ranked": "E1",
-  "wave": "",
-  "scope": "kept"
- },
- {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_anchor#reaching the houses",
   "verdict": "DRIFTED",
   "tier": "E1",
@@ -5035,7 +5006,7 @@
   "found": "wave 6 re-check (tiered by its work at T25a)",
   "tier_as_ranked": "E1",
   "moved": "T25a (amendment 6): tiered by its work - one constant at _helpers.py:35, read by kosatsuba_anchor and board_seat.py:240",
-  "wave": "",
+  "wave": "10",
   "scope": "kept"
  },
  {
@@ -5049,7 +5020,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "10",
   "scope": "kept"
  },
  {
@@ -5063,7 +5034,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "10",
   "scope": "kept"
  },
  {
@@ -5079,7 +5050,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "10",
   "scope": "kept"
  },
  {
@@ -5093,7 +5064,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "MISLABELED",
-  "wave": "",
+  "wave": "10",
   "scope": "kept"
  },
  {
@@ -5107,7 +5078,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "MISLABELED",
-  "wave": "",
+  "wave": "10",
   "scope": "kept"
  },
  {
@@ -5123,7 +5094,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "10",
   "scope": "kept"
  },
  {
@@ -5326,14 +5297,15 @@
   "key": ".claude/skills/diagram/l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.trim_lane_stubs#arrival at the bund",
   "verdict": "DRIFTED",
   "tier": "E1",
-  "fix": "the bund reach compared in pixels via self.px(BUND_REACH_FT), and labeled GUESS 0014 (the page gives no 6 ft)",
+  "fix": "settlement/water_ways/lanes.py:335: compare edge_dist against self.px(BUND_REACH_FT) instead of the bare BUND_REACH_FT, and relabel the claim at :263 as GUESS 0014 (the page gives no 6 ft)",
   "files": [
    ".claude/skills/diagram/l7r/diagram/settlement/water_ways/lanes.py"
   ],
   "after": [],
   "flag": "",
-  "found": "wave 10 re-check (tier provisional, by verdict)",
+  "found": "wave 10 re-check (tiered by its work at T42a)",
   "tier_as_ranked": "E1",
+  "moved": "T42a: tiered by its work - One comparison value is put on the map's scale and a claim relabeled; the rule's logic is unchanged.",
   "wave": "",
   "scope": "kept"
  },
@@ -5348,7 +5320,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "10",
   "scope": "kept"
  },
  {
@@ -5390,7 +5362,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "10",
   "scope": "kept"
  },
  {
@@ -5418,7 +5390,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "10",
   "scope": "kept"
  },
  {
@@ -5432,7 +5404,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "10",
   "scope": "kept"
  },
  {
@@ -5460,21 +5432,22 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "10",
   "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/waterfields/polder.py::build_polder#gaps",
   "verdict": "DRIFTED",
   "tier": "E1",
-  "fix": "scale the default gaps by ftpx as the module is (a 3 ft bund and an 8 ft corridor at any scale)",
+  "fix": "waterfields/polder.py:36: express the default gap (1.5, 4.0) px in feet scaled by ftpx (a 3 ft bund and an 8 ft corridor at any scale, i.e. 1.5/ftpx and 4.0/ftpx)",
   "files": [
    ".claude/skills/diagram/l7r/diagram/waterfields/polder.py"
   ],
   "after": [],
   "flag": "",
-  "found": "wave 10 re-check (tier provisional, by verdict)",
+  "found": "wave 10 re-check (tiered by its work at T42a)",
   "tier_as_ranked": "E1",
+  "moved": "T42a: tiered by its work - Only the default value's expression changes; the gap logic in _polder_parcels is untouched.",
   "wave": "",
   "scope": "kept"
  },
@@ -5489,7 +5462,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "10",
   "scope": "kept"
  },
  {
@@ -5503,7 +5476,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "10",
   "scope": "kept"
  },
  {
@@ -5517,7 +5490,7 @@
   "flag": "the single step was allowed as a scrap's only home; refusing it may leave bare scraps",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "10",
   "scope": "kept"
  },
  {
@@ -6265,14 +6238,15 @@
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::_polder_candidate#surveyed block",
   "verdict": "DRIFTED",
   "tier": "E2",
-  "fix": "hold the block's outer edge to its line (0019/0022: the wander fades to nothing at the fixed outer edge); the wander ladder and the 0.86 fill test are not on the page, and the axis-aligned box misreads an oblique block",
+  "fix": "hamletgen/water/polder.py:456-478: drop the edge_wander walk-down (0.5 -> 0.12) and its 0.86 fill test, holding the outer edge to its line (edge_wander 0) as 0019/0014 keep the block's edge fixed",
   "files": [
    ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py"
   ],
   "after": [],
   "flag": "",
-  "found": "wave 10 re-check (tier provisional, by verdict)",
+  "found": "wave 10 re-check (tiered by its work at T42a)",
   "tier_as_ranked": "E2",
+  "moved": "T42a: tiered by its work - The wander ladder and the bbox fill test are the loop logic of one function, so the fix rewrites that one rule rather than a single value.",
   "wave": "",
   "scope": "kept"
  },
@@ -7294,17 +7268,18 @@
   "scope": "kept"
  },
  {
-  "key": ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_source#feeder brook narrower than the head race",
-  "verdict": "DRIFTED",
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_source#pond feeder from the sluice",
+  "verdict": "UNCLAIMED",
   "tier": "E2",
-  "fix": "the brook arrives narrower than the head race it feeds (0068): a 7 ft brook into a 6 ft head race inverts it - size the two against each other",
+  "fix": "settlement/fields/comb.py:636: the pond feeder is drawn sluice -> pond center but recorded frm offmap; draw it from where 0061's feeding stream comes (off the map, into the pond) or record its true ends (frm the sluice/field), then claim it",
   "files": [
    ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py"
   ],
   "after": [],
   "flag": "",
-  "found": "wave 10 re-check (tier provisional, by verdict)",
-  "tier_as_ranked": "E2",
+  "found": "wave 10 re-check (tiered by its work at T42a)",
+  "tier_as_ranked": "E0",
+  "moved": "T42a: tiered by its work - An honest claim would state a drift (the stroke starts at the sluice while its record says off the map), so the one call's endpoints and record change.",
   "wave": "",
   "scope": "kept"
  },
@@ -7455,6 +7430,22 @@
   "scope": "kept"
  },
  {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::_wood_shed#wood shed fallback pace",
+  "verdict": "DRIFTED",
+  "tier": "E2",
+  "fix": "settlement/homestead_parts/fixture_seats.py:387: drop outward(seats, px(STEP_FT), 1) from the offered chain so no seat stands a further 8 ft past 0043's ken, and remove the fallback claim at :385",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 10 re-check (tiered by its work at T42a)",
+  "tier_as_ranked": "E1",
+  "moved": "T42a: tiered by its work - The fix removes one candidate class from the seat search in one function, a change to the seat rule rather than a single value.",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::_wood_shed#wood shed seats",
   "verdict": "CANNOT-TELL",
   "tier": "E2",
@@ -7594,14 +7585,15 @@
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#every crown gives way round a persimmon",
   "verdict": "DRIFTED",
   "tier": "E2",
-  "fix": "the grove's trees give way round a yard persimmon (0072): refuse every kind of crown under its crown, not the conifer alone",
+  "fix": "settlement/homestead_parts/groves.py:822-829: apply the yard-persimmon keep-out (_trees) to every crown kind, not the conifer alone, and update the claim at :730 to 'every crown refused under a yard persimmon's crown' (0046)",
   "files": [
    ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py"
   ],
   "after": [],
   "flag": "",
-  "found": "wave 10 re-check (tier provisional, by verdict)",
+  "found": "wave 10 re-check (tiered by its work at T42a)",
   "tier_as_ranked": "E2",
+  "moved": "T42a: tiered by its work - One keep-out condition in one function widens from conifers to every crown.",
   "wave": "",
   "scope": "kept"
  },
@@ -8029,17 +8021,18 @@
   "scope": "deferred"
  },
  {
-  "key": ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/boards.py::BoardsMixin.board_record#marker floor",
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_anchor#reach in feet",
   "verdict": "DRIFTED",
   "tier": "E2",
-  "fix": "floor the drawn marker only at city scale (0190 records the oversized marker there alone), not at a village's grain",
+  "fix": "settlement/structures/fixtures/_helpers.py:229: compare against KOSATSUBA_ENTRANCE_REACH_FT / ftpx (60 ft at scale), plumbing ftpx into kosatsuba_anchor(M, placement) at :198 from its caller structures/fixtures/siting.py:425 (self.ftpx)",
   "files": [
-   ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/boards.py"
+   ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/_helpers.py"
   ],
   "after": [],
   "flag": "",
-  "found": "wave 10 re-check (tier provisional, by verdict)",
-  "tier_as_ranked": "E2",
+  "found": "wave 10 re-check (tiered by its work at T42a)",
+  "tier_as_ranked": "E1",
+  "moved": "T42a: tiered by its work - kosatsuba_anchor is a module function with no scale in hand, so the value fix needs ftpx plumbed through its signature and caller.",
   "wave": "",
   "scope": "kept"
  },
@@ -11488,14 +11481,15 @@
   "key": ".claude/skills/diagram/l7r/diagram/waterfields/carve.py::_dry_fields#a hem that keeps its ground inside the berm",
   "verdict": "DRIFTED",
   "tier": "E3",
-  "fix": "drop the hem's cells inside a supply canal's bank (0055/0006: its half-width plus CANAL_BERM_FT) without handing the freed ground to the next placer - at the bank the freed ground re-lays the toe marsh (Inashiro: a sharp corner on open ground); the carve's docstring records the earlier measurements (the hem 23 -> 8 cells, the wells re-packed)",
+  "fix": "waterfields/carve.py:216: drop hem cells inside a supply canal's bank (half-width plus CANAL_BERM_FT, 0055/0006) without handing the freed ground to the next placer (the toe marsh and the well packing), keeping the measurements (hem 23 -> 8, wells re-packed) in the docstring",
   "files": [
    ".claude/skills/diagram/l7r/diagram/waterfields/carve.py"
   ],
   "after": [],
   "flag": "",
-  "found": "wave 10 gate: the row held for it (FR-004)",
+  "found": "wave 10 re-check (tiered by its work at T42a)",
   "tier_as_ranked": "E3",
+  "moved": "T42a: tiered by its work - Holding the freed ground needs changes in the hem carve and in the later placers (toe marsh, wells) that take it, across several functions.",
   "wave": "",
   "scope": "kept"
  },
@@ -12082,6 +12076,22 @@
   "scope": "deferred"
  },
  {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_source#feeder brook narrower than the head race",
+  "verdict": "DRIFTED",
+  "tier": "E4",
+  "fix": "research first: 0068 says the brook arrives narrower than the 6.0 ft head race while 0059 draws the brook 7 ft wide (comb.py:653 self.px(7.0)); the record must settle the brook's width before the code changes",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 10 re-check (tiered by its work at T42a)",
+  "tier_as_ranked": "E2",
+  "moved": "T42a: tiered by its work - The fix rests on two pages of the record that contradict each other (0059's 7 ft brook against 0068's brook narrower than a 6 ft head race).",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_source#feeder brook width against the ladder",
   "verdict": "DRIFTED",
   "tier": "E4",
@@ -12357,6 +12367,22 @@
   "flag": "",
   "found": "wave 10 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E4",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/boards.py::BoardsMixin.board_record#marker floor",
+  "verdict": "DRIFTED",
+  "tier": "E4",
+  "fix": "research first: settle whether the village grain draws the floored marker, then either record it on 0190's drawing page (code at boards.py:64 and :113 unchanged) or gate the KOSATSUBA_MARKER_MIN_PX floor to city grain",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/boards.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 10 re-check (tiered by its work at T42a)",
+  "tier_as_ranked": "E2",
+  "moved": "T42a: tiered by its work - The floor at boards.py:64/113 lifts village and city grain per a recorded GM call (2026-07-24, boards.py:87-96) while 0190 records the oversized marker at city scale only and calls the village board the post towns' size, so the record contradicts a recorded ruling.",
   "wave": "",
   "scope": "kept"
  },

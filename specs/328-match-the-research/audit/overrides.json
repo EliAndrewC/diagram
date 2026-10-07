@@ -188,6 +188,17 @@
   "moved": "wave 1: E0 -> E2, the re-check found the code's step (envelope depth + 18 + 39 ft scaled) is not the page's 92 ft: bring _rank_step to 0038 drawing's row spacing",
   "tier": "E2"
  },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::_polder_candidate#surveyed block": {
+  "after": [],
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py"
+  ],
+  "fix": "hamletgen/water/polder.py:456-478: drop the edge_wander walk-down (0.5 -> 0.12) and its 0.86 fill test, holding the outer edge to its line (edge_wander 0) as 0019/0014 keep the block's edge fixed",
+  "flag": "",
+  "found": "wave 10 re-check (tiered by its work at T42a)",
+  "moved": "T42a: tiered by its work - The wander ladder and the bbox fill test are the loop logic of one function, so the fix rewrites that one rule rather than a single value.",
+  "tier": "E2"
+ },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::RunOnBlocks.clear#off the steadings": {
   "after": [
    ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#a footpath reaches every farmhouse 7 ft off a plot"
@@ -985,6 +996,17 @@
   "moved": "T38b: tiered by its work - line 393's fallbacks are the writers' own drawn defaults (water.py draws a stream 9 px), so the claim records what is done without stating a drift.",
   "tier": "E0"
  },
+ ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#fallback watercourse widths": {
+  "after": [],
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py"
+  ],
+  "fix": "settlement/fields/comb.py:395: replace the fallback widths (streams 9.0, channels 2.5, canals 14.0 px) with 0068's in feet at scale (self.px(7.0), self.px(4.5), self.px(6.0)) and relabel the claim at :378 to cite 0068",
+  "flag": "",
+  "found": "wave 10 re-check (tiered by its work at T42a)",
+  "moved": "T42a: tiered by its work - Three literals in one tuple change; the hem-on-water logic is unchanged.",
+  "tier": "E1"
+ },
  ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#nothing on a dry plot": {
   "after": [],
   "e0_basis": "T38b: claim lines only; the code stands",
@@ -1008,6 +1030,17 @@
   "moved": "T38a: tiered by its work - comb.py honors `to`; the missing piece is a new brook course past the intake routed round the field in roll.py, interacting with the drain's brook (waterfields/comb.py _comb_brook) and the streams-avoid-fields check - more than one function.",
   "tier": "E3"
  },
+ ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_source#feeder brook narrower than the head race": {
+  "after": [],
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py"
+  ],
+  "fix": "research first: 0068 says the brook arrives narrower than the 6.0 ft head race while 0059 draws the brook 7 ft wide (comb.py:653 self.px(7.0)); the record must settle the brook's width before the code changes",
+  "flag": "",
+  "found": "wave 10 re-check (tiered by its work at T42a)",
+  "moved": "T42a: tiered by its work - The fix rests on two pages of the record that contradict each other (0059's 7 ft brook against 0068's brook narrower than a 6 ft head race).",
+  "tier": "E4"
+ },
  ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_source#feeder brook width": {
   "after": [],
   "files": [
@@ -1028,6 +1061,17 @@
   "flag": "",
   "moved": "amendment 9 exception check (spec-fidelity, 2026-10-07): DEVIATION NOT LEGITIMATE - the page calls the bare bank a gap still to fill, not a decision",
   "tier": "E3"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_source#pond feeder from the sluice": {
+  "after": [],
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py"
+  ],
+  "fix": "settlement/fields/comb.py:636: the pond feeder is drawn sluice -> pond center but recorded frm offmap; draw it from where 0061's feeding stream comes (off the map, into the pond) or record its true ends (frm the sluice/field), then claim it",
+  "flag": "",
+  "found": "wave 10 re-check (tiered by its work at T42a)",
+  "moved": "T42a: tiered by its work - An honest claim would state a drift (the stroke starts at the sluice while its record says off the map), so the one call's endpoints and record change.",
+  "tier": "E2"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::PRIVY_FRONT_STEP_FT#front privy off the front wall": {
   "after": [],
@@ -1096,6 +1140,17 @@
   "flag": "",
   "found": "wave 9 re-check (tiered by its work at T38a)",
   "moved": "T38a: tiered by its work - One seat in one function changes, with the annex rect plumbed in.",
+  "tier": "E2"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::_wood_shed#wood shed fallback pace": {
+  "after": [],
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py"
+  ],
+  "fix": "settlement/homestead_parts/fixture_seats.py:387: drop outward(seats, px(STEP_FT), 1) from the offered chain so no seat stands a further 8 ft past 0043's ken, and remove the fallback claim at :385",
+  "flag": "",
+  "found": "wave 10 re-check (tiered by its work at T42a)",
+  "moved": "T42a: tiered by its work - The fix removes one candidate class from the seat search in one function, a change to the seat rule rather than a single value.",
   "tier": "E2"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::_wood_shed#wood shed fallback seats": {
@@ -1211,6 +1266,29 @@
   "flag": "",
   "moved": "amendment 9 exception check (spec-fidelity, 2026-10-07): DEVIATION NOT LEGITIMATE - 0080 records no floor",
   "tier": "E1"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#every crown gives way round a persimmon": {
+  "after": [],
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py"
+  ],
+  "fix": "settlement/homestead_parts/groves.py:822-829: apply the yard-persimmon keep-out (_trees) to every crown kind, not the conifer alone, and update the claim at :730 to 'every crown refused under a yard persimmon's crown' (0046)",
+  "flag": "",
+  "found": "wave 10 re-check (tiered by its work at T42a)",
+  "moved": "T42a: tiered by its work - One keep-out condition in one function widens from conifers to every crown.",
+  "tier": "E2"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#mixed broadleaf belt": {
+  "after": [],
+  "e0_basis": "T42a: claim lines only; the code stands",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py"
+  ],
+  "fix": "add a claim to groves.py::_draw_grove: 'mixed broadleaf belt - 0072: rounded broadleaf crowns in the woods' size mix, no conifer'",
+  "flag": "",
+  "found": "wave 10 re-check (tiered by its work at T42a)",
+  "moved": "T42a: tiered by its work - The code already draws the mixed_broadleaf form as 0072 describes it, so only the claim line is written.",
+  "tier": "E0"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#belt off the deep marsh": {
   "after": [],
@@ -1438,6 +1516,18 @@
   "moved": "amendment 9 round 1 (spec-fidelity): a NEEDS-RESEARCH finding is E4 with the research pass first (spec Edge Cases), not a relabel",
   "tier": "E4"
  },
+ ".claude/skills/diagram/l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#dispersed well pocket": {
+  "after": [],
+  "e0_basis": "T42a: claim lines only; the code stands",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/rolling/bundle.py"
+  ],
+  "fix": "add a claim to bundle.py::_bundle_layout: 'dispersed well pocket - UNRESEARCHED: the wellhead plus a 3 ft margin, 2 * _well_vr() + px(6.0)' (bundle.py:390), as _lay_well_pocket's (:412)",
+  "flag": "",
+  "found": "wave 10 re-check (tiered by its work at T42a)",
+  "moved": "T42a: tiered by its work - The pocket already matches the 3 ft margin the claim will state and its twin at bundle.py:412.",
+  "tier": "E0"
+ },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#south band off an unkept yard": {
   "after": [],
   "e0_basis": "T38a: claim lines only; the code stands",
@@ -1495,6 +1585,17 @@
   "moved": "T25a (amendment 6): tiered by its work - a new knob value in _knobs.py:324 with its typing rule, a new anchor case in kosatsuba_anchor (_helpers.py:198) and the board seat search that reads it",
   "tier": "E3"
  },
+ ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_anchor#reach in feet": {
+  "after": [],
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/_helpers.py"
+  ],
+  "fix": "settlement/structures/fixtures/_helpers.py:229: compare against KOSATSUBA_ENTRANCE_REACH_FT / ftpx (60 ft at scale), plumbing ftpx into kosatsuba_anchor(M, placement) at :198 from its caller structures/fixtures/siting.py:425 (self.ftpx)",
+  "flag": "",
+  "found": "wave 10 re-check (tiered by its work at T42a)",
+  "moved": "T42a: tiered by its work - kosatsuba_anchor is a module function with no scale in hand, so the value fix needs ftpx plumbed through its signature and caller.",
+  "tier": "E2"
+ },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_anchor#reaching the houses": {
   "after": [],
   "files": [
@@ -1517,6 +1618,17 @@
   "found": "wave 5 re-check (tiered by its work at T25a)",
   "moved": "wave 7 re-check: the fix landed; what the re-check found beyond it",
   "tier": "E0"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/boards.py::BoardsMixin.board_record#marker floor": {
+  "after": [],
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/boards.py"
+  ],
+  "fix": "research first: settle whether the village grain draws the floored marker, then either record it on 0190's drawing page (code at boards.py:64 and :113 unchanged) or gate the KOSATSUBA_MARKER_MIN_PX floor to city grain",
+  "flag": "",
+  "found": "wave 10 re-check (tiered by its work at T42a)",
+  "moved": "T42a: tiered by its work - The floor at boards.py:64/113 lifts village and city grain per a recorded GM call (2026-07-24, boards.py:87-96) while 0190 records the oversized marker at city scale only and calls the village board the post towns' size, so the record contradicts a recorded ruling.",
+  "tier": "E4"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_for#anchored board band": {
   "after": [],
@@ -1553,6 +1665,40 @@
   "moved": "T38b: tiered by its work - an honest claim states a drift against 0190, and closing it changes the selection rule in two functions in two modules (the floor in _board_for, the open-before-shaded walk in choose_board), so it is not a relabel.",
   "tier": "E3"
  },
+ ".claude/skills/diagram/l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.trim_lane_stubs#arrival at the bund": {
+  "after": [],
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/water_ways/lanes.py"
+  ],
+  "fix": "settlement/water_ways/lanes.py:335: compare edge_dist against self.px(BUND_REACH_FT) instead of the bare BUND_REACH_FT, and relabel the claim at :263 as GUESS 0014 (the page gives no 6 ft)",
+  "flag": "",
+  "found": "wave 10 re-check (tiered by its work at T42a)",
+  "moved": "T42a: tiered by its work - One comparison value is put on the map's scale and a claim relabeled; the rule's logic is unchanged.",
+  "tier": "E1"
+ },
+ ".claude/skills/diagram/l7r/diagram/waterfields/carve.py::_dry_fields#a hem that keeps its ground inside the berm": {
+  "after": [],
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/waterfields/carve.py"
+  ],
+  "fix": "waterfields/carve.py:216: drop hem cells inside a supply canal's bank (half-width plus CANAL_BERM_FT, 0055/0006) without handing the freed ground to the next placer (the toe marsh and the well packing), keeping the measurements (hem 23 -> 8, wells re-packed) in the docstring",
+  "flag": "",
+  "found": "wave 10 re-check (tiered by its work at T42a)",
+  "moved": "T42a: tiered by its work - Holding the freed ground needs changes in the hem carve and in the later placers (toe marsh, wells) that take it, across several functions.",
+  "tier": "E3"
+ },
+ ".claude/skills/diagram/l7r/diagram/waterfields/carve.py::_dry_fields#end plot split": {
+  "after": [],
+  "e0_basis": "T42a: claim lines only; the code stands",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/waterfields/carve.py"
+  ],
+  "fix": "add a claim to waterfields/carve.py::_dry_fields: 'end plot split - NONE: an end cell stretched past 1.35 plot widths by the snap to the canal's length is halved, coarse grains only (carve.py:119)'",
+  "flag": "",
+  "found": "wave 10 re-check (tiered by its work at T42a)",
+  "moved": "T42a: tiered by its work - The split is a tiling-artifact guard the code already performs as an honest NONE claim would say.",
+  "tier": "E0"
+ },
  ".claude/skills/diagram/l7r/diagram/waterfields/carve.py::_dry_fields#off the water and the frame": {
   "after": [
    ".claude/skills/diagram/l7r/diagram/waterfields/carve.py::_dry_fields#a hem that keeps its ground inside the berm"
@@ -1564,5 +1710,76 @@
   "flag": "",
   "moved": "wave 10 gate: held - at the canal's bank Inashiro's toe marsh takes a sharp corner on open ground (bisected by group: the carve alone); waits on the hem row",
   "tier": "E3"
+ },
+ ".claude/skills/diagram/l7r/diagram/waterfields/comb.py::_comb_drain#straight last leg": {
+  "after": [],
+  "e0_basis": "T42a: claim lines only; the code stands",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/waterfields/comb.py"
+  ],
+  "fix": "add a claim to waterfields/comb.py::_comb_drain: 'straight last leg - UNRESEARCHED: no jittered sample within DRAIN_MIN_LEG (84 px) of the outfall' (comb.py:619)",
+  "flag": "",
+  "found": "wave 10 re-check (tiered by its work at T42a)",
+  "moved": "T42a: tiered by its work - The code already does what the claim will state and 0060 is silent on the last leg's straightness, so only the claim line is written.",
+  "tier": "E0"
+ },
+ ".claude/skills/diagram/l7r/diagram/waterfields/polder.py::_apex#polder plumbing": {
+  "after": [],
+  "e0_basis": "T42a: claim lines only; the code stands",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/waterfields/polder.py"
+  ],
+  "fix": "relabel the claim on waterfields/polder.py::_apex: cite 0005 (no basin tapers to a point sharper than 25 degrees), POLDER_APEX_DEG = 25.0 at polder.py:839, the sharpest convex corner taken first",
+  "flag": "",
+  "found": "wave 10 re-check (tiered by its work at T42a)",
+  "moved": "T42a: tiered by its work - The code already applies 0005's 25 degree threshold (polder.py:839, :889), so only the claim line changes.",
+  "tier": "E0"
+ },
+ ".claude/skills/diagram/l7r/diagram/waterfields/polder.py::build_polder#gaps": {
+  "after": [],
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/waterfields/polder.py"
+  ],
+  "fix": "waterfields/polder.py:36: express the default gap (1.5, 4.0) px in feet scaled by ftpx (a 3 ft bund and an 8 ft corridor at any scale, i.e. 1.5/ftpx and 4.0/ftpx)",
+  "flag": "",
+  "found": "wave 10 re-check (tiered by its work at T42a)",
+  "moved": "T42a: tiered by its work - Only the default value's expression changes; the gap logic in _polder_parcels is untouched.",
+  "tier": "E1"
+ },
+ ".claude/skills/diagram/l7r/diagram/waterfields/polder.py::build_polder#interior bund node jitter": {
+  "after": [],
+  "e0_basis": "T42a: claim lines only; the code stands",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/waterfields/polder.py"
+  ],
+  "fix": "add a claim to build_polder: 'hand-piled outlines - 0014: each parcel softened by organic (fillet 0.05 of the module, bow 0.02)' (polder.py:41), the node jitter itself already claimed in _polder_lattice",
+  "flag": "",
+  "found": "wave 10 re-check (tiered by its work at T42a)",
+  "moved": "T42a: tiered by its work - The organic default is passed through unchanged to the already-claimed parcel softening, so only the claim line is written.",
+  "tier": "E0"
+ },
+ ".claude/skills/diagram/l7r/diagram/waterfields/polder.py::build_polder#low rows wet": {
+  "after": [],
+  "e0_basis": "T42a: claim lines only; the code stands",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/waterfields/polder.py"
+  ],
+  "fix": "re-check: _polder_parcels flags low = r >= rows - 2 (polder.py:364) and tints every low plot FLOODED (:371), merges never straddle the band (:380); 0007 says a polder tints every low plot (22 of 22 on Enokida) - reword the claim at polder.py:98 and :334 to 'every low plot, the two lowest rows as the drawing's low band'",
+  "flag": "",
+  "found": "wave 10 re-check (tiered by its work at T42a)",
+  "moved": "T42a: tiered by its work - The code tints every plot it counts as low, which is what 0007 records for a polder, so only the claim wording changes.",
+  "tier": "E0"
+ },
+ ".claude/skills/diagram/l7r/diagram/waterfields/polder.py::build_polder#module line bow": {
+  "after": [],
+  "e0_basis": "T42a: claim lines only; the code stands",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/waterfields/polder.py"
+  ],
+  "fix": "add a claim to build_polder: 'module line bow - 0014: each row and column line bowed up to line_wander 0.10 of the module, off the boundary lines' (polder.py:40, applied in _polder_lattice)",
+  "flag": "",
+  "found": "wave 10 re-check (tiered by its work at T42a)",
+  "moved": "T42a: tiered by its work - line_wander 0.10 already matches 0014's 'about a tenth of the grid's spacing', so only the claim line is written.",
+  "tier": "E0"
  }
 }

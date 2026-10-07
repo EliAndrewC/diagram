@@ -27,6 +27,8 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
   dike gate's span sizes a glyph no pool map's manifest records (`dike_gates`), and the commons fill, a glyph change, moved to E2.
 - glyph-redrawn: notice board on inashiro - wave 10 sizes the kosatsuba to the page's 16 x 6 ft (from 12 x 5) and turns it
   30 degrees to its way (from 45); its other rows move values inside rules that already place or size their elements.
+- none (wave 11): claim lines and three values inside rules that already place or size their elements (the hem's fallback
+  watercourse widths, the stub's bund reach in pixels, the polder's default gaps in feet); no glyph redrawn, no element new.
 ## Phase 1 - the audit
 
 - [x] T01 the findings snapshot: `findings.json` = every finding of `make claims-report` at `a52ff1bcd` (565) (FR-001)
@@ -595,5 +597,43 @@ BEGINS ONCE WAVE 9 IS PUSHED (FR-006) - or as the exception check rules (plan, W
       research: rendering
       verify: DONE. impl-drift on every touched unit (bundles A-E, scratchpad/w10, each recorded with make claims-checked); the wave's own stale claim texts corrected and re-checked; every other finding a found row (audit/found-wave10.jsonl)
 - [ ] T41 the bookend pair, back to back, and the close: the band's records, `make done` green, the wave column, landed (FR-005, FR-006, SC-002, SC-003)
+      research: rendering
+      verify:
+
+
+## Phase 12 - wave 11 (amendment 10): the last open in-scope E0 and E1 rows
+
+Wave 10's re-checks found its found rows (`audit/found-wave10.jsonl`), each tiered by its work by a fresh reader (T42a,
+`audit/t42a-out.jsonl`: 5 moved - the board's marker floor and the feeder brook against the head race to E4, the pond feeder's
+record, the wood shed's fallback pace and the board's reach in feet to E2). The open in-scope E0 and E1 rows are these 11 -
+every one left in the ranking (FR-006): 8 claims, then 3 values. After them every open in-scope row is E2 or above (the next,
+row 365). Wave 11 starts on the unpushed waves 9 and 10 under amendment 9's second exception (plan, Wave 10: the GM's band-3
+sign-off the only thing between them and main).
+
+  - `l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#mixed broadleaf belt` - add a claim to groves.py::_draw_grove: 'mixed broadleaf belt - 0072: rounded broadleaf crowns in the woods' size mix, no conifer'
+  - `l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#dispersed well pocket` - add a claim to bundle.py::_bundle_layout: 'dispersed well pocket - UNRESEARCHED: the wellhead plus a 3 ft margin, 2 * _well_vr() + px(6.0)' (bundle.py:390), as _lay_well_pocket's (:412)
+  - `l7r/diagram/waterfields/carve.py::_dry_fields#end plot split` - add a claim to waterfields/carve.py::_dry_fields: 'end plot split - NONE: an end cell stretched past 1.35 plot widths by the snap to the canal's length is halved, coarse grains only (carve.py:119)'
+  - `l7r/diagram/waterfields/comb.py::_comb_drain#straight last leg` - add a claim to waterfields/comb.py::_comb_drain: 'straight last leg - UNRESEARCHED: no jittered sample within DRAIN_MIN_LEG (84 px) of the outfall' (comb.py:619)
+  - `l7r/diagram/waterfields/polder.py::_apex#polder plumbing` - relabel the claim on waterfields/polder.py::_apex: cite 0005 (no basin tapers to a point sharper than 25 degrees), POLDER_APEX_DEG = 25.0 at polder.py:839, the sharpest convex corner taken first
+  - `l7r/diagram/waterfields/polder.py::build_polder#interior bund node jitter` - add a claim to build_polder: 'hand-piled outlines - 0014: each parcel softened by organic (fillet 0.05 of the module, bow 0.02)' (polder.py:41), the node jitter itself already claimed in _polder_lattice
+  - `l7r/diagram/waterfields/polder.py::build_polder#low rows wet` - re-check: _polder_parcels flags low = r >= rows - 2 (polder.py:364) and tints every low plot FLOODED (:371), merges never straddle the band (:380); 0007 says a polder tints every low plot (22 of 22 on Enokida) - reword the claim at polder.py:98 and :334 to 'every low plot, the two lowest rows as the drawing's low band'
+  - `l7r/diagram/waterfields/polder.py::build_polder#module line bow` - add a claim to build_polder: 'module line bow - 0014: each row and column line bowed up to line_wander 0.10 of the module, off the boundary lines' (polder.py:40, applied in _polder_lattice)
+
+  - `l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#fallback watercourse widths` - settlement/fields/comb.py:395: replace the fallback widths (streams 9.0, channels 2.5, canals 14.0 px) with 0068's in feet at scale (self.px(7.0), self.px(4.5), self.px(6.0)) and relabel the claim at :378 to cite 0068
+  - `l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.trim_lane_stubs#arrival at the bund` - settlement/water_ways/lanes.py:335: compare edge_dist against self.px(BUND_REACH_FT) instead of the bare BUND_REACH_FT, and relabel the claim at :263 as GUESS 0014 (the page gives no 6 ft)
+  - `l7r/diagram/waterfields/polder.py::build_polder#gaps` - waterfields/polder.py:36: express the default gap (1.5, 4.0) px in feet scaled by ftpx (a 3 ft bund and an 8 ft corridor at any scale, i.e. 1.5/ftpx and 4.0/ftpx)
+
+- [x] T42a wave 10's found rows tiered by the work they take, by a fresh reader (FR-002, FR-003, SC-003)
+      research: rendering
+      verify: DONE. 19 rows tiered by their work by a fresh Opus reader (audit/t42a-out.jsonl): 5 moved
+- [ ] T43 the claims written and the values fixed toward their pages, with the unit tests they move; proven on Inashiro and the
+      pool through the gate; a value that makes a map refuse is held as its found row (FR-004, FR-005)
+      research: rendering
+      verify:
+- [ ] T44 every touched unit re-checked by `impl-drift` (FR-005, SC-002)
+      research: rendering
+      verify:
+- [ ] T45 the bookend pair, wave 11's own (opening at wave 10's closing commit), and the close: the band's records, `make done`
+      green, the wave column (FR-005, FR-006, SC-002, SC-003)
       research: rendering
       verify:

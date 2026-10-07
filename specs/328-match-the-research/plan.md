@@ -166,6 +166,15 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 - **Verification**: as wave 9 - Inashiro first, the pool through a green gate (FR-005), the bookends back to back;
   `impl-drift` on every touched unit; a held value becomes a found row.
 
+## Wave 11 (amendment 10, 2026-10-07)
+
+- **T42a first**: wave 10's 19 found rows tiered by their work (5 moved).
+- **Scope**: the last open in-scope E0 and E1 rows - 8 claims and 3 values (`tasks.md` Phase 12); after them every open
+  in-scope row is E2 or above (the next, row 365, a Mode A procedure row).
+- **On the unpushed waves 9 and 10** under the wave-11 exception (Wave 10 above): wave 10 closed in full at 6be618a9e, its backup
+  pushed; wave 11's opening bookend at that commit; stacking stops the moment anything but the GM's sign-off would refuse the push.
+- **Verification**: as wave 10 - Inashiro first, the pool through a green gate, the bookends, `impl-drift` on every touched unit.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Each later wave that changes engine behavior takes
