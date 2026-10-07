@@ -232,11 +232,11 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
   feature 152 made from a settlement-review's candidates - the copse against the belt, the board at the drawing-water place - have
   no page behind them and are retired; each knob keeps its one form, so a spec declaring it still reads. Mizuguchi declared the
   belt-side copse only to exhibit that value; the declaration goes with it.
-- **Occasions**: the copse re-placed on Mizuguchi, the board re-placed on Kashikawa and Sawada - a glyph check each.
+- **Occasions**: none, measured - the retired forms moved nothing drawn (Mizuguchi is linear and draws no copse; Kashikawa's and
+  Sawada's boards stand where they stood); only each map's recorded knob changed.
 - **On the unpushed waves 9-15** under the wave-11 exception's condition (6): (1)-(5) held at wave 15's close (799a0bf4b, its
   backup pushed, its own pair band 1 confirmed); wave 16's own pair opens at 799a0bf4b.
-- **Verification**: `impl-drift` on the touched claims, the glyph checks, the gate with the three maps regenerated, wave 16's own
-  bookend pair.
+- **Verification**: `impl-drift` on the touched claims, the gate with the three maps regenerated, wave 16's own bookend pair.
 
 ## Performance bookends (constitution VI)
 
