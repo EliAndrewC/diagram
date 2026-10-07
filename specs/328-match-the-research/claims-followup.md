@@ -340,11 +340,12 @@ re-tiered E3 after the found row that re-seats such a household (`gap_ways.py::_
 re-seated`), its claim stating the drift and naming it (D8). With it held the pool gate is green and Inashiro's and Sawada's
 knots are gone (their strict xfails lifted).
 
-WHAT THE HOLD COSTS, MEASURED: on the perf bookends three scaling seeds refuse their web with the yard step held (20 households
-seed 39, 40 households seeds 4 and 25: `WebRefused`, farmhouses or the field off the network), and none refuse with it at the
-page's value - so the wave holds a trade only the GM can rule on: the pool gate (Kuwabata) against three measured scaling rolls,
-on top of a band the sign-off already owes. Both exits are engine work this wave does not own (the re-seat rule; the web's
-reach on those three rolls).
+THE THREE SCALING ROLLS (amendment 9 round 2: a regression of the wave, bisected, not the GM's): with the yard step held,
+20 households seed 39 and 40 households seeds 4 and 25 refused their web. Bisected by row over the held state on those rolls
+(`perf_snapshot.measure` of the three, the wave's groups re-applied one at a time): the fixture seats alone, and within them
+the wood shed's step alone (holding the privy's sun reach instead also clears them; the smaller hold was chosen). The shed
+step is HELD at its pre-wave value, E3 after its found row (`last_resort.py::refuse_unreached#every household reached at 20
+and 40 households`), its claim stating the drift. Kuwabata stays clean with both holds.
 
 - `l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#manure beyond the privy` (DRIFTED, E2): step a heap beyond a flank privy out from the house (0047 §84: on the side away from the house), not along the flank (`out_` steps only along y)
 - `l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_for#traffic floor` (MISLABELED, E0): 0190's drawing page answers it (a caption that fits outranks any that does not, and among those the busiest wins): the 60% floor that lets open ground choose is a DEVIATION through the exception path, or the floor goes

@@ -63,8 +63,8 @@ PRIVY_SUN_MAX_FT = 48.0
 """Research: sun-side search reach - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: to 48 ft"""
 PRIVY_SUNNY_SHARE = 0.727  # Wang & Ochiai 2022: 72.7% of outhouses SE to S (the GM, 2026-08-29: used literally)
 """Research: privies on the sunny side - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: 72.7%"""
-WOODSHED_STEP_FT = 6.0 - WALL_GAP_FT  # the wood shed's edge a ken (6 ft) off the wall it serves, past the wall gap, a building of its own (GUESS: where on the plot no page says)
-"""Research: wood shed off its wall - research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: a ken, 6 ft"""
+WOODSHED_STEP_FT = 6.0  # HELD (feature 328 wave 9): the wood shed a ken past the wall gap - its edge a ken plus the gap off its wall
+"""Research: wood shed off its wall - research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: held at a ken plus the wall gap, past the page's ken - at a ken three scaling rolls of the reference refuse their web (20 households seed 39; 40 households seeds 4 and 25: farmhouses or the field left off the network); the found row hamletgen/ways/last_resort.py::refuse_unreached#every household reached at 20 and 40 households"""
 # THE PRIVY'S SIZE (feature 280, research/questions/0047-farm-privies-and-their-night-soil-benjo.html): each homestead's privy is one of the sixteen of the Kakimochi table
 # (Meiji 18, read back to the last years of the shogunate), frontage by depth in feet at 6 ft to the ken - each as likely as
 # the next. A calibration against one village's table; the old 6 x 6 ft one-ken module was a GUESS.

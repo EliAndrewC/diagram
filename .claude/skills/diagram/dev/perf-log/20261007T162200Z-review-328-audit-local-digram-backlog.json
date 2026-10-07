@@ -1,0 +1,64 @@
+{
+  "band": 3,
+  "base": {
+    "commit": "6ca2f5ccf",
+    "label": "328-start",
+    "utc": "20261007T160124Z"
+  },
+  "binding": "1da3fb9d68aa33507d24afee151644615cd90135375bf5681d20107a21dc2fa7",
+  "criteria": {
+    "commensurate": "No. The hold buys one green pool roll and costs three WebRefused scaling rolls (20 hh seed 39; 40 hh seeds 4 and 25), +2 s of web on 40 hh seed 39, and 15.2-15.7 s of web spent on 40 hh seed 4 before it refuses (4.0 s at start). The leg percentages drop refused rolls, so the 40 hh +9.9% covers two of four seeds and understates the cost. The rest of the wave, measured with the hold released: 20 hh seed 4 web +0.8-0.9 s, 40 hh seed 25 web +1.2-1.8 s, 20 hh seed 47 -0.6 s. 40 hh wall time over all four seeds: 55.8 s at start against 56.4 / 60.5 / 63.9 s released (noisy). The session has not explained or adjudicated that residual.",
+    "necessary": "No. The measured growth that crosses band 3 comes mostly from the hold of PRIVY_YARD_STEP_FT at 6.0 against 0047's ken (6.0 - WALL_GAP_FT). That is a held drift, not functionality the feature asks for. It keeps the pool gate green on Kuwabata. It is not work the map needs. Released (one constant, all else at eac572da4): 40 hh seed 39 web 5.5 s back to 3.25-3.9 s (3.0 s at start); 10 hh seed 25 3.4 s back to 2.6-3.2 s (3.0 s at start); 20 hh seed 39 and 40 hh seeds 4 and 25 complete instead of refusing.",
+    "no_way_around": "There is a way around, and the session names it: the found row settlement/rolling/gap_ways.py::_way_for#a household whose only ways zigzag re-seated. It mends Kuwabata's zigzag at the seating, which lets the yard step go to the page's value. Measured at that value: no refusals and the hold's web cost gone. Until that row lands, the cheaper state is the page's value with the Kuwabata pool failure as the open finding, or the wave held. A perf cost and three refusals are not the cheaper state."
+  },
+  "end": {
+    "commit": "eac572da4",
+    "label": "328-end",
+    "utc": "20261007T160442Z"
+  },
+  "environment": "local",
+  "feature": "328-match-the-research",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "8d3395e5-fe32-4f85-9c89-80c344d2ac1a",
+    "utc": "20261007T162200Z"
+  },
+  "kind": "audit",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": 13.8,
+          "39": 0.0,
+          "4": -8.8,
+          "47": -3.3
+        },
+        "total_pct": 0.0
+      },
+      "20": {
+        "seeds": {
+          "25": 0.0,
+          "4": 23.3,
+          "47": -16.7
+        },
+        "total_pct": 2.1
+      },
+      "40": {
+        "seeds": {
+          "39": 21.7,
+          "47": -1.6
+        },
+        "total_pct": 9.9
+      }
+    },
+    "seeds": {
+      "25": 2.5,
+      "39": -7.5,
+      "4": 4.3,
+      "47": 10.0
+    },
+    "total_pct": 2.4
+  },
+  "note": "Reviewer's counterfactual: detached worktrees at 6ca2f5ccf, eac572da4, and eac572da4 with the yard step at 6.0 - WALL_GAP_FT. l7r.diagram.tools.perf_snapshot.measure at 10/20/40 hh, seeds 4/25/39/47, run back to back: 2-3 reps per leg; start and end reproduce within about 3 percent. Band 3 (20 hh seed 4 +23.3%, 40 hh seed 39 +21.7%) also needs the GM's own perf-signoff, which this record does not grant.",
+  "verdict": "not-justified"
+}

@@ -1032,6 +1032,18 @@
   "moved": "wave 9 gate: held - at a ken Kuwabata's re-seated homesteads leave one household only a way the knot pass gathers into a zigzag across its neighbor's door end (bisected by row: this step alone does it with the wave's other rows kept; an edge at 7 ft does too); waits on the re-seat row",
   "tier": "E3"
  },
+ ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::WOODSHED_STEP_FT#wood shed off its wall": {
+  "after": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/last_resort.py::refuse_unreached#every household reached at 20 and 40 households"
+  ],
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py"
+  ],
+  "fix": "wood shed edge 6 ft off its wall: drop the gap from the seat (or WOODSHED_STEP_FT 2.5)",
+  "flag": "",
+  "moved": "wave 9 bookends: held - at a ken three scaling rolls refuse their web (bisected by row over the held state: the shed step alone; holding the privy's sun reach instead does it too, the smaller hold chosen); waits on the web row",
+  "tier": "E3"
+ },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#manure beyond the privy": {
   "after": [],
   "files": [
