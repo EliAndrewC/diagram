@@ -88,23 +88,11 @@ def knots(lanes: Sequence[Mapping[str, Any]]) -> list[tuple[int, int, float]]:
     nodes = end_nodes(lanes)
     where = {end: n for n, (_q, ends) in enumerate(nodes) for end in ends}
     spans = {frozenset((where[(i, 0)], where[(i, -1)])) for i, _e in where if _e == 0}
-    pts = [_pts(ln) for ln in lanes]
-
-    def junction(n: int) -> bool:
-        q, ends = nodes[n]
-        own = {i for i, _e in ends}
-        return len(ends) > 1 or any(k not in own and len(p) >= 2 and _on(p, q) for k, p in enumerate(pts))
-
-    def one_lane(a: int, b: int) -> bool:
-        return any(len(p) >= 2 and _on(p, nodes[a][0]) and _on(p, nodes[b][0]) for p in pts)
-
     out = []
     for a in range(len(nodes)):
         for b in range(a + 1, len(nodes)):
             d = math.dist(nodes[a][0], nodes[b][0])
-            if d > _KNOT_FT * KNOT_MARGIN or frozenset((a, b)) in spans:
-                continue
-            if d <= _KNOT_FT or (junction(a) and junction(b) and one_lane(a, b)):
+            if d <= _KNOT_FT * KNOT_MARGIN and frozenset((a, b)) not in spans:
                 out.append((a, b, d))
     return sorted(out, key=lambda k: k[2])
 
