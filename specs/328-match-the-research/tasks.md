@@ -841,8 +841,10 @@ row is the belt in the marsh (416).
 - [x] T61a wave 17's found rows tiered by the work they take, by a fresh reader (FR-002, FR-003, SC-003)
       research: rendering
       verify: DONE. 5 rows tiered by their work by a fresh Opus reader (audit/t61a-out.jsonl): 4 E0 (two already fixed in wave 17), 1 E2
-- [ ] T61 the two claims; the 70% passes dropped; Kashikawa and Mizuguchi regenerated (FR-004, FR-005)
+- [x] T61 the two claims; the 70% passes dropped; Kashikawa and Mizuguchi regenerated (FR-004, FR-005)
       research: rendering
-- [ ] T62 every touched claim re-checked by `impl-drift`, and the close: wave 18's own bookend pair, `make done` green, the wave
+      verify: DONE. the thicket size GUESS on 0075 (and drawn at full size only), the watercourse margin UNRESEARCHED, the 70% passes dropped (none where the full stand fits nowhere, UNRESEARCHED); row 807 settled by the same fix; both pool thickets unchanged
+- [x] T62 every touched claim re-checked by `impl-drift`, and the close: wave 18's own bookend pair, `make done` green, the wave
       column (FR-005, FR-006, SC-002, SC-003)
       research: rendering
+      verify: DONE. impl-drift on every touched claim (two rounds; all IN-STEP); make done green; wave 18's own pair (328-start at 8c3b5cdef) band 1, variance (perf-audit: identical call counts), consistent; the wave column written

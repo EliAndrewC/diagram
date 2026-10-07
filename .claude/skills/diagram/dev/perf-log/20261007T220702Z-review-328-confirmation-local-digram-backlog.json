@@ -1,0 +1,62 @@
+{
+  "band": 1,
+  "base": {
+    "commit": "8c3b5cdef",
+    "label": "328-start",
+    "utc": "20261007T220112Z"
+  },
+  "binding": "c4eb19e6df05c1f7c58b5716e3239d85392797d4f71294c44732cbf019e9efac",
+  "end": {
+    "commit": "eb86d9158",
+    "label": "328-end",
+    "utc": "20261007T220424Z"
+  },
+  "environment": "local",
+  "feature": "328-match-the-research",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "8d3395e5-fe32-4f85-9c89-80c344d2ac1a",
+    "utc": "20261007T220702Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": 0.0,
+          "39": -3.2,
+          "4": -2.8,
+          "47": 0.0
+        },
+        "total_pct": -1.5
+      },
+      "20": {
+        "seeds": {
+          "25": 0.0,
+          "39": -1.9,
+          "4": 1.3,
+          "47": 0.0
+        },
+        "total_pct": -0.0
+      },
+      "40": {
+        "seeds": {
+          "25": 0.0,
+          "39": 0.0,
+          "4": 0.0,
+          "47": -0.8
+        },
+        "total_pct": -0.2
+      }
+    },
+    "seeds": {
+      "25": -2.0,
+      "39": 0.0,
+      "4": 0.0,
+      "47": -2.3
+    },
+    "total_pct": -1.1
+  },
+  "note": "Counterfactual timed in two detached worktrees, seed 4 hinterland (bamboo_seats runs there): 8c3b5cdef 1.845s vs eb86d9158 1.809s under cProfile, same 3,189,684 calls on both (the 70% passes never ran: the full stand seated). The diff only drops those passes; per-stage delta on seed 4 is +/-0.01s everywhere, so 20 hh seed 4 +1.3% is variance",
+  "verdict": "consistent"
+}

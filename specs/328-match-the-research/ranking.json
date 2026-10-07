@@ -601,7 +601,7 @@
   "found": "wave 17 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
   "moved": "T61a: tiered by its work by a fresh reader - research/questions/0075-bamboo-groves-chikurin.drawing.html already says 'A village's bamboo thicket is 84 by 58 ft ... Its size is a GUESS', exactly the code's BAMBOO_THICKET_FT = (84.0, 58.0), so only the claim is missing.",
-  "wave": "",
+  "wave": "18",
   "scope": "kept"
  },
  {
@@ -617,7 +617,7 @@
   "found": "wave 17 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
   "moved": "T61a: tiered by its work by a fresh reader - research/questions/0075-bamboo-groves-chikurin.drawing.html supports dry ground ('bamboo suits high, level ground and dies in a low field once it gets water') but gives no 3 ft figure, so the code stands and only the claim's label and backing are wrong.",
-  "wave": "",
+  "wave": "18",
   "scope": "kept"
  },
  {
@@ -6272,7 +6272,7 @@
   "found": "wave 17 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E2",
   "moved": "T61a: tiered by its work by a fresh reader - One function's pass list changes (E2), and it removes no pool thicket: Kashikawa's drawn stand is 71.0 x 54.8 ft and Mizuguchi's 76.9 x 52.1 ft (ftpx 1.0), both beyond the 70% rect of 58.8 x 40.6 ft that holds any shrunk outline, so both were seated at full size, matching research/questions/0075-bamboo-groves-chikurin.drawing.html '84 by 58 ft'.",
-  "wave": "",
+  "wave": "18",
   "scope": "kept"
  },
  {
@@ -12393,7 +12393,7 @@
   "flag": "",
   "tier_as_ranked": "E4",
   "verdict": "NEEDS-RESEARCH",
-  "wave": "",
+  "wave": "18",
   "scope": "kept"
  },
  {
