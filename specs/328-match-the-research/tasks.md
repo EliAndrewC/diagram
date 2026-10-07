@@ -375,20 +375,20 @@ grounds' sizes, counts and reaches. Every `after` these rows carry is a row insi
       the wave chooses its rows (FR-002, FR-003, SC-003)
       research: rendering
       verify: DONE. DONE. 34 rows tiered by their work by a fresh Opus reader (audit/t25a-out.jsonl, each reason measured in the code), applied in audit/overrides.json: 18 moved (E0 6, E1 12, E2 9, E3 7); the follow-up record carries the new tiers
-- [ ] T25 the bookend pair, back to back: `make perf LABEL=328-start` in a detached worktree at main's engine, then
+- [x] T25 the bookend pair, back to back: `make perf LABEL=328-start` in a detached worktree at main's engine, then
       `LABEL=328-end` in the clone (constitution VI)
       research: rendering
-      verify:
-- [ ] T26 the open E0 claims; then the E1 rows, each with the unit tests it moves; proven on the reference hamlet (Inashiro,
+      verify: DONE. DONE. 328-start in a detached worktree at origin/main and 328-end in the clone, back to back: band 0 (total -2.4%, 40 hh -0.9%), nothing owed
+- [x] T26 the open E0 claims; then the E1 rows, each with the unit tests it moves; proven on the reference hamlet (Inashiro,
       its PNG looked at) and then across the pool and the cohort's bookend seeds; a town or city value no pool map draws is
       proven by its unit test; each row fixed toward the page it cites, DEVIATION written only after `spec-fidelity` rules it
       LEGITIMATE on the exception path (a GM ruling is CANON naming it); a value that makes a map refuse is held and the row
       takes the tier of the work it needs (FR-004, FR-005, spec Edge Cases)
       research: rendering
-      verify:
-- [ ] T27 every touched unit re-checked by `impl-drift`; each wave-7 row IN-STEP or re-tiered with its measured reason (FR-005, SC-002)
+      verify: DONE. DONE. The seven E0 claims; the E1 rows: plank abutment 5.5 ft and widths in feet, the samurai caption's estates, the castle wall's gate ground 36 ft, the city gate's road 30 ft, ground 36 ft, towers 390/165 ft and reach 36 ft, the civic grounds (granary one 45 x 25 ft store, ten merchant homes, kura 17 ft square, precinct 310 x 235 ft, terrace 8 units 24 ft deep, markers 9 ft, fire bed 6 x 3 ft, stalls a ken, yards 255 ft, wells within 40 ft), the boundary stone at 4 ft (its floor removed), the martial hall's practice gear removed; the lane clearance held at 40 ft (a center corridor) and re-tiered E2. Inashiro rolled; the pool and the cohort through the gate; city values by their unit tests
+- [x] T27 every touched unit re-checked by `impl-drift`; each wave-7 row IN-STEP or re-tiered with its measured reason (FR-005, SC-002)
       research: rendering
-      verify:
-- [ ] T28 the close: the band's records, `make done` green, the wave column, landed (FR-005, FR-006, SC-002, SC-003)
+      verify: DONE. DONE. impl-drift on every touched unit (bundles A-E of wave 7; make claims-owed: no claim is owed); 21 rows IN-STEP, 4 claimed under their unit's label, 9 re-tiered with the re-check's further finding (overrides.json); 30 findings ranked as found rows
+- [x] T28 the close: the band's records, `make done` green, the wave column, landed (FR-005, FR-006, SC-002, SC-003)
       research: rendering
-      verify:
+      verify: DONE. DONE. make done green (185 s); band 0 nothing owed; the wave column written

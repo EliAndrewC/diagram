@@ -244,3 +244,4 @@ Each wave's amendment adds its map decisions to this table. The program's decisi
 - Amendment 6, round 4 (spec-fidelity, 2026-10-07): CHANGES REQUIRED, plan CLEAR (22 decisions) - the follow-up record
   out of step with T25a's tiers.
 - Amendment 6, round 5 (spec-fidelity-verify, 2026-10-07): FAITHFUL.
+- Amendment 6 landed (wave 7, 2026-10-07): band 0; the lane clearance held with its reason.

@@ -4484,19 +4484,19 @@
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py::LANE_CLEARANCE#fronting lane's corridor": {
-  "code": "1b0b7c3757ec609a",
-  "core": "2c48ea6cfc2004e2",
+  "code": "9694b3e91d9fe48f",
+  "core": "4f6abb3ccbbe5fc1",
   "date": "2026-10-07",
-  "note": "the 7 ft is §16's figure, but §16 measures from the garden fence to the lane's middle, and the constant's own comment says `_near_corridor` tests a candidate's CENTER; I need the corridor test in Settlement.lane to tell whether 7 ft is measured to a fence or footprint, or to a center. The 40 ft derivation in the comment is stale",
+  "note": "the page finds a lane's middle at least 7 ft from a garden fence, but the code holds a 40 ft corridor measured to a building's center, worked out as 34.7 (minka half-diagonal) + 5 (half-tread), which contains no 7 ft at all; the page records no center-corridor deviation; test at the footprint's edge or record the departure as DEVIATION",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
   "research": "7b40c2c01cfba682",
   "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c5daec1a445d35bf"
   ],
-  "verdict": "CANNOT-TELL"
+  "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py::LANE_FRONTAGE_STANDOFF#farmsteads front a lane": {
   "code": "e6c6dbce6e7755f6",
@@ -14177,27 +14177,19 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::a_way_onto_the_bund#a lane end within 6 ft of the paddy (BUND_REACH_FT) counts as on the bund": {
-  "code": "9051ac4b2c4b6b02",
-  "core": "9051ac4b2c4b6b02",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::a_way_onto_the_bund#a lane end within 6 ft (BUND_REACH_FT) of the paddy counts as joined to the bund": {
+  "code": "3bcffd07196c0847",
+  "core": "3bcffd07196c0847",
   "date": "2026-10-07",
-  "note": "a lane end within 6 ft of the paddy (BUND_REACH_FT) counts as on the bund",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::a_way_onto_the_bund#branched field path 5 ft wide (BRANCH_WIDTH)": {
-  "code": "9051ac4b2c4b6b02",
-  "core": "9051ac4b2c4b6b02",
-  "date": "2026-10-07",
-  "note": "branched field path 5 ft wide (BRANCH_WIDTH)",
+  "note": "a lane end within 6 ft (BUND_REACH_FT) of the paddy counts as joined to the bund",
   "research": "",
   "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::a_way_onto_the_bund#nearest lane runs on": {
-  "code": "8d70a0d983c512a6",
-  "core": "9051ac4b2c4b6b02",
+  "code": "2d553cf94a188e22",
+  "core": "3bcffd07196c0847",
   "date": "2026-10-07",
-  "note": "the free lane end nearest the paddy is run on to the bund",
+  "note": "the nearest lane runs on to the bund",
   "pages": {
    "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
   },
@@ -14208,10 +14200,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::a_way_onto_the_bund#some way joins the bund": {
-  "code": "2cb806243c7a7cc5",
-  "core": "9051ac4b2c4b6b02",
+  "code": "1d693ef20df7b04a",
+  "core": "3bcffd07196c0847",
   "date": "2026-10-07",
-  "note": "joined, run on, or a field path to the outer bund; never ends short of it",
+  "note": "joined, run on, or a field path to the outer bund, as the page has it",
   "pages": {
    "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
   },
@@ -14221,11 +14213,19 @@
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::a_way_onto_the_bund#water between is crossed": {
-  "code": "9ee5a0552967260e",
-  "core": "9051ac4b2c4b6b02",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::a_way_onto_the_bund#the branched field path 5 ft wide (BRANCH_WIDTH) with the LANE_CLEARANCE corridor": {
+  "code": "3bcffd07196c0847",
+  "core": "3bcffd07196c0847",
   "date": "2026-10-07",
-  "note": "0084 says a way over water takes one planked deck, but nothing in it caps the way at one watercourse (`for over in (0, 1)`); the cap should be claimed UNRESEARCHED",
+  "note": "the branched field path 5 ft wide (BRANCH_WIDTH) with the LANE_CLEARANCE corridor",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::a_way_onto_the_bund#water between is crossed": {
+  "code": "f437a30182400e90",
+  "core": "3bcffd07196c0847",
+  "date": "2026-10-07",
+  "note": "0084 says a way over water takes one planked deck, but nothing in it allows \"one water course at most\" (`for over in (0, 1)`); the cap should read UNRESEARCHED",
   "pages": {
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "0b77fe8191a170cc"
   },
@@ -14236,32 +14236,25 @@
   "verdict": "NEEDS-RESEARCH"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::carry_on#a junction stays a T": {
-  "code": "d7b528b1ce425fef",
-  "core": "3d32bf7b6eca4e14",
+  "code": "445937ce97b240ef",
+  "core": "ea4191bf3abd1d03",
   "date": "2026-10-07",
-  "note": "a step from a junction becomes its own path, so the network stays joined at a T",
+  "note": "one network joined where treads meet; the step is drawn as its own path",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
   "research": "7b40c2c01cfba682",
   "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:048ef93cf5c5c59f"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:048ef93cf5c5c59f",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:ab698a7b15fb7e8e"
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::carry_on#stepped field path 5 ft wide (BRANCH_WIDTH)": {
-  "code": "3d32bf7b6eca4e14",
-  "core": "3d32bf7b6eca4e14",
-  "date": "2026-10-07",
-  "note": "stepped field path 5 ft wide (BRANCH_WIDTH)",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::carry_on#stepped spur's corridor": {
-  "code": "772d12a8e78e813c",
-  "core": "3d32bf7b6eca4e14",
+  "code": "87c4d040ee434346",
+  "core": "ea4191bf3abd1d03",
   "date": "2026-10-07",
-  "note": "passes LANE_CLEARANCE, 7 ft, as §16 gives",
+  "note": "the same `LANE_CLEARANCE` mismatch: a 40 ft center corridor where the page says \"middle keeps at least 7 ft clear of a garden fence\", and no deviation recorded",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
@@ -14269,7 +14262,15 @@
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c5daec1a445d35bf"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::carry_on#the stepped field path drawn 5 ft wide (BRANCH_WIDTH)": {
+  "code": "ea4191bf3abd1d03",
+  "core": "ea4191bf3abd1d03",
+  "date": "2026-10-07",
+  "note": "the stepped field path drawn 5 ft wide (BRANCH_WIDTH)",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::cut_past_the_junction#no stub past a junction": {
   "code": "d9a11555d331c35c",
@@ -22132,8 +22133,8 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#connector width": {
-  "code": "6ccae0efcbfc4bd1",
-  "core": "f4c7f3c041b33e73",
+  "code": "801a6cf1f6377015",
+  "core": "34b824f3630f8621",
   "date": "2026-10-07",
   "note": "track out 6 ft",
   "pages": {
@@ -22141,15 +22142,16 @@
   },
   "research": "ebd72aaa6a0eb9af",
   "rests": [
+   "0081-village-lanes.drawing.html:8ee2be2b6c83fe7f",
    "0081-village-lanes.drawing.html:91a5765af6230403"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#field spur tip on the bund": {
-  "code": "fdc7a98053db9bb9",
-  "core": "f4c7f3c041b33e73",
+  "code": "b11681d1587b8074",
+  "core": "34b824f3630f8621",
   "date": "2026-10-07",
-  "note": "the tip is set on the worked ground's edge before and after threading",
+  "note": "the tip is set on the bund, and again after threading",
   "pages": {
    "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
   },
@@ -22160,10 +22162,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#lane clearance": {
-  "code": "1be8bb84b6f57ce3",
-  "core": "f4c7f3c041b33e73",
+  "code": "3359bfa8e8b4f62c",
+  "core": "34b824f3630f8621",
   "date": "2026-10-07",
-  "note": "connector, spur and row road all pass LANE_CLEARANCE, 7 ft",
+  "note": "the connector and spur register the 40 ft center corridor; the page finds 7 ft from fence to lane middle, and no center-corridor deviation is recorded",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
@@ -22171,28 +22173,27 @@
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c5daec1a445d35bf"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#lanes after the farmhouses": {
-  "code": "2211c23122a4a73c",
-  "core": "f4c7f3c041b33e73",
+  "code": "7a1ffc7cab83a72c",
+  "core": "34b824f3630f8621",
   "date": "2026-10-07",
-  "note": "the code lays a row village's road and spur after its houses, but 0031 says \"In a row village, the road comes before the houses ... laid before the settlement\". Either 0031's drawing page records the GM's 2026-08-24 ruling as a deviation, or this claim becomes CANON or DEVIATION for the linear form",
+  "note": "every house is seated before any lane is laid",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
   "research": "7b40c2c01cfba682",
   "rests": [
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:2b715651d89e6207",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:d6c0546677319ff7"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#polder has no spur": {
-  "code": "f80f2d17e4bb0cab",
-  "core": "f4c7f3c041b33e73",
+  "code": "10e7c79653016ee8",
+  "core": "34b824f3630f8621",
   "date": "2026-10-07",
-  "note": "0014 answers this: the field path \"runs from the hamlet to the paddy's outer bund and joins it\". Leaving the spur off a polder departs from that finding, so the claim should be a DEVIATION recorded on 0014's drawing page, not a GUESS",
+  "note": "0014 answers this: \"the field path runs from the hamlet to the paddy's outer bund and joins it\"; leaving the polder with no path departs from that, so the label should be DEVIATION 0014 with the page recording it, not GUESS",
   "pages": {},
   "research": "",
   "rests": [
@@ -22202,10 +22203,10 @@
   "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#row road": {
-  "code": "a28cb505b9cd1990",
-  "core": "f4c7f3c041b33e73",
+  "code": "8df8709461a4f03a",
+  "core": "34b824f3630f8621",
   "date": "2026-10-07",
-  "note": "the street is carried on off the map as the road, at both ends",
+  "note": "the street runs on off the map at both ends",
   "pages": {
    "0033-row-villages-resson.drawing.html": "5b109c17a425e58e"
   },
@@ -22216,8 +22217,8 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#row road width": {
-  "code": "18b94c416c40079e",
-  "core": "f4c7f3c041b33e73",
+  "code": "0b93a2c0a57ee6ee",
+  "core": "34b824f3630f8621",
   "date": "2026-10-07",
   "note": "6 ft",
   "pages": {
@@ -22230,10 +22231,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#spur bow": {
-  "code": "a3dc84745e18dc94",
-  "core": "f4c7f3c041b33e73",
+  "code": "bf820cb4a1abf275",
+  "core": "34b824f3630f8621",
   "date": "2026-10-07",
-  "note": "`(_mx + ax * 14, _my + ay * 14)` bows the spur on purpose so it \"reads as walked rather than ruled\", but 0081 says \"Every lane is pulled taut like a string\" and runs straight wherever it can. Either 0081 records the bow as a deviation or the bow goes",
+  "note": "the code adds a 14 ft sideways swing at the midpoint (`_mx + ax * 14`), and the threading can keep it in the drawn spur; 0081 has \"Every lane is pulled taut like a string. It runs straight from point to point\" and attests no bow",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },
@@ -22245,10 +22246,10 @@
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#spur clip margin": {
-  "code": "d3bd0022f7ef057f",
-  "core": "f4c7f3c041b33e73",
+  "code": "33a43c8e3d84a0f1",
+  "core": "34b824f3630f8621",
   "date": "2026-10-07",
-  "note": "`clip_to_clear(spur, crops..., 12.0)` keeps the spur 12 ft off the dry plots, but 0081 says a lane \"may touch a plot's boundary\" and the spur \"stops at the hem's edge\". The page records no 12 ft margin",
+  "note": "`clip_to_clear(..., 12.0)` stops the spur 12 ft off the dry plots, where 0081 says a lane \"may touch a plot's boundary\" and \"the spur to the fields stops at the hem's edge\"; the 12 ft is attested nowhere",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },
@@ -22260,10 +22261,10 @@
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#spur kept however short": {
-  "code": "8019656ec246690a",
-  "core": "f4c7f3c041b33e73",
+  "code": "3e751b8941a85226",
+  "core": "34b824f3630f8621",
   "date": "2026-10-07",
-  "note": "drawn down to SPUR_WIDTH, \"however short that leaves the path\"",
+  "note": "\"however short that leaves the path\"; the floor is the 5 ft tread",
   "pages": {
    "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
   },
@@ -22275,10 +22276,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#spur over the brook at a ford": {
-  "code": "a4ea0a3b22e0c9d3",
-  "core": "f4c7f3c041b33e73",
+  "code": "7eb8a069972021fc",
+  "core": "34b824f3630f8621",
   "date": "2026-10-07",
-  "note": "the spur crosses the brook square at a crossing place and is bridged there",
+  "note": "crosses square at a crossing place, the one that makes the walk shortest",
   "pages": {
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "c23a085a43372c2c"
   },
@@ -22291,10 +22292,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#spur tip set back": {
-  "code": "24a10f7aae77135a",
-  "core": "f4c7f3c041b33e73",
+  "code": "77cff805fc9cb483",
+  "core": "34b824f3630f8621",
   "date": "2026-10-07",
-  "note": "the 17 ft is unresearched, and the tip is then reset on the bund",
+  "note": "nothing gives the 17 ft; the tip is later carried on to the bund",
   "pages": {},
   "research": "",
   "rests": [
@@ -22303,10 +22304,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#spur to the field": {
-  "code": "94063fea05d87b6c",
-  "core": "f4c7f3c041b33e73",
+  "code": "1e7b4eeaf334fe3d",
+  "core": "34b824f3630f8621",
   "date": "2026-10-07",
-  "note": "the outline point whose path crosses least, then the shortest, kept off crops and wet ground",
+  "note": "fewest crossings, then shortest; kept off crops and wet ground",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },
@@ -22319,10 +22320,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#toe-band margin": {
-  "code": "49270d03bf5a73b1",
-  "core": "f4c7f3c041b33e73",
+  "code": "b4b8067a3eaf8601",
+  "core": "34b824f3630f8621",
   "date": "2026-10-07",
-  "note": "0081 keeps a track off wet ground but gives no margin",
+  "note": "the page says keep off wet ground but gives no margin",
   "pages": {},
   "research": "",
   "rests": [
@@ -22331,10 +22332,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#track off the map": {
-  "code": "3c20ac17c55343b1",
-  "core": "f4c7f3c041b33e73",
+  "code": "182cd1a34de7f4f5",
+  "core": "34b824f3630f8621",
   "date": "2026-10-07",
-  "note": "the track runs on off the map",
+  "note": "runs off the map from the cluster",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },
@@ -22346,10 +22347,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#track off the wet": {
-  "code": "9770885de2ad8257",
-  "core": "f4c7f3c041b33e73",
+  "code": "cebd80ad2cc39d2d",
+  "core": "34b824f3630f8621",
   "date": "2026-10-07",
-  "note": "the toe band and the marsh are kept off",
+  "note": "the toe band and the marsh are treated as wet",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },
@@ -22924,10 +22925,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#clear of crop, wet and water": {
-  "code": "8dfa9dbd5fcff20d",
-  "core": "20cd03906df2331c",
+  "code": "4ec26b3ee198b9ea",
+  "core": "c26981eddbe1cc55",
   "date": "2026-10-07",
-  "note": "the arm never crosses row crops and keeps off wet ground",
+  "note": "no row crops, off wet ground, crop and wet stretches cut",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
@@ -22940,11 +22941,19 @@
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#routed round the steadings": {
-  "code": "1fb2423e704f7b4f",
-  "core": "20cd03906df2331c",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#each skeleton arm registers the 40 ft LANE_CLEARANCE no-build corridor": {
+  "code": "c26981eddbe1cc55",
+  "core": "c26981eddbe1cc55",
   "date": "2026-10-07",
-  "note": "nothing is built on a lane; the arm is routed round the steadings",
+  "note": "each skeleton arm registers the 40 ft LANE_CLEARANCE no-build corridor",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#routed round the steadings": {
+  "code": "df40795d8b4ae35e",
+  "core": "c26981eddbe1cc55",
+  "date": "2026-10-07",
+  "note": "nothing is built on a lane",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
@@ -22956,10 +22965,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton arm clipped WEB_FABRIC_GAP (7 ft) off the steadings and trimmed back to the last point serving a house": {
-  "code": "f5e431eaa616e808",
-  "core": "20cd03906df2331c",
+  "code": "66ad4f398c2a90c8",
+  "core": "c26981eddbe1cc55",
   "date": "2026-10-07",
-  "note": "7 ft clear, and an end that reaches nothing is pulled back to the last house it serves",
+  "note": "7 ft to the fabric; an end that reaches nothing is pulled back",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
@@ -22971,45 +22980,36 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton arm off the water": {
-  "code": "8712ea521ade7204",
-  "core": "20cd03906df2331c",
+  "code": "06f8f59c0f1c8553",
+  "core": "c26981eddbe1cc55",
   "date": "2026-10-07",
-  "note": "the record says nothing about inner arms crossing water",
+  "note": "no cited page says whether an inner lane avoids ditches",
   "pages": {},
   "research": "",
-  "rests": [
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:93969c06f800b0d5"
-  ],
+  "rests": [],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton arm's no-build corridor LANE_CLEARANCE, 7 ft": {
-  "code": "20cd03906df2331c",
-  "core": "20cd03906df2331c",
-  "date": "2026-10-07",
-  "note": "skeleton arm's no-build corridor LANE_CLEARANCE, 7 ft",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton form": {
-  "code": "0ca124e8e21a0cac",
-  "core": "20cd03906df2331c",
+  "code": "031df74ba9705f0c",
+  "core": "c26981eddbe1cc55",
   "date": "2026-10-07",
-  "note": "the lane shape is rolled from the seed",
+  "note": "five lane shapes, rolled per hamlet, each GUESS",
   "pages": {
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
   },
   "research": "4e7ba7479292ad40",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7c6e882522129755",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:88b0dc9025f38b30",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:bf4801c5605ed9ea"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton laid after the houses": {
-  "code": "3b04d56b5845a68b",
-  "core": "20cd03906df2331c",
+  "code": "090604e14a0fbf52",
+  "core": "c26981eddbe1cc55",
   "date": "2026-10-07",
-  "note": "farmhouses are placed first",
+  "note": "farmhouses placed first",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
@@ -23020,32 +23020,31 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton margin off the hard ground": {
-  "code": "9f9990e4e21f6f92",
-  "core": "20cd03906df2331c",
+  "code": "eeee3ff1c07a6fd1",
+  "core": "c26981eddbe1cc55",
   "date": "2026-10-07",
-  "note": "0081 answers this for the crops: a lane \"may touch a plot's boundary\". The 20 ft off the crops should be a DEVIATION recorded on 0081; only the marsh and ditch part stays UNRESEARCHED",
+  "note": "0081 answers lane-to-crop clearance (\"may touch a plot's boundary\"; \"runs ... along the edge of the hem\"); the 20 ft off the crop should cite 0081 as a recorded DEVIATION or follow it; the marsh and ditch parts of the margin stay unresearched",
   "pages": {},
   "research": "",
   "rests": [
+   "0081-village-lanes.drawing.html:43b635b1ca75125b",
    "0081-village-lanes.drawing.html:ff5e303a5a16af8f"
   ],
   "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton span floor": {
-  "code": "a93870d69214c7c3",
-  "core": "20cd03906df2331c",
+  "code": "ab9e2d82e90db197",
+  "core": "c26981eddbe1cc55",
   "date": "2026-10-07",
-  "note": "the record gives no span floor",
+  "note": "nothing gives the 100 ft floor or the 30 ft piece minimum",
   "pages": {},
   "research": "",
-  "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461"
-  ],
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton width": {
-  "code": "190181bdb8a56c32",
-  "core": "20cd03906df2331c",
+  "code": "68fc8b2486271f79",
+  "core": "c26981eddbe1cc55",
   "date": "2026-10-07",
   "note": "spine 5 ft",
   "pages": {
@@ -30744,10 +30743,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/overlap/taxonomy.py::_LABEL_GROUP#a caption covers its own group": {
-  "code": "a897b367aeed00db",
+  "code": "af35060d4733a24f",
   "core": "dbf31ba5cd42b869",
   "date": "2026-10-07",
-  "note": "`\"manors\": \"estate\"` lets only a caption containing \"estate\" cover a manor, but 0243 has \"A samurai caption, the samurai houses and estates\", so a \"samurai neighborhood\" caption is barred from the manors it may cover",
+  "note": "the funerary group and the samurai caption covering the estates match the page, but two other groups are narrower than it says. §11 says \"A temple's or shrine's name, the temples\", yet `religious` and `precinct_halls` sit in the group \"temple\", and GROUP_WORDS gives \"temple\" no extra words, so a \"... shrine\" caption cannot cover the temple group. §9 says \"A guard-house or inspection caption, the gate's guard-houses and inspection posts\", yet `gate_structs` sits in the group \"gate\", reachable only by the word \"gate\". Either add \"shrine\" to the temple group's words and \"guard\"/\"inspection\" to the gate group's, or narrow the claim to what the map does. A shrine's caption can still cover its own building through the subject rule (§5).",
   "pages": {
    "0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html": "992902d5f8170994"
   },
@@ -30755,8 +30754,9 @@
   "rests": [
    "0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html:1add67f15e6ee3ba",
    "0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html:1d012e55afaf18e2",
+   "0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html:3b5a2455fcb19ab6",
+   "0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html:436529fe4697b783",
    "0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html:629c7e0297b53a78",
-   "0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html:682bfd31d6acb8a4",
    "0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html:980ba3997f32f09c"
   ],
   "verdict": "DRIFTED"
@@ -30773,6 +30773,14 @@
    "0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html:436529fe4697b783"
   ],
   "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/overlap/taxonomy.py::_LABEL_GROUP#no caption may cover a torii arch (group \"torii\" is named by no caption); this is the GM's ruling of 2026-07-27, which 0243 does not cover, so it should be claimed as CANON": {
+  "code": "dbf31ba5cd42b869",
+  "core": "dbf31ba5cd42b869",
+  "date": "2026-10-07",
+  "note": "no caption may cover a torii arch (group \"torii\" is named by no caption); this is the GM's ruling of 2026-07-27, which 0243 does not cover, so it should be claimed as CANON",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/overlap/taxonomy.py::_LABEL_GROUPS#geometry and bookkeeping": {
   "code": "803125dfdd490b1b",
@@ -37397,10 +37405,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/civic.py::CivicWorksMixin.granary#caption": {
-  "code": "4e5866186707aaa4",
-  "core": "163a4afdacec0ed5",
+  "code": "d254e5b0f6bc0402",
+  "core": "9ddff4b5ca3d7653",
   "date": "2026-10-07",
-  "note": "captioned \"granary\", as the page asks",
+  "note": "the caption reads \"granary\"; only its placement and type are convention",
   "pages": {},
   "research": "",
   "rests": [
@@ -37409,58 +37417,60 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/civic.py::CivicWorksMixin.granary#gap between stores": {
-  "code": "756ec8fba0fa2efe",
-  "core": "163a4afdacec0ed5",
+  "code": "c94557402cf3e347",
+  "core": "9ddff4b5ca3d7653",
   "date": "2026-10-07",
-  "note": "the page gives no spacing",
+  "note": "nothing gives a gap between stores",
   "pages": {},
   "research": "",
-  "rests": [],
+  "rests": [
+   "0098-storehouses-for-the-tax-rice.drawing.html:28b329b6bfe7881f",
+   "0098-storehouses-for-the-tax-rice.drawing.html:87f96195cf97a73c"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/civic.py::CivicWorksMixin.granary#keep-clear margin": {
-  "code": "0003559ce00b66af",
-  "core": "163a4afdacec0ed5",
+  "code": "815042dcecc9d640",
+  "core": "9ddff4b5ca3d7653",
   "date": "2026-10-07",
-  "note": "the page is silent; 30 px a side either way",
+  "note": "nothing gives a keep-clear margin",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/civic.py::CivicWorksMixin.granary#store fills and roof band": {
-  "code": "b81376a65b02ff0d",
-  "core": "163a4afdacec0ed5",
+  "code": "5ff00b1117d15b7a",
+  "core": "9ddff4b5ca3d7653",
   "date": "2026-10-07",
-  "note": "colors only",
+  "note": "fills and band are rendering only",
   "pages": {},
   "research": "",
-  "rests": [],
+  "rests": [
+   "0098-storehouses-for-the-tax-rice.drawing.html:7b5dcbded97fb530"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/civic.py::CivicWorksMixin.granary#store size and count": {
-  "code": "b40ba7e2e1622583",
-  "core": "163a4afdacec0ed5",
+  "code": "5b562db562457d57",
+  "core": "9ddff4b5ca3d7653",
   "date": "2026-10-07",
-  "note": "the default n=3 office stores of 45 x 25 ft goes against the page: an office granary is \"a single storehouse of about 45 by 25 ft\", and a landing row is \"several, each about the 440 to 740 sq ft\"; the default should be 1 store at office size, or a row of smaller stores",
+  "note": "one store, default 45 x 25 ft, inside 43-50 x 25-27",
   "pages": {
    "0098-storehouses-for-the-tax-rice.drawing.html": "1466a760af61120d"
   },
   "research": "f1206af177a61c95",
   "rests": [
    "0098-storehouses-for-the-tax-rice.drawing.html:0dfd560c49d1636d",
-   "0098-storehouses-for-the-tax-rice.drawing.html:28b329b6bfe7881f",
-   "0098-storehouses-for-the-tax-rice.drawing.html:6754f505bb1258be",
-   "0098-storehouses-for-the-tax-rice.drawing.html:87f96195cf97a73c",
-   "0098-storehouses-for-the-tax-rice.drawing.html:c97a5ce79117b14d"
+   "0098-storehouses-for-the-tax-rice.drawing.html:6754f505bb1258be"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/civic.py::CivicWorksMixin.granary#tax-rice granary at a transit town": {
-  "code": "3bfb6dc5362d92a6",
-  "core": "163a4afdacec0ed5",
+  "code": "c3d63fe852c20f70",
+  "core": "9ddff4b5ca3d7653",
   "date": "2026-10-07",
-  "note": "where a county's rice waits (the office's storehouse or a landing row) is \"a knob, rolled per settlement from its seed\", leaning to the landing on navigable water; the code takes a hand-set meta(granary=True) flag instead of a seeded roll",
+  "note": "the page makes \"where a county's tax rice waits\" a knob (office storehouse or landing row) rolled per settlement; the code draws the separate row only when meta(granary=True) is set by hand, and the page never mentions a \"transit town\"",
   "pages": {
    "0098-storehouses-for-the-tax-rice.drawing.html": "1466a760af61120d"
   },
@@ -37473,10 +37483,10 @@
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/civic.py::CivicWorksMixin.granary#the capital's granaries": {
-  "code": "e9d9edb242a2420d",
-  "core": "163a4afdacec0ed5",
+  "code": "38d84953df3c6527",
+  "core": "9ddff4b5ca3d7653",
   "date": "2026-10-07",
-  "note": "appended rows set parallel to the quay, the stores facing the water",
+  "note": "storehouses in a row at the quay, turned to the water",
   "pages": {
    "0142-rice-storehouses-and-the-rice-brokers-in-a-capital-kura-fudasashi.drawing.html": "39ef96dccb574bba"
   },
@@ -37488,15 +37498,16 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/civic.py::CivicWorksMixin.granary#white walls and dark hip roof": {
-  "code": "b45be2dcf113270a",
-  "core": "163a4afdacec0ed5",
+  "code": "9dc7503562a9dfe7",
+  "core": "9ddff4b5ca3d7653",
   "date": "2026-10-07",
-  "note": "the page makes the form a knob (\"takakura ... or an earth-walled kura ... each map takes one\"), and the code always draws the kura; it must roll per settlement",
+  "note": "the page attests two forms (\"A granary takes one of two forms, a knob\": takakura or kura); the code always draws the kura and never rolls",
   "pages": {
    "0098-storehouses-for-the-tax-rice.drawing.html": "1466a760af61120d"
   },
   "research": "f1206af177a61c95",
   "rests": [
+   "0098-storehouses-for-the-tax-rice.drawing.html:0dfd560c49d1636d",
    "0098-storehouses-for-the-tax-rice.drawing.html:15ff4a12c8aee5ae",
    "0098-storehouses-for-the-tax-rice.drawing.html:7b5dcbded97fb530"
   ],
@@ -38729,33 +38740,34 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/lodging.py::LodgingMixin.stables#keep-clear margin": {
-  "code": "852fc08a0855e195",
-  "core": "58b140eaada95efd",
+  "code": "fa4418925d08a4f4",
+  "core": "9bd37f5bd5ed8f96",
   "date": "2026-10-07",
-  "note": "the page is silent",
+  "note": "nothing gives a block margin",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/lodging.py::LodgingMixin.stables#stables size": {
-  "code": "c30d8359bd3fa031",
-  "core": "58b140eaada95efd",
+  "code": "d27587e22fc95aba",
+  "core": "9bd37f5bd5ed8f96",
   "date": "2026-10-07",
-  "note": "no page sizes a wagon-train stables",
+  "note": "0108 covers an official's small stable, not a wagon-train stables; no size is given",
   "pages": {},
   "research": "",
   "rests": [
    "0108-stables-umaya.drawing.html:af3e2dedf1edb040",
+   "0108-stables-umaya.drawing.html:bfffc30811fc7968",
    "0108-stables-umaya.drawing.html:d4268b7e5b7275c7"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/lodging.py::LodgingMixin.stables#stall divisions": {
-  "code": "484e8f0df05bf201",
-  "core": "58b140eaada95efd",
+  "code": "ba4842856648fb56",
+  "core": "9bd37f5bd5ed8f96",
   "date": "2026-10-07",
-  "note": "the page says stalls \"about one ken (~6 ft) wide\", but step = max(6*sf, 3) with sf = 1/ftpx floors at 3 px, which is 9 ft at city scale (ftpx 3), so city stalls are drawn 9 ft apart; drop the floor or label it a CONVENTION",
+  "note": "one ken, about 6 ft, per stall",
   "pages": {
    "0108-stables-umaya.drawing.html": "9b263ee6db0a6b95"
   },
@@ -38763,22 +38775,23 @@
   "rests": [
    "0108-stables-umaya.drawing.html:219e638987c06796"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/lodging.py::LodgingMixin.stables#working yard at a city's gate stables": {
-  "code": "8dbfda4d363de488",
-  "core": "58b140eaada95efd",
+  "code": "34d8a9ba33341c70",
+  "core": "9bd37f5bd5ed8f96",
   "date": "2026-10-07",
-  "note": "queued, px(127.5), about 255 ft across",
+  "note": "255 ft across (px(127.5) radius) is right, but the yard is drawn only at city and capital scale, while the page gives \"a gate stables or caravan ground\" a working yard; a town's caravan stables gets none, and the page records no such exception",
   "pages": {
    "0195-stable-yards-and-watering-troughs.drawing.html": "15451a48113d9f9d"
   },
   "research": "d16baad4c6a0e9f3",
   "rests": [
-   "0195-stable-yards-and-watering-troughs.drawing.html:1d3812068f096e13",
+   "0195-stable-yards-and-watering-troughs.drawing.html:010b3d0aa1acb7d1",
+   "0195-stable-yards-and-watering-troughs.drawing.html:556af5f47feb7126",
    "0195-stable-yards-and-watering-troughs.drawing.html:b6a954ac88aa4a4c"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/stable_yard.py::StableYardMixin#plumbing": {
   "code": "911c7a526bd13577",

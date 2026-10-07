@@ -309,7 +309,7 @@ _LABEL_GROUP = {
 """Caption groups.
 
 Research:
-    a caption covers its own group - research/questions/0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html: the group word a caption names, and nothing else; the graveyard, cremation ground, mausoleum and ossuary one funerary group, named by any of their words (`labels.obstacles.GROUP_WORDS`)
+    a caption covers its own group - research/questions/0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html: the group word a caption names, and nothing else; the graveyard, cremation ground, mausoleum and ossuary one funerary group, and a samurai caption naming the estates (`manors`), each named by any of their words (`labels.obstacles.GROUP_WORDS`)
     an arch is never covered - CANON: the GM's ruling of 2026-07-27, an arch is never covered by the 'temple of X' label; the torii group word is in no caption
 """
 

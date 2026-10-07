@@ -218,14 +218,14 @@
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law_water.py::oblique_at#square ditch crossing": {
   "after": [],
-  "e0_basis": "T25a: a claim relabel; the code stands",
+  "e0_basis": "a claim fix citing the page that answers",
   "files": [
    ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law_water.py"
   ],
-  "fix": "claim the channel crossing UNRESEARCHED: squared within FORD_SQUARE_TOL_DEG, 10 degrees (0084 squares only the standalone footplank; 0087 solves a carried deck at its way's angle and gives no tolerance), the brook keeping its 0035 citation",
+  "fix": "cite 0087 (a carried deck crosses at an angle, solved for it) against the code's 10 degree squaring; dropping the squaring is a rule change ranked with it",
   "flag": "",
   "found": "wave 6 re-check (tiered by its work at T25a)",
-  "moved": "T25a (amendment 6): tiered by its work - the code (oblique_at, law_water.py:104) stands; only its 0084 claim line at 109 is relabeled",
+  "moved": "wave 7 re-check: the fix landed; what the re-check found beyond it",
   "tier": "E0"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law_water.py::off_ford_at#how far from a crossing place a brook crossing may stand, FORD_HALF 30 ft": {
@@ -281,11 +281,11 @@
   "files": [
    ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py"
   ],
-  "fix": "LANE_CLEARANCE becomes 7 ft (0246 drawing: a lane's middle keeps 7 ft clear of a garden fence and nothing is built on its tread) in place of the 40 ft corridor, and the claim cites 0246.drawing for it",
+  "fix": "test the connector's and spur's no-build corridor at a building's footprint edge (`_near_corridor` asks a center), so LANE_CLEARANCE can be 0246's 7 ft from the lane's middle to a fence",
   "flag": "",
   "found": "wave 6 re-check (tiered by its work at T25a)",
-  "moved": "T25a (amendment 6): tiered by its work - one constant at hamletgen/consts.py:91, passed to every s.lane call in stage_track (lines 486, 602, 631, 637); no logic changes",
-  "tier": "E1"
+  "moved": "wave 7: held at 40 ft - 7 ft as a center test let a building's body stand on the tread; the edge-based test is one rule (E2)",
+  "tier": "E2"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#spur clip margin": {
   "after": [],
@@ -307,10 +307,10 @@
   "files": [
    ".claude/skills/diagram/l7r/diagram/interactive/assets/place.json"
   ],
-  "fix": "the city's population_note says 'by convention' it takes in the samurai country estates, where 0001 counts only those within the walls: align the note with 0001; if the convention proves a GM ruling, the claim is CANON naming that ruling",
+  "fix": "0001's question counts a provincial city's ~3,000 within the walls; the GM's feature-156 request has it take in the samurai country estates: record the GM's ruling on 0001's drawing page (a record edit), so the CANON claim and the page agree",
   "flag": "",
-  "moved": "amendment 6 round 1: fixed toward the page, no DEVIATION offered",
-  "tier": "E1"
+  "moved": "wave 7 re-check: the fix landed; what the re-check found beyond it",
+  "tier": "E4"
  },
  ".claude/skills/diagram/l7r/diagram/overlap/taxonomy.py::_LABEL_GROUP#a caption covers its own group": {
   "after": [],
@@ -318,9 +318,9 @@
    ".claude/skills/diagram/l7r/diagram/overlap/taxonomy.py",
    ".claude/skills/diagram/l7r/diagram/labels/obstacles.py"
   ],
-  "fix": "the funerary group is in step (wave 5); what is left: `manors` maps to 'estate', so a samurai caption may not cover the manors 0243 lets it cover (\"A samurai caption, the samurai houses and estates\") - give the samurai caption the estates",
+  "fix": "the funerary group and the samurai caption's estates are in step (wave 7); left: give the temple group the word 'shrine' and the gate group 'guard' and 'inspection' (0243: a temple's or shrine's name covers the temples; a guard-house or inspection caption the gate's guard-houses and inspection posts)",
   "flag": "",
-  "moved": "wave 5 re-check: the funerary part fixed, the samurai caption's estates left",
+  "moved": "wave 7 re-check: two narrower groups left",
   "tier": "E1"
  },
  ".claude/skills/diagram/l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#mill beside its stream": {
@@ -526,10 +526,10 @@
   "files": [
    ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py"
   ],
-  "fix": "the coverage sweep's exempt stretches become self.px(390) of a gate and self.px(165) of its guard buildings in place of the fixed 130 and 55 px",
+  "fix": "the coverage sweep exempts all four of 0148's stretches: add 135 ft of a water gate and 186 ft of a ward gate to the 390 ft of a gate and 165 ft of its guard buildings",
   "flag": "",
   "found": "wave 5 re-check (tiered by its work at T25a)",
-  "moved": "T25a (amendment 6): tiered by its work - two literals in one test at walls.py:~531; the coverage check that once mirrored them is retired",
+  "moved": "wave 7 re-check: the fix landed; what the re-check found beyond it",
   "tier": "E1"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py::WallsMixin._seat_mural_towers#reach counted from the parapet": {
@@ -569,6 +569,26 @@
   "moved": "wave 1: E0 -> E1, the code draws a 20 x 14 oblong; the page says 14 to 20 ft square",
   "tier": "E1"
  },
+ ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/civic.py::CivicWorksMixin.terrace#range depth": {
+  "after": [],
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/civic.py"
+  ],
+  "fix": "size the drawn terrace unit to the drawing page's about 990 sq ft (Rank 1-4) in place of Shibata's 18 x 24 ft (432 sq ft) cell",
+  "flag": "",
+  "moved": "wave 7 re-check: the fix landed; what the re-check found beyond it",
+  "tier": "E1"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cemetery#rows of low markers": {
+  "after": [],
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/funerary.py"
+  ],
+  "fix": "start the first row a marker's height inside a ruled plot's edge (or test each marker's top against the plot as against the blob) so every marker stands wholly inside the ground",
+  "flag": "",
+  "moved": "wave 7 re-check: the fix landed; what the re-check found beyond it",
+  "tier": "E1"
+ },
  ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/justice.py::JusticeGroundsMixin.boundary_marker#how many stones": {
   "after": [],
   "files": [
@@ -578,6 +598,17 @@
   "flag": "",
   "found": "wave 6 re-check (tiered by its work at T25a)",
   "moved": "T25a (amendment 6): tiered by its work - boundary_marker (justice.py:182) draws one stone; it gains a seeded roll and a loop that seats and records each stone of the group",
+  "tier": "E2"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/lodging.py::LodgingMixin.stables#working yard at a city's gate stables": {
+  "after": [],
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/lodging.py",
+   ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/stable_yard.py"
+  ],
+  "fix": "give a town's gate stables or caravan ground its working yard too (0195), not only a city's or capital's",
+  "flag": "",
+  "moved": "wave 7 re-check: the fix landed; what the re-check found beyond it",
   "tier": "E2"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/houses.py::HousesMixin._in_blocked#seat set-back from fields, dry plots and hills": {
@@ -631,14 +662,14 @@
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_handover#a through track's handover": {
   "after": [],
-  "e0_basis": "T25a: a claim relabel; the code stands",
+  "e0_basis": "a claim fix citing the page that answers",
   "files": [
    ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/_helpers.py"
   ],
-  "fix": "claim the through track's handover UNRESEARCHED: where both ends are off the sheet, the lane end joining it nearest the houses' middle (0190 says only entrance)",
+  "fix": "cite 0190 (a board at the village's center or its entrance, and at crossroads where people pass) for the junction nearest the houses' middle",
   "flag": "",
   "found": "wave 5 re-check (tiered by its work at T25a)",
-  "moved": "T25a (amendment 6): tiered by its work - the code (kosatsuba_handover, _helpers.py:161) stands; only its 0190 claim line at 167 is relabeled",
+  "moved": "wave 7 re-check: the fix landed; what the re-check found beyond it",
   "tier": "E0"
  }
 }
