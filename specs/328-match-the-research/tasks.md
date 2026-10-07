@@ -10,7 +10,7 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
   within 25 ft, tails and hooks cut at 40 and 12 ft): the lanes are re-placed by substantially different rules.
 - none (wave 2): each fix moves one value inside a rule that already places the element (a weight, a pitch, a share, a
   count's cap, an extent); no element is new to a map, no glyph is redrawn, and no element is re-placed by different rules.
-- placement-changed: village lane on kashikawa - wave 5: 0033's row street runs on off the map as the road into it at both ends, where
+- (wave 5, landed and reviewed) placement-changed village lane on kashikawa - wave 5: 0033's row street runs on off the map as the road into it at both ends, where
   the web cut it back to its last joint (`trim_streets`); Kashikawa's and Mizuguchi's far ends now run off the sheet as a
   second way out (every way is inked `village lane`).
 - none (wave 5, the other rows): each fix moves one value inside a rule that already places or sizes the element (a
