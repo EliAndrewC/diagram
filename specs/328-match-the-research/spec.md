@@ -223,3 +223,4 @@ Each wave's amendment adds its map decisions to this table. The program's decisi
   lane rows; (2) the counts: 33 held since amendment 1 and 4 found since; the Decisions row worded as such.
 - Amendment 3, round 2 (spec-fidelity-verify, 2026-10-07): CHANGES REQUIRED - T15 and the Phase 5 heading name the four
   E1 rows ahead of the lane law, so no box can be ticked with them undone.
+- Amendment 3, round 3 (spec-fidelity-verify, 2026-10-07): FAITHFUL.
