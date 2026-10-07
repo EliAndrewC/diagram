@@ -127,11 +127,12 @@ def fit_square_parcel(half: float, floor_half: float, fits: Any) -> float | None
     return None
 
 
-WET_SHARE_CAP = 0.5
-"""The most of a woodland parcel that may stand in marsh: half its sample grid (`woodland_commons_on_dry_ground`). A
-managed coppice is not a swamp forest - standing water rots the stools and the cut cannot be carried out.
+WET_SHARE_CAP = 0.0
+"""The most of a woodland parcel that may stand in marsh: none of its sample grid (`woodland_commons_on_dry_ground`). A
+managed coppice is not a swamp forest - standing water rots the stools and the cut cannot be carried out - and 0077's
+drawing page leaves low ground by a river or marsh to grass, not wood (feature 328: the cap was half a parcel).
 
-Research: woods mostly on dry ground - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: at most half a parcel in marsh"""
+Research: woods mostly on dry ground - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: no part of a parcel in marsh"""
 
 
 def parcel_wet_share(ring: Sequence[Pt], marshes: Sequence[list[Pt]]) -> float:
@@ -277,7 +278,7 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
         parcels kept apart - UNRESEARCHED: each one's exclusion 1.15-2.5 of the size
         aspect and bearing - UNRESEARCHED: up to 2.2:1, laid across the fall within 20 deg
         line follows its bounds - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: within LOT_BOUND_REACH of a lane, brook or field the line runs alongside
-        mostly dry - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: at most WET_SHARE_CAP in marsh
+        mostly dry - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: no sample of the parcel in marsh (WET_SHARE_CAP 0)
         on the page - CONVENTION: WOODLAND_BBOX_FLOOR of the ring inside the view
         woods not in a ruled line - UNRESEARCHED
         nearest seat preferred - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: the nearest slope beyond the fields

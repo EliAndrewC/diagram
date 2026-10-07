@@ -45,11 +45,12 @@ rather than on its floor (a map drawing convention).
 Research: channel end off the yard - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: a 6 ft step off the threshing yard
 """
 
-DOORYARD_STEPS = (1.0, 2.0, 3.5)
-"""The multiples of `DOORYARD_STEP_FT` a channel's end is offered at off each side of the yard, nearest first (feature 291 on
-287; where in the dooryard the channel ended no page read says - a GUESS, as the one step was).
+DOORYARD_STEPS = (1.0,)
+"""The multiples of `DOORYARD_STEP_FT` a channel's end is offered at off each side of the yard: one step, the drawing page's
+GUESS ("a step off the threshing yard"). Feature 291 widened it to two and three and a half steps; feature 328 held it to
+the page - a farm whose every one-step end is boxed in takes a well of its own instead (`farm_channels`, 0031).
 
-Research: where in the dooryard - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: one, two or three and a half steps off the yard
+Research: where in the dooryard - GUESS research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: one step off the yard
 """
 SOURCE_TRIES = 6
 """The nearest candidate points on the irrigation water tried per farm, nearest first (the router's own budget)."""
@@ -175,7 +176,7 @@ def farm_channel(s: Settlement, h: Mapping[str, Any], courses: Sequence[Sequence
         a channel into the grounds - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.html, research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the shortest route found from the nearest sources
         no way back drawn - DEVIATION research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the channel stops in the dooryard
         crosses no other water - UNRESEARCHED: a route crossing other drawn water more than 6 ft past its mouth is refused
-        where the channel ends - GUESS research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: in the dooryard, `DOORYARD_STEP_FT` (6 ft) off the yard, out to 3.5 steps
+        where the channel ends - GUESS research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: in the dooryard, `DOORYARD_STEP_FT` (6 ft) off the yard, one step
         channel corridor - UNRESEARCHED: a 4 ft no-build corridor along each channel
     """
     from ..ways.route import _route  # local: the ways are a later stage
@@ -203,8 +204,8 @@ def farm_channel(s: Settlement, h: Mapping[str, Any], courses: Sequence[Sequence
     for srcs, steps, straight in (
         (near, (1.0,), False),
         # ...THEN THE WIDER SEARCH: the nearest sources off the crop beside them (a ditch inside the field can be walled by its
-        # paddies - cohort seed 19: all six of one farm's sources stood among them); ends farther off the yard (since feature
-        # 287 a farm's fixtures are laid round it, and a single step off each side stood boxed in by them); and the straight
+        # paddies - cohort seed 19: all six of one farm's sources stood among them); ends a step off each side of the yard (feature 291 tried
+        # farther ends when fixtures boxed the one step in; feature 328 held them to the page's one step); and the straight
         # chord where it crosses nothing (a farm seated close by its field leaves a strip narrower than the router's clearance
         # on both sides - seed 19: 90 routes refused for a channel 30 ft long)
         ([*near, *[q for q in offered if q not in near and not inside_the_crop(q, hard)][:SOURCE_TRIES]], DOORYARD_STEPS, True),

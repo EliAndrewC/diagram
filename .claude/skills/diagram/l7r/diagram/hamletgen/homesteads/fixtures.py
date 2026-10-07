@@ -132,8 +132,8 @@ Research:
 # continuum, rolled from the seed. Where in the yard the separate outhouse stands no page says: behind the house, a step
 # off the wall, is a GUESS. A privy inside the barn is a tub under its floor, which a top-down map cannot show; it is
 # drawn as the privy glyph against the barn's outer wall - a MAP DRAWING CONVENTION.
-_PRIVY_SEATS = (("yard", 0.35), ("front", 0.30), ("stable", 0.20), ("barn", 0.15))
-"""Research: four privy seats - research/questions/0047-farm-privies-and-their-night-soil-benjo.html, research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: yard 35, front 30, stable 20, barn 15 in 100"""
+_PRIVY_SEATS = (("stable", 0.35), ("yard", 0.30), ("front", 0.20), ("barn", 0.15))
+"""Research: four privy seats - research/questions/0047-farm-privies-and-their-night-soil-benjo.html, research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: under the stable's eaves 35, an outhouse in the yard 30, the front yard 20, in the barn 15 in 100, the page's order (feature 328)"""
 _PRIVY_WEIGHT_SPREAD = (0.5, 1.5)  # each base weight scaled by a factor in this range per hamlet, then renormalized (calibrated liberty)
 """Research: privy weights per hamlet - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: each base weight scaled 0.5-1.5"""
 # THE NIGHT-SOIL PIT AT THE FIELDS (269 B11, research/questions/0047-farm-privies-and-their-night-soil-benjo.html): Suzuki 1959 found the pit "beside the privy, or in

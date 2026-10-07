@@ -474,7 +474,7 @@ def _sweep_doubled_remnants(s: Settlement) -> int:
         # THE STRANDING TEST READS THE CHECK'S OWN FIGURE, NOT THE JOIN TOLERANCE (feature 155).
         # Written first against `_LANE_JOIN_FT` (30), which is the "is this end ON that way" figure and
         # is the wrong question entirely: `farmhouses_reach_a_way` fails a house more than
-        # `WEB_REACH_FT` (100 ft) from any drawn way. A house 80 ft from the remnant and 110 ft from
+        # `WEB_REACH_FT` (92 ft) from any drawn way. A house 80 ft from the remnant and 110 ft from
         # everything else was therefore not even in `served`, so the remnant went and Inashiro - the
         # REFERENCE hamlet - shipped a stranded farmhouse at (1185, 1008). Same-source doctrine: a
         # guard against a check measures what the check measures.

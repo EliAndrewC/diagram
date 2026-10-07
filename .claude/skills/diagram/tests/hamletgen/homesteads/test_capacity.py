@@ -8,6 +8,7 @@ import math
 import pytest
 
 from l7r.diagram import hamletgen as hg
+from l7r.diagram.hamletgen.consts import BUNDLE_PITCH
 from l7r.diagram.hamletgen.homesteads import capacity, stages
 from l7r.diagram.hamletgen.homesteads.capacity import SiteRefused, compass, free_seats, margin_ladder, seat_the_rest, seating_mark, unseat_to
 from l7r.diagram.settlement import Settlement
@@ -81,7 +82,7 @@ def test_free_seats_are_the_free_ground_nearest_the_seat_first() -> None:
     assert seats, "the toy's margin has free ground"
     assert all(not s._free_ground.point_taken(x, y) for x, y in seats)
     assert max(q[0] for q in seats) > 1300.0 or min(q[0] for q in seats) < 100.0 or max(q[1] for q in seats) > 1300.0, "seats to the canvas's edge"
-    assert all(math.dist(q, center) >= 50.0 for q in seats), "no seat on the standing house"
+    assert all(math.dist(q, center) >= BUNDLE_PITCH / 2 for q in seats), "no seat within half a pitch of the standing house"
     d = [math.dist(q, center) for q in seats]
     assert d == sorted(d)
 
@@ -89,7 +90,8 @@ def test_free_seats_are_the_free_ground_nearest_the_seat_first() -> None:
 def test_free_seats_scan_the_whole_canvas_where_no_chains_stand() -> None:
     s, _plan = _toy(10)
     s.W = s.H = 200
-    assert len(free_seats(s, (100.0, 100.0), step=0.5)) == 16  # a 50 px grid over 6..194
+    n = int(188.0 // (BUNDLE_PITCH * 0.5)) + 1  # a half-pitch grid over 6..194
+    assert len(free_seats(s, (100.0, 100.0), step=0.5)) == n * n
 
 
 def test_the_exhaustive_pass_seats_what_the_rounds_left_and_counts_it() -> None:

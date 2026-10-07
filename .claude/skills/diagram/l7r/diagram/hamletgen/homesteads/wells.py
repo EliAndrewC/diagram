@@ -17,13 +17,22 @@ from ..consts import Pt
 from ..plan import SitePlan
 from .holds import release_held
 
-_WELL_DRAWN_R = 12.0
-"""The wellhead's DRAWN half-extent, used when asking how far a candidate seat would push the crop.
-It is the `vr` the glyph draws (not the `r` clearance radius), because the frame follows the ink -
-`crop_not_held_open_by_one_feature` quotes a well's extent as 16 px across.
+_WELL_DRAWN_R = 12.376
+"""The wellhead's DRAWN half-extent, used when asking how far a candidate seat would push the crop: the glyph's own `vr`
+(`Settlement._well_vr`, the well-house roof's half-size, 12.376 ft on a to-scale map - the hamlet's 1 ft per px), not the
+`r` clearance radius, because the frame follows the ink. `drawn_r` asks the glyph; this is its value where the
+settlement is a stand-in that draws no well (feature 328: it was a separate 12, with a docstring saying 16 px across).
 
-Research: wellhead drawn extent - research/questions/0196-communal-wells-ido.drawing.html: 12 px, the glyph's half-extent
+Research: wellhead drawn extent - research/questions/0196-communal-wells-ido.drawing.html: the glyph's 12.376 ft roof half-size
 """
+
+
+def drawn_r(s: Any) -> float:
+    """The wellhead's drawn half-extent on `s`: its glyph's `vr`, or `_WELL_DRAWN_R` on a stand-in with no glyph.
+
+    Research: wellhead drawn extent - research/questions/0196-communal-wells-ido.drawing.html: read from the glyph
+    """
+    return float(s._well_vr()) if hasattr(s, "_well_vr") else _WELL_DRAWN_R
 
 
 # THE AMONG-THE-DWELLINGS RULE lives with the wellhead (`settlement/shrines_wells/wells.py`: `WELL_AMONG_DWELLINGS_PX`,
@@ -45,20 +54,19 @@ def crop_extent_added(s: Any, c: Pt, xs: Sequence[float], ys: Sequence[float]) -
     boxes = s._crop_boxes(city=False) if hasattr(s, "_crop_boxes") else []
     bx0, bx1 = min((b[0] for b in boxes), default=min(xs)), max((b[1] for b in boxes), default=max(xs))
     by0, by1 = min((b[2] for b in boxes), default=min(ys)), max((b[3] for b in boxes), default=max(ys))
-    return max(0.0, bx0 - (c[0] - _WELL_DRAWN_R), (c[0] + _WELL_DRAWN_R) - bx1, by0 - (c[1] - _WELL_DRAWN_R), (c[1] + _WELL_DRAWN_R) - by1)
+    r = drawn_r(s)
+    return max(0.0, bx0 - (c[0] - r), (c[0] + r) - bx1, by0 - (c[1] - r), (c[1] + r) - by1)
 
 
 def well_target(households: int) -> int:
     """How many communal draw-wells a hamlet of this size keeps.
 
-    `wells_sized_to_population` wants 2-20 households per well at hamlet scale (the setting's
-    deliberate prosperity liberty runs generous wells), so the band for 12 households is 1 to 6.
-    One per ~6 households sits mid-band and matches what the authored hamlets draw - a couple of
-    shared wells among the courtyards, not one per farm and not one for the whole place.
+    One per ~6 households, but never past the two a hamlet draws: 0196's drawing page reads the 2-20 households a well
+    serves at hamlet scale as "a hamlet draws one or two" (feature 328: the cap was 6, so 16-20 households drew three).
 
-    Research: how many wells - research/questions/0196-communal-wells-ido.drawing.html: one per 6 households, 1 to 6
+    Research: how many wells - research/questions/0196-communal-wells-ido.drawing.html: one per 6 households, one or two
     """
-    return max(1, min(6, round(households / 6.0)))
+    return max(1, min(2, round(households / 6.0)))
 
 
 def worst_after(c: tuple[float, float, float], needy: Sequence[Mapping[str, Any]], standing: Sequence[float]) -> float:
@@ -466,7 +474,8 @@ def place_wells(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, Any
                     # an outlying lobe still wins, because the coverage it buys is real.
                     def _extent_added(c: tuple[float, float, float], bx0: float = _bx0, bx1: float = _bx1, by0: float = _by0, by1: float = _by1) -> float:
                         """How far past the crop's predicted box this seat (drawn radius included) reaches."""
-                        return max(0.0, bx0 - (c[1] - _WELL_DRAWN_R), (c[1] + _WELL_DRAWN_R) - bx1, by0 - (c[2] - _WELL_DRAWN_R), (c[2] + _WELL_DRAWN_R) - by1)
+                        r = drawn_r(s)
+                        return max(0.0, bx0 - (c[1] - r), (c[1] + r) - bx1, by0 - (c[2] - r), (c[2] + r) - by1)
 
                     # ...AND THE LAST TIE-BREAK IS THE NEIGHBORHOOD, NOT THE CENTROID (settlement-review,
                     # Sawada 2026-08-18). Once the minimax bucket and the frame term are equal, the

@@ -22,7 +22,7 @@ import pytest
 from l7r.diagram.hamletgen import well_target
 
 
-@pytest.mark.parametrize(("households", "want"), [(1, 1), (4, 1), (8, 1), (15, 2), (30, 5), (60, 6)])
+@pytest.mark.parametrize(("households", "want"), [(1, 1), (4, 1), (8, 1), (15, 2), (30, 2), (60, 2)])
 def test_the_well_count_follows_the_household_count_inside_its_band(households: int, want: int) -> None:
     """`settlement_has_wells`. A hamlet with no well is not a hamlet, and one well per farm is a
     different settlement from the one the sources describe."""
@@ -37,16 +37,16 @@ def test_a_hamlet_always_keeps_at_least_one_well() -> None:
 
 
 def test_the_well_count_is_capped_so_a_large_hamlet_is_not_all_wells() -> None:
-    """The ceiling matters as much as the floor. Without it a 200-household map draws 33 wells, which is
-    a well per courtyard and reads as a waterworks rather than a farming settlement."""
-    assert all(well_target(n) <= 6 for n in range(1, 500))
+    """The ceiling matters as much as the floor: 0196's drawing page reads the band as "a hamlet draws one or two"
+    (feature 328 - the cap was six, so 16-20 households drew three)."""
+    assert all(well_target(n) <= 2 for n in range(1, 500))
 
 
 def test_the_count_stays_inside_the_researched_band_of_2_to_20_households_per_well() -> None:
     """The band is the actual finding; the `/6` is one honest choice inside it. Asserting the BAND rather
     than the divisor means a future re-tuning is free to move within the research and is caught the
     moment it leaves it."""
-    for n in range(2, 121):
+    for n in range(2, 41):  # a hamlet draws 10-20 households (0001), and the scaling bookend 40
         per_well = n / well_target(n)
         assert 2.0 <= per_well <= 20.0, f"{n} households over {well_target(n)} wells is {per_well:.1f} per well"
 
@@ -67,3 +67,16 @@ def test_worst_after_is_the_nested_minimax_it_replaced() -> None:
         c = (0.0, rng.uniform(0, 900), rng.uniform(0, 900))
         nested = max(min(min(math.hypot(h["x"] - wx, h["y"] - wy) for wx, wy in placed), math.hypot(h["x"] - c[1], h["y"] - c[2])) for h in needy)
         assert worst_after(c, needy, standing) == nested
+
+
+def test_the_drawn_extent_is_the_glyphs_own_and_a_stand_in_takes_its_value() -> None:
+    """Feature 328: the crop test reads the wellhead's extent from the glyph (`_well_vr`), never a second copy of it;
+    a stand-in settlement that draws no well takes the glyph's to-scale half-size."""
+    from l7r.diagram.hamletgen.homesteads.wells import _WELL_DRAWN_R, drawn_r
+
+    class Glyph:
+        def _well_vr(self) -> float:
+            return 9.5
+
+    assert drawn_r(Glyph()) == 9.5
+    assert drawn_r(object()) == _WELL_DRAWN_R == 12.376

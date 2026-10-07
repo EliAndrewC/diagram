@@ -242,7 +242,7 @@ MIN_WEB_GAP = 2.0 * WEB_FABRIC_GAP + 4.0  # 18 ft: both neighbors' clearance, pl
 # `ways/checks.py` `unreached_houses` counts reached through their neighbor. The previous 90 ft in
 # `lanes_reach_something` was flagged in future-work/ as a number nobody had justified; this one is
 # derived from a researched constant instead of chosen to make today's maps pass.
-WEB_REACH_FT = 100.0  # == BUNDLE_PITCH; asserted in tests rather than imported, since BUNDLE_PITCH is defined below
+WEB_REACH_FT = 92.0  # == BUNDLE_PITCH; asserted in tests rather than imported, since BUNDLE_PITCH is defined below
 """Research: every farmhouse reached by a way - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within 100 ft, how close counts as serving a house; but the few reached across a neighbor's land"""
 
 WAY_END_REACH_FT = 60.0
@@ -563,14 +563,14 @@ ROLLED_ARCHETYPES = ("valley_paddy",)
 # make the cluster tighter - it makes the placer spill the overflow OUTSIDE the band, which is how
 # seed 18 grew a two-farm satellite 500 px off the nucleus, 777 px from the nearest water against a
 # 760 px reach, with every legal well seat around it already taken by its own two courtyards.
-BUNDLE_PITCH = 100.0
-"""Research: row pitch - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: 100 ft, house, yard and the yard's 39 ft of sun"""
+BUNDLE_PITCH = 92.0
+"""Research: row pitch - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: 92 ft, house 28, yard 26 and the yard's 39 ft of sun ("Rows are set 92 ft apart"; feature 328, from 100)"""
 
 # THE GROUND ONE HOMESTEAD TAKES, as the side of a square (feature 280 M16 merged into feature 287, 2026-09-29): the seat
 # band's AREA (`plan.band_extent`, `households x HOMESTEAD_GROUND_FT^2`, which also sizes the canvas's room for the seat).
 # It was `BUNDLE_PITCH`, and grows with the yard: 280 moved the rice hamlet's yard median from 18 to 25 tsubo, and at the
 # apron's 1.45 aspect the median yard is sqrt(18 x 35.583 / 1.45) = 21.0 ft deep before and sqrt(25 x 35.583 / 1.45) =
-# 24.8 ft after - 3.8 ft more ground in the row's sum above, so 104. The ROW pitch stays 100: it plans offers the placer
+# 24.8 ft after - 3.8 ft more ground in the row's sum above, so 104. The ROW pitch is 0038's 92 (feature 328; it was 100): it plans offers the placer
 # staggers from (and the web's reach is tied to it, `WEB_REACH_FT`). MEASURED (`make cohort N=1 SEED=<n>`; a detached
 # worktree at 287's HEAD passes seed 18): with the band at 100 the merge held 13 of seed 18's 15 households on its best
 # margin and refused the site; with the band at 104 all 15 seat. Raising the row pitch to 104 as well seated seed 18 but
