@@ -234,3 +234,8 @@ Each wave's amendment adds its map decisions to this table. The program's decisi
   claim label; it is written only after the exception path rules it LEGITIMATE, and the spur clip margin cites 0081
   against the code.
 - Amendment 5, round 2 (spec-fidelity-verify, 2026-10-07): FAITHFUL.
+- Amendment 6, round 1 (spec-fidelity, 2026-10-07): CHANGES REQUIRED, plan CLEAR - four rows offered DEVIATION as a
+  choice (now fixed toward their pages, DEVIATION only through the exception path); the occasions' reason (the water gate
+  and boundary stones are drawn only on exempt legacy cities). Aside taken: row 93's value change split into an E1 row.
+- Amendment 6, round 2 (spec-fidelity-verify, 2026-10-07): CHANGES REQUIRED - the follow-up record's wave-6 bullets
+  carried the old wording; the plan verdict re-recorded for the run's new bounds (rows 180-231).
