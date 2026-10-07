@@ -1006,14 +1006,6 @@
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#granary labeled \"granary\", not \"rice granary\": contents rice-dominant but mixed": {
-  "code": "19f36312c8f14b65",
-  "core": "19f36312c8f14b65",
-  "date": "2026-10-07",
-  "note": "granary labeled \"granary\", not \"rice granary\": contents rice-dominant but mixed",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#granary size": {
   "code": "8d81d0ca6f4d7065",
   "core": "19f36312c8f14b65",
@@ -1088,14 +1080,6 @@
    "0099-the-hearing-court-shirasu.html:8f23e38817efeb5b"
   ],
   "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#kura granary's door placed on the loading apron": {
-  "code": "19f36312c8f14b65",
-  "core": "19f36312c8f14b65",
-  "date": "2026-10-07",
-  "note": "kura granary's door placed on the loading apron",
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#office hall": {
   "code": "7928f64e87ca2413",
@@ -1266,13 +1250,16 @@
   "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#tax archive drawn with white-plaster fill, heavy stroke and dark door mark": {
-  "code": "eb2644b2e4bfd0a5",
-  "core": "9b0e07af7c8028b3",
+  "code": "faf2bae1afbe039b",
+  "core": "19f36312c8f14b65",
   "date": "2026-10-07",
-  "note": "fill and stroke only",
+  "note": "fill, stroke and door mark are how the archive is shown; the plastered kura itself is attested",
   "pages": {},
   "research": "",
-  "rests": [],
+  "rests": [
+   "0098-storehouses-for-the-tax-rice.html:73d9a0065ef28793",
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:67384625aa76f7e9"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#tax archive size": {
@@ -1303,6 +1290,22 @@
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#the earth-walled granary's door placed on the loading apron": {
+  "code": "19f36312c8f14b65",
+  "core": "19f36312c8f14b65",
+  "date": "2026-10-07",
+  "note": "the earth-walled granary's door placed on the loading apron",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#the hearing court drawn with posts along its open side": {
+  "code": "19f36312c8f14b65",
+  "core": "19f36312c8f14b65",
+  "date": "2026-10-07",
+  "note": "the hearing court drawn with posts along its open side",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#the kura granary's vents not drawn": {
   "code": "3830c1702e8ba4f0",

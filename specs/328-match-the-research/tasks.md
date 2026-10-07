@@ -134,6 +134,7 @@ lines only. The rows:
   - `buildings/programs.md::Country shrine (a village district's shrine)#sacred tree drawn as the biggest crown in the precinct`
   - `buildings/programs.md::Magistrate's manor (county magistracy)#a detached guest house at a rich posting (0091's drawing page records it as a GUESS)`
   - `buildings/programs.md::Magistrate's manor (county magistracy)#formal visitors and the privacy baffle`
+  - `buildings/programs.md::Magistrate's manor (county magistracy)#granary weight knob` - taken with the granary forms row it is tied to (impl-drift on the split claim: the office draws one storehouse, any row stands at the town's river landing - 0098's drawing page): the knob is where the rice waits, the office draws one storehouse either way; no sheet draws a row at the office
   - `buildings/programs.md::Magistrate's manor (county magistracy)#upland granary strongbox role`
   - `buildings/programs.md::Magistrate's manor (county magistracy)#wells by use`
   - `l7r/diagram/hamletgen/cluster.py::seat_cluster#not in the reed fringe`
