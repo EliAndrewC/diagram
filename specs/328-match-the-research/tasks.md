@@ -141,8 +141,16 @@ lines only. The rows:
 
 ## Phase 5 - wave 4 (the lane law: three E0 claims, then the E1 rows of `hamletgen/ways/`) - amendment 3, 2026-10-07
 
-The three open E0 rows (undecided decisions in the lane code and the seating) come first (SC-003); then the 37 E1 rows of
-the lane law, held together since amendment 1 (plan D6), with the lane rows the re-checks found since. One rule set:
+The three open E0 rows (undecided decisions in the lane code and the seating) come first (SC-003); then four E1 rows
+outside the lane code that rank ahead of it (T12a's re-tiered rows and one wave-3 found row, none waiting on another):
+
+  - `buildings.md::Outer court (administrative / public)#cell` - procedure's Cell bullet: '1-2 occupants' becomes 'shared by several prisoners' (0096's measured cells); the 12 x 10 ft footprint stands
+  - `buildings/programs.md::Country shrine (a village district's shrine)#building size anchors` - the hall-and-dwelling band_ft 18-38 becomes ~21-35 ft (0222's attested halls) in types.json and the programs.md table; the 46x28 dwelling's claim relabeled GUESS 0221 drawing
+  - `l7r/diagram/hamletgen/cluster.py::seat_cluster#band on the canvas` - lat from band_extent is the band's HALF-length (dep/lat are the ellipse's semi-axes), so the frame test uses lat (half the band's length) not lat*0.5, with plan.seat_room's lat*0.5 term matched
+  - `buildings/programs.md::Country shrine (a village district's shrine)#a well as the purification stop beside the approach ("the well or basin"; the required item is `well`)` - the program's required purification item becomes the stone basin beside the approach (0222), not a well; the claim cites 0222
+
+and then the 37 E1 rows of the lane law: 33 held together since amendment 1 (plan D6's 32 in `ways/` and
+`FOOTPATH_FABRIC_GAP`) and 4 the re-checks found since (the row street, a web lane's span, the door path, the orphan stub). One rule set:
 0246's lane middle 7 ft clear of a garden fence, 0081's ends joined within 25 ft, a tail under 40 ft past a crossing cut, a
 hook of 12 ft turning 90 degrees or more cut, a lane end serving a house within 60 ft. A row whose map fails the gate in a
 way that takes more work than its tier takes that tier and waits on a found row (Edge Cases). The rows:

@@ -172,7 +172,7 @@ Each wave's amendment adds its map decisions to this table. The program's decisi
 | A Mode A building sheet a finding names is redrawn to the fixed procedure; the frozen hand-rolled settlement maps are never touched | scope, within the GM's 2026-09-28 ruling | the sheet is what contradicts the page; the ruling asks a feature to say which maps it touches, and the settlement maps stay frozen | FR-009 |
 | The 727 UNRESEARCHED claims are out of scope | scope | they are not findings: the claim honestly says no research backs it; closing them is research, not fixing a mismatch | Context, Assumptions |
 | Sheet-redrawing procedure rows tiered E3, not E1 (wave 2's amendment) | process, FR-003's own definition | the rankers put nine rows that redraw Ubame, Hayakawa, Ochiba or Hoshigaoka in E1; FR-003 tiers a sheet redraw E3 | `audit/overrides.json`, plan D5 |
-| The lane law's 32 rows are one wave (wave 4) | process, within FR-003's module grouping | one rule set (0081, 0246) across `hamletgen/ways/`; fixed apart, the network would be half under each law | plan D6 |
+| The lane law's 32 rows of `ways/` are one wave (wave 4), with the lane rows found since | process, within FR-003's module grouping | one rule set (0081, 0246) across `hamletgen/ways/`; fixed apart, the network would be half under each law | plan D6 |
 | Waves land inside this feature: only the current wave's rows are task boxes; the next wave is an amendment | process | the GM asked for one feature; the open-task refusal reads only `tasks.md`'s boxes, so a wave lands when its boxes are ticked | FR-006 |
 
 ## Assumptions
@@ -218,3 +218,6 @@ Each wave's amendment adds its map decisions to this table. The program's decisi
   39 rows truly (38 found, wave 1's one unclosed); (3) Edge Cases carries the hold wave 2 made. The holds themselves were
   ruled faithful (no row dropped, no research moved).
 - Amendment 2, round 2 (spec-fidelity-verify, 2026-10-07): FAITHFUL; plan CLEAR (seven decisions within).
+- Amendment 3, round 1 (spec-fidelity-verify, 2026-10-07): CHANGES REQUIRED - (1) four E1 rows outside the lane code that
+  rank ahead of it (T12a's cell, building size anchors, band on the canvas; the wave-3 basin row) join wave 4 ahead of the
+  lane rows; (2) the counts: 33 held since amendment 1 and 4 found since; the Decisions row worded as such.
