@@ -17435,14 +17435,6 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::DECK_NEAR_FT#plumbing and wrappers": {
-  "code": "e7d1c60bed99c384",
-  "core": "4f6abb3ccbbe5fc1",
-  "date": "2026-10-03",
-  "note": "matches the claim",
-  "research": "",
-  "verdict": "IN-STEP"
- },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::DOORSTEP_FT#an end discharged by a house": {
   "code": "c9aa8c05b9a20601",
   "core": "3c46ea823e395ddc",
@@ -17590,38 +17582,6 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::_bbox#plumbing and wrappers": {
-  "code": "72161ac4c9e33226",
-  "core": "bc7b17c211a38549",
-  "date": "2026-10-03",
-  "note": "matches the claim",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::_brooks#plumbing and wrappers": {
-  "code": "7a4ca5d9954f520b",
-  "core": "10a6e5c3f890b5e4",
-  "date": "2026-10-03",
-  "note": "matches the claim",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::_crossings#plumbing and wrappers": {
-  "code": "dbd154e61070b5d2",
-  "core": "220100b9fbf74516",
-  "date": "2026-10-03",
-  "note": "matches the claim",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::_min_dist#plumbing and wrappers": {
-  "code": "4e12e1ca6abc1fba",
-  "core": "66f50c54365a6813",
-  "date": "2026-10-03",
-  "note": "matches the claim",
-  "research": "",
-  "verdict": "IN-STEP"
- },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::_tread_bearings#plumbing and wrappers": {
   "code": "30e11b1c6a10c950",
   "core": "d32f85bd4e4d356e",
@@ -17633,14 +17593,6 @@
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::_walked_to#plumbing and wrappers": {
   "code": "75de8349c638bf49",
   "core": "a834d87255ae9f42",
-  "date": "2026-10-03",
-  "note": "matches the claim",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::_ways#plumbing and wrappers": {
-  "code": "da3efecbadacc2d2",
-  "core": "5fcfe00a2d6f17f1",
   "date": "2026-10-03",
   "note": "matches the claim",
   "research": "",
@@ -17670,14 +17622,6 @@
   "core": "759ce858e4547f76",
   "date": "2026-10-03",
   "note": "pure geometry",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::boxes_meet#plumbing and wrappers": {
-  "code": "45988794349503ac",
-  "core": "598c7c84e97b9d96",
-  "date": "2026-10-03",
-  "note": "matches the claim",
   "research": "",
   "verdict": "IN-STEP"
  },
@@ -17740,14 +17684,6 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::crossing_points#plumbing and wrappers": {
-  "code": "08f55cc925b5b1df",
-  "core": "fc68cad492548d3c",
-  "date": "2026-10-03",
-  "note": "matches the claim",
-  "research": "",
-  "verdict": "IN-STEP"
- },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::dangling_ends#plumbing and wrappers": {
   "code": "b0170581575dc98e",
   "core": "e7d3d922cbee1bba",
@@ -17780,17 +17716,6 @@
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461"
   ],
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::deck_seats#a deck's corners on dry ground": {
-  "code": "451cebc8a66365c6",
-  "core": "d65304bbdd0122c6",
-  "date": "2026-10-03",
-  "note": "matches the claim",
-  "pages": {
-   "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html": "c54aace546b26627"
-  },
-  "research": "281143d409996aaf",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::doorstep_ends#no fan of stubs at a door": {
@@ -18020,14 +17945,6 @@
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::lane_pts#plumbing and wrappers": {
-  "code": "b808f8450bc57b1d",
-  "core": "7fa511812e247b99",
-  "date": "2026-10-03",
-  "note": "matches the claim",
-  "research": "",
-  "verdict": "IN-STEP"
- },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::lanes_over_fixtures#plumbing and wrappers": {
   "code": "3b8f58246d776a83",
   "core": "aaeb305436d09e9c",
@@ -18062,34 +17979,40 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::near_misses#a connector's ends are never counted as joins that stop short": {
-  "code": "7f3e1a8cf8fbafa6",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::near_misses#a blocked join is no short join": {
+  "code": "578ca23d98aa70cf",
   "core": "7f3e1a8cf8fbafa6",
   "date": "2026-10-07",
-  "note": "a connector's ends are never counted as joins that stop short",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::near_misses#a door end is no short join": {
-  "code": "607d68543d3e427f",
-  "core": "7f3e1a8cf8fbafa6",
-  "date": "2026-10-07",
-  "note": "0246's drawing page answers this: a household's way is laid from its dooryard and a lane ends at the dooryard of the house it serves, so the label should cite research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html (itself a GUESS there), not UNRESEARCHED",
+  "note": "no question addresses a join blocked, folded or kinked",
   "pages": {},
   "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::near_misses#a connector's ends": {
+  "code": "7b9059782ff78fd8",
+  "core": "7f3e1a8cf8fbafa6",
+  "date": "2026-10-07",
+  "note": "the record is silent on connector ends",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::near_misses#a door end is no short join": {
+  "code": "f0eff37737cd6875",
+  "core": "7f3e1a8cf8fbafa6",
+  "date": "2026-10-07",
+  "note": "each way is laid from its dooryard, and a lane may end at the dooryard; the page records that as a GUESS",
+  "pages": {
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
+  },
+  "research": "7b40c2c01cfba682",
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461"
   ],
-  "verdict": "MISLABELED"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::near_misses#an end whose join would be blocked, fold or kink more than its own lane is no short join": {
-  "code": "7f3e1a8cf8fbafa6",
-  "core": "7f3e1a8cf8fbafa6",
-  "date": "2026-10-07",
-  "note": "an end whose join would be blocked, fold or kink more than its own lane is no short join",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::near_misses#ends that nearly meet are joined": {
   "code": "9b553fc7e316ed47",
@@ -18145,63 +18068,6 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::oblique_at#square brook crossing": {
-  "code": "ab1c14d90a3ee1c2",
-  "core": "5bb421dd3e5f8371",
-  "date": "2026-10-03",
-  "note": "matches the claim",
-  "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "c23a085a43372c2c"
-  },
-  "research": "d47738a05844fe19",
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::oblique_at#square ditch crossing": {
-  "code": "44be146083d31c0c",
-  "core": "5bb421dd3e5f8371",
-  "date": "2026-10-03",
-  "note": "matches the claim",
-  "pages": {
-   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "0b77fe8191a170cc"
-  },
-  "research": "43cf74757fcb48f3",
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::oblique_crossings#plumbing and wrappers": {
-  "code": "11738ec34dbcd907",
-  "core": "e036e45dfba0b7cb",
-  "date": "2026-10-03",
-  "note": "matches the claim",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::off_ford_at#crossed at a ford": {
-  "code": "eb8f26206a39a19f",
-  "core": "08b1b140114cb704",
-  "date": "2026-10-03",
-  "note": "matches the claim",
-  "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "c23a085a43372c2c"
-  },
-  "research": "d47738a05844fe19",
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::off_ford_crossings#plumbing and wrappers": {
-  "code": "b40e37fdf8b52636",
-  "core": "2bc068ed4e9c43e2",
-  "date": "2026-10-03",
-  "note": "matches the claim",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::off_square#plumbing and wrappers": {
-  "code": "6ff927a265bd02ba",
-  "core": "4e4b3ce4103e69cc",
-  "date": "2026-10-03",
-  "note": "matches the claim",
-  "research": "",
-  "verdict": "IN-STEP"
- },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::over_a_fixture#off the fixtures": {
   "code": "f010744b03542721",
   "core": "3f408ca3aff12409",
@@ -18215,39 +18081,6 @@
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d"
   ],
   "triaged": "2026-10-05",
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::over_and_back#over and back": {
-  "code": "5b222101f85df43b",
-  "core": "91d55f23a72f56d7",
-  "date": "2026-10-03",
-  "note": "matches the claim",
-  "pages": {
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "c23a085a43372c2c"
-  },
-  "research": "d47738a05844fe19",
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::plank_faults#planks on supply ditches": {
-  "code": "defc82964303d14c",
-  "core": "f86e53c3c71b3048",
-  "date": "2026-10-03",
-  "note": "matches the claim",
-  "pages": {
-   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "0b77fe8191a170cc"
-  },
-  "research": "43cf74757fcb48f3",
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::short_decks#a deck spans its water": {
-  "code": "c0347670c397732d",
-  "core": "b09720d3f747c871",
-  "date": "2026-10-03",
-  "note": "matches the claim",
-  "pages": {
-   "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html": "c54aace546b26627"
-  },
-  "research": "281143d409996aaf",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::short_fragments#a household's own way never debris": {
@@ -18309,25 +18142,6 @@
   ],
   "verdict": "NEEDS-RESEARCH"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::unbridged_crossings#every crossing decked": {
-  "code": "e6e675c3308deccb",
-  "core": "0aee5554cb99f3be",
-  "date": "2026-10-03",
-  "note": "matches the claim",
-  "pages": {
-   "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html": "c54aace546b26627"
-  },
-  "research": "281143d409996aaf",
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::undeckable_crossings#plumbing and wrappers": {
-  "code": "108986476fa4ab6b",
-  "core": "75b62af04e7c87e9",
-  "date": "2026-10-03",
-  "note": "matches the claim",
-  "research": "",
-  "verdict": "IN-STEP"
- },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::unreached_targets#a path runs to the graves": {
   "code": "5912de51df754761",
   "core": "61e531475975bd4a",
@@ -18339,14 +18153,6 @@
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::violations#plumbing and wrappers": {
   "code": "3bcaadc68c9958c2",
   "core": "83a4e63fe6728907",
-  "date": "2026-10-03",
-  "note": "matches the claim",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::water_courses#plumbing and wrappers": {
-  "code": "a4281067a8c91daa",
-  "core": "ee674537c6ba2ac6",
   "date": "2026-10-03",
   "note": "matches the claim",
   "research": "",
@@ -18392,6 +18198,283 @@
    "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
    "0081-village-lanes.drawing.html:91a5765af6230403"
   ],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law_water.py::DECK_NEAR_FT#plumbing and wrappers": {
+  "code": "e7d1c60bed99c384",
+  "core": "4f6abb3ccbbe5fc1",
+  "date": "2026-10-07",
+  "note": "a check's radius for matching a deck to its water",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law_water.py::_bbox#plumbing and wrappers": {
+  "code": "72161ac4c9e33226",
+  "core": "bc7b17c211a38549",
+  "date": "2026-10-07",
+  "note": "geometry",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law_water.py::_brooks#plumbing and wrappers": {
+  "code": "7a4ca5d9954f520b",
+  "core": "10a6e5c3f890b5e4",
+  "date": "2026-10-07",
+  "note": "parsing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law_water.py::_crossings#plumbing and wrappers": {
+  "code": "dbd154e61070b5d2",
+  "core": "220100b9fbf74516",
+  "date": "2026-10-07",
+  "note": "wrapper",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law_water.py::_min_dist#plumbing and wrappers": {
+  "code": "4e12e1ca6abc1fba",
+  "core": "66f50c54365a6813",
+  "date": "2026-10-07",
+  "note": "geometry",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law_water.py::_ways#plumbing and wrappers": {
+  "code": "da3efecbadacc2d2",
+  "core": "5fcfe00a2d6f17f1",
+  "date": "2026-10-07",
+  "note": "parsing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law_water.py::boxes_meet#plumbing and wrappers": {
+  "code": "45988794349503ac",
+  "core": "598c7c84e97b9d96",
+  "date": "2026-10-07",
+  "note": "geometry",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law_water.py::crossing_points#plumbing and wrappers": {
+  "code": "08f55cc925b5b1df",
+  "core": "fc68cad492548d3c",
+  "date": "2026-10-07",
+  "note": "indexed intersection",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law_water.py::deck_seats#a deck's corners on dry ground": {
+  "code": "451cebc8a66365c6",
+  "core": "d65304bbdd0122c6",
+  "date": "2026-10-07",
+  "note": "every corner tested on dry ground",
+  "pages": {
+   "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html": "c54aace546b26627"
+  },
+  "research": "281143d409996aaf",
+  "rests": [
+   "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html:367d166bf8fb0b33"
+  ],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law_water.py::lane_pts#plumbing and wrappers": {
+  "code": "b808f8450bc57b1d",
+  "core": "7fa511812e247b99",
+  "date": "2026-10-07",
+  "note": "parsing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law_water.py::oblique_at#square brook crossing": {
+  "code": "ab1c14d90a3ee1c2",
+  "core": "5bb421dd3e5f8371",
+  "date": "2026-10-07",
+  "note": "ways cross the brook squarely at straight reaches",
+  "pages": {
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "c23a085a43372c2c"
+  },
+  "research": "d47738a05844fe19",
+  "rests": [
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:03433651c0627577",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:93969c06f800b0d5"
+  ],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law_water.py::oblique_at#square ditch crossing": {
+  "code": "44be146083d31c0c",
+  "core": "5bb421dd3e5f8371",
+  "date": "2026-10-07",
+  "note": "0084 makes only the standalone footplank square (§68) and gives no 10 degree figure; a lane over a channel is a carried deck, which 0087 solves at an oblique angle (§52, §54); claim UNRESEARCHED",
+  "pages": {
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "0b77fe8191a170cc"
+  },
+  "research": "43cf74757fcb48f3",
+  "rests": [
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:09bdc345075811e2",
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:72ffa8c3abe4e4b2",
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:b74aa6e62d8b654b"
+  ],
+  "verdict": "NEEDS-RESEARCH"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law_water.py::oblique_crossings#plumbing and wrappers": {
+  "code": "11738ec34dbcd907",
+  "core": "e036e45dfba0b7cb",
+  "date": "2026-10-07",
+  "note": "rounding wrapper",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law_water.py::off_ford_at#crossed at a ford": {
+  "code": "eb8f26206a39a19f",
+  "core": "08b1b140114cb704",
+  "date": "2026-10-07",
+  "note": "crossings held to the set crossing places",
+  "pages": {
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "c23a085a43372c2c"
+  },
+  "research": "d47738a05844fe19",
+  "rests": [
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:03433651c0627577",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:93969c06f800b0d5",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:d643c23f456119bc"
+  ],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law_water.py::off_ford_at#how far from a crossing place a brook crossing may stand, FORD_HALF 30 ft": {
+  "code": "08b1b140114cb704",
+  "core": "08b1b140114cb704",
+  "date": "2026-10-07",
+  "note": "how far from a crossing place a brook crossing may stand, FORD_HALF 30 ft",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law_water.py::off_ford_crossings#plumbing and wrappers": {
+  "code": "b40e37fdf8b52636",
+  "core": "2bc068ed4e9c43e2",
+  "date": "2026-10-07",
+  "note": "rounding wrapper; the reach is decided in off_ford_at",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law_water.py::off_square#plumbing and wrappers": {
+  "code": "6ff927a265bd02ba",
+  "core": "4e4b3ce4103e69cc",
+  "date": "2026-10-07",
+  "note": "angle geometry",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law_water.py::over_and_back#over and back": {
+  "code": "5b222101f85df43b",
+  "core": "91d55f23a72f56d7",
+  "date": "2026-10-07",
+  "note": "a crossing is charged as extra walk; a farmstead stays on one bank",
+  "pages": {
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "c23a085a43372c2c"
+  },
+  "research": "d47738a05844fe19",
+  "rests": [
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:52835a76bb3e8115",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:d643c23f456119bc"
+  ],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law_water.py::plank_faults#planks on supply ditches": {
+  "code": "defc82964303d14c",
+  "core": "f86e53c3c71b3048",
+  "date": "2026-10-07",
+  "note": "drains at the field's foot and outer edge carry no crossing",
+  "pages": {
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "0b77fe8191a170cc"
+  },
+  "research": "43cf74757fcb48f3",
+  "rests": [
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:6b02012320fa6c39",
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:b74aa6e62d8b654b"
+  ],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law_water.py::short_decks#a deck spans its water": {
+  "code": "c0347670c397732d",
+  "core": "b09720d3f747c871",
+  "date": "2026-10-07",
+  "note": "the deck runs bank to bank",
+  "pages": {
+   "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html": "c54aace546b26627"
+  },
+  "research": "281143d409996aaf",
+  "rests": [
+   "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html:2bea76047e1862a0",
+   "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html:34c6192b89c0fa6b"
+  ],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law_water.py::short_decks#assumed water widths where none is recorded: 3 ft for a ditch or channel, 6 ft for a stream": {
+  "code": "b09720d3f747c871",
+  "core": "b09720d3f747c871",
+  "date": "2026-10-07",
+  "note": "assumed water widths where none is recorded: 3 ft for a ditch or channel, 6 ft for a stream",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law_water.py::unbridged_crossings#every crossing decked": {
+  "code": "e6e675c3308deccb",
+  "core": "0aee5554cb99f3be",
+  "date": "2026-10-07",
+  "note": "every crossing of a way and water is bridged",
+  "pages": {
+   "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html": "c54aace546b26627"
+  },
+  "research": "281143d409996aaf",
+  "rests": [
+   "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html:2bea76047e1862a0",
+   "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html:431c9ba134441966"
+  ],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law_water.py::undeckable_crossings#plumbing and wrappers": {
+  "code": "108986476fa4ab6b",
+  "core": "75b62af04e7c87e9",
+  "date": "2026-10-07",
+  "note": "wrapper over deck_seats",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law_water.py::water_courses#plumbing and wrappers": {
+  "code": "a4281067a8c91daa",
+  "core": "ee674537c6ba2ac6",
+  "date": "2026-10-07",
+  "note": "selects which courses to read",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/reach.py::_draw_tree_lane#a tree lane's no-build corridor": {
@@ -21991,18 +22074,19 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#lane clearance": {
-  "code": "288385f540b0e784",
+  "code": "2b192064e1d19435",
   "core": "34b824f3630f8621",
   "date": "2026-10-07",
-  "note": "0246 sets a lane's clearance: its middle keeps 7 ft clear of a garden fence, within an 18 ft lane's room, and nothing is built on the tread. The claim should cite 0246.drawing, and the 40 ft no-build corridor should then be judged against that 7 ft",
-  "pages": {},
-  "research": "",
+  "note": "`clearance=LANE_CLEARANCE` reserves 40 ft beside the connector and spur, but the page gives \"at least 7 ft clear of a garden fence\" and an 18 ft lane room; the clearance should be about 7 ft, or a recorded DEVIATION",
+  "pages": {
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
+  },
+  "research": "7b40c2c01cfba682",
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c5daec1a445d35bf"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#lanes after the farmhouses": {
   "code": "7a1ffc7cab83a72c",
@@ -25628,7 +25712,7 @@
   "code": "db3458db76f0cb2a",
   "core": "aebd5c4a2b2ac263",
   "date": "2026-10-07",
-  "note": "the claim's account matches the research, but the text it describes is in place.json's hamlet \"what\", which the bundle does not include; I need that string",
+  "note": "the place-kinds.json text for a hamlet (no shrine and no cremation ground; its dead burned at the main village's and laid in the village's ground) and for a village (the district's cremation ground, and the burial ground the village and its hamlets share) both match the drawing page",
   "pages": {
    "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html": "3d5e34940b9d67aa"
   },
@@ -25637,7 +25721,7 @@
    "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html:031d53823997269a",
    "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html:11df2d9a630be745"
   ],
-  "verdict": "CANNOT-TELL"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/place.py::KINDS#what each tier is": {
   "code": "b163fa6140b6ed24",
@@ -34029,6 +34113,18 @@
   ],
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.castle#bailey jog": {
+  "code": "db5a89462204067d",
+  "core": "e0c6c5fd36ffc177",
+  "date": "2026-10-07",
+  "note": "the page records only the offset toward the far side, no figures",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html:33b1a282b0336dfc"
+  ],
+  "verdict": "IN-STEP"
+ },
  ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.castle#baileys and masugata off by default": {
   "code": "68283039354bfb84",
   "core": "e0c6c5fd36ffc177",
@@ -34044,14 +34140,6 @@
    "0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html:77cd1fa9c361891a"
   ],
   "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.castle#baileys jogged sideways by 0.13 of the half-side, alternating, and set 0.72 of the way toward the far side": {
-  "code": "e0c6c5fd36ffc177",
-  "core": "e0c6c5fd36ffc177",
-  "date": "2026-10-07",
-  "note": "baileys jogged sideways by 0.13 of the half-side, alternating, and set 0.72 of the way toward the far side",
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.castle#blank interior": {
   "code": "6cf791fec05f88f2",
@@ -34117,13 +34205,15 @@
   ],
   "verdict": "DRIFTED"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.castle#gate jamb posts px(4) square at each opening": {
-  "code": "e0c6c5fd36ffc177",
+ ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.castle#gate jambs": {
+  "code": "3016b5287d29955b",
   "core": "e0c6c5fd36ffc177",
   "date": "2026-10-07",
-  "note": "gate jamb posts px(4) square at each opening",
+  "note": "the record is silent on jamb posts",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.castle#gatehouse passage": {
   "code": "b0ed56fe764d92f5",
@@ -34196,6 +34286,18 @@
   ],
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.castle#masugata's open flank": {
+  "code": "9485f8febcac221f",
+  "core": "e0c6c5fd36ffc177",
+  "date": "2026-10-07",
+  "note": "masugata are attested as square gate courts; nothing says which flank is open",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.html:0b2282fde2f8e657"
+  ],
+  "verdict": "IN-STEP"
+ },
  ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.castle#ninomaru and masugata sizes": {
   "code": "467a0656a74d6d64",
   "core": "e0c6c5fd36ffc177",
@@ -34220,14 +34322,6 @@
    "0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.html:764e386b227c94a3"
   ],
   "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.castle#the masugata's one open flank, turning the way out across the approach": {
-  "code": "e0c6c5fd36ffc177",
-  "core": "e0c6c5fd36ffc177",
-  "date": "2026-10-07",
-  "note": "the masugata's one open flank, turning the way out across the approach",
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.castle#yagura and gatehouse sizes": {
   "code": "f7d70a906f1661ab",
@@ -34456,13 +34550,19 @@
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.martial_hall#practice gear (rack and posts) drawn in the compound, beyond the page's three features": {
-  "code": "9c4a957506b7d874",
+ ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.martial_hall#practice gear": {
+  "code": "f43dea8df489a5f7",
   "core": "9c4a957506b7d874",
   "date": "2026-10-07",
-  "note": "practice gear (rack and posts) drawn in the compound, beyond the page's three features",
+  "note": "0165 answers this: the state hall's compound is \"its wall and three features inside ... the rest implied\", so the drawn rack and posts contradict it; cite 0165 (DRIFTED) or record a DEVIATION",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "rests": [
+   "0165-martial-training-grounds-and-dojo.drawing.html:25d51ab3028051ca",
+   "0165-martial-training-grounds-and-dojo.drawing.html:3a960258a33684e9",
+   "0165-martial-training-grounds-and-dojo.drawing.html:6b3ccf7746ee08c1"
+  ],
+  "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.martial_hall#state violet": {
   "code": "02921bbceb559be5",
@@ -34885,16 +34985,29 @@
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#assumed water widths": {
-  "code": "d9acdb2ed1c53434",
+ ".claude/skills/diagram/l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#assumed ditch width": {
+  "code": "9dc2203acf748b41",
   "core": "46d4f5e2f3bacb5f",
   "date": "2026-10-07",
-  "note": "0084 answers the field-ditch width (\"2.5 ft at the head and taper toward 1.2 ft\", drawn 2.7-3.7 ft), and the 4.2 px fallback lies outside it; cite 0084 for the ditches, in feet; streams 9 and channels 2.5 stay UNRESEARCHED",
+  "note": "`DEFAULT_W[\"field_ditches\"]=4.2` and `d.get(\"w\", 4.2)` are px, about 4 to 13 ft, against \"2.5 ft at the head and taper toward 1.2 ft\"; the default should be about 2.5 ft in feet",
+  "pages": {
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "0b77fe8191a170cc"
+  },
+  "research": "43cf74757fcb48f3",
+  "rests": [
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:df87d788cf419d16"
+  ],
+  "verdict": "DRIFTED"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#assumed stream and channel widths": {
+  "code": "9355b3e9e64f4f23",
+  "core": "46d4f5e2f3bacb5f",
+  "date": "2026-10-07",
+  "note": "0035 in this bundle gives the brook as 7 ft wide, and the code assumes 9 px; cite 0035 and bring the default to 7 ft",
   "pages": {},
   "research": "",
   "rests": [
-   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:df87d788cf419d16",
-   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:f4f8bace133208ab"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:54ccb64ee5924653"
   ],
   "verdict": "MISLABELED"
  },
@@ -34968,20 +35081,31 @@
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#off dry crops, gardens and groves": {
-  "code": "8569254b1e340216",
+ ".claude/skills/diagram/l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#off dry crops and gardens": {
+  "code": "c04a1b1452a5696e",
   "core": "46d4f5e2f3bacb5f",
   "date": "2026-10-07",
-  "note": "the page rules out \"houses, crops\" (dry plots, gardens) but says nothing of a farm's grove; split the grove keep-out off as UNRESEARCHED",
+  "note": "crops rule a seat out, but the page lays the crossing \"at the widest one remaining rather than left off\"; the code's hard filter `_wide_enough` leaves the ditch with no plank once every wide seat is ruled out",
   "pages": {
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "0b77fe8191a170cc"
   },
   "research": "43cf74757fcb48f3",
   "rests": [
-   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:a7603fcf4f80a38b",
-   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:bbbce046100dfc03"
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:a7603fcf4f80a38b"
   ],
-  "verdict": "NEEDS-RESEARCH"
+  "verdict": "DRIFTED"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#off groves": {
+  "code": "cfb81100f07bc57c",
+  "core": "46d4f5e2f3bacb5f",
+  "date": "2026-10-07",
+  "note": "the page's exclusion list names no groves",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:a7603fcf4f80a38b"
+  ],
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#off the homes": {
   "code": "ded203e1696db7b7",
@@ -35606,17 +35730,19 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/city/canals.py::CanalsMixin.farmland_ring#sluice outward": {
-  "code": "341adf1a597ac571",
+  "code": "8f45b184e0640493",
   "core": "1cf147602189a4a7",
   "date": "2026-10-07",
-  "note": "0146's drawing page (cited by this unit) answers it: \"Each tap stands about 90 ft outside the moat's rim\", upstream of its field; cite 0146 drawing",
-  "pages": {},
-  "research": "",
+  "note": "the tap stands about 90 ft outside the rim, stubbed to its gate",
+  "pages": {
+   "0146-moats-where-their-water-comes-from-and-where-it-goes-hori.drawing.html": "0bfda463562f62fe"
+  },
+  "research": "6f1e556b18feb821",
   "rests": [
    "0146-moats-where-their-water-comes-from-and-where-it-goes-hori.drawing.html:7798a23fdd5bb833",
    "0146-moats-where-their-water-comes-from-and-where-it-goes-hori.drawing.html:86970121b7358189"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/city/canals.py::CanalsMixin.farmland_ring#sluice standoff": {
   "code": "722e0ca54a29d6b5",
@@ -36224,16 +36350,19 @@
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py::WallsMixin._gate_flanking_buildings#fallback road width": {
-  "code": "707488c6d515ed1e",
+  "code": "9d85fb6dd5fd1f71",
   "core": "30eabe77501f432c",
   "date": "2026-10-07",
-  "note": "0147 answers it: the gate's 30 ft \"is the width of the trunk road\", against px(26); cite 0147 drawing at 30 ft; also, the code reads `road_width`, not a ring road as the claim says",
-  "pages": {},
-  "research": "",
+  "note": "`self.px(26)` is the fallback, but the page gives the trunk road and its gate 30 ft; it should fall back to px(30)",
+  "pages": {
+   "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html": "49298f0d00bbf69d"
+  },
+  "research": "1e01770d340670bb",
   "rests": [
-   "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html:513f3e283c0d2e43"
+   "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html:513f3e283c0d2e43",
+   "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html:c1fa31518daea2aa"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py::WallsMixin._gate_flanking_buildings#fills and trim": {
   "code": "30e628a49a8ce259",
@@ -36308,17 +36437,18 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py::WallsMixin._gate_flanking_buildings#turned to the wall": {
-  "code": "b939417cd228aabe",
+  "code": "c8971d145c0522e9",
   "core": "30eabe77501f432c",
   "date": "2026-10-07",
-  "note": "0147 answers it (\"stand square to the wall... within about 6 degrees\"); cite the 0147 drawing page; the code matches it",
-  "pages": {},
-  "research": "",
+  "note": "turned to the local wall tangent",
+  "pages": {
+   "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html": "49298f0d00bbf69d"
+  },
+  "research": "1e01770d340670bb",
   "rests": [
-   "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html:4703eb61a63eff0d",
    "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html:a62d0cd05508754b"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py::WallsMixin._gate_piers#pier at the jamb": {
   "code": "a246a0bf379e2a38",
@@ -36392,17 +36522,20 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py::WallsMixin._seat_mural_towers#a slid tower off a gate": {
-  "code": "743e33649aa39658",
+  "code": "a92f65c89baed868",
   "core": "c1f3ac64d764edb8",
   "date": "2026-10-07",
-  "note": "0148 answers it: no tower \"within 390 ft of a gate\"; the 45 px floor lets a slid seat land about 84 px (252 ft at 3 ft/px) from a gate; cite 0148 and hold slid seats to px(390)",
-  "pages": {},
-  "research": "",
+  "note": "a slid seat is only checked `>= 45` (unscaled px, about 135 ft), yet \"our maps seat no tower\" within 390 ft of a gate; the slide should re-test px(390) and the water gate's 135 ft",
+  "pages": {
+   "0148-towers-along-the-city-wall-mamian.drawing.html": "89938d617cc0b450"
+  },
+  "research": "f97df7dc77d0a218",
   "rests": [
    "0148-towers-along-the-city-wall-mamian.drawing.html:05e52ed8c34c5329",
+   "0148-towers-along-the-city-wall-mamian.drawing.html:62fa0326df18e9bf",
    "0148-towers-along-the-city-wall-mamian.drawing.html:ec7e78082e19e5d1"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py::WallsMixin._seat_mural_towers#coverage remediation": {
   "code": "8d0bf3f5e9aae5f6",
@@ -36512,17 +36645,19 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py::WallsMixin._seat_mural_towers#tower onto the berm": {
-  "code": "f29a8fd49c0b97e9",
+  "code": "e9f65aecd429da96",
   "core": "c1f3ac64d764edb8",
   "date": "2026-10-07",
-  "note": "0148 answers how far a tower stands out (\"12 m (~39 ft) out\"); cite 0148 and check that the px(40) offset of the tower's center gives a 39 ft projection, not one past it",
-  "pages": {},
-  "research": "",
+  "note": "need the line `_berm_nudge` measures from and the drawn tower depth; a center 40 ft beyond the wall face would put a 40 ft deep tower about 60 ft out, against Xi'an's 39 ft projection",
+  "pages": {
+   "0148-towers-along-the-city-wall-mamian.drawing.html": "89938d617cc0b450"
+  },
+  "research": "f97df7dc77d0a218",
   "rests": [
-   "0148-towers-along-the-city-wall-mamian.drawing.html:cff4a0e01c8abde3",
-   "0148-towers-along-the-city-wall-mamian.drawing.html:d568b9cefbaa02c3"
+   "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html:5b41b6e6412e4b2f",
+   "0148-towers-along-the-city-wall-mamian.drawing.html:cff4a0e01c8abde3"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "CANNOT-TELL"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py::WallsMixin._seat_mural_towers#tower separation floor": {
   "code": "b8ef6f16deae6f85",
@@ -54416,16 +54551,18 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_anchor#reaching the houses": {
-  "code": "4c09b367bcd35cd7",
+  "code": "88a8214fa6f97efd",
   "core": "679505cd861d8d34",
   "date": "2026-10-07",
-  "note": "0246 sets when a way counts as reaching a farmhouse (within 60 ft of the house, a GUESS). The claim should cite that page as GUESS, and the 100 ft `KOSATSUBA_ENTRANCE_REACH_FT` then disagrees with its 60 ft",
-  "pages": {},
-  "research": "",
+  "note": "`KOSATSUBA_ENTRANCE_REACH_FT` is 100 ft, but the cited guess is \"within 60 ft of the house\"; use 60 ft or relabel as its own GUESS",
+  "pages": {
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
+  },
+  "research": "7b40c2c01cfba682",
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_handover#a through track's handover": {
   "code": "7fd07e1d35903ece",

@@ -310,14 +310,14 @@ and the departure is a found row tiered by the work it takes (spec Edge Cases), 
   - `l7r/diagram/settlement/civic_grounds/justice.py::JusticeGroundsMixin.execution_ground#two post sockets about 3 ft square, and their spacing` - claim it: two post sockets about 3 ft square, and their spacing
   - `l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_anchor#the approach counts as reaching the houses within KOSATSUBA_ENTRANCE_REACH_FT 100 ft of a dwelling` - claim it: the approach counts as reaching the houses within KOSATSUBA_ENTRANCE_REACH_FT 100 ft of a dwelling
 
-- [ ] T22 every row's claim written or relabeled (cite the page that answers it, CANON for a GM ruling, GUESS or
+- [x] T22 every row's claim written or relabeled (cite the page that answers it, CANON for a GM ruling, GUESS or
       UNRESEARCHED where the page is silent; DEVIATION only after the exception path rules it LEGITIMATE); a departure a
       claim written or relabeled exposes - the code against the page it names - ranked as a found row (FR-003, FR-004)
       research: rendering
-      verify:
-- [ ] T23 every touched unit re-checked by `impl-drift`; each wave-6 row IN-STEP or re-tiered with its measured reason (FR-005, SC-002)
+      verify: DONE. DONE. Every open E0 row's claim written or relabeled in two rounds: pages that answer cited, CANON for the GM's arch ruling, GUESS or UNRESEARCHED where silent, no DEVIATION; each departure a claim now states is a found row (found-wave6.jsonl). law.py's water rules lifted to law_water.py at the 1,000-line bar
+- [x] T23 every touched unit re-checked by `impl-drift`; each wave-6 row IN-STEP or re-tiered with its measured reason (FR-005, SC-002)
       research: rendering
-      verify:
-- [ ] T24 the close: `make done` green, the wave column, landed (no bookend: claim lines move no engine behavior) (FR-005, FR-006)
+      verify: DONE. DONE. impl-drift on every touched unit (bundles A-D of wave 6; make claims-owed: no claim is owed); 32 rows closed (5 IN-STEP, 23 claimed under their unit's label, 4 claims stating a drift now ranked); 17 further findings ranked as found rows
+- [x] T24 the close: `make done` green, the wave column, landed (no bookend: claim lines move no engine behavior) (FR-005, FR-006)
       research: rendering
-      verify:
+      verify: DONE. DONE. make done green (193 s, every pool map, seeds 41-44); no bookend owed (claim lines and a unit move only); the wave column written
