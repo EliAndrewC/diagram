@@ -635,18 +635,6 @@ def test_a_bamboo_thicket_is_not_seated_on_the_water() -> None:
     assert all(seg_dist(q[0], q[1], brook[0], brook[1]) > 3.5 + 3.0 for poly in seats for q in poly), "a stand on the water"
 
 
-def test_the_copse_against_the_belt_anchors_on_its_lee_face() -> None:
-    """`lee_face` (settlement-review of Mizuguchi, feature 261): in each band across the wind, only the crowns within a crown's
-    depth of the most leeward - so the copse gathers on the houses' side of the belt, not beyond its windward face."""
-    from l7r.diagram.hamletgen.hinterland.stages import LEE_DEPTH_FT, lee_face
-
-    north = (0.0, -1.0)  # the wind from the north: windward is -y
-    belt = [(0.0, -100.0), (0.0, -120.0), (0.0, -200.0), (100.0, -150.0), (100.0, -250.0)]
-    lee = lee_face(belt, north)
-    assert set(lee) == {(0.0, -100.0), (0.0, -120.0), (100.0, -150.0)}
-    assert LEE_DEPTH_FT < 50.0
-
-
 def test_the_profile_is_sampled_along_its_length() -> None:
     """`along_the_profile`: a sample every `step` along each stretch between columns, the columns kept and the last one
     closing it; a short stretch keeps just its ends."""
@@ -902,27 +890,3 @@ def test_the_farm_groves_count_toward_the_homestead_wood() -> None:
         M = {"groves": [{"w": 10.0, "h": 20.0}, {"w": 5.0, "h": 4.0}, {"x": 1.0}]}
 
     assert farm_grove_area(_S()) == 220.0  # type: ignore[arg-type]
-
-
-def test_the_copse_against_the_belt_takes_the_belt_s_box_and_anchors_leeward_of_its_lee_face() -> None:
-    """`against_the_belt` (lifted from `stage_hinterland`, feature 291): the box is the belt footprint's extent; each anchor
-    stands `half` leeward of a lee crown - the wind (0, -1) comes from the north, so leeward is +y."""
-    from l7r.diagram.hamletgen.hinterland.stages import against_the_belt
-
-    dented = [(0.0, 0.0), (300.0, 0.0), (300.0, 100.0), (0.0, 100.0)]
-    groves = [{"role": "windbreak", "clumps": [[50.0, 20.0], [50.0, 90.0]]}, {"role": "copse", "clumps": [[999.0, 999.0]]}]
-    box, anchors = against_the_belt(dented, groves, (0.0, -1.0), 30.0)
-    assert box == [(0.0, 0.0), (300.0, 0.0), (300.0, 100.0), (0.0, 100.0)]
-    assert anchors == [(50.0, 120.0)], "the lee crown only, 30 ft leeward"
-
-
-def test_the_copse_seat_is_the_dooryard_s_unless_it_stands_against_a_belt() -> None:
-    from l7r.diagram.hamletgen.hinterland.stages import copse_seat
-
-    near = ([(1.0, 1.0)], 90.0, [])
-    dented = [(0.0, 0.0), (300.0, 0.0), (300.0, 100.0)]
-    groves = [{"role": "windbreak", "clumps": [[50.0, 20.0]]}]
-    assert copse_seat("dooryard", dented, groves, (0.0, -1.0), 30.0, "box", near, []) == ("box", near)
-    assert copse_seat("against_the_belt", [], groves, (0.0, -1.0), 30.0, "box", near, []) == ("box", near), "no belt footprint"
-    box, (anchors, half, _b) = copse_seat("against_the_belt", dented, groves, (0.0, -1.0), 30.0, "box", near, [])
-    assert box[0] == (0.0, 0.0) and anchors == [(50.0, 50.0)] and half == 30.0

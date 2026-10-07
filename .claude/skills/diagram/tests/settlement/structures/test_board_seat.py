@@ -500,18 +500,6 @@ def test_a_board_with_no_caption_is_sited_by_the_rules_alone() -> None:
     assert s.M["kosatsuba"] and s.M["meta"]["kosatsuba_well_ft"] > 0.0, "the drawn board's distance to its nearest well"
 
 
-def test_a_waterside_board_bids_for_the_wellhead() -> None:
-    """The `kosatsuba_siting` knob (feature 152): at `waterside` a verge near a well outbids the same count of dwellings
-    away from it."""
-    s = _hamlet(view=(0.0, 0.0, 1000.0, 800.0))
-    s.M["meta"]["kosatsuba_siting"] = "waterside"
-    s.M["lanes"] = [{"pts": [[100.0, 400.0], [900.0, 400.0]], "w": 5}]
-    s.M["wells"] = [{"x": 820.0, "y": 440.0, "r": 4.0}, {"x": 700.0, "y": 440.0, "r": 4.0}]
-    _house(s, 200.0, 440.0)
-    spot = s.place_kosatsuba()
-    assert spot is not None and spot[0] > 600.0, spot
-
-
 def test_an_entrance_whose_every_seat_hides_its_caption_is_not_afforded() -> None:
     """Labels L1, L4: every seat the departures pass has its caption on ink - `entrance` is not sitable, and the knob
     resolves over the placements that are."""

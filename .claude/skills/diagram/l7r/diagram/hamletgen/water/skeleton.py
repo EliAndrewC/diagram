@@ -95,8 +95,8 @@ def stage_water_frame(s: Settlement, plan: SitePlan) -> None:
         work_yards=plan.field_archetype != "mulberry_dike_fishpond",
         manure_form=plan.manure_form,  # the rolled manure form (feature 150 A2), read by farmstead_fixtures
         harvest_weather=plan.harvest_weather,  # the declared harvest weather (feature 282), recorded for the page and the tests
-        kosatsuba_siting=plan.kosatsuba_siting,  # frontage | waterside (feature 152 T21), read by place_kosatsuba
-        copse_siting=plan.copse_siting,  # among_the_houses | against_the_belt (feature 152 T20)
+        kosatsuba_siting=plan.kosatsuba_siting,  # frontage (feature 328: the drawing-water form retired)
+        copse_siting=plan.copse_siting,  # among_the_houses (feature 328: the belt-side form retired)
     )
     s._work_yards = plan.field_archetype != "mulberry_dike_fishpond"
     s._house_racks = plan.harvest_weather == "changeable"  # a rack by every house's yard (feature 282, `HARVEST_WEATHERS`)

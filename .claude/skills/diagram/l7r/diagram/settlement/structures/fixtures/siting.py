@@ -286,8 +286,6 @@ class FixtureSitingMixin:
             off the tread, out of water, in view - research/questions/0190-notice-boards-kosatsuba.drawing.html: never in the roadbed
             seat scored by traffic - research/questions/0190-notice-boards-kosatsuba.drawing.html: dwellings and buildings near each seat, the nearer counted double
             traffic radii - UNRESEARCHED: 260 px and 150 px, in pixels at every scale
-            waterside siting form - UNRESEARCHED: the `waterside` knob draws the board toward a well
-            waterside bonus - UNRESEARCHED: +14 within 40 px of a well, +8 within 90 px
             nearness tie-break - UNRESEARCHED: score less a third of the offset
             least offset off the tread - research/questions/0190-notice-boards-kosatsuba.drawing.html: 6 ft from the edge of the road
             sampling lattice - NONE: 12 px along, 5 px out"""
@@ -335,11 +333,8 @@ class FixtureSitingMixin:
                         ):
                             # BUSY IS WHERE THE FEET ARE (feature 140's Inashiro review): the near count is weighted double
                             busy = sum(1 for sx, sy in env.spots if math.hypot(x - sx, y - sy) < 260) + 2 * sum(1 for sx, sy in env.spots if math.hypot(x - sx, y - sy) < 150)
-                            # WHERE THE BOARD STANDS IS A KNOB (feature 152 T21): `frontage` is the busiest built ground,
-                            # `waterside` the drawing-water place - both attested
-                            if env.siting == "waterside" and env.wells:
-                                dw = min(math.hypot(x - wx, y - wy) for wx, wy in env.wells)
-                                busy += 14 if dw < 40.0 else (8 if dw < 90.0 else 0)
+                            # THE BUSIEST BUILT GROUND (feature 328): the drawing-water siting, a knob since feature 152, has no
+                            # page behind it (0190's drawing page) and is retired
                             out.append(BoardSeat(busy, busy * 10 - off / 3, x, y, turn, off - rw / 2 - h / 2, under_canopy(env.canopy, x, y, half), approach))
                         off += 5.0
         return out

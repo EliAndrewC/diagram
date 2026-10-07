@@ -13,6 +13,10 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 - (wave 5, landed and reviewed) placement-changed village lane on kashikawa - wave 5: 0033's row street runs on off the map as the road into it at both ends, where
   the web cut it back to its last joint (`trim_streets`); Kashikawa's and Mizuguchi's far ends now run off the sheet as a
   second way out (every way is inked `village lane`).
+- placement-changed copse on mizuguchi - wave 16: the against-the-belt copse retired (0071's drawing page draws the copse only
+  among the houses); Mizuguchi's copse is re-placed among its houses.
+- placement-changed notice board on kashikawa - wave 16: the drawing-water siting retired (0190: the busiest frontage).
+- placement-changed notice board on sawada - wave 16: the same.
 - none (wave 5, the other rows): each fix moves one value inside a rule that already places or sizes the element (a
   size, a width, a count, a reach, a caption's leader); no element is new to a map and no glyph is redrawn.
 
@@ -768,3 +772,28 @@ then `hamletgen/cluster.py`'s drain rules; wave 15 is these 9 rows.
       `make done` green, the wave column (FR-005, FR-006, SC-002, SC-003)
       research: rendering
       verify: DONE. impl-drift on every touched claim (w15 bundles, every wave row IN-STEP at the last round; findings filed and closed rows reopened); make done green; wave 15's own pair (328-start at 68ee171f4) band 1, explained, perf-audit consistent (its own alternating runs); the wave column written
+
+## Phase 17 - wave 16 (amendment 15): the copse among the houses, the board on the frontage
+
+Wave 15's re-checks found 7 rows; one was stale (the two-building dwelling size, IN-STEP on the second round) and dropped; a
+fresh reader tiered the other 6 by their work (T56a, `audit/t56a-out.jsonl`): donated stonework E0, the privacy baffle E2, the
+walled enclosure E3 (two gatehouses redrawn), and three E4 - two whose only remedy is a research page edited (the exception
+path) and the checkpoint's staffing (research first). The open in-scope run is then the E0 row and the E2 rows in ranking order;
+wave 16 takes the E0, the privacy-baffle paragraph, the copse rows (`COPSE_SITINGS` with `COPSE_BELT_REACH_FT` and
+`stage_windbreak`'s two copse rows, one retirement) and the notice board's siting. The next open row is `WEB_HARD_GAP` (407).
+
+  - `buildings/programs.md::Country shrine (a village district's shrine)#donated stonework` - split: the gifts on 0222; none at average a GUESS on its drawing page
+  - `buildings/programs.md::Magistrate's manor (county magistracy)#formal visitors and the privacy baffle` - the visitors' way runs on through the office (0104 drawing); "go no deeper" dropped
+  - `l7r/diagram/hamletgen/consts.py::COPSE_SITINGS#village copse siting` - among the houses only (0071 drawing); the against-the-belt form retired with `against_the_belt`, `copse_seat`, `lee_face`, its choice value and modal; Mizuguchi's declaration of it dropped
+  - `l7r/diagram/hamletgen/consts.py::COPSE_BELT_REACH_FT#copse against the belt` - retired with the form
+  - `l7r/diagram/hamletgen/hinterland/stages.py::stage_windbreak#against-the-belt copse clump` - retired with the form
+  - `l7r/diagram/hamletgen/hinterland/stages.py::stage_windbreak#copse among the homes` - the copse only among the houses
+  - `l7r/diagram/hamletgen/consts.py::KOSATSUBA_SITINGS#notice board siting` - the busiest frontage only (0190 drawing); the drawing-water bid, its choice value and modal retired
+
+- [x] T56a wave 15's found rows tiered by the work they take, by a fresh reader (FR-002, FR-003, SC-003)
+      research: rendering
+      verify: DONE. 6 rows tiered by their work by a fresh Opus reader (audit/t56a-out.jsonl): 1 E0, 1 E2, 1 E3, 3 E4; the stale seventh dropped
+- [ ] T57 the two Mode A rows; the copse and board sitings retired in the engine, their tests, choices and modals; Mizuguchi, Kashikawa and Sawada regenerated (FR-004, FR-005)
+      research: rendering
+- [ ] T58 every touched claim re-checked by `impl-drift`, the occasions' glyph checks, and the close: wave 16's own bookend pair, `make done` green, the wave column (FR-005, FR-006, SC-002, SC-003)
+      research: rendering

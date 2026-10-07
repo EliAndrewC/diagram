@@ -469,18 +469,16 @@ HARVEST_WEATHERS = ("settled", "changeable")
 standing rack forms - research/questions/0016-rice-drying-racks-hasa-hasagi.html, research/questions/0016-rice-drying-racks-hasa-hasagi.drawing.html: no map draws Niigata's living alder rack posts on the bunds or Ehime's permanent roofed racks"""
 DEFAULT_HARVEST_WEATHER = "settled"
 """Research: harvest weather when undeclared - research/questions/0016-rice-drying-racks-hasa-hasagi.drawing.html: settled"""
-# TWO SUPPORTABLE ANSWERS BECOME A KNOB (constitution XII), not a picked one. Both were named by a
-# settlement-review as knob candidates and the GM approved working them (feature 152, FR-005/FR-016).
-COPSE_SITINGS = ("among_the_houses", "against_the_belt")  # a village copse threading the homesteads, or
-"""Research: village copse siting - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: among the houses or against the belt"""
-# tucked against the back grove - both are what a back-village planting is, and they make a settlement
-# read differently at a glance, which is the whole point of a knob rather than a house style.
-KOSATSUBA_SITINGS = ("frontage", "waterside")  # the notice board on the busiest built frontage, or at the
-"""Research: notice board siting - research/questions/0190-notice-boards-kosatsuba.drawing.html: busiest frontage or the drawing-water place"""
-# drawing-water place. The takafuda stood at crossroads and bridgeheads AND at the village well; a
-# settlement-review measured Mizuguchi's at the wellhead (7 of 12 households within 250 ft) against 11 of
-# 12 at the frontage optimum and called it defensible-but-off-optimum, which is exactly the shape of a
-# genuine two-answer question rather than a defect.
+# THE COPSE STANDS AMONG THE HOUSES (feature 328): 0071's drawing page draws the dooryard copse only in the gaps between
+# the houses; the against-the-belt form (feature 152, a settlement-review's knob candidate) has no page behind it and is
+# retired. Kept as the knob's one form so a spec that declares it still reads.
+COPSE_SITINGS = ("among_the_houses",)
+"""Research: village copse siting - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: among the houses, in the gaps between them"""
+# THE NOTICE BOARD ON THE BUSIEST FRONTAGE (feature 328): 0190's drawing page seats it beside the busiest main road, else
+# where the most buildings stand; the drawing-water siting (feature 152, a settlement-review's knob candidate) has no page
+# behind it and is retired. Kept as the knob's one form so a spec that declares it still reads.
+KOSATSUBA_SITINGS = ("frontage",)
+"""Research: notice board siting - research/questions/0190-notice-boards-kosatsuba.drawing.html: the busiest frontage"""
 
 # THE DIKE CROP - which dike-pond planting a hamlet is (feature 150, GM 2026-08-28 choosing audit A6; the
 # options re-read by 269 B34). research/archetypes/230: Qu Dajun (late 17th c.) has the villages' pond dikes
@@ -701,12 +699,9 @@ WIND_BACK_MIN_DOT = 0.7071
 # bamboo and fruit trees in the gaps between the houses" and no distance (research/contents.json#vegetation, 'How our maps draw a
 # village's groves'); 90 ft is the bar the feature-230 settlement-review itself used to call a copse a wood (86% of clumps
 # more than 90 ft from any house), and the pool's copses before the reseats sat at a median 77-81 ft. A map drawing
-# convention on the record's words, not a finding. The against-the-belt copse reads as one wood with the belt when its
-# crowns stand within a crown or two of the belt's: 60 ft, the same kind of convention.
+# convention on the record's words, not a finding.
 COPSE_HOUSE_REACH_FT = 90.0
 """Research: copse among the houses - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: within 90 ft of a house"""
-COPSE_BELT_REACH_FT = 60.0
-"""Research: copse against the belt - CONVENTION: within 60 ft of the belt, a crown or two; the 0071 drawing page has no belt-side copse"""
 
 WIND_VECTORS: dict[str, Pt] = {
     "N": (0.0, -1.0),

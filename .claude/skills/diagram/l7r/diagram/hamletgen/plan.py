@@ -130,8 +130,8 @@ class HamletSpec:
     field_archetype: str | None = None
     pond_layout: str | None = None  # a dike-pond's arrangement, grid | mosaic (feature 150; `POND_LAYOUTS`)
     manure_form: str | None = None  # the manure fixture's form, heap | pit (feature 150; `MANURE_FORMS`)
-    copse_siting: str | None = None  # among_the_houses | against_the_belt (feature 152; `COPSE_SITINGS`)
-    kosatsuba_siting: str | None = None  # frontage | waterside (feature 152; `KOSATSUBA_SITINGS`)
+    copse_siting: str | None = None  # among_the_houses, the one form left (feature 328; `COPSE_SITINGS`)
+    kosatsuba_siting: str | None = None  # frontage, the one form left (feature 328; `KOSATSUBA_SITINGS`)
     byre_form: str | None = None  # courtyard | yard_shed | detached_commons - the settlement engine's knob, pinnable so the pool can exhibit each (feature 261; 269 B16)
     dike_crop: str | None = None  # a dike-pond's dike planting, mulberry | fruit | tea (feature 150, 269 B34; `DIKE_CROPS`)
     leftover: str | None = None  # a dike-pond block's unconverted parcels, rice | pond (feature 150, 269 E9; `LEFTOVER_FORMS`)
@@ -225,8 +225,8 @@ class SitePlan:
     pond_layout: str
     manure_form: str  # heap | pit (feature 150, `MANURE_FORMS`), read by `farmstead_fixtures`
     harvest_weather: str  # settled | changeable (feature 282): the spec's declaration or the regional default, never a roll
-    copse_siting: str  # among_the_houses | against_the_belt (feature 152, `COPSE_SITINGS`)
-    kosatsuba_siting: str  # frontage | waterside (feature 152, `KOSATSUBA_SITINGS`)
+    copse_siting: str  # among_the_houses (feature 328, `COPSE_SITINGS`)
+    kosatsuba_siting: str  # frontage (feature 328, `KOSATSUBA_SITINGS`)
     dike_crop: str  # the dike-pond's planting (feature 150 A6), read by `stage_polder`
     leftover: str  # the dike-pond's unconverted parcels (feature 150 B2), read by `stage_polder`
     plot_size: str

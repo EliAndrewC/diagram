@@ -14,7 +14,7 @@ from l7r.diagram.settlement._geom import CanopyArea
 from l7r.diagram.settlement.homestead_parts.belt_law import wind_unit
 from l7r.diagram.settlement.homestead_parts.wood_goal import copse_goal
 
-from ..consts import COPSE_BELT_REACH_FT, COPSE_HOUSE_REACH_FT
+from ..consts import COPSE_HOUSE_REACH_FT
 from ..homesteads import farmstead_fixtures, household_bamboo
 from ..plan import SitePlan
 from .bamboo import bamboo_seats
@@ -25,37 +25,10 @@ from .parcels import CROP_MARGIN, open_ground_patches
 # ---- STAGE 7: the ground between everything ------------------------------------------------------
 
 
-LEE_BAND_FT = 40.0  # ft: the width across the wind of one band of the belt, about a crown and a half
-"""Research: lee band width - UNRESEARCHED: 40 ft across the wind"""
-LEE_DEPTH_FT = 30.0  # ft: a crown's depth, the lee face's thickness in each band
-"""Research: lee face depth - UNRESEARCHED: 30 ft"""
-
-
 def reserved_seats(s: Settlement) -> list[tuple[float, float]]:
     """Every household's reserved share of the wood floor, as the seats its record carries (`wood_share`, feature 287,
     woods W25; plan D9), in the houses' order."""
     return [(float(p[0]), float(p[1])) for h in s.M.get("houses") or [] for p in (h.get("wood_share") or {}).get("seats") or ()]
-
-
-def lee_face(clumps: Sequence[tuple[float, float]], wind: tuple[float, float]) -> list[tuple[float, float]]:
-    """The belt crowns on its LEE face - in each `LEE_BAND_FT` band across the wind, those within `LEE_DEPTH_FT` of the
-    band's most leeward crown (settlement-review of Mizuguchi, feature 261).
-
-    The against-the-belt copse is "tucked against the back grove" (`COPSE_SITINGS`): the fruit and bamboo a household
-    keeps stand in the belt's shelter, on the houses' side. Anchored on every belt crown, it could stand anywhere within
-    reach of one, and once the belt kept its depth where its fringe turns, 31 of Mizuguchi's 75 copse crowns stood beyond
-    its windward face, farther from every house than the belt beside them - one wood 250 ft deep. `wind` points toward
-    where the wind comes from.
-
-    Research:
-        copse on the belt's lee - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: fruit trees planted on the fengshui wood's edges
-        lee side only - UNRESEARCHED: only crowns within LEE_DEPTH_FT of each band's leeward-most crown anchor it
-    """
-    wx, wy = wind
-    bands: dict[int, list[tuple[float, tuple[float, float]]]] = {}
-    for c in clumps:
-        bands.setdefault(int((c[0] * -wy + c[1] * wx) // LEE_BAND_FT), []).append((c[0] * wx + c[1] * wy, c))
-    return [c for band in bands.values() for u, c in band if u <= min(v for v, _ in band) + LEE_DEPTH_FT]
 
 
 _COMPASS = ("N", "NE", "E", "SE", "S", "SW", "W", "NW")
@@ -90,40 +63,6 @@ def woodland_on_the_sheet(s: Settlement, plan: SitePlan, polys: list[Any]) -> li
     if plan.woodland_patches and not polys:
         s.M["meta"]["woodland_offsheet"] = woodland_offsheet(plan)
     return polys
-
-
-def against_the_belt(dented: Sequence[tuple[float, float]], groves: Sequence[Any], wind: tuple[float, float], half: float) -> tuple[list[tuple[float, float]], list[tuple[float, float]]]:
-    """The against-the-belt copse's box and anchors (lifted from `stage_hinterland`, feature 291: no pool map rolls the
-    siting once Mizuguchi rolls linear, so its lines are tested here with plain inputs).
-
-    The box is the belt's own footprint (`dented`), stood off the houses so the two stands read as one wood at its back.
-    The anchors are on its LEE side of that face: the reach is centered `half` of it leeward of each lee crown, so a copse
-    crown stands 0 to `COPSE_BELT_REACH_FT` leeward and never windward of the face - at the belt's thin end a band's one or
-    two crowns are its lee face, and a copse anchored round them stood beyond its windward side (Mizuguchi, two crowns).
-
-    Research:
-        copse against the belt - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: anchored on the belt's lee face, fruit trees on the wood's edges
-        copse reach from the belt - UNRESEARCHED: 0 to COPSE_BELT_REACH_FT (60 ft) leeward, labeled a convention in consts
-    """
-    bx = [q[0] for q in dented]
-    by = [q[1] for q in dented]
-    box = [(min(bx), min(by)), (max(bx), min(by)), (max(bx), max(by)), (min(bx), max(by))]
-    belt = [(float(c[0]), float(c[1])) for g in groves if g.get("role") == "windbreak" for c in g.get("clumps") or []]
-    return box, [(x - wind[0] * half, y - wind[1] * half) for x, y in lee_face(belt, wind)]
-
-
-def copse_seat(
-    siting: str, dented: Sequence[tuple[float, float]], groves: Sequence[Any], wind: tuple[float, float], half: float, box: Any, near: tuple[Any, ...], brook: Any
-) -> tuple[Any, tuple[Any, ...]]:
-    """The copse's box and its reach: the dooryard copse's as given, or - sited against the belt, where it has one - the
-    belt's box and its lee anchors at `half` (`against_the_belt`). Lifted from `stage_hinterland` (feature 291).
-
-    Research: copse siting - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html, research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: dooryard (0036) or against the belt (0071), by the knob
-    """
-    if siting == "against_the_belt" and dented:
-        box, anchors = against_the_belt(dented, groves, wind, half)
-        return box, (anchors, half, brook)
-    return box, near
 
 
 def stage_hinterland(s: Settlement, plan: SitePlan) -> None:
@@ -295,7 +234,7 @@ def ring_box(ring: Sequence[Any]) -> tuple[float, float, float, float]:
 
 def dent_around(belt: Sequence[tuple[float, float]], pocket: tuple[float, float, float, float]) -> list[tuple[float, float]]:
     """The belt's outline with every vertex inside the title's `pocket` pushed 6 px out of it, to the nearest side - the
-    dent `plant_the_belt` plants and the against-the-belt copse is boxed by (one body, so the two cannot differ).
+    dent `plant_the_belt` plants.
 
     Research: belt dented round the title - CONVENTION: vertices in the title pocket pushed 6 px out
     """
@@ -414,24 +353,21 @@ def stage_windbreak(s: Settlement, plan: SitePlan) -> None:
 
     The belt itself is planted by `stage_hinterland` (`plant_the_belt`), before the view is decided, because its inner
     face sets the frame (feature 287, M6). What is left here is the copse, which sets no frame: seated after the woods
-    and the ground cover, against the belt's recorded crowns, so the two stands read as two.
+    and the ground cover, among the houses, so the copse and the belt read as two stands.
 
     Steps:
-        l7r.diagram.hamletgen.hinterland.frame.title_pocket
         l7r.diagram.settlement.Settlement.village_grove
 
     Research:
-        copse among the homes - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html, research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: over the cluster's own oriented footprint, or against the belt
+        copse among the homes - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html, research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: over the cluster's own oriented footprint, in the gaps between the houses
         copse reach from a house - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: within COPSE_HOUSE_REACH_FT (90 ft), a dooryard's reach
         copse on the house's own bank - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: each farmstead stands whole on one bank (a GUESS recorded there)
         copse sized by the homestead woods - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: each homestead's wood rolled in the register's range, the copse filled to what the belt and groves leave
         among-the-houses copse box - UNRESEARCHED: the box is the cluster's oriented footprint padded 16 ft
-        against-the-belt copse clump - UNRESEARCHED: a clump stands within half of COPSE_BELT_REACH_FT (30 ft) of a belt crown
     """
     _seats = reserved_seats(s)
     if not plan.belt and not _seats:
         return
-    _dented = dent_around(plan.belt or [], title_pocket(s, plan))
     # The COPSE fills the leafy gaps AMONG the homes, over the house cloud. That is only reasonable
     # ground because `stage_homesteads` now bounds every seat to the cluster band: over a cloud with
     # a strewn farmstead in it, this became a scatter across 1,446 x 1,244 px - a wood over the whole
@@ -441,12 +377,8 @@ def stage_windbreak(s: Settlement, plan: SitePlan) -> None:
     xs = [h["x"] for h in houses]
     ys = [h["y"] for h in houses]
     pad = 16.0
-    # WHERE THE COPSE SITS IS A KNOB (feature 152 T20, constitution XII). Both forms are what a
-    # back-village planting is: trees threading the homesteads, or a stand tucked against the shelter
-    # belt at the settlement's back. A settlement-review named the pair as a knob candidate while
-    # reporting Sawada's copse drawn INSIDE the belt - which is the second form happening by accident,
-    # unrecorded, on a map that had rolled the first. Rolled per settlement from the map's own seed, so
-    # two hamlets differ at a glance, which is the point of a knob rather than a house style.
+    # THE COPSE STANDS AMONG THE HOUSES (feature 328): the against-the-belt form, a knob since feature 152, has no page
+    # behind it - 0071's drawing page draws the copse only in the gaps between the houses - and is retired.
     # THE CLUSTER'S OWN FOOTPRINT, NOT ITS BOUNDING BOX (feature 230, settlement-review pass 6). A hamlet
     # seated on a diagonal margin is a RIBBON - Inashiro's is 969 x 231 ft - and its axis-aligned box is
     # 617 x 875, most of which is the empty bay beside it. Scattering "among the houses" over that box put 86%
@@ -468,9 +400,7 @@ def stage_windbreak(s: Settlement, plan: SitePlan) -> None:
     # ...AND WITHIN REACH OF WHAT IT STANDS AMONG (feature 261, settlement-review of Kashikawa, Inashiro and Mizuguchi).
     # The oriented box above is the cluster's extent, not its ground: a crescent or a cloud seat leaves an empty bay
     # inside the box, and the copse filled it as a wood 500 x 450 ft across that hid the belt behind it. So a dooryard
-    # copse clump stands within `COPSE_HOUSE_REACH_FT` of a house, and an against-the-belt one within
-    # `COPSE_BELT_REACH_FT` of a belt crown - scattered over the belt's axis-aligned box it spread across the whole
-    # cluster wherever the belt wrapped a diagonal ribbon.
+    # copse clump stands within `COPSE_HOUSE_REACH_FT` of a house.
     # ...AND ON ITS OWN BANK: a clump near a house across the brook is not among the houses (settlement-review of Kashikawa,
     # feature 261: three clumps stood across the water from every farmhouse, within reach only as the crow flies)
     _brook = [((float(a[0]), float(a[1])), (float(b[0]), float(b[1]))) for f in s.M.get("streams") or [] for a, b in zip(f.get("poly") or [], (f.get("poly") or [])[1:], strict=False)]
@@ -480,8 +410,6 @@ def stage_windbreak(s: Settlement, plan: SitePlan) -> None:
     # the manifest carries, and no margin stands in for the rounding.
     _copse_near: tuple[Any, ...] = ([(float(x), float(y)) for x, y in zip(xs, ys, strict=False)], s.px(COPSE_HOUSE_REACH_FT), _brook)
     _dooryard = _copse_near  # a household's reserved seat is its dooryard's on either siting (woods W25), asked of it as planted
-    # the belt's own footprint and its lee anchors, where the copse is sited against the belt (`copse_seat`)
-    _box, _copse_near = copse_seat(plan.copse_siting, _dented, s.M.get("village_groves") or [], plan.wind, s.px(COPSE_BELT_REACH_FT) / 2.0, _box, _copse_near, _brook)
     # THE COPSE IS THE HOMESTEADS' WOODS, SIZED BY THEM (269 B26; research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html): each homestead's wood - its
     # windward grove and its share of the copse together, which the record knows as one - is rolled within the 1684
     # register's range, and the copse is filled to what the belt leaves of their sum. It used to be whatever one grid's

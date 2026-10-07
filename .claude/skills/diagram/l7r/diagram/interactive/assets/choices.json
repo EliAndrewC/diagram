@@ -105,8 +105,7 @@
    "name": "Where the village's trees stand",
    "when": "[settlement_form=nucleated]",
    "values": {
-    "among_the_houses": "among the houses",
-    "against_the_belt": "against the windbreak"
+    "among_the_houses": "among the houses"
    }
   },
   {
@@ -350,8 +349,7 @@
    "key": "kosatsuba_siting",
    "name": "Where the notice board seeks to stand",
    "values": {
-    "frontage": "the busiest frontage",
-    "waterside": "the place water is drawn"
+    "frontage": "the busiest frontage"
    }
   },
   {

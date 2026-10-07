@@ -224,6 +224,20 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
   backup pushed, its own pair band 1 confirmed); wave 15's own pair opens at 68ee171f4.
 - **Verification**: `impl-drift` on the touched claims, the gate with the pool hamlets regenerated, wave 15's own bookend pair.
 
+## Wave 16 (amendment 15, 2026-10-07)
+
+- **T56a first**: wave 15's found rows tiered by their work (one stale row dropped).
+- **Scope**: the E0 row, the privacy-baffle paragraph, then the E2 engine rows in ranking order through the notice board's siting
+  (`tasks.md` Phase 17), with `stage_windbreak`'s two copse rows taken with `COPSE_SITINGS` (one retirement). Two knob forms
+  feature 152 made from a settlement-review's candidates - the copse against the belt, the board at the drawing-water place - have
+  no page behind them and are retired; each knob keeps its one form, so a spec declaring it still reads. Mizuguchi declared the
+  belt-side copse only to exhibit that value; the declaration goes with it.
+- **Occasions**: the copse re-placed on Mizuguchi, the board re-placed on Kashikawa and Sawada - a glyph check each.
+- **On the unpushed waves 9-15** under the wave-11 exception's condition (6): (1)-(5) held at wave 15's close (799a0bf4b, its
+  backup pushed, its own pair band 1 confirmed); wave 16's own pair opens at 799a0bf4b.
+- **Verification**: `impl-drift` on the touched claims, the glyph checks, the gate with the three maps regenerated, wave 16's own
+  bookend pair.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Each later wave that changes engine behavior takes
