@@ -379,7 +379,7 @@ grounds' sizes, counts and reaches. Every `after` these rows carry is a row insi
       `LABEL=328-end` in the clone (constitution VI)
       research: rendering
       verify:
-- [ ] T26 the four E0 claims; then the E1 rows, each with the unit tests it moves; proven on the reference hamlet (Inashiro,
+- [ ] T26 the open E0 claims; then the E1 rows, each with the unit tests it moves; proven on the reference hamlet (Inashiro,
       its PNG looked at) and then across the pool and the cohort's bookend seeds; a town or city value no pool map draws is
       proven by its unit test; each row fixed toward the page it cites, DEVIATION written only after `spec-fidelity` rules it
       LEGITIMATE on the exception path (a GM ruling is CANON naming it); a value that makes a map refuse is held and the row
