@@ -137,11 +137,14 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 ## Wave 10 (amendment 9, 2026-10-07)
 
 - **Wave 9 first (FR-006)**: its gate failed on Kuwabata (a zigzag across a joint), bisected by row to the yard privy's step,
-  which is held at its pre-wave value as its found row (the re-seat rule, E3) - the spec's route (Edge Cases, FR-004). The
-  gate is green with it held. Its bookends owe the GM's sign-off (band 3), and the hold has a measured cost (three scaling
-  rolls refuse their web with it held, none at the page's value): both are the GM's to rule, recorded in `claims-followup.md`,
-  Wave 9. Wave 10 starts on top of the unpushed wave 9 only if a fresh exception check rules it LEGITIMATE with these
-  measurements; otherwise wave 10 waits for wave 9 to land.
+  held as its found row's (the re-seat rule, E3); with it held three scaling rolls refused their web, bisected by row to the
+  wood shed's step, held as its found row's (the web's reach at 20 and 40 households, E3) - the spec's route (Edge Cases,
+  FR-004), as wave 2 held the brook's weight. Wave 9 closes in full (impl-drift, a green gate, the wave column, no measured
+  regression) and is pushed if its bookends read band 2 or lower.
+- **The exception (amendment 9 round 2, LEGITIMATE on these conditions)**: if wave 9's bookends still read band 3, its push
+  waits for the GM's sign-off at a terminal (the one thing the session cannot give), and wave 10 starts on top of it in the
+  clone - wave 10's opening bookend taken at wave 9's closing commit, so each wave's band is its own; the sign-off question
+  goes on the list for the end of the feature (the GM, 2026-10-07: "defer it to the end of the feature").
 - **Tiers by work (FR-002, FR-003)**: wave 9's found rows tiered by their work by a fresh reader (T38a; T38b for the 18 found
   after), and its three NEEDS-RESEARCH rows E4 with the research first (spec Edge Cases); the north annex's band row is "keep
   the 18 ft floor" (E2), never a named exception.
