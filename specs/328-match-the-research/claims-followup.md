@@ -478,3 +478,4 @@ pass on the sheet modals, not this feature's ranking - modals are not claims):
   deeper than the reed margin, so a belt moved into the marsh draws its alder at the margin and none deeper. A separate claim,
   not ranked as a finding.
 - Wave 19's pair (band 1): perf-audit timed 40 hh seed 4's hinterland at 2.29 s base, 3.96 s end, 2.27 s with only parcels.py at base - all the growth inside the parcel scan (open_ground_patches 0.98 -> 2.65 s), the scrub fill flat; the explanation's scrub-fill clause was wrong, the cause right.
+- `l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#scan seat window 08 of the square's box inside the predicted` (UNCLAIMED, E0): scan seat window: 0.8 of the square's box inside the predicted frame, the center allowed up to 0.6*half outside it (CONVENTION, framing)

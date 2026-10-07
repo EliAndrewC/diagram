@@ -1,6 +1,6 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "bdb81fb59811521d831263b5a0014510bdfd6ff3b25b3388e8fd351f72ac4fd5",
+ "plan_sha256": "109d3bfbf71829286af9d29efb9177815de16491877e6695cc6875fe66fa906d",
  "reviewed": "2026-10-07",
  "declared": "spec-fidelity",
  "decisions": [
@@ -43,15 +43,21 @@
   },
   {
    "id": "W20-7",
-   "summary": "Occasions none",
+   "summary": "Occasions: placement-changed woodland commons on mizuguchi (one wood where two stood); the other four meta only",
    "class": "within",
-   "why": "measured: the five manifests differ from 43b353361 in meta only (re-diffed by this review)"
+   "why": "FR-005 / feature 294: re-diffed by this review against 43b353361 - mizuguchi commons 2 -> 1 woods (with crowns, scrub, bamboo, ink classes), inashiro/kashikawa/kuwabata/sawada differ in meta only; the occasion is declared and T66 runs its glyph-check"
   },
   {
    "id": "W20-8",
    "summary": "Wave 20 on the unpushed waves 9-19 under condition (6)",
    "class": "within",
    "why": "the wave-11 exception already ruled LEGITIMATE; backup/digram-backlog is at 43b353361 (ls-remote), wave 19's pair band 1 recorded in T64"
+  },
+  {
+   "id": "W20-9",
+   "summary": "The houses'-side fallback in open_ground_patches retired: only seats beyond the fields are offered; a roll with none records the wood beyond the sheet (woodland_on_the_sheet, existing)",
+   "class": "within",
+   "why": "FR-004 literal: 0077's drawing page says 'on the nearest slope beyond the fields from the houses ... not on whatever open ground lies nearest the houses' and records no fallback; the fallback offered exactly the ground the page excludes. No research edited; the off-sheet record is the pre-existing plan D11 deviation, not a new carve-out"
   }
  ],
  "verdict": "CLEAR"

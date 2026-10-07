@@ -310,3 +310,4 @@ Each wave's amendment adds its map decisions to this table. The program's decisi
 - Amendment 18, round 1 (spec-fidelity, 2026-10-07): FAITHFUL, plan CLEAR (5 decisions) - overturning feature 261's preference the literal fix (a review's judgment, not the research).
 - Amendment 19, round 1 (spec-fidelity, 2026-10-07): CHANGES REQUIRED, plan CLEAR (8 decisions) - the bath's per-house roll never draws the main door (the yard covers it): filed E3 with the stale drawing-page line, Phase 21 says so; the slope reading added to open_ground_patches' claim.
 - Amendment 19, round 2 (spec-fidelity, 2026-10-07): FAITHFUL. impl-drift since: the wood's houses'-side fallback against 0077 - retired; Mizuguchi draws one wood where two stood (an occasion).
+- Amendment 19, round 3 (spec-fidelity, 2026-10-07): FAITHFUL, plan CLEAR (9 decisions) - retiring the fallback literal, not an exception.
