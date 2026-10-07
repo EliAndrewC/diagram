@@ -626,14 +626,14 @@ sign-off the only thing between them and main).
 - [x] T42a wave 10's found rows tiered by the work they take, by a fresh reader (FR-002, FR-003, SC-003)
       research: rendering
       verify: DONE. 19 rows tiered by their work by a fresh Opus reader (audit/t42a-out.jsonl): 5 moved
-- [ ] T43 the claims written and the values fixed toward their pages, with the unit tests they move; proven on Inashiro and the
+- [x] T43 the claims written and the values fixed toward their pages, with the unit tests they move; proven on Inashiro and the
       pool through the gate; a value that makes a map refuse is held as its found row (FR-004, FR-005)
       research: rendering
-      verify:
-- [ ] T44 every touched unit re-checked by `impl-drift` (FR-005, SC-002)
+      verify: DONE. the 8 claims written and the 3 values fixed toward their pages (the hem's fallback widths in feet, 0068 and 0059; the stub's bund reach in pixels; the polder's default gaps in feet); no pool map moved (the census unchanged); the pool through a green make done
+- [x] T44 every touched unit re-checked by `impl-drift` (FR-005, SC-002)
       research: rendering
-      verify:
-- [ ] T45 the bookend pair, wave 11's own (opening at wave 10's closing commit), and the close: the band's records, `make done`
+      verify: DONE. impl-drift on every touched unit (w11bA, w11bB recorded); the wave's own mislabels corrected; every other finding a found row (audit/found-wave11.jsonl)
+- [x] T45 the bookend pair, wave 11's own (opening at wave 10's closing commit), and the close: the band's records, `make done`
       green, the wave column (FR-005, FR-006, SC-002, SC-003)
       research: rendering
-      verify:
+      verify: DONE. wave 11's own pair (328-start at 6be618a9e, 328-end at the clone): band 0, owes nothing; make done green; the wave column written; before any push the main-to-HEAD landing pair is retaken as the newest pair (plan, Wave 11)

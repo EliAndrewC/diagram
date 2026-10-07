@@ -1,6 +1,6 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "deece272d42d92fd4c0b3d9e7045ee58d0957eb2c900bd0765eb82f1224adc3e",
+ "plan_sha256": "fcdad89ad5ff4aba1c54edd41d6468b41a9400785c6a3a18496f9d1cecc83f6c",
  "reviewed": "2026-10-07",
  "declared": "spec-fidelity",
  "decisions": [
@@ -28,6 +28,12 @@
    "summary": "Verification as wave 10: Inashiro first, pool through a green gate, bookends, impl-drift on every touched unit",
    "class": "within",
    "why": "FR-005"
+  },
+  {
+   "id": "W11-landing-pair",
+   "summary": "Before any push of the stack, the main-to-HEAD landing pair is retaken as the newest bookend pair (the push's perf gate reads only the newest, and wave 11's own band-0 pair is now newest), and the GM signs off its band with each wave's own pair beside it",
+   "class": "within",
+   "why": "Carries out condition (2) of the LEGITIMATE wave-11 exception (each wave's pair shown to the GM beside the combined landing pair) and condition (5) (the sign-off for each wave); it closes a route by which the stack could push on wave 11's band-0 pair alone and skip the sign-off waves 9 and 10 owe. Narrows nothing the request or spec asks for."
   }
  ],
  "verdict": "CLEAR"
