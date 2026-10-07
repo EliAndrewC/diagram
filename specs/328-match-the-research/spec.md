@@ -217,3 +217,4 @@ Each wave's amendment adds its map decisions to this table. The program's decisi
   plan D6, tasks); (2) T12a tiers the 13 provisional non-E0 found rows by their work before any E1 wave; Phase 4 names its
   39 rows truly (38 found, wave 1's one unclosed); (3) Edge Cases carries the hold wave 2 made. The holds themselves were
   ruled faithful (no row dropped, no research moved).
+- Amendment 2, round 2 (spec-fidelity-verify, 2026-10-07): FAITHFUL; plan CLEAR (seven decisions within).

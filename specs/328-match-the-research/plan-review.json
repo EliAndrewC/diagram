@@ -1,6 +1,6 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "c98996f5c9ab50e1ce1db7edfc2d93cd2ce246ea7d605a29c05ef569a1320ac5",
+ "plan_sha256": "8baabbfce56be38434327003780405d6d58b4eba8f28e0f81ec117e42fc06e66",
  "reviewed": "2026-10-07",
  "declared": "spec-fidelity",
  "decisions": [
@@ -36,9 +36,9 @@
   },
   {
    "id": "D6",
-   "summary": "the 32 hamletgen/ways/ E1 rows held together as wave 3; FOOTPATH_FABRIC_GAP waits for it via its recorded after",
+   "summary": "the 32 hamletgen/ways/ E1 rows held together as wave 4 (after wave 3's open E0 rows, which tier order takes first); FOOTPATH_FABRIC_GAP waits for it via its recorded after",
    "class": "within",
-   "why": "contiguous E1 rows taken as the very next wave; the dependency is now in ranking.json's after field (SC-003)"
+   "why": "within FR-003's module grouping and SC-003's tier order: the open E0 rows precede it, the rows are taken whole as the next E1 wave, no row dropped; the dependency is in ranking.json's after field"
   },
   {
    "id": "V2/bookends/XIII",
