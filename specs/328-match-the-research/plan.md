@@ -145,6 +145,16 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
   waits for the GM's sign-off at a terminal (the one thing the session cannot give), and wave 10 starts on top of it in the
   clone - wave 10's opening bookend taken at wave 9's closing commit, so each wave's band is its own; the sign-off question
   goes on the list for the end of the feature (the GM, 2026-10-07: "defer it to the end of the feature").
+- **The exception for wave 11 (exception check, 2026-10-07, LEGITIMATE on conditions)**: wave 10 reads band 3 on its own too
+  (its fork-triangle and ring-step rows, measured), so its push waits on the GM's sign-off as wave 9's does. Wave 11 may start
+  on the unpushed waves 9 and 10 only: (1) wave 10 closed in full first - impl-drift recorded, a green gate, its glyph-check, the
+  wave column, no measured regression - and the backup branch pushed at its closing commit (`sync-with-main.sh done`, refused
+  landing or not); (2) wave 11's opening bookend at wave 10's closing commit, its band its own and explained, each wave's pair
+  shown to the GM beside the combined landing pair; (3) no fixed depth, but stacking stops the moment anything other than the
+  GM's sign-off would refuse the push (a refused roll, a regression, a red gate, an unanswered review or record check, a claims
+  finding the delta introduced) - fixed within the wave first; (4) any lossless fix that brings the landing pair to band 2 or
+  lower pushes at once; (5) the sign-off on the end-of-feature list, for each wave; (6) wave 11 its own amendment with a reset
+  review counter and a plan review before its first tick; wave 12 is covered only if (1)-(5) still hold when wave 11 closes.
 - **Tiers by work (FR-002, FR-003)**: wave 9's found rows tiered by their work by a fresh reader (T38a; T38b for the 18 found
   after), and its three NEEDS-RESEARCH rows E4 with the research first (spec Edge Cases); the north annex's band row is "keep
   the 18 ft floor" (E2), never a named exception.

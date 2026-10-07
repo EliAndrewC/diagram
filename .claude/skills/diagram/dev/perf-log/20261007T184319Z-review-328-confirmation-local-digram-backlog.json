@@ -1,0 +1,62 @@
+{
+  "band": 3,
+  "base": {
+    "commit": "6ca2f5ccf",
+    "label": "328-start",
+    "utc": "20261007T182717Z"
+  },
+  "binding": "8ddda5ddf915ee3e8ae75203301e16d13c65381c449d06efa98fbdb27ba7caeb",
+  "end": {
+    "commit": "3cb19c982",
+    "label": "328-end",
+    "utc": "20261007T183029Z"
+  },
+  "environment": "local",
+  "feature": "328-match-the-research",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "8d3395e5-fe32-4f85-9c89-80c344d2ac1a",
+    "utc": "20261007T184319Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": 3.4,
+          "39": 11.1,
+          "4": 2.9,
+          "47": 13.8
+        },
+        "total_pct": 7.6
+      },
+      "20": {
+        "seeds": {
+          "25": 0.0,
+          "39": -1.8,
+          "4": 31.7,
+          "47": -3.3
+        },
+        "total_pct": 6.5
+      },
+      "40": {
+        "seeds": {
+          "25": -9.8,
+          "39": -2.5,
+          "4": -3.4,
+          "47": 0.8
+        },
+        "total_pct": -3.8
+      }
+    },
+    "seeds": {
+      "25": 25.6,
+      "39": 0.0,
+      "4": 0.0,
+      "47": 5.0
+    },
+    "total_pct": 7.2
+  },
+  "note": "Reviewer runs at 6ca2f5ccf (start), 3cb19c982 (end), end with fork+ring reverted, and with the yard step also released; 2 reps, agreeing within 0.1 s. Reference seed 25: 4.0-4.1, 4.9-5.0, 3.9-4.1 s (fork+ring). 20 hh seed 4: 6.0, 7.9-8.0, 6.4 s (fork+ring; the 0.4 s left is wave 9's, +6.7%, under the line alone). 10 hh seed 39: 2.7-2.8, 3.1, 3.0-3.1, released 2.6 s (yard hold, as stated). 10 hh seed 47, left unmeasured in the explanation, measured here: 3.0, 3.3, 2.9-3.0 s, homesteads 1.11 to 0.74 s, so it is fork+ring, a cause the explanation names. 10 hh total 12.0, 12.8, 12.2, released 11.2 s. Every crossing is attributed to a cause the explanation names.",
+  "verdict": "consistent"
+}

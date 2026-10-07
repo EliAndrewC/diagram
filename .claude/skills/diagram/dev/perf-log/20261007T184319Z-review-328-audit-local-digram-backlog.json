@@ -1,0 +1,67 @@
+{
+  "band": 3,
+  "base": {
+    "commit": "6ca2f5ccf",
+    "label": "328-start",
+    "utc": "20261007T182717Z"
+  },
+  "binding": "8ddda5ddf915ee3e8ae75203301e16d13c65381c449d06efa98fbdb27ba7caeb",
+  "criteria": {
+    "commensurate": "Judged proportionate. The fixes change every hamlet's fan and ring bunds; the cost falls on a few rolls (20 hh seed 4 +1.9 s / +32%, reference seed 25 +0.9 s / +26%, 10 hh seeds 39 and 47 +0.3-0.4 s) while 40 hh falls 3.8%. The worst roll was cut from +47% by the way round already taken. This is a judgment on correctness gained against seconds, not new functionality.",
+    "necessary": "Yes. The increase comes from research corrections: the fork triangle on a city's grain only (0010), no sideways ring step (0014), and wave 9's yard-step hold (E3). Reverting any of them puts the map back out of line with its research. No search code was added; the web's existing searches run deeper on the moved layouts (reach.settle_field 242 candidates against 10 on 20 hh seed 4).",
+    "no_way_around": "Measured, with nothing cheap left. Taken: the lawful-ground test asks the crossing last (3cb19c982, output identical; 20 hh seed 4 8.8 to 7.9 s). Tried and recovering nothing material: the flooded rings' boxes computed once (0.15 s), a crossing_deck memo (18 of 245 calls hit), and bund.clear with the fixture test last and the quads built once per RunOnBlocks (identical output, 8.0-8.1 s against 7.9 s). The rest is the field-way and bund-way searches running deeper on the new layout, which only a change to the searches themselves could cut, not a cheap fix."
+  },
+  "end": {
+    "commit": "3cb19c982",
+    "label": "328-end",
+    "utc": "20261007T183029Z"
+  },
+  "environment": "local",
+  "feature": "328-match-the-research",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "8d3395e5-fe32-4f85-9c89-80c344d2ac1a",
+    "utc": "20261007T184319Z"
+  },
+  "kind": "audit",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": 3.4,
+          "39": 11.1,
+          "4": 2.9,
+          "47": 13.8
+        },
+        "total_pct": 7.6
+      },
+      "20": {
+        "seeds": {
+          "25": 0.0,
+          "39": -1.8,
+          "4": 31.7,
+          "47": -3.3
+        },
+        "total_pct": 6.5
+      },
+      "40": {
+        "seeds": {
+          "25": -9.8,
+          "39": -2.5,
+          "4": -3.4,
+          "47": 0.8
+        },
+        "total_pct": -3.8
+      }
+    },
+    "seeds": {
+      "25": 25.6,
+      "39": 0.0,
+      "4": 0.0,
+      "47": 5.0
+    },
+    "total_pct": 7.2
+  },
+  "note": "Band 3 stands: 20 hh seed 4 +31.7% and reference seed 25 +25.6% are over the 20% per-seed line, and the GM's own perf-signoff is still owed; this record does not grant it.",
+  "verdict": "justified"
+}
