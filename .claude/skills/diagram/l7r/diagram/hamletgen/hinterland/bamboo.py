@@ -308,7 +308,7 @@ def bamboo_seats(s: Settlement, plan: SitePlan) -> list[Poly]:
                 target,
                 reach,
                 step,
-                lambda x, y, hw=hw, hh=hh: back - depth <= y + hh <= north and on_sheet(x, y, hw, hh) and _fits(x, y, hw, hh),
+                lambda x, y, hw=hw, hh=hh, back=back, depth=depth: back - depth <= y + hh <= north and on_sheet(x, y, hw, hh) and _fits(x, y, hw, hh),
                 box=(max(vx0 + hw, row_x0), back - depth - hh, min(vx1 - hw, row_x1), north - hh) if along_row else None,
             )
             if best is not None:
