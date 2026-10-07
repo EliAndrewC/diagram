@@ -20,8 +20,8 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 - none (wave 7): on the scripted pool maps each fix moves one value inside a rule that already places or sizes the element
   (a clearance, a size, a count, a reach); the water gate's opening and the boundary stones' group change a glyph's form, but
   only the legacy hand-authored cities draw them (`water_gate(`, `boundary_marker(`), and feature 294 exempts legacy maps.
-- none (wave 8): claim lines, and values inside rules that already place or size the element (a width, a margin, a
-  spacing, a stretch); no element is new to a map and no glyph is redrawn.
+- none (wave 8): on the scripted pool maps, claim lines and values inside rules that already place or size the element (a
+  width, a margin, a stretch); the cemetery, cremation ground, terrace and city wall are drawn only on exempt legacy maps.
 ## Phase 1 - the audit
 
 - [x] T01 the findings snapshot: `findings.json` = every finding of `make claims-report` at `a52ff1bcd` (565) (FR-001)
@@ -398,7 +398,7 @@ grounds' sizes, counts and reaches. Every `after` these rows carry is a row insi
 ## Phase 9 - wave 8 (the open E0 claims, then the next run of E1: rows 187-246) - amendment 7, 2026-10-07
 
 T29a first: the 14 found rows wave 7's re-checks tiered by verdict alone are tiered by their work by a fresh reader
-(`audit/t29a-out.jsonl`, applied in `audit/overrides.json`; 12 moved), as T25a did. Then the 18 open E0 rows (SC-003),
+(`audit/t29a-out.jsonl`, applied in `audit/overrides.json`; 11 moved), as T25a did. Then the 18 open E0 rows (SC-003),
 each a claim written or relabeled (cite the page that answers it, CANON for a GM ruling, GUESS or UNRESEARCHED where the page
 is silent; DEVIATION only after the exception path rules it LEGITIMATE). Then the next contiguous run of E1 (FR-006), rows
 187-246 in ranking order, ending with the civic grounds' last row (the next open E1 row is 252): the deck's assumed water
@@ -411,16 +411,16 @@ ground's margins and the cemetery's first row. Every `after` these rows carry is
   - `l7r/diagram/hamletgen/ways/bund.py::a_way_onto_the_bund#the branched field path 5 ft wide (BRANCH_WIDTH) with the LANE_CLEARANCE corridor` - claim it: the branched field path 5 ft wide (BRANCH_WIDTH) with the LANE_CLEARANCE corridor
   - `l7r/diagram/hamletgen/ways/bund.py::carry_on#stepped field path 5 ft wide (BRANCH_WIDTH)` - claim it: stepped field path 5 ft wide (BRANCH_WIDTH)
   - `l7r/diagram/hamletgen/ways/bund.py::carry_on#the stepped field path drawn 5 ft wide (BRANCH_WIDTH)` - claim it: the stepped field path drawn 5 ft wide (BRANCH_WIDTH)
-  - `l7r/diagram/hamletgen/ways/law_water.py::oblique_at#square ditch crossing` - cite 0087 (a carried deck crosses at an angle, solved for it) against the code's 10 degree squaring; dropping the squaring is a rule change ranked with it
+  - `l7r/diagram/hamletgen/ways/law_water.py::oblique_at#square ditch crossing` - cite 0087 (a carried deck crosses at an angle, solved for it) against the code's 10 degree squaring of a channel crossing; the question is the found row law_water.py::oblique_at#a channel crossing at its way's angle (E4)
   - `l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#a run within 25 ft of the network counts as arrived (_LANE_JOIN_FT)` - claim it: a run within 25 ft of the network counts as arrived (_LANE_JOIN_FT)
   - `l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#link kept 8 ft off hard ground, 7 ft off walls` - claim it: link kept 8 ft off hard ground, 7 ft off walls
-  - `l7r/diagram/hamletgen/ways/street.py::row_reach#a farm frame taken as 100 ft where none is recorded (0033 gives 220-260 ft)` - claim it: a farm frame taken as 100 ft where none is recorded (0033 gives 220-260 ft)
+  - `l7r/diagram/hamletgen/ways/street.py::row_reach#a farm frame taken as 100 ft where none is recorded (0033 gives 220-260 ft)` - claim the frame fallback against 0033 (a row village's holding 220-260 ft): BUNDLE_PITCH where none is recorded; the difference is fixed by the found row street.py::row_reach#a farm frame where none is recorded (E1)
   - `l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#each skeleton arm registers the 40 ft LANE_CLEARANCE no-build corridor` - claim it: each skeleton arm registers the 40 ft LANE_CLEARANCE no-build corridor
-  - `l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton arm's no-build corridor LANE_CLEARANCE, 7 ft` - claim it: skeleton arm's no-build corridor LANE_CLEARANCE, 7 ft
+  - `l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton arm's no-build corridor LANE_CLEARANCE, 7 ft` - claim the skeleton arm's no-build corridor as `LANE_CLEARANCE`, 40 ft as a center corridor, against 0246's 7 ft to a fence; the difference is fixed by the edge-based corridor row (consts.py::LANE_CLEARANCE, E3)
   - `l7r/diagram/settlement/civic_grounds/civic.py::CivicWorksMixin.precinct_interior#parish plot seated at the precinct's rear, east of the axis (x+44, 14 px in from the rear edge)` - claim it: parish plot seated at the precinct's rear, east of the axis (x+44, 14 px in from the rear edge)
   - `l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cemetery#no six jizo drawn at a burial ground's entrance unless a cremation ground stands beside it` - claim it: no six jizo drawn at a burial ground's entrance unless a cremation ground stands beside it
   - `l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cremation_ground#cleared ground's depth 0.7 of its width` - claim it: cleared ground's depth 0.7 of its width
-  - `l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cremation_ground#fire bed always a stone-framed trench (never an open pyre)` - claim it: fire bed always a stone-framed trench (never an open pyre)
+  - `l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cremation_ground#fire bed always a stone-framed trench (never an open pyre)` - cite 0238 (the fire bed a stack of firewood or a stone-framed trench) against the code's trench alone; the second form is the found row funerary.py::cremation_ground#the fire bed's two forms (E3)
   - `l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cremation_ground#snow-country walled hut over the bed never drawn` - claim it: snow-country walled hut over the bed never drawn
   - `l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_handover#a through track's handover` - cite 0190 (a board at the village's center or its entrance, and at crossroads where people pass) for the junction nearest the houses' middle
 

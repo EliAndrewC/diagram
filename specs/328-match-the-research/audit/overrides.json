@@ -253,14 +253,14 @@
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law_water.py::oblique_at#square ditch crossing": {
   "after": [],
-  "e0_basis": "a claim fix citing the page that answers",
+  "e0_basis": "a claim written against the page that answers",
   "files": [
    ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law_water.py"
   ],
-  "fix": "cite 0087 (a carried deck crosses at an angle, solved for it) against the code's 10 degree squaring; dropping the squaring is a rule change ranked with it",
+  "fix": "cite 0087 (a carried deck crosses at an angle, solved for it) against the code's 10 degree squaring of a channel crossing; the question is the found row law_water.py::oblique_at#a channel crossing at its way's angle (E4)",
   "flag": "",
   "found": "wave 6 re-check (tiered by its work at T25a)",
-  "moved": "wave 7 re-check: the fix landed; what the re-check found beyond it",
+  "moved": "amendment 7 round 1: the claim states the code against its page; the drift is its own row (D8)",
   "tier": "E0"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law_water.py::off_ford_at#how far from a crossing place a brook crossing may stand, FORD_HALF 30 ft": {
@@ -309,6 +309,17 @@
   "moved": "T25a (amendment 6): tiered by its work - the code (serve.py:160, `> 60.0`) stands; only the claim at serve.py:115-116 is relabeled",
   "tier": "E0"
  },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/street.py::row_reach#a farm frame taken as 100 ft where none is recorded (0033 gives 220-260 ft)": {
+  "after": [],
+  "e0_basis": "a claim written against the page that answers",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/street.py"
+  ],
+  "fix": "claim the frame fallback against 0033 (a row village's holding 220-260 ft): BUNDLE_PITCH where none is recorded; the difference is fixed by the found row street.py::row_reach#a farm frame where none is recorded (E1)",
+  "flag": "",
+  "moved": "amendment 7 round 1: the claim states the code against its page; the drift is its own row (D8)",
+  "tier": "E0"
+ },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/street.py::row_reach#street run past its end farms": {
   "after": [],
   "e0_basis": "T25a: a claim relabel; the code stands",
@@ -352,6 +363,17 @@
   "fix": "0081 answers where the spur stops at the dry plots (a lane \"may touch a plot's boundary\"); the claim cites 0081 against the code's 12 ft clip off the dry plots, which becomes a found row ranked toward 0081's rule; only the toe-band margin stays UNRESEARCHED",
   "flag": "",
   "moved": "amendment 5 round 1: the claim cites 0081 against the code; no DEVIATION",
+  "tier": "E0"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton arm's no-build corridor LANE_CLEARANCE, 7 ft": {
+  "after": [],
+  "e0_basis": "a claim written against the page that answers",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py"
+  ],
+  "fix": "claim the skeleton arm's no-build corridor as `LANE_CLEARANCE`, 40 ft as a center corridor, against 0246's 7 ft to a fence; the difference is fixed by the edge-based corridor row (consts.py::LANE_CLEARANCE, E3)",
+  "flag": "",
+  "moved": "amendment 7 round 1: the claim states the code against its page; the drift is its own row (D8)",
   "tier": "E0"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton margin off the hard ground": {
@@ -711,6 +733,17 @@
   "flag": "",
   "moved": "wave 7 re-check: the fix landed; what the re-check found beyond it",
   "tier": "E1"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cremation_ground#fire bed always a stone-framed trench (never an open pyre)": {
+  "after": [],
+  "e0_basis": "a claim written against the page that answers",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/funerary.py"
+  ],
+  "fix": "cite 0238 (the fire bed a stack of firewood or a stone-framed trench) against the code's trench alone; the second form is the found row funerary.py::cremation_ground#the fire bed's two forms (E3)",
+  "flag": "",
+  "moved": "amendment 7 round 1: the claim states the code against its page; the drift is its own row (D8)",
+  "tier": "E0"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cremation_ground#keep-clear margin": {
   "after": [],

@@ -1,6 +1,6 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "2c14a513991270cd3ef4a7cae73aa40f745ba2ec15f9faafcbc5bf8ea6fa03b5",
+ "plan_sha256": "bf51d87615528be73b58101b2eea9001d44a5b9ab405c5fcd3bf74c7a416f5f3",
  "reviewed": "2026-10-07",
  "declared": "spec-fidelity",
  "decisions": [
@@ -135,6 +135,24 @@
    "summary": "Wave 7 verified as wave 5: Inashiro first (PNG looked at), the pool through the gate, a town or city value by its unit test, bookends back to back, impl-drift on every touched unit, a held value becomes a found row",
    "class": "within",
    "why": "FR-005 and the spec's Edge Case for a fix that makes a map fail (held value -> found row, recorded in the ranking); the same verification already ruled within for wave 5."
+  },
+  {
+   "id": "T29a",
+   "summary": "Before wave 8 chooses its rows, the 14 found rows wave 7's re-checks tiered by verdict alone are tiered by their work by a fresh Opus reader (audit/t29a-out.jsonl, applied in overrides.json)",
+   "class": "within",
+   "why": "FR-002/FR-003 tier by implementation work and SC-003 orders the waves by tier; the same step T25a took, ruled faithful at amendment 6. Measured against the pre-amendment ranking.json: 11 of the 14 changed tier (the plan's '12 moved' and its 'two research gaps to E4' are a miscount, not a narrowing - both gaps were already E4)."
+  },
+  {
+   "id": "W8-scope",
+   "summary": "Wave 8: the 18 open E0 rows, then the contiguous E1 run, global rows 187-246 (8 open rows), ending at the civic grounds' last row; next open E1 row 252",
+   "class": "within",
+   "why": "Measured in ranking.json: every open E0 row (18) and every open E1 row ranked before 252 (187, 208, 230, 241-244, 246) is in the wave; nothing between is skipped. FR-006 contiguous run, lowest tier first."
+  },
+  {
+   "id": "W8-verification",
+   "summary": "Wave 8 verified as wave 7: Inashiro first, the pool through the gate, a town or city value by its unit test, bookends back to back, impl-drift on every touched unit, a held value becomes a found row",
+   "class": "within",
+   "why": "FR-005 and the spec's Edge Cases (a held value becomes a found row in the tier its work takes)."
   }
  ],
  "verdict": "CLEAR"
