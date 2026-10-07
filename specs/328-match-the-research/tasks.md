@@ -139,7 +139,7 @@ lines only. The rows:
       research: rendering
       verify: DONE. make done green; the wave column set from the index (audit/waves.json); the claims gate lists nothing introduced; findings 553 -> 525
 
-## Phase 5 - wave 4 (the lane law: three E0 claims, then the E1 rows of `hamletgen/ways/`) - amendment 3, 2026-10-07
+## Phase 5 - wave 4 (three E0 claims, four E1 rows ahead of the lane law, then the lane law's E1 rows of `hamletgen/ways/`) - amendment 3, 2026-10-07
 
 The three open E0 rows (undecided decisions in the lane code and the seating) come first (SC-003); then four E1 rows
 outside the lane code that rank ahead of it (T12a's re-tiered rows and one wave-3 found row, none waiting on another):
@@ -198,7 +198,7 @@ way that takes more work than its tier takes that tier and waits on a found row 
 - [ ] T14 the bookend before the first edit: `make perf LABEL=328-start` re-taken on the clone at main's engine (the wave's own pair) (constitution VI)
       research: rendering
       verify:
-- [ ] T15 the three E0 claims; then the lane law's values, each with the unit tests it moves; proven on the reference hamlet (Inashiro, its PNG looked at) and then across the pool and the cohort's bookend seeds (FR-004, FR-005)
+- [ ] T15 the three E0 claims; then the four E1 rows ahead of the lane law (the cell, the building size anchors, the band on the canvas, the purification basin); then the lane law's values, each with the unit tests it moves; proven on the reference hamlet (Inashiro, its PNG looked at) and then across the pool and the cohort's bookend seeds (FR-004, FR-005)
       research: rendering
       verify:
 - [ ] T16 every touched unit re-checked by `impl-drift`; each wave-4 row IN-STEP or re-tiered with its measured reason (FR-005, SC-002)

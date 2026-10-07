@@ -221,3 +221,5 @@ Each wave's amendment adds its map decisions to this table. The program's decisi
 - Amendment 3, round 1 (spec-fidelity-verify, 2026-10-07): CHANGES REQUIRED - (1) four E1 rows outside the lane code that
   rank ahead of it (T12a's cell, building size anchors, band on the canvas; the wave-3 basin row) join wave 4 ahead of the
   lane rows; (2) the counts: 33 held since amendment 1 and 4 found since; the Decisions row worded as such.
+- Amendment 3, round 2 (spec-fidelity-verify, 2026-10-07): CHANGES REQUIRED - T15 and the Phase 5 heading name the four
+  E1 rows ahead of the lane law, so no box can be ticked with them undone.
