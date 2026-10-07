@@ -597,7 +597,7 @@ def lay_sink(s: Settlement, plan: SitePlan) -> None:
         brook first, then off the frame - research/questions/0060-field-drains-akusuiro.drawing.html
         off-map route search - NONE: swings, junction distances and run lengths under route_refusals
         pond area - research/questions/0061-reservoir-ponds-tameike.drawing.html: held below two or three tenths of its paddy
-        pond's role - research/questions/0061-reservoir-ponds-tameike.drawing.html: the pond is laid at the drain's foot as the
+        pond's role - research/questions/0060-field-drains-akusuiro.drawing.html: a drain that ends in a pond of its own is a GUESS recorded there; the pond is laid at the drain's foot as the
             field's sink, not as a reservoir that waters the paddy
         pond bank form - research/questions/0061-reservoir-ponds-tameike.drawing.html: every bank bare; the second attested form,
             a bank planted sparsely with mulberry and cudrania, is never rolled

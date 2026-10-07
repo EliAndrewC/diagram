@@ -306,7 +306,7 @@ class StandsMixin:
         on a HOUSE / threshing YARD / GARDEN / PADDY (so the wood settles into the open ground and hugs the cluster without ever drawing trees on a
         building or out in the crops - this is what lets the belt nestle right up to the village edge). `dense=True` packs overlapping clumps into a
         continuous belt/cluster; `dense=False` scatters them for the leafy fringe among houses. role tunes the species mix (windbreak/water_mouth =
-        conifer-backed forest; copse = bamboo + fruit, no conifer). Recorded in M['village_groves'] (bbox + role + poly) IF any clump is drawn (a footprint entirely over houses/crops draws nothing and records nothing). `area` (px^2) is the canopy
+        conifer-backed forest; copse = fruit and other broadleaf, no bamboo, no conifer). Recorded in M['village_groves'] (bbox + role + poly) IF any clump is drawn (a footprint entirely over houses/crops draws nothing and records nothing). `area` (px^2) is the canopy
         the stand is filled TO: seating stops once its clumps cover it, and a second pass offers more seats where the first
         fell short (269 B26, the copse sized by the homesteads' woods); `area_from`, given instead, fills to the ground's capacity
         and trims back to the goal it returns for that capacity and the reserved seats' canopy (feature 294 B9, `wood_goal`). `wind` (toward where the wind comes from), given for the
@@ -323,7 +323,7 @@ class StandsMixin:
             clump off buildings, wells and shrines - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: half the diagonal plus the clump's radius and 2 px
             off the plots' sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: the south strip, the west lane and every crown's sun ground
             belt off the deep marsh - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: based in the reed margin at most
-            copse off the bamboo - research/questions/0075-bamboo-groves-chikurin.drawing.html: each stand grown by a crown
+            copse off the bamboo - research/questions/0075-bamboo-groves-chikurin.drawing.html: each stand grown by `copse_bamboo_reach` (two crowns)
             copse filled to the homesteads' wood - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: reserved seats first, then the grid
             belt a windward hook - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: ends trimmed to the wind's quarter
             belt deep and whole - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: interior gaps over 30 ft filled, thin stretches deepened

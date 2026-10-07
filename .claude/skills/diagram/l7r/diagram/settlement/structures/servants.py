@@ -26,11 +26,11 @@ class ServantRangesMixin:
     """The servant-range pass and its probes.
 
     Research:
-        servant range depth - research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html: 15 ft (SERVANT_RANGE_DEPTH_FT)
+        servant range depth - research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html: the drawing page's GUESS (no page we read measures one): 15 ft (SERVANT_RANGE_DEPTH_FT)
         office standoff - NONE: 15 px, the check's 14 plus a margin
     """
 
-    SERVANT_RANGE_DEPTH_FT = 15.0  # the measured nagayamon depth (Omura Yahei 2.5 ken; the Tokyo ICP gate 4.7 m)
+    SERVANT_RANGE_DEPTH_FT = 15.0  # a GUESS (0115 drawing: no page we read measures a range); cf. a nagayamon of Omura Yahei 2.5 ken, the Tokyo ICP gate 4.7 m
     _OFFICE_STANDOFF = 15.0  # city_government_offices_dont_abut wants 14px of daylight; a px of margin over it
 
     def _solid_records(self: Settlement) -> list[dict[str, Any]]:  # type: ignore[misc]

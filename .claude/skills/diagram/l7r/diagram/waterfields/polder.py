@@ -183,7 +183,7 @@ def _polder_lattice(
     other polder stage places through.
 
     Research:
-        edge wander - UNRESEARCHED: the whole block bent as one piece by a tilt and low-frequency sines, `edge_wander` of a module
+        edge wander - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the gently wavering line is a drawing convention; the whole block bent as one piece by a tilt and low-frequency sines, `edge_wander` of a module
         node jitter - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: interior bund nodes moved up to 6 px, the perimeter pinned
         dike-pond mosaic - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a smooth drift of the interior lattice fading to nothing at the edge, `mosaic` of 0.32 module
         each line wanders - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: every row and column line bowed on its own, up to `line_wander` of a module, off the boundary lines

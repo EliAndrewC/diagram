@@ -245,7 +245,7 @@ def _strip_blocked(
 
     Research:
         off the paddy - research/questions/0075-bamboo-groves-chikurin.drawing.html: no stand on a paddy
-        what a strip or fixture keeps off - UNRESEARCHED: 2 ft off placed boxes and houses, 6 ft off wells and sheds and paddy or marsh, 3 ft off dry plots, off water and crowns, 20 ft past the pond
+        what a strip or fixture keeps off - UNRESEARCHED: the pads, 2 ft off placed boxes and houses, 6 ft off wells and sheds and paddy or marsh, 3 ft off dry plots, off water and crowns, 20 ft past the pond
     """
     if cx - cw / 2 < 30 or cy - ch / 2 < 30 or cx + cw / 2 > s.W - 30 or cy + ch / 2 > s.H - 30:
         return True

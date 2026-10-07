@@ -165,8 +165,8 @@ _OVERLAP_EXEMPT = {
     "row_street_plans": "a row village's PLANNED street lines (feature 291, `hamletgen/homesteads/rows.py`): bookkeeping the row rules read - the street drawn from each is a `lanes` record the matrix already reasons about",
     "row_holdings": "a row village's far-row holdings as reserved (feature 291): bookkeeping the row rules read - the ground drawn is the `dry_plots` records the matrix already reasons about",
     "borders": "a drawn CLAN/jurisdictional border is a LINE OF LAW, not a physical object - it has no footprint (no w/h), reserves no ground and blocks nothing. Being overlapped is the POINT: a frontier magistracy stands its wall ON the line so the border runs across the parley-room floor (the Mode A ubame-magistracy sheet), and the period PHYSICAL marker - an earthen mound, as at the Nanbu-Date boundary - is deliberately NOT what this draws, precisely because a mound would be a structure everything then had to stay clear of",
-    "farm_sheds": "a farmstead's grain-storehouse kura drawn as an annex abutting its own farmhouse's back wall (farm_sheds_attached verifies the attachment)",
-    "pig_sties": "a pig shed ON a pond dike, over the water's edge, by construction (feature 150 A3; FAO/NACA: 'the simple pig shed constructed on the pond dyke or over the water surface')",
+    "farm_sheds": "a farmstead's grain-storehouse kura drawn as an annex abutting its own farmhouse - on the west wall of a scattered farmstead, the shaded north wall in a clustered village (0040; farm_sheds_attached verifies the attachment)",
+    "pig_sties": "a pig shed ON a pond dike, on the bank itself - set in from the plot's edge by half the bank's width - by construction (feature 150 A3; 0025)",
     "farm_fixtures": "a farmstead's small fixtures - privy, wood shed, manure heap, bath room, chicken coop, household shrine - each seated against its own farmhouse by the placer, which tests the seat against every placed footprint, lane, paddy and water (feature 133 T53-T59; farm_fixtures_attached verifies the attachment)",
     "scrub_pines": "the scrub's hill pines as (x, y, r) records for the sun rule (feature 310): bookkeeping - their ink is the scrub's own marks, whose extents the commons already keep off every footprint",
     "bamboo_marks": "every inked bamboo culm mark as (x, y, r) records for the sun rule (feature 315): bookkeeping - the ink is the clump's own group, ruled on there",
@@ -174,7 +174,7 @@ _OVERLAP_EXEMPT = {
     "persimmons": "the yard persimmon: a crown record (x, y, r) whose ink is also in tree_crowns, which structures_clear_of_trees tests; the placer keeps the trunk off every footprint (feature 133 T57)",
     "threshing_yards": "a farmstead's threshing/drying yard drawn as an annex abutting its own farmhouse",
     "gardens": "a farmstead's dooryard kitchen garden drawn as a plot abutting its own farmhouse",
-    "groves": "a farmstead's windbreak grove (yashikirin) drawn as a clump abutting the windward side of its own farmhouse",
+    "groves": "a farmstead's windbreak grove (yashikirin) drawn along its plot's edge on the sides its settlement rolls - two, three or all four (0028) - abutting its own farmhouse",
     "merchant_estates": "a walled court AROUND an inner building that is itself an overlap-checked struct",
     "wells": "a small well-head dropped into the open gaps between dwellings (its nominal footprint may kiss a dense-city building)",
     "wall_towers": "guard towers stand ON the city wall - an intentional overlap - and clear of the interior",
@@ -187,8 +187,8 @@ _OVERLAP_EXEMPT = {
     "jetties": "planked mooring fingers running out over the river water, like bridge decks",
     "log_booms": "a cabled chain of floating logs holding rafted timber against the bank - it FLOATS on the river, so overlapping the water is the whole point, exactly as a jetty deck does",
     "field_ditches": "in-field irrigation ditches (main/laterals/drain) - water lines drawn ON the paddy, validated by water_channels_obtuse_turns + field_ditches_terminate, not solid structures",
-    "village_groves": "the COMMUNAL fengshui windbreak (back-village belt / water-mouth cluster / bamboo copses) - vegetation drawn LAST in open ground at the cluster margins; a copse may abut a house, validated by the village_windbreak_* checks",
-    "bamboo_stands": "a BAMBOO STAND (take-yabu) drawn as a stand-level glyph at the cluster's damp N/W strip or the field margin's shady end (feature 133 T47) - vegetation drawn LAST in open ground; the stand's extent is to scale, its marks symbolic",
+    "village_groves": "the COMMUNAL fengshui windbreak (back-village belt / water-mouth cluster / the dooryard copse, which draws no bamboo - 0071) - vegetation drawn LAST in open ground at the cluster margins; a copse may abut a house, validated by the village_windbreak_* checks",
+    "bamboo_stands": "a BAMBOO STAND (take-yabu) drawn as a stand-level glyph of its own beyond the cluster's back row (0071: a farm's bamboo is a stand of its own) - vegetation drawn LAST in open ground; the stand's extent is to scale, its marks symbolic",
     "districts": "declarative fabric districts (feature 021), the quarter overlay's sibling - named pack regions validated by capital_districts_declared / capital_rank_gradient, never drawn",
     "precincts": "a sovereign-temple precinct RESERVATION (feature 021) - a region record like a district; its drawn content is precinct_halls, which carry their own classes",
     "quarters": "declarative zoning overlays (feature 006), not solid structures - they intentionally contain buildings and are validated by the city_quarters_* / per-quarter density checks",
@@ -203,14 +203,14 @@ _OVERLAP_EXEMPT = {
 """Overlap exemptions.
 
 Research:
-    annexes abut their house - research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html, research/questions/0040-farm-storehouses-kura.drawing.html: kura, yard, garden, grove and fixtures against their own farmhouse
-    pig sty on the dike - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html: on the pond bank
+    annexes abut their house - research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html, research/questions/0040-farm-storehouses-kura.drawing.html: kura (west wall scattered, north wall clustered), yard, garden, grove (along the plot edge on its rolled 2-4 sides) and fixtures against their own farmhouse
+    pig sty on the dike - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html: on the bank itself, half the bank's width in, not over the water
     wellhead among the houses - research/questions/0196-communal-wells-ido.drawing.html: in the gaps between dwellings
     border as a line - DEVIATION research/questions/0083-clan-borders-and-their-markers.html: no mound drawn, nothing keeps clear
     built on what it serves - research/questions/0087-road-bridges-over-rivers-and-canals-hashi.drawing.html, research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html, research/questions/0179-water-gates-and-sluices-shuimen.drawing.html, research/questions/0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html, research/questions/0176-wharves-and-landings-piers-quays-and-stepped-landings-kashi-gangi.drawing.html, research/questions/0148-towers-along-the-city-wall-mamian.drawing.html, research/questions/0210-timber-yards-and-log-booms-kiba.drawing.html: bridges, weirs, gates, jetties, towers, booms
     mill beside its stream - research/questions/0064-water-mills-suisha.drawing.html: its wheel in the water
     in-field ponds, rocks and graves - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: drawn on the paddy
-    copse and bamboo against a house - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: vegetation drawn last in open ground
+    copse and bamboo against a house - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: vegetation drawn last in open ground; the copse draws no bamboo, the thicket a stand of its own beyond the back row
     stable yard round its stables - research/questions/0195-stable-yards-and-watering-troughs.drawing.html: a ground scatter
     polder dike crossed - research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html: a walked bank lanes and channels cross
     in-field ditches - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: drawn on the paddy
@@ -488,7 +488,7 @@ Research:
 # much as the fact - these are the rows that stop the matrix crying wolf.
 _MATRIX_PERMISSIVE = {
     # the GM's own example, and the distinction the whole design turns on
-    "COVER": "permissive ground cover - grazing, pasture and scrub describe what the ground IS, not an object occupying it, so a well, a house or a field built on it is the normal case and the cover simply stops there (contrast GROUND, which is worked as a surface and is ruined by anything standing in it)",
+    "COVER": "permissive ground cover - grazing, pasture and scrub describe what the ground IS, not an object occupying it, so a house or a field built on it is the normal case (never a well: 0196 draws no well out on open common ground, and _OVERLAP_LINEAR keeps wells off it) and the cover simply stops there (contrast GROUND, which is worked as a surface and is ruined by anything standing in it)",
     "OVERLAY": "a declarative zoning overlay (a QUARTER) CONTAINS features by definition - it describes what a district is for, not an object standing in it",
     # Deliberately out of scope rather than unclassified: canopy-vs-structure is already governed
     # precisely by the keep-clear/canopy contract (Settlement._CANOPY_STRUCT_KEYS + the ratchet added
@@ -504,7 +504,7 @@ _MATRIX_PERMISSIVE = {
 """The permissive classes.
 
 Research:
-    ground cover takes buildings - research/questions/0196-communal-wells-ido.drawing.html: a well on commons, pasture or marsh permitted
+    ground cover takes buildings - research/questions/0196-communal-wells-ido.drawing.html: a house or field on commons, pasture or marsh permitted; no well drawn out on open common ground
         as the normal case, though _OVERLAP_LINEAR keeps structures off commons, pastures and marshes
     house or field on cover - UNRESEARCHED: built on, the cover stopping there
     deferred classes - NONE: vegetation, the ring road, records and paddy are decided by their own rules

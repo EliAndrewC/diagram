@@ -37,7 +37,7 @@ def persimmon_for(s: Settlement, h: Mapping[str, Any], forms: FixtureForms) -> d
     Research:
         persimmon in the dooryard - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html: by the seat search every persimmon takes, front or behind
         out of the plots' sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: its own plots' and its neighbors', `CANOPY_SHADE_FT`
-        under no conifer's crown - CONVENTION: a conifer reads on top
+        under no conifer's crown - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html: the farm's own grove trees give way round the persimmon; other stands are a GUESS
         in no other farm's grove - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html: a neighbor's grove refuses the tree"""
     g = h.get("geom") or {}
     if not g.get("house"):
@@ -87,7 +87,7 @@ def reseat_persimmons(s: Settlement, houses: Sequence[dict[str, Any]], target: i
     seat for it (`persimmon_for`), in the houses' own order; the trees laid. Only on the map that keeps the sun corridor.
 
     Research:
-        the rolled count honored - CANON: each tree short of the hamlet's rolled count offered to a household without one
+        the rolled count honored - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html: the per-hamlet 80 to 95 in 100 share; each tree short of the hamlet's rolled count offered to a household without one
         which household takes it - UNRESEARCHED: the next in the houses' own order that has a seat"""
     if not getattr(s, "_sun_corridor_ft", 0.0):
         return 0

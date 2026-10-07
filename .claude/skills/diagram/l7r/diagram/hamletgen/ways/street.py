@@ -243,7 +243,7 @@ def lay_row_streets(s: Settlement, houses: Sequence[Mapping[str, Any]], hard: li
     Research:
         one street per planned row - research/questions/0033-row-villages-resson.drawing.html: further streets laid beside the first
         further street joins the streets - UNRESEARCHED: only the first street takes the road, a further one joins a street laid
-        street join width - UNRESEARCHED: the join is drawn at the street's 6 ft tread
+        street join width - CONVENTION: streets are drawn 6 ft wide (research/questions/0033-row-villages-resson.drawing.html); the join is drawn at the street's 6 ft tread
         street join unhooked - research/questions/0081-village-lanes.drawing.html: a lane's end loses its hook"""
     centers = [(float(h["x"]), float(h["y"])) for h in houses]
     # EACH STREET SPANS ITS OWN FARMS, as `seat_rows` seated them: spanned over every farm within reach, Mizuguchi's second
@@ -314,7 +314,7 @@ def meet_the_road(street: Sequence[Pt], road: Sequence[Pt], reach: float = MEET_
 def unhooked_both(leg: Sequence[Pt]) -> list[Pt]:
     """`leg` with a hook taken off either end (`geom.door_unhooked`, asked of the leg and of it reversed).
 
-    Research: lane end loses its hook - research/questions/0081-village-lanes.drawing.html"""
+    Research: lane end loses its hook - research/questions/0081-village-lanes.drawing.html: `door_unhooked`'s `_HOOK_FT` 12 and `_HOOK_DEG` 90 are that page's figures (a last leg of 12 ft or less turning 90 degrees or more is cut)"""
     from .geom import door_unhooked
 
     out = door_unhooked(list(leg), lambda a, b: True)  # every straightened leg is the join's own ground: judged whole after

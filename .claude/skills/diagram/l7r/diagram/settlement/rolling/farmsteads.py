@@ -2,7 +2,7 @@
 
 Split from settlement/rolling.py by feature 118 - see settlement/rolling/CLAUDE.md for the index.
 
-Research: draw-order and footprint plumbing - NONE
+Research: draw-order and footprint plumbing - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: the bed sun-ground test, every crown, promised tree and bamboo mark held off a bed at CANOPY_SHADE_FT / BAMBOO_SHADE_FT
 """
 
 import math
@@ -23,7 +23,9 @@ def beds_sun_clear(beds: Any, crowns: Any, trees: Any, marks: Any, reach: float,
     """Is the sun ground of every bed in `beds` (drawn boxes, center x, center y, w, h) clear of every standing crown (`crowns`, the
     flat [x, y, r, ...] run of `tree_crowns`), every tree promised a seat (`trees`, (x, y, r)) and every bamboo mark (`marks`,
     [x, y, r]) - the trees at `reach`, the bamboo at `bamboo_reach`? (Feature 315: a garden nudged south after the groves stand
-    must not move its sun ground over a tree the sun rule already kept off its old place - cohort seed 14.)"""
+    must not move its sun ground over a tree the sun rule already kept off its old place - cohort seed 14.)
+
+    Research: bed sun ground clear of crowns and promised trees at reach, bamboo at bamboo_reach - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: no crown, promised tree or bamboo within 50 ft east, west or south of a bed"""
     discs = [(float(crowns[i]), float(crowns[i + 1]), float(crowns[i + 2])) for i in range(0, len(crowns) - 2, 3)] + [tuple(t) for t in trees]
     return not any(crown_shades(x, y, r, b, reach) for b in beds for x, y, r in discs) and not any(crown_shades(float(m[0]), float(m[1]), float(m[2]), b, bamboo_reach) for b in beds for m in marks)
 
@@ -165,6 +167,7 @@ class FarmsteadFlushMixin:
         south stays put (gardens_unshaded_from_east flags only the AVOIDABLE ones). See research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html ('gardens'.
 
         Research: east-shaded garden nudged south - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: best effort, 4 px steps up to the bed's height plus the house's plus 6 px
+            nudged bed's sun ground clear of crowns, promised persimmons and bamboo - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: 50 ft clear (CANOPY_SHADE_FT, BAMBOO_SHADE_FT)
         """
         step = 4 * self.bscale
 

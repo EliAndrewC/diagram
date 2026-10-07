@@ -196,7 +196,7 @@ def exit_bearing(s: Settlement, center: Pt, out: Pt, length: float) -> Pt | None
     line `length` out stands on lawful ground (`lawful_ground`, the corridors' own test) - a test of the ground, nothing
     reserved (feature 320). None where no turn does - the margin has no way out and is refused.
 
-    Research: track out leaves away from the field - UNRESEARCHED: the outward bearing away from the field, or the nearest turn whose line out stands on lawful ground
+    Research: track out leaves away from the field - research/questions/0081-village-lanes.drawing.html: the spur and the track out are one through-route's two ends, the track leaving off the wet foot; the outward bearing away from the field, or the nearest turn whose line out stands on lawful ground
     """
     for deg in EXIT_TURNS_DEG:
         c, sn = math.cos(math.radians(deg)), math.sin(math.radians(deg))
@@ -332,8 +332,10 @@ def _standing_memo(s: Settlement) -> tuple[Any, dict[Any, Any]]:
 
 
 def _standing_clear(s: Settlement, a: Pt, b: Pt) -> bool:
-    """Research: corridor geometry, memo and search plumbing - NONE: the site raster, the reach index and the exact gap
-    path refused over a household's reserved grove seats - UNRESEARCHED: `wood.corridor_bars` refuses a corridor across them"""
+    """Research:
+        no path corridor within its half-width of any placed footprint - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: nothing is built on a path, so the corridor clears every placed footprint by its half-width
+        corridor geometry, memo and search plumbing - NONE: the site raster, the reach index and the exact gap
+        path refused over a household's reserved grove seats - UNRESEARCHED: `wood.corridor_bars` refuses a corridor across them"""
     half = s._access.half
     # THE SITE'S RASTER FIRST: the site ground is what refuses most corridors (seed 44: 82,801 of the 106,061 refused), and
     # a sample in a surely taken cell refuses one with a lookup (`site_edge_samples`)

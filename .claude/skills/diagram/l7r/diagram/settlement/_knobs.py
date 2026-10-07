@@ -17,7 +17,7 @@ Research:
     byre_form forms - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.html, research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: the inner stable, a yard shed, a detached commons shed
     byre_form weights - GUESS: 0.6 inner, 0.3 yard shed, 0.1 commons
     caravan_inn_form forms - research/questions/0184-inns-hatago-and-carters-inns.html, research/questions/0185-travelers-inns-and-cheap-lodging-houses-hatago-dian-kichin-yado.html, research/questions/0184-inns-hatago-and-carters-inns.drawing.html: wagon or hatago, rolled evenly, never by the settlement's house form
-    hamlet knobs unrolled - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: a hamlet leaves none of these to chance and draws each knob's default
+    hamlet knobs unrolled - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: a hamlet rolls its cluster's shape, lane pattern, plot size and dry-row drift from its own tables (hamletgen/plan.py); the settlement knobs here keep their defaults
     hamlet default values - UNRESEARCHED: high_margin, round, spine, corner_NW, medium plots, organic, 0 drift, alleys, homestead bamboo
 """
 

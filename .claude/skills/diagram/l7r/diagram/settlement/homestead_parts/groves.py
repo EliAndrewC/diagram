@@ -702,8 +702,8 @@ class GrovesMixin:
         windbreak backbone, cedar/pine), DECIDUOUS broadleaf (mid green - timber and fruit, zelkova/persimmon),
         and, in the windbreak mix, BAMBOO low under the crowns, inked only in the gaps and along the edge (269 B29;
         `GROVE_BAMBOO_SHARE`). Returns the count of bamboo marks inked. `mix` picks the species blend: 'windbreak' is
-        conifer-backed (the sheltering wall - the yashikirin and the fengshui back belt); 'dooryard' is bamboo
-        + fruit broadleaf with NO conifer (the leafy bamboo/fruit greenery scattered among village houses).
+        conifer-backed (the sheltering wall - the yashikirin and the fengshui back belt); 'dooryard' is fruit and other
+        broadleaf with NO bamboo and NO conifer (the leafy fruit greenery scattered among village houses).
         The village belt draws one of the `windbreak_belt` knob's two forms (269 B30, research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.html): a 'conifer_led'
         clump draws only the lesser broadleaf and the bamboo between the belt's rows of conifers, which `_belt_ranks`
         seats for the whole belt first; 'mixed_broadleaf' is rounded broadleaf crowns in the woods' irregular size mix,
@@ -726,7 +726,7 @@ class GrovesMixin:
                 mean crown radius, 0.72-1.05 or a quarter 1.25-1.7 of it, a conifer 15% wider
             thin band end to end - UNRESEARCHED: a thin band's few trees spread along its length
             crown over no roof or wellhead - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html
-            crowns out of the plots' sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: bamboo marks exempt
+            crowns out of the plots' sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: every mark held out of the sun ground, bamboo at BAMBOO_SHADE_FT
             crown under no crown - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html
             alder in the marsh - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html
             clump glyph - CONVENTION: one disc per crown, conifers dark and painted last, no trunks

@@ -113,7 +113,7 @@ def kura_rect(w: float, h: float, side: str | None, ppf: float) -> tuple[float, 
 
     Research:
         annex held in its band - research/questions/0052-farm-sheds-and-barns-naya.html: length 18 to 27 ft and 1.5 to 1.8 times its depth, the depth a share of the house
-        annex larger than a kura - DEVIATION research/questions/0040-farm-storehouses-kura.html: the band's longer annexes exceed the 15 x 18 ft kura read
+        annex larger than a kura - DEVIATION research/questions/0040-farm-storehouses-kura.drawing.html: the storehouse is drawn at a farm shed's size, the annex 18 to 27 ft long; the band's longer annexes exceed the 15 x 18 ft kura read
     """
     fx, fy, fw, fh = KURA_PARTS["N" if side == "N" else "W"]
     if side != "N":
@@ -230,7 +230,7 @@ class FarmFixturesMixin:
 
 # ---- the stock a dike-pond hamlet keeps on its ponds (feature 150 A3/A4) ---------------------------
 
-STY_FT = (8.0, 6.0)  # a simple pig shed on the dike, over the water's edge (FAO/NACA: "the simple pig shed constructed on the pond dyke")
+STY_FT = (8.0, 6.0)  # a simple pig shed on the dike, on the bank itself (research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html)
 """Research: sty size - UNRESEARCHED: 8 x 6 ft (0025 gives no size for a sty)"""
 # NO DUCK PEN (269 B32, the GM 2026-09-28): the fenced dry and wet run is a modern fish-cum-duck form, read only
 # in the FAO/NACA manual, and a form attested only in modern sources is not drawn; premodern delta ducks were

@@ -118,6 +118,7 @@ class TreeStandsMixin:
             no crown on a roof or a wellhead - UNRESEARCHED
             no crown on a plot's sun ground - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: _sun_keepouts
             no trunk on a lane - UNRESEARCHED
+            fringe crowns drawn outside the stand's outline - CONVENTION: `_stand_fringe` outliers give the wood a soft edge
         """
         xs = [p[0] for p in poly]
         ys = [p[1] for p in poly]

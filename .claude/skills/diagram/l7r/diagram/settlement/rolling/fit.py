@@ -105,7 +105,7 @@ class BundleFitMixin:
         the pool, which is a real cost for no gain, since nothing downstream reads the figure as a norm
         once this docstring says it is not one.
 
-        Research: farmland rail - GUESS: a nudge may not carry a house past 165 px of the field, an arbitrary rail; 0029 sets no maximum"""
+        Research: farmland rail - CANON: the GM's ruling of 2026-09-13, a rail and not a norm: a nudge may not carry a house past 165 px of the field; research/questions/0029-farmhouses-minka.drawing.html sets no maximum"""
         return self._field_within(x, y, 165) if self.field_polys else True
 
     def _rect_corners(self: Settlement, rect: Any) -> list[Pt]:  # type: ignore[misc]

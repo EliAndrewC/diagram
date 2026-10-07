@@ -377,7 +377,7 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
         the seating's reach - UNRESEARCHED: a homestead within `FORM_BOUND` (1.15, 2.5 for a row) times the band's half-diagonal of the seat, 1.3 times that for the front row
         the seating band - UNRESEARCHED: `SEATING_GROUND_FT` of band per household, the whole ground and wood floor of one holding
         the front row's size - UNRESEARCHED: the square root of the households times the rolled shape's aspect band, at least 6
-        the step between ranks - UNRESEARCHED: an envelope's depth
+        the step between ranks - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: an envelope's depth, rows set 92 ft apart (house, yard and 39 ft of sun)
         a lane's room between ranks - GUESS: `MIN_WEB_GAP` kept between the dispersed form's ranks as a spacing only - no lane is laid there
         rank depth jitter - UNRESEARCHED: a rank seat moved up to half of `RANK_DEPTH_JITTER` of a pitch nearer or farther, in the rounds before the rescue, on an alleys hamlet only
         a rank grown along the field - UNRESEARCHED: once a round seats no one behind, the rank grows along the field - its ends a pitch out, half-seats half a pitch out along it at the rank's depth

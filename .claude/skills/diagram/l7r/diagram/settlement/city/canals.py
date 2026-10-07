@@ -180,7 +180,7 @@ class CanalsMixin:
             tap swept downstream - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.html
             tap at the nearest vertex - NONE: the pool's fields were sited against the vertex
             farmhouses around each field - research/questions/0010-farmland-around-towns-and-cities.drawing.html: rings of (26 seats, 15 px) and (20, 40), or the upslope walk
-            head race width - UNRESEARCHED: the tap-to-sluice channel drawn 7 px wide
+            head race width - research/questions/0146-moats-where-their-water-comes-from-and-where-it-goes-hori.drawing.html: the tap-to-sluice channel drawn 7 px wide, the page's 21 ft moat irrigation tap at 3 ft/px
             withdrawn field - NONE: a field whose fan fails is removed whole
             placement bound widened - NONE: 260 px around the field while seating
         """

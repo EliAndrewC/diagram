@@ -193,7 +193,7 @@ def size_sentence(kind: Kind, meta: dict[str, Any], houses: int) -> str:
 
     Research:
         population from households - research/questions/0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.html: five to a
-            drawn household where the tier records no figure of its own
+            DECLARED household (the meta households, not the drawn houses) where the tier records no figure of its own
         households named beside farmhouses - research/questions/0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.drawing.html:
             stated only where the drawn count differs from the declared households
     """
@@ -352,8 +352,8 @@ def homestead_grove_default(meta: dict[str, Any]) -> str:
             two, three or four sides, one roll a settlement
         full ring on flood ground - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: four sides rolled more
             often on flood-prone ground
-        no side sentence on a nucleated map - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: a
-            clustered village counts each farm's grove with its share of the dooryard copse, so no side count is stated
+        no side sentence on a nucleated map - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: a
+            farmstead's own grove is drawn only where a farmhouse stands apart, so a nucleated map states no side count
     """
     sides = meta.get("grove_sides")
     if sides not in _SIDES_WORDS or meta.get("settlement_form", "nucleated") == "nucleated":

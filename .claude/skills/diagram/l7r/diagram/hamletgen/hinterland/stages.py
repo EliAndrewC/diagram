@@ -423,7 +423,7 @@ def stage_windbreak(s: Settlement, plan: SitePlan) -> None:
     Research:
         copse among the homes - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html, research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: over the cluster's own oriented footprint, or against the belt
         copse reach from a house - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: within COPSE_HOUSE_REACH_FT (90 ft), a dooryard's reach
-        copse on the house's own bank - UNRESEARCHED
+        copse on the house's own bank - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: each farmstead stands whole on one bank (a GUESS recorded there)
         copse sized by the homestead woods - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: each homestead's wood rolled in the register's range, the copse filled to what the belt and groves leave
     """
     _seats = reserved_seats(s)

@@ -214,7 +214,7 @@ class CivicWorksMixin:
         Research:
             a kura behind the shop - research/questions/0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.html: an annex opposite the awning
             a minority of shops - research/questions/0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html: the drawing page's GUESS, a large merchant house one or two, an ordinary shop-house none; the caller's count, default 6, of kinds merchant and shop
-            kura size - research/questions/0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html: 14 to 20 ft square; 20 x 14 ft at the building grain
+            kura size - research/questions/0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html: 14 to 20 ft square; bscale is 1/ftpx on a to-scale town or city map, so the kura is 20 x 14 ft
             off the street bed and the neighbor's lot - NONE: overlap rules
         """
         if kw is None:

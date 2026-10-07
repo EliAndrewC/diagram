@@ -330,7 +330,7 @@ class LandUseMixin:
 
         Returns the leftover plots, which the land_use record reports.
 
-        Research: leftovers as standing rice - UNRESEARCHED: an unconverted parcel of a wholesale block is drawn as rice"""
+        Research: leftovers as standing rice - research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html: dike-ponds convert some of the low plots and leave the rest in rice; an unconverted parcel of a wholesale block is drawn as rice"""
         leftover_plots: list[Any] = []
         if overlay == "mulberry_fishpond" and eligible == "all":
             chosen_ids = {id(c) for c in chosen}

@@ -246,7 +246,7 @@ def crossing_deck(ra: Pt, rb: Pt, rw: float, wa: Pt, wb: Pt, ww: float, wpts: An
 
     Research:
         oblique span solved - research/questions/0087-road-bridges-over-rivers-and-canals-hashi.drawing.html: (ww + rw|cos|)/sin
-        landing past each bank - research/questions/0087-road-bridges-over-rivers-and-canals-hashi.drawing.html: LANDING_FT onto dry ground
+        landing past each bank - research/questions/0087-road-bridges-over-rivers-and-canals-hashi.drawing.html: LANDING_FT (10 ft) onto dry ground
         near-parallel clamp - NONE: sin floored at 0.25
         footplank form where the landing meets rice - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.html: local width plus PLANK_ABUTMENT, a 2 ft corner floor
     """

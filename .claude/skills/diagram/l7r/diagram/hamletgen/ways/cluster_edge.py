@@ -100,7 +100,7 @@ def _cluster_edge_toward(s: Settlement, target: Pt, fallback: Pt) -> Pt:
         spur starts facing the field - research/questions/0081-village-lanes.drawing.html: on the cluster's edge toward its target
         spur origin clear of the houses - UNRESEARCHED: `TRACK_FABRIC_GAP` plus 8 px past the farthest house toward the target
         origin on the houses' bank - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: stopped
-            14 px plus half the brook short of it, the brook crossed at a ford
+            14 px plus half the brook short of it (the router's figure, not the page's), the brook crossed squarely on a plank bridge at a crossing place
     """
     hs = s.M.get("houses") or []
     if not hs:

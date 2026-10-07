@@ -6,7 +6,7 @@ on the north and west, the threshing yard on the south front, the garden against
 the map's own wind by a symmetry of the square (`grove_sides.bundle_turn`). Before feature 291 the layout stopped at the
 canonical frame, so a map that declared another wind still drew its groves on the north and west.
 
-Research: rect helpers - NONE
+Research: rect helpers - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: grove bands cut back out of a bed's east (morning-sun) reach, short bands left uncut
 """
 
 from __future__ import annotations

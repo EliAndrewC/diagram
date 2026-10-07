@@ -424,7 +424,8 @@ class BundleGeomMixin:
 
         Research:
             farmstead fixtures - research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html: the kinds the household's lot keeps, laid in its own frame
-            persimmon out of the plots' sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: at every rake the house may be drawn at
+            persimmon may stand in its own grove's bands - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html: fruit=bands, the persimmon is not held out of its own farm's grove bands
+            persimmon out of the plots' sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: held 50 ft off yards and beds at the seat's own rake, re-checked as drawn (`fit._persimmon_sun_conflict`)
         """
         kinds = getattr(self, "_household_fixtures", None) or ()
         if not kinds:

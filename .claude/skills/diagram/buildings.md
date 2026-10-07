@@ -12,7 +12,7 @@ This file is the Mode A half of the /diagram skill: interior plan views of manor
 <!-- Research: true size for every footprint - CONVENTION: point glyphs included, only stroke floors and location markers diverge -->
 <!-- Research: well location marker - research/questions/0196-communal-wells-ido.drawing.html: ~22 px curb glyph marks a ~3-4 ft curb -->
 <!-- Research: salt ward marker - research/questions/0240-salt-heaps-at-doorways-morijio.drawing.html: r2.5 glyph for a ~0.3-0.7 ft heap -->
-<!-- Research: buildings at true size - research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html: cell, kura, granary, kitchen, shrine audited at true size, with a proportion sweep -->
+<!-- Research: buildings at true size - CANON: the GM's ruling of 2026-07-21, buildings drawn at true size; research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html bears only on the proportion ranking, the kitchen, stable and shrine ranks being this project's reading -->
 <!-- Research: main gate passage width - research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html: one bay, ~10-13 ft, ~40 px -->
 <!-- Research: residence wing length - research/questions/0118-samurai-house-lots-and-houses-by-rank-bukeyashiki.html: hand sheets' 180-200 ft wings kept, larger than the record's 49-67 tsubo houses, called a GUESS -->
 
@@ -78,7 +78,7 @@ Standard features with rough SVG conventions. New diagrams should reuse this voc
 <!-- Research: hearing court - research/questions/0099-the-hearing-court-shirasu.html: roofed, white gravel or river cobbles, south of the dais, size a guess -->
 <!-- Research: hearing cart slot - UNRESEARCHED: a cart-passable ~8-10 ft slot south of the hearing court -->
 <!-- Research: hearing mats - research/questions/0099-the-hearing-court-shirasu.html: accused at the center, plaintiff and village officials behind -->
-<!-- Research: hearing mat size - UNRESEARCHED: the accused's mat ~6x3 ft -->
+<!-- Research: hearing mat size - research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html: the accused's mat ~6x3 ft, the 3 by 6 ft of a straw mat woven at Nishidani; that mat is a farm threshing mat, so applying its size to a hearing mat is a borrowed figure -->
 <!-- Research: tax archive size - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: sealed kura ~32-36 ft, larger than the ~450 sq ft records store the drawing page caps it at -->
 <!-- Research: tax archive strongroom role - UNRESEARCHED: ledgers plus coin and in-kind valuables in one kura -->
 <!-- Research: stables - research/questions/0108-stables-umaya.html: few-horse umaya ~28-32 x 16-22 ft, 2-4 horses -->
@@ -88,7 +88,7 @@ Standard features with rough SVG conventions. New diagrams should reuse this voc
 <!-- Research: cell - research/questions/0096-holding-cells-agariya-and-roya.html: ~12 x 10 ft remand cell, small end of the 6-18 mat span -->
 <!-- Research: barracks - research/questions/0097-staff-rowhouses-and-barracks-nagaya.html, research/questions/0097-staff-rowhouses-and-barracks-nagaya.drawing.html: on-grounds rowhouse or common room, no bunks, ~27-53 ft wide; the county example's range 45 x 34 ft, 34 ft deep -->
 <!-- Research: granary forms - research/questions/0098-storehouses-for-the-tax-rice.html: raised on posts or earth-walled kura, ~43-50 x 25-27 ft, a row for a terminal store -->
-<!-- Research: practice ground - research/questions/0165-martial-training-grounds-and-dojo.html: swept multi-use ground with striking posts, no dojo -->
+<!-- Research: practice ground - research/questions/0165-martial-training-grounds-and-dojo.drawing.html: swept patch with a weapon rack and striking posts, no hall -->
 <!-- Research: practice ground placement - UNRESEARCHED: beside the watch's lodging -->
 <!-- Research: practice ground weapon rack - UNRESEARCHED: ~8x2 ft rack flush against the adjacent wall -->
 <!-- Research: practice ground area - UNRESEARCHED: ~90-135 sq ft per drilling samurai -->

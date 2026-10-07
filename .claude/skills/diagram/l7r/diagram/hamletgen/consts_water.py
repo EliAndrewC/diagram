@@ -150,6 +150,7 @@ OFFTAKE_LADDER: tuple[tuple[int, tuple[float, ...], tuple[float, ...]], ...] = (
 
 Research:
     delivery ditches by size - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: canal B always feeds one
+    canal B's single delivery ditch at 0.55-0.6 (0053 drawing: the second canal feeds at least one) - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: the second canal feeds at least one delivery ditch; its position is UNRESEARCHED
     delivery-ditch count and positions - UNRESEARCHED: 2, 3 or 4 offtakes under 11, 21 and 99 households, the last at 0.93
 """
 

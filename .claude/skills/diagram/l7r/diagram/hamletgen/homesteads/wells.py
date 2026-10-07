@@ -89,11 +89,17 @@ Research: watering reach - research/questions/0033-row-villages-resson.drawing.h
 
 
 BEND_LOOK_FT = 40.0
-"""How far along the street, either way, a shared well's mark looks for a bend (the law's zigzag run, `law.BEND_RUN_FT`)."""
+"""How far along the street, either way, a shared well's mark looks for a bend (the law's zigzag run, `law.BEND_RUN_FT`).
+
+Research: well arithmetic - GUESS: the bend rule's look-along; the 40 ft is the zigzag run of research/questions/0081-village-lanes.drawing.html
+"""
 
 BEND_WELL_DEG = 30.0
 """The street's turn, over `BEND_LOOK_FT` either way, past which no shared well is dug at a mark (feature 315): a GUESS, the
-law's zigzag turn (50 degrees) less a margin, so a bend the street may yet be straightened through is left clear."""
+law's zigzag turn (50 degrees) less a margin, so a bend the street may yet be straightened through is left clear.
+
+Research: well arithmetic - GUESS: no shared well where the street turns 30 degrees (a placement rule)
+"""
 
 
 def street_turns_at(line: Sequence[Pt], arc: Sequence[float], u: float, look: float) -> float:
@@ -248,7 +254,7 @@ def place_wells(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, Any
         not in the windbreak - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: belt seats sorted last, never refused
         neighborhood ladder - research/questions/0196-communal-wells-ido.drawing.html: the third-nearest house within 190, 300, 520 px, then two houses
         wells apart - UNRESEARCHED: 170 px between wells
-        no well past the crop - CONVENTION: a framing rule, refused where the wellhead would widen the crop
+        no well past the crop - research/questions/0196-communal-wells-ido.drawing.html: every well stands among the houses it serves; refused where the wellhead would widen the crop
     """
     grove_farms = [h for h in houses if (h.get("geom") or {}).get("groves")]
     if grove_farms:

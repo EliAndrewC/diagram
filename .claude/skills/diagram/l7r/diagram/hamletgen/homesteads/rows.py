@@ -516,6 +516,8 @@ def seat_rows(s: Settlement, plan: SitePlan, frame: Sequence[float], allowed: An
         far-row dry-field share - research/questions/0033-row-villages-resson.html, research/questions/0033-row-villages-resson.drawing.html: each far-row farm's holding `HOLDING_DEPTH_FRAMES` frames deep and its frame's width less two gaps, all dry field; the near row and a one-sided row hold none
         far-row farm only with its holding - research/questions/0033-row-villages-resson.drawing.html: a far-row seat whose holding does not fit clear is passed over
         farms to a street - research/questions/0033-row-villages-resson.drawing.html: half the households to a line on both sides, the line two lots longer than it needs, further streets set out parallel
+        at most MAX_STREETS (6) parallel streets - GUESS: six streets at most (research/questions/0033-row-villages-resson.drawing.html)
+        front door's ground: a frame refused without DOOR_ROOM_FT (16 ft) and half LANE_ROOM_FT clear before its front - CONVENTION: the 16 ft door room is the routing convention `DOOR_ROOM_FT` declares
         frame off the street - UNRESEARCHED: half the street plus half `FIELD_KEEP_FT`, 15 ft off its centerline
     """
     want = plan.spec.households

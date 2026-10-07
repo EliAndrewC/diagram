@@ -690,7 +690,7 @@ class ThreshingYardsMixin:
                 house) is rolled by no knob and never drawn
             yard turned with its house - research/questions/0029-farmhouses-minka.drawing.html: the house's rake, its house-facing edge level
             swept outline - CONVENTION: a slightly irregular quad, jitter 0.10
-            no floor without rice - UNRESEARCHED: a no-rice hamlet records a forecourt and draws no floor
+            no floor without rice - CANON: the GM's ruling of 2026-08-28, no threshing floor on a no-rice hamlet; a no-rice hamlet records a forecourt and draws no floor
         """
         ox, oy, yw, yh = spot
         # THE EDGE THAT FACES THE HOUSE IS LEVEL (GM 2026-09-26): north on every bundled homestead, where the yard

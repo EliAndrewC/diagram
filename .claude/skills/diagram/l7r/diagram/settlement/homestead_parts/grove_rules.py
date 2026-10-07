@@ -151,7 +151,7 @@ def fixtures_on_groves(M: Mapping[str, Any]) -> list[tuple[str, Mapping[str, Any
     shed lying along the wall is 12 ft across, not 24 (cohort seeds 6, 11, 16) - overlaps a grove band's box (both
     recorded centered).
 
-    Research: no fixture in a grove band - UNRESEARCHED: its drawn box, turned by its `rot`"""
+    Research: no fixture in a grove band - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: GUESS there - the windward stand is set back to leave a service strip for the wood shed and bath room; its drawn box, turned by its `rot`"""
     bands = [g for g in M.get("groves") or () if all(k in g for k in ("x", "y", "w", "h"))]
     out = []
     for f in M.get("farm_fixtures") or ():

@@ -659,6 +659,7 @@ def draw_intake(s: Settlement, plan: SitePlan, sluice: Pt) -> None:
     `WEIR_THICK_FT`'s, with its class beside it.
 
     Research: weir or bare mouth - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: `plan.intake` rolled per map, nothing drawn on an open hamlet
+        weir form rolled among four (s.resolve("weir_form")), 0059's four forms at even odds - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the four weir forms on small water, rolled at even odds (the even roll a GUESS)
         oblique weir - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the bar slants upstream from the intake bank, its root at the mouth's downstream lip
         weir skew angle - UNRESEARCHED: WEIR_SKEW_DEG, 30 deg
         full closure - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the bar crosses the whole brook, a map drawing convention

@@ -325,8 +325,7 @@ SPUR_SETBACK = 17.0
 """How far outside the paddy's outline a field spur's tip stops.
 
 Research:
-    path joins the outer bund - research/questions/0014-bunds-between-the-paddies-aze.drawing.html
-    field spur's tip - UNRESEARCHED: stops 17 ft outside the paddy outline, the cohort's smallest clear value
+    field spur's tip - research/questions/0081-village-lanes.drawing.html: a lane never crosses row crops, so the connector starts off the crop (the bund join is `ways/bund.py`'s claim); the 17 ft setback is UNRESEARCHED, the cohort's smallest clear value
 """
 
 # How much open ground a threshing yard needs to its SOUTH, in feet. A thatched roof is pitched 45
