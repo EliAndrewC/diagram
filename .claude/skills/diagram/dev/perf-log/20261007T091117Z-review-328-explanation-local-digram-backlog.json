@@ -1,0 +1,378 @@
+{
+  "band": 2,
+  "base": {
+    "commit": "57ca45ed3",
+    "label": "328-start",
+    "utc": "20261007T090617Z"
+  },
+  "binding": "7486658da85bb449592b4f82f3f3c9ad1b011d8470113085fbd026f4fe98ab90",
+  "end": {
+    "commit": "f52eb0771",
+    "label": "328-end",
+    "utc": "20261007T090934Z"
+  },
+  "environment": "local",
+  "explanation": "the lane law (0081, 0246) and the knot gather make the web stage settle more: lanes are routed and tested 7 ft clear of a garden fence instead of 4, ends join only within 25 ft so more links are routed than snapped, and the settle gathers lane ends within 25 ft at one point (ways/knots.py, each trial judged against the lane law, the network, needle loops and the unreached houses) - the web stage grows (+0.5 s on seed 39); measured as back-to-back pairs on a loaded host (load 5 -> 2), the total is +1.1% and the scaling leg +3.8% to +7.9%; an earlier pair taken under load read band 3, a second back-to-back pair band 2",
+  "feature": "328-match-the-research",
+  "granted_by": {
+    "declared": "main",
+    "session_id": "8d3395e5-fe32-4f85-9c89-80c344d2ac1a",
+    "utc": "20261007T091117Z"
+  },
+  "kind": "explanation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": 13.3,
+          "39": 3.3,
+          "4": -7.1,
+          "47": 10.0
+        },
+        "total_pct": 3.8
+      },
+      "20": {
+        "seeds": {
+          "25": 14.7,
+          "39": 8.6,
+          "4": -1.5,
+          "47": 10.3
+        },
+        "total_pct": 7.9
+      },
+      "40": {
+        "seeds": {
+          "25": 5.8,
+          "39": -3.6,
+          "4": 13.1,
+          "47": 7.4
+        },
+        "total_pct": 6.0
+      }
+    },
+    "seeds": {
+      "25": 2.4,
+      "39": 9.3,
+      "4": -5.7,
+      "47": 0.0
+    },
+    "total_pct": 1.1
+  },
+  "render": "perf bands [local]: 328-end vs 328-start -> band 2\n  seed   4    -5.7%\n  seed  25    +2.4%; grew: web +0.1s, homesteads +0.1s\n  seed  39    +9.3%; grew: web +0.5s, windbreak +0.1s\n  seed  47    +0.0%\n  TOTAL       +1.1%\n  10 households: TOTAL   +3.8% -> band 2\n    seed   4    -7.1%\n    seed  25   +13.3%; grew: web +0.3s\n    seed  39    +3.3%; grew: homesteads +0.1s\n    seed  47   +10.0%; grew: web +0.1s, hinterland +0.1s\n  20 households: TOTAL   +7.9% -> band 2\n    seed   4    -1.5%\n    seed  25   +14.7%; grew: web +0.6s, field +0.2s, homesteads +0.1s\n    seed  39    +8.6%; grew: windbreak +0.1s, homesteads +0.1s, hinterland +0.1s\n    seed  47   +10.3%; grew: web +0.4s, homesteads +0.2s\n  40 households: TOTAL   +6.0% -> band 2\n    seed   4   +13.1%; grew: web +3.1s\n    seed  25    +5.8%; grew: web +1.3s, homesteads +0.5s\n    seed  39    -3.6%\n    seed  47    +7.4%; grew: web +1.2s, homesteads +0.1s\n  crossed: 10 households: seed 25 +13.3% > 10%\n  crossed: 20 households: total +7.9% > 5%\n  crossed: 20 households: seed 25 +14.7% > 10%\n  crossed: 20 households: seed 47 +10.3% > 10%\n  crossed: 40 households: total +6.0% > 5%\n  crossed: 40 households: seed 4 +13.1% > 10%\n  owes: band 1, plus an escalated audit: necessary, commensurate, no way around it (make perf-audit ... AS=perf-audit)",
+  "stage_delta": {
+    "25": {
+      "appurtenances": [
+        0.08,
+        0.08
+      ],
+      "bamboo": [
+        0.0,
+        0.0
+      ],
+      "burial": [
+        0.0,
+        0.0
+      ],
+      "crossings": [
+        0.01,
+        0.01
+      ],
+      "field": [
+        0.67,
+        0.67
+      ],
+      "frame": [
+        0.01,
+        0.01
+      ],
+      "hinterland": [
+        0.69,
+        0.65
+      ],
+      "homesteads": [
+        1.17,
+        1.27
+      ],
+      "labels": [
+        0.01,
+        0.01
+      ],
+      "notice": [
+        0.13,
+        0.1
+      ],
+      "pond_stock": [
+        0.0,
+        0.0
+      ],
+      "seat": [
+        0.02,
+        0.02
+      ],
+      "sink": [
+        0.05,
+        0.05
+      ],
+      "track": [
+        0.06,
+        0.05
+      ],
+      "water_frame": [
+        0.0,
+        0.0
+      ],
+      "waterward": [
+        0.0,
+        0.0
+      ],
+      "web": [
+        0.6,
+        0.71
+      ],
+      "windbreak": [
+        0.56,
+        0.47
+      ],
+      "woodland": [
+        0.07,
+        0.06
+      ]
+    },
+    "39": {
+      "appurtenances": [
+        0.1,
+        0.09
+      ],
+      "bamboo": [
+        0.0,
+        0.0
+      ],
+      "burial": [
+        0.0,
+        0.0
+      ],
+      "crossings": [
+        0.01,
+        0.01
+      ],
+      "field": [
+        0.69,
+        0.58
+      ],
+      "frame": [
+        0.01,
+        0.01
+      ],
+      "hinterland": [
+        0.77,
+        0.81
+      ],
+      "homesteads": [
+        1.0,
+        0.99
+      ],
+      "labels": [
+        0.03,
+        0.02
+      ],
+      "notice": [
+        0.21,
+        0.17
+      ],
+      "pond_stock": [
+        0.0,
+        0.0
+      ],
+      "seat": [
+        0.02,
+        0.02
+      ],
+      "sink": [
+        0.01,
+        0.01
+      ],
+      "track": [
+        0.04,
+        0.05
+      ],
+      "water_frame": [
+        0.0,
+        0.0
+      ],
+      "waterward": [
+        0.0,
+        0.0
+      ],
+      "web": [
+        0.64,
+        1.12
+      ],
+      "windbreak": [
+        0.6,
+        0.65
+      ],
+      "woodland": [
+        0.16,
+        0.17
+      ]
+    },
+    "4": {
+      "appurtenances": [
+        0.1,
+        0.1
+      ],
+      "bamboo": [
+        0.0,
+        0.0
+      ],
+      "burial": [
+        0.0,
+        0.0
+      ],
+      "crossings": [
+        0.02,
+        0.01
+      ],
+      "field": [
+        0.94,
+        0.91
+      ],
+      "frame": [
+        0.01,
+        0.01
+      ],
+      "hinterland": [
+        0.97,
+        0.97
+      ],
+      "homesteads": [
+        1.45,
+        1.33
+      ],
+      "labels": [
+        0.01,
+        0.01
+      ],
+      "notice": [
+        0.12,
+        0.1
+      ],
+      "pond_stock": [
+        0.0,
+        0.0
+      ],
+      "seat": [
+        0.03,
+        0.03
+      ],
+      "sink": [
+        0.01,
+        0.01
+      ],
+      "track": [
+        0.14,
+        0.14
+      ],
+      "water_frame": [
+        0.0,
+        0.0
+      ],
+      "waterward": [
+        0.0,
+        0.0
+      ],
+      "web": [
+        0.9,
+        0.76
+      ],
+      "windbreak": [
+        0.49,
+        0.5
+      ],
+      "woodland": [
+        0.07,
+        0.08
+      ]
+    },
+    "47": {
+      "appurtenances": [
+        0.1,
+        0.1
+      ],
+      "bamboo": [
+        0.0,
+        0.0
+      ],
+      "burial": [
+        0.0,
+        0.0
+      ],
+      "crossings": [
+        0.01,
+        0.01
+      ],
+      "field": [
+        0.8,
+        0.75
+      ],
+      "frame": [
+        0.01,
+        0.01
+      ],
+      "hinterland": [
+        0.89,
+        0.81
+      ],
+      "homesteads": [
+        1.47,
+        1.49
+      ],
+      "labels": [
+        0.01,
+        0.01
+      ],
+      "notice": [
+        0.16,
+        0.15
+      ],
+      "pond_stock": [
+        0.0,
+        0.0
+      ],
+      "seat": [
+        0.02,
+        0.02
+      ],
+      "sink": [
+        0.06,
+        0.05
+      ],
+      "track": [
+        0.06,
+        0.06
+      ],
+      "water_frame": [
+        0.0,
+        0.0
+      ],
+      "waterward": [
+        0.0,
+        0.0
+      ],
+      "web": [
+        0.61,
+        0.72
+      ],
+      "windbreak": [
+        0.6,
+        0.6
+      ],
+      "woodland": [
+        0.08,
+        0.08
+      ]
+    }
+  },
+  "unverified": "the lane law's own share was controlled by perf-audit on the pre-knot engine (web +0.2 s on seed 39 with the law, none without); the knot gather's share is not separately controlled",
+  "verdict": "pending"
+}

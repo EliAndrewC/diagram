@@ -1,0 +1,6 @@
+{
+  "utc": "20261007T091216Z",
+  "guard": "pair-hooks",
+  "what": "review round 3",
+  "reason": "REVIEW_ROUNDS_OK: round 2's findings (the slid knot foot, lanes out of rank) were fixed in the engine after it, so the gated content is new and round 2 did not see it; this round verifies those fixes"
+}

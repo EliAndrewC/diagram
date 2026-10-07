@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-07T09:11:18Z",
+  "target": "perf-explain",
+  "commit": "f52eb0771",
+  "outcome": "permitted",
+  "why": "perf-explain UNVERIFIED: the lane law's own share was controlled by perf-audit on the pre-knot engine (web +0.2 s on seed 39 with the law, none without); the knot gather's share is not separately controlled"
+}

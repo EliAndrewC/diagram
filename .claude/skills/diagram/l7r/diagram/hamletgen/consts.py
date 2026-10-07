@@ -279,7 +279,7 @@ rule everywhere else by most of a house: measured the same afternoon, it let thr
 distance, and the three 60 ft clauses are untouched.
 
 12 ft is DERIVED from the clip, not chosen. A tread is cut `WEB_FABRIC_GAP` (7 ft) clear of a plot it runs beside, or
-`FOOTPATH_FABRIC_GAP` (the same 7 since feature 328; 4 when these ends were measured) for a footpath, and `clear_runs` walks its candidate in 4 ft steps - so a path that genuinely
+`FOOTPATH_FABRIC_GAP` (4 ft, held below 0246's 7 by feature 328 wave 4) for a footpath, and `clear_runs` walks its candidate in 4 ft steps - so a path that genuinely
 reaches a boundary records its last point 7-11 ft off it and cannot record it nearer. Measured: the two straggler ends
 at 7.8 and 6.9 ft from the garden they stop at, Inashiro's byre arm at 8.4, against the next-nearest built ground on any
 of those three maps at 24 ft. Anything past 12 is a tread that stopped somewhere else.

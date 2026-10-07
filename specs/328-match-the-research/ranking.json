@@ -4305,6 +4305,21 @@
   "wave": ""
  },
  {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/joints.py::RANK_WIDTHS#the spine at 5 ft",
+  "verdict": "DRIFTED",
+  "tier": "E2",
+  "fix": "give the cluster's spine 0081's 5 ft rank (the table has footpath, field spur and track out only): the route joining the track out to the field spur is one through-route (0081) and should take the spine's width, not run as 3 ft household ways",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/joints.py",
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 4 glyph-check round 3 (F3)",
+  "tier_as_ranked": "E2",
+  "wave": ""
+ },
+ {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/joints.py::_one_joint#ways of two kinds stay two",
   "tier": "E2",
   "fix": "_one_joint pulls a jog straight across a meeting of ways of two widths too, no width/kind exception",
