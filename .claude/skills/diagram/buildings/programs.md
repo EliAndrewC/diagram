@@ -15,7 +15,7 @@ Per-building-type specs: the required program every instance shares, the knobs t
 ### Magistrate's manor (county magistracy)
 
 <!-- Research: walled enclosure - research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html, research/questions/0097-staff-rowhouses-and-barracks-nagaya.html: a wall with a formal main gate, the gatehouse the office's gate range as at Omori and Kaibara -->
-<!-- Research: inner-court postern - GUESS research/questions/0101-privies-setchin.drawing.html: a kitchen and night-soil door serving the inner court (0107's katteguchi is the kitchen's own door, not a gate in the wall) -->
+<!-- Research: inner-court postern - GUESS research/questions/0101-privies-setchin.drawing.html: a kitchen and night-soil door serving the inner court (0104's katteguchi is the kitchen's own door, not a gate in the wall) -->
 <!-- Research: outer service gate - GUESS research/questions/0101-privies-setchin.drawing.html: a small gate for the night-soil collectors, no such gate named at a samurai house, the merchant's back gate the nearest -->
 <!-- Research: outer service gate for muck and prisoners - UNRESEARCHED: the same gate taking muck and prisoner transfers from a busy outer court -->
 <!-- Research: wall display - UNRESEARCHED: most impressive on the public approach, plainer at the rear -->

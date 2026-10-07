@@ -2379,6 +2379,23 @@
   ],
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#inner-court postern": {
+  "code": "75cd7200c39b4488",
+  "core": "630bf49f595a6717",
+  "date": "2026-10-07",
+  "note": "the question pages do not settle it; 0101's drawing page records the gate and the rule as the project's own (no source names a night-soil gate at a samurai house); 0104 defines the katteguchi as the kitchen's own outside door, as the claim says.",
+  "pages": {
+   "0101-privies-setchin.drawing.html": "03968c62149e28e2"
+  },
+  "research": "ad0c946c19e2af00",
+  "rests": [
+   "0101-privies-setchin.drawing.html:22aa0442ff4680a7",
+   "0101-privies-setchin.drawing.html:4b9c7b16a2cddbfa",
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:3bd3b9974993d277",
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:95160ff513e325fa"
+  ],
+  "verdict": "IN-STEP"
+ },
  ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#justice-front furniture knob": {
   "code": "429109a5d8c05375",
   "core": "630bf49f595a6717",

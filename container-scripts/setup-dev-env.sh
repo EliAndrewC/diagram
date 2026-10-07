@@ -94,6 +94,9 @@ check_all() {
     # the profile), and the DejaVu ITALIC face matters because resvg does not synthesize oblique:
     # without it every italic map label silently renders upright.
     _t "resvg (diagram PNG renderer)"            "command -v resvg"
+    # pdftotext (poppler): the source archive reads a PDF's text with it (scripts/_archive.py); six tooling tests
+    # failed on a fresh container without it (feature 328, 2026-10-07).
+    _t "pdftotext (poppler, the source archive)" "command -v pdftotext"
     _t "DejaVu Serif italic face"                "[ -f $ITALIC_FONT ]"
     # the engine's runtime deps (feature 131: THIS repository's lockfiles under the skill, beside
     # pyproject.toml - the webapp's cherrypy/playwright set stayed in gm-assistant with the webapp).
@@ -128,9 +131,9 @@ fi
 # Passwordless sudo is available in this container precisely so a session can install what it needs
 # without asking. Never work around a missing dependency - install it.
 echo "==> system packages (apt)"
-if ! command -v resvg >/dev/null 2>&1 || [ ! -f "$ITALIC_FONT" ]; then
+if ! command -v resvg >/dev/null 2>&1 || ! command -v pdftotext >/dev/null 2>&1 || [ ! -f "$ITALIC_FONT" ]; then
     $SUDO apt-get update -qq
-    $SUDO apt-get install -y -qq resvg fonts-dejavu-core fonts-dejavu-extra
+    $SUDO apt-get install -y -qq resvg fonts-dejavu-core fonts-dejavu-extra poppler-utils
 else
     echo "    already present"
 fi
