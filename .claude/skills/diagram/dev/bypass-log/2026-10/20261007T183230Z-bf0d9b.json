@@ -1,0 +1,6 @@
+{
+  "utc": "20261007T183230Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "no review occasion owed by this change (the glyph-check passed on this wave; this commit reorders a pure predicate, the pool byte-identical)"
+}
