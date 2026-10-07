@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-07T22:06:00Z",
+  "target": "perf-explain",
+  "commit": "eb86d9158",
+  "outcome": "permitted",
+  "why": "perf-explain UNVERIFIED: a change that only removes passes cannot add time; no counterfactual timed"
+}
