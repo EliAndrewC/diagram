@@ -2,7 +2,7 @@
 
 Split from settlement/rolling.py by feature 118 - see settlement/rolling/CLAUDE.md for the index.
 
-Research: draw-order and footprint plumbing - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: the bed sun-ground test, every crown, promised tree and bamboo mark held off a bed at CANOPY_SHADE_FT / BAMBOO_SHADE_FT
+Research: draw-order and footprint plumbing - NONE: the order things are drawn in and the footprints they are tested by decide nothing
 """
 
 import math
@@ -167,6 +167,7 @@ class FarmsteadFlushMixin:
         south stays put (gardens_unshaded_from_east flags only the AVOIDABLE ones). See research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html ('gardens'.
 
         Research: east-shaded garden nudged south - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: best effort, 4 px steps up to the bed's height plus the house's plus 6 px
+            own deep windward stand exempt from the east test - UNRESEARCHED: the farm's own deep windward stand is not tested as a neighbor's grove, since it stands on the wind's side
             nudged bed's sun ground clear of crowns, promised persimmons and bamboo - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: 50 ft clear (CANOPY_SHADE_FT, BAMBOO_SHADE_FT)
         """
         step = 4 * self.bscale

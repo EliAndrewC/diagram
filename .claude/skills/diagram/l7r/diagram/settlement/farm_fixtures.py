@@ -112,6 +112,7 @@ def kura_rect(w: float, h: float, side: str | None, ppf: float) -> tuple[float, 
     priced for the GM (specs/293-effort-level-experiment/outputs/I-port-handoff.md).
 
     Research:
+        west annex size - UNRESEARCHED: sized by the house's shares (about 14.7 x 15.7 ft on a 46 x 28 ft house), below 0040 drawing's 18-27 ft annex band
         annex held in its band - research/questions/0052-farm-sheds-and-barns-naya.html: length 18 to 27 ft and 1.5 to 1.8 times its depth, the depth a share of the house
         annex larger than a kura - DEVIATION research/questions/0040-farm-storehouses-kura.drawing.html: the storehouse is drawn at a farm shed's size, the annex 18 to 27 ft long; the band's longer annexes exceed the 15 x 18 ft kura read
     """

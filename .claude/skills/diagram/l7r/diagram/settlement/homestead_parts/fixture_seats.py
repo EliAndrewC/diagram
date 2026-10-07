@@ -302,7 +302,7 @@ def lay_fixtures(
     wall of its steading, each named - a refusal, never a room walked out into the yard (feature 280 M21, M22).
 
     Research:
-        fixture gap 3.5 ft off every other part and bath room slide 4 ft - CONVENTION: WALL_GAP_FT (3.5 ft) clears the drawn wall of any part a fixture stands by, WALL_SLIDE_FT (4 ft) the bath room's slide along its wall
+        fixture gap 3.5 ft off every other part and bath room slide 4 ft - UNRESEARCHED: WALL_GAP_FT (3.5 ft) clears the drawn wall of any part a fixture stands by, WALL_SLIDE_FT (4 ft) the bath room's slide along its wall
         seating order - UNRESEARCHED: FIXTURE_ORDER (retirement house, bath, wood shed, privy, manure, coop, shrine, persimmon) is the order the fixtures take seats
         stepped outward - UNRESEARCHED: a fixture with no recorded seat free is offered the same seats a pace further out
         wood shed's walls - research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: the house, its kura, the

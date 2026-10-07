@@ -271,8 +271,9 @@ class KeepoutsMixin:
         crown of a stand against this list.
 
         Research:
-            no crown on a roof or a wellhead - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:
-                against a wall, never on it; held here are roofs and wellheads, while the yards and beds are held by `_sun_keepouts` (50 ft, research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html)
+            no crown on a roof - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:
+                against a wall, never on it; held here are roofs, while the yards and beds are held by `_sun_keepouts` (50 ft, research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html)
+            no crown on a wellhead - UNRESEARCHED: a crown may not cover a wellhead
             burial ground's middle - GUESS: 0.9 of its half-extent kept clear of crowns"""
         bx0, by0, bx1, by1 = bbox
         rects: list[tuple[float, float, float, float]] = []

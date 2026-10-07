@@ -607,7 +607,7 @@ class ThreshingYardsMixin:
 
         Research:
             yard median - research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html: 25 tsubo, rice
-                and dry field alike
+                and dry field alike (`YARD_MEDIAN_TSUBO_DRYFIELD` = 25.0 equals the rice median, so both are drawn the same size)
             yard spread - research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html: lognormal,
                 sigma_ln 0.40
             larger household, larger yard - research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html:
@@ -690,7 +690,8 @@ class ThreshingYardsMixin:
                 house) is rolled by no knob and never drawn
             yard turned with its house - research/questions/0029-farmhouses-minka.drawing.html: the house's rake, its house-facing edge level
             swept outline - CONVENTION: a slightly irregular quad, jitter 0.10
-            no floor without rice - CANON: the GM's ruling of 2026-08-28, no threshing floor on a no-rice hamlet; a no-rice hamlet records a forecourt and draws no floor
+            a yard on every farm - research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html: every rice and dry-field farm keeps a yard; work yards are off only on the mulberry dike-fishpond hamlet (`s._work_yards`)
+            no floor without rice - CANON: the GM's ruling of 2026-08-28, no threshing floor on the no-rice (mulberry dike-fishpond) hamlet; it records a forecourt and draws no floor
         """
         ox, oy, yw, yh = spot
         # THE EDGE THAT FACES THE HOUSE IS LEVEL (GM 2026-09-26): north on every bundled homestead, where the yard

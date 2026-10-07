@@ -37,7 +37,8 @@ def persimmon_for(s: Settlement, h: Mapping[str, Any], forms: FixtureForms) -> d
     Research:
         persimmon in the dooryard - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html: by the seat search every persimmon takes, front or behind
         out of the plots' sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: its own plots' and its neighbors', `CANOPY_SHADE_FT`
-        under no conifer's crown - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html: the farm's own grove trees give way round the persimmon; other stands are a GUESS
+        under no conifer's crown - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html: the farm's own grove trees give way round the persimmon
+        under no other stand's conifer - UNRESEARCHED: a persimmon is also refused under the crown of any other stand's conifer; the page records nothing for other stands
         in no other farm's grove - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html: a neighbor's grove refuses the tree"""
     g = h.get("geom") or {}
     if not g.get("house"):

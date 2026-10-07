@@ -176,7 +176,7 @@ class CanalsMixin:
 
         Research:
             farmland rings the city - research/questions/0010-farmland-around-towns-and-cities.drawing.html: a comb field per spec, each a full irrigation system
-            sluice standoff - UNRESEARCHED: 30 px outward from the city center
+            sluice standoff - research/questions/0146-moats-where-their-water-comes-from-and-where-it-goes-hori.drawing.html: 30 px outward from the city center, about 90 ft at 3 ft/px, where each tap stands outside the moat's rim
             tap swept downstream - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.html
             tap at the nearest vertex - NONE: the pool's fields were sited against the vertex
             farmhouses around each field - research/questions/0010-farmland-around-towns-and-cities.drawing.html: rings of (26 seats, 15 px) and (20, 40), or the upslope walk

@@ -15,7 +15,7 @@ Per-building-type specs: the required program every instance shares, the knobs t
 ### Magistrate's manor (county magistracy)
 
 <!-- Research: walled enclosure - research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html, research/questions/0097-staff-rowhouses-and-barracks-nagaya.html: a wall with a formal main gate, the gatehouse the office's gate range as at Omori and Kaibara -->
-<!-- Research: inner-court postern - research/questions/0107-kitchens-daidokoro.html, research/questions/0101-privies-setchin.drawing.html: a kitchen and night-soil door serving the inner court -->
+<!-- Research: inner-court postern - GUESS research/questions/0101-privies-setchin.drawing.html, research/questions/0107-kitchens-daidokoro.html: a kitchen and night-soil door serving the inner court -->
 <!-- Research: outer service gate - GUESS research/questions/0101-privies-setchin.drawing.html: a small gate for the night-soil collectors, no such gate named at a samurai house, the merchant's back gate the nearest -->
 <!-- Research: outer service gate for muck and prisoners - UNRESEARCHED: the same gate taking muck and prisoner transfers from a busy outer court -->
 <!-- Research: wall display - UNRESEARCHED: most impressive on the public approach, plainer at the rear -->
@@ -24,19 +24,20 @@ Per-building-type specs: the required program every instance shares, the knobs t
 <!-- Research: divider gate - research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html: a gate between the two courts -->
 <!-- Research: divider gate width - UNRESEARCHED: ~8 ft -->
 <!-- Research: divider gate on the axis - research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html: on the axis behind the office hall, where the drawing page gives the jin'ya no fixed central axis -->
-<!-- Research: office hall rooms - GUESS: day office and study behind, dais band over the hearing court -->
+<!-- Research: office hall rooms - GUESS: day office and study behind the dais band -->
+<!-- Research: office hall dais band - research/questions/0099-the-hearing-court-shirasu.drawing.html: the magistrate's dais is the front of the office hall, over the hearing court -->
 <!-- Research: commuting clerks - research/questions/0113-the-office-hall-and-its-clerks-goyakusho.html: a workroom for 3-4 heimen clerks, no clerk housing -->
 <!-- Research: residence entrances - research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html: one genkan, informal doors elsewhere -->
 <!-- Research: rear service strip - GUESS research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html: servants' nagaya, stores, rear yard or alley on the north; 0115 puts servants along the street, in the gate range or under the main roof -->
 <!-- Research: universal shrine - research/questions/0218-the-compounds-own-shrine-yashikigami.html, research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html: one shrine, Inari by default, subordinate to the residence; Hayakawa's sheet keeps two, as real offices kept more than one shrine (the Joge post an Inari shrine, a Tenjin shrine and others) -->
 <!-- Research: wells by use - research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html, research/questions/0105-baths-furo.drawing.html: the kitchen well by the kitchen, where 0091 places a house's wells and 0105's drawing page keeps it with the kitchen and bath -->
-<!-- Research: garden and stables wells - GUESS research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html: a well for the garden and one for the stables; no page places them -->
+<!-- Research: garden and stables wells - GUESS: a well for the garden and one for the stables; no page places them, the 0091 drawing page records only the rear well as a guess -->
 <!-- Research: sand hearing court - research/questions/0099-the-hearing-court-shirasu.drawing.html: a gravel court below the dais, the parties kneeling on mats in the Edo arrangement -->
 <!-- Research: latrines by zone - research/questions/0101-privies-setchin.html: one per zone, residence privy attached, the rest by service gates -->
 <!-- Research: fire-water tubs - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: ~8-12, kitchen 2, none at the kura -->
 <!-- Research: notice board at the gate - GUESS research/questions/0190-notice-boards-kosatsuba.drawing.html: the bench's freestanding board just outside the main gate, apart from the town's kosatsuba - the Japanese board joined to the Chinese office's gate -->
 <!-- Research: practice ground - research/questions/0165-martial-training-grounds-and-dojo.drawing.html: no dojo at the compound; formal martial training belongs to the provincial city and above, a map rule -->
-<!-- Research: practice ground placement and gear - GUESS: in the outer court beside the watch, striking posts and a weapon rack -->
+<!-- Research: practice ground placement and gear - research/questions/0165-martial-training-grounds-and-dojo.drawing.html: in the outer court beside the watch, striking posts and a weapon rack -->
 <!-- Research: mostly open compound - research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: jin'ya coverage band, court spine open -->
 <!-- Research: staffing anchors - CANON: the GM's campaign notes ~15 samurai, 3-4 clerks, ~10 servants, sizing the barracks and nagaya -->
 <!-- Research: manor kitchen garden by the sun - research/questions/0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html, research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: rear strip only where it gets six hours, rarely behind a house -->
@@ -46,7 +47,12 @@ Per-building-type specs: the required program every instance shares, the knobs t
 <!-- Research: garrison emphasis knob - UNRESEARCHED: armory and watchtower in bandit country -->
 <!-- Research: staff housing knob - research/questions/0097-staff-rowhouses-and-barracks-nagaya.html: all on grounds, plus family rowhouses, or duty watch only; Ubame's family rowhouse stands inside the walls -->
 <!-- Research: tenure character knob - UNRESEARCHED: continuity accretes alcove, gardens, oddities -->
-<!-- Research: resident particulars knob - CANON: dedication by county type, a relic, a workshop, a dojo, designed per manor with the GM -->
+<!-- Research: resident particulars knob - research/questions/0165-martial-training-grounds-and-dojo.drawing.html: a dojo only as a special feature, a knob of the plan, not part of the default program -->
+<!-- Research: resident particulars other than the dojo - UNRESEARCHED: dedication by county type, a relic, a workshop, designed per manor with the GM -->
+<!-- Research: upland granary contents - research/questions/0098-storehouses-for-the-tax-rice.drawing.html: the dry-field share arrives in soybean and barley bales beside the rice -->
+<!-- Research: upland granary strongbox role - UNRESEARCHED: a partial strongbox role for an upland granary -->
+<!-- Research: cart route to granary and stables - UNRESEARCHED: a cart route from the gates to the granary and stables is required -->
+<!-- Research: formal visitors and the privacy baffle - UNRESEARCHED: formal visitors are received in the office hall and go no deeper; the hall is the privacy baffle -->
 <!-- Research: justice-front furniture knob - UNRESEARCHED: petition window, grievance drum or bell -->
 
 The seat of a County Magistrate (Rank 5): a walled compound in the county town combining court, tax office, granary, garrison, and the magistrate's household. [`pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg`](../pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg) is the worked example - it is this generic program plus Ochiba's particulars (the hall-scale two-altar Inari shrine, the Akami-fude and Fox-Fire Lantern relics, the cinnabar workshop colonnade, the Pact-Bowl threshold stone). A new magistracy should read as the same institution while sharing none of those particulars. [`pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg`](../pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg) is the validation instance: the same program with every knob set differently (rich river-landing county, staff-housing option (c), guest-wing annex, two modest shrines, cell by the gatehouse).

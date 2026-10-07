@@ -34,7 +34,7 @@ class FarmsteadMixin:
             every farm a yard - research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html: a farm
                 without room for one is refused
             every farm a garden - research/questions/0039-kitchen-gardens-beside-farmhouses-yashikibatake.html: a bed beside the house
-            garden on a sunny side - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: southeast, southwest, east or west
+            garden on a sunny side - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: the side is chosen in `gardens.py::_find_garden_spot` (east first, then southeast and southwest, the windward wall last, never north or south); this defers to its sides
             garden off the yard's side and the shed - UNRESEARCHED: a side other than the yard's, kept off the west-side shed
         """
         yard = self._find_yard_spot(hx, hy, hw, hh)

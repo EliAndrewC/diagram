@@ -6,7 +6,7 @@ on the north and west, the threshing yard on the south front, the garden against
 the map's own wind by a symmetry of the square (`grove_sides.bundle_turn`). Before feature 291 the layout stopped at the
 canonical frame, so a map that declared another wind still drew its groves on the north and west.
 
-Research: rect helpers - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: grove bands cut back out of a bed's east (morning-sun) reach, short bands left uncut
+Research: rect helpers - NONE: the rect and edge arithmetic decides nothing
 """
 
 from __future__ import annotations
@@ -219,7 +219,9 @@ def clear_east_of_beds(groves: list[Rect], beds: list[Rect], reach: float) -> li
 
     The bands are drawn unraked and the bed is turned with its house about the house's center (`_rake_parts`), so at a rake a
     bed laid wholly south of the band's end can rise past it by its distance from the house times the rake's sine - 1.3 ft
-    on cohort seed 906 at -8 degrees (feature 315). A band left shorter than it is wide is not cut (its run would be a stub)."""
+    on cohort seed 906 at -8 degrees (feature 315). A band left shorter than it is wide is not cut (its run would be a stub).
+
+    Research: rect helpers - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: grove bands cut back out of a bed's east (morning-sun) reach, short bands left uncut"""
     out = []
     for r in groves:
         x, y, w, h = r

@@ -517,8 +517,10 @@ def seat_rows(s: Settlement, plan: SitePlan, frame: Sequence[float], allowed: An
         far-row farm only with its holding - research/questions/0033-row-villages-resson.drawing.html: a far-row seat whose holding does not fit clear is passed over
         farms to a street - research/questions/0033-row-villages-resson.drawing.html: half the households to a line on both sides, the line two lots longer than it needs, further streets set out parallel
         at most MAX_STREETS (6) parallel streets - GUESS: six streets at most (research/questions/0033-row-villages-resson.drawing.html)
-        front door's ground: a frame refused without DOOR_ROOM_FT (16 ft) and half LANE_ROOM_FT clear before its front - CONVENTION: the 16 ft door room is the routing convention `DOOR_ROOM_FT` declares
+        front door's ground: a frame refused without DOOR_ROOM_FT (16 ft) and half LANE_ROOM_FT clear before its front - UNRESEARCHED: the 16 ft door room `DOOR_ROOM_FT` declares; no cited page measures a door's ground
         frame off the street - UNRESEARCHED: half the street plus half `FIELD_KEEP_FT`, 15 ft off its centerline
+        first street on the hard ground's edge - UNRESEARCHED: the first street runs along the stretch of the hard ground's edge that holds the most clear frames (`best_row_line`)
+        streets rounded at a corner - CONVENTION: a street is rounded on the inside of a corner at `street_bend_radius_ft`
     """
     want = plan.spec.households
     field = [(float(x), float(y)) for x, y in (plan.envelope or [])]

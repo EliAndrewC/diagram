@@ -203,7 +203,8 @@ _OVERLAP_EXEMPT = {
 """Overlap exemptions.
 
 Research:
-    annexes abut their house - research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html, research/questions/0040-farm-storehouses-kura.drawing.html: kura (west wall scattered, north wall clustered), yard, garden, grove (along the plot edge on its rolled 2-4 sides) and fixtures against their own farmhouse
+    annexes abut their house - research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html, research/questions/0040-farm-storehouses-kura.drawing.html: kura (west wall scattered, north wall clustered) and grove (along the plot edge on its rolled 2-4 sides) against their own farmhouse
+    yard, garden and fixtures against the house - UNRESEARCHED: the threshing yard, kitchen garden and fixtures drawn against their own farmhouse
     pig sty on the dike - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html: on the bank itself, half the bank's width in, not over the water
     wellhead among the houses - research/questions/0196-communal-wells-ido.drawing.html: in the gaps between dwellings
     border as a line - DEVIATION research/questions/0083-clan-borders-and-their-markers.html: no mound drawn, nothing keeps clear
@@ -504,8 +505,7 @@ _MATRIX_PERMISSIVE = {
 """The permissive classes.
 
 Research:
-    ground cover takes buildings - research/questions/0196-communal-wells-ido.drawing.html: a house or field on commons, pasture or marsh permitted; no well drawn out on open common ground
-        as the normal case, though _OVERLAP_LINEAR keeps structures off commons, pastures and marshes
+    no well on common ground - research/questions/0196-communal-wells-ido.drawing.html: no well drawn out on open common ground as the normal case, though _OVERLAP_LINEAR keeps structures off commons, pastures and marshes
     house or field on cover - UNRESEARCHED: built on, the cover stopping there
     deferred classes - NONE: vegetation, the ring road, records and paddy are decided by their own rules
 """

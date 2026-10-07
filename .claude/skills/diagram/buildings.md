@@ -78,7 +78,7 @@ Standard features with rough SVG conventions. New diagrams should reuse this voc
 <!-- Research: hearing court - research/questions/0099-the-hearing-court-shirasu.html: roofed, white gravel or river cobbles, south of the dais, size a guess -->
 <!-- Research: hearing cart slot - UNRESEARCHED: a cart-passable ~8-10 ft slot south of the hearing court -->
 <!-- Research: hearing mats - research/questions/0099-the-hearing-court-shirasu.html: accused at the center, plaintiff and village officials behind -->
-<!-- Research: hearing mat size - research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html: the accused's mat ~6x3 ft, the 3 by 6 ft of a straw mat woven at Nishidani; that mat is a farm threshing mat, so applying its size to a hearing mat is a borrowed figure -->
+<!-- Research: hearing mat size - GUESS research/questions/0099-the-hearing-court-shirasu.drawing.html: the accused's mat ~6x3 ft, the project's own guess; the 3 by 6 ft of a farm threshing mat is a borrowed figure -->
 <!-- Research: tax archive size - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: sealed kura ~32-36 ft, larger than the ~450 sq ft records store the drawing page caps it at -->
 <!-- Research: tax archive strongroom role - UNRESEARCHED: ledgers plus coin and in-kind valuables in one kura -->
 <!-- Research: stables - research/questions/0108-stables-umaya.html: few-horse umaya ~28-32 x 16-22 ft, 2-4 horses -->
@@ -90,6 +90,7 @@ Standard features with rough SVG conventions. New diagrams should reuse this voc
 <!-- Research: granary forms - research/questions/0098-storehouses-for-the-tax-rice.html: raised on posts or earth-walled kura, ~43-50 x 25-27 ft, a row for a terminal store -->
 <!-- Research: practice ground - research/questions/0165-martial-training-grounds-and-dojo.drawing.html: swept patch with a weapon rack and striking posts, no hall -->
 <!-- Research: practice ground placement - UNRESEARCHED: beside the watch's lodging -->
+<!-- Research: practice ground striking posts - GUESS research/questions/0165-martial-training-grounds-and-dojo.drawing.html: 1-2 posts, ~1 ft across, drawn as small markers; the page records the number drawn as a guess and the marker as a convention -->
 <!-- Research: practice ground weapon rack - UNRESEARCHED: ~8x2 ft rack flush against the adjacent wall -->
 <!-- Research: practice ground area - UNRESEARCHED: ~90-135 sq ft per drilling samurai -->
 <!-- Research: cart yard as a charcoal fire gap - research/questions/0197-charcoal-yards-and-charcoal-stores.drawing.html, research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: Ubame's cart yard drawn as the charcoal store's fire gap, ~13-14 ft and 29 ft wide -->
