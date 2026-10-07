@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-07T23:48:54Z",
+  "target": "perf-explain",
+  "commit": "44bf79ed6",
+  "outcome": "permitted",
+  "why": "perf-explain UNVERIFIED: perf-audit's own runs are the evidence; no measurements.json key"
+}

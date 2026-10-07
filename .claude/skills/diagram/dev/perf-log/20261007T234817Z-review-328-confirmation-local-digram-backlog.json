@@ -1,0 +1,62 @@
+{
+  "band": 1,
+  "base": {
+    "commit": "43b353361",
+    "label": "328-start",
+    "utc": "20261007T233434Z"
+  },
+  "binding": "f979f9c927ec8cca7ec1dde657f18e462bca5a742f534446fed896f48b8b4a7c",
+  "end": {
+    "commit": "7a49ee2e3",
+    "label": "328-end",
+    "utc": "20261007T233749Z"
+  },
+  "environment": "local",
+  "feature": "328-match-the-research",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "8d3395e5-fe32-4f85-9c89-80c344d2ac1a",
+    "utc": "20261007T234817Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": -3.4,
+          "39": 0.0,
+          "4": -5.7,
+          "47": -3.0
+        },
+        "total_pct": -3.1
+      },
+      "20": {
+        "seeds": {
+          "25": -4.3,
+          "39": -3.7,
+          "4": -6.2,
+          "47": 1.7
+        },
+        "total_pct": -3.4
+      },
+      "40": {
+        "seeds": {
+          "25": 4.1,
+          "39": 0.8,
+          "4": -3.8,
+          "47": 1.6
+        },
+        "total_pct": 0.2
+      }
+    },
+    "seeds": {
+      "25": -24.0,
+      "39": -7.0,
+      "4": -8.2,
+      "47": -2.3
+    },
+    "total_pct": -10.8
+  },
+  "note": "hinterland mechanism wrong, timed in base/end worktrees: at end NO seat passes crossed_through on any rung (40hh 39/25/47 and 20hh 47: 2006/1536/1371/232 candidates, 0 kept), so the woods' sorted list is EMPTY (0 seat_off_the_row calls) - not a longer walk; the count is never met, so all 8 setback x size rungs re-run the full lattice scan (40hh 39: _ok 1503->11968 calls, field_height_near 366->3148, open_ground_patches 0.54->1.49 s profiled, 0 woods on the sheet vs 3); the vectorized crossing call is only 0.05 s. Hinterland 1.41->1.72-1.78 s unprofiled. Homesteads part stands as timed.",
+  "verdict": "inconsistent"
+}
