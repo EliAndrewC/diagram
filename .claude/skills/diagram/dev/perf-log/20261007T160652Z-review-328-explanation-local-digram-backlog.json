@@ -1,0 +1,375 @@
+{
+  "band": 3,
+  "base": {
+    "commit": "6ca2f5ccf",
+    "label": "328-start",
+    "utc": "20261007T160124Z"
+  },
+  "binding": "1da3fb9d68aa33507d24afee151644615cd90135375bf5681d20107a21dc2fa7",
+  "end": {
+    "commit": "eac572da4",
+    "label": "328-end",
+    "utc": "20261007T160442Z"
+  },
+  "environment": "local",
+  "explanation": "wave 9 with the yard privy's step held and the entrance board's widened pass pruned to its reach (the earlier audit's way round: seed 25's notice +0.7 s is gone, notice +0.1 s now). What remains is the web on layouts the wave's values moved: 20 hh seed 4 web +1.3 s and 40 hh seed 39 web +2.5 s, while 20 hh seed 47 is -16.7% in the same pair; and three scaling rolls refuse their web (20 hh seed 39; 40 hh seeds 4 and 25) - with the yard step at the page's value none refuse (measured: make perf with it applied, 0 refusals) but Kuwabata's pool roll zigzags across a joint and the gate fails. The hold and its cost are recorded for the GM in specs/328-match-the-research/claims-followup.md, Wave 9.",
+  "feature": "328-match-the-research",
+  "granted_by": {
+    "declared": "main",
+    "session_id": "8d3395e5-fe32-4f85-9c89-80c344d2ac1a",
+    "utc": "20261007T160652Z"
+  },
+  "kind": "explanation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": 13.8,
+          "39": 0.0,
+          "4": -8.8,
+          "47": -3.3
+        },
+        "total_pct": 0.0
+      },
+      "20": {
+        "seeds": {
+          "25": 0.0,
+          "4": 23.3,
+          "47": -16.7
+        },
+        "total_pct": 2.1
+      },
+      "40": {
+        "seeds": {
+          "39": 21.7,
+          "47": -1.6
+        },
+        "total_pct": 9.9
+      }
+    },
+    "seeds": {
+      "25": 2.5,
+      "39": -7.5,
+      "4": 4.3,
+      "47": 10.0
+    },
+    "total_pct": 2.4
+  },
+  "render": "perf bands [local]: 328-end vs 328-start -> band 3\n  seed   4    +4.3%; grew: web +0.2s\n  seed  25    +2.5%; grew: web +0.2s, notice +0.1s\n  seed  39    -7.5%\n  seed  47   +10.0%; grew: web +0.6s\n  TOTAL       +2.4%\n  10 households: TOTAL   +0.0% -> band 2\n    seed   4    -8.8%\n    seed  25   +13.8%; grew: hinterland +0.2s, homesteads +0.1s, web +0.1s\n    seed  39    +0.0%\n    seed  47    -3.3%\n  20 households: TOTAL   +2.1% -> band 3\n    seed   4   +23.3%; grew: web +1.3s, hinterland +0.2s\n    seed  25    +0.0%\n    seed  47   -16.7%\n    seed  39 refused (WebRefused: the settled web leaves unreached what the seating reserved a way for: 19 farmhouse(s) stand off the connected way network, at [(2073, 2473), (1946, 2451), (2101, 2282), (2096, 2641)]; the field is rea)\n  40 households: TOTAL   +9.9% -> band 3\n    seed  39   +21.7%; grew: web +2.5s, homesteads +0.1s, hinterland +0.1s\n    seed  47    -1.6%\n    seed   4 refused (WebRefused: the web's last resort cannot mend it without dropping a tree lane: lanes 12 (access), 13 (access) still break a rule of the lane law; the web still breaks doubled_tails, needle_joins, needle_loops)\n    seed  25 refused (WebRefused: the settled web leaves unreached what the seating reserved a way for: the field is reached by no way)\n  crossed: 10 households: seed 25 +13.8% > 10%\n  crossed: 20 households: seed 4 +23.3% > 10%\n  crossed: 20 households: seed 4 +23.3% > 20%\n  crossed: 40 households: total +9.9% > 5%\n  crossed: 40 households: seed 39 +21.7% > 10%\n  crossed: 40 households: seed 39 +21.7% > 20%\n  owes: bands 1 and 2, plus the GM's personal sign-off before the push (make perf-signoff, at a terminal)",
+  "stage_delta": {
+    "25": {
+      "appurtenances": [
+        0.08,
+        0.08
+      ],
+      "bamboo": [
+        0.0,
+        0.0
+      ],
+      "burial": [
+        0.0,
+        0.0
+      ],
+      "crossings": [
+        0.01,
+        0.01
+      ],
+      "field": [
+        0.65,
+        0.65
+      ],
+      "frame": [
+        0.01,
+        0.01
+      ],
+      "hinterland": [
+        0.63,
+        0.67
+      ],
+      "homesteads": [
+        1.17,
+        1.06
+      ],
+      "labels": [
+        0.01,
+        0.01
+      ],
+      "notice": [
+        0.09,
+        0.17
+      ],
+      "pond_stock": [
+        0.0,
+        0.0
+      ],
+      "seat": [
+        0.02,
+        0.02
+      ],
+      "sink": [
+        0.05,
+        0.05
+      ],
+      "track": [
+        0.05,
+        0.05
+      ],
+      "water_frame": [
+        0.0,
+        0.0
+      ],
+      "waterward": [
+        0.0,
+        0.0
+      ],
+      "web": [
+        0.66,
+        0.85
+      ],
+      "windbreak": [
+        0.46,
+        0.44
+      ],
+      "woodland": [
+        0.06,
+        0.06
+      ]
+    },
+    "39": {
+      "appurtenances": [
+        0.09,
+        0.09
+      ],
+      "bamboo": [
+        0.0,
+        0.0
+      ],
+      "burial": [
+        0.0,
+        0.0
+      ],
+      "crossings": [
+        0.01,
+        0.01
+      ],
+      "field": [
+        0.57,
+        0.58
+      ],
+      "frame": [
+        0.01,
+        0.01
+      ],
+      "hinterland": [
+        0.64,
+        0.6
+      ],
+      "homesteads": [
+        0.91,
+        0.91
+      ],
+      "labels": [
+        0.02,
+        0.01
+      ],
+      "notice": [
+        0.14,
+        0.09
+      ],
+      "pond_stock": [
+        0.0,
+        0.0
+      ],
+      "seat": [
+        0.02,
+        0.02
+      ],
+      "sink": [
+        0.01,
+        0.01
+      ],
+      "track": [
+        0.05,
+        0.05
+      ],
+      "water_frame": [
+        0.0,
+        0.0
+      ],
+      "waterward": [
+        0.0,
+        0.0
+      ],
+      "web": [
+        0.93,
+        0.73
+      ],
+      "windbreak": [
+        0.5,
+        0.46
+      ],
+      "woodland": [
+        0.13,
+        0.11
+      ]
+    },
+    "4": {
+      "appurtenances": [
+        0.09,
+        0.1
+      ],
+      "bamboo": [
+        0.0,
+        0.0
+      ],
+      "burial": [
+        0.0,
+        0.0
+      ],
+      "crossings": [
+        0.01,
+        0.01
+      ],
+      "field": [
+        0.9,
+        0.9
+      ],
+      "frame": [
+        0.01,
+        0.01
+      ],
+      "hinterland": [
+        0.93,
+        0.93
+      ],
+      "homesteads": [
+        1.28,
+        1.27
+      ],
+      "labels": [
+        0.01,
+        0.01
+      ],
+      "notice": [
+        0.09,
+        0.08
+      ],
+      "pond_stock": [
+        0.0,
+        0.0
+      ],
+      "seat": [
+        0.03,
+        0.03
+      ],
+      "sink": [
+        0.01,
+        0.01
+      ],
+      "track": [
+        0.14,
+        0.13
+      ],
+      "water_frame": [
+        0.0,
+        0.0
+      ],
+      "waterward": [
+        0.0,
+        0.0
+      ],
+      "web": [
+        0.59,
+        0.8
+      ],
+      "windbreak": [
+        0.49,
+        0.49
+      ],
+      "woodland": [
+        0.08,
+        0.1
+      ]
+    },
+    "47": {
+      "appurtenances": [
+        0.08,
+        0.08
+      ],
+      "bamboo": [
+        0.0,
+        0.0
+      ],
+      "burial": [
+        0.0,
+        0.0
+      ],
+      "crossings": [
+        0.01,
+        0.01
+      ],
+      "field": [
+        0.63,
+        0.63
+      ],
+      "frame": [
+        0.01,
+        0.01
+      ],
+      "hinterland": [
+        0.68,
+        0.68
+      ],
+      "homesteads": [
+        1.26,
+        1.14
+      ],
+      "labels": [
+        0.01,
+        0.01
+      ],
+      "notice": [
+        0.12,
+        0.1
+      ],
+      "pond_stock": [
+        0.0,
+        0.0
+      ],
+      "seat": [
+        0.02,
+        0.02
+      ],
+      "sink": [
+        0.04,
+        0.04
+      ],
+      "track": [
+        0.05,
+        0.06
+      ],
+      "water_frame": [
+        0.0,
+        0.0
+      ],
+      "waterward": [
+        0.0,
+        0.0
+      ],
+      "web": [
+        0.54,
+        1.18
+      ],
+      "windbreak": [
+        0.5,
+        0.42
+      ],
+      "woodland": [
+        0.07,
+        0.05
+      ]
+    }
+  },
+  "unverified": "the web's growth is layout variance across seeds (one seed slower, another faster, same code on the web path); the refusals' counterfactual is measured, the per-seed web growth is not",
+  "verdict": "pending"
+}

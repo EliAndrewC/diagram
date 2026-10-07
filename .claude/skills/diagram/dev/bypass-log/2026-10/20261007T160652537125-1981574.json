@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-07T16:06:52Z",
+  "target": "perf-explain",
+  "commit": "eac572da4",
+  "outcome": "permitted",
+  "why": "perf-explain UNVERIFIED: the web's growth is layout variance across seeds (one seed slower, another faster, same code on the web path); the refusals' counterfactual is measured, the per-seed web growth is not"
+}

@@ -136,17 +136,19 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 
 ## Wave 10 (amendment 9, 2026-10-07)
 
-- **T38a first**: wave 9's 29 found rows tiered by their work (4 moved: the drain outfall and the wood shed's front seat
-  to E2, the crown size to E2, the feeder brook to E3); the bundle re-checks after it added 15 more, tiered by verdict
-  (the E0 claims among them are claim lines by their nature).
-- **Scope**: the 27 open in-scope E0 rows, then the last contiguous run of in-scope E1 (FR-006, FR-010): rows 297-362
-  (18 rows, `tasks.md` Phase 11) - the notice board's figures, the lanes' stub reach, the stream, the polder, the comb
-  drain, the fork triangle and the rings; after it every open in-scope row is E2 or above (the next, row 363).
-- **Wave 9 is held in the clone**: its gate fails on one pool roll (Kuwabata's zigzag across a joint, the investigation in
-  `claims-followup.md`, Wave 9) and its band 3 owes the GM's sign-off; wave 10 is built on it and lands with it once the GM
-  rules (constitution XIII: a regressed state stays in the clone, unpushed).
-- **Verification**: as wave 9 - Inashiro first, the pool through the gate (Kuwabata's one known failure aside, every other
-  test green), the bookends back to back; `impl-drift` on every touched unit; a held value becomes a found row.
+- **Wave 9 first (FR-006)**: its gate failed on Kuwabata (a zigzag across a joint), bisected by row to the yard privy's step,
+  which is held at its pre-wave value as its found row (the re-seat rule, E3) - the spec's route (Edge Cases, FR-004). The
+  gate is green with it held. Its bookends owe the GM's sign-off (band 3), and the hold has a measured cost (three scaling
+  rolls refuse their web with it held, none at the page's value): both are the GM's to rule, recorded in `claims-followup.md`,
+  Wave 9. Wave 10 starts on top of the unpushed wave 9 only if a fresh exception check rules it LEGITIMATE with these
+  measurements; otherwise wave 10 waits for wave 9 to land.
+- **Tiers by work (FR-002, FR-003)**: wave 9's found rows tiered by their work by a fresh reader (T38a; T38b for the 18 found
+  after), and its three NEEDS-RESEARCH rows E4 with the research first (spec Edge Cases); the north annex's band row is "keep
+  the 18 ft floor" (E2), never a named exception.
+- **Scope**: the 25 open in-scope E0 rows, then the last contiguous run of in-scope E1 (FR-006, FR-010): rows 295-360 (19 rows,
+  `tasks.md` Phase 11); after it every open in-scope row is E2 or above (the next, row 361).
+- **Verification**: as wave 9 - Inashiro first, the pool through a green gate (FR-005), the bookends back to back;
+  `impl-drift` on every touched unit; a held value becomes a found row.
 
 ## Performance bookends (constitution VI)
 
