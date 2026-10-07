@@ -429,3 +429,25 @@ Reopened (2026-10-07): wave 13's re-check found these rows of closed waves out o
 - `buildings/programs.md::Country shrine (a village district's shrine)#farmers' stage knob` (DRIFTED, E2; closed in wave 2): stages on shrine ground are an attested form ("often built on shrine grounds", regional), yet the code fixes absent instead of rolling a seeded, regionally weighted knob; roll it, or claim the default as GUESS
 - `buildings/programs.md::Magistrate's manor (county magistracy)#manor kitchen garden by the sun` (DRIFTED, E2; closed in wave 4): the program names only the rear strip for the kitchen garden, but 0109 attests a site knob among four (west, south, rear, own parcel; the rear on a Chinese list alone) and a size knob, and the hand-drawn plans take the south; the program should roll the site and size
 - `buildings/programs.md::Magistrate's manor (county magistracy)#upland granary strongbox role` (DRIFTED, E2; closed in wave 3): a strongbox role rests on dry-field tax paid in coin, which the project's own deviation replaces with payment in kind, and no block puts coin in a granary; drop the role or relabel it GUESS
+- `buildings.md::Outer court (administrative / public)#granary size and the terminal row` (MISLABELED, E0): the ~43-50 x 25-27 ft guess matches, but the drawing page records only a single storehouse at the office and the row at the landing. The terminal store's row at the office is 0098.html's GUESS ("large storehouse rows at its office"): cite 0098.html §287, or record the row on the drawing page
+- `buildings/programs.md::Country shrine (a village district's shrine)#building size anchors` (DRIFTED, E2): the hall band "18-35 by 12-35 ft" fits Hie's ~18x12 (0215) but the 0222 drawing page says "Our maps draw the villagers' worship hall 20 to 35 ft on a side" with its small end at the 21 ft hall; reconcile the band or the page
+- `buildings/programs.md::Country shrine (a village district's shrine)#innermost arch one pitch off the hall` (DRIFTED, E2): the claim calls the 12 ft a GUESS (right for a physical distance), but the cited drawing page records it as "a map drawing convention"; the page should call it a guess
+- `buildings/programs.md::Country shrine (a village district's shrine)#stage and ring roll weights` (DRIFTED, E2): the 0222 drawing page says the stage and ring are "absent by default... leave both off unless they are turned on"; the code rolls even odds where no map places them; reconcile the page or the roll
+- `buildings/programs.md::Country shrine (a village district's shrine)#two-building dwelling size` (DRIFTED, E2): the page says it is drawn "at the size of the map's farmhouses, 46 by 28 ft", but the table's dwelling band is 34-60 by 18-38 ft; narrow the band or record it on the page
+- `buildings/programs.md::Magistrate's manor (county magistracy)#formal visitors and the privacy baffle` (DRIFTED, E2): "Formal visitors are received in the hall and go no deeper" contradicts the page's "the way to the residence runs on through the office" (Takayama's visitor route "continues on to the residence"), and the program's own residence bullet ("the visitors' way runs on through the office to the house"); d
+- `buildings/programs.md::Magistrate's manor (county magistracy)#walled enclosure` (DRIFTED, E2): the claim makes the gatehouse the office's gate range as at Omori (~108 ft) and Kaibara (~81 ft). The rendered gatehouse kind instead sizes "a gatehouse of its own, about 18 by 12 ft" from a temple's, with a band of 14-82 ft that excludes Omori. Size the gatehouse as a gate rowhouse, or drop the Omo
+
+## Wave 15 (2026-10-07)
+
+The stage and sumo-ring knobs were first made rolls and their two sheet modals rewritten; the modal checks and impl-drift found the
+rolls contrary to 0222's drawing page ("absent by default ... the maps leave both off unless they are turned on"), so the finding's
+other remedy was taken - the default claimed as that page's GUESS - and the knobs, the modals and Hoshigaoka's notes went back to
+their wave-14 text. The modal checks, run on the rewritten modals, also found what stands in their unchanged text (for a later
+pass on the sheet modals, not this feature's ranking - modals are not claims):
+- `sheet/sumo-ring.md`: the Rokugan date ("the 30th day of the seventh month ... the rice god") rests on no research page or
+  cited canon; "in the same way as elsewhere" is more than 0222 says; no guess bullet for the drawn size and form.
+- `sheet/stage.md`: the China sentence answers none of the kind's questions; "the plays it put on" says villagers performed,
+  which no page says; the booth-play roofing (0187, a temporary license) is applied to a permanent village stage; no guess
+  bullet for the drawn size and form.
+- The manor bundle's aside: the `tax_archive` band (20-48 by 10-36 ft, to ~1,700 sq ft) passes 0100's drawing page's ~450 sq ft
+  ceiling - already ranked (the tax archive size row).

@@ -28,8 +28,8 @@
 4. Grove and burial-ground side: **by the map** - the grove the map now draws; the village graveyard stays 430 ft west, outside the frame.
    **Burial ground**: apart - the knob's `apart` form (in the yard the other; buildings/programs.md, research 0226 drawing), taken from the map, not rolled.
 5. Wealth: **average** - thatch and plain timber; none of the donated stonework (guardian figures, lanterns, strength stones).
-6. Farmers' stage: **absent** - by the map, which draws none (knob 6), not rolled.
-7. Sumo ring: **absent** - by the map, which draws none (knob 7), not rolled.
+6. Farmers' stage: **absent** (the default; the map draws none).
+7. Sumo ring: **absent** (the default; the map draws none).
 8. Grove form: **behind and sides** (feature 279). The hall stands mid-slope, with no break of slope, so the candidates are both slope classes' forms in the knob's order; the roll is exactly `random.Random(zlib.crc32(b"hoshigaoka:shrine grove form")).choice(["behind", "behind and sides", "sides"])` - the map has no seed, so the seed is its name. (A first reading of the ground as a hall at the top of its slope rolled `sides` between two candidates; the building-review of 2026-09-28 found the map has no such break.)
 
 **Particulars**: the seven arches. A village shrine at average wealth would carry one; this one carries seven because its country monk is a stickler for the potent number seven and raised the extra six himself (the GM's one-off, 2026-07-22; reaffirmed 2026-09-26). No page read shows a village shrine with a row of arches before 1868 (research 090); the seven are the setting's particular, and the wealth knob stays average.

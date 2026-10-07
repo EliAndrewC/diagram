@@ -209,6 +209,22 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
   backup pushed, its own pair band 1 confirmed by perf-audit); wave 14's own pair opens at 2e0268412.
 - **Verification**: `impl-drift` on the touched claims, the gate, wave 14's own bookend pair.
 
+## Wave 15 (amendment 14, 2026-10-07)
+
+- **The filer reopens a closed row** (found 2026-10-07): wave 13's re-check called four rows of closed waves out of step, and
+  the filing script had skipped every key already ranked; it now files such a finding as a found row and takes the row out of
+  `waves.json`, its closing wave kept in `reopened`. T53a tiered the four by their work.
+- **Scope**: the one open E0 row, then the E2 run in ranking order - six Mode A paragraphs and `hamletgen/cluster.py`'s two drain
+  rows (`tasks.md` Phase 16). The seat loses its drain refusal (0058: a dispersed farmstead's rule, never a nucleated cluster's);
+  the per-farm rule no seat enforced is filed E3. Two sheet modals (the stage, the sumo ring) follow their knobs, and owe the
+  record checks `make record-owed` names.
+- **The scope script keeps the page path** (spec-fidelity's aside, amendment 13 round 2): `render_png`, the raster tiles, the page
+  vocabulary's tables and every Kind a kept map records a feature under.
+- **On the unpushed waves 9-14** under the wave-11 exception's condition (6): (1)-(5) held at wave 14's close (68ee171f4, its
+  backup pushed, its own pair band 1 confirmed); wave 15's own pair opens at 68ee171f4.
+- **Verification**: `impl-drift` on the touched claims, the record checks the modals owe, the gate with the pool hamlets
+  regenerated, wave 15's own bookend pair.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Each later wave that changes engine behavior takes

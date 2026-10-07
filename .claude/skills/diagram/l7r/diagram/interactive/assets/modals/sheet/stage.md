@@ -13,10 +13,10 @@ Some 1,777 farmers' stages are known across Japan, counting those since lost and
 and Nagano each have more than 200. How big a stage was is not recorded.
 
 Guesses:
-- That a stage is as likely as not at a shrine no map places: how many village shrines had a stage is not recorded, so a plan
-  with no map rolls for one with even odds.
+- That a shrine has a stage only where its plan calls for one, none by default: how many village shrines had a stage is not
+  recorded.
 
-Depiction: A plan on a map draws a stage only where the map has one; a plan with no map draws one or none, rolled for it. Where one stands it is the Japanese
+Depiction: The plan draws a stage only where it calls for one; by default none stands. Where one stands it is the Japanese
 farmers' stage: the Chinese stage built facing a temple is not drawn, since the shrines follow the Japanese village shrine.
 
 Name: stage

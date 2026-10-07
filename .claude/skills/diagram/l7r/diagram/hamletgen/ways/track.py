@@ -270,7 +270,7 @@ def stage_seat(s: Settlement, plan: SitePlan) -> None:
             fords opened on straight reaches, the only free cells in the brook's band
         every way pays the crossing - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html:
             `BROOK_CROSSING_COST_FT` set on the router for the whole roll
-        seat off the reed fringe - research/questions/0058-ground-too-wet-to-build-on.drawing.html: the pond's fringe passed as wet
+        seat off the reed fringe - CANON: the GM's ruling of 2026-08-28, the pond's fringe passed as wet; it departs from research/questions/0058-ground-too-wet-to-build-on.drawing.html, which does not count the fringe as marsh
         the wind is kept - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: a seat off the
             wind is recorded, never the wind renamed
     """
