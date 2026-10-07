@@ -1,6 +1,6 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "eaff23fbd990ff1b7f2f56c31244140258784e844bbdb755b131392b9ad84664",
+ "plan_sha256": "adb5cdf54771cf7bc30076d0cca9b28eefb7cefaf65f45482a5816c1cb71c8d6",
  "reviewed": "2026-10-07",
  "declared": "spec-fidelity",
  "decisions": [
@@ -162,16 +162,16 @@
   },
   {
    "id": "D9-scope-rule",
-   "summary": "Scope from the kept maps' own gen-cache entries (pool hamlets, magistracy sheets, country shrine): a recorded function or method, a class one of whose methods ran or which executed code constructs or names, a constant an executed function or an in-use knob's registration reads, a knob in use and a module-level claim on one, any unit under hamletgen/, KEPT_CHECKS, buildings* as mode-a; a claim whose value no kept map reads though its unit runs deferred with its measured reason (DEFERRED_ON_MEASURE); everything else deferred (897 of 3927 units, 13 single claims)",
+   "summary": "Scope from the kept maps' own gen-cache entries (pool hamlets, magistracy sheets, country shrine): a recorded function or method, a class one of whose methods ran or which executed code constructs or names, a constant an executed function or an in-use knob's registration reads, a knob in use (the registry's knob resolved by name - resolve/resolve_knob/pin_knob/KNOBS[...] - or its typing rule run; not a hamlet's own hamletgen/ table rolled under the same name) and a module-level claim on one, any unit under hamletgen/, KEPT_CHECKS, buildings* as mode-a; a claim whose value no kept map reads though its unit runs deferred with its measured reason; everything else deferred (897 of 3927 units, 14 single claims)",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "Round 3's items answered and reproduced on round 4's own run (audit/scope.py re-run into a scratch copy: scope.json and claims-deferred.json identical; 274 kept / 60 mode-a / 159 deferred open rows; 10 knobs in use): WINTER_CROP, PADDY_REST, FOOTBRIDGE_FORM(S), _knobs.py <module>#kosatsuba_seat forms and #hamlet default values, BoardSeat, SiteEnv, PocketUnlaid and tiles.py::Cover are all kept. The narrowing that remains - deferring a claim whose value no kept map consumes though its module or class body runs - is legitimate on purpose, not words: the GM asked to fix what scripted hamlets execute and to punt what only legacy settlements show, and a fix to such a value changes no kept map. Measured: row 275's FixtureForms default privy weights are read only by bundle.py:444's fallback, and every kept map sets _fixture_forms (hamletgen/homesteads/stages.py:405) before any fixture is laid (_lay_fixtures returns without _household_fixtures; the region probe pops it); row 420's _knobs.py settlement_form registry weights are rolled only by the legacy roller - a hamlet rolls its form from hamletgen/consts.SETTLEMENT_FORMS (plan.py:484), which stays kept. The spec's WORDING of 'a knob in use' does not match this measure (spec finding, not a plan narrowing: see the spec verdict)."
+   "why": "Round 4's item answered: FR-010 and D9 now word a knob in use as scope.py measures it. Reproduced on round 5's own run (audit/scope.py into a scratch copy: scope.json and claims-deferred.json identical; 3160 executed functions, 9 knobs in use - byre_form, family_form, fan_middle, footbridge_form, kosatsuba_seat, paddy_rest, weir_form, windbreak_belt, winter_crop; 274 kept / 60 mode-a / 159 deferred open rows). Each of the 9 is resolved by name inside a function the kept maps' records hold (driver.build, HamletSpec.__post_init__, retirement_houses, stage_field, channel_footbridges, resolve_seat, place_kosatsuba, resting_plots, draw_intake, _windbreak_belt, _coarse_grain_top_up), so the file-level scan admits nothing a kept map does not execute. The two newly deferred registry claims are legitimate on purpose: the hamlet rolls bamboo and settlement_form from its own hamletgen/consts.py tables (BAMBOO_FORMS, SETTLEMENT_FORMS via plan.py _roll, which only seeds knob_rng by name), those tables and their claims stay kept, and no executed function reads the registry's bamboo or settlement_form entry (no literal resolve, no KNOBS subscript; conditions.knobs, the one reader of every entry's value_space, is not in any kept record; the spec pins of the kept maps name only paddy_rest and byre_form). A fix to the registry entry changes no kept map. The remaining narrowing - a value whose unit runs but no kept map reads (row 275's FixtureForms default privy weights) - stands as ruled on round 4."
   },
   {
    "id": "D9-deferred-list-from-current-rows",
-   "summary": "dev/claims-deferred.json derived over every claimed unit (897 of 3927) plus single claims under `keys` (13), read by scripts/_claims.py (load_deferred, shown; tested); re-derived when a wave lands",
+   "summary": "dev/claims-deferred.json derived over every claimed unit (897 of 3927) plus single claims under `keys` (14: the 13 registry knob claims no kept map resolves, bamboo forms now among them, and row 275's privy weights), read by scripts/_claims.py; re-derived when a wave lands",
    "class": "within",
-   "why": "Reproduced exactly on round 4. The `keys` field carries the 12 <module> knob claims whose registry entry no kept map resolves and row 275's privy weights; _claims.shown and load_deferred read it and test_claims_index pins both directions."
+   "why": "Reproduced exactly on round 5 (diff empty against the committed file). The `keys` field gained `_knobs.py::<module>#bamboo forms`, which follows from D9-scope-rule's measure."
   },
   {
    "id": "D9-any-in-scope-row-keeps-unit",
@@ -201,7 +201,7 @@
    "id": "W9-scope",
    "summary": "Wave 9: the 5 open in-scope E0 rows (51, 62, 65, 93, 94), then in-scope E1 rows 265-297 (26 rows); next open in-scope E1 row 303",
    "class": "within",
-   "why": "Measured on round 4 from ranking.json and the re-derived scope.json: open in-scope E0 rows exactly 51, 62, 65, 93, 94; open in-scope E1 rows in 265-297 are 26, the deferred ones there 271, 273, 275, 282, 287, 289, 291; the next in-scope E1 row is 303. plan.md now says 5. Unchanged by round 3's corrections (the rows it moved are E2/E3)."
+   "why": "Re-derived on round 5 from ranking.json and the committed scope.json (identical to round 5's re-run; ranking.json's scope field agrees on every row): open in-scope E0 rows exactly 51, 62, 65, 93, 94; 26 open in-scope E1 rows in 265-297, the deferred ones there 271, 273, 275, 282, 287, 289, 291; the next in-scope E1 row is 303. Unchanged by round 4's correction."
   },
   {
    "id": "W9-verification",

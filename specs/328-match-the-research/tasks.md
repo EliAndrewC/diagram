@@ -501,15 +501,15 @@ closed.
   - `l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#headman keeps an ordinary yard and garden` - headman's garden held to an ordinary farm's: the same lowered cap (<= 1,507 sq ft, near the 592 sq ft typical) applies to a big house (after: l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#garden size)
   - `l7r/diagram/settlement/rolling/fit.py::BundleFitMixin._garden_shaded#garden shaded by a house to its south` - _garden_shaded reach gh + 4 px -> px(39) south of the bed (0038's 39 ft house-shade corridor)
 
-- [ ] T34 the scope applied: `audit/scope.py` and `audit/scope.json`, the ranking's scope column (`audit/merge.py`),
+- [x] T34 the scope applied: `audit/scope.py` and `audit/scope.json`, the ranking's scope column (`audit/merge.py`),
       `dev/claims-deferred.json` over every claimed unit, and `make claims-report` showing a deferred unit's findings DEFERRED
       (`scripts/_claims.py`, its test); the Mode A sheets' records taken (`make map`) so the scope sees them (FR-010)
       research: rendering
-      verify:
-- [ ] T34a the in-scope found rows tiered provisionally by verdict read and tiered by the work they take, by a fresh reader
+      verify: DONE. DONE. audit/scope.py (the kept maps' own execution records, all of hamletgen/, knobs resolved by name or by typing rule, constructed classes, measured per-claim exceptions) -> audit/scope.json and the ranking's scope column; dev/claims-deferred.json over every claimed unit (897 units, 14 claims); make claims-report shows their findings DEFERRED (158), the push's claims gate skips them (scripts/_claims.py, tested); the Mode A records taken with make map
+- [x] T34a the in-scope found rows tiered provisionally by verdict read and tiered by the work they take, by a fresh reader
       (FR-002, FR-003, SC-003)
       research: rendering
-      verify:
+      verify: DONE. DONE. 5 rows tiered by their work by a fresh Opus reader (audit/t34a-out.jsonl): 3 moved
 - [ ] T35 the bookend pair, back to back: `make perf LABEL=328-start` in a detached worktree at main's engine, then
       `LABEL=328-end` in the clone, nothing else running (constitution VI)
       research: rendering

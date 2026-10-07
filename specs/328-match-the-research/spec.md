@@ -270,3 +270,4 @@ Each wave's amendment adds its map decisions to this table. The program's decisi
   REQUIRED, plan BLOCKED - the records included the legacy roller's gate tests and stale rolls. Round 3 (spec-fidelity):
   CHANGES REQUIRED, plan BLOCKED - knobs, constructed classes and module-level claims missed. Round 4 (spec-fidelity):
   CHANGES REQUIRED, plan CLEAR (34 decisions) - FR-010's wording of a knob in use; the measure counts resolutions only.
+- Amendment 8, round 5 (spec-fidelity, 2026-10-07): FAITHFUL; plan CLEAR (34 decisions).
