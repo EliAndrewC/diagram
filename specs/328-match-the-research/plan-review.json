@@ -1,62 +1,39 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "d3487b80a9fb774ee8cf3c24982d7e3e43ceebfa602422d6bec75169a89c6fc3",
+ "plan_sha256": "769962f67bd3b22706b5206b6feda9b97d516bff047b1069a9f86e45812267c9",
  "reviewed": "2026-10-07",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W20-1",
-   "summary": "T65a: wave 19's found row 417 tiered E2 by a fresh reader",
+   "id": "W21-T67a",
+   "summary": "Wave 20's two UNCLAIMED framing rows tiered E0 by a fresh reader before the wave",
    "class": "within",
-   "why": "FR-002/FR-003: tiered by implementation work"
+   "why": "FR-002/FR-003: tiered by the work; the code already does what each claim will state (verified at parcels.py 306/928 and 436-437/469), so only the claim is missing"
   },
   {
-   "id": "W20-2",
-   "summary": "Scope: rows 417, 422, 423, 424 in ranking order",
+   "id": "W21-scope",
+   "summary": "Wave 21 takes the two open E0 rows only; the next open row (425, E2) waits",
    "class": "within",
-   "why": "FR-006/SC-003: the first open kept rows, contiguous"
+   "why": "FR-006 lowest tier first: these are the only open in-scope E0 rows in ranking.json (measured: 2 E0, 112 E2, 99 E3, 37 E4 open)"
   },
   {
-   "id": "W20-3",
-   "summary": "The walk through the field (crossed_through) asked on every tier, replacing round 1's level-only test; the seat still ranked higher than the fields where the ground slopes",
+   "id": "W21-labels",
+   "summary": "Both claims labeled CONVENTION (page framing / map furniture kept clear), not a physical citation",
    "class": "within",
-   "why": "FR-004 literal: 0077's drawing page asks both 'on the nearest slope beyond the fields from the houses' and 'on ground higher than the fields beside it'; the round-1 level/slope split (then ruled LEGITIMATE) is withdrawn on the glyph check's evidence that the slope tier admitted the houses' own side - removing a narrowing, not adding one"
+   "why": "the scan window predicts the crop and the title pocket is map furniture: drawing conventions, one of the four recorded classes; claim text matches the code's 0.6*half, 0.8 area floor and title_pocket keep rectangle"
   },
   {
-   "id": "W20-4",
-   "summary": "REAL_CROSSING_SHARE 0.5, labeled UNRESEARCHED",
-   "class": "within",
-   "why": "calibrated liberty on a continuum the page gives no figure for, labeled"
+   "id": "W21-stack",
+   "summary": "Wave 21 stacks on unpushed waves 9-20 under the wave-11 exception's condition (6); own bookend pair opens at 2ba8a8154",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "continuation of the exception already ruled LEGITIMATE on conditions; at 2ba8a8154 wave 20 is closed (T65/T66 ticked, gate green, impl-drift IN-STEP, glyph check answered), backup/digram-backlog points at 2ba8a8154 (ls-remote), its found rows ranked by the spec's found-row route as at every earlier close; wave 21 is its own amendment with a reset counter and this plan review before its first tick"
   },
   {
-   "id": "W20-5",
-   "summary": "'about as near' = one grid pitch, UNRESEARCHED; tie toward the field",
+   "id": "W21-verify",
+   "summary": "impl-drift on the two claims, make done, wave 21's own bookend pair; no review occasion (no map changes)",
    "class": "within",
-   "why": "0029 drawing page's tie rule; row 422's fix"
-  },
-  {
-   "id": "W20-6",
-   "summary": "bath wall rolled per house, beyond the stable at 0.8",
-   "class": "within",
-   "why": "rows 423/424; 0044: 17 of 21, 12 of 15"
-  },
-  {
-   "id": "W20-7",
-   "summary": "Occasions: Kashikawa one wood where three stood; Inashiro and Mizuguchi none on the sheet, recorded beyond it (woodland_offsheet N, W); glyph NEEDS-WORK verified by measurement, a third round left to the GM's waiver",
-   "class": "within",
-   "why": "re-measured on the manifests (HEAD~1 -> HEAD: inashiro 3->0 offsheet N, mizuguchi 1->0 offsheet W, kashikawa 3->1); the off-sheet record is the pre-existing D11, applied where 0077's rule leaves no seat on the sheet; FR-005 occasion declared"
-  },
-  {
-   "id": "W20-8",
-   "summary": "Wave 20 on the unpushed waves 9-19 under condition (6)",
-   "class": "within",
-   "why": "the wave-11 exception already ruled LEGITIMATE"
-  },
-  {
-   "id": "W20-9",
-   "summary": "The houses'-side fallback retired; a roll with no seat beyond the fields records the wood beyond the sheet",
-   "class": "within",
-   "why": "FR-004 literal: 0077 records no fallback to the open ground nearest the houses"
+   "why": "FR-005; a docstring-only change opens no feature-294 occasion"
   }
  ],
  "verdict": "CLEAR"

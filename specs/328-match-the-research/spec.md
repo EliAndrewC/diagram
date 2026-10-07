@@ -314,3 +314,4 @@ Each wave's amendment adds its map decisions to this table. The program's decisi
 - Wave 20, the woodland glyph check (Mizuguchi): NEEDS-WORK - the slope tier admitted the houses' own side; the walk through the field now asked on every tier; Inashiro and Mizuguchi record their woods off the sheet, Kashikawa keeps one; verified by measurement.
 - Amendment 19, round 4 (spec-fidelity, 2026-10-07): CHANGES REQUIRED, plan CLEAR (9 decisions) - the every-tier crossing literal; the stale comments and the row line restated; the drawn wood measured on Kashikawa.
 - Amendment 19, round 5 (spec-fidelity, 2026-10-07): FAITHFUL.
+- Amendment 20, round 1 (spec-fidelity, 2026-10-07): FAITHFUL, plan CLEAR.
