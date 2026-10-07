@@ -60,7 +60,7 @@ Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Each lat
 - XII: PASS - wave 1 draws nothing new; later waves carry their own opening (the cited research IS the opening: each fix
   matches an existing question) and closing (the rendered PNG re-examined) bookends.
 - XII decisions for the reader: PASS - each fix's class at the claim line; the program decisions in the spec's table.
-- XIII: PASS - wave 1 is behavior-free; later waves take a detached-worktree baseline per their own plans.
+- XIII: PASS - wave 1 is behavior-free; later waves take a detached-worktree baseline per the wave's plan amendment.
 - XVI: PASS - the direction (implementation to research) is the GM's; exceptions go to spec-fidelity.
 
 ## Decisions

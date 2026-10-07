@@ -13,8 +13,11 @@ For EACH finding in your batch file: open the unit's code (or procedure section)
 and read just enough of the cited question / drawing page to see what the matching implementation would be. Then judge:
 
 Tiers (implementation work, easiest first):
-- E0: the claim alone - the implementation already matches the research; only the claim's label (GUESS/CONVENTION/
-  UNRESEARCHED/DEVIATION/pointer), citation or wording is wrong. MISLABELED usually lands here.
+- E0: the claim alone - ONLY when the verdict is MISLABELED (impl-drift itself says the implementation matches), or when
+  a page already in the record (name it in `fix`; not edited for this) states what the code does; then only the claim's
+  label, citation or wording changes. Any other DRIFTED row whose easiest fix is rewording the claim is tiered by the
+  implementation work and flagged `deviation-tempting`. (Bounded in spec round 1; the nine batches ran on the earlier,
+  unbounded wording, so the merge sends every E0 row that is not MISLABELED or UNCLAIMED to a bounded re-check.)
 - E1: one value - one number, size, count or band in code or procedure text changes; the logic stands.
 - E2: one rule - one function's logic or one procedure paragraph changes, within one module or one section.
 - E3: a form or several places - a new rolled knob or new element, a change across modules, a hand-drawn Mode A sheet

@@ -132,8 +132,8 @@ session's last actions are recording the running checks, a commit, and `scripts/
   for the GM's word to continue. The cap is enforced by the armed per-goal hook (`~/.claude/hooks/usage_cap.py`, whose
   self-test `test-usage-cap.sh` holds exactly that allow/deny set), not by memory.
 - **FR-008 (the record of decisions)**: every fix that changes what a map draws or states is recorded in its class
-  (accurate, deviation, convention, guess) at the point of change and in the wave's spec under Decisions Recorded; the
-  claim line is the pointer.
+  (accurate, deviation, convention, guess) at the point of change and in this feature's `spec.md` under Decisions
+  Recorded, added by the wave's amendment; the claim line is the pointer.
 
 - **FR-009 (which hand-drawn maps are touched)**: the frozen hand-rolled settlement maps (Hoshigaoka and the other
   legacy villages) are never edited (GM 2026-09-28: *"I do not want you to modify hand-rolled maps"*). A Mode A building
@@ -162,7 +162,7 @@ session's last actions are recording the running checks, a commit, and `scripts/
 
 ## Decisions Recorded *(mandatory for any feature that changes what a map draws or states)*
 
-Each wave records its own map decisions in its own spec. This feature's decisions are about the program:
+Each wave's amendment adds its map decisions to this table. The program's decisions:
 
 | Decision | Class | Why | Recorded at |
 |---|---|---|---|
@@ -189,3 +189,9 @@ Each wave records its own map decisions in its own spec. This feature's decision
   (FR-007, self-test 55/55); (3) hand-drawn maps: FR-009 names what is and is not touched; (4) E0 bounded to a match
   impl-drift or an unedited page already states (FR-003). Points 2 (UNRESEARCHED out of scope), 4 (tiers) and 5 (the
   stop's intent) passed.
+- Round 2 (2026-10-07): REVISE - (1) FR-008 and the Decisions preamble still named a wave's own spec: both now say this
+  feature's `spec.md`, added by the wave's amendment (and the plan's XIII line); (2) MEASURED that a subagent's tool call
+  reaches the hook with the parent's session_id plus an `agent_id` (a probe agent's Bash call, logged): the hook now lets
+  a running subagent's calls through and refuses only its dispatching more agents, and sends it no usage note
+  (self-test 59/59); (3) the E0 bound copied into `ranking-brief.md`; the batches ran on the earlier wording, so the
+  merge sends every E0 row that is not MISLABELED or UNCLAIMED to a bounded re-check.
