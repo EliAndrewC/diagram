@@ -114,6 +114,7 @@ KINDS: dict[str, Kind] = {
 }
 """Research:
     what each tier is - research/questions/0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.html
+    a city's figure takes in its samurai country estates - CANON: the GM's request of feature 156, a provincial city's ~3,000 includes the samurai country estates, not the farmers
     a hamlet's dead at the village's grounds - research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html: no cremation ground of its own; its dead burned and buried at the main village's, which holds the district's grounds"""
 
 #: Which classes are a CROP, and how the card groups them. Read from the classes PRESENT on the map

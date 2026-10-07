@@ -78,7 +78,6 @@ from ._geom import ward_interior as ward_interior
 from ._geom import way_beds as way_beds
 from ._geom import wellhead_quad as wellhead_quad
 from ._knobs import BOUNDARY_MARKER_FT as BOUNDARY_MARKER_FT
-from ._knobs import BOUNDARY_MARKER_MIN_PX as BOUNDARY_MARKER_MIN_PX
 from ._knobs import BOUNDARY_STONE_CLEAR_FT as BOUNDARY_STONE_CLEAR_FT
 from ._knobs import EXECUTION_GROUND_DEAD_CLEAR_FT as EXECUTION_GROUND_DEAD_CLEAR_FT
 from ._knobs import KIDO_TOWER_KEEPCLEAR as KIDO_TOWER_KEEPCLEAR

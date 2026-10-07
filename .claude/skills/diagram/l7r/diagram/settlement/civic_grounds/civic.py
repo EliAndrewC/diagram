@@ -24,7 +24,7 @@ if TYPE_CHECKING:
 
 
 class CivicWorksMixin:
-    def precinct_interior(self: Settlement, x: float, y: float, w: float = 130.0, h: float = 100.0, rear: str = "north", graveyard: bool = True) -> None:  # type: ignore[misc]
+    def precinct_interior(self: Settlement, x: float, y: float, w: float | None = None, h: float | None = None, rear: str = "north", graveyard: bool = True) -> None:  # type: ignore[misc]
         """A SOVEREIGN TEMPLE PRECINCT's interior (feature 021, research item 7): the head-house
         program - abbot's residence, order administration, library/sutra hall, two monk
         dormitories, kitchen/refectory - drawn INSIDE the ground the 020 reservation held,
@@ -41,10 +41,11 @@ class CivicWorksMixin:
             head-house program - research/questions/0227-city-temples-the-precinct-its-halls-bell-tower-and-pagoda-garan.drawing.html: residence, kitchen, two dormitories, library, administration
             program seats - research/questions/0227-city-temples-the-precinct-its-halls-bell-tower-and-pagoda-garan.drawing.html: kuri and monks' quarters to one side, abbot's behind the hall; hand-set, dormitories on axis at the rear, residence to one side
             program sizes - UNRESEARCHED: hand-set footprints
-            precinct size - research/questions/0227-city-temples-the-precinct-its-halls-bell-tower-and-pagoda-garan.drawing.html: the caller's w x h, default 130 x 100 px
+            precinct size - research/questions/0227-city-temples-the-precinct-its-halls-bell-tower-and-pagoda-garan.drawing.html: about 73,000 sq ft, 310 x 235 ft by default, or the caller's w x h
             parish burial plot in the precinct - research/questions/0237-burial-grounds-of-towns-and-cities-and-paupers-grounds-yizhong.drawing.html, research/questions/0235-village-burial-grounds-bochi.drawing.html: a ruled plot; 24 x 16 px (about 0.08 acre at 3 ft/px)
             glyph - CONVENTION: footprint boxes, no captions
         """
+        w, h = (self.px(310) if w is None else w), (self.px(235) if h is None else h)  # a sovereign precinct about 73,000 sq ft (0227)
         self.M.setdefault("precincts", []).append({"x": round(x, 1), "y": round(y, 1), "w": w, "h": h, "rear": rear, "graveyard": graveyard})
         self.block_polys.append([(x - w / 2, y - h / 2), (x + w / 2, y - h / 2), (x + w / 2, y + h / 2), (x - w / 2, y + h / 2)])
         self.placed.append((x, y, w, h))
@@ -84,7 +85,7 @@ class CivicWorksMixin:
             rec["rank_band"] = rank_band
         self.M.setdefault("districts", []).append(rec)
 
-    def terrace(self: Settlement, x: float, y: float, units: int = 6, rot: float = 0.0, frontage_ft: float = 18.0, depth_ft: float = 21.0) -> int:  # type: ignore[misc]
+    def terrace(self: Settlement, x: float, y: float, units: int = 8, rot: float = 0.0, frontage_ft: float = 18.0, depth_ft: float = 24.0) -> int:  # type: ignore[misc]
         """A RETAINER TERRACE range (feature 021): ONE roof over `units` single-file household
         cells divided by party walls - the kumi-yashiki/nagaya form. Research (021 item 2):
         cells of 4.5-8 tatami behind an earth-floored entry, ~18 ft frontage each, ~21 ft
@@ -97,8 +98,8 @@ class CivicWorksMixin:
         Research:
             one roof over the cells - research/questions/0140-where-a-capitals-samurai-live-lineage-compounds-walled-estates-and-retainer-terraces-bukeyashiki.drawing.html, research/questions/0140-where-a-capitals-samurai-live-lineage-compounds-walled-estates-and-retainer-terraces-bukeyashiki.html: a continuous range with drawn seams
             cell frontage - research/questions/0140-where-a-capitals-samurai-live-lineage-compounds-walled-estates-and-retainer-terraces-bukeyashiki.html: 18 ft
-            range depth - research/questions/0140-where-a-capitals-samurai-live-lineage-compounds-walled-estates-and-retainer-terraces-bukeyashiki.html: 21 ft
-            cell count - research/questions/0140-where-a-capitals-samurai-live-lineage-compounds-walled-estates-and-retainer-terraces-bukeyashiki.html: eight households under one roof at Shibata; the caller's units, default 6
+            range depth - research/questions/0140-where-a-capitals-samurai-live-lineage-compounds-walled-estates-and-retainer-terraces-bukeyashiki.html: 24 ft, Shibata's 7.3 m
+            cell count - research/questions/0140-where-a-capitals-samurai-live-lineage-compounds-walled-estates-and-retainer-terraces-bukeyashiki.html: eight households under one roof at Shibata; the caller's units, default 8
         """
         w, h = units * frontage_ft / self.ftpx, depth_ft / self.ftpx
         g = [f'<g transform="translate({x:.1f},{y:.1f}) rotate({rot:.1f})">']
@@ -117,7 +118,7 @@ class CivicWorksMixin:
         self.placed.append((x, y, abs(w * math.cos(ta)) + abs(h * math.sin(ta)), abs(w * math.sin(ta)) + abs(h * math.cos(ta))))
         return z
 
-    def granary(self: Settlement, x: float, y: float, n: int = 3, w: float = 58, h: float = 34, gap: float = 14, label: str = "granary", append: bool = False, rot: float = 0.0) -> list[Any]:  # type: ignore[misc]
+    def granary(self: Settlement, x: float, y: float, n: int = 3, w: Any = None, h: Any = None, gap: float = 14, label: str = "granary", append: bool = False, rot: float = 0.0) -> list[Any]:  # type: ignore[misc]
         """A short row of fireproof storehouses (kura) - the tax-rice granary of a rice-TRANSIT
         town, where grain from many counties is gathered and forwarded up the kick-up chain.
         White-walled with a dark hip roof. Opt-in (meta(granary=True)): a standard county seat
@@ -134,7 +135,7 @@ class CivicWorksMixin:
 
         Research:
             tax-rice granary at a transit town - research/questions/0098-storehouses-for-the-tax-rice.drawing.html: opt-in, a county seat keeps its grain in the yamen
-            store size and count - research/questions/0098-storehouses-for-the-tax-rice.drawing.html: the caller's n x w x h, default 3 of 58 x 34 px
+            store size and count - research/questions/0098-storehouses-for-the-tax-rice.drawing.html: the caller's n x w x h, by default 3 office stores of about 45 x 25 ft
             the capital's granaries - research/questions/0142-rice-storehouses-and-the-rice-brokers-in-a-capital-kura-fudasashi.drawing.html: append, turned to the bank
             white walls and dark hip roof - research/questions/0098-storehouses-for-the-tax-rice.drawing.html: the form a knob (takakura or kura); always the earth-walled kura, not rolled
             store fills and roof band - CONVENTION
@@ -142,6 +143,7 @@ class CivicWorksMixin:
             keep-clear margin - UNRESEARCHED: 30 px, 60 px added when turned
             caption - CONVENTION
         """
+        w, h = (self.px(45) if w is None else w), (self.px(25) if h is None else h)  # one office store about 45 x 25 ft (0098)
         stores: list[Any] = []
         ga = math.radians(rot)
         gca, gsa = math.cos(ga), math.sin(ga)
@@ -214,11 +216,11 @@ class CivicWorksMixin:
         Research:
             a kura behind the shop - research/questions/0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.html: an annex opposite the awning
             a minority of shops - research/questions/0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html: the drawing page's GUESS, a large merchant house one or two, an ordinary shop-house none; the caller's count, default 6, of kinds merchant and shop
-            kura size - research/questions/0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html: 14 to 20 ft square; bscale is 1/ftpx on a to-scale town or city map, so the kura is 20 x 14 ft
+            kura size - research/questions/0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html: 14 to 20 ft square, drawn 17 ft square
             off the street bed and the neighbor's lot - NONE: overlap rules
         """
         if kw is None:
-            kw, kh = 20 * self.bscale, 14 * self.bscale  # a ~20x14 ft kura, scaled with the building grain
+            kw = kh = self.px(17)  # a kura 14 to 20 ft square (0155), drawn at the middle
         biz = [b for b in self.M["buildings"] if b["kind"] in ("merchant", "shop")]
         st = random.getstate()  # spread the picks across the quarter without perturbing
         random.seed(7)  # the main placement RNG (saved/restored, like forest())
@@ -265,7 +267,7 @@ class CivicWorksMixin:
             placed += 1
         return placed
 
-    def merchant_residences(self: Settlement, count: int = 4, depth_margin: float = 14, spread: float = 120) -> int:  # type: ignore[misc]
+    def merchant_residences(self: Settlement, count: int = 10, depth_margin: float = 14, spread: float = 120) -> int:  # type: ignore[misc]
         """Place a few RICH merchant RESIDENCES (kind 'merchant_large') directly BEHIND the shopfront band,
         each ALIGNED to (same rotation as) the storefront it sits behind - the merchant family lives over/
         behind its own shop. Derived from the ACTUAL placed shops (not fixed coords), so it stays correct
@@ -276,7 +278,7 @@ class CivicWorksMixin:
 
         Research:
             the merchant family lives behind its shop - research/questions/0154-merchants-townhouses-machiya.html, research/questions/0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html: one step behind the shopfront band, aligned to it
-            how many - research/questions/0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html: a dozen or so very rich merchant families in a city of about 3,000; the caller's count, default 4
+            how many - research/questions/0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html: a dozen or so very rich merchant families in a city of about 3,000; the caller's count, default 10
             spread along the band - UNRESEARCHED: 120 px apart
             band margin - UNRESEARCHED: 14 px
         """

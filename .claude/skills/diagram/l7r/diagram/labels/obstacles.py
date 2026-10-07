@@ -26,11 +26,12 @@ onto its group like any other (FR-014).
 Research: named civic buildings - research/questions/0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html: ministry, governor and temple keep full weight against another civic caption
 """
 
-GROUP_WORDS = {"funerary": ("funerary", "cemetery", "graveyard", "cremation", "mausoleum", "ossuary")}
+GROUP_WORDS = {"funerary": ("funerary", "cemetery", "graveyard", "cremation", "mausoleum", "ossuary"), "estate": ("estate", "samurai")}
 """The words that name a caption group, where a group is named by more than its own word (feature 328 wave 5): a caption
-naming a graveyard, a cremation ground, a mausoleum or an ossuary may cover any of the funerary structures.
+naming a graveyard, a cremation ground, a mausoleum or an ossuary may cover any of the funerary structures; a samurai caption
+may cover the samurai houses and estates (0243).
 
-Research: a funerary caption covers the funerary structures - research/questions/0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html: a graveyard, cremation, mausoleum or ossuary caption may cover any of the funerary structures"""
+Research: a funerary caption covers the funerary structures - research/questions/0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html: a graveyard, cremation, mausoleum or ossuary caption may cover any of the funerary structures, and a samurai caption the samurai houses and estates"""
 
 
 def names_group(group: str | None, words: str) -> bool:

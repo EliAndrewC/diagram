@@ -20,14 +20,13 @@ def test_the_web_reach_is_the_pages_100_ft_in_the_generator_and_in_the_gate() ->
     assert _WEB_REACH == WEB_REACH_FT
 
 
-def test_a_web_lane_reserves_far_less_ground_than_a_lane_the_houses_front() -> None:
-    """The two clearances exist to be different. `LANE_CLEARANCE` (40) holds a steading off a lane it
-    FRONTS; `WEB_CLEARANCE` is for a way that runs behind and between the plots, which the sources
-    describe as colonised by the adjoining house. Collapsing them is what made an early version of
-    the web grow the pool's clusters by up to 97%."""
+def test_the_lane_clearances_are_the_lane_pages_figures() -> None:
+    """Both clearances are 0246's (feature 328): the connector and spur keep a lane's middle 7 ft off a garden fence
+    (`LANE_CLEARANCE`), and a web lane takes its 18 ft room between homesteads (`WEB_CLEARANCE`). The 40 ft once held off a
+    lane the houses front was derived from the drawn minka's half-diagonal, a figure no page gives."""
     from l7r.diagram.hamletgen.consts import LANE_CLEARANCE
 
-    assert WEB_CLEARANCE < LANE_CLEARANCE
+    assert (LANE_CLEARANCE, WEB_CLEARANCE) == (7.0, 18.0)
 
 
 def test_the_web_only_threads_a_gap_a_person_can_walk() -> None:

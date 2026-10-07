@@ -261,7 +261,7 @@ def crossing_deck(ra: Pt, rb: Pt, rw: float, wa: Pt, wb: Pt, ww: float, wpts: An
     _need = ww / 2 + CARRIED_LANDING_FLOOR_FT / ftpx  # the check's own carried-way floor
     rot_used, span, seated = seat_deck(p, rot, _span, rw, wpts, _need, (wa, wb))
     if seated and not _lands_dry(p, rot_used, span, rw, wet):
-        _plank = (ww + rw * abs(_cs)) / _sn + PLANK_ABUTMENT
+        _plank = (ww + rw * abs(_cs)) / _sn + PLANK_ABUTMENT / ftpx
         rot_used, span, seated = seat_deck(p, rot, _plank, rw, wpts, ww / 2 + 2.0 / ftpx, (wa, wb))
         seated = seated and _lands_dry(p, rot_used, span, rw, wet)
     return p, rot_used, span, seated
@@ -540,14 +540,15 @@ class BridgesMixin:
         each deck's record as `form`. The form changes the glyph only, never where or how wide a crossing is laid.
 
         Research:
-            supply ditches only - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: never the collector, drain or feeder
+            supply ditches only - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: never the collector or drain, the foot drains and diagonal edge drains
+            feeder left unplanked - UNRESEARCHED: the feeder kept out of `SUPPLY_ROLES`
             no path leads to a plank - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html
             one near the middle, more on a long run - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: one per 320 px of the run wide enough
             short stub stepped over - UNRESEARCHED: under 140 px, no plank
             only water too wide to step across - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: worth_planking, a hard filter at the seat
             square across the ditch - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html
             plank width - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: about 4 ft (`px(4)`), a single-file crossing
-            short abutment - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: the local width plus PLANK_ABUTMENT
+            short abutment - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: the local width plus `PLANK_ABUTMENT`, 5.5 ft, so a 2.5 ft ditch takes an 8 ft deck
             polder crossings by side - UNRESEARCHED: seg_caps, none on the feeder, far toe or drain
             longer plank at a junction - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: the joins of ditches rule a seat out and the span stays about 8 ft; the code widens the deck over a junction
             obliqueness ceiling - UNRESEARCHED: no seat needing over three times the nominal span
@@ -555,8 +556,9 @@ class BridgesMixin:
             off dry crops and gardens - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: houses, crops and other crossings rule a seat out
             off groves - UNRESEARCHED: a farm's grove rules a seat out
             a seat nearer a drain refused - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: never the collector or drain (`plank_on_supply`)
-            assumed ditch width - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: a field ditch 2.5 ft at the head tapering toward 1.2 ft; the code assumes 4.2 px where a record has none (`DEFAULT_W`)
-            assumed stream and channel widths - UNRESEARCHED: 9 and 2.5 px where a record has none (`DEFAULT_W`)
+            assumed ditch width - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: a field ditch 2.5 ft at its head where a record has none (`DEFAULT_W`)
+            assumed brook width - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: a brook 7 ft wide where a record has none (`DEFAULT_W`)
+            assumed channel width - UNRESEARCHED: 2.5 px where a record has none (`DEFAULT_W`)
             not on another deck - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html
             both banks reach useful ground - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html
             one rolled form - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: FOOTBRIDGE_FORM
@@ -603,7 +605,7 @@ class BridgesMixin:
         # polygons whose box - a pixel wider - meets the deck's box hold every one it can meet, and `quad_hits_poly`
         # decides as before; `any` over them is `any` over all. The homes are boxed the same way for `_quads_overlap`.
         dry_grid, ground_grid, house_grid = (boxed_grid(boxed_polys(q, 1.0)) for q in (dry_quads, ground_quads, houses))
-        DEFAULT_W = {"streams": 9.0, "channels": 2.5, "field_ditches": 4.2}
+        DEFAULT_W = {"streams": self.px(7.0), "channels": 2.5, "field_ditches": self.px(2.5)}  # a brook 7 ft (0035), a field ditch 2.5 ft at its head (0084); the channel UNRESEARCHED
         # ...including the OTHER FIELD DITCHES, which is where the confluences actually are: a comb's
         # branch takes off from a main, and the plank the branch wants at its own head sits over the
         # junction where the water is the main's width, not the branch's. Listing only streams and
@@ -621,7 +623,7 @@ class BridgesMixin:
             total = sum(seg)
             if total < min_len:
                 continue  # a short stub (e.g. the head-race) is stepped over, no plank
-            w = d.get("w", 4.2)
+            w = d.get("w", DEFAULT_W["field_ditches"])
             w_tail = float(d.get("w_tail", w))
             if not worth_planking(w, w_tail, self.ftpx):
                 continue  # narrow enough to stride across ANYWHERE - see `worth_planking`; the gate agrees
@@ -645,7 +647,7 @@ class BridgesMixin:
                 if cap <= 0:
                     continue
                 n = min(n, cap)
-            span = w + PLANK_ABUTMENT  # provisional; re-sized at each seat from the LOCAL width below
+            span = w + self.px(PLANK_ABUTMENT)  # provisional; re-sized at each seat from the LOCAL width below
             for k in range(n):
                 base = (k + 0.5) / n * total  # midway for n=1, evenly spaced otherwise
                 # SLIDE along the ditch to a spot that (a) misses every home and (b) lands on
@@ -711,7 +713,7 @@ class BridgesMixin:
                     # on the downstream half of every collector and cost `features_do_not_overlap`
                     # (48-seed cohort 45 -> 44). The deck's size was never the defect; the ceiling's
                     # basis was.
-                    if span_here > 3.0 * (max(w, w_tail) + PLANK_ABUTMENT):
+                    if span_here > 3.0 * (max(w, w_tail) + self.px(PLANK_ABUTMENT)):
                         continue  # too oblique to plank: widen where a longer deck is reasonable, but a
                         # crossing that needs three times the nominal span is a course running nearly
                         # ALONGSIDE this one, and the answer there is to cross somewhere else. (The fine

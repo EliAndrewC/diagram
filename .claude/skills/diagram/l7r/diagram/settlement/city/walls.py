@@ -263,7 +263,7 @@ class WallsMixin:
             inspection hall size - research/questions/0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html: 44 x 22 ft
             set on the patrol road - research/questions/0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html: the drawing page's GUESS, about 105 to 135 ft inside the opening on the patrol road's center; `FLANK_INSET_FT` 120 ft in, or the ring road centerline where that is deeper, 6 px past the verge
             fills and trim - CONVENTION
-            fallback road width - research/questions/0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html: the gate's 30 ft is the trunk road's width; the code falls back to px(26) where no `road_width` is recorded
+            fallback road width - research/questions/0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html: the gate's 30 ft is the trunk road's width, the fallback where no `road_width` is recorded
             turned to the wall - research/questions/0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html: they stand square to the wall, within about 6 degrees
         """
         # the GUARD HOUSE and INSPECTION STATION FLANK THE ROAD at the gate throat - one on each
@@ -280,10 +280,10 @@ class WallsMixin:
         # pulled in radially to the ring road centerline - the two end up just off either verge of
         # the road at the gate, the road passing between them.
         gh_west = not g_east  # guard house on the WEST flank by default; guard_east flips it east (inspection takes the other verge)
-        # px(26): city_wall runs before s.road, so this falls back to the Imperial-road default -
+        # px(30), the trunk road's width (0147): city_wall runs before s.road, so this falls back to the Imperial-road default -
         # which is a width in FEET and must be converted, or a city sets its guard buildings back
         # from a roadway three times wider than the one that will actually be drawn (GM 2026-07-27).
-        road_half = self.M.get("road_width", self.px(26)) / 2
+        road_half = self.M.get("road_width", self.px(30)) / 2
         # TRUE SCALE (GM 2026-07-22, was fixed-pixel 66x44 / 60x44 = ~198x132 / 180x132 ft at 3 ft/px -
         # a guardhouse drawn bigger than a temple): footprints in REAL FEET via px(). A gate guard duty
         # room is a small 1-3 bay building (~34x20 ft, upper end of the 15-35 ft attested range); a gate
@@ -358,7 +358,7 @@ class WallsMixin:
 
         Research:
             gate caption - CONVENTION: one 9 pt italic label pushed inward clear of the defenses
-            ground reserved round the gate works - research/questions/0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html: about 36 ft clear around each; 12 px round the guard buildings
+            ground reserved round the gate works - research/questions/0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html: about 36 ft clear around the gate tower and each gate building
             ground reserved round the gate tower - research/questions/0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html: about 36 ft clear around it
         """
         # ONE label for the pair, centered on the road just inside the gate and pushed far enough
@@ -429,7 +429,7 @@ class WallsMixin:
             # old 66x44 furniture) reserved far more ground than the footprint and squeezed a
             # gate-side quarter's packing (nagahara's E-gate merchant blocks). A modest apron keeps
             # packs from abutting the actual footprint without over-reserving (GM 2026-07-22).
-            bm = self.px(36) if gs.get("kind") == "tower" else 12
+            bm = self.px(36)  # about 36 ft clear round the gate tower and each gate building (0147)
             self.block_polys.append(
                 [
                     (gs["x"] - gs["w"] / 2 - bm, gs["y"] - gs["h"] / 2 - bm),
@@ -451,9 +451,9 @@ class WallsMixin:
             no tower in a gate or water-gate opening - research/questions/0148-towers-along-the-city-wall-mamian.drawing.html: within 390 ft of a gate, 135 ft of a water gate
             slide off a ward gate or gate works - research/questions/0148-towers-along-the-city-wall-mamian.drawing.html: the drawing page's GUESS bands, 186 ft of a ward gate and 165 ft of guard buildings, slides of 22 to 46 px
             coverage remediation - research/questions/0148-towers-along-the-city-wall-mamian.drawing.html: towers added where fewer than the posture's minimum reach
-            reach counted from the parapet - research/questions/0148-towers-along-the-city-wall-mamian.drawing.html: plus 12 px
-            exempt stretches - research/questions/0148-towers-along-the-city-wall-mamian.drawing.html: 130 px of a gate, 55 px of its guard buildings
-            a slid tower off a gate - research/questions/0148-towers-along-the-city-wall-mamian.drawing.html: no tower within 390 ft of a gate; a slid seat is held only 45 px from one
+            reach counted from the parapet - research/questions/0148-towers-along-the-city-wall-mamian.drawing.html: 36 ft out from the tower's center
+            exempt stretches - research/questions/0148-towers-along-the-city-wall-mamian.drawing.html: within 390 ft of a gate and 165 ft of its guard buildings
+            a slid tower off a gate - research/questions/0148-towers-along-the-city-wall-mamian.drawing.html: no tower within 390 ft of a gate, a slid seat held to it too
             tower onto the berm - research/questions/0148-towers-along-the-city-wall-mamian.drawing.html: a tower stands about 39 ft out from the wall; the code nudges its center px(40) outward onto the berm
         """
         # GUARD TOWERS (mamian) around the rampart, in addition to the gate towers, for enfilading
@@ -504,7 +504,7 @@ class WallsMixin:
             if _blocked(vx, vy):
                 for da in (22, -22, 34, -34, 46, -46):
                     sx_, sy_, se_ = self._wall_point_at_arc(pts, arc + da)
-                    if not _blocked(sx_, sy_) and all(math.hypot(sx_ - gx, sy_ - gy) >= 45 for gx, gy in gates):
+                    if not _blocked(sx_, sy_) and all(math.hypot(sx_ - gx, sy_ - gy) >= self.px(390) for gx, gy in gates):
                         vx, vy, ta_i = sx_, sy_, se_
                         break
                 else:
@@ -529,7 +529,7 @@ class WallsMixin:
         # curtain and drop an extra mural into the middle of any run of points still short of the tier's
         # coverage. This is what turns "spacing <= range" into "coverage >= min everywhere" even after slides.
         _rng_ft, _mincov = WALL_DEFENSE.get(tier, WALL_DEFENSE["garrison"])
-        _Rpx = _rng_ft / self.ftpx + 12.0  # +12 px: a mamian's half-footprint - an archer shoots from the tower's span, not its center point (matches the coverage check)
+        _Rpx = _rng_ft / self.ftpx + self.px(36)  # the reach counted from the parapet, 36 ft out from the tower's center (0148)
         for _pass in range(5):
             _nst = max(8, int(perim / 10))  # finer than the check's 18px sampling, so remediation catches every point the check would flag
             _step = perim / _nst
@@ -537,7 +537,7 @@ class WallsMixin:
             for _si in range(_nst):
                 _ra = perim * _si / _nst
                 _px, _py, _junk = self._wall_point_at_arc(pts, _ra)
-                if any(math.hypot(_px - gx, _py - gy) < 130 for gx, gy in gates) or any(math.hypot(_px - fx_, _py - fy_) < 55 for fx_, fy_ in gate_furn):
+                if any(math.hypot(_px - gx, _py - gy) < self.px(390) for gx, gy in gates) or any(math.hypot(_px - fx_, _py - fy_) < self.px(165) for fx_, fy_ in gate_furn):
                     continue  # inside the gate BARBICAN (gate + guard house + inspection) - a defended complex, exempt from the open-curtain rule
                 if sum(1 for tx_, ty_ in placed_tw if math.hypot(_px - tx_, _py - ty_) <= _Rpx + 1) < _mincov:
                     _thin.append(_ra)

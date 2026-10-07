@@ -5,7 +5,6 @@ import random
 
 import pytest
 
-from l7r.diagram import settlement
 from l7r.diagram.settlement import Settlement, seg_dist
 from tests.settlement._builders import _assert_no_glyph_overlaps, _cap020, _city, _crop_settlement, _town
 
@@ -317,7 +316,7 @@ def test_boundary_marker_is_a_location_marker():
     s.boundary_marker(300, 300)
     b = s.M["boundary_markers"][0]
     assert (b["w"], b["h"]) == (4.0, 4.0)  # TRUE footprint: a real stone is ~4 ft (0217)
-    assert b["vw"] == b["vh"] == settlement.BOUNDARY_MARKER_MIN_PX  # DRAWN at the legibility floor
+    assert b["vw"] == b["vh"] == s.px(4.0)  # DRAWN at its true 4 ft: 0217's smallest mark that shows (feature 328 wave 7 dropped the floor)
     assert (300, 300, b["vw"], b["vh"]) in s.placed  # overlap uses the drawn box, like the wells
 
 
@@ -370,12 +369,12 @@ def test_district_records_a_named_region():
 
 
 def test_terrace_draws_one_roof_with_party_wall_seams():
-    """The kumi-yashiki range (research 021 item 2): units x 18 ft frontage, 21 ft deep, one
+    """The kumi-yashiki range (research 021 item 2): units x 18 ft frontage, 24 ft deep (0140: Shibata's 7.3 m), one
     record for the whole roof, party-wall seams BETWEEN cells (units-1 of them)."""
     s = _crop_settlement()
     s.terrace(500, 500, units=6)
     r = s.M["terraces"][0]
-    assert r["units"] == 6 and abs(r["w"] - 6 * 18.0) < 0.1 and abs(r["h"] - 21.0) < 0.1
+    assert r["units"] == 6 and abs(r["w"] - 6 * 18.0) < 0.1 and abs(r["h"] - 24.0) < 0.1
     assert s.top[-1].count("<line") == 5  # 5 party walls divide 6 cells
     assert any(abs(p[0] - 500) < 0.1 and abs(p[2] - r["w"]) < 0.1 for p in s.placed)
 

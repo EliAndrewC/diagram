@@ -81,7 +81,7 @@ class FuneraryGroundsMixin:
         Research:
             unplotted ground for a common burial ground - research/questions/0235-village-burial-grounds-bochi.html, research/questions/0235-village-burial-grounds-bochi.drawing.html: organic unless parish
             parish plot ruled - research/questions/0235-village-burial-grounds-bochi.drawing.html: the drawing page's map drawing convention, a ruled plot in the temple precinct
-            rows of low markers - research/questions/0235-village-burial-grounds-bochi.drawing.html: 9 px apart, each wholly inside the ground
+            rows of low markers - research/questions/0235-village-burial-grounds-bochi.drawing.html: about 9 ft apart, each wholly inside the ground
             marker heights - CONVENTION: 6 to 8 px
             a taller memorial stone or two - research/questions/0235-village-burial-grounds-bochi.drawing.html: two stupas
             no cleared band round the ground - research/questions/0224-ground-swept-clear-around-shrines-and-graves.drawing.html
@@ -99,7 +99,8 @@ class FuneraryGroundsMixin:
         else:
             blob = None
             g.append(f'<rect x="{-w / 2:.1f}" y="{-h / 2:.1f}" width="{w:.0f}" height="{h:.0f}" rx="3" fill="#CFC6B4" stroke="#8C8470" stroke-width="1.3" opacity="0.75"/>')
-        yy = -h / 2 + 9
+        sp = self.px(9)  # the rows about 9 ft apart (0235)
+        yy = -h / 2 + sp
         while yy < h / 2 - 5:  # rows of small upright grave markers (kept inside the blob)
             xx = -w / 2 + 8
             while xx < w / 2 - 5:
@@ -108,11 +109,11 @@ class FuneraryGroundsMixin:
                     # its TOP inside the blob too (feature 273, settlement-review on Kuwabata): a marker is drawn
                     # upward from its base, and on a small ground a base just inside the rim put its top 5 ft out
                     if blob is not None and not point_in_poly(xx, yy - mh, blob):
-                        xx += 9
+                        xx += sp
                         continue
                     g.append(f'<rect x="{xx - 1.4:.1f}" y="{yy - mh:.1f}" width="2.8" height="{mh}" rx="1" fill="#9AA1A4" stroke="#5A584F" stroke-width="0.5"/>')
-                xx += 9
-            yy += 9
+                xx += sp
+            yy += sp
         stupas = (
             [(-w * 0.24, -h * 0.22), (w * 0.24, -h * 0.22)]
             if organic  # interior anchors (always inside the blob)
@@ -246,7 +247,7 @@ class FuneraryGroundsMixin:
 
         Research:
             cleared ground size - research/questions/0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html: 75 ft at a village or town, 130 ft at a city
-            fire bed - research/questions/0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html: a stone-framed trench about 12 x 8 ft
+            fire bed - research/questions/0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html: about a coffin's length and a little wider, about 6 x 3 ft
             roofed bed the minority - research/questions/0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html: ROOFED_SHARE off the seat
             roof size - research/questions/0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html: about 11 ft square on four posts
             six jizo at a burial ground's entrance - research/questions/0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html, research/questions/0235-village-burial-grounds-bochi.html
@@ -271,7 +272,7 @@ class FuneraryGroundsMixin:
         )  # cleared scorched ground
         fx = cx + crx * 0.08  # the fire bed a little east of center; the shelter keeps the east rim
         self.add(f'<polygon points="{cremation_outline(fx + crx * 0.05, cy + cry * 0.07, crx * 0.52, cry * 0.5, 14, 0.2, rnd)}" fill="#9A8A6A" opacity="0.5"/>')  # the burned ground
-        abw, abh = max(self.px(12), 5.0), max(self.px(8), 3.6)  # the fire bed (~12x8 ft burn area), a trench in the leveled ground
+        abw, abh = max(self.px(6), 2.0), max(self.px(3), 1.2)  # the fire bed, about one coffin long and a little wider (0238), a trench in the leveled ground
         self.add(
             f'<rect x="{fx - abw / 2 - 0.8:.1f}" y="{cy - abh / 2 - 0.8:.1f}" width="{abw + 1.6:.1f}" height="{abh + 1.6:.1f}" rx="0.8" fill="none" stroke="#8C8470" stroke-width="1.2"/>'
         )  # its stone frame

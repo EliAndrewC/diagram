@@ -444,7 +444,7 @@ class CastleCivicMixin:
             state violet - CONVENTION
             hall apron - UNRESEARCHED: max(30 x bscale, 14) px, and a reserved caption band
             compound layout - UNRESEARCHED: the hall across the north, the lane on the south band, the master's house between, a 10 ft azuchi, the shooting line 6 ft from the lane's end
-            practice gear - UNRESEARCHED: a rack and posts drawn in the compound
+            the compound's contents - research/questions/0165-martial-training-grounds-and-dojo.drawing.html: its wall and three features, the rest implied (no practice gear drawn)
         """
         f = self.px
         cw, ch = f(MARTIAL_COMPOUND_FT[0]) / 2, f(MARTIAL_COMPOUND_FT[1]) / 2
@@ -457,7 +457,6 @@ class CastleCivicMixin:
         g.append(f'<rect x="{lx1:.1f}" y="{ly0:.1f}" width="{f(10):.1f}" height="{ly1 - ly0:.1f}" rx="1" fill="#A98C58" stroke="#6B5228" stroke-width="1.1"/>')  # the azuchi butt
         self._dojo_hall(g, -cw + f(3), -ch + f(6), f(MARTIAL_HALL_FT[0]), f(MARTIAL_HALL_FT[1]), "#CDBBD6", "#463653", "#6A4A78")  # one long hall across the north
         g.append(f'<rect x="{f(10):.1f}" y="{-ch + f(45):.1f}" width="{f(40):.1f}" height="{f(24):.1f}" rx="1.5" fill="#DDB87A" stroke="#5A3F1E" stroke-width="1.4"/>')  # the sensei's house
-        self._keiko_gear(g, (-cw + f(10), -f(8)), [(-cw + f(32), -f(5)), (-cw + f(44), -f(5))], "#463653")
         g.append('</g>')
         self.add(''.join(g))
         self.M.setdefault("martial_halls", []).append(
@@ -782,7 +781,7 @@ class CastleCivicMixin:
             gate opening - research/questions/0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html: a 13 ft passage
             gateposts - UNRESEARCHED: 14 x 48 px posts flanking the opening
             buildings kept off the rampart - research/questions/0125-town-walls-and-which-county-seats-had-one-chengqiang.drawing.html: a clear strip about 46 ft wide; the code keeps 46 px
-            ground round the gate structures - research/questions/0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html: about 36 ft clear around each; the code keeps 32 px
+            ground round the gate structures - research/questions/0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html: about 36 ft clear around each
         """
         wc = '#3A352C'
         # the rampart renders in the WALL layer (over the ground lanes - a street running into it passes
@@ -807,7 +806,7 @@ class CastleCivicMixin:
                 self.M["gate_structs"].append({"x": gx + 70, "y": gy - 24, "w": 40, "h": 40, "z": tz})
             # block the guard station / tower from placement (rect + a building-half margin)
             for gs in self.M["gate_structs"]:
-                bm = 32
+                bm = self.px(36)  # about 36 ft clear around each (0147)
                 self.block_polys.append(
                     [
                         (gs["x"] - gs["w"] / 2 - bm, gs["y"] - gs["h"] / 2 - bm),

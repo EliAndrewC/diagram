@@ -576,7 +576,7 @@ KOSATSUBA_MARKER_MIN_PX = 11.0
 
 PUNISHMENT_SPOT_FT = (30.0, 12.0)  # the cangue frame + post + kneeling stone, true size at every tier
 """Research: punishment ground size - research/questions/0191-execution-and-punishment-grounds-keijo.drawing.html: 30 x 12 ft at every tier"""
-BOUNDARY_MARKER_FT = 4.0  # a real roadside dosojin stone (drawn as a marker - see BOUNDARY_MARKER_MIN_PX)
+BOUNDARY_MARKER_FT = 4.0  # a real roadside dosojin stone, drawn at its true size
 """Research: boundary stone size - research/questions/0217-wayside-shrines-and-stone-figures-dosojin-jizo.drawing.html: 4 ft"""
 
 
@@ -604,13 +604,8 @@ def execution_ground_ft(scale: str) -> tuple[float, float]:
     return (100.0, 60.0) if scale in CITY_TIER_SCALES else (60.0, 60.0)
 
 
-BOUNDARY_MARKER_MIN_PX = 7.0
-"""Research: boundary stone legibility floor - CONVENTION: 7 px long axis"""
-# Long-axis floor in px for the DRAWN dosojin stone (see Settlement.boundary_marker). A real
-# roadside boundary stone is ~4 ft, which draws 4 px at town grain and 1-2 px at city grain - sub-glyph
-# at EVERY tier, so this is a location marker in the wells' sense, never a size claim. 7 px is below
-# the wellhead glyph (~8 px) on purpose: the stone should read as the smallest deliberate mark on the
-# map, because that is what it is.
+# NO DRAWN FLOOR FOR THE BOUNDARY STONE (feature 328 wave 7): it was drawn at a 7 px floor, about 21 ft at the city grain,
+# where 0217 draws each stone about 4 ft across, the smallest mark that shows; it is drawn at its true size.
 
 BOUNDARY_STONE_CLEAR_FT = 60.0
 """Research: boundary stone off the houses - research/questions/0191-execution-and-punishment-grounds-keijo.drawing.html: 60 ft clear of the nearest dwelling on an unwalled map"""

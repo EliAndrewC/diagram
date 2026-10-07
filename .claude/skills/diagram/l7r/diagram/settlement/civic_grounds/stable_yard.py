@@ -22,7 +22,7 @@ if TYPE_CHECKING:
 
 
 class StableYardMixin:
-    def _stable_yard(self: Settlement, sx: float, sy: float, sw: float, sh: float, r: float = 72.0) -> None:  # type: ignore[misc]
+    def _stable_yard(self: Settlement, sx: float, sy: float, sw: float, sh: float, r: float | None = None) -> None:  # type: ignore[misc]
         """Draw the working YARD around a gate stables (GM 2026-07-22): the open ground where wagon-trains
         park, oxen are unyoked and tethered, teamsters wait between stages. Research (research/questions/0195-stable-yards-and-watering-troughs.html ('Stable
         yard'): a beaten-earth forecourt - NO grass (trampled hard, animals hay-fed not grazed) - and NOT a
@@ -41,9 +41,10 @@ class StableYardMixin:
 
         Research:
             beaten-earth yard, no paddock, no animals - research/questions/0195-stable-yards-and-watering-troughs.drawing.html
-            yard radius - research/questions/0195-stable-yards-and-watering-troughs.drawing.html: r, default 72 px
+            yard radius - research/questions/0195-stable-yards-and-watering-troughs.drawing.html: about 255 ft across by default (r, px(127.5))
             seeded scatter - NONE: the global stream seeded from the seat and restored
         """
+        r = self.px(127.5) if r is None else r  # a gate's stable yard about 255 ft across (0195)
         st = random.getstate()
         random.seed(int(abs(sx) * 11 + abs(sy) * 7 + round(r)))
         ctx = _YardCtx(self, sx, sy, r)
@@ -174,7 +175,7 @@ class StableYardMixin:
         """The troughs and their well.
 
         Research:
-            troughs clustered at the nearest well - research/questions/0195-stable-yards-and-watering-troughs.drawing.html: a well within r + 40 px
+            troughs clustered at the nearest well - research/questions/0195-stable-yards-and-watering-troughs.drawing.html: a well within 40 ft of the yard's edge
             trough count - research/questions/0195-stable-yards-and-watering-troughs.drawing.html: 3 on a ground of r 76 or more, else 2
             trough size - research/questions/0195-stable-yards-and-watering-troughs.drawing.html: 4.6 x 2 px
             bucket-pour offset - research/questions/0195-stable-yards-and-watering-troughs.drawing.html: the roof's reach plus 1.5 px
@@ -236,7 +237,7 @@ class StableYardMixin:
 
         wp: Pt | None = None
         for wl in sorted(self.M.get("wells", []) or [], key=lambda o: math.hypot(o["x"] - sx, o["y"] - sy)):
-            if not 1 <= math.hypot(wl["x"] - sx, wl["y"] - sy) <= r + 40:
+            if not 1 <= math.hypot(wl["x"] - sx, wl["y"] - sy) <= r + self.px(40):
                 continue
             wp = beside(wl)
             if wp:

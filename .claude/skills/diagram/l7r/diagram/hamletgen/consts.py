@@ -88,8 +88,10 @@ GROSS_ACRES_PER_HOUSEHOLD = 1.3
 # the same two pre-existing failures on the same two seeds as the 48 baseline - so the 8 ft this
 # returns to the cluster costs nothing. (At 32 the cohort drops to 21/24: the lane checks stay
 # green, but a corridor that tight re-packs the cluster into gardens and crops.)
-LANE_CLEARANCE = 40.0
-"""Research: fronting lane's corridor - UNRESEARCHED: a 40 ft no-build corridor about a fronting lane, where the page says only that farmsteads front a lane and nothing is built on it"""
+# ...AND 0246 GIVES THE CLEARANCE (feature 328 wave 7): a lane's middle keeps 7 ft clear of a garden fence and nothing is built
+# on its tread, so the connector and the spur keep 7 ft, not the 40 ft derived above from the drawn minka's half-diagonal.
+LANE_CLEARANCE = 7.0
+"""Research: fronting lane's corridor - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane's middle keeps 7 ft clear of a garden fence, nothing built on its tread"""
 
 # HOW FAR ALONG THE FIELD OUTLINE THE CLUSTER ACTUALLY REACHES, as a multiple of the seat band's own
 # lateral half-extent. ONE definition, read by `front_row` (which samples outline vertices out to

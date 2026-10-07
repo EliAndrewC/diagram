@@ -12,7 +12,7 @@ from .._geom import (
     label_tilt,
     tilt_caption_seat,
 )
-from .._knobs import BOUNDARY_MARKER_FT, BOUNDARY_MARKER_MIN_PX, CITY_TIER_SCALES, PUNISHMENT_SPOT_FT, execution_ground_ft
+from .._knobs import BOUNDARY_MARKER_FT, CITY_TIER_SCALES, PUNISHMENT_SPOT_FT, execution_ground_ft
 
 if TYPE_CHECKING:
     from ..core import Settlement
@@ -197,13 +197,13 @@ class JusticeGroundsMixin:
 
         Research:
             dosojin at the boundary - research/questions/0191-execution-and-punishment-grounds-keijo.drawing.html, research/questions/0085-village-boundaries-and-their-markers-murazakai.drawing.html: the caller's seat on the road out
-            stone size - research/questions/0217-wayside-shrines-and-stone-figures-dosojin-jizo.drawing.html: BOUNDARY_MARKER_FT recorded, drawn at the marker floor
+            stone size - research/questions/0217-wayside-shrines-and-stone-figures-dosojin-jizo.drawing.html: about 4 ft across, drawn at its true size (the smallest mark that shows)
             paired figures - research/questions/0217-wayside-shrines-and-stone-figures-dosojin-jizo.html: a seam down the stone
             how many stones - research/questions/0217-wayside-shrines-and-stone-figures-dosojin-jizo.drawing.html: a group of one to three at an entrance; the code draws one
             caption - CONVENTION
         """
         w = h = self.px(BOUNDARY_MARKER_FT)
-        k = max(1.0, BOUNDARY_MARKER_MIN_PX / w)  # marker floor, aspect preserved
+        k = 1.0  # drawn at its true 4 ft (0217: the smallest mark that shows; feature 328 wave 7 dropped the 7 px floor)
         vw, vh = w * k, h * k
         hw, hh = vw / 2, vh / 2
         g = [f'<g transform="translate({x:.0f},{y:.0f}) rotate({rot:.1f})">']

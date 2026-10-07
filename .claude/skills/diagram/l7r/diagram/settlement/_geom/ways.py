@@ -22,8 +22,8 @@ from .primitives import seg_dist
 # field-workers can cross to the FIELD, so both banks must reach ground worth crossing to. The record:
 # research/questions/0084-plank-bridges-over-farm-ditches-itabashi.html, research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html
 # and research/questions/0087-road-bridges-over-rivers-and-canals-hashi.drawing.html.
-PLANK_ABUTMENT = 6.0  # deck = local ditch width + this SHORT abutment (GM 2026-07-22: was 15, far too long for a footplank)
-"""Research: footplank abutment - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: deck is the ditch width plus 6 px"""
+PLANK_ABUTMENT = 5.5  # FEET: deck = local ditch width + this SHORT abutment, converted at each use (feature 328 wave 7: 6 px at every grain was 15 ft at 2 ft/px; GM 2026-07-22: was 15, far too long for a footplank)
+"""Research: footplank abutment - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: a deck over a 2.5 ft ditch spans about 8 ft, so 5.5 ft past the water, in feet at the map's scale"""
 PLANK_BANK_REACH = 11.0  # px past the abutment where a bank opens onto the terrain it lands on
 """Each bank probed past the abutment for the ground it lands on.
 

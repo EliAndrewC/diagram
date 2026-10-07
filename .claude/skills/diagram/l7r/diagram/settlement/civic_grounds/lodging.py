@@ -184,9 +184,9 @@ class LodgingMixin:
 
         Research:
             stables size - UNRESEARCHED: 92 x 44 ft
-            stall divisions - research/questions/0108-stables-umaya.drawing.html: every 16 px at the 44 ft depth, at least 6 px
+            stall divisions - research/questions/0108-stables-umaya.drawing.html: a stall a ken, about 6 ft, wide
             keep-clear margin - UNRESEARCHED: 24 px
-            working yard at a city's gate stables - research/questions/0195-stable-yards-and-watering-troughs.drawing.html: queued, radius 72 px
+            working yard at a city's gate stables - research/questions/0195-stable-yards-and-watering-troughs.drawing.html: queued, about 255 ft across
         """
         if w is None:
             w, h = self.px(92), self.px(44)
@@ -197,7 +197,7 @@ class LodgingMixin:
             f'<rect x="{-hw:.1f}" y="{-hh:.1f}" width="{w:.1f}" height="{h:.1f}" rx="2" fill="#B79A6E" stroke="#5A4326" stroke-width="{max(2 * sf, 1.0):.1f}"/>',
             f'<rect x="{-hw:.1f}" y="{-hh:.1f}" width="{w:.1f}" height="{9 * sf:.1f}" fill="#6B4F2A"/>',
         ]  # roof ridge
-        sx, step = -hw + 12 * sf, max(16 * sf, 6)  # stall divisions
+        sx, step = -hw + 12 * sf, max(6 * sf, 3)  # stall divisions, one ken (about 6 ft) apart (0108)
         while sx < hw - 8 * sf:
             g.append(f'<line x1="{sx:.1f}" y1="{-hh + 9 * sf:.1f}" x2="{sx:.1f}" y2="{hh:.1f}" stroke="#6B4F2A" stroke-width="1.4" opacity="0.7"/>')
             sx += step
@@ -216,9 +216,9 @@ class LodgingMixin:
             # drawn after it - so a heap landed on a later street (Nagahara wharf yard). Yards now
             # draw at crop time (flush_stable_yards, auto-run by crop_city), when the map is
             # complete - the same-data-as-the-checks doctrine (research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html).
-            self._pending_yards.append((x, y, w, h, 72.0, None))
+            self._pending_yards.append((x, y, w, h, self.px(127.5), None))
 
-    def animal_ground(self: Settlement, cx: float, cy: float, r: float = 68.0, label: Any = None) -> None:  # type: ignore[misc]
+    def animal_ground(self: Settlement, cx: float, cy: float, r: float | None = None, label: Any = None) -> None:  # type: ignore[misc]
         """EXTRA interior ANIMAL / CARAVAN GROUND - a standalone stable-yard scatter (beaten earth,
         hitching rails, a trough, dung heaps) that CLAIMS an open pocket as
         deliberate working ground. This is the standing EASY REMEDY when city_no_large_empty_space
@@ -231,8 +231,9 @@ class LodgingMixin:
         detector counts as claimed. The label (e.g. "caravan ground") is optional; the rails
         usually read on their own.
 
-        Research: caravan ground - research/questions/0195-stable-yards-and-watering-troughs.drawing.html: a queued yard, radius 68 px by default
+        Research: caravan ground - research/questions/0195-stable-yards-and-watering-troughs.drawing.html: a queued yard, about 255 ft across by default
         """
+        r = self.px(127.5) if r is None else r  # a caravan ground as wide as a gate's stable yard, about 255 ft across (0195)
         self._pending_yards.append((cx, cy, 0.0, 0.0, r, label))  # queued like the stables yards - drawn at crop time when every way exists (GM 2026-07-24)
 
     def flush_stable_yards(self: Settlement) -> None:  # type: ignore[misc]

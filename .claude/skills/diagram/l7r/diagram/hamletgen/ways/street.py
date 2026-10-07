@@ -41,7 +41,7 @@ def row_reach(houses: Sequence[Mapping[str, Any]]) -> tuple[float, float]:
 
     Research:
         a farm's own street - UNRESEARCHED: a farm within 1.5 frames of the street is its own
-        street run past its end farms - UNRESEARCHED: half a frame"""
+        street run past its end farms - UNRESEARCHED: half a frame past the end farms at both ends of the span; the run off the map is `street_run_out`'s road (0033)"""
     fw = max((max(float(b[2]), float(b[3])) for b in (((h.get("geom") or {}).get("bbox")) for h in houses) if b), default=BUNDLE_PITCH)
     return 1.5 * fw, fw / 2
 

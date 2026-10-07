@@ -79,7 +79,9 @@ def crossing_points(p: Poly, course: Poly) -> list[tuple[int, Pt]]:
 def off_ford_at(M: Mapping[str, Any], reach: float = FORD_HALF) -> list[tuple[int, int, Pt]]:
     """(lane index, segment index, point) for every crossing of the brook by a lane farther than `reach` from every
     recorded ford (`meta.brook_fords`).
-    Research: crossed at a ford - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html"""
+    Research:
+        crossed at a ford - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html
+        how far off a crossing place - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: within `FORD_HALF`, half the crossing place's 60 ft"""
     fords = [(float(f[0]), float(f[1])) for f in (M.get("meta") or {}).get("brook_fords") or []]
     return [(i, k, x) for brook in _brooks(M) for i, p in enumerate(_ways(M)) for k, x in crossing_points(p, brook) if min((math.dist(x, f) for f in fords), default=math.inf) > reach]
 
@@ -106,7 +108,7 @@ def oblique_at(M: Mapping[str, Any], water: str = "brook") -> list[tuple[int, in
     (`water_courses`) more than `FORD_SQUARE_TOL_DEG` off square.
     Research:
         square brook crossing - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html
-        square ditch crossing - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: 10 degrees"""
+        square ditch crossing - UNRESEARCHED: a channel crossing squared within `FORD_SQUARE_TOL_DEG`, 10 degrees (0084 squares only the standalone footplank)"""
     out = []
     ways = list(_ways(M))
     boxes = [_bbox(p) for p in ways]
@@ -175,7 +177,9 @@ def undeckable_crossings(M: Mapping[str, Any]) -> list[tuple[int, int]]:
 def short_decks(M: Mapping[str, Any]) -> list[tuple[int, int, float, float]]:
     """(x, y, span, water width) for every deck over a recorded watercourse (within `DECK_NEAR_FT` of it) shorter than that
     course's full width - its abutment stands in the water (`bridges_span_their_water`).
-    Research: a deck spans its water - research/questions/0087-road-bridges-over-rivers-and-canals-hashi.drawing.html"""
+    Research:
+        a deck spans its water - research/questions/0087-road-bridges-over-rivers-and-canals-hashi.drawing.html
+        assumed water widths - UNRESEARCHED: 3 ft for a ditch or channel, 6 ft for a stream, where none is recorded"""
     courses = [([(float(p[0]), float(p[1])) for p in d["poly"]], max(float(d.get("w", 3.0)), float(d.get("w_tail", 3.0)))) for d in (M.get("field_ditches") or [])]
     courses += [([(float(p[0]), float(p[1])) for p in c["poly"]], float(c.get("w", 3.0))) for c in (M.get("channels") or [])]
     courses += [([(float(p[0]), float(p[1])) for p in s["poly"]], float(s.get("w", 6.0))) for s in (M.get("streams") or [])]
