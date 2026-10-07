@@ -349,7 +349,7 @@ def carry_on(s: Settlement, i: int, e: int, q: Pt, to: Pt) -> bool:
     Research:
         a junction stays a T - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: one network, so the step is its own
             field path
-        stepped spur's corridor - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the no-build corridor `LANE_CLEARANCE`, 7 ft"""
+        stepped spur's corridor - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the no-build corridor `LANE_CLEARANCE`, 7 ft to a fence held as a 40 ft center corridor"""
     lanes = s.M.get("lanes") or []
     step = squared_step(q, to, drawn_water_segs(s))
     if not off_the_fixtures(s, [q, *step], float(lanes[i].get("w") or 3)):

@@ -197,7 +197,7 @@ class LodgingMixin:
             f'<rect x="{-hw:.1f}" y="{-hh:.1f}" width="{w:.1f}" height="{h:.1f}" rx="2" fill="#B79A6E" stroke="#5A4326" stroke-width="{max(2 * sf, 1.0):.1f}"/>',
             f'<rect x="{-hw:.1f}" y="{-hh:.1f}" width="{w:.1f}" height="{9 * sf:.1f}" fill="#6B4F2A"/>',
         ]  # roof ridge
-        sx, step = -hw + 12 * sf, max(6 * sf, 3)  # stall divisions, one ken (about 6 ft) apart (0108)
+        sx, step = -hw + 12 * sf, 6 * sf  # stall divisions, one ken (about 6 ft) apart (0108)
         while sx < hw - 8 * sf:
             g.append(f'<line x1="{sx:.1f}" y1="{-hh + 9 * sf:.1f}" x2="{sx:.1f}" y2="{hh:.1f}" stroke="#6B4F2A" stroke-width="1.4" opacity="0.7"/>')
             sx += step

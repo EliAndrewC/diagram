@@ -88,10 +88,12 @@ GROSS_ACRES_PER_HOUSEHOLD = 1.3
 # the same two pre-existing failures on the same two seeds as the 48 baseline - so the 8 ft this
 # returns to the cluster costs nothing. (At 32 the cohort drops to 21/24: the lane checks stay
 # green, but a corridor that tight re-packs the cluster into gardens and crops.)
-# ...AND 0246 GIVES THE CLEARANCE (feature 328 wave 7): a lane's middle keeps 7 ft clear of a garden fence and nothing is built
-# on its tread, so the connector and the spur keep 7 ft, not the 40 ft derived above from the drawn minka's half-diagonal.
-LANE_CLEARANCE = 7.0
-"""Research: fronting lane's corridor - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane's middle keeps 7 ft clear of a garden fence, nothing built on its tread"""
+# HELD AT 40 (feature 328 wave 7): 0246 keeps a lane's middle 7 ft clear of a garden FENCE, but the corridor this sets is a
+# CENTER test (`_near_corridor` asks a candidate's center), so 7 ft would let a building's body stand on the tread; the 40 ft
+# is the 7 ft carried to a center by the drawn minka's half-diagonal. Measuring the corridor to the footprint's edge, so 0246's
+# 7 ft can be written as it stands, is its own row (an edge-based corridor test).
+LANE_CLEARANCE = 40.0
+"""Research: fronting lane's corridor - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane's middle 7 ft clear of a garden fence, held as a 40 ft center corridor (the minka's half-diagonal added) until the corridor is tested at a footprint's edge"""
 
 # HOW FAR ALONG THE FIELD OUTLINE THE CLUSTER ACTUALLY REACHES, as a multiple of the seat band's own
 # lateral half-extent. ONE definition, read by `front_row` (which samples outline vertices out to

@@ -118,7 +118,7 @@ class CivicWorksMixin:
         self.placed.append((x, y, abs(w * math.cos(ta)) + abs(h * math.sin(ta)), abs(w * math.sin(ta)) + abs(h * math.cos(ta))))
         return z
 
-    def granary(self: Settlement, x: float, y: float, n: int = 3, w: Any = None, h: Any = None, gap: float = 14, label: str = "granary", append: bool = False, rot: float = 0.0) -> list[Any]:  # type: ignore[misc]
+    def granary(self: Settlement, x: float, y: float, n: int = 1, w: Any = None, h: Any = None, gap: float = 14, label: str = "granary", append: bool = False, rot: float = 0.0) -> list[Any]:  # type: ignore[misc]
         """A short row of fireproof storehouses (kura) - the tax-rice granary of a rice-TRANSIT
         town, where grain from many counties is gathered and forwarded up the kick-up chain.
         White-walled with a dark hip roof. Opt-in (meta(granary=True)): a standard county seat
@@ -135,7 +135,7 @@ class CivicWorksMixin:
 
         Research:
             tax-rice granary at a transit town - research/questions/0098-storehouses-for-the-tax-rice.drawing.html: opt-in, a county seat keeps its grain in the yamen
-            store size and count - research/questions/0098-storehouses-for-the-tax-rice.drawing.html: the caller's n x w x h, by default 3 office stores of about 45 x 25 ft
+            store size and count - research/questions/0098-storehouses-for-the-tax-rice.drawing.html: the caller's n x w x h, by default the office's single store of about 45 x 25 ft
             the capital's granaries - research/questions/0142-rice-storehouses-and-the-rice-brokers-in-a-capital-kura-fudasashi.drawing.html: append, turned to the bank
             white walls and dark hip roof - research/questions/0098-storehouses-for-the-tax-rice.drawing.html: the form a knob (takakura or kura); always the earth-walled kura, not rolled
             store fills and roof band - CONVENTION
