@@ -225,3 +225,12 @@ Each wave's amendment adds its map decisions to this table. The program's decisi
 - Amendment 3, round 2 (spec-fidelity-verify, 2026-10-07): CHANGES REQUIRED - T15 and the Phase 5 heading name the four
   E1 rows ahead of the lane law, so no box can be ticked with them undone.
 - Amendment 3, round 3 (spec-fidelity-verify, 2026-10-07): FAITHFUL.
+- Amendment 4, round 1 (spec-fidelity, 2026-10-07): CHANGES REQUIRED, plan BLOCKED - (1) wave 5 must be the contiguous
+  run of the ranking, not the homestead modules; (2) the row street settled now (0033 governs it, not 0246); (3) closed
+  rows keep the tier they closed at (`audit/closed-tiers.json`).
+- Amendment 4, round 2 (spec-fidelity, 2026-10-07): FAITHFUL; plan CLEAR (13 decisions within). Notes taken: the mill
+  row re-tiered E3 when its fix proved a new element; `merge.py` records a newly closed row's tier itself.
+- Amendment 5, round 1 (spec-fidelity, 2026-10-07): CHANGES REQUIRED, plan CLEAR - DEVIATION offered as an ordinary
+  claim label; it is written only after the exception path rules it LEGITIMATE, and the spur clip margin cites 0081
+  against the code.
+- Amendment 5, round 2 (spec-fidelity-verify, 2026-10-07): FAITHFUL.
