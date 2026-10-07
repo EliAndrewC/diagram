@@ -62872,19 +62872,19 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/waterfields/polder.py::build_polder#lattice unbent by default": {
-  "code": "85576ba56dcba083",
+  "code": "c160d17a5c31c21f",
   "core": "d51f5c127b6edb32",
   "date": "2026-10-07",
-  "note": "the rice polder keeps its grid; the dike-pond block passes its own mosaic",
+  "note": "a rice polder keeps its surveyed grid, so the default `mosaic` is 0.0 and only the dike-pond block bends its lattice; the page records only the grid form for rice polders, so there is no choice of forms to roll",
   "pages": {
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "45bbefa1e8568ae6"
   },
   "research": "7e58acaa9e345ce6",
   "rests": [
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:4141eca659aa9041",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:470adb1b46c06909",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:48a5898890bd6579",
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:4cf532f7ce72c2a8"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:4cf532f7ce72c2a8",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:8abfa46638cc09f4"
   ],
   "verdict": "IN-STEP"
  },

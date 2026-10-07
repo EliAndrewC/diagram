@@ -285,3 +285,5 @@ Each wave's amendment adds its map decisions to this table. The program's decisi
 - Amendment 10, round 1 (spec-fidelity, 2026-10-07): CHANGES REQUIRED, plan CLEAR - the fallback brook's width labeled 0068
   (option b taken: 0059, with 0068's conflict named). Round 2: FAITHFUL. Round 3: FAITHFUL, plan CLEAR (the push caution).
   Exception check for wave 11 on the unpushed waves 9 and 10: LEGITIMATE on six conditions (plan, Wave 10).
+- Amendment 11, round 1 (spec-fidelity, 2026-10-07): CHANGES REQUIRED, plan CLEAR - the polder lattice claim false for every
+  drawn map (corrected). Round 2: FAITHFUL.

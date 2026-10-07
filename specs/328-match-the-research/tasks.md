@@ -663,10 +663,10 @@ exception's condition (6): conditions (1)-(5) still held when wave 11 closed (67
 - [x] T46a wave 11's found rows tiered by the work they take, by a fresh reader (FR-002, FR-003, SC-003)
       research: rendering
       verify: DONE. 12 rows tiered by their work by a fresh Opus reader (audit/t46a-out.jsonl): none moved
-- [ ] T47 the claims written and the values fixed toward their pages; the pool through the gate (FR-004, FR-005)
+- [x] T47 the claims written and the values fixed toward their pages; the pool through the gate (FR-004, FR-005)
       research: rendering
-      verify:
-- [ ] T48 every touched unit re-checked by `impl-drift`, and the close: wave 12's own bookend pair, `make done` green, the wave
+      verify: DONE. the 8 claims written and the 2 values in feet (the brook's bank margin, the polder toe's run); no pool map moved (the census unchanged); make done green
+- [x] T48 every touched unit re-checked by `impl-drift`, and the close: wave 12's own bookend pair, `make done` green, the wave
       column (FR-005, FR-006, SC-002, SC-003)
       research: rendering
-      verify:
+      verify: DONE. impl-drift on every touched unit (w12bA 24 IN-STEP, w12bB the corrected lattice claim IN-STEP), two byre values filed as found rows; wave 12's own pair (328-start at 6760d9bbf): band 0, owes nothing; the wave column written
