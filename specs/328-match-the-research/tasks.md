@@ -80,3 +80,56 @@ web left ten farmhouses off the network (`WebRefused`); restoring 3.0 alone, of 
       research: rendering
       verify: DONE. 328-start -> 328-end band 1 (total -1.2%; 20-household seed 4 +0.7 s and 10-household seed 25 +0.2 s, both from the privy seats in 0047's order, measured by perf-audit's control and confirmed consistent); make done green (172 s); 14 wave-2 rows IN-STEP in ranking.json's wave column; the findings the re-checks exposed are found rows, listed in claims-followup.md
 
+## Phase 4 - wave 3 (tier E0: the claim alone, the found rows) - amendment 2, 2026-10-07
+
+The re-checks of waves 1 and 2 ranked 39 more E0 rows (found rows, tiered provisionally by verdict: a MISLABELED
+claim or an UNCLAIMED decision). Tier order (SC-003) takes them before the rest of E1. Each is re-tiered on reading: a row
+whose fix is more than the claim line moves to the tier it takes and says so (FR-003's bounded E0). Occasions: none - claim
+lines only. The rows:
+
+  - `buildings.md::Fire-water tubs#a tub never on a well glyph; moved to another eaves corner`
+  - `buildings.md::Fire-water tubs#tub against its wall`
+  - `buildings.md::Fire-water tubs#tub clear of the footprint`
+  - `buildings.md::Outer court (administrative / public)#cell kept well under the barracks`
+  - `buildings.md::Outer court (administrative / public)#granary kept under a residence block`
+  - `buildings.md::Outer court (administrative / public)#practice ground area`
+  - `buildings.md::Outer court (administrative / public)#practice ground placement`
+  - `buildings.md::Outer court (administrative / public)#practice ground shared with cart staging or muster`
+  - `buildings.md::Outer court (administrative / public)#practice ground weapon rack`
+  - `buildings.md::Outer court (administrative / public)#stable below barracks`
+  - `buildings.md::Outer court (administrative / public)#tax archive drawn with white-plaster fill, heavy stroke and dark door mark`
+  - `buildings.md::Sacred features#a fence round the sanctuary alone as a wealth knob (0223 §171-172 finds such fences before 1868 only where the shogunate or a lord built them)`
+  - `buildings.md::Sacred features#grove inside a compound wall`
+  - `buildings.md::Sacred features#the whole sacred complex held to at most ~2/3 of the residence`
+  - `buildings/programs.md::Country shrine (a village district's shrine)#a well as the purification stop beside the approach ("the well or basin"; the required item is `well`)`
+  - `buildings/programs.md::Country shrine (a village district's shrine)#approach width about 10 ft`
+  - `buildings/programs.md::Country shrine (a village district's shrine)#bell tower band 6-16 by 6-16 ft`
+  - `buildings/programs.md::Country shrine (a village district's shrine)#dwelling privy`
+  - `buildings/programs.md::Country shrine (a village district's shrine)#kitchen garden by the sun`
+  - `buildings/programs.md::Country shrine (a village district's shrine)#sacred tree drawn as the biggest crown in the precinct`
+  - `buildings/programs.md::Magistrate's manor (county magistracy)#a detached guest house at a rich posting (0091's drawing page records it as a GUESS)`
+  - `buildings/programs.md::Magistrate's manor (county magistracy)#formal visitors and the privacy baffle`
+  - `buildings/programs.md::Magistrate's manor (county magistracy)#upland granary strongbox role`
+  - `buildings/programs.md::Magistrate's manor (county magistracy)#wells by use`
+  - `l7r/diagram/hamletgen/cluster.py::seat_cluster#not in the reed fringe`
+  - `l7r/diagram/hamletgen/cluster.py::seat_cluster#the seat center set dep + 12 ft out from the field margin`
+  - `l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#a ring with room for fewer than 5 crowns is refused as a wood`
+  - `l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#commons legibility floor: a ring under 120 ft is dropped rather than drawn smaller (fewer, never smaller)`
+  - `l7r/diagram/hamletgen/homesteads/farm_water.py::farm_channel#how far a channel's source is sought: 20 ft steps, 60 ft spread, widened fourfold`
+  - `l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#a footpath's room off the outline`
+  - `l7r/diagram/hamletgen/homesteads/wells.py::place_wells#grove farms take their own water and are left out of the communal wells`
+  - `l7r/diagram/hamletgen/homesteads/wells.py::place_wells#no well seated over a household's reserved wood-floor seats`
+  - `l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#no way drawn twice`
+  - `l7r/diagram/hamletgen/ways/serve.py::shadowed_by#no way drawn twice`
+  - `l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#clear of crop, wet and water`
+  - `l7r/diagram/hamletgen/ways/web.py::stage_web#a web lane's span`
+  - `l7r/diagram/hamletgen/ways/web.py::stage_web#door path reach`
+  - `l7r/diagram/hamletgen/ways/web.py::stage_web#web lanes off the hard ground`
+  - `l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#annexes abut their house`
+- [ ] T12 every row read and either its claim corrected (cite the page that already says what the code does, relabel, or claim the undecided decision) or re-tiered with the reason; each corrected claim re-checked by `impl-drift` and IN-STEP (FR-003, FR-004, FR-005)
+      research: rendering
+      verify:
+- [ ] T13 the close: `make done` green; the wave column set from the index; landed (FR-005, FR-006, SC-002, SC-003)
+      research: rendering
+      verify:
+
