@@ -16,7 +16,7 @@ from l7r.diagram.settlement.land.wet import marsh_ground
 
 from ..consts import Poly, Pt
 from ..plan import SitePlan
-from .crossing import crossed_through, reached_across  # noqa: F401 - reached_across re-exported (tests)
+from .crossing import crossed_through, crossed_through_many, reached_across  # noqa: F401 - re-exported (tests)
 from .frame import content_box, frame_bounds, title_pocket
 
 CROP_MARGIN = 48.0  # the one crop margin, shared by stage_frame's crop_to_content call and the
@@ -516,7 +516,7 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
             # nearest the houses (impl-drift, wave 20). On EVERY tier the walk must run THROUGH the field (`crossed_through`):
             # 0077 asks both beyond the fields AND higher than them, and on ground falling evenly the houses' own side is
             # higher than the field too (the woodland glyph check of wave 20, Mizuguchi).
-            _beyond = [t for t in scored if crossed_through(plan.envelope, (ccx, ccy), (t[1], t[2]))]
+            _beyond = [t for t, ok in zip(scored, crossed_through_many(plan.envelope, (ccx, ccy), [(t[1], t[2]) for t in scored]), strict=True) if ok]
             scored = _beyond
             # ...NOT IN A ROW: a seat in line with two placed parcels is stepped sideways off the row where the ground allows,
             # and refused where it does not - the count is a target the scan already meets only where there is open ground

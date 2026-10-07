@@ -6,13 +6,13 @@ Research: crossing geometry - NONE: segment crossings and point sampling along a
 
 from __future__ import annotations
 
-import math
+from collections.abc import Sequence
 
-from l7r.diagram.settlement import point_in_poly, segments_cross
+from l7r.diagram.settlement import segments_cross
 
 from ..consts import Poly, Pt
 
-__all__ = ["REAL_CROSSING_SHARE", "crossed_through", "reached_across"]
+__all__ = ["REAL_CROSSING_SHARE", "crossed_through", "crossed_through_many", "reached_across"]
 
 
 def reached_across(field: Poly, frm: Pt, to: Pt) -> bool:
@@ -24,16 +24,33 @@ REAL_CROSSING_SHARE = 0.5
 """Research: a real crossing - UNRESEARCHED: the walk inside the field at least half the field's depth along it"""
 
 
-def crossed_through(field: Poly, frm: Pt, to: Pt, share: float = REAL_CROSSING_SHARE, samples: int = 64) -> bool:
+def crossed_through(field: Poly, frm: Pt, to: Pt, share: float = REAL_CROSSING_SHARE) -> bool:
     """Whether the straight walk `frm` -> `to` runs THROUGH the field rather than clipping a corner (feature 328, the woodland
     glyph check on Inashiro: a walk that crossed 42 ft of a 1,381 ft field counted as across it): the length of the walk
-    inside the field is at least `share` of the field's depth along the walk's direction.
+    inside the field is at least `share` of the field's depth along the walk's direction. One walk of `crossed_through_many`.
 
     Research: beyond the fields on the level - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: the far side of the fields from the houses"""
-    length = math.dist(frm, to)
-    if length <= 0.0 or not field:
-        return False
-    ux, uy = (to[0] - frm[0]) / length, (to[1] - frm[1]) / length
-    inside = sum(1 for i in range(samples) if point_in_poly(frm[0] + (to[0] - frm[0]) * (i + 0.5) / samples, frm[1] + (to[1] - frm[1]) * (i + 0.5) / samples, field)) * length / samples
-    depth = max(p[0] * ux + p[1] * uy for p in field) - min(p[0] * ux + p[1] * uy for p in field)
-    return depth > 0.0 and inside >= share * depth
+    return crossed_through_many(field, frm, [to], share)[0]
+
+
+def crossed_through_many(field: Poly, frm: Pt, tos: Sequence[Pt], share: float = REAL_CROSSING_SHARE) -> list[bool]:
+    """`crossed_through` for every walk from `frm` to each of `tos`, asked in one vectorized call (wave 20's pair: sampling
+    each candidate's walk against the field cost the hinterland stage up to +1.1 s a roll): the exact length of each walk
+    inside the field against the field's depth along it.
+
+    Research: walk through the field - NONE: the geometry of `crossed_through`, vectorized"""
+    if len(field) < 3 or not tos:
+        return [False] * len(tos)
+    import numpy as np  # noqa: PLC0415 - bound on first use
+    import shapely  # noqa: PLC0415
+
+    poly = shapely.Polygon(list(field))
+    lines = shapely.linestrings([[frm, to] for to in tos])
+    inside = shapely.length(shapely.intersection(lines, poly))
+    d = np.asarray(tos, dtype=float) - np.asarray(frm, dtype=float)
+    length = np.hypot(d[:, 0], d[:, 1])
+    u = d / np.where(length > 0.0, length, 1.0)[:, None]
+    pts = np.asarray(field, dtype=float)
+    proj = u @ pts.T  # each walk's direction against every vertex of the field
+    depth = proj.max(axis=1) - proj.min(axis=1)
+    return [bool(n > 0.0 and dp > 0.0 and i >= share * dp) for n, dp, i in zip(length, depth, inside, strict=True)]

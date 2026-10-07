@@ -33,7 +33,7 @@ def _scan(plan, count: int = 6) -> list:  # type: ignore[no-untyped-def]
 def test_the_scan_asks_the_row_rule_of_the_point_each_parcel_is_recorded_at(monkeypatch: pytest.MonkeyPatch) -> None:
     """Woods W04, the violating case: every drawn ring's recorded point (`ring_center`) is forced onto one line, so any
     third ring the scan accepts would stand in a ruled row with two before it, whatever its seat. The scan draws two."""
-    monkeypatch.setattr(parcels, "crossed_through", lambda *a, **k: True)  # the row rule's test, not the field's side (feature 328)
+    monkeypatch.setattr(parcels, "crossed_through_many", lambda field, frm, tos, share=0.5: [True] * len(tos))  # the row rule's test, not the field's side (feature 328)
     plan = a_plan()
     free = _scan(plan)
     assert len(free) >= 3, "non-vacuity: the open canvas seats a third parcel"
@@ -45,7 +45,7 @@ def test_the_scan_asks_the_row_rule_of_the_point_each_parcel_is_recorded_at(monk
 def test_a_jittered_seat_in_a_row_is_not_taken(monkeypatch: pytest.MonkeyPatch) -> None:
     """Woods W04: the jitter moves an accepted seat up to half a step, and the moved seat is asked the row rule too - with
     every moved seat in a row, the scan keeps the unmoved seat (the row test it already passed)."""
-    monkeypatch.setattr(parcels, "crossed_through", lambda *a, **k: True)  # the row rule's test, not the field's side (feature 328)
+    monkeypatch.setattr(parcels, "crossed_through_many", lambda field, frm, tos, share=0.5: [True] * len(tos))  # the row rule's test, not the field's side (feature 328)
     plan = a_plan()
     asked: list[tuple[float, float]] = []
     real = parcels.in_a_ruled_line
@@ -427,5 +427,5 @@ def test_the_scan_refuses_a_ring_that_does_not_follow_its_bounds_and_takes_the_n
 def test_the_scan_stops_once_it_has_seated_the_count(monkeypatch: pytest.MonkeyPatch) -> None:
     """With more fitting seats than asked, the scan seats exactly `count` and stops (the crossing pinned: this is the count's
     test, not the field's side)."""
-    monkeypatch.setattr(parcels, "crossed_through", lambda *a, **k: True)
+    monkeypatch.setattr(parcels, "crossed_through_many", lambda field, frm, tos, share=0.5: [True] * len(tos))
     assert len(_scan(a_plan(), count=1)) == 1
