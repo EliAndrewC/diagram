@@ -4005,19 +4005,20 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py::BUNDLE_PITCH#row pitch": {
-  "code": "0ad6486de6fd1516",
-  "core": "a2738f8641e9bbb8",
+  "code": "996ede6e0ce8649b",
+  "core": "444f866ae8da7cd0",
   "date": "2026-10-07",
-  "note": "92.0 is the page's \"Rows are set 92 ft apart\" (28 + 26 + 39)",
+  "note": "the code is `BUNDLE_PITCH = 100.0`, but the cited page says \"Rows are set 92 ft apart\" (house 28 + yard 26 + 39 sun = about 93 ft); the page or the constant must be brought into line",
   "pages": {
    "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03"
   },
   "research": "3874df1f1301e65f",
   "rests": [
    "0038-sunlight-and-shade-on-the-farm.drawing.html:1744d5d384a63127",
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:3cf9dd5c14103b6d",
    "0038-sunlight-and-shade-on-the-farm.drawing.html:d3e8abcab30e5886"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py::CARDINAL_BEARINGS#polder grid's orientation": {
   "code": "9e683c60a9cabc3d",
@@ -7528,10 +7529,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/capacity.py::_near_a_house#seat search": {
-  "code": "83f825993c798455",
-  "core": "7b2915740b1d7e10",
+  "code": "2c22e8d9071a08f2",
+  "core": "9e43e76fad558540",
   "date": "2026-10-07",
-  "note": "prunes candidates; the placer decides fit",
+  "note": "a pre-filter that the placer's own spacing rules already cover; it decides nothing on its own",
   "pages": {},
   "research": "",
   "rests": [],
@@ -7546,10 +7547,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/capacity.py::free_seats#no bound from the field": {
-  "code": "73b9824214df02dd",
-  "core": "799086805c3ce575",
+  "code": "ad6a372cc2a2eb2d",
+  "core": "2613b318e42dbb37",
   "date": "2026-10-07",
-  "note": "the whole canvas is offered and no distance from the fields bounds it",
+  "note": "the whole canvas is offered, with no distance from the field",
   "pages": {
    "0032-how-our-maps-pack-a-clustered-villages-houses.drawing.html": "a26e48b8cf648c5e"
   },
@@ -7560,14 +7561,16 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/capacity.py::free_seats#the exhaustive seat order": {
-  "code": "ed53eda4d600681d",
-  "core": "799086805c3ce575",
+  "code": "02a3eb043759ce64",
+  "core": "2613b318e42dbb37",
   "date": "2026-10-07",
-  "note": "nothing cited answers this pass's order",
+  "note": "0029 drawing §78 sets a seat order for a growing clustered settlement (nearest the cluster, then nearer the fields), while this code sorts by distance from the seat with ties broken by coordinates; I need to know whether the grown (clustered) path calls free_seats: if it does, the label should cite §78 and the tie-break is DRIFTED",
   "pages": {},
   "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
+  "rests": [
+   "0029-farmhouses-minka.drawing.html:9dd34b89f26d4272"
+  ],
+  "verdict": "CANNOT-TELL"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/capacity.py::margin_ladder#seat search": {
   "code": "0d915cc2edf06a38",
@@ -9914,45 +9917,46 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/seats.py::_front_row_from_chains#a row fronting the field": {
-  "code": "8e8aaf40498378f7",
-  "core": "d360814120de976b",
+  "code": "345246da11ded091",
+  "core": "7387499505f0b4a9",
   "date": "2026-10-07",
-  "note": "nothing cited gives a sampling rule",
+  "note": "the spacing along the row, the stretch and the center-out order are not answered in the bundle",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/seats.py::_front_row_from_chains#house off the paddy": {
-  "code": "b16adf10e7f99c1a",
-  "core": "d360814120de976b",
+  "code": "5bde71856c756ee7",
+  "core": "7387499505f0b4a9",
   "date": "2026-10-07",
-  "note": "6 ft gap + 1 ft + 3 px slack = 10 ft past the homestead's reach: at least the 6 ft minimum and within the 10-13 ft drawn",
+  "note": "6 + 1 + 3 ft of slack puts the homestead's near edge 10 ft off the chord, inside the 10-13 ft draw and clear of the 6 ft minimum",
   "pages": {
    "0029-farmhouses-minka.drawing.html": "28761adf1d2dece2"
   },
   "research": "a3cfa2fba63bb45d",
   "rests": [
    "0029-farmhouses-minka.drawing.html:0596cd67c0df9440",
-   "0029-farmhouses-minka.drawing.html:2f4048f3df8fcb07"
+   "0029-farmhouses-minka.drawing.html:2f4048f3df8fcb07",
+   "0029-farmhouses-minka.drawing.html:3d9a7e45ef210b9f"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/seats.py::cluster_aspect#seat geometry": {
-  "code": "dfa29583553ecbf5",
-  "core": "0420ea00cf1192d4",
+  "code": "ed25e1bbb46158ff",
+  "core": "019a2029db6d588f",
   "date": "2026-10-07",
-  "note": "a measure only",
+  "note": "a measure of the cluster's long:short ratio; it places nothing",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/seats.py::front_row#a row fronting the field": {
-  "code": "8d93136cba4cc3e6",
-  "core": "31bf6f23e89d0259",
+  "code": "fd776fb31e4be3cd",
+  "core": "6900833c1040b076",
   "date": "2026-10-07",
-  "note": "delegates to the chain walk",
+  "note": "a wrapper over the chain walk; not answered in the bundle",
   "pages": {},
   "research": "",
   "rests": [],
@@ -9991,36 +9995,40 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#a footpath's room off the outline": {
-  "code": "c4a649cd05016c6f",
-  "core": "71f8b4c48f407e87",
+  "code": "f35c54d6e29e61a3",
+  "core": "d4b283a8909eb106",
   "date": "2026-10-07",
-  "note": "runs only on the non-grown forms, which no lane-room finding covers",
+  "note": "`WEB_FABRIC_GAP * 2.0 + 6.0` (20 ft) is the lane's room 0246 records as a convention (\"7 ft at each garden fence and a 4 ft tread ... 20 ft in all\"); the label should cite 0246 drawing as CONVENTION, and the code's 6 ft of tread does not match the page's 4 ft tread plus 2 ft parting",
   "pages": {},
   "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c5daec1a445d35bf"
+  ],
+  "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#a household's wood share": {
-  "code": "eea8e94913582f38",
-  "core": "71f8b4c48f407e87",
+  "code": "98abd3c64339cce0",
+  "core": "d4b283a8909eb106",
   "date": "2026-10-07",
-  "note": "each household reserves the register's 6,000 sq ft floor within the 90 ft dooryard reach",
+  "note": "each household reserves the register's 6,000 sq ft floor within the 90 ft dooryard reach, on clustered maps",
   "pages": {
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
   },
   "research": "8e7d7569cc3f687f",
   "rests": [
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:05b046d03b3783aa",
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:892e21f3d9eb50da",
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:ccde3c4c44be3d3c"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:56bf66b98afe5452",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:6562af7543614f36",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:892e21f3d9eb50da"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#a lane's room between ranks": {
-  "code": "bd6f0b4eb52df1e9",
-  "core": "71f8b4c48f407e87",
+  "code": "5cd1dd044cb3542d",
+  "core": "d4b283a8909eb106",
   "date": "2026-10-07",
-  "note": "ranks run only on the non-grown forms, which draw no lanes between farms, so a spacing-only guess",
+  "note": "a dispersed hamlet lays no lanes, so the gap between its ranks is unanswered; a GUESS",
   "pages": {},
   "research": "",
   "rests": [
@@ -10029,30 +10037,30 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#a pushed front seat's retry": {
-  "code": "b68c2d3469f90679",
-  "core": "71f8b4c48f407e87",
+  "code": "4394577b3e906c2c",
+  "core": "d4b283a8909eb106",
   "date": "2026-10-07",
-  "note": "nothing cited",
+  "note": "not answered in the bundle",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#a rank grown along the field": {
-  "code": "56c86603d46491ed",
-  "core": "71f8b4c48f407e87",
+  "code": "02b8d375ce1187c6",
+  "core": "d4b283a8909eb106",
   "date": "2026-10-07",
-  "note": "nothing cited",
+  "note": "not answered in the bundle",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#a row village's rows": {
-  "code": "24fe86efd7c53c6c",
-  "core": "71f8b4c48f407e87",
+  "code": "6fbbd03c99df96fa",
+  "core": "d4b283a8909eb106",
   "date": "2026-10-07",
-  "note": "the step is the farmstead's width capped at 240 ft, every household goes in the rows, never in ranks behind",
+  "note": "farms are spaced at the frame's width capped at 240 ft, the row takes every farm, and no ranks stand behind it",
   "pages": {
    "0033-row-villages-resson.drawing.html": "5b109c17a425e58e",
    "0033-row-villages-resson.html": "bd99e75bbcb09bc7"
@@ -10068,10 +10076,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#a scattered hamlet's seating": {
-  "code": "a0c3ef844db1bdaa",
-  "core": "71f8b4c48f407e87",
+  "code": "af88d24b6ba3510d",
+  "core": "d4b283a8909eb106",
   "date": "2026-10-07",
-  "note": "the code seats a front row capped at sqrt(N*aspect), then up to four brick ranks behind it, then a cloud; 0031 has the scattered line \"hugged to the field edge in single file\", each farm \"within reach of\" its field; the ranks behind contradict that (and lane_web 'alleys' has no meaning on a form with no lanes)",
+  "note": "on the dispersed form the code caps the front row at sqrt(N*aspect) and seats the rest in brick ranks behind it, where the page has scattered farms \"hugged to the field edge in single file\", each standing \"in the middle of their own fields\" and within reach of one; ranks behind a front row are a clustered form",
   "pages": {
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
   },
@@ -10084,25 +10092,26 @@
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#a yard's sun between ranks": {
-  "code": "e4e000a1bf8d89fc",
-  "core": "71f8b4c48f407e87",
+  "code": "810591a5cc181798",
+  "core": "d4b283a8909eb106",
   "date": "2026-10-07",
-  "note": "39 ft added in proportion as the ranks climb north",
+  "note": "the code adds `max(0.0, -oy) * SUN_CORRIDOR_FT`, so only ranks climbing north get the corridor; a rank laid south of the front rank stands just south of that rank's yards, which the 39 ft rule (\"no neighbor's farmhouse ... within 39 ft to the south of a yard\") forbids equally; ranks should be spaced by the corridor whether they run north or south",
   "pages": {
    "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03"
   },
   "research": "3874df1f1301e65f",
   "rests": [
    "0038-sunlight-and-shade-on-the-farm.drawing.html:1744d5d384a63127",
-   "0038-sunlight-and-shade-on-the-farm.drawing.html:fb011b8973aa73bf"
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:3cf9dd5c14103b6d",
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:d3e8abcab30e5886"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#front row across the brook": {
-  "code": "60567e7e0eab6f3b",
-  "core": "71f8b4c48f407e87",
+  "code": "7708a739beb088d1",
+  "core": "d4b283a8909eb106",
   "date": "2026-10-07",
-  "note": "the row stands beside the brook, across it from its field; each farmstead stays whole on one bank",
+  "note": "at a stream's size the record gives both banks and one bank, and each farmstead stays whole on one bank",
   "pages": {
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "c23a085a43372c2c",
    "0035-villages-beside-their-stream-one-bank-or-both.html": "6844f31c4c8de3cc"
@@ -10118,132 +10127,148 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#rank depth jitter": {
-  "code": "4edc8183ec725316",
-  "core": "71f8b4c48f407e87",
+  "code": "0d18f6e21e7de26b",
+  "core": "d4b283a8909eb106",
   "date": "2026-10-07",
-  "note": "nothing cited gives the amplitude",
+  "note": "the amplitude is not answered in the bundle",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#rank jitter and the cloud's lean": {
-  "code": "c6842fe98aaec1ee",
-  "core": "71f8b4c48f407e87",
+  "code": "0d4c512ed3fcdec3",
+  "core": "d4b283a8909eb106",
   "date": "2026-10-07",
-  "note": "nothing cited",
+  "note": "not answered in the bundle",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#seats kept apart": {
-  "code": "bf8e91ff53c06276",
-  "core": "71f8b4c48f407e87",
+  "code": "699006701189afc5",
+  "core": "d4b283a8909eb106",
   "date": "2026-10-07",
-  "note": "nothing cited",
+  "note": "not answered in the bundle",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#shared byre pockets": {
-  "code": "f3c6cce99a3ed773",
-  "core": "71f8b4c48f407e87",
+  "code": "87ae906ee184cd05",
+  "core": "d4b283a8909eb106",
   "date": "2026-10-07",
-  "note": "shared sheds are reserved on common ground among the houses, inside the band",
+  "note": "the shared shed's ground is reserved among the houses before they are seated",
   "pages": {
    "0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html": "314aa8e38b10f2d2"
   },
   "research": "a75e3ada6edbbc9b",
   "rests": [
-   "0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html:8e9a1c027cabe064",
    "0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html:98546aed8457f1f5",
    "0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html:9dd3e953a6b92d53"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#the front row's gaps and the rescue's widening": {
-  "code": "c1708124eff9bacb",
-  "core": "71f8b4c48f407e87",
+  "code": "f3c9d5eb602f9de7",
+  "core": "d4b283a8909eb106",
   "date": "2026-10-07",
-  "note": "nothing cited",
+  "note": "not answered in the bundle",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#the front row's offer": {
-  "code": "215c1d59f866c6a2",
-  "core": "71f8b4c48f407e87",
+  "code": "d32fddb7a2ef314a",
+  "core": "d4b283a8909eb106",
   "date": "2026-10-07",
-  "note": "nothing cited",
+  "note": "not answered in the bundle",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#the front row's size": {
-  "code": "37905b6a79d6e71c",
-  "core": "71f8b4c48f407e87",
+  "code": "6e0eacd96c69c6a6",
+  "core": "d4b283a8909eb106",
   "date": "2026-10-07",
-  "note": "on the dispersed form, where this cap applies, 0031 drawing answers it: the scattered line is \"hugged to the field edge in single file\", so the row should take every household; cite 0031 drawing and drop the cap for that form",
+  "note": "not answered in the bundle",
   "pages": {},
   "research": "",
-  "rests": [
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:bc33ef71630b4b4c"
-  ],
-  "verdict": "MISLABELED"
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#the homestead's core (house, yard, shed, well; garden left out) as the part that stands off the paddy": {
+  "code": "d4b283a8909eb106",
+  "core": "d4b283a8909eb106",
+  "date": "2026-10-07",
+  "note": "the homestead's core (house, yard, shed, well; garden left out) as the part that stands off the paddy",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#the largest house the standoff clears, 46x1.35 by 28x1.10 ft (`_house_max`)": {
+  "code": "d4b283a8909eb106",
+  "core": "d4b283a8909eb106",
+  "date": "2026-10-07",
+  "note": "the largest house the standoff clears, 46x1.35 by 28x1.10 ft (`_house_max`)",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#the passage share": {
-  "code": "9db9826345af5fa6",
-  "core": "71f8b4c48f407e87",
+  "code": "93bb2d643e923844",
+  "core": "d4b283a8909eb106",
   "date": "2026-10-07",
-  "note": "only a grown (clustered) settlement rolls a share; the other forms roll 0",
+  "note": "rolled only on the grown clustered form, none on the other forms",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
   "research": "7b40c2c01cfba682",
   "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:71315c33d0ad6f37",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:9dcd87510d217672"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#the rescue's offer along the field": {
-  "code": "3d8682a7c1991ae1",
-  "core": "71f8b4c48f407e87",
+  "code": "1c9095e5af70f591",
+  "core": "d4b283a8909eb106",
   "date": "2026-10-07",
-  "note": "nothing cited",
+  "note": "not answered in the bundle",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#the seating band": {
-  "code": "fbcfda730bc0e8e9",
-  "core": "71f8b4c48f407e87",
+  "code": "c0fcdf4a8aa6ed92",
+  "core": "d4b283a8909eb106",
   "date": "2026-10-07",
-  "note": "nothing cited gives a band per household",
+  "note": "the per-household band is not answered; packing is a calibration",
   "pages": {},
   "research": "",
-  "rests": [],
+  "rests": [
+   "0032-how-our-maps-pack-a-clustered-villages-houses.drawing.html:0b0fcb350f07d57c"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#the seating's reach": {
-  "code": "ee2adb6e76168fb2",
-  "core": "71f8b4c48f407e87",
+  "code": "726312637b296470",
+  "core": "d4b283a8909eb106",
   "date": "2026-10-07",
-  "note": "nothing cited",
+  "note": "FORM_BOUND as the claim states it (1.15, or 2.5 for linear); not answered in the bundle",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#the step between ranks": {
-  "code": "1ee75ba090c291c6",
-  "core": "71f8b4c48f407e87",
+  "code": "dbc0cbb1589cb052",
+  "core": "d4b283a8909eb106",
   "date": "2026-10-07",
-  "note": "_rank_step = envelope depth + MIN_WEB_GAP (18 ft) + 39 ft where the ranks climb north, about 114 ft, against \"Rows are set 92 ft apart\" (house 28 + yard 26 + 39 sun); either drop the 18 ft where the sun corridor applies or restate the claim",
+  "note": "`_rank_step` is the envelope's depth + MIN_WEB_GAP (18 ft) + up to 39 ft, not the page's and claim's \"Rows are set 92 ft apart\" (28 + 26 + 39); the claim, the page or the code must agree on one figure",
   "pages": {
    "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03"
   },
@@ -15778,10 +15803,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/fabric.py::_margin_frame.__init__#plumbing and geometry": {
-  "code": "ae5d1cd8dcd1b05f",
-  "core": "44663a02475fd4a0",
+  "code": "8e18081250fe8728",
+  "core": "8734ee42532ee175",
   "date": "2026-10-07",
-  "note": "frame walk, look-ahead and normal orientation are coordinate plumbing",
+  "note": "a walk along the outline and the frame's normals; geometry only",
   "pages": {},
   "research": "",
   "rests": [],
@@ -18011,11 +18036,19 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#a link takes its way's width": {
-  "code": "4d36c47fc8d95b75",
-  "core": "cdc0e08d3921b215",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#a healing link kept WEB_HARD_GAP (8 ft) off hard ground and WEB_FABRIC_GAP (7 ft) off the steadings": {
+  "code": "548dd72a6597f1e2",
+  "core": "548dd72a6597f1e2",
   "date": "2026-10-07",
-  "note": "lane widths are a drawing convention",
+  "note": "a healing link kept WEB_HARD_GAP (8 ft) off hard ground and WEB_FABRIC_GAP (7 ft) off the steadings",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#a link takes its way's width": {
+  "code": "dc254f1cc8d0ea37",
+  "core": "548dd72a6597f1e2",
+  "date": "2026-10-07",
+  "note": "the link is drawn at the width of the lane it joins; lane widths are a drawing convention on the page",
   "pages": {},
   "research": "",
   "rests": [
@@ -18023,19 +18056,19 @@
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#a run within 30 ft of the network counts as joined, and stays unsnapped if the gap is not clear": {
-  "code": "cdc0e08d3921b215",
-  "core": "cdc0e08d3921b215",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#a run within _LANE_JOIN_FT (30 ft) of a way counts as arriving and is extended onto it": {
+  "code": "548dd72a6597f1e2",
+  "core": "548dd72a6597f1e2",
   "date": "2026-10-07",
-  "note": "a run within 30 ft of the network counts as joined, and stays unsnapped if the gap is not clear",
+  "note": "a run within _LANE_JOIN_FT (30 ft) of a way counts as arriving and is extended onto it",
   "research": "",
   "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#a tail past the junction cut": {
-  "code": "006bfc8b88e62f37",
-  "core": "cdc0e08d3921b215",
+  "code": "b5f768941d5b13ee",
+  "core": "548dd72a6597f1e2",
   "date": "2026-10-07",
-  "note": "a short half under 40 ft is cut",
+  "note": "the half shorter than 40 ft beyond the touch point is cut, as the page says",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },
@@ -18046,10 +18079,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#a web lane joins the network": {
-  "code": "11eb9607b9fca61c",
-  "core": "cdc0e08d3921b215",
+  "code": "8194a8bb6301a8cb",
+  "core": "548dd72a6597f1e2",
   "date": "2026-10-07",
-  "note": "a run whose link cannot be drawn is not drawn",
+  "note": "a run that cannot be linked to the network is refused",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
@@ -18062,32 +18095,30 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#link reach": {
-  "code": "e2e44755febc24c8",
-  "core": "cdc0e08d3921b215",
+  "code": "b519b2966ea15f43",
+  "core": "548dd72a6597f1e2",
   "date": "2026-10-07",
-  "note": "the pages are silent on how long a link may run",
+  "note": "WEB_REACH_FT*2 = 200 ft; no cited page gives how far a link may run",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#no way drawn twice": {
-  "code": "908338f9907ceaa3",
-  "core": "cdc0e08d3921b215",
+  "code": "c72e8acc25cc2f54",
+  "core": "548dd72a6597f1e2",
   "date": "2026-10-07",
-  "note": "a legibility threshold for doubled ink",
+  "note": "refusing a lane that runs beside another (over 60% of the run, or over 100 ft unbroken) decides where lanes exist on the ground, not how they are shown; the label should be GUESS or UNRESEARCHED",
   "pages": {},
   "research": "",
-  "rests": [
-   "0081-village-lanes.drawing.html:65ad16eace199d92"
-  ],
-  "verdict": "IN-STEP"
+  "rests": [],
+  "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#not along a shelter belt": {
-  "code": "a712aec1ac66c8b5",
-  "core": "cdc0e08d3921b215",
+  "code": "cac5495596b39760",
+  "core": "548dd72a6597f1e2",
   "date": "2026-10-07",
-  "note": "a lane may cross the belt but not run its length; 60 ft lets a crossing through",
+  "note": "the page backs the rule (\"a belt is kept whole, and a lane must still get through it\") but records no 60 ft figure for a lane inside a belt; the 60 ft should be labeled GUESS or be recorded on the drawing page",
   "pages": {
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fbd35c7766637fc3"
   },
@@ -18098,13 +18129,13 @@
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:301a35716bf73526",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:79d09be286e4e66b"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "NEEDS-RESEARCH"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#web lane width": {
-  "code": "31540dcbbe17a701",
-  "core": "cdc0e08d3921b215",
+  "code": "1b2af531de8bc831",
+  "core": "548dd72a6597f1e2",
   "date": "2026-10-07",
-  "note": "drawn at 3",
+  "note": "_draw_web(s, run, 3) uses the footpath's 3 ft",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },
@@ -18280,14 +18311,14 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py::shadowed_by#no way drawn twice": {
-  "code": "c9919a2bb1d711ff",
-  "core": "3ec5ea7d0f9ab44d",
+  "code": "cffdf381d7e42291",
+  "core": "698cb86515c7f546",
   "date": "2026-10-07",
-  "note": "a legibility convention: beside another within WEB_SHADOW_FT for more than one bundle pitch",
+  "note": "refusing a way that runs within 30 ft of another for more than 100 ft is a rule about where lanes run, not a drawing convention; should be GUESS or UNRESEARCHED",
   "pages": {},
   "research": "",
   "rests": [],
-  "verdict": "IN-STEP"
+  "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py::street_arrives#the street serves the farm": {
   "code": "b869e9505f1a79f5",
@@ -19600,29 +19631,30 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/street.py::row_reach#a farm's own street": {
-  "code": "aedf962bdb2d64cd",
-  "core": "3ac516a4acdff5c1",
+  "code": "621e7ed7e659d175",
+  "core": "d19853f14d5ae46f",
   "date": "2026-10-07",
-  "note": "0033 gives frame widths but not how far off its street a farm may stand; the 1.5 frames is unresearched",
+  "note": "no bundle page gives how far off its street a row farm may stand",
   "pages": {},
   "research": "",
   "rests": [
-   "0033-row-villages-resson.drawing.html:a88545fe00a7de6d"
+   "0033-row-villages-resson.drawing.html:a88545fe00a7de6d",
+   "0033-row-villages-resson.drawing.html:d41ee4495f2368b5"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/street.py::row_reach#street run past its end farms": {
-  "code": "97b6188e85eb7e50",
-  "core": "3ac516a4acdff5c1",
+  "code": "5cbf881266454fe5",
+  "core": "d19853f14d5ae46f",
   "date": "2026-10-07",
-  "note": "0033 drawing answers this: \"The street runs on off the map as the road into it\", not half a frame past the end farms; the claim should cite 0033 drawing (a DEVIATION, or DRIFTED against it)",
+  "note": "the 0033 drawing page says \"The street runs on off the map as the road into it\", which may answer or contradict a half-frame overrun; I need to see which end of the street the overrun is applied to",
   "pages": {},
   "research": "",
   "rests": [
-   "0033-row-villages-resson.drawing.html:03adf3d96fcebcdf",
-   "0033-row-villages-resson.drawing.html:8c303daeddea6496"
+   "0033-row-villages-resson.drawing.html:8c303daeddea6496",
+   "0081-village-lanes.html:c0cea64f1d88cab7"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "CANNOT-TELL"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/street.py::street_run_out#street runs on as the road": {
   "code": "c472bc59a9bdf60e",
@@ -21797,25 +21829,24 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#clear of crop, wet and water": {
-  "code": "377b7ed4ef5b6bf2",
-  "core": "09e01a613c8739f8",
+  "code": "f7a2ae3c75144187",
+  "core": "c26981eddbe1cc55",
   "date": "2026-10-07",
-  "note": "the cited pages answer whether a lane keeps off crop and wet ground (0246 §13 cuts such stretches; 0081 §63 never crosses row crops \"and may touch a plot's boundary\"; §66 keeps off wet ground); cite them, and the 20 ft standoff from the crop conflicts with §63's \"may touch\"",
+  "note": "the 0081 and 0246 drawing pages answer the rule of keeping off crop and wet ground (\"never crosses row crops\", \"keeps off wet ground\"), so the claim should cite them with the 20 ft as a GUESS or CONVENTION; note §59 also lets a lane \"touch a plot's boundary\"",
   "pages": {},
   "research": "",
   "rests": [
    "0081-village-lanes.drawing.html:43b635b1ca75125b",
-   "0081-village-lanes.drawing.html:bd66b84c6bda826f",
    "0081-village-lanes.drawing.html:ff5e303a5a16af8f",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:8ab9878d6ac1d10b"
   ],
   "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#routed round the steadings": {
-  "code": "7337aef7585ae115",
-  "core": "09e01a613c8739f8",
+  "code": "df40795d8b4ae35e",
+  "core": "c26981eddbe1cc55",
   "date": "2026-10-07",
-  "note": "routed and clipped round the fabric at WEB_FABRIC_GAP=7, matching the 7 ft fence-to-middle",
+  "note": "arms are routed round the fabric, then clipped to WEB_FABRIC_GAP",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
@@ -21826,11 +21857,19 @@
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton form": {
-  "code": "967aa6ddedeafa23",
-  "core": "09e01a613c8739f8",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton arm clipped WEB_FABRIC_GAP (7 ft) clear of the steadings' fabric": {
+  "code": "c26981eddbe1cc55",
+  "core": "c26981eddbe1cc55",
   "date": "2026-10-07",
-  "note": "uses the rolled plan.lane_skeleton, one of the GUESS shapes",
+  "note": "skeleton arm clipped WEB_FABRIC_GAP (7 ft) clear of the steadings' fabric",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton form": {
+  "code": "031df74ba9705f0c",
+  "core": "c26981eddbe1cc55",
+  "date": "2026-10-07",
+  "note": "the shape comes from the rolled plan.lane_skeleton",
   "pages": {
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
   },
@@ -21842,10 +21881,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton laid after the houses": {
-  "code": "a2dc009071cb237b",
-  "core": "09e01a613c8739f8",
+  "code": "090604e14a0fbf52",
+  "core": "c26981eddbe1cc55",
   "date": "2026-10-07",
-  "note": "fitted to the placed houses' arcs and stands",
+  "note": "sized from the arcs and stands of the placed houses",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
@@ -21856,20 +21895,20 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton span floor": {
-  "code": "4637ad1a54bdf8ae",
-  "core": "09e01a613c8739f8",
+  "code": "ab9e2d82e90db197",
+  "core": "c26981eddbe1cc55",
   "date": "2026-10-07",
-  "note": "half-extents floored at 46 ft (a 92 ft span on each axis); pieces under 30 ft not laid; the pages are silent",
+  "note": "half-extents floored at 50 ft (100 ft span); pieces under _WEB_MIN_FT (30 ft) dropped; pages silent",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton width": {
-  "code": "92777b14601f2089",
-  "core": "09e01a613c8739f8",
+  "code": "68fc8b2486271f79",
+  "core": "c26981eddbe1cc55",
   "date": "2026-10-07",
-  "note": "laid at 5 ft, the spine width",
+  "note": "laid at width=5, the spine's 5 ft",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },
@@ -21878,14 +21917,6 @@
    "0081-village-lanes.drawing.html:91a5765af6230403"
   ],
   "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#the skeleton's 40 ft no-build corridor (LANE_CLEARANCE)": {
-  "code": "09e01a613c8739f8",
-  "core": "09e01a613c8739f8",
-  "date": "2026-10-07",
-  "note": "the skeleton's 40 ft no-build corridor (LANE_CLEARANCE)",
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::_reachable_runs#islands never drawn": {
   "code": "12ca08ed5347fbba",
@@ -21979,10 +22010,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#a cut's room": {
-  "code": "fe5c29c02438b34f",
-  "core": "fb4c6a3fc3705fff",
+  "code": "1e5ab643c965e2e5",
+  "core": "8aa914b6b5fbaa23",
   "date": "2026-10-07",
-  "note": "MIN_WEB_GAP = 2x7+4 = 18 ft, the page's lane room",
+  "note": "MIN_WEB_GAP = 2*7+4 = 18 ft, the page's lane room",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
@@ -21991,15 +22022,16 @@
   "rests": [
    "0081-village-lanes.drawing.html:91a5765af6230403",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:81f9a92fe1d97af1",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c5daec1a445d35bf"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#a web lane's span": {
-  "code": "cb76486a14b9130a",
-  "core": "fb4c6a3fc3705fff",
+  "code": "2461e601951e2920",
+  "core": "8aa914b6b5fbaa23",
   "date": "2026-10-07",
-  "note": "0246 answers this: a back lane \"runs only along the houses it serves\", and serving means within 100 ft. The claim should cite 0246; against it, `local = WEB_REACH_FT * 1.5` (150 ft) is a drift to resolve",
+  "note": "0246 says a back lane \"runs only along the houses it serves\" (served = within 100 ft, §10), so the rule is answered; the claim should cite 0246 and reconcile the 1.5 x WEB_REACH_FT (150 ft) span with the 100 ft service reach",
   "pages": {},
   "research": "",
   "rests": [
@@ -22008,11 +22040,19 @@
   ],
   "verdict": "MISLABELED"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#back lane tie spacing": {
-  "code": "a0c285cdd1852f01",
-  "core": "fb4c6a3fc3705fff",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#an orphan stub joined to the web across up to _STUB_REACH_FT (48 ft)": {
+  "code": "8aa914b6b5fbaa23",
+  "core": "8aa914b6b5fbaa23",
   "date": "2026-10-07",
-  "note": "need `web_cuts`'s second argument. If it is a reach, as the web-cut-spacing claim says (\"cuts stand up to about twice that apart\"), then `web_cuts(arcs, 3.0 * BUNDLE_PITCH, ...)` puts ties up to ~550 ft apart against the page's \"about one to every 300 ft\" (DRIFTED). If it is a spacing, it is in step",
+  "note": "an orphan stub joined to the web across up to _STUB_REACH_FT (48 ft)",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#back lane tie spacing": {
+  "code": "71f853f0c558c150",
+  "core": "8aa914b6b5fbaa23",
+  "date": "2026-10-07",
+  "note": "web_cuts(arcs, 3.0 * BUNDLE_PITCH) = 300 ft, \"about one to every 300 ft\"",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
@@ -22020,70 +22060,70 @@
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:0462100d871c3cb0"
   ],
-  "verdict": "CANNOT-TELL"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#back lane ties": {
-  "code": "f90a06ff61192c18",
-  "core": "fb4c6a3fc3705fff",
+  "code": "f18d42c1e6d3b4b4",
+  "core": "8aa914b6b5fbaa23",
   "date": "2026-10-07",
-  "note": "ties make the back lanes a rectangular framework",
+  "note": "the back lane \"framed the village with the street in a rectangle\"",
   "pages": {
    "0081-village-lanes.html": "ae63115215c57952"
   },
   "research": "880549e43c64bfa2",
   "rests": [
-   "0081-village-lanes.html:7a53482e165741aa"
+   "0081-village-lanes.html:7a53482e165741aa",
+   "0081-village-lanes.html:96dca7c9e0b90cca"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#belt crossed not followed": {
-  "code": "ec5979f1e3a84e61",
-  "core": "fb4c6a3fc3705fff",
+  "code": "58d0eec1108ae3c6",
+  "core": "8aa914b6b5fbaa23",
   "date": "2026-10-07",
-  "note": "the belts are passed to the run layer, which refuses running along one",
+  "note": "the belts are passed to the web layer, which refuses a lane run along a belt",
   "pages": {
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fbd35c7766637fc3"
   },
   "research": "1f42835678daf333",
   "rests": [
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:19b6b8f457366d55",
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:1b23f53588df77c1",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:301a35716bf73526",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:79d09be286e4e66b"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#dispersed hamlet draws no web": {
-  "code": "c6b88fe7bd99ef2f",
-  "core": "fb4c6a3fc3705fff",
+  "code": "da185b1b343c1cff",
+  "core": "8aa914b6b5fbaa23",
   "date": "2026-10-07",
-  "note": "returns before any lane",
+  "note": "returns before any lane when settlement_form == \"dispersed\"",
   "pages": {
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
   },
   "research": "4e7ba7479292ad40",
   "rests": [
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:4ea19f2ff9e71342",
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:d5ff698d1e283713"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:4ea19f2ff9e71342"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#door path reach": {
-  "code": "7b0fce5cc9f9609d",
-  "core": "fb4c6a3fc3705fff",
+  "code": "a742e15ceea7f7ae",
+  "core": "8aa914b6b5fbaa23",
   "date": "2026-10-07",
-  "note": "a guess; 12 ft matches the page's guessed steading arrival, and no page gives 40 ft",
+  "note": "the 12 ft steading arrival is recorded on the 0246 drawing page as part of its GUESS (\"within 12 ft of the steading's built ground\"), so the claim should name that page (GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html); the 40 ft is not recorded there",
   "pages": {},
   "research": "",
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#every farmhouse served": {
-  "code": "47a71c9e9fa03750",
-  "core": "fb4c6a3fc3705fff",
+  "code": "9f93767b9d1499e1",
+  "core": "8aa914b6b5fbaa23",
   "date": "2026-10-07",
-  "note": "cuts skip households reached across a neighbor; the settle draws what is owed",
+  "note": "cuts are sized on every house except the reached_across ones",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
@@ -22096,10 +22136,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#lane form knob": {
-  "code": "a24bfad9f708081d",
-  "core": "fb4c6a3fc3705fff",
+  "code": "2695f647fea77d52",
+  "core": "8aa914b6b5fbaa23",
   "date": "2026-10-07",
-  "note": "alleys or back lane from the plan's rolled knob",
+  "note": "branches on the rolled plan.lane_web (alleys or back_lane)",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
@@ -22110,10 +22150,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#lane runs past its last steading": {
-  "code": "74f227d177e10950",
-  "core": "fb4c6a3fc3705fff",
+  "code": "2596e07023f23ea5",
+  "core": "8aa914b6b5fbaa23",
   "date": "2026-10-07",
-  "note": "pad = 30, recorded as a guess",
+  "note": "pad = 30.0, about 30 ft, recorded as a GUESS",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
@@ -22125,10 +22165,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#lanes after the houses": {
-  "code": "15f7b3265680912e",
-  "core": "fb4c6a3fc3705fff",
+  "code": "f2fc37f7332b5bb6",
+  "core": "8aa914b6b5fbaa23",
   "date": "2026-10-07",
-  "note": "the skeleton and web are fitted to placed houses",
+  "note": "the whole stage runs over houses already placed",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
@@ -22138,27 +22178,34 @@
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#row streets laid": {
-  "code": "dabddb80ed82bb4f",
-  "core": "fb4c6a3fc3705fff",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#repair lanes may cross commons and village groves (ground cover is not fabric)": {
+  "code": "8aa914b6b5fbaa23",
+  "core": "8aa914b6b5fbaa23",
   "date": "2026-10-07",
-  "note": "the row's planned street is drawn, with no skeleton or cuts",
+  "note": "repair lanes may cross commons and village groves (ground cover is not fabric)",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#row streets laid": {
+  "code": "3b3cdb23644d1e54",
+  "core": "8aa914b6b5fbaa23",
+  "date": "2026-10-07",
+  "note": "the planned _row_streets are laid in place of a skeleton and cuts",
   "pages": {
    "0033-row-villages-resson.drawing.html": "5b109c17a425e58e"
   },
   "research": "f407e2a81ba3ed3b",
   "rests": [
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:2b715651d89e6207",
    "0033-row-villages-resson.drawing.html:071bd73215fda123",
-   "0033-row-villages-resson.drawing.html:8c303daeddea6496"
+   "0033-row-villages-resson.drawing.html:0a23ce156774ee9f"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#web cut spacing": {
-  "code": "3f53e6d423066bae",
-  "core": "fb4c6a3fc3705fff",
+  "code": "85effca903061809",
+  "core": "8aa914b6b5fbaa23",
   "date": "2026-10-07",
-  "note": "the claim says WEB_REACH_FT is 92 ft, but the constant is 100 (the page's \"within 100 ft\"); fix the claim's figure",
+  "note": "web_cuts(..., WEB_REACH_FT=100) keeps every house within 100 ft of a cut",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
@@ -22166,13 +22213,21 @@
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c4049193a04d9dd0"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#web lanes kept off the households' reserved wood seats": {
+  "code": "8aa914b6b5fbaa23",
+  "core": "8aa914b6b5fbaa23",
+  "date": "2026-10-07",
+  "note": "web lanes kept off the households' reserved wood seats",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#web lanes off the hard ground": {
-  "code": "9852ed2eea54ecc8",
-  "core": "fb4c6a3fc3705fff",
+  "code": "d963e8fd4b39ef08",
+  "core": "8aa914b6b5fbaa23",
   "date": "2026-10-07",
-  "note": "the bundle answers this: 0081 drawing says a lane \"may touch a plot's boundary\", and 0246 cuts only stretches that cross the field, crop or wet ground. Cite them; WEB_HARD_GAP 8 ft off the field and crop then needs a recorded DEVIATION",
+  "note": "0246 (\"a stretch that would cross the field, a crop, wet ground ... is cut out\") and 0081 drawing answer the rule, so the claim should cite them with the 8 ft margin as a GUESS or CONVENTION",
   "pages": {},
   "research": "",
   "rests": [
