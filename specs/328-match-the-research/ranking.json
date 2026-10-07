@@ -7085,6 +7085,22 @@
   "wave": ""
  },
  {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/cluster.py::seat_cluster#brook across the band",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "0035 makes the uncrossed site a tie-breaker (\"otherwise equally good\") and builds on both banks where the best wind-facing site is crossed; score -= 3.0*crossed outweighs the whole wind term (1.0) and the upslope term (0.8), so a crossed best site always loses; the penalty should only break near-ties",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/cluster.py"
+  ],
+  "after": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#a cluster the brook crosses reached"
+  ],
+  "flag": "",
+  "found": "wave 2 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E2",
+  "wave": ""
+ },
+ {
   "key": ".claude/skills/diagram/l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#border as a line",
   "tier": "E3",
   "fix": "draw the border's earth mounds along the line as 0083 attests (and keep things clear of them)",
@@ -8251,6 +8267,20 @@
   "flag": "",
   "tier_as_ranked": "E4",
   "verdict": "CANNOT-TELL",
+  "wave": ""
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/cluster.py::seat_cluster#band on the canvas",
+  "verdict": "CANNOT-TELL",
+  "tier": "E4",
+  "fix": "code keeps seat_c at least lat*0.5 from the frame; the band samples at t=\u00b10.9*lat, which suggests lat is the half-length, so this would be a quarter of the length, not \"half the band's length\"; need band_extent's meaning of lat",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/cluster.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 2 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E4",
   "wave": ""
  },
  {

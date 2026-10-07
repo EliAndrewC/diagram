@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-07T06:01:58Z",
+  "target": "perf-explain",
+  "commit": "99fcf016e",
+  "outcome": "permitted",
+  "why": "perf-explain UNVERIFIED: no control roll with each value removed was run; the attribution is from the per-stage growth the report prints"
+}
