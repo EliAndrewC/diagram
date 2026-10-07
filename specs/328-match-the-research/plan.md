@@ -51,7 +51,7 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 - **Scope**: the first sixteen E1 rows (`tasks.md` Phase 3). Eight are procedure text; eight are generator values
   (`hamletgen/cluster.py`, `consts.py` BUNDLE_PITCH, `hinterland/parcels.py`, `homesteads/farm_water.py`,
   `homesteads/fixtures.py`, `homesteads/wells.py`).
-- **D5 - sheet rows re-tiered**: eleven procedure rows the rankers put in E1 redraw a hand-drawn Mode A sheet (Ubame,
+- **D5 - sheet rows re-tiered**: nine procedure rows the rankers put in E1 redraw a hand-drawn Mode A sheet (Ubame,
   Hayakawa, Ochiba, Hoshigaoka); FR-003 tiers a sheet redraw E3, so they moved there (`audit/overrides.json`).
 - **D6 - the lane law is one wave**: the 32 E1 rows of `hamletgen/ways/` (wave 3) apply one rule set (0081's join reach
   and turn limits, 0246's 7 ft clear of a fence); fixed together, the lane network is never half under each law.
@@ -76,7 +76,7 @@ Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Each lat
 - XII: PASS - wave 1 draws nothing new; later waves carry their own opening (the cited research IS the opening: each fix
   matches an existing question) and closing (the rendered PNG re-examined) bookends.
 - XII decisions for the reader: PASS - each fix's class at the claim line; the program decisions in the spec's table.
-- XIII: PASS - wave 1 is behavior-free; later waves take a detached-worktree baseline per the wave's plan amendment.
+- XIII: PASS - wave 1 is behavior-free; later waves take their baseline on the clone while its engine content is main's, before the wave's first edit (the same unmodified tree a detached worktree would hold, with its gitignored artifacts), per the wave's plan amendment.
 - XVI: PASS - the direction (implementation to research) is the GM's; exceptions go to spec-fidelity.
 
 ## Decisions

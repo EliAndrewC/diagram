@@ -796,6 +796,19 @@
   "wave": ""
  },
  {
+  "key": ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#archery bank",
+  "tier": "E1",
+  "fix": "archery lane drawn per 0164's yaba ~250 x 8 ft with the azuchi at its end, not ~90 ft (no sheet draws one)",
+  "files": [
+   ".claude/skills/diagram/buildings.md"
+  ],
+  "after": [],
+  "flag": "deviation-tempting: a 250 ft lane barely fits a county compound",
+  "tier_as_ranked": "E1",
+  "verdict": "DRIFTED",
+  "wave": ""
+ },
+ {
   "key": ".claude/skills/diagram/buildings.md::Sacred features#grove crown size",
   "tier": "E1",
   "fix": "grove crowns 13-24 ft (0080.drawing's 0.75-1.4 x 17 ft), cited to 0080's drawing page as a guess",
@@ -814,22 +827,6 @@
   "fix": "Scale section's main-gate passage made the two forms (yakuimon ~6-8.5 ft, nagaya-mon ~12 ft), dropping '~10-13 ft, ~40 px'; sheets already comply",
   "files": [
    ".claude/skills/diagram/buildings.md"
-  ],
-  "after": [],
-  "flag": "",
-  "tier_as_ranked": "E1",
-  "verdict": "DRIFTED",
-  "wave": ""
- },
- {
-  "key": ".claude/skills/diagram/buildings.md::Walls and gates#main gate posts",
-  "tier": "E1",
-  "fix": "main gate posts drawn ~2 ft square, not 2.7-5.3 x 4.7 ft, keeping each passage's inner face",
-  "files": [
-   ".claude/skills/diagram/buildings.md",
-   ".claude/skills/diagram/pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg",
-   ".claude/skills/diagram/pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
-   ".claude/skills/diagram/pool/magistracies/ubame-magistracy/ubame-magistracy.svg"
   ],
   "after": [],
   "flag": "",
@@ -913,19 +910,6 @@
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py::BUNDLE_PITCH#row pitch",
   "tier": "E1",
   "fix": "BUNDLE_PITCH 100.0 -> 92.0 (0038: rows set 92 ft apart); re-derive HOMESTEAD_GROUND_FT and WEB_REACH_FT ties",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py"
-  ],
-  "after": [],
-  "flag": "",
-  "tier_as_ranked": "E1",
-  "verdict": "DRIFTED",
-  "wave": ""
- },
- {
-  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py::FOOTPATH_FABRIC_GAP#footpath off a plot",
-  "tier": "E1",
-  "fix": "FOOTPATH_FABRIC_GAP 4.0 -> 7.0 (0246: a lane's middle at least 7 ft from a garden fence, footpath included)",
   "files": [
    ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py"
   ],
@@ -1024,6 +1008,21 @@
    ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py"
   ],
   "after": [],
+  "flag": "",
+  "tier_as_ranked": "E1",
+  "verdict": "DRIFTED",
+  "wave": ""
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py::FOOTPATH_FABRIC_GAP#footpath off a plot",
+  "tier": "E1",
+  "fix": "FOOTPATH_FABRIC_GAP 4.0 -> 7.0 (0246: a lane's middle at least 7 ft from a garden fence, footpath included)",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py"
+  ],
+  "after": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::RunOnBlocks.clear#off the steadings"
+  ],
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
@@ -5619,20 +5618,6 @@
   "wave": ""
  },
  {
-  "key": ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#archery bank",
-  "tier": "E3",
-  "fix": "archery lane drawn per 0164's yaba ~250 x 8 ft with the azuchi at its end, not ~90 ft (no sheet draws one)",
-  "files": [
-   ".claude/skills/diagram/buildings.md"
-  ],
-  "after": [],
-  "flag": "deviation-tempting: a 250 ft lane barely fits a county compound",
-  "tier_as_ranked": "E1",
-  "moved": "FR-003: the fix redraws a hand-drawn Mode A sheet, which the spec tiers E3 (the ranker had E1)",
-  "verdict": "DRIFTED",
-  "wave": ""
- },
- {
   "key": ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#cart yard as a charcoal fire gap",
   "tier": "E3",
   "fix": "Ubame's charcoal store at the ordinary 6-10 ft kura spacing, no 13-14 ft fire gap, its cart yard cut to a 15-20 ft apron; sheet re-laid",
@@ -5816,6 +5801,23 @@
   "after": [],
   "flag": "deviation-tempting: 18 x 12 is the one measured guardroom, the page's 40 ft a guess",
   "tier_as_ranked": "E3",
+  "verdict": "DRIFTED",
+  "wave": ""
+ },
+ {
+  "key": ".claude/skills/diagram/buildings.md::Walls and gates#main gate posts",
+  "tier": "E3",
+  "fix": "main gate posts drawn ~2 ft square, not 2.7-5.3 x 4.7 ft, keeping each passage's inner face",
+  "files": [
+   ".claude/skills/diagram/buildings.md",
+   ".claude/skills/diagram/pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg",
+   ".claude/skills/diagram/pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+   ".claude/skills/diagram/pool/magistracies/ubame-magistracy/ubame-magistracy.svg"
+  ],
+  "after": [],
+  "flag": "",
+  "tier_as_ranked": "E1",
+  "moved": "FR-003: the fix redraws three hand-drawn sheets (ochiba, hayakawa, ubame) - amendment 1 review",
   "verdict": "DRIFTED",
   "wave": ""
  },

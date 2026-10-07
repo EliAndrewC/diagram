@@ -55,10 +55,6 @@
   "tier": "E3",
   "moved": "FR-003: the fix redraws a hand-drawn Mode A sheet, which the spec tiers E3 (the ranker had E1)"
  },
- ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#archery bank": {
-  "tier": "E3",
-  "moved": "FR-003: the fix redraws a hand-drawn Mode A sheet, which the spec tiers E3 (the ranker had E1)"
- },
  ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#charcoal bales": {
   "tier": "E3",
   "moved": "FR-003: the fix redraws a hand-drawn Mode A sheet, which the spec tiers E3 (the ranker had E1)"
@@ -74,5 +70,14 @@
  ".claude/skills/diagram/buildings/programs.md::Country shrine (a village district's shrine)#dwelling entry tagged genkan": {
   "tier": "E3",
   "moved": "FR-003: the fix redraws a hand-drawn Mode A sheet, which the spec tiers E3 (the ranker had E1)"
+ },
+ ".claude/skills/diagram/buildings.md::Walls and gates#main gate posts": {
+  "tier": "E3",
+  "moved": "FR-003: the fix redraws three hand-drawn sheets (ochiba, hayakawa, ubame) - amendment 1 review"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py::FOOTPATH_FABRIC_GAP#footpath off a plot": {
+  "after": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::RunOnBlocks.clear#off the steadings"
+  ]
  }
 }
