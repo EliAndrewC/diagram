@@ -1,0 +1,36 @@
+perf-profile seed 25 stage notice: 2.0s under cProfile (the stages before it took 3.9s unprofiled; cProfile itself is ~+225%, research R2)
+raw: dev/perf-raw/20261007T151200Z-seed25-notice.prof (gitignored; archive: configured (https://github.com/EliAndrewC/mapgen-perflogs))
+
+         3723239 function calls (3722791 primitive calls) in 2.008 seconds
+
+   Ordered by: cumulative time
+   List reduced from 272 to 25 due to restriction <25>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.002    0.002    2.041    2.041 /diagram/.clones/digram-backlog/.claude/skills/diagram/l7r/diagram/hamletgen/frame.py:65(stage_notice)
+        1    0.000    0.000    2.039    2.039 /diagram/.clones/digram-backlog/.claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py:129(place_kosatsuba)
+        1    0.000    0.000    2.004    2.004 /diagram/.clones/digram-backlog/.claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/board_seat.py:277(site_board)
+        3    0.000    0.000    2.004    0.668 /diagram/.clones/digram-backlog/.claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py:217(<lambda>)
+        3    0.001    0.000    2.004    0.668 /diagram/.clones/digram-backlog/.claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py:381(_board_for)
+        3    0.000    0.000    1.910    0.637 /diagram/.clones/digram-backlog/.claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py:195(sample)
+        3    0.000    0.000    1.910    0.637 /diagram/.clones/digram-backlog/.claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py:243(_board_seats)
+       34    0.073    0.002    1.909    0.056 /diagram/.clones/digram-backlog/.claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py:264(_route_seats)
+     7932    0.105    0.000    1.117    0.000 /diagram/.clones/digram-backlog/.claude/skills/diagram/l7r/diagram/settlement/houses.py:300(_fits)
+     7821    0.036    0.000    0.442    0.000 /diagram/.clones/digram-backlog/.claude/skills/diagram/l7r/diagram/settlement/hard_ground.py:58(_hard_clear)
+     1171    0.173    0.000    0.358    0.000 /diagram/.clones/digram-backlog/.claude/skills/diagram/l7r/diagram/settlement/_geom/overlap.py:115(quad_hits_poly)
+     7821    0.019    0.000    0.278    0.000 /diagram/.clones/digram-backlog/.claude/skills/diagram/l7r/diagram/settlement/houses.py:109(_wall_on_the_bund)
+    39216    0.033    0.000    0.277    0.000 /diagram/.clones/digram-backlog/.claude/skills/diagram/l7r/diagram/settlement/rolling/fit.py:154(_field_blocks_point)
+    39105    0.021    0.000    0.233    0.000 /diagram/.clones/digram-backlog/.claude/skills/diagram/l7r/diagram/settlement/houses.py:124(<genexpr>)
+     7932    0.037    0.000    0.197    0.000 /diagram/.clones/digram-backlog/.claude/skills/diagram/l7r/diagram/settlement/houses.py:126(_in_blocked)
+     4459    0.010    0.000    0.190    0.000 /diagram/.clones/digram-backlog/.claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/board_seat.py:99(turn)
+     4138    0.003    0.000    0.190    0.000 /diagram/.clones/digram-backlog/.claude/skills/diagram/l7r/diagram/settlement/core.py:338(admits)
+     4138    0.005    0.000    0.187    0.000 /diagram/.clones/digram-backlog/.claude/skills/diagram/l7r/diagram/overlap/registry.py:312(admits)
+     4139    0.047    0.000    0.182    0.000 /diagram/.clones/digram-backlog/.claude/skills/diagram/l7r/diagram/overlap/registry.py:262(conflicts)
+    39216    0.138    0.000    0.178    0.000 /diagram/.clones/digram-backlog/.claude/skills/diagram/l7r/diagram/settlement/_geom/primitives.py:393(chain_violated)
+     4459    0.038    0.000    0.172    0.000 /diagram/.clones/digram-backlog/.claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/board_seat.py:86(_near)
+    59871    0.083    0.000    0.107    0.000 /diagram/.clones/digram-backlog/.claude/skills/diagram/l7r/diagram/settlement/_geom/indexes.py:267(near)
+   582643    0.093    0.000    0.093    0.000 {built-in method math.hypot}
+    14741    0.090    0.000    0.092    0.000 /diagram/.clones/digram-backlog/.claude/skills/diagram/l7r/diagram/settlement/_geom/primitives.py:32(point_in_poly)
+310618/310170    0.067    0.000    0.091    0.000 {built-in method builtins.min}
+
+

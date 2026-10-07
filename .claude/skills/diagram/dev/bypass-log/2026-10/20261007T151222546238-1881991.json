@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-07T15:12:22Z",
+  "target": "perf-explain",
+  "commit": "381018b8b",
+  "outcome": "permitted",
+  "why": "perf-explain UNVERIFIED: no recorded run with the layout held and the wave's values applied exists: the cause is the values themselves"
+}

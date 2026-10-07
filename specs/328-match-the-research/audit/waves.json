@@ -105,6 +105,7 @@
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law_water.py::short_decks#assumed water widths": "8 (claimed under its unit's new label; re-checked)",
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law_water.py::short_decks#assumed water widths where none is recorded: 3 ft for a ditch or channel, 6 ft for a stream": "7 (claimed under its unit's new label; re-checked)",
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#a healing link kept if its ends lie within 12 ft of the run and of the network (": "9",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#a healing link kept if its ends lie within 12 ft of the run and of the network (`_reach < 12.0`, `_net_reach < 12.0`), a": "9",
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#a run within 25 ft of the network counts as arrived (_LANE_JOIN_FT)": "8 (claimed under its unit's new label; re-checked)",
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#link kept 8 ft off hard ground, 7 ft off walls": "8 (claimed under its unit's new label; re-checked)",
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#link off hard ground and walls": "9",

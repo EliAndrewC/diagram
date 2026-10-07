@@ -754,7 +754,7 @@
   "tier_as_ranked": "E0",
   "e0_basis": "T34a: a claim split; the code stands",
   "moved": "T34a (amendment 8): tiered by its work - The spur call on bund.py line 307 already draws 5 ft as 0081 says; only the claim lines in the docstring change.",
-  "wave": "",
+  "wave": "9",
   "scope": "kept"
  },
  {
@@ -925,7 +925,7 @@
   "flag": "",
   "found": "wave 8 re-check",
   "tier_as_ranked": "E0",
-  "wave": "",
+  "wave": "9",
   "scope": "kept"
  },
  {
@@ -972,7 +972,7 @@
   "tier_as_ranked": "E0",
   "e0_basis": "T34a: a claim split; the code stands",
   "moved": "T34a (amendment 8): tiered by its work - The link call on serve.py line 190 already uses 7 ft at walls as 0246 gives; only the docstring claim is relabeled.",
-  "wave": "",
+  "wave": "9",
   "scope": "kept"
  },
  {
@@ -1238,6 +1238,37 @@
   "scope": "kept"
  },
  {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::admits#track out's width as judged",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "the track out's stub judged at 6 ft (0081's track)",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 9 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::admits#way out crosses each brook once",
+  "verdict": "NEEDS-RESEARCH",
+  "tier": "E0",
+  "fix": "label the one-crossing limit UNRESEARCHED (0035 prices a crossing at about 150 ft of walk and spaces crossings, but sets no one-per-brook limit), or derive it in the claim's account",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 9 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "needs_e0_review": true,
+  "scope": "kept"
+ },
+ {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#clear of crop, wet and water",
   "verdict": "MISLABELED",
   "tier": "E0",
@@ -1401,7 +1432,7 @@
   "flag": "",
   "found": "wave 8 re-check",
   "tier_as_ranked": "E0",
-  "wave": "",
+  "wave": "9",
   "scope": "kept"
  },
  {
@@ -1416,7 +1447,7 @@
   "flag": "",
   "found": "wave 8 re-check",
   "tier_as_ranked": "E0",
-  "wave": "",
+  "wave": "9",
   "scope": "kept"
  },
  {
@@ -2045,6 +2076,39 @@
   "scope": "deferred"
  },
  {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/farm_fixtures.py::KURA_PARTS#north annex",
+  "verdict": "MISLABELED",
+  "tier": "E0",
+  "fix": "farm_fixtures.py:79: add research/questions/0040-farm-storehouses-kura.drawing.html for the back-wall placement beside 0052 for the 18-27 ft band",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/farm_fixtures.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 9 re-check (tiered by its work at T38a)",
+  "tier_as_ranked": "E0",
+  "e0_basis": "T38a: claim lines only; the code stands",
+  "moved": "T38a: tiered by its work - The values in KURA_PARTS are untouched; only the claim line gains its second page.",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/farm_fixtures.py::kura_rect#annex held in its band",
+  "verdict": "DRIFTED",
+  "tier": "E0",
+  "fix": "name the recorded exception in the claim: on a house under about 22 ft deep the 1.8 to one wins and the annex runs under 18 ft (the docstring's own measured choice), or keep the 18 ft floor",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/farm_fixtures.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 9 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "needs_e0_review": true,
+  "scope": "kept"
+ },
+ {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/farm_fixtures.py::kura_rect#annex larger than a kura",
   "tier": "E0",
   "fix": "cite 0040.drawing (annex 18-27 ft at a shed's size) in place of the spec handoff",
@@ -2058,6 +2122,68 @@
   "tier_as_ranked": "E0",
   "verdict": "CANNOT-TELL",
   "wave": "1",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/farm_fixtures.py::kura_rect#annex seat",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "annex seat: against the north or west wall, and where along that wall (`KURA_PARTS` offsets); 0040's drawing page covers it",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/farm_fixtures.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 9 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#default watercourse widths",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "default watercourse widths when a record carries none (stream 9, channel 2.5, canal 14)",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 9 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#nothing on a dry plot",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "nothing built or planted on a dry plot (plots registered in `block_polys` and `dry_polys`)",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 9 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_source#planted pond bank",
+  "verdict": "MISLABELED",
+  "tier": "E0",
+  "fix": "comb.py:628: relabel the claim DEVIATION research/questions/0061-reservoir-ponds-tameike.drawing.html (every bank drawn bare), through the exception path",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 9 re-check (tiered by its work at T38a)",
+  "tier_as_ranked": "E0",
+  "e0_basis": "T38a: claim lines only; the code stands",
+  "moved": "T38a: tiered by its work - No code changes; the claim line is relabeled.",
+  "wave": "",
   "scope": "kept"
  },
  {
@@ -2090,6 +2216,40 @@
   "verdict": "CANNOT-TELL",
   "wave": "1",
   "scope": "deferred"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#manure heap fallback spots",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "fixture_seats.py:478: add a claim for the manure heap's fallback spots (beside the privy at 1.1 and 1.9 widths, 10 ft further out, lines 503-512) and its no-privy seats at 0.3 hw / 0.3 hh (line 501), UNRESEARCHED",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 9 re-check (tiered by its work at T38a)",
+  "tier_as_ranked": "E0",
+  "e0_basis": "T38a: claim lines only; the code stands",
+  "moved": "T38a: tiered by its work - Writing a claim line; no behavior changes.",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::_wood_shed#wood shed fallback seats",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "fixture_seats.py:383: add a claim for the fallback seats paced a further STEP_FT (8 ft) out (outward(seats, px(STEP_FT), 1), line 386), UNRESEARCHED",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 9 re-check (tiered by its work at T38a)",
+  "tier_as_ranked": "E0",
+  "e0_basis": "T38a: claim lines only; the code stands",
+  "moved": "T38a: tiered by its work - Writing a claim line; no behavior changes.",
+  "wave": "",
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#fixture gap 3.5 ft off every other part (WALL_GAP_FT) and bath room slide 4 ft (WALL_SLIDE_FT)",
@@ -2134,6 +2294,41 @@
   "scope": "deferred"
  },
  {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#bamboo patch forced",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "groves.py:~720: add a claim for in_box(..., bamboo_box) at :788 forcing an item to bamboo in any mix and even when bamboo=False, citing research/questions/0075-bamboo-groves-chikurin.drawing.html (the farm's patch) or UNRESEARCHED",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 9 re-check (tiered by its work at T38a)",
+  "tier_as_ranked": "E0",
+  "e0_basis": "T38a: claim lines only; the code stands",
+  "moved": "T38a: tiered by its work - Writing a claim line; no behavior changes.",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#crown over no roof or wellhead",
+  "tier": "E0",
+  "fix": "groves.py:727: add research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html for the wellhead (a wellhead in a belt removes the clumps round it) beside 0071",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py"
+  ],
+  "after": [],
+  "flag": "",
+  "e0_basis": "T38a: claim lines only; the code stands",
+  "e0_rechecked": true,
+  "tier_as_ranked": "E0",
+  "found": "wave 9 re-check (tiered by its work at T38a)",
+  "moved": "T38a: tiered by its work - Only the claim line gains a page.",
+  "verdict": "MISLABELED",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#crowns out of the plots' sun",
   "tier": "E0",
   "fix": "drop 'bamboo marks exempt' from the claim; code holds every mark out of the sun ground as 0038 says",
@@ -2145,6 +2340,40 @@
   "tier_as_ranked": "E0",
   "verdict": "MISLABELED",
   "wave": "1",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#crowns per clump ceiling",
+  "verdict": "MISLABELED",
+  "tier": "E0",
+  "fix": "groves.py:719 (now UNRESEARCHED): relabel DEVIATION research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html for GROVE_CLUMP_CROWNS=28 through the exception path, or drop the cap (then E1)",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 9 re-check (tiered by its work at T38a)",
+  "tier_as_ranked": "E0",
+  "e0_basis": "T38a: claim lines only; the code stands",
+  "moved": "T38a: tiered by its work - Relabel only; the exception path is process.",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#crowns per clump floor",
+  "verdict": "MISLABELED",
+  "tier": "E0",
+  "fix": "groves.py:717 (now UNRESEARCHED): relabel DEVIATION research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html for the max(5, ...) floor at :753 through the exception path, or drop the floor (then E1)",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 9 re-check (tiered by its work at T38a)",
+  "tier_as_ranked": "E0",
+  "e0_basis": "T38a: claim lines only; the code stands",
+  "moved": "T38a: tiered by its work - Relabel only; the exception path is process.",
+  "wave": "",
   "scope": "kept"
  },
  {
@@ -2180,6 +2409,74 @@
   "scope": "kept"
  },
  {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#belt off the deep marsh",
+  "verdict": "NEEDS-RESEARCH",
+  "tier": "E0",
+  "fix": "stands.py:252: relabel the cut at the reed margin (MARSH_FEATHER_BS) UNRESEARCHED: 0074 drawing gives no limit on how far in a belt may stand",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 9 re-check (tiered by its work at T38a)",
+  "tier_as_ranked": "E0",
+  "e0_basis": "T38a: claim lines only; the code stands",
+  "moved": "T38a: tiered by its work - The fix is the label; the code keeps its value.",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#clump inside the page window",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "stands.py:~252: add a claim, CONVENTION, that a clump is kept only when part of its crown falls inside the page window",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 9 re-check (tiered by its work at T38a)",
+  "tier_as_ranked": "E0",
+  "e0_basis": "T38a: claim lines only; the code stands",
+  "moved": "T38a: tiered by its work - Writing a claim line; no behavior changes.",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#clump off buildings, wells and shrines",
+  "verdict": "MISLABELED",
+  "tier": "E0",
+  "fix": "stands.py:250: narrow the claim to buildings (0071 section 15) and add a separate UNRESEARCHED claim for the wellhead keep-out vr + 1.05 clump + 1 (line ~91)",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 9 re-check (tiered by its work at T38a)",
+  "tier_as_ranked": "E0",
+  "e0_basis": "T38a: claim lines only; the code stands",
+  "moved": "T38a: tiered by its work - Claim lines split; no behavior changes.",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#copse mix",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "stands.py:~252: add a claim that the copse is drawn in the dooryard mix (fruit and broadleaf, no bamboo or conifer), citing research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html as groves.py:722 does",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 9 re-check (tiered by its work at T38a)",
+  "tier_as_ranked": "E0",
+  "e0_basis": "T38a: claim lines only; the code stands",
+  "moved": "T38a: tiered by its work - Writing a claim line; no behavior changes.",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#copse off the bamboo",
   "tier": "E0",
   "fix": "claim label: the copse grows off the bamboo by copse_bamboo_reach (two crowns), not 'by a crown'",
@@ -2191,6 +2488,40 @@
   "tier_as_ranked": "E0",
   "verdict": "MISLABELED",
   "wave": "1",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#copse off the whole marsh",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "stands.py:~252: add a claim that the copse is kept off the whole marsh, not only the deep marsh, citing research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html (woody cover on the dry ground above it)",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 9 re-check (tiered by its work at T38a)",
+  "tier_as_ranked": "E0",
+  "e0_basis": "T38a: claim lines only; the code stands",
+  "moved": "T38a: tiered by its work - Writing a claim line; no behavior changes.",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#wellhead canopy keep-out",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "stands.py:~252: add a claim for the wellhead keep-out vr + clump * 1.05 + 1.0 (line ~91), UNRESEARCHED or citing 0071/0072 for the wellhead",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 9 re-check (tiered by its work at T38a)",
+  "tier_as_ranked": "E0",
+  "e0_basis": "T38a: claim lines only; the code stands",
+  "moved": "T38a: tiered by its work - Writing a claim line; no behavior changes.",
+  "wave": "",
   "scope": "kept"
  },
  {
@@ -2208,6 +2539,51 @@
   "verdict": "CANNOT-TELL",
   "wave": "1",
   "scope": "deferred"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/wood_share.py::WoodShares.__init__#afternoon lane as the copse plants",
+  "verdict": "MISLABELED",
+  "tier": "E0",
+  "fix": "cite 0038 (every crown 50 ft west or southwest of a yard or bed) for the copse's west reservation, not NONE",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/wood_share.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 9 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/wood_share.py::WoodShares.__init__#copse clump size",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "the drawn size of a copse clump (`COPSE_CLUMP_BS` 22 bs)",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/wood_share.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 9 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/wood_share.py::WoodShares.__init__#copse seat pitch",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "the spacing between copse seats (`SEAT_PITCH_BS` 11*sqrt(2) bs)",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/wood_share.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 9 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/yards.py::ThreshingYardsMixin._attach_yard#no floor without rice",
@@ -2240,6 +2616,23 @@
   "scope": "kept"
  },
  {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/land/dikes.py::DikeMixin.dike_gates#gate glyph at the polder cut",
+  "verdict": "CANNOT-TELL",
+  "tier": "E0",
+  "fix": "re-check: the one caller (hamletgen/frame.py:60) uses the default span_ft=20.0 and dikes.py:383 passes span=self.px(20.0); at the hamlet's ftpx 1.0 sluice_gate (city/moat.py:209) scales the frame to max(1, 20/10.8), so posts stand 20 ft apart, inside 0179's 16-24 ft; rewrite the stale claim at dikes.py:354-355 (no \"~11 ft frame\", no \"6 ft span\") to say 20 ft",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/land/dikes.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 9 re-check (tiered by its work at T38a)",
+  "tier_as_ranked": "E0",
+  "e0_basis": "T38a: claim lines only; the code stands",
+  "moved": "T38a: tiered by its work - The code matches the page; only the claim text is stale.",
+  "wave": "9",
+  "scope": "kept"
+ },
+ {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/access.py::_standing_clear#no path corridor within its half-width of any placed footprint",
   "tier": "E0",
   "fix": "add claim citing 0246 drawing (nothing built on a path: corridor clears every placed footprint by its half-width)",
@@ -2265,6 +2658,74 @@
   "tier_as_ranked": "E0",
   "verdict": "MISLABELED",
   "wave": "1",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_geom#grove cleared east of turned beds",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "bundle.py:148 _bundle_geom docstring: add a claim for clear_east_of_beds (a dispersed farm's grove cleared 50 ft east of its turned beds), citing research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/rolling/bundle.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 9 re-check (tiered by its work at T38a)",
+  "tier_as_ranked": "E0",
+  "e0_basis": "T38a: claim lines only; the code stands",
+  "moved": "T38a: tiered by its work - Writing a claim line; no behavior changes.",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#byre beside the house",
+  "verdict": "NEEDS-RESEARCH",
+  "tier": "E0",
+  "fix": "bundle.py:275: relabel the flank away from the garden UNRESEARCHED: 0048 drawing places no byre on a flank",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/rolling/bundle.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 9 re-check (tiered by its work at T38a)",
+  "tier_as_ranked": "E0",
+  "e0_basis": "T38a: claim lines only; the code stands",
+  "moved": "T38a: tiered by its work - The fix is the label; the seat is unchanged.",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#south band off an unkept yard",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "bundle.py:277: add a claim for the non-sun-keeping case (yard_sun=YARD_SUN_STRIP, 22, unscaled, line 382), UNRESEARCHED",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/rolling/bundle.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 9 re-check (tiered by its work at T38a)",
+  "tier_as_ranked": "E0",
+  "e0_basis": "T38a: claim lines only; the code stands",
+  "moved": "T38a: tiered by its work - Writing a claim line; no behavior changes.",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#storehouse on the north wall",
+  "verdict": "MISLABELED",
+  "tier": "E0",
+  "fix": "bundle.py:274: relabel DEVIATION research/questions/0040-farm-storehouses-kura.drawing.html (the page calls the north-wall annex a convention the record contradicts), as steading_rects already does at fixture_seats.py:224, through the exception path",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/rolling/bundle.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 9 re-check (tiered by its work at T38a)",
+  "tier_as_ranked": "E0",
+  "e0_basis": "T38a: claim lines only; the code stands",
+  "moved": "T38a: tiered by its work - Relabel only; the exception path is process.",
+  "wave": "",
   "scope": "kept"
  },
  {
@@ -3983,7 +4444,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "9",
   "scope": "kept"
  },
  {
@@ -3998,7 +4459,7 @@
   "flag": "",
   "found": "wave 1 re-check",
   "tier_as_ranked": "E1",
-  "wave": "",
+  "wave": "9",
   "scope": "kept"
  },
  {
@@ -4012,7 +4473,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "9",
   "scope": "kept"
  },
  {
@@ -4026,6 +4487,22 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
+  "wave": "9",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_source#feeder brook width",
+  "verdict": "DRIFTED",
+  "tier": "E1",
+  "fix": "comb.py:651: width=7 -> width=self.px(7.0) (0059/0068: a brook about 7 ft wide), and drop \"in px rather than feet\" from the claim at comb.py:630",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 9 re-check (tiered by its work at T38a)",
+  "tier_as_ranked": "E1",
+  "moved": "T38a: tiered by its work - One literal becomes a scaled value; logic unchanged.",
   "wave": "",
   "scope": "kept"
  },
@@ -4040,7 +4517,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "9",
   "scope": "kept"
  },
  {
@@ -4054,7 +4531,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "9",
   "scope": "kept"
  },
  {
@@ -4082,7 +4559,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "9",
   "scope": "kept"
  },
  {
@@ -4110,7 +4587,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "9",
   "scope": "kept"
  },
  {
@@ -4138,7 +4615,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "9",
   "scope": "kept"
  },
  {
@@ -4152,7 +4629,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "9",
   "scope": "kept"
  },
  {
@@ -4166,7 +4643,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "9",
   "scope": "kept"
  },
  {
@@ -4180,78 +4657,22 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "9",
   "scope": "kept"
  },
  {
-  "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#lesser broadleaf crown size",
-  "verdict": "MISLABELED",
-  "tier": "E1",
-  "fix": "LESSER_BROADLEAF_S floor 0.6 -> 0.75 of the mean radius (0080 drawing: 0.75-1.4), cite 0080",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py"
-  ],
-  "after": [],
-  "flag": "",
-  "found": "wave 1 re-check",
-  "tier_as_ranked": "E1",
-  "wave": "",
-  "scope": "kept"
- },
- {
-  "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#windbreak conifer share",
-  "tier": "E1",
-  "fix": "windbreak conifer share c_th = b_th + 0.48 (0072/Takehara: 48% cedar, the dominant tree)",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py"
-  ],
-  "after": [],
-  "flag": "",
-  "tier_as_ranked": "E1",
-  "verdict": "DRIFTED",
-  "wave": "",
-  "scope": "kept"
- },
- {
-  "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._grove_fits#off a yard's south strip",
-  "tier": "E1",
-  "fix": "grove box kept out of the 39 ft south corridor (0037/0038) via px(), not a fixed 22 px strip",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py"
-  ],
-  "after": [],
-  "flag": "",
-  "tier_as_ranked": "E1",
-  "verdict": "DRIFTED",
-  "wave": "",
-  "scope": "deferred"
- },
- {
-  "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#belt deep and whole",
-  "tier": "E1",
-  "fix": "village_grove gap test compares px(_BELT_GAP_FT), 30 ft at every grain",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py"
-  ],
-  "after": [],
-  "flag": "",
-  "tier_as_ranked": "E1",
-  "verdict": "DRIFTED",
-  "wave": "",
-  "scope": "kept"
- },
- {
-  "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#clumps off the gardens' east",
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::shed_off_a_wall#wood shed a ken off a wall",
   "verdict": "DRIFTED",
   "tier": "E1",
-  "fix": "the east lane 50 ft in feet (0038: no crown within 50 ft east, west or south of a yard or bed), yards included, not 24 px past a garden",
+  "fix": "fixture_seats.py:364: drop \"+ px(STEP_FT)\" from the against_a_wall bound so a shed stands within g + px(WOODSHED_STEP_FT) (a ken) of its wall, per 0043 drawing (about 6 ft off a wall); the outward(seats, px(STEP_FT), 1) offers at line 386 then never pass and can go",
   "files": [
-   ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py"
+   ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py"
   ],
   "after": [],
   "flag": "",
-  "found": "wave 1 re-check",
+  "found": "wave 9 re-check (tiered by its work at T38a)",
   "tier_as_ranked": "E1",
+  "moved": "T38a: tiered by its work - One bound value changes; the predicate's logic is the same.",
   "wave": "",
   "scope": "kept"
  },
@@ -4268,24 +4689,67 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "NEEDS-RESEARCH",
-  "wave": "",
-  "scope": "kept"
+  "wave": "9",
+  "scope": "deferred"
  },
  {
-  "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/wood_share.py::EAST_LANE_PX#bed's morning lane",
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/grove_rules.py::gardens_east_shaded#garden's morning sun",
   "tier": "E1",
-  "fix": "EAST_LANE_PX 24 px -> 0038's 50 ft via px()",
+  "fix": "same constant: gardens_east_shaded reads the 50 ft reach (0038) via px()",
   "files": [
-   ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/wood_share.py"
+   ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/grove_rules.py"
   ],
   "after": [
    ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/grove_rules.py::EAST_REACH_PX#garden's morning sun"
   ],
   "flag": "",
   "tier_as_ranked": "E1",
+  "verdict": "NEEDS-RESEARCH",
+  "wave": "9",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#lesser broadleaf crown size",
+  "verdict": "MISLABELED",
+  "tier": "E1",
+  "fix": "LESSER_BROADLEAF_S floor 0.6 -> 0.75 of the mean radius (0080 drawing: 0.75-1.4), cite 0080",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 1 re-check",
+  "tier_as_ranked": "E1",
+  "wave": "9",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#windbreak conifer share",
+  "tier": "E1",
+  "fix": "windbreak conifer share c_th = b_th + 0.48 (0072/Takehara: 48% cedar, the dominant tree)",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py"
+  ],
+  "after": [],
+  "flag": "",
+  "tier_as_ranked": "E1",
+  "verdict": "DRIFTED",
+  "wave": "9",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._grove_fits#off a yard's south strip",
+  "tier": "E1",
+  "fix": "grove box kept out of the 39 ft south corridor (0037/0038) via px(), not a fixed 22 px strip",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py"
+  ],
+  "after": [],
+  "flag": "",
+  "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "kept"
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._shades_a_garden#garden's morning sun",
@@ -4304,20 +4768,49 @@
   "scope": "deferred"
  },
  {
-  "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/grove_rules.py::gardens_east_shaded#garden's morning sun",
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#belt deep and whole",
   "tier": "E1",
-  "fix": "same constant: gardens_east_shaded reads the 50 ft reach (0038) via px()",
+  "fix": "village_grove gap test compares px(_BELT_GAP_FT), 30 ft at every grain",
   "files": [
-   ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/grove_rules.py"
+   ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py"
+  ],
+  "after": [],
+  "flag": "",
+  "tier_as_ranked": "E1",
+  "verdict": "DRIFTED",
+  "wave": "9",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#clumps off the gardens' east",
+  "verdict": "DRIFTED",
+  "tier": "E1",
+  "fix": "the east lane 50 ft in feet (0038: no crown within 50 ft east, west or south of a yard or bed), yards included, not 24 px past a garden",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 1 re-check",
+  "tier_as_ranked": "E1",
+  "wave": "9",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/wood_share.py::EAST_LANE_PX#bed's morning lane",
+  "tier": "E1",
+  "fix": "EAST_LANE_PX 24 px -> 0038's 50 ft via px()",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/wood_share.py"
   ],
   "after": [
    ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/grove_rules.py::EAST_REACH_PX#garden's morning sun"
   ],
   "flag": "",
   "tier_as_ranked": "E1",
-  "verdict": "NEEDS-RESEARCH",
-  "wave": "",
-  "scope": "kept"
+  "verdict": "DRIFTED",
+  "wave": "9",
+  "scope": "deferred"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/houses.py::HousesMixin.frontage#rear row back to back",
@@ -4334,20 +4827,6 @@
   "scope": "deferred"
  },
  {
-  "key": ".claude/skills/diagram/l7r/diagram/settlement/land/cover.py::GroundCoverMixin.commons#scrub ground color",
-  "tier": "E1",
-  "fix": "drop the straw-gold solid fill under the commons tufts (0078: no solid fill, no outline)",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/settlement/land/cover.py"
-  ],
-  "after": [],
-  "flag": "",
-  "tier_as_ranked": "E1",
-  "verdict": "DRIFTED",
-  "wave": "",
-  "scope": "kept"
- },
- {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/land/cover.py::GroundCoverMixin.reserve_clearing#cleared collar",
   "tier": "E1",
   "fix": "reserve_clearing default extra 46 -> 0 (the footprint alone)",
@@ -4362,50 +4841,6 @@
   "scope": "deferred"
  },
  {
-  "key": ".claude/skills/diagram/l7r/diagram/settlement/land/dikes.py::DikeMixin.dike_gates#gate glyph at the polder cut",
-  "tier": "E1",
-  "fix": "draw the dike gate at a 16-24 ft sluice span, passing the span to the glyph frame",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/settlement/land/dikes.py"
-  ],
-  "after": [],
-  "flag": "",
-  "tier_as_ranked": "E1",
-  "verdict": "DRIFTED",
-  "wave": "",
-  "scope": "kept"
- },
- {
-  "key": ".claude/skills/diagram/l7r/diagram/settlement/land/wet.py::water_lines#watered by surface water",
-  "tier": "E1",
-  "fix": "water_lines includes irrigation channels and ponds per 0196 drawing (drop the 'never an irrigation ditch' exclusion)",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/settlement/land/wet.py"
-  ],
-  "after": [],
-  "flag": "",
-  "tier_as_ranked": "E1",
-  "verdict": "DRIFTED",
-  "wave": "",
-  "scope": "kept"
- },
- {
-  "key": ".claude/skills/diagram/l7r/diagram/settlement/land/wet.py::surface_water_dist#watered by surface water",
-  "tier": "E1",
-  "fix": "count irrigation channels as surface water in surface_water_dist (via water_lines)",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/settlement/land/wet.py"
-  ],
-  "after": [
-   ".claude/skills/diagram/l7r/diagram/settlement/land/wet.py::water_lines#watered by surface water"
-  ],
-  "flag": "",
-  "tier_as_ranked": "E1",
-  "verdict": "DRIFTED",
-  "wave": "",
-  "scope": "kept"
- },
- {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#garden size",
   "tier": "E1",
   "fix": "nucleated garden cap 48 x 34 ft -> a cap whose area stays <= 1,507 sq ft (e.g. 44 x 34 ft), per 0039",
@@ -4416,7 +4851,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "9",
   "scope": "kept"
  },
  {
@@ -4432,7 +4867,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "9",
   "scope": "kept"
  },
  {
@@ -4446,7 +4881,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "9",
   "scope": "kept"
  },
  {
@@ -6700,16 +7135,34 @@
   "scope": "kept"
  },
  {
-  "key": ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_ditches#outfall corridor",
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_ditches#drain outfall",
+  "verdict": "CANNOT-TELL",
   "tier": "E2",
-  "fix": "scope the 33 ft outfall corridor to town and city maps at px(33); hamlets and villages take the below-the-drain rule",
+  "fix": "comb.py:118-133 outfall_run: the run goes 70 px along the drain exit (b0->b1, which _comb_brook in waterfields/comb.py:657-668 takes from the collector, mostly cross-slope) then turns straight down the fall at `mid`, a corner of up to ~90 degrees; 0060 drawing holds the turn out of the collector to 55 degrees or less - cap the turn at `mid` at JUNCTION_TURN_MAX_DEG (hamletgen/sink.py:227), bending in steps of 55 or less, and fix the claim (0060, not 0067)",
   "files": [
    ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py"
   ],
   "after": [],
   "flag": "",
-  "tier_as_ranked": "E2",
+  "found": "wave 9 re-check (tiered by its work at T38a)",
+  "tier_as_ranked": "E0",
+  "moved": "T38a: tiered by its work - Re-checked with outfall_run: nothing bounds the angle between the exit heading and the fall, so one function's geometry rule changes.",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_ditches#outfall corridor",
   "verdict": "DRIFTED",
+  "tier": "E2",
+  "fix": "comb.py:703: append the outfall corridor only on town and city maps, at self.px(33.0) not 33.0 px; on hamlet and village maps rely on the existing below-the-drain rule (houses.py) per 0058 drawing, and rewrite the claim at comb.py:660",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 9 re-check (tiered by its work at T38a)",
+  "tier_as_ranked": "E2",
+  "moved": "T38a: tiered by its work - One condition (the map tier) and a unit conversion on one line in one function.",
   "wave": "",
   "scope": "kept"
  },
@@ -6749,22 +7202,6 @@
    ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py"
   ],
   "after": [],
-  "flag": "",
-  "tier_as_ranked": "E2",
-  "verdict": "DRIFTED",
-  "wave": "",
-  "scope": "kept"
- },
- {
-  "key": ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_ditches#drain outfall",
-  "tier": "E2",
-  "fix": "curve the drain outfall out of the collector's exit with the turn held to 55 degrees or less, as _comb_brook does",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py"
-  ],
-  "after": [
-   ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::outfall_run#drain outfall"
-  ],
   "flag": "",
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
@@ -6859,29 +7296,33 @@
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#privy seats",
+  "verdict": "DRIFTED",
   "tier": "E2",
-  "fix": "seat the barn privy against the byre/barn part's outer wall, not the house's +x end wall",
+  "fix": "fixture_seats.py:493: the \"barn\" seat (hw/2 + g + d/2, -0.25 hh) is the house's own +x end; per 0047 drawing seat it against the outer wall of the steading's annex (kura_rect via steading_rects) and plumb the walls/kura_side into _seats, falling back to the house end only where no annex stands",
   "files": [
    ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py"
   ],
   "after": [],
   "flag": "",
+  "found": "wave 9 re-check (tiered by its work at T38a)",
   "tier_as_ranked": "E2",
-  "verdict": "DRIFTED",
+  "moved": "T38a: tiered by its work - One seat in one function changes, with the annex rect plumbed in.",
   "wave": "",
   "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::_wood_shed#wood shed seats",
+  "verdict": "CANNOT-TELL",
   "tier": "E2",
-  "fix": "wall_places offers only the back and end walls, never the front wall (0043: never in the front yard)",
+  "fix": "fixture_seats.py:386: wall_places(walls, ...) offers places a ken off the FRONT wall (sy=+1, wall_places line 261), which pass shed_off_a_wall, so a shed whose back and flank seats are taken lands in the front yard against 0043 drawing (never the front yard); filter out the house's front-wall places in _wood_shed and fix the docstring",
   "files": [
    ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py"
   ],
   "after": [],
   "flag": "",
-  "tier_as_ranked": "E2",
-  "verdict": "DRIFTED",
+  "found": "wave 9 re-check (tiered by its work at T38a)",
+  "tier_as_ranked": "E0",
+  "moved": "T38a: tiered by its work - Re-checked with wall_places and against_a_wall: the front wall is offered, so one keep-out in one function changes.",
   "wave": "",
   "scope": "kept"
  },
@@ -6907,23 +7348,6 @@
    ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py"
   ],
   "after": [
-   ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::_wood_shed#wood shed seats"
-  ],
-  "flag": "",
-  "tier_as_ranked": "E2",
-  "verdict": "DRIFTED",
-  "wave": "",
-  "scope": "kept"
- },
- {
-  "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::shed_off_a_wall#wood shed a ken off a wall",
-  "tier": "E2",
-  "fix": "shed_off_a_wall admits ~6 ft (a ken, with tolerance) off a back or end wall only, never a front wall",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py"
-  ],
-  "after": [
-   ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::WOODSHED_STEP_FT#wood shed off its wall",
    ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::_wood_shed#wood shed seats"
   ],
   "flag": "",
@@ -6977,6 +7401,21 @@
   "scope": "deferred"
  },
  {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/grove_rules.py::gardens_east_shaded#east reach below the bed",
+  "verdict": "DRIFTED",
+  "tier": "E2",
+  "fix": "test the band against the page's clear ground from the bed's north edge down to 50 ft below its south edge (0038 \u00a777), not the bed's own height, so a band southeast of the bed is caught",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/grove_rules.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 9 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E2",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GROVE_CROWN_AREA#grove crown density",
   "tier": "E2",
   "fix": "key the clump crown density to ft/px (one crown per ~180 sq ft real) instead of (bscale/0.82)^2",
@@ -6992,15 +7431,17 @@
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#crown size",
+  "verdict": "DRIFTED",
   "tier": "E2",
-  "fix": "draw every crown, conifer and lesser included, at 0.75-1.4x the mean (0080); drop the 1.25-1.7 band and conifer x1.15",
+  "fix": "groves.py:789: replace the two bands (0.72-1.05, or 1.25-1.7 a quarter of the time) with 0080 drawing's one 0.75-1.4 band, and groves.py:854 drop the conifer x1.15 (also the 1.7 x 1.15 prefilter pad at :808 and the rank conifer base x1.15 at :366 with its claim at :127); rewrite the claim at :724-725",
   "files": [
    ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py"
   ],
   "after": [],
   "flag": "",
-  "tier_as_ranked": "E2",
-  "verdict": "DRIFTED",
+  "found": "wave 9 re-check (tiered by its work at T38a)",
+  "tier_as_ranked": "E1",
+  "moved": "T38a: tiered by its work - Several literals in the crown-size rule change together (the band's shape and the conifer factor), within the one rule.",
   "wave": "",
   "scope": "kept"
  },
@@ -7081,6 +7522,22 @@
   "scope": "kept"
  },
  {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#off the plots' sun",
+  "verdict": "DRIFTED",
+  "tier": "E2",
+  "fix": "stands.py:363-381 village_grove: the clump seats keep a south strip of _sun_corridor_ft (39 ft, the house rule) or 22 px, an east lane for gardens only, and a west lane only when _west_sun_ft is set; per 0038 drawing hold seats 50 ft (EAST_REACH_FT / CANOPY_SHADE_FT) east, west and south of every threshing yard and bed",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 9 re-check (tiered by its work at T38a)",
+  "tier_as_ranked": "E2",
+  "moved": "T38a: tiered by its work - One keep-out rule in one function changes its depths and the plots it covers.",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#water-mouth grove drawn in the conifer-backed windbreak mix",
   "tier": "E2",
   "fix": "draw the water-mouth grove mainly conifer (yew) with larger old-tree crowns, its own mix, not the windbreak mix",
@@ -7094,6 +7551,40 @@
   "flag": "",
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/wood_share.py::WoodShares.__init__#sun strip default",
+  "verdict": "MISLABELED",
+  "tier": "E2",
+  "fix": "the copse seats' south strip at 0038's 50 ft, not the 22 ft default labeled GUESS; with the copse's sun ground below (feature 317 measured seats reserved in the west lane left unplanted)",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/wood_share.py"
+  ],
+  "after": [
+   ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#off the plots' sun"
+  ],
+  "flag": "",
+  "found": "wave 9 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E2",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/wood_share.py::copse_keepouts#plots' sun strips",
+  "verdict": "DRIFTED",
+  "tier": "E2",
+  "fix": "reserve the copse's seats 50 ft east, west and south of every yard and bed (0038), yards' east included, as the planting holds them",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/wood_share.py"
+  ],
+  "after": [
+   ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#off the plots' sun"
+  ],
+  "flag": "",
+  "found": "wave 9 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E2",
   "wave": "",
   "scope": "kept"
  },
@@ -7142,6 +7633,21 @@
   "verdict": "DRIFTED",
   "wave": "",
   "scope": "deferred"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/land/cover.py::GroundCoverMixin.commons#scrub ground color",
+  "tier": "E2",
+  "fix": "drop the straw-gold solid fill under the commons tufts (0078: no solid fill, no outline) - a glyph redrawn on every hamlet, owing a glyph-check",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/land/cover.py"
+  ],
+  "after": [],
+  "flag": "",
+  "tier_as_ranked": "E1",
+  "moved": "wave 9: the change redraws a glyph, an occasion; taken with its review",
+  "verdict": "DRIFTED",
+  "wave": "",
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/land/cover.py::GroundCoverMixin.commons#wood edge",
@@ -9125,6 +9631,23 @@
   "scope": "kept"
  },
  {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::a_way_onto_the_bund#field path's corridor",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "the claim states the drift: the corridor is 0246's 7 ft to a fence held as a 40 ft center corridor; fixed by the edge-based corridor row (consts.py::LANE_CLEARANCE)",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py"
+  ],
+  "after": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py::LANE_CLEARANCE#fronting lane's corridor"
+  ],
+  "flag": "",
+  "found": "wave 9 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E3",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::carry_on#stepped spur's corridor",
   "verdict": "DRIFTED",
   "tier": "E3",
@@ -9826,48 +10349,33 @@
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/farm_fixtures.py::KURA_PARTS#free-standing storage shed",
+  "verdict": "DRIFTED",
   "tier": "E3",
-  "fix": "add a free-standing storage shed on about one farm in three, on a yard side rolled per farm",
+  "fix": "farm_fixtures.py:81 claims no free-standing shed, but 0028 drawing (and 0052) draw a storage shed standing free of the house on about one farm in three, on a yard side rolled per farm, 18-27 ft long at 1.5-1.8:1, roof gabled or hipped rolled per farm: add the shed as a new fixture kind (share, size, seat, glyph, roof knob) and rewrite the claim",
   "files": [
-   ".claude/skills/diagram/l7r/diagram/settlement/farm_fixtures.py",
-   ".claude/skills/diagram/l7r/diagram/settlement/houses.py",
-   ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/yards.py"
+   ".claude/skills/diagram/l7r/diagram/settlement/farm_fixtures.py"
   ],
   "after": [],
   "flag": "",
+  "found": "wave 9 re-check (tiered by its work at T38a)",
   "tier_as_ranked": "E3",
-  "verdict": "DRIFTED",
+  "moved": "T38a: tiered by its work - No shed element exists: KURA_PARTS only holds the N/W annex, so the fix is a new element with its own seat, size, roof knob and glyph across several modules.",
   "wave": "",
   "scope": "kept"
  },
  {
-  "key": ".claude/skills/diagram/l7r/diagram/settlement/farm_fixtures.py::KURA_PARTS#north annex",
-  "tier": "E3",
-  "fix": "detach the storehouse from the north wall: stand it free of the house, front or behind, side unfixed (0052/0040)",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/settlement/farm_fixtures.py",
-   ".claude/skills/diagram/l7r/diagram/settlement/houses.py"
-  ],
-  "after": [
-   ".claude/skills/diagram/l7r/diagram/settlement/farm_fixtures.py::KURA_PARTS#free-standing storage shed"
-  ],
-  "flag": "deviation-tempting: 0040 drawing keeps the annex as a convention to avoid shifting every hamlet",
-  "tier_as_ranked": "E3",
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_source#feeder brook",
   "verdict": "DRIFTED",
-  "wave": "",
-  "scope": "kept"
- },
- {
-  "key": ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_source#planted pond bank",
   "tier": "E3",
-  "fix": "roll the pond bank between bare and sparsely planted with mulberry and cudrania",
+  "fix": "rolling/roll.py:246 builds the rolled comb's brook as a 380 px stub ending at the sluice with no `to`; per 0059 drawing (the brook runs on past the intake, never taken whole) route it on past the intake down the fan's flank, clear of the field envelope, off the map or to take in the drain, and pass \"to\": {\"kind\": \"offmap\"} (the hamlet path, hamletgen/water/comb.py:89, already does)",
   "files": [
    ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py"
   ],
   "after": [],
   "flag": "",
-  "tier_as_ranked": "E3",
-  "verdict": "DRIFTED",
+  "found": "wave 9 re-check (tiered by its work at T38a)",
+  "tier_as_ranked": "E2",
+  "moved": "T38a: tiered by its work - comb.py honors `to`; the missing piece is a new brook course past the intake routed round the field in roll.py, interacting with the drain's brook (waterfields/comb.py _comb_brook) and the streams-avoid-fields check - more than one function.",
   "wave": "",
   "scope": "kept"
  },
@@ -9957,6 +10465,22 @@
   "verdict": "DRIFTED",
   "wave": "",
   "scope": "deferred"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/grove_rules.py::gardens_east_shaded#a neighbor's band",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "keep a neighbor farm's grove band 50 ft east of a bed (0038): at 50 ft a row village's next farm's deep west band stands 38 ft east of the bed (Mizuguchi, three farms), so the row frames or the band's reach re-seat; NEIGHBOR_REACH_FT holds the check at 22 ft until then",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/grove_rules.py",
+   ".claude/skills/diagram/l7r/diagram/settlement/rolling/dispersed.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 9 gate: a value held (FR-004), the row takes the tier of its work",
+  "tier_as_ranked": "E3",
+  "wave": "",
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._find_grove_arms#windward stand off the wall",
@@ -11161,20 +11685,6 @@
   "scope": "deferred"
  },
  {
-  "key": ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_source#feeder brook width",
-  "tier": "E4",
-  "fix": "the brook is 7 px (not feet) and the page says it arrives narrower than the 6 ft head race while another section gives a 7 ft brook; the record must reconcile the width first",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py"
-  ],
-  "after": [],
-  "flag": "",
-  "tier_as_ranked": "E4",
-  "verdict": "DRIFTED",
-  "wave": "",
-  "scope": "kept"
- },
- {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#a conifer-led clump throws only LESSER_ROLL_SHARE (10%) of its crowns as lesser broadleaf",
   "tier": "E4",
   "fix": "0072 gives no share of lesser broadleaf in a conifer-led clump; the 10% LESSER_ROLL_SHARE needs a source",
@@ -11185,22 +11695,6 @@
   "flag": "",
   "tier_as_ranked": "E4",
   "verdict": "UNCLAIMED",
-  "wave": "",
-  "scope": "kept"
- },
- {
-  "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#crown over no roof or wellhead",
-  "tier": "E4",
-  "fix": "research whether a farm let a tree's crown stand over its well; no page says, so the wellhead keep-out has no target (0071 covers roofs only)",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py"
-  ],
-  "after": [],
-  "flag": "deviation-tempting: the only easy fix is relabeling the claim, the record being silent",
-  "e0_basis": "",
-  "e0_rechecked": true,
-  "tier_as_ranked": "E0",
-  "verdict": "NEEDS-RESEARCH",
   "wave": "",
   "scope": "kept"
  },
@@ -11219,20 +11713,6 @@
   "verdict": "UNCLAIMED",
   "wave": "",
   "scope": "deferred"
- },
- {
-  "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#belt off the deep marsh",
-  "tier": "E4",
-  "fix": "0074 sets no limit on how far the belt runs into the marsh; MARSH_FEATHER_BS 46 needs a source",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py"
-  ],
-  "after": [],
-  "flag": "",
-  "tier_as_ranked": "E4",
-  "verdict": "NEEDS-RESEARCH",
-  "wave": "",
-  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/wood_share.py::COPSE_CLUMP_BS#copse clump size",
@@ -11332,6 +11812,38 @@
   "verdict": "UNCLAIMED",
   "wave": "",
   "scope": "deferred"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/land/wet.py::water_lines#watered by surface water",
+  "tier": "E4",
+  "fix": "0196's drawing page and the code's recorded 2026-08-18 ruling (ditch water is not domestic water) disagree on whether an irrigation channel waters a house: reconcile the record before the code moves",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/land/wet.py"
+  ],
+  "after": [],
+  "flag": "",
+  "tier_as_ranked": "E1",
+  "moved": "wave 9: the fix would reverse a recorded ruling the code cites as research-backed; a question for the record",
+  "verdict": "DRIFTED",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/land/wet.py::surface_water_dist#watered by surface water",
+  "tier": "E4",
+  "fix": "follows water_lines' question (0196 against the 2026-08-18 ruling)",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/land/wet.py"
+  ],
+  "after": [
+   ".claude/skills/diagram/l7r/diagram/settlement/land/wet.py::water_lines#watered by surface water"
+  ],
+  "flag": "",
+  "tier_as_ranked": "E1",
+  "moved": "wave 9: waits on water_lines' question",
+  "verdict": "DRIFTED",
+  "wave": "",
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/fit.py::BundleFitMixin._house_too_near_a_neighbor#roofs shed apart",

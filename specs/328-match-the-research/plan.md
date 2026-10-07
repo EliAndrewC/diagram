@@ -134,6 +134,20 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 - **Verification**: Inashiro first (`make map`, the PNG looked at), the pool through the gate; the bookends back to back
   with nothing else running; `impl-drift` on every touched unit; a held value becomes a found row.
 
+## Wave 10 (amendment 9, 2026-10-07)
+
+- **T38a first**: wave 9's 29 found rows tiered by their work (4 moved: the drain outfall and the wood shed's front seat
+  to E2, the crown size to E2, the feeder brook to E3); the bundle re-checks after it added 15 more, tiered by verdict
+  (the E0 claims among them are claim lines by their nature).
+- **Scope**: the 27 open in-scope E0 rows, then the last contiguous run of in-scope E1 (FR-006, FR-010): rows 297-362
+  (18 rows, `tasks.md` Phase 11) - the notice board's figures, the lanes' stub reach, the stream, the polder, the comb
+  drain, the fork triangle and the rings; after it every open in-scope row is E2 or above (the next, row 363).
+- **Wave 9 is held in the clone**: its gate fails on one pool roll (Kuwabata's zigzag across a joint, the investigation in
+  `claims-followup.md`, Wave 9) and its band 3 owes the GM's sign-off; wave 10 is built on it and lands with it once the GM
+  rules (constitution XIII: a regressed state stays in the clone, unpushed).
+- **Verification**: as wave 9 - Inashiro first, the pool through the gate (Kuwabata's one known failure aside, every other
+  test green), the bookends back to back; `impl-drift` on every touched unit; a held value becomes a found row.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Each later wave that changes engine behavior takes

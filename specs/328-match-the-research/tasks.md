@@ -25,6 +25,8 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 - none (amendment 8 and wave 9): the scope is a ranking column and a deferred list; wave 9's fixes move values inside rules
   that already place or size the element (a step off a wall, a reach, a crown floor, a share, a depth, a width, a size)); the
   dike gate's span sizes a glyph no pool map's manifest records (`dike_gates`), and the commons fill, a glyph change, moved to E2.
+- glyph-redrawn: notice board on inashiro - wave 10 sizes the kosatsuba to the page's 16 x 6 ft (from 12 x 5) and turns it
+  30 degrees to its way (from 45); its other rows move values inside rules that already place or size their elements.
 ## Phase 1 - the audit
 
 - [x] T01 the findings snapshot: `findings.json` = every finding of `make claims-report` at `a52ff1bcd` (565) (FR-001)
@@ -511,10 +513,10 @@ closed.
       (FR-002, FR-003, SC-003)
       research: rendering
       verify: DONE. DONE. 5 rows tiered by their work by a fresh Opus reader (audit/t34a-out.jsonl): 3 moved
-- [ ] T35 the bookend pair, back to back: `make perf LABEL=328-start` in a detached worktree at main's engine, then
+- [x] T35 the bookend pair, back to back: `make perf LABEL=328-start` in a detached worktree at main's engine, then
       `LABEL=328-end` in the clone, nothing else running (constitution VI)
       research: rendering
-      verify:
+      verify: DONE. the pair taken back to back (dev/perf-log 328-start at main, 328-end in the clone): band 3 - total +8.9%, seed 25 +15.0% (notice +0.7 s), 20 hh seed 39 +21.8%; explained (the board's seat search on layouts the wave moved: 3 routes and 7,932 seat fits against 2, a found row to index it), perf-audit dispatched; the GM's sign-off owed (band 3). A first pair with the zigzag preference read band 3 too, and the preference was withdrawn
 - [ ] T36 the open in-scope E0 claims; then the E1 rows, each fixed toward the page it cites (DEVIATION only through the
       exception path), with the unit tests it moves; proven on the reference hamlet (Inashiro, its PNG looked at) and the pool
       through the gate; a value that makes a map refuse is held and the row takes the tier of the work it needs (FR-004,
@@ -525,5 +527,79 @@ closed.
       research: rendering
       verify:
 - [ ] T38 the close: the band's records, `make done` green, the wave column, landed (FR-005, FR-006, SC-002, SC-003)
+      research: rendering
+      verify:
+
+
+## Phase 11 - wave 10 (amendment 9): the open in-scope E0 claims, then in-scope E1 rows 297-362
+
+Wave 9's re-checks found 27 open in-scope E0 rows and two E1 rows (`audit/found-wave9.jsonl`), tiered by their work by a
+fresh reader (T38a, `audit/t38a-out.jsonl`); with them, the last 18 in-scope E1 rows in ranking order, rows 297-362 (FR-006):
+the board's reach, facing, size and probe, its routes, the lane stubs' reach, the stream width, the polder's acreage, module
+and apexes, the comb drain's wander, the fork triangle and the rings' steps. A DEVIATION relabel (the planted pond bank, the
+crowns-per-clump floor and ceiling, the north-wall storehouse) goes through the exception path first. Every `after` these rows
+carry is a row inside the wave or closed. The next open in-scope row is E2, row 363.
+
+  - `l7r/diagram/hamletgen/ways/tree.py::admits#track out's width as judged` - the track out's stub judged at 6 ft (0081's track)
+  - `l7r/diagram/hamletgen/ways/tree.py::admits#way out crosses each brook once` - label the one-crossing limit UNRESEARCHED (0035 prices a crossing at about 150 ft of walk and spaces crossings, but sets no one-per-brook limit), or derive it in the claim's account
+  - `l7r/diagram/settlement/farm_fixtures.py::KURA_PARTS#north annex` - farm_fixtures.py:79: add research/questions/0040-farm-storehouses-kura.drawing.html for the back-wall placement beside 0052 for the 18-27 ft band
+  - `l7r/diagram/settlement/farm_fixtures.py::kura_rect#annex held in its band` - name the recorded exception in the claim: on a house under about 22 ft deep the 1.8 to one wins and the annex runs under 18 ft (the docstring's own measured choice), or keep the 18 ft floor
+  - `l7r/diagram/settlement/farm_fixtures.py::kura_rect#annex seat` - annex seat: against the north or west wall, and where along that wall (`KURA_PARTS` offsets); 0040's drawing page covers it
+  - `l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#default watercourse widths` - default watercourse widths when a record carries none (stream 9, channel 2.5, canal 14)
+  - `l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#nothing on a dry plot` - nothing built or planted on a dry plot (plots registered in `block_polys` and `dry_polys`)
+  - `l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_source#planted pond bank` - comb.py:628: relabel the claim DEVIATION research/questions/0061-reservoir-ponds-tameike.drawing.html (every bank drawn bare), through the exception path
+  - `l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#manure heap fallback spots` - fixture_seats.py:478: add a claim for the manure heap's fallback spots (beside the privy at 1.1 and 1.9 widths, 10 ft further out, lines 503-512) and its no-privy seats at 0.3 hw / 0.3 hh (line 501), UNRESEARCHED
+  - `l7r/diagram/settlement/homestead_parts/fixture_seats.py::_wood_shed#wood shed fallback seats` - fixture_seats.py:383: add a claim for the fallback seats paced a further STEP_FT (8 ft) out (outward(seats, px(STEP_FT), 1), line 386), UNRESEARCHED
+  - `l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#bamboo patch forced` - groves.py:~720: add a claim for in_box(..., bamboo_box) at :788 forcing an item to bamboo in any mix and even when bamboo=False, citing research/questions/0075-bamboo-groves-chikurin.drawing.html (the farm's patch) or UNRESEARCHED
+  - `l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#crown over no roof or wellhead` - groves.py:727: add research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html for the wellhead (a wellhead in a belt removes the clumps round it) beside 0071
+  - `l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#crowns per clump ceiling` - groves.py:719 (now UNRESEARCHED): relabel DEVIATION research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html for GROVE_CLUMP_CROWNS=28 through the exception path, or drop the cap (then E1)
+  - `l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#crowns per clump floor` - groves.py:717 (now UNRESEARCHED): relabel DEVIATION research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html for the max(5, ...) floor at :753 through the exception path, or drop the floor (then E1)
+  - `l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#belt off the deep marsh` - stands.py:252: relabel the cut at the reed margin (MARSH_FEATHER_BS) UNRESEARCHED: 0074 drawing gives no limit on how far in a belt may stand
+  - `l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#clump inside the page window` - stands.py:~252: add a claim, CONVENTION, that a clump is kept only when part of its crown falls inside the page window
+  - `l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#clump off buildings, wells and shrines` - stands.py:250: narrow the claim to buildings (0071 section 15) and add a separate UNRESEARCHED claim for the wellhead keep-out vr + 1.05 clump + 1 (line ~91)
+  - `l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#copse mix` - stands.py:~252: add a claim that the copse is drawn in the dooryard mix (fruit and broadleaf, no bamboo or conifer), citing research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html as groves.py:722 does
+  - `l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#copse off the whole marsh` - stands.py:~252: add a claim that the copse is kept off the whole marsh, not only the deep marsh, citing research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html (woody cover on the dry ground above it)
+  - `l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#wellhead canopy keep-out` - stands.py:~252: add a claim for the wellhead keep-out vr + clump * 1.05 + 1.0 (line ~91), UNRESEARCHED or citing 0071/0072 for the wellhead
+  - `l7r/diagram/settlement/homestead_parts/wood_share.py::WoodShares.__init__#afternoon lane as the copse plants` - cite 0038 (every crown 50 ft west or southwest of a yard or bed) for the copse's west reservation, not NONE
+  - `l7r/diagram/settlement/homestead_parts/wood_share.py::WoodShares.__init__#copse clump size` - the drawn size of a copse clump (`COPSE_CLUMP_BS` 22 bs)
+  - `l7r/diagram/settlement/homestead_parts/wood_share.py::WoodShares.__init__#copse seat pitch` - the spacing between copse seats (`SEAT_PITCH_BS` 11*sqrt(2) bs)
+  - `l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_geom#grove cleared east of turned beds` - bundle.py:148 _bundle_geom docstring: add a claim for clear_east_of_beds (a dispersed farm's grove cleared 50 ft east of its turned beds), citing research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html
+  - `l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#byre beside the house` - bundle.py:275: relabel the flank away from the garden UNRESEARCHED: 0048 drawing places no byre on a flank
+  - `l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#south band off an unkept yard` - bundle.py:277: add a claim for the non-sun-keeping case (yard_sun=YARD_SUN_STRIP, 22, unscaled, line 382), UNRESEARCHED
+  - `l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#storehouse on the north wall` - bundle.py:274: relabel DEVIATION research/questions/0040-farm-storehouses-kura.drawing.html (the page calls the north-wall annex a convention the record contradicts), as steading_rects already does at fixture_seats.py:224, through the exception path
+
+  - `l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_source#feeder brook width` - comb.py:651: width=7 -> width=self.px(7.0) (0059/0068: a brook about 7 ft wide), and drop "in px rather than feet" from the claim at comb.py:630
+  - `l7r/diagram/settlement/homestead_parts/fixture_seats.py::shed_off_a_wall#wood shed a ken off a wall` - fixture_seats.py:364: drop "+ px(STEP_FT)" from the against_a_wall bound so a shed stands within g + px(WOODSHED_STEP_FT) (a ken) of its wall, per 0043 drawing (about 6 ft off a wall); the outward(seats, px(STEP_FT), 1) offers at line 386 then never pass and can go
+  - `l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_anchor#reaching the houses` - KOSATSUBA_ENTRANCE_REACH_FT becomes 60 ft, cited as GUESS to 0246 drawing (a way reaches a farmhouse within 60 ft of it), in place of 100 ft
+  - `l7r/diagram/settlement/structures/fixtures/board_seat.py::FACING_DEG#board faces its way` - FACING_DEG from 45.0 to 30.0
+  - `l7r/diagram/settlement/structures/fixtures/boards.py::BoardsMixin.board_record#board size` - board_record from px(12) x px(5) to px(16) x px(6)
+  - `l7r/diagram/settlement/structures/fixtures/boards.py::BoardsMixin.kosatsuba#board size` - kosatsuba board 16 x 6 ft via board_record
+  - `l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_routes#lane fallback width` - lane fallback tread from 8 px to the recorded lane width in feet (0081's 3/5/6 ft via px), citing 0081
+  - `l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._route_seats#least offset off the tread` - least offset to 6 ft (px(6)) from the road edge, citing 0190
+  - `l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin.place_kosatsuba#probe size` - probe the 7 x 3 ft face the page names instead of 12 x 5 ft floored at 11 px
+  - `l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.trim_lane_stubs#meeting another way` - trim_lane_stubs way_reach 40 -> 60 ft (px-scaled), per 0246
+  - `l7r/diagram/settlement/water_ways/water.py::WaterBodiesMixin.stream#stream width` - stream width 9 raw px -> px(7) (0068's village brook)
+  - `l7r/diagram/waterfields/carve.py::_dry_fields#off the water and the frame` - drop a cell that falls inside any supply canal's bank (local half-width + CANAL_BERM_FT), not only within 0.5 px of the painted edge
+  - `l7r/diagram/waterfields/comb.py::_comb_drain#wandering line` - scale the drain wander by the map's scale: jitter +/-6 ft and sample spacing 120-170 ft converted to px (x grain/2)
+  - `l7r/diagram/waterfields/hem.py::_comb_dry_and_beans#fork triangle planted dry` - fire the fork-triangle band only on a coarse grain: `grain < 1.0` (city), not `grain != 1.0`
+  - `l7r/diagram/waterfields/polder.py::build_polder#acreage reckoned` - reckon acreage at the map's scale: area * ftpx**2 / 43560 (both sites), not *4
+  - `l7r/diagram/waterfields/polder.py::build_polder#module size` - default module cell 150 -> 190 ft (converted at ftpx)
+  - `l7r/diagram/waterfields/polder.py::unpoint_parcels#no parcel tapers to a point` - cut polder apexes under 25 deg (0005), not NEEDLE_DEG 15
+  - `l7r/diagram/waterfields/ring_rules.py::MAX_STEPS#sideways steps` - MAX_STEPS 1 -> 0: no ring keeps a sideways step
+
+- [x] T38a wave 9's found rows tiered by the work they take, by a fresh reader (FR-002, FR-003, SC-003)
+      research: rendering
+      verify: DONE. 29 rows tiered by their work by a fresh Opus reader (audit/t38a-out.jsonl): 4 moved (the drain outfall and the wood shed's front seat to E2, the crown size to E2, the feeder brook to E3)
+- [ ] T39 the open in-scope E0 claims, each written or relabeled (a DEVIATION only after the exception path rules it
+      LEGITIMATE); then the E1 rows, each fixed toward the page it cites, with the unit tests it moves; proven on the reference
+      hamlet (Inashiro, its PNG looked at) and the pool through the gate; a value that makes a map refuse is held and the row
+      takes the tier of the work it needs (FR-004, FR-005, spec Edge Cases)
+      research: rendering
+      verify:
+- [ ] T40 every touched unit re-checked by `impl-drift`; each wave-10 row IN-STEP or re-tiered with its measured reason (FR-005, SC-002)
+      research: rendering
+      verify:
+- [ ] T41 the bookend pair, back to back, and the close: the band's records, `make done` green, the wave column, landed with
+      wave 9 (FR-005, FR-006, SC-002, SC-003)
       research: rendering
       verify:

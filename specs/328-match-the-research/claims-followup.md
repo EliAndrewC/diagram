@@ -319,7 +319,6 @@ The gate held one value (FR-004): `l7r/diagram/settlement/homestead_parts/grove_
 joint pass could mend (the settle draws a tree lane as judged): the seating's judge now refuses a corridor the knot pass would
 gather into one (`tree.gathered_zigzag`), and the router lays another.
 - `l7r/diagram/hamletgen/ways/tree.py::admits#way out crosses each brook once` (NEEDS-RESEARCH, E0): label the one-crossing limit UNRESEARCHED (0035 prices a crossing at about 150 ft of walk and spaces crossings, but sets no one-per-brook limit), or derive it in the claim's account
-- `l7r/diagram/hamletgen/ways/tree.py::gathered_zigzag#no zigzag at a joint, ends gathered` (CANNOT-TELL, E0): re-check with gap_ways.KNOT_FT in the bundle (the reach is smooth._KNOT_FT = gap_ways.KNOT_FT, 0081's 25 ft)
 - `l7r/diagram/settlement/homestead_parts/grove_rules.py::gardens_east_shaded#east reach below the bed` (DRIFTED, E2): test the band against the page's clear ground from the bed's north edge down to 50 ft below its south edge (0038 §77), not the bed's own height, so a band southeast of the bed is caught
 - `l7r/diagram/hamletgen/ways/tree.py::admits#track out's width as judged` (UNCLAIMED, E0): the track out's stub judged at 6 ft (0081's track)
 - `l7r/diagram/settlement/homestead_parts/wood_share.py::WoodShares.__init__#afternoon lane as the copse plants` (MISLABELED, E0): cite 0038 (every crown 50 ft west or southwest of a yard or bed) for the copse's west reservation, not NONE
