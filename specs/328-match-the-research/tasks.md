@@ -722,8 +722,8 @@ in-scope row is E1 (deferred only) or E2 and above, the next E2 row 393 (`hamlet
   - `buildings/programs.md::Country shrine (a village district's shrine)#bell tower knob` - 0222 -> GUESS 0222 drawing (absent by default)
   - `buildings/programs.md::Country shrine (a village district's shrine)#grove and burial side knob` - CANON (the GM, 2026-09-20) for following the map; the off-map burial roll its own claim on 0226 drawing
   - `buildings/programs.md::Country shrine (a village district's shrine)#innermost arch one pitch off the hall` - CONVENTION -> GUESS 0220 drawing
-  - `buildings/programs.md::Country shrine (a village district's shrine)#tax-free fields off the sheet` - 0221 -> UNRESEARCHED for the fields' place; the fields themselves their own claim on 0221
-  - `buildings/programs.md::Magistrate's manor (county magistracy)#inner-court postern` - GUESS 0101 drawing -> UNRESEARCHED (the page records no such door)
+  - `buildings/programs.md::Country shrine (a village district's shrine)#tax-free fields off the sheet` - 0221 -> 0221 drawing ("Nothing about the shrine's land or its income is drawn"); the fields themselves their own claim on 0221
+  - `buildings/programs.md::Magistrate's manor (county magistracy)#inner-court postern` - GUESS 0101 drawing -> GUESS alone, saying what 0101's drawing page searched (no night-soil gate at a samurai house; the page records no such door)
 
 - [x] T51a wave 13's found rows tiered by the work they take, by a fresh reader (FR-002, FR-003, SC-003)
       research: rendering

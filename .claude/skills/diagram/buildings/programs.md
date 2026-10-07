@@ -15,7 +15,7 @@ Per-building-type specs: the required program every instance shares, the knobs t
 ### Magistrate's manor (county magistracy)
 
 <!-- Research: walled enclosure - research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html, research/questions/0097-staff-rowhouses-and-barracks-nagaya.html: a wall with a formal main gate, the gatehouse the office's gate range as at Omori and Kaibara -->
-<!-- Research: inner-court postern - UNRESEARCHED: a kitchen and night-soil door serving the inner court (0104's katteguchi is the kitchen's own door, not a gate in the wall) -->
+<!-- Research: inner-court postern - GUESS: no page we read names a night-soil gate at a samurai house (research/questions/0101-privies-setchin.drawing.html searched it and records only the merchant's back gate); a kitchen and night-soil door serving the inner court (0104's katteguchi is the kitchen's own door, not a gate in the wall) -->
 <!-- Research: outer service gate - GUESS research/questions/0101-privies-setchin.drawing.html: a small gate for the night-soil collectors, no such gate named at a samurai house, the merchant's back gate the nearest -->
 <!-- Research: outer service gate for muck and prisoners - UNRESEARCHED: the same gate taking muck and prisoner transfers from a busy outer court -->
 <!-- Research: wall display - UNRESEARCHED: most impressive on the public approach, plainer at the rear -->
@@ -149,7 +149,7 @@ Each item names the Mode A kind it is (feature 262): the sheet's own `data-kind`
 <!-- Research: no subsidiary buildings - research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html: no subsidiary shrines, office, plaque hall or portable-shrine store -->
 <!-- Research: burial ground beside the precinct - research/questions/0226-shrines-temples-and-graves-in-each-size-of-settlement.drawing.html: in the shrine's yard or apart from it, a knob rolled from the seed where no map says otherwise -->
 <!-- Research: no office building - research/questions/0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html: registers in the monk's writing room -->
-<!-- Research: tax-free fields off the sheet - UNRESEARCHED: where a shrine's exempt fields lay against its precinct (research/questions/0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html attests the fields, not their place); a sheet cropped to its precinct draws none -->
+<!-- Research: tax-free fields off the sheet - research/questions/0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html: nothing of the shrine's land or income is drawn -->
 <!-- Research: tax-free fields exist - research/questions/0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html: the shrine's fields were exempt -->
 <!-- Research: fire-water - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: a tub at the hall's corners, one at the dwelling end -->
 <!-- Research: hall-and-dwelling form knob - DEVIATION research/questions/0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html: one roof default, set against the sources' rare on the GM's word -->
