@@ -22,6 +22,7 @@ from ..._knobs import KNOBS, KOSATSUBA_MARKER_MIN_PX, PUNISHMENT_SPOT_FT
 from ..captions import tree_crown_discs
 from ._helpers import (
     KOSATSUBA_ANCHOR_BAND_FT,
+    KOSATSUBA_ENTRANCE_REACH_FT,
     KOSATSUBA_HANDOVER_BAND_FT,
     KOSATSUBA_VERGE_FT,
     RouteReach,
@@ -88,6 +89,9 @@ def under_canopy(grid: PointGrid, x: float, y: float, half: float) -> bool:
 VERGE_FIRST = True
 """`place_kosatsuba` samples the verge band before the whole band (feature 284, FR-007); off only in the test that proves the
 two give the same board."""
+
+ENTRANCE_PRUNE = True
+"""Research: an entrance board's whole band fitted within its reach - NONE: a search economy, the seats kept are the seats `entrance_seat_ok` keeps (the switch is the test's, `test_exact_pieces_284`)"""
 
 BOARD_ALONG_STEP_PX = 12.0
 """How far apart the board's candidate seats stand along a route. 24 was TRIED AND WITHDRAWN (feature 284, FR-007): the
@@ -192,8 +196,8 @@ class FixtureSitingMixin:
                 proved[c.x, c.y, c.rot] = (not label or p is not None, p)
             return proved[c.x, c.y, c.rot]
 
-        def sample(routes: list[tuple[list[Pt], float, bool]], verge_first: bool) -> list[BoardSeat]:
-            return self._board_seats(routes, verge_first, w, h, ftpx, env, sampled)
+        def sample(routes: list[tuple[list[Pt], float, bool]], verge_first: bool, near: tuple[float, float, float] | None = None) -> list[BoardSeat]:
+            return self._board_seats(routes, verge_first, w, h, ftpx, env, sampled, near)
 
         # THE CAPTION'S LATER STEPS (plan D12, GM 2026-09-30: the clean caption is a preference, never a reason for no
         # board): a caption on a leader or in the key that clears every way, then the one placer's normal fallback
@@ -241,27 +245,41 @@ class FixtureSitingMixin:
         return (x, y)
 
     def _board_seats(  # type: ignore[misc]
-        self: Settlement, routes: list[tuple[list[Pt], float, bool]], verge_first: bool, w: float, h: float, ftpx: float, env: SiteEnv, cache: dict[tuple[Any, ...], list[BoardSeat]]
+        self: Settlement,
+        routes: list[tuple[list[Pt], float, bool]],
+        verge_first: bool,
+        w: float,
+        h: float,
+        ftpx: float,
+        env: SiteEnv,
+        cache: dict[tuple[Any, ...], list[BoardSeat]],
+        near: tuple[float, float, float] | None = None,
     ) -> list[BoardSeat]:
         """Every candidate board seat along `routes` ((pts, tread width, is the approach)), each within
         `KOSATSUBA_WAY_REACH_FT` of its route (labels L11), off every way's bed, clear of water, fitting the ground (`_fits`),
         inside the view (labels L2) and off the title placard (labels L14). ROADSIDE FIRST (feature 284): with `verge_first`
         the verge band is sampled first, and only when it holds no seat is the whole band sampled, in the order it always
-        was. Each route's seats are sampled once per siting (`cache`), since every placement asks the same routes.
+        was. Each route's seats are sampled once per siting (`cache`), since every placement asks the same routes. `near`
+        ((x, y, r): the ground a placement keeps, e.g. an entrance board's reach) prunes the WHOLE band's pass to that disc
+        before a seat is fitted - never the verge's, whose emptiness decides whether the whole band is asked (the perf-audit of
+        feature 328 wave 9: the entrance's widened pass fitted 3,764 seats along 17 routes to keep the few within its reach).
 
         Research: roadside first - research/questions/0190-notice-boards-kosatsuba.drawing.html: the 6 ft verge sampled before the 60 ft band"""
         out: list[BoardSeat] = []
         for verge_only in (True, False) if verge_first else (False,):
             if out:
                 break
+            disc = None if verge_only else near
             for pts, rw, approach in routes:
-                key = (tuple(pts), rw, approach, verge_only)
+                key = (tuple(pts), rw, approach, verge_only, disc)
                 if key not in cache:
-                    cache[key] = self._route_seats(pts, rw, approach, verge_only, w, h, ftpx, env)
+                    cache[key] = self._route_seats(pts, rw, approach, verge_only, w, h, ftpx, env, disc)
                 out += cache[key]
         return out
 
-    def _route_seats(self: Settlement, pts: list[Pt], rw: float, approach: bool, verge_only: bool, w: float, h: float, ftpx: float, env: SiteEnv) -> list[BoardSeat]:  # type: ignore[misc]
+    def _route_seats(  # type: ignore[misc]
+        self: Settlement, pts: list[Pt], rw: float, approach: bool, verge_only: bool, w: float, h: float, ftpx: float, env: SiteEnv, near: tuple[float, float, float] | None = None
+    ) -> list[BoardSeat]:
         """The candidate seats along one route (see `_board_seats`).
 
         Research:
@@ -296,6 +314,9 @@ class FixtureSitingMixin:
                         if verge_only and off - rw / 2 - h / 2 > verge:  # past the verge: the roadside rule would drop it
                             break
                         x, y = mx + ux * off * side, my + uy * off * side
+                        if near is not None and math.hypot(x - near[0], y - near[1]) > near[2]:  # off the placement's ground (`near`)
+                            off += 5.0
+                            continue
                         # the board hugs the verge, so the lane corridor's no-build clearance (a HOUSE setback) is bypassed
                         # (_fits corridors=False) - but it still stands off the TREAD of every way (`way_beds`), out of the
                         # water, inside the view and off the title placard; the canvas top is its bottom (feature 261)
@@ -401,7 +422,9 @@ class FixtureSitingMixin:
             board may stand in shade - research/questions/0190-notice-boards-kosatsuba.drawing.html: shaded seats admitted
             open ground preferred - GUESS: shaded seats only where no open one fits"""
         anchor = kosatsuba_anchor(self.M, placement) if lane_tier else None
-        cands = sample(self._board_routes(anchor, placement, widen, ftpx), VERGE_FIRST and lane_tier and not widen)
+        # an entrance board keeps only the ground within its reach (`entrance_seat_ok`): the whole band is fitted there alone
+        ground = (anchor[0], anchor[1], (KOSATSUBA_ENTRANCE_REACH_FT + KOSATSUBA_ANCHOR_BAND_FT) / ftpx + 1e-6) if ENTRANCE_PRUNE and anchor is not None and placement == "entrance" else None
+        cands = sample(self._board_routes(anchor, placement, widen, ftpx), VERGE_FIRST and lane_tier and not widen, ground)
         if lane_tier and not widen:
             cands = [c for c in cands if c.gap <= KOSATSUBA_VERGE_FT / ftpx + 1e-6] or cands
         hand: Pt | None = None

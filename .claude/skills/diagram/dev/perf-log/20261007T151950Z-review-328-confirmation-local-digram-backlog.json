@@ -1,0 +1,62 @@
+{
+  "band": 3,
+  "base": {
+    "commit": "6ca2f5ccf",
+    "label": "328-start",
+    "utc": "20261007T150702Z"
+  },
+  "binding": "31f8d8e74829d0d3b2b6e9c2b1e98d6f96b99ca8b71c9c607f86c00353408291",
+  "end": {
+    "commit": "381018b8b",
+    "label": "328-end",
+    "utc": "20261007T151015Z"
+  },
+  "environment": "local",
+  "feature": "328-match-the-research",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "8d3395e5-fe32-4f85-9c89-80c344d2ac1a",
+    "utc": "20261007T151950Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": -10.3,
+          "39": 11.1,
+          "4": -5.9,
+          "47": 3.3
+        },
+        "total_pct": -0.8
+      },
+      "20": {
+        "seeds": {
+          "25": -2.9,
+          "39": 21.8,
+          "4": 15.0,
+          "47": -5.0
+        },
+        "total_pct": 6.5
+      },
+      "40": {
+        "seeds": {
+          "25": -3.0,
+          "39": 5.0,
+          "4": -6.8,
+          "47": 0.8
+        },
+        "total_pct": -1.6
+      }
+    },
+    "seeds": {
+      "25": 15.0,
+      "39": 10.0,
+      "4": 6.4,
+      "47": 4.9
+    },
+    "total_pct": 8.9
+  },
+  "note": "Consistent; the auditor ran the counterfactual (the explanation was UNVERIFIED) in detached worktrees at 6ca2f5ccf and 381018b8b, reverting one value group at a time at the end commit. No board or web code changed. Seed 25 (15 hh): notice is 0.09 s at base and 0.79 s at end; reverting ONLY belt_law (80 ft back to 30 ft) gives 0.10 s and 667 _fits with the houses unchanged, so the cause is the 80 ft belt, not the house layout. Seed 39 (20 hh): reverting ONLY fixture_seats restores notice (0.93 to 0.11 s) and web (1.91 to 1.17 s) and the base houses. Seed 4 (20 hh): web is 0.77 to 1.61 s, no single group restores it (fixture steps reach 1.38 s), so it is a layout interaction. Mechanism: the entrance placement finds no verge seat, so site_board widens and samples the full 60 ft band on every route (seed 25: 3 _board_for calls against 2, 34 _route_seats against 16, 7,932 _fits against 545). The explanation's 3 routes are 3 placement passes. Contrary to its unverified field, a counterfactual was runnable.",
+  "verdict": "consistent"
+}

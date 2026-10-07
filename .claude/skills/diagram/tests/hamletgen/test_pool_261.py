@@ -247,7 +247,8 @@ def lane_knots(lanes: list[dict]) -> list[tuple[int, tuple[float, float], int, t
 # remaining knots runs a way along another, through a yard, or off the network, so they wait for the ranked found row that
 # re-lays the earlier household's way at seating (specs/328-match-the-research/ranking.json, "a knot no lawful gather
 # reaches"). Main draws the same knots or more (Inashiro 7 end pairs within the reach on main and here, Sawada 3 -> 1). STRICT: the day a map's knots are gathered this fails, and its name comes off the list.
-_KNOTS_WAITING = {"inashiro", "sawada"}
+# Wave 9's re-seated homesteads left neither map a knot (feature 328, 2026-10-07): both names came off.
+_KNOTS_WAITING: set[str] = set()
 
 
 @pytest.mark.parametrize(

@@ -1,6 +1,6 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "adb5cdf54771cf7bc30076d0cca9b28eefb7cefaf65f45482a5816c1cb71c8d6",
+ "plan_sha256": "9485f33db38a9f81527d9bbcb68786253ddb4b300940439b91349199458654cf",
  "reviewed": "2026-10-07",
  "declared": "spec-fidelity",
  "decisions": [
@@ -208,7 +208,78 @@
    "summary": "Inashiro first, the pool through the gate, bookends back to back with nothing else running, impl-drift on every touched unit, a held value becomes a found row",
    "class": "within",
    "why": "FR-005's verification; adds no behavior."
+  },
+  {
+   "id": "W10-T38a",
+   "summary": "T38a: wave 9's 29 found rows tiered by their work by a fresh reader before the run is chosen (4 moved)",
+   "class": "within",
+   "why": "FR-002/FR-003: the measure is implementation work; the T25a/T29a/T34a practice."
+  },
+  {
+   "id": "W10-verdict-tiered",
+   "summary": "The bundle re-checks' later found rows (14 by audit/found-wave9.jsonl against t38a-out.jsonl; the plan says 15) tiered by verdict alone, before wave 10's run is chosen",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "FR-002/FR-003 tier by work; amendment 6 round 3 blocked the same thing. Not only E0 claim lines: rows 494, 504, 505 (E2) and 637 (E3) sit in the tiers by verdict, and 504's fix is one value (22 ft to 0038's 50 ft), E1 on its face, which by contiguity (FR-006, SC-003) would belong in wave 10."
+  },
+  {
+   "id": "W10-scope",
+   "summary": "Wave 10 = the 27 open in-scope E0 rows, then in-scope E1 rows 297-362 (18); next open in-scope row 363 is E2",
+   "class": "within",
+   "why": "Measured on ranking.json: the 45 listed keys are exactly every open kept/mode-a E0 and E1 row; row 363 is E2; every 'after' is inside the wave. Faithful to 'easiest to hardest' and FR-010 - subject to the tiers being by work (W10-verdict-tiered)."
+  },
+  {
+   "id": "W10-unresearched-relabels",
+   "summary": "NEEDS-RESEARCH rows 84 (one crossing per brook), 159 (belt off the deep marsh), 176 (byre beside the house) tiered E0 as relabels to UNRESEARCHED",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "Spec Edge Cases: a NEEDS-RESEARCH finding is E4 and the research pass runs first; FR-003's E0 needs a page that already says what the code does, which these rows' own fixes say is absent. A relabel to UNRESEARCHED moves the finding into the scoped-out 727 without the research the spec requires."
+  },
+  {
+   "id": "W10-row139",
+   "summary": "Row 139 (kura_rect#annex held in its band, DRIFTED) tiered E0: 'name the recorded exception in the claim ... or keep the 18 ft floor'",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "FR-003: any rewrite of a DRIFTED row's claim other than label/citation/wording is the exception path; naming the code's departure in the claim is that. Offered as a choice, as amendments 5 and 6 struck. The fix toward 0052's band (keep the 18 ft floor) is the row, tiered by its work; the exception only through a MODE 1 check."
+  },
+  {
+   "id": "W10-deviation-path",
+   "summary": "DEVIATION relabels (planted pond bank, crowns per clump floor and ceiling, north-wall storehouse) go through the exception path first; T39 says DEVIATION only after LEGITIMATE",
+   "class": "within",
+   "why": "Spec Edge Cases and FR-004."
+  },
+  {
+   "id": "W10-hold-wave9",
+   "summary": "Wave 9, whose gate fails on Kuwabata's zigzag and whose bookends read band 3, is not pushed",
+   "class": "within",
+   "why": "Constitution XIII: a regressed state stays in the clone, unpushed."
+  },
+  {
+   "id": "W10-stack-on-wave9",
+   "summary": "Wave 10 begins and is built on unlanded wave 9, the two to land together once the GM rules on a waiver",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "FR-006: each wave pushed before the next begins. Not impossible: the spec's Edge Case ('a map whose new layout fails the gate is fixed in the same wave - and where ... more work than the row's tier, the row takes that work's tier and waits on a found row') gives a route that needs no GM - hold the rows that produce the Z (found by row, not by halves; 'no single value' is not the Edge Case's test), the re-seat rule recorded as their found row, as wave 2 held the row pitch; the band 3 is attributed to layouts the wave moved, so it is re-measured after the hold. Waiting on a waiver the GM has not given is completing the GM's thought; wave 10's values re-roll Kuwabata again, so the regression the GM would be asked to waive would no longer be the one investigated."
+  },
+  {
+   "id": "W10-verify-aside",
+   "summary": "Wave 10's verification: the pool through the gate 'Kuwabata's one known failure aside'",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "FR-005 requires the gate green; T41 itself says 'make done green'. The plan lowers the bar the spec and the task set."
+  },
+  {
+   "id": "W10-occasion",
+   "summary": "Occasion: the notice board's glyph redrawn on Inashiro (16 x 6 ft, 30 degrees)",
+   "class": "within",
+   "why": "Feature 294's occasion for a glyph redrawn; the rows are in the wave."
+  },
+  {
+   "id": "W9-zigzag-preference-withdrawn",
+   "summary": "The gap pass's zigzag preference withdrawn after it mended nothing and read band 3",
+   "class": "within",
+   "why": "A design attempt measured and withdrawn; no scope moves."
   }
  ],
- "verdict": "CLEAR"
+ "verdict": "BLOCKED"
 }

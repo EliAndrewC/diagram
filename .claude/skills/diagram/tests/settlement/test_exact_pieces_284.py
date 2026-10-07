@@ -188,3 +188,39 @@ def test_the_comb_bead_test_through_the_segment_index_is_the_whole_scan() -> Non
     idx = seg_reach_index(line, 0.0)
     at = (50.0, 2.0)  # exactly `half` off the line: dry
     assert not any(x0 <= at[0] <= x1 and y0 <= at[1] <= y1 and seg_dist(at[0], at[1], a, b) < half for a, b, half, x0, y0, x1, y1 in idx.near(*at))
+
+
+def test_an_entrance_board_fitted_within_its_reach_is_the_board_fitted_whole() -> None:
+    """Feature 328 wave 9 (the perf-audit): the entrance board's whole band fitted only within its reach seats the same board,
+    with the same record, as the whole band fitted everywhere - on hamlets whose verge is taken, so the far band decides."""
+    import copy
+
+    from l7r.diagram.settlement.structures.fixtures import siting
+
+    rng = random.Random(3289)
+    seated = pruned = 0
+    real = siting.FixtureSitingMixin._route_seats
+
+    def counting(self, *a, **k):
+        nonlocal pruned
+        pruned += a[-1] is not None if len(a) == 9 else 0
+        return real(self, *a, **k)
+
+    for k in range(18):
+        s = _hamlet_with_a_board_to_seat(rng, blocked_verge=k % 2 == 0)
+        s.M["lanes"][0]["connector"] = True  # the way in: an entrance to seat the board at
+        s.M["meta"]["knobs"] = {"kosatsuba_seat": "entrance"}
+        whole = copy.deepcopy(s)
+        siting.ENTRANCE_PRUNE = False
+        try:
+            want = whole.place_kosatsuba()
+        finally:
+            siting.ENTRANCE_PRUNE = True
+        siting.FixtureSitingMixin._route_seats = counting
+        try:
+            assert s.place_kosatsuba() == want
+        finally:
+            siting.FixtureSitingMixin._route_seats = real
+        assert s.M.get("kosatsuba") == whole.M.get("kosatsuba")
+        seated += want is not None
+    assert seated >= 6 and pruned, f"non-vacuity: boards seated {seated}, pruned passes {pruned}"

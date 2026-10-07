@@ -1,0 +1,67 @@
+{
+  "band": 3,
+  "base": {
+    "commit": "6ca2f5ccf",
+    "label": "328-start",
+    "utc": "20261007T150702Z"
+  },
+  "binding": "31f8d8e74829d0d3b2b6e9c2b1e98d6f96b99ca8b71c9c607f86c00353408291",
+  "criteria": {
+    "commensurate": "No. Seed 25 notice is 0.09 s at base and 0.79 s at end (+0.7 s of the seed's +15.0%); seed 39 notice at 20 hh is 0.11 s and 0.93 s; seed 39 notice at 10 hh is 0.08 s and 0.50 s. That buys nothing on the board: the same entrance placement, now 9 ft (seed 25) and 14 ft (seed 39 at 20 hh) off the tread instead of 4 ft. The layout stages that carry the gained fidelity stay flat (homesteads seed 25 1.21 s and 1.08 s; windbreak 0.47 s and 0.45 s). The web growth on seeds 4 and 39 at 20 hh (+0.8 to +0.9 s) is layout variance, not paid-for work: seed 47 at 20 hh web fell 1.47 s to 0.61 s in the same pair.",
+    "necessary": "Partly. The values that trigger the growth are what feature 328 asks for: the 80 ft belt is MIN_BELT_DEPTH_FT from research 0071, and the privy and woodshed edges are measured past the wall gap. The board's widen step is the existing labels-L4 rule for a placement with no verge seat. The seconds themselves are not necessary: they come from how the unchanged search widens, not from work the new values require.",
+    "no_way_around": "There is a way around. The widened entrance pass samples the full 60 ft band of every main and web route (seed 25: 17 routes, 3,764 seats, 7,932 houses._fits calls, each scanning static hard ground, bund walls and field chains). Only afterwards does it keep the seats within KOSATSUBA_ANCHOR_BAND_FT of the anchor and passing entrance_seat_ok. The anchor is known before sampling, so routes and candidates can be pruned by anchor distance before _fits, or _fits can be indexed. The session's explanation names the second itself. That is the per-candidate scan of unchanging geometry that dev/performance.md describes."
+  },
+  "end": {
+    "commit": "381018b8b",
+    "label": "328-end",
+    "utc": "20261007T151015Z"
+  },
+  "environment": "local",
+  "feature": "328-match-the-research",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "8d3395e5-fe32-4f85-9c89-80c344d2ac1a",
+    "utc": "20261007T152000Z"
+  },
+  "kind": "audit",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": -10.3,
+          "39": 11.1,
+          "4": -5.9,
+          "47": 3.3
+        },
+        "total_pct": -0.8
+      },
+      "20": {
+        "seeds": {
+          "25": -2.9,
+          "39": 21.8,
+          "4": 15.0,
+          "47": -5.0
+        },
+        "total_pct": 6.5
+      },
+      "40": {
+        "seeds": {
+          "25": -3.0,
+          "39": 5.0,
+          "4": -6.8,
+          "47": 0.8
+        },
+        "total_pct": -1.6
+      }
+    },
+    "seeds": {
+      "25": 15.0,
+      "39": 10.0,
+      "4": 6.4,
+      "47": 4.9
+    },
+    "total_pct": 8.9
+  },
+  "note": "Reviewer's counterfactual numbers come from single-group reverts at 381018b8b in detached worktrees (perf-audit probe). Band 3 (20 hh seed 39 +21.8% > 20%) also needs the GM's own perf-signoff, which this record does not grant.",
+  "verdict": "not-justified"
+}
