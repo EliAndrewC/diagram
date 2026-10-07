@@ -5927,6 +5927,22 @@
   ],
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#how far \"just beyond the back row\" reaches: the stand's near edge within THICKET_ROW_DEPTH_FT 30 ft of the back row's back edge": {
+  "code": "4b83bca7081277a6",
+  "core": "4b83bca7081277a6",
+  "date": "2026-10-07",
+  "note": "how far \"just beyond the back row\" reaches: the stand's near edge within THICKET_ROW_DEPTH_FT 30 ft of the back row's back edge",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#how far the first search walks from the target: THICKET_REACH_FT 220 ft, before it falls back to the whole back row": {
+  "code": "4b83bca7081277a6",
+  "core": "4b83bca7081277a6",
+  "date": "2026-10-07",
+  "note": "how far the first search walks from the target: THICKET_REACH_FT 220 ft, before it falls back to the whole back row",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#irregular outline": {
   "code": "5ce8fa71892cfa23",
   "core": "4b83bca7081277a6",
@@ -5947,16 +5963,16 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#no shrunk stand": {
-  "code": "be776482daeb18a1",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#no stand where the full stand fits nowhere": {
+  "code": "19b7ce495f2779b8",
   "core": "4b83bca7081277a6",
   "date": "2026-10-07",
-  "note": "full page size or none; the size is recorded as a guess and no page attests a smaller stand",
-  "pages": {
-   "0075-bamboo-groves-chikurin.drawing.html": "d65f38fc7bbc0e20"
-  },
-  "research": "2e86e0d437d7c9d9",
+  "note": "the page seats the thicket just beyond the back row but never says what to do when there is no room there; UNRESEARCHED is correct",
+  "pages": {},
+  "research": "",
   "rests": [
+   "0075-bamboo-groves-chikurin.drawing.html:07017fd50a6b594d",
+   "0075-bamboo-groves-chikurin.drawing.html:1811d507fa09f2f7",
    "0075-bamboo-groves-chikurin.drawing.html:19e6e6b416628986"
   ],
   "verdict": "IN-STEP"
@@ -5987,14 +6003,6 @@
    "0075-bamboo-groves-chikurin.drawing.html:e76b74de88c86e77"
   ],
   "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#the thicket's near edge stands within THICKET_ROW_DEPTH_FT 30 ft of the back row, searched out to THICKET_REACH_FT 220 ft": {
-  "code": "4b83bca7081277a6",
-  "core": "4b83bca7081277a6",
-  "date": "2026-10-07",
-  "note": "the thicket's near edge stands within THICKET_ROW_DEPTH_FT 30 ft of the back row, searched out to THICKET_REACH_FT 220 ft",
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#thicket by the knob": {
   "code": "a26746e483b40ba5",
@@ -6052,6 +6060,20 @@
   "research": "2e86e0d437d7c9d9",
   "rests": [
    "0075-bamboo-groves-chikurin.drawing.html:07017fd50a6b594d"
+  ],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#thicket size": {
+  "code": "6ad28d87e4ebb696",
+  "core": "4b83bca7081277a6",
+  "date": "2026-10-07",
+  "note": "BAMBOO_THICKET_FT (84, 58) is drawn at full size only, and the page records 84 by 58 ft as a GUESS",
+  "pages": {
+   "0075-bamboo-groves-chikurin.drawing.html": "d65f38fc7bbc0e20"
+  },
+  "research": "2e86e0d437d7c9d9",
+  "rests": [
+   "0075-bamboo-groves-chikurin.drawing.html:19e6e6b416628986"
   ],
   "verdict": "IN-STEP"
  },
