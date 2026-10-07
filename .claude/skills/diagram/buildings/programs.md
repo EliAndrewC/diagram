@@ -49,7 +49,7 @@ Per-building-type specs: the required program every instance shares, the knobs t
 <!-- Research: tenure character knob - UNRESEARCHED: continuity accretes alcove, gardens, oddities -->
 <!-- Research: resident particulars knob - research/questions/0165-martial-training-grounds-and-dojo.drawing.html: a dojo only as a special feature, a knob of the plan, not part of the default program -->
 <!-- Research: resident particulars other than the dojo - UNRESEARCHED: dedication by county type, a relic, a workshop, designed per manor with the GM -->
-<!-- Research: upland granary contents - research/questions/0098-storehouses-for-the-tax-rice.drawing.html: the dry-field share arrives in soybean and barley bales beside the rice -->
+<!-- Research: upland granary contents - DEVIATION research/questions/0098-storehouses-for-the-tax-rice.drawing.html: the dry-field share arrives in soybean and barley bales beside the rice -->
 <!-- Research: upland granary strongbox role - UNRESEARCHED: a partial strongbox role for an upland granary -->
 <!-- Research: cart route to granary and stables - UNRESEARCHED: a cart route from the gates to the granary and stables is required -->
 <!-- Research: formal visitors and the privacy baffle - UNRESEARCHED: formal visitors are received in the office hall and go no deeper; the hall is the privacy baffle -->

@@ -25,5 +25,18 @@
   "tier": "E3",
   "flag": "deviation-tempting",
   "fix": "close the 18 ft joint between street shops to the attested zero gap (0152); the E0 basis was a recorded DEVIATION, not a match (FR-004)"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#the step between ranks": {
+  "tier": "E2",
+  "moved": "wave 1: E0 -> E2, the re-check found the code's step (envelope depth + 18 + 39 ft scaled) is not the page's 92 ft: bring _rank_step to 0038 drawing's row spacing"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/civic.py::CivicWorksMixin.merchant_storehouses#kura size": {
+  "tier": "E1",
+  "moved": "wave 1: E0 -> E1, the code draws a 20 x 14 oblong; the page says 14 to 20 ft square",
+  "fix": "draw each merchant kura square, 14-20 ft (0152/0150 drawing: 'Each storehouse is 14 to 20 ft square')"
+ },
+ ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#universal shrine": {
+  "tier": "E3",
+  "moved": "wave 1: E0 -> E3, the re-check found the implementation itself differs: Hayakawa's \"two modest shrines\" contradict the drawing page's rule \"a map draws one, a deliberate deviation\". Either the drawing page records Hayakawa as an exception or the sheet draws one"
  }
 }

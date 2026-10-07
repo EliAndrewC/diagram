@@ -204,7 +204,7 @@ _OVERLAP_EXEMPT = {
 
 Research:
     annexes abut their house - research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html, research/questions/0040-farm-storehouses-kura.drawing.html: kura (west wall scattered, north wall clustered) and grove (along the plot edge on its rolled 2-4 sides) against their own farmhouse
-    yard, garden and fixtures against the house - UNRESEARCHED: the threshing yard, kitchen garden and fixtures drawn against their own farmhouse
+    yard, garden and fixtures against the house - research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html, research/questions/0039-kitchen-gardens-beside-farmhouses-yashikibatake.drawing.html, research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html, research/questions/0044-baths-on-the-farm-furo.drawing.html, research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: the yard drawn beside its house, the bed beside the house (0038 on which sides), fixtures seated on the plot, the bath joined to the main house, the wood shed about 6 ft off a wall
     pig sty on the dike - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html: on the bank itself, half the bank's width in, not over the water
     wellhead among the houses - research/questions/0196-communal-wells-ido.drawing.html: in the gaps between dwellings
     border as a line - DEVIATION research/questions/0083-clan-borders-and-their-markers.html: no mound drawn, nothing keeps clear

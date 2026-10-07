@@ -2,7 +2,8 @@
 
 The audit read `make claims-report` at `a52ff1bcd` (snapshot: `specs/328-match-the-research/findings.json`) and ranked each
 finding by the implementation work it takes (tiers E0-E4, spec FR-003) into `ranking.json`; `ranking.md` is the readable
-table of the same rows. A finding missing, doubled or untiered would drop out of the GM's easiest-first order unseen.
+table of the same rows. A finding a wave's re-check exposed joins with a `found` field (spec Edge Cases). A finding
+missing, doubled or untiered would drop out of the GM's easiest-first order unseen.
 
 Data-file test: it re-runs under testmon only when this file changes, and always at the gate.
 """
@@ -29,7 +30,7 @@ def ranking_problems(findings: list[dict], ranking: list[dict], table: str) -> l
     keys = Counter(r["key"] for r in ranking)
     problems += [f"doubled: {k}" for k, n in keys.items() if n > 1]
     problems += [f"missing: {f['key']}" for f in findings if f["key"] not in keys]
-    known = {f["key"] for f in findings}
+    known = {f["key"] for f in findings} | {r["key"] for r in ranking if r.get("found")}
     problems += [f"not a finding of the audit: {k}" for k in keys if k not in known]
     for r in ranking:
         if r.get("tier") not in TIERS:

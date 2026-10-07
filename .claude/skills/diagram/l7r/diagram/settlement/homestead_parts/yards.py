@@ -607,7 +607,7 @@ class ThreshingYardsMixin:
 
         Research:
             yard median - research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html: 25 tsubo, rice
-                and dry field alike (`YARD_MEDIAN_TSUBO_DRYFIELD` = 25.0 equals the rice median, so both are drawn the same size)
+                and dry field alike: `YARD_MEDIAN_TSUBO = 25.0` and `YARD_MEDIAN_TSUBO_DRYFIELD = 25.0`, so both are drawn the same size
             yard spread - research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html: lognormal,
                 sigma_ln 0.40
             larger household, larger yard - research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html:

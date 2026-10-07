@@ -10,7 +10,7 @@
   "flag": "",
   "tier_as_ranked": "E0",
   "verdict": "MISLABELED",
-  "wave": ""
+  "wave": "1"
  },
  {
   "key": ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#practice ground",
@@ -25,7 +25,7 @@
   "e0_rechecked": true,
   "tier_as_ranked": "E0",
   "verdict": "DRIFTED",
-  "wave": ""
+  "wave": "1"
  },
  {
   "key": ".claude/skills/diagram/buildings.md::Scale#buildings at true size",
@@ -38,7 +38,7 @@
   "flag": "",
   "tier_as_ranked": "E0",
   "verdict": "MISLABELED",
-  "wave": ""
+  "wave": "1"
  },
  {
   "key": ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#practice ground",
@@ -53,22 +53,7 @@
   "e0_rechecked": true,
   "tier_as_ranked": "E0",
   "verdict": "DRIFTED",
-  "wave": ""
- },
- {
-  "key": ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#universal shrine",
-  "tier": "E0",
-  "fix": "cite 0218's Joge post for Hayakawa's two shrines (real offices kept more than one); no sheet change",
-  "files": [
-   ".claude/skills/diagram/buildings/programs.md"
-  ],
-  "after": [],
-  "flag": "",
-  "e0_basis": ".claude/skills/diagram/research/questions/0218-the-compounds-own-shrine-yashikigami.html: \"Real offices kept more than one shrine or god - the Joge post an Inari shrine, a Tenjin shrine and others\"",
-  "e0_rechecked": true,
-  "tier_as_ranked": "E0",
-  "verdict": "DRIFTED",
-  "wave": ""
+  "wave": "1"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py::SPUR_SETBACK#field spur's tip",
@@ -81,7 +66,7 @@
   "flag": "",
   "tier_as_ranked": "E0",
   "verdict": "MISLABELED",
-  "wave": ""
+  "wave": "1"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py::SPUR_SETBACK#path joins the outer bund",
@@ -96,7 +81,7 @@
   "e0_rechecked": true,
   "tier_as_ranked": "E0",
   "verdict": "DRIFTED",
-  "wave": ""
+  "wave": "1 (claim renamed or split; its parts re-checked)"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/consts_water.py::OFFTAKE_LADDER#canal B's single delivery ditch at 0.55-0.6 (0053 drawing: the second canal feeds at least one)",
@@ -109,7 +94,7 @@
   "flag": "",
   "tier_as_ranked": "E0",
   "verdict": "UNCLAIMED",
-  "wave": ""
+  "wave": "1"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#thicket kept off every household's reserved copse seats",
@@ -122,7 +107,7 @@
   "flag": "",
   "tier_as_ranked": "E0",
   "verdict": "UNCLAIMED",
-  "wave": ""
+  "wave": "1"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#thicket kept out of every plot's sun at BAMBOO_SHADE_FT 50 ft (0038 drawing)",
@@ -135,7 +120,7 @@
   "flag": "",
   "tier_as_ranked": "E0",
   "verdict": "UNCLAIMED",
-  "wave": ""
+  "wave": "1"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/stages.py::stage_windbreak#copse on the house's own bank",
@@ -148,7 +133,7 @@
   "flag": "",
   "tier_as_ranked": "E0",
   "verdict": "MISLABELED",
-  "wave": ""
+  "wave": "1"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/bamboo.py::_strip_blocked#what a strip or fixture keeps off",
@@ -161,20 +146,7 @@
   "flag": "",
   "tier_as_ranked": "E0",
   "verdict": "MISLABELED",
-  "wave": ""
- },
- {
-  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/persimmon_reseat.py::persimmon_for#under no conifer's crown",
-  "tier": "E0",
-  "fix": "cite 0046 drawing (grove trees give way round the persimmon) for the conifer refusal, GUESS for other stands",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/persimmon_reseat.py"
-  ],
-  "after": [],
-  "flag": "",
-  "tier_as_ranked": "E0",
-  "verdict": "MISLABELED",
-  "wave": ""
+  "wave": "1"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/persimmon_reseat.py::reseat_persimmons#the rolled count honored",
@@ -187,7 +159,7 @@
   "flag": "",
   "tier_as_ranked": "E0",
   "verdict": "MISLABELED",
-  "wave": ""
+  "wave": "1"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#at most MAX_STREETS (6) parallel streets",
@@ -200,7 +172,7 @@
   "flag": "",
   "tier_as_ranked": "E0",
   "verdict": "UNCLAIMED",
-  "wave": ""
+  "wave": "1"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#front door's ground: a frame refused without DOOR_ROOM_FT (16 ft) and half LANE_ROOM_FT clear before its front",
@@ -213,20 +185,21 @@
   "flag": "",
   "tier_as_ranked": "E0",
   "verdict": "UNCLAIMED",
-  "wave": ""
+  "wave": "1"
  },
  {
-  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#the step between ranks",
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#row step capped at ROW_FRONTAGE_MAX_FT",
+  "verdict": "UNCLAIMED",
   "tier": "E0",
-  "fix": "cite research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html (rows 92 ft apart) for the rank step",
+  "fix": "claim the row's step between farms (one frame, capped at 240 ft): cite 0033 drawing if it states the frontage, else UNRESEARCHED",
   "files": [
-   ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py"
+   ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py"
   ],
   "after": [],
   "flag": "",
+  "found": "wave 1 re-check",
   "tier_as_ranked": "E0",
-  "verdict": "MISLABELED",
-  "wave": ""
+  "wave": "1 (claim renamed or split; its parts re-checked)"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/wells.py::BEND_LOOK_FT#well arithmetic",
@@ -239,7 +212,7 @@
   "flag": "",
   "tier_as_ranked": "E0",
   "verdict": "MISLABELED",
-  "wave": ""
+  "wave": "1"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/wells.py::BEND_WELL_DEG#well arithmetic",
@@ -252,7 +225,7 @@
   "flag": "",
   "tier_as_ranked": "E0",
   "verdict": "MISLABELED",
-  "wave": ""
+  "wave": "1"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/wells.py::place_wells#no well past the crop",
@@ -265,7 +238,7 @@
   "flag": "",
   "tier_as_ranked": "E0",
   "verdict": "MISLABELED",
-  "wave": ""
+  "wave": "1"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/sink.py::lay_sink#pond's role",
@@ -280,7 +253,7 @@
   "e0_rechecked": true,
   "tier_as_ranked": "E0",
   "verdict": "DRIFTED",
-  "wave": ""
+  "wave": "1"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/water/brook.py::draw_intake#weir form rolled among four (s.resolve(\"weir_form\")), 0059's four forms at even odds",
@@ -293,7 +266,7 @@
   "flag": "",
   "tier_as_ranked": "E0",
   "verdict": "UNCLAIMED",
-  "wave": ""
+  "wave": "1"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/cluster_edge.py::_cluster_edge_toward#origin on the houses' bank",
@@ -308,7 +281,7 @@
   "e0_rechecked": true,
   "tier_as_ranked": "E0",
   "verdict": "DRIFTED",
-  "wave": ""
+  "wave": "1"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/street.py::lay_row_streets#street join width",
@@ -321,7 +294,7 @@
   "flag": "",
   "tier_as_ranked": "E0",
   "verdict": "MISLABELED",
-  "wave": ""
+  "wave": "1"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/street.py::unhooked_both#lane end loses its hook",
@@ -336,7 +309,7 @@
   "e0_rechecked": true,
   "tier_as_ranked": "E0",
   "verdict": "CANNOT-TELL",
-  "wave": ""
+  "wave": "1"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/interactive/place.py::homestead_grove_default#no side sentence on a nucleated map",
@@ -349,7 +322,7 @@
   "flag": "",
   "tier_as_ranked": "E0",
   "verdict": "MISLABELED",
-  "wave": ""
+  "wave": "1"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/interactive/place.py::size_sentence#population from households",
@@ -364,7 +337,7 @@
   "e0_rechecked": true,
   "tier_as_ranked": "E0",
   "verdict": "DRIFTED",
-  "wave": ""
+  "wave": "1"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/overlap/taxonomy.py::_MATRIX_PERMISSIVE#ground cover takes buildings",
@@ -379,7 +352,7 @@
   "e0_rechecked": true,
   "tier_as_ranked": "E0",
   "verdict": "DRIFTED",
-  "wave": ""
+  "wave": "1 (claim renamed or split; its parts re-checked)"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#annexes abut their house",
@@ -392,7 +365,7 @@
   "flag": "",
   "e0_basis": ".claude/skills/diagram/research/questions/0040-farm-storehouses-kura.drawing.html: \"It stands on the west wall of a scattered farmstead, and on the shaded north wall in a clustered village\"; 0028.drawing: \"on the sides its settlement rolls - two, three or all four\"",
   "e0_rechecked": true,
-  "tier_as_ranked": "E0",
+  "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": ""
  },
@@ -409,7 +382,7 @@
   "e0_rechecked": true,
   "tier_as_ranked": "E0",
   "verdict": "DRIFTED",
-  "wave": ""
+  "wave": "1"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#pig sty on the dike",
@@ -424,7 +397,7 @@
   "e0_rechecked": true,
   "tier_as_ranked": "E0",
   "verdict": "DRIFTED",
-  "wave": ""
+  "wave": "1"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/_knobs.py::<module>#hamlet knobs unrolled",
@@ -439,7 +412,7 @@
   "e0_rechecked": true,
   "tier_as_ranked": "E0",
   "verdict": "DRIFTED",
-  "wave": ""
+  "wave": "1"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/city/bridges.py::crossing_deck#landing past each bank",
@@ -454,7 +427,7 @@
   "e0_rechecked": true,
   "tier_as_ranked": "E0",
   "verdict": "CANNOT-TELL",
-  "wave": ""
+  "wave": "1"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/city/canals.py::CanalsMixin.farmland_ring#head race width",
@@ -467,22 +440,7 @@
   "flag": "",
   "tier_as_ranked": "E0",
   "verdict": "MISLABELED",
-  "wave": ""
- },
- {
-  "key": ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/civic.py::CivicWorksMixin.merchant_storehouses#kura size",
-  "tier": "E0",
-  "fix": "restate the claim: bscale = 1/ftpx on to-scale town/city maps, so the kura is 20 x 14 ft, inside 14-20 ft",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/civic.py"
-  ],
-  "after": [],
-  "flag": "",
-  "e0_basis": ".claude/skills/diagram/research/questions/0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html: \"Each storehouse is 14 to 20 ft square\"",
-  "e0_rechecked": true,
-  "tier_as_ranked": "E0",
-  "verdict": "CANNOT-TELL",
-  "wave": ""
+  "wave": "1"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/farm_fixtures.py::kura_rect#annex larger than a kura",
@@ -497,7 +455,7 @@
   "e0_rechecked": true,
   "tier_as_ranked": "E0",
   "verdict": "CANNOT-TELL",
-  "wave": ""
+  "wave": "1"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/fields/landuse.py::LandUseMixin._landuse_repaint_leftovers#leftovers as standing rice",
@@ -510,7 +468,7 @@
   "flag": "",
   "tier_as_ranked": "E0",
   "verdict": "MISLABELED",
-  "wave": ""
+  "wave": "1"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/farmstead.py::FarmsteadMixin._find_appurtenances#garden on a sunny side",
@@ -526,7 +484,7 @@
   "e0_rechecked": true,
   "tier_as_ranked": "E0",
   "verdict": "CANNOT-TELL",
-  "wave": ""
+  "wave": "1"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#fixture gap 3.5 ft off every other part (WALL_GAP_FT) and bath room slide 4 ft (WALL_SLIDE_FT)",
@@ -539,7 +497,7 @@
   "flag": "",
   "tier_as_ranked": "E0",
   "verdict": "UNCLAIMED",
-  "wave": ""
+  "wave": "1 (claim renamed or split; its parts re-checked)"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#seating order: retirement house, bath, wood shed, privy, manure, coop, shrine, persimmon (FIXTURE_ORDER)",
@@ -552,7 +510,7 @@
   "flag": "",
   "tier_as_ranked": "E0",
   "verdict": "UNCLAIMED",
-  "wave": ""
+  "wave": "1 (claim renamed or split; its parts re-checked)"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/grove_rules.py::fixtures_on_groves#no fixture in a grove band",
@@ -565,7 +523,7 @@
   "flag": "",
   "tier_as_ranked": "E0",
   "verdict": "MISLABELED",
-  "wave": ""
+  "wave": "1"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#crowns out of the plots' sun",
@@ -578,7 +536,7 @@
   "flag": "",
   "tier_as_ranked": "E0",
   "verdict": "MISLABELED",
-  "wave": ""
+  "wave": "1"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#dooryard mix",
@@ -608,7 +566,7 @@
   "e0_rechecked": true,
   "tier_as_ranked": "E0",
   "verdict": "DRIFTED",
-  "wave": ""
+  "wave": "1 (claim renamed or split; its parts re-checked)"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#copse off the bamboo",
@@ -621,7 +579,7 @@
   "flag": "",
   "tier_as_ranked": "E0",
   "verdict": "MISLABELED",
-  "wave": ""
+  "wave": "1"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/tree_shade.py::map_trees#which trees are canopy",
@@ -636,7 +594,7 @@
   "e0_rechecked": true,
   "tier_as_ranked": "E0",
   "verdict": "CANNOT-TELL",
-  "wave": ""
+  "wave": "1"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/yards.py::ThreshingYardsMixin._attach_yard#no floor without rice",
@@ -649,7 +607,7 @@
   "flag": "",
   "tier_as_ranked": "E0",
   "verdict": "MISLABELED",
-  "wave": ""
+  "wave": "1"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/yards.py::ThreshingYardsMixin._yard_area_ft2#yard median",
@@ -664,7 +622,7 @@
   "e0_rechecked": true,
   "tier_as_ranked": "E0",
   "verdict": "CANNOT-TELL",
-  "wave": ""
+  "wave": "1"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/access.py::_standing_clear#no path corridor within its half-width of any placed footprint",
@@ -677,7 +635,7 @@
   "flag": "",
   "tier_as_ranked": "E0",
   "verdict": "UNCLAIMED",
-  "wave": ""
+  "wave": "1"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/access.py::exit_bearing#track out leaves away from the field",
@@ -690,7 +648,7 @@
   "flag": "",
   "tier_as_ranked": "E0",
   "verdict": "MISLABELED",
-  "wave": ""
+  "wave": "1"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._lay_fixtures#persimmon may stand in its own grove's bands (fruit=bands; 0046)",
@@ -703,7 +661,7 @@
   "flag": "",
   "tier_as_ranked": "E0",
   "verdict": "UNCLAIMED",
-  "wave": ""
+  "wave": "1 (claim renamed or split; its parts re-checked)"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._lay_fixtures#persimmon out of the plots' sun",
@@ -718,7 +676,7 @@
   "e0_rechecked": true,
   "tier_as_ranked": "E0",
   "verdict": "DRIFTED",
-  "wave": ""
+  "wave": "1"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/dispersed.py::clear_east_of_beds#rect helpers",
@@ -731,7 +689,7 @@
   "flag": "",
   "tier_as_ranked": "E0",
   "verdict": "MISLABELED",
-  "wave": ""
+  "wave": "1"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/farmsteads.py::FarmsteadFlushMixin._relax_gardens_south#nudged bed's sun ground clear of crowns, promised persimmons and bamboo (CANOPY_SHADE_FT, BAMBOO_SHADE_FT)",
@@ -744,7 +702,7 @@
   "flag": "",
   "tier_as_ranked": "E0",
   "verdict": "UNCLAIMED",
-  "wave": ""
+  "wave": "1 (claim renamed or split; its parts re-checked)"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/farmsteads.py::beds_sun_clear#bed sun ground clear of crowns and promised trees at reach, bamboo at bamboo_reach",
@@ -757,7 +715,7 @@
   "flag": "",
   "tier_as_ranked": "E0",
   "verdict": "UNCLAIMED",
-  "wave": ""
+  "wave": "1"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/farmsteads.py::beds_sun_clear#draw-order and footprint plumbing",
@@ -770,7 +728,7 @@
   "flag": "",
   "tier_as_ranked": "E0",
   "verdict": "MISLABELED",
-  "wave": ""
+  "wave": "1 (claim renamed or split; its parts re-checked)"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/fit.py::BundleFitMixin._field_adjacent#farmland rail",
@@ -783,7 +741,7 @@
   "flag": "",
   "tier_as_ranked": "E0",
   "verdict": "MISLABELED",
-  "wave": ""
+  "wave": "1"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/shrines_wells/woods.py::TreeStandsMixin._draw_stand#fringe crowns drawn outside the stand's outline (_stand_fringe, outliers)",
@@ -796,7 +754,7 @@
   "flag": "",
   "tier_as_ranked": "E0",
   "verdict": "UNCLAIMED",
-  "wave": ""
+  "wave": "1 (claim renamed or split; its parts re-checked)"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/structures/servants.py::ServantRangesMixin#servant range depth",
@@ -809,7 +767,7 @@
   "flag": "",
   "tier_as_ranked": "E0",
   "verdict": "MISLABELED",
-  "wave": ""
+  "wave": "1"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/waterfields/polder.py::_polder_lattice#edge wander",
@@ -822,7 +780,7 @@
   "flag": "",
   "tier_as_ranked": "E0",
   "verdict": "MISLABELED",
-  "wave": ""
+  "wave": "1"
  },
  {
   "key": ".claude/skills/diagram/buildings.md::Approaches and surroundings#boundary pillars",
@@ -1052,6 +1010,20 @@
   "e0_rechecked": true,
   "tier_as_ranked": "E0",
   "verdict": "DRIFTED",
+  "wave": ""
+ },
+ {
+  "key": ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#posting wealth knob",
+  "verdict": "DRIFTED",
+  "tier": "E1",
+  "fix": "the procedure calls the poor end's look a GUESS (0091 drawing: no page describes how a short-funded office looked); only the shortfall is attested",
+  "files": [
+   ".claude/skills/diagram/buildings/programs.md"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 1 re-check",
+  "tier_as_ranked": "E1",
   "wave": ""
  },
  {
@@ -1696,6 +1668,20 @@
   "wave": ""
  },
  {
+  "key": ".claude/skills/diagram/l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#mill beside its stream",
+  "verdict": "DRIFTED",
+  "tier": "E1",
+  "fix": "the mill seated in a short mill race led off the stream below the intake (0064), and the exemption says so",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/overlap/taxonomy.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 1 re-check",
+  "tier_as_ranked": "E1",
+  "wave": ""
+ },
+ {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/_knobs.py::BOUNDARY_MARKER_FT#boundary stone size",
   "tier": "E1",
   "fix": "BOUNDARY_MARKER_FT 3.0 -> 4.0 per 0217 drawing",
@@ -1797,6 +1783,20 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
+  "wave": ""
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/city/canals.py::CanalsMixin.farmland_ring#sluice standoff",
+  "verdict": "CANNOT-TELL",
+  "tier": "E1",
+  "fix": "measure the sluice's standoff from the moat's rim (not the tap point / centerline) and set it to about 90 ft (0146 drawing)",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/city/canals.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 1 re-check",
+  "tier_as_ranked": "E1",
   "wave": ""
  },
  {
@@ -1973,6 +1973,22 @@
   "wave": ""
  },
  {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/civic.py::CivicWorksMixin.merchant_storehouses#kura size",
+  "tier": "E1",
+  "fix": "draw each merchant kura square, 14-20 ft (0152/0150 drawing: 'Each storehouse is 14 to 20 ft square')",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/civic.py"
+  ],
+  "after": [],
+  "flag": "",
+  "e0_basis": ".claude/skills/diagram/research/questions/0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html: \"Each storehouse is 14 to 20 ft square\"",
+  "e0_rechecked": true,
+  "tier_as_ranked": "E0",
+  "moved": "wave 1: E0 -> E1, the code draws a 20 x 14 oblong; the page says 14 to 20 ft square",
+  "verdict": "CANNOT-TELL",
+  "wave": ""
+ },
+ {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/civic.py::CivicWorksMixin.precinct_interior#precinct size",
   "tier": "E1",
   "fix": "default precinct from 130 x 100 px (~117,000 sq ft) to px-converted ~73,000 sq ft (e.g. 310 x 235 ft)",
@@ -2133,6 +2149,20 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
+  "wave": ""
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/farm_fixtures.py::kura_rect#west annex size",
+  "verdict": "MISLABELED",
+  "tier": "E1",
+  "fix": "hold the west annex to 0040 drawing's band: 18-27 ft long, 1.5-1.8 times as long as deep, as the north annex is",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/farm_fixtures.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 1 re-check",
+  "tier_as_ranked": "E1",
   "wave": ""
  },
  {
@@ -2305,6 +2335,20 @@
   "wave": ""
  },
  {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#lesser broadleaf crown size",
+  "verdict": "MISLABELED",
+  "tier": "E1",
+  "fix": "LESSER_BROADLEAF_S floor 0.6 -> 0.75 of the mean radius (0080 drawing: 0.75-1.4), cite 0080",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 1 re-check",
+  "tier_as_ranked": "E1",
+  "wave": ""
+ },
+ {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#windbreak conifer share",
   "tier": "E1",
   "fix": "windbreak conifer share c_th = b_th + 0.48 (0072/Takehara: 48% cedar, the dominant tree)",
@@ -2341,6 +2385,20 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
+  "wave": ""
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#clumps off the gardens' east",
+  "verdict": "DRIFTED",
+  "tier": "E1",
+  "fix": "the east lane 50 ft in feet (0038: no crown within 50 ft east, west or south of a yard or bed), yards included, not 24 px past a garden",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 1 re-check",
+  "tier_as_ranked": "E1",
   "wave": ""
  },
  {
@@ -3238,6 +3296,20 @@
   "wave": ""
  },
  {
+  "key": ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#staff housing knob",
+  "verdict": "DRIFTED",
+  "tier": "E2",
+  "fix": "option (c), senior retainers in town, restricted to urban tiers; a county seat keeps its officials' huts and rowhouses on its own grounds (0114)",
+  "files": [
+   ".claude/skills/diagram/buildings/programs.md"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 1 re-check",
+  "tier_as_ranked": "E2",
+  "wave": ""
+ },
+ {
   "key": ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#tier knob",
   "tier": "E2",
   "fix": "capital tier's staff housing made a knob: outside (Edo yoriki) or inside (a domain's Edo estate)",
@@ -3405,6 +3477,20 @@
   "wave": ""
  },
  {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/stages.py::stage_windbreak#against-the-belt copse clump",
+  "verdict": "MISLABELED",
+  "tier": "E2",
+  "fix": "seat a copse clump within a dooryard's reach (90 ft) of its house, through the gaps between the houses (0036, 0071), not 30 ft from a belt crown",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/stages.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 1 re-check",
+  "tier_as_ranked": "E2",
+  "wave": ""
+ },
+ {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/stages.py::stage_windbreak#copse among the homes",
   "tier": "E2",
   "fix": "stage_windbreak draws the copse only among the houses (0071); retire the against_the_belt branch and against_the_belt()",
@@ -3461,6 +3547,20 @@
   "wave": ""
  },
  {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/persimmon_reseat.py::persimmon_for#under no conifer's crown",
+  "verdict": "DRIFTED",
+  "tier": "E2",
+  "fix": "the farm's own grove gives way round the persimmon (0046 drawing): refuse the conifer, not the persimmon, where the conifer is the farm's own grove",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/persimmon_reseat.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 1 re-check",
+  "tier_as_ranked": "E2",
+  "wave": ""
+ },
+ {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#far-row dry-field share",
   "tier": "E2",
   "fix": "size the far-row holding as three times the frame's width (along the street), not its shorter side",
@@ -3471,6 +3571,20 @@
   "flag": "",
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
+  "wave": ""
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#the step between ranks",
+  "tier": "E2",
+  "fix": "cite research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html (rows 92 ft apart) for the rank step",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py"
+  ],
+  "after": [],
+  "flag": "",
+  "tier_as_ranked": "E0",
+  "moved": "wave 1: E0 -> E2, the re-check found the code's step (envelope depth + 18 + 39 ft scaled) is not the page's 92 ft: bring _rank_step to 0038 drawing's row spacing",
+  "verdict": "MISLABELED",
   "wave": ""
  },
  {
@@ -3872,6 +3986,20 @@
   "flag": "",
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
+  "wave": ""
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#yard, garden and fixtures against the house",
+  "verdict": "DRIFTED",
+  "tier": "E2",
+  "fix": "the wood shed stands about 6 ft (a ken) off a wall (0043), not against the house: the placer and the farm_fixtures exemption text",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/overlap/taxonomy.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 1 re-check",
+  "tier_as_ranked": "E2",
   "wave": ""
  },
  {
@@ -5746,6 +5874,34 @@
   "wave": ""
  },
  {
+  "key": ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#manor kitchen garden by the sun",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "every residence keeps a kitchen garden; its site a rolled knob among west, south, rear, own parcel, and its size a knob (0109 drawing); the sun only rules sites out",
+  "files": [
+   ".claude/skills/diagram/buildings/programs.md"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 1 re-check",
+  "tier_as_ranked": "E3",
+  "wave": ""
+ },
+ {
+  "key": ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#rear service strip",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "where the servants lodge becomes a knob between the gate range (Matsue) and a rear hut (Miwa), 0091",
+  "files": [
+   ".claude/skills/diagram/buildings/programs.md"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 1 re-check",
+  "tier_as_ranked": "E3",
+  "wave": ""
+ },
+ {
   "key": ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#residence entrances",
   "tier": "E3",
   "fix": "genkan rolled per plan (on the office hall, the route going on to the house, or none with a garden path); programs.md reworded, Hayakawa's reception genkan moved",
@@ -5756,6 +5912,22 @@
   "after": [],
   "flag": "",
   "tier_as_ranked": "E3",
+  "verdict": "DRIFTED",
+  "wave": ""
+ },
+ {
+  "key": ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#universal shrine",
+  "tier": "E3",
+  "fix": "cite 0218's Joge post for Hayakawa's two shrines (real offices kept more than one); no sheet change",
+  "files": [
+   ".claude/skills/diagram/buildings/programs.md"
+  ],
+  "after": [],
+  "flag": "",
+  "e0_basis": ".claude/skills/diagram/research/questions/0218-the-compounds-own-shrine-yashikigami.html: \"Real offices kept more than one shrine or god - the Joge post an Inari shrine, a Tenjin shrine and others\"",
+  "e0_rechecked": true,
+  "tier_as_ranked": "E0",
+  "moved": "wave 1: E0 -> E3, the re-check found the implementation itself differs: Hayakawa's \"two modest shrines\" contradict the drawing page's rule \"a map draws one, a deliberate deviation\". Either the drawing page records Hayakawa as an exception or the sheet draws one",
   "verdict": "DRIFTED",
   "wave": ""
  },
@@ -6632,6 +6804,20 @@
   "flag": "",
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
+  "wave": ""
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/yards.py::ThreshingYardsMixin._attach_yard#a yard on every farm",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "roll 0037's two floor forms per settlement (a knob): each house's own floor, or one shared floor with little or no yard at each house",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/yards.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 1 re-check",
+  "tier_as_ranked": "E3",
   "wave": ""
  },
  {

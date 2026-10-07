@@ -333,9 +333,9 @@ def _standing_memo(s: Settlement) -> tuple[Any, dict[Any, Any]]:
 
 def _standing_clear(s: Settlement, a: Pt, b: Pt) -> bool:
     """Research:
-        no path corridor within its half-width of any placed footprint - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: nothing is built on a path, so the corridor clears every placed footprint by its half-width
-        corridor geometry, memo and search plumbing - NONE: the site raster, the reach index and the exact gap
-        path refused over a household's reserved grove seats - UNRESEARCHED: `wood.corridor_bars` refuses a corridor across them"""
+    no path corridor within its half-width of any placed footprint - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: nothing is built on a path, so the corridor clears every placed footprint by its half-width
+    corridor geometry, memo and search plumbing - NONE: the site raster, the reach index and the exact gap
+    path refused over a household's reserved grove seats - UNRESEARCHED: `wood.corridor_bars` refuses a corridor across them"""
     half = s._access.half
     # THE SITE'S RASTER FIRST: the site ground is what refuses most corridors (seed 44: 82,801 of the 106,061 refused), and
     # a sample in a surely taken cell refuses one with a lookup (`site_edge_samples`)

@@ -729,6 +729,8 @@ class GrovesMixin:
             crowns out of the plots' sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: every mark held out of the sun ground, bamboo at BAMBOO_SHADE_FT
             crown under no crown - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html
             alder in the marsh - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html
+            conifer crown under a persimmon's crown - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html: a conifer crown refused under a yard persimmon's crown, the grove giving way round it
+            lesser crown over an earlier stand's conifer - CONVENTION: a lesser crown refused over an earlier stand's conifer, which decides only paint order (conifers painted last)
             clump glyph - CONVENTION: one disc per crown, conifers dark and painted last, no trunks
             conifer-led clump's lesser share - GUESS research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: a conifer-led clump throws LESSER_ROLL_SHARE (0.1) of its crowns as lesser broadleaf; the page names the lesser broadleaf, the share a guess
             lesser broadleaf crown size - GUESS research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: LESSER_BROADLEAF_S, 0.6 to 0.85 of the mean radius; the page gives lesser broadleaf, no figure

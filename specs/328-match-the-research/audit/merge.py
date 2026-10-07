@@ -19,6 +19,15 @@ for n in range(1, 10):
             r = json.loads(line)
             r["tier_as_ranked"] = r["tier"]  # the batch's tier, before the re-check and the second reader
             rows[r["key"]] = r
+# Findings a wave's re-check exposed (spec Edge Cases: "recorded in the ranking under the tier they take").
+for extra in sorted(AUDIT.glob("found-*.jsonl")):
+    for line in extra.read_text().splitlines():
+        if line.strip():
+            r = json.loads(line)
+            r["tier_as_ranked"] = r["tier"]
+            rows[r["key"]] = r
+            verdict[r["key"]] = r["verdict"]
+            note.setdefault(r["key"], "")
 missing = [k for k in verdict if k not in rows]
 extra = [k for k in rows if k not in verdict]
 if missing or extra:
@@ -62,6 +71,11 @@ while changed:
 def module(k):
     return k.split("::")[0]
 
+
+# The wave that closed each row (audit/waves.json: written from the claims index at a wave's close).
+waves = json.loads((AUDIT / "waves.json").read_text()) if (AUDIT / "waves.json").exists() else {}
+for r in rows.values():
+    r["wave"] = waves.get(r["key"], "")
 
 ordered = sorted(rows.values(), key=lambda r: (TIERS.index(r["tier"]), module(r["key"]), r["key"]))
 # within a tier, a row after its dependency
