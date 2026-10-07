@@ -80,9 +80,9 @@ def _on(p: Poly, q: Pt) -> bool:
 
 def knots(lanes: Sequence[Mapping[str, Any]]) -> list[tuple[int, int, float]]:
     """The knots of the web: pairs of `end_nodes` indices that no one lane runs between standing within `_KNOT_FT` of one
-    another - or within `KNOT_MARGIN` reaches where both are JUNCTIONS (two or more ends, or an end on another lane's side) on
-    one lane: a foot a few feet past the reach still reads as the knot (feature 328 wave 4, glyph-check round 2 of Inashiro) -
-    nearest first, with their distance.
+    another - `KNOT_MARGIN` (1.0, the page's own reach) applying where both are JUNCTIONS (two or more ends, or an end on
+    another lane's side) on one lane - nearest first, with their distance. (A 1.5 margin once caught a foot slid just past the
+    reach; the slide is gone, and the margin went past the page - feature 328 wave 4.)
 
     Research: lane ends gathered - research/questions/0081-village-lanes.drawing.html: ends within 25 ft are joined at a single point; the margin a map drawing convention (`gap_ways.KNOT_MARGIN`)"""
     nodes = end_nodes(lanes)

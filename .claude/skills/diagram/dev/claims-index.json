@@ -17112,10 +17112,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/knots.py::knots#lane ends gathered": {
-  "code": "b2f5631733328eff",
-  "core": "e725949ad3531350",
+  "code": "ebb7290e1b53521d",
+  "core": "6eee7954b6f85bb0",
   "date": "2026-10-07",
-  "note": "`d > _KNOT_FT * KNOT_MARGIN` gathers junction pairs on one lane up to 37.5 ft apart, but the page says \"Ends within 25 ft of one another are joined\" and records no wider reach; the 1.5 margin also sets where ways are placed, so it is not a CONVENTION about how they are shown; either record the margin on the drawing page as a deliberate choice (DEVIATION) or keep the gather to 25 ft",
+  "note": "ends within KNOT_FT (25 ft) times KNOT_MARGIN (1.0) are paired as knots to join, which matches the page's 25 ft; with the margin at 1.0 the junction branch past the reach can never fire, so the docstring's \"a few feet past the reach\" is stale prose, not a drift",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },
@@ -17124,7 +17124,7 @@
    "0081-village-lanes.drawing.html:65ad16eace199d92",
    "0081-village-lanes.drawing.html:df26f73dd5ee96d2"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/knots.py::moved_onto#lane ends gathered": {
   "code": "ff693ac1103e3ee2",
@@ -49108,6 +49108,21 @@
   ],
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/settlement/rolling/gap_ways.py::KNOT_MARGIN#a knot's margin": {
+  "code": "bd2296b92d864a23",
+  "core": "7276802b5dc226e3",
+  "date": "2026-10-07",
+  "note": "1.0 keeps the page's own 25 ft reach with no margin past it; the comment above the constant still describes a margin past the reach (stale prose)",
+  "pages": {
+   "0081-village-lanes.drawing.html": "9e27759395199abd"
+  },
+  "research": "ebd72aaa6a0eb9af",
+  "rests": [
+   "0081-village-lanes.drawing.html:65ad16eace199d92",
+   "0081-village-lanes.drawing.html:df26f73dd5ee96d2"
+  ],
+  "verdict": "IN-STEP"
+ },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/gap_ways.py::Layers#lane ground": {
   "code": "71d2516ffda52993",
   "core": "45d47d15b58c96af",
@@ -49192,33 +49207,34 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/rolling/gap_ways.py::_way_for#a household way's foot is gathered onto a junction up to 37.5 ft away (`KNOT_FT * KNOT_MARGIN`), past the page's 25 ft": {
-  "code": "2a257f74deff6404",
-  "core": "2a257f74deff6404",
-  "date": "2026-10-07",
-  "note": "a household way's foot is gathered onto a junction up to 37.5 ft away (`KNOT_FT * KNOT_MARGIN`), past the page's 25 ft",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/gap_ways.py::_way_for#a way leaves its own homestead from its dooryard": {
-  "code": "aaef8cdfeda74cc2",
-  "core": "2a257f74deff6404",
+  "code": "505f1a9a5ee359ff",
+  "core": "70fccb85a01772f7",
   "date": "2026-10-07",
-  "note": "doors inside the homestead's own fixtures or beds are excluded, the exit traced from the dooryard",
+  "note": "exits start at doors clear of its own fixtures and beds, and its legs keep clear of its house, fixtures and parts",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
   "research": "7b40c2c01cfba682",
   "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:f0a411a544083965"
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/rolling/gap_ways.py::_way_for#joined near, then far, then run on to the way out": {
-  "code": "521ac2c45c3f81d7",
-  "core": "2a257f74deff6404",
+ ".claude/skills/diagram/l7r/diagram/settlement/rolling/gap_ways.py::_way_for#a way's foot gathered onto a junction within the knot reach (KNOT_FT * KNOT_MARGIN), and a foot left beside a junction only when nothing else is admitted (would cite 0081 §21)": {
+  "code": "70fccb85a01772f7",
+  "core": "70fccb85a01772f7",
   "date": "2026-10-07",
-  "note": "each way runs along the gaps to an earlier way or the track out, which the page records as a GUESS",
+  "note": "a way's foot gathered onto a junction within the knot reach (KNOT_FT * KNOT_MARGIN), and a foot left beside a junction only when nothing else is admitted (would cite 0081 §21)",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/rolling/gap_ways.py::_way_for#joined near, then far, then run on to the way out": {
+  "code": "913632181da4442b",
+  "core": "70fccb85a01772f7",
+  "date": "2026-10-07",
+  "note": "the page lays each way along the gaps to the track out or an earlier way and records that reading as a GUESS; it is silent on the order the joins are tried in, so a GUESS fits",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },

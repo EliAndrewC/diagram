@@ -86,10 +86,9 @@ JOIN_FAR_FT = 45.0
 KNOT_FT = 25.0
 """Research: lane ends gathered - research/questions/0081-village-lanes.drawing.html: ends within 25 ft of one another are joined at a single point"""
 
-#: ...and a foot this many reaches from a junction is gathered too where it can be, and is the last of a household's joins
-#: tried where it cannot: a foot a few feet past the reach still reads as the knot (feature 328 wave 4, glyph-check round 2 of
-#: Inashiro: a foot slid to 25.18 ft from a junction drew the knot it was meant to undo; a traced foot 24.2 ft off was DRAWN
-#: 25.8 ft off once pulled taut).
+#: ...the reach, in KNOT_FT's, within which a foot is gathered onto a junction: 1.0, the page's own 25 ft. Feature 328 wave 4
+#: first set 1.5 to catch a foot slid just past the reach (Inashiro: slid to 25.18 ft, the knot still drawn); the slide was
+#: removed, and the margin went past the page, so it is the page's reach now.
 KNOT_MARGIN = 1.0
 """Research: a knot's margin - research/questions/0081-village-lanes.drawing.html: ends within 25 ft are joined at a single point - the page's own reach, no margin past it (feature 328: a 1.5 margin went past the page, and the slide it guarded against is gone)"""
 
