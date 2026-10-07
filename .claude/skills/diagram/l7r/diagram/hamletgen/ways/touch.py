@@ -120,7 +120,7 @@ def _touch_junctions(
     *"a bunch of random scattered lanes strewn about without much rhyme or reason ... a short section
     of lane, between three farmhouses. It does not really connect to anything on either end"*).
     Every pass here - the orphan-joiner, the stub trimmer, the service trim, the reach checks - treats
-    an end within `_LANE_JOIN_FT` (30 ft) of another way as JOINED, so a web could pass every gate
+    an end within `_LANE_JOIN_FT` (25 ft; 30 then) of another way as JOINED, so a web could pass every gate
     while its pieces stopped 29 px short of one another. On Inashiro that was nine lanes in six
     components. The research the web exists to honor says "interconnected" (research/contents.json#homesteads),
     and a junction is a place where two treads meet, not two ends that nearly do.
@@ -135,7 +135,7 @@ def _touch_junctions(
         orphan piece dropped - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: unless it is a farmhouse's only way, a household reached across a neighbor's land owed none (`geom.lane_houses`)
         connector never dropped - research/questions/0081-village-lanes.drawing.html: the track out runs off the map
         final overrun cut - research/questions/0081-village-lanes.drawing.html: on the final pass a tail of 6-40 ft past the way it meets is cut
-        join reach - research/questions/0081-village-lanes.drawing.html: ends within 25 ft are joined; the code extends a free end within 30 ft (48 ft on the final pass) of another way to it
+        join reach - research/questions/0081-village-lanes.drawing.html: ends within 25 ft are joined; the code extends a free end within 25 ft (`_LANE_JOIN_FT`, and `_STUB_REACH_FT` on the final pass) of another way to it
         orphan reach - UNRESEARCHED: a stranded piece linked back to the network from up to `_ORPHAN_REACH` (150 ft)
         a house served - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a house within `_SERVE_FT` (100 ft) of a lane counts as served by it, where the page says 60 ft"""
     # A TOUCH MAY NOT PUSH A LANE INTO THE FABRIC IT WAS DRAWN CLEAR OF (feature 134 T50, 2026-08-29).

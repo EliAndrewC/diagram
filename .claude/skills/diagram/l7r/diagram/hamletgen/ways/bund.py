@@ -160,7 +160,7 @@ class RunOnBlocks:
                 `over_water` courses, each bridged by the crossings stage
             off the wet ground - research/questions/0081-village-lanes.drawing.html: no marsh, no wet toe
             off the crop - research/questions/0081-village-lanes.drawing.html: never across a dry plot
-            off the steadings - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: nothing built on a lane, 4 ft footpath gap"""
+            off the steadings - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: nothing built on a lane, and the run-on's middle at least 7 ft (`FOOTPATH_FABRIC_GAP`) off the steadings' fabric, gardens included"""
         if not off_the_fixtures(self.s, [a, b], width):
             return False
         if sum(1 for c, d in self.water if segments_cross(a, b, c, d)) > over_water:

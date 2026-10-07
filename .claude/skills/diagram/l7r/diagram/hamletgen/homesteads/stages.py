@@ -383,6 +383,7 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
         a rank grown along the field - UNRESEARCHED: once a round seats no one behind, the rank grows along the field - its ends a pitch out, half-seats half a pitch out along it at the rank's depth
         the rescue's offer along the field - UNRESEARCHED: in the rescue rounds the seats along the field are offered first - a pitch beyond each end house, half-seats half a pitch out at that house's own depth and a `_rank_step` more
         a yard's sun between ranks - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: `SUN_CORRIDOR_FT` more where the ranks climb north
+        front-row standoff from the field set by the homestead core's reach (house, yard, shed, well pocket; garden excluded) - UNRESEARCHED: the front seat stands the core's reach toward the field off its chord, at the largest house the roll can take; the garden's side is chosen later by the sun, so it is not counted
     """
     seat = plan.seat
     # THE SITE BOUNDARY FIRST (feature 226): one outline separating the buildable ground from everything the map holds,

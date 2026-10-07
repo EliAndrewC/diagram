@@ -294,57 +294,19 @@ def test_the_cluster_gateway_and_edge_fall_back_when_no_house_is_placed_yet() ->
     assert _cluster_edge_toward(s, (900.0, 500.0), fallback) != fallback
 
 
-def test_a_hairpin_arm_LONGER_than_the_cheap_cap_is_cut_once_the_cut_is_MEASURED() -> None:
-    """The repair's threshold and the check's threshold were different numbers, and nothing compared them.
-
-    `lanes_bend_like_paths` fails ANY turn past 140 degrees, while `_smooth_web` would only cut an arm
-    under `_ARM_FT` (40 ft). Everything in the band between was drawn, failed, and could not be repaired
-    by any pass - tripwire seed 47's lane 11 doubled back 62 ft. The cap was standing in for "do not
-    destroy a lane doing real work", so `_arm_cuttable` measures that instead: the arm goes when no
-    farmhouse loses its way and the tip left behind still reaches something."""
+def test_a_returning_leg_of_the_cut_length_or_more_is_a_lane_and_is_kept() -> None:
+    """0081: "a returning leg under 40 ft is cut" (`_ARM_FT`). A longer leg is a lane in its own right and is kept, whatever
+    the tip would reach - the measured band past the cap (40-90 ft, feature 134 T50) went with feature 328, its figures on no
+    page. The fixture's head is 82 ft, past the cut length, with a way 38 ft off its apex."""
     from l7r.diagram.hamletgen.ways import _smooth_web, _turn_deg
+    from l7r.diagram.hamletgen.ways.clearance import _ARM_FT
 
     assert _turn_deg((620.0, 300.0), (702.0, 300.0), (630.0, 318.0)) >= 140.0, "the fixture really is a hairpin"
-    s = _webbed([{"pts": [list(p) for p in _HAIRPIN], "w": 5}, dict(_TIP_WAY)])
-    _smooth_web(s, _FOLD_BAR, [], [])
-    kept = s.M["lanes"][0]["pts"]
-    assert kept[0] == [702.0, 300.0], f"the 82 ft arm is cut and the apex becomes the end: {kept}"
-    assert all(_turn_deg(tuple(kept[k - 1]), tuple(kept[k]), tuple(kept[k + 1])) < 140.0 for k in range(1, len(kept) - 1)), kept
-
-
-def test_the_arm_is_KEPT_when_a_farmhouse_would_lose_its_only_way() -> None:
-    """The measurement has to preserve what the cap was protecting. This house stands 95 ft off the
-    arm and 113 ft from every other tread, so cutting would strand it; the lane keeps its hairpin and
-    `lanes_bend_like_paths` then fires on it honestly, which is the visible, correct outcome."""
-    from l7r.diagram.hamletgen.ways import _smooth_web
-
-    s = _webbed([{"pts": [list(p) for p in _HAIRPIN], "w": 5}, dict(_TIP_WAY)])
-    s.M["houses"].append({"x": 620.0, "y": 205.0, "w": 40.0, "h": 25.0})
-    _smooth_web(s, _FOLD_BAR, [], [])
-    assert s.M["lanes"][0]["pts"] == [list(p) for p in _HAIRPIN], "a farmhouse with no other way keeps the arm that serves it"
-
-
-def test_the_arm_is_KEPT_when_the_tip_left_behind_would_reach_nothing() -> None:
-    """The other half of the measurement, and the one that binds most often. After the cut the tip IS
-    the lane's end, and an end owes `lanes_reach_something` a way within 40 ft or a farmhouse within
-    90 ft - so a cut that would trade a bend failure for a reach failure is refused. Same fixture with
-    the neighbouring way taken away."""
-    from l7r.diagram.hamletgen.ways import _smooth_web
-
-    s = _webbed([{"pts": [list(p) for p in _HAIRPIN], "w": 5}])
-    _smooth_web(s, _FOLD_BAR, [], [])
-    assert s.M["lanes"][0]["pts"] == [list(p) for p in _HAIRPIN], "nothing within reach of the tip, so the arm stays"
-
-
-def test_an_arm_past_the_long_cap_is_a_lane_rather_than_an_arm() -> None:
-    """`_LONG_ARM_FT` is the check's own farmhouse figure: past 90 ft the arm reaches ground the rest
-    of the lane cannot, so it is a lane in its own right and is kept whatever the measurement says.
-    The cap bounds how much of the picture one cut may change; it no longer decides the cut alone."""
-    from l7r.diagram.hamletgen.ways import _smooth_web
-
-    s = _webbed([{"pts": [list(p) for p in _LONG_HAIRPIN], "w": 5}, dict(_TIP_WAY)])
-    _smooth_web(s, _FOLD_BAR, [], [])
-    assert s.M["lanes"][0]["pts"] == [list(p) for p in _LONG_HAIRPIN], "a 100 ft arm is a lane, not an arm"
+    assert math.dist(tuple(_HAIRPIN[0]), tuple(_HAIRPIN[1])) >= _ARM_FT, "the fixture's arm is past the cut length"
+    for lanes in ([{"pts": [list(p) for p in _HAIRPIN], "w": 5}, dict(_TIP_WAY)], [{"pts": [list(p) for p in _LONG_HAIRPIN], "w": 5}]):
+        s = _webbed(lanes)
+        _smooth_web(s, _FOLD_BAR, [], [])
+        assert s.M["lanes"][0]["pts"] == lanes[0]["pts"], "a returning leg of 40 ft or more is kept"
 
 
 def test_a_lane_whittled_below_the_minimum_and_left_standing_alone_is_swept() -> None:
@@ -587,13 +549,15 @@ def test_trim_to_service_keeps_the_tail_that_is_a_houses_ONLY_way() -> None:
     """...but not at the price of stranding somebody. A house no other way reaches is passed as `keep`, and the
     run is then cut no further back than the point that still serves it - a dangling end is a blemish, an
     unreached farmhouse is a map that fails its own rule (cohort seed 39, when both were tightened together)."""
-    from l7r.diagram.hamletgen.consts import WEB_REACH_FT
+    from l7r.diagram.hamletgen.consts import WAY_END_REACH_FT
 
     run = [(0.0, 0.0), (100.0, 0.0), (200.0, 0.0), (500.0, 0.0)]
     houses = [(0.0, 20.0), (100.0, 20.0)]
-    outlier = (260.0, 80.0)  # 85 ft from the run's (200, 0) vertex: past the end bar, inside the service reach
+    outlier = (230.0, 40.0)  # 50 ft from the run's (200, 0) vertex: inside the page's 60 ft reach of a farmhouse
     out = hg.ways._trim_to_service(run, [], houses, keep=[outlier])
-    assert math.dist(out[-1], outlier) <= WEB_REACH_FT, "the point that serves the outlier survived the cut"
+    assert math.dist(out[-1], outlier) <= WAY_END_REACH_FT, "the point that serves the outlier survived the cut"
+    farther = (260.0, 80.0)  # 100 ft off: past the reach, so it keeps nothing (the 100 ft WEB_REACH_FT until feature 328)
+    assert math.dist(hg.ways._trim_to_service(run, [], houses, keep=[farther])[-1], farther) > WAY_END_REACH_FT
 
 
 def test_shadow_share_of_a_one_point_lane_is_nothing() -> None:

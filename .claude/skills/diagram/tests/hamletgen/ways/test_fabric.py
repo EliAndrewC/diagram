@@ -8,7 +8,7 @@ from l7r.diagram import hamletgen as hg
 from l7r.diagram.hamletgen.ways import _crosses_fabric, _fabric_hits, _margin_frame, _pull_back_to_service
 from l7r.diagram.settlement import Settlement, seg_dist
 
-from .._builders import a_plan
+from .._builders import a_plan, a_seat
 from ._builders import _hamlet_for_ways, _StubSettlement
 
 
@@ -16,7 +16,7 @@ def test_margin_frame_round_trips_a_point_through_arc_and_standoff() -> None:
     """`project` is the inverse of `__call__`, and the web depends on both agreeing: the cuts are
     computed from projected house positions and then mapped back out to screen."""
     plan = a_plan()
-    plan.seat = hg.seat_cluster(plan)
+    plan.seat = a_seat(plan)
     # A SPAN, and a `near` cloud, that describe one flank rather than the whole ring. Given neither,
     # the walk laps the field - and a frame that laps has no single answer for `project`, because two
     # stretches of it lie on top of each other. That is now capped at half the ring in the engine,
@@ -35,7 +35,7 @@ def test_margin_frame_without_a_house_cloud_falls_back_to_the_along_axis() -> No
     for a caller that does not - it walks the outline by the seat band's own lateral reach instead,
     which is the same test `front_row` makes."""
     plan = a_plan()
-    plan.seat = hg.seat_cluster(plan)
+    plan.seat = a_seat(plan)
     frame = _margin_frame(plan, 150.0)
     assert frame.arc > 0.0
     assert len(frame.pts) >= 2
@@ -162,7 +162,7 @@ def test_a_track_that_cannot_thread_the_cluster_takes_a_wider_berth() -> None:
     from l7r.diagram.hamletgen.ways import _crosses_fabric, _homestead_polys, _thread_the_fabric
 
     plan = a_plan()
-    plan.seat = hg.seat_cluster(plan)
+    plan.seat = a_seat(plan)
     s = _hamlet_for_ways()
     # a wall of steadings, with the run starting inside one of them: nothing can be clipped off the
     # front, so the straight answer is refused and the detour is the only thing left to try

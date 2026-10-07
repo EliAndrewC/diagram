@@ -15,30 +15,16 @@ from ..consts import (
     Pt,
 )
 from .clearance import _ARM_FT, _HAIRPIN_DEG, _clear_link, _clear_touch, bowtie_cut
-from .geom import _TOUCH_GAP, _components, _plen, _seg_cross, _turn_deg, lane_houses, polyline_len
-from .sweeps import _SERVE_FT
+from .geom import _TOUCH_GAP, _components, _plen, _seg_cross, _turn_deg, polyline_len
 
-_STUB_REACH_FT = 48.0  # the post-smoothing touch: a cut stub may stand a little past _LANE_JOIN_FT from the run it left (T99 unlock, seed 37)
-"""Research: stub link reach - UNRESEARCHED: a cut stub up to 48 ft from the run it left is linked back"""
-# HOW LONG AN ARM MAY BE AND STILL BE CUT, once the cut has been MEASURED rather than assumed safe
-# (feature 134 T50, 2026-08-28). `_ARM_FT` alone left a gap between this repair and the check it
-# exists to satisfy: `lanes_bend_like_paths` fires on ANY turn past `_HAIRPIN_DEG`, while the repair
-# would only cut an arm under 40 ft, so a hairpin on a longer arm was drawn and then failed - measured
-# on tripwire seed 47, whose lane 11 doubled back 62 ft at (2487, 274) and could not be repaired at
-# all. The length cap was standing in for "do not destroy a lane that is doing real work"; where that
-# is measured directly - no farmhouse loses its way, the tip left behind still reaches something, and
-# `_commit` still refuses anything that breaks the web into another piece - the cap buys nothing but a
-# bound on how much of the picture one cut may change. That bound is the check's OWN farmhouse figure:
-# past 90 ft the arm is reaching ground the rest of the lane cannot, so it is a lane in its own right
-# and not an arm, and it stays (the bends check then fires on it honestly, as it did before).
-_LONG_ARM_FT = 90.0
-"""Research: hairpin arm cut length - research/questions/0081-village-lanes.drawing.html: a returning leg under 40 ft is cut; the code cuts an arm up to 90 ft where no house loses its way"""
-# `lanes_reach_something`'s two figures, so a cut never trades one failure for the other: after the
-# cut the tip is the lane's END, and an end must reach another way or a farmhouse.
-_END_WAY_FT = 40.0
-"""Research: lane end reaches a way - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within 40 ft where the page says 60 ft (sweeps.py _REACH_FT holds 60 ft)"""
-_END_HOUSE_FT = 90.0
-"""Research: lane end reaches a house - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within 90 ft where the page says 60 ft, and a lane runs about 30 ft past its last house"""
+_STUB_REACH_FT = 25.0  # the post-smoothing touch: 0081's join reach (48 ft until feature 328, past it for the T99 unlock's seed 37)
+"""Research: stub link reach - research/questions/0081-village-lanes.drawing.html: a cut stub within 25 ft of the run it left is linked back, the page's join reach"""
+# HOW LONG AN ARM MAY BE AND STILL BE CUT: `_ARM_FT`, the lane page's "a returning leg under 40 ft is cut"
+# (research/questions/0081-village-lanes.drawing.html). A MEASURED BAND STOOD PAST IT until feature 328 (feature 134 T50,
+# 2026-08-28): an arm of 40 to 90 ft (`_LONG_ARM_FT`) was cut too where no farmhouse lost its way and the tip left behind
+# still reached a way within 40 ft (`_END_WAY_FT`) or a house within 90 (`_END_HOUSE_FT`) - tripwire seed 47's lane 11
+# doubled back 62 ft and no pass could repair it. None of the three figures is on a page, so the band went with them: a
+# returning leg of 40 ft or more is a lane in its own right and is kept, and the lane law judges the bend.
 _JOG_FT = 6.0  # a vertex this close to the chord that replaces it was a jog, not a bend
 """Research: jog chorded - research/questions/0081-village-lanes.drawing.html: a vertex within 6 ft of the chord is a jog"""
 _KNOT_FT = 25.0  # ends of different lanes this close are one junction, not several
@@ -170,8 +156,7 @@ def _smooth_web(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: l
          the assembled lane. It removes the zigzags and the dense 4 ft stepping in one move.
       2. HAIRPIN - a turn past `_HAIRPIN_DEG` with the shorter arm on one side: the arm is cut, unless
          its tip is the lane's only contact with another way. An arm under `_ARM_FT` is cut on its
-         length alone; a longer one up to `_LONG_ARM_FT` is cut only once `_arm_cuttable` has measured
-         that no farmhouse loses its way and the tip left behind still reaches something.
+         length alone; a longer one is a lane in its own right and is kept.
       3. BOW-TIE - where two lanes cross each other mid-run and one runs on past the crossing for
          less than `_ARM_FT`, that tail is cut back to the crossing, which becomes the junction.
       4. KNOTS - ends of different lanes within `_KNOT_FT` (25 ft) of one another meet at ONE node.
@@ -181,7 +166,7 @@ def _smooth_web(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: l
     Research:
         lane pulled taut - research/questions/0081-village-lanes.drawing.html: string-pulled to the furthest vertex a clear chord reaches
         hairpin cut - research/questions/0081-village-lanes.drawing.html: a turn past the hairpin angle loses a returning arm under 40 ft
-        a longer hairpin arm - UNRESEARCHED: an arm of 40 to 90 ft (`_LONG_ARM_FT`) cut only where no farmhouse loses its only way by it (a household reached across a neighbor's land owed none, `geom.lane_houses`); a longer one kept as a lane
+        a longer hairpin arm - research/questions/0081-village-lanes.drawing.html: a returning leg of 40 ft or more is not cut; it is kept as a lane
         bow-tie tail cut - research/questions/0081-village-lanes.drawing.html: a tail run on past a crossing for under the arm length is cut
         knots gathered - research/questions/0081-village-lanes.drawing.html: ends within 25 ft meet at one node
         shadow lane dropped - NONE: a lane lying inside another's stroke is one way recorded twice
@@ -215,28 +200,9 @@ def _smooth_web(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: l
     def _touching(q: Pt, segs: Sequence[tuple[Pt, Pt]]) -> bool:
         return any(seg_dist(q[0], q[1], a, b) <= 4.0 for a, b in segs)
 
-    _houses = [(float(h["x"]), float(h["y"])) for h in s.M.get("houses", [])]
-    _owed = lane_houses(s.M)  # ...and the ones an arm may be kept for: a household reached across a yard is owed none (feature 317)
-
-    def _near_segs(pt: Pt, segs: Sequence[tuple[Pt, Pt]]) -> float:
-        return min((seg_dist(pt[0], pt[1], a, b) for a, b in segs), default=float("inf"))
-
-    def _arm_cuttable(arm_len: float, arm: Poly, kept: Poly, tip: Pt, others: Sequence[tuple[Pt, Pt]]) -> bool:
-        """May this hairpin arm be cut? Under `_ARM_FT` it is too short to be doing anything, which is
-        the cheap answer this pass has always given. Between there and `_LONG_ARM_FT` the same question
-        is MEASURED, the way `_join_orphan_ways` measures whether a fragment may be dropped: every
-        farmhouse the arm serves must still be served without it, and the tip that becomes the lane's
-        new end must still reach a way or a house by `lanes_reach_something`'s own figures. Beyond
-        `_LONG_ARM_FT` the arm is a lane, not an arm, and it is kept."""
-        if arm_len < _ARM_FT:
-            return True
-        if arm_len > _LONG_ARM_FT:
-            return False
-        arm_segs = list(zip(arm, arm[1:], strict=False))
-        kept_segs = list(zip(kept, kept[1:], strict=False)) + list(others)
-        if any(_near_segs(h, arm_segs) <= _SERVE_FT < _near_segs(h, kept_segs) for h in _owed):
-            return False
-        return _near_segs(tip, others) <= _END_WAY_FT or min((math.dist(tip, h) for h in _houses), default=float("inf")) <= _END_HOUSE_FT
+    def _arm_cuttable(arm_len: float) -> bool:
+        """May this hairpin arm be cut? A returning leg under `_ARM_FT` (40 ft) is; a longer one is a lane (0081)."""
+        return arm_len < _ARM_FT
 
     for i, ln in enumerate(lanes):
         if (ln.get("connector") or ln.get("street")) or len(ln.get("pts") or []) < 3:
@@ -250,11 +216,11 @@ def _smooth_web(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: l
                 if _turn_deg(pts[k - 1], pts[k], pts[k + 1]) < _HAIRPIN_DEG:
                     continue
                 head, tail = polyline_len(pts[: k + 1]), polyline_len(pts[k:])
-                if head <= tail and _arm_cuttable(head, pts[: k + 1], pts[k:], pts[k], others) and not (_touching(pts[0], others) and not _touching(pts[k], others)):
+                if head <= tail and _arm_cuttable(head) and not (_touching(pts[0], others) and not _touching(pts[k], others)):
                     pts = pts[k:]
                     cut = True
                     break
-                if tail < head and _arm_cuttable(tail, pts[k:], pts[: k + 1], pts[k], others) and not (_touching(pts[-1], others) and not _touching(pts[k], others)):
+                if tail < head and _arm_cuttable(tail) and not (_touching(pts[-1], others) and not _touching(pts[k], others)):
                     pts = pts[: k + 1]
                     cut = True
                     break

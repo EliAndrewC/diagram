@@ -371,14 +371,14 @@ def canvas_for(target_acres: float, ftpx: float) -> tuple[int, int]:
 
 
 def band_extent(households: int, shape: str | None, ground: float | None = None) -> tuple[float, float]:
-    """The seat band's half-depth and length, `(dep, lat)`, from the household count and the cluster shape - the ONE
+    """The seat band's half-depth and half-length (the ellipse's semi-axes), `(dep, lat)`, from the household count and the cluster shape - the ONE
     derivation `seat_cluster` seats with and `seat_room` sizes the canvas with (feature 287, homes H31). Area is held
     (`households * HOMESTEAD_GROUND_FT^2`, the ground a homestead takes), so the shape sets only the band's aspect.
 
     Research:
         band area - UNRESEARCHED: households times HOMESTEAD_GROUND_FT squared; 0037 sizes only the yard
         band aspect by shape - UNRESEARCHED: CLUSTER_BAND_ASPECT
-        band floors and caps - UNRESEARCHED: depth 112 to 300 ft, length 240 to 1,100 ft"""
+        band floors and caps - UNRESEARCHED: half-depth 112 to 300 ft, half-length 240 to 1,100 ft"""
     asp = CLUSTER_BAND_ASPECT.get(shape or "crescent", 3.0)
     g = HOMESTEAD_GROUND_FT if ground is None else ground
     dep = max(112.0, min(math.sqrt(households * (g**2) / (asp * math.pi)), 300.0))
@@ -414,7 +414,7 @@ def seat_room(households: int, shape: str | None) -> float:
     A CLOSED-FORM BOUND FROM THE SEAT'S OWN QUANTITIES, not a tuned margin: the canvas grows by this on every side, so
     whichever margin faces the wind has the room. The frame crops to content, so the room costs no ink."""
     dep, lat = band_extent(households, shape)
-    return dep + SEAT_STANDOFF + max(lat * 0.5, WIND_BACK_MIN_DOT * lat + dep + BELT_REACH)
+    return dep + SEAT_STANDOFF + max(lat, WIND_BACK_MIN_DOT * lat + dep + BELT_REACH)  # `lat` is the band's half-length
 
 
 def _fall_into_wind(down_deg: float, windward: str) -> float:

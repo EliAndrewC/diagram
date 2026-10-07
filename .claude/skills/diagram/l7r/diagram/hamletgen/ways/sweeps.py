@@ -20,6 +20,8 @@ from .checks import stream_segs
 from .clearance import _bends_badly, _clear_touch, drop_end_nubs, existing_walk, may_write
 from .fabric import _LANE_JOIN_FT, _WEB_MIN_FT, _draw_web, _hits_a_steading
 from .geom import (
+    _HOOK_DEG,
+    _HOOK_FT,
     _TOUCH_GAP,
     WorkedGround,
     _aim_off,
@@ -106,10 +108,10 @@ def _bridge_collinear_breaks(s: Settlement, hard: list[Poly], walls: Sequence[Po
     Research:
         one way drawn as two is joined - UNRESEARCHED: a walkable gap in one way is closed, up to `_BREAK_SPAN_FT` within `_BREAK_BEARING_DEG`
         no loop closed - UNRESEARCHED: not where a walk under twice the gap already exists
-        a short gap closed at any bearing - research/questions/0081-village-lanes.drawing.html: ends that nearly meet are joined - a break of `_LANE_JOIN_FT` (30 ft) or less, whatever the two ways' bearings
+        a short gap closed at any bearing - research/questions/0081-village-lanes.drawing.html: ends that nearly meet are joined - a break of `_LANE_JOIN_FT` (25 ft) or less, whatever the two ways' bearings
         a bridge as direct as a path - UNRESEARCHED: refused where its route runs over `_PATH_DIRECTNESS` (2) times the gap
         bridge width - UNRESEARCHED: drawn at the wider of the two ways' widths
-        bridge clearance fallback - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: 4 ft off the fabric where 7 ft finds no route"""
+        bridge clearance fallback - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: none - the bridge's line keeps 7 ft (`WEB_FABRIC_GAP`) off the fabric or is not drawn"""
     made = 0
     # TWELVE PASSES, not four. Each closure adds a lane whose own ends sit beside existing ones, so a
     # map with several breaks needs several rounds - and Sawada ran out at four with three breaks
@@ -206,15 +208,10 @@ def _bridge_collinear_breaks(s: Settlement, hard: list[Poly], walls: Sequence[Po
             # breaks this pass was written for; across a 25 ft gap it has two and a half cells and
             # cannot represent a route at all.
             cell = min(10.0, max(_FINE_CELL, gap / 6.0))
+            # NO LOWER FALLBACK (feature 328): a retry at the 4 ft join clearance stood here (feature 126, "a lane and a
+            # plot fence share a line in a real village"), but the lane page keeps a lane's middle at least 7 ft from a
+            # garden fence, so where the fabric clearance finds no route the interruption stands
             span = _route(ta, tb, hard, walls, water, gap=WEB_FABRIC_GAP, cell=cell)
-            if not span:
-                # ...and where the fabric clearance finds nothing, a bridge retries at the JOIN
-                # clearance, because a bridge IS a join link and the joiner has routed at `_TOUCH_GAP`
-                # since feature 126 on the recorded reasoning that "a lane and a plot fence share a
-                # line in a real village". What makes that safe is what makes it safe for a link:
-                # `_draw_web(joins=True)` refuses outright to put a tread on a farmhouse. A garden bed
-                # may share a line with a lane; a steading may not.
-                span = _route(ta, tb, hard, walls, water, gap=_TOUCH_GAP, pad_mult=2.0, cell=cell)
             if not span or polyline_len(span) > _PATH_DIRECTNESS * max(gap, 1.0):
                 continue  # something is genuinely in the way HERE; the interruption is honest
             # A BRIDGE CLOSES A HOLE, NOT A LOOP - see `_BRIDGE_DETOUR`. If the walk already exists
@@ -352,21 +349,17 @@ def _join_orphan_ways(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wa
     return made  # pragma: no cover - six links is far more than any hamlet needs
 
 
-_FREE_STUB_FT = 20.0  # ft: a free end's last leg this short, past a kink, is a stub the lane does not need
-"""Research: free-end stub past a kink - UNRESEARCHED: a last leg of 20 ft or less"""
-_KINK_DEG = 50.0  # the `lanes_bend_like_paths` turn: two of them within ...
-"""Research: kink turn - research/questions/0081-village-lanes.drawing.html: 50 degrees"""
-_KINK_RUN_FT = 40.0  # ... this run of lane read as a kink, not a bend
-"""Research: kink run - research/questions/0081-village-lanes.drawing.html: two such turns within 40 ft"""
+_FREE_STUB_FT = _HOOK_FT  # ft: a free end's last leg this short, turning `_HOOK_DEG` or more, is a hook the lane loses
+"""Research: free-end stub - research/questions/0081-village-lanes.drawing.html: a last leg of 12 ft or less turning 90 degrees or more is cut (20 ft past two 50-degree turns until feature 328)"""
 
 
 def trim_free_stub(pts: list[Pt], others: Sequence[tuple[Pt, Pt]], touch: float = 6.0) -> list[Pt]:
-    """`pts` without a short stub at a FREE end - an end on no other lane - where the stub's corner is the second of two
-    sharp turns inside `_KINK_RUN_FT` (feature 261). Kuwabata's ring lane threaded a threshing yard and a garden to a
-    door and ended 19 ft past a jog, two turns of 84 and 72 degrees inside 40 ft; the router's jog cure could not take
-    the chord through the fabric, and the lane serves the door as well from the corner. Each end is asked in turn.
+    """`pts` without a short stub at a FREE end - an end on no other lane - where its last leg of `_FREE_STUB_FT` (12 ft)
+    or less turns `_HOOK_DEG` (90 degrees) or more: the lane page's hook (feature 328; until then a stub of 20 ft past
+    two 50-degree turns inside 40 ft, for Kuwabata's ring lane of feature 261, which ended 19 ft past a jog of 84 and 72
+    degrees). Each end is asked in turn.
 
-    Research: zigzag at a free end - research/questions/0081-village-lanes.drawing.html: the stub past two sharp turns within 40 ft is cut"""
+    Research: only a free-end stub of 12 ft or less (_FREE_STUB_FT) is cut - research/questions/0081-village-lanes.drawing.html: a lane's end loses its hook - a last leg of 12 ft or less (`_FREE_STUB_FT`) turning 90 degrees or more"""
 
     def turn(a: Pt, b: Pt, c: Pt) -> float:
         u, v = (b[0] - a[0], b[1] - a[1]), (c[0] - b[0], c[1] - b[1])
@@ -375,17 +368,17 @@ def trim_free_stub(pts: list[Pt], others: Sequence[tuple[Pt, Pt]], touch: float 
 
     out = list(pts)
     for _end in range(2):
-        if len(out) >= 4:
-            a, b, c, d = out[-4], out[-3], out[-2], out[-1]
+        if len(out) >= 3:
+            b, c, d = out[-3], out[-2], out[-1]
             free = min((seg_dist(d[0], d[1], p, q) for p, q in others), default=1e9) > touch
-            if free and math.dist(c, d) <= _FREE_STUB_FT and turn(a, b, c) >= _KINK_DEG and turn(b, c, d) >= _KINK_DEG and math.dist(b, c) <= _KINK_RUN_FT:
+            if free and math.dist(c, d) <= _FREE_STUB_FT and turn(b, c, d) >= _HOOK_DEG:
                 out = out[:-1]
         out.reverse()
     return out
 
 
-_PAST_CONNECTOR_FT = 80.0  # ft: a lane's loose end this far past its crossing of the connector overran the junction
-"""Research: overrun past the connector - research/questions/0081-village-lanes.drawing.html: a loose end up to 80 ft past it"""
+_PAST_CONNECTOR_FT = 40.0  # ft: a lane's loose tail under this past its crossing of the connector overran the junction
+"""Research: overrun past the connector - research/questions/0081-village-lanes.drawing.html: a tail of under 40 ft beyond a crossing is cut (80 ft until feature 328)"""
 
 
 def on_the_way(a: Pt, b: Pt, way: Sequence[tuple[Pt, Pt]], touch: float, step: float = 2.0) -> Pt | None:
@@ -401,12 +394,12 @@ def on_the_way(a: Pt, b: Pt, way: Sequence[tuple[Pt, Pt]], touch: float, step: f
 
 def cut_past_connector(pts: list[Pt], connector: Sequence[tuple[Pt, Pt]], others: Sequence[tuple[Pt, Pt]], houses: Sequence[Pt] = (), touch: float = 6.0) -> list[Pt]:
     """`pts` cut back to where it crosses the connector, when it runs on past it to a LOOSE end within `_PAST_CONNECTOR_FT`
-    (settlement-review of Mizuguchi, feature 261): a skeleton leg met the way out and ran 52 ft on past it and off the
+    (settlement-review of Mizuguchi, feature 261; within 80 ft until feature 328): a skeleton leg met the way out and ran 52 ft on past it and off the
     sheet, where the off-frame convention reads it as a second track leaving. Only the connector is asked, only a loose
     end - one on no other way - is cut, and never a tail that is some house's only way within `_SERVE_FT` (a lane that
     crosses the way out to reach a door beyond it), so no pass here moves another lane or strands a house.
 
-    Research: overrun past the connector cut - research/questions/0081-village-lanes.drawing.html: a loose tail up to 80 ft past the crossing, never a house's only way"""
+    Research: overrun past the connector cut - research/questions/0081-village-lanes.drawing.html: a loose tail under 40 ft past the crossing, never a house's only way"""
     out = list(pts)
     for _end in range(2):
         d = out[-1] if out else (0.0, 0.0)
@@ -418,7 +411,7 @@ def cut_past_connector(pts: list[Pt], connector: Sequence[tuple[Pt, Pt]], others
             run = 0.0
             for i in range(len(out) - 1, 0, -1):
                 hit = on_the_way(out[i], out[i - 1], connector, touch)
-                if hit is not None and run + math.dist(out[i], hit) <= _PAST_CONNECTOR_FT:
+                if hit is not None and run + math.dist(out[i], hit) < _PAST_CONNECTOR_FT:
                     tail, kept = [hit, *out[i:]], [*out[:i], hit]
                     rest = [*others, *connector]  # the kept fragment does not vouch for the houses its own cut would strand
                     mine = [h for h in houses if min(seg_dist(h[0], h[1], p, q) for p, q in zip(tail, tail[1:], strict=False)) <= _SERVE_FT]
@@ -585,8 +578,8 @@ def _drop_end_nubs(s: Settlement, hard: Sequence[Poly] = ()) -> int:
 
 _ROUTE_MIN_W = 5.0  # a cart way; anything under this is a footpath and may legitimately neck
 """Research: cart-width way - research/questions/0081-village-lanes.drawing.html: 5 ft and over"""
-_ROUTE_JOIN_FT = 30.0  # the same reach the toucher uses - this closes what it declined, not more
-"""Research: wide ends joined - research/questions/0081-village-lanes.drawing.html: within 30 ft"""
+_ROUTE_JOIN_FT = _LANE_JOIN_FT  # the same reach the toucher uses - this closes what it declined, not more
+"""Research: wide ends joined - research/questions/0081-village-lanes.drawing.html: within 25 ft"""
 
 
 def joined_at_width(q: Pt, b: Pt, ways: Sequence[Poly]) -> bool:
@@ -878,7 +871,7 @@ _DOUBLED_GAP_FT = 8.0  # ft: two treads nearer than this read as one smudged ban
 _DOUBLED_SHARE = 0.5  # ...and a lane running that close for half its own length is the doubled ink, whatever its ends do
 """Research: doubled share - CONVENTION: half the lane's length"""
 _REACH_FT = 60.0  # ft: `WAY_END_REACH_FT`, the reach to another way; here the reach a home-bank drop and a dooryard carry look within
-"""Research: end reach to a way - GUESS: 60 ft (smooth.py _END_WAY_FT holds 40 ft for the same reach)"""
+"""Research: end reach to a way - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: 60 ft"""
 _SERVE_FT = 100.0  # ft: a way serves a house within this - `farmhouses_reach_a_way`'s own figure, so a dropped fragment never strands one
 """Research: a way serves a house - GUESS: within 100 ft"""
 

@@ -19,9 +19,9 @@ from typing import Any
 from l7r.diagram.settlement import edge_dist, point_in_poly, rot_rect, seg_dist, segments_cross
 from l7r.diagram.settlement._geom.indexes import PointGrid
 
-from ..consts import Poly, Pt
+from ..consts import WEB_FABRIC_GAP, Poly, Pt
 from . import law
-from .bund import BRANCH_STEP_FT, BRANCH_WIDTH, run_on_target
+from .bund import BRANCH_STEP_FT, run_on_target
 from .checks import ford_crossing, unreached_houses
 from .fabric import _homestead_polys
 from .geom import WorkedGround, _components, polyline_len
@@ -402,9 +402,10 @@ def field_router(s: Any, brook: Poly) -> Callable[[Pt, Pt], Poly]:
     return route
 
 
-FIELD_ROUTE_GAP_FT = BRANCH_WIDTH / 2.0 + 3.0
-"""How far the routed field way keeps off the steadings: the field path's half-tread and the 2 ft `house_hit` pads a tread
-by, and a foot to spare - at the footpath's own 4 ft the router drew a 5 ft path 4.3 ft off a house corner and the law
-(`fouled_segment`) refused it.
+FIELD_ROUTE_GAP_FT = WEB_FABRIC_GAP
+"""How far the routed field way keeps its middle off the steadings: the lane page's 7 ft from a lane's middle to a garden
+fence (feature 328). It was the field path's half-tread and 3 ft, 5.5 ft - the 3 ft footpath's EDGE figure, not a centerline
+one; at the footpath's own 4 ft the router drew a 5 ft path 4.3 ft off a house corner and the law (`fouled_segment`)
+refused it.
 
-Research: field way off the steadings - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: 5.5 ft, the half-tread and 3 ft"""
+Research: field way off the steadings - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: 7 ft from the way's middle to a garden fence"""

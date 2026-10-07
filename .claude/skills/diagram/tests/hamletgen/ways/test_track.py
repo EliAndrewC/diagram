@@ -4,7 +4,7 @@ import pytest
 
 from l7r.diagram import hamletgen as hg
 
-from .._builders import SQUARE, a_plan
+from .._builders import SQUARE, a_plan, a_seat
 from ._builders import _hamlet_for_ways, _walled_settlement
 
 
@@ -16,7 +16,7 @@ def test_the_connector_track_leaves_the_frame_without_crossing_the_crop() -> Non
     drawing the bow is exactly how a connector came to be drawn through the rice with the router
     insisting it had checked."""
     plan = a_plan()
-    plan.seat = hg.seat_cluster(plan)
+    plan.seat = a_seat(plan)
     track = hg.connector_track(plan, (700.0, 200.0), avoid=[SQUARE])
     assert hg.path_violations(track, [SQUARE], None, []) == 0, "no segment of the drawn track may cross the crop"
     assert not (0 <= track[-1][0] <= plan.W and 0 <= track[-1][1] <= plan.H)  # ends off the canvas
@@ -49,7 +49,7 @@ def test_a_spur_cut_short_of_the_field_is_recorded_instead_of_drawn(monkeypatch)
     from l7r.diagram.hamletgen.ways import track
 
     s, plan = _walled_settlement()
-    plan.seat = hg.seat_cluster(plan)
+    plan.seat = a_seat(plan)
     monkeypatch.setattr(track, "spur_cut_at_the_fold", lambda pts, env: ([], "folded back short of the field - the test's own reason"))
     # the wall of houses leaves the connector no way out at all (`NoDryExit`, tested on its own below); this test is the spur's
     monkeypatch.setattr(track, "connector_dry_exit", lambda *a: [(1384.0, 700.0), (1600.0, 700.0)])
@@ -67,7 +67,7 @@ def _spur_drawn_from(monkeypatch, arm):  # type: ignore[no-untyped-def]
 
     s, plan = _walled_settlement()
     s.M.setdefault("fields", []).append({"outline": [list(q) for q in _RICE]})
-    plan.seat = hg.seat_cluster(plan)
+    plan.seat = a_seat(plan)
     monkeypatch.setattr(track, "spur_cut_at_the_fold", lambda pts, env: (list(arm), None))
     monkeypatch.setattr(track, "connector_dry_exit", lambda *a: [(1384.0, 700.0), (1600.0, 700.0)])
     track.stage_track(s, plan)
@@ -128,7 +128,7 @@ def test_a_track_that_starts_in_a_grove_band_is_not_drawn_across_it() -> None:
     from l7r.diagram.hamletgen.ways import _crosses_fabric, _homestead_polys, _thread_the_fabric
 
     plan = a_plan()
-    plan.seat = hg.seat_cluster(plan)
+    plan.seat = a_seat(plan)
     s = _hamlet_for_ways()
     s.M["houses"] = [{"x": 760.0, "y": 500.0 + dy, "w": 60.0, "h": 40.0, "rot": 0.0, "kind": "plain"} for dy in range(0, 401, 40)]
     s.M["groves"] = [{"x": 700.0, "y": 700.0, "w": 40.0, "h": 80.0, "rot": 0.0, "of": [760.0, 700.0], "face": [-1, 0], "depth": "deep"}]
@@ -145,7 +145,7 @@ def test_where_no_route_rounds_the_band_the_track_keeps_its_far_part(monkeypatch
     from l7r.diagram.hamletgen.ways import _crosses_fabric, _homestead_polys, track
 
     plan = a_plan()
-    plan.seat = hg.seat_cluster(plan)
+    plan.seat = a_seat(plan)
     s = _hamlet_for_ways()
     s.M["houses"] = [{"x": 760.0, "y": 500.0 + dy, "w": 60.0, "h": 40.0, "rot": 0.0, "kind": "plain"} for dy in range(0, 401, 40)]
     s.M["groves"] = [{"x": 700.0, "y": 700.0, "w": 40.0, "h": 80.0, "rot": 0.0, "of": [760.0, 700.0], "face": [-1, 0], "depth": "deep"}]
@@ -164,7 +164,7 @@ def test_a_connector_with_no_dry_bearing_takes_the_dry_neck() -> None:
     from l7r.diagram.hamletgen.ways.track import wet_grown_by_the_lane
 
     plan = a_plan()
-    plan.seat = hg.seat_cluster(plan)
+    plan.seat = a_seat(plan)
     start = (700.0, 200.0)
     # a marsh boxing the start in on every side but a 60 ft neck at the north wall's west end (x 500-560)
     box = [
@@ -184,7 +184,7 @@ def test_a_gateway_with_no_dry_way_out_is_refused_by_name() -> None:
     from l7r.diagram.hamletgen.ways.track import NoDryExit
 
     plan = a_plan()
-    plan.seat = hg.seat_cluster(plan)
+    plan.seat = a_seat(plan)
     plan.sink_pond = (2000.0, 2000.0, 50.0, 40.0)
     ring = [[(480.0, 60.0), (920.0, 60.0), (920.0, 80.0), (480.0, 80.0)], [(480.0, 60.0), (500.0, 60.0), (500.0, 340.0), (480.0, 340.0)]]
     ring += [[(900.0, 60.0), (920.0, 60.0), (920.0, 340.0), (900.0, 340.0)], [(480.0, 320.0), (920.0, 320.0), (920.0, 340.0), (480.0, 340.0)]]
@@ -215,7 +215,7 @@ def test_a_spur_with_no_way_clear_of_the_steadings_is_recorded_dropped(monkeypat
     from l7r.diagram.hamletgen.ways import track
 
     s, plan = _walled_settlement()
-    plan.seat = hg.seat_cluster(plan)
+    plan.seat = a_seat(plan)
     monkeypatch.setattr(track, "_thread_the_fabric", lambda *a, **k: [])
     monkeypatch.setattr(track, "connector_dry_exit", lambda *a: [(1384.0, 700.0), (1600.0, 700.0)])
     track.stage_track(s, plan)
@@ -227,7 +227,7 @@ def test_a_bearing_that_only_clips_the_field_is_kept_for_route_around() -> None:
     """A crop clip is the one fault the sweep may still hand back: `route_around` bends the drawn track round the field
     afterwards (ways W24). Walled in by crop on every side but dry and clear of the steadings, the best bearing stands."""
     plan = a_plan()
-    plan.seat = hg.seat_cluster(plan)
+    plan.seat = a_seat(plan)
     fence = [[(480.0, 60.0), (920.0, 60.0), (920.0, 80.0), (480.0, 80.0)], [(480.0, 60.0), (500.0, 60.0), (500.0, 340.0), (480.0, 340.0)]]
     fence += [[(900.0, 60.0), (920.0, 60.0), (920.0, 340.0), (900.0, 340.0)], [(480.0, 320.0), (920.0, 320.0), (920.0, 340.0), (480.0, 340.0)]]
     track = hg.connector_track(plan, (700.0, 200.0), avoid=fence)
@@ -263,7 +263,7 @@ def test_the_connector_sweep_refuses_a_bearing_with_a_house_on_it_and_takes_the_
     from l7r.diagram.hamletgen.ways.fabric import _fabric_hits
 
     plan = a_plan()
-    plan.seat = hg.seat_cluster(plan)
+    plan.seat = a_seat(plan)
     free = hg.connector_track(plan, (700.0, 200.0), avoid=[SQUARE])
     box = _box_on(free[0], free[1])
     assert law.breaks_through(free, [box]), "the violating case: the ideal bearing runs through the house"
@@ -328,7 +328,7 @@ def _the_choice_watched(monkeypatch, polder: bool):  # type: ignore[no-untyped-d
     from l7r.diagram.hamletgen.ways import gateway, track
 
     s, plan = _walled_settlement()
-    plan.seat = hg.seat_cluster(plan)
+    plan.seat = a_seat(plan)
     if polder:
         plan.field_archetype = sorted(POLDER_ARCHETYPES)[0]
     calls: dict = {}
@@ -370,7 +370,7 @@ def test_stage_track_draws_the_recorded_track_as_chosen_on_both_branches(monkeyp
     from l7r.diagram.hamletgen.ways import track
 
     s, plan = _walled_settlement()
-    plan.seat = hg.seat_cluster(plan)
+    plan.seat = a_seat(plan)
     if polder:
         plan.field_archetype = sorted(POLDER_ARCHETYPES)[0]
     s.M["way_out_track"] = [[1384.0, 700.0], [1500.0, 700.0], [1600.0, 700.0]]

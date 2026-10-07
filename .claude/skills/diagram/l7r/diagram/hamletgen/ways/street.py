@@ -218,7 +218,7 @@ def join_to(path: list[Pt], network: Sequence[tuple[Pt, Pt]], hard: list[Poly], 
 
     Research:
         street joined to the network - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: one network
-        joining leg's berth - UNRESEARCHED: routed `FOOTPATH_FABRIC_GAP` (4 ft) off the fabric"""
+        joining leg's berth - UNRESEARCHED: routed `FOOTPATH_FABRIC_GAP` (7 ft) off the fabric"""
     if len(path) < 2 or not network:
         return path
 

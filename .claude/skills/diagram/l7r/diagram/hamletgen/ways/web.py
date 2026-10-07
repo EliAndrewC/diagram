@@ -83,7 +83,8 @@ def _lay_skeleton(s: Settlement, plan: SitePlan, frame: _margin_frame, arcs: Seq
         skeleton margin off the hard ground - UNRESEARCHED: 20 px off the crop, the marsh and the ditches
         routed round the steadings - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: nothing is built on a lane
         skeleton width - research/questions/0081-village-lanes.drawing.html: 5 ft
-        skeleton span floor - UNRESEARCHED: the span floored at one bundle pitch (100 ft) each way; a piece under 30 ft not laid"""
+        skeleton span floor - UNRESEARCHED: the span floored at one bundle pitch (100 ft) each way; a piece under 30 ft not laid
+        skeleton arm clipped WEB_FABRIC_GAP (7 ft) off the steadings and trimmed back to the last point serving a house - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane's middle keeps at least 7 ft clear of a garden fence, and a lane end that reaches nothing is pulled back to the last house it serves"""
     if len(arcs) < 2:
         return []
     arc0 = (min(arcs) + max(arcs)) / 2.0
@@ -244,13 +245,13 @@ def _drop_collapsed(s: Settlement) -> list[int]:
 
 
 def cut_the_overruns(s: Settlement) -> None:
-    """A free end's stub past a kink is taken off (feature 261: Kuwabata's ring lane, `trim_free_stub`), and a lane that
+    """A free end's hook is taken off (feature 261: Kuwabata's ring lane, `trim_free_stub`), and a lane that
     ran on past the connector to a loose end is cut where it met it (`cut_past_connector`); the connector itself is left.
 
     LIFTED TO MODULE LEVEL (feature 261, the GM's 2026-08-28 ruling on inner functions): it was the tail of `stage_web`,
     and once main's placer re-laid the pool no shipped roll rewrote a lane here, so the rewrite went uncovered.
 
-    Research: overrun cut - research/questions/0081-village-lanes.drawing.html: a free stub past a kink, a loose tail past the connector"""
+    Research: overrun cut - research/questions/0081-village-lanes.drawing.html: a free end's hook, a loose tail under 40 ft past the connector"""
     for _i, _ln in enumerate(s.M.get("lanes") or []):
         _p = [(float(x), float(y)) for x, y in _ln.get("pts") or []]
         _others = [
@@ -449,18 +450,19 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
         lanes after the houses - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html
         lane runs past its last steading - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: about 30 ft
         back lane ties - research/questions/0081-village-lanes.html: cross-ways frame the back lanes
-        back lane tie spacing - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the ties about three pitches (3 x BUNDLE_PITCH) apart
+        back lane tie spacing - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: cross lanes about one to every 300 ft - `web_cuts` at a reach of 1.5 x BUNDLE_PITCH (150 ft), so the ties stand up to about 300 ft apart
         belt crossed not followed - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: a lane
             may cross a shelter belt, the planting resuming on both sides, but not run its length
         door path reach - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: STEADING_ARRIVAL_FT 12 ft off the steading's built ground
-        door path distance - UNRESEARCHED: DOOR_REACH_FT 40 ft
+        door path distance - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: DOOR_REACH_FT 60 ft, the page's reach at which a way counts as reaching a farmhouse
         web cut spacing - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every house within WEB_REACH_FT (100 ft) of a cut, so the cuts stand up to about twice that apart
         a cut's room - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: MIN_WEB_GAP, 7 ft clear of a garden fence on each side and a 4 ft tread, within the page's 3 ft footpath to 5 ft spine
-        a web lane's span - UNRESEARCHED: only the houses within 1.5 times WEB_REACH_FT of its cut
+        a web lane's span - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane runs only along the houses it serves - those within WEB_REACH_FT (100 ft) of its cut
         web lanes off the hard ground - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html, research/questions/0081-village-lanes.drawing.html: a stretch that would cross the field, a crop or wet ground is cut out
         web lane margin off the hard ground - UNRESEARCHED: WEB_HARD_GAP 8 ft off the field, the crop and the marsh
         web lanes off the water - UNRESEARCHED: web cuts and joins clipped at the watercourses and drawn channels, no web lane crossing water
-        orphan stub joined - UNRESEARCHED: an orphan stub joined within _STUB_REACH_FT (48 ft), past 0081's 25 ft join reach
+        orphan stub joined - UNRESEARCHED: an orphan stub joined within _STUB_REACH_FT, held to 0081's 25 ft join reach (research/questions/0081-village-lanes.drawing.html); joining a stub into the one network is not that page's end-to-end rule
+        web lanes routed round the households' reserved wood seats as fabric - UNRESEARCHED: every pass clips and routes round each reserved wood seat by the copse's lane buffer, as it does a steading
         row streets laid - research/questions/0033-row-villages-resson.drawing.html
         every farmhouse served - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every farmhouse but the few reached across a neighbor's land, which `checks.unreached_houses` counts reached through their neighbor's chain
     """
@@ -541,7 +543,7 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # houses at that cut - a tread that serves nobody, which is exactly what `lanes_reach_something`
     # exists to catch, and it was 13 of 24 cohort seeds. So each lane's extent is read off the
     # houses within reach of ITS OWN cut, not off the cluster as a whole.
-    local = WEB_REACH_FT * 1.5
+    local = WEB_REACH_FT
 
     def _extent(cuts_at: float, along: list[float], across: list[float]) -> tuple[float, float]:
         near_by = [v for v, w in zip(along, across, strict=False) if abs(w - cuts_at) <= local] or along
@@ -577,12 +579,13 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
         # framework is the parallels PLUS the ties. We were drawing only the parallels.
         #
         # The ties go where a lateral can physically pass - the gaps between steadings - which is the
-        # same question `web_cuts` answers, asked along the other axis. They are spaced about three
-        # bundle pitches apart rather than one, so the form still reads as a laid-out place with a
-        # few cross-ways, not as the alleys form with extra steps.
+        # same question `web_cuts` answers, asked along the other axis. They stand about one to every
+        # 300 ft of the cluster's length (research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html):
+        # a reach of 1.5 pitches each way, so cuts up to three pitches apart - the form still reads as
+        # a laid-out place with a few cross-ways, not as the alleys form with extra steps.
         if cuts:
             lo_c, hi_c = min(cuts) - pad, max(cuts) + pad
-            for tie in web_cuts(arcs, 3.0 * BUNDLE_PITCH, MIN_WEB_GAP):
+            for tie in web_cuts(arcs, 1.5 * BUNDLE_PITCH, MIN_WEB_GAP):
                 lines.append([frame(tie, lo_c + (hi_c - lo_c) * i / 8.0) for i in range(9)])
 
     crops = crop_polys(s)

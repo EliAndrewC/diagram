@@ -189,7 +189,7 @@ def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), drain: Poly | N
         brook penalty weight - GUESS: 3.0
         brook reach on the band - UNRESEARCHED: a band point within 30 ft of the brook counts as on the water
         belt room on the canvas - CONVENTION: scored, refused past BELT_ROOM_MAX_OFF
-        band on the canvas - CONVENTION: the seat center at least half the band's length inside the frame
+        band on the canvas - CONVENTION: the seat center at least half the band's length (`lat`, the band's semi-axis along the field) inside the frame
         dry way out - research/questions/0081-village-lanes.drawing.html: a walled-in head is refused"""
     env = plan.envelope
     cen = centroid(env)
@@ -256,7 +256,9 @@ def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), drain: Poly | N
         # simply does not get built: seed 106 seated 7 farmhouses of a declared 15, with the band's
         # center 56 px off the east edge. The map is not wrong, the seat is; another margin will do.
         seat_c = (mid[0] + nx * (dep + 12.0), mid[1] + ny * (dep + 12.0))
-        if not (lat * 0.5 <= seat_c[0] <= plan.W - lat * 0.5 and lat * 0.5 <= seat_c[1] <= plan.H - lat * 0.5):
+        # `lat` is already HALF the band's length (`band_extent`: dep and lat are the ellipse's semi-axes), so the seat
+        # center stands a whole `lat` inside the frame - half the band's length, as the claim reads (feature 328)
+        if not (lat <= seat_c[0] <= plan.W - lat and lat <= seat_c[1] <= plan.H - lat):
             continue
         # HARD 4: THE CLUSTER IS NOT BUILT ON THE WET TOE (GM 2026-08-12). `hinterland` lays reed
         # marsh across everything below the crop's low point, and on a crescent cluster hugging the

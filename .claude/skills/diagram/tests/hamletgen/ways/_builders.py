@@ -129,10 +129,10 @@ def _webbed(lanes: list[dict[str, object]]) -> object:
 # A hairpin whose short HEAD runs back west along y=300 while the rest of the lane runs west along
 # y=318, with a bar between them so the chord over the fold is blocked and the arm cut is the only
 # way out. The apex is (702, 300); cutting the head leaves the apex as the lane's new end.
-_HAIRPIN = [[620.0, 300.0], [702.0, 300.0], [630.0, 318.0], [560.0, 318.0]]  # head 82 ft: past _ARM_FT, inside _LONG_ARM_FT
-_LONG_HAIRPIN = [[602.0, 300.0], [702.0, 300.0], [630.0, 318.0], [560.0, 318.0]]  # head 100 ft: past _LONG_ARM_FT
+_HAIRPIN = [[620.0, 300.0], [702.0, 300.0], [630.0, 318.0], [560.0, 318.0]]  # head 82 ft: past _ARM_FT
+_LONG_HAIRPIN = [[602.0, 300.0], [702.0, 300.0], [630.0, 318.0], [560.0, 318.0]]  # head 100 ft: past _ARM_FT
 _FOLD_BAR = [[(560.0, 306.0), (700.0, 306.0), (700.0, 312.0), (560.0, 312.0)]]
-_TIP_WAY = {"pts": [[728.0, 272.0], [790.0, 272.0]], "w": 5}  # 38 ft off the apex - inside _END_WAY_FT
+_TIP_WAY = {"pts": [[728.0, 272.0], [790.0, 272.0]], "w": 5}  # 38 ft off the apex
 
 
 # ---------------------------------------------------------------------------------------------

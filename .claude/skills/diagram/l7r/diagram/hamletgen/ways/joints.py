@@ -406,11 +406,11 @@ def center_lane_ends(s: Settlement) -> int:
     return moved
 
 
-# TWO ENDS THIS NEAR ARE ONE WAY WITH A HOLE IN IT: nearer than a steading's keep-out from a web lane (`WEB_FABRIC_GAP`,
-# 7 ft) plus the two treads' half-widths (3 ft for the connector, 1.5 for a footpath), so nothing a lane keeps clear of can
-# stand in the gap - and wider than `_TOUCH_GAP`, where `center_lane_ends` already sets an end on the tread it stops on.
-_MEET_FT = 11.5
-"""Research: ends that nearly meet - research/questions/0081-village-lanes.drawing.html: within 11.5 ft, joined end to end"""
+# TWO ENDS THIS NEAR ARE ONE WAY WITH A HOLE IN IT: the lane page's own figure, "ends within 25 ft of one another are
+# joined at a single point" (feature 328; it was 11.5 ft, a steading's keep-out plus two half-treads, on no page) - and
+# wider than `_TOUCH_GAP`, where `center_lane_ends` already sets an end on the tread it stops on.
+_MEET_FT = 25.0
+"""Research: ends that nearly meet - research/questions/0081-village-lanes.drawing.html: within 25 ft, joined at a single point"""
 
 
 def meet_end_to_end(s: Settlement, fabric: Sequence[Poly] = ()) -> int:
@@ -422,7 +422,7 @@ def meet_end_to_end(s: Settlement, fabric: Sequence[Poly] = ()) -> int:
     end-meets-end branch was refused its move and skipped the end, and the connector the later passes laid there stood
     6.9 ft off it - one way in the picture, two networks at the 4 ft ink tolerance (`lanes_form_one_network`).
 
-    Research: ends that nearly meet are joined - research/questions/0081-village-lanes.drawing.html: the free end moved on"""
+    Research: ends that nearly meet are joined - research/questions/0081-village-lanes.drawing.html: ends within 25 ft (`_MEET_FT`), the free end moved onto the other's"""
     from .clearance import may_write
 
     lanes: list[dict[str, Any]] = s.M.get("lanes") or []
@@ -492,8 +492,8 @@ def split_at_crossings(s: Settlement) -> int:
     return cuts
 
 
-_SHORT_LEG_FT = 25.0  # a last leg this short, with the joint beyond it, is read as one turn (a map drawing convention)
-"""Research: two turns read as one - UNRESEARCHED: across a leg under 25 ft"""
+_SHORT_LEG_FT = 40.0  # a last leg this short, with the joint beyond it, is a returning leg (0081; 25 ft until feature 328)
+"""Research: two turns read as one - research/questions/0081-village-lanes.drawing.html: a returning leg under 40 ft is cut"""
 
 
 def hairpin_over_a_short_leg(a: Pt, b: Pt, j: Pt, c: Pt) -> bool:
@@ -502,7 +502,7 @@ def hairpin_over_a_short_leg(a: Pt, b: Pt, j: Pt, c: Pt) -> bool:
     the limit, which is how the joint pass missed one (the 269 landing's round-2 review of Kuwabata: 79 + 90 degrees
     across a 15 ft leg, a lane and the connector running back side by side 15-40 ft apart).
 
-    Research: no hairpin - UNRESEARCHED: 140 degrees summed over a leg under 25 ft"""
+    Research: no hairpin - research/questions/0081-village-lanes.drawing.html: a turn past 140 degrees, summed over a returning leg under 40 ft"""
     if math.dist(b, j) > _SHORT_LEG_FT:
         return False
 

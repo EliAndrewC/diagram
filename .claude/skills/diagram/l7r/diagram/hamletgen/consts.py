@@ -133,9 +133,10 @@ Research: front row's reach per shape - research/questions/0031-clustered-and-sc
 # the adjoining house", which is a way people build right up against. Holding 40 ft off both verges
 # of every web lane reserved the middle of the cluster and pushed the houses out - measured on the
 # four pool hamlets, the long axis grew 51%, 58%, 15% and 97%. This is the lane's own half-tread
-# plus a hand's breadth: enough that a wall is not drawn ON the tread, and no more.
-WEB_CLEARANCE = 28.0
-"""Research: web lane's no-build corridor - UNRESEARCHED: 28 ft, byres and sheds kept off the tread; 0081 gives no corridor"""
+# plus a hand's breadth: enough that a wall is not drawn ON the tread, and no more. Since feature 328 it is the lane page's
+# own room between two homesteads, 18 ft - 7 ft at each garden fence and a 4 ft tread (it was 28, on no page).
+WEB_CLEARANCE = 18.0
+"""Research: web lane's no-build corridor - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane's room of 18 ft, 7 ft at each garden fence and a 4 ft tread between"""
 
 # THE LEAST ROOM BETWEEN TWO STEADINGS A WEB LANE WILL THREAD, in feet. `web_cuts` only cuts where a
 # gap is at least this wide, so a lane is placed where one can actually be walked rather than driven
@@ -185,8 +186,11 @@ WEB_FABRIC_GAP = 7.0
 # NOT LARGER, and feature 126 recorded why: it clipped its skeleton arms at 20 px, which demands a
 # 40 px clear corridor between two steadings that a packed cluster does not have, so arms were
 # clipped out of existence entirely. A track only needs to reach the cluster's edge, not thread it.
-TRACK_FABRIC_GAP = 16.0
-"""Research: track off a steading - UNRESEARCHED: 16 ft to the footprint, set off the houses_off_corridors check's 14"""
+#
+# 7 SINCE FEATURE 328: the 16 ft was on no page, and the check it was set off (`houses_off_corridors`) is retired; the lane
+# page keeps a lane's middle at least 7 ft from a garden fence, and a track is held to that figure like every other way.
+TRACK_FABRIC_GAP = WEB_FABRIC_GAP
+"""Research: track off a steading - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: 7 ft from the track's middle to a garden fence, as every lane"""
 
 # A FOOTPATH IS NOT A LANE, and it may squeeze where a lane may not. This is the clearance for the
 # path from an outlying steading's door to the nearest way - the thing the sources describe as
@@ -194,14 +198,17 @@ TRACK_FABRIC_GAP = 16.0
 # plots, walked in single file. It still clears the overlap matrix's 3 ft half-tread with room over,
 # but it lets a path thread a gap a back lane could not, which is the difference between a house
 # being reached and a house being 296 ft from anything with no route at all.
-# 4 ft, and the number is doing real work at the margin. The overlap matrix sizes every lane at 6 ft
+# 7 ft SINCE FEATURE 328, the lane page's own figure: a lane's middle, a 3 ft footpath's included, keeps at least 7 ft
+# clear of a garden fence (research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html) - a
+# footpath threads the same 18 ft room a lane does, so its gap is the web's (`WEB_FABRIC_GAP`). The history of the old
+# 4 ft, kept: the number was doing real work at the margin. The overlap matrix sizes every lane at 6 ft
 # wide whatever its record says, so 3 ft is the hard floor and this is 3 plus a hand's breadth; the
 # drawn tread is 3 px, so the ink clears a wall by better than two of its own widths. At 5 a hemmed-in
 # farmstead on cohort seed 41 had no route to the network at all, at any target - the gaps between
 # its neighbors' plots were simply narrower than a lane-and-two-margins. A footpath is the one way on
 # the map that is walked in single file, and this is the width that says so.
-FOOTPATH_FABRIC_GAP = 4.0
-"""Research: footpath off a plot - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: 4 ft, single file"""
+FOOTPATH_FABRIC_GAP = WEB_FABRIC_GAP
+"""Research: footpath off a plot - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: 7 ft from the path's middle to a garden fence, a 3 ft footpath included"""
 
 # HOW FAR A WEB LANE STAYS OFF THE CROP, THE TOE AND THE MARSH, in feet.
 #
@@ -272,7 +279,7 @@ rule everywhere else by most of a house: measured the same afternoon, it let thr
 distance, and the three 60 ft clauses are untouched.
 
 12 ft is DERIVED from the clip, not chosen. A tread is cut `WEB_FABRIC_GAP` (7 ft) clear of a plot it runs beside, or
-`FOOTPATH_FABRIC_GAP` (4) for a footpath, and `clear_runs` walks its candidate in 4 ft steps - so a path that genuinely
+`FOOTPATH_FABRIC_GAP` (the same 7 since feature 328; 4 when these ends were measured) for a footpath, and `clear_runs` walks its candidate in 4 ft steps - so a path that genuinely
 reaches a boundary records its last point 7-11 ft off it and cannot record it nearer. Measured: the two straggler ends
 at 7.8 and 6.9 ft from the garden they stop at, Inashiro's byre arm at 8.4, against the next-nearest built ground on any
 of those three maps at 24 ft. Anything past 12 is a tread that stopped somewhere else.
@@ -285,9 +292,10 @@ Research: a lane end arrives at a steading - GUESS research/questions/0246-how-o
 # the check because it is the reason the number is 40 and not something else: it is the same figure
 # `lanes_reach_something` used for "this end has met another way", deliberately - the two rules are about
 # the same fact from opposite ends, and letting them disagree would let a lane be connected for one and
-# isolated for the other.
-LANE_JOIN_FT = 40.0
-"""Research: two lanes as one network - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: treads within 40 ft count as one network (the page joins ends within 25 ft)"""
+# isolated for the other. 25 SINCE FEATURE 328: the lane page's own join reach, "ends within 25 ft of one another are
+# joined at a single point" (40 was on no page).
+LANE_JOIN_FT = 25.0
+"""Research: two lanes as one network - research/questions/0081-village-lanes.drawing.html: treads within 25 ft count as one network, the page's join reach"""
 
 # How far off a lane's centerline a frontage seat is offered. This is a PLACEMENT decision and is
 # deliberately not derived from LANE_CLEARANCE, which is the corridor rule: fronting a lane excuses

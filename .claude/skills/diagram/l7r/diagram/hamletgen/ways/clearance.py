@@ -18,7 +18,7 @@ from ..consts import (
     Poly,
     Pt,
 )
-from .geom import _TOUCH_GAP, _turn_deg, fabric_clearance, polyline_len, push_out_of, stroke_quad
+from .geom import _turn_deg, fabric_clearance, polyline_len, push_out_of, stroke_quad
 from .keeper import kept
 
 
@@ -265,11 +265,11 @@ def may_write(old_pts: Sequence[Pt], new_pts: Sequence[Pt], width: float, fabric
     required to fix itself either, because the pass that is moving it is not the pass that owns it.
 
     Research:
-        no nearer the fabric - UNRESEARCHED: half the width plus 2 ft, at least 4 ft, off the fabric (the web's own 7 ft is held where its gap is cut)
+        no nearer the fabric - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane's middle at least 7 ft (`WEB_FABRIC_GAP`) off the fabric, or no nearer than it already was
         no tread on the fabric - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: nothing built on a lane
         no new bad bend - research/questions/0081-village-lanes.drawing.html: no hairpin or zigzag added
     """
-    bar = max(_TOUCH_GAP, float(width or 5.0) / 2.0 + 2.0)
+    bar = WEB_FABRIC_GAP  # a lane's middle at least 7 ft from a garden fence (0246); half the width + 2 ft, at least 4, until feature 328
     if fabric_clearance(new_pts, fabric) < min(fabric_clearance(old_pts, fabric), bar) - 1e-9:
         return False
     # ...AND JUDGE THE DRAWN TREAD, NOT ONLY THE CENTERLINE (feature 291, found by the cohort's matrix on seed 20). A
@@ -299,10 +299,11 @@ def stroke_hits(pts: Sequence[Pt], width: float, fabric: Sequence[Poly]) -> set[
     return hits
 
 
-def _clear_touch(a: Pt, b: Pt, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]], gap: float = _TOUCH_GAP) -> bool:
-    """`_clear_link` at footprint margins - for the short link that closes a junction (see `_TOUCH_GAP`).
+def _clear_touch(a: Pt, b: Pt, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]], gap: float = WEB_FABRIC_GAP) -> bool:
+    """`_clear_link` at footprint margins - for the short link that closes a junction.
 
-    THE DEFAULT 4 ft BRUSH STAYS - three wider margins were measured and each broke the reference hamlet
+    THE DEFAULT IS THE LANE PAGE'S 7 ft SINCE FEATURE 328 (research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:
+    a lane's middle at least 7 ft from a garden fence) - the history of the 4 ft brush it replaced, kept: three wider margins were measured and each broke the reference hamlet
     (feature 137 T03, 2026-08-28): 7 ft (the fabric margin) put the T32 zigzag back beside the notice
     board and took the 24-cohort to 1/24; 6 ft for everything cost Inashiro three checks; 6 ft for
     gardens/yards/sheds with 4 for houses still cost it `lanes_bend_like_paths`. The margin was a
@@ -319,7 +320,7 @@ def _clear_touch(a: Pt, b: Pt, hard: list[Poly], walls: Sequence[Poly], water: l
     put there by a string-pull that tested its own chord and passed. Deriving it leaves the common 3 ft
     lane untouched (3.5 is below the default) and tightens only the wide ways.
 
-    Research: junction link margin - UNRESEARCHED: 4 ft off the fabric, or the caller's"""
+    Research: junction link margin - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: 7 ft (`WEB_FABRIC_GAP`) off the fabric, or the caller's"""
     span = math.dist(a, b)
     if span < 1.0:
         return True
@@ -478,7 +479,7 @@ def clear_runs(
     lines: Sequence[tuple[Pt, Pt]] = (),
     line_margin: float = 14.0,
     tight: Sequence[Poly] = (),
-    tight_margin: float = 6.0,
+    tight_margin: float = WEB_FABRIC_GAP,
     floor: float = 70.0,
     index: FabricIndex | None = None,
 ) -> list[Poly]:
@@ -498,7 +499,8 @@ def clear_runs(
     lane may not go near at all - crop, marsh, the wet toe - and keeps the full `margin`. `tight` is
     the settlement's own fabric: houses, yards, gardens, groves. A lane threads BETWEEN those; it is
     the leftover room between two steadings, and holding it 20 ft off every wall would mean there is
-    nowhere for it to be. So `tight` gets `tight_margin`, which is a hand's breadth.
+    nowhere for it to be. So `tight` gets `tight_margin`, by default the lane page's 7 ft from a lane's middle to a garden
+    fence (`WEB_FABRIC_GAP`; a hand's breadth, 6 ft, until feature 328).
 
     Returns every run that reaches `floor`, which defaults to the same 70 ft `clip_to_clear` uses.
     A short one is a real exception rather than a loosening: the footpath from an outlying steading's
@@ -511,7 +513,7 @@ def clear_runs(
 
     Research:
         off the crop and wet ground - research/questions/0081-village-lanes.drawing.html: the full margin
-        threads between steadings - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a hand's breadth off the fabric
+        threads between steadings - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the lane's middle at least 7 ft (`WEB_FABRIC_GAP`) off the fabric by default
         shortest lane - UNRESEARCHED: a run under 70 ft by default is not a lane"""
     if not obstacles and not lines and not tight:
         return [list(pts)]

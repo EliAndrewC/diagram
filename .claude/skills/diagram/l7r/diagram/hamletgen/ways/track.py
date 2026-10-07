@@ -132,8 +132,8 @@ def _thread_the_fabric(s: Settlement, plan: SitePlan, run: Poly, gap: float = TR
 
     Research:
         track round the steadings - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: routed round, else clipped, else none
-        gap off the steadings - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: `TRACK_FABRIC_GAP` 16 ft off every footprint where a lane
-            keeps 7 ft of a garden fence (a convention), a footpath's gap off a grove band
+        gap off the steadings - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: `TRACK_FABRIC_GAP`, a lane's 7 ft from a garden fence,
+            off every footprint, a footpath's gap off a grove band
         detour swing - UNRESEARCHED: the midpoint swung 40, 80, 140 then 220 px out from the cluster
         never across a grove - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: routed round
             the bands, else only the part clear of them kept
@@ -645,7 +645,7 @@ def connector_track(plan: SitePlan, start: Pt, avoid: Sequence[Poly] = (), reach
         wet, then steadings, then crop - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: wet ground and crop refused (0081), no tread on a steading (0246)
         the three ranked - NONE: search order; wet and steaded bearings are both refused in the end
         track's wander - research/questions/0081-village-lanes.drawing.html: bowed 34 and 46 px either side of the bearing
-        track off the steadings - UNRESEARCHED: kept `TRACK_FABRIC_GAP` (16 ft) off the steadings"""
+        track off the steadings - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: kept `TRACK_FABRIC_GAP` (7 ft) off the steadings"""
     dx, dy = plan.fall
     ox, oy = plan.seat["out"]
     base = math.degrees(math.atan2(0.55 * oy + 0.85 * dy, 0.55 * ox + 0.85 * dx))

@@ -295,9 +295,10 @@ def test_a_map_that_breaks_a_rule_names_it() -> None:
 def test_a_join_that_stops_short_of_the_way_it_makes_for() -> None:
     """Homes H37/H38: a free end making for a way within `JOIN_REACH_FT`, over walkable ground, is a join that stopped short
     (future-work: Inashiro's four lanes 28.1-28.5 ft shy of the lane they join)."""
+    shy = law.JOIN_REACH_FT - 3.0  # inside the page's 25 ft join reach (0081)
     way = _lane((0.0, 0.0), (0.0, 400.0))
-    short = _lane((200.0, 100.0), (28.0, 100.0))  # heading west, 28 ft shy of the way
-    away = _lane((200.0, 300.0), (28.0, 300.0), (60.0, 330.0))  # its end turns away from the way
+    short = _lane((200.0, 100.0), (shy, 100.0))  # heading west, 3 ft inside the reach
+    away = _lane((200.0, 300.0), (shy, 300.0), (60.0, 330.0))  # its end turns away from the way
     far = _lane((200.0, 200.0), (50.0, 200.0))  # 50 ft off: not a join
     M = {"lanes": [way, short, away, far]}
     assert law.near_misses(M) == [(1, -1, (0.0, 100.0))]

@@ -1,5 +1,8 @@
 """Shared fixtures for the hamletgen test package: a known square field, and a plan that uses it."""
 
+import copy
+from typing import Any
+
 from l7r.diagram import hamletgen as hg
 
 SQUARE: list[tuple[float, float]] = [(400.0, 400.0), (1000.0, 400.0), (1000.0, 1000.0), (400.0, 1000.0)]
@@ -21,3 +24,20 @@ def a_plan(households: int = 15, **kw: object) -> hg.SitePlan:
     plan = hg.plan_site(spec)
     plan.envelope = list(SQUARE)
     return plan
+
+
+SEAT_SHIFT = 300.0
+"""How far `a_seat` moves the field in from the canvas's top and left before it seats it."""
+
+
+def a_seat(plan: hg.SitePlan) -> dict[str, Any]:
+    """`seat_cluster(plan)` for a field that stands nearer the canvas's top or left than a band's half-length - `SQUARE`, 400
+    px in: `seat_cluster` holds the seat center a whole half-length (`lat`) inside the frame (feature 328), which the real
+    canvas gives (`plan.seat_room`) and this fixture does not. The seat is found on the field moved `SEAT_SHIFT` in, then
+    moved back, so a test's own coordinates about the field still hold."""
+    moved = copy.copy(plan)
+    moved.envelope = [(x + SEAT_SHIFT, y + SEAT_SHIFT) for x, y in plan.envelope]
+    seat = hg.seat_cluster(moved)
+    back = {k: (seat[k][0] - SEAT_SHIFT, seat[k][1] - SEAT_SHIFT) for k in ("anchor",) if k in seat}
+    assert not seat.get("ladder"), "a ladder's frames would need moving back too"
+    return {**seat, "cx": seat["cx"] - SEAT_SHIFT, "cy": seat["cy"] - SEAT_SHIFT, **back}

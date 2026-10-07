@@ -76,7 +76,7 @@ def row_rules(M: Mapping[str, Any]) -> list[tuple[str, Any]]:
         street one continuous way - research/questions/0033-row-villages-resson.drawing.html: each planned street drawn unbroken
         far-row holding drawn - research/questions/0033-row-villages-resson.drawing.html: every reserved holding drawn behind its farm
         way ends on its own street - research/questions/0033-row-villages-resson.drawing.html: the door within reach of its street, or a door path to it
-        door reach of a street - GUESS: a door within `DOOR_REACH_FT` (40 ft) of its street needs no door path
+        door reach of a street - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a door within `DOOR_REACH_FT` (60 ft) of its street needs no door path
     """
     meta = M.get("meta") or {}
     plans = M.get("row_street_plans") or []

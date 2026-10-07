@@ -47,7 +47,7 @@ from l7r.diagram.settlement.structures.fixtures._helpers import departure_routes
 from l7r.diagram.settlement.water_ways._helpers import BUND_REACH_FT
 from l7r.diagram.settlement.water_ways.lanes import behind_house, reaches_dooryard
 
-from ..consts import FORD_HALF, WAY_END_REACH_FT, Poly, Pt
+from ..consts import FORD_HALF, WAY_END_REACH_FT, WEB_FABRIC_GAP, Poly, Pt
 from .checks import FORD_SQUARE_TOL_DEG, served_network, unreached_houses
 from .clearance import _HAIRPIN_DEG, _ZIGZAG_DEG, _ZIGZAG_RUN_FT, kink_spans
 from .fabric import _LANE_JOIN_FT, _WEB_MIN_FT, _crosses_fabric, house_hit
@@ -110,10 +110,10 @@ NEEDLE_FT = 20.0
 
 JOIN_REACH_FT = _LANE_JOIN_FT
 """A free lane end this near another way, making for it, is a join that stops short (`near_misses`) - the web's own join
-reach (`fabric._LANE_JOIN_FT`, 30 ft), ONE tolerance for the placer that draws a join and the rule that asks whether it
+reach (`fabric._LANE_JOIN_FT`, 25 ft), ONE tolerance for the placer that draws a join and the rule that asks whether it
 touched. Future-work 2c measured every stopped-short join in the pool inside it (16.7, 28.0, 28.1, 29.2, 29.6 ft) - the
-dead band between the generator's 30 ft and the ink's 4 ft that neither half owned.
-Research: a join that stops short - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within 30 ft"""
+dead band between the generator's then 30 ft and the ink's 4 ft that neither half owned.
+Research: a join that stops short - research/questions/0081-village-lanes.drawing.html: ends within 25 ft of one another are joined"""
 
 FRAGMENT_FT = _WEB_MIN_FT
 """A lane shorter than this that earns nothing is debris (`short_fragments`) - the web's own debris floor (`_WEB_MIN_FT`),
@@ -219,7 +219,7 @@ def folded_joints(lanes: Lanes) -> list[tuple[int, int]]:
 def connector_hairpin_ends(lanes: Lanes) -> list[tuple[int, int, int]]:
     """(connector index, lane index, end) wherever a lane's short last leg meets the connector's start and the two double
     back (`hairpin_over_a_short_leg`); the end is -1 (the lane's last point) or 0 (its first).
-    Research: no hairpin at the track - research/questions/0081-village-lanes.drawing.html: over a leg under 25 ft"""
+    Research: no hairpin at the track - research/questions/0081-village-lanes.drawing.html: over a returning leg under 40 ft"""
     out = []
     for ci, co in enumerate(lanes):
         cp = lane_pts(co)
@@ -323,7 +323,7 @@ def span_walkable(M: Mapping[str, Any], p: Pt, q: Pt, skip: Sequence[int] = ()) 
     """May a short span of tread be laid from `p` to `q`: across no water (`bridge_crossed_waters`), no crop or marsh, no
     farmhouse (`house_hit`), no household's yard or garden, and not along another way (its middle within `JOIN_TOL` of a
     way other than the lanes `skip` - a span that doubles a tread rather than meeting it)?
-    Research: a walkable span - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: off water, crop, marsh, houses and yards"""
+    Research: a walkable span - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: off water, crop, marsh and houses, its line 7 ft (`WEB_FABRIC_GAP`) off yards and gardens"""
     for wpts, _w in bridge_crossed_waters(M):
         wp = [(float(a[0]), float(a[1])) for a in wpts]
         if any(segments_cross(p, q, u, v) for u, v in zip(wp, wp[1:], strict=False)):
@@ -336,7 +336,7 @@ def span_walkable(M: Mapping[str, Any], p: Pt, q: Pt, skip: Sequence[int] = ()) 
     if house_hit([p, q], 3.0, M.get("houses") or []):
         return False
     yards = [[(float(a), float(b)) for a, b in rec["poly"]] for key in ("threshing_yards", "gardens") for rec in M.get(key) or [] if rec.get("poly")]
-    if _crosses_fabric([p, q], yards, _TOUCH_GAP):
+    if _crosses_fabric([p, q], yards, WEB_FABRIC_GAP):
         return False
     mid = ((p[0] + q[0]) / 2, (p[1] + q[1]) / 2)
     return math.dist(p, q) <= 2 * JOIN_TOL or all(k in skip or len(o) < 2 or _min_dist(mid, o) > JOIN_TOL for k, o in enumerate(_ways(M)))
@@ -363,7 +363,7 @@ def near_misses(M: Mapping[str, Any]) -> list[tuple[int, int, Pt]]:
     (`meets_clean`, `kinks`). Such an end is a JOIN that stops short - a hole the eye reads in one way, or a T one clearance
     shy of its lane (homes H37, H38; future-work's "one clearance short" and 2c's corner hole). An end whose span is blocked,
     or would fold or kink, is not one: the two are separate ways, each ending at what it serves.
-    Research: ends that nearly meet are joined - research/questions/0081-village-lanes.drawing.html: within 30 ft, aimed"""
+    Research: ends that nearly meet are joined - research/questions/0081-village-lanes.drawing.html: within 25 ft (`JOIN_REACH_FT`), aimed"""
     ways = _ways(M)
     # EACH WAY'S BOX ONCE (feature 317): the seating asks this of every corridor it judges (`tree.as_joined`), and the
     # segment-by-segment search of every way from every free end was 1.26 s of a 40-household seating on seed 2 - 465,270
@@ -719,15 +719,15 @@ def breaks_mid_run(M: Mapping[str, Any]) -> list[tuple[int, int]]:
 
 
 def fouls_fabric(pts: Poly, width: float, houses: Sequence[Mapping[str, Any]], fabric: Sequence[tuple[Poly, Pt | None, str]], own: Pt | None = None) -> bool:
-    """Does a lane of this width along `pts` put ink on a farmhouse (`house_hit`), or pass within `_TOUCH_GAP` of another household's
+    """Does a lane of this width along `pts` put ink on a farmhouse (`house_hit`), or pass within `WEB_FABRIC_GAP` of another household's
     threshing yard or garden (`_crosses_fabric`)? `fabric`: `_homestead_polys`'; a door path is exempt from its OWN (`own`).
     Research:
         nothing built on a lane - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: no tread on another household's yard or bed
-        foul margin - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within 4 ft of another's yard or bed"""
+        foul margin - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the line within 7 ft of another's yard or bed"""
     if house_hit(pts, width, houses):
         return True
     theirs = [poly for poly, owner, kind in fabric if kind in ("threshing_yards", "gardens") and (own is None or owner != own)]
-    return _crosses_fabric(pts, theirs, _TOUCH_GAP)
+    return _crosses_fabric(pts, theirs, WEB_FABRIC_GAP)
 
 
 # ---- water ---------------------------------------------------------------------------------------------------------

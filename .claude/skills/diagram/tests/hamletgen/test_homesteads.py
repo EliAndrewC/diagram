@@ -13,7 +13,7 @@ from l7r.diagram import hamletgen as hg
 from l7r.diagram.hamletgen.homesteads.capacity import SiteRefused
 from l7r.diagram.settlement import Settlement
 
-from ._builders import a_plan
+from ._builders import a_plan, a_seat
 
 
 def _the_passes_the_dispersed_form_keeps(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -237,7 +237,7 @@ def test_a_linear_hamlet_stands_in_rows_along_its_streets_and_never_in_ranks() -
 
     for form in ("nucleated", "linear"):
         plan = a_plan(households=10, settlement_form=form)  # each form's own canvas (a row grows it, `LINEAR_CANVAS`)
-        plan.seat = hg.seat_cluster(plan)
+        plan.seat = a_seat(plan)
         s = Settlement(plan.W, plan.H, seed=3)  # the canvas the plan sized (feature 287's seat room on every side)
         s.meta(name="V", scale="hamlet", ftpx=1, toscale=True, households=10, down_deg=90, water_flow=90, nucleated=True)
         s._nucleated = form == "nucleated"
@@ -264,7 +264,7 @@ def test_a_row_village_whose_streets_cannot_hold_every_farm_is_refused(monkeypat
     from l7r.diagram.hamletgen.homesteads import stages as st
 
     plan = a_plan(households=10, settlement_form="linear")
-    plan.seat = {**hg.seat_cluster(plan), "ladder": []}
+    plan.seat = {**a_seat(plan), "ladder": []}
     s = Settlement(2400, 1400, seed=3)
     s.meta(name="V", scale="hamlet", ftpx=1, toscale=True, households=10, down_deg=90, water_flow=90, nucleated=False)
     s._nucleated = False
@@ -826,7 +826,7 @@ def test_a_far_row_farm_whose_holding_finds_no_room_is_not_seated_there(monkeypa
     from l7r.diagram.hamletgen.homesteads import capacity, rows, stage_homesteads
 
     plan = a_plan(households=10, settlement_form="linear")
-    plan.seat = {**hg.seat_cluster(plan), "ladder": []}
+    plan.seat = {**a_seat(plan), "ladder": []}
     plan.row_sides = "both"
     s = Settlement(plan.W, plan.H, seed=3)
     s.meta(name="V", scale="hamlet", ftpx=1, toscale=True, households=10, down_deg=90, water_flow=90, nucleated=False)

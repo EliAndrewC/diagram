@@ -223,8 +223,10 @@ def _homestead_polys(s: Settlement) -> list[tuple[Poly, Pt | None, str]]:
 # How near a footpath's far end must come to an existing way to count as joining it. This is
 # `lanes_reach_something`'s own way-reach, deliberately: a path that gets this close IS connected as
 # far as the gate is concerned, and demanding better only threw away paths that served their house.
-_LANE_JOIN_FT = 30.0  # inside lanes_reach_something's own 40 ft, with room to spare for a rounded end
-"""Research: join tolerance - NONE: how near an end is found as joining, before it is snapped on"""
+# Since feature 328 it is the lane page's own join reach, "ends within 25 ft of one another are joined at a single point"
+# (it was 30, on no page).
+_LANE_JOIN_FT = 25.0
+"""Research: join tolerance - research/questions/0081-village-lanes.drawing.html: ends within 25 ft of one another are joined"""
 
 # A GAP THIS SHORT BETWEEN TWO NEAR-COLLINEAR ENDS IS ONE WAY DRAWN AS TWO. 150 ft is about a
 # household and a half of frontage - far enough that a real interruption (a wellhead, a bed, a
@@ -269,11 +271,11 @@ def _hits_a_steading(s: Settlement, pts: Poly, width: int) -> bool:
     tread, which is the polyline widened by half its stroke. No tolerance either way - the check allows the
     overlap none, so neither does this.
 
-    Research: no house on a tread - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: half the width plus 2 ft
+    Research: no house on a tread - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: no house corner (or center) within half the tread's width
     """
     # MIRROR THE CHECK'S WINDOW, NOT JUST ITS FORMULA (this skill's CLAUDE.md). `houses_clear_of_lanes`
     # tests the house's four ROTATED CORNERS PLUS ITS CENTER against each lane segment at
-    # `w / 2 + 2` - the center is in the list so a lane narrower than a house cannot thread between the
+    # half the tread (`w / 2 + 2` until feature 328 dropped the pad, on no page) - the center is in the list so a lane narrower than a house cannot thread between the
     # corners. The first cut of this helper used a quad-versus-segment overlap at half the tolerance, and
     # so passed paths the gate still failed: same intent, different window, which is exactly the drift
     # the rule exists to stop.
@@ -284,8 +286,8 @@ def house_hit(pts: Poly, width: float, houses: Sequence[Mapping[str, Any]]) -> b
     """`_hits_a_steading`'s body on plain records (feature 287, M1): the lane law (`law.fouls_fabric`) asks it of a
     manifest's houses, the web pass of the settlement's - one predicate, read by both.
 
-    Research: no house on a tread - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: corners and center at half plus 2 ft"""
-    half = width / 2.0 + 2.0
+    Research: no house on a tread - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: no corner (nor the center) within half the tread's width - no corner of a house on the tread; the 2 ft pad past it, on no page, went with feature 328"""
+    half = width / 2.0
     for h in houses:
         quad = rot_rect(float(h["x"]), float(h["y"]), float(h["w"]), float(h["h"]), float(h.get("rot", 0.0)))
         probes = [*quad, (float(h["x"]), float(h["y"]))]
@@ -309,7 +311,7 @@ def _draw_web(s: Settlement, pts: Poly, width: int = 3, houses: Sequence[Pt] = (
         no join link through a house - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: nothing built on a lane
         web lanes seat no house - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the farmhouses placed first, the lanes
             among them after
-        web lane's no-build corridor - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: `WEB_CLEARANCE` 28 ft recorded beside the lane
+        web lane's no-build corridor - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: `WEB_CLEARANCE`, the lane's 18 ft room, recorded beside the lane
         web lane width - research/questions/0081-village-lanes.drawing.html: 3 ft by default, the footpath's tread"""
     if len(pts) < 2:
         return False

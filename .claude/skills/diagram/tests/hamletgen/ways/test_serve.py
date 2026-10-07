@@ -270,10 +270,13 @@ def test_a_web_lane_shadowing_another_for_a_bundles_pitch_is_refused() -> None:
 
 
 def test_the_overrun_past_the_connector_is_cut_and_the_connector_left() -> None:
-    """`cut_the_overruns` (feature 261, lifted from `stage_web`): a lane that met the way out and ran 52 ft on past it to a
-    loose end is cut where it met it; the connector itself is never cut, and a lane with nothing to cut is left as it is."""
+    """`cut_the_overruns` (feature 261, lifted from `stage_web`): a lane that met the way out and ran on past it to a loose
+    end, under `_PAST_CONNECTOR_FT`, is cut where it met it; the connector itself is never cut, and a lane with nothing to
+    cut is left as it is."""
+    from l7r.diagram.hamletgen.ways.sweeps import _PAST_CONNECTOR_FT
+
     s = _StubSettlement(lanes=[[(0.0, 100.0), (400.0, 100.0)]])
-    s.M["lanes"].append({"pts": [[0.0, 300.0], [0.0, 48.0]], "w": 3})
+    s.M["lanes"].append({"pts": [[0.0, 300.0], [0.0, 100.0 - (_PAST_CONNECTOR_FT - 8.0)]], "w": 3})
     s.M["lanes"].append({"pts": [[200.0, 400.0], [200.0, 100.0]], "w": 3})
     hg.ways.cut_the_overruns(s)
     assert s.M["lanes"][0]["pts"] == [[0.0, 100.0], [400.0, 100.0]], "the connector is left"

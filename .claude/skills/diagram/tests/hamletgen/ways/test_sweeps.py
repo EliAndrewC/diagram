@@ -1,5 +1,7 @@
 """Split from test_ways.py by feature 173 - see this directory's CLAUDE.md."""
 
+import math
+
 from l7r.diagram import hamletgen as hg
 from l7r.diagram.hamletgen.ways.sweeps import _keep_the_route_wide
 from l7r.diagram.settlement import Settlement
@@ -623,28 +625,35 @@ def test_a_wider_lane_is_never_cut_back_along_a_narrower() -> None:
 
 
 def test_a_free_ends_stub_past_a_kink_is_taken_off() -> None:
-    """Feature 261: a free end's short last leg that makes the second of two sharp turns inside 40 ft is dropped; the
-    same end on another lane, or a long last leg, stays."""
-    from l7r.diagram.hamletgen.ways.sweeps import trim_free_stub
+    """A free end's hook (0081): a last leg of `_FREE_STUB_FT` (12 ft) or less turning `_HOOK_DEG` (90 degrees) or more is
+    dropped; the same end on another lane, a longer last leg, or a gentler turn stays."""
+    from l7r.diagram.hamletgen.ways.sweeps import _FREE_STUB_FT, trim_free_stub
 
-    lane = [(0.0, 0.0), (100.0, 0.0), (100.0, -20.0), (118.0, -26.0)]
+    lane = [(0.0, 0.0), (100.0, 0.0), (100.0, -20.0), (110.0, -18.0)]  # a 10.2 ft last leg turning 101 degrees
+    assert math.dist(lane[-2], lane[-1]) <= _FREE_STUB_FT
     assert trim_free_stub(lane, []) == lane[:-1]
-    assert trim_free_stub(lane, [((118.0, -40.0), (118.0, 40.0))]) == lane, "the end stands on a way: a junction, not a stub"
-    long = [(0.0, 0.0), (100.0, 0.0), (100.0, -20.0), (160.0, -40.0)]
-    assert trim_free_stub(long, []) == long
+    assert trim_free_stub(lane, [((110.0, -40.0), (110.0, 40.0))]) == lane, "the end stands on a way: a junction, not a stub"
+    long = [(0.0, 0.0), (100.0, 0.0), (100.0, -20.0), (118.0, -16.0)]  # turning as sharply, 18 ft long
+    assert math.dist(long[-2], long[-1]) > _FREE_STUB_FT and trim_free_stub(long, []) == long
+    gentle = [(0.0, 0.0), (100.0, 0.0), (100.0, -20.0), (106.0, -29.0)]  # 10.8 ft, turning 34 degrees
+    assert trim_free_stub(gentle, []) == gentle
 
 
 def test_a_lane_that_runs_on_past_the_connector_to_a_loose_end_is_cut_where_it_met_it() -> None:
-    """Feature 261 (settlement-review of Mizuguchi): a leg that met the way out at its end vertex and ran 52 ft on past it
-    is cut there; a tail that is some house's only way, an end on another lane, and a run past the reach all stay."""
-    from l7r.diagram.hamletgen.ways.sweeps import cut_past_connector, on_the_way
+    """Feature 261 (settlement-review of Mizuguchi): a leg that met the way out at its end vertex and ran on past it, under
+    `_PAST_CONNECTOR_FT` (0081: a tail under 40 ft past a crossing), is cut there; a tail that is some house's only way, an
+    end on another lane, a tail at the reach and a run past it all stay."""
+    from l7r.diagram.hamletgen.ways.sweeps import _PAST_CONNECTOR_FT, cut_past_connector, on_the_way
 
     conn = [((0.0, 100.0), (400.0, 100.0))]
-    leg = [(0.0, 300.0), (0.0, 48.0)]  # meets the connector at its end vertex (0, 100) and runs 52 ft on
+    tail_y = 100.0 - (_PAST_CONNECTOR_FT - 8.0)
+    leg = [(0.0, 300.0), (0.0, tail_y)]  # meets the connector at its end vertex (0, 100) and runs 8 ft short of the reach on
     cut = cut_past_connector(leg, conn, [])
     assert cut[0] == (0.0, 300.0) and abs(cut[-1][1] - 100.0) <= 6.0
-    assert cut_past_connector(leg, conn, [], [(-90.0, 20.0)]) == leg, "the tail is that house's only way"
-    assert cut_past_connector(leg, conn, [((-50.0, 48.0), (50.0, 48.0))]) == leg, "the end stands on a lane"
+    assert cut_past_connector(leg, conn, [], [(-90.0, tail_y - 15.0)]) == leg, "the tail is that house's only way"
+    at_reach = [(0.0, 300.0), (0.0, 100.0 - 6.0 - _PAST_CONNECTOR_FT)]  # measured from where it comes within the 6 ft touch
+    assert cut_past_connector(at_reach, conn, []) == at_reach, "a tail of the reach or more is not cut"
+    assert cut_past_connector(leg, conn, [((-50.0, tail_y), (50.0, tail_y))]) == leg, "the end stands on a lane"
     assert cut_past_connector([(0.0, 300.0), (0.0, -100.0)], conn, []) == [(0.0, 300.0), (0.0, -100.0)], "past the reach"
     assert on_the_way((0.0, 300.0), (0.0, 200.0), conn, 6.0) is None
 

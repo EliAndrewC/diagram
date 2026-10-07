@@ -47,7 +47,7 @@ from l7r.diagram.settlement.city.bridges import flooded_ground
 from l7r.diagram.settlement.structures.fixtures._helpers import departure_routes
 from l7r.diagram.settlement.water_ways.lanes import behind_house, reaches_dooryard
 
-from ..consts import WAY_END_REACH_FT, WEB_CLEARANCE, Poly, Pt
+from ..consts import WAY_END_REACH_FT, WEB_CLEARANCE, WEB_FABRIC_GAP, Poly, Pt
 from . import law
 from .arcs import arc_at, cut_around, sub_run  # noqa: F401 - re-exported: `settle.sub_run` and the rest are what tree.py and the tests name
 from .checks import square_crossings, unreached_houses
@@ -140,7 +140,7 @@ def theirs(p: Poly, yards: Yards, houses: Sequence[Mapping[str, Any]]) -> list[P
 def fouled_segment(
     p: Poly, width: float, houses: Sequence[Mapping[str, Any]], yards: Yards, solid: Sequence[tuple[float, float, float, float]], fixtures: Sequence[Poly] = (), M: Any = None
 ) -> int | None:
-    """The first segment of `p` that fouls the fabric: ink on a farmhouse (`house_hit`), within `_TOUCH_GAP` of another
+    """The first segment of `p` that fouls the fabric: ink on a farmhouse (`house_hit`), within `WEB_FABRIC_GAP` of another
     household's yard or garden (`law.fouls_fabric`, `theirs`), a long leg through a building's box (`law.breaks_mid_run`),
     a tread over a farmstead fixture, the lane's own household's too (`law.over_a_fixture`), or a tread the overlap matrix
     forbids on what stands on `M` (`registry.forbidden_segment`, feature 287 M8: a yard, a garden, a well, a burial
@@ -148,7 +148,7 @@ def fouled_segment(
 
     Research:
         no tread on a farmhouse - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html
-        off another household's yard or garden - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within `_TOUCH_GAP`, 4 ft
+        off another household's yard or garden - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the line within `WEB_FABRIC_GAP`, 7 ft
         no long leg through a building - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: `law.breaks_through`
         off the fixtures - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: its own household's too
         what the overlap matrix forbids - NONE: each pair is claimed in the matrix"""
@@ -158,7 +158,7 @@ def fouled_segment(
     for k, (a, b) in enumerate(zip(p, p[1:], strict=False)):
         if k in (over, matrix):
             return k
-        if house_hit([a, b], width, houses) or _crosses_fabric([a, b], near, _TOUCH_GAP):
+        if house_hit([a, b], width, houses) or _crosses_fabric([a, b], near, WEB_FABRIC_GAP):
             return k
         if law.breaks_through([a, b], solid):
             return k
@@ -844,7 +844,7 @@ class Lawful:
         if ix.water_near(run, 1.0) and _crossing_fault({**self.M, "lanes": [{"pts": _rounded(run), "w": width}]}, 0, run, self.wet) is not None:
             return False
         houses = ix.near("houses", run, max(width / 2.0 + 2.0, law.DOORSTEP_FT) + 1.0)  # ...the doorstep's reach: `theirs` reads it
-        fouled = fouled_segment(run, width, houses, ix.near("yards", run, _TOUCH_GAP + 1.0), ix.near("solid", run, 1.0), ix.near("fixtures", run, width / 2.0 + law.FIXTURE_PAD_FT + 1.0), self.M)
+        fouled = fouled_segment(run, width, houses, ix.near("yards", run, WEB_FABRIC_GAP + 1.0), ix.near("solid", run, 1.0), ix.near("fixtures", run, width / 2.0 + law.FIXTURE_PAD_FT + 1.0), self.M)
         return fouled is None and ix.open_ground(run) and not through_a_building(run, ix.near("buildings", run, 1.0))
 
     def __call__(self, run: Poly, width: float, skip: int | None = None) -> bool:

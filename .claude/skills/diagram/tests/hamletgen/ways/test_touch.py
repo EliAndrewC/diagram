@@ -111,9 +111,12 @@ def test_an_end_ALREADY_STANDING_on_the_network_is_a_junction_not_a_free_end() -
 
     Two lanes whose ends stand near each other are the shape that reaches it.
     """
+    from l7r.diagram.hamletgen.ways.fabric import _LANE_JOIN_FT
+
+    y2 = 300.0 + _LANE_JOIN_FT - 5.0  # the second lane inside the join reach of the first (0081: 25 ft)
     s = _StubSettlement(
-        lanes=[[(0.0, 0.0), (0.0, 600.0)], [(60.0, 300.0), (200.0, 300.0)], [(60.0, 330.0), (200.0, 330.0)]],
-        houses=[(150.0, 320.0)],
+        lanes=[[(0.0, 0.0), (0.0, 600.0)], [(60.0, 300.0), (200.0, 300.0)], [(60.0, y2), (200.0, y2)]],
+        houses=[(150.0, y2 + 20.0)],
     )
     s.M.setdefault("meta", {"ftpx": 1})
     n = hg.ways._touch_junctions(s, [], [], [])

@@ -18,7 +18,6 @@ from ..consts import (
     STEADING_ARRIVAL_FT,
     TRACK_FABRIC_GAP,
     WAY_END_REACH_FT,
-    WEB_REACH_FT,
     Poly,
     Pt,
 )
@@ -276,7 +275,7 @@ def push_clear_of_fabric(base: Pt, unit: Pt, edge: float, fabric: Sequence[Poly]
 
     Research:
         track gateway off the fabric - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: nothing built on a lane, walked out until clear
-        gateway clearance - UNRESEARCHED: 16 ft (`TRACK_FABRIC_GAP`) by default
+        gateway clearance - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: 7 ft (`TRACK_FABRIC_GAP`) by default, a lane's middle off a garden fence
     """
     # EACH POLYGON'S BOX, ONCE (feature 284, FR-009): a point farther than `gap` outside a polygon's box is farther than
     # `gap` from its ring, so only the polygons whose widened box holds the point are asked - the same verdict.
@@ -517,7 +516,7 @@ def _trim_to_service(run: Poly, segs: Sequence[tuple[Pt, Pt]], houses: Sequence[
     Research:
         pulled back to the last house served - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: ends trimmed to what
             serves, 4 ft at a time
-        an outlying house keeps its way - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every farmhouse served, 100 ft how close counts as serving"""
+        an outlying house keeps its way - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: an end serving a house no other way reaches is kept within 60 ft of it (`WAY_END_REACH_FT`), or 12 ft of its built ground (`end_serves`)"""
 
     # ARRIVING AT THE FIELD IS SERVICE. A field spur exists to reach the crop, and it is the one way on
     # the map whose whole purpose is served by something that is neither a house nor another lane. Without
@@ -528,12 +527,13 @@ def _trim_to_service(run: Poly, segs: Sequence[tuple[Pt, Pt]], houses: Sequence[
 
     def serves(q: Pt, other: Pt | None = None) -> bool:
         # A HOUSE THIS RUN ALONE REACHES IS NOT TRADED FOR A TIDY END (feature 227 D11). `keep` carries the
-        # dwellings no other way comes within `WEB_REACH_FT` of, and a point that still reaches one of them counts
-        # as serving however far it is from anything else: a dangling end is a blemish on the drawing, an unreached
+        # dwellings no other way comes within `WEB_REACH_FT` of, and a point that still reaches one of them - within
+        # `WAY_END_REACH_FT` (60 ft), the lane page's reach for a way reaching a farmhouse (`WEB_REACH_FT`, 100, until
+        # feature 328) - counts as serving however far it is from anything else: a dangling end is a blemish on the drawing, an unreached
         # farmhouse breaks the map's own rule, and tightening both at once stranded cohort seed 39. It is measured
         # to the house's CENTER because that is what `farmhouses_reach_a_way` - the rule being protected here -
         # measures; arrival at a steading is the fourth clause of `end_serves`, at its own much tighter distance.
-        if any(math.dist(q, h) <= WEB_REACH_FT for h in keep):
+        if any(math.dist(q, h) <= WAY_END_REACH_FT for h in keep):
             return True
         # ...counting no way the run's OTHER end stands on (settlement-review of Mizuguchi, feature 261): a lane that left the
         # connector and ran 61 ft past its house counted as reaching the connector it had left
@@ -573,7 +573,7 @@ def _trim_to_service(run: Poly, segs: Sequence[tuple[Pt, Pt]], houses: Sequence[
         _left = [sg for sg in segs if seg_dist(other[0], other[1], sg[0], sg[1]) > _TOUCH_GAP]
         if end_serves(q, _left, (), ground, steadings):
             return None
-        return [h for h in houses if math.dist(q, h) <= WAY_END_REACH_FT] + [h for h in keep if math.dist(q, h) <= WEB_REACH_FT]
+        return [h for h in houses if math.dist(q, h) <= WAY_END_REACH_FT] + [h for h in keep if math.dist(q, h) <= WAY_END_REACH_FT]
 
     for _ in range(2):
         near, far = by_house(out[-1], out[0]), by_house(out[0], out[-1])

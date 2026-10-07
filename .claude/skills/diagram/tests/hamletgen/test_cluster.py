@@ -14,6 +14,19 @@ from l7r.diagram.hamletgen.plan import BELT_REACH, FAN_OVERHANG, SEAT_STANDOFF, 
 
 from ._builders import CROWN, SQUARE, a_plan
 
+D = 300.0  # the square moved this far in from the canvas's top and left for a seat test
+SEATED = [(x + D, y + D) for x, y in SQUARE]
+
+
+def a_seat_plan() -> hg.SitePlan:
+    """`a_plan` with its square moved `D` in from the canvas's top and left: `seat_cluster` holds the seat center a whole
+    band half-length (`lat`) inside the frame (feature 328), and at 400 px `SQUARE`'s north seat stood nearer the top."""
+    plan = a_plan()
+    plan.envelope = list(SEATED)
+    _dep, lat = band_extent(plan.spec.households, plan.cluster_shape)
+    assert lat <= SEATED[0][1] - _dep - SEAT_STANDOFF, "the fixture's premise: the north band fits on the canvas"
+    return plan
+
 
 def test_a_point_below_the_drain_is_recognized_as_wet_ground() -> None:
     drain = [(0.0, 1000.0), (2000.0, 1000.0)]  # runs east-west across a south-falling map
@@ -29,19 +42,19 @@ def test_ground_behind_a_margin_reports_how_much_of_it_is_crop() -> None:
 
 
 def test_the_cluster_is_seated_outside_the_field() -> None:
-    plan = a_plan()
+    plan = a_seat_plan()
     seat = hg.seat_cluster(plan)
-    assert not hg.point_in_poly(seat["cx"], seat["cy"], SQUARE)
+    assert not hg.point_in_poly(seat["cx"], seat["cy"], SEATED)
     assert seat["lat"] > 0 and seat["dep"] > 0
 
 
 def test_the_cluster_is_never_seated_below_the_drain() -> None:
     """The wet toe is not building ground. Excluded outright rather than scored down, because a
     strong enough wind score will otherwise pull the settlement into the bog."""
-    plan = a_plan()
-    drain = [(300.0, 1000.0), (1100.0, 1000.0)]  # along the square's low (south) edge
+    plan = a_seat_plan()
+    drain = [(300.0 + D, 1000.0 + D), (1100.0 + D, 1000.0 + D)]  # along the square's low (south) edge
     seat = hg.seat_cluster(plan, drain=drain)
-    assert seat["cy"] < 1000.0
+    assert seat["cy"] < 1000.0 + D
 
 
 def test_a_margin_below_the_drain_is_excluded_outright() -> None:
@@ -50,17 +63,17 @@ def test_a_margin_below_the_drain_is_excluded_outright() -> None:
     scan must skip that margin - not merely score it down. (The sibling drain-along-the-edge test
     asserts the RESULT; the 2026-08-16 re-rolls left this branch reached by no pool map, and a
     branch no test reaches is the coverage form of the check that never runs.)"""
-    plan = a_plan()
-    drain = [(300.0, 900.0), (1100.0, 900.0)]
+    plan = a_seat_plan()
+    drain = [(300.0 + D, 900.0 + D), (1100.0 + D, 900.0 + D)]
     seat = hg.seat_cluster(plan, drain=drain)
-    assert seat["cy"] < 900.0
+    assert seat["cy"] < 900.0 + D
 
 
 def test_the_cluster_avoids_a_margin_whose_back_is_under_the_hem() -> None:
     """A margin hemmed by dry crop is not a worse seat, it is not a seat: the cluster's own band and
     the windbreak behind it would stand in the barley."""
-    plan = a_plan()
-    hem = [(400.0, 100.0), (1000.0, 100.0), (1000.0, 395.0), (400.0, 395.0)]  # the whole north back
+    plan = a_seat_plan()
+    hem = [(x + D, y + D) for x, y in [(400.0, 100.0), (1000.0, 100.0), (1000.0, 395.0), (400.0, 395.0)]]  # the whole north back
     assert hg.seat_cluster(plan)["offwind"] is False
     # ...and with the one wind-facing margin gone the site is REFUSED, naming it - never seated off the wind (feature 287,
     # homes H30: the off-wind fallback feature 261 kept is gone)
@@ -143,7 +156,7 @@ def test_a_margin_the_brook_runs_through_is_scored_not_struck_out() -> None:
     """Feature 261 (the GM 2026-09-27: "fix the placement algorithm instead"): a band the brook runs through was struck
     out only because no way could cross the brook; ways cross it at a ford now, so the seat keeps its wind-facing
     margin and the brook costs only the score of the sample points standing on the water."""
-    plan = a_plan()
+    plan = a_seat_plan()
     plain = hg.seat_cluster(plan)
     ax, ay = plain["along"]
     brook = [(plain["cx"] - ax * 900.0, plain["cy"] - ay * 900.0), (plain["cx"] + ax * 900.0, plain["cy"] + ay * 900.0)]
@@ -153,10 +166,10 @@ def test_a_margin_the_brook_runs_through_is_scored_not_struck_out() -> None:
 
 
 def test_a_brook_across_every_margin_still_seats_the_hamlet_facing_the_wind() -> None:
-    plan = a_plan()
-    brook = [(-1300.0, 700.0), (2700.0, 700.0), (700.0, 700.0), (700.0, -1300.0), (700.0, 2700.0)]
+    plan = a_seat_plan()
+    brook = [(x + D, y + D) for x, y in [(-1300.0, 700.0), (2700.0, 700.0), (700.0, 700.0), (700.0, -1300.0), (700.0, 2700.0)]]
     seat = hg.seat_cluster(plan, brook=brook)
-    assert not hg.point_in_poly(seat["cx"], seat["cy"], SQUARE), "outside the field"
+    assert not hg.point_in_poly(seat["cx"], seat["cy"], SEATED), "outside the field"
     assert seat["offwind"] is False
 
 
@@ -293,21 +306,22 @@ def test_each_refusal_of_a_wind_facing_margin_turns_it_away() -> None:
     from l7r.diagram.hamletgen.cluster import SeatRefused
 
     plan = a_plan(households=20, cluster_shape="elongated")
-    plan.envelope = [(400.0, 1000.0), (500.0, 1000.0), (500.0, 1300.0), (1000.0, 1300.0), (1000.0, 1600.0), (400.0, 1600.0)]
+    # the L stands 700 px in from the canvas's left, so its arm's seat clears the frame by the band's half-length (587 ft)
+    plan.envelope = [(700.0, 1000.0), (800.0, 1000.0), (800.0, 1300.0), (1300.0, 1300.0), (1300.0, 1600.0), (700.0, 1600.0)]
     seat = hg.seat_cluster(plan)  # the L's long top edge is refused (its band stands in the arm); the arm's own top seats it
-    assert seat["out"] == (0.0, -1.0) and seat["anchor"][0] < 500.0
-    south = a_plan()
+    assert seat["out"] == (0.0, -1.0) and seat["anchor"][0] < 800.0
+    south = a_seat_plan()
     south.windward = "S"
     with pytest.raises(SeatRefused):
-        hg.seat_cluster(south, drain=[(300.0, 950.0), (1100.0, 950.0)])  # the south margin is below the drain
-    east = a_plan()
+        hg.seat_cluster(south, drain=[(300.0 + D, 950.0 + D), (1100.0 + D, 950.0 + D)])  # the south margin is below the drain
+    east = a_seat_plan()
     east.windward = "E"
-    east.W = east.H = 1050
+    east.W = east.H = int(1050 + D)
     with pytest.raises(SeatRefused):
         hg.seat_cluster(east)  # the east margin's band center stands off the canvas
-    toe = [(0.0, 0.0), (3000.0, 0.0), (3000.0, 395.0), (0.0, 395.0)]
+    toe = [(0.0, 0.0), (3000.0, 0.0), (3000.0, 395.0 + D), (0.0, 395.0 + D)]
     with pytest.raises(SeatRefused):
-        hg.seat_cluster(a_plan(), toe=toe)
+        hg.seat_cluster(a_seat_plan(), toe=toe)
     plan = a_plan()
     plan.envelope = list(CROWN)
     far = [[(600.0, 1500.0), (700.0, 1500.0), (700.0, 1600.0), (600.0, 1600.0)]]

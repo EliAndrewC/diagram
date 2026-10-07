@@ -323,13 +323,13 @@ def to_first_arrival(path: Sequence[Pt], segs: Sequence[tuple[Pt, Pt]], touch: f
     return pts
 
 
-DOOR_REACH_FT = 40.0
+DOOR_REACH_FT = 60.0
 """How far a grove farm's front door may stand from the lane network before a footpath is laid to it (feature 291; the
 settlement-review of Kashikawa: a farm whose only lane stopped against the outside of its east band, 89 ft from the door).
-The front is the side the grove leaves open for the way in (research/homesteads/715), so the path arrives there; 40 ft
-- about a yard's depth past the door - is a GUESS at 'at the door'.
+The front is the side the grove leaves open for the way in (research/homesteads/715), so the path arrives there; 60 ft is
+the reach at which the lane page counts a way as reaching a farmhouse, itself a GUESS there (feature 328).
 
-Research: a door reached - GUESS: 40 ft from the network"""
+Research: a door reached - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: 60 ft from the network, the page's reach for a way reaching a farmhouse"""
 
 
 def own_street(h: Mapping[str, Any], streets: Sequence[Sequence[tuple[Pt, Pt]]]) -> int | None:
