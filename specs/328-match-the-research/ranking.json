@@ -783,127 +783,11 @@
   "wave": "1"
  },
  {
-  "key": ".claude/skills/diagram/buildings.md::Approaches and surroundings#boundary pillars",
-  "tier": "E1",
-  "fix": "Ubame's boundary pillars redrawn ~1.5 ft shaft (or ~3 ft square with plinth), not 3 x 3.7 ft",
-  "files": [
-   ".claude/skills/diagram/buildings.md",
-   ".claude/skills/diagram/pool/magistracies/ubame-magistracy/ubame-magistracy.svg"
-  ],
-  "after": [],
-  "flag": "",
-  "tier_as_ranked": "E1",
-  "verdict": "DRIFTED",
-  "wave": ""
- },
- {
-  "key": ".claude/skills/diagram/buildings.md::Approaches and surroundings#cart lane to a side gate",
-  "tier": "E1",
-  "fix": "cart lanes to the side gates narrowed to ~6 ft (18 px) on Ubame (9 ft) and Hayakawa (10.7 ft)",
-  "files": [
-   ".claude/skills/diagram/buildings.md",
-   ".claude/skills/diagram/pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
-   ".claude/skills/diagram/pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg"
-  ],
-  "after": [],
-  "flag": "",
-  "tier_as_ranked": "E1",
-  "verdict": "DRIFTED",
-  "wave": ""
- },
- {
   "key": ".claude/skills/diagram/buildings.md::Fire-water tubs#tub glyph",
   "tier": "E1",
   "fix": "procedure's tub glyph r5 -> r~3.8 (2.5 ft across); sheets already draw r3.8",
   "files": [
    ".claude/skills/diagram/buildings.md"
-  ],
-  "after": [],
-  "flag": "",
-  "tier_as_ranked": "E1",
-  "verdict": "DRIFTED",
-  "wave": ""
- },
- {
-  "key": ".claude/skills/diagram/buildings.md::Inner court (private / sacred)#bath",
-  "tier": "E1",
-  "fix": "bath drawn ~10 x 8 ft (30 x 24 px) in the procedure; Ochiba (13 x 11 ft) and Ubame (10 x 11 ft) resized; band 8-22 tightened",
-  "files": [
-   ".claude/skills/diagram/buildings.md",
-   ".claude/skills/diagram/pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg",
-   ".claude/skills/diagram/pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
-   ".claude/skills/diagram/l7r/diagram/buildings/types.json"
-  ],
-  "after": [],
-  "flag": "",
-  "tier_as_ranked": "E1",
-  "verdict": "DRIFTED",
-  "wave": ""
- },
- {
-  "key": ".claude/skills/diagram/buildings.md::Latrines and the rear service strip#privy size",
-  "tier": "E1",
-  "fix": "privy drawn 5 ft square (15 px), not 14-20 px; oversize privies on Ochiba, Hayakawa, Ubame resized",
-  "files": [
-   ".claude/skills/diagram/buildings.md",
-   ".claude/skills/diagram/pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg",
-   ".claude/skills/diagram/pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
-   ".claude/skills/diagram/pool/magistracies/ubame-magistracy/ubame-magistracy.svg"
-  ],
-  "after": [],
-  "flag": "",
-  "tier_as_ranked": "E1",
-  "verdict": "DRIFTED",
-  "wave": ""
- },
- {
-  "key": ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#archery bank",
-  "tier": "E1",
-  "fix": "archery lane drawn per 0164's yaba ~250 x 8 ft with the azuchi at its end, not ~90 ft (no sheet draws one)",
-  "files": [
-   ".claude/skills/diagram/buildings.md"
-  ],
-  "after": [],
-  "flag": "deviation-tempting: a 250 ft lane barely fits a county compound",
-  "tier_as_ranked": "E1",
-  "verdict": "DRIFTED",
-  "wave": ""
- },
- {
-  "key": ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#charcoal bales",
-  "tier": "E1",
-  "fix": "charcoal bales drawn ~4 ft long by convention (per 0199.drawing), not ~6 x 3 ft, on Ubame",
-  "files": [
-   ".claude/skills/diagram/buildings.md",
-   ".claude/skills/diagram/pool/magistracies/ubame-magistracy/ubame-magistracy.svg"
-  ],
-  "after": [],
-  "flag": "",
-  "tier_as_ranked": "E1",
-  "verdict": "DRIFTED",
-  "wave": ""
- },
- {
-  "key": ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#charcoal weighing floor",
-  "tier": "E1",
-  "fix": "Ubame's charcoal weighing floor drawn 16 x 14 ft, not ~27 ft square",
-  "files": [
-   ".claude/skills/diagram/buildings.md",
-   ".claude/skills/diagram/pool/magistracies/ubame-magistracy/ubame-magistracy.svg"
-  ],
-  "after": [],
-  "flag": "",
-  "tier_as_ranked": "E1",
-  "verdict": "DRIFTED",
-  "wave": ""
- },
- {
-  "key": ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#forecourt",
-  "tier": "E1",
-  "fix": "'forecourt' label moved to the open ground inside Hayakawa's main gate; the strip behind the office hall unnamed or named as an alley",
-  "files": [
-   ".claude/skills/diagram/buildings.md",
-   ".claude/skills/diagram/pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg"
   ],
   "after": [],
   "flag": "",
@@ -965,20 +849,6 @@
   "e0_basis": "",
   "e0_rechecked": true,
   "tier_as_ranked": "E0",
-  "verdict": "DRIFTED",
-  "wave": ""
- },
- {
-  "key": ".claude/skills/diagram/buildings/programs.md::Country shrine (a village district's shrine)#dwelling entry tagged genkan",
-  "tier": "E1",
-  "fix": "Hoshigaoka's dwelling vestibule retagged an earth-floored entry (doma), not genkan",
-  "files": [
-   ".claude/skills/diagram/buildings/programs.md",
-   ".claude/skills/diagram/pool/country-shrines/hoshigaoka-shrine/hoshigaoka-shrine.svg"
-  ],
-  "after": [],
-  "flag": "",
-  "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": ""
  },
@@ -5482,6 +5352,37 @@
   "wave": ""
  },
  {
+  "key": ".claude/skills/diagram/buildings.md::Approaches and surroundings#boundary pillars",
+  "tier": "E3",
+  "fix": "Ubame's boundary pillars redrawn ~1.5 ft shaft (or ~3 ft square with plinth), not 3 x 3.7 ft",
+  "files": [
+   ".claude/skills/diagram/buildings.md",
+   ".claude/skills/diagram/pool/magistracies/ubame-magistracy/ubame-magistracy.svg"
+  ],
+  "after": [],
+  "flag": "",
+  "tier_as_ranked": "E1",
+  "moved": "FR-003: the fix redraws a hand-drawn Mode A sheet, which the spec tiers E3 (the ranker had E1)",
+  "verdict": "DRIFTED",
+  "wave": ""
+ },
+ {
+  "key": ".claude/skills/diagram/buildings.md::Approaches and surroundings#cart lane to a side gate",
+  "tier": "E3",
+  "fix": "cart lanes to the side gates narrowed to ~6 ft (18 px) on Ubame (9 ft) and Hayakawa (10.7 ft)",
+  "files": [
+   ".claude/skills/diagram/buildings.md",
+   ".claude/skills/diagram/pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+   ".claude/skills/diagram/pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg"
+  ],
+  "after": [],
+  "flag": "",
+  "tier_as_ranked": "E1",
+  "moved": "FR-003: the fix redraws a hand-drawn Mode A sheet, which the spec tiers E3 (the ranker had E1)",
+  "verdict": "DRIFTED",
+  "wave": ""
+ },
+ {
   "key": ".claude/skills/diagram/buildings.md::Approaches and surroundings#road at the gate",
   "tier": "E3",
   "fix": "road at each gate drawn at the road's own width: 30 ft (90 px) on Ochiba's Imperial road, 15-24 ft on Hayakawa's street and Ubame's road; gate approach, stones and board re-laid",
@@ -5513,6 +5414,23 @@
   ],
   "flag": "",
   "tier_as_ranked": "E3",
+  "verdict": "DRIFTED",
+  "wave": ""
+ },
+ {
+  "key": ".claude/skills/diagram/buildings.md::Inner court (private / sacred)#bath",
+  "tier": "E3",
+  "fix": "bath drawn ~10 x 8 ft (30 x 24 px) in the procedure; Ochiba (13 x 11 ft) and Ubame (10 x 11 ft) resized; band 8-22 tightened",
+  "files": [
+   ".claude/skills/diagram/buildings.md",
+   ".claude/skills/diagram/pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg",
+   ".claude/skills/diagram/pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+   ".claude/skills/diagram/l7r/diagram/buildings/types.json"
+  ],
+  "after": [],
+  "flag": "",
+  "tier_as_ranked": "E1",
+  "moved": "FR-003: the fix redraws a hand-drawn Mode A sheet, which the spec tiers E3 (the ranker had E1)",
   "verdict": "DRIFTED",
   "wave": ""
  },
@@ -5617,6 +5535,23 @@
   "wave": ""
  },
  {
+  "key": ".claude/skills/diagram/buildings.md::Latrines and the rear service strip#privy size",
+  "tier": "E3",
+  "fix": "privy drawn 5 ft square (15 px), not 14-20 px; oversize privies on Ochiba, Hayakawa, Ubame resized",
+  "files": [
+   ".claude/skills/diagram/buildings.md",
+   ".claude/skills/diagram/pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg",
+   ".claude/skills/diagram/pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+   ".claude/skills/diagram/pool/magistracies/ubame-magistracy/ubame-magistracy.svg"
+  ],
+  "after": [],
+  "flag": "",
+  "tier_as_ranked": "E1",
+  "moved": "FR-003: the fix redraws a hand-drawn Mode A sheet, which the spec tiers E3 (the ranker had E1)",
+  "verdict": "DRIFTED",
+  "wave": ""
+ },
+ {
   "key": ".claude/skills/diagram/buildings.md::Latrines and the rear service strip#residence privy attached",
   "tier": "E3",
   "fix": "house carries two privies, the guests' behind the reception room and the family's; procedure bullet and all three sheets get the second privy",
@@ -5684,6 +5619,20 @@
   "wave": ""
  },
  {
+  "key": ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#archery bank",
+  "tier": "E3",
+  "fix": "archery lane drawn per 0164's yaba ~250 x 8 ft with the azuchi at its end, not ~90 ft (no sheet draws one)",
+  "files": [
+   ".claude/skills/diagram/buildings.md"
+  ],
+  "after": [],
+  "flag": "deviation-tempting: a 250 ft lane barely fits a county compound",
+  "tier_as_ranked": "E1",
+  "moved": "FR-003: the fix redraws a hand-drawn Mode A sheet, which the spec tiers E3 (the ranker had E1)",
+  "verdict": "DRIFTED",
+  "wave": ""
+ },
+ {
   "key": ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#cart yard as a charcoal fire gap",
   "tier": "E3",
   "fix": "Ubame's charcoal store at the ordinary 6-10 ft kura spacing, no 13-14 ft fire gap, its cart yard cut to a 15-20 ft apron; sheet re-laid",
@@ -5694,6 +5643,51 @@
   "after": [],
   "flag": "",
   "tier_as_ranked": "E3",
+  "verdict": "DRIFTED",
+  "wave": ""
+ },
+ {
+  "key": ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#charcoal bales",
+  "tier": "E3",
+  "fix": "charcoal bales drawn ~4 ft long by convention (per 0199.drawing), not ~6 x 3 ft, on Ubame",
+  "files": [
+   ".claude/skills/diagram/buildings.md",
+   ".claude/skills/diagram/pool/magistracies/ubame-magistracy/ubame-magistracy.svg"
+  ],
+  "after": [],
+  "flag": "",
+  "tier_as_ranked": "E1",
+  "moved": "FR-003: the fix redraws a hand-drawn Mode A sheet, which the spec tiers E3 (the ranker had E1)",
+  "verdict": "DRIFTED",
+  "wave": ""
+ },
+ {
+  "key": ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#charcoal weighing floor",
+  "tier": "E3",
+  "fix": "Ubame's charcoal weighing floor drawn 16 x 14 ft, not ~27 ft square",
+  "files": [
+   ".claude/skills/diagram/buildings.md",
+   ".claude/skills/diagram/pool/magistracies/ubame-magistracy/ubame-magistracy.svg"
+  ],
+  "after": [],
+  "flag": "",
+  "tier_as_ranked": "E1",
+  "moved": "FR-003: the fix redraws a hand-drawn Mode A sheet, which the spec tiers E3 (the ranker had E1)",
+  "verdict": "DRIFTED",
+  "wave": ""
+ },
+ {
+  "key": ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#forecourt",
+  "tier": "E3",
+  "fix": "'forecourt' label moved to the open ground inside Hayakawa's main gate; the strip behind the office hall unnamed or named as an alley",
+  "files": [
+   ".claude/skills/diagram/buildings.md",
+   ".claude/skills/diagram/pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg"
+  ],
+  "after": [],
+  "flag": "",
+  "tier_as_ranked": "E1",
+  "moved": "FR-003: the fix redraws a hand-drawn Mode A sheet, which the spec tiers E3 (the ranker had E1)",
   "verdict": "DRIFTED",
   "wave": ""
  },
@@ -5841,6 +5835,21 @@
   ],
   "flag": "",
   "tier_as_ranked": "E3",
+  "verdict": "DRIFTED",
+  "wave": ""
+ },
+ {
+  "key": ".claude/skills/diagram/buildings/programs.md::Country shrine (a village district's shrine)#dwelling entry tagged genkan",
+  "tier": "E3",
+  "fix": "Hoshigaoka's dwelling vestibule retagged an earth-floored entry (doma), not genkan",
+  "files": [
+   ".claude/skills/diagram/buildings/programs.md",
+   ".claude/skills/diagram/pool/country-shrines/hoshigaoka-shrine/hoshigaoka-shrine.svg"
+  ],
+  "after": [],
+  "flag": "",
+  "tier_as_ranked": "E1",
+  "moved": "FR-003: the fix redraws a hand-drawn Mode A sheet, which the spec tiers E3 (the ranker had E1)",
   "verdict": "DRIFTED",
   "wave": ""
  },

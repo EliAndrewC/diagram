@@ -46,6 +46,19 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 - **Exception path**: a row flagged `deviation-tempting` is put to `spec-fidelity` with the request verbatim before it is
   fixed any other way (XVI).
 
+## Wave 2 (amendment 1, 2026-10-07)
+
+- **Scope**: the first sixteen E1 rows (`tasks.md` Phase 3). Eight are procedure text; eight are generator values
+  (`hamletgen/cluster.py`, `consts.py` BUNDLE_PITCH, `hinterland/parcels.py`, `homesteads/farm_water.py`,
+  `homesteads/fixtures.py`, `homesteads/wells.py`).
+- **D5 - sheet rows re-tiered**: eleven procedure rows the rankers put in E1 redraw a hand-drawn Mode A sheet (Ubame,
+  Hayakawa, Ochiba, Hoshigaoka); FR-003 tiers a sheet redraw E3, so they moved there (`audit/overrides.json`).
+- **D6 - the lane law is one wave**: the 32 E1 rows of `hamletgen/ways/` (wave 3) apply one rule set (0081's join reach
+  and turn limits, 0246's 7 ft clear of a fence); fixed together, the lane network is never half under each law.
+  `FOOTPATH_FABRIC_GAP` (consts.py) is the same constant as a lane-law row, so it waits for that wave.
+- **Verification**: the reference hamlet first (`make map` on Inashiro, the PNG looked at), then the pool through the
+  gate; the bookend pair `328-w2-start` / `328-w2-end` and the band's records; `impl-drift` on every touched unit.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Each later wave that changes engine behavior takes

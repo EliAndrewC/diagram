@@ -38,5 +38,41 @@
  ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#universal shrine": {
   "tier": "E3",
   "moved": "wave 1: E0 -> E3, the re-check found the implementation itself differs: Hayakawa's \"two modest shrines\" contradict the drawing page's rule \"a map draws one, a deliberate deviation\". Either the drawing page records Hayakawa as an exception or the sheet draws one"
+ },
+ ".claude/skills/diagram/buildings.md::Approaches and surroundings#boundary pillars": {
+  "tier": "E3",
+  "moved": "FR-003: the fix redraws a hand-drawn Mode A sheet, which the spec tiers E3 (the ranker had E1)"
+ },
+ ".claude/skills/diagram/buildings.md::Approaches and surroundings#cart lane to a side gate": {
+  "tier": "E3",
+  "moved": "FR-003: the fix redraws a hand-drawn Mode A sheet, which the spec tiers E3 (the ranker had E1)"
+ },
+ ".claude/skills/diagram/buildings.md::Inner court (private / sacred)#bath": {
+  "tier": "E3",
+  "moved": "FR-003: the fix redraws a hand-drawn Mode A sheet, which the spec tiers E3 (the ranker had E1)"
+ },
+ ".claude/skills/diagram/buildings.md::Latrines and the rear service strip#privy size": {
+  "tier": "E3",
+  "moved": "FR-003: the fix redraws a hand-drawn Mode A sheet, which the spec tiers E3 (the ranker had E1)"
+ },
+ ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#archery bank": {
+  "tier": "E3",
+  "moved": "FR-003: the fix redraws a hand-drawn Mode A sheet, which the spec tiers E3 (the ranker had E1)"
+ },
+ ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#charcoal bales": {
+  "tier": "E3",
+  "moved": "FR-003: the fix redraws a hand-drawn Mode A sheet, which the spec tiers E3 (the ranker had E1)"
+ },
+ ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#charcoal weighing floor": {
+  "tier": "E3",
+  "moved": "FR-003: the fix redraws a hand-drawn Mode A sheet, which the spec tiers E3 (the ranker had E1)"
+ },
+ ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#forecourt": {
+  "tier": "E3",
+  "moved": "FR-003: the fix redraws a hand-drawn Mode A sheet, which the spec tiers E3 (the ranker had E1)"
+ },
+ ".claude/skills/diagram/buildings/programs.md::Country shrine (a village district's shrine)#dwelling entry tagged genkan": {
+  "tier": "E3",
+  "moved": "FR-003: the fix redraws a hand-drawn Mode A sheet, which the spec tiers E3 (the ranker had E1)"
  }
 }

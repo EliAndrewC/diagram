@@ -6,6 +6,8 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 ## Occasions
 
 - none: wave 1 changes `Research:` claim lines only (tier E0) - nothing a map draws or where it is placed moves.
+- none (wave 2): each fix moves one value inside a rule that already places the element (a weight, a pitch, a share, a
+  count's cap, an extent); no element is new to a map, no glyph is redrawn, and no element is re-placed by different rules.
 
 ## Phase 1 - the audit
 
@@ -30,3 +32,42 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 - [x] T06 the wave's close: `make claims-report` shows the E0 rows gone and no new finding; `make done` green; `ranking.json` rows marked wave 1; landed (FR-005, FR-006, SC-002, SC-003)
       research: rendering
       verify: DONE. make claims-report: 5,934 claims, findings 565 -> 518 (DRIFTED 437, MISLABELED 28, UNCLAIMED 20, NEEDS-RESEARCH 20, CANNOT-TELL 13 at the close; owed 0); no finding introduced beyond the 7 named in claims-followup.md (ranked as found rows); make done green (174 s); ranking.json wave column set from the index
+
+## Phase 3 - wave 2 (tier E1: one value) - amendment 1, 2026-10-07
+
+Wave 2 takes the first sixteen E1 rows of `ranking.json` (the eight procedure-text fixes and eight single values of the
+hamlet generator outside its lane code). The E1 row `hamletgen/consts.py::FOOTPATH_FABRIC_GAP` waits for wave 3: it is
+the same constant as the lane-law rows that follow it (spec SC-003: a row may wait on a dependency). The rows:
+
+  - `buildings.md::Fire-water tubs#tub glyph` - procedure's tub glyph r5 -> r~3.8 (2.5 ft across); sheets already draw r3.8
+  - `buildings.md::Sacred features#grove crown size` - grove crowns 13-24 ft (0080.drawing's 0.75-1.4 x 17 ft), cited to 0080's drawing page as a guess
+  - `buildings.md::Scale#main gate passage width` - Scale section's main-gate passage made the two forms (yakuimon ~6-8.5 ft, nagaya-mon ~12 ft), dropping '~10-13 ft, ~40 px'; sheets already comply
+  - `buildings.md::Walls and gates#main gate posts` - main gate posts drawn ~2 ft square, not 2.7-5.3 x 4.7 ft, keeping each passage's inner face
+  - `buildings/programs.md::Country shrine (a village district's shrine)#basin beside the approach` - procedure basin sentence: drop 'from Nikko in 1636'; the one pre-1868 pavilion found is Yakyu Inari's (1836), a village's plain basin attested (Nagao 1828)
+  - `buildings/programs.md::Country shrine (a village district's shrine)#farmers' stage knob` - procedure knob 6: replace 'none in thirteen' with the record's 1,777 stages nationwide (lost stages and noh/puppet stages included); absent by default stands
+  - `buildings/programs.md::Country shrine (a village district's shrine)#precinct size` - procedure precinct sentence: replace the stale 'one Edo set ... 60-240 tsubo' with Saga's Edo returns (lower part of 150-650) and Kami-Nerima 1821 (~10 to ~3,350 tsubo), plus 'a register can also overstate'
+  - `buildings/programs.md::Magistrate's manor (county magistracy)#posting wealth knob` - the procedure calls the poor end's look a GUESS (0091 drawing: no page describes how a short-funded office looked); only the shortfall is attested
+  - `l7r/diagram/hamletgen/cluster.py::seat_cluster#brook penalty weight` - brook penalty weight 3.0 -> a tiebreak below the wind/upslope terms (e.g. 0.05 x crossed share), so a crossed site loses only when otherwise level
+  - `l7r/diagram/hamletgen/consts.py::BUNDLE_PITCH#row pitch` - BUNDLE_PITCH 100.0 -> 92.0 (0038: rows set 92 ft apart); re-derive HOMESTEAD_GROUND_FT and WEB_REACH_FT ties
+  - `l7r/diagram/hamletgen/hinterland/parcels.py::WET_SHARE_CAP#woods mostly on dry ground` - WET_SHARE_CAP 0.5 -> ~0 (0077: low ground by a river or marsh is left to grass, not wood)
+  - `l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#mostly dry` - same constant: woodland parcels on dry ground only, WET_SHARE_CAP -> ~0
+  - `l7r/diagram/hamletgen/homesteads/farm_water.py::farm_channel#where the channel ends` - cap the channel's end at one step (~6 ft) off the threshing yard, not up to 3.5 steps (21 ft)
+  - `l7r/diagram/hamletgen/homesteads/fixtures.py::_PRIVY_SEATS#four privy seats` - privy seat weights to stable 35, yard 30, front 20, barn 15
+  - `l7r/diagram/hamletgen/homesteads/wells.py::_WELL_DRAWN_R#wellhead drawn extent` - take the drawn extent from the glyph's vr (12.376 ft roof half-size, `_well_vr`) and fix the docstring's 16 px
+  - `l7r/diagram/hamletgen/homesteads/wells.py::well_target#how many wells` - cap a hamlet's well count at two (min(2, round(households/6)))
+- [ ] T07 the bookend and the baseline before the first edit: `make perf LABEL=328-w2-start` on the clone at main's head; the pool rolls green at main (the last gate) (plan Phase 2, constitution VI, XIII)
+      research: rendering
+      verify:
+- [ ] T08 the eight procedure rows: each sentence or figure in `buildings.md` / `buildings/programs.md` brought to its page; a row whose fix turns out to need a sheet redrawn moves to E3 and says so (FR-003, FR-004, FR-009)
+      research: rendering
+      verify:
+- [ ] T09 the eight generator values, each with the unit tests it moves, proven first on the reference hamlet (Inashiro) and then across the pool (FR-004, FR-005)
+      research: rendering
+      verify:
+- [ ] T10 every unit the wave touched re-checked by `impl-drift` (`make claims-owed` -> bundles -> `make claims-checked`); each wave-2 row IN-STEP; anything the re-check finds ranked as a found row (FR-005, SC-002)
+      research: rendering
+      verify:
+- [ ] T11 the close: `make perf LABEL=328-w2-end` and the band's records; `make done` green; `ranking.json` wave column; `make claims-report` falls by the wave's rows with nothing introduced beyond a follow-up note; landed (FR-005, FR-006, SC-002, SC-003)
+      research: rendering
+      verify:
+

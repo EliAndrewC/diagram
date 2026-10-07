@@ -169,6 +169,8 @@ Each wave's amendment adds its map decisions to this table. The program's decisi
 | The implementation moves to the research; the research moves only on the XVI exception path | GM's ruling | *"I'm not sure there's any reason for our implementation to not match for anything"* | FR-004 |
 | A Mode A building sheet a finding names is redrawn to the fixed procedure; the frozen hand-rolled settlement maps are never touched | scope, within the GM's 2026-09-28 ruling | the sheet is what contradicts the page; the ruling asks a feature to say which maps it touches, and the settlement maps stay frozen | FR-009 |
 | The 727 UNRESEARCHED claims are out of scope | scope | they are not findings: the claim honestly says no research backs it; closing them is research, not fixing a mismatch | Context, Assumptions |
+| Sheet-redrawing procedure rows tiered E3, not E1 (wave 2's amendment) | process, FR-003's own definition | the rankers put eleven rows that redraw Ubame, Hayakawa, Ochiba or Hoshigaoka in E1; FR-003 tiers a sheet redraw E3 | `audit/overrides.json`, plan D5 |
+| The lane law's 32 rows are one wave (wave 3) | process, within FR-003's module grouping | one rule set (0081, 0246) across `hamletgen/ways/`; fixed apart, the network would be half under each law | plan D6 |
 | Waves land inside this feature: only the current wave's rows are task boxes; the next wave is an amendment | process | the GM asked for one feature; the open-task refusal reads only `tasks.md`'s boxes, so a wave lands when its boxes are ticked | FR-006 |
 
 ## Assumptions
