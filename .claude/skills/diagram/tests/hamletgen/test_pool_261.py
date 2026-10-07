@@ -183,6 +183,41 @@ def test_no_zigzag_straddles_a_joint(gen: str) -> None:
 
 
 @pytest.mark.parametrize("gen", GENS, ids=IDS)
+def test_no_lane_ends_knot_short_of_a_join(gen: str) -> None:
+    """Lane ends that nearly meet are joined: ends within the knot reach (`_KNOT_FT`) of one another stand at ONE point
+    (research/questions/0081-village-lanes.drawing.html: "Ends within 25 ft of one another are joined at a single point";
+    feature 328 wave 4 glyph-check of Inashiro: lanes 7 and 3 T'd onto the track 6 ft apart, 18 and 24 ft down from its head
+    where lane 1 arrives, and lanes 9 and 11 ended 19 ft apart). Every lane's end counts, a T-foot (an end on another lane's
+    side) included. Ends within `_JOINT_FT` are one point (a junction); two such points within the reach are a knot unless one
+    lane runs from the one to the other - that lane IS their join (a 15 ft door lane is not two arrivals)."""
+    from l7r.diagram.hamletgen.ways.joints import _JOINT_FT
+    from l7r.diagram.hamletgen.ways.smooth import _KNOT_FT
+
+    lanes = _manifest(gen)["lanes"]
+    ends = [(i, (float(ln["pts"][e][0]), float(ln["pts"][e][1]))) for i, ln in enumerate(lanes) if len(ln.get("pts") or []) >= 2 for e in (0, -1)]
+    assert ends, "non-vacuity: the map has lanes"
+    node = list(range(len(ends)))
+
+    def root(a: int) -> int:
+        while node[a] != a:
+            a = node[a]
+        return a
+
+    for a in range(len(ends)):
+        for b in range(a + 1, len(ends)):
+            if math.dist(ends[a][1], ends[b][1]) <= _JOINT_FT:
+                node[root(b)] = root(a)
+    spans = {frozenset((root(2 * k), root(2 * k + 1))) for k in range(len(ends) // 2)}  # each lane's own two points
+    knots = [
+        (ends[a][0], ends[a][1], ends[b][0], ends[b][1], round(math.dist(ends[a][1], ends[b][1]), 1))
+        for a in range(len(ends))
+        for b in range(a + 1, len(ends))
+        if root(a) != root(b) and math.dist(ends[a][1], ends[b][1]) <= _KNOT_FT and frozenset((root(a), root(b))) not in spans
+    ]
+    assert not knots, f"lane ends within {_KNOT_FT:g} ft of one another and not joined (lane, end, lane, end, ft): {knots}"
+
+
+@pytest.mark.parametrize("gen", GENS, ids=IDS)
 def test_every_bamboo_stand_is_on_the_sheet(gen: str) -> None:
     """A bamboo stand is drawn where a reader can see it (feature 293 round 3, settlement-review of Kashikawa: the thicket
     stood wholly above the view, every culm clipped, while the page offered its class)."""

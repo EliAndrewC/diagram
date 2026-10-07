@@ -1,0 +1,62 @@
+{
+  "band": 1,
+  "base": {
+    "commit": "dbd474a82",
+    "label": "328-start",
+    "utc": "20261007T063038Z"
+  },
+  "binding": "78edaba96bfdaa496bf2d8f284075ebb485e28887616643c712d2ffd2d5cd6a1",
+  "end": {
+    "commit": "b91d5b6d3",
+    "label": "328-end",
+    "utc": "20261007T071438Z"
+  },
+  "environment": "local",
+  "feature": "328-match-the-research",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "8d3395e5-fe32-4f85-9c89-80c344d2ac1a",
+    "utc": "20261007T072039Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": 3.7,
+          "39": -3.2,
+          "4": -2.9,
+          "47": -3.4
+        },
+        "total_pct": -1.6
+      },
+      "20": {
+        "seeds": {
+          "25": 3.0,
+          "39": 0.0,
+          "4": -9.1,
+          "47": 0.0
+        },
+        "total_pct": -1.6
+      },
+      "40": {
+        "seeds": {
+          "25": 1.7,
+          "39": -4.2,
+          "4": 9.3,
+          "47": 0.9
+        },
+        "total_pct": 2.4
+      }
+    },
+    "seeds": {
+      "25": 2.6,
+      "39": 8.3,
+      "4": 2.0,
+      "47": 0.0
+    },
+    "total_pct": 3.0
+  },
+  "note": "web stage, the lane law in hamletgen/ways/+consts.py: reviewer control (end b91d5b6d3 with ways/ and consts.py reverted to dbd474a82, 3 interleaved worktree runs) gives web seed39 0.52-0.53s / seed25 0.58s / 40hh seed4 1.54-1.60s = start (0.52-0.54 / 0.58 / 1.54-1.59); end 0.71-0.81 / 0.64-0.71 / 2.78-2.90 - the whole growth is the lane law; hall band and frame check contribute none",
+  "verdict": "consistent"
+}

@@ -371,7 +371,9 @@ def test_a_piece_off_the_network_goes_and_so_does_a_husk() -> None:
 
 
 def test_a_web_that_keeps_every_rule_is_left_as_it_was() -> None:
-    s = _S([CONN, [(0.0, 2.0), (0.0, 100.0)]], houses=[(40.0, 110.0)])
+    # the lane starts ON the connector's head: 2 ft off it, as it stood before feature 328 wave 4, the two ends are a knot the
+    # settle gathers (`knots.settle_knots`, research/questions/0081-village-lanes.drawing.html: joined at a single point)
+    s = _S([CONN, [(0.0, 0.0), (0.0, 100.0)]], houses=[(40.0, 110.0)])
     before = [dict(ln) for ln in s.M["lanes"]]
     got = settle.settle_the_web(s)
     assert got["rounds"] == 1 and got["changed"] == 0 and got["dropped"] == 0

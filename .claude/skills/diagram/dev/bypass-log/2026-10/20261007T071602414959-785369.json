@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-07T07:16:02Z",
+  "target": "perf-explain",
+  "commit": "b91d5b6d3",
+  "outcome": "permitted",
+  "why": "perf-explain UNVERIFIED: no control roll with each lane value removed was run by the session; the attribution is from the per-stage growth, which is all in the web stage the changed values feed"
+}

@@ -66,6 +66,7 @@ from .fabric import _crosses_fabric, _homestead_polys, house_hit
 from .geom import _TOUCH_GAP, _components, _trim_to_service, memo_ground, polyline_len, steading_footprints, worked_ground
 from .joints import joints
 from .keeper import NOT_THE_SETTLES, unsettled  # noqa: F401 - re-exported: `settle.unsettled` is the exit question callers name
+from .knots import settle_knots
 from .reach import _draw_tree_lane, settle_field, settle_targets  # noqa: F401 - re-exported: callers and tests name these as `settle.<name>`
 from .serve import shadowed_by
 from .squaring import SQUARE_MARGIN_FT, SQUARE_PASSES, _pts, square_every_crossing, square_run, square_waters  # noqa: F401 - re-exported: callers and tests name these as `settle.<name>`
@@ -934,6 +935,7 @@ STEPS = (
     settle_network,
     settle_fragments,
     prune_the_tree,
+    settle_knots,
     settle_widths,
     settle_husks,
 )

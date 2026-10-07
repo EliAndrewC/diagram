@@ -9,6 +9,7 @@ from collections.abc import Callable, Mapping, Sequence
 from typing import Any
 
 from l7r.diagram.settlement import Settlement, seg_closest, seg_dist
+from l7r.diagram.settlement.rolling.gap_ways import KNOT_FT
 
 from ..consts import (
     Poly,
@@ -27,7 +28,7 @@ _STUB_REACH_FT = 25.0  # the post-smoothing touch: 0081's join reach (48 ft unti
 # returning leg of 40 ft or more is a lane in its own right and is kept, and the lane law judges the bend.
 _JOG_FT = 6.0  # a vertex this close to the chord that replaces it was a jog, not a bend
 """Research: jog chorded - research/questions/0081-village-lanes.drawing.html: a vertex within 6 ft of the chord is a jog"""
-_KNOT_FT = 25.0  # ends of different lanes this close are one junction, not several
+_KNOT_FT = KNOT_FT  # ends of different lanes this close are one junction, not several - the seating's figure (`gap_ways.KNOT_FT`)
 """Research: lane ends gathered - research/questions/0081-village-lanes.drawing.html: ends within 25 ft meet at one node"""
 
 

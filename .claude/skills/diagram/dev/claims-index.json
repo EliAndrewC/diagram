@@ -15446,11 +15446,11 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/corridors.py::field_router#a defence marsh (role \"defense\") is not a wall to the field way": {
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/corridors.py::field_router#a defense marsh (role \"defense\") is not a wall to the field way": {
   "code": "b80839d24d112268",
   "core": "b80839d24d112268",
   "date": "2026-10-07",
-  "note": "a defence marsh (role \"defense\") is not a wall to the field way",
+  "note": "a defense marsh (role \"defense\") is not a wall to the field way",
   "research": "",
   "verdict": "UNCLAIMED"
  },
