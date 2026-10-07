@@ -13,7 +13,6 @@ from l7r.diagram.settlement._geom import seg_closest
 from .banks import hem_to_bank, round_channel_joints
 from .frame import Poly, Pt, _poly_area
 from .palette import FLOODED, RICE_GREENS, organic_parcel
-from .ring_rules import NEEDLE_DEG as _NEEDLE_DEG
 from .ring_rules import needle as _needle
 
 _RING = 18.0  # the inner-toe ring-canal corridor width in (s, t) px (see _polder_lattice's RING note)
@@ -32,7 +31,7 @@ def build_polder(
     down_deg: float = 90,
     rows: int = 11,
     cols: int = 6,
-    cell: float = 150,
+    cell: float | None = None,
     parcel_mix: tuple[float, float, float] = (0.52, 0.16, 0.12),
     gap: tuple[float, float] = (1.5, 4.0),
     split_gap: float | None = None,
@@ -40,6 +39,7 @@ def build_polder(
     mosaic: float = 0.0,
     line_wander: float = 0.10,
     organic: tuple[float, float] = (0.05, 0.02),
+    ftpx: float = 1.0,
     clean_parcels: bool = True,  # the parcel/channel cleanup runs on the block that is DRAWN; `fit_polder` bisects with up to 45 candidates and cleans only the winner (feature 151)
 ) -> dict[str, Any]:
     """POLDER GRID (圩田 wei-tian / reclaimed-marsh grid): a rectilinear block of paddies on flat reclaimed
@@ -91,17 +91,18 @@ def build_polder(
 
     Research:
         polder layout - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a diked block, a ring canal inside the dike, water crossing only at an inlet and an outfall sluice
-        module size - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: `cell` px modules, 150 by default, 150 ft at the polder's 1 ft/px where the page's modules are about 190 ft
+        module size - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: `cell` px modules, by default the page's 190 ft at the map's `ftpx`
         polder size - UNRESEARCHED: 11 rows by 6 columns of modules by default
         parcel mix - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: most modules split into two or three strips, a few merged along the fall
         gaps - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: a walking bund between rows and between strips, a ditch corridor between columns
         low rows wet - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: every parcel of the two lowest rows tinted
         toe ends on the trunk - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: each toe end snapped onto the nearer trunk and run 3 ft on along its centerline
-        acreage reckoned - UNRESEARCHED: the cropped acreage worked at 2 ft/px (area x 4 / 43560) though the polder is drawn at 1 ft/px, so it reads four times the drawn ground
+        acreage reckoned - NONE: the cropped area reckoned at the map's scale (area x ftpx squared / 43560)
     """
     R = random.Random(seed)
     dx, dy = math.cos(math.radians(down_deg)), math.sin(math.radians(down_deg))  # downhill (row) unit
     ux, uy = dy, -dx  # cross (column) unit - the grid extends to the +x/+cross side of the origin
+    cell = 190.0 / ftpx if cell is None else cell  # the page's ~190 ft module (0022), in pixels
     span_s, span_t = rows * cell, cols * cell
 
     grid, nodes, tt, ss = _polder_lattice(R, seed, origin, (dx, dy), (ux, uy), rows, cols, cell, span_s, span_t, edge_wander, mosaic, line_wander)
@@ -141,7 +142,7 @@ def build_polder(
     if clean_parcels:  # after the channels are FINAL - the rounding and the toe snap both move them
         _plots_clear_of_channels(plots, channels)
     unpoint_parcels(plots)  # the LAST ring writer (feature 287, water W19) - whether or not the channel cleanup ran
-    acres = sum(_poly_area(p["poly"]) for p in plots) * 4 / 43560  # ...and after the parcels are, so the acreage is the ground actually cropped
+    acres = sum(_poly_area(p["poly"]) for p in plots) * ftpx * ftpx / 43560  # ...and after the parcels are, so the acreage is the ground actually cropped
     return {
         "channels": channels,
         "plots": plots,
@@ -150,6 +151,7 @@ def build_polder(
         "brook": brook,
         "envelope": [(round(x, 1), round(y, 1)) for x, y in envelope],
         "acres": acres,
+        "ftpx": ftpx,  # the scale the acreage is reckoned at (`clean_polder_parcels` re-measures at it)
         "dry_plots": [],
         "dry_acres": 0.0,
         "bund_beans": [],
@@ -793,7 +795,7 @@ def clean_polder_parcels(net: dict[str, Any]) -> dict[str, Any]:  # noqa: D401
     WINNER rather than on all 45: measured, 15 s of gen became 41 s when every candidate paid for it."""
     _plots_clear_of_channels(net["plots"], net["channels"])
     unpoint_parcels(net["plots"])  # the cleanup moves outlines, so the apex pass runs again after it (feature 287, water W19)
-    net["acres"] = sum(_poly_area(p["poly"]) for p in net["plots"]) * 4 / 43560
+    net["acres"] = sum(_poly_area(p["poly"]) for p in net["plots"]) * float(net.get("ftpx", 1.0)) ** 2 / 43560
     return net
 
 
@@ -834,9 +836,13 @@ def along_trunk(trunk: list[Pt], foot: Pt, heading: tuple[float, float], run: fl
     return (round(p[0] + f * (q[0] - p[0]), 1), round(p[1] + f * (q[1] - p[1]), 1))
 
 
+POLDER_APEX_DEG = 25.0
+"""Research: no parcel tapers to a point - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: an apex under 25 degrees cut off"""
+
+
 def unpoint_parcels(plots: list[dict[str, Any]]) -> None:
-    """NO POLDER PARCEL TAPERS TO A POINT (feature 287, water W19; the rule `ring_rules.needle`, an interior angle under
-    15 degrees - "no real basin tapers to ZERO").
+    """NO POLDER PARCEL TAPERS TO A POINT (feature 287, water W19; an interior angle under
+    25 degrees, `POLDER_APEX_DEG` - "no real basin tapers to ZERO").
 
     The polder's parcels are lattice quads clipped, bowed, hemmed to the collector and pushed off their ditches, and any of
     those can leave a sliver corner. This is the terminal pass over them, run after the last of those writers: a pointed
@@ -851,7 +857,7 @@ def unpoint_parcels(plots: list[dict[str, Any]]) -> None:
     unrounded vertices (the record rounds them to the ring judged here); one re-hemmed is written rounded.
 
     Research:
-        no parcel tapers to a point - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: a convex apex under 15 deg cut off until none is left
+        no parcel tapers to a point - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: a convex apex under 25 deg (`POLDER_APEX_DEG`) cut off until none is left
         pointed parcel left as bank - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: a ring still pointed is dropped from the crop
     """
     kept: list[dict[str, Any]] = []
@@ -880,6 +886,6 @@ def _apex(ring: list[Pt]) -> int | None:
         d = (math.hypot(*v1) or 1.0) * (math.hypot(*v2) or 1.0)
         ang = math.degrees(math.acos(max(-1.0, min(1.0, (v1[0] * v2[0] + v1[1] * v2[1]) / d))))
         turn = (v[0] - a[0]) * (c[1] - v[1]) - (v[1] - a[1]) * (c[0] - v[0])
-        if ang < _NEEDLE_DEG and turn * area2 >= 0 and (best is None or ang < best[0]):
+        if ang < POLDER_APEX_DEG and turn * area2 >= 0 and (best is None or ang < best[0]):
             best = (ang, i)
     return None if best is None else best[1]

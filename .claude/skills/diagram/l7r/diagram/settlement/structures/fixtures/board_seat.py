@@ -47,11 +47,11 @@ every other "these two inked things are separate" rule on these maps uses (`CAPT
 
 Research: board off the title placard - CONVENTION: 4 ft reading gap"""
 
-FACING_DEG = 45.0
+FACING_DEG = 30.0
 """How far off parallel to its way a board may stand and still face it (`kosatsuba_faces_the_road`, labels L12): past it the
 plank is side-on, unreadable to the traffic it was posted for. The retired gate test's `FACING_DEG`, stated once here.
 
-Research: board faces its way - research/questions/0190-notice-boards-kosatsuba.drawing.html: up to 45 degrees off parallel"""
+Research: board faces its way - research/questions/0190-notice-boards-kosatsuba.drawing.html: within 30 degrees of its road, about seven eighths of the face shown"""
 
 FACING_TIE_PX = 1.0
 """How near two ways must stand to a board for BOTH to be its "nearest way" (feature 287 wave 6, labels L12). Beside a

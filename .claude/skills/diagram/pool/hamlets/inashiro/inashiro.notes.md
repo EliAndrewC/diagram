@@ -1532,7 +1532,7 @@ correct the last one - so the numbers a reader can check now come from the artif
 - farmhouses: **15**
 - family form: **retirement_house**, retirement houses **10**
 - farmstead fixtures: bath **4**, coop **13**, manure **8**, privy **13**, shrine **1**, woodpile **6**
-- notice board at the entrance, **(2188.8, 1759.9)**: **14** of 14 households' ways out pass it
+- notice board at the entrance, **(2189.1, 1770.8)**: **14** of 14 households' ways out pass it
 <!-- /census -->
 
 

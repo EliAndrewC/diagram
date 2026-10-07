@@ -78,7 +78,7 @@ def test_a_notice_board_hemmed_on_every_side_still_gets_its_caption():
     seat = [frag for frag in s.toplabels if "notice board" in frag]
     assert len(seat) == 1, "the caption is drawn all the same"
     rec = s.M["labels"][-1]
-    assert rec[6] == [494.0, 497.5, 506.0, 502.5], "it records the board it names"
+    assert rec[6] == [492.0, 497.0, 508.0, 503.0], "it records the board it names (16 x 6 ft, 0190)"
     assert s.M["caption_key"] == [[1, "notice board"]] and rec[5] == "1", "its number on the board, its words in the key"
 
 
@@ -239,13 +239,13 @@ def test_kosatsuba_anchor_walks_the_imperial_road_and_ignores_a_run_too_short_to
 
 
 def test_kosatsuba_records_a_blocking_struct():
-    # the notice board records its manifest entry at true size (~12x5 ft) and reserves its
+    # the notice board records its manifest entry at true size (16 x 6 ft, 0190) and reserves its
     # verge (a later pack must not bury the board)
     s = _town()
     z = s.kosatsuba(500, 500, rot=15)
     kb = s.M["kosatsuba"][0]
-    assert (kb["x"], kb["y"], kb["w"], kb["h"], kb["rot"]) == (500, 500, 12, 5, 15) and z > 0
-    assert (kb["vw"], kb["vh"]) == (12, 5)  # at 1 ft/px the true frame already clears the marker floor
+    assert (kb["x"], kb["y"], kb["w"], kb["h"], kb["rot"]) == (500, 500, 16, 6, 15) and z > 0
+    assert (kb["vw"], kb["vh"]) == (16, 6)  # at 1 ft/px the true frame already clears the marker floor
     assert not s._fits(500, 500, 20, 20)
     s.place_labels()  # feature 157: captions are queued and drawn in the LABEL PHASE, so run it before reading M["labels"]
     rec = s.M["labels"][-1]
@@ -273,7 +273,8 @@ def test_an_anchored_board_with_no_handover_keeps_to_the_seats_nearest_its_ancho
     s = Settlement(600, 400, seed=1)
     s.meta(name="T", scale="hamlet", ftpx=1)
     s.M["road"] = [[20, 200], [580, 200]]  # a verge the whole width of the sheet, 400 px of it far from the anchor
-    s.M["houses"] = [{"x": 480.0, "y": 120.0, "w": 30.0, "h": 20.0, "rot": 0.0}, {"x": 520.0, "y": 120.0, "w": 30.0, "h": 20.0, "rot": 0.0}]
+    # the houses 50 ft off the road, inside the 60 ft at which the approach counts as arrived (`KOSATSUBA_ENTRANCE_REACH_FT`)
+    s.M["houses"] = [{"x": 480.0, "y": 150.0, "w": 30.0, "h": 20.0, "rot": 0.0}, {"x": 520.0, "y": 150.0, "w": 30.0, "h": 20.0, "rot": 0.0}]
     anchor = kosatsuba_anchor(s.M, "entrance")
     assert anchor is not None and "lanes" not in s.M, "an anchor, and no connector to hand over from"
     spot = s.place_kosatsuba()

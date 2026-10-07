@@ -247,7 +247,11 @@ class StandsMixin:
         Research:
             three groves - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: the back grove, the water-mouth grove and the dooryard copse
             clump grid - UNRESEARCHED: a 20 or 32 bscale step, clumps 28 or 22 bscale units
-            clump off buildings, wells and shrines - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: half the diagonal plus the clump's radius and 2 px
+            clump off buildings - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: half the diagonal plus the clump's radius and 2 px
+            wellhead canopy keep-out - UNRESEARCHED: a wellhead kept its drawn half-size plus 1.05 clumps and 1 px off
+            clump inside the page window - CONVENTION: a clump kept only where some of its crown falls inside the page
+            copse mix - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the dooryard mix, fruit and broadleaf, no bamboo or conifer
+            copse off the whole marsh - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: woody cover on the dry ground above the marsh, so the copse is kept off all of it
             off the plots' sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: the south strip, the west lane and every crown's sun ground
             belt off the deep marsh - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: based in the reed margin at most
             copse off the bamboo - research/questions/0075-bamboo-groves-chikurin.drawing.html: each stand grown by `copse_bamboo_reach` (two crowns)

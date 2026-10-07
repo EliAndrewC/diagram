@@ -58,9 +58,9 @@ class BoardsMixin:
         water W53).
 
         Research:
-            board size - research/questions/0190-notice-boards-kosatsuba.drawing.html: 12 x 5 ft
+            board size - research/questions/0190-notice-boards-kosatsuba.drawing.html: the frame drawn 16 x 6 ft
             marker floor - research/questions/0190-notice-boards-kosatsuba.drawing.html: floored at KOSATSUBA_MARKER_MIN_PX, aspect kept"""
-        w, h = self.px(12), self.px(5)
+        w, h = self.px(16), self.px(6)
         k = max(1.0, KOSATSUBA_MARKER_MIN_PX / w)  # marker floor, aspect preserved
         return {"x": round(x, 1), "y": round(y, 1), "w": w, "h": h, "vw": round(w * k, 1), "vh": round(h * k, 1), "rot": round(rot, 1)}
 
@@ -103,7 +103,7 @@ class BoardsMixin:
 
         Research:
             board broadside to its way - research/questions/0190-notice-boards-kosatsuba.drawing.html: `rot` is the road's bearing
-            board size - research/questions/0190-notice-boards-kosatsuba.drawing.html: 12 x 5 ft, from `board_record`
+            board size - research/questions/0190-notice-boards-kosatsuba.drawing.html: 16 x 6 ft, from `board_record`
             location marker at coarse tiers - research/questions/0190-notice-boards-kosatsuba.drawing.html: floored on the long axis
             roof and ridge glyph - CONVENTION
             stone footing and fence - research/questions/0190-notice-boards-kosatsuba.drawing.html: the frame alone, with no

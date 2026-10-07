@@ -468,6 +468,7 @@ def _polder_candidate(plan: SitePlan, seed: int, rows: int, cols: int, cellpx: f
             edge_wander=wander,
             mosaic=mosaic,
             clean_parcels=False,
+            ftpx=plan.ftpx,
         )
         _env = [(float(a), float(b)) for a, b in net["envelope"]]
         _xs = [q[0] for q in _env]

@@ -69,11 +69,11 @@ scripted hamlets and a 48-seed cohort in 2026-08-17: 0.53-1.06% on the pool, coh
 Research: lapped plots allowed - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a plot lapping a little over its neighbor is left alone, the over-count capped at 4%
 """
 
-MAX_STEPS = 1
+MAX_STEPS = 0
 """A STAIRCASE is more than one sideways step on a ring; a single step is one awkward corner where a scrap had
 exactly one home (see `test_a_bund_does_not_build_a_flight_of_steps` for the GM's report and the measurement).
 
-Research: sideways steps - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: one step on a ring allowed, two or more refused
+Research: sideways steps - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: no ring keeps a sideways step
 """
 
 STROKE_SAMPLE_PX = 3.0

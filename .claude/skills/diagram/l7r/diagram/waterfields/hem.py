@@ -40,7 +40,7 @@ def _comb_dry_and_beans(
 
     Research:
         dry hem above the canal - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: the hem laid upslope of supply canal A
-        fork triangle planted dry - research/questions/0010-farmland-around-towns-and-cities.drawing.html: on a coarse grain a second band along canal B's stretch above its first offtake
+        fork triangle planted dry - research/questions/0010-farmland-around-towns-and-cities.drawing.html: on a city's coarse grain (`grain < 1.0`) a second band along canal B's stretch above its first offtake
         fork band depth - UNRESEARCHED: 0.6 of the hem's depth
         fork band skipped on villages - UNRESEARCHED: grain 1.0 maps leave the triangle to the scrub
         wild middle - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: a wild fan keeps its drawn hem on the toe, the middle held in reserve
@@ -54,7 +54,7 @@ def _comb_dry_and_beans(
     _supply_strokes = [c for c in channels if c.get("role") != "drain"]
     dry_plots = _dry_fields(R, F, a_pts, W, H, dry_keepout, band=dry_band, g=grain, furrow_spread=furrow_spread, grain_drift=grain_drift, supply=_supply_strokes)
     hem = list(dry_plots)  # the a-side hem whole: a wild middle's share is split off AFTER the seams are settled (feature 287, W36)
-    if grain != 1.0:
+    if grain < 1.0:  # a city's grain only (0010), never a hamlet's or a village's
         # the INTER-ARM FORK TRIANGLE (coarse grains only): the ground between the two supply
         # canals just below the fork is commanded by neither (it sits upslope of canal B), and
         # on a village map the scrub matrix textures it - a city map has no scrub, so it read

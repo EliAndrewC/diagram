@@ -86,7 +86,7 @@ def test_a_bund_does_not_build_a_flight_of_steps() -> None:
         assert abs(_union_area([p["poly"] for p in plots]) - ring_area(ring)) < 1.0, "ground is conserved: the parts tile it"
         assert overcount([p["poly"] for p in plots]) < 0.001, "and they do not lap"
     boxes = sorted((min(x for x, _y in p["poly"]), max(x for x, _y in p["poly"])) for p in _hold([TWO_STEPS], ctx))
-    assert boxes == [(0.0, 40.0), (40.0, 120.0)], "the cut runs up the first hop's line, x = 40, across to the far bund"
+    assert boxes == [(0.0, 40.0), (40.0, 80.0), (80.0, 120.0)], "no ring keeps a step (feature 328, 0014): a cut up each hop's line, x = 40 and x = 80"
 
 
 def test_a_part_of_a_staircase_too_small_to_stand_is_welded_or_left_bare() -> None:

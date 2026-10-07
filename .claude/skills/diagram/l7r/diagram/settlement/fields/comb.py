@@ -375,6 +375,8 @@ class CombMixin:
             hem off rice and water - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: a plot on an earlier fan's rice, on water or on the field's own ditch is dropped
             bank beside the source brook - GUESS: a bund's width, 3 px, past the drawn 7 px brook's bank (7/2 + 3)
             plot size and crop - NONE: taken from the net as build_comb laid them
+            fallback watercourse widths - UNRESEARCHED: stream 9, channel 2.5, canal 14 px where a record carries no width
+            nothing built or planted on a dry plot - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: each drawn hem plot registered as blocked ground (`block_polys`) and dry ground (`dry_polys`)
             dry plot ink - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: the crop's own fill, furrowed, a tan edge"""
         from l7r.diagram.waterfields import hem_on_paddy
 
@@ -648,7 +650,7 @@ class CombMixin:
             # no "stream" polyline = an existing on-map stream already runs at the sluice (the town
             # pattern: the comb taps the map's stream via a weir); nothing extra is drawn, the
             # hairline topology channel below still anchors to that stream
-            self.stream(source["stream"], frm={"kind": "offmap"}, to=source.get("to"), width=7)  # `to`: where a brook that runs on past the sluice leaves (feature 287, water:W07)
+            self.stream(source["stream"], frm={"kind": "offmap"}, to=source.get("to"), width=self.px(7.0))  # `to`: where a brook that runs on past the sluice leaves (feature 287, water:W07)
         return pond_rec
 
     def _comb_draw_ditches(self: Settlement, net: dict[str, Any]) -> None:  # type: ignore[misc]

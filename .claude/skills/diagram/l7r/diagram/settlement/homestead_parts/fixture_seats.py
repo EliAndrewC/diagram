@@ -56,7 +56,7 @@ WALL_SLIDE_FT = 4.0  # the spacing of the places offered along a wall to a bath 
 PRIVY_YARD_STEP_FT = 6.0  # HELD (feature 328 wave 9): the yard outhouse a ken past the wall gap - its edge a ken plus the gap off the wall
 """Research: yard outhouse off the back wall - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: held at a ken plus the wall gap, past the page's ken - at a ken Kuwabata's re-seated homesteads leave one household only a way that zigzags across its neighbor's door end; the found row settlement/rolling/gap_ways.py::_way_for#a household whose only ways zigzag re-seated"""
 PRIVY_FRONT_STEP_FT = 8.0 - WALL_GAP_FT  # the front-yard privy's edge 8 ft out from the front wall, past the wall gap (GUESS)
-"""Research: front privy off the front wall - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: 8 ft"""
+"""Research: front privy off the front wall - GUESS research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: 8 ft, the page's own guess"""
 PRIVY_SUN_MIN_FT = 18.0  # the sun-side search's radii, 18 to 48 ft (`PRIVY_SUN_MAX_FT`'s reasons, fixtures.py)
 """Research: sun-side search start - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: from 18 ft"""
 PRIVY_SUN_MAX_FT = 48.0
@@ -381,7 +381,8 @@ def _wood_shed(hw: float, hh: float, w: float, d: float, g: float, walls: Sequen
 
     Research:
         wood shed seats - research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: behind or beside the house,
-            never the front yard"""
+            never the front yard
+        wood shed fallback seats - UNRESEARCHED: a further `STEP_FT` (8 ft) out past the ken seats"""
     seats = _seats("woodpile", hw, hh, w, d, g, None, None, lambda _salt: 0.0, 0.0, FixtureForms(), px)
     offered = chain(seats, outward(seats, px(STEP_FT), 1), wall_places(walls, w, d, g + px(WOODSHED_STEP_FT), px(WALL_SLIDE_FT)))
     found = _first((q for q in offered if shed_off_a_wall(q, walls, g, px)), taken, g)
@@ -477,6 +478,8 @@ def _seats(
             72.7%, else the four attested places
         manure beyond the privy - research/questions/0042-manure-heaps-and-compost-kyuhi.drawing.html: jittered a few feet;
             behind or beside the house where there is no privy
+        manure heap fallback spots - UNRESEARCHED: beside the privy at 1.1 and 1.9 of its width, then 10 ft further out; with
+            no privy, at 0.3 of the house's half-width and half-depth
         retirement house - UNRESEARCHED: off the back wall or a flank, the side rolled
         coop seats - research/questions/0045-chickens-and-chicken-coops.drawing.html: the east flank, the back wall or the
             west flank, rolled

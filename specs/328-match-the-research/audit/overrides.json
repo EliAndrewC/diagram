@@ -906,16 +906,16 @@
   "tier": "E3"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/farm_fixtures.py::KURA_PARTS#north annex": {
-  "after": [],
-  "e0_basis": "T38a: claim lines only; the code stands",
+  "after": [
+   ".claude/skills/diagram/l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#storehouse on the north wall"
+  ],
   "files": [
    ".claude/skills/diagram/l7r/diagram/settlement/farm_fixtures.py"
   ],
-  "fix": "farm_fixtures.py:79: add research/questions/0040-farm-storehouses-kura.drawing.html for the back-wall placement beside 0052 for the 18-27 ft band",
+  "fix": "moves with the free-standing storehouse row (0040)",
   "flag": "",
-  "found": "wave 9 re-check (tiered by its work at T38a)",
-  "moved": "T38a: tiered by its work - The values in KURA_PARTS are untouched; only the claim line gains its second page.",
-  "tier": "E0"
+  "moved": "amendment 9 exception check (spec-fidelity, 2026-10-07): DEVIATION NOT LEGITIMATE - the annex rests on the same contradicted sentence",
+  "tier": "E3"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/farm_fixtures.py::kura_rect#annex held in its band": {
   "after": [],
@@ -929,16 +929,16 @@
   "tier": "E2"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/farm_fixtures.py::kura_rect#annex seat": {
-  "after": [],
-  "e0_basis": "T38b: claim lines only; the code stands",
+  "after": [
+   ".claude/skills/diagram/l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#storehouse on the north wall"
+  ],
   "files": [
    ".claude/skills/diagram/l7r/diagram/settlement/farm_fixtures.py"
   ],
-  "fix": "add to kura_rect's Research block (farm_fixtures.py:114-117): 'annex seat - CONVENTION research/questions/0040-farm-storehouses-kura.drawing.html: against the north wall in a clustered village, the west wall of a scattered farmstead, at the KURA_PARTS offsets (N 0,-0.675; W -0.63,0)'",
+  "fix": "moves with the free-standing storehouse row (0040)",
   "flag": "",
-  "found": "wave 9 re-check (tiered by its work at T38b)",
-  "moved": "T38b: tiered by its work - the code already seats the annex on the north or west wall, as 0040's drawing page states as a drawing convention; the offsets along the wall are the placer's own, so only the claim is missing.",
-  "tier": "E0"
+  "moved": "amendment 9 exception check (spec-fidelity, 2026-10-07): DEVIATION NOT LEGITIMATE - the annex rests on the same contradicted sentence",
+  "tier": "E3"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_ditches#drain outfall": {
   "after": [],
@@ -1010,15 +1010,13 @@
  },
  ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_source#planted pond bank": {
   "after": [],
-  "e0_basis": "T38a: claim lines only; the code stands",
   "files": [
    ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py"
   ],
-  "fix": "comb.py:628: relabel the claim DEVIATION research/questions/0061-reservoir-ponds-tameike.drawing.html (every bank drawn bare), through the exception path",
+  "fix": "roll 0061's two attested bank forms per settlement (a bare bank, or one planted sparsely with mulberry and cudrania), a new element on the bank - a knob, never a fixed choice; then the drawing page describes the new code",
   "flag": "",
-  "found": "wave 9 re-check (tiered by its work at T38a)",
-  "moved": "T38a: tiered by its work - No code changes; the claim line is relabeled.",
-  "tier": "E0"
+  "moved": "amendment 9 exception check (spec-fidelity, 2026-10-07): DEVIATION NOT LEGITIMATE - the page calls the bare bank a gap still to fill, not a decision",
+  "tier": "E3"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::PRIVY_FRONT_STEP_FT#front privy off the front wall": {
   "after": [],
@@ -1185,27 +1183,23 @@
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#crowns per clump ceiling": {
   "after": [],
-  "e0_basis": "T38a: claim lines only; the code stands",
   "files": [
    ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py"
   ],
-  "fix": "groves.py:719 (now UNRESEARCHED): relabel DEVIATION research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html for GROVE_CLUMP_CROWNS=28 through the exception path, or drop the cap (then E1)",
+  "fix": "drop the cap: a clump's crown count is 0080's density alone (round(area / GROVE_CROWN_AREA)); GROVE_CLUMP_CROWNS kept only where band_clumps cuts a band into clumps, claimed for that",
   "flag": "",
-  "found": "wave 9 re-check (tiered by its work at T38a)",
-  "moved": "T38a: tiered by its work - Relabel only; the exception path is process.",
-  "tier": "E0"
+  "moved": "amendment 9 exception check (spec-fidelity, 2026-10-07): DEVIATION NOT LEGITIMATE - 0080 records no cap",
+  "tier": "E1"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#crowns per clump floor": {
   "after": [],
-  "e0_basis": "T38a: claim lines only; the code stands",
   "files": [
    ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py"
   ],
-  "fix": "groves.py:717 (now UNRESEARCHED): relabel DEVIATION research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html for the max(5, ...) floor at :753 through the exception path, or drop the floor (then E1)",
+  "fix": "drop the floor: the count is 0080's density, rounded (no max(5, ...))",
   "flag": "",
-  "found": "wave 9 re-check (tiered by its work at T38a)",
-  "moved": "T38a: tiered by its work - Relabel only; the exception path is process.",
-  "tier": "E0"
+  "moved": "amendment 9 exception check (spec-fidelity, 2026-10-07): DEVIATION NOT LEGITIMATE - 0080 records no floor",
+  "tier": "E1"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#belt off the deep marsh": {
   "after": [],
@@ -1447,15 +1441,13 @@
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#storehouse on the north wall": {
   "after": [],
-  "e0_basis": "T38a: claim lines only; the code stands",
   "files": [
    ".claude/skills/diagram/l7r/diagram/settlement/rolling/bundle.py"
   ],
-  "fix": "bundle.py:274: relabel DEVIATION research/questions/0040-farm-storehouses-kura.drawing.html (the page calls the north-wall annex a convention the record contradicts), as steading_rects already does at fixture_seats.py:224, through the exception path",
+  "fix": "the storehouse a free-standing building in front of or behind the house, its side rolled per household (0040: on no fixed side, few against the house), laid in the bundle so its ground is reserved - bundle.py, farm_fixtures.py (kura_rect, KURA_PARTS), fixture_seats.py (steading_rects) and the annex drawing",
   "flag": "",
-  "found": "wave 9 re-check (tiered by its work at T38a)",
-  "moved": "T38a: tiered by its work - Relabel only; the exception path is process.",
-  "tier": "E0"
+  "moved": "amendment 9 exception check (spec-fidelity, 2026-10-07): DEVIATION NOT LEGITIMATE - 0040's page says the record contradicts the north-wall annex",
+  "tier": "E3"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/dispersed.py::clear_east_of_beds#band cut a pixel clear of a bed's edge within its east reach; a band shorter than its width left uncut": {
   "after": [

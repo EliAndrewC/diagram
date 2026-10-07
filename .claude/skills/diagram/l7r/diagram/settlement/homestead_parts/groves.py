@@ -43,8 +43,8 @@ ALDER_GREENS = ("#5E7F6A", "#6B8A74")  # the alder crowns' tint (a map drawing c
 # its bamboo IN that grove, so the grove drawer makes the same roll.
 HOUSEHOLD_BAMBOO_PREVALENCE = 0.6
 """Research: farms with bamboo - research/questions/0075-bamboo-groves-chikurin.drawing.html, research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.html: three in five"""
-GROVE_CLUMP_CROWNS = 28  # the most crowns one `_draw_grove` clump throws
-"""Research: crowns a clump throws - UNRESEARCHED: at most 28"""
+GROVE_CLUMP_CROWNS = 28  # how many crowns' ground one piece of a band holds where `band_clumps` cuts it (`farmsteads`)
+"""Research: crowns a band piece holds - UNRESEARCHED: a band cut along its length into pieces of 28 crowns' ground, so every band is drawn at the one density"""
 GROVE_CROWN_AREA = 48.0  # sq px of clump per crown at the town grain (~one 5 m crown); scaled by (bscale / 0.82) ** 2
 """Research: grove crown density - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: one crown per 48 sq px at the town grain"""
 
@@ -714,9 +714,7 @@ class GrovesMixin:
 
         Research:
             windbreak conifer share - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.html: 48% of a windbreak's crowns cedar, the dominant tree (Takehara)
-            crowns per clump floor - UNRESEARCHED: at least 5 crowns thrown per clump
-            crowns per clump - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: one crown per `GROVE_CROWN_AREA` of clump (48 sq px at the town grain)
-            crowns per clump ceiling - UNRESEARCHED: at most `GROVE_CLUMP_CROWNS` (28)
+            crowns per clump - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: one crown per `GROVE_CROWN_AREA` of clump (48 sq px at the town grain), rounded, with no floor and no cap
             bamboo under the crowns - research/questions/0075-bamboo-groves-chikurin.drawing.html: 8% of a windbreak clump,
                 inked only in the gaps; none in the dooryard or alder mixes
             dooryard mix - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:
@@ -724,7 +722,8 @@ class GrovesMixin:
             crown size - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: the
                 mean crown radius, 0.72-1.05 or a quarter 1.25-1.7 of it, a conifer 15% wider
             thin band end to end - UNRESEARCHED: a thin band's few trees spread along its length
-            crown over no roof or wellhead - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html
+            crown over no roof or wellhead - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html, research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: no crown on a building, and none round a wellhead in a belt
+            bamboo patch forced - UNRESEARCHED: an item inside the farm's bamboo patch (`bamboo_box`) drawn as bamboo, in any mix
             crowns out of the plots' sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: every mark held out of the sun ground, bamboo at BAMBOO_SHADE_FT
             crown under no crown - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html
             alder in the marsh - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html
@@ -740,7 +739,7 @@ class GrovesMixin:
             lift = crown_lift(self.bscale)  # every crown is drawn this far up the sheet from its throw (`crown_reach` reads it)
             st = random.getstate()
             random.seed(int(abs(cx) * 5 + abs(cy) * 3 + round(w)))
-            n = max(5, min(GROVE_CLUMP_CROWNS, round(w * h / (bs * bs * GROVE_CROWN_AREA))))  # ~ one crown per ~48 px^2 at 2 ft/px (a ~5 m crown); ~40 across the 6:1 L-grove
+            n = round(w * h / (bs * bs * GROVE_CROWN_AREA))  # one crown per ~48 px^2 at 2 ft/px (a ~5 m crown), the page's density alone (0080)
             # BAMBOO LEFT THE MIX (feature 133 T47, GM 2026-08-27). It used to be 20% of a windbreak's
             # crowns and 45% of a dooryard copse's, drawn one culm at a time - 315 six-foot glyphs on
             # Inashiro that no one could see as bamboo, and not how bamboo grows: a stand is a clonal

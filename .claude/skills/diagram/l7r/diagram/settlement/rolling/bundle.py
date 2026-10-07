@@ -163,7 +163,9 @@ class BundleGeomMixin:
         (`turned_box`); every fit rule reads the boxes, and the bundle's `bbox` is theirs. Under the old +/-5 degree
         rake the difference was two pixels and was let stand; a house turned 30 degrees, or a quarter turn, is not.
 
-        Research: homestead turns as one piece - research/questions/0029-farmhouses-minka.drawing.html: the yard and beds turn with the house about its center, the ground cleared as drawn
+        Research:
+            homestead turns as one piece - research/questions/0029-farmhouses-minka.drawing.html: the yard and beds turn with the house about its center, the ground cleared as drawn
+            grove cleared east of turned beds - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: a dispersed farm's grove cut back 50 ft (`EAST_REACH_FT`) east of its turned beds (`clear_east_of_beds`)
         """
         tpl = self._bundle_template(hw, hh, garden_side, shed, getattr(self, "_household_seat", None) or (hx, hy))
 
@@ -271,6 +273,7 @@ class BundleGeomMixin:
             garden side - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: southeast, southwest, east or west of the house
             garden morning-sun reach - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: no grove band within 50 ft (`EAST_REACH_FT`) east of a garden across its height
             forecourt kept on a no-rice farm - UNRESEARCHED: the yard's ground reserved where no threshing floor is drawn
+            south band off an unkept yard - UNRESEARCHED: `YARD_SUN_STRIP`, 22, unscaled, where the map keeps no sun
             storehouse on the north wall - research/questions/0040-farm-storehouses-kura.drawing.html: a nucleated farm's annex on the shaded back wall
             byre beside the house - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: the keeper's stall on the flank away from the garden
             dispersed farm's grove - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the farm's own grove on its rolled sides, turned to the wind

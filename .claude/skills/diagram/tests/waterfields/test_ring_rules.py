@@ -61,9 +61,10 @@ def test_the_area_floor_is_a_ratio_to_the_design_cell() -> None:
     assert not too_small(SQUARE, 1600.0 / (AREA_FLOOR * 1.1))
 
 
-def test_two_steps_are_a_staircase_and_one_is_not() -> None:
+def test_any_sideways_step_is_a_staircase() -> None:
+    """Feature 328 (0014's drawing page): no ring keeps a sideways step - one is as much a staircase as two."""
     assert staircase(TWO_STEPS, 2.0)  # grain 2 / ftpx at 1 ft per px
-    assert not staircase(ONE_STEP, 2.0)
+    assert staircase(ONE_STEP, 2.0)
     assert not staircase(SQUARE, 2.0)
 
 

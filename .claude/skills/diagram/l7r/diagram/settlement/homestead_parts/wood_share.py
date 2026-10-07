@@ -111,7 +111,7 @@ def copse_keepouts(
     for r in [parts.get("yard"), *(parts.get("gardens") or ())]:
         if r is not None:  # the sunny strip south of a yard or a bed
             half, south = r[2] / 2.0 + cr + 2.0, r[1] + r[3] / 2.0
-            rects.append((r[0] - half - m, south - cr - 2.0 - m, r[0] + half + m, south + sun_depth + 2.0 + cr + m))
+            rects.append((r[0] - half - m, south - cr - 2.0 - m, r[0] + half + m, south + sun_depth * ppf + 2.0 + cr + m))  # the strip's depth in feet, at the map's scale
     for g in parts.get("gardens") or ():  # ...and the morning lane east of a bed
         east, half = g[0] + g[2] / 2.0, g[3] / 2.0 + cr + 2.0
         rects.append((east - cr - 2.0 - m, g[1] - half - m, east + EAST_LANE_FT * ppf + cr + m, g[1] + half + m))
@@ -246,8 +246,10 @@ class WoodShares:
         Research:
             sun strip default - GUESS: 22 ft where the map declares no sun corridor, copied from `village_grove`'s `_sun_depth`, so
                 the reservation keeps what the planting keeps; the 39 ft and 50 ft sun rules (research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html) are held at `copse_keepouts`
-            afternoon lane as the copse plants - NONE: passes through the map's
-                `west_sun_lane`, none where it declares none
+            afternoon lane as the copse plants - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: the map's
+                `west_sun_lane` west and southwest of each yard and bed, as the copse plants it; none where it declares none
+            copse clump size - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: `COPSE_CLUMP_BS`, 22 bscale units, the copse's clump
+            copse seat pitch - CONVENTION: `SEAT_PITCH_BS`, the clump radius times the square root of two, so the reserved crowns cover every point of a cell
             seat off a lane - UNRESEARCHED: the corridor's half plus the copse's lane buffer
         """
         self.clump = COPSE_CLUMP_BS * s.bscale

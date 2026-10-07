@@ -574,7 +574,7 @@ def _comb_drain(R: random.Random, F: _Frame, threads: list[_Thread], W: float, H
         collector on the low line - research/questions/0060-field-drains-akusuiro.drawing.html: dug below the deepest delivery ends, starting at the first delivery's bottom
         across the slope - research/questions/0060-field-drains-akusuiro.drawing.html: a fitted line falling 0.06-0.35 per unit along the contour toward its outfall
         set below the ditch ends - UNRESEARCHED: 32-48 px below the deepest end, the outfall 40 px past the last
-        wandering line - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: sampled every 120-170 px with up to 6 px of jitter
+        wandering line - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: sampled every 120-170 ft with up to 6 px of jitter
         drain widens - research/questions/0060-field-drains-akusuiro.drawing.html, research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: DRAIN_FT, a thread at its head, full at the outfall
     """
     bots = []
@@ -613,12 +613,12 @@ def _comb_drain(R: random.Random, F: _Frame, threads: list[_Thread], W: float, H
     duf = []
     u = lo_u
     while u < hi_u:
-        jitter = R.uniform(-6, 6)
+        jitter = R.uniform(-6, 6) * grain / 2.0  # 6 ft either way, in pixels at the map's scale (grain is 2 / ftpx)
         if u == lo_u:
             duf.append((u, a_fit + b_fit * u))
         elif u < hi_u - DRAIN_MIN_LEG:
             duf.append((u, a_fit + b_fit * u + jitter))
-        u += R.uniform(120, 170)
+        u += R.uniform(120, 170) * grain / 2.0  # a sample every 120-170 ft
     duf.append((hi_u, a_fit + b_fit * hi_u))  # the outfall point (drain's downhill end)
     duf.sort(key=lambda q: q[0])
     dpts = [F.to_xy(u, f) for u, f in duf]

@@ -226,7 +226,7 @@ class LanesMixin:
             del self._lane_ink[i]
 
     def trim_lane_stubs(  # type: ignore[misc]
-        self: Settlement, way_reach: float = 40.0, house_reach: float = HOUSE_SERVE_FT, dooryard_reach: float = DOORYARD_REACH_FT, fan_spread: float = 60.0, fan_bearing: float = 25.0
+        self: Settlement, way_reach: float | None = None, house_reach: float = HOUSE_SERVE_FT, dooryard_reach: float = DOORYARD_REACH_FT, fan_spread: float = 60.0, fan_bearing: float = 25.0
     ) -> int:
         """Pull back any internal lane end that REACHES NOTHING. Returns how many ends were trimmed.
 
@@ -261,12 +261,13 @@ class LanesMixin:
             an end reaching nothing is pulled back - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: to the last house, way or bund it serves
             served at the dooryard - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within 12 ft of the dooryard, or within 60 ft of the center and not past or behind the house
             arrival at the bund - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: within 6 ft of a field's or dry plot's edge
-            meeting another way - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within 40 ft of it where the page says 60 ft, at 20 degrees or more
+            meeting another way - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within 60 ft of it, at 20 degrees or more
             one end per house and bearing - UNRESEARCHED: a second end within 60 ft and 25 degrees of another fronting the same house is trimmed
             short lanes dropped - UNRESEARCHED: an internal lane under 71 ft
             the track out and the field spur stay whole - research/questions/0081-village-lanes.drawing.html
             a row street stays whole - research/questions/0033-row-villages-resson.drawing.html: the street runs on off the map as the road into it, its ends not pulled back as a lane's are
         """
+        way_reach = self.px(60.0) if way_reach is None else way_reach  # 0246: within 60 ft of another way, at the map's scale
         lanes = self.M.get("lanes") or []
         houses = self.M.get("houses") or []
         # the worked ground a lane may end on: the fields' outlines and the dry plots (hamletgen reads the drawn rice too)

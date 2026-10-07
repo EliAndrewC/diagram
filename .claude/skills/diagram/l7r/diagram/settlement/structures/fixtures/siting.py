@@ -18,7 +18,7 @@ from ..._geom import (
     street_runs,
     way_beds,
 )
-from ..._knobs import KNOBS, KOSATSUBA_MARKER_MIN_PX, PUNISHMENT_SPOT_FT
+from ..._knobs import KNOBS, PUNISHMENT_SPOT_FT
 from ..captions import tree_crown_discs
 from ._helpers import (
     KOSATSUBA_ANCHOR_BAND_FT,
@@ -164,15 +164,14 @@ class FixtureSitingMixin:
             every settlement carries a board - research/questions/0190-notice-boards-kosatsuba.drawing.html: hamlets included
             board placed last - research/questions/0190-notice-boards-kosatsuba.drawing.html: after the crop, against the view
             placement knob at the lane tiers - research/questions/0190-notice-boards-kosatsuba.html: towns and cities take `center` only
-            probe size - research/questions/0190-notice-boards-kosatsuba.drawing.html: probes the drawn 12 x 5 ft marker box"""
+            probe size - research/questions/0190-notice-boards-kosatsuba.drawing.html: the search tests a 7 x 3 ft face, smaller than the frame drawn"""
         meta = self.M["meta"]
         if not meta.get("kosatsuba", True):
             return None
         ftpx = float(meta.get("ftpx") or 1)
         # probe with the DRAWN marker box, not the true footprint (village grain floors the glyph
         # to ~11x4.6 px - see kosatsuba): the spot has to hold the pixels that get drawn there
-        w = max(self.px(12), KOSATSUBA_MARKER_MIN_PX)
-        h = w * 5 / 12
+        w, h = self.px(7.0), self.px(3.0)  # the face the search tests (0190), smaller than the 16 x 6 ft frame drawn
         lane_tier = str(meta.get("scale") or "") in ("hamlet", "village")
         view = meta.get("view")
         frame = (view[0], view[1], view[0] + view[2], view[1] + view[3]) if view else None
@@ -290,7 +289,7 @@ class FixtureSitingMixin:
             waterside siting form - UNRESEARCHED: the `waterside` knob draws the board toward a well
             waterside bonus - UNRESEARCHED: +14 within 40 px of a well, +8 within 90 px
             nearness tie-break - UNRESEARCHED: score less a third of the offset
-            least offset off the tread - UNRESEARCHED: 4 px past the tread edge (8 ft at 2 ft/px, past the 6 ft verge)
+            least offset off the tread - research/questions/0190-notice-boards-kosatsuba.drawing.html: 6 ft from the edge of the road
             sampling lattice - NONE: 12 px along, 5 px out"""
         lim = KOSATSUBA_WAY_REACH_FT / ftpx
         verge = KOSATSUBA_VERGE_FT / ftpx + 1e-6
@@ -309,7 +308,7 @@ class FixtureSitingMixin:
                 f = t * BOARD_ALONG_STEP_PX / seg
                 mx, my = ax + (bx - ax) * f, ay + (by - ay) * f
                 for side in (1.0, -1.0):
-                    off = rw / 2 + h / 2 + 4
+                    off = rw / 2 + h / 2 + self.px(6.0)  # the board 6 ft from the road's edge (0190)
                     while off <= lim:
                         if verge_only and off - rw / 2 - h / 2 > verge:  # past the verge: the roadside rule would drop it
                             break
@@ -371,7 +370,7 @@ class FixtureSitingMixin:
             service lanes last - UNRESEARCHED: web lanes and the connector only where nothing else stands or an anchor needs them
             anchor reach - UNRESEARCHED: lanes within 120 ft of the anchor admitted
             nominal widths - research/questions/0137-domain-capitals-the-daimyos-castle-town-jokamachi.drawing.html: every road taken at 18 px, its recorded width ignored
-            lane fallback width - NONE: 8 ft where no lane record exists"""
+            lane fallback width - research/questions/0081-village-lanes.drawing.html: a lane with no recorded width taken at the footpath's 3 ft"""
         routes: list[tuple[list[Pt], float, bool]] = []
         if self.M.get("road"):
             routes.append(([(p[0], p[1]) for p in self.M["road"]], 18.0, False))
@@ -380,7 +379,7 @@ class FixtureSitingMixin:
         if routes:
             return routes
         if not (self.M.get("lanes") or []):
-            routes.extend((_st, 8.0, False) for _st in street_runs(self.M))  # every lane; `M["lane"]` is only the last one drawn
+            routes.extend((_st, self.px(3.0), False) for _st in street_runs(self.M))  # every lane; `M["lane"]` is only the last one drawn
         ways = self.M.get("lanes") or []
         main = [ln for ln in ways if not ln.get("web") and not ln.get("connector")] or ways
         if widen:
@@ -395,7 +394,7 @@ class FixtureSitingMixin:
                 and (hand or not ln.get("connector"))
                 and any(seg_dist(anchor[0], anchor[1], (float(a[0]), float(a[1])), (float(b[0]), float(b[1]))) <= reach for a, b in zip(ln["pts"], ln["pts"][1:], strict=False))
             ]
-        routes.extend(([(p[0], p[1]) for p in ln["pts"]], float(ln.get("w", 8)), bool(ln.get("connector"))) for ln in main)
+        routes.extend(([(p[0], p[1]) for p in ln["pts"]], float(ln.get("w", self.px(3.0))), bool(ln.get("connector"))) for ln in main)
         routes.extend(([(p[0], p[1]) for p in st["pts"]], float(st.get("w", 18)), False) for st in self.M.get("town_streets") or [])
         return routes
 
@@ -420,7 +419,9 @@ class FixtureSitingMixin:
             entrance board on the approach - UNRESEARCHED: approach seats preferred at a handover
             traffic floor - UNRESEARCHED: 60% of the busiest seat's count
             board may stand in shade - research/questions/0190-notice-boards-kosatsuba.drawing.html: shaded seats admitted
-            open ground preferred - GUESS: shaded seats only where no open one fits"""
+            open ground preferred - GUESS: shaded seats only where no open one fits
+            anchored board band - UNRESEARCHED: within `KOSATSUBA_ANCHOR_BAND_FT`, 60 ft, of the nearest seat to the anchor
+            handover band - UNRESEARCHED: an entrance board within `KOSATSUBA_HANDOVER_BAND_FT`, 20 ft, of the nearest seat to the handover"""
         anchor = kosatsuba_anchor(self.M, placement) if lane_tier else None
         # an entrance board keeps only the ground within its reach (`entrance_seat_ok`): the whole band is fitted there alone
         ground = (anchor[0], anchor[1], (KOSATSUBA_ENTRANCE_REACH_FT + KOSATSUBA_ANCHOR_BAND_FT) / ftpx + 1e-6) if ENTRANCE_PRUNE and anchor is not None and placement == "entrance" else None

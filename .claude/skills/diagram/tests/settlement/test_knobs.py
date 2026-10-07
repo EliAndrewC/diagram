@@ -18,10 +18,10 @@ def test_kosatsuba_draws_a_location_marker_at_the_coarse_tiers():
         s.meta(name="C", scale="city" if ftpx == 3 else "village", ftpx=ftpx)
         s.kosatsuba(500, 500)
         kb = s.M["kosatsuba"][0]
-        assert (kb["w"], kb["h"]) == (12 / ftpx, 5 / ftpx)  # true size, unchanged
+        assert (kb["w"], kb["h"]) == (16 / ftpx, 6 / ftpx)  # true size, unchanged (0190: 16 x 6 ft)
         assert kb["vw"] == settlement.KOSATSUBA_MARKER_MIN_PX  # floored on the long axis...
-        assert kb["vh"] == round(settlement.KOSATSUBA_MARKER_MIN_PX * 5 / 12, 1)  # ...aspect preserved
-        assert s.placed[-1] == pytest.approx((500, 500, settlement.KOSATSUBA_MARKER_MIN_PX, settlement.KOSATSUBA_MARKER_MIN_PX * 5 / 12))  # the DRAWN box is reserved
+        assert kb["vh"] == round(settlement.KOSATSUBA_MARKER_MIN_PX * 6 / 16, 1)  # ...aspect preserved
+        assert s.placed[-1] == pytest.approx((500, 500, settlement.KOSATSUBA_MARKER_MIN_PX, settlement.KOSATSUBA_MARKER_MIN_PX * 6 / 16))  # the DRAWN box is reserved
         assert f'width="{kb["vw"]:.1f}"' in s.top[-1]  # and drawn
 
 

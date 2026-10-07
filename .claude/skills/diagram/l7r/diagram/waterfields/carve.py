@@ -80,7 +80,7 @@ def _dry_fields(
         crop per plot - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: one of four crops
         neighbor keeps the crop - UNRESEARCHED: a plot keeps the last plot's crop with a 55% chance, about 0.66 once a re-roll lands on the same crop
         row direction - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: each column's tract heading, each plot turned up to TRACT_PLOT_TURN_RAD
-        off the water and the frame - DEVIATION research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html, research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: a cell dropped only within 0.5 px of a supply stroke's painted edge, so a plot may stand inside another canal's 5 ft bank
+        off the water and the frame - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html, research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: a cell dropped inside any supply canal's bank, its half-width plus `CANAL_BERM_FT`
         keep-out and frame margin - NONE: a cell in a keep-out or within 12 px of the frame is dropped
     """
     plots = []
@@ -213,7 +213,7 @@ def _dry_fields(
         through on three cohort seeds. **A guard that DELETES a map feature hands its footprint to
         the next placer, so its blast radius is never confined to the thing it deletes.**"""
         gap, halfw = _bank(q)
-        return gap - halfw < 0.5
+        return gap - halfw < berm_px  # inside the canal's bank (feature 328: the page's berm, where 0.5 px let a plot stand in it)
 
     def _quad_in_berm(quad: Poly) -> bool:
         """Corners AND every edge, at a 3 px step. A cell can keep four dry corners while an EDGE

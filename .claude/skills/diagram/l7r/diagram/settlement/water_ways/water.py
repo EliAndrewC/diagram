@@ -104,7 +104,7 @@ class WaterBodiesMixin:
         # upstream -> downstream is (downstream - upstream); we built (upstream - downstream) above
         rec["flow_deg"] = round(math.degrees(math.atan2(-vy, -vx)) % 360, 1)
 
-    def stream(self: Settlement, pts: Any, frm: Any = None, to: Any = None, width: float = 9, flow: str = "forward", cls: str = "stream") -> None:  # type: ignore[misc]
+    def stream(self: Settlement, pts: Any, frm: Any = None, to: Any = None, width: float | None = None, flow: str = "forward", cls: str = "stream") -> None:  # type: ignore[misc]
         """A natural watercourse. If frm/to anchors are given (e.g. a forest brook
         feeding a pond), it is recorded and the gate checks it actually connects
         them - just like an irrigation channel. `width` is the water's drawn width
@@ -122,10 +122,11 @@ class WaterBodiesMixin:
 
         Research:
             every course declares its flow - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: authored upstream-first
-            stream width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.html: the page's GUESS of about 2 m (~7 ft) for a village brook; the code draws 9 px by default, unscaled (9 ft at 1 ft/px, 18 ft at 2 ft/px)
+            stream width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.html: the page's GUESS of about 2 m (~7 ft) for a village brook, drawn 7 ft at the map's scale by default, unscaled (9 ft at 1 ft/px, 18 ft at 2 ft/px)
             bed and sheen - CONVENTION: a blue bed, a lighter butt-capped mid-current sheen
             houses kept off the stream - UNRESEARCHED: a no-build corridor of max(30, half-width + 20) px
         """
+        width = self.px(7.0) if width is None else width  # a village brook about 7 ft wide (0068), at the map's scale
         dd = 'M' + ' L'.join(f'{x},{y}' for x, y in pts)
         # always recorded so the gate can check it (anchors optional - only some streams connect things)
         rec = {"poly": [[x, y] for x, y in pts], "frm": frm, "to": to, "w": width}

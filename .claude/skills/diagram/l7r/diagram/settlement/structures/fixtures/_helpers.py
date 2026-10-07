@@ -32,7 +32,7 @@ CAPTION_LANE_TARGET_FT = 3.0
 KOSATSUBA_VERGE_FT = 6.0
 """Research: board at the roadside - research/questions/0190-notice-boards-kosatsuba.drawing.html: 6 ft from the tread's edge at a hamlet or village"""
 
-KOSATSUBA_ENTRANCE_REACH_FT = 100.0
+KOSATSUBA_ENTRANCE_REACH_FT = 60.0
 """How near a dwelling the approach must come before it counts as having ARRIVED at the settlement.
 
 THE ENTRANCE IS THE FIRST BUILDINGS, NOT A RADIUS (settlement-review, feature 154). The first version
@@ -47,7 +47,7 @@ an `entrance` placement it had not drawn.
 is served by a way at all. Where the approach first comes within serving distance of a house is where
 a walker would say the hamlet begins, and it is the same measure the rest of the engine already makes.
 
-Research: where the settlement begins - UNRESEARCHED: the approach within 100 ft of a dwelling"""
+Research: where the settlement begins - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the approach within 60 ft of a dwelling, the reach at which a way serves a farmhouse"""
 
 KOSATSUBA_ANCHOR_BAND_FT = 60.0
 """How far from the best seat at an anchored placement another seat may stand and still compete.
