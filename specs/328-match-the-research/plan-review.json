@@ -1,6 +1,6 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "80f70f6897b3c244d26b5ecc942c688b5b07d4b5440a74f6adfa370bcca85afb",
+ "plan_sha256": "479473f68aeb86b13aa8e174d893646a651cc3bae5511a45c8e2800cfb46d9e4",
  "reviewed": "2026-10-07",
  "declared": "spec-fidelity",
  "decisions": [
@@ -37,9 +37,9 @@
   },
   {
    "id": "W16-occasions",
-   "summary": "three placement-changed occasions (copse on Mizuguchi, board on Kashikawa and Sawada), a glyph check each",
+   "summary": "occasions: none, measured - the retired forms moved nothing drawn (Mizuguchi linear, no copse; Kashikawa and Sawada boards unmoved); only each map's recorded knob changed",
    "class": "within",
-   "why": "FR-005: review occasions a wave opens are run"
+   "why": "FR-005: an occasion is a placement that changed; re-measured on round 2: each of the three manifests at HEAD equals the base 799a0bf4b with meta removed, and meta differs only in copse_siting / kosatsuba_siting, so no glyph was re-placed and no review occasion opens"
   },
   {
    "id": "W16-cond6",
@@ -49,9 +49,9 @@
   },
   {
    "id": "W16-verify",
-   "summary": "impl-drift on touched claims, glyph checks, the gate with three maps regenerated, wave 16's bookend pair",
+   "summary": "impl-drift on touched claims, the gate with three maps regenerated, wave 16's bookend pair (glyph checks dropped with the occasions)",
    "class": "within",
-   "why": "FR-005, constitution VI"
+   "why": "FR-005, constitution VI; the glyph checks go with the measured-none occasions"
   }
  ],
  "verdict": "CLEAR"

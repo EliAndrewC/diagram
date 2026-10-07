@@ -300,3 +300,4 @@ Each wave's amendment adds its map decisions to this table. The program's decisi
 - Amendment 15, round 1 (spec-fidelity, 2026-10-07): CHANGES REQUIRED, plan CLEAR (8 decisions) - the retirements literal
   (neither form on any page), the 412/413 dependency LEGITIMATE; the Decisions Recorded rows owed (added). Measured since: the
   retirements moved nothing drawn, so the three placement occasions became `none`.
+- Amendment 15, round 2 (spec-fidelity, 2026-10-07): FAITHFUL, plan CLEAR (8 decisions) - the Decisions Recorded rows; the occasions' none confirmed by its own measurement (each manifest differs from the base in meta only).

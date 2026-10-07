@@ -457,3 +457,10 @@ pass on the sheet modals, not this feature's ranking - modals are not claims):
 - `l7r/diagram/hamletgen/plan.py::plan_site#a farmstead grove takes 2, 3 or 4 sides the spec refusal` (UNCLAIMED, E0): a farmstead grove takes 2, 3 or 4 sides (the spec refusal)
 - `buildings/programs.md::Magistrate's manor (county magistracy)#granary weight knob` (DRIFTED, E2): landing/office knob matches, but "an isolated county ... own storehouse ... may be the compound's largest building" contradicts the page's single county granary of "about 43 to 50 by 25 to 27 ft", far below the office hall; drop "largest" or record it as a departure
 - `buildings/programs.md::Magistrate's manor (county magistracy)#staff housing knob` (DRIFTED, E2): option (c), staff housed in town with only a duty watch inside, is attested only at Edo's great town magistracy; the rural intendant's office "kept its junior officials' huts and rowhouses on its own grounds", so (c) at a county post is a form the question does not attest there (Hayakawa takes it)
+
+## Wave 16 (2026-10-07)
+
+- For the GM (spec-fidelity's aside, amendment 15 round 2): 0098's drawing page gives a county office ONE granary of about
+  43-50 by 25-27 ft, while 0116's drawing page lets an isolated county's granary be the compound's largest building (the
+  Takayama case). `buildings.md` keeps the latter under its own GUESS claim; the procedure's knob no longer says it. The
+  disagreement is between two research pages, so its fix goes through the FR-004 exception path.
