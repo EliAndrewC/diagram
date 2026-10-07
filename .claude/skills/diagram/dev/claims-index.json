@@ -6372,6 +6372,42 @@
   "triaged": "2026-10-05",
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/crossing.py::REAL_CROSSING_SHARE#a real crossing": {
+  "code": "55982b54fb82c737",
+  "core": "8965d718adaaab2a",
+  "date": "2026-10-07",
+  "note": "the half-depth threshold for \"through the field\" is a calibration that 0077 does not address",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:6a3373d9e6527e72"
+  ],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/crossing.py::crossed_through#beyond the fields on the level": {
+  "code": "9b230d4310afe3ae",
+  "core": "72aa9cb8a2d507d7",
+  "date": "2026-10-07",
+  "note": "the walk must run through the field, so the seat is on the far side of the fields from the houses on the level",
+  "pages": {
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "ecf6ed4b609ca690"
+  },
+  "research": "24afacf28c5d0294",
+  "rests": [
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:6a3373d9e6527e72"
+  ],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/crossing.py::reached_across#crossing geometry": {
+  "code": "5f33099d24421cd2",
+  "core": "05828fb2f0a1e555",
+  "date": "2026-10-07",
+  "note": "a pure segment-crossing test; the placement rule that uses it is claimed at open_ground_patches",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/frame.py::SCATTER_PAD#page frame": {
   "code": "96d4220f7d3ce6fc",
   "core": "4f6abb3ccbbe5fc1",
@@ -6759,10 +6795,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#beyond the fields preferred": {
-  "code": "c08a626d92106264",
+  "code": "5aad6443532bc648",
   "core": "d7993934dae51c75",
   "date": "2026-10-07",
-  "note": "seats across the field from the houses are preferred (the `_beyond` filter), falling back to the rest",
+  "note": "`if _beyond: scored = _beyond` falls back to the nearest seats on the houses' side when no seat lies beyond the fields, but 0077 puts the wood \"on the nearest slope beyond the fields from the houses ... not on whatever open ground lies nearest the houses\" and records no such fallback; either drop the fallback (draw fewer parcels) or record it on the drawing page as a DEVIATION",
   "pages": {
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "ecf6ed4b609ca690"
   },
@@ -6771,7 +6807,7 @@
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:51f3d4bae1a3978e",
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:6a3373d9e6527e72"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#commons legibility floor": {
   "code": "e947d7af290c6ec8",
@@ -7917,16 +7953,18 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/capacity.py::free_seats#the exhaustive seat order": {
-  "code": "46d4fd88d4dac7d0",
+  "code": "8dc547843e2a84f0",
   "core": "6de8ea368a268a46",
   "date": "2026-10-07",
-  "note": "nearest-first is stated by 0029.drawing (\"each next household takes the place open nearest the cluster\"); cite research/questions/0029-farmhouses-minka.drawing.html, not UNRESEARCHED",
-  "pages": {},
-  "research": "",
+  "note": "every legal point on the canvas, nearest the seat first, which matches \"takes the place open nearest the cluster\"",
+  "pages": {
+   "0029-farmhouses-minka.drawing.html": "28761adf1d2dece2"
+  },
+  "research": "a3cfa2fba63bb45d",
   "rests": [
    "0029-farmhouses-minka.drawing.html:9dd34b89f26d4272"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/capacity.py::margin_ladder#seat search": {
   "code": "0d915cc2edf06a38",
@@ -8943,16 +8981,18 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::grow_the_margin#nearer the field breaking ties": {
-  "code": "b71e85aa39b0fc4d",
+  "code": "602b7d1c83a8fe33",
   "core": "67c6c1de77b9c72a",
   "date": "2026-10-07",
-  "note": "0029.drawing records this tie-break (\"of two places about as near, the one nearer the fields\"), and free_seats' twin claim cites it; cite research/questions/0029-farmhouses-minka.drawing.html",
-  "pages": {},
-  "research": "",
+  "note": "the heap key orders by ring first, then field distance, matching \"of two places about as near, the one nearer the fields\", a preference and never a limit",
+  "pages": {
+   "0029-farmhouses-minka.drawing.html": "28761adf1d2dece2"
+  },
+  "research": "a3cfa2fba63bb45d",
   "rests": [
    "0029-farmhouses-minka.drawing.html:9dd34b89f26d4272"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::grow_the_margin#the growth's widening": {
   "code": "f7dce49e5c707c60",
@@ -8965,16 +9005,18 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::grow_the_margin#the order of growth": {
-  "code": "745dd47f31da6045",
+  "code": "f5dd9191961dd2fd",
   "core": "67c6c1de77b9c72a",
   "date": "2026-10-07",
-  "note": "0029.drawing states nearest-the-cluster first; should cite research/questions/0029-farmhouses-minka.drawing.html, not an unnamed GUESS",
-  "pages": {},
-  "research": "",
+  "note": "the heap is popped nearest the seat first, so each next household takes the open place nearest the cluster",
+  "pages": {
+   "0029-farmhouses-minka.drawing.html": "28761adf1d2dece2"
+  },
+  "research": "a3cfa2fba63bb45d",
   "rests": [
    "0029-farmhouses-minka.drawing.html:9dd34b89f26d4272"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::grow_the_margin#the spacing jitter": {
   "code": "1dadfcdf9b7400b3",
@@ -43827,6 +43869,23 @@
   ],
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#bath room's wall per house": {
+  "code": "943df13367800ae2",
+  "core": "16cb8a36cca94b03",
+  "date": "2026-10-07",
+  "note": "each house rolls between the stable end and the main door, both attested walls, with the floored rooms as a rarer last option (the value of `bath_stable_share` is not in the bundle; the registers give about 0.8)",
+  "pages": {
+   "0044-baths-on-the-farm-furo.html": "1b0add3e2fcce3b5"
+  },
+  "research": "f9b1fe1111c8963a",
+  "rests": [
+   "0044-baths-on-the-farm-furo.html:b06feb4284b8522f",
+   "0044-baths-on-the-farm-furo.html:bb60e0fd056a14eb",
+   "0044-baths-on-the-farm-furo.html:cd48fd2aad413cde",
+   "0044-baths-on-the-farm-furo.html:e6d213de3cdf21df"
+  ],
+  "verdict": "IN-STEP"
+ },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#fixture gap 3.5 ft off every other part and bath room slide 4 ft": {
   "code": "2ca8e3ea72e3fc3f",
   "core": "16cb8a36cca94b03",
@@ -43870,14 +43929,6 @@
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#the bath room's wall rolled per house (stable end against BATH_STABLE_SHARE, else main door; floored rooms / headman's case not visible here)": {
-  "code": "16cb8a36cca94b03",
-  "core": "16cb8a36cca94b03",
-  "date": "2026-10-07",
-  "note": "the bath room's wall rolled per house (stable end against BATH_STABLE_SHARE, else main door; floored rooms / headman's case not visible here)",
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#wood shed's walls": {
   "code": "1df30e5bc8f61d32",
