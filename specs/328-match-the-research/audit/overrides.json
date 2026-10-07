@@ -1113,14 +1113,16 @@
   "tier": "E2"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::shed_off_a_wall#wood shed a ken off a wall": {
-  "after": [],
+  "after": [
+   ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::WOODSHED_STEP_FT#wood shed off its wall"
+  ],
   "files": [
    ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py"
   ],
   "fix": "fixture_seats.py:364: drop \"+ px(STEP_FT)\" from the against_a_wall bound so a shed stands within g + px(WOODSHED_STEP_FT) (a ken) of its wall, per 0043 drawing (about 6 ft off a wall); the outward(seats, px(STEP_FT), 1) offers at line 386 then never pass and can go",
   "flag": "",
   "found": "wave 9 re-check (tiered by its work at T38a)",
-  "moved": "T38a: tiered by its work - One bound value changes; the predicate's logic is the same.",
+  "moved": "T38a: tiered by its work - One bound value changes; the predicate's logic is the same.; amendment 9 round 3: its bound is a ken only once the held shed step moves - after it",
   "tier": "E1"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/grove_rules.py::gardens_east_shaded#a neighbor's band": {

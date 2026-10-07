@@ -531,13 +531,13 @@ closed.
       verify:
 
 
-## Phase 11 - wave 10 (amendment 9): the open in-scope E0 claims, then in-scope E1 rows 295-360
+## Phase 11 - wave 10 (amendment 9): the open in-scope E0 claims, then in-scope E1 rows 296-358
 
 Wave 9's re-checks found its found rows (`audit/found-wave9.jsonl`), every one tiered by its work by a fresh reader (T38a,
 `audit/t38a-out.jsonl`; T38b, `audit/t38b-out.jsonl` and `audit/t38c-out.jsonl`); the NEEDS-RESEARCH rows are E4, the research
-first (spec Edge Cases). With them, the last 19 in-scope E1 rows in ranking order, rows 295-360 (FR-006). A DEVIATION relabel
+first (spec Edge Cases). With them, the last 18 in-scope E1 rows in ranking order, rows 296-358 (FR-006). A DEVIATION relabel
 (the planted pond bank, the crowns-per-clump floor and ceiling, the north-wall storehouse) goes through the exception path
-first. Every `after` these rows carry is a row inside the wave or closed. The next open in-scope row is E2, row 361. WAVE 10
+first. Every `after` these rows carry is a row inside the wave or closed. The next open in-scope row is E2, row 359. WAVE 10
 BEGINS ONCE WAVE 9 IS PUSHED (FR-006) - or as the exception check rules (plan, Wave 10).
 
   - `l7r/diagram/hamletgen/ways/tree.py::admits#track out's width as judged` - add to admits' Research block (tree.py:193-198): "track out's width as judged - research/questions/0081-village-lanes.drawing.html: the track out's stub (`_root`) judged at 6 ft, the track out as drawn", pointing at tree.py:205
@@ -546,6 +546,7 @@ BEGINS ONCE WAVE 9 IS PUSHED (FR-006) - or as the exception check rules (plan, W
   - `l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#default watercourse widths` - add to _comb_draw_hem's Research block (comb.py:373-378): 'fallback watercourse widths - UNRESEARCHED: stream 9, channel 2.5, canal 14 px where a record carries no w' (the same label wellground.py:30 gives the same tuple)
   - `l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#nothing on a dry plot` - add to _comb_draw_hem's Research block: 'nothing built or planted on a dry plot - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: each drawn hem plot registered in block_polys (no building) and dry_polys (no grove clump, fringe or scatter)', pointing at comb.py:444-445
   - `l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_source#planted pond bank` - comb.py:628: relabel the claim DEVIATION research/questions/0061-reservoir-ponds-tameike.drawing.html (every bank drawn bare), through the exception path
+  - `l7r/diagram/settlement/homestead_parts/fixture_seats.py::PRIVY_FRONT_STEP_FT#front privy off the front wall` - relabel GUESS research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: 8 ft (the page records the 8 ft as its own guess); the code's 8 ft edge stands
   - `l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#manure heap fallback spots` - fixture_seats.py:478: add a claim for the manure heap's fallback spots (beside the privy at 1.1 and 1.9 widths, 10 ft further out, lines 503-512) and its no-privy seats at 0.3 hw / 0.3 hh (line 501), UNRESEARCHED
   - `l7r/diagram/settlement/homestead_parts/fixture_seats.py::_wood_shed#wood shed fallback seats` - fixture_seats.py:383: add a claim for the fallback seats paced a further STEP_FT (8 ft) out (outward(seats, px(STEP_FT), 1), line 386), UNRESEARCHED
   - `l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#bamboo patch forced` - groves.py:~720: add a claim for in_box(..., bamboo_box) at :788 forcing an item to bamboo in any mix and even when bamboo=False, citing research/questions/0075-bamboo-groves-chikurin.drawing.html (the farm's patch) or UNRESEARCHED
@@ -567,7 +568,6 @@ BEGINS ONCE WAVE 9 IS PUSHED (FR-006) - or as the exception check rules (plan, W
   - `l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_for#handover band` - add to _board_for's Research block: 'handover band - UNRESEARCHED: an entrance board within KOSATSUBA_HANDOVER_BAND_FT, 20 ft, of the nearest seat to the handover, where every departure passes', pointing at siting.py:448-449 (the constant's claim at _helpers.py:92)
 
   - `l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_source#feeder brook width` - comb.py:651: width=7 -> width=self.px(7.0) (0059/0068: a brook about 7 ft wide), and drop "in px rather than feet" from the claim at comb.py:630
-  - `l7r/diagram/settlement/homestead_parts/fixture_seats.py::shed_off_a_wall#wood shed a ken off a wall` - fixture_seats.py:364: drop "+ px(STEP_FT)" from the against_a_wall bound so a shed stands within g + px(WOODSHED_STEP_FT) (a ken) of its wall, per 0043 drawing (about 6 ft off a wall); the outward(seats, px(STEP_FT), 1) offers at line 386 then never pass and can go
   - `l7r/diagram/settlement/homestead_parts/wood_share.py::copse_keepouts#south strip in feet` - scale the south strip's `sun_depth` (feet) by `ppf` as the east and west lanes are (copse_keepouts, wood_share.py:114)
   - `l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_anchor#reaching the houses` - KOSATSUBA_ENTRANCE_REACH_FT becomes 60 ft, cited as GUESS to 0246 drawing (a way reaches a farmhouse within 60 ft of it), in place of 100 ft
   - `l7r/diagram/settlement/structures/fixtures/board_seat.py::FACING_DEG#board faces its way` - FACING_DEG from 45.0 to 30.0

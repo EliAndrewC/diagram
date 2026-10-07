@@ -1,6 +1,6 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "fe2eabd1eeb1032ea06abbd9d48f90b5b1e434c7c691bc8e52197ad1ac541c18",
+ "plan_sha256": "47eaf19870eb1db896ae46b031abf67cff060004f4bea8999e54336e764b9aad",
  "reviewed": "2026-10-07",
  "declared": "spec-fidelity",
  "decisions": [
@@ -240,12 +240,6 @@
    "why": "Round 1's item answered: ranking row 473 E2 with a fix toward 0052's band; the claim-naming option is gone from tasks.md."
   },
   {
-   "id": "W10-scope",
-   "summary": "Wave 10 = the 25 open in-scope E0 rows, then in-scope E1 rows 295-360 (19); next open in-scope row 361 is E2",
-   "class": "within",
-   "why": "Re-derived on this round from ranking.json: open kept/mode-a rows with no wave: E0 exactly 25 (83 ... 188), E1 exactly 19 (295, 306, 316, 327-333, 348, 351, 353-355, 357-360); rows 361-363 E2. 'easiest to hardest' and FR-010."
-  },
-  {
    "id": "W10-deviation-path",
    "summary": "DEVIATION relabels go through the exception path first; T39 says DEVIATION only after LEGITIMATE",
    "class": "within",
@@ -270,25 +264,30 @@
    "why": "A measured design attempt withdrawn; no scope moves."
   },
   {
-   "id": "W10-hold-wave9",
-   "summary": "Wave 9 is not pushed while it owes the GM's band-3 sign-off",
+   "id": "W9-hold-shed-step",
+   "summary": "The three scaling rolls' web refusals bisected by row over the held state to the wood shed's step alone; WOODSHED_STEP_FT held at its pre-wave 6.0 ft, E3 after its found row (last_resort.py::refuse_unreached#every household reached at 20 and 40 households), its claim stating the drift",
    "class": "within",
-   "why": "Constitution VI/XIII and the push's perf check: a band-3 pair lands only on the GM's own sign-off."
+   "why": "Round 2's item 1 answered by the spec's Edge Case route, as wave 2 held the brook's weight. Verified: fixture_seats.py WOODSHED_STEP_FT 6.0 with the drift stated and the row named; overrides.json E3 after the found row; found-wave9.jsonl carries the row; 'GM's to rule' gone from plan.md and claims-followup.md; the newest pair (20261007T162956Z-328-start-perfbase at 6ca2f5ccf, 20261007T163306Z-328-end at 6870097cd) seats every household on all 12 scaling rolls."
   },
   {
-   "id": "W9-hold-cost-to-GM",
-   "summary": "With the yard step held, three perf scaling rolls refuse their web (20 hh seed 39, 40 hh seeds 4 and 25; none at the 328-start on main, none with the step at the page's value); the plan and claims-followup.md leave this 'trade' (gate vs the three rolls) for the GM to rule",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "Not GM-only. Measured on the perf logs: 20261007T160442Z-328-end refuses scaling 6, 8, 9; the start pair at main refuses none - a regression the wave introduced (XIII), and XIII's expected exit is the fix, the waiver last. The spec's Edge Case covers it and this feature has used it on exactly this kind of roll: wave 2's brook weight at 0.05 made the 10-household bookend seed 4 refuse its web, was bisected by row and held at 3.0 on a found row (tasks.md Phase 3 note, lines 66-69: restoring 3.0 alone, of the wave's values, rolls it). The record's reason ('engine work this wave does not own') is the Edge Case's own trigger, not an exit from it. A regression-free wave 9 always exists by holding rows (at worst every conflicting row at main's value). Required: bisect by row over the held state on the three rolls, hold what makes each refuse on a found row, re-take the pair back to back; only a measured irreducible conflict goes to the GM."
+   "id": "W10-scope",
+   "summary": "Wave 10 = the open in-scope E0 rows (plan: 25), then in-scope E1 rows 295-360 (19); next open in-scope row 361 is E2",
+   "class": "within",
+   "why": "The rule is 'easiest to hardest' and FR-010. The figures are stale: ranking.json was not re-merged after this round's overrides/waves edits; re-merged in scratch (audit/merge.py) the scope is 26 E0 (the front privy step's relabel joins) and E1 rows 296-359 (same 19 keys), next E2 row 360. And shed_off_a_wall#wood shed a ken off a wall (in the E1 run) fixes toward 'g + WOODSHED_STEP_FT (a ken)', which rests on the held step: its dependency is not recorded (spec FR: a row follows any row it depends on; SC-003). Both are CHANGES REQUIRED items in the amendment verdict, not narrowings."
+  },
+  {
+   "id": "W10-hold-wave9",
+   "summary": "Wave 9 closes in full (impl-drift, a green gate, the wave column, no measured regression) and is pushed if band 2 or lower",
+   "class": "within",
+   "why": "Constitution VI/XIII and FR-006; the push's perf check."
   },
   {
    "id": "W10-stack-on-wave9",
-   "summary": "Wave 10 starts on top of unpushed wave 9 (each wave its own commits, gate and records, landing together) while wave 9 waits on the GM",
+   "summary": "If wave 9's bookends still read band 3, its push waits for the GM's sign-off and wave 10 starts on top of it in the clone, wave 10's opening bookend at wave 9's closing commit, the sign-off question deferred to the end",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "LEGITIMATE for the band-3 sign-off ONLY. The push is refused without the GM's own sign-off (physically impossible for the session), and the GM's goal amendment says 'don't stop working until you hit the cap or the feature is done. If you need to ask me a question then please defer it to the end of the feature' - waiting is the blocking the GM forbade, so the exception is implied by the GM's own words and FR-006 read literally would defeat that stated purpose. FR-006's purpose (each wave complete, verified, in order, its own record) is kept on these conditions: wave 9 closed in full first - every box but the push itself (impl-drift, a green gate, the wave column) and no measured regression (W9-hold-cost-to-GM resolved); if the re-taken pair is band 2 or less wave 9 is pushed and no exception is used; wave 10's bookend start taken at wave 9's closing commit so each band is its own; the sign-off question recorded for the end of the feature. Round 1's NOT LEGITIMATE stood on a failing gate the GM would be asked to waive; with the gate green and the regression removed, the GM rules on a fixed, recorded pair."
+   "why": "Case (a) of round 2, now worded with its conditions in plan.md. It applies: the newest pair reads band 3 on timing alone (one roll over 20%: 40 hh seed 39, 12.0 -> 14.5 s), every scaling roll seats every household, the gate is green; the band is the GM's sign-off under the push's perf check, which the session cannot give, and the GM said to defer questions to the end of the feature. The condition 'wave 9 closed in full' (T37, T38's records) must hold before wave 10's first edit."
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }

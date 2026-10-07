@@ -2194,6 +2194,22 @@
   "scope": "deferred"
  },
  {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::PRIVY_FRONT_STEP_FT#front privy off the front wall",
+  "tier": "E0",
+  "fix": "relabel GUESS research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: 8 ft (the page records the 8 ft as its own guess); the code's 8 ft edge stands",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py"
+  ],
+  "after": [],
+  "flag": "",
+  "tier_as_ranked": "E1",
+  "e0_basis": "bundle I: the figure matches, the label owes the page's GUESS",
+  "moved": "wave 9 bundle I: MISLABELED after its value moved - the page marks the 8 ft a GUESS",
+  "verdict": "DRIFTED",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#manure heap fallback spots",
   "verdict": "UNCLAIMED",
   "tier": "E0",
@@ -4587,34 +4603,6 @@
   "scope": "deferred"
  },
  {
-  "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::PRIVY_FRONT_STEP_FT#front privy off the front wall",
-  "tier": "E1",
-  "fix": "front privy edge 8 ft off the front wall: drop the WALL_GAP_FT from the seat (or PRIVY_FRONT_STEP_FT 4.5)",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py"
-  ],
-  "after": [],
-  "flag": "",
-  "tier_as_ranked": "E1",
-  "verdict": "DRIFTED",
-  "wave": "9",
-  "scope": "kept"
- },
- {
-  "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::WOODSHED_STEP_FT#wood shed off its wall",
-  "tier": "E1",
-  "fix": "wood shed edge 6 ft off its wall: drop the gap from the seat (or WOODSHED_STEP_FT 2.5)",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py"
-  ],
-  "after": [],
-  "flag": "",
-  "tier_as_ranked": "E1",
-  "verdict": "DRIFTED",
-  "wave": "9",
-  "scope": "kept"
- },
- {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::privy_sun_reach_ft#sun-side reach by size",
   "tier": "E1",
   "fix": "cap a sunny-side privy center at 48 ft from its house; drop the size allowance in privy_sun_reach_ft",
@@ -4626,22 +4614,6 @@
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
   "wave": "9",
-  "scope": "kept"
- },
- {
-  "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::shed_off_a_wall#wood shed a ken off a wall",
-  "verdict": "DRIFTED",
-  "tier": "E1",
-  "fix": "fixture_seats.py:364: drop \"+ px(STEP_FT)\" from the against_a_wall bound so a shed stands within g + px(WOODSHED_STEP_FT) (a ken) of its wall, per 0043 drawing (about 6 ft off a wall); the outward(seats, px(STEP_FT), 1) offers at line 386 then never pass and can go",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py"
-  ],
-  "after": [],
-  "flag": "",
-  "found": "wave 9 re-check (tiered by its work at T38a)",
-  "tier_as_ranked": "E1",
-  "moved": "T38a: tiered by its work - One bound value changes; the predicate's logic is the same.",
-  "wave": "",
   "scope": "kept"
  },
  {
@@ -9781,6 +9753,22 @@
   "scope": "kept"
  },
  {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/last_resort.py::refuse_unreached#every household reached at 20 and 40 households",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "the web reaches every household and the field on the reference's scaling rolls with the wood shed a ken off its wall (0043): at that value 20 households seed 39 and 40 households seeds 4 and 25 refuse (farmhouses or the field left off the network); the cause in the web's search on the tighter dooryards is not yet measured",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/last_resort.py",
+   ".claude/skills/diagram/l7r/diagram/settlement/rolling/gap_ways.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 9 bookends: the row held for it (FR-004, spec Edge Cases; amendment 9 round 2)",
+  "tier_as_ranked": "E3",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/route.py::_route#clear of the crop",
   "tier": "E3",
   "fix": "_route crop margin 0 (may touch a plot's boundary) and cite 0081 drawing",
@@ -10468,6 +10456,41 @@
   "verdict": "DRIFTED",
   "wave": "",
   "scope": "deferred"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::WOODSHED_STEP_FT#wood shed off its wall",
+  "tier": "E3",
+  "fix": "wood shed edge 6 ft off its wall: drop the gap from the seat (or WOODSHED_STEP_FT 2.5)",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py"
+  ],
+  "after": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/last_resort.py::refuse_unreached#every household reached at 20 and 40 households"
+  ],
+  "flag": "",
+  "tier_as_ranked": "E1",
+  "moved": "wave 9 bookends: held - at a ken three scaling rolls refuse their web (bisected by row over the held state: the shed step alone; holding the privy's sun reach instead does it too, the smaller hold chosen); waits on the web row",
+  "verdict": "DRIFTED",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::shed_off_a_wall#wood shed a ken off a wall",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "fixture_seats.py:364: drop \"+ px(STEP_FT)\" from the against_a_wall bound so a shed stands within g + px(WOODSHED_STEP_FT) (a ken) of its wall, per 0043 drawing (about 6 ft off a wall); the outward(seats, px(STEP_FT), 1) offers at line 386 then never pass and can go",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py"
+  ],
+  "after": [
+   ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::WOODSHED_STEP_FT#wood shed off its wall"
+  ],
+  "flag": "",
+  "found": "wave 9 re-check (tiered by its work at T38a)",
+  "tier_as_ranked": "E1",
+  "moved": "T38a: tiered by its work - One bound value changes; the predicate's logic is the same.; amendment 9 round 3: its bound is a ken only once the held shed step moves - after it",
+  "wave": "",
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/grove_rules.py::gardens_east_shaded#a neighbor's band",
