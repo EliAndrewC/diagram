@@ -42075,67 +42075,11 @@
   "triaged": "2026-10-04",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py::grove_extent#plumbing": {
-  "code": "8c6d2eb1ad96b540",
-  "core": "4b9f2f7444b0c2cc",
-  "date": "2026-10-03",
-  "note": "geometry",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py::grove_stocked#a recorded grove is stocked": {
-  "code": "071b0f6660bb8725",
-  "core": "f38b1c29a019caf9",
-  "date": "2026-10-03",
-  "note": "unanswered in the bundle",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py::main_stand#plumbing": {
-  "code": "17473454a607f095",
-  "core": "a21d0d46a541ff68",
-  "date": "2026-10-03",
-  "note": "recorded extent only",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py::record_box#plumbing": {
-  "code": "4e38a8c1c950be74",
-  "core": "8850334c43c61d87",
-  "date": "2026-10-03",
-  "note": "record",
-  "research": "",
-  "verdict": "IN-STEP"
- },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py::reserved_seat_keepouts#plumbing": {
   "code": "7ee7f437a5970214",
   "core": "2064f1c295198ca1",
   "date": "2026-10-03",
   "note": "displacement geometry",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py::stocked_at_grain#plumbing": {
-  "code": "6ed5dea30841bc4e",
-  "core": "7db145d2b7108bb3",
-  "date": "2026-10-03",
-  "note": "rounding",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py::stocked_box#plumbing": {
-  "code": "a390ed2145c4cb25",
-  "core": "915d8a25157490db",
-  "date": "2026-10-03",
-  "note": "recorded extent only",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py::stocked_copse#copse clumps farthest from the centroid dropped until stocked": {
-  "code": "0f952ac6ff33eb3c",
-  "core": "d15ab9ebea6dec6d",
-  "date": "2026-10-03",
-  "note": "record silent",
   "research": "",
   "verdict": "IN-STEP"
  },
@@ -42157,6 +42101,84 @@
   "date": "2026-10-03",
   "note": "names the GM's 2026-09-12 ruling",
   "research": "",
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stocking.py::grove_extent#plumbing": {
+  "code": "8c6d2eb1ad96b540",
+  "core": "4b9f2f7444b0c2cc",
+  "date": "2026-10-07",
+  "note": "bounding box grown by a pad the caller passes in; plumbing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stocking.py::grove_stocked#a recorded grove is stocked": {
+  "code": "071b0f6660bb8725",
+  "core": "f38b1c29a019caf9",
+  "date": "2026-10-07",
+  "note": "the 1.5 clumps per 100,000 sq px floor is the code's only figure, and no question in the bundle bears on it",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stocking.py::main_stand#plumbing": {
+  "code": "17473454a607f095",
+  "core": "a21d0d46a541ff68",
+  "date": "2026-10-07",
+  "note": "splits clumps only to choose the recorded extent; no clump is moved or dropped",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stocking.py::record_box#plumbing": {
+  "code": "4e38a8c1c950be74",
+  "core": "8850334c43c61d87",
+  "date": "2026-10-07",
+  "note": "writes the box into the record, rounded to 0.1 px",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stocking.py::stocked_at_grain#plumbing": {
+  "code": "6ed5dea30841bc4e",
+  "core": "7db145d2b7108bb3",
+  "date": "2026-10-07",
+  "note": "runs the stocking test on the rounded box so rounding cannot tip it",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stocking.py::stocked_box#plumbing": {
+  "code": "a390ed2145c4cb25",
+  "core": "915d8a25157490db",
+  "date": "2026-10-07",
+  "note": "picks which already-computed box the record keeps; the threshold it applies is claimed on grove_stocked",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stocking.py::stocked_copse#a household's reserved share of the wood floor (woods W25) is never dropped as a straggler": {
+  "code": "d15ab9ebea6dec6d",
+  "core": "d15ab9ebea6dec6d",
+  "date": "2026-10-07",
+  "note": "a household's reserved share of the wood floor (woods W25) is never dropped as a straggler",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stocking.py::stocked_copse#copse clumps farthest from the centroid dropped until stocked": {
+  "code": "0f952ac6ff33eb3c",
+  "core": "d15ab9ebea6dec6d",
+  "date": "2026-10-07",
+  "note": "drops the farthest clumps one at a time until stocked; no question in the bundle bears on it",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/tree_shade.py::BAMBOO_SHADE_FT#bamboo shade reach": {

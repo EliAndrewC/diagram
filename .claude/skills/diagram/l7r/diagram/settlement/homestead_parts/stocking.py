@@ -19,7 +19,9 @@ def stocked_copse(clumps: list[tuple[float, float]], pad: float, kept: frozenset
     """A copse's clumps with its stragglers dropped - the clump farthest from the clumps' centroid, one at a time - until the extent the copse is
     recorded at (its clumps' box grown by `pad`) is `grove_stocked` (feature 287, woods W15). It terminates: one clump's extent is a square of `2 * pad`,
     far above the floor. A clump in `kept` - a household's reserved share of the wood floor (woods W25) - is never a straggler: the drop stops when only kept clumps are left.
-    Research: copse clumps farthest from the centroid dropped until stocked - UNRESEARCHED"""
+    Research:
+        copse clumps farthest from the centroid dropped until stocked - UNRESEARCHED
+        reserved share never a straggler - UNRESEARCHED: a household's reserved share of the wood floor (woods W25) is kept"""
     out = list(clumps)
     while len(out) > 1:
         xs, ys = [c[0] for c in out], [c[1] for c in out]

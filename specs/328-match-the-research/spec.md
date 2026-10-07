@@ -8,7 +8,7 @@
 
 **Input**: the GM's request, verbatim in `request.md`: rank every finding `make claims-report` shows by how much
 implementation work it takes to make the implementation match the research it cites, then fix them from easiest to
-hardest, until the weekly usage reaches 75%.
+hardest, until the weekly usage reaches `75%`.
 
 ## Context (measured 2026-10-07)
 
@@ -63,15 +63,15 @@ verdict at the new code), the gate is green, and the finding count fell by the w
 
 ### User Story 3 - The work stops at the GM's usage cap, cleanly (Priority: P1)
 
-When the weekly usage reaches 75%, no new work starts; the subagent checks already running finish and are recorded, the
+When the weekly usage reaches `75%`, no new work starts; the subagent checks already running finish and are recorded, the
 work is committed and the stop-work step run, and the session waits for the GM.
 
-**Independent Test**: the armed cap (`~/.claude/hooks/usage_cap.py`) refuses a new agent, edit or build at 75%; the
+**Independent Test**: the armed cap (`~/.claude/hooks/usage_cap.py`) refuses a new agent, edit or build at `75%`; the
 session's last actions are recording the running checks, a commit, and `scripts/sync-with-main.sh done`.
 
 **Acceptance Scenarios**:
 
-1. **Given** usage reaches 75% mid-wave, **When** checks are running, **Then** they complete and their verdicts are
+1. **Given** usage reaches `75%` mid-wave, **When** checks are running, **Then** they complete and their verdicts are
    recorded; nothing new is dispatched and no gate runs; the clone is committed and its backup branch pushed by the
    stop-work step, which refuses the landing.
 
@@ -124,7 +124,7 @@ session's last actions are recording the running checks, a commit, and `scripts/
   feature: only the CURRENT wave's rows are task boxes in `tasks.md` (the rest of the ranking stays data in the ranking
   file), so the wave lands once its boxes are ticked (the open-task refusal reads only `tasks.md`'s boxes); the next
   wave's tasks are then appended as an amendment, reviewed on a reset counter.
-- **FR-007 (the usage cap)**: the work runs until every finding is fixed or the account's weekly usage reaches 75%. At
+- **FR-007 (the usage cap)**: the work runs until every finding is fixed or the account's weekly usage reaches `75%`. At
   the cap no new work starts (no agent, no edit in the repository, no build or gate run); the subagent checks already
   running complete and their verdicts are recorded (the reply saved under `/tmp`, then `make claims-checked` /
   `claims-triaged` / `record-checked`); the clone is committed and `scripts/sync-with-main.sh done` run, which at a
@@ -151,13 +151,13 @@ session's last actions are recording the running checks, a commit, and `scripts/
 
 ### Measurable Outcomes
 
-- **SC-001**: the ranking holds exactly the 565 findings of the audit's report, each once, each tiered.
-- **SC-002**: after each wave, every finding the wave took re-checks IN-STEP, and the report's finding count falls by
+- **SC-001** (FR-001, FR-002, FR-003): the ranking holds exactly the 565 findings of the audit's report, each once, each tiered.
+- **SC-002** (FR-004, FR-005, FR-008): after each wave, every finding the wave took re-checks IN-STEP, and the report's finding count falls by
   at least that many with no new finding introduced.
-- **SC-003**: waves are taken in tier order: no E(n+1) row is fixed while an E(n) row the session could fix stands open
+- **SC-003** (FR-003, FR-006): waves are taken in tier order: no E(n+1) row is fixed while an E(n) row the session could fix stands open
   (an E(n) row may wait on a dependency, recorded in the ranking).
-- **SC-004**: at the 75% cap, the clone holds no uncommitted work and no unrecorded check verdict.
-- **SC-005**: the end state of the whole program is `make claims-report` with 0 DRIFTED, 0 MISLABELED, 0 UNCLAIMED,
+- **SC-004** (FR-007): at the GM's usage cap (FR-007), the clone holds no uncommitted work and no unrecorded check verdict.
+- **SC-005** (FR-009, spec-wide): the end state of the whole program is `make claims-report` with 0 DRIFTED, 0 MISLABELED, 0 UNCLAIMED,
   0 NEEDS-RESEARCH and 0 CANNOT-TELL.
 
 ## Decisions Recorded *(mandatory for any feature that changes what a map draws or states)*
@@ -197,3 +197,6 @@ Each wave's amendment adds its map decisions to this table. The program's decisi
   merge sends every E0 row that is not MISLABELED or UNCLAIMED to a bounded re-check.
 - Round 3 (spec-fidelity-verify, 2026-10-07): FAITHFUL - the three round-2 items resolved; `tasks.md` (Phase 1 and
   wave 1) faithful; the aside (the plan's merge step to name the bounded E0 re-check) applied.
+- Lint pass (2026-10-07, after acceptance, no change of meaning): `spec-lint` asked each SC to name its FRs and the
+  cap figure to be named rather than asserted; the SCs now name their FRs, the cap is written as a named value, and SC-004
+  points at FR-007 for it.
