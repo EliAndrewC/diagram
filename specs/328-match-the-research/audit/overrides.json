@@ -79,5 +79,11 @@
   "after": [
    ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::RunOnBlocks.clear#off the steadings"
   ]
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py::BUNDLE_PITCH#row pitch": {
+  "after": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/joints.py::_one_joint#a fold or Z at a joint becomes a T"
+  ],
+  "moved": "wave 2: at 92 ft (0038) Kuwabata's lanes 3 and 8 zigzag across a joint the engine cannot yet re-route; held back to 100 in wave 2, the row waits for that row"
  }
 }

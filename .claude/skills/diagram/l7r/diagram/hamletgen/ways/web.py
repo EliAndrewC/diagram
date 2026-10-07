@@ -81,7 +81,7 @@ def _lay_skeleton(s: Settlement, plan: SitePlan, frame: _margin_frame, arcs: Seq
         clear of crop, wet and water - UNRESEARCHED: 20 ft off the crop, the marsh and the ditches
         routed round the steadings - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: nothing is built on a lane
         skeleton width - research/questions/0081-village-lanes.drawing.html: 5 ft
-        skeleton span floor - UNRESEARCHED: the span floored at one bundle pitch (92 ft) each way; a piece under 30 ft not laid"""
+        skeleton span floor - UNRESEARCHED: the span floored at one bundle pitch (100 ft) each way; a piece under 30 ft not laid"""
     if len(arcs) < 2:
         return []
     arc0 = (min(arcs) + max(arcs)) / 2.0
@@ -451,7 +451,7 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
         belt crossed not followed - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: a lane
             may cross a shelter belt, the planting resuming on both sides, but not run its length
         door path reach - GUESS: DOOR_REACH_FT 40 ft, STEADING_ARRIVAL_FT 12 ft on a row
-        web cut spacing - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every house within WEB_REACH_FT (92 ft) of a cut, so the cuts stand up to about twice that apart
+        web cut spacing - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every house within WEB_REACH_FT (100 ft) of a cut, so the cuts stand up to about twice that apart
         a cut's room - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: MIN_WEB_GAP, 7 ft clear of a garden fence on each side and a 4 ft tread, within the page's 3 ft footpath to 5 ft spine
         a web lane's span - UNRESEARCHED: only the houses within 1.5 times WEB_REACH_FT of its cut
         web lanes off the hard ground - UNRESEARCHED: WEB_HARD_GAP 8 ft off the field, the crop and the marsh

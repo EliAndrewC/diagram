@@ -208,3 +208,6 @@ Each wave's amendment adds its map decisions to this table. The program's decisi
   `after`. The aside on XIII applied: the baseline is the clone at main's engine content before the first edit.
 - Amendment 1, round 2 (spec-fidelity-verify, 2026-10-07): FAITHFUL; plan CLEAR (seven decisions within). Aside: the
   archery bank is fixed literally at `250 x 8 ft`; any move from it goes to the exception path first.
+- Wave 2 measurement (2026-10-07, not a review round): the row pitch at 0038's `92 ft` Z'd a Kuwabata joint the engine
+  cannot re-route (`test_no_zigzag_straddles_a_joint`); on the measured cause the row waits for a found E3 row that
+  re-routes such a joint (SC-003's dependency), held at 100 meanwhile; `WEB_REACH_FT` stays 0246's `100 ft`, decoupled.

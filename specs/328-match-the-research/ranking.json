@@ -907,19 +907,6 @@
   "wave": ""
  },
  {
-  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py::BUNDLE_PITCH#row pitch",
-  "tier": "E1",
-  "fix": "BUNDLE_PITCH 100.0 -> 92.0 (0038: rows set 92 ft apart); re-derive HOMESTEAD_GROUND_FT and WEB_REACH_FT ties",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py"
-  ],
-  "after": [],
-  "flag": "",
-  "tier_as_ranked": "E1",
-  "verdict": "DRIFTED",
-  "wave": ""
- },
- {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::WET_SHARE_CAP#woods mostly on dry ground",
   "tier": "E1",
   "fix": "WET_SHARE_CAP 0.5 -> ~0 (0077: low ground by a river or marsh is left to grass, not wood)",
@@ -6357,6 +6344,36 @@
   "after": [],
   "flag": "",
   "tier_as_ranked": "E3",
+  "verdict": "DRIFTED",
+  "wave": ""
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/joints.py::_one_joint#a fold or Z at a joint becomes a T",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "a Z across a joint that no T and no pull can take out (every replacing link refused: the jog skirts a steading) is re-routed, so no zigzag straddles the joint (0081); found when 0038's 92 ft row pitch Z'd Kuwabata's lanes 3 and 8 at (3534, 1426) - the T's foot fell on the joint from both sides, and both links that drop the 36 ft jog were refused",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/joints.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 2: the row pitch at 92 ft",
+  "tier_as_ranked": "E3",
+  "wave": ""
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py::BUNDLE_PITCH#row pitch",
+  "tier": "E3",
+  "fix": "BUNDLE_PITCH 100.0 -> 92.0 (0038: rows set 92 ft apart); re-derive HOMESTEAD_GROUND_FT and WEB_REACH_FT ties",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py"
+  ],
+  "after": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/joints.py::_one_joint#a fold or Z at a joint becomes a T"
+  ],
+  "flag": "",
+  "tier_as_ranked": "E1",
+  "moved": "wave 2: at 92 ft (0038) Kuwabata's lanes 3 and 8 zigzag across a joint the engine cannot yet re-route; held back to 100 in wave 2, the row waits for that row",
   "verdict": "DRIFTED",
   "wave": ""
  },
