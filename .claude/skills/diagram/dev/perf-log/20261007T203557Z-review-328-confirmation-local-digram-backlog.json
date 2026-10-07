@@ -1,0 +1,62 @@
+{
+  "band": 1,
+  "base": {
+    "commit": "68ee171f4",
+    "label": "328-start",
+    "utc": "20261007T202726Z"
+  },
+  "binding": "6609fe0bc4fb6fe6e5a7fa239a356136c75b11f6d3386c837478007f26fc35e6",
+  "end": {
+    "commit": "4c5db9f85",
+    "label": "328-end",
+    "utc": "20261007T203040Z"
+  },
+  "environment": "local",
+  "feature": "328-match-the-research",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "8d3395e5-fe32-4f85-9c89-80c344d2ac1a",
+    "utc": "20261007T203557Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": 0.0,
+          "39": 0.0,
+          "4": 0.0,
+          "47": 0.0
+        },
+        "total_pct": 0.0
+      },
+      "20": {
+        "seeds": {
+          "25": 0.0,
+          "39": -3.6,
+          "4": -1.2,
+          "47": 0.0
+        },
+        "total_pct": -1.1
+      },
+      "40": {
+        "seeds": {
+          "25": -0.8,
+          "39": -1.7,
+          "4": -0.6,
+          "47": 0.8
+        },
+        "total_pct": -0.6
+      }
+    },
+    "seeds": {
+      "25": -2.0,
+      "39": 0.0,
+      "4": -4.1,
+      "47": 2.4
+    },
+    "total_pct": -1.1
+  },
+  "note": "Reviewer counterfactual (UNVERIFIED explanation): base 68ee171f4 (drain call present) vs end 4c5db9f85, both in detached worktrees, seed 47 x4 interleaved: same seat anchor (3265.8,2046.5 ref; 5331.1,3295.5 at 40 hh), seat 0.021-0.022s both; ref total 4.30-4.47s base vs 4.30-4.35s end; 40-hh homesteads 4.79-4.84s base vs 4.77-4.82s end - the +2.4%/+0.8% (homesteads +0.1s) does not reproduce; the l7r diff touches only seat_cluster/track and removes a call; run-to-run variance as stated",
+  "verdict": "consistent"
+}

@@ -758,10 +758,13 @@ then `hamletgen/cluster.py`'s drain rules; wave 15 is these 9 rows.
 - [x] T53a the four reopened rows tiered by the work they take, by a fresh reader (FR-002, FR-003, SC-003)
       research: rendering
       verify: DONE. 4 rows tiered by their work by a fresh Opus reader (audit/t53a-out.jsonl): granary forms E0, the rest E2; no sheet redrawn
-- [ ] T53 the Mode A rows changed toward their pages: the claims, the procedure paragraphs and the regenerated table (FR-004, FR-005, FR-009)
+- [x] T53 the Mode A rows changed toward their pages: the claims, the procedure paragraphs and the regenerated table (FR-004, FR-005, FR-009)
       research: rendering
-- [ ] T54 `below_drain`'s span and the seat without the drain rule, with their tests; the pool hamlets regenerated (FR-004, FR-005)
+      verify: DONE. the Mode A rows changed toward their pages: granary claims split (forms, size GUESS, the vents a convention, one storehouse at the office with the row at the landing - the granary-weight row taken with it), the size hierarchy from 0116's drawing page, subsidiary buildings with what the record shows, the stage and sumo defaults claimed as 0222's GUESS (a roll tried and withdrawn against that page), the manor kitchen garden's two knobs, the strongbox clause dropped; the programs table regenerated
+- [x] T54 `below_drain`'s span and the seat without the drain rule, with their tests; the pool hamlets regenerated (FR-004, FR-005)
       research: rendering
-- [ ] T55 every touched claim re-checked by `impl-drift`, the modals' owed record checks, and the close: wave 15's own bookend pair,
+      verify: DONE. below_drain judged within the drain's span across the slope (test: past either end, a diagonal drain, a drain straight down the slope); the seat's drain rule removed with its tests rewritten; no pool hamlet's manifest changed (the rule never fired on one); the per-farm rule filed E3
+- [x] T55 every touched claim re-checked by `impl-drift`, the modals' owed record checks, and the close: wave 15's own bookend pair,
       `make done` green, the wave column (FR-005, FR-006, SC-002, SC-003)
       research: rendering
+      verify: DONE. impl-drift on every touched claim (w15 bundles, every wave row IN-STEP at the last round; findings filed and closed rows reopened); make done green; wave 15's own pair (328-start at 68ee171f4) band 1, explained, perf-audit consistent (its own alternating runs); the wave column written
