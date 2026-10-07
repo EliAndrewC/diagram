@@ -907,7 +907,9 @@ row is the fixture count's cap (425).
 - [x] T67a wave 20's found rows tiered by the work they take, by a fresh reader (FR-002, FR-003, SC-003)
       research: rendering
       verify: DONE. 2 rows tiered E0 by a fresh Opus reader (audit/t67a-out.jsonl)
-- [ ] T67 the two claims written (FR-004)
+- [x] T67 the two claims written (FR-004)
       research: rendering
-- [ ] T68 the claims re-checked by `impl-drift`, and the close: wave 21's own bookend pair, `make done` green, the wave column (FR-005, FR-006)
+      verify: DONE. the two CONVENTION claims written in open_ground_patches (the scan's seat window, the title pocket kept clear); no executed code changed
+- [x] T68 the claims re-checked by `impl-drift`, and the close: wave 21's own bookend pair, `make done` green, the wave column (FR-005, FR-006)
       research: rendering
+      verify: DONE. impl-drift on both claims IN-STEP; amendment 20 FAITHFUL; make done green (already verified); wave 21's own pair band 1, variance on identical code (perf-audit consistent); the wave column written

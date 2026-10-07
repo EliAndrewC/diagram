@@ -91,6 +91,8 @@
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#mostly dry": "2",
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#near side of the field preferred": "19",
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#nearest seat preferred": "4 (IN-STEP on a wave's re-check, no change needed)",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#scan seat window 08 of the square's box inside the predicted": "21",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#woods kept out of the title pocket titlepocket keep rectangl": "21",
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/stages.py::stage_windbreak#against-the-belt copse clump": "16",
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/stages.py::stage_windbreak#copse among the homes": "16",
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/stages.py::stage_windbreak#copse on the house's own bank": "1",

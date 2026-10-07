@@ -680,7 +680,7 @@
   "found": "wave 20 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
   "moved": "T67a: tiered by its work by a fresh reader - Code already does exactly this (parcels.py lines 436-437 window at 0.6*half, line 469 area test at 0.8*(2*half)^2, comment 430-435 gives the why). It is a page-framing decision, not a physical one, so CONVENTION backing; no value or logic changes, only the missing claim.",
-  "wave": "",
+  "wave": "21",
   "scope": "kept"
  },
  {
@@ -696,7 +696,7 @@
   "found": "wave 20 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
   "moved": "T67a: tiered by its work by a fresh reader - Code already does this (parcels.py line 306 seeds keep_rects with title_pocket(s, plan); line 928 paints it into the open-ground region grown by half). Keeping map furniture clear is a drawing convention; only the claim is missing.",
-  "wave": "",
+  "wave": "21",
   "scope": "kept"
  },
  {

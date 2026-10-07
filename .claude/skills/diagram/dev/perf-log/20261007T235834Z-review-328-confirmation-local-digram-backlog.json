@@ -1,0 +1,62 @@
+{
+  "band": 1,
+  "base": {
+    "commit": "2ba8a8154",
+    "label": "328-start",
+    "utc": "20261007T235323Z"
+  },
+  "binding": "efae934d8c0bc3c08811e6f91e66c886f6be4423f890fdd33254350c1aed2f01",
+  "end": {
+    "commit": "71c4552bf",
+    "label": "328-end",
+    "utc": "20261007T235634Z"
+  },
+  "environment": "local",
+  "feature": "328-match-the-research",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "8d3395e5-fe32-4f85-9c89-80c344d2ac1a",
+    "utc": "20261007T235834Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": -3.4,
+          "39": -3.2,
+          "4": 0.0,
+          "47": 3.1
+        },
+        "total_pct": -0.8
+      },
+      "20": {
+        "seeds": {
+          "25": 0.0,
+          "39": 0.0,
+          "4": -1.3,
+          "47": -4.8
+        },
+        "total_pct": -1.5
+      },
+      "40": {
+        "seeds": {
+          "25": 0.0,
+          "39": 0.8,
+          "4": 0.6,
+          "47": 0.8
+        },
+        "total_pct": 0.5
+      }
+    },
+    "seeds": {
+      "25": -2.6,
+      "39": -2.4,
+      "4": -2.2,
+      "47": -2.3
+    },
+    "total_pct": -2.4
+  },
+  "note": "l7r diff 2ba8a8154..71c4552bf is 2 lines inside open_ground_patches' docstring; AST identical with docstrings blanked, so the start leg is itself the counterfactual. 10hh seed 47 +3.1% (homesteads +0.1s) on identical executed code is run-to-run variance, matched by 20hh seed 47 -4.8% in the same pair; total -2.4%.",
+  "verdict": "consistent"
+}
