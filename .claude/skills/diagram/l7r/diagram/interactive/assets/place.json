@@ -10,7 +10,7 @@
     },
     "village": {
       "noun": "village",
-      "what": "the head of its village district, and the seat of the village headsman who oversees the outlying hamlets - with its own shrine, its tax-free plots, the district's cremation ground and the burial ground that the village and its hamlets use. Like every village district it is peasant-only; no samurai live here.",
+      "what": "the head of its village district, and the seat of the village headsman who oversees the outlying hamlets - with its own shrine, its one plot of tax-free land, the district's cremation ground and the burial ground that the village and its hamlets use. Like every village district it is peasant-only; no samurai live here.",
       "houses_noun": "farmhouses",
       "excludes_farms": false,
       "population_note": "",

@@ -253,19 +253,19 @@ bridges, canals, moat and governor's gate. Every `after` these rows carry is a r
   - `l7r/diagram/settlement/city/walls.py::WallsMixin._tower#tower footprint` - tower footprint 65 x 40 ft (along_ft 65, ~1.7:1)
   - `l7r/diagram/settlement/city/walls.py::WallsMixin._tower#tower building on the spur` - floor the tower building on the spur at 30 ft: max(30, min(34, 0.55*along)) (after: l7r/diagram/settlement/city/walls.py::WallsMixin._tower#tower footprint)
 
-- [ ] T18 the bookend before the first edit: `make perf LABEL=328-start` in a detached worktree at main's engine, taken back
+- [x] T18 the bookend before the first edit: `make perf LABEL=328-start` in a detached worktree at main's engine, taken back
       to back with the end bookend (constitution VI; the wave-4 lesson: a pair taken apart reads the host's load)
       research: rendering
-      verify:
-- [ ] T19 the two E0 claims; then the E1 rows, each with the unit tests it moves; proven on the reference hamlet (Inashiro,
+      verify: DONE. DONE. 328-start taken in a detached worktree at origin/main (491b7bf7f, main's engine before any wave-5 edit), back to back with the end bookend on a quiet host (a first pair that overlapped the gate was discarded): total 16.9 s
+- [x] T19 the two E0 claims; then the E1 rows, each with the unit tests it moves; proven on the reference hamlet (Inashiro,
       its PNG looked at; Kashikawa and Mizuguchi for the row street) and then across the pool and the cohort's bookend
       seeds; a town or city value no pool map draws is proven by its unit test; a value that makes a map refuse is held at
       its old value and the row takes the tier of the work it needs, as a found row (FR-004, FR-005, spec Edge Cases)
       research: rendering
-      verify:
-- [ ] T20 every touched unit re-checked by `impl-drift`; each wave-5 row IN-STEP or re-tiered with its measured reason (FR-005, SC-002)
+      verify: DONE. DONE. The two E0 claims; the row street runs on off the map at both ends (0033; the far run flagged run_on so the board keeps the road's entrance); captions leaderless to twice the gap (0242); the funerary caption group; the tier text; the execution ground by tier and the 4 ft stone; the honmaru at 2 ha; the martial hall's 124 x 35 ft hall; ministries by tier; the town wall's 13 ft gate and 11 ft rampart; the plank 4 ft; the sluice 90 ft past the rim; the moat's river ends square; the water gate 60 ft clear between 12 ft piers; the governor's gate south; the city wall's figures in feet; the mill re-tiered E3 (a mill race is new), the moat width E4 (0146 and 0151 disagree), the dead archery constant removed. Proven on Inashiro, Kashikawa and Mizuguchi (PNGs looked at), then the pool and the cohort through the gate; city values by their unit tests
+- [x] T20 every touched unit re-checked by `impl-drift`; each wave-5 row IN-STEP or re-tiered with its measured reason (FR-005, SC-002)
       research: rendering
-      verify:
-- [ ] T21 the occasion's review (glyph-check on Kashikawa's ways, one map) on a green gate; the close: `make perf LABEL=328-end` and the band's records, `make done` green, the wave column, landed (FR-005, FR-006, SC-002, SC-003)
+      verify: DONE. DONE. impl-drift on every touched unit (bundles A-G of wave 5; make claims-owed: no claim is owed); 21 wave-5 rows IN-STEP, 6 closed by rename or removal, 5 re-tiered with their reasons (overrides.json), the re-checks' 37 further findings ranked as found rows (found-wave5.jsonl, claims-followup.md Wave 5)
+- [x] T21 the occasion's review (glyph-check on Kashikawa's ways, one map) on a green gate; the close: `make perf LABEL=328-end` and the band's records, `make done` green, the wave column, landed (FR-005, FR-006, SC-002, SC-003)
       research: rendering
-      verify:
+      verify: DONE. DONE. glyph-check on Kashikawa's ways PASS (the occasion now names its map, _review_owed.py); the later run_on flag left the lanes identical and restored main's board seat. Bookends back to back: band 0 (total -1.2%, 40 hh -5.8%), nothing owed; make done green; make page-check green; the wave column written

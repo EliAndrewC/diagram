@@ -704,7 +704,7 @@
   "e0_basis": "impl-drift wave 4: the 25 ft reach is the page's; only the AIM_DEG test is unclaimed",
   "moved": "wave 4 re-check: the reach in step, the aim test unclaimed",
   "verdict": "DRIFTED",
-  "wave": ""
+  "wave": "5"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#no way drawn twice",
@@ -830,7 +830,7 @@
   "flag": "",
   "found": "wave 4 re-check (impl-drift on track.py)",
   "tier_as_ranked": "E0",
-  "wave": ""
+  "wave": "5 (claimed; its relabel to 0081 ranked)"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#connector and spur keep a 40 ft no-build clearance (LANE_CLEARANCE)",
@@ -858,7 +858,7 @@
   "flag": "",
   "found": "wave 5 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
-  "wave": ""
+  "wave": "5 (IN-STEP on a wave's re-check, no change needed)"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#spur clip margin",
@@ -879,6 +879,20 @@
   "verdict": "UNCLAIMED",
   "tier": "E0",
   "fix": "claim it: spur tip set back 17 ft (SPUR_SETBACK) off the field outline's vertex",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 5 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E0",
+  "wave": ""
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#valley and polder connector width CONNECTOR_WIDTH 6 ft",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "claim it: valley and polder connector width CONNECTOR_WIDTH 6 ft",
   "files": [
    ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py"
   ],
@@ -957,6 +971,20 @@
   "found": "wave 3 re-check",
   "tier_as_ranked": "E0",
   "wave": "4"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/interactive/place.py::KINDS#a hamlet's dead burned and buried at the main village's",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "claim it: a hamlet has no cremation ground; its dead are burned and buried at the main village's, which holds the district's grounds - cite the burial question (0236)",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/interactive/place.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 5 re-check of the tier text",
+  "tier_as_ranked": "E0",
+  "wave": ""
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/interactive/place.py::homestead_grove_default#no side sentence on a nucleated map",
@@ -1160,6 +1188,21 @@
   "wave": ""
  },
  {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.wall#gate opening",
+  "tier": "E0",
+  "fix": "the 13 ft passage is in step (0147); claim the 14 x 48 px gateposts UNRESEARCHED",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py"
+  ],
+  "after": [],
+  "flag": "",
+  "tier_as_ranked": "E1",
+  "e0_basis": "impl-drift wave 5: the passage is the page's; the posts are on no page",
+  "moved": "wave 5 re-check: only the posts' size is unanswered",
+  "verdict": "MISLABELED",
+  "wave": ""
+ },
+ {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.wall#guard station and tower",
   "verdict": "MISLABELED",
   "tier": "E0",
@@ -1296,6 +1339,34 @@
   "after": [],
   "flag": "",
   "found": "wave 5 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E0",
+  "wave": ""
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/city/moat.py::MoatMixin.water_gate#one opening whatever the canal",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "claim it: one 60 ft opening whatever the canal; 0179 makes the passage as wide as its canal and gives a river a row of arched openings - claim against 0179 (a drift to rank if the canal is narrower or a river)",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/city/moat.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 5 re-check of the water gate",
+  "tier_as_ranked": "E0",
+  "wave": ""
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/city/moat.py::MoatMixin.water_gate#pier depth through the wall, 30 ft",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "claim it: the piers 30 ft deep through the wall, UNRESEARCHED (0147 gives a water gate's opening and pier width, not its depth)",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/city/moat.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 5 re-check of the water gate",
   "tier_as_ranked": "E0",
   "wave": ""
  },
@@ -1724,6 +1795,20 @@
   "tier_as_ranked": "E0",
   "verdict": "UNCLAIMED",
   "wave": "1 (claim renamed or split; its parts re-checked)"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_anchor#the approach counts as reaching the houses within KOSATSUBA_ENTRANCE_REACH_FT 100 ft of a dwelling",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "claim it: the approach counts as reaching the houses within KOSATSUBA_ENTRANCE_REACH_FT 100 ft of a dwelling",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/_helpers.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 5 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E0",
+  "wave": ""
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/structures/servants.py::ServantRangesMixin#servant range depth",
@@ -2368,7 +2453,7 @@
   "flag": "",
   "found": "wave 3 re-check",
   "tier_as_ranked": "E1",
-  "wave": ""
+  "wave": "5 (the street runs on off the map; its claims re-checked IN-STEP)"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#a web lane's span",
@@ -2429,13 +2514,14 @@
  {
   "key": ".claude/skills/diagram/l7r/diagram/interactive/place.py::KINDS#what each tier is",
   "tier": "E1",
-  "fix": "the 0001 figures match (1,296, 216, 40%); drop 'unless the hamlet keeps a burial ground of its own' from the hamlet text (and the village's 'hamlets without their own') per 0236",
+  "fix": "wave 5 dropped the hamlet burial hedges and gave the village its one tax-free plot (0001); left: the city's population_note says 'by convention' it takes in the samurai country estates, where 0001 counts only those within the walls - find whether that convention was a GM ruling (then a DEVIATION claim) or align the note",
   "files": [
    ".claude/skills/diagram/l7r/diagram/interactive/assets/place.json"
   ],
   "after": [],
   "flag": "",
   "tier_as_ranked": "E1",
+  "moved": "wave 5 re-check: two of three fixed; the city note's convention to trace",
   "verdict": "CANNOT-TELL",
   "wave": ""
  },
@@ -2450,7 +2536,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
-  "wave": ""
+  "wave": "5"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/labels/standard.py::REACH_EM#how far a caption may move",
@@ -2465,7 +2551,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
-  "wave": ""
+  "wave": "5 (the leader at twice the gap; the reach's relabel to CONVENTION ranked)"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/overlap/matrix.py::DOJO_RANGE_FT#archery lane",
@@ -2478,18 +2564,20 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
-  "wave": ""
+  "wave": "5 (the dead constant removed: nothing read it)"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/overlap/taxonomy.py::_LABEL_GROUP#a caption covers its own group",
   "tier": "E1",
-  "fix": "give graveyard, cremation, mausoleum and ossuary one shared funerary label group",
+  "fix": "the funerary group is in step (wave 5); what is left: `manors` maps to 'estate', so a samurai caption may not cover the manors 0243 lets it cover (\"A samurai caption, the samurai houses and estates\") - give the samurai caption the estates",
   "files": [
-   ".claude/skills/diagram/l7r/diagram/overlap/taxonomy.py"
+   ".claude/skills/diagram/l7r/diagram/overlap/taxonomy.py",
+   ".claude/skills/diagram/l7r/diagram/labels/obstacles.py"
   ],
   "after": [],
   "flag": "",
   "tier_as_ranked": "E1",
+  "moved": "wave 5 re-check: the funerary part fixed, the samurai caption's estates left",
   "verdict": "DRIFTED",
   "wave": ""
  },
@@ -2504,7 +2592,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
-  "wave": ""
+  "wave": "5"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/_knobs.py::execution_ground_ft#execution ground size",
@@ -2517,7 +2605,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
-  "wave": ""
+  "wave": "5"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.castle#bailey and masugata sizes",
@@ -2530,7 +2618,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "MISLABELED",
-  "wave": ""
+  "wave": "5 (claim renamed or split; its parts re-checked)"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.martial_hall#hall program sizes",
@@ -2543,7 +2631,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
-  "wave": ""
+  "wave": "5 (claim renamed or split; its parts re-checked)"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.ministry#ministry compound size",
@@ -2556,20 +2644,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
-  "wave": ""
- },
- {
-  "key": ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.wall#gate opening",
-  "tier": "E1",
-  "fix": "gate opening 36 px -> px(13) (0147 drawing: 13 ft passage); cite 0147",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py"
-  ],
-  "after": [],
-  "flag": "",
-  "tier_as_ranked": "E1",
-  "verdict": "MISLABELED",
-  "wave": ""
+  "wave": "5"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.wall#rampart stroke",
@@ -2582,7 +2657,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "CANNOT-TELL",
-  "wave": ""
+  "wave": "5"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#plank width",
@@ -2595,7 +2670,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
-  "wave": ""
+  "wave": "5"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/city/canals.py::CanalsMixin.farmland_ring#sluice standoff",
@@ -2609,7 +2684,7 @@
   "flag": "",
   "found": "wave 1 re-check",
   "tier_as_ranked": "E1",
-  "wave": ""
+  "wave": "5"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/city/civic.py::CityCivicMixin.governor_mansion#gate direction",
@@ -2622,7 +2697,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
-  "wave": ""
+  "wave": "5"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/city/moat.py::MoatMixin.moat#junction tilts",
@@ -2635,7 +2710,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
-  "wave": ""
+  "wave": "5"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/city/moat.py::MoatMixin.water_gate#glyph size",
@@ -2648,7 +2723,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
-  "wave": ""
+  "wave": "5"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py::WallsMixin._gate_caption#ground reserved round the gate tower",
@@ -2661,7 +2736,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "MISLABELED",
-  "wave": ""
+  "wave": "5"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py::WallsMixin._gate_flanking_buildings#set on the patrol road",
@@ -2674,7 +2749,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "CANNOT-TELL",
-  "wave": ""
+  "wave": "5"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py::WallsMixin._seat_mural_towers#no tower in a gate or water-gate opening",
@@ -2687,7 +2762,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
-  "wave": ""
+  "wave": "5"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py::WallsMixin._seat_mural_towers#slide off a ward gate or gate works",
@@ -2702,33 +2777,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
-  "wave": ""
- },
- {
-  "key": ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py::WallsMixin._tower#no-build margin",
-  "tier": "E1",
-  "fix": "no-build margin px(36) in feet; 12*max(bscale,0.5) gives ~18 ft at the city's bscale 1/3",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py"
-  ],
-  "after": [],
-  "flag": "",
-  "tier_as_ranked": "E1",
-  "verdict": "CANNOT-TELL",
-  "wave": ""
- },
- {
-  "key": ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py::WallsMixin._tower#tower footprint",
-  "tier": "E1",
-  "fix": "tower footprint 65 x 40 ft (along_ft 65, ~1.7:1)",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py"
-  ],
-  "after": [],
-  "flag": "",
-  "tier_as_ranked": "E1",
-  "verdict": "DRIFTED",
-  "wave": ""
+  "wave": "5"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py::WallsMixin._tower#tower building on the spur",
@@ -2743,7 +2792,20 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
-  "wave": ""
+  "wave": "5"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py::WallsMixin._tower#tower footprint",
+  "tier": "E1",
+  "fix": "tower footprint 65 x 40 ft (along_ft 65, ~1.7:1)",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py"
+  ],
+  "after": [],
+  "flag": "",
+  "tier_as_ranked": "E1",
+  "verdict": "DRIFTED",
+  "wave": "5"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/civic.py::CivicWorksMixin.granary#store size and count",
@@ -5104,7 +5166,7 @@
   "flag": "",
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
-  "wave": ""
+  "wave": "5 (IN-STEP on a wave's re-check, no change needed)"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/city/civic.py::CityCivicMixin.governor_mansion#compound size",
@@ -5226,7 +5288,7 @@
   "flag": "",
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
-  "wave": ""
+  "wave": "5 (IN-STEP on a wave's re-check, no change needed)"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/justice.py::JusticeGroundsMixin.execution_ground#stake, sand bed, head-display stand, well and pit",
@@ -5239,7 +5301,7 @@
   "flag": "",
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
-  "wave": ""
+  "wave": "5 (IN-STEP on a wave's re-check, no change needed)"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/lodging.py::LodgingMixin.flophouse#a long dormitory with a row of doorways",
@@ -5938,6 +6000,20 @@
   "flag": "",
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
+  "wave": ""
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_anchor#board placements",
+  "verdict": "DRIFTED",
+  "tier": "E2",
+  "fix": "only center, entrance and frontage (headman's gate) get anchors. The question also attests \"bridge ends\" as a village board's site, an attested form the choice never offers. Add it to the rolled placements, or record its omission as a DEVIATION",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/_helpers.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 5 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E2",
   "wave": ""
  },
  {
@@ -9318,6 +9394,20 @@
   "wave": ""
  },
  {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py::WallsMixin._tower#no-build margin",
+  "tier": "E4",
+  "fix": "0147's 36 ft clearance is for the gate's three buildings; whether a mural tower keeps any clear ground is on no page - research it first",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py"
+  ],
+  "after": [],
+  "flag": "",
+  "tier_as_ranked": "E1",
+  "moved": "wave 5 re-check: NEEDS-RESEARCH",
+  "verdict": "CANNOT-TELL",
+  "wave": ""
+ },
+ {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cremation_ground#pyre ground unwalled",
   "tier": "E4",
   "fix": "0237 (walled yard) and 0238 (open cleared ground) disagree on whether the pyre ground is walled; the record must settle it before the code can match",
@@ -9541,6 +9631,20 @@
   "flag": "",
   "tier_as_ranked": "E4",
   "verdict": "NEEDS-RESEARCH",
+  "wave": ""
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_handover#a through track's handover",
+  "verdict": "NEEDS-RESEARCH",
+  "tier": "E4",
+  "fix": "0190 says only \"entrance\". It says nothing on where a through road's entrance lies, and the join nearest the houses' centroid reads as the center, not an entrance. Label it UNRESEARCHED or GUESS",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/_helpers.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 5 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E4",
   "wave": ""
  },
  {

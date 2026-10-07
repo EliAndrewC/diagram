@@ -21928,19 +21928,11 @@
   "triaged": "2026-10-05",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#connector and spur keep a 40 ft no-build clearance (LANE_CLEARANCE)": {
-  "code": "ec39c50d381ae470",
-  "core": "ec39c50d381ae470",
-  "date": "2026-10-07",
-  "note": "connector and spur keep a 40 ft no-build clearance (LANE_CLEARANCE)",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#field spur tip on the bund": {
-  "code": "4192e6549e6ef991",
-  "core": "ec39c50d381ae470",
+  "code": "b11681d1587b8074",
+  "core": "34b824f3630f8621",
   "date": "2026-10-07",
-  "note": "tip_onto_the_bund runs before and after threading; the path joins the outer bund",
+  "note": "tip_onto_the_bund before and after threading; the path \"joins\" the outer bund",
   "pages": {
    "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
   },
@@ -21950,52 +21942,59 @@
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#lanes after the farmhouses": {
-  "code": "0e81d154d11afce2",
-  "core": "ec39c50d381ae470",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#lane clearance LANE_CLEARANCE 40 ft for the connector and spur": {
+  "code": "34b824f3630f8621",
+  "core": "34b824f3630f8621",
   "date": "2026-10-07",
-  "note": "connector and spur are laid once every house stands",
+  "note": "lane clearance LANE_CLEARANCE 40 ft for the connector and spur",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#lanes after the farmhouses": {
+  "code": "7a1ffc7cab83a72c",
+  "core": "34b824f3630f8621",
+  "date": "2026-10-07",
+  "note": "connector and spur laid once the last house stands",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
   "research": "7b40c2c01cfba682",
   "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:d6c0546677319ff7"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#polder has no spur": {
-  "code": "bb8328c952801352",
-  "core": "ec39c50d381ae470",
+  "code": "10e7c79653016ee8",
+  "core": "34b824f3630f8621",
   "date": "2026-10-07",
-  "note": "0014 answers this: \"the field path runs from the hamlet to the paddy's outer bund... Where no path is left to draw, the hamlet's nearest lane runs on to the bund\"; dropping the polder spur departs from that, so the claim should be a DEVIATION 0014 that its drawing page records; it cannot be a GUESS",
+  "note": "0014 answers this: \"the field path runs from the hamlet to the paddy's outer bund and joins it ... Where no path is left to draw, the hamlet's nearest lane runs on to the bund\". The polder branch draws only the connector, and nothing in the bundle shows it reaching the dike. Cite 0014 and record the polder as a DEVIATION on its drawing page, or lay a way onto the dike",
   "pages": {},
   "research": "",
   "rests": [
    "0014-bunds-between-the-paddies-aze.drawing.html:5b66ec3bfb5ac947",
-   "0014-bunds-between-the-paddies-aze.drawing.html:de5f537983379a58"
+   "0014-bunds-between-the-paddies-aze.drawing.html:afe81094f9c9518d"
   ],
   "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#row road": {
-  "code": "848d1dece97f36bd",
-  "core": "ec39c50d381ae470",
+  "code": "8df8709461a4f03a",
+  "core": "34b824f3630f8621",
   "date": "2026-10-07",
-  "note": "0033 backs the run off the map, but it is silent on the ford; the crossing (ford_crossing) rests on 0035, so add 0035 for \"over a ford\"",
+  "note": "the street runs on off the map at both ends, the far end flagged run_on",
   "pages": {
    "0033-row-villages-resson.drawing.html": "5b109c17a425e58e"
   },
   "research": "f407e2a81ba3ed3b",
   "rests": [
-   "0033-row-villages-resson.drawing.html:8c303daeddea6496",
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:03433651c0627577",
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:93969c06f800b0d5"
+   "0033-row-villages-resson.drawing.html:8c303daeddea6496"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#row road width": {
-  "code": "bc7acbe7ca2e7219",
-  "core": "ec39c50d381ae470",
+  "code": "0b93a2c0a57ee6ee",
+  "core": "34b824f3630f8621",
   "date": "2026-10-07",
   "note": "width=6 matches \"Each street is drawn 6 ft wide\"",
   "pages": {
@@ -22008,54 +22007,54 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#spur bow": {
-  "code": "56fa27778ecef310",
-  "core": "ec39c50d381ae470",
+  "code": "bf820cb4a1abf275",
+  "core": "34b824f3630f8621",
   "date": "2026-10-07",
-  "note": "`(_mx + ax * 14, _my + ay * 14)` bows the spur, but 0081 says \"Every lane is pulled taut like a string. It runs straight from point to point\"; no block attests a bow; either drop the bow or relabel it GUESS/CONVENTION",
+  "note": "`(_mx + ax * 14, _my + ay * 14)` puts in a swing \"so the path reads as walked rather than ruled\". The page says \"Every lane is pulled taut like a string. It runs straight from point to point\" and \"with as few turns as the plots allow\". Drop the bow, or record it as a DEVIATION on 0081",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },
   "research": "ebd72aaa6a0eb9af",
   "rests": [
    "0081-village-lanes.drawing.html:18dffe2b3b52b18c",
+   "0081-village-lanes.drawing.html:65ad16eace199d92",
    "0081-village-lanes.drawing.html:be608a70af4cfcc5"
   ],
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#spur clip margin": {
-  "code": "5c171ad7add892bc",
-  "core": "ec39c50d381ae470",
+  "code": "77c19ab4afd55316",
+  "core": "34b824f3630f8621",
   "date": "2026-10-07",
-  "note": "0081 answers this: a lane \"may touch a plot's boundary\", and the path joins the bund; a 12 ft margin off the dry plots is a DEVIATION from §9, not UNRESEARCHED (only the toe-band margin is unanswered)",
+  "note": "0081 answers where the spur stops at the dry plots: it \"may touch a plot's boundary\" and \"stops at the hem's edge\". So this is not UNRESEARCHED: cite 0081. A 12.0 ft clip off the hem then leaves the spur short of the hem's edge, which the cited claim must reconcile",
   "pages": {},
   "research": "",
   "rests": [
-   "0014-bunds-between-the-paddies-aze.drawing.html:5b66ec3bfb5ac947",
-   "0081-village-lanes.drawing.html:43b635b1ca75125b",
+   "0081-village-lanes.drawing.html:65ad16eace199d92",
+   "0081-village-lanes.drawing.html:f2368e271306e3c2",
    "0081-village-lanes.drawing.html:ff5e303a5a16af8f"
   ],
   "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#spur kept however short": {
-  "code": "d2989a0e2443f390",
-  "core": "ec39c50d381ae470",
+  "code": "3e751b8941a85226",
+  "core": "34b824f3630f8621",
   "date": "2026-10-07",
-  "note": "`_spur_ft >= SPUR_WIDTH` (5 ft) floor; \"however short that leaves the path\"",
+  "note": "drawn while _spur_ft >= SPUR_WIDTH (5 ft); \"however short that leaves the path\"",
   "pages": {
    "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
   },
   "research": "9c5292e27312fca8",
   "rests": [
-   "0014-bunds-between-the-paddies-aze.drawing.html:5b66ec3bfb5ac947",
-   "0081-village-lanes.drawing.html:91a5765af6230403"
+   "0014-bunds-between-the-paddies-aze.drawing.html:5b66ec3bfb5ac947"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#spur over the brook at a ford": {
-  "code": "64e64bba3c9fb1df",
-  "core": "ec39c50d381ae470",
+  "code": "7eb8a069972021fc",
+  "core": "34b824f3630f8621",
   "date": "2026-10-07",
-  "note": "crosses square at the crossing place that makes the walk shortest",
+  "note": "crosses square at the ford that makes the walk shortest; decked by bridges()",
   "pages": {
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "c23a085a43372c2c"
   },
@@ -22067,50 +22066,50 @@
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#spur tip set back 17 ft (SPUR_SETBACK) off the field outline's vertex": {
-  "code": "ec39c50d381ae470",
-  "core": "ec39c50d381ae470",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#spur tip set back SPUR_SETBACK 17 ft off the outline vertex": {
+  "code": "34b824f3630f8621",
+  "core": "34b824f3630f8621",
   "date": "2026-10-07",
-  "note": "spur tip set back 17 ft (SPUR_SETBACK) off the field outline's vertex",
+  "note": "spur tip set back SPUR_SETBACK 17 ft off the outline vertex",
   "research": "",
   "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#spur to the field": {
-  "code": "5a667f0b2457ed25",
-  "core": "ec39c50d381ae470",
+  "code": "1e7b4eeaf334fe3d",
+  "core": "34b824f3630f8621",
   "date": "2026-10-07",
-  "note": "the outline point whose path crosses least, then the shortest; clipped off crops and marsh",
+  "note": "fewest violations then shortest; clipped off the crops, the toe band and the marsh",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },
   "research": "ebd72aaa6a0eb9af",
   "rests": [
    "0081-village-lanes.drawing.html:43b635b1ca75125b",
-   "0081-village-lanes.drawing.html:be608a70af4cfcc5",
+   "0081-village-lanes.drawing.html:bd66b84c6bda826f",
    "0081-village-lanes.drawing.html:ff5e303a5a16af8f"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#track off the map": {
-  "code": "3fcd9c34bbe0efdd",
-  "core": "ec39c50d381ae470",
+  "code": "182cd1a34de7f4f5",
+  "core": "34b824f3630f8621",
   "date": "2026-10-07",
-  "note": "the connector runs out to the frame",
+  "note": "the connector is a recorded or chosen track out to the frame",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },
   "research": "ebd72aaa6a0eb9af",
   "rests": [
    "0081-village-lanes.drawing.html:16df95fc169329f7",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b"
+   "0081-village-lanes.drawing.html:df440690bbce9cb6"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#track off the wet": {
-  "code": "951e7c55b5e34fd8",
-  "core": "ec39c50d381ae470",
+  "code": "cebd80ad2cc39d2d",
+  "core": "34b824f3630f8621",
   "date": "2026-10-07",
-  "note": "the toe band and marsh are walled; the spur is trimmed off the marsh",
+  "note": "the toe band and the marsh are treated as wet and kept clear",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },
@@ -22119,6 +22118,14 @@
    "0081-village-lanes.drawing.html:43b635b1ca75125b"
   ],
   "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#valley and polder connector width CONNECTOR_WIDTH 6 ft": {
+  "code": "34b824f3630f8621",
+  "core": "34b824f3630f8621",
+  "date": "2026-10-07",
+  "note": "valley and polder connector width CONNECTOR_WIDTH 6 ft",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::wet_grown_by_the_lane#track plumbing": {
   "code": "32047c17c5777421",
@@ -25552,16 +25559,36 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/interactive/place.py::KINDS#a hamlet has no cremation ground, its dead are burned and buried at the main village's, and the village holds the district's cremation and burial grounds (0001 §5 only points to the burial page, which is not in the bundle)": {
+  "code": "aebd5c4a2b2ac263",
+  "core": "aebd5c4a2b2ac263",
+  "date": "2026-10-07",
+  "note": "a hamlet has no cremation ground, its dead are burned and buried at the main village's, and the village holds the district's cremation and burial grounds (0001 §5 only points to the burial page, which is not in the bundle)",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  ".claude/skills/diagram/l7r/diagram/interactive/place.py::KINDS#what each tier is": {
   "code": "b163fa6140b6ed24",
   "core": "aebd5c4a2b2ac263",
-  "date": "2026-10-03",
-  "note": "the tier text lives in place.json; need its kinds entries and HAMLETS_PER_DOMAIN, VILLAGES_PER_DOMAIN, HAMLET_SHARE (0001: 1,296, 216, 40%) and each kind's excludes_farms",
+  "date": "2026-10-07",
+  "note": "Two parts of the tier text contradict the question. (1) The city's population_note says the figure \"does take in the samurai country estates around the city\", but the question says it \"counts only those living within the walls\" and that an estate \"stands apart\" (§17, §16). (2) The village's \"what\" says \"its tax-free plots\", but the question gives one: \"one plot of tax-free land\" (§5, §7). The other parts match: hamlets per domain 1296/216/40% (§8), no headman and no shrine for a hamlet (§5), the town's 1200 people and 238 households with about two in three farming (§11, §12), not counting the villages (§13), and samurai first appearing at town level (§15). The text should say walls-only and one plot, or the claim should cite a DEVIATION.",
   "pages": {
    "0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.html": "44a3744ac1eacfe3"
   },
   "research": "f86a0d6160742f02",
-  "verdict": "CANNOT-TELL"
+  "rests": [
+   "0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.html:41cc929ee6734ab7",
+   "0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.html:4c31308961c358ab",
+   "0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.html:583ab77f0130a108",
+   "0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.html:5f7443597d96e66d",
+   "0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.html:612944d6c4611880",
+   "0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.html:999b731fa5ca1ed6",
+   "0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.html:a1742d0f254ecf92",
+   "0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.html:c2190bb4d95182e9",
+   "0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.html:d20abbc9f00c12ee",
+   "0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.html:f81c789234a58129"
+  ],
+  "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/place.py::Kind#card plumbing": {
   "code": "b5616056f7a9220d",
@@ -54091,10 +54118,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/_helpers.py::departure_routes#board-siting plumbing": {
-  "code": "6f9424c2bd03dc95",
-  "core": "51db50a29fe38e33",
+  "code": "d97a348343d58c5d",
+  "core": "b74b26bd4bc2b7af",
   "date": "2026-10-07",
-  "note": "routing graph of lane samples to the connector's outer end",
+  "note": "graph sampling, joins and Dijkstra routes only",
   "pages": {},
   "research": "",
   "rests": [],
@@ -54125,32 +54152,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_anchor#board placements": {
-  "code": "a9cf7ec00b942210",
-  "core": "0f162fc08c2bb0c5",
-  "date": "2026-10-03",
-  "note": "as claimed",
-  "pages": {
-   "0190-notice-boards-kosatsuba.html": "d5c6d0418e52d1fa"
-  },
-  "research": "348847d2a9750e4b",
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_anchor#entrance anchor": {
-  "code": "63f8389f7fb896a5",
-  "core": "0f162fc08c2bb0c5",
-  "date": "2026-10-03",
-  "note": "as claimed",
-  "pages": {
-   "0190-notice-boards-kosatsuba.html": "d5c6d0418e52d1fa"
-  },
-  "research": "348847d2a9750e4b",
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_handover#a through track's handover": {
-  "code": "23f7d5861d74033f",
-  "core": "eef055892eabb003",
-  "date": "2026-10-04",
-  "note": "the code returns the lane end that meets the through track nearest the houses' middle, which is the crossroads where the village's ways reach the road out. The page attests boards at entrances and crossroads where people passed. The choice between center and entrance is rolled per settlement outside this function, so this anchor is a calibrated choice within the \"entrance\" form.",
+  "code": "a2fe3533a0e66968",
+  "core": "679505cd861d8d34",
+  "date": "2026-10-07",
+  "note": "only center, entrance and frontage (headman's gate) get anchors. The question also attests \"bridge ends\" as a village board's site, an attested form the choice never offers. Add it to the rolled placements, or record its omission as a DEVIATION",
   "pages": {
    "0190-notice-boards-kosatsuba.html": "d5c6d0418e52d1fa"
   },
@@ -54158,24 +54163,61 @@
   "rests": [
    "0190-notice-boards-kosatsuba.html:aeb5e9860f97b764",
    "0190-notice-boards-kosatsuba.html:b465c07b81f6c576",
+   "0190-notice-boards-kosatsuba.html:f5973f0b2ea1c6cc"
+  ],
+  "verdict": "DRIFTED"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_anchor#entrance anchor": {
+  "code": "58cbf1dc29a5e154",
+  "core": "679505cd861d8d34",
+  "date": "2026-10-07",
+  "note": "the handover, else where the approach first reaches a dwelling, else its point nearest the houses",
+  "pages": {
+   "0190-notice-boards-kosatsuba.html": "d5c6d0418e52d1fa"
+  },
+  "research": "348847d2a9750e4b",
+  "rests": [
+   "0190-notice-boards-kosatsuba.html:aeb5e9860f97b764",
    "0190-notice-boards-kosatsuba.html:ebb781f8589560e1",
    "0190-notice-boards-kosatsuba.html:f5973f0b2ea1c6cc"
   ],
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_anchor#the approach counts as reaching the houses within KOSATSUBA_ENTRANCE_REACH_FT 100 ft of a dwelling": {
+  "code": "679505cd861d8d34",
+  "core": "679505cd861d8d34",
+  "date": "2026-10-07",
+  "note": "the approach counts as reaching the houses within KOSATSUBA_ENTRANCE_REACH_FT 100 ft of a dwelling",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_handover#a through track's handover": {
+  "code": "7fd07e1d35903ece",
+  "core": "c7fe295d3aaf0362",
+  "date": "2026-10-07",
+  "note": "0190 says only \"entrance\". It says nothing on where a through road's entrance lies, and the join nearest the houses' centroid reads as the center, not an entrance. Label it UNRESEARCHED or GUESS",
+  "pages": {
+   "0190-notice-boards-kosatsuba.html": "d5c6d0418e52d1fa"
+  },
+  "research": "348847d2a9750e4b",
+  "rests": [
+   "0190-notice-boards-kosatsuba.html:ebb781f8589560e1",
+   "0190-notice-boards-kosatsuba.html:f5973f0b2ea1c6cc"
+  ],
+  "verdict": "NEEDS-RESEARCH"
+ },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_handover#entrance is the handover": {
-  "code": "65317823c0590267",
-  "core": "eef055892eabb003",
-  "date": "2026-10-04",
-  "note": "with a recorded gate, the board goes at the first join walked in from the outer end: the entrance, on the road, where the most traffic passes",
+  "code": "7ecb25a6563f15cb",
+  "core": "c7fe295d3aaf0362",
+  "date": "2026-10-07",
+  "note": "the last join walking in from the outer end, where every departure has joined",
   "pages": {
    "0190-notice-boards-kosatsuba.html": "d5c6d0418e52d1fa"
   },
   "research": "348847d2a9750e4b",
   "rests": [
    "0190-notice-boards-kosatsuba.html:aeb5e9860f97b764",
-   "0190-notice-boards-kosatsuba.html:b465c07b81f6c576",
-   "0190-notice-boards-kosatsuba.html:c1b40e481f7a5b1c",
+   "0190-notice-boards-kosatsuba.html:ebb781f8589560e1",
    "0190-notice-boards-kosatsuba.html:f5973f0b2ea1c6cc"
   ],
   "verdict": "IN-STEP"

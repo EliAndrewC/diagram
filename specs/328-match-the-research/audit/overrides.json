@@ -209,6 +209,27 @@
   "moved": "wave 3 reading: the claim cannot be made honest without the value (E0 -> E1)",
   "tier": "E1"
  },
+ ".claude/skills/diagram/l7r/diagram/interactive/place.py::KINDS#what each tier is": {
+  "after": [],
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/interactive/assets/place.json"
+  ],
+  "fix": "wave 5 dropped the hamlet burial hedges and gave the village its one tax-free plot (0001); left: the city's population_note says 'by convention' it takes in the samurai country estates, where 0001 counts only those within the walls - find whether that convention was a GM ruling (then a DEVIATION claim) or align the note",
+  "flag": "",
+  "moved": "wave 5 re-check: two of three fixed; the city note's convention to trace",
+  "tier": "E1"
+ },
+ ".claude/skills/diagram/l7r/diagram/overlap/taxonomy.py::_LABEL_GROUP#a caption covers its own group": {
+  "after": [],
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/overlap/taxonomy.py",
+   ".claude/skills/diagram/l7r/diagram/labels/obstacles.py"
+  ],
+  "fix": "the funerary group is in step (wave 5); what is left: `manors` maps to 'estate', so a samurai caption may not cover the manors 0243 lets it cover (\"A samurai caption, the samurai houses and estates\") - give the samurai caption the estates",
+  "flag": "",
+  "moved": "wave 5 re-check: the funerary part fixed, the samurai caption's estates left",
+  "tier": "E1"
+ },
  ".claude/skills/diagram/l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#mill beside its stream": {
   "after": [],
   "files": [
@@ -220,6 +241,17 @@
   "moved": "wave 5: the mill race is a new element (spec-fidelity's note on amendment 4)",
   "tier": "E3"
  },
+ ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.wall#gate opening": {
+  "after": [],
+  "e0_basis": "impl-drift wave 5: the passage is the page's; the posts are on no page",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py"
+  ],
+  "fix": "the 13 ft passage is in step (0147); claim the 14 x 48 px gateposts UNRESEARCHED",
+  "flag": "",
+  "moved": "wave 5 re-check: only the posts' size is unanswered",
+  "tier": "E0"
+ },
  ".claude/skills/diagram/l7r/diagram/settlement/city/moat.py::MoatMixin.moat#moat width": {
   "after": [],
   "files": [
@@ -228,6 +260,16 @@
   "fix": "the record disagrees with itself: 0151's drawing page says 35 ft (a Ming treatise's smallest width) 'is the width the maps should draw', while 0146's drawing page draws every moat about 66 ft; reconcile the two pages first, then set the width",
   "flag": "",
   "moved": "wave 5: the two moat pages contradict each other (spec Edge Case: a NEEDS-RESEARCH question)",
+  "tier": "E4"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py::WallsMixin._tower#no-build margin": {
+  "after": [],
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py"
+  ],
+  "fix": "0147's 36 ft clearance is for the gate's three buildings; whether a mural tower keeps any clear ground is on no page - research it first",
+  "flag": "",
+  "moved": "wave 5 re-check: NEEDS-RESEARCH",
   "tier": "E4"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/civic.py::CivicWorksMixin.merchant_storehouses#kura size": {
