@@ -39,10 +39,10 @@ def test_punishment_spot_records_true_size_and_reserves_ground():
 def test_boundary_marker_floor_never_shrinks_a_stone():
     # The marker floor lifts a sub-glyph stone; it must not shrink one that already draws larger.
     s = Settlement(1000, 1000, seed=1)
-    s.meta(name="B", scale="town", ftpx=0.25)  # 4 px per foot - the true stone is already 12 px
+    s.meta(name="B", scale="town", ftpx=0.25)  # 4 px per foot - the true 4 ft stone is already 16 px
     s.boundary_marker(300, 300)
     b = s.M["boundary_markers"][0]
-    assert b["vw"] == b["w"] == 12.0
+    assert b["vw"] == b["w"] == 16.0
 
 
 def test_a_merchant_residence_is_refused_by_the_bound_the_edge_and_its_neighbours() -> None:

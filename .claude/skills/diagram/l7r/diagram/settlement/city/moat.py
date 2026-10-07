@@ -155,21 +155,23 @@ class MoatMixin:
 
         Research:
             arch on two piers with a grille - research/questions/0179-water-gates-and-sluices-shuimen.drawing.html
-            glyph size - research/questions/0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html: about 60 ft across with piers about 12 ft, drawn at the map's scale
+            glyph size - research/questions/0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html: a 60 ft clear opening between piers about 12 ft wide, 84 ft across, in feet
             no-build block - UNRESEARCHED: 16 px round the glyph
         """
         wc = '#3A352C'
-        k = self.px(60.0) / 36.0  # the 36-unit glyph drawn about 60 ft across, its 8-unit piers about 12 ft (0147)
-        g = [f'<g transform="translate({x:.0f},{y:.0f}) rotate({rot:.1f}) scale({k:.3f})">']
-        g.append(f'<rect x="-17" y="-9" width="8" height="18" fill="#9C8A66" stroke="{wc}" stroke-width="1.6"/>')  # piers
-        g.append(f'<rect x="9" y="-9" width="8" height="18" fill="#9C8A66" stroke="{wc}" stroke-width="1.6"/>')
-        g.append(f'<path d="M-14,-9 C-8,-19 8,-19 14,-9" fill="none" stroke="{wc}" stroke-width="3.4"/>')  # the arch
-        for gx_ in (-6, -1, 4):
-            g.append(f'<line x1="{gx_}" y1="-8" x2="{gx_}" y2="6" stroke="{wc}" stroke-width="1.1" opacity="0.7"/>')  # the grate/sluice bars
+        u = self.px(1.0)  # the glyph in feet (0147): a 60 ft clear opening between two piers about 12 ft wide, 84 ft across
+        ho, pw, hd = 30.0 * u, 12.0 * u, 15.0 * u  # half the opening, a pier's width, half the piers' depth
+        g = [f'<g transform="translate({x:.0f},{y:.0f}) rotate({rot:.1f})">']
+        for px0 in (-ho - pw, ho):
+            g.append(f'<rect x="{px0:.1f}" y="{-hd:.1f}" width="{pw:.1f}" height="{2 * hd:.1f}" fill="#9C8A66" stroke="{wc}" stroke-width="1.6"/>')  # piers
+        g.append(f'<path d="M{-ho - pw / 4:.1f},{-hd:.1f} C{-ho / 2:.1f},{-hd - ho * 0.55:.1f} {ho / 2:.1f},{-hd - ho * 0.55:.1f} {ho + pw / 4:.1f},{-hd:.1f}" fill="none" stroke="{wc}" stroke-width="3.4"/>')  # the arch
+        for gx_ in (-ho * 0.5, 0.0, ho * 0.5):
+            g.append(f'<line x1="{gx_:.1f}" y1="{-hd + u:.1f}" x2="{gx_:.1f}" y2="{hd * 0.66:.1f}" stroke="{wc}" stroke-width="1.1" opacity="0.7"/>')  # the grate/sluice bars
         g.append('</g>')
         z = self.add_top(''.join(g))
-        self.M.setdefault("water_gates", []).append({"x": round(x, 1), "y": round(y, 1), "w": round(36 * k, 1), "h": round(22 * k, 1), "rot": round(rot, 1), "z": z})
-        bm, hx, hy = 16, 18 * k, 11 * k
+        hx, hy = ho + pw, hd + ho * 0.4
+        self.M.setdefault("water_gates", []).append({"x": round(x, 1), "y": round(y, 1), "w": round(2 * hx, 1), "h": round(2 * hy, 1), "rot": round(rot, 1), "z": z})
+        bm = 16
         self.block_polys.append([(x - hx - bm, y - hy - bm), (x + hx + bm, y - hy - bm), (x + hx + bm, y + hy + bm), (x - hx - bm, y + hy + bm)])
         return z
 
