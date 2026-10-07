@@ -7,12 +7,44 @@
   "moved": "FR-003: the fix redraws a hand-drawn Mode A sheet, which the spec tiers E3 (the ranker had E1)",
   "tier": "E3"
  },
+ ".claude/skills/diagram/buildings.md::Fire-water tubs#tub against its wall": {
+  "after": [],
+  "files": [
+   ".claude/skills/diagram/buildings.md",
+   ".claude/skills/diagram/pool/magistracies/county-magistracy-example/county-magistracy-example.svg",
+   ".claude/skills/diagram/pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+   ".claude/skills/diagram/pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg",
+   ".claude/skills/diagram/pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+   ".claude/skills/diagram/pool/country-shrines/hoshigaoka-shrine/hoshigaoka-shrine.svg",
+   ".claude/skills/diagram/pool/magistracies/ochiba-roundtrip-test/ochiba-roundtrip-test.svg"
+  ],
+  "fix": "the tub seated where 0100 attests water kept - at the wooden building's entrance - or a knob between the attested seats, not at a wall or eaves corner",
+  "flag": "",
+  "moved": "exception check 2026-10-07 (FR-003: a redrawn hand sheet is E3), sorted by a fresh reader (audit/modea-sort-out.jsonl): Every sheet's fire-water tubs group seats its r3.8 tubs at eaves corners/walls (Hayakawa comments 'west eaves corner', 'SW eaves corner'; Ubame 'each sits against its building at an eaves corner'; Hoshigaoka 'at the building's four corners'), so seating them at the entrance moves tubs on all sheets.",
+  "tier": "E3"
+ },
  ".claude/skills/diagram/buildings.md::Inner court (private / sacred)#bath": {
   "moved": "FR-003: the fix redraws a hand-drawn Mode A sheet, which the spec tiers E3 (the ranker had E1)",
   "tier": "E3"
  },
  ".claude/skills/diagram/buildings.md::Latrines and the rear service strip#privy size": {
   "moved": "FR-003: the fix redraws a hand-drawn Mode A sheet, which the spec tiers E3 (the ranker had E1)",
+  "tier": "E3"
+ },
+ ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#barracks": {
+  "after": [],
+  "files": [
+   ".claude/skills/diagram/pool/magistracies/county-magistracy-example/county-magistracy-example.gen.py",
+   ".claude/skills/diagram/l7r/diagram/buildings/types.json",
+   ".claude/skills/diagram/buildings.md",
+   ".claude/skills/diagram/pool/magistracies/county-magistracy-example/county-magistracy-example.svg",
+   ".claude/skills/diagram/pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg",
+   ".claude/skills/diagram/pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+   ".claude/skills/diagram/pool/magistracies/ochiba-roundtrip-test/ochiba-roundtrip-test.svg"
+  ],
+  "fix": "barracks drawn 12-24 ft deep and long, never squat: county example's 45 x 34 ft range re-proportioned, barracks band depth capped at 24 ft",
+  "flag": "",
+  "moved": "exception check 2026-10-07 (FR-003: a redrawn hand sheet is E3), sorted by a fresh reader (audit/modea-sort-out.jsonl): Barracks rects at 3 px = 1 ft: county example 135x102 px (45x34 ft), Ochiba 92x100 (31x33 ft), Ubame 134x96 (45x32 ft), roundtrip 93x99 - all deeper than the 24 ft cap; only Hayakawa's 105x47 (35x16 ft) already fits.",
   "tier": "E3"
  },
  ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#cell": {
@@ -27,6 +59,24 @@
  },
  ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#charcoal weighing floor": {
   "moved": "FR-003: the fix redraws a hand-drawn Mode A sheet, which the spec tiers E3 (the ranker had E1)",
+  "tier": "E3"
+ },
+ ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#clerk positions at the dais": {
+  "after": [],
+  "files": [
+   ".claude/skills/diagram/buildings.md",
+   ".claude/skills/diagram/buildings/programs.md",
+   ".claude/skills/diagram/pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg",
+   ".claude/skills/diagram/pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+   ".claude/skills/diagram/pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+   ".claude/skills/diagram/pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+   ".claude/skills/diagram/pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg",
+   ".claude/skills/diagram/pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+   ".claude/skills/diagram/pool/magistracies/county-magistracy-example/county-magistracy-example.svg"
+  ],
+  "fix": "clerk (and examiner) drawn on the middle level between the magistrate's dais and the court, not flanking the dais; cite 0099; all three sheets' dais bands",
+  "flag": "",
+  "moved": "exception check 2026-10-07 (FR-003: a redrawn hand sheet is E3), sorted by a fresh reader (audit/modea-sort-out.jsonl): clerks' seats rects sit level with the dais flanking it (Hayakawa 370/570 beside dais 465-555 at y 540-543; Ochiba 455/665 beside 555-645; Ubame 380/590 beside 480-570; county example 244/370 beside 274-364), so moving clerks to a middle level redraws every dais band.",
   "tier": "E3"
  },
  ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#forecourt": {
@@ -86,6 +136,26 @@
   "moved": "FR-003: the fix redraws three hand-drawn sheets (ochiba, hayakawa, ubame) - amendment 1 review",
   "tier": "E3"
  },
+ ".claude/skills/diagram/buildings.md::Wells#well curb size": {
+  "after": [],
+  "files": [
+   ".claude/skills/diagram/buildings.md",
+   ".claude/skills/diagram/pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg",
+   ".claude/skills/diagram/pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+   ".claude/skills/diagram/pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+   ".claude/skills/diagram/pool/country-shrines/hoshigaoka-shrine/hoshigaoka-shrine.svg",
+   ".claude/skills/diagram/pool/magistracies/county-magistracy-example/county-magistracy-example.svg",
+   ".claude/skills/diagram/pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+   ".claude/skills/diagram/pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg",
+   ".claude/skills/diagram/pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+   ".claude/skills/diagram/pool/country-shrines/hoshigaoka-shrine/hoshigaoka-shrine.svg",
+   ".claude/skills/diagram/pool/magistracies/ochiba-roundtrip-test/ochiba-roundtrip-test.svg"
+  ],
+  "fix": "well curb drawn at true ~4 ft (12 px) on Mode A sheets, procedure and marker text updated, all sheets' curbs resized",
+  "flag": "",
+  "moved": "exception check 2026-10-07 (FR-003: a redrawn hand sheet is E3), sorted by a fresh reader (audit/modea-sort-out.jsonl): Well curbs are 22x22 px rects (~7 ft) on the county example, Hayakawa, Ochiba, Ubame and the roundtrip test, and 15x15 px (5 ft) on Hoshigaoka; a true ~4 ft (12 px) curb resizes every one.",
+  "tier": "E3"
+ },
  ".claude/skills/diagram/buildings/programs.md::Country shrine (a village district's shrine)#building size anchors": {
   "after": [],
   "files": [
@@ -99,6 +169,29 @@
  },
  ".claude/skills/diagram/buildings/programs.md::Country shrine (a village district's shrine)#dwelling entry tagged genkan": {
   "moved": "FR-003: the fix redraws a hand-drawn Mode A sheet, which the spec tiers E3 (the ranker had E1)",
+  "tier": "E3"
+ },
+ ".claude/skills/diagram/buildings/programs.md::Country shrine (a village district's shrine)#fire-water": {
+  "after": [],
+  "files": [
+   ".claude/skills/diagram/buildings/programs.md",
+   ".claude/skills/diagram/pool/country-shrines/hoshigaoka-shrine/hoshigaoka-shrine.svg",
+   ".claude/skills/diagram/pool/country-shrines/hoshigaoka-shrine/hoshigaoka-shrine.svg"
+  ],
+  "fix": "country shrine tubs: one at the hall, two at the kitchen end; Hoshigaoka's tubs moved",
+  "flag": "",
+  "moved": "exception check 2026-10-07 (FR-003: a redrawn hand sheet is E3), sorted by a fresh reader (audit/modea-sort-out.jsonl): Hoshigaoka's fire-water tubs are four circles at the one-roof building's four corners (372/542 x 446/555); one at the hall and two at the kitchen end moves them.",
+  "tier": "E3"
+ },
+ ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#granary weight knob": {
+  "after": [],
+  "files": [
+   ".claude/skills/diagram/buildings/programs.md",
+   ".claude/skills/diagram/pool/magistracies/ubame-magistracy/ubame-magistracy.svg"
+  ],
+  "fix": "knob 3's upland soybean/barley content shift dropped; upland granary reflects dry-field tax paid in cash",
+  "flag": "",
+  "moved": "exception check 2026-10-07 (FR-003: a redrawn hand sheet is E3), sorted by a fresh reader (audit/modea-sort-out.jsonl): Ubame, the one upland sheet, draws the content shift on the sheet: its granary sublabel reads 'grain and in-kind forest goods' and its notes/comment tie the terminal store to in-kind tax, so dropping the shift changes a drawn caption (label-level redraw).",
   "tier": "E3"
  },
  ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#universal shrine": {

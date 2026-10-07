@@ -277,6 +277,8 @@ class BundleGeomMixin:
             service strip - GUESS research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the windward stand `SERVICE_STRIP_FT` (24 ft) off the back and windward end walls, sized to seat a wood shed
             thin band - GUESS research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: a grove side away from the wind one tree deep, `THIN_BAND_FT` 17 ft (two 0080 mean crown radii)
             way in through a ring - GUESS research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: one `WAY_IN_FT` (36 ft) break at the front band's middle, sized so a lane can be routed through
+            byre footprint - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: `BYRE_FT`, 16.12 x 10.92 ft
+            byre off the house - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: `YARD_SHED_GAP_FT[0]`, 6 ft, off the house
             dispersed well pocket - UNRESEARCHED: the wellhead plus a 3 ft margin, `2 * _well_vr() + px(6.0)`
             south band off an unkept yard - UNRESEARCHED: `YARD_SUN_STRIP`, 22, unscaled, where the map keeps no sun
             storehouse on the north wall - research/questions/0040-farm-storehouses-kura.drawing.html: a nucleated farm's annex on the shaded back wall

@@ -14,7 +14,7 @@ def test_render_lists_every_item_with_its_label_band_class_and_why() -> None:
     shrine = bt.by_tier("country-shrines")
     assert shrine is not None
     table = bp.render(shrine)
-    assert "| `sanctuary` |" in table and "4-10 by 4-10 ft" in table and "| per statement |" in table
+    assert "| `sanctuary` |" in table and "4-20 by 4-12 ft" in table and "| per statement |" in table
     assert "under `one roof`: 2100-3600 sq ft" in table and "under `one roof`: absent" in table
     assert "optional, a knob" in table and shrine.notes in table
     magi = bt.by_tier("magistracies")

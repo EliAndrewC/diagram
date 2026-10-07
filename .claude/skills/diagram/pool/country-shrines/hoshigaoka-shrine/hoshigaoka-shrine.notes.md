@@ -26,6 +26,7 @@
 2. Bell tower: **absent** (the default).
 3. Dedication: **Bishamon**, the Fortune of Strength - the GM's word for this district (2026-09-20). Named on the sanctuary and nothing else of it drawn (no guardian figures at average wealth).
 4. Grove and burial-ground side: **by the map** - the grove the map now draws; the village graveyard stays 430 ft west, outside the frame.
+   **Burial ground**: apart - the knob's `apart` form (in the yard the other; buildings/programs.md, research 0226 drawing), taken from the map, not rolled.
 5. Wealth: **average** - thatch and plain timber; none of the donated stonework (guardian figures, lanterns, strength stones).
 6. Farmers' stage: **absent** (the default; the map draws none).
 7. Sumo ring: **absent** (the default; the map draws none).

@@ -31,6 +31,8 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
   watercourse widths, the stub's bund reach in pixels, the polder's default gaps in feet); no glyph redrawn, no element new.
 - none (wave 12): claim lines and two values in feet inside rules that already place their elements (the brook's bank margin, the
   polder toe's run); no glyph redrawn, no element new.
+- none (wave 13): claim lines and the Mode A procedures' text; no sheet redrawn (the redraw rows are E3), the country shrine's
+  widened bands still hold Hoshigaoka as drawn.
 ## Phase 1 - the audit
 
 - [x] T01 the findings snapshot: `findings.json` = every finding of `make claims-report` at `a52ff1bcd` (565) (FR-001)
@@ -670,3 +672,39 @@ exception's condition (6): conditions (1)-(5) still held when wave 11 closed (67
       column (FR-005, FR-006, SC-002, SC-003)
       research: rendering
       verify: DONE. impl-drift on every touched unit (w12bA 24 IN-STEP, w12bB the corrected lattice claim IN-STEP), two byre values filed as found rows; wave 12's own pair (328-start at 6760d9bbf): band 0, owes nothing; the wave column written
+
+
+## Phase 14 - wave 13 (amendment 12): the byre claims, then the procedure-only Mode A rows
+
+The open in-scope rows after wave 12 are wave 12's two found byre claims (E0), then the E2 run, which opens with the Mode A
+procedure rows. An exception check (2026-10-07) ruled there is nothing to ask the GM - the Mode A sheets are in scope by the
+GM's own words - and that FR-003's own definition applies: a row whose fix redraws a hand-drawn sheet is E3. A fresh reader
+sorted the 18 Mode A E2 rows by measuring the sheets (`audit/modea-sort-out.jsonl`): 6 redraw a sheet (the tubs at the entrance,
+the barracks, the clerks at the dais, the well curbs, the country shrine's tubs, the granary's caption) and are E3; these 12
+change only the procedure and record each sheet's roll in its notes. With the two claims, wave 13 is these 14 rows. The next
+open in-scope row is E2, row 393, the first kept-code rule (`hamletgen/cluster.py`).
+
+  - `l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#byre footprint` - the byre's footprint `BYRE_FT` 16.12 x 10.92 ft
+  - `l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#byre off the house` - the byre set `YARD_SHED_GAP_FT[0]`, 6 ft, off the house
+
+  - `buildings.md::Outer court (administrative / public)#granary kept under a residence block` - the under-the-residence ceiling tied to the granary-weight knob: a terminal store may be the largest building (0098 drawing)
+  - `buildings.md::Sacred features#burial ground beside the precinct` - burial ground placed by a knob, in the shrine's yard or apart from it, rolled/following the map; DEVIATION label dropped
+  - `buildings.md::Sacred features#compound shrine arch` - compound shrine's arch optional (may have none) and shared-or-own a knob rolled per map, in procedure and notes
+  - `buildings.md::Sacred features#grove` - grove covers the sides of the hall knob 8 gives (behind, sides, both, all round), not the whole precinct; 'swept' clearing dropped
+  - `buildings.md::Sacred features#more than one kami in a hall` - a second kami's form (one hall or a shrine of its own) made a knob rolled from the seed in the procedure; sheets record their roll
+  - `buildings.md::Walls and gates#threshold wards` - threshold wards bullet dropped from Walls and gates (no pair at any official's gate before present-day custom); no sheet still draws them
+  - `buildings.md::Scale#salt ward marker` - salt ward marker claim and the Scale paragraph's salt-ward marker text dropped; Hayakawa's wards already off the sheet
+  - `buildings/programs.md::Country shrine (a village district's shrine)#building size anchors` - widen the country shrine's size bands to the record: a sanctuary of 1 or 3 ken (Hie's 2-bay about 12 x 6 ft) and worship halls from about 18 ft (Hie about 18 x 12, Rokusha 9 tsubo), in the band, its table and the sheet sizing rule
+  - `buildings/programs.md::Country shrine (a village district's shrine)#burial ground beside the precinct` - country shrine's burial ground rolls in the yard or apart on a knob, DEVIATION label dropped
+  - `buildings/programs.md::Magistrate's manor (county magistracy)#formal visitors and the privacy baffle` - where office and residence share a compound the genkan is drawn on the office (0104 drawing), not on the residence's reception block
+  - `buildings/programs.md::Magistrate's manor (county magistracy)#sand hearing court` - 'sand hearing court' -> roofed hearing court with a floor knob (white gravel or river cobbles), each plan taking one
+  - `buildings/programs.md::Magistrate's manor (county magistracy)#tier knob` - capital tier's staff housing made a knob: outside (Edo yoriki) or inside (a domain's Edo estate)
+
+- [ ] T49 the claims written; the procedures changed toward their pages, each sheet's roll recorded in its notes, no sheet redrawn;
+      the country shrine's bands widened in `types.json` and its table regenerated (FR-004, FR-005, FR-009)
+      research: rendering
+      verify:
+- [ ] T50 every touched claim re-checked by `impl-drift`, and the close: wave 13's own bookend pair, `make done` green, the wave
+      column (FR-005, FR-006, SC-002, SC-003)
+      research: rendering
+      verify:
