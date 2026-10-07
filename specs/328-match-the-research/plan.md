@@ -96,6 +96,17 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 - **Verification**: as wave 5 - Inashiro first (`make map`, the PNG looked at), the pool through the gate, a town or city
   value by its unit test; the bookends back to back; `impl-drift` on every touched unit; a held value becomes a found row.
 
+## Wave 8 (amendment 7, 2026-10-07)
+
+- **T29a first**: the 14 found rows wave 7's re-checks tiered by verdict alone are tiered by their work by a fresh reader
+  before the run is chosen (12 moved: the lane clearance and its stepped spur to E3, the skeleton margin, the plank's
+  obliqueness ceiling, the kura's rear seat, the six jizo and the trough count to E2, the city figure and two research gaps
+  to E4, three claim rows to E1 as values).
+- **Scope**: the 18 open E0 rows, then the next contiguous run of E1 (FR-006): rows 187-246 (8 rows, `tasks.md`
+  Phase 9), ending with the civic grounds' last row; the next open E1 row is 252.
+- **Verification**: as wave 7 - Inashiro first, the pool through the gate, a town or city value by its unit test; the
+  bookends back to back; `impl-drift` on every touched unit; a held value becomes a found row.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Each later wave that changes engine behavior takes

@@ -20,6 +20,8 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 - none (wave 7): on the scripted pool maps each fix moves one value inside a rule that already places or sizes the element
   (a clearance, a size, a count, a reach); the water gate's opening and the boundary stones' group change a glyph's form, but
   only the legacy hand-authored cities draw them (`water_gate(`, `boundary_marker(`), and feature 294 exempts legacy maps.
+- none (wave 8): claim lines, and values inside rules that already place or size the element (a width, a margin, a
+  spacing, a stretch); no element is new to a map and no glyph is redrawn.
 ## Phase 1 - the audit
 
 - [x] T01 the findings snapshot: `findings.json` = every finding of `make claims-report` at `a52ff1bcd` (565) (FR-001)
@@ -392,3 +394,62 @@ grounds' sizes, counts and reaches. Every `after` these rows carry is a row insi
 - [x] T28 the close: the band's records, `make done` green, the wave column, landed (FR-005, FR-006, SC-002, SC-003)
       research: rendering
       verify: DONE. DONE. make done green (185 s); band 0 nothing owed; the wave column written
+
+## Phase 9 - wave 8 (the open E0 claims, then the next run of E1: rows 187-246) - amendment 7, 2026-10-07
+
+T29a first: the 14 found rows wave 7's re-checks tiered by verdict alone are tiered by their work by a fresh reader
+(`audit/t29a-out.jsonl`, applied in `audit/overrides.json`; 12 moved), as T25a did. Then the 18 open E0 rows (SC-003),
+each a claim written or relabeled (cite the page that answers it, CANON for a GM ruling, GUESS or UNRESEARCHED where the page
+is silent; DEVIATION only after the exception path rules it LEGITIMATE). Then the next contiguous run of E1 (FR-006), rows
+187-246 in ranking order, ending with the civic grounds' last row (the next open E1 row is 252): the deck's assumed water
+widths, the temple and gate caption words, the city wall's exempt stretches, the terrace unit, the cemetery's and cremation
+ground's margins and the cemetery's first row. Every `after` these rows carry is a row inside the wave or closed.
+
+  - `l7r/diagram/hamletgen/ways/bund.py::a_way_onto_the_bund#a lane end within 6 ft (BUND_REACH_FT) of the paddy counts as joined to the bund` - claim it: a lane end within 6 ft (BUND_REACH_FT) of the paddy counts as joined to the bund
+  - `l7r/diagram/hamletgen/ways/bund.py::a_way_onto_the_bund#a lane end within 6 ft of the paddy (BUND_REACH_FT) counts as on the bund` - claim it: a lane end within 6 ft of the paddy (BUND_REACH_FT) counts as on the bund
+  - `l7r/diagram/hamletgen/ways/bund.py::a_way_onto_the_bund#branched field path 5 ft wide (BRANCH_WIDTH)` - claim it: branched field path 5 ft wide (BRANCH_WIDTH)
+  - `l7r/diagram/hamletgen/ways/bund.py::a_way_onto_the_bund#the branched field path 5 ft wide (BRANCH_WIDTH) with the LANE_CLEARANCE corridor` - claim it: the branched field path 5 ft wide (BRANCH_WIDTH) with the LANE_CLEARANCE corridor
+  - `l7r/diagram/hamletgen/ways/bund.py::carry_on#stepped field path 5 ft wide (BRANCH_WIDTH)` - claim it: stepped field path 5 ft wide (BRANCH_WIDTH)
+  - `l7r/diagram/hamletgen/ways/bund.py::carry_on#the stepped field path drawn 5 ft wide (BRANCH_WIDTH)` - claim it: the stepped field path drawn 5 ft wide (BRANCH_WIDTH)
+  - `l7r/diagram/hamletgen/ways/law_water.py::oblique_at#square ditch crossing` - cite 0087 (a carried deck crosses at an angle, solved for it) against the code's 10 degree squaring; dropping the squaring is a rule change ranked with it
+  - `l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#a run within 25 ft of the network counts as arrived (_LANE_JOIN_FT)` - claim it: a run within 25 ft of the network counts as arrived (_LANE_JOIN_FT)
+  - `l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#link kept 8 ft off hard ground, 7 ft off walls` - claim it: link kept 8 ft off hard ground, 7 ft off walls
+  - `l7r/diagram/hamletgen/ways/street.py::row_reach#a farm frame taken as 100 ft where none is recorded (0033 gives 220-260 ft)` - claim it: a farm frame taken as 100 ft where none is recorded (0033 gives 220-260 ft)
+  - `l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#each skeleton arm registers the 40 ft LANE_CLEARANCE no-build corridor` - claim it: each skeleton arm registers the 40 ft LANE_CLEARANCE no-build corridor
+  - `l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton arm's no-build corridor LANE_CLEARANCE, 7 ft` - claim it: skeleton arm's no-build corridor LANE_CLEARANCE, 7 ft
+  - `l7r/diagram/settlement/civic_grounds/civic.py::CivicWorksMixin.precinct_interior#parish plot seated at the precinct's rear, east of the axis (x+44, 14 px in from the rear edge)` - claim it: parish plot seated at the precinct's rear, east of the axis (x+44, 14 px in from the rear edge)
+  - `l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cemetery#no six jizo drawn at a burial ground's entrance unless a cremation ground stands beside it` - claim it: no six jizo drawn at a burial ground's entrance unless a cremation ground stands beside it
+  - `l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cremation_ground#cleared ground's depth 0.7 of its width` - claim it: cleared ground's depth 0.7 of its width
+  - `l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cremation_ground#fire bed always a stone-framed trench (never an open pyre)` - claim it: fire bed always a stone-framed trench (never an open pyre)
+  - `l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cremation_ground#snow-country walled hut over the bed never drawn` - claim it: snow-country walled hut over the bed never drawn
+  - `l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_handover#a through track's handover` - cite 0190 (a board at the village's center or its entrance, and at crossroads where people pass) for the junction nearest the houses' middle
+
+  - `l7r/diagram/hamletgen/ways/law_water.py::short_decks#assumed water widths` - Set the fallback widths in short_decks to the record's: a field ditch 2.5 ft (its head, 0084) in place of 3.0, and a stream 7 ft (0035) in place of 6.0, citing those pages; the channel's 3 ft stays claimed UNRESEARCHED.
+  - `l7r/diagram/overlap/taxonomy.py::_LABEL_GROUP#a caption covers its own group` - the funerary group and the samurai caption's estates are in step (wave 7); left: give the temple group the word 'shrine' and the gate group 'guard' and 'inspection' (0243: a temple's or shrine's name covers the temples; a guard-house or inspection caption the gate's guard-houses and inspection posts)
+  - `l7r/diagram/settlement/city/walls.py::WallsMixin._seat_mural_towers#exempt stretches` - the coverage sweep exempts all four of 0148's stretches: add 135 ft of a water gate and 186 ft of a ward gate to the 390 ft of a gate and 165 ft of its guard buildings
+  - `l7r/diagram/settlement/civic_grounds/civic.py::CivicWorksMixin.terrace#cell frontage` - Grow the terrace's default cell to the drawing page's Rank 1-4 unit of about 990 sq ft (0140 drawing) from 18 x 24 ft (432 sq ft), the frontage/depth split labeled GUESS.
+  - `l7r/diagram/settlement/civic_grounds/civic.py::CivicWorksMixin.terrace#range depth` - size the drawn terrace unit to the drawing page's about 990 sq ft (Rank 1-4) in place of Shibata's 18 x 24 ft (432 sq ft) cell
+  - `l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cemetery#keep-clear margin` - Set the cemetery's block band bm from 8 px to 0, so it blocks only the plot's own ground (0224: no cleared band is drawn, other features placed without regard to it; 0235: no set distance from houses), and cite 0224/0235.
+  - `l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cemetery#rows of low markers` - start the first row a marker's height inside a ruled plot's edge (or test each marker's top against the plot as against the blob) so every marker stands wholly inside the ground
+  - `l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cremation_ground#keep-clear margin` - Set the cremation ground's block band m from 8 px to 0 (0238: no fire clearance is drawn around a pyre), with the 120 ft from houses and wells cited to 0238 where edge_seat holds it (roll.py clear_px=self.px(120)).
+
+- [ ] T29a the found rows tiered provisionally by verdict read and tiered by the work they take, by a fresh reader, before
+      the wave chooses its rows (FR-002, FR-003, SC-003)
+      research: rendering
+      verify:
+- [ ] T30 the bookend pair, back to back: `make perf LABEL=328-start` in a detached worktree at main's engine, then
+      `LABEL=328-end` in the clone (constitution VI)
+      research: rendering
+      verify:
+- [ ] T31 the open E0 claims; then the E1 rows, each fixed toward the page it cites (DEVIATION only through the exception
+      path), with the unit tests it moves; proven on the reference hamlet and the pool through the gate, a town or city value
+      by its unit test; a value that makes a map refuse is held and the row takes the tier of the work it needs (FR-004,
+      FR-005, spec Edge Cases)
+      research: rendering
+      verify:
+- [ ] T32 every touched unit re-checked by `impl-drift`; each wave-8 row IN-STEP or re-tiered with its measured reason (FR-005, SC-002)
+      research: rendering
+      verify:
+- [ ] T33 the close: the band's records, `make done` green, the wave column, landed (FR-005, FR-006, SC-002, SC-003)
+      research: rendering
+      verify:

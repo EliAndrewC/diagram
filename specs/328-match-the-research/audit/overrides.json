@@ -144,6 +144,17 @@
   ],
   "moved": "wave 4: at 7 ft (0246) Kashikawa refuses; held at 4, the row waits for the found E3 row"
  },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py::LANE_CLEARANCE#fronting lane's corridor": {
+  "after": [],
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py"
+  ],
+  "fix": "Test the no-build corridor at a footprint's edge rather than its center, so LANE_CLEARANCE can be 0246's 7 ft from the lane's middle to a fence, and drop the 40 ft center derivation.",
+  "flag": "",
+  "found": "wave 7 re-check (tiered by its work at T29a)",
+  "moved": "T29a (amendment 7): tiered by its work - _near_corridor (settlement/houses.py line 146) takes a bare center point and is called from eight sites in six modules (houses, civic, rolling/fit, yards, gardens, groves, byres), each of which must pass its footprint - a change across modules, not the constant alone.",
+  "tier": "E3"
+ },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#line follows its bounds": {
   "e0_basis": "0077 drawing: 'within about 45 ft' (its GUESS) - LOT_BOUND_REACH is 45.0",
   "fix": "LOT_BOUND_REACH is 45.0, which 0077 drawing's 'within about 45 ft' already states; the claim names the value and keeps the page's GUESS label",
@@ -182,6 +193,30 @@
    ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#a footpath reaches every farmhouse 7 ft off a plot"
   ],
   "moved": "wave 4: reads FOOTPATH_FABRIC_GAP, held at 4 ft; waits with it"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::a_way_onto_the_bund#water between is crossed": {
+  "after": [],
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py"
+  ],
+  "fix": "Research first: search whether a path to the paddy's bund crossed more than one watercourse (0084 gives one planked deck per crossing, nothing on how many); claim the one-water cap UNRESEARCHED only if the pass comes back silent.",
+  "flag": "",
+  "found": "wave 7 re-check (tiered by its work at T29a)",
+  "moved": "T29a (amendment 7): tiered by its work - The cap is the `for over in (0, 1)` loop at bund.py line 301; no page says whether it should be one, more or none, so the record must answer before the loop or its claim changes.",
+  "tier": "E4"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::carry_on#stepped spur's corridor": {
+  "after": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py::LANE_CLEARANCE#fronting lane's corridor"
+  ],
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py"
+  ],
+  "fix": "Follows the LANE_CLEARANCE row: once the corridor is tested at the footprint's edge and LANE_CLEARANCE is 7 ft, carry_on's spur passes it unchanged and its claim drops the '40 ft center corridor' wording.",
+  "flag": "",
+  "found": "wave 7 re-check (tiered by its work at T29a)",
+  "moved": "T29a (amendment 7): tiered by its work - carry_on (bund.py line 360) only passes LANE_CLEARANCE, so it cannot be IN-STEP until the edge-based corridor (several modules) lands; no code of its own changes.",
+  "tier": "E3"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::fouls_fabric#foul margin": {
   "after": [],
@@ -240,6 +275,28 @@
   "moved": "T25a (amendment 6): tiered by its work - the code already uses FORD_HALF (consts_water.py:170, cited to 0035's 60 ft gap); only a claim line is added to off_ford_at at law_water.py:82",
   "tier": "E0"
  },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law_water.py::off_ford_at#how far off a crossing place": {
+  "after": [],
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law_water.py"
+  ],
+  "fix": "Research first: search for how wide a hamlet's crossing place on its brook was (0035 gives a spacing GUESS of 160 ft and no width); claim FORD_HALF's 30 ft UNRESEARCHED only if the pass comes back silent.",
+  "flag": "",
+  "found": "wave 7 re-check (tiered by its work at T29a)",
+  "moved": "T29a (amendment 7): tiered by its work - FORD_HALF (consts_water) is one constant read by off_ford_at at law_water.py line 79, but no page gives the width it should be, so the record comes first.",
+  "tier": "E4"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law_water.py::short_decks#assumed water widths": {
+  "after": [],
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law_water.py"
+  ],
+  "fix": "Set the fallback widths in short_decks to the record's: a field ditch 2.5 ft (its head, 0084) in place of 3.0, and a stream 7 ft (0035) in place of 6.0, citing those pages; the channel's 3 ft stays claimed UNRESEARCHED.",
+  "flag": "",
+  "found": "wave 7 re-check (tiered by its work at T29a)",
+  "moved": "T29a (amendment 7): tiered by its work - Two default literals in the d.get('w', ...) fallbacks at law_water.py lines 183 and 185, logic unchanged; the claim line moves with them.",
+  "tier": "E1"
+ },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#not along a shelter belt": {
   "after": [],
   "e0_basis": "T25a: a claim relabel; the code stands",
@@ -297,10 +354,32 @@
   "moved": "amendment 5 round 1: the claim cites 0081 against the code; no DEVIATION",
   "tier": "E0"
  },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton margin off the hard ground": {
+  "after": [],
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py"
+  ],
+  "fix": "Clip the skeleton arms at 0 ft off the crop plots (0081: a lane may touch a plot's boundary) and keep the 20 px margin only for the marsh, the wet toe and the ditches, claimed UNRESEARCHED.",
+  "flag": "",
+  "found": "wave 7 re-check (tiered by its work at T29a)",
+  "moved": "T29a (amendment 7): tiered by its work - The one clip_to_clear call at web.py line 146 applies a single 20.0 margin to crops, toe, marsh and water together, so the crops must be split into their own zero-margin clip - one rule in one function.",
+  "tier": "E2"
+ },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#a web lane's span": {
   "fix": "a back lane's span held to the houses it serves, within WEB_REACH_FT (100 ft, 0246), not 1.5 x WEB_REACH_FT (150 ft); the claim cites 0246",
   "moved": "wave 3 reading: the claim cannot be made honest without the value (E0 -> E1)",
   "tier": "E1"
+ },
+ ".claude/skills/diagram/l7r/diagram/interactive/place.py::KINDS#a city's figure takes in its samurai country estates": {
+  "after": [],
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/interactive/place.py"
+  ],
+  "fix": "Research first: 0001 says a provincial city's ~3,000 'counts only those living within the walls' (l7r-budgets) while the CANON claim and place.json's population_note follow the GM's feature-156 ruling that it takes in the samurai country estates; 0001 must record and reconcile the GM's ruling before the claim can cite it.",
+  "flag": "",
+  "found": "wave 7 re-check (tiered by its work at T29a)",
+  "moved": "T29a (amendment 7): tiered by its work - The code (place.json city population_note) already states the GM's ruling; the work is in the record, where 0001 and its l7r-budgets note contradict that canon - no code change until the record is reconciled.",
+  "tier": "E4"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/place.py::KINDS#what each tier is": {
   "after": [],
@@ -410,6 +489,17 @@
   "found": "wave 6 re-check (tiered by its work at T25a)",
   "moved": "T25a (amendment 6): tiered by its work - one literal in DEFAULT_W at bridges.py:606 turned to feet, and the claim split into a cited brook line and an UNRESEARCHED channel line",
   "tier": "E1"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#obliqueness ceiling": {
+  "after": [],
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/city/bridges.py"
+  ],
+  "fix": "Rule out a seat whose deck _widen_for_confluence would lengthen past the nominal span (0084: the joins of ditches rule a seat out and the span stays about 8 ft), replacing the 3x ceiling at bridges.py line 716, and cite 0084.",
+  "flag": "",
+  "found": "wave 7 re-check (tiered by its work at T29a)",
+  "moved": "T29a (amendment 7): tiered by its work - One seat-rejection condition in the seat loop (bridges.py lines 701-716) changes from a 3x-span ceiling to 'no widening at a join'; it rides with the 'longer plank at a junction' drift on the same loop.",
+  "tier": "E2"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#off dry crops and gardens": {
   "after": [],
@@ -564,9 +654,31 @@
   "moved": "wave 5 re-check: NEEDS-RESEARCH",
   "tier": "E4"
  },
+ ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/civic.py::CivicWorksMixin.merchant_storehouses#a kura behind the shop": {
+  "after": [],
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/civic.py"
+  ],
+  "fix": "Seat the kura at the back of the lot (0155: storehouses 'at the back of the lots', thick along the block backs) - stepped back along the shop's back direction to the lot's rear line - rather than 2 px into the shop's back wall.",
+  "flag": "",
+  "found": "wave 7 re-check (tiered by its work at T29a)",
+  "moved": "T29a (amendment 7): tiered by its work - The offset at civic.py line 235 (off = h/2 + kh/2 - 2) has no lot depth to use, since buildings record no lot, so the placement rule must find the lot's rear (block back) before the street-bed and neighbor tests run - one function's logic.",
+  "tier": "E2"
+ },
  ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/civic.py::CivicWorksMixin.merchant_storehouses#kura size": {
   "fix": "draw each merchant kura square, 14-20 ft (0152/0150 drawing: 'Each storehouse is 14 to 20 ft square')",
   "moved": "wave 1: E0 -> E1, the code draws a 20 x 14 oblong; the page says 14 to 20 ft square",
+  "tier": "E1"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/civic.py::CivicWorksMixin.terrace#cell frontage": {
+  "after": [],
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/civic.py"
+  ],
+  "fix": "Grow the terrace's default cell to the drawing page's Rank 1-4 unit of about 990 sq ft (0140 drawing) from 18 x 24 ft (432 sq ft), the frontage/depth split labeled GUESS.",
+  "flag": "",
+  "found": "wave 7 re-check (tiered by its work at T29a)",
+  "moved": "T29a (amendment 7): tiered by its work - The frontage_ft=18.0 / depth_ft=24.0 defaults in the terrace signature at civic.py line 88 are the one size; no caller overrides them.",
   "tier": "E1"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/civic.py::CivicWorksMixin.terrace#range depth": {
@@ -579,6 +691,17 @@
   "moved": "wave 7 re-check: the fix landed; what the re-check found beyond it",
   "tier": "E1"
  },
+ ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cemetery#keep-clear margin": {
+  "after": [],
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/funerary.py"
+  ],
+  "fix": "Set the cemetery's block band bm from 8 px to 0, so it blocks only the plot's own ground (0224: no cleared band is drawn, other features placed without regard to it; 0235: no set distance from houses), and cite 0224/0235.",
+  "flag": "",
+  "found": "wave 7 re-check (tiered by its work at T29a)",
+  "moved": "T29a (amendment 7): tiered by its work - One literal, bm = 8 at funerary.py line 130; the block polygon and _clear_ground(..., 0) already follow.",
+  "tier": "E1"
+ },
  ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cemetery#rows of low markers": {
   "after": [],
   "files": [
@@ -588,6 +711,28 @@
   "flag": "",
   "moved": "wave 7 re-check: the fix landed; what the re-check found beyond it",
   "tier": "E1"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cremation_ground#keep-clear margin": {
+  "after": [],
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/funerary.py"
+  ],
+  "fix": "Set the cremation ground's block band m from 8 px to 0 (0238: no fire clearance is drawn around a pyre), with the 120 ft from houses and wells cited to 0238 where edge_seat holds it (roll.py clear_px=self.px(120)).",
+  "flag": "",
+  "found": "wave 7 re-check (tiered by its work at T29a)",
+  "moved": "T29a (amendment 7): tiered by its work - One literal, m = 8 at funerary.py line 299; the 120 ft is already the seat's clear_px in rolling/roll.py, the only caller.",
+  "tier": "E1"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cremation_ground#six jizo at a burial ground's entrance": {
+  "after": [],
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/funerary.py"
+  ],
+  "fix": "Seat the six jizo at the entrance of the burial ground the cremation ground stands beside (0235/0238), on the rim facing that burial ground, rather than on the cremation ground's own north rim.",
+  "flag": "",
+  "found": "wave 7 re-check (tiered by its work at T29a)",
+  "moved": "T29a (amendment 7): tiered by its work - The stone row at funerary.py line 293 is fixed at cy - cry - jh; cremation_ground must be handed the burial ground (M['cemeteries']) and place the row toward it - one function's rule (the only jizo=True caller today is a test).",
+  "tier": "E2"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/justice.py::JusticeGroundsMixin.boundary_marker#how many stones": {
   "after": [],
@@ -609,6 +754,17 @@
   "fix": "give a town's gate stables or caravan ground its working yard too (0195), not only a city's or capital's",
   "flag": "",
   "moved": "wave 7 re-check: the fix landed; what the re-check found beyond it",
+  "tier": "E2"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/stable_yard.py::StableYardMixin._yard_watering#trough count": {
+  "after": [],
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/stable_yard.py"
+  ],
+  "fix": "Key the trough count on the yard's kind - three at a caravan ground, two at a plain stables yard (0195) - in place of the r >= 76 px test.",
+  "flag": "",
+  "found": "wave 7 re-check (tiered by its work at T29a)",
+  "moved": "T29a (amendment 7): tiered by its work - The condition at stable_yard.py line 204 changes, and the kind must be passed from animal_ground (lodging.py) through _stable_yard into _YardCtx since r cannot tell them apart (both default px(127.5)) - one rule with a flag plumbed to it.",
   "tier": "E2"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/houses.py::HousesMixin._in_blocked#seat set-back from fields, dry plots and hills": {
