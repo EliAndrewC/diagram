@@ -407,7 +407,7 @@ class CombMixin:
             # ...with a BUND'S WIDTH of margin beyond the bank (settlement-review, feature 230 pass 11). At the bare half-width a
             # hem plot 5.9 ft from Mizuguchi's centerline was kept, which leaves about half a foot between the water's bank and
             # the plot's plow boundary - the crop stops at the bank, and a bund is the thing that stops it.
-            _wet.append(([(float(q[0]), float(q[1])) for q in _src_brook], 9.0 / 2 + 3.0))
+            _wet.append(([(float(q[0]), float(q[1])) for q in _src_brook], 7.0 / 2 + 3.0))  # the drawn 7 px brook's half-width plus a bund (GUESS)
 
         _wet_lines = WetLines(_wet)  # filed once: every hem and reserve plot asks it
 

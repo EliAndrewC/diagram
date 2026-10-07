@@ -23,7 +23,8 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 - none (wave 8): on the scripted pool maps, claim lines and values inside rules that already place or size the element (a
   width, a margin, a stretch); the cemetery, cremation ground, terrace and city wall are drawn only on exempt legacy maps.
 - none (amendment 8 and wave 9): the scope is a ranking column and a deferred list; wave 9's fixes move values inside rules
-  that already place or size the element (a step off a wall, a reach, a crown floor, a share, a depth, a width, a size).
+  that already place or size the element (a step off a wall, a reach, a crown floor, a share, a depth, a width, a size)); the
+  dike gate's span sizes a glyph no pool map's manifest records (`dike_gates`), and the commons fill, a glyph change, moved to E2.
 ## Phase 1 - the audit
 
 - [x] T01 the findings snapshot: `findings.json` = every finding of `make claims-report` at `a52ff1bcd` (565) (FR-001)

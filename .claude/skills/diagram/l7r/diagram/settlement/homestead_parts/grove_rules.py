@@ -30,7 +30,7 @@ from typing import Any
 from .grove_sides import grove_faces
 
 EAST_REACH_FT = 50.0  # no crown within 50 ft east of a yard or bed (0038), in feet at every grain
-"""Research: garden's morning sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: a band within 22 bscale units east of a garden"""
+"""Research: garden's morning sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: no band within 50 ft east of a garden, in feet at every grain"""
 
 Pt = tuple[float, float]
 

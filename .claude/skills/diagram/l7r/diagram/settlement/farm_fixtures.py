@@ -117,8 +117,10 @@ def kura_rect(w: float, h: float, side: str | None, ppf: float) -> tuple[float, 
         annex larger than a kura - DEVIATION research/questions/0040-farm-storehouses-kura.drawing.html: the storehouse is drawn at a farm shed's size, the annex 18 to 27 ft long; the band's longer annexes exceed the 15 x 18 ft kura read
     """
     fx, fy, fw, fh = KURA_PARTS["N" if side == "N" else "W"]
-    if side != "N":
-        return (fx * w, fy * h, fw * w, fh * h)
+    if side != "N":  # the west annex: its length along the wall in the band, its depth out from it 1.5 to 1.8 times shorter
+        length = min(max(fh * h, ANNEX_LENGTH_FT[0] * ppf), ANNEX_LENGTH_FT[1] * ppf)
+        out = min(max(fw * w, length / ANNEX_RATIO[1]), length / ANNEX_RATIO[0])
+        return ((fx + fw) * w - out, fy * h, out, length)  # its inner edge stays where the shares put it, lapping the wall
     depth = fh * h
     lo, hi = max(ANNEX_LENGTH_FT[0] * ppf, ANNEX_RATIO[0] * depth), min(ANNEX_LENGTH_FT[1] * ppf, ANNEX_RATIO[1] * depth)
     return (fx * w, fy * h, min(max(fw * w, lo), hi), depth)

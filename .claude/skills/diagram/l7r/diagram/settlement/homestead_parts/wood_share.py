@@ -92,7 +92,7 @@ def copse_keepouts(parts: Mapping[str, Any], clump: float, sun_depth: float, wel
             half the diagonal plus the clump's radius and 2 px
         copse off the wellhead - UNRESEARCHED: its drawn half-size plus 1.05 clumps
         plots' sun strips - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: the copse's own SEAT keep-outs
-            (`village_grove`): south of each yard and bed at the map's sun depth, 24 px east of each bed, and west and southwest
+            (`village_grove`): south of each yard and bed at the map's sun depth, `EAST_LANE_FT` (50 ft) east of each bed, and west and southwest
             of each yard and bed at the map's afternoon lane; the page's 50 ft round every crown is held at the planting
             (`_sun_keepouts`)
     """

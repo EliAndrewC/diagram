@@ -269,3 +269,44 @@ beside the changed claims, tiered provisionally by its verdict until a read by i
 - `l7r/diagram/labels/obstacles.py::GROUP_WORDS#a guard or inspection caption may cover the gate's posts (0243 §9)` (UNCLAIMED, E0): claim it: a guard or inspection caption may cover the gate's posts (0243 §9)
 - `l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cemetery#stupa height 13 px and its seats (rear corners of a ruled plot, interior of an organic one)` (UNCLAIMED, E0): claim it: stupa height 13 px and its seats (rear corners of a ruled plot, interior of an organic one)
 - `l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cremation_ground#jizo true size px(2.0) x px(2.7) ft against 0235 §102's "about 2 ft tall", and their 1.4-width pitch` (UNCLAIMED, E0): claim it: jizo true size px(2.0) x px(2.7) ft against 0235 §102's "about 2 ft tall", and their 1.4-width pitch
+
+## Wave 9 (2026-10-07)
+
+Wave 9 wrote the five open in-scope E0 claims and took in-scope E1 rows 265-297 (the scope of amendment 8): the kura's
+west annex held to the shed band, the comb's and pond's feeder and outfall widths, the privy, yard-privy and wood-shed steps
+off their walls, the privy's 48 ft sun reach, the lesser broadleaf floor and the windbreak's conifer share, the belt's 80 ft
+depth and 30 ft gap in feet, the 50 ft morning-sun reach east of a bed (the dispersed layout's own reach as well), the
+garden cap, the dike gate's 20 ft span and the 39 ft house shade. Three rows were re-tiered by their work: the commons fill
+to E2 (a glyph change) and the two surface-water rows to E4 (0196 against the recorded 2026-08-18 ruling). The re-checks of
+the changed units found the rows below (`audit/found-wave9.jsonl`), tiered provisionally by verdict until a read by their work.
+
+- `l7r/diagram/hamletgen/ways/bund.py::a_way_onto_the_bund#field path's corridor` (DRIFTED, E3): the claim states the drift: the corridor is 0246's 7 ft to a fence held as a 40 ft center corridor; fixed by the edge-based corridor row (consts.py::LANE_CLEARANCE)
+- `l7r/diagram/settlement/farm_fixtures.py::KURA_PARTS#free-standing storage shed` (DRIFTED, E3): draw 0052's free-standing storage shed (18-27 ft, roof rolled) on about one farm in three, or record the omission as a DEVIATION through the exception path
+- `l7r/diagram/settlement/farm_fixtures.py::KURA_PARTS#north annex` (MISLABELED, E0): cite 0040's drawing page for the back-wall placement; 0052 gives the band
+- `l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_ditches#drain outfall` (CANNOT-TELL, E0): re-check with outfall_run in the bundle (0067: the turn out of the collector held to 55 degrees or less)
+- `l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_ditches#outfall corridor` (DRIFTED, E2): on a hamlet or village map use the below-the-drain rule; the 33 ft corridor from a channel's centerline is the town and city rule, and in feet (px(33))
+- `l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_source#feeder brook` (DRIFTED, E2): the feeder brook runs on past the intake (0196: never a brook taken whole by its ditch)
+- `l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_source#feeder brook width` (DRIFTED, E1): feeder brook width=7 px -> self.px(7.0), stored in feet (0068)
+- `l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_source#planted pond bank` (MISLABELED, E0): the page records every bank drawn bare as the project's choice: DEVIATION 0061, through the exception path
+- `l7r/diagram/settlement/land/dikes.py::DikeMixin.dike_gates#gate glyph at the polder cut` (CANNOT-TELL, E0): re-check with sluice_gate and its callers' span_ft in the bundle (0179: a 16-24 ft span)
+- `l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#privy seats` (DRIFTED, E2): seat the barn-side privy against a barn's outer wall (0047), not the house's own +x end, or record the house-end seat on the page
+- `l7r/diagram/settlement/homestead_parts/fixture_seats.py::shed_off_a_wall#wood shed a ken off a wall` (DRIFTED, E1): admit a shed only a ken (6 ft) off its wall, not g + a ken + a STEP_FT (about 14 ft)
+- `l7r/diagram/settlement/homestead_parts/fixture_seats.py::_wood_shed#wood shed seats` (CANNOT-TELL, E0): re-check with wall_places and against_a_wall in the bundle: never the front yard (0051)
+- `l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#manure heap fallback spots` (UNCLAIMED, E0): the manure heap's fallback spots (beside the privy at 1.1 and 1.9 widths, 10 ft further out) and its no-privy seats at 0.3 hw / 0.3 hh
+- `l7r/diagram/settlement/homestead_parts/fixture_seats.py::_wood_shed#wood shed fallback seats` (UNCLAIMED, E0): the wood shed's fallback seats paced a further STEP_FT (8 ft) out beyond the ken seats
+- `l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#crown over no roof or wellhead` (MISLABELED, E0): add 0072's drawing page for the wellhead (a wellhead in a belt removes the clumps round it)
+- `l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#crown size` (DRIFTED, E1): hold every crown to 0080's 0.75-1.4 of the mean radius, one size for hill woods and windbreak cedars alike (no conifer x1.15)
+- `l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#crowns per clump ceiling` (MISLABELED, E0): the cap of 28 overrides 0080's density on large clumps: a DEVIATION through the exception path, or drop the cap
+- `l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#crowns per clump floor` (MISLABELED, E0): the floor of 5 over-stocks small clumps against 0080's density: a DEVIATION through the exception path, or drop the floor
+- `l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#bamboo patch forced` (UNCLAIMED, E0): a grove item inside the farm's bamboo patch (bamboo_box) forced to bamboo, in any mix and even when bamboo=False
+- `l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#clump off buildings, wells and shrines` (MISLABELED, E0): narrow the label to buildings (0071 §15); give the wellhead keep-out (vr + 1.05 clump + 1) its own UNRESEARCHED claim
+- `l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#off the plots' sun` (DRIFTED, E2): keep every crown 50 ft east, west and south of a yard or bed (0038), threshing yards included, not the 39 ft house-shade corridor south
+- `l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#belt off the deep marsh` (NEEDS-RESEARCH, E0): mark the cut at the reed margin (MARSH_FEATHER_BS) UNRESEARCHED: the page gives no limit on how far in
+- `l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#wellhead canopy keep-out` (UNCLAIMED, E0): wellhead canopy keep-out, vr + 1.05 clump + 1
+- `l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#copse off the whole marsh` (UNCLAIMED, E0): copse kept off the whole marsh, not only the deep marsh
+- `l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#copse mix` (UNCLAIMED, E0): copse drawn in the fruit-and-broadleaf mix, no bamboo or conifer
+- `l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#clump inside the page window` (UNCLAIMED, E0): a clump kept only when some of its crown falls inside the page window
+- `l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_geom#grove cleared east of turned beds` (UNCLAIMED, E0): a dispersed farm's grove cleared 50 ft east of its turned beds
+- `l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#south band off an unkept yard` (UNCLAIMED, E0): south band on a map that does not keep the sun stands YARD_SUN_STRIP 22 off the yard, unscaled
+- `l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#byre beside the house` (NEEDS-RESEARCH, E0): mark the flank away from the garden UNRESEARCHED: no page places the byre on a flank
+- `l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#storehouse on the north wall` (MISLABELED, E0): the drawing page calls the north-wall annex a convention the record contradicts: DEVIATION 0040, through the exception path

@@ -129,7 +129,7 @@ LESSER_BROADLEAF_S = (
     0.75,
     0.85,
 )  # "lesser broadleaf crowns among them" (research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html): smaller than the woods' crowns
-"""Research: lesser broadleaf size - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: 0.6 to 0.85 of the mean crown"""
+"""Research: lesser broadleaf size - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: 0.75 to 0.85 of the mean radius, within the page's 0.75 to 1.4"""
 # ...and FEWER than the conifers: of a clump's usual rolls, this share is thrown for the broadleaf and the bamboo between the
 # rows, so the conifer stays the commonest crown (the entry's guess; the share itself a GUESS, measured against the maps'
 # `crowns` tallies, 269 B30). Measured on Inashiro's belt with the rows laid per clump: 0.3 drew 182 conifers to 330
