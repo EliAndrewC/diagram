@@ -195,7 +195,8 @@ def admits(base: Any, M: Mapping[str, Any], run: Poly, role: str = ACCESS_ROLE, 
         no sliver between the tree's lanes - UNRESEARCHED: no needle (`needle_loops`), asked of the tree with its ends joined as the settle joins them (`as_joined`), and no doubled tail
         way out crosses each brook once - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html
         no doubled band - UNRESEARCHED: an access lane may not run beside another past a pitch
-        free ends at a house - UNRESEARCHED: at most DOORSTEP_MAX (2) free lane ends at a house"""
+        free ends at a house - UNRESEARCHED: at most DOORSTEP_MAX (2) free lane ends at a house
+        no zigzag across a joint - research/questions/0081-village-lanes.drawing.html: two lanes met end to end walked as one way, the knot pass's gather of its ends included (`gathered_zigzag`)"""
     recs: list[dict[str, Any]] = [*tree_records(M), {"role": role, "of": (float(house["x"]), float(house["y"])) if house is not None else None, "pts": _dedup([_pt(q) for q in run])}]
     root = _root(M)
     host = hosts(recs, root)
