@@ -13,9 +13,12 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 - (wave 5, landed and reviewed) placement-changed village lane on kashikawa - wave 5: 0033's row street runs on off the map as the road into it at both ends, where
   the web cut it back to its last joint (`trim_streets`); Kashikawa's and Mizuguchi's far ends now run off the sheet as a
   second way out (every way is inked `village lane`).
-- placement-changed: woodland commons on mizuguchi - wave 20: a wood only beyond the fields from the houses, none on their side
-  (0077 drawing; impl-drift found the fallback) - Mizuguchi draws one wood where two stood; the other rows moved nothing drawn
-  (the other four manifests differ from wave 19's close in `meta` only).
+- placement-changed: woodland commons on kashikawa - wave 20: a wood only where the walk from the houses runs THROUGH the field and
+  beyond it, on every tier (0077 drawing: beyond the fields AND higher than them; the woodland glyph check found the slope tier
+  admitting the houses' own side) - Kashikawa draws one wood where three stood; Inashiro's and Mizuguchi's woods now fit nowhere
+  on the sheet and are recorded beyond it (`woodland_offsheet`, N and W), the woodland commons gone from their legends. The
+  woodland unit's two rounds are spent (waves 19 and 20, the second NEEDS-WORK); its F1 is verified by measurement
+  (`measurements.json` mizuguchi-glyph-woodland-F1-side) - a third round asks the GM's waiver.
 - placement-changed: woodland commons on inashiro - wave 19: the coppice wood taken beyond the fields from the houses first (0077
   drawing), where feature 261 preferred the houses' side; Inashiro's woods re-placed (three where two stood).
 - placement-changed: woodland commons on kashikawa - wave 19: the same; Kashikawa's woods move across its field.
@@ -876,7 +879,7 @@ Wave 19's glyph check filed one row - the wood's walk clipping a field's corner 
 `audit/t65a-out.jsonl`: one predicate, used once). With it the open in-scope run takes the seat order's tie (422) and the bath
 room's wall (423, 424); the next open row is the fixture count's cap (425).
 
-  - `l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#beyond the fields by a real crossing` - on the level the walk must run through the field (`crossed_through`, `REAL_CROSSING_SHARE` 0.5 UNRESEARCHED); above the fields the slope reading governs (0077 drawing); and no seat on the houses' side at all (the fallback retired - impl-drift)
+  - `l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#beyond the fields by a real crossing` - on the level the walk must run through the field (`crossed_through`, `REAL_CROSSING_SHARE` 0.5 UNRESEARCHED); above the fields the slope reading governs (0077 drawing); no seat on the houses' side at all (the fallback retired - impl-drift); and the walk through the field asked on every tier (the woodland glyph check: the slope tier admitted the houses' own side)
   - `l7r/diagram/hamletgen/homesteads/capacity.py::free_seats#the exhaustive seat order` - of seats about as near (one grid pitch), the one nearer the field first (0029 drawing)
   - `l7r/diagram/hamletgen/homesteads/fixtures.py::BATH_SEATS#bath room wall` - the wall rolled per house, not once per hamlet
   - `l7r/diagram/hamletgen/homesteads/fixtures.py::fixture_forms#bath room wall` - beyond the stable wing at 0.8 (0044: 17 of 21 and 12 of 15 registered baths); the roll reaches the map only where the main-door seat is free - on the pool hamlets the threshing yard covers it, so every bath draws beyond the stable (a found row, E3: the seat geometry)
@@ -886,5 +889,5 @@ room's wall (423, 424); the next open row is the fixture count's cap (425).
       verify: DONE. 1 row tiered E2 by a fresh Opus reader (audit/t65a-out.jsonl): one predicate, used once
 - [ ] T65 the real crossing on the level, the seat's tie, each house's bath wall rolled at the registers' share (drawn: see the found row), with their tests; the five hamlets regenerated (FR-004, FR-005)
       research: rendering
-- [ ] T66 every touched claim re-checked by `impl-drift`, the occasion's review (glyph-check on Mizuguchi's woodland commons), and the close: wave 20's own bookend pair, `make done` green, the wave column (FR-005, FR-006, SC-002, SC-003)
+- [ ] T66 every touched claim re-checked by `impl-drift`, the occasion's review (glyph-check on Mizuguchi's woodland commons: NEEDS-WORK, fixed and measured), and the close: wave 20's own bookend pair, `make done` green, the wave column (FR-005, FR-006, SC-002, SC-003)
       research: rendering

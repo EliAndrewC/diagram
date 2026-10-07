@@ -16,7 +16,7 @@ from l7r.diagram.settlement.land.wet import marsh_ground
 
 from ..consts import Poly, Pt
 from ..plan import SitePlan
-from .crossing import crossed_through, reached_across
+from .crossing import crossed_through, reached_across  # noqa: F401 - reached_across re-exported (tests)
 from .frame import content_box, frame_bounds, title_pocket
 
 CROP_MARGIN = 48.0  # the one crop margin, shared by stage_frame's crop_to_content call and the
@@ -270,7 +270,7 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
         crop set-back - UNRESEARCHED: 80 px, 180 px on the crop's sunny side, relaxed to 40 and 100
         keep-outs - UNRESEARCHED: 150 px from houses, 90 from wells, 120 past the pond, 70 from lanes, 60 from streams, 110 round the belt and the houses
         where the fuel wood stands - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: ranked by `woodland_tier`, below-the-houses seats dropped
-        beyond the fields preferred - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: only seats across the field from the houses, the nearest slope beyond the fields, none offered on the houses' side; above the fields the slope reading governs (reached across the outline), on the level the walk runs through the field (`crossed_through`)
+        beyond the fields preferred - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: only seats across the field from the houses, the nearest slope beyond the fields, none offered on the houses' side; the walk from the houses runs through the field on every tier (`crossed_through`), the seat also higher than the fields beside it where the ground slopes
         parcels kept apart - UNRESEARCHED: each one's exclusion 1.15-2.5 of the size
         aspect and bearing - UNRESEARCHED: up to 2.2:1, laid across the fall within 20 deg
         line follows its bounds - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: within LOT_BOUND_REACH (45 ft, the page's "within about 45 ft", its GUESS) of a lane, brook or field the line runs alongside
@@ -508,7 +508,6 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
             # a RANK, not a filter, below the downslope refusal: every tier-0 seat outranks every tier-1 one (the 1e9 dwarfs any
             # distance on a canvas), so the level is taken only once the ground above the fields is used up - "where the map
             # has no such ground" read per parcel, as the count is a target the scan meets only where there is open ground
-            _tier_of = {(t[1], t[2]): k for t, k in zip(scored, _tiers, strict=True)}
             scored = [(t[0] - 1e9 * k, t[1], t[2]) for t, k in zip(scored, _tiers, strict=True) if k < 2]
             # ...AND BEYOND THE FIELDS FROM THE HOUSES (feature 328; 0077's drawing page: "on the nearest slope beyond the fields
             # from the houses", the village running houses, then fields, then the wild land): feature 261 had preferred the
@@ -517,7 +516,7 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
             # nearest the houses (impl-drift, wave 20). ON THE LEVEL the walk must run THROUGH the field (`crossed_through`; the woodland glyph check of
             # wave 19 found a corner clip counted); above the fields the slope reading governs (0077: "beyond" read as higher
             # than the fields beside it), so a seat there needs only to be reached across the outline.
-            _beyond = [t for t in scored if (crossed_through(plan.envelope, (ccx, ccy), (t[1], t[2])) if _tier_of[(t[1], t[2])] == 1 else reached_across(plan.envelope, (ccx, ccy), (t[1], t[2])))]
+            _beyond = [t for t in scored if crossed_through(plan.envelope, (ccx, ccy), (t[1], t[2]))]
             scored = _beyond
             # ...NOT IN A ROW: a seat in line with two placed parcels is stepped sideways off the row where the ground allows,
             # and refused where it does not - the count is a target the scan already meets only where there is open ground

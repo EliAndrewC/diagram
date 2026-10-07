@@ -6773,20 +6773,20 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#a ring with room for a wood": {
-  "code": "f2ec954a366e94a3",
-  "core": "d7993934dae51c75",
+  "code": "dcb2673e69aaa530",
+  "core": "dafd39f80433307f",
   "date": "2026-10-07",
-  "note": "the 5-crown minimum matches WOODLAND_MIN_CROWNS; the questions are silent",
+  "note": "the page does not give a minimum crown count",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#aspect and bearing": {
-  "code": "03b67948a8232d45",
-  "core": "d7993934dae51c75",
+  "code": "8eab0e058b61cd6c",
+  "core": "dafd39f80433307f",
   "date": "2026-10-07",
-  "note": "aspect rolls 1.0-2.2, bearing across the fall +/-20 deg, as the claim says; no page answers it",
+  "note": "§5 rules out a surveyed rectangle; the page does not give an aspect ratio or a bearing",
   "pages": {},
   "research": "",
   "rests": [
@@ -6795,10 +6795,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#beyond the fields preferred": {
-  "code": "5aad6443532bc648",
-  "core": "d7993934dae51c75",
+  "code": "ee63012c8eb88350",
+  "core": "dafd39f80433307f",
   "date": "2026-10-07",
-  "note": "`if _beyond: scored = _beyond` falls back to the nearest seats on the houses' side when no seat lies beyond the fields, but 0077 puts the wood \"on the nearest slope beyond the fields from the houses ... not on whatever open ground lies nearest the houses\" and records no such fallback; either drop the fallback (draw fewer parcels) or record it on the drawing page as a DEVIATION",
+  "note": "a hard rule: only seats across the field are offered; slope reading above the fields, crossed_through on the level, matches §2/§3",
   "pages": {
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "ecf6ed4b609ca690"
   },
@@ -6807,43 +6807,43 @@
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:51f3d4bae1a3978e",
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:6a3373d9e6527e72"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#commons legibility floor": {
-  "code": "e947d7af290c6ec8",
-  "core": "d7993934dae51c75",
+  "code": "5ce1f0d8e89ac583",
+  "core": "dafd39f80433307f",
   "date": "2026-10-07",
-  "note": "120 ft floor, rungs below it skipped, parcel dropped rather than shrunk",
+  "note": "the page does not give a minimum lot size",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#crop set-back": {
-  "code": "a311a2ecf8405b96",
-  "core": "d7993934dae51c75",
+  "code": "a8b4e2cddf705264",
+  "core": "dafd39f80433307f",
   "date": "2026-10-07",
-  "note": "80/180, then 40/100 plus the diagonal pad",
+  "note": "the page gives no set-back from crops or sunny-side figure",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#keep-outs": {
-  "code": "b5082120a8d31056",
-  "core": "d7993934dae51c75",
+  "code": "1a34b36b1fdfa444",
+  "core": "dafd39f80433307f",
   "date": "2026-10-07",
-  "note": "150/90/pond+120/70/60/110 all match the code",
+  "note": "the page gives no keep-out distances",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#line follows its bounds": {
-  "code": "60d5bc6b6c88c87c",
-  "core": "d7993934dae51c75",
+  "code": "de7b148e02b45a72",
+  "core": "dafd39f80433307f",
   "date": "2026-10-07",
-  "note": "within about 45 ft the line runs alongside, which the page records as a GUESS",
+  "note": "lanes, streams and fields within about 45 ft, recorded as a GUESS",
   "pages": {
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "ecf6ed4b609ca690"
   },
@@ -6854,10 +6854,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#mostly dry": {
-  "code": "3c129c8cacacf65d",
-  "core": "d7993934dae51c75",
+  "code": "b7333ded3aa46336",
+  "core": "dafd39f80433307f",
   "date": "2026-10-07",
-  "note": "no ring in marsh; low wet ground is left to grass",
+  "note": "marsh ground is left to grass (zero wet share); the marsh-edge reading is the page's GUESS",
   "pages": {
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "ecf6ed4b609ca690"
   },
@@ -6868,10 +6868,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#nearest seat preferred": {
-  "code": "21cc2a8d964e6b21",
-  "core": "d7993934dae51c75",
+  "code": "c7d9a8315702e095",
+  "core": "dafd39f80433307f",
   "date": "2026-10-07",
-  "note": "scored by nearness to the cluster within the tier, \"the nearest slope\"",
+  "note": "nearness ranks within a tier, matching \"the nearest slope beyond the fields\"",
   "pages": {
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "ecf6ed4b609ca690"
   },
@@ -6882,60 +6882,72 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#on the page": {
-  "code": "26ff6802b0763ea0",
-  "core": "d7993934dae51c75",
+  "code": "867110b68e89d500",
+  "core": "dafd39f80433307f",
   "date": "2026-10-07",
-  "note": "the in-view share is framing only",
+  "note": "the share of the ring inside the view is a framing matter",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#parcel count and size": {
-  "code": "91d7f5ef4717c3cc",
-  "core": "d7993934dae51c75",
+  "code": "80d4be2cf24b6851",
+  "core": "dafd39f80433307f",
   "date": "2026-10-07",
-  "note": "250 ft, ladder 0.9-1.1, rungs 0.8/0.64/0.5 match",
+  "note": "§1's \"a few patches\" gives no count or footage",
   "pages": {},
   "research": "",
-  "rests": [],
+  "rests": [
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:b9c8109469f1d0d3"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#parcels kept apart": {
-  "code": "e3527bedda264b08",
-  "core": "d7993934dae51c75",
+  "code": "b287bc67b34d6a8e",
+  "core": "dafd39f80433307f",
   "date": "2026-10-07",
-  "note": "size*(1.15+1.35*jit) = 1.15-2.5",
+  "note": "the page gives no spacing between lots",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#per-parcel size bands": {
-  "code": "432d8893a636d070",
-  "core": "d7993934dae51c75",
+  "code": "d36e9aedbb3a22e5",
+  "core": "dafd39f80433307f",
   "date": "2026-10-07",
-  "note": "0.82+0.36*band share, then 0.84",
+  "note": "the page does not address size variety",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#scan reach": {
-  "code": "1a586ff5632abd23",
-  "core": "d7993934dae51c75",
+  "code": "fbc2f425f02624ae",
+  "core": "dafd39f80433307f",
   "date": "2026-10-07",
-  "note": "content_box pad 210",
+  "note": "the page gives no limit on how far from the settlement a lot may lie",
   "pages": {},
   "research": "",
-  "rests": [],
+  "rests": [
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:51f3d4bae1a3978e"
+  ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#where the fuel wood stands": {
-  "code": "77be2279eed8586e",
-  "core": "d7993934dae51c75",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#scan seat window: 0.8 of the square's box inside the predicted frame, the center allowed up to 0.6*half outside it (CONVENTION, framing)": {
+  "code": "dafd39f80433307f",
+  "core": "dafd39f80433307f",
   "date": "2026-10-07",
-  "note": "tier ranking: above the fields first, then the level, never below the houses (k<2)",
+  "note": "scan seat window: 0.8 of the square's box inside the predicted frame, the center allowed up to 0.6*half outside it (CONVENTION, framing)",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#where the fuel wood stands": {
+  "code": "ac9ad22931a8a958",
+  "core": "dafd39f80433307f",
+  "date": "2026-10-07",
+  "note": "higher ground beyond the fields ranks first, then the level, and seats below the houses are dropped, per §2-§4",
   "pages": {
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "ecf6ed4b609ca690"
   },
@@ -6948,15 +6960,13 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#woods not in a ruled line": {
-  "code": "44c6ae83f1b5537d",
-  "core": "d7993934dae51c75",
+  "code": "c98a81994e6f6f6c",
+  "core": "dafd39f80433307f",
   "date": "2026-10-07",
-  "note": "the row refusal is answered by no page",
+  "note": "the page says nothing on how lots are arranged against each other",
   "pages": {},
   "research": "",
-  "rests": [
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:20a89928a2cc8f84"
-  ],
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_region#woodland scan plumbing": {

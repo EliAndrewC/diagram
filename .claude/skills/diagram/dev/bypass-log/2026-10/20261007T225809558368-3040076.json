@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-07T22:58:09Z",
+  "target": "review-accept",
+  "commit": "c72e3f187",
+  "outcome": "permitted",
+  "why": "review-accept glyph-check--woodland-commons F1: fixed in wave 20: on the level a wood must be reached THROUGH the field (crossed_through), and no wood is offered on the houses' side"
+}

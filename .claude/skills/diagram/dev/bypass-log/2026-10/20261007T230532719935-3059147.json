@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-07T23:05:32Z",
+  "target": "review-accept",
+  "commit": "c72e3f187",
+  "outcome": "permitted",
+  "why": "review-accept glyph-check--woodland-commons F5: a confirmation, not a defect"
+}

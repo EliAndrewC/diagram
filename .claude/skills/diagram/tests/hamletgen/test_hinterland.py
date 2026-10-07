@@ -601,6 +601,7 @@ def test_a_third_parcel_with_no_ground_off_the_row_is_not_seated(monkeypatch: py
     it qualifies (`seat_off_the_row` returns None - asked of every seat, which it passes through when it is in no row) no
     parcel is seated there. Forced here because the pool's rolls reach it
     only by the accident of a layout, and a feature 261 re-seat moved Inashiro off it."""
+    monkeypatch.setattr(hg.hinterland.parcels, "crossed_through", lambda *a, **k: True)  # the row rule's test, not the field's side (feature 328)
     from l7r.diagram.hamletgen.hinterland import parcels
 
     plan = a_plan()

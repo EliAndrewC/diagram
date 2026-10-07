@@ -272,8 +272,9 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 - **T65a first**: the glyph check's found row tiered E2.
 - **Scope**: four E2 rows in ranking order (`tasks.md` Phase 21): the level wood's real crossing, the seat order's tie toward the
   field, and the bath room's wall rolled per house at the registers' share.
-- **Occasions**: the woodland commons re-placed on Mizuguchi (one wood where two stood: the houses'-side fallback retired); the
-  other four manifests differ from wave 19's close in `meta` only.
+- **Occasions**: the woodland commons re-placed or recorded off the sheet - the walk through the field asked on every tier
+  (0077: beyond the fields and higher than them): Kashikawa one wood where three stood, Inashiro and Mizuguchi none on the sheet
+  (recorded beyond it, N and W); the woodland glyph check's NEEDS-WORK fixed and verified by measurement (its two rounds spent).
 - **On the unpushed waves 9-19** under the wave-11 exception's condition (6): (1)-(5) held at wave 19's close (43b353361, its
   backup pushed, its own pair band 1 confirmed); wave 20's own pair opens at 43b353361.
 - **Verification**: `impl-drift` on the touched claims, the gate, wave 20's own bookend pair.
