@@ -32,6 +32,9 @@ from .grove_sides import grove_faces
 EAST_REACH_FT = 50.0  # no crown within 50 ft east of a yard or bed (0038), in feet at every grain
 """Research: garden's morning sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: no band within 50 ft east of a garden, in feet at every grain"""
 
+NEIGHBOR_REACH_FT = 22.0  # HELD (feature 328 wave 9): a NEIGHBOR farm's band 22 ft east of a bed, the reach before the wave
+"""Research: a neighbor's band east of a garden - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: held at 22 ft, short of the page's 50 ft - at 50 ft a row village's next farm's deep west band stands 38 ft east of the bed (Mizuguchi, three farms); keeping it off re-seats the row frames, the found row grove_rules.py::gardens_east_shaded#a neighbor's band"""
+
 Pt = tuple[float, float]
 
 
@@ -129,9 +132,11 @@ def gardens_east_shaded(M: Mapping[str, Any]) -> list[tuple[Pt, Mapping[str, Any
     """Each (garden, band) where a grove band's west edge stands within the east reach of the garden's east edge and
     overlaps its height - the garden's morning sun cut off.
 
-    Research: garden's morning sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: no band within `EAST_REACH_FT`, 50 ft, east of a garden across its height"""
+    Research: garden's morning sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: no band of its own farm within `EAST_REACH_FT`, 50 ft, east of a garden across its height
+    a neighbor's band east of a garden - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: held at `NEIGHBOR_REACH_FT`, 22 ft, short of the page's 50 ft (the found row grove_rules.py::gardens_east_shaded#a neighbor's band)"""
     meta = M.get("meta") or {}
-    reach = EAST_REACH_FT / float(meta.get("ftpx", 1.0))
+    reach = EAST_REACH_FT / float(meta.get("ftpx", 1.0))  # the farm's own bands (`clear_east_of_beds`, the layout's own reach)
+    near = NEIGHBOR_REACH_FT / float(meta.get("ftpx", 1.0))  # ...a neighbor's, held (`NEIGHBOR_REACH_FT`)
     out = []
     for gd in M.get("gardens") or ():
         if not all(k in gd for k in ("x", "y", "w", "h")):  # a record with no box has no east edge to shade
@@ -140,7 +145,7 @@ def gardens_east_shaded(M: Mapping[str, Any]) -> list[tuple[Pt, Mapping[str, Any
         gy0, gy1 = gd["y"] - gd["h"] / 2, gd["y"] + gd["h"] / 2
         for g in M.get("groves") or ():
             west = g["x"] - g["w"] / 2
-            if gx1 - 2 <= west < gx1 + reach and g["y"] - g["h"] / 2 < gy1 and gy0 < g["y"] + g["h"] / 2:
+            if gx1 - 2 <= west < gx1 + (reach if g.get("of") is not None and g.get("of") == gd.get("of") else near) and g["y"] - g["h"] / 2 < gy1 and gy0 < g["y"] + g["h"] / 2:
                 out.append((_key((gd["x"], gd["y"])), g))
     return out
 

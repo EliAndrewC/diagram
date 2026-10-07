@@ -456,3 +456,33 @@ def test_an_ordinary_lane_beside_a_tree_lane_past_a_pitch_defers_at_the_middle_o
     assert not tree.tree_shadow_cuts(short, [[(float(x), float(y)) for x, y in ln["pts"]] for ln in short])
     plain = [{**lanes[0], "role": None}, lanes[1]]
     assert not tree.tree_shadow_cuts(plain, [[(float(x), float(y)) for x, y in ln["pts"]] for ln in plain])
+
+
+def test_a_corridor_zigzagging_across_a_joint_is_read() -> None:
+    """Feature 328, Kuwabata: the access lane rounding a forecourt's corner onto its neighbor's house lane's end - each
+    record bends like a path, the two walked as one do not. Only a joint the last lane makes is asked."""
+    from l7r.diagram.hamletgen.ways.tree import zigzag_joint
+
+    house_lane = {"pts": [[3868.7, 1760.0], [3798.9, 1693.7], [3717.9, 1536.9]], "w": 3.0, "role": "access"}
+    run = {"pts": [[4042.0, 1765.8], [3918.9, 1808.7], [3848.9, 1783.7], [3868.7, 1760.0]], "w": 3.0, "role": "access"}
+    assert zigzag_joint([house_lane, run])
+    straight = {"pts": [[3990.0, 1880.0], [3918.9, 1808.7], [3868.7, 1760.0]], "w": 3.0, "role": "access"}
+    assert not zigzag_joint([house_lane, straight])
+    assert not zigzag_joint([run, house_lane, {"pts": [[0.0, 0.0], [50.0, 0.0]], "w": 3.0, "role": "access"}]), "a joint the last lane does not make"
+
+
+def test_a_corridor_the_knot_pass_would_gather_into_a_zigzag_is_read() -> None:
+    """Feature 328, Kuwabata as judged: the access lane's foot stands on its neighbor's house lane 5 ft short of that lane's
+    door end - a T as judged, which the knot pass gathers onto the door end, a Z. An end with no other end in reach, or a
+    gather that walks straight, is not one."""
+    from l7r.diagram.hamletgen.ways.tree import gathered_zigzag
+
+    house_lane = {"pts": [[3868.7, 1760.0], [3798.9, 1693.7], [3717.9, 1536.9]], "w": 3.0, "role": "access"}
+    run = {"pts": [[4042.0, 1765.8], [3918.9, 1808.7], [3848.9, 1783.7], [3865.0, 1756.5]], "w": 3.0, "role": "access"}
+    assert gathered_zigzag([house_lane, run])
+    assert gathered_zigzag([house_lane, {**run, "pts": [*run["pts"][:-1], [3868.7, 1760.0]]}]), "as it stands"
+    far = {"pts": [[4042.0, 1765.8], [3918.9, 1808.7], [3848.9, 1783.7], [3700.0, 1900.0]], "w": 3.0, "role": "access"}
+    assert not gathered_zigzag([house_lane, far])
+    straight = {"pts": [[3990.0, 1880.0], [3918.9, 1808.7], [3866.0, 1757.0]], "w": 3.0, "role": "access"}
+    assert not gathered_zigzag([house_lane, straight])
+    assert not gathered_zigzag([house_lane, {"pts": [[1.0, 1.0]], "w": 3.0}])

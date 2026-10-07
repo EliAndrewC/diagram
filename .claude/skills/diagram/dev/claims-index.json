@@ -39888,10 +39888,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/farm_fixtures.py::kura_rect#annex held in its band": {
-  "code": "434ac9855ccad695",
-  "core": "4bd395f7587c151e",
+  "code": "5883831fa1a573c8",
+  "core": "c4a7abfec014f33e",
   "date": "2026-10-07",
-  "note": "the length is clamped to 18-27 ft and 1.5-1.8 times the depth, the two measured sheds' band.",
+  "note": "the north annex's length is clamped by `min(max(fw * w, lo), hi)`, and when `hi` < `lo` the 1.8 ratio wins: on a house under about 22 ft deep the annex comes out shorter than 18 ft, below the page's \"about 18 and 27 ft long\". The claim should name that exception, or the code should keep the 18 ft floor.",
   "pages": {
    "0052-farm-sheds-and-barns-naya.html": "8f4296a65c4ca33f"
   },
@@ -39901,13 +39901,13 @@
    "0052-farm-sheds-and-barns-naya.html:3de79678cb70b971",
    "0052-farm-sheds-and-barns-naya.html:faf3675b520021d0"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/farm_fixtures.py::kura_rect#annex larger than a kura": {
-  "code": "f1aec4b52a78a633",
-  "core": "4bd395f7587c151e",
+  "code": "57e6195e5395fe25",
+  "core": "c4a7abfec014f33e",
   "date": "2026-10-07",
-  "note": "the drawing page records the shed-size annex against the 12-15 x 18 ft kura as the project's choice.",
+  "note": "the drawing page records the shed-size choice and its reason (\"would shift the houses of every generated hamlet\").",
   "pages": {
    "0040-farm-storehouses-kura.drawing.html": "ed021816f05d011b"
   },
@@ -39917,11 +39917,19 @@
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/farm_fixtures.py::kura_rect#west annex size": {
-  "code": "864ccd729cce41cc",
-  "core": "4bd395f7587c151e",
+ ".claude/skills/diagram/l7r/diagram/settlement/farm_fixtures.py::kura_rect#annex seat: against the north or west wall, and where along that wall (`KURA_PARTS` offsets) (the page covers this at §8, but no claim cites it)": {
+  "code": "c4a7abfec014f33e",
+  "core": "c4a7abfec014f33e",
   "date": "2026-10-07",
-  "note": "the W branch returns the raw shares with no clamp: on the 62 x 28 ft house the docstring names it is 16.1 deep x 21 ft, 1.30 to one, outside \"1.5 to 1.8 times as long as deep\". Hold W to the band as N is, or narrow the claim.",
+  "note": "annex seat: against the north or west wall, and where along that wall (`KURA_PARTS` offsets) (the page covers this at §8, but no claim cites it)",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/farm_fixtures.py::kura_rect#west annex size": {
+  "code": "30615858f683ab7d",
+  "core": "c4a7abfec014f33e",
+  "date": "2026-10-07",
+  "note": "the shares give 21 x 12 ft and both measures are clamped to the band, a calibrated choice within 18-27 ft at 1.5-1.8 to one.",
   "pages": {
    "0040-farm-storehouses-kura.drawing.html": "ed021816f05d011b"
   },
@@ -39929,7 +39937,7 @@
   "rests": [
    "0040-farm-storehouses-kura.drawing.html:90057266aa2f2fa5"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/fields/__init__.py::FieldsMixin#package composition": {
   "code": "51c73d278b312186",
@@ -40052,60 +40060,86 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#bank beside the source brook": {
-  "code": "b1ff0a8df261dbd1",
-  "core": "51535d346db56464",
+  "code": "b8ef2e1f687b22d1",
+  "core": "13d26df7829c7b2e",
   "date": "2026-10-07",
-  "note": "the code says `9.0 / 2 + 3.0` (7.5), not the claimed 7/2 + 3, though the brook is inked at 7. The bund the margin is named for is 1.5 ft on 0068, not 3 px. Fix the half-width, and cite 0068 for the bund.",
+  "note": "the page names a narrow bank but gives no width, so a GUESS is right.",
   "pages": {},
   "research": "",
   "rests": [
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:9d8037280ef493f3",
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:bafd76f310aec4b3"
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:25a9d039c229ae5d"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#default watercourse widths when a record carries none (stream 9, channel 2.5, canal 14)": {
+  "code": "13d26df7829c7b2e",
+  "core": "13d26df7829c7b2e",
+  "date": "2026-10-07",
+  "note": "default watercourse widths when a record carries none (stream 9, channel 2.5, canal 14)",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#dry plot ink": {
-  "code": "05f66534dcf74423",
-  "core": "51535d346db56464",
-  "date": "2026-10-03",
-  "note": "as cited",
+  "code": "c4db0e7d2aab1ae5",
+  "core": "13d26df7829c7b2e",
+  "date": "2026-10-07",
+  "note": "fill per crop, furrows drawn, tan edge.",
   "pages": {
    "0006-dry-fields-and-their-crops-hatake.drawing.html": "9f1b7fafe06f01fe"
   },
   "research": "eae521ca5e2ccfdd",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:176c6b47d65b6207",
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:7e438855d3e0806f"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#hem off rice and water": {
-  "code": "6cc9967d205e540c",
-  "core": "51535d346db56464",
-  "date": "2026-10-03",
-  "note": "as cited",
+  "code": "c27111f1cdfa211c",
+  "core": "13d26df7829c7b2e",
+  "date": "2026-10-07",
+  "note": "a plot on another canal's rice or on water is dropped.",
   "pages": {
    "0006-dry-fields-and-their-crops-hatake.drawing.html": "9f1b7fafe06f01fe"
   },
   "research": "eae521ca5e2ccfdd",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:25a9d039c229ae5d",
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:93778d368035a1bf"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#hem placement": {
-  "code": "94b0f22009a7ecb2",
-  "core": "51535d346db56464",
-  "date": "2026-10-03",
-  "note": "as cited",
+  "code": "bcc848f86f68188b",
+  "core": "13d26df7829c7b2e",
+  "date": "2026-10-07",
+  "note": "plots are taken upslope of the supply canal as the net lays them.",
   "pages": {
    "0006-dry-fields-and-their-crops-hatake.drawing.html": "9f1b7fafe06f01fe"
   },
   "research": "eae521ca5e2ccfdd",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:25a9d039c229ae5d",
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:abb8b4f0d05c6c11"
+  ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#plot size and crop": {
-  "code": "4603eaef5e01b1c1",
-  "core": "51535d346db56464",
-  "date": "2026-10-03",
-  "note": "as cited",
+ ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#nothing built or planted on a dry plot (plots registered in `block_polys` and `dry_polys`)": {
+  "code": "13d26df7829c7b2e",
+  "core": "13d26df7829c7b2e",
+  "date": "2026-10-07",
+  "note": "nothing built or planted on a dry plot (plots registered in `block_polys` and `dry_polys`)",
   "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#plot size and crop": {
+  "code": "23831cc942cdc7e6",
+  "core": "13d26df7829c7b2e",
+  "date": "2026-10-07",
+  "note": "this unit takes size and crop from the net and decides neither.",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_paddies#blue plot class": {
@@ -43835,18 +43869,19 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/grove_rules.py::EAST_REACH_FT#garden's morning sun": {
-  "code": "0c608d7b949a3f66",
+  "code": "044421cbe21b7dcb",
   "core": "b55406ac40336020",
   "date": "2026-10-07",
-  "note": "the code's 50 ft matches the page, but the claim's account says \"22 bscale units\"; it should say 50 ft east",
+  "note": "50 ft east of a yard or bed.",
   "pages": {
    "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03"
   },
   "research": "3874df1f1301e65f",
   "rests": [
-   "0038-sunlight-and-shade-on-the-farm.drawing.html:106fb9ebea718da7"
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:106fb9ebea718da7",
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:fb011b8973aa73bf"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/grove_rules.py::_bands_by_farm#map checks plumbing": {
   "code": "cb4f03ca6b244b5b",
@@ -44832,19 +44867,20 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::LESSER_BROADLEAF_S#lesser broadleaf size": {
-  "code": "074cce09a2f03d88",
+  "code": "49b4307120d662fb",
   "core": "e760673547541136",
   "date": "2026-10-07",
-  "note": "the claim says 0.6-0.85 where the code is (0.75, 0.85), and the 0072 drawing page gives no crown size (it points to 0080); should read \"0080 drawing: 0.75 to 0.85 of the mean radius, within the page's 0.75-1.4\"",
+  "note": "0.75 to 0.85 lies inside the page's 0.75 to 1.4 range of the mean radius.",
   "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fbd35c7766637fc3"
+   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html": "605417d79e0e0561"
   },
-  "research": "1f42835678daf333",
+  "research": "f1a38c9708a60be9",
   "rests": [
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:8c5fba97aa9399f9",
+   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:2f5a6f0369f5b0db",
+   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:7f54cfe8dba1be5f",
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:a40ebd3a6acb1f87"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::LESSER_ROLL_SHARE#conifer the commonest crown": {
   "code": "7a0334bd0a54cae7",
@@ -46094,20 +46130,21 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/wood_share.py::copse_keepouts#plots' sun strips": {
-  "code": "aa984f02688a7a53",
+  "code": "4059f8dfcee2aaa1",
   "core": "f978d4eac539d0db",
   "date": "2026-10-07",
-  "note": "the claim's account says \"24 px east of each bed\", but the code holds `EAST_LANE_FT` (50 ft) east of a bed; the account should say 50 ft",
+  "note": "`east + EAST_LANE_FT + cr + m` adds a figure in feet straight to pixel coordinates (the same sum carries `clump` and `BAR_MARGIN_PX`, both pixels), so the east lane is 50 ft only at 1 ft per pixel; it should be scaled by pixels per foot (`west_ft` probably has the same problem, by its name).",
   "pages": {
    "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03"
   },
   "research": "3874df1f1301e65f",
   "rests": [
    "0038-sunlight-and-shade-on-the-farm.drawing.html:106fb9ebea718da7",
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:45d116e0d7359762",
    "0038-sunlight-and-shade-on-the-farm.drawing.html:cf77608be5e193f8",
-   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:07682c227be39db1"
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:fb011b8973aa73bf"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/wood_share.py::crown_cells#plumbing": {
   "code": "761ccaa8f2401896",

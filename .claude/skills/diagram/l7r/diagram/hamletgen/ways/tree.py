@@ -245,7 +245,59 @@ def admits(base: Any, M: Mapping[str, Any], run: Poly, role: str = ACCESS_ROLE, 
             # web pulled the joint straight and the doubled band stood as one record, two tree lanes no settle may cut
             if tree_shadows([ln["pts"] for ln in lanes]) or walked_shadows(lanes):
                 return False
+            # ...NOR ZIGZAGS ACROSS A JOINT AS THE WALKER READS IT (feature 328, Kuwabata): an access lane rounding a neighbor's
+            # forecourt corner onto its house lane's end turned 110 degrees back onto it and the house lane left at 86 - each
+            # record bends like a path, the two met end to end do not, and the settle draws a tree lane as judged, so no joint
+            # pass could mend it (`test_no_zigzag_straddles_a_joint`)
+            if gathered_zigzag(as_joined(_trial(view, lanes=[*lanes, *stub]), lanes)):
+                return False
     return True
+
+
+def gathered_zigzag(lanes: Sequence[Mapping[str, Any]]) -> bool:
+    """Does the last lane zigzag across a joint (`zigzag_joint`) as it stands, or in every form the knot pass could gather an
+    end of it into (`knots.moved_onto`: an end within the knot's reach of another lane's end put on it - the settle's
+    `settle_knots`, which draws the gather into the corridor)? An end with no other end in reach is read as it stands.
+
+    Research: no zigzag at a joint, ends gathered - research/questions/0081-village-lanes.drawing.html: ends within 25 ft are joined at a single point, and two lanes met end to end are one way"""
+    from l7r.diagram.settlement.rolling.gap_ways import KNOT_MARGIN
+
+    from .knots import moved_onto
+    from .smooth import _KNOT_FT
+
+    if zigzag_joint(lanes):
+        return True
+    last = list(lanes[-1]["pts"])
+    if len(last) < 2:
+        return False
+    for e in (0, -1):
+        q = last[e]
+        near = [o["pts"][oe] for o in lanes[:-1] if len(o.get("pts") or []) >= 2 for oe in (0, -1) if 1e-6 < math.dist(o["pts"][oe], q) <= _KNOT_FT * KNOT_MARGIN]
+        if not near:
+            continue
+        node = tuple(min(near, key=lambda p: math.dist(p, q)))
+        forms = moved_onto([tuple(p) for p in last], e, node)
+        if forms and all(zigzag_joint([*lanes[:-1], {**lanes[-1], "pts": [list(p) for p in f]}]) for f in forms):
+            return True
+    return False
+
+
+def zigzag_joint(lanes: Sequence[Mapping[str, Any]]) -> bool:
+    """Do the last lane and another met end to end walk as one zigzag (`clearance._bends_badly`) where each alone bends like
+    a path (`joints.joints`, `joints.oriented`: the walker's reading)?
+
+    Research: no zigzag at a joint - research/questions/0081-village-lanes.drawing.html: two lanes met end to end are one way, held to the bend rule"""
+    from .clearance import _bends_badly
+    from .joints import joints, oriented  # joints reaches the web's smoothing; imported here, where the seating asks it
+
+    last = len(lanes) - 1
+    for i, ei, j, ej in joints(list(lanes)):
+        if last not in (i, j):
+            continue
+        x, y = oriented(list(lanes), i, ei, j, ej)
+        if not _bends_badly(x) and not _bends_badly(y) and _bends_badly([*x, *y[1:]]):
+            return True
+    return False
 
 
 def laid_run(base: Any, M: Mapping[str, Any], run: Poly) -> Poly:
