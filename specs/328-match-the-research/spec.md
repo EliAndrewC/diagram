@@ -88,7 +88,9 @@ session's last actions are recording the running checks, a commit, and `scripts/
   implementation to not match for anything."*
 - **A finding about a hand-drawn Mode A sheet**: the procedure is fixed, and the sheet the finding names is redrawn to
   it (the sheet is what contradicts the page); ranked E3 at least, and governed by FR-009.
-- **A fix that changes many maps**: regenerate the pool; a map whose new layout fails the gate is fixed in the same wave.
+- **A fix that changes many maps**: regenerate the pool; a map whose new layout fails the gate is fixed in the same wave -
+  and where making the failing map pass takes more work than the row's tier, the row takes that work's tier and waits on a
+  found row recorded in the ranking (SC-003); its claim stays as found.
 - **A finding that disappears or changes when its neighbor is fixed**: the re-check records what it finds; the ranking is
   not re-sorted mid-wave.
 - **New findings a fix exposes**: recorded in the ranking under the tier they take; a finding the wave introduced blocks
@@ -170,7 +172,7 @@ Each wave's amendment adds its map decisions to this table. The program's decisi
 | A Mode A building sheet a finding names is redrawn to the fixed procedure; the frozen hand-rolled settlement maps are never touched | scope, within the GM's 2026-09-28 ruling | the sheet is what contradicts the page; the ruling asks a feature to say which maps it touches, and the settlement maps stay frozen | FR-009 |
 | The 727 UNRESEARCHED claims are out of scope | scope | they are not findings: the claim honestly says no research backs it; closing them is research, not fixing a mismatch | Context, Assumptions |
 | Sheet-redrawing procedure rows tiered E3, not E1 (wave 2's amendment) | process, FR-003's own definition | the rankers put nine rows that redraw Ubame, Hayakawa, Ochiba or Hoshigaoka in E1; FR-003 tiers a sheet redraw E3 | `audit/overrides.json`, plan D5 |
-| The lane law's 32 rows are one wave (wave 3) | process, within FR-003's module grouping | one rule set (0081, 0246) across `hamletgen/ways/`; fixed apart, the network would be half under each law | plan D6 |
+| The lane law's 32 rows are one wave (wave 4) | process, within FR-003's module grouping | one rule set (0081, 0246) across `hamletgen/ways/`; fixed apart, the network would be half under each law | plan D6 |
 | Waves land inside this feature: only the current wave's rows are task boxes; the next wave is an amendment | process | the GM asked for one feature; the open-task refusal reads only `tasks.md`'s boxes, so a wave lands when its boxes are ticked | FR-006 |
 
 ## Assumptions
@@ -211,3 +213,7 @@ Each wave's amendment adds its map decisions to this table. The program's decisi
 - Wave 2 measurement (2026-10-07, not a review round): the row pitch at 0038's `92 ft` Z'd a Kuwabata joint the engine
   cannot re-route (`test_no_zigzag_straddles_a_joint`); on the measured cause the row waits for a found E3 row that
   re-routes such a joint (SC-003's dependency), held at 100 meanwhile; `WEB_REACH_FT` stays 0246's `100 ft`, decoupled.
+- Amendment 2, round 1 (spec-fidelity-verify, 2026-10-07): CHANGES REQUIRED - (1) the lane law renumbered wave 4 (spec,
+  plan D6, tasks); (2) T12a tiers the 13 provisional non-E0 found rows by their work before any E1 wave; Phase 4 names its
+  39 rows truly (38 found, wave 1's one unclosed); (3) Edge Cases carries the hold wave 2 made. The holds themselves were
+  ruled faithful (no row dropped, no research moved).

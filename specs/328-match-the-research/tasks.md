@@ -37,7 +37,7 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 
 Wave 2 takes the first sixteen E1 rows of `ranking.json`, less the row pitch and the brook's weight (see below), (the eight procedure fixes that change only the procedure's
 own text, and eight single values of the hamlet generator outside its lane code). The E1 row
-`hamletgen/consts.py::FOOTPATH_FABRIC_GAP` waits for wave 3: it is the same constant as the lane-law rows, and its
+`hamletgen/consts.py::FOOTPATH_FABRIC_GAP` waits for wave 4 (the lane law): it is the same constant as the lane-law rows, and its
 `after` names `ways/bund.py::RunOnBlocks.clear#off the steadings` (spec SC-003). No row of this wave redraws a sheet.
 
 The row pitch (`hamletgen/consts.py::BUNDLE_PITCH`, 100 -> 0038's 92 ft) left the wave on measurement (2026-10-07): at
@@ -82,8 +82,9 @@ web left ten farmhouses off the network (`WebRefused`); restoring 3.0 alone, of 
 
 ## Phase 4 - wave 3 (tier E0: the claim alone, the found rows) - amendment 2, 2026-10-07
 
-The re-checks of waves 1 and 2 ranked 39 more E0 rows (found rows, tiered provisionally by verdict: a MISLABELED
-claim or an UNCLAIMED decision). Tier order (SC-003) takes them before the rest of E1. Each is re-tiered on reading: a row
+Thirty-nine E0 rows stand open: 38 found rows the re-checks of waves 1 and 2 ranked (tiered provisionally by verdict: a
+MISLABELED claim or an UNCLAIMED decision), and wave 1's one unclosed E0 row (`taxonomy.py::_OVERLAP_EXEMPT#annexes abut
+their house`, T05's "56 of 57"). Tier order (SC-003) takes them before the rest of E1. Each is re-tiered on reading: a row
 whose fix is more than the claim line moves to the tier it takes and says so (FR-003's bounded E0). Occasions: none - claim
 lines only. The rows:
 
@@ -126,6 +127,9 @@ lines only. The rows:
   - `l7r/diagram/hamletgen/ways/web.py::stage_web#door path reach`
   - `l7r/diagram/hamletgen/ways/web.py::stage_web#web lanes off the hard ground`
   - `l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#annexes abut their house`
+- [ ] T12a the 13 open found rows tiered provisionally above E0 (six E2, one E3, six E4, by verdict) read and tiered by the work they take (FR-002, FR-003), before any E1 wave chooses its rows - a row easier than its provisional tier moves down, and an E0 or E1 row it becomes joins this wave or the next E1 wave in order (SC-003)
+      research: rendering
+      verify:
 - [ ] T12 every row read and either its claim corrected (cite the page that already says what the code does, relabel, or claim the undecided decision) or re-tiered with the reason; each corrected claim re-checked by `impl-drift` and IN-STEP (FR-003, FR-004, FR-005)
       research: rendering
       verify:

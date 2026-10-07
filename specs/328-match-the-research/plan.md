@@ -53,7 +53,7 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
   `homesteads/fixtures.py`, `homesteads/wells.py`).
 - **D5 - sheet rows re-tiered**: nine procedure rows the rankers put in E1 redraw a hand-drawn Mode A sheet (Ubame,
   Hayakawa, Ochiba, Hoshigaoka); FR-003 tiers a sheet redraw E3, so they moved there (`audit/overrides.json`).
-- **D6 - the lane law is one wave**: the 32 E1 rows of `hamletgen/ways/` (wave 3) apply one rule set (0081's join reach
+- **D6 - the lane law is one wave**: the 32 E1 rows of `hamletgen/ways/` (wave 4) apply one rule set (0081's join reach
   and turn limits, 0246's 7 ft clear of a fence); fixed together, the lane network is never half under each law.
   `FOOTPATH_FABRIC_GAP` (consts.py) is the same constant as a lane-law row, so it waits for that wave.
 - **Verification**: the reference hamlet first (`make map` on Inashiro, the PNG looked at), then the pool through the
