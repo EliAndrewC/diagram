@@ -77,8 +77,9 @@
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py::FOOTPATH_FABRIC_GAP#footpath off a plot": {
   "after": [
-   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::RunOnBlocks.clear#off the steadings"
-  ]
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#a footpath reaches every farmhouse 7 ft off a plot"
+  ],
+  "moved": "wave 4: at 7 ft (0246) Kashikawa refuses; held at 4, the row waits for the found E3 row"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py::BUNDLE_PITCH#row pitch": {
   "after": [

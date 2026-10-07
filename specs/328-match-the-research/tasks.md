@@ -195,9 +195,9 @@ way that takes more work than its tier takes that tier and waits on a found row 
   - `l7r/diagram/hamletgen/ways/web.py::stage_web#back lane tie spacing` - stage_web passes 1.5 x BUNDLE_PITCH to web_cuts so ties stand about 300 ft apart
   - `l7r/diagram/hamletgen/ways/web.py::stage_web#door path distance` - DOOR_REACH_FT 40 ft brought to 0246 drawing's GUESS for a way reaching a farmhouse (within 60 ft of the house, or 12 ft of its built ground), the claim citing it
   - `l7r/diagram/hamletgen/ways/web.py::stage_web#orphan stub joined` - an orphan stub joined only within 0081's 25 ft join reach, not _STUB_REACH_FT 48 ft (with the lane law, wave 4)
-- [ ] T14 the bookend before the first edit: `make perf LABEL=328-start` re-taken on the clone at main's engine (the wave's own pair) (constitution VI)
+- [x] T14 the bookend before the first edit: `make perf LABEL=328-start` re-taken on the clone at main's engine (the wave's own pair) (constitution VI)
       research: rendering
-      verify:
+      verify: DONE. 328-start taken on the clone at main's engine after waves 2-3 landed, before any wave-4 edit: total 16.4s, median 4.0s, worst 4.9s, no seed refused
 - [ ] T15 the three E0 claims; then the four E1 rows ahead of the lane law (the cell, the building size anchors, the band on the canvas, the purification basin); then the lane law's values, each with the unit tests it moves; proven on the reference hamlet (Inashiro, its PNG looked at) and then across the pool and the cohort's bookend seeds (FR-004, FR-005)
       research: rendering
       verify:

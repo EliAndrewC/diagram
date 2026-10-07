@@ -207,8 +207,8 @@ TRACK_FABRIC_GAP = WEB_FABRIC_GAP
 # farmstead on cohort seed 41 had no route to the network at all, at any target - the gaps between
 # its neighbors' plots were simply narrower than a lane-and-two-margins. A footpath is the one way on
 # the map that is walked in single file, and this is the width that says so.
-FOOTPATH_FABRIC_GAP = WEB_FABRIC_GAP
-"""Research: footpath off a plot - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: 7 ft from the path's middle to a garden fence, a 3 ft footpath included"""
+FOOTPATH_FABRIC_GAP = 4.0
+"""Research: footpath off a plot - UNRESEARCHED: 4 ft, held below 0246's 7 ft (a lane's middle 7 ft from a garden fence): at 7 ft Kashikawa's footpaths cannot thread to two farmhouses (feature 328 wave 4, `WebRefused`); it waits for the found row that lets a footpath reach every farmhouse 7 ft off a plot"""
 
 # HOW FAR A WEB LANE STAYS OFF THE CROP, THE TOE AND THE MARSH, in feet.
 #
