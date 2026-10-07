@@ -189,7 +189,7 @@ def bamboo_seats(s: Settlement, plan: SitePlan) -> list[Poly]:
         off crop and water - research/questions/0075-bamboo-groves-chikurin.drawing.html: refused on paddy, marsh and pond, and within 3 ft of a watercourse
         off the dry plots - UNRESEARCHED: refused on the dry crop's plots too
         crop and water pads - UNRESEARCHED: 12 ft off the crop, 6 ft off marsh, 30 ft off the pond
-        keep-out pads - UNRESEARCHED: 2-30 ft round houses, yards, gardens, sheds, wells, persimmons, groves, lanes, belt and woods
+        keep-out pads - UNRESEARCHED: 2-20 ft round houses, retirement houses, yards, gardens, sheds, byres, wells, the notice board, persimmons, groves, lanes, belt and woods
         irregular outline - CONVENTION: a hard but not ruled edge inside the tested rect
     """
     forms = ["thicket"] if plan.bamboo in ("thicket", "both") else []
