@@ -19,9 +19,9 @@ if TYPE_CHECKING:
     from ..core import Settlement
 
 
-
 FLANK_INSET_FT = 120.0
 """Research: set on the patrol road - research/questions/0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html: the drawing page's GUESS, about 105 to 135 ft inside the opening"""
+
 
 class WallsMixin:
     def _gapped_ring(self: Settlement, ring: Any, gates: Any, gap: float = 38, closed: bool = True, water_gates: Any = (), water_gap: float = 24) -> str:  # type: ignore[misc]

@@ -39,6 +39,7 @@ def names_group(group: str | None, words: str) -> bool:
     Research: plumbing - NONE"""
     return bool(group) and any(w in words for w in GROUP_WORDS.get(group or "", (group or "",)))
 
+
 ASSOCIATION_TIE = 1e-6
 """How much farther than a caption's own subject a neighbor may stand and still claim the caption (labels L6, the
 ASSOCIATION): a tie counts, and this is float slack on the tie only - it decides no seat a rounding-free measure would

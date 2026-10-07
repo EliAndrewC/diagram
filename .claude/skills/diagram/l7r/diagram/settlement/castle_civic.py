@@ -29,7 +29,6 @@ if TYPE_CHECKING:
     from .core import Settlement
 
 
-
 HONMARU_SQ_FT = 215_000.0
 """Research: honmaru size - research/questions/0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html: about 2 ha (Nijo's honmaru about 150 m on a side, Hiroshima's upper honmaru about 2.2 ha)"""
 
@@ -50,6 +49,7 @@ MARTIAL_HALL_FT = (124.0, 35.0)
 
 MARTIAL_COMPOUND_FT = (130.0, 124.0)
 """Research: martial hall compound - UNRESEARCHED: 130 x 124 ft, the hall across its north, the master's house and the archery lane south of it"""
+
 
 class CastleCivicMixin:
     """The castle, the state offices and schools, the dojos and the caption scorer.
@@ -328,7 +328,9 @@ class CastleCivicMixin:
             office apron - research/questions/0163-the-provincial-governments-seat-the-governors-compound-and-where-it-stands-yamen.drawing.html: about 42 ft clear on the page; the code keeps max(30 x bscale, 26) px
         """
         if w is None:
-            w, h = (self.px(160), self.px(110)) if self.M["meta"].get("scale") == "capital" else (self.px(125), self.px(88))  # 0167: a capital's ~160 x 110 ft, a provincial office 110 x 80 - 140 x 95 ft
+            w, h = (
+                (self.px(160), self.px(110)) if self.M["meta"].get("scale") == "capital" else (self.px(125), self.px(88))
+            )  # 0167: a capital's ~160 x 110 ft, a provincial office 110 x 80 - 140 x 95 ft
         self.add(f'<rect x="{x - w / 2:.0f}" y="{y - h / 2:.0f}" width="{w}" height="{h}" rx="2" fill="#BCA6C4" stroke="#463653" stroke-width="2"/>')
         self.add(f'<rect x="{x - w / 2:.0f}" y="{y - h / 2:.0f}" width="{w}" height="9" fill="#6A4A78"/>')
         self.add(f'<line x1="{x - w * 0.3:.0f}" y1="{y:.0f}" x2="{x + w * 0.3:.0f}" y2="{y:.0f}" stroke="#463653" stroke-width="0.7" opacity="0.6"/>')
@@ -451,7 +453,15 @@ class CastleCivicMixin:
         g.append('</g>')
         self.add(''.join(g))
         self.M.setdefault("martial_halls", []).append(
-            {"x": round(x, 1), "y": round(y, 1), "w": round(f(MARTIAL_COMPOUND_FT[0]), 1), "h": round(f(MARTIAL_COMPOUND_FT[1]), 1), "rot": round(rot, 1), "label": label, "range_ft": round((lx1 - lx0) * self.ftpx, 1)}
+            {
+                "x": round(x, 1),
+                "y": round(y, 1),
+                "w": round(f(MARTIAL_COMPOUND_FT[0]), 1),
+                "h": round(f(MARTIAL_COMPOUND_FT[1]), 1),
+                "rot": round(rot, 1),
+                "label": label,
+                "range_ft": round((lx1 - lx0) * self.ftpx, 1),
+            }
         )
         self.placed.append((x, y, f(MARTIAL_COMPOUND_FT[0]), f(MARTIAL_COMPOUND_FT[1])))
         # a modest stand-clear apron (14px, the office-abut clearance), NOT the ministries' 26: the

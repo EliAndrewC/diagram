@@ -18,9 +18,9 @@ if TYPE_CHECKING:
     from ..core import Settlement
 
 
-
 SLUICE_STANDOFF_FT = 90.0
 """Research: sluice standoff - research/questions/0146-moats-where-their-water-comes-from-and-where-it-goes-hori.drawing.html: each tap stands about 90 ft outside the moat's rim"""
+
 
 class CanalsMixin:
     def canal(self: Settlement, pts: Any, width: float | None = None, flow: str = "level") -> float:  # type: ignore[misc]
