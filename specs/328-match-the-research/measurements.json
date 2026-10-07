@@ -20,5 +20,16 @@
   "observed": "2026-10-07",
   "source": ".claude/skills/diagram/pool/hamlets/inashiro/inashiro.json lanes, after the knot fix",
   "method": "the same test, green; and a direct count of distinct lane ends 1-25 ft apart within 60 ft of the corner: 0 (lane 11's end moved clear of lane 9's)"
+ },
+ "inashiro-glyph-lane-r2-F2-widths": {
+  "verifies": "F2",
+  "subject": "glyph-check--village-lane",
+  "answers": "cc7748da784c",
+  "quantity": "Inashiro's lane widths by role after the rank fix (the field route's household way no longer widened to the track's 6 ft)",
+  "value": "access: 3.0; connector: 6.0; field way: 5",
+  "unit": "ft",
+  "observed": "2026-10-07",
+  "source": ".claude/skills/diagram/pool/hamlets/inashiro/inashiro.json lanes[].w grouped by role, after the regenerate",
+  "method": "joints.rank_width / at_rank hold each lane at its role's 0081 width (3 ft footpath, 5 ft spine and field spur, 6 ft track out) and settle_widths keeps it; tests/hamletgen/test_pool_261.py test_every_lane_is_drawn_at_its_own_rank green on all five pool maps"
  }
 }

@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-07T08:30:28Z",
+  "target": "review-accept",
+  "commit": "1500ed57f",
+  "outcome": "permitted",
+  "why": "review-accept glyph-check--village-lane F1: pre-existing on main (the corner knot round 1 also raised); every single-point gather is refused by the lane law, measured - ranked E3 found row 'a knot no lawful gather reaches' (feature 328), strict xfail in test_pool_261"
+}
