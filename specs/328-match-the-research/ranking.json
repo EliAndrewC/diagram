@@ -60,6 +60,24 @@
   "scope": "mode-a"
  },
  {
+  "key": ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#granary forms",
+  "verdict": "MISLABELED",
+  "tier": "E0",
+  "fix": "buildings.md line 93: replace the claim with two - `<!-- Research: granary forms - research/questions/0098-storehouses-for-the-tax-rice.html: raised on posts or earth-walled kura -->` and `<!-- Research: granary size and the terminal row - GUESS research/questions/0098-storehouses-for-the-tax-rice.drawing.html: ~43-50 x 25-27 ft, no page gives a county office granary's size or count; a row for a terminal store, the landing row the project's reading -->`. The vocabulary entry (line 113) and the programs.md granary band (line 86) stand unchanged.",
+  "files": [
+   ".claude/skills/diagram/buildings.md",
+   ".claude/skills/diagram/buildings/programs.md"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 13 re-check (tier provisional, by verdict)",
+  "reopened": "closed in wave 4 (IN-STEP on a wave's re-check, no change needed)",
+  "tier_as_ranked": "E0",
+  "moved": "T53a: a reopened row tiered by its work by a fresh reader - impl-drift's verdict is MISLABELED and the 0098 drawing page already states the 43-50 x 25-27 ft storehouse as a GUESS ('no page we read gives the size of a county office's grain storehouse or how many it kept') and the landing row as the project's reading, so only the claim's citation moves; nothing drawn changes.",
+  "wave": "",
+  "scope": "mode-a"
+ },
+ {
   "key": ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#hearing mat size",
   "tier": "E0",
   "fix": "hearing mat size cites 0037.drawing's 3 x 6 ft Nishidani mat with its applicability, not UNRESEARCHED",
@@ -419,21 +437,6 @@
   "tier_as_ranked": "E0",
   "verdict": "DRIFTED",
   "wave": "1",
-  "scope": "mode-a"
- },
- {
-  "key": ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#upland granary strongbox role",
-  "verdict": "MISLABELED",
-  "tier": "E0",
-  "fix": "0098 bears on this: \"The tax on dry fields was often paid in cash\", with the money share delivered to the office; it should cite 0098, and note the tension with the deviation that the dry-field share arrives in kind",
-  "files": [
-   ".claude/skills/diagram/buildings/programs.md"
-  ],
-  "after": [],
-  "flag": "",
-  "found": "wave 2 re-check (tier provisional, by verdict)",
-  "tier_as_ranked": "E0",
-  "wave": "3",
   "scope": "mode-a"
  },
  {
@@ -3340,22 +3343,6 @@
   "scope": "mode-a"
  },
  {
-  "key": ".claude/skills/diagram/buildings/programs.md::Country shrine (a village district's shrine)#farmers' stage knob",
-  "tier": "E1",
-  "fix": "procedure knob 6: replace 'none in thirteen' with the record's 1,777 stages nationwide (lost stages and noh/puppet stages included); absent by default stands",
-  "files": [
-   ".claude/skills/diagram/buildings/programs.md"
-  ],
-  "after": [],
-  "flag": "",
-  "e0_basis": "",
-  "e0_rechecked": true,
-  "tier_as_ranked": "E0",
-  "verdict": "DRIFTED",
-  "wave": "2",
-  "scope": "mode-a"
- },
- {
   "key": ".claude/skills/diagram/buildings/programs.md::Country shrine (a village district's shrine)#precinct size",
   "tier": "E1",
   "fix": "procedure precinct sentence: replace the stale 'one Edo set ... 60-240 tsubo' with Saga's Edo returns (lower part of 150-650) and Kami-Nerima 1821 (~10 to ~3,350 tsubo), plus 'a register can also overstate'",
@@ -5829,21 +5816,6 @@
   "scope": "mode-a"
  },
  {
-  "key": ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#granary forms",
-  "tier": "E2",
-  "fix": "granary form (on posts or earth-walled kura) made a knob rolled per plan, each notes file records its roll",
-  "files": [
-   ".claude/skills/diagram/buildings.md",
-   ".claude/skills/diagram/buildings/programs.md"
-  ],
-  "after": [],
-  "flag": "",
-  "tier_as_ranked": "E2",
-  "verdict": "DRIFTED",
-  "wave": "4 (IN-STEP on a wave's re-check, no change needed)",
-  "scope": "mode-a"
- },
- {
   "key": ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#granary kept under a residence block",
   "verdict": "DRIFTED",
   "tier": "E2",
@@ -5993,6 +5965,23 @@
   "scope": "mode-a"
  },
  {
+  "key": ".claude/skills/diagram/buildings/programs.md::Country shrine (a village district's shrine)#farmers' stage knob",
+  "tier": "E2",
+  "fix": "buildings/programs.md line 220 (knob 6): '6. **Farmers' stage**: by the map when the shrine stands on one (knob 4: the sheet draws a stage only where its map has one); else `absent` or `present`, rolled from the seed with equal weights (a guess: the record attests stages often built on shrine ground from the early 1800s and dense in three prefectures - 1,777 counted nationwide, lost, noh and puppet stages included, over 200 in each of three - but gives no share of village shrines that kept one, so no regional weight can be set). Written in the notes file as `**Farmers' stage**: absent` or `present`.'; line 181: 'a farmers' stage and a sumo ring are knobs, rolled from the seed or taken from the map' in place of 'knobs, absent by default'; line 163 claim: '... farmers' stage knob - research/questions/0222-...keidai.html: attested on shrine ground, regional; rolled with equal weights (GUESS: no share recorded) or by the map'; and the 0222 drawing page's 'absent by default ... leave both off unless they are turned on' brought to the roll - the same edit the sumo ring (knob 7) takes in this wave.",
+  "files": [
+   ".claude/skills/diagram/buildings/programs.md"
+  ],
+  "after": [],
+  "flag": "",
+  "e0_basis": "",
+  "e0_rechecked": true,
+  "tier_as_ranked": "E2",
+  "moved": "T53a: a reopened row tiered by its work by a fresh reader - The knob exists and only its default becomes a seeded roll; the one sheet, hoshigaoka-shrine, stands on the Hoshigaoka map (notes knob 4 `**On map**`, knob 6 'absent (the default; the map draws none)'), so it follows its map by the procedure's own rule and draws no stage whatever its roll (crc32 'hoshigaoka-shrine:farmers' stage' would give present, 'hoshigaoka:farmers' stage' absent - moot); no engine code builds a stage, and 'regionally weighted' is not settable from the record (no per-shrine share), so equal weights as a labeled guess, matching the sumo ring.",
+  "verdict": "DRIFTED",
+  "wave": "",
+  "scope": "mode-a"
+ },
+ {
   "key": ".claude/skills/diagram/buildings/programs.md::Country shrine (a village district's shrine)#no subsidiary buildings",
   "verdict": "DRIFTED",
   "tier": "E2",
@@ -6038,6 +6027,23 @@
   "scope": "mode-a"
  },
  {
+  "key": ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#manor kitchen garden by the sun",
+  "verdict": "DRIFTED",
+  "tier": "E2",
+  "fix": "buildings/programs.md line 70: replace 'utility (the household's storehouses, a kitchen garden only where it gets its six hours of sun - rarely, behind a house - the attached family privy)' with 'utility (the household's storehouses, the attached family privy)' and add after the rear-strip sentence: '**The kitchen garden** (research/questions/0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html): its site a knob among four - west of the residence, south beside the formal garden, the rear service ground (a Chinese list alone), a parcel of its own - with every site where a full-sun bed gets under six hours of direct sun in autumn ruled out (research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html; a GUESS that a household chose by the sun); its size a knob from a soup-greens plot of about 1,076 sq ft to a field over half the grounds. A generated plan rolls each from the seed among the sites left; a hand-drawn plan takes one and its notes record it.'; line 43 claim: 'manor kitchen garden by the sun - research/questions/0109-...saien.drawing.html, research/questions/0038-...farm.drawing.html: site a knob among west, south, rear, own parcel, those under six hours ruled out; size a knob from ~1,076 sq ft to half the grounds'.",
+  "files": [
+   ".claude/skills/diagram/buildings/programs.md"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 13 re-check (tier provisional, by verdict)",
+  "reopened": "closed in wave 4 (IN-STEP on a wave's re-check, no change needed)",
+  "tier_as_ranked": "E2",
+  "moved": "T53a: a reopened row tiered by its work by a fresh reader - Measured on the SVGs: Hayakawa's bed (x 466-576, y 326-414) and Ubame's (x 582-684, y 330-424) lie south of their residences (bottom y 318, 322), Ochiba's (x 720-800, y 298-430) south-east in the inner garden below the karo's house, the placer's county-magistracy-example west of the house (x 63-255 vs residence x 348-516, its notes 'WEST of the house'), ochiba-roundtrip-test draws none - every sheet already takes an attested sunny site and its notes already declare the site and size knobs (feature 283), so only the procedure paragraph changes and no sheet is redrawn.",
+  "wave": "",
+  "scope": "mode-a"
+ },
+ {
   "key": ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#sand hearing court",
   "tier": "E2",
   "fix": "'sand hearing court' -> roofed hearing court with a floor knob (white gravel or river cobbles), each plan taking one",
@@ -6078,6 +6084,22 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "13",
+  "scope": "mode-a"
+ },
+ {
+  "key": ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#upland granary strongbox role",
+  "verdict": "MISLABELED",
+  "tier": "E2",
+  "fix": "buildings/programs.md line 113 (knob 3): replace 'An upland county's granary also shifts CONTENTS: more in-kind goods (soybeans, barley, local products) and a partial strongbox role, since less of its tax is rice (see grounding).' with 'An upland county's granary also shifts CONTENTS: more in-kind goods (soybeans, barley, local products), since less of its tax is rice and the dry-field share arrives in kind (see grounding); the county's coin and valuables stay in the tax archive.'; delete the claim at line 53 (the 'upland granary contents' DEVIATION claim at line 52 stands).",
+  "files": [
+   ".claude/skills/diagram/buildings/programs.md"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 2 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E0",
+  "moved": "T53a: a reopened row tiered by its work by a fresh reader - The role conflicts with the project's own in-kind deviation and no sheet draws it: a grep of every magistracy sheet's notes finds no strongbox or coin in a granary (Ubame, the one upland county, keeps a modest kura on posts and its wealth in the sealed charcoal store; the strongroom role is the tax archive's, buildings.md line 109), so dropping one clause of one procedure paragraph matches the research.",
+  "wave": "",
   "scope": "mode-a"
  },
  {
@@ -9768,21 +9790,6 @@
   "scope": "mode-a"
  },
  {
-  "key": ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#manor kitchen garden by the sun",
-  "verdict": "DRIFTED",
-  "tier": "E3",
-  "fix": "every residence keeps a kitchen garden; its site a rolled knob among west, south, rear, own parcel, and its size a knob (0109 drawing); the sun only rules sites out",
-  "files": [
-   ".claude/skills/diagram/buildings/programs.md"
-  ],
-  "after": [],
-  "flag": "",
-  "found": "wave 1 re-check",
-  "tier_as_ranked": "E3",
-  "wave": "4 (IN-STEP on a wave's re-check, no change needed)",
-  "scope": "mode-a"
- },
- {
   "key": ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#rear service strip",
   "verdict": "DRIFTED",
   "tier": "E3",
@@ -9841,6 +9848,22 @@
   "flag": "",
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/cluster.py::below_drain#dispersed farmsteads off the ground below the drain",
+  "verdict": "UNCLAIMED",
+  "tier": "E3",
+  "fix": "research 0058's drawing page keeps the ground below a field's drain from farmsteads strewn one by one; with the seat's HARD 1 gone (it was never the per-farm rule), no farmstead of a dispersed scripted hamlet is asked `below_drain` - add the per-farm refusal to the dispersed seating (settlement/rolling/dispersed.py and the grove-farm seat search), with the drain passed to it",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/cluster.py",
+   ".claude/skills/diagram/l7r/diagram/settlement/rolling/dispersed.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 15's own work: the seat's drain rule removed (row 405) leaves the dispersed farmsteads' rule unenforced - a new placement rule across modules, E3",
+  "tier_as_ranked": "E3",
   "wave": "",
   "scope": "kept"
  },

@@ -11,7 +11,7 @@ import math
 from collections.abc import Sequence
 from typing import Any
 
-from l7r.diagram.settlement import point_in_poly, seg_closest, seg_dist, seg_intersect
+from l7r.diagram.settlement import point_in_poly, seg_dist, seg_intersect
 from l7r.diagram.settlement._geom import seg_reach_index
 from l7r.diagram.sitegen.geom import centroid, unit
 
@@ -29,13 +29,26 @@ def below_drain(pt: Pt, drain: Poly, dx: float, dy: float, band: float = 150.0) 
     centroid" is the point: an aggregate cannot stand in for a distributed thing, and
     the drain is a LINE across the low side, not a point.
 
+    The ground judged lies downslope of the drain along the map's set downhill direction (`dx`, `dy`) and within the drain's
+    own span ACROSS the slope: a point is measured against the drain where the drain crosses the point's line down the
+    slope, so ground past either end of the drain - a dry flank - is never below it (feature 328: the nearest segment's
+    clamped end used to stand in, and refused that flank).
+
     Research:
-        wet side of the drain - research/questions/0058-ground-too-wet-to-build-on.drawing.html: no farmhouse on the low ground below a field's drain
+        wet side of the drain - research/questions/0058-ground-too-wet-to-build-on.drawing.html: downslope of the drain, within its span across the slope
         toe band - UNRESEARCHED: 18 ft past the drain line, within 150 ft of it"""
-    near = min(range(len(drain) - 1), key=lambda i: seg_dist(pt[0], pt[1], drain[i], drain[i + 1]))
-    d = seg_dist(pt[0], pt[1], drain[near], drain[near + 1])
-    proj = seg_closest(pt[0], pt[1], drain[near], drain[near + 1])
-    return (pt[0] - proj[0]) * dx + (pt[1] - proj[1]) * dy > 18.0 and d <= band
+    ax, ay = -dy, dx  # across the slope
+    across = pt[0] * ax + pt[1] * ay
+    down = pt[0] * dx + pt[1] * dy
+    for a, b in zip(drain, drain[1:], strict=False):
+        a_across, b_across = a[0] * ax + a[1] * ay, b[0] * ax + b[1] * ay
+        if a_across == b_across or not min(a_across, b_across) <= across <= max(a_across, b_across):
+            continue  # this stretch of the drain does not cross the point's line down the slope
+        t = (across - a_across) / (b_across - a_across)
+        drain_down = (a[0] + t * (b[0] - a[0])) * dx + (a[1] + t * (b[1] - a[1])) * dy
+        if 18.0 < down - drain_down <= band:
+            return True
+    return False
 
 
 def nearest_within(index: Any, px: float, py: float, reach: float) -> float:
@@ -145,7 +158,7 @@ class SeatRefused(ValueError):
     is refused at `stage_seat`, naming it, before any house exists - never seated off the wind."""
 
 
-def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), drain: Poly | None = None, toe: Poly | None = None, wet: Sequence[Poly] = (), brook: Sequence[Pt] = ()) -> dict[str, Any]:
+def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), toe: Poly | None = None, wet: Sequence[Poly] = (), brook: Sequence[Pt] = ()) -> dict[str, Any]:
     """WHERE THE HOUSES GO - the one derivation that decides how the whole map reads.
 
     背山面水, "back to the hill, face the water": a farming settlement stands with its back to the
@@ -153,8 +166,8 @@ def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), drain: Poly | N
     the reason the windbreak grove has a side to be on, and it is what Ikegami's own docstring cites.
     So the cluster is seated on the field-envelope margin whose OUTWARD NORMAL best points into the
     wind, scored by the wind (1.0) and by the UPSLOPE end (0.8), with penalties for wet ground, the dry
-    hem, the brook and the belt's room - the ground below the drainage line is the wettest in the valley
-    and is not building ground. A margin whose normal is within 45 degrees of the wind faces it (tier 0);
+    hem, the brook and the belt's room - the wet toe below the fields is not building ground; the drain's own rule is a
+    dispersed farmstead's, not the cluster's (research 0058). A margin whose normal is within 45 degrees of the wind faces it (tier 0);
     one whose belt would fall off the canvas is not a candidate (`BELT_ROOM_MAX_OFF`): the wind is the
     regional northwest unless declared, and the seat bends to it.
 
@@ -177,7 +190,7 @@ def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), drain: Poly | N
         seat on the field's margin - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: higher, drier ground beside the paddy
         back to the wind - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: the margin facing the northwest unless declared
         band area - research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html: households times the homestead's ground
-        never below the drain - research/questions/0058-ground-too-wet-to-build-on.drawing.html
+        no drain rule at the seat - research/questions/0058-ground-too-wet-to-build-on.drawing.html: the ground below a drain kept only from dispersed farmsteads, not a nucleated cluster
         clear ground behind - UNRESEARCHED: refused past 0.30 of the back under dry crop
         not on the wet toe - research/questions/0058-ground-too-wet-to-build-on.drawing.html: seat and anchor off the marsh below the fields
         not in the reed fringe - CANON: the GM's ruling of 2026-08-28, refused centered in a pond's reed fringe, scored down at an end; it departs from research/questions/0058-ground-too-wet-to-build-on.drawing.html, which does not count the fringe as marsh
@@ -231,19 +244,9 @@ def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), drain: Poly | N
         # still graze a lobe of the fan a little further along, and a check is cheaper than a theory.
         if any(point_in_poly(mid[0] + nx * d - ny * lat * t, mid[1] + ny * d + nx * lat * t, env) for d in (dep * 0.5, dep + 34.0, dep * 2.0) for t in (-0.6, 0.0, 0.6)):
             continue
-        # HARD 1: never below the DRAIN. The ground under the drainage line is the wettest in the
-        # valley - reed marsh, the tameike, the low reclaimed paddy - and it is not building ground
-        # (`dwellings_above_field_drain` says exactly this). Excluded rather than scored down: a
-        # soft penalty lets a strong enough wind score pull the settlement into the bog.
-        #
-        # Measured against the DRAIN POLYLINE, not against the field's middle. "Above the middle"
-        # was tried first and was much too strict - it is the dry HEM that hems the upslope margin,
-        # so banning the downslope half leaves only the hem to build on, and the whole cohort came
-        # back with its lanes and its grove standing in the hatake plots. The wet toe is a thin band
-        # along one edge; the buildable ground is the two flanks, which is where Ikegami's cluster
-        # sits and where this now puts it.
-        if drain is not None and below_drain(mid, drain, dx, dy):
-            continue
+        # NO DRAIN RULE AT THE SEAT (feature 328): the ground below a field's drain is kept from farmsteads strewn one by
+        # one, never from a nucleated cluster placed as one block (research 0058's drawing page - unscoped, the rule would
+        # forbid the Ueda map's cluster beside a diagonal drain). The wet toe and the reed fringe below stay refused.
         # HARD 2: there must be clear ground BEHIND the margin. The settlement is a band and its
         # windbreak is a belt behind that - together most of a cluster's depth again - so a margin
         # is only usable if the ground it backs onto is free of crop. Testing the anchor POINT is
@@ -342,7 +345,7 @@ def seat_cluster(plan: SitePlan, dry_plots: Sequence[Poly] = (), drain: Poly | N
         order.pop(0)
     if not order:
         raise SeatRefused(
-            f"{plan.spec.name} (seed {plan.spec.seed}): no field margin turns its back to the {plan.windward} wind clear of the drain, the dry hem, the toe and the canvas edge - the site has no seat (plan D3)"
+            f"{plan.spec.name} (seed {plan.spec.seed}): no field margin turns its back to the {plan.windward} wind clear of the dry hem, the toe and the canvas edge - the site has no seat (plan D3)"
         )
     frames = [_seat_frame(anchor, out, lat, dep, (wx, wy)) for _score, anchor, out in order]
     return {**frames[0], "ladder": frames[1:]}

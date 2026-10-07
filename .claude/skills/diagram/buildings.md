@@ -90,7 +90,8 @@ No salt heaps or other wards are drawn at a compound's gates: no pair at any off
 <!-- Research: tax archive drawn with white-plaster fill, heavy stroke and dark door mark - CONVENTION: the sealed kura shown plastered, distinct from the vented granary slats -->
 
 <!-- Research: barracks - research/questions/0097-staff-rowhouses-and-barracks-nagaya.html, research/questions/0097-staff-rowhouses-and-barracks-nagaya.drawing.html: on-grounds rowhouse or common room, no bunks, ~27-53 ft wide; the county example's range 45 x 34 ft, 34 ft deep -->
-<!-- Research: granary forms - research/questions/0098-storehouses-for-the-tax-rice.html: raised on posts or earth-walled kura, ~43-50 x 25-27 ft, a row for a terminal store -->
+<!-- Research: granary forms - research/questions/0098-storehouses-for-the-tax-rice.html: raised on posts or earth-walled kura -->
+<!-- Research: granary size and the terminal row - GUESS research/questions/0098-storehouses-for-the-tax-rice.drawing.html: ~43-50 x 25-27 ft, no page gives a county office granary's size or count; a row for a terminal store, the landing row the project's reading -->
 <!-- Research: practice ground - research/questions/0165-martial-training-grounds-and-dojo.drawing.html: swept patch with a weapon rack and striking posts, no hall -->
 <!-- Research: practice ground placement - research/questions/0165-martial-training-grounds-and-dojo.drawing.html: a practice ground beside the guards' quarters -->
 <!-- Research: practice ground shared with cart staging or muster - UNRESEARCHED: the open ground serves also as cart staging or muster -->
@@ -305,8 +306,8 @@ The sweep (`tests/test_mode_a_sheets.py`) picks the tier up from the declaration
 <!-- Research: labels and title block - CONVENTION: no always-true labels, no summary line, no legend, compass or staffing box -->
 <!-- Research: crop and scale bar - CONVENTION -->
 <!-- Research: guest and service doors - research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html: guest entrances feed a court or garden -->
-<!-- Research: size hierarchy - research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html: residence dominant, kitchen, stable, cell, shrine below -->
-<!-- Research: packing coverage - research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: ~30-42%, fire gaps ~6-8 ft, kura ~6-10 ft, apron ~15-20 ft -->
+<!-- Research: size hierarchy - research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: office hall, residence, rowhouse; the residence the largest domestic building, kitchen, bath and shrine hall below it; stable below the barracks; small storehouses well below the rowhouse; the grain storehouse by the rice held -->
+<!-- Research: cell below the barracks - GUESS: no page sizes a jail cell against the guards' quarters --><!-- Research: packing coverage - research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: ~30-42%, fire gaps ~6-8 ft, kura ~6-10 ft, apron ~15-20 ft -->
 <!-- Research: clear gateways - UNRESEARCHED: nothing stands in a passage -->
 <!-- Research: gate hierarchy - UNRESEARCHED: the ceremonial main gate widest -->
 <!-- Research: structures clear of wall ink - research/questions/0092-compound-walls-neribei-and-tsuijibei.drawing.html -->
@@ -327,7 +328,7 @@ Before declaring done (Mode A):
 - [ ] viewBox cropped tight to content (rectangular, ~15-25 px border; no wide empty margins); scale bar in a top corner, approach labels close to the compound, edge labels just inside their openings; any road meant to leave the map runs off the viewBox edge (not a stub stopping short)
 - [ ] Scale bar present; new features sanity-checked in real feet (3 px = 1 ft)
 - [ ] Every guest-facing entrance feeds a court or garden; service doors feed work areas
-- [ ] Size hierarchy honest: the residence is the dominant DOMESTIC footprint (the office hall aside); kitchen < a residence living block, stable < barracks, cell < barracks, any shrine/storehouse < the residence (size-audit proportion sweep)
+- [ ] Size hierarchy honest: the office hall largest of the halls, then the residence, then the staff's rowhouse; the residence the largest DOMESTIC building - no kitchen, bath or shrine hall out-sizes it, and a kitchen a fraction of the living quarters; stable < barracks, cell < barracks; the records store and the small storehouses well below the rowhouse; the grain storehouse ranked by the rice its office holds, so a terminal store may out-size every hall (size-audit proportion sweep)
 - [ ] Packing checked with `tools/pack_audit/`: coverage ~30-42% (envelope NOT shrunk - the bottom is Takayama's measured ~31%, the top a guess); read the TOP-N vacant rectangles + the per-region density (a big vacant rectangle or a locally-sparse tile that is NOT the oshirasu/garden/forecourt is slack); every empty region kept as a feature carries a QUANTIFIED size (loading apron ~15-20 ft, forecourt for assembly); loose wooden service gaps abutted or tightened to ~6-8 ft fire-gaps (kura ~6-10 ft) - fragmentation fixed by consolidation, not a smaller wall
 - [ ] Nothing stands in a gateway: `tools/pack_audit/`'s PASSAGE check reports "every gateway's track is clear" (threshold stones and gate posts FLANK a passage, they never stand in it - see "Walls and gates")
 - [ ] Every opening's INK width matches the width its comment claims: read `tools/pack_audit/`'s GATE OPENINGS section figure by figure (a square cap eats 1.5 ft per end - see "Walls and gates"), and confirm the hierarchy holds with the ceremonial main gate widest

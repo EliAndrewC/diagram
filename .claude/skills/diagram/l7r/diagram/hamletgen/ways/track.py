@@ -274,11 +274,6 @@ def stage_seat(s: Settlement, plan: SitePlan) -> None:
         the wind is kept - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: a seat off the
             wind is recorded, never the wind renamed
     """
-    drain = None
-    for ditch in s.M.get("field_ditches", []):
-        if ditch.get("role") == "drain" and len(ditch["poly"]) >= 2:
-            drain = [(float(v[0]), float(v[1])) for v in ditch["poly"]]
-            break
     # EVERY watercourse on the map, not just the field's own ditches. The ways are routed to meet
     # water squarely and to keep their decks off the crop, and that is only as good as the list they
     # are handed: the STREAMS - the feed brook coming down to the intake, the drain brook leaving
@@ -307,7 +302,6 @@ def stage_seat(s: Settlement, plan: SitePlan) -> None:
     seat = seat_cluster(
         plan,
         dry_plots=crop_polys(s),
-        drain=drain,
         toe=s.toe_band() or None,
         wet=marsh_ground(s.M, only=("pond_fringe",)),
         brook=plan.brook,  # the stream runs past the fan since feature 230; a cluster does not straddle it

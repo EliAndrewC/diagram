@@ -35,6 +35,20 @@ def test_a_point_below_the_drain_is_recognized_as_wet_ground() -> None:
     assert not hg.below_drain((1000.0, 1400.0), drain, 0.0, 1.0)  # past the toe band entirely
 
 
+def test_ground_past_either_end_of_the_drain_is_a_dry_flank() -> None:
+    """Research 0058's drawing page: the ground judged is downslope of the drain WITHIN ITS SPAN ACROSS THE SLOPE; past
+    either end stands a dry flank. The nearest segment's clamped end used to stand in, and refused it."""
+    drain = [(0.0, 1000.0), (2000.0, 1000.0)]
+    assert not hg.below_drain((-10.0, 1080.0), drain, 0.0, 1.0)  # just past the west end, downslope of its line
+    assert not hg.below_drain((2010.0, 1080.0), drain, 0.0, 1.0)  # just past the east end
+    # a diagonal drain falling to the southeast on a south-falling map: measured against the drain where it crosses the
+    # point's own line down the slope, not against its nearest point
+    diagonal = [(0.0, 900.0), (1000.0, 1100.0)]
+    assert hg.below_drain((500.0, 1080.0), diagonal, 0.0, 1.0)  # 80 below the drain's y of 1000 at x = 500
+    assert not hg.below_drain((500.0, 1010.0), diagonal, 0.0, 1.0)  # within the 18 ft margin
+    assert not hg.below_drain((500.0, 1080.0), [(500.0, 900.0), (500.0, 1000.0)], 0.0, 1.0)  # a drain straight down the slope spans nothing across it
+
+
 def test_ground_behind_a_margin_reports_how_much_of_it_is_crop() -> None:
     assert hg.back_fouled((700.0, 400.0), (0.0, -1.0), 100.0, []) == 0.0
     fouled = hg.back_fouled((700.0, 1000.0), (0.0, -1.0), 100.0, [SQUARE])  # normal points back INTO the square
@@ -48,25 +62,13 @@ def test_the_cluster_is_seated_outside_the_field() -> None:
     assert seat["lat"] > 0 and seat["dep"] > 0
 
 
-def test_the_cluster_is_never_seated_below_the_drain() -> None:
-    """The wet toe is not building ground. Excluded outright rather than scored down, because a
-    strong enough wind score will otherwise pull the settlement into the bog."""
-    plan = a_seat_plan()
-    drain = [(300.0 + D, 1000.0 + D), (1100.0 + D, 1000.0 + D)]  # along the square's low (south) edge
-    seat = hg.seat_cluster(plan, drain=drain)
-    assert seat["cy"] < 1000.0 + D
-
-
-def test_a_margin_below_the_drain_is_excluded_outright() -> None:
-    """HARD 1's own `continue`: a drain drawn INSIDE the low half puts the square's south margin
-    genuinely on the wet side (mid 100 px past the line, within the 150 px toe band), so the seat
-    scan must skip that margin - not merely score it down. (The sibling drain-along-the-edge test
-    asserts the RESULT; the 2026-08-16 re-rolls left this branch reached by no pool map, and a
-    branch no test reaches is the coverage form of the check that never runs.)"""
-    plan = a_seat_plan()
-    drain = [(300.0 + D, 900.0 + D), (1100.0 + D, 900.0 + D)]
-    seat = hg.seat_cluster(plan, drain=drain)
-    assert seat["cy"] < 900.0 + D
+def test_the_cluster_takes_no_drain_rule() -> None:
+    """Research 0058's drawing page keeps the ground below a field's drain from farmsteads strewn one by one, never from a
+    nucleated cluster placed as one block (feature 328): the seat is asked nothing of the drain, so a wind from the south
+    seats the cluster on the south margin, where a drain across the low half used to refuse it."""
+    south = a_seat_plan()
+    south.windward = "S"
+    assert hg.seat_cluster(south)["out"] == (0.0, 1.0)
 
 
 def test_the_cluster_avoids_a_margin_whose_back_is_under_the_hem() -> None:
@@ -307,8 +309,8 @@ def test_a_seat_walled_in_by_the_wet_has_no_dry_exit_and_is_refused() -> None:
 
 def test_each_refusal_of_a_wind_facing_margin_turns_it_away() -> None:
     """Every HARD refusal met on a margin whose back faces the wind (homes H30 put the wind first): the band standing in
-    the field's own arm, the drain, the canvas edge, the wet toe - each leaves no seat here - and a dry hem that only
-    scores a surviving margin down."""
+    the field's own arm, the canvas edge, the wet toe - each leaves no seat here - and a dry hem that only scores a
+    surviving margin down."""
     from l7r.diagram.hamletgen.cluster import SeatRefused
 
     plan = a_plan(households=20, cluster_shape="elongated")
@@ -316,10 +318,6 @@ def test_each_refusal_of_a_wind_facing_margin_turns_it_away() -> None:
     plan.envelope = [(700.0, 1000.0), (800.0, 1000.0), (800.0, 1300.0), (1300.0, 1300.0), (1300.0, 1600.0), (700.0, 1600.0)]
     seat = hg.seat_cluster(plan)  # the L's long top edge is refused (its band stands in the arm); the arm's own top seats it
     assert seat["out"] == (0.0, -1.0) and seat["anchor"][0] < 800.0
-    south = a_seat_plan()
-    south.windward = "S"
-    with pytest.raises(SeatRefused):
-        hg.seat_cluster(south, drain=[(300.0 + D, 950.0 + D), (1100.0 + D, 950.0 + D)])  # the south margin is below the drain
     east = a_seat_plan()
     east.windward = "E"
     east.W = east.H = int(1050 + D)

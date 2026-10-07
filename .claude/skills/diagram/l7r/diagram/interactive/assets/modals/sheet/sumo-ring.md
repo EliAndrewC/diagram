@@ -8,10 +8,10 @@ recorded, nor when sumo was first offered at village shrines.
 How big a village's ring was, and how many village shrines kept one, are not recorded.
 
 Guesses:
-- That most village shrines kept no ring, so the plan draws one only where it calls for one: sumo was offered at shrines
-  across the country, but how many village shrines kept a ring was not found recorded.
+- That a ring is as likely as not at a shrine no map places: sumo was offered at shrines across the country, but how many
+  village shrines kept a ring was not found recorded, so a plan with no map rolls for one with even odds.
 
-Depiction: The plan draws a sumo ring only where it calls for one; by default none stands.
+Depiction: A plan on a map draws a sumo ring only where the map has one; a plan with no map draws one or none, rolled for it.
 
 Name: sumo ring
 Covers: the sumo ring
