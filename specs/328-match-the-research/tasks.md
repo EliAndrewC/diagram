@@ -6,12 +6,13 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 ## Occasions
 
 - none: wave 1 changes `Research:` claim lines only (tier E0) - nothing a map draws or where it is placed moves.
-- placement-changed: village lane - wave 4 brings the lane law to 0081 and 0246 (7 ft clear of a fence, ends joined
+- (wave 4, landed and reviewed) placement-changed village lane - wave 4 brought the lane law to 0081 and 0246 (7 ft clear of a fence, ends joined
   within 25 ft, tails and hooks cut at 40 and 12 ft): the lanes are re-placed by substantially different rules.
 - none (wave 2): each fix moves one value inside a rule that already places the element (a weight, a pitch, a share, a
   count's cap, an extent); no element is new to a map, no glyph is redrawn, and no element is re-placed by different rules.
-- placement-changed (wave 5): row street - 0033's row street runs on off the map as the road into it, where the web
-  cut it back to its last joint (`trim_streets`); Kashikawa's and Mizuguchi's streets are re-placed by that rule.
+- placement-changed: village lane on kashikawa - wave 5: 0033's row street runs on off the map as the road into it at both ends, where
+  the web cut it back to its last joint (`trim_streets`); Kashikawa's and Mizuguchi's far ends now run off the sheet as a
+  second way out (every way is inked `village lane`).
 - none (wave 5, the other rows): each fix moves one value inside a rule that already places or sizes the element (a
   size, a width, a count, a reach, a caption's leader); no element is new to a map and no glyph is redrawn.
 
@@ -265,6 +266,6 @@ bridges, canals, moat and governor's gate. Every `after` these rows carry is a r
 - [ ] T20 every touched unit re-checked by `impl-drift`; each wave-5 row IN-STEP or re-tiered with its measured reason (FR-005, SC-002)
       research: rendering
       verify:
-- [ ] T21 the occasion's review (glyph-check on the row street, one map) on a green gate; the close: `make perf LABEL=328-end` and the band's records, `make done` green, the wave column, landed (FR-005, FR-006, SC-002, SC-003)
+- [ ] T21 the occasion's review (glyph-check on Kashikawa's ways, one map) on a green gate; the close: `make perf LABEL=328-end` and the band's records, `make done` green, the wave column, landed (FR-005, FR-006, SC-002, SC-003)
       research: rendering
       verify:

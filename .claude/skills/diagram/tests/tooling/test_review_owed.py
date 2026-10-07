@@ -141,6 +141,19 @@ def test_a_declared_re_placement_owes_the_glyph_check(clone: Path) -> None:
     assert units(clone) == [("glyph-check", "wood shed", "sawada")]
 
 
+def test_a_declared_re_placement_on_a_named_map_owes_the_glyph_check_there(clone: Path) -> None:
+    """`<class> on <map>`: the map the change moved, not the first that draws the class (feature 328 wave 5: every way is
+    inked `village lane`, and a row street re-placed on Kashikawa was owed a review of Inashiro's)."""
+    _tasks(clone, ["placement-changed: wood shed on sawada - now seated off the gable"])
+    assert units(clone) == [("glyph-check", "wood shed", "sawada")]
+
+
+def test_a_declared_element_not_on_the_named_map_is_a_problem(clone: Path) -> None:
+    _tasks(clone, ["placement-changed: wood shed on inashiro"])
+    _, _, problems = owed.owed(clone)
+    assert problems == ["specs/999-test: placement-changed: 'wood shed' is not drawn on 'inashiro'"]
+
+
 def test_a_declared_element_no_map_draws_is_a_problem(clone: Path) -> None:
     _tasks(clone, ["glyph-redrawn: tannery"])
     _, got, problems = owed.owed(clone)

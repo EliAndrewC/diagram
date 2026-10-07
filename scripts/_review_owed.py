@@ -288,10 +288,20 @@ def declared(root: Path, base: str) -> tuple[list[Unit], list[str], bool]:
             subject = arg.split(" - ")[0].strip()
             for check in checks:
                 if check == "glyph-check":
-                    on = first_drawing(root, subject)
-                    if not on:
-                        problems.append(f"{feature}: {kind}: {subject!r} is drawn on no pool map or sheet")
-                    units.append(Unit(check, subject, on, f"declared {kind} ({feature})"))
+                    # GUARD_EDIT_OK: feature 328 wave 5 - `<element> on <map>` names the map the change moved: the
+                    # first map drawing the class was the only choice, and every way is inked `village lane`, so a
+                    # row street re-placed on Kashikawa was owed a review of Inashiro's lanes, which had not moved
+                    element, _, at = subject.partition(" on ")
+                    element, at = element.strip(), at.strip()
+                    if at:
+                        on = at if element in legends(root).get(at, set()) else ""
+                        if not on:
+                            problems.append(f"{feature}: {kind}: {element!r} is not drawn on {at!r}")
+                    else:
+                        on = first_drawing(root, element)
+                        if not on:
+                            problems.append(f"{feature}: {kind}: {element!r} is drawn on no pool map or sheet")
+                    units.append(Unit(check, element, on, f"declared {kind} ({feature})"))
                 elif kind == "new-program":
                     program, _, sheet = subject.partition(" ")
                     units.append(Unit(check, sheet.strip() if check == "building-review" else program, sheet.strip(), f"declared {kind} {program} ({feature})"))
@@ -327,7 +337,7 @@ def check_declared(root: Path) -> str | None:
     shown = ", ".join(code[:5]) + (f" and {len(code) - 5} more" if len(code) > 5 else "")
     return (
         f"drawing or placement code moved ({shown}) and no active feature's tasks.md has an `## Occasions` section, nor any commit "
-        f"of the delta an `Occasion:` line. Declare what the change re-places or redraws - `- placement-changed: <class>`, "
+        f"of the delta an `Occasion:` line. Declare what the change re-places or redraws - `- placement-changed: <class>` (or `<class> on <map>` for the map it moved), "
         f"`- glyph-redrawn: <class>`, ... or `- none: <why>` in the feature's tasks.md; a tweak with no feature puts "
         f"`Occasion: glyph-redrawn: <class> - <why>` in its commit message "
         f"(feature 294: whether a change is substantial is the feature's to declare, never silent)"
