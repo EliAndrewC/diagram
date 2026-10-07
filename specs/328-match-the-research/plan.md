@@ -267,6 +267,16 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
   backup pushed, its own pair band 1 confirmed); wave 19's own pair opens at 822e44c52.
 - **Verification**: `impl-drift` on the touched claims, the glyph checks, the gate, wave 19's own bookend pair.
 
+## Wave 20 (amendment 19, 2026-10-07)
+
+- **T65a first**: the glyph check's found row tiered E2.
+- **Scope**: four E2 rows in ranking order (`tasks.md` Phase 21): the level wood's real crossing, the seat order's tie toward the
+  field, and the bath room's wall rolled per house at the registers' share.
+- **Occasions**: none, measured - the five regenerated manifests differ from wave 19's close in `meta` only.
+- **On the unpushed waves 9-19** under the wave-11 exception's condition (6): (1)-(5) held at wave 19's close (43b353361, its
+  backup pushed, its own pair band 1 confirmed); wave 20's own pair opens at 43b353361.
+- **Verification**: `impl-drift` on the touched claims, the gate, wave 20's own bookend pair.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Each later wave that changes engine behavior takes

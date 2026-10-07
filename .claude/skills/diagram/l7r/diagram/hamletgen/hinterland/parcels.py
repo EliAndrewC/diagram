@@ -251,6 +251,25 @@ def reached_across(field: Poly, frm: Pt, to: Pt) -> bool:
     return any(segments_cross(frm, to, a, b) for a, b in zip(field, list(field[1:]) + list(field[:1]), strict=False))
 
 
+REAL_CROSSING_SHARE = 0.5
+"""Research: a real crossing - UNRESEARCHED: the walk inside the field at least half the field's depth along it"""
+
+
+def crossed_through(field: Poly, frm: Pt, to: Pt, share: float = REAL_CROSSING_SHARE, samples: int = 64) -> bool:
+    """Whether the straight walk `frm` -> `to` runs THROUGH the field rather than clipping a corner (feature 328, the woodland
+    glyph check on Inashiro: a walk that crossed 42 ft of a 1,381 ft field counted as across it): the length of the walk
+    inside the field is at least `share` of the field's depth along the walk's direction.
+
+    Research: beyond the fields on the level - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: the far side of the fields from the houses"""
+    length = math.dist(frm, to)
+    if length <= 0.0 or not field:
+        return False
+    ux, uy = (to[0] - frm[0]) / length, (to[1] - frm[1]) / length
+    inside = sum(1 for i in range(samples) if point_in_poly(frm[0] + (to[0] - frm[0]) * (i + 0.5) / samples, frm[1] + (to[1] - frm[1]) * (i + 0.5) / samples, field)) * length / samples
+    depth = max(p[0] * ux + p[1] * uy for p in field) - min(p[0] * ux + p[1] * uy for p in field)
+    return depth > 0.0 and inside >= share * depth
+
+
 def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float = 250.0) -> list[Poly]:
     """Find `count` patches of ground still open enough for a managed woodland - by SCANNING.
 
@@ -512,12 +531,15 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
             # a RANK, not a filter, below the downslope refusal: every tier-0 seat outranks every tier-1 one (the 1e9 dwarfs any
             # distance on a canvas), so the level is taken only once the ground above the fields is used up - "where the map
             # has no such ground" read per parcel, as the count is a target the scan meets only where there is open ground
+            _tier_of = {(t[1], t[2]): k for t, k in zip(scored, _tiers, strict=True)}
             scored = [(t[0] - 1e9 * k, t[1], t[2]) for t, k in zip(scored, _tiers, strict=True) if k < 2]
             # ...AND BEYOND THE FIELDS FROM THE HOUSES (feature 328; 0077's drawing page: "on the nearest slope beyond the fields
             # from the houses", the village running houses, then fields, then the wild land): feature 261 had preferred the
             # houses' side of the field. A preference as the one above: where no seat is reached across the field, the rest are
-            # still offered.
-            _beyond = [t for t in scored if reached_across(plan.envelope, (ccx, ccy), (t[1], t[2]))]
+            # still offered. ON THE LEVEL the walk must run THROUGH the field (`crossed_through`; the woodland glyph check of
+            # wave 19 found a corner clip counted); above the fields the slope reading governs (0077: "beyond" read as higher
+            # than the fields beside it), so a seat there needs only to be reached across the outline.
+            _beyond = [t for t in scored if (crossed_through(plan.envelope, (ccx, ccy), (t[1], t[2])) if _tier_of[(t[1], t[2])] == 1 else reached_across(plan.envelope, (ccx, ccy), (t[1], t[2])))]
             if _beyond:
                 scored = _beyond
             # ...NOT IN A ROW: a seat in line with two placed parcels is stepped sideways off the row where the ground allows,

@@ -83,8 +83,24 @@ def test_free_seats_are_the_free_ground_nearest_the_seat_first() -> None:
     assert all(not s._free_ground.point_taken(x, y) for x, y in seats)
     assert max(q[0] for q in seats) > 1300.0 or min(q[0] for q in seats) < 100.0 or max(q[1] for q in seats) > 1300.0, "seats to the canvas's edge"
     assert all(math.dist(q, center) >= BUNDLE_PITCH / 2 for q in seats), "no seat within half a pitch of the standing house"
-    d = [math.dist(q, center) for q in seats]
-    assert d == sorted(d)
+    pitch = BUNDLE_PITCH * hg.homesteads.capacity.FREE_SEAT_STEP
+    bands = [round(math.dist(q, center) / pitch) for q in seats]
+    assert bands == sorted(bands), "center-out, a grid pitch to a band"
+
+
+def test_free_seats_about_as_near_take_the_one_nearer_the_field_first() -> None:
+    """Feature 328 (0029's drawing page: of two places about as near the cluster, the one nearer the fields): within one
+    pitch's band of the seat, the point nearer the field's outline comes first."""
+    s, _plan = _toy(10)
+    s.W = s.H = 200
+    field = [(0.0, 150.0), (200.0, 150.0), (200.0, 200.0), (0.0, 200.0)]  # the field along the bottom edge
+    seats = free_seats(s, (100.0, 100.0), step=0.5, field=field)
+    pitch = BUNDLE_PITCH * 0.5
+    band = [round(math.dist(q, (100.0, 100.0)) / pitch) for q in seats]
+    to_field = [max(0.0, 150.0 - q[1]) for q in seats]  # every seat stands above the field's top edge
+    ties = [i for i in range(1, len(seats)) if band[i] == band[i - 1]]
+    assert ties, "non-vacuity: a band holds more than one point"
+    assert all(to_field[i - 1] <= to_field[i] + 1e-9 for i in ties), "within a band, nearer the field first"
 
 
 def test_free_seats_scan_the_whole_canvas_where_no_chains_stand() -> None:
@@ -112,7 +128,7 @@ def test_the_pass_skips_a_seat_a_house_it_seated_now_stands_on(monkeypatch: pyte
     s, plan = _toy(10)
     hg.homesteads.boundary.install_site_boundary(s, plan)
     s._seat_search = {"candidates": 0, "placer_calls": 0, "positions": 0, "rects": 0, "rounds": 0}
-    monkeypatch.setattr(capacity, "free_seats", lambda s_, c: [(700.0, 300.0), (710.0, 300.0)])
+    monkeypatch.setattr(capacity, "free_seats", lambda s_, c, **_kw: [(700.0, 300.0), (710.0, 300.0)])
 
     def place(x: float, y: float, kind: str) -> bool:
         s.M["houses"].append({"x": x, "y": y, "w": 46.0, "h": 28.0, "kind": kind})

@@ -22,6 +22,8 @@ import math
 from collections.abc import Sequence
 from typing import TYPE_CHECKING, Any
 
+from l7r.diagram.settlement import seg_dist
+
 from ..consts import BUNDLE_PITCH, Pt
 
 if TYPE_CHECKING:
@@ -53,9 +55,10 @@ def _near_a_house(s: Settlement, q: Pt) -> bool:
     return any(math.hypot(q[0] - float(h["x"]), q[1] - float(h["y"])) < BUNDLE_PITCH * 0.5 for h in s.M.get("houses", []))
 
 
-def free_seats(s: Settlement, center: Pt, step: float | None = None) -> list[Pt]:
+def free_seats(s: Settlement, center: Pt, step: float | None = None, field: Sequence[Pt] = ()) -> list[Pt]:
     """Every grid point of the legal ground on the canvas, nearest `center` first (homes H14; no distance from the field
-    bounds it, feature 318).
+    bounds it, feature 318) - and among points about as near (one grid pitch), the one nearer the `field`'s outline first
+    (feature 328: the coordinates broke that tie before).
 
     A point is dropped unasked only where the answer is already known: in a cell the static ground surely refuses
     (`FreeGround`), or within half a pitch of a standing house (the envelope would lap the
@@ -64,6 +67,8 @@ def free_seats(s: Settlement, center: Pt, step: float | None = None) -> list[Pt]
     Research:
         no bound from the field - research/questions/0032-how-our-maps-pack-a-clustered-villages-houses.drawing.html: no house is refused for its distance from the fields
         the exhaustive seat order - UNRESEARCHED: every legal grid point on the canvas, nearest the seat first
+        about as near, nearer the fields - research/questions/0029-farmhouses-minka.drawing.html: a tie broken by nearness to the field
+        about as near - UNRESEARCHED: one grid pitch
     """
     pitch = BUNDLE_PITCH * (FREE_SEAT_STEP if step is None else step)
     x0, y0, x1, y1 = 6.0, 6.0, float(s.W) - 6.0, float(s.H) - 6.0
@@ -78,7 +83,8 @@ def free_seats(s: Settlement, center: Pt, step: float | None = None) -> list[Pt]
             if (fg is not None and fg.point_taken(q[0], q[1])) or _near_a_house(s, q):
                 continue
             out.append(q)
-    out.sort(key=lambda q: (math.hypot(q[0] - center[0], q[1] - center[1]), q))
+    edges = list(zip(field, [*field[1:], *field[:1]], strict=False)) if field else []
+    out.sort(key=lambda q: (round(math.hypot(q[0] - center[0], q[1] - center[1]) / pitch), min((seg_dist(q[0], q[1], a, b) for a, b in edges), default=0.0), q))
     return out
 
 
@@ -90,7 +96,7 @@ def seat_the_rest(s: Settlement, plan: SitePlan, placed: int) -> int:
     if placed >= want:
         return placed
     offered = took = 0
-    seats = free_seats(s, (float(plan.seat["cx"]), float(plan.seat["cy"])))
+    seats = free_seats(s, (float(plan.seat["cx"]), float(plan.seat["cy"])), field=plan.envelope)
     # ...FROM THE SEAT REGION (feature 297, FR-001, plan B1): the whole list offered at once, only what the region holds
     region = getattr(s, "_seat_region", None)
     if region is not None:

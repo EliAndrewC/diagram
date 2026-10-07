@@ -73,7 +73,7 @@ def test_the_bath_is_a_room_joined_to_the_house_on_an_attested_wall_or_refused()
     notes: dict = {}
     bath = _lay(("bath",), notes=notes)["bath"]
     assert fs.joined_to_house(bath, HW, HH) and notes["bath_seat"] == "stable_end" and bath[0] == pytest.approx(-(HW / 2 + 3.0))
-    free = _lay(("bath",), ground=(), forms=fs.FixtureForms(bath_seat="main_door"), notes=notes)["bath"]
+    free = _lay(("bath",), ground=(), forms=fs.FixtureForms(bath_stable_share=0.0), notes=notes)["bath"]
     assert fs.joined_to_house(free, HW, HH) and notes["bath_seat"] == "main_door" and free[1] == pytest.approx(HH / 2 + 3.0), "against the front wall"
     ends = [(HW / 2 + 10.0, 0.0, 16.0, 3 * HH), (-(HW / 2 + 10.0), 0.0, 16.0, 3 * HH), (0.0, HH / 2 + 8.0, 3 * HW, 10.0)]
     with pytest.raises(ValueError, match="bath room"):

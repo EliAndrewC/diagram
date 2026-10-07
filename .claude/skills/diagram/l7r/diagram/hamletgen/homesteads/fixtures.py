@@ -148,11 +148,11 @@ _PIT_EDGE_CLEAR_FT = 8.0  # off the paddy's edge: the placer's 6 ft paddy margin
 _PIT_CANDIDATES = 8  # the nearest edge points tried, nearest first
 # THE BATH ROOM'S THREE SEATS (feature 280 M22, research/homesteads/740): joined to the main house beside its main door, at
 # the far end of its stable wing (the house's -x end, where the doma and its stable are), or joined to its floored rooms (the
-# +x end) - three attested places, so a KNOB rolled per hamlet between the two common ones; the third, "found in only a few
-# houses, most of them headmen's", is the last wall offered (the headman keeps no lot of fixtures, feature 287). The odds are
-# a GUESS. The room abuts the wall: joined, not beside (`fixture_seats.bath_room_seats`, `joined_to_house`).
-BATH_SEATS = ("main_door", "stable_end")
-"""Research: bath room wall - research/questions/0044-baths-on-the-farm-furo.html, research/questions/0044-baths-on-the-farm-furo.drawing.html: the main door or the stable end, rolled per hamlet"""
+# +x end) - three attested places; the registers count the wall house by house - 17 of 21 baths beyond the stable at
+# Shimohasuda, 12 of 15 at Ukiya - so each house rolls its own at that share (feature 328; it was one wall per hamlet at even
+# odds); the third, "found in only a few houses, most of them headmen's", is the last wall offered. The room abuts the wall: joined, not beside (`fixture_seats.bath_room_seats`, `joined_to_house`).
+BATH_STABLE_SHARE = 0.8
+"""Research: bath room wall - research/questions/0044-baths-on-the-farm-furo.html: beyond the stable wing at 17 of 21 and 12 of 15 registered baths, beside the main door the rest; rolled per house"""
 # THE PERSIMMON'S SIDE (269 B14, research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.html): "the dooryard in front of the house, most often, and behind it" -
 # the front the likelier, by how much no page says, so this hamlet's front share is rolled in this band (calibrated liberty).
 PERSIMMON_FRONT_BAND = (0.60, 0.85)
@@ -202,13 +202,13 @@ def fixture_forms(seed: int, manure_form: str) -> FixtureForms:
 
     Research:
         privy seats - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: this hamlet's weights
-        bath room wall - research/questions/0044-baths-on-the-farm-furo.drawing.html: one of two walls at even odds
+        bath room wall - research/questions/0044-baths-on-the-farm-furo.html: the share beyond the stable wing, rolled per house
         persimmon side - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html: this hamlet's front share
     """
     lo, hi = PERSIMMON_FRONT_BAND
     return FixtureForms(
         privy_weights=privy_seat_weights(seed),
-        bath_seat=BATH_SEATS[knob_rng(seed, "bath_seat").randrange(len(BATH_SEATS))],
+        bath_stable_share=BATH_STABLE_SHARE,
         persimmon_front=round(lo + knob_rng(seed, "persimmon_front").random() * (hi - lo), 3),
         manure_form=manure_form,
         retirement_ft=RETIREMENT_FT,
@@ -300,7 +300,7 @@ def _draw_laid(s: Settlement, plan: SitePlan, houses: Sequence[Mapping[str, Any]
     shares = fixture_shares(s.seed)
     meta["farm_fixtures"] = dict(shares)
     meta["privy_seats"] = dict(forms.privy_weights)
-    meta["bath_seat"] = forms.bath_seat
+    meta["bath_stable_share"] = forms.bath_stable_share
     meta["persimmon_front_share"] = forms.persimmon_front
     pit_field_share = 0.0
     if plan.manure_form == "pit":

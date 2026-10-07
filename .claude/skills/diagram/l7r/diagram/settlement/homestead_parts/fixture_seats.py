@@ -135,14 +135,14 @@ class FixtureForms:
     Research:
         privy seat weights - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: yard 35, front 30,
             stable 20, barn 15
-        bath room's default wall - research/questions/0044-baths-on-the-farm-furo.drawing.html: beside the main door
+        bath room beyond the stable wing - research/questions/0044-baths-on-the-farm-furo.html: most baths there, 17 of 21 at Shimohasuda and 12 of 15 at Ukiya, so 0.8; the main door the rest, each house rolled
         persimmon front share - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:
             0.7 by default
         manure form - research/questions/0042-manure-heaps-and-compost-kyuhi.drawing.html: heap by default, or pit
         retirement house size and gaps - UNRESEARCHED: 18 x 15 ft, 6 or 12 ft off the house"""
 
     privy_weights: tuple[tuple[str, float], ...] = (("yard", 0.35), ("front", 0.30), ("stable", 0.20), ("barn", 0.15))
-    bath_seat: str = "main_door"
+    bath_stable_share: float = 0.8
     persimmon_front: float = 0.7
     manure_form: str = "heap"
     retirement_ft: tuple[float, float] = (18.0, 15.0)  # `hamletgen/homesteads/retirement.py` RETIREMENT_FT
@@ -328,8 +328,10 @@ def lay_fixtures(
             walls = steading_rects(hw, hh, "N" if kura else None, px(1.0)) + ([annex] if annex is not None else []) + ([laid["retirement"]] if "retirement" in laid else [])
             seat = _wood_shed(hw, hh, w, d, g, walls, taken, px)
         elif kind == "bath":
-            named = bath_room_seats(forms.bath_seat, hw, hh, w, d, (yard[0], yard[2] / 2) if yard is not None else None)
-            named += bath_room_slides(forms.bath_seat, hw, hh, w, d, px(WALL_SLIDE_FT))
+            # EACH HOUSE'S OWN WALL (feature 328): the registers count the wall house by house, most beyond the stable wing
+            wall = "stable_end" if roll(SALT[kind] + 0.25) < forms.bath_stable_share else "main_door"
+            named = bath_room_seats(wall, hw, hh, w, d, (yard[0], yard[2] / 2) if yard is not None else None)
+            named += bath_room_slides(wall, hw, hh, w, d, px(WALL_SLIDE_FT))
             house = roofs[0]
             others = [t for t in taken if t is not house]
             got = next(((q, n) for q, n in named if clears(q, [house], -1e-6) and clears(q, others, g)), None)

@@ -377,7 +377,7 @@ def grow_the_margin(s: Settlement, plan: SitePlan, placed: int, largest: tuple[f
     cx, cy = float(plan.seat["cx"]), float(plan.seat["cy"])
     offered = took = 0
     if not s.M.get("houses") and placed < want:
-        seats = free_seats(s, (cx, cy))
+        seats = free_seats(s, (cx, cy), field=plan.envelope)
         region = getattr(s, "_seat_region", None)
         if region is not None:
             seats = [q for q, ok in zip(seats, region.offer(seats), strict=True) if ok]

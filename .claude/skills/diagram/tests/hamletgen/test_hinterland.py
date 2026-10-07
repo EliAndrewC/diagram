@@ -907,3 +907,15 @@ def test_the_farm_groves_count_toward_the_homestead_wood() -> None:
         M = {"groves": [{"w": 10.0, "h": 20.0}, {"w": 5.0, "h": 4.0}, {"x": 1.0}]}
 
     assert farm_grove_area(_S()) == 220.0  # type: ignore[arg-type]
+
+
+def test_a_walk_through_the_field_is_beyond_it_and_a_corner_clip_is_not() -> None:
+    """Feature 328 (the woodland glyph check on Inashiro, wave 19): on the level a wood is beyond the fields only where the
+    walk from the houses runs THROUGH the field - at least `REAL_CROSSING_SHARE` of its depth along the walk - not where
+    it clips a corner (0077's drawing page: the far side of the fields from the houses)."""
+    from l7r.diagram.hamletgen.hinterland.parcels import crossed_through, reached_across
+
+    field = [(0.0, 0.0), (1000.0, 0.0), (1000.0, 1000.0), (0.0, 1000.0)]
+    assert crossed_through(field, (500.0, -100.0), (500.0, 1100.0)), "straight through the field"
+    assert reached_across(field, (-50.0, 60.0), (60.0, -50.0)) and not crossed_through(field, (-50.0, 60.0), (60.0, -50.0)), "a corner clip"
+    assert not crossed_through(field, (5.0, 5.0), (5.0, 5.0)) and not crossed_through([], (0.0, 0.0), (1.0, 1.0)), "no walk, no field"
