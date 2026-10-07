@@ -55,7 +55,7 @@ def test_the_privy_and_the_bath_room_take_the_households_rolled_size_and_the_not
     assert notes["ft"]["privy"] == fs.PRIVY_SIZES_FT[int(0.3 * 16)] and notes["ft"]["bath"] == (8.0, fs.BATH_DEPTH_FT) and notes["ft"]["coop"] == (5.0, 5.0)
     assert sorted(laid["bath"][2:]) == [6.0, 8.0] and notes["bath_seat"] in fs.BATH_WALLS
     assert fs.fixture_ft("privy", fs.FixtureForms()) == (6.0, 6.0) and fs.fixture_ft("bath", fs.FixtureForms()) == (6.0, 6.0), "the one-ken default"
-    assert fs.privy_sun_reach_ft(6.0, 6.0) == fs.PRIVY_SUN_MAX_FT and fs.privy_sun_reach_ft(24.0, 12.0) == fs.PRIVY_SUN_MAX_FT + 9.0
+    assert fs.privy_sun_reach_ft(6.0, 6.0) == fs.PRIVY_SUN_MAX_FT and fs.privy_sun_reach_ft(24.0, 12.0) == fs.PRIVY_SUN_MAX_FT
 
 
 def test_the_heap_stands_beyond_the_privy_and_without_one_at_the_back() -> None:

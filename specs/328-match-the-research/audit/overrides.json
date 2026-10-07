@@ -874,6 +874,38 @@
   "flag": "deviation-tempting",
   "tier": "E3"
  },
+ ".claude/skills/diagram/l7r/diagram/settlement/land/cover.py::GroundCoverMixin.commons#scrub ground color": {
+  "after": [],
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/land/cover.py"
+  ],
+  "fix": "drop the straw-gold solid fill under the commons tufts (0078: no solid fill, no outline) - a glyph redrawn on every hamlet, owing a glyph-check",
+  "flag": "",
+  "moved": "wave 9: the change redraws a glyph, an occasion; taken with its review",
+  "tier": "E2"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/land/wet.py::surface_water_dist#watered by surface water": {
+  "after": [
+   ".claude/skills/diagram/l7r/diagram/settlement/land/wet.py::water_lines#watered by surface water"
+  ],
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/land/wet.py"
+  ],
+  "fix": "follows water_lines' question (0196 against the 2026-08-18 ruling)",
+  "flag": "",
+  "moved": "wave 9: waits on water_lines' question",
+  "tier": "E4"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/land/wet.py::water_lines#watered by surface water": {
+  "after": [],
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/land/wet.py"
+  ],
+  "fix": "0196's drawing page and the code's recorded 2026-08-18 ruling (ditch water is not domestic water) disagree on whether an irrigation channel waters a house: reconcile the record before the code moves",
+  "flag": "",
+  "moved": "wave 9: the fix would reverse a recorded ruling the code cites as research-backed; a question for the record",
+  "tier": "E4"
+ },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/dispersed.py::clear_east_of_beds#band cut a pixel clear of a bed's edge within its east reach; a band shorter than its width left uncut": {
   "after": [
    ".claude/skills/diagram/l7r/diagram/settlement/rolling/dispersed.py::clear_east_of_beds#rect helpers"

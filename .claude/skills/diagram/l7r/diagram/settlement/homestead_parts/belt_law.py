@@ -41,14 +41,12 @@ from ._helpers import _BELT_GAP_FT
 Pt = tuple[float, float]
 View = tuple[float, float, float, float]
 
-MIN_BELT_DEPTH_FT = (
-    30.0  # research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.html: a belt 'shallower than about 30 ft reads as a row of blobs'
-)
+MIN_BELT_DEPTH_FT = 80.0  # research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: never thinner than 80 ft
 """The least depth of a judged stretch.
 
 Research:
     least belt depth - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:
-        no judged stretch under 30 ft along the wind
+        no judged stretch under 80 ft along the wind
 """
 DEPTH_BIN_FT = 40.0  # the stretch across the wind a depth is read over - about a crown and a half
 BELT_PUSH_BACK_FT = 60.0  # how far past the band's far face a thin column may be planted: `belt_polygon`'s own ladder tops out at 60 ft back

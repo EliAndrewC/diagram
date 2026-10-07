@@ -13,6 +13,7 @@ from .bamboo_keepout import copse_bamboo_reach, grown_ring
 from .bamboo_keepout import stand_spares_seats as stand_spares_seats
 from .belt_law import settle_the_belt
 from .grove_blocks import BankNear, GroveBlocks, Seats
+from .grove_rules import EAST_REACH_FT
 from .groves import RANK_JITTER_FT, crown_lift
 from .stocking import Box as Box
 from .stocking import grove_extent as grove_extent
@@ -252,14 +253,14 @@ class StandsMixin:
             copse off the bamboo - research/questions/0075-bamboo-groves-chikurin.drawing.html: each stand grown by `copse_bamboo_reach` (two crowns)
             copse filled to the homesteads' wood - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: reserved seats first, then the grid
             belt a windward hook - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: ends trimmed to the wind's quarter
-            belt deep and whole - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: interior gaps over 30 ft filled, thin stretches deepened
+            belt deep and whole - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: interior gaps over `_BELT_GAP_FT`, 30 ft at every grain, filled
             canopy kept 0.9 clump off shrines, torii and ponds - UNRESEARCHED
             clumps kept 12 px plus a crown off paddies and 12 px off dry plots - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: the crops stay open; the 12 px and the crown UNRESEARCHED
             clumps off streams, channels and the moat - UNRESEARCHED: clumps kept a crown off streams, channels and the moat
             clumps off the road - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: the copse and the groves kept off the main road
             clumps off lanes - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: where a lane crosses the belt the planting resumes on both sides
             clump crown-reach margin off a way - UNRESEARCHED: the crown reach kept clear of lanes, streets and the road, the margin's width
-            clumps off the gardens' east - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: seats kept 24 px plus a crown east of each garden, the east sun lane
+            clumps off the gardens' east - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: no crown within 50 ft (`EAST_REACH_FT`) east of a bed
             copse stragglers dropped to its stocking - UNRESEARCHED: `stocked_copse` drops the farthest clumps until the copse holds half a clump plus 4 px
             one grove off another's - UNRESEARCHED: one grove's clumps kept off another's by the sum of their canopy reaches
             belt alder in the marsh - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: belt clumps standing in the toe or waterside marsh drawn as alder
@@ -435,7 +436,7 @@ class StandsMixin:
             circles=occ,
             displacers=occ_grove,
             rects=[(sx - shw, se - cr - 2, sx + shw, se + _sun_depth + 2 + cr) for sx, se, shw in sun]
-            + [(ex - cr - 2, ey - ehh, ex + 24 + cr, ey + ehh) for ex, ey, ehh in east]
+            + [(ex - cr - 2, ey - ehh, ex + self.px(EAST_REACH_FT) + cr, ey + ehh) for ex, ey, ehh in east]
             + [(wx0 - wl - cr - 3, wy0 - cr - 1, wx0 + cr + 1, wy1 + wl + cr + 1) for wx0, wy0, wy1 in west]
             # ...AND OFF GROUND SOMETHING ELSE HAS RESERVED (settlement-review, feature 230 pass 12). `reserved`
             # is a rectangle a later stage is holding - today the pocket the map's own NAME will stand in. The
@@ -729,7 +730,7 @@ class StandsMixin:
                 # chase a belt that "stops short" - measure whether the short end is on the page first.
                 for _a, _b in zip(_order, _order[1:], strict=False):
                     _pa, _pb = seated[_a], seated[_b]
-                    if math.dist(_pa, _pb) <= _BELT_GAP_FT or (_GAP_MEMORY and (_pa, _pb) in _barren):
+                    if math.dist(_pa, _pb) <= self.px(_BELT_GAP_FT) or (_GAP_MEMORY and (_pa, _pb) in _barren):
                         continue
                     # FILL UP TO THE OBSTACLE FROM BOTH SIDES, not only at the midpoint. Where a lane
                     # crosses the belt the midpoint IS the lane, so a midpoint-only fill gives up and

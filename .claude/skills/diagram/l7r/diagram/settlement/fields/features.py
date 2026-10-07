@@ -207,13 +207,13 @@ class FieldFeaturesMixin:
 
         Research:
             pond glyph - CONVENTION: blue fill, a dark rim and an inner sheen
-            pond feeder width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: 5 px, the lateral tier"""
+            pond feeder width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: about 3 ft at the map's scale, twice the 1.5 ft floor"""
         refuse_unadmitted(self.M, "pond", [cx, cy, rx, ry])
         if stream_curve:
             # the pond's feeder runs at the lateral/ditch tier - a thin line near the channel weight,
             # NOT the heftier natural-stream weight (see the water-width ladder in research/contents.json#water).
             self._water(
-                f'<path d="{stream_curve}" fill="none" stroke="#9CB4C8" stroke-width="5"/>', {}, cls="irrigation ditch"
+                f'<path d="{stream_curve}" fill="none" stroke="#9CB4C8" stroke-width="{self.px(3.0):.1f}"/>', {}, cls="irrigation ditch"
             )  # no record behind it: the feed INTO a reservoir is supply (spec 230 FR-001, the third clause)
         self._water(
             f'<ellipse cx="{cx}" cy="{cy}" rx="{rx}" ry="{ry}" fill="#9CB4C8"/>',  # FILL -> shared bed group (topmost bed)

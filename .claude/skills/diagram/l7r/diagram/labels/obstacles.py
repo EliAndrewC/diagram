@@ -36,7 +36,9 @@ GROUP_WORDS = {
 naming a graveyard, a cremation ground, a mausoleum or an ossuary may cover any of the funerary structures; a samurai caption
 may cover the samurai houses and estates; a shrine's the temples; a guard-house or inspection caption the gate's posts (0243).
 
-Research: a funerary caption covers the funerary structures - research/questions/0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html: a graveyard, cremation, mausoleum or ossuary caption may cover any of the funerary structures, and a samurai caption the samurai houses and estates"""
+Research: a funerary caption covers the funerary structures - research/questions/0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html: a graveyard, cremation, mausoleum or ossuary caption may cover any of the funerary structures, and a samurai caption the samurai houses and estates
+a shrine caption may cover the temples - research/questions/0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html: 0243 §11
+a guard or inspection caption may cover the gate's posts - research/questions/0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html: 0243 §9"""
 
 
 def names_group(group: str | None, words: str) -> bool:

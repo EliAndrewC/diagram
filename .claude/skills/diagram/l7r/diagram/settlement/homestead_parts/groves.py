@@ -126,7 +126,7 @@ RANK_BIN_FT = 40.0  # the centerline's vertex spacing along the belt: two rows' 
 RANK_CONIFER_S = (1.0, 1.1)  # a planted row is even-aged: one size band (x CANOPY_R_FT x 1.15), not the emergent mix
 """Research: row conifer size - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: 1.0 to 1.1 of the mean crown, x 1.15"""
 LESSER_BROADLEAF_S = (
-    0.6,
+    0.75,
     0.85,
 )  # "lesser broadleaf crowns among them" (research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html): smaller than the woods' crowns
 """Research: lesser broadleaf size - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: 0.6 to 0.85 of the mean crown"""
@@ -713,8 +713,7 @@ class GrovesMixin:
         are seeded by position (stable across regenerations). Canopy count scales with footprint area.
 
         Research:
-            windbreak conifer share - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.html: 38% of a
-                windbreak clump's items, against 54% broadleaf, where the grove is led by cedar
+            windbreak conifer share - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.html: 48% of a windbreak's crowns cedar, the dominant tree (Takehara)
             crowns per clump floor - UNRESEARCHED: at least 5 crowns thrown per clump
             crowns per clump - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: one crown per `GROVE_CROWN_AREA` of clump (48 sq px at the town grain)
             crowns per clump ceiling - UNRESEARCHED: at most `GROVE_CLUMP_CROWNS` (28)
@@ -733,7 +732,7 @@ class GrovesMixin:
             lesser crown over an earlier stand's conifer - CONVENTION: a lesser crown refused over an earlier stand's conifer, which decides only paint order (conifers painted last)
             clump glyph - CONVENTION: one disc per crown, conifers dark and painted last, no trunks
             conifer-led clump's lesser share - GUESS research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: a conifer-led clump throws LESSER_ROLL_SHARE (0.1) of its crowns as lesser broadleaf; the page names the lesser broadleaf, the share a guess
-            lesser broadleaf crown size - GUESS research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: LESSER_BROADLEAF_S, 0.6 to 0.85 of the mean radius; the page gives lesser broadleaf, no figure
+            lesser broadleaf crown size - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: LESSER_BROADLEAF_S, 0.75 to 0.85 of the mean radius (the page's 0.75 to 1.4)
         """
         # SCOPED (2026-08-08): a homestead grove's crowns are decoration keyed to the grove itself.
         with self.rng_scope("grove", cx, cy, w, h):
@@ -760,7 +759,7 @@ class GrovesMixin:
             b_th = (
                 GROVE_BAMBOO_SHARE if bamboo and mix in ("windbreak", *WINDBREAK_BELT_FORMS) else 0.0
             )  # `bamboo=False`: a farm that rolled none (feature 291)  # dooryard = fruit broadleaf, no conifer; alder = broadleaf only
-            c_th = b_th + 0.38 if mix == "windbreak" else b_th
+            c_th = b_th + 0.48 if mix == "windbreak" else b_th
             if mix == "conifer_led":
                 rows = max(0.0, (w - 4) * (h - 4)) / (self.px(RANK_ALONG_FT) * self.px(RANK_APART_FT))  # the row conifers this clump's box holds
                 n = max(1, round(n * LESSER_ROLL_SHARE))

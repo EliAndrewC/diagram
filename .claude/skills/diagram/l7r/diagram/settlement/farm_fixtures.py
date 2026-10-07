@@ -72,12 +72,12 @@ FIXTURE_KINDS = tuple(FIXTURE_FT)
 #: tall block on the west wall (the dispersed farms). THE ONE TABLE the drawing (`Settlement.house`), the bundle's
 #: reservation, the flush's side choice and the fixtures' wall list read: it was written out in four places, and feature
 #: 280's new proportion reached two of them.
-KURA_PARTS: dict[str, tuple[float, float, float, float]] = {"N": (0.0, -0.675, 0.46, 0.45), "W": (-0.64, 0.0, 0.32, 0.56)}
+KURA_PARTS: dict[str, tuple[float, float, float, float]] = {"N": (0.0, -0.675, 0.46, 0.45), "W": (-0.63, 0.0, 0.26, 0.75)}
 """The annex footprints.
 
 Research:
     north annex - research/questions/0052-farm-sheds-and-barns-naya.html: 0.46 of the house's length by 0.45 of its depth, on the back wall
-    west annex - DEVIATION research/questions/0052-farm-sheds-and-barns-naya.html, research/questions/0040-farm-storehouses-kura.drawing.html: 0.32 x 0.56 of the house (~15 x 16 ft on a 46 x 28 ft house), near square and attached to its west wall, for the dispersed farms, against a shed of 18 to 27 ft at 1.5 to 1.8 to one built apart
+    west annex - research/questions/0040-farm-storehouses-kura.drawing.html: 0.26 x 0.75 of the house (about 12 x 21 ft on a 46 x 28 ft house, 1.75 to one), along its west wall
     free-standing storage shed - research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html: only the storehouse annex is drawn; no farm carries a storage shed standing free of the house
 """
 
@@ -112,7 +112,7 @@ def kura_rect(w: float, h: float, side: str | None, ppf: float) -> tuple[float, 
     priced for the GM (specs/293-effort-level-experiment/outputs/I-port-handoff.md).
 
     Research:
-        west annex size - UNRESEARCHED: sized by the house's shares (about 14.7 x 15.7 ft on a 46 x 28 ft house), below 0040 drawing's 18-27 ft annex band
+        west annex size - research/questions/0040-farm-storehouses-kura.drawing.html: about 21 ft long by 12 deep, inside the 18-27 ft band at 1.5-1.8 to one
         annex held in its band - research/questions/0052-farm-sheds-and-barns-naya.html: length 18 to 27 ft and 1.5 to 1.8 times its depth, the depth a share of the house
         annex larger than a kura - DEVIATION research/questions/0040-farm-storehouses-kura.drawing.html: the storehouse is drawn at a farm shed's size, the annex 18 to 27 ft long; the band's longer annexes exceed the 15 x 18 ft kura read
     """

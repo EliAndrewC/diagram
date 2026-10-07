@@ -77,7 +77,7 @@ def test_the_stretch_between_two_groups_no_house_stands_before_is_a_run_break() 
     """W19: a cluster in two groups 1,000 ft apart gets a belt in two runs; the stretch between them, beyond the band's
     reach of every house, is not a hole and its empty bins are not judged."""
     houses = [{"x": float(x), "y": 700.0} for x in (100, 200, 300, 1300, 1400, 1500)]
-    seats = [(float(x), y) for x in [*range(80, 521, 20), *range(1080, 1521, 20)] for y in (520.0, 560.0)]  # to the reach
+    seats = [(float(x), y) for x in [*range(80, 521, 20), *range(1080, 1521, 20)] for y in (520.0, 580.0)]  # to the reach
     band = [(50.0, 480.0), (1550.0, 480.0), (1550.0, 600.0), (50.0, 600.0)]
     assert _read(seats, houses=houses, band=band).holes(), "without a reach the opening is a hole"
     rd = _read(seats, houses=houses, reach=250.0, band=band)

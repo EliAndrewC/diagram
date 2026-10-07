@@ -52,7 +52,7 @@ def test_the_keepouts_are_the_copses_own_figures_a_hair_stricter() -> None:
     assert (60.0, 150.0, 12.0 + 22.0 * 1.05 + 1.0 + BAR_MARGIN_PX) in circles, "the wellhead: its drawn half-size and 1.05 clumps"
     yard_sun = (100.0 - 33.0 - BAR_MARGIN_PX, 150.0 - 13.0 - BAR_MARGIN_PX, 100.0 + 33.0 + BAR_MARGIN_PX, 150.0 + 39.0 + 13.0 + BAR_MARGIN_PX)
     assert rects[0] == yard_sun, "the yard's sunny strip, 39 ft deep"
-    assert rects[-1] == (150.0 - 13.0 - BAR_MARGIN_PX, 100.0 - 23.0 - BAR_MARGIN_PX, 150.0 + 24.0 + 11.0 + BAR_MARGIN_PX, 100.0 + 23.0 + BAR_MARGIN_PX), "the bed's morning lane"
+    assert rects[-1] == (150.0 - 13.0 - BAR_MARGIN_PX, 100.0 - 23.0 - BAR_MARGIN_PX, 150.0 + 50.0 + 11.0 + BAR_MARGIN_PX, 100.0 + 23.0 + BAR_MARGIN_PX), "the bed's morning lane, 50 ft"
     assert in_keepouts(100.0, 140.0, circles, rects) and in_keepouts(160.0, 100.0, circles, rects)
     assert not in_keepouts(100.0, 30.0, circles, rects), "behind the house, clear of every keep-out"
     assert not in_keepouts(100.0, 100.0 - 38.5, [(100.0, 100.0, 38.5)], []), "a disc's edge is not inside it (the planting's strict test)"

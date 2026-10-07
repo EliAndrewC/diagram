@@ -138,7 +138,7 @@ def test_the_layout_carried_to_a_wind_plants_the_faces_grove_faces_names(wind: s
 
 
 def _manifest(sides: int, wind: str = "NW", drop: tuple | None = None, off: bool = False, shade: bool = False) -> dict:
-    lay = dispersed_layout(500.0, 400.0, 50.0, 28.0, 3.0, (22.0, 24.0), (40.0, 30.0), sides=sides, turn=bundle_turn(wind, -1), thin=17.0, sun_east=22.0, way_in=12.0)
+    lay = dispersed_layout(500.0, 400.0, 50.0, 28.0, 3.0, (22.0, 24.0), (40.0, 30.0), sides=sides, turn=bundle_turn(wind, -1), thin=17.0, sun_east=50.0, way_in=12.0)
     groves = []
     for (cx, cy, w, h), (face, depth) in zip(lay["groves"], lay["grove_faces"], strict=True):
         if drop is not None and face == drop:

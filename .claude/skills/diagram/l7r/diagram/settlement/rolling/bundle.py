@@ -9,13 +9,13 @@ import math
 from typing import TYPE_CHECKING, Any, cast
 
 from ..homestead_parts.fixture_seats import FixtureForms, FixtureUnlaid, lay_fixtures, sun_turns
-from ..homestead_parts.grove_rules import EAST_REACH_PX
+from ..homestead_parts.grove_rules import EAST_REACH_FT
 from ..homestead_parts.grove_sides import bundle_turn
 from ..homestead_parts.tree_shade import CANOPY_SHADE_FT
 from ..shrines_wells.byres import BYRE_FT, YARD_SHED_GAP_FT, byre_part
 from ..shrines_wells.wells import WELL_AMONG_DWELLINGS_PX, well_gap_to_dwellings
 from .bearing import BEARING_SPREAD_DEG
-from .dispersed import EAST_SHADE_REACH, LANE_ROOM_FT, SERVICE_STRIP_FT, THIN_BAND_FT, WAY_IN_FT, YARD_SUN_STRIP, clear_east_of_beds, dispersed_layout
+from .dispersed import LANE_ROOM_FT, SERVICE_STRIP_FT, THIN_BAND_FT, WAY_IN_FT, YARD_SUN_STRIP, clear_east_of_beds, dispersed_layout
 from .lot import kura_rect
 
 if TYPE_CHECKING:
@@ -178,7 +178,7 @@ class BundleGeomMixin:
         turn = self._turn_at(hx, hy) if rot is None else rot
         self._rake_parts(base, hx, hy, turn)
         if frame is not None:  # dispersed: no unraked band left standing in a turned bed's morning sun (feature 315, seed 906)
-            base["groves"] = clear_east_of_beds(list(base.get("groves") or ()), list(base["gardens"]), EAST_REACH_PX * self.bscale)
+            base["groves"] = clear_east_of_beds(list(base.get("groves") or ()), list(base["gardens"]), self.px(EAST_REACH_FT))
         base["turn"] = turn  # the parts' turn, so a reader of their true sizes (`access.doors_of`) measures them as drawn
         # `turned_box` for every part, its turn's cosine and sine taken once (the same arithmetic, part by part)
         _th = math.radians(turn)
@@ -264,11 +264,12 @@ class BundleGeomMixin:
 
         Research:
             house-to-part gap - UNRESEARCHED: 3 ft between the house and its yard and garden
-            garden size - research/questions/0039-kitchen-gardens-beside-farmhouses-yashikibatake.drawing.html: 0.48 x 0.85 of the house, jittered up to 1.25x, capped at 48 x 34 ft (dispersed 42 x 30)
+            garden size - research/questions/0039-kitchen-gardens-beside-farmhouses-yashikibatake.drawing.html: 0.48 x 0.85 of the house, jittered up to 1.25x, capped at 44 x 34 ft (dispersed 42 x 30), under 0039's 1,507 sq ft
             yard before the south wall - research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html, research/questions/0029-farmhouses-minka.drawing.html: the rolled yard, centered on the front
             headman keeps an ordinary yard and garden - research/questions/0030-the-headmans-house-and-the-rich-farmers-homestead-shoya-gono.drawing.html: the caps hold a big house's parts to an ordinary farm's
             no grove of its own in a cluster - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html, research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: a nucleus shelters behind one village belt
             garden side - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: southeast, southwest, east or west of the house
+            garden morning-sun reach - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: no grove band within 50 ft (`EAST_REACH_FT`) east of a garden across its height
             forecourt kept on a no-rice farm - UNRESEARCHED: the yard's ground reserved where no threshing floor is drawn
             storehouse on the north wall - research/questions/0040-farm-storehouses-kura.drawing.html: a nucleated farm's annex on the shaded back wall
             byre beside the house - research/questions/0048-draft-oxen-and-horses-and-their-byres-umaya.drawing.html: the keeper's stall on the flank away from the garden
@@ -321,7 +322,7 @@ class BundleGeomMixin:
             # THE YARD KEEPS ITS ROLLED DIMS (feature 134 T49): the lognormal IS its variation, and
             # re-jittering it here would flatten the distribution the research fixed. The garden below
             # still jitters UP from its minimum - that rule is unchanged.
-            gw = min(gw * (1.0 + self._hjit(sx, sy, 3.0) * 0.25), self.px(48))  # garden [1.00,1.25]x, capped at 48 ft
+            gw = min(gw * (1.0 + self._hjit(sx, sy, 3.0) * 0.25), self.px(44))  # garden [1.00,1.25]x, capped at 44 ft (44 x 34 = 1,496 sq ft, under 0039's 1,507)
             gh = min(gh * (1.0 + self._hjit(sx, sy, 4.0) * 0.25), self.px(34))
             # THE FORECOURT IS RESERVED WHETHER OR NOT A THRESHING FLOOR IS DRAWN ON IT (feature 150, GM
             # 2026-08-28: "thrashing yards on a no-rice hamlet seem bad and should be eliminated"). A
@@ -377,7 +378,7 @@ class BundleGeomMixin:
             sides=self._grove_sides(),
             turn=bundle_turn(self._windward(), self._grove_flank()),
             thin=self.px(THIN_BAND_FT),
-            sun_east=EAST_SHADE_REACH * self.bscale,
+            sun_east=self.px(EAST_REACH_FT),  # the garden's morning sun: no band within 50 ft east of a bed (0038)
             yard_sun=_sun if _sun else YARD_SUN_STRIP,
             sun_band=bool(_sun),
             way_in=self.px(WAY_IN_FT),

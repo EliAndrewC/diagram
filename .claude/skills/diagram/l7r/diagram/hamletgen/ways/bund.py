@@ -259,7 +259,8 @@ def a_way_onto_the_bund(s: Settlement, blocks: RunOnBlocks | None = None) -> str
         water between is crossed - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: one water
             course at most, bridged by the crossings stage
         on the bund - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a lane end within 6 ft of the paddy's edge (`BUND_REACH_FT`) counts as joined to the bund
-        field path width - research/questions/0081-village-lanes.drawing.html: the branched field path 5 ft wide (`BRANCH_WIDTH`), the spur's rank, with the `LANE_CLEARANCE` corridor"""
+        field path width - research/questions/0081-village-lanes.drawing.html: the branched field path 5 ft wide (`BRANCH_WIDTH`), the spur's rank
+        field path's corridor - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the no-build corridor `LANE_CLEARANCE`, 7 ft to a fence held as a 40 ft center corridor (the edge-based corridor row, consts.py::LANE_CLEARANCE)"""
     paddy = paddy_ground(s)
     if paddy.edge is None:
         return "none: no paddy"

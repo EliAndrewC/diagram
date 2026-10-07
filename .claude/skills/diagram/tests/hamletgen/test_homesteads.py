@@ -767,12 +767,13 @@ def test_a_front_seat_is_pushed_across_a_brook_by_the_waters_reach() -> None:
     assert water_push([((5000.0, 0.0), (5100.0, 0.0), 5.0)], (0.0, 20.0), (0.0, 1.0), 30.0, 0.0, 40.0) == 0.0
 
 
-def test_a_large_privy_s_sun_side_reach_keeps_its_near_edge_where_a_one_ken_privy_s_is() -> None:
-    """Feature 280 (settlement-review of Sawada): a 24 x 12 ft privy never fitted the one-ken reach and fell to the north-east."""
+def test_a_privy_s_sun_side_reach_is_the_same_whatever_its_size() -> None:
+    """Feature 328 (0047): the privy's center stands within 48 ft of its house whatever its size - the feature 280
+    widening for a large privy is gone."""
     from l7r.diagram.hamletgen.homesteads.fixtures import PRIVY_SUN_MAX_FT, privy_sun_reach_ft
 
     assert privy_sun_reach_ft(6.0, 6.0) == PRIVY_SUN_MAX_FT == privy_sun_reach_ft(5.0, 5.0)
-    assert privy_sun_reach_ft(24.0, 12.0) == PRIVY_SUN_MAX_FT + 9.0
+    assert privy_sun_reach_ft(24.0, 12.0) == PRIVY_SUN_MAX_FT
 
 
 def test_strip_blocked_refuses_another_farmhouse_as_drawn() -> None:

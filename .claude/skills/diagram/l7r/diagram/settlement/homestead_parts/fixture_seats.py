@@ -53,9 +53,9 @@ STEP_FT = 8.0  # the outward pace a fixture takes when every recorded seat is ta
 """Research: outward pace - UNRESEARCHED: 8 ft further out when every recorded seat is taken"""
 OUT_STEPS = 24  # paces offered: 192 ft, past any bundle's parts
 WALL_SLIDE_FT = 4.0  # the spacing of the places offered along a wall to a bath room or a wood shed
-PRIVY_YARD_STEP_FT = 6.0  # the yard outhouse a ken off the back wall (GUESS)
+PRIVY_YARD_STEP_FT = 6.0 - WALL_GAP_FT  # the yard outhouse's edge a ken (6 ft) off the back wall, past the wall gap (GUESS)
 """Research: yard outhouse off the back wall - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: a ken"""
-PRIVY_FRONT_STEP_FT = 8.0  # the front-yard privy a step out from the front wall (GUESS)
+PRIVY_FRONT_STEP_FT = 8.0 - WALL_GAP_FT  # the front-yard privy's edge 8 ft out from the front wall, past the wall gap (GUESS)
 """Research: front privy off the front wall - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: 8 ft"""
 PRIVY_SUN_MIN_FT = 18.0  # the sun-side search's radii, 18 to 48 ft (`PRIVY_SUN_MAX_FT`'s reasons, fixtures.py)
 """Research: sun-side search start - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: from 18 ft"""
@@ -63,7 +63,7 @@ PRIVY_SUN_MAX_FT = 48.0
 """Research: sun-side search reach - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: to 48 ft"""
 PRIVY_SUNNY_SHARE = 0.727  # Wang & Ochiai 2022: 72.7% of outhouses SE to S (the GM, 2026-08-29: used literally)
 """Research: privies on the sunny side - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: 72.7%"""
-WOODSHED_STEP_FT = 6.0  # the wood shed a ken off the wall it serves, a building of its own (GUESS: where on the plot no page says)
+WOODSHED_STEP_FT = 6.0 - WALL_GAP_FT  # the wood shed's edge a ken (6 ft) off the wall it serves, past the wall gap, a building of its own (GUESS: where on the plot no page says)
 """Research: wood shed off its wall - research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: a ken, 6 ft"""
 # THE PRIVY'S SIZE (feature 280, research/questions/0047-farm-privies-and-their-night-soil-benjo.html): each homestead's privy is one of the sixteen of the Kakimochi table
 # (Meiji 18, read back to the last years of the shogunate), frontage by depth in feet at 6 ft to the ken - each as likely as
@@ -160,14 +160,13 @@ def weighted(weights: Sequence[tuple[str, float]], u: float) -> str:
 
 
 def privy_sun_reach_ft(w_ft: float, d_ft: float) -> float:
-    """How far from its house's center the sun-side search may seat a privy of `w_ft` x `d_ft`: `PRIVY_SUN_MAX_FT`, plus the
-    half-length it has past the one-ken default, so its near edge stands no farther out than a one-ken privy's (feature
-    280, settlement-review of Sawada: every privy of 18 x 12 ft or more fell through to the north-east seat, 7 of 17).
+    """How far from its house's center the sun-side search may seat a privy of `w_ft` x `d_ft`: `PRIVY_SUN_MAX_FT`, whatever
+    its size (feature 328: 0047 puts the privy's center within 48 ft; feature 280's widening for a large privy, after 7 of
+    17 privies of 18 x 12 ft or more fell to the north-east seat at Sawada, is gone).
 
     Research:
-        sun-side reach by size - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: 48 ft plus the
-            half-length past a one-ken privy"""
-    return PRIVY_SUN_MAX_FT + max(0.0, (max(w_ft, d_ft) - 6.0) / 2.0)
+        sun-side reach by size - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: the privy's center within 48 ft of its house, whatever its size"""
+    return PRIVY_SUN_MAX_FT  # its center within 48 ft of the house, whatever its size (0047)
 
 
 def fixture_ft(kind: str, forms: FixtureForms, roll: Callable[[float], float] | None = None) -> tuple[float, float]:

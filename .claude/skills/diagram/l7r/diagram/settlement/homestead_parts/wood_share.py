@@ -75,9 +75,9 @@ FOCUS_DEPTH = 0.7
 LATERAL_WEIGHT = 2.0
 """Research: flanks after the back - UNRESEARCHED: a foot aside costs twice a foot deeper"""
 
-#: The strip the morning lane runs east of a garden bed, in px: `village_grove`'s `east` rectangle (24 px past the bed).
-EAST_LANE_PX = 24.0
-"""Research: bed's morning lane - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: 24 px east of a bed"""
+#: The strip the morning lane runs east of a garden bed: 50 ft (`grove_rules.EAST_REACH_FT`), drawn at the hamlet's 1 ft a px.
+EAST_LANE_FT = 50.0
+"""Research: bed's morning lane - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: no crown within 50 ft east of a bed"""
 
 
 def copse_keepouts(parts: Mapping[str, Any], clump: float, sun_depth: float, well_vr: float, west_ft: float = 0.0) -> tuple[list[tuple[float, float, float]], list[tuple[float, float, float, float]]]:
@@ -112,7 +112,7 @@ def copse_keepouts(parts: Mapping[str, Any], clump: float, sun_depth: float, wel
             rects.append((r[0] - half - m, south - cr - 2.0 - m, r[0] + half + m, south + sun_depth + 2.0 + cr + m))
     for g in parts.get("gardens") or ():  # ...and the morning lane east of a bed
         east, half = g[0] + g[2] / 2.0, g[3] / 2.0 + cr + 2.0
-        rects.append((east - cr - 2.0 - m, g[1] - half - m, east + EAST_LANE_PX + cr + m, g[1] + half + m))
+        rects.append((east - cr - 2.0 - m, g[1] - half - m, east + EAST_LANE_FT + cr + m, g[1] + half + m))
     # ...AND THE AFTERNOON LANE WEST AND SOUTHWEST OF A YARD OR A BED, where the map declares one (feature 310 put it on the copse,
     # `village_grove`'s `west`, and not here: a seat reserved in it was never planted - the shipped hamlets lost 16-34 seats
     # each, and on Inashiro a neighbor's path routed round two of them bulged 27 ft round bare scrub; feature 317)

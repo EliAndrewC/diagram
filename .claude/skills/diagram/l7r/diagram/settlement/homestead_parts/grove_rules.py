@@ -29,7 +29,7 @@ from typing import Any
 
 from .grove_sides import grove_faces
 
-EAST_REACH_PX = 22.0  # at the village grain; scaled by the map's `bscale` (`_east_trees`)
+EAST_REACH_FT = 50.0  # no crown within 50 ft east of a yard or bed (0038), in feet at every grain
 """Research: garden's morning sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: a band within 22 bscale units east of a garden"""
 
 Pt = tuple[float, float]
@@ -129,10 +129,9 @@ def gardens_east_shaded(M: Mapping[str, Any]) -> list[tuple[Pt, Mapping[str, Any
     """Each (garden, band) where a grove band's west edge stands within the east reach of the garden's east edge and
     overlaps its height - the garden's morning sun cut off.
 
-    Research: garden's morning sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: no band within `EAST_REACH_PX` east of a garden across its height"""
+    Research: garden's morning sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: no band within `EAST_REACH_FT`, 50 ft, east of a garden across its height"""
     meta = M.get("meta") or {}
-    bscale = 1.0 / float(meta.get("ftpx", 1.0)) if meta.get("toscale") else 1.0
-    reach = EAST_REACH_PX * bscale
+    reach = EAST_REACH_FT / float(meta.get("ftpx", 1.0))
     out = []
     for gd in M.get("gardens") or ():
         if not all(k in gd for k in ("x", "y", "w", "h")):  # a record with no box has no east edge to shade

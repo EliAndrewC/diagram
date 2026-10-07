@@ -373,7 +373,7 @@ class CombMixin:
         Research:
             hem placement - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: the dry plots upslope of the supply canal, as the net lays them
             hem off rice and water - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: a plot on an earlier fan's rice, on water or on the field's own ditch is dropped
-            bank beside the source brook - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: a bund's width, 3 px, past the brook's bank
+            bank beside the source brook - GUESS: a bund's width, 3 px, past the drawn 7 px brook's bank (7/2 + 3)
             plot size and crop - NONE: taken from the net as build_comb laid them
             dry plot ink - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: the crop's own fill, furrowed, a tan edge"""
         from l7r.diagram.waterfields import hem_on_paddy
@@ -624,14 +624,14 @@ class CombMixin:
         Research:
             source pond - research/questions/0061-reservoir-ponds-tameike.drawing.html: a tameike at the sluice, a reed fringe and a no-build block round it
             fringe and margin widths - UNRESEARCHED: 40 px of reed fringe, a 10 px no-build margin
-            pond feeder width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: the feeder stream drawn 6 px wide
+            pond feeder width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: about 3 ft at the map's scale, twice the 1.5 ft floor
             planted pond bank - research/questions/0061-reservoir-ponds-tameike.drawing.html: every bank drawn bare; the bank planted sparsely with mulberry and cudrania is never rolled
             feeder brook - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: a stream from the map's edge to the sluice, on past it where `to` says
             feeder brook width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html, research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the brook drawn 7 px wide, in px rather than feet"""
         pond_rec: Any = None
         if source.get("kind") == "pond":
             pcx, pcy, prx, pry = source["pond"]
-            self.stream([(sluice[0], sluice[1]), (pcx, pcy)], frm={"kind": "offmap"}, to={"kind": "pond"}, width=6) if source.get("feeder") else None
+            self.stream([(sluice[0], sluice[1]), (pcx, pcy)], frm={"kind": "offmap"}, to={"kind": "pond"}, width=self.px(3.0)) if source.get("feeder") else None
             self.pond(pcx, pcy, prx, pry)
             # THE FRINGE WAITS FOR THE WATER (feature 151, found by the overlap audit (retired 2026-09-06, feature 193) the day it was
             # written). The reed scatter keeps off every drawn watercourse - but this ran BEFORE the field's
@@ -658,7 +658,7 @@ class CombMixin:
             ditch net over the paddies - CONVENTION: drawn in the late block, ring trunk last
             drain outfall - research/questions/0060-field-drains-akusuiro.drawing.html: a dug drain run straight down the fall off the map at the collector's tail width
             outfall corridor - research/questions/0058-ground-too-wet-to-build-on.drawing.html: 33 px no-build either side of the outfall run on every map (the record gives it for town and city maps)
-            outfall recorded width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: recorded at w 2.5 while inked at the drain's tail width (~5.5)"""
+            outfall recorded width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: recorded at the width it is inked, the drain's tail width"""
         # The ditch net ALWAYS goes to the LATE water block (GM 2026-07-21: Hoshizora's canals
         # "rendering below the rice paddies"). In the shared block - anchored at the FIRST water
         # call - the net composites UNDER any plots painted after that anchor: a town/city stream
@@ -696,7 +696,7 @@ class CombMixin:
             # ...INTO THE LATE BLOCK WITH THE NET (feature 287, water W38): drawn into the shared early block it was spliced
             # at the FIRST water call, before every plot painted after it - a second fan's paddies, or this fan's own where
             # the run's middle lies over the toe - so the plots covered it. The late block re-anchors after the last field.
-            _rec = {"poly": [[round(x, 1), round(y, 1)] for x, y in _run], "frm": {"kind": "drain"}, "to": {"kind": "offmap"}, "w": 2.5}
+            _rec = {"poly": [[round(x, 1), round(y, 1)] for x, y in _run], "frm": {"kind": "drain"}, "to": {"kind": "offmap"}, "w": _dw}
             refuse_unadmitted(self.M, "channels", _rec)  # asked before it is drawn: the straight run is the only one (W53)
             self.field_channel(_run, col, _dw, _dw, late=True, cls=cls)
             self.M["channels"].append(_rec)
@@ -826,7 +826,7 @@ class CombMixin:
 
         Research:
             feed joins the brook - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the intake snapped onto a brook within 30 px, else sourced at the sluice
-            feed recorded width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: recorded at w 2.5 while it traces the 6.0 ft head race"""
+            feed recorded width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: recorded at 6.0, the head race it traces"""
         if source.get("kind") != "cascade":
             hr = net["channels"][0]["pts"]
             fork = hr[-1]
@@ -948,7 +948,7 @@ class CombMixin:
                 raise ValueError(f"{name}: the feed from its {frm['kind']} to the field runs level or uphill ({_ch_poly[0]} -> {_ch_poly[-1]})")
             # ...AND IT NAMES THE FIELD IT FEEDS (feature 287, water W53): it traces the head race, and a field's own water may
             # lie along its own resting basin (`_MATRIX_SAME_PARENT_OK`); a stranger's may not. Asked before it is recorded.
-            _feed = {"poly": _ch_poly, "frm": frm, "to": {"kind": "field", "name": name}, "w": 2.5, "field": name}
+            _feed = {"poly": _ch_poly, "frm": frm, "to": {"kind": "field", "name": name}, "w": 6.0, "field": name}
             refuse_unadmitted(self.M, "channels", _feed)
             self.M["channels"].append(_feed)
 

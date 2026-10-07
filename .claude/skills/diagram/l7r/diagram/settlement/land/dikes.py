@@ -337,7 +337,7 @@ class DikeMixin:
                 best[0], best[1] - 8, label, 10, italic=True, color="#6B5836", ref=(min(p[0] for p in outer_s), min(p[1] for p in outer_s), max(p[0] for p in outer_s), max(p[1] for p in outer_s))
             )
 
-    def dike_gates(self: Settlement, span_ft: float = 6.0) -> int:  # type: ignore[misc]
+    def dike_gates(self: Settlement, span_ft: float = 20.0) -> int:  # type: ignore[misc]
         """A sluice gate at every cut of every perimeter dike (feature 150, GM 2026-08-28 choosing audit A7).
 
         Water crosses a polder dike only through a gated sluice - "a protected opening in the pond dike that
@@ -350,7 +350,7 @@ class DikeMixin:
 
         Research:
             sluice at every cut - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a gate at each gap, along the crest across the water
-            gate span - UNRESEARCHED: 6 ft
+            gate span - research/questions/0179-water-gates-and-sluices-shuimen.drawing.html: a 16 to 24 ft sluice span, 20 ft by default
             gate glyph at the polder cut - research/questions/0179-water-gates-and-sluices-shuimen.drawing.html: the field sluice glyph
                 at its default ~11 ft frame; the 6 ft span passed only ever widens a frame, so no gate is drawn at 6 ft"""
         n_gates = 0

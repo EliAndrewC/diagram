@@ -103,7 +103,7 @@ def test_garden_shaded_from_the_index_equals_the_scan_of_every_house():
 
     def scan(g):
         gx, gy, gw, gh = g
-        return any(r["y"] > gy + gh / 2 - 3 and abs(r["x"] - gx) < (r["w"] + gw) / 2 and (r["y"] - r["h"] / 2) - (gy + gh / 2) < gh + 4 for r in s.M["houses"])
+        return any(r["y"] > gy + gh / 2 - 3 and abs(r["x"] - gx) < (r["w"] + gw) / 2 and (r["y"] - r["h"] / 2) - (gy + gh / 2) < s.px(39) for r in s.M["houses"])
 
     gardens = [(rng.uniform(0, 600), rng.uniform(0, 600), rng.uniform(10, 30), rng.uniform(8, 20)) for _ in range(400)]
     got = [s._garden_shaded(g) for g in gardens]

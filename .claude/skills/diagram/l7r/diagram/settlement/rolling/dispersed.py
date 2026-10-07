@@ -16,11 +16,6 @@ from typing import Any
 from ..homestead_parts.grove_sides import THIN_BAND_FT as THIN_BAND_FT
 from ..homestead_parts.grove_sides import E, N, S, Turn, W, turn_face, turns_axes
 
-# THE GARDEN'S MORNING SUN: no grove band stands within this reach east of a garden across its height - the reach
-# `_east_trees` reads (px at the village grain, scaled by `bscale`; research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html).
-EAST_SHADE_REACH = 22.0
-"""Research: garden morning-sun reach - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: no grove band just east of a garden
-garden morning-sun reach in px - UNRESEARCHED: 22 px east of the garden, a reach 0038 does not give"""
 # THE YARD'S DRYING SUN, AS A SEATING PREFERENCE: the strip south of a threshing yard a grove BAND is kept out of when a farm is
 # seated (`_yard_sun_conflict`'s 22 px strip), which keeps bands whole; the sun rule itself is the crown's - no crown in any
 # plot's sun ground, `CANOPY_SHADE_FT` (feature 310, `KeepoutsMixin._sun_keepouts`).

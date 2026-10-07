@@ -117,7 +117,9 @@ def _lay_web_lane(s: Settlement, run: Poly, hard: list[Poly], walls: list[Poly],
         a tail past the junction cut - research/questions/0081-village-lanes.drawing.html: under 40 ft
         link reach - UNRESEARCHED: a link up to 200 ft to the network
         arrived at the network - research/questions/0081-village-lanes.drawing.html: a run within 25 ft of it (`_LANE_JOIN_FT`), the join reach
-        link off hard ground and walls - UNRESEARCHED: kept 8 ft off hard ground, 7 ft off walls
+        link off walls - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: 7 ft off a wall (`WEB_FABRIC_GAP`), a garden fence's 7 ft to a lane's middle
+        link off hard ground - UNRESEARCHED: kept 8 ft off hard ground (`WEB_HARD_GAP`)
+        a healing link kept - UNRESEARCHED: its ends within 12 ft of the run and of the network (`_reach < 12.0`, `_net_reach < 12.0`), else the gap is left unjoined
         a link takes its way's width - CONVENTION
         web lane width - research/questions/0081-village-lanes.drawing.html: a web lane drawn 3 ft wide, the footpath's tread"""
     segs = _net_segs(s)
