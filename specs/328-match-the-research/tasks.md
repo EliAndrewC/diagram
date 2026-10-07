@@ -395,14 +395,14 @@ grounds' sizes, counts and reaches. Every `after` these rows carry is a row insi
       research: rendering
       verify: DONE. DONE. make done green (185 s); band 0 nothing owed; the wave column written
 
-## Phase 9 - wave 8 (the open E0 claims, then the next run of E1: rows 187-246) - amendment 7, 2026-10-07
+## Phase 9 - wave 8 (the open E0 claims, then the next run of E1: rows 187-247) - amendment 7, 2026-10-07
 
 T29a first: the 14 found rows wave 7's re-checks tiered by verdict alone are tiered by their work by a fresh reader
 (`audit/t29a-out.jsonl`, applied in `audit/overrides.json`; 11 moved), as T25a did. Then the 18 open E0 rows (SC-003),
 each a claim written or relabeled (cite the page that answers it, CANON for a GM ruling, GUESS or UNRESEARCHED where the page
 is silent; DEVIATION only after the exception path rules it LEGITIMATE). Then the next contiguous run of E1 (FR-006), rows
-187-246 in ranking order, ending with the civic grounds' last row (the next open E1 row is 252): the deck's assumed water
-widths, the temple and gate caption words, the city wall's exempt stretches, the terrace unit, the cemetery's and cremation
+187-247 in ranking order, ending with the civic grounds' last row (the next open E1 row is 253): the deck's assumed water
+widths, a row street's farm frame (row 192, found by this amendment's first round), the temple and gate caption words, the city wall's exempt stretches, the terrace unit, the cemetery's and cremation
 ground's margins and the cemetery's first row. Every `after` these rows carry is a row inside the wave or closed.
 
   - `l7r/diagram/hamletgen/ways/bund.py::a_way_onto_the_bund#a lane end within 6 ft (BUND_REACH_FT) of the paddy counts as joined to the bund` - claim it: a lane end within 6 ft (BUND_REACH_FT) of the paddy counts as joined to the bund
@@ -425,6 +425,7 @@ ground's margins and the cemetery's first row. Every `after` these rows carry is
   - `l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_handover#a through track's handover` - cite 0190 (a board at the village's center or its entrance, and at crossroads where people pass) for the junction nearest the houses' middle
 
   - `l7r/diagram/hamletgen/ways/law_water.py::short_decks#assumed water widths` - Set the fallback widths in short_decks to the record's: a field ditch 2.5 ft (its head, 0084) in place of 3.0, and a stream 7 ft (0035) in place of 6.0, citing those pages; the channel's 3 ft stays claimed UNRESEARCHED.
+  - `l7r/diagram/hamletgen/ways/street.py::row_reach#a farm frame where none is recorded` - take a farm frame where none is recorded at 0033's 220-260 ft (a row village's holding) in place of the BUNDLE_PITCH fallback
   - `l7r/diagram/overlap/taxonomy.py::_LABEL_GROUP#a caption covers its own group` - the funerary group and the samurai caption's estates are in step (wave 7); left: give the temple group the word 'shrine' and the gate group 'guard' and 'inspection' (0243: a temple's or shrine's name covers the temples; a guard-house or inspection caption the gate's guard-houses and inspection posts)
   - `l7r/diagram/settlement/city/walls.py::WallsMixin._seat_mural_towers#exempt stretches` - the coverage sweep exempts all four of 0148's stretches: add 135 ft of a water gate and 186 ft of a ward gate to the 390 ft of a gate and 165 ft of its guard buildings
   - `l7r/diagram/settlement/civic_grounds/civic.py::CivicWorksMixin.terrace#cell frontage` - Grow the terrace's default cell to the drawing page's Rank 1-4 unit of about 990 sq ft (0140 drawing) from 18 x 24 ft (432 sq ft), the frontage/depth split labeled GUESS.
