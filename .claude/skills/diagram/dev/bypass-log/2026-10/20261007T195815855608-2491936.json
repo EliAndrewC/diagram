@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-07T19:58:15Z",
+  "target": "perf-explain",
+  "commit": "b92a441c2",
+  "outcome": "permitted",
+  "why": "perf-explain UNVERIFIED: identical engine code; no counterfactual exists to remove"
+}
