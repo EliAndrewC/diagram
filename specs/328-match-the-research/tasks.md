@@ -878,12 +878,12 @@ room's wall (423, 424); the next open row is the fixture count's cap (425).
   - `l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#beyond the fields by a real crossing` - on the level the walk must run through the field (`crossed_through`, `REAL_CROSSING_SHARE` 0.5 UNRESEARCHED); above the fields the slope reading governs (0077 drawing)
   - `l7r/diagram/hamletgen/homesteads/capacity.py::free_seats#the exhaustive seat order` - of seats about as near (one grid pitch), the one nearer the field first (0029 drawing)
   - `l7r/diagram/hamletgen/homesteads/fixtures.py::BATH_SEATS#bath room wall` - the wall rolled per house, not once per hamlet
-  - `l7r/diagram/hamletgen/homesteads/fixtures.py::fixture_forms#bath room wall` - beyond the stable wing at 0.8 (0044: 17 of 21 and 12 of 15 registered baths)
+  - `l7r/diagram/hamletgen/homesteads/fixtures.py::fixture_forms#bath room wall` - beyond the stable wing at 0.8 (0044: 17 of 21 and 12 of 15 registered baths); the roll reaches the map only where the main-door seat is free - on the pool hamlets the threshing yard covers it, so every bath draws beyond the stable (a found row, E3: the seat geometry)
 
 - [x] T65a wave 19's found row tiered by the work it takes, by a fresh reader (FR-002, FR-003, SC-003)
       research: rendering
       verify: DONE. 1 row tiered E2 by a fresh Opus reader (audit/t65a-out.jsonl): one predicate, used once
-- [ ] T65 the real crossing on the level, the seat's tie, each house's bath wall at the registers' share, with their tests; the five hamlets regenerated (FR-004, FR-005)
+- [ ] T65 the real crossing on the level, the seat's tie, each house's bath wall rolled at the registers' share (drawn: see the found row), with their tests; the five hamlets regenerated (FR-004, FR-005)
       research: rendering
 - [ ] T66 every touched claim re-checked by `impl-drift`, and the close: wave 20's own bookend pair, `make done` green, the wave column (FR-005, FR-006, SC-002, SC-003)
       research: rendering

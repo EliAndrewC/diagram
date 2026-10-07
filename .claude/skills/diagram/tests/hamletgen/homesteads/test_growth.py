@@ -88,11 +88,11 @@ class _Ground:
 
 
 def _plan(n: int) -> Any:
-    return SimpleNamespace(spec=SimpleNamespace(households=n), seat={"cx": 0.0, "cy": 0.0})
+    return SimpleNamespace(spec=SimpleNamespace(households=n), seat={"cx": 0.0, "cy": 0.0}, envelope=[])
 
 
 def test_the_cluster_grows_from_its_first_house_nearest_the_seat_first(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setattr(growth, "free_seats", lambda s, c, step=None: [(0.0, 0.0), (500.0, 0.0)])
+    monkeypatch.setattr(growth, "free_seats", lambda s, c, step=None, field=(): [(0.0, 0.0), (500.0, 0.0)])
     s = _Ground(room=40.0)
     assert grow_the_margin(s, _plan(6), 0, (46.0, 28.0)) == 6  # type: ignore[arg-type]
     assert s.asked[0] == (0.0, 0.0), "the first house on the free ground nearest the seat"
@@ -102,7 +102,7 @@ def test_the_cluster_grows_from_its_first_house_nearest_the_seat_first(monkeypat
 
 
 def test_a_margin_whose_seats_run_dry_widens_then_is_reported_short(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setattr(growth, "free_seats", lambda s, c, step=None: [(0.0, 0.0)])
+    monkeypatch.setattr(growth, "free_seats", lambda s, c, step=None, field=(): [(0.0, 0.0)])
     s = _Ground(room=40.0, ring=120.0)  # the ground ends 120 from the seat
     got = grow_the_margin(s, _plan(200), 0, (46.0, 28.0))  # type: ignore[arg-type]
     assert 1 < got < 200, "seated what the ground holds, then short"
@@ -155,14 +155,14 @@ def test_a_box_keeps_the_threading_gap_from_every_standing_footprint_but_its_tig
 
 
 def test_a_margin_with_no_free_ground_or_nothing_owed_seats_no_one(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setattr(growth, "free_seats", lambda s, c, step=None: [])
+    monkeypatch.setattr(growth, "free_seats", lambda s, c, step=None, field=(): [])
     s = _Ground(room=40.0)
     assert grow_the_margin(s, _plan(5), 0, (46.0, 28.0)) == 0 and s._seat_search["grow_took"] == 0  # type: ignore[arg-type]
     assert grow_the_margin(_Ground(room=40.0), _plan(0), 0, (46.0, 28.0)) == 0  # type: ignore[arg-type]
 
 
 def test_the_first_seat_asks_the_seat_region(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setattr(growth, "free_seats", lambda s, c, step=None: [(900.0, 0.0), (0.0, 0.0)])
+    monkeypatch.setattr(growth, "free_seats", lambda s, c, step=None, field=(): [(900.0, 0.0), (0.0, 0.0)])
     s = _Ground(room=40.0)
     s._seat_region = SimpleNamespace(offer=lambda seats: [q[0] < 500.0 for q in seats])  # type: ignore[assignment]
     grow_the_margin(s, _plan(1), 0, (46.0, 28.0))  # type: ignore[arg-type]
@@ -317,7 +317,7 @@ class _Tight(_Ground):
 def test_while_the_share_has_room_each_reached_house_offers_tight_seats_against_its_land(monkeypatch: pytest.MonkeyPatch) -> None:
     """Feature 317, plan D2: a tight seat parts the two footprints by `TIGHT_GAP_PX` alone, and the household offered it is told
     its neighbor, the neighbor's land, its own allotted reach and the parting; none is offered with the share spent."""
-    monkeypatch.setattr(growth, "free_seats", lambda s, c, step=None: [(0.0, 0.0)])
+    monkeypatch.setattr(growth, "free_seats", lambda s, c, step=None, field=(): [(0.0, 0.0)])
     s = _Tight(room=30.0)
     s._passage_left = 1  # type: ignore[attr-defined]
     grow_the_margin(s, _plan(3), 0, (46.0, 28.0))  # type: ignore[arg-type]
@@ -337,7 +337,7 @@ def test_while_the_share_has_room_each_reached_house_offers_tight_seats_against_
 
 
 def test_a_house_no_passage_may_cross_to_offers_no_tight_seat(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setattr(growth, "free_seats", lambda s, c, step=None: [(0.0, 0.0)])
+    monkeypatch.setattr(growth, "free_seats", lambda s, c, step=None, field=(): [(0.0, 0.0)])
     s = _Ground(room=30.0)  # seats households with no corridor and no yard
     s._passage_left = 1  # type: ignore[attr-defined]
     asked: list[Any] = []
@@ -371,7 +371,7 @@ def test_a_tight_seat_stands_on_its_neighbor_s_yard_side() -> None:
 
 
 def test_the_tight_seats_offered_stand_on_the_yard_s_side(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setattr(growth, "free_seats", lambda s, c, step=None: [(0.0, 0.0)])
+    monkeypatch.setattr(growth, "free_seats", lambda s, c, step=None, field=(): [(0.0, 0.0)])
     s = _Tight(room=30.0)
     s._passage_left = 1  # type: ignore[attr-defined]
     seats: list[tuple[float, float]] = []
@@ -398,9 +398,9 @@ def test_a_constructed_site_too_small_for_everyone_is_refused_naming_the_shortfa
     from l7r.diagram.hamletgen.homesteads import stages
     from l7r.diagram.hamletgen.homesteads.capacity import SiteRefused
 
-    monkeypatch.setattr(growth, "free_seats", lambda s, c, step=None: [(0.0, 0.0)])
+    monkeypatch.setattr(growth, "free_seats", lambda s, c, step=None, field=(): [(0.0, 0.0)])
     s = _Ground(room=40.0, ring=120.0)
-    plan = SimpleNamespace(spec=SimpleNamespace(households=200, name="Tiny", seed=5), seat={"cx": 0.0, "cy": 0.0, "ladder": []}, field_archetype="hill")
+    plan = SimpleNamespace(spec=SimpleNamespace(households=200, name="Tiny", seed=5), seat={"cx": 0.0, "cy": 0.0, "ladder": []}, field_archetype="hill", envelope=[])
     monkeypatch.setattr(stages, "seating_mark", lambda s_: ())
     monkeypatch.setattr(stages, "_seat_households", lambda s_, p_: (grow_the_margin(s_, p_, 0, (46.0, 28.0)), 0))
     with pytest.raises(SiteRefused, match=r"Tiny \(seed 5\): seated \d+ of 200 households on margin 1; no house is taken back") as got:
@@ -419,7 +419,7 @@ def test_a_tight_seat_queued_while_the_share_had_room_is_passed_over_once_it_is_
     """Feature 320: a tight seat is queued only while the passage share has room, but the share may be spent before the seat
     is popped - by any household seated in between. Popped then, it is no seat: no way stands while houses are seated to be
     near, so the household is never told a neighbor."""
-    monkeypatch.setattr(growth, "free_seats", lambda s, c, step=None: [(0.0, 0.0)])
+    monkeypatch.setattr(growth, "free_seats", lambda s, c, step=None, field=(): [(0.0, 0.0)])
 
     class _Spends(_Tight):
         def try_place(self, x: float, y: float, _kind: str) -> bool:

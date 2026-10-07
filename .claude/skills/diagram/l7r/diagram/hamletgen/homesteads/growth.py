@@ -365,9 +365,9 @@ def grow_the_margin(s: Settlement, plan: SitePlan, placed: int, largest: tuple[f
 
     Research:
         cluster grown house by house - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: an irregular cluster, each next house where two footprints part by a lane's room
-        the order of growth - GUESS: nearest the seat first (`grow_key`)
+        the order of growth - research/questions/0029-farmhouses-minka.drawing.html: nearest the seat first (`grow_key`)
         the spacing jitter - GUESS: each seat up to `GROW_JITTER_FRAC` farther than the lane's room, its direction jittered (`grow_jitter`), so the lump is irregular
-        nearer the field breaking ties - CANON: the GM's ruling of 2026-10-03 (feature 318 amendment 3) - nearer the field only among seats in the same ring
+        nearer the field breaking ties - research/questions/0029-farmhouses-minka.drawing.html: nearer the field only among seats in the same ring (the GM's ruling of 2026-10-03, feature 318 amendment 3)
         first house against the field - UNRESEARCHED: the free ground nearest the seat's center
         tight seats for a passage household - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: offered round each house a passage may cross while the settlement's share has room, beside the ordinary seats
         a neighbor's land - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: its footprint as the growth parts it (`land_box`), which the household's land must adjoin

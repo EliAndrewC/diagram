@@ -1,38 +1,57 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "af680d63f32633dce3fc48b93182cf070bf6aed1cc324d4f7fe53cfe8f9ac2e4",
+ "plan_sha256": "bdb81fb59811521d831263b5a0014510bdfd6ff3b25b3388e8fd351f72ac4fd5",
  "reviewed": "2026-10-07",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W19-1 scope rows 416, 417",
-   "summary": "the belt into the marsh (416) and the wood beyond the fields (417); next open row 421",
+   "id": "W20-1",
+   "summary": "T65a: wave 19's found row 417 tiered E2 by a fresh reader",
    "class": "within",
-   "why": "FR-006 contiguous run: no open in-scope row before 416; 418-420 already closed (waves 4, 16); 421 next open, as tasks.md says"
+   "why": "FR-002/FR-003: tiered by implementation work (one predicate, one call site)"
   },
   {
-   "id": "W19-2 belt wet guard retired",
-   "summary": "past_the_lanes moves the band past a back lane into the marsh, its trees there alder via the existing village_grove alder mix",
+   "id": "W20-2",
+   "summary": "Scope: rows 417, 422, 423, 424 in ranking order",
    "class": "within",
-   "why": "FR-004: the row's fix verbatim; 0074 drawing: 'Where a village's shelter belt runs down into the marsh, its trees there are drawn as alder'; no research edit; no pool belt moved (manifest diff touches commons/scrub/crowns only)"
+   "why": "FR-006/SC-003: the first four open kept rows, contiguous (418-421 already waved), no open E0/E1 row stands"
   },
   {
-   "id": "W19-3 wood preference inverted",
-   "summary": "open_ground_patches prefers seats reached across the field from the houses, overturning feature 261's settlement-review preference",
-   "class": "within",
-   "why": "FR-004: the row says 'invert _near_side'; 0077 drawing: 'On the nearest slope beyond the fields from the houses ... not on whatever open ground lies nearest the houses' and 'the far side of the fields on the level'. Feature 261's preference was a review judgment, not research; the GM asked the implementation to match the research. Still a preference (fallback when none across), as before; no research edit"
+   "id": "W20-3",
+   "summary": "The real-crossing test on the level tier only; above the fields the slope reading keeps reached_across",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Implied by the research the GM asked the code to match: 0077's drawing page itself reads 'beyond the fields' as 'higher than the fields next to it' where the ground slopes, and gives 'the far side of the fields from the houses' only where there is no higher ground; the row's own fix (T65a) prescribed it. The carve-out does not gut the rule's purpose on tier 0, where the seat is already above the fields."
   },
   {
-   "id": "W19-4 occasions",
-   "summary": "woodland commons re-placed on Inashiro and Kashikawa, a glyph check each; belt change moved no pool map",
+   "id": "W20-4",
+   "summary": "REAL_CROSSING_SHARE 0.5, labeled UNRESEARCHED",
    "class": "within",
-   "why": "feature 294 occasion for a re-placed element; manifest diffs confirm commons moved on both, no belt key changed"
+   "why": "a degree on a continuum the page gives no figure for (calibrated liberty), labeled; it separates a corner clip from a crossing"
   },
   {
-   "id": "W19-5 condition (6) carried",
-   "summary": "(1)-(5) held at 822e44c52; wave 19's pair opens there",
+   "id": "W20-5",
+   "summary": "'about as near' = one grid pitch band, labeled UNRESEARCHED; tie broken by distance to plan.envelope's outline, both callers",
    "class": "within",
-   "why": "continues the ruled wave-11 exception: T61/T62 ticked, backup/digram-backlog at 822e44c52 on the remote, this wave its own amendment with a plan review before its first tick"
+   "why": "0029's drawing page gives the tie rule without a figure; row 422's fix names this sort key"
+  },
+  {
+   "id": "W20-6",
+   "summary": "bath wall rolled per house, beyond the stable at 0.8",
+   "class": "within",
+   "why": "rows 423/424 verbatim; 0044 question page: 17 of 21, 12 of 15"
+  },
+  {
+   "id": "W20-7",
+   "summary": "Occasions none",
+   "class": "within",
+   "why": "measured: the five manifests differ from 43b353361 in meta only (re-diffed by this review)"
+  },
+  {
+   "id": "W20-8",
+   "summary": "Wave 20 on the unpushed waves 9-19 under condition (6)",
+   "class": "within",
+   "why": "the wave-11 exception already ruled LEGITIMATE; backup/digram-backlog is at 43b353361 (ls-remote), wave 19's pair band 1 recorded in T64"
   }
  ],
  "verdict": "CLEAR"

@@ -308,3 +308,4 @@ Each wave's amendment adds its map decisions to this table. The program's decisi
 - Amendment 17, round 1 (spec-fidelity, 2026-10-07): CHANGES REQUIRED, plan CLEAR (12 decisions) - the no-shrunk-stand claim cited 0075 for dropping a stand that does not fit: split (the size a GUESS on 0075, none where it fits nowhere UNRESEARCHED); its aside taken (row 807 settled by row 41's fix).
 - Amendment 17, round 2 (spec-fidelity, 2026-10-07): FAITHFUL - the claim split; row 807 settled within FR-006.
 - Amendment 18, round 1 (spec-fidelity, 2026-10-07): FAITHFUL, plan CLEAR (5 decisions) - overturning feature 261's preference the literal fix (a review's judgment, not the research).
+- Amendment 19, round 1 (spec-fidelity, 2026-10-07): CHANGES REQUIRED, plan CLEAR (8 decisions) - the bath's per-house roll never draws the main door (the yard covers it): filed E3 with the stale drawing-page line, Phase 21 says so; the slope reading added to open_ground_patches' claim.

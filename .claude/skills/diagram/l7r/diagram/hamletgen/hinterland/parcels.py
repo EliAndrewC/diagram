@@ -270,7 +270,7 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
         crop set-back - UNRESEARCHED: 80 px, 180 px on the crop's sunny side, relaxed to 40 and 100
         keep-outs - UNRESEARCHED: 150 px from houses, 90 from wells, 120 past the pond, 70 from lanes, 60 from streams, 110 round the belt and the houses
         where the fuel wood stands - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: ranked by `woodland_tier`, below-the-houses seats dropped
-        beyond the fields preferred - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: seats across the field from the houses taken first, the nearest slope beyond the fields
+        beyond the fields preferred - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: seats across the field from the houses taken first, the nearest slope beyond the fields; above the fields the slope reading governs (reached across the outline), on the level the walk runs through the field (`crossed_through`)
         parcels kept apart - UNRESEARCHED: each one's exclusion 1.15-2.5 of the size
         aspect and bearing - UNRESEARCHED: up to 2.2:1, laid across the fall within 20 deg
         line follows its bounds - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: within LOT_BOUND_REACH (45 ft, the page's "within about 45 ft", its GUESS) of a lane, brook or field the line runs alongside

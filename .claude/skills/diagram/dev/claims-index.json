@@ -6737,20 +6737,20 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#a ring with room for a wood": {
-  "code": "3fce74d85a381984",
-  "core": "50b65f6f7a13f679",
+  "code": "f2ec954a366e94a3",
+  "core": "d7993934dae51c75",
   "date": "2026-10-07",
-  "note": "the 5-crown minimum is unattested",
+  "note": "the 5-crown minimum matches WOODLAND_MIN_CROWNS; the questions are silent",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#aspect and bearing": {
-  "code": "81e07c7f40f77f47",
-  "core": "50b65f6f7a13f679",
+  "code": "03b67948a8232d45",
+  "core": "d7993934dae51c75",
   "date": "2026-10-07",
-  "note": "aspect 1 to 2.2 and bearing across the fall +/-20 deg match the code; no page gives a lot's proportion",
+  "note": "aspect rolls 1.0-2.2, bearing across the fall +/-20 deg, as the claim says; no page answers it",
   "pages": {},
   "research": "",
   "rests": [
@@ -6759,58 +6759,55 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#beyond the fields preferred": {
-  "code": "fc21d281dd525596",
-  "core": "50b65f6f7a13f679",
+  "code": "c08a626d92106264",
+  "core": "d7993934dae51c75",
   "date": "2026-10-07",
-  "note": "reached_across seats preferred, others still offered when none",
+  "note": "seats across the field from the houses are preferred (the `_beyond` filter), falling back to the rest",
   "pages": {
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "ecf6ed4b609ca690"
   },
   "research": "24afacf28c5d0294",
   "rests": [
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:51f3d4bae1a3978e",
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:6a3373d9e6527e72",
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:b9c8109469f1d0d3"
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:6a3373d9e6527e72"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#commons legibility floor": {
-  "code": "5284a86b46df825a",
-  "core": "50b65f6f7a13f679",
+  "code": "e947d7af290c6ec8",
+  "core": "d7993934dae51c75",
   "date": "2026-10-07",
-  "note": "the 120 ft floor is unattested",
+  "note": "120 ft floor, rungs below it skipped, parcel dropped rather than shrunk",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#crop set-back": {
-  "code": "5f51b81bc8d4a67d",
-  "core": "50b65f6f7a13f679",
+  "code": "a311a2ecf8405b96",
+  "core": "d7993934dae51c75",
   "date": "2026-10-07",
-  "note": "no page gives a wood's distance from the fields (the 50 ft sun rule concerns yards and beds)",
+  "note": "80/180, then 40/100 plus the diagonal pad",
   "pages": {},
   "research": "",
-  "rests": [
-   "0038-sunlight-and-shade-on-the-farm.drawing.html:106fb9ebea718da7"
-  ],
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#keep-outs": {
-  "code": "3f3af75d5981adaf",
-  "core": "50b65f6f7a13f679",
+  "code": "b5082120a8d31056",
+  "core": "d7993934dae51c75",
   "date": "2026-10-07",
-  "note": "code radii match the label; no page gives these distances",
+  "note": "150/90/pond+120/70/60/110 all match the code",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#line follows its bounds": {
-  "code": "06fb1006a2ba9069",
-  "core": "50b65f6f7a13f679",
+  "code": "60d5bc6b6c88c87c",
+  "core": "d7993934dae51c75",
   "date": "2026-10-07",
-  "note": "follows lanes, brooks and field edges within about 45 ft, the page's own GUESS",
+  "note": "within about 45 ft the line runs alongside, which the page records as a GUESS",
   "pages": {
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "ecf6ed4b609ca690"
   },
@@ -6821,10 +6818,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#mostly dry": {
-  "code": "0209ecba0cef2d4e",
-  "core": "50b65f6f7a13f679",
+  "code": "3c129c8cacacf65d",
+  "core": "d7993934dae51c75",
   "date": "2026-10-07",
-  "note": "a ring with any wet share is refused; low wet ground is left to grass",
+  "note": "no ring in marsh; low wet ground is left to grass",
   "pages": {
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "ecf6ed4b609ca690"
   },
@@ -6835,10 +6832,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#nearest seat preferred": {
-  "code": "4751164ff3429b24",
-  "core": "50b65f6f7a13f679",
+  "code": "21cc2a8d964e6b21",
+  "core": "d7993934dae51c75",
   "date": "2026-10-07",
-  "note": "nearest to the houses wins within each tier and within the beyond-the-fields set",
+  "note": "scored by nearness to the cluster within the tier, \"the nearest slope\"",
   "pages": {
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "ecf6ed4b609ca690"
   },
@@ -6849,62 +6846,60 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#on the page": {
-  "code": "e5c8f570f251972d",
-  "core": "50b65f6f7a13f679",
+  "code": "26ff6802b0763ea0",
+  "core": "d7993934dae51c75",
   "date": "2026-10-07",
-  "note": "the in-view share is a framing rule, purely how the map is shown",
+  "note": "the in-view share is framing only",
   "pages": {},
   "research": "",
-  "rests": [
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:9e9583030b309e84"
-  ],
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#parcel count and size": {
-  "code": "d29d7d7caccbe1a4",
-  "core": "50b65f6f7a13f679",
+  "code": "91d7f5ef4717c3cc",
+  "core": "d7993934dae51c75",
   "date": "2026-10-07",
-  "note": "the 250 ft base, 0.9-1.1 per-map ladder and rungs 0.8/0.64/0.5 match the code; unattested",
+  "note": "250 ft, ladder 0.9-1.1, rungs 0.8/0.64/0.5 match",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#parcels kept apart": {
-  "code": "fe7ad0a6a76e90e0",
-  "core": "50b65f6f7a13f679",
+  "code": "e3527bedda264b08",
+  "core": "d7993934dae51c75",
   "date": "2026-10-07",
-  "note": "exclusion size*(1.15+1.35*jit) matches; unattested",
+  "note": "size*(1.15+1.35*jit) = 1.15-2.5",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#per-parcel size bands": {
-  "code": "33ce75539bae9de7",
-  "core": "50b65f6f7a13f679",
+  "code": "432d8893a636d070",
+  "core": "d7993934dae51c75",
   "date": "2026-10-07",
-  "note": "0.82+0.36*band and the 0.84 smaller try match; unattested",
+  "note": "0.82+0.36*band share, then 0.84",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#scan reach": {
-  "code": "9448234ea580de0e",
-  "core": "50b65f6f7a13f679",
+  "code": "1a586ff5632abd23",
+  "core": "d7993934dae51c75",
   "date": "2026-10-07",
-  "note": "the 210 px pad is unattested",
+  "note": "content_box pad 210",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#where the fuel wood stands": {
-  "code": "1316e0842d604c25",
-  "core": "50b65f6f7a13f679",
+  "code": "77be2279eed8586e",
+  "core": "d7993934dae51c75",
   "date": "2026-10-07",
-  "note": "woodland_tier ranks seats above the fields first, then level ground, and drops seats below the houses",
+  "note": "tier ranking: above the fields first, then the level, never below the houses (k<2)",
   "pages": {
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "ecf6ed4b609ca690"
   },
@@ -6917,13 +6912,15 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#woods not in a ruled line": {
-  "code": "5780c651aba31315",
-  "core": "50b65f6f7a13f679",
+  "code": "44c6ae83f1b5537d",
+  "core": "d7993934dae51c75",
   "date": "2026-10-07",
-  "note": "no page speaks to woods in a row",
+  "note": "the row refusal is answered by no page",
   "pages": {},
   "research": "",
-  "rests": [],
+  "rests": [
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:20a89928a2cc8f84"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_region#woodland scan plumbing": {
@@ -6955,14 +6952,6 @@
   "core": "e69ae9127dcbe77f",
   "date": "2026-10-03",
   "note": "a measure",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::reached_across#woodland scan plumbing": {
-  "code": "9bb16529b89d1dac",
-  "core": "05828fb2f0a1e555",
-  "date": "2026-10-03",
-  "note": "geometric predicate",
   "research": "",
   "verdict": "IN-STEP"
  },
@@ -7887,11 +7876,37 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/capacity.py::free_seats#no bound from the field": {
-  "code": "ad6a372cc2a2eb2d",
-  "core": "2613b318e42dbb37",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/capacity.py::free_seats#about as near": {
+  "code": "9b367b14d7f42367",
+  "core": "6de8ea368a268a46",
   "date": "2026-10-07",
-  "note": "the whole canvas is offered, with no distance from the field",
+  "note": "the page leaves \"about as near\" unsized; the pitch ring is the calibration",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0029-farmhouses-minka.drawing.html:9dd34b89f26d4272"
+  ],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/capacity.py::free_seats#about as near, nearer the fields": {
+  "code": "e0c1753917c14953",
+  "core": "6de8ea368a268a46",
+  "date": "2026-10-07",
+  "note": "the second sort key is distance to the field outline",
+  "pages": {
+   "0029-farmhouses-minka.drawing.html": "28761adf1d2dece2"
+  },
+  "research": "a3cfa2fba63bb45d",
+  "rests": [
+   "0029-farmhouses-minka.drawing.html:9dd34b89f26d4272"
+  ],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/capacity.py::free_seats#no bound from the field": {
+  "code": "c85ff9d667dea2ab",
+  "core": "6de8ea368a268a46",
+  "date": "2026-10-07",
+  "note": "no field-distance filter",
   "pages": {
    "0032-how-our-maps-pack-a-clustered-villages-houses.drawing.html": "a26e48b8cf648c5e"
   },
@@ -7902,16 +7917,16 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/capacity.py::free_seats#the exhaustive seat order": {
-  "code": "02a3eb043759ce64",
-  "core": "2613b318e42dbb37",
+  "code": "46d4fd88d4dac7d0",
+  "core": "6de8ea368a268a46",
   "date": "2026-10-07",
-  "note": "0029 drawing §78 sets a seat order for a growing clustered settlement (nearest the cluster, then nearer the fields), while this code sorts by distance from the seat with ties broken by coordinates; I need to know whether the grown (clustered) path calls free_seats: if it does, the label should cite §78 and the tie-break is DRIFTED",
+  "note": "nearest-first is stated by 0029.drawing (\"each next household takes the place open nearest the cluster\"); cite research/questions/0029-farmhouses-minka.drawing.html, not UNRESEARCHED",
   "pages": {},
   "research": "",
   "rests": [
    "0029-farmhouses-minka.drawing.html:9dd34b89f26d4272"
   ],
-  "verdict": "CANNOT-TELL"
+  "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/capacity.py::margin_ladder#seat search": {
   "code": "0d915cc2edf06a38",
@@ -7930,11 +7945,13 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/capacity.py::seat_the_rest#seat search": {
-  "code": "5fe34e5328ed466b",
-  "core": "85964134e79638fb",
-  "date": "2026-10-03",
-  "note": "give-up count and region filter are plumbing",
+  "code": "5960986eb772945c",
+  "core": "1facb8d4411090d7",
+  "date": "2026-10-07",
+  "note": "offer list and dry-spell give-up are plumbing; free_seats decides the order",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/capacity.py::seating_mark#seat search": {
@@ -8258,17 +8275,20 @@
   "triaged": "2026-10-05",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/fixtures.py::BATH_SEATS#bath room wall": {
-  "code": "69062976a85f35e3",
-  "core": "055d7852dc1f9a01",
-  "date": "2026-10-03",
-  "note": "one wall rolled per HAMLET puts every bath of a map on the same wall, but 0044 finds both walls inside one village (Shimohasuda 17 of 21 beyond the stable, the rest not); roll per house",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/fixtures.py::BATH_STABLE_SHARE#bath room wall": {
+  "code": "6092ecfad216288a",
+  "core": "54fee85181737233",
+  "date": "2026-10-07",
+  "note": "0.8 from 17/21 and 12/15, main door attested",
   "pages": {
-   "0044-baths-on-the-farm-furo.drawing.html": "06c647651494be2f",
    "0044-baths-on-the-farm-furo.html": "1b0add3e2fcce3b5"
   },
-  "research": "6e9edb0416109357",
-  "verdict": "DRIFTED"
+  "research": "f9b1fe1111c8963a",
+  "rests": [
+   "0044-baths-on-the-farm-furo.html:b06feb4284b8522f",
+   "0044-baths-on-the-farm-furo.html:bb60e0fd056a14eb"
+  ],
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/fixtures.py::FIXTURE_BANDS#bath room share": {
   "code": "cfbf5e572099fa35",
@@ -8462,14 +8482,17 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/fixtures.py::_draw_laid#which pits go to the field": {
-  "code": "6ab1bd524f231fe3",
-  "core": "e9b561bb43b0615a",
-  "date": "2026-10-03",
-  "note": "2-85 per hamlet, hash per house",
+  "code": "b4832ac8022a0a22",
+  "core": "556e6e67165db4c8",
+  "date": "2026-10-07",
+  "note": "share rolled 0.02-0.85 per hamlet, per-house hash against it",
   "pages": {
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "87ffb6a8fd559f32"
   },
   "research": "fa621c85688c72b2",
+  "rests": [
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:52eb031787c16126"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/fixtures.py::_draw_pending#a lane between pit and house allowed": {
@@ -8594,36 +8617,45 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/fixtures.py::fixture_forms#bath room wall": {
-  "code": "89ad688ce7254988",
-  "core": "c1189c1a16ce95b2",
-  "date": "2026-10-03",
-  "note": "randrange(2) gives even odds, but 0044 counts the 1824/1842 baths beyond the stable wing at 17 of 21 and 12 of 15 (the period the page says it follows); weight the stable end, and the page's \"how often each is drawn is a GUESS\" is wrong too",
+  "code": "c649f2fc1fd47543",
+  "core": "0653ed944b810711",
+  "date": "2026-10-07",
+  "note": "the 0.8 share is passed on and each house rolls against it",
   "pages": {
-   "0044-baths-on-the-farm-furo.drawing.html": "06c647651494be2f"
+   "0044-baths-on-the-farm-furo.html": "1b0add3e2fcce3b5"
   },
-  "research": "eac07ff70a225610",
-  "verdict": "DRIFTED"
+  "research": "f9b1fe1111c8963a",
+  "rests": [
+   "0044-baths-on-the-farm-furo.html:bb60e0fd056a14eb"
+  ],
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/fixtures.py::fixture_forms#persimmon side": {
-  "code": "1febdb22a396330a",
-  "core": "c1189c1a16ce95b2",
-  "date": "2026-10-03",
-  "note": "rolled in the band",
+  "code": "d0cdf68c53400c67",
+  "core": "0653ed944b810711",
+  "date": "2026-10-07",
+  "note": "front share rolled 0.60-0.85 per hamlet, front the likelier",
   "pages": {
    "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html": "6b3be37b04307230"
   },
   "research": "1640adf91280aca1",
+  "rests": [
+   "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:decf69e0e6c15d94"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/fixtures.py::fixture_forms#privy seats": {
-  "code": "bce6084fb3663e97",
-  "core": "c1189c1a16ce95b2",
-  "date": "2026-10-03",
-  "note": "this hamlet's weights",
+  "code": "d6a1b6befa76c290",
+  "core": "0653ed944b810711",
+  "date": "2026-10-07",
+  "note": "weights rolled per hamlet (privy_seat_weights)",
   "pages": {
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "87ffb6a8fd559f32"
   },
   "research": "fa621c85688c72b2",
+  "rests": [
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:2564ad475c02811e"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/fixtures.py::fixture_quota#count to the share": {
@@ -8868,10 +8900,99 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::grow_the_margin#a neighbor's land": {
-  "code": "e572c17e65dbcf4c",
-  "core": "97ae2e753552fb72",
-  "date": "2026-10-05",
-  "note": "the neighbor's land as the growth parted it, adjoined at the parting",
+  "code": "3d58a76e8456f375",
+  "core": "67c6c1de77b9c72a",
+  "date": "2026-10-07",
+  "note": "the land_box is carried for the adjoin test",
+  "pages": {
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
+  },
+  "research": "7b40c2c01cfba682",
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:9dcd87510d217672"
+  ],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::grow_the_margin#cluster grown house by house": {
+  "code": "1c044b339cde1ede",
+  "core": "67c6c1de77b9c72a",
+  "date": "2026-10-07",
+  "note": "irregular lump, each next house set off by the growth gap",
+  "pages": {
+   "0031-clustered-and-scattered-villages-shuson-sanson.html": "117bdeff72353321",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
+  },
+  "research": "41bb223a644a785d",
+  "rests": [
+   "0031-clustered-and-scattered-villages-shuson-sanson.html:2afa77b5b6a4c810",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:d6c0546677319ff7"
+  ],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::grow_the_margin#first house against the field": {
+  "code": "9912578adbf3cfb4",
+  "core": "67c6c1de77b9c72a",
+  "date": "2026-10-07",
+  "note": "nothing in the questions says where the first house stands",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0029-farmhouses-minka.drawing.html:9dd34b89f26d4272"
+  ],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::grow_the_margin#nearer the field breaking ties": {
+  "code": "b71e85aa39b0fc4d",
+  "core": "67c6c1de77b9c72a",
+  "date": "2026-10-07",
+  "note": "0029.drawing records this tie-break (\"of two places about as near, the one nearer the fields\"), and free_seats' twin claim cites it; cite research/questions/0029-farmhouses-minka.drawing.html",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0029-farmhouses-minka.drawing.html:9dd34b89f26d4272"
+  ],
+  "verdict": "MISLABELED"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::grow_the_margin#the growth's widening": {
+  "code": "f7dce49e5c707c60",
+  "core": "67c6c1de77b9c72a",
+  "date": "2026-10-07",
+  "note": "the 8/12/16 levels match GROW_LEVELS",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::grow_the_margin#the order of growth": {
+  "code": "745dd47f31da6045",
+  "core": "67c6c1de77b9c72a",
+  "date": "2026-10-07",
+  "note": "0029.drawing states nearest-the-cluster first; should cite research/questions/0029-farmhouses-minka.drawing.html, not an unnamed GUESS",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0029-farmhouses-minka.drawing.html:9dd34b89f26d4272"
+  ],
+  "verdict": "MISLABELED"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::grow_the_margin#the spacing jitter": {
+  "code": "1dadfcdf9b7400b3",
+  "core": "67c6c1de77b9c72a",
+  "date": "2026-10-07",
+  "note": "up to 0.12 past the parting, which no page sets",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b"
+  ],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::grow_the_margin#tight seats for a passage household": {
+  "code": "1d1bc8a43a4083c6",
+  "core": "67c6c1de77b9c72a",
+  "date": "2026-10-07",
+  "note": "2 ft parting, yard side only, only while the share remains, only round a crossable house",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
@@ -8880,92 +9001,6 @@
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:9dcd87510d217672"
   ],
-  "triaged": "2026-10-05",
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::grow_the_margin#cluster grown house by house": {
-  "code": "9843ffd9bc89c689",
-  "core": "97ae2e753552fb72",
-  "date": "2026-10-05",
-  "note": "an irregular lump, each next house a lane's room off a standing one",
-  "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.html": "117bdeff72353321",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
-  },
-  "research": "41bb223a644a785d",
-  "rests": [
-   "0031-clustered-and-scattered-villages-shuson-sanson.html:2afa77b5b6a4c810",
-   "0031-clustered-and-scattered-villages-shuson-sanson.html:8f9155802a8c478d",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b"
-  ],
-  "triaged": "2026-10-05",
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::grow_the_margin#first house against the field": {
-  "code": "21f5790e3ed4bc58",
-  "core": "97ae2e753552fb72",
-  "date": "2026-10-04",
-  "note": "",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::grow_the_margin#nearer the field breaking ties": {
-  "code": "ed6c2ac92782ca51",
-  "core": "97ae2e753552fb72",
-  "date": "2026-10-04",
-  "note": "CANON names the GM's ruling; the heap key orders ring, then field distance, then distance, as the claim says; no cited question covers tie order",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::grow_the_margin#the growth's widening": {
-  "code": "d4b9a1739a5a312e",
-  "core": "97ae2e753552fb72",
-  "date": "2026-10-04",
-  "note": "",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::grow_the_margin#the order of growth": {
-  "code": "2047175b1f1bc1a3",
-  "core": "97ae2e753552fb72",
-  "date": "2026-10-04",
-  "note": "",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::grow_the_margin#the spacing jitter": {
-  "code": "771a2818043e4e97",
-  "core": "97ae2e753552fb72",
-  "date": "2026-10-04",
-  "note": "",
-  "pages": {},
-  "research": "",
-  "rests": [
-   "0031-clustered-and-scattered-villages-shuson-sanson.html:2afa77b5b6a4c810"
-  ],
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::grow_the_margin#tight seats for a passage household": {
-  "code": "953379535d65fd4b",
-  "core": "97ae2e753552fb72",
-  "date": "2026-10-05",
-  "note": "offered only while the share has room, round crossable houses, on the yard side",
-  "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
-  },
-  "research": "7b40c2c01cfba682",
-  "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:9dcd87510d217672"
-  ],
-  "triaged": "2026-10-05",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/growth.py::grows#growth search": {
@@ -43113,57 +43148,70 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::FixtureForms#bath room's default wall": {
-  "code": "dcb7f1d6b05b58f8",
-  "core": "05a6079bc0e1b0c9",
-  "date": "2026-10-03",
-  "note": "matches the cited finding or the label",
+ ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::FixtureForms#bath room beyond the stable wing": {
+  "code": "33298193852059cb",
+  "core": "c0cf80fb6e9ccbc8",
+  "date": "2026-10-07",
+  "note": "0.8 default",
   "pages": {
-   "0044-baths-on-the-farm-furo.drawing.html": "06c647651494be2f"
+   "0044-baths-on-the-farm-furo.html": "1b0add3e2fcce3b5"
   },
-  "research": "eac07ff70a225610",
+  "research": "f9b1fe1111c8963a",
+  "rests": [
+   "0044-baths-on-the-farm-furo.html:bb60e0fd056a14eb"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::FixtureForms#manure form": {
-  "code": "4c9a2bb385f985c6",
-  "core": "05a6079bc0e1b0c9",
-  "date": "2026-10-03",
-  "note": "matches the cited finding or the label",
+  "code": "220355afeb03b53a",
+  "core": "c0cf80fb6e9ccbc8",
+  "date": "2026-10-07",
+  "note": "heap default; the hamlet rolls heap or pit",
   "pages": {
    "0042-manure-heaps-and-compost-kyuhi.drawing.html": "8b458f42d4e2cbac"
   },
   "research": "9222f4ebf6feae10",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0042-manure-heaps-and-compost-kyuhi.drawing.html:0f24b531c56eedb8"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::FixtureForms#persimmon front share": {
-  "code": "8a8a45cf9175cc2e",
-  "core": "05a6079bc0e1b0c9",
-  "date": "2026-10-03",
-  "note": "front the likelier, degree a GUESS per 0046",
+  "code": "6f3e6adf7a6ac6e8",
+  "core": "c0cf80fb6e9ccbc8",
+  "date": "2026-10-07",
+  "note": "0.7 default, inside the rolled band, front the likelier",
   "pages": {
    "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html": "6b3be37b04307230"
   },
   "research": "1640adf91280aca1",
+  "rests": [
+   "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:decf69e0e6c15d94"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::FixtureForms#privy seat weights": {
-  "code": "b244673a49a89792",
-  "core": "05a6079bc0e1b0c9",
-  "date": "2026-10-03",
-  "note": "the page lists the places \"under the eaves by the stable, ... in the yard, the front yard, and inside the barn\" then \"35, 30, 20 and 15\", read respectively stable 35 / yard 30 / front 20; the code gives yard 35, front 30, stable 20; fix the code or have the page name the mapping",
+  "code": "894cc095da243d1a",
+  "core": "c0cf80fb6e9ccbc8",
+  "date": "2026-10-07",
+  "note": "35/30/20/15 base weights",
   "pages": {
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "87ffb6a8fd559f32"
   },
   "research": "fa621c85688c72b2",
-  "verdict": "DRIFTED"
+  "rests": [
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:2564ad475c02811e"
+  ],
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::FixtureForms#retirement house size and gaps": {
-  "code": "b4712128f1f50345",
-  "core": "05a6079bc0e1b0c9",
-  "date": "2026-10-03",
-  "note": "matches the cited finding or the label",
+  "code": "0e54d0791fd2b860",
+  "core": "c0cf80fb6e9ccbc8",
+  "date": "2026-10-07",
+  "note": "nothing in the bundle answers it",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::FixtureUnlaid#plumbing": {
@@ -43764,68 +43812,86 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#bath room joined": {
-  "code": "8f78def9d601ea8f",
-  "core": "c1c171be3fb781ff",
-  "date": "2026-10-03",
-  "note": "room joined to the house or refused, per 0044",
+  "code": "3efd491d52e055e9",
+  "core": "16cb8a36cca94b03",
+  "date": "2026-10-07",
+  "note": "abuts the house (clears it at -1e-6) or raises; never walked out",
   "pages": {
    "0044-baths-on-the-farm-furo.drawing.html": "06c647651494be2f"
   },
   "research": "eac07ff70a225610",
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#fixture gap 3.5 ft off every other part and bath room slide 4 ft": {
-  "code": "721541c750bd2c1c",
-  "core": "c1c171be3fb781ff",
-  "date": "2026-10-07",
-  "note": "no page gives a gap between fixtures or a bath's slide along its wall; the shed's ken is a separate figure",
-  "pages": {},
-  "research": "",
   "rests": [
-   "0043-firewood-stacks-and-sheds-kigoya.drawing.html:4615b4a128e48e55",
    "0044-baths-on-the-farm-furo.drawing.html:78f622a8252b9b53",
-   "0044-baths-on-the-farm-furo.drawing.html:a8d16ebfdea834bf"
+   "0044-baths-on-the-farm-furo.drawing.html:a8d16ebfdea834bf",
+   "0044-baths-on-the-farm-furo.drawing.html:f4b4951f028d4a66"
   ],
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#fixture gap 3.5 ft off every other part and bath room slide 4 ft": {
+  "code": "2ca8e3ea72e3fc3f",
+  "core": "16cb8a36cca94b03",
+  "date": "2026-10-07",
+  "note": "no page sets a fixture's clearance",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#no seat, no persimmon": {
-  "code": "2dba2f2224b2522b",
-  "core": "c1c171be3fb781ff",
-  "date": "2026-10-03",
-  "note": "farm keeps none, per 0046",
+  "code": "e66dda3bf13c613e",
+  "core": "16cb8a36cca94b03",
+  "date": "2026-10-07",
+  "note": "no seat means the farm keeps none",
   "pages": {
    "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html": "6b3be37b04307230"
   },
   "research": "1640adf91280aca1",
+  "rests": [
+   "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:65dfdac106fa4297"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#seating order": {
-  "code": "8a139531e9fc1a3e",
-  "core": "c1c171be3fb781ff",
+  "code": "eea7197ae11f0ae4",
+  "core": "16cb8a36cca94b03",
   "date": "2026-10-07",
-  "note": "no cited page orders the fixtures",
+  "note": "no page sets the order",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#stepped outward": {
-  "code": "e244201c8da7d537",
-  "core": "c1c171be3fb781ff",
-  "date": "2026-10-03",
-  "note": "fallback pacing, record silent",
+  "code": "cdc6f0c0f21f1319",
+  "core": "16cb8a36cca94b03",
+  "date": "2026-10-07",
+  "note": "outward paces are answered by no page",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#the bath room's wall rolled per house (stable end against BATH_STABLE_SHARE, else main door; floored rooms / headman's case not visible here)": {
+  "code": "16cb8a36cca94b03",
+  "core": "16cb8a36cca94b03",
+  "date": "2026-10-07",
+  "note": "the bath room's wall rolled per house (stable end against BATH_STABLE_SHARE, else main door; floored rooms / headman's case not visible here)",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#wood shed's walls": {
-  "code": "a2aa15f4ff30607c",
-  "core": "c1c171be3fb781ff",
-  "date": "2026-10-03",
-  "note": "0043 stands the shed \"a short step off the house\" (behind or beside it); code also seats it a ken off the byre (annex) and the retirement house walls, which no page records - record those walls on 0043 (as a GUESS) or drop them",
+  "code": "1df30e5bc8f61d32",
+  "core": "16cb8a36cca94b03",
+  "date": "2026-10-07",
+  "note": "the page puts the shed \"behind or beside the house\"; the code also seats it on the kura, byre and retirement-house walls (`walls = steading_rects(...) + [annex] + [laid[\"retirement\"]]`). Either the page records those walls or the code keeps to the house",
   "pages": {
    "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "ad5072e51b00c129"
   },
   "research": "862d7c9fcd1644d6",
+  "rests": [
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html:4615b4a128e48e55",
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html:93fa63f17d70422d"
+  ],
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::outward#plumbing": {

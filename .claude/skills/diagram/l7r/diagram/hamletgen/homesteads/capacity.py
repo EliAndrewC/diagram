@@ -66,7 +66,7 @@ def free_seats(s: Settlement, center: Pt, step: float | None = None, field: Sequ
 
     Research:
         no bound from the field - research/questions/0032-how-our-maps-pack-a-clustered-villages-houses.drawing.html: no house is refused for its distance from the fields
-        the exhaustive seat order - UNRESEARCHED: every legal grid point on the canvas, nearest the seat first
+        the exhaustive seat order - research/questions/0029-farmhouses-minka.drawing.html: every legal grid point on the canvas, nearest the seat first
         about as near, nearer the fields - research/questions/0029-farmhouses-minka.drawing.html: a tie broken by nearness to the field
         about as near - UNRESEARCHED: one grid pitch
     """

@@ -11290,6 +11290,22 @@
   "scope": "kept"
  },
  {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#a main-door bath drawn",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "spec-fidelity, amendment 19 round 1: each house rolls its bath's wall at 0.8 beyond the stable wing (research/questions/0044-baths-on-the-farm-furo.html), but a main-door bath never draws - the threshing yard covers the front wall, so every main-door roll falls to the stable end (0 of 22 baths at the main door on the five pool hamlets; 0 of 10 at the base where Kuwabata and Sawada rolled main_door) - so the maps draw ~100% beyond the stable; seat the main-door bath beside the door clear of the yard (bath_room_seats/bath_room_slides, the yard's placement), and bring research/questions/0044-baths-on-the-farm-furo.drawing.html's 'how often each is drawn is a GUESS' in line",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py",
+   ".claude/skills/diagram/research/questions/0044-baths-on-the-farm-furo.drawing.html"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 20's review (amendment 19 round 1), tier E3: the seat geometry against the yard, and a drawing-page line",
+  "tier_as_ranked": "E3",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::shed_off_a_wall#wood shed a ken off a wall",
   "verdict": "DRIFTED",
   "tier": "E3",

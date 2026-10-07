@@ -307,6 +307,7 @@ def lay_fixtures(
         wood shed's walls - research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: the house, its kura, the
             byre and the retirement house
         bath room joined - research/questions/0044-baths-on-the-farm-furo.drawing.html: refused rather than walked out
+        bath room's wall per house - research/questions/0044-baths-on-the-farm-furo.html: each house rolls the stable end at `bath_stable_share`, else the main door; the floored rooms the last wall offered
         no seat, no persimmon - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html: the farm keeps none"""
     g = px(WALL_GAP_FT)
     # (A grove farm's bands stay roofs here: letting a persimmon's crown reach over them, feature 315 found, let it take the
