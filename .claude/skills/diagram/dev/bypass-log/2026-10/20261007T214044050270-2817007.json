@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-07T21:40:44Z",
+  "target": "perf-explain",
+  "commit": "652d41065",
+  "outcome": "permitted",
+  "why": "perf-explain UNVERIFIED: which seeds fall through to the along-row passes is not yet timed against the base"
+}

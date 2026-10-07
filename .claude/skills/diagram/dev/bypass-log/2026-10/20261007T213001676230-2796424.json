@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-07T21:30:01Z",
+  "target": "review-accept",
+  "commit": "0d332ddc8",
+  "outcome": "permitted",
+  "why": "review-accept glyph-check--notice-board F3: a confirmation, not a defect: every departure passes the entrance seat"
+}
