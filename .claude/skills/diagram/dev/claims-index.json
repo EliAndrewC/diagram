@@ -40107,14 +40107,6 @@
   ],
   "verdict": "DRIFTED"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#coarse-grain plots topped up after refused plots (`_coarse_grain_top_up`)": {
-  "code": "b9ce56589ec31620",
-  "core": "b9ce56589ec31620",
-  "date": "2026-10-07",
-  "note": "coarse-grain plots topped up after refused plots (`_coarse_grain_top_up`)",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#dry plot ink": {
   "code": "dda7954c0eb3c8df",
   "core": "b9ce56589ec31620",
@@ -40132,23 +40124,24 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#fallback watercourse widths": {
-  "code": "4aff904b542bb7a1",
+  "code": "156322cb40a32f38",
   "core": "b9ce56589ec31620",
   "date": "2026-10-07",
-  "note": "the fallback brook is `self.px(7.0)`, but 0068 has \"the brook arrives narrower than the head race\" (6.0 ft) and a village creek at \"roughly three and a half times\" the 1.5 ft floor (about 5.25 ft); the brook fallback should sit under 6.0 ft",
+  "note": "px(4.5) channel, px(6.0) canal and px(7.0) brook, converted from feet, match 0068's supply canal head and head race and 0059's 7 ft brook. The conflict between brook and head race is already recorded as a found row",
   "pages": {
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "20b954e8c3ae0884",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html": "73b09981aa65bd21"
   },
-  "research": "0563a9dcc87ebedc",
+  "research": "43d03d4ffab70ddf",
   "rests": [
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:7d2ddc0969f9e213",
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:b1c3c0e8029a1da5",
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:0c50dfc54e196c68",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:8ab31b5afaea5611",
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:a2bbc3411bf2a387",
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:b3d0c7e9f522e493",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:bb9359b7865aa39b",
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:e79a72c285e6838c",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:e9e1c49b84a3b570"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#hem off rice and water": {
   "code": "111096d6cb9f6265",
@@ -60060,16 +60053,19 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/waterfields/carve.py::_dry_fields#end plot split": {
-  "code": "a2cc3e0aaabf41a8",
+  "code": "addf606d4fb1a66c",
   "core": "efd3f20e913ed79d",
   "date": "2026-10-07",
-  "note": "halving an end cell stretched past 1.35 widths sets a dry plot's size, and village grain keeps up to ~1.85-width end plots; it should cite the 0006 drawing page (plot size)",
-  "pages": {},
-  "research": "",
+  "note": "the page says plots are \"tiled in real feet at every scale, roughly 92 ft across\", but the split runs only when `g != 1.0`. On a village map an end cell snapped to the canal's length can stay up to 1.85 plot widths (about 170 ft, 0.28 acre), so plot size depends on the map's scale. Either split at every scale, or have the claim name the village-grain exemption as a DEVIATION that 0006's drawing page records",
+  "pages": {
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "9f1b7fafe06f01fe"
+  },
+  "research": "eae521ca5e2ccfdd",
   "rests": [
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:abb8b4f0d05c6c11",
    "0006-dry-fields-and-their-crops-hatake.drawing.html:dcc917f58bd99fa2"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/waterfields/carve.py::_dry_fields#hem depth": {
   "code": "28d22e74504127b1",

@@ -396,3 +396,4 @@ Wave 11 wrote the last open in-scope E0 claims and took the last E1 values. Its 
 - `l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#service strip` (UNCLAIMED, E0): the service strip behind the house 24 ft (`SERVICE_STRIP_FT`)
 - `l7r/diagram/waterfields/comb.py::_comb_drain#collector above the frame` (UNCLAIMED, E0): the collector held 40 px above the frame's bottom edge
 - `l7r/diagram/waterfields/polder.py::build_polder#lattice unbent by default` (UNCLAIMED, E0): the rice polder's lattice unbent by default (mosaic 0, edge_wander 0)
+- `l7r/diagram/waterfields/carve.py::_dry_fields#end plot split at every scale` (DRIFTED, E2): split an end plot stretched past 1.35 plot widths at every scale (0006: plots tiled in real feet at every scale, about 92 ft), not only off the village grain

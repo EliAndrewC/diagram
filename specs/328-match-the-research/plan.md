@@ -174,6 +174,10 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 - **On the unpushed waves 9 and 10** under the wave-11 exception (Wave 10 above): wave 10 closed in full at 6be618a9e, its backup
   pushed; wave 11's opening bookend at that commit; stacking stops the moment anything but the GM's sign-off would refuse the push.
 - **Verification**: as wave 10 - Inashiro first, the pool through a green gate, the bookends, `impl-drift` on every touched unit.
+- **Before any push of the stack**: the push's perf gate reads only the NEWEST pair, and wave 11's own pair (band 0) is now
+  the newest - so the main-to-HEAD landing pair is retaken as the newest pair before the push, and the GM signs off its band
+  with each wave's own pair beside it (waves 9 and 10 band 3, wave 11 band 0). A push on wave 11's pair alone would skip the
+  sign-off the stack owes.
 
 ## Performance bookends (constitution VI)
 
