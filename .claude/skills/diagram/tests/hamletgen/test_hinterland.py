@@ -859,11 +859,9 @@ def test_nearest_fitting_keeps_to_its_box() -> None:
     assert nearest_fitting((0.0, 0.0), 50.0, 10.0, lambda x, y: True, box=(60.0, 0.0, 70.0, 10.0)) is None, "a box off the square"
 
 
-def test_no_thicket_is_drawn_where_none_fits_within_its_reach() -> None:
-    """Feature 328: 0075's drawing page seats the thicket just beyond the back row, so where nothing fits within
-    `THICKET_REACH_FT` of the target no thicket is drawn - an open seat farther along the row is not the thicket (feature
-    293 had searched the whole sheet behind the back row)."""
-    from l7r.diagram.hamletgen.hinterland.bamboo import THICKET_REACH_FT
+def _thicket_site(band_taken: bool):  # type: ignore[no-untyped-def]
+    """Four houses along y = 800 (the back row from x 600 to 1500), wet ground behind the three western ones - and, where
+    `band_taken`, behind the whole row's first 90 px too."""
     from l7r.diagram.settlement import Settlement
 
     from ._builders import a_plan
@@ -876,9 +874,30 @@ def test_no_thicket_is_drawn_where_none_fits_within_its_reach() -> None:
     s.M["houses"] = [{"x": x, "y": 800.0, "w": 46.0, "h": 28.0, "rot": 0.0} for x in (600.0, 700.0, 800.0, 1500.0)]
     s.M["gardens"] = [{"x": 700.0, "y": 500.0, "w": 10.0, "h": 10.0}]  # crop content: the sheet reaches behind the row
     s.M["marshes"] = [{"poly": [[0.0, 0.0], [1100.0, 0.0], [1100.0, 790.0], [0.0, 790.0]], "role": "toe"}]  # wet behind the near houses
-    seats = hg.hinterland.bamboo_seats(s, plan)  # type: ignore[arg-type]
-    assert seats == [], f"no thicket past its reach ({THICKET_REACH_FT} ft)"
+    if band_taken:
+        s.M["marshes"].append({"poly": [[1100.0, 700.0], [1800.0, 700.0], [1800.0, 790.0], [1100.0, 790.0]], "role": "toe"})
+    return s, plan
 
+
+def test_a_thicket_is_sought_along_the_back_row_just_beyond_it_when_none_fits_near() -> None:
+    """Feature 328 (0075's drawing page: the thicket "just beyond the back row of houses"): nothing fits within
+    `THICKET_REACH_FT` of the target, so the band just behind the back row is searched along the row's whole length - the
+    thicket stands behind the house at x = 1500, its near edge within `THICKET_ROW_DEPTH_FT` of the row."""
+    from l7r.diagram.hamletgen.hinterland.bamboo import THICKET_REACH_FT, THICKET_ROW_DEPTH_FT
+
+    s, plan = _thicket_site(band_taken=False)
+    seats = hg.hinterland.bamboo_seats(s, plan)  # type: ignore[arg-type]
+    assert len(seats) == 1, "the thicket is seated along the back row"
+    cx = sum(q[0] for q in seats[0]) / len(seats[0])
+    south = max(q[1] for q in seats[0])
+    assert cx - 700.0 > THICKET_REACH_FT and 800.0 - THICKET_ROW_DEPTH_FT - 3.0 <= south <= 800.0, "behind the row, just beyond it"
+
+
+def test_no_thicket_is_drawn_deep_in_the_page_far_from_the_back_row() -> None:
+    """Feature 328: where the band just beyond the back row is taken along its whole length, open ground deep in the page
+    is not the thicket's seat (feature 293's search over the whole page behind the row seated it there): none is drawn."""
+    s, plan = _thicket_site(band_taken=True)
+    assert hg.hinterland.bamboo_seats(s, plan) == [], "no thicket deep in the page"  # type: ignore[arg-type]
 
 def test_the_farm_groves_count_toward_the_homestead_wood() -> None:
     """`farm_grove_area` (feature 291): the farms' own bands, as recorded; a record with no box counts nothing."""

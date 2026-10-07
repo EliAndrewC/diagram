@@ -387,7 +387,11 @@
   "after": [],
   "files": [
    ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py",
-   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/clearance.py"
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py",
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/route.py",
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/clearance.py",
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py",
+   ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/boundary.py"
   ],
   "fix": "split WEB_HARD_GAP: against crop the lane runs on the bund and may touch a plot boundary (half-tread, ~1.5 ft), keep a separate toe/marsh gap claimed UNRESEARCHED; the hard ground is one list (crop, toe and marsh) read with the one gap by five modules - ways/serve.py, ways/route.py, ways/clearance.py, ways/web.py and homesteads/boundary.py - so a crop gap apart from the wet gap separates that list in each",
   "flag": "",

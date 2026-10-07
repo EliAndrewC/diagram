@@ -465,3 +465,6 @@ pass on the sheet modals, not this feature's ranking - modals are not claims):
   Takayama case). `buildings.md` keeps the latter under its own GUESS claim; the procedure's knob no longer says it. The
   disagreement is between two research pages, so its fix goes through the FR-004 exception path.
 - `l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._route_seats#farthest seat 60 ft from the road kosatsubawayreachft 0190 2` (UNCLAIMED, E0): farthest seat 60 ft from the road (KOSATSUBA_WAY_REACH_FT; 0190 §225)
+- `l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#shrunk stand` (DRIFTED, E2): the scale loop (1.0, 0.7) draws a 58.8 x 40.6 ft thicket, but the page says "A village's bamboo thicket is 84 by 58 ft"; either the drawing page records the 70% fallback (then GUESS or DEVIATION) or the code drops it
+- `l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#watercourse margin of half-width  3 ft no page gives the fig` (UNCLAIMED, E0): watercourse margin of half-width + 3 ft: no page gives the figure, and the crop and water pads claim leaves it out
+- `l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#12 ft pad round the notice board, and the byre and retiremen` (UNCLAIMED, E0): 12 ft pad round the notice board, and the byre and retirement-house pads, which the keep-out pads claim does not name

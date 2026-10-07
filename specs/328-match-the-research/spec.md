@@ -301,3 +301,4 @@ Each wave's amendment adds its map decisions to this table. The program's decisi
   (neither form on any page), the 412/413 dependency LEGITIMATE; the Decisions Recorded rows owed (added). Measured since: the
   retirements moved nothing drawn, so the three placement occasions became `none`.
 - Amendment 15, round 2 (spec-fidelity, 2026-10-07): FAITHFUL, plan CLEAR (8 decisions) - the Decisions Recorded rows; the occasions' none confirmed by its own measurement (each manifest differs from the base in meta only).
+- Amendment 16, round 1 (spec-fidelity, 2026-10-07): CHANGES REQUIRED, plan BLOCKED - "else no thicket" was an exception (distance from one point, not the back row): the fallback held to the band just beyond the back row along its whole length; the WEB_HARD_GAP override's files (all five modules).

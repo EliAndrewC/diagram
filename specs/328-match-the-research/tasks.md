@@ -13,7 +13,7 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 - (wave 5, landed and reviewed) placement-changed village lane on kashikawa - wave 5: 0033's row street runs on off the map as the road into it at both ends, where
   the web cut it back to its last joint (`trim_streets`); Kashikawa's and Mizuguchi's far ends now run off the sheet as a
   second way out (every way is inked `village lane`).
-- none (wave 17): the thicket's far search retired moved nothing drawn - measured: Kashikawa's and Mizuguchi's thickets, the two
+- none (wave 17): the thicket's fallback held to the back row moved nothing drawn - measured: Kashikawa's and Mizuguchi's thickets, the two
   pool maps that roll one, stand within their reach and their manifests are unchanged; the other rows are claims.
 - none (wave 16): the two retired knob forms moved nothing drawn - measured on the regenerated maps against the base: Mizuguchi,
   which declared the belt-side copse, is linear and draws no copse, and Kashikawa's and Sawada's notice boards stand where they
@@ -813,9 +813,9 @@ fallback (411). The next open row is the belt in the marsh (412).
   - `l7r/diagram/hamletgen/hinterland/stages.py::stage_windbreak#no copse drawn where there is no belt and no reserved seats` - its claim written (UNRESEARCHED)
   - `l7r/diagram/hamletgen/plan.py::plan_site#a farmstead grove takes 2, 3 or 4 sides the spec refusal` - its claim written (0036 drawing: two, three or four sides)
   - `l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._route_seats#farthest seat 60 ft from the road kosatsubawayreachft 0190 2` - its claim written (GUESS 0190 drawing: the project's own figure)
-  - `l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#thicket fallback: THICKET_REACH_FT 220 ft, then anywhere on the page behind the back row (0075 says "just beyond the back row")` - the page-wide search retired: within the reach, else no thicket (0075 drawing)
+  - `l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#thicket fallback: THICKET_REACH_FT 220 ft, then anywhere on the page behind the back row (0075 says "just beyond the back row")` - the page-wide fallback held to 0075's "just beyond the back row": the band behind the row's whole length, the near edge within `THICKET_ROW_DEPTH_FT` (30 ft, UNRESEARCHED) of it; no thicket only where none fits there
 
-- [ ] T59 the three claims; the thicket's far search retired with its test; Kashikawa and Mizuguchi regenerated (FR-004, FR-005)
+- [ ] T59 the three claims; the thicket's fallback held to the band just beyond the back row, with its two tests; Kashikawa and Mizuguchi regenerated (FR-004, FR-005)
       research: rendering
 - [ ] T60 every touched claim re-checked by `impl-drift`, and the close: wave 17's own bookend pair, `make done` green, the wave
       column (FR-005, FR-006, SC-002, SC-003)

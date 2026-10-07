@@ -528,6 +528,21 @@
   "scope": "kept"
  },
  {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#12 ft pad round the notice board, and the byre and retiremen",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "12 ft pad round the notice board, and the byre and retirement-house pads, which the keep-out pads claim does not name",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 17 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#thicket kept off every household's reserved copse seats",
   "tier": "E0",
   "fix": "add the claim: thicket off the copse seats - 0075 drawing (the dooryard copse draws no bamboo; a farm's bamboo is a stand of its own)",
@@ -553,6 +568,21 @@
   "tier_as_ranked": "E0",
   "verdict": "UNCLAIMED",
   "wave": "1",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#watercourse margin of half-width  3 ft no page gives the fig",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "watercourse margin of half-width + 3 ft: no page gives the figure, and the crop and water pads claim leaves it out",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 17 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E0",
+  "wave": "",
   "scope": "kept"
  },
  {
@@ -6195,6 +6225,21 @@
   "scope": "kept"
  },
  {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#shrunk stand",
+  "verdict": "DRIFTED",
+  "tier": "E2",
+  "fix": "the scale loop (1.0, 0.7) draws a 58.8 x 40.6 ft thicket, but the page says \"A village's bamboo thicket is 84 by 58 ft\"; either the drawing page records the 70% fallback (then GUESS or DEVIATION) or the code drops it",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 17 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E2",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#thicket fallback: THICKET_REACH_FT 220 ft, then anywhere on the page behind the back row (0075 says \"just beyond the back row\")",
   "tier": "E2",
   "fix": "drop the anywhere-on-the-page fallback: 0075 seats the thicket just beyond the back row, so seat it within THICKET_REACH_FT (claimed UNRESEARCHED) or drop the stand",
@@ -10000,7 +10045,11 @@
   "fix": "split WEB_HARD_GAP: against crop the lane runs on the bund and may touch a plot boundary (half-tread, ~1.5 ft), keep a separate toe/marsh gap claimed UNRESEARCHED; the hard ground is one list (crop, toe and marsh) read with the one gap by five modules - ways/serve.py, ways/route.py, ways/clearance.py, ways/web.py and homesteads/boundary.py - so a crop gap apart from the wet gap separates that list in each",
   "files": [
    ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py",
-   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/clearance.py"
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py",
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/route.py",
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/clearance.py",
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py",
+   ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/boundary.py"
   ],
   "after": [],
   "flag": "",

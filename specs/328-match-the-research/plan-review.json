@@ -1,58 +1,46 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "479473f68aeb86b13aa8e174d893646a651cc3bae5511a45c8e2800cfb46d9e4",
+ "plan_sha256": "7770f5a0aa0e3c82946587eac05b5168f99d3dc356e6448b4e91ccbf58a0c937",
  "reviewed": "2026-10-07",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W16-T56a",
-   "summary": "wave 15's found rows tiered by a fresh reader; the two-building dwelling size row dropped as stale (IN-STEP on its later round)",
+   "id": "W17-1 stale row dropped",
+   "summary": "wave 16's staff-housing found row dropped, its closing wave (4, IN-STEP) restored",
    "class": "within",
-   "why": "FR-002/FR-003 tiering by work; Edge Cases: a re-check records what it finds. The two E4 rows whose fix names a page edit are record conflicts (0222 drawing's 21 ft small end vs 0215's Hie hall; 0220 drawing calls the innermost-arch distance a convention at one place and a GUESS at another), and their fix text routes the page edit through the FR-004 exception path when taken"
+   "why": "the row's later round was IN-STEP; nothing to fix"
   },
   {
-   "id": "W16-scope",
-   "summary": "the open E0 row, then the E2 rows in ranking order: 398, 403, 404, 405 (399-402 closed or IN-STEP)",
+   "id": "W17-2 three UNCLAIMED claims",
+   "summary": "claims for stage_windbreak no-copse (UNRESEARCHED), plan_site grove sides (0036 drawing), board 60 ft farthest seat (GUESS, 0190 drawing)",
    "class": "within",
-   "why": "FR-006 contiguous run, lowest tier first; SC-003: the one open E0 row is taken first"
+   "why": "each label matches its page: 0036 'Two, three or four'; 0190 'The 60 ft is this project's own figure, not a finding'; no page covers the no-copse case"
   },
   {
-   "id": "W16-412-413",
-   "summary": "stage_windbreak's two copse rows (412, 413) taken with COPSE_SITINGS (403) ahead of 407-410",
+   "id": "W17-3 WEB_HARD_GAP re-tiered E3",
+   "summary": "row moved E2 -> E3 by measurement",
+   "class": "within",
+   "why": "verified: web.py builds one hard list [envelope, *crops, toe, *wet] and serve.py, route.py, clearance.py, web.py and boundary.py each apply WEB_HARD_GAP to it; splitting the crop gap is a change across modules, E3 by FR-003. The row stays in the ranking (655), not dropped"
+  },
+  {
+   "id": "W17-4 thicket fallback: within reach, else no thicket",
+   "summary": "the page-wide fallback retired; a thicket only within THICKET_REACH_FT (220 ft, UNRESEARCHED) of a point 40 ft north of the three northernmost houses, else none",
    "class": "narrowing",
-   "ruling": "LEGITIMATE",
-   "why": "FR-006 asks for a contiguous run; but 413 records 403 as its dependency and carries 403's own fix, and 412's unit is the code 403's fix deletes, so neither can stay an open row once 403 is fixed. All are E2, so the request's purpose (easiest first) is untouched"
+   "ruling": "NOT LEGITIMATE",
+   "why": "0075 drawing seats the thicket 'on dry ground just beyond the back row of houses'; the fix bounds it by radial distance from a three-house target instead of by distance from the back row, and its own test pins no thicket where a fitting seat stands just behind a back-row house (x=1500, same y=800 as the row). The knob rolled a thicket, the page's ground exists, none is drawn: not physically impossible, not in the GM's words, and it moves the code off the page rather than onto it"
   },
   {
-   "id": "W16-retire",
-   "summary": "the copse against the belt and the board at the drawing-water place retired with their code, tests, choices and modals; each knob keeps its one form",
+   "id": "W17-5 occasions none",
+   "summary": "no review occasion: the two thicket maps regenerated unchanged",
    "class": "within",
-   "why": "FR-004: the implementation moves to the research. Neither form is on any page: 0071's drawing page puts the copse only in the gaps between the houses (0072 drawing likewise), and 0190's question page names center, entrance, officials' gates and bridge ends, its drawing page the busiest main road; no page puts a board at a well. XII makes a knob of attested forms, so keeping an unattested one is the finding itself. No research page edited"
+   "why": "measured, per feature 294"
   },
   {
-   "id": "W16-mizuguchi",
-   "summary": "Mizuguchi's copse_siting=against_the_belt declaration dropped",
+   "id": "W17-6 condition (6) carried",
+   "summary": "(1)-(5) held at b49a6c221; wave 17's pair opens there",
    "class": "within",
-   "why": "the declared value no longer exists; Mizuguchi is a scripted hamlet, not a frozen hand-rolled map (FR-009), and FR-005 regenerates the maps a wave changes"
-  },
-  {
-   "id": "W16-occasions",
-   "summary": "occasions: none, measured - the retired forms moved nothing drawn (Mizuguchi linear, no copse; Kashikawa and Sawada boards unmoved); only each map's recorded knob changed",
-   "class": "within",
-   "why": "FR-005: an occasion is a placement that changed; re-measured on round 2: each of the three manifests at HEAD equals the base 799a0bf4b with meta removed, and meta differs only in copse_siting / kosatsuba_siting, so no glyph was re-placed and no review occasion opens"
-  },
-  {
-   "id": "W16-cond6",
-   "summary": "waves 9-15 stay unpushed under the wave-11 exception's condition (6); wave 16's pair opens at 799a0bf4b",
-   "class": "within",
-   "why": "continues the ruled exception; verified: origin/backup/digram-backlog is 799a0bf4b, wave 15 closed (T55) at d78d95d6a/799a0bf4b"
-  },
-  {
-   "id": "W16-verify",
-   "summary": "impl-drift on touched claims, the gate with three maps regenerated, wave 16's bookend pair (glyph checks dropped with the occasions)",
-   "class": "within",
-   "why": "FR-005, constitution VI; the glyph checks go with the measured-none occasions"
+   "why": "origin/backup/digram-backlog points at b49a6c221; T58 records the pair band 1"
   }
  ],
- "verdict": "CLEAR"
+ "verdict": "BLOCKED"
 }
