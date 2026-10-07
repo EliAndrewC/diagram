@@ -1,39 +1,39 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "fcdad89ad5ff4aba1c54edd41d6468b41a9400785c6a3a18496f9d1cecc83f6c",
+ "plan_sha256": "29a5c470c3485e53e2cab5cae70b0f7094429fd8f447da12d692d01b030815dd",
  "reviewed": "2026-10-07",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W11-T42a",
-   "summary": "Wave 10's 19 found rows tiered by their work by a fresh reader before the run is chosen (5 moved)",
+   "id": "W12-T46a",
+   "summary": "Wave 11's 12 found rows tiered by their work by a fresh reader before the run is chosen (none moved)",
    "class": "within",
-   "why": "FR-002/FR-003: tiers by implementation work; every T42a tier is the tier ranking.json carries"
+   "why": "FR-002/FR-003: audit/t46a-out.jsonl carries the 12 rows; each tier equals the tier in ranking.json/overrides.json; the two E2 (mixed broadleaf belt's band and bamboo, end plot split at every scale) are logic changes, honestly E2"
   },
   {
-   "id": "W11-scope",
-   "summary": "Wave 11 takes the last 11 open in-scope E0 and E1 rows (8 claims, 3 values); next open in-scope row 365 is E2",
+   "id": "W12-scope",
+   "summary": "Wave 12 takes wave 11's found E0 and E1 rows - 8 claims and 2 values; next open in-scope row 375 is E2",
    "class": "within",
-   "why": "FR-006/FR-010: measured from ranking.json - exactly rows 151,169,186,187,188,190,191,192,297,351,361 are open, kept, E0/E1; row 365 is E2 mode-a; ranking is tier-ordered"
+   "why": "FR-006/FR-010: measured from ranking.json - exactly rows 138,171,172,174,175,192,196,198 (E0) and 305,372 (E1) are open, not deferred, tier E0/E1, all with empty after; row 375 is E2 mode-a"
   },
   {
-   "id": "W11-exception",
-   "summary": "Wave 11 starts on the unpushed waves 9 and 10 under the wave-11 exception (wave 10 closed at 6be618a9e, backup pushed; opening bookend at that commit; stacking stops when anything but the GM's sign-off would refuse)",
+   "id": "W12-exception",
+   "summary": "Wave 12 starts on the unpushed waves 9-11 under the wave-11 exception's condition (6); wave 12's own pair opens at 6760d9bbf",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "Narrows FR-006's pushed-before-the-next-begins, as ruled on conditions in the Wave 10 section; condition (1) measured met: T40 impl-drift ticked, gate green at 76b945688 (engine identical to 6be618a9e), glyph-check PASS in the ledger, wave column in waves.json, origin backup/digram-backlog = 6be618a9e; (2) a commit, engine-identical to 3cb19c982, carried by T45; (3) the only escape at 6be618a9e is the feature's standing CLAIMS_OK for found rows; (5) in the plan; (6) this review"
+   "why": "Narrows FR-006's pushed-before-the-next-begins; condition (6) of the exception ruled LEGITIMATE (amendment 10) names wave 12 if (1)-(5) still hold at wave 11's close. Measured: origin backup/digram-backlog = 6760d9bbf; T44 impl-drift and T45 gate green and band 0 ticked; amendment 10 FAITHFUL and plan CLEAR recorded; the only open boxes besides wave 12's are T38/T41, the landed boxes awaiting the GM's band-3 sign-off; wave 11 declared no occasions; 6760d9bbf is engine-identical to wave 11's closing commit c4137685c. This amendment is the reset-counter review condition (6) requires."
   },
   {
-   "id": "W11-verification",
-   "summary": "Verification as wave 10: Inashiro first, pool through a green gate, bookends, impl-drift on every touched unit",
+   "id": "W12-verify",
+   "summary": "Verification as wave 11 (impl-drift on every touched unit, the pool through a green gate, wave 12's own bookend pair)",
    "class": "within",
-   "why": "FR-005"
+   "why": "FR-005 restated"
   },
   {
-   "id": "W11-landing-pair",
-   "summary": "Before any push of the stack, the main-to-HEAD landing pair is retaken as the newest bookend pair (the push's perf gate reads only the newest, and wave 11's own band-0 pair is now newest), and the GM signs off its band with each wave's own pair beside it",
+   "id": "W12-occasions",
+   "summary": "No review occasion for wave 12: claim lines and two values in feet inside rules that already place their elements",
    "class": "within",
-   "why": "Carries out condition (2) of the LEGITIMATE wave-11 exception (each wave's pair shown to the GM beside the combined landing pair) and condition (5) (the sign-off for each wave); it closes a route by which the stack could push on wave 11's band-0 pair alone and skip the sign-off waves 9 and 10 owe. Narrows nothing the request or spec asks for."
+   "why": "FR-005/feature 294: no glyph redrawn, no element new; both value edits are a scale conversion (identical at 1 ft/px)"
   }
  ],
  "verdict": "CLEAR"
