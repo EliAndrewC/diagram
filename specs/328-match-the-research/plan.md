@@ -80,7 +80,7 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 
 - **Scope**: the 32 open E0 rows (`tasks.md` Phase 7), every one the re-checks of waves 4 and 5 found: claims to write,
   relabels to make. Claim lines only, so no map moves, no review occasion and no bookend.
-- **D8 - a relabel never carries a code change**: where the page a relabel names answers the decision differently from the
+- **D8 - a claim written or relabeled never carries a code change**: where the page a claim names answers the decision differently from the
   code (the inner moat's width, the rampart strip in px, the plank over a junction), the claim states the code against the
   page and the departure is ranked as a found row in its own tier, so E0 stays the claim alone (FR-003).
 

@@ -864,7 +864,7 @@
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#spur clip margin",
   "verdict": "MISLABELED",
   "tier": "E0",
-  "fix": "0081 answers this: a lane \"may touch a plot's boundary\", and the path joins the bund; a 12 ft margin off the dry plots is a DEVIATION from \u00a79, not UNRESEARCHED (only the toe-band margin is unanswered)",
+  "fix": "0081 answers where the spur stops at the dry plots (a lane \"may touch a plot's boundary\"); the claim cites 0081 against the code's 12 ft clip off the dry plots, which becomes a found row ranked toward 0081's rule; only the toe-band margin stays UNRESEARCHED",
   "files": [
    ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py"
   ],
@@ -872,6 +872,7 @@
   "flag": "",
   "found": "wave 5 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
+  "moved": "amendment 5 round 1: the claim cites 0081 against the code; no DEVIATION",
   "wave": ""
  },
  {

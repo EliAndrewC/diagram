@@ -204,6 +204,16 @@
   "moved": "wave 4: waits on the footpath row (held at 4 ft)",
   "tier": "E3"
  },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#spur clip margin": {
+  "after": [],
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py"
+  ],
+  "fix": "0081 answers where the spur stops at the dry plots (a lane \"may touch a plot's boundary\"); the claim cites 0081 against the code's 12 ft clip off the dry plots, which becomes a found row ranked toward 0081's rule; only the toe-band margin stays UNRESEARCHED",
+  "flag": "",
+  "moved": "amendment 5 round 1: the claim cites 0081 against the code; no DEVIATION",
+  "tier": "E0"
+ },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#a web lane's span": {
   "fix": "a back lane's span held to the houses it serves, within WEB_REACH_FT (100 ft, 0246), not 1.5 x WEB_REACH_FT (150 ft); the claim cites 0246",
   "moved": "wave 3 reading: the claim cannot be made honest without the value (E0 -> E1)",

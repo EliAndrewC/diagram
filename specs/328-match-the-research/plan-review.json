@@ -1,86 +1,26 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "53c63bc894ef196f8cd88880d442d79a69dcfbc5d564f7dc97841a919f865909",
+ "plan_sha256": "f771d618224d15547c8919de45d720078a06c5af459fb70c39dfb60e08d18840",
  "reviewed": "2026-10-07",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "TC-input/output/check",
-   "summary": "findings.json snapshot; ranking.json + generated ranking.md; tests/test_328_ranking.py holds one row per finding key",
+   "id": "W6-scope",
+   "summary": "Wave 6 is the 32 open E0 rows (every open E0 row of ranking.json, all found by the wave 4/5 re-checks), claim lines only",
    "class": "within",
-   "why": "FR-001/SC-001 as asked; the test enforces the requested ranking"
+   "why": "E0 is the lowest open tier (32 open E0, then 87 E1); the 32 rows in tasks.md Phase 7 are exactly the open E0 rows of ranking.json, none held back (FR-006, SC-003)."
   },
   {
-   "id": "P1.2-P1.4/D4",
-   "summary": "nine Opus ranking batches; bounded E0 re-check; a dependency-outranked open row takes its dependency's tier; a 30-row blind second reader",
+   "id": "W6-no-occasion-no-bookend",
+   "summary": "No review occasion, no map regeneration and no perf bookend for wave 6",
    "class": "within",
-   "why": "how the GM's first step (rank every finding by implementation work) is staffed and checked; drops no finding"
+   "why": "Claim lines move nothing a map draws; FR-005's occasions and the plan's bookend rule apply only to waves that change engine behavior."
   },
   {
-   "id": "P2-order/D1/D2/D3",
-   "summary": "waves E0..E4, by module within a tier, after-rows wait; only the current wave is task boxes; wave 1 = E0",
+   "id": "D8",
+   "summary": "A relabel never carries a code change; where the named page answers differently from the code, the claim states the code against the page and the departure is ranked as a found row in its own tier",
    "class": "within",
-   "why": "'go from easiest to hardest', FR-003/FR-006/SC-003"
-  },
-  {
-   "id": "P2-exception-path",
-   "summary": "deviation-tempting rows go to spec-fidelity with the request verbatim before any other fix",
-   "class": "within",
-   "why": "FR-004 and XVI; enforces the GM's 'no reason for our implementation to not match'"
-  },
-  {
-   "id": "D5",
-   "summary": "nine sheet-redrawing procedure rows moved E1 -> E3",
-   "class": "within",
-   "why": "FR-003 tiers a sheet redraw E3; ruled in an earlier round, unchanged"
-  },
-  {
-   "id": "D6",
-   "summary": "the hamletgen/ways/ E1 rows as wave 4",
-   "class": "within",
-   "why": "module grouping inside FR-003; wave closed; unchanged"
-  },
-  {
-   "id": "W5-scope",
-   "summary": "Wave 5 = the two open E0 rows (positions 50, 58), then row 143 (the row street) and rows 148-173: 29 rows",
-   "class": "within",
-   "why": "Re-measured on ranking.json at acc620d4a (merge.py re-run on a copy reproduces it byte for byte): the only open E0 rows are 50 and 58; the first open E1 row is 143; 144-147 are closed; 148-173 are the next open E1 rows with no gap; every 'after' inside the run points inside it. The contiguous run FR-006 asks for, easiest first."
-  },
-  {
-   "id": "D7",
-   "summary": "the row street fixed in wave 5 to 0033's drawing ('The street runs on off the map as the road into it'); trim_streets no longer cuts it to its last joint",
-   "class": "within",
-   "why": "Moves the implementation to the research (FR-004). Read: 0033-row-villages-resson.drawing.html carries the sentence; 0246 is titled 'how our maps lay a clustered settlement's lanes' and its pull-back is a GUESS for that form; trim_streets' claim cites 0246 for a row street. No carve-out remains; the row is fixed, not deferred. Kashikawa and Mizuguchi are scripted (.gen.py), so FR-009 is not touched."
-  },
-  {
-   "id": "W5-occasions",
-   "summary": "placement-changed: row street (glyph-check in T21); none for the other rows",
-   "class": "within",
-   "why": "FR-005 runs the occasions a wave opens; the row street's re-placement is declared and reviewed."
-  },
-  {
-   "id": "W5-verify",
-   "summary": "Inashiro first, Kashikawa and Mizuguchi for the row street, the pool through the gate; a town or city value no scripted map draws proven by its unit test; bookends back to back; impl-drift on every touched unit; a held value becomes a found row",
-   "class": "within",
-   "why": "FR-005; the unit-test clause covers only values no map draws, so no regeneration is skipped"
-  },
-  {
-   "id": "retier-wave4-open",
-   "summary": "wave 4's open lane rows re-tiered (two to E4, one to E0, one to E3)",
-   "class": "within",
-   "why": "Spec Assumptions and Edge Cases; ruled within in round 1, unchanged"
-  },
-  {
-   "id": "closed-tiers",
-   "summary": "audit/closed-tiers.json holds each closed row's tier at wave 4's close; merge.py restores it before the dependency pass, which skips closed rows",
-   "class": "within",
-   "why": "Bookkeeping that keeps the ranking's history honest; verified: all 157 closed rows carry their wave-4-close tier (491b7bf7f) now, and the three rewritten in 931839671 are restored."
-  },
-  {
-   "id": "perf-bookends/constitution-check",
-   "summary": "each behavior-changing wave takes its own start/end bookend; XIII baseline at main's engine",
-   "class": "within",
-   "why": "constitution VI/XIII; adds no unrequested scope"
+   "why": "FR-003 defines E0 as an implementation that already matches; a departure is by definition E1+ work, and the spec's Edge Cases already rank what a fix exposes under the tier it takes. Nothing is dropped and the research is not moved: the code change is ranked toward the research (FR-004), and E1 is the next tier taken."
   }
  ],
  "verdict": "CLEAR"

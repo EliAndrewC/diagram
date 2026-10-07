@@ -274,13 +274,13 @@ bridges, canals, moat and governor's gate. Every `after` these rows carry is a r
 ## Phase 7 - wave 6 (tier E0: the claim alone - the open rows) - amendment 5, 2026-10-07
 
 Every open E0 row in ranking order (SC-003): the decisions wave 5's re-checks found unclaimed or mislabeled. Claim lines
-only. Where a relabel names a page that the code then departs from, the claim says what the code does against that page,
+only. Where a claim written or relabeled names a page that the code then departs from, the claim says what the code does against that page,
 and the departure is a found row tiered by the work it takes (spec Edge Cases), not a code change in this wave.
 
   - `l7r/diagram/hamletgen/ways/law.py::near_misses#a household way's door end is never counted as a join that stops short` - claim it: a household way's door end is never counted as a join that stops short
   - `l7r/diagram/hamletgen/ways/track.py::_thread_the_fabric#the track's route walled` - 0246 walls only a back lane's stretches (§63); the track's walls are in 0081 ("never crosses row crops", "stops at the flooded paddy", "keeps off wet ground"), and keeping off drawn water belongs to 0035's crossing rule; repoint to 0081 (and 0035 for the water)
   - `l7r/diagram/hamletgen/ways/track.py::stage_track#connector and spur keep a 40 ft no-build clearance (LANE_CLEARANCE)` - claim it: connector and spur keep a 40 ft no-build clearance (LANE_CLEARANCE)
-  - `l7r/diagram/hamletgen/ways/track.py::stage_track#spur clip margin` - 0081 answers this: a lane "may touch a plot's boundary", and the path joins the bund; a 12 ft margin off the dry plots is a DEVIATION from §9, not UNRESEARCHED (only the toe-band margin is unanswered)
+  - `l7r/diagram/hamletgen/ways/track.py::stage_track#spur clip margin` - 0081 answers where the spur stops at the dry plots (a lane "may touch a plot's boundary"); the claim cites 0081 against the code's 12 ft clip off the dry plots, which becomes a found row ranked toward 0081's rule; only the toe-band margin stays UNRESEARCHED
   - `l7r/diagram/hamletgen/ways/track.py::stage_track#spur tip set back 17 ft (SPUR_SETBACK) off the field outline's vertex` - claim it: spur tip set back 17 ft (SPUR_SETBACK) off the field outline's vertex
   - `l7r/diagram/hamletgen/ways/track.py::stage_track#valley and polder connector width CONNECTOR_WIDTH 6 ft` - claim it: valley and polder connector width CONNECTOR_WIDTH 6 ft
   - `l7r/diagram/interactive/place.py::KINDS#a hamlet's dead burned and buried at the main village's` - claim it: a hamlet has no cremation ground; its dead are burned and buried at the main village's, which holds the district's grounds - cite the burial question (0236)
@@ -310,8 +310,9 @@ and the departure is a found row tiered by the work it takes (spec Edge Cases), 
   - `l7r/diagram/settlement/civic_grounds/justice.py::JusticeGroundsMixin.execution_ground#two post sockets about 3 ft square, and their spacing` - claim it: two post sockets about 3 ft square, and their spacing
   - `l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_anchor#the approach counts as reaching the houses within KOSATSUBA_ENTRANCE_REACH_FT 100 ft of a dwelling` - claim it: the approach counts as reaching the houses within KOSATSUBA_ENTRANCE_REACH_FT 100 ft of a dwelling
 
-- [ ] T22 every row's claim written or relabeled (cite the page that answers it, CANON for a GM ruling, DEVIATION or GUESS
-      or UNRESEARCHED where the page is silent); a departure a relabel exposes ranked as a found row (FR-003, FR-004)
+- [ ] T22 every row's claim written or relabeled (cite the page that answers it, CANON for a GM ruling, GUESS or
+      UNRESEARCHED where the page is silent; DEVIATION only after the exception path rules it LEGITIMATE); a departure a
+      claim written or relabeled exposes - the code against the page it names - ranked as a found row (FR-003, FR-004)
       research: rendering
       verify:
 - [ ] T23 every touched unit re-checked by `impl-drift`; each wave-6 row IN-STEP or re-tiered with its measured reason (FR-005, SC-002)
