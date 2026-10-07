@@ -422,3 +422,10 @@ def test_the_scan_refuses_a_ring_that_does_not_follow_its_bounds_and_takes_the_n
     monkeypatch.setattr(parcels, "lot_follows_its_bounds", _first_refused)
     got = _scan(plan, count=2)
     assert asked[0] not in got and got
+
+
+def test_the_scan_stops_once_it_has_seated_the_count(monkeypatch: pytest.MonkeyPatch) -> None:
+    """With more fitting seats than asked, the scan seats exactly `count` and stops (the crossing pinned: this is the count's
+    test, not the field's side)."""
+    monkeypatch.setattr(parcels, "crossed_through", lambda *a, **k: True)
+    assert len(_scan(a_plan(), count=1)) == 1

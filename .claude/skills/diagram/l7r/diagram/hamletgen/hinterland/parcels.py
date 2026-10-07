@@ -500,8 +500,8 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
             # nearest field ground and not below the lowest house first; then, where the map has no such ground, a seat on
             # the level beside the fields - not below the houses; a seat downslope of every house is never offered. Low wet
             # ground by a marsh or a river is left to grass and reeds: the marsh and stream keep-outs above refuse it, and it
-            # lies below the houses on a fan. Reading "beyond the fields" as "higher than the field next to it" where the
-            # ground slopes is the entry's own reading of "the slopes around the settlement".
+            # lies below the houses on a fan. Where the ground slopes the seat higher than the field next to it ranks first -
+            # the entry's "the slopes around the settlement" - and it must still be beyond the fields (below).
             _fall = (dx, dy)
             _house_floor = min((-(float(h["x"]) * dx + float(h["y"]) * dy) for h in s.M.get("houses", [])), default=-math.inf)
             _tiers = [woodland_tier((t[1], t[2]), _fall, _house_floor, field_height_near((t[1], t[2]), _fall, crop_pts)) for t in scored]
@@ -513,9 +513,9 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
             # from the houses", the village running houses, then fields, then the wild land): feature 261 had preferred the
             # houses' side of the field. A RULE, not a preference: where no seat is reached across the field none is offered,
             # and the wood is recorded beyond the sheet (`woodland_on_the_sheet`) - 0077 records no fallback to the open ground
-            # nearest the houses (impl-drift, wave 20). ON THE LEVEL the walk must run THROUGH the field (`crossed_through`; the woodland glyph check of
-            # wave 19 found a corner clip counted); above the fields the slope reading governs (0077: "beyond" read as higher
-            # than the fields beside it), so a seat there needs only to be reached across the outline.
+            # nearest the houses (impl-drift, wave 20). On EVERY tier the walk must run THROUGH the field (`crossed_through`):
+            # 0077 asks both beyond the fields AND higher than them, and on ground falling evenly the houses' own side is
+            # higher than the field too (the woodland glyph check of wave 20, Mizuguchi).
             _beyond = [t for t in scored if crossed_through(plan.envelope, (ccx, ccy), (t[1], t[2]))]
             scored = _beyond
             # ...NOT IN A ROW: a seat in line with two placed parcels is stepped sideways off the row where the ground allows,
