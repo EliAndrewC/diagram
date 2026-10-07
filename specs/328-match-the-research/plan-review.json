@@ -1,6 +1,6 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "9ef6a854282b15eec4a32638b6ec740075c8b0e769e21218e14af23c66fba8d4",
+ "plan_sha256": "7dca63c857ad1bf544403a28a547ec636ebb88db2ac52cf9754f1716856759d2",
  "reviewed": "2026-10-07",
  "declared": "spec-fidelity",
  "decisions": [
@@ -271,9 +271,9 @@
   },
   {
    "id": "W10-scope",
-   "summary": "Wave 10 = the 26 open in-scope E0 rows, then in-scope E1 rows 296-358 (18); next open in-scope row 359 is E2",
+   "summary": "Wave 10 = the 20 open in-scope E0 rows, then in-scope E1 rows 290-354 (20 rows); next open in-scope row 355 is E2",
    "class": "within",
-   "why": "Round 3's item answered and re-derived on this round: audit/merge.py re-run in scratch reproduces ranking.json, ranking.md and closed-tiers.json byte for byte; open in-scope rows with no wave: E0 exactly 26 (the front privy step's GUESS relabel among them), E1 exactly 18 in rows 296-358 (296, 314, 325-331, 346, 349, 351-353, 355-358); row 359 is E2. shed_off_a_wall now carries after = WOODSHED_STEP_FT (held, E3) and takes E3, out of wave 10; tasks.md Phase 11's 44 keys equal the derived set; the only afters inside it (rows 328, 331 on 327) are in the wave. 'easiest to hardest', FR-010 and SC-003's dependency clause."
+   "why": "Re-derived on round 5 from ranking.json: open in-scope rows with no wave are exactly 20 E0 and 20 E1, the E1 at positions 290, 301, 302, 310, 321-327, 342, 345, 347-349, 351-354; the first open in-scope E2+ is 355 (a Mode A row, in scope by FR-010). The six rows that left the E1/E0 count are the four relabels re-tiered E3 (678, 708) with the two annex claims after the storehouse (709, 710), as the exception check ruled - none dropped."
   },
   {
    "id": "W10-hold-wave9",
@@ -287,6 +287,12 @@
    "class": "narrowing",
    "ruling": "LEGITIMATE",
    "why": "Case (a) of round 2, now worded with its conditions in plan.md. It applies: the newest pair reads band 3 on timing alone (one roll over 20%: 40 hh seed 39, 12.0 -> 14.5 s), every scaling roll seats every household, the gate is green; the band is the GM's sign-off under the push's perf check, which the session cannot give, and the GM said to defer questions to the end of the feature. The condition 'wave 9 closed in full' (T37, T38's records) must hold before wave 10's first edit."
+  },
+  {
+   "id": "W10-relabels-ruled",
+   "summary": "The exception check ruled the four DEVIATION relabels NOT LEGITIMATE: the crowns-per-clump floor and ceiling dropped (E1, in this wave), the planted bank's two forms and the free-standing storehouse E3 with the two annex claims after the storehouse row",
+   "class": "within",
+   "why": "Nothing is excepted: each ruling sends the code to the page (FR-004). Verified in ranking.json: rows 301/302 E1 open in the wave, 678 and 708-710 E3 open, scope kept; groves.py drops max(5, ...) and the cap, GROVE_CLUMP_CROWNS kept only for band_clumps and claimed so."
   }
  ],
  "verdict": "CLEAR"

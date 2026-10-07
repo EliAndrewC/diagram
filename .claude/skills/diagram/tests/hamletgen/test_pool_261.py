@@ -248,8 +248,10 @@ def lane_knots(lanes: list[dict]) -> list[tuple[int, tuple[float, float], int, t
 # re-lays the earlier household's way at seating (specs/328-match-the-research/ranking.json, "a knot no lawful gather
 # reaches"). Main draws the same knots or more (Inashiro 7 end pairs within the reach on main and here, Sawada 3 -> 1). STRICT: the day a map's knots are gathered this fails, and its name comes off the list.
 # Wave 9's re-seated homesteads left neither map a knot (feature 328, 2026-10-07): both names came off. Wave 10's field
-# values (the rings' steps, the fork triangle, the canal's berm - all three together, bisected) re-lay Sawada so its knot is
-# back, as main draws it: Sawada waits again, Inashiro does not.
+# values (the rings' steps and the fork triangle) re-lay Sawada so it carries
+# a knot again - one knot, as main has one there, at a different place (main: lanes 9/12, 21.9 ft; here: lanes 15/17, 8.2 ft;
+# bisected with the berm still applied, the three together; the berm since held and the knot stands): Sawada waits again, Inashiro
+# does not (main had one there too).
 _KNOTS_WAITING = {"sawada"}
 
 

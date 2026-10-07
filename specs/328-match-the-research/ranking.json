@@ -2112,6 +2112,21 @@
   "scope": "kept"
  },
  {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_source#pond feeder from the sluice",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "the pond feeder drawn from the sluice to the pond's center, recorded as coming from off the map",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 10 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/fields/landuse.py::LandUseMixin._landuse_repaint_leftovers#leftovers as standing rice",
   "tier": "E0",
   "fix": "cite 0020's drawing page (some low plots converted, the rest left in rice)",
@@ -2297,6 +2312,21 @@
   "tier_as_ranked": "E0",
   "verdict": "DRIFTED",
   "wave": "1",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#mixed broadleaf belt",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "a mixed_broadleaf belt drawn with no conifer, in the woods' crown size mix",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 10 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E0",
+  "wave": "",
   "scope": "kept"
  },
  {
@@ -2574,6 +2604,21 @@
   "scope": "kept"
  },
  {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#dispersed well pocket",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "the dispersed farm's well pocket: the wellhead plus a 3 ft margin (px(6.0))",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/rolling/bundle.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 10 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#south band off an unkept yard",
   "verdict": "UNCLAIMED",
   "tier": "E0",
@@ -2815,6 +2860,51 @@
   "scope": "deferred"
  },
  {
+  "key": ".claude/skills/diagram/l7r/diagram/waterfields/carve.py::_dry_fields#end plot split",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "an end plot split in two when wider than 1.35 plot widths (coarse grains only)",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/waterfields/carve.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 10 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/waterfields/comb.py::_comb_drain#straight last leg",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "no jittered sample within DRAIN_MIN_LEG (84 px) of the outfall, so the drain's last leg is straight",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/waterfields/comb.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 10 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/waterfields/polder.py::_apex#polder plumbing",
+  "verdict": "MISLABELED",
+  "tier": "E0",
+  "fix": "cite 0005 (no parcel tapers to a point): the unit applies the 25 degree threshold and picks the sharpest convex corner first",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/waterfields/polder.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 10 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": ".claude/skills/diagram/l7r/diagram/waterfields/polder.py::_polder_lattice#edge wander",
   "tier": "E0",
   "fix": "relabel: cite 0019's drawing (the gently wavering line is a drawing convention), not UNRESEARCHED",
@@ -2826,6 +2916,52 @@
   "tier_as_ranked": "E0",
   "verdict": "MISLABELED",
   "wave": "1",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/waterfields/polder.py::build_polder#interior bund node jitter",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "the interior bund nodes jittered by organic (0.05, 0.02)",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/waterfields/polder.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 10 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/waterfields/polder.py::build_polder#low rows wet",
+  "verdict": "CANNOT-TELL",
+  "tier": "E0",
+  "fix": "re-check with _polder_parcels' tint code in the bundle (0007: every low plot, not the two lowest rows)",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/waterfields/polder.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 10 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "needs_e0_review": true,
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/waterfields/polder.py::build_polder#module line bow",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "the module lines bowed by line_wander 0.10 of the grid's spacing (0014)",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/waterfields/polder.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 10 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E0",
+  "wave": "",
   "scope": "kept"
  },
  {
@@ -4387,6 +4523,21 @@
   "scope": "kept"
  },
  {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#fallback watercourse widths",
+  "verdict": "MISLABELED",
+  "tier": "E1",
+  "fix": "cite 0068 and draw its widths where a record carries none: the brook about 7 ft, the supply canal 4.5 ft, the head race 6 ft (not 9, 2.5 and 14 px)",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 10 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E1",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_source#feeder brook width",
   "verdict": "DRIFTED",
   "tier": "E1",
@@ -4499,6 +4650,21 @@
   "verdict": "DRIFTED",
   "wave": "",
   "scope": "deferred"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::_wood_shed#wood shed fallback pace",
+  "verdict": "DRIFTED",
+  "tier": "E1",
+  "fix": "the fallback seats a further 8 ft out put a shed about 17 ft off its wall against 0043's ken: drop the extra pace, or the page records the departure",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 10 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E1",
+  "wave": "",
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::privy_sun_reach_ft#sun-side reach by size",
@@ -4842,6 +5008,21 @@
   "scope": "deferred"
  },
  {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_anchor#reach in feet",
+  "verdict": "DRIFTED",
+  "tier": "E1",
+  "fix": "compare the approach's distance to a house with px(KOSATSUBA_ENTRANCE_REACH_FT), not the bare feet (60 ft only at 1 ft/px)",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/_helpers.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 10 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E1",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_anchor#reaching the houses",
   "verdict": "DRIFTED",
   "tier": "E1",
@@ -5142,6 +5323,21 @@
   "scope": "deferred"
  },
  {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.trim_lane_stubs#arrival at the bund",
+  "verdict": "DRIFTED",
+  "tier": "E1",
+  "fix": "the bund reach compared in pixels via self.px(BUND_REACH_FT), and labeled GUESS 0014 (the page gives no 6 ft)",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/water_ways/lanes.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 10 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E1",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.trim_lane_stubs#meeting another way",
   "tier": "E1",
   "fix": "trim_lane_stubs way_reach 40 -> 60 ft (px-scaled), per 0246",
@@ -5212,20 +5408,6 @@
   "scope": "deferred"
  },
  {
-  "key": ".claude/skills/diagram/l7r/diagram/waterfields/carve.py::_dry_fields#off the water and the frame",
-  "tier": "E1",
-  "fix": "drop a cell that falls inside any supply canal's bank (local half-width + CANAL_BERM_FT), not only within 0.5 px of the painted edge",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/waterfields/carve.py"
-  ],
-  "after": [],
-  "flag": "",
-  "tier_as_ranked": "E1",
-  "verdict": "DRIFTED",
-  "wave": "",
-  "scope": "kept"
- },
- {
   "key": ".claude/skills/diagram/l7r/diagram/waterfields/comb.py::_comb_drain#wandering line",
   "tier": "E1",
   "fix": "scale the drain wander by the map's scale: jitter +/-6 ft and sample spacing 120-170 ft converted to px (x grain/2)",
@@ -5278,6 +5460,21 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/waterfields/polder.py::build_polder#gaps",
+  "verdict": "DRIFTED",
+  "tier": "E1",
+  "fix": "scale the default gaps by ftpx as the module is (a 3 ft bund and an 8 ft corridor at any scale)",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/waterfields/polder.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 10 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E1",
   "wave": "",
   "scope": "kept"
  },
@@ -6061,6 +6258,21 @@
   "flag": "",
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::_polder_candidate#surveyed block",
+  "verdict": "DRIFTED",
+  "tier": "E2",
+  "fix": "hold the block's outer edge to its line (0019/0022: the wander fades to nothing at the fixed outer edge); the wander ladder and the 0.86 fill test are not on the page, and the axis-aligned box misreads an oblique block",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 10 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E2",
   "wave": "",
   "scope": "kept"
  },
@@ -7082,6 +7294,21 @@
   "scope": "kept"
  },
  {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_source#feeder brook narrower than the head race",
+  "verdict": "DRIFTED",
+  "tier": "E2",
+  "fix": "the brook arrives narrower than the head race it feeds (0068): a 7 ft brook into a 6 ft head race inverts it - size the two against each other",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 10 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E2",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::channel_end_on_stream#mouth reaches the water",
   "tier": "E2",
   "fix": "junction tolerance from a fixed 13 px to the stream's own drawn half-width",
@@ -7360,6 +7587,21 @@
   "flag": "",
   "tier_as_ranked": "E2",
   "verdict": "CANNOT-TELL",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#every crown gives way round a persimmon",
+  "verdict": "DRIFTED",
+  "tier": "E2",
+  "fix": "the grove's trees give way round a yard persimmon (0072): refuse every kind of crown under its crown, not the conifer alone",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 10 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E2",
   "wave": "",
   "scope": "kept"
  },
@@ -7785,6 +8027,21 @@
   "verdict": "DRIFTED",
   "wave": "",
   "scope": "deferred"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/boards.py::BoardsMixin.board_record#marker floor",
+  "verdict": "DRIFTED",
+  "tier": "E2",
+  "fix": "floor the drawn marker only at city scale (0190 records the oversized marker there alone), not at a village's grain",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/boards.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 10 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E2",
+  "wave": "",
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/boards.py::BoardsMixin.kosatsuba#stone footing and fence",
@@ -9670,7 +9927,7 @@
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/knots.py::settle_knots#a knot no lawful gather reaches",
   "verdict": "DRIFTED",
   "tier": "E3",
-  "fix": "gather the knots left on Inashiro (lanes 9/11 at 19.1 ft; lane 3 24.1 ft from the track head) and Sawada (lanes 9/12, 21.9 ft) at one point (0081): every single-point gather today runs a way along another, through a yard, or off the network - re-lay the earlier household's way at seating so a lawful gather exists; then drop the map from test_pool_261's _KNOTS_WAITING",
+  "fix": "re-lay the earlier household's way at seating so the gather is lawful (0081: ends within 25 ft joined at a single point) - at wave 10's HEAD the one knot left is Sawada's lanes 15/17 at 8.2 ft (Inashiro none); main's were Sawada 9/12 at 21.9 ft and Inashiro 11/13 at 19.1 ft",
   "files": [
    ".claude/skills/diagram/l7r/diagram/hamletgen/ways/knots.py",
    ".claude/skills/diagram/l7r/diagram/settlement/rolling/gap_ways.py"
@@ -9679,6 +9936,7 @@
   "flag": "",
   "found": "wave 4: the knot test, measured",
   "tier_as_ranked": "E3",
+  "moved": "amendment 9 round 5: the fix text re-aimed at the knot that exists",
   "wave": "",
   "scope": "kept"
  },
@@ -11227,6 +11485,38 @@
   "scope": "kept"
  },
  {
+  "key": ".claude/skills/diagram/l7r/diagram/waterfields/carve.py::_dry_fields#a hem that keeps its ground inside the berm",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "drop the hem's cells inside a supply canal's bank (0055/0006: its half-width plus CANAL_BERM_FT) without handing the freed ground to the next placer - at the bank the freed ground re-lays the toe marsh (Inashiro: a sharp corner on open ground); the carve's docstring records the earlier measurements (the hem 23 -> 8 cells, the wells re-packed)",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/waterfields/carve.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 10 gate: the row held for it (FR-004)",
+  "tier_as_ranked": "E3",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/waterfields/carve.py::_dry_fields#off the water and the frame",
+  "tier": "E3",
+  "fix": "drop a cell that falls inside any supply canal's bank (local half-width + CANAL_BERM_FT), not only within 0.5 px of the painted edge",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/waterfields/carve.py"
+  ],
+  "after": [
+   ".claude/skills/diagram/l7r/diagram/waterfields/carve.py::_dry_fields#a hem that keeps its ground inside the berm"
+  ],
+  "flag": "",
+  "tier_as_ranked": "E1",
+  "moved": "wave 10 gate: held - at the canal's bank Inashiro's toe marsh takes a sharp corner on open ground (bisected by group: the carve alone); waits on the hem row",
+  "verdict": "DRIFTED",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": ".claude/skills/diagram/l7r/diagram/waterfields/comb.py::_comb_threads#delivery takeoff",
   "tier": "E3",
   "fix": "leave canal A's deliveries at right angles to the canal (0053) rather than 33-48 deg; reshapes every comb fan's columns and partition",
@@ -11792,6 +12082,21 @@
   "scope": "deferred"
  },
  {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_source#feeder brook width against the ladder",
+  "verdict": "DRIFTED",
+  "tier": "E4",
+  "fix": "research first: 0068's ladder puts a village creek at about 3.5 times the 1.5 ft floor (about 5.25 ft) where 0059 says 7 ft - the record reconciles the two before the code moves",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 10 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E4",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#a conifer-led clump throws only LESSER_ROLL_SHARE (10%) of its crowns as lesser broadleaf",
   "tier": "E4",
   "fix": "0072 gives no share of lesser broadleaf in a conifer-led clump; the 10% LESSER_ROLL_SHARE needs a source",
@@ -12037,6 +12342,21 @@
   "flag": "",
   "tier_as_ranked": "E4",
   "verdict": "NEEDS-RESEARCH",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/board_seat.py::entrance_seat_ok#entrance board near the entrance",
+  "verdict": "NEEDS-RESEARCH",
+  "tier": "E4",
+  "fix": "research first: 0190 gives no distance from an entrance; the code holds the reach plus the band, 120 ft (the claim says 160)",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/board_seat.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 10 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E4",
   "wave": "",
   "scope": "kept"
  },

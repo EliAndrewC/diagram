@@ -254,6 +254,17 @@
   "moved": "T29a (amendment 7): tiered by its work - carry_on (bund.py line 360) only passes LANE_CLEARANCE, so it cannot be IN-STEP until the edge-based corridor (several modules) lands; no code of its own changes.",
   "tier": "E3"
  },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/knots.py::settle_knots#a knot no lawful gather reaches": {
+  "after": [],
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/knots.py",
+   ".claude/skills/diagram/l7r/diagram/settlement/rolling/gap_ways.py"
+  ],
+  "fix": "re-lay the earlier household's way at seating so the gather is lawful (0081: ends within 25 ft joined at a single point) - at wave 10's HEAD the one knot left is Sawada's lanes 15/17 at 8.2 ft (Inashiro none); main's were Sawada 9/12 at 21.9 ft and Inashiro 11/13 at 19.1 ft",
+  "flag": "",
+  "moved": "amendment 9 round 5: the fix text re-aimed at the knot that exists",
+  "tier": "E3"
+ },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::fouls_fabric#foul margin": {
   "after": [],
   "files": [
