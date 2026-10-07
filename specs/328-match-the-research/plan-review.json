@@ -1,6 +1,6 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "1a603340c0b38862959b1abc7175635a90e0d605edb1356622a13baf453a1262",
+ "plan_sha256": "fbb245568beb815edf76730178b8720f1091656f24965358b5adabe8b762c246",
  "reviewed": "2026-10-07",
  "declared": "spec-fidelity",
  "decisions": [
@@ -120,9 +120,10 @@
   },
   {
    "id": "W7-scope",
-   "summary": "Wave 7: the four open E0 rows, then the next contiguous run of E1, global rows 180-230 (26 open rows, tasks.md Phase 8); the run ends at the civic grounds' last row (230), the next open E1 row is 231",
-   "class": "within",
-   "why": "FR-006/SC-003: measured on ranking.json - no open E0 row is left out, the first open E1 row is 180, every open E1 row in 180-230 is in the wave (26), all rows in the span are E1, and the only afters (228, 229 -> 227) are inside the wave. Nothing held back or re-tiered."
+   "summary": "Wave 7: the four open E0 rows, then the next contiguous run of E1, global rows 180-231 (27 open rows, tasks.md Phase 8), ending at the civic grounds last row (231), the next open E1 row 232; the run is chosen on ranking.json tiers as they stand",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "Measured on ranking.json: 22 open found rows of the wave 5 and 6 re-checks still carry a tier assigned by VERDICT, not by work (found: tier provisional) - 11 E1 (180,194,197,200,201,203,208,210,212,225,270), 6 E2 (387,393-396,453), 5 E4 (678,684,685,687,706). The GM asked for the findings ranked by implementation work and done easiest first (FR-002, FR-003, SC-003); the amendment-2 review already required this step (T12a) before an E1 wave chooses its rows. On their own fix lines, 394-396 are one value each (bm=12 -> px(36), <130/<55 -> px(390)/px(165), +12 -> px(36), the twin of row 197 inside the wave) and are left out of the E1 run; 678, 685, 706 are claim relabels (E0 by FR-003) left at E4 while E1 rows are fixed; and 201 (a fallback seat rule), 203 (a sweep condition) and 208 (a row of arches, a new form) are rule or form changes taken into an E1 wave. Not impossible, not implied by the request, and it defeats the request purpose (the order by work). Fix: tier the 22 by their work before the wave chooses its rows, then re-derive the run."
   },
   {
    "id": "W7-verification",
@@ -131,5 +132,5 @@
    "why": "FR-005 and the spec's Edge Case for a fix that makes a map fail (held value -> found row, recorded in the ranking); the same verification already ruled within for wave 5."
   }
  ],
- "verdict": "CLEAR"
+ "verdict": "BLOCKED"
 }
