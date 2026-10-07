@@ -166,7 +166,8 @@ A compound housing ~50 people plus horses needs 2-4 wells, distributed by use:
 <!-- Research: one tub per wooden building - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: ~8-12 tubs; Ubame's sheet draws 19, Ochiba's none at its karo's house or senior retainers' quarters -->
 <!-- Research: kitchen weighting - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: 2 tubs at the kitchen -->
 <!-- Research: tub against its wall - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: tubs stand at the wooden buildings, at the entrance; the gutter feed at an eaves corner and the ~3.5 ft limit from the building are UNRESEARCHED -->
-<!-- Research: tub clear of the footprint - CANON: the GM's ruling of 2026-07-25, tightened 2026-07-26, no part of a tub glyph in a building's footprint (the downspout discharges and the bucket line forms outside the wall); the glyph is seated ~2.2 px (~0.7 ft) off the wall -->
+<!-- Research: tub clear of the footprint - CANON: the GM's ruling of 2026-07-25, tightened 2026-07-26, no part of a tub glyph in a building's footprint (the downspout discharges and the bucket line forms outside the wall) -->
+<!-- Research: tub seat off the wall - CONVENTION: the glyph seated ~2.2 px (~0.7 ft at 3 px = 1 ft) off the wall, its outline clear of the wall's ink -->
 <!-- Research: a tub never on a well glyph; moved to another eaves corner - UNRESEARCHED: the two point glyphs would smear into one blob, so a tub is moved to a different eaves corner -->
 
 <!-- Research: no tub at the plaster kura - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: none at the kura, one may stand at a wooden granary -->

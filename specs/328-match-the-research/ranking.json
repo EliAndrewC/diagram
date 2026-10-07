@@ -14,20 +14,6 @@
   "wave": ""
  },
  {
-  "key": ".claude/skills/diagram/buildings.md::Fire-water tubs#tub against its wall",
-  "verdict": "MISLABELED",
-  "tier": "E0",
-  "fix": "the page does answer that tubs stand at the building (\"kept at the wooden buildings, at the entrance\"), so cite 0100 drawing \u00a73 for that; only the gutter feed and the ~3.5 ft limit are UNRESEARCHED",
-  "files": [
-   ".claude/skills/diagram/buildings.md"
-  ],
-  "after": [],
-  "flag": "",
-  "found": "wave 2 re-check (tier provisional, by verdict)",
-  "tier_as_ranked": "E0",
-  "wave": ""
- },
- {
   "key": ".claude/skills/diagram/buildings.md::Fire-water tubs#tub clear of the footprint",
   "verdict": "MISLABELED",
   "tier": "E0",
@@ -46,20 +32,6 @@
   "verdict": "UNCLAIMED",
   "tier": "E0",
   "fix": "cell kept well under the barracks",
-  "files": [
-   ".claude/skills/diagram/buildings.md"
-  ],
-  "after": [],
-  "flag": "",
-  "found": "wave 2 re-check (tier provisional, by verdict)",
-  "tier_as_ranked": "E0",
-  "wave": ""
- },
- {
-  "key": ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#granary kept under a residence block",
-  "verdict": "UNCLAIMED",
-  "tier": "E0",
-  "fix": "granary kept under a residence block",
   "files": [
    ".claude/skills/diagram/buildings.md"
   ],
@@ -209,20 +181,6 @@
   "wave": "1"
  },
  {
-  "key": ".claude/skills/diagram/buildings/programs.md::Country shrine (a village district's shrine)#a well as the purification stop beside the approach (\"the well or basin\"; the required item is `well`)",
-  "verdict": "UNCLAIMED",
-  "tier": "E0",
-  "fix": "a well as the purification stop beside the approach (\"the well or basin\"; the required item is `well`)",
-  "files": [
-   ".claude/skills/diagram/buildings/programs.md"
-  ],
-  "after": [],
-  "flag": "",
-  "found": "wave 2 re-check (tier provisional, by verdict)",
-  "tier_as_ranked": "E0",
-  "wave": ""
- },
- {
   "key": ".claude/skills/diagram/buildings/programs.md::Country shrine (a village district's shrine)#approach width about 10 ft",
   "verdict": "UNCLAIMED",
   "tier": "E0",
@@ -297,20 +255,6 @@
   "verdict": "UNCLAIMED",
   "tier": "E0",
   "fix": "a detached guest house at a rich posting (0091's drawing page records it as a GUESS)",
-  "files": [
-   ".claude/skills/diagram/buildings/programs.md"
-  ],
-  "after": [],
-  "flag": "",
-  "found": "wave 2 re-check (tier provisional, by verdict)",
-  "tier_as_ranked": "E0",
-  "wave": ""
- },
- {
-  "key": ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#formal visitors and the privacy baffle",
-  "verdict": "MISLABELED",
-  "tier": "E0",
-  "fix": "0104 answers this: \"the genkan is drawn on the office. The way to the residence runs on through the office\"; it should cite 0104's drawing page, and \"go no deeper\" is the project's reading beyond that",
   "files": [
    ".claude/skills/diagram/buildings/programs.md"
   ],
@@ -1356,6 +1300,20 @@
   "wave": "2"
  },
  {
+  "key": ".claude/skills/diagram/buildings/programs.md::Country shrine (a village district's shrine)#a well as the purification stop beside the approach (\"the well or basin\"; the required item is `well`)",
+  "verdict": "MISLABELED",
+  "tier": "E1",
+  "fix": "the program's required purification item becomes the stone basin beside the approach (0222), not a well; the claim cites 0222",
+  "files": [
+   ".claude/skills/diagram/buildings/programs.md"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 3 re-check",
+  "tier_as_ranked": "E1",
+  "wave": ""
+ },
+ {
   "key": ".claude/skills/diagram/buildings/programs.md::Country shrine (a village district's shrine)#basin beside the approach",
   "tier": "E1",
   "fix": "procedure basin sentence: drop 'from Nikko in 1636'; the one pre-1868 pavilion found is Yakyu Inari's (1836), a village's plain basin attested (Nagao 1828)",
@@ -2007,6 +1965,34 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
+  "wave": ""
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#door path distance",
+  "verdict": "MISLABELED",
+  "tier": "E1",
+  "fix": "DOOR_REACH_FT 40 ft brought to 0246 drawing's GUESS for a way reaching a farmhouse (within 60 ft of the house, or 12 ft of its built ground), the claim citing it",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 3 re-check",
+  "tier_as_ranked": "E1",
+  "wave": ""
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#orphan stub joined",
+  "verdict": "UNCLAIMED",
+  "tier": "E1",
+  "fix": "an orphan stub joined only within 0081's 25 ft join reach, not _STUB_REACH_FT 48 ft (with the lane law, wave 4)",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 3 re-check",
+  "tier_as_ranked": "E1",
   "wave": ""
  },
  {
@@ -3492,6 +3478,20 @@
   "wave": ""
  },
  {
+  "key": ".claude/skills/diagram/buildings.md::Fire-water tubs#tub against its wall",
+  "verdict": "DRIFTED",
+  "tier": "E2",
+  "fix": "the tub seated where 0100 attests water kept - at the wooden building's entrance - or a knob between the attested seats, not at a wall or eaves corner",
+  "files": [
+   ".claude/skills/diagram/buildings.md"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 3 re-check",
+  "tier_as_ranked": "E2",
+  "wave": ""
+ },
+ {
   "key": ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#barracks",
   "tier": "E2",
   "fix": "barracks drawn 12-24 ft deep and long, never squat: county example's 45 x 34 ft range re-proportioned, barracks band depth capped at 24 ft",
@@ -3535,6 +3535,20 @@
   "flag": "",
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
+  "wave": ""
+ },
+ {
+  "key": ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#granary kept under a residence block",
+  "verdict": "DRIFTED",
+  "tier": "E2",
+  "fix": "the under-the-residence ceiling tied to the granary-weight knob: a terminal store may be the largest building (0098 drawing)",
+  "files": [
+   ".claude/skills/diagram/buildings.md"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 3 re-check",
+  "tier_as_ranked": "E2",
   "wave": ""
  },
  {
@@ -3691,6 +3705,20 @@
   "flag": "",
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
+  "wave": ""
+ },
+ {
+  "key": ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#formal visitors and the privacy baffle",
+  "verdict": "DRIFTED",
+  "tier": "E2",
+  "fix": "where office and residence share a compound the genkan is drawn on the office (0104 drawing), not on the residence's reception block",
+  "files": [
+   ".claude/skills/diagram/buildings/programs.md"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 3 re-check",
+  "tier_as_ranked": "E2",
   "wave": ""
  },
  {
@@ -8351,6 +8379,20 @@
   "flag": "",
   "tier_as_ranked": "E4",
   "verdict": "NEEDS-RESEARCH",
+  "wave": ""
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/wells.py::place_wells#grove farms take their own water",
+  "verdict": "CANNOT-TELL",
+  "tier": "E4",
+  "fix": "whether every grove farm (row farms included) draws its own water, or a row village keeps its street's shared wells (0028, 0033) - read grove_water and the row roll, then hold the code to the page",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/wells.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 3 re-check",
+  "tier_as_ranked": "E4",
   "wave": ""
  },
  {

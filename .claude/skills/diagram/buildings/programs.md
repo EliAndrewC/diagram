@@ -141,7 +141,7 @@ Each item names the Mode A kind it is (feature 262): the sheet's own `data-kind`
 <!-- Research: sacred tree - research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html, research/questions/0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html: roped, beside the approach -->
 <!-- Research: well and basin both drawn - UNRESEARCHED: where a map sites the shrine's well elsewhere, the well and the basin are both drawn -->
 <!-- Research: a well as the purification stop beside the approach ("the well or basin"; the required item is `well`) - UNRESEARCHED: a well drawn as the purification stop beside the approach, the page attesting only the basin -->
-<!-- Research: approach width about 10 ft - UNRESEARCHED: no village shrine's approach was found measured -->
+<!-- Research: approach width about 10 ft - GUESS research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html: about 10 ft; the record measures only a great shrine's ~23 ft approach -->
 <!-- Research: bell tower band 6-16 by 6-16 ft - UNRESEARCHED: no account says whether a village shrine kept by a monk had its bell -->
 <!-- Research: sacred tree drawn as the biggest crown in the precinct - UNRESEARCHED: no sacred tree's size was found -->
 
