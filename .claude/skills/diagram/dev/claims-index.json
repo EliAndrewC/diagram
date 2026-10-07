@@ -19354,25 +19354,28 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py::Lawful.on_lawful_ground#bends like a path": {
-  "code": "a2e8c1c0fca206ca",
-  "core": "b078f83d4a987a71",
+  "code": "a2f04b420b4aa60b",
+  "core": "5a55bcd6394299d8",
   "date": "2026-10-07",
-  "note": "hooked and kink tests",
+  "note": "the run is refused when it is hooked or has a kink span, as the page's no-hairpin, no-zigzag and no-end-hook rules require",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },
   "research": "ebd72aaa6a0eb9af",
   "rests": [
+   "0081-village-lanes.drawing.html:3b9a5312c92335d3",
+   "0081-village-lanes.drawing.html:65ad16eace199d92",
    "0081-village-lanes.drawing.html:a857325132f8d4ee",
+   "0081-village-lanes.drawing.html:be608a70af4cfcc5",
    "0081-village-lanes.drawing.html:d30e15716180fbf5"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py::Lawful.on_lawful_ground#crossings": {
-  "code": "94aa0315a0178ff3",
-  "core": "b078f83d4a987a71",
+  "code": "9b9f5acf678ae106",
+  "core": "5a55bcd6394299d8",
   "date": "2026-10-07",
-  "note": "a square crossing at a crossing place, not crossed twice",
+  "note": "`_crossing_fault` refuses a crossing that is off square, off a crossing place, or crossed twice, matching the page's square plank crossings at set places and its stay-on-your-own-bank rule",
   "pages": {
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "c23a085a43372c2c"
   },
@@ -19385,26 +19388,27 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py::Lawful.on_lawful_ground#nothing built on a lane": {
-  "code": "1e6470ed1d731144",
-  "core": "b078f83d4a987a71",
+  "code": "d48d4e2b01d751f1",
+  "core": "5a55bcd6394299d8",
   "date": "2026-10-07",
-  "note": "fouled_segment and through_a_building",
+  "note": "the run is refused when it fouls a house, yard, building or fixture, as the page says nothing stands on a lane's tread and a way keeps round other holdings; the 7 ft yard reach matches the page's 7 ft fence clearance",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
   "research": "7b40c2c01cfba682",
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:8ab9878d6ac1d10b",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c5daec1a445d35bf",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:f0a411a544083965"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/settle.py::Lawful.on_lawful_ground#off crop and marsh": {
-  "code": "4d02bafe4afeb518",
-  "core": "b078f83d4a987a71",
+  "code": "512eb32d0e7f4d4d",
+  "core": "5a55bcd6394299d8",
   "date": "2026-10-07",
-  "note": "open_ground test",
+  "note": "`open_ground` keeps the run off row crops, the flooded paddy and wet ground",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },
