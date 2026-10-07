@@ -147,3 +147,24 @@ def test_a_wild_comb_draws_its_toe_strip_and_hands_the_whole_middle_over_as_its_
     taken = [d["poly"] for d in wild["dry_plots"]] + [p["poly"] for p in wild["plots"]]
     assert not any(overlaps_any(d["poly"], taken) for d in wild["dry_reserve"])
     assert finish_comb(carve_comb(2400, 2400, (300.0, 300.0), 5, down_deg=90, grain=2.0))["dry_reserve"] == [], "a cleared fan holds nothing back"
+
+
+def test_the_fork_triangle_is_planted_dry_on_a_citys_grain_only(monkeypatch) -> None:
+    """Feature 328 (0010's drawing page): the second hem band along canal B's supply stretch fills the fork triangle on a
+    city's coarse grain (`grain < 1.0`) and never on a hamlet's or a village's."""
+    from l7r.diagram.waterfields import hem
+    from l7r.diagram.waterfields.comb import carve_comb, finish_comb
+
+    calls: list[float] = []
+    real = hem._dry_fields
+
+    def counting(*a, **k):
+        calls.append(k.get("g", 0.0))
+        return real(*a, **k)
+
+    monkeypatch.setattr(hem, "_dry_fields", counting)
+    finish_comb(carve_comb(2400, 2400, (300.0, 300.0), 3, down_deg=90, grain=0.5))
+    city = len(calls)
+    calls.clear()
+    finish_comb(carve_comb(2400, 2400, (300.0, 300.0), 3, down_deg=90, grain=2.0))
+    assert city > len(calls) >= 1, f"the city's comb draws the fork band too ({city} hem passes against {len(calls)})"
