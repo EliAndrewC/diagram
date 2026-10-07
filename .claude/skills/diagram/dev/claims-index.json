@@ -42163,19 +42163,21 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stocking.py::stocked_copse#a household's reserved share of the wood floor (woods W25) is never dropped as a straggler": {
-  "code": "d15ab9ebea6dec6d",
-  "core": "d15ab9ebea6dec6d",
-  "date": "2026-10-07",
-  "note": "a household's reserved share of the wood floor (woods W25) is never dropped as a straggler",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stocking.py::stocked_copse#copse clumps farthest from the centroid dropped until stocked": {
   "code": "0f952ac6ff33eb3c",
   "core": "d15ab9ebea6dec6d",
   "date": "2026-10-07",
   "note": "drops the farthest clumps one at a time until stocked; no question in the bundle bears on it",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stocking.py::stocked_copse#reserved share never a straggler": {
+  "code": "dd5e77d4ffa61462",
+  "core": "d15ab9ebea6dec6d",
+  "date": "2026-10-07",
+  "note": "the code never drops a clump in `kept`, and stops once only kept clumps are left; the bundle cites no question, so UNRESEARCHED is the right label",
   "pages": {},
   "research": "",
   "rests": [],
