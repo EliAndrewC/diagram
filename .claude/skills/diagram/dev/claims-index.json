@@ -396,14 +396,16 @@
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/buildings.md::Fire-water tubs#tub clear of the footprint": {
-  "code": "3cbd2ca4e6b9899f",
+  "code": "12d102d9b9ecbd57",
   "core": "c7c04e2eef446c6d",
   "date": "2026-10-07",
-  "note": "the no-overlap rule is the GM's CANON, but the 2.2 px seat is house style, not the GM's ruling, and the prose calls it \"~2 ft clear\" where 2.2 px at 3 px/ft is ~0.7 ft; split the seat into its own GUESS or CONVENTION claim and correct the prose",
+  "note": "CANON names the GM's ruling; 0100's \"at the wooden buildings, at the entrance\" does not settle inside or outside",
   "pages": {},
   "research": "",
-  "rests": [],
-  "verdict": "MISLABELED"
+  "rests": [
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:3d78982d8d903e9f"
+  ],
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/buildings.md::Fire-water tubs#tub glyph": {
   "code": "04d7c9cb320d62d0",
@@ -428,6 +430,19 @@
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/buildings.md::Fire-water tubs#tub seat off the wall": {
+  "code": "70184b4f0cad044e",
+  "core": "c7c04e2eef446c6d",
+  "date": "2026-10-07",
+  "note": "the section gives the standoff a physical meaning: the glyph \"sits ~2 ft clear of the outside wall face ... under the eaves-line ... close enough that a downspout reaches it\" and \"~1.7-2 ft off\". But 2.2 px at 3 px = 1 ft is 0.7 ft, so the text and the claim disagree. 0100 is silent on the distance, so either label it UNRESEARCHED and make the figure agree, or keep CONVENTION (glyph clear of the wall's ink) and drop the stale ~2 ft text and its physical reasoning",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:3d78982d8d903e9f",
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:4530579a74e75485"
+  ],
+  "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/buildings.md::Historical grounding#grounding pointer": {
   "code": "753a9cc3c91efcdc",
@@ -1876,13 +1891,19 @@
   "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/buildings/programs.md::Country shrine (a village district's shrine)#approach width about 10 ft": {
-  "code": "c044f451bb4033a5",
+  "code": "c1e250dd0312c192",
   "core": "754857caf22cf344",
   "date": "2026-10-07",
-  "note": "the record was searched (0220 found only a great shrine's ~23 ft approach), so this should be GUESS citing 0220, not UNRESEARCHED",
-  "pages": {},
-  "research": "",
+  "note": "the 0220 drawing page does not record a 10 ft approach width as a guess (it says nothing about width). The research page gives only Nagao's ~23 ft. The claim should be bare GUESS or name the page that records the guess",
+  "pages": {
+   "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html": "e385403eda71f0a2"
+  },
+  "research": "187ffe8b48289099",
   "rests": [
+   "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:11a53f93479ca7e0",
+   "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:150b6599eb0096ca",
+   "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:6dbb45d3631d3bee",
+   "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:6e46a236e3d5c3e9",
    "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html:30f48e3afb3b13e1"
   ],
   "verdict": "MISLABELED"
@@ -10022,16 +10043,19 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#a footpath's room off the outline": {
-  "code": "7f9256616eb27c06",
+  "code": "7c6b7d0c0a33c053",
   "core": "d4b283a8909eb106",
   "date": "2026-10-07",
-  "note": "push += WEB_FABRIC_GAP*2+6 (20 ft) sets a physical distance between a farmstead and the dike bank or brook, so it is not CONVENTION; it should be a question claim on 0246.drawing §330 (the 20 ft lane's room, which the page classes as a drawing convention)",
-  "pages": {},
-  "research": "",
+  "note": "`push += WEB_FABRIC_GAP * 2.0 + 6.0` clears a seat off the dike, pond or brook outline. §431's 20 ft is the room between two homesteads (\"7 ft at each garden fence ... a 2 ft parting between the two holdings\"). Off an outline there is one fence and no second holding, and the page is silent on that gap, so the claim should say UNRESEARCHED",
+  "pages": {
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
+  },
+  "research": "7b40c2c01cfba682",
   "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c5daec1a445d35bf"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "NEEDS-RESEARCH"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#a household's wood share": {
   "code": "98abd3c64339cce0",
@@ -10151,6 +10175,14 @@
    "0035-villages-beside-their-stream-one-bank-or-both.html:7978c54474b6099a"
   ],
   "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#front-row standoff from the field set by the homestead core's reach (house, yard, shed, well pocket; garden excluded)": {
+  "code": "d4b283a8909eb106",
+  "core": "d4b283a8909eb106",
+  "date": "2026-10-07",
+  "note": "front-row standoff from the field set by the homestead core's reach (house, yard, shed, well pocket; garden excluded)",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#rank depth jitter": {
   "code": "0d18f6e21e7de26b",
@@ -21869,6 +21901,30 @@
   ],
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton arm clipped WEB_FABRIC_GAP (7 ft) off the steadings and trimmed back to the last point serving a house": {
+  "code": "c26981eddbe1cc55",
+  "core": "c26981eddbe1cc55",
+  "date": "2026-10-07",
+  "note": "skeleton arm clipped WEB_FABRIC_GAP (7 ft) off the steadings and trimmed back to the last point serving a house",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton arm off the water": {
+  "code": "06f8f59c0f1c8553",
+  "core": "c26981eddbe1cc55",
+  "date": "2026-10-07",
+  "note": "for the brook the bundle answers it: 0035's drawing page has \"the ways between the two banks cross the brook squarely, on a plank bridge\", at crossing places every ~160 ft, only where crossing saves ~150 ft. Cite it for the brook (the arm crosses only at those crossing places) and keep UNRESEARCHED for ditches and drawn channels only",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:03433651c0627577",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:93969c06f800b0d5",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:d643c23f456119bc",
+   "0081-village-lanes.drawing.html:43b635b1ca75125b",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:8ab9878d6ac1d10b"
+  ],
+  "verdict": "MISLABELED"
+ },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton form": {
   "code": "031df74ba9705f0c",
   "core": "c26981eddbe1cc55",
@@ -22043,6 +22099,14 @@
   ],
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#a row street trimmed to end at its outermost door-path joint or last farm door": {
+  "code": "8aa914b6b5fbaa23",
+  "core": "8aa914b6b5fbaa23",
+  "date": "2026-10-07",
+  "note": "a row street trimmed to end at its outermost door-path joint or last farm door",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#a web lane's span": {
   "code": "2461e601951e2920",
   "core": "8aa914b6b5fbaa23",
@@ -22055,14 +22119,6 @@
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c4049193a04d9dd0"
   ],
   "verdict": "MISLABELED"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#an orphan stub joined within _STUB_REACH_FT (48 ft), against 0081.drawing §131's 25 ft join": {
-  "code": "8aa914b6b5fbaa23",
-  "core": "8aa914b6b5fbaa23",
-  "date": "2026-10-07",
-  "note": "an orphan stub joined within _STUB_REACH_FT (48 ft), against 0081.drawing §131's 25 ft join",
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#back lane tie spacing": {
   "code": "71f853f0c558c150",
@@ -22209,6 +22265,23 @@
   ],
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#orphan stub joined": {
+  "code": "3967da9fdfdd095e",
+  "core": "8aa914b6b5fbaa23",
+  "date": "2026-10-07",
+  "note": "joining an orphan stub into the one network is not §631's end-to-end knot rule. The reach is undecided by the record",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0081-village-lanes.drawing.html:34425c991aa27503",
+   "0081-village-lanes.drawing.html:65ad16eace199d92",
+   "0081-village-lanes.drawing.html:df26f73dd5ee96d2",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:048ef93cf5c5c59f",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:ab698a7b15fb7e8e"
+  ],
+  "verdict": "IN-STEP"
+ },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#row streets laid": {
   "code": "3b3cdb23644d1e54",
   "core": "8aa914b6b5fbaa23",
@@ -22238,14 +22311,6 @@
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#web cuts and joins clipped at the watercourses and drawn channels (no web lane crosses water)": {
-  "code": "8aa914b6b5fbaa23",
-  "core": "8aa914b6b5fbaa23",
-  "date": "2026-10-07",
-  "note": "web cuts and joins clipped at the watercourses and drawn channels (no web lane crosses water)",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#web lane margin off the hard ground": {
   "code": "72c8d162bb5d4a00",
   "core": "8aa914b6b5fbaa23",
@@ -22272,6 +22337,30 @@
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:8ab9878d6ac1d10b"
   ],
   "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#web lanes off the water": {
+  "code": "6990ce1b74012969",
+  "core": "8aa914b6b5fbaa23",
+  "date": "2026-10-07",
+  "note": "the same finding as the skeleton: 0035's drawing page says ways between the banks cross the brook squarely on a plank bridge at its crossing places. Cite it for the brook and keep UNRESEARCHED for ditches and drawn channels",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:03433651c0627577",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:93969c06f800b0d5",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:d643c23f456119bc",
+   "0081-village-lanes.drawing.html:43b635b1ca75125b",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:8ab9878d6ac1d10b"
+  ],
+  "verdict": "MISLABELED"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#web lanes routed round the households' reserved wood seats as fabric": {
+  "code": "8aa914b6b5fbaa23",
+  "core": "8aa914b6b5fbaa23",
+  "date": "2026-10-07",
+  "note": "web lanes routed round the households' reserved wood seats as fabric",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::tidy_lane_ends#a connector starting at the way out's gate is never trimmed": {
   "code": "9071f8c7dae2e70e",

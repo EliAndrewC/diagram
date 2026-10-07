@@ -540,16 +540,16 @@
   "wave": "1 (claim renamed or split; its parts re-checked)"
  },
  {
-  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#a footpath's room off the outline",
-  "verdict": "MISLABELED",
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#front-row standoff from the field set by the homestead core's reach (house, yard, shed, well pocket; garden excluded)",
+  "verdict": "UNCLAIMED",
   "tier": "E0",
-  "fix": "`WEB_FABRIC_GAP * 2.0 + 6.0` (20 ft) is the lane's room 0246 records as a convention (\"7 ft at each garden fence and a 4 ft tread ... 20 ft in all\"); the label should cite 0246 drawing as CONVENTION, and the code's 6 ft of tread does not match the page's 4 ft tread plus 2 ft parting",
+  "fix": "claim the front-row standoff by the homestead core's reach",
   "files": [
    ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py"
   ],
   "after": [],
   "flag": "",
-  "found": "wave 2 re-check (tier provisional, by verdict)",
+  "found": "wave 3 re-check",
   "tier_as_ranked": "E0",
   "wave": ""
  },
@@ -734,6 +734,20 @@
   "wave": ""
  },
  {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton arm clipped WEB_FABRIC_GAP (7 ft) off the steadings and trimmed back to the last point serving a house",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "claim the skeleton arm's 7 ft fabric clip and its trim (0246)",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 3 re-check",
+  "tier_as_ranked": "E0",
+  "wave": ""
+ },
+ {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#door path reach",
   "verdict": "MISLABELED",
   "tier": "E0",
@@ -758,6 +772,20 @@
   "after": [],
   "flag": "",
   "found": "wave 2 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E0",
+  "wave": ""
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#web lanes routed round the households' reserved wood seats as fabric",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "claim the wood seats as fabric the web routes round",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 3 re-check",
   "tier_as_ranked": "E0",
   "wave": ""
  },
@@ -1937,6 +1965,20 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "MISLABELED",
+  "wave": ""
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#a row street trimmed to end at its outermost door-path joint or last farm door",
+  "verdict": "UNCLAIMED",
+  "tier": "E1",
+  "fix": "the row street runs on off the map as the road into it (0033 drawing), not trimmed at its last farm's path - with the lane law",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 3 re-check",
+  "tier_as_ranked": "E1",
   "wave": ""
  },
  {
@@ -4343,6 +4385,34 @@
   "flag": "",
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
+  "wave": ""
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton arm off the water",
+  "verdict": "MISLABELED",
+  "tier": "E2",
+  "fix": "an inner arm crosses the brook squarely on a plank bridge at its crossing places (0035 drawing), not clipped at it; UNRESEARCHED stays for ditches and channels",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 3 re-check",
+  "tier_as_ranked": "E2",
+  "wave": ""
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#web lanes off the water",
+  "verdict": "MISLABELED",
+  "tier": "E2",
+  "fix": "web lanes cross the brook squarely on a plank bridge at its crossing places (0035 drawing), not clipped at it; UNRESEARCHED stays for ditches and channels",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 3 re-check",
+  "tier_as_ranked": "E2",
   "wave": ""
  },
  {
@@ -8379,6 +8449,20 @@
   "flag": "",
   "tier_as_ranked": "E4",
   "verdict": "NEEDS-RESEARCH",
+  "wave": ""
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#a footpath's room off the outline",
+  "verdict": "NEEDS-RESEARCH",
+  "tier": "E4",
+  "fix": "the room a seat keeps off a dike, pond or brook outline (one fence, no second holding) - 0246's 20 ft is between two homesteads; research the outline case, then hold the code to it",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 3 re-check",
+  "tier_as_ranked": "E4",
   "wave": ""
  },
  {
