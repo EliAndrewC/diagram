@@ -1,26 +1,122 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "f771d618224d15547c8919de45d720078a06c5af459fb70c39dfb60e08d18840",
+ "plan_sha256": "09ec34d64abd854280dfede7f8de3f1b9893b88bca4457f55b196fb1fb204467",
  "reviewed": "2026-10-07",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W6-scope",
-   "summary": "Wave 6 is the 32 open E0 rows (every open E0 row of ranking.json, all found by the wave 4/5 re-checks), claim lines only",
+   "id": "P1-audit",
+   "summary": "Phase 1: findings snapshotted; nine Opus batches by module merged to ranking.json/ranking.md; E0 rows tiered on the brief's earlier wording get a bounded re-check (E0 only with a named page already saying what the code does); a row a dependency outranks takes that tier",
    "class": "within",
-   "why": "E0 is the lowest open tier (32 open E0, then 87 E1); the 32 rows in tasks.md Phase 7 are exactly the open E0 rows of ranking.json, none held back (FR-006, SC-003)."
+   "why": "The GM's first step ('rank all of the findings by how much implementation work'); FR-001/FR-003. The bounded re-check holds E0 to FR-003's definition rather than widening it."
+  },
+  {
+   "id": "D4",
+   "summary": "A second Opus reader re-tiers a 30-row sample blind; a batch disagreeing by more than one tier on more than 5 rows is re-run",
+   "class": "within",
+   "why": "Checks that the order the GM asked for is a reproducible estimate (spec Assumptions); it enforces the ranking, it narrows nothing."
+  },
+  {
+   "id": "wave-order",
+   "summary": "Waves in tier order E0..E4; within a tier by module; a row with `after` waits for its dependency",
+   "class": "within",
+   "why": "'go from easiest to hardest' (request); FR-003's ordering and SC-003's dependency clause."
+  },
+  {
+   "id": "D1",
+   "summary": "Waves as amendments: only the current wave's rows are task boxes; the next wave appended once a wave lands",
+   "class": "within",
+   "why": "FR-006 verbatim; the GM asked for one feature that keeps going."
+  },
+  {
+   "id": "D2",
+   "summary": "Wave 1 is every E0 row, claim lines only, no map regeneration, gate runs",
+   "class": "within",
+   "why": "E0 is the easiest tier, so it is first under 'easiest to hardest'; no row is excluded."
+  },
+  {
+   "id": "D3",
+   "summary": "Re-checks batched by module, several units per claims bundle",
+   "class": "within",
+   "why": "FR-003's module grouping; every row is still re-checked by impl-drift (FR-005)."
+  },
+  {
+   "id": "later-waves-E4",
+   "summary": "E4 rows take a research pass under the record's own checks before any code change",
+   "class": "within",
+   "why": "Spec Edge Cases (a finding the research cannot settle); the code still moves to the research afterward."
+  },
+  {
+   "id": "exception-path",
+   "summary": "A row flagged deviation-tempting goes to spec-fidelity with the request verbatim before any other fix",
+   "class": "within",
+   "why": "FR-004 and the Edge Cases' XVI path; the plan adds no exception of its own."
+  },
+  {
+   "id": "D5",
+   "summary": "Nine procedure rows that redraw a hand-drawn Mode A sheet re-tiered E1 -> E3",
+   "class": "within",
+   "why": "FR-003 tiers a sheet redraw E3; the rows stay in the ranking and are fixed in their tier (FR-009 names the sheets)."
+  },
+  {
+   "id": "D6",
+   "summary": "The 32 E1 rows of hamletgen/ways/ are one wave (wave 4); FOOTPATH_FABRIC_GAP waits for it",
+   "class": "within",
+   "why": "FR-003's module grouping and dependency rule; nothing dropped, the rows are fixed toward 0081/0246."
+  },
+  {
+   "id": "W2-verification",
+   "summary": "Waves 2+ verified on Inashiro first, then the pool through the gate, bookends, impl-drift on every touched unit",
+   "class": "within",
+   "why": "FR-005's verification; adds no behavior."
+  },
+  {
+   "id": "W5-scope",
+   "summary": "Wave 5 is the contiguous run: row 143 (the row street) and rows 148-173, 29 rows",
+   "class": "within",
+   "why": "FR-006's 'contiguous run of the ranking'; the remainder is the next wave."
+  },
+  {
+   "id": "D7",
+   "summary": "The row street follows 0033 (runs on off the map), not 0246's clustered-lane pull-back; trim_streets no longer cuts it back",
+   "class": "within",
+   "why": "The implementation is moved to the page that governs a row village; the research is not changed and no row is excepted (FR-004)."
+  },
+  {
+   "id": "W5-verification",
+   "summary": "A town or city value no scripted map draws is proven by its unit test; bookends back to back; a held value becomes a found row",
+   "class": "within",
+   "why": "FR-005 regenerates the maps a wave changes; a value no map draws changes none. A held value is ranked, not dropped (Edge Cases)."
+  },
+  {
+   "id": "closed-tiers",
+   "summary": "Closed rows keep the tier they closed at (audit/closed-tiers.json); merge.py keeps it",
+   "class": "within",
+   "why": "Bookkeeping of the ranking's history; it moves no open row and changes no fix."
+  },
+  {
+   "id": "W6-scope",
+   "summary": "Wave 6 is the 32 open E0 rows (tasks.md Phase 7), claim lines only",
+   "class": "within",
+   "why": "Measured: ranking.json holds exactly 32 E0 rows with no wave, and Phase 7 lists 32; E0 is the lowest open tier (SC-003)."
   },
   {
    "id": "W6-no-occasion-no-bookend",
-   "summary": "No review occasion, no map regeneration and no perf bookend for wave 6",
+   "summary": "No map regeneration, review occasion or perf bookend for wave 6",
    "class": "within",
-   "why": "Claim lines move nothing a map draws; FR-005's occasions and the plan's bookend rule apply only to waves that change engine behavior."
+   "why": "Claim lines change nothing a map draws; FR-005's regeneration and occasions apply to waves that change drawing, and the bookend rule to waves that change engine behavior."
   },
   {
    "id": "D8",
-   "summary": "A relabel never carries a code change; where the named page answers differently from the code, the claim states the code against the page and the departure is ranked as a found row in its own tier",
+   "summary": "A claim written or relabeled never carries a code change; where the page it names answers differently from the code, the claim states the code against that page and the departure is ranked as a found row in its own tier",
    "class": "within",
-   "why": "FR-003 defines E0 as an implementation that already matches; a departure is by definition E1+ work, and the spec's Edge Cases already rank what a fix exposes under the tier it takes. Nothing is dropped and the research is not moved: the code change is ranked toward the research (FR-004), and E1 is the next tier taken."
+   "why": "The rewording only extends the rule from relabels to claims written for UNCLAIMED units, which is the same case (Phase 7 is both). The code still moves to the research (FR-004), in the tier its work takes (FR-003, Edge Cases 'new findings a fix exposes'); the claim stays a drift, not a DEVIATION (T22 allows DEVIATION only via the exception path), so the departure stays a finding until fixed. Nothing is dropped; it is ordered, as the GM asked."
+  },
+  {
+   "id": "XIII-baseline",
+   "summary": "Later waves take their regression baseline on the clone while its engine content is main's, before the wave's first edit",
+   "class": "within",
+   "why": "A verification method under constitution XIII; it does not touch the scope of what the GM asked."
   }
  ],
  "verdict": "CLEAR"

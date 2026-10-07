@@ -157,6 +157,8 @@ class MoatMixin:
             arch on two piers with a grille - research/questions/0179-water-gates-and-sluices-shuimen.drawing.html
             glyph size - research/questions/0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html: a 60 ft clear opening between piers about 12 ft wide, 84 ft across, in feet
             no-build block - UNRESEARCHED: 16 px round the glyph
+            pier depth - UNRESEARCHED: the piers 30 ft deep through the wall
+            one opening - research/questions/0179-water-gates-and-sluices-shuimen.drawing.html: the passage as wide as its canal, a river given a row of arched openings; the code draws one 60 ft opening whatever the canal
         """
         wc = '#3A352C'
         u = self.px(1.0)  # the glyph in feet (0147): a 60 ft clear opening between two piers about 12 ft wide, 84 ft across

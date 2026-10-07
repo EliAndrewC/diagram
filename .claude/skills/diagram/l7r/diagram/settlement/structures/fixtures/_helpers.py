@@ -215,6 +215,7 @@ def kosatsuba_anchor(M: Any, placement: str) -> tuple[float, float] | None:
     Research:
         board placements - research/questions/0190-notice-boards-kosatsuba.html: center, entrance, or the headman's gate (frontage)
         entrance anchor - research/questions/0190-notice-boards-kosatsuba.html: the handover, else where the approach first reaches a dwelling
+        reaching the houses - UNRESEARCHED: the approach counts as reaching them within `KOSATSUBA_ENTRANCE_REACH_FT`, 100 ft of a dwelling
     """
     houses = [(float(h["x"]), float(h["y"])) for h in (M.get("houses") or []) if "x" in h]
     if not houses or placement == "center":

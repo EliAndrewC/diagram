@@ -137,7 +137,8 @@ def _thread_the_fabric(s: Settlement, plan: SitePlan, run: Poly, gap: float = TR
         detour swing - UNRESEARCHED: the midpoint swung 40, 80, 140 then 220 px out from the cluster
         never across a grove - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: routed round
             the bands, else only the part clear of them kept
-        the track's route walled - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: walled by the field, crop, toe band and wet ground, and kept off drawn water
+        the track's route walled - research/questions/0081-village-lanes.drawing.html: never across row crops or the flooded paddy, and off wet ground (the field, crop, toe band and wet ground walled)
+        the track kept off drawn water - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: a way crosses water only at a crossing
     """
     if len(run) < 2:
         return run
@@ -424,7 +425,11 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
         row road width - research/questions/0033-row-villages-resson.drawing.html: 6 ft
         track off the map - research/questions/0081-village-lanes.drawing.html: from the gateway, out of the field, to the frame
         track off the wet - research/questions/0081-village-lanes.drawing.html: the toe band and every drawn marsh are wet
-        spur clip margin - UNRESEARCHED: 12 ft off the dry plots and the toe band
+        spur clip margin - research/questions/0081-village-lanes.drawing.html: a lane may touch a plot's boundary; the code clips the spur 12 ft off the dry plots
+        toe-band margin - UNRESEARCHED: the spur clipped 12 ft off the toe band
+        spur tip set back - UNRESEARCHED: SPUR_SETBACK, 17 ft off the field outline's vertex
+        connector width - research/questions/0081-village-lanes.drawing.html: the track out 6 ft (`CONNECTOR_WIDTH`), valley and polder alike
+        lane clearance - UNRESEARCHED: the connector and spur keep `LANE_CLEARANCE`, 40 ft, of no-build ground
     """
     seat = plan.seat
     ax, ay = seat["along"]

@@ -263,6 +263,8 @@ class WallsMixin:
             inspection hall size - research/questions/0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html: 44 x 22 ft
             set on the patrol road - research/questions/0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html: the drawing page's GUESS, about 105 to 135 ft inside the opening on the patrol road's center; `FLANK_INSET_FT` 120 ft in, or the ring road centerline where that is deeper, 6 px past the verge
             fills and trim - CONVENTION
+            fallback road width - UNRESEARCHED: px(26) for the verge setback where no ring road is recorded
+            turned to the wall - UNRESEARCHED: each guard building square to the local wall tangent
         """
         # the GUARD HOUSE and INSPECTION STATION FLANK THE ROAD at the gate throat - one on each
         # side, facing each other across the entering roadway (the Hakone-sekisho pattern: the
@@ -451,6 +453,8 @@ class WallsMixin:
             coverage remediation - research/questions/0148-towers-along-the-city-wall-mamian.drawing.html: towers added where fewer than the posture's minimum reach
             reach counted from the parapet - research/questions/0148-towers-along-the-city-wall-mamian.drawing.html: plus 12 px
             exempt stretches - research/questions/0148-towers-along-the-city-wall-mamian.drawing.html: 130 px of a gate, 55 px of its guard buildings
+            a slid tower off a gate - UNRESEARCHED: kept at least 45 px from a gate
+            tower onto the berm - UNRESEARCHED: a mural tower nudged px(40) outward onto the berm
         """
         # GUARD TOWERS (mamian) around the rampart, in addition to the gate towers, for enfilading
         # flanking fire along the wall face. SPACING is set by the city's DEFENSE POSTURE (GM 2026-07-22,

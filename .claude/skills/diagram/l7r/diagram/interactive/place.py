@@ -112,7 +112,9 @@ KINDS: dict[str, Kind] = {
     key: Kind(**{**fields, "what": fields["what"].format(HAMLETS_PER_DOMAIN=HAMLETS_PER_DOMAIN, VILLAGES_PER_DOMAIN=VILLAGES_PER_DOMAIN, HAMLET_SHARE=HAMLET_SHARE)})
     for key, fields in _CONTENT["kinds"].items()
 }
-"""Research: what each tier is - research/questions/0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.html"""
+"""Research:
+    what each tier is - research/questions/0001-the-five-sizes-of-settlement-hamlet-village-town-provincial-city-and-capital.html
+    a hamlet's dead at the village's grounds - research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html: no cremation ground of its own; its dead burned and buried at the main village's, which holds the district's grounds"""
 
 #: Which classes are a CROP, and how the card groups them. Read from the classes PRESENT on the map
 #: (spec FR-010, FR-014), never from a per-map list - which is what lets the dike-pond hamlet, whose

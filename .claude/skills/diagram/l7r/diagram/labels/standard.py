@@ -56,7 +56,7 @@ PREFERRED_OFFSET_EM = 0.5
 RING_STEP_EM = 0.5
 """Research: nearer first - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: further seats a half em a ring outward"""
 REACH_EM = 8.0
-"""Research: how far the ringed search runs - UNRESEARCHED: eight ems before the outer leader rings; past twice the usual gap (`placer.LEADERLESS_RINGS`) every seat is tied back by a leader, as 0242 has it"""
+"""Research: how far the ringed search runs - CONVENTION: eight ems before the outer leader rings; past twice the usual gap (`placer.LEADERLESS_RINGS`) every seat is tied back by a leader, as 0242 has it"""
 
 # THE HUG: a caption never stands more than this far, box to box, from the feature it names (`label_hugs_its_referent`,
 # the gate's 120 px since feature 133). Past it the reader has to guess which feature a name belongs to, so it bounds

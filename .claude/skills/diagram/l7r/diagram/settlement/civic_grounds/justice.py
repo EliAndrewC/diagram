@@ -125,6 +125,7 @@ class JusticeGroundsMixin:
             empty post sockets - research/questions/0191-execution-and-punishment-grounds-keijo.drawing.html
             stake, sand bed, head-display stand, well and pit - UNRESEARCHED
             keep-clear margin - UNRESEARCHED: 8 px
+            post sockets - UNRESEARCHED: two sockets about 3 ft square, and their spacing
             caption - CONVENTION
         """
         city = self.M["meta"].get("scale") in CITY_TIER_SCALES
@@ -198,6 +199,7 @@ class JusticeGroundsMixin:
             dosojin at the boundary - research/questions/0191-execution-and-punishment-grounds-keijo.drawing.html, research/questions/0085-village-boundaries-and-their-markers-murazakai.drawing.html: the caller's seat on the road out
             stone size - research/questions/0217-wayside-shrines-and-stone-figures-dosojin-jizo.drawing.html: BOUNDARY_MARKER_FT recorded, drawn at the marker floor
             paired figures - research/questions/0217-wayside-shrines-and-stone-figures-dosojin-jizo.html: a seam down the stone
+            how many stones - research/questions/0217-wayside-shrines-and-stone-figures-dosojin-jizo.drawing.html: a group of one to three at an entrance; the code draws one
             caption - CONVENTION
         """
         w = h = self.px(BOUNDARY_MARKER_FT)

@@ -39,7 +39,8 @@ def honmaru_fracs(w: float, h: float, ftpx: float) -> tuple[float, float]:
 
     Research:
         honmaru size - research/questions/0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html: about 2 ha
-        ninomaru fraction - UNRESEARCHED: 0.64 of the enceinte"""
+        ninomaru fraction - UNRESEARCHED: 0.64 of the enceinte
+        honmaru on a small enceinte - UNRESEARCHED: held to at most 0.34 of the half-sides"""
     whole = max(w * h * ftpx * ftpx, 1.0)
     return (0.64, min(0.34, math.sqrt(HONMARU_SQ_FT / whole)))
 
@@ -136,9 +137,11 @@ class CastleCivicMixin:
             baileys and masugata off by default - DEVIATION research/questions/0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html: the 1644 plans drew the baileys; when asked for, offset walled rectangles with dogleg gates
             honmaru size - research/questions/0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html: about 2 ha (`HONMARU_SQ_FT`; Nijo's 150 m square, Hiroshima's upper honmaru 2.2 ha), held inside the enceinte
             ninomaru and masugata sizes - UNRESEARCHED: the ninomaru at 0.64 of the enceinte, offset from the ote-mon, a masugata box outside the main gate
-            inner moat - UNRESEARCHED: 0.42 x the moat gap off the honmaru, half the moat width
+            inner moat width - research/questions/0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.html: Hiroshima's inner moat 30 to 104 m; the code draws half the moat's width, about 40 ft, below it
+            inner moat offset - UNRESEARCHED: 0.42 x the moat gap off the honmaru
+            bailey gates turned - UNRESEARCHED: each bailey's gate turned 90 degrees from its parent's, the dogleg route
             ishigaki doubling - CONVENTION: a doubled inner line on the enceinte
-            ground reserved - NONE: the moat plus max(36 x bscale, 26) px in both registries
+            ground reserved - UNRESEARCHED: the moat plus max(36 x bscale, 26) px in both registries, how close buildings stand to the castle works
         """
         hw, hh = w / 2, h / 2
         wall = "#2D2A24"
@@ -437,6 +440,7 @@ class CastleCivicMixin:
             master's house size - UNRESEARCHED: 40 x 24 ft
             state violet - CONVENTION
             hall apron - UNRESEARCHED: max(30 x bscale, 14) px, and a reserved caption band
+            compound layout - UNRESEARCHED: the hall across the north, the lane on the south band, the master's house between, a 10 ft azuchi, the shooting line 6 ft from the lane's end
         """
         f = self.px
         cw, ch = f(MARTIAL_COMPOUND_FT[0]) / 2, f(MARTIAL_COMPOUND_FT[1]) / 2
@@ -769,10 +773,12 @@ class CastleCivicMixin:
 
         Research:
             a town rampart with a gate - research/questions/0125-town-walls-and-which-county-seats-had-one-chengqiang.html: an irregular thick line, gapped at the gate
-            guard station and tower - UNRESEARCHED: a 96 x 46 px station and a 40 x 40 px tower beside the gate
+            guard station and tower - research/questions/0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html: a tower about 40 x 24 ft over the passage and a guard room about 12 x 18 ft inside; the code draws a 40 x 40 px tower beside the gate and a 96 x 46 px station
             rampart stroke - research/questions/0125-town-walls-and-which-county-seats-had-one-chengqiang.html, research/questions/0125-town-walls-and-which-county-seats-had-one-chengqiang.drawing.html: drawn 10 to 12 ft thick, 11 ft at the map's scale
-            gate opening - research/questions/0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html: a 13 ft passage, between 14 x 48 px gateposts
-            buildings kept off the rampart - UNRESEARCHED: a 46 px corridor, 32 px round the gate structures
+            gate opening - research/questions/0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html: a 13 ft passage
+            gateposts - UNRESEARCHED: 14 x 48 px posts flanking the opening
+            buildings kept off the rampart - research/questions/0125-town-walls-and-which-county-seats-had-one-chengqiang.drawing.html: a clear strip about 46 ft wide; the code keeps 46 px
+            ground round the gate structures - research/questions/0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html: about 36 ft clear around each; the code keeps 32 px
         """
         wc = '#3A352C'
         # the rampart renders in the WALL layer (over the ground lanes - a street running into it passes
