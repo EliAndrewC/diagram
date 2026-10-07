@@ -70,7 +70,7 @@ changed = True
 while changed:
     changed = False
     for r in rows.values():
-        if waves.get(r["key"]):
+        if r["key"] in closed_tiers and waves.get(r["key"]):
             continue
         for d in r["after"]:
             if d in rows and TIERS.index(rows[d]["tier"]) > TIERS.index(r["tier"]):
@@ -84,6 +84,12 @@ def module(k):
 
 for r in rows.values():
     r["wave"] = waves.get(r["key"], "")
+
+# A row closed since the last record takes the tier it has now, once: recorded so a later re-tier never moves it.
+fresh = {k: r["tier"] for k, r in rows.items() if r["wave"] and k not in closed_tiers}
+if fresh:
+    closed_tiers.update(fresh)
+    (AUDIT / "closed-tiers.json").write_text(json.dumps(closed_tiers, indent=1, sort_keys=True) + "\n")
 
 ordered = sorted(rows.values(), key=lambda r: (TIERS.index(r["tier"]), module(r["key"]), r["key"]))
 # within a tier, a row after its dependency
