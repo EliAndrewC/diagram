@@ -440,6 +440,13 @@ def test_a_fragment_is_dropped_and_a_chain_takes_one_width() -> None:
     settle.settle_widths(tight)
     assert {ln["w"] for ln in tight.M["lanes"][1:]} == {3}, "widened, it would foul the farmhouse beside it: the narrowest"
     assert settle.settle_widths(_S([CONN])) == 0
+    # EACH WAY AT ITS RANK (feature 328 wave 4, glyph-check round 2 of Inashiro: the field route - a household's way, a 6 ft
+    # link, the spur - all drawn 6 ft): the ranked lanes back to their rank, the link between them at the widest rank
+    route = _S([CONN, ([(0.0, 5.0), (100.0, 5.0)], {"w": 6.0}), ([(100.0, 5.0), (200.0, 15.0)], {"w": 6}), ([(200.0, 15.0), (300.0, 15.0)], {"w": 6.0})])
+    route.M["lanes"][1]["role"], route.M["lanes"][3]["spur"] = co.ACCESS_ROLE, True
+    assert settle.settle_widths(route) == 3
+    assert [ln["w"] for ln in route.M["lanes"][1:]] == [3.0, 5.0, 5.0] and law.width_steps(route.M["lanes"]) == []
+    assert settle.settle_widths(route) == 0
 
 
 def test_a_width_change_redraws_the_ink() -> None:

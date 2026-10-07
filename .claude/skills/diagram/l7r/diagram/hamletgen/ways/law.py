@@ -52,7 +52,7 @@ from .checks import FORD_SQUARE_TOL_DEG, served_network, unreached_houses
 from .clearance import _HAIRPIN_DEG, _ZIGZAG_DEG, _ZIGZAG_RUN_FT, kink_spans
 from .fabric import _LANE_JOIN_FT, _WEB_MIN_FT, _crosses_fabric, house_hit
 from .geom import _TOUCH_GAP, WorkedGround, _components, _turn_deg, end_serves, polyline_len, steading_footprints, worked_ground
-from .joints import _HOOK_DEG, _HOOK_FT, hairpin_over_a_short_leg, joints, oriented
+from .joints import _HOOK_DEG, _HOOK_FT, at_rank, hairpin_over_a_short_leg, joints, oriented
 from .keeper import kept
 from .sweeps import _DOUBLED_DEG, along_tail
 
@@ -462,9 +462,9 @@ def short_fragments(M: Mapping[str, Any], ground: WorkedGround | None = None) ->
 
 def width_steps(lanes: Lanes) -> list[tuple[int, int]]:
     """The joints (`joints`: two lane ends meeting, no third way there) where one way changes width - a back lane halving
-    its tread where nothing happens (homes H42, future-work "THE WIDTH STEP"): (lane, lane) for each.
-    Research: one width a way - research/questions/0081-village-lanes.drawing.html: no step at a bare joint"""
-    return [(i, j) for i, _ei, j, _ej in joints(lanes) if float(lanes[i].get("w") or 3.0) != float(lanes[j].get("w") or 3.0)]
+    its tread where nothing happens (homes H42); a lane at its rank meeting another way is where one rank meets the next (`at_rank`).
+    Research: one width a way - research/questions/0081-village-lanes.drawing.html: no step at a bare joint, each way at its rank's width"""
+    return [(i, j) for i, _ei, j, _ej in joints(lanes) if float(lanes[i].get("w") or 3.0) != float(lanes[j].get("w") or 3.0) and not (at_rank(lanes[i]) or at_rank(lanes[j]))]
 
 
 def lane_networks(M: Mapping[str, Any]) -> int:

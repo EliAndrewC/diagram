@@ -182,20 +182,23 @@ def test_no_zigzag_straddles_a_joint(gen: str) -> None:
         assert _bends_badly(x) or _bends_badly(y) or not _bends_badly([*x, *y[1:]]), f"lanes {i} and {j} zigzag across their joint at {x[-1]}"
 
 
-@pytest.mark.parametrize("gen", GENS, ids=IDS)
-def test_no_lane_ends_knot_short_of_a_join(gen: str) -> None:
-    """Lane ends that nearly meet are joined: ends within the knot reach (`_KNOT_FT`) of one another stand at ONE point
-    (research/questions/0081-village-lanes.drawing.html: "Ends within 25 ft of one another are joined at a single point";
-    feature 328 wave 4 glyph-check of Inashiro: lanes 7 and 3 T'd onto the track 6 ft apart, 18 and 24 ft down from its head
-    where lane 1 arrives, and lanes 9 and 11 ended 19 ft apart). Every lane's end counts, a T-foot (an end on another lane's
-    side) included. Ends within `_JOINT_FT` are one point (a junction); two such points within the reach are a knot unless one
-    lane runs from the one to the other - that lane IS their join (a 15 ft door lane is not two arrivals)."""
+_KNOT_MARGIN = 1.5
+"""Two junctions on one lane this many knot reaches apart still count as a knot: a foot slid along the lane to just past the
+reach is the knot drawn, not gathered (glyph-check round 2 of feature 328 wave 4, Inashiro: lane 13's foot slid 16.7 ft along
+lane 11 to 25.18 ft from lane 11's end, a walker turning 51, 91, 92 and 72 degrees within 45 ft)."""
+
+
+def lane_knots(lanes: list[dict]) -> list[tuple[int, tuple[float, float], int, tuple[float, float], float]]:
+    """The knots of a finished web, (lane, end, lane, end, ft): two lane ends within the knot reach (`_KNOT_FT`) of one another
+    not standing at one point, and two JUNCTIONS (an end that meets another way: two or more ends at one point, or a T-foot on
+    another lane's side) on the SAME lane within `_KNOT_MARGIN` reaches. Ends within `_JOINT_FT` are one point; a pair one lane
+    runs between (its own two ends) is that lane, its join."""
     from l7r.diagram.hamletgen.ways.joints import _JOINT_FT
     from l7r.diagram.hamletgen.ways.smooth import _KNOT_FT
+    from l7r.diagram.settlement._geom.primitives import seg_dist
 
-    lanes = _manifest(gen)["lanes"]
-    ends = [(i, (float(ln["pts"][e][0]), float(ln["pts"][e][1]))) for i, ln in enumerate(lanes) if len(ln.get("pts") or []) >= 2 for e in (0, -1)]
-    assert ends, "non-vacuity: the map has lanes"
+    pts = [[(float(x), float(y)) for x, y in ln.get("pts") or []] for ln in lanes]
+    ends = [(i, p[e]) for i, p in enumerate(pts) if len(p) >= 2 for e in (0, -1)]
     node = list(range(len(ends)))
 
     def root(a: int) -> int:
@@ -208,13 +211,80 @@ def test_no_lane_ends_knot_short_of_a_join(gen: str) -> None:
             if math.dist(ends[a][1], ends[b][1]) <= _JOINT_FT:
                 node[root(b)] = root(a)
     spans = {frozenset((root(2 * k), root(2 * k + 1))) for k in range(len(ends) // 2)}  # each lane's own two points
-    knots = [
-        (ends[a][0], ends[a][1], ends[b][0], ends[b][1], round(math.dist(ends[a][1], ends[b][1]), 1))
-        for a in range(len(ends))
-        for b in range(a + 1, len(ends))
-        if root(a) != root(b) and math.dist(ends[a][1], ends[b][1]) <= _KNOT_FT and frozenset((root(a), root(b))) not in spans
-    ]
-    assert not knots, f"lane ends within {_KNOT_FT:g} ft of one another and not joined (lane, end, lane, end, ft): {knots}"
+
+    def on(k: int, q: tuple[float, float]) -> bool:
+        return any(seg_dist(q[0], q[1], u, v) <= _JOINT_FT for u, v in zip(pts[k], pts[k][1:], strict=False))
+
+    def junction(a: int) -> bool:
+        return sum(root(b) == root(a) for b in range(len(ends))) > 1 or any(k != ends[a][0] and len(pts[k]) >= 2 and on(k, ends[a][1]) for k in range(len(pts)))
+
+    def one_lane(a: int, b: int) -> bool:
+        return any(len(p) >= 2 and on(k, ends[a][1]) and on(k, ends[b][1]) for k, p in enumerate(pts))
+
+    out = []
+    for a in range(len(ends)):
+        for b in range(a + 1, len(ends)):
+            d = math.dist(ends[a][1], ends[b][1])
+            if root(a) == root(b) or frozenset((root(a), root(b))) in spans or d > _KNOT_MARGIN * _KNOT_FT:
+                continue
+            if d <= _KNOT_FT or (junction(a) and junction(b) and one_lane(a, b)):
+                out.append((ends[a][0], ends[a][1], ends[b][0], ends[b][1], round(d, 1)))
+    return out
+
+
+def test_lane_knots_counts_a_foot_slid_past_the_reach() -> None:
+    """The sliding form is a knot: a T-foot 30 ft along a lane from where that lane meets a third way (past the 25 ft reach,
+    inside 1.5 reaches) counts; gathered at the one point it does not, nor does a door end 30 ft off or a foot 40 ft on."""
+    track = {"pts": [[0.0, 0.0], [0.0, 100.0]]}
+    lane = {"pts": [[100.0, 50.0], [0.0, 50.0]]}  # T-foot on the track at (0, 50)
+    slid = {"pts": [[30.0, 90.0], [30.0, 50.0]]}  # T-foot on `lane` 30 ft from its end
+    assert lane_knots([track, lane, slid]), "a foot slid to 30 ft from the junction is a knot"
+    assert not lane_knots([track, lane, {"pts": [[60.0, 90.0], [0.0, 50.0]]}]), "gathered at the junction: no knot"
+    assert not lane_knots([track, lane, {"pts": [[40.0, 90.0], [40.0, 50.0]]}]), "40 ft along: a T of its own"
+    assert not lane_knots([track, lane, {"pts": [[30.0, 90.0], [30.0, 52.0]]}]), "an end 2 ft short of the lane is no junction"
+
+
+@pytest.mark.parametrize("gen", GENS, ids=IDS)
+def test_no_lane_ends_knot_short_of_a_join(gen: str) -> None:
+    """Lane ends that nearly meet are joined: ends within the knot reach (`_KNOT_FT`) of one another stand at ONE point
+    (research/questions/0081-village-lanes.drawing.html: "Ends within 25 ft of one another are joined at a single point";
+    feature 328 wave 4 glyph-check of Inashiro: lanes 7 and 3 T'd onto the track 6 ft apart, 18 and 24 ft down from its head
+    where lane 1 arrives, and lanes 9 and 11 ended 19 ft apart). Every lane's end counts, a T-foot (an end on another lane's
+    side) included - and two junctions on one lane within `_KNOT_MARGIN` reaches, so a foot slid to just past the reach is
+    not read as gathered (`lane_knots`)."""
+    from l7r.diagram.hamletgen.ways.smooth import _KNOT_FT
+
+    lanes = _manifest(gen)["lanes"]
+    assert any(len(ln.get("pts") or []) >= 2 for ln in lanes), "non-vacuity: the map has lanes"
+    knots = lane_knots(lanes)
+    assert not knots, f"lane ends within {_KNOT_FT:g} ft of one another (or junctions on one lane within {_KNOT_MARGIN * _KNOT_FT:g} ft) and not joined (lane, end, lane, end, ft): {knots}"
+
+
+RANK_FT = {"footpath": 3.0, "spur": 5.0, "track": 6.0}
+"""0081's widths by rank (research/questions/0081-village-lanes.drawing.html): "a footpath is drawn 3 ft wide, the cluster's
+spine and its spur to the fields 5 ft, and the track out to the wider world 6 ft"."""
+
+
+def lane_rank(ln: dict) -> str | None:
+    """A lane's rank by its role: the track out (the connector), the field spur (the spur or the field way), a footpath (a
+    household's way or a way target's). None for a lane with no role of rank (a web lane, a link, a street)."""
+    if ln.get("connector"):
+        return "track"
+    if ln.get("spur") or ln.get("role") == "field way":
+        return "spur"
+    return "footpath" if ln.get("role") in ("access", "way target") else None
+
+
+@pytest.mark.parametrize("gen", GENS, ids=IDS)
+def test_every_lane_is_drawn_at_its_own_rank(gen: str) -> None:
+    """A household's way is a 3 ft footpath, the field spur 5 ft and the track out 6 ft, whatever they meet end to end
+    (glyph-check round 2 of feature 328 wave 4, Inashiro: the field route, lanes 7, 2 and 0, all drawn 6 ft - a household's
+    way and the spur widened to the track's tread, a 6 ft lane hanging off a 3 ft footpath)."""
+    lanes = _manifest(gen)["lanes"]
+    ranked = [(i, r, float(ln["w"])) for i, ln in enumerate(lanes) if (r := lane_rank(ln))]
+    assert any(r == "footpath" for _i, r, _w in ranked) or any(ln.get("role") == "touch" for ln in lanes), "non-vacuity: ranked lanes"
+    off = [(i, r, w) for i, r, w in ranked if w != RANK_FT[r]]
+    assert not off, f"lanes drawn off their rank (lane, rank, ft): {off}"
 
 
 @pytest.mark.parametrize("gen", GENS, ids=IDS)

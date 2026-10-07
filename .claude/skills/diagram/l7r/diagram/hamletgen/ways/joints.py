@@ -51,6 +51,35 @@ _JOINT_FT = 1.0  # two lane ends this close are one point: the knot pass and the
 # (the two figures live in `geom`, a layer below, since feature 291: the door paths in `serve` take their hook off too)
 
 
+RANK_WIDTHS = {"access": 3.0, "way target": 3.0, "field way": 5.0}
+"""A lane's width by the rank its role gives it (a household's way and a way target's are footpaths; the field way is the
+field spur's rank), with the spur `spur` 5 and the connector 6 (`rank_width`).
+
+Research: a width by rank - research/questions/0081-village-lanes.drawing.html: a footpath is drawn 3 ft wide, the cluster's spine and its spur to the fields 5 ft, and the track out to the wider world 6 ft"""
+
+
+def rank_width(ln: Mapping[str, Any]) -> float | None:
+    """The width lane `ln`'s role ranks it at - the connector the track out's 6 ft, the field spur its 5, a household's way
+    or a way target's a footpath's 3 (`RANK_WIDTHS`) - or None for a lane its role does not rank (a web lane, a link, a
+    street), which takes the width of the way it continues.
+
+    Research: a width by rank - research/questions/0081-village-lanes.drawing.html: 3 ft footpath, 5 ft spine and field spur, 6 ft track out"""
+    if ln.get("connector"):
+        return 6.0
+    if ln.get("spur"):
+        return 5.0
+    return RANK_WIDTHS.get(str(ln.get("role")))
+
+
+def at_rank(ln: Mapping[str, Any]) -> bool:
+    """Lane `ln` is ranked by its role and drawn at that rank (`rank_width`): a width step at its joint is where one rank of way
+    meets another (a household's footpath ending where the field spur begins), not a way changing its tread.
+
+    Research: a width by rank - research/questions/0081-village-lanes.drawing.html: each way drawn at its rank's width"""
+    r = rank_width(ln)
+    return r is not None and float(ln.get("w") or 3.0) == r
+
+
 def _pts(ln: Mapping[str, Any]) -> Poly:
     return [(float(x), float(y)) for x, y in ln.get("pts") or []]
 

@@ -17,8 +17,8 @@ stands this module lays every household's way ONCE, in the gaps:
    blocked ground so a way keeps to the middle of its gap (`flood`).
 3. Each household, nearest the way out first: a small search out of its own homestead from its dooryard doors, off its house,
    beds, outbuildings and fixtures (`way_out`), traced back along the flood to the way out - or to a way already laid, joined
-   at a T where it comes within `JOIN_FT` (`trace`), its foot gathered onto a junction within `KNOT_FT` or slid clear of it
-   (`gathered_foot`, `knot_free_foot`; feature 328 wave 4) - pulled taut and admitted by the corridor's own predicate
+   at a T where it comes within `JOIN_FT` (`trace`), its foot gathered onto a junction within `KNOT_FT` (`gathered_foot`,
+   feature 328 wave 4; never slid clear of it) - pulled taut and admitted by the corridor's own predicate
    (`access.admitted`: its legs, then the whole tree's lane law). The first admitted of its exits is reserved and recorded as
    the household's corridor, exactly as the seating recorded one before, so the web draws it unchanged.
 4. A household none of its exits gives an admitted way is reached across the yard of the nearest household with a way: THE
@@ -85,6 +85,13 @@ JOIN_FAR_FT = 45.0
 #: Ends of ways this close are joined at ONE point (`gathered_foot`): the lane page's knot reach.
 KNOT_FT = 25.0
 """Research: lane ends gathered - research/questions/0081-village-lanes.drawing.html: ends within 25 ft of one another are joined at a single point"""
+
+#: ...and a foot this many reaches from a junction is gathered too where it can be, and is the last of a household's joins
+#: tried where it cannot: a foot a few feet past the reach still reads as the knot (feature 328 wave 4, glyph-check round 2 of
+#: Inashiro: a foot slid to 25.18 ft from a junction drew the knot it was meant to undo; a traced foot 24.2 ft off was DRAWN
+#: 25.8 ft off once pulled taut).
+KNOT_MARGIN = 1.5
+"""Research: a knot's margin - CONVENTION research/questions/0081-village-lanes.drawing.html: ends within 25 ft are joined at a single point, so three lanes never arrive a few feet apart in a knot; the half-reach past it is a map drawing convention, no page measuring it"""
 
 _STEPS = ((-1, 0, 1.0), (1, 0, 1.0), (0, -1, 1.0), (0, 1, 1.0), (-1, -1, math.sqrt(2.0)), (1, 1, math.sqrt(2.0)), (-1, 1, math.sqrt(2.0)), (1, -1, math.sqrt(2.0)))
 """Research: plumbing - NONE: the eight steps between raster cells and their lengths"""
@@ -341,34 +348,6 @@ def gathered_foot(foot: Pt, junctions: Sequence[Pt], reach: float) -> Pt | None:
     return min(near, key=lambda j: math.dist(j, foot)) if near else None
 
 
-def knot_free_foot(foot: Pt, segs: Sequence[tuple[Pt, Pt]], junctions: Sequence[Pt], reach: float) -> Pt | None:
-    """Where a way's foot slides along the tree to stand clear of every junction - the point of the tree's segments nearest
-    `foot`, within `2 * reach` of it, more than `reach` from every one of `junctions` - or None. Asked where the foot cannot be
-    gathered onto the junction beside it (`gathered_foot`): the way then meets the tree at a T of its own instead of a few feet
-    from another (feature 328 wave 4, Inashiro: a way T'd onto another's last bend 19 ft from where that one met a third).
-
-    Research: lane ends gathered - research/questions/0081-village-lanes.drawing.html: ends within 25 ft of one another are joined at a single point, so a way meets the tree farther off"""
-    clear = reach + 0.1
-    best: Pt | None = None
-    for a, b in segs:
-        dx, dy = b[0] - a[0], b[1] - a[1]
-        ll = dx * dx + dy * dy
-        if ll < 1e-12:
-            continue
-        ts = [max(0.0, min(1.0, ((foot[0] - a[0]) * dx + (foot[1] - a[1]) * dy) / ll))]
-        for j in junctions:  # where the segment crosses the circle `clear` about each junction
-            fx, fy = a[0] - j[0], a[1] - j[1]
-            bq = 2 * (fx * dx + fy * dy)
-            disc = bq * bq - 4 * ll * (fx * fx + fy * fy - clear * clear)
-            if disc >= 0:
-                ts += [u for u in ((-bq - math.sqrt(disc)) / (2 * ll), (-bq + math.sqrt(disc)) / (2 * ll)) if 0.0 <= u <= 1.0]
-        for u in ts:
-            q = (a[0] + u * dx, a[1] + u * dy)
-            if math.dist(q, foot) <= 2 * reach and all(math.dist(q, j) >= reach for j in junctions) and (best is None or math.dist(q, foot) < math.dist(best, foot)):
-                best = q
-    return best
-
-
 def ended_at(pts: Sequence[Pt], foot: Pt) -> list[Pt]:
     """`pts` run on to `foot`, unless it ends there already.
 
@@ -497,6 +476,13 @@ def _way_for(
         doors = [d for d in doors_of(geom, half) if fixtures_clear(s, d, d, geom) and parts_clear(s, d, d, geom)]
         exits, back = way_out(L, dist, doors, area, open_here)
         picked: list[tuple[int, int]] = []
+        # ...ITS FOOT GATHERED onto a junction or way's end standing within the knot reach and its margin (`gathered_foot`,
+        # `KNOT_MARGIN`), each of the joins (`lays`) of every exit tried so first; a foot left where it was traced beside a
+        # junction only where no exit gives a gathered or knot-free join. NEVER SLID CLEAR: a foot moved along the tree to just
+        # past the reach is the knot drawn, not gathered (feature 328 wave 4, glyph-check round 2 of Inashiro: lane 13's foot
+        # slid 16.7 ft along lane 11 to 25.18 ft from its end, a walker turning 51, 91, 92 and 72 degrees within 45 ft)
+        junctions = junction_points(s._access.segs)
+        knotted: list[list[Pt]] = []
         for _, i, j in exits:
             if len(picked) >= GAP_TRIES:
                 break
@@ -509,27 +495,29 @@ def _way_for(
                 c = back[c]
             local.append(L.at(c))
             door = back[c]
-            # ...ITS FOOT GATHERED onto a junction or way's end standing within the knot reach (`gathered_foot`), or slid along
-            # the tree clear of it (`knot_free_foot`), each of the joins (`lays`) tried so first; a foot left a few feet beside a
-            # junction only where no knot-free join is admitted
-            junctions = junction_points(s._access.segs)
             gathered: list[list[Pt]] = []
-            knotted: list[list[Pt]] = []
             for laid in lays:
                 path, foot = trace(L, dist, pred, laid, (i, j), s._access.segs, lambda here, f: standing_ground(s, here, f, memo))
                 pts = [door, *reversed(local), *path]
-                g = gathered_foot(foot, junctions, s.px(KNOT_FT))
+                g = gathered_foot(foot, junctions, s.px(KNOT_FT * KNOT_MARGIN))
                 gathered.append(ended_at(pts, foot if g is None else g))
                 if g is not None:
-                    slid = knot_free_foot(foot, s._access.segs, junctions, s.px(KNOT_FT))
-                    gathered += [ended_at(pts, slid)] if slid is not None else []
                     knotted.append(ended_at(pts, foot))
-            for q in (*gathered, *knotted):
-                run = taut(q, leg_ok, doubles_back, GAP_LEGS)
-                drawn = admitted(s, run, geom, memo) if run is not None else None
-                if drawn is not None:
-                    return drawn
-        return None
+            if (drawn := _first_admitted(s, gathered, leg_ok, geom, memo)) is not None:
+                return drawn
+        return _first_admitted(s, knotted, leg_ok, geom, memo)
     finally:
         if k is not None:
             s.placed.insert(k, own)
+
+
+def _first_admitted(s: Settlement, runs: Sequence[list[Pt]], leg_ok: Any, geom: Any, memo: dict[Any, Any]) -> tuple[Pt, ...] | None:
+    """The first of `runs`, pulled taut, that the corridor's predicate admits (`access.admitted`), as it will be drawn; or None.
+
+    Research: plumbing - NONE: candidates asked in order"""
+    for q in runs:
+        run = taut(q, leg_ok, doubles_back, GAP_LEGS)
+        drawn = admitted(s, run, geom, memo) if run is not None else None
+        if drawn is not None:
+            return drawn
+    return None

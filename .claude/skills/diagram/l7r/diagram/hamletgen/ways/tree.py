@@ -343,6 +343,26 @@ def _key(ln: Mapping[str, Any]) -> tuple[Any, ...] | None:
     return None
 
 
+def set_corridor(M: dict[str, Any], ln: Mapping[str, Any]) -> bool:
+    """Household way `ln`'s reserved corridor (`access_corridors`, read by `tree_records`) rewritten as the lane now stands, so
+    the settle's next draw of the tree (`settle_tree`) draws it so too - asked where a settle step re-lays a household's way
+    (`knots.settle_knots`, its foot gathered onto the junction beside it). False where `ln` is no household's way or its
+    record is not found.
+
+    Research: plumbing - NONE: the reserved corridor kept in step with the way drawn"""
+    key = _key(ln)
+    acs = M.get("access_corridors") or []
+    start = next((n for n, c in enumerate(acs) if key is not None and c.get("of") and _key({"role": ACCESS_ROLE, "of": c["of"]}) == key), None)
+    pts = [[float(x), float(y)] for x, y in ln.get("pts") or []]
+    if start is None or len(pts) < 2:
+        return False
+    end = start + 1
+    while end < len(acs) and not acs[end].get("of"):
+        end += 1
+    acs[start:end] = [{"pts": [a, b], **({"of": acs[start]["of"]} if n == 0 else {})} for n, (a, b) in enumerate(zip(pts, pts[1:], strict=False))]
+    return True
+
+
 def left_to_the_tree(M: Mapping[str, Any], i: int) -> bool:
     """Would taking ordinary lane `i` away keep every other lane on the connector's network and the web in no more networks,
     leaving unreached only farmhouses whose way the gap pass laid (`gap_ways`, feature 318) - which the settle then draws as

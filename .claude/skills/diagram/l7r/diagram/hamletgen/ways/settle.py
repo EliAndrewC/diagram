@@ -64,7 +64,7 @@ from .corridors import (
 )
 from .fabric import _crosses_fabric, _homestead_polys, house_hit
 from .geom import _TOUCH_GAP, _components, _trim_to_service, memo_ground, polyline_len, steading_footprints, worked_ground
-from .joints import joints
+from .joints import joints, rank_width
 from .keeper import NOT_THE_SETTLES, unsettled  # noqa: F401 - re-exported: `settle.unsettled` is the exit question callers name
 from .knots import settle_knots
 from .reach import _draw_tree_lane, settle_field, settle_targets  # noqa: F401 - re-exported: callers and tests name these as `settle.<name>`
@@ -699,15 +699,21 @@ def rewidth(s: Any, i: int, width: float) -> None:
 
 
 def settle_widths(s: Any) -> int:
-    """One way keeps one width (homes H42): every chain of lanes meeting end to end (`joints`) is drawn at its widest
-    member's width - the rank of the way - unless a member drawn that wide would foul the fabric (`fouled_segment`), in
-    which case at its narrowest. Either way no joint steps (`law.width_steps`) and no tread is widened onto a steading.
+    """One way keeps one width (homes H42), and each way its rank's: a lane its role ranks (`joints.rank_width`: a household's
+    way 3 ft, the field spur 5) is drawn at its rank whatever it meets end to end - feature 328 wave 4's glyph-check of
+    Inashiro found a household's way and the spur widened to a 6 ft link's tread, a 6 ft lane hanging off a 3 ft footpath. A
+    chain of lanes meeting end to end (`joints`) draws its unranked members at its widest ranked member's rank, or its widest
+    member's where none is ranked - in either case at its narrowest where that would foul the fabric (`fouled_segment`). No
+    tread is widened onto a steading; a step left is where one rank meets another (`law.width_steps`).
 
-    Research: one width a way - research/questions/0081-village-lanes.drawing.html: the widest member's, the narrowest where that fouls"""
+    Research: one width a way - research/questions/0081-village-lanes.drawing.html: each way at its rank's width (3 ft footpath, 5 ft field spur), the rest of a chain at its widest rank, the narrowest where that fouls"""
     lanes = s.M.get("lanes") or []
-    steps = law.width_steps(lanes)
-    if not steps:
-        return 0
+    changed = 0
+    for k, ln in enumerate(lanes):
+        r = rank_width(ln)
+        if r is not None and not ln.get("connector") and float(ln.get("w") or 3.0) != r:
+            rewidth(s, k, r)
+            changed += 1
     par = list(range(len(lanes)))
 
     def find(k: int) -> int:
@@ -720,13 +726,14 @@ def settle_widths(s: Any) -> int:
     yards, houses = _fabric(s)
     solid = law.solid_boxes(s.M)
     fixtures = law.fixture_quads(s.M)
-    changed = 0
-    for root in {find(i) for i, _j in steps}:
+    for root in {find(i) for i in range(len(lanes)) if find(i) != i}:
         chain = [k for k in range(len(lanes)) if find(k) == root]
+        free = [k for k in chain if rank_width(lanes[k]) is None]
         widths = [float(lanes[k].get("w") or 3.0) for k in chain]
-        wide = max(widths)
-        target = wide if all(fouled_segment(_pts(lanes[k]), wide, houses, yards, solid, fixtures, s.M) is None for k in chain) else min(widths)
-        for k in chain:
+        ranks = [w for k, w in zip(chain, widths, strict=True) if k not in free]
+        wide = max(ranks or widths)
+        target = wide if all(fouled_segment(_pts(lanes[k]), wide, houses, yards, solid, fixtures, s.M) is None for k in free) else min(widths)
+        for k in free:
             if float(lanes[k].get("w") or 3.0) != target:
                 rewidth(s, k, target)
                 changed += 1

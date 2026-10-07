@@ -193,14 +193,6 @@ def test_a_foot_is_gathered_onto_the_nearest_junction_within_the_knot_reach() ->
     assert gw.gathered_foot((100.0, 0.0), js, gw.KNOT_FT) is None, "the foot on a junction is gathered already"
 
 
-def test_a_foot_no_junction_takes_slides_along_the_tree_clear_of_every_junction() -> None:
-    segs = [((0.0, 0.0), (200.0, 0.0)), ((5.0, 5.0), (5.0, 5.0))]  # a degenerate segment is passed over
-    got = gw.knot_free_foot((10.0, 0.0), segs, [(0.0, 0.0)], gw.KNOT_FT)
-    assert got is not None and math.dist(got, (0.0, 0.0)) >= gw.KNOT_FT and math.dist(got, (10.0, 0.0)) < 16.0
-    assert gw.knot_free_foot((100.0, 0.0), segs, [(0.0, 0.0)], gw.KNOT_FT) == (100.0, 0.0), "clear already: where it stands"
-    assert gw.knot_free_foot((10.0, 0.0), [((0.0, 0.0), (40.0, 0.0))], [(0.0, 0.0), (40.0, 0.0)], gw.KNOT_FT) is None, "nowhere clear"
-
-
 def test_a_traced_way_is_run_on_to_its_foot_unless_it_ends_there() -> None:
     assert gw.ended_at([(0.0, 0.0), (5.0, 0.0)], (9.0, 0.0)) == [(0.0, 0.0), (5.0, 0.0), (9.0, 0.0)]
     assert gw.ended_at([(0.0, 0.0), (5.0, 0.0)], (5.0, 0.0)) == [(0.0, 0.0), (5.0, 0.0)]
@@ -230,21 +222,23 @@ def test_a_way_whose_foot_stands_beside_a_junction_is_gathered_onto_it(monkeypat
     assert [h["geom"]["access"][-1] for h in houses] == js
 
 
-def test_a_way_not_admitted_at_the_junction_slides_clear_of_it(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_a_way_not_admitted_at_the_junction_joins_where_another_exit_is_clear_never_slid(monkeypatch: pytest.MonkeyPatch) -> None:
+    """No slide clear of the junction (glyph-check round 2 of Inashiro, feature 328 wave 4): refused at the junction, every
+    exit's join is asked before a foot beside it - here another exit's, traced to the strip clear of both junctions."""
     s, houses = _site((600.0,))
     js = [(545.0, 450.0), (560.0, 450.0)]
     monkeypatch.setattr(gw, "junction_points", lambda segs: js)
     _refusing_ends_at(monkeypatch, js)
     assert gw.lay_the_ways(s) == (0, 0)
     foot = houses[0]["geom"]["access"][-1]
-    assert foot[1] == pytest.approx(450.0) and all(math.dist(foot, j) >= gw.KNOT_FT for j in js)
+    assert all(math.dist(foot, j) > gw.KNOT_FT * gw.KNOT_MARGIN for j in js), "a join of its own, as traced"
 
 
-def test_a_way_takes_the_foot_as_traced_where_no_knot_free_join_is_admitted(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_a_way_takes_the_foot_as_traced_where_every_join_stands_beside_a_junction(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Refused at the junction from every exit: the foot as traced, for the settle to gather (`ways/knots.settle_knots`)."""
     s, houses = _site((600.0,))
-    js = [(545.0, 450.0), (560.0, 450.0)]
-    monkeypatch.setattr(gw, "junction_points", lambda segs: js)
-    monkeypatch.setattr(gw, "knot_free_foot", lambda *a: None)
-    _refusing_ends_at(monkeypatch, js)
+    j = (0.0, 0.0)
+    monkeypatch.setattr(gw, "gathered_foot", lambda foot, js, reach: j)
+    _refusing_ends_at(monkeypatch, [j])
     assert gw.lay_the_ways(s) == (0, 0)
     assert houses[0]["geom"]["access"][-1] == _FEET[0], "reached all the same, a few feet beside the junction"

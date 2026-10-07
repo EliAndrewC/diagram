@@ -331,6 +331,22 @@ def test_a_fragment_that_earns_nothing() -> None:
 def test_one_way_keeps_one_width() -> None:
     lanes = [_lane((0.0, 0.0), (100.0, 0.0), w=6), _lane((100.0, 0.0), (200.0, 10.0), w=3), _lane((200.0, 10.0), (300.0, 10.0), w=3)]
     assert law.width_steps(lanes) == [(0, 1)]
+    ranked = [_lane((0.0, 0.0), (100.0, 0.0), w=3, role="access"), _lane((100.0, 0.0), (200.0, 10.0), w=5, spur=True)]
+    assert law.width_steps(ranked) == [], "a household's footpath meeting the field spur end to end: one rank meets the next"
+    off = [_lane((0.0, 0.0), (100.0, 0.0), w=6, role="access"), _lane((100.0, 0.0), (200.0, 10.0), w=5, spur=True)]
+    assert law.width_steps(off) == [], "the spur at its rank" and law.width_steps([off[0], _lane((100.0, 0.0), (200.0, 10.0), w=5)]) == [(0, 1)]
+
+
+def test_a_lanes_rank_is_its_roles() -> None:
+    from l7r.diagram.hamletgen.ways import corridors as co
+    from l7r.diagram.hamletgen.ways.bund import BRANCH_WIDTH
+    from l7r.diagram.hamletgen.ways.joints import at_rank, rank_width
+    from l7r.diagram.hamletgen.ways.track import SPUR_WIDTH
+
+    assert rank_width({"connector": True}) == 6.0 and rank_width({"spur": True}) == SPUR_WIDTH == 5.0
+    assert rank_width({"role": co.ACCESS_ROLE}) == rank_width({"role": co.TARGET_ROLE}) == co.ACCESS_WIDTH
+    assert rank_width({"role": co.FIELD_ROLE}) == BRANCH_WIDTH and rank_width({"role": "join-orphans"}) is None
+    assert at_rank({"role": co.ACCESS_ROLE, "w": 3}) and not at_rank({"role": co.ACCESS_ROLE, "w": 6}) and not at_rank({"w": 3})
 
 
 # ---- feature 287 wave 3: the ends at a house, the needles, the way targets, every water decked ---------------------------
