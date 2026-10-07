@@ -1,0 +1,35 @@
+{
+  "utc": "2026-10-07T12:17:08Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 52,
+  "result": "green",
+  "commit": "4e365b14d",
+  "cache": "cold",
+  "mode": "incremental",
+  "selected": "828/2219",
+  "host": {
+    "load": [
+      0.76,
+      2.2
+    ],
+    "mem_avail_mb": [
+      11024,
+      11119
+    ],
+    "cpu_temp_c": [
+      50.0,
+      57.0
+    ],
+    "stall_s": {
+      "cpu": 0.4,
+      "io": 0.0,
+      "io_full": 0.0,
+      "memory": 0.0
+    },
+    "throttle_ms": {
+      "core": 0,
+      "package": 0
+    }
+  }
+}
