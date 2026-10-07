@@ -8,11 +8,9 @@ from __future__ import annotations
 import math
 import random
 from collections.abc import Sequence
-from typing import Any
 
-from l7r.diagram.settlement import Settlement, point_in_poly
+from l7r.diagram.settlement import Settlement
 from l7r.diagram.settlement._geom import RingIndex
-from l7r.diagram.settlement.land.wet import marsh_ground
 from l7r.diagram.sitegen.geom import crop_polys
 
 from ..consts import Poly, Pt
@@ -91,25 +89,25 @@ BELT_LANE_CLEAR_FT = 12.0  # ft: a belt whose band a lane runs along stands this
 """Research: belt clear of a back lane - UNRESEARCHED: 12 ft beyond the tread"""
 
 
-def past_the_lanes(cols: Sequence[tuple[float, float]], lanes: Sequence[tuple[float, float]], width: float, near: float = 36.0, depth: float = 146.0, wet: Any = None) -> list[tuple[float, float]]:
+def past_the_lanes(cols: Sequence[tuple[float, float]], lanes: Sequence[tuple[float, float]], width: float, near: float = 36.0, depth: float = 146.0) -> list[tuple[float, float]]:
     """The fringe profile `cols` ((v, u) in wind coordinates) moved upwind past any lane running inside the belt's band
     (settlement-review of Kuwabata, feature 261). `lanes` are samples of the web's lanes in the same coordinates. A back
     lane along the windward row of houses ran lengthwise down the middle of the band, 40 ft from its near face; the lane
     keep-out took the clumps there and the belt drew a 63 ft wall where the record asks 80-120 (main's back lane ran
     outside the near face). So a column whose band holds a lane stands its near face `BELT_LANE_CLEAR_FT` beyond the
-    lane, and keeps its whole depth - unless `wet(v, u)` says the moved band would stand in the marsh, where no woody cover
-    stands (Sawada's belt, pushed past its back lane, walked into the toe marsh's reeds).
+    lane, and keeps its whole depth - into the marsh too, where its trees are drawn as alder (0074's drawing page; feature 328: a band
+    the move would stand in the marsh used to stay put).
 
     Research:
         belt keeps its depth past a back lane - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: moved upwind past a lane inside the band
-        no belt in the marsh - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: a band the move would stand in the marsh stays put
+        belt into the marsh as alder - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: a shelter belt's trees in the marsh drawn as alder, so the band moves into it
         lane clearance - UNRESEARCHED: BELT_LANE_CLEAR_FT
     """
     out: list[tuple[float, float]] = []
     for v, u in cols:
         inside = [lu for lu, lv in lanes if abs(lv - v) <= width and u + near - BELT_LANE_CLEAR_FT <= lu <= u + depth]
         moved = max(u, max(inside) + BELT_LANE_CLEAR_FT - near) if inside else u
-        out.append((v, u if moved != u and wet is not None and wet(v, moved) else moved))
+        out.append((v, moved))
     return out
 
 
@@ -331,14 +329,6 @@ def belt_polygon(s: Settlement, plan: SitePlan) -> Poly:
         for q in [(a[0] + (b[0] - a[0]) * t / 10, a[1] + (b[1] - a[1]) * t / 10) for t in range(11)]
     ]
 
-    _marsh = marsh_ground(s.M)
-
-    def _in_marsh(v: float, u: float) -> bool:
-        """Would the band moved to fringe `u` in column `v` stand in the marsh - its middle, half its depth behind its near face?"""
-        _mid = BELT_NEAR_FT + BELT_DEPTH_FT / 2.0
-        x, y = ccx + wx * (u + _mid + _sun_off) + px * v, ccy + wy * (u + _mid + _sun_off) + py * v
-        return any(point_in_poly(x, y, ring) for ring in _marsh)
-
     _near_n = [0]  # how many of the band's vertices are its near face, recorded for the depth measure (the far face has more)
 
     def band(span_f: float, back: float) -> Poly:
@@ -348,7 +338,6 @@ def belt_polygon(s: Settlement, plan: SitePlan) -> Poly:
             half * span_f / COLS,
             near=BELT_NEAR_FT,
             depth=BELT_NEAR_FT + BELT_DEPTH_FT,
-            wet=_in_marsh,
         )
         # 36 px, not 24. `village_grove` filters clumps against every structure and crop, and it
         # filters the near face hardest - so a belt whose POLYGON sits clearly windward can still

@@ -13,6 +13,9 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 - (wave 5, landed and reviewed) placement-changed village lane on kashikawa - wave 5: 0033's row street runs on off the map as the road into it at both ends, where
   the web cut it back to its last joint (`trim_streets`); Kashikawa's and Mizuguchi's far ends now run off the sheet as a
   second way out (every way is inked `village lane`).
+- placement-changed: woodland commons on inashiro - wave 19: the coppice wood taken beyond the fields from the houses first (0077
+  drawing), where feature 261 preferred the houses' side; Inashiro's woods re-placed (three where two stood).
+- placement-changed: woodland commons on kashikawa - wave 19: the same; Kashikawa's woods move across its field.
 - none (wave 18): the thicket's 70% passes dropped moved nothing drawn - measured: Kashikawa's and Mizuguchi's thickets were seated
   at full size and their manifests are unchanged; the other rows are claims.
 - placement-changed: shared bamboo grove on kashikawa - wave 17: every thicket pass holds the stand just beyond the back row
@@ -848,3 +851,16 @@ row is the belt in the marsh (416).
       column (FR-005, FR-006, SC-002, SC-003)
       research: rendering
       verify: DONE. impl-drift on every touched claim (two rounds; all IN-STEP); make done green; wave 18's own pair (328-start at 8c3b5cdef) band 1, variance (perf-audit: identical call counts), consistent; the wave column written
+
+## Phase 20 - wave 19 (amendment 18): the belt into the marsh, the wood beyond the fields
+
+Wave 18's re-checks filed no new row. The open in-scope run is the E2 rows in ranking order: the belt in the marsh (416) and the
+wood's side of the field (417). The next open row is the seat order's tie (421).
+
+  - `l7r/diagram/hamletgen/hinterland/belt.py::past_the_lanes#no belt in the marsh` - the belt keeps its depth past a back lane into the marsh, its trees there drawn as alder (0074 drawing); the wet guard and its marsh test retired
+  - `l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#near side of the field preferred` - seats across the field from the houses taken first (0077 drawing: the nearest slope beyond the fields), inverting feature 261's preference
+
+- [ ] T63 the belt's wet guard retired; the wood's preference inverted; the five pool hamlets regenerated (Inashiro's and Kashikawa's woods move) (FR-004, FR-005)
+      research: rendering
+- [ ] T64 every touched claim re-checked by `impl-drift`, the occasions' reviews (glyph-check on Inashiro's and Kashikawa's woodland commons), and the close: wave 19's own bookend pair, `make done` green, the wave column (FR-005, FR-006, SC-002, SC-003)
+      research: rendering

@@ -274,7 +274,7 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
         crop set-back - UNRESEARCHED: 80 px, 180 px on the crop's sunny side, relaxed to 40 and 100
         keep-outs - UNRESEARCHED: 150 px from houses, 90 from wells, 120 past the pond, 70 from lanes, 60 from streams, 110 round the belt and the houses
         where the fuel wood stands - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: ranked by `woodland_tier`, below-the-houses seats dropped
-        near side of the field preferred - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: seats not across the field from the houses taken first
+        beyond the fields preferred - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: seats across the field from the houses taken first, the nearest slope beyond the fields
         parcels kept apart - UNRESEARCHED: each one's exclusion 1.15-2.5 of the size
         aspect and bearing - UNRESEARCHED: up to 2.2:1, laid across the fall within 20 deg
         line follows its bounds - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: within LOT_BOUND_REACH (45 ft, the page's "within about 45 ft", its GUESS) of a lane, brook or field the line runs alongside
@@ -513,13 +513,13 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
             # distance on a canvas), so the level is taken only once the ground above the fields is used up - "where the map
             # has no such ground" read per parcel, as the count is a target the scan meets only where there is open ground
             scored = [(t[0] - 1e9 * k, t[1], t[2]) for t, k in zip(scored, _tiers, strict=True) if k < 2]
-            # ...AND ON THE HOUSES' SIDE OF THEIR FIELD (settlement-review of Inashiro, feature 261): a coppice walked to daily
-            # for fuel and fodder stands on the hillside the settlement backs onto, and with the houses seated against the
-            # wind Inashiro's parcels went up across the paddy from every house. A preference as the one above: where no seat
-            # is reached from the cluster without crossing the field, the rest are still offered.
-            _near_side = [t for t in scored if not reached_across(plan.envelope, (ccx, ccy), (t[1], t[2]))]
-            if _near_side:
-                scored = _near_side
+            # ...AND BEYOND THE FIELDS FROM THE HOUSES (feature 328; 0077's drawing page: "on the nearest slope beyond the fields
+            # from the houses", the village running houses, then fields, then the wild land): feature 261 had preferred the
+            # houses' side of the field. A preference as the one above: where no seat is reached across the field, the rest are
+            # still offered.
+            _beyond = [t for t in scored if reached_across(plan.envelope, (ccx, ccy), (t[1], t[2]))]
+            if _beyond:
+                scored = _beyond
             # ...NOT IN A ROW: a seat in line with two placed parcels is stepped sideways off the row where the ground allows,
             # and refused where it does not - the count is a target the scan already meets only where there is open ground
             # (a map with one parcel is common), and a ruled chain is the defect two reviews recorded (Inashiro's band lies

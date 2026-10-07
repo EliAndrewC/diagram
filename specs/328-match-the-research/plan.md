@@ -257,6 +257,16 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
   backup pushed, its own pair band 1 confirmed); wave 18's own pair opens at 8c3b5cdef.
 - **Verification**: `impl-drift` on the touched claims, the gate, wave 18's own bookend pair.
 
+## Wave 19 (amendment 18, 2026-10-07)
+
+- **Scope**: the next two E2 rows in ranking order - the belt into the marsh (its trees there alder, 0074 drawing) and the wood
+  beyond the fields (0077 drawing), inverting feature 261's settlement-review preference (`tasks.md` Phase 20).
+- **Occasions**: the woodland commons re-placed on Inashiro and Kashikawa (a glyph check each); the belt change moved no pool map
+  (measured: each hamlet's manifest unchanged by it).
+- **On the unpushed waves 9-18** under the wave-11 exception's condition (6): (1)-(5) held at wave 18's close (822e44c52, its
+  backup pushed, its own pair band 1 confirmed); wave 19's own pair opens at 822e44c52.
+- **Verification**: `impl-drift` on the touched claims, the glyph checks, the gate, wave 19's own bookend pair.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Each later wave that changes engine behavior takes
