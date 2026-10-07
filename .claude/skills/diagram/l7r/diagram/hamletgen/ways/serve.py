@@ -60,7 +60,7 @@ def shadowed_by(ways: Sequence[Sequence[Pt]], i: int) -> int | None:
     (`shadow_measure`, way against way) - or None: `_lay_web_lane`'s refusal, asked of a finished lane (`settle_shadows`).
     Only a way whose box comes within `WEB_SHADOW_FT` of this one's is measured.
 
-    Research: no way drawn twice - CONVENTION: beside another unbroken for more than a bundle pitch"""
+    Research: no way drawn twice - UNRESEARCHED: refused beside another way, within `WEB_SHADOW_FT` (30 ft), unbroken for more than a bundle pitch"""
     p = ways[i]
     if len(p) < 2:
         return None
@@ -105,7 +105,7 @@ def _lay_web_lane(s: Settlement, run: Poly, hard: list[Poly], walls: list[Poly],
 
     Research:
         a web lane joins the network - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: one network, or not drawn
-        no way drawn twice - CONVENTION: over 60% of the run, or a bundle pitch unbroken, beside a way
+        no way drawn twice - UNRESEARCHED: a run refused over 60% of it, or a bundle pitch unbroken, beside a way
         not along a shelter belt - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:
             over 60 ft inside a belt refused
         a tail past the junction cut - research/questions/0081-village-lanes.drawing.html: under 40 ft

@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-07T06:09:05Z",
+  "target": "claims-gate",
+  "commit": "8047f5780",
+  "why": "CLAIMS_OK: feature 328 wave 2: every finding the gate calls introduced is pre-existing implementation measured for the first time by the wave's re-checks, listed in specs/328-match-the-research/claims-followup.md and ranked as found rows"
+}

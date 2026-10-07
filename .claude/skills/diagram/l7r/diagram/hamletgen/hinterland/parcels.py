@@ -277,13 +277,15 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
         near side of the field preferred - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: seats not across the field from the houses taken first
         parcels kept apart - UNRESEARCHED: each one's exclusion 1.15-2.5 of the size
         aspect and bearing - UNRESEARCHED: up to 2.2:1, laid across the fall within 20 deg
-        line follows its bounds - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: within LOT_BOUND_REACH of a lane, brook or field the line runs alongside
+        line follows its bounds - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: within LOT_BOUND_REACH (45 ft, the page's "within about 45 ft", its GUESS) of a lane, brook or field the line runs alongside
         mostly dry - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: no sample of the parcel in marsh (WET_SHARE_CAP 0)
         on the page - CONVENTION: WOODLAND_BBOX_FLOOR of the ring inside the view
         woods not in a ruled line - UNRESEARCHED
         nearest seat preferred - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: the nearest slope beyond the fields
         per-parcel size bands - UNRESEARCHED: 0.82-1.18 of the half-size by band, then a 0.84 smaller try
         scan reach - UNRESEARCHED: confined to 210 px past the content box
+        a ring with room for a wood - UNRESEARCHED: a ring with room for fewer than `WOODLAND_MIN_CROWNS` (5) crowns is refused as a wood
+        commons legibility floor - UNRESEARCHED: a ring under 120 ft is dropped rather than drawn smaller (fewer, never smaller)
     """
     dx, dy = plan.fall
     keep: list[tuple[float, float, float]] = []  # (x, y, radius) of everything to stay clear of

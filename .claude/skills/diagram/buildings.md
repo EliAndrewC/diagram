@@ -84,15 +84,21 @@ Standard features with rough SVG conventions. New diagrams should reuse this voc
 <!-- Research: stables - research/questions/0108-stables-umaya.html: few-horse umaya ~28-32 x 16-22 ft, 2-4 horses -->
 <!-- Research: stable stall width - research/questions/0108-stables-umaya.drawing.html: all three magistracy sheets draw 3 stalls ~9.3-9.7 ft wide -->
 <!-- Research: stable passage and grooms' quarters - research/questions/0108-stables-umaya.drawing.html: no sheet draws an earth-floored passage before the stalls or quarters for the grooms -->
-<!-- Research: stable below barracks - research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html: stable drawn smaller than the barracks -->
+<!-- Research: stable below barracks - GUESS research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: stable drawn smaller than the barracks; no page says where a stable ranked among an office's buildings -->
 <!-- Research: cell - research/questions/0096-holding-cells-agariya-and-roya.html: ~12 x 10 ft remand cell, small end of the 6-18 mat span -->
+<!-- Research: cell kept well under the barracks - UNRESEARCHED: the cell drawn smaller than the barracks; no page ranks them -->
+<!-- Research: granary kept under a residence block - GUESS research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: every storage building held below the residence, the rank tied to the rice held -->
+<!-- Research: tax archive drawn with white-plaster fill, heavy stroke and dark door mark - CONVENTION: the sealed kura shown plastered, distinct from the vented granary slats -->
+
 <!-- Research: barracks - research/questions/0097-staff-rowhouses-and-barracks-nagaya.html, research/questions/0097-staff-rowhouses-and-barracks-nagaya.drawing.html: on-grounds rowhouse or common room, no bunks, ~27-53 ft wide; the county example's range 45 x 34 ft, 34 ft deep -->
 <!-- Research: granary forms - research/questions/0098-storehouses-for-the-tax-rice.html: raised on posts or earth-walled kura, ~43-50 x 25-27 ft, a row for a terminal store -->
 <!-- Research: practice ground - research/questions/0165-martial-training-grounds-and-dojo.drawing.html: swept patch with a weapon rack and striking posts, no hall -->
-<!-- Research: practice ground placement - UNRESEARCHED: beside the watch's lodging -->
+<!-- Research: practice ground placement - research/questions/0165-martial-training-grounds-and-dojo.drawing.html: a practice ground beside the guards' quarters -->
+<!-- Research: practice ground shared with cart staging or muster - UNRESEARCHED: the open ground serves also as cart staging or muster -->
+
 <!-- Research: practice ground striking posts - GUESS research/questions/0165-martial-training-grounds-and-dojo.drawing.html: 1-2 posts, ~1 ft across, drawn as small markers; the page records the number drawn as a guess and the marker as a convention -->
-<!-- Research: practice ground weapon rack - UNRESEARCHED: ~8x2 ft rack flush against the adjacent wall -->
-<!-- Research: practice ground area - UNRESEARCHED: ~90-135 sq ft per drilling samurai -->
+<!-- Research: practice ground weapon rack - GUESS research/questions/0165-martial-training-grounds-and-dojo.drawing.html: ~8x2 ft rack flush against the adjacent wall -->
+<!-- Research: practice ground area - GUESS research/questions/0165-martial-training-grounds-and-dojo.drawing.html: ~90-135 sq ft per drilling samurai -->
 <!-- Research: cart yard as a charcoal fire gap - research/questions/0197-charcoal-yards-and-charcoal-stores.drawing.html, research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: Ubame's cart yard drawn as the charcoal store's fire gap, ~13-14 ft and 29 ft wide -->
 <!-- Research: charcoal bales - research/questions/0199-straw-bales-of-rice-and-charcoal-tawara.drawing.html: Ubame's sheet draws each bale ~6 x 3 ft -->
 <!-- Research: charcoal weighing floor - research/questions/0197-charcoal-yards-and-charcoal-stores.drawing.html: Ubame's sheet draws the weighing floor ~27 ft square -->
@@ -159,8 +165,10 @@ A compound housing ~50 people plus horses needs 2-4 wells, distributed by use:
 <!-- Research: tub glyph colors - CONVENTION: water-blue circle distinct from square wells -->
 <!-- Research: one tub per wooden building - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: ~8-12 tubs; Ubame's sheet draws 19, Ochiba's none at its karo's house or senior retainers' quarters -->
 <!-- Research: kitchen weighting - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: 2 tubs at the kitchen -->
-<!-- Research: tub against its wall - UNRESEARCHED: gutter-fed at an eaves corner, within ~3.5 ft of the building -->
-<!-- Research: tub clear of the footprint - UNRESEARCHED: ~2 ft outside the wall face for downspout and bucket line -->
+<!-- Research: tub against its wall - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: tubs stand at the wooden buildings, at the entrance; the gutter feed at an eaves corner and the ~3.5 ft limit from the building are UNRESEARCHED -->
+<!-- Research: tub clear of the footprint - CANON: the GM's ruling of 2026-07-25, tightened 2026-07-26, no part of a tub glyph in a building's footprint (the downspout discharges and the bucket line forms outside the wall); the glyph is seated ~2.2 px (~0.7 ft) off the wall -->
+<!-- Research: a tub never on a well glyph; moved to another eaves corner - UNRESEARCHED: the two point glyphs would smear into one blob, so a tub is moved to a different eaves corner -->
+
 <!-- Research: no tub at the plaster kura - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: none at the kura, one may stand at a wooden granary -->
 
 Standing fire-water (rain-fed water tubs; the Edo *tensuioke*, "heaven-water tubs") kept as first-response fire reserve. Draw as small tub glyphs (~r3.8 circles, about 2.5 ft across, water-blue `#8FB0C6` / rim `#3A5060`, distinct from the square-curb wells), DISTRIBUTED across the compound, not a token pair in one corner:
@@ -206,6 +214,8 @@ A **rear service strip** organizes all of this: the residence's formal garden si
 <!-- Research: grove inside a compound wall - UNRESEARCHED: three magistracy sheets draw the compound shrine's grove as a stipple rectangle with a dashed edge inside the compound wall -->
 <!-- Research: shrine vermilion edging - CONVENTION: the compound shrine and the hall shrine edged vermilion, the shrine color 0219's drawing page records as a drawing convention -->
 <!-- Research: workshop colonnade - UNRESEARCHED: open hatched craft area attached to a shrine -->
+<!-- Research: the whole sacred complex held to at most ~2/3 of the residence - UNRESEARCHED: the hall plus any workshop at most ~2/3 of the residence; the hall's own ceiling is the claim above -->
+
 <!-- Research: sanctuary - research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html: one-bay honden ~6 ft square at the back on the approach axis -->
 <!-- Research: hall and dwelling - research/questions/0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html, research/questions/0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html: one roof, the dwelling with its kitchen and writing room -->
 <!-- Research: privy at the dwelling - GUESS: the privy at the dwelling's back corner, following the farmhouse -->

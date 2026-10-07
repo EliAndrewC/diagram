@@ -178,6 +178,7 @@ def farm_channel(s: Settlement, h: Mapping[str, Any], courses: Sequence[Sequence
         crosses no other water - UNRESEARCHED: a route crossing other drawn water more than 6 ft past its mouth is refused
         where the channel ends - GUESS research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: in the dooryard, `DOORYARD_STEP_FT` (6 ft) off the yard, one step
         channel corridor - UNRESEARCHED: a 4 ft no-build corridor along each channel
+        how far a channel's source is sought - UNRESEARCHED: 20 ft steps, 60 ft spread, widened fourfold where the nearest find nothing
     """
     from ..ways.route import _route  # local: the ways are a later stage
 

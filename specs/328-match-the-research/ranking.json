@@ -182,34 +182,6 @@
   "wave": ""
  },
  {
-  "key": ".claude/skills/diagram/buildings.md::Sacred features#a fence round the sanctuary alone as a wealth knob (0223 \u00a7171-172 finds such fences before 1868 only where the shogunate or a lord built them)",
-  "verdict": "UNCLAIMED",
-  "tier": "E0",
-  "fix": "a fence round the sanctuary alone as a wealth knob (0223 \u00a7171-172 finds such fences before 1868 only where the shogunate or a lord built them)",
-  "files": [
-   ".claude/skills/diagram/buildings.md"
-  ],
-  "after": [],
-  "flag": "",
-  "found": "wave 2 re-check (tier provisional, by verdict)",
-  "tier_as_ranked": "E0",
-  "wave": ""
- },
- {
-  "key": ".claude/skills/diagram/buildings.md::Sacred features#grove inside a compound wall",
-  "verdict": "MISLABELED",
-  "tier": "E0",
-  "fix": "0218's drawing page does answer what stands with a compound shrine: a single tree (the seat of the god is \"an old tree or a stone\"). The claim should cite 0218 rather than say UNRESEARCHED, and against it a stippled grove rectangle would drift",
-  "files": [
-   ".claude/skills/diagram/buildings.md"
-  ],
-  "after": [],
-  "flag": "",
-  "found": "wave 2 re-check (tier provisional, by verdict)",
-  "tier_as_ranked": "E0",
-  "wave": ""
- },
- {
   "key": ".claude/skills/diagram/buildings.md::Sacred features#the whole sacred complex held to at most ~2/3 of the residence",
   "verdict": "UNCLAIMED",
   "tier": "E0",
@@ -515,6 +487,22 @@
   "wave": ""
  },
  {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#line follows its bounds",
+  "verdict": "CANNOT-TELL",
+  "tier": "E0",
+  "fix": "LOT_BOUND_REACH is 45.0, which 0077 drawing's 'within about 45 ft' already states; the claim names the value and keeps the page's GUESS label",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 2 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E4",
+  "moved": "T12a: tiered by the work it takes (was provisional, by verdict)",
+  "e0_basis": "0077 drawing: 'within about 45 ft' (its GUESS) - LOT_BOUND_REACH is 45.0",
+  "wave": ""
+ },
+ {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/stages.py::stage_windbreak#copse on the house's own bank",
   "tier": "E0",
   "fix": "cite 0035 drawing (each farmstead stands whole on one bank, a GUESS recorded there) for the copse's bank, as household_bamboo does",
@@ -792,20 +780,6 @@
   "verdict": "MISLABELED",
   "tier": "E0",
   "fix": "the 0081 and 0246 drawing pages answer the rule of keeping off crop and wet ground (\"never crosses row crops\", \"keeps off wet ground\"), so the claim should cite them with the 20 ft as a GUESS or CONVENTION; note \u00a759 also lets a lane \"touch a plot's boundary\"",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py"
-  ],
-  "after": [],
-  "flag": "",
-  "found": "wave 2 re-check (tier provisional, by verdict)",
-  "tier_as_ranked": "E0",
-  "wave": ""
- },
- {
-  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#a web lane's span",
-  "verdict": "MISLABELED",
-  "tier": "E0",
-  "fix": "0246 says a back lane \"runs only along the houses it serves\" (served = within 100 ft, \u00a710), so the rule is answered; the claim should cite 0246 and reconcile the 1.5 x WEB_REACH_FT (150 ft) span with the 100 ft service reach",
   "files": [
    ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py"
   ],
@@ -1341,6 +1315,21 @@
   "wave": "2"
  },
  {
+  "key": ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#cell",
+  "verdict": "DRIFTED",
+  "tier": "E1",
+  "fix": "procedure's Cell bullet: '1-2 occupants' becomes 'shared by several prisoners' (0096's measured cells); the 12 x 10 ft footprint stands",
+  "files": [
+   ".claude/skills/diagram/buildings.md"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 2 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E2",
+  "moved": "T12a: tiered by the work it takes (was provisional, by verdict)",
+  "wave": ""
+ },
+ {
   "key": ".claude/skills/diagram/buildings.md::Sacred features#grove crown size",
   "tier": "E1",
   "fix": "grove crowns 13-24 ft (0080.drawing's 0.75-1.4 x 17 ft), cited to 0080's drawing page as a guess",
@@ -1380,6 +1369,21 @@
   "tier_as_ranked": "E0",
   "verdict": "DRIFTED",
   "wave": "2"
+ },
+ {
+  "key": ".claude/skills/diagram/buildings/programs.md::Country shrine (a village district's shrine)#building size anchors",
+  "verdict": "DRIFTED",
+  "tier": "E1",
+  "fix": "the hall-and-dwelling band_ft 18-38 becomes ~21-35 ft (0222's attested halls) in types.json and the programs.md table; the 46x28 dwelling's claim relabeled GUESS 0221 drawing",
+  "files": [
+   ".claude/skills/diagram/buildings/programs.md"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 2 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E2",
+  "moved": "T12a: tiered by the work it takes (was provisional, by verdict)",
+  "wave": ""
  },
  {
   "key": ".claude/skills/diagram/buildings/programs.md::Country shrine (a village district's shrine)#farmers' stage knob",
@@ -1424,6 +1428,21 @@
   "found": "wave 1 re-check",
   "tier_as_ranked": "E1",
   "wave": "2"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/cluster.py::seat_cluster#band on the canvas",
+  "verdict": "CANNOT-TELL",
+  "tier": "E1",
+  "fix": "lat from band_extent is the band's HALF-length (dep/lat are the ellipse's semi-axes), so the frame test uses lat (half the band's length) not lat*0.5, with plan.seat_room's lat*0.5 term matched",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/cluster.py"
+  ],
+  "after": [],
+  "flag": "deviation-tempting: rewording the CONVENTION claim to 'a quarter of the band's length' leaves the code alone",
+  "found": "wave 2 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E4",
+  "moved": "T12a: tiered by the work it takes (was provisional, by verdict)",
+  "wave": ""
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::WET_SHARE_CAP#woods mostly on dry ground",
@@ -1960,6 +1979,21 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "MISLABELED",
+  "wave": ""
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#a web lane's span",
+  "verdict": "MISLABELED",
+  "tier": "E1",
+  "fix": "a back lane's span held to the houses it serves, within WEB_REACH_FT (100 ft, 0246), not 1.5 x WEB_REACH_FT (150 ft); the claim cites 0246",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 2 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E0",
+  "moved": "wave 3 reading: the claim cannot be made honest without the value (E0 -> E1)",
   "wave": ""
  },
  {
@@ -3473,20 +3507,6 @@
   "wave": ""
  },
  {
-  "key": ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#cell",
-  "verdict": "DRIFTED",
-  "tier": "E2",
-  "fix": "the 12 x 10 ft size is in step (small end of 6-18 mats, size not recorded), but the procedure's \"1-2 occupants\" contradicts the measured cells \"each shared by several prisoners\"",
-  "files": [
-   ".claude/skills/diagram/buildings.md"
-  ],
-  "after": [],
-  "flag": "",
-  "found": "wave 2 re-check (tier provisional, by verdict)",
-  "tier_as_ranked": "E2",
-  "wave": ""
- },
- {
   "key": ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#clerk positions at the dais",
   "tier": "E2",
   "fix": "clerk (and examiner) drawn on the middle level between the magistrate's dais and the court, not flanking the dais; cite 0099; all three sheets' dais bands",
@@ -3518,17 +3538,18 @@
   "wave": ""
  },
  {
-  "key": ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#stables",
-  "verdict": "DRIFTED",
+  "key": ".claude/skills/diagram/buildings.md::Sacred features#a fence round the sanctuary alone as a wealth knob (0223 \u00a7171-172 finds such fences before 1868 only where the shogunate or a lord built them)",
+  "verdict": "UNCLAIMED",
   "tier": "E2",
-  "fix": "28-32 ft for 2-4 one-ken stalls (12-24 ft) is longer than a small stable \"three bays long\"; the horse count is a GUESS the claim presents as research",
+  "fix": "the Fence and hedge bullet's sanctuary-only fence dropped from the wealth knob: 0223 drawing and programs.md draw no sanctuary fence at any wealth",
   "files": [
    ".claude/skills/diagram/buildings.md"
   ],
   "after": [],
   "flag": "",
   "found": "wave 2 re-check (tier provisional, by verdict)",
-  "tier_as_ranked": "E2",
+  "tier_as_ranked": "E0",
+  "moved": "wave 3 reading: the procedure sentence must change (E0 -> E2)",
   "wave": ""
  },
  {
@@ -3599,34 +3620,6 @@
   "wave": ""
  },
  {
-  "key": ".claude/skills/diagram/buildings.md::Sacred features#sanctuary",
-  "verdict": "DRIFTED",
-  "tier": "E2",
-  "fix": "~6 ft square at the back on the axis matches the record, but the page attests two forms: 1 and 3 ken are the commonest widths, and a covering building (oiya) was sometimes built over the sanctuary. The procedure fixes the one-bay, uncovered form; roll the forms or record the choice",
-  "files": [
-   ".claude/skills/diagram/buildings.md"
-  ],
-  "after": [],
-  "flag": "",
-  "found": "wave 2 re-check (tier provisional, by verdict)",
-  "tier_as_ranked": "E2",
-  "wave": ""
- },
- {
-  "key": ".claude/skills/diagram/buildings.md::Scale#well location marker",
-  "verdict": "DRIFTED",
-  "tier": "E2",
-  "fix": "the page's marker is ~19 ft across (r 9.36 ft), scales with the map, and is calibrated hamlet-to-city at 0.35-0.85 of a dwelling; it marks a ~4 ft curb, not \"~3-4 ft\". A 22 px (~7 ft) marker at 3 px/ft fits neither the size nor the band; record the plan's marker on the page or redraw",
-  "files": [
-   ".claude/skills/diagram/buildings.md"
-  ],
-  "after": [],
-  "flag": "",
-  "found": "wave 2 re-check (tier provisional, by verdict)",
-  "tier_as_ranked": "E2",
-  "wave": ""
- },
- {
   "key": ".claude/skills/diagram/buildings.md::Walls and gates#threshold wards",
   "tier": "E2",
   "fix": "threshold wards bullet dropped from Walls and gates (no pair at any official's gate before present-day custom); no sheet still draws them",
@@ -3669,20 +3662,6 @@
   "flag": "deviation-tempting: GM confirmed the 22 px marker status 2026-07-21",
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
-  "wave": ""
- },
- {
-  "key": ".claude/skills/diagram/buildings/programs.md::Country shrine (a village district's shrine)#building size anchors",
-  "verdict": "DRIFTED",
-  "tier": "E2",
-  "fix": "the table's hall band \"18-38 by 18-38 ft\" runs past the attested \"about 21 to 35 ft\" and the claim's own 20-35; and the 46x28 dwelling is not a 0221 finding (\"the farmhouse size is a guess\"), so that part should be GUESS 0221 drawing",
-  "files": [
-   ".claude/skills/diagram/buildings/programs.md"
-  ],
-  "after": [],
-  "flag": "",
-  "found": "wave 2 re-check (tier provisional, by verdict)",
-  "tier_as_ranked": "E2",
   "wave": ""
  },
  {
@@ -3951,6 +3930,21 @@
   "wave": ""
  },
  {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/capacity.py::free_seats#the exhaustive seat order",
+  "verdict": "CANNOT-TELL",
+  "tier": "E2",
+  "fix": "grow_the_margin (growth.py) seats its first house from free_seats, so per 0029 drawing the tie among seats about as near the seat breaks by nearer the fields, not by coordinates; sort key becomes (distance, field distance)",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/capacity.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 2 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E4",
+  "moved": "T12a: tiered by the work it takes (was provisional, by verdict)",
+  "wave": ""
+ },
+ {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/fixtures.py::BATH_SEATS#bath room wall",
   "tier": "E2",
   "fix": "roll the bath-room wall per house, not once per hamlet",
@@ -4022,7 +4016,7 @@
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#a yard's sun between ranks",
   "verdict": "DRIFTED",
   "tier": "E2",
-  "fix": "the code adds `max(0.0, -oy) * SUN_CORRIDOR_FT`, so only ranks climbing north get the corridor; a rank laid south of the front rank stands just south of that rank's yards, which the 39 ft rule (\"no neighbor's farmhouse ... within 39 ft to the south of a yard\") forbids equally; ranks should be spaced by the corridor whether they run north or south",
+  "fix": "_rank_step adds s.px(SUN_CORRIDOR_FT) whichever way the ranks run (north or south), not max(0, -oy) * it, so no rank stands within 39 ft south of another rank's yards",
   "files": [
    ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py"
   ],
@@ -4030,6 +4024,7 @@
   "flag": "",
   "found": "wave 2 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E2",
+  "moved": "T12a: tiered by the work it takes (was provisional, by verdict)",
   "wave": ""
  },
  {
@@ -6302,6 +6297,21 @@
   "wave": ""
  },
  {
+  "key": ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#stables",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "stable becomes 0108's small warrior stable: three bays long of one-bay (one-ken) stalls, with the kusa-no-ma passage before the stalls and the tozamurai room; procedure's ~84-96 px (28-32 ft) re-derived and the three magistracy sheets' stables redrawn; the 2-4 horse count labeled GUESS (0108: no page says)",
+  "files": [
+   ".claude/skills/diagram/buildings.md"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 2 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E2",
+  "moved": "T12a: tiered by the work it takes (was provisional, by verdict)",
+  "wave": ""
+ },
+ {
   "key": ".claude/skills/diagram/buildings.md::Outer court (administrative / public)#tax archive size",
   "tier": "E3",
   "fix": "tax archive cut to a records kura of <=450 sq ft (~24 x 18 ft) on all three sheets (now 32 x 28 ft) and in the band and prose",
@@ -6347,6 +6357,21 @@
   "wave": ""
  },
  {
+  "key": ".claude/skills/diagram/buildings.md::Sacred features#grove inside a compound wall",
+  "verdict": "MISLABELED",
+  "tier": "E3",
+  "fix": "a compound shrine drawn beside a single tree (0218 drawing), not a stippled grove rectangle - the three magistracy sheets redrawn",
+  "files": [
+   ".claude/skills/diagram/buildings.md"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 2 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E0",
+  "moved": "wave 3 reading: the honest fix redraws three sheets (E0 -> E3)",
+  "wave": ""
+ },
+ {
   "key": ".claude/skills/diagram/buildings.md::Sacred features#hall shrine ceiling",
   "tier": "E3",
   "fix": "hall shrine ceiling ~30 ft (3-5 ken haiden), 'under half a residence' labeled GUESS; Ochiba's hall and complex resized",
@@ -6359,6 +6384,21 @@
   "flag": "",
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
+  "wave": ""
+ },
+ {
+  "key": ".claude/skills/diagram/buildings.md::Sacred features#sanctuary",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "sanctuary width becomes a rolled knob, 1 ken (~6 ft) or 3 ken (~18 ft) per 0222; the covering house stays undrawn as 0222 already records; procedure, type band and shrine sheets follow",
+  "files": [
+   ".claude/skills/diagram/buildings.md"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 2 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E2",
+  "moved": "T12a: tiered by the work it takes (was provisional, by verdict)",
   "wave": ""
  },
  {
@@ -6375,6 +6415,21 @@
   "flag": "deviation-tempting: shrinking the house several-fold repacks every compound",
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
+  "wave": ""
+ },
+ {
+  "key": ".claude/skills/diagram/buildings.md::Scale#well location marker",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "Mode A wells drawn to 0196's curb: ~4 ft square (12 px at 3 px/ft) on its ~4 ft-wider apron, true size, in place of the 22 px (~7.3 ft) marker; procedure text and every pool sheet's wells redrawn",
+  "files": [
+   ".claude/skills/diagram/buildings.md"
+  ],
+  "after": [],
+  "flag": "deviation-tempting: the 22 px marker carries a GM-confirmed marker status (2026-07-21) and 0196's marker band is calibrated for map scale, not Mode A",
+  "found": "wave 2 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E2",
+  "moved": "T12a: tiered by the work it takes (was provisional, by verdict)",
   "wave": ""
  },
  {
@@ -6544,6 +6599,21 @@
   "flag": "",
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
+  "wave": ""
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/cluster.py::seat_cluster#belt room on the canvas",
+  "verdict": "CANNOT-TELL",
+  "tier": "E3",
+  "fix": "per 0072 drawing (a belt off the map's edge is sound, nothing beyond counted) drop the -2.5*off score and the BELT_ROOM_MAX_OFF refusal, and plan.seat_room's canvas growth for the belt; ripples into which margin seats every map",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/cluster.py"
+  ],
+  "after": [],
+  "flag": "deviation-tempting: the refusal fixed a settlement-review defect (feature 261/287) the page does not speak to",
+  "found": "wave 2 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E4",
+  "moved": "T12a: tiered by the work it takes (was provisional, by verdict)",
   "wave": ""
  },
  {
@@ -7088,7 +7158,7 @@
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/cluster.py::seat_cluster#brook across the band",
   "verdict": "DRIFTED",
   "tier": "E3",
-  "fix": "0035 makes the uncrossed site a tie-breaker (\"otherwise equally good\") and builds on both banks where the best wind-facing site is crossed; score -= 3.0*crossed outweighs the whole wind term (1.0) and the upslope term (0.8), so a crossed best site always loses; the penalty should only break near-ties",
+  "fix": "the brook crossing only breaks near-ties: drop score -= 3.0*crossed from the score and use crossed as a secondary sort key among margins whose scores are level (within a small epsilon)",
   "files": [
    ".claude/skills/diagram/l7r/diagram/hamletgen/cluster.py"
   ],
@@ -7098,6 +7168,7 @@
   "flag": "",
   "found": "wave 2 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E2",
+  "moved": "T12a: tiered by the work it takes (was provisional, by verdict)",
   "wave": ""
  },
  {
@@ -8270,34 +8341,6 @@
   "wave": ""
  },
  {
-  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/cluster.py::seat_cluster#band on the canvas",
-  "verdict": "CANNOT-TELL",
-  "tier": "E4",
-  "fix": "code keeps seat_c at least lat*0.5 from the frame; the band samples at t=\u00b10.9*lat, which suggests lat is the half-length, so this would be a quarter of the length, not \"half the band's length\"; need band_extent's meaning of lat",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/hamletgen/cluster.py"
-  ],
-  "after": [],
-  "flag": "",
-  "found": "wave 2 re-check (tier provisional, by verdict)",
-  "tier_as_ranked": "E4",
-  "wave": ""
- },
- {
-  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/cluster.py::seat_cluster#belt room on the canvas",
-  "verdict": "CANNOT-TELL",
-  "tier": "E4",
-  "fix": "0072 says a belt that runs off the frame is sound, and one exhibit has about 28% of its outline off the page (747 ft outline, 537 ft framed). Whether BELT_ROOM_MAX_OFF 0.2 would refuse that depends on what belt_off_canvas measures, which the bundle does not show",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/hamletgen/cluster.py"
-  ],
-  "after": [],
-  "flag": "",
-  "found": "wave 2 re-check (tier provisional, by verdict)",
-  "tier_as_ranked": "E4",
-  "wave": ""
- },
- {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#off crop and water",
   "tier": "E4",
   "fix": "the 3 ft off a watercourse rests on no page; research a bamboo stand's set-back from water, or claim it UNRESEARCHED with the pads",
@@ -8308,34 +8351,6 @@
   "flag": "",
   "tier_as_ranked": "E4",
   "verdict": "NEEDS-RESEARCH",
-  "wave": ""
- },
- {
-  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#line follows its bounds",
-  "verdict": "CANNOT-TELL",
-  "tier": "E4",
-  "fix": "the bundle does not give LOT_BOUND_REACH's value, so I cannot check it against the page's \"Within about 45 ft\"; the edge following its bounds matches the page's rule, which the page itself calls a GUESS",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py"
-  ],
-  "after": [],
-  "flag": "",
-  "found": "wave 2 re-check (tier provisional, by verdict)",
-  "tier_as_ranked": "E4",
-  "wave": ""
- },
- {
-  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/capacity.py::free_seats#the exhaustive seat order",
-  "verdict": "CANNOT-TELL",
-  "tier": "E4",
-  "fix": "0029 drawing \u00a778 sets a seat order for a growing clustered settlement (nearest the cluster, then nearer the fields), while this code sorts by distance from the seat with ties broken by coordinates; I need to know whether the grown (clustered) path calls free_seats: if it does, the label should cite \u00a778 and the tie-break is DRIFTED",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/capacity.py"
-  ],
-  "after": [],
-  "flag": "",
-  "found": "wave 2 re-check (tier provisional, by verdict)",
-  "tier_as_ranked": "E4",
   "wave": ""
  },
  {
@@ -8425,7 +8440,7 @@
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#not along a shelter belt",
   "verdict": "NEEDS-RESEARCH",
   "tier": "E4",
-  "fix": "the page backs the rule (\"a belt is kept whole, and a lane must still get through it\") but records no 60 ft figure for a lane inside a belt; the 60 ft should be labeled GUESS or be recorded on the drawing page",
+  "fix": "0072 drawing backs keeping a lane through a belt but gives no length a lane may run inside one; the 60 ft needs a figure the record does not have",
   "files": [
    ".claude/skills/diagram/l7r/diagram/hamletgen/ways/serve.py"
   ],
@@ -8433,13 +8448,14 @@
   "flag": "",
   "found": "wave 2 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E4",
+  "moved": "T12a: tiered by the work it takes (was provisional, by verdict)",
   "wave": ""
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/street.py::row_reach#street run past its end farms",
   "verdict": "CANNOT-TELL",
   "tier": "E4",
-  "fix": "the 0033 drawing page says \"The street runs on off the map as the road into it\", which may answer or contradict a half-frame overrun; I need to see which end of the street the overrun is applied to",
+  "fix": "the half-frame pad applies to both ends of the street's span; the run off the map is street_run_out's separate road (0033 drawing), and no page says how far a street runs past its end farms at the inner end",
   "files": [
    ".claude/skills/diagram/l7r/diagram/hamletgen/ways/street.py"
   ],
@@ -8447,6 +8463,7 @@
   "flag": "",
   "found": "wave 2 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E4",
+  "moved": "T12a: tiered by the work it takes (was provisional, by verdict)",
   "wave": ""
  },
  {
