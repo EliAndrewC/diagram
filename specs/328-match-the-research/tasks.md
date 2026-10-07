@@ -818,6 +818,6 @@ fallback (411). The next open row is the belt in the marsh (412).
 
 - [ ] T59 the three claims; the thicket's fallback held to the band just beyond the back row, with its two tests; Kashikawa and Mizuguchi regenerated (FR-004, FR-005)
       research: rendering
-- [ ] T60 every touched claim re-checked by `impl-drift`, and the close: wave 17's own bookend pair, `make done` green, the wave
+- [ ] T60 every touched claim re-checked by `impl-drift`, the occasion's review (glyph-check on Kashikawa's thicket, one map), and the close: wave 17's own bookend pair, `make done` green, the wave
       column (FR-005, FR-006, SC-002, SC-003)
       research: rendering

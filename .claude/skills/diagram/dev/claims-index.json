@@ -5854,6 +5854,32 @@
   ],
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py::THICKET_ROW_DEPTH_FT#thicket just beyond the back row": {
+  "code": "9e62debaab88a22d",
+  "core": "f9869fee1052b437",
+  "date": "2026-10-07",
+  "note": "every search caps the stand's near edge at this depth behind the back row's back edge, which matches the drawing page's \"just beyond the back row of houses\"",
+  "pages": {
+   "0075-bamboo-groves-chikurin.drawing.html": "d65f38fc7bbc0e20"
+  },
+  "research": "2e86e0d437d7c9d9",
+  "rests": [
+   "0075-bamboo-groves-chikurin.drawing.html:07017fd50a6b594d"
+  ],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py::THICKET_ROW_DEPTH_FT#thicket row depth figure": {
+  "code": "a9d1c823657a9f77",
+  "core": "f9869fee1052b437",
+  "date": "2026-10-07",
+  "note": "the page says \"just beyond\" and gives no figure, so the 30 ft is honestly UNRESEARCHED",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0075-bamboo-groves-chikurin.drawing.html:07017fd50a6b594d"
+  ],
+  "verdict": "IN-STEP"
+ },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_blocked#frame margin and title pocket": {
   "code": "2f927d1507f7b388",
   "core": "f2c3afce31e9bf5d",
@@ -5907,14 +5933,17 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#keep-out pads": {
-  "code": "f5a3d2dcd657bf7d",
+  "code": "8ddb6361b378f6bc",
   "core": "782e0ea47d9fed33",
   "date": "2026-10-07",
-  "note": "UNRESEARCHED is the right class, but the account is wrong: the code's pads run 2-20 ft (woods 20, wells 14, kosatsuba 12, houses and retirement houses 10, belt and lanes 10, yards, gardens, sheds and byres 8, groves 4, persimmons 2), not 2-30 (the 30 is the pond's, in another claim), and it omits byres, retirement houses and kosatsuba; the account should say 2-20 ft and name them",
+  "note": "the code's pads run from 2 ft (persimmons) to 20 ft (woods), within the claimed 2-20 ft; neither cited page gives a thicket's clearance figures (§12 covers the farm strip, not the thicket)",
   "pages": {},
   "research": "",
-  "rests": [],
-  "verdict": "MISLABELED"
+  "rests": [
+   "0075-bamboo-groves-chikurin.drawing.html:07017fd50a6b594d",
+   "0075-bamboo-groves-chikurin.drawing.html:a3eaaa1508f4647d"
+  ],
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#off crop and water": {
   "code": "55246d866b1f88d9",
@@ -5956,14 +5985,6 @@
    "0075-bamboo-groves-chikurin.drawing.html:19e6e6b416628986"
   ],
   "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#the stand's near edge held within THICKET_ROW_DEPTH_FT 30 ft behind the back row's back edge, falling back to anywhere along the row": {
-  "code": "782e0ea47d9fed33",
-  "core": "782e0ea47d9fed33",
-  "date": "2026-10-07",
-  "note": "the stand's near edge held within THICKET_ROW_DEPTH_FT 30 ft behind the back row's back edge, falling back to anywhere along the row",
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#thicket by the knob": {
   "code": "ed40334736461fd0",
@@ -6022,14 +6043,6 @@
    "0075-bamboo-groves-chikurin.drawing.html:e76b74de88c86e77"
   ],
   "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#thicket size BAMBOO_THICKET_FT 84 x 58 ft (0075 §20 GUESS)": {
-  "code": "782e0ea47d9fed33",
-  "core": "782e0ea47d9fed33",
-  "date": "2026-10-07",
-  "note": "thicket size BAMBOO_THICKET_FT 84 x 58 ft (0075 §20 GUESS)",
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py::nearest_fitting#stand seat search": {
   "code": "db566e224cd30d34",
