@@ -137,10 +137,12 @@ session's last actions are recording the running checks, a commit, and `scripts/
   a unit a kept map actually EXECUTES - the scripted hamlets, the magistracy sheets and the country shrine - measured by
   each kept map's own gen-cache entry on today's engine (each function that ran, by path and qualified name, the record
   `tools/hamlet_floor` reads; never a gate test's roll of the legacy village roller, a unit test's roll or a stale entry):
-  a function or method a kept map's run executed, a class one of whose methods ran, a module-level constant an executed
-  function reads, any unit under `hamletgen/` (the scripted hamlet's own code, which only a scripted hamlet runs, whatever
-  seed or form), a check the gate runs against the kept maps' finished output (listed with its reason), and the Mode A
-  procedures. Every other
+  a function or method a kept map's run executed, a class one of whose methods ran or which executed code constructs or
+  names, a module-level constant an executed function reads or an in-use knob's registration reads, a knob in use (an
+  executed function's call names it, or its typing rule ran) and a module-level claim on one, any unit under `hamletgen/`
+  (the scripted hamlet's own code, which only a scripted hamlet runs, whatever seed or form), a check the gate runs against
+  the kept maps' finished output (listed with its reason), and the Mode A procedures; a claim whose value no kept map reads
+  though its unit runs is deferred with its measured reason. Every other
   claimed unit - code only the legacy hand-authored villages, towns and cities run - is DEFERRED: its rows stay ranked
   (`scope: deferred`) and no wave takes them, and every such unit is listed in `dev/claims-deferred.json` (derived over every
   claimed unit, not only today's findings, by `audit/scope.py`, re-run when a wave lands), so `make claims-report` shows and

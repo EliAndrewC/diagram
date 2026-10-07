@@ -1,6 +1,6 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "eb3c231c55f1d117f83afe78123ffcd25e1a4b771cd158e400edb1e75ba38380",
+ "plan_sha256": "28fb575fb5ecad4383869fea40989d56a9615c1bef8a82f72be91122b3b76a3b",
  "reviewed": "2026-10-07",
  "declared": "spec-fidelity",
  "decisions": [
@@ -162,16 +162,16 @@
   },
   {
    "id": "D9-scope-rule",
-   "summary": "Scope from the gen cache's execution records: every (path, qualname) recorded under .gencache/*/ and .gencache/rolls/*/ is `kept` (plus classes with a run method, constants an executed function reads, KEPT_CHECKS, and buildings* as mode-a); everything else deferred",
+   "summary": "Scope from the kept maps' own gen-cache entries only (KEPT_MAPS: pool hamlets, magistracy sheets, country shrine; never .gencache/rolls, h10, h20): a recorded function or method, a class one of whose methods ran, a constant an executed function reads BY NAME, any unit under hamletgen/, KEPT_CHECKS, buildings* as mode-a; everything else deferred (924 of 3945)",
    "class": "narrowing",
    "ruling": "NOT LEGITIMATE",
-   "why": "The unit-level measure is right and answers round 1 (crescent_pond, water_field, _grove_fits, _shades_a_garden, merchant_estate, water_gate, _try_place_legacy, nearring.py all read deferred; scope.json and claims-deferred.json reproduce exactly, 963 of 3945). But the records it reads are not the kept maps' runs. Measured on round 2: .gencache/rolls holds 32 entries, none a kept map (tests/rolls.py: the gate rolls ZERO maps of its own since feature 219): three `roll_village:*` gate-test rolls of the legacy feature-005 roller (tests/gate/settlement/test_rolling.py; no pool generator calls roll_village), seven HamletSpec rolls from older engine code (Sep 8-29, their spec repr lacks grove_sides/row_line), and unit-test field rolls. Excluding only the roll_village rolls moves 14 open rows kept->deferred (all of rolling/roll.py plus _knobs._land_use_ok); using only the kept maps' entries and current-code HamletSpec rolls moves 20, including FuneraryGroundsMixin.cemetery, which no current kept map runs (the hamlet burial stage draws nothing; only the Sep 29 rolls record it). Wave 9 takes three of these (cemetery#stupa E0, cemetery#six jizo E1, RollVillageMixin._roll_civic E1). The GM: 'limit ourselves to code actually executed by magistracies, country shrines, and scripted hamlets'. A gate test of the legacy roller and a stale record of old code are neither; the round-1 code itself called roll.py 'the legacy village roller, which no scripted hamlet runs'."
+   "why": "Round 2's items answered and reproduced on round 3's own run (scope.json and claims-deferred.json identical; 271/60/162; the kept maps' entries dated 2026-10-07 09:17-09:25; today's current-code Inashiro HamletSpec roll adds 0 functions; hamletgen/ is imported by no legacy path but finish.py's strip_reaches_view). But the measure cannot see code the scripted hamlets execute through the knob registry or at a module's top level, so it marks their findings DEFERRED, against 'limit ourselves to code actually executed by ... scripted hamlets; legacy hand-drawn settlements shall have their findings marked as DEFERRED'. Measured: grain.py::WINTER_CROP (row 456, E2) is resolved by name (resolve_knob('winter_crop')) in CombMixin._coarse_grain_top_up, which all five pool hamlets' records hold; _knobs.py::<module>#kosatsuba_seat forms (row 633, E3) is the knob board_seat.py resolves, whose typing rule _kosatsuba_seat_ok is in all five hamlets' records - scope_of defers every <module> claim unconditionally; paddy.py::PADDY_REST and bridges.py::FOOTBRIDGE_FORM sit on the deferred list though resting_plots and channel_footbridges (all five records) resolve them. 20 classes executed code names (e.g. land/tiles.py::Cover, structures/fixtures/board_seat.py BoardSeat and SiteEnv, rolling/bundle.py::PocketUnlaid) are deferred because no Python-level method ran. Not impossible (the knob name and the typing rule are both measurable), and nothing in the request implies deferring hamlet code. Wave 9's rows are unaffected (456 and 633 are E2/E3; row 275 FixtureForms#privy seat weights stays deferred on substance: fixture_forms overrides the default, which only bundle.py:444's fallback reads)."
   },
   {
    "id": "D9-deferred-list-from-current-rows",
-   "summary": "dev/claims-deferred.json derived over every claimed unit (963 of 3945), re-derived when a wave lands",
+   "summary": "dev/claims-deferred.json derived over every claimed unit (924 of 3945), re-derived when a wave lands",
    "class": "within",
-   "why": "Answers round 1: measured, the list is computed over every unit of dev/claims-index.json, not today's findings, and FR-010 and the plan say it is re-run when a wave lands. Its CONTENT inherits D9-scope-rule's measure (990 with the legacy roller's rolls excluded, 1078 on current kept-map records only) and is corrected with it."
+   "why": "Derived over every unit of dev/claims-index.json and re-run when a wave lands (FR-010, plan D9); reproduced exactly on round 3. Its content inherits D9-scope-rule's misses (PADDY_REST, FOOTBRIDGE_FORM, WINTER_CROP, the constructed classes) and is corrected with it."
   },
   {
    "id": "D9-any-in-scope-row-keeps-unit",
@@ -189,7 +189,7 @@
    "id": "cap-85",
    "summary": "The cap is 85%, the hook re-armed at 85; the plan's Summary now says 85%",
    "class": "within",
-   "why": "'Please also raise the cap from 75% to 85%'. Round 1's stale word is corrected."
+   "why": "'Please also raise the cap from 75% to 85%'. The plan's Summary says 85%."
   },
   {
    "id": "T34a",
@@ -199,9 +199,9 @@
   },
   {
    "id": "W9-scope",
-   "summary": "Wave 9: the 6 open in-scope E0 rows, then in-scope E1 rows 255-298 (28 rows); next open in-scope E1 row 303",
+   "summary": "Wave 9: the open in-scope E0 rows (plan.md says 6; measured 5: 51, 62, 65, 93, 94), then in-scope E1 rows 265-297 (26 rows); next open in-scope E1 row 303",
    "class": "within",
-   "why": "Measured on ranking.json: open in-scope E0 rows are 51, 62, 65, 93, 94, 129; open in-scope E1 rows from 255 to 298 are exactly 28 and the next is 303; Phase 10 lists exactly those 34 keys; tier order monotone; every after is inside the wave. Correct arithmetic on the scope as written, but three of its rows are legacy-only code (see D9-scope-rule) and it must be re-chosen once the scope is re-measured."
+   "why": "Measured on round 3: open in-scope E0 rows are exactly 51, 62, 65, 93, 94; open in-scope E1 rows 265-297 are 26 and the next is 303; tasks.md Phase 10 lists exactly those 31 keys; every `after` they carry is inside the wave or closed. The plan's Wave 9 bullet still says '6 open in-scope E0 rows' - a stale count to correct, not a decision. The rows D9-scope-rule wrongly defers are E2/E3, so this run holds once the scope is corrected (re-confirm on re-derivation)."
   },
   {
    "id": "W9-verification",
