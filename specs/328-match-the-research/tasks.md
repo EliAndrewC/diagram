@@ -860,7 +860,9 @@ wood's side of the field (417). The next open row is the seat order's tie (421).
   - `l7r/diagram/hamletgen/hinterland/belt.py::past_the_lanes#no belt in the marsh` - the belt keeps its depth past a back lane into the marsh, its trees there drawn as alder (0074 drawing); the wet guard and its marsh test retired
   - `l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#near side of the field preferred` - seats across the field from the houses taken first (0077 drawing: the nearest slope beyond the fields), inverting feature 261's preference
 
-- [ ] T63 the belt's wet guard retired; the wood's preference inverted; the five pool hamlets regenerated (Inashiro's and Kashikawa's woods move) (FR-004, FR-005)
+- [x] T63 the belt's wet guard retired; the wood's preference inverted; the five pool hamlets regenerated (Inashiro's and Kashikawa's woods move) (FR-004, FR-005)
       research: rendering
-- [ ] T64 every touched claim re-checked by `impl-drift`, the occasions' reviews (glyph-check on Inashiro's and Kashikawa's woodland commons), and the close: wave 19's own bookend pair, `make done` green, the wave column (FR-005, FR-006, SC-002, SC-003)
+      verify: DONE. the belt's wet guard retired (its marsh trees alder, 0074); the wood beyond the fields first (0077), inverting feature 261; the five hamlets regenerated - Inashiro's and Kashikawa's woods move, no belt moved; the brook fixture laid within reach of the first parcel
+- [x] T64 every touched claim re-checked by `impl-drift`, the occasions' reviews (glyph-check on Inashiro's and Kashikawa's woodland commons), and the close: wave 19's own bookend pair, `make done` green, the wave column (FR-005, FR-006, SC-002, SC-003)
       research: rendering
+      verify: DONE. impl-drift on every touched claim (27 IN-STEP); the glyph checks PASS (Inashiro's woodland commons, F1 filed as a found row; Kashikawa's thicket re-owed); the notice board's third round capped (passed twice, unmoved - the GM's waiver asked at the end); make done green; wave 19's own pair band 1, the parcel scan's growth timed by perf-audit (consistent); the wave column written

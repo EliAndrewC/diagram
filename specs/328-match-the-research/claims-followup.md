@@ -477,3 +477,4 @@ pass on the sheet modals, not this feature's ranking - modals are not claims):
 - For the GM (spec-fidelity's note, amendment 18): `settlement/homestead_parts/stands.py::deep_marsh` still drops belt clumps
   deeper than the reed margin, so a belt moved into the marsh draws its alder at the margin and none deeper. A separate claim,
   not ranked as a finding.
+- Wave 19's pair (band 1): perf-audit timed 40 hh seed 4's hinterland at 2.29 s base, 3.96 s end, 2.27 s with only parcels.py at base - all the growth inside the parcel scan (open_ground_patches 0.98 -> 2.65 s), the scrub fill flat; the explanation's scrub-fill clause was wrong, the cause right.

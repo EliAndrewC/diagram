@@ -1,0 +1,62 @@
+{
+  "band": 1,
+  "base": {
+    "commit": "822e44c52",
+    "label": "328-start",
+    "utc": "20261007T222640Z"
+  },
+  "binding": "21f20f444ceb6a2abf1dbadf1fb1ce0ff967314eb4fb1fdc08ad6a68492566e2",
+  "end": {
+    "commit": "0742be534",
+    "label": "328-end",
+    "utc": "20261007T222954Z"
+  },
+  "environment": "local",
+  "feature": "328-match-the-research",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "8d3395e5-fe32-4f85-9c89-80c344d2ac1a",
+    "utc": "20261007T223653Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": -3.3,
+          "39": 0.0,
+          "4": 0.0,
+          "47": -3.0
+        },
+        "total_pct": -1.6
+      },
+      "20": {
+        "seeds": {
+          "25": -1.4,
+          "39": -1.9,
+          "4": 0.0,
+          "47": 0.0
+        },
+        "total_pct": -0.8
+      },
+      "40": {
+        "seeds": {
+          "25": 0.8,
+          "39": 0.0,
+          "4": 7.6,
+          "47": -0.8
+        },
+        "total_pct": 2.4
+      }
+    },
+    "seeds": {
+      "25": -2.0,
+      "39": 0.0,
+      "4": 2.1,
+      "47": 0.0
+    },
+    "total_pct": 0.0
+  },
+  "note": "Counterfactual run by perf-audit (worktrees at 822e44c52, at 0742be534, and at 0742be534 with only parcels.py reverted to base), 40 hh seed 4, 3 runs each: hinterland 2.29 s base, 3.96 s end, 2.27 s counterfactual; the counterfactual seats the same woods as base (hash 7a20f7b648, 4 woods; end has 3). Inside hinterland, open_ground_patches goes 0.98 to 2.65 s (+1.67 s, all of the growth). The scrub calls (0.52 to 0.54) and fill_the_holes (0.095) stay flat, so the cost is in the parcel scan, not in the fill running round different ground. belt_polygon 0.22 to 0.21 s; the belt change moved no map (counterfactual matches base on ref 4, 40hh 4 and 40hh 25). Ref seed 4: ogp 0.32 to 0.48 s, 3 woods where 2 stood. 40hh seed 25: woodland +0.16 s drawing 4 woods instead of 1, hinterland -0.2 s.",
+  "verdict": "consistent"
+}
