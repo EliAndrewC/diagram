@@ -293,3 +293,5 @@ Each wave's amendment adds its map decisions to this table. The program's decisi
 - Amendment 13, round 1 (spec-fidelity-verify, 2026-10-07): FAITHFUL (the plan verdict left to spec-fidelity). Round 2
   (spec-fidelity): FAITHFUL, plan CLEAR - the two claims impl-drift's re-check moved (the tax-free fields on 0221's drawing
   page, the postern a GUESS saying what was searched); its aside fixed: the scope keeps the page path.
+- Amendment 14, round 1 (spec-fidelity, 2026-10-07): FAITHFUL, plan CLEAR (8 decisions) - removing the seat's drain rule the
+  literal reading of 0058 (keeping it at a dispersed seat would be "X except Y"); the stage and sumo defaults within the spec.

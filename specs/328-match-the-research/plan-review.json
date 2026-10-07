@@ -1,39 +1,57 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "17df9a3b3f650dde569ef21f331f2875de9c29e0a9b0ccc6d00da6a8ca7d2faa",
+ "plan_sha256": "f7d4b68cb1350486395d0067f136bf3a9f8b53dc86d1a8a804d8674ee5db172d",
  "reviewed": "2026-10-07",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W14-T51a",
-   "summary": "wave 13's 13 found rows tiered by their work by a fresh reader before the run is chosen (3 moved: one to E0 with its basis, two to E3)",
+   "id": "W15-reopen",
+   "summary": "the filer files a finding on a closed row as a found row, takes it out of waves.json and keeps its closing wave in `reopened`; T53a tiers the four reopened rows by their work (granary forms E0, stage, kitchen garden, strongbox E2)",
    "class": "within",
-   "why": "FR-002/FR-003: tiers by implementation work; rows stay ranked and open, none dropped"
+   "why": "FR-001/FR-002/FR-003: every finding is ranked and tiered by implementation work; skipping a closed key dropped findings. T53a's tiers fit FR-003 (granary forms: the unedited 0098 drawing page already states the size as GUESS, a claim-only fix; the other three change one procedure paragraph each, no sheet redrawn)."
   },
   {
-   "id": "W14-scope",
-   "summary": "the 8 open in-scope E0 rows, all Mode A procedure claims; no procedure text, sheet or engine line changes",
+   "id": "W15-scope",
+   "summary": "wave 15 = the one open E0 row then the E2 rows in ranking order: six Mode A paragraphs and cluster.py's two drain rows (9 rows)",
    "class": "within",
-   "why": "FR-006 contiguous run, E0 first; FR-003 E0 is the claim alone; FR-010 mode-a is in scope. The two re-changed claims are impl-drift MISLABELED fixes: tax-free fields cites 0221's drawing page ('Nothing about the shrine's land or its income is drawn', unedited since 319), the postern a bare GUESS naming what 0101's drawing page searched (no night-soil gate at a samurai house, the merchant's back gate only) - label and wording only, FR-004"
+   "why": "FR-006/SC-003: measured on ranking.json, the 9 rows are exactly the first 9 open non-deferred rows in ranking order (indices 4, 383, 394, 395, 396, 398, 402, 403, 404); no open E0/E1 row is passed over."
   },
   {
-   "id": "W14-stack",
-   "summary": "wave 14 starts on unpushed waves 9-13 under the wave-11 exception's condition (6)",
+   "id": "W15-seat-drain",
+   "summary": "seat_cluster's HARD 1 (no seat below the drain) removed for every form; below_drain judged within the drain's span across the slope; the per-farm rule no seat enforced filed E3 (found-wave15.jsonl)",
+   "class": "within",
+   "why": "Literal to 0058's drawing page (unedited since feature 303): 'Farmhouses are kept off the ground below a drain only in a dispersed settlement, not in a nucleated cluster' and 'each farm of a dispersed settlement ... must stand on dry ground on its own', and to row 404's fix ('drop HARD 1'). HARD 1 tested the seat margin's midpoint, never a farmstead, so keeping it at a dispersed seat would enforce a rule the page does not state - an 'X except Y' - rather than the per-farm rule; filing that rule as a new ranked row (E3, a new placement rule across modules) puts it in the queue the request asks to work through."
+  },
+  {
+   "id": "W15-stage-sumo",
+   "summary": "the stage and sumo-ring rows take the finding's second remedy: the absent default claimed as 0222's drawing page's GUESS; the roll tried and withdrawn (knobs, modals and Hoshigaoka notes back to their wave-14 text)",
+   "class": "within",
+   "why": "FR-003/FR-004: 0222's drawing page, unedited, already says what the procedure does ('absent by default ... the maps leave both off unless they are turned on'), so only the claim moves. Rolling would contradict that page and need it edited - the research moving, FR-004's exception path. The net diff 68ee171f4..48967b2ea touches no modal, notes file or research page."
+  },
+  {
+   "id": "W15-mode-a-edits",
+   "summary": "granary claim split (forms on 0098; size GUESS on 0098 drawing; terminal row at the office the question page's GUESS; kura vents CONVENTION); checklist ranks from 0116 drawing; subsidiary-buildings claim on 0222 drawing with 0222/0215 evidence; manor kitchen garden as 0109's site and size knobs; strongbox clause dropped",
+   "class": "within",
+   "why": "Each edit checked against its page: 0098 drawing (size GUESS), 0098.html (large storehouse rows at the office, the project's GUESS), 0116 drawing (office hall > residence > rowhouse; grain store by rice held), 0222.html ('sometimes seen in a precinct'), 0215 (Rokusha 30-tsubo office, 1872), 0109 drawing (four sites, six hours, ~1,076 sq ft to half the grounds), 0098 drawing deviation (dry-field share in kind). No research page changed in the range (FR-004)."
+  },
+  {
+   "id": "W15-scope-script",
+   "summary": "audit/scope.py keeps the page path (render_png, raster tiles, the page vocabulary's tables, each Kind a kept map records)",
+   "class": "within",
+   "why": "FR-010: code the kept maps execute; the page path is executed by every kept map. Committed in b92a441c2, before 68ee171f4 (already in wave 14's close)."
+  },
+  {
+   "id": "W15-stack",
+   "summary": "wave 15 starts on unpushed waves 9-14 under the wave-11 exception's condition (6); its own pair opens at 68ee171f4",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "exception ruled LEGITIMATE on conditions (amendment 10); wave 13 closed at 2e0268412, an ancestor of HEAD, backup pushed, own pair band 1 confirmed by perf-audit; nothing but the GM's sign-off is stated to refuse the push"
+   "why": "The same GM-reviewed exception ruled LEGITIMATE at each earlier wave; condition (6) checked at 68ee171f4: wave 14 closed (T51/T52 ticked, impl-drift recorded, gate verified, pair band 1, wave column), and origin's backup/digram-backlog is at 68ee171f4. Wave 15 is its own amendment on a reset counter with this plan review before its first tick."
   },
   {
-   "id": "W14-verify",
-   "summary": "impl-drift on the touched claims, the gate, wave 14's own bookend pair",
+   "id": "W15-verify",
+   "summary": "impl-drift on the touched claims, the modals' owed record checks, the gate with the pool hamlets regenerated, wave 15's own bookend pair",
    "class": "within",
-   "why": "FR-005"
-  },
-  {
-   "id": "W14-scope-rederive",
-   "summary": "audit/scope.py re-run at the wave: 13 Mode A procedure claims scoped mode-a, kept claims added, 19 units newly deferred",
-   "class": "within",
-   "why": "D9/FR-010 as accepted (re-derived from the gen cache's records); every newly deferred unit's claims are IN-STEP, so no finding leaves the wave by it"
+   "why": "FR-005, constitution VI (wave 15 is the first engine change of the stack since wave 13)."
   }
  ],
  "verdict": "CLEAR"

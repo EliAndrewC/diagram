@@ -93,7 +93,7 @@ No salt heaps or other wards are drawn at a compound's gates: no pair at any off
 <!-- Research: granary forms - research/questions/0098-storehouses-for-the-tax-rice.html: raised on posts or earth-walled kura -->
 <!-- Research: the kura granary's vents not drawn - CONVENTION: a plan shows a wall's footprint, not the ventilation gaps in its face -->
 <!-- Research: granary size - GUESS research/questions/0098-storehouses-for-the-tax-rice.drawing.html: ~43-50 x 25-27 ft, no page gives a county office granary's size or count -->
-<!-- Research: a terminal store's row at the office - GUESS research/questions/0098-storehouses-for-the-tax-rice.html: large storehouse rows at its office, the question page's own guess -->
+<!-- Research: a terminal store's row at the office - GUESS: large storehouse rows at its office, the guess research/questions/0098-storehouses-for-the-tax-rice.html records -->
 <!-- Research: practice ground - research/questions/0165-martial-training-grounds-and-dojo.drawing.html: swept patch with a weapon rack and striking posts, no hall -->
 <!-- Research: practice ground placement - research/questions/0165-martial-training-grounds-and-dojo.drawing.html: a practice ground beside the guards' quarters -->
 <!-- Research: practice ground shared with cart staging or muster - UNRESEARCHED: the open ground serves also as cart staging or muster -->

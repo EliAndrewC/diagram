@@ -451,3 +451,4 @@ pass on the sheet modals, not this feature's ranking - modals are not claims):
   bullet for the drawn size and form.
 - The manor bundle's aside: the `tax_archive` band (20-48 by 10-36 ft, to ~1,700 sq ft) passes 0100's drawing page's ~450 sq ft
   ceiling - already ranked (the tax archive size row).
+- `buildings/programs.md::Country shrine (a village district's shrine)#donated stonework` (MISLABELED, E0): the research attests the three gifts but not "none at average" (no count of village shrines keeping them); that gating should be GUESS research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html §250

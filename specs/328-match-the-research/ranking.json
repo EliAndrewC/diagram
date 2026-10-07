@@ -302,6 +302,21 @@
   "scope": "mode-a"
  },
  {
+  "key": ".claude/skills/diagram/buildings/programs.md::Country shrine (a village district's shrine)#donated stonework",
+  "verdict": "MISLABELED",
+  "tier": "E0",
+  "fix": "the research attests the three gifts but not \"none at average\" (no count of village shrines keeping them); that gating should be GUESS research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html \u00a7250",
+  "files": [
+   ".claude/skills/diagram/buildings/programs.md"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 15 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": ".claude/skills/diagram/buildings/programs.md::Country shrine (a village district's shrine)#dwelling privy",
   "verdict": "MISLABELED",
   "tier": "E0",
@@ -321,21 +336,6 @@
   "verdict": "MISLABELED",
   "tier": "E0",
   "fix": "0226 covers only the burial yard-or-apart roll; following the declared map (grove and burial side) is the GM's ruling of 2026-09-20, so that half should be CANON",
-  "files": [
-   ".claude/skills/diagram/buildings/programs.md"
-  ],
-  "after": [],
-  "flag": "",
-  "found": "wave 13 re-check (tier provisional, by verdict)",
-  "tier_as_ranked": "E0",
-  "wave": "14",
-  "scope": "mode-a"
- },
- {
-  "key": ".claude/skills/diagram/buildings/programs.md::Country shrine (a village district's shrine)#innermost arch one pitch off the hall",
-  "verdict": "MISLABELED",
-  "tier": "E0",
-  "fix": "12 ft from arch to hall is a physical placement a reader takes as fact, not how something is shown; the research is silent, so the claim should be GUESS 0220.drawing",
   "files": [
    ".claude/skills/diagram/buildings/programs.md"
   ],
@@ -5945,7 +5945,7 @@
   "found": "wave 2 re-check (tiered by its work at T25a)",
   "tier_as_ranked": "E2",
   "moved": "T25a (amendment 6): tiered by its work - one procedure section (programs.md, Country shrine, line 120 on) rewritten; a widened band leaves the existing sheets inside it",
-  "wave": "13",
+  "wave": "",
   "scope": "mode-a"
  },
  {
@@ -5982,6 +5982,22 @@
   "scope": "mode-a"
  },
  {
+  "key": ".claude/skills/diagram/buildings/programs.md::Country shrine (a village district's shrine)#innermost arch one pitch off the hall",
+  "verdict": "DRIFTED",
+  "tier": "E2",
+  "fix": "the claim calls the 12 ft a GUESS (right for a physical distance), but the cited drawing page records it as \"a map drawing convention\"; the page should call it a guess",
+  "files": [
+   ".claude/skills/diagram/buildings/programs.md"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 15 re-check (tier provisional, by verdict)",
+  "reopened": "closed in wave 14",
+  "tier_as_ranked": "E2",
+  "wave": "",
+  "scope": "mode-a"
+ },
+ {
   "key": ".claude/skills/diagram/buildings/programs.md::Country shrine (a village district's shrine)#no subsidiary buildings",
   "verdict": "DRIFTED",
   "tier": "E2",
@@ -6012,6 +6028,21 @@
   "scope": "mode-a"
  },
  {
+  "key": ".claude/skills/diagram/buildings/programs.md::Country shrine (a village district's shrine)#two-building dwelling size",
+  "verdict": "DRIFTED",
+  "tier": "E2",
+  "fix": "the page says it is drawn \"at the size of the map's farmhouses, 46 by 28 ft\", but the table's dwelling band is 34-60 by 18-38 ft; narrow the band or record it on the page",
+  "files": [
+   ".claude/skills/diagram/buildings/programs.md"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 15 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E2",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#formal visitors and the privacy baffle",
   "verdict": "DRIFTED",
   "tier": "E2",
@@ -6023,7 +6054,7 @@
   "flag": "",
   "found": "wave 3 re-check",
   "tier_as_ranked": "E2",
-  "wave": "13",
+  "wave": "",
   "scope": "mode-a"
  },
  {
@@ -6101,6 +6132,21 @@
   "moved": "T53a: a reopened row tiered by its work by a fresh reader - The role conflicts with the project's own in-kind deviation and no sheet draws it: a grep of every magistracy sheet's notes finds no strongbox or coin in a granary (Ubame, the one upland county, keeps a modest kura on posts and its wealth in the sealed charcoal store; the strongroom role is the tax archive's, buildings.md line 109), so dropping one clause of one procedure paragraph matches the research.",
   "wave": "",
   "scope": "mode-a"
+ },
+ {
+  "key": ".claude/skills/diagram/buildings/programs.md::Magistrate's manor (county magistracy)#walled enclosure",
+  "verdict": "DRIFTED",
+  "tier": "E2",
+  "fix": "the claim makes the gatehouse the office's gate range as at Omori (~108 ft) and Kaibara (~81 ft). The rendered gatehouse kind instead sizes \"a gatehouse of its own, about 18 by 12 ft\" from a temple's, with a band of 14-82 ft that excludes Omori. Size the gatehouse as a gate rowhouse, or drop the Omori/Kaibara pointer",
+  "files": [
+   ".claude/skills/diagram/buildings/programs.md"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 15 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E2",
+  "wave": "",
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/cluster.py::below_drain#wet side of the drain",
