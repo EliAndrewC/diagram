@@ -14,8 +14,8 @@ the legacy village roller, unit tests' rolls and stale rolls of older code. A un
   - it is a class one of whose methods a recorded run executed;
   - it is a module-level constant an executed function of the engine reads by name, or a knob it registers is in use;
   - it is a class executed code constructs or names;
-  - it is a module-level (`<module>`) claim on a knob in use - an executed function resolves it by name, or its typing rule
-    ran - or, naming no knob, on a module a kept map runs;
+  - it is a module-level (`<module>`) claim on a knob in use - an executed function resolves the registry's knob by name
+    (`RESOLVERS`, `KNOBS[...]`), or its typing rule ran - or, naming no knob, on a module a kept map runs;
   - it is a check the gate runs against the kept maps' finished output (`KEPT_CHECKS`, each with its reason).
 Everything else is DEFERRED, and so is a claim whose value no kept map reads though its unit runs (`DEFERRED_ON_MEASURE`,
 each with its measured reason). The deferred list (`claims-deferred.json`) is derived over EVERY claimed unit, not only the units
@@ -40,7 +40,9 @@ KEPT_MAPS = (
 
 
 KNOB_NAMES: set[str] = set()
-DICT_ACCESS = {"get", "setdefault", "pop", "__getitem__", "__contains__", "Knob", "register_knob"}  # a meta key read, or the registration itself, is not a knob resolved
+RESOLVERS = {"resolve", "resolve_knob", "pin_knob"}  # the calls that resolve the REGISTRY's knob by name; a hamlet rolling its own
+# `hamletgen/` table under the knob's name (`_roll(seed, "settlement_form", SETTLEMENT_FORMS)`) does not put the registry entry in
+# use - that table is the kept unit
 KNOB_FEEDS: set[str] = set()  # the constants an in-use knob's registration reads (`FOOTBRIDGE_FORMS` in `Knob(..., list(FOOTBRIDGE_FORMS))`)
 
 
@@ -119,8 +121,11 @@ def knobs_in_use(skill: Path, ran: set[tuple[str, str]]) -> set[str]:
         for call in (n for n in ast.walk(tree) if isinstance(n, ast.Call)):
             f = call.func
             fname = f.id if isinstance(f, ast.Name) else f.attr if isinstance(f, ast.Attribute) else ""
-            if fname and fname not in DICT_ACCESS and call.args and isinstance(call.args[0], ast.Constant) and isinstance(call.args[0].value, str):
-                resolved.add(call.args[0].value)  # any call naming a knob first (`resolve_knob`, `self.knob`, `knob_rng`)
+            if fname in RESOLVERS and call.args and isinstance(call.args[0], ast.Constant) and isinstance(call.args[0].value, str):
+                resolved.add(call.args[0].value)  # the registry's knob resolved by name (`resolve`, `resolve_knob`, `pin_knob`)
+        for sub in (n for n in ast.walk(tree) if isinstance(n, ast.Subscript)):
+            if isinstance(sub.value, ast.Name) and sub.value.id == "KNOBS" and isinstance(sub.slice, ast.Constant) and isinstance(sub.slice.value, str):
+                resolved.add(sub.slice.value)  # `KNOBS["name"]`
     for f in glob.glob(str(skill / "l7r/diagram/**/*.py"), recursive=True):
         try:
             tree = ast.parse(Path(f).read_text())

@@ -112,8 +112,8 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 - **D9 - the feature fixes what the kept maps execute (FR-010)**: every row takes a scope from the gen cache's execution
   records (`audit/scope.py` -> `audit/scope.json`, shown in `ranking.md`): `kept` (a unit a kept map's own gen-cache entry -
   the pool hamlets, the magistracy sheets, the country shrine, on today's engine - records as executed, a constant such a unit
-  reads or an in-use knob's registration reads, a knob in use and a module-level claim on one, a class executed code
-  constructs, any unit under `hamletgen/`, or a listed check the gate runs on the kept maps; a claim whose value no kept map
+  reads or an in-use knob's registration reads, a knob in use (the registry's knob resolved by name, or its typing rule run - not a hamlet's own `hamletgen/`
+  table rolled under the same name) and a module-level claim on one, a class executed code constructs, any unit under `hamletgen/`, or a listed check the gate runs on the kept maps; a claim whose value no kept map
   reads is deferred with its measured reason; never the gate's tests of the legacy
   village roller, a unit test's roll or a stale entry), `mode-a` (the procedures) or `deferred`. A wave takes only
   `kept` and `mode-a` rows, still the next contiguous run of those in ranking order (FR-006). The deferred list

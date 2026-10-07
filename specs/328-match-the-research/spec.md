@@ -139,7 +139,9 @@ session's last actions are recording the running checks, a commit, and `scripts/
   `tools/hamlet_floor` reads; never a gate test's roll of the legacy village roller, a unit test's roll or a stale entry):
   a function or method a kept map's run executed, a class one of whose methods ran or which executed code constructs or
   names, a module-level constant an executed function reads or an in-use knob's registration reads, a knob in use (an
-  executed function's call names it, or its typing rule ran) and a module-level claim on one, any unit under `hamletgen/`
+  executed function resolves the registry's knob by name - `resolve`, `resolve_knob`, `pin_knob`, `KNOBS[...]` - or its typing
+  rule ran; a hamlet rolling its own `hamletgen/` table under the knob's name does not put the registry entry in use, that
+  table being the kept unit) and a module-level claim on one, any unit under `hamletgen/`
   (the scripted hamlet's own code, which only a scripted hamlet runs, whatever seed or form), a check the gate runs against
   the kept maps' finished output (listed with its reason), and the Mode A procedures; a claim whose value no kept map reads
   though its unit runs is deferred with its measured reason. Every other
@@ -263,3 +265,8 @@ Each wave's amendment adds its map decisions to this table. The program's decisi
 - Amendment 6 landed (wave 7, 2026-10-07): band 0; the lane clearance held with its reason.
 - Amendment 7, round 1 (spec-fidelity, 2026-10-07): CHANGES REQUIRED, plan CLEAR - four E0 claims stating a drift named no
   row that fixes it (D8); T29a's count. Round 2 (spec-fidelity, 2026-10-07): FAITHFUL; plan CLEAR (26 decisions).
+- Amendment 8, round 1 (spec-fidelity, 2026-10-07): CHANGES REQUIRED, plan BLOCKED - the scope judged by module and name
+  matches, not by what runs; the deferred list only today's findings; the plan's cap. Round 2 (spec-fidelity): CHANGES
+  REQUIRED, plan BLOCKED - the records included the legacy roller's gate tests and stale rolls. Round 3 (spec-fidelity):
+  CHANGES REQUIRED, plan BLOCKED - knobs, constructed classes and module-level claims missed. Round 4 (spec-fidelity):
+  CHANGES REQUIRED, plan CLEAR (34 decisions) - FR-010's wording of a knob in use; the measure counts resolutions only.
