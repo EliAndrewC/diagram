@@ -22,8 +22,6 @@ import math
 from collections.abc import Sequence
 from typing import TYPE_CHECKING, Any
 
-from l7r.diagram.settlement import seg_dist
-
 from ..consts import BUNDLE_PITCH, Pt
 
 if TYPE_CHECKING:
@@ -55,6 +53,18 @@ def _near_a_house(s: Settlement, q: Pt) -> bool:
     return any(math.hypot(q[0] - float(h["x"]), q[1] - float(h["y"])) < BUNDLE_PITCH * 0.5 for h in s.M.get("houses", []))
 
 
+def field_distances(field: Sequence[Pt], points: Sequence[Pt]) -> dict[Pt, float]:
+    """Each point's distance to the field's outline (its ring), in one vectorized call; empty where there is no field.
+
+    Research: field distance - NONE: a ring's distance to points"""
+    if len(field) < 3 or not points:
+        return {}
+    import shapely  # noqa: PLC0415 - bound on first use
+
+    ds = shapely.distance(shapely.LinearRing(list(field)), shapely.points(list(points)))
+    return {q: float(d) for q, d in zip(points, ds, strict=True)}
+
+
 def free_seats(s: Settlement, center: Pt, step: float | None = None, field: Sequence[Pt] = ()) -> list[Pt]:
     """Every grid point of the legal ground on the canvas, nearest `center` first (homes H14; no distance from the field
     bounds it, feature 318) - and among points about as near (one grid pitch), the one nearer the `field`'s outline first
@@ -83,8 +93,10 @@ def free_seats(s: Settlement, center: Pt, step: float | None = None, field: Sequ
             if (fg is not None and fg.point_taken(q[0], q[1])) or _near_a_house(s, q):
                 continue
             out.append(q)
-    edges = list(zip(field, [*field[1:], *field[:1]], strict=False)) if field else []
-    out.sort(key=lambda q: (round(math.hypot(q[0] - center[0], q[1] - center[1]) / pitch), min((seg_dist(q[0], q[1], a, b) for a, b in edges), default=0.0), q))
+    # THE FIELD DISTANCE ASKED ONCE FOR EVERY POINT (wave 20's pair: a scan of the outline's edges per point inside the sort
+    # cost the homesteads stage up to +1.5 s a roll) - one vectorized shapely call, the same distance
+    to_field = field_distances(field, out)
+    out.sort(key=lambda q: (round(math.hypot(q[0] - center[0], q[1] - center[1]) / pitch), to_field.get(q, 0.0), q))
     return out
 
 
