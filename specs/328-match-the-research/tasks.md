@@ -13,6 +13,8 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 - (wave 5, landed and reviewed) placement-changed village lane on kashikawa - wave 5: 0033's row street runs on off the map as the road into it at both ends, where
   the web cut it back to its last joint (`trim_streets`); Kashikawa's and Mizuguchi's far ends now run off the sheet as a
   second way out (every way is inked `village lane`).
+- none (wave 18): the thicket's 70% passes dropped moved nothing drawn - measured: Kashikawa's and Mizuguchi's thickets were seated
+  at full size and their manifests are unchanged; the other rows are claims.
 - placement-changed: shared bamboo grove on kashikawa - wave 17: every thicket pass holds the stand just beyond the back row
   (0075 drawing; its near edge within `THICKET_ROW_DEPTH_FT` of the row's back edge): Kashikawa's thicket moves from 88 ft
   behind its row to against it; Mizuguchi's, the other pool thicket, stands where it stood.
@@ -823,3 +825,23 @@ fallback (411). The next open row is the belt in the marsh (412).
       column (FR-005, FR-006, SC-002, SC-003)
       research: rendering
       verify: DONE. impl-drift on every touched claim (five rounds; every wave row IN-STEP at the last); the glyph checks PASS (Kashikawa's thicket; Inashiro's notice board, re-owed); make done green; wave 17's own pair (328-start at b49a6c221) band 1, variance by perf-audit's timings, consistent; the wave column written
+
+## Phase 19 - wave 18 (amendment 17): the thicket's claims and its one size
+
+Wave 17's re-checks found 5 rows, each tiered by its work by a fresh reader (T61a, `audit/t61a-out.jsonl`): 4 E0, 1 E2. Two of
+the E0 rows (the keep-out pads' account and the pads it left out) were already fixed in wave 17 (074a12773, IN-STEP at its last
+round) and carry wave 17's mark. Wave 18 takes the other two E0 claims and the E2 run's head, the shrunk stand; the next open
+row is the belt in the marsh (416).
+
+  - `l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#thicket size bamboothicketft 84 x 58 ft 0075 20 guess` - the size's claim labeled GUESS on 0075's drawing page, which marks its 84 by 58 ft a GUESS
+  - `l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#watercourse margin of half-width  3 ft no page gives the fig` - the margin its own UNRESEARCHED claim; "within 3 ft of a watercourse" out of the 0075 claim
+  - `l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#shrunk stand` - the 70% passes dropped: the thicket at the page's size or none
+
+- [x] T61a wave 17's found rows tiered by the work they take, by a fresh reader (FR-002, FR-003, SC-003)
+      research: rendering
+      verify: DONE. 5 rows tiered by their work by a fresh Opus reader (audit/t61a-out.jsonl): 4 E0 (two already fixed in wave 17), 1 E2
+- [ ] T61 the two claims; the 70% passes dropped; Kashikawa and Mizuguchi regenerated (FR-004, FR-005)
+      research: rendering
+- [ ] T62 every touched claim re-checked by `impl-drift`, and the close: wave 18's own bookend pair, `make done` green, the wave
+      column (FR-005, FR-006, SC-002, SC-003)
+      research: rendering

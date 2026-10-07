@@ -29,7 +29,7 @@ from .parcels import _parcel_outline
 # (`household_bamboo` in homesteads.py, seated with the sheds and gardens). The thicket's size is a working
 # harvested stand in real feet; a stand under the legibility floor does not read at fit zoom.
 BAMBOO_THICKET_FT = (84.0, 58.0)
-"""Research: thicket size - research/questions/0075-bamboo-groves-chikurin.drawing.html: 84 by 58 ft"""
+"""Research: thicket size - GUESS research/questions/0075-bamboo-groves-chikurin.drawing.html: 84 by 58 ft"""
 BAMBOO_LEGIBLE_FT = 14.0  # the SHORT axis: a household strip is ~16 ft deep and reads; below this, nothing does
 """Research: legibility floor - research/questions/0075-bamboo-groves-chikurin.drawing.html: no stand under 14 ft on its short side, a convention"""
 
@@ -175,8 +175,9 @@ def bamboo_seats(s: Settlement, plan: SitePlan) -> list[Poly]:
     A candidate is a rect on a `BAMBOO_SEAT_STEP_FT` lattice around its target, refused when any sample of a grid over
     the whole stand (`BAMBOO_SAMPLE_FT` apart) stands on a house, yard, garden, shed, byre, well, lane, paddy, marsh, pond, the belt,
     a coppice patch or the other stand (each with its own pad), and the surviving candidate nearest the
-    target wins - behind the back row and on the page, within `THICKET_REACH_FT` of it at full size, then at 70%, and only
-    then anywhere along the back row with its near edge within `THICKET_ROW_DEPTH_FT` behind it, full size then 70%; a stand
+    target wins - behind the back row and on the page, within `THICKET_REACH_FT` of it, and only
+    then anywhere along the back row with its near edge within `THICKET_ROW_DEPTH_FT` behind it, always at the page's full
+    size (0075 drawing: 84 by 58 ft - feature 328 dropped the 70% stand the page does not draw); a stand
     that fits nowhere is dropped - a hamlet with no room for bamboo just beyond its back row draws none rather than a sliver. Outlines are irregular rings inside the
     tested rect (`_parcel_outline`), because a thicket has a hard but not a ruled edge.
 
@@ -185,8 +186,9 @@ def bamboo_seats(s: Settlement, plan: SitePlan) -> list[Poly]:
         thicket seat - research/questions/0075-bamboo-groves-chikurin.drawing.html: on dry ground behind the back row, nearest a point 40 ft north of the three northernmost houses
         thicket kept off every household's reserved copse seats - research/questions/0075-bamboo-groves-chikurin.drawing.html: the dooryard copse draws no bamboo; a farm's bamboo is a stand of its own
         thicket kept out of every plot's sun at BAMBOO_SHADE_FT 50 ft (0038 drawing) - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: no clump, bamboo included, within 50 ft east, west or south of a yard or bed (and research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html)
-        shrunk stand - UNRESEARCHED: 70% size where the full stand fits nowhere, none drawn where that fails too
-        off crop and water - research/questions/0075-bamboo-groves-chikurin.drawing.html: refused on paddy, marsh and pond, and within 3 ft of a watercourse
+        no shrunk stand - GUESS research/questions/0075-bamboo-groves-chikurin.drawing.html: the thicket at the page's 84 by 58 ft or none
+        off crop and water - research/questions/0075-bamboo-groves-chikurin.drawing.html: refused on paddy, marsh and pond, on dry ground
+        watercourse margin - UNRESEARCHED: kept a watercourse's half-width plus 3 ft off it
         off the dry plots - UNRESEARCHED: refused on the dry crop's plots too
         crop and water pads - UNRESEARCHED: 12 ft off the crop, 6 ft off marsh, 30 ft off the pond
         keep-out pads - UNRESEARCHED: 2-20 ft round houses, retirement houses, yards, gardens, sheds, byres, wells, the notice board, persimmons, groves, lanes, belt and woods
@@ -299,8 +301,8 @@ def bamboo_seats(s: Settlement, plan: SitePlan) -> list[Poly]:
         row_x0, row_x1 = min(float(o["x"]) for o in houses), max(float(o["x"]) for o in houses)
         depth = px(THICKET_ROW_DEPTH_FT)
         back = min(float(o["y"]) - float(o.get("h") or 0.0) / 2 for o in houses)  # the back row's back edge, not its centers
-        for scale, reach, along_row in ((1.0, px(THICKET_REACH_FT), False), (0.7, px(THICKET_REACH_FT), False), (1.0, far, True), (0.7, far, True)):
-            hw, hh = px(wft) * scale / 2, px(hft) * scale / 2
+        hw, hh = px(wft) / 2, px(hft) / 2
+        for reach, along_row in ((px(THICKET_REACH_FT), False), (far, True)):
             # ...AND ONLY BEHIND THE BACK ROW, ON THE PAGE (feature 293): the search walked out from the target in every
             # direction, so where the ground behind the houses was taken the stand walked into the cluster and round a well;
             # and behind the row the nearest fitting seat could stand wholly off the page (main's Kashikawa drew 5 of its 12

@@ -248,6 +248,15 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
   backup pushed, its own pair band 1 confirmed); wave 17's own pair opens at b49a6c221.
 - **Verification**: `impl-drift` on the touched claims, the gate, wave 17's own bookend pair.
 
+## Wave 18 (amendment 17, 2026-10-07)
+
+- **T61a first**: wave 17's found rows tiered by their work (two already fixed in wave 17).
+- **Scope**: the two open E0 claims and the E2 run's head - the thicket's 70% passes dropped (`tasks.md` Phase 19).
+- **Occasions**: none, measured - both pool thickets were seated at full size; their manifests are unchanged.
+- **On the unpushed waves 9-17** under the wave-11 exception's condition (6): (1)-(5) held at wave 17's close (8c3b5cdef, its
+  backup pushed, its own pair band 1 confirmed); wave 18's own pair opens at 8c3b5cdef.
+- **Verification**: `impl-drift` on the touched claims, the gate, wave 18's own bookend pair.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Each later wave that changes engine behavior takes

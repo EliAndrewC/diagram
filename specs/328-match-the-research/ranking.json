@@ -531,7 +531,7 @@
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#12 ft pad round the notice board, and the byre and retiremen",
   "verdict": "UNCLAIMED",
   "tier": "E0",
-  "fix": "12 ft pad round the notice board, and the byre and retirement-house pads, which the keep-out pads claim does not name",
+  "fix": "None beyond the claim: the 'keep-out pads - UNRESEARCHED: 2-20 ft round houses, retirement houses, yards, gardens, sheds, byres, wells, the notice board, persimmons, groves, lanes, belt and woods' claim (commit 074a12773, feature 328 wave 17) now names the kosatsuba 12 ft, byre 8 ft and retirement-house 10 ft pads; confirm it at the re-check.",
   "files": [
    ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py"
   ],
@@ -539,7 +539,25 @@
   "flag": "",
   "found": "wave 17 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
-  "wave": "",
+  "moved": "T61a: tiered by its work by a fresh reader - The code's pads (kosatsuba 12, byres 8, retirement_houses 10 in bamboo_seats) are unchanged and the claim in the clone already names all three, so the row is a claim-only fix already written.",
+  "wave": "17",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#keep-out pads",
+  "verdict": "DRIFTED",
+  "tier": "E0",
+  "fix": "None beyond the claim: the clone's claim already reads '2-20 ft round houses, retirement houses, yards, gardens, sheds, byres, wells, the notice board, persimmons, groves, lanes, belt and woods' (commit 074a12773), the 30 ft pond pad staying under 'crop and water pads'; confirm it at the re-check.",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 17 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E2",
+  "e0_basis": "the claim corrected to its code in wave 17 (074a12773; impl-drift round 5 IN-STEP): only the claim's account was wrong",
+  "moved": "T61a: tiered by its work by a fresh reader - The pads in code run 2-20 ft (woods 20, wells 14, kosatsuba 12, houses/retirement houses/lanes/belt 10, yards/gardens/sheds/byres 8, groves 4, persimmons 2) and the claim is UNRESEARCHED, so the drift was in the claim's wording only, already corrected.",
+  "wave": "17",
   "scope": "kept"
  },
  {
@@ -574,7 +592,7 @@
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#thicket size bamboothicketft 84 x 58 ft 0075 20 guess",
   "verdict": "UNCLAIMED",
   "tier": "E0",
-  "fix": "thicket size BAMBOO_THICKET_FT 84 x 58 ft (0075 \u00a720 GUESS)",
+  "fix": "Write the claim 'thicket size - research/questions/0075-bamboo-groves-chikurin.drawing.html: 84 by 58 ft, a GUESS on that page' in bamboo_seats' Research: section (the constant BAMBOO_THICKET_FT already carries it at bamboo.py line 32); no code changes.",
   "files": [
    ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py"
   ],
@@ -582,6 +600,7 @@
   "flag": "",
   "found": "wave 17 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
+  "moved": "T61a: tiered by its work by a fresh reader - research/questions/0075-bamboo-groves-chikurin.drawing.html already says 'A village's bamboo thicket is 84 by 58 ft ... Its size is a GUESS', exactly the code's BAMBOO_THICKET_FT = (84.0, 58.0), so only the claim is missing.",
   "wave": "",
   "scope": "kept"
  },
@@ -589,7 +608,7 @@
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#watercourse margin of half-width  3 ft no page gives the fig",
   "verdict": "UNCLAIMED",
   "tier": "E0",
-  "fix": "watercourse margin of half-width + 3 ft: no page gives the figure, and the crop and water pads claim leaves it out",
+  "fix": "Write the claim 'watercourse margin - UNRESEARCHED: half-width + 3 ft off a stream or drawn channel' (or add it to the 'crop and water pads - UNRESEARCHED' claim), and drop 'and within 3 ft of a watercourse' from the 'off crop and water' claim citing research/questions/0075-bamboo-groves-chikurin.drawing.html, which keeps the dry-ground rule only.",
   "files": [
    ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py"
   ],
@@ -597,6 +616,7 @@
   "flag": "",
   "found": "wave 17 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
+  "moved": "T61a: tiered by its work by a fresh reader - research/questions/0075-bamboo-groves-chikurin.drawing.html supports dry ground ('bamboo suits high, level ground and dies in a low field once it gets water') but gives no 3 ft figure, so the code stands and only the claim's label and backing are wrong.",
   "wave": "",
   "scope": "kept"
  },
@@ -6240,25 +6260,10 @@
   "scope": "kept"
  },
  {
-  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#keep-out pads",
-  "verdict": "DRIFTED",
-  "tier": "E2",
-  "fix": "the claim says 2-30 ft, but these pads run 2-20 ft (woods 20, wells 14, kosatsuba 12, houses and retirement houses 10, lanes and belt 10, yards, gardens, sheds and byres 8, groves 4, persimmons 2). The 30 ft is the pond's pad, under another claim. The claim also leaves out byres, retirement houses and kosatsuba. Correct it to \"2-20 ft\" and name those three",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py"
-  ],
-  "after": [],
-  "flag": "",
-  "found": "wave 17 re-check (tier provisional, by verdict)",
-  "tier_as_ranked": "E2",
-  "wave": "",
-  "scope": "kept"
- },
- {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#shrunk stand",
   "verdict": "DRIFTED",
   "tier": "E2",
-  "fix": "the scale loop (1.0, 0.7) draws a 58.8 x 40.6 ft thicket, but the page says \"A village's bamboo thicket is 84 by 58 ft\"; either the drawing page records the 70% fallback (then GUESS or DEVIATION) or the code drops it",
+  "fix": "Drop the two 0.7 passes from the scale loop in bamboo_seats (pass list becomes (1.0, THICKET_REACH_FT, near) then (1.0, far, along_row)), remove the 'then at 70%' and 'full size then 70%' wording from its docstring, and delete the 'shrunk stand - UNRESEARCHED' claim; a stand that fits nowhere at 84 by 58 ft is not drawn, as the docstring already says of the last failure.",
   "files": [
    ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py"
   ],
@@ -6266,6 +6271,7 @@
   "flag": "",
   "found": "wave 17 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E2",
+  "moved": "T61a: tiered by its work by a fresh reader - One function's pass list changes (E2), and it removes no pool thicket: Kashikawa's drawn stand is 71.0 x 54.8 ft and Mizuguchi's 76.9 x 52.1 ft (ftpx 1.0), both beyond the 70% rect of 58.8 x 40.6 ft that holds any shrunk outline, so both were seated at full size, matching research/questions/0075-bamboo-groves-chikurin.drawing.html '84 by 58 ft'.",
   "wave": "",
   "scope": "kept"
  },

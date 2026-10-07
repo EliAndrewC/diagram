@@ -75,6 +75,8 @@
  ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py::SPUR_SETBACK#field spur's tip": "E0",
  ".claude/skills/diagram/l7r/diagram/hamletgen/consts.py::SPUR_SETBACK#path joins the outer bund": "E0",
  ".claude/skills/diagram/l7r/diagram/hamletgen/consts_water.py::OFFTAKE_LADDER#canal B's single delivery ditch at 0.55-0.6 (0053 drawing: the second canal feeds at least one)": "E0",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#12 ft pad round the notice board, and the byre and retiremen": "E0",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#keep-out pads": "E0",
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#thicket fallback: THICKET_REACH_FT 220 ft, then anywhere on the page behind the back row (0075 says \"just beyond the back row\")": "E2",
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#thicket kept off every household's reserved copse seats": "E0",
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/bamboo.py::bamboo_seats#thicket kept out of every plot's sun at BAMBOO_SHADE_FT 50 ft (0038 drawing)": "E0",
