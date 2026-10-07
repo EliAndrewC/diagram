@@ -540,9 +540,7 @@ def dangling_ends(M: Mapping[str, Any]) -> list[tuple[int, int]]:
 
 
 def fronting_ends(M: Mapping[str, Any]) -> dict[int, list[tuple[int, int]]]:
-    """The free lane ends (the connector's aside; an end within `JOIN_TOL` of another way is discharged by the junction)
-    each farmhouse discharges, as (lane index, end) - an end whose nearest farmhouse center is within `DOORSTEP_FT`.
-
+    """The free lane ends each farmhouse discharges, as (lane index, end) - an end whose nearest farmhouse center is within `DOORSTEP_FT` (the connector's aside; an end within `JOIN_TOL` of another way is discharged by the junction).
     Research:
         an end discharged by a house - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within DOORSTEP_FT, 80 ft of the nearest farmhouse's center
         an end discharged by a junction - NONE: an end within JOIN_TOL, the touch gap, of another way already meets it"""
