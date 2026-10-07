@@ -282,6 +282,6 @@ Each wave's amendment adds its map decisions to this table. The program's decisi
   four DEVIATION relabels NOT LEGITIMATE (floor and ceiling dropped; the bank's forms and the free-standing storehouse E3).
   Round 5 (spec-fidelity): wave 10 FAITHFUL, plan CLEAR, record CHANGES REQUIRED (Sawada's knot not main's; the berm not a
   cause; the knot row's fix text). Round 6 (spec-fidelity): FAITHFUL, plan CLEAR.
-- Amendment 10, round 1 (spec-fidelity, 2026-10-07): CHANGES REQUIRED, plan CLEAR - the fallback brook's 7 ft labeled 0068
+- Amendment 10, round 1 (spec-fidelity, 2026-10-07): CHANGES REQUIRED, plan CLEAR - the fallback brook's width labeled 0068
   (option b taken: 0059, with 0068's conflict named). Round 2: FAITHFUL. Round 3: FAITHFUL, plan CLEAR (the push caution).
   Exception check for wave 11 on the unpushed waves 9 and 10: LEGITIMATE on six conditions (plan, Wave 10).
