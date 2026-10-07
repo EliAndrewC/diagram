@@ -18062,11 +18062,32 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::near_misses#a household way's door end is never counted as a join that stops short": {
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::near_misses#a connector's ends are never counted as joins that stop short": {
   "code": "7f3e1a8cf8fbafa6",
   "core": "7f3e1a8cf8fbafa6",
   "date": "2026-10-07",
-  "note": "a household way's door end is never counted as a join that stops short",
+  "note": "a connector's ends are never counted as joins that stop short",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::near_misses#a door end is no short join": {
+  "code": "607d68543d3e427f",
+  "core": "7f3e1a8cf8fbafa6",
+  "date": "2026-10-07",
+  "note": "0246's drawing page answers this: a household's way is laid from its dooryard and a lane ends at the dooryard of the house it serves, so the label should cite research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html (itself a GUESS there), not UNRESEARCHED",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461"
+  ],
+  "verdict": "MISLABELED"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/law.py::near_misses#an end whose join would be blocked, fold or kink more than its own lane is no short join": {
+  "code": "7f3e1a8cf8fbafa6",
+  "core": "7f3e1a8cf8fbafa6",
+  "date": "2026-10-07",
+  "note": "an end whose join would be blocked, fold or kink more than its own lane is no short join",
   "research": "",
   "verdict": "UNCLAIMED"
  },
@@ -21574,23 +21595,36 @@
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::_thread_the_fabric#the track's route walled": {
-  "code": "cb3136a0246e7ff1",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::_thread_the_fabric#the track kept off drawn water": {
+  "code": "c0e33236de135a0c",
   "core": "7b3c192fb1a20f28",
   "date": "2026-10-07",
-  "note": "0246 walls only a back lane's stretches (§63); the track's walls are in 0081 (\"never crosses row crops\", \"stops at the flooded paddy\", \"keeps off wet ground\"), and keeping off drawn water belongs to 0035's crossing rule; repoint to 0081 (and 0035 for the water)",
+  "note": "brook and drawn channels are walls to the router; the water-free fallback is taken only if it crosses no more water, and those crossings are left to the ford pass",
   "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "c23a085a43372c2c"
   },
-  "research": "7b40c2c01cfba682",
+  "research": "d47738a05844fe19",
   "rests": [
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:93969c06f800b0d5",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:03433651c0627577",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:93969c06f800b0d5"
+  ],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::_thread_the_fabric#the track's route walled": {
+  "code": "75eeccd231f29e03",
+  "core": "7b3c192fb1a20f28",
+  "date": "2026-10-07",
+  "note": "the grove fallback's second and third routes, `(bands, lines), (bands, [])`, wall only the grove bands. The field envelope, crops, toe band and wet ground are no longer walled, and `around` is checked only against the fabric, so the track can cross row crops, the paddy or wet ground, against \"A lane never crosses row crops\", \"A lane stops at the flooded paddy\" and \"A track keeps off wet ground\"; every route should keep `obstacles` walled",
+  "pages": {
+   "0081-village-lanes.drawing.html": "9e27759395199abd"
+  },
+  "research": "ebd72aaa6a0eb9af",
+  "rests": [
    "0081-village-lanes.drawing.html:43b635b1ca75125b",
    "0081-village-lanes.drawing.html:bd66b84c6bda826f",
-   "0081-village-lanes.drawing.html:ff5e303a5a16af8f",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:8ab9878d6ac1d10b"
+   "0081-village-lanes.drawing.html:ff5e303a5a16af8f"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::_thread_the_fabric#track round the steadings": {
   "code": "fc55933859dc045c",
@@ -21928,6 +21962,20 @@
   "triaged": "2026-10-05",
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#connector width": {
+  "code": "801a6cf1f6377015",
+  "core": "34b824f3630f8621",
+  "date": "2026-10-07",
+  "note": "6 ft track out, the row road too",
+  "pages": {
+   "0081-village-lanes.drawing.html": "9e27759395199abd"
+  },
+  "research": "ebd72aaa6a0eb9af",
+  "rests": [
+   "0081-village-lanes.drawing.html:91a5765af6230403"
+  ],
+  "verdict": "IN-STEP"
+ },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#field spur tip on the bund": {
   "code": "b11681d1587b8074",
   "core": "34b824f3630f8621",
@@ -21942,13 +21990,19 @@
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#lane clearance LANE_CLEARANCE 40 ft for the connector and spur": {
-  "code": "34b824f3630f8621",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#lane clearance": {
+  "code": "288385f540b0e784",
   "core": "34b824f3630f8621",
   "date": "2026-10-07",
-  "note": "lane clearance LANE_CLEARANCE 40 ft for the connector and spur",
+  "note": "0246 sets a lane's clearance: its middle keeps 7 ft clear of a garden fence, within an 18 ft lane's room, and nothing is built on the tread. The claim should cite 0246.drawing, and the 40 ft no-build corridor should then be judged against that 7 ft",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c5daec1a445d35bf"
+  ],
+  "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#lanes after the farmhouses": {
   "code": "7a1ffc7cab83a72c",
@@ -22023,18 +22077,21 @@
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#spur clip margin": {
-  "code": "77c19ab4afd55316",
+  "code": "33a43c8e3d84a0f1",
   "core": "34b824f3630f8621",
   "date": "2026-10-07",
-  "note": "0081 answers where the spur stops at the dry plots: it \"may touch a plot's boundary\" and \"stops at the hem's edge\". So this is not UNRESEARCHED: cite 0081. A 12.0 ft clip off the hem then leaves the spur short of the hem's edge, which the cited claim must reconcile",
-  "pages": {},
-  "research": "",
+  "note": "a 12 ft margin is a calibrated choice inside \"may touch a plot's boundary\"; the tip is then set on the bund",
+  "pages": {
+   "0081-village-lanes.drawing.html": "9e27759395199abd"
+  },
+  "research": "ebd72aaa6a0eb9af",
   "rests": [
+   "0014-bunds-between-the-paddies-aze.drawing.html:5b66ec3bfb5ac947",
    "0081-village-lanes.drawing.html:65ad16eace199d92",
    "0081-village-lanes.drawing.html:f2368e271306e3c2",
    "0081-village-lanes.drawing.html:ff5e303a5a16af8f"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#spur kept however short": {
   "code": "3e751b8941a85226",
@@ -22066,13 +22123,17 @@
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#spur tip set back SPUR_SETBACK 17 ft off the outline vertex": {
-  "code": "34b824f3630f8621",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#spur tip set back": {
+  "code": "77cff805fc9cb483",
   "core": "34b824f3630f8621",
   "date": "2026-10-07",
-  "note": "spur tip set back SPUR_SETBACK 17 ft off the outline vertex",
+  "note": "the 17 ft aim point is not where the drawn tip ends (`tip_onto_the_bund` resets it), and nothing gives the aim's offset",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "rests": [
+   "0014-bunds-between-the-paddies-aze.drawing.html:5b66ec3bfb5ac947"
+  ],
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#spur to the field": {
   "code": "1e7b4eeaf334fe3d",
@@ -22087,6 +22148,18 @@
    "0081-village-lanes.drawing.html:43b635b1ca75125b",
    "0081-village-lanes.drawing.html:bd66b84c6bda826f",
    "0081-village-lanes.drawing.html:ff5e303a5a16af8f"
+  ],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#toe-band margin": {
+  "code": "b4b8067a3eaf8601",
+  "core": "34b824f3630f8621",
+  "date": "2026-10-07",
+  "note": "the page says keep off wet ground but gives no margin",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0081-village-lanes.drawing.html:43b635b1ca75125b"
   ],
   "verdict": "IN-STEP"
  },
@@ -22118,14 +22191,6 @@
    "0081-village-lanes.drawing.html:43b635b1ca75125b"
   ],
   "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::stage_track#valley and polder connector width CONNECTOR_WIDTH 6 ft": {
-  "code": "34b824f3630f8621",
-  "core": "34b824f3630f8621",
-  "date": "2026-10-07",
-  "note": "valley and polder connector width CONNECTOR_WIDTH 6 ft",
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/track.py::wet_grown_by_the_lane#track plumbing": {
   "code": "32047c17c5777421",
@@ -25559,13 +25624,20 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/interactive/place.py::KINDS#a hamlet has no cremation ground, its dead are burned and buried at the main village's, and the village holds the district's cremation and burial grounds (0001 §5 only points to the burial page, which is not in the bundle)": {
-  "code": "aebd5c4a2b2ac263",
+ ".claude/skills/diagram/l7r/diagram/interactive/place.py::KINDS#a hamlet's dead at the village's grounds": {
+  "code": "db3458db76f0cb2a",
   "core": "aebd5c4a2b2ac263",
   "date": "2026-10-07",
-  "note": "a hamlet has no cremation ground, its dead are burned and buried at the main village's, and the village holds the district's cremation and burial grounds (0001 §5 only points to the burial page, which is not in the bundle)",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "note": "the claim's account matches the research, but the text it describes is in place.json's hamlet \"what\", which the bundle does not include; I need that string",
+  "pages": {
+   "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html": "3d5e34940b9d67aa"
+  },
+  "research": "d7ba04d0b4559610",
+  "rests": [
+   "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html:031d53823997269a",
+   "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html:11df2d9a630be745"
+  ],
+  "verdict": "CANNOT-TELL"
  },
  ".claude/skills/diagram/l7r/diagram/interactive/place.py::KINDS#what each tier is": {
   "code": "b163fa6140b6ed24",
@@ -29283,18 +29355,14 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/labels/standard.py::REACH_EM#how far the ringed search runs": {
-  "code": "1dc5f55346a7dbce",
+  "code": "b60c23c7add0519d",
   "core": "232d3ac8ac8b4b8c",
   "date": "2026-10-07",
-  "note": "how far a caption is displaced before its leader is how it is shown (0242 calls the gap \"our calibration\"); the label should be CONVENTION, not UNRESEARCHED",
+  "note": "label search reach, purely how a caption is shown",
   "pages": {},
   "research": "",
-  "rests": [
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html:029c96e91be555c3",
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html:2c608781acf39605",
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html:49f52467f1959b2a"
-  ],
-  "verdict": "MISLABELED"
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/labels/standard.py::RING_STEP_EM#nearer first": {
   "code": "59b7b96243d2d81f",
@@ -30515,17 +30583,17 @@
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/overlap/taxonomy.py::_LABEL_GROUP#an arch is never covered": {
-  "code": "804248af3e5d09f1",
+  "code": "b658c3280af86850",
   "core": "dbf31ba5cd42b869",
   "date": "2026-10-07",
-  "note": "this is the GM's ruling (2026-07-27, \"never be covered by the 'temple of X' label\"), and it overrides 0243's \"its own building or compound\"; the label should be CANON naming that ruling",
+  "note": "the GM's 2026-07-27 ruling is named; 0243 would let a temple caption cover its own compound, and the ruling overrides it as canon",
   "pages": {},
   "research": "",
   "rests": [
    "0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html:1d012e55afaf18e2",
    "0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html:436529fe4697b783"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/overlap/taxonomy.py::_LABEL_GROUPS#geometry and bookkeeping": {
   "code": "803125dfdd490b1b",
@@ -33948,6 +34016,19 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.castle#bailey gates turned": {
+  "code": "2864141c7bccde15",
+  "core": "e0c6c5fd36ffc177",
+  "date": "2026-10-07",
+  "note": "no question gives a bailey gate's turn; the bailey experiment is recorded but the dogleg is not",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html:33b1a282b0336dfc",
+   "0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.html:0b2282fde2f8e657"
+  ],
+  "verdict": "IN-STEP"
+ },
  ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.castle#baileys and masugata off by default": {
   "code": "68283039354bfb84",
   "core": "e0c6c5fd36ffc177",
@@ -33963,6 +34044,14 @@
    "0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html:77cd1fa9c361891a"
   ],
   "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.castle#baileys jogged sideways by 0.13 of the half-side, alternating, and set 0.72 of the way toward the far side": {
+  "code": "e0c6c5fd36ffc177",
+  "core": "e0c6c5fd36ffc177",
+  "date": "2026-10-07",
+  "note": "baileys jogged sideways by 0.13 of the half-side, alternating, and set 0.72 of the way toward the far side",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.castle#blank interior": {
   "code": "6cf791fec05f88f2",
@@ -34011,14 +34100,6 @@
   ],
   "verdict": "DRIFTED"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.castle#each bailey's gate turned 90 degrees from its parent's (the dogleg route)": {
-  "code": "e0c6c5fd36ffc177",
-  "core": "e0c6c5fd36ffc177",
-  "date": "2026-10-07",
-  "note": "each bailey's gate turned 90 degrees from its parent's (the dogleg route)",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.castle#front and rear gates": {
   "code": "cca3cde4a5d5110e",
   "core": "e0c6c5fd36ffc177",
@@ -34036,6 +34117,14 @@
   ],
   "verdict": "DRIFTED"
  },
+ ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.castle#gate jamb posts px(4) square at each opening": {
+  "code": "e0c6c5fd36ffc177",
+  "core": "e0c6c5fd36ffc177",
+  "date": "2026-10-07",
+  "note": "gate jamb posts px(4) square at each opening",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.castle#gatehouse passage": {
   "code": "b0ed56fe764d92f5",
   "core": "e0c6c5fd36ffc177",
@@ -34047,16 +34136,14 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.castle#ground reserved": {
-  "code": "9098586cef89ee41",
+  "code": "0f946f41ce9fe38f",
   "core": "e0c6c5fd36ffc177",
   "date": "2026-10-07",
-  "note": "the max(36 x bscale, 26) px margin outside the moat is a physical rule for how close buildings stand to the castle works, not plumbing; it should be UNRESEARCHED",
+  "note": "no question gives a building clearance round the castle works",
   "pages": {},
   "research": "",
-  "rests": [
-   "0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html:0ab1253f87332e82"
-  ],
-  "verdict": "MISLABELED"
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.castle#honmaru size": {
   "code": "c76c69ea3ba04a7a",
@@ -34072,17 +34159,30 @@
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.castle#inner moat": {
-  "code": "f048f8492a9fadd9",
+ ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.castle#inner moat offset": {
+  "code": "45c99e3f5a4c1eb2",
   "core": "e0c6c5fd36ffc177",
   "date": "2026-10-07",
-  "note": "the findings answer the inner moat's width: Hiroshima's \"inner moat 30 to 104 m\" (~98-341 ft), while the code draws mw*0.5 = 40 ft, below that range; the width should cite 0139.html §51 and be widened, and only the 0.42 x gap offset stays UNRESEARCHED",
+  "note": "no question gives the inner moat's offset off the honmaru",
   "pages": {},
   "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.castle#inner moat width": {
+  "code": "9c62ab80c00af310",
+  "core": "e0c6c5fd36ffc177",
+  "date": "2026-10-07",
+  "note": "`mw * 0.5` (about 40 ft) is below the attested \"inner moat 30 to 104 m (~98-341 ft)\", and the drawing page calls for \"broad water between the baileys\"; draw it within 98-341 ft, or relabel it DEVIATION once the drawing page records the choice",
+  "pages": {
+   "0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.html": "760618560f5cb273"
+  },
+  "research": "97f72fff8bbe77ce",
   "rests": [
+   "0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html:77cd1fa9c361891a",
    "0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.html:6487f59909ac688c"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.castle#ishigaki doubling": {
   "code": "a6dbdc6a25f3c4fa",
@@ -34120,6 +34220,14 @@
    "0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.html:764e386b227c94a3"
   ],
   "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.castle#the masugata's one open flank, turning the way out across the approach": {
+  "code": "e0c6c5fd36ffc177",
+  "core": "e0c6c5fd36ffc177",
+  "date": "2026-10-07",
+  "note": "the masugata's one open flank, turning the way out across the approach",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.castle#yagura and gatehouse sizes": {
   "code": "f7d70a906f1661ab",
@@ -34270,6 +34378,19 @@
   "research": "60a72d2aab397be7",
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.martial_hall#compound layout": {
+  "code": "18648e05532804e9",
+  "core": "9c4a957506b7d874",
+  "date": "2026-10-07",
+  "note": "the page names the three features but not where they stand; the north-hall layout at §83 is the Chinese drill ground's",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0165-martial-training-grounds-and-dojo.drawing.html:3a960258a33684e9",
+   "0165-martial-training-grounds-and-dojo.drawing.html:f29c3cf9023c10f0"
+  ],
+  "verdict": "IN-STEP"
+ },
  ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.martial_hall#hall apron": {
   "code": "9c44a5e49ad60a60",
   "core": "9c4a957506b7d874",
@@ -34335,6 +34456,14 @@
   ],
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.martial_hall#practice gear (rack and posts) drawn in the compound, beyond the page's three features": {
+  "code": "9c4a957506b7d874",
+  "core": "9c4a957506b7d874",
+  "date": "2026-10-07",
+  "note": "practice gear (rack and posts) drawn in the compound, beyond the page's three features",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.martial_hall#state violet": {
   "code": "02921bbceb559be5",
   "core": "9c4a957506b7d874",
@@ -34346,14 +34475,6 @@
    "0165-martial-training-grounds-and-dojo.drawing.html:b3227cb92d2c7d55"
   ],
   "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.martial_hall#the layout: hall across the north, lane on the south band, sensei's house between, azuchi 10 ft deep, shooting line 6 ft from the lane's end": {
-  "code": "9c4a957506b7d874",
-  "core": "9c4a957506b7d874",
-  "date": "2026-10-07",
-  "note": "the layout: hall across the north, lane on the south band, sensei's house between, azuchi 10 ft deep, shooting line 6 ft from the lane's end",
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.martial_hall#the master's house": {
   "code": "8cfcbda0205f232d",
@@ -34436,40 +34557,71 @@
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.wall#buildings kept off the rampart": {
-  "code": "09f0ee9db762b86a",
+  "code": "abc9a40b2fb010fc",
   "core": "af0ff99095cb41c8",
   "date": "2026-10-07",
-  "note": "the cited 0125 drawing page answers this: \"a clear strip about 46 ft wide\" (the code uses 46 px, not px(46)); 0147 answers the gate buildings' clearance, \"about 36 ft clear around each\" (the code uses 32 px); both should cite those blocks",
-  "pages": {},
-  "research": "",
+  "note": "`self.corridors.append((..., 46))` is a fixed 46 px, not converted from feet, and the comment's half-diagonal reasoning reads it as a distance from the line (a strip about 92 px wide), against \"a clear strip about 46 ft wide\"; use px(23) as the distance from the line (px(46) if the corridor value is a full width)",
+  "pages": {
+   "0125-town-walls-and-which-county-seats-had-one-chengqiang.drawing.html": "40a1ccb161e5bcf9"
+  },
+  "research": "f58e603993fbeb00",
   "rests": [
-   "0125-town-walls-and-which-county-seats-had-one-chengqiang.drawing.html:2c9baa2f6a02a178",
-   "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html:9825dafa2be7c1f4"
+   "0125-town-walls-and-which-county-seats-had-one-chengqiang.drawing.html:2c9baa2f6a02a178"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.wall#gate opening": {
-  "code": "97d6dfe3455eb225",
+  "code": "42874453b6aa7613",
   "core": "af0ff99095cb41c8",
   "date": "2026-10-07",
-  "note": "the 13 ft passage matches §205, but the page gives no size for a town gate's posts, and the code draws them at a fixed 14 x 48 px; that half of the claim should say UNRESEARCHED",
+  "note": "px(13), \"a 13 ft passage\"",
   "pages": {
    "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html": "49298f0d00bbf69d"
   },
   "research": "1e01770d340670bb",
   "rests": [
    "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html:9ba0d19d575a39dc",
-   "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html:c34ec2c8e8c7ce91"
+   "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html:c77df2753595e3b4"
   ],
-  "verdict": "NEEDS-RESEARCH"
+  "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.wall#guard station and tower": {
-  "code": "a83f03717e000426",
+ ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.wall#gateposts": {
+  "code": "b244bebbc5e0ac6d",
   "core": "af0ff99095cb41c8",
   "date": "2026-10-07",
-  "note": "0147 answers both: a town gate has \"a 13 ft passage under a tower about 40 by 24 ft\" and a \"small guard room ... about 12 by 18 ft just inside it\", but the code draws a 40 x 40 px tower beside the gate and a 96 x 46 px station; the claim should cite 0147, and the code is off from it",
+  "note": "nothing gives a town gate's posts; the pier sizes are for the city's road gate",
   "pages": {},
   "research": "",
+  "rests": [
+   "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html:9ba0d19d575a39dc",
+   "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html:c34ec2c8e8c7ce91"
+  ],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.wall#ground round the gate structures": {
+  "code": "8e1cdc9ca03d4b62",
+  "core": "af0ff99095cb41c8",
+  "date": "2026-10-07",
+  "note": "`bm = 32` is a fixed 32 px, against \"about 36 ft clear around each\"; should be px(36)",
+  "pages": {
+   "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html": "49298f0d00bbf69d"
+  },
+  "research": "1e01770d340670bb",
+  "rests": [
+   "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html:4703eb61a63eff0d",
+   "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html:9825dafa2be7c1f4"
+  ],
+  "verdict": "DRIFTED"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.wall#guard station and tower": {
+  "code": "6700604b6b4380e9",
+  "core": "af0ff99095cb41c8",
+  "date": "2026-10-07",
+  "note": "the code draws a 40x40 px tower at gx+50 beside the opening, where the page has a tower \"about 40 by 24 ft\" over the passage, and a 96x46 px station where it has a guard room \"about 12 by 18 ft\" just inside; draw both in feet at the page's sizes, the tower over the passage",
+  "pages": {
+   "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html": "49298f0d00bbf69d"
+  },
+  "research": "1e01770d340670bb",
   "rests": [
    "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html:4605f0e10d754090",
    "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html:91a65df252a59af6",
@@ -34477,7 +34629,7 @@
    "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html:ab225ca0fb472ab8",
    "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html:c77df2753595e3b4"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.wall#rampart stroke": {
   "code": "d2dfb1172f1b22d2",
@@ -34535,6 +34687,20 @@
   ],
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::honmaru_fracs#honmaru on a small enceinte": {
+  "code": "d754d9b17308c78b",
+  "core": "155264ece6133de9",
+  "date": "2026-10-07",
+  "note": "nothing gives a honmaru's size in a castle under 50 ha, and the maps keep 50 ha as their least castle",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html:a657570243a040a8",
+   "0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html:f64e987dbcacb30d",
+   "0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.html:5695b138848b3787"
+  ],
+  "verdict": "IN-STEP"
+ },
  ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::honmaru_fracs#honmaru size": {
   "code": "88915537eed9d09f",
   "core": "155264ece6133de9",
@@ -34558,14 +34724,6 @@
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/settlement/castle_civic.py::honmaru_fracs#the honmaru held to at most 0.34 of a small enceinte's half-sides": {
-  "code": "155264ece6133de9",
-  "core": "155264ece6133de9",
-  "date": "2026-10-07",
-  "note": "the honmaru held to at most 0.34 of a small enceinte's half-sides",
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/city/__init__.py::CityMixin#mixin composition": {
   "code": "415dc1d1102574d9",
@@ -34712,21 +34870,33 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#a seat nearer a drain or collector than its own ditch refused (plank_on_supply)": {
-  "code": "46d4f5e2f3bacb5f",
+ ".claude/skills/diagram/l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#a seat nearer a drain refused": {
+  "code": "edf694026989de81",
   "core": "46d4f5e2f3bacb5f",
   "date": "2026-10-07",
-  "note": "a seat nearer a drain or collector than its own ditch refused (plank_on_supply)",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "note": "drains carry no crossing, and the joins of ditches rule a seat out",
+  "pages": {
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "0b77fe8191a170cc"
+  },
+  "research": "43cf74757fcb48f3",
+  "rests": [
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:6b02012320fa6c39",
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:a7603fcf4f80a38b"
+  ],
+  "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#assumed water widths when a record has none (DEFAULT_W: streams 9.0, channels 2.5, ditches 4.2)": {
-  "code": "46d4f5e2f3bacb5f",
+ ".claude/skills/diagram/l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#assumed water widths": {
+  "code": "d9acdb2ed1c53434",
   "core": "46d4f5e2f3bacb5f",
   "date": "2026-10-07",
-  "note": "assumed water widths when a record has none (DEFAULT_W: streams 9.0, channels 2.5, ditches 4.2)",
+  "note": "0084 answers the field-ditch width (\"2.5 ft at the head and taper toward 1.2 ft\", drawn 2.7-3.7 ft), and the 4.2 px fallback lies outside it; cite 0084 for the ditches, in feet; streams 9 and channels 2.5 stay UNRESEARCHED",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "rests": [
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:df87d788cf419d16",
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:f4f8bace133208ab"
+  ],
+  "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#both banks reach useful ground": {
   "code": "3377b6d23a46b317",
@@ -34743,17 +34913,20 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#longer plank at a junction": {
-  "code": "72fe7c520eb42e17",
+  "code": "b57fa4c039d13060",
   "core": "46d4f5e2f3bacb5f",
   "date": "2026-10-07",
-  "note": "0084 answers this: it lists \"the joins of ditches\" among things that rule a seat out, and holds the span at \"about 8 ft\" because a longer board \"would read as a jetty\"; the code instead widens the deck over the junction. Should cite 0084, and against it this is a drift",
-  "pages": {},
-  "research": "",
+  "note": "`_widen_for_confluence` lengthens the deck up to 3x the nominal span at a junction, where the page says \"the joins of ditches\" rule a seat out and a crossing \"spans about 8 ft\"; refuse junction seats, or record the widening as a DEVIATION on the drawing page",
+  "pages": {
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "0b77fe8191a170cc"
+  },
+  "research": "43cf74757fcb48f3",
   "rests": [
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:37fccd9fa074e380",
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:72ffa8c3abe4e4b2",
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:a7603fcf4f80a38b"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#no path leads to a plank": {
   "code": "75b3b0ddced26d15",
@@ -34796,16 +34969,19 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#off dry crops, gardens and groves": {
-  "code": "2c975730a95818a0",
+  "code": "8569254b1e340216",
   "core": "46d4f5e2f3bacb5f",
   "date": "2026-10-07",
-  "note": "0084 answers it (\"Houses, crops, other crossings ... can rule out every wide spot\"); should cite 0084, not UNRESEARCHED",
-  "pages": {},
-  "research": "",
+  "note": "the page rules out \"houses, crops\" (dry plots, gardens) but says nothing of a farm's grove; split the grove keep-out off as UNRESEARCHED",
+  "pages": {
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "0b77fe8191a170cc"
+  },
+  "research": "43cf74757fcb48f3",
   "rests": [
-   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:a7603fcf4f80a38b"
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:a7603fcf4f80a38b",
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:bbbce046100dfc03"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "NEEDS-RESEARCH"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#off the homes": {
   "code": "ded203e1696db7b7",
@@ -35353,6 +35529,22 @@
   "triaged": "2026-10-05",
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/settlement/city/canals.py::CanalsMixin.farmland_ring#a river tap unswept": {
+  "code": "8c5f067a94e8d958",
+  "core": "1cf147602189a4a7",
+  "date": "2026-10-07",
+  "note": "only `src == \"moat\"` is swept; a river tap's head race leaves on the outward bearing at any angle, against \"a canal leaves a river at a slant\" at 30 to 45 degrees downstream; sweep river taps too, or record a DEVIATION",
+  "pages": {
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.html": "d9e9a68ef73c9507"
+  },
+  "research": "4409e1905454f5d9",
+  "rests": [
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.html:2c0c9529f10836ee",
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.html:435c7f6642d8db43",
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.html:565d1ab9614d0d6b"
+  ],
+  "verdict": "DRIFTED"
+ },
  ".claude/skills/diagram/l7r/diagram/settlement/city/canals.py::CanalsMixin.farmland_ring#farmhouses around each field": {
   "code": "3e0f7931e4f44a66",
   "core": "1cf147602189a4a7",
@@ -35403,14 +35595,6 @@
   ],
   "verdict": "DRIFTED"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/city/canals.py::CanalsMixin.farmland_ring#non-moat (river) taps are never swept; the head race leaves on the outward bearing, unaligned with the current": {
-  "code": "1cf147602189a4a7",
-  "core": "1cf147602189a4a7",
-  "date": "2026-10-07",
-  "note": "non-moat (river) taps are never swept; the head race leaves on the outward bearing, unaligned with the current",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  ".claude/skills/diagram/l7r/diagram/settlement/city/canals.py::CanalsMixin.farmland_ring#placement bound widened": {
   "code": "0a71d38d77f014fd",
   "core": "1cf147602189a4a7",
@@ -35421,13 +35605,18 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/city/canals.py::CanalsMixin.farmland_ring#sluice set radially outward from the city center (or the caller's bearing)": {
-  "code": "1cf147602189a4a7",
+ ".claude/skills/diagram/l7r/diagram/settlement/city/canals.py::CanalsMixin.farmland_ring#sluice outward": {
+  "code": "341adf1a597ac571",
   "core": "1cf147602189a4a7",
   "date": "2026-10-07",
-  "note": "sluice set radially outward from the city center (or the caller's bearing)",
+  "note": "0146's drawing page (cited by this unit) answers it: \"Each tap stands about 90 ft outside the moat's rim\", upstream of its field; cite 0146 drawing",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "rests": [
+   "0146-moats-where-their-water-comes-from-and-where-it-goes-hori.drawing.html:7798a23fdd5bb833",
+   "0146-moats-where-their-water-comes-from-and-where-it-goes-hori.drawing.html:86970121b7358189"
+  ],
+  "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/city/canals.py::CanalsMixin.farmland_ring#sluice standoff": {
   "code": "722e0ca54a29d6b5",
@@ -35917,21 +36106,35 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/city/moat.py::MoatMixin.water_gate#one opening, always 60 ft wide whatever the canal; 0179 says \"The passage through the wall is as wide as its canal\" and a river gets \"a row of arched openings\" (§4, §7, §8)": {
-  "code": "c2fdf479502ee3ac",
+ ".claude/skills/diagram/l7r/diagram/settlement/city/moat.py::MoatMixin.water_gate#one opening": {
+  "code": "cd90ff9c2eb1e2c1",
   "core": "c2fdf479502ee3ac",
   "date": "2026-10-07",
-  "note": "one opening, always 60 ft wide whatever the canal; 0179 says \"The passage through the wall is as wide as its canal\" and a river gets \"a row of arched openings\" (§4, §7, §8)",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "note": "the code draws one fixed 60 ft opening, where 0179 says \"as wide as its canal\" and gives a river \"a row of arched openings\"; size the opening to its canal and draw a row of arches for a river",
+  "pages": {
+   "0179-water-gates-and-sluices-shuimen.drawing.html": "19011b41723432c2"
+  },
+  "research": "7abc2922379a319e",
+  "rests": [
+   "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html:8c6e4d1d8109adfa",
+   "0179-water-gates-and-sluices-shuimen.drawing.html:110c4d21448f7f54",
+   "0179-water-gates-and-sluices-shuimen.drawing.html:27ed53483dc6cfc1",
+   "0179-water-gates-and-sluices-shuimen.drawing.html:e7064b16fafb510d"
+  ],
+  "verdict": "DRIFTED"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/city/moat.py::MoatMixin.water_gate#pier depth through the wall, 30 ft (hd=15 ft); 0147 gives a water gate's opening and pier width but no depth, and a road gate's piers are 24 ft deep (§21)": {
-  "code": "c2fdf479502ee3ac",
+ ".claude/skills/diagram/l7r/diagram/settlement/city/moat.py::MoatMixin.water_gate#pier depth": {
+  "code": "f0b5884b31f5d8d8",
   "core": "c2fdf479502ee3ac",
   "date": "2026-10-07",
-  "note": "pier depth through the wall, 30 ft (hd=15 ft); 0147 gives a water gate's opening and pier width but no depth, and a road gate's piers are 24 ft deep (§21)",
+  "note": "a water gate's pier depth is given nowhere; the 24 ft depth is the road gate's guess",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "rests": [
+   "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html:8c6e4d1d8109adfa",
+   "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html:c34ec2c8e8c7ce91"
+  ],
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py::FLANK_INSET_FT#set on the patrol road": {
   "code": "fcbfcc9b7b65dc28",
@@ -36020,13 +36223,17 @@
   ],
   "verdict": "DRIFTED"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py::WallsMixin._gate_flanking_buildings#fallback road width px(26) for the verge setback": {
-  "code": "30eabe77501f432c",
+ ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py::WallsMixin._gate_flanking_buildings#fallback road width": {
+  "code": "707488c6d515ed1e",
   "core": "30eabe77501f432c",
   "date": "2026-10-07",
-  "note": "fallback road width px(26) for the verge setback",
+  "note": "0147 answers it: the gate's 30 ft \"is the width of the trunk road\", against px(26); cite 0147 drawing at 30 ft; also, the code reads `road_width`, not a ring road as the claim says",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "rests": [
+   "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html:513f3e283c0d2e43"
+  ],
+  "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py::WallsMixin._gate_flanking_buildings#fills and trim": {
   "code": "30e628a49a8ce259",
@@ -36037,14 +36244,6 @@
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py::WallsMixin._gate_flanking_buildings#guard buildings turned square to the local wall tangent": {
-  "code": "30eabe77501f432c",
-  "core": "30eabe77501f432c",
-  "date": "2026-10-07",
-  "note": "guard buildings turned square to the local wall tangent",
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py::WallsMixin._gate_flanking_buildings#guard house size": {
   "code": "303d19387d63e125",
@@ -36107,6 +36306,19 @@
    "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html:ebfa8617ce256166"
   ],
   "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py::WallsMixin._gate_flanking_buildings#turned to the wall": {
+  "code": "b939417cd228aabe",
+  "core": "30eabe77501f432c",
+  "date": "2026-10-07",
+  "note": "0147 answers it (\"stand square to the wall... within about 6 degrees\"); cite the 0147 drawing page; the code matches it",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html:4703eb61a63eff0d",
+   "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html:a62d0cd05508754b"
+  ],
+  "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py::WallsMixin._gate_piers#pier at the jamb": {
   "code": "a246a0bf379e2a38",
@@ -36179,13 +36391,18 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py::WallsMixin._seat_mural_towers#a slid tower kept at least 45 px from a gate": {
-  "code": "c1f3ac64d764edb8",
+ ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py::WallsMixin._seat_mural_towers#a slid tower off a gate": {
+  "code": "743e33649aa39658",
   "core": "c1f3ac64d764edb8",
   "date": "2026-10-07",
-  "note": "a slid tower kept at least 45 px from a gate",
+  "note": "0148 answers it: no tower \"within 390 ft of a gate\"; the 45 px floor lets a slid seat land about 84 px (252 ft at 3 ft/px) from a gate; cite 0148 and hold slid seats to px(390)",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "rests": [
+   "0148-towers-along-the-city-wall-mamian.drawing.html:05e52ed8c34c5329",
+   "0148-towers-along-the-city-wall-mamian.drawing.html:ec7e78082e19e5d1"
+  ],
+  "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py::WallsMixin._seat_mural_towers#coverage remediation": {
   "code": "8d0bf3f5e9aae5f6",
@@ -36218,14 +36435,6 @@
    "0148-towers-along-the-city-wall-mamian.drawing.html:f42a38183d112e63"
   ],
   "verdict": "DRIFTED"
- },
- ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py::WallsMixin._seat_mural_towers#mural tower nudged outward onto the berm, px(40)": {
-  "code": "c1f3ac64d764edb8",
-  "core": "c1f3ac64d764edb8",
-  "date": "2026-10-07",
-  "note": "mural tower nudged outward onto the berm, px(40)",
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py::WallsMixin._seat_mural_towers#no tower in a gate or water-gate opening": {
   "code": "78d9125f66dafeaa",
@@ -36301,6 +36510,19 @@
    "0148-towers-along-the-city-wall-mamian.drawing.html:d568b9cefbaa02c3"
   ],
   "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py::WallsMixin._seat_mural_towers#tower onto the berm": {
+  "code": "f29a8fd49c0b97e9",
+  "core": "c1f3ac64d764edb8",
+  "date": "2026-10-07",
+  "note": "0148 answers how far a tower stands out (\"12 m (~39 ft) out\"); cite 0148 and check that the px(40) offset of the tower's center gives a 39 ft projection, not one past it",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0148-towers-along-the-city-wall-mamian.drawing.html:cff4a0e01c8abde3",
+   "0148-towers-along-the-city-wall-mamian.drawing.html:d568b9cefbaa02c3"
+  ],
+  "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/city/walls.py::WallsMixin._seat_mural_towers#tower separation floor": {
   "code": "b8ef6f16deae6f85",
@@ -37668,13 +37890,19 @@
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/justice.py::JusticeGroundsMixin.boundary_marker#one stone drawn, where 0217 draws a group of one to three at an entrance": {
-  "code": "6dca4f663259b81c",
+ ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/justice.py::JusticeGroundsMixin.boundary_marker#how many stones": {
+  "code": "eecedcb85f98017c",
   "core": "6dca4f663259b81c",
   "date": "2026-10-07",
-  "note": "one stone drawn, where 0217 draws a group of one to three at an entrance",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "note": "the code draws one stone, but the page says \"a map draws a group rather than a single stone\", one to three. The count should be rolled per entrance from 1 to 3",
+  "pages": {
+   "0217-wayside-shrines-and-stone-figures-dosojin-jizo.drawing.html": "5b10dd5c098ceacd"
+  },
+  "research": "d86aa52de6213ead",
+  "rests": [
+   "0217-wayside-shrines-and-stone-figures-dosojin-jizo.drawing.html:424e06511cd904ae"
+  ],
+  "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/justice.py::JusticeGroundsMixin.boundary_marker#paired figures": {
   "code": "0fdd000253951d7a",
@@ -37768,6 +37996,18 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/justice.py::JusticeGroundsMixin.execution_ground#post sockets": {
+  "code": "8b6e66aff60fd3fc",
+  "core": "cc55f89ada6994c8",
+  "date": "2026-10-07",
+  "note": "the page says only \"empty post sockets\", with no count, size or spacing",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0191-execution-and-punishment-grounds-keijo.drawing.html:7dd8f9d309bc389c"
+  ],
+  "verdict": "IN-STEP"
+ },
  ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/justice.py::JusticeGroundsMixin.execution_ground#stake, sand bed, head-display stand, well and pit": {
   "code": "b6700b85298b17e7",
   "core": "cc55f89ada6994c8",
@@ -37777,14 +38017,6 @@
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/justice.py::JusticeGroundsMixin.execution_ground#two post sockets about 3 ft square, and their spacing": {
-  "code": "cc55f89ada6994c8",
-  "core": "cc55f89ada6994c8",
-  "date": "2026-10-07",
-  "note": "two post sockets about 3 ft square, and their spacing",
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/justice.py::JusticeGroundsMixin.punishment_spot#cangue, flogging post and kneeling stone": {
   "code": "45b4eb938734f61c",
@@ -54183,13 +54415,17 @@
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_anchor#the approach counts as reaching the houses within KOSATSUBA_ENTRANCE_REACH_FT 100 ft of a dwelling": {
-  "code": "679505cd861d8d34",
+ ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_anchor#reaching the houses": {
+  "code": "4c09b367bcd35cd7",
   "core": "679505cd861d8d34",
   "date": "2026-10-07",
-  "note": "the approach counts as reaching the houses within KOSATSUBA_ENTRANCE_REACH_FT 100 ft of a dwelling",
+  "note": "0246 sets when a way counts as reaching a farmhouse (within 60 ft of the house, a GUESS). The claim should cite that page as GUESS, and the 100 ft `KOSATSUBA_ENTRANCE_REACH_FT` then disagrees with its 60 ft",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461"
+  ],
+  "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_handover#a through track's handover": {
   "code": "7fd07e1d35903ece",

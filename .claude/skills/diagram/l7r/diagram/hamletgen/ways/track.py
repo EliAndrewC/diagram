@@ -429,7 +429,7 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
         toe-band margin - UNRESEARCHED: the spur clipped 12 ft off the toe band
         spur tip set back - UNRESEARCHED: SPUR_SETBACK, 17 ft off the field outline's vertex
         connector width - research/questions/0081-village-lanes.drawing.html: the track out 6 ft (`CONNECTOR_WIDTH`), valley and polder alike
-        lane clearance - UNRESEARCHED: the connector and spur keep `LANE_CLEARANCE`, 40 ft, of no-build ground
+        lane clearance - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane's middle keeps 7 ft clear of a garden fence; the code keeps `LANE_CLEARANCE`, 40 ft, of no-build ground beside the connector and spur
     """
     seat = plan.seat
     ax, ay = seat["along"]

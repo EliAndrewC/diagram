@@ -552,9 +552,11 @@ class BridgesMixin:
             longer plank at a junction - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: the joins of ditches rule a seat out and the span stays about 8 ft; the code widens the deck over a junction
             obliqueness ceiling - UNRESEARCHED: no seat needing over three times the nominal span
             off the homes - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html
-            off dry crops, gardens and groves - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: houses, crops and other crossings rule a seat out
+            off dry crops and gardens - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: houses, crops and other crossings rule a seat out
+            off groves - UNRESEARCHED: a farm's grove rules a seat out
             a seat nearer a drain refused - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: never the collector or drain (`plank_on_supply`)
-            assumed water widths - UNRESEARCHED: streams 9, channels 2.5, ditches 4.2 px where a record has none (`DEFAULT_W`)
+            assumed ditch width - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: a field ditch 2.5 ft at the head tapering toward 1.2 ft; the code assumes 4.2 px where a record has none (`DEFAULT_W`)
+            assumed stream and channel widths - UNRESEARCHED: 9 and 2.5 px where a record has none (`DEFAULT_W`)
             not on another deck - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html
             both banks reach useful ground - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html
             one rolled form - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: FOOTBRIDGE_FORM

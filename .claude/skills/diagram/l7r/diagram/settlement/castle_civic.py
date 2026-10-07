@@ -141,6 +141,9 @@ class CastleCivicMixin:
             inner moat offset - UNRESEARCHED: 0.42 x the moat gap off the honmaru
             bailey gates turned - UNRESEARCHED: each bailey's gate turned 90 degrees from its parent's, the dogleg route
             ishigaki doubling - CONVENTION: a doubled inner line on the enceinte
+            gate jambs - UNRESEARCHED: px(4) square posts at each opening
+            bailey jog - UNRESEARCHED: baileys jogged 0.13 of the half-side, alternating, and set 0.72 of the way toward the far side
+            masugata's open flank - UNRESEARCHED: one flank open, turning the way out across the approach
             ground reserved - UNRESEARCHED: the moat plus max(36 x bscale, 26) px in both registries, how close buildings stand to the castle works
         """
         hw, hh = w / 2, h / 2
@@ -441,6 +444,7 @@ class CastleCivicMixin:
             state violet - CONVENTION
             hall apron - UNRESEARCHED: max(30 x bscale, 14) px, and a reserved caption band
             compound layout - UNRESEARCHED: the hall across the north, the lane on the south band, the master's house between, a 10 ft azuchi, the shooting line 6 ft from the lane's end
+            practice gear - UNRESEARCHED: a rack and posts drawn in the compound
         """
         f = self.px
         cw, ch = f(MARTIAL_COMPOUND_FT[0]) / 2, f(MARTIAL_COMPOUND_FT[1]) / 2

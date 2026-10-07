@@ -34,26 +34,87 @@ import math
 from collections.abc import Callable, Mapping, Sequence
 from typing import Any
 
-from l7r.diagram.settlement import point_in_poly, rot_rect, seg_closest, seg_dist, seg_intersect, segments_cross
+from l7r.diagram.settlement import point_in_poly, rot_rect, seg_closest, seg_dist, segments_cross
 from l7r.diagram.settlement._geom.indexes import PointGrid
-from l7r.diagram.settlement._knobs import bridge_carried_ways, bridge_crossed_waters
+from l7r.diagram.settlement._knobs import bridge_crossed_waters
 from l7r.diagram.settlement.city.bridges import DECK_SPAN_DEFAULT_FT as DECK_SPAN_DEFAULT_FT
 from l7r.diagram.settlement.city.bridges import PLANK_DITCH_FT as PLANK_DITCH_FT
 from l7r.diagram.settlement.city.bridges import deck_covers as deck_covers
-from l7r.diagram.settlement.city.bridges import flooded_ground, plank_ditch, plank_on_supply
 from l7r.diagram.settlement.city.bridges import undeckable_at as undeckable_at
 from l7r.diagram.settlement.homestead_parts.fixture_seats import TRUNK_FT
 from l7r.diagram.settlement.structures.fixtures._helpers import departure_routes
 from l7r.diagram.settlement.water_ways._helpers import BUND_REACH_FT
 from l7r.diagram.settlement.water_ways.lanes import behind_house, reaches_dooryard
 
-from ..consts import FORD_HALF, WAY_END_REACH_FT, WEB_FABRIC_GAP, Poly, Pt
-from .checks import FORD_SQUARE_TOL_DEG, served_network, unreached_houses
+from ..consts import WAY_END_REACH_FT, WEB_FABRIC_GAP, Poly, Pt
+from .checks import served_network, unreached_houses
 from .clearance import _HAIRPIN_DEG, _ZIGZAG_DEG, _ZIGZAG_RUN_FT, kink_spans
 from .fabric import _LANE_JOIN_FT, _WEB_MIN_FT, _crosses_fabric, house_hit
 from .geom import _TOUCH_GAP, WorkedGround, _components, _turn_deg, end_serves, polyline_len, steading_footprints, worked_ground
 from .joints import _HOOK_DEG, _HOOK_FT, at_rank, hairpin_over_a_short_leg, joints, oriented
-from .keeper import kept
+from .law_water import (  # noqa: F401 - re-exported: the law's callers reach the water rules and the lane helpers here
+    DECK_NEAR_FT as DECK_NEAR_FT,
+)
+from .law_water import (
+    _bbox as _bbox,
+)
+from .law_water import (
+    _brooks as _brooks,
+)
+from .law_water import (
+    _crossings as _crossings,
+)
+from .law_water import (
+    _min_dist as _min_dist,
+)
+from .law_water import (
+    _ways as _ways,
+)
+from .law_water import (
+    boxes_meet as boxes_meet,
+)
+from .law_water import (
+    crossing_points as crossing_points,
+)
+from .law_water import (
+    deck_seats as deck_seats,
+)
+from .law_water import (
+    lane_pts as lane_pts,
+)
+from .law_water import (
+    oblique_at as oblique_at,
+)
+from .law_water import (
+    oblique_crossings as oblique_crossings,
+)
+from .law_water import (
+    off_ford_at as off_ford_at,
+)
+from .law_water import (
+    off_ford_crossings as off_ford_crossings,
+)
+from .law_water import (
+    off_square as off_square,
+)
+from .law_water import (
+    over_and_back as over_and_back,
+)
+from .law_water import (
+    plank_faults as plank_faults,
+)
+from .law_water import (
+    short_decks as short_decks,
+)
+from .law_water import (
+    unbridged_crossings as unbridged_crossings,
+)
+from .law_water import (
+    undeckable_crossings as undeckable_crossings,
+)
+from .law_water import (
+    water_courses as water_courses,
+)
 from .tails import tail_doubled
 
 Lanes = Sequence[Mapping[str, Any]]
@@ -90,8 +151,6 @@ FIELD_REACH_FT = 60.0
 the reach `lanes_reach_something` asks of the field (feature 261, FR-012).
 Research: a way reaches the field - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: within 60 ft"""
 
-DECK_NEAR_FT = 40.0
-"""A deck this near a recorded watercourse is over it, and is judged against that course's width."""
 
 CONNECTOR_START_FT = 1.5
 """A lane end this near the connector's first point meets the connector's START - `fold_the_connector_hairpin`'s own
@@ -125,26 +184,6 @@ AIM_DEG = 60.0
 tread that stops pointing at a way within a turn of 60 degrees reads as meant to meet it; one pointing away from it, or past
 it at a glance, is a lane that ends beside a way, not a broken join.
 Research: making for a way - CONVENTION: within 60 degrees of the end's heading"""
-
-
-def lane_pts(ln: Mapping[str, Any]) -> Poly:
-    """A lane record's points as float tuples."""
-    return [(float(x), float(y)) for x, y in (ln.get("pts") or [])]
-
-
-def _ways(M: Mapping[str, Any]) -> list[Poly]:
-    return [lane_pts(ln) for ln in (M.get("lanes") or [])]
-
-
-def _brooks(M: Mapping[str, Any]) -> list[Poly]:
-    return [[(float(p[0]), float(p[1])) for p in s["poly"]] for s in (M.get("streams") or []) if len(s.get("poly", ())) >= 2]
-
-
-def _min_dist(pt: Pt, poly: Poly) -> float:
-    return min(seg_dist(pt[0], pt[1], poly[i], poly[i + 1]) for i in range(len(poly) - 1))
-
-
-# ---- a lane's own shape --------------------------------------------------------------------------------------------
 
 
 def kinks(pts: Sequence[Pt]) -> list[tuple[str, int, int]]:
@@ -361,7 +400,9 @@ def near_misses(M: Mapping[str, Any]) -> list[tuple[int, int, Pt]]:
     Research:
         ends that nearly meet are joined - research/questions/0081-village-lanes.drawing.html: within 25 ft (`JOIN_REACH_FT`)
         which ends count - UNRESEARCHED: an end counts only where the way it nears lies within `AIM_DEG`, 60 deg, of its heading
-        a door end is no short join - UNRESEARCHED: a household way's door end is never counted as a join that stops short"""
+        a door end is no short join - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a household's way is laid from its dooryard, so its door end is where it starts, never a join that stops short
+        a blocked join is no short join - UNRESEARCHED: an end whose span would be blocked, fold or kink more than its own lane is not counted
+        a connector's ends - UNRESEARCHED: never counted as joins that stop short"""
     ways = _ways(M)
     # EACH WAY'S BOX ONCE (feature 317): the seating asks this of every corridor it judges (`tree.as_joined`), and the
     # segment-by-segment search of every way from every free end was 1.26 s of a 40-household seating on seed 2 - 465,270
@@ -731,177 +772,6 @@ def fouls_fabric(pts: Poly, width: float, houses: Sequence[Mapping[str, Any]], f
 
 
 # ---- water ---------------------------------------------------------------------------------------------------------
-
-
-def _crossings(p: Poly, course: Poly) -> list[Pt]:
-    return [x for _k, x in crossing_points(p, course)]
-
-
-def over_and_back(M: Mapping[str, Any]) -> list[tuple[int, int]]:
-    """(lane index, crossings) for every lane crossing one brook twice or more - out and home, two planks for nothing.
-    Research: over and back - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html"""
-    ways = _ways(M)
-    return [(i, n) for brook in _brooks(M) for i, p in enumerate(ways) if (n := len(_crossings(p, brook))) >= 2]
-
-
-@kept
-def crossing_points(p: Poly, course: Poly) -> list[tuple[int, Pt]]:
-    """(segment index, point) for every crossing of `course` by the run `p`, in the run's order.
-
-    THE COURSE INDEXED ONCE (constitution X clause 15): a household's way out is sampled every 10 ft and a brook runs to
-    hundreds of segments, so every pair was millions of tests a map (`settle_the_web`'s way-out step, 4.3 s of Kashikawa's
-    5.0). The grid only prunes - a course segment whose box cannot meet the run segment's cannot cross it - and the same
-    test decides, in the same order."""
-    grid = PointGrid(64.0)
-    grid.extend((j, c, d, min(c[0], d[0]), min(c[1], d[1]), max(c[0], d[0]), max(c[1], d[1])) for j, (c, d) in enumerate(zip(course, course[1:], strict=False)))
-    out = []
-    for k, (a, b) in enumerate(zip(p, p[1:], strict=False)):
-        mx, my = (a[0] + b[0]) / 2, (a[1] + b[1]) / 2
-        near = {item[0]: item for item in grid.near(mx, my, math.dist(a, b) / 2 + 1.0)}
-        for j in sorted(near):
-            _j, c, d, *_box = near[j]
-            if segments_cross(a, b, c, d) and (x := seg_intersect(a, b, c, d)) is not None:
-                out.append((k, x))
-    return out
-
-
-def off_ford_at(M: Mapping[str, Any], reach: float = FORD_HALF) -> list[tuple[int, int, Pt]]:
-    """(lane index, segment index, point) for every crossing of the brook by a lane farther than `reach` from every
-    recorded ford (`meta.brook_fords`).
-    Research: crossed at a ford - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html"""
-    fords = [(float(f[0]), float(f[1])) for f in (M.get("meta") or {}).get("brook_fords") or []]
-    return [(i, k, x) for brook in _brooks(M) for i, p in enumerate(_ways(M)) for k, x in crossing_points(p, brook) if min((math.dist(x, f) for f in fords), default=math.inf) > reach]
-
-
-def off_ford_crossings(M: Mapping[str, Any], reach: float = FORD_HALF) -> list[tuple[int, int]]:
-    """Every crossing of the brook by a lane that stands farther than `reach` from every recorded ford
-    (`meta.brook_fords`) - ONE constant with the router's ford gap (`off_ford_at`)."""
-    return [(round(x[0]), round(x[1])) for _i, _k, x in off_ford_at(M, reach)]
-
-
-def water_courses(M: Mapping[str, Any], water: str = "brook") -> list[Poly]:
-    """The brook's courses (`water="brook"`, the streams) or the drawn channels' (`water="channel"`)."""
-    return _brooks(M) if water == "brook" else [[(float(q[0]), float(q[1])) for q in c["pts"]] for c in M.get("drawn_channels") or []]
-
-
-def off_square(a: Pt, b: Pt, u: Pt, v: Pt) -> float:
-    """How many degrees the run `a`-`b` crosses the course `u`-`v` off square."""
-    t = math.degrees(math.atan2(b[1] - a[1], b[0] - a[0]) - math.atan2(v[1] - u[1], v[0] - u[0])) % 180.0
-    return abs(90.0 - t)
-
-
-def oblique_at(M: Mapping[str, Any], water: str = "brook") -> list[tuple[int, int, Pt, float]]:
-    """(lane index, segment index, point, degrees off square) for every lane crossing of the brook or a drawn channel
-    (`water_courses`) more than `FORD_SQUARE_TOL_DEG` off square.
-    Research:
-        square brook crossing - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html
-        square ditch crossing - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: 10 degrees"""
-    out = []
-    ways = list(_ways(M))
-    boxes = [_bbox(p) for p in ways]
-    for course in water_courses(M, water):
-        cb = _bbox(course)
-        for i, p in enumerate(ways):
-            # ...a lane whose box misses the course's crosses none of it (feature 314: the census's 1,000 comparisons a call)
-            lb = boxes[i]
-            if lb is None or cb is None or lb[2] < cb[0] or cb[2] < lb[0] or lb[3] < cb[1] or cb[3] < lb[1]:
-                continue
-            for k, (a, b) in enumerate(zip(p, p[1:], strict=False)):
-                for u, v in zip(course, course[1:], strict=False):
-                    if segments_cross(a, b, u, v) and (off := off_square(a, b, u, v)) > FORD_SQUARE_TOL_DEG:
-                        out.append((i, k, seg_intersect(a, b, u, v) or a, off))
-    return out
-
-
-def _bbox(p: Sequence[Sequence[float]]) -> tuple[float, float, float, float] | None:
-    """The box `(x0, y0, x1, y1)` of a polyline, or None for an empty one."""
-    if not p:
-        return None
-    xs, ys = [float(q[0]) for q in p], [float(q[1]) for q in p]
-    return (min(xs), min(ys), max(xs), max(ys))
-
-
-def boxes_meet(a: Sequence[Sequence[float]], b: Sequence[Sequence[float]], pad: float) -> bool:
-    """Do the boxes of two polylines come within `pad` of each other (`_bbox`)? Two empty ones never do."""
-    ba, bb = _bbox(a), _bbox(b)
-    return ba is not None and bb is not None and not (ba[2] + pad < bb[0] or bb[2] + pad < ba[0] or ba[3] + pad < bb[1] or bb[3] + pad < ba[1])
-
-
-def oblique_crossings(M: Mapping[str, Any], water: str = "brook") -> list[tuple[int, int, float]]:
-    """(x, y, degrees off square) for every lane crossing more than `FORD_SQUARE_TOL_DEG` off square - of the brook
-    (`water="brook"`, the streams) or of a drawn channel (`water="channel"`, `drawn_channels`) (`oblique_at`)."""
-    return [(round(x[0]), round(x[1]), round(off, 1)) for _i, _k, x, off in oblique_at(M, water)]
-
-
-def unbridged_crossings(M: Mapping[str, Any]) -> list[tuple[int, int]]:
-    """Every crossing of water by a lane that no drawn deck covers (`deck_covers`): the brook, and every other course a way
-    may have to be carried over (`bridge_crossed_waters`) - a drawn channel, a field ditch, the polder's drain (feature
-    287: the drain takes no footplank, `plank_on_supply`, so a way over it is carried on the deck `bridges()` lays where
-    the web's last pass left a crossing it can deck, and cut where it could not - never walked through the water).
-    Research: every crossing decked - research/questions/0087-road-bridges-over-rivers-and-canals-hashi.drawing.html"""
-    decks = M.get("bridges") or []
-    waters = [*_brooks(M), *([(float(q[0]), float(q[1])) for q in wpts] for wpts, _w in bridge_crossed_waters(M) if len(wpts) >= 2)]
-    hits = {(round(x[0]), round(x[1])) for course in waters for p in _ways(M) for x in _crossings(p, course) if not any(deck_covers(d, x[0], x[1]) for d in decks)}
-    return sorted(hits)
-
-
-def deck_seats(pts: Poly, width: float, waters: Sequence[tuple[Any, float]], ftpx: float = 1.0, wet: Sequence[Poly] = (), M: Any = None) -> list[tuple[int, int]]:
-    """Every crossing of `waters` (`bridge_crossed_waters`) by a way along `pts` where no deck seats: `crossing_deck`, the
-    very solve `bridges()` makes - grown, then skewed toward square, until every corner clears the whole crossed course
-    (`_deck_corners_clear`) and lands off the flooded rice (`wet`, `flooded_ground`) (`undeckable_at`).
-    Research: a deck's corners on dry ground - research/questions/0087-road-bridges-over-rivers-and-canals-hashi.drawing.html"""
-    return [(round(p[0]), round(p[1])) for _k, p in undeckable_at(pts, width, waters, ftpx, wet, M)]
-
-
-def undeckable_crossings(M: Mapping[str, Any]) -> list[tuple[int, int]]:
-    """`deck_seats` over every carried way of the map (`bridge_carried_ways`) against every watercourse it may cross."""
-    ftpx = float((M.get("meta") or {}).get("ftpx") or 1.0)
-    waters = bridge_crossed_waters(M)
-    wet = flooded_ground(M)
-    return [x for rpts, rw in bridge_carried_ways(M) for x in deck_seats([(float(q[0]), float(q[1])) for q in rpts], float(rw), waters, ftpx, wet, M)]
-
-
-def short_decks(M: Mapping[str, Any]) -> list[tuple[int, int, float, float]]:
-    """(x, y, span, water width) for every deck over a recorded watercourse (within `DECK_NEAR_FT` of it) shorter than that
-    course's full width - its abutment stands in the water (`bridges_span_their_water`).
-    Research: a deck spans its water - research/questions/0087-road-bridges-over-rivers-and-canals-hashi.drawing.html"""
-    courses = [([(float(p[0]), float(p[1])) for p in d["poly"]], max(float(d.get("w", 3.0)), float(d.get("w_tail", 3.0)))) for d in (M.get("field_ditches") or [])]
-    courses += [([(float(p[0]), float(p[1])) for p in c["poly"]], float(c.get("w", 3.0))) for c in (M.get("channels") or [])]
-    courses += [([(float(p[0]), float(p[1])) for p in s["poly"]], float(s.get("w", 6.0))) for s in (M.get("streams") or [])]
-    short = []
-    for b in M.get("bridges") or []:
-        bx, by, span = float(b["x"]), float(b["y"]), float(b["span"])
-        near = min(((_min_dist((bx, by), poly), w) for poly, w in courses if len(poly) >= 2), key=lambda t: t[0], default=(math.inf, 0.0))
-        if near[0] <= DECK_NEAR_FT and span < near[1]:
-            short.append((round(bx), round(by), round(span, 1), round(near[1], 1)))
-    return short
-
-
-def plank_faults(M: Mapping[str, Any]) -> tuple[list[tuple[int, int]], list[tuple[int, int, str]]]:
-    """(stranded, on the drain): footplanks farther than `PLANK_DITCH_FT` from every recorded field ditch, and planks whose
-    nearest ditch is not a supply ditch (`SUPPLY_ROLES`: a main, a branch or a lateral) - the collector, the drain or the
-    feeder. `plank_ditch` and `plank_on_supply` are the placer's own (`channel_footbridges`, ways W14).
-
-    THE LATERAL IS A SUPPLY DITCH (feature 287; Kuwabata's six planks). The test this was lifted from read the comb's two roles
-    only, and so named every plank on a polder's laterals and settlement-side ring canal - which record the role `lateral` -
-    as laid on a drain. The record answers it: a plank is laid where a bund path meets an IRRIGATION ditch (research/questions/0084-plank-bridges-over-farm-ditches-itabashi.html),
-    and the polder's inner ring canal and its field ditches are its distribution water (research/archetypes/110).
-    Research: planks on supply ditches - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html"""
-    ditches = M.get("field_ditches") or []
-    stranded, on_drain = [], []
-    for b in M.get("bridges") or []:
-        if not b.get("foot"):
-            continue
-        pt = (float(b["x"]), float(b["y"]))
-        dist, role = plank_ditch(pt, ditches)
-        if dist >= PLANK_DITCH_FT:
-            stranded.append((round(pt[0]), round(pt[1])))
-        elif not plank_on_supply(pt, ditches):
-            on_drain.append((round(pt[0]), round(pt[1]), str(role)))
-    return stranded, on_drain
-
-
-# ---- the ways out --------------------------------------------------------------------------------------------------
 
 
 def way_outs_crossing(M: Mapping[str, Any], routes: Sequence[Sequence[Pt]] | None = None) -> list[tuple[int, int, int]]:

@@ -184,7 +184,7 @@ class CanalsMixin:
             tap swept downstream - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.html
             tap at the nearest vertex - NONE: the pool's fields were sited against the vertex
             a river tap unswept - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.html: an offtake leans downstream; the code sweeps only a moat tap, a river tap's head race leaving on the outward bearing
-            sluice outward - UNRESEARCHED: set radially outward from the city center, or on the caller's bearing
+            sluice outward - research/questions/0146-moats-where-their-water-comes-from-and-where-it-goes-hori.drawing.html: each tap about 90 ft outside the moat's rim, upstream of its field; set radially outward from the city center, or on the caller's bearing
             farmhouses around each field - research/questions/0010-farmland-around-towns-and-cities.drawing.html: rings of (26 seats, 15 px) and (20, 40), or the upslope walk
             head race width - research/questions/0146-moats-where-their-water-comes-from-and-where-it-goes-hori.drawing.html: the tap-to-sluice channel drawn 7 px wide, the page's 21 ft moat irrigation tap at 3 ft/px
             withdrawn field - NONE: a field whose fan fails is removed whole

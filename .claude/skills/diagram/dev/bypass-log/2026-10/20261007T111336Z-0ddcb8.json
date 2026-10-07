@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-07T11:13:36Z",
+  "target": "claims-gate",
+  "commit": "3749ef50a",
+  "why": "CLAIMS_OK: wave 5's introduced findings are each a found row recorded in specs/328-match-the-research/claims-followup.md (Wave 5), the work later waves take"
+}
