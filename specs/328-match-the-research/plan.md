@@ -84,6 +84,14 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
   code (the inner moat's width, the rampart strip in px, the plank over a junction), the claim states the code against the
   page and the departure is ranked as a found row in its own tier, so E0 stays the claim alone (FR-003).
 
+## Wave 7 (amendment 6, 2026-10-07)
+
+- **Scope**: the four open E0 rows, then the next contiguous run of E1 (FR-006): rows 180-230 (26 rows, `tasks.md`
+  Phase 8). Mostly town and city values; the connector's clearance (0246's 7 ft against `LANE_CLEARANCE`'s 40) and the
+  plank's widest-left seat move hamlet maps.
+- **Verification**: as wave 5 - Inashiro first (`make map`, the PNG looked at), the pool through the gate, a town or city
+  value by its unit test; the bookends back to back; `impl-drift` on every touched unit; a held value becomes a found row.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Each later wave that changes engine behavior takes
