@@ -20,3 +20,7 @@ The GM, 2026-10-07 (amendment 8), verbatim:
 > Your proposal sounds good.  Please also raise the cap from 75% to 85%
 
 > Thanks.  Please go with the order you've described: finish your current round of in-progress stuff, the edit the feature to limit ourselves to code actually executed by magistracies, country shrines, and scripted hamlets; legacy hand-drawn settlements shall have their findings marked as DEFERRED rather than DRIFTED.  I pre-authorize you to exceed the normal limit on rounds of spec reviews if necessary, so you don't need to ask whether to continue past the usual number - you should do so if needed.  Keep going until the feature is complete or until you hit 85% usage (if you hit 85% usage then let whatever is running finish running even if it drives up usage a few more percenage points and then stop - I believe this is how the cap works, which is what we want).
+
+## The GM, 2026-10-07 (amending the goal, verbatim)
+
+I'm amending the goal to note that I'm leaving for work, so please don't stop working until you hit the cap or the feature is done.  If you need to ask me a question then please defer it to the end of the feature so that I don't come back to find you've been blocking on a question not doing any work for the past 7 hours, etc.

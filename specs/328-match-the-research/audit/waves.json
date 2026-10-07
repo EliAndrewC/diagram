@@ -257,7 +257,6 @@
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/belt_law.py::MIN_BELT_DEPTH_FT#least belt depth": "9",
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/farmstead.py::FarmsteadMixin._find_appurtenances#garden on a sunny side": "1",
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::PRIVY_FRONT_STEP_FT#front privy off the front wall": "9",
- ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::PRIVY_YARD_STEP_FT#yard outhouse off the back wall": "9",
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::WOODSHED_STEP_FT#wood shed off its wall": "9",
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#fixture gap 3.5 ft off every other part (WALL_GAP_FT) and bath room slide 4 ft (WALL_SLIDE_FT)": "1 (claim renamed or split; its parts re-checked)",
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#seating order: retirement house, bath, wood shed, privy, manure, coop, shrine, persimmon (FIXTURE_ORDER)": "1 (claim renamed or split; its parts re-checked)",

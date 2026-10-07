@@ -55,8 +55,8 @@ OUT_STEPS = 24  # paces offered: 192 ft, past any bundle's parts
 WALL_SLIDE_FT = 4.0  # the spacing of the places offered along a wall to a bath room or a wood shed
 PRIVY_YARD_STEP_FT = 6.0  # HELD (feature 328 wave 9): the yard outhouse a ken past the wall gap - its edge a ken plus the gap off the wall
 """Research: yard outhouse off the back wall - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: held at a ken plus the wall gap, past the page's ken - at a ken Kuwabata's re-seated homesteads leave one household only a way that zigzags across its neighbor's door end; the found row settlement/rolling/gap_ways.py::_way_for#a household whose only ways zigzag re-seated"""
-PRIVY_FRONT_STEP_FT = 8.0  # HELD (feature 328 wave 9): the front-yard privy 8 ft past the wall gap - its edge 8 ft plus the gap off the wall
-"""Research: front privy off the front wall - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: held at 8 ft plus the wall gap, past the page's 8 ft - at 8 ft Kuwabata's re-seated homesteads leave one household only a way that zigzags across its neighbor's door end; the found row settlement/rolling/gap_ways.py::_way_for#a household whose only ways zigzag re-seated"""
+PRIVY_FRONT_STEP_FT = 8.0 - WALL_GAP_FT  # the front-yard privy's edge 8 ft out from the front wall, past the wall gap (GUESS)
+"""Research: front privy off the front wall - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: 8 ft"""
 PRIVY_SUN_MIN_FT = 18.0  # the sun-side search's radii, 18 to 48 ft (`PRIVY_SUN_MAX_FT`'s reasons, fixtures.py)
 """Research: sun-side search start - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: from 18 ft"""
 PRIVY_SUN_MAX_FT = 48.0

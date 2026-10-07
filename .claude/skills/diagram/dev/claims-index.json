@@ -22602,10 +22602,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::admits#free ends at a house": {
-  "code": "84b238085f741d9e",
-  "core": "5b2d373341b0eb64",
+  "code": "e154b07a157a7e86",
+  "core": "92c77771287305a5",
   "date": "2026-10-07",
-  "note": "no page counts the free lane ends at a house",
+  "note": "no page gives a count of lane ends at a house",
   "pages": {},
   "research": "",
   "rests": [
@@ -22614,56 +22614,42 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::admits#no doubled band": {
-  "code": "dba8c2284633ed1d",
-  "core": "5b2d373341b0eb64",
+  "code": "9b278fc02b661d8b",
+  "core": "92c77771287305a5",
   "date": "2026-10-07",
-  "note": "nothing covers two lanes running side by side; §17's \"doubling back\" is about one lane",
+  "note": "no cited page covers lanes running side by side",
   "pages": {},
   "research": "",
   "rests": [
-   "0081-village-lanes.drawing.html:be608a70af4cfcc5"
+   "0081-village-lanes.drawing.html:3b230d13e2fc6d0b"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::admits#no sliver between the tree's lanes": {
-  "code": "06c56cd8e2c0a256",
-  "core": "5b2d373341b0eb64",
+  "code": "ca69fda9e7b6002f",
+  "core": "92c77771287305a5",
   "date": "2026-10-07",
-  "note": "the cited pages say nothing about slivers between lanes",
+  "note": "no cited page covers needles or slivers",
   "pages": {},
   "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::admits#no zigzag across a joint": {
-  "code": "e76bb19d4f6f4916",
-  "core": "5b2d373341b0eb64",
-  "date": "2026-10-07",
-  "note": "\"Two lanes that meet end to end are read as one ... a jog across the meeting point is pulled straight\"",
-  "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
-  },
-  "research": "ebd72aaa6a0eb9af",
   "rests": [
-   "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
-   "0081-village-lanes.drawing.html:d30e15716180fbf5",
    "0081-village-lanes.drawing.html:df26f73dd5ee96d2"
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::admits#track out's width as judged, the stub's `\"w\": 6.0` (6 ft, which matches 0081 §1)": {
-  "code": "5b2d373341b0eb64",
-  "core": "5b2d373341b0eb64",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::admits#the track out tested at 6 ft wide (stub w 6.0)": {
+  "code": "92c77771287305a5",
+  "core": "92c77771287305a5",
   "date": "2026-10-07",
-  "note": "track out's width as judged, the stub's `\"w\": 6.0` (6 ft, which matches 0081 §1)",
+  "note": "the track out tested at 6 ft wide (stub w 6.0)",
   "research": "",
   "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::admits#tree keeps the lane law": {
-  "code": "9a0a5308d16519ea",
-  "core": "5b2d373341b0eb64",
+  "code": "6a94afe0b447e6ff",
+  "core": "92c77771287305a5",
   "date": "2026-10-07",
-  "note": "each household's way is laid once the last house stands and joined to the network; the hook, hairpin and dangling-end rules are the page's",
+  "note": "each way is laid after the last house and refused for a hook, hairpin or dangling end, as the pages say",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
@@ -22679,16 +22665,16 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::admits#way out crosses each brook once": {
-  "code": "fe520eba6baffea3",
-  "core": "5b2d373341b0eb64",
+  "code": "d954c5b6103120af",
+  "core": "92c77771287305a5",
   "date": "2026-10-07",
-  "note": "the page prices a crossing at about 150 ft of walk and spaces crossings, but never limits a way to one crossing per brook; label UNRESEARCHED, or derive the limit from §47 in the claim's account",
+  "note": "0035 covers square plank crossings, the ~150 ft crossing charge and one bank per farmstead, but never says a way crosses each brook at most once; mark it UNRESEARCHED or have the page record the rule",
   "pages": {
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "c23a085a43372c2c"
   },
   "research": "d47738a05844fe19",
   "rests": [
-   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:03433651c0627577",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:52835a76bb3e8115",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:93969c06f800b0d5",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:d643c23f456119bc"
   ],
@@ -22717,21 +22703,6 @@
   "note": "plumbing",
   "research": "",
   "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::gathered_zigzag#no zigzag at a joint, ends gathered": {
-  "code": "9cf59536c6c3c875",
-  "core": "6a6494906acea1bf",
-  "date": "2026-10-07",
-  "note": "the reach is `_KNOT_FT * KNOT_MARGIN` with KNOT_MARGIN 1.0, but the bundle never resolves smooth.KNOT_FT; I need its value to confirm it is the page's 25 ft",
-  "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
-  },
-  "research": "ebd72aaa6a0eb9af",
-  "rests": [
-   "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
-   "0081-village-lanes.drawing.html:df26f73dd5ee96d2"
-  ],
-  "verdict": "CANNOT-TELL"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::hosts#access tree plumbing": {
   "code": "9ee35e2287a5d9ce",
@@ -23079,21 +23050,6 @@
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "c23a085a43372c2c"
   },
   "research": "d47738a05844fe19",
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::zigzag_joint#no zigzag at a joint": {
-  "code": "d61e110102f81c66",
-  "core": "b998e1c66739b151",
-  "date": "2026-10-07",
-  "note": "two lanes met end to end are read as one way and held to the bend rule",
-  "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
-  },
-  "research": "ebd72aaa6a0eb9af",
-  "rests": [
-   "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
-   "0081-village-lanes.drawing.html:d30e15716180fbf5"
-  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::_drop_collapsed#web plumbing": {
@@ -42917,10 +42873,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::PRIVY_FRONT_STEP_FT#front privy off the front wall": {
-  "code": "91d98ebc4ec9e8af",
-  "core": "9095d1abff122e93",
+  "code": "e3d2ee6a0732e2a4",
+  "core": "232d3ac8ac8b4b8c",
   "date": "2026-10-07",
-  "note": "edge 8 ft out from the front wall, a recorded GUESS",
+  "note": "§56 says \"8 ft out from the front wall\"; the code sets the edge at 8 ft plus the wall gap, and the drawing page does not record that departure; record it on the page as a DEVIATION, or return the code to 8 ft",
   "pages": {
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "87ffb6a8fd559f32"
   },
@@ -42928,7 +42884,7 @@
   "rests": [
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:111af1d739cc6920"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::PRIVY_SIZES_FT#privy sizes": {
   "code": "df5cbbc948837247",
@@ -42975,10 +42931,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::PRIVY_YARD_STEP_FT#yard outhouse off the back wall": {
-  "code": "70fbea6b0e3f287b",
-  "core": "d5854e32afb7c8fc",
+  "code": "d8695fc477d80848",
+  "core": "5efeb905b7d48b3f",
   "date": "2026-10-07",
-  "note": "a ken (6 ft) off the back wall, a recorded GUESS",
+  "note": "§55 says \"a ken (about 6 ft) off the back wall\"; the code sets the edge at a ken plus the wall gap, and the drawing page does not record that departure; record it on the page as a DEVIATION, or return the code to a ken",
   "pages": {
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "87ffb6a8fd559f32"
   },
@@ -42986,7 +42942,7 @@
   "rests": [
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:2cba396257ae313b"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::SALT#plumbing": {
   "code": "5983e3a4d197e8d1",
@@ -43116,10 +43072,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#coop seats": {
-  "code": "29f5799317bcadb3",
-  "core": "bd694381d10f39aa",
+  "code": "5f83165169012fec",
+  "core": "7628512d1263f534",
   "date": "2026-10-07",
-  "note": "the flanks or the back wall, rolled, within \"beside the house\", a GUESS",
+  "note": "flanks and back wall, rolled; matches the page's guess \"beside the house\"",
   "pages": {
    "0045-chickens-and-chicken-coops.drawing.html": "09fa83d177b6f5e9"
   },
@@ -43130,10 +43086,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#manure beyond the privy": {
-  "code": "36a246956dbe7ec2",
-  "core": "bd694381d10f39aa",
+  "code": "978378468d2186b7",
+  "core": "7628512d1263f534",
   "date": "2026-10-07",
-  "note": "beyond the privy, away from the house, jittered by up to 4.5 ft either way; with no privy, behind or beside the house",
+  "note": "the ±4.5 ft jitter and the no-privy seats agree, but `out_` steps only along y, so a heap beyond a flank (\"barn\") privy moves along the flank, not \"on the side away from the house\" (§84)",
   "pages": {
    "0042-manure-heaps-and-compost-kyuhi.drawing.html": "8b458f42d4e2cbac"
   },
@@ -43143,13 +43099,21 @@
    "0042-manure-heaps-and-compost-kyuhi.drawing.html:770a6419fbce2b73",
    "0042-manure-heaps-and-compost-kyuhi.drawing.html:cee269ecfe8fca3a"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#manure fallback spots beside the privy (1.1 and 1.9 privy widths along, 10 ft further out)": {
+  "code": "7628512d1263f534",
+  "core": "7628512d1263f534",
+  "date": "2026-10-07",
+  "note": "manure fallback spots beside the privy (1.1 and 1.9 privy widths along, 10 ft further out)",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#privy seats": {
-  "code": "f4fcec44a4c69349",
-  "core": "bd694381d10f39aa",
+  "code": "73d2d1416cb01fe0",
+  "core": "7628512d1263f534",
   "date": "2026-10-07",
-  "note": "the 72.7% sun roll and its fallback are right, but the \"barn\" seat `(hw/2 + g + d/2, -hh*0.25)` stands against the house's own +x end (the floored rooms, per the module's bath note), where the page says it is \"drawn against the barn's outer wall\"; it should be seated against a barn, or the page should record the house-end seat",
+  "note": "the 72.7% sun-side roll, the 18 ft start and the weighted fallbacks agree with the page, but the \"barn\" seat `(hw / 2 + g + d / 2, -hh * 0.25)` stands against the house's +x (floored-rooms) wall, where §57 says \"drawn against the barn's outer wall\"",
   "pages": {
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "87ffb6a8fd559f32"
   },
@@ -43163,30 +43127,30 @@
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#retirement house": {
-  "code": "20933a13b7ba9a42",
-  "core": "bd694381d10f39aa",
+  "code": "25bea821da253d22",
+  "core": "7628512d1263f534",
   "date": "2026-10-07",
-  "note": "no cited question bears on it",
+  "note": "no cited page covers it",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#seat positions along each wall": {
-  "code": "7d77860a1173c1bc",
-  "core": "bd694381d10f39aa",
+  "code": "67a7cb8a6c0a0f6d",
+  "core": "7628512d1263f534",
   "date": "2026-10-07",
-  "note": "the figures match the code; no page gives them",
+  "note": "no cited page gives positions along a wall",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#shrine corner": {
-  "code": "de34824286ed0ee7",
-  "core": "bd694381d10f39aa",
+  "code": "0a7b90b36689a121",
+  "core": "7628512d1263f534",
   "date": "2026-10-07",
-  "note": "NW/NE/SW rolled at 45/35/20 per shrine",
+  "note": "NW, NE or SW, weighted 45/35/20",
   "pages": {
    "0219-household-shrines-yashikigami.drawing.html": "b8ac74762f0906b7"
   },
@@ -43197,19 +43161,11 @@
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#the manure heap's fallback spots (beside the privy at 1.1 and 1.9 widths, 10 ft further out) and its no-privy seats at 0.3 hw / 0.3 hh": {
-  "code": "bd694381d10f39aa",
-  "core": "bd694381d10f39aa",
-  "date": "2026-10-07",
-  "note": "the manure heap's fallback spots (beside the privy at 1.1 and 1.9 widths, 10 ft further out) and its no-privy seats at 0.3 hw / 0.3 hh",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#wood shed seats": {
-  "code": "0c4d2caeb966253d",
-  "core": "bd694381d10f39aa",
+  "code": "382434880b0f76ac",
+  "core": "7628512d1263f534",
   "date": "2026-10-07",
-  "note": "the back wall and both flanks, never the front",
+  "note": "behind or beside the house, never in front, about a ken off the wall",
   "pages": {
    "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "ad5072e51b00c129"
   },
@@ -56043,6 +55999,16 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py::ENTRANCE_PRUNE#an entrance board's whole band fitted within its reach": {
+  "code": "ed53a3cf57512c84",
+  "core": "c3e4d134ed4f3447",
+  "date": "2026-10-07",
+  "note": "a search economy only",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin#siting plumbing": {
   "code": "b7bd7d2fa0a9e111",
   "core": "45d47d15b58c96af",
@@ -56051,62 +56017,105 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_for#anchored board within 60 ft of the nearest seat to its anchor (KOSATSUBA_ANCHOR_BAND_FT)": {
+  "code": "40a8307159220407",
+  "core": "40a8307159220407",
+  "date": "2026-10-07",
+  "note": "anchored board within 60 ft of the nearest seat to its anchor (KOSATSUBA_ANCHOR_BAND_FT)",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_for#board may stand in shade": {
-  "code": "9569d34a96b0cfea",
-  "core": "760826ea669f5c8d",
-  "date": "2026-10-03",
-  "note": "0190 admits shaded seats",
+  "code": "84dbd26d0848fc1f",
+  "core": "40a8307159220407",
+  "date": "2026-10-07",
+  "note": "shaded seats are kept when nothing else fits",
   "pages": {
    "0190-notice-boards-kosatsuba.drawing.html": "6046a6a69d20be53"
   },
   "research": "3b4a965d33e6f331",
+  "rests": [
+   "0190-notice-boards-kosatsuba.drawing.html:a42e1495c85275c0",
+   "0190-notice-boards-kosatsuba.drawing.html:aa00a4e4244c5f44"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_for#entrance board on the approach": {
-  "code": "a94619549589ffb6",
-  "core": "760826ea669f5c8d",
-  "date": "2026-10-03",
-  "note": "as claimed",
+  "code": "19f2b08f8cdbd175",
+  "core": "40a8307159220407",
+  "date": "2026-10-07",
+  "note": "no cited page covers a preference for the approach",
+  "pages": {},
   "research": "",
+  "rests": [
+   "0190-notice-boards-kosatsuba.html:71d64edbc2411ed0"
+  ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_for#open ground preferred": {
-  "code": "08692218640e976e",
-  "core": "760826ea669f5c8d",
-  "date": "2026-10-03",
-  "note": "0190 is silent on preference; GUESS fits",
+ ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_for#entrance board within 20 ft of the nearest seat to the handover (KOSATSUBA_HANDOVER_BAND_FT)": {
+  "code": "40a8307159220407",
+  "core": "40a8307159220407",
+  "date": "2026-10-07",
+  "note": "entrance board within 20 ft of the nearest seat to the handover (KOSATSUBA_HANDOVER_BAND_FT)",
   "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_for#open ground preferred": {
+  "code": "d6394ba71d3ede35",
+  "core": "40a8307159220407",
+  "date": "2026-10-07",
+  "note": "the pages allow shade but say nothing of preferring open ground",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0190-notice-boards-kosatsuba.drawing.html:a42e1495c85275c0",
+   "0190-notice-boards-kosatsuba.drawing.html:aa00a4e4244c5f44"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_for#placement chooses the ground": {
-  "code": "24088c08a70a8f37",
-  "core": "760826ea669f5c8d",
-  "date": "2026-10-03",
-  "note": "as claimed",
+  "code": "11e74ddf4402f184",
+  "core": "40a8307159220407",
+  "date": "2026-10-07",
+  "note": "entrance and center are attested sites, frontage is the busiest ground; the knob rolls among them",
   "pages": {
    "0190-notice-boards-kosatsuba.html": "d5c6d0418e52d1fa"
   },
   "research": "348847d2a9750e4b",
+  "rests": [
+   "0190-notice-boards-kosatsuba.html:aeb5e9860f97b764",
+   "0190-notice-boards-kosatsuba.html:b465c07b81f6c576",
+   "0190-notice-boards-kosatsuba.html:ebb781f8589560e1",
+   "0190-notice-boards-kosatsuba.html:f5973f0b2ea1c6cc"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_for#roadside first": {
-  "code": "b730985f80245587",
-  "core": "760826ea669f5c8d",
-  "date": "2026-10-03",
-  "note": "as claimed",
+  "code": "ab7c71d5ce828a6e",
+  "core": "40a8307159220407",
+  "date": "2026-10-07",
+  "note": "only verge seats compete at the lane tiers, wider only when widened",
   "pages": {
    "0190-notice-boards-kosatsuba.drawing.html": "6046a6a69d20be53"
   },
   "research": "3b4a965d33e6f331",
+  "rests": [
+   "0190-notice-boards-kosatsuba.drawing.html:532df9d7ad5a1f62",
+   "0190-notice-boards-kosatsuba.drawing.html:a98bd6773fc06235"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_for#traffic floor": {
-  "code": "4a3402fe4f895e50",
-  "core": "760826ea669f5c8d",
-  "date": "2026-10-03",
-  "note": "as claimed",
+  "code": "e67f15e82a066760",
+  "core": "40a8307159220407",
+  "date": "2026-10-07",
+  "note": "§164 answers it (\"a site whose caption fits outranks any whose caption does not, and among those the busiest wins\"); the 60% floor that lets open ground choose among the busy seats departs from that, so cite 0190 drawing and record the floor as a DEVIATION",
+  "pages": {},
   "research": "",
-  "verdict": "IN-STEP"
+  "rests": [
+   "0190-notice-boards-kosatsuba.drawing.html:44bd9b1ac0e11171"
+  ],
+  "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_routes#anchor reach": {
   "code": "f6a082ab76a82b45",
@@ -56166,95 +56175,130 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_seats#roadside first": {
-  "code": "fea11f46ed5af708",
-  "core": "e96a139933b3201a",
-  "date": "2026-10-03",
-  "note": "as claimed",
+  "code": "5ed524fd75f2e9e2",
+  "core": "db09472c978363c0",
+  "date": "2026-10-07",
+  "note": "the 6 ft verge is sampled before the 60 ft band",
   "pages": {
    "0190-notice-boards-kosatsuba.drawing.html": "6046a6a69d20be53"
   },
   "research": "3b4a965d33e6f331",
+  "rests": [
+   "0190-notice-boards-kosatsuba.drawing.html:532df9d7ad5a1f62",
+   "0190-notice-boards-kosatsuba.drawing.html:a98bd6773fc06235"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._route_seats#least offset off the tread": {
-  "code": "27d80a19f65934cc",
-  "core": "82c37130bfc237d2",
-  "date": "2026-10-03",
-  "note": "0190 answers it: \"at a hamlet or a village the board stands 6 ft from the edge of the road\" (the project's figure), so this is not UNRESEARCHED. The 4 px puts a village board at 8 ft, so with verge_only every village seat breaks out on its first step. Cite 0190 and bring the offset within the 6 ft",
+  "code": "7b28845c72ff8932",
+  "core": "205748d564f0417b",
+  "date": "2026-10-07",
+  "note": "§157 answers it (\"6 ft from the edge of the road\"); the 4 px first step puts the board 4 ft off at hamlet scale and 8 ft off at village scale, past the 3 px verge, so verge-first finds no seat there; cite 0190 drawing, and the offset is then DRIFTED",
+  "pages": {},
   "research": "",
+  "rests": [
+   "0190-notice-boards-kosatsuba.drawing.html:a98bd6773fc06235"
+  ],
   "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._route_seats#long axis along the route": {
-  "code": "3115a26e993fa26f",
-  "core": "82c37130bfc237d2",
-  "date": "2026-10-03",
-  "note": "as claimed",
+  "code": "9ca98c000e09770a",
+  "core": "205748d564f0417b",
+  "date": "2026-10-07",
+  "note": "the board is turned to the segment's bearing, broadside to traffic",
   "pages": {
    "0190-notice-boards-kosatsuba.drawing.html": "6046a6a69d20be53"
   },
   "research": "3b4a965d33e6f331",
+  "rests": [
+   "0190-notice-boards-kosatsuba.drawing.html:00c958149f1d98b5",
+   "0190-notice-boards-kosatsuba.drawing.html:00e4ac62d04e42dd"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._route_seats#nearness tie-break": {
-  "code": "a92d1c06d251c78e",
-  "core": "82c37130bfc237d2",
-  "date": "2026-10-03",
-  "note": "as claimed",
+  "code": "211fa412cb6231ac",
+  "core": "205748d564f0417b",
+  "date": "2026-10-07",
+  "note": "no cited page covers it",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._route_seats#off the tread, out of water, in view": {
-  "code": "cc8d6ed501444de2",
-  "core": "82c37130bfc237d2",
-  "date": "2026-10-03",
-  "note": "as claimed",
+  "code": "ebe86a241b6114b8",
+  "core": "205748d564f0417b",
+  "date": "2026-10-07",
+  "note": "seats are on the verge, never on the tread",
   "pages": {
    "0190-notice-boards-kosatsuba.drawing.html": "6046a6a69d20be53"
   },
   "research": "3b4a965d33e6f331",
+  "rests": [
+   "0190-notice-boards-kosatsuba.drawing.html:a98bd6773fc06235"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._route_seats#sampling lattice": {
-  "code": "2b9a483698250fad",
-  "core": "82c37130bfc237d2",
-  "date": "2026-10-03",
-  "note": "as claimed",
+  "code": "d0f69e72d82a885f",
+  "core": "205748d564f0417b",
+  "date": "2026-10-07",
+  "note": "search resolution only",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._route_seats#seat scored by traffic": {
-  "code": "28bf981b5d1102e5",
-  "core": "82c37130bfc237d2",
-  "date": "2026-10-03",
-  "note": "as claimed",
+  "code": "cf6eca2998cd70f2",
+  "core": "205748d564f0417b",
+  "date": "2026-10-07",
+  "note": "counts the buildings near each seat",
   "pages": {
    "0190-notice-boards-kosatsuba.drawing.html": "6046a6a69d20be53"
   },
   "research": "3b4a965d33e6f331",
+  "rests": [
+   "0190-notice-boards-kosatsuba.drawing.html:199e8c96e82623ad",
+   "0190-notice-boards-kosatsuba.drawing.html:2c72b95a28c81d2f",
+   "0190-notice-boards-kosatsuba.drawing.html:e5c42f0010bd2a09"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._route_seats#traffic radii": {
-  "code": "c80cfe4f61ee803a",
-  "core": "82c37130bfc237d2",
-  "date": "2026-10-03",
-  "note": "as claimed",
+  "code": "ba836f64344f07e9",
+  "core": "205748d564f0417b",
+  "date": "2026-10-07",
+  "note": "no page gives the scoring radii",
+  "pages": {},
   "research": "",
+  "rests": [
+   "0190-notice-boards-kosatsuba.drawing.html:e5c42f0010bd2a09"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._route_seats#waterside bonus": {
-  "code": "086cc9196af4e2d6",
-  "core": "82c37130bfc237d2",
-  "date": "2026-10-03",
-  "note": "as claimed",
+  "code": "35e2b08be4de4630",
+  "core": "205748d564f0417b",
+  "date": "2026-10-07",
+  "note": "no cited page covers it",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._route_seats#waterside siting form": {
-  "code": "f375b29bc9dfa1e4",
-  "core": "82c37130bfc237d2",
-  "date": "2026-10-03",
-  "note": "no bundled question answers it (the code comment says \"both attested\"; the 0190 research page is not in the bundle)",
+  "code": "eb58ff024a9ae848",
+  "core": "205748d564f0417b",
+  "date": "2026-10-07",
+  "note": "no cited page covers wells; the code comment calling the form \"attested\" is stale",
+  "pages": {},
   "research": "",
+  "rests": [
+   "0190-notice-boards-kosatsuba.html:b465c07b81f6c576",
+   "0190-notice-boards-kosatsuba.html:f5973f0b2ea1c6cc"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin.fixture_clear_of_water#fixture out of the water": {
@@ -56266,47 +56310,64 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin.place_kosatsuba#board placed last": {
-  "code": "d548eeb9a1ee719b",
-  "core": "ebd8e31f3ec0d602",
-  "date": "2026-10-03",
-  "note": "as claimed",
+  "code": "6dd82f11b42b1c68",
+  "core": "cc33be59a63c3b1b",
+  "date": "2026-10-07",
+  "note": "after the crop, against the view",
   "pages": {
    "0190-notice-boards-kosatsuba.drawing.html": "6046a6a69d20be53"
   },
   "research": "3b4a965d33e6f331",
+  "rests": [
+   "0190-notice-boards-kosatsuba.drawing.html:170cd7ce98fd6d9a"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin.place_kosatsuba#every settlement carries a board": {
-  "code": "cc166c677f69f653",
-  "core": "ebd8e31f3ec0d602",
-  "date": "2026-10-03",
-  "note": "as claimed",
+  "code": "5409e5039f972d2e",
+  "core": "cc33be59a63c3b1b",
+  "date": "2026-10-07",
+  "note": "hamlets included",
   "pages": {
    "0190-notice-boards-kosatsuba.drawing.html": "6046a6a69d20be53"
   },
   "research": "3b4a965d33e6f331",
+  "rests": [
+   "0190-notice-boards-kosatsuba.drawing.html:10ca8908cd449c17",
+   "0190-notice-boards-kosatsuba.drawing.html:f602b2cd2b391398"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin.place_kosatsuba#placement knob at the lane tiers": {
-  "code": "34f07662aae7986b",
-  "core": "ebd8e31f3ec0d602",
-  "date": "2026-10-03",
-  "note": "towns/cities fixed to [\"center\"], but 0190.html attests a town's boards \"at a town's central crossroads, at its entrances, at the foot of bridges\" - several forms, should roll",
+  "code": "452593b01911f974",
+  "core": "cc33be59a63c3b1b",
+  "date": "2026-10-07",
+  "note": "towns are fixed to `[\"center\"]`, but the page attests town entrances and bridge feet as well (\"at a town's central crossroads, at its entrances, at the foot of bridges\"; Ogose's board at its southern entrance); a choice between attested forms must be rolled",
   "pages": {
    "0190-notice-boards-kosatsuba.html": "d5c6d0418e52d1fa"
   },
   "research": "348847d2a9750e4b",
+  "rests": [
+   "0190-notice-boards-kosatsuba.html:71d64edbc2411ed0",
+   "0190-notice-boards-kosatsuba.html:b465c07b81f6c576",
+   "0190-notice-boards-kosatsuba.html:cd8d9ce0b74bb55f",
+   "0190-notice-boards-kosatsuba.html:ebb781f8589560e1"
+  ],
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin.place_kosatsuba#probe size": {
-  "code": "1ded9deb0f5fe479",
-  "core": "ebd8e31f3ec0d602",
-  "date": "2026-10-03",
-  "note": "0190 draws the board at 16 x 6 ft and has the search test a 7 x 3 ft face; the code probes 12 x 5 ft (floored at 11 px), which is neither",
+  "code": "a28105ccbeaaa09b",
+  "core": "cc33be59a63c3b1b",
+  "date": "2026-10-07",
+  "note": "the code probes 12 x 5 ft (`w = max(self.px(12), ...)`, `h = w * 5 / 12`), but §172 says the search \"uses a face of 7 by 3 ft\" and §170 draws the frame at 16 by 6 ft",
   "pages": {
    "0190-notice-boards-kosatsuba.drawing.html": "6046a6a69d20be53"
   },
   "research": "3b4a965d33e6f331",
+  "rests": [
+   "0190-notice-boards-kosatsuba.drawing.html:00e4ac62d04e42dd",
+   "0190-notice-boards-kosatsuba.drawing.html:4000a252d8f22fd1"
+  ],
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin.place_punishment_spot#caption seat": {

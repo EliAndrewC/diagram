@@ -327,25 +327,27 @@ gather into one (`tree.gathered_zigzag`), and the router lays another.
 - `l7r/diagram/settlement/homestead_parts/wood_share.py::WoodShares.__init__#copse clump size` (UNCLAIMED, E0): the drawn size of a copse clump (`COPSE_CLUMP_BS` 22 bs)
 - `l7r/diagram/settlement/homestead_parts/wood_share.py::WoodShares.__init__#copse seat pitch` (UNCLAIMED, E0): the spacing between copse seats (`SEAT_PITCH_BS` 11*sqrt(2) bs)
 
-### Wave 9: an open regression held for the GM (Kuwabata's zigzag across a joint)
+### Wave 9: Kuwabata's zigzag across a joint - one row held (FR-004), and what the hold costs
 
-Wave 9's values move Kuwabata's homesteads: either half of the wave alone (the homestead layout rows, or the grove and field
-rows) produces it, so no single value can be held. On the new layout, house (4051.7, 1727)'s access lane rounds its
-neighbor's forecourt corner and its foot stands 5 ft from that neighbor's door end; the knot pass gathers the foot onto the
-door end (0081: ends within 25 ft are one point), and the two lanes walk as a Z (turns of 110 and 86 degrees within 31 ft) -
-`test_no_zigzag_straddles_a_joint[kuwabata]`. Measured, rule by rule:
+Wave 9's values moved Kuwabata's homesteads so that one household's only way rounded its neighbor's forecourt and the knot
+pass gathered its foot onto that neighbor's door end: a zigzag across the joint (`test_no_zigzag_straddles_a_joint`). No joint
+pass can mend it (the settle draws a tree lane as judged; the T's foot is the joint itself; the shortcut crosses the forecourt),
+and refusing such ways at the seating's judge left the reference at seed 47 without its field way (no lawful field run from the
+network that remained). BISECTED BY ROW over the pre-wave engine: the yard privy's step and the front privy's step each produce
+it alone over the clean set; with every other row of the wave kept, holding the YARD step alone clears it (the front step at the
+page's 8 ft is harmless there), and an edge at 7 ft ("about a ken") does not. The yard step is HELD at its pre-wave value,
+re-tiered E3 after the found row that re-seats such a household (`gap_ways.py::_way_for#a household whose only ways zigzag
+re-seated`), its claim stating the drift and naming it (D8). With it held the pool gate is green and Inashiro's and Sawada's
+knots are gone (their strict xfails lifted).
 
-- the joint pass's T and its moved-back joint: the T's foot is the joint itself (the foot stands behind the door lane's first
-  leg), and moving the joint drops the door end (`keeps_the_web`); a T on the next leg is a needle join the web refuses; and
-  every joint pass is undone by the settle, which draws a tree lane as judged (`settle_tree`)
-- the shortcut that drops the overshoot crosses the neighbor's forecourt (the overlap matrix)
-- refusing such a way at the seating's judge mends Kuwabata (the household re-seated) but leaves the reference at seed 47
-  without its field way (`WebRefused`: two households' ways refused, the field way hosted on them)
-- a preference instead (the judge REPORTS the gathered zigzag, onto a fixed door end or a junction only, and the gap pass
-  takes such a way only where no other exit is admitted): seed 47 rolls, but Kuwabata's household has no other exit, so its Z
-  stands - and the bookends read band 3 (20 households +6.9%, seed 39 +21.8%: every exit tried for a household whose first
-  way zigzags). WITHDRAWN: it mended nothing on the pool at that price
+WHAT THE HOLD COSTS, MEASURED: on the perf bookends three scaling seeds refuse their web with the yard step held (20 households
+seed 39, 40 households seeds 4 and 25: `WebRefused`, farmhouses or the field off the network), and none refuse with it at the
+page's value - so the wave holds a trade only the GM can rule on: the pool gate (Kuwabata) against three measured scaling rolls,
+on top of a band the sign-off already owes. Both exits are engine work this wave does not own (the re-seat rule; the web's
+reach on those three rolls).
 
-The remaining exits (constitution XIII): a re-seat rule for a household whose only ways zigzag that keeps the field way's host
-(hours of work, sketch: in the gap pass, when only held ways remain, release the household's seat to the seating's re-seat
-queue before the field way is laid), or a GM waiver. Wave 9 stays unpushed in the clone until the GM rules.
+- `l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#manure beyond the privy` (DRIFTED, E2): step a heap beyond a flank privy out from the house (0047 §84: on the side away from the house), not along the flank (`out_` steps only along y)
+- `l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_for#traffic floor` (MISLABELED, E0): 0190's drawing page answers it (a caption that fits outranks any that does not, and among those the busiest wins): the 60% floor that lets open ground choose is a DEVIATION through the exception path, or the floor goes
+- `l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_for#anchored board band` (UNCLAIMED, E0): an anchored board within 60 ft of the nearest seat to its anchor (KOSATSUBA_ANCHOR_BAND_FT)
+- `l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_for#handover band` (UNCLAIMED, E0): an entrance board within 20 ft of the nearest seat to the handover (KOSATSUBA_HANDOVER_BAND_FT)
+- `l7r/diagram/settlement/homestead_parts/wood_share.py::copse_keepouts#south strip in feet` (DRIFTED, E1): scale the south strip's `sun_depth` (feet) by `ppf` as the east and west lanes are (copse_keepouts, wood_share.py:114)
