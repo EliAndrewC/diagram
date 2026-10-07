@@ -6174,76 +6174,106 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/belt.py::belt_polygon#belt on the windward fringe": {
-  "code": "b3499debf6dd442d",
-  "core": "55b0e1d474996702",
-  "date": "2026-10-03",
-  "note": "fringe columns, floored at the median and the centroid",
+  "code": "69bb84645aa8754f",
+  "core": "f0d341584f49b8af",
+  "date": "2026-10-07",
+  "note": "band hugs each column's windward-most house, floored at max(median u, 0) so it never falls behind the centroid",
   "pages": {
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fbd35c7766637fc3"
   },
   "research": "1f42835678daf333",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:31f1ea9e18204d6a",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:43aedefed41c4f79",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:5e9ac2daf3925f70",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:8e692f283f7947e4",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:dde93f148061b296"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/belt.py::belt_polygon#connector and field spur lanes cross the belt as a way through, not moved past": {
-  "code": "bc0506fdb7f475e7",
-  "core": "55b0e1d474996702",
-  "date": "2026-10-03",
-  "note": "0072: the planting resumes on both sides",
+  "code": "6120ee4f1f63f398",
+  "core": "f0d341584f49b8af",
+  "date": "2026-10-07",
+  "note": "connector/spur lanes are left out of the past-the-lanes move, so they cross the band and the planting resumes either side",
   "pages": {
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fbd35c7766637fc3"
   },
   "research": "1f42835678daf333",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:19b6b8f457366d55",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:301a35716bf73526",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:79d09be286e4e66b"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/belt.py::belt_polygon#no belt under three houses": {
-  "code": "5b0ef41784f40709",
-  "core": "55b0e1d474996702",
-  "date": "2026-10-03",
-  "note": "given nowhere",
+  "code": "a376dbee8478c258",
+  "core": "f0d341584f49b8af",
+  "date": "2026-10-07",
+  "note": "no cited page gives a house-count threshold",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/belt.py::belt_polygon#off the afternoon sun-lane": {
-  "code": "e67c32bb499bab28",
-  "core": "55b0e1d474996702",
-  "date": "2026-10-03",
-  "note": "face offset by the lane, the clump refusal guarantees",
+  "code": "cc0ad50696a5e5de",
+  "core": "f0d341584f49b8af",
+  "date": "2026-10-07",
+  "note": "near face moved back by -wx*(west sun lane + 12 ft plot overhang); clump refusal stays the guarantee, as the page says",
   "pages": {
    "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03"
   },
   "research": "3874df1f1301e65f",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:38b090ebbcaca19b",
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:a5ccfefd1cc58394",
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:b827c5a10b15cbbc",
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:cf77608be5e193f8",
+   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:07682c227be39db1"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/belt.py::belt_polygon#off the crop": {
-  "code": "7813df52bcf3ce51",
-  "core": "55b0e1d474996702",
-  "date": "2026-10-03",
-  "note": "the ladder is given nowhere",
+  "code": "41c27de38f08e5ab",
+  "core": "f0d341584f49b8af",
+  "date": "2026-10-07",
+  "note": "the 22-60 ft step-back and 0.6 shortening ladder are unattested; pages only keep paddies open",
+  "pages": {},
   "research": "",
+  "rests": [
+   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:b504bfc778e63907"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/belt.py::belt_polygon#one village belt for the clustered form only": {
-  "code": "e23dffa42d22746c",
-  "core": "55b0e1d474996702",
-  "date": "2026-10-03",
-  "note": "returns [] when not nucleated, as 0031 drawing and 0071 say",
+  "code": "1a7d19927b0adbf9",
+  "core": "f0d341584f49b8af",
+  "date": "2026-10-07",
+  "note": "returns no belt when not _nucleated; the record makes it one shared belt or a grove per farm, never both",
   "pages": {
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d",
    "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.html": "5505f4d0f0752806"
   },
   "research": "be5e2d92a73b3b19",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7e82a3d8b8b3ed66",
+   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:a29084862058742f",
+   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.html:d05a175e3f65183f"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/belt.py::belt_polygon#shoulder past the end houses": {
-  "code": "ccfbc321f5b10ff2",
-  "core": "55b0e1d474996702",
-  "date": "2026-10-03",
-  "note": "90 ft is given nowhere",
+  "code": "cff391b908fdf59b",
+  "core": "f0d341584f49b8af",
+  "date": "2026-10-07",
+  "note": "the 90 ft shoulder is unattested; pages only say a belt runs on past the frame",
+  "pages": {},
   "research": "",
+  "rests": [
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:9e9583030b309e84"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/belt.py::far_envelope#belt geometry": {
@@ -6266,37 +6296,46 @@
   "triaged": "2026-10-05",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/belt.py::past_the_lanes#belt keeps its depth past a back lane": {
-  "code": "a74bce148057c771",
-  "core": "24a8c63cf9e54ad0",
-  "date": "2026-10-03",
-  "note": "keeps the 80-120 ft depth",
-  "pages": {
-   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html": "f32599678d1cb241"
-  },
-  "research": "90cf9ff106c766c9",
-  "triaged": "2026-10-05",
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/belt.py::past_the_lanes#lane clearance": {
-  "code": "494c4961d39f234a",
-  "core": "24a8c63cf9e54ad0",
-  "date": "2026-10-03",
-  "note": "unresearched, nothing answers it",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/belt.py::past_the_lanes#no belt in the marsh": {
-  "code": "69a8fee92041d6df",
-  "core": "24a8c63cf9e54ad0",
-  "date": "2026-10-03",
-  "note": "the code keeps the moved band out of the marsh because \"no woody cover stands\" there, but 0074 drawing says \"A shelter belt's trees in the marsh are drawn as alder\"; cite the alder rule and allow the move, or label this a DEVIATION the drawing page records",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/belt.py::past_the_lanes#belt into the marsh as alder": {
+  "code": "bae24b6a110cbaf4",
+  "core": "54163d5179638643",
+  "date": "2026-10-07",
+  "note": "band moves with no marsh check; its trees in the marsh are drawn as alder",
   "pages": {
    "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "fb7c4bec76071ea3"
   },
   "research": "a44790630d28af23",
-  "triaged": "2026-10-04",
-  "verdict": "DRIFTED"
+  "rests": [
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:66fe4489ce37ece6",
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:c7f27395e395df62",
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:d4d9c7851e8a97bc"
+  ],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/belt.py::past_the_lanes#belt keeps its depth past a back lane": {
+  "code": "1215380b17c04d12",
+  "core": "54163d5179638643",
+  "date": "2026-10-07",
+  "note": "the column moves upwind past the lane and keeps its full depth, honouring the 80-120 ft never-thinner rule",
+  "pages": {
+   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html": "f32599678d1cb241"
+  },
+  "research": "90cf9ff106c766c9",
+  "rests": [
+   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:21b4ce77ba7bcd02",
+   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:d3ed8cad5ddc7b21"
+  ],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/belt.py::past_the_lanes#lane clearance": {
+  "code": "fa6998bb0e829228",
+  "core": "54163d5179638643",
+  "date": "2026-10-07",
+  "note": "no page gives a clearance from a lane",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/belt.py::round_the_houses#near face clear of every house": {
   "code": "0756ec566a32616e",
@@ -6698,20 +6737,20 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#a ring with room for a wood": {
-  "code": "7d316854eac0ffb4",
-  "core": "50c356f4fed00101",
+  "code": "3fce74d85a381984",
+  "core": "50b65f6f7a13f679",
   "date": "2026-10-07",
-  "note": "len(woodland_room) < WOODLAND_MIN_CROWNS (5) refused; the page gives no minimum stand",
+  "note": "the 5-crown minimum is unattested",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#aspect and bearing": {
-  "code": "c23051d1d79a2644",
-  "core": "50c356f4fed00101",
+  "code": "81e07c7f40f77f47",
+  "core": "50b65f6f7a13f679",
   "date": "2026-10-07",
-  "note": "_excess 1.2 gives up to 2.2:1, bearing is fall + 90 deg +/-20 deg; the page is silent on aspect and bearing",
+  "note": "aspect 1 to 2.2 and bearing across the fall +/-20 deg match the code; no page gives a lot's proportion",
   "pages": {},
   "research": "",
   "rests": [
@@ -6719,41 +6758,59 @@
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#commons legibility floor": {
-  "code": "668c43755c0c8096",
-  "core": "50c356f4fed00101",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#beyond the fields preferred": {
+  "code": "fc21d281dd525596",
+  "core": "50b65f6f7a13f679",
   "date": "2026-10-07",
-  "note": "the rung is skipped, the candidates are clamped to the floor and a ring_span under 120 ft is dropped; the page gives no lot size",
+  "note": "reached_across seats preferred, others still offered when none",
+  "pages": {
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "ecf6ed4b609ca690"
+  },
+  "research": "24afacf28c5d0294",
+  "rests": [
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:51f3d4bae1a3978e",
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:6a3373d9e6527e72",
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:b9c8109469f1d0d3"
+  ],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#commons legibility floor": {
+  "code": "5284a86b46df825a",
+  "core": "50b65f6f7a13f679",
+  "date": "2026-10-07",
+  "note": "the 120 ft floor is unattested",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#crop set-back": {
-  "code": "7230ee789293d083",
-  "core": "50c356f4fed00101",
+  "code": "5f51b81bc8d4a67d",
+  "core": "50b65f6f7a13f679",
   "date": "2026-10-07",
-  "note": "80/180 px, relaxed to 40/100, as claimed; no cited page answers it",
+  "note": "no page gives a wood's distance from the fields (the 50 ft sun rule concerns yards and beds)",
   "pages": {},
   "research": "",
-  "rests": [],
+  "rests": [
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:106fb9ebea718da7"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#keep-outs": {
-  "code": "c5edd86e44ecd668",
-  "core": "50c356f4fed00101",
+  "code": "3f3af75d5981adaf",
+  "core": "50b65f6f7a13f679",
   "date": "2026-10-07",
-  "note": "150/90/120/70/60/110 as claimed; no cited page answers them",
+  "note": "code radii match the label; no page gives these distances",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#line follows its bounds": {
-  "code": "51bc1c0bf9e818ba",
-  "core": "50c356f4fed00101",
+  "code": "06fb1006a2ba9069",
+  "core": "50b65f6f7a13f679",
   "date": "2026-10-07",
-  "note": "follow_the_bounds/lot_follows_its_bounds within the reach of a lane, a brook or a field, as the page's 45 ft GUESS",
+  "note": "follows lanes, brooks and field edges within about 45 ft, the page's own GUESS",
   "pages": {
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "ecf6ed4b609ca690"
   },
@@ -6764,10 +6821,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#mostly dry": {
-  "code": "9d5c8633b4c29544",
-  "core": "50c356f4fed00101",
+  "code": "0209ecba0cef2d4e",
+  "core": "50b65f6f7a13f679",
   "date": "2026-10-07",
-  "note": "parcel_wet_share > WET_SHARE_CAP (0) refuses any wet ring, and the marsh keep-out applies too",
+  "note": "a ring with any wet share is refused; low wet ground is left to grass",
   "pages": {
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "ecf6ed4b609ca690"
   },
@@ -6777,27 +6834,11 @@
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#near side of the field preferred": {
-  "code": "731101c54ccb5e00",
-  "core": "50c356f4fed00101",
-  "date": "2026-10-07",
-  "note": "`_near_side` keeps seats NOT reached across the field from the houses, but the page puts the wood \"on the nearest slope beyond the fields from the houses\" and, on the level, \"the wood keeps to the far side of the fields from the houses\"; the preference contradicts the finding and should favour the far side, or be dropped",
-  "pages": {
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "ecf6ed4b609ca690"
-  },
-  "research": "24afacf28c5d0294",
-  "rests": [
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:51f3d4bae1a3978e",
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:6a3373d9e6527e72",
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:b9c8109469f1d0d3"
-  ],
-  "verdict": "DRIFTED"
- },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#nearest seat preferred": {
-  "code": "57d52e5a821722e6",
-  "core": "50c356f4fed00101",
+  "code": "4751164ff3429b24",
+  "core": "50b65f6f7a13f679",
   "date": "2026-10-07",
-  "note": "within each tier the nearest seat wins (-hypot to the cluster), as in \"the nearest slope beyond the fields\"",
+  "note": "nearest to the houses wins within each tier and within the beyond-the-fields set",
   "pages": {
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "ecf6ed4b609ca690"
   },
@@ -6808,62 +6849,62 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#on the page": {
-  "code": "1d6bd013cd697a36",
-  "core": "50c356f4fed00101",
+  "code": "e5c8f570f251972d",
+  "core": "50b65f6f7a13f679",
   "date": "2026-10-07",
-  "note": "the 0.72 share inside the view is framing, a convention",
+  "note": "the in-view share is a framing rule, purely how the map is shown",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:9e9583030b309e84"
+  ],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#parcel count and size": {
+  "code": "d29d7d7caccbe1a4",
+  "core": "50b65f6f7a13f679",
+  "date": "2026-10-07",
+  "note": "the 250 ft base, 0.9-1.1 per-map ladder and rungs 0.8/0.64/0.5 match the code; unattested",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#parcel count and size": {
-  "code": "d797b34ba862740f",
-  "core": "50c356f4fed00101",
-  "date": "2026-10-07",
-  "note": "250 ft, ladder 0.9-1.1, rungs 0.8/0.64/0.5 as claimed; the page says only \"a few patches\"",
-  "pages": {},
-  "research": "",
-  "rests": [
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:b9c8109469f1d0d3"
-  ],
-  "verdict": "IN-STEP"
- },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#parcels kept apart": {
-  "code": "23134dcec0a6f2d7",
-  "core": "50c356f4fed00101",
+  "code": "fe7ad0a6a76e90e0",
+  "core": "50b65f6f7a13f679",
   "date": "2026-10-07",
-  "note": "1.15 + 1.35*hjit gives 1.15-2.50 as claimed; no cited page answers it",
+  "note": "exclusion size*(1.15+1.35*jit) matches; unattested",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#per-parcel size bands": {
-  "code": "5469a24ec01db0ba",
-  "core": "50c356f4fed00101",
+  "code": "33ce75539bae9de7",
+  "core": "50b65f6f7a13f679",
   "date": "2026-10-07",
-  "note": "_f stays within 0.82-1.18, then a 0.84 try, as claimed; no cited page answers it",
+  "note": "0.82+0.36*band and the 0.84 smaller try match; unattested",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#scan reach": {
-  "code": "8d493447028d60ac",
-  "core": "50c356f4fed00101",
+  "code": "9448234ea580de0e",
+  "core": "50b65f6f7a13f679",
   "date": "2026-10-07",
-  "note": "content_box pad 210 as claimed; no cited page answers it",
+  "note": "the 210 px pad is unattested",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#where the fuel wood stands": {
-  "code": "61d59863d289ab02",
-  "core": "50c356f4fed00101",
+  "code": "1316e0842d604c25",
+  "core": "50b65f6f7a13f679",
   "date": "2026-10-07",
-  "note": "woodland_tier ranks ground above the fields first, then the level; tier 2 (below the houses) is dropped",
+  "note": "woodland_tier ranks seats above the fields first, then level ground, and drops seats below the houses",
   "pages": {
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "ecf6ed4b609ca690"
   },
@@ -6876,10 +6917,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#woods not in a ruled line": {
-  "code": "9e07a46f6244da8d",
-  "core": "50c356f4fed00101",
+  "code": "5780c651aba31315",
+  "core": "50b65f6f7a13f679",
   "date": "2026-10-07",
-  "note": "seat_off_the_row and in_a_ruled_line; no cited page answers it",
+  "note": "no page speaks to woods in a row",
   "pages": {},
   "research": "",
   "rests": [],

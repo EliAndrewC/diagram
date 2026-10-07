@@ -398,7 +398,7 @@ def test_the_scan_draws_every_lot_following_the_brook_beside_it() -> None:
     free = _scan(plan, count=3)
     assert free, "non-vacuity: the open canvas seats a parcel"
     x0 = min(p[0] for p in free[0])
-    brook = [(x0 - 90.0, 0.0), (x0 - 90.0, float(plan.H))]
+    brook = [(x0 - 75.0, 0.0), (x0 - 75.0, float(plan.H))]  # 75 ft: within the lot's reach of the first parcel (wave 19 seats the woods beyond the field, which moved that parcel)
     got = _scan_by_brook(plan, brook)
     bounds = parcels.lot_bounds([], [brook], [], 80.0)
     assert got and all(parcels.lot_follows_its_bounds(r, bounds) for r in got)
