@@ -376,7 +376,7 @@ class CombMixin:
             bank beside the source brook - GUESS: a bund's width, 3 px, past the drawn 7 px brook's bank (7/2 + 3)
             plot size and crop - NONE: taken from the net as build_comb laid them
             fallback watercourse widths - UNRESEARCHED: stream 9, channel 2.5, canal 14 px where a record carries no width
-            nothing built or planted on a dry plot - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: each drawn hem plot registered as blocked ground (`block_polys`) and dry ground (`dry_polys`)
+            nothing built or planted on a dry plot - UNRESEARCHED: each drawn hem plot registered as blocked ground (`block_polys`) and dry ground (`dry_polys`)
             dry plot ink - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: the crop's own fill, furrowed, a tan edge"""
         from l7r.diagram.waterfields import hem_on_paddy
 
@@ -629,7 +629,7 @@ class CombMixin:
             pond feeder width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: about 3 ft at the map's scale, twice the 1.5 ft floor
             planted pond bank - research/questions/0061-reservoir-ponds-tameike.drawing.html: every bank drawn bare; the bank planted sparsely with mulberry and cudrania is never rolled
             feeder brook - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: a stream from the map's edge to the sluice, on past it where `to` says
-            feeder brook width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html, research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the brook drawn 7 px wide, in px rather than feet"""
+            feeder brook width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html, research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the brook drawn 7 ft wide at the map's scale"""
         pond_rec: Any = None
         if source.get("kind") == "pond":
             pcx, pcy, prx, pry = source["pond"]

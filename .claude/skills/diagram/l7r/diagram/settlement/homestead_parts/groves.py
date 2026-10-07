@@ -713,7 +713,7 @@ class GrovesMixin:
         are seeded by position (stable across regenerations). Canopy count scales with footprint area.
 
         Research:
-            windbreak conifer share - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.html: 48% of a windbreak's crowns cedar, the dominant tree (Takehara)
+            windbreak conifer share - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.html: 48% of a windbreak's crowns cedar (the 1987 Kashima count), the dominant tree (Takehara)
             crowns per clump - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: one crown per `GROVE_CROWN_AREA` of clump (48 sq px at the town grain), rounded, with no floor and no cap
             bamboo under the crowns - research/questions/0075-bamboo-groves-chikurin.drawing.html: 8% of a windbreak clump,
                 inked only in the gaps; none in the dooryard or alder mixes
@@ -723,7 +723,7 @@ class GrovesMixin:
                 mean crown radius, 0.72-1.05 or a quarter 1.25-1.7 of it, a conifer 15% wider
             thin band end to end - UNRESEARCHED: a thin band's few trees spread along its length
             crown over no roof or wellhead - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html, research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: no crown on a building, and none round a wellhead in a belt
-            bamboo patch forced - UNRESEARCHED: an item inside the farm's bamboo patch (`bamboo_box`) drawn as bamboo, in any mix
+            bamboo patch forced - GUESS research/questions/0075-bamboo-groves-chikurin.drawing.html: a farm grove keeps its bamboo as a patch inside it, an item there drawn as bamboo in any mix
             crowns out of the plots' sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: every mark held out of the sun ground, bamboo at BAMBOO_SHADE_FT
             crown under no crown - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html
             alder in the marsh - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html
@@ -752,7 +752,7 @@ class GrovesMixin:
             # items, and each is drawn only where a plan view would see it - in a gap between the crowns or past the
             # clump's edge - as the stand glyph's culm mark (`bamboo_stand`, a map drawing convention), not a crown.
             # The share is a GUESS (no page gives one; "a grove is mostly trees with bamboo among them"): 8% of the
-            # items, taken from the broadleaf so the cedar backbone keeps its 38%. The dooryard and alder mixes carry none.
+            # items, taken from the broadleaf so the cedar backbone keeps its 48%. The dooryard and alder mixes carry none.
             # The village belt's two forms (269 B30) carry the same bamboo share; a conifer-led belt's conifers are its rows,
             # seated for the whole belt by `_belt_ranks`, so its clumps throw only the lesser crowns; a mixed broadleaf belt has none.
             b_th = (

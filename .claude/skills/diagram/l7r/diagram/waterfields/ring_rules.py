@@ -70,8 +70,8 @@ Research: lapped plots allowed - research/questions/0014-bunds-between-the-paddi
 """
 
 MAX_STEPS = 0
-"""A STAIRCASE is more than one sideways step on a ring; a single step is one awkward corner where a scrap had
-exactly one home (see `test_a_bund_does_not_build_a_flight_of_steps` for the GM's report and the measurement).
+"""A STAIRCASE is any sideways step on a ring (feature 328: 0014's drawing page, "never step sideways"; a single step was
+allowed until then as one awkward corner where a scrap had exactly one home - `test_a_bund_does_not_build_a_flight_of_steps`).
 
 Research: sideways steps - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: no ring keeps a sideways step
 """

@@ -80,7 +80,7 @@ def _dry_fields(
         crop per plot - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: one of four crops
         neighbor keeps the crop - UNRESEARCHED: a plot keeps the last plot's crop with a 55% chance, about 0.66 once a re-roll lands on the same crop
         row direction - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: each column's tract heading, each plot turned up to TRACT_PLOT_TURN_RAD
-        off the water and the frame - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html, research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: a cell dropped inside any supply canal's bank, its half-width plus `CANAL_BERM_FT`
+        off the water and the frame - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html, research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: held at 0.5 px of a supply stroke's painted edge, short of the page's bank (its half-width plus `CANAL_BERM_FT`) - at the bank the freed ground re-lays Inashiro's toe marsh with a sharp corner on open ground; the found row waterfields/carve.py::_dry_fields#a hem that keeps its ground inside the berm
         keep-out and frame margin - NONE: a cell in a keep-out or within 12 px of the frame is dropped
     """
     plots = []
@@ -213,7 +213,7 @@ def _dry_fields(
         through on three cohort seeds. **A guard that DELETES a map feature hands its footprint to
         the next placer, so its blast radius is never confined to the thing it deletes.**"""
         gap, halfw = _bank(q)
-        return gap - halfw < berm_px  # inside the canal's bank (feature 328: the page's berm, where 0.5 px let a plot stand in it)
+        return gap - halfw < 0.5  # HELD (feature 328 wave 10): at the page's berm Inashiro's toe marsh took a sharp corner on open ground
 
     def _quad_in_berm(quad: Poly) -> bool:
         """Corners AND every edge, at a 3 px step. A cell can keep four dry corners while an EDGE

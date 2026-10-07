@@ -72,7 +72,7 @@ class BoardsMixin:
         (Edo's principal board stood at Nihonbashi, the bridgehead). NEVER defaulted to the
         magistrate's manor gate: the manor's own board (Mode A program, buildings.md) posts the
         bench's OUTPUT (verdicts, bounties) for people who come to court, and the manor sits at
-        the settlement edge where feet do not pass. True size ~12x5 ft (a 7x3 ft board under a
+        the settlement edge where feet do not pass. True size 16 x 6 ft, the frame drawn (a 7 x 3 ft board under a
         small roof); the label carries the read.
 
         `rot` IS THE ROAD'S BEARING, not a free choice. The glyph's long axis is the board's
@@ -85,14 +85,14 @@ class BoardsMixin:
         beside the road, like the fire tower.
 
         The DRAWN glyph is a LOCATION MARKER at the coarse tiers (GM call 2026-07-24, taking the
-        escape research/questions/0190-notice-boards-kosatsuba.drawing.html documents): the true 12x5 ft frame draws 6x2.5 px at village grain
+        escape research/questions/0190-notice-boards-kosatsuba.drawing.html documents): the true 16 x 6 ft frame draws 8 x 3 px at village grain
         and 4x1.7 px at city grain - at city scale, rotated upright, that is a 1.7 px sliver that
         reads as gate hardware, not a feature (Nagahara: two of its three boards were invisible
         until the GM went looking, and the one that read did so only by its label). So the glyph
         is floored at KOSATSUBA_MARKER_MIN_PX on its long axis with the 12:5 aspect preserved -
         the wells' doctrine exactly (SKILL.md 'to scale'): the marker denotes the board's
         TO-SCALE LOCATION with legible pixels that are not themselves claimed to be to scale. The
-        floor NEVER shrinks a board, so hamlets and towns (1 ft/px) still draw the true 12x5 px;
+        floor NEVER shrinks a board, so hamlets and towns (1 ft/px) still draw the true 16 x 6 px;
         only village and city grain lift. The manifest keeps the TRUE w/h (so a size audit reads
         real feet) and records the drawn box as vw/vh, which is what the overlap checks and the
         placement reservation use - the pixels that can actually collide.

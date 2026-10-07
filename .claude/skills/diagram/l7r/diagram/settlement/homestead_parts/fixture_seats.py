@@ -478,8 +478,8 @@ def _seats(
             72.7%, else the four attested places
         manure beyond the privy - research/questions/0042-manure-heaps-and-compost-kyuhi.drawing.html: jittered a few feet;
             behind or beside the house where there is no privy
-        manure heap fallback spots - UNRESEARCHED: beside the privy at 1.1 and 1.9 of its width, then 10 ft further out; with
-            no privy, at 0.3 of the house's half-width and half-depth
+        manure heap fallback spots - GUESS research/questions/0042-manure-heaps-and-compost-kyuhi.drawing.html: beside the privy at 1.1 and 1.9
+            of its width, then 10 ft further out; with no privy, at 0.3 of the house's width and depth
         retirement house - UNRESEARCHED: off the back wall or a flank, the side rolled
         coop seats - research/questions/0045-chickens-and-chicken-coops.drawing.html: the east flank, the back wall or the
             west flank, rolled

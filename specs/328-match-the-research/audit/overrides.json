@@ -1541,5 +1541,17 @@
   "found": "wave 9 re-check (tiered by its work at T38b)",
   "moved": "T38b: tiered by its work - an honest claim states a drift against 0190, and closing it changes the selection rule in two functions in two modules (the floor in _board_for, the open-before-shaded walk in choose_board), so it is not a relabel.",
   "tier": "E3"
+ },
+ ".claude/skills/diagram/l7r/diagram/waterfields/carve.py::_dry_fields#off the water and the frame": {
+  "after": [
+   ".claude/skills/diagram/l7r/diagram/waterfields/carve.py::_dry_fields#a hem that keeps its ground inside the berm"
+  ],
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/waterfields/carve.py"
+  ],
+  "fix": "drop a cell that falls inside any supply canal's bank (local half-width + CANAL_BERM_FT), not only within 0.5 px of the painted edge",
+  "flag": "",
+  "moved": "wave 10 gate: held - at the canal's bank Inashiro's toe marsh takes a sharp corner on open ground (bisected by group: the carve alone); waits on the hem row",
+  "tier": "E3"
  }
 }

@@ -353,3 +353,28 @@ and 40 households`), its claim stating the drift. Kuwabata stays clean with both
 - `l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_for#handover band` (UNCLAIMED, E0): an entrance board within 20 ft of the nearest seat to the handover (KOSATSUBA_HANDOVER_BAND_FT)
 - `l7r/diagram/settlement/homestead_parts/wood_share.py::copse_keepouts#south strip in feet` (DRIFTED, E1): scale the south strip's `sun_depth` (feet) by `ppf` as the east and west lanes are (copse_keepouts, wood_share.py:114)
 - `l7r/diagram/settlement/homestead_parts/fixture_seats.py::PRIVY_FRONT_STEP_FT#front privy off the front wall` (MISLABELED, E0): relabel GUESS 0047 - the page records its 8 ft as a guess
+
+## Wave 10 (2026-10-07)
+
+Wave 10 wrote the open in-scope E0 claims and took the in-scope E1 rows (the notice board, the lanes' stubs, the brook, the clump's crowns, the fork triangle, the drain, the berm, the polder, the rings, the copse's south strip); the four DEVIATION relabels were ruled NOT LEGITIMATE and re-tiered. The re-checks found the rows below (`audit/found-wave10.jsonl`), tiered provisionally by verdict until a read by their work.
+
+- `l7r/diagram/settlement/structures/fixtures/boards.py::BoardsMixin.board_record#marker floor` (DRIFTED, E2): floor the drawn marker only at city scale (0190 records the oversized marker there alone), not at a village's grain
+- `l7r/diagram/settlement/structures/fixtures/board_seat.py::entrance_seat_ok#entrance board near the entrance` (NEEDS-RESEARCH, E4): research first: 0190 gives no distance from an entrance; the code holds the reach plus the band, 120 ft (the claim says 160)
+- `l7r/diagram/hamletgen/water/polder.py::_polder_candidate#surveyed block` (DRIFTED, E2): hold the block's outer edge to its line (0019/0022: the wander fades to nothing at the fixed outer edge); the wander ladder and the 0.86 fill test are not on the page, and the axis-aligned box misreads an oblique block
+- `l7r/diagram/waterfields/polder.py::_apex#polder plumbing` (MISLABELED, E0): cite 0005 (no parcel tapers to a point): the unit applies the 25 degree threshold and picks the sharpest convex corner first
+- `l7r/diagram/waterfields/polder.py::build_polder#gaps` (DRIFTED, E1): scale the default gaps by ftpx as the module is (a 3 ft bund and an 8 ft corridor at any scale)
+- `l7r/diagram/waterfields/polder.py::build_polder#low rows wet` (CANNOT-TELL, E0): re-check with _polder_parcels' tint code in the bundle (0007: every low plot, not the two lowest rows)
+- `l7r/diagram/waterfields/carve.py::_dry_fields#end plot split` (UNCLAIMED, E0): an end plot split in two when wider than 1.35 plot widths (coarse grains only)
+- `l7r/diagram/waterfields/polder.py::build_polder#module line bow` (UNCLAIMED, E0): the module lines bowed by line_wander 0.10 of the grid's spacing (0014)
+- `l7r/diagram/waterfields/polder.py::build_polder#interior bund node jitter` (UNCLAIMED, E0): the interior bund nodes jittered by organic (0.05, 0.02)
+- `l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#fallback watercourse widths` (MISLABELED, E1): cite 0068 and draw its widths where a record carries none: the brook about 7 ft, the supply canal 4.5 ft, the head race 6 ft (not 9, 2.5 and 14 px)
+- `l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_source#feeder brook narrower than the head race` (DRIFTED, E2): the brook arrives narrower than the head race it feeds (0068): a 7 ft brook into a 6 ft head race inverts it - size the two against each other
+- `l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.trim_lane_stubs#arrival at the bund` (DRIFTED, E1): the bund reach compared in pixels via self.px(BUND_REACH_FT), and labeled GUESS 0014 (the page gives no 6 ft)
+- `l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_source#pond feeder from the sluice` (UNCLAIMED, E0): the pond feeder drawn from the sluice to the pond's center, recorded as coming from off the map
+- `l7r/diagram/waterfields/comb.py::_comb_drain#straight last leg` (UNCLAIMED, E0): no jittered sample within DRAIN_MIN_LEG (84 px) of the outfall, so the drain's last leg is straight
+- `l7r/diagram/settlement/homestead_parts/fixture_seats.py::_wood_shed#wood shed fallback pace` (DRIFTED, E1): the fallback seats a further 8 ft out put a shed about 17 ft off its wall against 0043's ken: drop the extra pace, or the page records the departure
+- `l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#every crown gives way round a persimmon` (DRIFTED, E2): the grove's trees give way round a yard persimmon (0072): refuse every kind of crown under its crown, not the conifer alone
+- `l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#mixed broadleaf belt` (UNCLAIMED, E0): a mixed_broadleaf belt drawn with no conifer, in the woods' crown size mix
+- `l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#dispersed well pocket` (UNCLAIMED, E0): the dispersed farm's well pocket: the wellhead plus a 3 ft margin (px(6.0))
+
+The gate held one row (FR-004): the carve's berm (`waterfields/carve.py::_dry_fields#off the water and the frame`), bisected by group - at the canal's bank Inashiro's toe marsh takes a sharp corner on open ground; E3 after `waterfields/carve.py::_dry_fields#a hem that keeps its ground inside the berm`. Sawada's knot came back with the rings' steps, the fork triangle and the berm together, as main draws it (its strict xfail restored).

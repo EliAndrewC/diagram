@@ -248,8 +248,8 @@ class WoodShares:
                 the reservation keeps what the planting keeps; the 39 ft and 50 ft sun rules (research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html) are held at `copse_keepouts`
             afternoon lane as the copse plants - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: the map's
                 `west_sun_lane` west and southwest of each yard and bed, as the copse plants it; none where it declares none
-            copse clump size - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: `COPSE_CLUMP_BS`, 22 bscale units, the copse's clump
-            copse seat pitch - CONVENTION: `SEAT_PITCH_BS`, the clump radius times the square root of two, so the reserved crowns cover every point of a cell
+            copse clump size - UNRESEARCHED: `COPSE_CLUMP_BS`, 22 bscale units, the copse's clump
+            copse seat pitch - UNRESEARCHED: `SEAT_PITCH_BS`, the clump radius times the square root of two, so the reserved crowns cover every point of a cell
             seat off a lane - UNRESEARCHED: the corridor's half plus the copse's lane buffer
         """
         self.clump = COPSE_CLUMP_BS * s.bscale

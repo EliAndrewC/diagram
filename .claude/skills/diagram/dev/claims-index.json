@@ -13592,24 +13592,33 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::_polder_candidate#block centered": {
-  "code": "4db1a3db7d7cdf22",
-  "core": "85aac5a896993e02",
-  "date": "2026-10-03",
-  "note": "canvas placement",
+  "code": "411b74070b765559",
+  "core": "fea6f79507867af5",
+  "date": "2026-10-07",
+  "note": "centering the block on the canvas only frames it; the bearing comes from plan.fall",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::_polder_candidate#surveyed block": {
-  "code": "bc1dcd9cd9346c6f",
-  "core": "85aac5a896993e02",
-  "date": "2026-10-03",
-  "note": "surveyed grid (0019 drawing); inner face follows the parcels (0027)",
+  "code": "cf49e23744c8f677",
+  "core": "fea6f79507867af5",
+  "date": "2026-10-07",
+  "note": "the ladder `edge_wander` 0.5 down to 0.12 with a 0.86 fill test lets the block's outline wobble (the fill is under 1 of its box), but the page fixes the outer edge (\"fades to nothing at the fixed outer edge\"; 0022 \"the block's edge holds its line\"). Neither the wander ladder nor 0.86 is on the page. Hold the edge straight, or record the wobbling edge as a DEVIATION or GUESS. Also, the fill test uses an axis-aligned box, so a block at an oblique bearing never reaches 0.86",
   "pages": {
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "45bbefa1e8568ae6"
   },
   "research": "7e58acaa9e345ce6",
-  "triaged": "2026-10-05",
-  "verdict": "IN-STEP"
+  "rests": [
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:2c50ae22cb97ead3",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:4141eca659aa9041",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:470adb1b46c06909",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:48a5898890bd6579",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f981425220ab2e60",
+   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:eb2d7af29e23a469"
+  ],
+  "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::dike_face#strip at the dike's outer face": {
   "code": "edbdc31b06b7b9d2",
@@ -22637,13 +22646,19 @@
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::admits#the track out tested at 6 ft wide (stub w 6.0)": {
-  "code": "92c77771287305a5",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::admits#track out's width as judged": {
+  "code": "df56486a8131554b",
   "core": "92c77771287305a5",
   "date": "2026-10-07",
-  "note": "the track out tested at 6 ft wide (stub w 6.0)",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "note": "stub w 6.0, the track out's 6 ft at the hamlet's 1 ft/px",
+  "pages": {
+   "0081-village-lanes.drawing.html": "9e27759395199abd"
+  },
+  "research": "ebd72aaa6a0eb9af",
+  "rests": [
+   "0081-village-lanes.drawing.html:91a5765af6230403"
+  ],
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/tree.py::admits#tree keeps the lane law": {
   "code": "6a94afe0b447e6ff",
@@ -40086,14 +40101,6 @@
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#default watercourse widths when a record carries none (stream 9, channel 2.5, canal 14)": {
-  "code": "13d26df7829c7b2e",
-  "core": "13d26df7829c7b2e",
-  "date": "2026-10-07",
-  "note": "default watercourse widths when a record carries none (stream 9, channel 2.5, canal 14)",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#dry plot ink": {
   "code": "c4db0e7d2aab1ae5",
   "core": "13d26df7829c7b2e",
@@ -40108,6 +40115,21 @@
    "0006-dry-fields-and-their-crops-hatake.drawing.html:7e438855d3e0806f"
   ],
   "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#fallback watercourse widths": {
+  "code": "d9414f9e56ff1b4c",
+  "core": "13d26df7829c7b2e",
+  "date": "2026-10-07",
+  "note": "0068 in the bundle answers this, so cite it. The figures also disagree with it: stream 9 px against a brook of about 7 ft (\"about 2 m (~7 ft)\"), and canal 14 px against a supply canal of 4.5 ft and a head race of 6.0 ft",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:7d2ddc0969f9e213",
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:8ab31b5afaea5611",
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:bb9359b7865aa39b",
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.html:0cc5bcaf3d9bf50c"
+  ],
+  "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#hem off rice and water": {
   "code": "c27111f1cdfa211c",
@@ -40139,13 +40161,21 @@
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#nothing built or planted on a dry plot (plots registered in `block_polys` and `dry_polys`)": {
-  "code": "13d26df7829c7b2e",
+ ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#nothing built or planted on a dry plot": {
+  "code": "deae99fa85e8a844",
   "core": "13d26df7829c7b2e",
   "date": "2026-10-07",
-  "note": "nothing built or planted on a dry plot (plots registered in `block_polys` and `dry_polys`)",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "note": "0006 says nothing about keeping houses or trees off a dry plot. Only 0010 bears on it, and only for farmsteads on a city map (\"may stand hard against a strip of dry crop, but never on it\"); trees are unresearched",
+  "pages": {
+   "0006-dry-fields-and-their-crops-hatake.drawing.html": "9f1b7fafe06f01fe"
+  },
+  "research": "eae521ca5e2ccfdd",
+  "rests": [
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:25a9d039c229ae5d",
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:abb8b4f0d05c6c11",
+   "0010-farmland-around-towns-and-cities.drawing.html:94ab7849787d2179"
+  ],
+  "verdict": "NEEDS-RESEARCH"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#plot size and crop": {
   "code": "23831cc942cdc7e6",
@@ -40187,10 +40217,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_source#feeder brook": {
-  "code": "c2b039aaa6d2606b",
-  "core": "218eea228e9a2084",
+  "code": "3adbbc20688e5ea0",
+  "core": "0a6fb5e4960cf152",
   "date": "2026-10-07",
-  "note": "the page says \"the brook runs on past the intake\" and \"never draw a brook taken whole by its ditch\". The code ends the brook at the sluice unless `to` says otherwise, and `_comb_source_channel` notes a comb \"fed by its OWN feeder brook ending AT the sluice\".",
+  "note": "the brook runs on past the sluice only when `to` says so, but 0059 has it always run on (\"The brook runs on past the intake\"; \"never draw a brook taken whole by its ditch\"). Running on should be unconditional",
   "pages": {
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "20b954e8c3ae0884"
   },
@@ -40203,37 +40233,43 @@
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_source#feeder brook width": {
-  "code": "6fb55b379b9b02f1",
-  "core": "218eea228e9a2084",
+  "code": "a7ef6206d7849802",
+  "core": "0a6fb5e4960cf152",
   "date": "2026-10-07",
-  "note": "`width=7` is pixels, but the ladder says \"Widths are stored in feet and converted when drawn\". It should be `self.px(7.0)` (a 7 ft brook).",
+  "note": "the claim says \"7 px, in px rather than feet\", but the code draws self.px(7.0), 7 ft at the map's scale. And a 7 ft brook is wider than the 6.0 ft head race it feeds, against \"the brook arrives narrower than the head race it feeds\"",
   "pages": {
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "20b954e8c3ae0884",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html": "73b09981aa65bd21"
   },
   "research": "43d03d4ffab70ddf",
   "rests": [
-   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:b1c3c0e8029a1da5",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:0c50dfc54e196c68",
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:7d2ddc0969f9e213"
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:7d2ddc0969f9e213",
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:8ab31b5afaea5611",
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:e9e1c49b84a3b570",
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.html:0cc5bcaf3d9bf50c"
   ],
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_source#fringe and margin widths": {
-  "code": "f3535fbb655abf12",
-  "core": "218eea228e9a2084",
+  "code": "cad84e27c5535743",
+  "core": "0a6fb5e4960cf152",
   "date": "2026-10-07",
-  "note": "no page gives the fringe's or the margin's width.",
+  "note": "0061 gives no width for the fringe or the margin",
   "pages": {},
   "research": "",
-  "rests": [],
+  "rests": [
+   "0061-reservoir-ponds-tameike.drawing.html:b4e3ac5d9de888f6",
+   "0061-reservoir-ponds-tameike.drawing.html:d6c10e2a38c86b30",
+   "0061-reservoir-ponds-tameike.drawing.html:f9e5a5b88e2a9590"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_source#planted pond bank": {
-  "code": "0ca5d70c6772ff37",
-  "core": "218eea228e9a2084",
+  "code": "798e519653e6b0e4",
+  "core": "0a6fb5e4960cf152",
   "date": "2026-10-07",
-  "note": "the page attests two bank forms and records drawing every bank bare as \"this project's choice\". The claim should read DEVIATION 0061.",
+  "note": "0061 attests two forms (bare, and planted sparsely with mulberry and cudrania) and calls fixing it bare \"a shortfall\", not a deliberate choice. The code should roll between the two forms per settlement",
   "pages": {
    "0061-reservoir-ponds-tameike.drawing.html": "be8eb7a4bb23863d"
   },
@@ -40243,33 +40279,41 @@
    "0061-reservoir-ponds-tameike.drawing.html:acc57fcad91076b2",
    "0061-reservoir-ponds-tameike.drawing.html:f9e5a5b88e2a9590"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "DRIFTED"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_source#pond feeder drawn from the sluice to the pond's center, recorded as coming from off the map": {
+  "code": "0a6fb5e4960cf152",
+  "core": "0a6fb5e4960cf152",
+  "date": "2026-10-07",
+  "note": "pond feeder drawn from the sluice to the pond's center, recorded as coming from off the map",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_source#pond feeder width": {
-  "code": "6c1e7c61e6ac4dc4",
-  "core": "218eea228e9a2084",
+  "code": "12c9467b1918f16a",
+  "core": "0a6fb5e4960cf152",
   "date": "2026-10-07",
-  "note": "`px(3.0)` is about twice the 1.5 ft floor.",
+  "note": "px(3.0) is about twice the 1.5 ft floor",
   "pages": {
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html": "73b09981aa65bd21"
   },
   "research": "0563a9dcc87ebedc",
   "rests": [
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:0c50dfc54e196c68",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:7d2ddc0969f9e213"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_source#source pond": {
-  "code": "eda7c9402f4f844f",
-  "core": "218eea228e9a2084",
+  "code": "b1399fb654f445f4",
+  "core": "0a6fb5e4960cf152",
   "date": "2026-10-07",
-  "note": "the pond has its reed fringe and no-build block.",
+  "note": "pond with a reed fringe and the bank kept clear",
   "pages": {
    "0061-reservoir-ponds-tameike.drawing.html": "be8eb7a4bb23863d"
   },
   "research": "06a7923692f832d3",
   "rests": [
+   "0061-reservoir-ponds-tameike.drawing.html:b4e3ac5d9de888f6",
    "0061-reservoir-ponds-tameike.drawing.html:d6c10e2a38c86b30",
    "0061-reservoir-ponds-tameike.drawing.html:f9e5a5b88e2a9590"
   ],
@@ -42873,10 +42917,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::PRIVY_FRONT_STEP_FT#front privy off the front wall": {
-  "code": "91d98ebc4ec9e8af",
+  "code": "1dd5b3fce9fc2afa",
   "core": "9095d1abff122e93",
   "date": "2026-10-07",
-  "note": "the 8 ft figure is right (8.0 - WALL_GAP_FT plus g gives an edge 8 ft out), but the page says \"the 8 ft is a GUESS\", so the claim should read GUESS research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: 8 ft",
+  "note": "8 ft edge off the front wall (8 - WALL_GAP_FT, plus g), recorded as a GUESS",
   "pages": {
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "87ffb6a8fd559f32"
   },
@@ -42884,7 +42928,7 @@
   "rests": [
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:111af1d739cc6920"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::PRIVY_SIZES_FT#privy sizes": {
   "code": "df5cbbc948837247",
@@ -43102,13 +43146,18 @@
   ],
   "verdict": "DRIFTED"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#manure fallback spots 1.1 and 1.9 heap-widths beside the privy, and a further 10 ft step out": {
-  "code": "b2f3b0f8b0a20a59",
+ ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#manure heap fallback spots": {
+  "code": "ca75aa62f35e01a5",
   "core": "b2f3b0f8b0a20a59",
   "date": "2026-10-07",
-  "note": "manure fallback spots 1.1 and 1.9 heap-widths beside the privy, and a further 10 ft step out",
+  "note": "the claim says \"0.3 of the house's half-width and half-depth\" but the code uses hw*0.3 and hh*0.3, and hw and hh are full sizes (hw / 2 + g is the wall); the claim should say 0.3 of the house's width and depth. The spots are also a GUESS on 0042 (\"no page we read says where in the yard the heap stood\"), not unresearched",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "rests": [
+   "0042-manure-heaps-and-compost-kyuhi.drawing.html:770a6419fbce2b73",
+   "0042-manure-heaps-and-compost-kyuhi.drawing.html:cee269ecfe8fca3a"
+  ],
+  "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#privy seats": {
   "code": "aa14f96ca50f2aee",
@@ -43207,13 +43256,17 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::_wood_shed#second ring of shed seats one 8 ft pace (STEP_FT) further out": {
-  "code": "4e1445028bf3a5a8",
+ ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::_wood_shed#wood shed fallback seats": {
+  "code": "6bcc49566b2bb24c",
   "core": "4e1445028bf3a5a8",
   "date": "2026-10-07",
-  "note": "second ring of shed seats one 8 ft pace (STEP_FT) further out",
+  "note": "0043 does address the distance (\"about 6 ft (a ken) off a wall\", a GUESS). The extra px(STEP_FT) 8 ft puts the shed about 17 ft off its wall, a departure the page does not record; the claim should be a DEVIATION that 0043's drawing page records, not UNRESEARCHED",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "rests": [
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html:4615b4a128e48e55"
+  ],
+  "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/fixture_seats.py::_wood_shed#wood shed seats": {
   "code": "834d64c991d4cfda",
@@ -44243,12 +44296,14 @@
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GROVE_CLUMP_CROWNS#crowns a clump throws": {
-  "code": "7f614daf2fbba48e",
+ ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GROVE_CLUMP_CROWNS#crowns a band piece holds": {
+  "code": "121f43cda565892f",
   "core": "021f865564721587",
-  "date": "2026-10-03",
-  "note": "a per-clump cap the bundle does not answer",
+  "date": "2026-10-07",
+  "note": "how a band is cut into pieces; the density stays the 0080 one",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GROVE_CROWN_AREA#grove crown density": {
@@ -44341,10 +44396,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#alder in the marsh": {
-  "code": "8550a36183c78527",
-  "core": "a7540df489e249bc",
+  "code": "d80e23b477cb0129",
+  "core": "e2763ed6ca40c776",
   "date": "2026-10-07",
-  "note": "the alder mix is all broadleaf, carries no bamboo, and is tinted blue-gray green as a drawing convention",
+  "note": "alder mix all broadleaf, no bamboo, blue-gray tint",
   "pages": {
    "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "fb7c4bec76071ea3"
   },
@@ -44352,16 +44407,28 @@
   "rests": [
    "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:5b72bf251cebc78b",
    "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:66fe4489ce37ece6",
-   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:d4d9c7851e8a97bc",
-   "0075-bamboo-groves-chikurin.drawing.html:8814c0e6e1d63c8e"
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:c7f27395e395df62"
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#bamboo under the crowns": {
-  "code": "851c42ea95619666",
-  "core": "a7540df489e249bc",
+ ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#bamboo patch forced": {
+  "code": "dc1bfdf093596656",
+  "core": "e2763ed6ca40c776",
   "date": "2026-10-07",
-  "note": "8% is about one in twelve, in the windbreak mix and both belt forms; inked only in gaps; none in the dooryard or alder mixes",
+  "note": "0075 answers this: a farm grove keeps its bamboo as a patch inside the grove (a GUESS recorded there). The claim should be GUESS research/questions/0075-bamboo-groves-chikurin.drawing.html",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0075-bamboo-groves-chikurin.drawing.html:399c3deb721a5928",
+   "0075-bamboo-groves-chikurin.drawing.html:e7c00c0357d35ec7"
+  ],
+  "verdict": "MISLABELED"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#bamboo under the crowns": {
+  "code": "02daee3b98026d25",
+  "core": "e2763ed6ca40c776",
+  "date": "2026-10-07",
+  "note": "0.08 is about the page's one in twelve; inked only in gaps; none in the dooryard or alder mix",
   "pages": {
    "0075-bamboo-groves-chikurin.drawing.html": "d65f38fc7bbc0e20"
   },
@@ -44374,34 +44441,35 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#clump glyph": {
-  "code": "8891e36f22dcc50f",
-  "core": "a7540df489e249bc",
+  "code": "112db61b4c93f528",
+  "core": "e2763ed6ca40c776",
   "date": "2026-10-07",
-  "note": "one disc per crown, colors and paint order are drawing conventions",
+  "note": "display only",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#conifer crown under a persimmon's crown": {
-  "code": "c7b5c58c152bbffc",
-  "core": "a7540df489e249bc",
+  "code": "be706dc6bd9d858f",
+  "core": "e2763ed6ca40c776",
   "date": "2026-10-07",
-  "note": "a conifer is refused under a yard persimmon's crown and the grove gives way round it",
+  "note": "the page says \"the grove's trees give way round it\", but the `_trees` test refuses only kind == \"conifer\", so broadleaf grove crowns still stand under the persimmon's crown. Refuse every kind, or narrow the claim",
   "pages": {
    "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html": "6b3be37b04307230"
   },
   "research": "1640adf91280aca1",
   "rests": [
-   "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:881ed76b6b6133cb"
+   "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:881ed76b6b6133cb",
+   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:d9d6ec0e3a243d28"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#conifer-led clump's lesser share": {
-  "code": "da36acf01c0b100c",
-  "core": "a7540df489e249bc",
+  "code": "b6336c06fee552b8",
+  "core": "e2763ed6ca40c776",
   "date": "2026-10-07",
-  "note": "the page names lesser broadleaf among the rows and records \"conifer the commonest crown\" as a GUESS; the 0.1 implements that guess",
+  "note": "the page names the lesser broadleaf among the rows; 0.1 is on no page; the conifer stays the commonest crown",
   "pages": {
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fbd35c7766637fc3"
   },
@@ -44413,25 +44481,26 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#crown over no roof or wellhead": {
-  "code": "a8c77d37b684dcf9",
-  "core": "a7540df489e249bc",
+  "code": "6de83d5dec844ad0",
+  "core": "e2763ed6ca40c776",
   "date": "2026-10-07",
-  "note": "0071 covers house, yard, garden, byre and shed but never a wellhead; add 0072 drawing §225 (a wellhead in a belt removes the clumps round it), or mark the wellhead part CANON (GM 2026-07-25)",
+  "note": "_crown_covers with krect/kcirc and CANOPY_PAD",
   "pages": {
-   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html": "f32599678d1cb241"
+   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html": "f32599678d1cb241",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fbd35c7766637fc3"
   },
-  "research": "90cf9ff106c766c9",
+  "research": "66e8d696e33eb19d",
   "rests": [
    "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:5267e319c5872785",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:301a35716bf73526"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#crown size": {
-  "code": "cddd6fd659e71557",
-  "core": "a7540df489e249bc",
+  "code": "fa1afec49c7ea7e9",
+  "core": "e2763ed6ca40c776",
   "date": "2026-10-07",
-  "note": "the code's bands (0.72, 1.05) and (1.25, 1.7), with a conifer x1.15 (up to 1.96), fall outside the page's \"between 0.75 and 1.4 times that\"; the page also says \"one crown size serves the hill woods and the windbreak's cedars alike\", so the 15% wider conifer is not on the page; clamp to 0.75-1.4 or record a deviation on the drawing page",
+  "note": "the page says \"each crown is drawn between 0.75 and 1.4 times\" the mean radius; the code draws 0.72-1.05 and 1.25-1.7, and 1.15x again for a conifer (up to about 1.96). Hold the bands within 0.75-1.4, or record the departure on 0080",
   "pages": {
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html": "605417d79e0e0561"
   },
@@ -44443,10 +44512,10 @@
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#crown under no crown": {
-  "code": "a2b958c938fb094a",
-  "core": "a7540df489e249bc",
+  "code": "3f9eb857ede4279d",
+  "core": "e2763ed6ca40c776",
   "date": "2026-10-07",
-  "note": "_crown_seat_clear against earlier and drawn crowns; edge overlap allowed",
+  "note": "_crown_seat_clear against _near and drawn",
   "pages": {
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html": "605417d79e0e0561"
   },
@@ -44458,131 +44527,98 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#crowns out of the plots' sun": {
-  "code": "0263adf49b85326b",
-  "core": "a7540df489e249bc",
+  "code": "7ab090ba44746121",
+  "core": "e2763ed6ca40c776",
   "date": "2026-10-07",
-  "note": "every crown is held out of the sun keep-outs, and bamboo marks at 50 ft",
+  "note": "ksun for crowns; bamboo marks at BAMBOO_SHADE_FT 50",
   "pages": {
    "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03"
   },
   "research": "3874df1f1301e65f",
   "rests": [
    "0038-sunlight-and-shade-on-the-farm.drawing.html:106fb9ebea718da7",
-   "0038-sunlight-and-shade-on-the-farm.drawing.html:cf77608be5e193f8",
    "0038-sunlight-and-shade-on-the-farm.drawing.html:eec3f6a7b5017ede"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#crowns per clump": {
-  "code": "a6e4f1e0d66d5284",
-  "core": "a7540df489e249bc",
+  "code": "7dccc8a23a4b6eb2",
+  "core": "e2763ed6ca40c776",
   "date": "2026-10-07",
-  "note": "48 sq px at 2 ft/px is about 192 sq ft a crown, inside the 500-800/ha hill-wood stocking a windbreak keeps",
+  "note": "48 sq px at 2 ft/px is about 192 sq ft, against the hill wood's one tree to about 180 sq ft that the windbreak keeps",
   "pages": {
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html": "605417d79e0e0561"
   },
   "research": "f1a38c9708a60be9",
   "rests": [
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:02dd5d25f9e2f806",
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:7f54cfe8dba1be5f",
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:e0f372bc46e81fac"
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#crowns per clump ceiling": {
-  "code": "784b957d6698e426",
-  "core": "a7540df489e249bc",
-  "date": "2026-10-07",
-  "note": "the cap of 28 overrides the page's density on large clumps (the code's own comment: \"~40 across the 6:1 L-grove\"); the density question answers it, so this is a DEVIATION from 0080 that the drawing page would have to record, not UNRESEARCHED",
-  "pages": {},
-  "research": "",
-  "rests": [
-   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:7f54cfe8dba1be5f",
-   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:e0f372bc46e81fac"
-  ],
-  "verdict": "MISLABELED"
- },
- ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#crowns per clump floor": {
-  "code": "c5fa53123362bf54",
-  "core": "a7540df489e249bc",
-  "date": "2026-10-07",
-  "note": "a floor of 5 throws more crowns than the page's density on small clumps; the density question answers it, so label it a DEVIATION from 0080 (recorded on the drawing page), not UNRESEARCHED",
-  "pages": {},
-  "research": "",
-  "rests": [
-   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:7f54cfe8dba1be5f",
-   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:e0f372bc46e81fac"
-  ],
-  "verdict": "MISLABELED"
- },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#dooryard mix": {
-  "code": "5381837649188055",
-  "core": "a7540df489e249bc",
+  "code": "8a4c1abaf2827fa2",
+  "core": "e2763ed6ca40c776",
   "date": "2026-10-07",
-  "note": "dooryard draws broadleaf only, no conifer and no bamboo",
+  "note": "b_th = c_th = 0, so all broadleaf",
   "pages": {
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
   },
   "research": "8e7d7569cc3f687f",
   "rests": [
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:16f2c2d8419164c1",
-   "0075-bamboo-groves-chikurin.drawing.html:399c3deb721a5928"
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:16f2c2d8419164c1"
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#grove item inside the farm's bamboo patch (bamboo_box) forced to bamboo, in any mix and even when bamboo=False": {
-  "code": "a7540df489e249bc",
-  "core": "a7540df489e249bc",
-  "date": "2026-10-07",
-  "note": "grove item inside the farm's bamboo patch (bamboo_box) forced to bamboo, in any mix and even when bamboo=False",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#lesser broadleaf crown size": {
-  "code": "71ec48b6324092b7",
-  "core": "a7540df489e249bc",
+  "code": "6c8e9a24477ea8df",
+  "core": "e2763ed6ca40c776",
   "date": "2026-10-07",
-  "note": "0.75-0.85 is inside the page's 0.75-1.4, at its lesser end",
+  "note": "0.75-0.85 is within 0.75-1.4",
   "pages": {
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html": "605417d79e0e0561"
   },
   "research": "f1a38c9708a60be9",
   "rests": [
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:49a55637e421e2be",
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:a40ebd3a6acb1f87"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#lesser crown over an earlier stand's conifer": {
-  "code": "044742cba7f6b22a",
-  "core": "a7540df489e249bc",
+  "code": "1bae05cc4a0140c5",
+  "core": "e2763ed6ca40c776",
   "date": "2026-10-07",
-  "note": "a canopy-layer paint rule, like the page's own drawing convention",
+  "note": "a layering choice; edge overlap is itself a drawing allowance",
   "pages": {},
   "research": "",
   "rests": [
-   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:d9d6ec0e3a243d28"
+   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:aad44c6751a44f5f"
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#thin band end to end": {
-  "code": "b4ebdebc784268c7",
-  "core": "a7540df489e249bc",
+ ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#mixed_broadleaf belt drawn with no conifer, in the woods' crown size mix": {
+  "code": "e2763ed6ca40c776",
+  "core": "e2763ed6ca40c776",
   "date": "2026-10-07",
-  "note": "the pages give the band's depth, not how its trees spread along it",
+  "note": "mixed_broadleaf belt drawn with no conifer, in the woods' crown size mix",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#thin band end to end": {
+  "code": "ee4f75cbef3fe92a",
+  "core": "e2763ed6ca40c776",
+  "date": "2026-10-07",
+  "note": "the band's spread along its length is on no page",
   "pages": {},
   "research": "",
-  "rests": [
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:c2e7b505cf13f306",
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:e53d0cfe8f7f0386"
-  ],
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#windbreak conifer share": {
-  "code": "7657ec81c9841a9d",
-  "core": "a7540df489e249bc",
+  "code": "9280d2092e2e6e31",
+  "core": "e2763ed6ca40c776",
   "date": "2026-10-07",
-  "note": "c_th = b_th + 0.48 gives conifer 48% of rolls, Kashima's 48% cedar",
+  "note": "the code's 48% (c_th = b_th + 0.48) matches the page, but the claim credits Takehara; the 48% is the 1987 Kashima count, and Takehara gives only cedar's dominance. Fix the claim's source. (The code comment's \"keeps its 38%\" is also stale.)",
   "pages": {
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.html": "186cb571d0ba4842"
   },
@@ -44591,7 +44627,7 @@
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.html:1884e0c831822752",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.html:8b6131d80ca7a717"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._find_grove_arms#every rolled face planted": {
   "code": "d831601daf5b0ebd",
@@ -45294,14 +45330,6 @@
   "triaged": "2026-10-05",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#a clump kept only when some of its crown falls inside the page window": {
-  "code": "12df93faf7d4cc3d",
-  "core": "12df93faf7d4cc3d",
-  "date": "2026-10-07",
-  "note": "a clump kept only when some of its crown falls inside the page window",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#belt a windward hook": {
   "code": "6d6db9e0d810e231",
   "core": "12df93faf7d4cc3d",
@@ -45399,11 +45427,24 @@
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#clump off buildings, wells and shrines": {
-  "code": "a3160f290ec0b92c",
+ ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#clump inside the page window": {
+  "code": "8a4e0da3a6c1b2c2",
   "core": "12df93faf7d4cc3d",
   "date": "2026-10-07",
-  "note": "\"half the diagonal plus the clump's radius and 2 px\" holds only for houses, yards, gardens, byres and sheds (matches §15); the well keep-out is `vr + clump*1.05 + 1` and the shrine keep-out is `clump*0.90`, and the page is silent on both; narrow the label to buildings and give the well its own UNRESEARCHED claim (shrines already have one)",
+  "note": "a clump is kept when its crown is partly on the page",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:9e9583030b309e84",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:dc08f0e1620f3363"
+  ],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#clump off buildings": {
+  "code": "fb15d1dd7d58022b",
+  "core": "12df93faf7d4cc3d",
+  "date": "2026-10-07",
+  "note": "circumscribing radius plus clump/2 plus 2",
   "pages": {
    "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html": "f32599678d1cb241"
   },
@@ -45411,7 +45452,7 @@
   "rests": [
    "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:5267e319c5872785"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#clumps kept 12 px plus a crown off paddies and 12 px off dry plots": {
   "code": "826eba0c3afdcb93",
@@ -45481,14 +45522,6 @@
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#copse drawn in the fruit-and-broadleaf mix, no bamboo or conifer": {
-  "code": "12df93faf7d4cc3d",
-  "core": "12df93faf7d4cc3d",
-  "date": "2026-10-07",
-  "note": "copse drawn in the fruit-and-broadleaf mix, no bamboo or conifer",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#copse filled to the homesteads' wood": {
   "code": "cf32c1bc89d08c95",
   "core": "12df93faf7d4cc3d",
@@ -45506,13 +45539,19 @@
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#copse kept off the whole marsh, not only the deep marsh": {
-  "code": "12df93faf7d4cc3d",
+ ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#copse mix": {
+  "code": "98db033f740d4644",
   "core": "12df93faf7d4cc3d",
   "date": "2026-10-07",
-  "note": "copse kept off the whole marsh, not only the deep marsh",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "note": "copse draws the dooryard mix",
+  "pages": {
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+  },
+  "research": "8e7d7569cc3f687f",
+  "rests": [
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:16f2c2d8419164c1"
+  ],
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#copse off the bamboo": {
   "code": "afc9446ccf82f61e",
@@ -45526,6 +45565,22 @@
   "rests": [
    "0075-bamboo-groves-chikurin.drawing.html:399c3deb721a5928",
    "0075-bamboo-groves-chikurin.drawing.html:482ec6b700c3e1bc"
+  ],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#copse off the whole marsh": {
+  "code": "4baade72c4a0d3f5",
+  "core": "12df93faf7d4cc3d",
+  "date": "2026-10-07",
+  "note": "the whole marsh ground is a hard edge for the copse; the edge is kept open, and only belt trees there are drawn as alder",
+  "pages": {
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "fb7c4bec76071ea3"
+  },
+  "research": "a44790630d28af23",
+  "rests": [
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:97697d59c9e28e0c",
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:c7f27395e395df62",
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:d4d9c7851e8a97bc"
   ],
   "verdict": "IN-STEP"
  },
@@ -45595,13 +45650,17 @@
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#wellhead canopy keep-out, vr + 1.05 clump + 1": {
-  "code": "12df93faf7d4cc3d",
+ ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#wellhead canopy keep-out": {
+  "code": "f1c61f8b9eaeebfd",
   "core": "12df93faf7d4cc3d",
   "date": "2026-10-07",
-  "note": "wellhead canopy keep-out, vr + 1.05 clump + 1",
+  "note": "vr + 1.05 clump + 1; no page gives a distance",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "rests": [
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:301a35716bf73526"
+  ],
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/stands.py::_GAP_MEMORY#plumbing": {
   "code": "a0556cc1fe70b320",
@@ -46033,16 +46092,43 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/wood_share.py::WoodShares.__init__#afternoon lane as the copse plants": {
-  "code": "d16d7d4164fd8212",
+  "code": "9825a6685461a870",
   "core": "bbf53cc85534430c",
   "date": "2026-10-07",
-  "note": "`getattr(s, \"_west_sun_ft\", 0.0)` sets the copse seats' clear ground west of a plot to 0 ft where the map declares no lane, which is a sun decision; the page holds every tree 50 ft west or southwest. The claim should cite 0038, not NONE",
-  "pages": {},
-  "research": "",
+  "note": "mirrors the copse's west lane; the 50 ft round every crown is held at the planting",
+  "pages": {
+   "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03"
+  },
+  "research": "3874df1f1301e65f",
   "rests": [
    "0038-sunlight-and-shade-on-the-farm.drawing.html:106fb9ebea718da7",
    "0038-sunlight-and-shade-on-the-farm.drawing.html:cf77608be5e193f8"
   ],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/wood_share.py::WoodShares.__init__#copse clump size": {
+  "code": "5ed561fca98b994a",
+  "core": "bbf53cc85534430c",
+  "date": "2026-10-07",
+  "note": "0036 gives no clump size, and village_grove labels the same 22 bscale clump UNRESEARCHED. The claim should say UNRESEARCHED",
+  "pages": {
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
+  },
+  "research": "8e7d7569cc3f687f",
+  "rests": [
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:02dd5d25f9e2f806",
+   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:16f2c2d8419164c1"
+  ],
+  "verdict": "NEEDS-RESEARCH"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/wood_share.py::WoodShares.__init__#copse seat pitch": {
+  "code": "122e8faa837037ed",
+  "core": "bbf53cc85534430c",
+  "date": "2026-10-07",
+  "note": "not a drawing convention: the pitch sets where the reserved copse clumps stand and how far apart. It should be UNRESEARCHED (or NONE, if read as lattice geometry only)",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/wood_share.py::WoodShares.__init__#seat off a lane": {
@@ -46071,22 +46157,6 @@
    "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:07682c227be39db1"
   ],
   "verdict": "MISLABELED"
- },
- ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/wood_share.py::WoodShares.__init__#the drawn size of a copse clump (`COPSE_CLUMP_BS` 22 bs)": {
-  "code": "bbf53cc85534430c",
-  "core": "bbf53cc85534430c",
-  "date": "2026-10-07",
-  "note": "the drawn size of a copse clump (`COPSE_CLUMP_BS` 22 bs)",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/wood_share.py::WoodShares.__init__#the spacing between copse seats (`SEAT_PITCH_BS` 11*sqrt(2) bs)": {
-  "code": "bbf53cc85534430c",
-  "core": "bbf53cc85534430c",
-  "date": "2026-10-07",
-  "note": "the spacing between copse seats (`SEAT_PITCH_BS` 11*sqrt(2) bs)",
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/wood_share.py::WoodShares.commit#plumbing": {
   "code": "35922c8d9fdc90bb",
@@ -46199,10 +46269,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/wood_share.py::copse_keepouts#clump beside, never on, a building": {
-  "code": "18ac89b3f04af5f3",
-  "core": "0c6aef1b7ba9d96e",
+  "code": "08efd9d85f580964",
+  "core": "e98904a6827bada4",
   "date": "2026-10-07",
-  "note": "the building's circumscribing radius plus the clump's full radius, the page's rule, with a 2 px margin; covers house, yard, gardens, byre and shed",
+  "note": "0.5*hypot + cr + 2 + margin",
   "pages": {
    "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html": "f32599678d1cb241"
   },
@@ -46213,31 +46283,30 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/wood_share.py::copse_keepouts#copse off the wellhead": {
-  "code": "88d1c7494351ff31",
-  "core": "0c6aef1b7ba9d96e",
+  "code": "eb5ab4059096775d",
+  "core": "e98904a6827bada4",
   "date": "2026-10-07",
-  "note": "no cited question speaks of a well",
+  "note": "matches village_grove; no page gives a distance",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/wood_share.py::copse_keepouts#plots' sun strips": {
-  "code": "8511151e26f81371",
-  "core": "0c6aef1b7ba9d96e",
+  "code": "47ac7ed25f5352c1",
+  "core": "e98904a6827bada4",
   "date": "2026-10-07",
-  "note": "the south strip uses `sun_depth` (22 ft by default), a yard has no east strip, and the west strip exists only where the map declares a lane. The page holds every crown, the copse's included, 50 ft \"east, west or south of a yard or bed\". Either reserve at 50 ft, or have the page record a lighter reservation than the planting",
+  "note": "the seat keep-outs mirror the copse's; the page's 50 ft is held at the crowns, as the claim states",
   "pages": {
    "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03"
   },
   "research": "3874df1f1301e65f",
   "rests": [
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:0a9f4b3b9b0dbbea",
    "0038-sunlight-and-shade-on-the-farm.drawing.html:106fb9ebea718da7",
-   "0038-sunlight-and-shade-on-the-farm.drawing.html:45d116e0d7359762",
-   "0038-sunlight-and-shade-on-the-farm.drawing.html:cf77608be5e193f8",
-   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:07682c227be39db1"
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:cf77608be5e193f8"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/wood_share.py::crown_cells#plumbing": {
   "code": "761ccaa8f2401896",
@@ -49937,13 +50006,20 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_geom#a dispersed farm's grove cleared 50 ft east of its turned beds": {
-  "code": "3cb9f450bf5fa406",
+ ".claude/skills/diagram/l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_geom#grove cleared east of turned beds": {
+  "code": "d049d19827877dec",
   "core": "3cb9f450bf5fa406",
   "date": "2026-10-07",
-  "note": "a dispersed farm's grove cleared 50 ft east of its turned beds",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "note": "clear_east_of_beds at px(EAST_REACH_FT) 50 ft",
+  "pages": {
+   "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03"
+  },
+  "research": "3874df1f1301e65f",
+  "rests": [
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:106fb9ebea718da7",
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:cef95d825324536e"
+  ],
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_geom#homestead turns as one piece": {
   "code": "d496a3ecb531b5da",
@@ -49998,6 +50074,14 @@
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:effd653c04180008"
   ],
   "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#dispersed well pocket: wellhead plus a 3 ft margin (px(6.0))": {
+  "code": "ba96e4c83570a50d",
+  "core": "ba96e4c83570a50d",
+  "date": "2026-10-07",
+  "note": "dispersed well pocket: wellhead plus a 3 ft margin (px(6.0))",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#forecourt kept on a no-rice farm": {
   "code": "8d0b29ab0c9ecf57",
@@ -50110,13 +50194,18 @@
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#south band on a map that does not keep the sun stands YARD_SUN_STRIP 22 off the yard, unscaled": {
-  "code": "ba96e4c83570a50d",
+ ".claude/skills/diagram/l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#south band off an unkept yard": {
+  "code": "14910d158837a103",
   "core": "ba96e4c83570a50d",
   "date": "2026-10-07",
-  "note": "south band on a map that does not keep the sun stands YARD_SUN_STRIP 22 off the yard, unscaled",
+  "note": "0038 does answer this: no canopy tree within 50 ft south of a yard, and the rule binds every generated map (only hand-drawn maps are exempt). The unscaled 22 is a departure, so the claim should be a DEVIATION that the 0038 drawing page records, not UNRESEARCHED",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "rests": [
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:106fb9ebea718da7",
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:c3578d51ce1e884d"
+  ],
+  "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#storehouse on the north wall": {
   "code": "24bf558bbb0b6090",
@@ -55405,11 +55494,17 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/_helpers.py::KOSATSUBA_ENTRANCE_REACH_FT#where the settlement begins": {
-  "code": "2836d8a1909c6572",
-  "core": "444f866ae8da7cd0",
-  "date": "2026-10-03",
-  "note": "as claimed",
-  "research": "",
+  "code": "a3f4ffc2ad755d8c",
+  "core": "c0101826cceee8b7",
+  "date": "2026-10-07",
+  "note": "60 ft is the page's recorded guess for \"reaching a farmhouse\"",
+  "pages": {
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
+  },
+  "research": "7b40c2c01cfba682",
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/_helpers.py::KOSATSUBA_HANDOVER_BAND_FT#entrance board beside the handover": {
@@ -55498,42 +55593,43 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_anchor#board placements": {
-  "code": "a2fe3533a0e66968",
-  "core": "679505cd861d8d34",
+  "code": "caf9177e2b2975d7",
+  "core": "c293f1e89963bfd8",
   "date": "2026-10-07",
-  "note": "only center, entrance and frontage (headman's gate) get anchors. The question also attests \"bridge ends\" as a village board's site, an attested form the choice never offers. Add it to the rolled placements, or record its omission as a DEVIATION",
+  "note": "the question attests bridge ends as a fourth village form (\"as well as bridge ends\", \"at the foot of bridges\"), but the code offers only center/entrance/frontage; the knob should add a bridge-end form or the claim should record leaving it out",
   "pages": {
    "0190-notice-boards-kosatsuba.html": "d5c6d0418e52d1fa"
   },
   "research": "348847d2a9750e4b",
   "rests": [
-   "0190-notice-boards-kosatsuba.html:aeb5e9860f97b764",
    "0190-notice-boards-kosatsuba.html:b465c07b81f6c576",
+   "0190-notice-boards-kosatsuba.html:cd8d9ce0b74bb55f",
+   "0190-notice-boards-kosatsuba.html:ebb781f8589560e1",
    "0190-notice-boards-kosatsuba.html:f5973f0b2ea1c6cc"
   ],
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_anchor#entrance anchor": {
-  "code": "58cbf1dc29a5e154",
-  "core": "679505cd861d8d34",
+  "code": "9334289228003073",
+  "core": "c293f1e89963bfd8",
   "date": "2026-10-07",
-  "note": "the handover, else where the approach first reaches a dwelling, else its point nearest the houses",
+  "note": "boards attested at village and town entrances; the handover-or-first-arrival point is how the code finds that entrance",
   "pages": {
    "0190-notice-boards-kosatsuba.html": "d5c6d0418e52d1fa"
   },
   "research": "348847d2a9750e4b",
   "rests": [
-   "0190-notice-boards-kosatsuba.html:aeb5e9860f97b764",
+   "0190-notice-boards-kosatsuba.html:71d64edbc2411ed0",
    "0190-notice-boards-kosatsuba.html:ebb781f8589560e1",
    "0190-notice-boards-kosatsuba.html:f5973f0b2ea1c6cc"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_anchor#reaching the houses": {
-  "code": "88a8214fa6f97efd",
-  "core": "679505cd861d8d34",
+  "code": "2ee3d7e6f41710f5",
+  "core": "c293f1e89963bfd8",
   "date": "2026-10-07",
-  "note": "`KOSATSUBA_ENTRANCE_REACH_FT` is 100 ft, but the cited guess is \"within 60 ft of the house\"; use 60 ft or relabel as its own GUESS",
+  "note": "the claim says \"100 ft\", but the code uses KOSATSUBA_ENTRANCE_REACH_FT = 60 ft, which matches the page's 60 ft guess; correct the claim's figure to 60 ft",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
@@ -55541,7 +55637,7 @@
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_handover#a through track's handover": {
   "code": "0187fe9520777fec",
@@ -55628,15 +55724,18 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/board_seat.py::FACING_DEG#board faces its way": {
-  "code": "5a11c3bdb4fce30c",
-  "core": "6782838fe131ace9",
-  "date": "2026-10-03",
-  "note": "0190.drawing: \"within 30 degrees of some stretch of that road ... The 30 degrees is this project's own figure\"; code is 45.0",
+  "code": "74d6cceaa948cbc9",
+  "core": "f9869fee1052b437",
+  "date": "2026-10-07",
+  "note": "30 degrees, about seven eighths of the face, the project's calibration",
   "pages": {
    "0190-notice-boards-kosatsuba.drawing.html": "6046a6a69d20be53"
   },
   "research": "3b4a965d33e6f331",
-  "verdict": "DRIFTED"
+  "rests": [
+   "0190-notice-boards-kosatsuba.drawing.html:00c958149f1d98b5"
+  ],
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/board_seat.py::FACING_TIE_PX#board-seat plumbing": {
   "code": "51ebc96c58271e16",
@@ -55698,14 +55797,17 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/board_seat.py::WayFacing.turn#board squared to its nearest way": {
-  "code": "be24364091bb8618",
-  "core": "3a7f5c77fdec594d",
-  "date": "2026-10-03",
-  "note": "as claimed",
+  "code": "553b2a5b62f83dae",
+  "core": "2c19671afa08929c",
+  "date": "2026-10-07",
+  "note": "turned to the nearest way, within 30 degrees, refused where that cannot be held",
   "pages": {
    "0190-notice-boards-kosatsuba.drawing.html": "6046a6a69d20be53"
   },
   "research": "3b4a965d33e6f331",
+  "rests": [
+   "0190-notice-boards-kosatsuba.drawing.html:00c958149f1d98b5"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/board_seat.py::board_at#board-seat plumbing": {
@@ -55760,22 +55862,29 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/board_seat.py::entrance_seat_ok#entrance board near the entrance": {
-  "code": "8bcb74d21b52d715",
-  "core": "edeca8777bdd9b42",
-  "date": "2026-10-03",
-  "note": "as claimed",
+  "code": "26e02b5d456c163e",
+  "core": "2230b9199b4506fe",
+  "date": "2026-10-07",
+  "note": "0190 attests boards at entrances but gives no distance; the code's limit is REACH 60 + BAND 60 = 120 ft (the claim says 160); relabel UNRESEARCHED with 120 ft",
   "pages": {
    "0190-notice-boards-kosatsuba.html": "d5c6d0418e52d1fa"
   },
   "research": "348847d2a9750e4b",
-  "verdict": "IN-STEP"
+  "rests": [
+   "0190-notice-boards-kosatsuba.html:71d64edbc2411ed0",
+   "0190-notice-boards-kosatsuba.html:ebb781f8589560e1",
+   "0190-notice-boards-kosatsuba.html:f5973f0b2ea1c6cc"
+  ],
+  "verdict": "NEEDS-RESEARCH"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/board_seat.py::entrance_seat_ok#passed by every way out": {
-  "code": "9f560b3ece5eda14",
-  "core": "edeca8777bdd9b42",
-  "date": "2026-10-03",
-  "note": "as claimed",
+  "code": "2ef6101a7630d8a6",
+  "core": "2230b9199b4506fe",
+  "date": "2026-10-07",
+  "note": "the 20 ft band; the research is silent",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/board_seat.py::fallback_caption#board caption fallback": {
@@ -55862,26 +55971,34 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/boards.py::BoardsMixin.board_record#board size": {
-  "code": "26e9dd4e1d45b81f",
-  "core": "698d644f6f76bf62",
-  "date": "2026-10-03",
-  "note": "self.px(12), self.px(5) draws 12 x 5 ft; 0190.drawing: \"drawn as a roofed frame 16 ft long and 6 ft deep\"",
+  "code": "7aa1478a43a67f99",
+  "core": "8cefc2f43584fe32",
+  "date": "2026-10-07",
+  "note": "16 x 6 ft frame",
   "pages": {
    "0190-notice-boards-kosatsuba.drawing.html": "6046a6a69d20be53"
   },
   "research": "3b4a965d33e6f331",
-  "verdict": "DRIFTED"
+  "rests": [
+   "0190-notice-boards-kosatsuba.drawing.html:00e4ac62d04e42dd",
+   "0190-notice-boards-kosatsuba.drawing.html:f602b2cd2b391398",
+   "0190-notice-boards-kosatsuba.html:f20c5e6c7c0b59f6"
+  ],
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/boards.py::BoardsMixin.board_record#marker floor": {
-  "code": "de541c920b479954",
-  "core": "698d644f6f76bf62",
-  "date": "2026-10-03",
-  "note": "as claimed",
+  "code": "1a087a388643a581",
+  "core": "8cefc2f43584fe32",
+  "date": "2026-10-07",
+  "note": "the page records the oversized marker only \"at city scale\"; the 11 px floor also enlarges the 16 ft frame at village grain (8 px at 2 ft/px); the page should record the village enlargement or the floor should apply only at city scale",
   "pages": {
    "0190-notice-boards-kosatsuba.drawing.html": "6046a6a69d20be53"
   },
   "research": "3b4a965d33e6f331",
-  "verdict": "IN-STEP"
+  "rests": [
+   "0190-notice-boards-kosatsuba.drawing.html:32a04db09c93fbc9"
+  ],
+  "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/boards.py::BoardsMixin.fire_tower#colors, cap and caption": {
   "code": "825ad25b7f83fb61",
@@ -55936,15 +56053,19 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/boards.py::BoardsMixin.kosatsuba#board size": {
-  "code": "a6ae2f63422accf6",
+  "code": "8df63dcb3f72d28e",
   "core": "1f35ae7702051faf",
-  "date": "2026-10-03",
-  "note": "12 x 5 ft from board_record; 0190.drawing: \"16 ft long and 6 ft deep\"",
+  "date": "2026-10-07",
+  "note": "16 x 6 ft via board_record (the docstring's \"12x5 ft\" is stale)",
   "pages": {
    "0190-notice-boards-kosatsuba.drawing.html": "6046a6a69d20be53"
   },
   "research": "3b4a965d33e6f331",
-  "verdict": "DRIFTED"
+  "rests": [
+   "0190-notice-boards-kosatsuba.drawing.html:00e4ac62d04e42dd",
+   "0190-notice-boards-kosatsuba.drawing.html:f602b2cd2b391398"
+  ],
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/boards.py::BoardsMixin.kosatsuba#location marker at coarse tiers": {
   "code": "d5c6aecd08b4f900",
@@ -56026,161 +56147,186 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_for#anchored board within 60 ft of the nearest seat to its anchor (KOSATSUBA_ANCHOR_BAND_FT)": {
-  "code": "40a8307159220407",
-  "core": "40a8307159220407",
+ ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_for#anchored board band": {
+  "code": "a57f5454954483d1",
+  "core": "28abbbfc2b8762ae",
   "date": "2026-10-07",
-  "note": "anchored board within 60 ft of the nearest seat to its anchor (KOSATSUBA_ANCHOR_BAND_FT)",
+  "note": "60 ft band; the research is silent",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_for#board may stand in shade": {
-  "code": "84dbd26d0848fc1f",
-  "core": "40a8307159220407",
+  "code": "d9d0cb981efa6e8d",
+  "core": "28abbbfc2b8762ae",
   "date": "2026-10-07",
-  "note": "shaded seats are kept when nothing else fits",
+  "note": "shaded seats admitted",
   "pages": {
    "0190-notice-boards-kosatsuba.drawing.html": "6046a6a69d20be53"
   },
   "research": "3b4a965d33e6f331",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:a42e1495c85275c0",
-   "0190-notice-boards-kosatsuba.drawing.html:aa00a4e4244c5f44"
+   "0190-notice-boards-kosatsuba.drawing.html:aa00a4e4244c5f44",
+   "0190-notice-boards-kosatsuba.html:ca444adc7dad6cb2"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_for#entrance board on the approach": {
-  "code": "19f2b08f8cdbd175",
-  "core": "40a8307159220407",
+  "code": "5f7dbabea220379b",
+  "core": "28abbbfc2b8762ae",
   "date": "2026-10-07",
-  "note": "no cited page covers a preference for the approach",
+  "note": "the research is silent",
   "pages": {},
   "research": "",
-  "rests": [
-   "0190-notice-boards-kosatsuba.html:71d64edbc2411ed0"
-  ],
+  "rests": [],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_for#entrance board within 20 ft of the nearest seat to the handover (KOSATSUBA_HANDOVER_BAND_FT)": {
-  "code": "40a8307159220407",
-  "core": "40a8307159220407",
+ ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_for#handover band": {
+  "code": "fb926f882ef9c805",
+  "core": "28abbbfc2b8762ae",
   "date": "2026-10-07",
-  "note": "entrance board within 20 ft of the nearest seat to the handover (KOSATSUBA_HANDOVER_BAND_FT)",
+  "note": "20 ft; the research is silent",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_for#open ground preferred": {
-  "code": "d6394ba71d3ede35",
-  "core": "40a8307159220407",
+  "code": "f9e635a411099c17",
+  "core": "28abbbfc2b8762ae",
   "date": "2026-10-07",
-  "note": "the pages allow shade but say nothing of preferring open ground",
+  "note": "the research is silent on boards and trees",
   "pages": {},
   "research": "",
   "rests": [
-   "0190-notice-boards-kosatsuba.drawing.html:a42e1495c85275c0",
-   "0190-notice-boards-kosatsuba.drawing.html:aa00a4e4244c5f44"
+   "0190-notice-boards-kosatsuba.html:ca444adc7dad6cb2"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_for#placement chooses the ground": {
-  "code": "11e74ddf4402f184",
-  "core": "40a8307159220407",
+  "code": "edac66fbda0547a6",
+  "core": "28abbbfc2b8762ae",
   "date": "2026-10-07",
-  "note": "entrance and center are attested sites, frontage is the busiest ground; the knob rolls among them",
+  "note": "the knob takes entrance/frontage/center, but the question also attests bridge ends for villages; the bridge-end form is never offered",
   "pages": {
    "0190-notice-boards-kosatsuba.html": "d5c6d0418e52d1fa"
   },
   "research": "348847d2a9750e4b",
   "rests": [
-   "0190-notice-boards-kosatsuba.html:aeb5e9860f97b764",
    "0190-notice-boards-kosatsuba.html:b465c07b81f6c576",
    "0190-notice-boards-kosatsuba.html:ebb781f8589560e1",
    "0190-notice-boards-kosatsuba.html:f5973f0b2ea1c6cc"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_for#roadside first": {
-  "code": "ab7c71d5ce828a6e",
-  "core": "40a8307159220407",
+  "code": "cc3913ce6cf2d9d3",
+  "core": "28abbbfc2b8762ae",
   "date": "2026-10-07",
-  "note": "only verge seats compete at the lane tiers, wider only when widened",
+  "note": "verge seats within 6 ft at the lane tiers, widened only where none fit",
   "pages": {
    "0190-notice-boards-kosatsuba.drawing.html": "6046a6a69d20be53"
   },
   "research": "3b4a965d33e6f331",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:532df9d7ad5a1f62",
-   "0190-notice-boards-kosatsuba.drawing.html:a98bd6773fc06235"
+   "0190-notice-boards-kosatsuba.drawing.html:a98bd6773fc06235",
+   "0190-notice-boards-kosatsuba.html:c1b40e481f7a5b1c"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_for#traffic floor": {
-  "code": "e67f15e82a066760",
-  "core": "40a8307159220407",
+  "code": "000c94471c8cb50a",
+  "core": "28abbbfc2b8762ae",
   "date": "2026-10-07",
-  "note": "§164 answers it (\"a site whose caption fits outranks any whose caption does not, and among those the busiest wins\"); the 60% floor that lets open ground choose among the busy seats departs from that, so cite 0190 drawing and record the floor as a DEVIATION",
+  "note": "the 60% floor is unresearched",
   "pages": {},
   "research": "",
   "rests": [
+   "0190-notice-boards-kosatsuba.drawing.html:199e8c96e82623ad",
    "0190-notice-boards-kosatsuba.drawing.html:44bd9b1ac0e11171"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_routes#anchor reach": {
-  "code": "f6a082ab76a82b45",
-  "core": "af95aeb2f49506c8",
-  "date": "2026-10-03",
-  "note": "as claimed",
+  "code": "c7379590a910fee5",
+  "core": "635c833090022f76",
+  "date": "2026-10-07",
+  "note": "2 x 60 = 120 ft; the research is silent",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_routes#lane fallback width": {
-  "code": "ae132aab588cbd1f",
-  "core": "af95aeb2f49506c8",
-  "date": "2026-10-03",
-  "note": "a lane's tread width is physical (it sets how far off the way the board stands), and it is 8 px, not 8 ft as the label says, against 0081's 3/5/6 ft lanes; label it UNRESEARCHED or cite 0081",
-  "research": "",
-  "verdict": "MISLABELED"
+  "code": "2403e257374e7cb4",
+  "core": "635c833090022f76",
+  "date": "2026-10-07",
+  "note": "footpath 3 ft",
+  "pages": {
+   "0081-village-lanes.drawing.html": "9e27759395199abd"
+  },
+  "research": "ebd72aaa6a0eb9af",
+  "rests": [
+   "0081-village-lanes.drawing.html:8ee2be2b6c83fe7f",
+   "0081-village-lanes.drawing.html:91a5765af6230403"
+  ],
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_routes#main ways only": {
-  "code": "0e41bc803e9f2e5b",
-  "core": "af95aeb2f49506c8",
-  "date": "2026-10-03",
-  "note": "as claimed",
+  "code": "4d4ece23dfbb7e88",
+  "core": "635c833090022f76",
+  "date": "2026-10-07",
+  "note": "roads and main streets only, where the map has any",
   "pages": {
    "0190-notice-boards-kosatsuba.drawing.html": "6046a6a69d20be53"
   },
   "research": "3b4a965d33e6f331",
+  "rests": [
+   "0190-notice-boards-kosatsuba.drawing.html:8548890f1af8984a"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_routes#no main way, the whole network": {
-  "code": "5cc92f699f095dc0",
-  "core": "af95aeb2f49506c8",
-  "date": "2026-10-03",
-  "note": "as claimed",
+  "code": "cd942e2fde388c50",
+  "core": "635c833090022f76",
+  "date": "2026-10-07",
+  "note": "falls back to the network and counts buildings",
   "pages": {
    "0190-notice-boards-kosatsuba.drawing.html": "6046a6a69d20be53"
   },
   "research": "3b4a965d33e6f331",
+  "rests": [
+   "0190-notice-boards-kosatsuba.drawing.html:2c72b95a28c81d2f"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_routes#nominal widths": {
-  "code": "2d715521ce5eb233",
-  "core": "af95aeb2f49506c8",
-  "date": "2026-10-03",
-  "note": "0137 gives roads 30 ft (avenue 45, ring 20); the code takes every road at 18 px (36-54 ft at 2-3 ft/px) and ignores the recorded width, so the board's offset off the tread is wrong. A capital page is also the wrong pointer for every tier's roads",
+  "code": "22c47d4a9dc96dd0",
+  "core": "635c833090022f76",
+  "date": "2026-10-07",
+  "note": "0137 gives no 18 px nominal (it gives roads 30 ft, the avenue 45 ft) and is about capitals, not board siting; relabel UNRESEARCHED/GUESS, or read each road's recorded width",
   "pages": {
    "0137-domain-capitals-the-daimyos-castle-town-jokamachi.drawing.html": "76f19657d541ffff"
   },
   "research": "281e638162646bea",
-  "verdict": "DRIFTED"
+  "rests": [
+   "0137-domain-capitals-the-daimyos-castle-town-jokamachi.drawing.html:c80ced0799d0328d"
+  ],
+  "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_routes#service lanes last": {
-  "code": "4c03aff639c79eeb",
-  "core": "af95aeb2f49506c8",
-  "date": "2026-10-03",
-  "note": "as claimed",
+  "code": "92cfb5a775ae619d",
+  "core": "635c833090022f76",
+  "date": "2026-10-07",
+  "note": "the research is silent",
+  "pages": {},
   "research": "",
+  "rests": [
+   "0190-notice-boards-kosatsuba.drawing.html:2c72b95a28c81d2f"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._board_seats#roadside first": {
@@ -56199,59 +56345,64 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._route_seats#least offset off the tread": {
-  "code": "7b28845c72ff8932",
-  "core": "205748d564f0417b",
+  "code": "94f6add4596d82c9",
+  "core": "ee632132f433f9cf",
   "date": "2026-10-07",
-  "note": "§157 answers it (\"6 ft from the edge of the road\"); the 4 px first step puts the board 4 ft off at hamlet scale and 8 ft off at village scale, past the 3 px verge, so verge-first finds no seat there; cite 0190 drawing, and the offset is then DRIFTED",
-  "pages": {},
-  "research": "",
+  "note": "6 ft from the road edge, out to 60 ft",
+  "pages": {
+   "0190-notice-boards-kosatsuba.drawing.html": "6046a6a69d20be53"
+  },
+  "research": "3b4a965d33e6f331",
   "rests": [
+   "0190-notice-boards-kosatsuba.drawing.html:532df9d7ad5a1f62",
    "0190-notice-boards-kosatsuba.drawing.html:a98bd6773fc06235"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._route_seats#long axis along the route": {
-  "code": "9ca98c000e09770a",
-  "core": "205748d564f0417b",
+  "code": "3e929ebc6604a6ba",
+  "core": "ee632132f433f9cf",
   "date": "2026-10-07",
-  "note": "the board is turned to the segment's bearing, broadside to traffic",
+  "note": "broadside to the traffic",
   "pages": {
    "0190-notice-boards-kosatsuba.drawing.html": "6046a6a69d20be53"
   },
   "research": "3b4a965d33e6f331",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:00c958149f1d98b5",
-   "0190-notice-boards-kosatsuba.drawing.html:00e4ac62d04e42dd"
+   "0190-notice-boards-kosatsuba.drawing.html:00e4ac62d04e42dd",
+   "0190-notice-boards-kosatsuba.drawing.html:f602b2cd2b391398"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._route_seats#nearness tie-break": {
-  "code": "211fa412cb6231ac",
-  "core": "205748d564f0417b",
+  "code": "3b49779418839256",
+  "core": "ee632132f433f9cf",
   "date": "2026-10-07",
-  "note": "no cited page covers it",
+  "note": "the research is silent",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._route_seats#off the tread, out of water, in view": {
-  "code": "ebe86a241b6114b8",
-  "core": "205748d564f0417b",
+  "code": "60152d1017cbc15e",
+  "core": "ee632132f433f9cf",
   "date": "2026-10-07",
-  "note": "seats are on the verge, never on the tread",
+  "note": "never in the roadbed",
   "pages": {
    "0190-notice-boards-kosatsuba.drawing.html": "6046a6a69d20be53"
   },
   "research": "3b4a965d33e6f331",
   "rests": [
-   "0190-notice-boards-kosatsuba.drawing.html:a98bd6773fc06235"
+   "0190-notice-boards-kosatsuba.drawing.html:a98bd6773fc06235",
+   "0190-notice-boards-kosatsuba.html:c1b40e481f7a5b1c"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._route_seats#sampling lattice": {
-  "code": "d0f69e72d82a885f",
-  "core": "205748d564f0417b",
+  "code": "b37f465a213818da",
+  "core": "ee632132f433f9cf",
   "date": "2026-10-07",
   "note": "search resolution only",
   "pages": {},
@@ -56260,10 +56411,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._route_seats#seat scored by traffic": {
-  "code": "cf6eca2998cd70f2",
-  "core": "205748d564f0417b",
+  "code": "ace6616c45fc5ea4",
+  "core": "ee632132f433f9cf",
   "date": "2026-10-07",
-  "note": "counts the buildings near each seat",
+  "note": "nearby houses and buildings counted",
   "pages": {
    "0190-notice-boards-kosatsuba.drawing.html": "6046a6a69d20be53"
   },
@@ -56276,10 +56427,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._route_seats#traffic radii": {
-  "code": "ba836f64344f07e9",
-  "core": "205748d564f0417b",
+  "code": "7ae3f7b4c455518a",
+  "core": "ee632132f433f9cf",
   "date": "2026-10-07",
-  "note": "no page gives the scoring radii",
+  "note": "the research is silent",
   "pages": {},
   "research": "",
   "rests": [
@@ -56288,20 +56439,20 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._route_seats#waterside bonus": {
-  "code": "35e2b08be4de4630",
-  "core": "205748d564f0417b",
+  "code": "e39cdb38e1cff543",
+  "core": "ee632132f433f9cf",
   "date": "2026-10-07",
-  "note": "no cited page covers it",
+  "note": "the research is silent",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._route_seats#waterside siting form": {
-  "code": "eb58ff024a9ae848",
-  "core": "205748d564f0417b",
+  "code": "fa66920587e11fdd",
+  "core": "ee632132f433f9cf",
   "date": "2026-10-07",
-  "note": "no cited page covers wells; the code comment calling the form \"attested\" is stale",
+  "note": "no well-side site attested; the code comment's \"both attested\" is wrong, the label right",
   "pages": {},
   "research": "",
   "rests": [
@@ -56319,10 +56470,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin.place_kosatsuba#board placed last": {
-  "code": "6dd82f11b42b1c68",
-  "core": "cc33be59a63c3b1b",
+  "code": "c2a05c18dd7fc0b1",
+  "core": "8601b73bf75c19c3",
   "date": "2026-10-07",
-  "note": "after the crop, against the view",
+  "note": "after the crop",
   "pages": {
    "0190-notice-boards-kosatsuba.drawing.html": "6046a6a69d20be53"
   },
@@ -56333,8 +56484,8 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin.place_kosatsuba#every settlement carries a board": {
-  "code": "5409e5039f972d2e",
-  "core": "cc33be59a63c3b1b",
+  "code": "c4d42702f4ef478c",
+  "core": "8601b73bf75c19c3",
   "date": "2026-10-07",
   "note": "hamlets included",
   "pages": {
@@ -56348,36 +56499,34 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin.place_kosatsuba#placement knob at the lane tiers": {
-  "code": "452593b01911f974",
-  "core": "cc33be59a63c3b1b",
+  "code": "b8645cc6eaab7b2c",
+  "core": "8601b73bf75c19c3",
   "date": "2026-10-07",
-  "note": "towns are fixed to `[\"center\"]`, but the page attests town entrances and bridge feet as well (\"at a town's central crossroads, at its entrances, at the foot of bridges\"; Ogose's board at its southern entrance); a choice between attested forms must be rolled",
+  "note": "towns are fixed to \"center\", but 0190 attests \"the entrances and centers of towns\" and a post town's board \"at the town's southern entrance\"; the town tier should roll the forms",
   "pages": {
    "0190-notice-boards-kosatsuba.html": "d5c6d0418e52d1fa"
   },
   "research": "348847d2a9750e4b",
   "rests": [
    "0190-notice-boards-kosatsuba.html:71d64edbc2411ed0",
-   "0190-notice-boards-kosatsuba.html:b465c07b81f6c576",
    "0190-notice-boards-kosatsuba.html:cd8d9ce0b74bb55f",
    "0190-notice-boards-kosatsuba.html:ebb781f8589560e1"
   ],
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin.place_kosatsuba#probe size": {
-  "code": "a28105ccbeaaa09b",
-  "core": "cc33be59a63c3b1b",
+  "code": "543609098db6165a",
+  "core": "8601b73bf75c19c3",
   "date": "2026-10-07",
-  "note": "the code probes 12 x 5 ft (`w = max(self.px(12), ...)`, `h = w * 5 / 12`), but §172 says the search \"uses a face of 7 by 3 ft\" and §170 draws the frame at 16 by 6 ft",
+  "note": "7 x 3 ft probe",
   "pages": {
    "0190-notice-boards-kosatsuba.drawing.html": "6046a6a69d20be53"
   },
   "research": "3b4a965d33e6f331",
   "rests": [
-   "0190-notice-boards-kosatsuba.drawing.html:00e4ac62d04e42dd",
    "0190-notice-boards-kosatsuba.drawing.html:4000a252d8f22fd1"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin.place_punishment_spot#caption seat": {
   "code": "48cb5ad870bead72",
@@ -58618,21 +58767,24 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.trim_lane_stubs#a row street stays whole": {
-  "code": "5ac9ff2b18463b76",
-  "core": "515cea92a2124e6b",
-  "date": "2026-10-03",
-  "note": "a street is skipped by the trim",
+  "code": "3f57e9deabf3c621",
+  "core": "59110adb2e24a165",
+  "date": "2026-10-07",
+  "note": "street exempt",
   "pages": {
    "0033-row-villages-resson.drawing.html": "5b109c17a425e58e"
   },
   "research": "f407e2a81ba3ed3b",
+  "rests": [
+   "0033-row-villages-resson.drawing.html:8c303daeddea6496"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.trim_lane_stubs#an end reaching nothing is pulled back": {
-  "code": "1288d522043cbd42",
-  "core": "515cea92a2124e6b",
-  "date": "2026-10-05",
-  "note": "to the last house, way or bund it serves",
+  "code": "1d31f9e05e7d5b09",
+  "core": "59110adb2e24a165",
+  "date": "2026-10-07",
+  "note": "pulled back to house, way or bund",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
@@ -58643,22 +58795,24 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.trim_lane_stubs#arrival at the bund": {
-  "code": "cffeb8ceda32daf3",
-  "core": "515cea92a2124e6b",
-  "date": "2026-10-03",
-  "note": "the lane runs on to the bund, within a tread's reach",
+  "code": "6971d4ed3dfdfc2e",
+  "core": "59110adb2e24a165",
+  "date": "2026-10-07",
+  "note": "`edge_dist(...) <= BUND_REACH_FT` compares a distance in px with a figure in feet, without the self.px() that way_reach gets, so it is only 6 ft on a 1 ft/px map. And 0014 gives no 6 ft figure: it says only that the path joins the outer bund, so the figure should be marked GUESS",
   "pages": {
    "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
   },
   "research": "9c5292e27312fca8",
-  "triaged": "2026-10-05",
-  "verdict": "IN-STEP"
+  "rests": [
+   "0014-bunds-between-the-paddies-aze.drawing.html:5b66ec3bfb5ac947"
+  ],
+  "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.trim_lane_stubs#meeting another way": {
-  "code": "27425f035972f078",
-  "core": "515cea92a2124e6b",
-  "date": "2026-10-05",
-  "note": "way_reach=40.0 where the page counts an end reaching another way \"within 60 ft\"; set it to 60 or record a DEVIATION on the 0246 drawing page",
+  "code": "9caef25981ef9820",
+  "core": "59110adb2e24a165",
+  "date": "2026-10-07",
+  "note": "0246 records 60 ft as a GUESS; px(60) is applied",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
@@ -58666,21 +58820,23 @@
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.trim_lane_stubs#one end per house and bearing": {
-  "code": "258ea1be8983dac4",
-  "core": "515cea92a2124e6b",
-  "date": "2026-10-03",
-  "note": "no bundle page gives it",
+  "code": "9d969c42a83f57cd",
+  "core": "59110adb2e24a165",
+  "date": "2026-10-07",
+  "note": "nothing in the bundle answers it",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.trim_lane_stubs#served at the dooryard": {
-  "code": "497467eede0d5a58",
-  "core": "515cea92a2124e6b",
-  "date": "2026-10-05",
-  "note": "counts only 12 ft of the yard, beds or front band, and refuses an end behind or past the house, where the page counts \"within 60 ft of the house, or within 12 ft of the steading's built ground - its house, byre, shed, threshing yard or garden\"; record the narrower rule on 0246 or follow it",
+  "code": "083820bcdeb2c31a",
+  "core": "59110adb2e24a165",
+  "date": "2026-10-07",
+  "note": "60/12 ft match the GUESS that 0246 records, but the defaults HOUSE_SERVE_FT and DOORYARD_REACH_FT are compared with px distances unconverted, while way_reach goes through px(). I need to see whether the callers pass px values",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
@@ -58688,26 +58844,32 @@
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "CANNOT-TELL"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.trim_lane_stubs#short lanes dropped": {
-  "code": "08b90f709bf50140",
-  "core": "515cea92a2124e6b",
-  "date": "2026-10-03",
-  "note": "no bundle page gives it",
+  "code": "dfd8d097ab71407f",
+  "core": "59110adb2e24a165",
+  "date": "2026-10-07",
+  "note": "no minimum lane length in the bundle",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.trim_lane_stubs#the track out and the field spur stay whole": {
-  "code": "4fec2a163573ee84",
-  "core": "515cea92a2124e6b",
-  "date": "2026-10-03",
-  "note": "the track out runs off the map, and the spur and track out are one through-route",
+  "code": "16364fab3c4faa7b",
+  "core": "59110adb2e24a165",
+  "date": "2026-10-07",
+  "note": "connector and spur exempt",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },
   "research": "ebd72aaa6a0eb9af",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0081-village-lanes.drawing.html:16df95fc169329f7",
+   "0081-village-lanes.drawing.html:df440690bbce9cb6",
+   "0081-village-lanes.drawing.html:f2368e271306e3c2"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/water_ways/lanes.py::_house_frame#lane records and their ink": {
@@ -59012,42 +59174,55 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/water_ways/water.py::WaterBodiesMixin.stream#bed and sheen": {
-  "code": "9a11602c59c23638",
-  "core": "ee5a12aa22973248",
-  "date": "2026-10-03",
-  "note": "conventions",
+  "code": "7d0940c7658c7e2c",
+  "core": "80800d137240f27d",
+  "date": "2026-10-07",
+  "note": "ink only",
+  "pages": {},
   "research": "",
+  "rests": [
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:1c4ab4cdec854bfe"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/water_ways/water.py::WaterBodiesMixin.stream#every course declares its flow": {
-  "code": "c0655bd7dd1101da",
-  "core": "ee5a12aa22973248",
-  "date": "2026-10-03",
-  "note": "upstream-first with a flow tag",
+  "code": "74f7b8bdf02d7b29",
+  "core": "80800d137240f27d",
+  "date": "2026-10-07",
+  "note": "upstream-first, flow_deg recorded",
   "pages": {
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "790c57e2a1c0ab27"
   },
   "research": "a3b4c3a9112374b7",
+  "rests": [
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:197d66e59c4872e2",
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:8dd23e19f3e6c598",
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:b522c6a3d290c1f4"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/water_ways/water.py::WaterBodiesMixin.stream#houses kept off the stream": {
-  "code": "b89f1ca4d642fcf5",
-  "core": "ee5a12aa22973248",
-  "date": "2026-10-03",
-  "note": "no bundle page gives it",
+  "code": "b2ec4ac86d63cd62",
+  "core": "80800d137240f27d",
+  "date": "2026-10-07",
+  "note": "the bundle is silent",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/water_ways/water.py::WaterBodiesMixin.stream#stream width": {
-  "code": "8f67d7456e194232",
-  "core": "ee5a12aa22973248",
-  "date": "2026-10-03",
-  "note": "width=9 is in px, unscaled: 9 ft at 1 ft/px but 18 ft at 2 ft/px, against 0068's ~7 ft GUESS for a village brook; size it in ft via px()",
+  "code": "42b497068b2af3a1",
+  "core": "80800d137240f27d",
+  "date": "2026-10-07",
+  "note": "the claim says \"unscaled (9 ft at 1 ft/px, 18 ft at 2 ft/px)\", but the code draws self.px(7.0), 7 ft at the map's scale. That matches the page; the claim should say so",
   "pages": {
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.html": "653d11fed9d1fb7b"
   },
   "research": "be69f0d771c8374a",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.html:0cc5bcaf3d9bf50c"
+  ],
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/settlement/water_ways/water.py::channel_class#watercourse records": {
@@ -59789,101 +59964,135 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/waterfields/carve.py::_dry_fields#behind a bare bank": {
-  "code": "53d7660034b516c4",
-  "core": "efd3f20e913ed79d",
-  "date": "2026-10-03",
-  "note": "5 ft bank past the local half-width (0055); the docstring's \"base dips slightly BELOW the canal\" is stale",
+  "code": "53e6dc1b89aa540d",
+  "core": "385525c92e90a6b9",
+  "date": "2026-10-07",
+  "note": "CANAL_BERM_FT 5.0 past the local bank, as the page's 5 ft bare bank",
   "pages": {
    "0006-dry-fields-and-their-crops-hatake.drawing.html": "9f1b7fafe06f01fe",
    "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html": "ce566988cdde2734"
   },
   "research": "ccb962a855ae9508",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:25a9d039c229ae5d",
+   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:60f41f927442ee20"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/waterfields/carve.py::_dry_fields#crop per plot": {
-  "code": "c2e17b5e141b59c1",
-  "core": "efd3f20e913ed79d",
-  "date": "2026-10-03",
-  "note": "the four crops match, but R.choice(list(DRY_CROPS)) is uniform with no per-map weights, against 0006 \"Each map picks its mix of the four crops at random\" (unless a caller re-rolls the mix)",
+  "code": "9c468bfb640a91ac",
+  "core": "385525c92e90a6b9",
+  "date": "2026-10-07",
+  "note": "`R.choice(list(DRY_CROPS))` draws the four crops in equal shares on every map, where the page says \"Each map picks its mix of the four crops at random\". Roll a per-map crop mix, or cite where the caller rolls one",
   "pages": {
    "0006-dry-fields-and-their-crops-hatake.drawing.html": "9f1b7fafe06f01fe"
   },
   "research": "eae521ca5e2ccfdd",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:73f55068e82112e4",
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:7e438855d3e0806f",
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:abb8b4f0d05c6c11"
+  ],
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/waterfields/carve.py::_dry_fields#dry plot size": {
-  "code": "7623562015b8cda6",
-  "core": "efd3f20e913ed79d",
-  "date": "2026-10-03",
-  "note": "46g x 36g px, x0.9-1.25: about 92 x 72 ft and ~0.16 acre at village grain, as 0006 states",
+  "code": "dd52698c8f3303b1",
+  "core": "385525c92e90a6b9",
+  "date": "2026-10-07",
+  "note": "46g x0.9-1.25 by 36g gives about 92 x 72 ft at village grain",
   "pages": {
    "0006-dry-fields-and-their-crops-hatake.drawing.html": "9f1b7fafe06f01fe"
   },
   "research": "eae521ca5e2ccfdd",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:dcc917f58bd99fa2"
+  ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/waterfields/carve.py::_dry_fields#hem depth": {
-  "code": "28d22e74504127b1",
-  "core": "efd3f20e913ed79d",
-  "date": "2026-10-03",
-  "note": "0006 attests the ragged outer edge; depth unrecorded",
+ ".claude/skills/diagram/l7r/diagram/waterfields/carve.py::_dry_fields#end plot split in two when wider than 1.35 plot widths (coarse grains only)": {
+  "code": "385525c92e90a6b9",
+  "core": "385525c92e90a6b9",
+  "date": "2026-10-07",
+  "note": "end plot split in two when wider than 1.35 plot widths (coarse grains only)",
   "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ ".claude/skills/diagram/l7r/diagram/waterfields/carve.py::_dry_fields#hem depth": {
+  "code": "2ccdc9bd6a73523a",
+  "core": "385525c92e90a6b9",
+  "date": "2026-10-07",
+  "note": "the pages give no depth for the hem band",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/waterfields/carve.py::_dry_fields#keep-out and frame margin": {
-  "code": "cd201aeed195d8a4",
-  "core": "efd3f20e913ed79d",
-  "date": "2026-10-03",
-  "note": "collision and canvas margin, plumbing",
+  "code": "15e002a464d9363f",
+  "core": "385525c92e90a6b9",
+  "date": "2026-10-07",
+  "note": "frame margin and overlap avoidance are plumbing",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/waterfields/carve.py::_dry_fields#neighbor keeps the crop": {
-  "code": "3973b57978bb5f01",
-  "core": "efd3f20e913ed79d",
-  "date": "2026-10-03",
-  "note": "0.55 + 0.45/4 = 0.66; record silent on clustering",
+  "code": "4d1f19cc3f9ccc52",
+  "core": "385525c92e90a6b9",
+  "date": "2026-10-07",
+  "note": "the pages say nothing on crop clustering; 0.55+0.45/4 is about 0.66",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/waterfields/carve.py::_dry_fields#off the water and the frame": {
-  "code": "0faf79ab6af14067",
-  "core": "efd3f20e913ed79d",
-  "date": "2026-10-03",
-  "note": "neither 0055 (\"stand back behind a bare earth bank about 5 ft wide\") nor 0006 records that a plot may stand inside another canal's bank; the DEVIATION needs recording on a drawing page",
+  "code": "80536c3ef6894a4e",
+  "core": "385525c92e90a6b9",
+  "date": "2026-10-07",
+  "note": "a cell is dropped within half-width plus berm of any supply stroke",
   "pages": {
    "0006-dry-fields-and-their-crops-hatake.drawing.html": "9f1b7fafe06f01fe",
    "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html": "ce566988cdde2734"
   },
   "research": "4093f876b21e8ef3",
-  "triaged": "2026-10-05",
-  "verdict": "DRIFTED"
+  "rests": [
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:25a9d039c229ae5d",
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:93778d368035a1bf",
+   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:60f41f927442ee20"
+  ],
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/waterfields/carve.py::_dry_fields#row direction": {
-  "code": "1158fbf76808341c",
-  "core": "efd3f20e913ed79d",
-  "date": "2026-10-03",
-  "note": "tract heading plus a 0.05 rad (~3 deg) per-plot turn, as 0006",
+  "code": "9d1e4ca00d7eba6c",
+  "core": "385525c92e90a6b9",
+  "date": "2026-10-07",
+  "note": "the tract heading is per column, and the ±0.05 rad turn is the page's \"about 3 degrees\"",
   "pages": {
    "0006-dry-fields-and-their-crops-hatake.drawing.html": "9f1b7fafe06f01fe"
   },
   "research": "eae521ca5e2ccfdd",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:176c6b47d65b6207",
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:924bd22463e9b102"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/waterfields/carve.py::_dry_fields#squared to the canal": {
-  "code": "1748080d30f732aa",
-  "core": "efd3f20e913ed79d",
-  "date": "2026-10-03",
-  "note": "mitred shared seams along the canal line (0006)",
+  "code": "2c80aaa42f28b520",
+  "core": "385525c92e90a6b9",
+  "date": "2026-10-07",
+  "note": "mitred shared seams, rectangles square to the canal",
   "pages": {
    "0006-dry-fields-and-their-crops-hatake.drawing.html": "9f1b7fafe06f01fe"
   },
   "research": "eae521ca5e2ccfdd",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:6501f794f6c83ba6",
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:794454f6ea76b0fc",
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:dde5f2b9d9331f24"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/waterfields/carve.py::_root_f#sector bounds": {
@@ -60052,60 +60261,83 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/waterfields/comb.py::_comb_drain#across the slope": {
-  "code": "028efe910abb6f26",
-  "core": "f48d10f739a774c6",
-  "date": "2026-10-03",
-  "note": "atan(0.06..0.35) puts it 71-87 deg off the fall, inside 0060's \">50\"",
+  "code": "948c97b326665ee9",
+  "core": "2a5076bc135960ed",
+  "date": "2026-10-07",
+  "note": "b clamped to 0.06-0.35, at most ~19 deg off the contour, falling toward the outfall",
   "pages": {
    "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
   },
   "research": "8ff7ceb036c4856e",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:0458365d163de05d",
+   "0060-field-drains-akusuiro.drawing.html:3f8aaea7876f6fee",
+   "0060-field-drains-akusuiro.drawing.html:5430b16d81429901"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/waterfields/comb.py::_comb_drain#collector on the low line": {
-  "code": "dc95aa8147ae07f5",
-  "core": "f48d10f739a774c6",
-  "date": "2026-10-03",
-  "note": "collector along the low line (0060)",
+  "code": "f7779b2b6c20d3db",
+  "core": "2a5076bc135960ed",
+  "date": "2026-10-07",
+  "note": "collector along the low line, head at the first delivery",
   "pages": {
    "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
   },
   "research": "8ff7ceb036c4856e",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0060-field-drains-akusuiro.drawing.html:3f8aaea7876f6fee",
+   "0060-field-drains-akusuiro.drawing.html:d3e99aaa0ddc4599"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/waterfields/comb.py::_comb_drain#drain widens": {
-  "code": "1686e2141eb3ca32",
-  "core": "f48d10f739a774c6",
-  "date": "2026-10-03",
-  "note": "thread head widening to the outfall (0060, 0068)",
+  "code": "37f3421f107bf0af",
+  "core": "2a5076bc135960ed",
+  "date": "2026-10-07",
+  "note": "1.2 to 5.5 ft",
   "pages": {
    "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html": "73b09981aa65bd21"
   },
   "research": "f92e0a94674d2241",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0060-field-drains-akusuiro.drawing.html:9335eaa56aa337a3",
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:603250935c007233",
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:b60a8b29980e1035"
+  ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/waterfields/comb.py::_comb_drain#set below the ditch ends": {
-  "code": "4ba403ff71210cfa",
-  "core": "f48d10f739a774c6",
-  "date": "2026-10-03",
-  "note": "no figure in the bundle",
+ ".claude/skills/diagram/l7r/diagram/waterfields/comb.py::_comb_drain#no jittered sample within DRAIN_MIN_LEG (84 px) of the outfall, so the drain's last leg is straight": {
+  "code": "2a5076bc135960ed",
+  "core": "2a5076bc135960ed",
+  "date": "2026-10-07",
+  "note": "no jittered sample within DRAIN_MIN_LEG (84 px) of the outfall, so the drain's last leg is straight",
   "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ ".claude/skills/diagram/l7r/diagram/waterfields/comb.py::_comb_drain#set below the ditch ends": {
+  "code": "1be6059ca06963ab",
+  "core": "2a5076bc135960ed",
+  "date": "2026-10-07",
+  "note": "the bundle is silent",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/waterfields/comb.py::_comb_drain#wandering line": {
-  "code": "d439a481fa66bd76",
-  "core": "f48d10f739a774c6",
-  "date": "2026-10-03",
-  "note": "`R.uniform(-6, 6)` and `R.uniform(120, 170)` are px not scaled by grain; 0055 \"about 6 ft at a bend every 120-170 ft\" holds only at 1 ft/px (12 ft per 240-340 ft on a 2 ft/px village) - scale by grain or restate the page per tier",
+  "code": "d41963068ca50420",
+  "core": "2a5076bc135960ed",
+  "date": "2026-10-07",
+  "note": "the claim says \"up to 6 px of jitter\", but the code jitters 6 ft at the map's scale (uniform(-6,6)*grain/2), which is what the page says. Fix the claim to 6 ft",
   "pages": {
    "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html": "ce566988cdde2734"
   },
   "research": "39036ea15e57c448",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:63df982a8a8be353"
+  ],
   "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/waterfields/comb.py::_comb_envelope#floor ends at the collector": {
@@ -61089,86 +61321,114 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/waterfields/hem.py::_comb_dry_and_beans#bund beans": {
-  "code": "571a9801024aace4",
-  "core": "7736774e532d40e0",
-  "date": "2026-10-03",
-  "note": "beans on some bunds (0014)",
+  "code": "c7957167c82abf4c",
+  "core": "7ab0c6b72739ea09",
+  "date": "2026-10-07",
+  "note": "beans on a share of the bunds",
   "pages": {
    "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
   },
   "research": "9c5292e27312fca8",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0014-bunds-between-the-paddies-aze.drawing.html:af5d565ccf760fa8",
+   "0014-bunds-between-the-paddies-aze.drawing.html:bae027cc6cb44e22"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/waterfields/hem.py::_comb_dry_and_beans#dry acreage scale": {
-  "code": "0520d9613226025c",
-  "core": "7736774e532d40e0",
-  "date": "2026-10-03",
-  "note": "a measurement, plumbing",
+  "code": "3f54ded8e2a44752",
+  "core": "7ab0c6b72739ea09",
+  "date": "2026-10-07",
+  "note": "an area conversion, not a decision",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/waterfields/hem.py::_comb_dry_and_beans#dry hem above the canal": {
-  "code": "aaa5fc3d2b6c9252",
-  "core": "7736774e532d40e0",
-  "date": "2026-10-03",
-  "note": "hem upslope of canal A (0006)",
+  "code": "62610918611bdf48",
+  "core": "7ab0c6b72739ea09",
+  "date": "2026-10-07",
+  "note": "hem upslope of canal A",
   "pages": {
    "0006-dry-fields-and-their-crops-hatake.drawing.html": "9f1b7fafe06f01fe"
   },
   "research": "eae521ca5e2ccfdd",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:25a9d039c229ae5d",
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:794454f6ea76b0fc",
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:abb8b4f0d05c6c11"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/waterfields/hem.py::_comb_dry_and_beans#fork band depth": {
-  "code": "b0f442bd9105cd1f",
-  "core": "7736774e532d40e0",
-  "date": "2026-10-03",
-  "note": "no figure in the bundle",
+  "code": "2ba5513203bc306a",
+  "core": "7ab0c6b72739ea09",
+  "date": "2026-10-07",
+  "note": "no depth given for the fork band",
+  "pages": {},
   "research": "",
+  "rests": [
+   "0010-farmland-around-towns-and-cities.drawing.html:2f19d581d6b3c8ad",
+   "0010-farmland-around-towns-and-cities.drawing.html:3493e7b3a94673f1"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/waterfields/hem.py::_comb_dry_and_beans#fork band skipped on villages": {
-  "code": "555547bdf71f4910",
-  "core": "7736774e532d40e0",
-  "date": "2026-10-03",
-  "note": "no ruling for villages",
+  "code": "cc5cdf0c88074471",
+  "core": "7ab0c6b72739ea09",
+  "date": "2026-10-07",
+  "note": "0010 rules only for cities",
+  "pages": {},
   "research": "",
+  "rests": [
+   "0010-farmland-around-towns-and-cities.drawing.html:3493e7b3a94673f1"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/waterfields/hem.py::_comb_dry_and_beans#fork triangle planted dry": {
-  "code": "d9ee532f0e490492",
-  "core": "7736774e532d40e0",
-  "date": "2026-10-03",
-  "note": "`if grain != 1.0` also fires at the scripted hamlet's grain 2.0 (finer, not coarser); the claim and comment say coarse grains only and 0010 rules it \"On a city map\" - test for a coarse grain, or cite a hamlet ruling",
+  "code": "99ed5e906c96dea1",
+  "core": "7ab0c6b72739ea09",
+  "date": "2026-10-07",
+  "note": "city fork triangle planted dry",
   "pages": {
    "0010-farmland-around-towns-and-cities.drawing.html": "a6ecbb2065f500ff"
   },
   "research": "547d1c1f54d952f0",
-  "verdict": "DRIFTED"
+  "rests": [
+   "0010-farmland-around-towns-and-cities.drawing.html:3493e7b3a94673f1"
+  ],
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/waterfields/hem.py::_comb_dry_and_beans#seams settled": {
-  "code": "75925484e97ef4b5",
-  "core": "7736774e532d40e0",
-  "date": "2026-10-03",
-  "note": "seams over every band (0006)",
+  "code": "a583ea534571043d",
+  "core": "7ab0c6b72739ea09",
+  "date": "2026-10-07",
+  "note": "seams set where rows spread, none on steep ground",
   "pages": {
    "0006-dry-fields-and-their-crops-hatake.drawing.html": "9f1b7fafe06f01fe"
   },
   "research": "eae521ca5e2ccfdd",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:1d36bfe90951ecad",
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:2c9808eceb0cc72a",
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:924bd22463e9b102"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/waterfields/hem.py::_comb_dry_and_beans#wild middle": {
-  "code": "9f4bcfaceabe21fc",
-  "core": "7736774e532d40e0",
-  "date": "2026-10-03",
-  "note": "toe hem, middle reserved (0006)",
+  "code": "32870c3d2d6cda18",
+  "core": "7ab0c6b72739ea09",
+  "date": "2026-10-07",
+  "note": "toe kept, middle held in reserve",
   "pages": {
    "0006-dry-fields-and-their-crops-hatake.drawing.html": "9f1b7fafe06f01fe"
   },
   "research": "eae521ca5e2ccfdd",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:79c616b0b0fbbeb4",
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:a4efedb923b01d31"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/waterfields/hem.py::_ring_mean#hem plumbing": {
@@ -62074,6 +62334,21 @@
   "triaged": "2026-10-05",
   "verdict": "DRIFTED"
  },
+ ".claude/skills/diagram/l7r/diagram/waterfields/polder.py::POLDER_APEX_DEG#no parcel tapers to a point": {
+  "code": "05cfd1ab9b83c59d",
+  "core": "1956a2a68f21c5fe",
+  "date": "2026-10-07",
+  "note": "25 degrees, as the page",
+  "pages": {
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8"
+  },
+  "research": "d717a3e31d236e53",
+  "rests": [
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:09e14486a2d7cf93",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:30e48ce04a927227"
+  ],
+  "verdict": "IN-STEP"
+ },
  ".claude/skills/diagram/l7r/diagram/waterfields/polder.py::_RING#ring canal corridor": {
   "code": "40e46bd8dd3461b7",
   "core": "14aaee2fbe7c7694",
@@ -62083,12 +62358,17 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/waterfields/polder.py::_apex#polder plumbing": {
-  "code": "aeff2db07afc1485",
-  "core": "1d415c19c4e27567",
-  "date": "2026-10-03",
-  "note": "plumbing, decides nothing physical",
+  "code": "ba4c54705a1f535b",
+  "core": "f691056d61861369",
+  "date": "2026-10-07",
+  "note": "NONE is the wrong label: the unit applies the 25 degree needle threshold and decides which corner of a parcel is cut off (the sharpest convex one first). It should cite 0005, no parcel tapers to a point",
+  "pages": {},
   "research": "",
-  "verdict": "IN-STEP"
+  "rests": [
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:30e48ce04a927227",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:6138bdfbc6462421"
+  ],
+  "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/waterfields/polder.py::_nearest_on#polder plumbing": {
   "code": "337b9b8fc207a38c",
@@ -62429,22 +62709,20 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/waterfields/polder.py::build_polder#acreage reckoned": {
-  "code": "7f911d4f5f458b43",
-  "core": "7f26fd5178bc6cec",
-  "date": "2026-10-05",
-  "note": "`acres = area * 4 / 43560` reckons 2 ft/px on a block drawn at 1 ft/px (the claim's own account), so the acreage reads four times the parcels the page draws \"at their real size\"; this is a scale defect, not a research gap - reckon at the map's ftpx squared",
+  "code": "d642013faaad0baf",
+  "core": "5d9e4b1ed48bd892",
+  "date": "2026-10-07",
+  "note": "measuring the acreage is plumbing",
   "pages": {},
   "research": "",
-  "rests": [
-   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:f75d60bdb9784b89"
-  ],
-  "verdict": "DRIFTED"
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/waterfields/polder.py::build_polder#gaps": {
-  "code": "dd914f17ea54ce20",
-  "core": "7f26fd5178bc6cec",
-  "date": "2026-10-05",
-  "note": "1.5 px of inset a side makes a 3 ft walking bund and 4.0 px an 8 ft corridor, at 1 ft/px",
+  "code": "d797852ff88b5ed7",
+  "core": "5d9e4b1ed48bd892",
+  "date": "2026-10-07",
+  "note": "the default `gap=(1.5, 4.0)` is in pixels and is not divided by ftpx, while `cell` is (190/ftpx). So the 3 ft bund and 8 ft corridor hold only at ftpx=1, and at 2 ft/px they become 6 ft and 16 ft. Scale gap by ftpx",
   "pages": {
    "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "b3774c7331266452"
   },
@@ -62455,24 +62733,44 @@
    "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:2121aaffee2cc5ab",
    "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:f75d60bdb9784b89"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
+ },
+ ".claude/skills/diagram/l7r/diagram/waterfields/polder.py::build_polder#interior bund node jitter default organic (0.05, 0.02)": {
+  "code": "5d9e4b1ed48bd892",
+  "core": "5d9e4b1ed48bd892",
+  "date": "2026-10-07",
+  "note": "interior bund node jitter default organic (0.05, 0.02)",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/waterfields/polder.py::build_polder#low rows wet": {
-  "code": "9bafd4689841eedf",
-  "core": "7f26fd5178bc6cec",
-  "date": "2026-10-03",
-  "note": "matches the cited drawing page",
+  "code": "4bc1c67b80cde0ce",
+  "core": "5d9e4b1ed48bd892",
+  "date": "2026-10-07",
+  "note": "the tinting is not in this unit's code (it is presumably in _polder_parcels), and the page says \"every low plot\", not \"two lowest rows\". Need _polder_parcels' tint code",
   "pages": {
    "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "d28f2aaa854f4f5b"
   },
   "research": "c7c7af520bd4fdf8",
-  "verdict": "IN-STEP"
+  "rests": [
+   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:4fc3811eb15b4538",
+   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:68a6523772c7cec3"
+  ],
+  "verdict": "CANNOT-TELL"
+ },
+ ".claude/skills/diagram/l7r/diagram/waterfields/polder.py::build_polder#module line bow default line_wander 0.10 of the grid's spacing (0014 §154)": {
+  "code": "5d9e4b1ed48bd892",
+  "core": "5d9e4b1ed48bd892",
+  "date": "2026-10-07",
+  "note": "module line bow default line_wander 0.10 of the grid's spacing (0014 §154)",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/waterfields/polder.py::build_polder#module size": {
-  "code": "b2a62ae572b309a2",
-  "core": "7f26fd5178bc6cec",
-  "date": "2026-10-05",
-  "note": "`cell=150` (150 ft at 1 ft/px) against \"square modules about 190 ft on a side\" (and the docstring's own \"~110 ft module\" is a third figure); set the default near 190 or record the 150 on 0022",
+  "code": "9f094047015c0760",
+  "core": "5d9e4b1ed48bd892",
+  "date": "2026-10-07",
+  "note": "190 ft / ftpx",
   "pages": {
    "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "b3774c7331266452"
   },
@@ -62481,57 +62779,72 @@
    "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:87427868eb3365dc",
    "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:f75d60bdb9784b89"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/waterfields/polder.py::build_polder#parcel mix": {
-  "code": "95fe8d225b28c073",
-  "core": "7f26fd5178bc6cec",
-  "date": "2026-10-03",
-  "note": "matches the cited drawing page",
+  "code": "ece8af094b0bfede",
+  "core": "5d9e4b1ed48bd892",
+  "date": "2026-10-07",
+  "note": "0.68 split into strips and 0.12 merged gives a mean of about half an acre, rolled per module",
   "pages": {
    "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html": "b3774c7331266452"
   },
   "research": "5b339210163f008f",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:eb2d7af29e23a469",
+   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:f75d60bdb9784b89"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/waterfields/polder.py::build_polder#polder layout": {
-  "code": "91b66d18f320ac98",
-  "core": "7f26fd5178bc6cec",
-  "date": "2026-10-03",
-  "note": "matches the cited drawing page",
+  "code": "1b876c2c773432c7",
+  "core": "5d9e4b1ed48bd892",
+  "date": "2026-10-07",
+  "note": "ring of feeder, drain and toes inside the dike, with sluice and dike sluices",
   "pages": {
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "45bbefa1e8568ae6"
   },
   "research": "7e58acaa9e345ce6",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:9b079184810cacb3",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f981425220ab2e60"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/waterfields/polder.py::build_polder#polder size": {
-  "code": "1e1bc01a7ca282fd",
-  "core": "7f26fd5178bc6cec",
-  "date": "2026-10-03",
-  "note": "unanswered in the bundle",
+  "code": "a5e01f6e6a9c35a8",
+  "core": "5d9e4b1ed48bd892",
+  "date": "2026-10-07",
+  "note": "the pages are silent on the block's size in modules",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/waterfields/polder.py::build_polder#toe ends on the trunk": {
-  "code": "8b5ebbffcbab27c4",
-  "core": "7f26fd5178bc6cec",
-  "date": "2026-10-03",
-  "note": "matches the cited drawing page",
+  "code": "59f7dcdc2cc7131e",
+  "core": "5d9e4b1ed48bd892",
+  "date": "2026-10-07",
+  "note": "the tip is set on the trunk's drawn line, a junction drawn as one confluence",
   "pages": {
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "790c57e2a1c0ab27"
   },
   "research": "a3b4c3a9112374b7",
+  "rests": [
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:1c4ab4cdec854bfe",
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:863892cbd9ede3bd",
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:c7c19378534d318a"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/waterfields/polder.py::clean_polder_parcels#polder plumbing": {
-  "code": "99882eb868ff4139",
-  "core": "bd8afc7d83500b7e",
-  "date": "2026-10-03",
-  "note": "plumbing, decides nothing physical",
+  "code": "ce45142b33715d13",
+  "core": "1b7913abc5b94299",
+  "date": "2026-10-07",
+  "note": "it composes callees and re-measures; it decides nothing itself",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/waterfields/polder.py::end_on_centerline#join on the centerline": {
@@ -62554,16 +62867,19 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/waterfields/polder.py::unpoint_parcels#no parcel tapers to a point": {
-  "code": "73d76ffd30308a55",
+  "code": "f6764f56a06ca4ca",
   "core": "69300ec9b866f374",
-  "date": "2026-10-03",
-  "note": "cuts only apexes under NEEDLE_DEG=15 deg, so a polder parcel may keep a 15-25 deg point; 0005: \"No basin tapers to a point sharper than 25 degrees ... The maps refuse a point sharper than 25 degrees\"",
+  "date": "2026-10-07",
+  "note": "a convex apex under 25 degrees is cut off, and a ring still pointed is left bare",
   "pages": {
    "0005-rice-paddies-and-their-plots-suiden.drawing.html": "9c75bb42c61f88f8"
   },
   "research": "d717a3e31d236e53",
-  "triaged": "2026-10-05",
-  "verdict": "DRIFTED"
+  "rests": [
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:30e48ce04a927227",
+   "0005-rice-paddies-and-their-plots-suiden.drawing.html:6138bdfbc6462421"
+  ],
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/waterfields/polder.py::unpoint_parcels#pointed parcel left as bank": {
   "code": "0e2fbe75684d86c6",
@@ -62658,16 +62974,20 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/waterfields/ring_rules.py::MAX_STEPS#sideways steps": {
-  "code": "bd384b8946df41d6",
-  "core": "a7a50042be63d617",
-  "date": "2026-10-03",
-  "note": "MAX_STEPS=1 lets a ring keep one sideways step, but 0014 says a wall that \"steps a few feet sideways and carries on parallel to itself is not drawn\" and records no one-step allowance; set 0 or record the allowance on 0014",
+  "code": "edeebfc34380fee8",
+  "core": "a8fef0cbbfd8d9a8",
+  "date": "2026-10-07",
+  "note": "0, as \"never step sideways\"",
   "pages": {
    "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
   },
   "research": "9c5292e27312fca8",
-  "triaged": "2026-10-05",
-  "verdict": "DRIFTED"
+  "rests": [
+   "0014-bunds-between-the-paddies-aze.drawing.html:0a5c813bdbc4ad64",
+   "0014-bunds-between-the-paddies-aze.drawing.html:af5d565ccf760fa8",
+   "0014-bunds-between-the-paddies-aze.drawing.html:d7ca85f575a7671c"
+  ],
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/waterfields/ring_rules.py::NEEDLE_DEG#no basin tapers to a point": {
   "code": "10c9a7906899c659",
@@ -62946,15 +63266,18 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/waterfields/ring_rules.py::staircase#staircase": {
-  "code": "24047d3937acd50a",
-  "core": "4488b4b4f724270e",
-  "date": "2026-10-03",
-  "note": "matches the cited drawing page",
+  "code": "f638927c92159cce",
+  "core": "ecd93efe8399a977",
+  "date": "2026-10-07",
+  "note": "more than MAX_STEPS (0) jogs is a staircase",
   "pages": {
    "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
   },
   "research": "9c5292e27312fca8",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0014-bunds-between-the-paddies-aze.drawing.html:0a5c813bdbc4ad64",
+   "0014-bunds-between-the-paddies-aze.drawing.html:d7ca85f575a7671c"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/waterfields/ring_rules.py::supply_intrusions#bund abuts the supply stroke": {
@@ -63048,15 +63371,18 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/waterfields/seams/close.py::_split_steps#no sideways step": {
-  "code": "e4e768fa5704a0b0",
-  "core": "ce76c0507e3c647f",
-  "date": "2026-10-03",
-  "note": "matches the cited drawing page",
+  "code": "6b3ddcc565ab5c44",
+  "core": "866cdc7252c4e688",
+  "date": "2026-10-07",
+  "note": "it cuts until no part steps, preferring whole basins to scraps",
   "pages": {
    "0014-bunds-between-the-paddies-aze.drawing.html": "2f7b54cc8da5cb54"
   },
   "research": "9c5292e27312fca8",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0014-bunds-between-the-paddies-aze.drawing.html:0a5c813bdbc4ad64",
+   "0014-bunds-between-the-paddies-aze.drawing.html:b09d82d6a024f0e7"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/waterfields/seams/close.py::_weld_within_rules#weld host": {

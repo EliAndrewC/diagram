@@ -148,8 +148,11 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 - **Tiers by work (FR-002, FR-003)**: wave 9's found rows tiered by their work by a fresh reader (T38a; T38b for the 18 found
   after), and its three NEEDS-RESEARCH rows E4 with the research first (spec Edge Cases); the north annex's band row is "keep
   the 18 ft floor" (E2), never a named exception.
-- **Scope**: the 26 open in-scope E0 rows, then the last contiguous run of in-scope E1 (FR-006, FR-010): rows 296-358 (18 rows,
-  `tasks.md` Phase 11); after it every open in-scope row is E2 or above (the next, row 359).
+- **Scope**: the 20 open in-scope E0 rows, then the last contiguous run of in-scope E1 (FR-006, FR-010): rows 290-354 (20 rows,
+  `tasks.md` Phase 11); after it every open in-scope row is E2 or above (the next, row 355).
+- **The exception check on the four DEVIATION relabels** (2026-10-07): NOT LEGITIMATE, each - the crowns-per-clump floor
+  and ceiling dropped (E1, in this wave), the planted bank's two forms and the free-standing storehouse E3 with the two annex
+  claims after the storehouse row.
 - **Verification**: as wave 9 - Inashiro first, the pool through a green gate (FR-005), the bookends back to back;
   `impl-drift` on every touched unit; a held value becomes a found row.
 

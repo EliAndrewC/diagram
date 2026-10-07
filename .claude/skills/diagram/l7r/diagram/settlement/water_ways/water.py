@@ -122,7 +122,7 @@ class WaterBodiesMixin:
 
         Research:
             every course declares its flow - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: authored upstream-first
-            stream width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.html: the page's GUESS of about 2 m (~7 ft) for a village brook, drawn 7 ft at the map's scale by default, unscaled (9 ft at 1 ft/px, 18 ft at 2 ft/px)
+            stream width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.html: the page's GUESS of about 2 m (~7 ft) for a village brook, drawn 7 ft at the map's scale by default
             bed and sheen - CONVENTION: a blue bed, a lighter butt-capped mid-current sheen
             houses kept off the stream - UNRESEARCHED: a no-build corridor of max(30, half-width + 20) px
         """
