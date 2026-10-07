@@ -5,20 +5,19 @@ from l7r.diagram.hamletgen.consts import BUNDLE_PITCH, MIN_WEB_GAP, WEB_CLEARANC
 from l7r.diagram.hamletgen.ways import WEB_REACH_FT as _WEB_REACH
 
 
-def test_the_web_reach_is_one_bundle_pitch_in_the_generator_and_in_the_gate() -> None:
+def test_the_web_reach_is_the_pages_100_ft_in_the_generator_and_in_the_gate() -> None:
     """THREE copies of one number, and this is what stops them drifting.
 
     `WEB_REACH_FT` is what the generator lays the web to satisfy, `_WEB_REACH` is what
-    `farmhouses_reach_a_way` measures against, and both ARE `BUNDLE_PITCH` - the ground one
-    homestead occupies, which is the distance at which a lane passes your own plot or your
-    neighbor's. The gate deliberately does not import the generator's constant (a check that reads
+    `farmhouses_reach_a_way` measures against, and both are 0246's "every farmhouse within 100 ft of one" (feature
+    328: they were `BUNDLE_PITCH` while the pitch was 100; the pitch is 0038's 92 now). The gate deliberately does not import the generator's constant (a check that reads
     the value it is checking cannot catch that value being wrong), so the coupling has to live
     somewhere, and it lives here.
 
     If you are changing the reach, change all three and say why in `consts.py` - the number is
     derived from research, not tuned to make maps pass."""
-    assert WEB_REACH_FT == BUNDLE_PITCH
-    assert _WEB_REACH == BUNDLE_PITCH
+    assert WEB_REACH_FT == 100.0
+    assert _WEB_REACH == WEB_REACH_FT
 
 
 def test_a_web_lane_reserves_far_less_ground_than_a_lane_the_houses_front() -> None:

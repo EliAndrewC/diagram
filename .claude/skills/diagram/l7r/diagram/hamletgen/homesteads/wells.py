@@ -23,14 +23,14 @@ _WELL_DRAWN_R = 12.376
 `r` clearance radius, because the frame follows the ink. `drawn_r` asks the glyph; this is its value where the
 settlement is a stand-in that draws no well (feature 328: it was a separate 12, with a docstring saying 16 px across).
 
-Research: wellhead drawn extent - research/questions/0196-communal-wells-ido.drawing.html: the glyph's 12.376 ft roof half-size
+Research: wellhead drawn extent - CONVENTION: the glyph's 12.376 ft roof half-size, a marker larger than life (0196)
 """
 
 
 def drawn_r(s: Any) -> float:
     """The wellhead's drawn half-extent on `s`: its glyph's `vr`, or `_WELL_DRAWN_R` on a stand-in with no glyph.
 
-    Research: wellhead drawn extent - research/questions/0196-communal-wells-ido.drawing.html: read from the glyph
+    Research: wellhead drawn extent - NONE: reads the glyph's `vr`, or the stand-in value
     """
     return float(s._well_vr()) if hasattr(s, "_well_vr") else _WELL_DRAWN_R
 

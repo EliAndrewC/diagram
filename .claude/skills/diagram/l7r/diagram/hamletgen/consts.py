@@ -231,18 +231,18 @@ MIN_WEB_GAP = 2.0 * WEB_FABRIC_GAP + 4.0  # 18 ft: both neighbors' clearance, pl
 """Research: least gap a lane threads - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: 7 ft clear of each garden fence and a 4 ft tread between, within the page's 3 ft footpath to 5 ft spine; the 2 ft parting is added by `growth.grow_gap`"""
 
 # THE REACH A FARMHOUSE IS ENTITLED TO: every house center must be within this of some drawn way
-# (`farmhouses_reach_a_way`). It is BUNDLE_PITCH, deliberately and by reference rather than by
-# repetition - the ground one homestead occupies is exactly the distance at which a lane passes your
-# own plot or your neighbor's, which is what the sources mean by a lateral "colonized as semi-private
-# space by the adjoining house". The same number sets the web's lane spacing, so the requirement and
-# the geometry that satisfies it cannot drift apart.
+# (`farmhouses_reach_a_way`). It is 0246's own figure, "every farmhouse within 100 ft of one" - NOT the row pitch.
+# The two were one number while the pitch was 100; feature 328 brought the pitch to 0038's 92 ft and the
+# re-check found every served-house rule then measuring 92 against the page's 100, so they are two constants now.
+# The same number sets the web's lane spacing, so the requirement and the geometry that satisfies it cannot drift
+# apart.
 #
 # Grounding: research/questions/0081-village-lanes.html, and research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html - a house
 # in a nucleated cluster is reached by a way, but for the few reached across a neighbor's land (feature 317), which
 # `ways/checks.py` `unreached_houses` counts reached through their neighbor. The previous 90 ft in
 # `lanes_reach_something` was flagged in future-work/ as a number nobody had justified; this one is
 # derived from a researched constant instead of chosen to make today's maps pass.
-WEB_REACH_FT = 92.0  # == BUNDLE_PITCH; asserted in tests rather than imported, since BUNDLE_PITCH is defined below
+WEB_REACH_FT = 100.0  # 0246's "within 100 ft"; the gate's copy is asserted equal in tests
 """Research: every farmhouse reached by a way - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within 100 ft, how close counts as serving a house; but the few reached across a neighbor's land"""
 
 WAY_END_REACH_FT = 60.0

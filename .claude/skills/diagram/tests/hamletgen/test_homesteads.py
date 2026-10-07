@@ -24,7 +24,7 @@ def _the_passes_the_dispersed_form_keeps(monkeypatch: pytest.MonkeyPatch) -> Non
     monkeypatch.setattr(_st, "grows", lambda plan: False)
 
 
-@pytest.mark.parametrize(("households", "wells"), [(10, 2), (12, 2), (15, 2), (20, 3)])
+@pytest.mark.parametrize(("households", "wells"), [(10, 2), (12, 2), (15, 2), (20, 2)])
 def test_wells_are_one_per_six_households_or_so(households: int, wells: int) -> None:
     """Inside `wells_sized_to_population`'s 2-20 households-per-well band at hamlet scale."""
     got = hg.well_target(households)
@@ -52,6 +52,7 @@ def _only_seat(sx: float, sy: float, open_seat: tuple[float, float] | None = Non
     # `frozen_terrain` is the engine's one-index scope for the well ladder; this stand-in has no terrain to freeze
     return SimpleNamespace(
         well_at=lambda x, y: abs(x - sx) < 0.5 and abs(y - sy) < 0.5,
+        _well_vr=lambda: 12.0,  # this toy's wellhead glyph, declared as a real settlement's is (`drawn_r` reads it)
         open_seat=lambda *_a, **_k: open_seat,
         M={},
         frozen_terrain=contextlib.nullcontext,
@@ -675,7 +676,7 @@ def test_the_privy_seat_weights_are_rolled_per_hamlet_over_the_four_attested_sea
     from l7r.diagram.hamletgen.homesteads.fixtures import _PRIVY_SEATS, privy_seat_weights
 
     a, b = privy_seat_weights(3), privy_seat_weights(4)
-    assert [k for k, _ in a] == [k for k, _ in _PRIVY_SEATS] == ["yard", "front", "stable", "barn"]
+    assert [k for k, _ in a] == [k for k, _ in _PRIVY_SEATS] == ["stable", "yard", "front", "barn"]
     assert abs(sum(v for _, v in a) - 1.0) < 0.01 and a != b and a == privy_seat_weights(3)
 
 

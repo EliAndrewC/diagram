@@ -81,7 +81,7 @@ def _lay_skeleton(s: Settlement, plan: SitePlan, frame: _margin_frame, arcs: Seq
         clear of crop, wet and water - UNRESEARCHED: 20 ft off the crop, the marsh and the ditches
         routed round the steadings - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: nothing is built on a lane
         skeleton width - research/questions/0081-village-lanes.drawing.html: 5 ft
-        skeleton span floor - UNRESEARCHED: the span floored at one bundle pitch (100 ft) each way; a piece under 30 ft not laid"""
+        skeleton span floor - UNRESEARCHED: the span floored at one bundle pitch (92 ft) each way; a piece under 30 ft not laid"""
     if len(arcs) < 2:
         return []
     arc0 = (min(arcs) + max(arcs)) / 2.0

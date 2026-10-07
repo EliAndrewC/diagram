@@ -196,7 +196,7 @@ def cluster_aspect(xs: list[float], ys: list[float]) -> float:
     # houses' CENTERS, so a perfectly straight single row - ten houses fronting one straight field margin - measured
     # about 0.2 ft across and drew 2,345:1, past every shape's band, and `seat_every_household` refused every margin of
     # the site. A reader's ruler laid across that row reads the homesteads' own depth, so the short side is floored
-    # at the ground one homestead takes (`BUNDLE_PITCH`, 100 ft): the row reads about n:1, a string. The floor reaches
+    # at the ground one homestead takes (`BUNDLE_PITCH`, 92 ft): the row reads about n:1, a string. The floor reaches
     # only a near-straight row - every exhibit the bands were calibrated on (`CLUSTER_DRAWN_ASPECT`) is far deeper. The
     # long side takes the same floor, so a cloud smaller than one homestead each way reads 1:1, never under it.
     return max(BUNDLE_PITCH, _du, _dv) / max(BUNDLE_PITCH, min(_du, _dv))

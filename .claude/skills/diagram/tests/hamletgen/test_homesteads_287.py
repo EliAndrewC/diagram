@@ -23,7 +23,7 @@ def test_a_well_past_the_crop_is_refused_now_the_pockets_water_every_house() -> 
 
     boxed = SimpleNamespace(_crop_boxes=lambda city: [(900.0, 1100.0, 900.0, 1100.0)])
     assert crop_extent_added(boxed, (1000.0, 1000.0), [0.0], [0.0]) == 0.0
-    assert crop_extent_added(boxed, (1100.0, 1000.0), [0.0], [0.0]) == pytest.approx(12.0)
+    assert crop_extent_added(boxed, (1100.0, 1000.0), [0.0], [0.0]) == pytest.approx(12.376)  # the glyph's roof half-size (feature 328)
     east = (1110.0, 1000.0)
     plan = SimpleNamespace(spec=SimpleNamespace(households=6), ftpx=1.0)
     fake = _only_seat(*east)
