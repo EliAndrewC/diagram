@@ -668,6 +668,36 @@
   "scope": "kept"
  },
  {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#scan seat window 08 of the square's box inside the predicted",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "scan seat window: 0.8 of the square's box inside the predicted frame, the center allowed up to 0.6*half outside it (CONVENTION, framing)",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 20 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#woods kept out of the title pocket titlepocket keep rectangl",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "woods kept out of the title pocket (title_pocket keep rectangle), a CONVENTION",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/parcels.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 20 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/hinterland/stages.py::stage_windbreak#copse on the house's own bank",
   "tier": "E0",
   "fix": "cite 0035 drawing (each farmstead stands whole on one bank, a GUESS recorded there) for the copse's bank, as household_bamboo does",
@@ -6316,7 +6346,7 @@
   "found": "wave 19's glyph check (F1), tier provisional",
   "tier_as_ranked": "E2",
   "moved": "T65a: tiered by its work by a fresh reader - The drawing page holds both readings: on a slope 'beyond the fields' IS 'higher than the fields beside it' (woodland_tier already enforces it, so Inashiro, a hillfoot hamlet the page names as drawing the hillside form, is in step there and the clip is harmless), but on the level it makes 'the far side of the fields from the houses' the rule, which a walk clipping a field's corner does not meet - so the code is not in step everywhere and a claim line alone is not enough. The fix is one predicate's logic with one call site in one module (grep: `reached_across(` is called only at parcels.py:520), hence E2, not E3.",
-  "wave": "",
+  "wave": "20",
   "scope": "kept"
  },
  {
@@ -6393,7 +6423,7 @@
   "found": "wave 2 re-check (tiered by its work at T25a)",
   "tier_as_ranked": "E4",
   "moved": "T25a (amendment 6): tiered by its work - the sort at capacity.py:81 changes rule and free_seats needs the field outline to measure against; one function",
-  "wave": "",
+  "wave": "20",
   "scope": "kept"
  },
  {
@@ -6407,7 +6437,7 @@
   "flag": "",
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "20",
   "scope": "kept"
  },
  {
@@ -6423,7 +6453,7 @@
   "flag": "",
   "tier_as_ranked": "E1",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "20",
   "scope": "kept"
  },
  {

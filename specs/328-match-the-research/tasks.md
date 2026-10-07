@@ -887,7 +887,9 @@ room's wall (423, 424); the next open row is the fixture count's cap (425).
 - [x] T65a wave 19's found row tiered by the work it takes, by a fresh reader (FR-002, FR-003, SC-003)
       research: rendering
       verify: DONE. 1 row tiered E2 by a fresh Opus reader (audit/t65a-out.jsonl): one predicate, used once
-- [ ] T65 the real crossing on the level, the seat's tie, each house's bath wall rolled at the registers' share (drawn: see the found row), with their tests; the five hamlets regenerated (FR-004, FR-005)
+- [x] T65 the real crossing on the level, the seat's tie, each house's bath wall rolled at the registers' share (drawn: see the found row), with their tests; the five hamlets regenerated (FR-004, FR-005)
       research: rendering
-- [ ] T66 every touched claim re-checked by `impl-drift`, the occasion's review (glyph-check on Mizuguchi's woodland commons: NEEDS-WORK, fixed and measured), and the close: wave 20's own bookend pair, `make done` green, the wave column (FR-005, FR-006, SC-002, SC-003)
+      verify: DONE. the walk through the field asked of every wood on every tier (0077: beyond the fields and higher than them), no wood on the houses' side; the seat order's tie toward the field (0029); each house's bath wall rolled at 0.8 (0044; the main-door seat that never draws filed E3); both new asks vectorized (band 3 -> 1); Kashikawa one wood, Inashiro and Mizuguchi recorded off the sheet
+- [x] T66 every touched claim re-checked by `impl-drift`, the occasion's review (glyph-check on Mizuguchi's woodland commons: NEEDS-WORK, fixed and measured), and the close: wave 20's own bookend pair, `make done` green, the wave column (FR-005, FR-006, SC-002, SC-003)
       research: rendering
+      verify: DONE. impl-drift on every touched claim (five rounds, all IN-STEP at the last); the woodland glyph check NEEDS-WORK fixed and verified by measurement (its two rounds spent); amendment 19 FAITHFUL (round 5); make done green; wave 20's own pair band 1 (total -10.8%), explained from perf-audit's timings and confirmed; the wave column written
