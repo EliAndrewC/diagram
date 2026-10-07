@@ -66,18 +66,30 @@ def street_run_out(street: Sequence[Pt], width: float, height: float, beyond: fl
 
     Research: street runs on as the road - research/questions/0033-row-villages-resson.drawing.html, research/questions/0081-village-lanes.drawing.html: straight on along its last leg off the nearer sheet edge"""
 
-    def run(end: Pt, prev: Pt) -> tuple[float, list[Pt]]:
-        dx, dy = end[0] - prev[0], end[1] - prev[1]
-        m = math.hypot(dx, dy) or 1.0
-        ux, uy = dx / m, dy / m
-        tx = (-end[0]) / ux if ux < 0 else (width - end[0]) / ux if ux > 0 else math.inf
-        ty = (-end[1]) / uy if uy < 0 else (height - end[1]) / uy if uy > 0 else math.inf
-        t = max(0.0, min(tx, ty))
-        return t, [end, (end[0] + ux * (t + beyond), end[1] + uy * (t + beyond))]
-
-    a = run(street[0], street[min(8, len(street) - 1)])
-    b = run(street[-1], street[max(-9, -len(street))])
+    a, b = street_runs_out(street, width, height, beyond)
     return a[1] if a[0] <= b[0] else b[1]
+
+
+def run_to_edge(end: Pt, prev: Pt, width: float, height: float, beyond: float = 60.0) -> tuple[float, list[Pt]]:
+    """How far `end` stands from the sheet's edge straight on along the leg from `prev`, and that run carried `beyond` past it.
+
+    Research: run plumbing - NONE"""
+    dx, dy = end[0] - prev[0], end[1] - prev[1]
+    m = math.hypot(dx, dy) or 1.0
+    ux, uy = dx / m, dy / m
+    tx = (-end[0]) / ux if ux < 0 else (width - end[0]) / ux if ux > 0 else math.inf
+    ty = (-end[1]) / uy if uy < 0 else (height - end[1]) / uy if uy > 0 else math.inf
+    t = max(0.0, min(tx, ty))
+    return t, [end, (end[0] + ux * (t + beyond), end[1] + uy * (t + beyond))]
+
+
+def street_runs_out(street: Sequence[Pt], width: float, height: float, beyond: float = 60.0) -> tuple[tuple[float, list[Pt]], tuple[float, list[Pt]]]:
+    """The run off the sheet from each end of a row's street, its first end's then its last's (`run_to_edge` along each end's
+    last leg): the road it runs on as leaves by the nearer (`street_run_out`), and the street runs on off the map at the other
+    end too (feature 328 wave 5) - the street stands for the road the row stands on, which does not stop at the row's last farm.
+
+    Research: street runs on off the map - research/questions/0033-row-villages-resson.drawing.html: the street runs on off the map as the road into it; it stands for the road the row stands on"""
+    return run_to_edge(street[0], street[min(8, len(street) - 1)], width, height, beyond), run_to_edge(street[-1], street[max(-9, -len(street))], width, height, beyond)
 
 
 _CHUNK = 16
@@ -397,7 +409,12 @@ def trim_streets(s: Settlement, touch: float, doors: Sequence[Pt] = (), reach: f
     lays none within that reach): cut to its paths' joints alone, Mizuguchi's street stopped a frame short of its end farm,
     whose door stood 12 ft off it, and the farm was left off every way (2026-10-01). Returns the streets cut.
 
-    Research: street cut to its joints - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: pulled back to the last way or door it serves"""
+    The row's first street runs on off the map at both ends (`street_runs_out`, the road's two runs), so its ends are joints
+    and it is not cut; a further street, which joins the first, is cut back to its last way or door.
+
+    Research:
+        the first street runs on - research/questions/0033-row-villages-resson.drawing.html: the street runs on off the map as the road into it
+        a further street cut to its joints - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: pulled back to the last way or door it serves"""
     lanes = s.M.get("lanes") or []
     n = 0
     for i, ln in enumerate(lanes):

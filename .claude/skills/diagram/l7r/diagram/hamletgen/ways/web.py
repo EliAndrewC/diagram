@@ -789,8 +789,8 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
         # before any door path existed
         _sweep_doubled_tails(s)
         tidy_lane_ends(s, list(plan.envelope), streets=True)
-        # ...and each street ends at its outermost joint, not past its last farm's path - or its last farm's door, where that
-        # stood within the arrival reach and so took no path
+        # ...and a further street ends at its outermost joint, not past its last farm's path - or its last farm's door, where
+        # that stood within the arrival reach and so took no path; the first runs on off the map at both ends as the road (0033)
         _doors = [d for h in s.M.get("houses") or [] if (d := front_door(h, FOOTPATH_FABRIC_GAP + 4.0)) is not None]
         trim_streets(s, _TOUCH_GAP, _doors, STEADING_ARRIVAL_FT)
     s.M["meta"]["field_path"] = a_way_onto_the_bund(s)

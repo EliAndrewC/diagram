@@ -137,6 +137,7 @@ def _thread_the_fabric(s: Settlement, plan: SitePlan, run: Poly, gap: float = TR
         detour swing - UNRESEARCHED: the midpoint swung 40, 80, 140 then 220 px out from the cluster
         never across a grove - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: routed round
             the bands, else only the part clear of them kept
+        the track's route walled - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: walled by the field, crop, toe band and wet ground, and kept off drawn water
     """
     if len(run) < 2:
         return run
@@ -610,14 +611,19 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
     # the gap, and the street was dropped from the network with all ten of its farms (cohort seed 22, 2026-10-01)
     _row = (getattr(s, "_row_streets", None) or [None])[0] if plan.settlement_form == "linear" else None
     if _row and len(_row) >= 2:
-        from .street import drawn_span, street_run_out  # the street module reads the web's settle, laid after this stage
+        from .street import drawn_span, street_runs_out  # the street module reads the web's settle, laid after this stage
 
         _span = drawn_span(s, 0, s.M.get("houses") or [], plan.brook or [])
-        _out = street_run_out(_span if len(_span) >= 2 else _row, s.W, s.H)
-        # ...AND OVER THE BROOK AT A FORD, as every other way crosses it (`ford_crossing`): run straight on along the street's
-        # line, the road crossed the brook 72 ft from the nearest ford (cohort seed 3, 2026-10-01)
-        _out = [_out[0], *ford_crossing(_out[0], _out[-1], plan.brook or [], getattr(s, "brook_fords", ())), _out[-1]]
-        s.lane(_thread_the_fabric(s, plan, _out), width=6, clearance=LANE_CLEARANCE, worn=True, connector=True)
+        _a, _b = street_runs_out(_span if len(_span) >= 2 else _row, s.W, s.H)
+        # THE ROAD LEAVES BY THE NEARER EDGE, AND THE STREET RUNS ON OFF THE MAP AT ITS OTHER END TOO (feature 328 wave 5,
+        # research/questions/0033-row-villages-resson.drawing.html: "The street runs on off the map as the road into it"): cut
+        # back to its last farm's path at the far end, the street stopped where the road it stands for went on
+        for _out in sorted((_a, _b), key=lambda r: r[0]):
+            _out = _out[1]
+            # ...AND OVER THE BROOK AT A FORD, as every other way crosses it (`ford_crossing`): run straight on along the
+            # street's line, the road crossed the brook 72 ft from the nearest ford (cohort seed 3, 2026-10-01)
+            _out = [_out[0], *ford_crossing(_out[0], _out[-1], plan.brook or [], getattr(s, "brook_fords", ())), _out[-1]]
+            s.lane(_thread_the_fabric(s, plan, _out), width=6, clearance=LANE_CLEARANCE, worn=True, connector=True)
         return
     # THE TRACK OUT AS CHOSEN ONCE THE LAST HOUSE STOOD (feature 320, FR-008), the households' ways already laid to it; chosen
     # here only on a form that records none

@@ -359,7 +359,9 @@ def near_misses(M: Mapping[str, Any]) -> list[tuple[int, int, Pt]]:
     (`meets_clean`, `kinks`). Such an end is a JOIN that stops short - a hole the eye reads in one way, or a T one clearance
     shy of its lane (homes H37, H38; future-work's "one clearance short" and 2c's corner hole). An end whose span is blocked,
     or would fold or kink, is not one: the two are separate ways, each ending at what it serves.
-    Research: ends that nearly meet are joined - research/questions/0081-village-lanes.drawing.html: within 25 ft (`JOIN_REACH_FT`), aimed"""
+    Research:
+        ends that nearly meet are joined - research/questions/0081-village-lanes.drawing.html: within 25 ft (`JOIN_REACH_FT`)
+        which ends count - UNRESEARCHED: an end counts only where the way it nears lies within `AIM_DEG`, 60 deg, of its heading"""
     ways = _ways(M)
     # EACH WAY'S BOX ONCE (feature 317): the seating asks this of every corridor it judges (`tree.as_joined`), and the
     # segment-by-segment search of every way from every free end was 1.26 s of a 40-household seating on seed 2 - 465,270
