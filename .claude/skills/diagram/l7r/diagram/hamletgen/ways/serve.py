@@ -116,6 +116,8 @@ def _lay_web_lane(s: Settlement, run: Poly, hard: list[Poly], walls: list[Poly],
         how far inside a belt - UNRESEARCHED: a run over 60 ft inside a belt refused
         a tail past the junction cut - research/questions/0081-village-lanes.drawing.html: under 40 ft
         link reach - UNRESEARCHED: a link up to 200 ft to the network
+        arrived at the network - research/questions/0081-village-lanes.drawing.html: a run within 25 ft of it (`_LANE_JOIN_FT`), the join reach
+        link off hard ground and walls - UNRESEARCHED: kept 8 ft off hard ground, 7 ft off walls
         a link takes its way's width - CONVENTION
         web lane width - research/questions/0081-village-lanes.drawing.html: a web lane drawn 3 ft wide, the footpath's tread"""
     segs = _net_segs(s)

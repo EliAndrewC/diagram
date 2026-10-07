@@ -452,7 +452,7 @@ class WallsMixin:
             slide off a ward gate or gate works - research/questions/0148-towers-along-the-city-wall-mamian.drawing.html: the drawing page's GUESS bands, 186 ft of a ward gate and 165 ft of guard buildings, slides of 22 to 46 px
             coverage remediation - research/questions/0148-towers-along-the-city-wall-mamian.drawing.html: towers added where fewer than the posture's minimum reach
             reach counted from the parapet - research/questions/0148-towers-along-the-city-wall-mamian.drawing.html: 36 ft out from the tower's center
-            exempt stretches - research/questions/0148-towers-along-the-city-wall-mamian.drawing.html: within 390 ft of a gate and 165 ft of its guard buildings
+            exempt stretches - research/questions/0148-towers-along-the-city-wall-mamian.drawing.html: the four stretches - within 390 ft of a gate, 165 ft of its guard buildings, 135 ft of a water gate and 186 ft of a ward gate
             a slid tower off a gate - research/questions/0148-towers-along-the-city-wall-mamian.drawing.html: no tower within 390 ft of a gate, a slid seat held to it too
             tower onto the berm - research/questions/0148-towers-along-the-city-wall-mamian.drawing.html: a tower stands about 39 ft out from the wall; the code nudges its center px(40) outward onto the berm
         """
@@ -537,7 +537,12 @@ class WallsMixin:
             for _si in range(_nst):
                 _ra = perim * _si / _nst
                 _px, _py, _junk = self._wall_point_at_arc(pts, _ra)
-                if any(math.hypot(_px - gx, _py - gy) < self.px(390) for gx, gy in gates) or any(math.hypot(_px - fx_, _py - fy_) < self.px(165) for fx_, fy_ in gate_furn):
+                if (
+                    any(math.hypot(_px - gx, _py - gy) < self.px(390) for gx, gy in gates)
+                    or any(math.hypot(_px - fx_, _py - fy_) < self.px(165) for fx_, fy_ in gate_furn)
+                    or any(math.hypot(_px - wx_, _py - wy_) < self.px(135) for wx_, wy_ in water_gates)
+                    or any(math.hypot(_px - kx_, _py - ky_) < self.px(186) for kx_, ky_ in tower_skip)
+                ):
                     continue  # inside the gate BARBICAN (gate + guard house + inspection) - a defended complex, exempt from the open-curtain rule
                 if sum(1 for tx_, ty_ in placed_tw if math.hypot(_px - tx_, _py - ty_) <= _Rpx + 1) < _mincov:
                     _thin.append(_ra)

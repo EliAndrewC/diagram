@@ -8915,6 +8915,20 @@
   "wave": ""
  },
  {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cremation_ground#the snow-country hut",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "draw 0238's snow-country form, a walled hut of four to six tatami over the bed, where the map is snow country, beside the open bed and the four-post roof",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/funerary.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 8 T31: the drift the snow-hut claim states (D8), a new form",
+  "tier_as_ranked": "E3",
+  "wave": ""
+ },
+ {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.mausoleum#walled court with a crypt hall and stupas",
   "tier": "E3",
   "fix": "redraw the mausoleum as the attested set: main hall, worship hall, Chinese-style gate, offering hall and a further gate; drop the unattested stupas",

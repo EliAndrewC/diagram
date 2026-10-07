@@ -164,7 +164,7 @@ def kosatsuba_handover(M: Any) -> tuple[float, float] | None:
 
     Research:
         entrance is the handover - research/questions/0190-notice-boards-kosatsuba.html: the board at the village entrance, read as the last join on the way out
-        a through track's handover - UNRESEARCHED: where both its ends are off the sheet, the lane end joining it nearest the houses' middle (0190 says only entrance)"""
+        a through track's handover - research/questions/0190-notice-boards-kosatsuba.html: a board at the village's center or its entrance, and at crossroads where people pass - where both its ends are off the sheet, the lane end joining it nearest the houses' middle"""
     houses = [(float(h["x"]), float(h["y"])) for h in (M.get("houses") or []) if "x" in h]
     if not houses:
         return None

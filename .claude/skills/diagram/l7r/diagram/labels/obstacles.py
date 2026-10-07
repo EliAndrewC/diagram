@@ -26,10 +26,15 @@ onto its group like any other (FR-014).
 Research: named civic buildings - research/questions/0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html: ministry, governor and temple keep full weight against another civic caption
 """
 
-GROUP_WORDS = {"funerary": ("funerary", "cemetery", "graveyard", "cremation", "mausoleum", "ossuary"), "estate": ("estate", "samurai")}
+GROUP_WORDS = {
+    "funerary": ("funerary", "cemetery", "graveyard", "cremation", "mausoleum", "ossuary"),
+    "estate": ("estate", "samurai"),
+    "temple": ("temple", "shrine"),
+    "gate": ("gate", "guard", "inspection"),
+}
 """The words that name a caption group, where a group is named by more than its own word (feature 328 wave 5): a caption
 naming a graveyard, a cremation ground, a mausoleum or an ossuary may cover any of the funerary structures; a samurai caption
-may cover the samurai houses and estates (0243).
+may cover the samurai houses and estates; a shrine's the temples; a guard-house or inspection caption the gate's posts (0243).
 
 Research: a funerary caption covers the funerary structures - research/questions/0243-what-labels-may-cover-and-how-districts-are-named-on-town-and-city-maps.drawing.html: a graveyard, cremation, mausoleum or ossuary caption may cover any of the funerary structures, and a samurai caption the samurai houses and estates"""
 

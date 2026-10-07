@@ -108,7 +108,7 @@ def oblique_at(M: Mapping[str, Any], water: str = "brook") -> list[tuple[int, in
     (`water_courses`) more than `FORD_SQUARE_TOL_DEG` off square.
     Research:
         square brook crossing - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html
-        square ditch crossing - UNRESEARCHED: a channel crossing squared within `FORD_SQUARE_TOL_DEG`, 10 degrees (0084 squares only the standalone footplank)"""
+        square ditch crossing - research/questions/0087-road-bridges-over-rivers-and-canals-hashi.drawing.html: a carried deck crosses at its way's angle, solved for it; the code squares a channel crossing within `FORD_SQUARE_TOL_DEG`, 10 degrees (the found row law_water.py::oblique_at#a channel crossing at its way's angle asks which page governs)"""
     out = []
     ways = list(_ways(M))
     boxes = [_bbox(p) for p in ways]
@@ -179,10 +179,12 @@ def short_decks(M: Mapping[str, Any]) -> list[tuple[int, int, float, float]]:
     course's full width - its abutment stands in the water (`bridges_span_their_water`).
     Research:
         a deck spans its water - research/questions/0087-road-bridges-over-rivers-and-canals-hashi.drawing.html
-        assumed water widths - UNRESEARCHED: 3 ft for a ditch or channel, 6 ft for a stream, where none is recorded"""
-    courses = [([(float(p[0]), float(p[1])) for p in d["poly"]], max(float(d.get("w", 3.0)), float(d.get("w_tail", 3.0)))) for d in (M.get("field_ditches") or [])]
+        assumed ditch width - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: a field ditch 2.5 ft at its head where none is recorded
+        assumed brook width - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: 7 ft where none is recorded
+        assumed channel width - UNRESEARCHED: 3 ft where none is recorded"""
+    courses = [([(float(p[0]), float(p[1])) for p in d["poly"]], max(float(d.get("w", 2.5)), float(d.get("w_tail", 2.5)))) for d in (M.get("field_ditches") or [])]
     courses += [([(float(p[0]), float(p[1])) for p in c["poly"]], float(c.get("w", 3.0))) for c in (M.get("channels") or [])]
-    courses += [([(float(p[0]), float(p[1])) for p in s["poly"]], float(s.get("w", 6.0))) for s in (M.get("streams") or [])]
+    courses += [([(float(p[0]), float(p[1])) for p in s["poly"]], float(s.get("w", 7.0))) for s in (M.get("streams") or [])]
     short = []
     for b in M.get("bridges") or []:
         bx, by, span = float(b["x"]), float(b["y"]), float(b["span"])

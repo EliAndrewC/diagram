@@ -5,7 +5,6 @@ from __future__ import annotations
 import math
 import random
 
-from l7r.diagram.hamletgen.consts import BUNDLE_PITCH
 from l7r.diagram.hamletgen.ways.street import _line_chunks, _nearest_within, brook_bounds, drawn_span, join_to, lay_row_streets, row_reach, street_run_out, street_span, thread
 from l7r.diagram.settlement import Settlement, seg_closest, seg_dist
 
@@ -194,7 +193,7 @@ def test_the_drawn_span_is_the_streets_own_farms_at_their_reach() -> None:
     assert drawn_span(s, 0, []) == []
     s._row_streets = [LINE]
     farms = [{"x": 300.0, "y": 560.0, "geom": {"bbox": (0.0, 0.0, 200.0, 120.0)}}, {"x": 700.0, "y": 440.0}]
-    assert row_reach(farms) == (300.0, 100.0) and row_reach([]) == (1.5 * BUNDLE_PITCH, 0.5 * BUNDLE_PITCH)  # no farms: one pitch as the frame
+    assert row_reach(farms) == (300.0, 100.0) and row_reach([]) == (1.5 * 240.0, 120.0)  # no farms: 0033's 240 ft row holding as the frame (feature 328 wave 8)
     span = drawn_span(s, 0, farms)
     assert 200.0 <= span[0][0] < 208.0 and 792.0 < span[-1][0] <= 800.0
     s._row_street_farms = [[(700.0, 440.0)]]

@@ -15,7 +15,7 @@ from typing import Any
 
 from l7r.diagram.settlement import Settlement, seg_closest, seg_dist
 
-from ..consts import BUNDLE_PITCH, FOOTPATH_FABRIC_GAP, Poly, Pt
+from ..consts import FOOTPATH_FABRIC_GAP, Poly, Pt
 from . import law
 from .corridors import FORD_LANDING_FT
 from .fabric import _crosses_fabric, _draw_web
@@ -35,14 +35,19 @@ treads' lengths or so - a map drawing convention.
 Research: street vertex spacing - CONVENTION: a vertex every 40 ft"""
 
 
+ROW_FRAME_FT = 240.0
+"""Research: a row farm's frame where none is recorded - research/questions/0033-row-villages-resson.drawing.html: a row village's holding 220 to 260 ft, drawn at its middle (1 ft a px)"""
+
+
 def row_reach(houses: Sequence[Mapping[str, Any]]) -> tuple[float, float]:
     """How far off a planned street a farm may stand and still be its own (1.5 frames), and how far the street runs past its
     end farms (half a frame) - the widest farm's frame (`geom.bbox`), or the nucleated pitch where none is recorded.
 
     Research:
         a farm's own street - UNRESEARCHED: a farm within 1.5 frames of the street is its own
-        street run past its end farms - UNRESEARCHED: half a frame past the end farms at both ends of the span; the run off the map is `street_run_out`'s road (0033)"""
-    fw = max((max(float(b[2]), float(b[3])) for b in (((h.get("geom") or {}).get("bbox")) for h in houses) if b), default=BUNDLE_PITCH)
+        street run past its end farms - UNRESEARCHED: half a frame past the end farms at both ends of the span; the run off the map is `street_run_out`'s road (0033)
+        a farm frame where none is recorded - research/questions/0033-row-villages-resson.drawing.html: `ROW_FRAME_FT`, the middle of a row holding's 220 to 260 ft"""
+    fw = max((max(float(b[2]), float(b[3])) for b in (((h.get("geom") or {}).get("bbox")) for h in houses) if b), default=ROW_FRAME_FT)
     return 1.5 * fw, fw / 2
 
 

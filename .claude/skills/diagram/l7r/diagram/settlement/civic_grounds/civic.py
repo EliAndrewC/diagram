@@ -43,6 +43,7 @@ class CivicWorksMixin:
             program sizes - UNRESEARCHED: hand-set footprints
             precinct size - research/questions/0227-city-temples-the-precinct-its-halls-bell-tower-and-pagoda-garan.drawing.html: about 73,000 sq ft, 310 x 235 ft by default, or the caller's w x h
             parish burial plot in the precinct - research/questions/0237-burial-grounds-of-towns-and-cities-and-paupers-grounds-yizhong.drawing.html, research/questions/0235-village-burial-grounds-bochi.drawing.html: a ruled plot; 24 x 16 px (about 0.08 acre at 3 ft/px)
+            parish plot's seat - UNRESEARCHED: at the precinct's rear, east of the axis (x+44, 14 px in from the rear edge)
             glyph - CONVENTION: footprint boxes, no captions
         """
         w, h = (self.px(310) if w is None else w), (self.px(235) if h is None else h)  # a sovereign precinct about 73,000 sq ft (0227)
@@ -85,7 +86,7 @@ class CivicWorksMixin:
             rec["rank_band"] = rank_band
         self.M.setdefault("districts", []).append(rec)
 
-    def terrace(self: Settlement, x: float, y: float, units: int = 8, rot: float = 0.0, frontage_ft: float = 18.0, depth_ft: float = 24.0) -> int:  # type: ignore[misc]
+    def terrace(self: Settlement, x: float, y: float, units: int = 8, rot: float = 0.0, frontage_ft: float = 33.0, depth_ft: float = 30.0) -> int:  # type: ignore[misc]
         """A RETAINER TERRACE range (feature 021): ONE roof over `units` single-file household
         cells divided by party walls - the kumi-yashiki/nagaya form. Research (021 item 2):
         cells of 4.5-8 tatami behind an earth-floored entry, ~18 ft frontage each, ~21 ft
@@ -97,8 +98,8 @@ class CivicWorksMixin:
 
         Research:
             one roof over the cells - research/questions/0140-where-a-capitals-samurai-live-lineage-compounds-walled-estates-and-retainer-terraces-bukeyashiki.drawing.html, research/questions/0140-where-a-capitals-samurai-live-lineage-compounds-walled-estates-and-retainer-terraces-bukeyashiki.html: a continuous range with drawn seams
-            cell frontage - research/questions/0140-where-a-capitals-samurai-live-lineage-compounds-walled-estates-and-retainer-terraces-bukeyashiki.html: 18 ft
-            range depth - research/questions/0140-where-a-capitals-samurai-live-lineage-compounds-walled-estates-and-retainer-terraces-bukeyashiki.html: 24 ft, Shibata's 7.3 m
+            cell area - research/questions/0140-where-a-capitals-samurai-live-lineage-compounds-walled-estates-and-retainer-terraces-bukeyashiki.drawing.html: a drawn unit of about 990 sq ft (Rank 1-4)
+            frontage and depth - GUESS: 33 x 30 ft, the 990 sq ft split by eye
             cell count - research/questions/0140-where-a-capitals-samurai-live-lineage-compounds-walled-estates-and-retainer-terraces-bukeyashiki.html: eight households under one roof at Shibata; the caller's units, default 8
         """
         w, h = units * frontage_ft / self.ftpx, depth_ft / self.ftpx

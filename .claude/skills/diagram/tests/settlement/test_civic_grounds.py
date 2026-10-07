@@ -21,7 +21,7 @@ def test_cemetery_organic_draws_an_irregular_plot():
     frag = s.out[-1]
     assert "<path" in frag and 'width="100"' not in frag  # a jittered blob outline, no ruled 100-wide plot rect
     assert s.M["cemeteries"][-1]["w"] == 100  # recorded bbox is still the w x h rectangle
-    assert s.block_polys[-1] == [(242, 257), (358, 257), (358, 343), (242, 343)]  # no-build block unchanged (checks unaffected)
+    assert s.block_polys[-1] == [(250, 265), (350, 265), (350, 335), (250, 335)]  # the plot's own ground, no cleared band (0224, 0235)
 
 
 def test_cemetery_common_ground_defaults_organic():
@@ -369,12 +369,12 @@ def test_district_records_a_named_region():
 
 
 def test_terrace_draws_one_roof_with_party_wall_seams():
-    """The kumi-yashiki range (research 021 item 2): units x 18 ft frontage, 24 ft deep (0140: Shibata's 7.3 m), one
-    record for the whole roof, party-wall seams BETWEEN cells (units-1 of them)."""
+    """The kumi-yashiki range (research 021 item 2): units x 33 ft frontage, 30 ft deep (0140's drawn unit of about 990 sq ft),
+    one record for the whole roof, party-wall seams BETWEEN cells (units-1 of them)."""
     s = _crop_settlement()
     s.terrace(500, 500, units=6)
     r = s.M["terraces"][0]
-    assert r["units"] == 6 and abs(r["w"] - 6 * 18.0) < 0.1 and abs(r["h"] - 24.0) < 0.1
+    assert r["units"] == 6 and abs(r["w"] - 6 * 33.0) < 0.1 and abs(r["h"] - 30.0) < 0.1
     assert s.top[-1].count("<line") == 5  # 5 party walls divide 6 cells
     assert any(abs(p[0] - 500) < 0.1 and abs(p[2] - r["w"]) < 0.1 for p in s.placed)
 

@@ -85,8 +85,9 @@ class FuneraryGroundsMixin:
             marker heights - CONVENTION: 6 to 8 px
             a taller memorial stone or two - research/questions/0235-village-burial-grounds-bochi.drawing.html: two stupas
             no cleared band round the ground - research/questions/0224-ground-swept-clear-around-shrines-and-graves.drawing.html
-            keep-clear margin - UNRESEARCHED: 8 px
+            keep-clear margin - research/questions/0224-ground-swept-clear-around-shrines-and-graves.drawing.html: no cleared band; other features placed without regard to it
             caption - CONVENTION
+            six jizo at its entrance - research/questions/0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html: at a burial ground's entrance; the code draws them only on a cremation ground's rim (the found row funerary.py::cremation_ground#six jizo at a burial ground's entrance fixes it)
         """
         if organic is None:
             organic = not parish
@@ -100,7 +101,7 @@ class FuneraryGroundsMixin:
             blob = None
             g.append(f'<rect x="{-w / 2:.1f}" y="{-h / 2:.1f}" width="{w:.0f}" height="{h:.0f}" rx="3" fill="#CFC6B4" stroke="#8C8470" stroke-width="1.3" opacity="0.75"/>')
         sp = self.px(9)  # the rows about 9 ft apart (0235)
-        yy = -h / 2 + sp
+        yy = -h / 2 + max(sp, 9.0)  # the first row a marker's height (up to 8 px) inside the edge, so every marker stands wholly inside
         while yy < h / 2 - 5:  # rows of small upright grave markers (kept inside the blob)
             xx = -w / 2 + 8
             while xx < w / 2 - 5:
@@ -127,7 +128,7 @@ class FuneraryGroundsMixin:
         self.add(''.join(g))
         self.M.setdefault("cemeteries", []).append({"x": round(cx, 1), "y": round(cy, 1), "w": w, "h": h, "rot": round(rot, 1), "parish": parish})
         self.placed.append((cx, cy, w, h))
-        bm = 8
+        bm = 0  # no cleared band round the ground; other features are placed without regard to it (0224, 0235)
         self.block_polys.append([(cx - w / 2 - bm, cy - h / 2 - bm), (cx + w / 2 + bm, cy - h / 2 - bm), (cx + w / 2 + bm, cy + h / 2 + bm), (cx - w / 2 - bm, cy + h / 2 + bm)])
         # THE GROUND CLEARS ONLY ITSELF (feature 280 M66, research/questions/0224-ground-swept-clear-around-shrines-and-graves.html): the grave itself was weeded and
         # topped up at Qingming in 1630s Beijing, but no cleared band round a graveyard is attested in any period - the
@@ -247,13 +248,16 @@ class FuneraryGroundsMixin:
 
         Research:
             cleared ground size - research/questions/0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html: 75 ft at a village or town, 130 ft at a city
+            cleared ground's depth - UNRESEARCHED: 0.7 of its width
+            fire bed's form - research/questions/0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html: a stack of firewood or a stone-framed trench; the code draws the trench alone (the found row funerary.py::cremation_ground#the fire bed's two forms fixes it)
+            no walled hut - research/questions/0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html: in snow country a walled hut of four to six tatami over the bed; the code never draws it (the found row funerary.py::cremation_ground#the snow-country hut fixes it)
             fire bed - research/questions/0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html: about a coffin's length and a little wider, about 6 x 3 ft
             roofed bed the minority - research/questions/0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html: ROOFED_SHARE off the seat
             roof size - research/questions/0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html: about 11 ft square on four posts
             six jizo at a burial ground's entrance - research/questions/0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html, research/questions/0235-village-burial-grounds-bochi.html
             jizo drawn size - CONVENTION: at least 2.4 x 3.2 px
             ragged outline, bed off center - CONVENTION
-            keep-clear margin - UNRESEARCHED: 8 px
+            keep-clear margin - research/questions/0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html: no fire clearance drawn around a pyre; its 120 ft from houses and wells held where it is seated
             pyre ground unwalled - research/questions/0237-burial-grounds-of-towns-and-cities-and-paupers-grounds-yizhong.drawing.html: the pyre stands in a walled yard; drawn as an open ragged ground, no wall
         """
         # TO SCALE (GM 2026-07-19; anchors in research/questions/0238-cremation-grounds-and-bone-mounds-kasoba.drawing.html): a sanmai's cleared working core is
@@ -296,7 +300,7 @@ class FuneraryGroundsMixin:
             rec["jizo"] = [list(p) for p in stones]
         self.M["cremation_grounds"].append(rec)
         self.placed.append((cx, cy, 2 * crx, 2 * cry))
-        m = 8
+        m = 0  # no fire clearance is drawn around a pyre (0238); its 120 ft from houses and wells is held where it is seated
         self.block_polys.append([(cx - crx - m, cy - cry - m), (cx + crx + m, cy - cry - m), (cx + crx + m, cy + cry + m), (cx - crx - m, cy + cry + m)])
         if label:
             self.label(cx, cy - cry - 8 if label_above else cy + cry + 14, label, 11, italic=True, color="#6B5A3C", ref=(cx - crx, cy - cry, cx + crx, cy + cry))
