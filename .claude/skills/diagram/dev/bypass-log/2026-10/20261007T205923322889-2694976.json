@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-07T20:59:23Z",
+  "target": "perf-explain",
+  "commit": "dabf4d746",
+  "outcome": "permitted",
+  "why": "perf-explain UNVERIFIED: which 40-household seeds rolled against_the_belt is read from their rolled meta, not timed with the form restored"
+}

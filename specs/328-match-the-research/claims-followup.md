@@ -464,3 +464,4 @@ pass on the sheet modals, not this feature's ranking - modals are not claims):
   43-50 by 25-27 ft, while 0116's drawing page lets an isolated county's granary be the compound's largest building (the
   Takayama case). `buildings.md` keeps the latter under its own GUESS claim; the procedure's knob no longer says it. The
   disagreement is between two research pages, so its fix goes through the FR-004 exception path.
+- `l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._route_seats#farthest seat 60 ft from the road kosatsubawayreachft 0190 2` (UNCLAIMED, E0): farthest seat 60 ft from the road (KOSATSUBA_WAY_REACH_FT; 0190 §225)
