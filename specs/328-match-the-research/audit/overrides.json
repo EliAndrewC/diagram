@@ -1,0 +1,29 @@
+{
+ ".claude/skills/diagram/l7r/diagram/settlement/houses.py::HousesMixin._in_blocked#seat set-back from fields, dry plots and hills": {
+  "tier": "E4",
+  "fix": "nothing attests a 14 px set-back measured from a house's center from fields, plots and hills (0029 gives only edge gaps, 6 ft minimum, 10-13 ft typical, for another relation); research pass first",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/houses.py"
+  ],
+  "after": [],
+  "flag": "",
+  "second_reader": "ranked E1, second reader E4: the higher taken (plan D4)"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/rolling/dispersed.py::clear_east_of_beds#band cut a pixel clear of a bed's edge within its east reach; a band shorter than its width left uncut": {
+  "tier": "E2",
+  "fix": "a band whose cut run would be shorter than its width is dropped, not kept whole in the bed's east reach (0038: no canopy within 50 ft east of a bed); the cut part then cites 0038",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/rolling/dispersed.py"
+  ],
+  "after": [
+   ".claude/skills/diagram/l7r/diagram/settlement/rolling/dispersed.py::clear_east_of_beds#rect helpers"
+  ],
+  "flag": "",
+  "second_reader": "ranked E0, second reader E2: the higher taken (plan D4)"
+ },
+ ".claude/skills/diagram/l7r/diagram/settlement/houses.py::HousesMixin.frontage#shops face the street": {
+  "tier": "E3",
+  "flag": "deviation-tempting",
+  "fix": "close the 18 ft joint between street shops to the attested zero gap (0152); the E0 basis was a recorded DEVIATION, not a match (FR-004)"
+ }
+}
