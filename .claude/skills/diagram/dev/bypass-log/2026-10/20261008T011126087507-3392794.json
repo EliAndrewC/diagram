@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-08T01:11:26Z",
+  "target": "perf-explain",
+  "commit": "988ce9f83",
+  "outcome": "permitted",
+  "why": "perf-explain UNVERIFIED: no per-seed counterfactual taken; one seed under 1% with no stage named"
+}

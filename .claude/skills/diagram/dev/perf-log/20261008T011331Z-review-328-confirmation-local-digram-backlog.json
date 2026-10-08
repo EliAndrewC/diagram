@@ -1,0 +1,62 @@
+{
+  "band": 1,
+  "base": {
+    "commit": "397c005fb",
+    "label": "328-start",
+    "utc": "20261008T010638Z"
+  },
+  "binding": "4ac5adb5a6620f850eea8a52a4401f9209a26e0ccf6cad369d023a9125c6ff8b",
+  "end": {
+    "commit": "988ce9f83",
+    "label": "328-end",
+    "utc": "20261008T010950Z"
+  },
+  "environment": "local",
+  "feature": "328-match-the-research",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "8d3395e5-fe32-4f85-9c89-80c344d2ac1a",
+    "utc": "20261008T011331Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": -3.4,
+          "39": 0.0,
+          "4": -2.9,
+          "47": -3.0
+        },
+        "total_pct": -2.4
+      },
+      "20": {
+        "seeds": {
+          "25": -2.9,
+          "39": 0.0,
+          "4": -1.3,
+          "47": 0.0
+        },
+        "total_pct": -1.2
+      },
+      "40": {
+        "seeds": {
+          "25": 0.0,
+          "39": 0.0,
+          "4": -0.6,
+          "47": 0.8
+        },
+        "total_pct": 0.0
+      }
+    },
+    "seeds": {
+      "25": -2.6,
+      "39": -4.8,
+      "4": -6.2,
+      "47": -4.5
+    },
+    "total_pct": -4.6
+  },
+  "note": "40hh seed 47 +0.8% is noise: reviewer counterfactual at 988ce9f83 (both wave-24 rules reverted: max(0,-oy) sun term, midpoints-first bank ranking) timed 40hh seed 47 at 12.8/12.6/12.6s vs live 12.8/12.6/12.6s, homesteads 5.02/4.98/4.99 vs 5.09/4.99/4.96; no stage grew; total -4.6%",
+  "verdict": "consistent"
+}

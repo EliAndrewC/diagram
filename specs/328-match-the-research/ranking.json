@@ -789,6 +789,51 @@
   "scope": "kept"
  },
  {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::draw_holdings#cell on a lane or stream left undrawn",
+  "verdict": "MISLABELED",
+  "tier": "E0",
+  "fix": "leaving a holding cell unplanted where a lane or stream crosses it is a decision about what was planted, not how it is shown; the claim itself says the record was searched and is silent, so it should be GUESS (or UNRESEARCHED), not CONVENTION",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 24 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::draw_holdings#crop cells kept back from lanes half the lane width  20 and",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "crop cells kept back from lanes (half the lane width + 2.0) and from streams (6.0); these margins reach past the \"touches\" the guess claim names",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 24 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::draw_holdings#holding strip cut into plots holdingcellft 150 ft deep, whic",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "holding strip cut into plots HOLDING_CELL_FT (150 ft) deep, which 0033 \u00a714 records as a convention",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 24 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#at most MAX_STREETS (6) parallel streets",
   "tier": "E0",
   "fix": "add the claim: at most six streets is a GUESS on research/questions/0033-row-villages-resson.drawing.html",
@@ -917,6 +962,21 @@
   "scope": "kept"
  },
  {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#a lane's room between ranks",
+  "verdict": "MISLABELED",
+  "tier": "E0",
+  "fix": "`MIN_WEB_GAP` (18 ft) is 0246's lane room (\"a lane's room of 18 ft ... a map drawing convention\"), which the bundle answers, so it is not a GUESS; it should cite 0246 \u00a798 and note that a dispersed hamlet lays no lane (\u00a7109). For grove farms, 0036's 32 ft least gap between groves also bears on it",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 24 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#front-row standoff from the field set by the homestead core's reach (house, yard, shed, well pocket; garden excluded)",
   "verdict": "UNCLAIMED",
   "tier": "E0",
@@ -929,6 +989,36 @@
   "found": "wave 3 re-check",
   "tier_as_ranked": "E0",
   "wave": "4",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#rank depth jitter",
+  "verdict": "MISLABELED",
+  "tier": "E0",
+  "fix": "the amplitude matches (\u00b1RANK_DEPTH_JITTER/2 of a pitch), but the alleys-only gate rests on 0246's planned-versus-grown reading, so the claim should cite 0246 \u00a7103 for the gate and keep UNRESEARCHED for the amplitude; the ranks run only on the dispersed form, which lays no lanes",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 24 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#seats kept apart",
+  "verdict": "MISLABELED",
+  "tier": "E0",
+  "fix": "the claim's account is wrong: in the rescue only other offered seats drop to 0.3 pitch, and houses stay at 0.5 pitch in every round; this is also a candidate dedupe (the placer's envelope decides spacing), so it is closer to NONE",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 24 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E0",
+  "wave": "",
   "scope": "kept"
  },
  {
@@ -1016,6 +1106,21 @@
   "found": "wave 16 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
   "wave": "17",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/pondstock.py::_bank_seats#sty seat pulled in by half the bank bankinsetft so it stands",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "sty seat pulled in by half the bank (BANK_INSET_FT) so it stands on the bank, not by the canal (0025 \u00a7259)",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/pondstock.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 24 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E0",
+  "wave": "",
   "scope": "kept"
  },
  {
@@ -6619,7 +6724,7 @@
   "found": "wave 2 re-check (tiered by its work at T25a)",
   "tier_as_ranked": "E2",
   "moved": "T25a (amendment 6): tiered by its work - the condition on the sun term in the one expression at stages.py:772 changes",
-  "wave": "",
+  "wave": "24",
   "scope": "kept"
  },
  {
@@ -6648,7 +6753,7 @@
   "flag": "",
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "24",
   "scope": "kept"
  },
  {
