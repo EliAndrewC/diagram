@@ -260,8 +260,9 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
         set-back is bigger to the south for exactly that reason);
       - it must be clear of the settlement, its lanes, its grove and its water.
 
-    Among the candidates that qualify it prefers the ones furthest from the crop and highest up the
-    slope, and it keeps them apart from each other so three patches read as three woods rather than
+    Among the candidates that qualify - beyond the fields from the houses - it ranks them by `woodland_tier` (higher ground
+    than the fields first, then the level) and takes the nearest within a tier, and it keeps them apart from each other so
+    three patches read as three woods rather than
     one ragged mass. This is the stage that most obviously could not be done by pinning coordinates:
     "where is there still room" is a question about the map as it stands at that moment.
 
