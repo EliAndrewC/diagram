@@ -32675,9 +32675,9 @@
   "date": "2026-10-03",
   "note": "per 0179",
   "pages": {
-   "0179-water-gates-and-sluices-shuimen.drawing.html": "68cbefcac72113fe"
+   "0179-water-gates-and-sluices-shuimen.drawing.html": "54c4f48049320f90"
   },
-  "research": "e33fd90b7331cad7",
+  "research": "e305ba29a00899a2",
   "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
@@ -32938,9 +32938,9 @@
   "note": "the permission covers wall x {road, roads, town_streets, alleys, lanes, canals, channels, streams} anywhere along the wall, while the claim says \"at a gate or a water gate\"; need the check that holds every way or watercourse crossing the wall to a gate or water-gate opening (as city_kido_on_ward_fence does for the ward fence)",
   "pages": {
    "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html": "49298f0d00bbf69d",
-   "0179-water-gates-and-sluices-shuimen.drawing.html": "68cbefcac72113fe"
+   "0179-water-gates-and-sluices-shuimen.drawing.html": "54c4f48049320f90"
   },
-  "research": "9d1663df3dade425",
+  "research": "f208306cb69fb14f",
   "rests": [
    "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html:5066b991dad4631a",
    "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html:8c6e4d1d8109adfa",
@@ -33241,10 +33241,10 @@
    "0148-towers-along-the-city-wall-mamian.drawing.html": "89938d617cc0b450",
    "0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html": "e242aadf4edb4965",
    "0176-wharves-and-landings-piers-quays-and-stepped-landings-kashi-gangi.drawing.html": "676ecd28f9b1d116",
-   "0179-water-gates-and-sluices-shuimen.drawing.html": "68cbefcac72113fe",
+   "0179-water-gates-and-sluices-shuimen.drawing.html": "54c4f48049320f90",
    "0210-timber-yards-and-log-booms-kiba.drawing.html": "f17b51f2d5f34284"
   },
-  "research": "78aacacc28f4c415",
+  "research": "1472590ddc98794f",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:b1c3c0e8029a1da5",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:fb25778e65e5d8bd",
@@ -38208,9 +38208,9 @@
   "date": "2026-10-03",
   "note": "0179/0146 drawings",
   "pages": {
-   "0179-water-gates-and-sluices-shuimen.drawing.html": "68cbefcac72113fe"
+   "0179-water-gates-and-sluices-shuimen.drawing.html": "54c4f48049320f90"
   },
-  "research": "e33fd90b7331cad7",
+  "research": "e305ba29a00899a2",
   "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
@@ -38338,9 +38338,9 @@
   "date": "2026-10-08",
   "note": "drawn where one channel hands its water to another (moat or river tap to canal, drain to culvert)",
   "pages": {
-   "0179-water-gates-and-sluices-shuimen.drawing.html": "68cbefcac72113fe"
+   "0179-water-gates-and-sluices-shuimen.drawing.html": "54c4f48049320f90"
   },
-  "research": "e33fd90b7331cad7",
+  "research": "e305ba29a00899a2",
   "rests": [
    "0179-water-gates-and-sluices-shuimen.drawing.html:067bd7a407956917",
    "0179-water-gates-and-sluices-shuimen.drawing.html:cf888beb9dde091c"
@@ -38354,13 +38354,14 @@
   "date": "2026-10-08",
   "note": "board between two posts, crossbeam over them, drum at the beam's center",
   "pages": {
-   "0179-water-gates-and-sluices-shuimen.drawing.html": "68cbefcac72113fe"
+   "0179-water-gates-and-sluices-shuimen.drawing.html": "54c4f48049320f90"
   },
-  "research": "e33fd90b7331cad7",
+  "research": "e305ba29a00899a2",
   "rests": [
    "0179-water-gates-and-sluices-shuimen.drawing.html:088c44a5ca24eaf0",
    "0179-water-gates-and-sluices-shuimen.drawing.html:b61cf64d7fc5dad2"
   ],
+  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/moat.py::MoatMixin.sluice_gate#caption": {
@@ -38379,13 +38380,13 @@
   "code": "9f69577a573799ec",
   "core": "afb13c70efc084dc",
   "date": "2026-10-08",
-  "note": "20 ft default within 16-24 ft; outer post edges at ±span/2 so the span is drawn true post to post; a passed span stretches it bank to bank",
+  "note": "frame is 20 ft with no span given, inside the field sluice's 16-24 ft; a span passed is drawn true, post edge to post edge",
   "pages": {
-   "0179-water-gates-and-sluices-shuimen.drawing.html": "68cbefcac72113fe"
+   "0179-water-gates-and-sluices-shuimen.drawing.html": "54c4f48049320f90"
   },
-  "research": "e33fd90b7331cad7",
+  "research": "e305ba29a00899a2",
   "rests": [
-   "0179-water-gates-and-sluices-shuimen.drawing.html:2534881cef72526c",
+   "0179-water-gates-and-sluices-shuimen.drawing.html:5bfc7981ce08c3b7",
    "0179-water-gates-and-sluices-shuimen.drawing.html:65c2e2ee17e2dda0"
   ],
   "verdict": "IN-STEP"
@@ -38394,13 +38395,14 @@
   "code": "7eb0f721fd15850d",
   "core": "afb13c70efc084dc",
   "date": "2026-10-08",
-  "note": "posts 2.0 px, board 2.8 px, beam 1.2 px and drum 2.2 px are fixed pixel sizes while the span scales",
+  "note": "fixed-pixel post width, board depth, beam stroke and drum, a map drawing convention as the page records",
   "pages": {
-   "0179-water-gates-and-sluices-shuimen.drawing.html": "68cbefcac72113fe"
+   "0179-water-gates-and-sluices-shuimen.drawing.html": "54c4f48049320f90"
   },
-  "research": "e33fd90b7331cad7",
+  "research": "e305ba29a00899a2",
   "rests": [
-   "0179-water-gates-and-sluices-shuimen.drawing.html:2534881cef72526c"
+   "0179-water-gates-and-sluices-shuimen.drawing.html:5bfc7981ce08c3b7",
+   "0179-water-gates-and-sluices-shuimen.drawing.html:b61cf64d7fc5dad2"
   ],
   "verdict": "IN-STEP"
  },
@@ -38410,9 +38412,9 @@
   "date": "2026-10-07",
   "note": "the code draws the arch on two piers but only one set of bars. Those bars are three lines running the depth of the passage, along the flow rather than \"across the water\". The rule says \"A grille crosses the water at both the outer and the inner face of the wall\" and \"The channel between the two grilles is lined with stone on both sides\"; the code draws neither the second grille nor the stone lining. Either draw grilles at both faces (and the stone revetments), or narrow the claim and record the single grille as a deviation",
   "pages": {
-   "0179-water-gates-and-sluices-shuimen.drawing.html": "68cbefcac72113fe"
+   "0179-water-gates-and-sluices-shuimen.drawing.html": "54c4f48049320f90"
   },
-  "research": "e33fd90b7331cad7",
+  "research": "e305ba29a00899a2",
   "rests": [
    "0179-water-gates-and-sluices-shuimen.drawing.html:088c44a5ca24eaf0",
    "0179-water-gates-and-sluices-shuimen.drawing.html:0c0cf1f522fe99df",
@@ -38453,15 +38455,16 @@
   "date": "2026-10-08",
   "note": "the code draws one fixed 60 ft opening (ho=30 ft) whatever the canal, but the page says \"The passage through the wall is as wide as its canal\" and a river gets \"a row of arched openings\"; §3 records this as a gap not yet drawn (\"not every map draws it so yet\"), not a deliberate deviation, so the code should take the canal's width and draw a row of openings for a river, or the claim should say UNRESEARCHED/known gap",
   "pages": {
-   "0179-water-gates-and-sluices-shuimen.drawing.html": "68cbefcac72113fe"
+   "0179-water-gates-and-sluices-shuimen.drawing.html": "54c4f48049320f90"
   },
-  "research": "e33fd90b7331cad7",
+  "research": "e305ba29a00899a2",
   "rests": [
    "0179-water-gates-and-sluices-shuimen.drawing.html:110c4d21448f7f54",
    "0179-water-gates-and-sluices-shuimen.drawing.html:27ed53483dc6cfc1",
    "0179-water-gates-and-sluices-shuimen.drawing.html:d21d92ab5e6513f4",
    "0179-water-gates-and-sluices-shuimen.drawing.html:e7064b16fafb510d"
   ],
+  "triaged": "2026-10-08",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/city/moat.py::MoatMixin.water_gate#pier depth": {
@@ -50018,49 +50021,66 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/dikes.py::DikeMixin.dike_gates#gate glyph at the polder cut": {
-  "code": "65738553e4f0bcb0",
-  "core": "5748963fc55880ce",
+  "code": "bee3e20a757c5350",
+  "core": "8b3751cc1e91ef18",
   "date": "2026-10-08",
-  "note": "calls sluice_gate with span=px(span_ft), so the frame is drawn true at the span passed, turned along the crest across the water",
+  "note": "the engine's sluice glyph with its frame at the span passed",
   "pages": {
-   "0179-water-gates-and-sluices-shuimen.drawing.html": "68cbefcac72113fe"
+   "0179-water-gates-and-sluices-shuimen.drawing.html": "54c4f48049320f90"
   },
-  "research": "e33fd90b7331cad7",
+  "research": "e305ba29a00899a2",
   "rests": [
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f981425220ab2e60",
    "0179-water-gates-and-sluices-shuimen.drawing.html:088c44a5ca24eaf0",
-   "0179-water-gates-and-sluices-shuimen.drawing.html:2534881cef72526c",
+   "0179-water-gates-and-sluices-shuimen.drawing.html:5bfc7981ce08c3b7",
    "0179-water-gates-and-sluices-shuimen.drawing.html:b61cf64d7fc5dad2"
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/land/dikes.py::DikeMixin.dike_gates#gate snapped onto the nearest drawn watercourse within 20 ft of the cut, else seated at the cut itself": {
-  "code": "5748963fc55880ce",
-  "core": "5748963fc55880ce",
+ "l7r/diagram/settlement/land/dikes.py::DikeMixin.dike_gates#gate on its watercourse": {
+  "code": "62815cf892614904",
+  "core": "8b3751cc1e91ef18",
   "date": "2026-10-08",
-  "note": "gate snapped onto the nearest drawn watercourse within 20 ft of the cut, else seated at the cut itself",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "note": "seats the gate where water crosses the dike; the 20 ft snap reach only lines the gate up with the drawn stroke",
+  "pages": {
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "45bbefa1e8568ae6"
+  },
+  "research": "7e58acaa9e345ce6",
+  "rests": [
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f981425220ab2e60"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/dikes.py::DikeMixin.dike_gates#gate span": {
-  "code": "51501d94f43417ca",
-  "core": "5748963fc55880ce",
+  "code": "fae0560f394791b9",
+  "core": "8b3751cc1e91ef18",
   "date": "2026-10-08",
-  "note": "span_ft is a fixed 20 ft whatever the width of the watercourse the gate snaps to, while §13 has \"a wider channel's spans bank to bank\"; I need the widths of the streams and canals at polder cuts: if any is over about 24 ft this is DRIFTED (the span should be read from the channel)",
+  "note": "max(20 ft, channel width + 4 ft): 20 ft default inside 16-24 ft, bank to bank on a wider channel",
   "pages": {
-   "0179-water-gates-and-sluices-shuimen.drawing.html": "68cbefcac72113fe"
+   "0179-water-gates-and-sluices-shuimen.drawing.html": "54c4f48049320f90"
   },
-  "research": "e33fd90b7331cad7",
+  "research": "e305ba29a00899a2",
   "rests": [
    "0179-water-gates-and-sluices-shuimen.drawing.html:65c2e2ee17e2dda0"
   ],
-  "verdict": "CANNOT-TELL"
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/land/dikes.py::DikeMixin.dike_gates#posts past the banks": {
+  "code": "a49f3d685252d4e6",
+  "core": "8b3751cc1e91ef18",
+  "date": "2026-10-08",
+  "note": "the page puts the posts on the banks but gives no distance, so the 2 ft past each bank is a true GUESS",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0179-water-gates-and-sluices-shuimen.drawing.html:65c2e2ee17e2dda0"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/dikes.py::DikeMixin.dike_gates#sluice at every cut": {
-  "code": "6640d4bbf9b01216",
-  "core": "5748963fc55880ce",
-  "date": "2026-10-07",
-  "note": "water crosses the dike only at a gated sluice, one per gap.",
+  "code": "b26ef20ba1c857c8",
+  "core": "8b3751cc1e91ef18",
+  "date": "2026-10-08",
+  "note": "a gate at every dike gap, turned along the crest so it lies across the water; water crosses only at gated sluices",
   "pages": {
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "45bbefa1e8568ae6"
   },
