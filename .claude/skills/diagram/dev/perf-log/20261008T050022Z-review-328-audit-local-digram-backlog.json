@@ -1,0 +1,67 @@
+{
+  "band": 3,
+  "base": {
+    "commit": "51da9771f",
+    "label": "328-start",
+    "utc": "20261008T044058Z"
+  },
+  "binding": "c7c6f8871bb9133355774a1fd3148fc95133dc63417d349d7ce0c7c86161a959",
+  "criteria": {
+    "commensurate": "the code's own cost is zero within noise at every size: reference -2.9% (maps byte-identical), 10 households -1.0% (identical), 20 households -1.9% (seeds 4 and 47 maps differ, as intended), 40 households -15.4% (three of four maps differ); no seconds are spent to buy the behavior",
+    "necessary": "the change wave 33 asked for (0246: a path goes round its own beds, sheds, byres, retirement houses; only the dooryard is its own) is a three-line ownership change in ways/fabric.py _homestead_polys; it adds no geometry and no pass, and the measured +63.5% is not caused by it - reverted, the reference is no faster (HEAD 25.4s vs reverted 26.2s, paired interleaved medians)",
+    "no_way_around": "nothing to get around: the bookend growth is host load (start leg at load 1.8, end leg at 4.2, another session's gate; the same HEAD code swings 4.2s to 7.9s per seed by load alone); a cheaper form of a None-for-owner assignment does not exist"
+  },
+  "end": {
+    "commit": "c97cf0a31",
+    "label": "328-end",
+    "utc": "20261008T044517Z"
+  },
+  "environment": "local",
+  "feature": "328-match-the-research",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "8d3395e5-fe32-4f85-9c89-80c344d2ac1a",
+    "utc": "20261008T050022Z"
+  },
+  "kind": "audit",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": 69.0,
+          "39": 58.1,
+          "4": 70.6,
+          "47": 64.7
+        },
+        "total_pct": 65.6
+      },
+      "20": {
+        "seeds": {
+          "25": 32.2,
+          "39": 21.7,
+          "4": 45.7,
+          "47": 15.2
+        },
+        "total_pct": 29.8
+      },
+      "40": {
+        "seeds": {
+          "25": 11.3,
+          "39": -29.3,
+          "4": 43.0,
+          "47": -21.4
+        },
+        "total_pct": 1.9
+      }
+    },
+    "seeds": {
+      "25": 72.5,
+      "39": 62.5,
+      "4": 54.2,
+      "47": 66.7
+    },
+    "total_pct": 63.5
+  },
+  "note": "counterfactual: detached worktrees of c97cf0a31, one with hamletgen/ways/fabric.py checked out from 51da9771f, ABBA-interleaved, 3 reps at 15/10/20 households and 2 at 40, map identity by sha256 of s.M; band 3 still owes the GM's perf-signoff, or a quiet-host bookend retake",
+  "verdict": "justified"
+}

@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-08T04:46:56Z",
+  "target": "perf-explain",
+  "commit": "c97cf0a31",
+  "outcome": "permitted",
+  "why": "perf-explain UNVERIFIED: sequential legs under changing load; perf-audit to take interleaved runs with the change reverted"
+}
