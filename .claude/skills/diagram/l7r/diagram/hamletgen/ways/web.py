@@ -752,7 +752,8 @@ def stage_web(s: Settlement, plan: SitePlan) -> None:
     # back along the skeleton lane at 16 degrees before meeting it, and moving its end to the foot of the vertex before it
     # (square to the tread) let the tidy trim the skeleton's tail, which had been a gable-end house's nearest way - two
     # households' ways out then left by another lane and missed the entrance board (`test_an_entrance_board_stands_at_the_
-    # entrance`). Open in future-work/farming-communities.md with the measurement; a fix has to keep the tail's service.
+    # entrance`). Feature 287 relays a needle end in `settle_ends` (`law.needle_ends`, ways W21) instead; a fix here has
+    # to keep the tail's service.
 
     center_lane_ends(s)
     cut_the_overruns(s)

@@ -10,78 +10,9 @@ another (GM 2026-08-24).
 a town has enough that is specific to it - storefronts, inns, caravans, the theater, a farmers
 plurality the larger tiers do not have - that folding it in here would bury it.
 
-**Much of this file predates scripted generation.** Only hamlet `valley_paddy` is SHIPPED; village,
-town, city and capital are all NOT STARTED ([`../migration-plan.md`](../migration-plan.md)). Entries
-here that assume a NEXT hand-authored map are annotated: the task is dead, the insight is an input to
-the tier's conversion.
-## 1. Parametric feature bundles (gate wards, rim bands) - HIGH VALUE
-
-> **PREMISE RETIRED (audit 2026-08-24).** This entry assumes a NEXT hand-authored map: its fix
-> sketch says "extract the helper the next time a gate bundle is authored or moved". There will not
-> be one. The 18 hand-authored maps are FROZEN (never regenerated, never re-gated), and
-> [`migration-plan.md`](migration-plan.md) makes conversion - not retrofit - the answer for every
-> tier above hamlet. So the TASK as written is dead.
->
-> The INSIGHT is not, and is why this is annotated rather than deleted: "a layout change should be a
-> parameter change, not hundreds of re-typed coordinates" is precisely what a scripted city generator
-> has to get right, and this entry records what it cost when it was got wrong. Read it as an input to
-> the city-tier conversion, not as a job queued against the current pool.
-
-The 021 wall resize (2026-08-10) invalidated ~hundreds of hand-typed coordinates and cost
-hours of migrate-regen-check cycles. The pieces that were FORMULA-DRIVEN from the wall
-parameters (rim temples, moat, ring road, wall towers) migrated instantly and for free; every
-literal coordinate had to be re-typed one check-failure at a time - and a careless bulk
-shifter corrupted list multipliers (`* -144`) and took extra rounds to repair.
-**Fix sketch**: a `gate_ward(gate, ...)` helper that lays a whole guan-xiang bundle (market
-frontage, flophouse, inn+stables+yard, its lanes, its district poly) RELATIVE to whichever
-gate it is handed; a sibling for ring-adjacent band fills. A layout change then becomes a
-parameter change. Extract the helper the NEXT time a gate bundle is authored or moved.
-
-## 4. WALL SIZE SETTLES FIRST, against a slack threshold (GM process rule, 2026-08-10)
-
-> **STILL OPEN, but read the era (audit 2026-08-24):** this is a PROCESS RULE for hand-authoring a capital, and the capital tier is NOT STARTED (migration-plan.md). It binds whoever hand-authors the next capital - if anyone does - and should be folded into the city/capital generator's design rather than left as a rule someone must remember.
-
-Measured at the moment the GM called it from the render: 41% of the walled interior was
-claimed-open commons, and hours of fine adjustments (junction snaps, well boxes, kido
-reserves) had been tuned against a wall that was about to be wrong. The rule: **an interior
-slack check (claimed-open + unclaimed <= ~15% of interior) is an EARLY reconciliation gate**
-- run it, and re-derive the wall, BEFORE any fine iteration. Fine adjustments are downstream
-of the wall; the wall must never be adjusted after them. Implement as
-`capital_interior_slack_in_band` beside the packed-split check, and write the ordering into
-the capital-build sequence recorded on `research/contents.json#capitals`. (This is also the strongest single
-argument for the fabric-first ordering in #2: a wall wrapped around a grown fabric has the
-right slack by construction.)
-
-## 5. Interior fullness DEFERRED on Shiro Daika (GM 2026-08-10, end of the resize day)
-
-> **STILL OPEN, but read the era (audit 2026-08-24):** this is scoped to `wip/shiro-daika.gen.py`, which is a hand-authored capital sitting OUTSIDE the pool and outside the gate. It is real deferred work, but it is deferred against an artifact nothing currently regenerates or checks.
-
-After the third wall derivation the slack check passes (<=15% claimed-open) but the render
-still reads empty to the GM's eye: bare-rendered commons, the model's 20% circulation, and a
-fabric that packs naturally denser than the model prices. Options weighed: a third shrink
-(hour-plus migration each, diminishing returns), raising population (rejected - 12,360 is
-budgets.md-anchored research), or defer. DEFERRED by GM choice: ship the green map as the
-first pass; **wall-to-fabric fullness is the headline requirement of the fabric-first
-feature (#2)**. Cosmetic option noted: a faint ground tint for kept commons (between blank
-and scrub). When fabric-first is specced, start from this map's slack profile as the
-motivating example.
-
-## 2026-08-10 addendum: the first pass SHIPPED against #5
-
-Shiro Daika went out green with three waivers (packed_inwall ~1,930/2,100, census ~130 short,
-rotating ~1.5 ac pockets) - the deferred-fullness gap made concrete. Fixture:
-`pool/regressions/capital_fullness_deferral_fires_on_the_first_pass_shiro_daika.json`. Two fresh
-data points for the fabric-first design:
-
-- Realized machi density is bounded by the SERVICE fabric, not the packer: streets + kido
-  reserves + well courts + hand roji took ~8% of C_PACKED at the settled wall. A fabric-first
-  pass must budget service ground per district (wells per ~20 households, roji per 95 px reach)
-  BEFORE deriving the wall, or the same gap reappears.
-- The endgame grind was dominated by cross-coupled reflows: every well/claim/alley edit re-rolls
-  neighboring packs, so single-defect fixes rotate the defect population instead of shrinking it
-  (three "dead cores" moved five times). Fabric-first should place service features and packs in
-  one deterministic order per district, so a local edit stays local.
-
+**Every tier this file covers is unconverted** - only hamlets are generated
+([`../migration-plan.md`](../migration-plan.md)) - and the hand-authored cities are frozen. An entry here is an input
+to the tier's conversion, or work on the engine code that conversion will reuse.
 ## Fold settlement/city/civic.py into castle_civic.py (feature 113, 2026-08-16)
 
 Left deliberately undone by the `settlement/city/` package split, with the reasoning recorded so
@@ -106,43 +37,6 @@ and make the relocation a one-file change later.
 `civic.py` row from `settlement/city/CLAUDE.md`. Verify with the same byte-identity sweep - the
 drawing must not change. `specs/113-city-package/quickstart.md` has the harness.
 
-## `wip/shiro-daika.gen.py`'s cost is UNKNOWN and unbounded
-
-Feature 112 recorded it as "over 6 minutes"; feature 115 discovered that figure is an **aborted
-lower bound** - 112 stopped the map at six minutes without output and never learned the real number.
-115 got it to **10m35s of CPU at 100%, still with no output**, and stopped it for the same reason.
-Nobody has ever let this map finish.
-
-That matters beyond curiosity: `precinct_interior`'s only consumer in the entire tree is this map,
-so any future refactor touching it has no artifact-level oracle available at a known price. Two
-follow-ups, either of which closes it:
-
-- Run it to completion once, unattended, and record the actual cost here.
-- Profile it. A capital map costing more than 3x the entire 28-map pool is itself a finding - the
-  "one performance bug this engine keeps growing" section of `CLAUDE.md` describes the shape it is
-  most likely to be.
-
-## Restore `labels_clear_of_other_buildings` - and give the hamlet tier a caption check at all (feature 146, 2026-08-28)
-
-**Feature 266 (2026-09-27): the placement half is done.** The one caption placer weighs every built feature 1,000 (an
-obstacle) unless the caption's own group word names it, and takes free space first - so a caption covers something it
-does not name only when no free seat exists in reach, and then the least of it. What remains open below is the CHECK:
-a gate test over finished maps asserting no caption lies on a foreign building.
-
-Feature 141's cut retired `labels_clear_of_other_buildings`, and with it the only consumer of the
-`_LABEL_GROUP` / `_LABEL_EXEMPT` registry in `check_village/common_01_geometry.py` - a registry still
-maintained in comments to this day, now enforcing nothing. Restore it (the body is recoverable at
-`b709c4ae^:.../segments_04a_margins_lanes_and_wells.py`, lines 208-380) and prove it fires; the frozen
-town and city exhibits now run at the gate, so it has a test bed the day it comes back.
-
-**And the finding that came with it**: that check was guarded `if scale in ("town", "city")`. It never ran
-on a hamlet - so the Kashikawa caption drawn through a byre (settlement-review, 2026-08-28, accepted with
-its alternatives priced in that map's notes) was never covered by it, and **at hamlet scale no check tests
-whether a caption covers something it does not name**. Feature 145 moved `byres` out of `_LABEL_EXEMPT` into
-the `farmhouse` group so the registry says the right thing; nothing reads it yet at that tier. Whether the
-hamlet tier wants the same check is the open question - one caption on the sheet, in a dense cluster, and
-the board must stay on the traffic.
-
 ## The town, city and capital tiers' hand-seated captions go through the one placer when their tier is scripted (feature 266, spec D8)
 
 Feature 266 built ONE caption placer (`l7r/diagram/labels/`, the cartographic standard: ranked positions, a
@@ -161,11 +55,10 @@ building or district (`Subject("area", ...)` through `_draw_seated_caption`), an
 
 Feature 269 read these questions for the city tier (research/contents.json#cities; `specs/269-research-backfill/outcomes.md`
 section 3). The hand-drawn maps are frozen, so each is owed by the city tier's conversion (`migration-plan.md`), and
-the rows marked GM wait on a ruling that the conversion puts to the GM through `escalation-check`.
+the rows marked GM wait on a ruling that the conversion puts to the GM through `escalation-check`. The rows the record
+now states as the drawing rule (the moat's width by rank, the gate range's guard room, the block-form and
+lower-mansion knobs) are on their drawing pages and are not repeated here.
 
-- **The moat's width (B38).** Measurement: `settlement/city/moat.py` draws `px(66)`, 66 ft, on every city. The record
-  reads about 13 ft for a county seat, with a broad shallow form on low ground by a river. Sketch: width by the city's
-  rank, and a knob `moat_form` narrow / broad_shallow, the broad form offered only on low riverside ground.
 - **The gate's guard and inspection posts (B38, GM).** Measurement: drawn 105-135 ft inside the opening; the Hakone
   barrier puts them 59 ft in. Mechanism: the gate furniture's offsets are fixed. Sketch: the conversion asks the GM,
   then sets the offset.
@@ -173,13 +66,6 @@ the rows marked GM wait on a ruling that the conversion puts to the GM through `
   rampart; Tang wards never met the rampart, a road lay between. Today's form is the GM's 2026-07-27 ruling, so the
   conversion puts the Tang reading to the GM before changing it. Sketch: the fence closes on the road's inner edge; the
   road may widen.
-- **The gate range (B39).** Measurement: a plain range. Sketch: an optional guard room either side of a senior house's
-  gate, and a ward gate about 12-15 ft wide with wickets.
-- **The ward blocks (B40).** Measurement: `settlement/water_ways/wards.py` `quarter` lays one block form. The record
-  reads blocks about 390 ft with lots about 130 ft, rectangle-weighted or a square with an open core. Sketch: a knob
-  `block_form` rolled per city.
-- **Lower mansions at the outer town (B41a-1).** Measurement: the hinterland draws a garden retreat only. Sketch: a
-  second form, a street of lower mansions at the outer town, rolled per city.
 - **The gate belt's ceiling (B41a-4, GM).** Measurement: a 6-structure floor and no ceiling. Sketch: the GM sets the
   ceiling; the belt may then be denser.
 - **The in-wall samurai share (B41b, GM).** Measurement: `l7r/diagram/citybudget.py` `SAMURAI_INWALL_FRAC` 2/3; the

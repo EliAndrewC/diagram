@@ -532,9 +532,10 @@ class BundleFitMixin:
         is slack a footprint routinely overhangs, and tightening it cost Nagahara a well and pushed
         Hoshizora's punishment ground off its street.
 
-        THE HOUSE ONLY, and that is a decision rather than an oversight. The yard, garden and grove
-        are drawn axis-aligned, so for them the rect already IS the drawn footprint and the corridor
-        test they get is honest. Extending a tread test to them would be a new rule about where a
+        THE HOUSE ONLY, and that is a decision rather than an oversight. The yard and garden turn with
+        the house's rake (`bundle._rake_parts`, GM 2026-09-26; the grove arms stay unraked), and the
+        corridor test they get reads their turned box (`boxes`), which contains the drawn part, so it
+        stays honest. Extending a tread test to them would be a new rule about where a
         threshing yard may lie - which no check currently makes and which would re-pack every
         nucleated map to enforce - so it is deliberately out of scope here.
 

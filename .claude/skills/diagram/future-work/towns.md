@@ -6,20 +6,20 @@ community does not; it has a farmers plurality and no wall-and-ward apparatus, w
 city does. Filed with cities in the first cut of this split, and pulled out the same day because
 burying town material inside the capital-era backlog is how it stops being found.
 
-**Thin today, and that is about where the work has been rather than about towns.** The 2026-08-24
-audit found exactly one open town-specific item. Every hand-authored town (Ubame, Hirameki) is
+**Thin today, and that is about where the work has been rather than about towns.** Every hand-authored town
+(Hoshizora, Hirameki, Ubame) is
 FROZEN, and the town tier is NOT STARTED for scripted generation
 ([`../migration-plan.md`](../migration-plan.md)) - so nothing has been generating town defects to
 find. Expect this file to fill when the town tier converts, and treat its current emptiness as a
 statement about attention, not about quality.
 
-## OPEN: two `s.kiln` glyph defects (settlement-review on Ubame, 2026-08-17)
+## OWED AT CONVERSION: two `s.kiln` glyph defects (settlement-review on Ubame, 2026-08-17)
 
 Both found on Ubame's new potters' kiln works and both deliberately NOT fixed there: they are
 defects in `settlement/trades.py::kiln`, not in that map, and a shared-glyph change made under a
-one-off content edit lands on Tango, Minami, Nagahara and `wip/shiro-daika` as well. The three
-pool cities are frozen and would keep their committed ink either way, which is exactly why the
-fix wants its own pass with its own sweep rather than riding along.
+one-off content edit lands on Tango, Minami, Nagahara and `wip/shiro-daika` as well. Every map that draws
+the kiln today is frozen (or `wip/`), so the fix lands with the first scripted tier that draws a kiln. Still in
+the code as of 2026-10-07 (`trades.py` the wisp path, `cxs_` the two-cottage case).
 
 1. **The smoke wisp ignores the map's declared wind.** The plume is authored in the glyph's LOCAL
    frame (`q 2 -3.5 0.5 -7`, toward local -y), so it rotates with the kiln. On Ubame, at
@@ -29,8 +29,7 @@ fix wants its own pass with its own sweep rather than riding along.
    drawing reads the nuisance axis backwards. **Fix sketch**: derive the wisp's bearing from
    `meta["windward"]` in world coordinates and counter-rotate it out of the glyph's group, the way
    `_trade_record`'s `lab_off` already counter-rotates a caption. Then the plume becomes free
-   evidence for the reader instead of a contradiction. Every settlement that draws smoke has the
-   same latent bug; the kiln is just where a map finally rotated far enough to expose it.
+   evidence for the reader instead of a contradiction.
 2. **The two-cottage case is mirrored, with the well centered above it.** `cxs_ = {2: (-f(22),
    f(22))}` puts the pair symmetrically about the works' axis, and the private well's saturated
    blue disc sits centered above them - a bright centered mark over a symmetric pair, which is the
@@ -39,24 +38,6 @@ fix wants its own pass with its own sweep rather than riding along.
    important object. **Fix sketch**: offset the 2-cottage case the way the 3-cottage case already
    is asymmetric in effect, or move the private well off the axis. Cheap, but it changes every
    two-cottage works, so it belongs with item 1 in one pass.
-
-## OWED AT CONVERSION (269 B43, 2026-09-28): where a Chinese-model town seats its magistrate
-
-Measurement: the town tier seats the magistrate's compound at the town's edge on every map. The record
-(research/contents.json#towns 250) puts a Chinese-model town's yamen on the main avenue; the Japanese form keeps the edge
-(research/questions/0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html). Mechanism: one seat rule for both models. Sketch: the scripted town generator reads the
-settlement's model and seats the compound on the main avenue for the Chinese model, at the edge for the Japanese.
-
-## OWED AT CONVERSION (feature 292 closing pass C4, 2026-10-01): the T plan and the crank at a town's ends
-
-Measurement: a grep of `l7r/` (2026-10-01) finds no street-form knob and no bend in a town's road; the only masugata
-drawn is the castle's gate box (`settlement/castle_civic.py`). The record states both as the rule: the town plan is a
-knob of five forms, four street-town forms (both sides, one-sided, back streets, and the T of Zhouzhuang) and the walled
-town's planned avenue (research/questions/0121-town-plans-the-street-town-gaison-the-planned-grid-and-the-castle-town.drawing.html), and the road bends twice at right angles at each end of the built
-street, as at a post town (research/questions/0136-town-streets-side-lanes-and-back-alleys-roji.drawing.html). Mechanism: the town tier is unscripted, so nothing rolls either.
-Sketch: the scripted town generator rolls the plan from the seed (the T laying a second main street off the first at its
-middle), and lays the road through the town with a two-turn crank just outside each end of the built street before the
-lots are placed, so the street front follows the bent road.
 
 ## OWED AT CONVERSION: the frozen towns' modern-only forms (feature 280, the modern-only sweep, 2026-09-29)
 

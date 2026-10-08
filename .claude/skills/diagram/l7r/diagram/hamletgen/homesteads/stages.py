@@ -156,6 +156,8 @@ def stage_homesteads(s: Settlement, plan: SitePlan) -> None:
     s.west_sun_lane(WEST_SUN_FT)
     _placed, _cloud_placed = seat_every_household(s, plan)
 
+    # (`TWIN_AXES`, the twin detector these notes name, went with `check_village/` in feature 166; the declaration
+    # still has to describe the drawing for every reader of the manifest.)
     # THE SHAPE IS RECORDED ONLY IF THE CLOUD ACTUALLY SHAPED THE CLUSTER (2026-08-17).
     # `cluster_seeds` used to stamp `meta.cluster_shape` on its first attempt, BEFORE it knew how
     # many seats it would win - which was harmless while the cloud either ran for the whole hamlet

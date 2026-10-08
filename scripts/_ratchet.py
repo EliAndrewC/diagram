@@ -123,7 +123,7 @@ RATCHETS = {
                     "THIS IS A SESSION-PINNED NUMBER, not one the GM ratified: 400 is theirs and is "
                     "untouched. If a fuller sample moves 549 materially it goes back to them. Ceiling 713.",
         hard_ceiling=45,
-        hard_at_or_below=35,   # not yet - today's baseline is 155
+        hard_at_or_below=35,   # not yet - the pinned baseline (400 warm, 549 cold) is far above it
         compare="median",      # D2, RATIFIED BY THE GM 2026-08-30, and BOUNDED TO THIS REGIME: while
                                # the baseline is above 35 s the median of recent green same-scope runs
                                # is judged, because 7 of the last 25 sit at or above the 201 s ceiling

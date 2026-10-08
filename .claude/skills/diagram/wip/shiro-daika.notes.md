@@ -221,7 +221,7 @@ appending pain points to future-work/ per the GM's standing instruction.
 
 Gate: **0 FAIL** with three DOCUMENTED waivers, all one phenomenon - the first-pass fabric
 under-fills the settled wall (~8% packed shortfall, ~130 census households, rotating ~1.5 ac
-pockets) - which the GM deferred on 2026-08-10 to the fabric-first feature (future-work/ #2/#5).
+pockets) - which the GM deferred on 2026-08-10 to the fabric-first feature (future-work/ #2, which now carries #5's inputs).
 Pre-waiver failing state frozen as
 `pool/regressions/capital_fullness_deferral_fires_on_the_first_pass_shiro_daika.json` (fires all 3).
 

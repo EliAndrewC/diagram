@@ -380,7 +380,7 @@ def over_the_water(q: Pt, p: Pt, water: Sequence[tuple[Pt, Pt]]) -> Pt:
     """Where an end at `q` carried over the water toward the bund point `p` stops: straight across the first water course
     the step crosses, square to it, and `OVER_THE_WATER_FT` past its centerline, so the path ends ON the bund rather than
     on the canal's centerline where the paddy's outline runs (the round-3 review of Mizuguchi). The carried deck's
-    paddy-side landing still runs onto the field - the gate's carried-way landing floor holds it; open in future-work.
+    paddy-side landing is held to dry ground by the deck's own seat (feature 287, ways W13).
     `p` itself where the step crosses nothing.
 
     Research: carried over the water - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: the path ends on the bund"""

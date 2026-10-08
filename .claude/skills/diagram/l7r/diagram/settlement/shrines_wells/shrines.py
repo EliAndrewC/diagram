@@ -118,15 +118,14 @@ class ShrineHallsMixin:
         'Temple of Bishamon' and Hoshizora's 'Monastery of Bishamon' each sat on their own arch, Kikuta's
         'Shrine to Benten' on its sando). The caption goes to the hall's BACK when its avenue owns the
         front: the gen's `label_below` is honored unless the arches are there, in which case the caption
-        takes the other side. If both sides are fouled the requested side stands and
-        `labels_clear_of_other_buildings` reports it - the engine does not get to hide a map that has no
-        room for both.
+        takes the other side. If both sides are fouled the requested side stands - the engine does not get to
+        hide a map that has no room for both (`labels_clear_of_other_buildings`, which reported it, was cut
+        in feature 141).
 
         THREE candidate baselines, tried in a STRICT ORDER: the side the gen asked for, then that same
         side pushed clear PAST the far end of the avenue, and only then the opposite side. Arches veto a
-        candidate; the first survivor wins. If all three are fouled the requested side stands and
-        `labels_clear_of_other_buildings` reports it - the engine does not get to hide a map that has no
-        room for both.
+        candidate; the first survivor wins. If all three are fouled the requested side stands - the engine does
+        not get to hide a map that has no room for both.
 
         WHY AN ORDER RATHER THAN A SCORE. The first version scored the survivors with `_label_hits`, the
         way `ministry` picks its label side, and it was wrong here for a DRAW ORDER reason: a hall goes

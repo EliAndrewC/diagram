@@ -375,7 +375,8 @@ behind twice - `martial_halls`/`dojos` had to be remembered into it, and a day l
 `punishment_spots`/`execution_grounds`/`boundary_markers` were absent, so a foreign caption over an
 execution ground shipped green. `_LABEL_GROUP` now maps each manifest key to the caption GROUP a
 label must name to be allowed over it, `_LABEL_EXEMPT` excuses the few that do not need protecting
-(with the reason), and `every_solid_feature_classified_for_labels` fires when a key is in neither.
+(with the reason), and `every_solid_feature_classified_for_labels` fired when a key was in neither (both checks went
+with `check_village/`, feature 166; the registry now lives in `overlap/taxonomy.py` and the one caption placer reads it).
 The permission side is derived from the same registry - a group's name IS its caption word
 ("brewery", "martial hall", "execution ground") - so a classified feature can caption itself with
 no second list to remember. The named branches in `_label_allows` survive only for SYNONYMS: a
@@ -404,7 +405,7 @@ on a dye works (2026-07-27). It now iterates **any manifest list of dicts carryi
 has to be remembered into it. Two sibling lessons from the same defect, both worth generalizing:
 
 - **A probe must measure the box the CHECK will measure.** That probe sized its trial box with
-  `_text_width` (the PIL glyph measurement) while `labels_clear_of_other_buildings` reads the box
+  `_text_width` (the PIL glyph measurement) while `labels_clear_of_other_buildings` (since retired) read the box
   `_record_label` writes (`len(text) * size * 0.55`), which is ~2px wider per side at caption size. The
   probe cleared, the gate did not. Same rule as "placement and its check read the SAME manifest
   source", one level down: geometry, not just data.

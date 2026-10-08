@@ -111,9 +111,9 @@ def seat_deck(p: Pt, rot: float, span: float, rw: float, wpts: Any, need: float,
     from an effective 16.6 deg to 23.6 and the span required from 44.6 px to about 31.
 
     Seating unchanged is the point: the skew is reached ONLY when plain growth failed, so every deck that
-    seats today seats identically. When nothing seats, the ORIGINAL span comes back and the caller draws
-    it anyway - an undersized deck that `bridges_span_their_water` then fails is better than none, because
-    the check names it.
+    seats today seats identically. When nothing seats, the ORIGINAL span comes back unseated, and the
+    caller refuses it: `bridges()` raises on an unseated crossing (an engine defect, never drawn), and a
+    lane is cut at a crossing that cannot be decked (`undeckable_at`, feature 287).
 
     Research:
         deck grown until its corners clear - research/questions/0087-road-bridges-over-rivers-and-canals-hashi.drawing.html: up to 14 steps of 12% of the span

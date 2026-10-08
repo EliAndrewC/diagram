@@ -86,7 +86,7 @@ the baseline is already failing, because a delta cannot see a rule the empty cas
 
 **Known limit:** label collisions cannot be judged from a manifest - a label box is produced at draw
 time, not recorded for a hypothetical placement - so `labels_clear_of_other_buildings` and
-`no_label_overlaps` still surface only on regeneration. That is why `punishment_spot` and
+`no_label_overlaps` surfaced only on regeneration (both retired with `check_village/`, feature 166). That is why `punishment_spot` and
 `execution_ground` both take `label_above` / `label_xy`.
 
 ## Read derived geometry from the MANIFEST, not by re-running the generators

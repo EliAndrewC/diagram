@@ -248,7 +248,7 @@ def drawn_ground(poly: Any, fields: Any = (), blocks: Any = (), clearings: Any =
     """The ground a marsh's reeds are ACTUALLY drawn on: its outline with the scatter's AREA keep-outs taken out, as one
     keyholed ring - or None where nothing is left (feature 287, M7; woods W08).
 
-    THE RECORD WAS THE UNCLIPPED RING (future-work/farming-communities.md, "The toe marsh's recorded outline is not the
+    THE RECORD WAS THE UNCLIPPED RING (future-work/closed.md, "the toe marsh's recorded outline is not the
     drawn marsh"). The scatter refuses a mark in a paddy (padded `field_pad`), on a building or any other no-build block,
     in a swept clearing and in the caller's `avoid` set, while `M['marshes']` kept the whole outline - so every reader
     asking "is this in the marsh" was told yes about dry, cleared ground: Sawada's belt lost 68 of 179 crowns to an
