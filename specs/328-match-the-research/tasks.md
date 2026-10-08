@@ -958,12 +958,12 @@ first half, on the page, stays; the UNRESEARCHED line is removed until its resea
 ## Phase 25 - wave 24 (amendment 23): the yard's sun between ranks, the bank's nearest seat
 
 The next open in-scope rows in ranked order (row 434, the shrine cap, held for the GM): wave 23's one found row (tiered first),
-the rank step and its citation, and the sty's bank seat.
+the rank step's sun, and the sty's bank seat. Row 437 (the step between ranks) does not close here: impl-drift found the step
+about 111 ft north-south against 0038's 92 ft rows (envelope + lane room + sun), so it stays open with that finding.
 
   - `l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#a yard's sun between ranks` - `SUN_CORRIDOR_FT` by the step's north-south share whichever way the ranks run (0038 drawing)
-  - `l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#the step between ranks` - 0038 drawing cited, now true both ways
   - `l7r/diagram/hamletgen/pondstock.py::_bank_seats#edge midpoints first` - every bank seat ranked together nearest the houses (0025 drawing); the UNRESEARCHED clause retired
-  - `l7r/diagram/hamletgen/homesteads/rows.py::draw_holdings#a holding plot that touches a lane or stream` - E0 (T73a): claimed CONVENTION, as `cell on a lane or stream left undrawn`
+  - `l7r/diagram/hamletgen/homesteads/rows.py::draw_holdings#a holding plot that touches a lane or stream` - E0 (T73a): claimed, as `cell on a lane or stream left undrawn` - GUESS (impl-drift: leaving a cell unplanted is a decision about the place, not its drawing)
 
 - [x] T73a wave 23's found row tiered by the work it takes, by a fresh reader (FR-002, FR-003, SC-003)
       research: rendering

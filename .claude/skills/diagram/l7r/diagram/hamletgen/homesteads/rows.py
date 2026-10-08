@@ -319,7 +319,7 @@ def draw_holdings(s: Settlement) -> int:
     Research:
         holding drawn as dry field - research/questions/0033-row-villages-resson.drawing.html: every cell a dry crop, none paddy
         furrows down the strip - CONVENTION: across the street, the crops cycled from the dry palette
-        cell on a lane or stream left undrawn - CONVENTION: a holding cell a lane or stream crosses or touches is dropped whole and the rest of the holding stands, so no lane runs through row crops (research/questions/0081-village-lanes.drawing.html: a lane never crosses row crops); no page says how a lane or stream crossing a farm's dry-field strip was laid out (searched 0033, 0081, 0014)
+        cell on a lane or stream left undrawn - GUESS: a holding cell a lane or stream crosses or touches is left unplanted and the rest of the holding stands, so no lane runs through row crops (research/questions/0081-village-lanes.drawing.html: a lane never crosses row crops); no page says how a lane or stream crossing a farm's dry-field strip was laid out (searched 0033, 0081, 0014)
     """
     from shapely.geometry import LineString, Polygon
 
