@@ -712,6 +712,24 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 - **Verification**: tests red on the old code (0.508 outside 0.02); `impl-drift`; `spec-fidelity`; the gate, pair and
   occasions at batch 3's close.
 
+## Wave 55 (amendment 54, 2026-10-08) - batch 3's close, the homestead grove's glyph-check answered
+
+- **Scope**: the grove's density AS DRAWN (glyph-check of Mizuguchi, round 1 NEEDS-WORK): wave 53 threw one crown to 0080's
+  ~180 sq ft, but the culls (a crown under another's, the sun and building keep-outs, the persimmon) took more than half the
+  throw, and the groves were drawn at ~400 sq ft a crown. A clump now keeps throwing until its drawn crowns hold its open
+  ground (`open_share`: the box less what the keep-outs, earlier stands' crowns and persimmons cover) at `GROVE_CROWN_SQFT`,
+  or `TOPUP_TRIES` (6) throws a crown wanted fail; the crowns are painted back to front after the top-up. Not the
+  conifer-led belt (its rows are its own; its density a filed row). The same gap as wave 54's conifer share: thrown versus drawn.
+- **Measured** (m:wave55-grove-density-as-drawn): drawn crowns rise on every hamlet (Mizuguchi 339 -> 601); Mizuguchi's
+  bands hold one crown to 242 sq ft of their whole boxes, keep-out ground included. Generation times unchanged within a
+  tenth of a second.
+- **Batch 3's close so far**: the gate green (waves 51-54); privy, manure heap and manure pit PASS; windbreak PASS (to be
+  seen again with the top-up); homestead grove round 2 owed; the record checks the 0072 re-measure owed answered, their
+  modal edits applied (a further depiction round owed); three found rows filed (`found-batch3.jsonl`: the privy's rolled seat
+  honored, the windbreak's hover region, Kuwabata's bare runs). The pair and perf-audit follow the reviews.
+- **Verification**: tests red on the old code (the open clump drew under 0.9 of its density); `impl-drift`; `spec-fidelity`;
+  glyph-check rounds on the homestead grove and the windbreak.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Waves 2-45 that changed engine behavior took

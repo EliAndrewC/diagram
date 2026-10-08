@@ -19,16 +19,16 @@ Guesses:
 - Whether a farm draws a channel or a well of its own, at even odds: on the Tonami plain many areas led a channel into the
   house's grounds, and no account says how the other areas drew their water.
 
-Depiction: The map stands each farm alone beside its own fields, with its grove round it, and draws no lanes among the farms:
+Depiction: The map stands each farm alone beside its own fields, with its own grove on two, three or four of its sides, and draws no lanes among the farms:
 the road out joins the settlement to the world, and the field paths join the farms to one another. No village shelter belt
 is drawn, since each farm has its own grove. A scattered settlement needs about twice the ground per farm that a clustered
 one does, so the map gives it a roomier field rather than squeezing its farms together; that is a rule for fitting the
 drawing, not a measure of how far apart real farms stood. Each farm's water is a channel led off the nearest irrigation
-ditch into its dooryard, drawn at the narrowest width the map shows legibly (how wide a real one ran is not recorded), or a
-well in its dooryard.
+ditch into its dooryard, drawn as wide as a delivery ditch where it leaves its canal (how wide a real one ran is not recorded), or a
+well in its dooryard. The channel's way back out to the fields is not drawn.
 
 Name: How the houses stand: scattered, each farm on its own (dispersed)
 Covers: `meta.settlement_form = dispersed`
 Sources: kotobank-sanson, visit-toyama-sankyoson, senjochi-jawiki, tonami-heiya-jawiki, suido-ishizue-yachida, tonami-sankyoson-museum, mdpi-sho-fan-groundwater, kotobank-shuson
 Entry: research/questions/0031-clustered-and-scattered-villages-shuson-sanson.html
-Drawing: research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html, research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html
+Drawing: research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html, research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html, research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html, research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html

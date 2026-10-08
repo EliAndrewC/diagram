@@ -521,6 +521,6 @@
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#manure beyond the privy": "52",
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#privy seats": "52",
  "l7r/diagram/settlement/homestead_parts/groves.py::GROVE_CROWN_AREA#grove crown density": "53",
- "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#crowns per clump": "53",
+ "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#crowns per clump": "55",
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#windbreak conifer share as drawn": "54"
 }

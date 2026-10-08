@@ -13,11 +13,11 @@ Guesses:
 - That the high edge on the windward side is one seat among several, and how often each comes up: which edge of a valley was
   driest depended on the valley, and no count of village seats was found.
 
-Depiction: The map seats the cluster along the upper edge of the fields, centered on it, with its back to the rising ground
-and to the winter wind, and keeps it off any drawn marsh.
+Depiction: The map seats the cluster along the upper edge of the fields, with its back to the rising ground,
+and keeps it off any drawn marsh.
 
 Name: Where the houses sit: on the high edge of the fields
 Covers: `meta.cluster_position = high_margin`
 Sources: shizen-teibo-jawiki, fengshui-zhwiki, sonraku-jawiki
 Entry: research/questions/0031-clustered-and-scattered-villages-shuson-sanson.html, research/questions/0029-farmhouses-minka.html
-Drawing: research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html, research/questions/0058-ground-too-wet-to-build-on.drawing.html, research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html
+Drawing: research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html, research/questions/0058-ground-too-wet-to-build-on.drawing.html, research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html, research/questions/0029-farmhouses-minka.drawing.html

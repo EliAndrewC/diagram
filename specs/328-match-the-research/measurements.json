@@ -424,5 +424,37 @@
     "sqft_per_crown": 818
    }
   }
+ },
+ "wave55-grove-density-as-drawn": {
+  "quantity": "wave 55 (2026-10-08): drawn tree crowns per hamlet manifest (len(tree_crowns)/3) before the top-up (f17480a38's rerolls, wave 54) and after; Mizuguchi's 24 homestead-grove bands: the union of their boxes over the crowns standing in it (keep-out ground included)",
+  "value": {
+   "crowns": {
+    "inashiro": [
+     528,
+     631
+    ],
+    "kashikawa": [
+     2675,
+     3264
+    ],
+    "kuwabata": [
+     575,
+     746
+    ],
+    "mizuguchi": [
+     339,
+     601
+    ],
+    "sawada": [
+     704,
+     915
+    ]
+   },
+   "mizuguchi_bands": {
+    "area_sqft": 135987,
+    "crowns": 561,
+    "sqft_per_crown": 242
+   }
+  }
  }
 }

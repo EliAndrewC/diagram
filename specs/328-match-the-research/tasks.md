@@ -5,11 +5,11 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 
 ## Occasions
 
-- placement-changed: privy on sawada - wave 52: the barn seat against the steading annex (a north annex's east gable, a west annex's west wall; 0047), the heap stepped away from the house along the privy's bearing; batch 3's close
-- placement-changed: manure heap on inashiro - wave 52: the same seat, the heap form; batch 3's close
-- glyph-redrawn: homestead grove on mizuguchi - wave 53: the crown density one to ~180 sq ft real (0080), drawn crowns 546 -> 337; batch 3's close
-- glyph-redrawn: windbreak on inashiro - wave 53: the same density in the windward bands; wave 54: its conifer share as drawn 0.48; batch 3's close
-- placement-changed: manure pit on sawada - wave 52: the heap beyond the privy along the line from the house's center (0042, "on the side away from the house"); batch 3's close
+- (reviewed PASS at batch 3's close, 2026-10-08) placement-changed: privy on sawada - wave 52: the barn seat against the steading annex (a north annex's east gable, a west annex's west wall; 0047), the heap stepped away from the house along the privy's bearing; batch 3's close
+- (reviewed PASS at batch 3's close, 2026-10-08) placement-changed: manure heap on inashiro - wave 52: the same seat, the heap form; batch 3's close
+- glyph-redrawn: homestead grove on mizuguchi - wave 53: the crown density one to ~180 sq ft real (0080), drawn crowns 546 -> 337; wave 55: topped up to that density as DRAWN (round 1 NEEDS-WORK: ~400 sq ft a crown drawn); batch 3's close, round 2
+- glyph-redrawn: windbreak on inashiro - wave 53: the same density in the windward bands; wave 54: its conifer share as drawn 0.48; wave 55: its bands topped up to the density as drawn (round 1 PASS before it); batch 3's close, again
+- (reviewed PASS at batch 3's close, 2026-10-08) placement-changed: manure pit on sawada - wave 52: the heap beyond the privy along the line from the house's center (0042, "on the side away from the house"); batch 3's close
 - none: wave 1 changes `Research:` claim lines only (tier E0) - nothing a map draws or where it is placed moves.
 - (wave 4, landed and reviewed) placement-changed village lane - wave 4 brought the lane law to 0081 and 0246 (7 ft clear of a fence, ends joined
   within 25 ft, tails and hooks cut at 40 and 12 ft): the lanes are re-placed by substantially different rules.
@@ -1711,4 +1711,13 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
 - [ ] T137 wave 52's two regressions fixed (spec-fidelity W54-5, W54-7; constitution XIII): Kuwabata's knot (lanes 9/11, 21.8 ft)
       off `_KNOTS_WAITING` (DONE wave 54: `KNOTTED_TRIES`) and Sawada's zigzag (lanes 1/3) off `_ZIGZAGS_WAITING` - or the
       impossibility investigation written (plan, Wave 54) and the waiver put to the GM
+      research: rendering
+
+## Phase 56 - wave 55 (amendment 54): the grove's density as drawn
+
+- `groves.py` (`open_share`, `TOPUP_TRIES`, `_draw_grove`'s top-up and back-to-front paint).
+
+- [ ] T138 wave 55's row (FR-003, FR-004)
+      research: rendering
+- [ ] T139 the claims re-checked by `impl-drift`; the record checks owed (FR-005, FR-006)
       research: rendering

@@ -17,8 +17,8 @@ Guesses:
   row. No share of the forms was found for any period; the clustered village was the general form, so the true share was
   higher, and the odds are kept flatter so the rarer forms appear at all.
 
-Depiction: The map gathers the houses into one cluster on the dry ground at the edge of the fields, each house reached by a
-lane, and shelters the whole cluster behind one belt of trees along its windward edge rather than a grove at each farm;
+Depiction: The map gathers the houses together on the dry ground at the edge of the fields, each house reached by a
+lane, and shelters the houses behind a belt of trees along their windward edge rather than a grove at each farm;
 clumps of trees, the dooryard copse, stand in the gaps between the farms. A village of a dozen houses or more is drawn with
 at least a quarter of the ground inside its houses' outline built, so that it reads as compact, a hamlet looser; how densely
 a real village was built is not recorded. The title card says where this cluster sits and what

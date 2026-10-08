@@ -245,4 +245,17 @@ def test_a_grove_throws_one_crown_to_about_180_sq_ft_at_every_grain() -> None:
     tally: dict[str, int] = {}
     s._draw_grove(400.0, 400.0, 120.0, 120.0, face=(0, -1), mix="mixed_broadleaf", tally=tally)
     drawn = sum(tally.values())
-    assert 30 < drawn <= round(120.0 * 120.0 / GROVE_CROWN_SQFT), (drawn, tally)
+    want = round(120.0 * 120.0 / GROVE_CROWN_SQFT)
+    # ...AND DRAWN AT IT (wave 55, the homestead grove's glyph-check of Mizuguchi: the culls left ~400 sq ft a crown): an open
+    # clump is topped up until its drawn crowns hold its ground at the page's density
+    assert 0.9 * want <= drawn <= want, (drawn, want, tally)
+
+
+def test_a_clumps_open_share_is_the_grid_left_by_what_covers_it() -> None:
+    """`open_share` (feature 328 wave 55): the share of the clump's box a crown may stand on - a grid at the crown's radius,
+    less every point a keep-out, an earlier stand or a persimmon covers."""
+    from l7r.diagram.settlement.homestead_parts.groves import open_share
+
+    assert open_share(0.0, 0.0, 40.0, 40.0, 10.0, lambda x, y: False) == 1.0
+    assert open_share(0.0, 0.0, 40.0, 40.0, 10.0, lambda x, y: x < 0) == 0.5
+    assert open_share(0.0, 0.0, 4.0, 4.0, 10.0, lambda x, y: False) == 1.0, "a box smaller than the step: one point"

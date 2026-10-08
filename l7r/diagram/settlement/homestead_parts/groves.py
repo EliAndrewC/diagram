@@ -6,7 +6,7 @@ Research: plumbing - NONE
 import heapq
 import math
 import random
-from collections.abc import Sequence
+from collections.abc import Callable, Sequence
 from typing import TYPE_CHECKING, Any
 
 from .._geom import CrownIndex, PointGrid, _union_area, boxed_grid, boxed_polys, boxes_meeting, nearest_seg_dist, point_in_poly, seg_dist, seg_reach_index
@@ -47,6 +47,23 @@ GROVE_CLUMP_CROWNS = 28  # how many crowns' ground one piece of a band holds whe
 """Research: crowns a band piece holds - UNRESEARCHED: a band cut along its length into pieces of 28 crowns' ground, so every band is drawn at the one density"""
 GROVE_CROWN_SQFT = 107_639.0 / 600.0  # real sq ft of clump per crown: 600 trees a hectare, one to ~180 sq ft (0080)
 """Research: grove crown density - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: one crown per ~180 sq ft (600 a hectare), in real feet at every grain - it was 48 sq px at the town grain scaled by the building grain, ~71 sq ft a crown on a hamlet (feature 328)"""
+
+
+TOPUP_TRIES = 6
+"""How many throws a clump spends on each crown it still wants before it stops (`_draw_grove`'s top-up): enough that a clump
+whose open ground holds its crowns reaches them, few enough that one whose ground is mostly kept out gives up quickly.
+
+Research: plumbing - NONE: a search breadth (feature 328 wave 55)"""
+
+
+def open_share(cx: float, cy: float, w: float, h: float, step: float, covered: Callable[[float, float], bool]) -> float:
+    """The share of the `w` x `h` box centered on (`cx`, `cy`) that is open to a crown: a grid at `step`, each point asked
+    `covered` (a keep-out, an earlier stand's crown, a persimmon). 1.0 for a box too small to hold a grid point.
+
+    Research: a clump's open ground - NONE: a measure of the clump's own box, for the density as drawn (feature 328 wave 55)"""
+    nx, ny = max(1, int(w // step)), max(1, int(h // step))
+    pts = [(cx - w / 2 + (i + 0.5) * w / nx, cy - h / 2 + (j + 0.5) * h / ny) for i in range(nx) for j in range(ny)]
+    return sum(not covered(x, y) for x, y in pts) / len(pts)
 
 
 def grove_crown_px2(ftpx: float) -> float:
@@ -844,7 +861,6 @@ class GrovesMixin:
                 for t in ((rec.get("geom") or {}).get("fixtures", {}).get("persimmon") for rec in self.M.get("houses") or ())
                 if t is not None and cx - w / 2 - _cpad - t[2] <= t[0] <= cx + w / 2 + _cpad + t[2] and cy - h / 2 - _cpad - t[2] <= t[1] <= cy + h / 2 + _cpad + t[2]
             ]
-            high: list[str] = []
             # ...TRANSLATED TO THE TENTH, as its crowns are written (feature 315): rounded to the whole pixel, every crown was inked up
             # to half a pixel from where its tests seated it, and a Mizuguchi broadleaf tested clear of a cedar was drawn over it (B5b)
             g = [f'<g transform="translate({cx:.1f},{cy:.1f})">']
@@ -856,12 +872,10 @@ class GrovesMixin:
             # comparison (the 'to scale, compact bamboo' option) for the before/after; groves stay to scale, the
             # SVG + rsvg raster roughly halve.
             seated: dict[str, int] = {}  # this clump's crowns drawn, by kind (the windbreak's share is of these)
-            for px, py, kind, s in sorted(items, key=lambda t: t[1]):
-                # THE BAMBOO ITEM WAS UNREACHABLE (feature 146: `b_th` was 0.0 in both mixes) until 269 B29 gave the
-                # windbreak a share; a bamboo item draws no crown - it stands under them, and is inked below, after
-                # every crown of the clump is known, only where it shows.
-                if kind == "bamboo":
-                    continue
+            under: list[tuple[float, str]] = []  # the crowns drawn, by the sheet's y: painted back to front at the end
+            on_top: list[tuple[float, str]] = []
+
+            def seat(px: float, py: float, kind: str, s: float) -> None:
                 # ONE CROWN AT THE RESEARCHED SIZE (GM 2026-08-28, feature 134 T36). This was `(4.6 | 4.0) * s * bs`,
                 # a pixel radius calibrated at the village's 2 ft/px ("a ~5-6 m canopy") and never rescaled by ftpx:
                 # at the hamlet's 1 ft/px the belt drew 9 ft crowns beside the commons' 18 ft ones (measured on
@@ -882,30 +896,64 @@ class GrovesMixin:
                 # real foliage is a plain dark green; the tint is chosen so the wet stand reads apart)
                 col = random.choice(ALDER_GREENS) if mix == "alder" else ("#496733" if kind == "conifer" else random.choice(["#7C9A4E", "#6E8B43"]))
                 if self._crown_covers(cx + px, cy + py - lift, rr, ksun, kcirc, self.CANOPY_PAD):
-                    continue
+                    return
                 # TWO SCANS, NOT A GRID (feature 284, A6 withdrawn, specs/284 research R7): a crown grid per clump was exact but
                 # slower - a clump's nearby crowns are few, and filing them cost more than walking them (the windbreak 8-12%
                 # slower on three pool hamlets against main).
                 if not self._crown_seat_clear(cx + px, cy + py - lift, rr, _near) or not self._crown_seat_clear(cx + px, cy + py - lift, rr, drawn):
-                    continue  # a crown centered under an already-drawn crown is an understory stem, not canopy (GM 2026-08-28; woods._crown_seat_clear)
+                    return  # a crown centered under an already-drawn crown is an understory stem, not canopy (GM 2026-08-28; woods._crown_seat_clear)
                 if kind != "conifer" and over_a_conifer(cx + px, cy + py - lift, rr, _cones):
-                    continue
+                    return
                 # ...EVERY CROWN, not the conifer alone (feature 328, 0046: "the grove's trees give way round it") - and WHOLLY: no
                 # crown's edge under the persimmon's disc (batch 1's glyph checks: `over_a_conifer`'s 0.8 share let a grove crown
                 # reach 3.7 ft under one on Kashikawa and copse crowns 4.1 ft on Kuwabata), the ink's 0.2 px rounding added
                 if any(math.hypot(cx + px - tx, cy + py - lift - ty) < tr + rr + 0.2 for tx, ty, tr in _trees):
-                    continue
+                    return
                 drawn.append((cx + px, cy + py - lift, rr))
                 seated[kind] = seated.get(kind, 0) + 1
                 # ONE DISC PER CROWN, conifer included (GM 2026-09-27). A conifer used to carry a second, darker
                 # disc at 40% of its radius (a "dense dark apex"); the GM read it as a trunk, which a plan view
                 # cannot show, and it was an unrecorded map convention. The darker fill
                 # tells a conifer from a broadleaf (the 15% larger crown went with feature 328: on no page).
-                (high if kind == "conifer" else g).append(f'<circle cx="{px:.1f}" cy="{py - lift:.1f}" r="{rr:.1f}" fill="{col}" stroke="#3C5526" stroke-width="0.8"/>')
+                (on_top if kind == "conifer" else under).append((py, f'<circle cx="{px:.1f}" cy="{py - lift:.1f}" r="{rr:.1f}" fill="{col}" stroke="#3C5526" stroke-width="0.8"/>'))
                 if kind == "conifer":
                     self._conifer_crowns = [*(getattr(self, "_conifer_crowns", None) or []), (cx + px, cy + py - lift, rr)]
                 if tally is not None:
                     tally[kind] = tally.get(kind, 0) + 1
+
+            for px, py, kind, s in sorted(items, key=lambda t: t[1]):
+                # THE BAMBOO ITEM WAS UNREACHABLE (feature 146: `b_th` was 0.0 in both mixes) until 269 B29 gave the
+                # windbreak a share; a bamboo item draws no crown - it stands under them, and is inked below, after
+                # every crown of the clump is known, only where it shows.
+                if kind != "bamboo":
+                    seat(px, py, kind, s)
+            # ...AND TOPPED UP TO THE PAGE'S DENSITY AS DRAWN (feature 328 wave 55, the homestead grove's glyph-check of Mizuguchi):
+            # the culls - a crown under another's, the sun and building keep-outs, the persimmon - took more than half the throw,
+            # and the groves were drawn at ~400 sq ft a crown against 0080's 180. A clump keeps throwing until its drawn crowns
+            # hold its OPEN ground (`_open_share`: the box less what the keep-outs and earlier stands' crowns cover) at
+            # `GROVE_CROWN_SQFT`, or `TOPUP_TRIES` throws a crown wanted have failed. Not the conifer-led belt: its rows are its
+            # own (`_belt_ranks`), and its density is a filed row of its own.
+            if mix != "conifer_led":
+                want = round(
+                    open_share(
+                        cx,
+                        cy - lift,
+                        w,
+                        h,
+                        self.px(self.CANOPY_R_FT),
+                        lambda x, y: self._crown_covers(x, y, 1.0, ksun, kcirc, self.CANOPY_PAD) or any(math.hypot(x - ox, y - oy) < orr for ox, oy, orr in (*_near, *_trees)),
+                    )
+                    * w
+                    * h
+                    / grove_crown_px2(self.ftpx)
+                )
+                for _ in range(TOPUP_TRIES * max(want, 1)):
+                    if sum(seated.values()) >= want:
+                        break
+                    px, py = random.uniform(-w / 2 + 2, w / 2 - 2), random.uniform(-h / 2 + 2, h / 2 - 2)
+                    seat(px, py, "conifer" if random.uniform(b_th, 1.0) < c_th else "broadleaf", random.uniform(*CROWN_S))
+            g.extend(c for _y, c in sorted(under, key=lambda t: t[0]))
+            high = [c for _y, c in sorted(on_top, key=lambda t: t[0])]
             # THE BAMBOO SHOWS IN THE GAPS AND ALONG THE EDGE (269 B29, research/questions/0075-bamboo-groves-chikurin.html): a bamboo item under a drawn
             # crown, this clump's or an earlier one's, is hidden from above and not inked; one in the open, clear of
             # every building and wellhead, is the culm mark, painted UNDER the crowns (first in the group) because it

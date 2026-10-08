@@ -7754,6 +7754,21 @@
   "scope": "kept"
  },
  {
+  "key": "l7r/diagram/interactive/page.py::the windbreak's hover region",
+  "verdict": "DRIFTED",
+  "tier": "E2",
+  "fix": "Inashiro's interactive page lights 'windbreak' over the empty west arm (down to y ~2026 at x ~2120-2131) where no crown stands south of y 1561 or west of x 2171 (glyph-check of batch 3's close, F3): the hover region is taken from the belt's whole outline, not from its drawn clumps. Fix: build the belt's hover region from the clumps the page draws",
+  "files": [
+   "l7r/diagram/settlement/homestead_parts/stands.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "batch 3's close, glyph-check--windbreak F3",
+  "tier_as_ranked": "E2",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": "l7r/diagram/interactive/place.py::dwellings_shown#town and city count no farmhouses",
   "tier": "E2",
   "fix": "town counts its drawn farmhouses among its dwellings (0004 drawing): town excludes_farms False, dwellings_shown counts houses at the town tier; city unchanged",
@@ -8558,6 +8573,22 @@
   "scope": "kept"
  },
  {
+  "key": "l7r/diagram/settlement/homestead_parts/belt_law.py::BeltReading.holes#Kuwabata's bare runs",
+  "verdict": "DRIFTED",
+  "tier": "E2",
+  "fix": "0072 (the planting continuous along the side it holds; a hole past 30 ft is a defect): 0072's own comment records Kuwabata's mixed-broadleaf belt carrying three bare runs of 40-50 ft a reader can see (modal-depiction of batch 3's close on windbreak_belt--mixed_broadleaf, TRUTH 1). Re-measure on the current map; where they stand, fill the runs (or the hole check finds them), and the modal's 'drawn unbroken' holds",
+  "files": [
+   "l7r/diagram/settlement/homestead_parts/stands.py",
+   "l7r/diagram/settlement/homestead_parts/belt_law.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "batch 3's close, modal-depiction",
+  "tier_as_ranked": "E2",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#manure beyond the privy",
   "verdict": "DRIFTED",
   "tier": "E2",
@@ -8587,6 +8618,21 @@
   "tier_as_ranked": "E2",
   "moved": "T38a: tiered by its work - One seat in one function changes, with the annex rect plumbed in.",
   "wave": "52",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#privy seats as rolled",
+  "verdict": "DRIFTED",
+  "tier": "E2",
+  "fix": "0047: the privy's seat is rolled per house over the attested places (the barn's share spread over the yard, the front and the stable since wave 52). On Sawada all 8 privies off the sunny side stand at the yard seat behind the house, none at the stable or the front (glyph-check of batch 3's close, 2026-10-08: at the weights, 8 of 8 at the yard is about 0.3% likely) - every seat is tried at its first spot before the rolled seat is stepped outward, and the stable and front spots fall on the work yard and the beds. Fix: step the ROLLED seat outward (or along its wall) before trying the next seat, so the roll is honored where its place can be had",
+  "files": [
+   "l7r/diagram/settlement/homestead_parts/fixture_seats.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "batch 3's close, glyph-check--privy F2",
+  "tier_as_ranked": "E2",
+  "wave": "",
   "scope": "kept"
  },
  {
@@ -8738,7 +8784,7 @@
   "flag": "",
   "tier_as_ranked": "E2",
   "verdict": "CANNOT-TELL",
-  "wave": "53",
+  "wave": "55",
   "scope": "kept"
  },
  {
@@ -12431,7 +12477,7 @@
   "key": "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#conifer-led clump's lesser share",
   "verdict": "DRIFTED",
   "tier": "E3",
-  "fix": "Measured on Inashiro (wave 53): the conifer-led belt draws 160 crowns (125 conifer, 35 broadleaf) over ~130,900 sq ft, one crown to ~820 sq ft, where 0080 holds a windbreak to one to ~180; its conifer share is 78% against 0072's 48%. The rows (RANK_ALONG_FT x RANK_APART_FT, ~520 sq ft a conifer) and LESSER_ROLL_SHARE 0.1 of n leave the belt at under a quarter of the density. Fix: fill each conifer-led clump to GROVE_CROWN_SQFT with lesser crowns (n minus the rows the box holds), and re-derive the row spacing so the conifers come to 0072's 48% of the crowns at that density",
+  "fix": "Measured on Inashiro (wave 53): the conifer-led belt draws 160 crowns (125 conifer, 35 broadleaf) over ~130,900 sq ft, one crown to ~820 sq ft, where 0080 holds a windbreak to one to ~180; its conifer share is 78% against 0072's 48%. The rows (RANK_ALONG_FT x RANK_APART_FT, ~520 sq ft a conifer) and LESSER_ROLL_SHARE 0.1 of n leave the belt at under a quarter of the density. Fix: fill each conifer-led clump to GROVE_CROWN_SQFT with lesser crowns (n minus the rows the box holds), and re-derive the row spacing so the conifers come to 0072's 48% of the crowns at that density; then the windbreak modal's Guesses bullet ('conifers are about half the crowns in the conifer-led form') holds as drawn again (modal-depiction of batch 3's close: 77-78% drawn today)",
   "files": [
    "l7r/diagram/settlement/homestead_parts/groves.py",
    "l7r/diagram/settlement/homestead_parts/stands.py"
