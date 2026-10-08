@@ -9,6 +9,7 @@ from __future__ import annotations
 import json
 import os
 import sqlite3
+import subprocess
 import types
 from pathlib import Path
 
@@ -393,6 +394,18 @@ def test_import_time_change_skips_removed_new_and_never_imported_files(tmp_path:
     # b.py is not in the import-time context; a.py is removed; c.py is new; nothing reaches `git cat-file`
     ch = incremental.Changed(engine=("e/a.py", "e/b.py", "e/c.py"), removed=("e/a.py",), test_modules=(), other_tests=(), tooling_moved=False)
     assert incremental.import_time_change(root, db, before, ch) is None
+
+
+def test_import_time_change_takes_a_missing_baseline_blob_as_touched(tmp_path: Path) -> None:
+    """Feature 328 wave 42: the baseline hashes uncommitted content without writing it, so its id can name no object; the
+    change is then taken as touching the import-time lines (the run goes full) rather than crashing the gate."""
+    subprocess.run(["git", "init", "-q", str(tmp_path)], check=True)
+    (tmp_path / "e").mkdir()
+    (tmp_path / "e/a.py").write_text("x = 1\n", encoding="utf-8")
+    db = _db(tmp_path / "c.db", {"": {str(tmp_path / "e/a.py"): [1]}})
+    before = {"engine": {"e/a.py": "0" * 40}}
+    ch = incremental.Changed(engine=("e/a.py",), removed=(), test_modules=(), other_tests=(), tooling_moved=False)
+    assert incremental.import_time_change(tmp_path, db, before, ch) == "e/a.py"
 
 
 def test_main_where_mode_and_selected(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:

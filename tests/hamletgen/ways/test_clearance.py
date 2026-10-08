@@ -232,12 +232,3 @@ def test_a_rewrite_may_not_swing_the_drawn_tread_onto_fabric_it_cleared() -> Non
     assert may_write(new, new, 5.0, [bed]), "no worse than it was: a lane already on it is not made to fix itself here"
     far = [(2400.0, 2400.0), (2410.0, 2400.0)]
     assert stroke_hits(new, 5.0, [far]) == set(), "a polygon nowhere near the stroke is not tested"
-
-
-def test_an_end_leg_is_cut_at_the_hooks_figures() -> None:
-    """0081 (feature 328 wave 42): "A last leg of 12 ft or less turning 90 degrees or more is cut" - one rule with the hook; a
-    shorter leg at a gentler turn (it was cut under 9 ft at 60 deg) stands."""
-    hooked = [[(0.0, 0.0), (0.0, 12.0), (100.0, 12.0)]]  # 12 ft, then 90 degrees
-    assert hg.ways.drop_end_nubs(hooked) == [0] and hooked[0] == [(0.0, 0.0), (100.0, 12.0)]
-    gentle = [[(0.0, 0.0), (4.0, 7.0), (100.0, 7.0)]]  # 8.1 ft, then 60 degrees
-    assert hg.ways.drop_end_nubs(gentle) == []

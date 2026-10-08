@@ -1,65 +1,58 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "4cc2416c443acd7778342b8dee2529a6d6ad4e24b79bb575299be6d900928888",
+ "plan_sha256": "92e626b10fb041e37a69cb4a86f6086386288190ccd2c1ef1393db6e9b1c3d26",
  "reviewed": "2026-10-08",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W41-1 mouth tolerance",
-   "summary": "channel_end_on_stream judges a declaring channel end within half the stream's drawn width (the intake passes each stream's w, 7 ft fallback) instead of a flat 13 px",
-   "class": "within",
-   "why": "0054 drawing: 'A meeting is a junction when either channel's end lies inside the other's drawn width'. Unchanged from round 1. Round 1's aside answered: join_vertices' docstring no longer says 'under the rule's 13', and brook_rules.CROSSING_END_TOL, the same judgment at 13 px, is filed as a found row (audit/found-wave41.jsonl, E2 provisional)."
-  },
-  {
-   "id": "W41-2 corner hold withdrawn",
-   "summary": "the hold in drawn_course and its test removed; no corner is held mitred for a confluence; the guarantee is that no confluence is seated on a corner (sink.brook_join refuses one via course_corner, pinned by test_the_drain_is_not_joined_to_the_brook_on_a_corner)",
-   "class": "within",
-   "why": "Round 1's NOT LEGITIMATE item is gone: drawn_course now returns finished_course(pts, w, held + held_j), with no stranded-corner branch, and the test that pinned the hold is deleted. Both 0054 rules stand together. Checked the one other confluence source, the constructed route (sink.py hull_route / join_beside): it meets drawn_brook(s, plan), the course already ROUNDED (finished_course), so its meeting lies on the water as drawn rather than on a stations corner. A nearest-point projection does land exactly on a convex corner (measured 2026-10-08 with shapely: (130,-20) onto [(0,0),(100,0),(100,100)] gives (100,0)), but the polyline it projects onto here has no mitred corner to land on. No unhandled corner case found."
-  },
-  {
-   "id": "W41-3 belt_off_canvas claim",
-   "summary": "cluster.py::belt_off_canvas#belt distance upwind (NEEDS-RESEARCH) tiered E0; depth cited to 0071 drawing's 80-120 ft convention; near face now GUESS citing 0071 drawing ('the outline stands back from the row of houses nearest it'; the 50 ft sun rule applied to the clumps), its 36 ft on no page",
+   "id": "W42-order",
+   "summary": "Wave 42 takes row 492 (the end-nub cut, E2) while rows 482-491 (ten open, kept, unflagged E2 rows in ways/, no recorded dependency) wait for the next wave; the plan calls this 'in ranking order'",
    "class": "narrowing",
-   "ruling": "LEGITIMATE",
-   "why": "Same ground as round 1: the claim restates a constant (BELT_NEAR_FT) that is not researched, and the accepted spec puts research for such constants outside the feature. The change from UNRESEARCHED to GUESS cites words that ARE on 0071 drawing (checked: 'The back grove's outline stands back from the row of houses nearest it', and the 50 ft rule on clumps) and labels the 36 ft as a guess. That is more faithful to the record, not less, and the code is unchanged."
+   "ruling": "NOT LEGITIMATE",
+   "why": "FR-006 makes each wave 'a contiguous run of the ranking' and Key Entities defines a wave the same way; SC-003 lets a row wait only on a dependency recorded in the ranking, and none of 482-491 records one (after: [] on all but 486/490/491, whose afters are other rows, not 492). Amendment 40 round 2 asked the next wave to return to ranking order; 481 + 492 is not a contiguous run, and the plan's 'in ranking order' is untrue for 492. Nothing makes 482-491 first impossible, the GM's words do not imply skipping them, and the literal order defeats no purpose. Fix: take 482-491 before or with 492, or hold 492 to its turn, or record in the ranking the measured reason a skipped row cannot be fixed now."
   },
   {
-   "id": "W41-4 BELT_REACH claim",
-   "summary": "plan.py::BELT_REACH#belt's far row (NEEDS-RESEARCH) tiered E0: 0071's drawn depth, the 10 ft rag, the near face standing back from the nearest houses (0071), its 36 ft a GUESS",
-   "class": "narrowing",
-   "ruling": "LEGITIMATE",
-   "why": "Judged separately from W41-3, on the same ground: 146 = 36 (GUESS, now labeled so) + 100 (0071 convention) + 10 (0071). Value unchanged."
-  },
-  {
-   "id": "W41-5 0072 figures row",
-   "summary": "the found row on 0072 drawing's older measured figures tiered E2 by the fresh reader (T107a) and left for its place in the ranking",
+   "id": "W42-E1-row",
+   "summary": "Wave 41's found row CROSSING_END_TOL tiered E1 by a fresh reader (T109a) and taken in this wave",
    "class": "within",
-   "why": "FR-002/FR-003. Unchanged."
+   "why": "an open E1 row must be fixed before E2 work proceeds (SC-003); FR-002/FR-003 tiering by a fresh reader"
   },
   {
-   "id": "W41-6 row choice",
-   "summary": "the wave takes E2 row 544 ahead of open E2 rows 481-543, because it shares 0054 and the brook's rounding with wave 40's water work; the next wave returns to ranking order",
+   "id": "W42-row481",
+   "summary": "Row 481 (_one_joint, ways of two kinds stay two) closed as E0, already fixed in wave 34",
    "class": "within",
-   "why": "Round 1 asked for a reason or a return to order, and the plan and tasks.md now give both. Same tier, so the GM's 'easiest to hardest' and SC-003 hold, and no row leaves scope. Departing from FR-006's 'contiguous run' within a tier is now stated with a reason, together with a commitment to return to order next wave."
+   "why": "the ranking already records wave 34 and impl-drift IN-STEP in wave 38; recording a done fix is not a narrowing"
   },
   {
-   "id": "W41-7 occasions",
-   "summary": "Occasions: none - the five hamlets regenerated 2026-10-08 against wave 40's close with byte-identical manifests",
+   "id": "W42-nub",
+   "summary": "drop_end_nubs takes the hook's figures: a last leg of 12 ft or less (inclusive) turning 90 deg or more is cut; 60-89 deg end stretches now stand",
    "class": "within",
-   "why": "Round 1 asked for the run to be named; it now carries its date and method (a one-shot label). FR-005 owes no occasion where nothing drawn changed."
+   "why": "literal 0081 drawing page: 'A last leg of 12 ft or less turning 90 degrees or more is cut'; the old 9 ft / 60 deg convention is on no page; the implementation moves to the research (FR-004)"
   },
   {
-   "id": "W41-8 verification",
-   "summary": "the predicate's test at half the width; impl-drift on the touched claims; the gate; the pair",
+   "id": "W42-crossing",
+   "summary": "CROSSING_END_TOL = BROOK_DRAWN_W / 2 (3.5) in place of a flat 13; crosses_mid_run keeps its logic (tests the joiner's ends only)",
    "class": "within",
-   "why": "FR-005. The corner-hold test went with the hold."
+   "why": "0054 drawing: 'a junction when either channel's end lies inside the other's drawn width'; every caller passes the brook drawn at BROOK_DRAWN_W (sink.py 258/317/532/812, brook.py 289/548). The water's-end half is not separately tested; at brook.py:548 the course begins at the sluice on canvas, but an end touching a ditch is not a proper crossing there, so the verdict matches the page"
   },
   {
-   "id": "W41-9 feed claims",
-   "summary": "comb.py channel_end_on_stream's caller gains two claims: the feed's downhill refusal (0054 drawing) and a stream of no recorded width taken as 7 ft (0068)",
+   "id": "W42-occasions",
+   "summary": "No review occasion: the five hamlets regenerated 2026-10-08 with byte-identical manifests",
    "class": "within",
-   "why": "These are claim additions asked for by impl-drift round 1, and no behavior changes. They serve FR-003/FR-005: every unit carries its claim. An aside for impl-drift, not a fidelity finding: 0068's own page calls the village brook's ~7 ft a GUESS ('This record's widths for a village brook and a town river ... are GUESSES'), so the claim may want that label."
+   "why": "a dated one-shot measurement; feature 294 owes occasions only where a map moved"
+  },
+  {
+   "id": "W42-tests",
+   "summary": "New test of the cut at 0081's figures (red on old code); fabric-refusal test restated as a 121 deg hook; a test of the overlap-matrix refusal; the brook predicate's confluence case restated at half the drawn width",
+   "class": "within",
+   "why": "enforcement of the fixes the request asks for"
+  },
+  {
+   "id": "W42-verification",
+   "summary": "impl-drift on the touched claims, the gate, the timing pair",
+   "class": "within",
+   "why": "FR-005"
   }
  ],
- "verdict": "CLEAR"
+ "verdict": "BLOCKED"
 }

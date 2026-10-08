@@ -13,8 +13,8 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 - (wave 5, landed and reviewed) placement-changed village lane on kashikawa - wave 5: 0033's row street runs on off the map as the road into it at both ends, where
   the web cut it back to its last joint (`trim_streets`); Kashikawa's and Mizuguchi's far ends now run off the sheet as a
   second way out (every way is inked `village lane`).
-- none (wave 42): the nub cut at the hook's figures and the confluence at the brook's drawn width moved no map (the five
-  hamlets regenerated 2026-10-08, manifests byte-identical)
+- none (wave 42): the confluence at the brook's drawn width moved no map (the five hamlets regenerated 2026-10-08,
+  manifests byte-identical)
 - none (wave 41): the channel mouth's tolerance moved no map (the five hamlets regenerated 2026-10-08 with manifests
   byte-identical); the feed's recorded width (round 2) moved Kuwabata's polder feed record 6.0 -> 5.0 and one scrub-cover ring of
   its grazing common by under a foot where it keeps off that canal (measured on the regenerated manifest) - no rule changed
@@ -1371,24 +1371,27 @@ regenerated, `tree_crowns` and `bamboo_marks` changed on every map, nothing else
       research: rendering
       verify: DONE. impl-drift rounds 1-3 IN-STEP; spec-fidelity CLEAR round 2; gate green; no glyph occasion; the pair band 1 confirmed consistent by perf-audit; waves.json 41 for three rows
 
-## Phase 43 - wave 42 (amendment 41): an end leg cut at 0081's figures; a joiner's confluence inside the brook's width
+## Phase 43 - wave 42 (amendment 41): a joiner's confluence inside the brook's drawn width; row 481 closed
 
 Back in ranking order (row 481 on).
 
 - `ways/joints.py::_one_joint#ways of two kinds stay two` (row 481, E2) closes as E0: fixed in wave 34 (`_split_committed`),
   its claim IN-STEP since wave 38.
-- `ways/sweeps.py::_drop_end_nubs#nub at a junction dropped` (row 492, E2): 0081 - "A last leg of 12 ft or less turning 90
-  degrees or more is cut". The nub cut takes the hook's own figures (`_NUB_FT = _HOOK_FT`, `_NUB_TURN = _HOOK_DEG`, the length
-  inclusive); it cut under 9 ft at 60 deg, which no page asks. `test_an_end_leg_is_cut_at_the_hooks_figures`, red on the old
-  code; the fabric-refusal test's nub restated as a 121 deg hook.
+- Row 492, `ways/sweeps.py::_drop_end_nubs` (the nub cut at 0081's hook figures), was done and then HELD for its turn
+  (spec-fidelity round 1: rows 482-491 come first, FR-006's contiguous run); its change and tests are kept as
+  `audit/held-row492-nub.patch`, applied when the run reaches it.
 - Wave 41's found row, tiered by a fresh reader (T109a, `audit/t109a-out.jsonl`): `water/brook_rules.py::CROSSING_END_TOL` E1 -
   half the brook's drawn width (`BROOK_DRAWN_W / 2`), 0054's junction rule, as `channel_end_on_stream` since wave 41; the
   confluence case in `test_the_small_predicates` restated (5 px off a 7 px brook is a crossing now).
-- Rows 482-491 wait for the next wave.
+- Round 1 (impl-drift): `crosses_mid_run#no crossing mid-run` DRIFTED - 0054 makes a junction where EITHER channel's end lies
+  inside the other's drawn width, and it tested the joiner's ends alone; the water's ends are now tested against half the
+  joiner's drawn width too (2.5 px where the caller gives none, a GUESS) - a case in `test_the_small_predicates`, red without
+  it. No map moved (the five hamlets regenerated again, manifests byte-identical).
+- Rows 482-492 are the next wave's.
 
 - [x] T109a wave 41's found rows tiered by the work they take, by a fresh reader (FR-002, FR-003, SC-003)
       research: rendering
-- [ ] T109 the nub cut and the joiner's confluence; row 481 closed (FR-003, FR-004)
+- [ ] T109 the joiner's confluence, both ends; row 481 closed (FR-003, FR-004)
       research: rendering
 - [ ] T110 the claims re-checked by `impl-drift`; the close: `make done` green, the pair, the wave column (FR-005, FR-006)
       research: rendering

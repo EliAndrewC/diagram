@@ -502,12 +502,12 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 
 ## Wave 42 (amendment 41, 2026-10-08)
 
-- **Scope**: in ranking order - row 481 closed as fixed in wave 34; row 492, the end-nub cut, at 0081's figures (12 ft or less,
-  90 deg or more), one rule with the hook; wave 41's found row (T109a), a joiner's confluence inside the brook's drawn width
-  (0054) (`tasks.md` Phase 43). Rows 482-491 next.
+- **Scope**: in ranking order - row 481 closed as fixed in wave 34; wave 41's found row (T109a, E1, taken before E2 work per
+  SC-003), a joiner's confluence inside the brook's drawn width tested from either end (0054). Row 492 was done and held for its
+  turn (`audit/held-row492-nub.patch`); rows 482-492 are the next wave's (`tasks.md` Phase 43).
 - **Occasions**: none - the five hamlets regenerated 2026-10-08 with byte-identical manifests.
 - **On the unpushed waves 9-41** under condition (6): as at wave 41's close; the pair is owed (executed code).
-- **Verification**: the two tests red on the old code; `impl-drift` on the touched claims; the gate; the pair.
+- **Verification**: the confluence cases red on the old code; `impl-drift` on the touched claims; the gate; the pair.
 
 ## Performance bookends (constitution VI)
 

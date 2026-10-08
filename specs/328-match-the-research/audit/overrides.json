@@ -1340,10 +1340,6 @@
  },
  "l7r/diagram/hamletgen/ways/sweeps.py::_drop_end_nubs#nub at a junction dropped": {
   "after": [],
-  "files": [
-   "l7r/diagram/hamletgen/ways/clearance.py",
-   "l7r/diagram/hamletgen/ways/sweeps.py"
-  ],
   "fix": "drop_end_nubs cuts per 0081: end leg 12 ft or less turning 90 deg or more (_NUB_FT 9 -> 12, _NUB_TURN 60 -> 90, spike rule folded in)",
   "flag": "",
   "moved": "",

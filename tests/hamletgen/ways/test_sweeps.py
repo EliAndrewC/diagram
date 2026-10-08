@@ -279,11 +279,11 @@ def test_a_nub_is_KEPT_when_dropping_it_would_push_the_lane_into_the_fabric() ->
     """
     from l7r.diagram.hamletgen.ways.sweeps import _drop_end_nubs
 
-    lane = [(0.0, 0.0), (-3.0, 5.0), (100.0, 5.0)]  # a leading nub: 5.8 ft then a 121 degree turn (0081: 12 ft or less, 90 or more)
+    lane = [(0.0, 0.0), (2.0, 5.0), (100.0, 5.0)]  # a leading nub: 5.4 ft then a 68 degree turn
     s = _StubSettlement(lanes=[lane])
     fabric = [[(45.0, -3.0), (55.0, -3.0), (55.0, 1.0), (45.0, 1.0)]]  # under the STRAIGHTENED line, not the dogleg
     _drop_end_nubs(s, fabric)
-    assert [tuple(p) for p in s.M["lanes"][0]["pts"]] == [(0.0, 0.0), (-3.0, 5.0), (100.0, 5.0)], "the nub must survive: dropping it would put the tread nearer the fabric than the dogleg was"
+    assert [tuple(p) for p in s.M["lanes"][0]["pts"]] == [(0.0, 0.0), (2.0, 5.0), (100.0, 5.0)], "the nub must survive: dropping it would put the tread nearer the fabric than the dogleg was"
     # ...and with nothing to foul, the very same nub IS dropped - so the assertion above is about the
     # fabric and not about the nub being unrecognized.
     s2 = _StubSettlement(lanes=[lane])
@@ -739,15 +739,3 @@ def test_keep_the_route_wide_leaves_ends_already_on_one_wide_way() -> None:
     s = _StubSettlement(lanes=[[(0.0, 0.0), (-100.0, 0.0)], [(0.0, 0.0), (50.0, 0.0)], [(20.0, 0.0), (20.0, 100.0)]])
     assert _keep_the_route_wide(s, [], [], []) == 0
     assert [tuple(p) for p in s.M["lanes"][0]["pts"]] == [(0.0, 0.0), (-100.0, 0.0)], "the connector is not carried up the skeleton"
-
-
-def test_a_nub_the_overlap_matrix_refuses_is_kept() -> None:
-    """`_drop_end_nubs` asks the overlap matrix before it rewrites (feature 287 M8): a refused reshape leaves the lane as it was
-    and re-inks nothing (feature 328 wave 42: no pool map has a nub at 0081's figures, so this is its only exercise)."""
-    from l7r.diagram.hamletgen.ways.sweeps import _drop_end_nubs
-
-    lane = [(0.0, 0.0), (-3.0, 5.0), (100.0, 5.0)]
-    s = _StubSettlement(lanes=[lane])
-    s.reshape_lane = lambda ln, pts: False  # type: ignore[method-assign]
-    _drop_end_nubs(s, [])
-    assert [tuple(p) for p in s.M["lanes"][0]["pts"]] == lane

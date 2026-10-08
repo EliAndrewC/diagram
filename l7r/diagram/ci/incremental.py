@@ -197,8 +197,14 @@ def import_time_change(root: Path, db: Path, before: dict[str, Any], ch: Changed
         executed = import_time_lines(db, root, path)
         if not executed:
             continue
-        old = subprocess.run(["git", "-C", str(root), "cat-file", "-p", before["engine"][path]], capture_output=True, text=True, check=True).stdout
-        if old_lines_changed(old, (root / path).read_text(encoding="utf-8")) & executed:
+        got = subprocess.run(["git", "-C", str(root), "cat-file", "-p", before["engine"][path]], capture_output=True, text=True, check=False)
+        # THE BASELINE'S BLOB MAY NOT EXIST (feature 328 wave 42): the baseline hashes the working tree (`git hash-object`, which
+        # writes nothing), so a green run on uncommitted content leaves an id no object answers once that content is gone - the
+        # gate died here on a `CalledProcessError`. With no old text to compare, the change cannot be shown clear of the
+        # import-time lines, so it is taken as touching them (the run goes full).
+        if got.returncode != 0:
+            return path
+        if old_lines_changed(got.stdout, (root / path).read_text(encoding="utf-8")) & executed:
             return path
     return None
 

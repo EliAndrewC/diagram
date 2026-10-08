@@ -118,6 +118,7 @@ def test_the_small_predicates() -> None:
     assert br.crosses_mid_run(water, [(100.0, 0.0), (100.0, 200.0)])
     assert not br.crosses_mid_run(water, [(100.0, 0.0), (100.0, 47.0), (100.0, 53.0)]), "an end inside the brook's drawn width is a confluence"
     assert br.crosses_mid_run(water, [(100.0, 0.0), (100.0, 45.0), (100.0, 55.0)]), "5 px off a 7 px brook is outside its drawn width (0054; feature 328)"
+    assert not br.crosses_mid_run([(99.0, 50.0), (300.0, 50.0)], [(100.0, 0.0), (100.0, 200.0)]), "the water's end on the joiner is a confluence too (0054: either channel's end)"
     assert not br.crosses_mid_run(water, [(100.0, 0.0)]) and not br.crosses_mid_run([(0.0, 0.0)], [(1.0, 1.0), (2.0, 2.0)])
     assert br.monotone_down([(0.0, 0.0), (5.0, 10.0), (0.0, 20.0)], (0.0, 1.0))
     assert not br.monotone_down([(0.0, 0.0), (5.0, 10.0), (0.0, 5.0)], (0.0, 1.0))

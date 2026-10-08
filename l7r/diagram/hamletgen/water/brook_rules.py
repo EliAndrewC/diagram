@@ -187,12 +187,18 @@ def _dist_to_course(p: Pt, course: Sequence[Pt]) -> float:
     return best
 
 
-def crosses_mid_run(water: Sequence[Pt], joiner: Sequence[Pt], tol: float = CROSSING_END_TOL) -> bool:
+def crosses_mid_run(water: Sequence[Pt], joiner: Sequence[Pt], tol: float = CROSSING_END_TOL, joiner_w: float = 2.5) -> bool:
     """Does `joiner` cross `water` away from a confluence - a crossing where neither end of the joiner stands within `tol`
-    of the water (water:W08, the junction test's rule, lifted).
-    Research: no crossing mid-run - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.html: a ditch meets the brook only at a confluence, never across it
+    of the water, and neither end of the water within half the joiner's drawn width `joiner_w` of the joiner (water:W08,
+    the junction test's rule, lifted; feature 328 wave 42: 0054 tests either channel's end, it tested the joiner's alone).
+    Research:
+        no crossing mid-run - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.html: a ditch meets the brook only at a confluence, never across it
+        either end makes the junction - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: "a meeting is a junction when either channel's end lies inside the other's drawn width"
+        a joiner's width - GUESS: 2.5 px, the hairline ditch `channel` draws, where the caller gives none
     """
     if len(joiner) < 2 or len(water) < 2 or min(_dist_to_course(e, water) for e in (joiner[0], joiner[-1])) < tol:
+        return False
+    if min(_dist_to_course(e, joiner) for e in (water[0], water[-1])) < joiner_w / 2.0:
         return False
     return any(_proper_cross(j0, j1, w0, w1) for j0, j1 in zip(joiner, joiner[1:], strict=False) for w0, w1 in zip(water, water[1:], strict=False))
 
