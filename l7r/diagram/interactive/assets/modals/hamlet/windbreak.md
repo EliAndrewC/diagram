@@ -1,7 +1,7 @@
-About: A wood on the side the winter wind came from sheltered a farming village. In southern China the fengshui wood
-behind the village, upslope of it, probably served so; in Japan a grove stood on
+About: A wood on the side the wind came from sheltered a farming village. In southern China the fengshui wood
+behind the village probably served so; in Japan a grove stood on
 the north and west of many a farmhouse, and from 1682 one domain planted a belt to windward of its new fields; in the
-Ryukyu islands a belt rings a settlement on the west, the south and the east.
+Ryukyu islands a belt stood round a settlement on the west, the south and the east.
 
 In China's Huizhou a village's wood belonged to no household. Its lineage held it in common, closed it to cutting by rules
 on stone and fined anyone who cut a tree - in one village, the cost of an opera performance; a tree the wind brought
@@ -10,17 +10,17 @@ manure.
 
 The Japanese grove mixed many trees, led by tall cedar, with bamboo low on its windward
 side. Surviving southern Chinese woods are mixed evergreen broadleaf, dense and dark, their tallest
-trees often over 65 ft (20 m). The Ryukyu belt, about 50 ft (16 m) wide, was probably planted in the Edo period, in 1742, with
+trees often over 65 ft (20 m). The Ryukyu belt, about 50 ft (16 m) wide at first, was probably planted in 1742, with
 fukugi, an evergreen, and Alexandrian laurel.
 
 Of the woods that survive, a Fujian village commonly keeps about two, a Hong Kong village's back wood is about 2.5 acres
-(1 ha), and some in Fujian run over 50 acres (20 ha). In the Edo period a farmhouse's grove might cover roughly 6,000 to
+(1 ha), and some in Fujian run past 49 acres (20 ha). In the Edo period a farmhouse's grove might cover roughly 6,000 to
 28,000 sq ft.
 
 Guesses:
 - [settlement_form=nucleated] That a clustered village sheltered behind one shared wood, rather than a grove for each house: no source says which a Japanese
   village of farmhouses packed close together kept; in the loosely clustered villages of eastern Japan, and in a street village of the Toyama plain, each house stood in a grove of its own.
-- That a settlement's wood is conifer-led or broadleaf at even odds, that conifers are about half the crowns in the conifer-led form, the commonest single kind of tree, and
+- That a settlement's wood is conifer-led or broadleaf at even odds, that conifers are about half the crowns in the conifer-led form, with cedar the commonest single kind of tree, and
   that bamboo is about one plant in twelve: no source gives a village belt's share (in one Tonami hamlet's farmhouse groves
   nearly half the trees were cedar), and every survey of the conifer-led form is of farmhouse groves, not of a belt for a whole village.
 
