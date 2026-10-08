@@ -1,13 +1,14 @@
-About: A settlement far from its market town lay beyond the few miles' walk that bound the villages trading there, and in
-medieval times remote places grew no winter barley at all.
+About: A settlement far from its market town lay beyond the few miles' walk that bound the villages trading there; in medieval
+times remote places grew no winter barley at all, though the second crop spread further in the Edo period.
 
-A market town sat in the middle of the countryside it served: in China the villages that traded at one town lay within
-a walk of a few miles of it, the longest about 3 miles, and its buyers and sellers on market days were chiefly the
-villagers nearby.
+A market town sat in the middle of the countryside it served, and its buyers and sellers on market days were chiefly the
+villagers nearby; in China, where it was measured, the villages that traded at one town lay within a walk of a few miles
+of it, the longest about 3 miles.
 
 A second crop on the paddy, barley in the winter after the rice, needed twice the manure of one crop, and in medieval
-times enough could be had only near densely settled districts. In the Edo period bought fertilizer carried the second
-crop further from the towns. Only a paddy that drained well could carry the barley at all.
+times enough could be had only near densely settled districts. In the Edo period the second crop spread further, above
+all around Kyoto and Osaka and along the Inland Sea, where better seed, bought fertilizer and irrigation came together.
+Only a paddy that drained well could carry the barley at all.
 
 Night soil was heavy, and carrying it far cost too much: from most rural towns it went no further than 2 or 3 miles.
 Around Kanazawa, a castle town, the fields within about 2.5 miles got urine and abundant manure, those further out
@@ -17,8 +18,7 @@ Guesses:
 - Whether this settlement's market town is near or far: no record of the settlement gives the distance, so it is rolled
   with even odds.
 - How a town's nearness and a settlement's drainage weigh against each other: both set the odds of a winter crop, but no
-  source says how much each counts; a far town halves the odds the drainage gives, short of the medieval "none" for
-  remote places, since bought fertilizer spread the second crop further in the Edo period.
+  source says how much each counts; a far town halves the odds the drainage gives, short of the medieval "none" for remote places, since the second crop spread further in the Edo period, bought fertilizer among the reasons.
 
 Depiction: The town is not drawn, and neither is the winter crop: our maps show the paddies in high summer. With the town far off, a settlement's drained paddies carry winter barley at half the odds their drainage would give near a town,
 and that shows only where an alluvial fan's middle is still wild: a settlement whose paddies lie bare over the winter

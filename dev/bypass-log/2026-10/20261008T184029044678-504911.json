@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-08T18:40:29Z",
+  "target": "review-accept",
+  "commit": "f6318435d",
+  "outcome": "permitted",
+  "why": "review-accept glyph-check--field-pond F1: fixed: the bank drawn inside the fitted outline, the wet margin held to a least width inside it (POND_MARGIN_PX), the reeds midway across it in a lighter reed green (POND_REED_INK); this round re-judges it"
+}

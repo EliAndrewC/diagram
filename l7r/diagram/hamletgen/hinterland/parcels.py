@@ -462,8 +462,8 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
             # the cluster was worth 257 px of height, so Kashikawa drew a stand 886 ft down the fan and 75 ft off the reed
             # marsh. A cross-slope preference (the along/cross ratio, 2026-08-18) narrowed that and still admitted ground
             # below the houses. The record's rule is a ranking, so it is one here (`woodland_tier`): a seat higher than the
-            # nearest field ground and not below the lowest house first; then, where the map has no such ground, a seat on
-            # the level beside the fields - not below the houses; a seat downslope of every house is never offered. Low wet
+            # field ground beside it and not below the houses (their median, `house_floor`) first; then, where the map has no such ground, a seat on
+            # the level beside the fields - not below the houses; a seat below the houses' median height is never offered. Low wet
             # ground by a marsh or a river is left to grass and reeds: the marsh and stream keep-outs above refuse it, and it
             # lies below the houses on a fan. Where the ground slopes the seat higher than the field next to it ranks first -
             # the entry's "the slopes around the settlement" - and it must still be beyond the fields (below).

@@ -7082,14 +7082,6 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/hinterland/parcels.py::_EDGE_SAMPLE#woodland scan plumbing": {
-  "code": "1e4f5af12b1294fe",
-  "core": "f9869fee1052b437",
-  "date": "2026-10-03",
-  "note": "sampling",
-  "research": "",
-  "verdict": "IN-STEP"
- },
  "l7r/diagram/hamletgen/hinterland/parcels.py::_bound_margin#woodland scan plumbing": {
   "code": "06794a6ee39e0a33",
   "core": "424274facb19518c",
@@ -7149,22 +7141,6 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/hinterland/parcels.py::crop_edge_points#woodland scan plumbing": {
-  "code": "994a31c87e830dee",
-  "core": "3e2f084f4cc2147a",
-  "date": "2026-10-03",
-  "note": "index",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/hinterland/parcels.py::field_height_near#woodland scan plumbing": {
-  "code": "50138bc48c63ef88",
-  "core": "7c7096c8780d3488",
-  "date": "2026-10-03",
-  "note": "a measure",
-  "research": "",
-  "verdict": "IN-STEP"
- },
  "l7r/diagram/hamletgen/hinterland/parcels.py::fit_square_parcel#shrink before dropping": {
   "code": "5b711e532f5f56a5",
   "core": "118015c2ba64eabf",
@@ -7220,20 +7196,20 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#a ring with room for a wood": {
-  "code": "f011a8c98489f637",
-  "core": "e7f55544df096cd3",
+  "code": "a1225a9a7df770f9",
+  "core": "48fc6656858fc8a4",
   "date": "2026-10-08",
-  "note": "fewer than 5 crowns refused (`woodland_room` < WOODLAND_MIN_CROWNS); the page is silent on a minimum stand",
+  "note": "nothing in 0077 sets a least crown count",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#aspect and bearing": {
-  "code": "93a668c54c4229dd",
-  "core": "e7f55544df096cd3",
+  "code": "61e880a8bba60be0",
+  "core": "48fc6656858fc8a4",
   "date": "2026-10-08",
-  "note": "`_excess` up to 1.2 gives up to 2.2:1, and the bearing is the fall +90 deg within +/-20 deg; the page records no shape or bearing figure, only that the lot is not a surveyed rectangle",
+  "note": "the wandering edge is recorded; the aspect and bearing are not, and the code matches the claim (excess up to 1.2, bearing within 20 deg of the cross-fall)",
   "pages": {},
   "research": "",
   "rests": [
@@ -7242,56 +7218,55 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#beyond the fields preferred": {
-  "code": "7d37b4d45218fc78",
-  "core": "e7f55544df096cd3",
+  "code": "dcca4c74f5e71fb0",
+  "core": "48fc6656858fc8a4",
   "date": "2026-10-08",
-  "note": "only seats `crossed_through` the paddy or a row holding are kept, and higher ground ranks first; matches \"on the nearest slope beyond the fields from the houses\" and the far side of the fields on the level",
+  "note": "`crossed_through` filters seats (a rule, not a ranking) through the paddy or any row holding, so only seats across the field from the houses are offered, as the page asks",
   "pages": {
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "ecf6ed4b609ca690"
   },
   "research": "24afacf28c5d0294",
   "rests": [
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:442b1963a64696d8",
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:51f3d4bae1a3978e",
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:6a3373d9e6527e72"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#commons legibility floor": {
-  "code": "c9d54237b5bb4fe3",
-  "core": "e7f55544df096cd3",
+  "code": "13e39409d5139bb7",
+  "core": "48fc6656858fc8a4",
   "date": "2026-10-08",
-  "note": "rungs and cut rings under 120 ft are skipped or dropped; the page is silent",
+  "note": "nothing in 0077 sets a least lot size",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#crop set-back": {
-  "code": "1c7b6d73199c34c6",
-  "core": "e7f55544df096cd3",
+  "code": "32cc5aef12462a25",
+  "core": "48fc6656858fc8a4",
   "date": "2026-10-08",
-  "note": "80/180, then 40/100 plus the diagonal slack (a true-gap floor of 40/100); the page gives no set-back figure",
+  "note": "80/180, then 40/100; 0077 is silent on the gap",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#keep-outs": {
-  "code": "624680d1964840eb",
-  "core": "e7f55544df096cd3",
+  "code": "c7c2b7e1e2dc8990",
+  "core": "48fc6656858fc8a4",
   "date": "2026-10-08",
-  "note": "150/90/pond+120/70/60/110 match the code; the page gives no keep-out distance",
+  "note": "the figures match the code; nothing in 0077 sets them",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#line follows its bounds": {
-  "code": "ba3329f947847d84",
-  "core": "e7f55544df096cd3",
+  "code": "c5bcdab7322c8aec",
+  "core": "48fc6656858fc8a4",
   "date": "2026-10-08",
-  "note": "`bounds_near`/`follow_the_bounds`/`lot_follows_its_bounds` against lanes, brooks and fields; matches \"Within about 45 ft ... follows it\", recorded as a GUESS",
+  "note": "the page's \"within about 45 ft\" of a brook, lane or field, recorded as a GUESS",
   "pages": {
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "ecf6ed4b609ca690"
   },
@@ -7302,10 +7277,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#mostly dry": {
-  "code": "06ad474a00b27654",
-  "core": "e7f55544df096cd3",
+  "code": "d0d2e5e780994899",
+  "core": "48fc6656858fc8a4",
   "date": "2026-10-08",
-  "note": "a ring is refused when `parcel_wet_share` > 0, and the marsh is a keep-out; consistent with \"Low ground by a river or marsh is left to grass, not wood\"",
+  "note": "with WET_SHARE_CAP 0 a ring touching the marsh is refused, so no wood stands on the low wet ground the page gives to grass",
   "pages": {
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "ecf6ed4b609ca690"
   },
@@ -7316,35 +7291,34 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#nearest seat preferred": {
-  "code": "356a1eef471289c1",
-  "core": "e7f55544df096cd3",
+  "code": "8de48b33afd72d7f",
+  "core": "48fc6656858fc8a4",
   "date": "2026-10-08",
-  "note": "the score is -distance to the house centroid within each tier; matches \"the nearest slope beyond the fields\"",
+  "note": "within a tier the nearest seat to the houses wins: \"the nearest slope beyond the fields\"",
   "pages": {
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "ecf6ed4b609ca690"
   },
   "research": "24afacf28c5d0294",
   "rests": [
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:51f3d4bae1a3978e",
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:b9c8109469f1d0d3"
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:51f3d4bae1a3978e"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#on the page": {
-  "code": "2ae9119d0f9e34ee",
-  "core": "e7f55544df096cd3",
+  "code": "f1f3e4b9644ee91d",
+  "core": "48fc6656858fc8a4",
   "date": "2026-10-08",
-  "note": "the 0.72 share of the ring inside the view is sheet framing, a convention",
+  "note": "how much of the ring falls inside the sheet is framing, not a fact about the place",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#parcel count and size": {
-  "code": "8259dfc5463c6dd5",
-  "core": "e7f55544df096cd3",
+  "code": "c06163321fd2fa0e",
+  "core": "48fc6656858fc8a4",
   "date": "2026-10-08",
-  "note": "250 ft times a ladder of 0.90-1.10, with rungs 1/0.8/0.64/0.5, matches the code; the page gives \"a few patches\" and no size",
+  "note": "\"a few patches\" is attested; the count, the 250 ft and the ladder are not",
   "pages": {},
   "research": "",
   "rests": [
@@ -7353,60 +7327,60 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#parcels kept apart": {
-  "code": "dd4b10e1f4e7140d",
-  "core": "e7f55544df096cd3",
+  "code": "af8ed2944e2d993c",
+  "core": "48fc6656858fc8a4",
   "date": "2026-10-08",
-  "note": "`size * (1.15 + 1.35*hjit)` gives 1.15-2.5; the page is silent on spacing",
+  "note": "the 1.15-2.5 exclusion is unanswered by 0077",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#per-parcel size bands": {
-  "code": "fb4c5eb5d2b5e56b",
-  "core": "e7f55544df096cd3",
+  "code": "245d2632e0eb164f",
+  "core": "48fc6656858fc8a4",
   "date": "2026-10-08",
-  "note": "`_f` spans 0.82-1.18 by band, then a 0.84 try, both clamped to the floor; the page is silent",
+  "note": "the 0.82-1.18 bands and the 0.84 try are unanswered by 0077",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#scan reach": {
-  "code": "3d0bcd2af868e75c",
-  "core": "e7f55544df096cd3",
+  "code": "6566ff3e3692f832",
+  "core": "48fc6656858fc8a4",
   "date": "2026-10-08",
-  "note": "`content_box(pad=210.0)` matches the claim; the page is silent on how far out a wood may stand",
+  "note": "the 210 px pad is unanswered by 0077",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#scan seat window": {
-  "code": "f6b4e699f882e2ff",
-  "core": "e7f55544df096cd3",
+  "code": "0a2f2d8b54f126d2",
+  "core": "48fc6656858fc8a4",
   "date": "2026-10-08",
-  "note": "a 0.6*half overhang and a 0.8 bbox share inside the predicted frame are framing only, a convention",
+  "note": "a framing window for the sheet (0.6 half outside, 0.8 of the box inside)",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#title pocket kept clear": {
-  "code": "0607d8078e9b125f",
-  "core": "e7f55544df096cd3",
+  "code": "3342eb0a60a35e92",
+  "core": "48fc6656858fc8a4",
   "date": "2026-10-08",
-  "note": "`title_pocket` is a keep rectangle; a sheet-layout convention",
+  "note": "keeps the title clear on the page",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#where the fuel wood stands": {
-  "code": "6ee924e7ab7978e6",
-  "core": "e7f55544df096cd3",
+  "code": "0c78803dfe9418e5",
+  "core": "48fc6656858fc8a4",
   "date": "2026-10-08",
-  "note": "`woodland_tier` ranks seats: tier 0 above the fields, then tier 1 on the level, and tier 2 below the houses is dropped; matches the page's higher-ground / level / low-ground order",
+  "note": "seats higher than the field rank first (tier 0), then the level (tier 1); seats below the houses (tier 2) are dropped",
   "pages": {
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "ecf6ed4b609ca690"
   },
@@ -7419,10 +7393,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#woods not in a ruled line": {
-  "code": "4d7abb80ddad6557",
-  "core": "e7f55544df096cd3",
+  "code": "a2c3e87f0fc8d181",
+  "core": "48fc6656858fc8a4",
   "date": "2026-10-08",
-  "note": "`seat_off_the_row`/`in_a_ruled_line` refuse a third parcel in line with two others; the page is silent on how parcels are arranged",
+  "note": "0077 is silent on how woods are spaced along a line",
   "pages": {},
   "research": "",
   "rests": [],
@@ -7474,17 +7448,6 @@
   "date": "2026-10-03",
   "note": "seat search",
   "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/hinterland/parcels.py::woodland_tier#where the fuel wood stands": {
-  "code": "2625fdcccc19995c",
-  "core": "60fe741003a7944d",
-  "date": "2026-10-03",
-  "note": "above the fields, then level, never below the houses",
-  "pages": {
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "ecf6ed4b609ca690"
-  },
-  "research": "24afacf28c5d0294",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/stages.py::_COMPASS#stage plumbing": {
@@ -7793,6 +7756,83 @@
   "research": "4dbbaaf344044dd0",
   "triaged": "2026-10-05",
   "verdict": "DRIFTED"
+ },
+ "l7r/diagram/hamletgen/hinterland/wood_rank.py::FIELD_BESIDE_FT#the fields beside a wood": {
+  "code": "efdc525b3b759ae6",
+  "core": "aabc3f166a6b0ce5",
+  "date": "2026-10-08",
+  "note": "reading \"higher than the fields beside it\" is the page's own interpretation; how far \"beside\" reaches is unanswered",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:51f3d4bae1a3978e"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/hinterland/wood_rank.py::_EDGE_SAMPLE#plumbing": {
+  "code": "2156b363a04b7a7e",
+  "core": "f9869fee1052b437",
+  "date": "2026-10-08",
+  "note": "a sampling step along the field edge",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/hinterland/wood_rank.py::crop_edge_points#plumbing": {
+  "code": "6e63876f0b705244",
+  "core": "3e2f084f4cc2147a",
+  "date": "2026-10-08",
+  "note": "samples the field edges into a grid",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/hinterland/wood_rank.py::field_height_near#higher than the fields beside it": {
+  "code": "2c9980a50fa728e5",
+  "core": "ba6ccc421829f1dc",
+  "date": "2026-10-08",
+  "note": "takes the highest field edge within reach of the nearest, which is the field the wood adjoins",
+  "pages": {
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "ecf6ed4b609ca690"
+  },
+  "research": "24afacf28c5d0294",
+  "rests": [
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:51f3d4bae1a3978e"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/hinterland/wood_rank.py::house_floor#never below the houses": {
+  "code": "4fd46c3535351fb0",
+  "core": "f170d018432fc621",
+  "date": "2026-10-08",
+  "note": "measuring against the houses' median height is a calibrated reading of \"below the houses\"",
+  "pages": {
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "ecf6ed4b609ca690"
+  },
+  "research": "24afacf28c5d0294",
+  "rests": [
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:51f3d4bae1a3978e",
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:d40cad5607ccfe28"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/hinterland/wood_rank.py::woodland_tier#where the fuel wood stands": {
+  "code": "2625fdcccc19995c",
+  "core": "60fe741003a7944d",
+  "date": "2026-10-08",
+  "note": "tier 0 is above the field, tier 1 the level, tier 2 below the houses (refused)",
+  "pages": {
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "ecf6ed4b609ca690"
+  },
+  "research": "24afacf28c5d0294",
+  "rests": [
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:51f3d4bae1a3978e",
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:6a3373d9e6527e72",
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:d40cad5607ccfe28"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/bamboo.py::Footing#strip geometry": {
   "code": "12416d666d1e4171",
@@ -12725,19 +12765,17 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/sink.py::brook_join#the nearest fallen point, off the crop": {
-  "code": "48eb3653bddafb6c",
+  "code": "becdc87f5004a289",
   "core": "78a40e597cdd7908",
   "date": "2026-10-08",
-  "note": "0060 has the drain join the brook \"where the passing brook comes near\" and has water move downhill, but it says nothing on taking the nearest fallen point or on keeping the run off the crop (`_through_the_crop`); label should be UNRESEARCHED",
-  "pages": {
-   "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
-  },
-  "research": "8ff7ceb036c4856e",
+  "note": "0060 says the drain joins a brook that comes near and runs downhill; it does not say which point of the brook or whether the drain may cross the crop",
+  "pages": {},
+  "research": "",
   "rests": [
    "0060-field-drains-akusuiro.drawing.html:2ae22b1c1cd7eb3e",
    "0060-field-drains-akusuiro.drawing.html:5430b16d81429901"
   ],
-  "verdict": "NEEDS-RESEARCH"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/sink.py::brook_join#trunk below the junction": {
   "code": "61463f9fe9e74451",
@@ -42671,13 +42709,18 @@
   "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._paddy_features#rock outcrop host plot: any plot, chosen at random (rng.choice(plots))": {
-  "code": "28baa4359410638e",
+ "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._paddy_features#rock outcrop's host plot": {
+  "code": "7e8e74a4e3f87543",
   "core": "28baa4359410638e",
   "date": "2026-10-08",
-  "note": "rock outcrop host plot: any plot, chosen at random (rng.choice(plots))",
+  "note": "0008 places the outcrop off-center within its plot and records the rocks as a GUESS; nothing says which plot hosts it",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "rests": [
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:07108ce9127e5e0d",
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:7c3e3563d5367b62"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._paddy_features#rock outcrops": {
   "code": "ac998d91d8faeac2",
@@ -42695,6 +42738,14 @@
   ],
   "triaged": "2026-10-08",
   "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._paddy_features#the field grave's host plot: chosen at random, then the plots after it in list order": {
+  "code": "28baa4359410638e",
+  "core": "28baa4359410638e",
+  "date": "2026-10-08",
+  "note": "the field grave's host plot: chosen at random, then the plots after it in list order",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._paddy_features#town and city fields plain": {
   "code": "d52fc29eef7954f8",
@@ -42769,38 +42820,38 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._plot_pond#bank, margin and water proportions": {
-  "code": "feba4642906b8539",
-  "core": "f51a4997b2f8d081",
+  "code": "771d53725329f130",
+  "core": "3e8e40aca8a5096f",
   "date": "2026-10-08",
-  "note": "the page gives pond sizes but no bank-to-water proportions",
+  "note": "the drawing page records the dish pond's proportions as a GUESS",
   "pages": {},
   "research": "",
   "rests": [
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.html:f69963814c648bf4"
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:0e8fb94bb06b48b6"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._plot_pond#field pond glyph": {
-  "code": "d65be6a1d3c343c9",
-  "core": "f51a4997b2f8d081",
+  "code": "d2da11a14b322204",
+  "core": "3e8e40aca8a5096f",
   "date": "2026-10-08",
-  "note": "draws a bank ring, a wet margin and dug-out open water, the dish pond",
+  "note": "drawn as an earthen bank ring, a wet margin and open water: \"low ground ringed with an embankment and dug out\"",
   "pages": {
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.html": "d5e2adec9bfc397b"
   },
   "research": "c0b2cd4155452b98",
   "rests": [
-   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:9fed2c627efb7cf2",
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:0e8fb94bb06b48b6",
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.html:9b0e42acdf970f21",
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.html:ff28b96f143df826"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._plot_pond#reed fringe": {
-  "code": "da9d969fdc766a3e",
-  "core": "f51a4997b2f8d081",
+  "code": "e796caac5189c7f2",
+  "core": "3e8e40aca8a5096f",
   "date": "2026-10-08",
-  "note": "reeds at 0.86 stand on the wet margin between the water and the bank",
+  "note": "the reeds stand on the wet margin inside the bank, within one low plot",
   "pages": {
    "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html": "00985d4ef3104bc7"
   },
@@ -42930,11 +42981,35 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/fields/features.py::POND_REED_RING#the reeds on the wet margin": {
-  "code": "bda44d505f6e2855",
-  "core": "fa92899b97cb7840",
+ "l7r/diagram/settlement/fields/features.py::POND_BANK_PX#the dish pond's bank stroke": {
+  "code": "308e5d2bc8c2bada",
+  "core": "310858ca1c05a862",
   "date": "2026-10-08",
-  "note": "the record is silent on where the reeds stand",
+  "note": "the weight of the bank's line",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:0e8fb94bb06b48b6"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/fields/features.py::POND_MARGIN_PX#the wet margin's least width": {
+  "code": "e5a6ec0868df850c",
+  "core": "7a33414bed51de7b",
+  "date": "2026-10-08",
+  "note": "a floor so the reeds stay visible; the proportions themselves are covered by the GUESS on _plot_pond",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:0e8fb94bb06b48b6"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/fields/features.py::POND_REED_INK#the reed ink": {
+  "code": "a09364feae677ca9",
+  "core": "1ad8767f49872fad",
+  "date": "2026-10-08",
+  "note": "a color",
   "pages": {},
   "research": "",
   "rests": [],
@@ -66588,6 +66663,21 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/waterfields/tint.py::fronts#fronting the drain": {
+  "code": "6c93a9a5f478a582",
+  "core": "bc8319c3be7e7cae",
+  "date": "2026-10-08",
+  "note": "a quarter plot of frontage within a quarter plot calibrates \"whose foot lies on the drain\" and excludes plots that only touch the drain at a point",
+  "pages": {
+   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "1e0cc8002bddb72d"
+  },
+  "research": "45d05a93011e034b",
+  "rests": [
+   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:4fc3811eb15b4538",
+   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:68a6523772c7cec3"
+  ],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/waterfields/tint.py::judge_tint#one wet plot at least": {
   "code": "5c9afc1acb42b57a",
   "core": "f5e7d358f5c86915",
@@ -66618,36 +66708,44 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/tint.py::mark_low#low ground": {
-  "code": "d0516925b90a84dc",
-  "core": "7479d6f3c8c1e672",
-  "date": "2026-10-03",
-  "note": "0007 lowest row on the drain, 45% sample = FLOOD_SAMPLE",
-  "pages": {
-   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "1e0cc8002bddb72d"
-  },
-  "research": "45d05a93011e034b",
-  "triaged": "2026-10-08",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/waterfields/tint.py::mark_low#low ground depth": {
-  "code": "9531af4bb5727943",
-  "core": "7479d6f3c8c1e672",
-  "date": "2026-10-03",
-  "note": "unanswered in the bundle",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/waterfields/tint.py::mark_low#wet plots on the drain": {
-  "code": "c3eb5ad30e7c4099",
-  "core": "7479d6f3c8c1e672",
+  "code": "12034356adac80aa",
+  "core": "29cd0c7ea839270a",
   "date": "2026-10-08",
-  "note": "plots on the drain get a 45% chance of the tint",
+  "note": "the low ground is measured out from the collector, at the foot of the field",
   "pages": {
    "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "1e0cc8002bddb72d"
   },
   "research": "45d05a93011e034b",
   "rests": [
+   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:3b41256e849c4671",
+   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:4fc3811eb15b4538"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/waterfields/tint.py::mark_low#low ground depth": {
+  "code": "eb80678da726664d",
+  "core": "29cd0c7ea839270a",
+  "date": "2026-10-08",
+  "note": "0007 does not say how deep the low ground runs",
+  "pages": {},
+  "research": "",
+  "rests": [
    "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:68a6523772c7cec3"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/waterfields/tint.py::mark_low#wet plots on the drain": {
+  "code": "4b40056109e14205",
+  "core": "29cd0c7ea839270a",
+  "date": "2026-10-08",
+  "note": "0.45 of the plots fronting the drain, matching the page's 45% for a comb field",
+  "pages": {
+   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "1e0cc8002bddb72d"
+  },
+  "research": "45d05a93011e034b",
+  "rests": [
+   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:68a6523772c7cec3",
+   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:f84f7dcd5af814ac"
   ],
   "verdict": "IN-STEP"
  },

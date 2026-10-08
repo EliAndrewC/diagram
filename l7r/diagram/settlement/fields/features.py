@@ -268,6 +268,7 @@ class FieldFeaturesMixin:
             field pond on a low plot - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: tried over the low plots in random order
             rock outcrops - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: terraces always, ribbon valleys half the time, 1-3 a field
             rock outcrop's host plot - UNRESEARCHED: any plot of the field, chosen at random
+            field grave's host plot - UNRESEARCHED: a plot chosen at random, then the plots after it in list order
             field grave rate - research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html: 0.3 on valley, terrace and ribbon fields
         """
         if self.M.get("meta", {}).get("scale") in ("town", *CITY_TIER_SCALES):

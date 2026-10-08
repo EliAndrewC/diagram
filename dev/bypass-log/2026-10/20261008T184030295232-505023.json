@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-08T18:40:30Z",
+  "target": "review-accept",
+  "commit": "f6318435d",
+  "outcome": "permitted",
+  "why": "review-accept glyph-check--wet-paddy F1: fixed: mark_low tints only plots fronting the collector (fronts), the found row closed; this round re-judges it"
+}

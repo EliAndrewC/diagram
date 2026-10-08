@@ -61,7 +61,7 @@ def basin_rank(basin: Any, fill: float, median: float, collector: Any, plot_acro
     # ON the collector means FRONTING it, not touching it at a corner (settlement-review, feature 230 pass 11): Kashikawa's
     # promoted basin met the drain at one corner with a sliver and a wedge between it and the drain-side edge. A basin fronts
     # the drain when a real length of its boundary runs along it - a quarter of a plot's width.
-    on = collector is not None and basin.buffer(0.25 * plot_across).intersection(collector).length >= 0.25 * plot_across
+    on = collector is not None and fronts(basin, collector, plot_across)  # the plot's own edge along the drain (feature 328)
     size = abs(math.log(basin.area / median)) if median > 0.0 and basin.area > 0.0 else 0.0
     return (not on, round(1.0 - fill, 4), round(size, 4))
 
@@ -92,11 +92,17 @@ def mark_low(plots: list[dict[str, Any]], dpts: Poly, plot_across: float, row_st
             p["fill"] = FLOODED
 
 
+FRONTAGE_SHARE = 0.5
+"""Research: a real length along the drain - CONVENTION: half a plot's width of the plot's OWN edge within a quarter plot of the
+drain (glyph-check of Sawada, round 2: a corner plot's edge near the drain measures 8-15 ft, a fronting plot's 19 ft or more)"""
+
+
 def fronts(poly: Any, line: Any, plot_across: float) -> bool:
-    """Does `poly` front `line` - a quarter of a plot's width of the line within a quarter plot of it?
+    """Does `poly` front `line` - half a plot's width of its own edge within a quarter plot of the line? Measuring the LINE near
+    the plot instead (the first cut) is a distance test in disguise: a single corner near a long drain cuts a chord of it.
 
     Research: fronting the drain - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: the plots whose foot lies on the drain"""
-    return bool(poly.buffer(0.25 * plot_across).intersection(line).length >= 0.25 * plot_across)
+    return bool(poly.exterior.intersection(line.buffer(0.25 * plot_across)).length >= FRONTAGE_SHARE * plot_across)
 
 
 def judge_tint(plots: list[dict[str, Any]], dpts: Poly, plot_across: float, g: float) -> None:

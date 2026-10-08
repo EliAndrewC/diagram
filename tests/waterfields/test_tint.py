@@ -142,7 +142,11 @@ def test_a_plot_fronts_the_drain_only_along_a_real_length_of_it() -> None:
 
     from l7r.diagram.waterfields.tint import fronts
 
-    drain = LineString([(0.0, 0.0), (200.0, 0.0)])
+    drain = LineString([(0.0, 0.0), (400.0, 0.0)])
     along = Polygon([(10.0, 2.0), (50.0, 2.0), (50.0, 30.0), (10.0, 30.0)])
-    corner = Polygon([(205.0, 3.0), (240.0, 3.0), (240.0, 30.0), (205.0, 30.0)])
+    corner = Polygon([(405.0, 3.0), (440.0, 3.0), (440.0, 30.0), (405.0, 30.0)])  # past the drain's end
     assert fronts(along, drain, 32.0) and not fronts(corner, drain, 32.0)
+    # glyph-check of Sawada round 2: a second-row plot with ONE vertex near a long drain, a green wedge between - a chord of
+    # the drain's line near it passed the first cut
+    diamond = Polygon([(300.0, 5.0), (320.0, 25.0), (300.0, 45.0), (280.0, 25.0)])
+    assert not fronts(diamond, drain, 32.0), "a corner beside a long drain does not front it"
