@@ -30,8 +30,10 @@ def _lane(pts, **kw):
 # ---- lanes_share_tread: plain lists, no settlement ----------------------------------------------
 
 
-def test_treads_that_pass_within_the_join_share_a_network():
-    assert lanes_share_tread(_L_END_APART, _L_MID_NEAR) is True
+def test_treads_that_meet_share_a_network_and_treads_20_ft_apart_do_not():
+    """0081: two lanes are one network where their treads meet (feature 328: a tread 20 ft off another counted as joined)."""
+    assert lanes_share_tread(_L_END_APART, _L_MID_NEAR) is False, "20 ft apart: not joined"
+    assert lanes_share_tread(_L_END_APART, [(100.0, 3.0), (100.0, 400.0)]) is True, "within the ink tolerance: joined"
 
 
 def test_treads_that_stay_apart_do_not():

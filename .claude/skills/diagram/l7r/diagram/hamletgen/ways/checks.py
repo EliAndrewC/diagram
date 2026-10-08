@@ -18,11 +18,11 @@ from l7r.diagram.sitegen.geom import crosses_disc, crosses_poly, unit
 from ..clearance import pairs_within
 from ..consts import (
     FORD_HALF,
-    LANE_JOIN_FT,
     WEB_REACH_FT,
     Poly,
     Pt,
 )
+from .geom import _TOUCH_GAP
 
 
 def stream_segs(s: Settlement) -> list[tuple[Pt, Pt]]:
@@ -358,17 +358,18 @@ def shallow_crossing(a: Pt, b: Pt, p: Pt, q: Pt, limit_deg: float = 42.0) -> boo
 # "MEASURE WHAT THE RULE MEASURES".
 
 
-def lanes_share_tread(p: Poly, q: Poly, join: float = LANE_JOIN_FT) -> bool:
-    """Do two drawn treads come within `join` anywhere - by ANY vertex of either against the other's run?
+def lanes_share_tread(p: Poly, q: Poly, join: float = _TOUCH_GAP) -> bool:
+    """Do two drawn treads meet - come within `join` (the ink tolerance, `_TOUCH_GAP`) anywhere, by ANY vertex of either
+    against the other's run? (Feature 328: it was the 25 ft join reach, so two ways 20 ft apart counted as one network.)
 
     Lifted from the check's own inner `_fw_touch` so it can be tested with two lists of tuples instead
     of a settlement (the project's standing rule on closures that are hard to reach).
 
-    Research: one network at 25 ft - research/questions/0081-village-lanes.drawing.html: joined where their treads meet, judged as within the page's 25 ft join reach (`LANE_JOIN_FT`)"""
+    Research: one network at 25 ft - research/questions/0081-village-lanes.drawing.html: joined only where their treads meet, within the ink tolerance; ends within 25 ft are joined at one point by the knot pass, not counted joined apart"""
     return any(seg_dist(v[0], v[1], a, b) <= join for v in p for a, b in zip(q, q[1:], strict=False)) or any(seg_dist(v[0], v[1], a, b) <= join for v in q for a, b in zip(p, p[1:], strict=False))
 
 
-def served_network(lanes: Sequence[Mapping[str, Any]], join: float = LANE_JOIN_FT) -> list[tuple[Pt, Pt]]:
+def served_network(lanes: Sequence[Mapping[str, Any]], join: float = _TOUCH_GAP) -> list[tuple[Pt, Pt]]:
     """The segments of the CONNECTED network - the component containing the settlement's link to the world.
 
     THE NETWORK, NOT ANY LINE ON THE GROUND. The rule this serves is that every house in a nucleated

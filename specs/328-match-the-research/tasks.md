@@ -13,6 +13,7 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 - (wave 5, landed and reviewed) placement-changed village lane on kashikawa - wave 5: 0033's row street runs on off the map as the road into it at both ends, where
   the web cut it back to its last joint (`trim_streets`); Kashikawa's and Mizuguchi's far ends now run off the sheet as a
   second way out (every way is inked `village lane`).
+- none (wave 31): the network join tightened changes no pool map; the bund trial reverted
 - none (wave 30): the reservoir share tried and reverted; a claim relabeled, no executed code changed
 - none (wave 29): claims only, no executed code changed
 - none (wave 28): the polder edge and the knot form tried and reverted; a claim and a comment changed, no executed code
@@ -1094,3 +1095,17 @@ fixed ellipse is claimed UNRESEARCHED with what was searched, and the row is E4,
 - [x] T86 the claim re-checked by `impl-drift`; no executed code changed since wave 29's close; `make done` green (FR-005, FR-006)
       research: rendering
       verify: DONE. impl-drift IN-STEP on the relabeled claim; amendment 29 FAITHFUL (round 3), plan CLEAR; make done green; no executed code or map differs from wave 29's close
+
+## Phase 32 - wave 31 (amendment 30): one network only where treads meet
+
+The next open in-scope E2 rows. Row 459 (`a_way_onto_the_bund#on the bund`) tried literally - an end within `BUND_REACH_FT`
+of the paddy with no water between carried on to the bund - and measured: Mizuguchi's field spur, laid after the pass, then
+started 22 ft off the street's end and `test_no_lane_ends_knot_short_of_a_join[mizuguchi]` failed; keeping a junction end in
+place did not cure it. The fix spans the bund pass and the spur's laying: E3 by FR-003, the trial reverted. Then row 460.
+
+  - `l7r/diagram/hamletgen/ways/checks.py::lanes_share_tread#one network at 25 ft` - two lanes one network only where their treads meet (within the ink tolerance); ends within 25 ft are the knot pass's to join at one point (0081)
+
+- [ ] T87 row 459 tried, measured and re-tiered E3; the network join to the treads' meeting, its test to the page (FR-003, FR-004, FR-005)
+      research: rendering
+- [ ] T88 the claims re-checked by `impl-drift`; the close: wave 31's own bookend pair, `make done` green, the wave column (FR-005, FR-006)
+      research: rendering

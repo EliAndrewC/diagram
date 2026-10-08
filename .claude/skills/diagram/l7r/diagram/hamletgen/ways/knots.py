@@ -246,8 +246,9 @@ class WebMemo:
         return got
 
     def _ask(self, kind: str, a: int, b: int) -> bool:
+        from ..consts import LANE_JOIN_FT
         from . import law
-        from .checks import LANE_JOIN_FT, lanes_share_tread
+        from .checks import lanes_share_tread
         from .geom import ends_touch
         from .serve import runs_beside, sampled
         from .tails import tail_doubled

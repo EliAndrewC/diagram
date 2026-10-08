@@ -378,6 +378,18 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
   changes no executed code, so it owes no pair.
 - **Verification**: `impl-drift` on the relabeled claim, the gate.
 
+## Wave 31 (amendment 30, 2026-10-08)
+
+- **Scope**: row 459 tried and re-tiered E3 by measurement (its literal fix leaves Mizuguchi's field spur 22 ft off the
+  street's end - a knot the pool test refuses - and the spur is laid downstream of the pass); row 460: `lanes_share_tread`
+  and `served_network` join two lanes only where their treads meet (the ink tolerance), not anywhere within the 25 ft join
+  reach - 0081's 25 ft is the knot pass's, joining ends at one point. The test that pinned 20 ft apart as joined brought to
+  the page. Row 434 held for the GM.
+- **Occasions**: none - no pool map changes.
+- **On the unpushed waves 9-30** under condition (6): (1)-(5) held at wave 30's close (9a29aee8f, backed up); wave 31's
+  own pair opens at 9a29aee8f.
+- **Verification**: `impl-drift` on the touched claims, the gate, wave 31's own bookend pair.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Each later wave that changes engine behavior takes

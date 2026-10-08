@@ -1302,6 +1302,21 @@
   "scope": "kept"
  },
  {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::stage_polder#inlet stub extended outside the dike to the pond's rim inlet",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "inlet stub extended outside the dike to the pond's rim (inlet_to_rim); 0019 \u00a713 says \"no channel runs outside the dike\"",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 30 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::stage_polder#polder fabric per archetype cell 190160, parcel mix, gap sel",
   "verdict": "UNCLAIMED",
   "tier": "E0",
@@ -7025,22 +7040,6 @@
   "scope": "kept"
  },
  {
-  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::a_way_onto_the_bund#on the bund",
-  "verdict": "DRIFTED",
-  "tier": "E2",
-  "fix": "In `a_way_onto_the_bund`, an end within `BUND_REACH_FT` of the paddy with no water between is carried on to `paddy.nearest(q)` through `carry_on` (as the water-between case already is) instead of returning \"joined\" where it stands, so no path stops short of the bund, and the claim drops the 6 ft as an arrival bar.",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py"
-  ],
-  "after": [],
-  "flag": "",
-  "found": "wave 8 re-check (tiered by its work at T34a)",
-  "tier_as_ranked": "E1",
-  "moved": "T34a (amendment 8): tiered by its work - One branch of one function changes (the early `return \"joined\"` at line 275 becomes a carry-on), not a single value: setting `BUND_REACH_FT` to 0 would also move `end_serves` and the shared settlement helper.",
-  "wave": "",
-  "scope": "kept"
- },
- {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/checks.py::lanes_share_tread#one network at 25 ft",
   "verdict": "DRIFTED",
   "tier": "E2",
@@ -10869,6 +10868,22 @@
   "found": "wave 9 re-check (tiered by its work at T38b)",
   "tier_as_ranked": "E3",
   "moved": "T38b: tiered by its work - the drift lives in what a lane's clearance means (center vs edge), a corridor test shared by the five modules that read LANE_CLEARANCE, not in one literal here.",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::a_way_onto_the_bund#on the bund",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "In `a_way_onto_the_bund`, an end within `BUND_REACH_FT` of the paddy with no water between is carried on to `paddy.nearest(q)` through `carry_on` (as the water-between case already is) instead of returning \"joined\" where it stands, so no path stops short of the bund, and the claim drops the 6 ft as an arrival bar.; and the field spur laid after it kept on its junction (measured: the literal carry alone leaves Mizuguchi's spur foot 22 ft off the street's end, a knot)",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 8 re-check (tiered by its work at T34a)",
+  "tier_as_ranked": "E1",
+  "moved": "wave 31 trial (measured 2026-10-08): ends within BUND_REACH_FT carried on to the bund (no water between), only an end within _JOINT_FT joined; Mizuguchi's field_path went joined -> run_on and its field spur, laid after the pass, started 22 ft off the street's end - test_no_lane_ends_knot_short_of_a_join[mizuguchi] failed; keeping a junction end in place did not cure it (the spur is re-laid downstream). The fix spans the bund pass and the spur's laying: E3. Reverted.",
   "wave": "",
   "scope": "kept"
  },
