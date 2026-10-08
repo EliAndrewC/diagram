@@ -186,7 +186,7 @@ class MoatMixin:
         CHANGES WATER - a moat/river tap handing off to the comb's own canal (the palette seam sits
         exactly here, and the gate is what makes it read as engineered rather than two strokes crossing)
         or a field drain handing off to its outfall culvert. `rot` degrees turns the board ACROSS the
-        channel (pass the channel's heading + 90). ~8px span = a true-scale ~16-24 ft timber intake
+        channel (pass the channel's heading + 90). The span is true - 20 ft where none is given, a ~16-24 ft timber intake
         structure with wing posts at the village/city grains. Top layer, above the water. Records
         M['sluice_gates'] for `channel_gates_at_water_junctions`, asked of the registry of what stands before anything is drawn
         (feature 287, water W53): its seat is the junction its caller found, so a gate the matrix forbids there - a fixture is
@@ -195,7 +195,8 @@ class MoatMixin:
         Research:
             a sluice where a channel changes water - research/questions/0179-water-gates-and-sluices-shuimen.drawing.html
             board, posts, crossbeam and windlass - research/questions/0179-water-gates-and-sluices-shuimen.drawing.html
-            frame span - research/questions/0179-water-gates-and-sluices-shuimen.drawing.html: the drawing page's GUESS, a field sluice about 16 to 24 ft - 20 ft at the map's scale where no span is given; a wider channel bank to bank
+            frame span - research/questions/0179-water-gates-and-sluices-shuimen.drawing.html: the drawing page's GUESS, a field sluice about 16 to 24 ft - 20 ft at the map's scale where no span is given; a wider channel bank to bank; the span drawn true
+            timbers and drum at the glyph floor - research/questions/0179-water-gates-and-sluices-shuimen.drawing.html: posts, board and drum at fixed pixel thicknesses, larger than life (CONVENTION)
             caption - CONVENTION: 9 pt italic
         """
         span = self.px(20.0) if span is None else span  # a field sluice about 16 to 24 ft (0179): 20 ft at the map's scale

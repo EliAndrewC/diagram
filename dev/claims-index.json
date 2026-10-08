@@ -32217,10 +32217,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/registry.py::element_extents#drawn extents": {
-  "code": "8e98c4ed1f57d24f",
-  "core": "622e2b47aa0bce5e",
+  "code": "4646e2d3c4e299cf",
+  "core": "f6c5829c05875708",
   "date": "2026-10-08",
-  "note": "extracts drawn extents for the overlap check; its fallback widths are the check's own, not drawn",
+  "note": "the code copies each record's drawn ink, and the sluice branch reads the recorded span as the frame draws it",
   "pages": {},
   "research": "",
   "rests": [],
@@ -33143,10 +33143,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_MX_FIXTURE_BOX#drawn fixture box": {
-  "code": "0ca022887bab3983",
-  "core": "4c190ebfc056ca5f",
+  "code": "e78c913381e5f38e",
+  "core": "2d6a5b22ad5900e0",
   "date": "2026-10-08",
-  "note": "mirrors each glyph's box for the check",
+  "note": "the sluice box matches the drawn glyph: span post edge to post edge (+/-5.4*_sk = span/2) by 8.4 along the channel (drum top -4.2 to post foot +2.0, centered)",
   "pages": {},
   "research": "",
   "rests": [],
@@ -38329,10 +38329,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/moat.py::MoatMixin.sluice_gate#a sluice where a channel changes water": {
-  "code": "ec6c40af0444794b",
-  "core": "23a4077eb1a686fb",
+  "code": "77f30c2f0bffe47d",
+  "core": "afb13c70efc084dc",
   "date": "2026-10-08",
-  "note": "drawn where an offtake feeds a field canal or a drain hands off to its outfall culvert",
+  "note": "drawn where one channel hands its water to another (moat or river tap to canal, drain to culvert)",
   "pages": {
    "0179-water-gates-and-sluices-shuimen.drawing.html": "19011b41723432c2"
   },
@@ -38344,10 +38344,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/moat.py::MoatMixin.sluice_gate#board, posts, crossbeam and windlass": {
-  "code": "89f51404238689f8",
-  "core": "23a4077eb1a686fb",
+  "code": "4c0a378efe9d95fc",
+  "core": "afb13c70efc084dc",
   "date": "2026-10-08",
-  "note": "board between two posts, crossbeam over them, drum at the beam's center, one glyph with no open/shut form, drawn at the glyph floor",
+  "note": "board between two posts, crossbeam over them and windlass drum at its center, one glyph with no open or shut form",
   "pages": {
    "0179-water-gates-and-sluices-shuimen.drawing.html": "19011b41723432c2"
   },
@@ -38355,16 +38355,15 @@
   "rests": [
    "0179-water-gates-and-sluices-shuimen.drawing.html:088c44a5ca24eaf0",
    "0179-water-gates-and-sluices-shuimen.drawing.html:30803fa2df4a125c",
-   "0179-water-gates-and-sluices-shuimen.drawing.html:b61cf64d7fc5dad2",
-   "0179-water-gates-and-sluices-shuimen.drawing.html:f46d69cf2f05a9d2"
+   "0179-water-gates-and-sluices-shuimen.drawing.html:b61cf64d7fc5dad2"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/moat.py::MoatMixin.sluice_gate#caption": {
-  "code": "51ee6ba93d65f7be",
-  "core": "23a4077eb1a686fb",
+  "code": "d7a12ba43caaff2c",
+  "core": "afb13c70efc084dc",
   "date": "2026-10-08",
-  "note": "the name is drawn beside the sluice; 9 pt italic is purely how it is shown",
+  "note": "the name is a 9 pt italic label beside the gate",
   "pages": {},
   "research": "",
   "rests": [
@@ -38373,10 +38372,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/moat.py::MoatMixin.sluice_gate#frame span": {
-  "code": "66c09231c6f83525",
-  "core": "23a4077eb1a686fb",
+  "code": "febe80f3a1bdaaf6",
+  "core": "afb13c70efc084dc",
   "date": "2026-10-08",
-  "note": "`_sk = max(1.0, span / 10.8)` never draws the frame narrower than 10.8 px, so at a city's ~3 ft/px the default px(20.0) (~6.7 px) still draws ~32 ft, outside \"about 16 to 24 ft\", and the recorded `span` (6.7) is not the drawn width; either the claim names the glyph floor as the §72 convention or the default stays 20 ft at every scale",
+  "note": "the code now draws the frame at its span, \"no glyph floor widens it (to scale, never inflated)\", but the page says \"The frame and its drum are drawn larger than life ... at the smallest size the map draws anything\". The 20 ft default is within §13's 16 to 24 ft, so either §12 should limit the floor to the drum and timber thicknesses, or the code should keep a floor",
   "pages": {
    "0179-water-gates-and-sluices-shuimen.drawing.html": "19011b41723432c2"
   },
