@@ -947,7 +947,9 @@ first half, on the page, stays; the UNRESEARCHED line is removed until its resea
 
 - [x] T71a wave 22's found rows tiered by the work they take, by a fresh reader (FR-002, FR-003, SC-003)
       research: rendering
-- [ ] T71 the claims written in `seat_rows` and `_well_vr` (FR-003 E0, FR-004)
+- [x] T71 the claims written in `seat_rows` and `_well_vr` (FR-003 E0, FR-004)
       research: rendering
-- [ ] T72 the claims re-checked by `impl-drift`; the close: wave 23's own bookend pair, `make done` green, the wave column (FR-005, FR-006)
+      verify: DONE. claims written in seat_rows (the row's step, the next street past the holdings, the holding's margin UNRESEARCHED, further streets parallel) and _well_vr (the curb the page's 19 ft, the roof UNRESEARCHED); the line's share and slack back to E4 (round 1)
+- [x] T72 the claims re-checked by `impl-drift`; the close: wave 23's own bookend pair, `make done` green, the wave column (FR-005, FR-006)
       research: rendering
+      verify: DONE. impl-drift: 9 + 5 triaged claims IN-STEP; amendment 22 FAITHFUL (round 3), plan CLEAR; make done green; wave 23's own pair band 1, identical bytecode (perf-audit consistent); the wave column

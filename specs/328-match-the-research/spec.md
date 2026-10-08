@@ -316,3 +316,4 @@ Each wave's amendment adds its map decisions to this table. The program's decisi
 - Amendment 19, round 5 (spec-fidelity, 2026-10-07): FAITHFUL.
 - Amendment 20, round 1 (spec-fidelity, 2026-10-07): FAITHFUL, plan CLEAR.
 - Amendment 21, round 1 (spec-fidelity, 2026-10-07): FAITHFUL, plan CLEAR (6 decisions) - row 428's E3 measured, row 429 literal to 0033.
+- Amendment 22: round 1 (spec-fidelity) CHANGES REQUIRED - farms to a street E4, not E0; round 2 (verify) CHANGES REQUIRED - the plan's scope line; round 3 (verify) FAITHFUL; plan CLEAR (spec-fidelity, 2026-10-08).

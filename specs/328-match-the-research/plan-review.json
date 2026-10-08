@@ -1,39 +1,38 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "d129d045ea219ce99785865b583da37dea1ba9829e3a8481e48f0c2cfae58819",
+ "plan_sha256": "7f702e190e130d7f2fc9de4bc0eddb55929ad8df49c11f648cc4920366837771",
  "reviewed": "2026-10-07",
  "declared": "spec-fidelity",
  "decisions": [
   {
    "id": "W23-scope-E0",
-   "summary": "wave 22's seven found rows all tiered E0 by T71a and written as claims, including seat_rows#farms to a street (impl-drift verdict NEEDS-RESEARCH), whose share and slack are labeled UNRESEARCHED with only 0033 and its drawing page searched",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "spec Edge Cases: a NEEDS-RESEARCH finding is tier E4 and the research pass (archive, then the web) runs first; amendment 9 round 1 already ruled NEEDS-RESEARCH rows relabeled instead of E4 a required change, and tree.py::admits (impl-drift likewise suggesting a label) stands E4. The reader's own reason says the page is silent, which is not FR-003's E0 (a page already says what the code does). The other six rows are within: UNCLAIMED rows claimed (wave 1 precedent) and the well row matching 0196."
+   "summary": "six of wave 22's seven found rows E0 by T71a and written as claims; seat_rows#farms to a street (NEEDS-RESEARCH) is E4 and waits for its research pass, its UNRESEARCHED line removed from rows.py",
+   "class": "within",
+   "why": "round 1's NOT LEGITIMATE item resolved: the spec's Edge Cases make a NEEDS-RESEARCH finding E4 with the research pass first; overrides.json now tiers the row E4 with that fix, the rows.py docstring no longer labels the share and slack UNRESEARCHED, and plan.md and tasks.md Phase 24 both say six rows claimed, the seventh E4. The other six are UNCLAIMED rows claimed (wave 1 precedent) and the well row matching 0196."
   },
   {
    "id": "W23-well-withdrawn",
-   "summary": "_well_vr's DRIFTED row withdrawn: 0196's about 19 ft across is the curb well() draws at 9.36 ft radius; the 24.75 ft roof square claimed UNRESEARCHED",
+   "summary": "_well_vr's DRIFTED row withdrawn: 0196's about 19 ft is the curb well() draws; the roof square claimed UNRESEARCHED",
    "class": "within",
-   "why": "measured on the page: 0196 drawing sizes the curb (9.36 ft radius), and well() draws px(9.36); the page gives no roof size, so the implementation matches and only the claim's citation was wrong - FR-003 E0. The page's one-roof-in-three and square curb are the separate open E3 row well#wellhead marker."
+   "why": "the implementation matches the page's sized element; only the claim's citation was wrong - FR-003 E0"
   },
   {
    "id": "W23-occasions-none",
    "summary": "no review occasions",
    "class": "within",
-   "why": "the diff to l7r/ is docstrings only (rows.py Research block and a docstring word, wells.py Research block); nothing drawn moves"
+   "why": "the l7r diff is docstrings only; nothing drawn moves"
   },
   {
    "id": "W23-stack-cond6",
-   "summary": "wave 23 stacked on the unpushed waves 9-22 under the wave-11 exception's condition (6); its pair opens at 049e951d4",
+   "summary": "wave 23 stacked on unpushed waves 9-22 under the wave-11 exception's condition (6); pair opens at 049e951d4",
    "class": "within",
-   "why": "an earlier LEGITIMATE exception applied on its own terms: wave 22 closed (T70 ticked, its pair recorded) and origin's backup/digram-backlog is at 049e951d4"
+   "why": "an earlier LEGITIMATE exception applied on its own terms, wave 22 closed with its pair recorded"
   },
   {
    "id": "W23-street-facing-E3",
-   "summary": "seat_rows#row farm faces its street stays E3 as tiered",
+   "summary": "seat_rows#row farm faces its street stays E3",
    "class": "within",
-   "why": "FR-006 tier order: the open E0 rows first; an E3 row waits its turn"
+   "why": "FR-006 tier order"
   },
   {
    "id": "W23-verification",
@@ -42,5 +41,5 @@
    "why": "FR-005 as written"
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }

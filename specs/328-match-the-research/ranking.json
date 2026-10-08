@@ -814,7 +814,7 @@
   "tier_as_ranked": "E0",
   "e0_basis": "same decision as the other parallel-streets row: rows.py:561 row_offsets(depth_n, ..., hold_depth + gap); 0033 drawing page's parallel-streets block",
   "moved": "T71a (fresh reader): same decision as the other parallel-streets row: rows.py:561 row_offsets(depth_n, ..., hold_depth + gap); 0033 drawing page's parallel-streets block - duplicate of .claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#distance between parallel streets the frame's depth along th",
-  "wave": "",
+  "wave": "23",
   "scope": "kept"
  },
  {
@@ -831,7 +831,7 @@
   "tier_as_ranked": "E0",
   "e0_basis": "rows.py:560-562 sets the streets out by row_offsets (rows.py:214-224: per = 2 x depth + 2 x gap + keep + holding) with the frame depth along the normal; 0033 drawing page says further streets run parallel to the first, never a second line behind, and gives the 6 ft street and 24 ft keep as conventions; row_offsets' own claim (rows.py:219) already cites it, seat_rows' block does not",
   "moved": "T71a (fresh reader): rows.py:560-562 sets the streets out by row_offsets (rows.py:214-224: per = 2 x depth + 2 x gap + keep + holding) with the frame depth along the normal; 0033 drawing page says further streets run parallel to the first, never a second line behind, and gives the 6 ft street and 24 ft keep as conventio",
-  "wave": "",
+  "wave": "23",
   "scope": "kept"
  },
  {
@@ -848,7 +848,7 @@
   "tier_as_ranked": "E0",
   "e0_basis": "rows.py:538 steps the row at min(frame width, 240 ft); 0033 drawing page (block 'The farms stand one farmstead frame apart, lot against lot, and never more than 240 ft apart') states exactly this, and ROW_FRONTAGE_MAX_FT's own docstring (rows.py:45-53) cites it, but seat_rows' Research block (rows.py:515-524) has no claim for the step",
   "moved": "T71a (fresh reader): rows.py:538 steps the row at min(frame width, 240 ft); 0033 drawing page (block 'The farms stand one farmstead frame apart, lot against lot, and never more than 240 ft apart') states exactly this, and ROW_FRONTAGE_MAX_FT's own docstring (rows.py:45-53) cites it, but seat_rows' Research block (rows.p",
-  "wave": "",
+  "wave": "23",
   "scope": "kept"
  },
  {
@@ -879,7 +879,7 @@
   "tier_as_ranked": "E0",
   "e0_basis": "rows.py:603 centers the holding at depth/2 + gap/2 + hold_depth/2 along the normal; gap = STREET_HALF_FT 3 + FIELD_KEEP_FT 24 / 2 = 15 ft (rows.py:536, 32, 39), so gap/2 = 7.5 ft; 0033 drawing page says the far row 'has its holding drawn behind each farm' but gives no margin, so only the claim with the margin labeled UNRESEARCHED is owed",
   "moved": "T71a (fresh reader): rows.py:603 centers the holding at depth/2 + gap/2 + hold_depth/2 along the normal; gap = STREET_HALF_FT 3 + FIELD_KEEP_FT 24 / 2 = 15 ft (rows.py:536, 32, 39), so gap/2 = 7.5 ft; 0033 drawing page says the far row 'has its holding drawn behind each farm' but gives no margin, so only the claim with ",
-  "wave": "",
+  "wave": "23",
   "scope": "kept"
  },
  {
@@ -896,7 +896,7 @@
   "tier_as_ranked": "E0",
   "e0_basis": "same decision as the 'farms one frame apart' row: rows.py:538 lot = min(fw, s.px(ROW_FRONTAGE_MAX_FT)); backed by the 0033 drawing page's 240 ft block",
   "moved": "T71a (fresh reader): same decision as the 'farms one frame apart' row: rows.py:538 lot = min(fw, s.px(ROW_FRONTAGE_MAX_FT)); backed by the 0033 drawing page's 240 ft block - duplicate of .claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#farms one frame apart along the street, never more than rowf",
-  "wave": "",
+  "wave": "23",
   "scope": "kept"
  },
  {
@@ -3219,7 +3219,7 @@
   "tier_as_ranked": "E2",
   "e0_basis": "0196 drawing page ('A well is drawn as a marker larger than life. At one foot per pixel its curb is drawn at a radius of 9.36 ft, about 19 ft across') sizes the CURB, and wells.py:89 draws the curb at px(9.36) - the code matches; _well_vr (wells.py:54-64) is the roof square's half-size, which the page never sizes, so the claim citing the page for 12.376 ft is mislabeled, not drifted - withdraw DRI",
   "moved": "T71a (fresh reader): 0196 drawing page ('A well is drawn as a marker larger than life. At one foot per pixel its curb is drawn at a radius of 9.36 ft, about 19 ft across') sizes the CURB, and wells.py:89 draws the curb at px(9.36) - the code matches; _well_vr (wells.py:54-64) is the roof square's half-size, which the pa",
-  "wave": "",
+  "wave": "23",
   "scope": "kept"
  },
  {
