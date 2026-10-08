@@ -18,7 +18,7 @@ import argparse
 import pathlib
 import sys
 
-SKILL = pathlib.Path(__file__).resolve().parents[1] / ".claude" / "skills" / "diagram"
+ROOT = pathlib.Path(__file__).resolve().parents[1]
 
 
 def locate(subject: str) -> pathlib.Path:
@@ -63,7 +63,7 @@ def main(argv: list[str] | None = None, parse=None) -> int:  # noqa: ANN001
             return 2
         box = (min(parts[0], parts[2]), min(parts[1], parts[3]), max(parts[0], parts[2]), max(parts[1], parts[3]))
     if parse is None:
-        sys.path.insert(0, str(SKILL))
+        sys.path.insert(0, str(ROOT))
         from l7r.diagram.tools.scatter_audit import parse_bases as parse  # noqa: PLC0415 - the engine's own parse, never a copy
     print(render(svg.stem, parse(svg.read_text(encoding="utf-8")), box, args.limit))
     return 0

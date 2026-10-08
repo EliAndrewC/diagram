@@ -511,7 +511,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--json", default="")
     ap.add_argument("--offline", default="", help="a directory of saved pages named by Pages.name_for(url)")
     args = ap.parse_args(argv)
-    research = pathlib.Path(args.root) / ".claude/skills/diagram/research"
+    research = pathlib.Path(args.root) / "research"
     if args.q:
         sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
         from _hm_record import fragments_for  # noqa: PLC0415

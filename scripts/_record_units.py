@@ -39,7 +39,7 @@ import re
 from collections.abc import Iterable, Mapping
 from dataclasses import dataclass, field
 
-RECORD = ".claude/skills/diagram/research"
+RECORD = "research"
 QUESTIONS = f"{RECORD}/questions"
 SOURCES = f"{RECORD}/sources/010-works-cited"
 

@@ -12,7 +12,7 @@ NEVER="NEVER_APPEARS_${T##*/}"
 export GUARD_LOG_DIR="$T/guard-log"
 
 CLONE=$T/clone
-LOG=$CLONE/.claude/skills/diagram/dev/run-log
+LOG=$CLONE/dev/run-log
 mkdir -p "$LOG"
 git init -q "$CLONE"
 

@@ -59,18 +59,17 @@ sys.path.insert(0, str(HERE))
 sys.dont_write_bytecode = True  # the push runs this in fixture trees whose `git status` must stay clean
 import _record_units as ru  # noqa: E402
 
-SKILL = ".claude/skills/diagram"
-INDEX = f"{SKILL}/dev/claims-index.json"
+INDEX = "dev/claims-index.json"
 # GUARD_EDIT_OK: feature 328 amendment 8 (the GM 2026-10-07) - a finding in code only the legacy hand-authored villages, towns
 # and cities run is DEFERRED, not DRIFTED: those checks go when the settlements convert, so they are not worth fixing now.
-DEFERRED = f"{SKILL}/dev/claims-deferred.json"
-STORE = f"{SKILL}/dev/claims-pages.json"  # the page snapshots each row's pages name (feature 318, FR-016)
-QUESTIONS = f"{SKILL}/research/questions"
+DEFERRED = "dev/claims-deferred.json"
+STORE = "dev/claims-pages.json"  # the page snapshots each row's pages name (feature 318, FR-016)
+QUESTIONS = "research/questions"
 FINDINGS = ("DRIFTED", "NEEDS-RESEARCH", "MISLABELED", "UNCLAIMED", "CANNOT-TELL")
 VERDICTS = ("IN-STEP", *FINDINGS)
 DEFAULT_OUT = Path("/tmp/l7r-check")
 #: What the base read needs: the engine, the procedure documents and the questions.
-BASE_PATHS = (f"{SKILL}/l7r", f"{SKILL}/buildings.md", f"{SKILL}/buildings", QUESTIONS)
+BASE_PATHS = ("l7r", "docs/buildings.md", "docs/buildings", QUESTIONS)
 _VERDICT = re.compile(r"^VERDICT\s+(\S.*?)\s+(" + "|".join(VERDICTS) + r")\s+-\s+(.*)$")
 _UNCLAIMED = re.compile(r"^UNCLAIMED\s+(\S+?::\S.*?)\s+-\s+(.*)$")
 
@@ -144,7 +143,7 @@ class Row:
 
 def current(skill: Path, qdir: Path | None = None) -> dict[str, Row]:
     """key -> Row for every claim of every unit in scope, at the tree under `skill` (its questions under `qdir`)."""
-    cl = engine(Path(__file__).resolve().parents[1] / SKILL)
+    cl = engine(Path(__file__).resolve().parents[1])
     qdir = qdir if qdir is not None else skill / "research" / "questions"
     memo: dict[str, str] = {}
     out: dict[str, Row] = {}
@@ -655,14 +654,14 @@ def base_tree(root: Path, base: str, into: Path) -> Path:
         tar.write_bytes(archive.stdout)
         with tarfile.open(tar) as t:
             t.extractall(into, filter="data")
-    (into / SKILL / "l7r" / "diagram" / "hamletgen").mkdir(parents=True, exist_ok=True)
-    return into / SKILL
+    (into / "l7r" / "diagram" / "hamletgen").mkdir(parents=True, exist_ok=True)
+    return into
 
 
 def base_cores(skill: Path) -> dict[str, str]:
     """uid -> core for EVERY unit at a tree, claimed or not: the base the push compares with may hold no claims at all (this
     feature's own landing, where main has none), and a unit's code is the same whatever its claims say."""
-    cl = engine(Path(__file__).resolve().parents[1] / SKILL)
+    cl = engine(Path(__file__).resolve().parents[1])
     return {f"{u.path}::{u.qualname}": u.core for u, _errors in cl.all_units(skill, every_module_unit=True)}
 
 
@@ -719,7 +718,7 @@ def split_keys(text: str, known: Mapping[str, Any]) -> list[str]:
 
 def gate(root: Path) -> tuple[list[str], list[str]]:
     """(refusals, warnings) for the push: owed units, introduced findings; pre-existing findings warn."""
-    skill = root / SKILL
+    skill = root
     cur = current(skill)
     index = load_index(root / INDEX)
     due = owed(cur, index, skill / "research" / "questions", load_store(root / STORE))
@@ -767,14 +766,14 @@ def main(argv: Sequence[str] | None = None) -> int:
             print(f"claims-gate: REFUSED {x}")
         return 1 if refuse else 0
     if args.cmd == "coverage":
-        cl = engine(root / SKILL)
+        cl = engine(root)
         qs = {p.name for p in (root / QUESTIONS).glob("*.html")}
-        probs = [x for x in cl.coverage(cl.all_units(root / SKILL), qs) if args.path in x.split(" ", 1)[0]]
+        probs = [x for x in cl.coverage(cl.all_units(root), qs) if args.path in x.split(" ", 1)[0]]
         print("\n".join(probs) if probs else f"claims-coverage: every unit{' under ' + args.path if args.path else ''} carries a claim")
         if probs:
             print(f"claims-coverage: {len(probs)} problem(s). The form: {cl.GRAMMAR}")
         return 1 if probs else 0
-    cur = current(root / SKILL)
+    cur = current(root)
     index = load_index(root / INDEX)
     qdir, store = root / QUESTIONS, load_store(root / STORE)
     if args.cmd == "owed":

@@ -30,7 +30,7 @@ pretool() {
   escape_or_refuse canon-read CANON_OK "$verdict" "$CR_HERE" && exit 0
   guard_log canon-read blocked "$(guard_cmd)" "$verdict"
   if [ "$verdict" = direct ]; then
-    printf 'BLOCKED: read the setting canon with one call naming every term of the claim:\n    make canon TERMS="<term>|<term>|<term>"   (in .claude/skills/diagram)\n' >&2
+    printf 'BLOCKED: read the setting canon with one call naming every term of the claim:\n    make canon TERMS="<term>|<term>|<term>"   (at the repository root)\n' >&2
   else
     printf 'BLOCKED: fold these terms into the last `make canon` - one call, every term:\n    make canon TERMS="<the earlier terms>|<these>"\n' >&2
   fi

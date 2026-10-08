@@ -41,7 +41,6 @@ from collections.abc import Sequence
 from pathlib import Path
 from typing import Any
 
-SKILL = ".claude/skills/diagram"
 TREES = ("pool", "legacy-hand-authored-pool")
 #: what a reviewer reads of a map or sheet, in the order it is listed
 SUFFIXES = (".json", ".svg", ".png", ".html", ".notes.md")
@@ -50,7 +49,7 @@ SUFFIXES = (".json", ".svg", ".png", ".html", ".notes.md")
 def map_dir(tree_root: Path, name: str) -> Path | None:
     """The folder of map or sheet `name` under either pool tree of `tree_root`, or None."""
     for tree in TREES:
-        for d in sorted((tree_root / SKILL / tree).glob(f"*/{name}")):
+        for d in sorted((tree_root / tree).glob(f"*/{name}")):
             if d.is_dir():
                 return d
     return None
@@ -87,7 +86,7 @@ This prompt was written by the tooling (feature 294): one agent per owed unit, a
 names more than one. Do not review anything else - its own agent has it - and wait for nothing but your own work.
 
 Clone: {clone} (the directory holding `.git/review-snapshot/`; run the `make` targets from its
-`.claude/skills/diagram/`). Engine key: {key}. The gate went green on this content before this dispatch.
+root). Engine key: {key}. The gate went green on this content before this dispatch.
 
 Snapshot - read THESE:
   after (the clone): {after}{missing}

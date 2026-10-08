@@ -57,7 +57,7 @@ if ! git -C "$ROOT" pull -q --no-rebase --no-edit "$Q" HEAD; then
 fi
 # PULL_QUEUE_REBUILD replaces the two targets in the tests, which have no Makefile
 if [ -n "${PULL_QUEUE_REBUILD:-}" ]; then ( cd "$ROOT" && eval "$PULL_QUEUE_REBUILD" ); else
-  ( cd "$ROOT/.claude/skills/diagram" && make glossary >/dev/null && make record >/dev/null ); fi
+  ( cd "$ROOT" && make glossary >/dev/null && make record >/dev/null ); fi
 if [ -n "$(git -C "$ROOT" status --porcelain)" ]; then
   git -C "$ROOT" add -A && git -C "$ROOT" commit -q -m "queue $N pulled back: the generated pages rebuilt"
 fi

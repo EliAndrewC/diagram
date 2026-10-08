@@ -85,7 +85,7 @@ multiple footnote links per paragraph or even multiple per sentence in sentences
 
 ## Input
 
-A question's page (`.claude/skills/diagram/research/questions/NNNN-<heading id>.html`, or its `.drawing.html`), or
+A question's page (`research/questions/NNNN-<heading id>.html`, or its `.drawing.html`), or
 several. The record is HTML (feature 194): `<sup class="fn" data-note="<key>"></sup>` after an assertion, and the note
 `<li data-note="<key>"><a href="url"><code>key</code></a> - 「quoted passage」 (gloss)</li>` in the page's own notes file
 beside it (`NNNN-<heading id>.notes.html`; features 258, 303): read BOTH files, the page for the assertions and its notes

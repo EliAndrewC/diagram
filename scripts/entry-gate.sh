@@ -54,7 +54,7 @@ record_bypass() {  # $1 the escape's name, $2 its reason
   # AND to dev/bypass-log/, which is what `make audit` reads and what the spec promises a later reader
   # (SC-013). The guard log is per-host and gitignored; a reason that ships with the push has to be in
   # the repository, like every other bypass this project records.
-  BL="$ROOT/.claude/skills/diagram/dev/bypass-log/$(date -u +%Y-%m)"   # GUARD_EDIT_OK: 2026-10-02 - a month folder, as every log writer
+  BL="$ROOT/dev/bypass-log/$(date -u +%Y-%m)"   # GUARD_EDIT_OK: 2026-10-02 - a month folder, as every log writer
   mkdir -p "$BL" 2>/dev/null || true
   python3 - "$BL" "$1: $2" <<'PYBL' || true
 import json, os, pathlib, secrets, subprocess, sys, time

@@ -15,7 +15,7 @@ ok() { echo "  ok      $1"; PASS=$((PASS+1)); }
 no() { echo "  FAIL    $1 ${2:-}"; FAIL=$((FAIL+1)); }
 
 M="$T/mirror"; C="$M/.clones/q"
-G="$C/.claude/skills/diagram/l7r/diagram/interactive/assets/glossary"; R="$C/.claude/skills/diagram/research/sources/010-works-cited"
+G="$C/l7r/diagram/interactive/assets/glossary"; R="$C/research/sources/010-works-cited"
 mkdir -p "$G" "$R" "$M/.specify"; git -C "$C" init -q 2>/dev/null
 echo '{}' > "$G/0100-old.json"; : > "$R/0100-old-key.html"
 python3 "$HERE/reserve-prefix.py" registry reserved-key --root "$C" --mirror "$M" >/dev/null
@@ -31,7 +31,7 @@ call Write "{\"file_path\":\"$G/0200-hitoyado.json\",\"content\":\"{}\"}"
 grep -q 'make reserve KIND=glossary KEY="hitoyado"' "$T/err" && ok "...the message names make reserve for it" || no "no command" "$(cat "$T/err")"
 call Write "{\"file_path\":\"$R/0200-suzhou-enwiki.html\",\"content\":\"x\"}"
 [ "$(rc)" -eq 2 ] && grep -q 'KIND=registry KEY="suzhou-enwiki"' "$T/err" && ok "a Write creating an unreserved registry entry" || no "allowed" "(rc=$(rc))"
-call Bash '{"command":"G=.claude/skills/diagram/l7r/diagram/interactive/assets/glossary && cat > \"$G/0300-wakato.json\" <<EOF\n{}\nEOF"}'
+call Bash '{"command":"G=l7r/diagram/interactive/assets/glossary && cat > \"$G/0300-wakato.json\" <<EOF\n{}\nEOF"}'
 [ "$(rc)" -eq 2 ] && ok "a heredoc redirect into a new glossary file through a shell variable" || no "allowed" "(rc=$(rc))"
 
 echo "2. what passes"
@@ -47,10 +47,10 @@ call Write "{\"file_path\":\"$R/$f\",\"content\":\"x\"}"
 pfx=${f%%-*}
 call Write "{\"file_path\":\"$R/$pfx-a-different-key.html\",\"content\":\"x\"}"
 [ "$(rc)" -eq 2 ] && ok "a DIFFERENT key on a reserved prefix is refused (a number taken by hand that collides)" || no "the colliding key was allowed" "(rc=$(rc))"
-call Write "{\"file_path\":\"$C/.claude/skills/diagram/research/fields/0300-q.html\",\"content\":\"x\"}"
+call Write "{\"file_path\":\"$C/research/fields/0300-q.html\",\"content\":\"x\"}"
 [ "$(rc)" -eq 0 ] && ok "a file outside the two directories" || no "refused" "(rc=$(rc))"
 # GUARD_EDIT_OK: feature 265 FR-010 - plan review round 2: a known path outside the two directories is not guessed
-call Bash '{"command":"echo {} > .claude/skills/diagram/research/fields/0600-probe.json; echo x > /tmp/0600-foo.html"}'
+call Bash '{"command":"echo {} > research/fields/0600-probe.json; echo x > /tmp/0600-foo.html"}'
 [ "$(rc)" -eq 0 ] && ok "a redirect to a known prefixed path outside the two directories" || no "refused" "(rc=$(rc))"
 call Bash '{"command":"echo done > /tmp/out.txt; ls 0400-x.json"}'
 [ "$(rc)" -eq 0 ] && ok "a command that only mentions a prefixed name" || no "refused" "(rc=$(rc))"
@@ -59,7 +59,7 @@ call Bash '{"command":"echo done > /tmp/out.txt; ls 0400-x.json"}'
 call Bash "{\"command\":\"echo x > $R/10990-five-digit-key.html\"}"
 [ "$(rc)" -eq 2 ] && grep -q 'KEY="five-digit-key"' "$T/err" && ok "a five-digit prefix, unreserved, is refused by its own key" || no "five-digit" "(rc=$(rc)) $(cat "$T/err")"
 # GUARD_EDIT_OK: feature 303 - a new question's stem takes a reserved number; another file of a stem that exists passes
-Q="$C/.claude/skills/diagram/research/questions"; mkdir -p "$Q"; printf x > "$Q/0243-the-last.html"
+Q="$C/research/questions"; mkdir -p "$Q"; printf x > "$Q/0243-the-last.html"
 call Write "{\"file_path\":\"$Q/0244-a-new-question.html\",\"content\":\"x\"}"
 [ "$(rc)" -eq 2 ] && grep -q 'KIND=question KEY="a-new-question"' "$T/err" && ok "a Write creating an unreserved question is refused, naming make reserve" || no "question" "(rc=$(rc)) $(cat "$T/err")"
 call Write "{\"file_path\":\"$Q/0243-the-last.notes.html\",\"content\":\"x\"}"

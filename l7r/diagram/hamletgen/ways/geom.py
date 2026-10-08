@@ -1,0 +1,674 @@
+"""Split from hamletgen/ways.py by feature 173 - see this package's CLAUDE.md for the index.
+
+Research: geometry - NONE
+"""
+
+from __future__ import annotations
+
+import math
+from collections.abc import Callable, Mapping, Sequence
+from typing import Any, cast
+
+from l7r.diagram.settlement import point_in_poly, rot_rect, seg_closest, seg_dist, seg_intersect, segments_cross
+from l7r.diagram.settlement.water_ways._helpers import BUND_REACH_FT
+from l7r.diagram.sitegen.geom import centroid, unit
+
+from ..clearance import ring_index
+from ..consts import (
+    STEADING_ARRIVAL_FT,
+    TRACK_FABRIC_GAP,
+    WAY_END_REACH_FT,
+    Poly,
+    Pt,
+)
+
+
+def _reach(c: Pt, path: Poly) -> float:
+    """How near a polyline comes to a point - the same measurement `farmhouses_reach_a_way` makes."""
+    return min(math.dist(c, seg_closest(c[0], c[1], a, b)) for a, b in zip(path, path[1:], strict=False))
+
+
+def _aim_off(prev: Pt, tip: Pt, target: Pt) -> float:
+    """How far off this end's outward heading is from aiming at `target`, in degrees.
+
+    The honest test of "these two ends are one way with a hole in it": each end has to be heading
+    INTO the gap toward the other, which is a statement about each end separately and about the line
+    between them - not a comparison of the two headings with each other."""
+    out = math.degrees(math.atan2(tip[1] - prev[1], tip[0] - prev[0]))
+    aim = math.degrees(math.atan2(target[1] - tip[1], target[0] - tip[0]))
+    return abs((out - aim + 180.0) % 360.0 - 180.0)
+
+
+def shadow_share(pts: Poly, others: Sequence[Poly], gap: float, step: float = 5.0) -> float:
+    """The greatest share of this lane's own length that runs within `gap` of ONE other way.
+
+    The structural test below asks whether a lane leaves a way and returns to it. This asks the other shape of the same
+    defect: a lane that runs ALONGSIDE another for most of itself, whatever its ends do - two treads with a hairline of
+    grass between them, which is what a reader sees. Measured on Sawada after feature 230 moved its web: 75 ft of a 136 ft
+    lane lay within 8 ft of the lane beside it, where main had no such pair; a lane merely leaving along the connector and
+    diverging (Mizuguchi, 22% of 344 ft) is not this and must not be swept."""
+    if len(pts) < 2:
+        return 0.0
+    total = sum(math.dist(pts[k], pts[k + 1]) for k in range(len(pts) - 1)) or 1.0
+    best = 0.0
+    # THE BOX PRUNES, THE SAMPLING DECIDES (constitution X clause 15): a lane whose bounding box does not come within
+    # `gap` of this one cannot shadow it, and most lanes on a map are that.
+    x0, x1 = min(q[0] for q in pts) - gap, max(q[0] for q in pts) + gap
+    y0, y1 = min(q[1] for q in pts) - gap, max(q[1] for q in pts) + gap
+    for other in others:
+        if len(other) < 2:
+            continue
+        # A REMNANT IS THE SHORTER OF THE PAIR. Without this the test is symmetric and answers yes for the PARENT as well -
+        # a 200 ft remnant covers half of the 400 ft way it doubles - so the sweep dropped the way and kept the remnant
+        # (caught by `_sweep_doubled_remnants`'s own fixture, feature 230 pass 11).
+        if sum(math.dist(other[k], other[k + 1]) for k in range(len(other) - 1)) < total - 1e-9:
+            continue
+        if max(q[0] for q in other) < x0 or min(q[0] for q in other) > x1 or max(q[1] for q in other) < y0 or min(q[1] for q in other) > y1:
+            continue
+        segs = list(zip(other, other[1:], strict=False))
+        near, walked = 0.0, 0.0
+        for k in range(len(pts) - 1):
+            leg = math.dist(pts[k], pts[k + 1])
+            n = max(1, int(leg / step))
+            for m in range(n):
+                f = (m + 0.5) / n
+                q = (pts[k][0] + (pts[k + 1][0] - pts[k][0]) * f, pts[k][1] + (pts[k + 1][1] - pts[k][1]) * f)
+                if min(seg_dist(q[0], q[1], a, b) for a, b in segs) <= gap:
+                    near += leg / n
+                walked += leg / n
+        best = max(best, near / total)
+    return best
+
+
+def shadowing_lane(pts: Poly, others: Sequence[Poly], reach: float) -> int | None:
+    """Index of a way that BOTH of this lane's ends stand on or beside, or None - "it goes nowhere".
+
+    A way earns its ink by connecting one thing to another. A lane whose two ends both land on the same
+    single other way connects that way to itself: whatever the shape in between, no journey uses it that
+    could not be walked along the way it leaves and returns to. That is a STRUCTURAL question with a yes
+    or a no, and it is deliberately not a distance between the two treads.
+
+    THE METRIC FORM OF THIS TEST WAS WRITTEN FIRST AND WAS A NO-OP ON BOTH MAPS IT NAMED (settlement-review
+    x2, feature 155). It asked whether every point of a lane lay within `1.5 * w` - 4.5 ft for a footpath -
+    of another lane. Kashikawa's remnant sits at 6.58 ft and sawada's at 11.4 ft, and the sawada figure was
+    written into the docstring three lines above the constant that rejected it. Sawada's reviewer named the
+    pattern, and it is the one to guard against here: *"calibrating a general rule to the single case that
+    was easiest to measure is the recurring defect on this map, not a coincidence"* - the same shape as the
+    5 ft nub floor shipped for an 8.25 ft boot and the 4.5 ft threshold shipped for a 6.6 ft remnant. A
+    structural predicate has no dial to leave set too low, which is the whole reason to prefer it.
+
+    `reach` is the gate's own "is this end ON that way" tolerance, not a tuning knob.
+
+    Research: a lane that goes nowhere - UNRESEARCHED: both ends on one other way
+    """
+    if len(pts) < 2:
+        return None
+    for j, other in enumerate(others):
+        if len(other) < 2:
+            continue
+        segs = list(zip(other, other[1:], strict=False))
+        if all(min(seg_dist(e[0], e[1], a, b) for a, b in segs) <= reach for e in (pts[0], pts[-1])):
+            return j
+    return None
+
+
+def stroke_quad(a: Pt, b: Pt, half: float) -> Poly:
+    """The quad a straight stroke of half-width `half` from `a` to `b` covers, square-ended - the footprint the overlap
+    matrix reads for a lane's segment (feature 291)."""
+    d = max(math.dist(a, b), 1e-9)
+    nx, ny = -(b[1] - a[1]) / d * half, (b[0] - a[0]) / d * half
+    return [(a[0] + nx, a[1] + ny), (b[0] + nx, b[1] + ny), (b[0] - nx, b[1] - ny), (a[0] - nx, a[1] - ny)]
+
+
+def fabric_clearance(pts: Sequence[Pt], fabric: Sequence[Poly]) -> float:
+    """How near a run passes to the settlement's own fabric - infinity when there is none to pass.
+
+    Lifted out of `_touch_junctions` so the rewrite rule below can be asked with plain lists
+    (GM 2026-08-28 on testability); the inner one delegates, so there is ONE body."""
+    if len(pts) < 2 or not fabric:
+        return float("inf")
+    return min(seg_dist(v[0], v[1], a2, b2) for poly in fabric for v in poly for a2, b2 in zip(pts, pts[1:], strict=False))
+
+
+def _stop_at_network(link: Poly, others: list[tuple[Pt, Pt]]) -> Poly:
+    """Cut a join link at the FIRST place it meets one of the ways it was sent to reach.
+
+    A link is routed to a point `q` on the network, and the router is free to run it along or
+    across another way on the road there - tripwire seed 27's link touched lane 8 at 20 ft and
+    carried on for 20 ft more to a `q` on a way that a later trim removed, leaving a hook to
+    nothing beside a shed (feature 137 T03). A link exists to reach the network; the moment it
+    does, the rest is a stub. Cut at a vertex within `_TOUCH_GAP` of one of `others`, or at a
+    crossing. `others` is the TARGET set only - the main component in the orphan ladder, the unmet
+    ways in the touch pass - never the piece's own component: a piece is often several lanes, and
+    cutting at one of them left the reference hamlet's web in pieces on the first try.
+
+    Research: no stub past a junction - research/questions/0081-village-lanes.drawing.html: a joining link ends where it first meets a lane, whatever the tail"""
+    if not others or len(link) < 2:
+        return list(link)
+    out = [link[0]]
+    for t in range(1, len(link)):
+        a, b = link[t - 1], link[t]
+        # `seg_intersect` meets LINES - guard it with `segments_cross`, as every other caller here does,
+        # or the cut lands on the link's own backward extension (the reference hamlet, first try).
+        hits = [x for c, d in others if segments_cross(a, b, c, d) for x in [seg_intersect(a, b, c, d)] if x is not None and math.dist(a, x) > 0.5]
+        if hits:
+            out.append(min(hits, key=lambda x: math.dist(a, x)))
+            return out
+        out.append(b)
+        if t < len(link) - 1:
+            _near = min(((seg_dist(b[0], b[1], c, d), c, d) for c, d in others), key=lambda z: z[0])
+            if _near[0] <= _TOUCH_GAP:
+                # LAND ON THE WAY, not beside it: the web counts two lanes as joined at 4 ft, and a
+                # link cut at a vertex 3.9 ft off rounds to a piece - the first cut of this pass
+                # took the reference hamlet's web apart that way.
+                foot = seg_closest(b[0], b[1], _near[1], _near[2])
+                if math.dist(b, foot) > 0.5:
+                    out.append(foot)
+                return out
+    return out
+
+
+def _unretrace(pts: Poly) -> Poly:
+    """Collapse an out-and-back in a polyline: a vertex whose two neighbors coincide is a spur to
+    nowhere, and both it and the return vertex go. A join link is routed from a piece's END, and the
+    router's first hop is free to land on the piece's own next vertex - so prepending the whole link
+    drew `A -> B -> A' -> B -> ...`, a 180-degree hairpin the eye reads as a loop (cohort seed 07,
+    feature 137 T03: lane 1 went 20 ft out to its old end and 20 ft back). Splicing is the one place
+    this shape is made, so it is undone here rather than by a general smoothing pass.
+
+    Research: no doubling back - research/questions/0081-village-lanes.drawing.html: an out-and-back collapsed"""
+    out = [p for k, p in enumerate(pts) if k == 0 or math.dist(p, pts[k - 1]) > 0.5]
+    k = 1
+    while k < len(out) - 1:
+        if math.dist(out[k - 1], out[k + 1]) <= 2.0:
+            del out[k : k + 2]
+            k = max(1, k - 1)
+        else:
+            k += 1
+    # A polyline that folds away entirely (a door path whose link ran back past the door) is left
+    # as it was drawn: an ugly lane is a lane, an empty one is a hole in the web (cohort seed 03).
+    return out if len(out) >= 2 else list(pts)
+
+
+# A JUNCTION LINK CROSSES NOTHING, BUT IT MAY BRUSH A FENCE. The 29 ft gaps this pass closes are
+# made by the fabric margin itself: `clear_runs` clips a lane wherever it passes within
+# `WEB_FABRIC_GAP` (7 ft) of a garden or a yard, and where two lanes meet beside a plot that is
+# exactly where the cut lands - measured on Inashiro, every refused link was 29 ft long, sat 6-15 ft
+# from a garden, and `_clear_link` refused it on the same margin that had made it. A lane and a
+# garden fence share a line in a real village (the plot FRONTS the lane), so the last few feet into
+# a junction are tested against footprints only: the link may not cross a house, a bed, a yard or
+# water, and it may run along a fence.
+# 4 ft, not 1: the gate's overlap matrix extends a lane by its tread (3 ft wide, so 1.5 each side)
+# plus rounding, and the first cut at 1 ft let a string-pulled chord run 2.1 ft from a garden's
+# corner - clear of the footprint, inside the tread's ink (`features_do_not_overlap`, lanes vs
+# gardens, feature 133 T41). A junction link may still brush a fence; it may not paint on it.
+_TOUCH_GAP = 4.0
+"""Research: a junction link may brush a fence - UNRESEARCHED: 4 ft off footprints"""
+
+
+def _components(ways: Sequence[Poly], touch: float) -> list[int]:
+    """Connected-component label per way, joined by an END within `touch` of another way's tread."""
+    par = list(range(len(ways)))
+
+    def find(i: int) -> int:
+        while par[i] != i:
+            par[i] = par[par[i]]
+            i = par[i]
+        return i
+
+    segs = [list(zip(w, w[1:], strict=False)) for w in ways]
+    for i in range(len(ways)):
+        for j in range(i + 1, len(ways)):
+            if len(ways[i]) < 2 or len(ways[j]) < 2:
+                continue
+            if ends_touch(ways[i], ways[j], segs[i], segs[j], touch):
+                par[find(i)] = find(j)
+    return [find(i) for i in range(len(ways))]
+
+
+def ends_touch(p: Poly, q: Poly, p_segs: Sequence[tuple[Pt, Pt]], q_segs: Sequence[tuple[Pt, Pt]], touch: float) -> bool:
+    """`_components`' join of two ways (`p_segs`, `q_segs` their legs): an END of either within `touch` of the other's tread.
+
+    Research: plumbing - NONE: `_components`' pair test, asked pair by pair by a caller that keeps the answers (`knots.WebMemo`)"""
+    return any(seg_dist(e[0], e[1], a, b) <= touch for e in (p[0], p[-1]) for a, b in q_segs) or any(seg_dist(e[0], e[1], a, b) <= touch for e in (q[0], q[-1]) for a, b in p_segs)
+
+
+_HOOK_FT = 12.0
+"""Research: hook leg - research/questions/0081-village-lanes.drawing.html: 12 ft or less"""
+_HOOK_DEG = 90.0
+"""A HOOK: a lane's end leg of `_HOOK_FT` or less turning back `_HOOK_DEG` or more - drawing thresholds, reasoned in
+`joints` (four paces is too short a leg to be a route of its own; 90 degrees is where a turn stops reading as a bend).
+
+Research: hook turn - research/questions/0081-village-lanes.drawing.html: 90 degrees or more"""
+
+
+def door_unhooked(path: Poly, clear: Callable[[Pt, Pt], bool]) -> Poly:
+    """A door path (`path[0]` the door) without a hook at the door: a first leg of `_HOOK_FT` or less that the path turns
+    back from by `_HOOK_DEG` or more goes - the door joined straight to the vertex after it where `clear` allows, else the
+    path begins at that vertex (feature 291: Kashikawa's door path at (2300, 2777) stepped 6 ft south and turned back 124
+    degrees, the router's first cell).
+
+    Research: a lane's end loses its hook - research/questions/0081-village-lanes.drawing.html: at the door"""
+    if len(path) < 3 or math.dist(path[0], path[1]) > _HOOK_FT or _turn_deg(path[0], path[1], path[2]) < _HOOK_DEG:
+        return path
+    return [path[0], *path[2:]] if clear(path[0], path[2]) else path[1:]
+
+
+def _turn_deg(a: Pt, b: Pt, c: Pt) -> float:
+    """The change of heading at `b` on the run a -> b -> c, in degrees: 0 straight on, 180 doubled back."""
+    v1 = (b[0] - a[0], b[1] - a[1])
+    v2 = (c[0] - b[0], c[1] - b[1])
+    n1, n2 = math.hypot(*v1), math.hypot(*v2)
+    if n1 < 1e-6 or n2 < 1e-6:
+        return 0.0
+    return math.degrees(math.acos(max(-1.0, min(1.0, (v1[0] * v2[0] + v1[1] * v2[1]) / (n1 * n2)))))
+
+
+def _plen(pts: Poly) -> float:
+    return sum(math.dist(pts[k], pts[k + 1]) for k in range(len(pts) - 1))
+
+
+def push_clear_of_fabric(base: Pt, unit: Pt, edge: float, fabric: Sequence[Poly], gap: float = TRACK_FABRIC_GAP) -> Pt:
+    """Walk out from `base` along the unit vector `unit`, starting `edge` out, until the point clears every
+    standing thing by `gap`. Twenty-four steps of 6 px, then the last point tried.
+
+    LIFTED OUT OF `_cluster_gateway` AND `_cluster_edge_toward` (feature 146), which carried the same loop
+    twice. Stepping rather than solving is deliberate - the fabric is an arbitrary set of polygons, the step
+    is cheap, and a bounded walk cannot fail to terminate the way a solve can. The bound is what makes the
+    LAST line a real branch: a cluster ringed all the way round returns a point that does not clear, and the
+    caller draws from it anyway rather than returning nothing. No live hamlet is that crowded.
+
+    Research:
+        track gateway off the fabric - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: nothing built on a lane, walked out until clear
+        gateway clearance - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: 7 ft (`TRACK_FABRIC_GAP`) by default, a lane's middle off a garden fence
+    """
+    # EACH POLYGON'S BOX, ONCE (feature 284, FR-009): a point farther than `gap` outside a polygon's box is farther than
+    # `gap` from its ring, so only the polygons whose widened box holds the point are asked - the same verdict.
+    boxes = [(poly, min(p[0] for p in poly) - gap, min(p[1] for p in poly) - gap, max(p[0] for p in poly) + gap, max(p[1] for p in poly) + gap) for poly in fabric if poly]
+    for _ in range(24):
+        gx, gy = base[0] + unit[0] * edge, base[1] + unit[1] * edge
+        if not any(x0 <= gx <= x1 and y0 <= gy <= y1 and ring_within(gx, gy, poly, gap, closed=False) for poly, x0, y0, x1, y1 in boxes):  # `edge_dist >= gap` for every one
+            return (gx, gy)
+        edge += 6.0
+    return (base[0] + unit[0] * edge, base[1] + unit[1] * edge)
+
+
+def _seg_cross(a: Pt, b: Pt, c: Pt, d: Pt, ab_eps: float = 0.02) -> Pt | None:
+    """Where segment a-b crosses segment c-d STRICTLY inside both (never at an end), else None. `ab_eps` is how far
+    inside a-b, as a share of it, a crossing must lie."""
+    r = (b[0] - a[0], b[1] - a[1])
+    q = (d[0] - c[0], d[1] - c[1])
+    den = r[0] * q[1] - r[1] * q[0]
+    if abs(den) < 1e-9:
+        return None
+    w = (c[0] - a[0], c[1] - a[1])
+    t = (w[0] * q[1] - w[1] * q[0]) / den
+    u = (w[0] * r[1] - w[1] * r[0]) / den
+    eps = 0.02
+    if ab_eps < t < 1 - ab_eps and eps < u < 1 - eps:
+        return (a[0] + t * r[0], a[1] + t * r[1])
+    return None
+
+
+def lane_houses(M: Mapping[str, Any]) -> list[Pt]:
+    """The farmhouses a lane is owed to SERVE: every one but a household reached across a neighbor's yard (feature 317,
+    `settlement/rolling/passage.py`), which has no way of its own - its neighbor's way is its way in. Asked where a pass
+    keeps an arm or a fragment as the only way to a house, or carries a lane's end to a dooryard; where an end merely
+    REACHES something (`end_serves`), every house counts.
+
+    Research: who a lane serves - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every farmhouse but the few reached across a neighbor's land
+    """
+    return [(float(h["x"]), float(h["y"])) for h in M.get("houses") or [] if not h.get("reached_across")]
+
+
+def steading_footprints(M: Mapping[str, object]) -> list[Poly]:
+    """Every piece of a steading's own BUILT ground, as the shapes a lane end can arrive at.
+
+    The farm buildings as their drawn quads - houses, byres, field sheds, the three keys
+    `lanes_do_not_break_mid_run` already treats as solid - and the steading's plots as their recorded
+    rings: the threshing yard and the kitchen garden, which are the dooryard a path is worn to.
+
+    GROUND COVER IS NOT A DESTINATION, and the distinction is the one the straggler footpaths drew in prose until feature 287 dropped them: the grazing commons and the homestead groves are what the ground IS, not things
+    built on it, and a lane crosses them. A tread that stops 29 ft into the commons has stopped in a
+    field, which is what this rule exists to catch, so they are not in this set.
+
+    TURNED AS DRAWN (269 B18). The rectangles were read axis-aligned while a farmhouse's rake was 5 degrees, which moved
+    these distances by less than the clip's 4 ft step; a house turned 30 degrees, or a quarter turn, is not that, so each
+    building is its `rot_rect` at its own `rot`.
+
+    Research:
+        a lane ends at the dooryard - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the buildings, yard and garden
+        ground cover is no destination - UNRESEARCHED: the commons and groves are left out"""
+    out: list[Poly] = []
+    for key in ("houses", "byres", "farm_sheds", "retirement_houses"):
+        for r in M.get(key) or []:  # type: ignore[union-attr]
+            if all(k in r for k in ("x", "y", "w", "h")):
+                out.append(rot_rect(float(r["x"]), float(r["y"]), float(r["w"]), float(r["h"]), float(r.get("rot") or 0.0)))
+    for key in ("threshing_yards", "gardens"):
+        for r in M.get(key) or []:  # type: ignore[union-attr]
+            ring = r.get("poly") or r.get("outline") or ()
+            if len(ring) >= 3:
+                out.append([(float(a), float(b)) for a, b in ring])
+    return out
+
+
+def ring_within(x: float, y: float, poly: Sequence[Pt], limit: float, closed: bool = True) -> bool:
+    """`edge_dist(x, y, poly) <= limit` (or `< limit` with `closed=False`), exactly, from the ring's shared index (feature 284,
+    FR-009): `edge_dist` walks every edge; the index measures only the edges near the point, with the same `seg_dist`.
+    `edge_within` answers strictly under its limit, so a closed test asks it a hair wide and re-applies `<=`."""
+    d = ring_index(list(poly)).edge_within(x, y, limit + 1e-9 if closed else limit)
+    return d is not None and (d <= limit if closed else d < limit)
+
+
+def worked_ground_rings(M: Mapping[str, Any]) -> list[list[Pt]]:
+    """The field a way may END at: the paddy's outlines AND its dry hem, which is worked ground of the same field (feature
+    261: Mizuguchi's spur crossed the brook and stopped at the hem plots between the water and the paddy, 108 ft from the
+    paddy's own outline, and was dropped as an end in open ground - the hamlet's only way to its rice). One definition,
+    read by the sweep that trims ends and by the gate that checks them.
+
+    Research: the field a way ends at - research/questions/0081-village-lanes.drawing.html: the paddy and its dry hem"""
+    rings = [[(float(a), float(b)) for a, b in (f.get("outline") or [])] for f in (M.get("fields") or [])]
+    return rings + [[(float(a), float(b)) for a, b in (d.get("poly") or [])] for d in (M.get("dry_plots") or []) if d.get("poly")]
+
+
+class WorkedGround:
+    """The worked ground's EDGE - the bund a way arrives on (269 B04, research/questions/0014-bunds-between-the-paddies-aze.drawing.html) - built once and asked per end.
+
+    The paddy's outline, its dry plots, and its drawn rice: the outline runs 3-9 ft off the rice on a valley fan and a
+    plot can stand up to 12 ft past it (measured on the five pool hamlets), so a tip measured to the outline alone could
+    stop on the rice or short of it. The union is taken once (shapely), and a query is one distance to its boundary - no
+    walk over the rings per end (dev/performance.md).
+
+    Research:
+        the bund a way arrives on - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: the edge of the
+            outline, dry plots and rice together"""
+
+    def __init__(self, rings: Sequence[Sequence[Pt]]) -> None:
+        from shapely.geometry import Polygon
+        from shapely.ops import unary_union
+
+        polys = [Polygon(r).buffer(0) for r in rings if len(r) >= 3]
+        polys = [p for p in polys if not p.is_empty]
+        self.union: Any = unary_union(polys) if polys else None
+        self.edge: Any = self.union.boundary if self.union is not None else None
+
+    def dist(self, q: Pt) -> float:
+        """How far `q` stands from the worked ground's edge, inside or out; infinite where there is no ground."""
+        from shapely.geometry import Point
+
+        return float(self.edge.distance(Point(q))) if self.edge is not None else float("inf")
+
+    def inside(self, q: Pt) -> bool:
+        from shapely.geometry import Point
+
+        return bool(self.union is not None and self.union.contains(Point(q)))
+
+    def nearest(self, q: Pt) -> Pt | None:
+        """The point of the edge nearest `q`, or None where there is no ground."""
+        from shapely.geometry import Point
+        from shapely.ops import nearest_points
+
+        if self.edge is None:
+            return None
+        p = nearest_points(self.edge, Point(q))[0]
+        return (float(p.x), float(p.y))
+
+
+def ground_key(M: Mapping[str, Any]) -> tuple[int, ...]:
+    """What a settlement's worked ground is built from, by count: the field and dry-plot registries are only appended to
+    while a roll lays its ways, so the same counts on the same settlement are the same ground."""
+    fields, dry = M.get("fields") or [], M.get("dry_plots") or []
+    return (len(fields), len(dry), sum(len(f.get("plot_rings") or []) for f in fields))
+
+
+_GROUNDS: list[tuple[Any, dict[str, tuple[tuple[int, ...], WorkedGround]]]] = []
+"""`memo_ground`'s memos, one per MANIFEST (the manifest object held, so its identity is never reused while it is here),
+newest last and at most `_GROUNDS_MAX`; emptied when a roll ends (`reset_grounds`, from `driver.roll_scope`)."""
+_GROUNDS_MAX = 4
+
+
+def reset_grounds() -> None:
+    """Forget every manifest's worked ground - a roll's end (`driver.roll_scope`), as the clearance memo is."""
+    _GROUNDS.clear()
+
+
+def memo_ground(s: Any, tag: str, build: Any) -> WorkedGround:
+    """The worked ground `build(s.M)` makes, BUILT ONCE per settlement while the registries it reads stand unchanged
+    (constitution X clause 15, "build the blocked ground once"; dev/performance.md, "The third shape"): the union of a fan's 600-odd rice plots is the costly part, and
+    the web stage asks for it from five passes. Kept per MANIFEST, so no other roll can ever read it - and every view of
+    one manifest shares it (feature 287 perf: the seating's view, `corridor_on_lawful_ground`'s and the settlement itself
+    each kept their own, and the reference seed 4's seating took the same 683-ring union three times, 56 ms each)."""
+    M = s.M
+    memo = next((m for owner, m in _GROUNDS if owner is M), None)
+    if memo is None:
+        memo = {}
+        _GROUNDS.append((M, memo))
+        del _GROUNDS[:-_GROUNDS_MAX]
+    key = ground_key(M)
+    hit = memo.get(tag)
+    if hit is not None and hit[0] == key:
+        return cast(WorkedGround, hit[1])
+    ground: WorkedGround = build(s.M)
+    memo[tag] = (key, ground)
+    return ground
+
+
+def worked_ground(M: Mapping[str, Any]) -> WorkedGround:
+    """The worked ground of a manifest (`WorkedGround`): `worked_ground_rings` and every field's drawn rice plots."""
+    rice = [[(float(a), float(b)) for a, b in r] for f in (M.get("fields") or []) for r in (f.get("plot_rings") or []) if len(r) >= 3]
+    return WorkedGround(worked_ground_rings(M) + rice)
+
+
+def end_serves(
+    q: Pt,
+    segs: Sequence[tuple[Pt, Pt]] = (),
+    houses: Sequence[Pt] = (),
+    ground: WorkedGround | None = None,
+    steadings: Sequence[Poly] = (),
+) -> bool:
+    """Does a lane END reach something worth walking to - another way, a farmhouse, the bund, or the built ground of a
+    steading it has arrived at?
+
+    ONE BODY, READ BY THE PLACER AND BY THE CHECK, which is this skill's standing rule about a rule and
+    its verdict ("placement and its check must read the SAME source"). They had drifted twice over:
+    `_trim_to_service` measured ways at 40 ft and house centers at 90 while the gate asked 60 of all
+    three (fixed earlier in feature 227 by `WAY_END_REACH_FT`), and then NEITHER of them could see a
+    tread that had arrived at a garden fence - the steading clause, at `STEADING_ARRIVAL_FT`. An end served by a house
+    alone is cut beside it, at its closest approach, by `_trim_to_service` (the GM's road to nowhere, 2026-09-27; 269 B17,
+    research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: "pulled back to the last house it serves").
+
+    THE FIELD IS REACHED ON ITS BUND (269 B04, research/questions/0014-bunds-between-the-paddies-aze.drawing.html: the path "never ends in open ground short of the
+    bund"): within `BUND_REACH_FT` of the worked ground's edge, where it used to be anywhere within 60 ft of the field. An
+    end short of the bund is carried on to it (`ways/bund.py`) before the trims that read this.
+
+    Research:
+        an end reaches something seen - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a way or farmhouse within 60 ft
+        reached on the bund - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: within 6 ft of its edge
+        arrived at a steading - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within 12 ft of its built ground, how close counts as serving"""
+    if any(seg_dist(q[0], q[1], a, b) <= WAY_END_REACH_FT for a, b in segs):
+        return True
+    if any(math.dist(q, h) <= WAY_END_REACH_FT for h in houses):
+        return True
+    if ground is not None and ground.dist(q) <= BUND_REACH_FT:
+        return True
+    return any(ring_within(q[0], q[1], sp, STEADING_ARRIVAL_FT) for sp in steadings)
+
+
+def _trim_to_service(run: Poly, segs: Sequence[tuple[Pt, Pt]], houses: Sequence[Pt], ground: WorkedGround | None = None, keep: Sequence[Pt] = (), steadings: Sequence[Poly] = ()) -> Poly:
+    """Pull a run's ends back to the last point that actually serves something.
+
+    ONE BAR, THE GATE'S, FOR EVERY CALLER. `WAY_END_REACH_FT` is what
+    `lanes_reach_something` asks of every internal lane end - within it of another way or a farmhouse, on the bund, or at a
+    steading's dooryard (`end_serves`) - so that is what this trims to, and a caller cannot leave an end the gate will then fail.
+    There used to be an `end_reach` parameter whose absence meant a looser private triple (40 ft to a
+    way, 90 ft to a HOUSE CENTER, `SPUR_SETBACK + 4` to the field); feature 227 moved all four callers
+    onto the gate's figure one at a time, at which point the default was reachable only from this
+    module's own unit tests - a literal agreeing with a test and with nothing that ships, which is the
+    shape this project deletes rather than keeps (feature 174's rule for an unreachable line). Found by a settlement-review reading
+    the comments rather than the code, 2026-09-12.
+
+    The ends that are NOT traded for the bar are named instead of excepted: `keep` carries the houses no
+    other way comes within `WEB_REACH_FT` of, because the late pass runs after the web's joins and
+    trimming to the bar alone there took back the tail that was an outlying steading's only way (cohort
+    seed 39 stranded a farmhouse the moment both passes were tightened together).
+
+    A web lane's ends come out of the clipper, which stops where the ground stops being walkable and has
+    no opinion about whether anything is there. Trimming BEFORE the ink goes down is better than trimming
+    after: `trim_lane_stubs` drops anything under its 71 ft floor, which is the right rule for a skeleton
+    arm and would delete the door paths this feature exists to draw.
+
+    Research:
+        pulled back to the last house served - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: ends trimmed to what
+            serves, 4 ft at a time
+        an outlying house keeps its way - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: an end serving a house no other way reaches is kept within 60 ft of it (`WAY_END_REACH_FT`), or 12 ft of its built ground (`end_serves`)"""
+
+    # ARRIVING AT THE FIELD IS SERVICE. A field spur exists to reach the crop, and it is the one way on
+    # the map whose whole purpose is served by something that is neither a house nor another lane. Without
+    # this clause the trim cut Mizuguchi's spur 32 ft short of the paddy - it removed the only part of the
+    # lane that did the job the lane was drawn for, on the grounds that nothing was there. The bar is the
+    # gate's, not a baulk distance: this comment used to say the setback matched `SPUR_SETBACK` so that
+    # "touching the envelope" meant within that, and no caller has asked for that figure since feature 227.
+
+    def serves(q: Pt, other: Pt | None = None) -> bool:
+        # A HOUSE THIS RUN ALONE REACHES IS NOT TRADED FOR A TIDY END (feature 227 D11). `keep` carries the
+        # dwellings no other way comes within `WEB_REACH_FT` of, and a point that still reaches one of them - within
+        # `WAY_END_REACH_FT` (60 ft), the lane page's reach for a way reaching a farmhouse (`WEB_REACH_FT`, 100, until
+        # feature 328) - counts as serving however far it is from anything else: a dangling end is a blemish on the drawing, an unreached
+        # farmhouse breaks the map's own rule, and tightening both at once stranded cohort seed 39. It is measured
+        # to the house's CENTER because that is what `farmhouses_reach_a_way` - the rule being protected here -
+        # measures; arrival at a steading is the fourth clause of `end_serves`, at its own much tighter distance.
+        if any(math.dist(q, h) <= WAY_END_REACH_FT for h in keep):
+            return True
+        # ...counting no way the run's OTHER end stands on (settlement-review of Mizuguchi, feature 261): a lane that left the
+        # connector and ran 61 ft past its house counted as reaching the connector it had left
+        return end_serves(q, segs if other is None else [sg for sg in segs if seg_dist(other[0], other[1], sg[0], sg[1]) > _TOUCH_GAP], houses, ground, steadings)
+
+    out = list(run)
+    while len(out) > 2 and not serves(out[-1], out[0]):
+        out.pop()
+    while len(out) > 2 and not serves(out[0], out[-1]):
+        out.pop(0)
+    # A TWO-POINT ARM HAS NO VERTEX TO POP, and the skeleton's arms are straight lines: popping stops at two
+    # points, so both of Inashiro's arms kept ends 81-97 ft from the nearest house however hard this trimmed.
+    # Walk the end IN along its own last segment instead, four feet at a time, to the first point that serves.
+    # An arm no point of which serves reaches nothing at all and is handed back too short to draw, for the
+    # caller to drop - which is the honest answer for a way with nothing at either end.
+    #
+    # UNCONDITIONAL SINCE FEATURE 227. This was guarded by `if end_reach is not None`, which is to say it ran
+    # for every caller that asked the gate's bar and not for the private default - and once all four callers
+    # asked the bar, the guard only ever read True. It is the same walk for every way on the map now.
+    for _ in range(2):
+        while len(out) >= 2 and not serves(out[-1], out[0]):
+            _a, _b = out[-2], out[-1]
+            _d = math.dist(_a, _b)
+            if _d <= 4.0:
+                out.pop()
+                continue
+            _t = (_d - 4.0) / _d
+            out[-1] = (_a[0] + (_b[0] - _a[0]) * _t, _a[1] + (_b[1] - _a[1]) * _t)
+        out.reverse()
+    if len(out) < 2 or not serves(out[0], out[-1]) or not serves(out[-1], out[0]):
+        return list(out[:1])
+
+    def by_house(q: Pt, other: Pt) -> list[Pt] | None:
+        # the houses an end is served by, or None when it has arrived at a way, the field or a steading - a way OTHER than
+        # the one the run's far end already stands on (settlement-review of Mizuguchi, feature 261: a lane ran 61 ft past
+        # its house into the grass, and counted as arrived because it was still within reach of the connector it left)
+        _left = [sg for sg in segs if seg_dist(other[0], other[1], sg[0], sg[1]) > _TOUCH_GAP]
+        if end_serves(q, _left, (), ground, steadings):
+            return None
+        return [h for h in houses if math.dist(q, h) <= WAY_END_REACH_FT] + [h for h in keep if math.dist(q, h) <= WAY_END_REACH_FT]
+
+    for _ in range(2):
+        near, far = by_house(out[-1], out[0]), by_house(out[0], out[-1])
+        # A TREAD COMES FROM SOMEWHERE ELSE: when the other end is served by nothing but these same houses, the
+        # run is a short way beside them, and cutting both ends toward one house would leave no way at all.
+        if near is not None and (far is None or any(h not in near for h in far)):
+            out = _stop_at_closest_approach(out, near)
+        out.reverse()
+    return out
+
+
+def _stop_at_closest_approach(run: Poly, near: Sequence[Pt]) -> Poly:
+    """An end served only by a HOUSE stops where the tread is nearest that house, not past it.
+
+    THE ROAD TO NOWHERE (GM 2026-09-27, Inashiro): the skeleton's spine passed its last farmhouse and walked on
+    another 45 ft into the windbreak, and every rule called that end served because it was still within
+    `WAY_END_REACH_FT` of the house's center. A tread goes TO a house; once it is walking away from every house
+    it could be serving, the rest is a way into the woods. So the last segment is cut at the foot of the
+    perpendicular from the house it last approaches, and a segment that moves away from all of them is dropped.
+    An end that meets a way, the field or a steading's built ground is the caller's to leave alone - it has
+    arrived somewhere. Cuts under 4 ft are left, the same grain as the walk in `_trim_to_service`.
+
+    Research: no road to nowhere - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: cut at the house's closest approach"""
+    out = list(run)
+    while near and len(out) >= 2:
+        a, b = out[-2], out[-1]
+        d2 = (b[0] - a[0]) ** 2 + (b[1] - a[1]) ** 2
+        if d2 <= 0.0:
+            break
+        t = max(min(1.0, ((h[0] - a[0]) * (b[0] - a[0]) + (h[1] - a[1]) * (b[1] - a[1])) / d2) for h in near)
+        if (1.0 - t) * math.sqrt(d2) <= 4.0:
+            break
+        if t > 0.0:
+            out[-1] = (a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t)
+            break
+        if len(out) == 2:
+            break  # the whole tread walks away from the house: its OTHER end is the arrival, and that end is kept
+        out.pop()
+    return out
+
+
+def _nearest_seg(q: Pt, segs: Sequence[tuple[Pt, Pt]]) -> tuple[float, tuple[Pt, Pt] | None]:
+    """The distance from `q` to the way network, and WHICH segment of it - the two are one answer.
+
+    Returned together on purpose: a caller that finds the distance and then re-derives the segment is
+    two expressions that can disagree, which is the skill's standing rule about a diagnostic that
+    restates what it observed."""
+    best, at = float("inf"), None
+    for a, b in segs:
+        d = seg_dist(q[0], q[1], a, b)
+        if d < best:
+            best, at = d, (a, b)
+    return best, at
+
+
+def _net_reach(path: Poly, segs: Sequence[tuple[Pt, Pt]]) -> float:
+    """How near a candidate path comes to the EXISTING way network, at its nearest point."""
+    return min(seg_dist(q[0], q[1], a, b) for q in path for a, b in segs)
+
+
+def push_out_of(poly: Poly, p: Pt, margin: float) -> Pt:
+    """Move `p` OUTSIDE `poly` by `margin`, on the normal of the outline EDGE nearest to it.
+
+    Shared by the field spur's tip and the connector's route, which had the same defect for the same
+    reason: both were pushed clear along one fixed map-wide direction (the seat's outward normal),
+    which is only the right way out where the outline happens to run across it - so a spur tip
+    finished 28 px inside the standing water. Projecting onto the nearest EDGE (not the nearest
+    VERTEX - a point deep inside a lobe can have its nearest vertex right round the far side, and
+    stepping out from there is a detour, not a fix) puts the way exactly where a track meeting a
+    field goes: on the bund, just outside the crop. A point already clear is returned untouched, so
+    this never drags a way back in."""
+    ring = list(poly)
+    n = len(ring)
+    best: tuple[float, Pt, Pt, Pt] | None = None
+    for k in range(n):
+        a, b = ring[k], ring[(k + 1) % n]
+        q = seg_closest(p[0], p[1], a, b)
+        d = math.hypot(q[0] - p[0], q[1] - p[1])
+        if best is None or d < best[0]:
+            best = (d, q, a, b)
+    assert best is not None  # a ring always has an edge
+    d, q, a, b = best
+    inside = point_in_poly(p[0], p[1], ring)
+    if not inside and d > margin:
+        return p
+    nx, ny = unit(-(b[1] - a[1]), b[0] - a[0])
+    cen = centroid(poly)
+    if nx * (q[0] - cen[0]) + ny * (q[1] - cen[1]) < 0:
+        nx, ny = -nx, -ny
+    return (q[0] + nx * margin, q[1] + ny * margin)
+
+
+def polyline_len(pts: Poly) -> float:
+    return sum(math.hypot(pts[i + 1][0] - pts[i][0], pts[i + 1][1] - pts[i][1]) for i in range(len(pts) - 1))

@@ -93,7 +93,7 @@ def reason_ok(reason: str) -> bool:
 
 def bypass_record(root: pathlib.Path, where: str, why: str) -> None:
     """The reason ships with the push: `dev/bypass-log/` is in the repository and `make audit` lists it."""
-    log = root / ".claude" / "skills" / "diagram" / "dev" / "bypass-log"
+    log = root / "dev" / "bypass-log"
     if not log.parent.is_dir():
         return
     now = datetime.datetime.now(datetime.UTC)

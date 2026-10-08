@@ -85,7 +85,7 @@ GUIDANCE = f"""
   Read, in this order:
     - .specify/memory/constitution.md, Principle X clause 13 (the rule and both carve-outs)
     - CLAUDE.md, "Files stay at human scale" (the operational mirror)
-    - .claude/skills/diagram/l7r/diagram/settlement/structures/ - a worked exemplar: its
+    - l7r/diagram/settlement/structures/ - a worked exemplar: its
       __init__.py composes the sub-mixins back into the one class its caller imports, and its
       CLAUDE.md is the index format. Seventeen more packages in this tree follow it.
 

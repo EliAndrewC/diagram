@@ -18,13 +18,12 @@ MAKE_TARGET=${MAKE_TARGET:-done}
 CI_SCOPE=${CI_SCOPE:-reference}
 PARK_TIMEOUT_S=${PARK_TIMEOUT_S:-120}
 BUILD_UUID=${CODEBUILD_BUILD_ID##*:}
-SKILL=.claude/skills/diagram
 
 echo "== fetch: $GITHUB_REPO @ $MAILBOX ($GIT_SHA), mode=$MODE target='$MAKE_TARGET' scope=$CI_SCOPE"
 # the buildspec's install phase already cloned once (to fetch this script); reuse it - a blob:none
 # clone of this repository measured ~56 s on the first real build, and paying it twice is waste
 # THE CACHE ARRIVES BEFORE THE SOURCE (feature 175). CodeBuild restores its S3 cache during
-# DOWNLOAD_SOURCE, and the cached paths live under `repo/.claude/skills/diagram/.gencache/` - so on any
+# DOWNLOAD_SOURCE, and the cached paths live under `repo/.gencache/` - so on any
 # build after the first, `repo/` ALREADY EXISTS holding nothing but the generation cache. `mv bootstrap
 # repo` then moves bootstrap INSIDE it as `repo/bootstrap` instead of renaming, and `cd repo` lands in a
 # directory with no `.git`: build a48b730d died at the next git call with exit 128, one billed minute.
@@ -104,13 +103,13 @@ echo "== go received after ${waited}s"
 # operator enables from a terminal; until it exists - and whenever the dispatcher finds no image
 # marker - the build runs on aws/codebuild/standard and installs what the gate needs here: Python
 # 3.14 through uv (prebuilt, seconds), the two pinned lockfiles, resvg from its release tarball,
-# and the DejaVu faces. Measured in timings.md beside the image's provisioning time.
+# and the DejaVu faces. Measured in dev/timings.md beside the image's provisioning time.
 if ! python3 -c 'import sys; sys.exit(0 if sys.version_info[:2] == (3, 14) else 1)' 2>/dev/null || ! command -v resvg >/dev/null; then
   echo "== bootstrap (stock image): python 3.14 via uv, lockfiles, resvg, fonts"
   t0=$(date +%s)
   curl -LsSf https://astral.sh/uv/install.sh | sh >/dev/null 2>&1; export PATH="$HOME/.local/bin:$PATH"
   uv venv -q --python 3.14 /tmp/venv && . /tmp/venv/bin/activate
-  uv pip install -q -r "$SKILL/requirements.txt" -r "$SKILL/requirements-dev.txt"
+  uv pip install -q -r "requirements.txt" -r "requirements-dev.txt"
   curl -sSL "https://github.com/linebender/resvg/releases/download/v0.46.0/resvg-linux-x86_64.tar.gz" | tar -xz -C /usr/local/bin resvg
   (apt-get install -y -qq fonts-dejavu-core fonts-dejavu-extra >/dev/null 2>&1 || (apt-get update -qq >/dev/null && apt-get install -y -qq fonts-dejavu-core fonts-dejavu-extra >/dev/null))
   echo "== bootstrap done in $(( $(date +%s) - t0 ))s: $(python3 --version), resvg $(resvg --version)"
@@ -123,9 +122,8 @@ tree=$(git rev-parse 'HEAD^{tree}')
 echo "== merged main $main_sha; tree $tree"
 
 echo "== gate: make $MAKE_TARGET  (nproc $(nproc))"
-cd "$SKILL"
 export SPECIFY_FEATURE="${SPECIFY_FEATURE:-}"
-if [ -z "$SPECIFY_FEATURE" ]; then SPECIFY_FEATURE=$(ls -d ../../../specs/[0-9]*/ 2>/dev/null | sort | tail -1 | xargs -r basename); export SPECIFY_FEATURE; fi
+if [ -z "$SPECIFY_FEATURE" ]; then SPECIFY_FEATURE=$(ls -d specs/[0-9]*/ 2>/dev/null | sort | tail -1 | xargs -r basename); export SPECIFY_FEATURE; fi
 t0=$(date +%s)
 set +e
 # shellcheck disable=SC2086
@@ -133,15 +131,14 @@ make --no-print-directory $MAKE_TARGET </dev/null
 rc=$?
 set -e
 echo "== gate exit $rc after $(( $(date +%s) - t0 ))s"
-cd ../../..
 
 # artifacts: perf snapshots (a FULL run took both bookends in-build) and any operation report
-if ls "$SKILL"/dev/perf-log/*.json >/dev/null 2>&1; then
-  for f in $(git status --porcelain --untracked-files=all -- "$SKILL/dev/perf-log" | awk '{print $2}'); do
+if ls dev/perf-log/*.json >/dev/null 2>&1; then
+  for f in $(git status --porcelain --untracked-files=all -- "dev/perf-log" | awk '{print $2}'); do
     aws s3 cp --quiet "$f" "s3://$CI_BUCKET/artifacts/$BUILD_UUID/perf-log/$(basename "$f")"
   done
 fi
-if [ -d "$SKILL/dev/ci-report" ]; then aws s3 cp --quiet --recursive "$SKILL/dev/ci-report" "s3://$CI_BUCKET/artifacts/$BUILD_UUID/report/"; fi
+if [ -d "dev/ci-report" ]; then aws s3 cp --quiet --recursive "dev/ci-report" "s3://$CI_BUCKET/artifacts/$BUILD_UUID/report/"; fi
 
 [ "$rc" -eq 0 ] || { echo "== gate RED - no record, nothing pushed"; exit "$rc"; }
 
@@ -160,7 +157,7 @@ fi
 # THE RECORD IS KEYED BY THE ENGINE CONTENT the gate tested (a hash over the engine paths' blobs in
 # the merge tree - the same function the dispatcher looks up with), not by the whole tree: a docs
 # change after a green build must not throw the verification away (GM 2026-08-25).
-key=$(cd "$SKILL" && make --no-print-directory engine-key REF=HEAD)
+key=$(make --no-print-directory engine-key REF=HEAD)
 echo "== record: verified/$key.json ($CI_SCOPE; tree $tree)"
 printf '{"tree":"%s","engine_key":"%s","build_id":"%s","project":"%s","scope":"%s","utc":"%s","main":"%s","work":"%s","target":"%s"}\n' \
   "$tree" "$key" "$CODEBUILD_BUILD_ID" "$MODE" "$CI_SCOPE" "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$main_sha" "$GIT_SHA" "$MAKE_TARGET" > /tmp/verified.json

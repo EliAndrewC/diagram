@@ -30,7 +30,7 @@ pretool() {
   escape_or_refuse new-file RESERVE_OK unreserved "$NF_HERE" && exit 0
   kind=${verdict%%$'\t'*}; key=${verdict#*$'\t'}
   guard_log new-file blocked "$(guard_cmd)" unreserved
-  printf 'BLOCKED: a new %s file takes a RESERVED prefix, so parallel queues never collide:\n    make reserve KIND=%s KEY="%s"   (in .claude/skills/diagram) - it writes the stub; then fill that file\n' "$kind" "$kind" "$key" >&2
+  printf 'BLOCKED: a new %s file takes a RESERVED prefix, so parallel queues never collide:\n    make reserve KIND=%s KEY="%s"   (at the repository root) - it writes the stub; then fill that file\n' "$kind" "$kind" "$key" >&2
   exit 2
 }
 

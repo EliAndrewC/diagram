@@ -49,7 +49,6 @@ from pathlib import Path
 # The trees whose directories can be reached by an import. `l7r` is a namespace portion and `tests`
 # is a package rooted at the skill dir, so both are on the import path during a run.
 IMPORTABLE = ("l7r", "tests")
-SKILL = Path(".claude/skills/diagram")
 # Never descend into these: `.git` is enormous and irrelevant, and `.clones` holds other sessions'
 # checkouts, which are not this tree's business and would multiply every finding by the clone count.
 SKIP = {".git", ".clones", "node_modules", ".venv", "venv", "__pycache__"}
@@ -59,7 +58,7 @@ def stale_dirs(root: Path) -> list[Path]:
     """Directories under the importable trees whose only remaining contents are `__pycache__`."""
     found: list[Path] = []
     for tree in IMPORTABLE:
-        base = root / SKILL / tree
+        base = root / tree
         if not base.is_dir():
             base = root / tree  # the checker also runs against a bare skill dir (the selftest does)
         if not base.is_dir():
@@ -107,7 +106,7 @@ def report(found: list[Path], root: Path) -> None:
 def selftest() -> int:
     with tempfile.TemporaryDirectory() as td:
         root = Path(td)
-        skill = root / SKILL
+        skill = root
         # (1) a genuinely stale directory - source deleted, bytecode left behind
         dead = skill / "l7r" / "diagram" / "gone"
         (dead / "__pycache__").mkdir(parents=True)

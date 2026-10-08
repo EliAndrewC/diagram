@@ -31,14 +31,14 @@ check() { local rc; rc=$(run "$2" "${3:-x}" "${4:-Edit}")
   else echo "  FAIL    expected $1 for $2 (rc=$rc)"; FAIL=$((FAIL+1)); fi; }
 
 echo "1. IT FIRES on the files that ARE guards (FR-015)"
-check blocked "$ROOT/.claude/skills/diagram/Makefile"
+check blocked "$ROOT/Makefile"
 check blocked "$ROOT/scripts/gate-hooks.sh"
 check blocked "$ROOT/scripts/make-only-hooks.sh"
 check blocked "$ROOT/scripts/guard-file-hooks.sh"
 check blocked "$ROOT/.claude/settings.json"
 check blocked "$ROOT/.claude/settings.json" "x" "Write"
-check blocked "$ROOT/.claude/skills/diagram/dev/switches.json"
-check blocked "$ROOT/.claude/skills/diagram/dev/switches.json" "x" "Write"
+check blocked "$ROOT/dev/switches.json"
+check blocked "$ROOT/dev/switches.json" "x" "Write"
 
 echo
 echo "2. IT STAYS QUIET on everything else (FR-016)"
@@ -46,19 +46,19 @@ check ok "$ROOT/.claude/agents/frontend-review.md"
 check ok "$ROOT/.claude/agents/spec-fidelity.md"
 check ok "$ROOT/scripts/test-gate-hooks.sh"
 check ok "$ROOT/scripts/test-make-only-hooks.sh"
-check ok "$ROOT/.claude/skills/diagram/l7r/diagram/hamletgen/ways.py"
-check ok "$ROOT/.claude/skills/diagram/tests/test_invocation.py"
+check ok "$ROOT/l7r/diagram/hamletgen/ways.py"
+check ok "$ROOT/tests/test_invocation.py"
 check ok "$ROOT/CLAUDE.md"
 check ok "$ROOT/specs/127-gated-make-commands/spec.md"
 
 echo
 echo "3. THE ESCAPE WORKS, and puts the intent in the diff"
-check ok "$ROOT/.claude/skills/diagram/Makefile" "GUARD_EDIT_OK - adding a target for a new operation"
+check ok "$ROOT/Makefile" "GUARD_EDIT_OK - adding a target for a new operation"
 check ok "$ROOT/scripts/gate-hooks.sh" "GUARD_EDIT_OK - it was firing on correct work"
 
 echo
 echo "4. THE REFUSAL TELLS YOU WHAT TO DO"
-rc=$(run "$ROOT/.claude/skills/diagram/Makefile")
+rc=$(run "$ROOT/Makefile")
 if [ "$rc" -ne 0 ] && grep -q "GUARD_EDIT_OK" "$HOOK_ERR" && grep -q "fires on correct work" "$HOOK_ERR"; then
   echo "  ok      names the escape and distinguishes legitimate edits"; PASS=$((PASS+1))
 else echo "  FAIL    refusal did not carry the escape or the categories"; FAIL=$((FAIL+1)); fi
@@ -69,7 +69,7 @@ echo
 echo "5. A RECIPE COMMENT THAT WOULD RUN IS REFUSED (feature 212)"
 TAB=$(printf '\t')
 hazard() { # label, expected, new_string (Edit) - against the skill Makefile
-  local rc; rc=$(run "$ROOT/.claude/skills/diagram/Makefile" "$3" Edit)
+  local rc; rc=$(run "$ROOT/Makefile" "$3" Edit)
   if { [ "$2" = ok ] && [ "$rc" -eq 0 ]; } || { [ "$2" = blocked ] && [ "$rc" -ne 0 ]; }; then
     echo "  ok      $1"; PASS=$((PASS+1))
   else echo "  FAIL    $1 (expected $2, rc=$rc)"; sed 's/^/          /' "$HOOK_ERR" | head -3; FAIL=$((FAIL+1)); fi
@@ -85,36 +85,40 @@ hazard "a backtick in a make COMMENT line (#) is not a recipe" ok "# GUARD_EDIT_
 hazard "a backtick in a recipe COMMAND is the session's business" ok "${TAB}@echo \"GUARD_EDIT_OK: \$\$(date) runs on purpose\""
 RC=$(ev "$ROOT/other/Makefile" "${TAB}: \"a \`backtick\` comment\"" Write | "$HOOK" pretool >/dev/null 2>&1; echo $?)
 [ "$RC" -ne 0 ] && { echo "  ok      any Makefile, by Write too"; PASS=$((PASS+1)); } || { echo "  FAIL    a Write to another Makefile was not checked"; FAIL=$((FAIL+1)); }
-run "$ROOT/.claude/skills/diagram/Makefile" "${TAB}: \"\`x\`\"" Edit >/dev/null
+run "$ROOT/Makefile" "${TAB}: \"\`x\`\"" Edit >/dev/null
 grep -q "There is no escape token" "$HOOK_ERR" && { echo "  ok      the refusal says there is no escape and how to write it"; PASS=$((PASS+1)); } || { echo "  FAIL    the refusal is unhelpful"; FAIL=$((FAIL+1)); }
 
 echo
 echo
 echo "6. THE ROSTER OF ROLLED HAMLETS IS A GUARD (feature 217), with its own Read-time context"
-ROSTER="$ROOT/.claude/skills/diagram/tests/rolls.py"
+ROSTER="$ROOT/tests/rolls.py"
 check blocked "$ROSTER"
 check blocked "$ROSTER" "x" "Write"
 check ok "$ROSTER" "GUARD_EDIT_OK: adding a roll row after make roll-audit showed its lines"
-check ok "$ROOT/.claude/skills/diagram/tests/test_rolls.py"   # the roster's TEST is ordinary source
+check ok "$ROOT/tests/test_rolls.py"   # the roster's TEST is ordinary source
 ctx=$(ev "$ROSTER" "" "Read" | "$HOOK" pretool 2>/dev/null)
 if printf '%s' "$ctx" | grep -q "roll-audit" && printf '%s' "$ctx" | grep -q "constitution VI" && printf '%s' "$ctx" | grep -q "tests/soak/"; then
   echo "  ok      the Read of the roster names the doctrine, make roll-audit and the three exits"; PASS=$((PASS+1))
 else echo "  FAIL    the roster's Read-time context is missing the doctrine or the command: $ctx"; FAIL=$((FAIL+1)); fi
-ctx=$(ev "$ROOT/.claude/skills/diagram/Makefile" "" "Read" | "$HOOK" pretool 2>/dev/null)
+ctx=$(ev "$ROOT/Makefile" "" "Read" | "$HOOK" pretool 2>/dev/null)
 if printf '%s' "$ctx" | grep -q "GUARD file" && ! printf '%s' "$ctx" | grep -q "roll-audit"; then
   echo "  ok      another guard's Read keeps the generic context"; PASS=$((PASS+1))
 else echo "  FAIL    the generic Read context changed: $ctx"; FAIL=$((FAIL+1)); fi
+# GUARD_EDIT_OK: feature 329 - the project Makefile is the one at the repository root; a Makefile below it is not the guard
+ctx=$(ev "$ROOT/specs/001-x/Makefile" "" "Read" | "$HOOK" pretool 2>/dev/null)
+if [ -z "$ctx" ]; then echo "  ok      a Makefile below the root is not the guard file"; PASS=$((PASS+1))
+else echo "  FAIL    a Makefile below the root was treated as the guard file: $ctx"; FAIL=$((FAIL+1)); fi
 
 echo
 # GUARD_EDIT_OK: 2026-09-26 - the Read reminder was RECORDED on every Read, guard file or not (4,662 of 4,681 entries
 # in two weeks were ordinary files that got no reminder). It records only when it said something.
 echo "7. A READ IS RECORDED ONLY WHEN IT WAS REMINDED"
 rm -rf "$GUARD_LOG_ROOT"/*
-ctx=$(ev "$ROOT/.claude/skills/diagram/l7r/diagram/settlement/hamletgen.py" "" "Read" | "$HOOK" pretool 2>/dev/null)
+ctx=$(ev "$ROOT/l7r/diagram/settlement/hamletgen.py" "" "Read" | "$HOOK" pretool 2>/dev/null)
 n=$(grep -rl read-reminder "$GUARD_LOG_ROOT" 2>/dev/null | wc -l)
 if [ -z "$ctx" ] && [ "$n" -eq 0 ]; then echo "  ok      an ordinary Read says nothing and records nothing"; PASS=$((PASS+1))
 else echo "  FAIL    an ordinary Read said '$ctx' or recorded $n entries"; FAIL=$((FAIL+1)); fi
-ev "$ROOT/.claude/skills/diagram/Makefile" "" "Read" | "$HOOK" pretool >/dev/null 2>&1
+ev "$ROOT/Makefile" "" "Read" | "$HOOK" pretool >/dev/null 2>&1
 n=$(grep -rl read-reminder "$GUARD_LOG_ROOT" 2>/dev/null | wc -l)
 if [ "$n" -eq 1 ]; then echo "  ok      a guard file's Read records its reminder"; PASS=$((PASS+1))
 else echo "  FAIL    a guard file's Read recorded $n entries, not 1"; FAIL=$((FAIL+1)); fi

@@ -41,7 +41,7 @@ def _logs(cwd: str) -> list[str]:
     for root in dict.fromkeys((top, mirror)):   # dedupe, order preserved
         if root:
             # recursive since 2026-10-02: the log is in month folders (dev/run-log/<YYYY-MM>/), flat entries still read
-            out.append(os.path.join(root, ".claude/skills/diagram/dev/run-log/**/*.json"))
+            out.append(os.path.join(root, "dev/run-log/**/*.json"))
     return out
 
 

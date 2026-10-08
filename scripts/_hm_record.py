@@ -22,13 +22,13 @@ import os
 import re
 import sys
 
-RECORD = os.path.join(".claude", "skills", "diagram", "research")
+RECORD = "research"
 # GUARD_EDIT_OK: feature 303 - the record's page directories are gone: the questions are one flat directory and the
 # registry the one page of fragments left, so an edit aimed at any built page is re-aimed among the questions (or the
 # registry's fragments), and a check reads a question's files by its number. A change of layout; nothing loosened.
 #: The glossary is the same kind of file in a different tree (feature 259): assembled from one file
 #: per term, read by the engine, and never hand-edited. One case here rather than a second guard.
-GLOSSARY = os.path.join(".claude", "skills", "diagram", "l7r", "diagram", "interactive", "assets", "glossary.json")
+GLOSSARY = os.path.join("l7r", "diagram", "interactive", "assets", "glossary.json")
 #: The questions, one stem each (feature 303), and the registry's fragments.
 QUESTIONS = "questions"
 _REGISTRY = "SOURCES.html"
@@ -119,7 +119,7 @@ def decide(tool: str, file_path: str, tool_input: dict, root: str) -> dict:
                            f"`make record` would overwrite it, and the fragments a session and every "
                            f"checking agent read would still say the old thing. A whole-file write "
                            f"cannot be routed to a fragment: edit the fragments, then run "
-                           f"`{_rebuild(rel)}` in .claude/skills/diagram."}
+                           f"`{_rebuild(rel)}` at the repository root."}
     old = str(tool_input.get("old_string", ""))
     holders = fragments_holding(page_dir, old, root)
     if len(holders) == 1:
@@ -159,7 +159,7 @@ def main() -> int:
             "additionalContext": (
                 f"{verdict['page']} is assembled from {os.path.dirname(verdict['fragment'])}/ and is "
                 f"never hand-edited, so this edit was re-aimed at the one fragment holding that text: "
-                f"{verdict['fragment']}. Run `make record` in .claude/skills/diagram afterwards to rebuild "
+                f"{verdict['fragment']}. Run `make record` at the repository root afterwards to rebuild "
                 f"the site (research/site/) from it."),
         }}
     print(json.dumps(verdict))

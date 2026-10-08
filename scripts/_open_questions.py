@@ -30,7 +30,6 @@ from collections.abc import Iterable, Sequence
 from dataclasses import dataclass, field
 from pathlib import Path
 
-SKILL = ".claude/skills/diagram"
 #: a question's page (feature 303): its number, its heading id, `.html` or `.drawing.html` - its notes beside it
 _FRAGMENT = re.compile(r"^\d{4}-[^.]+(?:\.drawing)?\.html$")
 #: a question's tags, on the line after its heading; a drawing page beside its research page states none
@@ -138,7 +137,7 @@ def subject_of(path: Path) -> str:
 
 
 def questions(root: Path) -> list[Question]:
-    base = root / SKILL / "research" / "questions"
+    base = root / "research" / "questions"
     out = []
     for path in sorted(base.glob("*.html")):
         if path.name.endswith((".notes.html", ".originals.html")) or not _FRAGMENT.match(path.name):
@@ -253,7 +252,7 @@ def outside_guesses(files: dict[str, str]) -> list[tuple[str, int, str]]:
 
 def tracked(root: Path) -> list[str]:
     """The skill's tracked files, relative to the skill."""
-    res = subprocess.run(["git", "-C", str(root / SKILL), "ls-files", "-z"], capture_output=True, text=True, check=True)
+    res = subprocess.run(["git", "-C", str(root), "ls-files", "-z"], capture_output=True, text=True, check=True)
     return [p for p in res.stdout.split("\0") if p]
 
 
@@ -263,14 +262,14 @@ def outside_files(root: Path, names: Iterable[str]) -> dict[str, str]:
         if _SKIP_OUTSIDE.search(rel):
             continue
         try:
-            out[rel] = (root / SKILL / rel).read_text(encoding="utf-8")
+            out[rel] = (root / rel).read_text(encoding="utf-8")
         except UnicodeDecodeError:  # a binary file (an image, a font) holds no label
             continue
     return out
 
 
 def _engine(root: Path):  # noqa: ANN202 - the class registry and the one Entry: resolver
-    skill = str(root / SKILL)
+    skill = str(root)
     if skill not in sys.path:
         sys.path.insert(0, skill)
     from l7r.diagram.interactive.classes import CLASSES
@@ -336,7 +335,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     entries = {k: [q["url"].rsplit("/", 1)[1].removesuffix(".html") for q in research_questions(", ".join(p for p in (fc.entry, fc.drawing) if p))] for k, fc in classes.items()}
     routes = class_routes(entries, qs)
     names = tracked(root)
-    engine = {rel: (root / SKILL / rel).read_text(encoding="utf-8") for rel in names if rel.startswith("l7r/") and rel.endswith(".py")}
+    engine = {rel: (root / rel).read_text(encoding="utf-8") for rel in names if rel.startswith("l7r/") and rel.endswith(".py")}
     open_qs = [q for q in qs if q.items]
     cites = cite_all(engine, open_qs, {q.anchor: heading_key(question_text(q.heading)) for q in open_qs})
     sys.stdout.write(report(qs, routes, cites, outside_guesses(outside_files(root, names))))

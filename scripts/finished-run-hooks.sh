@@ -326,7 +326,7 @@ PY
 
 report() { # report <clone> <mark|nomark> -> one line per finished run the session has not been told about
   local clone=$1 mark=$2 log seen newest utc target result seconds age now
-  log="$clone/.claude/skills/diagram/dev/run-log"
+  log="$clone/dev/run-log"
   [ -d "$log" ] || return 0
   seen="$clone/.git/finished-run.seen"
   # GUARD_EDIT_OK: 2026-10-02 - the run log is in month folders (dev/run-log/<YYYY-MM>/); `find`, not a glob, so the

@@ -16,7 +16,7 @@ Judges a DRAFT writeup the session is about to send the GM, item by item, and sa
 # Escalation check - is this actually worth the GM's attention?
 
 **Tier: Opus at medium effort, both pinned in the frontmatter (the tier table in
-`.claude/skills/diagram/tests/test_agent_models.py`, GM 2026-09-19): what deserves the GM's attention is judgment, so the model
+`tests/test_agent_models.py`, GM 2026-09-19): what deserves the GM's attention is judgment, so the model
 is Opus; the input is one short draft and the rubric is three tests, so the effort is medium.**
 
 You are reading a DRAFT. The session is about to send it to the GM, and your job is to cut from it

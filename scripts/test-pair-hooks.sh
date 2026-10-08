@@ -18,7 +18,7 @@ bad() { fail=$((fail+1)); echo "FAIL: $1"; }
 check() { if eval "$2"; then ok; else bad "$1"; fi; }
 
 TMP=$(mktemp -d); trap 'rm -rf "$TMP"' EXIT
-CLONE="$TMP/clone"; SKILL="$CLONE/.claude/skills/diagram"
+CLONE="$TMP/clone"; SKILL="$CLONE"
 mkdir -p "$SKILL/dev/bypass-log" "$CLONE/scripts" "$TMP/proj/sid-1/subagents"
 (cd "$CLONE" && git init -q)
 : > "$TMP/proj/sid-1.jsonl"
@@ -30,7 +30,7 @@ DIR="$TMP/proj/sid-1/subagents"
 # review is owed only when a pool manifest moved against main (GM 2026-09-12), and the two scripts that
 # decide it live beside the guard, so the fixture carries them and a moved manifest. `moved`/`unmoved`
 # switch the world between cases; every case below section 1 runs in the world it names.
-cp "$(dirname "$HOOK")/_review_owed.py" "$(dirname "$HOOK")/_review_snapshot.py" "$CLONE/scripts/"
+cp "$(dirname "$HOOK")/_review_owed.py" "$(dirname "$HOOK")/_review_snapshot.py" "$(dirname "$HOOK")/_moves.py" "$CLONE/scripts/"
 MAPDIR_F="$SKILL/pool/hamlets/testmap"
 # GUARD_EDIT_OK: feature 240 - a settlement-review dispatch now asks `_review_prereq.py` first, so the fixture
 # carries it, spec-lint (whose figure pattern it imports), a stub gate stamp (green while `.git/stub-gate-green`
@@ -416,9 +416,9 @@ GHOSTREV=$(printf '{"tool_name":"Agent","tool_input":{"subagent_type":"settlemen
 rm -f "$MIRROR/.git/pairing-state.json" "$MIRROR/.git/verification-state.json"
 check "the review refusal discloses it too" 'note_says "$GHOSTREV" | grep -q "could not be resolved"'
 printf '{"engine_key":"%s"}' "$KEY" > "$MIRROR/.git/verification-state.json"
-mkdir -p "$MIRROR/.claude/skills/diagram/pool/hamlets/m"
-printf '{"meta":{"name":"m"}}' > "$MIRROR/.claude/skills/diagram/pool/hamlets/m/m.json"   # a manifest, so a review IS owed there
-printf 'engine-key:\n\t@printf "%%s" %s\n' "$KEY" > "$MIRROR/.claude/skills/diagram/Makefile"
+mkdir -p "$MIRROR/pool/hamlets/m"
+printf '{"meta":{"name":"m"}}' > "$MIRROR/pool/hamlets/m/m.json"   # a manifest, so a review IS owed there
+printf 'engine-key:\n\t@printf "%%s" %s\n' "$KEY" > "$MIRROR/Makefile"
 GHOSTSTOP=$(printf '{"transcript_path":"%s","session_id":"ghost","cwd":"%s"}' "$TMP/proj/sid-1.jsonl" "$MIRROR")
 check "the half-open stop discloses it too" 'note_says "$GHOSTSTOP" stop | grep -q "could not be resolved"'
 check "a RESOLVED clone adds nothing" '! run_pretool "$GATE_FULL" | grep -q "could not be resolved"'

@@ -41,10 +41,12 @@ from collections.abc import Sequence
 from dataclasses import dataclass
 from pathlib import Path
 
-SKILL = ".claude/skills/diagram"
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from _moves import moved_only  # noqa: E402  (feature 329: a map or module the delta only moved is not new)
+
 TREES = ("pool", "legacy-hand-authored-pool")
 #: git pathspecs for every manifest in both pool trees (fnmatch without FNM_PATHNAME: `*` spans `/`)
-MANIFESTS = tuple(f"{SKILL}/{tree}/*/*/*.json" for tree in TREES)
+MANIFESTS = tuple(f"{tree}/*/*/*.json" for tree in TREES)
 #: the checks an occasion can owe, in the order a session dispatches them
 CHECKS = ("settlement-review", "building-review", "glyph-check", "size-audit", "fix-check")
 #: the declarable occasions and the check each owes (`new-program` owes two)
@@ -63,7 +65,7 @@ NOT_ELEMENTS = frozenset({"-", "place"})
 _DATA_KIND = re.compile(r'data-kind="([^"]+)"')
 _OCCASION = re.compile(r"^\s*-\s*(?P<kind>[a-z-]+)\s*:\s*(?P<arg>.+?)\s*$")
 #: drawing or placement code - a change here must declare its occasions (D2)
-_CODE = re.compile(rf"^{re.escape(SKILL)}/(l7r/.+\.py|(pool|legacy-hand-authored-pool)/.+\.(gen\.py|svg))$")
+_CODE = re.compile(r"^(l7r/.+\.py|(pool|legacy-hand-authored-pool)/.+\.(gen\.py|svg))$")
 
 
 @dataclass(frozen=True)
@@ -102,7 +104,7 @@ def pool_map_names(root: Path) -> list[str]:
     """Every map or sheet folder of both pool trees (feature 248 FR-001: a dispatch is counted against all of them)."""
     names: set[str] = set()
     for tree in TREES:
-        for d in (root / SKILL / tree).glob("*/*"):
+        for d in (root / tree).glob("*/*"):
             if d.is_dir() and ((d / f"{d.name}.json").is_file() or (d / f"{d.name}.gen.py").is_file() or (d / f"{d.name}.svg").is_file()):
                 names.add(d.name)
     return sorted(names)
@@ -112,7 +114,7 @@ def _folders(root: Path) -> list[Path]:
     """Every map/sheet folder, the live pool first (a check looks at a live map before a legacy one), then by name."""
     out: list[Path] = []
     for tree in TREES:
-        out += sorted(d for d in (root / SKILL / tree).glob("*/*") if d.is_dir())
+        out += sorted(d for d in (root / tree).glob("*/*") if d.is_dir())
     return out
 
 
@@ -123,7 +125,7 @@ def is_sheet(folder: Path) -> bool:
 
 def exempt(folder: Path) -> bool:
     """A hand-drawn Mode B map awaiting conversion owes no review; a Mode A sheet keeps its review wherever it lives (the GM's
-    ruling of 2026-10-01, feature 294, quoted in `dev/reviews.md`): a folder in the legacy tree that is not a Mode A sheet."""
+    ruling of 2026-10-01, feature 294, quoted in `docs/reviews.md`): a folder in the legacy tree that is not a Mode A sheet."""
     return folder.parent.parent.name == TREES[1] and not is_sheet(folder)
 
 
@@ -164,6 +166,15 @@ def sheet_kinds(text: str | None) -> set[str]:
     return set(_DATA_KIND.findall(text or ""))
 
 
+def legends_of(d: Path) -> set[str]:
+    """One folder's elements now: its manifest's ink classes, or its sheet's kinds."""
+    if (d / f"{d.name}.json").is_file():
+        return ink_classes((d / f"{d.name}.json").read_text(errors="replace"))
+    if (d / f"{d.name}.svg").is_file():
+        return sheet_kinds((d / f"{d.name}.svg").read_text(errors="replace"))
+    return set()
+
+
 def legends(root: Path) -> dict[str, set[str]]:
     """Each folder's elements now (`<name>` -> classes or kinds)."""
     out: dict[str, set[str]] = {}
@@ -197,6 +208,14 @@ def detected(root: Path, base: str) -> list[Unit]:
         if not (manifest.is_file() or svg.is_file() or (d / f"{d.name}.gen.py").is_file()):
             continue
         if not _existed(root, base, d):
+            # MOVED, NOT NEW (feature 329): a folder any of whose tracked files stood at the base with these same bytes was
+            # renamed by the delta (its renders are untracked, and a pointer comment in a hand-drawn sheet may have moved
+            # with it), so it is no new map or sheet. Its legend is taken as the one it had: a delta that both renames a
+            # folder and adds an element to it would not be seen here - none has, and a rename is its own commit.
+            tracked = [ln for ln in (_git(root, "ls-files", "--", f"{_rel(root, d)}/") or "").splitlines() if ln]
+            if tracked and moved_only(root, base, tracked):
+                before[d.name] = legends_of(d)
+                continue
             new_folders.append(d)
             continue
         if manifest.is_file():
@@ -325,7 +344,8 @@ def touched_code(root: Path, base: str) -> list[str]:
     """Drawing or placement code the delta touches (committed, staged or unstaged against the merge base)."""
     diff = (_git(root, "diff", "--name-only", base) or "") if base else ""
     untracked = _git(root, "ls-files", "--others", "--exclude-standard") or ""
-    return sorted(p for p in {*diff.splitlines(), *untracked.splitlines()} if p and _CODE.match(p) and "/tests/" not in p)
+    names = [p for p in {*diff.splitlines(), *untracked.splitlines()} if p and _CODE.match(p) and "/tests/" not in p]
+    return sorted(set(names) - moved_only(root, base, names))
 
 
 def check_declared(root: Path) -> str | None:

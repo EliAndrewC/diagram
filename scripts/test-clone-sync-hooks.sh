@@ -191,10 +191,10 @@ git init -q -b main "$FMAIN5"   # the push-time guards check against origin/main
 mkdir -p "$FMAIN5/.clones/.session-clones"
 git clone -q "$FMAIN5" "$FMAIN5/.clones/bare"
 cp -r "$HERE" "$FMAIN5/.clones/bare/scripts"   # the push runs review-gate.sh and check-duplicate-defs.py from the clone
-mkdir -p "$FMAIN5/.clones/bare/.claude/skills/x" && echo 'def a(): return 1' > "$FMAIN5/.clones/bare/.claude/skills/x/a.py"   # check-duplicate-defs refuses to scan nothing
+mkdir -p "$FMAIN5/.clones/bare/wip/x" && echo 'def a(): return 1' > "$FMAIN5/.clones/bare/wip/x/a.py"   # check-duplicate-defs refuses to scan nothing
 ( export GIT_AUTHOR_NAME=x GIT_AUTHOR_EMAIL=x@t GIT_COMMITTER_NAME=x GIT_COMMITTER_EMAIL=x@t
-  echo c1 > "$FMAIN5/.clones/bare/g"; git -C "$FMAIN5/.clones/bare" add g scripts .claude; git -C "$FMAIN5/.clones/bare" commit -qm c1 )
-( cd "$FMAIN5/.clones/bare" && python3 scripts/gate-stamp.py --write hooks )   # the commit changes scripts/, and a scripts/ change pushes only behind a green hooks-test stamp (GUARD_EDIT_OK: fixture follows the new gate)
+  echo c1 > "$FMAIN5/.clones/bare/g"; git -C "$FMAIN5/.clones/bare" add g scripts wip; git -C "$FMAIN5/.clones/bare" commit -qm c1 )
+( cd "$FMAIN5/.clones/bare" && python3 scripts/gate-stamp.py --write hooks && python3 scripts/gate-stamp.py --write diagram )   # the commit changes scripts/, and a scripts/ change pushes only behind a green hooks-test stamp (GUARD_EDIT_OK: fixture follows the new gate)
 [ -z "$(git -C "$FMAIN5" config --get receive.denyCurrentBranch || true)" ] || { echo "FAIL  fixture: main5 already had denyCurrentBranch"; FAILED=1; }
 OUT=$(cd "$FMAIN5/.clones/bare" && HOME=$TMP CLONE_MAIN="$FMAIN5" CLONE_GITHUB="$FMAIN5" "$SYNC" push 2>&1); RC=$?   # CLONE_GITHUB: the fixture main stands in for GitHub (GUARD_EDIT_OK: feature 130 made origin = GitHub)
 check "procedure push from a bare fixture (no updateInstead, no identity) succeeds" 0 "$RC"
@@ -318,8 +318,8 @@ git clone -q "$BM/remote.git" "$BM/main/.clones/work" 2>/dev/null
 git -C "$BM/main/.clones/work" config user.email t@t; git -C "$BM/main/.clones/work" config user.name t
 mkdir -p "$BM/main/.clones/.session-clones"
 printf '%s' "$BM/main/.clones/work" > "$BM/main/.clones/.session-clones/sid-bm"
-mkdir -p "$BM/main/.claude/skills/diagram/l7r/diagram"
-echo x > "$BM/main/.claude/skills/diagram/l7r/diagram/mod.py"
+mkdir -p "$BM/main/l7r/diagram"
+echo x > "$BM/main/l7r/diagram/mod.py"
 git -C "$BM/main" add -A; git -C "$BM/main" commit -qm engine
 git -C "$BM/main" push -q origin HEAD:main; git -C "$BM/main" fetch -q origin
 git -C "$BM/main/.clones/work" fetch -q origin
@@ -359,7 +359,7 @@ bm_silent "make quick"                  "a CLEAN clone is left to the stale-base
 # literal so it costs nothing on a hook that fires for every tool call; the TRUTH is derived here from
 # the skill Makefile, and any target that reaches pytest but is missing from the hook fails this
 # suite. Three hand-written rosters in this repository were each short by one within a day.
-DERIVED=$(python3 - "$HERE/../.claude/skills/diagram/Makefile" "$HOOK" <<'PYEOF'
+DERIVED=$(python3 - "$HERE/../Makefile" "$HOOK" <<'PYEOF'
 import re, sys
 mk = open(sys.argv[1], encoding="utf-8").read()
 hook = open(sys.argv[2], encoding="utf-8").read()

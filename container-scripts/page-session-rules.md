@@ -22,6 +22,7 @@ on. The research record's own `CLAUDE.md` still loads when you touch `research/`
 
 - Search before deciding and before writing "guess"; a record that is silent after a search gets an absence note
   saying what was searched and when.
+- Geography resolves China first, Japan as tiebreaker, and the GM's canon overrides both (`docs/research-doctrine.md`).
 - Two or more attested forms are a KNOB rolled per settlement from the seed, never a choice. A degree along a
   continuum is calibrated liberty.
 - Every rendering decision is one of four classes: historically accurate, deliberate deviation, map drawing

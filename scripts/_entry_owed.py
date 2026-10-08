@@ -56,10 +56,9 @@ import sys
 from collections.abc import Sequence
 from pathlib import Path
 
-SKILL = ".claude/skills/diagram"
-RESEARCH = f"{SKILL}/research"
-CLASSES = f"{SKILL}/l7r/diagram/interactive/classes"
-COMPOUND_KINDS = f"{SKILL}/l7r/diagram/interactive/compound_kinds"  # the Mode A modals (feature 262), a registry of their own
+RESEARCH = "research"
+CLASSES = "l7r/diagram/interactive/classes"
+COMPOUND_KINDS = "l7r/diagram/interactive/compound_kinds"  # the Mode A modals (feature 262), a registry of their own
 
 
 def _git(root: Path, *args: str) -> str | None:
@@ -81,7 +80,7 @@ def base_of(root: Path) -> tuple[str, str]:
 
 def _engine(root: Path):  # noqa: ANN202 - the engine's own modules, imported once
     """The engine's parsers, so this script has no second copy of them to drift from."""
-    skill = str(root / SKILL)
+    skill = str(root)
     if skill not in sys.path:
         sys.path.insert(0, skill)
     from l7r.diagram.interactive import sources

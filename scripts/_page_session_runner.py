@@ -72,7 +72,7 @@ def floor_flags(root: str) -> list[str]:
 
 
 def record_of(root: str) -> pathlib.Path:
-    return pathlib.Path(root) / ".claude" / "skills" / "diagram" / "research"
+    return pathlib.Path(root) / "research"
 
 
 def admit(root: str, brief: str) -> bool:

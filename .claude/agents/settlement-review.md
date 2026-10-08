@@ -25,7 +25,7 @@ Send the reads, greps and fetches you already know you need in ONE message.
 
 ## First stage
 
-From the clone's `.claude/skills/diagram/` (the clone holds `.git/review-snapshot/`; never `/diagram`, a read-only mirror):
+From the clone's root (the clone holds `.git/review-snapshot/`; never `/diagram`, a read-only mirror):
 `make review-paired-gate` must print `green`, else write NOT-REVIEWABLE naming it and stop. If the unit has a previous verdict,
 each finding it raised must be disposed of by a record that read the thing the finding is about (not a proxy); otherwise
 NOT-REVIEWABLE. Re-run the gate read immediately before your verdict. You keep the right to measure independently: anything you doubt, from the artifact.
@@ -50,7 +50,7 @@ specification is in `research/contents.json#tiers` and its pages (`towns.html`, 
 4. **On a new tier only** (`new-tier:`): does the fabric read? A quarter or district reads as fabric with a grain - rows, lanes,
    frontage - not a scatter of identical boxes; a street network reads as blocks fronting streets; a field system as a
    water-ordered grain. And list the tier's struck obligations (outcast and status zoning, the border rule, the Imperial-road
-   caption - `migration-plan.md`) with whether the generator carries each as a placement rule: an obligation it does not carry is
+   caption - `docs/migration-plan.md`) with whether the generator carries each as a placement rule: an obligation it does not carry is
    an error against the generator, not the map.
 
 ## What to ignore
@@ -77,7 +77,7 @@ XII): you have WebSearch; say what the record would have to show; two supportabl
 settlements"), not a choice; a degree along a continuum is calibrated liberty, a choice between forms is a knob.
 
 **Your last act is the verdict record**: findings to a JSON list of `{"id", "severity", "what"}` (F1, F2, ...), then from the
-clone's `.claude/skills/diagram/`:
+clone's root:
 
     make review-verdict UNIT=<unit> VERDICT=<PASS|NEEDS-WORK|NOT-REVIEWABLE> FINDINGS=<that file>
 

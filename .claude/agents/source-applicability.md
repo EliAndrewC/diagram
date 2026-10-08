@@ -54,7 +54,7 @@ The session applies your report with ONE command, `make apply-edits`, which read
 your reply (measured, research R9: every other check's findings were applied by command, and a page's source
 write-up fixes were the hand edits left - four on one page):
 
-    EDIT <the registry entry's ORIGIN path, as the MANIFEST gives it - `.claude/skills/diagram/research/sources/010-works-cited/NNNN-<key>.html`>
+    EDIT <the registry entry's ORIGIN path, as the MANIFEST gives it - `research/sources/010-works-cited/NNNN-<key>.html`>
     <<<
     the exact text now in the write-up
     ===

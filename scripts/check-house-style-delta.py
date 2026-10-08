@@ -37,6 +37,8 @@ import pathlib
 import re
 import subprocess
 import sys
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+from _moves import moved_only  # noqa: E402  (feature 329: a file the delta only moved changed no word)
 
 HERE = pathlib.Path(__file__).resolve().parent
 
@@ -118,6 +120,8 @@ def delta_lines(root: pathlib.Path) -> tuple[dict[str, list[tuple[int, str]]], s
             line_no += 1
         elif raw.startswith("-") and not raw.startswith("---"):
             removed.add(raw[1:].strip())
+    for moved in moved_only(root, base, list(added)):
+        added.pop(moved, None)
     for name in _git(root, "ls-files", "--others", "--exclude-standard").split("\n"):
         if not name.strip():
             continue
@@ -221,7 +225,7 @@ def selftest() -> None:
     words = brit_words()
     assert "colour" in words and "centre" in words and len(words) > 40, len(words)
     assert exempt_path("CLAUDE.md") and exempt_path("specs/236-x/request.md")
-    assert exempt_path(".claude/skills/diagram/dev/../../../.clones/other/x.md")
+    assert exempt_path("dev/../../../.clones/other/x.md")
     assert not exempt_path("docs/a.md")
     spans = exempt_spans("a `colour` span\n<blockquote>\nthe colour there\n</blockquote>\nplain colour\n", "docs/a.md")
     text = "a `colour` span\n<blockquote>\nthe colour there\n</blockquote>\nplain colour\n"

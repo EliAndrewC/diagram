@@ -52,7 +52,7 @@ The session applies your report with ONE command, `make apply-edits`, which read
 your reply (measured, research R8: seven drifted modals on one page were thirteen hand edits, each a turn re-reading
 a context of up to 171,000 tokens):
 
-    EDIT <the modal's file, as kind.txt names it - `.claude/skills/diagram/l7r/diagram/interactive/assets/modals/<hamlet|sheet>/<kind>.md`>
+    EDIT <the modal's file, as kind.txt names it - `l7r/diagram/interactive/assets/modals/<hamlet|sheet>/<kind>.md`>
     <<<
     the exact text now in the modal's file
     ===
@@ -78,7 +78,7 @@ With a bundle, open nothing outside it. Without one, every path you open is unde
 carry the entry, the class or the registry key you were sent to check.
 
 **What a modal is.** What the map says about a feature IS its modal file,
-`.claude/skills/diagram/l7r/diagram/interactive/assets/modals/<hamlet|sheet>/<kind>.md` (feature 319; a class docstring until then). Its `What:` and `Why:` are
+`l7r/diagram/interactive/assets/modals/<hamlet|sheet>/<kind>.md` (feature 319; a class docstring until then). Its `What:` and `Why:` are
 the two paragraphs a reader sees; `Note:` justifies its accuracy label; `Caveat:` is the liberty half.
 Its `Entry:` tag names the research section or sections it was written from. Only that prose is your
 subject - the data tags (`Name:`, `Covers:`, `Label:`, `Sources:`, `Entry:`) are not.

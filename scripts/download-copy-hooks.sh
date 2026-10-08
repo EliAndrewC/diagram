@@ -48,7 +48,7 @@ cat >&2 <<'TAIL'
 BLOCKED: writing the GM's copy of the download list.
 
 /host-l7r-repo/academic-sources/TO-DOWNLOAD.md is the GM's working copy: they tick its boxes as they work. The
-canonical list is .claude/skills/diagram/research/to-download.md (feature 313).
+canonical list is research/to-download.md (feature 313).
 
   - a source only the GM can fetch:   make download-add FILE=<draft.md>   (entries headed "### NEW. <the work>",
                                        appended at the end)

@@ -17,3 +17,7 @@ the skill entirely rather than keep a stub.
 The GM's second message (after renaming the session "Diagram unskillify"):
 
 Yes please make the speckit feature adn then do the refactor, taking the feature from start to finish.
+
+The GM's third message (mid-turn, while the spec was under review):
+
+As part of this, you should look at all of the .md files underneath .claude/skills/diagram/ and see which ones should be refactored, which ones shoulod be deleted, incorporated into other files or locations, etc.

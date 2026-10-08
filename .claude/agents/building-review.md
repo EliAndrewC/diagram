@@ -30,7 +30,7 @@ need in ONE message.
 
 ## First stage
 
-From the clone's `.claude/skills/diagram/` (never `/diagram`, a read-only mirror): `make review-paired-gate` must print
+From the clone's root (never `/diagram`, a read-only mirror): `make review-paired-gate` must print
 `green`, else write NOT-REVIEWABLE and stop. A previous verdict's findings must each be disposed of by a record that read the
 thing the finding is about. Re-run the gate read before your verdict.
 
@@ -38,7 +38,7 @@ thing the finding is about. Re-run the gate read before your verdict.
 
 The snapshot the dispatch names: `<sheet>.png` (Read it as an image first - what the GM sees), `<sheet>.svg` (3 px = 1 ft),
 `<sheet>.notes.md` (deliberate choices and the Review log are settled; a knob recorded one way and drawn another is a
-finding). `buildings/programs.md` (the type named by the notes' `**Program type**` line) and `buildings.md`.
+finding). `docs/buildings/programs.md` (the type named by the notes' `**Program type**` line) and `docs/buildings.md`.
 `make pack-audit ARGS=<svg>` reports coverage, the largest vacant rectangles and the aligned gaps - numbers for you to judge.
 
 ## What you judge

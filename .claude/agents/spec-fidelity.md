@@ -30,7 +30,7 @@ imagination.
 You run in one of the modes below. The caller says which.
 
 **Tier: Opus at high effort, both pinned in the frontmatter (the tier table in
-`.claude/skills/diagram/tests/test_agent_models.py`, GM 2026-09-19).** Weighing a specification, an exception or a plan against
+`tests/test_agent_models.py`, GM 2026-09-19).** Weighing a specification, an exception or a plan against
 the GM's own words is judgment, and the verdict gates a push; a round after the first is a narrower job
 and runs on the twin (MODE 3 below).
 
@@ -196,8 +196,7 @@ You are given: the GM's `request.md` VERBATIM, the accepted `spec.md`, and `plan
         "class": "within|narrowing", "ruling": "LEGITIMATE|NOT LEGITIMATE" (narrowing only), "why": "..."}],
         "verdict": "CLEAR|BLOCKED"}
 
-   then `make plan-verdict F=NNN FILE=<that file> AS=spec-fidelity`, run from the clone's `.claude/skills/diagram` (the repository
-   root's Makefile does not forward it). The verdict is DERIVED by the
+   then `make plan-verdict F=NNN FILE=<that file> AS=spec-fidelity`, run from the clone's root. The verdict is DERIVED by the
    target (BLOCKED when any narrowing decision is NOT LEGITIMATE) and an input that disagrees with its
    own rulings is refused. Only this agent passes `AS=spec-fidelity`; nothing distinguishes the shells,
    so the declaration is recorded rather than proven.

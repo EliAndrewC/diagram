@@ -53,12 +53,11 @@ SYNC_LOCK_WAIT=${SYNC_LOCK_WAIT:-30}
 RENDER_RUNNING=$MAIN/.clones/.render-sync.running   # the runner's own lock: one background render-sync at a time
 RENDER_LOG=$MAIN/.clones/.render-sync.log
 RENDER_STATUS=$MAIN/.clones/.render-sync.status     # "ok <when> at <tip>" or "FAILED <when> exit <rc> at <tip>"
-POOL=.claude/skills/diagram/pool
+POOL=pool
 # The FROZEN tree is checked alongside it: render-sync must never rewrite an exhibit, and the
 # dirty-pool warning below is what would say so (feature 161).
-LEGACY_POOL=.claude/skills/diagram/legacy-hand-authored-pool
-SKILL_DIR=.claude/skills/diagram
-RENDER_CACHE_MOD=l7r.diagram.pipeline.render_cache   # run as a MODULE from SKILL_DIR: it imports its package siblings relatively
+LEGACY_POOL=legacy-hand-authored-pool
+RENDER_CACHE_MOD=l7r.diagram.pipeline.render_cache   # run as a MODULE from the root: it imports its package siblings relatively
 
 case "$ROOT" in
   "$MAIN") die "this is MAIN, not a clone - the procedure runs from a session clone (CLAUDE.md 'Session clones')" ;;
@@ -136,8 +135,8 @@ ensure_github_origin() {
     fi
   done
   export GIT_ASKPASS="$ROOT/scripts/git-askpass-token.sh" GIT_TERMINAL_PROMPT=0
-  if [ -z "${GITHUB_TOKEN:-}" ] && [ -f "$ROOT/$SKILL_DIR/l7r/diagram/ci/config.py" ]; then
-    GITHUB_TOKEN=$(cd "$ROOT/$SKILL_DIR" && python3 -c "import sys; from pathlib import Path; from l7r.diagram.ci.config import load_secrets; print(load_secrets(Path(sys.argv[1])).github_pat)" "$ROOT" 2>/dev/null || true)
+  if [ -z "${GITHUB_TOKEN:-}" ] && [ -f "$ROOT/l7r/diagram/ci/config.py" ]; then
+    GITHUB_TOKEN=$(cd "$ROOT" && python3 -c "import sys; from pathlib import Path; from l7r.diagram.ci.config import load_secrets; print(load_secrets(Path(sys.argv[1])).github_pat)" "$ROOT" 2>/dev/null || true)
     export GITHUB_TOKEN
   fi
 }
@@ -153,6 +152,9 @@ mirror_refresh() { # [wait-seconds]: with one, returns 75 when the lock stays bu
   if [ -n "${1:-}" ]; then flock -E 75 -w "$1" "$LOCK" env M="$MAIN" U="$GITHUB_URL" sh -c "$refresh" || rc=$?
   else flock "$LOCK" env M="$MAIN" U="$GITHUB_URL" sh -c "$refresh" || rc=$?; fi
   [ "$rc" = 75 ] && [ -n "${1:-}" ] && return 75
+  # The mirror's own artifacts follow the project to the root after the fast-forward that moved it (feature 329,
+  # FR-008): render-sync's renders, the pool index, the built record site. Idempotent and quiet when nothing is left.
+  [ "$rc" = 0 ] && "$(dirname "${BASH_SOURCE[0]}")/_layout_carry.sh" "$MAIN"
   [ "$rc" = 0 ] \
     || die "mirror $MAIN cannot fast-forward to GitHub main - someone committed there by hand (main is a MIRROR, nobody's workspace). Inspect 'git -C $MAIN log origin/main..HEAD' and move that work into a clone."
   # GUARD_EDIT_OK: feature 169 - `--ff-only` DOES NOT CATCH THE COMMON CASE, and the documentation
@@ -189,17 +191,17 @@ It belongs to whoever made it - do NOT reset it unless it is yours, because the 
 # the dependency state - so a seed at the wrong commit, or from a tree that differs by one function,
 # simply misses and re-rolls. That is why the sibling's HEAD is checked but nothing is trusted.
 seed_roll_cache() {
-  local cache="$ROOT/.claude/skills/diagram/.gencache"
+  local cache="$ROOT/.gencache"
   [ -d "$cache" ] && return 0                      # already has one: the common case, costs one test
   local head sib_head sib
   head="$(git -C "$ROOT" rev-parse HEAD 2>/dev/null)" || return 0
   for sib in "$(dirname "$ROOT")"/*/; do
     [ "${sib%/}" = "$ROOT" ] && continue
-    [ -d "$sib/.claude/skills/diagram/.gencache" ] || continue
+    [ -d "$sib/.gencache" ] || continue
     sib_head="$(git -C "$sib" rev-parse HEAD 2>/dev/null)" || continue
     [ "$sib_head" = "$head" ] || continue
     mkdir -p "$(dirname "$cache")" 2>/dev/null || return 0   # the skill dir exists in any real clone; a fixture may not have it
-    cp -a "$sib/.claude/skills/diagram/.gencache" "$cache" 2>/dev/null || return 0
+    cp -a "$sib/.gencache" "$cache" 2>/dev/null || return 0
     echo "sync-with-main: seeded the roll cache from $(basename "${sib%/}") (same commit) - a cold clone pays ~2 min re-rolling maps"
     return 0
   done
@@ -230,7 +232,11 @@ sync_in() { # [--mirror-only] [--background-render]
   fi
   seed_roll_cache
   if [ -n "$mirror_only" ]; then clone_index_refresh; echo "sync-with-main: mirror refreshed from GitHub main (clone left alone - mid-task)"; return 0; fi
-  git pull --no-rebase origin main
+  # merge.directoryRenames: a file a clone added under a directory main renamed follows the rename instead of
+  # stopping the merge (feature 329 moved the whole project; research.md R5 measured both outcomes). The global git
+  # config sets it too, for the clones whose own copy of this script predates the move.
+  git -c merge.directoryRenames=true pull --no-rebase origin main
+  "$(dirname "${BASH_SOURCE[0]}")/_layout_carry.sh" "$ROOT"   # this clone's artifacts follow the move (FR-008)
   clone_index_refresh
   clone_page_refresh
   # No render pull-in anymore (GM 2026-07-22): its old rationale was that a clone's stale renders
@@ -247,9 +253,9 @@ sync_in() { # [--mirror-only] [--background-render]
 # exactly where a WIP index matters) through the skill's `pool-index-if-stale`, whose `find -newer`
 # check makes a no-change turn cost milliseconds. Never fatal: a broken index must not stop a sync.
 clone_index_refresh() {
-  [ -f "$ROOT/$SKILL_DIR/Makefile" ] || return 0
-  ( cd "$ROOT/$SKILL_DIR" && make --no-print-directory pool-index-if-stale ) \
-    || echo "sync-with-main: WARNING - pool index refresh failed in the clone (run: make pool-index in $SKILL_DIR)" >&2
+  [ -f "$ROOT/Makefile" ] || return 0
+  ( cd "$ROOT" && make --no-print-directory pool-index-if-stale ) \
+    || echo "sync-with-main: WARNING - pool index refresh failed in the clone (run: make pool-index)" >&2
 }
 
 # THE CLONE'S PLACEMENT PAGE FOLLOWS THE CLASS REGISTRY (feature 278, FR-013; GUARD_EDIT_OK: a new operation, nothing
@@ -258,9 +264,9 @@ clone_index_refresh() {
 # by hand. After a merge only (a mid-task clone merged nothing), and only when the page's class stamp differs - the
 # common sync costs one hash. Never fatal: a failed re-plate must not stop a sync, and the test still says what is wrong.
 clone_page_refresh() {
-  [ -f "$ROOT/$SKILL_DIR/Makefile" ] || return 0
-  ( cd "$ROOT/$SKILL_DIR" && make --no-print-directory placement-stages-if-classes ) \
-    || echo "sync-with-main: WARNING - placement page re-plate failed in the clone (run: make placement-stages in $SKILL_DIR)" >&2
+  [ -f "$ROOT/Makefile" ] || return 0
+  ( cd "$ROOT" && make --no-print-directory placement-stages-if-classes ) \
+    || echo "sync-with-main: WARNING - placement page re-plate failed in the clone (run: make placement-stages)" >&2
 }
 
 push_cmd() {
@@ -286,6 +292,9 @@ push_cmd() {
   # a delta. Selftest first: a checker that cannot fail is worth nothing.
   python3 "$ROOT/scripts/check-stale-dirs.py" --selftest >/dev/null || die "check-stale-dirs selftest failed - the guard itself is broken; fix scripts/check-stale-dirs.py before pushing"
   python3 "$ROOT/scripts/check-stale-dirs.py" "$ROOT" || die "a directory in an importable tree has nothing left but __pycache__ (above) - it is still an importable namespace package, so this clone passes what a fresh clone fails"
+  # GUARD_EDIT_OK: feature 329 FR-007 - a NEW refusal: a live file naming the project's old location (moved to the root).
+  python3 "$ROOT/scripts/check-old-layout.py" --selftest >/dev/null || die "check-old-layout selftest failed - fix scripts/check-old-layout.py before pushing"
+  python3 "$ROOT/scripts/check-old-layout.py" "$ROOT" || die "a live file names the project's old location (above) - feature 329 moved it to the repository root; drop the prefix"
   python3 "$ROOT/scripts/check-file-scale.py" "$ROOT" || die "a Python file is past the ~1,000-line bar (above) - constitution Principle X clause 13, gated since feature 173"
   # GUARD_EDIT_OK: feature 234 - both halves of "the record and the modals stay in step" run HERE for
   # the same reason the three above do: the delta that breaks either is a research-page edit touching
@@ -311,16 +320,16 @@ push_cmd() {
   # land. It costs 0.11 s over the whole record (specs/258 R7).
   # ...where there IS a record to check. A test fixture is a bare git tree with no skill in it, and a
   # check that fails on the absence of the thing it checks is a check that fails everywhere else.
-  if [ -d "$ROOT/.claude/skills/diagram/research/sources" ]; then
+  if [ -d "$ROOT/research/sources" ]; then
     # GUARD_EDIT_OK: feature 301 - the same call, a new meaning: nothing assembled is committed any more, so CHECK
     # builds the whole site in memory and fails on a refusal (a link that lands nowhere, an id used twice, a note
     # nothing cites, a cited work with no write-up). The record still owes it at the push for the reason above.
-    ( cd "$ROOT/.claude/skills/diagram" && make --no-print-directory record CHECK=1 >/dev/null ) \
-      || die "the record does not build cleanly (above; \`make record CHECK=1\` in .claude/skills/diagram names each refusal) - features 258 and 301"
+    ( cd "$ROOT" && make --no-print-directory record CHECK=1 >/dev/null ) \
+      || die "the record does not build cleanly (above; \`make record CHECK=1\` at the repository root names each refusal) - features 258 and 301"
     # GUARD_EDIT_OK: feature 259 - the glossary is assembled from per-term files now, and takes the
     # DIRECT route for the same reason the record does: a definition edit touches no engine code.
-    ( cd "$ROOT/.claude/skills/diagram" && make --no-print-directory glossary CHECK=1 >/dev/null ) \
-      || die "the committed glossary differs from its per-term files (run \`make glossary\` in .claude/skills/diagram, then commit) - feature 259, spec FR-006"
+    ( cd "$ROOT" && make --no-print-directory glossary CHECK=1 >/dev/null ) \
+      || die "the committed glossary differs from its per-term files (run \`make glossary\` at the repository root, then commit) - feature 259, spec FR-006"
   fi
   # GUARD_EDIT_OK: feature 236 - spec-lint runs HERE as well as at the gate, for the reason its four
   # siblings above do: the delta it judges is a `specs/` edit that touches no Python, which takes the
@@ -423,8 +432,8 @@ push_cmd() {
   # reviewer's aside): a tree with no diagram skill Makefile is the only tree the tests build, and
   # on a real clone `CI_ROUTE=DIRECT` would have skipped the gated route entirely. So the seams
   # (CI_PERF_REVIEW, CI_ROUTE, CI_MERGE) are read only when that Makefile is absent.
-  local seams=""; [ -f "$ROOT/$SKILL_DIR/Makefile" ] || seams=1
-  if [ -n "$seams" ] && [ -n "${CI_PERF_REVIEW:-}" ]; then bash -c "$CI_PERF_REVIEW"; elif [ -f "$ROOT/$SKILL_DIR/Makefile" ]; then ( cd "$ROOT/$SKILL_DIR" && make --no-print-directory perf-review ); else true; fi \
+  local seams=""; [ -f "$ROOT/Makefile" ] || seams=1
+  if [ -n "$seams" ] && [ -n "${CI_PERF_REVIEW:-}" ]; then bash -c "$CI_PERF_REVIEW"; elif [ -f "$ROOT/Makefile" ]; then ( cd "$ROOT" && make --no-print-directory perf-review ); else true; fi \
     || die "the performance bands owe a record (above) - the work stays in this clone until it exists (feature 129)"
   # TWO ROUTES TO MAIN, CHOSEN BY THE DELTA, NEVER BY THE SESSION (feature 130, FR-002). The delta
   # is inspected against the LATEST GitHub main (fetched above). DIRECT: no diagram engine code in
@@ -439,18 +448,18 @@ push_cmd() {
   # `make done` vouches for the merged engine content; otherwise the work stays in the clone.
   local route
   if [ -n "$seams" ] && [ -n "${CI_ROUTE:-}" ]; then route=$CI_ROUTE
-  elif [ -f "$ROOT/$SKILL_DIR/Makefile" ]; then
-    route=$( { cd "$ROOT/$SKILL_DIR" && make --no-print-directory ci-status ROUTE=1; } 2>/dev/null | tail -1 || true)
+  elif [ -f "$ROOT/Makefile" ]; then
+    route=$( { cd "$ROOT" && make --no-print-directory ci-status ROUTE=1; } 2>/dev/null | tail -1 || true)
     # AN UNDECIDED ROUTE IS NOT A DIRECT ROUTE. If the dispatcher could not answer, engine code
     # could be sitting in the delta; falling through to the free push would land it ungated.
-    case "$route" in DIRECT|GATED|GATED-LOCAL) ;; *) die "could not decide the route ('make ci-status ROUTE=1' said '${route:-nothing}') - not pushing. Run it by hand in $SKILL_DIR to see why." ;; esac
+    case "$route" in DIRECT|GATED|GATED-LOCAL) ;; *) die "could not decide the route ('make ci-status ROUTE=1' said '${route:-nothing}') - not pushing. Run it by hand to see why." ;; esac
   else route=DIRECT; fi   # a tree with no diagram skill (a fixture) has nothing to gate
   case "$route" in
     GATED-LOCAL) echo "sync-with-main: route GATED (local - remote off): engine code in our delta, nothing dispatches; a green local make done on the merged engine content pushes, otherwise the work stays here" ;;
     *)           echo "sync-with-main: route $route (diagram engine code in our delta -> GATED, CodeBuild; otherwise DIRECT)" ;;
   esac
   if [ "$route" = GATED ] || [ "$route" = GATED-LOCAL ]; then
-    if [ -n "$seams" ] && [ -n "${CI_MERGE:-}" ]; then bash -c "$CI_MERGE"; else ( cd "$ROOT/$SKILL_DIR" && make --no-print-directory ci-merge ${FULL:+FULL=1} ); fi \
+    if [ -n "$seams" ] && [ -n "${CI_MERGE:-}" ]; then bash -c "$CI_MERGE"; else ( cd "$ROOT" && make --no-print-directory ci-merge ${FULL:+FULL=1} ); fi \
       || die "gated route: nothing landed (the conditions or the build refused - see above; the work stays in this clone)"
     case "$(cat "$ROOT/.git/ci-verdict" 2>/dev/null)" in
       SKIP-VERIFIED) flock "$LOCK" sh -c 'git pull --no-rebase origin main && git push origin HEAD:main' ;;
@@ -484,7 +493,7 @@ push_cmd() {
 render_sync() {
   # NO DIAGRAM SKILL, NO RENDER-SYNC (feature 131): gm-assistant no longer holds the skill, and the
   # diagram repository holds nothing else - one script serves both because this step is conditional.
-  if [ ! -f "$MAIN/$SKILL_DIR/Makefile" ]; then echo "sync-with-main: no $SKILL_DIR/Makefile in $MAIN - render-sync skipped"; return 0; fi
+  if [ ! -f "$MAIN/Makefile" ]; then echo "sync-with-main: no Makefile in $MAIN - render-sync skipped"; return 0; fi
   # REGENERATE main's diagram renders IN PLACE from main's own tip (GM 2026-07-22, replacing the
   # old build-in-clone-then-rsync-copy machinery). Renders now become a pure function of main's
   # committed code - nothing is copied, so nothing can be copied stale (the fragility that copy
@@ -506,7 +515,7 @@ render_sync() {
   # operation in the repo invoked outside make, and it was exempted in an early draft of the spec on
   # the grounds that render-sync is a LEGITIMATE caller. The fidelity review rejected that: legitimate
   # WORK does not imply a legitimate INVOCATION ROUTE, and compliance cost exactly this line.
-  (cd "$MAIN/$SKILL_DIR" && flock "$LOCK" env GM_ASSISTANT_ALLOW_MAIN=1 make --no-print-directory render-sync ARGS="--skill-dir $MAIN/$SKILL_DIR --main-repo $MAIN")
+  (cd "$MAIN" && flock "$LOCK" env GM_ASSISTANT_ALLOW_MAIN=1 make --no-print-directory render-sync ARGS="--skill-dir $MAIN --main-repo $MAIN")
   # --skill-dir, not --pool: since feature 161 the pool is TWO trees under the skill dir
   # (pool/ live, legacy-hand-authored-pool/ frozen), and render_cache walks both from that one
   # root - it warns about a frozen exhibit whose render is missing, and that job followed the
@@ -527,7 +536,7 @@ render_sync() {
 # THE BACKGROUND RENDER (the prompt hook's path; see SYNC_LOCK_WAIT above). Detached from the hook - its own session,
 # no inherited stdout - so the hook's `$(...)` returns at once and a killed hook cannot take the render down with it.
 render_sync_background() {
-  if [ ! -f "$MAIN/$SKILL_DIR/Makefile" ]; then echo "sync-with-main: no $SKILL_DIR/Makefile in $MAIN - render-sync skipped"; return 0; fi
+  if [ ! -f "$MAIN/Makefile" ]; then echo "sync-with-main: no Makefile in $MAIN - render-sync skipped"; return 0; fi
   if grep -q '^FAILED' "$RENDER_STATUS" 2>/dev/null; then
     echo "sync-with-main: WARNING - the last background render-sync FAILED ($(cat "$RENDER_STATUS")), so main's renders may be stale; see $RENDER_LOG"
   fi

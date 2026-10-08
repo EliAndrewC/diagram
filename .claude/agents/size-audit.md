@@ -58,7 +58,7 @@ the ceiling.
 
 ## First stage
 
-From the clone's `.claude/skills/diagram/` (never `/diagram`, a read-only mirror): `make review-paired-gate` must print
+From the clone's root (never `/diagram`, a read-only mirror): `make review-paired-gate` must print
 `green`, else write NOT-REVIEWABLE and stop; re-run it before your verdict.
 
 ## Inputs
@@ -66,8 +66,8 @@ From the clone's `.claude/skills/diagram/` (never `/diagram`, a read-only mirror
 - the snapshot's `<sheet>.svg` (3 px = 1 ft), `.png` and `.notes.md` (function context only);
 - the size table the dispatch hands you (`make size-table PLAN=<svg>`): every rect in feet by its `data-kind`, every gap in a
   wall, every stroke - the arithmetic is done; check only the rows for the kind under audit;
-- `buildings/programs.md` (the type's required-items table, rendered from `types.json`: each item's band is a claim to
-  RE-VERIFY) and `buildings.md`.
+- `docs/buildings/programs.md` (the type's required-items table, rendered from `types.json`: each item's band is a claim to
+  RE-VERIFY) and `docs/buildings.md`.
 
 ## Method - for the kind (or each item of the program) under audit
 

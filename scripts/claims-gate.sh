@@ -22,7 +22,7 @@ CG_HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 . "$CG_HERE/_guardlog.sh"
 
 # A fixture tree with no engine in it has no claims to hold: silent, as entry-gate is on a tree with no record.
-[ -d "$ROOT/.claude/skills/diagram/l7r/diagram/hamletgen" ] || exit 0
+[ -d "$ROOT/l7r/diagram/hamletgen" ] || exit 0
 
 if [ -n "${CLAIMS_OK:-}" ]; then
   if ! python3 "$CG_HERE/_hm_escape.py" reason-ok <<<"$CLAIMS_OK" >/dev/null; then
@@ -32,7 +32,7 @@ if [ -n "${CLAIMS_OK:-}" ]; then
     exit 1
   fi
   guard_log claims-gate escaped "$CLAIMS_OK" claims-ok
-  BL="$ROOT/.claude/skills/diagram/dev/bypass-log/$(date -u +%Y-%m)"
+  BL="$ROOT/dev/bypass-log/$(date -u +%Y-%m)"
   mkdir -p "$BL" 2>/dev/null || true
   python3 - "$BL" "CLAIMS_OK: $CLAIMS_OK" <<'PYBL' || true
 import json, pathlib, secrets, subprocess, sys, time

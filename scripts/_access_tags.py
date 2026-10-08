@@ -41,7 +41,7 @@ if str(HERE) not in sys.path:
 
 import _downloads as dl  # noqa: E402
 
-RECORD = f"{dl.SKILL}/research"
+RECORD = "research"
 ACCESS = f"{RECORD}/source-access.json"
 REGISTRY = f"{RECORD}/sources/010-works-cited"
 MANIFEST = f"{RECORD}/archive"

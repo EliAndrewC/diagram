@@ -29,7 +29,7 @@ expect_out() { case "$OUT" in *"$1"*) : ;; *) echo "FAIL  output lacks '$1': $OU
 topology() { # $1 = name; builds $T/$1/{github.git,main,main/.clones/c}
   local d=$T/$1; rm -rf "$d"; mkdir -p "$d"
   git init -q --bare -b main "$d/github.git"
-  git init -q -b main "$d/seed"; ( cd "$d/seed" && mkdir -p scripts .claude/skills/x && echo base > f && echo '.clones/' > .gitignore && echo 'def a(): return 1' > .claude/skills/x/a.py && cp "$HERE"/*.sh "$HERE"/*.py scripts/ && git add -A && git commit -qm base && git push -q "$d/github.git" HEAD:main )
+  git init -q -b main "$d/seed"; ( cd "$d/seed" && mkdir -p scripts wip/x && echo base > f && echo '.clones/' > .gitignore && echo 'def a(): return 1' > wip/x/a.py && cp "$HERE"/*.sh "$HERE"/*.py scripts/ && git add -A && git commit -qm base && git push -q "$d/github.git" HEAD:main )
   git clone -q "$d/github.git" "$d/main"
   git -C "$d/main" config receive.denyCurrentBranch updateInstead
   mkdir -p "$d/main/.clones/.session-clones"
@@ -40,7 +40,7 @@ syncmain() { # $1 = topology dir, then args
   local d=$1; shift
   ( cd "$d/main/.clones/c" && CLONE_MAIN="$d/main" CLONE_GITHUB="$d/github.git" GITHUB_TOKEN=unused "$SYNC" "$@" 2>&1 )
 }
-stamp_hooks() { ( cd "$1/main/.clones/c" && python3 scripts/gate-stamp.py --write hooks >/dev/null ); }
+stamp_hooks() { ( cd "$1/main/.clones/c" && python3 scripts/gate-stamp.py --write hooks >/dev/null && python3 scripts/gate-stamp.py --write diagram >/dev/null ); }
 
 echo "1. sync-in refreshes the mirror from GitHub main, then the clone"
 D=$(topology a)
@@ -60,14 +60,14 @@ OUT=$(syncmain "$D" sync-in --mirror-only); check "sync-in --mirror-only" 0 $?
 
 echo "2b. sync-in refreshes the CLONE's pool index on both branches, only when it is stale"
 D=$(topology b2)
-mkdir -p "$D/main/.clones/c/.claude/skills/diagram/pool/hamlets/x"
-printf 'pool-index:\n\t@echo built >> pool/index.html\npool-index-if-stale:\n\t@if [ ! -f pool/index.html ] || [ -n "$$(find pool legacy-hand-authored-pool -newer pool/index.html \\( -name "*.json" -o -name "*.png" -o -name "*.notes.md" \\) -print -quit 2>/dev/null)" ]; then $(MAKE) --no-print-directory pool-index; fi\n' > "$D/main/.clones/c/.claude/skills/diagram/Makefile"
-IDX="$D/main/.clones/c/.claude/skills/diagram/pool/index.html"
+mkdir -p "$D/main/.clones/c/pool/hamlets/x"
+printf 'pool-index:\n\t@echo built >> pool/index.html\npool-index-if-stale:\n\t@if [ ! -f pool/index.html ] || [ -n "$$(find pool legacy-hand-authored-pool -newer pool/index.html \\( -name "*.json" -o -name "*.png" -o -name "*.notes.md" \\) -print -quit 2>/dev/null)" ]; then $(MAKE) --no-print-directory pool-index; fi\n' > "$D/main/.clones/c/Makefile"
+IDX="$D/main/.clones/c/pool/index.html"
 OUT=$(syncmain "$D" sync-in --mirror-only); check "mirror-only sync-in with no index" 0 $?
 [ "$(cat "$IDX" 2>/dev/null)" = "built" ] && PASS=$((PASS+1)) || { echo "FAIL  missing index was not built on the dirty-clone branch"; FAIL=$((FAIL+1)); }
 OUT=$(syncmain "$D" sync-in); check "sync-in with a fresh index" 0 $?
 [ "$(cat "$IDX")" = "built" ] && PASS=$((PASS+1)) || { echo "FAIL  fresh index was rebuilt (efficiency check did not hold)"; FAIL=$((FAIL+1)); }
-touch -d '-10 seconds' "$IDX"; echo '{}' > "$D/main/.clones/c/.claude/skills/diagram/pool/hamlets/x/x.json"
+touch -d '-10 seconds' "$IDX"; echo '{}' > "$D/main/.clones/c/pool/hamlets/x/x.json"
 OUT=$(syncmain "$D" sync-in); check "sync-in after a manifest changed" 0 $?
 [ "$(cat "$IDX")" = "$(printf 'built\nbuilt')" ] && PASS=$((PASS+1)) || { echo "FAIL  stale index was not rebuilt: $(cat "$IDX")"; FAIL=$((FAIL+1)); }
 
@@ -88,7 +88,7 @@ expect_out "route DIRECT"
 
 echo "5. GATED route, refused: nothing lands, the work stays in the clone"
 D=$(topology e)
-( cd "$D/main/.clones/c" && echo 'def a(): return 2' > .claude/skills/x/a.py && git add -A && git commit -qm engine ); stamp_hooks "$D"
+( cd "$D/main/.clones/c" && echo 'def a(): return 2' > wip/x/a.py && git add -A && git commit -qm engine ); stamp_hooks "$D"
 gh_before=$(git -C "$D/github.git" rev-parse main)
 OUT=$(CI_ROUTE=GATED CI_MERGE="false" syncmain "$D" push); check "gated route refused by ci-merge -> push fails" 1 $?
 [ "$(git -C "$D/github.git" rev-parse main)" = "$gh_before" ] && PASS=$((PASS+1)) || { echo "FAIL  something landed on GitHub main"; FAIL=$((FAIL+1)); }
@@ -96,7 +96,7 @@ expect_out "nothing landed"
 
 echo "6. GATED route, dispatched: the build lands the merge on GitHub main; the clone fast-forwards; mirror follows"
 D=$(topology f)
-( cd "$D/main/.clones/c" && echo 'def a(): return 3' > .claude/skills/x/a.py && git add -A && git commit -qm engine ); stamp_hooks "$D"
+( cd "$D/main/.clones/c" && echo 'def a(): return 3' > wip/x/a.py && git add -A && git commit -qm engine ); stamp_hooks "$D"
 # the "build": merges main into the mailbox commit and pushes the result to GitHub main
 BUILD="git -C $D/main/.clones/c push -q $D/github.git HEAD:main && echo DISPATCHED > $D/main/.clones/c/.git/ci-verdict"
 OUT=$(CI_ROUTE=GATED CI_MERGE="$BUILD" syncmain "$D" push); check "gated route dispatched" 0 $?
@@ -105,13 +105,13 @@ OUT=$(CI_ROUTE=GATED CI_MERGE="$BUILD" syncmain "$D" push); check "gated route d
 
 echo "7. GATED route, SKIP-VERIFIED: the clone pushes directly (a build already verified this tree)"
 D=$(topology g)
-( cd "$D/main/.clones/c" && echo 'def a(): return 4' > .claude/skills/x/a.py && git add -A && git commit -qm engine ); stamp_hooks "$D"
+( cd "$D/main/.clones/c" && echo 'def a(): return 4' > wip/x/a.py && git add -A && git commit -qm engine ); stamp_hooks "$D"
 OUT=$(CI_ROUTE=GATED CI_MERGE="echo SKIP-VERIFIED > $D/main/.clones/c/.git/ci-verdict" syncmain "$D" push); check "skip-verified pushes directly" 0 $?
 [ "$(git -C "$D/github.git" rev-parse main)" = "$(git -C "$D/main/.clones/c" rev-parse HEAD)" ] && PASS=$((PASS+1)) || { echo "FAIL  skip-verified did not land"; FAIL=$((FAIL+1)); }
 
 echo "7b. GATED-LOCAL route (remote off, feature 132): SKIP-VERIFIED pushes directly; a refusal keeps the work in the clone"
 D=$(topology gl)
-( cd "$D/main/.clones/c" && echo 'def a(): return 5' > .claude/skills/x/a.py && git add -A && git commit -qm engine ); stamp_hooks "$D"
+( cd "$D/main/.clones/c" && echo 'def a(): return 5' > wip/x/a.py && git add -A && git commit -qm engine ); stamp_hooks "$D"
 OUT=$(CI_ROUTE=GATED-LOCAL CI_MERGE="false" syncmain "$D" push); check "gated-local refused by ci-merge -> push fails" 1 $?
 expect_out "route GATED (local - remote off)"
 [ "$(git -C "$D/github.git" rev-parse main)" != "$(git -C "$D/main/.clones/c" rev-parse HEAD)" ] && PASS=$((PASS+1)) || { echo "FAIL  a refused gated-local push landed"; FAIL=$((FAIL+1)); }
@@ -120,7 +120,7 @@ OUT=$(CI_ROUTE=GATED-LOCAL CI_MERGE="echo SKIP-VERIFIED > $D/main/.clones/c/.git
 
 echo "7c. THE SEAMS ARE IGNORED IN A REAL-SHAPED TREE (feature 132): CI_ROUTE=DIRECT cannot skip the gated route"
 D=$(topology gs)
-( cd "$D/main/.clones/c" && mkdir -p .claude/skills/diagram && printf 'ci-status:\n\t@false\nperf-review:\n\t@true\n' > .claude/skills/diagram/Makefile && echo 'def a(): return 6' > .claude/skills/x/a.py && git add -A && git commit -qm engine ); stamp_hooks "$D"
+( cd "$D/main/.clones/c" && printf 'ci-status:\n\t@false\nperf-review:\n\t@true\n' > Makefile && echo 'def a(): return 6' > wip/x/a.py && git add -A && git commit -qm engine ); stamp_hooks "$D"
 OUT=$(CI_ROUTE=DIRECT CI_MERGE="true" syncmain "$D" push); check "a real-shaped tree with CI_ROUTE=DIRECT does not push" 1 $?
 expect_out "could not decide the route"
 [ "$(git -C "$D/github.git" rev-parse main)" != "$(git -C "$D/main/.clones/c" rev-parse HEAD)" ] && PASS=$((PASS+1)) || { echo "FAIL  the seam bypassed the gated route"; FAIL=$((FAIL+1)); }
@@ -149,7 +149,7 @@ expect_out "PLAN GATE"
   && printf '{"plan_sha256": "%s", "decisions": [], "verdict": "CLEAR"}\n' "$(sha256sum specs/140-x/plan.md | cut -d' ' -f1)" > specs/140-x/plan-review.json \
   && git add -A && git commit -qm "the plan, reviewed" )
 OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "STAYS QUIET: every task ticked and the plan reviewed -> the docs land" 0 $?
-( cd "$D/main/.clones/c" && echo 'def a(): return 9' > .claude/skills/x/a.py && printf -- '- [x] T01 done\n- [ ] T02 the GM accepts\n' > specs/140-x/tasks.md && git add -A && git commit -qm engine ); stamp_hooks "$D"
+( cd "$D/main/.clones/c" && echo 'def a(): return 9' > wip/x/a.py && printf -- '- [x] T01 done\n- [ ] T02 the GM accepts\n' > specs/140-x/tasks.md && git add -A && git commit -qm engine ); stamp_hooks "$D"
 OUT=$(CI_ROUTE=GATED CI_MERGE="echo SKIP-VERIFIED > $D/main/.clones/c/.git/ci-verdict" syncmain "$D" push); check "IT FIRES on the GATED route too, before ci-merge is even consulted" 1 $?
 expect_out "IN PROGRESS"
 
@@ -194,29 +194,29 @@ OUT=$(CI_ROUTE=DIRECT CI_PERF_REVIEW="echo 'perf-review: nothing owed'" syncmain
 echo "== the roll cache is seeded from a sibling at the same commit =="
 D=$(topology seed167)
 SIB="$D/main/.clones/sib"; git clone -q "$D/github.git" "$SIB"
-mkdir -p "$SIB/.claude/skills/diagram/.gencache/rolls/abc"
-echo '{"key":"k","subject":"s","deps":{"functions":[],"files":[]}}' > "$SIB/.claude/skills/diagram/.gencache/rolls/abc/meta.json"
+mkdir -p "$SIB/.gencache/rolls/abc"
+echo '{"key":"k","subject":"s","deps":{"functions":[],"files":[]}}' > "$SIB/.gencache/rolls/abc/meta.json"
 
 OUT=$(syncmain "$D" sync-in); check "sync-in succeeds" 0 $?
-[ -d "$D/main/.clones/c/.claude/skills/diagram/.gencache/rolls/abc" ] \
+[ -d "$D/main/.clones/c/.gencache/rolls/abc" ] \
   && { echo "  ok    a clone with no cache is seeded from the sibling"; PASS=$((PASS+1)); } \
   || { echo "FAIL  the clone was not seeded"; FAIL=$((FAIL+1)); }
 expect_out "seeded the roll cache"
 
 # ...and it must NOT overwrite a cache the clone already has - that one is keyed to work in progress
-echo 'MINE' > "$D/main/.clones/c/.claude/skills/diagram/.gencache/mine.txt"
+echo 'MINE' > "$D/main/.clones/c/.gencache/mine.txt"
 OUT=$(syncmain "$D" sync-in)
-[ -f "$D/main/.clones/c/.claude/skills/diagram/.gencache/mine.txt" ] \
+[ -f "$D/main/.clones/c/.gencache/mine.txt" ] \
   && { echo "  ok    an existing cache is left alone"; PASS=$((PASS+1)); } \
   || { echo "FAIL  the seeding clobbered an existing cache"; FAIL=$((FAIL+1)); }
 
 # ...and a sibling at a DIFFERENT commit is not taken: the clone starts cold instead
 D2=$(topology seed167b)
 SIB2="$D2/main/.clones/sib"; git clone -q "$D2/github.git" "$SIB2"
-mkdir -p "$SIB2/.claude/skills/diagram/.gencache/rolls/xyz"
+mkdir -p "$SIB2/.gencache/rolls/xyz"
 ( cd "$SIB2" && echo drift > drift.txt && git add -A && git -c user.email=t@t -c user.name=t commit -qm drift )
 OUT=$(syncmain "$D2" sync-in)
-[ -d "$D2/main/.clones/c/.claude/skills/diagram/.gencache" ] \
+[ -d "$D2/main/.clones/c/.gencache" ] \
   && { echo "FAIL  seeded from a sibling at a different commit"; FAIL=$((FAIL+1)); } \
   || { echo "  ok    a sibling at another commit is refused - the clone starts cold"; PASS=$((PASS+1)); }
 
@@ -233,9 +233,9 @@ expect_out "shares no commit with main"
 echo "12. the prompt hook's path: render-sync detached, one runner at a time, a bounded lock wait (2026-10-02)"
 # GUARD_EDIT_OK: new test cases for the hook's --background-render path; nothing existing loosened
 D=$(topology bg)
-mkdir -p "$D/main/.claude/skills/diagram"
+mkdir -p "$D/main"
 MARK="$D/rendered"
-printf 'render-sync:\n\t@sleep 2; git -C %s rev-parse --short HEAD >> %s\n' "$D/main" "$MARK" > "$D/main/.claude/skills/diagram/Makefile"
+printf 'render-sync:\n\t@sleep 2; git -C %s rev-parse --short HEAD >> %s\n' "$D/main" "$MARK" > "$D/main/Makefile"
 ( cd "$D/seed" && echo more > g && git add -A && git commit -qm upstream && git push -q "$D/github.git" HEAD:main )
 start=$(date +%s)
 OUT=$(syncmain "$D" sync-in --background-render); check "sync-in --background-render" 0 $?
@@ -348,6 +348,26 @@ expect_out "deleted backup/c on GitHub"
 ( cd "$D/main/.clones/c" && echo more > note.md && git add -A && git commit -qm more && git push -q origin HEAD:refs/heads/backup/c )
 OUT=$(CI_ROUTE=DIRECT CI_PERF_REVIEW=false syncmain "$D" done); check "a stop with the backup already at HEAD" 1 $?
 case "$OUT" in *"backed up HEAD"*) no_ "pushed a backup that was already at HEAD" ;; *) yes_ ;; esac
+
+echo "15. a clone with work in flight syncs in a move of the project to the root (feature 329, FR-008, FR-009)"
+# GUARD_EDIT_OK: feature 329 - a NEW case. The old path is built by concatenation so the old-layout check (which reads
+# this file) does not count it; the global git config is switched off so the case proves the SCRIPT passes
+# merge.directoryRenames, not the container's ~/.gitconfig.
+OLDP=".claude/skills/""diagram"
+D=$(topology mv)
+( cd "$D/seed" && mkdir -p "$OLDP/dev" "$OLDP/l7r" && printf 'a\nb\nc\n' > "$OLDP/dev/x.md" && echo 'X = 1' > "$OLDP/l7r/a.py" \
+  && echo '.gencache/' >> .gitignore && git add -A && git commit -qm old-layout && git push -q "$D/github.git" HEAD:main )
+OUT=$(GIT_CONFIG_GLOBAL=/dev/null syncmain "$D" sync-in); check "the clone takes the old layout" 0 $?
+( cd "$D/main/.clones/c" && printf 'a\nB\nc\n' > "$OLDP/dev/x.md" && echo new > "$OLDP/dev/new.md" && mkdir -p "$OLDP/.gencache" \
+  && echo warm > "$OLDP/.gencache/k" && git add -A && git commit -qm in-flight )
+( cd "$D/seed" && git mv "$OLDP/dev" dev && git mv "$OLDP/l7r" l7r && git commit -qm move && git push -q "$D/github.git" HEAD:main )
+OUT=$(GIT_CONFIG_GLOBAL=/dev/null syncmain "$D" sync-in); check "sync-in merges the move into the clone with work in flight" 0 $?
+C="$D/main/.clones/c"
+grep -qx B "$C/dev/x.md" 2>/dev/null && yes_ || no_ "the clone's edit did not land on the moved file"
+[ "$(cat "$C/dev/new.md" 2>/dev/null)" = new ] && yes_ || no_ "a file the clone added under the old directory did not follow the rename"
+[ "$(cat "$C/.gencache/k" 2>/dev/null)" = warm ] && yes_ || no_ "the clone's ignored cache was not carried to the root"
+[ ! -e "$C/$OLDP" ] && yes_ || no_ "the old directory was left behind"
+[ -z "$(git -C "$C" status --porcelain)" ] && yes_ || no_ "the merge left the clone dirty: $(git -C "$C" status --porcelain | head -3)"
 
 echo "-----"
 if [ "$FAIL" -eq 0 ]; then echo "all sync-with-main tests passed ($PASS checks)"; exit 0; else echo "SOME TESTS FAILED ($FAIL)"; exit 1; fi

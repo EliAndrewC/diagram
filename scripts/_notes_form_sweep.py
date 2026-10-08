@@ -21,7 +21,7 @@ import pathlib
 import re
 import sys
 
-RECORD = ".claude/skills/diagram/research"
+RECORD = "research"
 #: `the Japanese`, `the Chinese (simplified)`, `the Classical Chinese`, `the Middle Korean` - a language named plainly.
 _LANG = r"the (?:[a-z]+ )?(?:[A-Z][A-Za-z-]*\s)*?[A-Z][A-Za-z-]*(?: \([a-z ,]+\))?"  # `the classical Chinese` too
 _TRANSLATED = re.compile(rf"\btranslated from {_LANG} by this project")

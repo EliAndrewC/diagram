@@ -38,12 +38,12 @@ import sys
 HERE = pathlib.Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 import _bundle_owed as bo  # noqa: E402
-RECORD = pathlib.Path(".claude/skills/diagram/research")
+RECORD = pathlib.Path("research")
 REGISTRY = RECORD / "sources" / "010-works-cited"
 VARIANTS = RECORD / "assets" / "glossary-variants.txt"
-CLASSES = pathlib.Path(".claude/skills/diagram/l7r/diagram/interactive/classes")
+CLASSES = pathlib.Path("l7r/diagram/interactive/classes")
 # Mode A sheets carry modals too (feature 262): a compound kind is a modal class as much as a settlement one
-COMPOUND_KINDS = pathlib.Path(".claude/skills/diagram/l7r/diagram/interactive/compound_kinds")
+COMPOUND_KINDS = pathlib.Path("l7r/diagram/interactive/compound_kinds")
 DEFAULT_ROOT = pathlib.Path("/tmp/l7r-check")
 MANIFEST = "MANIFEST.md"
 #: the MANIFEST section feature 311 appends: what may be dispatched on the bundle, and the units it carries
@@ -227,7 +227,7 @@ PARTS = {
 NOTES_BUDGET = 12_000
 #: The style guide `record-style` judges against (feature 292) - handed in the bundle, so the agent reads the one copy
 #: the writers read rather than a paraphrase of it in its contract.
-STYLE = pathlib.Path(".claude/skills/diagram/research/STYLE.md")
+STYLE = pathlib.Path("research/STYLE.md")
 
 
 def entry_bundle(root: pathlib.Path, q: str, out: pathlib.Path, extra: list[str], quotes: bool, kind: str = "",
@@ -393,7 +393,7 @@ def quoted_passages(root: pathlib.Path, key: str) -> list[str]:
     spec.loader.exec_module(qv)
     li = re.compile(rf'<li data-note="{re.escape(key)}(?:-\d+)?">(.*?)</li>', re.S)
     out: list[str] = []
-    for notes in sorted((root / ".claude/skills/diagram/research").rglob("*.notes.html")):
+    for notes in sorted((root / "research").rglob("*.notes.html")):
         for m in li.finditer(notes.read_text(encoding="utf-8")):
             # a session note in an HTML comment quotes the record's own reading, never the source (plan review, D19)
             out += [p["original"] or p["quote"] for p in qv.passages(re.sub(r"<!--.*?-->", "", m.group(1), flags=re.S))]

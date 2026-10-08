@@ -30,8 +30,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-SKILL = ROOT / ".claude" / "skills" / "diagram"
-sys.path.insert(0, str(SKILL))
+sys.path.insert(0, str(ROOT))
 
 from l7r.diagram.ci import cachepolicy, config  # noqa: E402
 

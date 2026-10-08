@@ -72,7 +72,7 @@ if "MANIFEST.md" in prompt:
             if owed is None or atype not in owed.group(1).split():
                 print("\x1fnotowed-refuse\x1f" + atype + "\x1e" + mp + "\x1e" + (owed.group(1).strip() if owed else "(none - a bundle from before feature 311: build it again)") or "nothing"); sys.exit(0)
     print("\x1fbundle\x1f" + atype); sys.exit(0)
-paths = re.findall(r"(?:/diagram(?:/\.clones/[\w.-]+)?/)?\.claude/skills/diagram/research/[^\s`\"<>)]+", prompt)
+paths = re.findall(r"(?<![\w.-])(?:/diagram(?:/\.clones/[\w.-]+)?/)?research/[^\s`\"<>)]+", prompt)  # GUARD_EDIT_OK: feature 329 - the record is at the root
 if not paths:
     print("\x1fnone\x1f" + atype); sys.exit(0)
 cmds = []

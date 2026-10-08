@@ -6,10 +6,16 @@
 # roster now.
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-ROOT="$(git -C "$HERE" rev-parse --show-toplevel)"
+REAL="$(git -C "$HERE" rev-parse --show-toplevel)"
 GATE="$HERE/entry-gate.sh"
-PAGE="$ROOT/.claude/skills/diagram/research/questions/0094-rooms-for-a-parley-across-a-border.html"
-BL="$ROOT/.claude/skills/diagram/dev/bypass-log"
+# A THROWAWAY CLONE, NOT THE LIVE TREE (feature 329, found when this suite's probe text - "a short walk apart." - was
+# swept into a commit by a `git commit -a` made while hooks-test ran). The suite edits a real question page to drive
+# the guard; it now edits that page in a local clone of HEAD, whose origin/main is HEAD, so the delta the guard sees is
+# exactly the suite's own edits. The guard's scripts still come from HERE - the working copy under test.
+ROOT="$(mktemp -d)/clone"
+git clone -q "$REAL" "$ROOT" || { echo "test-entry-gate: could not clone $REAL"; exit 1; }
+PAGE="$ROOT/research/questions/0094-rooms-for-a-parley-across-a-border.html"
+BL="$ROOT/dev/bypass-log"
 # ISOLATE THE CENSUS (feature 169) AND THE ANSWERS (feature 311): a suite that drives a recording guard writes into
 # throwaway stores, or its fixtures land in the live guard census and the clone's own answer records.
 GUARD_LOG_DIR="$(mktemp -d)"; export GUARD_LOG_DIR
@@ -28,6 +34,7 @@ restore() {
   while [ "$(find "$BL" -name '*.json' | wc -l)" -gt "$BL_BEFORE" ]; do
     rm -f "$(find "$BL" -name '*.json' -printf '%T@ %p\n' | sort -n | tail -1 | cut -d' ' -f2-)"   # GUARD_EDIT_OK: 2026-10-02 - no SIGPIPE'd ls across month folders
   done
+  rm -rf "$(dirname "$ROOT")"   # the throwaway clone (feature 329)
 }
 trap restore EXIT
 edit() { python3 - "$PAGE" "$1" "$2" <<'PY'
@@ -37,9 +44,9 @@ assert sys.argv[2] in s
 p.write_text(s.replace(sys.argv[2], sys.argv[3], 1))
 PY
 }
-answer_all() { python3 - "$ROOT" <<'PY'
+answer_all() { python3 - "$ROOT" "$HERE" <<'PY'
 import pathlib, sys
-sys.path.insert(0, sys.argv[1] + "/scripts")
+sys.path.insert(0, sys.argv[2])
 import _record_owed as ro
 root = pathlib.Path(sys.argv[1])
 for u in ro.unanswered(root):

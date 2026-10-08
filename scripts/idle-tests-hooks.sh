@@ -169,7 +169,7 @@ do_prompt() {
     if [ -f "$CLONE/.git/idle-tests.running" ]; then  # a run in progress is ABORTED (D9): nothing of the session's ever waits on it
       kill -TERM -- "-$pid" 2>/dev/null; kill -TERM "$pid" 2>/dev/null; sleep 0.2; kill -KILL -- "-$pid" 2>/dev/null
       rm -f "$CLONE/.git/idle-tests.running"
-      python3 - "$CLONE/.claude/skills/diagram/dev/idle-log/$(date -u +%Y%m%dT%H%M%SZ)-$SESSION.json" "$SESSION" "$(git -C "$CLONE" rev-parse --short HEAD 2>/dev/null)" <<'PY'
+      python3 - "$CLONE/dev/idle-log/$(date -u +%Y%m%dT%H%M%SZ)-$SESSION.json" "$SESSION" "$(git -C "$CLONE" rev-parse --short HEAD 2>/dev/null)" <<'PY'
 import json, os, sys
 rec, session, commit = sys.argv[1:]
 os.makedirs(os.path.dirname(rec), exist_ok=True)
@@ -179,7 +179,7 @@ PY
   fi
   # the last verdict, once: the record newer than the one already shown
   seen="$CLONE/.git/idle-tests.seen"
-  latest=$(ls -t "$CLONE"/.claude/skills/diagram/dev/idle-log/*-"$SESSION".json 2>/dev/null | head -1)
+  latest=$(ls -t "$CLONE"/dev/idle-log/*-"$SESSION".json 2>/dev/null | head -1)
   if [ -n "$latest" ] && [ "$(cat "$seen" 2>/dev/null)" != "$latest" ]; then
     printf '%s\n' "$latest" > "$seen"
     python3 - "$latest" <<'PY'
@@ -236,10 +236,10 @@ do_timer() {
   # guard, feature 136): the arming is consumed below whatever happens, and a clone unchanged since its
   # last GREEN idle run - same commit, no tracked change - is recorded as skipped rather than rolled
   # again. A red is rolled again as soon as something changed.
-  last=$(ls -t "$CLONE"/.claude/skills/diagram/dev/idle-log/*-"$SESSION".json 2>/dev/null | head -1)
+  last=$(ls -t "$CLONE"/dev/idle-log/*-"$SESSION".json 2>/dev/null | head -1)
   if [ -n "$last" ] && [ "$(state_of "$last" rc)" = "0" ] && [ "$(state_of "$last" commit)" = "$commit" ] && [ -z "$(git -C "$CLONE" status --porcelain --untracked-files=no 2>/dev/null)" ]; then
-    mkdir -p "$CLONE/.claude/skills/diagram/dev/idle-log"
-    python3 - "$CLONE/.claude/skills/diagram/dev/idle-log/$utc-$SESSION.json" "$utc" "$SESSION" "$commit" "$target" "$(basename "$last")" <<'PY'
+    mkdir -p "$CLONE/dev/idle-log"
+    python3 - "$CLONE/dev/idle-log/$utc-$SESSION.json" "$utc" "$SESSION" "$commit" "$target" "$(basename "$last")" <<'PY'
 import json, sys
 rec, utc, session, commit, target, prev = sys.argv[1:]
 json.dump({"utc": utc, "session": session, "commit": commit, "target": target, "rc": 0, "skipped": f"unchanged since the green run {prev}", "wall_s": 0, "suspends": 0, "deferrals": 0, "failures": [], "log": ""}, open(rec, "w"), indent=1)
@@ -250,11 +250,11 @@ PY
   fi
   echo "$$" > "$running"
   t0=$(now)
-  ( cd "$CLONE/.claude/skills/diagram" 2>/dev/null || cd "$CLONE"; $target ) > "$log" 2>&1; rc=$?
+  ( cd "$CLONE" 2>/dev/null || cd "$CLONE"; $target ) > "$log" 2>&1; rc=$?
   t1=$(now)
   rm -f "$running"
-  mkdir -p "$CLONE/.claude/skills/diagram/dev/idle-log"
-  rec="$CLONE/.claude/skills/diagram/dev/idle-log/$utc-$SESSION.json"
+  mkdir -p "$CLONE/dev/idle-log"
+  rec="$CLONE/dev/idle-log/$utc-$SESSION.json"
   python3 - "$rec" "$utc" "$SESSION" "$commit" "$target" "$rc" "$((t1 - t0))" "$suspends" "$deferrals" "$log" <<'PY'
 import json, re, sys
 rec, utc, session, commit, target, rc, wall, sus, dfr, log = sys.argv[1:]

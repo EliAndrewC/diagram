@@ -110,7 +110,7 @@ drops is the mandatory explanation for an increase smaller than the machine's ow
 and the increase is still printed. The number is the GM's, supported by measurement and
 carrying a labeled guess: the noise was measured on the 36-vCPU box that this same feature
 retires, and the 8-vCPU box's noise is unmeasured. Dependent artifacts updated: this
-repository's CLAUDE.md, the skill's CLAUDE.md, `.claude/skills/diagram/dev/performance.md`,
+repository's CLAUDE.md, the skill's CLAUDE.md, `dev/performance.md`,
 `.claude/agents/perf-audit.md` (the agent that ADJUDICATES band 1) and
 `l7r/diagram/tools/perf_bands.py`. An existing principle materially expanded: MINOR.
 
@@ -153,7 +153,7 @@ Templates requiring review/update:
   ✅ CLAUDE.md - "Files stay at human scale" says GATED; the file-size row
                               moves out of "Deliberately NOT enforced" and
                               into the enforcement table.
-  ✅ .claude/skills/diagram/Makefile - `lint` runs the check; the `audit`
+  ✅ Makefile - `lint` runs the check; the `audit`
                               section reports the carve-outs instead of
                               saying the rule is ungated on purpose.
 
@@ -371,9 +371,9 @@ Templates requiring review/update:
                               Principle XIV entry.
   ✅ CLAUDE.md - "Verification before reporting done" gains the
                               fix-what-you-find rule.
-  ✅ .claude/skills/diagram/CLAUDE.md - the always-on list gains it, since
+  ✅ CLAUDE.md - the always-on list gains it, since
                               /diagram is where it bites hardest.
-  ✅ .claude/skills/diagram/dev/reviews.md - states that a review finding
+  ✅ docs/reviews.md - states that a review finding
                               outside the delta is still yours to fix.
 
 PRIOR (1.7.0 → 1.8.0):
@@ -427,7 +427,7 @@ Templates requiring review/update:
   ✅ CLAUDE.md - "Verification before reporting done" gains the
                               no-regressions merge gate; the session-clone
                               stop-work procedure now states the push bar.
-  ✅ .claude/skills/diagram/CLAUDE.md - the cohort-baseline rule now says
+  ✅ CLAUDE.md - the cohort-baseline rule now says
                               a rotated residue is not a defense.
 
 PRIOR (1.6.1 → 1.7.0):
@@ -672,7 +672,7 @@ independent pass. The author rationalizes choices the reviewer would not.
 
 **NOT APPLICABLE IN THIS REPOSITORY** - same reason as Principle I: it governs
 frontend pages, which this repository has none of. Map style is governed by the
-skill's own style library and design doctrine (`.claude/skills/diagram/SKILL.md`,
+skill's own style library and design doctrine (`SKILL.md`,
 `settlements/`, `buildings/`). Text retained for the shared numbering.
 
 Frontend work uses the official `frontend-design` Claude Code plugin and
@@ -746,7 +746,7 @@ markers and MAY be updated freely.
 No agent or skill may report a task complete without verifying the actual
 artifacts. Specifically:
 
-- **Python**: the gate is `make done` in `.claude/skills/diagram/` (lint,
+- **Python**: the gate is `make done` at the repository root (lint,
   format, the strict type check, the hook suites, pytest with the coverage floors -
   nothing runs outside make, per feature 127). **100% line coverage on
   everything** - not a target and not opt-in (GM 2026-09-02). External boundaries are tested via saved fixtures, not via
@@ -935,7 +935,7 @@ artifacts. Specifically:
   - **The start snapshot is also a health check.** Read the trend before
     beginning: if performance has drifted since the last feature, the first work
     is finding out why, not adding to it.
-  - Snapshots live one-file-per-run in `.claude/skills/diagram/dev/perf-log/`, so
+  - Snapshots live one-file-per-run in `dev/perf-log/`, so
     concurrent clones never conflict. Never edit or delete one.
   - **History is never rewritten: no squashing, no rebasing, no amending of
     shared commits, no force pushes** (GM 2026-08-25). Every landing is a real
@@ -1019,7 +1019,7 @@ or with established figures in the GM's notes.
 ### X. Python Discipline (NON-NEGOTIABLE)
 
 Python code in this project - the diagram engine and its generators, checks,
-pipeline and tools under `.claude/skills/diagram/l7r/diagram/` - MUST meet
+pipeline and tools under `l7r/diagram/` - MUST meet
 the following standards. Failing
 any single rule is reason enough to refuse "done" status.
 
@@ -1504,7 +1504,7 @@ until v2.17.0, when the GM split the second into two - see below):
 
 Where it lives: the finding and its classification in the skill's `research/`
 file for that feature family (the interactive map will read from there); the
-operative rule in the `settlements/` or `buildings.md` doc; the pointer at the
+operative rule in the `settlements/` or `docs/buildings.md` doc; the pointer at the
 point of change in the code. A feature's `spec.md` lists, in its "Decisions
 Recorded" section, every rendering decision it made and where each landed -
 the spec review (Principle XVI) checks that section against the diff. This
@@ -1988,7 +1988,7 @@ shell command that writes one. It carries no silent escape - a genuine exception
 
 **Python tooling (per Principle X)**
 - **Lint + format**: `ruff` (lint + formatter, single tool). Config lives
-  in `.claude/skills/diagram/pyproject.toml`.
+  in `pyproject.toml`.
 - **Type checking**: strict static typing on production modules (pyrefly with the mypy-strict rule set, feature 142; `mypy --strict` before it), configured in
   the same `pyproject.toml`; `l7r/` is a PEP 420 namespace portion and
   never gains an `__init__.py`.
@@ -1999,13 +1999,13 @@ shell command that writes one. It carries no silent escape - a genuine exception
   ratchet and the four-tree `--omit` both retired the day their own
   condition was met).
 - **Dependency management**: source-of-truth in
-  `.claude/skills/diagram/requirements.in` / `requirements-dev.in`, compiled
+  `requirements.in` / `requirements-dev.in`, compiled
   to the `.txt` lockfiles with `pip-compile`, pinned; a re-lock that bumps
   ruff or the type checker is a reviewed change, since it can change what the gate says.
 - **Logging**: stdlib `logging` with `logging.getLogger(__name__)`.
 
 **Test layout**
-- Tests live under `.claude/skills/diagram/tests/`, mirroring the source
+- Tests live under `tests/`, mirroring the source
   layout (`tests/CLAUDE.md` indexes them).
 - A found defect becomes a unit test of the PLACER first, and a gate check
   only where a later stage can undo the placer (feature 141, GM 2026-08-28:
@@ -2021,9 +2021,8 @@ shell command that writes one. It carries no silent escape - a genuine exception
   variant inputs. A map-rolling test carries `@pytest.mark.rolls_map`.
 
 **Repository layout conventions**
-- The skill stays at `.claude/skills/diagram/` - the same path as before
-  the split, so nothing in the engine, the pool generators or the guards
-  moved. The engine is `l7r/diagram/`; shipped maps are `pool/<tier>/`;
+- The project lives at the repository root (feature 329 moved it out of the old skill directory under
+  `.claude/skills/`; the split from gm-assistant had kept that path). The engine is `l7r/diagram/`; shipped maps are `pool/<tier>/`;
   staged maps are `wip/`.
 - The GM's setting notes are read from gm-assistant, mounted read-only at
   `/gm-assistant`; the canonical `l7r.md` is never edited from here.
@@ -2067,8 +2066,8 @@ findings are acted on before the change ships.
 `scripts/review-gate.sh` refuses the push otherwise.
 
 **Python "done" checklist (mandatory per Principle X)**
-A Python change is not complete until `make done` is green in
-`.claude/skills/diagram/` - it runs, together and reporting every failure
+A Python change is not complete until `make done` is green at
+the repository root - it runs, together and reporting every failure
 at once:
 
 1. `ruff check`
@@ -2113,7 +2112,7 @@ time). Whenever a review runs it runs in the background after the map is
 handed back - or beside a LONG gate, never `make quick` - is never waited on,
 and lands its findings as follow-ups. Every pass is a row in
 `docs/review-ledger.md`, and a miss becomes a rule in the agent, proven to
-fire on the unfixed artifact. Doctrine: `.claude/skills/diagram/dev/reviews.md`.
+fire on the unfixed artifact. Doctrine: `docs/reviews.md`.
 
 **Quick runs the unit form; the gate runs the integration form (GM 2026-08-26,
 feature 133 T22).** The GM, on the audit: *"if you look at what we are testing
@@ -2271,7 +2270,7 @@ document wins; where this document is silent, defer to the project's
 
 **Runtime guidance**
 `/diagram/CLAUDE.md` and the per-directory CLAUDE.md files (the skill's
-`.claude/skills/diagram/CLAUDE.md` above all) remain the day-to-day runtime
+`CLAUDE.md` above all) remain the day-to-day runtime
 guidance. This constitution is the higher-level authority; CLAUDE.md
 operationalizes it.
 

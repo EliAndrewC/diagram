@@ -44,13 +44,13 @@ call Grep '{"pattern":"road","path":"/host-l7r-repo/gm-assistant/setting"}'
 echo "2. what is not a canon read"
 call Bash '{"command":"echo see /host-l7r-repo/setting/budgets.md for the figures"}'
 [ "$(rc)" -eq 0 ] && ok "a mention (echo) of the path" || no "a mention was refused"
-call Bash '{"command":"grep -rn imperial .claude/skills/diagram/research/contents.json#cities"}'
+call Bash '{"command":"grep -rn imperial research/contents.json#cities"}'
 [ "$(rc)" -eq 0 ] && ok "a grep over the record, not the canon" || no "refused"
 # GUARD_EDIT_OK: feature 303 - the record file in this case takes the flat layout's path; the case is unchanged.
-call Read '{"file_path":"/diagram/.clones/x/.claude/skills/diagram/research/questions/0040-q.html"}'
+call Read '{"file_path":"/diagram/.clones/x/research/questions/0040-q.html"}'
 [ "$(rc)" -eq 0 ] && ok "a Read of a record file" || no "refused"
 earlier 'ls'
-call Bash '{"command":"cd .claude/skills/diagram && make canon TERMS=\"imperial road|merchant\""}'
+call Bash '{"command":"make canon TERMS=\"imperial road|merchant\""}'
 [ "$(rc)" -eq 0 ] && ok "make canon itself" || no "make canon was refused" "(rc=$(rc))"
 
 echo "3. make canon again within three calls is refused unless it folds the earlier terms"

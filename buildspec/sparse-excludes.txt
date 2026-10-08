@@ -41,7 +41,7 @@
 # 190.8 MB, 12 files of 12-17 MB each. `render_cache.engine_fingerprint` and `gencache` both PRUNE
 # `wip/` from their walks; no test in the tree names a `wip/` page. The `.py` under `wip/` STAY -
 # `ruff` and `check-file-scale.py` scan them, and `wip/shiro-daika.gen.py` is 1,592 lines.
-/.claude/skills/diagram/wip/*.html
+/wip/*.html
 
 # 78.4 MB (73.2 `.html` + 5.2 `.png`). A documentation artifact written by
 # `l7r/diagram/tools/placement_stages.py` and read by a human through `dev/placement.md`. The tool is
@@ -51,5 +51,5 @@
 # default), which is not rot - and declaring it beats narrowing the guard's scan to `tests/`, because
 # a READER hiding in an engine module is precisely what the guard exists to catch. A stale
 # declaration is itself checked: the producer must exist and must still name this path.
-/.claude/skills/diagram/dev/placement-stages/
+/dev/placement-stages/
 producer: l7r/diagram/tools/placement_stages.py

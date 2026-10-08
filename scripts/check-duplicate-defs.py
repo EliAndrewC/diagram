@@ -14,7 +14,7 @@ Deliberately NOT flagged (legitimate redefinition patterns):
   statements directly in the module body are examined;
 - `@overload`-decorated stubs (the typing pattern is N stubs + one implementation).
 
-Scanned: webapp/ and .claude/skills/ under the given root (including the pool gen scripts - a
+Scanned: the project's trees under the given root (l7r/, tests/, both pool trees, wip/) (including the pool gen scripts - a
 duplicate inside one gen is the same latent bug). Paths are filtered RELATIVE to the scan root,
 so the checker works identically from main or from inside a session clone (the first draft put
 ".clones" in an absolute-parts skip set and silently scanned NOTHING when run inside a clone -
@@ -37,7 +37,7 @@ import sys
 import tempfile
 from pathlib import Path
 
-SCAN_ROOTS = ("webapp", ".claude/skills")
+SCAN_ROOTS = ("l7r", "tests", "pool", "legacy-hand-authored-pool", "wip")  # the project at the root (feature 329); webapp/ went to gm-assistant
 SKIP_PARTS = {"__pycache__", ".git", "node_modules"}
 
 
@@ -93,7 +93,7 @@ def run(root: str = ".", scan_roots: tuple[str, ...] = SCAN_ROOTS) -> tuple[int,
 def selftest() -> int:
     """Prove the checker bites: a planted duplicate must fire; a clean tree must pass."""
     with tempfile.TemporaryDirectory() as td:
-        pkg = Path(td) / "webapp"
+        pkg = Path(td) / "l7r"
         pkg.mkdir()
         (pkg / "dup.py").write_text(
             "def f():\n    return 1\n\n\ndef g():\n    return f()\n\n\ndef f():\n    return 2\n"

@@ -41,16 +41,16 @@ EDIT = re.compile(
     re.S | re.M,
 )
 GLOSSARY = re.compile(r"^[ \t]*GLOSSARY[ \t]+(?P<term>[^|\n]+?)[ \t]*\|[ \t]*(?P<variants>[^|\n]*?)[ \t]*\|[ \t]*(?P<def>[^\n]+?)[ \t]*$", re.M)
-RECORD = ".claude/skills/diagram/research/"
+RECORD = "research/"
 # D17 (R8, recommendation 1): a drifted modal's prose is its Kind class's docstring - thirteen hand edits on `fields`
-MODALS = ".claude/skills/diagram/l7r/diagram/interactive/classes/"
+MODALS = "l7r/diagram/interactive/classes/"
 # feature 262's building-plan sheets keep their modal prose in compound_kinds/, which entry-drift checks the same way
 # (feature 265: 58 owed pairs there, and every EDIT for them was refused until this)
-SHEET_MODALS = ".claude/skills/diagram/l7r/diagram/interactive/compound_kinds/"
+SHEET_MODALS = "l7r/diagram/interactive/compound_kinds/"
 # feature 319 (plan D12): a modal's text is its own file now, one per kind - the EDIT target every modal check names
-MODAL_FILES = ".claude/skills/diagram/l7r/diagram/interactive/assets/modals/"
+MODAL_FILES = "l7r/diagram/interactive/assets/modals/"
 ROOTS = (RECORD, MODALS, SHEET_MODALS, MODAL_FILES)
-TERMS = ".claude/skills/diagram/l7r/diagram/interactive/assets/glossary/"
+TERMS = "l7r/diagram/interactive/assets/glossary/"
 
 
 def unescaped(text: str) -> str:

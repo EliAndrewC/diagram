@@ -31,11 +31,11 @@ version: 0.2
 #           cache LOCATION is per-scope (dispatch.py) rather than shared.
 cache:
   paths:
-    - 'repo/.claude/skills/diagram/.gencache/*/*.json'
-    - 'repo/.claude/skills/diagram/.gencache/*/*.svg'
-    - 'repo/.claude/skills/diagram/.gencache/*/coverage.*'
-    - 'repo/.claude/skills/diagram/.gencache/ast/**/*'
-    - 'repo/.claude/skills/diagram/.gencache/rolls/**/*'
+    - 'repo/.gencache/*/*.json'
+    - 'repo/.gencache/*/*.svg'
+    - 'repo/.gencache/*/coverage.*'
+    - 'repo/.gencache/ast/**/*'
+    - 'repo/.gencache/rolls/**/*'
     # THE HOOKS-TEST FRESHNESS STATE TRAVELS TOO (feature 177). Measured on build 03c8ce13: the gate
     # spent 60 s of its 94 re-proving 21 guard suites and said so - "21 guard suites green, 0
     # unchanged since they last went green" - because both stamps live under the git directory and a

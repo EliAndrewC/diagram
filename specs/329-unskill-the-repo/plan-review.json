@@ -1,0 +1,112 @@
+{
+ "feature": "329-unskill-the-repo",
+ "plan_sha256": "318787aa7bb02aef2e936af1f879e5583ee91d35507e60b594cee3e3dcf747f8",
+ "reviewed": "2026-10-07",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "git mv prefix strip of every tracked path, one commit",
+   "class": "within",
+   "why": "FR-001 verbatim."
+  },
+  {
+   "id": "D2",
+   "summary": "Makefile/.gitignore/CLAUDE.md merged; forwarder and make-docs --forwardable removed; research session loads less",
+   "class": "within",
+   "why": "FR-002; the forwarder retires by FR-002 and its only helper with it."
+  },
+  {
+   "id": "D3",
+   "summary": "pyproject at root, ruff.toml deleted, extend-exclude carries the fence, equal file lists, seeded-lint and rootdir tests",
+   "class": "within",
+   "why": "FR-002a and SC-007; the tests enforce what was asked."
+  },
+  {
+   "id": "D4",
+   "summary": "SKILL.md to docs/usage.md, frontmatter dropped, not-a-skill note once",
+   "class": "within",
+   "why": "FR-003, FR-011."
+  },
+  {
+   "id": "D5-verbatim",
+   "summary": "specs/, dev/*-log/, scripts/fixtures/*.json, review-ledger rows left unswept; fixture cases judged by hooks-test",
+   "class": "within",
+   "why": "Exactly FR-004's verbatim list; the ledger is now named as 'rows written before this feature (line by line - D7)', matching FR-004's words and D7's mechanism."
+  },
+  {
+   "id": "D5-claims",
+   "summary": "claims-index keys renamed",
+   "class": "within",
+   "why": "Live data under FR-004."
+  },
+  {
+   "id": "D6",
+   "summary": "path guards re-pointed, each with a test on the new path",
+   "class": "within",
+   "why": "FR-006."
+  },
+  {
+   "id": "D7",
+   "summary": "old-layout check at gate and push; ledger exempt line by line as of the commit that added the check; selftest covers old and new rows",
+   "class": "within",
+   "why": "FR-007 with FR-004's 'rows written before this feature'. Round 1's NOT LEGITIMATE is resolved: a row written after the check is held like any live line. Implementation read (scripts/check-old-layout.py old_ledger_lines: oldest --diff-filter=A commit of the check) matches the plan."
+  },
+  {
+   "id": "D8",
+   "summary": "carry moves old-dir artifacts to the root; colliding caches deleted (reason recorded), other colliding files kept as <name>.pre-329 (numbered if taken); old directory always removed",
+   "class": "within",
+   "why": "FR-008 verbatim: carry, or invalidate a cache with the reason recorded, and leave no old directory. The numbered suffix closes round 2's note: no collision can leave the old directory behind, and nothing non-cache is deleted."
+  },
+  {
+   "id": "D9",
+   "summary": "merge.directoryRenames=true in the global git config (setup-dev-env.sh, applied once in the running container) and passed by sync_in; the mirror's clone-sync hook runs _layout_carry.sh after a clone's sync-in; scratch-clone test",
+   "class": "within",
+   "why": "FR-009 and FR-008. R5 measures why (2026-10-07, scratch repos, git 2.53 ort): default config stops on a file added under the renamed directory; a not-yet-synced clone runs its own pre-move script, so the flag and the carry must reach it from outside that script. A mechanism serving the two FRs, not a narrowing; the global setting's reach beyond this repository is a design note, not a fidelity finding."
+  },
+  {
+   "id": "D10",
+   "summary": "old-path note in root CLAUDE.md Key paths, no specs README",
+   "class": "within",
+   "why": "FR-005 asks for one note; location is open."
+  },
+  {
+   "id": "D11",
+   "summary": "gm-assistant pointer reported not edited; memory entry",
+   "class": "within",
+   "why": "Spec Assumptions and Edge Cases."
+  },
+  {
+   "id": "D12-classes",
+   "summary": "modal write-ups and pool notes judged as classes, every member listed; 85 docs judged one by one",
+   "class": "within",
+   "why": "FR-012 permits class verdicts with every member listed."
+  },
+  {
+   "id": "D12-wip-readme",
+   "summary": "wip/README.md KEPT against the reader's DELETE, raised with the GM",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Unchanged from round 1: implied by the GM's standing rule that READMEs are theirs (readme-hooks.sh); the audit request asks for a judgment, recorded, not an explicit README delegation; raised with the GM."
+  },
+  {
+   "id": "D12-apply",
+   "summary": "audit applied after the move as its own commit; Mode A claims re-owed through impl-drift",
+   "class": "within",
+   "why": "FR-012 and the spec's assumption that the audit is its own step."
+  },
+  {
+   "id": "D13",
+   "summary": "CI definitions swept and checked locally, remote not dispatched",
+   "class": "within",
+   "why": "Spec Assumptions."
+  },
+  {
+   "id": "bookends",
+   "summary": "no perf bookends; the ratchet and SC-004's first warm gate are the measurement",
+   "class": "within",
+   "why": "Spec asks only SC-004's measurement; no generator stage changes."
+  }
+ ],
+ "verdict": "CLEAR"
+}

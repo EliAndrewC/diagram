@@ -16,7 +16,7 @@ g() { git -C "$FIX/repo" -c user.name=t -c user.email=t@example.com "$@"; }
 run() { ( cd "$FIX/repo" && env -u PLAN_REVIEW_OK "$@" "$GATE" "$BASE..HEAD" >/dev/null 2>&1 ); echo $?; }
 run_with() { ( cd "$FIX/repo" && PLAN_REVIEW_OK="$1" "$GATE" "$BASE..HEAD" >/dev/null 2>&1 ); echo $?; }
 
-mkdir -p "$FIX/repo/.claude/skills/diagram/dev" && g init -q
+mkdir -p "$FIX/repo/dev" && g init -q
 echo base > "$FIX/repo/README"; g add -A; g commit -q -m base; BASE=$(g rev-parse HEAD)
 D="$FIX/repo/specs/243-x"; mkdir -p "$D"
 commit() { g add -A; g commit -q -m "$1"; }
@@ -53,7 +53,7 @@ ok "$(run)" 1 "a BLOCKED review refuses"
 # 8. the escape must SAY WHY, and a reason discharges it and is recorded in the repository's bypass log
 ok "$(run_with x)" 1 "a bare token is refused"
 ok "$(run_with 'a superseded plan nobody will implement')" 0 "a reason discharges it"
-[ -n "$(find "$FIX/repo/.claude/skills/diagram/dev/bypass-log/" -name '*.json' 2>/dev/null)" ]; ok $? 0 "the reason lands in dev/bypass-log/"   # GUARD_EDIT_OK: 2026-10-02 - in its month folder now
+[ -n "$(find "$FIX/repo/dev/bypass-log/" -name '*.json' 2>/dev/null)" ]; ok $? 0 "the reason lands in dev/bypass-log/"   # GUARD_EDIT_OK: 2026-10-02 - in its month folder now
 grep -lq '"rule": "plan-review-ok"' "$GUARD_LOG_DIR"/*.json 2>/dev/null; ok $? 0 "the escape is recorded"
 
 printf 'test-plan-gate: %d passed, %d failed\n' "$pass" "$fail"

@@ -41,7 +41,7 @@ in_container() { [ -f /run/.containerenv ] || [ -f /.dockerenv ]; }
 # a failed install prints its log's tail and the command to re-run, then exits 0.
 STAMP_DIR="${SETUP_STAMP_DIR:-$HOME/.cache}"
 STAMP="$STAMP_DIR/l7r-dev-env.stamp"
-SKILL_DIR="$REPO/.claude/skills/diagram"
+SKILL_DIR="$REPO"
 env_key() {
     cat "${BASH_SOURCE[0]}" "$SKILL_DIR/requirements.txt" "$SKILL_DIR/requirements-dev.txt" "$SKILL_DIR/requirements-ci.txt" 2>/dev/null | sha256sum | cut -d' ' -f1
 }
@@ -144,7 +144,7 @@ echo "==> python packages (pip)"
 # skill's pyproject.toml (feature 131): the first session in the split repository found this line
 # still reading webapp/requirements.txt from gm-assistant, which does not exist here, so a fresh
 # container could not be provisioned at all.
-SKILL="$REPO/.claude/skills/diagram"
+SKILL="$REPO"
 pip install --quiet --break-system-packages \
     -r "$SKILL/requirements.txt" \
     -r "$SKILL/requirements-dev.txt"
@@ -210,10 +210,18 @@ elif [ -z "$(git -C "$REPO" config --get user.email || true)" ] && [ -n "$(git -
     echo "    set committer identity from main's tip author (no ~/.claude/gitconfig): $(git -C "$REPO" config user.name) <$(git -C "$REPO" config user.email)>"
 fi
 
+# A FILE ADDED UNDER A RENAMED DIRECTORY FOLLOWS THE RENAME (feature 329, research.md R5). Feature 329 moved the
+# project out of the old skill directory; a clone holding a commit that added a file there merges main with
+# `CONFLICT (file location)` under git's default, and the clone that syncs in runs its OWN, pre-move sync script -
+# so the setting lives where every git in the container reads it, not only in the new script.
+if [ "$(git config --global --get merge.directoryRenames || true)" != true ]; then
+    git config --global merge.directoryRenames true && echo "    set merge.directoryRenames=true (global)"
+fi
+
 echo "==> verifying"
 if check_all; then
     echo
-    echo "dev environment ready. Next: cd .claude/skills/diagram && make quick"
+    echo "dev environment ready. Next: make quick"
     echo "(from a .clones/<session> workspace, never main; \`make map\` first on a fresh clone so"
     echo "the reference hamlet has a render for the pool-artifact tests to check)"
 else

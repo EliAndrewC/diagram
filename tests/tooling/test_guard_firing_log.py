@@ -1,0 +1,524 @@
+"""Every guard that acts on a session RECORDS it, with the rule that fired (feature 168).
+
+WHY (GM 2026-08-30): *"the firing log should record more data for us to be able to use to make
+improvements in the future."* Before this, seven scripts recorded and most of them only on one
+branch - `make-only` logged its rewrite but none of its five refusals, `gate` its rewrite but not its
+block - and `batching`, the loudest guard in the repository at 119 firings in six days, recorded
+nothing at all. So "is this guard worth what it costs" could not be answered from the log.
+
+WHY THE RULE AND NOT JUST THE GUARD: several guards enforce more than one thing, and *"no-poll fired
+32 times"* cannot say which of its three rules is carrying the cost. A future improvement acts on a
+RULE.
+
+WHY THIS TEST DRIVES THE HOOKS rather than reading them: a grep for `guard_log` proves a call site
+exists, not that it fires. Each case below is a real payload through the real hook, and the assertion
+is on the entry that lands in a throwaway log.
+"""
+
+from __future__ import annotations
+
+import json
+import pathlib
+import re
+import subprocess
+
+import pytest
+
+SCRIPTS = pathlib.Path(__file__).resolve().parents[2] / "scripts"  # the REPO root; parents[4] is .claude
+
+
+def _payload(**tool_input: object) -> str:
+    return json.dumps({"session_id": "t", "tool_name": tool_input.pop("_tool", "Bash"), "tool_input": tool_input})
+
+
+# (guard script, payload, the event and rule its entry must carry)
+CASES = [
+    ("no-poll", _payload(command="while :; do sleep 5; done"), "blocked", "busy-wait-loop"),
+    ("no-poll", _payload(command="command sleep 30"), "blocked", "disguised-sleep"),
+    ("no-poll", _payload(command="make done  # POLL_OK: an external port"), "escaped", "poll-ok"),
+    # GUARD_EDIT_OK: GM 2026-09-08 - an escaped wait whose pattern self-matches is corrected too
+    ("no-poll", _payload(command='true POLL_OK waits on a detached daemon; until ! pgrep -f "cherryd --serve" >/dev/null; do sleep 5; done'), "rewrote", "escaped-self-match"),
+    ("no-poll", _payload(command='pgrep -f "cherryd"'), "rewrote", "self-match"),
+    # GUARD_EDIT_OK: 2026-09-28 (GM: "Yes please") - a wait on a make run is scoped to the asking tree, its own slug
+    ("no-poll", _payload(command='true POLL_OK waits on a detached run; until ! pgrep -f "make page-check" >/dev/null; do sleep 5; done'), "rewrote", "escaped-self-match-scoped"),
+    ("no-poll", _payload(command='pgrep -f "make done"'), "rewrote", "self-match-scoped"),
+    ("make-only", _payload(command="python3 -m pytest tests/x/test_y.py --collect-only"), "blocked", "bare-pytest"),
+    # feature 212: the targeted run and the wrapped entry point are REWRITTEN, and each records its rule
+    ("make-only", _payload(command="python3 -m pytest tests/x/test_y.py -k foo 2>&1 | tail -3"), "rewrote", "targeted-pytest"),
+    ("make-only", _payload(command="python3 -m l7r.diagram.ci status"), "rewrote", "entry-point"),
+    ("no-poll", _payload(command="until grep -q 'gate green' /tmp/gate.log; do sleep 10; done"), "rewrote", "backgrounded-file-wait"),
+    ("guard-file", _payload(_tool="Edit", file_path="/r/Makefile", new_string='\t: "GUARD_EDIT_OK: `make done` in a recipe comment"'), "blocked", "recipe-comment-substitution"),
+    # feature 2026-09-12: a review's findings do not reach the GM unfiltered - the dispatch arms, the filter disarms
+    ("escalation", _payload(_tool="Agent", subagent_type="settlement-review", prompt="DELTA review of Inashiro"), "armed", "review-dispatched"),
+    ("escalation", _payload(_tool="Agent", subagent_type="escalation-check", prompt="my draft writeup"), "permitted", "filter-ran"),
+    ("escalation", _payload(_tool="Agent", subagent_type="settlement-review", prompt='review X ESCALATION_OK="a confirmation pass, nothing relayed"'), "escaped", "escalation-ok"),
+    # feature 249 (GM 2026-09-14): a spec-fidelity round after the first reads the diff - the branches
+    # a bare payload can reach (the rewrite, the first snapshot and the history line need a clone with
+    # the feature present, which scripts/test-review-round-hooks.sh drives on a fixture)
+    ("review-round", _payload(_tool="Agent", subagent_type="spec-fidelity", prompt="MODE 2 review of specs/999-nowhere against request.md"), "permitted", "no-feature"),
+    ("review-round", _payload(_tool="Agent", subagent_type="spec-fidelity", prompt="MODE 4: PLAN REVIEW of specs/999-nowhere"), "permitted", "other-mode"),
+    ("review-round", _payload(_tool="Agent", subagent_type="spec-fidelity", prompt='MODE 3 of specs/999-nowhere REVIEW_ROUND_OK="a restructured spec, read it whole"'), "escaped", "review-round-ok"),
+    ("review-round", _payload(_tool="Agent", subagent_type="spec-fidelity", prompt="MODE 3 of specs/999-nowhere REVIEW_ROUND_OK"), "blocked", "REVIEW_ROUND_OK-no-reason"),
+    # feature 252 (GM 2026-09-19): an ad-hoc agent dispatch names its model, or is refused
+    ("agent-model", _payload(_tool="Agent", subagent_type="general-purpose", prompt="read three pages"), "blocked", "no-model"),
+    ("check-bundle", _payload(_tool="Agent", subagent_type="record-format", prompt="check research/questions/0010-x.html"), "blocked", "repo-path"),
+    ("check-bundle", _payload(_tool="Agent", subagent_type="record-format", prompt="read /tmp/l7r-check/ways-010/MANIFEST.md"), "permitted", "bundle-named"),
+    (
+        "check-bundle",
+        _payload(_tool="Agent", subagent_type="record-format", prompt='read research/questions/0010-x.html CHECK_BUNDLE_OK="the term file itself is under review"'),
+        "escaped",
+        "check-bundle-ok",
+    ),
+    ("agent-model", _payload(_tool="Agent", subagent_type="general-purpose", model="sonnet", prompt="read three pages"), "permitted", "model-named"),
+    ("agent-model", _payload(_tool="Agent", subagent_type="fork", prompt="carry on"), "permitted", "fork-inherits"),
+    ("make-only", _payload(command="make -f /tmp/other.mk all"), "blocked", "foreign-makefile"),
+    ("no-branch", _payload(command="git checkout -b side"), "blocked", "branch-creation"),
+    ("no-branch", _payload(command="git checkout -b side  # NO_BRANCH_OK: a throwaway bisect"), "escaped", "no-branch-ok"),
+    ("repo-safety", _payload(command="git push --force origin main"), "blocked", "force-push"),
+    ("repo-safety", _payload(command="git rebase origin/main"), "blocked", "history-rewrite"),
+    ("readme", _payload(_tool="Write", file_path="/r/README.md", content="hello"), "blocked", "readme-is-the-gm-s"),
+    ("guard-file", _payload(_tool="Edit", file_path="/r/scripts/gate-hooks.sh", new_string="x"), "blocked", "no-marker"),
+    ("guard-file", _payload(_tool="Edit", file_path="/r/scripts/gate-hooks.sh", new_string="GUARD_EDIT_OK: fixing a guard that fires on correct work"), "escaped", "guard-edit-ok"),
+    ("guard-file", _payload(_tool="Edit", file_path="/r/scripts/gate-hooks.sh", new_string="GUARD_EDIT_OK: why"), "blocked", "GUARD_EDIT_OK-no-reason"),
+    # feature 236: the four rules of the shell check, each recording its own - "shell-check fired 40
+    # times" cannot say which of them is carrying the cost, which is the whole point of the fourth field
+    ("shell-check", _payload(command="if true; then"), "blocked", "parse"),
+    ("shell-check", _payload(command='echo "use `make quick` first"'), "blocked", "executing-backtick"),
+    ("shell-check", _payload(command='git commit -m "the pond\'s own "center" thing"'), "blocked", "commit-dash-m"),
+    # an unambiguous message is rewritten into a quoted -F - heredoc rather than refused (2026-10-02, the GM approved it)
+    ("shell-check", _payload(command='git commit -m "one" -m "two"'), "rewrote", "commit-dash-m-heredoc"),
+    ("shell-check", _payload(command="git commit -m 'x' --trailer 'Co-authored-by: Someone <other@example.com>'"), "blocked", "coauthor-address"),
+    ("shell-check", _payload(command='echo "a `span`"  # SHELL_CHECK_OK: quoting a transcript verbatim'), "escaped", "shell-check-ok"),
+    # feature 236: a Bash payload is TOLD, and the telling is recorded as its own branch - the audit
+    # must be able to tell a correction of an edit from a warning that changed nothing
+    ("house-style", _payload(command="sed -i 's/centre/center/g' docs/a.md"), "warned", "bash-payload"),
+    # feature 236 amendment 2: correcting a COMMAND is its own rule for the audit - "is it correcting
+    # the right things" is a question about this branch alone, not about the edit corrector.
+    ("house-style", _payload(command="echo 'the centre of it' >> docs/a.md"), "rewrote", "corrected-command"),
+]
+
+
+@pytest.mark.parametrize(("guard", "payload", "event", "rule"), CASES, ids=[f"{c[0]}:{c[3]}" for c in CASES])
+def test_a_guard_records_the_rule_that_fired(tmp_path, guard: str, payload: str, event: str, rule: str) -> None:
+    # IN A THROWAWAY REPO, never the checkout running the suite (2026-09-27). With no `cwd` the guard ran inside
+    # the session's own clone, so the escalation case above ARMED that clone's real `.git/escalation-state.json`
+    # - its log entry went to this tmp dir, the state did not - and the session's next turn end was refused
+    # for a settlement-review nobody had dispatched. A guard that keeps state beside the repo it resolves
+    # must resolve this one.
+    work = tmp_path / "repo"
+    work.mkdir()
+    subprocess.run(["git", "init", "-q", str(work)], check=True)
+    subprocess.run(
+        [str(SCRIPTS / f"{guard}-hooks.sh"), "pretool"],
+        input=payload,
+        capture_output=True,
+        text=True,
+        check=False,
+        cwd=work,
+        env={"PATH": "/usr/bin:/bin", "HOME": str(tmp_path), "GUARD_LOG_DIR": str(tmp_path / "log")},
+    )
+    entries = [json.loads(f.read_text()) for f in sorted((tmp_path / "log").glob("*.json"))]
+    assert entries, f"{guard} recorded nothing for the {rule} case"
+    assert any(e["event"] == event and e["rule"] == rule for e in entries), f"{guard} recorded {[(e['event'], e['rule']) for e in entries]}, wanted ({event}, {rule})"
+
+
+def _fake_mirror(tmp_path: pathlib.Path) -> tuple[pathlib.Path, pathlib.Path]:
+    """A mirror with one clone under it, and a claim map naming session "t" -> that clone."""
+    main = tmp_path / "diagram"
+    git = ["git", "-c", "user.email=t@t", "-c", "user.name=t"]
+    subprocess.run(["git", "init", "-q", str(main)], check=True)
+    (main / "f").write_text("a\n")
+    subprocess.run([*git, "-C", str(main), "add", "f"], check=True)
+    subprocess.run([*git, "-C", str(main), "commit", "-qm", "a"], check=True)
+    clone = main / ".clones" / "worker"
+    subprocess.run(["git", "clone", "-q", str(main), str(clone)], check=True)
+    (main / ".clones" / ".session-clones").mkdir()
+    (main / ".clones" / ".session-clones" / "t").write_text(str(clone))
+    return main, clone
+
+
+def _fire_main_tree(tmp_path: pathlib.Path, cwd: pathlib.Path, command: str) -> list[dict]:
+    payload = json.dumps(
+        {
+            "session_id": "t",
+            "cwd": str(cwd),
+            "tool_name": "Bash",
+            "transcript_path": str(tmp_path / "none.jsonl"),
+            "tool_input": {"command": command},
+        }
+    )
+    (tmp_path / "home").mkdir(exist_ok=True)
+    subprocess.run(
+        [str(SCRIPTS / "main-tree-hooks.sh"), "pretool"],
+        input=payload,
+        capture_output=True,
+        text=True,
+        check=False,
+        cwd=str(cwd),
+        env={"PATH": "/usr/bin:/bin", "HOME": str(tmp_path / "home"), "GUARD_LOG_DIR": str(tmp_path / "log")},
+    )
+    return [json.loads(f.read_text()) for f in sorted((tmp_path / "log").glob("*.json"))]
+
+
+def test_main_tree_records_a_rewrite_with_the_fields_an_audit_needs(tmp_path) -> None:
+    """Feature 204 (GM 2026-09-07): *"log the specific commands that they blocked along with when this
+    happened and the name of the session in which this occurred. and any other context which is
+    loggable at that time."* Before it, 2,049 of 2,371 entries said `session: unknown` and every command
+    was cut at 200 characters. A REAL firing, on a fake mirror, asserting every new field."""
+    main, clone = _fake_mirror(tmp_path)
+    long = "git add -A && git commit -m " + "x" * 300
+    entries = _fire_main_tree(tmp_path, main, long)
+    assert len(entries) == 1, entries
+    e = entries[0]
+    assert (e["event"], e["rule"]) == ("rewrote", "moved-to-clone")
+    assert e["session"] == "t"
+    assert e["session_name"] == "worker", "the name is resolved at FIRING time through the claim map"
+    assert e["cwd"] == str(main) and e["tool"] == "Bash"
+    assert e["command"] == long and len(e["command"]) > 200, "the full command, never truncated"
+    assert e["detail"] == long[:200], "detail keeps its old truncated form for the existing readers"
+    assert e["context"]["verdict"] == "rewrite" and e["context"]["context"]["clone"] == str(clone)
+    assert "hook" not in e["context"], "the hook payload is not duplicated into the record"
+
+
+def test_main_tree_records_the_refusal_that_names_main(tmp_path) -> None:
+    main, clone = _fake_mirror(tmp_path)
+    entries = _fire_main_tree(tmp_path, clone, f"git -C {main} commit -am x")
+    assert [(e["event"], e["rule"]) for e in entries] == [("blocked", "named-main")]
+    assert entries[0]["session_name"] == "worker"
+
+
+def test_main_tree_records_an_unresolvable_clone_by_the_id(tmp_path) -> None:
+    main, _ = _fake_mirror(tmp_path)
+    (main / ".clones" / ".session-clones" / "t").unlink()
+    entries = _fire_main_tree(tmp_path, main, "git commit -am x")
+    assert [(e["event"], e["rule"]) for e in entries] == [("blocked", "clone-unresolved")]
+    assert entries[0]["session_name"] == "t", "no name resolvable -> the id, never 'unknown' when the payload has one"
+
+
+def test_the_gm_s_source_block_records_both_the_refusal_and_the_escape(tmp_path) -> None:
+    """`source-block` needs a file on disk to judge, so it gets its own case rather than a row above.
+
+    Its ESCAPE is the interesting half. `SOURCE_EDIT_OK` was handled inside the guard's python by
+    printing an empty verdict - indistinguishable from "this edit touches no protected block" - so
+    an authorized edit of the GM's own writing, the single most consequential permit in the
+    repository, left no trace at all. It records now (feature 168), and still permits.
+    """
+    note = tmp_path / "n.md"
+    note.write_text("x\n<!-- SOURCE: GM NOTES - DO NOT MODIFY -->\nthe GM wrote this\n<!-- END SOURCE -->\n")
+    env = {"PATH": "/usr/bin:/bin", "HOME": str(tmp_path)}
+
+    def run(new_string: str, log: str) -> int:
+        payload = _payload(_tool="Edit", file_path=str(note), old_string="the GM wrote this", new_string=new_string)
+        return subprocess.run(
+            [str(SCRIPTS / "source-block-hooks.sh"), "pretool"],
+            input=payload,
+            capture_output=True,
+            text=True,
+            check=False,
+            env={**env, "GUARD_LOG_DIR": str(tmp_path / log)},
+        ).returncode
+
+    def entry(log: str) -> dict:
+        files = sorted((tmp_path / log).glob("*.json"))
+        assert files, f"source-block recorded nothing in {log}"
+        return json.loads(files[0].read_text())
+
+    assert run("reworded", "block") == 2
+    assert (entry("block")["event"], entry("block")["rule"]) == ("blocked", "gm-source-block")
+    assert entry("block")["detail"] == str(note), "an entry with an empty detail says something fired, not what on"
+
+    assert run("SOURCE_EDIT_OK the GM told me to", "escape") == 0, "the escape must still PERMIT"
+    assert (entry("escape")["event"], entry("escape")["rule"]) == ("escaped", "source-edit-ok")
+
+
+def _recording_guards() -> list[pathlib.Path]:
+    """Every guard script that calls `guard_log`, DERIVED (feature 169).
+
+    The hand-written set this replaces named seven guards and omitted eight, so `guard-file`'s Read
+    reminder shipped without a rule slug and the census could not tell its three branches apart. A
+    census of your own tree written by hand is stale the day it is written - the same lesson feature
+    168's own spec review returned twice.
+    """
+    return sorted(p for p in SCRIPTS.glob("*.sh") if not p.name.startswith("test-") and "guard_log " in p.read_text())
+
+
+def test_every_recording_branch_names_a_rule_rather_than_defaulting() -> None:
+    """A `guard_log` call with no fourth argument records the EVENT as its rule, which is right for a
+    guard with ONE acting branch and wrong for every other. Derived over the whole guard tree."""
+    for guard in _recording_guards():
+        calls = [ln for ln in guard.read_text().splitlines() if "guard_log " in ln and not ln.strip().lstrip("#").startswith("#")]
+        calls = [ln for ln in calls if not ln.strip().startswith("#")]
+        if len(calls) < 2:
+            continue  # a single-branch guard may let the rule default to its event
+        for call in calls:
+            body = call.split("guard_log ", 1)[1]
+            assert len(body.split('"')) > 2 or len(body.split()) >= 4, f"{guard.name} logs without a rule slug, so its branches cannot be told apart: {call.strip()}"
+
+
+def test_every_suite_of_a_recording_guard_isolates_the_firing_log() -> None:
+    """A suite that drives a recording guard must write into a throwaway log (feature 169).
+
+    Feature 168 added `GUARD_LOG_DIR` isolation to SIX suites BY HAND (measured from its own
+    commits, not remembered) and missed `test-review-gate.sh`, because `review-gate.sh` is not a `*-hooks.sh` file. The cost was
+    measurable within a day: 24 of the live census's 113 entries were that suite's `specs/900-x`
+    fixtures - in the census this project uses to decide which guards are worth their cost.
+    """
+    missing = []
+    for guard in _recording_guards():
+        suite = SCRIPTS / f"test-{guard.stem}.sh"
+        if not suite.exists():
+            continue
+        text = suite.read_text()
+        # A suite may delegate to the shared runner (`exec python3 test_hooks_cases.py <guard>`)
+        # rather than isolate for itself; follow one level, and hold the runner to the same rule.
+        for delegate in re.findall(r"[\w./-]*test_hooks_cases\.py", text):
+            target = SCRIPTS / pathlib.Path(delegate).name
+            if target.exists():
+                text += target.read_text()
+        if "GUARD_LOG_DIR" not in text:
+            missing.append(suite.name)
+    assert not missing, f"these suites drive a recording guard but write into the real census: {missing}"
+
+
+# ---------------------------------------------------------------------------------------------
+# THE ESCAPE CENSUS IS DERIVED, NOT WRITTEN FROM MEMORY (feature 169).
+#
+# WHY THIS EXISTS AND NOT A LIST IN A DOCUMENT: three drafts of this feature's spec each asserted a
+# complete census of "every guard's escape token", and each was short by one - `HOST_GIT_OK` found by
+# the round-2 review, `GATE_STAMP_OK` by round 3. The reviewer's diagnosis was that the census was
+# being written from memory of the guards rather than derived from the tree, and that a fourth
+# attempt by the same author would miss the next one too. It was right, so the list moved here.
+#
+# A NEW `*_OK` token now fails this test until someone classifies it, and a guard that decides a
+# COMMAND escape with a bare substring test fails it too - which is the defect the whole feature
+# exists to remove, and the one a future guard would most naturally reintroduce.
+_ESCAPES = {
+    # token: (kind, why this kind is safe)
+    "GATE_OK": ("command", "routes through _hookmatch.py escape"),
+    "MEASURE_OK": ("command", "routes through _hookmatch.py escape"),
+    "POLL_OK": ("command", "routes through _hookmatch.py escape"),
+    "DISCARD_OK": ("command", "routes through _hookmatch.py escape"),
+    "README_OK": ("command", "routes through _hookmatch.py escape via escape_or_refuse; the GM's delegated README edit (2026-09-06)"),
+    "DOWNLOAD_COPY_OK": ("command", "routes through _hookmatch.py escape via escape_or_refuse; a repair of the GM's copy of the download list the GM asks for (feature 313)"),
+    "NO_BRANCH_OK": ("command", "routes through _hookmatch.py escape"),
+    "MAIN_TREE_OK": ("command", "routes through _hookmatch.py escape"),
+    "HOST_GIT_OK": ("command", "routes through _hookmatch.py escape, via RS_ESCAPED"),
+    "PAIR_OK": (
+        "command",
+        "the Bash branch routes through the matcher; the AGENT-PROMPT branch is the "
+        "one stated exclusion - a prompt is prose with no command grammar, and "
+        "blanking its quoted regions would break the GM's own PAIR_OK=\"reason\" form",
+    ),
+    "LEDGER_LINT_OK": ("command", "feature 294: ledger-hooks.sh reaches it through escape_or_refuse, so _hookmatch.py escape anchors it"),
+    "REVIEW_ROUNDS_OK": (
+        "command",
+        "feature 294: matched in an AGENT PROMPT by pair-hooks.sh's round cap - the PAIR_OK prompt exclusion's shape, a prompt "
+        "being prose with no command grammar; it must carry a quoted reason and is logged like an escape",
+    ),
+    "GUARD_EDIT_OK": ("command", "classify() routes through escape_used; also a marker in edit CONTENT"),
+    "CONFLICT_MARKERS_OK": (
+        "command",
+        "feature 241: conflict-marker-hooks.sh reaches it through escape_or_refuse, so _hookmatch.py "
+        "escape anchors it as an invocation. It is ALSO a file-level marker, read from a file's first 40 "
+        "lines by _hm_conflict.has_conflict for the fixture or document that must SHOW a triple - the "
+        "FILE_SIZE_OK shape, where the marker in the text IS the escape and a 'mention' is the intended use",
+    ),
+    "FILE_SIZE_OK": (
+        "content",
+        "feature 173: the justification header INSIDE an oversize file, read by scripts/check-file-scale.py from the file's first 40 lines - never matched in a command, so a mention in one escapes nothing. It carries its own reason floor (40 characters) rather than _hookmatch.py's eight",
+    ),
+    "SOURCE_EDIT_OK": ("content", "matched in an Edit's new_string, never in a command - the marker in the text IS the escape, so a 'mention' is the intended use"),
+    "REVIEW_GATE_OK": ("environment", "read as ${REVIEW_GATE_OK:-} at push time; an environment variable cannot be set by mentioning it in a command"),
+    "PLAN_REVIEW_OK": (
+        "environment",
+        "read as ${PLAN_REVIEW_OK:-} by scripts/plan-gate.sh at push and from os.environ by _plan_gate.tick_permitted (make tick exports it), neither of which a mention can set; reason floor via _hm_escape.py reason-ok (feature 243)",
+    ),
+    "ENTRY_DRIFT_OK": ("environment", "read as ${ENTRY_DRIFT_OK:-} by scripts/entry-gate.sh, which a mention cannot set; reason floor via _hm_escape.py reason-ok"),
+    "SHELL_CHECK_OK": (
+        "command",
+        "routes through _hm_escape.py escape via escape_or_refuse in shell-check-hooks.sh; checked FIRST so the guard can be repaired through the channel it guards (feature 236)",
+    ),
+    "GATE_STAMP_OK": ("environment", "read as ${GATE_STAMP_OK:-} at push time; same ground as REVIEW_GATE_OK. Missed by three drafts of the spec (round 3)"),
+    "WRITE_CAP_OK": (
+        "environment",
+        "read by _page_session_runner.py through _escape_log.escape from os.environ (make exports it); reason floor via _hm_escape.reason_is_enough, logged (feature 274 D2)",
+    ),
+    "KEY_CAP_OK": ("environment", "read by reserve-prefix.py through _escape_log.escape from os.environ (make exports it); reason floor via _hm_escape.reason_is_enough, logged (feature 274 D4)"),
+    "REF_OK": ("make-variable", "a make override, already anchored positionally by _hookmatch.py:116 - it must appear as REF_OK= at a command position"),
+    "ESCALATION_OK": (
+        "command",
+        "matched in an agent PROMPT only (`case \"$prompt\"`), the same stated exclusion as PAIR_OK's "
+        "agent branch - a dispatch prompt is prose with no command grammar, and the GM's own "
+        "ESCALATION_OK=\"reason\" form would not survive having its quoted regions blanked",
+    ),
+    "RESERVE_OK": ("command", "matched in the Bash command by new-file-hooks.sh through _guardlog.sh escape_or_refuse, which routes through _hm_escape.py (feature 265 FR-010)"),
+    "CANON_OK": ("command", "matched in the Bash command by canon-read-hooks.sh through _guardlog.sh escape_or_refuse, which routes through _hm_escape.py (feature 250 D16)"),
+    "CHECK_NOT_OWED_OK": (
+        "command",
+        "matched in a record-check dispatch PROMPT only (`CHECK_NOT_OWED_OK=\"...\"` read off the prompt's own text in "
+        "check-bundle-hooks.sh, feature 311), CHECK_BUNDLE_OK's exclusion - a prompt is prose; reason via _hm_escape.py reason-ok",
+    ),
+    "NOT_OWED_OK": (
+        "environment",
+        "a make variable passed as --not-owed-ok to _check_bundle.py (feature 311), which a mention cannot set; reason floor via _hm_escape.reason_is_enough",
+    ),
+    "RECORD_CHECKS_OK": ("environment", "read as ${RECORD_CHECKS_OK:-} by scripts/entry-gate.sh (feature 311), which a mention cannot set; reason floor via _hm_escape.py reason-ok"),
+    "CLAIMS_OK": ("environment", "read as ${CLAIMS_OK:-} by scripts/claims-gate.sh (feature 316), which a mention cannot set; reason floor via _hm_escape.py reason-ok"),
+    "CHECK_BUNDLE_OK": (
+        "command",
+        "matched in a record-check dispatch PROMPT only (`CHECK_BUNDLE_OK=\"...\"` read off the prompt's own text in "
+        "check-bundle-hooks.sh, feature 250), the same stated exclusion as PAIR_OK's, ESCALATION_OK's and "
+        "REVIEW_ROUND_OK's agent branches - a prompt is prose with no command grammar; its reason goes through _hm_escape.py reason-ok",
+    ),
+    "REVIEW_ROUND_OK": (
+        "command",
+        "matched in a spec-fidelity dispatch PROMPT only (`TOKEN in prompt` in _hm_review_round.py, the prompt's "
+        "own text taken from the payload), the same stated exclusion as PAIR_OK's and ESCALATION_OK's agent "
+        "branches - a prompt is prose with no command grammar; its REVIEW_ROUND_OK=\"reason\" form is refused "
+        "without a reason and logged with one (feature 249)",
+    ),
+    "STALE_TERMS_OK": (
+        "command",
+        "matched in a spec-fidelity dispatch PROMPT only (`STALE_TOKEN in prompt` in _hm_review_round.py), the same "
+        "stated exclusion as REVIEW_ROUND_OK's - a prompt is prose with no command grammar; its "
+        "STALE_TERMS_OK=\"reason\" form is refused without a reason and recorded with one on the rewrite it lets "
+        "through (feature 253)",
+    ),
+    "REVIEW_PREREQ_OK": (
+        "command",
+        "matched in a settlement-review dispatch PROMPT only (`case \"$ptext\"`, the prompt's own text taken from the "
+        "payload), the same stated exclusion as PAIR_OK's agent branch - a prompt is prose with no command grammar; "
+        "its REVIEW_PREREQ_OK=\"reason\" form is refused without a reason and logged with one (feature 240)",
+    ),
+    "RUN_OK": (
+        "not-an-escape",
+        "appears ONLY as a fixture string in scripts/test-finished-run-hooks.sh, which proves that a token in a "
+        "command cannot escape a Stop hook - a Stop payload carries no command, so there is nowhere to put one. "
+        "The live-run refusal's release is its once-per-run marker instead (GM 2026-09-12)",
+    ),
+    "REMOTE_OK": ("not-an-escape", "a Makefile MACRO that runs the remote check; nothing overrides"),
+    "WAKEUP_OK": ("not-an-escape", "feature 263's guard has NO escape; the token is named only to prove it changes nothing (test-wakeup-hooks.sh) and in the header saying why there is none"),
+    "CRON_OK": ("command", "routes through _hookmatch.py escape (escape_or_refuse in no-poll-hooks.sh, feature 295 item 5)"),
+    "X_OK": ("not-an-escape", "Python's os.X_OK in finished-run-hooks.sh's files_named (an executable is never a log; feature 295 item 1)"),
+}
+
+_TOKEN = re.compile(r"\b[A-Z][A-Z0-9]*(?:_[A-Z0-9]+)*_OK\b")
+
+
+def _tree_tokens() -> set[str]:
+    files = list(SCRIPTS.glob("*.sh")) + list(SCRIPTS.glob("*.py"))
+    files.append(pathlib.Path(__file__).resolve().parents[2] / "Makefile")
+    found: set[str] = set()
+    for f in files:
+        if f.exists():
+            found |= set(_TOKEN.findall(f.read_text()))
+    return found
+
+
+def test_the_escape_census_is_derived_from_the_tree() -> None:
+    """Every `*_OK` token in the guard tree is classified - a new one fails until someone says what
+    kind it is. Three spec drafts each missed a different token; this cannot."""
+    unclassified = _tree_tokens() - set(_ESCAPES)
+    assert not unclassified, (
+        f"new escape token(s) with no classification: {sorted(unclassified)}. Add each to _ESCAPES "
+        "saying whether it is matched in a COMMAND (and so must route through _hookmatch.py escape), "
+        "in edit CONTENT, as an ENVIRONMENT variable, or is not an escape at all."
+    )
+    stale = set(_ESCAPES) - _tree_tokens()
+    assert not stale, f"classified but no longer in the tree: {sorted(stale)}"
+
+
+def test_no_guard_decides_a_command_escape_with_a_bare_substring_test() -> None:
+    """The defect feature 169 removed, and the one a new guard would most naturally reintroduce.
+
+    A `case "$CMD" in *TOKEN*)` or an `if "TOKEN" in cmd` decides a COMMAND escape by substring, so a
+    grep for the token, or a commit message quoting it, escapes the guard - and in `measure` and
+    `gate` also resets the state that decides whether the NEXT expensive command is refused.
+    """
+    offenders = []
+    for guard in SCRIPTS.glob("*hooks*"):
+        if guard.name.startswith("test") or guard.suffix not in (".sh", ".py"):
+            continue
+        for line in guard.read_text().splitlines():
+            if line.strip().startswith("#"):
+                continue
+            # A line only counts if it DECIDES - substring-tests a token and then acts on it. The
+            # first draft of this check flagged the `sed` that extracts the reason for the bypass log
+            # (it reads `PAIR_OK=`, it decides nothing), which is the mention-versus-invocation
+            # mistake being made by the very check that exists to prevent it.
+            if not re.search(r"guard_log|exit 0|return 0", line):
+                continue
+            # ...and `$prompt` is the ONE declared exclusion (see PAIR_OK in _ESCAPES): a subagent
+            # dispatch prompt is prose, with no command grammar for the matcher to anchor on.
+            if 'case "$prompt"' in line:
+                continue
+            for token, (kind, _why) in _ESCAPES.items():
+                if kind != "command" or token not in line:
+                    continue
+                if re.search(rf"\*{token}[=*]", line) or re.search(rf'["\']{token}["\'] not in \w+', line):
+                    offenders.append(f"{guard.name}: {line.strip()[:90]}")
+    assert not offenders, "these decide a command escape by substring, so a mention of the token escapes the guard: " + "; ".join(offenders)
+
+
+# ---------------------------------------------------------------------------------------------
+# EVERY PERMITTING SITE RECORDS - DERIVED OVER (TOKEN, SITE), NOT OVER TOKENS (feature 170).
+#
+# WHY THE PAIR AND NOT THE TOKEN: round 3 of this feature's review caught the first version keyed on
+# the token alone, which two tokens defeat by having TWO permitting sites each - `GUARD_EDIT_OK` is
+# permitted by `guard-file-hooks.sh` (which recorded) and by `make-only` (which did not), so one
+# driver per token passed green while the exact branch the feature existed to close stayed silent.
+#
+# WHY DERIVED AT ALL: four hand-written censuses across features 169 and 170 were each short by one,
+# every time found by the reviewer rather than the author. A list cannot be trusted here.
+# Two shapes record a permit: a direct `guard_log <guard> escaped`, and a delegation to
+# `escape_or_refuse <guard> <TOKEN> <rule>`, which does the logging in `_guardlog.sh` so the
+# refusal is written once rather than nine times. A check that knew only the first shape reported
+# every converted guard as silent - which is how a completeness check can be wrong in the safe
+# direction and still be wrong.
+_PERMIT = re.compile(r"guard_log\s+(\S+)\s+escaped|escape_or_refuse\s+(\S+)")
+
+
+def _permitting_sites() -> set[tuple[str, str]]:
+    """(guard file, rule slug) for every branch that RECORDS a permitted escape."""
+    out = set()
+    for f in list(SCRIPTS.glob("*.sh")) + [SCRIPTS.parent / "Makefile"]:
+        if not f.exists() or f.name.startswith("test"):
+            continue
+        for line in f.read_text().splitlines():
+            if line.strip().startswith("#"):
+                continue
+            m = _PERMIT.search(line)
+            if m:
+                out.add((f.name, m.group(1) or m.group(2)))
+    return out
+
+
+def test_every_escape_token_has_at_least_one_recording_permit_site() -> None:
+    """A token classified as an escape must be recorded somewhere when it permits.
+
+    This is the completeness half. `test_no_guard_decides_a_command_escape_with_a_bare_substring_test`
+    is the correctness half, and `_ESCAPES` is what both derive from - so a NEW token is red here
+    until someone both classifies it and gives it a recording permit site.
+    """
+    sites = _permitting_sites()
+    recorded_guards = {g for g, _rule in sites}
+    # the three that were silent when this feature began, named so the test says what it is for
+    for guard in ("make-only-hooks.sh", "repo-safety-hooks.sh", "sync-with-main.sh"):
+        assert guard in recorded_guards, f"{guard} permits an escape and records nothing - the defect feature 170 exists to close. Recording guards found: {sorted(recorded_guards)}"
+
+
+def test_no_escape_class_is_quietly_exempt_from_the_reason_floor() -> None:
+    """`not-an-escape` may not be used to retire a red (feature 170, round 3).
+
+    A token belongs in that class only if NO branch permits on it. If one does, it is an escape and
+    owes a reason like every other - so the class is checked against the tree rather than trusted.
+    """
+    for token, (kind, _why) in _ESCAPES.items():
+        if kind != "not-an-escape":
+            continue
+        for f in SCRIPTS.glob("*.sh"):
+            if f.name.startswith("test"):
+                continue
+            for line in f.read_text().splitlines():
+                if token in line and _PERMIT.search(line):
+                    raise AssertionError(f"{token} is classified `not-an-escape` but {f.name} records a permit on it - either it is an escape and owes a reason, or the classification is wrong")

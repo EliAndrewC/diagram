@@ -42,7 +42,7 @@ HERE = pathlib.Path(__file__).resolve().parent
 LEDGER = "sources-consulted.jsonl"
 LOCK = "sources-consulted.lock"
 CACHE = "page-cache"
-REGISTRY = pathlib.Path(".claude/skills/diagram/research/sources/010-works-cited")
+REGISTRY = pathlib.Path("research/sources/010-works-cited")
 
 #: THE AGE RULE. A cached page older than this is fetched again (REFRESH=1 fetches it at once). WHY SEVEN DAYS
 #: (research.md R1, observed 2026-09-29): the saving is nearly all in the first day - 5,236 repeats came within an
