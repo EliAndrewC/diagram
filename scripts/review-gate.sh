@@ -131,7 +131,7 @@ if [ -n "$undeclared" ]; then
 fi
 owed_units="$(python3 "$RG_HERE/_review_owed.py" --root "$ROOT" 2>/dev/null || true)"
 if [ -n "$owed_units" ]; then
-  tree_key="$( cd "$ROOT/.claude/skills/diagram" 2>/dev/null && make -s engine-key REF=worktree 2>/dev/null | tr -d '[:space:]' )"
+  tree_key="$( cd "$ROOT" 2>/dev/null && make -s engine-key REF=worktree 2>/dev/null | tr -d '[:space:]' )"
 fi
 for unit in $owed_units; do
   verdict_rec="$(git rev-parse --git-dir 2>/dev/null)/review-verdicts/$unit.json"

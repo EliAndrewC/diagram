@@ -18,7 +18,7 @@ import re
 from pathlib import Path
 
 SKILL = Path(__file__).resolve().parents[1]
-REPO = SKILL.parents[2]
+REPO = SKILL
 BOXES = ("research pass", "source-reader confirmed", "recorded and cited")
 #: Feature 194 (GM 2026-09-06, "quote what you cite"): a physical task created from feature 194 on carries a FOURTH
 #: box, `quote-check confirmed`, beside the three - an addition, nothing retired. Older task files are history.

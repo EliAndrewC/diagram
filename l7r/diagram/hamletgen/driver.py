@@ -42,7 +42,7 @@ from .ways import stage_seat, stage_track, stage_web
 # field the water shapes, then the sink the field drains to, then the ways, then the homesteads
 # that front the ways, then their appurtenances, then ground cover, then the woods, then the
 # frame. It is the same order a human follows and the same order the skill's DRAW ORDER map
-# requires (.claude/skills/diagram/CLAUDE.md) - so a change here is a change to that map, and the
+# requires (CLAUDE.md) - so a change here is a change to that map, and the
 # two must move together.
 #
 # It stays a LITERAL tuple, deliberately, rather than being derived by scanning the submodules for

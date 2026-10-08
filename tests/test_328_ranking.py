@@ -15,7 +15,7 @@ from collections import Counter
 from pathlib import Path
 
 SKILL = Path(__file__).resolve().parents[1]
-REPO = SKILL.parents[2]
+REPO = SKILL
 FEATURE = REPO / "specs" / "328-match-the-research"
 TIERS = ("E0", "E1", "E2", "E3", "E4")
 

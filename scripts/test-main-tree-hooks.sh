@@ -160,7 +160,7 @@ import json, os, re, subprocess, sys, collections
 fixture, hook, main, t = sys.argv[1:5]
 data = json.load(open(fixture))
 want = data["expected"]
-# /diagram as a path ROOT only: `l7r/diagram/x.py` and `.claude/skills/diagram` are relative paths that
+# /diagram as a path ROOT only: `l7r/diagram/x.py` and the recorded commands' old skill path are relative paths that
 # merely CONTAIN it (the first cut substituted those too and turned three reads into named writes).
 sub = lambda s: re.sub(r"(?<![\w./-])/diagram(?=/|[\s\"';&|):]|$)", main, s)
 got = collections.Counter(); wrong = []

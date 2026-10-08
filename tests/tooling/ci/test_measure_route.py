@@ -21,7 +21,7 @@ from tests.tooling.ci.test_decision import DIRECT, GATED, NOW, failed, green
 pytestmark = pytest.mark.tooling
 
 HERE = Path(__file__).resolve().parents[3]
-REPO = HERE.parents[2]
+REPO = HERE
 BUILDSPEC = REPO / "buildspec"
 
 

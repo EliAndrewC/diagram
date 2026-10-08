@@ -156,7 +156,7 @@ def tooling_hash(root: Path) -> str:
     repo's scripts/. Raw bytes, deliberately: a Makefile comment IS a Makefile change worth one run."""
     import hashlib
 
-    skill = root / ".claude" / "skills" / "diagram"
+    skill = root
     h = hashlib.sha256()
     files: list[Path] = []
     for rel in TOOLING_PATHS:

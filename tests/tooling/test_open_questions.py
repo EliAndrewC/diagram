@@ -19,8 +19,8 @@ import resource
 import subprocess
 import sys
 
-REPO = pathlib.Path(__file__).resolve().parents[5]
-SKILL = REPO / ".claude/skills/diagram"
+REPO = pathlib.Path(__file__).resolve().parents[2]
+SKILL = REPO
 
 
 def _load(name: str):  # noqa: ANN202
@@ -57,15 +57,15 @@ LINKER = """<h2 id="did-a-village-rack-by-the-house">Did a village put its racks
 
 
 def _record(tmp: pathlib.Path) -> pathlib.Path:
-    q = tmp / ".claude/skills/diagram/research/questions"
+    q = tmp / "research/questions"
     q.mkdir(parents=True)
     (q / "0500-how-long-was-a-rack.html").write_text(QUESTION)
     (q / "0500-how-long-was-a-rack.notes.html").write_text(NOTES)
     (q / "0505-did-a-village-rack-by-the-house.html").write_text(LINKER)
     (q / "0505-did-a-village-rack-by-the-house.notes.html").write_text("<ol></ol>")
     # a built page repeats the questions and is never read
-    (tmp / ".claude/skills/diagram/research/site/q").mkdir(parents=True)
-    (tmp / ".claude/skills/diagram/research/site/q/how-long-was-a-rack.html").write_text(QUESTION)
+    (tmp / "research/site/q").mkdir(parents=True)
+    (tmp / "research/site/q/how-long-was-a-rack.html").write_text(QUESTION)
     return tmp
 
 
@@ -86,7 +86,7 @@ def test_a_question_yields_one_item_per_guess_sentence_and_per_absence_note(tmp_
 def test_rewriting_a_guess_removes_exactly_its_item(tmp_path: pathlib.Path) -> None:
     root = _record(tmp_path)
     before = [i.text for i in oq.questions(root)[0].items]
-    frag = root / ".claude/skills/diagram/research/questions/0500-how-long-was-a-rack.html"
+    frag = root / "research/questions/0500-how-long-was-a-rack.html"
     frag.write_text(QUESTION.replace("Its length per household is a GUESS until a figure is\nfound.", "Its length was 30 m."))
     after = [i.text for i in oq.questions(root)[0].items]
     assert [t for t in before if t not in after] == ["Its length per household is a GUESS until a figure is found."]
@@ -115,7 +115,7 @@ def test_a_question_reaches_its_map_features_three_ways(tmp_path: pathlib.Path) 
 
 
 def test_guesses_outside_the_record_are_listed_with_file_and_line_the_logs_skipped(tmp_path: pathlib.Path) -> None:
-    skill = tmp_path / ".claude/skills/diagram"
+    skill = tmp_path
     for rel, body in {
         "l7r/compound.py": "a = 6  # the postern's 6 ft passage is a GUESS\n",
         "pool/m/m.svg": "<svg><!-- what the east room held is a GUESS --></svg>\n",
@@ -153,7 +153,7 @@ def test_a_note_marker_in_no_passage_leaves_the_claim_empty() -> None:
 
 def test_a_fragment_without_its_heading_is_skipped(tmp_path: pathlib.Path) -> None:
     root = _record(tmp_path)
-    (root / ".claude/skills/diagram/research/questions/0510-no-heading.html").write_text("<p>a GUESS with no heading</p>")
+    (root / "research/questions/0510-no-heading.html").write_text("<p>a GUESS with no heading</p>")
     assert [q.anchor for q in oq.questions(root)] == ["how-long-was-a-rack", "did-a-village-rack-by-the-house"]
 
 

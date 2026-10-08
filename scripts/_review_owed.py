@@ -41,10 +41,9 @@ from collections.abc import Sequence
 from dataclasses import dataclass
 from pathlib import Path
 
-SKILL = ".claude/skills/diagram"
 TREES = ("pool", "legacy-hand-authored-pool")
 #: git pathspecs for every manifest in both pool trees (fnmatch without FNM_PATHNAME: `*` spans `/`)
-MANIFESTS = tuple(f"{SKILL}/{tree}/*/*/*.json" for tree in TREES)
+MANIFESTS = tuple(f"{tree}/*/*/*.json" for tree in TREES)
 #: the checks an occasion can owe, in the order a session dispatches them
 CHECKS = ("settlement-review", "building-review", "glyph-check", "size-audit", "fix-check")
 #: the declarable occasions and the check each owes (`new-program` owes two)
@@ -63,7 +62,7 @@ NOT_ELEMENTS = frozenset({"-", "place"})
 _DATA_KIND = re.compile(r'data-kind="([^"]+)"')
 _OCCASION = re.compile(r"^\s*-\s*(?P<kind>[a-z-]+)\s*:\s*(?P<arg>.+?)\s*$")
 #: drawing or placement code - a change here must declare its occasions (D2)
-_CODE = re.compile(rf"^{re.escape(SKILL)}/(l7r/.+\.py|(pool|legacy-hand-authored-pool)/.+\.(gen\.py|svg))$")
+_CODE = re.compile(r"^(l7r/.+\.py|(pool|legacy-hand-authored-pool)/.+\.(gen\.py|svg))$")
 
 
 @dataclass(frozen=True)
@@ -102,7 +101,7 @@ def pool_map_names(root: Path) -> list[str]:
     """Every map or sheet folder of both pool trees (feature 248 FR-001: a dispatch is counted against all of them)."""
     names: set[str] = set()
     for tree in TREES:
-        for d in (root / SKILL / tree).glob("*/*"):
+        for d in (root / tree).glob("*/*"):
             if d.is_dir() and ((d / f"{d.name}.json").is_file() or (d / f"{d.name}.gen.py").is_file() or (d / f"{d.name}.svg").is_file()):
                 names.add(d.name)
     return sorted(names)
@@ -112,7 +111,7 @@ def _folders(root: Path) -> list[Path]:
     """Every map/sheet folder, the live pool first (a check looks at a live map before a legacy one), then by name."""
     out: list[Path] = []
     for tree in TREES:
-        out += sorted(d for d in (root / SKILL / tree).glob("*/*") if d.is_dir())
+        out += sorted(d for d in (root / tree).glob("*/*") if d.is_dir())
     return out
 
 

@@ -30,7 +30,7 @@ need in ONE message.
 
 ## First stage
 
-From the clone's `.claude/skills/diagram/` (never `/diagram`, a read-only mirror): `make review-paired-gate` must print
+From the clone's `` (never `/diagram`, a read-only mirror): `make review-paired-gate` must print
 `green`, else write NOT-REVIEWABLE and stop. A previous verdict's findings must each be disposed of by a record that read the
 thing the finding is about. Re-run the gate read before your verdict.
 

@@ -24,7 +24,7 @@ import ast
 import re
 from pathlib import Path
 
-REPO = Path(__file__).resolve().parents[5]
+REPO = Path(__file__).resolve().parents[2]
 SCRIPTS = REPO / "scripts"
 
 # a duration: `~70 s`, `4.5 min`, `~45s`, `3.9-minute`, `2.5-4 minutes`
@@ -74,7 +74,7 @@ def test_the_check_would_catch_the_string_it_was_written_for() -> None:
 # target (`make reference`), two durations, and the vocabulary of the retired scope lock. The rule
 # was censused over the surface where it was first written rather than over every place the
 # mechanism lives, which is the same failure that produced the defect it was meant to catch.
-ENGINE = REPO / ".claude/skills/diagram/l7r/diagram"
+ENGINE = REPO / "l7r/diagram"
 
 _OUTPUT_ATTRS = {"stdout", "stderr"}
 
@@ -188,7 +188,7 @@ def test_every_target_named_in_the_refusal_ladder_resolves() -> None:
     `make reference` sat in this ladder for hours after that rung was retired. Only the STATIC
     ladder is checked - `assert_via_make`'s interpolated `{target}` is passed a free-form ROUTE by
     `ci/__main__.py` ("ci-status (free) | make ci-check | ..."), which is prose, not one target."""
-    makefile = (REPO / ".claude/skills/diagram/Makefile").read_text(encoding="utf-8")
+    makefile = (REPO / "Makefile").read_text(encoding="utf-8")
     rules = set(re.findall(r"^([a-z][\w-]*):(?!=)", makefile, re.M))
     ladder = "\n".join(printed_text((ENGINE / "_invocation.py").read_text(encoding="utf-8")))
     # A LADDER ROW, not any mention of the word "make". The first cut used `\bmake\s+(\w+)` and

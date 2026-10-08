@@ -22,7 +22,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-SKILL = ".claude/skills/diagram/"
+SKILL = ""
 
 # (directory under the skill, accepted suffixes). An empty suffix tuple means "everything under it".
 _ENGINE_DIRS: tuple[tuple[str, tuple[str, ...]], ...] = (
@@ -136,7 +136,7 @@ def _semantically_changed(root: Path, base: str, path: str) -> bool:
     return bool(gs.content_id(before, path, root) != gs.content_id(after, path, root))
 
 
-SKILL_PY = ".claude/skills/diagram/l7r/"
+SKILL_PY = "l7r/"
 
 
 def coverage_scope(root: Path, base_ref: str = "origin/main") -> list[str]:
@@ -161,7 +161,7 @@ def coverage_scope(root: Path, base_ref: str = "origin/main") -> list[str]:
         f = f.strip()
         if not (f.startswith(SKILL_PY) and f.endswith(".py")) or "/tests/" in f:
             continue
-        mods.add(f[len(".claude/skills/diagram/") :].rpartition("/")[0])
+        mods.add(f[len("") :].rpartition("/")[0])
     return sorted(mods)
 
 

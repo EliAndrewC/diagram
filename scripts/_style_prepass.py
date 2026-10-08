@@ -215,7 +215,7 @@ def main(argv: list[str] | None = None) -> int:
     if not rels:
         print(f"style-prepass: no question is {args.q!r} - name one by its number, e.g. make style-prepass Q=0041", file=sys.stderr)
         return 2
-    variants = root / ".claude/skills/diagram/research/assets/glossary-variants.txt"
+    variants = root / "research/assets/glossary-variants.txt"
     words = {line.split("\t", 1)[0] for line in variants.read_text(encoding="utf-8").splitlines()} if variants.is_file() else set()
     notes = {}
     for r in rels:

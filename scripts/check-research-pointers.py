@@ -27,10 +27,9 @@ import subprocess
 import sys
 from pathlib import Path
 
-SKILL = ".claude/skills/diagram"
-RECORD = f"{SKILL}/research"
+RECORD = "research"
 MAPPING = "moved-303.json"
-#: A question's file, named from anywhere (`research/...`, `../research/...`, `.claude/skills/diagram/research/...`).
+#: A question's file, named from anywhere (`research/...`, `../research/...`, `research/...`).
 QUESTION = re.compile(r"(?<![\w.-])research/questions/(\d{4}-[^\s\"'`)\]<>,;|#*]+?\.html)(?![\w.-])")
 #: A section of the record.
 SECTION = re.compile(r"(?<![\w.-])research/contents\.json#([a-z0-9-]+)")
@@ -158,13 +157,13 @@ def tracked(root: Path) -> list[str]:
 VERBATIM = ("scripts/fixtures/",)
 REFUSAL_DATA = (
     "scripts/check-research-pointers.py",
-    f"{SKILL}/tests/tooling/test_research_pointers.py",
+    "tests/tooling/test_research_pointers.py",
     "scripts/_hm_record.py",
     "scripts/test-record-edit-hooks.sh",
     "scripts/test-check-bundle-hooks.sh",
-    f"{SKILL}/tests/interactive/test_record.py",
+    "tests/interactive/test_record.py",
 )
-FIXTURES = (f"{SKILL}/tests/", "scripts/test_", "scripts/test-", "scripts/_fragment_move.py", "scripts/check-entry-headings.py", "scripts/_hm_record.py", "scripts/check-research-pointers.py")
+FIXTURES = ("tests/", "scripts/test_", "scripts/test-", "scripts/_fragment_move.py", "scripts/check-entry-headings.py", "scripts/_hm_record.py", "scripts/check-research-pointers.py")
 TEST_DATA = VERBATIM
 
 
@@ -235,7 +234,7 @@ def selftest() -> int:
         assert not problems(_QUOTED.sub("", 'the GM: *"a research/citations directory in research/water/"*'), mapping), "a quotation keeps its words"
         assert problems("specs/229-rule-files-into-research/audit/x.md", mapping) == [], "a word ending in -research is not the record"
     assert exempt("specs/180-x/request.md") and exempt(f"{RECORD}/{MAPPING}") and not exempt("CLAUDE.md") and not exempt(f"{RECORD}/CLAUDE.md")
-    assert exempt("scripts/fixtures/x.json") and not exempt(f"{SKILL}/tests/x.py") and not exempt("scripts/x.py")
+    assert exempt("scripts/fixtures/x.json") and not exempt("tests/x.py") and not exempt("scripts/x.py")
     print("check-research-pointers selftest ok")
     return 0
 

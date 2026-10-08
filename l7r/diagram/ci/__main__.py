@@ -31,7 +31,7 @@ from l7r.diagram.ci import config, decision, dispatch, door, runlog, state  # no
 
 def _roots() -> tuple[Path, Path]:
     root = Path(subprocess.run(["git", "rev-parse", "--show-toplevel"], capture_output=True, text=True, check=True).stdout.strip())
-    return root, root / ".claude" / "skills" / "diagram"
+    return root, root
 
 
 def main(argv: list[str] | None = None) -> int:

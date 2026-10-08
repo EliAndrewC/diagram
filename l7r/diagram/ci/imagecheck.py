@@ -31,13 +31,13 @@ block but the KNOWLEDGE - the three-day outage was a session having no way to be
 from __future__ import annotations
 
 #: What the image is built from. `Dockerfile.ci` is the recipe; the two lockfiles are what it COPYs
-#: into the venv (`COPY .claude/skills/diagram/requirements.txt ... requirements-dev.txt /tmp/req/`).
+#: into the venv (`COPY requirements.txt ... requirements-dev.txt /tmp/req/`).
 #: If the COPY list in the Dockerfile grows, this grows with it - `tests/tooling/ci/test_imagecheck.py`
 #: derives the expected set from the Dockerfile rather than trusting this tuple.
 IMAGE_INPUTS = (
     "Dockerfile.ci",
-    ".claude/skills/diagram/requirements.txt",
-    ".claude/skills/diagram/requirements-dev.txt",
+    "requirements.txt",
+    "requirements-dev.txt",
 )
 
 

@@ -84,24 +84,24 @@ EOF"
 echo
 echo "2b. TIER 5 VIA BASH - a guard file written by shell rather than the Edit tool"
 check "heredoc python writing the Makefile"   blocked "python3 - <<PY
-import pathlib; pathlib.Path('.claude/skills/diagram/Makefile').write_text(x)
+import pathlib; pathlib.Path('Makefile').write_text(x)
 PY"
 check "sed -i on a hook script"               blocked "sed -i 's/foo/bar/' scripts/gate-hooks.sh"
 check "redirect over settings.json"           blocked "cat > .claude/settings.json"
 check "append to a hook script"               blocked "echo x >> scripts/no-poll-hooks.sh"
 check "the escape, with a reason"             ok      "sed -i 's/a/b/' scripts/gate-hooks.sh  # GUARD_EDIT_OK: it fired on correct work"
-check "READING a guard file is not writing"   ok      "grep -n done .claude/skills/diagram/Makefile"
+check "READING a guard file is not writing"   ok      "grep -n done Makefile"
 # GUARD_EDIT_OK: feature 217 - the roster of rolled hamlets is a guard on the shell route too
-check "heredoc appending a roll row to the roster" blocked "cat >> .claude/skills/diagram/tests/rolls.py <<EOF
+check "heredoc appending a roll row to the roster" blocked "cat >> tests/rolls.py <<EOF
 Roll(SPEC, 'x', 'y')
 EOF"
 check "python writing the roster"                blocked "python3 - <<PY
-import pathlib; pathlib.Path('.claude/skills/diagram/tests/rolls.py').write_text(x)
+import pathlib; pathlib.Path('tests/rolls.py').write_text(x)
 PY"
-check "writing the roster's TEST is ordinary"    ok      "cat >> .claude/skills/diagram/tests/test_rolls.py <<EOF
+check "writing the roster's TEST is ordinary"    ok      "cat >> tests/test_rolls.py <<EOF
 x = 1
 EOF"
-check "READING the roster is not writing"        ok      "grep -n Roll .claude/skills/diagram/tests/rolls.py"
+check "READING the roster is not writing"        ok      "grep -n Roll tests/rolls.py"
 # GUARD_EDIT_OK: feature 169 - two live false positives, both matched against the RAW command.
 # The first REFUSED A COMMAND THAT WROTE NOTHING: an arrow in printed prose reads as a redirect.
 check "an arrow in prose is not a redirect"   ok      "printf '5 mirror cd+write -> scripts/main-tree-hooks.sh (new)\n'"

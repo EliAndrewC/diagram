@@ -17,7 +17,7 @@ import sys
 
 import pytest
 
-REPO = pathlib.Path(__file__).resolve().parents[5]
+REPO = pathlib.Path(__file__).resolve().parents[2]
 _spec = importlib.util.spec_from_file_location("_plan_gate", REPO / "scripts" / "_plan_gate.py")
 assert _spec and _spec.loader
 gate = importlib.util.module_from_spec(_spec)
@@ -135,14 +135,14 @@ def _log_rules(tmp_path: pathlib.Path) -> list[str]:
 
 def test_a_tick_is_refused_then_escaped_only_with_a_reason_and_recorded(tmp_path: pathlib.Path) -> None:
     d = feature(tmp_path)
-    (tmp_path / ".claude" / "skills" / "diagram" / "dev").mkdir(parents=True)
+    (tmp_path / "dev").mkdir(parents=True)
     ok, message = gate.tick_permitted(d, tmp_path, None)
     assert not ok and "no current CLEAR review" in message and "make plan-verdict" in message
     ok, message = gate.tick_permitted(d, tmp_path, "x")
     assert not ok and "needs a REASON" in message
     ok, message = gate.tick_permitted(d, tmp_path, "a superseded plan nobody implements")
     assert ok and "BYPASSED" in message
-    entries = list((tmp_path / ".claude" / "skills" / "diagram" / "dev" / "bypass-log").rglob("*.json"))
+    entries = list((tmp_path / "dev" / "bypass-log").rglob("*.json"))
     assert len(entries) == 1 and "a superseded plan" in entries[0].read_text()
     assert sorted(_log_rules(tmp_path)) == sorted(["plan-review-missing", "PLAN_REVIEW_OK-no-reason", "plan-review-ok"])
     gate.record(d, current([]), "spec-fidelity")

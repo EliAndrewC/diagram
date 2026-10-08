@@ -46,9 +46,12 @@ from pathlib import Path
 # area name -> (repo-relative root, glob patterns the area's gate covers). Each area's gate stamps it
 # on success: `make done` stamps `diagram`, `make hooks-test` stamps `hooks` (and `done` runs it).
 AREAS: dict[str, tuple[str, tuple[str, ...]]] = {
+    # THE PROJECT IS THE REPOSITORY ROOT (feature 329): an area rooted there has the root "" and names its top-level
+    # trees, because a bare `*.py` would now reach `scripts/` (the hooks area) and `specs/`. These five are exactly
+    # what `*.py` covered under the old skill directory.
     "diagram": (
-        ".claude/skills/diagram",
-        ("*.py",),
+        "",
+        ("l7r/*.py", "tests/*.py", "pool/*.py", "legacy-hand-authored-pool/*.py", "wip/*.py"),
     ),  # the webapp area lives in gm-assistant since feature 131
     "hooks": ("scripts", ("*.sh", "*.py")),
     # THE PAGE AREA (feature 188, GM 2026-09-05): the interactive page's stylesheet and script, inlined into
@@ -65,7 +68,7 @@ AREAS: dict[str, tuple[str, tuple[str, ...]]] = {
     # the area, hashed by BYTES (`RAW_AREAS`), because the point of moving the prose into docstrings is that
     # the semantic id - which strips docstrings - no longer sees a prose edit, so this area must. The other
     # interactive modules stay out: they hold no page prose, and a comment edit in them costs nothing.
-    "page": (".claude/skills/diagram/l7r/diagram/interactive", ("assets/*", "classes/*.py")),  # `assets/*`: the two inlined assets AND the content files (feature 207: glossary.json, siblings.json, place.json, page-text.json)
+    "page": ("l7r/diagram/interactive", ("assets/*", "classes/*.py")),  # `assets/*`: the two inlined assets AND the content files (feature 207: glossary.json, siblings.json, place.json, page-text.json)
     # THE BROWSER KEY (feature 206, GM 2026-09-07: "Do we have logic in place to skip them if the content which
     # they are testing has not changed? ... this is about saving memory, not saving time").
     # GUARD_EDIT_OK: adding an area the GATE may SKIP on, never one the push demands (SKIP_ONLY_AREAS below).
@@ -79,7 +82,7 @@ AREAS: dict[str, tuple[str, tuple[str, ...]]] = {
     # NAME: the diagram area excludes tests/, and this area must not. `--check` never looks at it: a research
     # or test edit owes no gate at push (feature 132 FR-024), and this key would otherwise invent that obligation.
     "browser": (
-        ".claude/skills/diagram",
+        "",
         # GUARD_EDIT_OK: feature 301 - the record's pages are built, not committed, so the key hashes its FRAGMENTS:
         # `research/*.html` already reaches them (fnmatch's `*` crosses `/`), and the retired citations scripts leave it
         ("l7r/diagram/interactive/*.py", "l7r/diagram/interactive/assets/*", "tests/full/interactive/page_browser/*.py", "research/*.html"),
@@ -119,7 +122,7 @@ _DECLARED_EXCLUDE: dict[str, tuple[str, ...]] = {"diagram": ("tests/", "l7r/diag
 # WHAT THIS DOES NOT TOUCH: `delta.is_engine`, which answers a DIFFERENT question - does this delta
 # owe a PAID BUILD. The GM's FR-025 ruling stands there, so a ci-only change still routes DIRECT and
 # still starts no build. The two questions stop sharing one answer, which is the whole of item 1.
-_COVERAGE_TOML = ".claude/skills/diagram/pyproject.toml"
+_COVERAGE_TOML = "pyproject.toml"
 
 
 def coverage_sources(root: Path | None = None) -> tuple[str, ...]:
@@ -183,7 +186,7 @@ def _area_files(root: Path, area_path: str, patterns: tuple[str, ...], area: str
         "-coz",
         "--exclude-standard",
         "--",
-        *(f"{area_path}/{pat}" for pat in patterns),
+        *(f"{_prefix(area_path)}{pat}" for pat in patterns),
         cwd=root,
     )
     excl = _area_exclusions(area_path, area)
@@ -212,7 +215,12 @@ def _excluded(path: str, area_path: str, area: str | None = None, excl: tuple[st
     # slowest test in `make quick` and alone past its 11 s ratchet. The answer cannot change mid-walk.
     if excl is None:
         excl = _area_exclusions(area_path, area)
-    return any(path.startswith(f"{area_path}/{sub}") for sub in excl)
+    return any(path.startswith(f"{_prefix(area_path)}{sub}") for sub in excl)
+
+
+def _prefix(area_path: str) -> str:
+    """`area_path` as a path prefix: `""` (the repository root, feature 329) is no prefix at all."""
+    return f"{area_path}/" if area_path else ""
 
 
 def _salt(area: str) -> str:
@@ -237,9 +245,9 @@ def _matches(path: str, area_path: str, patterns: tuple[str, ...], excl: tuple[s
     # fnmatch on the area-relative path (feature 189): `*` crosses `/` here exactly as it does in the
     # `git ls-files` pathspec `_area_files` uses, so `*.py` still means every Python file under the area
     # and `classes/*.py` means the registry's modules and nothing else
-    if not path.startswith(area_path + "/") or _excluded(path, area_path, excl=excl):
+    if not path.startswith(_prefix(area_path)) or _excluded(path, area_path, excl=excl):
         return False
-    rel = path[len(area_path) + 1 :]
+    rel = path[len(_prefix(area_path)) :]
     return any(fnmatch.fnmatch(rel, pat) for pat in patterns)
 
 
@@ -499,7 +507,7 @@ def check(base: str, root: Path | None = None) -> int:
     for line in bad:
         print(f"  {line}", file=sys.stderr)
     print(
-        "gate-stamp: run the named gate in .claude/skills/diagram and push again - it stamps on success.",
+        "gate-stamp: run the named gate at the repository root and push again - it stamps on success.",
         file=sys.stderr,
     )
     print(

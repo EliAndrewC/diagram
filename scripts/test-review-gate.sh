@@ -19,16 +19,16 @@ trap 'rm -rf "$T"' EXIT
 export GUARD_LOG_DIR="$T/guard-log"
 
 # The map fixture lives in its own folder, like every real map since feature 161.
-POOL=".claude/skills/diagram/pool/hamlets/m"
+POOL="pool/hamlets/m"
 
 # A repo whose `main` already holds $2 (the pre-existing state), then a `work` branch to change on.
 mkrepo() {
-  rm -rf "$T/$1"; mkdir -p "$T/$1/$POOL" "$T/$1/specs/900-x" "$T/$1/.claude/skills/diagram"; cd "$T/$1" || return 1
+  rm -rf "$T/$1"; mkdir -p "$T/$1/$POOL" "$T/$1/specs/900-x" "$T/$1"; cd "$T/$1" || return 1
   git init -q .; git config user.email t@t; git config user.name t
   echo base > seed.txt
   # GUARD_EDIT_OK: feature 248 - the gate reads the pushed tree's ENGINE KEY (a stub target, never the engine) and
   # asks _review_owed.py, which needs an origin/main to diff against; both are fixture state, like the map itself
-  printf 'engine-key:\n\t@printf k\n' > .claude/skills/diagram/Makefile
+  printf 'engine-key:\n\t@printf k\n' > Makefile
   # GUARD_EDIT_OK: feature 294 - the map carries its ink census, the record the occasions are read from
   [ "${2:-}" = withmap ] && { echo '{"v":1,"ink_classes":{"farmhouse":1}}' > "$POOL/m.json"; echo "notes" > "$POOL/m.notes.md"; }
   git add -A; git commit -qm base; git branch -q -M main; git checkout -q -b work
@@ -172,8 +172,8 @@ mkrepo r2 withmap; echo "$NEW" > "$POOL/m.json"; echo "reviewed 2026-09-14" >> "
 mkdir -p .git/review-verdicts; echo '{"map":"glyph-check--well","engine_key":"stale","verdict":"PASS","findings":[]}' > "$V"
 check "...and a stale-key record with the notes touched is refused too (D5: no substitute on a map with a record)" r2 blocked
 # GUARD_EDIT_OK: feature 294 D2 - the rendering waiver is gone; drawing or placement code that moved must DECLARE its occasions
-mkrepo r3 withmap; mkdir -p .specify specs/901-r .claude/skills/diagram/l7r
-echo 'X = 1' > .claude/skills/diagram/l7r/placer.py
+mkrepo r3 withmap; mkdir -p .specify specs/901-r l7r
+echo 'X = 1' > l7r/placer.py
 printf -- '- [x] T01 the placer\n      research: rendering\n' > specs/901-r/tasks.md
 echo '{"feature_directory":"specs/901-r"}' > .specify/feature.json; git add -A; git commit -qm placer
 check "placement code moved with no Occasions section in the active feature: refused" r3 blocked

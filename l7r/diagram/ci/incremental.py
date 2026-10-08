@@ -145,7 +145,7 @@ def changed(before: dict[str, Any], now: dict[str, Any]) -> Changed:
 # ---- reading the baseline's contexts ------------------------------------------------------------------
 
 
-SKILL_PREFIX = ".claude/skills/diagram/"  # nodeids are skill-relative; the manifest is repo-relative
+SKILL_PREFIX = ""  # nodeids are skill-relative; the manifest is repo-relative
 
 
 def _marks(items: Any) -> str:

@@ -81,7 +81,7 @@ def test_the_gates_own_STANDARD_is_part_of_the_stamp_key() -> None:
     otherwise the first push after the change rides a record of the old one."""
     import importlib.util
 
-    path = SKILL.parents[2] / "scripts" / "gate-stamp.py"
+    path = SKILL / "scripts" / "gate-stamp.py"
     spec = importlib.util.spec_from_file_location("_gate_stamp_under_test", path)
     assert spec and spec.loader
     gs = importlib.util.module_from_spec(spec)

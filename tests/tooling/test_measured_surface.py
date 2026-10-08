@@ -23,7 +23,7 @@ import pytest
 pytestmark = pytest.mark.tooling
 
 HERE = Path(__file__).resolve().parents[2]
-REPO = HERE.parents[2]
+REPO = HERE
 
 
 def _gate_stamp():
@@ -75,7 +75,7 @@ def test_the_PAID_route_is_untouched_so_a_ci_change_still_dispatches_nothing() -
     ci-only delta still routes DIRECT and still starts no build."""
     from l7r.diagram.ci.delta import is_engine
 
-    S = ".claude/skills/diagram/"
+    S = ""
     assert not is_engine(S + "l7r/diagram/ci/decision.py"), "ci/ is not engine for the ROUTE - money is the other question"
     assert not is_engine(S + "l7r/diagram/ci/dispatch.py")
     assert is_engine(S + "l7r/diagram/settlement/houses.py"), "...and real engine code still is"
@@ -132,5 +132,5 @@ def test_the_page_area_is_the_assets_and_the_registry_and_the_gate_s_area_holds_
     diagram = [str(f) for f in gs._area_files(REPO, *gs.AREAS["diagram"])]
     assert not [f for f in diagram if f.endswith((".js", ".css", ".json"))], "the gate's area holds no asset, and no content file"
     for name in assets:
-        assert not is_engine(".claude/skills/diagram/l7r/diagram/interactive/assets/" + name), name
+        assert not is_engine("l7r/diagram/interactive/assets/" + name), name
     assert "page" in gs.RAW_AREAS and "diagram" not in gs.RAW_AREAS, "only the page area hashes bytes (spec 189 D3)"

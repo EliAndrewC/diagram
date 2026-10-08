@@ -6,7 +6,7 @@ import importlib.util
 import sys
 from pathlib import Path
 
-REPO = Path(__file__).resolve().parents[5]
+REPO = Path(__file__).resolve().parents[2]
 _spec = importlib.util.spec_from_file_location("ledger_lint", REPO / "scripts" / "_ledger_lint.py")
 assert _spec and _spec.loader
 ll = importlib.util.module_from_spec(_spec)

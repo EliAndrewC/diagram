@@ -34,7 +34,6 @@ import re
 import sys
 from pathlib import Path
 
-SKILL = ".claude/skills/diagram"
 #: the declared-silence form - a section deliberately not written, recognized rather than inferred
 SILENT = re.compile(r"\(no dedicated entry\s*-\s*recorded as silent\)", re.I)
 
@@ -48,9 +47,9 @@ def _load(root: Path):  # noqa: ANN202
     `scripts/test-sync-with-main.sh` builds, which are a bare main and a clone and nothing else. A
     skill directory that EXISTS but will not import is a different thing and still raises.
     """
-    if not (root / SKILL / "l7r").is_dir():
+    if not (root / "l7r").is_dir():
         return None
-    skill = str(root / SKILL)
+    skill = str(root)
     if skill not in sys.path:
         sys.path.insert(0, skill)
     from l7r.diagram.interactive.classes import CLASSES

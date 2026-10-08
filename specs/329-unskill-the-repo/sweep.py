@@ -55,7 +55,7 @@ def climb(rel_dir: str, ups: int, rest: str) -> str | None:
 
 
 def main() -> int:
-    moved = set(open(sys.argv[1]).read().split())
+    moved = set(open(sys.argv[1]).read().splitlines())
     log = open(sys.argv[2], "w")
     files = subprocess.run(["git", "ls-files", "-z"], capture_output=True, text=True, check=True).stdout.split("\0")
     leftovers: list[str] = []

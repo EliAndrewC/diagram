@@ -17,7 +17,7 @@ import sys
 
 import pytest as _pytest
 
-REPO = pathlib.Path(__file__).resolve().parents[5]
+REPO = pathlib.Path(__file__).resolve().parents[2]
 _spec = importlib.util.spec_from_file_location("spec_lint", REPO / "scripts" / "spec-lint.py")
 assert _spec and _spec.loader
 lint = importlib.util.module_from_spec(_spec)

@@ -11,7 +11,7 @@ import importlib.util
 import pathlib
 import sys
 
-SCRIPTS = pathlib.Path(__file__).resolve().parents[5] / "scripts"
+SCRIPTS = pathlib.Path(__file__).resolve().parents[2] / "scripts"
 _spec = importlib.util.spec_from_file_location("_hookdeps", SCRIPTS / "_hookdeps.py")
 assert _spec and _spec.loader
 hookdeps = importlib.util.module_from_spec(_spec)

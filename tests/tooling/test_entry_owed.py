@@ -18,8 +18,8 @@ import sys
 
 import pytest
 
-REPO = pathlib.Path(__file__).resolve().parents[5]
-SKILL = REPO / ".claude/skills/diagram"
+REPO = pathlib.Path(__file__).resolve().parents[2]
+SKILL = REPO
 
 
 def _load(name: str):  # noqa: ANN202
@@ -80,7 +80,7 @@ def test_the_class_parser_still_finds_the_registry():
     from l7r.diagram.interactive.classes import CLASSES, _base
 
     found: dict[str, str] = {}
-    repo = SKILL.parents[2]
+    repo = SKILL
     for path in sorted((SKILL / "l7r/diagram/interactive/classes").glob("*.py")):
         # feature 319 (plan D12): a kind's text is its modal file, read by repository-relative path
         rel = str(path.relative_to(repo))

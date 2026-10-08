@@ -19,11 +19,11 @@ version: 0.2
 # absent; `tests/tooling/ci/test_cache.py` fails if the buildspecs disagree.
 cache:
   paths:
-    - 'repo/.claude/skills/diagram/.gencache/*/*.json'
-    - 'repo/.claude/skills/diagram/.gencache/*/*.svg'
-    - 'repo/.claude/skills/diagram/.gencache/*/coverage.*'
-    - 'repo/.claude/skills/diagram/.gencache/ast/**/*'
-    - 'repo/.claude/skills/diagram/.gencache/rolls/**/*'
+    - 'repo/.gencache/*/*.json'
+    - 'repo/.gencache/*/*.svg'
+    - 'repo/.gencache/*/coverage.*'
+    - 'repo/.gencache/ast/**/*'
+    - 'repo/.gencache/rolls/**/*'
     - 'repo/.git/gate-green-hooks'
     - 'repo/.git/hooks-test/**/*'
 env:

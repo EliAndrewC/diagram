@@ -1,10 +1,10 @@
 # The research record's rules, in full - with the GM's words and the incidents behind them
 
-<!-- Moved here verbatim from `.claude/skills/diagram/research/CLAUDE.md` by feature 250 (research R3,
+<!-- Moved here verbatim from `research/CLAUDE.md` by feature 250 (research R3,
 recommendation 4; the GM 2026-09-26): that file auto-loads into every session that reads a research file, on
 every turn, and at 43,500 characters it was about 8% of a research session's mean turn. It now carries the
 rules; this carries why each is the rule. Paths in backticks are relative to the skill directory
-`.claude/skills/diagram/`; links are relative to this file. -->
+``; links are relative to this file. -->
 
 ## What proves a cheaper check is still a good check (feature 260)
 
@@ -66,7 +66,7 @@ when you have to make an edit, then you are opening a file which is relatively s
 Do not `ls research/sources/` bare - it is 2,127 entries. Do not open a built page to edit it: the guard will
 re-aim an Edit at the one fragment holding its text, and refuse where none or several do.
 
-**Editing.** Open the fragment, edit it, run `make record` in `.claude/skills/diagram`. The gate and the push
+**Editing.** Open the fragment, edit it, run `make record` at the repository root. The gate and the push
 both run `make record CHECK=1`, which builds the whole site in memory and refuses a record that does not build.
 
 **Adding a question**: a free prefix between its neighbors - they count by ten, so there are nine - and
@@ -119,7 +119,7 @@ with `make append FILE= LINE=`. And a headless page session carries `container-s
 place of the root CLAUDE.md (about 5,200 tokens a turn).
 
 This file auto-loads when a research entry is being written or changed - which is exactly when the
-rule below applies. The entry's presentation is [`STYLE.md`](../.claude/skills/diagram/research/STYLE.md), the citing rules the record's
+rule below applies. The entry's presentation is [`STYLE.md`](../research/STYLE.md), the citing rules the record's
 `CLAUDE.md`, and the record a reader browses is the built site (the research README was retired by the GM on 2026-10-01);
 this file carries the one thing
 that is not a format rule: who the reader is.
@@ -143,7 +143,7 @@ level of curiosity:
    (since feature 301 the question's own small page in the built site, `../../../research/site/<page>/<anchor>.html`;
    from feature 194 the anchor on its research page, and before that the GitHub rendering of the Markdown),
    where the well-formatted markdown gives the finding, the decision it drove and any disclosed liberty.
-4. **The sources.** Every section ends in a `**Sources:**` line, and every key in [`SOURCES.html`](../.claude/skills/diagram/research/sources/)
+4. **The sources.** Every section ends in a `**Sources:**` line, and every key in [`SOURCES.html`](../research/sources/)
    carries the URL where the work can be read (constitution v2.13.0), so a reader who truly wants to
    check can - *"which both demonstrates that this was based on actual research and also gives them the
    ability to go read Wikipedia or whatever other public source we have linked to."*
@@ -205,7 +205,7 @@ research file is never bare. Write it as a link, and the target follows from the
 - a document we READ - the citation line carries a URL and no not-read marker - links to that URL, the FIRST
   one on the line: `` [`wang-ochiai-2022`](https://doi.org/10.1080/13467581.2021.1972810) ``;
 - a document we did NOT read - the line says `SUMMARY-ONLY` or `URL: none`, or records its URL as `unfetched`
-  with no `READ` beside it - links to its registry entry, `` [`ma-2024-desire-paths`](../.claude/skills/diagram/research/sources/010-works-cited/6140-ma-2024-desire-paths.html) ``
+  with no `READ` beside it - links to its registry entry, `` [`ma-2024-desire-paths`](../research/sources/010-works-cited/6140-ma-2024-desire-paths.html) ``
   (`../SOURCES.md#...` from `cities/`), because the entry is where "we could not read it" is said, and a link
   to the page would present an unread source as a read one.
 
@@ -451,7 +451,7 @@ opens these pages locally (`../../../research/<name>.html#<id>`). GitHub shows a
 the reading path is the local page, not GitHub. The record's `CLAUDE.md` and this file stay Markdown: they are instructions,
 not the record.
 The mechanics of the page side - the anchor rule, the ordering, the button - are in
-[`../l7r/diagram/interactive/CLAUDE.md`](../.claude/skills/diagram/l7r/diagram/interactive/CLAUDE.md), "The references modal
+[`../l7r/diagram/interactive/CLAUDE.md`](../l7r/diagram/interactive/CLAUDE.md), "The references modal
 lists QUESTIONS".
 
 ## The record is the ONE home per topic - the rule files retired into it (GM 2026-09-12, feature 229)

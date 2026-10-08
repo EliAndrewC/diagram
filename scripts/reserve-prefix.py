@@ -48,9 +48,9 @@ import _escape_log  # noqa: E402
 # GUARD_EDIT_OK: feature 303 - a third kind, `question`: a new question of the record takes the next free identity number
 # (`research/questions/NNNN-<heading id>.html`) under the same lock, so two sessions never number two questions alike.
 DIRS = {
-    "glossary": ".claude/skills/diagram/l7r/diagram/interactive/assets/glossary",
-    "registry": ".claude/skills/diagram/research/sources/010-works-cited",
-    "question": ".claude/skills/diagram/research/questions",
+    "glossary": "l7r/diagram/interactive/assets/glossary",
+    "registry": "research/sources/010-works-cited",
+    "question": "research/questions",
 }
 SUFFIX = {"glossary": ".json", "registry": ".html", "question": ".html"}
 LEDGER = "prefixes.jsonl"
@@ -194,14 +194,14 @@ def _sources():  # noqa: ANN202
 
 
 #: Where the record keeps its source vocabulary, under the clone (feature 305).
-RECORD = Path(".claude/skills/diagram/research")
+RECORD = Path("research")
 #: A registry stub's tags marker before its tags are given: no value is a real one, so `make record` refuses the entry
 #: until it is filled (feature 305 FR-011) - a source cannot reach the site untagged.
 TAGS_PLACEHOLDER = "<!-- tags: period=<period>; region=<region>; kind=<kind> -->"
 
 
 def _source_tags():  # noqa: ANN202 - the engine's own parser, loaded by path: one grammar for the marker, and stdlib-only
-    spec = importlib.util.spec_from_file_location("_source_tags", HERE.parent / ".claude/skills/diagram/l7r/diagram/interactive/record/source_tags.py")
+    spec = importlib.util.spec_from_file_location("_source_tags", HERE.parent / "l7r/diagram/interactive/record/source_tags.py")
     assert spec and spec.loader
     mod = importlib.util.module_from_spec(spec)
     sys.modules[spec.name] = mod  # a dataclass resolves its module by name while the class is made

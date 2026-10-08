@@ -33,12 +33,11 @@ HERE = pathlib.Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 sys.dont_write_bytecode = True
 
-SKILL = ".claude/skills/diagram"
 MODAL_DIRS = (
-    f"{SKILL}/l7r/diagram/interactive/classes",
-    f"{SKILL}/l7r/diagram/interactive/compound_kinds",
+    "l7r/diagram/interactive/classes",
+    "l7r/diagram/interactive/compound_kinds",
 )
-RESEARCH = f"{SKILL}/research"
+RESEARCH = "research"
 FORM_CHECK = "modal-form"
 RESEARCH_CHECKS = ("modal-accuracy", "modal-references", "modal-gaps")
 #: the Depiction tab's check (plan D13): owed by the tab's words, its Drawing: list, or a page that list names
@@ -137,7 +136,7 @@ def parse_tags(doc: str) -> dict[str, str]:
 
 
 #: one file per modal (plan D12): `<MODALS>/<hamlet|sheet>/<slug of the key>.md`, as `classes/_base.modal_path` places them
-MODALS = f"{SKILL}/l7r/diagram/interactive/assets/modals"
+MODALS = "l7r/diagram/interactive/assets/modals"
 
 
 def modal_file(py_path: str, key: str) -> str:
@@ -287,8 +286,8 @@ def digest(parts: Sequence[str]) -> str:
 
 def _pages(root: pathlib.Path, files: Sequence[str]) -> list[str]:
     return [
-        page_words((root / SKILL / f).read_text(encoding="utf-8"))
-        if (root / SKILL / f).is_file()
+        page_words((root / f).read_text(encoding="utf-8"))
+        if (root / f).is_file()
         else ""
         for f in files
     ]
@@ -346,7 +345,7 @@ def owed(root: pathlib.Path, base: str) -> list[tuple[str, str, str]]:
         was = before.get(m.uid)
         fp_form, fp_research = fingerprints(root, m)
         moved_text = was is None or was.prose != m.prose or was.entry != m.entry
-        moved_pages = [f for f in m.entry_files() if f"{SKILL}/{f}" in changed_pages]
+        moved_pages = [f for f in m.entry_files() if f in changed_pages]
         if moved_text:
             why = (
                 "new to the About form"
@@ -363,7 +362,7 @@ def owed(root: pathlib.Path, base: str) -> list[tuple[str, str, str]]:
         # 2026-10-04: a conversion that dropped its drawing pages from Entry: and wrote no Depiction: would otherwise land with
         # its conventions and drawing links silently gone, every check green - the case FR-014 and SC-008 exist to catch)
         moved_drawing = [
-            f for f in m.drawing_files() if f"{SKILL}/{f}" in changed_pages
+            f for f in m.drawing_files() if f in changed_pages
         ]
         if moved_text or was.depiction != m.depiction:
             rows.append(

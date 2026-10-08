@@ -34,8 +34,7 @@ pytestmark = pytest.mark.tooling
 
 HERE = Path(__file__).resolve()
 SKILL = HERE.parents[2]
-REPO_ROOT = SKILL.parents[2]
-S = ".claude/skills/diagram"
+REPO_ROOT = SKILL
 
 CORE = '''from eng import tool
 
@@ -156,7 +155,7 @@ def new_project(tmp_path: Path) -> tuple[Path, Path]:
     git(root, "config", "user.name", "t")
     (root / "scripts").mkdir()
     shutil.copyfile(REPO_ROOT / "scripts" / "gate-stamp.py", root / "scripts" / "gate-stamp.py")
-    skill = root / S
+    skill = root
     (skill / "eng").mkdir(parents=True)
     (skill / "eng" / "__init__.py").write_text("", encoding="utf-8")
     (skill / "eng" / "core.py").write_text(CORE, encoding="utf-8")
@@ -261,12 +260,12 @@ def test_a_full_run_records_per_test_and_per_fixture_contexts_and_the_manifest(b
         contexts
     )  # the fixture is keyed by its definition site since feature 213 (tests/conftest.py -> baseid "tests")
     # the session fixture's execution of core.py is recorded under the FIXTURE, not under whichever test asked first
-    touched = incremental.contexts_touching(bdir / incremental.COVERAGE_DB, root, (f"{S}/eng/core.py",))
+    touched = incremental.contexts_touching(bdir / incremental.COVERAGE_DB, root, ("eng/core.py",))
     assert "fixture:tests::built" in touched
     tests = json.loads((bdir / incremental.TESTS).read_text(encoding="utf-8"))
     assert "tests::built" in tests["tests/test_tool.py::test_shallow"] and "tests::built" not in tests["tests/test_polder.py::test_dike[1]"]
     man = json.loads((bdir / incremental.MANIFEST).read_text(encoding="utf-8"))
-    assert f"{S}/eng/core.py" in man["engine"] and f"{S}/tests/conftest.py" in man["tests"] and man["tooling"]
+    assert "eng/core.py" in man["engine"] and "tests/conftest.py" in man["tests"] and man["tooling"]
 
 
 # ---- (d) an unrelated edit selects only what executed it --------------------------------------------------

@@ -21,7 +21,7 @@ import pytest
 pytestmark = pytest.mark.tooling
 
 SKILL = pathlib.Path(__file__).resolve().parents[2]
-REPO = SKILL.parents[2]
+REPO = SKILL
 MAKEFILE = (SKILL / "Makefile").read_text(encoding="utf-8")
 PACKAGE = "tests/full/interactive/page_browser"
 
@@ -54,7 +54,7 @@ def test_the_browser_area_is_what_the_synthetic_tests_read() -> None:
     exclusion list drops tests/ (the reason `_excluded` takes the area name)."""
     gs = _gate_stamp()
     files = {str(f.relative_to(REPO)) for f in gs._area_files(REPO, *gs.AREAS["browser"], area="browser")}
-    base = ".claude/skills/diagram/"
+    base = ""
     for want in (
         "l7r/diagram/interactive/assets/page.js",
         "l7r/diagram/interactive/assets/page.css",
@@ -94,7 +94,7 @@ def repo(tmp_path: pathlib.Path) -> pathlib.Path:
     main = tmp_path / "main"
     main.mkdir()
     git("init", "-q", "-b", "main", cwd=main)
-    skill = main / ".claude/skills/diagram"
+    skill = main
     for rel, text in {
         "l7r/diagram/interactive/page.py": "def render_page():\n    return 1\n",
         "l7r/diagram/interactive/assets/page.css": "body{}\n",
@@ -131,7 +131,7 @@ def test_the_stamp_goes_stale_when_any_input_or_the_browser_changes(repo: pathli
     assert _stale(gs, repo), "no stamp yet"
     gs.write_stamp("browser", repo)
     assert not _stale(gs, repo)
-    skill = repo / ".claude/skills/diagram"
+    skill = repo
     for rel in (
         "l7r/diagram/interactive/assets/page.css",
         "l7r/diagram/interactive/page.py",
@@ -159,7 +159,7 @@ def test_check_never_demands_a_browser_stamp(repo: pathlib.Path) -> None:
     passes the push's `--check` - the key is what the gate may skip on, never an obligation (a research or
     test edit owes no gate at push, feature 132 FR-024)."""
     gs = _gate_stamp()
-    skill = repo / ".claude/skills/diagram"
+    skill = repo
     with open(skill / "research/questions/0008-q.html", "a") as fh:
         fh.write("<h2>More</h2>\n")
     with open(skill / f"{PACKAGE}/test_synthetic.py", "a") as fh:

@@ -16,7 +16,7 @@ import pathlib
 
 import pytest
 
-REPO = pathlib.Path(__file__).resolve().parents[5]
+REPO = pathlib.Path(__file__).resolve().parents[2]
 
 
 def _load():  # noqa: ANN202
@@ -87,7 +87,7 @@ def test_a_question_bundle_on_the_real_record(tmp_path: pathlib.Path) -> None:
     assert "sources/ritter-timber-bridges.html" in names, "non-vacuity: the entry cites a registered work"
     assert "WORDS TO RULE ON" in (out / "prepass.txt").read_text(encoding="utf-8")
     manifest = (out / "MANIFEST.md").read_text(encoding="utf-8")
-    assert ".claude/skills/diagram/research/questions/0087-road-bridges-over-rivers-and-canals-hashi.html" in manifest, "the origin is named"
+    assert "research/questions/0087-road-bridges-over-rivers-and-canals-hashi.html" in manifest, "the origin is named"
     assert "counts on the first line" in manifest
 
 
@@ -226,7 +226,7 @@ def test_each_check_gets_only_its_own_parts(tmp_path: pathlib.Path) -> None:
     assert {"STYLE.md", "style-prepass.txt", "glossary-variants.txt"} <= names and "prepass.txt" not in names, "feature 292: record-style reads the guide itself, and its own prepass"
     assert not any(n.endswith(".notes.html") for n in names), "feature 292: record-style judges prose - no notes unless it audits a merge"
     rsx = tmp_path / "rsx"
-    old = REPO / ".claude/skills/diagram/research/questions" / next(n for n in names if n.endswith(".html") and n[:4].isdigit())
+    old = REPO / "research/questions" / next(n for n in names if n.endswith(".html") and n[:4].isdigit())
     assert cb.main(["0087", "--out", str(rsx), "--no-quotes", "--for", "record-style", "--extra", str(old), "--root", str(REPO)]) == 0
     assert any(p.name.endswith(".notes.html") for p in rsx.iterdir()), "a merge audit accounts for the notes, so it is handed them"
     ed = tmp_path / "ed"

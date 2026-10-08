@@ -12,7 +12,7 @@ from l7r.diagram.tools import roll_audit
 
 pytestmark = pytest.mark.tooling
 
-ENGINE = "/repo/.claude/skills/diagram/l7r/diagram"
+ENGINE = "/repo/l7r/diagram"
 
 
 def _db(tmp_path: Path) -> Path:
@@ -24,7 +24,7 @@ def _db(tmp_path: Path) -> Path:
     with_lines = [
         ("fixture:tests/gate/a.py::rolled", {f"{ENGINE}/hamletgen/sink.py": list(range(1, 2101))}),
         ("tests/gate/b.py::t|run", {f"{ENGINE}/hamletgen/sink.py": list(range(1, 2001)), f"{ENGINE}/hamletgen/water.py": list(range(1, 51))}),
-        ("tests/unit/test_w.py::t|run", {f"{ENGINE}/hamletgen/water.py": list(range(1, 11)), "/repo/.claude/skills/diagram/tests/unit/test_w.py": [1, 2]}),
+        ("tests/unit/test_w.py::t|run", {f"{ENGINE}/hamletgen/water.py": list(range(1, 11)), "/repo/tests/unit/test_w.py": [1, 2]}),
         ("", {f"{ENGINE}/hamletgen/plan.py": list(range(1, 100))}),
     ]
     for ctx, lines in with_lines:
@@ -81,5 +81,5 @@ def test_main_finds_the_repository_root_from_its_own_location(monkeypatch: pytes
     monkeypatch.setattr(roll_audit, "baseline_db", fake_baseline)
     out = io.StringIO()
     assert roll_audit.main([], out=out) == 2
-    assert (seen["root"] / ".claude" / "skills" / "diagram" / "Makefile").is_file(), seen
+    assert (seen["root"] / "Makefile").is_file(), seen
     assert "no baseline" in out.getvalue()

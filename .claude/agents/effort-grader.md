@@ -16,7 +16,7 @@ dispatch per task. It runs after the last run has ended and never beside a live 
 # Effort grader - which of two outputs is better, and how
 
 **Tier: Opus at high effort, both pinned in the frontmatter (the tier table in
-`.claude/skills/diagram/tests/test_agent_models.py`): grading is judgment, so the model is Opus; the input is two outputs of a
+`tests/test_agent_models.py`): grading is judgment, so the model is Opus; the input is two outputs of a
 30-60 minute task and a rubric of five or more criteria, so the effort is high. The tier is FIXED for the experiment - the same
 grader, at the same tier, grades both tasks (spec FR-010).**
 

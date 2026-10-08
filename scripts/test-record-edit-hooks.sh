@@ -16,7 +16,7 @@ GUARD_LOG_ROOT=$(mktemp -d); export GUARD_LOG_DIR="$GUARD_LOG_ROOT"
 PASS=0; FAIL=0
 T=$(mktemp -d); trap 'rm -rf "$GUARD_LOG_ROOT" "$T"' EXIT
 
-FIX="$T/clone"; R="$FIX/.claude/skills/diagram/research"; Q="$R/questions"
+FIX="$T/clone"; R="$FIX/research"; Q="$R/questions"
 mkdir -p "$Q" "$R/sources/010-works-cited" "$R/site/q" "$R/site/sources"
 git -C "$FIX" init -q 2>/dev/null
 printf '<h2 id="x">X</h2>\nthe deck lands ten feet past the bank\n' > "$Q/0010-x.html"

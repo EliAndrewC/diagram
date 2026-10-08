@@ -12,7 +12,7 @@ from tests.tooling.ci.conftest import git
 
 
 def test_entry_shape_and_month_to_date(repo: Path) -> None:
-    skill = repo / ".claude" / "skills" / "diagram"
+    skill = repo
     p = runlog.write_remote(skill, "ci-check", "reference", 300, "SUCCEEDED", "gm-assistant-check:abc", 4.0, "done")
     e = json.loads(p.read_text(encoding="utf-8"))
     assert e["where"] == "codebuild" and e["build_id"] == "gm-assistant-check:abc" and e["minutes"] == 4.0
@@ -29,7 +29,7 @@ def test_entry_shape_and_month_to_date(repo: Path) -> None:
 
 
 def test_report_with_no_remote_runs(repo: Path) -> None:
-    skill = repo / ".claude" / "skills" / "diagram"
+    skill = repo
     rep = runlog.remote_spend_report(skill)
     assert "(no remote runs yet)" in rep and "month-to-date: $0.00" in rep
 
@@ -40,7 +40,7 @@ def test_report_with_no_remote_runs(repo: Path) -> None:
 def test_would_have_entries_are_recorded_reported_and_never_spend(repo: Path) -> None:
     from l7r.diagram.ci import runlog
 
-    skill = repo / ".claude" / "skills" / "diagram"
+    skill = repo
     before = runlog.month_to_date(skill)
     p = runlog.write_would_have(skill, "ci-check", "reference", 5.0, "remote off: attempted")
     d = json.loads(p.read_text(encoding="utf-8"))

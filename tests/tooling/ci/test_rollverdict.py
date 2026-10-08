@@ -347,7 +347,7 @@ def test_unique_by_context_reads_the_run_s_database_and_main_judges_with_it(monk
     line nothing else does -> green with the line printed; the same line reached by another context too -> red."""
     import coverage
 
-    engine = "/repo/.claude/skills/diagram/l7r/diagram"
+    engine = "/repo/l7r/diagram"
     census = tmp_path / "census.jsonl"
     monkeypatch.setenv(_census.ENV, str(census))
     census.write_text(json.dumps(_rolled_with_context("Inashiro", 4, "tests/gate/a.py::t", "tests/gate/a.py::t|run")) + "\n")

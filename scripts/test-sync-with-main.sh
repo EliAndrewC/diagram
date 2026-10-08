@@ -60,14 +60,14 @@ OUT=$(syncmain "$D" sync-in --mirror-only); check "sync-in --mirror-only" 0 $?
 
 echo "2b. sync-in refreshes the CLONE's pool index on both branches, only when it is stale"
 D=$(topology b2)
-mkdir -p "$D/main/.clones/c/.claude/skills/diagram/pool/hamlets/x"
-printf 'pool-index:\n\t@echo built >> pool/index.html\npool-index-if-stale:\n\t@if [ ! -f pool/index.html ] || [ -n "$$(find pool legacy-hand-authored-pool -newer pool/index.html \\( -name "*.json" -o -name "*.png" -o -name "*.notes.md" \\) -print -quit 2>/dev/null)" ]; then $(MAKE) --no-print-directory pool-index; fi\n' > "$D/main/.clones/c/.claude/skills/diagram/Makefile"
-IDX="$D/main/.clones/c/.claude/skills/diagram/pool/index.html"
+mkdir -p "$D/main/.clones/c/pool/hamlets/x"
+printf 'pool-index:\n\t@echo built >> pool/index.html\npool-index-if-stale:\n\t@if [ ! -f pool/index.html ] || [ -n "$$(find pool legacy-hand-authored-pool -newer pool/index.html \\( -name "*.json" -o -name "*.png" -o -name "*.notes.md" \\) -print -quit 2>/dev/null)" ]; then $(MAKE) --no-print-directory pool-index; fi\n' > "$D/main/.clones/c/Makefile"
+IDX="$D/main/.clones/c/pool/index.html"
 OUT=$(syncmain "$D" sync-in --mirror-only); check "mirror-only sync-in with no index" 0 $?
 [ "$(cat "$IDX" 2>/dev/null)" = "built" ] && PASS=$((PASS+1)) || { echo "FAIL  missing index was not built on the dirty-clone branch"; FAIL=$((FAIL+1)); }
 OUT=$(syncmain "$D" sync-in); check "sync-in with a fresh index" 0 $?
 [ "$(cat "$IDX")" = "built" ] && PASS=$((PASS+1)) || { echo "FAIL  fresh index was rebuilt (efficiency check did not hold)"; FAIL=$((FAIL+1)); }
-touch -d '-10 seconds' "$IDX"; echo '{}' > "$D/main/.clones/c/.claude/skills/diagram/pool/hamlets/x/x.json"
+touch -d '-10 seconds' "$IDX"; echo '{}' > "$D/main/.clones/c/pool/hamlets/x/x.json"
 OUT=$(syncmain "$D" sync-in); check "sync-in after a manifest changed" 0 $?
 [ "$(cat "$IDX")" = "$(printf 'built\nbuilt')" ] && PASS=$((PASS+1)) || { echo "FAIL  stale index was not rebuilt: $(cat "$IDX")"; FAIL=$((FAIL+1)); }
 
@@ -120,7 +120,7 @@ OUT=$(CI_ROUTE=GATED-LOCAL CI_MERGE="echo SKIP-VERIFIED > $D/main/.clones/c/.git
 
 echo "7c. THE SEAMS ARE IGNORED IN A REAL-SHAPED TREE (feature 132): CI_ROUTE=DIRECT cannot skip the gated route"
 D=$(topology gs)
-( cd "$D/main/.clones/c" && mkdir -p .claude/skills/diagram && printf 'ci-status:\n\t@false\nperf-review:\n\t@true\n' > .claude/skills/diagram/Makefile && echo 'def a(): return 6' > .claude/skills/x/a.py && git add -A && git commit -qm engine ); stamp_hooks "$D"
+( cd "$D/main/.clones/c" && printf 'ci-status:\n\t@false\nperf-review:\n\t@true\n' > Makefile && echo 'def a(): return 6' > .claude/skills/x/a.py && git add -A && git commit -qm engine ); stamp_hooks "$D"
 OUT=$(CI_ROUTE=DIRECT CI_MERGE="true" syncmain "$D" push); check "a real-shaped tree with CI_ROUTE=DIRECT does not push" 1 $?
 expect_out "could not decide the route"
 [ "$(git -C "$D/github.git" rev-parse main)" != "$(git -C "$D/main/.clones/c" rev-parse HEAD)" ] && PASS=$((PASS+1)) || { echo "FAIL  the seam bypassed the gated route"; FAIL=$((FAIL+1)); }
@@ -194,29 +194,29 @@ OUT=$(CI_ROUTE=DIRECT CI_PERF_REVIEW="echo 'perf-review: nothing owed'" syncmain
 echo "== the roll cache is seeded from a sibling at the same commit =="
 D=$(topology seed167)
 SIB="$D/main/.clones/sib"; git clone -q "$D/github.git" "$SIB"
-mkdir -p "$SIB/.claude/skills/diagram/.gencache/rolls/abc"
-echo '{"key":"k","subject":"s","deps":{"functions":[],"files":[]}}' > "$SIB/.claude/skills/diagram/.gencache/rolls/abc/meta.json"
+mkdir -p "$SIB/.gencache/rolls/abc"
+echo '{"key":"k","subject":"s","deps":{"functions":[],"files":[]}}' > "$SIB/.gencache/rolls/abc/meta.json"
 
 OUT=$(syncmain "$D" sync-in); check "sync-in succeeds" 0 $?
-[ -d "$D/main/.clones/c/.claude/skills/diagram/.gencache/rolls/abc" ] \
+[ -d "$D/main/.clones/c/.gencache/rolls/abc" ] \
   && { echo "  ok    a clone with no cache is seeded from the sibling"; PASS=$((PASS+1)); } \
   || { echo "FAIL  the clone was not seeded"; FAIL=$((FAIL+1)); }
 expect_out "seeded the roll cache"
 
 # ...and it must NOT overwrite a cache the clone already has - that one is keyed to work in progress
-echo 'MINE' > "$D/main/.clones/c/.claude/skills/diagram/.gencache/mine.txt"
+echo 'MINE' > "$D/main/.clones/c/.gencache/mine.txt"
 OUT=$(syncmain "$D" sync-in)
-[ -f "$D/main/.clones/c/.claude/skills/diagram/.gencache/mine.txt" ] \
+[ -f "$D/main/.clones/c/.gencache/mine.txt" ] \
   && { echo "  ok    an existing cache is left alone"; PASS=$((PASS+1)); } \
   || { echo "FAIL  the seeding clobbered an existing cache"; FAIL=$((FAIL+1)); }
 
 # ...and a sibling at a DIFFERENT commit is not taken: the clone starts cold instead
 D2=$(topology seed167b)
 SIB2="$D2/main/.clones/sib"; git clone -q "$D2/github.git" "$SIB2"
-mkdir -p "$SIB2/.claude/skills/diagram/.gencache/rolls/xyz"
+mkdir -p "$SIB2/.gencache/rolls/xyz"
 ( cd "$SIB2" && echo drift > drift.txt && git add -A && git -c user.email=t@t -c user.name=t commit -qm drift )
 OUT=$(syncmain "$D2" sync-in)
-[ -d "$D2/main/.clones/c/.claude/skills/diagram/.gencache" ] \
+[ -d "$D2/main/.clones/c/.gencache" ] \
   && { echo "FAIL  seeded from a sibling at a different commit"; FAIL=$((FAIL+1)); } \
   || { echo "  ok    a sibling at another commit is refused - the clone starts cold"; PASS=$((PASS+1)); }
 
@@ -233,9 +233,9 @@ expect_out "shares no commit with main"
 echo "12. the prompt hook's path: render-sync detached, one runner at a time, a bounded lock wait (2026-10-02)"
 # GUARD_EDIT_OK: new test cases for the hook's --background-render path; nothing existing loosened
 D=$(topology bg)
-mkdir -p "$D/main/.claude/skills/diagram"
+mkdir -p "$D/main"
 MARK="$D/rendered"
-printf 'render-sync:\n\t@sleep 2; git -C %s rev-parse --short HEAD >> %s\n' "$D/main" "$MARK" > "$D/main/.claude/skills/diagram/Makefile"
+printf 'render-sync:\n\t@sleep 2; git -C %s rev-parse --short HEAD >> %s\n' "$D/main" "$MARK" > "$D/main/Makefile"
 ( cd "$D/seed" && echo more > g && git add -A && git commit -qm upstream && git push -q "$D/github.git" HEAD:main )
 start=$(date +%s)
 OUT=$(syncmain "$D" sync-in --background-render); check "sync-in --background-render" 0 $?

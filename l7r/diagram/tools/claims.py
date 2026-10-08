@@ -495,7 +495,7 @@ def _scope_trees(skill: Path, root: str = ROOT_PACKAGE) -> dict[str, tuple[Path,
     return dict(sorted(seen.items()))
 
 
-def all_units(skill: Path, repo_prefix: str = ".claude/skills/diagram/", every_module_unit: bool = False) -> Iterator[tuple[Unit, list[str]]]:
+def all_units(skill: Path, repo_prefix: str = "", every_module_unit: bool = False) -> Iterator[tuple[Unit, list[str]]]:
     """Every unit in scope with its module's errors: the code (FR-002), then the procedure sections (FR-003). Paths are
     repository-relative, as the index keys them."""
     mods = _scope_trees(skill)

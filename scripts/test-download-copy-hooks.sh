@@ -39,11 +39,11 @@ echo
 echo "2. IT STAYS QUIET - reading the copy, the make targets, the canonical list"
 check "cat"                        ok "$(bash_ev "cat $COPY")"
 check "grep"                       ok "$(bash_ev "grep -n 'Mark:' $COPY")"
-check "diff"                       ok "$(bash_ev "diff $COPY .claude/skills/diagram/research/to-download.md")"
+check "diff"                       ok "$(bash_ev "diff $COPY research/to-download.md")"
 check "copying it out"             ok "$(bash_ev "cp $COPY /tmp/x.md")"
 check "make downloads-sync"        ok "$(bash_ev 'make downloads-sync')"
 check "make download-add"          ok "$(bash_ev 'make download-add FILE=draft.md')"
-check "editing the canonical list" ok "$(tool_ev Edit /repo/.claude/skills/diagram/research/to-download.md)"
+check "editing the canonical list" ok "$(tool_ev Edit /repo/research/to-download.md)"
 check "a commit message naming it" ok "$(bash_ev "git -C . commit -qm 'the GM copy TO-DOWNLOAD.md left alone'")"
 
 echo

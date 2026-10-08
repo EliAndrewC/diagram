@@ -14,7 +14,7 @@ import importlib.util
 import pathlib
 import string
 
-REPO = pathlib.Path(__file__).resolve().parents[5]
+REPO = pathlib.Path(__file__).resolve().parents[2]
 BRIEF = REPO / "specs" / "250-close-the-record-checks" / "measure" / "brief.py"
 
 
@@ -40,7 +40,7 @@ def test_every_template_declares_its_kind_and_the_runner_reads_it() -> None:
     for name, kind in WANT.items():
         text = _render(getattr(brief, name), kind)
         assert bl.declared(text) == kind, name
-        assert bl.refusal(pathlib.Path(f"{name}.md"), text, REPO / ".claude/skills/diagram/research") == "", name
+        assert bl.refusal(pathlib.Path(f"{name}.md"), text, REPO / "research") == "", name
 
 
 def test_every_call_site_passes_the_right_kind() -> None:

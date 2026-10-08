@@ -63,7 +63,7 @@ def report(rows: list[str]) -> int:
     if not rows:
         return 0
     print(f"OLD LAYOUT: {len(rows)} line(s) name {OLD}/, which feature 329 moved to the repository root.")
-    print("Drop the prefix - `.claude/skills/diagram/dev/loop.md` is now `dev/loop.md`, and a command that cd'd there runs at the root:")
+    print(f"Drop the prefix - `{OLD}/dev/loop.md` is now `dev/loop.md`, and a command that cd'd there runs at the root:")
     for r in rows[:40]:
         path, rest = r.split(":", 1)
         print(f"  {path}:{rest[:200].replace(OLD + '/', '')}")

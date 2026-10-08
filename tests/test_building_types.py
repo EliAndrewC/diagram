@@ -156,7 +156,7 @@ def test_the_census_fires_on_a_planted_literal(tmp_path, monkeypatch) -> None:
 def test_ignore_file_negates_each_hand_drawn_tier_and_reignores_its_generated_exceptions() -> None:
     with open(os.path.join(REPO, ".gitignore"), encoding="utf-8") as fh:
         lines = [ln.strip() for ln in fh if ln.strip() and not ln.startswith("#")]
-    prefix = ".claude/skills/diagram/pool/"
+    prefix = "pool/"
     for t in bt.load_types():
         if t.hand_drawn:
             assert f"!{prefix}{t.tier}/*/*.svg" in lines, f"{t.tier}: hand-drawn source is not un-ignored per tier"

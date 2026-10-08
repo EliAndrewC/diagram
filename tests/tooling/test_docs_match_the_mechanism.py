@@ -26,7 +26,7 @@ import pytest
 pytestmark = pytest.mark.tooling
 
 SKILL = Path(__file__).resolve().parents[2]
-ROOT = SKILL.parents[2]
+ROOT = SKILL
 
 # The files a session reads before it acts. A doc not listed here is free to be a historical record;
 # these are the ones that instruct.

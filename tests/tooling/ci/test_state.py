@@ -9,7 +9,7 @@ import pytest
 from l7r.diagram.ci import state
 from tests.tooling.ci.conftest import commit
 
-S = ".claude/skills/diagram/"
+S = ""
 
 
 def test_absent_then_green_then_hash_changes_on_edit(repo: Path) -> None:

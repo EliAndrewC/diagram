@@ -54,7 +54,7 @@ def _git_env() -> dict[str, str]:
 
         from l7r.diagram.ci.config import load_secrets
 
-        root = Path(SKILL).parents[2]
+        root = Path(SKILL)
         env.update({"GIT_ASKPASS": str(root / "scripts" / "git-askpass-token.sh"), "GITHUB_TOKEN": load_secrets(root).github_pat, "GIT_TERMINAL_PROMPT": "0"})
     except FileNotFoundError:
         pass  # no secrets: an anonymous clone still works for a public archive; the push will say so

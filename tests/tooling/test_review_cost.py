@@ -9,7 +9,7 @@ from pathlib import Path
 
 import pytest
 
-REPO = Path(__file__).resolve().parents[5]
+REPO = Path(__file__).resolve().parents[2]
 _spec = importlib.util.spec_from_file_location("review_cost", REPO / "scripts" / "_review_cost.py")
 assert _spec and _spec.loader
 rc = importlib.util.module_from_spec(_spec)

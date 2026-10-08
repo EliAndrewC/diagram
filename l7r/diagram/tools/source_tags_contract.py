@@ -16,7 +16,7 @@ from l7r.diagram.interactive.record import source_tags as st
 from l7r.diagram.interactive.sources import RESEARCH_DIR
 
 #: The contract, from the skill's research directory: `.claude/agents/` beside `.claude/skills/`.
-CONTRACT = os.path.normpath(os.path.join(RESEARCH_DIR, "..", "..", "..", "agents", "source-applicability.md"))
+CONTRACT = os.path.normpath(os.path.join(RESEARCH_DIR, "..", ".claude", "agents", "source-applicability.md"))
 
 
 def main(argv: list[str] | None = None) -> int:

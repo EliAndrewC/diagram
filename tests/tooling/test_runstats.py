@@ -16,7 +16,7 @@ import pytest
 
 from tests import _gate_failures
 
-REPO = pathlib.Path(__file__).resolve().parents[5]
+REPO = pathlib.Path(__file__).resolve().parents[2]
 SKILL = pathlib.Path(__file__).resolve().parents[2]
 _spec = importlib.util.spec_from_file_location("_runstats", REPO / "scripts" / "_runstats.py")
 assert _spec and _spec.loader

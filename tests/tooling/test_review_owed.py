@@ -19,8 +19,7 @@ from typing import Any
 
 import pytest
 
-REPO = Path(__file__).resolve().parents[5]
-SKILL = ".claude/skills/diagram"
+REPO = Path(__file__).resolve().parents[2]
 
 
 def _mod(name: str) -> Any:
@@ -41,7 +40,7 @@ def git(root: Path, *args: str) -> str:
 
 
 def _map(root: Path, tree: str, name: str, classes: dict[str, int], *, poly: int = 1, renders: bool = False) -> Path:
-    d = root / SKILL / tree / "hamlets" / name
+    d = root / tree / "hamlets" / name
     d.mkdir(parents=True, exist_ok=True)
     (d / f"{name}.json").write_text(json.dumps({"meta": {"name": name}, "houses": [[poly, poly]], "ink_classes": classes}))
     (d / f"{name}.notes.md").write_text(f"# {name}\n")
@@ -53,7 +52,7 @@ def _map(root: Path, tree: str, name: str, classes: dict[str, int], *, poly: int
 
 
 def _sheet(root: Path, name: str, kinds: list[str]) -> Path:
-    d = root / SKILL / "pool" / "magistracies" / name
+    d = root / "pool" / "magistracies" / name
     d.mkdir(parents=True, exist_ok=True)
     (d / f"{name}.gen.py").write_text("# sheet\n")
     (d / f"{name}.svg").write_text("<svg>" + "".join(f'<rect data-kind="{k}"/>' for k in kinds) + "</svg>")
@@ -82,8 +81,8 @@ def clone(tmp_path: Path) -> Path:
     _map(root, "pool", "sawada", {"farmhouse": 7, "wood shed": 3})
     _map(root, "legacy-hand-authored-pool", "furu", {})
     _sheet(root, "hayakawa", ["residence", "kitchen"])
-    (root / SKILL / "l7r").mkdir(parents=True)
-    (root / SKILL / "l7r" / "engine.py").write_text("X = 1\n")
+    (root / "l7r").mkdir(parents=True)
+    (root / "l7r" / "engine.py").write_text("X = 1\n")
     git(root, "add", "-A")
     git(root, "commit", "-qm", "the pool")
     git(root, "update-ref", "refs/remotes/origin/main", git(root, "rev-parse", "HEAD"))
@@ -106,7 +105,7 @@ def test_an_engine_change_moving_every_manifest_owes_nothing(clone: Path) -> Non
     """SC-001: the shared engine change - every manifest moved, nothing new drawn - owes zero review runs."""
     _map(clone, "pool", "inashiro", {"farmhouse": 9, "privy": 4}, poly=2, renders=True)
     _map(clone, "pool", "sawada", {"farmhouse": 7, "wood shed": 3}, poly=2)
-    (clone / SKILL / "l7r" / "engine.py").write_text("X = 2\n")
+    (clone / "l7r" / "engine.py").write_text("X = 2\n")
     _tasks(clone, ["none: a speed lever, every element placed under rules already judged"])
     assert units(clone) == []
     assert owed.check_declared(clone) is None
@@ -216,7 +215,7 @@ def test_a_hand_drawn_map_awaiting_conversion_owes_nothing(clone: Path) -> None:
 
 def test_a_mode_a_sheet_in_the_legacy_tree_still_owes_its_review(clone: Path) -> None:
     """GM 2026-10-01: a hand-drawn magistracy or shrine is never scripted, so it keeps its review wherever it lives."""
-    d = clone / SKILL / "legacy-hand-authored-pool" / "shrines" / "kaminari"
+    d = clone / "legacy-hand-authored-pool" / "shrines" / "kaminari"
     d.mkdir(parents=True)
     (d / "kaminari.svg").write_text('<svg><rect data-kind="hall"/></svg>')
     assert ("building-review", "kaminari", "kaminari") in units(clone)
@@ -224,7 +223,7 @@ def test_a_mode_a_sheet_in_the_legacy_tree_still_owes_its_review(clone: Path) ->
 
 def test_a_tweak_declares_in_its_commit_message(clone: Path) -> None:
     """GM 2026-10-01 (the household shrine's torii): a change done directly has no tasks.md, so its commit carries the line."""
-    (clone / SKILL / "l7r" / "engine.py").write_text("X = 2\n")
+    (clone / "l7r" / "engine.py").write_text("X = 2\n")
     git(clone, "add", "-A")
     git(clone, "commit", "-qm", "the torii's second crossbar\n\nOccasion: glyph-redrawn: privy - the second crossbar")
     assert units(clone) == [("glyph-check", "privy", "inashiro")]
@@ -262,7 +261,7 @@ def test_detected_and_declared_units_are_one_unit(clone: Path) -> None:
 
 
 def test_code_moved_with_no_occasions_section_is_refused(clone: Path) -> None:
-    (clone / SKILL / "l7r" / "engine.py").write_text("X = 3\n")
+    (clone / "l7r" / "engine.py").write_text("X = 3\n")
     refusal = owed.check_declared(clone)
     assert refusal and "l7r/engine.py" in refusal and "## Occasions" in refusal
     _tasks(clone, None)  # a tasks.md with no section still refuses
@@ -272,9 +271,9 @@ def test_code_moved_with_no_occasions_section_is_refused(clone: Path) -> None:
 
 
 def test_a_tracked_sheet_svg_is_code_and_a_test_or_a_note_is_not(clone: Path) -> None:
-    (clone / SKILL / "tests").mkdir()
-    (clone / SKILL / "tests" / "test_x.py").write_text("")
-    (clone / SKILL / "pool" / "hamlets" / "inashiro" / "inashiro.notes.md").write_text("# more\n")
+    (clone / "tests").mkdir()
+    (clone / "tests" / "test_x.py").write_text("")
+    (clone / "pool" / "hamlets" / "inashiro" / "inashiro.notes.md").write_text("# more\n")
     assert owed.check_declared(clone) is None
     _sheet(clone, "hayakawa", ["residence", "kitchen"]).joinpath("hayakawa.svg").write_text("<svg><rect/></svg>")
     assert owed.check_declared(clone)
@@ -282,7 +281,7 @@ def test_a_tracked_sheet_svg_is_code_and_a_test_or_a_note_is_not(clone: Path) ->
 
 def test_many_touched_files_are_summarized(clone: Path) -> None:
     for i in range(7):
-        (clone / SKILL / "l7r" / f"m{i}.py").write_text("")
+        (clone / "l7r" / f"m{i}.py").write_text("")
     assert "and 2 more" in (owed.check_declared(clone) or "")
 
 
@@ -307,15 +306,15 @@ def test_a_mirror_supplies_a_generated_sheets_base(clone: Path, tmp_path: Path) 
     inner = mirror / ".clones" / "s"
     subprocess.run(["git", "clone", "-q", str(clone), str(inner)], check=True)
     git(inner, "update-ref", "refs/remotes/origin/main", git(inner, "rev-parse", "HEAD"))
-    gen = inner / SKILL / "pool" / "magistracies" / "example"
+    gen = inner / "pool" / "magistracies" / "example"
     gen.mkdir(parents=True)
     (gen / "example.gen.py").write_text("")
     git(inner, "add", "-A")
     git(inner, "commit", "-qm", "a generated sheet")
     git(inner, "update-ref", "refs/remotes/origin/main", git(inner, "rev-parse", "HEAD"))
     (gen / "example.svg").write_text('<svg><g data-kind="residence"/><g data-kind="well"/></svg>')
-    (mirror / SKILL / "pool" / "magistracies" / "example").mkdir(parents=True)
-    (mirror / SKILL / "pool" / "magistracies" / "example" / "example.svg").write_text('<svg><g data-kind="residence"/></svg>')
+    (mirror / "pool" / "magistracies" / "example").mkdir(parents=True)
+    (mirror / "pool" / "magistracies" / "example" / "example.svg").write_text('<svg><g data-kind="residence"/></svg>')
     _, got, _ = owed.owed(inner)
     assert [(u.check, u.subject, u.on) for u in got] == [("glyph-check", "well", "example"), ("size-audit", "well", "example")]
 
@@ -341,7 +340,7 @@ def test_main_prints_slugs_units_the_ruling_and_the_declaration(clone: Path, cap
     assert capsys.readouterr().out.strip().split("\t")[:4] == ["glyph-check--well", "glyph-check", "well", "inashiro"]
     owed.main(["--root", str(clone), "--why"])
     assert "glyph-check:well on inashiro" in capsys.readouterr().out
-    (clone / SKILL / "l7r" / "engine.py").write_text("X = 9\n")
+    (clone / "l7r" / "engine.py").write_text("X = 9\n")
     assert owed.main(["--root", str(clone), "--check-declared"]) == 1
     _tasks(clone, ["none: test"])
     assert owed.main(["--root", str(clone), "--check-declared"]) == 0

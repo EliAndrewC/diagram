@@ -11,7 +11,7 @@ import os
 import pathlib
 import subprocess
 
-REPO = pathlib.Path(__file__).resolve().parents[5]
+REPO = pathlib.Path(__file__).resolve().parents[2]
 SCRIPT = REPO / "scripts" / "pull-queue.sh"
 
 

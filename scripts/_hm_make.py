@@ -420,7 +420,7 @@ def _makefile_for(cwd: str) -> str:
     repository's own. A clone and main carry the same targets, and a target missing from the tree
     the command runs in fails loudly in make, never silently."""
     from pathlib import Path
-    rel = Path(".claude/skills/diagram/Makefile")
+    rel = Path("Makefile")
     here = Path(cwd).resolve() if cwd else None
     while here is not None:
         if (here / rel).is_file():

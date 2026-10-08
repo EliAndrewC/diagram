@@ -18,7 +18,7 @@ g() { git -C "$T" -c user.name=t -c user.email=t@t "$@" >/dev/null 2>&1; }
 g init -q -b main; g commit -q --allow-empty -m root
 ( cd "$T" && "$GATE" >/dev/null 2>&1 ); ok "$?" 0 "no engine, silent"
 
-S="$T/.claude/skills/diagram"
+S="$T"
 mkdir -p "$S/l7r/diagram/hamletgen" "$S/research/questions" "$S/buildings"
 printf 'from . import rows\n' > "$S/l7r/diagram/hamletgen/__init__.py"
 cat > "$S/l7r/diagram/hamletgen/rows.py" <<'PY'
@@ -35,7 +35,7 @@ printf '### Country shrine (a village district'"'"'s shrine)\n<!-- Research: pre
 
 # owed: refused, naming the claim and the command
 out="$( cd "$T" && "$GATE" 2>&1 )"; ok "$?" 1 "owed claims refuse"
-case "$out" in *"owed (new): .claude/skills/diagram/l7r/diagram/hamletgen/rows.py::far_row#dry share"*"make claims-bundle"*) ok y y "names the claim and the command" ;; *) ok n y "names the claim and the command" ;; esac
+case "$out" in *"owed (new): l7r/diagram/hamletgen/rows.py::far_row#dry share"*"make claims-bundle"*) ok y y "names the claim and the command" ;; *) ok n y "names the claim and the command" ;; esac
 
 # the escape: no reason refused, a reason passes and is logged in the tree's bypass log
 ( cd "$T" && CLAIMS_OK=1 "$GATE" >/dev/null 2>&1 ); ok "$?" 1 "CLAIMS_OK without a reason"
@@ -55,7 +55,7 @@ g add -A; g commit -q -m base
 # a finding introduced against an IN-STEP base: refused
 python3 - "$S/dev/claims-index.json" <<'PY'
 import json, sys
-p = sys.argv[1]; d = json.load(open(p)); d[".claude/skills/diagram/l7r/diagram/hamletgen/rows.py::far_row#dry share"]["verdict"] = "DRIFTED"
+p = sys.argv[1]; d = json.load(open(p)); d["l7r/diagram/hamletgen/rows.py::far_row#dry share"]["verdict"] = "DRIFTED"
 open(p, "w").write(json.dumps(d))
 PY
 out="$( cd "$T" && "$GATE" 2>&1 )"; ok "$?" 1 "an introduced finding refuses"

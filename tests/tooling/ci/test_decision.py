@@ -8,7 +8,7 @@ from l7r.diagram.ci.delta import Delta
 from l7r.diagram.ci.features import FeatureStatus
 from l7r.diagram.ci.state import FAILED, GREEN, VerificationState
 
-S = ".claude/skills/diagram/"
+S = ""
 GATED = Delta("b", (S + "l7r/diagram/m.py",), (S + "l7r/diagram/m.py",))
 DIRECT = Delta("b", ("docs/x.md",), ())
 COMPLETE = FeatureStatus(name="130-x", exists=True, faithful=True, open_tasks=())

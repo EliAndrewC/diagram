@@ -165,7 +165,7 @@ def stale_maps(skill: pathlib.Path, names: Iterable[str], current: Callable[[str
     # through the pass-12 failure it exists to stop: snapshots stay on disk, so a stale whole one passed a dispatch
     # that named none while the agent read a pool folder with no renders.
     out = []
-    snapshots = skill.parents[2] / ".git" / "review-snapshot"
+    snapshots = skill / ".git" / "review-snapshot"
     for name in names:
         gen = gen_of(skill, name)
         if gen is None:
@@ -289,7 +289,7 @@ def maps_named(prompt: str, pool_names: Iterable[str]) -> list[str]:
 
 def check(clone: pathlib.Path, names: list[str], prompt: str, gate_green: bool, current: Callable[[str], bool]) -> list[str]:
     """Every reason this dispatch should not run, in the order a session would fix them. Empty means go."""
-    skill = clone / ".claude" / "skills" / "diagram"
+    skill = clone
     records = measurement_records(clone)
     problems: list[str] = []
     for name in names:
@@ -321,7 +321,7 @@ def unit_maps(clone: pathlib.Path) -> dict[str, str]:
 
 
 def _gencache_current() -> Callable[[str], bool]:
-    skill = pathlib.Path(__file__).resolve().parents[1] / ".claude" / "skills" / "diagram"
+    skill = pathlib.Path(__file__).resolve().parents[1]
     sys.path.insert(0, str(skill))
     from l7r.diagram.pipeline import gencache  # noqa: PLC0415 - lazy: only the CLI pays for the engine import
 

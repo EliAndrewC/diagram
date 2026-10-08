@@ -429,7 +429,7 @@ def test_a_roster_change_plans_a_full_run(tmp_path: Path, monkeypatch: pytest.Mo
     bdir = tmp_path / "gb"
     bdir.mkdir()
     monkeypatch.setattr(incremental, "baseline_dir", lambda root: bdir)
-    roster = ".claude/skills/diagram/tests/rolls.py"
+    roster = "tests/rolls.py"
     before = {"engine": {"e/a.py": "1"}, "tests": {"t/test_a.py": "1", roster: "1"}, "tooling": "T"}
     (bdir / incremental.MANIFEST).write_text(json.dumps(before), encoding="utf-8")
     (bdir / incremental.COVERAGE_DB).write_bytes(b"")

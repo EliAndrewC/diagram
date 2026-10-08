@@ -119,7 +119,7 @@ def decide(tool: str, file_path: str, tool_input: dict, root: str) -> dict:
                            f"`make record` would overwrite it, and the fragments a session and every "
                            f"checking agent read would still say the old thing. A whole-file write "
                            f"cannot be routed to a fragment: edit the fragments, then run "
-                           f"`{_rebuild(rel)}` in .claude/skills/diagram."}
+                           f"`{_rebuild(rel)}` at the repository root."}
     old = str(tool_input.get("old_string", ""))
     holders = fragments_holding(page_dir, old, root)
     if len(holders) == 1:
@@ -159,7 +159,7 @@ def main() -> int:
             "additionalContext": (
                 f"{verdict['page']} is assembled from {os.path.dirname(verdict['fragment'])}/ and is "
                 f"never hand-edited, so this edit was re-aimed at the one fragment holding that text: "
-                f"{verdict['fragment']}. Run `make record` in .claude/skills/diagram afterwards to rebuild "
+                f"{verdict['fragment']}. Run `make record` at the repository root afterwards to rebuild "
                 f"the site (research/site/) from it."),
         }}
     print(json.dumps(verdict))

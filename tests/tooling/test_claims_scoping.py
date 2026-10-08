@@ -16,8 +16,8 @@ import pytest
 from tests.tooling.test_claims_index import MOD, _commit, _repo, _tree, cx
 
 PAGE = '<h2 id="row-villages-resson">Row villages</h2>\n<p class="intro">Why asked.</p>\n<p>Farms face the street.</p>\n<p>Each lane is 5 ft.</p>\n'
-SHARE = ".claude/skills/diagram/l7r/diagram/hamletgen/rows.py::SHARE#dry share"
-FAR = ".claude/skills/diagram/l7r/diagram/hamletgen/rows.py::far_row#dry share"
+SHARE = "l7r/diagram/hamletgen/rows.py::SHARE#dry share"
+FAR = "l7r/diagram/hamletgen/rows.py::far_row#dry share"
 QDIR = "research/questions"
 
 

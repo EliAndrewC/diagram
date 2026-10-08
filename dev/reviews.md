@@ -90,7 +90,7 @@ reviewer, which runs multiple times on every pass."* So:
 - **Never busy-wait on one.** Same rule as the gate: act on the completion notification.
 - **The push-time gate is unchanged** (`review-gate.sh`: a re-rolled pool map carries a logged
   review) - under FR-006 the push is the feature's end, which is exactly the acceptance pass above.
-- **Every FINDING is a row in [`docs/review-ledger.md`](../../../../docs/review-ledger.md), written
+- **Every FINDING is a row in [`docs/review-ledger.md`](../docs/review-ledger.md), written
   by the SESSION, never by the reviewer** (the GM: you may disagree with the reviewer, and the log
   must say both what was found and whether it was acted on - fixed / recorded-only / declined with
   why / MISSED-BY-REVIEWER). In the same commit that acts on the review. The first miss on record (T12 round 2: the mechanism measured, the picture not judged)

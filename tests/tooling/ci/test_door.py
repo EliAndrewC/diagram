@@ -11,7 +11,7 @@ import pytest
 from l7r.diagram.ci import door
 from tests.tooling.ci.conftest import commit, git
 
-S = ".claude/skills/diagram/"
+S = ""
 
 
 def _entry(root: Path, name: str, outcome: str, target: str, commit_sha: str) -> None:

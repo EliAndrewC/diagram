@@ -41,7 +41,7 @@ check() { # label expected(ok|blocked) rc
 echo "1. THE MOTIVATING CASE: measure, write one test, measure"
 setup
 run "$(bash_ev 'make test-full')"; check "the first measurement is allowed" ok $?
-run "$(edit_ev '/diagram/.claude/skills/diagram/tests/settlement/test_geom.py')"
+run "$(edit_ev '/diagram/tests/settlement/test_geom.py')"
 run "$(bash_ev 'make test-full')"; check "the SECOND is BLOCKED" blocked $?
 grep -q "Measure ONCE" "$HOOK_ERR" && { echo "  ok    the message says what to do instead"; PASS=$((PASS+1)); } || { echo "  FAIL  message unhelpful"; FAIL=$((FAIL+1)); }
 grep -q "make quick" "$HOOK_ERR" && { echo "  ok    the message names the cheap loop"; PASS=$((PASS+1)); } || { echo "  FAIL  message does not name make quick"; FAIL=$((FAIL+1)); }
@@ -57,7 +57,7 @@ teardown
 echo "2. an ENGINE edit resets it - the numbers really are stale now"
 setup
 run "$(bash_ev 'make test-full')"; run "$(bash_ev 'make test-full')"
-run "$(edit_ev '/diagram/.claude/skills/diagram/l7r/diagram/hamletgen/ways.py')"
+run "$(edit_ev '/diagram/l7r/diagram/hamletgen/ways.py')"
 run "$(bash_ev 'make test-full')"; check "allowed after an engine edit" ok $?
 teardown
 

@@ -100,7 +100,7 @@ monthly hard stop) and, for FULL, `door.py`'s committed `permitted` entry. A ver
 short-circuit it, because a record says a gate PASSED and says nothing about what it cost.
 
 **It cannot mint a push credential, and that refusal lives in the tree the build runs.**
-[`buildspec/measure.yml`](../../../../../buildspec/measure.yml) sets `MODE: measure`, and `run.sh`
+[`buildspec/measure.yml`](../../../buildspec/measure.yml) sets `MODE: measure`, and `run.sh`
 returns before writing `verified/<key>.json` - which puts it before the push as well. A dispatcher
 flag would be a promise; a buildspec is a diff, which is the bar [`door.py`](door.py) set for the FULL
 prompt. Its cache block and install phase are otherwise IDENTICAL to `check.yml`'s: a measurement that
@@ -123,9 +123,9 @@ local state.
 ## What travels to the build, and how
 
 The projects hold a placeholder buildspec. The dispatcher passes the repository's own
-[`buildspec/<mode>.yml`](../../../../../buildspec/) as `buildspecOverride`, so the build runs
+[`buildspec/<mode>.yml`](../../../buildspec) as `buildspecOverride`, so the build runs
 whatever the tree under test says - reviewable in a diff. Both YAMLs call
-[`buildspec/run.sh`](../../../../../buildspec/run.sh); `MODE` (check | merge) is the only
+[`buildspec/run.sh`](../../../buildspec/run.sh); `MODE` (check | merge) is the only
 difference: merge fast-forward-pushes the verified result to GitHub `main` and deletes the mailbox.
 The custom image (`Dockerfile.ci`, `make ci-image`) is used once its marker `image/latest.txt`
 exists in the bucket; until then the build bootstraps Python 3.14 + resvg on the stock image
@@ -149,7 +149,7 @@ that can present any of these as diligence -
 
 ## The `verified/` write path (R8, FR-016) - closed 2026-08-25
 
-The bucket policy in [`buildspec/verified-deny-policy.json`](../../../../../buildspec/verified-deny-policy.json)
+The bucket policy in [`buildspec/verified-deny-policy.json`](../../../buildspec/verified-deny-policy.json)
 denies `s3:PutObject` under `verified/` to every principal except `gm-assistant-codebuild-role`.
 Applied with the admin key on 2026-08-25 and verified: the session key gets `AccessDenied` there and
 still writes `go/`. Only a build can write a verified record.

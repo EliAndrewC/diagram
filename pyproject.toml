@@ -20,7 +20,17 @@ line-length = 200
 # faithfully regenerated. Measured 2026-08-30 with the tree named but this list not yet
 # updated: 18 files would be reformatted and 16 lint errors auto-fixed. `legacy-hand-authored-pool`
 # does not match the pattern `pool`, so the new tree had to be named here explicitly.
-extend-exclude = ["pool", "legacy-hand-authored-pool"]
+# THE FENCE (feature 329, carried from the retired root ruff.toml). The project moved to the repository root, so a
+# root `ruff format .` / `ruff check --fix .` - which the gate runs, in place, without failing - now starts here. The
+# old root config was `exclude = ["*"]` for exactly that reason: on 2026-08-17 a root `ruff format .` reformatted 19
+# files of RETIRED migration tooling under specs/ (features 022-116), frozen artifacts nobody works on, and it was
+# caught only because `git status` printed paths starting with `../../../`. Everything at the root that the skill
+# directory did not hold is named here, so a root run lints exactly what the skill directory's run did (research.md
+# R3 compares the two file lists) and touches nothing no package has adopted. tests/tooling/test_lint_scope.py pins it.
+extend-exclude = [
+    "pool", "legacy-hand-authored-pool",
+    "specs", "scripts", ".clones", ".claude", ".specify", "buildspec", "container-scripts", "docs",
+]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "SIM"]

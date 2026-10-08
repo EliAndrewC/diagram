@@ -29,7 +29,7 @@ You did not write the specification and you are not here to improve it. A better
 not ask for is out of scope, and saying so is part of your job rather than a failure of imagination.
 
 **Tier: Opus at high effort, both pinned in the frontmatter (the tier table in
-`.claude/skills/diagram/tests/test_agent_models.py`, GM 2026-09-19).** Whether a specification matches the GM's words is
+`tests/test_agent_models.py`, GM 2026-09-19).** Whether a specification matches the GM's words is
 judgment, so the model is `spec-fidelity`'s. MEDIUM effort was tried on three recorded later rounds
 (`specs/251-tiered-subagent-checks/research.md` R5): it agreed on the clean one, and on a round that had
 returned two findings it found the missing success criterion and MISSED the larger one - a requirement
@@ -122,7 +122,7 @@ run`).
   they stand. Do not review the substance. A NOT-REVIEWABLE return does **not** consume one of the five
   rounds - nothing was reviewed - and the session records the figures and re-dispatches.
 - **Where a figure carries a key, verify it by RE-RUNNING the entry's `command`**, not by reading the
-  number: `make figures SPEC=specs/NNN-slug` (from `.claude/skills/diagram/`) re-runs every recorded
+  number: `make figures SPEC=specs/NNN-slug` (from ``) re-runs every recorded
   command and restores the file. A COUNT that moved is a finding. A TIMING carries `varies` and a band:
   one outside its band is worth a sentence, not a verdict, because this container is shared.
 - **You remain free to measure independently.** The contract removes your having to REBUILD an

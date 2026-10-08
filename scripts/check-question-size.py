@@ -32,7 +32,7 @@ import subprocess
 import sys
 
 CAP = 20_000
-RECORD = pathlib.Path(".claude/skills/diagram/research")
+RECORD = pathlib.Path("research")
 #: A question's page (feature 303: `NNNN-<slug>.html`, or how our maps draw it, `NNNN-<slug>.drawing.html`).
 _QUESTION = re.compile(r"^[0-9]{4}-[^.]+(?:\.drawing)?\.html$")
 #: A question's companion files, beside it: its notes and the originals of its translated quotations.

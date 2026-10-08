@@ -17,7 +17,7 @@ import pytest
 pytestmark = pytest.mark.tooling
 
 HERE = Path(__file__).resolve().parents[3]
-REPO = HERE.parents[2]
+REPO = HERE
 ROSTER = REPO / "buildspec" / "sparse-excludes.txt"
 BUILDSPECS = [REPO / "buildspec" / name for name in ("check.yml", "merge.yml")]
 
@@ -85,7 +85,7 @@ def test_the_roster_exists_and_every_pattern_is_anchored() -> None:
     assert pats, "an empty roster excludes nothing while looking configured"
     for p in pats:
         assert p.startswith("/"), f"{p!r} must be anchored at the repository root, or it matches at any depth"
-        assert ".claude/skills/diagram/" in p, f"{p!r} is outside the skill; widen deliberately, not by accident"
+        assert "" in p, f"{p!r} is outside the skill; widen deliberately, not by accident"
 
 
 def test_nothing_the_gate_runs_reads_an_excluded_path() -> None:
@@ -108,7 +108,7 @@ def test_every_declared_producer_still_exists_and_still_names_its_output() -> No
 def test_the_rot_check_FIRES_on_a_planted_reference() -> None:
     """Proven, not assumed - the roster guard is worthless if it cannot see a real reference, and its
     negative form passes green either way."""
-    pats = [("/.claude/skills/diagram/wip/*.html", []), ("/.claude/skills/diagram/dev/placement-stages/", ["writer.py"])]
+    pats = [("/wip/*.html", []), ("/dev/placement-stages/", ["writer.py"])]
     assert rot_violations(pats, {"clean.py": "open('pool/hamlets/inashiro/inashiro.json')"}) == []
     planted = {"reader.py": "PAGE = 'wip/kuwabata-grid.html'"}
     assert len(rot_violations(pats, planted)) == 1

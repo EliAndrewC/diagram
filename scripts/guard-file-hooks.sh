@@ -46,7 +46,7 @@ except Exception:
 # GUARD_EDIT_OK: feature 217 - THE ROSTER OF ROLLED HAMLETS IS A GUARD (GM 2026-09-08: a later session "not
 # remembering the context of how we got here" must not add rolls back thoughtlessly). tests/rolls.py joins the
 # list, and its Read-time context is its own: the doctrine and the command to run first.
-guard = re.search(r"(/\.claude/skills/diagram/Makefile|/scripts/[\w-]+-hooks\.sh|/\.claude/settings\.json|/dev/switches\.json|/\.claude/skills/diagram/tests/rolls\.py)$", path)
+guard = re.search(r"(/\Makefile|/scripts/[\w-]+-hooks\.sh|/\.claude/settings\.json|/dev/switches\.json|/\tests/rolls\.py)$", path)
 if guard and not re.search(r"/scripts/test-[\w-]+-hooks\.sh$", path):
     if path.endswith("/tests/rolls.py"):
         context = (
@@ -126,10 +126,10 @@ esac
 case "$FILE" in
   # (GUARD_EDIT_OK: feature 217 - the roster of rolled hamlets is a guard: a row added without a stated reason is
   #  the thoughtless roll the GM asked to make impossible; the census verdict judges what the row claims)
-  */.claude/skills/diagram/Makefile|*/scripts/*-hooks.sh|*/.claude/settings.json|*/.claude/skills/diagram/tests/rolls.py) ;;
+  */Makefile|*/scripts/*-hooks.sh|*/.claude/settings.json|*/tests/rolls.py) ;;
   # (GUARD_EDIT_OK: feature 132 - the iteration switches are a guard; a hand edit is flagged like any other, the
   #  make targets `ci-off` / `ci-on` are the supported write path; the scope lock was retired in 185)
-  */.claude/skills/diagram/dev/switches.json) ;;
+  */dev/switches.json) ;;
   *) exit 0 ;;
 esac
 

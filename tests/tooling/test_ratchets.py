@@ -16,7 +16,7 @@ import sys
 
 import pytest
 
-SCRIPTS = pathlib.Path(__file__).resolve().parents[5] / "scripts"
+SCRIPTS = pathlib.Path(__file__).resolve().parents[2] / "scripts"
 _spec = importlib.util.spec_from_file_location("_ratchet", SCRIPTS / "_ratchet.py")
 assert _spec and _spec.loader
 ratchet = importlib.util.module_from_spec(_spec)
@@ -154,7 +154,7 @@ def test_the_median_ignores_short_circuits_failures_and_other_scopes(tmp_path) -
     gc_spec.loader.exec_module(gatecost)
 
     subprocess.run(["git", "init", "-q", str(tmp_path)], check=True)  # so the toplevel resolves HERE
-    log = tmp_path / ".claude/skills/diagram/dev/run-log"
+    log = tmp_path / "dev/run-log"
     log.mkdir(parents=True)
     rows = (
         [("green", "reference", 100)] * 3  # the only evidence about duration
@@ -236,7 +236,7 @@ def test_a_class_median_EXCLUDES_entries_that_carry_no_class(tmp_path) -> None: 
     spec = importlib.util.spec_from_file_location("gc", SCRIPTS / "_gatecost.py")
     gc = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(gc)
-    logs = tmp_path / ".claude/skills/diagram/dev/run-log"
+    logs = tmp_path / "dev/run-log"
     logs.mkdir(parents=True)
     rows = [
         {"target": "done", "scope": "reference", "result": "green", "seconds": 900, "utc": "2026-01-01T00:00:00Z"},
@@ -257,7 +257,7 @@ def test_the_quick_budget_judges_only_a_warm_selective_run() -> None:
     """Feature 318 found it: `make quick ALL=1` ran 9,247 tests in 78 s, all passing, and failed on the 60 s budget as
     'something slow is running' - the ratchet beside it already exempted ALL=1 and a cold run (feature 171). The budget
     is held to the same runs: its test names the warm and ALL conditions."""
-    recipe = (SCRIPTS.parent / ".claude" / "skills" / "diagram" / "Makefile").read_text(encoding="utf-8")
+    recipe = (SCRIPTS.parent / "Makefile").read_text(encoding="utf-8")
     line = next(ln for ln in recipe.splitlines() if "-gt $(QUICK_BUDGET)" in ln)
     assert '"$$warm" = yes' in line and '[ -z "$(ALL)" ]' in line, line
 
@@ -265,6 +265,6 @@ def test_the_quick_budget_judges_only_a_warm_selective_run() -> None:
 def test_the_type_check_runs_on_the_interpreter_make_runs() -> None:
     """Feature 318 found it: pyrefly picks a `.venv` beside the engine before the interpreter make runs, and an empty one a
     tool left behind turned 0 errors into 171 missing imports. The typecheck is pinned to make's own python3."""
-    recipe = (SCRIPTS.parent / ".claude" / "skills" / "diagram" / "Makefile").read_text(encoding="utf-8")
+    recipe = (SCRIPTS.parent / "Makefile").read_text(encoding="utf-8")
     line = next(ln for ln in recipe.splitlines() if ln.startswith("TYPECHECK ="))
     assert "--python-interpreter-path" in line and "command -v python3" in line, line

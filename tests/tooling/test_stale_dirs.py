@@ -17,9 +17,8 @@ import subprocess
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[5]  # <repo>/.claude/skills/diagram/tests/tooling -> repo root
+ROOT = Path(__file__).resolve().parents[2]  # <repo>/tests/tooling -> repo root
 GUARD = ROOT / "scripts" / "check-stale-dirs.py"
-SKILL_REL = Path(".claude/skills/diagram")
 
 
 def _run(*args: str) -> subprocess.CompletedProcess[str]:
@@ -38,14 +37,14 @@ def test_the_tree_is_clean() -> None:
 
 
 def _plant(tmp_path: Path) -> Path:
-    (tmp_path / SKILL_REL / "l7r" / "diagram").mkdir(parents=True)
-    (tmp_path / SKILL_REL / "tests").mkdir(parents=True)
+    (tmp_path / "l7r" / "diagram").mkdir(parents=True)
+    (tmp_path / "tests").mkdir(parents=True)
     return tmp_path
 
 
 def test_it_FIRES_on_a_directory_holding_only_bytecode(tmp_path: Path) -> None:
     root = _plant(tmp_path)
-    dead = root / SKILL_REL / "l7r" / "diagram" / "gone" / "__pycache__"
+    dead = root / "l7r" / "diagram" / "gone" / "__pycache__"
     dead.mkdir(parents=True)
     (dead / "m.cpython-314.pyc").write_bytes(b"\x00")
     r = _run(str(root))
@@ -57,7 +56,7 @@ def test_it_FIRES_on_a_directory_holding_only_bytecode(tmp_path: Path) -> None:
 def test_it_does_NOT_delete_anything(tmp_path: Path) -> None:
     """Removing a directory is irreversible for anything untracked inside it, so a person runs it."""
     root = _plant(tmp_path)
-    dead = root / SKILL_REL / "l7r" / "diagram" / "gone" / "__pycache__"
+    dead = root / "l7r" / "diagram" / "gone" / "__pycache__"
     dead.mkdir(parents=True)
     (dead / "m.pyc").write_bytes(b"\x00")
     _run(str(root))
@@ -66,7 +65,7 @@ def test_it_does_NOT_delete_anything(tmp_path: Path) -> None:
 
 def test_a_real_package_is_left_alone(tmp_path: Path) -> None:
     root = _plant(tmp_path)
-    live = root / SKILL_REL / "l7r" / "diagram" / "alive"
+    live = root / "l7r" / "diagram" / "alive"
     (live / "__pycache__").mkdir(parents=True)
     (live / "mod.py").write_text("x = 1\n", encoding="utf-8")
     assert _run(str(root)).returncode == 0, "a package with source is not stale"
@@ -74,7 +73,7 @@ def test_a_real_package_is_left_alone(tmp_path: Path) -> None:
 
 def test_a_directory_of_real_files_is_left_alone(tmp_path: Path) -> None:
     root = _plant(tmp_path)
-    d = root / SKILL_REL / "tests" / "fixtures"
+    d = root / "tests" / "fixtures"
     d.mkdir(parents=True)
     (d / "f.json").write_text("{}", encoding="utf-8")
     assert _run(str(root)).returncode == 0, "a data directory holds files of its own"
@@ -83,13 +82,13 @@ def test_a_directory_of_real_files_is_left_alone(tmp_path: Path) -> None:
 def test_a_fresh_clone_shape_finds_nothing(tmp_path: Path) -> None:
     """No __pycache__ anywhere is what a fresh clone looks like - the guard must be silent there."""
     root = _plant(tmp_path)
-    (root / SKILL_REL / "l7r" / "diagram" / "pkg").mkdir(parents=True)
-    (root / SKILL_REL / "l7r" / "diagram" / "pkg" / "m.py").write_text("y = 2\n", encoding="utf-8")
+    (root / "l7r" / "diagram" / "pkg").mkdir(parents=True)
+    (root / "l7r" / "diagram" / "pkg" / "m.py").write_text("y = 2\n", encoding="utf-8")
     assert _run(str(root)).returncode == 0
 
 
 def test_outside_the_importable_trees_is_not_its_business(tmp_path: Path) -> None:
     """Scoped to l7r/ and tests/ on the GM's ruling: elsewhere a leftover cannot be imported."""
     root = _plant(tmp_path)
-    (root / SKILL_REL / "pool" / "leftover" / "__pycache__").mkdir(parents=True)
+    (root / "pool" / "leftover" / "__pycache__").mkdir(parents=True)
     assert _run(str(root)).returncode == 0, "an unimportable leftover is untidy, not dangerous"

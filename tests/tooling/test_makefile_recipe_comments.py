@@ -18,7 +18,7 @@ import sys
 from typing import Any
 
 SKILL = pathlib.Path(__file__).resolve().parents[2]
-REPO = SKILL.parents[2]
+REPO = SKILL
 SCRIPTS = REPO / "scripts"
 
 

@@ -88,7 +88,7 @@ def main(argv: list[str] | None = None, root: Path | None = None, out: Any = Non
         if root is None:
             # tools/ diagram/ l7r/ diagram/ skills/ .claude/ -> the repository root is SIX levels up; the
             # first draft said five and landed on `.claude/`, which is what the unit test proves against.
-            root = Path(__file__).resolve().parents[6]
+            root = Path(__file__).resolve().parents[3]
         db = baseline_db(root)
     if not db.is_file():
         print(f"roll audit: no baseline at {db} - a green full `make done` (INCREMENTAL=0) records one", file=out)

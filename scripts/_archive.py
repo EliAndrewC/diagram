@@ -63,8 +63,7 @@ import urllib.parse
 from collections.abc import Iterator
 
 HERE = pathlib.Path(__file__).resolve().parent
-SKILL = HERE.parent / ".claude" / "skills" / "diagram"
-for _p in (str(HERE), str(SKILL)):
+for _p in (str(HERE), str(HERE.parent)):
     if _p not in sys.path:
         sys.path.insert(0, _p)
 
@@ -79,7 +78,7 @@ UNPUSHED = "source-archive.unpushed"
 GM_DIR = pathlib.Path(
     os.environ.get("L7R_GM_SOURCES", "/host-l7r-repo/academic-sources")
 )
-MANIFEST = pathlib.Path(".claude/skills/diagram/research") / rec.ARCHIVE_DIR
+MANIFEST = pathlib.Path("research") / rec.ARCHIVE_DIR
 #: A file past this is stored in parts: GitHub refuses a file past 100 MB, and 95 leaves room.
 PART = 95 * 2**20
 #: The backfill pushes once this much is committed and unpushed (plan D9: far under GitHub's 2 GB push limit, and a
@@ -763,10 +762,10 @@ def sync_gm_copies(root: pathlib.Path, store: Archive) -> int:
 
 def owed(root: pathlib.Path) -> dict[str, rec.Cited]:
     """Every cited URL with no row, or a row still waiting on its upload."""
-    rows = rec.load(str(root / ".claude/skills/diagram/research"))
+    rows = rec.load(str(root / "research"))
     return {
         u: w
-        for u, w in rec.cited(str(root / ".claude/skills/diagram/research")).items()
+        for u, w in rec.cited(str(root / "research")).items()
         if rows.get(rec.url_id(u), {}).get("outcome") in (None, "pending-upload")
     }
 
@@ -793,7 +792,7 @@ def _lane(
     root_s, urls, home_s = args
     root = pathlib.Path(root_s)
     store = Archive(pathlib.Path(home_s), env=git_env(token(root)))
-    who = rec.cited(str(root / ".claude/skills/diagram/research"))
+    who = rec.cited(str(root / "research"))
     browser = Browser()
     out = []
     try:
@@ -861,7 +860,7 @@ def settle(root: pathlib.Path) -> int:
 
 def report(root: pathlib.Path, out=sys.stdout) -> int:  # noqa: ANN001
     """The coverage table (spec FR-004): counts per outcome, every URL with none, and every unreachable one's reason."""
-    research = str(root / ".claude/skills/diagram/research")
+    research = str(root / "research")
     rows = rec.load(research)
     counts: dict[str, int] = {}
     missing, failed = [], []
@@ -917,7 +916,7 @@ def archive_one(
     root: pathlib.Path, url: str, key: str = ""
 ) -> int:  # pragma: no cover - the live path `make archive` and `make reserve` take
     """Archive one URL now, as the census sees it (a KEY names a registry entry not yet written)."""
-    who = rec.cited(str(root / ".claude/skills/diagram/research")).get(
+    who = rec.cited(str(root / "research")).get(
         rec.clean(url), rec.Cited()
     )
     if key and key not in who.keys:

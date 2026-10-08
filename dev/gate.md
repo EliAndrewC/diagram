@@ -41,7 +41,7 @@ Four destinations, and the choice is usually obvious once the question is asked 
 | a feature no scripted generator produces | a RECORDED DROP, with its grounding kept | `pond_fed_from_edge`, and the urban vocabulary |
 
 The 142 rules the battery held were migrated one at a time under feature 166, and
-[`specs/166-retire-the-check-battery/migration-record.md`](../../../../specs/166-retire-the-check-battery/migration-record.md)
+[`specs/166-retire-the-check-battery/migration-record.md`](../specs/166-retire-the-check-battery/migration-record.md)
 is the ledger: one row per rule, naming its destination and the mutation that proved the replacement
 carries it. A drop names what was measured and why nothing on any live map can exercise the rule.
 

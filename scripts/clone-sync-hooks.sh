@@ -164,7 +164,7 @@ behind_main_notice() { # behind_main_notice <clone> - one line of additionalCont
   # main was unchanged or had landed forty engine commits, so a session could not tell "routine" from
   # "you are meaningfully stale". Engine paths are the ones that re-key the gate and force a rerun.
   bn_eng=$(git -C "$bn_clone" diff --name-only "HEAD..$bn_ref" 2>/dev/null \
-             | grep -cE '^\.claude/skills/diagram/(l7r/.*\.py|pool/.*\.(gen\.py|json))$' 2>/dev/null) || bn_eng=0
+             | grep -cE '^\(l7r/.*\.py|pool/.*\.(gen\.py|json))$' 2>/dev/null) || bn_eng=0
   if [ "${bn_eng:-0}" -gt 0 ]; then
     # GUARD_EDIT_OK: bn_eng counts FILES, not commits - saying "N of them" after a commit count read
     # as N commits, which is a different and wrong number.
@@ -414,6 +414,7 @@ case $MODE in
          && ( cd "$clone" && timeout 25 scripts/sync-with-main.sh sync-in >/dev/null 2>&1 ) \
          && git -C "$clone" merge-base --is-ancestor "$main_head" HEAD 2>/dev/null; then
         guard_log clone-sync permitted "$clone" synced-in
+        "$(dirname "${BASH_SOURCE[0]}")/_layout_carry.sh" "$clone" >/dev/null 2>&1 || true   # GUARD_EDIT_OK: feature 329 - from the mirror's copy
         printf '{"hookSpecificOutput":{"hookEventName":"PreToolUse","additionalContext":"clone-sync: %s was a clean clone BEHIND main (main moved during this turn), so main was merged in - a fast-forward - before this edit; it proceeds on the current base. If this edit fails as stale, the merge changed the file: re-read it and retry. (feature 212; CLAUDE.md, Session clones / sync-in rule)"}}\n' "$clone"
         exit 0
       fi
@@ -492,6 +493,10 @@ case $MODE in
     if [ -n "$midtask" ]; then
       if out=$(cd "$clone" && scripts/sync-with-main.sh sync-in --mirror-only --background-render 2>&1); then
         echo "clone-sync: $clone $midtask - clone merge skipped; mirror refreshed from GitHub main. Finish and run sync-with-main.sh done"
+        # GUARD_EDIT_OK: feature 329 - a mid-task clone still on the old layout is told why its paths no longer match main's.
+        if git -C "$clone" ls-files --error-unmatch ".claude/skills/""diagram/Makefile" >/dev/null 2>&1 && [ -f "$(dirname "${BASH_SOURCE[0]}")/../l7r/diagram/__init__.py" ]; then
+          echo "clone-sync: main moved the project to the repository root (feature 329) - this clone is still on the old layout. Commit, then sync in: the merge carries your edits to the new paths."
+        fi
         printf '%s\n' "$out" | grep -E '^sync-with-main: (NOTE|WARNING)' || true
       else
         echo "clone-sync: $clone $midtask - clone merge skipped; mirror refresh FAILED: $(printf '%s' "$out" | tail -1)"
@@ -500,6 +505,8 @@ case $MODE in
     fi
     if out=$(cd "$clone" && scripts/sync-with-main.sh sync-in --background-render 2>&1); then  # GUARD_EDIT_OK: 2026-10-02 bounded wait and detached render, as above
       echo "clone-sync: auto-synced $clone with main (git)"
+      # GUARD_EDIT_OK: feature 329 - the clone's own sync script may predate the move, so the carry runs from HERE, the mirror's copy.
+      "$(dirname "${BASH_SOURCE[0]}")/_layout_carry.sh" "$clone" 2>&1 || true
       printf '%s\n' "$out" | grep -E '^sync-with-main: (NOTE|WARNING)' || true
     else
       echo "clone-sync: auto sync-in FAILED in $clone - resolve before modifying the repo: $(printf '%s' "$out" | tail -2)"

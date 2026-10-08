@@ -14,7 +14,7 @@ import importlib.util
 import pathlib
 import sys
 
-REPO = pathlib.Path(__file__).resolve().parents[5]
+REPO = pathlib.Path(__file__).resolve().parents[2]
 _spec = importlib.util.spec_from_file_location("check_file_scale", REPO / "scripts" / "check-file-scale.py")
 assert _spec and _spec.loader
 cfs = importlib.util.module_from_spec(_spec)

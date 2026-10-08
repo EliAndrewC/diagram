@@ -1,8 +1,8 @@
-<!-- Moved here from `.claude/skills/diagram/CLAUDE.md` by feature 250 (research R2, recommendation 3; the GM
+<!-- Moved here from `CLAUDE.md` by feature 250 (research R2, recommendation 3; the GM
 2026-09-26): that file auto-loaded into every session that read a research file, because `research/` sits
 under it, and none of this bears on research - about 7,500 tokens on every turn of every research session.
 It auto-loads here, under the engine, and `pool/CLAUDE.md` and `tests/CLAUDE.md` import it. Paths in backticks
-below are relative to the skill directory, `.claude/skills/diagram/`; links are relative to this file. -->
+below are relative to the skill directory, ``; links are relative to this file. -->
 
 # /diagram engine - dev loop
 
@@ -10,8 +10,8 @@ Guidance for *working on the diagram engine* (the `settlement/` package, the `ov
 generators), as opposed to *invoking* `/diagram` to draw a map (that is `SKILL.md`). This file
 auto-loads whenever a session edits files in this directory - which is exactly when it applies.
 
-The project-wide iteration doctrine is the root [`CLAUDE.md`](../../../../../CLAUDE.md) "Verification
-and iteration" section, and in full [`docs/efficiency-tooling.md`](../../../../../docs/efficiency-tooling.md)
+The project-wide iteration doctrine is the root [`CLAUDE.md`](../../CLAUDE.md) "Verification
+and iteration" section, and in full [`docs/efficiency-tooling.md`](../../docs/efficiency-tooling.md)
 (batch recon into fewer bigger turns; iterate on the ONE motivating artifact, then run the full test
 bed once at the end; background the final gate; never cut the procedure/guardrail steps). This file
 carries the concrete diagram numbers and the DIAGRAM-SPECIFIC lessons those do not cover - each
@@ -79,7 +79,7 @@ under two names.
 This file used to carry all of it inline, at 1,449 lines - roughly 28k tokens charged to **every**
 session that edits anything in this tree, including sessions that only regenerate a map. The
 doctrine itself is unchanged and verbatim; it now lives in [`dev/`](../../dev), one file per topic, each
-stating when to load it. Same pattern as the root [`CLAUDE.md`](../../../../../CLAUDE.md) -> `docs/`
+stating when to load it. Same pattern as the root [`CLAUDE.md`](../../CLAUDE.md) -> `docs/`
 split. **Load the one file your task is in.** The short always-on version of each rule is below the
 table; the file is where the evidence, the measurements and the failure stories live, and you want
 those before you argue with a rule.

@@ -27,7 +27,7 @@ import _record_units as ru  # noqa: E402
 
 #: the checks a question bundle is owed for; `record-style` is owed by a declared sweep (feature 292), never by a delta
 GATED = ("intro-check", "record-format", "quote-check", "translation-check", "entry-drift")
-MODAL_DIRS = (".claude/skills/diagram/l7r/diagram/interactive/classes", ".claude/skills/diagram/l7r/diagram/interactive/compound_kinds")
+MODAL_DIRS = ("l7r/diagram/interactive/classes", "l7r/diagram/interactive/compound_kinds")
 
 
 def reason_ok(text: str) -> bool:

@@ -41,7 +41,7 @@ import sys
 
 # The repository this module belongs to. Resolved from THIS file rather than from the cwd, because
 # the cwd is caller-controlled and the whole point is to not trust the caller.
-_REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..", "..", ".."))
+_REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))  # l7r/diagram/ -> the root (feature 329)
 
 _MAKE_COMMS = frozenset({"make", "gmake", "remake"})
 _MAKEFILE_FLAGS = ("-f", "--file", "--makefile")

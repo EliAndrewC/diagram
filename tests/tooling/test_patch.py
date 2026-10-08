@@ -17,7 +17,7 @@ import sys
 
 import pytest
 
-REPO = pathlib.Path(__file__).resolve().parents[5]
+REPO = pathlib.Path(__file__).resolve().parents[2]
 _spec = importlib.util.spec_from_file_location("_patch", REPO / "scripts" / "_patch.py")
 assert _spec and _spec.loader
 patch = importlib.util.module_from_spec(_spec)

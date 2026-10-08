@@ -22,9 +22,9 @@ import sys
 
 import pytest
 
-REPO = pathlib.Path(__file__).resolve().parents[5]
+REPO = pathlib.Path(__file__).resolve().parents[2]
 TOOL = REPO / "scripts" / "claim-feature.py"
-SKILL = REPO / ".claude" / "skills" / "diagram"
+SKILL = REPO
 _spec = importlib.util.spec_from_file_location("claim_feature", TOOL)
 assert _spec and _spec.loader
 cf = importlib.util.module_from_spec(_spec)
@@ -301,7 +301,7 @@ def test_duplicates_in_reports_a_number_under_two_names_only() -> None:
 def test_make_claim_through_the_real_makefile(world) -> None:
     """The wiring: `make claim SLUG=... PEEK=1` from a clone's skill dir reaches the tool."""
     clone = world["alpha"]
-    skill = clone / ".claude" / "skills" / "diagram"
+    skill = clone
     skill.mkdir(parents=True)
     (skill / "Makefile").write_bytes((SKILL / "Makefile").read_bytes())
     (skill / "pyproject.toml").write_bytes((SKILL / "pyproject.toml").read_bytes())

@@ -120,7 +120,7 @@ def _tooling_unchanged() -> bool:
     try:
         from l7r.diagram.ci import state
 
-        root = Path(__file__).resolve().parents[4]
+        root = Path(__file__).resolve().parents[1]
         rec = json.loads((root / state.STATE_FILE).read_text(encoding="utf-8"))
         return bool(rec.get("tooling")) and rec["tooling"] == state.tooling_hash(root)
     except Exception:  # noqa: BLE001 - any failure to decide means "run them"

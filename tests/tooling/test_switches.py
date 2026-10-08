@@ -73,7 +73,7 @@ def test_make_done_short_circuits_on_an_unchanged_gate_key(fixture_skill: Path) 
     # which is the suite doing its job: a guard the fixture cannot find exits non-zero and the
     # short-circuit path fails, so a missing script reads as a broken gate rather than a silent pass.
     for script in ("gate-stamp.py", "check-run-plausible.py", "_ratchet.py"):
-        (root / "scripts" / script).write_bytes((SKILL.parents[2] / "scripts" / script).read_bytes())
+        (root / "scripts" / script).write_bytes((SKILL / "scripts" / script).read_bytes())
     subprocess.run(["git", "-C", str(root), "config", "user.email", "t@t"], check=True)
     subprocess.run(["git", "-C", str(root), "config", "user.name", "t"], check=True)
     subprocess.run(["git", "-C", str(root), "add", "-A"], check=True)

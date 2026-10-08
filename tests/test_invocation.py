@@ -22,7 +22,7 @@ import pytest
 from l7r.diagram import _invocation as inv
 
 SKILL = Path(__file__).resolve().parents[1]
-REPO = SKILL.parents[2]
+REPO = SKILL
 
 
 @pytest.fixture(autouse=True)

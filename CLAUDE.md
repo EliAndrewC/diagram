@@ -2,11 +2,18 @@
 
 <!-- container-mounts: ..:/host-l7r-repo -->
 
-This repository is the `/diagram` skill of the GM's L5R worldbuilding project: building plans
-(Mode A) and settlement maps (Mode B), deliberately one skill and one package at
-`.claude/skills/diagram/` (why one, and what would change it: `dev/skill-boundary.md`). Usage is
-`.claude/skills/diagram/SKILL.md`; the engine dev loop is `.claude/skills/diagram/l7r/diagram/CLAUDE.md`,
-which auto-loads under the engine, `pool/` and `tests/` - not under `research/` (feature 250).
+This repository is the diagram project of the GM's L5R worldbuilding: building plans (Mode A) and settlement maps
+(Mode B), deliberately one package (why one, and what would change it: `docs/package-boundary.md`). It was a Claude
+Code skill (under `.claude/skills/`) until feature 329 moved it to the root: nothing invoked it as a skill any
+more, and the prefix cost every pointer. What to read next:
+
+| you are | read |
+|---|---|
+| drawing a map or a building plan | `docs/usage.md` (Mode A detail: `docs/buildings.md`) |
+| changing the engine, a pool generator or a test | `l7r/diagram/CLAUDE.md` - the dev loop; it auto-loads under `l7r/diagram/`, `pool/` and `tests/` |
+| writing or checking the research record | `research/CLAUDE.md` - it auto-loads under `research/` |
+
+`docs/` is the repository's process; `dev/` is engine development and the append-only run records.
 
 The GM's setting notes that the research cites live in gm-assistant, mounted at
 `/host-l7r-repo/gm-assistant` (`setting/`, `cosmology/`, `campaigns/`; on GitHub at
@@ -44,7 +51,7 @@ Enforced by `scripts/house-style-hooks.sh`, which corrects the text rather than 
 
 Constitution XII. The full record with the GM's rulings is `docs/research-doctrine.md`; the
 operative form of the citation rules (the footnote shape, the notes and the works cited, the download list)
-is `.claude/skills/diagram/research/CLAUDE.md`, which auto-loads when a session edits the record.
+is `research/CLAUDE.md`, which auto-loads when a session edits the record.
 
 - A question about how a place was built, farmed, planted or lived in is a RESEARCH question. Run
   the search pass before deciding, before asking the GM, and before writing "guess". The GM is asked
@@ -147,7 +154,7 @@ full doctrine with the GM's rulings and the incidents behind them: `docs/spec-ki
 - Review checks (`glyph-check`, `settlement-review`, `fix-check`, `building-review`, `size-audit`) run ON
   THEIR OCCASION (feature 294): an element new to a map, a glyph redrawn or re-placed, a map or sheet new to the
   pool, or an occasion the feature declares in its `tasks.md` `## Occasions` - never because a manifest moved
-  (`_review_owed.py`; `.claude/skills/diagram/dev/reviews.md` has the table). One unit per agent, on a green gate,
+  (`_review_owed.py`; `dev/reviews.md` has the table). One unit per agent, on a green gate,
   two rounds at most; every pass is a row of the ledger's measured table with its cost (`make review-cost`). To improve one, add
   the general rule, prove it fires on the unfixed artifact, then fix the artifact. Findings for the
   GM go through `escalation-check` first. Every check runs on the TIER its file pins - a model and an
@@ -266,9 +273,9 @@ behavioral principles XII, XIV and XV.
 
 - `.specify/memory/constitution.md` - the constitution; `.specify/templates/plan-template.md` - the
   Constitution Check gate.
-- `.claude/skills/diagram/SKILL.md` - usage; `.claude/skills/diagram/CLAUDE.md` - the dev loop and the
-  index over `dev/` (the draw order and the keep-clear contract are in `dev/placement.md`).
-- `.claude/skills/diagram/migration-plan.md` - the standing plan for converting hand-authored maps to
+- `docs/usage.md` - usage; `l7r/diagram/CLAUDE.md` - the dev loop and the index over `dev/` (the draw order and the
+  keep-clear contract are in `dev/placement.md`).
+- `docs/migration-plan.md` - the standing plan for converting hand-authored maps to
   scripted generation; read it before drawing or scripting a settlement map, and update its status
   table when a conversion lands.
 - `.claude/agents/` - the review and verification agents; `docs/review-ledger.md` - every review pass.
@@ -276,4 +283,6 @@ behavioral principles XII, XIV and XV.
   `efficiency-tooling.md`, `guards.md`, `research-doctrine.md`, `iteration-loop.md`, `container.md`,
   `l7r-style.md`.
 - `specs/NNN-*/` - the features. There is deliberately no single active-plan pointer; current status
-  is the highest-numbered spec, its `tasks.md` and `git log`.
+  is the highest-numbered spec, its `tasks.md` and `git log`. A path in a spec before 329 that starts with
+  the old skill directory (`.claude/skills/` + the project's name) now drops that prefix (the specs are history and keep their words); the Markdown that
+  feature 329 moved or retired is listed in `specs/329-unskill-the-repo/audit.md`.

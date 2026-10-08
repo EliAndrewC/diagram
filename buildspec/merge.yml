@@ -9,11 +9,11 @@ version: 0.2
 # `tests/tooling/ci/test_cache.py` fails.
 cache:
   paths:
-    - 'repo/.claude/skills/diagram/.gencache/*/*.json'
-    - 'repo/.claude/skills/diagram/.gencache/*/*.svg'
-    - 'repo/.claude/skills/diagram/.gencache/*/coverage.*'
-    - 'repo/.claude/skills/diagram/.gencache/ast/**/*'
-    - 'repo/.claude/skills/diagram/.gencache/rolls/**/*'
+    - 'repo/.gencache/*/*.json'
+    - 'repo/.gencache/*/*.svg'
+    - 'repo/.gencache/*/coverage.*'
+    - 'repo/.gencache/ast/**/*'
+    - 'repo/.gencache/rolls/**/*'
     # The hooks-test freshness state (feature 177) - identical to check.yml's, see there for why each
     # line and why `run.sh`'s restore detection had to change first. `test_cache.py` fails if the two
     # buildspecs ever disagree.

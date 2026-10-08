@@ -67,7 +67,7 @@ teardown
 echo "3. an EDIT after a subset run clears the flag (the run predates the code)"
 setup
 run "$(bash_ev 'pytest test_settlement.py -k foo')"
-run "$(edit_ev '/gm-assistant/.clones/x/.claude/skills/diagram/settlement.py')"
+run "$(edit_ev '/gm-assistant/.clones/x/settlement.py')"
 run "$(bash_ev 'make done')"; check "gate allowed - the stale subset cannot vouch either way" ok $?
 teardown
 
@@ -122,7 +122,7 @@ rewrote 'make quick done' 'make done'
 rewrote 'make quick 2>&1 | tail -2; make done 2>&1 | tail -2' 'make done 2>&1 | tail -2'
 rewrote 'make done 2>&1 | tail -1 && make quick' 'make done 2>&1 | tail -1'
 rewrote 'cd /x && make quick ALL=1 && make done' 'cd /x && make done'
-rewrote '( cd /x/.claude/skills/diagram && make quick && make done )' '( cd /x/.claude/skills/diagram && make done )'
+rewrote '( cd /x && make quick && make done )' '( cd /x && make done )'
 rewrote 'make -C /x quick && make -C /x done' 'make -C /x done'
 untouched 'make quick'
 untouched 'make done'

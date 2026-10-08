@@ -13,7 +13,7 @@ from typing import Any
 import pytest
 
 FIXTURES = Path(__file__).parent / "fixtures"
-REPO_ROOT = Path(__file__).resolve().parents[6]  # tests/tooling/ci/ is one level deeper than tests/ci/ was (T29)  # the real repository, for scripts/gate-stamp.py
+REPO_ROOT = Path(__file__).resolve().parents[3]  # tests/tooling/ci/ is one level deeper than tests/ci/ was (T29)  # the real repository, for scripts/gate-stamp.py
 
 
 def load(name: str) -> dict[str, Any]:
@@ -35,7 +35,7 @@ def repo(tmp_path: Path) -> Path:
     git(root, "config", "user.name", "t")
     (root / "scripts").mkdir()
     (root / "scripts" / "gate-stamp.py").write_text((REPO_ROOT / "scripts" / "gate-stamp.py").read_text(encoding="utf-8"), encoding="utf-8")
-    skill = root / ".claude" / "skills" / "diagram"
+    skill = root
     (skill / "l7r" / "diagram").mkdir(parents=True)
     (skill / "l7r" / "diagram" / "m.py").write_text("x = 1\n", encoding="utf-8")
     (skill / "dev" / "run-log").mkdir(parents=True)

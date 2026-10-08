@@ -22,7 +22,7 @@ import pytest
 from l7r.diagram.interactive.record import archive as rec
 from tests import _flat_record as fr
 
-REPO = pathlib.Path(__file__).resolve().parents[5]
+REPO = pathlib.Path(__file__).resolve().parents[2]
 
 
 def _load(name: str):  # noqa: ANN202

@@ -22,7 +22,7 @@ import sys
 from pathlib import Path
 
 SKILL = Path(__file__).resolve().parents[2]
-GUARD = SKILL.parents[2] / "scripts" / "check-run-plausible.py"
+GUARD = SKILL / "scripts" / "check-run-plausible.py"
 
 
 def _mod():

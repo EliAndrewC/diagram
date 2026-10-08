@@ -23,7 +23,7 @@ import urllib.error
 
 import pytest
 
-REPO = pathlib.Path(__file__).resolve().parents[5]
+REPO = pathlib.Path(__file__).resolve().parents[2]
 
 
 def _load():  # noqa: ANN202
@@ -130,7 +130,7 @@ def _record(tmp_path: pathlib.Path) -> pathlib.Path:
     """A flat record (feature 303) with one more question, `0005-x`, whose notes are NOTE's seven, cited in order."""
     from tests import _flat_record as fr
 
-    research = tmp_path / ".claude/skills/diagram/research"
+    research = tmp_path / "research"
     research.mkdir(parents=True)
     fr.write(research)
     bodies = [re.sub(r' <a class="fnback".*?</a>$', "", m.group(1)) for m in re.finditer(r'<li id="fn-\d+">(.*?)</li>', NOTE)]

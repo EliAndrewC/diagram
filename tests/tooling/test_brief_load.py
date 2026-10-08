@@ -16,7 +16,7 @@ import pathlib
 
 import pytest
 
-REPO = pathlib.Path(__file__).resolve().parents[5]
+REPO = pathlib.Path(__file__).resolve().parents[2]
 FIX = pathlib.Path(__file__).resolve().parent / "fixtures" / "brief_load"
 RECORD = FIX / "record"
 

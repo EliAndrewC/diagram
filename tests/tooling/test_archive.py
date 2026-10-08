@@ -23,7 +23,7 @@ import pytest
 from l7r.diagram.interactive.record import archive as rec
 from tests import _flat_record as fr
 
-REPO = pathlib.Path(__file__).resolve().parents[5]
+REPO = pathlib.Path(__file__).resolve().parents[2]
 FIXTURES = pathlib.Path(__file__).resolve().parent / "fixtures" / "archive"
 
 
@@ -221,7 +221,7 @@ def test_one_url_is_archived_with_its_gm_copy_pushed_and_its_row_written(tmp_pat
     root, remote = _root(tmp_path), _remote(tmp_path)
     store = ar.Archive(tmp_path / "home", remote=remote)
     stand = Stand({"https://a": _page("https://a")}, {"https://a": ("MHTML", "A's text")})
-    who = rec.cited(str(root / ".claude/skills/diagram/research"))["https://a"]
+    who = rec.cited(str(root / "research"))["https://a"]
     row = ar.archive_url(root, "https://a", who, stand, store)
     assert row["outcome"] == "archived" and row["path"].startswith(ar.capture_base("https://a") + "/") and row["first"] == row["path"]
     assert row["gm_copies"] == ["gm-copies/alpha.pdf", "gm-copies/pages_files"]

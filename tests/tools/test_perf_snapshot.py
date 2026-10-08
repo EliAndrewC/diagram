@@ -101,10 +101,10 @@ def test_a_worktree_reports_its_OWN_directory_rather_than_claiming_to_be_main(mo
     """The first snapshot ever recorded was taken in a detached baseline worktree and this said
     "main" - in a project where main is never a workspace, that is a claim that would mislead anyone
     reading the trend later. A clone reports its clone name; a worktree reports its own directory."""
-    monkeypatch.setattr(ps, "SKILL", "/diagram/.clones/diagram-tooling/.claude/skills/diagram")
+    monkeypatch.setattr(ps, "SKILL", "/diagram/.clones/diagram-tooling")
     assert ps._where() == "diagram-tooling"
 
-    monkeypatch.setattr(ps, "SKILL", "/tmp/base125/.claude/skills/diagram")
+    monkeypatch.setattr(ps, "SKILL", "/tmp/base125")
     monkeypatch.setattr(ps, "_git", lambda *a: "/tmp/base125")
     assert ps._where() == "base125", "the worktree's own name, not 'main'"
 

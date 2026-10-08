@@ -97,7 +97,7 @@ case "$VERDICT" in
     escape_or_refuse make-only GUARD_EDIT_OK guard-edit-ok "$HERE"
     exit 0 ;;
   foreign-makefile)
-    block "a make driven by a named makefile. This project's targets are in its own Makefile, and a foreign one is the documented way to walk past every guard here." "make <target>   (from .claude/skills/diagram)" ;;
+    block "a make driven by a named makefile. This project's targets are in its own Makefile, and a foreign one is the documented way to walk past every guard here." "make <target>   (from the repository root)" ;;
   engine-entry-point)
     # GUARD_EDIT_OK: feature 212 - AN ENTRY POINT A MAKE TARGET WRAPS BECOMES THAT TARGET. The
     # compliant command is derived from the Makefile at hook time (`_hm_make.py as-wrapped`): a

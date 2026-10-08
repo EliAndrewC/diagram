@@ -12,7 +12,7 @@ import sys
 
 import pytest
 
-REPO = pathlib.Path(__file__).resolve().parents[5]
+REPO = pathlib.Path(__file__).resolve().parents[2]
 _spec = importlib.util.spec_from_file_location("tick_task", REPO / "scripts" / "tick-task.py")
 assert _spec and _spec.loader
 tt = importlib.util.module_from_spec(_spec)

@@ -37,7 +37,7 @@ pure function of its spec; `gencache.store` publishes atomically), and the per-m
 captured in the worker and printed in order, so a parallel run reads like a serial one.
 (A whole-pool regen is an ITERATION convenience, never a pre-gate step: the gate verifies the pool
 itself and render-sync regenerates main's renders from main's own tip - the 2026-08-16 rule, with
-the evidence, is in [`docs/iteration-loop.md`](../../../../docs/iteration-loop.md).)
+the evidence, is in [`docs/iteration-loop.md`](../docs/iteration-loop.md).)
 
 ## The gate total is a BUDGET, not a score - and timings live in timings.md
 
@@ -102,7 +102,7 @@ line being searched - so the `break` can never fire. And the loop was pointless 
 backgrounded Bash command NOTIFIES you when it exits. Background the gate, spend the turn on the
 docs or the commit message, and act on the notification.
 
-[`scripts/no-poll-hooks.sh`](../../../../scripts/no-poll-hooks.sh) (tested by `test-no-poll-hooks.sh`)
+[`scripts/no-poll-hooks.sh`](../scripts/no-poll-hooks.sh) (tested by `test-no-poll-hooks.sh`)
 now BLOCKS the pattern at PreToolUse: `pgrep -f` / `pkill -f` with a literal pattern, any loop
 containing a `sleep`, and the `command sleep` / `/bin/sleep` / `env sleep` forms that exist only to
 dodge the harness's own foreground-sleep guard. A genuine wait on EXTERNAL state (a server port)

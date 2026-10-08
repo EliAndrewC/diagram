@@ -18,7 +18,7 @@ already know you need in ONE message.
 
 ## First stage
 
-Run `make review-paired-gate` from the clone's `.claude/skills/diagram/` (never `/diagram`): it must print `green`; otherwise
+Run `make review-paired-gate` from the clone's `` (never `/diagram`): it must print `green`; otherwise
 write NOT-REVIEWABLE and stop. Re-run it immediately before your verdict.
 
 ## What you judge

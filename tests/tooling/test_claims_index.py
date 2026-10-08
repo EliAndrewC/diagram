@@ -15,7 +15,7 @@ import sys
 
 import pytest
 
-REPO = pathlib.Path(__file__).resolve().parents[5]
+REPO = pathlib.Path(__file__).resolve().parents[2]
 
 
 def _load(name: str):  # noqa: ANN202
@@ -91,14 +91,14 @@ def test_every_claim_is_a_row_including_inherited_and_procedure_claims(tmp_path:
     keys = sorted(cur)
     assert keys == sorted(
         [
-            ".claude/skills/diagram/l7r/diagram/hamletgen/rows.py::SHARE#dry share",
-            ".claude/skills/diagram/l7r/diagram/hamletgen/rows.py::far_row#dry share",
-            ".claude/skills/diagram/l7r/diagram/hamletgen/rows.py::helper#plumbing",
-            ".claude/skills/diagram/buildings.md::Walls#walls",
-            ".claude/skills/diagram/buildings/programs.md::Country shrine (a village district's shrine)#precinct",
+            "l7r/diagram/hamletgen/rows.py::SHARE#dry share",
+            "l7r/diagram/hamletgen/rows.py::far_row#dry share",
+            "l7r/diagram/hamletgen/rows.py::helper#plumbing",
+            "buildings.md::Walls#walls",
+            "buildings/programs.md::Country shrine (a village district's shrine)#precinct",
         ]
     )
-    assert cur[".claude/skills/diagram/buildings.md::Walls#walls"].research == "" and cur[".claude/skills/diagram/l7r/diagram/hamletgen/rows.py::far_row#dry share"].research
+    assert cur["buildings.md::Walls#walls"].research == "" and cur["l7r/diagram/hamletgen/rows.py::far_row#dry share"].research
 
 
 def test_owed_says_new_code_changed_and_research_changed_and_nothing_for_prose_or_the_intro(tmp_path: pathlib.Path) -> None:
@@ -111,7 +111,7 @@ def test_owed_says_new_code_changed_and_research_changed_and_nothing_for_prose_o
     _tree(tmp_path, page=PAGE.replace("Why asked.", "Why it is asked."))
     assert cx.owed(cx.current(skill), index) == [], "the intro is not a finding"
     _tree(tmp_path, MOD.replace("x * SHARE", "x * SHARE * 2"))
-    assert cx.owed(cx.current(skill), index) == [(".claude/skills/diagram/l7r/diagram/hamletgen/rows.py::far_row#dry share", "code changed")]
+    assert cx.owed(cx.current(skill), index) == [("l7r/diagram/hamletgen/rows.py::far_row#dry share", "code changed")]
     _tree(tmp_path, MOD.replace("SHARE = 0.5", "SHARE = 0.4"))
     assert sorted(k.rsplit("::", 1)[1] for k, _w in cx.owed(cx.current(skill), index)) == ["SHARE#dry share", "far_row#dry share"]
     _tree(tmp_path, page=PAGE.replace("face the street", "face south"))
@@ -129,7 +129,7 @@ def test_the_bundle_holds_each_unit_its_claims_and_the_cited_pages(tmp_path: pat
     cur = cx.current(skill)
     keys = sorted(cur)
     manifest = cx.bundle(tmp_path, cur, keys, tmp_path / "b").read_text()
-    assert "## UNIT .claude/skills/diagram/l7r/diagram/hamletgen/rows.py::far_row (function" in manifest
+    assert "## UNIT l7r/diagram/hamletgen/rows.py::far_row (function" in manifest
     assert "return x * SHARE" in manifest and "constants it reads: `SHARE=Constant(value=0.5)`" in manifest
     assert '"""Research: dry share' in manifest, "a constant brings its claim literal"
     assert "(inherited from the module docstring)" in manifest
@@ -162,9 +162,9 @@ def test_record_writes_verdicts_refuses_strangers_and_keeps_unclaimed_rows_until
 def test_the_report_counts_lists_findings_and_the_open_research(tmp_path: pathlib.Path) -> None:
     skill = _tree(tmp_path)
     index = _all_in_step(tmp_path)
-    k = ".claude/skills/diagram/l7r/diagram/hamletgen/rows.py::far_row#dry share"
+    k = "l7r/diagram/hamletgen/rows.py::far_row#dry share"
     index[k] |= {"verdict": "DRIFTED", "note": "296"}
-    index[".claude/skills/diagram/l7r/diagram/hamletgen/rows.py::helper#an unclaimed thing"] = {"verdict": "UNCLAIMED", "note": "n"}
+    index["l7r/diagram/hamletgen/rows.py::helper#an unclaimed thing"] = {"verdict": "UNCLAIMED", "note": "n"}
     index["gone::x#y"] = {"verdict": "DRIFTED"}
     text = cx.report(cx.current(skill), index)
     assert text.startswith("claims: 5 in scope; IN-STEP 4, DRIFTED 1, UNCLAIMED 1; owed 0")
@@ -177,7 +177,7 @@ def test_a_finding_in_a_deferred_unit_is_reported_deferred(tmp_path: pathlib.Pat
     not DRIFTED - shown and counted so, and never a finding the push's gate classifies."""
     skill = _tree(tmp_path)
     index = _all_in_step(tmp_path)
-    k = ".claude/skills/diagram/l7r/diagram/hamletgen/rows.py::far_row#dry share"
+    k = "l7r/diagram/hamletgen/rows.py::far_row#dry share"
     index[k] |= {"verdict": "DRIFTED", "note": "296"}
     deferred = frozenset({k.rsplit("#", 1)[0]})
     text = cx.report(cx.current(skill), index, deferred=deferred)
@@ -197,7 +197,7 @@ def test_classify_introduced_and_pre_existing(tmp_path: pathlib.Path) -> None:
     base_skill = _tree(tmp_path / "base")
     base = cx.current(base_skill)
     cores, bq = cx.base_cores(base_skill), base_skill / "research" / "questions"
-    k = ".claude/skills/diagram/l7r/diagram/hamletgen/rows.py::far_row#dry share"
+    k = "l7r/diagram/hamletgen/rows.py::far_row#dry share"
     # IN-STEP at the base, a finding now: introduced
     assert cx.classify(base, {k: _row(base, k, "DRIFTED")}, {k: _row(base, k, "IN-STEP")}, cores, bq)[0]
     # a finding at both ends, whatever changed: pre-existing
@@ -227,7 +227,7 @@ def test_a_base_with_no_claims_at_all_makes_every_first_finding_on_untouched_cod
     base_skill = _tree(tmp_path / "base", bare)
     assert cx.current(base_skill) == {} or all("rows.py" not in k for k in cx.current(base_skill))
     head = cx.current(_tree(tmp_path / "head"))
-    k = ".claude/skills/diagram/l7r/diagram/hamletgen/rows.py::far_row#dry share"
+    k = "l7r/diagram/hamletgen/rows.py::far_row#dry share"
     intro, pre = cx.classify(head, {k: _row(head, k, "DRIFTED")}, {}, cx.base_cores(base_skill), base_skill / "research" / "questions")
     assert intro == [] and pre
 
@@ -238,7 +238,7 @@ def test_the_gate_refuses_owed_and_introduced_and_warns_pre_existing(tmp_path: p
     cx.save_index(root / cx.INDEX, _all_in_step(root))
     _commit(root, "base")
     assert cx.gate(root) == ([], [])
-    k = ".claude/skills/diagram/l7r/diagram/hamletgen/rows.py::far_row#dry share"
+    k = "l7r/diagram/hamletgen/rows.py::far_row#dry share"
     idx = cx.load_index(root / cx.INDEX)
     idx[k]["verdict"] = "DRIFTED"
     cx.save_index(root / cx.INDEX, idx)
@@ -284,7 +284,7 @@ def test_a_class_is_shown_as_its_own_statements_and_each_method_under_its_own_he
     cur = cx.current(skill)
     keys = [k for k in cur if "Farm" in k]
     manifest = cx.bundle(tmp_path, cur, keys, tmp_path / "b").read_text()
-    head, _sep, method = manifest.partition("## UNIT .claude/skills/diagram/l7r/diagram/hamletgen/rows.py::Farm.lay")
+    head, _sep, method = manifest.partition("## UNIT l7r/diagram/hamletgen/rows.py::Farm.lay")
     assert "SIZE = 3" in head and "return self.SIZE" not in head and "return self.SIZE * 2" in method
 
 

@@ -2,7 +2,7 @@
 
 This file auto-loads into every session that reads a research file, on every turn, so it carries the RULES and
 nothing else. Why each is the rule - the GM's words, the incidents, the measurements - is in
-[`docs/research-record-rules.md`](../../../../docs/research-record-rules.md), under the same headings; read it
+[`docs/research-record-rules.md`](../docs/research-record-rules.md), under the same headings; read it
 before arguing with a rule. How an entry is written is [`STYLE.md`](STYLE.md); the four evidence labels (accurate,
 deviation, convention, guess) are in `docs/research-record-rules.md`, "Four labels".
 
@@ -28,7 +28,7 @@ it (the guard re-aims the Edit). A pointer of a retired form (`research/<page>/N
 the pointer check, naming the new one from `research/moved-303.json`.
 `research/assets/glossary-variants.txt` maps a word to the term that owns it; grep it, never read it whole.
 
-**Editing.** Edit the file, then `make record` (and `make glossary` for a term) in `.claude/skills/diagram`;
+**Editing.** Edit the file, then `make record` (and `make glossary` for a term) at the repository root;
 `make record CHECK=1` builds in memory and names every refusal (a link that lands nowhere, an id used twice, a note
 nothing cites, a question with no tags or tags no section takes). **A new question**: `make reserve KIND=question
 KEY=<heading id>` gives it the next number and a stub; write its heading and FILL ITS TAGS from `research/tags.json` -

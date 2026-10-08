@@ -221,7 +221,7 @@ def selftest() -> None:
     words = brit_words()
     assert "colour" in words and "centre" in words and len(words) > 40, len(words)
     assert exempt_path("CLAUDE.md") and exempt_path("specs/236-x/request.md")
-    assert exempt_path(".claude/skills/diagram/dev/../../../.clones/other/x.md")
+    assert exempt_path("dev/../../../.clones/other/x.md")
     assert not exempt_path("docs/a.md")
     spans = exempt_spans("a `colour` span\n<blockquote>\nthe colour there\n</blockquote>\nplain colour\n", "docs/a.md")
     text = "a `colour` span\n<blockquote>\nthe colour there\n</blockquote>\nplain colour\n"

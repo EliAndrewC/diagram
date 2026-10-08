@@ -47,13 +47,13 @@ differed on three others, in both directions. The noticing is mechanical now; th
 ## The glossary is one file per word, and you do not read it whole (feature 259)
 
 VOCABULARY is judged against the glossary, and you have been reading all 144,524 bytes of
-`.claude/skills/diagram/research/assets/glossary.js` to ask a question that needs none of its definitions. It is now one file
+`research/assets/glossary.js` to ask a question that needs none of its definitions. It is now one file
 per term:
 
 | what you want | where it is | about |
 |---|---|---|
-| does this WORD have a definition, under any term? | `.claude/skills/diagram/research/assets/glossary-variants.txt` - one tab-separated line per variant, and the term that owns it | 22 KB, one read |
-| is this word itself a TERM? | `ls .claude/skills/diagram/l7r/diagram/interactive/assets/glossary/*-<word>.json` - the filenames are the terms; ask for the one you want, never list the folder (2,202 names, ~30 KB) | one line, no file opened |
+| does this WORD have a definition, under any term? | `research/assets/glossary-variants.txt` - one tab-separated line per variant, and the term that owns it | 22 KB, one read |
+| is this word itself a TERM? | `ls l7r/diagram/interactive/assets/glossary/*-<word>.json` - the filenames are the terms; ask for the one you want, never list the folder (2,202 names, ~30 KB) | one line, no file opened |
 | what does one term actually say? | that term's own file, `NNNN-<term>.json` | about 154 bytes |
 
 **Read the variant index, not the glossary.** A word in the prose is usually a variant (`towpaths` for
@@ -154,9 +154,9 @@ whether there are references to things which are past edits that should no longe
 
 ## Input
 
-A question's page (`.claude/skills/diagram/research/questions/NNNN-<heading id>.html`, or its `.drawing.html`), or
+A question's page (`research/questions/NNNN-<heading id>.html`, or its `.drawing.html`), or
 several - with its notes file beside it (`NNNN-<heading id>.notes.html`, features 258, 303: the page's notes, which a
-reader meets at the foot of its page with the works they cite) - or the registry itself. The glossary is `.claude/skills/diagram/l7r/diagram/interactive/assets/glossary.json` (loaded by `glossary.py` as `GLOSSARY`: term, variants,
+reader meets at the foot of its page with the works they cite) - or the registry itself. The glossary is `l7r/diagram/interactive/assets/glossary.json` (loaded by `glossary.py` as `GLOSSARY`: term, variants,
 definition) - every occurrence of a term in a page's visible text is a hover tooltip, so a word IN the glossary
 needs nothing from you. `SOURCES.html` is NOT under the session-note and history rules (its `READ` markers are read by the link
 classifier and its entries are the record of the search): on the registry, report VOCABULARY only. Your drafted

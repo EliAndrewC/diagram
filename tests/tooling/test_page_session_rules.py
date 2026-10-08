@@ -12,7 +12,7 @@ from __future__ import annotations
 import pathlib
 import re
 
-REPO = pathlib.Path(__file__).resolve().parents[5]
+REPO = pathlib.Path(__file__).resolve().parents[2]
 SLIM = REPO / "container-scripts" / "page-session-rules.md"
 
 # opening words of the CLAUDE.md bullet -> the phrase in the slim file that carries it (or NOT: <why not>)

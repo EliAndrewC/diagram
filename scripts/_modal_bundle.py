@@ -36,10 +36,9 @@ sys.path.insert(0, str(HERE))
 sys.dont_write_bytecode = True
 import _modal_owed as mo  # noqa: E402
 
-SKILL = pathlib.Path(mo.SKILL)
-QUESTIONS = SKILL / "research" / "questions"
-VARIANTS = SKILL / "research" / "assets" / "glossary-variants.txt"
-GUIDELINES = {"standard": SKILL / "dev" / "modals.md", "particular": SKILL / "dev" / "modals-particular.md"}
+QUESTIONS = pathlib.Path("research/questions")
+VARIANTS = pathlib.Path("research/assets/glossary-variants.txt")
+GUIDELINES = {"standard": pathlib.Path("dev/modals.md"), "particular": pathlib.Path("dev/modals-particular.md")}
 #: the About tab's word band, per form (`dev/modals.md` M3, `dev/modals-particular.md` P3)
 BAND = {"standard": (120, 250), "particular": (80, 200)}
 #: record talk and the old feature-level label, barred from the About tab (`dev/modals.md` M11, M16)
@@ -94,12 +93,12 @@ def terms_of(root: pathlib.Path, m: mo.Modal) -> list[str]:
 def candidates(root: pathlib.Path, m: mo.Modal) -> list[tuple[int, str, str, list[str], int, str]]:
     """(score, file, heading, tags, term hits, first words) for every candidate, best first - the UNION rule, never cut."""
     entry = set(m.entry_files())
-    tags = {t for f in entry if (root / SKILL / f).is_file() for t in subjects((root / SKILL / f).read_text(encoding="utf-8"))}
+    tags = {t for f in entry if (root / f).is_file() for t in subjects((root / f).read_text(encoding="utf-8"))}
     terms = terms_of(root, m)
     pat = re.compile(r"\b(" + "|".join(re.escape(t) for t in terms) + r")\b", re.I) if terms else None
     out = []
     for p in question_pages(root):
-        rel = str(p.relative_to(root / SKILL))
+        rel = str(p.relative_to(root))
         if rel in entry:
             continue
         text = p.read_text(encoding="utf-8")
@@ -139,13 +138,13 @@ def render(root: pathlib.Path, m: mo.Modal) -> str:
     lines += ["## Depiction", ""]
     lines += [p + "\n" for p in dep] if dep else ["(no Depiction paragraphs)\n"]
     for f in m.drawing_files():
-        p = root / SKILL / f
+        p = root / f
         lines.append(f"- {heading(p.read_text(encoding='utf-8')) if p.is_file() else '(MISSING FILE)'}  - `{f}`")
     if not dep and not m.drawing_files():
         lines.append("(no Depiction tab - nothing to say and no drawing page)")
     lines += ["", "## References", ""]
     for f in m.entry_files():
-        p = root / SKILL / f
+        p = root / f
         lines.append(f"- {heading(p.read_text(encoding='utf-8')) if p.is_file() else '(MISSING FILE)'}  - `{f}`")
     lines += ["", f"Sources: {m.tags.get('Sources', '')}", ""]
     return _conditions_shown("\n".join(lines))
@@ -163,7 +162,7 @@ def prepass(root: pathlib.Path, m: mo.Modal) -> str:
         if len(re.findall(r"[.!?](\s|$)", g)) > 2:
             out.append(f"- a guess past two sentences (M3): {g[:90]}...")
     for f in m.entry_files():
-        if not (root / SKILL / f).is_file():
+        if not (root / f).is_file():
             out.append(f"- Entry names no file: {f}")
     if not m.entry_files():
         out.append("- Entry names no question file")
@@ -172,10 +171,10 @@ def prepass(root: pathlib.Path, m: mo.Modal) -> str:
     return "\n".join(out) + "\n"
 
 
-CLAIMS_INDEX = SKILL / "dev" / "claims-index.json"
+CLAIMS_INDEX = pathlib.Path("dev/claims-index.json")
 #: where the pool pages a glyph is cropped from live; the hamlets are searched first (the standardized kinds), then every other
 #: pool tree - read off the directory, never named here (a building type is named only in its declaration, `buildings/types.json`)
-POOL = SKILL / "pool"
+POOL = pathlib.Path("pool")
 HAMLETS = "hamlets"
 
 
@@ -268,7 +267,7 @@ def drawing_candidates(root: pathlib.Path, m: mo.Modal) -> list[str]:
     for f in m.entry_files():
         if f.endswith(".html") and not f.endswith(".drawing.html"):
             sibling = f[: -len(".html")] + ".drawing.html"
-            if (root / SKILL / sibling).is_file():
+            if (root / sibling).is_file():
                 out.append(sibling)
     base = ro.merge_base(root)
     # in EITHER form: FR-012 keeps every conversion off main, so at the base a kind is in the old form and its drawing pages
@@ -279,24 +278,24 @@ def drawing_candidates(root: pathlib.Path, m: mo.Modal) -> list[str]:
     # ...and every drawing page a LISTED one links to: the windbreak's 0072 sends its reader to 0080 for the crowns it draws,
     # and the check was never shown 0080 (feature 319, the windbreak's modal-depiction round 1)
     for f in m.drawing_files():
-        p = root / SKILL / f
+        p = root / f
         if p.is_file():
             out += [f"research/questions/{h}" for h in re.findall(r'href="(?:[^"]*/)?(\d{4}-[^"/#]+\.drawing\.html)', p.read_text(encoding="utf-8"))]
     listed = set(m.drawing_files())
-    return [f for f in dict.fromkeys(out) if f not in listed and (root / SKILL / f).is_file()]
+    return [f for f in dict.fromkeys(out) if f not in listed and (root / f).is_file()]
 
 
 def depiction_parts(root: pathlib.Path, m: mo.Modal, put, out: pathlib.Path, grep_targets: list[str]) -> None:  # noqa: ANN001
     """What `modal-depiction` reads beyond the modal and the rules: each drawing page its `Drawing:` lists and each CANDIDATE
     its kind has (`drawing_candidates`), whole; the claims citing any of them; and the glyph's crop (plan D13)."""
     for f in m.drawing_files():
-        p = root / SKILL / f
+        p = root / f
         if p.is_file():
-            put(f"drawing/{p.name}", p.read_text(encoding="utf-8"), str(SKILL / f), "LISTED - a page the modal's Drawing: names - how our maps draw it")
+            put(f"drawing/{p.name}", p.read_text(encoding="utf-8"), f, "LISTED - a page the modal's Drawing: names - how our maps draw it")
     candidates = drawing_candidates(root, m)
     for f in candidates:
-        p = root / SKILL / f
-        put(f"drawing/{p.name}", p.read_text(encoding="utf-8"), str(SKILL / f), "CANDIDATE - NOT on the modal's Drawing: list, but its kind's (beside an Entry question, or listed before this change): is it owed a link?")
+        p = root / f
+        put(f"drawing/{p.name}", p.read_text(encoding="utf-8"), f, "CANDIDATE - NOT on the modal's Drawing: list, but its kind's (beside an Entry question, or listed before this change): is it owed a link?")
     rows = claims_citing(root, [*m.drawing_files(), *candidates])
     put("claims.md", "# The engine's research claims citing these drawing pages (verdict | unit | note)\n\n" + ("\n".join(rows) if rows else "(none)") + "\n",
         str(CLAIMS_INDEX), "the code's own account of how it draws the kind - a DRIFTED row is a variety the record names and the code does not draw")
@@ -353,11 +352,11 @@ def bundle(root: pathlib.Path, kind: str, for_: str, out_arg: str) -> int:
         depiction_parts(root, m, put, out, grep_targets)
     if for_ == "modal-research":
         for f in m.entry_files():
-            p = root / SKILL / f
+            p = root / f
             if p.is_file():
                 # the page itself, not its notes: accuracy is judged against what the page TELLS its reader; whether a
                 # footnote's passage says it is quote-check's (feature 319 T07: the notes made the bundle 380 KB)
-                put(f"entry/{p.name}", p.read_text(encoding="utf-8"), str(SKILL / f), "a page the modal's Entry names - what its statements must rest on")
+                put(f"entry/{p.name}", p.read_text(encoding="utf-8"), f, "a page the modal's Entry names - what its statements must rest on")
         cands = candidates(root, m) if m.form == "standard" else []
         listing = [f"# Candidates for {m.cls} - {len(cands)}, best first (the UNION rule; never cut)", ""]
         for i, (score, rel, head, tags, hits, first) in enumerate(cands):
@@ -367,7 +366,7 @@ def bundle(root: pathlib.Path, kind: str, for_: str, out_arg: str) -> int:
         put("candidates.md", "\n".join(listing) + "\n", "scripts/_modal_bundle.py", "every question that may answer what the modal leaves open (gaps) - the top ten are files under cand/, every page under record/")
         (out / "cand").mkdir()
         for _score, rel, *_ in cands[:TOP]:
-            shutil.copyfile(root / SKILL / rel, out / "cand" / pathlib.Path(rel).name)
+            shutil.copyfile(root / rel, out / "cand" / pathlib.Path(rel).name)
         grep_targets.append("cand/")
         (out / "record").mkdir()
         for p in question_pages(root):

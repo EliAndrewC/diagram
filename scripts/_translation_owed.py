@@ -31,7 +31,7 @@ sys.path.insert(0, str(HERE))
 import _quote_verbatim as qv  # noqa: E402
 import _style_prepass as sp  # noqa: E402
 
-RECORD = ".claude/skills/diagram/research"
+RECORD = "research"
 _NOTE = re.compile(r'<li data-note="([^"]+)">(.*?)</li>', re.S)
 _TOKEN = re.compile(r'<span class="orig" data-orig="([^"]+)"></span>')
 _STORED = re.compile(r'<li data-orig="([^"]+)">(.*?)</li>', re.S)

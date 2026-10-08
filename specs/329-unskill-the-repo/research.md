@@ -27,8 +27,10 @@ hence D3. Nothing else shares a name.
 
 ## R3 - The config root is equal
 
-To fill at T03: file lists from `ruff check --show-files`, `ruff format --check`, and pyrefly, before (skill dir) and
-after (root), prefix stripped, compared.
+`ruff check --show-files .` from the skill directory before the move and from the root after it (with the fence carried
+into `extend-exclude`), prefixes stripped: 831 files each, IDENTICAL (`diff` empty), 2026-10-07. `ruff format` reads the
+same discovery and the same excludes. pyrefly's `project-includes` are explicit `l7r/diagram/...` paths relative to the
+config's directory and `search-path = ["."]`, so moving the config with the tree changes nothing it checks.
 
 ## R4 - Guards and push checks naming the path
 

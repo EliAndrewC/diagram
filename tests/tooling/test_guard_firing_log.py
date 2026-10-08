@@ -24,7 +24,7 @@ import subprocess
 
 import pytest
 
-SCRIPTS = pathlib.Path(__file__).resolve().parents[5] / "scripts"  # the REPO root; parents[4] is .claude
+SCRIPTS = pathlib.Path(__file__).resolve().parents[2] / "scripts"  # the REPO root; parents[4] is .claude
 
 
 def _payload(**tool_input: object) -> str:
@@ -47,7 +47,7 @@ CASES = [
     ("make-only", _payload(command="python3 -m pytest tests/x/test_y.py -k foo 2>&1 | tail -3"), "rewrote", "targeted-pytest"),
     ("make-only", _payload(command="python3 -m l7r.diagram.ci status"), "rewrote", "entry-point"),
     ("no-poll", _payload(command="until grep -q 'gate green' /tmp/gate.log; do sleep 10; done"), "rewrote", "backgrounded-file-wait"),
-    ("guard-file", _payload(_tool="Edit", file_path="/r/.claude/skills/diagram/Makefile", new_string='\t: "GUARD_EDIT_OK: `make done` in a recipe comment"'), "blocked", "recipe-comment-substitution"),
+    ("guard-file", _payload(_tool="Edit", file_path="/r/Makefile", new_string='\t: "GUARD_EDIT_OK: `make done` in a recipe comment"'), "blocked", "recipe-comment-substitution"),
     # feature 2026-09-12: a review's findings do not reach the GM unfiltered - the dispatch arms, the filter disarms
     ("escalation", _payload(_tool="Agent", subagent_type="settlement-review", prompt="DELTA review of Inashiro"), "armed", "review-dispatched"),
     ("escalation", _payload(_tool="Agent", subagent_type="escalation-check", prompt="my draft writeup"), "permitted", "filter-ran"),
@@ -61,11 +61,11 @@ CASES = [
     ("review-round", _payload(_tool="Agent", subagent_type="spec-fidelity", prompt="MODE 3 of specs/999-nowhere REVIEW_ROUND_OK"), "blocked", "REVIEW_ROUND_OK-no-reason"),
     # feature 252 (GM 2026-09-19): an ad-hoc agent dispatch names its model, or is refused
     ("agent-model", _payload(_tool="Agent", subagent_type="general-purpose", prompt="read three pages"), "blocked", "no-model"),
-    ("check-bundle", _payload(_tool="Agent", subagent_type="record-format", prompt="check .claude/skills/diagram/research/questions/0010-x.html"), "blocked", "repo-path"),
+    ("check-bundle", _payload(_tool="Agent", subagent_type="record-format", prompt="check research/questions/0010-x.html"), "blocked", "repo-path"),
     ("check-bundle", _payload(_tool="Agent", subagent_type="record-format", prompt="read /tmp/l7r-check/ways-010/MANIFEST.md"), "permitted", "bundle-named"),
     (
         "check-bundle",
-        _payload(_tool="Agent", subagent_type="record-format", prompt='read .claude/skills/diagram/research/questions/0010-x.html CHECK_BUNDLE_OK="the term file itself is under review"'),
+        _payload(_tool="Agent", subagent_type="record-format", prompt='read research/questions/0010-x.html CHECK_BUNDLE_OK="the term file itself is under review"'),
         "escaped",
         "check-bundle-ok",
     ),
@@ -481,7 +481,7 @@ _PERMIT = re.compile(r"guard_log\s+(\S+)\s+escaped|escape_or_refuse\s+(\S+)")
 def _permitting_sites() -> set[tuple[str, str]]:
     """(guard file, rule slug) for every branch that RECORDS a permitted escape."""
     out = set()
-    for f in list(SCRIPTS.glob("*.sh")) + [SCRIPTS.parent / ".claude/skills/diagram/Makefile"]:
+    for f in list(SCRIPTS.glob("*.sh")) + [SCRIPTS.parent / "Makefile"]:
         if not f.exists() or f.name.startswith("test"):
             continue
         for line in f.read_text().splitlines():

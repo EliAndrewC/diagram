@@ -4,7 +4,7 @@
 than in every session's context. CLAUDE.md keeps the six rules in one line each; this file is the
 full record with the GM's words. The operative form of the citation rules - the footnote shape, the
 notes and the works cited, the download list - is
-[`.claude/skills/diagram/research/CLAUDE.md`](../.claude/skills/diagram/research/CLAUDE.md), which
+[`research/CLAUDE.md`](../research/CLAUDE.md), which
 auto-loads when a session edits the record; the principles are constitution XII.*
 
 **Load this file when:** a research task raises a question the one-liners do not settle - what
@@ -120,7 +120,7 @@ counts as a readable source, when a guess may be recorded, how a two-form findin
   them. So write down **what was accepted, what it costs in observable terms, which alternatives were
   priced, and who chose** - the rejected options matter as much as the chosen one, because they are
   what stops the question being reopened from scratch. Worked example:
-  [`research/contents.json#water`](../.claude/skills/diagram/research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html)
+  [`research/contents.json#water`](../research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html)
   "How our maps draw channel widths" - the GM asked why a channel did not visibly narrow, the
   honest answer was that at true scale it cannot, two legibility multipliers were priced against
   keeping true size, and the ruling plus both declined numbers are recorded where the next reader
@@ -171,7 +171,7 @@ entry (`specs/258-split-the-record-into-per-entry-files/research.md` R2, R3).
 So a question is `research/questions/NNNN-<heading id>.html` (feature 303), its footnotes are the `.notes.html` beside it,
 a source is `research/sources/NNNN-<key>.html`, and `make record` writes the pages a reader opens. The
 operative rules - how to find an entry without reading a page, how to add a question or a footnote, what
-to hand a check - are in `.claude/skills/diagram/research/CLAUDE.md`.
+to hand a check - are in `research/CLAUDE.md`.
 
 Three things worth knowing beyond the mechanics:
 
@@ -202,7 +202,7 @@ hosting a copy publicly, but for now I just want an archive."* Nothing from it i
 host keeps one working copy of it, pushed straight to GitHub - no clone of it per session (the GM). The GM's own
 downloaded files in `academic-sources/` that copy a cited source are archived beside its captures. The mechanism, the
 fallback order for a dead or a refused page and the measurements: `specs/309-source-archive/`; the operative rule:
-`.claude/skills/diagram/research/CLAUDE.md`.
+`research/CLAUDE.md`.
 
 **Amendment (the GM, 2026-10-02).** The download directory is a queue: *"once something has been added to the diagram
 research repository and then pushed, then we can delete it from the academic sources directory. And in that way, looking

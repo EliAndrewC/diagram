@@ -318,8 +318,8 @@ git clone -q "$BM/remote.git" "$BM/main/.clones/work" 2>/dev/null
 git -C "$BM/main/.clones/work" config user.email t@t; git -C "$BM/main/.clones/work" config user.name t
 mkdir -p "$BM/main/.clones/.session-clones"
 printf '%s' "$BM/main/.clones/work" > "$BM/main/.clones/.session-clones/sid-bm"
-mkdir -p "$BM/main/.claude/skills/diagram/l7r/diagram"
-echo x > "$BM/main/.claude/skills/diagram/l7r/diagram/mod.py"
+mkdir -p "$BM/main/l7r/diagram"
+echo x > "$BM/main/l7r/diagram/mod.py"
 git -C "$BM/main" add -A; git -C "$BM/main" commit -qm engine
 git -C "$BM/main" push -q origin HEAD:main; git -C "$BM/main" fetch -q origin
 git -C "$BM/main/.clones/work" fetch -q origin
@@ -359,7 +359,7 @@ bm_silent "make quick"                  "a CLEAN clone is left to the stale-base
 # literal so it costs nothing on a hook that fires for every tool call; the TRUTH is derived here from
 # the skill Makefile, and any target that reaches pytest but is missing from the hook fails this
 # suite. Three hand-written rosters in this repository were each short by one within a day.
-DERIVED=$(python3 - "$HERE/../.claude/skills/diagram/Makefile" "$HOOK" <<'PYEOF'
+DERIVED=$(python3 - "$HERE/../Makefile" "$HOOK" <<'PYEOF'
 import re, sys
 mk = open(sys.argv[1], encoding="utf-8").read()
 hook = open(sys.argv[2], encoding="utf-8").read()

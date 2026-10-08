@@ -23,7 +23,7 @@ from typing import Any
 import pytest
 
 SKILL = pathlib.Path(__file__).resolve().parents[2]
-REPO = SKILL.parents[2]
+REPO = SKILL
 SCRIPTS = REPO / "scripts"
 FIXTURE = SCRIPTS / "fixtures" / "guard-refusals-2026-09.json"
 

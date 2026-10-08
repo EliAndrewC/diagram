@@ -5,7 +5,7 @@ from __future__ import annotations
 import importlib.util
 import pathlib
 
-REPO = pathlib.Path(__file__).resolve().parents[5]
+REPO = pathlib.Path(__file__).resolve().parents[2]
 
 
 def _load():  # noqa: ANN202
@@ -35,7 +35,7 @@ def test_a_question_s_size_is_its_prose_and_its_notes_and_originals_are_not_coun
 
 def test_only_questions_count() -> None:
     """Feature 303: a question's page, research or drawing, in `research/questions/` - nothing else."""
-    r = pathlib.Path(".claude/skills/diagram/research")
+    r = pathlib.Path("research")
     assert qs.is_question(r / "questions" / "0010-how-far.html") and qs.is_question(r / "questions" / "0010-how-far.drawing.html")
     assert not qs.is_question(r / "sources" / "010-works-cited" / "4220-edo-enwiki.html")
     assert not qs.is_question(r / "questions" / "0010-how-far.notes.html") and not qs.is_question(r / "questions" / "0010-how-far.originals.html")
@@ -44,7 +44,7 @@ def test_only_questions_count() -> None:
 
 def test_the_cap_admits_the_first_question_split_under_it() -> None:
     """The split of 0115 is the cap's worked example: its argument whole, under the cap."""
-    d = REPO / ".claude/skills/diagram/research/questions"
+    d = REPO / "research/questions"
     q = next(p for p in d.glob("0115-servants-in-a-samurai-household*.html") if qs.is_question(p))
     assert qs.size(q) <= qs.CAP, qs.size(q)
 

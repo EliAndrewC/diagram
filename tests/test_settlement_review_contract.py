@@ -11,9 +11,9 @@ from __future__ import annotations
 import pathlib
 import re
 
-ROOT = pathlib.Path(__file__).resolve().parents[4]
+ROOT = pathlib.Path(__file__).resolve().parents[1]
 AGENT = (ROOT / ".claude" / "agents" / "settlement-review.md").read_text(encoding="utf-8")
-MAKEFILE = (ROOT / ".claude" / "skills" / "diagram" / "Makefile").read_text(encoding="utf-8")
+MAKEFILE = (ROOT / "Makefile").read_text(encoding="utf-8")
 
 
 FIX_CHECK = (ROOT / ".claude" / "agents" / "fix-check.md").read_text(encoding="utf-8")

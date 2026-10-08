@@ -18,7 +18,7 @@ from l7r.diagram.ci.dispatch import cache_location, registered_operation
 pytestmark = pytest.mark.tooling
 
 HERE = Path(__file__).resolve().parents[3]
-REPO = HERE.parents[2]
+REPO = HERE
 BUILDSPECS = [REPO / "buildspec" / name for name in ("check.yml", "merge.yml")]
 # Feature 177: the two paths that carry the `hooks-test` freshness state between builds. Named once,
 # here, because three files have to agree about them - both buildspecs and `run.sh`'s restore.
@@ -131,7 +131,7 @@ def test_the_cached_paths_are_what_a_HIT_needs(spec: Path) -> None:
     # and then it forbade the change outright. The fix is NOT "and `.git` is allowed": it is an exact
     # set. Anything else in the cache is a deliberate decision that belongs in a diff, not a path
     # that slipped in behind a prefix test.
-    extra = [p for p in paths if not p.startswith("repo/.claude/skills/diagram/.gencache/")]
+    extra = [p for p in paths if not p.startswith("repo/.gencache/")]
     assert extra == FRESHNESS_PATHS, f"the cache carries the gencache set plus exactly the freshness state; found {extra}"
 
 

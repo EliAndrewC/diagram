@@ -36,8 +36,8 @@ from collections.abc import Mapping
 import os
 import sys
 
-GLOSSARY = ".claude/skills/diagram/l7r/diagram/interactive/assets/glossary.json"
-RESEARCH = ".claude/skills/diagram/research"
+GLOSSARY = "l7r/diagram/interactive/assets/glossary.json"
+RESEARCH = "research"
 
 #: (label, pattern) over a section's visible text - the session-note shapes `record-format` names.
 SESSION_NOTES: tuple[tuple[str, re.Pattern[str]], ...] = (

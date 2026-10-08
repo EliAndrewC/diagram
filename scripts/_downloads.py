@@ -43,9 +43,8 @@ import subprocess
 import sys
 from collections.abc import Iterable
 
-SKILL = ".claude/skills/diagram"
-CANON = f"{SKILL}/research/to-download.md"
-STATE = f"{SKILL}/research/to-download.state.json"
+CANON = "research/to-download.md"
+STATE = "research/to-download.state.json"
 #: The GM's copy, in the inbox `_archive.GM_DIR` names (the same environment variable moves both, for a test).
 GM_COPY = pathlib.Path(os.environ.get("L7R_GM_SOURCES", "/host-l7r-repo/academic-sources")) / "TO-DOWNLOAD.md"
 HIGH_RISK = "specs/312-uncited-source-catalog/high-risk-sources.md"
@@ -452,7 +451,7 @@ def _reserve_module():  # noqa: ANN202
 def add(root: pathlib.Path, draft: str, timeout: float = 30.0) -> list[str]:
     """Append the draft's entries under the next numbers, taken under the host-wide lock (plan D6); returns the ids."""
     rp = _reserve_module()
-    items = drafts(draft, root / SKILL / "research")
+    items = drafts(draft, root / "research")
     mirror = rp.mirror_of(root.resolve())
     ledger = mirror / ".specify" / LEDGER
     with rp.Lock(mirror / ".specify" / LOCK, timeout):

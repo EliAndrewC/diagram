@@ -11,7 +11,7 @@ from l7r.diagram.ci import imagecheck
 
 pytestmark = pytest.mark.tooling
 
-REPO = Path(__file__).resolve().parents[6]
+REPO = Path(__file__).resolve().parents[3]
 DOCKERFILE = REPO / "Dockerfile.ci"
 
 
@@ -53,17 +53,17 @@ def test_an_unreadable_marker_is_UNKNOWN_rather_than_an_exception(marker: str | 
 def test_a_changed_lockfile_is_stale_and_an_unrelated_change_is_not() -> None:
     """The motivating case: `requirements-dev.txt` gained `pyrefly==1.2.0` on 2026-08-28 and the image
     was not rebuilt, so every remote build failed at typecheck with Error 127 for three days."""
-    changed = [".claude/skills/diagram/requirements-dev.txt", ".claude/skills/diagram/l7r/diagram/settlement/houses.py"]
-    assert imagecheck.stale_inputs(changed) == [".claude/skills/diagram/requirements-dev.txt"]
+    changed = ["requirements-dev.txt", "l7r/diagram/settlement/houses.py"]
+    assert imagecheck.stale_inputs(changed) == ["requirements-dev.txt"]
     # ...and a diff touching nothing the image is built from leaves it current
-    assert imagecheck.stale_inputs([".claude/skills/diagram/l7r/diagram/settlement/houses.py", "README.md"]) == []
+    assert imagecheck.stale_inputs(["l7r/diagram/settlement/houses.py", "README.md"]) == []
 
 
 def test_the_line_names_the_FILES_and_says_nothing_when_current() -> None:
     """Which file changed decides whether it matters - a lockfile means the build's Python differs from
     the tree's, a Dockerfile comment does not - so the message names them rather than saying "old"."""
     assert imagecheck.staleness_line([]) is None
-    line = imagecheck.staleness_line([".claude/skills/diagram/requirements-dev.txt", "Dockerfile.ci"])
+    line = imagecheck.staleness_line(["requirements-dev.txt", "Dockerfile.ci"])
     assert line is not None
     assert "requirements-dev.txt" in line and "Dockerfile.ci" in line
     assert "make ci-image" in line, "a warning without the fix command is a warning people learn to skip"

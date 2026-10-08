@@ -187,7 +187,7 @@ engine_key() { # the working tree's engine key, or "" when it cannot be computed
   # THROUGH MAKE, because the engine refuses a bare interpreter (feature 127) - and cached, because the
   # Stop hook asks on every turn and the key costs ~0.4 s to compute. The cache is invalidated by the
   # clone's own index+worktree mtimes, so an edit re-keys it and a quiet turn does not pay.
-  local skill="${CLONE_ROOT}/.claude/skills/diagram" cache="${CLONE_ROOT}/.git/pairing-key" stamp
+  local skill="${CLONE_ROOT}" cache="${CLONE_ROOT}/.git/pairing-key" stamp
   [ -d "$skill" ] || return 0
   stamp="$(find "$skill/l7r" "$skill/pool" -name '*.py' -newer "$cache" -print -quit 2>/dev/null || true)"
   if [ -s "$cache" ] && [ -z "$stamp" ]; then
@@ -273,7 +273,7 @@ gate_green() { # gate_green <key> - a green gate has seen exactly this content
   # GUARD_EDIT_OK: feature 294 - the stamp alone when it exists: the verification record is last-event-wins, so a green
   # `make test-file` would read as a gate (feature 240's note on `gate_state`)
   if [ -f "${CLONE_ROOT}/scripts/gate-stamp.py" ]; then
-    ( cd "${CLONE_ROOT}/.claude/skills/diagram" 2>/dev/null && python3 "${CLONE_ROOT}/scripts/gate-stamp.py" --fresh diagram >/dev/null 2>&1 )
+    ( cd "${CLONE_ROOT}" 2>/dev/null && python3 "${CLONE_ROOT}/scripts/gate-stamp.py" --fresh diagram >/dev/null 2>&1 )
     return $?
   fi
   [ "$(read_field "${CLONE_ROOT}/.git/verification-state.json" engine_key)" = "$key" ]
@@ -319,7 +319,7 @@ PY
 # GUARD_EDIT_OK: feature 294 US6 - gate_running_or_fresh retired: a review no longer runs beside a gate (gate_green above)
 log_bypass() { # the override's reason, where `make bypass-audit` reads it
   local why="$1" what="$2"
-  local dir="${CLONE_ROOT}/.claude/skills/diagram/dev/bypass-log"
+  local dir="${CLONE_ROOT}/dev/bypass-log"
   [ -d "$dir" ] || return 0
   dir="$dir/$(date -u +%Y-%m)"; mkdir -p "$dir" 2>/dev/null || return 0   # GUARD_EDIT_OK: 2026-10-02 - a month folder, as every log writer
   python3 - "$dir" "$why" "$what" <<'PY' 2>/dev/null || true
@@ -553,7 +553,7 @@ print(json.dumps({"hookSpecificOutput": {
         *)
           pf="$(mktemp)"; printf '%s' "$ptext" > "$pf"
           green=no
-          ( cd "${CLONE_ROOT}/.claude/skills/diagram" 2>/dev/null && python3 "${CLONE_ROOT}/scripts/gate-stamp.py" --fresh diagram >/dev/null 2>&1 ) && green=yes
+          ( cd "${CLONE_ROOT}" 2>/dev/null && python3 "${CLONE_ROOT}/scripts/gate-stamp.py" --fresh diagram >/dev/null 2>&1 ) && green=yes
           problems="$(python3 "${CLONE_ROOT}/scripts/_review_prereq.py" check --clone "$CLONE_ROOT" --maps "${named:-$(review_owed_names)}" --prompt-file "$pf" --gate-green "$green" 2>&1)"
           rc=$?; rm -f "$pf"
           if [ "$rc" -ne 0 ]; then

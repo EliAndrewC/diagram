@@ -725,7 +725,7 @@ def _unclaimed() -> None:
 
 
 def test_research_of_reads_own_claims_with_their_questions_and_verdicts(monkeypatch: pytest.MonkeyPatch) -> None:
-    key = ".claude/skills/diagram/tests/tools/test_placement_stages.py::_claimed#dry share"
+    key = "tests/tools/test_placement_stages.py::_claimed#dry share"
     monkeypatch.setattr(ps, "_verdicts", lambda: {key: "DRIFTED"})
     got = ps.research_of(_claimed)
     assert [(c["label"], c["backing"], c["verdict"]) for c in got] == [("dry share", "POINTER", "DRIFTED"), ("a drawn thing", "CONVENTION", "unchecked")]

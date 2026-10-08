@@ -30,7 +30,7 @@ Every Mode A diagram saves a **design-notes file** alongside its SVG/PNG: `pool/
 
 Mode A's automated gate is a **subagent review**, not a scripted validator (a compound plan has far fewer objects than a settlement, and most failure modes are judgment calls a script can't encode). The author is not a reliable reviewer of their own plan, so before presenting a diagram as done:
 
-1. Invoke the **`building-review`** subagent ([`/.claude/agents/building-review.md`](../../agents/building-review.md)) with the subject name. It reads this file's program + grounding, the notes file, the PNG, and the SVG, and returns errors / questionables / nitpicks / confirmations.
+1. Invoke the **`building-review`** subagent ([`/.claude/agents/building-review.md`](.claude/agents/building-review.md)) with the subject name. It reads this file's program + grounding, the notes file, the PNG, and the SVG, and returns errors / questionables / nitpicks / confirmations.
 2. **Iterate**: fix valid findings and re-run, until the reviewer returns no findings OR the remaining findings are overruled by context it lacks (GM rulings, setting canon). Record every overrule with its rationale in the notes file's Review log - the reviewer reads the log and will not re-raise settled items.
 3. One reviewer covers ALL building types - the type-specific knowledge lives in this file's "Compound programs" section, which the reviewer reads at review time. Adding a new building type means writing its program here, not a new agent.
 
@@ -42,7 +42,7 @@ Mode A's automated gate is a **subagent review**, not a scripted validator (a co
 4. **Green-test**: re-run the tuned agents; the map should pass clean.
 5. **Record the specific example** in the agent definition's "validated examples" note and in the design-notes Review log - a validated example is the negative-fixture equivalent for a judgment-call check (coverage/coincidence does not prove a check has teeth; a recorded red-then-green does).
 
-This is the Mode A instance of the project-wide subagent-check TDD rule in [the repository `CLAUDE.md`](../../../CLAUDE.md); it applies to both `building-review` and `size-audit`.
+This is the Mode A instance of the project-wide subagent-check TDD rule in [the repository `CLAUDE.md`](CLAUDE.md); it applies to both `building-review` and `size-audit`.
 
 ## Building vocabulary
 
@@ -341,7 +341,7 @@ Before declaring done (Mode A):
 - [ ] Self-review pass after first render (read the PNG)
 - [ ] Design notes written to `pool/<subject>.notes.md` (knob settings, particulars, deliberate choices)
 - [ ] `building-review` subagent pass: iterate until no findings, or remaining findings overruled with rationale recorded in the notes file's Review log
-- [ ] `size-audit` subagent pass ([`/.claude/agents/size-audit.md`](../../agents/size-audit.md)): every feature checked in real feet against independently researched historical anchors - documented tolerances get RE-VERIFIED, not assumed (a wrong size once laundered itself into the docs as a tolerance). It runs [`tools/pack_audit/`](l7r/diagram/tools/pack_audit/CLAUDE.md) for the packing/whitespace sweep (coverage %, largest vacant rectangle, aligned building gaps)
+- [ ] `size-audit` subagent pass ([`/.claude/agents/size-audit.md`](.claude/agents/size-audit.md)): every feature checked in real feet against independently researched historical anchors - documented tolerances get RE-VERIFIED, not assumed (a wrong size once laundered itself into the docs as a tolerance). It runs [`tools/pack_audit/`](l7r/diagram/tools/pack_audit/CLAUDE.md) for the packing/whitespace sweep (coverage %, largest vacant rectangle, aligned building gaps)
 - [ ] Every drawn element carries a KIND (feature 262): `data-kind="<key>"` on it or on its group (the nearest wins; a label goes in its feature's group), `data-kind="-"` on the sheet's apparatus (background, title, scale bar); the precinct one rect per court, abutting at the divider, so each court lights on the page. A new kind is a class in [`interactive/compound_kinds/`](l7r/diagram/interactive/compound_kinds/__init__.py), written from the record. `tests/interactive/test_compound_kinds.py` names any ink with no kind, and the gen writes `<name>.html` - open it and click the new thing once
 - [ ] `.svg`, `.png`, `.html` and `.notes.md` all saved in `pool/`
 - [ ] Historical-accuracy review offered to the GM at completion

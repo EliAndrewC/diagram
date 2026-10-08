@@ -722,8 +722,8 @@ hooks-test:     ## [tests] run every scripts/test-*-hooks.sh, and prove each gua
 perf-gate:      ## [performance] require the feature's -start bookend, take -end, and FAIL on a regression
 	@: "(GUARD_EDIT_OK: feature 132 - a perf snapshot rolls several seeds, a sweep under the scope lock)"; \
 	f="$(or $(FEATURE),$(SPECIFY_FEATURE))"; \
-	if [ -z "$$f" ] && [ -f ../../../.specify/feature.json ]; then \
-	  f=$$(python3 -c "import json;print(json.load(open('../../../.specify/feature.json'))['feature_directory'].split('/')[-1])" 2>/dev/null); \
+	if [ -z "$$f" ] && [ -f .specify/feature.json ]; then \
+	  f=$$(python3 -c "import json;print(json.load(open('.specify/feature.json'))['feature_directory'].split('/')[-1])" 2>/dev/null); \
 	fi; \
 	n=$$(printf '%s' "$$f" | grep -oE '^[0-9]+' || true); \
 	if [ -z "$$n" ]; then \
@@ -739,7 +739,7 @@ perf-gate:      ## [performance] require the feature's -start bookend, take -end
 	  : "SNAPSHOT for its recorded machine identity, which is also STRICTER: the filename test would" ; \
 	  : "have paired an XLARGE -start with an 8-vCPU -end. The no-baseline refusal below is untouched." ; \
 	  printf '\n\033[1mPERF GATE (in-build): taking the %s-start bookend on the pre-merge main, in a detached worktree.\033[0m\n' "$$n"; \
-	  git worktree add -q --detach /tmp/base"$$n" origin/main && ( cd /tmp/base"$$n"/.claude/skills/diagram && $(MAKE) --no-print-directory perf LABEL="$$n-start" ) && cp /tmp/base"$$n"/.claude/skills/diagram/dev/perf-log/*"$$n-start"*.json dev/perf-log/ || exit 1; \
+	  git worktree add -q --detach /tmp/base"$$n" origin/main && ( cd /tmp/base"$$n" && $(MAKE) --no-print-directory perf LABEL="$$n-start" ) && cp /tmp/base"$$n"/dev/perf-log/*"$$n-start"*.json dev/perf-log/ || exit 1; \
 	fi; \
 	if ! ls dev/perf-log/*"$$n"-start*.json >/dev/null 2>&1; then \
 	  printf '\n\033[1mPERF GATE: no %s-start bookend exists, so a regression cannot be measured.\033[0m\n\n' "$$n"; \
@@ -748,8 +748,8 @@ perf-gate:      ## [performance] require the feature's -start bookend, take -end
 	  printf 'fine and is what the regression baseline already does - take it in a detached worktree at\n'; \
 	  printf 'the pre-feature commit:\n\n'; \
 	  printf '  git worktree add --detach /tmp/base%s <pre-feature-commit>\n' "$$n"; \
-	  printf '  ( cd /tmp/base%s/.claude/skills/diagram && make perf LABEL=%s-start )\n' "$$n" "$$n"; \
-	  printf '  cp /tmp/base%s/.claude/skills/diagram/dev/perf-log/*%s-start*.json dev/perf-log/\n\n' "$$n" "$$n"; \
+	  printf '  ( cd /tmp/base%s && make perf LABEL=%s-start )\n' "$$n" "$$n"; \
+	  printf '  cp /tmp/base%s/dev/perf-log/*%s-start*.json dev/perf-log/\n\n' "$$n" "$$n"; \
 	  printf 'What is NOT allowed is shipping with no baseline: "did this get slower" then has no answer,\n'; \
 	  printf 'and feature 126 shipped a +51%% slowdown exactly that way.\n\n'; \
 	  exit 1; \
@@ -828,7 +828,7 @@ print()"
 # of `scripts/` were invisible to the very report meant to catch this. It asks the CHECKER now, over
 # the checker's own scope, so the report and the gate can never again disagree about what is over.
 	@printf '\033[1mFiles past the ~1,000-line bar\033[0m (constitution X clause 13 - GATED since feature 173)\n'
-	@python3 ../../../scripts/check-file-scale.py --list ../../..
+	@python3 scripts/check-file-scale.py --list .
 	@printf '  A file over the bar FAILS `make lint`, and so `make done` and the push. The one way out\n'
 	@printf '  is clause 13'"'"'s ordered-data carve-out, stated IN the file as `FILE_SIZE_OK: <reason>` and\n'
 	@printf '  listed above with its reason - a carve-out nobody can enumerate is one nobody revisits.\n'
@@ -841,7 +841,7 @@ print()"
 # reason" pointing past a second list, which is its own little piece of drift (spec-fidelity, round 1
 # of the amended spec).
 	@printf '\033[1mFiles allowed to carry a conflict triple\033[0m (feature 241 - the file-level exemption)\n'
-	@python3 ../../../scripts/_hm_conflict.py --list ../../..
+	@python3 scripts/_hm_conflict.py --list .
 	@printf '  Declaring it makes the WHOLE file invisible to the hook and to the backstop, so a real\n'
 	@printf '  conflict committed into one of these is caught by nothing - which is why the reason must be\n'
 	@printf '  argued, must open its line, and is listed here with the file that claims it.\n\n'
@@ -849,7 +849,7 @@ print()"
 # is, one line above: a class entry may name no research section when the section is deliberately unwritten,
 # and a carve-out nobody can list is one nobody revisits.
 	@printf '\033[1mClass entries with no research section\033[0m (feature 234 - the declared-silence form)\n'
-	@python3 -c "import sys; sys.path.insert(0, '.'); sys.path.insert(0, '../../../scripts'); from l7r.diagram.interactive.classes import CLASSES; import importlib.util as u; sp=u.spec_from_file_location('ceh','../../../scripts/check-entry-headings.py'); m=u.module_from_spec(sp); sp.loader.exec_module(m); rows=[(k,fc.entry) for k,fc in sorted(CLASSES.items()) if m.SILENT.search(fc.entry)]; [print(f'  {k:<22} {e}') for k,e in rows]; print(f'  {len(rows)} of {len(CLASSES)} entries name no section; the other {len(CLASSES)-len(rows)} must RESOLVE, checked at the gate and the push.')"
+	@python3 -c "import sys; sys.path.insert(0, '.'); sys.path.insert(0, 'scripts'); from l7r.diagram.interactive.classes import CLASSES; import importlib.util as u; sp=u.spec_from_file_location('ceh','scripts/check-entry-headings.py'); m=u.module_from_spec(sp); sp.loader.exec_module(m); rows=[(k,fc.entry) for k,fc in sorted(CLASSES.items()) if m.SILENT.search(fc.entry)]; [print(f'  {k:<22} {e}') for k,e in rows]; print(f'  {len(rows)} of {len(CLASSES)} entries name no section; the other {len(CLASSES)-len(rows)} must RESOLVE, checked at the gate and the push.')"
 	@printf '  A broken heading and a deliberate silence are told apart by this FORM, never by a non-match.\n\n'
 # GUARD_EDIT_OK: feature 197 - the audit gains the FEATURE-NUMBER LEDGER (spec FR-008): every claim `make claim`
 # made, newest last, read from the mirror's `.specify/feature-numbers.jsonl` (the mirror is a clone's grandparent;
@@ -870,7 +870,7 @@ print(f'  {len(rows)} claims recorded') if rows else None; print()"
 # the GM asked about specific targets - so the list stopped being hand-maintained. The page is derived
 # from this file's own `##` lines; `--check` runs in `static` and fails when it drifts.
 docs:           ## [project] regenerate docs/make-targets.html from this Makefile's own `##` lines
-	@python3 ../../../scripts/make-docs.py ../../.. --write
+	@python3 scripts/make-docs.py . --write
 
 help:           ## [project] list every target with its one-line purpose
 	@printf '\n\033[1mOperations\033[0m - everything runs through one of these.\n\n'
@@ -878,7 +878,7 @@ help:           ## [project] list every target with its one-line purpose
 # GUARD_EDIT_OK: feature 162 - the help line stops quoting durations typed in by hand (GM 2026-08-30:
 # *"those numbers for `make quick` are wrong and outdated"*; this line still said done ~5.5min while
 # the run log's median was 137 s). The one number worth printing is asked of the recorded runs.
-	@cost=$$(../../../scripts/_gatecost.py done 2>/dev/null); \
+	@cost=$$(scripts/_gatecost.py done 2>/dev/null); \
 	 printf '\nCheapest first: quick | reference | done (NOT the quick one) | done FULL=1'; \
 	 [ -n "$$cost" ] && printf '   -   `make done` median %s s over its recent recorded runs (`make audit`)' "$$cost"; \
 	 printf '\n'
@@ -1509,10 +1509,10 @@ quick:           ## [tests] tier 2: lint, types and every test that rolls no map
 	: "(GUARD_EDIT_OK: this comment block ends WITHOUT a trailing backslash - a continued line makes the"; \
 	: " next line part of the same shell command, where a leading @ is not make syntax but a command"; \
 	: " named @python3, which is what the first version of this phase did.)"
-	@python3 ../../../scripts/check-house-style-delta.py --selftest >/dev/null
-	@python3 ../../../scripts/check-house-style-delta.py ../../..
+	@python3 scripts/check-house-style-delta.py --selftest >/dev/null
+	@python3 scripts/check-house-style-delta.py .
 	@: "(GUARD_EDIT_OK: feature 250 D14 - a research question this change touched stays under the size cap)"
-	@python3 ../../../scripts/check-question-size.py
+	@python3 scripts/check-question-size.py
 	@: "(GUARD_EDIT_OK: feature 171 - capture whether testmon was warm BEFORE the run, so the ratchet below judges like with like)"; \
 	: "(GUARD_EDIT_OK: the GM's ruling 2026-09-27 - and not tooling: the tooling tests that live OUTSIDE tests/tooling (five tests/tools modules) leave quick with the tree; see QUICK_TREE)"; \
 	warm=$$([ -f .testmondata ] && echo yes || echo no); start=$$(date +%s); $(EXHAUSTIVE_ENV) python3 -m pytest -n $(XDIST_WORKERS) --dist worksteal $(TESTMON) -q --no-cov -x --ff -m "not rolls_map and not tooling" $(TIER_SELECT) $(QUICK_TREE); ec=$$?; \
@@ -1699,8 +1699,8 @@ static format typecheck test: | guard
 # the target-position line above; four sites in this file, all of them required).
 static:         ## [static] the static checks: ruff, duplicate-defs, file-scale, stale-dirs (was `lint`)
 	python3 -m ruff check --fix .
-	python3 ../../../scripts/check-duplicate-defs.py --selftest
-	python3 ../../../scripts/check-duplicate-defs.py ../../..
+	python3 scripts/check-duplicate-defs.py --selftest
+	python3 scripts/check-duplicate-defs.py .
 # GUARD_EDIT_OK: feature 173 - THE ~1,000-LINE BAR IS GATED (GM 2026-08-31: *"one of the things that
 # can run whenever we do a make done can be to check the size of our files ... then we fail the
 # gate"*). It sits in `lint` beside check-duplicate-defs because it is the same class of thing - a
@@ -1708,14 +1708,14 @@ static:         ## [static] the static checks: ruff, duplicate-defs, file-scale,
 # the gate (feature 168), so an oversize file is reported before the map roll is paid for. It costs
 # 0.04 s over the tree. Closes half of the constitution's own v1.6.1 deferred TODO; the other half,
 # clause 12's expression count on FUNCTIONS, is still owed.
-	python3 ../../../scripts/check-file-scale.py --selftest
-	python3 ../../../scripts/check-file-scale.py ../../..
+	python3 scripts/check-file-scale.py --selftest
+	python3 scripts/check-file-scale.py .
 	: "GUARD_EDIT_OK: feature 236, the GM item 5 - spec-lint, beside its two siblings and for the same" ; \
 	: "reason: a repo-wide static rule with a selftest that runs first, in the phase the gate runs FIRST" ; \
 	: "so a finding arrives before the map roll is paid for. It reads only the specs directories this" ; \
 	: "delta touches, so it costs nothing on a change that touches none."
-	python3 ../../../scripts/spec-lint.py --selftest
-	python3 ../../../scripts/spec-lint.py --delta ../../..
+	python3 scripts/spec-lint.py --selftest
+	python3 scripts/spec-lint.py --delta .
 	: "GUARD_EDIT_OK: feature 241 - THE CONFLICT-MARKER BACKSTOP, beside its two siblings and for the third" ; \
 	: " time the same reason: a repo-wide static rule belongs in the phase the gate runs FIRST, so a finding" ; \
 	: " arrives before the map roll is paid for. The hook refuses STAGING a conflict; this asks whether one is" ; \
@@ -1724,17 +1724,17 @@ static:         ## [static] the static checks: ruff, duplicate-defs, file-scale,
 	: " the second one surfaced by accident. It scans every tracked file and costs about a second." ; \
 	: " GUARD_EDIT_OK: selftest FIRST, the rule every static check in this phase follows - a checker that" ; \
 	: " cannot fail is worth nothing, and this one is now trusted at the push as well."
-	python3 ../../../scripts/_hm_conflict.py --selftest
-	python3 ../../../scripts/_hm_conflict.py --tracked ../../..
+	python3 scripts/_hm_conflict.py --selftest
+	python3 scripts/_hm_conflict.py --tracked .
 	: "GUARD_EDIT_OK: a directory left with nothing but __pycache__ is still an importable PEP 420" ; \
 	: "namespace package, so a long-lived clone passes what a fresh clone fails - silently, and in the" ; \
 	: "direction that hides the bug. Four of them were live when this landed (GM 2026-09-05). It runs" ; \
 	: "in lint, beside its two siblings, because the gate runs lint FIRST and this costs 5 ms."
 	: "GUARD_EDIT_OK: the generated target reference must match this Makefile - a doc that drifts is" ; \
 	: "worse than none, and this one is derived so drift is always a stale FILE, never a stale FACT." ; \
-	python3 ../../../scripts/make-docs.py ../../.. --check
-	python3 ../../../scripts/check-stale-dirs.py --selftest
-	python3 ../../../scripts/check-stale-dirs.py ../../..
+	python3 scripts/make-docs.py . --check
+	python3 scripts/check-stale-dirs.py --selftest
+	python3 scripts/check-stale-dirs.py .
 
 format:          ## [static] ruff format over the tree
 	python3 -m ruff format .
@@ -2044,10 +2044,10 @@ test:            ## [tests] {internal} the pytest phase itself (internal - `done
 	$(if $(BROWSER_SKIP),printf 'browser tests: already green against exactly what they read - skipped (gate-stamp --fresh browser; make page-check runs them on demand)\n';,) \
 	if python3 -c "import xdist" >/dev/null 2>&1; then $(GATE_EXHAUSTIVE_ENV) $(FULL_ENV) $(JOURNAL_ENV) $(INCR_ENV) python3 -m pytest -n $(XDIST_WORKERS) --dist $(DIST) $(COV_SCOPE) $(INCR_ARGS) $(FULL_TREE_IGNORE) $(BROWSER_SKIP) $(ROLL_DESELECT) $(TIER_SELECT) $${paths:-}; else $(GATE_EXHAUSTIVE_ENV) $(FULL_ENV) $(JOURNAL_ENV) $(INCR_ENV) python3 -m pytest $(COV_SCOPE) $(INCR_ARGS) $(FULL_TREE_IGNORE) $(BROWSER_SKIP) $(ROLL_DESELECT) $(TIER_SELECT) $${paths:-}; fi; ec=$$?; \
 	traced=$(if $(filter --no-cov,$(COV_SCOPE)),,1); \
-	if [ $$ec -ne 0 ]; then [ -n "$$traced" ] && { python3 ../../../scripts/uncovered-in-diff.py || true; }; exit $$ec; fi; \
+	if [ $$ec -ne 0 ]; then [ -n "$$traced" ] && { python3 scripts/uncovered-in-diff.py || true; }; exit $$ec; fi; \
 	if [ -z "$(COV_FLOORS)" ]; then \
 	  printf '\033[1mcoverage floors: deferred to `make done FULL=1`\033[0m (a deselected test takes its coverage with it - see the Makefile comment)\n'; \
-	  [ -n "$$traced" ] && { python3 -m coverage combine --append >/dev/null 2>&1 || true; python3 ../../../scripts/uncovered-in-diff.py || true; }; \
+	  [ -n "$$traced" ] && { python3 -m coverage combine --append >/dev/null 2>&1 || true; python3 scripts/uncovered-in-diff.py || true; }; \
 	  exit 0; \
 	fi; \
 	python3 -m coverage combine --append >/dev/null 2>&1 || true; \

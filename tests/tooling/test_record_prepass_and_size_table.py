@@ -16,8 +16,8 @@ import json
 import pathlib
 import subprocess
 
-REPO = pathlib.Path(__file__).resolve().parents[5]
-SKILL = REPO / ".claude/skills/diagram"
+REPO = pathlib.Path(__file__).resolve().parents[2]
+SKILL = REPO
 
 
 def _load(name: str):  # noqa: ANN202

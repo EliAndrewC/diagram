@@ -12,7 +12,7 @@ import importlib.util
 import json
 import pathlib
 
-REPO = pathlib.Path(__file__).resolve().parents[5]
+REPO = pathlib.Path(__file__).resolve().parents[2]
 
 
 def _load():  # noqa: ANN202
@@ -130,7 +130,7 @@ def test_a_modal_s_class_file_is_writable_too(tmp_path, capsys) -> None:
     report.write_text(_report(str(m.relative_to(tmp_path)), "A bund is a low earthen ridge.", "A bund is a low ridge of puddled earth."), encoding="utf-8")
     assert ae.main([str(report), "--root", str(tmp_path)]) == 0
     assert "puddled earth" in m.read_text(encoding="utf-8")
-    other = tmp_path / ".claude/skills/diagram/l7r/diagram/settlement/x.py"
+    other = tmp_path / "l7r/diagram/settlement/x.py"
     other.parent.mkdir(parents=True)
     other.write_text("A bund", encoding="utf-8")
     report.write_text(_report(str(other.relative_to(tmp_path)), "A bund", "B"), encoding="utf-8")

@@ -10,7 +10,7 @@ import pathlib
 import subprocess
 import sys
 
-REPO = pathlib.Path(__file__).resolve().parents[5]
+REPO = pathlib.Path(__file__).resolve().parents[2]
 
 
 def _load(name: str):  # noqa: ANN202
@@ -228,7 +228,7 @@ def test_the_bundle_carries_the_modal_the_rules_and_its_owed_units(
     out = tmp_path / "b"
     assert mb.bundle(root, "Farmhouse", "modal-research", str(out)) == 0
     manifest = (out / "MANIFEST.md").read_text(encoding="utf-8")
-    assert "## `modal.md`" in manifest and "## `guidelines.md` - origin `.claude/skills/diagram/dev/modals.md`" in manifest
+    assert "## `modal.md`" in manifest and "## `guidelines.md` - origin `dev/modals.md`" in manifest
     assert "entry/0029-farmhouses-minka.html" in manifest and "Farmhouses (minka)" in manifest
     assert "owed-checks: modal-research" in manifest and "unit: modal-gaps:hamlet/farmhouse " in manifest and "unit: modal-form:" not in manifest
     assert (out / "record" / "0004-households.html").is_file() and (out / "cand" / "0004-households.html").is_file()
@@ -264,7 +264,7 @@ def test_a_modal_in_its_own_file_is_read_from_the_file_and_owed_by_its_edits(
     )
     assert [s for s, _w, _f in mo.owed(root, base)][0] == "modal-form:hamlet/farmhouse"
     sheet = mo.modal_file(
-        ".claude/skills/diagram/l7r/diagram/interactive/compound_kinds/household.py",
+        "l7r/diagram/interactive/compound_kinds/household.py",
         "well",
     )
     assert sheet.endswith("/modals/sheet/well.md"), "a sheet's well and a hamlet's well are two files"
@@ -295,7 +295,7 @@ def test_the_depiction_tab_owes_its_own_check_and_its_bundle_carries_the_drawing
     (root / SKILL / "dev" / "claims-index.json").write_text(
         json.dumps(
             {
-                ".claude/skills/diagram/l7r/diagram/settlement/houses.py::HousesMixin.house#ridge": {
+                "l7r/diagram/settlement/houses.py::HousesMixin.house#ridge": {
                     "verdict": "DRIFTED",
                     "note": "always hipped",
                     "pages": "{'0029-farmhouses-minka.drawing.html': 'x'}",

@@ -11,7 +11,7 @@ from __future__ import annotations
 import importlib.util
 import pathlib
 
-REPO = pathlib.Path(__file__).resolve().parents[5]
+REPO = pathlib.Path(__file__).resolve().parents[2]
 
 
 def _load():  # noqa: ANN202

@@ -130,7 +130,7 @@ def fixture_skill(tmp_path: Path) -> Path:
     """A tree shaped like a clone's skill dir: the real Makefile, `l7r` symlinked, no `.clones/`
     (so `guard` passes), and the switch file under our control."""
     root = tmp_path / "repo"
-    skill = root / ".claude" / "skills" / "diagram"
+    skill = root
     skill.mkdir(parents=True)
     subprocess.run(["git", "init", "-q", str(root)], check=True)
     (skill / "Makefile").write_bytes((SKILL / "Makefile").read_bytes())

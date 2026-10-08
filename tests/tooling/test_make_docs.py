@@ -18,10 +18,10 @@ import subprocess
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[5]
+ROOT = Path(__file__).resolve().parents[2]
 GUARD = ROOT / "scripts" / "make-docs.py"
 PAGE = ROOT / "docs" / "make-targets.html"
-MAKEFILE = ROOT / ".claude" / "skills" / "diagram" / "Makefile"
+MAKEFILE = ROOT / "Makefile"
 
 
 def _mod():
@@ -54,9 +54,9 @@ def test_every_documented_target_carries_a_category(tmp_path: Path) -> None:
 
 def test_it_FIRES_when_the_makefile_gains_a_target(tmp_path: Path) -> None:
     """Delete the guard and this is the test that goes red: a new target must make the page stale."""
-    (tmp_path / ".claude" / "skills" / "diagram").mkdir(parents=True)
+    (tmp_path).mkdir(parents=True)
     (tmp_path / "docs").mkdir()
-    mk = tmp_path / ".claude" / "skills" / "diagram" / "Makefile"
+    mk = tmp_path / "Makefile"
     mk.write_text("alpha:          ## [tests] the first one\n\t@true\n", encoding="utf-8")
     subprocess.run([sys.executable, str(GUARD), str(tmp_path), "--write"], capture_output=True, timeout=300)
     assert _check(tmp_path).returncode == 0, "freshly generated, so current"
@@ -67,9 +67,9 @@ def test_it_FIRES_when_the_makefile_gains_a_target(tmp_path: Path) -> None:
 
 
 def test_it_FIRES_on_a_target_with_no_category(tmp_path: Path) -> None:
-    (tmp_path / ".claude" / "skills" / "diagram").mkdir(parents=True)
+    (tmp_path).mkdir(parents=True)
     (tmp_path / "docs").mkdir()
-    mk = tmp_path / ".claude" / "skills" / "diagram" / "Makefile"
+    mk = tmp_path / "Makefile"
     mk.write_text("alpha:          ## no category tag at all\n\t@true\n", encoding="utf-8")
     r = _check(tmp_path)
     assert r.returncode == 1 and "no [category] tag" in r.stderr
@@ -79,9 +79,9 @@ def test_an_undocumented_target_is_REPORTED_not_silently_dropped(tmp_path: Path)
     """The audit that prompted this found THIRTEEN targets with a recipe and no `##` line - `quick`,
     `maps` and `reference` among them, invisible to `make help` for months. Omitting them quietly is
     how that happened; the page lists them instead."""
-    (tmp_path / ".claude" / "skills" / "diagram").mkdir(parents=True)
+    (tmp_path).mkdir(parents=True)
     (tmp_path / "docs").mkdir()
-    mk = tmp_path / ".claude" / "skills" / "diagram" / "Makefile"
+    mk = tmp_path / "Makefile"
     mk.write_text("alpha:          ## [tests] documented\n\t@true\n\nhidden:\n\t@true\n", encoding="utf-8")
     m = _mod()
     rows, undocumented = m.parse(mk)
@@ -99,40 +99,10 @@ def test_the_page_groups_and_names_its_source() -> None:
     assert "make done" in page and "make quick" in page and "make static" in page
 
 
-# ---- THE ROOT FORWARDS WHAT THIS DOCUMENTS (feature 316 follow-up) ----------------------------------------------------
-# GM 2026-10-03: "That bug keeps recurring where something gets defined but then not passed through." The root Makefile's
-# hand list missed a new skill target six times and kept forwarding a retired one; it now reads `--forwardable`.
-
-
-def test_forwardable_is_every_documented_target_a_person_types(tmp_path: Path) -> None:
-    mk = tmp_path / "Makefile"
-    mk.write_text(
-        "alpha:          ## [tests] typed\n\t@true\n_beta:          ## [tests] {internal} called by a recipe\n\t@true\ngamma:\n\t@true\n",
-        encoding="utf-8",
-    )
-    assert _mod().forwardable(mk) == ["alpha"], "documented and typed only: no internal, no undocumented target"
-
-
-def test_the_root_forwards_exactly_the_documented_skill_targets() -> None:
-    root_forward = subprocess.run(
-        ["make", "-s", "--no-print-directory", "-C", str(ROOT), "--eval", "print-forward: ; @echo $(FORWARD)", "print-forward"],
-        capture_output=True,
-        text=True,
-        timeout=60,
-    )
-    assert root_forward.returncode == 0, root_forward.stderr
-    forwarded = set(root_forward.stdout.split())
-    expected = set(_mod().forwardable(MAKEFILE)) - {"help"}
-    assert forwarded == expected, f"root forwards {sorted(forwarded ^ expected)} differently from the documented targets"
-    assert {"done", "quick", "claims-report", "claims-coverage", "open-questions"} <= forwarded
-    assert "reference" not in forwarded, "a retired target is not forwarded into a second 'No rule to make target'"
-
-
-def test_a_forwarded_target_reaches_the_skill_and_a_typo_fails_at_the_root() -> None:
+def test_a_target_runs_at_the_root_and_a_typo_fails_there() -> None:
+    """The project's Makefile IS the root's since feature 329; nothing is forwarded, so a typo fails once, at the root."""
     ok = subprocess.run(["make", "-n", "--no-print-directory", "-C", str(ROOT), "claims-report"], capture_output=True, text=True, timeout=60)
     assert ok.returncode == 0 and "_claims.py" in ok.stdout, ok.stdout + ok.stderr
     typo = subprocess.run(["make", "-n", "--no-print-directory", "-C", str(ROOT), "claims-reprot"], capture_output=True, text=True, timeout=60)
-    # A forwarded miss leaves a second line, the root's `[Makefile:NN: claims-reprot] Error 2`; a miss AT the root has none.
-    # (Not `make[1]` - under `make test-file` MAKELEVEL is already set, so the root's own error is labeled make[1].)
     assert typo.returncode != 0 and "No rule to make target 'claims-reprot'" in typo.stderr, typo.stderr
-    assert "] Error" not in typo.stderr, f"the typo was forwarded into the skill: {typo.stderr}"
+    assert "] Error" not in typo.stderr, f"the typo reached a second makefile: {typo.stderr}"

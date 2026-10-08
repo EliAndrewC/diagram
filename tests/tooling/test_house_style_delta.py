@@ -19,7 +19,7 @@ import pytest
 
 pytestmark = pytest.mark.tooling
 
-REPO = pathlib.Path(__file__).resolve().parents[5]
+REPO = pathlib.Path(__file__).resolve().parents[2]
 _spec = importlib.util.spec_from_file_location("check_house_style_delta", REPO / "scripts" / "check-house-style-delta.py")
 assert _spec and _spec.loader
 chk = importlib.util.module_from_spec(_spec)

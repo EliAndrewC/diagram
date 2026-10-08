@@ -34,7 +34,7 @@ from __future__ import annotations
 import pathlib
 import re
 
-AGENTS = pathlib.Path(__file__).resolve().parents[4] / ".claude" / "agents"
+AGENTS = pathlib.Path(__file__).resolve().parents[1] / ".claude" / "agents"
 
 MODELS = ("opus", "sonnet")
 EFFORTS = ("low", "medium", "high", "xhigh", "max")

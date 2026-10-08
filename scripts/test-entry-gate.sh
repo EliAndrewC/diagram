@@ -8,8 +8,8 @@ set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT="$(git -C "$HERE" rev-parse --show-toplevel)"
 GATE="$HERE/entry-gate.sh"
-PAGE="$ROOT/.claude/skills/diagram/research/questions/0094-rooms-for-a-parley-across-a-border.html"
-BL="$ROOT/.claude/skills/diagram/dev/bypass-log"
+PAGE="$ROOT/research/questions/0094-rooms-for-a-parley-across-a-border.html"
+BL="$ROOT/dev/bypass-log"
 # ISOLATE THE CENSUS (feature 169) AND THE ANSWERS (feature 311): a suite that drives a recording guard writes into
 # throwaway stores, or its fixtures land in the live guard census and the clone's own answer records.
 GUARD_LOG_DIR="$(mktemp -d)"; export GUARD_LOG_DIR

@@ -14,7 +14,7 @@ from l7r.diagram.ci import __main__ as cli
 from l7r.diagram.ci import config, dispatch, state
 from tests.tooling.ci.conftest import FakeClient, ScriptedSh, commit, git
 
-S = ".claude/skills/diagram/"
+S = ""
 
 
 @pytest.fixture
@@ -130,7 +130,7 @@ def test_bare_invocation_outside_make_is_refused_and_names_the_target(monkeypatc
 
 def test_roots_resolve_to_this_repository() -> None:
     root, skill = cli._roots()
-    assert skill == root / ".claude" / "skills" / "diagram" and (root / ".git").exists()
+    assert skill == root and (root / ".git").exists()
     assert git(root, "rev-parse", "--show-toplevel") == str(root)
 
 

@@ -120,7 +120,7 @@ def _excepted(nodeid: str | None, in_process: Any) -> bool:
 def run_db(root: Path) -> Path:
     """The run's COMBINED coverage database, as the Makefile leaves it before the verdict (`coverage combine`, then
     the incremental merge over the kept baseline contexts) - the same file the floors are judged on."""
-    return root / ".claude" / "skills" / "diagram" / ".coverage"
+    return root / ".coverage"
 
 
 def unique_by_context(db: Path) -> dict[str, list[tuple[str, int]]] | None:

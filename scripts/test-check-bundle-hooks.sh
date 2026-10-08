@@ -21,8 +21,8 @@ dispatch() { # dispatch <subagent_type> <prompt> -> rc in $T/rc, stderr in $T/er
 }
 rc() { cat "$T/rc"; }
 logged() { grep -rlq "$1" "$GUARD_LOG_ROOT" 2>/dev/null; }
-Q=/diagram/.clones/x/.claude/skills/diagram/research/questions/0087-road-bridges-over-rivers-and-canals-hashi.html
-S=/diagram/.claude/skills/diagram/research/sources/010-works-cited/4220-edo-enwiki.html
+Q=/diagram/.clones/x/research/questions/0087-road-bridges-over-rivers-and-canals-hashi.html
+S=/diagram/research/sources/010-works-cited/4220-edo-enwiki.html
 # GUARD_EDIT_OK: feature 311 - the bundles the suite names are its own, written here with the owed section a bundle carries
 mkdir -p "$T/q-0087" "$T/q-old"
 printf '# Check bundle - question 0087\n\n## Owed (feature 311)\n\nowed-checks: record-format\nunit: record-format:0087 abc\n' > "$T/q-0087/MANIFEST.md"
@@ -45,9 +45,9 @@ dispatch source-applicability "Judge the entry $S against its page."
 dispatch source-reader "Read the entry $S and find the passage behind the claim."
 [ "$(rc)" -eq 2 ] && grep -q 'make check-bundle KEY=edo-enwiki WHOLE=1' "$T/err" && ok "a source-reader gets KEY= WHOLE=1 - the whole page, not the excerpt" || no "source-reader was not given WHOLE=1" "$(cat "$T/err")"
 # GUARD_EDIT_OK: feature 303 - a question's files are research/questions/NNNN-<slug>...; the command names its number
-dispatch quote-check "Check .claude/skills/diagram/research/questions/0151-how-densely-is-a-quarter-built.drawing.notes.html"
+dispatch quote-check "Check research/questions/0151-how-densely-is-a-quarter-built.drawing.notes.html"
 [ "$(rc)" -eq 2 ] && grep -q 'make check-bundle Q=0151' "$T/err" && ok "a drawing page's notes file, relative, is read off the path too" || no "the drawing notes path was not read" "$(cat "$T/err")"
-dispatch source-reader "Read the passage quoted in .claude/skills/diagram/research/SOURCES.html"
+dispatch source-reader "Read the passage quoted in research/SOURCES.html"
 [ "$(rc)" -eq 2 ] && grep -q 'Q=<question number>' "$T/err" && ok "a path the guard cannot map still refuses, with the general form" || no "an unmappable path passed" "(rc=$(rc))"
 dispatch record-format "CHECK_BUNDLE_OK=\"x\" read $Q"
 [ "$(rc)" -eq 2 ] && logged CHECK_BUNDLE_OK-no-reason && ok "an escape with no real reason is refused and recorded" || no "a bare escape passed" "(rc=$(rc))"
@@ -60,9 +60,9 @@ dispatch source-reader "Report per claim whether https://en.wikipedia.org/wiki/E
 [ "$(rc)" -eq 0 ] && logged no-repo-path && ok "a dispatch naming no repository file passes (a reader handed URLs)" || no "a URL-only dispatch was refused" "(rc=$(rc))"
 dispatch record-format "CHECK_BUNDLE_OK=\"the glossary term file itself is under review\" read $Q"
 [ "$(rc)" -eq 0 ] && logged check-bundle-ok && ok "an escape with a reason passes and is recorded" || no "a reasoned escape was refused" "(rc=$(rc))"
-dispatch entry-drift "Compare the modal with /diagram/.claude/skills/diagram/research/questions/0007-the-wettest.html"
+dispatch entry-drift "Compare the modal with /diagram/research/questions/0007-the-wettest.html"
 [ "$(rc)" -eq 2 ] && grep -q "Q=0007" "$T/err" && ok "an entry-drift dispatch into the tree is refused too" || no "entry-drift passed" "(rc=$(rc))"
-dispatch spec-fidelity "Review /diagram/.claude/skills/diagram/research/questions/0010-x.html"
+dispatch spec-fidelity "Review /diagram/research/questions/0010-x.html"
 [ "$(rc)" -eq 0 ] && ok "an agent that is not a record check is not this guard's business" || no "spec-fidelity was refused" "(rc=$(rc))"
 out=$(printf '{"session_id":"t","tool_name":"Bash","tool_input":{"command":"make done"}}' | ( cd "$T" && "$HOOK" pretool 2>/dev/null )); r=$?
 [ "$r" -eq 0 ] && [ -z "$out" ] && ok "a Bash call is ignored" || no "a Bash call was not ignored" "(rc=$r)"

@@ -15,7 +15,7 @@ import json
 import pathlib
 import sys
 
-REPO = pathlib.Path(__file__).resolve().parents[5]
+REPO = pathlib.Path(__file__).resolve().parents[2]
 _spec = importlib.util.spec_from_file_location("review_prereq", REPO / "scripts" / "_review_prereq.py")
 assert _spec and _spec.loader
 prereq = importlib.util.module_from_spec(_spec)
@@ -89,7 +89,7 @@ def test_a_not_reviewable_verdict_raises_no_findings_and_no_verdict_means_nothin
 
 
 def test_a_map_is_stale_when_its_key_moved_or_an_artifact_is_missing(tmp_path: pathlib.Path) -> None:
-    skill = tmp_path / ".claude" / "skills" / "diagram"
+    skill = tmp_path
     m = skill / "pool" / "hamlets" / "kuwabata"
     m.mkdir(parents=True)
     (m / "kuwabata.gen.py").write_text("")
@@ -136,7 +136,7 @@ def test_a_quoted_figure_resolves_by_key_or_one_shot_label_and_a_named_one_is_sk
 
 
 def _pool_map(clone: pathlib.Path, name: str) -> None:
-    m = clone / ".claude" / "skills" / "diagram" / "pool" / "hamlets" / name
+    m = clone / "pool" / "hamlets" / name
     m.mkdir(parents=True)
     (m / f"{name}.gen.py").write_text("")
     for ext in (".json", ".svg", ".png", ".html"):
@@ -305,7 +305,7 @@ def test_a_dispatch_names_its_unit_by_its_unit_line_and_otherwise_by_the_maps_it
 
 
 def test_a_sheet_owes_no_manifest_and_a_unit_is_checked_on_its_map(tmp_path: pathlib.Path, monkeypatch) -> None:
-    skill = tmp_path / ".claude" / "skills" / "diagram"
+    skill = tmp_path
     sheet = skill / "pool" / "magistracies" / "hayakawa"
     sheet.mkdir(parents=True)
     for ext in (".gen.py", ".svg", ".png", ".html"):

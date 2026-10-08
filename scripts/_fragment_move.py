@@ -32,8 +32,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-SKILL = ".claude/skills/diagram"
-RECORD = f"{SKILL}/research"
+RECORD = "research"
 QUESTIONS = "questions"
 _NAME = re.compile(r"^(\d{4})-([^./\s]+)(\.drawing)?\.html$")
 _SUFFIXES = ("", ".notes", ".originals", ".drawing", ".drawing.notes", ".drawing.originals")
@@ -222,7 +221,7 @@ def main(argv: list[str]) -> int:
         return 1
     print(f"fragment-move: {args[0]} -> {args[1]}; {len(changed)} file(s) changed:")
     print("\n".join(f"  {c}" for c in changed))
-    print("then `make record` in .claude/skills/diagram, and commit")
+    print("then `make record` at the repository root, and commit")
     return 0
 
 

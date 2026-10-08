@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # _layout_carry.sh <tree> - carry what a tree kept at the old project location to the root (feature 329, FR-008).
 #
-# WHY. Feature 329 moved the project from `.claude/skills/diagram/` to the repository root with `git mv`. A merge or a
+# WHY. Feature 329 moved the project from `` to the repository root with `git mv`. A merge or a
 # fast-forward moves TRACKED files only: every gitignored artifact a clone or the mirror had built there - the roll
 # cache `.gencache/`, the renders beside each pool map, the built record site, testmon's database, coverage data -
 # stays behind at the old place, where nothing reads it. Left there, the first gate after the move runs cold (the roll
