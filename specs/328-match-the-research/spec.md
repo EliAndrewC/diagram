@@ -345,7 +345,7 @@ Each wave's amendment adds its map decisions to this table. The program's decisi
 - Amendments 37-44 (waves 38-45): each round's verdict is recorded in `plan-review.json` and the wave's `plan.md` section; every one ended plan CLEAR.
 - Amendment 45 (wave 46, and the GM's batching ruling): round 1 plan BLOCKED - the village lane occasion still "capped, for a waiver" against the GM's 2026-10-08 ruling, and row 491's tree-lane fallback misstated; round 2 plan CLEAR, the spec's FR-006 and Wave entity still verifying per wave - CHANGES REQUIRED; round 3 (verify) FAITHFUL (2026-10-08).
 - Amendments 50-51 (waves 51-52) and batch 2's close, round 1 (spec-fidelity MODE 4, 2026-10-08): plan BLOCKED on three
-  narrowings - 0043's page reworded to the code's 9.5 ft (restored: the shed's step is HELD behind the found row
+  narrowings - 0043's page reworded to the code's `9.5 ft` (`WALL_GAP_FT` + `WOODSHED_STEP_FT`, a sum of constants; restored: the shed's step is HELD behind the found row
   `refuse_unreached#every household reached`, as wave 9 held it); `WINTER_CROP` re-derived DEFERRED because `audit/scope.py`
   missed a subclassed knob (fixed: any `...Knob(` call counts); the barn privy against the storehouse (fixed: a hamlet draws
   no barn, so the barn place is not offered and its share goes to the three places a hamlet farm has). Batch 2's pair is
