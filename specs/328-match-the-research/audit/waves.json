@@ -155,6 +155,7 @@
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::a_way_onto_the_bund#the branched field path 5 ft wide (BRANCH_WIDTH) with the LANE_CLEARANCE corridor": "8 (claimed under its unit's new label; re-checked)",
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::carry_on#stepped field path 5 ft wide (BRANCH_WIDTH)": "8 (claimed under its unit's new label; re-checked)",
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::carry_on#the stepped field path drawn 5 ft wide (BRANCH_WIDTH)": "8 (claimed under its unit's new label; re-checked)",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/checks.py::lanes_share_tread#one network at 25 ft": "31",
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/checks.py::lanes_share_tread#one network at 40 ft": "4 (claim renamed to 25 ft; the drift left is a found row)",
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/clearance.py::_clear_touch#junction link margin": "4",
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/clearance.py::clear_runs#threads between steadings": "4",

@@ -1105,7 +1105,9 @@ place did not cure it. The fix spans the bund pass and the spur's laying: E3 by 
 
   - `l7r/diagram/hamletgen/ways/checks.py::lanes_share_tread#one network at 25 ft` - two lanes one network only where their treads meet (within the ink tolerance); ends within 25 ft are the knot pass's to join at one point (0081)
 
-- [ ] T87 row 459 tried, measured and re-tiered E3; the network join to the treads' meeting, its test to the page (FR-003, FR-004, FR-005)
+- [x] T87 row 459 tried, measured and re-tiered E3; the network join to the treads' meeting, its test to the page (FR-003, FR-004, FR-005)
       research: rendering
-- [ ] T88 the claims re-checked by `impl-drift`; the close: wave 31's own bookend pair, `make done` green, the wave column (FR-005, FR-006)
+      verify: DONE. row 459 tried, measured (Mizuguchi's spur 22 ft off the street, the knot test failed) and re-tiered E3, reproduced by the review; two lanes one network only where their treads meet (0246; 0081's 25 ft is the knot pass's), its test to the page; the five hamlets unchanged
+- [x] T88 the claims re-checked by `impl-drift`; the close: wave 31's own bookend pair, `make done` green, the wave column (FR-005, FR-006)
       research: rendering
+      verify: DONE. impl-drift IN-STEP (the claim relabeled to 0246); amendment 30 FAITHFUL, plan CLEAR; make done green; wave 31's own pair band 0 on a retake (the first band 3 under another session's load, every stage grown); the wave column
