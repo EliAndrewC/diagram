@@ -1252,7 +1252,9 @@ sheets together), left for its place in the run.
 
 - [x] T101a wave 37's found rows tiered by the work they take, by a fresh reader (FR-002, FR-003, SC-003)
       research: rendering
-- [ ] T101 the claims written (FR-003 E0, FR-004)
+- [x] T101 the claims written (FR-003 E0, FR-004)
       research: rendering
-- [ ] T102 the claims re-checked by `impl-drift`; the close: `make done` green, the wave column (FR-005, FR-006)
+      verify: DONE. the T's stem GUESS, no new kink on 0081, the buildings-only touch fixed and claimed; impl-drift IN-STEP on all (rounds 1-4); spec-fidelity CLEAR at round 3
+- [x] T102 the claims re-checked by `impl-drift`; the close: `make done` green, the wave column (FR-005, FR-006)
       research: rendering
+      verify: DONE. impl-drift 2 of 2 IN-STEP at round 4; gate green; five hamlets byte-identical; the timing pair band 1 confirmed consistent by perf-audit; waves.json 38 for the four rows

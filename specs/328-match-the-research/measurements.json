@@ -218,5 +218,16 @@
   "unit": "ft",
   "observed": "2026-10-08",
   "source": "pool/hamlets/kuwabata/kuwabata.json channels (frm pond -> field), dikes[0].outline, pond; shapely difference; HEAD vs the regenerated map. The remainder lies in the sluice's gap in the drawn outline"
+ },
+ "wave38-perf-pair-quiet": {
+  "quantity": "328-start (989dbd862, wave 37's close) against 328-end (the buildings-only touch), taken back to back on a quiet host (loadavg 1.40 then 1.23); totals",
+  "value": {
+   "10hh": 0.8,
+   "20hh": -0.4,
+   "40hh": 0.4
+  },
+  "unit": "% end vs start",
+  "observed": "2026-10-08",
+  "source": "dev/perf-log/20261008T071309Z-328-start-perfbase.json and 20261008T071615Z-328-end-digram-backlog.json; the first pair (06:51/07:03, taken while a review agent and a peer session ran) read +13 to +65% with the growth in homesteads and field, stages the change never runs"
  }
 }

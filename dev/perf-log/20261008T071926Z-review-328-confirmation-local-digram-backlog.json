@@ -1,0 +1,62 @@
+{
+  "band": 1,
+  "base": {
+    "commit": "989dbd862",
+    "label": "328-start",
+    "utc": "20261008T071309Z"
+  },
+  "binding": "7bd3199baea58ca9d6dcd435be4320cb3133a7895b53ad109e1e525e991adf4b",
+  "end": {
+    "commit": "fa03cbe40",
+    "label": "328-end",
+    "utc": "20261008T071615Z"
+  },
+  "environment": "local",
+  "feature": "328-match-the-research",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "8d3395e5-fe32-4f85-9c89-80c344d2ac1a",
+    "utc": "20261008T071926Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": 0.0,
+          "39": 0.0,
+          "4": 3.0,
+          "47": 0.0
+        },
+        "total_pct": 0.8
+      },
+      "20": {
+        "seeds": {
+          "25": 0.0,
+          "39": 0.0,
+          "4": 0.0,
+          "47": -1.7
+        },
+        "total_pct": -0.4
+      },
+      "40": {
+        "seeds": {
+          "25": 0.0,
+          "39": 0.0,
+          "4": 0.0,
+          "47": 1.6
+        },
+        "total_pct": 0.4
+      }
+    },
+    "seeds": {
+      "25": 0.0,
+      "39": 2.4,
+      "4": -2.2,
+      "47": 0.0
+    },
+    "total_pct": 0.0
+  },
+  "note": "Only l7r change is joints.py _one_joint's building-only touch test (web stage, after the usual _clear_link fails); control wave38-perf-pair-quiet IS the start/end pair (989dbd862 lacks the change) and matches the report. Every rise is noise-sized: 10hh s4 +3.0% and s39 +2.4% are 0.1s display-rounding steps (stage sums 3.34->3.36, 4.15->4.15); the largest real rise, 40hh s47 +1.3% (12.93->13.10s), is web +0.09s plus hinterland +0.07s, a stage the change never runs; web deltas across legs range -0.07..+0.09s; placer calls identical every leg; no pool files changed",
+  "verdict": "consistent"
+}
