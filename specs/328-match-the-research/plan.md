@@ -493,11 +493,12 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 
 ## Wave 41 (amendment 40, 2026-10-08)
 
-- **Scope**: a channel's mouth judged inside the stream's drawn width (0054), with a corner held where the brook's rounding would
-  carry the course off a confluence on it; wave 40's two belt-figure rows re-cited (E0, T107a) (`tasks.md` Phase 42).
-- **Occasions**: none - the five hamlets regenerate with identical manifests.
+- **Scope**: a channel's mouth judged inside the stream's drawn width (0054) - no confluence seated on a brook's corner, so no
+  corner is ever held mitred (the hold tried in round 1 withdrawn); wave 40's two belt-figure rows re-cited (E0, T107a). Taken
+  ahead of E2 rows 481-543 for its shared page with wave 40; the next wave returns to ranking order (`tasks.md` Phase 42).
+- **Occasions**: none - the five hamlets regenerated 2026-10-08 with byte-identical manifests.
 - **On the unpushed waves 9-40** under condition (6): as at wave 40's close; the pair is owed (executed code).
-- **Verification**: the corner-hold test red without the rule; `impl-drift` on the touched claims; the gate; the pair.
+- **Verification**: the predicate's test at half the width; `impl-drift` on the touched claims; the gate; the pair.
 
 ## Performance bookends (constitution VI)
 

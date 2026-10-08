@@ -238,13 +238,16 @@ def course_corner(q: Pt, course: Sequence[Pt], tol: float = JOIN_ON_COURSE) -> b
 
 def join_vertices(course: Sequence[Pt], ends: Sequence[Pt], hold_corners: bool = True, tol: float = JOIN_ON_COURSE) -> tuple[Poly, list[Pt]]:
     """`course` with every channel end in `ends` that lies ON it (within `tol`) made a vertex, and the ends to hold there
-    (feature 287, labels L16). A confluence mid-segment - the drain's `brook_join` walks the brook at a stride - is not a
-    vertex, so `finished_course` could not hold it and the fillet of a nearby bend moved the course off the mouth; it is
-    inserted, and held. An end on a CORNER is held only where `hold_corners` says (the head race's tap, whose run is a
-    deliberate line); a confluence there is left to the rounding, which moves the course at most half its cut-back off
-    the corner - `0.5 * BROOK_BEND_WIDTHS * w * cos(half the angle)`, 8.75 px on the 7 px brook - under the rule's 13.
+        (feature 287, labels L16). A confluence mid-segment - the drain's `brook_join` walks the brook at a stride - is not a
+        vertex, so `finished_course` could not hold it and the fillet of a nearby bend moved the course off the mouth; it is
+        inserted, and held. An end on a CORNER is held only where `hold_corners` says (the head race's tap, whose run is a
+        deliberate line); a confluence there is left to the rounding, which moves the course at most half its cut-back off
+        the corner - `0.5 * BROOK_BEND_WIDTHS * w * cos(half the angle)`, 8.75 px on the 7 px brook, past its 3.5 px half-width, so a
+    mouth there would stand out of the water (0054: a junction only where an end lies inside the other's drawn width). So no
+    confluence is seated on a corner: `sink.brook_join` refuses one (`course_corner`), and a corner is never held mitred for one
+    (0054: "no watercourse on them has a mitered corner"; feature 328 tried the hold and withdrew it).
 
-    Research: plumbing - NONE: vertex insertion, so the rounding keeps a declared mouth on the course
+        Research: plumbing - NONE: vertex insertion, so the rounding keeps a declared mouth on the course
     """
     pts = [(float(x), float(y)) for x, y in course]
     held: list[Pt] = []
@@ -299,25 +302,12 @@ def round_the_brooks(s: Settlement) -> None:
 
 def drawn_course(course: Sequence[Pt], taps: Sequence[Pt], joins: Sequence[Pt] = (), w: float = BROOK_DRAWN_W) -> Poly:
     """The brook AS THE MAP DRAWS IT (feature 287 wave 5): every tap and confluence on `course` made a vertex and held
-    (`join_vertices` - a confluence on a corner left to the rounding unless the rounding would carry the course off its mouth),
-    then rounded (`finished_course`). The ONE geometry
+    (`join_vertices` - a confluence on a corner left to the rounding), then rounded (`finished_course`). The ONE geometry
     `round_the_brooks` draws and `brook_violations` judges, so a confluence the sink adds after the brook was judged is
     judged with it - where the rounding round a held join changed the course, the judged and the drawn used to differ."""
     pts, held = join_vertices(course, taps)
     pts, held_j = join_vertices(pts, joins, hold_corners=False)
-    out = finished_course(pts, w, held + held_j)
-    # ...AND A CORNER IS HELD WHERE ITS ROUNDING WOULD CARRY THE COURSE OFF A MOUTH (feature 328, 0054 drawing: "a meeting is a
-    # junction when either channel's end lies inside the other's drawn width"): a confluence on a corner was left to the
-    # rounding, which moves the course up to `0.5 * BROOK_BEND_WIDTHS * w * cos(half the angle)` off it - 8.75 px on the 7 px
-    # brook, past its 3.5 px half-width - so that corner alone stays mitred and the mouth stays in the water
-    stranded = [
-        min(pts, key=lambda v, q=q: math.dist(v, q))
-        for q in joins
-        if min(math.dist(v, (float(q[0]), float(q[1]))) for v in pts) <= JOIN_ON_COURSE
-        and len(out) >= 2
-        and min(seg_dist(float(q[0]), float(q[1]), a, b) for a, b in zip(out, out[1:], strict=False)) > w / 2.0
-    ]
-    return finished_course(pts, w, held + held_j + stranded) if stranded else out
+    return finished_course(pts, w, held + held_j)
 
 
 def _off_the_axes(course: Poly, away: Pt, eps: float = 1.6, nudge: float = 11.0, hold: int = 0) -> Poly:

@@ -98,7 +98,7 @@ def belt_off_canvas(center: Pt, along: Pt, out: Pt, lat: float, dep: float, wind
 
     Research:
         belt's depth - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: a back wood drawn 80 to 120 ft deep, a convention (the band's 36 to 146 ft is `BELT_NEAR_FT` + `BELT_DEPTH_FT` 100 + `BELT_FAR_RAG_FT`)
-        belt's distance upwind - UNRESEARCHED: its near face 36 ft behind the fringe (`BELT_NEAR_FT`); the record says only that the band hugs the cluster"""
+        belt's distance upwind - GUESS research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: the outline stands back from the row of houses nearest it, and no clump within 50 ft east, west or south of a yard or bed (applied to the clumps, not here); the near face's 36 ft (`BELT_NEAR_FT`) is on no page"""
     wx, wy = unit(*wind)
     px, py = -wy, wx
     reach = abs(wx * along[0] + wy * along[1]) * lat + abs(wx * out[0] + wy * out[1]) * dep  # the fringe, upwind of the middle

@@ -827,6 +827,8 @@ class CombMixin:
 
         Research:
             feed joins the brook - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the intake snapped onto a brook within 30 px, else sourced at the sluice
+            feed runs downhill - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: a feed whose net travel is level or uphill is refused, and the snap onto a stream taken only where it still runs down (`runs_downhill`)
+            a stream of no recorded width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.html: taken as the village brook's 7 ft in the mouth-in-the-water test, as `stream` draws it
             feed recorded width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: recorded at 6.0, the head race it traces"""
         if source.get("kind") != "cascade":
             hr = net["channels"][0]["pts"]

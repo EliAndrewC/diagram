@@ -13,8 +13,8 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 - (wave 5, landed and reviewed) placement-changed village lane on kashikawa - wave 5: 0033's row street runs on off the map as the road into it at both ends, where
   the web cut it back to its last joint (`trim_streets`); Kashikawa's and Mizuguchi's far ends now run off the sheet as a
   second way out (every way is inked `village lane`).
-- none (wave 41): the channel mouth's tolerance to the stream's drawn width and the corner hold moved no map (the five hamlets
-  regenerated with manifests identical); the belt claims re-cited
+- none (wave 41): the channel mouth's tolerance to the stream's drawn width moved no map (the five hamlets regenerated
+  2026-10-08 with manifests byte-identical); the belt claims re-cited
 - placement-changed: wet paddy on sawada - wave 40: only the draw or a pointed shape leaves a low plot green (0007); the four
   shape clauses and the outfall's keep-out, on no page, went, and the blue plots run 7 -> 16 here (Inashiro 1 -> 8, Kashikawa 4 -> 13, Mizuguchi 3 -> 7, Sawada 7 -> 16, after round 2's taper fix)
 - glyph-redrawn: windbreak on inashiro - wave 39: every grove crown in 0080's one 0.75-1.4 band, a conifer no wider than a broadleaf
@@ -1342,17 +1342,20 @@ regenerated, `tree_crowns` and `bamboo_marks` changed on every map, nothing else
 
 - `settlement/fields/comb.py::channel_end_on_stream#mouth reaches the water` (E2): 0054 drawing - "A meeting is a junction when
   either channel's end lies inside the other's drawn width". The predicate takes the stream's drawn width and asks half of it
-  (it was a flat 13 px, wider than a 7 ft brook's whole bed); the intake passes each stream's `w`. And `drawn_course` holds a
-  corner a confluence stands on where its rounding would carry the course out of the mouth's reach (a lone confluence on a 100
-  degree corner of a 9 px brook was left about 12 px off) - `test_a_corner_is_held_where_its_rounding_would_carry_the_course_off_a_mouth`,
-  red without the hold. No pool map moved.
+  (it was a flat 13 px, wider than a 7 ft brook's whole bed); the intake passes each stream's `w`. A corner hold in
+  `drawn_course` (a confluence's corner left mitred where rounding would carry the brook off it) was tried and withdrawn
+  (spec-fidelity round 1: 0054's "no watercourse on them has a mitered corner"); the guarantee is construction -
+  `sink.brook_join` seats no confluence on a corner (`test_the_drain_is_not_joined_to_the_brook_on_a_corner`). No pool map
+  moved (the five hamlets regenerated 2026-10-08 against wave 40's close, manifests byte-identical). Taken ahead of E2 rows
+  481-543 because it shares 0054 and the brook's rounding with wave 40's water work; the waves return to ranking order next.
+  `brook_rules.CROSSING_END_TOL`, the same judgment at 13 px, filed (`audit/found-wave41.jsonl`).
 - Wave 40's found rows, tiered by a fresh reader (T107a, `audit/t107a-out.jsonl`): `cluster.py::belt_off_canvas#belt distance
   upwind` and `plan.py::BELT_REACH#belt's far row` E0 - the band's depth re-cited to 0071 drawing's drawn 80 to 120 ft (a
   convention), its 36 ft near face UNRESEARCHED; 0072 drawing's older measured figures E2, left for its place.
 
 - [x] T107a wave 40's found rows tiered by the work they take, by a fresh reader (FR-002, FR-003, SC-003)
       research: rendering
-- [ ] T107 the mouth's tolerance and the corner hold; the belt claims re-cited (FR-003, FR-004)
+- [ ] T107 the mouth's tolerance; the belt claims re-cited (FR-003, FR-004)
       research: rendering
 - [ ] T108 the claims re-checked by `impl-drift`; the close: `make done` green, the pair, the wave column (FR-005, FR-006)
       research: rendering

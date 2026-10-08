@@ -394,7 +394,7 @@ BELT_REACH = 146.0
 """px upwind of the cluster's windward fringe to the belt's far row (`belt_off_canvas` samples 36, 90 and 146).
 
 Research:
-    belt's far row - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: the band's 100 ft depth inside the drawn 80 to 120 ft, a convention, behind a near face 36 ft out (UNRESEARCHED) and a 10 ft ragged edge"""
+    belt's far row - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: the band's 100 ft depth inside the drawn 80 to 120 ft, a convention, and a 10 ft ragged edge, behind a near face that stands back from the nearest houses (the page; its 36 ft a GUESS - the 50 ft sun rule on yards and beds is applied to the clumps)"""
 
 
 FAN_OVERHANG = 0.22
