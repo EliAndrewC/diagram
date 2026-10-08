@@ -341,5 +341,28 @@
   "unit": "% end vs start",
   "observed": "2026-10-08",
   "source": "dev/perf-log/20261008T122441Z-328-start-perfbase.json and 20261008T122842Z-328-end-base.json; the load fell while the end leg ran, so its faster legs are the host, not the change - read only as: no seed more than 5% slower"
+ },
+ "batch1-perf-pair-and-reach-control": {
+  "quantity": "batch 1's pair, 328-start (4a9b7c077, before wave 43) against 328-end (2e3153b4e, batch 1's last commit), back to back in scratch worktrees on a host under load 0.9 to 1.9; and the control, seed 4's web stage under cProfile at the start, at the batch end and in the clone with wave 47's past_the_frame (the track out to the canvas edge and 400 ft beyond, not the canvas diagonal)",
+  "value": {
+   "15hh_total_pct": 4.2,
+   "10hh_total_pct": 2.4,
+   "10hh_seed4_pct": 12.1,
+   "20hh_total_pct": -1.6,
+   "40hh_total_pct": 2.8,
+   "web_s_cprofile": {
+    "start": 1.902,
+    "batch_end": 2.155,
+    "clone_with_fix": 1.845
+   },
+   "run_on_target_calls": {
+    "start": 3577,
+    "batch_end": 5481,
+    "clone_with_fix": 3489
+   }
+  },
+  "unit": "% end vs start; s under cProfile; calls",
+  "observed": "2026-10-08",
+  "source": "dev/perf-log/20261008T142706Z-328-start-perfbase.json and 20261008T143016Z-328-end-base.json; dev/perf-log/20261008T143238Z-profile-adhoc-seed4-web.txt (end) and the start's and the clone's seed-4 web profiles (dev/perf-raw, archived to mapgen-perflogs)"
  }
 }

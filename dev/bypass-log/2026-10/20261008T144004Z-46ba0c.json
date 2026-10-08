@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-08T14:40:04Z",
+  "target": "record-checked",
+  "commit": "66a73e2f2",
+  "why": "modal-depiction on modal-depiction:choice/cluster_position--high_margin: 0072's drawing page changed only Inashiro's belt arc (49 to 66 degrees); grep shows this modal states no arc or any 0072 figure"
+}

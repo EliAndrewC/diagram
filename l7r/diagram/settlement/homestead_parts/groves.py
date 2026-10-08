@@ -734,7 +734,7 @@ class GrovesMixin:
             alder in the marsh - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html
             mixed broadleaf belt - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: rounded broadleaf crowns in the woods' size mix, no conifer
             mixed broadleaf belt's bamboo - GUESS research/questions/0075-bamboo-groves-chikurin.drawing.html: the windbreak's one in twelve, the page's guess, which it holds in the village's shelter belt as in the farm's grove
-            every crown gives way round a persimmon - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html: every crown refused where it would lie over a yard persimmon's crown (`over_a_conifer`: centers nearer than CROWN_OVER_SHARE of the two radii), the grove giving way round it; an edge may still reach a few feet under
+            every crown gives way round a persimmon - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html: every crown refused where any of its disc would lie under a yard persimmon's crown (centers nearer than the two radii summed), the grove giving way round it wholly
             lesser crown over an earlier stand's conifer - GUESS research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: a lesser crown over an earlier stand's conifer is not drawn - the stand loses that tree - read from the page's canopy-layer rule, which speaks of a crown's center, not its edge
             clump glyph - CONVENTION: one disc per crown, conifers dark and painted last, no trunks
             conifer-led clump's lesser share - GUESS research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: a conifer-led clump throws LESSER_ROLL_SHARE (0.1) of its crowns as lesser broadleaf; the page names the lesser broadleaf, the share a guess
@@ -877,8 +877,10 @@ class GrovesMixin:
                     continue  # a crown centered under an already-drawn crown is an understory stem, not canopy (GM 2026-08-28; woods._crown_seat_clear)
                 if kind != "conifer" and over_a_conifer(cx + px, cy + py - lift, rr, _cones):
                     continue
-                # ...EVERY CROWN, not the conifer alone (feature 328, 0046: "the grove's trees give way round it")
-                if any(over_a_conifer(tx, ty, tr, [(cx + px, cy + py - lift, rr)]) for tx, ty, tr in _trees):
+                # ...EVERY CROWN, not the conifer alone (feature 328, 0046: "the grove's trees give way round it") - and WHOLLY: no
+                # crown's edge under the persimmon's disc (batch 1's glyph checks: `over_a_conifer`'s 0.8 share let a grove crown
+                # reach 3.7 ft under one on Kashikawa and copse crowns 4.1 ft on Kuwabata), the ink's 0.2 px rounding added
+                if any(math.hypot(cx + px - tx, cy + py - lift - ty) < tr + rr + 0.2 for tx, ty, tr in _trees):
                     continue
                 drawn.append((cx + px, cy + py - lift, rr))
                 # ONE DISC PER CROWN, conifer included (GM 2026-09-27). A conifer used to carry a second, darker
