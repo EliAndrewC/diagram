@@ -62,5 +62,5 @@ def unsettled(M: Mapping[str, Any], ground: Any = None) -> dict[str, Any]:
     of the question's cost (~120 of ~186 ms a map over the pool and cohort 1-20, 2026-09-30)."""
     from . import law  # bound here: `law` keeps its verdicts through this module (`kept`)
 
-    rules = {**law.LAW, "dangling_ends": lambda M: law.dangling_lane_ends(M, ground), "ends_behind": lambda M: law.ends_behind(M, ground)} if ground is not None else law.LAW
+    rules = {**law.LAW, "dangling_ends": lambda M: law.dangling_lane_ends(M, ground)} if ground is not None else law.LAW
     return {name: v for name, rule in rules.items() if name not in NOT_THE_SETTLES and (v := rule(M))}

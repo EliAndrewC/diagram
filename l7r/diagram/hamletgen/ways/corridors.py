@@ -189,39 +189,10 @@ class GroundIndex:
 
 
 GABLE_MARGIN_FT = 6.0
-"""How far off its gable wall a path carried round a house runs (`round_the_gable`): clear of the eaves by more than a
-tread's half-width and the house-hit margin (`house_hit`: 1.5 + 2 ft), and inside the dooryard reach (12 ft) at the front
-corner, so the carried end reaches the dooryard (`reaches_dooryard`). A map drawing convention.
+"""How far off its own house's wall a field route may run beside its own steading (`field_router`): clear of the eaves by more
+than a tread's half-width and the house-hit margin (`house_hit`: 1.5 + 2 ft). A map drawing convention.
 
-Research: gable margin - UNRESEARCHED: 6 ft off the gable wall, labeled a drawing convention here"""
-
-
-def round_the_gable(pts: Poly, house: Mapping[str, Any], far: bool = False, keep_end: bool = False) -> Poly:
-    """`pts`, whose LAST point stands behind `house` (water W57), carried round the nearer gable to the front: its last
-    point replaced by a point `GABLE_MARGIN_FT` off that gable's back corner and one as far off its front corner, in the
-    band before the front face - the dooryard (`reaches_dooryard`). By the back corner, not straight to the gable's middle:
-    a run from behind the house to its mid-gable cuts the back corner (cohort seeds 42, 43, 55 and 60, measured: every such
-    run fouled its own house). The gable taken is the one on the side the end stands (the side the lane came from, on a
-    tie); `far` takes the other, where a neighbor's garden stands along the nearer (cohort seed 55). `keep_end` keeps the
-    last point and runs on from it instead - the stretch before it may carry other ways' junctions (cohort seed 31).
-
-    Research:
-        a path reaches the front - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane ends at the dooryard
-        round the nearer gable by its back corner - UNRESEARCHED"""
-    th = math.radians(float(house.get("rot") or 0.0))
-    c, sn = math.cos(th), math.sin(th)
-    hx, hy, hw, hh = float(house["x"]), float(house["y"]), float(house["w"]) / 2, float(house["h"]) / 2
-
-    def local(q: Pt) -> float:
-        return (q[0] - hx) * c + (q[1] - hy) * sn
-
-    def world(lx: float, ly: float) -> Pt:
-        return (hx + lx * c - ly * sn, hy + lx * sn + ly * c)
-
-    lx = local(pts[-1])
-    side = math.copysign(1.0, lx if abs(lx) > 1e-6 else (local(pts[-2]) if len(pts) >= 2 else 1.0)) * (-1.0 if far else 1.0)
-    x = side * (hw + GABLE_MARGIN_FT)
-    return [*(pts if keep_end else pts[:-1]), world(x, -hh - GABLE_MARGIN_FT), world(x, hh + GABLE_MARGIN_FT)]
+Research: gable margin - UNRESEARCHED: 6 ft off the house's wall"""
 
 
 def samples_along(segs: Sequence[tuple[Pt, Pt]], step: float = BRANCH_STEP_FT) -> list[Pt]:

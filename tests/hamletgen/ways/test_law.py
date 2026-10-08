@@ -352,21 +352,6 @@ def test_a_lanes_rank_is_its_roles() -> None:
 # ---- feature 287 wave 3: the ends at a house, the needles, the way targets, every water decked ---------------------------
 
 
-def test_a_lane_end_behind_a_house_has_not_reached_it() -> None:
-    """Water W57: behind the back wall and abreast of it, at no dooryard, off the bund and at no junction."""
-    house = _house(0.0, 200.0)  # the front faces +y: the back wall is at y = 185
-    M = {"lanes": [_lane((0.0, 0.0), (0.0, 160.0))], "houses": [house]}
-    assert law.ends_behind(M) == [(0, -1, 0)]
-    assert law.ends_behind({**M, "houses": []}) == [] and law.ends_behind({**M, "lanes": [_lane((0.0, 0.0), (0.0, 100.0))]}) == [], "no house near"
-    front = {**M, "lanes": [_lane((0.0, 400.0), (0.0, 220.0))]}
-    assert law.ends_behind(front) == [], "at the front, the dooryard"
-    joined = {**M, "lanes": [*M["lanes"], _lane((-50.0, 160.0), (50.0, 160.0))]}
-    assert law.ends_behind(joined) == [], "an end on another way is a junction"
-    field = {**M, "fields": [{"outline": [[-20.0, 162.0], [20.0, 162.0], [20.0, 170.0], [-20.0, 170.0]]}]}
-    assert law.ends_behind(field) == [], "an end on the bund reaches the field"
-    assert law.ends_behind({**M, "lanes": [_lane((0.0, 0.0), (0.0, 160.0), connector=True)]}) == [], "the connector leaves the map"
-
-
 def test_a_way_forked_round_a_needle_of_grass_is_named_and_a_block_is_not() -> None:
     """Homes H39: a face of the web thinner than `NEEDLE_LOOP_FT` is the same way drawn twice."""
     needle = {"lanes": [_lane((0.0, 0.0), (200.0, 0.0)), _lane((0.0, 0.0), (100.0, 12.0), (200.0, 0.0))]}

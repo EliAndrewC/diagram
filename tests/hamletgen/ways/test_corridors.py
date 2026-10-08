@@ -16,20 +16,6 @@ def test_the_tree_is_the_connector_and_the_lanes_the_web_draws_for_what_it_owes(
     assert co.is_tree({"role": co.TARGET_ROLE}) and co.is_tree({"role": co.FIELD_ROLE}) and not co.is_tree({"role": "straggler"}) and not co.is_tree({})
 
 
-def test_an_end_behind_a_house_is_carried_round_the_nearer_gable_into_the_dooryard() -> None:
-    """Water W57: Kuwabata's lane 5 ended 11 ft behind house 1 and counted as its dooryard."""
-    from l7r.diagram.settlement.water_ways.lanes import behind_house, reaches_dooryard
-
-    h = _house(0.0, 0.0, rot=0.0)  # the front faces +y
-    for end, side in (((10.0, -25.0), 1.0), ((-10.0, -25.0), -1.0)):
-        run = co.round_the_gable([(end[0], -200.0), end], h)
-        assert behind_house(h, end) and reaches_dooryard(h, run[-1]) and not behind_house(h, run[-1])
-        assert math.copysign(1.0, run[-1][0]) == side, "round the gable on the side the end stands"
-    tie = co.round_the_gable([(-50.0, -200.0), (0.0, -25.0)], h)
-    assert tie[-1][0] < 0, "on a tie, the side the lane came from"
-    assert co.round_the_gable([(0.0, -25.0)], h)[-1][0] > 0
-
-
 def test_spurs_leave_the_network_nearest_first() -> None:
     segs = [((0.0, 0.0), (100.0, 0.0))]
     assert co.samples_along(segs, step=50.0) == [(0.0, 0.0), (50.0, 0.0), (100.0, 0.0)]

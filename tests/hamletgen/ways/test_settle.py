@@ -92,11 +92,18 @@ def test_a_hook_is_relaid_as_a_tee_and_a_free_hook_loses_its_leg() -> None:
     assert min(math.dist(_pts(s, 1)[-1], q) for q in [(0.0, y) for y in range(-100, 101)]) <= law.JOIN_TOL, "still on the way it joined"
 
 
-def test_a_lane_that_doubles_back_keeps_its_longer_arm_and_a_kink_loses_its_middle() -> None:
-    s = _S([CONN, [(0.0, 50.0), (200.0, 50.0), (150.0, 55.0)], [(0.0, 300.0), (100.0, 300.0), (100.0, 320.0), (200.0, 320.0)]])
+def test_a_returning_leg_under_40_ft_is_cut_and_a_zigzag_pulled_straight() -> None:
+    """0081 (feature 328): "a returning leg under 40 ft is cut" - a 30 ft one goes, a 50 ft one stands; "Two turns of more than
+    50 degrees within 40 ft of path ... are pulled straight" - one lane, its two turns dropped (it was cut into two)."""
+    s = _S([CONN, [(0.0, 50.0), (200.0, 50.0), (170.0, 54.0)], [(0.0, 300.0), (100.0, 300.0), (100.0, 320.0), (200.0, 320.0)]])
     settle.settle_shapes(s)
     assert law.lanes_that_kink(s.M) == []
-    assert any(len(ln["pts"]) == 2 and ln["pts"][0] == [0.0, 50.0] for ln in s.M["lanes"]), "the 200 ft arm is kept"
+    assert any(ln["pts"] == [[0.0, 50.0], [200.0, 50.0]] for ln in s.M["lanes"]), "the 30 ft returning leg is cut"
+    assert any(ln["pts"] == [[0.0, 300.0], [200.0, 320.0]] for ln in s.M["lanes"]), "the zigzag pulled straight, one lane"
+    from l7r.diagram.hamletgen.ways.settle import _unkinked
+
+    long_back = [(0.0, 50.0), (200.0, 50.0), (150.0, 55.0)]  # a 50 ft returning leg
+    assert _unkinked(long_back, ("doubles back", 1, 1)) == [long_back]
 
 
 def test_seed_43s_lattice_step_is_a_kink_the_old_bend_test_passed() -> None:
@@ -502,27 +509,13 @@ def test_a_target_no_lawful_run_reaches_is_left_unreached_not_drawn_least_bad(mo
     assert not any(ln.get("role") == "way target" for ln in s.M["lanes"])
 
 
-def test_an_end_behind_a_house_is_carried_round_the_gable_or_cut() -> None:
-    """Water W57: a lane ending 26 ft behind a farmhouse's back wall has not reached it. Carried round the nearer gable into
-    the dooryard band where that keeps the law; where it would not (another house on the gable), its last leg goes."""
-    from l7r.diagram.settlement.water_ways.lanes import reaches_dooryard
-
+def test_an_end_behind_a_house_reaches_it_and_is_left() -> None:
+    """0246 (feature 328): an end within 60 ft of the house or 12 ft of its built ground reaches it, on any side - the end
+    40 ft behind a farmhouse's back wall is left where it is (water W57 carried it round the gable or cut it, a rule on no page)."""
     lane = [(-100.0, 0.0), (-100.0, 100.0), (-100.0, 160.0)]
     s = _S([CONN, lane], houses=[(-100.0, 200.0)])
-    assert law.ends_behind(s.M) == [(1, -1, 0)]
     settle.settle_ends(s)
-    assert law.ends_behind(s.M) == [] and reaches_dooryard(s.M["houses"][0], _pts(s, 1)[-1])
-    walled = [(-100.0, 200.0), (-60.0, 200.0), (-140.0, 200.0)]  # a house on either gable: no carry keeps the law
-    blocked = _S([CONN, lane], houses=walled)
-    settle.settle_ends(blocked)
-    cut = _pts(blocked, 1)
-    assert law.ends_behind(blocked.M) == [] and cut[:2] == lane[:2] and math.dist(cut[-1], (-100.0, 200.0)) > 60.0, "taken back only off the back"
-    junction = _S([CONN, lane, [(-130.0, 150.0), (-100.0, 150.0)]], houses=walled)
-    settle.settle_ends(junction)
-    assert math.dist(_pts(junction, 1)[-1], (-100.0, 150.0)) <= law.JOIN_TOL, "no further than its last junction: the way that joins it keeps it"
-    behind = _S([CONN, [(-100.0, 170.0), (-100.0, 180.0)]], houses=walled)
-    settle.settle_ends(behind)
-    assert len(behind.M["lanes"]) == 1, "a lane standing wholly behind the house goes"
+    assert _pts(s, 1) == lane
 
 
 def test_a_needle_of_grass_is_opened_on_its_shorter_lane() -> None:
@@ -576,14 +569,14 @@ def test_lawful_refuses_each_rule_a_new_tree_lane_would_break() -> None:
 
 def test_the_tree_is_left_alone_at_a_fold_and_behind_a_house_and_a_target_is_drawn_to_once() -> None:
     """The tree lanes (`corridors.is_tree`) are never the lane a repair edits: two folded on each other are left, a tree
-    lane ending behind a house is the corridor pass's to carry, and a target whose spur is drawn is not drawn to again."""
+    lane ending behind a house is left as it is, and a target whose spur is drawn is not drawn to again."""
     folded = _S([CONN, [(-100.0, 0.0), (-100.0, 100.0)], [(-100.0, 100.0), (-95.0, 20.0)]])
     for ln in folded.M["lanes"][1:]:
         ln["role"] = "access"
     assert law.folded_joint_pairs(folded.M["lanes"]) and settle.settle_ends(folded) == 0
     behind = _S([CONN, [(-100.0, 0.0), (-100.0, 100.0), (-100.0, 160.0)]], houses=[(-100.0, 200.0)])
     behind.M["lanes"][1]["role"] = "access"
-    assert law.ends_behind(behind.M) and settle.settle_ends(behind) == 0
+    assert settle.settle_ends(behind) == 0
     drawn = _S([CONN, ([(-600.0, 0.0), (-600.0, 50.0)], {})], meta={**_GEN, "way_targets": [{"at": [-300.0, 80.0]}]})
     drawn.M["lanes"][1].update({"role": "way target", "to": [-300.0, 80.0]})
     assert settle.settle_targets(drawn, settle.Lawful(drawn)) == 0

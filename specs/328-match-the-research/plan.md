@@ -529,6 +529,15 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 - **On the unpushed waves 9-43** under condition (6): as at wave 43; the pair is owed (executed code).
 - **Verification**: the tests red on the old code; `impl-drift` on the touched claims; the gate; the pair.
 
+## Wave 45 (amendment 44, 2026-10-08)
+
+- **Scope**: rows 487-490 in ranking order - 0081's returning leg (cut under 40 ft) and zigzag (pulled straight); the
+  behind-the-back-wall rule removed, 0246 counting an end within 60 ft of the house or 12 ft of its built ground as reaching it
+  on any side (`tasks.md` Phase 46). Rows 491-492 next; the settlement-side behind-the-wall rows in their turn.
+- **Occasions**: none - the five hamlets regenerated 2026-10-08 with byte-identical manifests.
+- **On the unpushed waves 9-44** under condition (6): as at wave 44; the pair is owed (executed code).
+- **Verification**: the tests; `impl-drift` on the touched claims; the gate; the pair.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Each later wave that changes engine behavior takes

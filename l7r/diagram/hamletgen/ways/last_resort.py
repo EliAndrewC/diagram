@@ -80,7 +80,6 @@ def lanes_breaking(s: Any) -> set[int]:
     bad |= set(law.doubled_tails(M))
     bad |= {i for i, _e in law.dangling_lane_ends(M, ground)}
     bad |= {i for ends in law.fronting_ends(M).values() if len(ends) > law.DOORSTEP_MAX for i, _e in ends}
-    bad |= {i for i, _e, _h in law.ends_behind(M, ground)}
     bad |= {i for _face, bounding in law.needle_loops(M) for i in bounding}
     if law.way_outs_crossing(M):
         bad |= {i for brook in law._brooks(M) for i in _ordinary(M) if law.crossing_points(_pts(lanes[i]), brook)}

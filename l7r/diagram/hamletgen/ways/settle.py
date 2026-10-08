@@ -45,9 +45,8 @@ from l7r.diagram.settlement import rot_rect, seg_closest, seg_dist
 from l7r.diagram.settlement._knobs import bridge_crossed_waters
 from l7r.diagram.settlement.city.bridges import flooded_ground
 from l7r.diagram.settlement.structures.fixtures._helpers import departure_routes
-from l7r.diagram.settlement.water_ways.lanes import behind_house, reaches_dooryard
 
-from ..consts import WAY_END_REACH_FT, WEB_CLEARANCE, WEB_FABRIC_GAP, Poly, Pt
+from ..consts import WEB_CLEARANCE, WEB_FABRIC_GAP, Poly, Pt
 from . import law
 from .arcs import arc_at, cut_around, sub_run  # noqa: F401 - re-exported: `settle.sub_run` and the rest are what tree.py and the tests name
 from .checks import square_crossings, unreached_houses
@@ -58,7 +57,6 @@ from .corridors import (
     _poly_box,
     building_quads,
     is_tree,
-    round_the_gable,
     strands_only_ordinary,
     through_a_building,
 )
@@ -215,15 +213,24 @@ def _cut_gap(M: Mapping[str, Any], x: Pt) -> float:
     return max(near, default=3.0)
 
 
-def _unkinked(p: Poly, span: tuple[str, int, int]) -> list[Poly]:
-    """A run that doubles back keeps its longer arm; one that kinks loses the stretch between its two turns.
+HAIRPIN_LEG_FT = 40.0
+"""Research: a returning leg cut - research/questions/0081-village-lanes.drawing.html: a returning leg under 40 ft is cut"""
 
-    Research: no hairpin or zigzag - research/questions/0081-village-lanes.drawing.html: longer arm kept, or the turns' stretch cut"""
+
+def _unkinked(p: Poly, span: tuple[str, int, int]) -> list[Poly]:
+    """A run that doubles back loses its returning leg where that leg is under `HAIRPIN_LEG_FT` (the shorter arm; a longer
+    one stands); one that zigzags is pulled straight - its two turns dropped, the way running from the vertex before the first
+    to the vertex after the second (feature 328: it kept the longer arm at any length, and cut a zigzag's middle out, leaving
+    two lanes where there was one).
+
+    Research: no hairpin or zigzag - research/questions/0081-village-lanes.drawing.html: "a returning leg under 40 ft is cut";
+    and two turns of more than 50 degrees within 40 ft of path are pulled straight"""
     kind, ka, kb = span
     if kind == "doubles back":
         head, tail = p[: ka + 1], p[ka:]
-        return [max(head, tail, key=polyline_len)]
-    return [q for q in (p[: ka + 1], p[kb:]) if len(q) >= 2]
+        short, long_ = sorted((head, tail), key=polyline_len)
+        return [long_] if polyline_len(short) < HAIRPIN_LEG_FT else [p]
+    return [[*p[:ka], *p[kb + 1 :]]]
 
 
 def settle_shapes(s: Any) -> int:
@@ -405,58 +412,12 @@ def settle_ends(s: Any) -> int:
             seq = _as_end(_pts(lanes[i]), end)
             walk = next((polyline_len(seq[: k + 1]) for k in range(len(seq) - 1, -1, -1) if math.dist(seq[k], c) > law.DOORSTEP_FT), 0.0)
             claim({i}, i, [_back(sub_run(seq, 0.0, walk), end)] if walk > 0 else [])
-    # AN END BEHIND A HOUSE IS CARRIED ROUND THE GABLE TO ITS FRONT, OR CUT (water W57): where the carried run keeps the law
-    # (`Lawful`, asked without the lane it replaces) the end runs on round the nearer gable into the dooryard band, or the
-    # farther; otherwise the end is taken back only as far as it stands behind the house (`off_the_back`) - never a whole
-    # leg: cohort seed 31's backbone lane lost its 200 ft last leg to a cut, and fifteen houses hanging off that leg were
-    # stranded - and the next round asks what the shortened end reaches (a dangling end is trimmed to service, a house left
-    # unreached is its corridor's). Each lane's first such end only, one repair per round.
-    lawful: Lawful | None = None
-    for i, end, h in law.ends_behind(M, memo_ground(s, "worked", worked_ground)):
-        if i in touched or is_tree(lanes[i]):
-            continue
-        seq = _as_end(_pts(lanes[i]), end)
-        lawful = lawful or Lawful(s)
-        width = float(lanes[i].get("w") or 3.0)
-        gables = [round_the_gable(seq, houses[h], far=far, keep_end=keep) for keep in (False, True) for far in (False, True)]
-        carries = [c for c in gables if lawful(c, width, skip=i)]
-        # ...PREFERRING A REPAIR THAT SPLITS NOTHING (`keeps_the_network`): a carry, then the back-off; where each would leave
-        # another way's end hanging, the carry or the back-off all the same - the rule holds, and a house the split strands is
-        # its corridor's
-        others = [sg for k, o in enumerate(lanes) if k != i for sg in zip(_pts(o), _pts(o)[1:], strict=False)]
-        options = [_back(q, end) for q in (*carries, off_the_back(seq, houses[h], others))]
-        # ...judged against the web WITH this round's earlier repairs made: two carries each harmless alone can together
-        # take a junction's both sides (cohort seed 31's lanes 8 and 10, carried round one gable to one point)
-        work = with_edits(M, edits)
-        claim({i}, i, [next((q for q in options if keeps_the_network(work, i, [q])), options[0])])
+    # (AN END BEHIND A HOUSE WAS CARRIED ROUND THE GABLE OR BACKED OFF HERE - water W57, 269 B17 - until feature 328: 0246
+    # counts an end within 60 ft of the house or 12 ft of its built ground as reaching it on any side, and no page puts the
+    # back wall out of reach.)
     if edits:
         return apply_pieces(s, edits)
     return settle_dangling(s)
-
-
-BACK_OFF_STEP_FT = 2.0
-"""The step an end behind a house is taken back in (`off_the_back`)."""
-
-
-def off_the_back(seq: Poly, house: Mapping[str, Any], others: Sequence[tuple[Pt, Pt]] = ()) -> Poly:
-    """`seq`, whose last point stands behind `house` (water W57), taken back along itself to the first point that no longer
-    does - beside the house, at its dooryard, or past `WAY_END_REACH_FT` from it, where the end is no longer the house's
-    to reach - or to its last junction (a point within `law.JOIN_TOL` of another way's `others` segment), which is the
-    stub's own end: the design's "trimmed back to the last way junction", so no way that joins the lane is cut off it. []
-    where no such point is left (the lane stands wholly behind the house).
-
-    Research:
-        a lane ends at the dooryard - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: backed off to beside the house,
-            its dooryard, 60 ft from it or its last junction"""
-    c, total = (float(house["x"]), float(house["y"])), polyline_len(seq)
-    walk = total
-    while walk > 0.0:
-        run = sub_run(seq, 0.0, walk)
-        q = run[-1] if run else seq[0]
-        if math.dist(q, c) > WAY_END_REACH_FT or not behind_house(house, q) or reaches_dooryard(house, q) or any(seg_dist(q[0], q[1], a, b) <= law.JOIN_TOL for a, b in others):
-            return run
-        walk -= BACK_OFF_STEP_FT
-    return []
 
 
 def settle_dangling(s: Any) -> int:
@@ -877,11 +838,10 @@ class Lawful:
             return False
         if any(n == k for _c, n, _e in law.connector_hairpin_ends(tl)):
             return False
-        # ...AND EACH END SERVES SOMETHING, NOT FROM BEHIND A HOUSE (the lane law's `dangling_lane_ends`, water W57's
-        # `ends_behind`): a tree lane is never trimmed afterwards, so an end it would leave in open ground or behind a back
-        # wall is refused here
+        # ...AND EACH END SERVES SOMETHING (the lane law's `dangling_lane_ends`): a tree lane is never trimmed afterwards, so an
+        # end it would leave in open ground is refused here
         trial = {**M, "lanes": tl}
-        if any(n == k for n, _e in law.dangling_lane_ends(trial, self.ground)) or any(n == k for n, _e, _h in law.ends_behind(trial, self.ground)):
+        if any(n == k for n, _e in law.dangling_lane_ends(trial, self.ground)):
             return False
         if any(along_tail(p, q, deg=_DOUBLED_DEG) is not None for o in (_pts(ln) for ln in near) for p, q in ((run, o), (run[::-1], o), (o, run), (o[::-1], run))):
             return False

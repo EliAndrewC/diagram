@@ -7487,6 +7487,7 @@
   "after": [],
   "flag": "",
   "tier_as_ranked": "E2",
+  "moved": "",
   "verdict": "DRIFTED",
   "wave": "",
   "scope": "kept"
@@ -7501,6 +7502,7 @@
   "after": [],
   "flag": "",
   "tier_as_ranked": "E2",
+  "moved": "",
   "verdict": "DRIFTED",
   "wave": "",
   "scope": "kept"
@@ -7512,11 +7514,10 @@
   "files": [
    "l7r/diagram/hamletgen/ways/settle.py"
   ],
-  "after": [
-   "l7r/diagram/hamletgen/ways/settle.py::off_the_back#a lane ends at the dooryard"
-  ],
+  "after": [],
   "flag": "",
   "tier_as_ranked": "E2",
+  "moved": "",
   "verdict": "DRIFTED",
   "wave": "",
   "scope": "kept"
@@ -7528,11 +7529,10 @@
   "files": [
    "l7r/diagram/hamletgen/ways/settle.py"
   ],
-  "after": [
-   "l7r/diagram/hamletgen/ways/settle.py::_unkinked#no hairpin or zigzag"
-  ],
+  "after": [],
   "flag": "",
   "tier_as_ranked": "E2",
+  "moved": "",
   "verdict": "DRIFTED",
   "wave": "",
   "scope": "kept"

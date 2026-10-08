@@ -13,6 +13,8 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 - (wave 5, landed and reviewed) placement-changed village lane on kashikawa - wave 5: 0033's row street runs on off the map as the road into it at both ends, where
   the web cut it back to its last joint (`trim_streets`); Kashikawa's and Mizuguchi's far ends now run off the sheet as a
   second way out (every way is inked `village lane`).
+- none (wave 45): the hairpin and zigzag cuts and the behind-the-wall rule's removal moved no map (the five hamlets
+  regenerated 2026-10-08, manifests byte-identical)
 - none (wave 44): the near joins and the steading reach's center moved no map (the five hamlets regenerated 2026-10-08,
   manifests byte-identical)
 - none (wave 43): the hairpin's T, the third gather form, the steading's reach and the refused near join moved no map (the
@@ -1461,4 +1463,26 @@ In ranking order (rows 482-485; 486-492 next, row 492's change held as `audit/he
 - [ ] T113 row 486; the reach to the center (FR-003, FR-004)
       research: rendering
 - [ ] T114 the claims re-checked by `impl-drift`; the close: `make done` green, the pair, the wave column (FR-005, FR-006)
+      research: rendering
+
+## Phase 46 - wave 45 (amendment 44): rows 487-490 - 0081's hairpin and zigzag; no end is behind a house
+
+In ranking order (rows 487-490; 491-492 next, row 492's change held as `audit/held-row492-nub.patch`).
+
+- `settle.py::_unkinked#no hairpin or zigzag` (row 487, E2): 0081 - "a returning leg under 40 ft is cut" (`HAIRPIN_LEG_FT`; it kept
+  the longer arm at any length, so a longer returning leg now stands) and "Two turns of more than 50 degrees within 40 ft of
+  path ... are pulled straight" (the two turns dropped; it cut the middle out, leaving two lanes). `settle_shapes` (row 490)
+  cuts by it, so both close. `test_a_returning_leg_under_40_ft_is_cut_and_a_zigzag_pulled_straight`.
+- `settle.py::off_the_back` and `settle_ends#a lane ends at the dooryard` (rows 488-489, E2): 0246 counts an end within 60 ft of
+  the house or 12 ft of its built ground as reaching it, on any side; no page puts the back wall out of reach (the rule was
+  269 B17's and water W57's). Every end `law.ends_behind` flagged stood within 60 ft of the house, so the rule is removed
+  whole: `ends_behind` (the law's registry, the keeper's exit question, the tree's end faults, the last resort), the settle's
+  carry round the gable and its back-off (`off_the_back`, `corridors.round_the_gable`). The settlement-side form of the same
+  rule (`water_ways/lanes.py::behind_house`, `reaches_dooryard`, `trim_lane_stubs`) is three rows later in the ranking.
+  Tests restated: an end behind a house is left; the tree's third-end case rebuilt so the end is nearest house A (it was
+  refused only by the removed rule).
+
+- [ ] T115 rows 487-490 (FR-003, FR-004)
+      research: rendering
+- [ ] T116 the claims re-checked by `impl-drift`; the close: `make done` green, the pair, the wave column (FR-005, FR-006)
       research: rendering

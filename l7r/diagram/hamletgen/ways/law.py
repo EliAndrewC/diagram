@@ -43,10 +43,8 @@ from l7r.diagram.settlement.city.bridges import deck_covers as deck_covers
 from l7r.diagram.settlement.city.bridges import undeckable_at as undeckable_at
 from l7r.diagram.settlement.homestead_parts.fixture_seats import TRUNK_FT
 from l7r.diagram.settlement.structures.fixtures._helpers import departure_routes
-from l7r.diagram.settlement.water_ways._helpers import BUND_REACH_FT
-from l7r.diagram.settlement.water_ways.lanes import behind_house, reaches_dooryard
 
-from ..consts import WAY_END_REACH_FT, WEB_FABRIC_GAP, Poly, Pt
+from ..consts import WEB_FABRIC_GAP, Poly, Pt
 from .checks import served_network, unreached_houses
 from .clearance import _HAIRPIN_DEG, _ZIGZAG_DEG, _ZIGZAG_RUN_FT, kink_spans
 from .fabric import _LANE_JOIN_FT, _WEB_MIN_FT, _crosses_fabric, house_hit
@@ -650,34 +648,6 @@ def fronted_ends(M: Mapping[str, Any]) -> dict[int, int]:
     return {h: len(ends) for h, ends in fronting_ends(M).items()}
 
 
-def ends_behind(M: Mapping[str, Any], ground: WorkedGround | None = None) -> list[tuple[int, int, int]]:
-    """(lane index, end, house index) for every free lane end (the connector's aside; an end within `JOIN_TOL` of another
-    way is a junction) that stands within `WAY_END_REACH_FT` of a farmhouse, BEHIND the nearest such house - past its back
-    wall, abreast of it (`behind_house`) - and at no house's dooryard (`reaches_dooryard`), nor on the bund (water W57; 269
-    B17, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane that serves a farmhouse ends at its dooryard, and a lane end behind a house's back
-    wall does not count as reaching it - Kuwabata's lane 5, 11 ft behind house 1 and 43 ft from its yard).
-    Research: a lane ends at the dooryard - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: never behind the house"""
-    ways = _ways(M)
-    houses = M.get("houses") or []
-    if not houses:
-        return []
-    ground = worked_ground(M) if ground is None else ground
-    out = []
-    for i, ln in enumerate(M.get("lanes") or []):
-        p = ways[i]
-        if ln.get("connector") or len(p) < 2:
-            continue
-        for e in (0, -1):
-            q = p[e]
-            near = [h for h in range(len(houses)) if math.hypot(q[0] - houses[h]["x"], q[1] - houses[h]["y"]) <= WAY_END_REACH_FT]
-            if not near or not free_end(ways, i, q) or ground.dist(q) <= BUND_REACH_FT or any(reaches_dooryard(houses[h], q) for h in near):
-                continue
-            h = min(near, key=lambda k: math.hypot(q[0] - houses[k]["x"], q[1] - houses[k]["y"]))
-            if behind_house(houses[h], q):
-                out.append((i, e, h))
-    return out
-
-
 def doorstep_ends(M: Mapping[str, Any]) -> dict[int, int]:
     """The farmhouses that discharge more than `DOORSTEP_MAX` free lane ends apiece (`fronted_ends`).
     Research: no fan of stubs at a door - UNRESEARCHED: more than two free ends within 80 ft"""
@@ -885,7 +855,6 @@ LAW: dict[str, Callable[[Mapping[str, Any]], Any]] = {
     "width_steps": lambda M: width_steps(M.get("lanes") or []),
     "dangling_ends": dangling_ends,
     "doorstep_ends": doorstep_ends,
-    "ends_behind": ends_behind,
     "over_fixtures": lanes_over_fixtures,
     "needle_loops": lambda M: [[round(v) for v in face.centroid.coords[0]] for face, _lanes in needle_loops(M)],
     "field_unreached": field_unreached,

@@ -1367,6 +1367,46 @@
   "moved": "T25a (amendment 6): tiered by its work - the code (serve.py:160, `> 60.0`) stands; only the claim at serve.py:115-116 is relabeled",
   "tier": "E0"
  },
+ "l7r/diagram/hamletgen/ways/settle.py::_unkinked#no hairpin or zigzag": {
+  "after": [],
+  "files": [
+   "l7r/diagram/hamletgen/ways/settle.py"
+  ],
+  "fix": "_unkinked cuts a returning leg only under 40 ft and pulls a zigzag straight instead of dropping its middle",
+  "flag": "",
+  "moved": "",
+  "tier": "E2"
+ },
+ "l7r/diagram/hamletgen/ways/settle.py::off_the_back#a lane ends at the dooryard": {
+  "after": [],
+  "files": [
+   "l7r/diagram/hamletgen/ways/settle.py"
+  ],
+  "fix": "off_the_back drops the behind-the-house rule; an end within 60 ft of the house or 12 ft of its built ground reaches it on any side",
+  "flag": "",
+  "moved": "",
+  "tier": "E2"
+ },
+ "l7r/diagram/hamletgen/ways/settle.py::settle_ends#a lane ends at the dooryard": {
+  "after": [],
+  "files": [
+   "l7r/diagram/hamletgen/ways/settle.py"
+  ],
+  "fix": "settle_ends no longer carries or backs off an end behind a house the 0246 figures already count as reaching it",
+  "flag": "",
+  "moved": "",
+  "tier": "E2"
+ },
+ "l7r/diagram/hamletgen/ways/settle.py::settle_shapes#no hairpin or zigzag": {
+  "after": [],
+  "files": [
+   "l7r/diagram/hamletgen/ways/settle.py"
+  ],
+  "fix": "settle_shapes cuts as the fixed _unkinked does (40 ft leg, zigzag pulled straight)",
+  "flag": "",
+  "moved": "",
+  "tier": "E2"
+ },
  "l7r/diagram/hamletgen/ways/street.py::row_reach#a farm frame taken as 100 ft where none is recorded (0033 gives 220-260 ft)": {
   "after": [],
   "e0_basis": "a claim written against the page that answers",

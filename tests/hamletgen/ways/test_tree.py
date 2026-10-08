@@ -266,8 +266,12 @@ def test_the_tree_refuses_a_sliver_a_third_end_and_a_strip_folded_on_its_new_inn
     M = _tree(houses=[_house(300.0, 100.0)], access_corridors=[{"pts": [[300.0, 80.0], [300.0, 0.0]], "of": [300.0, 100.0]}])
     ok = _law(M)
     assert not tree.admits(ok, M, [(330.0, 150.0), (300.0, 0.0)], ACCESS_ROLE, _house(330.0, 170.0)), "on the same host point: a sliver"
-    crowded = _tree(houses=[_house(300.0, 100.0)], access_corridors=[{"pts": [[300.0, 80.0], [300.0, 0.0]], "of": [300.0, 100.0]}, {"pts": [[250.0, 60.0], [250.0, 0.0]], "of": [250.0, 30.0]}])
-    assert not tree.admits(_law(crowded), crowded, [(340.0, 60.0), (340.0, 0.0)], ACCESS_ROLE, _house(345.0, 30.0)), "a third free end at house A"
+    crowded = _tree(
+        houses=[_house(300.0, 100.0)], access_corridors=[{"pts": [[300.0, 80.0], [300.0, 0.0]], "of": [300.0, 100.0]}, {"pts": [[260.0, 60.0], [260.0, 0.0]], "of": [260.0, 30.0]}]
+    )  # its end 57 ft from A's center, inside 0246's 60 ft
+    # a third end 50 ft from A's center, nearer A than its own household (feature 328: the old case's end stood nearer its own
+    # house, and was refused only by the behind-the-wall rule 0246 does not have)
+    assert not tree.admits(_law(crowded), crowded, [(330.0, 60.0), (330.0, -90.0)], ACCESS_ROLE, _house(345.0, -110.0)), "a third free end at house A"
     # the strip's inner end, now the new corridor's: a corridor arriving from the connector's side folds back on the strip
     back = _tree(houses=[], access_corridors=[{"pts": [[100.0, 80.0], [100.0, 0.0]], "of": [100.0, 100.0]}])
     assert not tree.admits(_law(back), back, [(180.0, 60.0), (150.0, 5.0), (250.0, 0.0)], ACCESS_ROLE, _house(180.0, 80.0))

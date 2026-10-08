@@ -640,12 +640,11 @@ def square_run_of(M: Mapping[str, Any], run: Poly) -> Poly:
 
 
 def end_faults(M: Mapping[str, Any], ground: Any) -> tuple[int, ...]:
-    """How many lane ends break each rule an end is judged by - serving nothing, behind a house, a house's third, a fold
+    """How many lane ends break each rule an end is judged by - serving nothing, a house's third, a fold
     where two meet with no third way there, a join stopping short: what a lane taken away can leave another lane's end
     doing, since the ends that met it are then free (cohort seeds 14 and 40: a corridor's end left behind a house)."""
     return (
         len(law.dangling_lane_ends(M, ground)),
-        len(law.ends_behind(M, ground)),
         len(law.doorstep_ends(M)),
         len(law.folded_joint_pairs(M.get("lanes") or [])),
         len(law.near_misses(M)),
