@@ -14063,16 +14063,20 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/water/fit.py::flanks_commanded#both flanks commanded": {
-  "code": "a49dfcf8c32e4ba7",
-  "core": "7e53f07bc7f81642",
-  "date": "2026-10-03",
-  "note": "if min(extent) <= FLANK_MIN_EXTENT_FT it returns False and refuses the fan, but 0053 says the both-sides rule does not touch \"a fan whose far flank is a sliver under the 150 ft line\" (exempt, not refused; FLANK_MIN_EXTENT_FT's own docstring agrees); also code demands max(80 ft, 30%) where the page says \"80 ft or 30%\"",
+  "code": "bcca2436b032ea73",
+  "core": "5f56833027b1fb17",
+  "date": "2026-10-07",
+  "note": "main or branch supply must reach at least min(80 ft, 30% of the flank) on each flank wider than 150 ft across the fall, and narrower or one-sided flanks are not judged; this matches the figures the drawing page records as the project's own choice",
   "pages": {
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html": "92978f4124b5a89e"
   },
   "research": "8b7dec608b28495e",
-  "triaged": "2026-10-05",
-  "verdict": "DRIFTED"
+  "rests": [
+   "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:ada331da1c1d1012",
+   "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:bbe1e651cffe3535",
+   "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html:c3c7f4605659e6ad"
+  ],
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/water/fit.py::head_sluice#head set-back": {
   "code": "5c4c40ddc698eaea",

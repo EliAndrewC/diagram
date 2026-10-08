@@ -337,10 +337,11 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 
 ## Wave 27 (amendment 26, 2026-10-08)
 
-- **Scope**: the brook trio (448-450) tried literally and measured E3 (6 of 28 brook tests fail with no dip and a strict
-  downhill check: a run across the fall then takes no bend); row 451, `flanks_commanded` as 0053 states it - a flank of
-  150 ft or less not judged, a judged flank owed 80 ft or 30%, the lesser; the test that pinned the old refusal brought to
-  the page (`tasks.md` Phase 28). Row 434 held for the GM.
+- **Scope**: rows 448-451 (`tasks.md` Phase 28): the brook below its tap never climbs - a run across the fall takes no dip
+  down it, the downhill check is strict, the 8 ft allowance retired (0054: strictly under 90); `flanks_commanded` as 0053
+  states it - a flank of 150 ft or less not judged, a judged flank owed 80 ft or 30%, the lesser; the test that pinned the
+  old refusal brought to the page. A first trial's E3 re-tier of the brook rows is withdrawn (amendment 26 round 1). Row
+  434 held for the GM.
 - **Occasions**: none - the five pool hamlets are unchanged.
 - **On the unpushed waves 9-26** under condition (6): (1)-(5) held at wave 26's close (2657e36a5, backed up, its own pair
   band 0); wave 27's own pair opens at 2657e36a5.

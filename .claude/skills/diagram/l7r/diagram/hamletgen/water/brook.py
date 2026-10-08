@@ -52,7 +52,6 @@ from .brook_course import (  # noqa: F401 - re-exported where callers and tests 
 )
 from .brook_rules import (
     AXIS_EPS_DEG,
-    BEND_DIP_FT,
     BROOK_DRAWN_W,
     LEVEL_TOL_FT,
     RULED_TOL_FT,
@@ -273,7 +272,7 @@ def brook_violations(course: Sequence[Pt], plan: SitePlan, sluice: Pt, ditches: 
         out of the field - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the course never enters the field's envelope
         off-map ends - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the source and the mouth both off the canvas
         no crossing - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: the course crosses no ditch mid-run
-        runs downhill - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: below the tap every step runs down the fall, a bend dipping BEND_DIP_FT at most
+        runs downhill - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: below the tap every step runs down the fall or level, none climbing (strictly under 90)
     """
     fin = drawn_course(course, [sluice], joins)
     W, H = float(plan.W), float(plan.H)
@@ -288,7 +287,7 @@ def brook_violations(course: Sequence[Pt], plan: SitePlan, sluice: Pt, ditches: 
         "source": not ends_off_canvas(fin, W, H, ends=(0,)),
         "mouth": not ends_off_canvas(fin, W, H, ends=(-1,)),  # the brook runs on past the fan and leaves the map (feature 230)
         "crosses": any(crosses_mid_run(fin, d) for d in ditches),
-        "climbs": not monotone_down(fin[tap_index(fin, [sluice]) :], plan.fall, slack=BEND_DIP_FT),
+        "climbs": not monotone_down(fin[tap_index(fin, [sluice]) :], plan.fall),
     }
     return [k for k, bad in checks.items() if bad]
 
@@ -349,7 +348,8 @@ def bend_at(course: Sequence[Pt], span: Sequence[Pt], need: Callable[[Pt], tuple
     to the frame box in 8-70 ft legs kept its level run through every pass). Set along `away`: the caller passes the
     flank's normal, so the bend moves no vertex up or down the fall and the course below the tap stays monotone
     (water:W11) - or, for a run lying ACROSS the fall, which no bend across it can break (the step round the fan's head
-    on the W08 unit case: 280 ft straight), the fall itself, a dip of a bend's depth that `BEND_DIP_FT` allows.
+    on the W08 unit case: 280 ft straight), the fall itself with a cap of 0 - no dip, since the next leg would climb
+    (0054: strictly under 90; feature 328 retired the 8 ft dip `BEND_DIP_FT` allowed), so such a run takes no bend.
 
     Research: bend placement - UNRESEARCHED: one bend at the middle of the run's longest segment, the smaller clearing offset, at most half the segment, outside the field
     """
@@ -374,7 +374,7 @@ def bend_runs(course: Sequence[Pt], plan: SitePlan, sluice: Pt, away: Pt) -> Pol
     Research:
         level runs broken - CONVENTION: a bend in every level run along the frame, the longest first
         ruled runs broken - UNRESEARCHED: a bend in the straightest run while it is over its bound
-        bend across the fall - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: a run the flank's normal cannot leave bends down the fall, at most BEND_DIP_FT
+        bend across the fall - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: a run the flank's normal cannot leave takes no dip down the fall, the next leg never climbing; such a run takes no bend
     """
     W, H = float(plan.W), float(plan.H)
     out = list(course)
@@ -387,8 +387,8 @@ def bend_runs(course: Sequence[Pt], plan: SitePlan, sluice: Pt, away: Pt) -> Pol
         if not runs:
             break
         axis, i, j, _run = max(runs, key=lambda r: r[3])
-        v = away if abs(away[axis]) >= 0.3 else plan.fall  # a level the flank's normal cannot leave is left down the fall
-        bent = bend_at(out, fin[i : j + 1], level_offsets(fin[i][axis], axis, v), v, sluice, plan.envelope, BEND_DIP_FT if v is plan.fall else math.inf)
+        v = away if abs(away[axis]) >= 0.3 else plan.fall  # a level the flank's normal cannot leave takes no dip down the fall (cap 0): the next leg would climb
+        bent = bend_at(out, fin[i : j + 1], level_offsets(fin[i][axis], axis, v), v, sluice, plan.envelope, 0.0 if v is plan.fall else math.inf)
         if bent == out:
             break  # no segment along it takes a bend; the placer's judgment refuses the candidate
         out = bent
@@ -398,7 +398,7 @@ def bend_runs(course: Sequence[Pt], plan: SitePlan, sluice: Pt, away: Pt) -> Pol
         if run <= bound:
             break
         v = away if abs(away[0] * (b[1] - a[1]) - away[1] * (b[0] - a[0])) >= 0.3 * run else plan.fall  # a run ACROSS the fall bends down it
-        out = bend_at(out, [a, b], chord_offsets(a, b, v), v, sluice, plan.envelope, BEND_DIP_FT if v is plan.fall else math.inf)
+        out = bend_at(out, [a, b], chord_offsets(a, b, v), v, sluice, plan.envelope, 0.0 if v is plan.fall else math.inf)
     return out
 
 

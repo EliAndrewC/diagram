@@ -50,8 +50,6 @@ RULED_MIN_LEN_FT = 300.0  # ... once that length is at least this (settlement-re
 AXIS_EPS_DEG = 1.6  # water:W04 - a segment of a wander stride or more this near a screen axis is a ruled line
 """Research: screen-axis segment - CONVENTION: a segment within 1.6 deg of a screen axis reads as ruled"""
 CROSSING_END_TOL = 13.0  # water:W08 - a joiner with an end this near the water meets it at a confluence (`TRUNK_TOL`)
-BEND_DIP_FT = 8.0  # water:W11 as the placer asks it - a bend set across a run lying across the fall dips down it by at most its own depth
-"""Research: bend dip allowance - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: a bend across the fall may dip 8 ft down it, the water still running downhill"""
 BROOK_DRAWN_W = 7.0  # the width `draw_comb_field` draws a hamlet's brook at (`settlement/fields/comb.py`, `stream(width=7)`)
 """Research: brook width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: 7 ft, mirrored from `draw_comb_field`"""
 # THE ROOM A LEVEL-RUN BEND NEEDS (water:W02): a station held against the frame box still has the skirt's floor 10 px

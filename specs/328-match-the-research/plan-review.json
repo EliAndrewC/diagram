@@ -1,46 +1,34 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "cfd5e1661df9d4560d9c67dc27ada7fe634ecb9094fe320ff4fe79391c9d4039",
+ "plan_sha256": "bd001518382d6d1c843701347021bbee91cbd6791618c2deb2fc634eb9a14420",
  "reviewed": "2026-10-07",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W26-scope",
-   "summary": "wave 26 takes ranking row 447 (sink.py::drain_run#no-build corridor) alone: the hamlet's drain registers no 33 ft corridor",
-   "class": "within",
-   "why": "FR-004: 0058's drawing page sets the 33 ft strip for town and city maps only; the fix moves the code to the research. FR-006: E2 rows 1-38 carry a wave except 34 (row 434, held), so row 447 (E2 #39) is the next in the run"
-  },
-  {
-   "id": "W26-below-drain",
-   "summary": "the Scope line states a nucleated cluster is exempt from the below-drain rule and the dispersed farmsteads' rule is open as row 669 (E3)",
-   "class": "within",
-   "why": "0058's drawing page scopes the below-drain rule to farmsteads strewn one by one, not a nucleated cluster; ranking.json row 669 (cluster.py::below_drain#dispersed farmsteads off the ground below the drain) is UNCLAIMED, E3, scope kept, wave blank - left open in the ranking's order under FR-006, not dropped"
-  },
-  {
-   "id": "W26-brook-next",
-   "summary": "the brook rows 448-450 left to the next wave",
-   "class": "within",
-   "why": "FR-006 sets no minimum size for a wave; 447 then 448-450 is one contiguous run, and 449-450 name 448 under after, so they belong together"
-  },
-  {
-   "id": "W26-hold-434",
-   "summary": "row 434 (fixture_quota shrine cap) held for the GM",
+   "id": "W27-brook-E3",
+   "summary": "the brook trio (bend_runs#bend across the fall, brook_violations#runs downhill, BEND_DIP_FT) re-tiered E3 on a trial said to fail 6 of 28 brook tests",
    "class": "narrowing",
-   "ruling": "LEGITIMATE",
-   "why": "already ruled LEGITIMATE (spec-fidelity exception check, 2026-10-07): the GM's goal amendment defers questions to the feature's end; it conflicts with the GM's feature 133 ruling, so it cannot be settled by the session"
+   "ruling": "NOT LEGITIMATE",
+   "why": "moves three open in-scope rows behind every remaining E2 row against the easiest-first order (request; FR-003, SC-003) on a measurement that does not reproduce: the literal fix at HEAD in a detached worktree (bend_at cap 0.0 for a bend down the fall in both bend_runs calls, monotone_down slack 0.01) passes 28 of 28 in tests/hamletgen/test_brook.py and 1341 passed, 1 xfailed over tests/hamletgen (reviewer's run 2026-10-08; a sabotage run confirmed the worktree's code was the code under test). The trial's patch is not recorded, so the 6-of-28 figure has no route back to its run."
   },
   {
-   "id": "W26-occasions",
-   "summary": "no review occasions; the five pool hamlets stated unchanged",
+   "id": "W27-flank-0053",
+   "summary": "flanks_commanded: a flank of 150 ft or less not judged; a judged flank owed 80 ft or 30%, the lesser",
    "class": "within",
-   "why": "FR-005 owes the occasions a wave opens; T77 regenerates the five hamlets, which verifies the unchanged claim"
+   "why": "0053 drawing page: 'more than about 150 ft ... reaches at least 80 ft or 30% of that flank' and the rule 'does not touch ... a fan whose far flank is a sliver under the 150 ft line'; the implementation moves to the page (FR-004)"
   },
   {
-   "id": "W26-stack",
-   "summary": "wave 26 stacked on unpushed waves 9-25 under condition (6), its pair opening at 8e6e380ad",
+   "id": "W27-flank-test",
+   "summary": "the test pinning the refusal of a 120 ft flank brought to the page; a test of the lesser added",
    "class": "within",
-   "why": "condition (6) already ruled; at 8e6e380ad backup/digram-backlog equals 8e6e380ad and T75a/T75/T76 are ticked"
+   "why": "the old assertion pinned behavior 0053 contradicts; the new tests discriminate min from max (90 ft on 400 accepted, 70 refused, 50 on a 160 ft flank accepted) and the 60 ft refusal stands - brought to the page, not weakened"
+  },
+  {
+   "id": "W27-row-434",
+   "summary": "row 434 held for the GM",
+   "class": "within",
+   "why": "carried unchanged from waves 23-26 under the GM's instruction to defer questions to the end"
   }
  ],
- "verdict": "CLEAR"
+ "verdict": "BLOCKED"
 }

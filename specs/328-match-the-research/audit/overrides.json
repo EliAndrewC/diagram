@@ -714,8 +714,8 @@
   ],
   "fix": "bend a brook run lying across the fall across its own run (no dip down the fall), so the next leg never climbs",
   "flag": "",
-  "moved": "wave 27 trial (measured 2026-10-08): with no dip down the fall and the downhill check strict, a run across the fall takes no bend and its candidate is refused; 6 of 28 tests in tests/hamletgen/test_brook.py then fail, among them the A plan's brook placement and the last-candidate fallbacks (the placer returns no course) - breaking a run across the fall needs another construction (a bend that keeps every leg level or downhill, or a course re-routed off the fall's contour), across bend_runs, the placer's candidates and its tests: E3 by FR-003",
-  "tier": "E3"
+  "moved": "wave 27: the session's E3 re-tier withdrawn - its trial changed more than the fix (it also broke out of the bend loop and turned the bend), and the literal fix (cap 0 down the fall, the strict downhill check) passes all 28 brook tests (amendment 26 round 1 reproduced it); done in wave 27",
+  "tier": "E2"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/water/brook.py::brook_violations#runs downhill": {
   "after": [],
@@ -725,8 +725,8 @@
   ],
   "fix": "monotone_down below the tap with slack 0.01, not BEND_DIP_FT: no step climbs the fall (0054 strict under 90)",
   "flag": "",
-  "moved": "wave 27 trial (measured 2026-10-08): with no dip down the fall and the downhill check strict, a run across the fall takes no bend and its candidate is refused; 6 of 28 tests in tests/hamletgen/test_brook.py then fail, among them the A plan's brook placement and the last-candidate fallbacks (the placer returns no course) - breaking a run across the fall needs another construction (a bend that keeps every leg level or downhill, or a course re-routed off the fall's contour), across bend_runs, the placer's candidates and its tests: E3 by FR-003",
-  "tier": "E3"
+  "moved": "wave 27: the session's E3 re-tier withdrawn - its trial changed more than the fix (it also broke out of the bend loop and turned the bend), and the literal fix (cap 0 down the fall, the strict downhill check) passes all 28 brook tests (amendment 26 round 1 reproduced it); done in wave 27",
+  "tier": "E2"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/water/brook_rules.py::BEND_DIP_FT#bend dip allowance": {
   "after": [],
@@ -736,8 +736,8 @@
   ],
   "fix": "retire BEND_DIP_FT as a climb allowance: with bends across the run and a strict monotone check it has nothing left to allow",
   "flag": "",
-  "moved": "wave 27 trial (measured 2026-10-08): with no dip down the fall and the downhill check strict, a run across the fall takes no bend and its candidate is refused; 6 of 28 tests in tests/hamletgen/test_brook.py then fail, among them the A plan's brook placement and the last-candidate fallbacks (the placer returns no course) - breaking a run across the fall needs another construction (a bend that keeps every leg level or downhill, or a course re-routed off the fall's contour), across bend_runs, the placer's candidates and its tests: E3 by FR-003",
-  "tier": "E3"
+  "moved": "wave 27: the session's E3 re-tier withdrawn - its trial changed more than the fix (it also broke out of the bend loop and turned the bend), and the literal fix (cap 0 down the fall, the strict downhill check) passes all 28 brook tests (amendment 26 round 1 reproduced it); done in wave 27",
+  "tier": "E2"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::_polder_candidate#surveyed block": {
   "after": [],
