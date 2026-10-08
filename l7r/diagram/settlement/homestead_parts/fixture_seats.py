@@ -213,13 +213,12 @@ def within_reach_of(r: Rect, house: Rect, reach: float) -> bool:
     the house's outline, measured true (a box test let a privy off a corner stand about 68 ft out)?
 
     Research: the privy's reach - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: no more than 48 ft from its house"""
-    for sx in (-1.0, 1.0):
-        for sy in (-1.0, 1.0):
-            gx = max(0.0, abs(r[0] + sx * r[2] / 2 - house[0]) - house[2] / 2)
-            gy = max(0.0, abs(r[1] + sy * r[3] / 2 - house[1]) - house[3] / 2)
-            if math.hypot(gx, gy) > reach:
-                return False
-    return True
+    # THE FAR CORNER ALONE (feature 328, perf-audit of batch 3): each axis's gap is largest at the corner farther from the
+    # house, so that corner is the only one that can fail - one squared comparison, the same answer as four hypots (asked
+    # ~150,000 times on a 40-household roll)
+    gx = max(0.0, abs(r[0] - house[0]) + r[2] / 2 - house[2] / 2)
+    gy = max(0.0, abs(r[1] - house[1]) + r[3] / 2 - house[3] / 2)
+    return gx * gx + gy * gy <= reach * reach
 
 
 def clears(r: Rect, taken: Sequence[Rect], gap: float) -> bool:

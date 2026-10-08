@@ -1,0 +1,66 @@
+{
+  "band": 3,
+  "base": {
+    "commit": "3f91becf2",
+    "label": "328-start",
+    "utc": "20261008T220741Z"
+  },
+  "binding": "0da5bf59db6fe8d1ecb30d201dbf211f27b5ff11ca39594fa09d9d8fe3112293",
+  "criteria": {
+    "commensurate": "Not shown. Seed 4 at the reference size +17.4% (+0.8 s) and seed 47 at 40 hh +23.8% (+3.1 s; perf-audit re-run 13.3 -> 15.9 s) buy a privy and heap seated per 0042 and 0047. The time is the web repairing knots and strands on those seats - the defect this feature logged at 37685f9ef (wave 52's privy and heap seats left knots; T137 open). Seed 25 at 40 hh now refuses outright, and no functionality offsets that. The 10 and 20 hh totals fell (-7.2%, -1.3%), so this is not a steady cost; it is a seating-quality cost on particular rolls.",
+    "necessary": "Partly. The re-seatings are asked for: 0047's privy within 48 ft (f83a9214b, 3b4d2fc4d), 0042's heap away from the house (e4c99b277), the barn seat withdrawn at spec-fidelity (19f69655c). The time is not that work: hamletgen/ways is unchanged between the legs, and the growth is the web's repair passes firing on the new seats - seed 47 at 40 hh resettle_straightened 0.19 -> 4.60 s profiled with a second settle_the_web and settle_knots 2 -> 4 calls; seed 4 at 15 hh drop_stranding 0 -> 1.15 s and bund clear 15 -> 445 calls. A perf-audit control at 4451df09a with the reach filter removed returns seed 47 at 40 hh to 13.1 s (start re-run 13.3 s), and seed 25 at 40 hh draws again (13.0 s).",
+    "no_way_around": "A cheaper way exists and was measured. within_reach_of tests all four corners with hypot for every offered privy seat (149,854 calls at 40 hh seed 47), but only the corner farthest on both axes can fail. One squared comparison on that corner gives the identical outcome on all 16 rolls (same placer calls, same refusal, web within 0.03 s) and cuts homesteads 6.03 -> 5.86 s at 40 hh seed 47 and 1.31 -> 1.24 s at 15 hh. For the web's share, a seating that keeps 0042 and 0047 without leaving knotted or stranded ways has not been tried (d7586617f's KNOTTED_TRIES did this for Kuwabata alone); until it is, the repair cost is not shown unavoidable."
+  },
+  "end": {
+    "commit": "4451df09a",
+    "label": "328-end",
+    "utc": "20261008T224031Z"
+  },
+  "environment": "local",
+  "feature": "328-match-the-research",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "8d3395e5-fe32-4f85-9c89-80c344d2ac1a",
+    "utc": "20261008T231050Z"
+  },
+  "kind": "audit",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": 10.7,
+          "39": -23.5,
+          "4": -14.7,
+          "47": 3.4
+        },
+        "total_pct": -7.2
+      },
+      "20": {
+        "seeds": {
+          "25": 8.1,
+          "39": 3.9,
+          "4": -10.1,
+          "47": -5.2
+        },
+        "total_pct": -1.3
+      },
+      "40": {
+        "seeds": {
+          "39": -1.9,
+          "4": -3.6,
+          "47": 23.8
+        },
+        "total_pct": 5.7
+      }
+    },
+    "seeds": {
+      "25": 7.7,
+      "39": -2.5,
+      "4": 17.4,
+      "47": 0.0
+    },
+    "total_pct": 6.0
+  },
+  "note": "perf-audit's own runs, detached worktrees under scratchpad/pa328b3: make perf at start 3f91becf2 16.6 s, end 4451df09a 17.4 s, end with the one-corner reach test 17.3 s, end with no reach filter 17.2 s; per-commit web profiles of seed 4 at 15 hh; per-commit seed 47 at 40 hh. Band 3: the GM's personal sign-off is owed regardless (40 hh seed 47 +23.8% > 20%).",
+  "verdict": "not-justified"
+}

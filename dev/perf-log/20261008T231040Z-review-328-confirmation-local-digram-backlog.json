@@ -1,0 +1,61 @@
+{
+  "band": 3,
+  "base": {
+    "commit": "3f91becf2",
+    "label": "328-start",
+    "utc": "20261008T220741Z"
+  },
+  "binding": "0da5bf59db6fe8d1ecb30d201dbf211f27b5ff11ca39594fa09d9d8fe3112293",
+  "end": {
+    "commit": "4451df09a",
+    "label": "328-end",
+    "utc": "20261008T224031Z"
+  },
+  "environment": "local",
+  "feature": "328-match-the-research",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "8d3395e5-fe32-4f85-9c89-80c344d2ac1a",
+    "utc": "20261008T231040Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": 10.7,
+          "39": -23.5,
+          "4": -14.7,
+          "47": 3.4
+        },
+        "total_pct": -7.2
+      },
+      "20": {
+        "seeds": {
+          "25": 8.1,
+          "39": 3.9,
+          "4": -10.1,
+          "47": -5.2
+        },
+        "total_pct": -1.3
+      },
+      "40": {
+        "seeds": {
+          "39": -1.9,
+          "4": -3.6,
+          "47": 23.8
+        },
+        "total_pct": 5.7
+      }
+    },
+    "seeds": {
+      "25": 7.7,
+      "39": -2.5,
+      "4": 17.4,
+      "47": 0.0
+    },
+    "total_pct": 6.0
+  },
+  "note": "Silent on two of the crossings and wrong on a third. (1) Seed 4 at 15 households +17.4% (web 0.72 -> 1.61 s, both end legs): perf-audit bisected it per commit to 19f69655c, the barn privy withdrawn (web profiled 2.0 -> 4.5 s there and flat after; drop_stranding newly fires, bund clear 15 -> 445 calls, over_a_fixture 40 -> 485); the explanation names only seed 4's 40-household hinterland. (2) 10 households seed 25 +10.7% (homesteads 0.77 -> 1.18 s) is not mentioned. (3) Seed 47 at 40 households does not hold through wave 51: by the session's own method (perf-profile STAGE=labels HOUSEHOLDS=40) it is 12.9 s at 3f91becf2 and f83a9214b, 13.4 s at 3b4d2fc4d (the privy reach measured off a corner), 13.7 s at 3aa752419 - the bisection's 13.8 s baseline already carries about 0.8 s of the batch's growth. Consistent: the 40-household seed 47 web growth is re-seating, not web code (hamletgen/ways is unchanged between the legs; resettle_straightened 0.19 -> 4.60 s profiled, a second settle_the_web, settle_knots 2 -> 4 calls), and the barn-seat control (-1.0 s) matches. The homesteads +1.0 s is mostly layout, but it carries an unnamed steady cost: fixture_seats.lay_fixtures 3x per call (within_reach_of, 149,854 calls).",
+  "verdict": "inconsistent"
+}

@@ -233,6 +233,7 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
         crop set-back - UNRESEARCHED: 80 px, 180 px on the crop's sunny side, relaxed to 40 and 100
         keep-outs - UNRESEARCHED: 150 px from houses, 90 from wells, 120 past the pond, 70 from lanes, 60 from streams, 110 round the belt and the houses
         where the fuel wood stands - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: ranked by `woodland_tier`, below-the-houses seats dropped
+        the fields beside a seat - UNRESEARCHED: the field edge within `FIELD_BESIDE_FT` (300 ft) past the nearest point, in the map's px
         beyond the fields preferred - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: only seats across the field from the houses, the nearest slope beyond the fields, none offered on the houses' side; the walk from the houses runs through the field on every tier (`crossed_through`) - the paddy or a row holding, research/questions/0033-row-villages-resson.drawing.html's house lot, then field, then woodland - the seat also higher than the fields beside it where the ground slopes
         parcels kept apart - UNRESEARCHED: each one's exclusion 1.15-2.5 of the size
         aspect and bearing - UNRESEARCHED: up to 2.2:1, laid across the fall within 20 deg
@@ -248,6 +249,9 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
         a ring with room for a wood - UNRESEARCHED: a ring with room for fewer than `WOODLAND_MIN_CROWNS` (5) crowns is refused as a wood
         commons legibility floor - UNRESEARCHED: a ring under 120 ft is dropped rather than drawn smaller (fewer, never smaller)
     """
+    # IN THE MAP'S PIXELS (feature 328 batch 3, impl-drift): the parcel size and the commons' legibility floor are feet, and every
+    # length the scan compares them with is px - equal at a hamlet's 1 ft/px, wrong at any other grain
+    size, floor_px = s.px(size), s.px(_COMMONS_FLOOR_FT)
     dx, dy = plan.fall
     keep: list[tuple[float, float, float]] = []  # (x, y, radius) of everything to stay clear of
     for h in s.M.get("houses", []):
@@ -372,7 +376,7 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
             # the same thing in one line and leaves `half_used = half` unconditionally safe, because
             # every rung that survives to the accept block is already above the floor. Either way a
             # settlement whose ground cannot hold a legible commons draws FEWER, never smaller.
-            if size_try < _COMMONS_FLOOR_FT:
+            if size_try < floor_px:
                 continue
             half = size_try / 2.0
             _sb_pad = 0.415 * half if _sb_normal < 80.0 else 0.0  # the diagonal slack (see above); the generous profile keeps its historical thresholds exactly
@@ -565,7 +569,7 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
                 # the reach a rotated parcel needs is its circumscribing half - a 2.2:1 parcel of the
                 # same AREA reaches sqrt(2.2) further along its long axis than the square did, so the
                 # candidate is tested at that reach and the rotation cannot buy ground.
-                for _cand in (max(half * _f, _COMMONS_FLOOR_FT / 2.0), max(half * 0.84, _COMMONS_FLOOR_FT / 2.0)):
+                for _cand in (max(half * _f, floor_px / 2.0), max(half * 0.84, floor_px / 2.0)):
                     # the jitter moves a seat off the row check it passed, so the moved seat is asked the row rule too (woods W04)
                     if _ok(jx, jy, _cand) and not in_a_ruled_line((jx, jy), centers):
                         x, y, half_used = jx, jy, _cand
@@ -657,7 +661,7 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
                     # is plumbing that only a real site can execute, and pinning a cohort member to
                     # execute it is what made `test_woodland_shrink_147` rot twice (features 147 and
                     # 149) before it was re-aimed a third time.
-                    _cand_half = fit_square_parcel(half_used, _COMMONS_FLOOR_FT / 2.0, lambda _h, _x=x, _y=y: _ok(_x, _y, _h) and _bbox_ok(_h, _h))
+                    _cand_half = fit_square_parcel(half_used, floor_px / 2.0, lambda _h, _x=x, _y=y: _ok(_x, _y, _h) and _bbox_ok(_h, _h))
                     half_used, _asp = (_cand_half, 1.0) if _cand_half is not None else (half_used, _asp)
                 if not _asp:
                     # Nothing fits. Drop the parcel rather than draw one the crop will cut off: a
@@ -679,7 +683,7 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
                 # a lot the cut leaves under it is not drawn - FEWER, never smaller
                 _bounds = bounds_near(_lot_bounds, (x, y), _hw)
                 _ring = follow_the_bounds(_ring, (x, y), _bounds)
-                if not lot_follows_its_bounds(_ring, _bounds) or ring_span(_ring) < _COMMONS_FLOOR_FT:
+                if not lot_follows_its_bounds(_ring, _bounds) or ring_span(_ring) < floor_px:
                     continue
                 # ...AND THE RING THAT IS DRAWN STANDS ON DRY GROUND, by the rule's own measure (feature 287, FR-003; woods
                 # W12): the 3x3 probe above samples the circumscribing SQUARE, and a marsh finger threading between its
