@@ -1060,5 +1060,5 @@ Sawada's web, which the settle had left (Sawada's other knot, the found row it w
 
 - [ ] T81 the polder's outer edge fixed; the five hamlets regenerated (Kuwabata re-rolls) (FR-004, FR-005)
       research: rendering
-- [ ] T82 the claims re-checked by `impl-drift`; the glyph check (perimeter dike on Kuwabata); the close: wave 28's own bookend pair, `make done` green, the wave column (FR-005, FR-006)
+- [ ] T82 the claims re-checked by `impl-drift`; the glyph checks (the perimeter dike on Kuwabata; the village lanes of Kuwabata and Sawada); the close: wave 28's own bookend pair, `make done` green, the wave column (FR-005, FR-006)
       research: rendering
