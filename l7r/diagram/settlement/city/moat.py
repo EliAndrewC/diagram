@@ -198,7 +198,9 @@ class MoatMixin:
             frame span - research/questions/0179-water-gates-and-sluices-shuimen.drawing.html: the drawing page's GUESS, a field sluice about 16 to 24 ft, a wider channel bank to bank; about 8 px, stretched to span when given
             caption - CONVENTION: 9 pt italic
         """
-        rec = {"x": round(x, 1), "y": round(y, 1), "rot": round(rot, 1)}
+        rec: dict[str, float] = {"x": round(x, 1), "y": round(y, 1), "rot": round(rot, 1)}
+        if span is not None:
+            rec["span"] = round(span, 1)  # the frame bank to bank: the matrix sizes the gate's box from it
         refuse_unadmitted(self.M, "sluice_gates", rec)
         wc = '#3A352C'
         # `span` stretches the frame ACROSS its channel so the posts stand on the BANKS (GM

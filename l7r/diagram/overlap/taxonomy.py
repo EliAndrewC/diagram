@@ -795,7 +795,7 @@ def _mx_stroke(pts: Sequence[Any], hw: float) -> list[list[tuple[float, float]]]
 _MX_FIXTURE_BOX: dict[str, Any] = {
     "bridges": lambda o: (float(o["span"]), float(o["w"])),  # the deck: span along the way, deck width across
     "jetties": lambda o: (float(o["len"]), 6.4),  # the planked finger, at the width the glyph draws
-    "sluice_gates": lambda o: (11.0, 11.0),  # the board and its cheeks - a small square control structure
+    "sluice_gates": lambda o: (max(10.8, float(o.get("span") or 0.0)), 8.4),  # post to post across the channel (bank to bank where a span is recorded), the beam and drum to the posts along it
     "weirs": lambda o: (float(o["len"]), float(o["w"])),  # the oblique bar: its length across the brook, its thickness along it
 }
 """Research: drawn fixture box - NONE: mirrors each glyph's drawn size"""

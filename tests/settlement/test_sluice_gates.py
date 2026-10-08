@@ -65,3 +65,18 @@ def test_the_span_widens_the_frame_so_its_posts_stand_on_the_banks() -> None:
         return max(widths) if widths else 0.0
 
     assert _board_width(wide.top) > _board_width(narrow.top), "a 66 ft leat got no wider a frame than a field ditch"
+
+
+def test_the_gate_s_drawn_box_spans_bank_to_bank() -> None:
+    """Feature 328 row 513 (0179's field sluice, about 16 to 24 ft, a wider channel bank to bank): the matrix sizes the gate's
+    box from the span it recorded, so a frame stretched across a wide leat is judged at the width it is drawn, never a fixed
+    11 x 11; with no span the field-channel frame's own post-to-post 10.8 holds."""
+    from l7r.diagram.overlap.taxonomy import _MX_FIXTURE_BOX
+
+    s = _s()
+    s.sluice_gate(400.0, 500.0, rot=90.0)
+    s.sluice_gate(900.0, 500.0, rot=90.0, span=40.0)
+    plain, wide = s.M["sluice_gates"]
+    assert "span" not in plain and wide["span"] == 40.0
+    assert _MX_FIXTURE_BOX["sluice_gates"](plain) == (10.8, 8.4)
+    assert _MX_FIXTURE_BOX["sluice_gates"](wide) == (40.0, 8.4)

@@ -493,5 +493,9 @@
  "l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton arm's corridor": "48",
  "l7r/diagram/hamletgen/consts.py::LANE_CLEARANCE#fronting lane's corridor": "48",
  "l7r/diagram/hamletgen/ways/bund.py::a_way_onto_the_bund#field path's corridor": "48",
- "l7r/diagram/hamletgen/ways/bund.py::carry_on#stepped spur's corridor": "48"
+ "l7r/diagram/hamletgen/ways/bund.py::carry_on#stepped spur's corridor": "48",
+ "l7r/diagram/labels/placer.py::place#never left off": "49",
+ "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#notice board at the roadside": "49",
+ "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#supply canal along the dry hem": "50",
+ "l7r/diagram/overlap/taxonomy.py::_MX_FIXTURE_BOX#drawn fixture box": "50"
 }
