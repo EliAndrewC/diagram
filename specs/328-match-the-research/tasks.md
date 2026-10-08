@@ -20,17 +20,17 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 - glyph-redrawn: field pond on inashiro - wave 51: the field pond drawn as a dish pond (0008), a bank ring on wet ground
   round the open water, reeds on the margin; batch 3's close
 - glyph-redrawn: field pond on mizuguchi - wave 51: the same dish pond; batch 3's close
-- placement-changed: wood shed on inashiro - wave 51: the shed off the house's own walls only, never the front, no extra
+- (reviewed PASS at batch 2's close, 2026-10-08) placement-changed wood shed on inashiro - wave 51: the shed off the house's own walls only, never the front, no extra
   pace (0043); batch 3's close
-- placement-changed: wood shed on kuwabata - wave 51: the same seat rule; batch 3's close
-- placement-changed: bath room on kashikawa - wave 51: each house rolls among the three walls, the floored rooms at 0.03 (0044: one of the registers' 36 baths in a peasant's house); one of Kashikawa's baths moves to its floored rooms; batch 3's close
+- (reviewed PASS at batch 2's close, 2026-10-08) placement-changed wood shed on kuwabata - wave 51: the same seat rule; batch 3's close
+- (reviewed PASS at batch 2's close, 2026-10-08) placement-changed bath room on kashikawa - wave 51: each house rolls among the three walls, the floored rooms at 0.03 (0044: one of the registers' 36 baths in a peasant's house); one of Kashikawa's baths moves to its floored rooms; batch 3's close
 - placement-changed: woodland commons on kashikawa - wave 47: the beyond-the-fields walk counts a row holding as field, so the
   wood moves to the higher ground beyond the far row's strips (batch 1's round 3 NEEDS-WORK); run at batch 2's close
-- placement-changed: copse on kuwabata - wave 47: every copse crown gives way round a yard persimmon wholly; batch 2's close
-- placement-changed: homestead grove on kashikawa - wave 47: every grove crown gives way round a yard persimmon wholly
-- placement-changed: village lane on inashiro - wave 46: the track out drawn taut (no 34/46 px wander) on Inashiro, Kuwabata
+- (reviewed PASS at batch 2's close, 2026-10-08) placement-changed copse on kuwabata - wave 47: every copse crown gives way round a yard persimmon wholly; batch 2's close
+- (reviewed PASS at batch 2's close, 2026-10-08) placement-changed homestead grove on kashikawa - wave 47: every grove crown gives way round a yard persimmon wholly
+- (reviewed PASS at batch 2's close, 2026-10-08) placement-changed village lane on inashiro - wave 46: the track out drawn taut (no 34/46 px wander) on Inashiro, Kuwabata
   and Sawada; run at batch 1's close (T119), from round 3 on under the GM's ruling of 2026-10-08 (rounds past two allowed)
-- placement-changed: village lane on kashikawa - wave 46: the road re-squared at the brook's ford on a leg past 40 ft
+- (reviewed PASS at batch 2's close, 2026-10-08) placement-changed village lane on kashikawa - wave 46: the road re-squared at the brook's ford on a leg past 40 ft
   (`squaring.squared_against`), a different rule on a different map; run at batch 1's close (T119), round 3 on
 - none (wave 45): the hairpin and zigzag cuts and the behind-the-wall rule's removal moved no map (the five hamlets
   regenerated 2026-10-08, manifests byte-identical)
@@ -46,11 +46,11 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
   for any element; the belt claims re-cited
 - placement-changed: wet paddy on sawada - wave 40: only the draw or a pointed shape leaves a low plot green (0007); the four
   shape clauses and the outfall's keep-out, on no page, went, and the blue plots run 7 -> 16 here (Inashiro 1 -> 8, Kashikawa 4 -> 13, Mizuguchi 3 -> 7, Sawada 7 -> 16, after round 2's taper fix)
-- glyph-redrawn: windbreak on inashiro - wave 39: every grove crown in 0080's one 0.75-1.4 band, a conifer no wider than a broadleaf
+- (reviewed PASS at batch 2's close, 2026-10-08) glyph-redrawn windbreak on inashiro - wave 39: every grove crown in 0080's one 0.75-1.4 band, a conifer no wider than a broadleaf
   (the conifer-led belt's rows and the farm groves), and every crown giving way round a yard persimmon (0046)
-- glyph-redrawn: windbreak on kuwabata - wave 39: the mixed broadleaf belt in the one band, its bamboo kept (0075)
-- glyph-redrawn: copse on kuwabata - wave 39: the dooryard copse's crowns in the one band
-- glyph-redrawn: homestead grove on kashikawa - wave 39: the farm groves' crowns in the one band, and the windbreak mix's
+- (reviewed PASS at batch 2's close, 2026-10-08) glyph-redrawn windbreak on kuwabata - wave 39: the mixed broadleaf belt in the one band, its bamboo kept (0075)
+- (reviewed PASS at batch 2's close, 2026-10-08) glyph-redrawn copse on kuwabata - wave 39: the dooryard copse's crowns in the one band
+- (reviewed PASS at batch 2's close, 2026-10-08) glyph-redrawn homestead grove on kashikawa - wave 39: the farm groves' crowns in the one band, and the windbreak mix's
   conifers 48% of the CROWNS (impl-drift: it was 48% of the items, about 52% of the crowns drawn)
 - none (wave 38): the buildings-only touch in `_one_joint` moved no lane - the five pool hamlets regenerated with manifests identical (measured 2026-10-08)
 - none (wave 37): the Z pulled straight changes no pool map; the salt-ward clauses are doc text
@@ -68,7 +68,7 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 - none (wave 25): claims and one code comment, no executed code changed
 - none (wave 24): the rank step reaches no pool map; Kuwabata's two sties move 3.8 and 1.7 ft along their own bank (measured 2026-10-08, kuwabata.json 397c005fb vs HEAD)
 - none (wave 23): claims only, no executed code changed
-- placement-changed: farm holding on kashikawa - wave 22: the far-row holding three LOTS deep (0033 drawing: three times the frame's
+- (reviewed PASS at batch 2's close, 2026-10-08) placement-changed farm holding on kashikawa - wave 22: the far-row holding three LOTS deep (0033 drawing: three times the frame's
   width), not three frame depths; Kashikawa's holdings run deeper (47 dry plots to 67), its houses unmoved.
 - none (wave 21): two claims written - no code a map executes changed.
 - placement-changed: woodland commons on kashikawa - wave 20: a wood only where the walk from the houses runs THROUGH the field and
@@ -82,7 +82,7 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 - placement-changed: woodland commons on kashikawa - wave 19: the same; Kashikawa's woods move across its field.
 - none (wave 18): the thicket's 70% passes dropped moved nothing drawn - measured: Kashikawa's and Mizuguchi's thickets were seated
   at full size and their manifests are unchanged; the other rows are claims.
-- placement-changed: shared bamboo grove on kashikawa - wave 17: every thicket pass holds the stand just beyond the back row
+- (reviewed PASS at batch 2's close, 2026-10-08) placement-changed shared bamboo grove on kashikawa - wave 17: every thicket pass holds the stand just beyond the back row
   (0075 drawing; its near edge within `THICKET_ROW_DEPTH_FT` of the row's back edge): Kashikawa's thicket moves from 88 ft
   behind its row to against it; Mizuguchi's, the other pool thicket, stands where it stood.
 - none (wave 16): the two retired knob forms moved nothing drawn - measured on the regenerated maps against the base: Mizuguchi,
@@ -100,7 +100,7 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 - none (amendment 8 and wave 9): the scope is a ranking column and a deferred list; wave 9's fixes move values inside rules
   that already place or size the element (a step off a wall, a reach, a crown floor, a share, a depth, a width, a size)); the
   dike gate's span sizes a glyph no pool map's manifest records (`dike_gates`), and the commons fill, a glyph change, moved to E2.
-- glyph-redrawn: notice board on inashiro - wave 10 sizes the kosatsuba to the page's 16 x 6 ft (from 12 x 5) and turns it
+- (reviewed PASS at batch 2's close, 2026-10-08) glyph-redrawn notice board on inashiro - wave 10 sizes the kosatsuba to the page's 16 x 6 ft (from 12 x 5) and turns it
   30 degrees to its way (from 45); its other rows move values inside rules that already place or size their elements.
 - none (wave 11): claim lines and three values inside rules that already place or size their elements (the hem's fallback
   watercourse widths, the stub's bund reach in pixels, the polder's default gaps in feet); no glyph redrawn, no element new.
