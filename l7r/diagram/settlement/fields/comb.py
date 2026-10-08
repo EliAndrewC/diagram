@@ -454,7 +454,7 @@ class CombMixin:
 
         Research:
             top-up scope - research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html: a generated comb hamlet whose fan middle is wild
-            drained acres - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: every plot not painted as wet paddy counts as drained
+            drained acres - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: every plot off the drain-side lowest row and not painted as wet paddy counts as drained; the row's green plots are as wet as its blue ones
             need and count - research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html: the winter crop rolled among the site's forms, the band topped up to the need"""
         from l7r.diagram.waterfields import FLOODED
 
@@ -462,7 +462,7 @@ class CombMixin:
         if meta.get("generated_by") != "hamletgen" or "fan_middle" not in meta or "dry_reserve" not in net:
             return []
         ft2 = float(meta.get("ftpx") or 1.0) ** 2 / SQ_FT_PER_ACRE
-        drained = sum(poly_area(p["poly"]) for p in net.get("plots", []) if p.get("fill") != FLOODED) * ft2
+        drained = sum(poly_area(p["poly"]) for p in net.get("plots", []) if p.get("fill") != FLOODED and not p.get("low")) * ft2  # the drain-side row is all as wet as its blue plots (0007)
         offered = [p for p in net["dry_reserve"] if not refused(p["poly"])]
         households = int(meta.get("households") or 0)
         room = (drawn_px2 + sum(poly_area(p["poly"]) for p in offered)) * ft2

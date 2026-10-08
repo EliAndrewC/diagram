@@ -91,6 +91,16 @@ def test_a_wet_paddy_carries_no_winter_barley_so_the_band_is_topped_up_all_the_s
     assert (400.0, 100.0) in _drawn(s), "the blue plot is shitsuden, too wet for barley"
 
 
+def test_a_green_plot_of_the_drain_side_row_carries_no_winter_barley_either() -> None:
+    """Feature 328 (0007: the lowest row's green plots are as wet as its blue ones): a plot of the drain-side row counts as
+    wet whatever its tint, so the band is topped up as for a blue one."""
+    s = _hamlet(2, "barley")
+    net, source = _net("#7FA35A")
+    net["plots"][0]["low"] = True
+    s._comb_draw_hem(net, source)
+    assert (400.0, 100.0) in _drawn(s), "the low row's green plot is not drained"
+
+
 def test_the_knob_offers_only_the_forms_this_ground_can_feed() -> None:
     """The violating case: ten households need 8.5 acres of dry field, and the toe and the middle offered hold 3.7. Bare
     over the winter is never rolled there; with the drained paddy's barley the need left is nil and the band holds it."""

@@ -381,6 +381,7 @@
  "l7r/diagram/settlement/farm_fixtures.py::kura_rect#annex held in its band": "E2",
  "l7r/diagram/settlement/farm_fixtures.py::kura_rect#annex larger than a kura": "E0",
  "l7r/diagram/settlement/farm_fixtures.py::kura_rect#west annex size": "E1",
+ "l7r/diagram/settlement/fields/comb.py::CombMixin._coarse_grain_top_up#drained acres": "E2",
  "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_ditches#outfall recorded width": "E1",
  "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#bank beside the source brook": "E1",
  "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_hem#bank margin in feet": "E1",
