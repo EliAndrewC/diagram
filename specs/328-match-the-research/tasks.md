@@ -13,7 +13,7 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 - (wave 5, landed and reviewed) placement-changed village lane on kashikawa - wave 5: 0033's row street runs on off the map as the road into it at both ends, where
   the web cut it back to its last joint (`trim_streets`); Kashikawa's and Mizuguchi's far ends now run off the sheet as a
   second way out (every way is inked `village lane`).
-- none (wave 38): the fence clearance in `_one_joint` moved no lane - the five pool hamlets regenerated with manifests identical (measured 2026-10-08)
+- none (wave 38): the buildings-only touch in `_one_joint` moved no lane - the five pool hamlets regenerated with manifests identical (measured 2026-10-08)
 - none (wave 37): the Z pulled straight changes no pool map; the salt-ward clauses are doc text
 - none (wave 36): claims only, no executed code changed
 - none (wave 35): claims only, no executed code changed

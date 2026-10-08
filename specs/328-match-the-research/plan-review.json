@@ -1,6 +1,6 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "547c4e9684f2efab5f0f10dea459c5ccd68b70b2b0d791424fc0e424393b8325",
+ "plan_sha256": "66261f631c47a08cdf24810ed99346721f0daa63f548b5183a648d9ef0d15836",
  "reviewed": "2026-10-08",
  "declared": "spec-fidelity",
  "decisions": [
@@ -18,37 +18,41 @@
   },
   {
    "id": "W38-clearance",
-   "summary": "the pulled lane's clearance row re-tiered E2 and fixed: straighten_joints passes the threshing yards and gardens to _one_joint, whose pull also needs _clear_touch at 7 ft against them; everything else keeps the touch at max(4, w/2+2)",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "Round 1's item was that 0081 licenses the touch for BUILDINGS only ('keep its usual clearance from fences and buildings. It may come right up to the buildings'); the fix takes two kinds OUT of the touch rather than limiting it TO buildings. _clear_touch(p[a], p[b], hard, walls, water, g) still applies g (4-4.5 ft) to hard = hard_built (the crop, marsh and wet toe, whose usual clearance is 0081's own 8 ft WEB_HARD_GAP) and to walls = the whole fabric (per-house groves, wells, the wood seat, commons and village groves, non-building fixtures). The fix is right for fences; the rest of the exception's reach is still unlicensed, and the claim line now reads 'where a straightened lane touches a BUILDING' and tasks.md says the touch 'is the buildings' alone' - both false of the code (round 1's grounds: the claim does not say what the code does). Remedy: the touch at g against the buildings only (houses, sheds, byres, retirement houses, and whichever fixtures the session records as buildings), every other obstacle at _clear_link's usual margins (8 ft hard, 7 ft fabric); or FR-004's exception path with a measurement if that cannot be done."
+   "summary": "the pulled lane's clearance row re-tiered E2 and fixed (bdc9d5053): straighten_joints hands _one_joint the buildings (_BUILDINGS: houses, farm_sheds, byres, retirement_houses from _homestead_polys); a pull passes if _clear_link clears it at the usual margins against everything, or if _clear_link clears it against hard and walls with the buildings removed AND _clear_touch at g = max(4, w/2+2) clears it against the buildings alone AND every dropped vertex is within _JOG_FT (6 ft) of the new line",
+   "class": "within",
+   "why": "Round 2's item is met. 0081: 'keep its usual clearance from fences and buildings. It may come right up to the buildings when the straightened line stays within 6 ft of the old one.' The touch at g now reaches the buildings only; the crop, envelope, toe and marsh (hard, 8 ft) and the fences, groves, wells, wood seats, commons and fixtures (walls, 7 ft) keep _clear_link's usual margins, and the 6 ft condition rides only the touch branch. The exclusion is by exact polygon key and is sound: at web.py:600-627 hard_built's _solid and walls are both built from the same _homestead_polys(s) list straighten_joints reads, so a building's polygon is the same tuple in all three (seated parts, whose sheds carry another kind, are cleared at household_ways.py:124 before the web runs). The claim line ('all but the buildings keep the usual clearance ... a fence, a grove, a well, a fixture and the crop keep _clear_link's margins') and tasks.md Phase 39 now say what the code does. test_a_pull_may_touch_a_building_and_nothing_else (houses straightened, garden and well kept) passes on the clone (make test-file, 2026-10-08). The exception is now exactly the page's, so it is no longer a narrowing to rule on."
   },
   {
    "id": "W38-clearance-dup",
    "summary": "the duplicate clearance row, re-tiered E2 with the same fix",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "Same unit and same code as W38-clearance; it falls with it."
+   "class": "within",
+   "why": "Same unit and same code as W38-clearance; it stands with it."
+  },
+  {
+   "id": "W38-fixtures",
+   "summary": "farm fixtures (privy, manure heap, bath, coop, hokora) not counted among the buildings a pull may touch; they keep the usual 7 ft",
+   "class": "within",
+   "why": "0081 licenses the touch for 'the buildings' and is otherwise the usual clearance; 0246's own enumeration ('houses, yards, beds, sheds, wells and fixtures are fabric a lane keeps off') lists fixtures as a class apart from houses and sheds, so withholding a permissive 'may' from them applies the page's rule as written rather than narrowing it (the tie goes to the page's default). Not a finding, one note for T102's impl-drift: the _BUILDINGS docstring glosses the buildings as 'the roofed fabric', which a privy, bath, coop and hokora also are - the reason is 0246's separate fixtures class, not roofing, and the line should say so (or label the boundary CONVENTION)."
   },
   {
    "id": "W38-gate",
    "summary": "docs/buildings.md main gate passage width tiered E3 and left for its place in the run; the 0093 pointer written in full",
    "class": "within",
-   "why": "Unchanged since round 1 but for the pointer's full file name: FR-003's E3, FR-006's order takes it later."
+   "why": "Unchanged since round 1: FR-003's E3, FR-006's order takes it later."
   },
   {
    "id": "W38-occasions",
-   "summary": "no review occasion: the fence clearance moved no pool lane (five hamlets regenerated, manifests identical, measured 2026-10-08); the timing pair now owed and a glyph check where a lane moves",
+   "summary": "no review occasion: the pool's five hamlets regenerated on round 2's code with manifests identical (bypass log 2026-10-08T06:55Z, before the 06:59Z commit); the timing pair owed and a glyph check where a lane moves",
    "class": "within",
-   "why": "Feature 294's occasions are opened by a changed map; executed code now changes, so the plan owes the constitution VI pair, and it says so."
+   "why": "Feature 294's occasions are opened by a changed map and none changed; executed code changed, so the constitution VI pair is owed, and the plan says so. tasks.md:16 and this decision's old summary still say 'the fence clearance' moved no lane - stale wording for round 2's buildings-only touch, worth a word when T102 closes, not a fidelity finding."
   },
   {
    "id": "W38-cond6",
    "summary": "condition (6) on the unpushed waves: (1) held but for the backup push pending the GM's call on the 329 merge commit; (2)-(5) held at 989dbd862; wave 38 owes the pair",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "The same narrowing ruled LEGITIMATE at amendments 34-36; 989dbd862 is wave 37's close in the log."
+   "why": "Unchanged since round 2: the same narrowing ruled LEGITIMATE at amendments 34-37; 989dbd862 is wave 37's close in the log."
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }

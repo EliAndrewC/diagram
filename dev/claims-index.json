@@ -17709,6 +17709,20 @@
   ],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/ways/joints.py::_BUILDINGS#what a pull may touch": {
+  "code": "1a8472c263109677",
+  "core": "cd1b48c345ef4d3f",
+  "date": "2026-10-08",
+  "note": "the touch is limited to buildings (houses, farm sheds, byres, retirement houses), as \"may come right up to the buildings\" says; the second page it cites (0246) was not in the bundle, so its quote about fixtures was not checked",
+  "pages": {
+   "0081-village-lanes.drawing.html": "9e27759395199abd"
+  },
+  "research": "ebd72aaa6a0eb9af",
+  "rests": [
+   "0081-village-lanes.drawing.html:18dffe2b3b52b18c"
+  ],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/ways/joints.py::_JOINT_FT#plumbing": {
   "code": "496f0ac33ef3f4e6",
   "core": "7276802b5dc226e3",
@@ -17765,6 +17779,16 @@
   "triaged": "2026-10-05",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/ways/joints.py::_key#plumbing": {
+  "code": "fa8cc1e20e638c53",
+  "core": "744cf24e6699d17e",
+  "date": "2026-10-08",
+  "note": "turns a polygon into a hashable key",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/ways/joints.py::_one_hook#a lane's end loses its hook": {
   "code": "e1087298de65a02f",
   "core": "0ae8c2c327b540f0",
@@ -17781,10 +17805,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/joints.py::_one_joint#a fold at a joint becomes a T": {
-  "code": "13a55a8cfc184898",
-  "core": "aa7fdcfd5c21dfd9",
+  "code": "da421a1660308d9c",
+  "core": "c950502f0a03cf3c",
   "date": "2026-10-08",
-  "note": "a turn of 140 degrees or more at the joint (_HAIRPIN_DEG) becomes a T, and a Z is pulled straight or its joint moved back a vertex, as the page says",
+  "note": "a turn of 140 degrees or more at the joint becomes a T, and a Z is pulled straight",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },
@@ -17796,10 +17820,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/joints.py::_one_joint#a jog across a joint pulled straight": {
-  "code": "af5f2527d8a5cbb6",
-  "core": "aa7fdcfd5c21dfd9",
+  "code": "b9bd203da28ee18d",
+  "core": "c950502f0a03cf3c",
   "date": "2026-10-08",
-  "note": "the pull keeps a vertex only where the clear link fails, and drops it within _JOG_FT=6 ft of the chord, as in \"within 6 ft of the old one\"",
+  "note": "the string pull keeps the usual clearance through _clear_link; a pull that touches a building is allowed only when every dropped vertex is within _JOG_FT=6 of the new chord, matching \"within 6 ft of the old one\"; a jog across a joint is pulled like any other",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },
@@ -17812,10 +17836,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/joints.py::_one_joint#a pulled lane's clearance": {
-  "code": "37e421feba939fc8",
-  "core": "aa7fdcfd5c21dfd9",
+  "code": "c257ba86e57469f4",
+  "core": "c950502f0a03cf3c",
   "date": "2026-10-08",
-  "note": "the page sets no clearance figure and calls every distance in its lane bullets a drawing convention; the 5 ft default width matches the spine's 5 ft",
+  "note": "the page names no clearance figure and calls its distances drawing conventions; the 5 ft default is the spine's width",
   "pages": {},
   "research": "",
   "rests": [
@@ -17825,11 +17849,25 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/joints.py::_one_joint#no new kink from a pull": {
-  "code": "79de1e29803876b8",
-  "core": "aa7fdcfd5c21dfd9",
+ "l7r/diagram/hamletgen/ways/joints.py::_one_joint#all but the buildings keep the usual clearance": {
+  "code": "8ecd454f7e557f40",
+  "core": "c950502f0a03cf3c",
   "date": "2026-10-08",
-  "note": "a pull that adds kink spans is refused, which agrees with the no-zigzag and no-doubling-back rules",
+  "note": "only the building polygons are taken out of the hard and wall sets; water and everything else keep `_clear_link`",
+  "pages": {
+   "0081-village-lanes.drawing.html": "9e27759395199abd"
+  },
+  "research": "ebd72aaa6a0eb9af",
+  "rests": [
+   "0081-village-lanes.drawing.html:18dffe2b3b52b18c"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/joints.py::_one_joint#no new kink from a pull": {
+  "code": "3944a4de5d8a4638",
+  "core": "c950502f0a03cf3c",
+  "date": "2026-10-08",
+  "note": "a pull is refused if it adds a kink span",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },
@@ -17842,10 +17880,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/joints.py::_one_joint#the shorter link the T's stem": {
-  "code": "8e48131d5f1261c8",
-  "core": "aa7fdcfd5c21dfd9",
+  "code": "9fca1978718ed747",
+  "core": "c950502f0a03cf3c",
   "date": "2026-10-08",
-  "note": "the page makes the fold a T but does not say which lane is the stem, and picking the shorter link agrees with the shortest-way finding",
+  "note": "the page does not say which lane is the stem; the shortest-way principle points the same way",
   "pages": {},
   "research": "",
   "rests": [
@@ -17855,10 +17893,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/joints.py::_one_joint#ways of two kinds stay two": {
-  "code": "066fd2cba7aebf5b",
-  "core": "aa7fdcfd5c21dfd9",
+  "code": "b29971094340747f",
+  "core": "c950502f0a03cf3c",
   "date": "2026-10-08",
-  "note": "the joint is pulled straight like any other, then split back into two records, each keeping its own rank's width",
+  "note": "pulled straight, then split back into two records, each keeping its own width",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },
@@ -18092,27 +18130,32 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/joints.py::straighten_joints#a lane's end loses its hook": {
-  "code": "e1022d52d9a366a8",
-  "core": "528906090b0d60c5",
-  "date": "2026-10-03",
-  "note": "runs _one_hook",
+  "code": "02e22c79b97f16bc",
+  "core": "40619a486f832b8f",
+  "date": "2026-10-08",
+  "note": "hands the hook to `_one_hook`",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },
   "research": "ebd72aaa6a0eb9af",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0081-village-lanes.drawing.html:a857325132f8d4ee"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/joints.py::straighten_joints#lanes met end to end are one": {
-  "code": "4a052e30715014d8",
-  "core": "528906090b0d60c5",
-  "date": "2026-10-03",
-  "note": "fold to T, jog pulled straight",
+  "code": "912a61245460a57c",
+  "core": "40619a486f832b8f",
+  "date": "2026-10-08",
+  "note": "hands the joint to `_one_joint`, using the building set",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },
   "research": "ebd72aaa6a0eb9af",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0081-village-lanes.drawing.html:18dffe2b3b52b18c",
+   "0081-village-lanes.drawing.html:3b230d13e2fc6d0b"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/joints.py::tee#a fold at a joint becomes a T": {

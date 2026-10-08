@@ -238,8 +238,9 @@ def unhooked(pts: Poly, others: Sequence[Poly]) -> Poly | None:
 
 
 _BUILDINGS = ("houses", "farm_sheds", "byres", "retirement_houses")
-"""Research: what a pull may touch - research/questions/0081-village-lanes.drawing.html: "right up to the buildings" - the roofed
-fabric; a fixture (a privy, a heap, a coop) is not counted, so it keeps the usual clearance"""
+"""Research: what a pull may touch - research/questions/0081-village-lanes.drawing.html: "right up to the buildings" - the houses and
+their sheds; research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html names the fixtures apart (a way "leaves its
+dooryard round its own garden beds and fixtures"), so a privy, a heap or a coop keeps the usual clearance"""
 
 
 def _key(q: Poly) -> tuple[tuple[float, float], ...]:
@@ -301,8 +302,8 @@ def _one_joint(s: Settlement, lanes: list[dict[str, Any]], houses: Sequence[Pt],
         no new kink from a pull - research/questions/0081-village-lanes.drawing.html: a lane does not zigzag (two turns over 50 degrees within 40 ft) or double back, so a pull at a joint that leaves more kink_spans than the two lanes had is refused
         a pulled lane's clearance - CONVENTION: where a straightened lane touches a building it keeps max(_TOUCH_GAP 4 ft, half its width + 2 ft), a 5 ft width assumed when none is set; research/questions/0081-village-lanes.drawing.html lets it come right up to the buildings within 6 ft of the old line and calls every distance in its lane bullets a drawing convention, but gives no clearance figure
         all but the buildings keep the usual clearance - research/questions/0081-village-lanes.drawing.html: the touch is the buildings' (houses, farm sheds, byres, retirement houses); a fence, a grove, a well, a fixture and the crop keep `_clear_link`'s margins, as an unpulled lane does
-        a jog across a joint pulled straight - research/questions/0081-village-lanes.drawing.html: string-pulled, a vertex
-            within 6 ft of the chord dropped
+        a jog across a joint pulled straight - research/questions/0081-village-lanes.drawing.html: string-pulled wherever the
+            chord keeps the usual clearance; where it touches a building, every dropped vertex within 6 ft of the new line
         ways of two kinds stay two - research/questions/0081-village-lanes.drawing.html: a jog across a joint pulled straight
             like any other; a cart route and a footpath, or a web and a non-web lane, met end to end, split back into their
             two records after the pull (`_split_committed`), each keeping its own width"""
