@@ -1,17 +1,19 @@
 {
  "docs/buildings.md::Adding a building type#type workflow": {
-  "code": "1c209f9f2346f815",
-  "core": "8633a6de2b56399b",
-  "date": "2026-10-03",
-  "note": "process only",
+  "code": "ac95c05fb57627ec",
+  "core": "b0409a92cbedd11c",
+  "date": "2026-10-08",
+  "note": "workflow plumbing only",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Approaches and surroundings#boundary pillars": {
-  "code": "0474f1dd72d2ecc1",
-  "core": "8ef7fb73fca34db5",
-  "date": "2026-10-05",
-  "note": "Ubame's pillar is ~3 x 3.7 ft, but the page gives \"about 1 to 1.5 ft of shaft, up to about 3 ft with a plinth\"; the sheet or the page must change",
+  "code": "256f3908b2001b11",
+  "core": "afa1187219969616",
+  "date": "2026-10-08",
+  "note": "Ubame's ~3 x 3.7 ft pillar is over \"about 1 to 1.5 ft of shaft, up to about 3 ft with a plinth\"; the page also records this size as a GUESS",
   "pages": {
    "0083-clan-borders-and-their-markers.drawing.html": "aae7d10697713dff"
   },
@@ -22,18 +24,20 @@
   "verdict": "DRIFTED"
  },
  "docs/buildings.md::Approaches and surroundings#canopy glyph": {
-  "code": "26503d5ed2625db5",
-  "core": "8ef7fb73fca34db5",
-  "date": "2026-10-03",
-  "note": "drawing convention (note that \"touch at most\" differs from the grove's overlapping crowns)",
+  "code": "e697c54a2d7433da",
+  "core": "afa1187219969616",
+  "date": "2026-10-08",
+  "note": "how a tree is shown",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Approaches and surroundings#cart lane to a side gate": {
-  "code": "c2b220ad30fdd784",
-  "core": "8ef7fb73fca34db5",
-  "date": "2026-10-05",
-  "note": "the sheets draw 9 and 10.7 ft lanes, but both pages say a cart lane is \"about 6 ft\" (a GUESS)",
+  "code": "c037e498ee48c29d",
+  "core": "afa1187219969616",
+  "date": "2026-10-08",
+  "note": "sheets draw 9 and 10.7 ft lanes where the page says \"about 6 ft where carts use it\"",
   "pages": {
    "0082-moving-goods-carts-packhorses-and-river-landings-kashi.drawing.html": "85212996326713e7",
    "0088-highways-and-what-lines-them-kaido.drawing.html": "be38120bdcb9fa58"
@@ -43,39 +47,38 @@
    "0082-moving-goods-carts-packhorses-and-river-landings-kashi.drawing.html:0a998c14d09c7362",
    "0088-highways-and-what-lines-them-kaido.drawing.html:8a0b103100180964"
   ],
-  "triaged": "2026-10-05",
   "verdict": "DRIFTED"
  },
  "docs/buildings.md::Approaches and surroundings#empty surroundings": {
-  "code": "5eace34a0a3e06be",
-  "core": "8ef7fb73fca34db5",
-  "date": "2026-10-03",
-  "note": "drawing convention",
+  "code": "d57055e59ab57406",
+  "core": "afa1187219969616",
+  "date": "2026-10-08",
+  "note": "leaving the parchment empty is a drawing choice",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Approaches and surroundings#notice board size": {
-  "code": "b14f66c1b7474701",
-  "core": "8ef7fb73fca34db5",
-  "date": "2026-10-05",
-  "note": "the boards are ~7 x 3 and ~9 x 4 ft, but the page draws \"a roofed frame 16 ft long and 6 ft deep\"; 7 x 3 ft is only the search's test face",
+  "code": "bb1ca2ec2fbd68f4",
+  "core": "afa1187219969616",
+  "date": "2026-10-08",
+  "note": "sheets draw ~7x3 and ~9x4 ft boards; the page draws \"a roofed frame 16 ft long and 6 ft deep\", and 7x3 ft is only the size the search tests",
   "pages": {
    "0190-notice-boards-kosatsuba.drawing.html": "6046a6a69d20be53"
   },
   "research": "3b4a965d33e6f331",
   "rests": [
    "0190-notice-boards-kosatsuba.drawing.html:00e4ac62d04e42dd",
-   "0190-notice-boards-kosatsuba.drawing.html:0d8ca713e70426df",
-   "0190-notice-boards-kosatsuba.drawing.html:2ceb799ba8f67923",
    "0190-notice-boards-kosatsuba.drawing.html:4000a252d8f22fd1"
   ],
   "verdict": "DRIFTED"
  },
  "docs/buildings.md::Approaches and surroundings#road at the gate": {
-  "code": "ef68512090466890",
-  "core": "8ef7fb73fca34db5",
-  "date": "2026-10-05",
-  "note": "the sheets draw 8 and 12 ft roads, but the page says the gate road is the road's own width: \"the 30 ft\" on the Imperial road, \"15 to 24 ft\" on a lesser highway",
+  "code": "aab3b29d395aca15",
+  "core": "afa1187219969616",
+  "date": "2026-10-08",
+  "note": "Ochiba's Imperial road is 8 ft and the others 12 ft, where the page says the Imperial road is \"at the 30 ft it is drawn everywhere else\" and a lesser highway 15-24 ft",
   "pages": {
    "0088-highways-and-what-lines-them-kaido.drawing.html": "be38120bdcb9fa58"
   },
@@ -83,248 +86,331 @@
   "rests": [
    "0088-highways-and-what-lines-them-kaido.drawing.html:567067c7560f4325",
    "0088-highways-and-what-lines-them-kaido.drawing.html:7336b6f855fd2b4c",
-   "0088-highways-and-what-lines-them-kaido.drawing.html:f0fd502c959cebfe"
+   "0088-highways-and-what-lines-them-kaido.drawing.html:7b5b5f842665a66e"
   ],
   "verdict": "DRIFTED"
  },
  "docs/buildings.md::Approaches and surroundings#road to gate": {
-  "code": "a86d783e397398a4",
-  "core": "8ef7fb73fca34db5",
-  "date": "2026-10-03",
-  "note": "drawing convention",
+  "code": "cb49c9df3c82c66b",
+  "core": "afa1187219969616",
+  "date": "2026-10-08",
+  "note": "road glyph and no caption",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Approaches and surroundings#sheet follows its map": {
-  "code": "f3415df590216fb9",
-  "core": "8ef7fb73fca34db5",
-  "date": "2026-10-03",
-  "note": "a consistency rule only",
+  "code": "25738f81ce0587d6",
+  "core": "afa1187219969616",
+  "date": "2026-10-08",
+  "note": "keeping the sheet consistent with the map",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Approaches and surroundings#subject sized from the record": {
-  "code": "9b967e0d5f2984c5",
-  "core": "8ef7fb73fca34db5",
-  "date": "2026-10-03",
-  "note": "the record's bands, per 0116",
+  "code": "00ce2bd33e409740",
+  "core": "afa1187219969616",
+  "date": "2026-10-08",
+  "note": "building sizes taken from the record's figures",
   "pages": {
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html": "ac75a1e28a361c16"
   },
   "research": "ff6f552939c9b1ab",
+  "rests": [
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html:4e26eb3612539faf",
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html:69620b1e79461ecf",
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html:8f475d6fee9c99bf"
+  ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Building vocabulary#vocabulary index": {
   "code": "3ac71dc8d96ac6ea",
   "core": "ffca44dc01241553",
-  "date": "2026-10-03",
-  "note": "index only",
+  "date": "2026-10-08",
+  "note": "an index",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Checklist for a new diagram#clear gateways": {
-  "code": "cf348fd66e3f5648",
-  "core": "6b1869dbab67a27a",
-  "date": "2026-10-03",
-  "note": "unanswered in the bundle",
+  "code": "4b9e2652b9ea44cb",
+  "core": "3fe51b4530a1914f",
+  "date": "2026-10-08",
+  "note": "no page bears on it",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Checklist for a new diagram#crop and scale bar": {
-  "code": "477843b954461767",
-  "core": "6b1869dbab67a27a",
-  "date": "2026-10-03",
-  "note": "drawing convention",
+  "code": "bc1a3d34b9bf5e26",
+  "core": "3fe51b4530a1914f",
+  "date": "2026-10-08",
+  "note": "framing only",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Checklist for a new diagram#fire-water tubs": {
-  "code": "0844c27fac8e5788",
-  "core": "6b1869dbab67a27a",
-  "date": "2026-10-03",
-  "note": "per 0100 drawing",
+  "code": "65ddb9aa63bc35f4",
+  "core": "3fe51b4530a1914f",
+  "date": "2026-10-08",
+  "note": "8-12 tubs, 2 at the kitchen, none at a plaster storehouse",
   "pages": {
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "2c4dfd988d663a80"
   },
   "research": "5292b7fa7abf1048",
+  "rests": [
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:67384625aa76f7e9",
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:81eec727dd4e93f2",
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:a8ace44152bf8182"
+  ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Checklist for a new diagram#gate hierarchy": {
-  "code": "0c2bea645855a323",
-  "core": "6b1869dbab67a27a",
-  "date": "2026-10-03",
-  "note": "nothing in the bundle answers gate ranking",
+  "code": "93e88795adfdc85c",
+  "core": "3fe51b4530a1914f",
+  "date": "2026-10-08",
+  "note": "no page ranks a compound's gates",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Checklist for a new diagram#guest and service doors": {
-  "code": "14fe7c4fa2d85755",
-  "core": "6b1869dbab67a27a",
-  "date": "2026-10-03",
-  "note": "open ground or a roji garden before the guest entrance, per 0104",
+  "code": "343f264fa76ac782",
+  "core": "3fe51b4530a1914f",
+  "date": "2026-10-08",
+  "note": "the guest crosses open ground or a garden path to the entrance",
   "pages": {
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "bbfebe573bb99b25"
   },
   "research": "d6575223a27df7a3",
+  "rests": [
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:00bcfd3abdfc77d8",
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:508d759fa76d492e",
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:fc0610901368c3d8"
+  ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Checklist for a new diagram#labels and title block": {
-  "code": "6d33607efbbcd961",
-  "core": "6b1869dbab67a27a",
-  "date": "2026-10-03",
-  "note": "drawing convention",
+  "code": "99998da954d97bc9",
+  "core": "3fe51b4530a1914f",
+  "date": "2026-10-08",
+  "note": "labeling conventions",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Checklist for a new diagram#packing coverage": {
-  "code": "084184e1f2a236c1",
-  "core": "6b1869dbab67a27a",
-  "date": "2026-10-03",
-  "note": "per 0116 drawing",
+  "code": "4bfb38f245e5321b",
+  "core": "3fe51b4530a1914f",
+  "date": "2026-10-08",
+  "note": "30-42% coverage, 6-8 ft gaps, kura 6-10 ft, apron 15-20 ft",
   "pages": {
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c2a4ba141b354319"
   },
   "research": "8bb634ee7fbc398f",
+  "rests": [
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:5b274ef99f301ef1",
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:a911be254a00f660",
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:db5208a7bd0dcf9d",
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:fa6b53e2166eb519"
+  ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Checklist for a new diagram#practice ground sizing": {
-  "code": "5b366c90092ab191",
-  "core": "6b1869dbab67a27a",
-  "date": "2026-10-03",
-  "note": "0165 gives no area per samurai",
+  "code": "9b6421439621d4e8",
+  "core": "3fe51b4530a1914f",
+  "date": "2026-10-08",
+  "note": "the drawing page answers this (\"about 90-135 sq ft ... a GUESS\"); the label should be GUESS research/questions/0165-martial-training-grounds-and-dojo.drawing.html",
+  "pages": {},
   "research": "",
-  "verdict": "IN-STEP"
+  "rests": [
+   "0165-martial-training-grounds-and-dojo.drawing.html:e5d173fb8d7dcb4a"
+  ],
+  "verdict": "MISLABELED"
  },
  "docs/buildings.md::Checklist for a new diagram#privies and rear strip": {
-  "code": "027f6680ee1e9e9b",
-  "core": "6b1869dbab67a27a",
-  "date": "2026-10-03",
-  "note": "one attached residence privy, where 0101 drawing gives the house two; the ~3-4 count is a GUESS on the drawing page, not on the cited 0101.html",
+  "code": "6d5857287107e561",
+  "core": "3fe51b4530a1914f",
+  "date": "2026-10-08",
+  "note": "the checklist asks for one attached \"residence privy\" where the record gives a house two, guests' and family's; the 3-4 count comes from the drawing page's GUESS, not this page",
   "pages": {
    "0101-privies-setchin.html": "f772eb2b05990168"
   },
   "research": "9f2d5a5c6b30a6c8",
+  "rests": [
+   "0101-privies-setchin.drawing.html:35d401ea5514f4f8",
+   "0101-privies-setchin.drawing.html:38960fd9975a6f1c",
+   "0101-privies-setchin.html:158fc32b3525ad57",
+   "0101-privies-setchin.html:3e6cdef5ad67f277"
+  ],
   "verdict": "DRIFTED"
  },
  "docs/buildings.md::Checklist for a new diagram#size hierarchy": {
-  "code": "536d8e00d336e56d",
-  "core": "6b1869dbab67a27a",
-  "date": "2026-10-03",
-  "note": "the order per 0116 (the cell's rank is unstated there)",
+  "code": "7303843ed2daaf8e",
+  "core": "3fe51b4530a1914f",
+  "date": "2026-10-08",
+  "note": "\"any shrine/storehouse < the residence\" conflicts with \"a storehouse could out-size every hall\" for a storing office; the kitchen, stable and shrine ranks are \"this project's reading\", not a finding",
   "pages": {
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html": "ac75a1e28a361c16"
   },
   "research": "ff6f552939c9b1ab",
-  "verdict": "IN-STEP"
+  "rests": [
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:50460e872bf52ef6",
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html:307e1fa85e603c4f",
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html:69620b1e79461ecf",
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html:d89c58633b72e2d1"
+  ],
+  "verdict": "DRIFTED"
  },
  "docs/buildings.md::Checklist for a new diagram#structures clear of wall ink": {
-  "code": "cbe40368431c7554",
-  "core": "6b1869dbab67a27a",
-  "date": "2026-10-03",
-  "note": "per 0092 drawing",
+  "code": "875511c794c0a9b4",
+  "core": "3fe51b4530a1914f",
+  "date": "2026-10-08",
+  "note": "nothing is built on the wall",
   "pages": {
    "0092-compound-walls-neribei-and-tsuijibei.drawing.html": "aec0fef5c25a07e2"
   },
   "research": "04d454c4c7654894",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0092-compound-walls-neribei-and-tsuijibei.drawing.html:f335f68a1e164a0e"
+  ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Composition: perimeter buildings + a named court-spine#buildings ring the edges": {
-  "code": "4f7d2c40a2cf7c5b",
-  "core": "44d12e99e3633213",
-  "date": "2026-10-03",
-  "note": "buildings around open courts, per 0116 drawing",
+  "code": "e0ab96b08462ba88",
+  "core": "a9243672fea7539a",
+  "date": "2026-10-08",
+  "note": "courts kept open, about a third built",
   "pages": {
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c2a4ba141b354319"
   },
   "research": "8bb634ee7fbc398f",
+  "rests": [
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:5b274ef99f301ef1",
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:e672b523bf8222b2",
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:f6879c35848621fc"
+  ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Composition: perimeter buildings + a named court-spine#coverage band": {
-  "code": "89e47af3202c7965",
-  "core": "44d12e99e3633213",
-  "date": "2026-10-03",
-  "note": "30-42%, per 0116 drawing",
+  "code": "17a1c7b1547441ec",
+  "core": "a9243672fea7539a",
+  "date": "2026-10-08",
+  "note": "30-42%",
   "pages": {
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c2a4ba141b354319"
   },
   "research": "8bb634ee7fbc398f",
+  "rests": [
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:5b274ef99f301ef1"
+  ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Composition: perimeter buildings + a named court-spine#few large masses": {
-  "code": "8d92814bb672b726",
-  "core": "44d12e99e3633213",
-  "date": "2026-10-03",
-  "note": "per 0116 drawing",
+  "code": "451d125af834c738",
+  "core": "a9243672fea7539a",
+  "date": "2026-10-08",
+  "note": "rooms gathered into a few connected buildings",
   "pages": {
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c2a4ba141b354319"
   },
   "research": "8bb634ee7fbc398f",
+  "rests": [
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:f2129fd621e95512"
+  ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Composition: perimeter buildings + a named court-spine#named court spine": {
-  "code": "018cce6b2ca55b72",
-  "core": "44d12e99e3633213",
-  "date": "2026-10-03",
-  "note": "the oshirasu per 0099; the forecourt and garden are kept open per 0116 drawing",
+  "code": "d1f2bb1b8573a807",
+  "core": "a9243672fea7539a",
+  "date": "2026-10-08",
+  "note": "0099 bears only on the hearing court; the open forecourt / hearing court / garden spine is 0116.drawing's, so the pointer should name that page",
   "pages": {
    "0099-the-hearing-court-shirasu.html": "c0f6b660f7639a81"
   },
   "research": "81ffa6b221f0f767",
-  "verdict": "IN-STEP"
+  "rests": [
+   "0099-the-hearing-court-shirasu.html:700e8e156074abca",
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:f6879c35848621fc"
+  ],
+  "verdict": "MISLABELED"
  },
  "docs/buildings.md::Composition: perimeter buildings + a named court-spine#office front, residence rear": {
-  "code": "37fc5f6d33bba3d7",
-  "core": "44d12e99e3633213",
-  "date": "2026-10-03",
-  "note": "recorded as a deliberate simplification on 0090 drawing",
+  "code": "d3c0b8d1ad42f335",
+  "core": "a9243672fea7539a",
+  "date": "2026-10-08",
+  "note": "the page calls the residence behind the office \"a deliberate simplification\" (Takayama's stood beside it), so the label should be DEVIATION, and the doc's \"universal in both traditions\" is wrong",
   "pages": {
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "8d81fb67fc6be64e"
   },
   "research": "b9f86fd8593ec1ea",
-  "triaged": "2026-10-05",
-  "verdict": "IN-STEP"
+  "rests": [
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:049a643bfa279d82",
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:b92fdf4980d4aceb"
+  ],
+  "verdict": "MISLABELED"
  },
  "docs/buildings.md::Composition: perimeter buildings + a named court-spine#perimeter-first placement order": {
-  "code": "37236fae835e2e33",
-  "core": "44d12e99e3633213",
-  "date": "2026-10-03",
-  "note": "a placement algorithm, unresearched",
+  "code": "0d085e40eb716605",
+  "core": "a9243672fea7539a",
+  "date": "2026-10-08",
+  "note": "placer ordering, no page bears on it",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Composition: perimeter buildings + a named court-spine#second rank": {
-  "code": "3a72d3b4a22517ac",
-  "core": "44d12e99e3633213",
-  "date": "2026-10-03",
-  "note": "0115 gives servants no rear rank behind the house (street ranges, gate range or under the main roof), and 0091 calls a rear servants' range a GUESS. Stores behind the house are attested (Higuchi); servants are not",
+  "code": "7f80bcce377abfdd",
+  "core": "a9243672fea7539a",
+  "date": "2026-10-08",
+  "note": "0115 puts servants in street-front ranges or under the main roof, and finds no rank of servants' dwellings; placing them behind the residence is 0091's GUESS and should cite it as such",
   "pages": {
    "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html": "02572d36ba405916"
   },
   "research": "56857267abb1042e",
+  "rests": [
+   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:5b10f481659ec3b8",
+   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:5f4232f3b151ae8d",
+   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:61c37142b4c0fac5",
+   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:8cda5119259f24f1"
+  ],
   "verdict": "DRIFTED"
  },
  "docs/buildings.md::Compound programs#catalog pointer": {
-  "code": "68be990d91585ae0",
-  "core": "39db088e712fdedb",
-  "date": "2026-10-03",
-  "note": "pointer only",
+  "code": "5dc5148f13cb3689",
+  "core": "ad367e3ca54153c0",
+  "date": "2026-10-08",
+  "note": "a pointer",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Design notes and the review gate#review workflow": {
-  "code": "4972b40c44fe1da5",
-  "core": "8d9869285b0ef909",
-  "date": "2026-10-03",
-  "note": "process only",
+  "code": "73b3e62bae16dc29",
+  "core": "9405621853f66bc2",
+  "date": "2026-10-08",
+  "note": "review procedure",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Fire-water tubs#a tub never on a well glyph; moved to another eaves corner": {
   "code": "098b3d572ee46833",
   "core": "9566f0c2425a41fb",
-  "date": "2026-10-07",
-  "note": "nothing in 0100's drawing page places a tub relative to a well",
+  "date": "2026-10-08",
+  "note": "no page bears on it",
   "pages": {},
   "research": "",
   "rests": [],
@@ -333,8 +419,8 @@
  "docs/buildings.md::Fire-water tubs#kitchen weighting": {
   "code": "763dade2a15425e6",
   "core": "9566f0c2425a41fb",
-  "date": "2026-10-07",
-  "note": "2 at the kitchen, as the page says",
+  "date": "2026-10-08",
+  "note": "two tubs at the kitchen",
   "pages": {
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "2c4dfd988d663a80"
   },
@@ -349,8 +435,8 @@
  "docs/buildings.md::Fire-water tubs#no tub at the plaster kura": {
   "code": "4e52b252f7778f0e",
   "core": "9566f0c2425a41fb",
-  "date": "2026-10-07",
-  "note": "none at the dozo, one may stand at a wooden granary",
+  "date": "2026-10-08",
+  "note": "none at a plaster storehouse, one may stand at a wooden granary",
   "pages": {
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "2c4dfd988d663a80"
   },
@@ -364,24 +450,23 @@
  "docs/buildings.md::Fire-water tubs#one tub per wooden building": {
   "code": "2ed3e4254f208792",
   "core": "9566f0c2425a41fb",
-  "date": "2026-10-07",
-  "note": "one per major wooden building, about 8-12, the count following from the buildings",
+  "date": "2026-10-08",
+  "note": "Ochiba draws no tub at its karo's house or senior retainers' quarters, against \"one at each major wooden building\"",
   "pages": {
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "2c4dfd988d663a80"
   },
   "research": "5292b7fa7abf1048",
   "rests": [
-   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:3d78982d8d903e9f",
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:81eec727dd4e93f2",
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:a8ace44152bf8182"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  "docs/buildings.md::Fire-water tubs#tub against its wall": {
   "code": "7eb6d880b7694c96",
   "core": "9566f0c2425a41fb",
-  "date": "2026-10-07",
-  "note": "the procedure's hard rule seats each tub \"at a wall/eaves corner\" (and a displaced tub moves to \"a different eaves corner\"); the page finds water kept \"at the wooden buildings, at the entrance and on the roof\" and never says corner. Either allow the entrance seat, or label the eaves-corner choice UNRESEARCHED/DEVIATION apart from the entrance finding",
+  "date": "2026-10-08",
+  "note": "tubs stand at the wooden buildings, at the entrance",
   "pages": {
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "2c4dfd988d663a80"
   },
@@ -389,13 +474,13 @@
   "rests": [
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:3d78982d8d903e9f"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "docs/buildings.md::Fire-water tubs#tub clear of the footprint": {
   "code": "805d55025e890f82",
   "core": "9566f0c2425a41fb",
-  "date": "2026-10-07",
-  "note": "GM ruling named and dated",
+  "date": "2026-10-08",
+  "note": "the claim names the GM's ruling",
   "pages": {},
   "research": "",
   "rests": [],
@@ -404,8 +489,8 @@
  "docs/buildings.md::Fire-water tubs#tub glyph": {
   "code": "075db0450b3924ad",
   "core": "9566f0c2425a41fb",
-  "date": "2026-10-07",
-  "note": "about 2.5 ft across, which the page records as a guess",
+  "date": "2026-10-08",
+  "note": "a tub about 2.5 ft across, recorded as a GUESS",
   "pages": {
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "2c4dfd988d663a80"
   },
@@ -418,8 +503,8 @@
  "docs/buildings.md::Fire-water tubs#tub glyph colors": {
   "code": "870fcac39b0b5478",
   "core": "9566f0c2425a41fb",
-  "date": "2026-10-07",
-  "note": "pure symbol color",
+  "date": "2026-10-08",
+  "note": "colors only",
   "pages": {},
   "research": "",
   "rests": [],
@@ -428,37 +513,44 @@
  "docs/buildings.md::Fire-water tubs#tub seat off the wall": {
   "code": "a5eca551d514568b",
   "core": "9566f0c2425a41fb",
-  "date": "2026-10-07",
-  "note": "a 2.2 px offset that keeps the outline clear of the wall's ink",
+  "date": "2026-10-08",
+  "note": "glyph seated clear of the wall's ink",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Historical grounding#grounding pointer": {
-  "code": "753a9cc3c91efcdc",
-  "core": "2438930dbaf8e28f",
-  "date": "2026-10-03",
-  "note": "pointer only",
+  "code": "2e67083834a9146d",
+  "core": "21a726c4e2f27122",
+  "date": "2026-10-08",
+  "note": "a pointer",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Inner court (private / sacred)#bath": {
-  "code": "f7082c06d9d9bb1c",
-  "core": "56b8211591025880",
-  "date": "2026-10-03",
-  "note": "placement is in step, but 12-15 ft (enlarged 18x12) disagrees with 0105 drawing's \"The bath is drawn 10 by 8 ft\"",
+  "code": "33ad19ee541d056d",
+  "core": "16cf6efc57b0deff",
+  "date": "2026-10-08",
+  "note": "a room or addition to the house, never its own building; the record gives no size",
   "pages": {
    "0105-baths-furo.html": "d5cd9565ea393908"
   },
   "research": "a9b3906a2a309127",
-  "verdict": "DRIFTED"
+  "rests": [
+   "0105-baths-furo.html:16a26f2af5d6a16b",
+   "0105-baths-furo.html:6f0f6411ed6e730e",
+   "0105-baths-furo.html:92fb6bed7c57c8e5"
+  ],
+  "verdict": "IN-STEP"
  },
  "docs/buildings.md::Inner court (private / sacred)#engawa": {
-  "code": "15ef494e9d7c257d",
-  "core": "56b8211591025880",
-  "date": "2026-10-05",
-  "note": "an ~8 px (~2.7 ft) strip is below the page's \"3 to 6 ft\"; the procedure also fixes the garden face only, where \"Which faces carry the veranda is a knob between two forms\"",
+  "code": "e810555b7ac8f930",
+  "core": "16cf6efc57b0deff",
+  "date": "2026-10-08",
+  "note": "the ~8 px (~2.7 ft) strip is under the 3-6 ft range, and which faces carry it is a two-form knob (\"each plan takes one\") that no sheet rolls",
   "pages": {
    "0102-verandas-and-storm-shutters-engawa-and-amado.drawing.html": "9a588e588b7fc9fa",
    "0102-verandas-and-storm-shutters-engawa-and-amado.html": "d414f1a91e856c72"
@@ -466,50 +558,55 @@
   "research": "5332970e76f0dd3b",
   "rests": [
    "0102-verandas-and-storm-shutters-engawa-and-amado.drawing.html:002eb43fd8e0dbdc",
-   "0102-verandas-and-storm-shutters-engawa-and-amado.drawing.html:1ab70933149d3f3b",
-   "0102-verandas-and-storm-shutters-engawa-and-amado.drawing.html:e679dd9ba7fb6cc9",
-   "0102-verandas-and-storm-shutters-engawa-and-amado.html:ab7dc4049fa46cee",
-   "0102-verandas-and-storm-shutters-engawa-and-amado.html:c62884b883d6ff3f",
-   "0102-verandas-and-storm-shutters-engawa-and-amado.html:e50acf31e21172cd"
+   "0102-verandas-and-storm-shutters-engawa-and-amado.drawing.html:e679dd9ba7fb6cc9"
   ],
   "verdict": "DRIFTED"
  },
  "docs/buildings.md::Inner court (private / sacred)#formal reception room": {
-  "code": "b582535aa90b1a41",
-  "core": "56b8211591025880",
-  "date": "2026-10-03",
-  "note": "Takayama residence had a room for receiving guests",
+  "code": "c28e367f9ce0ee8e",
+  "core": "16cf6efc57b0deff",
+  "date": "2026-10-08",
+  "note": "the Takayama residence had a room for receiving guests",
   "pages": {
    "0091-samurai-residences-and-their-rooms-buke-yashiki.html": "aea2caa039ea5e60"
   },
   "research": "cde11191e2ae3f5f",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.html:e20e108d786f655f"
+  ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Inner court (private / sacred)#genkan": {
-  "code": "412b80831a837744",
-  "core": "56b8211591025880",
-  "date": "2026-10-03",
-  "note": "genkan on the office or roji with no genkan, as a knob; uchigenkan doors elsewhere, per 0104",
+  "code": "cefa3188e2c0afb8",
+  "core": "16cf6efc57b0deff",
+  "date": "2026-10-08",
+  "note": "two approaches as a knob; the household uses an inner entrance",
   "pages": {
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "bbfebe573bb99b25"
   },
   "research": "d6575223a27df7a3",
+  "rests": [
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:6a481055c981d54e",
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:8df3343eda86262e",
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:fc0610901368c3d8"
+  ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Inner court (private / sacred)#genkan porch size": {
-  "code": "7c1ec21d71b17dbd",
-  "core": "56b8211591025880",
-  "date": "2026-10-03",
-  "note": "no bundled question sizes a genkan",
+  "code": "47923244e711dca1",
+  "core": "16cf6efc57b0deff",
+  "date": "2026-10-08",
+  "note": "no page gives a size",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Inner court (private / sacred)#inner garden": {
-  "code": "b9ba32cb1736fabf",
-  "core": "56b8211591025880",
-  "date": "2026-10-05",
-  "note": "pond or dry garden both attested, lanterns in ordinary gardens from Momoyama, garden before the formal rooms",
+  "code": "01f3b34cdf1c137b",
+  "core": "16cf6efc57b0deff",
+  "date": "2026-10-08",
+  "note": "pond and dry gardens both attested; lanterns in gardens",
   "pages": {
    "0103-ornamental-gardens-ponds-and-stone-lanterns-teien.html": "a2da28c93c49acfa"
   },
@@ -517,137 +614,149 @@
   "rests": [
    "0103-ornamental-gardens-ponds-and-stone-lanterns-teien.html:06be5b63ed197f3b",
    "0103-ornamental-gardens-ponds-and-stone-lanterns-teien.html:21ce4fa1ddb6b1b8",
+   "0103-ornamental-gardens-ponds-and-stone-lanterns-teien.html:28bccdbb5d4fc2f1",
    "0103-ornamental-gardens-ponds-and-stone-lanterns-teien.html:47e1a354b7e22021",
-   "0103-ornamental-gardens-ponds-and-stone-lanterns-teien.html:90362721f42307d0",
-   "0103-ornamental-gardens-ponds-and-stone-lanterns-teien.html:ba5b5b37436fe857",
    "0103-ornamental-gardens-ponds-and-stone-lanterns-teien.html:c29c96fc559c5cb1"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Inner court (private / sacred)#kamado range size": {
-  "code": "4fb548607a8bc732",
-  "core": "56b8211591025880",
-  "date": "2026-10-03",
-  "note": "nothing bundled sizes a kamado (the prose cites 0107.drawing, not bundled, for the knob)",
+  "code": "3e3a3d1df997853e",
+  "core": "16cf6efc57b0deff",
+  "date": "2026-10-08",
+  "note": "no page gives a size",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Inner court (private / sacred)#kitchen": {
-  "code": "705184757ee32206",
-  "core": "56b8211591025880",
-  "date": "2026-10-03",
-  "note": "part of the house and the kamado are in step, but ~40x33 ft (1,320 sq ft) is about 3x 0091's measured kitchen of \"about 12 tsubo (~440 sq ft)\", a sixth of the house; neither cited page gives a size",
+  "code": "05a7998afa8941d2",
+  "core": "16cf6efc57b0deff",
+  "date": "2026-10-08",
+  "note": "a ~40x33 ft (~1,320 sq ft) kitchen against a ~1,740 sq ft house is no \"fraction\" (the one measured is \"about a sixth\"); 0107 itself sends size to 0091",
   "pages": {
    "0107-kitchens-daidokoro.drawing.html": "d3233f8a13a78830",
    "0107-kitchens-daidokoro.html": "1eedc5cf7b1adca7"
   },
   "research": "045aa137a2fb4926",
+  "rests": [
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.html:d7fdec902b44b3d2",
+   "0107-kitchens-daidokoro.drawing.html:b9c022b8e45ef642",
+   "0107-kitchens-daidokoro.html:22e397b7573f5733",
+   "0107-kitchens-daidokoro.html:6632640caa3050e2"
+  ],
   "verdict": "DRIFTED"
  },
  "docs/buildings.md::Inner court (private / sacred)#kitchen corridor tagged residence corridor": {
-  "code": "36b9ce00adae3454",
-  "core": "56b8211591025880",
-  "date": "2026-10-05",
-  "note": "the section lets the kitchen join the house \"by a short covered corridor\", but the cited page gives middle and lower samurai houses \"almost none\" (corridors between buildings are the shogun's and daimyo's) and the kitchen projecting from the one house; drop the corridor form or record it as a deviation",
+  "code": "47d28b091f97c415",
+  "core": "16cf6efc57b0deff",
+  "date": "2026-10-08",
+  "note": "the \"short covered corridor\" option contradicts \"houses of middle and lower-ranking samurai had almost none\" (corridors); the kitchen should project from the house",
   "pages": {
    "0091-samurai-residences-and-their-rooms-buke-yashiki.html": "aea2caa039ea5e60"
   },
   "research": "cde11191e2ae3f5f",
   "rests": [
    "0091-samurai-residences-and-their-rooms-buke-yashiki.html:4adcc0fb43fa63e7",
-   "0091-samurai-residences-and-their-rooms-buke-yashiki.html:8b5bfb3e8ae20fa0",
-   "0091-samurai-residences-and-their-rooms-buke-yashiki.html:cc9dbee03dc4d549"
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.html:8b5bfb3e8ae20fa0"
   ],
   "verdict": "DRIFTED"
  },
  "docs/buildings.md::Inner court (private / sacred)#reception at one end": {
-  "code": "7aaa98a430bb87b1",
-  "core": "56b8211591025880",
-  "date": "2026-10-05",
-  "note": "reception at an end in both orders; altar by or behind the zashiki",
+  "code": "4373e8038931fe54",
+  "core": "16cf6efc57b0deff",
+  "date": "2026-10-08",
+  "note": "reception at an end; the altar by the zashiki",
   "pages": {
    "0091-samurai-residences-and-their-rooms-buke-yashiki.html": "aea2caa039ea5e60",
    "0239-household-altar-rooms-and-ancestral-tablets-butsuma-and-ihai.html": "1228abbd554a36c7"
   },
   "research": "5928a50e3d067773",
   "rests": [
-   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:67be3b248bb083d3",
    "0091-samurai-residences-and-their-rooms-buke-yashiki.html:d59d56dfc182e6ec",
-   "0091-samurai-residences-and-their-rooms-buke-yashiki.html:f1cd8cc3f400ee13",
    "0239-household-altar-rooms-and-ancestral-tablets-butsuma-and-ihai.html:2a2c8bbc0151daa8",
-   "0239-household-altar-rooms-and-ancestral-tablets-butsuma-and-ihai.html:56590e800f15cbe0",
-   "0239-household-altar-rooms-and-ancestral-tablets-butsuma-and-ihai.html:b1a400170b174e5b"
+   "0239-household-altar-rooms-and-ancestral-tablets-butsuma-and-ihai.html:414f8be338415f3b",
+   "0239-household-altar-rooms-and-ancestral-tablets-butsuma-and-ihai.html:56590e800f15cbe0"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Inner court (private / sacred)#residence massing": {
-  "code": "acc3a2da08524a0a",
-  "core": "56b8211591025880",
-  "date": "2026-10-05",
-  "note": "one block two rows deep, echelon tied to accretion as the drawing page records",
+  "code": "80a36b127da9274e",
+  "core": "16cf6efc57b0deff",
+  "date": "2026-10-08",
+  "note": "one block, or halls in echelon for a house that was added to",
   "pages": {
    "0091-samurai-residences-and-their-rooms-buke-yashiki.html": "aea2caa039ea5e60"
   },
   "research": "cde11191e2ae3f5f",
   "rests": [
-   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:7d94a6540909d990",
-   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:a1aa9579204f19f0",
    "0091-samurai-residences-and-their-rooms-buke-yashiki.html:1b824e8b14368b18",
    "0091-samurai-residences-and-their-rooms-buke-yashiki.html:2005eab9d88a4421",
    "0091-samurai-residences-and-their-rooms-buke-yashiki.html:4adcc0fb43fa63e7",
-   "0091-samurai-residences-and-their-rooms-buke-yashiki.html:8b5bfb3e8ae20fa0",
    "0091-samurai-residences-and-their-rooms-buke-yashiki.html:cc9dbee03dc4d549"
   ],
   "verdict": "IN-STEP"
  },
+ "docs/buildings.md::Inner court (private / sacred)#residence of ~18-25 tatami rooms": {
+  "code": "16cf6efc57b0deff",
+  "core": "16cf6efc57b0deff",
+  "date": "2026-10-08",
+  "note": "residence of ~18-25 tatami rooms",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  "docs/buildings.md::Inner court (private / sacred)#room order": {
-  "code": "8864920fd4739049",
-  "core": "56b8211591025880",
-  "date": "2026-10-05",
-  "note": "the drawing page makes room order \"a knob with two forms\" (palace order or the small house's zashiki-deepest order), but the procedure names no such knob and every sheet is fixed to the palace order; the procedure should offer the room-order knob",
+  "code": "4244ad1de789d5be",
+  "core": "16cf6efc57b0deff",
+  "date": "2026-10-08",
+  "note": "room order is \"a knob with two forms\", but every sheet takes the palace order; the small house's order is never rolled",
   "pages": {
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html": "2688f28d713d8374"
   },
   "research": "1f38e2d63c0f5480",
   "rests": [
-   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:67be3b248bb083d3",
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:7d39a6c083ed2ffa",
-   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:c46fa707abad1ec6",
-   "0091-samurai-residences-and-their-rooms-buke-yashiki.html:d59d56dfc182e6ec"
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:c46fa707abad1ec6"
   ],
   "verdict": "DRIFTED"
  },
  "docs/buildings.md::Inner court (private / sacred)#senior retainers housed apart": {
-  "code": "2eb99bb766872011",
-  "core": "56b8211591025880",
-  "date": "2026-10-03",
-  "note": "the sheet draws a karo's house inside the walls; 0106: \"No page we read places a chief retainer's own house inside the residence compound itself\". The attested forms are near the lord, or the staff's koya/nagaya inside",
+  "code": "e7888c89d8871749",
+  "core": "16cf6efc57b0deff",
+  "date": "2026-10-08",
+  "note": "the karo is not housed in the lord's wing; staff in small houses and rowhouses",
   "pages": {
    "0106-the-chief-retainers-house-karo-yashiki.html": "b58e93b5d1d396f7"
   },
   "research": "5a4241ec0f470a1b",
-  "verdict": "DRIFTED"
+  "rests": [
+   "0106-the-chief-retainers-house-karo-yashiki.html:3b969adec7af9389",
+   "0106-the-chief-retainers-house-karo-yashiki.html:47f0cdaa1ad82d71",
+   "0106-the-chief-retainers-house-karo-yashiki.html:80b0dad39e3061bf"
+  ],
+  "verdict": "IN-STEP"
  },
  "docs/buildings.md::Inner court (private / sacred)#suites as labeled zones": {
-  "code": "6b1822b59eee541e",
-  "core": "56b8211591025880",
-  "date": "2026-10-03",
-  "note": "drawing convention",
+  "code": "e6b71278250922f2",
+  "core": "16cf6efc57b0deff",
+  "date": "2026-10-08",
+  "note": "each labeled area compresses several rooms",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Latrines and the rear service strip#named rear yard": {
   "code": "426a3bbd9d037994",
   "core": "e2c0566b40be1972",
-  "date": "2026-10-05",
-  "note": "Higuchi's niwa behind the house, storehouse beyond",
+  "date": "2026-10-08",
+  "note": "open ground with the storehouse beyond, as at the Higuchi house",
   "pages": {
    "0091-samurai-residences-and-their-rooms-buke-yashiki.html": "aea2caa039ea5e60"
   },
   "research": "cde11191e2ae3f5f",
   "rests": [
-   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:3fbca2091d585e8c",
-   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:49cd9dd3d26f1477",
    "0091-samurai-residences-and-their-rooms-buke-yashiki.html:89821f7c125623ad"
   ],
   "verdict": "IN-STEP"
@@ -655,56 +764,64 @@
  "docs/buildings.md::Latrines and the rear service strip#outer privies by service gates": {
   "code": "6f5c018325d1d5a0",
   "core": "e2c0566b40be1972",
-  "date": "2026-10-03",
-  "note": "against service walls near a gate, per 0101 drawing",
+  "date": "2026-10-08",
+  "note": "against service walls near a gate",
   "pages": {
    "0101-privies-setchin.drawing.html": "03968c62149e28e2"
   },
   "research": "ad0c946c19e2af00",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0101-privies-setchin.drawing.html:4b9c7b16a2cddbfa"
+  ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Latrines and the rear service strip#privies away from water": {
   "code": "cba0a39ddf47ef6c",
   "core": "e2c0566b40be1972",
-  "date": "2026-10-03",
-  "note": "0101.drawing gives \"at least 15 ft from any well - a GUESS\" but says nothing of food prep; state the 15 ft from wells and mark the food-prep half UNRESEARCHED",
+  "date": "2026-10-08",
+  "note": "consistent with the 15 ft from a well",
   "pages": {
    "0101-privies-setchin.drawing.html": "03968c62149e28e2"
   },
   "research": "ad0c946c19e2af00",
-  "triaged": "2026-10-05",
-  "verdict": "NEEDS-RESEARCH"
+  "rests": [
+   "0101-privies-setchin.drawing.html:4b6fdf768707f4bb"
+  ],
+  "verdict": "IN-STEP"
  },
  "docs/buildings.md::Latrines and the rear service strip#privy count": {
   "code": "60b7d86e90fc0ba2",
   "core": "e2c0566b40be1972",
-  "date": "2026-10-03",
-  "note": "\"three or four at a county magistrate's compound\", a guess",
+  "date": "2026-10-08",
+  "note": "about one per part of the compound, 3-4",
   "pages": {
    "0101-privies-setchin.drawing.html": "03968c62149e28e2"
   },
   "research": "ad0c946c19e2af00",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0101-privies-setchin.drawing.html:38960fd9975a6f1c"
+  ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Latrines and the rear service strip#privy size": {
   "code": "e8b48fb0f482164d",
   "core": "e2c0566b40be1972",
-  "date": "2026-10-03",
-  "note": "0101.drawing: \"A privy is drawn 5 ft square\"; the prose's 14-20 px runs to ~6.7 ft; draw 15 px or record the band on the drawing page",
+  "date": "2026-10-08",
+  "note": "14-20 px allows up to ~6.7 ft; the page draws \"5 ft square, a one-seat privy\"",
   "pages": {
    "0101-privies-setchin.drawing.html": "03968c62149e28e2"
   },
   "research": "ad0c946c19e2af00",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0101-privies-setchin.drawing.html:fc9cf897ba09ad11"
+  ],
   "verdict": "DRIFTED"
  },
  "docs/buildings.md::Latrines and the rear service strip#rear kitchen garden by the sun": {
   "code": "93b5f06083027aa3",
   "core": "e2c0566b40be1972",
-  "date": "2026-10-05",
-  "note": "rear service ground is one of the four site-knob values, ruled out under six hours",
+  "date": "2026-10-08",
+  "note": "six hours of autumn sun",
   "pages": {
    "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03",
    "0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html": "461744888b10dad0"
@@ -712,48 +829,60 @@
   "research": "9d4ec9a570c81514",
   "rests": [
    "0038-sunlight-and-shade-on-the-farm.drawing.html:518902ab7cde51b3",
-   "0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html:42bdf96bf8f0f70f",
-   "0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html:7ce0bef9ba8bf611",
-   "0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html:a2d5a204d8ca856d",
-   "0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html:ff9d9cf36d9635eb"
+   "0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html:a2d5a204d8ca856d"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Latrines and the rear service strip#rear service alley": {
   "code": "eed11c6bf2a30527",
   "core": "e2c0566b40be1972",
-  "date": "2026-10-03",
-  "note": "unanswered in the bundle",
+  "date": "2026-10-08",
+  "note": "0091.drawing answers it (\"an alley of about 6-10 ft ... its width a GUESS\"); the label should be GUESS research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html",
+  "pages": {},
   "research": "",
-  "verdict": "IN-STEP"
+  "rests": [
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:77860a26bb8da90e"
+  ],
+  "verdict": "MISLABELED"
  },
  "docs/buildings.md::Latrines and the rear service strip#residence privy attached": {
   "code": "c7be35aaf02556bf",
   "core": "e2c0566b40be1972",
-  "date": "2026-10-03",
-  "note": "the section draws ONE residence privy at a back corner; 0101 drawing gives the house two (\"the guests' and the family's\"), the guests' behind the reception room",
+  "date": "2026-10-08",
+  "note": "one privy at a back corner, where the record gives a house two (upper and lower); the drawing page puts the guests' privy behind the reception room; the family-corner site is a GUESS",
   "pages": {
    "0101-privies-setchin.html": "f772eb2b05990168"
   },
   "research": "9f2d5a5c6b30a6c8",
+  "rests": [
+   "0101-privies-setchin.html:158fc32b3525ad57",
+   "0101-privies-setchin.html:18e84aa2b3f392ce",
+   "0101-privies-setchin.html:3e6cdef5ad67f277",
+   "0101-privies-setchin.html:b7521b5326a035cf"
+  ],
   "verdict": "DRIFTED"
  },
  "docs/buildings.md::Latrines and the rear service strip#servants in the rear strip": {
   "code": "fe968cd6fe8ed04d",
   "core": "e2c0566b40be1972",
-  "date": "2026-10-03",
-  "note": "0115 houses servants in street-side ranges or the gate range, or under the main roof (\"in neither ... a rank of small uniform dwellings\"); 0091 calls a rear servants' range a GUESS; \"~10 servants\" is on neither page",
+  "date": "2026-10-08",
+  "note": "0115 houses servants in street-front ranges or under the main roof, never in a nagaya behind the house; the rear siting and ~10 count are 0091's GUESS and should cite it",
   "pages": {
    "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html": "02572d36ba405916"
   },
   "research": "56857267abb1042e",
+  "rests": [
+   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:5f4232f3b151ae8d",
+   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:61c37142b4c0fac5",
+   "0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.html:8cda5119259f24f1"
+  ],
   "verdict": "DRIFTED"
  },
  "docs/buildings.md::Outer court (administrative / public)#archery bank": {
-  "code": "366f704704de4b79",
-  "core": "92e75ffa3b03e4a2",
-  "date": "2026-10-07",
-  "note": "250 x 8 ft lane with the azuchi at its end, as the page says",
+  "code": "95249cce606f1f1c",
+  "core": "99bded91e37b18fd",
+  "date": "2026-10-08",
+  "note": "about 250 x 8 ft with the butt at its end; may stand inside a residence",
   "pages": {
    "0164-drill-grounds-archery-ranges-and-riding-grounds-jiaochang-yaba-baba.html": "6690901d517f62f4"
   },
@@ -764,46 +893,35 @@
   ],
   "verdict": "IN-STEP"
  },
- "docs/buildings.md::Outer court (administrative / public)#archery range added only at a garrison-emphasis manor": {
-  "code": "92e75ffa3b03e4a2",
-  "core": "92e75ffa3b03e4a2",
-  "date": "2026-10-07",
-  "note": "archery range added only at a garrison-emphasis manor",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  "docs/buildings.md::Outer court (administrative / public)#barracks": {
-  "code": "287782af0fbff535",
-  "core": "92e75ffa3b03e4a2",
-  "date": "2026-10-07",
-  "note": "the claim's \"county example ... 34 ft deep\" (45 x 34, a squat block) contradicts \"drawn 12 to 24 ft deep ... never a square or squat block\"; and the code's \"one large common room for servants\" form belongs to the separate servants' quarters, while the barracks is \"divided into dwellings\"; drop the 34 ft depth and the common-room form from the barracks",
+  "code": "767e5bed0c6a1561",
+  "core": "99bded91e37b18fd",
+  "date": "2026-10-08",
+  "note": "the county example's 45 x 34 ft (34 ft deep), and 27-53 ft lengths, break \"12 to 24 ft deep ... never a square or squat block\"",
   "pages": {
    "0097-staff-rowhouses-and-barracks-nagaya.drawing.html": "d4c70185f30440ae",
    "0097-staff-rowhouses-and-barracks-nagaya.html": "62a5ddbd963f7fc7"
   },
   "research": "e843cbfa61680fd4",
   "rests": [
-   "0097-staff-rowhouses-and-barracks-nagaya.drawing.html:06766b70728caeae",
-   "0097-staff-rowhouses-and-barracks-nagaya.drawing.html:40d18dac4b203306",
-   "0097-staff-rowhouses-and-barracks-nagaya.drawing.html:6d20e14e8c281ff8",
    "0097-staff-rowhouses-and-barracks-nagaya.drawing.html:921e9524e0a5f213",
    "0097-staff-rowhouses-and-barracks-nagaya.html:b10862c89c3c5c24"
   ],
   "verdict": "DRIFTED"
  },
- "docs/buildings.md::Outer court (administrative / public)#barracks watch strength ~10-20 men": {
-  "code": "92e75ffa3b03e4a2",
-  "core": "92e75ffa3b03e4a2",
-  "date": "2026-10-07",
-  "note": "barracks watch strength ~10-20 men",
+ "docs/buildings.md::Outer court (administrative / public)#barracks watch of ~10-20 men": {
+  "code": "99bded91e37b18fd",
+  "core": "99bded91e37b18fd",
+  "date": "2026-10-08",
+  "note": "barracks watch of ~10-20 men",
   "research": "",
   "verdict": "UNCLAIMED"
  },
  "docs/buildings.md::Outer court (administrative / public)#cart yard as a charcoal fire gap": {
-  "code": "6f3b9984e678bf33",
-  "core": "92e75ffa3b03e4a2",
-  "date": "2026-10-07",
-  "note": "this section draws no cart yard or charcoal store, so the claim belongs on the Ubame instance; even there it would be drifted: 0197 keeps \"no fire gap of a set width\" and a plastered store \"at the ordinary spacing\" (kura gap 6-10 ft GUESS), and neither page records 13-14 ft or 29 ft",
+  "code": "c0e5e5b4038bd4c5",
+  "core": "99bded91e37b18fd",
+  "date": "2026-10-08",
+  "note": "a 13-14 ft \"fire gap\" where the page \"keep[s] no fire gap of a set width\" and a storehouse keeps ordinary spacing (6-10 ft for a kura)",
   "pages": {
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c2a4ba141b354319",
    "0197-charcoal-yards-and-charcoal-stores.drawing.html": "fba749a9a3f24a9c"
@@ -812,22 +930,20 @@
   "rests": [
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:db5208a7bd0dcf9d",
    "0197-charcoal-yards-and-charcoal-stores.drawing.html:0ad7edfc766bacb6",
-   "0197-charcoal-yards-and-charcoal-stores.drawing.html:7a657acf6f84c329",
-   "0197-charcoal-yards-and-charcoal-stores.drawing.html:9c6dfab4db52b728"
+   "0197-charcoal-yards-and-charcoal-stores.drawing.html:7a657acf6f84c329"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "DRIFTED"
  },
  "docs/buildings.md::Outer court (administrative / public)#cell": {
-  "code": "afbbd93c063c55c2",
-  "core": "92e75ffa3b03e4a2",
-  "date": "2026-10-07",
-  "note": "12 x 10 ft temporary compound cell, at the small end of the measured 6-18 mat span, shared by several prisoners",
+  "code": "7ef6aea8d3bc3f8b",
+  "core": "99bded91e37b18fd",
+  "date": "2026-10-08",
+  "note": "small cell, in the 6-18 mat span, shared",
   "pages": {
    "0096-holding-cells-agariya-and-roya.html": "4426e3559e549311"
   },
   "research": "86def40e24cced5e",
   "rests": [
-   "0096-holding-cells-agariya-and-roya.html:46d27721497d60b0",
    "0096-holding-cells-agariya-and-roya.html:937c7af5507a1c15",
    "0096-holding-cells-agariya-and-roya.html:bc94fea1004fa3d9",
    "0096-holding-cells-agariya-and-roya.html:f1e5972ca3458ff3"
@@ -835,20 +951,20 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#cell kept well under the barracks": {
-  "code": "250ea95ded7eff72",
-  "core": "92e75ffa3b03e4a2",
-  "date": "2026-10-07",
-  "note": "no cited page ranks a cell against the barracks",
+  "code": "74f8dd273b5d0c9a",
+  "core": "99bded91e37b18fd",
+  "date": "2026-10-08",
+  "note": "no page ranks them",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#charcoal bales": {
-  "code": "98d99d0585814abe",
-  "core": "92e75ffa3b03e4a2",
-  "date": "2026-10-07",
-  "note": "this section draws no bales, so the claim belongs on the Ubame instance; even there 0199 draws a bale \"about 4 ft long, by convention\" (real ~2 x 1.3 ft), not 6 x 3 ft",
+  "code": "f00e1d19a6144819",
+  "core": "99bded91e37b18fd",
+  "date": "2026-10-08",
+  "note": "Ubame's ~6x3 ft bales exceed the drawn \"about 4 ft long, by convention\" (real ~2x1.3 ft)",
   "pages": {
    "0199-straw-bales-of-rice-and-charcoal-tawara.drawing.html": "c4e837038c94b2f6"
   },
@@ -857,28 +973,27 @@
    "0199-straw-bales-of-rice-and-charcoal-tawara.drawing.html:47b9da864eba6419",
    "0199-straw-bales-of-rice-and-charcoal-tawara.drawing.html:bb020e97bc9a68c9"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "DRIFTED"
  },
  "docs/buildings.md::Outer court (administrative / public)#charcoal weighing floor": {
-  "code": "8dfad4b1281a851b",
-  "core": "92e75ffa3b03e4a2",
-  "date": "2026-10-07",
-  "note": "this section draws no weighing floor, so the claim belongs on the Ubame instance; even there 0197 gives \"a weighing floor of 16 by 14 ft\", not ~27 ft square",
+  "code": "11b2129deba7310a",
+  "core": "99bded91e37b18fd",
+  "date": "2026-10-08",
+  "note": "Ubame's ~27 ft square weighing floor against \"a weighing floor of 16 by 14 ft\"",
   "pages": {
    "0197-charcoal-yards-and-charcoal-stores.drawing.html": "fba749a9a3f24a9c"
   },
   "research": "7a250f14854ed763",
   "rests": [
-   "0197-charcoal-yards-and-charcoal-stores.drawing.html:6bf708142ba3ec57",
-   "0197-charcoal-yards-and-charcoal-stores.drawing.html:9c6dfab4db52b728"
+   "0197-charcoal-yards-and-charcoal-stores.drawing.html:6bf708142ba3ec57"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "DRIFTED"
  },
  "docs/buildings.md::Outer court (administrative / public)#clerk positions at the dais": {
-  "code": "9b0ad8a11462fbcf",
-  "core": "92e75ffa3b03e4a2",
-  "date": "2026-10-07",
-  "note": "the drawing page answers this: clerks seated \"to either side of the magistrate, level with the dais ... a deliberate deviation\", with the seats' size a GUESS; the claim should be DEVIATION research/questions/0099-the-hearing-court-shirasu.drawing.html",
+  "code": "8dc5a732b5e40aff",
+  "core": "99bded91e37b18fd",
+  "date": "2026-10-08",
+  "note": "0099.drawing answers it (clerks \"to either side of the magistrate, level with the dais ... a deliberate deviation\"); the label should be DEVIATION research/questions/0099-the-hearing-court-shirasu.drawing.html",
   "pages": {},
   "research": "",
   "rests": [
@@ -887,45 +1002,32 @@
   ],
   "verdict": "MISLABELED"
  },
- "docs/buildings.md::Outer court (administrative / public)#earth-walled granary kura with its door on the loading apron": {
-  "code": "92e75ffa3b03e4a2",
-  "core": "92e75ffa3b03e4a2",
-  "date": "2026-10-07",
-  "note": "earth-walled granary kura with its door on the loading apron",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  "docs/buildings.md::Outer court (administrative / public)#forecourt": {
-  "code": "8370092aa15a47da",
-  "core": "92e75ffa3b03e4a2",
-  "date": "2026-10-07",
-  "note": "the section text decides nothing about a forecourt; the claim describes Hayakawa's sheet labels, and neither page records them; the pages put the forecourt/plaza before the entrance in the open ground inside the main gate, not in a strip behind the office hall",
+  "code": "d62207323b410af6",
+  "core": "99bded91e37b18fd",
+  "date": "2026-10-08",
+  "note": "Hayakawa labels the strip behind the office hall \"forecourt\" and calls the open ground inside the main gate OUTER COURT; the record's open ground is inside the main gate, before the entrance",
   "pages": {
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "bbfebe573bb99b25",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html": "ac75a1e28a361c16"
   },
   "research": "ec238eaee630004b",
   "rests": [
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:00bcfd3abdfc77d8",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:459642a27a3630d1",
-   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:f6879c35848621fc",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html:294ade5001734dd1"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "DRIFTED"
  },
  "docs/buildings.md::Outer court (administrative / public)#granary forms": {
-  "code": "905e0703fa07b366",
-  "core": "92e75ffa3b03e4a2",
-  "date": "2026-10-07",
-  "note": "both attested forms (on posts, earth-walled kura) chosen per plan; ~1,100-1,350 sq ft, long and shallow, is a calibration inside the measured bracket; a row for a terminal store",
+  "code": "2b7b95ab7db94775",
+  "core": "99bded91e37b18fd",
+  "date": "2026-10-08",
+  "note": "raised on posts or earth-walled kura, rolled; size within the measured bracket",
   "pages": {
    "0098-storehouses-for-the-tax-rice.html": "b0964dae032a23e9"
   },
   "research": "f2e5561095446765",
   "rests": [
-   "0098-storehouses-for-the-tax-rice.html:057bf89c63cb11ea",
-   "0098-storehouses-for-the-tax-rice.html:0f9ff5b4a485d650",
-   "0098-storehouses-for-the-tax-rice.html:234a9d6b4069fc1a",
    "0098-storehouses-for-the-tax-rice.html:a4b977f062796001",
    "0098-storehouses-for-the-tax-rice.html:ba9c123d1799c49c",
    "0098-storehouses-for-the-tax-rice.html:dd3661cdd179fb46",
@@ -934,10 +1036,10 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#granary kept under a residence block": {
-  "code": "97fad9e9ed804635",
-  "core": "92e75ffa3b03e4a2",
-  "date": "2026-10-07",
-  "note": "the claim's \"every storage building held below the residence\" contradicts \"So the maps do not hold every storage building below the residence\", and the code's unconditional \"Keep it under a residence block\" ignores the terminal-store case, which \"may be the largest building\"; tie the cap to the granary-weight knob",
+  "code": "f8960b35f81ae76d",
+  "core": "99bded91e37b18fd",
+  "date": "2026-10-08",
+  "note": "a fixed \"Keep it under a residence block\" (and the claim's own account) contradicts \"the maps do not hold every storage building below the residence\" for a terminal store",
   "pages": {
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c2a4ba141b354319"
   },
@@ -947,36 +1049,27 @@
   ],
   "verdict": "DRIFTED"
  },
- "docs/buildings.md::Outer court (administrative / public)#granary labeled for mixed, rice-dominant contents": {
-  "code": "92e75ffa3b03e4a2",
-  "core": "92e75ffa3b03e4a2",
-  "date": "2026-10-07",
-  "note": "granary labeled for mixed, rice-dominant contents",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  "docs/buildings.md::Outer court (administrative / public)#hearing cart slot": {
-  "code": "e618270b7267ae13",
-  "core": "92e75ffa3b03e4a2",
-  "date": "2026-10-07",
-  "note": "no page sizes a passage past the hearing court (the 15-20 ft apron is a different GUESS)",
+  "code": "127ec1abbdd7ca9a",
+  "core": "99bded91e37b18fd",
+  "date": "2026-10-08",
+  "note": "no page bears on it",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#hearing court": {
-  "code": "eba54555f176ec9e",
-  "core": "92e75ffa3b03e4a2",
-  "date": "2026-10-07",
-  "note": "roofed, gravel or river cobbles as a knob, against the front of the office hall, size a guess",
+  "code": "bbb07f273a05c14d",
+  "core": "99bded91e37b18fd",
+  "date": "2026-10-08",
+  "note": "roofed, white gravel or river cobbles, before the hall",
   "pages": {
    "0099-the-hearing-court-shirasu.html": "c0f6b660f7639a81"
   },
   "research": "81ffa6b221f0f767",
   "rests": [
    "0099-the-hearing-court-shirasu.html:1c5a6e5edd21f113",
-   "0099-the-hearing-court-shirasu.html:1dcd0a6b024a14c6",
    "0099-the-hearing-court-shirasu.html:2b4df310fcb5d01c",
    "0099-the-hearing-court-shirasu.html:700e8e156074abca",
    "0099-the-hearing-court-shirasu.html:fd2431d8cc8f2d5a"
@@ -984,10 +1077,10 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#hearing mat size": {
-  "code": "94638f6cd2b6bbd8",
-  "core": "92e75ffa3b03e4a2",
-  "date": "2026-10-07",
-  "note": "the accused's mat ~6 x 3 ft is recorded as a GUESS",
+  "code": "89588758566f23e2",
+  "core": "99bded91e37b18fd",
+  "date": "2026-10-08",
+  "note": "accused's mat ~6x3 ft, recorded as a GUESS",
   "pages": {
    "0099-the-hearing-court-shirasu.drawing.html": "6e346d062ac74ea6"
   },
@@ -998,25 +1091,24 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#hearing mats": {
-  "code": "57abf64df7d9bc03",
-  "core": "92e75ffa3b03e4a2",
-  "date": "2026-10-07",
-  "note": "accused at the center, plaintiff and officials behind to either side, as at Edo",
+  "code": "9c83c4d0f3a80e89",
+  "core": "99bded91e37b18fd",
+  "date": "2026-10-08",
+  "note": "accused at the center, officials and plaintiff behind",
   "pages": {
    "0099-the-hearing-court-shirasu.html": "c0f6b660f7639a81"
   },
   "research": "81ffa6b221f0f767",
   "rests": [
-   "0099-the-hearing-court-shirasu.html:8f23e38817efeb5b",
-   "0099-the-hearing-court-shirasu.html:df1c5d05bbf98460"
+   "0099-the-hearing-court-shirasu.html:8f23e38817efeb5b"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#office hall": {
-  "code": "9be6f04b4767c1f0",
-  "core": "92e75ffa3b03e4a2",
-  "date": "2026-10-07",
-  "note": "~3,360 sq ft falls between Joge's 2,850 and Takayama's 8,100; the courtroom is a room of the one block",
+  "code": "a3d954733609eb85",
+  "core": "99bded91e37b18fd",
+  "date": "2026-10-08",
+  "note": "~3,360 sq ft, between Joge and Takayama; clerks in rooms of the hall; court a room of it",
   "pages": {
    "0113-the-office-hall-and-its-clerks-goyakusho.html": "f48c2ca0c1c3bee2"
   },
@@ -1030,27 +1122,25 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#practice ground": {
-  "code": "70f440259e6a3a03",
-  "core": "92e75ffa3b03e4a2",
-  "date": "2026-10-07",
-  "note": "swept patch with a weapon rack and striking posts, no hall",
+  "code": "67d21c80a51fd43d",
+  "core": "99bded91e37b18fd",
+  "date": "2026-10-08",
+  "note": "swept patch, rack and posts, no hall",
   "pages": {
    "0165-martial-training-grounds-and-dojo.drawing.html": "931bfd2e0737c1a3"
   },
   "research": "8b27404bc31588ce",
   "rests": [
    "0165-martial-training-grounds-and-dojo.drawing.html:6b3ccf7746ee08c1",
-   "0165-martial-training-grounds-and-dojo.drawing.html:8496364fd5fb5ba3",
-   "0165-martial-training-grounds-and-dojo.drawing.html:de4325f24196505d",
-   "0165-martial-training-grounds-and-dojo.drawing.html:eaaa0e49753241f1"
+   "0165-martial-training-grounds-and-dojo.drawing.html:8496364fd5fb5ba3"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#practice ground area": {
-  "code": "b4efc5b517de8fa0",
-  "core": "92e75ffa3b03e4a2",
-  "date": "2026-10-07",
-  "note": "90-135 sq ft per samurai, a GUESS on the page",
+  "code": "95bfaaf0ded40549",
+  "core": "99bded91e37b18fd",
+  "date": "2026-10-08",
+  "note": "90-135 sq ft per samurai, recorded as a GUESS",
   "pages": {
    "0165-martial-training-grounds-and-dojo.drawing.html": "931bfd2e0737c1a3"
   },
@@ -1061,9 +1151,9 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#practice ground placement": {
-  "code": "c5a7105135b553c1",
-  "core": "92e75ffa3b03e4a2",
-  "date": "2026-10-07",
+  "code": "a05a04665269031a",
+  "core": "99bded91e37b18fd",
+  "date": "2026-10-08",
   "note": "beside the guards' quarters",
   "pages": {
    "0165-martial-training-grounds-and-dojo.drawing.html": "931bfd2e0737c1a3"
@@ -1075,22 +1165,20 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#practice ground shared with cart staging or muster": {
-  "code": "a214ef09c1f34d93",
-  "core": "92e75ffa3b03e4a2",
-  "date": "2026-10-07",
-  "note": "no page describes how rural practice ground was used",
+  "code": "d8041e564b0fbd5f",
+  "core": "99bded91e37b18fd",
+  "date": "2026-10-08",
+  "note": "no page bears on it",
   "pages": {},
   "research": "",
-  "rests": [
-   "0165-martial-training-grounds-and-dojo.drawing.html:6b3ccf7746ee08c1"
-  ],
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#practice ground striking posts": {
-  "code": "46cfa9e22265003f",
-  "core": "92e75ffa3b03e4a2",
-  "date": "2026-10-07",
-  "note": "upright posts only; the marker is a convention and the count a GUESS",
+  "code": "4fe6fc4291538ff2",
+  "core": "99bded91e37b18fd",
+  "date": "2026-10-08",
+  "note": "upright posts, drawn as markers; the count is a GUESS",
   "pages": {
    "0165-martial-training-grounds-and-dojo.drawing.html": "931bfd2e0737c1a3"
   },
@@ -1102,10 +1190,10 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#practice ground weapon rack": {
-  "code": "8adf311b122d3acf",
-  "core": "92e75ffa3b03e4a2",
-  "date": "2026-10-07",
-  "note": "~8 x 2 ft rack at the ground's edge, a GUESS",
+  "code": "86199e63ff51628a",
+  "core": "99bded91e37b18fd",
+  "date": "2026-10-08",
+  "note": "~8x2 ft, recorded as a GUESS",
   "pages": {
    "0165-martial-training-grounds-and-dojo.drawing.html": "931bfd2e0737c1a3"
   },
@@ -1116,84 +1204,79 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#stable below barracks": {
-  "code": "baa69b7438982daf",
-  "core": "92e75ffa3b03e4a2",
-  "date": "2026-10-07",
-  "note": "the page records the stable-below-barracks order as a GUESS",
+  "code": "0cc5f9a1e29419a7",
+  "core": "99bded91e37b18fd",
+  "date": "2026-10-08",
+  "note": "stable smaller than the barracks, recorded as a GUESS",
   "pages": {
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c2a4ba141b354319"
   },
   "research": "8bb634ee7fbc398f",
   "rests": [
-   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:1cb5624cb2336cca",
-   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:f04061862f18172a"
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:1cb5624cb2336cca"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#stable passage and grooms' quarters": {
-  "code": "bc133ddea6a478a4",
-  "core": "92e75ffa3b03e4a2",
-  "date": "2026-10-07",
-  "note": "the drawing page says the opposite of the claim: the stable is drawn \"with quarters in it for the grooms and an earth-floored passage before the stalls\"; the code draws stall divisions only",
+  "code": "9d7fef78c695efa2",
+  "core": "99bded91e37b18fd",
+  "date": "2026-10-08",
+  "note": "no sheet draws them, but the page says the stable is drawn \"with quarters in it for the grooms and an earth-floored passage before the stalls\"",
   "pages": {
    "0108-stables-umaya.drawing.html": "9b263ee6db0a6b95"
   },
   "research": "96ea0c83b210c787",
   "rests": [
-   "0108-stables-umaya.drawing.html:bfffc30811fc7968",
-   "0108-stables-umaya.html:3167887923b3c4cc",
-   "0108-stables-umaya.html:77be2a6a5f39b548"
+   "0108-stables-umaya.drawing.html:bfffc30811fc7968"
   ],
   "verdict": "DRIFTED"
  },
  "docs/buildings.md::Outer court (administrative / public)#stable stall width": {
-  "code": "0160f8e6ce8d86da",
-  "core": "92e75ffa3b03e4a2",
-  "date": "2026-10-07",
-  "note": "the page draws stalls \"about one ken (~6 ft) wide\"; the claim and code give ~9.3-9.7 ft (28-32 ft over 3 stalls)",
+  "code": "fd9f80f0fa03801a",
+  "core": "99bded91e37b18fd",
+  "date": "2026-10-08",
+  "note": "sheets draw 9.3-9.7 ft stalls where \"The stalls are drawn about one ken (~6 ft) wide\"",
   "pages": {
    "0108-stables-umaya.drawing.html": "9b263ee6db0a6b95"
   },
   "research": "96ea0c83b210c787",
   "rests": [
-   "0108-stables-umaya.drawing.html:219e638987c06796",
-   "0108-stables-umaya.html:593523e7ce195b4d"
+   "0108-stables-umaya.drawing.html:219e638987c06796"
   ],
   "verdict": "DRIFTED"
  },
  "docs/buildings.md::Outer court (administrative / public)#stables": {
-  "code": "fb2f96e746a53840",
-  "core": "92e75ffa3b03e4a2",
-  "date": "2026-10-07",
-  "note": "the research says \"a small one was three bays long\" with stalls \"one bay wide\" (~18 ft), not ~28-32 ft; the horse count of 2-4 is unsourced (\"No page we read says\") and should be GUESS on the drawing page",
+  "code": "94eabcdd734b5c15",
+  "core": "99bded91e37b18fd",
+  "date": "2026-10-08",
+  "note": "28-32 ft for three stalls implies ~9.5 ft bays against \"stalls one bay wide\" (~6 ft); no matted room or passage is drawn; the 2-4 horses are a GUESS the page does not give",
   "pages": {
    "0108-stables-umaya.html": "e28bb721c804f4bf"
   },
   "research": "f6f01652a6a060e2",
   "rests": [
-   "0108-stables-umaya.drawing.html:d4268b7e5b7275c7",
-   "0108-stables-umaya.html:12a3224dd5a29b03",
    "0108-stables-umaya.html:41dd4a78c52512c9",
    "0108-stables-umaya.html:593523e7ce195b4d",
+   "0108-stables-umaya.html:77be2a6a5f39b548",
    "0108-stables-umaya.html:e24e1c344ed689f1"
   ],
   "verdict": "DRIFTED"
  },
  "docs/buildings.md::Outer court (administrative / public)#tax archive drawn with white-plaster fill, heavy stroke and dark door mark": {
-  "code": "48a5737a3d0c6a30",
-  "core": "92e75ffa3b03e4a2",
-  "date": "2026-10-07",
-  "note": "fill, stroke and door mark are purely how the kura is shown",
+  "code": "506c4e33b673a5b4",
+  "core": "99bded91e37b18fd",
+  "date": "2026-10-08",
+  "note": "how the plastered store is shown",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#tax archive size": {
-  "code": "427180b48d97b2cd",
-  "core": "92e75ffa3b03e4a2",
-  "date": "2026-10-07",
-  "note": "the page's rule is \"no more than about 450 sq ft\" (about 24 x 18 ft); the code's 32-36 ft matches the kitchen store, not the records store, and the page notes this size without calling it a deliberate choice; resize to the cap, or make it a DEVIATION the drawing page records as deliberate (the strongroom role)",
+  "code": "75ba347f086602cc",
+  "core": "99bded91e37b18fd",
+  "date": "2026-10-08",
+  "note": "32-36 ft breaks the page's rule of \"a floor of no more than about 450 sq ft\" (about 24 x 18 ft); it should be redrawn, or the page should record the oversize as a DEVIATION",
   "pages": {
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "2c4dfd988d663a80"
   },
@@ -1201,131 +1284,165 @@
   "rests": [
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:2282c61a5b1e4912",
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:33510cb335904fa2",
-   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:9ba0f5fcb5d7014a",
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:aea6cd1ed8944b96",
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:fb5af5b7b0dcb397"
   ],
   "verdict": "DRIFTED"
  },
  "docs/buildings.md::Outer court (administrative / public)#tax archive strongroom role": {
-  "code": "964e73fd30a31342",
-  "core": "92e75ffa3b03e4a2",
-  "date": "2026-10-07",
-  "note": "no page puts ledgers and valuables in one kura",
+  "code": "62ece3ba295e0036",
+  "core": "99bded91e37b18fd",
+  "date": "2026-10-08",
+  "note": "no page bears on it",
   "pages": {},
   "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "docs/buildings.md::Period defaults: Edo for the civil, Sengoku for the military#L5R divergences kept": {
+  "code": "d7450cc69b0671cb",
+  "core": "3e5f81b52fb4d9c1",
+  "date": "2026-10-08",
+  "note": "the claim names the GM's setting canon",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "docs/buildings.md::Period defaults: Edo for the civil, Sengoku for the military#civil features default to Edo": {
+  "code": "b563d2d56af49617",
+  "core": "3e5f81b52fb4d9c1",
+  "date": "2026-10-08",
+  "note": "the claim names the GM's setting decision",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "docs/buildings.md::Period defaults: Edo for the civil, Sengoku for the military#detention a holding function": {
+  "code": "ecd79b78f97bd8db",
+  "core": "3e5f81b52fb4d9c1",
+  "date": "2026-10-08",
+  "note": "the jail held people; confinement as a sentence only by exception",
+  "pages": {
+   "0096-holding-cells-agariya-and-roya.html": "4426e3559e549311"
+  },
+  "research": "86def40e24cced5e",
   "rests": [
-   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:67384625aa76f7e9"
+   "0096-holding-cells-agariya-and-roya.html:109065ac6a0ea787",
+   "0096-holding-cells-agariya-and-roya.html:798a67666670807f",
+   "0096-holding-cells-agariya-and-roya.html:822b7c5e4691c840"
   ],
+  "verdict": "IN-STEP"
+ },
+ "docs/buildings.md::Period defaults: Edo for the civil, Sengoku for the military#military features default to Sengoku": {
+  "code": "b2e0a51dcdf9f553",
+  "core": "3e5f81b52fb4d9c1",
+  "date": "2026-10-08",
+  "note": "the claim names the GM's setting decision",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sacred features#approach width": {
-  "code": "c42668525d86dd83",
-  "core": "5dc3c4f8379833c2",
-  "date": "2026-10-07",
-  "note": "no cited page gives an approach's width; 0224 says only what the gravel was for",
+  "code": "5f3ce4aff59cf6cf",
+  "core": "11a5b73c9ab6be03",
+  "date": "2026-10-08",
+  "note": "no page gives a width",
   "pages": {},
   "research": "",
-  "rests": [
-   "0224-ground-swept-clear-around-shrines-and-graves.html:5b400e21e086078a"
-  ],
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sacred features#arch dimensions": {
-  "code": "6f38d0f717f1c8bb",
-  "core": "5dc3c4f8379833c2",
-  "date": "2026-10-07",
-  "note": "nothing in the bundle sizes an arch's beam or posts",
+  "code": "e30eecb3a4094192",
+  "core": "11a5b73c9ab6be03",
+  "date": "2026-10-08",
+  "note": "no page gives dimensions",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sacred features#arch in plan": {
-  "code": "227521d547aa7dfc",
-  "core": "5dc3c4f8379833c2",
-  "date": "2026-10-07",
-  "note": "the arches stand 12 ft apart, as the page sets",
+  "code": "a9660fe2ad8e2077",
+  "core": "11a5b73c9ab6be03",
+  "date": "2026-10-08",
+  "note": "arches 12 ft apart",
   "pages": {
    "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html": "e385403eda71f0a2"
   },
   "research": "187ffe8b48289099",
   "rests": [
-   "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:11a53f93479ca7e0",
-   "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:3f3c47b402c4f41d",
-   "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:6e46a236e3d5c3e9"
+   "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:11a53f93479ca7e0"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sacred features#bare precinct earth": {
-  "code": "cfa5e5b11abd79b5",
-  "core": "5dc3c4f8379833c2",
-  "date": "2026-10-07",
-  "note": "no rake lines: the page says a raked or swept precinct is \"this project's own guess\" and no page gives the surface",
+  "code": "850f791d7dd6c795",
+  "core": "11a5b73c9ab6be03",
+  "date": "2026-10-08",
+  "note": "the record gives no raked or swept precinct",
   "pages": {
    "0224-ground-swept-clear-around-shrines-and-graves.html": "ac45206dd1b05fe0"
   },
   "research": "6466d41a1eb45257",
   "rests": [
    "0224-ground-swept-clear-around-shrines-and-graves.html:55f2714efdadc428",
-   "0224-ground-swept-clear-around-shrines-and-graves.html:898072db4155f25a",
-   "0224-ground-swept-clear-around-shrines-and-graves.html:ede9f63d0b1336c9"
+   "0224-ground-swept-clear-around-shrines-and-graves.html:898072db4155f25a"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sacred features#burial ground beside the precinct": {
-  "code": "3b3e900db9038464",
-  "core": "5dc3c4f8379833c2",
-  "date": "2026-10-07",
-  "note": "0226 does not record \"in the shrine's yard\" as a deviation; it is one side of a knob (\"in the shrine's yard or apart from it on a knob\"). The claim should cite 0226 as a question claim, and the sheet should say which side of the knob it took",
+  "code": "f155dd553cad0815",
+  "core": "11a5b73c9ab6be03",
+  "date": "2026-10-08",
+  "note": "the drawing page records no deviation here: the ground sits in the shrine's yard or apart \"on a knob\", so the claim should cite the question and the form should be rolled",
   "pages": {
    "0226-shrines-temples-and-graves-in-each-size-of-settlement.drawing.html": "57917dbe10aef8d5"
   },
   "research": "66dcc8ae512a5c22",
   "rests": [
-   "0226-shrines-temples-and-graves-in-each-size-of-settlement.drawing.html:2858734a49afe917",
-   "0226-shrines-temples-and-graves-in-each-size-of-settlement.drawing.html:3cb31f36e31e3029",
-   "0226-shrines-temples-and-graves-in-each-size-of-settlement.drawing.html:658031ef79aa2d75"
+   "0226-shrines-temples-and-graves-in-each-size-of-settlement.drawing.html:3cb31f36e31e3029"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "DRIFTED"
  },
  "docs/buildings.md::Sacred features#compound shrine arch": {
-  "code": "723320e31e4be57c",
-  "core": "5dc3c4f8379833c2",
-  "date": "2026-10-07",
-  "note": "the procedure always draws a torii, but the page says \"A compound shrine may have no arch at all\". It also makes sharing one arch a seeded knob, where the procedure only \"may share\", and it puts the arch 5-12 ft before the hall, where the procedure says only \"nearby\"",
+  "code": "038e4b9094e97226",
+  "core": "11a5b73c9ab6be03",
+  "date": "2026-10-08",
+  "note": "\"a torii always drawn\" fixes one form where the page says a compound shrine \"may have no arch at all\"; arch or none should roll like the shared/own knob",
   "pages": {
    "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html": "e385403eda71f0a2"
   },
   "research": "187ffe8b48289099",
   "rests": [
    "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:42f44bb974a57496",
-   "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:52ba5c2f9e830511",
    "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:5dbe6218f548b7d9"
   ],
   "verdict": "DRIFTED"
  },
  "docs/buildings.md::Sacred features#compound shrine tree": {
-  "code": "261d1b121d7852db",
-  "core": "5dc3c4f8379833c2",
-  "date": "2026-10-07",
-  "note": "the drawing page sets every compound shrine \"in a corner of its grounds beside a tree\" and records any garden as a GUESS. Ochiba's garden with no tree is not recorded there; either give the shrine its tree or record the departure as a DEVIATION",
+  "code": "fae8e243667df651",
+  "core": "11a5b73c9ab6be03",
+  "date": "2026-10-08",
+  "note": "Ochiba's shrine has no tree, where the page draws \"one modest shrine, in a corner of its grounds beside a tree\"",
   "pages": {
    "0218-the-compounds-own-shrine-yashikigami.drawing.html": "30143bd59a2deac9"
   },
   "research": "433c01774fd3a16c",
   "rests": [
    "0218-the-compounds-own-shrine-yashikigami.drawing.html:08413de30e1b0f4b",
-   "0218-the-compounds-own-shrine-yashikigami.drawing.html:169483752db7d7f8",
    "0218-the-compounds-own-shrine-yashikigami.drawing.html:49a9e6e92d9dd874"
   ],
   "verdict": "DRIFTED"
  },
  "docs/buildings.md::Sacred features#grave markers": {
-  "code": "3f01a99831bcad42",
-  "core": "5dc3c4f8379833c2",
-  "date": "2026-10-07",
-  "note": "the page draws an irregular patch of rows \"at about 9 ft spacing\" with \"a taller memorial stone or two\" and six jizo at the entrance; the procedure draws none of these. The ~2x1 ft marker size is on no page (it should be a GUESS), and \"outside the fence\" names a fence the precinct does not have",
+  "code": "48735a2a1814db19",
+  "core": "11a5b73c9ab6be03",
+  "date": "2026-10-08",
+  "note": "the sheet draws neither the \"six small stone jizo\" at the entrance nor \"a taller memorial stone or two\"; \"outside the fence\" when the precinct has none",
   "pages": {
    "0235-village-burial-grounds-bochi.drawing.html": "fa6fc256f086d28d"
   },
@@ -1333,67 +1450,58 @@
   "rests": [
    "0235-village-burial-grounds-bochi.drawing.html:3cdcbc4280308cb8",
    "0235-village-burial-grounds-bochi.drawing.html:7a977de34ea42248",
-   "0235-village-burial-grounds-bochi.drawing.html:a2b15867d4cd7350",
-   "0235-village-burial-grounds-bochi.drawing.html:d222af3b26079b80"
+   "0235-village-burial-grounds-bochi.drawing.html:a2b15867d4cd7350"
   ],
   "verdict": "DRIFTED"
  },
  "docs/buildings.md::Sacred features#grove": {
-  "code": "7f11d02b84d171ee",
-  "core": "5dc3c4f8379833c2",
-  "date": "2026-10-07",
-  "note": "the procedure fixes one form, a wood filling the whole precinct. 0223 attests several forms that follow the ground: all round on a rise or in paddy; behind, behind and at the sides, or at the sides only on a slope; a row along the approach. The roped sacred tree comes from 0222 §87, not from 0223",
+  "code": "f1167209ec34ef36",
+  "core": "11a5b73c9ab6be03",
+  "date": "2026-10-08",
+  "note": "the wood \"filling the precinct\" fixes the all-round form; the record ties the wood's sides to the slope (behind, sides or both), and \"the wood stands on only part of the ground\"",
   "pages": {
    "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html": "81663f30960fa262"
   },
   "research": "3377b10b4014ee4c",
   "rests": [
-   "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html:0754094bacfe5b43",
+   "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:150b6599eb0096ca",
    "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html:11b077a13153a698",
-   "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html:288fa0fbdf7d7371",
    "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html:2ae7827162453585",
-   "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html:e258ed2b31e06420",
-   "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html:e2776b83ca1ea0ab"
+   "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html:e258ed2b31e06420"
   ],
   "verdict": "DRIFTED"
  },
  "docs/buildings.md::Sacred features#grove crown size": {
-  "code": "8a8863448c1a41ae",
-  "core": "5dc3c4f8379833c2",
-  "date": "2026-10-07",
-  "note": "0.75-1.4 x a 17 ft mean crown, recorded as a GUESS, overlapping allowed",
+  "code": "55054a230bbe3fd4",
+  "core": "11a5b73c9ab6be03",
+  "date": "2026-10-08",
+  "note": "0.75-1.4 x 17 ft, overlapping at the edges, recorded as a GUESS",
   "pages": {
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html": "605417d79e0e0561"
   },
   "research": "f1a38c9708a60be9",
   "rests": [
-   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:02347cd7bad4385d",
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:a40ebd3a6acb1f87",
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:aad44c6751a44f5f",
-   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:c42d5b3f4f69bf47",
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:d9d6ec0e3a243d28"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sacred features#grove inside a compound wall": {
-  "code": "ca72213f09e8cf5d",
-  "core": "5dc3c4f8379833c2",
-  "date": "2026-10-07",
-  "note": "0218's drawing page does answer what stands with a compound shrine: a single tree (the seat of the god is \"an old tree or a stone\"). The claim should cite 0218 rather than say UNRESEARCHED, and against it a stippled grove rectangle would drift",
+  "code": "a0f0ccc6ef04007c",
+  "core": "11a5b73c9ab6be03",
+  "date": "2026-10-08",
+  "note": "no page describes such a grove",
   "pages": {},
   "research": "",
-  "rests": [
-   "0218-the-compounds-own-shrine-yashikigami.drawing.html:08413de30e1b0f4b",
-   "0218-the-compounds-own-shrine-yashikigami.drawing.html:49a9e6e92d9dd874",
-   "0218-the-compounds-own-shrine-yashikigami.html:b15f43848fbd0e18"
-  ],
-  "verdict": "MISLABELED"
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sacred features#hall and dwelling": {
-  "code": "ca4f063ef54106e8",
-  "core": "5dc3c4f8379833c2",
-  "date": "2026-10-07",
-  "note": "one roof is the default and a separate house is the author's alternative; the kuri began as a kitchen; the writing room holds the records",
+  "code": "4f4c79cdcfd1d555",
+  "core": "11a5b73c9ab6be03",
+  "date": "2026-10-08",
+  "note": "one roof by default, a separate house as the other form; a writing room for the records",
   "pages": {
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html": "5e8ac2e778e0e69b",
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html": "53e6b30a3e84d65c"
@@ -1402,31 +1510,26 @@
   "rests": [
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html:3c6c34f741caa79c",
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html:47b50699d36be383",
-   "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html:7950922e6a0cab34",
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html:7d3c2032a9987c33",
-   "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html:2c7b940b515976a0",
-   "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html:f24d361f0a0d9421"
-  ],
-  "verdict": "IN-STEP"
- },
- "docs/buildings.md::Sacred features#hall and dwelling order": {
-  "code": "2af0e4cf516b267c",
-  "core": "5dc3c4f8379833c2",
-  "date": "2026-10-07",
-  "note": "Kaie-ji, the one one-roof example, gives no order of hall and kuri",
-  "pages": {},
-  "research": "",
-  "rests": [
-   "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html:3c6c34f741caa79c",
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html:2c7b940b515976a0"
   ],
   "verdict": "IN-STEP"
  },
+ "docs/buildings.md::Sacred features#hall and dwelling order": {
+  "code": "b545e3585125ef4a",
+  "core": "11a5b73c9ab6be03",
+  "date": "2026-10-08",
+  "note": "no page bears on it",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "docs/buildings.md::Sacred features#hall shrine ceiling": {
-  "code": "06ac4fa68277eacb",
-  "core": "5dc3c4f8379833c2",
-  "date": "2026-10-07",
-  "note": "the ~36x30 ft ceiling is above 0116's haiden of \"3 to 5 ken across\" (~18-30 ft); the procedure's own \"~24-30 ft\" note admits it. 0218 gives no hall size. \"Under half a residence block\" is a ranking 0116 says no page records. Hold the ceiling to 30 ft, or record the grand hall as a DEVIATION",
+  "code": "1718ef87c4586524",
+  "core": "11a5b73c9ab6be03",
+  "date": "2026-10-08",
+  "note": "the ~36 ft ceiling is over 0116's 3-5 ken hall (~18-30 ft), and 0218 gives no size; cap it at ~30 ft or cite the Fox-lands divergence as CANON",
   "pages": {
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html": "ac75a1e28a361c16",
    "0218-the-compounds-own-shrine-yashikigami.html": "9599070ed9639df8"
@@ -1434,137 +1537,129 @@
   "research": "e5ea23f1a3952728",
   "rests": [
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html:810821d06441c9f0",
-   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html:d89c58633b72e2d1",
-   "0218-the-compounds-own-shrine-yashikigami.html:834a4967c2ef0c57",
-   "0218-the-compounds-own-shrine-yashikigami.html:b15f43848fbd0e18"
+   "0218-the-compounds-own-shrine-yashikigami.html:19a8b2635c1b3c76"
   ],
   "verdict": "DRIFTED"
  },
  "docs/buildings.md::Sacred features#kitchen garden at the dwelling": {
-  "code": "8140e18bf9a1fb53",
-  "core": "5dc3c4f8379833c2",
-  "date": "2026-10-07",
-  "note": "nothing in the bundle places a garden at a monk's dwelling",
+  "code": "43436ef76805f519",
+  "core": "11a5b73c9ab6be03",
+  "date": "2026-10-08",
+  "note": "0109.drawing answers it (the keeper's plot \"near the hall, on open ground that gets its sun\", a GUESS); the label should be GUESS research/questions/0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html",
   "pages": {},
   "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
+  "rests": [
+   "0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html:a4c8a8d9311781d9"
+  ],
+  "verdict": "MISLABELED"
  },
  "docs/buildings.md::Sacred features#modest compound shrine": {
-  "code": "829db1ac6e4facdb",
-  "core": "5dc3c4f8379833c2",
-  "date": "2026-10-07",
-  "note": "a small shrine in the lot, with Inari among the attested gods",
+  "code": "feef19597516bd2e",
+  "core": "11a5b73c9ab6be03",
+  "date": "2026-10-08",
+  "note": "a small shrine in a corner of the lot",
   "pages": {
    "0218-the-compounds-own-shrine-yashikigami.html": "9599070ed9639df8"
   },
   "research": "ba81c28e1330864c",
   "rests": [
-   "0218-the-compounds-own-shrine-yashikigami.drawing.html:1cf5b0fa52131673",
    "0218-the-compounds-own-shrine-yashikigami.html:834a4967c2ef0c57",
-   "0218-the-compounds-own-shrine-yashikigami.html:925ed990bebbc1c3",
    "0218-the-compounds-own-shrine-yashikigami.html:b15f43848fbd0e18"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sacred features#more than one kami in a hall": {
-  "code": "ff907d12ca5bfc11",
-  "core": "5dc3c4f8379833c2",
-  "date": "2026-10-07",
-  "note": "the drawing page records the second kami only for Ochiba, not Hayakawa, and rolls its housing from the seed: one hall (aidono) or a shrine of its own. The procedure fixes one form, \"internal rail division for multiple altars\"",
+  "code": "cc746a2b291fcf4b",
+  "core": "11a5b73c9ab6be03",
+  "date": "2026-10-08",
+  "note": "0218.drawing records only Ochiba's two-kami shrine, not Hayakawa's; side-by-side altars are attested in 0222, which the pointer should name",
   "pages": {
    "0218-the-compounds-own-shrine-yashikigami.drawing.html": "30143bd59a2deac9"
   },
   "research": "433c01774fd3a16c",
   "rests": [
-   "0218-the-compounds-own-shrine-yashikigami.drawing.html:be6049ab7f6ba02d"
+   "0218-the-compounds-own-shrine-yashikigami.drawing.html:be6049ab7f6ba02d",
+   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:338c2d041cf07e0d",
+   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:8516c3ef6de75ad2"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "MISLABELED"
  },
  "docs/buildings.md::Sacred features#precinct unenclosed": {
-  "code": "8f85a8e1fb9c1cc4",
-  "core": "5dc3c4f8379833c2",
-  "date": "2026-10-07",
-  "note": "the wood and the arch mark the ground; no whole precinct was found fenced",
+  "code": "8075a2d205eb5a7d",
+  "core": "11a5b73c9ab6be03",
+  "date": "2026-10-08",
+  "note": "no village precinct was found fenced whole",
   "pages": {
    "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html": "81663f30960fa262"
   },
   "research": "3377b10b4014ee4c",
   "rests": [
-   "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html:1e26d7114bc34b25",
    "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html:511a5d7ea05ca39e",
    "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html:d284e5af358a3a1f"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sacred features#privy at the dwelling": {
-  "code": "a71a67b31c75b8f0",
-  "core": "5dc3c4f8379833c2",
-  "date": "2026-10-07",
-  "note": "nothing in the bundle places a monk's privy",
+  "code": "e9deeac237e86fa5",
+  "core": "11a5b73c9ab6be03",
+  "date": "2026-10-08",
+  "note": "no page bears on it",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sacred features#sanctuary": {
-  "code": "58450945a10e5b51",
-  "core": "5dc3c4f8379833c2",
-  "date": "2026-10-07",
-  "note": "~6 ft square at the back on the axis matches the record, but the page attests two forms: 1 and 3 ken are the commonest widths, and a covering building (oiya) was sometimes built over the sanctuary. The procedure fixes the one-bay, uncovered form; roll the forms or record the choice",
+  "code": "3659cbc4d09cb298",
+  "core": "11a5b73c9ab6be03",
+  "date": "2026-10-08",
+  "note": "one bay, ~6 ft square, at the rear on the axis",
   "pages": {
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html": "4eb9d08db97f2235"
   },
   "research": "704fffd977ae2d80",
   "rests": [
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:031ae913ec9c4ff0",
-   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:45ce51e0ab9fc655",
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:646f71e0cff55d3c",
-   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:676e431353bece90",
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:8645ca661afbf310"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sacred features#shrine vermilion edging": {
-  "code": "90b5a5a541771fff",
-  "core": "5dc3c4f8379833c2",
-  "date": "2026-10-07",
-  "note": "color only; 0226 also records vermilion on small shrines as a convention",
+  "code": "acf5641cd9b77a15",
+  "core": "11a5b73c9ab6be03",
+  "date": "2026-10-08",
+  "note": "shrine color",
   "pages": {},
   "research": "",
-  "rests": [
-   "0226-shrines-temples-and-graves-in-each-size-of-settlement.drawing.html:1abd0863c503614b"
-  ],
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sacred features#the whole sacred complex held to at most ~2/3 of the residence": {
-  "code": "f63854c69fa1ce1d",
-  "core": "5dc3c4f8379833c2",
-  "date": "2026-10-07",
-  "note": "no page sizes a hall plus workshop against the residence",
+  "code": "0a69737b6e0b05a0",
+  "core": "11a5b73c9ab6be03",
+  "date": "2026-10-08",
+  "note": "no page bears on it",
   "pages": {},
   "research": "",
-  "rests": [
-   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:8e60bf46e6b04c4a",
-   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html:d89c58633b72e2d1"
-  ],
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sacred features#workshop colonnade": {
-  "code": "417b98e348eecc60",
-  "core": "5dc3c4f8379833c2",
-  "date": "2026-10-07",
-  "note": "nothing in the bundle describes a shrine craft area",
+  "code": "0369c4d4481cbe13",
+  "core": "11a5b73c9ab6be03",
+  "date": "2026-10-08",
+  "note": "no page bears on it",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Scale#buildings at true size": {
-  "code": "aff23cc1494a51c8",
-  "core": "ab42c3d9bffffc9f",
-  "date": "2026-10-07",
-  "note": "the claim names the GM's ruling; 0116 bears only on the ranking",
+  "code": "235c0c254197d3dc",
+  "core": "3234e7e6b3d51b70",
+  "date": "2026-10-08",
+  "note": "the claim names the GM's ruling; the ranks are this project's reading",
   "pages": {},
   "research": "",
   "rests": [
@@ -1573,77 +1668,71 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Scale#caption placement": {
-  "code": "6d6127e6cc80729f",
-  "core": "ab42c3d9bffffc9f",
-  "date": "2026-10-07",
-  "note": "captions are declared in the sheet and placed by the one placer: inside a feature that holds them, else at the ranked places beside it, turned with it, with a leader beyond the gap",
+  "code": "b1be65a4b3970488",
+  "core": "3234e7e6b3d51b70",
+  "date": "2026-10-08",
+  "note": "captions declared, one placer",
   "pages": {
    "0242-labels-on-maps-cartographic-label-placement.drawing.html": "fa1bb4a252673d47"
   },
   "research": "0a880fd17413bbf6",
   "rests": [
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html:27a75683e4a17f7e",
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html:2a0f6f2ce376476e",
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html:2fa2f3836fdedc1e",
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html:6b739c24a9da86ad",
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html:b450303bef4265a6",
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html:c1c19453413e41cd"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:08c0bd1f9acf9800",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:27a75683e4a17f7e"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Scale#main gate passage width": {
-  "code": "d4f4501f7c263a17",
-  "core": "ab42c3d9bffffc9f",
-  "date": "2026-10-07",
-  "note": "yakuimon 6-9 ft (2.6 m is ~8.5 ft), nagaya-mon two ken, ~12 ft",
+  "code": "08e3222ec0935c2e",
+  "core": "3234e7e6b3d51b70",
+  "date": "2026-10-08",
+  "note": "yakuimon 6-8.5 ft, nagaya-mon ~12 ft",
   "pages": {
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html": "976d82c32111af9d"
   },
   "research": "3bf7bc936cb62419",
   "rests": [
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:04ac23f9653e01fb",
-   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:65f0493063abc217",
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:6ef47a197b18e3dd"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Scale#plan scale": {
-  "code": "98edf50c2bb0f4eb",
-  "core": "ab42c3d9bffffc9f",
-  "date": "2026-10-07",
-  "note": "3 px = 1 ft, set so the drawn compounds fall between Joge and Takayama",
+  "code": "f2b7cb882317cc89",
+  "core": "3234e7e6b3d51b70",
+  "date": "2026-10-08",
+  "note": "3 px = 1 ft, between Joge and Takayama",
   "pages": {
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "8d81fb67fc6be64e"
   },
   "research": "b9f86fd8593ec1ea",
   "rests": [
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:4afbca9685190246",
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:b92fdf4980d4aceb",
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:c1eb54b975cd5790",
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:fe00696b6b046c03"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Scale#residence wing length": {
-  "code": "5bb3efd3f53130df",
-  "core": "ab42c3d9bffffc9f",
-  "date": "2026-10-07",
-  "note": "the 180-200 ft wings are far beyond the houses 0118 measures, ~49-67 tsubo (~1,740-2,380 sq ft). A question claim cannot cover a figure its question contradicts: redraw the wings to the record, or relabel as a DEVIATION recorded on a drawing page",
+  "code": "0f285cdceee5e303",
+  "core": "3234e7e6b3d51b70",
+  "date": "2026-10-08",
+  "note": "180-200 ft wings are kept against a measured 49-67 tsubo house; a figure that contradicts its finding is DRIFTED unless the page records it as a DEVIATION, which none does",
   "pages": {
    "0118-samurai-house-lots-and-houses-by-rank-bukeyashiki.html": "3e4449f4b18d8a72"
   },
   "research": "290c8108e3cfeac0",
   "rests": [
-   "0118-samurai-house-lots-and-houses-by-rank-bukeyashiki.html:7a5358483b31834d",
-   "0118-samurai-house-lots-and-houses-by-rank-bukeyashiki.html:a0744a8d4e6197ff",
-   "0118-samurai-house-lots-and-houses-by-rank-bukeyashiki.html:b4f7e08b118404c0"
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.html:953f1f83f0003148",
+   "0118-samurai-house-lots-and-houses-by-rank-bukeyashiki.html:7a5358483b31834d"
   ],
   "verdict": "DRIFTED"
  },
  "docs/buildings.md::Scale#salt ward marker": {
-  "code": "a66d1ac6700c2ca9",
-  "core": "ab42c3d9bffffc9f",
-  "date": "2026-10-07",
-  "note": "the procedure says the salt wards were redrawn on both magistrate manors, but the drawing page says \"none draws salt at the gates of an official's compound\"; the ~0.3-0.7 ft heap size is not on the page either",
+  "code": "edc6cd28562155c3",
+  "core": "3234e7e6b3d51b70",
+  "date": "2026-10-08",
+  "note": "draws salt wards at a compound's gates where the page says \"none draws salt at the gates of an official's compound\"",
   "pages": {
    "0240-salt-heaps-at-doorways-morijio.drawing.html": "21e03e816285eede"
   },
@@ -1654,30 +1743,30 @@
   "verdict": "DRIFTED"
  },
  "docs/buildings.md::Scale#scale bar": {
-  "code": "af682c7632373040",
-  "core": "ab42c3d9bffffc9f",
-  "date": "2026-10-07",
-  "note": "a scale bar is purely how the sheet is shown",
+  "code": "8f01f2ecb7762a5e",
+  "core": "3234e7e6b3d51b70",
+  "date": "2026-10-08",
+  "note": "Scale puts the bar \"near the bottom of the sheet\", but Sheet conventions and the checklist put it \"in a top corner\"; one of them must change",
   "pages": {},
   "research": "",
   "rests": [],
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  "docs/buildings.md::Scale#true size for every footprint": {
-  "code": "fdda27f169817deb",
-  "core": "ab42c3d9bffffc9f",
-  "date": "2026-10-07",
-  "note": "a sizing convention for the drawing, with the stroke floor named as its one exception",
+  "code": "7b1201d0234a58bc",
+  "core": "3234e7e6b3d51b70",
+  "date": "2026-10-08",
+  "note": "drawing doctrine",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Scale#well location marker": {
-  "code": "ae3a099aeed790b5",
-  "core": "ab42c3d9bffffc9f",
-  "date": "2026-10-07",
-  "note": "the page's marker is ~19 ft across (r 9.36 ft), scales with the map, and is calibrated hamlet-to-city at 0.35-0.85 of a dwelling; it marks a ~4 ft curb, not \"~3-4 ft\". A 22 px (~7 ft) marker at 3 px/ft fits neither the size nor the band; record the plan's marker on the page or redraw",
+  "code": "cdca428251f8a5f0",
+  "core": "3234e7e6b3d51b70",
+  "date": "2026-10-08",
+  "note": "an oversized marker for a ~4 ft curb",
   "pages": {
    "0196-communal-wells-ido.drawing.html": "85fc1e4c2a7f3a2a"
   },
@@ -1686,36 +1775,55 @@
    "0196-communal-wells-ido.drawing.html:157e7add410a9655",
    "0196-communal-wells-ido.drawing.html:ff48898c682cc774"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
+ },
+ "docs/buildings.md::Sheet conventions#main gate on the south wall": {
+  "code": "c31b35e716fa6c13",
+  "core": "c31b35e716fa6c13",
+  "date": "2026-10-08",
+  "note": "main gate on the south wall",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "docs/buildings.md::Sheet conventions#sheet conventions": {
+  "code": "52b5f927a59da676",
+  "core": "c31b35e716fa6c13",
+  "date": "2026-10-08",
+  "note": "CONVENTION covers the palette and canvas, but \"a walled compound's main gate faces south\" is a physical placement rule and should be UNRESEARCHED",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "MISLABELED"
  },
  "docs/buildings.md::Walls and gates#compound wall stroke": {
-  "code": "3fc0b035370d01f3",
-  "core": "03bae847f68f702e",
-  "date": "2026-10-05",
-  "note": "3 ft heavier form as a drawing convention, dark stroke",
+  "code": "b683282c31fc684e",
+  "core": "44dbc99daa221e83",
+  "date": "2026-10-08",
+  "note": "3 ft wall stroke",
   "pages": {
    "0092-compound-walls-neribei-and-tsuijibei.drawing.html": "aec0fef5c25a07e2"
   },
   "research": "04d454c4c7654894",
   "rests": [
-   "0092-compound-walls-neribei-and-tsuijibei.drawing.html:aef4a5069500ea83",
    "0092-compound-walls-neribei-and-tsuijibei.drawing.html:bbba3419b31507b3"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Walls and gates#divider wall": {
-  "code": "c68f7317e14a51a6",
-  "core": "03bae847f68f702e",
-  "date": "2026-10-03",
-  "note": "0090.drawing gives only the 3 ft outer wall",
+  "code": "19973779a4ceaa78",
+  "core": "44dbc99daa221e83",
+  "date": "2026-10-08",
+  "note": "no page bears on it",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Walls and gates#gatehouse": {
-  "code": "0e69f8d48009c3b2",
-  "core": "03bae847f68f702e",
-  "date": "2026-10-05",
-  "note": "the drawing page draws a gatehouse of its own \"about 40 ft\" long (a GUESS) and both forms \"about 2 ken (~12 ft) deep\", but the procedure draws it 18 x 12 ft and calls 40 ft the guess, and the claim records the gate ranges at 14 ft deep",
+  "code": "fbf90bf2c110ac22",
+  "core": "44dbc99daa221e83",
+  "date": "2026-10-08",
+  "note": "the gate-range rooms are 14 ft deep against \"about 2 ken (~12 ft) deep\"; the freestanding 18 x 12 ft disagrees with the page's \"About 40 ft\" drawn length (one of the two must move)",
   "pages": {
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html": "c88808926ebd4116",
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html": "976d82c32111af9d"
@@ -1724,30 +1832,31 @@
   "rests": [
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html:45d250045a3b5164",
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html:77efbd366737e4bc",
-   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html:c728fa105e6309d9",
-   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:049fe2faa8c36407",
-   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:7962493012310fe7",
-   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:cd57d3fd287dbd8e"
+   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:7962493012310fe7"
   ],
   "verdict": "DRIFTED"
  },
  "docs/buildings.md::Walls and gates#main gate forms": {
-  "code": "373b7ba9dd05c191",
-  "core": "03bae847f68f702e",
-  "date": "2026-10-03",
-  "note": "the two attested forms, rolled per plan",
+  "code": "0223e737e8aa185e",
+  "core": "44dbc99daa221e83",
+  "date": "2026-10-08",
+  "note": "two forms rolled per plan",
   "pages": {
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html": "976d82c32111af9d"
   },
   "research": "3bf7bc936cb62419",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html:d1ba9a8df1aeee2c",
+   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html:d930b9e498ec74cf",
+   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:65f0493063abc217"
+  ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Walls and gates#main gate posts": {
-  "code": "a9e77fb8b2a8602e",
-  "core": "03bae847f68f702e",
-  "date": "2026-10-05",
-  "note": "posts are ~2.7-5.3 x 4.7 ft, but the page says \"A gate post is drawn about 2 ft square\"",
+  "code": "edf9c97692e05498",
+  "core": "44dbc99daa221e83",
+  "date": "2026-10-08",
+  "note": "sheets draw ~2.7-5.3 x 4.7 ft posts where \"A gate post is drawn about 2 ft square\"",
   "pages": {
    "0092-compound-walls-neribei-and-tsuijibei.drawing.html": "aec0fef5c25a07e2"
   },
@@ -1755,72 +1864,88 @@
   "rests": [
    "0092-compound-walls-neribei-and-tsuijibei.drawing.html:db416479b46af43a"
   ],
-  "triaged": "2026-10-05",
   "verdict": "DRIFTED"
  },
  "docs/buildings.md::Walls and gates#opening ink width": {
-  "code": "e36a7e7974ecd8cf",
-  "core": "03bae847f68f702e",
-  "date": "2026-10-03",
-  "note": "drawing convention",
+  "code": "a43805b1db5cb4e8",
+  "core": "44dbc99daa221e83",
+  "date": "2026-10-08",
+  "note": "how the opening is inked",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Walls and gates#structures abut walls": {
-  "code": "1a4f6e8ccef9e43d",
-  "core": "03bae847f68f702e",
-  "date": "2026-10-03",
-  "note": "\"A foot or two\" off the wall, a GUESS on 0092 drawing",
+  "code": "355476951b76e9c5",
+  "core": "44dbc99daa221e83",
+  "date": "2026-10-08",
+  "note": "\"~2 ft off\" measured from the wall's centerline (\"half the ink plus a hair\") leaves ~0.5 ft clear of the face, under \"A foot or two\"",
   "pages": {
    "0092-compound-walls-neribei-and-tsuijibei.drawing.html": "aec0fef5c25a07e2"
   },
   "research": "04d454c4c7654894",
-  "triaged": "2026-10-05",
-  "verdict": "IN-STEP"
+  "rests": [
+   "0092-compound-walls-neribei-and-tsuijibei.drawing.html:02ce4c097038a77e",
+   "0092-compound-walls-neribei-and-tsuijibei.drawing.html:f335f68a1e164a0e"
+  ],
+  "verdict": "DRIFTED"
  },
  "docs/buildings.md::Walls and gates#threshold stones": {
-  "code": "c7f9851b57dca7d5",
-  "core": "03bae847f68f702e",
-  "date": "2026-10-03",
-  "note": "the setting's own invention, honestly unresearched",
+  "code": "6b568b3526d2d275",
+  "core": "44dbc99daa221e83",
+  "date": "2026-10-08",
+  "note": "the setting's own invention; no page bears on it",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Walls and gates#threshold wards": {
-  "code": "c7e2117cce1bec9e",
-  "core": "03bae847f68f702e",
-  "date": "2026-10-03",
-  "note": "0240: no pair at a door \"before present-day custom\", and none \"at the gate of a samurai residence, a magistrate's office\". Cite it as a DEVIATION or drop the pair",
+  "code": "df41617a4acea9af",
+  "core": "44dbc99daa221e83",
+  "date": "2026-10-08",
+  "note": "a pair of salt wards outside each opening contradicts \"No page we read gives a pair of heaps at a door before modern times\" and none at an official's gate",
   "pages": {
    "0240-salt-heaps-at-doorways-morijio.html": "f93396b656b47f34"
   },
   "research": "2ae5af432cd7edd1",
+  "rests": [
+   "0240-salt-heaps-at-doorways-morijio.html:0b353ecaf13c478c",
+   "0240-salt-heaps-at-doorways-morijio.html:f1124f0982386f04",
+   "0240-salt-heaps-at-doorways-morijio.html:ff241118dafe7f48"
+  ],
   "verdict": "DRIFTED"
  },
  "docs/buildings.md::Wells#bath-area well": {
   "code": "f7df90d7f5712cf1",
   "core": "309217cfd3f4df96",
-  "date": "2026-10-03",
-  "note": "the kitchen well serves the bath, per 0105 drawing",
+  "date": "2026-10-08",
+  "note": "the kitchen's well serves the bath",
   "pages": {
    "0105-baths-furo.drawing.html": "3a22b50676fcbd78"
   },
   "research": "c93529d7938119b7",
+  "rests": [
+   "0105-baths-furo.drawing.html:0b1d5b0ba345a21a"
+  ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Wells#garden well": {
   "code": "4acd79d4af94df79",
   "core": "309217cfd3f4df96",
-  "date": "2026-10-03",
-  "note": "0091: no page places a well in the grounds",
+  "date": "2026-10-08",
+  "note": "no page places a garden well",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Wells#kitchen well": {
   "code": "43758fcf084e6538",
   "core": "309217cfd3f4df96",
-  "date": "2026-10-05",
-  "note": "well with the kitchen (indoors in the Miwa doma, kept with kitchen and bath at Takayama)",
+  "date": "2026-10-08",
+  "note": "a well with the kitchen, inside or beside it",
   "pages": {
    "0091-samurai-residences-and-their-rooms-buke-yashiki.html": "aea2caa039ea5e60",
    "0105-baths-furo.drawing.html": "3a22b50676fcbd78"
@@ -1828,7 +1953,6 @@
   "research": "d6adb6196011c9f7",
   "rests": [
    "0091-samurai-residences-and-their-rooms-buke-yashiki.html:6218744dea5fe01d",
-   "0105-baths-furo.drawing.html:01dad30a7f1a8c0e",
    "0105-baths-furo.drawing.html:0b1d5b0ba345a21a"
   ],
   "verdict": "IN-STEP"
@@ -1836,57 +1960,58 @@
  "docs/buildings.md::Wells#stables well": {
   "code": "16bed03fee167c19",
   "core": "309217cfd3f4df96",
-  "date": "2026-10-03",
-  "note": "nothing bundled places it",
+  "date": "2026-10-08",
+  "note": "no page bears on it",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Wells#well count": {
   "code": "3bf10fa43c1aa652",
   "core": "309217cfd3f4df96",
-  "date": "2026-10-03",
-  "note": "no count in the bundle",
+  "date": "2026-10-08",
+  "note": "no page counts a compound's wells",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Wells#well curb size": {
   "code": "a04adf6f485d48f3",
   "core": "309217cfd3f4df96",
-  "date": "2026-10-05",
-  "note": "0196 enlarges the curb to be seen at map scale; a Mode A sheet at 3 px/ft draws the ~4 ft curb at 12 px, so ~7.3 ft is an inflation the page does not license on a to-scale plan (the program's well item says 3-4 ft)",
+  "date": "2026-10-08",
+  "note": "an oversized marker by convention",
   "pages": {},
   "research": "",
   "rests": [
    "0196-communal-wells-ido.drawing.html:157e7add410a9655",
-   "0196-communal-wells-ido.drawing.html:6ae8258e9425fcd7",
    "0196-communal-wells-ido.drawing.html:ff48898c682cc774"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "docs/buildings.md::Wells#well glyph": {
   "code": "ea15e570490e7723",
   "core": "309217cfd3f4df96",
-  "date": "2026-10-05",
-  "note": "the page attests two lifting gears and rolls them as a knob (\"a sweep\" or \"a pulley frame\"); a plain curb with no gear fixes an unattested form",
+  "date": "2026-10-08",
+  "note": "a plain curb and mouth, where the cited page draws \"a square curb on a paved apron, with a well-sweep or a pulley frame over it and, on some, a roof\", with the lifting gear a knob",
   "pages": {
    "0196-communal-wells-ido.drawing.html": "85fc1e4c2a7f3a2a"
   },
   "research": "47e13325a5aa6f26",
   "rests": [
-   "0196-communal-wells-ido.drawing.html:157e7add410a9655",
-   "0196-communal-wells-ido.drawing.html:1e90c0992a2ef55f",
-   "0196-communal-wells-ido.drawing.html:6ae8258e9425fcd7",
+   "0196-communal-wells-ido.drawing.html:36ac509adca7b4e4",
+   "0196-communal-wells-ido.drawing.html:a24e8638e374e060",
    "0196-communal-wells-ido.drawing.html:b4195d0bbad2580e",
    "0196-communal-wells-ido.drawing.html:fd226b6f01fe702b"
   ],
-  "triaged": "2026-10-05",
   "verdict": "DRIFTED"
  },
  "docs/buildings/programs.md::Country shrine (a village district's shrine)#Bishamon tigers": {
-  "code": "0e61197c2ccd8910",
-  "core": "5ab41d3e5bc5e94b",
-  "date": "2026-10-07",
-  "note": "the findings page attests tigers only at named Bishamon temples and says \"Whether a village shrine of Bishamon had them, no page we read says\"; should be GUESS research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html (it records the village reach as a guess)",
+  "code": "13f6794a86cbaf43",
+  "core": "3ca14da0edcd8ce4",
+  "date": "2026-10-08",
+  "note": "tigers attested at Bishamon temples; reach to a village is a recorded guess",
   "pages": {
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html": "4eb9d08db97f2235"
   },
@@ -1895,13 +2020,13 @@
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html:75a349e961295614",
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:ac6d02db6fad2b16"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "docs/buildings/programs.md::Country shrine (a village district's shrine)#a well as the purification stop beside the approach (\"the well or basin\"; the required item is `well`)": {
-  "code": "69e26d991f573c44",
-  "core": "5ab41d3e5bc5e94b",
-  "date": "2026-10-07",
-  "note": "the record attests only the basin beside the approach; a well as the purification stop is not answered",
+  "code": "f7bc356fd1a2846d",
+  "core": "3ca14da0edcd8ce4",
+  "date": "2026-10-08",
+  "note": "the pages attest only the basin; a well as the stop is unanswered",
   "pages": {},
   "research": "",
   "rests": [
@@ -1911,10 +2036,10 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings/programs.md::Country shrine (a village district's shrine)#approach width about 10 ft": {
-  "code": "6b144c5a8a472ee2",
-  "core": "5ab41d3e5bc5e94b",
-  "date": "2026-10-07",
-  "note": "no village approach measured; only Nagao's ~23 ft",
+  "code": "f2d2c56034d6c481",
+  "core": "3ca14da0edcd8ce4",
+  "date": "2026-10-08",
+  "note": "only Nagao's ~23 ft is measured; no village approach width",
   "pages": {},
   "research": "",
   "rests": [
@@ -1924,16 +2049,15 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings/programs.md::Country shrine (a village district's shrine)#arch count": {
-  "code": "330d422843813b26",
-  "core": "5ab41d3e5bc5e94b",
-  "date": "2026-10-07",
-  "note": "the 1/3/7 count and the row are recorded as deliberate deviations",
+  "code": "eb341717039e1aad",
+  "core": "3ca14da0edcd8ce4",
+  "date": "2026-10-08",
+  "note": "village most likely one arch and no pre-1868 row; the 1/3/7 row is recorded as a deliberate deviation on the drawing page",
   "pages": {
    "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html": "fd1a3212a5c01f72"
   },
   "research": "6d6aec09760b8162",
   "rests": [
-   "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:3cec57c2e7969071",
    "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:692a4ae5dd61efa9",
    "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:6dbb45d3631d3bee",
    "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:c404414ec4c8366e",
@@ -1943,26 +2067,25 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings/programs.md::Country shrine (a village district's shrine)#arch pitch": {
-  "code": "798c560ea204d266",
-  "core": "5ab41d3e5bc5e94b",
-  "date": "2026-10-07",
-  "note": "12 ft, recorded as a guess inside the 10-13 ft band and the ~10-14 ft rural row",
+  "code": "809e388b7a4a8922",
+  "core": "3ca14da0edcd8ce4",
+  "date": "2026-10-08",
+  "note": "12 ft, the drawing page's figure",
   "pages": {
    "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html": "e385403eda71f0a2"
   },
   "research": "187ffe8b48289099",
   "rests": [
    "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:11a53f93479ca7e0",
-   "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:3f3c47b402c4f41d",
-   "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html:f072502feed3f9c0"
+   "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:3f3c47b402c4f41d"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings/programs.md::Country shrine (a village district's shrine)#basin beside the approach": {
-  "code": "5184241130fca151",
-  "core": "5ab41d3e5bc5e94b",
-  "date": "2026-10-07",
-  "note": "basin beside the approach, Nagao 1828, Yakyu Inari 1836, open/roofed silent",
+  "code": "1778f7064aae237e",
+  "core": "3ca14da0edcd8ce4",
+  "date": "2026-10-08",
+  "note": "plain basin beside the approach, Nagao 1828, Yakyu Inari 1836, roof a guess",
   "pages": {
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html": "4eb9d08db97f2235"
   },
@@ -1972,16 +2095,15 @@
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:1e9ed2c7e6dfa6ef",
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:256854f2c294a9c5",
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:b3ef50530e7ace96",
-   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:e6aac2ab2eba5899",
-   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:effeb28693efbf3e"
+   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:e6aac2ab2eba5899"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings/programs.md::Country shrine (a village district's shrine)#bell tower band 6-16 by 6-16 ft": {
-  "code": "57e5b27882d47f43",
-  "core": "5ab41d3e5bc5e94b",
-  "date": "2026-10-07",
-  "note": "no bell tower size or presence at a village shrine in the record",
+  "code": "b6023bbac9daa3df",
+  "core": "3ca14da0edcd8ce4",
+  "date": "2026-10-08",
+  "note": "no belfry size in the bundle",
   "pages": {},
   "research": "",
   "rests": [
@@ -1990,10 +2112,10 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings/programs.md::Country shrine (a village district's shrine)#bell tower knob": {
-  "code": "d182b1fd854b6c72",
-  "core": "5ab41d3e5bc5e94b",
-  "date": "2026-10-07",
-  "note": "the page does not find \"absent by default\": it is silent on village shrines and calls hall plus belfry \"by far the commonest\" at small temples; should be GUESS research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html",
+  "code": "00f4cdef2798a7e0",
+  "core": "3ca14da0edcd8ce4",
+  "date": "2026-10-08",
+  "note": "no bell attested at a village shrine; absent by default, a knob",
   "pages": {
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html": "4eb9d08db97f2235"
   },
@@ -2002,59 +2124,64 @@
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html:85e95ca82c3e1549",
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:53fdd2515e12f9d8"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "docs/buildings/programs.md::Country shrine (a village district's shrine)#building size anchors": {
-  "code": "ff76b065c9d80f93",
-  "core": "5ab41d3e5bc5e94b",
-  "date": "2026-10-07",
-  "note": "sanctuary band 4-10 ft fixes the one-bay form, but the page gives 1 and 3 ken as the commonest and village Hie Shrine's sanctuary is 2 bays, ~12x6 ft; village worship halls below 21 ft are measured (Hie ~18x12 ft, Rokusha 9 tsubo); widen the bands or record the cut as a deviation",
+  "code": "77479660a7e75e46",
+  "core": "3ca14da0edcd8ce4",
+  "date": "2026-10-08",
+  "note": "sanctuary ~6 ft, hall 21-35 ft, Kaie-ji 200-330 sq m (~2,150-3,550 sq ft) all match",
   "pages": {
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html": "53e6b30a3e84d65c",
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html": "4eb9d08db97f2235"
   },
   "research": "d71a0b8870db3154",
   "rests": [
-   "0215-village-shrines-where-they-stand-and-how-big-their-grounds-are.html:33f48fe6e0a80ee2",
-   "0215-village-shrines-where-they-stand-and-how-big-their-grounds-are.html:93c3d3b599503717",
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html:2c7b940b515976a0",
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:45ce51e0ab9fc655",
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:646f71e0cff55d3c",
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:8645ca661afbf310",
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:9285b92b183caf71"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "docs/buildings/programs.md::Country shrine (a village district's shrine)#burial ground beside the precinct": {
-  "code": "fcc04c6ec8da24ea",
-  "core": "5ab41d3e5bc5e94b",
-  "date": "2026-10-07",
-  "note": "the procedure fixes the burial ground beside the precinct, in the shrine's yard; the cited drawing page records no deviation but a knob, \"in the shrine's yard or apart from it on a knob\" (the table says even odds); should roll yard/apart",
+  "code": "76e039315e01602a",
+  "core": "3ca14da0edcd8ce4",
+  "date": "2026-10-08",
+  "note": "the drawing page records no deviation: its village cell is \"in the shrine's yard or apart from it on a knob\", but the code fixes the yard where no map says otherwise; should roll the two forms (or the page should record the deviation)",
   "pages": {
    "0226-shrines-temples-and-graves-in-each-size-of-settlement.drawing.html": "57917dbe10aef8d5"
   },
   "research": "66dcc8ae512a5c22",
   "rests": [
-   "0226-shrines-temples-and-graves-in-each-size-of-settlement.drawing.html:2858734a49afe917",
    "0226-shrines-temples-and-graves-in-each-size-of-settlement.drawing.html:3cb31f36e31e3029"
   ],
   "verdict": "DRIFTED"
  },
+ "docs/buildings/programs.md::Country shrine (a village district's shrine)#burial ground placed outside the grove": {
+  "code": "3ca14da0edcd8ce4",
+  "core": "3ca14da0edcd8ce4",
+  "date": "2026-10-08",
+  "note": "burial ground placed outside the grove",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  "docs/buildings/programs.md::Country shrine (a village district's shrine)#dedication knob": {
-  "code": "8d596274ad599248",
-  "core": "5ab41d3e5bc5e94b",
-  "date": "2026-10-07",
-  "note": "GM ruling named",
+  "code": "f77e668b7954bb1d",
+  "core": "3ca14da0edcd8ce4",
+  "date": "2026-10-08",
+  "note": "names the GM ruling of 2026-09-20; no bundle question answers a village shrine's dedication",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings/programs.md::Country shrine (a village district's shrine)#donated stonework": {
-  "code": "c42448cc10b08191",
-  "core": "5ab41d3e5bc5e94b",
-  "date": "2026-10-07",
-  "note": "komainu, 1799 lanterns, strength stones beside the approach; wealth tie on the drawing page",
+  "code": "2882ae32c47ad2f4",
+  "core": "3ca14da0edcd8ce4",
+  "date": "2026-10-08",
+  "note": "guardian dogs, lanterns and strength stones attested as parish gifts; the wealth tie is the drawing page's",
   "pages": {
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html": "4eb9d08db97f2235"
   },
@@ -2062,33 +2189,33 @@
   "rests": [
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html:cc29d33e4a52f44e",
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:3dba430450c42071",
+   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:4bec9f4f1782de45",
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:c4e4424a990d6fd8",
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:ff7b754820341789"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings/programs.md::Country shrine (a village district's shrine)#dwelling entry tagged genkan": {
-  "code": "451ffa331d84b802",
-  "core": "5ab41d3e5bc5e94b",
-  "date": "2026-10-07",
-  "note": "the page finds that in the Edo period \"genkan\" meant \"an entrance with a shikidai\", at houses of standing, and a middle-rank house had none; a plain earth-floored vestibule at a farmhouse-class dwelling is not one; retag it, or make the claim GUESS/DEVIATION",
+  "code": "24e54bcbfcb0d3ec",
+  "core": "3ca14da0edcd8ce4",
+  "date": "2026-10-08",
+  "note": "in the Edo period \"genkan\" meant an entrance with a shikidai, for the head and honored guests; a plain earth-floored vestibule tagged genkan contradicts that; tag it as an entry/doma or record a deviation",
   "pages": {
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "bbfebe573bb99b25"
   },
   "research": "d6575223a27df7a3",
   "rests": [
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:38ce75614bcb4467",
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:508d759fa76d492e",
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:a3162f7d1b6545a0",
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:fc0610901368c3d8"
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:6a481055c981d54e",
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:a3162f7d1b6545a0"
   ],
   "verdict": "DRIFTED"
  },
  "docs/buildings/programs.md::Country shrine (a village district's shrine)#dwelling kitchen floor": {
-  "code": "7848f8bb108b8537",
-  "core": "5ab41d3e5bc5e94b",
-  "date": "2026-10-07",
-  "note": "no kitchen floor recorded for a kuri",
+  "code": "0a54a88d0b7ba2b5",
+  "core": "3ca14da0edcd8ce4",
+  "date": "2026-10-08",
+  "note": "nothing in the bundle on a kuri kitchen's floor",
   "pages": {},
   "research": "",
   "rests": [
@@ -2097,10 +2224,10 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings/programs.md::Country shrine (a village district's shrine)#dwelling privy": {
-  "code": "55b04748881156c7",
-  "core": "5ab41d3e5bc5e94b",
-  "date": "2026-10-07",
-  "note": "the drawing page records the privy as a guess",
+  "code": "89cfe34a11691e9f",
+  "core": "3ca14da0edcd8ce4",
+  "date": "2026-10-08",
+  "note": "the drawing page records the dwelling's privy as a GUESS",
   "pages": {
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html": "538be8acb21445ff"
   },
@@ -2111,10 +2238,10 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings/programs.md::Country shrine (a village district's shrine)#farmers' stage knob": {
-  "code": "aca371c945684c7c",
-  "core": "5ab41d3e5bc5e94b",
-  "date": "2026-10-07",
-  "note": "regional count matches; knob absent by default",
+  "code": "a9b0f7d8d273f8bf",
+  "core": "3ca14da0edcd8ce4",
+  "date": "2026-10-08",
+  "note": "1,777 stages, regional, from the early 1800s; a knob, absent by default",
   "pages": {
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html": "4eb9d08db97f2235"
   },
@@ -2129,10 +2256,10 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings/programs.md::Country shrine (a village district's shrine)#fire-water": {
-  "code": "7d4aae4b8e62bf88",
-  "core": "5ab41d3e5bc5e94b",
-  "date": "2026-10-07",
-  "note": "the drawing page gives \"one at each major wooden building and two at the kitchen\"; the procedure puts tubs at each of the hall's corners and one at the dwelling end, which holds the kitchen; it should be one at the hall and two at the kitchen",
+  "code": "6582d867e749a013",
+  "core": "3ca14da0edcd8ce4",
+  "date": "2026-10-08",
+  "note": "the page gives \"one at each major wooden building and two at the kitchen\"; the code puts tubs at the hall's corners (several on one building) and only one at the dwelling end, which holds the kitchen",
   "pages": {
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "2c4dfd988d663a80"
   },
@@ -2144,29 +2271,21 @@
   ],
   "verdict": "DRIFTED"
  },
- "docs/buildings/programs.md::Country shrine (a village district's shrine)#fire-water tub about 2.5 ft across (0100 drawing §366 records it as a guess)": {
-  "code": "5ab41d3e5bc5e94b",
-  "core": "5ab41d3e5bc5e94b",
-  "date": "2026-10-07",
-  "note": "fire-water tub about 2.5 ft across (0100 drawing §366 records it as a guess)",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  "docs/buildings/programs.md::Country shrine (a village district's shrine)#grove and burial side knob": {
-  "code": "1a391e149cf4338f",
-  "core": "5ab41d3e5bc5e94b",
-  "date": "2026-10-07",
-  "note": "drawing a grove or burial ground only where and on the side the map shows it is a placement and presence rule, not plumbing; should be CANON (the GM, 2026-09-20: the diagram matches the larger map)",
+  "code": "676051a9b14440a8",
+  "core": "3ca14da0edcd8ce4",
+  "date": "2026-10-08",
+  "note": "defers placement to the declared map; decides nothing of its own",
   "pages": {},
   "research": "",
   "rests": [],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "docs/buildings/programs.md::Country shrine (a village district's shrine)#grove form knob": {
-  "code": "ad46514c98483ea4",
-  "core": "5ab41d3e5bc5e94b",
-  "date": "2026-10-07",
-  "note": "forms by slope position, all around on a rise or paddy, shares unreadable so equal weights, field-line foot and ragged edge both rolled",
+  "code": "85f9bfd5e112d8cd",
+  "core": "3ca14da0edcd8ce4",
+  "date": "2026-10-08",
+  "note": "the foot/top/rise/paddy candidates match the survey; equal weights and the field-line or ragged foot are recorded guesses",
   "pages": {
    "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html": "81663f30960fa262"
   },
@@ -2184,60 +2303,58 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings/programs.md::Country shrine (a village district's shrine)#hall in the middle of the one roof": {
-  "code": "2fb63f31269f4db9",
-  "core": "5ab41d3e5bc5e94b",
-  "date": "2026-10-07",
-  "note": "the drawing page records the dwelling as \"one end of the worship hall's own building\"; a center hall with the kitchen at one end and the monk's rooms at the other is not recorded there, and it contradicts this section's own \"villagers' end toward the arch, dwelling end behind\"; should be GUESS, or the page updated",
+  "code": "7051cb3f1aed1662",
+  "core": "3ca14da0edcd8ce4",
+  "date": "2026-10-08",
+  "note": "the drawing page says \"the monk's dwelling is one end of the worship hall's own building\", not a central hall between a kitchen end and a rooms end; the page does not record Hoshigaoka's layout, and the procedure's own \"villagers' end toward the arch, dwelling end behind\" contradicts a central hall",
   "pages": {
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html": "5e8ac2e778e0e69b"
   },
   "research": "a8feb4a94cf5c3b6",
   "rests": [
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html:3c6c34f741caa79c",
-   "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html:7950922e6a0cab34",
-   "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html:2c7b940b515976a0"
+   "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html:7950922e6a0cab34"
   ],
   "verdict": "DRIFTED"
  },
  "docs/buildings/programs.md::Country shrine (a village district's shrine)#hall largest and monk's home": {
-  "code": "d1e7bf3f81bd5bd3",
-  "core": "5ab41d3e5bc5e94b",
-  "date": "2026-10-07",
-  "note": "the page makes the hall larger than the sanctuary only; under two buildings the 46x28 ft dwelling (1,288 sq ft) out-foots any hall in the 21-35 ft band (at most 1,225 sq ft), and Rokusha's office (30 tsubo) out-foots its hall (9)",
+  "code": "db3ee999ef9b8c4e",
+  "core": "3ca14da0edcd8ce4",
+  "date": "2026-10-08",
+  "note": "worship hall larger than the sanctuary; hall and kuri under one roof attested at Kaie-ji",
   "pages": {
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html": "53e6b30a3e84d65c",
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html": "4eb9d08db97f2235"
   },
   "research": "d71a0b8870db3154",
   "rests": [
-   "0215-village-shrines-where-they-stand-and-how-big-their-grounds-are.html:33f48fe6e0a80ee2",
-   "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html:7d3c2032a9987c33",
-   "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html:688c44b9770b4b68",
-   "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html:79e7d404014c73c5",
-   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:646f71e0cff55d3c"
+   "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html:2c7b940b515976a0",
+   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:646f71e0cff55d3c",
+   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:9285b92b183caf71"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "docs/buildings/programs.md::Country shrine (a village district's shrine)#hall-and-dwelling form knob": {
-  "code": "371c08e59de4158f",
-  "core": "5ab41d3e5bc5e94b",
-  "date": "2026-10-07",
-  "note": "Kaie-ji one roof \"unusual\"; the default is recorded as the project's choice",
+  "code": "7a7b834eb1fa9fd7",
+  "core": "3ca14da0edcd8ce4",
+  "date": "2026-10-08",
+  "note": "one roof \"unusual\"; the drawing page records the default as the project's choice; both forms on knob 1",
   "pages": {
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html": "53e6b30a3e84d65c"
   },
   "research": "f7696f7745e7b6c1",
   "rests": [
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html:3c6c34f741caa79c",
+   "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html:7d3c2032a9987c33",
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html:2c7b940b515976a0"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings/programs.md::Country shrine (a village district's shrine)#innermost arch one pitch off the hall": {
-  "code": "aef395ea3ce6b15a",
-  "core": "5ab41d3e5bc5e94b",
-  "date": "2026-10-07",
-  "note": "a 12 ft distance from the innermost arch to the hall is a physical placement, not how a thing is shown; should be GUESS research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html (the record is silent on the distance)",
+  "code": "fef02e2665eb947e",
+  "core": "3ca14da0edcd8ce4",
+  "date": "2026-10-08",
+  "note": "a 12 ft distance from the hall is a physical placement, not how something is shown; no page gives the distance, so the label should be GUESS research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html",
   "pages": {},
   "research": "",
   "rests": [
@@ -2248,25 +2365,26 @@
   "verdict": "MISLABELED"
  },
  "docs/buildings/programs.md::Country shrine (a village district's shrine)#kitchen garden by the sun": {
-  "code": "61f65b4e1eecf02b",
-  "core": "5ab41d3e5bc5e94b",
-  "date": "2026-10-07",
-  "note": "keeper's plot place and size and the six-hour rule recorded as guesses",
+  "code": "0a9496cf5572f6fb",
+  "core": "3ca14da0edcd8ce4",
+  "date": "2026-10-08",
+  "note": "the keeper's plot's place and size and the six-hour rule are recorded guesses",
   "pages": {
    "0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html": "461744888b10dad0"
   },
   "research": "fa7c444533806351",
   "rests": [
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:518902ab7cde51b3",
    "0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html:a2d5a204d8ca856d",
    "0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html:a4c8a8d9311781d9"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings/programs.md::Country shrine (a village district's shrine)#no office building": {
-  "code": "0f8ac2689aa2be2f",
-  "core": "5ab41d3e5bc5e94b",
-  "date": "2026-10-07",
-  "note": "business at the administrator's home at small shrines",
+  "code": "512d195de5b21ddc",
+  "core": "3ca14da0edcd8ce4",
+  "date": "2026-10-08",
+  "note": "a small shrine's business was done at the administrator's home",
   "pages": {
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html": "53e6b30a3e84d65c"
   },
@@ -2280,10 +2398,10 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings/programs.md::Country shrine (a village district's shrine)#no subsidiary buildings": {
-  "code": "6cc07913903c52b0",
-  "core": "5ab41d3e5bc5e94b",
-  "date": "2026-10-07",
-  "note": "none placed at a village shrine",
+  "code": "32d396c4174c76a0",
+  "core": "3ca14da0edcd8ce4",
+  "date": "2026-10-08",
+  "note": "no page places these at a village shrine",
   "pages": {
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html": "4eb9d08db97f2235"
   },
@@ -2291,16 +2409,15 @@
   "rests": [
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html:ec94842e60f4ec90",
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:367d8473b787b9c1",
-   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:e0cb771a4e176bb4",
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:ea5e8406a7977ac4"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings/programs.md::Country shrine (a village district's shrine)#one-roof ends' order": {
-  "code": "bd7dae7b526fa8a1",
-  "core": "5ab41d3e5bc5e94b",
-  "date": "2026-10-07",
-  "note": "Kaie-ji gives no arrangement; record silent",
+  "code": "59715bace66bcf9f",
+  "core": "3ca14da0edcd8ce4",
+  "date": "2026-10-08",
+  "note": "nothing in the bundle orders the ends",
   "pages": {},
   "research": "",
   "rests": [
@@ -2309,15 +2426,16 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings/programs.md::Country shrine (a village district's shrine)#outermost arch at the precinct edge": {
-  "code": "df3ba68de971fa90",
-  "core": "5ab41d3e5bc5e94b",
-  "date": "2026-10-07",
-  "note": "first torii where the approach enters the grounds",
+  "code": "16be572b988a5a4b",
+  "core": "3ca14da0edcd8ce4",
+  "date": "2026-10-08",
+  "note": "the first torii stands where the approach enters the grounds",
   "pages": {
    "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html": "fd1a3212a5c01f72"
   },
   "research": "6d6aec09760b8162",
   "rests": [
+   "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:150b6599eb0096ca",
    "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html:5bcf01e1de5d3a96",
    "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html:a2df4c9dfafe5647",
    "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html:f1f901aac0e0e023"
@@ -2325,17 +2443,16 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings/programs.md::Country shrine (a village district's shrine)#precinct holds the grove": {
-  "code": "074b2572e0c00837",
-  "core": "5ab41d3e5bc5e94b",
-  "date": "2026-10-07",
-  "note": "wood kept around sanctuary, approach and hall; sides by ground",
+  "code": "3af9fe6fab4742a3",
+  "core": "3ca14da0edcd8ce4",
+  "date": "2026-10-08",
+  "note": "wood in and around the precinct, on the sides the ground gives",
   "pages": {
    "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html": "81663f30960fa262"
   },
   "research": "3377b10b4014ee4c",
   "rests": [
    "0215-village-shrines-where-they-stand-and-how-big-their-grounds-are.html:8c0147b5acb362f0",
-   "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html:0754094bacfe5b43",
    "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html:2ae7827162453585",
    "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html:e258ed2b31e06420",
    "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html:e2776b83ca1ea0ab"
@@ -2343,10 +2460,10 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings/programs.md::Country shrine (a village district's shrine)#precinct size": {
-  "code": "6f656dd41cf767b3",
-  "core": "5ab41d3e5bc5e94b",
-  "date": "2026-10-07",
-  "note": "register ranges, medians, built share, Edo returns, under- and overstatement all match",
+  "code": "ef31ad49998a415e",
+  "core": "3ca14da0edcd8ce4",
+  "date": "2026-10-08",
+  "note": "the register bands and medians, the 1/40 to 1/7 built share, and the Edo returns all match",
   "pages": {
    "0215-village-shrines-where-they-stand-and-how-big-their-grounds-are.html": "0584c762fce56b9b"
   },
@@ -2366,27 +2483,11 @@
   ],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Country shrine (a village district's shrine)#privy at least 15 ft from any well": {
-  "code": "5ab41d3e5bc5e94b",
-  "core": "5ab41d3e5bc5e94b",
-  "date": "2026-10-07",
-  "note": "privy at least 15 ft from any well",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "docs/buildings/programs.md::Country shrine (a village district's shrine)#privy size 5 ft square": {
-  "code": "5ab41d3e5bc5e94b",
-  "core": "5ab41d3e5bc5e94b",
-  "date": "2026-10-07",
-  "note": "privy size 5 ft square",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  "docs/buildings/programs.md::Country shrine (a village district's shrine)#resident monk": {
-  "code": "ba15ffa71f46e58f",
-  "core": "5ab41d3e5bc5e94b",
-  "date": "2026-10-07",
-  "note": "shrine-temple monk attested; rota and commuting priest left out as the project's recorded choice",
+  "code": "edd4ff3d195f2720",
+  "core": "3ca14da0edcd8ce4",
+  "date": "2026-10-08",
+  "note": "the shrine-monk form is attested; fixing it for every village is recorded as the project's choice",
   "pages": {
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html": "53e6b30a3e84d65c"
   },
@@ -2396,74 +2497,72 @@
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html:dc21d93f6fce21c2",
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html:45dd8025df53da60",
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html:65f775b74e07e799",
+   "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html:79e7d404014c73c5",
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html:d718ba59465c1fe3",
-   "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html:ea355903d99ff0f8",
-   "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html:fe069b51755156b3"
+   "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html:ea355903d99ff0f8"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings/programs.md::Country shrine (a village district's shrine)#sacred tree": {
-  "code": "0e3ad007a965f39d",
-  "core": "5ab41d3e5bc5e94b",
-  "date": "2026-10-07",
-  "note": "roped tree in the precinct; single trees along the approach",
+  "code": "0ea388d24e458ca1",
+  "core": "3ca14da0edcd8ce4",
+  "date": "2026-10-08",
+  "note": "a roped tree in the precinct; single trees along the approach",
   "pages": {
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html": "4eb9d08db97f2235",
    "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html": "81663f30960fa262"
   },
   "research": "4736f7f7d055c0c5",
   "rests": [
-   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html:fa7554c781a7ed15",
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:4bec9f4f1782de45",
+   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:5da9f8fd45af5fb4",
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:91892ea39367c5ef",
    "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html:0754094bacfe5b43"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings/programs.md::Country shrine (a village district's shrine)#sacred tree drawn as the biggest crown in the precinct": {
-  "code": "84f5786d72c36173",
-  "core": "5ab41d3e5bc5e94b",
-  "date": "2026-10-07",
-  "note": "no tree size in the record",
+  "code": "ba8e3663576e90c0",
+  "core": "3ca14da0edcd8ce4",
+  "date": "2026-10-08",
+  "note": "no tree size in the bundle",
   "pages": {},
   "research": "",
   "rests": [
-   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:5da9f8fd45af5fb4",
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:91892ea39367c5ef"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings/programs.md::Country shrine (a village district's shrine)#sanctuary on the axis": {
-  "code": "b3a056d1a5887121",
-  "core": "5ab41d3e5bc5e94b",
-  "date": "2026-10-07",
-  "note": "sanctuary at the rear on the hall's axis",
+  "code": "8fa15a5454cef8a9",
+  "core": "3ca14da0edcd8ce4",
+  "date": "2026-10-08",
+  "note": "sanctuary at the rear on the worship hall's axis",
   "pages": {
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html": "4eb9d08db97f2235"
   },
   "research": "704fffd977ae2d80",
   "rests": [
-   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html:4491044dddfc06ff",
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:031ae913ec9c4ff0",
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:646f71e0cff55d3c"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings/programs.md::Country shrine (a village district's shrine)#staffing and income": {
-  "code": "bc015ba24625f0d7",
-  "core": "5ab41d3e5bc5e94b",
-  "date": "2026-10-07",
-  "note": "campaign notes named",
+  "code": "e1a2f46b68fd73b1",
+  "core": "3ca14da0edcd8ce4",
+  "date": "2026-10-08",
+  "note": "names the campaign notes as canon",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings/programs.md::Country shrine (a village district's shrine)#sumo ring knob": {
-  "code": "5f7ef6cc52ca39e4",
-  "core": "5ab41d3e5bc5e94b",
-  "date": "2026-10-07",
-  "note": "the page finds sumo offered \"at shrines across the country\" and no count of rings; \"absent by default\" is not its finding; should be GUESS research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html",
+  "code": "5c105cdcef2d8792",
+  "core": "3ca14da0edcd8ce4",
+  "date": "2026-10-08",
+  "note": "sumo offered at shrines, no count; a knob, absent by default",
   "pages": {
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html": "4eb9d08db97f2235"
   },
@@ -2472,13 +2571,13 @@
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html:39f48711b5bdcffb",
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:ba13903e154776ed"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "docs/buildings/programs.md::Country shrine (a village district's shrine)#tax-free fields off the sheet": {
-  "code": "2839929a8fa4a83a",
-  "core": "5ab41d3e5bc5e94b",
-  "date": "2026-10-07",
-  "note": "exempt land is rights, not buildings; not drawn",
+  "code": "ac533d5b815c333c",
+  "core": "3ca14da0edcd8ce4",
+  "date": "2026-10-08",
+  "note": "exempt land is a right, not drawn",
   "pages": {
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html": "53e6b30a3e84d65c"
   },
@@ -2491,10 +2590,10 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings/programs.md::Country shrine (a village district's shrine)#two-building dwelling size": {
-  "code": "fb3d0152f1eb1cb1",
-  "core": "5ab41d3e5bc5e94b",
-  "date": "2026-10-07",
-  "note": "46x28 ft recorded as a guess; no village kuri measured",
+  "code": "ae650b6a2dbde9e6",
+  "core": "3ca14da0edcd8ce4",
+  "date": "2026-10-08",
+  "note": "46 by 28 ft recorded as a guess",
   "pages": {
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html": "5e8ac2e778e0e69b"
   },
@@ -2506,26 +2605,25 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings/programs.md::Country shrine (a village district's shrine)#two-building form": {
-  "code": "8f8899b37e4c8921",
-  "core": "5ab41d3e5bc5e94b",
-  "date": "2026-10-07",
-  "note": "kuri like an ordinary house or farmhouse, separate building",
+  "code": "082cd63c1b8a83b4",
+  "core": "3ca14da0edcd8ce4",
+  "date": "2026-10-08",
+  "note": "an ordinary temple's kuri was much like an ordinary house, farmhouse-like",
   "pages": {
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html": "53e6b30a3e84d65c"
   },
   "research": "f7696f7745e7b6c1",
   "rests": [
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html:7d3c2032a9987c33",
-   "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html:2c7b940b515976a0",
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html:8fedbcfb447d4dc1"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings/programs.md::Country shrine (a village district's shrine)#unenclosed precinct": {
-  "code": "11e0edb47b6cd404",
-  "core": "5ab41d3e5bc5e94b",
-  "date": "2026-10-07",
-  "note": "no precinct fence; sanctuary fences modern or lordly only",
+  "code": "817c7f09457d281c",
+  "core": "3ca14da0edcd8ce4",
+  "date": "2026-10-08",
+  "note": "no fenced precinct found; sanctuary fences are modern or a lord's",
   "pages": {
    "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html": "81663f30960fa262"
   },
@@ -2534,49 +2632,47 @@
    "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html:0758769902a3b99a",
    "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html:3025ee24804583c1",
    "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html:511a5d7ea05ca39e",
-   "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html:79dbb6e531e96313",
    "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html:d284e5af358a3a1f"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings/programs.md::Country shrine (a village district's shrine)#unswept precinct ground": {
-  "code": "a487f05d8e92c865",
-  "core": "5ab41d3e5bc5e94b",
-  "date": "2026-10-07",
-  "note": "surface unknown; swept is a guess",
+  "code": "d0503d4061b667e9",
+  "core": "3ca14da0edcd8ce4",
+  "date": "2026-10-08",
+  "note": "a swept precinct is unattested, a guess",
   "pages": {
    "0224-ground-swept-clear-around-shrines-and-graves.html": "ac45206dd1b05fe0"
   },
   "research": "6466d41a1eb45257",
   "rests": [
    "0224-ground-swept-clear-around-shrines-and-graves.html:55f2714efdadc428",
-   "0224-ground-swept-clear-around-shrines-and-graves.html:898072db4155f25a",
-   "0224-ground-swept-clear-around-shrines-and-graves.html:fc6105386aab5582"
+   "0224-ground-swept-clear-around-shrines-and-graves.html:898072db4155f25a"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings/programs.md::Country shrine (a village district's shrine)#wealth knob": {
-  "code": "5bd62ca4b44c551e",
-  "core": "5ab41d3e5bc5e94b",
-  "date": "2026-10-07",
-  "note": "donated stonework",
+  "code": "ed4facaaacaf39d1",
+  "core": "3ca14da0edcd8ce4",
+  "date": "2026-10-08",
+  "note": "donated stonework as for its own claim",
   "pages": {
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html": "4eb9d08db97f2235"
   },
   "research": "704fffd977ae2d80",
   "rests": [
-   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html:cc29d33e4a52f44e",
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:3dba430450c42071",
+   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:4bec9f4f1782de45",
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:c4e4424a990d6fd8",
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:ff7b754820341789"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings/programs.md::Country shrine (a village district's shrine)#wealth knob roofing": {
-  "code": "c67934027b174ddd",
-  "core": "5ab41d3e5bc5e94b",
-  "date": "2026-10-07",
-  "note": "a thatched hall is attested, but no wealth link",
+  "code": "a146c220fa3dc0cf",
+  "core": "3ca14da0edcd8ce4",
+  "date": "2026-10-08",
+  "note": "a thatched hall is attested, but not thatch against tile by wealth",
   "pages": {},
   "research": "",
   "rests": [
@@ -2585,10 +2681,10 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings/programs.md::Country shrine (a village district's shrine)#well and basin both drawn": {
-  "code": "072120a548911582",
-  "core": "5ab41d3e5bc5e94b",
-  "date": "2026-10-07",
-  "note": "record silent on a well at the shrine",
+  "code": "a06913fa9c3877c9",
+  "core": "3ca14da0edcd8ce4",
+  "date": "2026-10-08",
+  "note": "nothing in the bundle on a shrine well beside a basin",
   "pages": {},
   "research": "",
   "rests": [
@@ -2596,19 +2692,11 @@
   ],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Country shrine (a village district's shrine)#well curb size 3-4 ft (the table's well row)": {
-  "code": "5ab41d3e5bc5e94b",
-  "core": "5ab41d3e5bc5e94b",
-  "date": "2026-10-07",
-  "note": "well curb size 3-4 ft (the table's well row)",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  "docs/buildings/programs.md::Magistrate's manor (county magistracy)#a detached guest house at a rich posting (0091's drawing page records it as a GUESS)": {
-  "code": "8fc812cbbd00058b",
-  "core": "a8fc8192ed023812",
-  "date": "2026-10-07",
-  "note": "the drawing page records the detached guest house as a GUESS",
+  "code": "62691e5f63f06ab6",
+  "core": "389b4ed09ef8526b",
+  "date": "2026-10-08",
+  "note": "recorded as a GUESS",
   "pages": {
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html": "2688f28d713d8374"
   },
@@ -2620,36 +2708,44 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings/programs.md::Magistrate's manor (county magistracy)#cart route to granary and stables": {
-  "code": "b19d55d51ed6642d",
-  "core": "a8fc8192ed023812",
-  "date": "2026-10-07",
-  "note": "no cited page gives a cart route to granary or stables",
+  "code": "049d9bc87e8d890f",
+  "core": "389b4ed09ef8526b",
+  "date": "2026-10-08",
+  "note": "nothing in the bundle on a cart route",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings/programs.md::Magistrate's manor (county magistracy)#commuting clerks": {
-  "code": "1563d75c228ace79",
-  "core": "a8fc8192ed023812",
-  "date": "2026-10-07",
-  "note": "the clerks work in a room of the hall; 3-4 heimen who live in town",
+  "code": "8912ec5e9eeb6986",
+  "core": "389b4ed09ef8526b",
+  "date": "2026-10-08",
+  "note": "the workroom in the hall is attested, but \"no clerk housing\" goes against the intendant's tedai who \"lived in huts and row houses inside the office's compound\"; the town-dwelling heimen clerk is the setting's own (§492), so that part should be CANON or DEVIATION 0113",
   "pages": {
    "0113-the-office-hall-and-its-clerks-goyakusho.html": "f48c2ca0c1c3bee2"
   },
   "research": "7e9c46821cfb826d",
   "rests": [
-   "0113-the-office-hall-and-its-clerks-goyakusho.html:10f227f986a15250",
    "0113-the-office-hall-and-its-clerks-goyakusho.html:67e2f21a3252fd23",
    "0113-the-office-hall-and-its-clerks-goyakusho.html:9bba608484ca0320",
-   "0113-the-office-hall-and-its-clerks-goyakusho.html:bfca6b0c572eed52"
+   "0113-the-office-hall-and-its-clerks-goyakusho.html:bfca6b0c572eed52",
+   "0113-the-office-hall-and-its-clerks-goyakusho.html:ff7cc7b9e0cf23e6"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "MISLABELED"
+ },
+ "docs/buildings/programs.md::Magistrate's manor (county magistracy)#dais band on the office hall's south face": {
+  "code": "389b4ed09ef8526b",
+  "core": "389b4ed09ef8526b",
+  "date": "2026-10-08",
+  "note": "dais band on the office hall's south face",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  "docs/buildings/programs.md::Magistrate's manor (county magistracy)#divider gate": {
-  "code": "50b92a79da009951",
-  "core": "a8fc8192ed023812",
-  "date": "2026-10-07",
+  "code": "5ee053ecdf7a2140",
+  "core": "389b4ed09ef8526b",
+  "date": "2026-10-08",
   "note": "a gate between the two courts",
   "pages": {
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "8d81fb67fc6be64e"
@@ -2662,41 +2758,42 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings/programs.md::Magistrate's manor (county magistracy)#divider gate on the axis": {
-  "code": "b3e7d14df8ba67a3",
-  "core": "a8fc8192ed023812",
-  "date": "2026-10-07",
-  "note": "the program puts the gate \"customarily on the main axis directly BEHIND the office hall\", but 0090's drawing page takes the Japanese form, \"No fixed central axis\", and does not record this placement as a deviation; record it as a DEVIATION on 0090's drawing page, or relabel it GUESS",
+  "code": "9512b6b04de20fb6",
+  "core": "389b4ed09ef8526b",
+  "date": "2026-10-08",
+  "note": "the code puts the gate \"customarily on the main axis directly BEHIND the office hall\", but the page gives \"No fixed central axis ... No page we read on the jin'ya records one\"; drop the \"customarily\", or relabel as a GUESS or DEVIATION",
   "pages": {
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "8d81fb67fc6be64e"
   },
   "research": "b9f86fd8593ec1ea",
   "rests": [
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:32affd822563d2d9",
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:45ffe904afced68b",
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:769a88ade68767a9"
   ],
   "verdict": "DRIFTED"
  },
  "docs/buildings/programs.md::Magistrate's manor (county magistracy)#divider gate width": {
-  "code": "e1e44e7f87ce5385",
-  "core": "a8fc8192ed023812",
-  "date": "2026-10-07",
-  "note": "no page in the bundle gives a nakamon's width",
+  "code": "1a1ace618bbb309d",
+  "core": "389b4ed09ef8526b",
+  "date": "2026-10-08",
+  "note": "no nakamon width in the bundle",
   "pages": {},
   "research": "",
-  "rests": [],
+  "rests": [
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:fc0610901368c3d8"
+  ],
   "verdict": "IN-STEP"
  },
  "docs/buildings/programs.md::Magistrate's manor (county magistracy)#fire-water tubs": {
-  "code": "671a78511f174990",
-  "core": "a8fc8192ed023812",
-  "date": "2026-10-07",
-  "note": "about 8-12 tubs, 2 at the kitchen, none at a dozo",
+  "code": "9d1bec9b8100c6cc",
+  "core": "389b4ed09ef8526b",
+  "date": "2026-10-08",
+  "note": "~8-12 tubs, two at the kitchen, none at the kura",
   "pages": {
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "2c4dfd988d663a80"
   },
   "research": "5292b7fa7abf1048",
   "rests": [
-   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:3d78982d8d903e9f",
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:67384625aa76f7e9",
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:81eec727dd4e93f2",
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:a8ace44152bf8182"
@@ -2704,66 +2801,65 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings/programs.md::Magistrate's manor (county magistracy)#formal visitors and the privacy baffle": {
-  "code": "f343956aca76a0bb",
-  "core": "a8fc8192ed023812",
-  "date": "2026-10-07",
-  "note": "the composition rule gives the residence \"one formal genkan on the reception block\", but the cited page says that where office and residence share a compound \"the genkan is drawn on the office\"; move the genkan to the office or record the departure",
+  "code": "977533943c61cd5c",
+  "core": "389b4ed09ef8526b",
+  "date": "2026-10-08",
+  "note": "the drawing page has \"the way to the residence runs on through the office\" (the Takayama route continues to the residence); the code stops visitors at the hall and sends household traffic through a separate divider gate, and also puts the formal genkan on the residence, not the office",
   "pages": {
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html": "b2a74a73e3c362a1"
   },
   "research": "2892ce3f903e6811",
   "rests": [
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:116aa236938eb510"
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:116aa236938eb510",
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:8df3343eda86262e"
   ],
   "verdict": "DRIFTED"
  },
  "docs/buildings/programs.md::Magistrate's manor (county magistracy)#garden and stables wells": {
-  "code": "aa22e8ad464bc43b",
-  "core": "a8fc8192ed023812",
-  "date": "2026-10-07",
-  "note": "no page places a garden well or a stable well",
+  "code": "3003df898c378a1f",
+  "core": "389b4ed09ef8526b",
+  "date": "2026-10-08",
+  "note": "no page places a garden or stable well",
   "pages": {},
   "research": "",
   "rests": [
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:598ef8ea7d58c2f4",
-   "0091-samurai-residences-and-their-rooms-buke-yashiki.html:6218744dea5fe01d"
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:77860a26bb8da90e"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings/programs.md::Magistrate's manor (county magistracy)#garrison emphasis knob": {
-  "code": "b9076abd2c0bcfb0",
-  "core": "a8fc8192ed023812",
-  "date": "2026-10-07",
-  "note": "the bundle is silent",
+  "code": "05cd6774f4a91a50",
+  "core": "389b4ed09ef8526b",
+  "date": "2026-10-08",
+  "note": "nothing in the bundle on armory or watchtower",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings/programs.md::Magistrate's manor (county magistracy)#granary weight knob": {
-  "code": "d8dff31b0b9563f2",
-  "core": "a8fc8192ed023812",
-  "date": "2026-10-07",
-  "note": "the program puts a granary row inside a remote county's compound; 0098 calls the terminal row a GUESS from a whole-province office (\"is this project's GUESS\") and gives no count, and its drawing page gives a county office \"a single storehouse\", with the row at the river landing for a county on navigable water and an isolated county leaning to the office's single store",
+  "code": "fd974b46bb3589b7",
+  "core": "389b4ed09ef8526b",
+  "date": "2026-10-08",
+  "note": "0098 calls the terminal office row \"this project's GUESS\" and gives no count for an office's stores; should be GUESS 0098 (the drawing page's knob is office storehouse against landing row, not one against a row)",
   "pages": {
    "0098-storehouses-for-the-tax-rice.html": "b0964dae032a23e9"
   },
   "research": "f2e5561095446765",
   "rests": [
-   "0098-storehouses-for-the-tax-rice.drawing.html:0dfd560c49d1636d",
    "0098-storehouses-for-the-tax-rice.drawing.html:c97a5ce79117b14d",
    "0098-storehouses-for-the-tax-rice.drawing.html:d28322fa1bae3655",
    "0098-storehouses-for-the-tax-rice.html:234a9d6b4069fc1a",
-   "0098-storehouses-for-the-tax-rice.html:b8fb4a1535a30a42",
    "0098-storehouses-for-the-tax-rice.html:ba9c123d1799c49c"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "MISLABELED"
  },
  "docs/buildings/programs.md::Magistrate's manor (county magistracy)#guest doors feed courts": {
-  "code": "2287667f3cb360e8",
-  "core": "a8fc8192ed023812",
-  "date": "2026-10-07",
-  "note": "open ground before a guest door, the kitchen door into work space; the drawing pages record the garden and the lantern as guesses",
+  "code": "e1953e8ca17032ef",
+  "core": "389b4ed09ef8526b",
+  "date": "2026-10-08",
+  "note": "guests cross open ground, the garden approach is attested at a middle-rank house, the kitchen door opens into work space, and the lantern in the court is a guess",
   "pages": {
    "0103-ornamental-gardens-ponds-and-stone-lanterns-teien.drawing.html": "48d206623f86d1e3",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html": "b2a74a73e3c362a1",
@@ -2775,61 +2871,64 @@
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:096177a66b97c551",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:3bd3b9974993d277",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:5537423845128d56",
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:7e1a102957652671",
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:a7771290ebe77a35"
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:a7771290ebe77a35",
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:00bcfd3abdfc77d8",
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:508d759fa76d492e",
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:fc0610901368c3d8"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings/programs.md::Magistrate's manor (county magistracy)#inner-court postern": {
-  "code": "e5f9ab07108cd80d",
-  "core": "a8fc8192ed023812",
-  "date": "2026-10-07",
-  "note": "0101's drawing page records a gate for collectors as the project's reading; the katteguchi is only the kitchen's door",
+  "code": "5c84e225a006488c",
+  "core": "389b4ed09ef8526b",
+  "date": "2026-10-08",
+  "note": "no such gate named at a samurai house; recorded as the project's reading",
   "pages": {
    "0101-privies-setchin.drawing.html": "03968c62149e28e2"
   },
   "research": "ad0c946c19e2af00",
   "rests": [
    "0101-privies-setchin.drawing.html:22aa0442ff4680a7",
-   "0101-privies-setchin.drawing.html:4b9c7b16a2cddbfa",
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:95160ff513e325fa"
+   "0101-privies-setchin.drawing.html:4b9c7b16a2cddbfa"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings/programs.md::Magistrate's manor (county magistracy)#justice-front furniture knob": {
-  "code": "d7c20da2e838d0bf",
-  "core": "a8fc8192ed023812",
-  "date": "2026-10-07",
-  "note": "the bundle is silent on petition windows and drums",
+  "code": "67171cd229f99dec",
+  "core": "389b4ed09ef8526b",
+  "date": "2026-10-08",
+  "note": "no petition window or drum in the bundle",
   "pages": {},
   "research": "",
-  "rests": [],
+  "rests": [
+   "0190-notice-boards-kosatsuba.drawing.html:2ceb799ba8f67923"
+  ],
   "verdict": "IN-STEP"
  },
  "docs/buildings/programs.md::Magistrate's manor (county magistracy)#latrines by zone": {
-  "code": "0e26745b828bf1bc",
-  "core": "a8fc8192ed023812",
-  "date": "2026-10-07",
-  "note": "0101's research page backs only privies attached to the house; \"one per zone\" and \"by service gates\" are recorded as a GUESS and a reading on its drawing page, so the label should be GUESS on that drawing page; also \"the residence privy\" is singular where the drawing page gives the house two",
+  "code": "7806b4774f798ba3",
+  "core": "389b4ed09ef8526b",
+  "date": "2026-10-08",
+  "note": "0101 attests only privies attached to the house and a shared privy building near the row houses; one per zone and siting by the service gates are the drawing page's GUESS and reading, so the label should be GUESS research/questions/0101-privies-setchin.drawing.html",
   "pages": {
    "0101-privies-setchin.html": "f772eb2b05990168"
   },
   "research": "9f2d5a5c6b30a6c8",
   "rests": [
-   "0101-privies-setchin.drawing.html:35d401ea5514f4f8",
    "0101-privies-setchin.drawing.html:38960fd9975a6f1c",
    "0101-privies-setchin.drawing.html:4b9c7b16a2cddbfa",
    "0101-privies-setchin.html:18e84aa2b3f392ce",
    "0101-privies-setchin.html:3e6cdef5ad67f277",
+   "0101-privies-setchin.html:989221f59acc042a",
    "0101-privies-setchin.html:ad7226cc05347e65"
   ],
   "verdict": "MISLABELED"
  },
  "docs/buildings/programs.md::Magistrate's manor (county magistracy)#manor kitchen garden by the sun": {
-  "code": "d69d784a694bd4dc",
-  "core": "a8fc8192ed023812",
-  "date": "2026-10-07",
-  "note": "the rear site only where a bed gets six hours of sun",
+  "code": "fe4bd2da9b53db8f",
+  "core": "389b4ed09ef8526b",
+  "date": "2026-10-08",
+  "note": "the procedure names only the rear strip for the bed, but 0109's drawing page makes the site a knob among west, south beside the formal garden, rear and own parcel (and the hand-drawn plans put it south), and the size a knob too",
   "pages": {
    "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03",
    "0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html": "461744888b10dad0"
@@ -2837,25 +2936,24 @@
   "research": "9d4ec9a570c81514",
   "rests": [
    "0038-sunlight-and-shade-on-the-farm.drawing.html:518902ab7cde51b3",
-   "0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html:42bdf96bf8f0f70f",
    "0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html:7ce0bef9ba8bf611",
    "0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html:a2d5a204d8ca856d",
+   "0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html:fc44e5419b7307af",
    "0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html:ff9d9cf36d9635eb"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  "docs/buildings/programs.md::Magistrate's manor (county magistracy)#mostly open compound": {
-  "code": "7246d38978533811",
-  "core": "a8fc8192ed023812",
-  "date": "2026-10-07",
-  "note": "30-42% coverage, the court spine kept open, loose ground consolidated",
+  "code": "fd0a538dc3a9c64d",
+  "core": "389b4ed09ef8526b",
+  "date": "2026-10-08",
+  "note": "30-42% coverage, court spine open",
   "pages": {
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c2a4ba141b354319"
   },
   "research": "8bb634ee7fbc398f",
   "rests": [
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:5b274ef99f301ef1",
-   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:c63fb7818cf50fcb",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:e672b523bf8222b2",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:f2129fd621e95512",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:f6879c35848621fc"
@@ -2863,10 +2961,10 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings/programs.md::Magistrate's manor (county magistracy)#notice board at the gate": {
-  "code": "6b6c3ebfaaf2887f",
-  "core": "a8fc8192ed023812",
-  "date": "2026-10-07",
-  "note": "the board at the gate is recorded as a GUESS",
+  "code": "9c5f404948634372",
+  "core": "389b4ed09ef8526b",
+  "date": "2026-10-08",
+  "note": "recorded GUESS joining the Japanese board to the Chinese gate",
   "pages": {
    "0190-notice-boards-kosatsuba.drawing.html": "6046a6a69d20be53"
   },
@@ -2877,10 +2975,10 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings/programs.md::Magistrate's manor (county magistracy)#office hall dais band": {
-  "code": "4814a38a9011ea7b",
-  "core": "a8fc8192ed023812",
-  "date": "2026-10-07",
-  "note": "the dais is the front of the hall; flanking clerks a recorded deviation",
+  "code": "a4213afcd7a17931",
+  "core": "389b4ed09ef8526b",
+  "date": "2026-10-08",
+  "note": "the dais is the front of the office hall",
   "pages": {
    "0099-the-hearing-court-shirasu.drawing.html": "6e346d062ac74ea6"
   },
@@ -2888,53 +2986,51 @@
   "rests": [
    "0099-the-hearing-court-shirasu.drawing.html:36f49b610deb6fb9",
    "0099-the-hearing-court-shirasu.drawing.html:400ef23a77443c5c",
-   "0099-the-hearing-court-shirasu.drawing.html:6f3e1d8136359675"
+   "0099-the-hearing-court-shirasu.drawing.html:a82abb47f7fed2c5"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings/programs.md::Magistrate's manor (county magistracy)#office hall rooms": {
-  "code": "432019671ed226ce",
-  "core": "a8fc8192ed023812",
-  "date": "2026-10-07",
-  "note": "no page places these rooms behind the court",
+  "code": "89b51271880a4fa1",
+  "core": "389b4ed09ef8526b",
+  "date": "2026-10-08",
+  "note": "no page places the rooms behind the dais",
   "pages": {},
   "research": "",
   "rests": [
-   "0099-the-hearing-court-shirasu.drawing.html:36f49b610deb6fb9",
    "0113-the-office-hall-and-its-clerks-goyakusho.html:96b3ae0aeb48709a"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings/programs.md::Magistrate's manor (county magistracy)#outer service gate": {
-  "code": "794f81deabfd54a7",
-  "core": "a8fc8192ed023812",
-  "date": "2026-10-07",
-  "note": "the merchant's back gate is the nearest record, and the drawing page records this as a reading",
+  "code": "eb578406ab20dca0",
+  "core": "389b4ed09ef8526b",
+  "date": "2026-10-08",
+  "note": "only the merchant's back gate is attested; recorded",
   "pages": {
    "0101-privies-setchin.drawing.html": "03968c62149e28e2"
   },
   "research": "ad0c946c19e2af00",
   "rests": [
-   "0101-privies-setchin.drawing.html:4b9c7b16a2cddbfa",
-   "0101-privies-setchin.html:ad7226cc05347e65"
+   "0101-privies-setchin.drawing.html:4b9c7b16a2cddbfa"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings/programs.md::Magistrate's manor (county magistracy)#outer service gate for muck and prisoners": {
-  "code": "01f359831eefb49d",
-  "core": "a8fc8192ed023812",
-  "date": "2026-10-07",
-  "note": "the bundle is silent on prisoner transfers",
+  "code": "5683e49392d0326e",
+  "core": "389b4ed09ef8526b",
+  "date": "2026-10-08",
+  "note": "nothing in the bundle",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings/programs.md::Magistrate's manor (county magistracy)#posting wealth knob": {
-  "code": "f67295f6ca193c71",
-  "core": "a8fc8192ed023812",
-  "date": "2026-10-07",
-  "note": "the poor-office look is recorded as a GUESS",
+  "code": "b3ac49413e634555",
+  "core": "389b4ed09ef8526b",
+  "date": "2026-10-08",
+  "note": "the poor-office picture is recorded as a GUESS",
   "pages": {
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "8d81fb67fc6be64e"
   },
@@ -2945,10 +3041,10 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings/programs.md::Magistrate's manor (county magistracy)#practice ground": {
-  "code": "ba6bab0691a09187",
-  "core": "a8fc8192ed023812",
-  "date": "2026-10-07",
-  "note": "no hall below a provincial city",
+  "code": "eae71183fcf67376",
+  "core": "389b4ed09ef8526b",
+  "date": "2026-10-08",
+  "note": "no hall at a county magistracy",
   "pages": {
    "0165-martial-training-grounds-and-dojo.drawing.html": "931bfd2e0737c1a3"
   },
@@ -2961,10 +3057,10 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings/programs.md::Magistrate's manor (county magistracy)#practice ground placement and gear": {
-  "code": "c26609fb54499142",
-  "core": "a8fc8192ed023812",
-  "date": "2026-10-07",
-  "note": "beside the guards' quarters, with a weapon rack and striking posts",
+  "code": "323e03a791a3294c",
+  "core": "389b4ed09ef8526b",
+  "date": "2026-10-08",
+  "note": "beside the guards' quarters, rack and posts, sized per samurai",
   "pages": {
    "0165-martial-training-grounds-and-dojo.drawing.html": "931bfd2e0737c1a3"
   },
@@ -2978,10 +3074,10 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings/programs.md::Magistrate's manor (county magistracy)#rear service strip": {
-  "code": "88295a48a0f1ab10",
-  "core": "a8fc8192ed023812",
-  "date": "2026-10-07",
-  "note": "the bundle answers where servants lived: \"At Matsue the gatekeepers and servants lived in the gate range\", and at Miwa a servants' hut outside the back door; storehouses behind the house are also attested; so it should cite 0091 and 0097 with gate range versus rear as attested forms, not GUESS for the whole strip",
+  "code": "90b5c53c8f4c48bf",
+  "core": "389b4ed09ef8526b",
+  "date": "2026-10-08",
+  "note": "a GUESS the bundle answers: 0097 puts the servants' rooms in the gate range (\"the gatekeeper's room and the chugen room ... lodged retainers and servants\"); cite 0097 and offer that form, or record the rear as a DEVIATION",
   "pages": {
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html": "2688f28d713d8374"
   },
@@ -2991,18 +3087,15 @@
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:49cd9dd3d26f1477",
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:598ef8ea7d58c2f4",
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:77860a26bb8da90e",
-   "0091-samurai-residences-and-their-rooms-buke-yashiki.html:38c4ffc4522eb6cd",
-   "0091-samurai-residences-and-their-rooms-buke-yashiki.html:6218744dea5fe01d",
-   "0091-samurai-residences-and-their-rooms-buke-yashiki.html:89821f7c125623ad",
    "0097-staff-rowhouses-and-barracks-nagaya.html:be72cb091c68e5f6"
   ],
   "verdict": "MISLABELED"
  },
  "docs/buildings/programs.md::Magistrate's manor (county magistracy)#residence entrances": {
-  "code": "354db2aa1bde7aaf",
-  "core": "a8fc8192ed023812",
-  "date": "2026-10-07",
-  "note": "the program fixes \"one formal genkan on the reception block\" of the residence; 0104's drawing page draws the genkan on the office where office and residence share a compound, and makes the entrance a knob between a genkan with a shikidai and the garden-path form (\"a middle-rank house could do without one\")",
+  "code": "f9c84b8a27b58d32",
+  "core": "389b4ed09ef8526b",
+  "date": "2026-10-08",
+  "note": "the code fixes \"one formal genkan on the reception block\", but the record attests a second form (a middle-rank house with no shikidai genkan, guests through a garden), and its drawing page puts the genkan on the office where office and residence share a compound",
   "pages": {
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "bbfebe573bb99b25"
   },
@@ -3019,10 +3112,10 @@
   "verdict": "DRIFTED"
  },
  "docs/buildings/programs.md::Magistrate's manor (county magistracy)#resident particulars knob": {
-  "code": "2b12be7b3f439aa3",
-  "core": "a8fc8192ed023812",
-  "date": "2026-10-07",
-  "note": "a dojo only as a special feature, set by a knob",
+  "code": "9c5965921cbb2cf8",
+  "core": "389b4ed09ef8526b",
+  "date": "2026-10-08",
+  "note": "a dojo only as a special feature",
   "pages": {
    "0165-martial-training-grounds-and-dojo.drawing.html": "931bfd2e0737c1a3"
   },
@@ -3033,20 +3126,22 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings/programs.md::Magistrate's manor (county magistracy)#resident particulars other than the dojo": {
-  "code": "c64920a5ce8aff53",
-  "core": "a8fc8192ed023812",
-  "date": "2026-10-07",
-  "note": "the bundle is silent on a dedication by county type, relics and workshops",
+  "code": "412d2b228ad37657",
+  "core": "389b4ed09ef8526b",
+  "date": "2026-10-08",
+  "note": "nothing in the bundle on dedication by county type, relics or workshops",
   "pages": {},
   "research": "",
-  "rests": [],
+  "rests": [
+   "0218-the-compounds-own-shrine-yashikigami.drawing.html:1cf5b0fa52131673"
+  ],
   "verdict": "IN-STEP"
  },
  "docs/buildings/programs.md::Magistrate's manor (county magistracy)#sand hearing court": {
-  "code": "6dd2c70948fbf256",
-  "core": "a8fc8192ed023812",
-  "date": "2026-10-07",
-  "note": "the claim and the program fix a gravel or \"sand\" floor; 0099's drawing page makes the floor a knob, \"white gravel, or cobbles from the local riverbed... Each plan takes one\"; roll the floor between the two",
+  "code": "fd6a4605195f1502",
+  "core": "389b4ed09ef8526b",
+  "date": "2026-10-08",
+  "note": "\"sand hearing court\" fixes the floor, but the page makes it a knob: \"white gravel, or cobbles from the local riverbed\"",
   "pages": {
    "0099-the-hearing-court-shirasu.drawing.html": "6e346d062ac74ea6"
   },
@@ -3060,10 +3155,10 @@
   "verdict": "DRIFTED"
  },
  "docs/buildings/programs.md::Magistrate's manor (county magistracy)#staff housing knob": {
-  "code": "94bd8a02b75fa7b5",
-  "core": "a8fc8192ed023812",
-  "date": "2026-10-07",
-  "note": "staff on the grounds, family rows, and staff living in a district of their own are all attested",
+  "code": "40ac67252b13a71a",
+  "core": "389b4ed09ef8526b",
+  "date": "2026-10-08",
+  "note": "quarters on the grounds, household rows, and the Edo constables housed apart",
   "pages": {
    "0097-staff-rowhouses-and-barracks-nagaya.html": "62a5ddbd963f7fc7"
   },
@@ -3078,10 +3173,10 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings/programs.md::Magistrate's manor (county magistracy)#staffing anchors": {
-  "code": "d8279eab0a978fed",
-  "core": "a8fc8192ed023812",
-  "date": "2026-10-07",
-  "note": "0113 records the clerk count as the setting's own figure",
+  "code": "dfa6e99bd51c4710",
+  "core": "389b4ed09ef8526b",
+  "date": "2026-10-08",
+  "note": "names the campaign notes",
   "pages": {},
   "research": "",
   "rests": [
@@ -3090,20 +3185,20 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings/programs.md::Magistrate's manor (county magistracy)#tenure character knob": {
-  "code": "45c6d65ea5059779",
-  "core": "a8fc8192ed023812",
-  "date": "2026-10-07",
-  "note": "the bundle is silent",
+  "code": "994341afb0266c2a",
+  "core": "389b4ed09ef8526b",
+  "date": "2026-10-08",
+  "note": "nothing in the bundle",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings/programs.md::Magistrate's manor (county magistracy)#tier knob": {
-  "code": "d38c7fe6ee3f37fb",
-  "core": "a8fc8192ed023812",
-  "date": "2026-10-07",
-  "note": "the capital tier fixes \"most staff living out in the city\", where 0114 says \"The record therefore supports both ways of housing its staff\", which makes it a knob; also 0110 gives no checkpoint garrison, so \"2-3 samurai\" is unsupported",
+  "code": "0184c5bbdb4077ce",
+  "core": "389b4ed09ef8526b",
+  "date": "2026-10-08",
+  "note": "the capital end fixes \"most staff living out in the city\", but 0114 says \"the record therefore supports both ways of housing its staff\"; roll between them",
   "pages": {
    "0110-border-posts-and-their-crossing-court-kuchidome-bansho.html": "b3f95cfe064ecbb5",
    "0114-the-imperial-magistrates-compound-in-a-capital.html": "151ec0a20c28dab8"
@@ -3112,6 +3207,7 @@
   "rests": [
    "0110-border-posts-and-their-crossing-court-kuchidome-bansho.html:ae79afce1ebb08ba",
    "0110-border-posts-and-their-crossing-court-kuchidome-bansho.html:b24bcf640dc2cb0f",
+   "0114-the-imperial-magistrates-compound-in-a-capital.html:17fc62464f47b095",
    "0114-the-imperial-magistrates-compound-in-a-capital.html:8217091e065fa394",
    "0114-the-imperial-magistrates-compound-in-a-capital.html:9f209424f377fc8c",
    "0114-the-imperial-magistrates-compound-in-a-capital.html:a325a11b4634b47d",
@@ -3120,33 +3216,32 @@
   "verdict": "DRIFTED"
  },
  "docs/buildings/programs.md::Magistrate's manor (county magistracy)#two-court zoning": {
-  "code": "f95d5fc6640173d3",
-  "core": "a8fc8192ed023812",
-  "date": "2026-10-07",
-  "note": "office in front and residence behind, a recorded simplification",
+  "code": "68307455bc34b2aa",
+  "core": "389b4ed09ef8526b",
+  "date": "2026-10-08",
+  "note": "office in front, residence behind, recorded as a simplification",
   "pages": {
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "8d81fb67fc6be64e"
   },
   "research": "b9f86fd8593ec1ea",
   "rests": [
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:049a643bfa279d82",
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:b92fdf4980d4aceb"
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:049a643bfa279d82"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings/programs.md::Magistrate's manor (county magistracy)#universal shrine": {
-  "code": "4e3a7089ef161b71",
-  "core": "a8fc8192ed023812",
-  "date": "2026-10-07",
-  "note": "0218's drawing page says \"a map draws one, a deliberate deviation\" and records only Ochiba's second kami; Hayakawa's two shrines are not recorded there; record the count (attested at Joge) as a knob or an exception on that page",
+  "code": "404ae00c5f751cf0",
+  "core": "389b4ed09ef8526b",
+  "date": "2026-10-08",
+  "note": "the drawing page rules \"Our maps draw one modest shrine, however many a real office kept\", but Hayakawa's sheet keeps two; record the two-shrine form on the page (as a knob) or bring the sheet to one",
   "pages": {
    "0218-the-compounds-own-shrine-yashikigami.drawing.html": "30143bd59a2deac9",
    "0218-the-compounds-own-shrine-yashikigami.html": "9599070ed9639df8"
   },
   "research": "757a8ea819830433",
   "rests": [
+   "0218-the-compounds-own-shrine-yashikigami.drawing.html:08413de30e1b0f4b",
    "0218-the-compounds-own-shrine-yashikigami.drawing.html:1cf5b0fa52131673",
-   "0218-the-compounds-own-shrine-yashikigami.drawing.html:be6049ab7f6ba02d",
    "0218-the-compounds-own-shrine-yashikigami.drawing.html:d462ca0a1a370798",
    "0218-the-compounds-own-shrine-yashikigami.html:19a8b2635c1b3c76",
    "0218-the-compounds-own-shrine-yashikigami.html:28d396983ee76947"
@@ -3154,50 +3249,52 @@
   "verdict": "DRIFTED"
  },
  "docs/buildings/programs.md::Magistrate's manor (county magistracy)#upland granary contents": {
-  "code": "dd4bff7f1623a106",
-  "core": "a8fc8192ed023812",
-  "date": "2026-10-07",
-  "note": "the soybean and barley bales are a recorded deliberate deviation",
+  "code": "590bdb03b5e6dfac",
+  "core": "389b4ed09ef8526b",
+  "date": "2026-10-08",
+  "note": "the in-kind bales are recorded as a deliberate deviation",
   "pages": {
    "0098-storehouses-for-the-tax-rice.drawing.html": "1466a760af61120d"
   },
   "research": "f1206af177a61c95",
   "rests": [
    "0098-storehouses-for-the-tax-rice.drawing.html:1ae871342edf3960",
-   "0098-storehouses-for-the-tax-rice.drawing.html:38cdaa6bf4104e0b"
+   "0098-storehouses-for-the-tax-rice.drawing.html:38cdaa6bf4104e0b",
+   "0098-storehouses-for-the-tax-rice.html:1bf32cdbfe515d4e"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings/programs.md::Magistrate's manor (county magistracy)#upland granary strongbox role": {
-  "code": "5330f1d94ee13555",
-  "core": "a8fc8192ed023812",
-  "date": "2026-10-07",
-  "note": "the page attests the dry-field tax \"often paid in cash\" and part of the land tax paid in money",
+  "code": "f150222b8985b8e6",
+  "core": "389b4ed09ef8526b",
+  "date": "2026-10-08",
+  "note": "the strongbox rests on the dry-field tax \"often paid in cash\", which the project's own deviation replaces with soybean and barley bales; one of the two must give, and no page puts coin in a granary",
   "pages": {
    "0098-storehouses-for-the-tax-rice.html": "b0964dae032a23e9"
   },
   "research": "f2e5561095446765",
   "rests": [
+   "0098-storehouses-for-the-tax-rice.drawing.html:38cdaa6bf4104e0b",
    "0098-storehouses-for-the-tax-rice.html:024345af40d85da3",
    "0098-storehouses-for-the-tax-rice.html:1bf32cdbfe515d4e"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  "docs/buildings/programs.md::Magistrate's manor (county magistracy)#wall display": {
-  "code": "e49ba783e8332c1b",
-  "core": "a8fc8192ed023812",
-  "date": "2026-10-07",
-  "note": "the bundle is silent",
+  "code": "400951abc6df6d21",
+  "core": "389b4ed09ef8526b",
+  "date": "2026-10-08",
+  "note": "nothing in the bundle",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings/programs.md::Magistrate's manor (county magistracy)#walled enclosure": {
-  "code": "90bdbb09c5fe3e4d",
-  "core": "a8fc8192ed023812",
-  "date": "2026-10-07",
-  "note": "the wall and the gate ranges at Omori and Kaibara",
+  "code": "cbf7b5f5475c7ead",
+  "core": "389b4ed09ef8526b",
+  "date": "2026-10-08",
+  "note": "the claim makes the gatehouse the office's gate range as at Omori and Kaibara, but the gatehouse band (14-82 ft) excludes Omori's 33 m (~108 ft) range",
   "pages": {
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "8d81fb67fc6be64e",
    "0097-staff-rowhouses-and-barracks-nagaya.html": "62a5ddbd963f7fc7"
@@ -3207,22 +3304,22 @@
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:b92fdf4980d4aceb",
    "0097-staff-rowhouses-and-barracks-nagaya.html:21b1183d8cab06e5",
    "0097-staff-rowhouses-and-barracks-nagaya.html:79b867ffa7ca309a",
-   "0097-staff-rowhouses-and-barracks-nagaya.html:a29a90d662b98d5d",
-   "0097-staff-rowhouses-and-barracks-nagaya.html:cc71c79235f31e3e"
+   "0097-staff-rowhouses-and-barracks-nagaya.html:a29a90d662b98d5d"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  "docs/buildings/programs.md::Magistrate's manor (county magistracy)#wells by use": {
-  "code": "59900698abcb5b09",
-  "core": "a8fc8192ed023812",
-  "date": "2026-10-07",
-  "note": "the kitchen well with the kitchen and bath is the project's recorded reading, and 0091 places no kitchen well",
+  "code": "6e15503de9842151",
+  "core": "389b4ed09ef8526b",
+  "date": "2026-10-08",
+  "note": "the kitchen well kept with the bath is the recorded reading",
   "pages": {
    "0105-baths-furo.drawing.html": "3a22b50676fcbd78"
   },
   "research": "c93529d7938119b7",
   "rests": [
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:598ef8ea7d58c2f4",
+   "0105-baths-furo.drawing.html:01dad30a7f1a8c0e",
    "0105-baths-furo.drawing.html:0b1d5b0ba345a21a"
   ],
   "verdict": "IN-STEP"
