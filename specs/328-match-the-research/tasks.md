@@ -44,7 +44,7 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
   byte-identical); the feed's recorded width (round 2) moved Kuwabata's polder feed record 6.0 -> 5.0 and one scrub-cover ring of
   its grazing common by under a foot where it keeps off that canal (measured on the regenerated manifest) - no rule changed
   for any element; the belt claims re-cited
-- placement-changed: wet paddy on sawada - wave 40: only the draw or a pointed shape leaves a low plot green (0007); the four
+- (reviewed PASS at batch 2's close round 3, 2026-10-08) placement-changed wet paddy on sawada - wave 40: only the draw or a pointed shape leaves a low plot green (0007); the four
   shape clauses and the outfall's keep-out, on no page, went, and the blue plots run 7 -> 16 here (Inashiro 1 -> 8, Kashikawa 4 -> 13, Mizuguchi 3 -> 7, Sawada 7 -> 16, after round 2's taper fix)
 - (reviewed PASS at batch 2's close, 2026-10-08) glyph-redrawn windbreak on inashiro - wave 39: every grove crown in 0080's one 0.75-1.4 band, a conifer no wider than a broadleaf
   (the conifer-led belt's rows and the farm groves), and every crown giving way round a yard persimmon (0046)

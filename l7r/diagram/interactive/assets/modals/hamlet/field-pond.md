@@ -1,14 +1,14 @@
-About: A paddy field was rice, plot after plot, but not only rice: small ponds stood among the paddies to store water
-for them. One form, seen mostly on the plains, was the dish pond (sara-ike), made by ringing a hollow or a stretch of
-low wet ground with an embankment and digging out its bottom.
+About: A paddy field was rice, plot after plot, but not only rice: small ponds stood among the paddies to store water for them.
+One form, seen mostly on the plains, was the dish pond (sara-ike), made by ringing a hollow or a stretch of low wet
+ground with an embankment and digging out its bottom.
 
 The dish ponds of the plains today are ringed with reed, wild rice and cattail, with water chestnut and water lilies
 over their surface, and their banks are mown and burned. In old China, too, water plants stood inside a marsh's bank,
 not on it, and a pond's bank could be planted with a few trees and trodden firm by cattle.
 
 Japan came to have over a hundred thousand ponds, more of them built in the Edo period than in any other. The smallest,
-about 33 ft on a side, were owned and kept by one person; how large a pond sunk in one paddy plot usually was is not
-recorded. In twelfth-century China a farmer of a high field was told to give up two or three parts in ten of it to a
+about 33 ft (10 m) on a side, were owned and kept by one person; how large a pond sunk in one paddy plot usually was is
+not recorded. In twelfth-century China a farmer of a high field was told to give up two or three parts in ten of it to a
 pond where the water gathered. How often one field had a pond is not recorded either; it seems to have ranged from none,
 in a valley whose stream watered every plot, to the dense pond country of a dry plain like Sanuki (today's Kagawa).
 

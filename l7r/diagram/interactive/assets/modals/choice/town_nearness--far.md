@@ -1,8 +1,8 @@
 About: A settlement far from its market town lay beyond the few miles' walk that bound the villages trading there; in medieval
-times remote places grew no winter barley at all, though the second crop spread further in the Edo period.
+times remote places grew no winter barley at all, though it spread further in the Edo period.
 
-A market town sat in the middle of the countryside it served, and its buyers and sellers on market days were chiefly the
-villagers nearby; in China, where it was measured, the villages that traded at one town lay within a walk of a few miles
+A market town sat in the middle of the countryside it served. In China, where it was measured, its buyers and sellers on
+market days were chiefly the villagers nearby, and the villages that traded at one town lay within a walk of a few miles
 of it, the longest about 3 miles.
 
 A second crop on the paddy, barley in the winter after the rice, needed twice the manure of one crop, and in medieval
@@ -18,10 +18,12 @@ Guesses:
 - Whether this settlement's market town is near or far: no record of the settlement gives the distance, so it is rolled
   with even odds.
 - How a town's nearness and a settlement's drainage weigh against each other: both set the odds of a winter crop, but no
-  source says how much each counts; a far town halves the odds the drainage gives, short of the medieval "none" for remote places, since the second crop spread further in the Edo period, bought fertilizer among the reasons.
+  source says how much each counts. A far town halves the odds the drainage gives rather than ruling the crop out, as
+  remoteness did in medieval times, because the second crop spread further in the Edo period, bought fertilizer among
+  the reasons.
 
 Depiction: The town is not drawn, and neither is the winter crop: our maps show the paddies in high summer. With the town far off, a settlement's drained paddies carry winter barley at half the odds their drainage would give near a town,
-and that shows only where an alluvial fan's middle is still wild: a settlement whose paddies lie bare over the winter
+and the difference shows on the map only where an alluvial fan's middle is still wild: a settlement whose paddies lie bare over the winter
 grows its coarse grain in dry fields instead, drawn climbing into that wild middle.
 
 Name: The market town: far off

@@ -42679,6 +42679,24 @@
   ],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._paddy_features#field grave's host plot": {
+  "code": "5a542e8fe75fe677",
+  "core": "28baa4359410638e",
+  "date": "2026-10-08",
+  "note": "neither page says which plot hosts a field grave; they cover only its form, its rate and the bunds carved round it",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:118c0e65bc0df044",
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:9fed2c627efb7cf2",
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:e2a5023c80820d14",
+   "0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html:e4da437e97125540",
+   "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html:217483c75039b45e",
+   "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html:89647304d9a0811c",
+   "0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html:c5af31f6633b6cb8"
+  ],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._paddy_features#field pond on a low plot": {
   "code": "c4ce848af0023b24",
   "core": "28baa4359410638e",
@@ -42738,14 +42756,6 @@
   ],
   "triaged": "2026-10-08",
   "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._paddy_features#the field grave's host plot: chosen at random, then the plots after it in list order": {
-  "code": "28baa4359410638e",
-  "core": "28baa4359410638e",
-  "date": "2026-10-08",
-  "note": "the field grave's host plot: chosen at random, then the plots after it in list order",
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._paddy_features#town and city fields plain": {
   "code": "d52fc29eef7954f8",
@@ -66639,6 +66649,19 @@
   ],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/waterfields/tint.py::FRONTAGE_SHARE#a real length along the drain": {
+  "code": "53cf23f437e17f06",
+  "core": "8965d718adaaab2a",
+  "date": "2026-10-08",
+  "note": "the threshold for what counts as fronting the drain; the page calls which plots take the tint a drawing convention",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:3b41256e849c4671",
+   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:68a6523772c7cec3"
+  ],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/waterfields/tint.py::LOW_ROWS#low ground depth": {
   "code": "738b970e7be06b6f",
   "core": "b40f355972c320f2",
@@ -66656,23 +66679,29 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/tint.py::basin_rank#which plot is promoted": {
-  "code": "78da648461c46a43",
-  "core": "a8e16880e7b310c3",
-  "date": "2026-10-03",
-  "note": "0007 \"Which plots wear the tint is a drawing convention\"",
+  "code": "83042c2a1714777f",
+  "core": "bcb0c1c32a6a835d",
+  "date": "2026-10-08",
+  "note": "the ranking decides how the blue is shown, which fits the page's convention for which plots are tinted",
+  "pages": {},
   "research": "",
+  "rests": [
+   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:68a6523772c7cec3",
+   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:f84f7dcd5af814ac"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/tint.py::fronts#fronting the drain": {
-  "code": "6c93a9a5f478a582",
-  "core": "bc8319c3be7e7cae",
+  "code": "34ea686804700655",
+  "core": "bd1df5f70b823e43",
   "date": "2026-10-08",
-  "note": "a quarter plot of frontage within a quarter plot calibrates \"whose foot lies on the drain\" and excludes plots that only touch the drain at a point",
+  "note": "checks the plot's own edge along the drain, which matches the page's \"the ones whose foot lies on the drain\"",
   "pages": {
    "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "1e0cc8002bddb72d"
   },
   "research": "45d05a93011e034b",
   "rests": [
+   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:3b41256e849c4671",
    "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:4fc3811eb15b4538",
    "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:68a6523772c7cec3"
   ],

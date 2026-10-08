@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-08T18:54:59Z",
+  "target": "review-accept",
+  "commit": "09cbf389b",
+  "outcome": "permitted",
+  "why": "review-accept glyph-check--wet-paddy F1: fixed: fronts now measures the plot's own edge within a quarter plot of the drain (half a plot's width, FRONTAGE_SHARE), not the drain's line near the plot; basin_rank reads the same predicate; a test plants a corner beside a long drain"
+}

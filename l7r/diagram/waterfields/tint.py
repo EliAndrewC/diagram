@@ -51,7 +51,7 @@ def _needle(poly: Poly) -> bool:
 def basin_rank(basin: Any, fill: float, median: float, collector: Any, plot_across: float) -> tuple[bool, float, float]:
     """How a compliant low plot ranks as THE flooded basin a map must exhibit - lower is better.
 
-    First, whether it lies ON the collector (within a quarter of a plot's width): blue means the closing rank pooling before the
+    First, whether it lies ON the collector (`fronts`: half a plot's width of its own edge along it): blue means the closing rank pooling before the
     outfall, and a promoted plot owes the same reading. Then how far it falls short of filling its own rectangle, which is what a
     leveled basin looks like. Then how far its size is from the median basin's, so the one blue plot on the sheet is not also
     its biggest. (Moved from `seams/close.py` `_basin_rank`.)
@@ -60,7 +60,7 @@ def basin_rank(basin: Any, fill: float, median: float, collector: Any, plot_acro
     """
     # ON the collector means FRONTING it, not touching it at a corner (settlement-review, feature 230 pass 11): Kashikawa's
     # promoted basin met the drain at one corner with a sliver and a wedge between it and the drain-side edge. A basin fronts
-    # the drain when a real length of its boundary runs along it - a quarter of a plot's width.
+    # the drain when a real length of its own boundary runs along it (`fronts`, feature 328).
     on = collector is not None and fronts(basin, collector, plot_across)  # the plot's own edge along the drain (feature 328)
     size = abs(math.log(basin.area / median)) if median > 0.0 and basin.area > 0.0 else 0.0
     return (not on, round(1.0 - fill, 4), round(size, 4))
@@ -68,7 +68,7 @@ def basin_rank(basin: Any, fill: float, median: float, collector: Any, plot_acro
 
 def mark_low(plots: list[dict[str, Any]], dpts: Poly, plot_across: float, row_step: tuple[float, float], R: random.Random) -> None:
     """`low` on every plot within `LOW_ROWS` row steps of the collector, and FLOODED on `FLOOD_SAMPLE` of those ON it (within a
-    quarter of a plot's width) - the carve's two marks, set from where each plot lies rather than from the level it was cut in.
+    quarter of a plot's width, and fronting it, `fronts`) - the carve's two marks, set from where each plot lies rather than from the level it was cut in.
 
     Research:
         low ground - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: the low ground begins at the plots whose foot lies on the collector
