@@ -244,13 +244,21 @@
   ],
   "verdict": "IN-STEP"
  },
- "docs/buildings.md::Checklist for a new diagram#practice ground in the outer court beside the watch's lodging, no dojo building": {
-  "code": "4974343acce86583",
+ "docs/buildings.md::Checklist for a new diagram#practice ground beside the watch, no dojo": {
+  "code": "30973913701243a3",
   "core": "4974343acce86583",
   "date": "2026-10-08",
-  "note": "practice ground in the outer court beside the watch's lodging, no dojo building",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "note": "outer court beside the watch's lodging, no hall, dojo only as a recorded particular",
+  "pages": {
+   "0165-martial-training-grounds-and-dojo.drawing.html": "931bfd2e0737c1a3"
+  },
+  "research": "8b27404bc31588ce",
+  "rests": [
+   "0165-martial-training-grounds-and-dojo.drawing.html:8496364fd5fb5ba3",
+   "0165-martial-training-grounds-and-dojo.drawing.html:de4325f24196505d",
+   "0165-martial-training-grounds-and-dojo.drawing.html:eaaa0e49753241f1"
+  ],
+  "verdict": "IN-STEP"
  },
  "docs/buildings.md::Checklist for a new diagram#practice ground sizing": {
   "code": "d6cd72d7f4692d49",
@@ -951,17 +959,16 @@
   "verdict": "DRIFTED"
  },
  "docs/buildings.md::Outer court (administrative / public)#barracks watch of ~10-20 men": {
-  "code": "136a6baca25aa6e5",
+  "code": "6cff44607282f8a7",
   "core": "5a31cf1e47f2f0bf",
   "date": "2026-10-08",
-  "note": "the setting's ~15 is canon, but the 10-20 band is 0116's own GUESS (\"the barracks' strength are a GUESS\"); label it GUESS research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html",
+  "note": "the page records ten to twenty men as the project's own figure, a guess",
   "pages": {},
   "research": "",
   "rests": [
-   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html:8a9c6454630327b1",
-   "0165-martial-training-grounds-and-dojo.drawing.html:83f6d143094f365e"
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html:8a9c6454630327b1"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#cart yard as a charcoal fire gap": {
   "code": "d90bac6ac96d6e47",
@@ -1041,17 +1048,19 @@
   "verdict": "DRIFTED"
  },
  "docs/buildings.md::Outer court (administrative / public)#clerk positions at the dais": {
-  "code": "2daf1a1877090be7",
+  "code": "3be5ff6fb74321e8",
   "core": "5a31cf1e47f2f0bf",
   "date": "2026-10-08",
-  "note": "0099's drawing page answers this: clerks \"to either side of the magistrate, level with the dais\", a deliberate deviation; label it DEVIATION research/questions/0099-the-hearing-court-shirasu.drawing.html",
-  "pages": {},
-  "research": "",
+  "note": "the drawing page records clerks flanking level with the dais as a deliberate deviation from Edo",
+  "pages": {
+   "0099-the-hearing-court-shirasu.drawing.html": "6e346d062ac74ea6"
+  },
+  "research": "2ce708ebe5a0a04a",
   "rests": [
    "0099-the-hearing-court-shirasu.drawing.html:400ef23a77443c5c",
    "0099-the-hearing-court-shirasu.drawing.html:a82abb47f7fed2c5"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#forecourt": {
   "code": "f5e2948e1bccae47",
@@ -1143,6 +1152,21 @@
   ],
   "verdict": "IN-STEP"
  },
+ "docs/buildings.md::Outer court (administrative / public)#hearing court posts": {
+  "code": "af256f9cd4ed4b9d",
+  "core": "5a31cf1e47f2f0bf",
+  "date": "2026-10-08",
+  "note": "posts along the roofed court's open side, two ken apart and 1 ft square, recorded as a guess",
+  "pages": {
+   "0099-the-hearing-court-shirasu.drawing.html": "6e346d062ac74ea6"
+  },
+  "research": "2ce708ebe5a0a04a",
+  "rests": [
+   "0099-the-hearing-court-shirasu.drawing.html:831a7ca5b9c4e9de",
+   "0099-the-hearing-court-shirasu.drawing.html:e8ce192cc7ecd5e4"
+  ],
+  "verdict": "IN-STEP"
+ },
  "docs/buildings.md::Outer court (administrative / public)#hearing mat size": {
   "code": "8813463f6bf6b805",
   "core": "5a31cf1e47f2f0bf",
@@ -1173,21 +1197,21 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#office hall": {
-  "code": "467c76a3ff851def",
+  "code": "863a366592064351",
   "core": "5a31cf1e47f2f0bf",
   "date": "2026-10-08",
-  "note": "120 x 28 ft (~3,360 sq ft) fits 0113's 2,850-8,100 sq ft bracket, but 0090's drawing page says \"office hall runs 113 ft long ... 38 ft deep\"; bring the doc and the page into one figure",
+  "note": "~360x84 px (120x28 ft, ~3,360 sq ft) sits inside 80-150 by 20-45 ft and 1,600-6,750 sq ft; day office and study behind the dais band",
   "pages": {
-   "0113-the-office-hall-and-its-clerks-goyakusho.html": "f48c2ca0c1c3bee2"
+   "0113-the-office-hall-and-its-clerks-goyakusho.drawing.html": "44879b9fd51f7154"
   },
-  "research": "7e9c46821cfb826d",
+  "research": "b41a6bcda29db296",
   "rests": [
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:3096f9775f2c523a",
-   "0113-the-office-hall-and-its-clerks-goyakusho.html:3fd2f96b8b3d69aa",
-   "0113-the-office-hall-and-its-clerks-goyakusho.html:9bba608484ca0320",
-   "0113-the-office-hall-and-its-clerks-goyakusho.html:f6c2d8a51b9ec5bf"
+   "0113-the-office-hall-and-its-clerks-goyakusho.drawing.html:976444e94e95943d",
+   "0113-the-office-hall-and-its-clerks-goyakusho.drawing.html:bedd579ac94bfd98",
+   "0113-the-office-hall-and-its-clerks-goyakusho.drawing.html:ca6e750720f63140",
+   "0113-the-office-hall-and-its-clerks-goyakusho.drawing.html:dd1082c27eb94aa1"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#one storehouse at the office": {
   "code": "439a4b8a39dc49ad",
@@ -2001,13 +2025,19 @@
   ],
   "verdict": "DRIFTED"
  },
- "docs/buildings.md::Walls and gates#no salt heaps or wards drawn at a compound's gates": {
-  "code": "93ed4be7c8bbe208",
+ "docs/buildings.md::Walls and gates#no salt wards at gates": {
+  "code": "551b798cd7d68c10",
   "core": "93ed4be7c8bbe208",
   "date": "2026-10-08",
-  "note": "no salt heaps or wards drawn at a compound's gates",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "note": "the \"Structures ABUT a wall\" bullet lists \"salt wards flank a door\" as a legitimate occupant of wall ink, but the page draws no salt \"as a pair at a door\" before present-day custom; drop that example so the section agrees with its claim",
+  "pages": {
+   "0240-salt-heaps-at-doorways-morijio.drawing.html": "21e03e816285eede"
+  },
+  "research": "56e47de3a2872e55",
+  "rests": [
+   "0240-salt-heaps-at-doorways-morijio.drawing.html:a33f241183e741d5"
+  ],
+  "verdict": "DRIFTED"
  },
  "docs/buildings.md::Walls and gates#opening ink width": {
   "code": "b601ffcb98efaa37",
@@ -2373,13 +2403,17 @@
   ],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Country shrine (a village district's shrine)#dwelling band 34-60 by 18-38 ft round the farmhouse guess": {
-  "code": "c0cc795ffdb44ea1",
+ "docs/buildings/programs.md::Country shrine (a village district's shrine)#dwelling band 34-60 by 18-38 ft": {
+  "code": "0d6e82d27022ffba",
   "core": "c0cc795ffdb44ea1",
   "date": "2026-10-08",
-  "note": "dwelling band 34-60 by 18-38 ft round the farmhouse guess",
+  "note": "the band round the 46x28 ft farmhouse, a guess; the one small kuri is 12x15 ft and no parish kuri is measured",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "rests": [
+   "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html:7d3c2032a9987c33"
+  ],
+  "verdict": "IN-STEP"
  },
  "docs/buildings/programs.md::Country shrine (a village district's shrine)#dwelling entry tagged genkan": {
   "code": "94be56cd601e4007",
@@ -2932,13 +2966,20 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Magistrate's manor (county magistracy)#clerk positions flanking the dais (0099 drawing records it as a deviation, §475)": {
-  "code": "7f0be7b061bf9b37",
+ "docs/buildings/programs.md::Magistrate's manor (county magistracy)#clerk positions flanking the dais": {
+  "code": "f754cceb1d592d86",
   "core": "7f0be7b061bf9b37",
   "date": "2026-10-08",
-  "note": "clerk positions flanking the dais (0099 drawing records it as a deviation, §475)",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "note": "the deviation and the guessed seat size are both recorded on the drawing page",
+  "pages": {
+   "0099-the-hearing-court-shirasu.drawing.html": "6e346d062ac74ea6"
+  },
+  "research": "2ce708ebe5a0a04a",
+  "rests": [
+   "0099-the-hearing-court-shirasu.drawing.html:400ef23a77443c5c",
+   "0099-the-hearing-court-shirasu.drawing.html:a82abb47f7fed2c5"
+  ],
+  "verdict": "IN-STEP"
  },
  "docs/buildings/programs.md::Magistrate's manor (county magistracy)#commuting clerks": {
   "code": "2b9b9cadbc9acf0d",
@@ -17729,13 +17770,18 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/joints.py::_one_joint#the arriving lane with the shorter clear link becomes the T's stem (the page says a T but not which lane is the stem)": {
-  "code": "932cf4864139ea09",
+ "l7r/diagram/hamletgen/ways/joints.py::_one_joint#the shorter link the T's stem": {
+  "code": "c7abb66f167f2d71",
   "core": "932cf4864139ea09",
   "date": "2026-10-08",
-  "note": "the arriving lane with the shorter clear link becomes the T's stem (the page says a T but not which lane is the stem)",
+  "note": "the page draws a T without naming its stem and calls its lane-geometry limits drawing conventions; the sort puts the shortest final link first",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "rests": [
+   "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
+   "0081-village-lanes.drawing.html:65ad16eace199d92"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/joints.py::_one_joint#ways of two kinds stay two": {
   "code": "e5cfe6205ce654a4",
