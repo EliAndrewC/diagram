@@ -514,5 +514,6 @@
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_wood_shed#wood shed fallback pace": "51",
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_wood_shed#wood shed seats": "51",
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#wood shed's walls": "51",
- "l7r/diagram/settlement/homestead_parts/fixture_seats.py::shed_off_a_wall#wood shed a ken off a wall": "51"
+ "l7r/diagram/settlement/homestead_parts/fixture_seats.py::shed_off_a_wall#wood shed a ken off a wall": "51",
+ "l7r/diagram/settlement/homestead_parts/fixture_seats.py::bath_room_seats#bath room seat fallback": "51"
 }

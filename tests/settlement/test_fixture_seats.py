@@ -205,3 +205,11 @@ def test_a_grove_farms_persimmon_may_stand_in_its_own_grove_and_nothing_else_may
     assert fs.clears(laid["coop"], [north], 0.0), "the coop stands outside the band"
     held = fs.lay_fixtures(("persimmon",), *args[:2], [HOUSE, north], *args[3:])
     assert "persimmon" not in held or held["persimmon"][1] != tree[1], "held off the band, it does not take that seat"
+
+
+def test_the_bath_room_rolls_among_its_three_walls() -> None:
+    """Feature 328 (0044: most baths beyond the stable wing, a few joined to the floored rooms, the rest by the main door): the
+    three walls each house rolls among, the floored rooms no longer only a fallback."""
+    forms = fs.FixtureForms()
+    assert fs.bath_wall(0.1, forms) == "stable_end" and fs.bath_wall(0.81, forms) == "floored_rooms" and fs.bath_wall(0.9, forms) == "main_door"
+    assert {fs.bath_wall(k / 100, forms) for k in range(100)} == set(fs.BATH_WALLS)

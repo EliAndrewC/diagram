@@ -36,8 +36,9 @@ Each subpackage carries its own `CLAUDE.md` index: read it, then load one module
 | [`civic_grounds/`](civic_grounds/CLAUDE.md) | funerary and justice grounds, civic buildings, lodging, the stable yard |
 | [`city/`](city/CLAUDE.md) | the provincial city: walls, moat, canals, waterfront, bridges, the governor's mansion, its crop and knobs |
 | `castle_civic.py` | castle, ministries, dojos + martial halls + hanko, the caption/label-spot engine, forest patches, freestanding walls, flower fields |
-| `houses.py` | house drawing + placement machinery (corridors, keepouts, treads, `_fits`, frontage), `try_place`, cluster seeds, plot texture, water-source anchors |
+| `houses.py` | house drawing + placement machinery (corridors, keepouts, treads, `_fits`, frontage), `try_place`, cluster seeds, plot texture |
 | `hard_ground.py` | the hard no-build ground (`_hard_ground`: crop, pond, bog, a field's own ditches, read from the manifest) and the footprint test against it (`_hard_clear`, from `_hard_index`'s box grid) (`HardGroundMixin`) |
+| `water_source.py` | where a field's water comes in: the gravity-feedable source positions and the sluice point a named one resolves to (`WaterSourceMixin`; out of `houses.py` at the 1,000-line bar, feature 328) |
 | [`rolling/`](rolling/CLAUDE.md) | the rolling / homestead-solver CHAIN: `roll_village` and its stages, the settlement-form seeds, the bundle, fit, place and the deferred flush |
 | `see_through.py` | the marks drawn below solid opacity, each with its class, its faintest and why (feature 294); the gate holds every shipped map to this table |
 | `finish.py` | labels, `finish()` (layer assembly + svg write + the ink census and the interactive `.html`, feature 134), `render_png` |

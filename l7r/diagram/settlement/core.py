@@ -31,6 +31,7 @@ from .structures.urban_fixtures import UrbanFixturesMixin
 from .title import TitleMixin
 from .town_ways import TownWaysMixin
 from .trades import TradesMixin
+from .water_source import WaterSourceMixin
 from .water_ways import WaterWaysMixin
 
 
@@ -51,6 +52,7 @@ class Settlement(
     CastleCivicMixin,
     HousesMixin,
     HardGroundMixin,  # feature 278: the hard no-build ground, out of houses.py
+    WaterSourceMixin,  # feature 328: where a field's water comes in, out of houses.py
     RollingMixin,
     FinishMixin,
     TitleMixin,  # feature 319: the title placard, out of finish.py

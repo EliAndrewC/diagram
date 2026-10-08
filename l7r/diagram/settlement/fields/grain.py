@@ -60,6 +60,10 @@ class WinterCropKnob(Knob):
     Research: winter-crop weights - research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html: the drainage and a town's nearness set the odds; how they weigh is a GUESS"""
 
     def weights_for(self, context: Mapping[str, Any]) -> dict[Any, float] | None:
+        """Barley's odds: the drained share of the paddy, times `TOWN_FAR_FACTOR` where the town is far; the knob's own even
+        weights where the site's figures are missing.
+
+        Research: the odds from the site - research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html: drainage and a town's nearness set the odds, how they weigh a GUESS"""
         paddy = float(context.get("grain_paddy_acres") or 0.0)
         if paddy <= 0.0:
             return self.weights

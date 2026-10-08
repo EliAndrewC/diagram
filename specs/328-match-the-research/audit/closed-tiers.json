@@ -412,6 +412,7 @@
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_wood_shed#wood shed fallback pace": "E2",
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_wood_shed#wood shed fallback seats": "E0",
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_wood_shed#wood shed seats": "E2",
+ "l7r/diagram/settlement/homestead_parts/fixture_seats.py::bath_room_seats#bath room seat fallback": "E2",
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#fixture gap 3.5 ft off every other part (WALL_GAP_FT) and bath room slide 4 ft (WALL_SLIDE_FT)": "E0",
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#seating order: retirement house, bath, wood shed, privy, manure, coop, shrine, persimmon (FIXTURE_ORDER)": "E0",
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#wood shed's walls": "E2",

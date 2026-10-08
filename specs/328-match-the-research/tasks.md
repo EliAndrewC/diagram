@@ -23,6 +23,7 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 - placement-changed: wood shed on inashiro - wave 51: the shed off the house's own walls only, never the front, no extra
   pace (0043); batch 3's close
 - placement-changed: wood shed on kuwabata - wave 51: the same seat rule; batch 3's close
+- placement-changed: bath room on kashikawa - wave 51: each house rolls among the three walls, the floored rooms at 0.03 (0044: one of the registers' 36 baths in a peasant's house); one of Kashikawa's baths moves to its floored rooms; batch 3's close
 - placement-changed: woodland commons on kashikawa - wave 47: the beyond-the-fields walk counts a row holding as field, so the
   wood moves to the higher ground beyond the far row's strips (batch 1's round 3 NEEDS-WORK); run at batch 2's close
 - placement-changed: copse on kuwabata - wave 47: every copse crown gives way round a yard persimmon wholly; batch 2's close
