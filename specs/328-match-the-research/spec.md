@@ -126,11 +126,13 @@ session's last actions are recording the running checks, a commit, and `scripts/
   wave's review occasions are taken ONCE per batch of 4-5 waves (or before anything lands), the pair spanning the batch
   (the commit before its first wave against its last). A wave's close task is ticked when its batch closes.
 - **FR-006 (waves land, inside this one feature)**: the fixes land on main in waves, each a contiguous run of the
-  ranking (lowest tier first) that is complete and verified (its batch closed, FR-005) and pushed before the next
-  begins - pushed in batches while landing is held (the band-3 sign-off for waves 9-10). Feature 328 stays the one
-  feature: only the CURRENT wave's rows are task boxes in `tasks.md` (the rest of the ranking stays data in the ranking
-  file), so the wave lands once its boxes are ticked (the open-task refusal reads only `tasks.md`'s boxes); the next
-  wave's tasks are then appended as an amendment, reviewed on a reset counter.
+  ranking (lowest tier first) that is complete - its rows fixed, its claims re-checked, its maps regenerated, its
+  `spec-fidelity` verdict clear - before the next begins. Waves are VERIFIED AND PUSHED PER BATCH (FR-005, the GM's ruling
+  of 2026-10-08): when a batch closes, its gate, its pair with the `perf-audit`, and its occasions run once, and its waves
+  land together; landing stays held while the band-3 sign-off for waves 9-10 is pending. Feature 328 stays the one
+  feature: only the CURRENT batch's waves are task boxes in `tasks.md` (the rest of the ranking stays data in the ranking
+  file), so a batch lands once its boxes are ticked (the open-task refusal reads only `tasks.md`'s boxes); each next
+  wave's tasks are appended as an amendment, reviewed on a reset counter, while its batch is still open.
 - **FR-007 (the usage cap)**: the work runs until every finding is fixed or the account's weekly usage reaches `85%`. At
   the cap no new work starts (no agent, no edit in the repository, no build or gate run); the subagent checks already
   running complete and their verdicts are recorded (the reply saved under `/tmp`, then `make claims-checked` /
@@ -169,7 +171,7 @@ session's last actions are recording the running checks, a commit, and `scripts/
 - **Finding**: a claim key (`<file>::<unit>#<claim>`), its verdict, and the reason `impl-drift` gave.
 - **Ranking row**: a finding plus its tier, its one-line fix, the files it touches, what it depends on, and the wave
   that fixed it (blank until then).
-- **Wave**: a contiguous run of ranking rows fixed, verified and landed together.
+- **Wave**: a contiguous run of ranking rows fixed together; it is verified and landed with its batch (FR-005).
 
 ## Success Criteria *(mandatory)*
 
