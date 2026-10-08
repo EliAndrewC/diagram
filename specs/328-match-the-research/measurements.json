@@ -481,7 +481,7 @@
     "start": 13.0,
     "end": 16.1
    },
-   "40hh_seed25": "refused at the end (WebRefused: 14 access lanes' first leg within 7 ft of a neighbor's yard; bisected to 19f69655c, the barn seat withdrawn; passes at e4c99b277)",
+   "40hh_seed25": "refused at the end (WebRefused: fourteen access lanes' first leg within 7 ft of owner-less fabric - each farm's own garden, an obstacle to its own path since this feature; bisected to 19f69655c, the barn seat withdrawn; passes at e4c99b277)",
    "40hh_seed4_s": {
     "start": 16.8,
     "before_speedup": 19.3,
@@ -540,5 +540,16 @@
     "bund_clear_boxes": "seed 4 15hh web 4.6 -> 3.7 s profiled"
    }
   }
+ },
+ "t140-seed25-fouled-fabric": {
+  "quantity": "seed 25 at 40 households, at the web's refusal: for each access lane the last resort names, the yard or garden its first leg comes within WEB_FABRIC_GAP (7 ft) of, and that fabric's owner as `fabric._homestead_polys` reads it",
+  "value": {
+   "lanes": 14,
+   "fouled_fabric_owner": "None (a garden) on all 14",
+   "yards_and_gardens_read": 178,
+   "manifest_yards_while_ways_laid": 2
+  },
+  "observed": "2026-10-08",
+  "method": "a temporary log in last_resort.lanes_breaking (settle.theirs, fabric._crosses_fabric on the first leg) and in tree.admits, under make cohort N=1 SEED=25 HOUSEHOLDS=40; reverted"
  }
 }

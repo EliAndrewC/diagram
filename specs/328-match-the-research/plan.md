@@ -740,11 +740,11 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
   the yard's far edge (the yard's width, 20 ft out) - the reference roll (Inashiro, 15 households) then refused its web
   (four access lanes), worse than before; reverted. The web's outcome moves chaotically with the seats, so a local keep-out
   trades one map's refusal for another's; the remaining route is the seating's own search asking the way out of each
-  household with its fixtures in place (E3, row 748), put to the GM with the band-3 sign-off.
+  household with its fixtures in place (E3, row 748) - attempted, see T140's investigation below.
 - **T140's investigation (spec-fidelity B3-9: the named route attempted before any waiver)**: the seating's own search
   asking each household's way out with its fixtures in place. (1) The cause, measured at the refusal (seed 25, 40
   households): all fourteen failing access lanes foul the 7 ft fabric gap on their first leg, and the fabric each fouls
-  is owner-less - a garden, which since this feature is an obstacle to its own farm's path as to any other (0246: the way
+  is owner-less - a garden (m:t140-seed25-fouled-fabric), which since this feature is an obstacle to its own farm's path as to any other (0246: the way
   leaves round its own beds). (2) Attempted: `tree.admits` asked the settle's own fabric reading (`theirs`, 7 ft) of each
   household's way before admitting it. First form: it read only the manifest's yard lists, which hold 2 while the ways
   are laid (the rest stand in the house records' `geom` boxes) - no effect. Second form: the seated yards and gardens

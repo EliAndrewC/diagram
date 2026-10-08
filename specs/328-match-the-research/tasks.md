@@ -1722,7 +1722,7 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
 - [ ] T139 the claims re-checked by `impl-drift`; the record checks owed (FR-005, FR-006)
       research: rendering
 - [ ] T140 the 40-household scaling roll of seed 25 refuses its web since the barn seat's withdrawal (19f69655c; fourteen
-      access lanes' first leg within 7 ft of their own garden - m:batch3-pair-and-controls): fix the seating so a door's way
+      access lanes' first leg within 7 ft of their own garden - m:t140-seed25-fouled-fabric): fix the seating so a door's way
       keeps the fabric gap at 40 households; the route the plan names was attempted and its investigation written (plan,
       batch 3's close) - only now the GM's waiver or go-ahead on the seating rebuild, with batch 3's band-3 sign-off
       research: rendering

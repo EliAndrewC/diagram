@@ -1,6 +1,6 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "daa6959097314f1adaed1ee43ac21b290aaacfbaf68464190d361ef5cb628fac",
+ "plan_sha256": "c943e9bb2d6b45bb79bedb78d220d61f819aa1b4b8000dac79956e1a85d36dc5",
  "reviewed": "2026-10-08",
  "declared": "spec-fidelity",
  "decisions": [
@@ -14,13 +14,13 @@
    "id": "B3-2 conifer-led 'smaller' lesser crowns kept (LESSER_BROADLEAF_S)",
    "summary": "depiction finding declined: the modal keeps 'smaller broadleaf crowns' because LESSER_BROADLEAF_S draws 0.75-0.85 of the mean radius",
    "class": "within",
-   "why": "The modal describes what is drawn. The range sits inside 0080's 0.75-1.4 and its rows were closed E0 in wave 39 (overrides.json). No new carve-out is made here."
+   "why": "The modal describes what is drawn. The range sits inside 0080's 0.75-1.4 and its rows were closed E0 in wave 39 (overrides.json). No new carve-out is made here. The decline is now written in plan.md under batch 3's close."
   },
   {
    "id": "B3-3 mixed belt's wind side at the village tier not taken",
    "summary": "depiction finding declined: the village roller's belt side (RollVillageMixin._roll_windbreak) left to the deferred legacy tier",
    "class": "within",
-   "why": "Amendment 8 (GM: limit to code run by magistracies, country shrines and scripted hamlets; legacy settlements DEFERRED) and spec line 155 already settle this. The hamlet modal names the declared wind side, which is what the hamlet code does. The decline is recorded only in commit a07691a48's message, though, and plan.md does not carry it."
+   "why": "Amendment 8 (GM: limit the feature to code run by magistracies, country shrines and scripted hamlets; legacy settlements DEFERRED) and spec line 155 already settle this. The hamlet engine keeps 0072's bearing. The decline is now written in plan.md under batch 3's close."
   },
   {
    "id": "B3-4 homestead grove PASS at round 2, windbreak PASS again",
@@ -50,14 +50,14 @@
    "id": "B3-8 perf-audit: explanation CONSISTENT, audit cannot-determine",
    "summary": "dev/perf-log/20261008T234039Z audit: no_way_around 'not settled by the data' until a seating that keeps 0042/0047 and leaves no knot or stranded way is tried",
    "class": "within",
-   "why": "The plan does not treat the inconclusive audit as passed. VI: an inconclusive verdict never lets the work proceed, and every rung keeps the ones below it, so the GM's band-3 sign-off stands above the audit and does not replace it. The batch table row 3 still reads 'perf-audit owed', which is stale."
+   "why": "The plan does not treat the inconclusive audit as passed. VI: an inconclusive verdict never lets the work proceed, and the GM's band-3 sign-off stands above the audit and does not replace it. The batch table row 3 now reads 'perf-audit round 2: explanation CONSISTENT, audit cannot-determine (re-run once T140's seating is decided)'."
   },
   {
-   "id": "B3-9 seed 25's 40-household refusal (T140) and the no-knot seating: one keep-out tried, the remaining route put to the GM",
-   "summary": "the 'way out' strip (yard width, 20 ft) was tried and reverted because Inashiro refused its web; the plan then names 'the seating's own search asking the way out of each household with its fixtures in place (E3, row 748)' as the remaining route and puts it to the GM with the band-3 sign-off; T140 reads 'fix ... or the GM's waiver'",
+   "id": "B3-9 T140 held for the GM after the named route was attempted",
+   "summary": "the seating's admission (tree.admits, which the gap pass asks of each household's way) asked the settle's 7 ft fabric reading in two forms: the manifest's yard lists only, which had no effect; then the seated yards and gardens from geom, after which the reference roll Inashiro refused its web. Earlier, a way-out strip was tried and also refused at the reference. All reverted. The cause found was each farm's own garden. The remaining route is a seating that lays the garden, the fixtures and the way out together (E3, row 748). T140 stays open and the batch is held; the GM is asked for a waiver or a go-ahead at band-3 sign-off",
    "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "Seed 25 at 40 households drew at the batch's start and refuses now, so it is a regression (XIII: a cohort seed that passed and now fails; 'one seed' and 'a map nobody ships' excuse nothing). XIII allows a waiver to be asked 'only after the fix has been genuinely attempted', and a session that has found a path forward TAKES it. The plan names the path itself, the seating's own search, and has not tried it. The one trial was a local keep-out, a different mechanism. The perf-audit's no_way_around criterion names the same untried seating. This is the shape of W54-5 round 2 (row 748's re-lay named but not attempted: NOT LEGITIMATE), which the session then fixed with KNOTTED_TRIES. The hold is lawful, because T140 open keeps it off main. What is not lawful is handing the GM the choice of route. The GM's own instruction says to keep working until the cap or the end of the feature and to defer only real questions."
+   "ruling": "LEGITIMATE",
+   "why": "Round 1 required the route the plan itself named to be tried before any waiver: the seating's own search asking each household's way out with its fixtures in place. That route has now been tried at the place named. tree.admits is the predicate the gap pass asks of each way before it admits it (gap_ways, feature 318). It was tried in two forms, measured, and reverted, and that meets XIII's 'genuinely attempted'. The same pattern was ruled LEGITIMATE at W54-7 round 3. What is left is a layout change across the seating's modules. That is XIV's overhaul exception, delivered with the measurement (fourteen first legs, the fabric an owner-less garden), the mechanism (each change moves the exit, and the web's outcome moves chaotically with it) and a sketch. A wrong guess at that change would take hours to unwind. Nothing is narrowed: T140 stays open, the batch stays off main, and band 3 owes the GM's personal sign-off anyway. Deferring the question to the feature's end is what the GM's request asks for ('defer it to the end of the feature'). A waiver is still the GM's to grant and is not presumed."
   },
   {
    "id": "B3-10 T137 still held for the GM",
@@ -72,5 +72,5 @@
    "why": "A record of an observation, with the search done. It changes no behavior."
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }
