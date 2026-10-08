@@ -6,43 +6,6 @@ module organization, and generation doctrine that applies at every tier.
 The test for this file is simple - if fixing it would change maps of more than one type, or would
 change no map at all (tooling, structure, checks), it belongs here.
 
-## FLAKY: the raster-mode wash test (`test_in_raster_mode_the_lit_paddy_is_washed_and_the_lit_beads_are_not`)
-
-`tests/full/interactive/page_browser/test_synthetic.py`. Failed twice in FULL gates under load and passed alone
-each time: 2026-09-26 (feature 250) and 2026-09-27 (feature 267 follow-up gate), both with the lit paddy at
-`fillOpacity` 1 where raster mode washes it to 0.45 (`('1', '1') == ('0.45', '1')`). The first fix made each read
-poll for its state up to 2 s (`_driver.settles`); the second failure came with that fix in place, so the paddy
-stayed unwashed for the whole 2 s - not a slow style recompute. Likely mechanism, UNMEASURED: the page leaves raster
-mode between the `data-mode == raster` check and the highlight (a debounced resize or fit after the viewport is
-shrunk to 100x100 re-evaluates the mode), or the highlight lands before the raster layer is ready. Next step is a
-measurement, not a longer timeout: run the test in a loop under parallel load (e.g. 20 runs beside a `make done`)
-logging `data-mode` and the highlight state at each read, and fix whichever of the two the log shows.
-
-MEASURED 2026-09-28 (the GM asked): NOT reproduced - 20 module runs with all 22 cores busy, then 8 package runs beside
-a real `make test-full` (itself green, this test included): 29 raster samples, 0 failures, and at every one the page
-was in raster mode with no highlight or modal pinned from the test before (`data-hl` empty, `#explain` closed) - so
-state leaking from the previous test is ruled out for these runs, and CPU load alone does not trigger it. Both real
-failures came in gates run while the machine was short of memory (the 2026-09-27 one as the system was killing
-background shells for low memory); memory pressure on Chromium is the untested condition, not safe to induce here.
-The assertion now names the page's state (mode, `data-hl`, the modal, raster readiness) before and after, so the
-next natural failure says which one was wrong.
-
-MEASURED 2026-09-28 (feature 283, two failures in three loaded gates): while lit the page was in raster mode with NO
-highlight - `data-hl` empty, the paddy group's class `f f-paddy` without `on` - so the highlight was undone or never
-applied, not a slow wash. `highlight()` ignores nothing but a pinned modal (closed here) or a repeat of the current
-key; the likely undoer is the pointer event Chromium fires for the stationary mouse after the viewport shrinks, which
-runs `highlight` for what is under it. The test now re-asserts the highlight on every poll of `settles`, keeping the
-assertion's strictness; if it fails again with `on` set, the wash itself is the fault.
-
-## The review-prereq guard matches a finding's measurement by bare id (found 2026-09-27, feature 267)
-
-`scripts/_review_prereq.py` `unverified_findings` counts a finding disposed when any `measurements.json` record has
-`verifies` equal to its id and `subject` equal to the map - with no round or engine key. A map reviewed more than once
-reuses F1, F2, ...: Kashikawa's round-2 PASS nitpicks F1/F2 (two docstrings) were counted disposed by the round-1
-records for F1/F2 (the grave's step, the page's feature note), and the reviewer caught it by reading the records'
-sources, not the guard. Sketch: a record names the verdict it answers (the verdict's engine key or a verdict id), and
-the lookup matches on it; or `make review-verdict` stamps each finding id with the round (`r2-F1`).
-
 ## 2. Fabric-first generation (the GM's ordering question, 2026-08-10) - RESEARCH DIRECTION
 Today's order is shell-first: wall/roads/water, then fabric fitted inside, with the wall
 PRE-SIZED from a budget density constant. The constant was wrong once (Tango's 690 vs the
@@ -53,340 +16,21 @@ CONSTRUCTION. Known hard parts (the GM named them): gate-anchored programs (guar
 inspection stations, caravan clusters) need the gates, so it becomes two-pass - grow fabric,
 choose gates on the hull, then place gate programs and re-arrange locally; ring/moat must
 wrap an irregular hull rather than an ellipse. This is a full feature with its own spec, not
-a mid-feature pivot. Candidate: the next city-tier map.
+a mid-feature pivot. Candidate: the city tier's conversion (the GM, 2026-10-07: the capital goes straight to
+a scripted generator; Shiro Daika's hand pass is dropped).
 
-## 2g. The render cache serves a PNG made from a DIFFERENT SVG (recurs; five times on 2026-08-19/20)
-`test_every_live_pool_png_matches_its_own_svg_viewbox` fails whenever a change moves a map's geometry:
-the gen re-renders the SVG while the PNG comes back from the render cache, so the pair disagree on
-aspect (kashikawa, 2600x3962 against the 3864 its own viewBox implies). Deleting the PNG and running
-`regen --no-cache` fixes that pair - and the next `make done` re-breaks it, because the gate regenerates
-too and the cache serves the same stale PNG again.
-
-It bit five times in two days across three sessions, always after someone moved geometry, and each time
-it was fixed by hand rather than diagnosed. **It is a cache-key defect, not a map defect**: the PNG's
-entry is being treated as valid for an SVG it was not rendered from. Start at `pipeline/render_cache.py`
-and ask what the PNG half of an entry is keyed on, and whether the SVG's own bytes are in that key -
-`dev/cache.md` already records that an entry has "TWO independently-perishable halves" and that the
-artifact half staying valid says nothing about the other half. This looks like the same shape one level
-down: the SVG half is refreshed, the PNG half is not, and nothing notices until a test compares them.
-
-## Three members that are in `settlement/structures/` only because of where feature 025 cut
-
-Feature 114 split `settlement/structures.py` into a package and, in doing so, isolated the members
-that do not belong to the structures subsystem at all - so each of these is now a one-file change
-plus one row of `settlement/structures/CLAUDE.md`. None was moved by 114 itself, deliberately: a
-cross-mixin relocation would have made that feature's byte-identity oracle answer two questions at
-once, so a dirty diff could not have distinguished "the composition is wrong" from "moving `road`
-changed something".
-
-- **`road` -> `water_ways.py`.** It is a way, and `water_ways.py` is already the ways module (lanes,
-  streets, alleys, kido). It sits in `structures/ground.py` today.
-- **`pasture` -> `land/cover.py`.** It is a land surface, and `cover.py` already holds the commons
-  and the hinterland layout (marsh and the toe band sit next door in `land/wet.py`). Same module
-  today. Destination updated by feature 120, which split `land.py` into a package; the move itself
-  was explicitly left out of that feature's scope, because a cross-package relocation does not
-  belong in a split whose whole safety argument is that nothing moves but text.
-- **`structures/captions.py` -> `castle_civic.py`, but this one is an OPEN QUESTION, not a pending
-  move.** `castle_civic.py` holds `place_caption` (the draw-time seat ladder) while `captions.py`
-  holds the probes underneath it - so folding them gives one caption subsystem, but three of the
-  five probes are consumed by siters that live in `structures/fixtures.py`. The implementation
-  sketch, the thing that holds it (the composed-surface guard, which fails naming the five names if
-  they move out without the frozenset being updated in the same commit) and the one deliberate
-  exclusion (`_under_a_caption`) are all in `settlement/structures/CLAUDE.md` under "Three
-  placements you will want to fix".
-
-The two straight moves are cheap and safe on their own: every consumer reaches these members through
-`self.` on the composed `Settlement`, so no call site changes - the move is the member's text, its
-row in the two indexes, and the name migrating between the two mixins' surface frozensets.
-
-## Feature 115's leftovers (civic_grounds/)
-
-Same shape as feature 114's above: pending PARENT-level relocations that were deliberately not
-folded into the split, because moving a member between parent-level mixins would have made the
-byte-identity oracle answer two questions at once.
-
-- **`_ward_fence_cap` -> `water_ways.py`.** It is a ward-fence predicate and `water_ways.py` is
-  already the wards/fences module. It sits in `civic_grounds/funerary.py` today because `mausoleum`
-  is its caller inside the package being cut (the placement-follows-the-caller rule). Its other
-  consumer, `structures/compounds.py`, reaches it through the composed `Settlement` and is unaffected
-  either way.
-- **`precinct_interior` -> `shrines_wells/`.** It draws a sovereign temple precinct's INTERIOR
-  program (abbot's residence, order administration, library, two dormitories, kitchen/refectory), so
-  it is religious ground; `civic_grounds/civic.py` holds it as the institutional-works member.
-  Feature 116 has since made `shrines_wells` a package, so the destination is now a specific file -
-  `shrines_wells/shrines.py` is the closest fit. Note it calls `self.cemetery`, which stays in
-  `civic_grounds/funerary.py`; that cross-package `self.` call is already normal and needs no import.
-
-Both are cheap: every consumer reaches these through `self.`, so the move is the member's text, its
-row in the two indexes, and the name migrating between the two mixins' surface frozensets.
-
-## The gate's 15 over-150-line segment functions (found by feature 122, deliberately NOT fixed there)
-
-This file records "the largest function in the engine is now `_bundle_geom` at 81 lines, so nothing
-is over the ~150-line bar features 112/115 converged on and there is no standing clause-12
-candidate". That is true, and it is scoped to the ENGINE. **The GATE was never measured**, and it
-has fifteen segment functions over the bar:
-
-| lines | segment | file |
-|---|---|---|
-| 293 | `_seg_0555_007__execution_ground_outside_the_settlement` | `segments_09a_justice_grounds_and_land_fall.py` |
-| 273 | `_seg_0324__field_ditches_terminate` | `segments_05c_streams_and_field_ditches.py` |
-| 255 | `_seg_0581__polder_dike_is_earthwork` | `segments_11b_polder_dikes_and_waivers.py` |
-| 248 | `_seg_0571__torii_count_canonical` | `segments_11a_taxfree_terraces_and_dikeponds.py` |
-| 228 | `_seg_0580__dikepond_is_ponds_in_a_block` | `segments_11a_taxfree_terraces_and_dikeponds.py` |
-| 227 | `_seg_0563_072__city_neighborhoods_have_wells` | `segments_10b_city_civic_and_commerce.py` |
-| 221 | `_seg_0556__walled_town_has_wall` | `segments_09a_justice_grounds_and_land_fall.py` |
-| 208 | `_seg_0033__hard_features_within_frame` | `segments_01a_city_ring_and_frame.py` |
-| 199 | `_seg_0104__city_wall_tower_coverage` | `segments_02a_capital_budget_and_ministries.py` |
-| 196 | `_seg_0563_325__city_moat_feeder_matches_width` | `segments_10g_city_streets_and_docks.py` |
-| 195 | `_seg_0275__labels_clear_of_other_buildings` | `segments_04a_margins_lanes_and_wells.py` |
-| 185 | `_seg_0603__paddy_plot_seams_shared` | `segments_08d_kosatsuba_and_paddy_basins.py` |
-| 183 | `_seg_0127__city_fan_heads_quilted` | `segments_02c_walls_gates_and_housing.py` |
-| 153 | `_seg_0563_335__city_streets_connected` | `segments_10h_city_torii_and_estate_grounds.py` |
-| 151 | `_seg_0108__merchant_estate_wall_clear_of_water` | `segments_02b_capital_ways_and_burial.py` |
-
-**Why 122 left them, which is the part worth keeping.** 122's whole safety argument is that it moved
-whole functions and changed no character inside one - which let it prove itself with a byte-identity
-oracle over 24,354 content lines plus an identical 1,377-row `GATE_SEGMENTS`. Decomposing a check
-BODY is the opposite kind of edit: it changes text inside a function, so neither oracle can hold it,
-and folding the two together would have meant a 24,000-line diff whose correctness rested on reading
-rather than on a check. Doing them in one feature would have bought nothing and cost the proof.
-
-**The bar these should be measured against is NOT the engine's.** A segment is a check, and a check
-that is long because it walks a lot of geometry to reach one verdict is not the same defect as a
-draw method doing eight things. Before decomposing any of these, ask which it is:
-`_seg_0571__torii_count_canonical` at 248 lines is likely one long enumeration (the numerology has
-cases), while `_seg_0555_007__execution_ground_outside_the_settlement` at 293 is the check with six
-interacting rules that `dev/diagnostics.md` describes needing `site_justice.py` to adjudicate, and
-that one probably does decompose into named predicates.
-
-**Pre-flight, both cheap, both mandated by the 115/118 lesson** (recorded in `dev/pool.md`, where
-each of them changed the plan once): measure the RNG surface - free here, since a check draws
-nothing - and count the closures. Then decompose behind the same registry contract, with one trap
-worth stating out loud: the numeric key in the NAME is the execution position, so a helper extracted
-out of a segment must NOT be named `_seg_*`, or the registry will try to run it as a segment.
-
-## 8. `TWIN_AXES` believes a declared knob over the drawn shape
-
-The cap pushed the surplus households into the cloud pass, so Sawada's `cluster_seeding` flipped
-`frontage` -> `cloud` and `meta.cluster_shape: "round"` is now emitted for the first time. The drawn
-cluster is **808 x 235 ft, 3.48:1**. That would be harmless bookkeeping except `check_village/driver.py`'s
-`TWIN_AXES` reads *"the declared knob if present, else the cluster-bbox aspect"* - so the
-twin-distinctness axis now reports **round** on the strength of a rolled knob, where before the cap
-it fell through to the MEASUREMENT and would have said elongated.
-
-This is the derive-don't-pin rule inverted: a declaration is being trusted over the geometry it is
-supposed to describe, and the flip was a side effect of a placer change that never touched the twin
-detector. **Sketch**: prefer the measurement when both exist (a knob says what was ASKED for, the
-bbox says what was DRAWN, and the twin detector's question is about what a reader sees) - or make
-the cloud record what it actually produced.
-
-**RULED BY THE GM 2026-08-24: the twin detector measures WHAT WAS DRAWN, not what was asked for.**
-The GM's reasoning, which generalizes past this one axis: *"the thing that we are detecting when we
-are doing automated checks is we should be running the automated checks against what is actually
-being rendered, not just checking to see whether what was asked for was valid and then doing
-something else and then not checking whether what we did matches our specifications."*
-
-A knob records an INTENTION. A check that reads the knob is asking whether we meant well, and it
-passes cleanly on a map that drew something else entirely - which is the failure mode this project
-has hit repeatedly under a different name (`cluster_shape` was rolled, printed in every cohort header,
-and read by nothing for months). So: prefer the measurement wherever both exist. **Not implemented
-yet** - recorded here as DECIDED-AND-PENDING per the same 2026-08-24 direction that a code change
-should not be started mid-feature.
-
-## NOTE 2026-08-27 (feature 133 T90): the would-have-dispatched trail was empty for the whole period
-
-Zero entries between the lock (2026-08-25) and the unlock (2026-08-27). Not because nothing was
-built - 30 tasks landed in the clone - but because FR-006 refused every push before the route was
-decided, so the recorder (which fires when the GATED route would dispatch) never ran. `make ci-status`
-prints "(none)", which reads as "nothing wanted a build"; the honest reading is "no push got far
-enough to want one". A one-line change when it matters: `ci-status` could count the FR-006 refusals
-in the period beside the trail, so an empty trail says which of the two it is. Not a task - the
-audit's answer (should any have run? no) does not change either way.
-
-## The hamlet coverage floor's last 128 lines (feature 146 closed at 99.13%, 2026-08-28)
-
-Feature 146 took the derived hamlet-path floor from 373 uncovered lines to **128** (99.13%) - about 5,300
-lines of dead check code removed, ~50 refusal-reason unit tests, 27 scripted negative fixtures, and the
-town/city battery gated for the first time since the 2026-08-16 freeze. It did NOT reach green, and the
-spec records that rather than rounding. What is left, from `specs/146-the-hamlet-floor-residue/floor-at-close.txt`:
-
-- **`hamletgen/ways.py`, 28** - nested closures in the web stages (`_rejoinable`, `_commit`, `_join_piece`,
-  `_touch_junctions`, `_thread_the_fabric`'s detour). Reachable, but each needs a lane geometry contrived so
-  precisely that the router, the string-pull AND the un-jog pass all fail first. Three were closed that way
-  under 146, so the method is proven; the rest is the same work at a higher price per line.
-- **`settlement/city/bridges.py`, 17** - the city bridge's rotation search and the footbridge's per-segment
-  caps. Reachable only by a city map's PLACER, and the city pool is frozen, so nothing runs them. Not
-  removable (the city tier needs them) and not reachable until a city is scripted - so this half closes for
-  free the day the city tier converts, and not before.
-- **~83 across 29 modules** - ones and twos, each a refusal reason whose setup is a whole carve or a whole
-  web (`close_seams`, `_carve_sector`, `_dry_fields`), or a check branch needing a manifest shape the
-  reference does not carry.
-
-**UPDATE 2026-08-30 (feature 166): the floor now reads 99.28%, ~90 lines** - it improved from 128 as a
-side effect of retiring the check battery, and 166 verified the residue is NOT a consequence of that
-deletion (it probed the two largest blocks against the battery's own tests and found them Missing there
-too). The composition is unchanged in shape: `hamletgen/ways.py` 25, `settlement/_knobs.py` 24,
-`_geom/primitives.py` 16, `structures/fixtures.py` 9, the rest in ones and twos.
-
-**AND THE FLOOR IS NOT ACTUALLY BEING ENFORCED** - see 2h below, which is the reason this entry has been
-open across three features without anyone noticing it was never checked. Read 2h first; this entry is the
-worklist, 2h is why nothing was failing over it.
-
-`research: rendering`. Whoever picks this up: the worklist is generated straight off the FULL run's
-hamlet-floor table; the module set is derived by `tools/hamlet_floor.py` (no make route since feature 198, claimed as 195 and renumbered 2026-09-07).
-
-## The caption-over-a-building rule was cut, and its whole apparatus is still standing
-
-**Found by `settlement-review` on Kuwabata, 2026-08-29 (feature 157), outside the delta.**
-
-`labels_clear_of_other_buildings` - the check that stopped a caption being drawn across a roof - was
-deleted in **b709c4ae** ("141: the GM's cut - 442 legacy-tier checks and 39 untested keeps"). What
-survives it:
-
-- **Live comments in NINE engine files** - `settlement/trades.py`, `settlement/castle_civic.py`,
-  `settlement/shrines_wells/shrines.py`, `settlement/structures/captions.py`,
-  `settlement/structures/fixtures.py`, `check_village/segments_06b_bridge_labels_and_reach.py`,
-  `check_village/segments_10b_city_civic_and_commerce.py`, `settlement/city/walls.py` - and three
-  pool gens, all describing it as an operative rule and justifying real geometry by it. (Feature 157
-  corrected the one in `fixtures.py::_blocked` because that comment was justifying code the feature
-  was changing; the rest stand.)
-- **FOUR OPERATIVE DOCS, which is the half that matters most and which the first draft of this entry
-  missed** (settlement-review round 2): the presentation and cities rule files (both retired into `research/` by feature 229, which dropped
-  these passages), `dev/placement.md`, `dev/diagnostics.md`. The presentation rule file was the worst - it stated the rule as a
-  LIVE GATE in three separate passages, including the normative paragraph beginning *"A label must
-  also not sit on a feature it does NOT name (`labels_clear_of_other_buildings`, town + city
-  scale)"* and the "Checks stay narrow" bullet that names it as the backstop justifying why no wider
-  label gate exists. A session that swept only the code from this entry would leave the doctrine
-  asserting a gate that is gone - which is exactly how this got here.
-- **The whole `_LABEL_GROUP` / `_LABEL_EXEMPT` registry** (`check_village/common_01_geometry.py`,
-  ~lines 256-356) - the map from each solid feature key to *"the word a caption must contain to be
-  allowed to cover it"*.
-- **Its completeness guard, `every_solid_feature_classified_for_labels`**
-  (`segments_03a_overlaps_and_ward_fences.py`, segments 0141/0142), which still fails the gate when a
-  new solid feature is added without a caption GROUP - enforcing classification for a consumer that
-  no longer exists. Census: the registry's only consumers are that guard and its own tests.
-
-**Why it matters rather than being tidy-up**: nothing in the gate measures a caption against a
-building any more, so a placer's own fabric probe is the sole defense - and feature 157 is exactly
-the kind of change that leans on it, because it pulls captions IN off the empty margins and into the
-crowded ground beside their subject. Measured on the five scripted hamlets, the notice-board
-caption's clearance to the nearest built glyph is 20-70 px on four of them and **2.24 px on
-Kuwabata**, nine times tighter than the next.
-
-**The decision is the GM's, and it is one of two**, because both are defensible and they point
-opposite ways:
-
-- **RESTORE** it. The registry is sitting there unconsumed and the victim list derives from it, so
-  the check is mostly re-assembly rather than design. If the 2026-08-26 cut was about LEGACY-TIER
-  checks specifically, this one may have gone out with the tide rather than by intent.
-- **RETIRE** the apparatus. Sweep the comments, delete the registry, delete segments 0141/0142 and
-  their tests. A guard that enforces classification for nobody is the "verification that never runs"
-  shape this repository keeps re-finding, and it taxes every new feature that draws a solid thing.
-
-**Not decided here** because it reverses or ratifies a GM cut, which is not a session's call, and
-because either branch is a sweep across six files rather than a fix at a point of change. What
-feature 157 DID fix, at the point of change, is the narrow half that was its own: the comment that
-asserted the dead check, and `_blocked`'s hand-listed victim families, which had fallen behind the
-map exactly the way the registry's own docstring warns.
-
-## 2h. `make done FULL=1` HAS NEVER BEEN GREEN - and nothing says so out loud (found 2026-08-30, feature 166)
-
-**The measurement.** `dev/run-log/` records four FULL-scope runs in the project's history: one on
-2026-08-25 and the three feature 166 ran on 2026-08-30. **None is green.** The reference-scope
-`make done` is green routinely and is what the push actually requires, so nothing has ever forced the
-FULL scope to pass, and its failures have quietly accumulated.
-
-**Why it matters.** FULL is the ONLY scope that enforces the coverage floors **[PREMISE DISSOLVED by feature 174, 2026-09-02: a plain `make done` enforces them too, over the whole engine. The finding below is kept as dated history; do not work its worklist without re-measuring]** and collects
-`tests/full/`. So the floors this project believes it holds - the 100% rule outside the four exempt
-packages, and the derived hamlet-path floor - are not actually being enforced by anything a session
-runs. A floor nobody checks is not a floor.
-
-**Three classes of failure, all found in one sitting, all pre-existing:**
-
-1. **Stale path literals from feature 161's map move.** `tests/full/test_coverage_carriers.py` (all
-   eight carriers), `test_gencache.py` and `test_villages.py` read `pool/<tier>/<name>.json` and
-   `pool/hamlets/<name>.gen.py`, and 161 moved every map into a per-map folder. They stopped matching
-   SILENTLY. Feature 166 fixed the two `.gen.py` literals and deleted the carriers (which the battery
-   retirement made redundant), so this class may now be empty - but the LESSON is the standing one in
-   [`../../../docs/session-clones.md`](../../../docs/session-clones.md): a layout change leaves path
-   patterns outside the walk, and they fail silently.
-2. **A FULL-only environment leak** (fixed by 166, recorded because the SHAPE will recur). A variable
-   set on make's COMMAND LINE is exported to recipes as a plain environment variable, so
-   `make done FULL=1` puts `FULL=1` into `os.environ` and a fixture's nested `make` inherits it. Feature
-   145 fixed exactly this for `COV_FLOORS` by clearing `MAKEFLAGS` - which does not touch it, because it
-   is not a flag. The next variable added to the FULL path is the third instance unless it is added to
-   the strip list in `tests/test_switches.py`'s `make()`.
-3. **The `tooling` deselection against the coverage floor.** `ci/` and `switches.py` tests are
-   deselected when the tooling stamp is fresh, so their lines are uncovered in the coverage report
-   without anything having been deleted. The floor and the selection disagree about what a run covers.
-
-**What is left after 166.** (The worklist itself is the older entry above, "The hamlet coverage
-floor's last 128 lines" - these two are one thread: that entry is WHAT to cover, this one is why nothing
-has been failing over it.) The hamlet-path floor stands at **99.28%**, ~90 lines across 11 modules
-(`hamletgen/ways.py` 25, `settlement/_knobs.py` 24, `_geom/primitives.py` 16, `structures/fixtures.py`
-9, and the rest in ones and twos). Feature 166 probed the two largest blocks against the retired
-battery's own tests and found them listed as Missing THERE too, so this predates the deletion and is
-not a consequence of it. Bringing it up is a TESTS job (spec FR-002's rule: bring the floor up by
-tests, never by widening the omit list).
-
-**Why this is its own feature and not a tail on someone else's.** It is three unrelated causes plus
-~90 lines of genuinely untested engine code, and the work is tooling rather than cartography - no map
-changes. Doing it inside a map feature is how it stayed invisible for as long as it has.
-
-**Where to start:** run `make done FULL=1` and read the whole failure list before fixing anything; it
-reports every phase. The evidence and the two probes are in
-`specs/166-retire-the-check-battery/research.md` R11.
-
-## `hooks-test` is 94 s of a 135 s gate, and it runs its suites SERIALLY (found 2026-08-30)
-
-Measured by the `diagram-testing` session while investigating where `make done`'s time goes, and
-recorded here because it is the largest single lever in the repository right now:
-
-    lint        0 s      format      0 s      typecheck   1 s
-    reference   0 s (cache HIT; ~29-37 s on a miss)
-    test       17 s      <- 2,286 pytest tests
-    hooks-test 94 s      <- 19 shell suites, FIVE AND A HALF TIMES the whole Python suite
-
-Fully cached the gate is ~18 s; today's ~135 s median is essentially 18 + `hooks-test` + a reference
-miss. **The gate did not get slower because anything backslid** - it got slower because four days of
-work (162, 164, 168, 169, 170, 171) have all been GUARD work, and guard work is the one area whose
-verification is the most expensive. The per-suite freshness cache is returning nothing (`0 unchanged`
-on a recent run) for the same reason: 29 guard scripts changed on main in half a day, so there is
-nothing stable to hit. The cache is working; there is simply no hit to be had.
-
-**The lever**: `hooks-test` runs 19 shell suites one after another. pytest runs 2,286 tests in 13.8 s
-by running them in parallel. Nothing about the shell suites obviously requires serialization -
-each builds its own fixtures in its own `mktemp -d`, and since feature 170 each isolates its own
-`GUARD_LOG_DIR` - but that is a claim to verify rather than assume: some drive git repos, and
-`test-sync-with-main.sh` and `test-clone-sync-hooks.sh` in particular manipulate trees whose paths
-they derive. Check for shared state before parallelizing, and expect at least one suite that cannot be.
-
-Not opened as a feature here; the GM has been told, and the efficiency work is a conversation they
-said comes after 171.
-
-## RE-PIN `done`'s ratchet baseline once post-172 runs exist (the GM's condition, 2026-08-30)
-
-The GM ratified feature 171's D1 - the 155 s interim baseline giving a 201 s ceiling - **with a
-condition**: re-pin it once real post-172 measurements exist.
-
-**Why it is owed.** The 155 s is the median of green reference-scope `done` runs from a window
-spanning 2026-08-29/30. That window predates feature 172, which took `hooks-test` from 94 s serial to
-0 s when guards are unchanged - and `hooks-test` was the single largest phase of the gate. So the
-baseline describes a gate that no longer exists.
-
-**Why it has not been done already**: every `done` run since 172 landed has short-circuited as
-`already-verified` (unchanged engine content), so there is no post-172 full-gate measurement to pin
-to. The next ordinary engine change produces one.
-
-**How to do it**: take the median of the green reference-scope runs recorded AFTER feature 172
-(`scripts/_gatecost.py done reference`, or `make audit`), pin it in `scripts/_ratchet.py`'s `done` row
-WITH a written reason (FR-010 requires one in either direction), and let FR-004 derive the new
-ceiling. If the new baseline is 35 s or less, nothing further is needed: the GM's own 45 s per-run
-rule takes over automatically, which is the regime the whole feature was built to hand off to.
-
-**Do not** lower the baseline to a single lucky fast run - the same window discipline applies, and the
-distribution is wide (25 s to 334 s in the pre-172 window, driven by cold roll caches and a shared box).
+Design inputs measured on Shiro Daika's hand-authored first pass (2026-08-10), the motivating example:
+- **Wall-to-fabric fullness is the headline requirement** (GM 2026-08-10). After three wall derivations the
+  interior slack check passed (claimed-open + unclaimed <= ~15% of the interior), yet the map still read empty: 41% of
+  the walled interior had been claimed-open commons at the first derivation, and hours of fine adjustment were tuned
+  against a wall about to be wrong. A grown fabric with the wall wrapped round it has the right slack by construction;
+  a wall must never be adjusted after the fine work.
+- **Realized machi density is bounded by the SERVICE fabric, not the packer**: streets, kido reserves, well courts and
+  roji took ~8% of the packed ground at the settled wall. Budget service ground per district (wells per ~20
+  households, roji per 95 px reach) BEFORE deriving the wall, or the same gap reappears.
+- **Place service features and packs in one deterministic order per district**, so a local edit stays local: the
+  hand pass's endgame was cross-coupled reflows, every well, claim or alley edit re-rolling neighboring packs (three
+  "dead cores" moved five times).
 
 ## The push-time `roll-review` agent (deferred by feature 217, 2026-09-08)
 
@@ -407,38 +51,6 @@ session is told to exercise and the GM reads in the diff.
 **When to build it**: if a village-tier feature lands rows that the GM, reading the diff, judges should have been unit
 tests - that is the measurement that says the judgment layer is not holding.
 
-## Three magistracy SVGs have no generator, and the ignore rules say they do (found 2026-09-13, feature 237)
-
-**What is actually true, measured.** Of the five magistracies, **two generate their own svg** -
-`county-magistracy-example` and `ochiba-roundtrip-test` call `compound.place()` and `emit_svg()` and write
-it (0.17 s end to end, svg 6 KB) - and **three do not**: `hayakawa`, `ochiba-magistracy` and `ubame` have a
-`.gen.py` whose entire body is `resvg <svg> <png>`. Their svg is hand-authored source that nothing can
-rebuild. The size signature says the same thing: the two generated svgs are 5.7 and 6.3 KB, the three
-hand-drawn ones 35.6, 38.6 and 39.7 KB.
-
-**The ignore rules state the opposite.** `.gitignore`'s note 2 retires the Mode A exception on this:
-*"Measured 2026-09-03: all five HAVE a `.gen.py` and all five regenerate BYTE-FOR-BYTE (identical md5,
-empty git diff). The `.gen.py` is the source; the `.svg` is its output."* That measurement cannot mean what
-it says for the three: running their gens does not write an svg, so the file on disk was left untouched and
-the md5 compared each file with itself. An unchanged file is not a reproduced one.
-
-**What it costs today.** `render-sync` exits 1 on the first of the three in any clone that lacks the file -
-which is every fresh clone, since the svg is neither tracked nor restored by any procedure - and the maps
-after it in the walk therefore never render either. Nothing is LOST: all three are in
-`/host-l7r-repo/diagram-render-archive/` with sha256s (83 files, 442 MB, verified present 2026-09-13), which
-is the second copy the ignore block promises.
-
-**The sketch.** Track the three (114 KB in total, which is three ten-thousandths of the 345.71 -> 38.68 MiB
-the purge won), correct note 2 to say two of five, and leave the two generated ones ignored. Their gen
-docstrings already claim the svg is "hand-authored svg SOURCE (tracked in git)" - which the change would
-make true rather than aspirational. The GM's call: it puts hand-drawn artifacts back in git, which is the
-decision the purge reversed.
-
-**A separate, smaller thing found with it.** `render-sync` warns that a missing frozen render should be
-restored "with `git checkout`" because "the frozen renders are committed (GM 2026-08-16)". They are not, and
-deliberately so: `.gitignore` note 1 records that the frozen exhibits were removed from git and archived.
-The warning should point at `/host-l7r-repo/diagram-render-archive/` and its MANIFEST. `ueda` is not a
-defect - it is that decision working.
 ## Lighting a watercourse paints over the things that CROSS it (measured 2026-09-12, feature 230)
 
 MEASURED by the feature's fifth settlement-review pass with `make page-lit` on Inashiro's page:
@@ -468,21 +80,6 @@ elements per hover rather than feature 201's whole-class restacking - which is t
 alternative, splitting the water stroke geometrically where a fixture crosses it, is cheaper on the
 page and is REFUSED: it would change the SVG and the PNG, which spec 134 FR-010 forbids.
 
-## A single fallback wakeup for a LOST harness notification (deferred by feature 246, 2026-09-13)
-
-The GM, watching the finished-run guard refuse one gate's turn-end three times, floated *"automatically
-starting a timer that prompts you every N minutes until the task is finished"*. Feature 246 declined the
-periodic form (`specs/246` research.md R4): each tick is a model turn, and the event wakeup already exists
-twice over - the harness notifies the session when a background-mode command exits, and a detached run
-carries a file-watching loop with its proof-of-life clause - and neither failed on any of the gates
-measured (zero of three). What that leaves open is the one case a period would cover and an event does
-not: a tracked run whose completion notification is LOST. No such loss has been observed. If one is, the
-shape to build is ONE long fallback wakeup armed when the guard lets a tracked run through - at the
-target's recorded median duration times two (`scripts/_gatecost.py` has the median) - not a period; and
-the first thing to establish is how the notification was lost, because a hook cannot schedule a wakeup
-today (`ScheduleWakeup` is the session's tool), so the mechanism would need the harness's own support or
-a `Monitor` the guard starts.
-
 ## MEASURE feature 274's write cap and line reads on the groups that run after it landed (owed by 274 FR-004)
 
 Feature 274 capped a research WRITE session at four questions and ten new registry keys (the runner and
@@ -499,13 +96,9 @@ files. **Expected**: write sessions under ~40 turns, the peak back inside 250's 
 10-20% lower, and coordination reads near zero - and `grep continued .git/page-sessions/run-*.log` says how often the
 key cap split a session. A continuation brief sits at `.git/page-sessions/<sid>/continue.md`, which `collect.py`'s `specs/NNN-` match does not read: attribute it to its parent's group through the run log's `continued <sid> -> <sid>` line. Close this entry with the table and the verdict in 274's research.md as R3.
 
-## A headless session stalls on the no-poll guard (found by feature 293, 2026-09-30)
+## Hamlet labels in the zoomed-out hit map (found by feature 267, 2026-09-27; unmeasured)
 
-**Pain.** A headless `claude -p` session is never woken for background work: nothing re-invokes it when a backgrounded Bash command, a
-detached `make` or a background agent finishes. `no-poll-hooks.sh` turns a foreground wait loop into a background one (and refuses a
-bare `sleep` loop), so a headless session that follows the guard ends its turn waiting and sits idle until someone resumes it.
-**Evidence.** Feature 293's runs e5 and e7 stalled eight times in all, each after backgrounding a gate, a cohort or review agents
-(`specs/293-effort-level-experiment/interventions.md`); page sessions (`make page-session`) have the same exposure. **Sketch.** Let
-the guard tell a headless session apart (the page-session runner sets `L7R_PAGE_SESSION`; a launcher can set a like flag) and, there,
-permit a bounded foreground wait instead of rewriting it to background; or have the runners resume a session whose last turn ended
-with background work pending, as feature 293's watchdog did (`_effort_run.py resume`).
+A small label's blended glyph edges can answer the hit map as the kind one palette step away. It is fixed for magistracy
+pages only (`interactive/raster.py` `id_map(crisp_text=)`, used on a Mode A sheet's page; the hamlet pages are held
+unchanged). Sketch: measure a hamlet page's hit map at the smallest label size first; if it misreads, pass `crisp_text`
+there too and re-measure the page's size and build time.

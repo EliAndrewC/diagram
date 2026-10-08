@@ -146,7 +146,7 @@ now says it first.
 | Village | 2 ft/px | NOT STARTED | Hoshigaoka, Ueda, Kikuta, Hikari-no-Sato | headman, shrine, tax-free plots, a second field |
 | Town | 1 ft/px | NOT STARTED | Hoshizora, Hirameki, Ubame | market, road frontage, crafts row, inn |
 | Provincial city | 3 ft/px | NOT STARTED | Tango, Minami, Nagahara | wall circuit, wards, garrison, temple complexes, districts |
-| Capital | 3 ft/px | NOT STARTED, tier itself unfinished | Shiro Daika (`wip/`, housing pass still open) | castle, great houses, the capital's own street grammar |
+| Capital | 3 ft/px | NOT STARTED | Shiro Daika (`wip/`, hand pass dropped 2026-10-07) | castle, great houses, the capital's own street grammar |
 
 **The exemplars carry forms the GM's rule of 2026-09-28 eliminates** (anything attested only in modern times; feature
 280). They are not redrawn: a converted tier must NOT copy them. The forms owed, by map, are in
@@ -295,8 +295,9 @@ Ordered by value per unit of effort, not by tier.
    question this step used to be expected to surface - whether `hamletgen/` generalizes or whether
    tiers share a stage library - is **ANSWERED**, see below.
 6. **Town, then provincial city.**
-7. **Capital** - last, and blocked on the tier being finished by hand first (Shiro Daika's housing
-   pass is still open). Do not script a tier whose rules are not settled.
+7. **Capital** - last, scripted like every other tier (the GM, 2026-10-07: Shiro Daika's hand pass is
+   dropped; `wip/shiro-daika` stays as an exhibit). Its design inputs are `future-work/cross-cutting.md`,
+   "Fabric-first generation".
 
 ### The architecture question, ANSWERED (GM 2026-08-17, feature 119)
 

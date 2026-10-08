@@ -427,3 +427,42 @@ safe for the same reason it is fiddly: everything is escaped deliberately.
 **And history cannot be rewritten here** (constitution VI), so a damaged message stays damaged. The
 content survived only because it was also written at the point of change - which is the argument for
 that rule restated: the commit message is a POINTER to the record, never the record itself.
+
+## Twelve lessons from the hamlet backlog, kept when its closed entries were deleted (future-work audit, 2026-10-07)
+
+Each was learned on an entry the audit found closed; the entry is gone (a line in `future-work/closed.md` says what
+closed it), the lesson is not.
+
+**Measuring the wrong thing**
+- **Clearance measured from a house CENTER counts the steading's own parts.** It read a ~1.5 ft pinch for a farmhouse
+  standing alone in an empty field. Exclude the bundle's own house, yard and garden, as the pass under test does,
+  before calling ground sealed (2b).
+- **A density read on a self-measured extent cannot see a collapse.** The copse's density held while its area fell to
+  half the rolled wood; read drawn / rolled, never a ratio whose denominator shrinks with the defect (the homestead woods).
+- **Fixing where a feature may not go says nothing about whether any of it remains.** After a keep-out lands, measure
+  what SURVIVED, not only the separation it was written for (the copse that collapsed to one tree).
+- **A check whose join tolerance sits above the clearance that guarantees the gap welds a network the ink does not
+  contain.** `_LANE_JOIN` 40 against `WEB_CLEARANCE` 28 counted four islands as one web; fixing only the constant turns
+  maps red without connecting anything (the web one clearance short).
+- **Clearance is not monotonic in the offset.** A board at the traffic optimum has ways on more than one side, so a seat
+  ladder that stops at the first dip misses the pocket past it; enumerate every candidate before concluding no seat is
+  better (the notice-board caption).
+
+**Testing the wrong object**
+- **Being stricter than your own gate is not the safe direction.** The woodland scan demanded the whole square plus
+  16 px inside the kept window where the gate asked 70% of the bbox, and two of four hamlets shipped with no woodland. A
+  placer judges a seat by the gate's own measure, with slack on the gate's side.
+- **Test the geometry where it is final, after the last nudge.** The threshing yard's fit test read a reservation that
+  `farmsteads()` later moved, so no fit-time test could catch its lap onto a paddy (seed 31).
+- **Instrument the name the caller resolves.** Patching `seams.close_seams` did nothing because `comb.py` had done
+  `from .seams import close_seams` at import (the flooded tint).
+- **When a reconstruction and the engine disagree, stop reconstructing - print from inside the engine.** An env-gated
+  dump answered in one run what three reconstructions had argued about (the caption attempts 8-13).
+
+**Searching and rolling**
+- **A satisficing bar above what the ground offers is a maximizer with extra steps** (the caption attempts 8-13).
+- **A free predicate at the bottom of a search loop is invisible to a cumulative-time profile.** It costs nothing
+  itself, but each rejection pays another search; measure it A/B with the rule forced true (the straggler router).
+- **A position-seeded hash is right for a per-feature ATTRIBUTE and wrong for a per-household RATE.** Sampled at a
+  near-uniform pitch along a row it aliases (one kura in 12 against three in ten); a rate wants a count, not a roll
+  (the kura roll, now `rolling/lot.py`).

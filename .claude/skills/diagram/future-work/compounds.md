@@ -4,10 +4,9 @@
 fields: magistracies today, and - as they are built - samurai city estates, governor's mansions,
 samurai country estates, temple precincts drawn in their own right, and keeps.
 
-**This file was empty until 2026-09-26**, and the 2026-08-24 note that said so predicted why: nobody had
-looked at a compound recently. Feature 262 (the interactive magistracy pages) looked - it measured every
-drawn kind against the whole research record (`specs/262-interactive-magistracy-pages/coverage.md`) and ran
-`building-review` over the Ochiba page - and what it found is below.
+A drift between a Mode A procedure (`buildings.md`, `buildings/programs.md`) and the research record is NOT tracked
+here: `make claims-report` lists every one (the `buildings.md::` and `programs.md::` rows). A guess or silence the
+record already labels is listed by `make open-questions`. An entry here is sheet-level or research work neither carries.
 
 ## OPEN 2026-09-28: the magistracies' rear strips, and what feature 283's reviews left open
 
@@ -16,26 +15,18 @@ them all"). Filling the strips they left took four `building-review` rounds a sh
 fourth round still found here rather than into a fifth (spec 283, Decisions Recorded, with its cost). Each is a finding
 to work, the research ones first:
 
-- **The rear strip is a knob, not yet declared.** Research buildings 230 now attests a garden behind the house with the
-  storehouse beyond it (the Higuchi house) beside the old service-strip-or-alley rule; `buildings/programs.md` still
-  states only the latter. Declare the forms - a rear yard (the Higuchi house), a service strip with an alley - with
-  their evidence, and say which each sheet takes (Ubame the garden; Ochiba storehouses hard behind the house with a
-  garden beside them, a form not yet shown attested; Hayakawa storehouses across the alley).
 - **Ubame's rear yard** (open ground since the GM's 2026-09-28 ruling to draw what the sources most safely support):
   stepping stones or a way to the two storehouse doors, a service way to the reception's privy (its cesspit has no approach that avoids a garden),
   and settle the 19 x 31 ft strip east of the reception; end the garden at the storehouses' south faces.
-- **Hayakawa**: the family's way out of the inner garden (research: a wicket, kido or shiorido, between a buke inner
-  garden and its service ground?); the working well at the middle gate's mouth beside the guests' first stone
-  (research: was a draw-well ever on the roji's line?); the 33 x 12 ft rear pocket kept for caption seats.
+- **Hayakawa**: the family's way out of the inner garden (whether a wicket stood there is an absence note on
+  research/questions/0104, so the sheet draws a labeled guess or none); the working well at the middle gate's mouth beside
+  the guests' first stone (research: was a draw-well ever on the roji's line?); the 33 x 12 ft rear pocket, kept for
+  caption seats the one placer no longer needs - judge it as dead space.
 - **Ubame**: the servants' quarters' four bays under one door are the common-room form, accurate as drawn PROVIDED the
   bay divisions read as sliding partitions (research buildings 910, feature 293). Owed: look at the sheet's divisions and
   redraw them as sliding partitions if they read as walls.
-- **Every sheet's bed**: whether it stood beyond the ornamental ground, before the rooms, or within the garden, and
-  whether it was screened (research buildings 405 records all three as searched and not found).
-- **The shrine**: whether a keeper's plot ever stood in a precinct's front ground (research 405's absence note).
 - **Tools**: pack-audit's aligned-gap finder pairs two buildings across a third
-  (Ochiba's "28.7 ft" nagaya-to-storehouse gap); `building-review`'s contract names an "all N structures clear the wall
-  ink" line the audit no longer prints.
+  (Ochiba's "28.7 ft" nagaya-to-storehouse gap; `tools/pack_audit/checks.py` `aligned_gaps`, unchanged since 2026-08-31).
 
 ## Research owed (rewritten by feature 267, 2026-09-27)
 
@@ -52,36 +43,18 @@ with "This is a guess", and a thin part is disclosed in its kind's caveat (`l7r/
   the genkan on the office and says the visitors' route runs through the office to the residence; Ochiba draws it as
   the office's rear door, the middle gate and the garden path to the reception's veranda stone. Whether that way ran
   under roof (a corridor, the office's own rooms) is not recorded; a Takayama Jin'ya plan with its watari-rōka would
-  answer it.
+  answer it. A lead is already in the record: 0104.drawing.notes quotes shirobito-1717-takayama, "The route goes round
+  the rooms of the goyakusho ... and continues on to the residence" - read it first.
 
 - **How big was a roofed hearing court?** The court is roofed on every sheet now (research buildings 450), but at
   the old open court's size - larger than the office hall it fronts. No measured roofed court was found (Takayama's
-  two courts are described, not measured). The size each sheet draws is a guess, disclosed; if a court turns out to
-  be a room-scale bay, the sheets shrink it.
-- **Was the knee-high striking bundle an adult drill in the period?** Research buildings 560 attests the adult bundle
-  only as present-day practice; its one writer holds the older form a children's exercise of one to a few branches.
-  Ubame draws the bundle as the knob's second form, labeled a guess in its notes.
+  two courts are described, not measured). The size each sheet draws is a guess, disclosed in the modal; research 0099
+  carries no absence note for it, so `make open-questions` cannot list it - add one or answer it.
 - **Where did the Koseki form's middle gate stand relative to the offices?** The roji approach (Hayakawa, Ubame)
   runs a guest of rank behind the office hall to the divider gate; if the middle gate opened off the forecourt, the
   divider gate's place becomes a per-sheet form.
-- **What stood between the office's genkan and its working rooms at Takayama** (a genkan-no-ma, a shikidai)? Ochiba's
-  genkan opens into the office hall's end room.
-- **Were stepped landings (gangi) cut back into the bank or built out into the water?** Hayakawa's steps project a
-  few feet past the revetment face.
-- **How often was a grave drawn in the fields, by field kind?** The rate (about three maps in ten) is a degree chosen
-  for the maps; the record argues "common where the custom held" and gives no number (research fields 220).
-- **Where were a house's ancestral tablets kept** - a butsudan in the butsuma beside the zashiki, which the kind calls
-  the ancestral alcove? The placing at the formal end stands (research 0239); the word may not.
-
-### Silences the maps fill with a labeled guess
-
-Searched and not found (the dated absence notes are in the record): a household kennel's form and seat (590); a study
-standing apart at an official's compound, and its size (600); two sides meeting in a room across their border -
-history kept each party on its own ground (610; Ubame's parley room is the setting's own); the road's width before a
-compound's gate (ways 070); a gap between a charcoal kura and its neighbors (urban-features 210); a household keeping
-an unused wing shuttered by day (350); tablets of predecessors in office rather than in the house's line (280); a torii's
-distance from its hall (religion-and-death 230); a bench's notice board at the office's own gate before Meiji (470);
-the size of the clerks' place in the hall, of the cell within the span read, of a bath, a stable stall and a kitchen.
+- **Hayakawa's stepped landing (sheet check)**: the record now says the steps are cut into the revetment (0176); check
+  whether the sheet's steps still project past the revetment face, and redraw them if they do.
 
 ### Sources to read when a pass comes back
 
@@ -90,11 +63,6 @@ bulletin vol. 6) on tablet veneration; the NILIM page on samurai-house ranks; th
 magistracy plan; Takehashi yohitsu for the Nakano dog figures; Ji Cheng's Yuanye (1631) on a study's garden siting;
 the Fuchu Joge pamphlet's drawing labels, which sit only in its PDF's images and want a rendering reader.
 
-### Canon gaps (for the GM, not research)
-
-- Ubame, Hayakawa, the Kurogi, Moriguchi and Nagahara are absent from the mounted `l7r.md`; their particulars rest
-  on each map's own notes (Ubame's two broken `l7r.md` citations were corrected in feature 267).
-
 ### Drawing and tooling questions left open
 
 - **The program example's captions and the hand-sheet placer (`labels.hand_sheet`, `seat_label` until feature 286) disagreed on 9** (feature 267, 2026-09-27: striking posts, residence, well, gatehouse, practice ground, both clerks, straw mats' seat and leader). `compound.py` seats through the one placer but with its own view: a caption's subject is one chosen shape (the rear alley, one seat, one mat) where the hand-sheet placer takes what the caption declares; it counts invisible stand-ins for tubs and stones and blocks the roofed court only after the court's own captions; and it measures every caption at the standard's character width where the hand-sheet placer measures bold, capitals and spacing (feature 267's rules). The reasons are read from the code, not measured. The fix is one view: `compound.py` builds its obstacle index with `hand_sheet.classify` over the sheet it is drawing, or `hand_sheet` gains the composer's subjects; measure first which disagreements each removes.
@@ -102,28 +70,11 @@ the Fuchu Joge pamphlet's drawing labels, which sit only in its PDF's images and
   a convention question).
 - The torii drawn as an elevation silhouette on Mode A sheets while `buildings.md` (feature 268) says a Mode A arch
   is drawn in plan; the "Modest shrine" bullet still says silhouette. Settle the rule, then redraw.
-- Hamlet labels in the zoomed-out hit map (unmeasured): a small label's blended glyph edges can answer as the kind one
-  palette step away. Fixed for magistracy pages only (`raster.id_map(crisp_text=)`); measure a hamlet page first.
-- The glossary tooltip matcher has no proper-name exclusion: "Shinden Togashi" picks up the shinden (new fields)
-  tooltip (religion-and-death 220's check).
-
-### Settled on 2026-09-26, recorded so it is not reopened
-
-- Ochiba's threshold stones are drawn ~3.3 by 4.7 ft ON PURPOSE (GM: Ochiba is where the threshold stones are
-  made and painted); canon's field stones are two fists.
-- Ochiba's reception room now faces the inner garden (it faced the kitchen roof, against 'The shady rear is the
-  service strip'); the genkan moved with it.
-
-## The barracks size band after the bunk rooms (feature 280 M119, 2026-09-29)
-
-The bunk rooms were taken off (modern only; the Barracks modal, `buildings.md`, Hayakawa's sheet comment). The size band
-still reads as a bunk hall's. Measurement: Hayakawa's barracks against the staff rowhouse of the record (the nagaya
-rooms the record reads). Sketch: recalibrate the band in `buildings/types.json` to the rowhouse's rooms per retainer and
-re-run `size-audit` on the sheets that draw one.
 
 ## Is the receiving court "swept"? (found by feature 280, 2026-09-29)
 
 The practice ground's "swept earth" was reworded to open earth in feature 280 (M66 found the swept precinct recorded only
-in modern custom). The receiving court's modal (`compound_kinds/grounds.py`) still calls it "a swept court". Owed: a
-research pass on whether a receiving court's surface is attested swept or raked before modern times, and the modal
-reworded if not.
+in modern custom). The receiving court's modal (`l7r/diagram/interactive/assets/modals/sheet/border-court.md`) still reads
+"The plan draws the border court as a swept garden"; research 0224's drawing page finds swept ground at shrines and graves
+recorded only in modern custom. Owed: a research pass on whether a receiving court's surface is attested swept or raked
+before modern times, and the modal reworded if not.

@@ -7,10 +7,10 @@ and a human auditing the list had to sift a changelog to see what was actually o
 
 | file | load it when | size |
 |---|---|---|
-| [`farming-communities.md`](farming-communities.md) | working on hamlets or villages - paddy fabric, lanes, homesteads, wells, woodland, the notice board, cohort seeds | large; this is where the live work is |
+| [`farming-communities.md`](farming-communities.md) | working on hamlets or villages - paddy fabric, lanes, homesteads, wells, woodland, the notice board, and the village tier's conversion | the live work |
 | [`towns.md`](towns.md) | working on a town - storefronts, inns, caravans, the theater | thin; the tier is unconverted |
 | [`cities.md`](cities.md) | working on a provincial city or a capital - walls, gates, wards, streets, the castle | small |
-| [`compounds.md`](compounds.md) | working on a Mode A compound plan - magistracies, and the estate/mansion types still to be built | EMPTY, deliberately - read why |
+| [`compounds.md`](compounds.md) | working on a Mode A compound plan - magistracies, and the estate/mansion types still to be built | small |
 | [`cross-cutting.md`](cross-cutting.md) | the thing you are fixing would change more than one kind of map, or no map at all (the gate, the caches, module structure) | small |
 | [`closed.md`](closed.md) | you want to know whether something was SETTLED or merely forgotten | a one-line ledger |
 
@@ -44,7 +44,12 @@ estates and keeps are coming.
 3. **Each entry names the pain, the evidence, and a sketch of the fix.** An entry without a
    measurement is a feeling, and this project's own history says a feeling is usually wrong about
    which fix will work.
-4. **Check the era before you act on an old entry.** Much of the city material predates scripted
+4. **Not a second copy of what a tool already lists.** A drift between the engine (or a Mode A procedure) and the
+   research is `make claims-report`'s; a guess or silence the record labels is `make open-questions`'. An entry
+   here is work neither carries - a defect the claims do not state, a sheet check, an unlabeled research question,
+   a tooling gap, or what a tier's conversion owes. The 2026-10-07 audit removed ~3,000 lines that were done,
+   about code or checks since deleted, or already tracked by one of those two.
+5. **Check the era before you act on an old entry.** Much of the city material predates scripted
    generation and assumes a next hand-authored map. There will not be one: the 18 hand-authored maps
    are FROZEN and conversion is the answer for every tier above hamlet
    ([`../migration-plan.md`](../migration-plan.md)). Those entries are annotated - the task is dead,
@@ -67,18 +72,18 @@ What the split actually rests on:
 - Towns moved between files within a day, which is the honest illustration: the first answer was
   wrong and the cost of fixing it was five minutes.
 
-**So reorganize freely.** Moving a section between these files is cheap, requires no migration, and
-breaks nothing - the only pointers into this directory are to files, not to sections. The signals
+**So reorganize freely.** Moving a section between these files is cheap and requires no migration. Code comments,
+notes and tests do cite entries by TITLE (`git grep -n "future-work"`), so a moved or closed entry keeps its title in
+its new file or in `closed.md`, and a pointer that names a FILE is re-aimed in the same commit. The signals
 worth acting on:
 
 - **A file nobody loads for its own tier.** If hamlet work never opens `cross-cutting.md`, the split
   is wrong or that file's contents are misfiled.
 - **A section that keeps getting read from the wrong file** - the town material was found by grepping
   `cities.md`, which is the symptom that preceded the split.
-- **`farming-communities.md` at 1,854 lines** is the obvious next candidate. It is where all the live
-  work is, so it will keep growing; when it becomes the thing you scroll rather than read, split it
-  by subject - the water/paddy fabric, the way network, homesteads and their appurtenances - rather
-  than by tier, because the tier is already the filename.
+- **`farming-communities.md` grows fastest** because it is where the live work is. When it becomes the thing you
+  scroll rather than read, first close what is done (rule 2), then split it by subject - the water/paddy fabric, the
+  way network, homesteads and their appurtenances - rather than by tier, because the tier is already the filename.
 
 The one thing NOT to do is leave a section in the wrong file because moving it feels like churn. This
 directory exists to be read under time pressure; a misfiled entry costs more every time it is missed

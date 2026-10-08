@@ -105,9 +105,13 @@ the other became a knob. Full record in
 [`../research/contents.json#homesteads`](../research/contents.json#homesteads) and `future-work/` section C.
 
 A corollary worth stating separately, from the same day's ruling on the twin detector: **when a knob
-and the geometry disagree, that is a placer bug, not an axis-selection question.** Keep reading the
-declared knob, and fix the drawing to match what was rolled - switching the measurement hides the
-disagreement instead of resolving it.
+and the geometry disagree, that is a placer bug, not an axis-selection question** - fix the drawing to
+match what was rolled. And a check measures WHAT WAS DRAWN, never the knob (the GM, 2026-08-24: *"we
+should be running the automated checks against what is actually being rendered, not just checking to
+see whether what was asked for was valid and then doing something else and then not checking whether
+what we did matches our specifications"*): a knob records an intention, and a check that reads it
+passes cleanly on a map that drew something else. The two halves together: the placer honors the
+knob, the check measures the drawing, and their disagreement is the bug report.
 
 ## WHEN A FORM IS A KNOB, CHECK THAT BOTH FORMS CAN ACTUALLY DO THE JOB
 

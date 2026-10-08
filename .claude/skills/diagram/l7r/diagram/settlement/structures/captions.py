@@ -151,9 +151,9 @@ class CaptionProbesMixin:
         passes. Nothing here needs to know WHICH lists exist, so a new feature is covered the day it
         is drawn; `skip_key` drops the captioned feature\'s own glyph.
 
-        ROTATION-AWARE, because `labels_clear_of_other_buildings` tests each building\'s AABB and a
-        rotated shopfront\'s AABB is much larger than its w/h - probing the unrotated rect passes here
-        and still fails the gate."""
+        ROTATION-AWARE, because a rotated shopfront\'s AABB is much larger than its w/h - probing the
+        unrotated rect passed here and failed `labels_clear_of_other_buildings` (cut in feature 141),
+        which tested each building\'s AABB."""
         boxes = [(min(px for px, _ in q), min(py for _, py in q), max(px for px, _ in q), max(py for _, py in q)) for q in self.label_blocker_quads(skip_key)]
         boxes += [label_aabb(lb) for lb in self.M["labels"] if len(lb) > 3]  # AABB: a tilted caption blocks the ground its rotated run can reach
         return boxes
@@ -428,7 +428,7 @@ class CaptionProbesMixin:
 
     def label_caption_hw(self: Settlement, label: str, size: float) -> float:  # type: ignore[misc]
         """A caption\'s half-width AS RECORDED. `_record_label` writes len(text) * size * 0.55, and
-        that is what `labels_clear_of_other_buildings` tests - so probing the PIL-measured glyph box
+        that is what `labels_clear_of_other_buildings` tested (cut in feature 141) - so probing the PIL-measured glyph box
         (~2px narrower per side at caption size) is the same class of bug as a hand-written victim
         list: the probe reports clear and the gate reports a collision on the 2px it could not see
         (Minami, 2026-07-27). Placement and its check read the SAME geometry."""
@@ -491,7 +491,8 @@ class CaptionProbesMixin:
     def _under_a_caption(self: Settlement, x: float, y: float, w: float, h: float, rot: float = 0.0, pad: float = 2.0) -> bool:  # type: ignore[misc]
         """Whether a footprint at (x, y, w, h, rot) would land under a caption ALREADY on the map.
 
-        A label may cover only the thing it labels (`labels_clear_of_other_buildings`), and a
+        A label may cover only the thing it labels (the rule `labels_clear_of_other_buildings` held until
+        feature 141), and a
         feature sited LATE can walk under a caption placed early: Minami's punishment ground
         auto-sited onto the burakumin quarter's caption when a reflow moved the busiest traffic
         node 24px north (2026-08-08). The existing probe cannot catch this - it seats the

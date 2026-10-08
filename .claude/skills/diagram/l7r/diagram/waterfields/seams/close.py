@@ -45,7 +45,7 @@ def _load_shapely() -> None:
 
 
 # past that the 'repair' is moving more ground than the step it retires, which is a land grab wearing a
-# repair's clothes. Feature 152 T18; the lever itself was recorded untried in future-work/farming-communities.md.
+# repair's clothes. Feature 152 T18; the lever itself was recorded untried (future-work/closed.md: the jog residue it was for went with feature 302).
 
 
 # A STAIRCASE IS CUT AT MOST THIS MANY TIMES. Each cut takes one step off a ring and hands back two rings with fewer

@@ -45,7 +45,7 @@ class TradesMixin:
         # the caption normally hangs off the RAW footprint half-height, but a ROTATED record's drawn
         # vertical extent is its axis-aligned half-height, (w/2)|sin| + (h/2)|cos| - and a caption
         # anchored at h/2 then lands INSIDE the record's own bbox, which
-        # labels_clear_of_other_buildings reports as "'farrier' over a farrier" (GM 2026-07-25, the
+        # labels_clear_of_other_buildings (cut in feature 141) reported as "'farrier' over a farrier" (GM 2026-07-25, the
         # rot=150 Hoshizora forge). A rotated caller passes its rotated half-height as `lab_off`.
         # NOT applied globally on purpose: the formula would also push the four rot=90 tanning-yard
         # captions ~5px down, which grows those maps' content crop, and on Tango a 5px taller frame
@@ -505,7 +505,7 @@ class TradesMixin:
         wx_, wy_ = _world(f(2), f(24))
         self.well(wx_, wy_, private=True)
         # A ROTATED works must report its rotated half-height, or the caption anchors at the raw h/2
-        # and lands inside the record's own bbox - labels_clear_of_other_buildings then reports
+        # and lands inside the record's own bbox - labels_clear_of_other_buildings (cut in feature 141) then reported
         # "'kiln works' over a kiln works". Same fix the rot=150 Hoshizora farrier needed; see
         # _trade_record's `lab_off` note. Live from 2026-07-27, when the maps started passing `rot`
         # so the kiln climbs its slope instead of pointing east on every sheet.

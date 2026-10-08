@@ -56,27 +56,16 @@ no-build corridor the placer then refuses seats against, whatever the lane repre
 
 ## Still open
 
-- **The lane web breaks into islands.** Four of Inashiro's fragments touch nothing, at 28.1-28.5 ft
-  against `WEB_CLEARANCE = 28.0` - each web lane REGISTERS that clearance as its corridor, so the
-  next one routes exactly one clearance short of the way it meant to join. `_LANE_JOIN = 40.0` sits
-  above it, so the gate welds them into a "component" the ink does not contain. Both halves of the
-  fix, and the measurements, are in `future-work/farming-communities.md`.
-- **The cohort.** Seeds 8, 18, 23, 42, 47 fail, plus 12 and 39 which predate all of this. The GM's
-  standing limit is the reference hamlet at one seed, so the cohort has not been the bar - but it is
-  the obvious next question.
-- **The rescue passes.** `_serve_stragglers` (dropped by feature 287, 2026-09-30), `_join_orphan_ways`, `_bridge_collinear_breaks` are
-  three repair passes stacked on the lane derivation. Three repairs on one derivation is a smell,
-  and 128 deliberately did NOT touch them so that its own effect stayed measurable. Worth asking
-  whether the derivation, done right, needs them at all.
-- **Generation speed.** Feature 126 cost ~51% (total 261 s -> 394 s across the bookend seeds) and it
-  was never diagnosed - it shipped because `perf-report` printed "diagnose before shipping" and
-  exited 0. Both halves are closed now, and the measurement is in
-  [`../future-work/farming-communities.md`](../future-work/farming-communities.md). The larger
-  separate prize is `place_kosatsuba`: ~36% of every build to site one signboard.
-- **Dispersed and linear forms** stay pinned to nucleated. If linear is ever unpinned, the
-  `spec-fidelity` reviewer flagged one sentence to re-adjudicate as an exception request: a linear
-  hamlet seats houses ALONG the connector, so it needs the route known before seating - a route is
-  not a corridor, and nothing may be reserved.
+Nothing from 2026-08-24's list; each item closed since, and open hamlet work is in
+[`../future-work/farming-communities.md`](../future-work/farming-communities.md):
+- **The lane web's islands** (a lane ending one `WEB_CLEARANCE` short of the way it joins): closed by feature 287 (homes
+  H37, a web link ends ON the way it joins).
+- **The cohort**: feature 287's cohort 1-60 ran 60/60.
+- **The rescue passes**: `_serve_stragglers`, `_join_orphan_ways` and `_bridge_collinear_breaks` are gone; the access tree
+  and the settle guarantee reach (feature 287).
+- **Generation speed**: feature 126's cost was never diagnosed, and the derivation it measured has been rebuilt since
+  (297, 302, 306, 308, 314, 318, 320); a slower target now fails the gate (`_ratchet.py`, the perf bands).
+- **Dispersed and linear forms** are rolled again (feature 291); only the reference hamlet is pinned nucleated.
 
 ## How to work here
 
