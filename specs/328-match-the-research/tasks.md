@@ -17,14 +17,14 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
   2026-10-08, manifests byte-identical; no kept sheet drew a key)
 - none (wave 48): the corridor at the footprint's edge, the skeleton's crop margin and its ford moved no map (the five
   hamlets regenerated 2026-10-08, manifests byte-identical)
-- glyph-redrawn: field pond on inashiro - wave 51: the field pond drawn as a dish pond (0008), a bank ring on wet ground
+- (reviewed PASS at batch 2's close round 2, 2026-10-08) glyph-redrawn field pond on inashiro - wave 51: the field pond drawn as a dish pond (0008), a bank ring on wet ground
   round the open water, reeds on the margin; batch 3's close
-- glyph-redrawn: field pond on mizuguchi - wave 51: the same dish pond; batch 3's close
+- (reviewed PASS at batch 2's close round 2, 2026-10-08) glyph-redrawn field pond on mizuguchi - wave 51: the same dish pond; batch 3's close
 - (reviewed PASS at batch 2's close, 2026-10-08) placement-changed wood shed on inashiro - wave 51: the shed off the house's own walls only, never the front, no extra
   pace (0043); batch 3's close
 - (reviewed PASS at batch 2's close, 2026-10-08) placement-changed wood shed on kuwabata - wave 51: the same seat rule; batch 3's close
 - (reviewed PASS at batch 2's close, 2026-10-08) placement-changed bath room on kashikawa - wave 51: each house rolls among the three walls, the floored rooms at 0.03 (0044: one of the registers' 36 baths in a peasant's house); one of Kashikawa's baths moves to its floored rooms; batch 3's close
-- placement-changed: woodland commons on kashikawa - wave 47: the beyond-the-fields walk counts a row holding as field, so the
+- (reviewed PASS at batch 2's close round 2, 2026-10-08) placement-changed woodland commons on kashikawa - wave 47: the beyond-the-fields walk counts a row holding as field, so the
   wood moves to the higher ground beyond the far row's strips (batch 1's round 3 NEEDS-WORK); run at batch 2's close
 - (reviewed PASS at batch 2's close, 2026-10-08) placement-changed copse on kuwabata - wave 47: every copse crown gives way round a yard persimmon wholly; batch 2's close
 - (reviewed PASS at batch 2's close, 2026-10-08) placement-changed homestead grove on kashikawa - wave 47: every grove crown gives way round a yard persimmon wholly
@@ -71,7 +71,7 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 - (reviewed PASS at batch 2's close, 2026-10-08) placement-changed farm holding on kashikawa - wave 22: the far-row holding three LOTS deep (0033 drawing: three times the frame's
   width), not three frame depths; Kashikawa's holdings run deeper (47 dry plots to 67), its houses unmoved.
 - none (wave 21): two claims written - no code a map executes changed.
-- placement-changed: woodland commons on kashikawa - wave 20: a wood only where the walk from the houses runs THROUGH the field and
+- (reviewed PASS at batch 2's close round 2, 2026-10-08) placement-changed woodland commons on kashikawa - wave 20: a wood only where the walk from the houses runs THROUGH the field and
   beyond it, on every tier (0077 drawing: beyond the fields AND higher than them; the woodland glyph check found the slope tier
   admitting the houses' own side) - Kashikawa draws one wood where three stood; Inashiro's and Mizuguchi's woods now fit nowhere
   on the sheet and are recorded beyond it (`woodland_offsheet`, N and W), the woodland commons gone from their legends. The
@@ -79,7 +79,7 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
   (`measurements.json` mizuguchi-glyph-woodland-F1-side) - a third round asks the GM's waiver.
 - (wave 19, superseded: Inashiro draws no woodland commons since wave 20) woodland commons on inashiro - wave 19: the coppice wood taken beyond the fields from the houses first (0077
   drawing), where feature 261 preferred the houses' side; Inashiro's woods re-placed (three where two stood).
-- placement-changed: woodland commons on kashikawa - wave 19: the same; Kashikawa's woods move across its field.
+- (reviewed PASS at batch 2's close round 2, 2026-10-08) placement-changed woodland commons on kashikawa - wave 19: the same; Kashikawa's woods move across its field.
 - none (wave 18): the thicket's 70% passes dropped moved nothing drawn - measured: Kashikawa's and Mizuguchi's thickets were seated
   at full size and their manifests are unchanged; the other rows are claims.
 - (reviewed PASS at batch 2's close, 2026-10-08) placement-changed shared bamboo grove on kashikawa - wave 17: every thicket pass holds the stand just beyond the back row
