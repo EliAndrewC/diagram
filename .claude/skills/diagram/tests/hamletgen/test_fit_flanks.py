@@ -19,9 +19,17 @@ def test_a_flank_whose_supply_is_trimmed_short_is_uncommanded() -> None:
     assert flanks_commanded(_net(130.0), 90.0)
 
 
-def test_a_one_sided_fan_commands_no_second_flank_and_a_net_with_no_fork_is_not_judged() -> None:
-    assert not flanks_commanded(_net(130.0, extent_b=120.0), 90.0), "120 ft of plots on the B side: no flank there"
+def test_a_sliver_flank_and_a_net_with_no_fork_are_not_judged() -> None:
+    """0053: the rule does not touch "a fan whose far flank is a sliver under the 150 ft line" (feature 328: it refused the fan)."""
+    assert flanks_commanded(_net(0.0, extent_b=120.0), 90.0), "120 ft of plots on the B side: not a flank the rule judges"
     assert flanks_commanded({"plots": [], "channels": []}, 90.0)
+
+
+def test_a_judged_flank_is_owed_80_ft_or_30_percent_the_lesser() -> None:
+    """0053: "at least 80 ft or 30% of that flank" - on 400 ft of plots, 80 ft suffices (feature 328: the greater, 120 ft, was asked)."""
+    assert flanks_commanded(_net(90.0), 90.0)
+    assert not flanks_commanded(_net(70.0), 90.0)
+    assert flanks_commanded(_net(50.0, extent_b=160.0), 90.0), "160 ft of plots: 30% is 48 ft, the lesser"
 
 
 # ---- the fit refuses what it cannot bring inside the rules (feature 287, FR-005: water W32 and the acreage band) ------------

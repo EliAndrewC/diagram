@@ -13,6 +13,7 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 - (wave 5, landed and reviewed) placement-changed village lane on kashikawa - wave 5: 0033's row street runs on off the map as the road into it at both ends, where
   the web cut it back to its last joint (`trim_streets`); Kashikawa's and Mizuguchi's far ends now run off the sheet as a
   second way out (every way is inked `village lane`).
+- none (wave 27): the flank rule changes no pool map; the brook trial was reverted
 - none (wave 26): the drain's corridor dropped on a hamlet; the five pool hamlets unchanged
 - none (wave 25): claims and one code comment, no executed code changed
 - none (wave 24): the rank step reaches no pool map; Kuwabata's two sties move 3.8 and 1.7 ft along their own bank (measured 2026-10-08, kuwabata.json 397c005fb vs HEAD)
@@ -1017,3 +1018,17 @@ dip allowance) are the next wave.
 - [x] T78 the claims re-checked by `impl-drift`; the close: wave 26's own bookend pair, `make done` green, the wave column (FR-005, FR-006)
       research: rendering
       verify: DONE. impl-drift IN-STEP on the three drain claims; amendment 25 FAITHFUL (round 2), plan CLEAR; make done green; wave 26's own pair band 0; the wave column
+
+## Phase 28 - wave 27 (amendment 26): the brook rows measured E3; both flanks as the page judges them
+
+The next open in-scope rows are the brook trio (448-450). Tried literally - no dip down the fall, the downhill check strict -
+a run across the fall takes no bend and its candidate is refused, and 6 of 28 brook tests fail, the A plan's placement among
+them (the placer returns no course); breaking such a run needs another construction across `bend_runs`, the placer's
+candidates and their tests, so the three are E3 by FR-003 (measured; the trial reverted). Then row 451.
+
+  - `l7r/diagram/hamletgen/water/fit.py::flanks_commanded#both flanks commanded` - a flank of 150 ft or less not judged; a judged flank owed 80 ft or 30%, the lesser (0053 drawing)
+
+- [ ] T79 the brook trio measured and re-tiered E3; the flank rule as 0053 states it, its tests to the page (FR-003, FR-004, FR-005)
+      research: rendering
+- [ ] T80 the claims re-checked by `impl-drift`; the close: wave 27's own bookend pair, `make done` green, the wave column (FR-005, FR-006)
+      research: rendering

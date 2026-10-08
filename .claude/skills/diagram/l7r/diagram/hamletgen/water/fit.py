@@ -394,10 +394,10 @@ Research: judged flank - research/questions/0053-irrigation-canals-and-how-they-
 
 def flanks_commanded(net: Mapping[str, Any], down_deg: float, ftpx: float = 1.0) -> bool:
     """Does the supply reach both flanks of the fork (feature 287, water W32)? Each side of the fork, measured across the
-    fall, is owed supply-ditch reach of at least max(80 ft, 30% of that flank's planted extent); a fan planted on one side
-    only commands no second flank. The ONE predicate the fit's legality reads and the finished-map test reads.
+    fall, wider than `FLANK_MIN_EXTENT_FT`, is owed supply-ditch reach of at least 80 ft or 30% of that flank's planted
+    extent, the lesser; a narrower flank, or a fan planted on one side only, is not judged. The ONE predicate the fit's legality reads and the finished-map test reads.
 
-    Research: both flanks commanded - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: supply reach at least max(80 ft, 30% of the flank), and a fan with a flank of 150 ft or less refused
+    Research: both flanks commanded - research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.drawing.html: each flank over 150 ft across the fall reached at least 80 ft or 30% of it, the lesser; a narrower flank not judged
     """
     fork = net.get("fork")
     if fork is None:
@@ -417,9 +417,9 @@ def flanks_commanded(net: Mapping[str, Any], down_deg: float, ftpx: float = 1.0)
             for v in c["pts"]:
                 o = offset(v)
                 reach[0 if o >= 0 else 1] = max(reach[0 if o >= 0 else 1], abs(o))
-    if min(extent) <= FLANK_MIN_EXTENT_FT / ftpx:
-        return False
-    return all(reach[i] >= max(FLANK_REACH_FLOOR_FT / ftpx, FLANK_REACH_SHARE * extent[i]) for i in (0, 1))
+    # a flank of FLANK_MIN_EXTENT_FT or less is not judged, and a judged flank is owed 80 ft OR 30% of it, the lesser (0053;
+    # feature 328: a narrow flank refused the fan, and the greater of the two was asked)
+    return all(extent[i] <= FLANK_MIN_EXTENT_FT / ftpx or reach[i] >= min(FLANK_REACH_FLOOR_FT / ftpx, FLANK_REACH_SHARE * extent[i]) for i in (0, 1))
 
 
 def net_bends_acutely(net: Mapping[str, Any]) -> bool:

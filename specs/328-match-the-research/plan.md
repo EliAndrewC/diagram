@@ -335,6 +335,17 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
   band 0); wave 26's own pair opens at 8e6e380ad.
 - **Verification**: `impl-drift` on the touched claim, the gate, wave 26's own bookend pair.
 
+## Wave 27 (amendment 26, 2026-10-08)
+
+- **Scope**: the brook trio (448-450) tried literally and measured E3 (6 of 28 brook tests fail with no dip and a strict
+  downhill check: a run across the fall then takes no bend); row 451, `flanks_commanded` as 0053 states it - a flank of
+  150 ft or less not judged, a judged flank owed 80 ft or 30%, the lesser; the test that pinned the old refusal brought to
+  the page (`tasks.md` Phase 28). Row 434 held for the GM.
+- **Occasions**: none - the five pool hamlets are unchanged.
+- **On the unpushed waves 9-26** under condition (6): (1)-(5) held at wave 26's close (2657e36a5, backed up, its own pair
+  band 0); wave 27's own pair opens at 2657e36a5.
+- **Verification**: `impl-drift` on the touched claims, the gate, wave 27's own bookend pair.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Each later wave that changes engine behavior takes
