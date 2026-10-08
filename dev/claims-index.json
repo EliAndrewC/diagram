@@ -31258,21 +31258,18 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/placer.py::moved_inward#moved inward": {
-  "code": "1522b35b8fe5a4a5",
+  "code": "3beb026cd2adb486",
   "core": "bedd6133a228ca4b",
   "date": "2026-10-08",
-  "note": "0241's only \"moved inward\" finding is about a caption that alone holds open a frame computed from captions, \"moved in among the things it names\". The page says nothing about shifting a caption by the least amount into a fixed frame, or about centring one wider than the frame (such a caption still crosses both edges). Should say UNRESEARCHED until a pass answers it",
-  "pages": {
-   "0241-the-map-sheet-its-title-legend-frame-and-margins.drawing.html": "74f2ed75d6b79cce"
-  },
-  "research": "0507e505d7cb52bb",
+  "note": "No cited question fixes how a caption that is clipped by a fixed frame gets moved; 0241's \"moved inward\" is about the crop, and 0242 only says never clip and never drop. UNRESEARCHED is the right label.",
+  "pages": {},
+  "research": "",
   "rests": [
-   "0241-the-map-sheet-its-title-legend-frame-and-margins.drawing.html:64c50f31f572e378",
-   "0241-the-map-sheet-its-title-legend-frame-and-margins.drawing.html:812d60ec289ce773",
-   "0241-the-map-sheet-its-title-legend-frame-and-margins.drawing.html:b1f8fc5b9e2fd4dd",
-   "0241-the-map-sheet-its-title-legend-frame-and-margins.drawing.html:bfb8a974713829e1"
+   "0241-the-map-sheet-its-title-legend-frame-and-margins.drawing.html:bfb8a974713829e1",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:2c608781acf39605",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:9564a49aae1239a0"
   ],
-  "verdict": "NEEDS-RESEARCH"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/placer.py::nudge#caption search plumbing": {
   "code": "354699e9c7cb167e",
@@ -31343,20 +31340,34 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/placer.py::place#no key": {
-  "code": "a87cefc65c38a8de",
+  "code": "800c7f5151b335c5",
   "core": "d96ca008324c903f",
   "date": "2026-10-08",
-  "note": "\"no key box\" matches 0241, but the claim's second half (with no seat in the frame, take the first seat beside the subject and move it inward until it fits) is not what 0241 finds. Its moved-inward finding is about the crop, not a fixed frame with no seat. That half should say UNRESEARCHED",
+  "note": "Every path ends in a placement on the map, and no path routes a caption to a key box (\"There is no key box\").",
   "pages": {
    "0241-the-map-sheet-its-title-legend-frame-and-margins.drawing.html": "74f2ed75d6b79cce"
   },
   "research": "0507e505d7cb52bb",
   "rests": [
    "0241-the-map-sheet-its-title-legend-frame-and-margins.drawing.html:342306f8c160905d",
-   "0241-the-map-sheet-its-title-legend-frame-and-margins.drawing.html:bfb8a974713829e1",
    "0241-the-map-sheet-its-title-legend-frame-and-margins.drawing.html:eaf008caefe19e0b"
   ],
-  "verdict": "NEEDS-RESEARCH"
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/labels/placer.py::place#no seat in the frame": {
+  "code": "de153c2500e16cad",
+  "core": "d96ca008324c903f",
+  "date": "2026-10-08",
+  "note": "Neither 0242 nor 0241 says which seat to take when no seat fits in the frame. Never-clipped and never-left-off are both kept. UNRESEARCHED holds.",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0241-the-map-sheet-its-title-legend-frame-and-margins.drawing.html:bfb8a974713829e1",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:08c0bd1f9acf9800",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:2c608781acf39605",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:9564a49aae1239a0"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/placer.py::place#the hug": {
   "code": "98a1c046342684aa",
@@ -32726,10 +32737,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#arch over its approach": {
-  "code": "d4df260781a0ba9c",
-  "core": "b216e4adde15680b",
+  "code": "e66b81bdbcd1ba36",
+  "core": "0ede6de03bb093a0",
   "date": "2026-10-08",
-  "note": "torii x ways: the approach runs under its arches",
+  "note": "Matches the page: the approach runs \"under an avenue of\" torii, starting where it enters the shrine's ground.",
   "pages": {
    "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html": "e385403eda71f0a2"
   },
@@ -32741,25 +32752,26 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#castle moat bridge": {
-  "code": "1b57f0336a55a7a6",
-  "core": "b216e4adde15680b",
+  "code": "f03608cf42cb0d81",
+  "core": "0ede6de03bb093a0",
   "date": "2026-10-08",
-  "note": "castles x bridges and castle_towers x bridges: each gate's own bridge over the castle moat, landing at its gate",
+  "note": "The castle's gates have \"its own bridge over the castle's moat\", so the deck lies on the castle's own moat ring.",
   "pages": {
    "0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html": "03efd934d9bc580d"
   },
   "research": "6f20c89792cc1b34",
   "rests": [
+   "0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html:5587d9f515b67812",
    "0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html:587fa6a20cd5bd0e",
-   "0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html:836a12d1e6e242d6"
+   "0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html:e5a33c63331eac89"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#castle towers on the rampart": {
-  "code": "7b7a54b6b0676534",
-  "core": "b216e4adde15680b",
+  "code": "4422046f286ab991",
+  "core": "0ede6de03bb093a0",
   "date": "2026-10-08",
-  "note": "the claim and the reason string (\"a corner tower projecting from the enceinte\") give corner turrets, but 0139 draws the outer enceinte only, \"Leaving out the keep, the turrets\"; the only towers it attests are the gate towers, so ground the castles x castle_towers permission on those",
+  "note": "The entry permits castles x castle_towers because \"a corner tower projecting from the enceinte IS the form\". 0139 says the castle is drawn as \"its outer enceinte only\" with two gates, and for keep, turrets and inner baileys \"our maps draw none\". Either the claim should rest on the gate towers (§180-182), or the code is drawing corner turrets the page excludes.",
   "pages": {
    "0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html": "03efd934d9bc580d"
   },
@@ -32767,25 +32779,27 @@
   "rests": [
    "0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html:587fa6a20cd5bd0e",
    "0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html:626bf62fa07e8528",
-   "0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html:a45cce441fa38426"
+   "0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html:77cd1fa9c361891a",
+   "0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html:a45cce441fa38426",
+   "0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html:e5a33c63331eac89"
   ],
   "verdict": "DRIFTED"
  },
  "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#flower bed against the town wall": {
-  "code": "74a457ef9b814ffd",
-  "core": "b216e4adde15680b",
+  "code": "d76ad41985c05c32",
+  "core": "0ede6de03bb093a0",
   "date": "2026-10-08",
-  "note": "no cited question addresses a flower bed against the rampart",
+  "note": "No cited question covers an ornamental bed against the rampart, so UNRESEARCHED holds.",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#merchant estate court": {
-  "code": "3a4831891778e0e1",
-  "core": "b216e4adde15680b",
+  "code": "a025c93a650f3453",
+  "core": "0ede6de03bb093a0",
   "date": "2026-10-08",
-  "note": "a walled court with the merchant's house inside it",
+  "note": "Matches \"a walled court ... with the merchant's house inside it\".",
   "pages": {
    "0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html": "8bbd1b525592811a"
   },
@@ -32797,34 +32811,33 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#moat against the rampart": {
-  "code": "ce4b55a9b50f7617",
-  "core": "b216e4adde15680b",
+  "code": "bc99408eab659a7b",
+  "core": "0ede6de03bb093a0",
   "date": "2026-10-08",
-  "note": "no question in the bundle says whether a city moat lies at the rampart's foot; 0139 sets only the castle's moat 60 ft out from the castle wall",
+  "note": "The bundle has no question on how the city moat sits against the city wall's foot. 0139 covers only the castle's own moat, and the city-moat page is not in the bundle. UNRESEARCHED holds.",
   "pages": {},
   "research": "",
   "rests": [
    "0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html:5587d9f515b67812",
-   "0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html:d03d5186b7b5f712",
-   "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html:03ebb587680911de"
+   "0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html:d03d5186b7b5f712"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#one object under two keys": {
-  "code": "9202365d7c982c26",
-  "core": "b216e4adde15680b",
+  "code": "4a15418b2c77e8d9",
+  "core": "0ede6de03bb093a0",
   "date": "2026-10-08",
-  "note": "religious x shrines and gate_structs x wall_towers are one record kept under two keys; bookkeeping",
+  "note": "These are duplicate records of one object, which is bookkeeping, so NONE is right.",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#pier from the quay": {
-  "code": "06c53baea38c4902",
-  "core": "b216e4adde15680b",
+  "code": "d643003bed4e65bc",
+  "core": "0ede6de03bb093a0",
   "date": "2026-10-08",
-  "note": "quays x jetties: the pier starts at the revetment by design",
+  "note": "Matches \"on our maps it starts at the revetment, and the two meet by design\".",
   "pages": {
    "0176-wharves-and-landings-piers-quays-and-stepped-landings-kashi-gangi.drawing.html": "676ecd28f9b1d116"
   },
@@ -32835,10 +32848,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#supply canal along the dry hem": {
-  "code": "866bba838743a855",
-  "core": "b216e4adde15680b",
+  "code": "1436cc1f903fab1b",
+  "core": "0ede6de03bb093a0",
   "date": "2026-10-08",
-  "note": "channels x dry_plots lets a plot be \"crossed by the irrigation that serves it\", but 0006 says \"Both edges of a plot lie upslope of the canal, behind a narrow bank\"; plots meet the canal's bank and never overlap the canal",
+  "note": "The entry permits channels x dry_plots overlap (\"a plot may be crossed by the irrigation that serves it\"). 0006 puts the plots on the dry side of the canal \"behind a narrow bank\", with \"Both edges of a plot ... upslope of the canal\". A plot should abut the canal's bank, never overlap the channel.",
   "pages": {
    "0006-dry-fields-and-their-crops-hatake.drawing.html": "9f1b7fafe06f01fe"
   },
@@ -32851,26 +32864,25 @@
   "verdict": "DRIFTED"
  },
  "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#ward fence meets the wall": {
-  "code": "a0f69924b116d033",
-  "core": "b216e4adde15680b",
+  "code": "de000106080c10e9",
+  "core": "0ede6de03bb093a0",
   "date": "2026-10-08",
-  "note": "wards x wall and wards x wall_towers: the fence ends land on solid rampart",
+  "note": "Matches: each fence end \"lands on solid rampart\", and the rampart is drawn over the fence's ends.",
   "pages": {
    "0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html": "e242aadf4edb4965"
   },
   "research": "e5a2b084c87905c5",
   "rests": [
    "0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html:8ebc97c527ee4eac",
-   "0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html:acc680f54deffd47",
    "0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html:d6fab51b8b7526aa"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#ways and water through the rampart": {
-  "code": "5401bb5c46385aa9",
-  "core": "b216e4adde15680b",
+  "code": "cae319484c62e779",
+  "core": "0ede6de03bb093a0",
   "date": "2026-10-08",
-  "note": "roads pass through the rampart at a gate, canals and rivers at a water gate",
+  "note": "Two problems. (1) The permission is unconditional, so it allows wall x way or watercourse anywhere, not only \"at a gate or a water gate\", and no gate check is named the way one is for WATER x WAY. (2) It covers alleys, lanes and town_streets, but 0147 puts only road gates through the rampart, and 0160 lets a lane \"stop short of the city wall\". The fix is to tie the permission to a recorded gate or water-gate opening and drop the alleys and lanes.",
   "pages": {
    "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html": "49298f0d00bbf69d",
    "0179-water-gates-and-sluices-shuimen.drawing.html": "19011b41723432c2"
@@ -32879,11 +32891,12 @@
   "rests": [
    "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html:03ebb587680911de",
    "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html:5066b991dad4631a",
+   "0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html:179bde9dc17d20b3",
    "0179-water-gates-and-sluices-shuimen.drawing.html:088c44a5ca24eaf0",
    "0179-water-gates-and-sluices-shuimen.drawing.html:27ed53483dc6cfc1",
    "0179-water-gates-and-sluices-shuimen.drawing.html:bcba93d97070123b"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_PAIRS#way over water": {
   "code": "8eb17d64141b0925",
@@ -33515,10 +33528,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::matrix_policy#geometry and bookkeeping": {
-  "code": "f0ebba29b001ed83",
-  "core": "425df97d9a81bcd3",
+  "code": "6a0c9534993b32f1",
+  "core": "37da5029b62247bf",
   "date": "2026-10-08",
-  "note": "a lookup and dispatch over the permission tables; the physical decisions sit in the tables",
+  "note": "This is dispatch logic over the permission tables; the tables carry their own claims. NONE holds.",
   "pages": {},
   "research": "",
   "rests": [],

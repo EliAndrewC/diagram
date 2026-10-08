@@ -9258,6 +9258,21 @@
   "scope": "kept"
  },
  {
+  "key": "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin.place_kosatsuba#the caption proved against the board",
+  "verdict": "DRIFTED",
+  "tier": "E2",
+  "fix": "place_kosatsuba proves the board's caption (all three steps: board_caption_seat, terminal_caption, fallback_caption) against the 7 x 3 ft face its seat search tests, while the board is drawn 16 x 6 ft (0190); the proved caption, drawn as proved, can stand on the drawn frame - prove the caption against the drawn board's footprint (vw, vh)",
+  "files": [
+   "l7r/diagram/settlement/structures/fixtures/siting.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 49 (the key's removal exposed it: the key mark sat at the board's center whatever its size)",
+  "tier_as_ranked": "E2",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": "l7r/diagram/settlement/structures/packing.py::PackingMixin.rowpack#court every few rows",
   "tier": "E2",
   "fix": "fix the court modulus so between-pair gaps are the 12 ft alley, widened only at the shared well; no 21 ft court",
@@ -14091,6 +14106,22 @@
   "after": [],
   "flag": "",
   "found": "wave 10 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E4",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/settlement/structures/fixtures/board_seat.py::terminal_caption#board caption on a leader",
+  "verdict": "MISLABELED",
+  "tier": "E4",
+  "fix": "terminal_caption refuses a board's caption crossing any way, where 0242 lets a caption cross a lane ('A lane or a ditch may be crossed', one rather than two); either the drawing page records the board's stricter rule as a deviation (the claim then a DEVIATION), or the step lets the caption cross one lane as 0242 does",
+  "files": [
+   "l7r/diagram/settlement/structures/fixtures/board_seat.py",
+   "research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 49 impl-drift round 1",
   "tier_as_ranked": "E4",
   "wave": "",
   "scope": "kept"

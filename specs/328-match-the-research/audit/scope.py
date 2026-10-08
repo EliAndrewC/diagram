@@ -170,6 +170,9 @@ DEFERRED_ON_MEASURE = {
     # (`castle`), so neither pair is ever asked of one (wave 49's measure, 2026-10-08)
     "l7r/diagram/overlap/taxonomy.py::_FIXTURE_MOUNTS#gate complex and inspection post",
     "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#castle towers on the rampart",
+    # the rampart's matrix entries: no kept map draws a town or city wall (`wall`), so no way or watercourse is ever asked
+    # through one (wave 49's measure, 2026-10-08)
+    "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#ways and water through the rampart",
 }
 
 
