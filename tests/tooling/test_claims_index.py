@@ -53,7 +53,7 @@ def helper(y):
 
 
 def _tree(root: pathlib.Path, mod: str = MOD, page: str = PAGE) -> pathlib.Path:
-    skill = root / cx.SKILL
+    skill = root
     (skill / "l7r" / "diagram" / "hamletgen").mkdir(parents=True, exist_ok=True)
     (skill / "l7r" / "diagram" / "hamletgen" / "__init__.py").write_text("from . import rows\n")
     (skill / "l7r" / "diagram" / "hamletgen" / "rows.py").write_text(mod)
@@ -82,7 +82,7 @@ def _commit(root: pathlib.Path, msg: str = "c") -> None:
 
 
 def _all_in_step(root: pathlib.Path) -> dict[str, dict[str, str]]:
-    cur = cx.current(root / cx.SKILL)
+    cur = cx.current(root)
     return {k: {"verdict": "IN-STEP", "code": r.code, "core": r.unit.core, "research": r.research, "date": "d", "note": ""} for k, r in cur.items()}
 
 

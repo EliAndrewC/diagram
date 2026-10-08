@@ -164,7 +164,7 @@ behind_main_notice() { # behind_main_notice <clone> - one line of additionalCont
   # main was unchanged or had landed forty engine commits, so a session could not tell "routine" from
   # "you are meaningfully stale". Engine paths are the ones that re-key the gate and force a rerun.
   bn_eng=$(git -C "$bn_clone" diff --name-only "HEAD..$bn_ref" 2>/dev/null \
-             | grep -cE '^\(l7r/.*\.py|pool/.*\.(gen\.py|json))$' 2>/dev/null) || bn_eng=0
+             | grep -cE '^(l7r/.*\.py|pool/.*\.(gen\.py|json))$' 2>/dev/null) || bn_eng=0
   if [ "${bn_eng:-0}" -gt 0 ]; then
     # GUARD_EDIT_OK: bn_eng counts FILES, not commits - saying "N of them" after a commit count read
     # as N commits, which is a different and wrong number.

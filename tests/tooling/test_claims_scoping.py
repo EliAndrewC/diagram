@@ -132,7 +132,7 @@ def test_the_backfill_gives_only_rows_checked_at_todays_research_their_pages(tmp
 
 def test_the_command_line_triage_triaged_and_backfill(tmp_path: pathlib.Path, capsys: pytest.CaptureFixture[str]) -> None:
     root = _repo(tmp_path)
-    skill = root / cx.SKILL
+    skill = root
     _tree(root, MOD, PAGE)
     assert cx.main(["--root", str(root), "triage"]) == 0 and "no claim is owed a triage" in capsys.readouterr().out
     assert cx.main(["--root", str(root), "bundle", "--owed", "--out", str(tmp_path / "b")]) == 0

@@ -190,7 +190,7 @@ def claims_citing(root: pathlib.Path, files: Sequence[str]) -> list[str]:
     out = []
     for key, row in sorted(json.loads(path.read_text(encoding="utf-8")).items()):
         if any(n in str(row.get("pages", "")) for n in names):
-            out.append(f"- {row.get('verdict', '?')} | `{key.split('/l7r/diagram/', 1)[-1]}` | {row.get('note', '')}")
+            out.append(f"- {row.get('verdict', '?')} | `{key.split('l7r/diagram/', 1)[-1]}` | {row.get('note', '')}")
     return out
 
 

@@ -30,7 +30,7 @@ DIR="$TMP/proj/sid-1/subagents"
 # review is owed only when a pool manifest moved against main (GM 2026-09-12), and the two scripts that
 # decide it live beside the guard, so the fixture carries them and a moved manifest. `moved`/`unmoved`
 # switch the world between cases; every case below section 1 runs in the world it names.
-cp "$(dirname "$HOOK")/_review_owed.py" "$(dirname "$HOOK")/_review_snapshot.py" "$CLONE/scripts/"
+cp "$(dirname "$HOOK")/_review_owed.py" "$(dirname "$HOOK")/_review_snapshot.py" "$(dirname "$HOOK")/_moves.py" "$CLONE/scripts/"
 MAPDIR_F="$SKILL/pool/hamlets/testmap"
 # GUARD_EDIT_OK: feature 240 - a settlement-review dispatch now asks `_review_prereq.py` first, so the fixture
 # carries it, spec-lint (whose figure pattern it imports), a stub gate stamp (green while `.git/stub-gate-green`

@@ -46,7 +46,13 @@ except Exception:
 # GUARD_EDIT_OK: feature 217 - THE ROSTER OF ROLLED HAMLETS IS A GUARD (GM 2026-09-08: a later session "not
 # remembering the context of how we got here" must not add rolls back thoughtlessly). tests/rolls.py joins the
 # list, and its Read-time context is its own: the doctrine and the command to run first.
-guard = re.search(r"(/\Makefile|/scripts/[\w-]+-hooks\.sh|/\.claude/settings\.json|/dev/switches\.json|/\tests/rolls\.py)$", path)
+guard = re.search(r"(/scripts/[\w-]+-hooks\.sh|/\.claude/settings\.json|/dev/switches\.json|/tests/rolls\.py)$", path)
+# GUARD_EDIT_OK: feature 329 - the project's Makefile is the REPOSITORY ROOT's now: a Makefile is a guard file when it
+# sits at the top of its checkout, not wherever a `/Makefile` suffix matches (a fixture, a spec directory).
+if not guard and path.endswith("/Makefile"):
+    import os, subprocess
+    top = subprocess.run(["git", "-C", os.path.dirname(path) or ".", "rev-parse", "--show-toplevel"], capture_output=True, text=True).stdout.strip()
+    guard = re.match(r".*", path) if top and os.path.dirname(path) == top else None
 if guard and not re.search(r"/scripts/test-[\w-]+-hooks\.sh$", path):
     if path.endswith("/tests/rolls.py"):
         context = (

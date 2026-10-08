@@ -301,8 +301,7 @@ def test_duplicates_in_reports_a_number_under_two_names_only() -> None:
 def test_make_claim_through_the_real_makefile(world) -> None:
     """The wiring: `make claim SLUG=... PEEK=1` from a clone's skill dir reaches the tool."""
     clone = world["alpha"]
-    skill = clone
-    skill.mkdir(parents=True)
+    skill = clone  # the project is the clone root (feature 329)
     (skill / "Makefile").write_bytes((SKILL / "Makefile").read_bytes())
     (skill / "pyproject.toml").write_bytes((SKILL / "pyproject.toml").read_bytes())
     (skill / "l7r").symlink_to(SKILL / "l7r", target_is_directory=True)

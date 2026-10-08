@@ -54,7 +54,6 @@ def test_every_documented_target_carries_a_category(tmp_path: Path) -> None:
 
 def test_it_FIRES_when_the_makefile_gains_a_target(tmp_path: Path) -> None:
     """Delete the guard and this is the test that goes red: a new target must make the page stale."""
-    (tmp_path).mkdir(parents=True)
     (tmp_path / "docs").mkdir()
     mk = tmp_path / "Makefile"
     mk.write_text("alpha:          ## [tests] the first one\n\t@true\n", encoding="utf-8")
@@ -67,7 +66,6 @@ def test_it_FIRES_when_the_makefile_gains_a_target(tmp_path: Path) -> None:
 
 
 def test_it_FIRES_on_a_target_with_no_category(tmp_path: Path) -> None:
-    (tmp_path).mkdir(parents=True)
     (tmp_path / "docs").mkdir()
     mk = tmp_path / "Makefile"
     mk.write_text("alpha:          ## no category tag at all\n\t@true\n", encoding="utf-8")
@@ -79,7 +77,6 @@ def test_an_undocumented_target_is_REPORTED_not_silently_dropped(tmp_path: Path)
     """The audit that prompted this found THIRTEEN targets with a recipe and no `##` line - `quick`,
     `maps` and `reference` among them, invisible to `make help` for months. Omitting them quietly is
     how that happened; the page lists them instead."""
-    (tmp_path).mkdir(parents=True)
     (tmp_path / "docs").mkdir()
     mk = tmp_path / "Makefile"
     mk.write_text("alpha:          ## [tests] documented\n\t@true\n\nhidden:\n\t@true\n", encoding="utf-8")

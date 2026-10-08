@@ -46,12 +46,12 @@ from pathlib import Path
 # area name -> (repo-relative root, glob patterns the area's gate covers). Each area's gate stamps it
 # on success: `make done` stamps `diagram`, `make hooks-test` stamps `hooks` (and `done` runs it).
 AREAS: dict[str, tuple[str, tuple[str, ...]]] = {
-    # THE PROJECT IS THE REPOSITORY ROOT (feature 329): an area rooted there has the root "" and names its top-level
-    # trees, because a bare `*.py` would now reach `scripts/` (the hooks area) and `specs/`. These five are exactly
-    # what `*.py` covered under the old skill directory.
+    # THE PROJECT IS THE REPOSITORY ROOT (feature 329): the area's root is "" and `*.py` still means every Python
+    # file of the project; the root trees that were never the project - `scripts/` (the hooks area), `specs/`, the CI
+    # and container trees - are excluded by name in `_DECLARED_EXCLUDE` below, so the area hashes exactly what it did.
     "diagram": (
         "",
-        ("l7r/*.py", "tests/*.py", "pool/*.py", "legacy-hand-authored-pool/*.py", "wip/*.py"),
+        ("*.py",),
     ),  # the webapp area lives in gm-assistant since feature 131
     "hooks": ("scripts", ("*.sh", "*.py")),
     # THE PAGE AREA (feature 188, GM 2026-09-05): the interactive page's stylesheet and script, inlined into
@@ -100,7 +100,9 @@ SKIP_ONLY_AREAS: frozenset[str] = frozenset({"browser"})
 # recorded cost: a test edited after the last green run lands unexecuted and runs on the next real gate.
 # l7r/diagram/ci/ joins it (FR-025, GM 2026-08-25: "isn't it actually test code? ... the ci/ directory should
 # join the list of exempted things along with the tests themselves") - its tests are fast and inside `make quick`.
-_DECLARED_EXCLUDE: dict[str, tuple[str, ...]] = {"diagram": ("tests/", "l7r/diagram/ci/")}
+_DECLARED_EXCLUDE: dict[str, tuple[str, ...]] = {
+    "diagram": ("tests/", "l7r/diagram/ci/", *("scripts/", "specs/", ".claude/", ".specify/", ".clones/", "buildspec/", "container-scripts/", "docs/")),
+}  # the second group: the root trees outside the project (feature 329)
 
 # WHAT THE COVERAGE FLOOR MEASURES CANNOT BE EXCLUDED FROM THE GATE THAT ENFORCES IT (feature 178
 # FR-001/FR-003, GM 2026-09-03: *"I think a short-circuit for 'measured but engine' is best"*).

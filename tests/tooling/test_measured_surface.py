@@ -41,7 +41,8 @@ def test_the_exclusions_are_derived_from_the_coverage_config() -> None:
     gs = _gate_stamp()
     assert gs.coverage_sources(REPO) == ("l7r/",), "the authority is [tool.coverage.run] source"
     assert "l7r/diagram/ci/" in gs._DECLARED_EXCLUDE["diagram"], "still DECLARED - the derivation is what drops it"
-    assert gs.exclusions("diagram", REPO) == ("tests/",), "measured -> not excludable; tests/ is outside l7r/ and survives"
+    # tests/ is outside l7r/ and survives, and so do the root trees outside the project (feature 329)
+    assert gs.exclusions("diagram", REPO) == ("tests/", "scripts/", "specs/", ".claude/", ".specify/", ".clones/", "buildspec/", "container-scripts/", "docs/"), "measured -> not excludable"
 
 
 def test_an_unreadable_coverage_config_fails_CLOSED() -> None:
@@ -52,7 +53,7 @@ def test_an_unreadable_coverage_config_fails_CLOSED() -> None:
     encodes, *"if you add a file under `l7r/`, it is measured"*."""
     gs = _gate_stamp()
     assert gs.coverage_sources(Path("/nonexistent-root")) == ("l7r/",)
-    assert gs.exclusions("diagram", Path("/nonexistent-root")) == ("tests/",), "ci/ stays measured even with no config to read"
+    assert gs.exclusions("diagram", Path("/nonexistent-root")) == ("tests/", "scripts/", "specs/", ".claude/", ".specify/", ".clones/", "buildspec/", "container-scripts/", "docs/"), "ci/ stays measured even with no config to read"
 
 
 def test_ci_is_hashed_now_and_the_other_two_populations_are_untouched() -> None:

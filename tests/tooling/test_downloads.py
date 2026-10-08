@@ -130,11 +130,14 @@ def test_the_status_table_ticks_only_what_the_gms_file_records() -> None:
 
 def test_the_committed_list_re_derives_the_gms_file_the_import_read() -> None:
     """SC-001 on the repository itself: the list as first committed, unimported, has the fingerprint the import recorded."""
-    first = subprocess.run(["git", "-C", str(REPO), "log", "--diff-filter=A", "--format=%H", "--", dl.CANON], capture_output=True, text=True).stdout.split()
-    if not first:
+    # --follow: the list was first committed under the project's old location, and feature 329's move is not its first add
+    log = subprocess.run(["git", "-C", str(REPO), "log", "--follow", "--diff-filter=A", "--format=%H", "--name-only", "--", dl.CANON], capture_output=True, text=True).stdout.split()
+    if not log:
         pytest.skip("the list is not committed in this checkout")
-    text = subprocess.run(["git", "-C", str(REPO), "show", f"{first[-1]}:{dl.CANON}"], capture_output=True, text=True, check=True).stdout
-    state = json.loads(subprocess.run(["git", "-C", str(REPO), "show", f"{first[-1]}:{dl.STATE}"], capture_output=True, text=True, check=True).stdout)
+    first, canon = log[-2], log[-1]
+    state_path = canon[: -len(dl.CANON)] + dl.STATE
+    text = subprocess.run(["git", "-C", str(REPO), "show", f"{first}:{canon}"], capture_output=True, text=True, check=True).stdout
+    state = json.loads(subprocess.run(["git", "-C", str(REPO), "show", f"{first}:{state_path}"], capture_output=True, text=True, check=True).stdout)
     gm, hr = dl.unimport(text)
     assert dl.sha(gm) == state["imported"]["sha256"]
     assert hr.startswith("# High-risk sources") and "### H1. " in hr
@@ -233,7 +236,7 @@ def test_two_adds_from_two_clones_take_distinct_numbers_at_the_end(tmp_path: pat
     b = tmp_path / "mirror" / ".clones" / "b"
     _git(tmp_path, "clone", "-q", str(a), str(b))
     for root in (a, b):
-        q = root / dl.SKILL / "research" / "questions"
+        q = root / "research" / "questions"
         q.mkdir(parents=True, exist_ok=True)
         (q / "0001-wells.html").write_text("<h2>Wells</h2>", encoding="utf-8")
     assert dl.add(a, DRAFT) == ["4"]
@@ -320,9 +323,9 @@ def test_the_inbox_resolves_an_entry_id_to_that_entrys_keys(tmp_path: pathlib.Pa
 
 def test_ingest_reports_the_access_tag_of_each_source_it_changed(tmp_path: pathlib.Path) -> None:
     root, copy = _world(tmp_path)
-    access = root / dl.SKILL / "research" / "source-access.json"
-    access.write_text((REPO / dl.SKILL / "research" / "source-access.json").read_text(encoding="utf-8"), encoding="utf-8")
-    reg = root / dl.SKILL / "research" / "sources" / "010-works-cited"
+    access = root / "research" / "source-access.json"
+    access.write_text((REPO / "research" / "source-access.json").read_text(encoding="utf-8"), encoding="utf-8")
+    reg = root / "research" / "sources" / "010-works-cited"
     reg.mkdir(parents=True)
     (reg / "0010-alpha.html").write_text('<h3 id="alpha"><code>alpha</code></h3>\n', encoding="utf-8")
     dl.sync(root, copy, "2026-10-03")

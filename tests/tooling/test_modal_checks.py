@@ -24,7 +24,6 @@ def _load(name: str):  # noqa: ANN202
 
 mo = _load("_modal_owed")
 mb = _load("_modal_bundle")
-SKILL = pathlib.Path(mo.SKILL)
 CLASSES = pathlib.Path(mo.MODAL_DIRS[0])
 
 FARMHOUSE = '''
@@ -74,7 +73,7 @@ def _tree(tmp: pathlib.Path, homestead: str = FARMHOUSE) -> pathlib.Path:
     root = tmp / "repo"
     (root / CLASSES).mkdir(parents=True)
     (root / CLASSES / "homestead.py").write_text(homestead, encoding="utf-8")
-    q = root / SKILL / "research" / "questions"
+    q = root / "research" / "questions"
     q.mkdir(parents=True)
     for name, text in (
         ("0029-farmhouses-minka.html", Q0029),
@@ -84,12 +83,12 @@ def _tree(tmp: pathlib.Path, homestead: str = FARMHOUSE) -> pathlib.Path:
     ):
         (q / name).write_text(text, encoding="utf-8")
     (q / "0029-farmhouses-minka.notes.html").write_text("<li>notes</li>", encoding="utf-8")
-    dev = root / SKILL / "dev"
+    dev = root / "dev"
     dev.mkdir(parents=True)
     (dev / "modals.md").write_text("M1. The reader.\n", encoding="utf-8")
     (dev / "modals-particular.md").write_text("P1. Particular.\n", encoding="utf-8")
-    (root / SKILL / "research" / "assets").mkdir(parents=True)
-    (root / SKILL / "research" / "assets" / "glossary-variants.txt").write_text("minka\tfarmhouse\n", encoding="utf-8")
+    (root / "research" / "assets").mkdir(parents=True)
+    (root / "research" / "assets" / "glossary-variants.txt").write_text("minka\tfarmhouse\n", encoding="utf-8")
     _git(root, "init", "-q")
     _git(
         root,
@@ -155,7 +154,7 @@ def test_nothing_is_owed_while_nothing_moved_and_a_moved_entry_page_owes_only_th
     root = _tree(tmp_path)
     base = _commit(root)
     assert mo.owed(root, base) == [], "a formatting-free delta owes nothing (feature 311)"
-    (root / SKILL / "research/questions/0029-farmhouses-minka.html").write_text(Q0029.replace("one household", "one farming household"), encoding="utf-8")
+    (root / "research/questions/0029-farmhouses-minka.html").write_text(Q0029.replace("one household", "one farming household"), encoding="utf-8")
     rows = mo.owed(root, base)
     assert [s for s, _w, _f in rows] == [
         "modal-accuracy:hamlet/farmhouse",
@@ -172,7 +171,7 @@ def test_a_comment_or_a_rewrap_of_an_entry_page_owes_nothing(
     "a comment and a re-wrap owe nothing" went red on main. A page moves when its WORDS do."""
     root = _tree(tmp_path)
     base = _commit(root)
-    page = root / SKILL / "research/questions/0029-farmhouses-minka.html"
+    page = root / "research/questions/0029-farmhouses-minka.html"
     page.write_text(Q0029.replace("one household", "one  <!-- probe -->household"), encoding="utf-8")
     assert "probe" in page.read_text(encoding="utf-8")
     assert mo.owed(root, base) == [], "a comment and a re-wrap change no words"
@@ -287,12 +286,12 @@ def test_the_depiction_tab_owes_its_own_check_and_its_bundle_carries_the_drawing
             "    Entry: research/questions/0029-farmhouses-minka.html\n    Drawing: research/questions/0029-farmhouses-minka.drawing.html",
         ),
     )
-    q = root / SKILL / "research" / "questions"
+    q = root / "research" / "questions"
     (q / "0029-farmhouses-minka.drawing.html").write_text(
         '<h2 id="how-our-maps-draw-farmhouses">How our maps draw farmhouses</h2>\n<p>The roof shape is a knob.</p>\n',
         encoding="utf-8",
     )
-    (root / SKILL / "dev" / "claims-index.json").write_text(
+    (root / "dev" / "claims-index.json").write_text(
         json.dumps(
             {
                 "l7r/diagram/settlement/houses.py::HousesMixin.house#ridge": {
@@ -325,7 +324,7 @@ def test_a_modal_with_no_drawing_list_is_still_handed_its_kinds_drawing_page_as_
     """The plan review of D13, round 2: a conversion that leaves `Drawing:` empty must still be judged against the drawing page
     its kind has - the one beside a question its Entry: names - so the bundle carries it, marked CANDIDATE, with the claims."""
     root = _tree(tmp_path)
-    q = root / SKILL / "research" / "questions"
+    q = root / "research" / "questions"
     (q / "0029-farmhouses-minka.drawing.html").write_text(
         '<h2 id="how-our-maps-draw-farmhouses">How our maps draw farmhouses</h2>\n<p>Drawn bold.</p>\n',
         encoding="utf-8",
@@ -348,7 +347,7 @@ def test_a_drawing_page_the_old_form_listed_at_the_base_is_a_candidate_after_the
     old = FARMHOUSE.replace("Farmhouse(Kind)", "Farmhouse(Kind)").split('"""')
     old_doc = "\n    What: old form.\n    Why: old form.\n    Name: farmhouse\n    Covers: houses\n    Label: accurate\n    Sources: not recorded\n    Entry: research/questions/0029-farmhouses-minka.html, research/questions/0038-yards.drawing.html\n    "
     root = _tree(tmp_path, old[0] + '"""' + old_doc + '"""' + '"""'.join(old[2:]))
-    (root / SKILL / "research" / "questions" / "0038-yards.drawing.html").write_text(
+    (root / "research" / "questions" / "0038-yards.drawing.html").write_text(
         '<h2 id="how-our-maps-draw-yards">How our maps draw yards</h2>\n<p>Each house drawn turned.</p>\n',
         encoding="utf-8",
     )
@@ -371,7 +370,7 @@ def test_a_drawing_page_a_listed_one_links_to_is_a_candidate(
             "    Entry: research/questions/0029-farmhouses-minka.html\n    Drawing: research/questions/0029-farmhouses-minka.drawing.html",
         ),
     )
-    q = root / SKILL / "research" / "questions"
+    q = root / "research" / "questions"
     (q / "0029-farmhouses-minka.drawing.html").write_text(
         '<p>Crowns are at <a href="0080-crowns.drawing.html">crowns</a>.</p>\n',
         encoding="utf-8",

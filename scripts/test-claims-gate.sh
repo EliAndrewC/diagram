@@ -46,7 +46,7 @@ ok "$(find "$S/dev/bypass-log" -name '*.json' | wc -l | tr -d ' ')" 1 "the reaso
 CLAIMS_PY="$HERE/_claims.py" python3 - "$T" <<'PY'
 import importlib.util, os, pathlib, sys
 spec = importlib.util.spec_from_file_location("_claims", os.environ["CLAIMS_PY"]); cx = importlib.util.module_from_spec(spec); sys.modules["_claims"] = cx; spec.loader.exec_module(cx)
-root = pathlib.Path(sys.argv[1]); cur = cx.current(root / cx.SKILL)
+root = pathlib.Path(sys.argv[1]); cur = cx.current(root)
 cx.save_index(root / cx.INDEX, {k: {"verdict": "IN-STEP", "code": r.code, "core": r.unit.core, "research": r.research, "date": "d", "note": ""} for k, r in cur.items()})
 PY
 ( cd "$T" && "$GATE" >/dev/null 2>&1 ); ok "$?" 0 "every claim recorded"

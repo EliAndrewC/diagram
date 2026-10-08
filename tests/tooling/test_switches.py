@@ -46,7 +46,7 @@ def test_make_remote_targets_refuse_when_remote_is_off(fixture_skill: Path, targ
 @pytest.mark.tooling
 def test_make_switch_targets_require_a_reason_and_commit(fixture_skill: Path) -> None:
     """The REMOTE switch, which survived feature 185; the scope half went with the lock."""
-    root = fixture_skill.parents[2]
+    root = fixture_skill  # the project is the repository root (feature 329)
     subprocess.run(["git", "-C", str(root), "config", "user.email", "t@t"], check=True)
     subprocess.run(["git", "-C", str(root), "config", "user.name", "t"], check=True)
     assert make(fixture_skill, "ci-off").returncode != 0  # no REASON
@@ -66,7 +66,7 @@ def test_make_switch_targets_require_a_reason_and_commit(fixture_skill: Path) ->
 def test_make_done_short_circuits_on_an_unchanged_gate_key(fixture_skill: Path) -> None:
     from l7r.diagram.ci import state
 
-    root = fixture_skill.parents[2]
+    root = fixture_skill  # the project is the repository root (feature 329)
     (root / "scripts").mkdir()
     # The Makefile's `done` recipe reaches into scripts/, so the fixture must carry what it calls.
     # `check-run-plausible.py` joined that set on 2026-09-05 and the fixture went red immediately -
