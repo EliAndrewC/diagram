@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-08T14:43:29Z",
+  "target": "record-checked",
+  "commit": "f2801574a",
+  "why": "modal-depiction on modal-depiction:choice/windbreak_belt--conifer_led: 0072's drawing page changed one sentence's wording (the planting reaches both ends of the visible stretch); grep shows this modal does not state it"
+}
