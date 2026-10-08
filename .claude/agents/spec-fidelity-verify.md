@@ -122,7 +122,7 @@ run`).
   they stand. Do not review the substance. A NOT-REVIEWABLE return does **not** consume one of the five
   rounds - nothing was reviewed - and the session records the figures and re-dispatches.
 - **Where a figure carries a key, verify it by RE-RUNNING the entry's `command`**, not by reading the
-  number: `make figures SPEC=specs/NNN-slug` (from ``) re-runs every recorded
+  number: `make figures SPEC=specs/NNN-slug` (from the clone's root) re-runs every recorded
   command and restores the file. A COUNT that moved is a finding. A TIMING carries `varies` and a band:
   one outside its band is worth a sentence, not a verdict, because this container is shared.
 - **You remain free to measure independently.** The contract removes your having to REBUILD an

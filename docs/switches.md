@@ -29,46 +29,18 @@ file down `_closed()`, and failing closed means **remote OFF in every clone that
 `_closed()` has exactly three entrances: a JSON parse failure, a non-dict top level, or `_axis`
 rejecting a NAMED key. Never an unrecognized one.
 
-## Why there is only one axis now
+## Do not reinstate the scope axis, and keep `idle_context`
 
-There were two. The second, **scope**, locked every invocation to the tier's reference settlement so
-that no command could roll another map. It was retired in feature 185 (GM 2026-09-05: *"please go
-ahead and retire the concept of the scope lock and the scope unlock, i.e. retiring both the concept
-and the specific make targets"*), and the reasoning is worth keeping because it is a good example of
-a mechanism outliving its condition rather than being wrong:
+The second axis, **scope**, was retired by feature 185 (GM 2026-09-05: *"please go ahead and retire the concept of the
+scope lock and the scope unlock, i.e. retiring both the concept and the specific make targets"*), with its make targets,
+the `SWEEP_OK` macro, `switches.locked_out` and `regen.py`'s one-map-per-invocation refusal. Do not bring back a piece of
+it in isolation: the condition it served (map-rolling tests deferred out of a slow gate) ended with feature 174.
 
-- It was built for the **reference-hamlet iteration period**, when `make done` was slow and the
-  map-rolling tests had to be deferred out of it to keep the loop usable.
-- **Feature 174 removed that condition.** Making the coverage floors unconditional also turned every
-  deselection off, so the gate runs the whole suite every time - there is nothing left to defer.
-- The scope had been UNLOCKED for nine days when the GM asked, and `ROLL_DESELECT` / `TIER_SELECT`,
-  the variables it drove, expanded to nothing on every run.
-- It also owned the word **sweep** (`SWEEP_OK` was the scope check), which collided with the soak
-  suite's first name. Retiring the lock retired the word: `cohort` is a set of seeds, `soak` is the
-  tier that would run them, and nothing is called a sweep any more.
+**`switches.idle_context` STAYS**, though it looks like part of the lock. The Makefile's `DONE_NAME` picks `idle-done`
+over `done` from it, and `ci/state.py`'s `GREEN_TARGETS` deliberately omits `idle-done`: that omission is the whole
+mechanism by which an unattended idle gate **neither grants nor revokes a push**. Removing the seam would make a
+detached timer write a record the push honors, and nothing would catch it - the code still runs, only the recorded NAME
+changes, so coverage stays full and every test passes.
 
-**What went with it, recorded so nobody reinstates a piece in isolation:** `make scope-lock` /
-`scope-unlock` (in BOTH Makefiles - the root forwards them too), the `SWEEP_OK` macro and its five
-uses, four inline `check scope` calls that were the FIRST recipe line of `done`, `ci-check`,
-`ci-merge` and `maps`, `switches.locked_out` and its five engine call sites, the scope field and the
-LOCKED refusal in `ci/state.py`, `SCOPE_STATE`, and **`regen.py`'s one-map-per-invocation refusal**,
-which feature 161's FR-014 stated as standing doctrine and which was `locked_out` and nothing else -
-FR-014 is superseded.
-
-**What did NOT go with it, and this is the subtle one.** `switches.idle_context` STAYS. It looks like
-part of the lock - it existed so an idle run could relax it - but it has a second consumer: the
-Makefile's `DONE_NAME` picks `idle-done` over `done` from it, and `ci/state.py`'s `GREEN_TARGETS`
-deliberately omits `idle-done`. That omission is the whole mechanism by which an unattended idle gate
-**neither grants nor revokes a push**. Removing the seam would have made a detached timer write a
-record the push honors - and nothing would have caught it, because the code still runs and only the
-recorded NAME changes, so coverage stays full and every test passes. Only the relaxation branch died.
-
-`mapcheck`'s own `--scope auto|reference|all` and the `SCOPE=` make variable also stay. They are its
-breadth argument - *"what you mean when you know better"* - not the retired axis. The words collide;
-the mechanisms never did.
-
-## The one axis, and why it is not two
-
-`remote` gates MONEY: it is consulted before every paid dispatch, and `ci/decision.py` prints it
-first among the five conditions. `scope` gated TIME, on a gate that no longer takes enough of it to
-be worth gating. Sharing a file was never a reason to keep both.
+`mapcheck`'s own `--scope auto|reference|all` and the `SCOPE=` make variable also stay: they are its breadth argument,
+not the retired axis.

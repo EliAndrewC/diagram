@@ -1,9 +1,8 @@
 # Invoking a review agent
 
-**Load this file when:** You are about to launch a review check - `glyph-check`, `settlement-review`, `fix-check`, `building-review`, `size-audit` - or `backstory-review`, or a feature asks which one is owed.
+**Load this file when:** You are about to launch a review check - `glyph-check`, `settlement-review`, `fix-check`, `building-review`, `size-audit` - or a feature asks which one is owed.
 
-Split out of [`../CLAUDE.md`](../l7r/diagram/CLAUDE.md) so it is not in every diagram session's
-context. The text is verbatim; the short always-on version of each rule stays in the index.
+The repository's review process; the short always-on version is in the root [`CLAUDE.md`](../CLAUDE.md).
 
 ## WHICH review is owed: its OCCASION (feature 294, GM 2026-10-01)
 
@@ -45,56 +44,20 @@ already judged owes nothing and gets no report - the GM looks at the map.
 author had missed it, and the run's cost from `make review-cost AGENT=<id>`; `make review-census` totals them per check, so a
 check that never finds anything is a number.
 
-## Invoking a review agent: launch it EARLY (feature 233's measurements, still true)
+## Invoking a review agent: launch it EARLY, in the background, and never wait on it
 
-`settlement-review` used to be owed for every moved map and was the single most expensive thing a session waited on. Measured
-2026-08-08, on a change that resized some captions: one agent, two maps, a full audit - **12.3 minutes, 22% of the whole task's
-wall clock**, with this session idle for 11.4 of them. Launch an owed check the moment its gate is green - BEFORE your own
-visual pass, the docs and the commit: everything you do while it runs is free (measured 2026-08-16: the review was the whole
-task's critical-path TAIL after a 52 s reasoning turn and the session's own crop reads).
+Launch an owed check the moment its gate is green - BEFORE your own visual pass, the docs and the commit: everything you do
+while it runs is free (measured 2026-08-08: one `settlement-review` was 22% of a task's wall clock, with the session idle for
+almost all of it). The GM (2026-08-26): *"iterating in a way that allows me to look at something more quickly will probably
+be more productive than having a built in independent reviewer, which runs multiple times on every pass."* So:
 
-## History: WHEN a review ran before feature 294 (GM 2026-08-26) - it never blocked the GM's look
-
-**FIRST: is one owed at all? (feature 231, GM 2026-09-12)** *"if there are no changes to the actual way
-that the settlement is laid out, then we should not need to re review the settlement because we're just
-rereviewing things that have not changed."* The trigger is scripted - `scripts/_review_owed.py` names
-every pool map whose MANIFEST differs from the merge base with main (committed or not, both trees, a new
-map counted) - and it is the only place the question is answered: `make verify` asks it, the pair guard's
-gate branch asks it, the stop branch asks it again after the gate, because the gate's own pool phase can
-move a manifest. No map named means no review: the gate runs as typed, the waiver is recorded against
-that engine key with its reason (`make audit` counts them), and the map goes back to the GM, who reads
-one changed map faster than the agent does. A glyph-form change with an identical manifest is exactly
-that case - feature 228 spent 18.7 of its 32 minutes on one. If the automatic waiver ever fires on a
-delta the GM DOES think moved a layout, the manifest is the knob to revisit, not the trigger.
-
-**And the snapshot is taken for you.** Where a review is owed at gate time, the changed maps' files are
-copied from the clone and from main into `<clone>/.git/review-snapshot/<map>/{clone,main}/` before the
-gate starts, and the dispatch line names them - the gate's roll cache evicts a pool map's `.png` and
-`.html` mid-run, which cost feature 228's reviewer minutes of waiting and a re-render.
-
-The GM, after a task in which three serial `settlement-review` passes added ~10 minutes and the
-second of them passed a map the GM rejected on sight: *"iterating in a way that allows me to look at
-something more quickly will probably be more productive than having a built in independent
-reviewer, which runs multiple times on every pass."* So:
-
-- **While `scope` is LOCKED (the reference-hamlet iteration period), no per-task review.** The GM
-  is looking at every result and is the faster, more authoritative reviewer of the one map on the
-  sheet. Gate green -> hand the map back. The independent review runs at **acceptance** (one FULL
-  pass of the reference settlement before T99 is ticked) and at **unlock** (the pool re-roll, where
-  48 seeds are more than the GM can look at - the place an automated reviewer earns its time).
-  (the scope lock that used to defer this was retired in feature 185.)
-- **When a review does run, it runs in the BACKGROUND, after the map is handed back** - or in
-  parallel with a LONG gate (`make done FULL=1`, a CodeBuild run), never alongside `make quick`
-  (~30 s: launching a 3-minute review "in parallel" with it just serializes). A finding becomes a
-  follow-up task; it never holds the result.
+- **A review runs in the BACKGROUND, after the map is handed back** - or in parallel with a LONG gate (`make done FULL=1`, a
+  CodeBuild run), never alongside `make quick` (launching a multi-minute review "in parallel" with it just serializes). A
+  finding becomes a follow-up task; it never holds the result.
 - **Never busy-wait on one.** Same rule as the gate: act on the completion notification.
-- **The push-time gate is unchanged** (`review-gate.sh`: a re-rolled pool map carries a logged
-  review) - under FR-006 the push is the feature's end, which is exactly the acceptance pass above.
-- **Every FINDING is a row in [`docs/review-ledger.md`](review-ledger.md), written
-  by the SESSION, never by the reviewer** (the GM: you may disagree with the reviewer, and the log
-  must say both what was found and whether it was acted on - fixed / recorded-only / declined with
-  why / MISSED-BY-REVIEWER). In the same commit that acts on the review. The first miss on record (T12 round 2: the mechanism measured, the picture not judged)
-  became the agent's fit-zoom-first rule.
+- **Every FINDING is a row in [`docs/review-ledger.md`](review-ledger.md), written by the SESSION, never by the reviewer**
+  (the GM: you may disagree with the reviewer, and the log must say both what was found and whether it was acted on - fixed /
+  recorded-only / declined with why / MISSED-BY-REVIEWER), in the same commit that acts on the review.
 
 ## WHAT GOES TO THE GM, AND WHAT DOES NOT (GM 2026-09-12)
 
@@ -150,31 +113,13 @@ off-canvas clumps - and the *first* attempt at the lane fix (a relaxation ladder
 point of change as having measurably done nothing, because a fix that fails is worth as much to the
 next reader as the one that works.
 
-## The pairing's stop hook fired once with a review actually in flight (observed 2026-08-29)
+## A `PAIR_OK` waiver is honored by the stop hook
 
-`scripts/pair-hooks.sh stop` reported PAIRING HALF-OPEN while a `settlement-review` agent was running
-over exactly that delta. Investigated and NOT reproduced: replaying the same payload by hand exits 0,
-and `agent-stall-hooks.sh pending` - which `review_pending()` delegates the "is it finished" question
-to - lists the agent correctly. The most likely cause is a race, since the check runs against a
-transcript the agent is still writing and the gate's reference sub-phase records a green key of its own
-partway through the run.
-
-Recorded rather than fixed at first, deliberately: the hook is self-limiting (`stop_told` fires once
-per engine key, never in a loop), the cost of a false fire is one line of noise, and a speculative edit
-to a guard that cannot be reproduced is the kind of change that breaks the guard for real.
-
-**It fired a second time the same day, and the second one was reproducible and worse.** The gate had
-been run with `PAIR_OK` and a written reason - which is precisely what the hook's own message asks for,
-*"record why it is not owed: PAIR_OK=... on your next gate run"* - and the override logged its reason
-and then changed nothing the stop branch reads. So the guard told the session to do the thing the
-session had just done. That is the failure mode this project's own guard rules single out ("check the
-ESCAPE FIRST or the guard cannot be repaired through the channel it guards"), and it is worse than a
-false fire because it teaches a session that the documented remedy does not work.
-
-Fixed: a `PAIR_OK` gate run now records `waived_key` against that exact engine key, and `stop` honors
-it. Per content, so an engine edit after a waived gate is guarded again rather than riding the old
-waiver. `scripts/test-pair-hooks.sh` gained four cases (21 total), and deleting the one line that
-records the waiver turns two of them red.
+A gate run with `PAIR_OK="<reason>"` records `waived_key` against that exact engine key, and `scripts/pair-hooks.sh stop`
+honors it - per content, so an engine edit after a waived gate is guarded again. Do not drop that record: without it the
+guard told a session to do the thing it had just done, which teaches that the documented remedy does not work
+(`scripts/test-pair-hooks.sh` holds it). A one-off PAIRING HALF-OPEN report while a review is genuinely in flight was seen
+once and not reproduced (likely a race against a transcript still being written); the hook fires once per engine key.
 
 ## `impl-drift` is owed by the claims index, not by an occasion (feature 316)
 

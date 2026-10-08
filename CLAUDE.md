@@ -60,6 +60,7 @@ is `research/CLAUDE.md`, which auto-loads when a session edits the record.
   `academic-sources/` archived, then removed - what is left there is unprocessed), then `make archive-find` for each
   source. Every cited page is archived in the PRIVATE repository `EliAndrewC/diagram-research`; never
   link or copy it anywhere public.
+- Geography resolves China first, Japan as tiebreaker, and the GM's canon overrides both (`docs/research-doctrine.md`).
 - Where the research supports more than one form, it becomes a knob with per-settlement variance
   rolled from the map's seed, never a choice. A degree along a continuum is calibrated liberty; a
   choice between distinct forms is a knob.

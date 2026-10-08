@@ -1,4 +1,4 @@
-# Migrating `/diagram` from hand-authored maps to scripted generation
+# Migrating the diagram project from hand-authored maps to scripted generation
 
 *A standing project plan, not a spec-kit feature. Individual conversions ARE spec-kit features; this
 document says which ones exist, what order they go in, what "done" means for each, and the rules a
@@ -6,34 +6,32 @@ conversion has to obey. **Update the status table in section 4 as part of finish
 - a plan nobody updates is worse than no plan.*
 
 **Load this file when:** you are about to convert a map type to scripted generation, you are picking
-up this project cold, or you are deciding whether a `/diagram` request should be hand-authored or
+up this project cold, or you are deciding whether a diagram request should be hand-authored or
 generated.
 
 **Status: hamlet tier converted (one archetype of five). Everything above hamlet is hand-authored -
 and the whole hand-authored pool is FROZEN as of 2026-08-16 (section 2): exhibits, not maintained
-artifacts.** Last updated 2026-08-30.
+artifacts.**
 
-**THE FREEZE IS NOW VISIBLE IN THE LAYOUT (feature 161, 2026-08-30).** The pool used to be one tree
-in which a frozen exhibit and a live scripted map sat side by side, distinguishable only by opening
-a file. It is now two, each `<tree>/<tier>/<map>/` with one folder per map:
+**THE FREEZE IS VISIBLE IN THE LAYOUT (feature 161).** The pool is two trees, each `<tree>/<tier>/<map>/`
+with one folder per map, so a frozen exhibit and a live scripted map never sit side by side:
 
 | tree | holds | regenerated | renders |
 |---|---|---|---|
-| `pool/` | the 5 scripted hamlets + the 5 Mode A magistracies | every run | derived, gitignored |
-| `legacy-hand-authored-pool/` | the 18 frozen hand-authored Mode B maps | **never** | committed write-once |
+| `pool/` | the scripted hamlets + the hand-drawn Mode A sheets | every run | derived, gitignored |
+| `legacy-hand-authored-pool/` | the frozen hand-authored Mode B maps | **never** | not tracked (feature 178); the mirror's copies are the exhibit |
 
 `pool/villages/`, `pool/towns/` and `pool/provincial-cities/` no longer exist - every map they held
 was frozen. **A CONVERSION NOW MOVES A MAP BETWEEN TREES**: `git mv` its folder from
 `legacy-hand-authored-pool/<tier>/<map>/` to `pool/<tier>/<map>/`, and its renders become derived
 and ignored automatically - there is no ignore line to add or delete either way, because the rules
-are per-tree patterns rather than the 36 per-file exemptions they replaced. See section 5, criterion
-4.
+are per-tree patterns. See section 5, criterion 4.
 
 ---
 
 ## 1. What is being converted
 
-A `/diagram` Mode B map has three layers, and only ONE of them is changing.
+A Mode B map has three layers, and only ONE of them is changing.
 
 | Layer | What it is | Size | Converting? |
 |---|---|---|---|
@@ -67,11 +65,11 @@ it is a separate project with a separate rationale.
 | Where a placement rule lives | in one map's `.gen.py`, invisible to every other map | in the generator, applied to every map it makes |
 | How a defect is found | the GM opens the PNG and spots it | the cohort finds it on some seed you never thought about |
 | How a defect is fixed | edit that map | edit the generator; every future map is fixed |
-| Evidence a fix worked | that one map looks right | 36 maps pass 189 checks each |
+| Evidence a fix worked | that one map looks right | a cohort of seeds passes the gate's placer and seed tests |
 
 The second and fourth rows matter more than the first. A hand-authored map that gets a rule right
-teaches the next map nothing. That is the actual cost being paid, and it compounds: the pool has 23
-hand-authored maps, and a rule discovered today reaches none of them.
+teaches the next map nothing. That is the actual cost being paid, and it compounds: a rule discovered today reaches none of the
+hand-authored maps.
 
 **The accepted trade** (GM, 2026-08-13): when a newly-codified rule reveals a defect in existing
 hand-authored maps, we do NOT go back and fix those maps. We fix it in the generator and the map
@@ -79,24 +77,22 @@ gets fixed when its type is converted. Retrofitting by hand is the cost this pro
 paying. Record the decision in the map's `.notes.md` so nobody re-discovers it as a bug.
 
 **Extended to a full FREEZE** (GM, 2026-08-16): the hand-authored pool is no longer regenerated OR
-re-gated at all. The 18 legacy Mode B maps keep their committed .json/.svg/.png as permanent
+re-gated at all. The legacy Mode B maps keep their .json/.svg/.png as permanent
 exhibits (still in `pool/index.html`), the `tests/test_villages.py` sweep covers scripted maps only, and
 `pipeline/regen.py` refuses a legacy gen (`FROZEN`; `--frozen-ok` overrides). `pipeline/poolmaps.py` is the
 classification all three tools share. What this buys: iteration on placement rules and checks costs
 nothing on maps whose authoring process is deprecated, and - the bigger half - **engine changes no
 longer need to hold the legacy pool byte-identical**, so new rules ship un-flagged and the
 byte-identity criterion below is retired. The known cost, accepted out loud: the above-hamlet wings
-of the `settlement/` package (towns, cities, the capital) are exercised by nothing until their tiers convert,
-so the coverage gate holds 100% on every module except the `settlement/` package, which carries a RATCHET
-floor in the Makefile. **Retired by feature 174 (2026-08-31)**: the wings were covered BY TESTS rather than by waiting for the conversion, so settlement/ reached 100% and the ratchet's own condition was met. The gate now holds ONE floor - 100% over the whole tree.
+of the `settlement/` package (towns, cities, the capital) are exercised by no live map until their tiers convert,
+so they are covered by tests instead: the gate holds ONE floor, 100% over the whole tree (feature 174).
 A frozen map's defects against post-freeze rules are expected, not bugs; the fix is conversion.
-The frozen maps' renders (svg + png, ~195 MB) are **write-once exhibits** (GM 2026-08-16),
-because nothing can faithfully re-derive them once the engine drifts. They were committed at the
-freeze; since feature 178 no render is tracked, so the copies on disk in the mirror ARE the exhibit
-(`render_cache` never re-runs a legacy gen and warns when one is missing), and a hand edit to an
-exhibit is made to those copies and to the tracked manifest together; **when a map is converted to the scripted approach, its physical renders
-come out of git again** (`git rm` the svg/png, delete its `!` lines in `.gitignore`) - a
-converted map's renders are derived by a live generator and return to being ignored.
+The frozen maps' renders (svg + png) are **write-once exhibits** (GM 2026-08-16), because nothing
+can faithfully re-derive them once the engine drifts. Since feature 178 no render is tracked, so the
+copies on disk in the mirror ARE the exhibit (`render_cache` never re-runs a legacy gen and warns
+when one is missing), and a hand edit to an exhibit is made to those copies and to the tracked
+manifest together. A converted map's renders are derived by its live generator like every other
+live map's (section 5, criterion 4).
 
 ## 3. The two axes
 
@@ -134,10 +130,9 @@ STARTED = partial. NOT STARTED = hand-authored only.
 | overlays (`mulberry_fishpond`, `lotus`, `tea_fringe`) | STARTED | the generator drives `apply_land_use` for the dike-pond's wholesale case (feature 150); the SCATTERED overlays a paddy hamlet may carry are not yet rolled | Honda, Shimizu |
 
 Generated so far: Inashiro, Kashikawa, Mizuguchi, Sawada, Kuwabata - each in its own folder under
-`pool/hamlets/`. Since feature 161 they no longer sit beside the hand-authored hamlets: those eight
-(Akagahara, Enokida, Honda, Ikegami, Moritono, Shimizu, Tanada, Yatsuda) are in
-`legacy-hand-authored-pool/hamlets/`. `meta.generated_by` still marks a scripted map, but the tree
-now says it first.
+`pool/hamlets/`; the eight hand-authored hamlets (Akagahara, Enokida, Honda, Ikegami, Moritono,
+Shimizu, Tanada, Yatsuda) are in `legacy-hand-authored-pool/hamlets/`. `meta.generated_by` still marks
+a scripted map, but the tree says it first.
 
 ### Above hamlet
 
@@ -173,7 +168,8 @@ which lists these four and whether the generator carries each.
 
 ### Mode A (compound plans) - out of scope, listed so nobody wonders
 
-Magistracies (Ochiba, Hayakawa, Ubame, plus the generic county example) are hand-authored by design.
+Magistracies (Ochiba, Hayakawa, Ubame, plus the generic county example) and the country shrine (Hoshigaoka) are
+hand-authored by design.
 
 ## 5. The unit of work: one conversion = one spec-kit feature
 
@@ -192,17 +188,13 @@ document is deliberately NOT a spec-kit feature: it outlives all of them.
    Without the second number you have memorized the first.
 4. **The frozen legacy pool is untouched on disk.** RETIRED as a byte-identity requirement by the
    2026-08-16 freeze (section 2): legacy gens are never re-run, so engine changes need no flags and
-   nothing verifies 19 deprecated compositions. What remains is the trivial half: nothing in the
-   conversion may regenerate or overwrite a frozen map's committed artifacts (`git status` under
-   `pool/` stays clean apart from the maps you meant to change). When the conversion of a TIER
-   lands, its legacy exemplars stay frozen as exhibits; raise the Makefile's
-   the coverage floor, which is now a flat 100% over the whole tree (feature 174 retired the ratchet). And when a legacy
-   MAP is itself converted (superseded by a scripted version), **move its folder into `pool/`**
-   (`git mv legacy-hand-authored-pool/<tier>/<map> pool/<tier>/<map>`). Its renders stop being
-   committed exhibits and become derived-and-ignored by the move alone: since feature 161 the ignore
-   rules are per-tree patterns, so there are no `!` lines to delete and no new ones to add. The old
-   instruction here - `git rm` the svg/png and delete its two `!` lines - described the pre-161
-   single-tree layout and no longer applies.
+   nothing verifies the deprecated compositions. What remains is the trivial half: nothing in the
+   conversion may regenerate or overwrite a frozen map's artifacts (`git status` stays clean apart
+   from the maps you meant to change). When the conversion of a TIER lands, its legacy exemplars
+   stay frozen as exhibits. And when a legacy MAP is itself converted (superseded by a scripted
+   version), **move its folder into `pool/`** (`git mv legacy-hand-authored-pool/<tier>/<map>
+   pool/<tier>/<map>`): the ignore rules are per-tree patterns (feature 161), so the move alone makes
+   its renders derived and ignored - there is no `.gitignore` line to add or delete.
 5. **`make done` is green** - ruff, format, pyrefly (mypy-strict rules), pytest, 100% coverage.
 6. **A `settlement-review` pass on at least one generated map.** The gate cannot see glyph
    legibility, feature FORM, or whether the map reads as a distinct place. The author is not a
@@ -229,8 +221,8 @@ These are the failure modes that have actually cost this project time. They are 
 - **A check that never runs looks exactly like a check that passes.** `wells_off_the_wet_toe` was
   written for a hamlet and placed inside a village-scale block; it never ran on the map that
   motivated it. When you add a check, prove it FIRES on the broken artifact before you fix it.
-- ~~**Save every bad map as a negative fixture** in `pool/regressions/`~~ (RETIRED with the battery, feature 166: a defect in a scripted map becomes a unit test of the placer that made it, and the frozen manifest proves nothing a placer test does not). Coverage proves a check ran,
-  not that it has teeth.
+- **A defect in a scripted map becomes a unit test of the placer that made it** (feature 166), red on
+  the defect before the fix. Coverage proves a check ran, not that it has teeth.
 - **Enumerate what binds a feature BEFORE moving it.** One reservoir got moved five times because
   its three constraints (outside the crop, uphill, anchored on the main channel's last point) were
   discovered one gate failure at a time.
@@ -242,10 +234,10 @@ These are the failure modes that have actually cost this project time. They are 
 The GM's standing constraint: *the difference between 5 minutes and 50 minutes to implement a change
 is huge, and inefficient loops have been the single biggest stumbling block.*
 
-**The numbers live in [`dev/timings.md`](../dev/timings.md), not here** - one dated block per measurement,
-appended by `python3 -m l7r.diagram.tools.timings`. They are deliberately NOT duplicated into this plan, because a
-number written in two places eventually disagrees with itself, which is exactly how the skill's
-CLAUDE.md came to claim a "~2 to 2.5 minute" sweep long after it had passed four minutes.
+**The numbers live in the record, not here**: [`dev/timings.md`](../dev/timings.md) holds the dated blocks measured
+before its producer was retired (feature 193), and the run record answers the live cost (`make audit`,
+`scripts/_gatecost.py <target>`). They are deliberately NOT duplicated into this plan, because a number written in two
+places eventually disagrees with itself.
 
 **Every benchmark records its BREAKDOWN, not just its total** (GM, 2026-08-15). A total says a loop
 is slow; only the parts say what to do about it. This is Amdahl's law as a working rule: a phase
@@ -259,8 +251,8 @@ Three rules follow, and they bind:
 - **If a change can only be tested by a multi-minute run, the loop is wrong and fixing the loop comes
   first.** Reach for the smallest artifact that can show the defect - one seed, one fall, one stage -
   and widen only once it is fixed. The gate is proof, not a probe.
-- **Re-measure and append a block** after performance work, after adding a tier or archetype, and
-  whenever a loop starts to feel slow. Feeling slow is how the last drift went unnoticed for a week.
+- **Re-measure** after performance work, after adding a tier or archetype, and whenever a loop
+  starts to feel slow. Feeling slow is how the last drift went unnoticed for a week.
 - **These costs only grow as the pool grows.** Every conversion adds maps to sweep and checks to
   run, so the budget has to be watched on the way up rather than rediscovered at the top.
 
@@ -306,8 +298,8 @@ on a shared package of tier-agnostic machinery, `l7r.diagram.sitegen`.
 
 The engine now lives under `l7r/diagram/`, a PEP 420 namespace portion sharing the `l7r` parent
 package with the toolkit webapp - so `import l7r.app` and `import l7r.diagram.settlement` resolve in
-one interpreter, and the webapp can render a map when we want it to. The skill directory is still
-the `sys.path` root; `pool/`, `tests/` and the gate config did not move.
+one interpreter, and the webapp can render a map when we want it to. The repository root is the
+`sys.path` root, beside `pool/`, `tests/` and the gate config.
 
 **The rule that keeps `sitegen` honest, and it is the rule the village tier will actually meet:**
 
@@ -344,8 +336,7 @@ real consumer, so the seam is observed rather than predicted.
   one. An archetype that generates but is not in the roll is opt-in only.
 - **`meta.generated_by`** - the manifest tag marking a map as scripted. Checks gated on it apply new
   rules to generated maps without moving hand-authored ones. (Largely historical since the freeze:
-  new rules no longer need gating, because legacy maps are never re-gated; existing gates stay for
-  the regression corpus's frozen fixtures.)
-- **Frozen** - a legacy map's permanent state since 2026-08-16: committed artifacts kept as
+  new rules no longer need gating, because legacy maps are never re-gated.)
+- **Frozen** - a legacy map's permanent state since 2026-08-16: its artifacts kept as
   exhibits, gen never re-run, gate never re-applied. `pipeline/poolmaps.py` holds the classification.
-- **`make done`** - the full lint/type/test/coverage run. (The gate was `check_village/`; it is retired - see feature 166.)
+- **`make done`** - the full lint/type/test/coverage run.

@@ -25,7 +25,7 @@ Send the reads, greps and fetches you already know you need in ONE message.
 
 ## First stage
 
-From the clone's `` (the clone holds `.git/review-snapshot/`; never `/diagram`, a read-only mirror):
+From the clone's root (the clone holds `.git/review-snapshot/`; never `/diagram`, a read-only mirror):
 `make review-paired-gate` must print `green`, else write NOT-REVIEWABLE naming it and stop. If the unit has a previous verdict,
 each finding it raised must be disposed of by a record that read the thing the finding is about (not a proxy); otherwise
 NOT-REVIEWABLE. Re-run the gate read immediately before your verdict. You keep the right to measure independently: anything you doubt, from the artifact.
@@ -77,7 +77,7 @@ XII): you have WebSearch; say what the record would have to show; two supportabl
 settlements"), not a choice; a degree along a continuum is calibrated liberty, a choice between forms is a knob.
 
 **Your last act is the verdict record**: findings to a JSON list of `{"id", "severity", "what"}` (F1, F2, ...), then from the
-clone's ``:
+clone's root:
 
     make review-verdict UNIT=<unit> VERDICT=<PASS|NEEDS-WORK|NOT-REVIEWABLE> FINDINGS=<that file>
 

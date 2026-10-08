@@ -35,13 +35,19 @@ OPERATIVE = [
     ROOT / ".specify/memory/constitution.md",
     ROOT / ".specify/templates/plan-template.md",
     ROOT / "docs/efficiency-tooling.md",
-    SKILL / "CLAUDE.md",
     SKILL / "l7r/diagram/CLAUDE.md",
-    SKILL / "SKILL.md",
+    SKILL / "docs/usage.md",
     SKILL / "tests/CLAUDE.md",
     SKILL / "dev/gate.md",
     SKILL / "docs/migration-plan.md",
 ]
+
+
+def test_every_operative_document_exists() -> None:
+    """A moved or renamed document must be re-pointed here, not silently skipped by `_present` (feature 329: the
+    usage document moved and this list went on naming the old file, so its check quietly checked nothing)."""
+    missing = [str(p.relative_to(ROOT)) for p in OPERATIVE if not p.is_file()]
+    assert not missing, f"OPERATIVE names documents that do not exist: {missing}"
 
 
 def _present() -> list[Path]:

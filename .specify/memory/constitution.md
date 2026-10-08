@@ -746,7 +746,7 @@ markers and MAY be updated freely.
 No agent or skill may report a task complete without verifying the actual
 artifacts. Specifically:
 
-- **Python**: the gate is `make done` in `` (lint,
+- **Python**: the gate is `make done` at the repository root (lint,
   format, the strict type check, the hook suites, pytest with the coverage floors -
   nothing runs outside make, per feature 127). **100% line coverage on
   everything** - not a target and not opt-in (GM 2026-09-02). External boundaries are tested via saved fixtures, not via
@@ -2021,9 +2021,8 @@ shell command that writes one. It carries no silent escape - a genuine exception
   variant inputs. A map-rolling test carries `@pytest.mark.rolls_map`.
 
 **Repository layout conventions**
-- The skill stays at `` - the same path as before
-  the split, so nothing in the engine, the pool generators or the guards
-  moved. The engine is `l7r/diagram/`; shipped maps are `pool/<tier>/`;
+- The project lives at the repository root (feature 329 moved it out of the old skill directory under
+  `.claude/skills/`; the split from gm-assistant had kept that path). The engine is `l7r/diagram/`; shipped maps are `pool/<tier>/`;
   staged maps are `wip/`.
 - The GM's setting notes are read from gm-assistant, mounted read-only at
   `/gm-assistant`; the canonical `l7r.md` is never edited from here.
@@ -2067,8 +2066,8 @@ findings are acted on before the change ships.
 `scripts/review-gate.sh` refuses the push otherwise.
 
 **Python "done" checklist (mandatory per Principle X)**
-A Python change is not complete until `make done` is green in
-`` - it runs, together and reporting every failure
+A Python change is not complete until `make done` is green at
+the repository root - it runs, together and reporting every failure
 at once:
 
 1. `ruff check`

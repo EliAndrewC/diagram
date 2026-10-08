@@ -86,7 +86,7 @@ This prompt was written by the tooling (feature 294): one agent per owed unit, a
 names more than one. Do not review anything else - its own agent has it - and wait for nothing but your own work.
 
 Clone: {clone} (the directory holding `.git/review-snapshot/`; run the `make` targets from its
-``). Engine key: {key}. The gate went green on this content before this dispatch.
+root). Engine key: {key}. The gate went green on this content before this dispatch.
 
 Snapshot - read THESE:
   after (the clone): {after}{missing}

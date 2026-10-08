@@ -58,7 +58,7 @@ the ceiling.
 
 ## First stage
 
-From the clone's `` (never `/diagram`, a read-only mirror): `make review-paired-gate` must print
+From the clone's root (never `/diagram`, a read-only mirror): `make review-paired-gate` must print
 `green`, else write NOT-REVIEWABLE and stop; re-run it before your verdict.
 
 ## Inputs

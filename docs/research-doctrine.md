@@ -22,7 +22,7 @@ counts as a readable source, when a guess may be recorded, how a two-form findin
   deliberate departures from literal reality (features drawn larger than true scale for legibility
   while keeping *relative* sizes roughly honest). This protects against having to redo the research
   when memory fades or the context window rolls over, and applies to any generator, not just
-  `/diagram`.
+  the settlement engine.
 - **And the sources.** Every research finding names its sources, registered by key in
   `research/sources/` with what each was used for and the URL where it can be read (`URL: none -
   <why>` when there is none), because the interactive map owes its reader the source behind each
@@ -158,6 +158,63 @@ counts as a readable source, when a guess may be recorded, how a two-form findin
   hamlets without a shrine of their own because the modern counts reflect *"a wealthier and even
   post-industrial society"* (269 B35). Where animals lived in the premodern place - ducks herded in the
   fields rather than penned at the ponds - the write-up of that place says so.
+
+## China first, then Japan
+
+Rokugan's **land** - its geography, terrain, agriculture, demographics, settlement patterns and transport - is inspired
+more by CHINA (especially the Song/Ming rice-growing south our population density anchors to) than by Japan. When a map
+or geography question could go either way, the Chinese answer is the guiding star; the Japanese answer is the tiebreaker,
+used when the Chinese reality is ambiguous or strongly region-dependent.
+
+- **Research and record BOTH.** Japanese rural life is often the better documented, and much transfers (both are wet-rice
+  monsoon-Asian societies). Record the Japanese findings; where the two DIFFER, resolve to the Chinese reality and say so.
+- **The division of labor:** the physical and economic layer follows China - valley-bottom paddy with terraced or dry
+  margins, nucleated villages, pond-and-canal irrigation (the *beitang* and comb doctrine), wheelbarrow, porter and boat
+  transport, road and settlement scale. The cultural surface stays Japanese - clan and personal names, the samurai caste,
+  *kami* and their shrines (torii, Inari, Benten), *minka* architecture vocabulary, the title block's Japanese terms. Draw
+  a Japanese-flavored society on a Chinese-shaped land.
+- **Already applied this way:** the nucleated village form (Knapp: rice-south villages of ~30-60 households), the COMB
+  irrigation default (Chinese canal doctrine and *beitang* pond systems), demographics and budgets anchored to Song/Ming.
+- **The GM's setting canon overrides the historical default.** China-first governs the UNDECIDED questions; where the GM
+  has established canon that diverges, the canon wins. The worked example: artificial transport canals are ubiquitous in
+  Ming China but in Rokugan are a LION-lands feature only (other clans use natural water or land), so they are a tunable
+  exception, not the Empire-wide rule ([`research/contents.json#ways`](../research/contents.json#ways)).
+
+## Do not put a question to the GM that our documentation or history already answers
+
+**GM 2026-08-24**: *"you should do things the way that our documentation says you should do them unless there is a
+specific reason not to."* Said while declining to rule on the paddy-tint question, because the code's own doctrine already
+stated what the color meant: a session had read its documentation, found it clear, and queued a ruling anyway - which
+costs the GM a decision they had effectively already made and stalls the work until they make it twice. The check is one
+line before you write the question: **does something we have already written answer this?** If it does, follow it and
+say in the commit that you did. The documentation can be stale, wrong, or older than a constraint; then the departure is
+the thing to raise, with the reason, not the original question.
+
+**GM 2026-08-18**, after three questions were escalated as "rulings wanted" and two of them turned out to be settled in
+the vernacular-architecture literature the moment anyone searched (now constitution Principle XII). So the ladder above
+starts one rung earlier - OUR DOCS, then the record, then a knob, and only then the GM - and no rung is skipped:
+
+1. **Research it** - real sources, China first and Japan as tiebreaker (above). Write the finding into
+   [`research/`](../research/) whether or not it changes code, so the next session does not pay for the same search.
+2. **If the research is decisive, implement the answer.** No knob, no ruling; write down that it was decisive, so a later
+   reviewer who finds the result surprising reads the finding instead of re-opening it.
+3. **If two forms are supportable, add a KNOB** rolled per settlement in `_knobs.py`. Two attested forms are a gift, not an
+   obstacle: they are a place two maps can honestly differ.
+4. **Only if the record is genuinely silent does the GM rule** - and the ask states what was searched, what was found, and
+   why it is still unsettled.
+
+**The worked example** is the back-rank lane question: the research came back decisive on one axis and two-formed on the
+other in the same pass. *Access* is non-negotiable ("every house in the nucleated village is accessible via the
+interconnected system of narrow lanes and alleys"), while the *form* of that access is two-shaped - accretive alleys off
+the spine, or a planned back lane behind the plots. One axis became a requirement and the other a knob
+([`research/contents.json#homesteads`](../research/contents.json#homesteads)).
+
+**A corollary**, from the same day's ruling on the twin detector: when a knob and the geometry disagree, that is a placer
+bug, not an axis-selection question - fix the drawing to match what was rolled. And a check measures WHAT WAS DRAWN,
+never the knob (the GM, 2026-08-24: *"we should be running the automated checks against what is actually being rendered,
+not just checking to see whether what was asked for was valid and then doing something else and then not checking
+whether what we did matches our specifications"*): the placer honors the knob, the check measures the drawing, and their
+disagreement is the bug report.
 
 ## The record is written per entry, and the pages are assembled (feature 258, GM 2026-09-20)
 

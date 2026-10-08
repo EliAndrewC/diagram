@@ -25,7 +25,7 @@ greps and fetches you already know you need in ONE message.
 ## First stage - before you look at the element
 
 The clone is the directory the dispatch names (it holds `.git/review-snapshot/`); run `make` targets from its
-``, never in `/diagram` (a read-only mirror).
+root, never in `/diagram` (a read-only mirror).
 
 1. `make review-paired-gate` must print `green` - the tooling dispatches you only on a green gate (feature 294, US6). On `red`
    or `running`, write the verdict NOT-REVIEWABLE naming it and stop.
@@ -98,7 +98,7 @@ finding is a NITPICK at most. **Never ask the GM what history can answer**: you 
 to show, and where it supports two forms the finding is "this should vary between settlements" (a knob), not a choice.
 
 **Your last act is the verdict record.** Write each finding to a JSON list of `{"id", "severity", "what"}` (ids F1, F2, ...)
-and run, from the clone's ``:
+and run, from the clone's root:
 
     make review-verdict UNIT=<unit> VERDICT=<PASS|NEEDS-WORK|NOT-REVIEWABLE> FINDINGS=<that file>
 

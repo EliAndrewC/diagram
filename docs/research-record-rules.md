@@ -3,8 +3,8 @@
 <!-- Moved here verbatim from `research/CLAUDE.md` by feature 250 (research R3,
 recommendation 4; the GM 2026-09-26): that file auto-loads into every session that reads a research file, on
 every turn, and at 43,500 characters it was about 8% of a research session's mean turn. It now carries the
-rules; this carries why each is the rule. Paths in backticks are relative to the skill directory
-``; links are relative to this file. -->
+rules; this carries why each is the rule. Paths in backticks are relative to the repository root;
+links are relative to this file. -->
 
 ## What proves a cheaper check is still a good check (feature 260)
 

@@ -2,7 +2,7 @@
 
 **Load this file when:** You are about to build on a property of the engine nobody decided, or you are leaving a decision open for a later session.
 
-Split out of [`../CLAUDE.md`](../l7r/diagram/CLAUDE.md) so it is not in every diagram session's
+Split out of [`l7r/diagram/CLAUDE.md`](../l7r/diagram/CLAUDE.md) so it is not in every diagram session's
 context. The text is verbatim; the short always-on version of each rule stays in the index.
 
 ## A side effect is not a rule - check what was actually DECIDED before you build on it
@@ -47,71 +47,12 @@ open-decision author knew - the commons scatter's `wat_b` grid was the landing s
 drawn-channels margin test was the one to extend, streams/marsh were the exclusions.
 `research/questions/0073-scrub-and-rough-grass-at-the-edges-of-fields-and-channels.drawing.html` carries the retro-fitted worked example.
 
-## Do not put a question to the GM that your OWN DOCUMENTATION already answers
+## Before asking the GM
 
-**GM 2026-08-24**: *"you should do things the way that our documentation says you should do them
-unless there is a specific reason not to."*
-
-Said while declining to rule on the paddy-tint question, because the code's own doctrine already
-stated what the colour meant. A session had read its documentation, found it clear, and queued a
-ruling anyway - which costs the GM a decision they had effectively already made and stalls the work
-until they make it twice.
-
-The check is one line before you write the question: **does something we have already written answer
-this?** If it does, follow it and say in the commit that you did. A specific reason to depart is a
-real thing and it happens - the documentation can be stale, or wrong, or written before a constraint
-existed - but then the departure is the thing to raise, with the reason, not the original question.
-
-This sits directly above the older rule below and is the same family: the rungs of the ladder are
-OUR DOCS -> the historical record -> a knob -> and only then the GM.
-
-## Do not put a question to the GM that history can answer - and two answers means a KNOB
-
-**GM 2026-08-18**, after three questions were escalated as "rulings wanted" and two of them turned
-out to be settled in the vernacular-architecture literature the moment anyone searched. Now
-constitution Principle XII; this is the diagram-side operational form of it.
-
-**The ladder, in order. Do not skip a rung.**
-
-1. **Research it.** Real sources, China first and Japan as tiebreaker per the project's standing
-   geography rule. Write the finding into [`../research/`](../research/) whether or not it changes
-   code - that is the record-the-why rule, and it is what stops the next session paying for the same
-   search.
-2. **If the research is decisive, implement the answer.** No knob, no ruling. Write down that it was
-   decisive, so a later reviewer who finds the adjacency surprising reads the finding instead of
-   re-opening it.
-3. **If two forms are supportable, add a KNOB.** This is not tie-breaking; it is the point of the
-   generator. The GM's framing: settlements should be *"within historical norms while being as
-   different from one another as is justifiable by our historical research, for the benefit of
-   players who need to be able to look at different maps and distinguish them from one another at a
-   glance."* Two attested forms are therefore a gift, not an obstacle - roll between them per
-   settlement in `_knobs.py` and let the maps differ.
-4. **Only if the record is genuinely silent does the GM rule** - and the ask must state what was
-   searched, what was found, and why it is still unsettled.
-
-**The distinction that decides rung 3 vs. calibrated liberty:** liberty covers a DEGREE along a
-continuum - how many temples per city, how dense a cluster - where the sources give a band and we
-pick within it. It does NOT cover a choice between two distinct FORMS (alleys off a spine vs. a back
-lane; a byre in the yard vs. under the house's roof). A form choice made once and hardcoded makes
-every map the same in a way the history does not require, which is the failure this rule exists to
-prevent.
-
-**The worked example** is the back-rank lane question, and it is worth reading because the research
-came back decisive on one axis and two-formed on the other in the same pass: *access* is
-non-negotiable ("every house in the nucleated village is accessible via the interconnected system of
-narrow lanes and alleys"), while the *form* of that access is genuinely two-shaped - accretive
-alleys off the spine, or a planned back lane behind the plots. So one axis became a requirement and
-the other became a knob. Full record in
-[`../research/contents.json#homesteads`](../research/contents.json#homesteads) and `future-work/` section C.
-
-A corollary worth stating separately, from the same day's ruling on the twin detector: **when a knob
-and the geometry disagree, that is a placer bug, not an axis-selection question** - fix the drawing to
-match what was rolled. And a check measures WHAT WAS DRAWN, never the knob (the GM, 2026-08-24: *"we
-should be running the automated checks against what is actually being rendered, not just checking to
-see whether what was asked for was valid and then doing something else and then not checking whether
-what we did matches our specifications"*): a knob records an intention, and a check that reads it
-passes cleanly on a map that drew something else. The two halves together: the placer honors the
-knob, the check measures the drawing, and their disagreement is the bug report.
+Do not ask the GM what our own documentation answers, nor what history can answer (two answers make a KNOB): both rules
+are repository-wide and live with the research ladder in
+[`docs/research-doctrine.md`](../docs/research-doctrine.md) ("Do not put a question to the GM that our documentation or
+history already answers"). The engine-side corollary follows.
 
 ## WHEN A FORM IS A KNOB, CHECK THAT BOTH FORMS CAN ACTUALLY DO THE JOB
 

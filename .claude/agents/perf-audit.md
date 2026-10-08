@@ -34,7 +34,7 @@ statement in the audit trail, not a shortcut.
 ## What you are given
 
 The main session names the feature (`SPECIFY_FEATURE=NNN-slug`) and the environment (`local` or
-`codebuild`). From ``:
+`codebuild`). From the clone's root:
 
 1. `make perf-report AGAINST=<NNN>-start` - the trend, the per-seed and total percentages, the
    BAND, the stages that grew (e.g. `web +11.0s`). Read it first.
