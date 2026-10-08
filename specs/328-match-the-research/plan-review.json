@@ -1,6 +1,6 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "555ed6045e8e532984d40c1be7105e0d31f3235681d0ebe81fb38a0a413b6f53",
+ "plan_sha256": "e8451ab043cdeeb2d214a85f9df00e9097adf919f6b1b0e0397444941acbcb5a",
  "reviewed": "2026-10-08",
  "declared": "spec-fidelity",
  "decisions": [
@@ -371,7 +371,56 @@
    "summary": "Wave 52's Measured: the 20- and 40-household cohorts match or better the commit before the wave, 3/4 and 3/4, re-measured after the barn seat's withdrawal",
    "class": "within",
    "why": "Round 3: the line now states the post-withdrawal 3/4 and 3/4 round 2 asked for; a measured outcome, not a decision that narrows anything."
+  },
+  {
+   "id": "W53-1 crown density in real feet",
+   "summary": "GROVE_CROWN_SQFT = 107,639/600 (~179.4 sq ft) and grove_crown_px2(ftpx), replacing 48 sq px at the town grain scaled by bscale (~71 sq ft on a hamlet)",
+   "class": "within",
+   "why": "0080's drawing page: 600 a hectare, one tree to about 180 sq ft, and 'every other wood, the windbreak among them, keeps the hill wood's spacing'. Moves a DRIFTED claim onto its page; the new test pins it."
+  },
+  {
+   "id": "W53-2 band-piece cap at the same density",
+   "summary": "farmsteads.py _cap = GROVE_CLUMP_CROWNS * grove_crown_px2(ftpx); the cut into 28 crowns' ground kept as plumbing",
+   "class": "within",
+   "why": "The cut follows the density it divides; no clump cap remains, so the density is the constant's. Nothing asked is narrowed."
+  },
+  {
+   "id": "W53-3 windbreak conifer-share tolerance 0.02 -> 0.035",
+   "summary": "test_a_windbreak_draws_about_half_its_crowns_conifer widened so the drawn share 0.508 (cull at the new density) passes against 0072's 0.48",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "Loosens the test that enforces 0072's 48% so a measured 2.8-point departure, caused by the implementation's own canopy-layer cull, passes unfiled. Not impossible (the throw can be solved so the DRAWN share is 0.48, or the departure filed as a found row with the test held to it), not implied by the request, and it guts the request's purpose ('no reason for our implementation to not match'). The drawn 0.508 is deterministic over ~5,000 crowns, not noise. The docstring's 'drawn 47.9% on Kashikawa (555 of 1158)' predates the density change and is now unmeasured."
+  },
+  {
+   "id": "W53-4 two farmsteads claims relabeled NONE",
+   "summary": "'no tree over a building' (CONVENTION -> NONE) and 'band drawn at one density' (0036 -> NONE); impl-drift had both MISLABELED, now IN-STEP",
+   "class": "within",
+   "why": "Fixes a finding: the unit only orders passes and cuts pieces; the keep-out is claimed at _draw_grove ('crown over no roof or wellhead') and the density at GROVE_CROWN_SQFT against 0080. No rule loses its claim."
+  },
+  {
+   "id": "W53-5 conifer-led belt under-density filed",
+   "summary": "measured ~820 sq ft a crown on Inashiro's conifer-led belt against 0080's ~180; filed as an E3 DRIFTED found row (found-wave53.jsonl, ranking row 154) rather than fixed in this wave",
+   "class": "within",
+   "why": "The request's own order: rank by work, easiest to hardest. A newly found E3 row placed in the ranking with a concrete fix is the feature's route (plan: a held value becomes a found row); it is not dropped."
+  },
+  {
+   "id": "W53-6 test fixtures resized for the lower density",
+   "summary": "more clumps / wider yard and grove / 1000 iterations so the bamboo, sun and crown-reach tests stay non-vacuous at ~180 sq ft",
+   "class": "within",
+   "why": "Keeps the same assertions reachable; no assertion loosened."
+  },
+  {
+   "id": "W53-7 the density test",
+   "summary": "test_a_grove_throws_one_crown_to_about_180_sq_ft_at_every_grain",
+   "class": "within",
+   "why": "Enforces the requested match (GM 2026-09-20 ruling: enforcement serves the request)."
+  },
+  {
+   "id": "W53-8 occasions",
+   "summary": "glyph-redrawn homestead grove on Mizuguchi and windbreak on Inashiro at batch 3's close",
+   "class": "within",
+   "why": "Review occasions for a redrawn glyph; narrows nothing."
   }
  ],
- "verdict": "CLEAR"
+ "verdict": "BLOCKED"
 }

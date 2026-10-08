@@ -53448,18 +53448,16 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/farmsteads.py::FarmsteadFlushMixin._farmsteads_bundle#band drawn at one density": {
-  "code": "dafa678f1ed8a5fc",
+  "code": "ea35dcc2735dc752",
   "core": "ade8e9b0548f6743",
   "date": "2026-10-08",
-  "note": "_draw_grove no longer caps a clump (its own claim says \"no floor and no cap\", and n has no cap), so cutting a band into 28-crown pieces does not set the density; GROVE_CROWN_SQFT does. The comment saying \"_draw_grove caps a clump at 28 crowns\" and the 0.57 -> 0.78 account are stale. The cut is now NONE (plumbing)",
-  "pages": {
-   "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
-  },
-  "research": "8e7d7569cc3f687f",
+  "note": "this unit's GROVE_CLUMP_CROWNS cut (the `_cap` passed to band_clumps) only splits the band into separately rolled pieces and sets no spacing; density is GROVE_CROWN_SQFT's and is judged at that constant's claim against 0080",
+  "pages": {},
+  "research": "",
   "rests": [
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:02dd5d25f9e2f806"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/farmsteads.py::FarmsteadFlushMixin._farmsteads_bundle#canopy edge at the band's inner edge": {
   "code": "e50d6b84cd9c0dac",
@@ -53477,16 +53475,14 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/farmsteads.py::FarmsteadFlushMixin._farmsteads_bundle#no tree over a building": {
-  "code": "a9c59481ceb37eb5",
+  "code": "38cf3aa8af88d7cb",
   "core": "ade8e9b0548f6743",
   "date": "2026-10-08",
-  "note": "\"no crown on a building\" is a placement rule that 0071's drawing page answers, and _draw_grove already cites it. What this code decides is only the draw order that lets the keep-outs see the houses, so it should be NONE, or cite 0071 drawing like _draw_grove does",
+  "note": "this unit only orders the passes: houses are drawn before `_draw_grove`, so the keep-out sees them; the keep-out rule itself lives in `_draw_grove` and is claimed there against 0071",
   "pages": {},
   "research": "",
-  "rests": [
-   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:5267e319c5872785"
-  ],
-  "verdict": "MISLABELED"
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/farmsteads.py::FarmsteadFlushMixin._farmsteads_bundle#thin band's lesser trees": {
   "code": "679b7bbf851fb614",

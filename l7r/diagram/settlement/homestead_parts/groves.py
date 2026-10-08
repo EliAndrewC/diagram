@@ -723,7 +723,7 @@ class GrovesMixin:
         are seeded by position (stable across regenerations). Canopy count scales with footprint area.
 
         Research:
-            windbreak conifer share - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.html: 48% of a windbreak's crowns cedar (the 1987 Kashima count), the dominant tree (Takehara) - rolled of the crowns; drawn 47.9% on Kashikawa's farm groves (555 of 1158, glyph-check 2026-10-08), the filters taking about as many of each
+            windbreak conifer share - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.html: 48% of a windbreak's crowns cedar (the 1987 Kashima count), the dominant tree (Takehara) - rolled of the crowns; the cull's asymmetry (a lesser crown over a conifer is not drawn) leaves the DRAWN share above it - 0.508 in the unit sample at ~180 sq ft a crown (wave 53) - filed behind the found row `GrovesMixin._draw_grove#windbreak conifer share as drawn`
             crowns per clump - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: one crown per `GROVE_CROWN_SQFT` of clump (~180 sq ft real, at the map's ft/px), rounded, with no floor and no cap
             bamboo under the crowns - research/questions/0075-bamboo-groves-chikurin.drawing.html: 8% of a windbreak clump,
                 inked only in the gaps; none in the dooryard or alder mixes

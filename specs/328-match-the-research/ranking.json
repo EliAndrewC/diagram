@@ -8773,6 +8773,22 @@
   "scope": "kept"
  },
  {
+  "key": "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#windbreak conifer share as drawn",
+  "verdict": "DRIFTED",
+  "tier": "E2",
+  "fix": "0072: 48% of a windbreak's crowns cedar. The throw is 0.48 of the crowns, but the cull is asymmetric (`over_a_conifer`: a lesser crown over an earlier conifer is not drawn), so the DRAWN share runs above it - 0.508 in test_a_windbreak_draws_about_half_its_crowns_conifer's 256-clump sample at ~180 sq ft a crown (wave 53; 0.463 at the old density). Fix: roll each crown's kind against the clump's drawn tally (the conifer threshold nudged by the drawn deficit) so the drawn share is 0.48, then put the test's tolerance back to 0.02",
+  "files": [
+   "l7r/diagram/settlement/homestead_parts/groves.py",
+   "tests/settlement/test_homestead_woods.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 53, spec-fidelity W53-3",
+  "tier_as_ranked": "E2",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._find_grove_arms#windward depth",
   "tier": "E2",
   "fix": "draw each windward stand a fixed 1.57 house depths deep (0036 drawing), replacing the 1.4-3.6 deepening loop",

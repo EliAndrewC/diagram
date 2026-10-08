@@ -386,5 +386,43 @@
   "unit": "% end vs start (totals); s (stages)",
   "observed": "2026-10-08",
   "source": "dev/perf-log/20261008T165220Z-328-start-perfbase.json and 20261008T165526Z-328-end-base.json; profiles 20261008T185926Z-profile-328-seed39-homesteads-perfbase.txt and 20261008T185931Z-...-base.txt; perf-audit's record 20261008T192314Z-review-328-confirmation-local-digram-backlog.json"
+ },
+ "wave53-grove-density": {
+  "quantity": "wave 53 (2026-10-08): drawn tree crowns per hamlet manifest (len(tree_crowns)/3) before (58de4e648) and after the density moved to ~180 sq ft a crown; the windbreak's drawn conifer share in test_a_windbreak_draws_about_half_its_crowns_conifer (256 clumps of 60 x 60 px at 1 ft/px, seed 1); the conifer-led belt on Inashiro: its recorded crowns over its poly's area",
+  "value": {
+   "crowns": {
+    "inashiro": [
+     641,
+     528
+    ],
+    "kashikawa": [
+     3102,
+     2673
+    ],
+    "kuwabata": [
+     790,
+     576
+    ],
+    "mizuguchi": [
+     546,
+     337
+    ],
+    "sawada": [
+     961,
+     704
+    ]
+   },
+   "windbreak_drawn_conifer_share": {
+    "before": 0.463,
+    "after": 0.508,
+    "sample_crowns": 2791
+   },
+   "inashiro_conifer_led_belt": {
+    "crowns": 160,
+    "conifer": 125,
+    "area_sqft": 130910,
+    "sqft_per_crown": 818
+   }
+  }
  }
 }

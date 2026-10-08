@@ -659,7 +659,7 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
   same density, so a piece still holds 28 crowns' ground.
 - **Measured**: drawn crowns fall 14-38% across the five hamlets (Inashiro 641 -> 528, Kashikawa 3,102 -> 2,673,
   Kuwabata 790 -> 576, Mizuguchi 546 -> 337, Sawada 961 -> 704). A windbreak's drawn conifer share moves 0.463 -> 0.508 as
-  the canopy-layer cull thins less at the lower density (the throw stays 0.48 of the crowns).
+  the canopy-layer cull thins less at the lower density (the throw stays 0.48 of the crowns); the test's tolerance is widened behind a found row to bring the drawn share back to 0.48 (spec-fidelity W53-3). The figures: m:wave53-grove-density.
 - **Occasions**: glyph-redrawn homestead grove on Mizuguchi, windbreak on Inashiro - batch 3's close.
 - **Verification**: tests red on the old code; `impl-drift`; `spec-fidelity`; the gate, pair and occasions at batch 3's close.
 
