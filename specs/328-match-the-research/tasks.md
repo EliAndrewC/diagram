@@ -1293,7 +1293,9 @@ Tests: `test_every_grove_crown_is_drawn_in_the_woods_one_band` (windbreak, doory
 `test_no_crown_is_drawn_under_a_yard_persimmons_crown`, all four red on the old code. Measured: the five pool hamlets
 regenerated, `tree_crowns` and `bamboo_marks` changed on every map, nothing else placed differently.
 
-- [ ] T103 the grove crowns: one band, no conifer inflation, every crown round the persimmon, the mixed broadleaf belt's bamboo claimed on 0075 (FR-003 E2, FR-004)
+- [x] T103 the grove crowns: one band, no conifer inflation, every crown round the persimmon, the mixed broadleaf belt's bamboo claimed on 0075 (FR-003 E2, FR-004)
       research: rendering
-- [ ] T104 the claims re-checked by `impl-drift`; the glyph checks; the close: `make done` green, the pair, the wave column (FR-005, FR-006)
+      verify: DONE. CROWN_S one band, no conifer 1.15, every crown round the persimmon, the conifer share of the crowns, bamboo kept on 0075; five tests red on the old code; impl-drift rounds 1-3 IN-STEP on every touched claim
+- [x] T104 the claims re-checked by `impl-drift`; the glyph checks; the close: `make done` green, the pair, the wave column (FR-005, FR-006)
       research: rendering
+      verify: DONE. gate green; glyph PASS on windbreak (inashiro), copse (kuwabata), homestead grove (kashikawa, 47.9 percent conifer); spec-fidelity CLEAR round 2; record checks answered; the pair band 0; waves.json 39 for five rows; two found rows filed
