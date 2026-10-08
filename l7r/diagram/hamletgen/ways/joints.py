@@ -237,6 +237,15 @@ def unhooked(pts: Poly, others: Sequence[Poly]) -> Poly | None:
     return [*pts[:-2], min(hits, key=lambda x: math.dist(a, x))]
 
 
+_BUILDINGS = ("houses", "farm_sheds", "byres", "retirement_houses")
+"""Research: what a pull may touch - research/questions/0081-village-lanes.drawing.html: "right up to the buildings" - the roofed
+fabric; a fixture (a privy, a heap, a coop) is not counted, so it keeps the usual clearance"""
+
+
+def _key(q: Poly) -> tuple[tuple[float, float], ...]:
+    return tuple((float(x), float(y)) for x, y in q)
+
+
 def _rounded(p: Poly) -> list[list[float]]:
     return [[round(a, 1), round(b, 1)] for a, b in p]
 
@@ -253,10 +262,10 @@ def straighten_joints(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wa
     # fix is a re-route (future-work/farming-communities.md, "Found by feature 280's settlement-reviews").
     lanes: list[dict[str, Any]] = s.M.get("lanes") or []
     houses = [(float(h["x"]), float(h["y"])) for h in s.M.get("houses", [])]
-    fences = [poly for poly, _owner, kind in _homestead_polys(s) if kind in ("threshing_yards", "gardens")]  # the fenced plots a pull may not touch
+    buildings = [poly for poly, _owner, kind in _homestead_polys(s) if kind in _BUILDINGS]  # all a pull may come right up to
     changed = 0
     for _round in range(len(lanes) + 1):  # each rewrite removes a joint or a vertex, so this is a bound, not a budget
-        if not (_one_hook(s, lanes, houses, hard, walls, water) or _one_joint(s, lanes, houses, hard, walls, water, fences)):
+        if not (_one_hook(s, lanes, houses, hard, walls, water) or _one_joint(s, lanes, houses, hard, walls, water, buildings)):
             break
         changed += 1
     return changed
@@ -283,7 +292,7 @@ def _one_hook(s: Settlement, lanes: list[dict[str, Any]], houses: Sequence[Pt], 
     return False
 
 
-def _one_joint(s: Settlement, lanes: list[dict[str, Any]], houses: Sequence[Pt], hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]], fences: Sequence[Poly] = ()) -> bool:
+def _one_joint(s: Settlement, lanes: list[dict[str, Any]], houses: Sequence[Pt], hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]], buildings: Sequence[Poly] = ()) -> bool:
     """Rewrite the first joint that can be improved; False when none can.
 
     Research:
@@ -291,7 +300,7 @@ def _one_joint(s: Settlement, lanes: list[dict[str, Any]], houses: Sequence[Pt],
         the shorter link the T's stem - GUESS: of the two arriving lanes, the one whose clear link to the other's side is shorter becomes the stem; searched research/questions/0081-village-lanes.drawing.html (a fold at a joint becomes a T, a worn path takes the shortest or easiest way, but not which lane is the stem) and research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html (ways joined at a T, no stem rule)
         no new kink from a pull - research/questions/0081-village-lanes.drawing.html: a lane does not zigzag (two turns over 50 degrees within 40 ft) or double back, so a pull at a joint that leaves more kink_spans than the two lanes had is refused
         a pulled lane's clearance - CONVENTION: where a straightened lane touches a building it keeps max(_TOUCH_GAP 4 ft, half its width + 2 ft), a 5 ft width assumed when none is set; research/questions/0081-village-lanes.drawing.html lets it come right up to the buildings within 6 ft of the old line and calls every distance in its lane bullets a drawing convention, but gives no clearance figure
-        fences keep the usual clearance - research/questions/0081-village-lanes.drawing.html: the touch is the buildings'; a garden or a dooryard keeps the 7 ft (`WEB_FABRIC_GAP`, 0246) a pulled lane keeps
+        all but the buildings keep the usual clearance - research/questions/0081-village-lanes.drawing.html: the touch is the buildings' (houses, farm sheds, byres, retirement houses); a fence, a grove, a well, a fixture and the crop keep `_clear_link`'s margins, as an unpulled lane does
         a jog across a joint pulled straight - research/questions/0081-village-lanes.drawing.html: string-pulled, a vertex
             within 6 ft of the chord dropped
         ways of two kinds stay two - research/questions/0081-village-lanes.drawing.html: a jog across a joint pulled straight
@@ -313,15 +322,20 @@ def _one_joint(s: Settlement, lanes: list[dict[str, Any]], houses: Sequence[Pt],
                 if keeps_the_web(lanes, {i, j}, old, [*t, *other], houses) and commit_lane(lanes, m, _rounded(t), hard, walls, water, s.reink_lane, admits_lane(s)):
                     return True
             continue
+        built = {_key(q) for q in buildings}
         two = lanes[i].get("w") != lanes[j].get("w") or bool(lanes[i].get("web")) != bool(lanes[j].get("web"))
         gap = max(_TOUCH_GAP, float(lanes[i].get("w") or 5.0) / 2.0 + 2.0)
 
-        def ok(a: int, b: int, p: Poly = old, g: float = gap) -> bool:
+        def ok(a: int, b: int, p: Poly = old, g: float = gap, bt: set[tuple[tuple[float, float], ...]] = built) -> bool:
             if _clear_link(p[a], p[b], hard, walls, water):
                 return True
-            # ...RIGHT UP TO THE BUILDINGS, NEVER A FENCE (0081: "may come right up to the buildings"; feature 328 - the touch
-            # took in every garden and dooryard too): a fenced plot keeps the usual clearance whatever the touch allows
-            return _clear_touch(p[a], p[b], hard, walls, water, g) and _clear_touch(p[a], p[b], [], fences, []) and all(seg_dist(v[0], v[1], p[a], p[b]) <= _JOG_FT for v in p[a + 1 : b])
+            # ...RIGHT UP TO THE BUILDINGS AND NOTHING ELSE (0081: "may come right up to the buildings"; feature 328 - the touch
+            # took in every fence, grove, well and the crop too): all but the buildings keep the usual clearance
+            return (
+                _clear_link(p[a], p[b], [q for q in hard if _key(q) not in bt], [q for q in walls if _key(q) not in bt], water)
+                and _clear_touch(p[a], p[b], [], buildings, [], g)
+                and all(seg_dist(v[0], v[1], p[a], p[b]) <= _JOG_FT for v in p[a + 1 : b])
+            )
 
         new = pulled(old, ok)
         # ...NEVER INTO A KINK THE TWO DID NOT HAVE (feature 317): two access lanes met end to end at a door (one corridor hung

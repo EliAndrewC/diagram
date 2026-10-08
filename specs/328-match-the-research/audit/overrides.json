@@ -1100,7 +1100,7 @@
   "files": [
    "l7r/diagram/hamletgen/ways/joints.py"
   ],
-  "fix": "0081: the touch is the buildings' - a straightened lane keeps the usual 7 ft (WEB_FABRIC_GAP) from a garden or dooryard fence",
+  "fix": "0081: the touch is the buildings' alone - a straightened lane keeps the usual clearance (_clear_link: 8 ft off the crop, 7 ft off the fabric) from every fence, grove, well and fixture",
   "flag": "",
   "moved": "T101a (fresh reader): joints.py:312 gap = max(_TOUCH_GAP, (w or 5.0)/2 + 2.0), used by _clear_touch at joints.py:317; 0081 drawing page: 'runs straight ... wherever it can keep its usual clearance from fences and buildings. It may come right up to the buildings when the straightened line stays within 6 ft' and 'Every tur | re-tiered E2 by spec-fidelity amendment 37 round 1: the touch covered every fence, the page allows buildings only",
   "tier": "E2"
@@ -1121,7 +1121,7 @@
   "files": [
    "l7r/diagram/hamletgen/ways/joints.py"
   ],
-  "fix": "0081: the touch is the buildings' - a straightened lane keeps the usual 7 ft (WEB_FABRIC_GAP) from a garden or dooryard fence",
+  "fix": "0081: the touch is the buildings' alone - a straightened lane keeps the usual clearance (_clear_link: 8 ft off the crop, 7 ft off the fabric) from every fence, grove, well and fixture",
   "flag": "",
   "moved": "T101a (fresh reader): same decision as the gap row: joints.py:312, the same max(_TOUCH_GAP, w/2 + 2 ft) with the 5 ft default - duplicate of l7r/diagram/hamletgen/ways/joints.py::_one_joint#how close a pulled lane may come to a building gap  maxtouch | re-tiered E2 by spec-fidelity amendment 37 round 1: the touch covered every fence, the page allows buildings only",
   "tier": "E2"

@@ -38,17 +38,19 @@ def test_a_cart_route_and_a_footpath_meeting_end_to_end_are_pulled_straight_and_
     assert all(p[1] == 500.0 for ln in s.M["lanes"] for p in ln["pts"]), "the jog pulled straight"
 
 
-@pytest.mark.parametrize("fenced", [False, True])
-def test_a_pull_may_touch_a_building_but_never_a_fence(fenced: bool) -> None:
+@pytest.mark.parametrize("kind", ["houses", "gardens", "wells"])
+def test_a_pull_may_touch_a_building_and_nothing_else(kind: str) -> None:
     """0081 (feature 328): a straightened lane "may come right up to the buildings" within 6 ft of the old line; a garden fence
-    5 ft off the straightened line keeps the usual clearance, so beside a garden the jog is kept."""
+    or a well 5 ft off the straightened line keeps the usual clearance, so beside either the jog is kept."""
+    from l7r.diagram.hamletgen.ways.fabric import _homestead_polys
+
     s = _webbed([{"pts": [[100.0, 300.0], [300.0, 300.0]], "w": 3}, {"pts": [[300.0, 300.0], [310.0, 303.0], [500.0, 300.0]], "w": 3}])
-    block = [(280.0, 285.0), (320.0, 285.0), (320.0, 295.0), (280.0, 295.0)]  # 5 ft off the straight line, 8 ft off the old
-    if fenced:
-        s.M.setdefault("gardens", []).append({"poly": [list(p) for p in block], "of": [300.0, 250.0]})
-    assert straighten_joints(s, [], [block], []) == 1
+    rect = {"x": 300.0, "y": 290.0, "w": 40.0, "h": 10.0}  # 5 ft off the straight line, 8 ft off the old
+    s.M.setdefault(kind, []).append({**rect, "r": 5.0} if kind == "wells" else {**rect, "of": [300.0, 250.0]})
+    walls = [poly for poly, _own, _kind in _homestead_polys(s)]
+    assert straighten_joints(s, [], walls, []) == 1
     straight = all(p[1] == 300.0 for ln in s.M["lanes"] for p in ln["pts"])
-    assert straight is not fenced, "pulled taut past a building; past a fence the jog stays clear of it"
+    assert straight is (kind == "houses"), "pulled taut past a building; past anything else the jog stays clear of it"
 
 
 def test_a_joint_with_nothing_to_straighten_is_left_alone() -> None:

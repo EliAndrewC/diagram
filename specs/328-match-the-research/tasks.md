@@ -1238,14 +1238,16 @@ a fold becomes a T, a Z is pulled like any jog, and the joint is moved back a ve
 
 Wave 37's five found rows tiered by a fresh reader (T101a, `audit/t101a-out.jsonl`): four E0 (one a duplicate) claimed in
 `_one_joint` - two of them, the pulled lane's clearance and its duplicate, re-tiered E2 by spec-fidelity (round 1: the touch
-took in every fence, 0081 allows buildings only) and fixed: a pull keeps the usual 7 ft from a garden or dooryard - and one E3 (the yakuimon's 6-8.5 ft frontage drawn as its passage - the doc, the engine's 8 ft and the hand
+took in every fence, 0081 allows buildings only) and fixed: a pull may come right up to a building and keeps the usual
+clearance from everything else - and one E3 (the yakuimon's 6-8.5 ft frontage drawn as its passage - the doc, the engine's 8 ft and the hand
 sheets together), left for its place in the run.
 
   - `l7r/diagram/hamletgen/ways/joints.py::_one_joint#the shorter link the T's stem` - GUESS, with what was searched (it was CONVENTION)
   - `l7r/diagram/hamletgen/ways/joints.py::_one_joint#how close a pulled lane may come to a building ...` (and its duplicate) - E2,
-    fixed: `straighten_joints` hands `_one_joint` the fenced plots (threshing yards, gardens) and a pull keeps `_clear_touch`'s
-    7 ft from them; the touch at max(4 ft, half the width + 2) is the buildings' alone
-    (`test_a_pull_may_touch_a_building_but_never_a_fence`, red without the rule)
+    fixed: `straighten_joints` hands `_one_joint` the buildings (houses, farm sheds, byres, retirement houses); a pull keeps
+    `_clear_link`'s usual margins from everything else (8 ft off the crop, 7 ft off the fabric) and the touch at max(4 ft, half
+    the width + 2) is the buildings' alone (`test_a_pull_may_touch_a_building_and_nothing_else`, red for the garden and the
+    well without the rule; round 2 found round 1's fix had taken out only the fenced plots)
   - `l7r/diagram/hamletgen/ways/joints.py::_one_joint#a pull at a joint is refused if it leaves more kinks ...` - 0081 drawing
 
 - [x] T101a wave 37's found rows tiered by the work they take, by a fresh reader (FR-002, FR-003, SC-003)

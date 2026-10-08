@@ -7237,7 +7237,7 @@
   "key": "l7r/diagram/hamletgen/ways/joints.py::_one_joint#how close a pulled lane may come to a building gap  maxtouch",
   "verdict": "UNCLAIMED",
   "tier": "E2",
-  "fix": "0081: the touch is the buildings' - a straightened lane keeps the usual 7 ft (WEB_FABRIC_GAP) from a garden or dooryard fence",
+  "fix": "0081: the touch is the buildings' alone - a straightened lane keeps the usual clearance (_clear_link: 8 ft off the crop, 7 ft off the fabric) from every fence, grove, well and fixture",
   "files": [
    "l7r/diagram/hamletgen/ways/joints.py"
   ],
@@ -7253,7 +7253,7 @@
   "key": "l7r/diagram/hamletgen/ways/joints.py::_one_joint#the clearance a straightened lane keeps from buildings and w",
   "verdict": "UNCLAIMED",
   "tier": "E2",
-  "fix": "0081: the touch is the buildings' - a straightened lane keeps the usual 7 ft (WEB_FABRIC_GAP) from a garden or dooryard fence",
+  "fix": "0081: the touch is the buildings' alone - a straightened lane keeps the usual clearance (_clear_link: 8 ft off the crop, 7 ft off the fabric) from every fence, grove, well and fixture",
   "files": [
    "l7r/diagram/hamletgen/ways/joints.py"
   ],
