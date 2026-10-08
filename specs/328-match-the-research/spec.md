@@ -315,3 +315,4 @@ Each wave's amendment adds its map decisions to this table. The program's decisi
 - Amendment 19, round 4 (spec-fidelity, 2026-10-07): CHANGES REQUIRED, plan CLEAR (9 decisions) - the every-tier crossing literal; the stale comments and the row line restated; the drawn wood measured on Kashikawa.
 - Amendment 19, round 5 (spec-fidelity, 2026-10-07): FAITHFUL.
 - Amendment 20, round 1 (spec-fidelity, 2026-10-07): FAITHFUL, plan CLEAR.
+- Amendment 21, round 1 (spec-fidelity, 2026-10-07): FAITHFUL, plan CLEAR (6 decisions) - row 428's E3 measured, row 429 literal to 0033.
