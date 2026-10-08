@@ -3023,6 +3023,21 @@
   "scope": "kept"
  },
  {
+  "key": "l7r/diagram/settlement/homestead_parts/belt_law.py::BeltReading.holes#continuous planting",
+  "verdict": "DRIFTED",
+  "tier": "E0",
+  "fix": "No engine change. The claim's wording only: belt_law.py:281-283 holes() docstring 'not where a way crosses the belt' -> 'not the way's own crossing, with no more than 30 ft bare either side of it (`_crossed`)', and the 'continuous planting' claim (:286-287) adds 'planting resumes on both sides of a lane, the 30 ft rule holding beside it'.",
+  "files": [],
+  "after": [],
+  "flag": "",
+  "found": "wave 47 impl-drift round 4",
+  "tier_as_ranked": "E2",
+  "moved": "T122a (fresh reader): tiered by its work - Already matches. The finding says holes() 'excuses every opening a way crosses', but _crossed (belt_law.py:306-321, this bound unchanged since feature 329's move) excuses only a face-to-face crossing with 'no more than `_BELT_GAP_FT` of opening either side of it' - `return min(v for _u, v in cross) - a <= _BELT_GAP_FT and b - max(v for _u, v in cross) <= _BELT_GAP_FT` - and its docstring says 'an ",
+  "e0_basis": "Already matches. The finding says holes() 'excuses every opening a way crosses', but _crossed (belt_law.py:306-321, this bound unchanged since feature 329's move) excuses only a face-to-face crossing with 'no more than `_BELT_GAP_FT` of opening either side of it' - `return min(v for _u, v in cross) ",
+  "wave": "47",
+  "scope": "kept"
+ },
+ {
   "key": "l7r/diagram/settlement/homestead_parts/belt_law.py::the village belt#its west arm on inashiro",
   "verdict": "DRIFTED",
   "tier": "E0",
@@ -5892,7 +5907,7 @@
   "found": "wave 10 re-check (tiered by its work at T42a)",
   "tier_as_ranked": "E1",
   "moved": "T119a (fresh reader): tiered by its work - Wave 39 extended the keep-out to every crown kind (groves.py:880 '...EVERY CROWN, not the conifer alone (feature 328, 0046 ...)'), but it still uses over_a_conifer: ':255 ... < (CROWN_OVER_SHARE * (r + cr) + slack) ** 2' with CROWN_OVER_SHARE = 0.8, and the claim at :737 admits 'an edge may still reach a few feet under'. 0046 drawing: 'its persimmon stands behind the house at the edge of its own g",
-  "wave": "",
+  "wave": "47",
   "scope": "kept"
  },
  {
@@ -6687,7 +6702,7 @@
   "found": "batch 1 glyph-check windbreak F3 (nitpick)",
   "tier_as_ranked": "E1",
   "moved": "T119a (fresh reader): tiered by its work - Not fixed: the page (:12) reads 'Inashiro 49 degrees, Kuwabata 71 and Sawada 14'. Re-measured now on pool/hamlets/*/*.json village_groves (role windbreak) clumps, bearings from the mean of houses' x,y, smallest arc: Inashiro 66.0, Kuwabata 71.0, Sawada 14.6 (clumps_offpage changes none). Only Inashiro's number is stale; one value. Related to but not the same claim as the ranked '#outline, frame an",
-  "wave": "",
+  "wave": "47",
   "scope": "kept"
  },
  {
@@ -6719,7 +6734,7 @@
   "found": "wave 46 impl-drift on the merged section (earlier checks IN-STEP)",
   "tier_as_ranked": "E2",
   "moved": "T119a (fresh reader): tiered by its work - Not fixed: docs/building-programs.md:189 still says 'The hall is the precinct's largest building' for both forms, while the bands at :202-203 give the hall 18-35 by 12-35 ft (at most 1,225 sq ft) and the two-building dwelling 34-60 by 18-38 ft, drawn 46 x 28 ft (1,288 sq ft, claim :175). The pages do not back 'largest' under two buildings: 0222 drawing: 'The hall alone is farmhouse-sized or smalle",
-  "wave": "",
+  "wave": "47",
   "scope": "mode-a"
  },
  {
@@ -6781,7 +6796,7 @@
   "found": "wave 46 impl-drift: the claim written for the tier's text",
   "tier_as_ranked": "E3",
   "moved": "T119a (fresh reader): tiered by its work - Not fixed: :45 claims 'a road checkpoint post of 2-3 samurai with one office room' from 0110 and :113 says '2-3 samurai, one office room, a cell, a barrier gate'. 0110 gives no garrison count (grep for samurai/garrison finds none) and more than one room: 'Facing it was the inspection hall (kendansho ...), and the officer's residence stood to the right, behind the hall', the officer's house '19 m (",
-  "wave": "",
+  "wave": "47",
   "scope": "kept"
  },
  {
@@ -8526,6 +8541,21 @@
   "verdict": "DRIFTED",
   "wave": "",
   "scope": "deferred"
+ },
+ {
+  "key": "l7r/diagram/settlement/homestead_parts/belt_law.py::BeltReading._crossed#a crossing's bare reach",
+  "verdict": "DRIFTED",
+  "tier": "E2",
+  "fix": "_crossed measures from the lowest to the highest crossing point over every way through the opening, so where two ways cross one opening the bare stretch between them is excused with no limit; 0072 holds the hole rule at a lane 'as written' - excuse each way's own crossing and no more than _BELT_GAP_FT bare either side of it",
+  "files": [
+   "l7r/diagram/settlement/homestead_parts/belt_law.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "T122a (the fresh reader of wave 47's found rows)",
+  "tier_as_ranked": "E2",
+  "wave": "",
+  "scope": "kept"
  },
  {
   "key": "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#manure beyond the privy",
@@ -10577,7 +10607,7 @@
   "key": "docs/buildings.md::Sacred features#sanctuary",
   "verdict": "DRIFTED",
   "tier": "E3",
-  "fix": "the sanctuary's width becomes a rolled knob, 1 ken (~6 ft) or 3 ken (~18 ft) per 0222, the covering house left undrawn as 0222 records, with the procedure, type band and shrine sheets following",
+  "fix": "docs/buildings.md:305 (Sanctuary bullet) and docs/building-programs.md knob list (~:232-239) and Size anchors (:239): the sanctuary's width becomes a knob rolled per sheet from its seed - 1 bay (~6 ft), 2 bays (Hie, ~12 x 6 ft) or 3 bays (~18 ft) - recorded in the sheet's notes; the types.json sanctuary band (4-20 by 4-12 ft, building-programs.md:206) already holds all three; pool/country-shrines/hoshigaoka-shrine/hoshigaoka-shrine.svg and .notes take their roll (redrawn if the roll is not 1 bay). Same work as the ranked row of this key (which named 1 or 3 ken); this wave adds the attested 2-bay form.",
   "files": [
    "docs/buildings.md"
   ],
@@ -10585,7 +10615,7 @@
   "flag": "",
   "found": "wave 2 re-check (tiered by its work at T25a)",
   "tier_as_ranked": "E2",
-  "moved": "T25a (amendment 6): tiered by its work - a new knob in the procedure and the type band, and the shrine sheets redrawn",
+  "moved": "T122a (fresh reader): tiered by its work - Not fixed: buildings.md:305 still fixes the drawing at 'one bay an 18-20 px rect' and states the range in prose, with no roll. 0222: 'the English Wikipedia gives 1 and 3 ken as its commonest sizes' and 'A hall built as two bays joined into one, with two doors, was a recognized form, the two-bay shrine'; 0215 gives Hie's two-bay sanctuary ~12 x 6 ft. CLAUDE.md: a choice between distinct attested fo",
   "wave": "",
   "scope": "mode-a"
  },
@@ -13254,15 +13284,15 @@
   "key": "docs/building-programs.md::Country shrine (a village district's shrine)#building size anchors",
   "verdict": "DRIFTED",
   "tier": "E4",
-  "fix": "Exception path (FR-004), a page edit: research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html line 8 'Our maps draw the villagers' worship hall 20 to 35 ft on a side' to 'about 18 to 35 ft long by 12 to 35 ft deep', citing Hie Shrine's 3-by-2-bay hall (~18 x 12 ft) and Rokusha's 9 tsubo from research/questions/0215-village-shrines-where-they-stand-and-how-big-their-grounds-are.html. No implementation change: the band in l7r/diagram/buildings/types.json (hall w 18-35, h 12-35), the size-anchors paragraph (buildings/programs.md line 226) and the claim (line 168) already match 0215. If the page is held, the fallback is E1: types.json hall band w [20,35], h [20,35].",
+  "fix": "Exception path (FR-004), a page edit: research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html:8 'Our maps draw the villagers' worship hall 20 to 35 ft on a side' -> about 18 to 35 ft long by 12 to 35 ft deep, citing Hie's ~18 x 12 ft hall from 0215. No implementation change: l7r/diagram/buildings/types.json:260-270 (hall w 18-35, h 12-35), docs/building-programs.md:207 and the claim at :179 already follow 0215. Fallback if the page is held: E1, types.json hall band w/h [20,35] (Hoshigaoka's 28 x 32 ft hall fits either band).",
   "files": [
    "docs/building-programs.md"
   ],
   "after": [],
   "flag": "",
-  "found": "wave 2 re-check (tier provisional, by verdict)",
-  "tier_as_ranked": "E2",
-  "moved": "T56a: tiered by its work by a fresh reader - The implementation's 18-35 ft band rests on 0215's measured Hie hall (~18 x 12 ft), so only the drawing page lags; Hoshigaoka measured at 3 px/ft draws the villagers' hall 84x96 px = 28 x 32 ft, the sanctuary 18x18 px = 6 ft square and the one roof 198x96 px = 66 x 32 ft = 2,112 sq ft, inside both the 18-35 and the 20-35 bands and the 2,100-3,600 sq ft one-roof band, so no sheet changes either way.",
+  "found": "wave 47 impl-drift round 4",
+  "tier_as_ranked": "E1",
+  "moved": "T122a (fresh reader): tiered by its work - Not fixed and unchanged since T56a tiered this key: the drawing page still says '20 to 35 ft on a side' (0222.drawing.html:8) while the procedure's claim (building-programs.md:179) reads 'worship hall from about 18 ft (Hie about 18 x 12, Rokusha 9 tsubo) to about 35 ft (the band about 18-35 by 12-35 ft)', which matches 0215's measured hall. Only the drawing page lags its own research section, so n",
   "wave": "",
   "scope": "mode-a"
  },
@@ -13270,16 +13300,15 @@
   "key": "docs/building-programs.md::Country shrine (a village district's shrine)#innermost arch one pitch off the hall",
   "verdict": "DRIFTED",
   "tier": "E4",
-  "fix": "Exception path (FR-004): the only remedy the finding names is a page edit - research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html line 29 ('so this is a map drawing convention') and its Evidence comment line 4 ('convention (the innermost arch one pitch off the hall ...)') to call the 12 ft distance a GUESS. The claim at buildings/programs.md line 128 (already GUESS), the rule at line 180 and the 12 ft drawn stand.",
+  "fix": "Exception path (FR-004), a page edit: research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:4 (Evidence comment, 'convention (the innermost arch one pitch off the hall ...)') and :29 ('so this is a map drawing convention') reclassed as a GUESS. No implementation change: the claim at docs/building-programs.md:132 is already 'GUESS ... the innermost arch 12 ft off the hall's face', and the 12 ft drawn stands.",
   "files": [
    "docs/building-programs.md"
   ],
   "after": [],
   "flag": "",
-  "found": "wave 15 re-check (tier provisional, by verdict)",
-  "reopened": "closed in wave 14",
-  "tier_as_ranked": "E2",
-  "moved": "T56a: tiered by its work by a fresh reader - The implementation already draws the innermost arch 12 ft (one pitch) off the hall as the page describes; the disagreement is only the page's class for that distance, which no implementation change resolves.",
+  "found": "wave 47 impl-drift round 4",
+  "tier_as_ranked": "E1",
+  "moved": "T122a (fresh reader): tiered by its work - Not fixed: 0220.drawing.html:4 still lists 'convention (the innermost arch one pitch off the hall; ...)' and :29 'The innermost arch stands 12 ft off the hall's nearest face, the same as the spacing between arches.' The procedure already draws that distance and already labels it GUESS (building-programs.md:132), so the disagreement is only in the page's class; T56a tiered this same key E4 for that",
   "wave": "",
   "scope": "mode-a"
  },

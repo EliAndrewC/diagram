@@ -481,5 +481,10 @@
  "l7r/diagram/hamletgen/ways/sweeps.py::_drop_end_nubs#nub at a junction dropped": "46",
  "l7r/diagram/hamletgen/ways/track.py::connector_track#track's wander": "46",
  "l7r/diagram/hamletgen/ways/law.py::lanes_that_kink#bends like a path": "46",
- "l7r/diagram/hamletgen/ways/track.py::stage_track#spur bow": "46"
+ "l7r/diagram/hamletgen/ways/track.py::stage_track#spur bow": "46",
+ "l7r/diagram/settlement/homestead_parts/belt_law.py::BeltReading.holes#continuous planting": "47",
+ "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#every crown gives way round a persimmon, no overlap": "47",
+ "research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html::the belts' measured figures#belt arcs": "47",
+ "docs/building-programs.md::Magistrate's manor (county magistracy)#road checkpoint tier": "47",
+ "docs/building-programs.md::Country shrine (a village district's shrine)#hall largest and monk's home": "47"
 }

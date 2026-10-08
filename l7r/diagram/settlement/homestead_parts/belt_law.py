@@ -280,7 +280,7 @@ class BeltReading:
 
     def holes(self) -> list[tuple[float, float]]:
         """THE ONE PREDICATE of W17: every opening (v1, v2) across the wind wider than `_BELT_GAP_FT` between two crowns
-        that is a HOLE - not where a way crosses the belt, not where the page cuts it, not a run break (W19).
+        that is a HOLE - not where a way crosses the belt face to face with no more than `_BELT_GAP_FT` bare either side (`_crossed`), not where the page cuts it, not a run break (W19).
 
         Research:
             continuous planting - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: an
