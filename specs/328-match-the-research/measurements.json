@@ -467,5 +467,56 @@
   "observed": "2026-10-08",
   "source": "pool/hamlets/mizuguchi/mizuguchi.json groves and tree_crowns, after wave 55's top-up",
   "method": "shapely union of the groves' boxes, crowns counted by containment (m:wave55-grove-density-as-drawn); round 1 measured ~401 on the same reading; the open ground is held to GROVE_CROWN_SQFT by the top-up, test_a_grove_throws_one_crown_to_about_180_sq_ft_at_every_grain (an open clump drawn at 0.9-1.0 of its density)"
+ },
+ "batch3-pair-and-controls": {
+  "quantity": "batch 3's pair, 328-start (3f91becf2, batch 2's close) against 328-end (the field-height speedup's HEAD), back to back in scratch worktrees (load 1.3 / 2.5); and the 40-household stage totals (make perf-profile SEED= HOUSEHOLDS=40 STAGE=labels, 'the stages before it took') at each wave's commit and under three controls at HEAD before the speedup: the grove top-up off (TOPUP_TRIES 0), KNOTTED_TRIES 1, and wave 52's fixture_seats.py (the barn seat restored)",
+  "observed": "2026-10-08",
+  "method": "make perf LABEL=328-start / -end and make perf-report AGAINST=328-start; make perf-profile per commit with the current profiler copied in (commits before 3aa752419 lack beyond_the_band and rolled the default size - not counted)",
+  "value": {
+   "total": 6.0,
+   "10hh": -7.2,
+   "20hh": -1.3,
+   "40hh": 5.7,
+   "40hh_seed47_s": {
+    "start": 13.0,
+    "end": 16.1
+   },
+   "40hh_seed25": "refused at the end (WebRefused: 14 access lanes' first leg within 7 ft of a neighbor's yard; bisected to 19f69655c, the barn seat withdrawn; passes at e4c99b277)",
+   "40hh_seed4_s": {
+    "start": 16.8,
+    "before_speedup": 19.3,
+    "end": 16.2
+   },
+   "seed47_40hh_by_commit_s": {
+    "3aa752419": 13.8,
+    "f5dd7e198": 13.9,
+    "e4c99b277": 14.7,
+    "19f69655c": 15.7,
+    "2d9ad0b19": 15.5,
+    "d7586617f": 15.8
+   },
+   "controls_at_head_s": {
+    "head": {
+     "4": 19.1,
+     "47": 16.0
+    },
+    "no_topup": {
+     "4": 19.0,
+     "47": 15.8
+    },
+    "barn_seat_restored": {
+     "4": 19.9,
+     "47": 15.0
+    },
+    "knotted_tries_1_web_profiled": {
+     "47": 10.4,
+     "head": 10.1
+    }
+   },
+   "field_height_near_profiled_s": {
+    "seed4_hinterland_total": 12.9,
+    "field_height_near": 9.2
+   }
+  }
  }
 }

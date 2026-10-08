@@ -751,7 +751,7 @@ scratch worktrees back to back on a quiet host, then `make perf-explain` and the
 |---|---|---|---|---|
 | 1 | 42-46 | waves 42, 44, 45 taken alone (band 1, 1, 0; confirmed); the batch 4a9b7c077 -> 2e3153b4e band 2, its cause (the track out drawn the canvas' diagonal past the frame, wave 46) removed by wave 47's `past_the_frame` - perf-audit consistent, audit not-justified as measured: batch 2's pair re-measures it, and explains seed 47's +0.19 s web at 40 households | green 2026-10-08 | closed but for the pair |
 | 2 | 47-50 | 2e3153b4e -> 3f91becf2: band 1, TOTAL -3.5%; batch 1's band 2 re-measured and gone. Its one growth (seed 39, 10 households, homesteads +0.24 s, web -0.2 s) is wave 47's past_the_frame candidate sending that roll's track out through the fabric router - perf-audit CONSISTENT on its own control (the candidate undone removes the growth), profiled with the new `make perf-profile HOUSEHOLDS=` | green 2026-10-08 (waves 47-51, the NEEDS-WORK fixes re-gated) | closed: 12 glyph checks PASS (field pond, woodland commons and wet paddy after rounds 2-3) |
-| 3 | 51- | owed at the batch close, from 3f91becf2 | at the batch close | open |
+| 3 | 51-55 | 3f91becf2 -> HEAD: band 3 - 40 households +5.7% from seed 47 (+23.8%, web and homesteads: wave 52's privy and heap re-seating, bisected per commit) and seed 25 refused (T140); 10 households -7.2%, 20 -1.3%; seed 4's hinterland growth fixed in the batch (field_height_near in one vector pass) - m:batch3-pair-and-controls; perf-audit owed; the GM's band-3 sign-off owed | green 2026-10-08 | closing: 7 glyph checks PASS (homestead grove at round 2), the record checks answered; T137 and T140 open for the GM |
 
 ## Constitution Check
 

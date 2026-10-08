@@ -1721,3 +1721,7 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
       research: rendering
 - [ ] T139 the claims re-checked by `impl-drift`; the record checks owed (FR-005, FR-006)
       research: rendering
+- [ ] T140 the 40-household scaling roll of seed 25 refuses its web since the barn seat's withdrawal (19f69655c; fourteen
+      access lanes' first leg within 7 ft of a neighbor's yard - m:batch3-pair-and-controls): fix the seating so a door's way
+      keeps the fabric gap at 40 households, or the GM's waiver with batch 3's band-3 sign-off
+      research: rendering
