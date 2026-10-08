@@ -33,6 +33,8 @@
  "docs/buildings.md::Scale#main gate passage width": "E1",
  "docs/buildings.md::Scale#salt ward marker": "E2",
  "docs/buildings.md::Walls and gates#divider wall": "E0",
+ "docs/buildings.md::Walls and gates#internal divider walls separating courts, each with its own": "E0",
+ "docs/buildings.md::Walls and gates#main gate placed in the south wall the one placed example, j": "E0",
  "docs/buildings.md::Walls and gates#no salt heaps or wards drawn at a compound's gates": "E0",
  "docs/buildings.md::Walls and gates#threshold stones": "E0",
  "docs/buildings.md::Walls and gates#threshold wards": "E2",

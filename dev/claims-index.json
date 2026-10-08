@@ -1925,16 +1925,21 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sheet conventions#main gate on the south wall": {
-  "code": "d9193b9e47e2d1ad",
+  "code": "c0efd7a2fec074c6",
   "core": "c31b35e716fa6c13",
   "date": "2026-10-08",
-  "note": "\"Orientation... a walled compound's main gate faces south (bottom)\" fixes one wall on every sheet, but the cited record attests at least two other walls: Joge's main gate \"together at its east wall\" (0093) and the Higuchi house's \"front gate\" north of the watercourse (0091). Neither cited page puts a main gate in a south wall: the south in 0091 belongs to the garden. Several attested forms make this a per-settlement seeded roll, so fixing south is drift. The other route is to relabel the claim DEVIATION and record the fixed south gate as a deliberate choice on a drawing page. North-at-top (GM 2026-07) is a ruling about how the map is oriented, not about the gate, so it does not cover this. [0093 §7, 0091 §21, §50, §51]",
+  "note": "the page's default, used on both models: \"where nothing else decides it, the gate faces south\"; a sheet has no town to front; Joge's east-wall gate is cited correctly",
   "pages": {
-   "0091-samurai-residences-and-their-rooms-buke-yashiki.html": "aea2caa039ea5e60",
-   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html": "976d82c32111af9d"
+   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.drawing.html": "017ee0b68f90e06e"
   },
-  "research": "f846547eb18756e8",
-  "verdict": "DRIFTED"
+  "research": "46458bb7b6f54af4",
+  "rests": [
+   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:74c4edddb44a6e24",
+   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.drawing.html:214fecd4c06bf067",
+   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.drawing.html:e01efb8bf02042d7",
+   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.drawing.html:e116904d37e71942"
+  ],
+  "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sheet conventions#sheet conventions": {
   "code": "38228a9d641b0b44",
@@ -1976,6 +1981,22 @@
   ],
   "verdict": "IN-STEP"
  },
+ "docs/buildings.md::Walls and gates#divider wall between the courts": {
+  "code": "af1439faf4fab30d",
+  "core": "d3ae8ce66de7d544",
+  "date": "2026-10-08",
+  "note": "two courts with the office in front and the residence behind, split by a divider with its own gate, as recorded",
+  "pages": {
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "8d81fb67fc6be64e"
+  },
+  "research": "b9f86fd8593ec1ea",
+  "rests": [
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:049a643bfa279d82",
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:45ffe904afced68b",
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:b92fdf4980d4aceb"
+  ],
+  "verdict": "IN-STEP"
+ },
  "docs/buildings.md::Walls and gates#gatehouse": {
   "code": "2de3f853c27cbedf",
   "core": "d3ae8ce66de7d544",
@@ -1996,14 +2017,6 @@
   ],
   "verdict": "DRIFTED"
  },
- "docs/buildings.md::Walls and gates#internal divider walls separating courts, each with its own gate opening (no cited question covers it)": {
-  "code": "d3ae8ce66de7d544",
-  "core": "d3ae8ce66de7d544",
-  "date": "2026-10-08",
-  "note": "internal divider walls separating courts, each with its own gate opening (no cited question covers it)",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  "docs/buildings.md::Walls and gates#main gate forms": {
   "code": "c90751aa9d5da411",
   "core": "d3ae8ce66de7d544",
@@ -2023,13 +2036,22 @@
   ],
   "verdict": "IN-STEP"
  },
- "docs/buildings.md::Walls and gates#main gate placed in the south wall (the one placed example, Joge, has its gate at the east wall)": {
-  "code": "d3ae8ce66de7d544",
+ "docs/buildings.md::Walls and gates#main gate on the south wall": {
+  "code": "ebc7a690af2e91c1",
   "core": "d3ae8ce66de7d544",
   "date": "2026-10-08",
-  "note": "main gate placed in the south wall (the one placed example, Joge, has its gate at the east wall)",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "note": "the same default as above, applied to the south-wall gap in the compound wall",
+  "pages": {
+   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.drawing.html": "017ee0b68f90e06e"
+  },
+  "research": "46458bb7b6f54af4",
+  "rests": [
+   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:74c4edddb44a6e24",
+   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.drawing.html:214fecd4c06bf067",
+   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.drawing.html:e01efb8bf02042d7",
+   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.drawing.html:e116904d37e71942"
+  ],
+  "verdict": "IN-STEP"
  },
  "docs/buildings.md::Walls and gates#main gate posts": {
   "code": "3d3720e1a5dc2e56",

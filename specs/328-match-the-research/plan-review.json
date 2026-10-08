@@ -1,45 +1,45 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "0c40c03550af8a2320d7905960e0f0acb55c3f69e839cf5568b2e0636261eb1a",
+ "plan_sha256": "020a30e3505c39141df61e42e1ad187beafde6d1feeeff616bf873c5095cda32",
  "reviewed": "2026-10-08",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W35-scope",
-   "summary": "wave 34's ten found rows tiered by a fresh reader (T95a): eight E0 claims written or relabeled (dwelling band GUESS 0221 drawing; clerk positions DEVIATION 0099 drawing; barracks watch GUESS not CANON 0116; office hall cited to 0113 drawing; practice ground 0165 drawing; hearing court posts 0099 drawing; no salt wards at gates 0240 drawing; the T's stem CONVENTION 0081 drawing)",
+   "id": "W36-scope",
+   "summary": "wave 36 = wave 35's two found UNCLAIMED rows, tiered E0 by a fresh reader (T97a); claims only, no executed code",
    "class": "within",
-   "why": "FR-003 E0 and FR-004: each cited page, unedited for this purpose, already says what the doc or code does (checked against each page's text); only the claim's label or citation changes"
+   "why": "FR-003/FR-006: the next contiguous rows, easiest tier first; both cited drawing pages (0123, 0090, 0092) last changed in content before this audit (0123 by 303/292, 0090 by 319 H13 on 2026-10-05; 329 only renamed them) and say the default-south gate and the two courts with a gate between them"
   },
   {
-   "id": "W35-stale-clerk",
-   "summary": "the stale UNRESEARCHED 'clerk positions at the dais' claim in docs/buildings.md takes the same DEVIATION as its programs.md row",
+   "id": "W36-repoint",
+   "summary": "the sheet-conventions south-gate claim re-pointed from 0093/0091 to 0123 drawing, and the same claim added under Walls and gates",
    "class": "within",
-   "why": "the same E0 fact (0099 drawing: 'a deliberate deviation, for simplicity'); a found row fixed in the same wave"
+   "why": "FR-004: an E0 fix corrects the claim (its citation), not the research; the old citations did not say south"
   },
   {
-   "id": "W35-E2-left",
-   "summary": "the Scale paragraph's salt-ward marker clause and the Z-to-T rule in _one_joint tiered E2 and left for their place in the run",
+   "id": "W36-followup",
+   "summary": "the 0123/0093 disagreement on a jin'ya's gate direction noted in claims-followup.md, not edited here",
    "class": "within",
-   "why": "FR-003 E2 (one procedure paragraph; one function's logic) and FR-006 (waves a contiguous run lowest tier first); not dropped, ranked"
+   "why": "a record edit outside the wave's rows, logged in the feature's standing follow-up list as earlier waves did; no row is dropped by it"
   },
   {
-   "id": "W35-0090-note",
-   "summary": "0090's drawing page credits a 38 ft deep office hall to the drawn compounds while the three hand sheets draw 28 ft; recorded in claims-followup.md, no doc value changed",
+   "id": "W36-occasions",
+   "summary": "no review occasions",
    "class": "within",
-   "why": "the doc matches the sheets and 0113's band; changing the record is FR-004's exception path, so noting it rather than editing the page or the implementation keeps the direction of the fix"
+   "why": "no map, glyph or sheet changes (feature 294 occasions)"
   },
   {
-   "id": "W35-stack",
-   "summary": "wave 35 proceeds on the unpushed waves 9-34 under condition (6), the backup branch not pushed past 51da9771f (wave 32's close) because the 329 merge commit carries stray profiles awaiting the GM's call",
+   "id": "W36-cond6",
+   "summary": "condition (6) at 0e87667c8: (1) held but for the backup push, withheld pending the GM's call on the 329 merge commit; (2)-(5) held",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "condition (1)'s backup push is blocked, not skipped: history may not be rewritten, so pushing the backup would put the merge's .prof files on GitHub and pre-empt the very decision left to the GM; the plan discloses it; wave 35 changes no executed code (claim comments and a docstring line), so it opens no pair and stacks no behavior; (2)-(5) unaffected"
+   "why": "same narrowing ruled LEGITIMATE at amendment 34; measured: origin backup/digram-backlog is 51da9771f, an ancestor of 0e87667c8 48 commits behind, so the push is indeed withheld, and the GM's request defers questions to the end rather than blocking work"
   },
   {
-   "id": "W35-no-pair",
-   "summary": "no bookend pair and no review occasions for wave 35",
+   "id": "W36-verify",
+   "summary": "impl-drift on the touched claims and the gate",
    "class": "within",
-   "why": "no executed code or pool map changes; plan's Performance bookends rule owes a pair only to a wave that changes engine behavior"
+   "why": "FR-005"
   }
  ],
  "verdict": "CLEAR"

@@ -1207,7 +1207,9 @@ divider walls between the courts, each with its gate, on 0090's drawing page (th
 
 - [x] T97a wave 35's found rows tiered by the work they take, by a fresh reader (FR-002, FR-003, SC-003)
       research: rendering
-- [ ] T97 the claims written (FR-003 E0, FR-004)
+- [x] T97 the claims written (FR-003 E0, FR-004)
       research: rendering
-- [ ] T98 the claims re-checked by `impl-drift`; the close: `make done` green, the wave column (FR-005, FR-006)
+      verify: DONE. the south-wall gate (0123 drawing; the sheet conventions' claim re-pointed) and the courts' divider walls (0090 drawing) claimed
+- [x] T98 the claims re-checked by `impl-drift`; the close: `make done` green, the wave column (FR-005, FR-006)
       research: rendering
+      verify: DONE. impl-drift IN-STEP on all three; amendment 35 FAITHFUL, plan CLEAR; make done green; no executed code changed; the wave column
