@@ -3,7 +3,7 @@ times remote places grew no winter barley at all, though it spread further in th
 
 A market town sat in the middle of the countryside it served. In China, its buyers and sellers on
 market days were chiefly the villagers nearby, and the villages that traded at one town lay within a walk of a few miles
-of it, the longest about 3 miles.
+of it, the longest typically about 3 miles.
 
 A second crop on the paddy, barley in the winter after the rice, needed twice the manure of one crop, and in medieval
 times enough could be had only near densely settled districts. In the Edo period the second crop spread further, above

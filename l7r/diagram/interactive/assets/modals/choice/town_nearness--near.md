@@ -1,10 +1,10 @@
 About: A settlement near its market town lay within the few miles around it whose fields the town's night soil kept richly
-manured; around Kanazawa the farmers within that ring brought vegetables into town every morning to exchange for its
+manured; around Kanazawa, a castle town, the farmers within that ring brought vegetables into town every morning to exchange for its
 households' urine.
 
 A market town sat in the middle of the countryside it served. In China, its buyers and sellers on
 market days were chiefly the villagers nearby, and the villages that traded at one town lay within a walk of a few miles
-of it, the longest about 3 miles.
+of it, the longest typically about 3 miles.
 
 A second crop on the paddy, barley in the winter after the rice, needed twice the manure of one crop, and in medieval
 times enough could be had only near densely settled districts. In the Edo period the second crop spread further, above
@@ -12,14 +12,14 @@ all around Kyoto and Osaka and along the Inland Sea, where better seed, bought f
 Only a paddy that drained well could carry the barley at all.
 
 Night soil was heavy, and carrying it far cost too much: from most rural towns it went no further than 2 or 3 miles.
-Around Kanazawa, a castle town, the fields within about 2.5 miles got urine and abundant manure, those further out
+Around Kanazawa the fields within about 2.5 miles got urine and abundant manure, those further out
 manure, rapeseed cake and dried sardine, and remote places bushes and grasses as well.
 
 Guesses:
 - Whether this settlement's market town is near or far: no record of the settlement gives the distance, so it is rolled
   with even odds.
 - How a town's nearness and a settlement's drainage weigh against each other: both set the odds of a winter crop, but no
-  source says how much each counts. A near town leaves the odds the drainage gives whole and a far one halves them, rather
+  source says how much each counts, so a near town leaves the odds the drainage gives whole and a far one halves them, rather
   than ruling the crop out as remoteness did in medieval times, because the second crop spread further in the Edo period,
   bought fertilizer among the reasons.
 

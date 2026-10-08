@@ -627,7 +627,7 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
   (0008: "low ground ringed with an embankment and dug out"). The winter crop's odds set by the site, barley weighing
   the drained share of the paddy, halved where a rolled town nearness is far (0009: the drainage and a town's nearness
   set the odds, how they weigh a GUESS). The wood shed seated off the house's own walls, never the front wall, with no
-  extra outward pace (0043). The pond feeder and the lotus draw are DEFERRED on measure: no kept map draws either.
+  extra outward pace (0043); its step HELD past the page's ken behind ranking row 101 (`refuse_unreached#every household reached`), as wave 9 held it. The pond feeder and the lotus draw are DEFERRED on measure: no kept map draws either.
 - **Measured**: the five hamlets' winter crops unchanged. Inashiro and Kuwabata re-seat wood sheds. Inashiro and
   Mizuguchi draw the dish pond. The scaling rolls (10, 20 and 40 households; seeds 4, 25, 39, 47) lay every shed.
 - **Occasions**: glyph-redrawn field pond on Inashiro and Mizuguchi; placement-changed wood shed on Inashiro and
@@ -639,13 +639,14 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 
 - **Scope**: the next kept rows. The belt's crossing allowance made each way's own (0072, "as written": two ways through one
   opening excuse 30 ft either side of each, the stretch between no more than twice that). The manure heap stepped beyond its
-  privy along the line from the house's center (0042: "on the side away from the house"). The privy's barn seat set against
-  the steading annex (0047): a north annex's east gable (its north wall was tried and refused cohort seed 7's web at 20
-  households), a west annex's west wall, the house's own end where there is none.
+  privy along the line from the house's center (0042: "on the side away from the house"). The privy's barn seat withdrawn
+  (spec-fidelity W52-3): 0047's barn is a building of its own and a hamlet farm draws no barn, so there is no barn seat and
+  the barn's share goes to the yard, the front and the stable at their own weights; drawing the barn is filed as an E3
+  found row (`found-wave52.jsonl`).
 - **Tooling** (the GM's four-hour check, 2026-10-08): `make cohort HOUSEHOLDS=` rolls the scaling sizes untimed, the band
   lifted as the perf snapshot lifts it; measure-hooks reminds a `make perf` outside a pair's legs of it; `make perf-profile
   HOUSEHOLDS=` profiles a growth at the size it was measured.
-- **Measured**: the 20- and 40-household cohorts match the commit before the wave (2/4 and 3/4); seed 4's refusal at 20
+- **Measured**: the 20- and 40-household cohorts match or better the commit before the wave (3/4 and 3/4, re-measured after the barn seat's withdrawal); seed 4's refusal at 20
   households predates it and is filed (`found-wave52.jsonl`). Privies and heaps re-seat across the five hamlets.
 - **Occasions**: placement-changed privy on Sawada, manure pit on Sawada, manure heap on Inashiro - batch 3's close.
 - **Verification**: tests red on the old code; `impl-drift`; `spec-fidelity`; the gate, pair and occasions at batch 3's close.
@@ -662,7 +663,7 @@ scratch worktrees back to back on a quiet host, then `make perf-explain` and the
 | batch | waves | pair | gate | state |
 |---|---|---|---|---|
 | 1 | 42-46 | waves 42, 44, 45 taken alone (band 1, 1, 0; confirmed); the batch 4a9b7c077 -> 2e3153b4e band 2, its cause (the track out drawn the canvas' diagonal past the frame, wave 46) removed by wave 47's `past_the_frame` - perf-audit consistent, audit not-justified as measured: batch 2's pair re-measures it, and explains seed 47's +0.19 s web at 40 households | green 2026-10-08 | closed but for the pair |
-| 2 | 47-50 | 2e3153b4e -> 3f91becf2: band 1, TOTAL -3.5%; batch 1's band 2 re-measured and gone. Its one growth (seed 39, 10 households, homesteads +0.3 s, web -0.2 s) is wave 47's past_the_frame candidate sending that roll's track out through the fabric router - perf-audit CONSISTENT on its own control (the candidate undone removes the growth), profiled with the new `make perf-profile HOUSEHOLDS=` | green 2026-10-08 (waves 47-51, the NEEDS-WORK fixes re-gated) | closed: 12 glyph checks PASS (field pond, woodland commons and wet paddy after rounds 2-3) |
+| 2 | 47-50 | 2e3153b4e -> 3f91becf2: band 1, TOTAL -3.5%; batch 1's band 2 re-measured and gone. Its one growth (seed 39, 10 households, homesteads +0.24 s, web -0.2 s) is wave 47's past_the_frame candidate sending that roll's track out through the fabric router - perf-audit CONSISTENT on its own control (the candidate undone removes the growth), profiled with the new `make perf-profile HOUSEHOLDS=` | green 2026-10-08 (waves 47-51, the NEEDS-WORK fixes re-gated) | closed: 12 glyph checks PASS (field pond, woodland commons and wet paddy after rounds 2-3) |
 | 3 | 51- | owed at the batch close, from 3f91becf2 | at the batch close | open |
 
 ## Constitution Check
