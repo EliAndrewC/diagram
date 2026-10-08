@@ -368,6 +368,16 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
   changes no executed code, so it owes no pair.
 - **Verification**: `impl-drift` on the touched claims, the gate.
 
+## Wave 30 (amendment 29, 2026-10-08)
+
+- **Scope**: row 458 (`tasks.md` Phase 31): the polder's header reservoir sized by the paddy it waters - a share of the
+  block's acres rolled between two and three tenths (0061, the Song manual's figure), its ellipse's proportions kept (a
+  GUESS); it was a fixed 82 x 54 ft ellipse. Row 434 held for the GM.
+- **Occasions**: the pond re-placed on Kuwabata (a glyph check); Kuwabata re-rolls round the larger reservoir.
+- **On the unpushed waves 9-29** under condition (6): (1)-(5) held at wave 29's close (2e33f31b3, backed up); wave 30's own
+  pair opens at 2e33f31b3.
+- **Verification**: `impl-drift` on the touched claims, the glyph check, the gate, wave 30's own bookend pair.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Each later wave that changes engine behavior takes

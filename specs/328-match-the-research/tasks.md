@@ -13,6 +13,8 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 - (wave 5, landed and reviewed) placement-changed village lane on kashikawa - wave 5: 0033's row street runs on off the map as the road into it at both ends, where
   the web cut it back to its last joint (`trim_streets`); Kashikawa's and Mizuguchi's far ends now run off the sheet as a
   second way out (every way is inked `village lane`).
+- placement-changed: pond on kuwabata - wave 30: the header reservoir sized by the paddy it waters (0061: two or three tenths),
+  about 4.25 acres against the old fixed ellipse's third of an acre; Kuwabata re-rolls round it
 - none (wave 29): claims only, no executed code changed
 - none (wave 28): the polder edge and the knot form tried and reverted; a claim and a comment changed, no executed code
 - none (wave 27): the brook and flank rules change no pool map
@@ -1075,3 +1077,18 @@ one E2 (the knot gap in `next_gather`, left for its place in the run).
 - [x] T84 the claims re-checked by `impl-drift`; the close: `make done` green, the wave column (FR-005, FR-006)
       research: rendering
       verify: DONE. impl-drift IN-STEP on all three; amendment 28 FAITHFUL, plan CLEAR; make done green; no executed code changed; the wave column
+
+## Phase 31 - wave 30 (amendment 29): the polder's reservoir sized by its paddy
+
+The next open in-scope E2 row (row 434, the shrine cap, held for the GM). 0061's drawing page: "A reservoir pond is sized by
+the paddy it waters", two or three tenths of it (the Song-dynasty manual), less where a stream also feeds the paddy. The
+polder's header reservoir is its only source, and it was a fixed 82 x 54 ft ellipse whatever the acreage. Now its area is a
+share of the block's acres rolled in the band (`RESERVOIR_SHARE`), the ellipse keeping its proportions (`RESERVOIR_ASPECT`,
+GUESS). Kuwabata's reservoir is about a fifth of its 21.2-acre block.
+
+  - `l7r/diagram/hamletgen/water/polder.py::stage_polder#reservoir size` - the reservoir sized by its paddy (0061)
+
+- [ ] T85 the reservoir sized by its paddy; the five hamlets regenerated (Kuwabata re-rolls) (FR-004, FR-005)
+      research: rendering
+- [ ] T86 the claims re-checked by `impl-drift`; the glyph check (the pond on Kuwabata); the close: wave 30's own bookend pair, `make done` green, the wave column (FR-005, FR-006)
+      research: rendering
