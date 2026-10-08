@@ -1618,7 +1618,8 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
   dropped; the board stands on its 6 ft verge (0190).
 - Found on the way: the board's caption proved against the 7 x 3 ft search face, not the 16 x 6 ft board (`found-wave49`).
 
-- [ ] T125 rows 507-511 (FR-003, FR-004)
+- [x] T125 rows 507-511 (FR-003, FR-004)
       research: rendering
+      verify: DONE. rows 507-511: the town, gate-complex, castle and rampart entries DEFERRED on measure; the caption key removed whole (exception NOT LEGITIMATE; a caption goes down where it covers the least, one with no seat in the frame moved inward); the board's lane permission dropped; tests restated; the five hamlets byte-identical; impl-drift answered r1-r5; spec-fidelity CLEAR r2
 - [ ] T126 the claims re-checked by `impl-drift`; the close at batch 2's (FR-005, FR-006)
       research: rendering

@@ -31291,21 +31291,20 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/placer.py::place#caption clearance": {
-  "code": "9006708712c0122d",
+  "code": "e5d4568acc298f1f",
   "core": "d96ca008324c903f",
   "date": "2026-10-08",
-  "note": "the page sets half the letter height only as the gap from the caption's own feature (measured from its drawn edge, and called \"our calibration, not a finding\"). It says nothing about a margin to keep off other ink, and it tests clearance on \"its true outline\" against the true outlines of everything else, with no padding. Here `clear = CLEAR_EM * size` pads every overlap test against other ink (`index.blocked`, `_score`, `nudge`). The bundle does not give the value of `PREFERRED_OFFSET_EM`. Either relabel the claim UNRESEARCHED or GUESS, or record the clearance on the drawing page",
-  "pages": {
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html": "fa1bb4a252673d47"
-  },
-  "research": "0a880fd17413bbf6",
+  "note": "0242 sets half the letter height only as the gap from the caption's own feature, and calls it \"our calibration, not a finding\"; it tests clearance against other ink but sets no gap for it, so UNRESEARCHED is the right label",
+  "pages": {},
+  "research": "",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:029c96e91be555c3",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:08c0bd1f9acf9800",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:2a0f6f2ce376476e",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:79466d587ee45226",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:d00d7c60e14c6181"
   ],
-  "verdict": "NEEDS-RESEARCH"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/placer.py::place#free space wins": {
   "code": "78f8b5b28784187b",
