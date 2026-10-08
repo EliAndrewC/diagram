@@ -1,44 +1,45 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "7f702e190e130d7f2fc9de4bc0eddb55929ad8df49c11f648cc4920366837771",
+ "plan_sha256": "94ae70461773ec7a9ae6ff0d564816bbd367d3926e80b001605aa60bb291e020",
  "reviewed": "2026-10-07",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W23-scope-E0",
-   "summary": "six of wave 22's seven found rows E0 by T71a and written as claims; seat_rows#farms to a street (NEEDS-RESEARCH) is E4 and waits for its research pass, its UNRESEARCHED line removed from rows.py",
+   "id": "W24-scope-rank-step",
+   "summary": "_rank_step adds SUN_CORRIDOR_FT by abs(oy), whichever way the ranks run; row 437's citation of 0038 rides along",
    "class": "within",
-   "why": "round 1's NOT LEGITIMATE item resolved: the spec's Edge Cases make a NEEDS-RESEARCH finding E4 with the research pass first; overrides.json now tiers the row E4 with that fix, the rows.py docstring no longer labels the share and slack UNRESEARCHED, and plan.md and tasks.md Phase 24 both say six rows claimed, the seventh E4. The other six are UNCLAIMED rows claimed (wave 1 precedent) and the well row matching 0196."
+   "why": "0038 drawing: no neighbor's farmhouse within 39 ft south of a yard - a rank stepping south stands in the sun of the rank behind as one stepping north does; the implementation moves to the research (FR-004)"
   },
   {
-   "id": "W23-well-withdrawn",
-   "summary": "_well_vr's DRIFTED row withdrawn: 0196's about 19 ft is the curb well() draws; the roof square claimed UNRESEARCHED",
+   "id": "W24-scope-bank-seats",
+   "summary": "_bank_seats ranks midpoints and eighths together by distance to the houses; the UNRESEARCHED midpoints-first clause retired",
    "class": "within",
-   "why": "the implementation matches the page's sized element; only the claim's citation was wrong - FR-003 E0"
+   "why": "0025 drawing: the sty takes the place nearest the houses that has room; the near-half bound is untouched (FR-004)"
   },
   {
-   "id": "W23-occasions-none",
-   "summary": "no review occasions",
+   "id": "W24-found-row-E0",
+   "summary": "wave 23's found row (draw_holdings drops a cell a lane or stream touches) tiered E0 by a fresh reader (T73a) and claimed CONVENTION",
    "class": "within",
-   "why": "the l7r diff is docstrings only; nothing drawn moves"
+   "why": "FR-002/FR-003 by a fresh reader, as seven earlier UNCLAIMED rows were claimed CONVENTION at E0; 0081 drawing says a lane never crosses row crops and MAY touch a plot - permission, not a requirement to draw it, so dropping a touching cell does not contradict the page and the label is honest about the rest"
   },
   {
-   "id": "W23-stack-cond6",
-   "summary": "wave 23 stacked on unpushed waves 9-22 under the wave-11 exception's condition (6); pair opens at 049e951d4",
-   "class": "within",
-   "why": "an earlier LEGITIMATE exception applied on its own terms, wave 22 closed with its pair recorded"
+   "id": "W24-row-434-held",
+   "summary": "row 434 (the shrine cap) held for the GM, not fixed in ranked order",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "implied by the GM's own amendment: a question is deferred to the end of the feature rather than blocked on; the row stays in the ranking, not dropped"
   },
   {
-   "id": "W23-street-facing-E3",
-   "summary": "seat_rows#row farm faces its street stays E3",
+   "id": "W24-occasions-none",
+   "summary": "no review occasion declared: rank search reaches no pool map; Kuwabata's sties move a few feet along their own bank",
    "class": "within",
-   "why": "FR-006 tier order"
+   "why": "FR-005 runs the occasions a wave opens (feature 294); measured manifests: only kuwabata.json changed, only pig_sties and the site-boundary hole around one - not a substantial placement change"
   },
   {
-   "id": "W23-verification",
-   "summary": "impl-drift on the touched claims, the gate, wave 23's own bookend pair",
+   "id": "W24-condition-6",
+   "summary": "wave 24 stacks on the unpushed waves 9-23 under the wave-11 exception's condition (6); its pair opens at 397c005fb",
    "class": "within",
-   "why": "FR-005 as written"
+   "why": "the exception was ruled LEGITIMATE on conditions; at 397c005fb T72 is ticked and backup/digram-backlog points at 397c005fb (ls-remote), the CLAIMS_OK on the same found-row basis as every wave since 19"
   }
  ],
  "verdict": "CLEAR"
