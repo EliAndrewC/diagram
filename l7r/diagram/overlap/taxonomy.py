@@ -641,9 +641,6 @@ _MATRIX_ALLOWED_KEYS: dict[frozenset[str], str] = {
     frozenset(
         {"castle_towers", "bridges"}
     ): "the ote-mon's moat deck lands at the gate tower's foot - a castle bridge ENDS at its gate, so the deck's landing margin may kiss the tower footprint, exactly as a city gate's bridge lands in its gate complex",
-    frozenset(
-        {"channels", "dry_plots"}
-    ): "a supply canal hugs the fan's HIGH DRY MARGIN by design (the comb doctrine), and the dry hem IS that margin - a plot may be crossed by the irrigation that serves it. A NATURAL watercourse is a different matter and stays forbidden: dry_plots x streams is the defect this whole feature was opened for",
     frozenset({"buildings", "merchant_estates"}): "a merchant estate is a walled COURT drawn around an inner building that is itself a checked struct",
     frozenset(
         {"wall", "flower_fields"}
@@ -660,7 +657,6 @@ Research:
     one object under two keys - NONE: a hall as religious and shrines, a gate tower twice
     ward fence meets the wall - research/questions/0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html: ends at the rampart
     castle moat bridge - research/questions/0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html: a deck over the castle's own moat to its gate
-    supply canal along the dry hem - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: plots laid along the canal
     merchant estate court - research/questions/0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html: a walled court round its house
     flower bed against the town wall - UNRESEARCHED: a bed laid flush inside the rampart
 """
