@@ -1600,7 +1600,7 @@
   "key": "l7r/diagram/hamletgen/ways/joints.py::_one_joint#a pull at a joint is refused if it leaves more kinks than th",
   "verdict": "UNCLAIMED",
   "tier": "E0",
-  "fix": "a pull at a joint is refused if it leaves more kinks than the two lanes had (kink_spans)",
+  "fix": "        no new kink from a pull - research/questions/0081-village-lanes.drawing.html: a lane does not zigzag (two turns over 50 degrees within 40 ft) or double back, so a pull at a joint that leaves more kink_spans than the two lanes had is refused",
   "files": [
    "l7r/diagram/hamletgen/ways/joints.py"
   ],
@@ -1608,6 +1608,8 @@
   "flag": "",
   "found": "wave 37 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
+  "e0_basis": "joints.py:324 refuses len(kink_spans(new)) > len(kink_spans(old)); kink_spans (ways/clearance.py:358-370) is the 0081 hairpin and zigzag rules; 0081 drawing page 'A lane does not zigzag ... pulled straight' and 'never doubling back' - the code holds the page's bend rules, only the claim was missing",
+  "moved": "T101a (fresh reader): joints.py:324 refuses len(kink_spans(new)) > len(kink_spans(old)); kink_spans (ways/clearance.py:358-370) is the 0081 hairpin and zigzag rules; 0081 drawing page 'A lane does not zigzag ... pulled straight' and 'never doubling back' - the code holds the page's bend rules, only the claim was missing",
   "wave": "",
   "scope": "kept"
  },
@@ -1615,7 +1617,7 @@
   "key": "l7r/diagram/hamletgen/ways/joints.py::_one_joint#how close a pulled lane may come to a building gap  maxtouch",
   "verdict": "UNCLAIMED",
   "tier": "E0",
-  "fix": "how close a pulled lane may come to a building: gap = max(_TOUCH_GAP=4 ft, half the lane width + 2 ft)",
+  "fix": "        a pulled lane's clearance - CONVENTION: where a straightened lane touches a building or wall it keeps max(_TOUCH_GAP 4 ft, half its width + 2 ft), a 5 ft width assumed when none is set; research/questions/0081-village-lanes.drawing.html lets it come right up to the buildings within 6 ft of the old line and calls every distance in its lane bullets a drawing convention, but gives no clearance figure",
   "files": [
    "l7r/diagram/hamletgen/ways/joints.py"
   ],
@@ -1623,6 +1625,8 @@
   "flag": "",
   "found": "wave 37 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
+  "e0_basis": "joints.py:312 gap = max(_TOUCH_GAP, (w or 5.0)/2 + 2.0), used by _clear_touch at joints.py:317; 0081 drawing page: 'runs straight ... wherever it can keep its usual clearance from fences and buildings. It may come right up to the buildings when the straightened line stays within 6 ft' and 'Every turn limit and distance in these bullets is chosen ... not measured'; 0246 drawing page gives only the ",
+  "moved": "T101a (fresh reader): joints.py:312 gap = max(_TOUCH_GAP, (w or 5.0)/2 + 2.0), used by _clear_touch at joints.py:317; 0081 drawing page: 'runs straight ... wherever it can keep its usual clearance from fences and buildings. It may come right up to the buildings when the straightened line stays within 6 ft' and 'Every tur",
   "wave": "",
   "scope": "kept"
  },
@@ -1647,7 +1651,7 @@
   "key": "l7r/diagram/hamletgen/ways/joints.py::_one_joint#the clearance a straightened lane keeps from buildings and w",
   "verdict": "UNCLAIMED",
   "tier": "E0",
-  "fix": "the clearance a straightened lane keeps from buildings and walls where it touches them: half its width plus 2 ft, at least _TOUCH_GAP=4 ft, with a 5 ft width assumed when none is set",
+  "fix": "(the same claim line as its duplicate)",
   "files": [
    "l7r/diagram/hamletgen/ways/joints.py"
   ],
@@ -1655,6 +1659,8 @@
   "flag": "",
   "found": "wave 37 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
+  "e0_basis": "same decision as the gap row: joints.py:312, the same max(_TOUCH_GAP, w/2 + 2 ft) with the 5 ft default",
+  "moved": "T101a (fresh reader): same decision as the gap row: joints.py:312, the same max(_TOUCH_GAP, w/2 + 2 ft) with the 5 ft default - duplicate of l7r/diagram/hamletgen/ways/joints.py::_one_joint#how close a pulled lane may come to a building gap  maxtouch",
   "wave": "",
   "scope": "kept"
  },
@@ -1662,7 +1668,7 @@
   "key": "l7r/diagram/hamletgen/ways/joints.py::_one_joint#the shorter link the T's stem",
   "verdict": "MISLABELED",
   "tier": "E0",
-  "fix": "choosing which lane bends to meet the other is a placement rule, not a matter of how something is shown. It should cite 0081 (a worn path takes the shortest way) or say GUESS",
+  "fix": "        the shorter link the T's stem - GUESS: of the two arriving lanes, the one whose clear link to the other's side is shorter becomes the stem; searched research/questions/0081-village-lanes.drawing.html (a fold at a joint becomes a T, a worn path takes the shortest or easiest way, but not which lane is the stem) and research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html (ways joined at a T, no stem rule)",
   "files": [
    "l7r/diagram/hamletgen/ways/joints.py"
   ],
@@ -1670,6 +1676,8 @@
   "flag": "",
   "found": "wave 37 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
+  "e0_basis": "joints.py:289 claim, code joints.py:304-306 (tees sorted by the stem's last-leg length); 0081 drawing page 'Two lanes that meet end to end are read as one ... meets the other's side as a T' names no stem; 0246 drawing page 'joined at a T' likewise; a placement rule the record is silent on is a GUESS, not CONVENTION",
+  "moved": "T101a (fresh reader): joints.py:289 claim, code joints.py:304-306 (tees sorted by the stem's last-leg length); 0081 drawing page 'Two lanes that meet end to end are read as one ... meets the other's side as a T' names no stem; 0246 drawing page 'joined at a T' likewise; a placement rule the record is silent on is a GUESS",
   "wave": "",
   "scope": "kept"
  },
@@ -6687,22 +6695,6 @@
   "scope": "mode-a"
  },
  {
-  "key": "docs/buildings.md::Scale#main gate passage width",
-  "verdict": "DRIFTED",
-  "tier": "E2",
-  "fix": "the page measures the yakuimon \"across their frontage\" (1.8-2.6 m), which is the structure's width, not the passage; the claim gives that frontage as the passage, the same mix-up this section warns about. Only the nagaya-mon's 12 ft is an opening (\"opens in its central two ken\"). The claim should say the yakuimon passage is narrower than its ~6-8.5 ft frontage",
-  "files": [
-   "docs/buildings.md"
-  ],
-  "after": [],
-  "flag": "",
-  "found": "wave 37 re-check (tier provisional, by verdict)",
-  "reopened": "closed in wave 2",
-  "tier_as_ranked": "E2",
-  "wave": "",
-  "scope": "mode-a"
- },
- {
   "key": "docs/buildings.md::Scale#salt ward marker",
   "tier": "E2",
   "fix": "salt ward marker claim and the Scale paragraph's salt-ward marker text dropped; Hayakawa's wards already off the sheet",
@@ -10237,6 +10229,23 @@
   "found": "wave 2 re-check (tiered by its work at T25a)",
   "tier_as_ranked": "E2",
   "moved": "T25a (amendment 6): tiered by its work - a new knob in the procedure and the type band, and the shrine sheets redrawn",
+  "wave": "",
+  "scope": "mode-a"
+ },
+ {
+  "key": "docs/buildings.md::Scale#main gate passage width",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "the RULE is wrong, not only the claim: make the yakuimon's ~6-8.5 ft the gate's FRONTAGE (post outside to post outside, as 0093's drawing page draws it: 'about 6 to 8.5 ft wide, the frontage the three registered examples measure'), the passage that frontage less the two posts; the nagaya-mon's ~12 ft stays a passage ('opens in its central two ken'). Change the docs/buildings.md Scale claim (line 15) and Main gate paragraph (line 126), compound.py's 8 ft yakuimon passage (line 670) and every hand sheet whose yakuimon posts stand outside a 6-8.5 ft opening; recheck main_gate_passage_ft's readers",
+  "files": [
+   "docs/buildings.md"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 37 re-check (tier provisional, by verdict)",
+  "reopened": "closed in wave 2",
+  "tier_as_ranked": "E2",
+  "moved": "T101a (fresh reader): research/questions/0093-...html:12 measures the yakuimon 'across their frontage' (1.8-2.6 m) and gives no passage; 0093 drawing.html:8 draws the gate 6-8.5 ft wide as that frontage; docs/buildings.md:126 instead sets the passage BETWEEN the posts to 6-8.5 ft, posts drawn on the wall's cut ends outsi",
   "wave": "",
   "scope": "mode-a"
  },

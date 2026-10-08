@@ -454,6 +454,16 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
   329 merge commit; (2)-(5) held at wave 36's close (49824361c); wave 37's own pair opens at 49824361c.
 - **Verification**: `impl-drift` on the touched claims, the gate, wave 37's own bookend pair.
 
+## Wave 38 (amendment 37, 2026-10-08)
+
+- **Scope**: wave 37's found rows tiered by a fresh reader (T101a): three claim lines in `_one_joint` (the T's stem GUESS, a
+  pulled lane's clearance CONVENTION, no new kink on 0081's drawing page) (`tasks.md` Phase 39); the gate passage width
+  tiered E3 and left for its place. No executed code changes.
+- **Occasions**: none.
+- **On the unpushed waves 9-37** under condition (6): (1) held but for the backup push, withheld pending the GM's call on the
+  329 merge commit; (2)-(5) held at wave 37's close (989dbd862); wave 38 changes no executed code, so it owes no pair.
+- **Verification**: `impl-drift` on the touched claims, the gate.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Each later wave that changes engine behavior takes

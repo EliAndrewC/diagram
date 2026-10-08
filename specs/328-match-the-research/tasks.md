@@ -13,6 +13,7 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 - (wave 5, landed and reviewed) placement-changed village lane on kashikawa - wave 5: 0033's row street runs on off the map as the road into it at both ends, where
   the web cut it back to its last joint (`trim_streets`); Kashikawa's and Mizuguchi's far ends now run off the sheet as a
   second way out (every way is inked `village lane`).
+- none (wave 38): claims only, no executed code changed
 - none (wave 37): the Z pulled straight changes no pool map; the salt-ward clauses are doc text
 - none (wave 36): claims only, no executed code changed
 - none (wave 35): claims only, no executed code changed
@@ -1232,3 +1233,20 @@ a fold becomes a T, a Z is pulled like any jog, and the joint is moved back a ve
 - [x] T100 the claims re-checked by `impl-drift`; the close: wave 37's own bookend pair, `make done` green, the wave column (FR-005, FR-006)
       research: rendering
       verify: DONE. impl-drift IN-STEP on the wave's claims; amendment 36 FAITHFUL (round 2), plan CLEAR; make done green; wave 37's own pair band 1 on a quiet host (perf-audit consistent: the same calls and time with the change reverted); the wave column
+
+## Phase 39 - wave 38 (amendment 37): wave 37's found rows
+
+Wave 37's five found rows tiered by a fresh reader (T101a, `audit/t101a-out.jsonl`): four E0 (one a duplicate) claimed in
+`_one_joint`, and one E3 (the yakuimon's 6-8.5 ft frontage drawn as its passage - the doc, the engine's 8 ft and the hand
+sheets together), left for its place in the run.
+
+  - `l7r/diagram/hamletgen/ways/joints.py::_one_joint#the shorter link the T's stem` - GUESS, with what was searched (it was CONVENTION)
+  - `l7r/diagram/hamletgen/ways/joints.py::_one_joint#how close a pulled lane may come to a building ...` (and its duplicate) - CONVENTION
+  - `l7r/diagram/hamletgen/ways/joints.py::_one_joint#a pull at a joint is refused if it leaves more kinks ...` - 0081 drawing
+
+- [x] T101a wave 37's found rows tiered by the work they take, by a fresh reader (FR-002, FR-003, SC-003)
+      research: rendering
+- [ ] T101 the claims written (FR-003 E0, FR-004)
+      research: rendering
+- [ ] T102 the claims re-checked by `impl-drift`; the close: `make done` green, the wave column (FR-005, FR-006)
+      research: rendering

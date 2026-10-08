@@ -286,7 +286,9 @@ def _one_joint(s: Settlement, lanes: list[dict[str, Any]], houses: Sequence[Pt],
 
     Research:
         a fold at a joint becomes a T - research/questions/0081-village-lanes.drawing.html: a fold at the meeting point made a T; a Z across it pulled straight like any jog, the joint moved back a vertex where the pull cannot clear it
-        the shorter link the T's stem - CONVENTION: of the two arriving lanes, the one whose clear link to the other's side is shorter becomes the stem; the page draws a T but does not say which lane is its stem (research/questions/0081-village-lanes.drawing.html)
+        the shorter link the T's stem - GUESS: of the two arriving lanes, the one whose clear link to the other's side is shorter becomes the stem; searched research/questions/0081-village-lanes.drawing.html (a fold at a joint becomes a T, a worn path takes the shortest or easiest way, but not which lane is the stem) and research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html (ways joined at a T, no stem rule)
+        no new kink from a pull - research/questions/0081-village-lanes.drawing.html: a lane does not zigzag (two turns over 50 degrees within 40 ft) or double back, so a pull at a joint that leaves more kink_spans than the two lanes had is refused
+        a pulled lane's clearance - CONVENTION: where a straightened lane touches a building or wall it keeps max(_TOUCH_GAP 4 ft, half its width + 2 ft), a 5 ft width assumed when none is set; research/questions/0081-village-lanes.drawing.html lets it come right up to the buildings within 6 ft of the old line and calls every distance in its lane bullets a drawing convention, but gives no clearance figure
         a jog across a joint pulled straight - research/questions/0081-village-lanes.drawing.html: string-pulled, a vertex
             within 6 ft of the chord dropped
         ways of two kinds stay two - research/questions/0081-village-lanes.drawing.html: a jog across a joint pulled straight
