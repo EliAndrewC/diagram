@@ -14,7 +14,7 @@ from typing import Any
 
 from l7r.diagram.settlement import PointGrid, Settlement, knob_rng, point_in_poly, seg_intersect, segments_cross
 from l7r.diagram.settlement.land.dikes import CREST_REACH, DIKE_GAP_HW, GAP_REACH, course_breaches, dike_band, dike_crest
-from l7r.diagram.sitegen.geom import SQ_FT_PER_ACRE, net_acres, poly_area
+from l7r.diagram.sitegen.geom import net_acres, poly_area
 from l7r.diagram.waterfields import build_polder, clean_polder_parcels
 
 from ..consts import (
@@ -156,16 +156,6 @@ def gaps_for_courses(gaps: Sequence[Any], courses: Sequence[Sequence[Pt]], crest
     return out
 
 
-RESERVOIR_SHARE = (0.2, 0.3)
-"""The header reservoir's area as a share of the paddy it waters, rolled per settlement in the band.
-
-Research: reservoir share - research/questions/0061-reservoir-ponds-tameike.drawing.html: two or three tenths of its paddy, the Song-dynasty manual's figure"""
-RESERVOIR_ASPECT = 54.0 / 82.0
-"""The reservoir ellipse's minor axis against its major (the old fixed 82 x 54 ellipse's proportions).
-
-Research: reservoir shape - GUESS: an ellipse of these proportions; no page gives a reservoir pond's outline (searched 0061, 0019, 0053)"""
-
-
 def stage_polder(s: Settlement, plan: SitePlan) -> None:
     """The POLDER field: a surveyed orthogonal grid diked out of standing water on flat ground.
 
@@ -188,8 +178,7 @@ def stage_polder(s: Settlement, plan: SitePlan) -> None:
 
     Research:
         header reservoir - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html, research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.html: outside the dike, uphill at the ring canal's head
-        reservoir size - research/questions/0061-reservoir-ponds-tameike.drawing.html: a pond sized to the paddy it waters, two or three tenths of it (`RESERVOIR_SHARE`, rolled per settlement)
-        reservoir of a fish-pond block - GUESS: a block converted to fish ponds (`mulberry_dike_fishpond`) takes the paddy's share too; no page sizes a reservoir for fish ponds (searched 0061, 0020, 0019)
+        reservoir size - UNRESEARCHED: a fixed 82 x 54 ft ellipse whatever the acreage; 0061 sizes a reservoir pond by the paddy it waters only for a field on high ground whose pond is its only water, and no page sizes a polder's source, the wild water its inlet sluice draws from (searched 0061, 0017, 0019, 0020)
         dike-pond conversion - research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.html: the block converted to fish ponds, DIKEPOND_CONVERSION or the whole of it
         perimeter dike gapped at crossings - research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html: cut wherever a channel or recorded course crosses it
         dike uncaptioned - CONVENTION: the scripted tier draws the perimeter dike without a label
@@ -214,12 +203,7 @@ def stage_polder(s: Settlement, plan: SitePlan) -> None:
     # derived from the drawn envelope rather than offset from a corner, because which corner is
     # "high" depends on the bearing. It is the wild water the inlet sluice draws from.
     env = plan.envelope
-    # SIZED BY THE PADDY IT WATERS (0061: two or three tenths of it, the Song manual's figure; feature 328 - it was a fixed
-    # 82 x 54 ft ellipse whatever the acreage): the share rolled in that band, the ellipse keeping its 82:54 proportions
-    _share = RESERVOIR_SHARE[0] + knob_rng(plan.spec.seed, "reservoir_share").random() * (RESERVOIR_SHARE[1] - RESERVOIR_SHARE[0])
-    _area = _share * plan.acres * SQ_FT_PER_ACRE / (plan.ftpx * plan.ftpx)
-    prx = math.sqrt(_area / (math.pi * RESERVOIR_ASPECT))
-    pry = prx * RESERVOIR_ASPECT
+    prx, pry = 82.0, 54.0
     # SEATED AT THE DIKE'S OWN INLET SLUICE, pushed straight out from the block. `build_polder` says
     # where the dike is cut for water (`dike_sluices`), and the reservoir is the body that sluice
     # draws from - so the link between them is the short square one Enokida draws, not a diagonal

@@ -806,6 +806,16 @@
   "moved": "T83a (fresh reader): hamletgen/water/polder.py:441 now reads 'wander walked down to a 0.86 box fill - GUESS: ... no page sets how irregular a polder's dike outline was (searched 0019, 0022, 0027)', relabeled from CONVENTION in wave 28 and re-checked IN-STEP",
   "tier": "E0"
  },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::stage_polder#reservoir size": {
+  "after": [],
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py"
+  ],
+  "fix": "research first (archive, then the web): how big a polder's source was - the lake or standing water a weitian's inlet sluice draws from - then the code to the record; 0061's two or three tenths covers a high-ground pond that is its fields' only water, not a polder",
+  "flag": "",
+  "moved": "wave 30 (measured 2026-10-08): the share tried - Kuwabata's reservoir 4.25 acres against its 21.2-acre block - and impl-drift found 0061 gives it only for a field on high ground whose pond is its only water; a polder draws on wild water and no page sizes it: reverted, the fixed ellipse claimed UNRESEARCHED, E4",
+  "tier": "E4"
+ },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::RunOnBlocks.clear#off the steadings": {
   "after": [
    ".claude/skills/diagram/l7r/diagram/hamletgen/ways/web.py::stage_web#a footpath reaches every farmhouse 7 ft off a plot"

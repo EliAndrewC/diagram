@@ -13,8 +13,7 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 - (wave 5, landed and reviewed) placement-changed village lane on kashikawa - wave 5: 0033's row street runs on off the map as the road into it at both ends, where
   the web cut it back to its last joint (`trim_streets`); Kashikawa's and Mizuguchi's far ends now run off the sheet as a
   second way out (every way is inked `village lane`).
-- placement-changed: pond on kuwabata - wave 30: the header reservoir sized by the paddy it waters (0061: two or three tenths),
-  about 4.25 acres against the old fixed ellipse's third of an acre; Kuwabata re-rolls round it
+- none (wave 30): the reservoir share tried and reverted; a claim relabeled, no executed code changed
 - none (wave 29): claims only, no executed code changed
 - none (wave 28): the polder edge and the knot form tried and reverted; a claim and a comment changed, no executed code
 - none (wave 27): the brook and flank rules change no pool map
@@ -1078,18 +1077,18 @@ one E2 (the knot gap in `next_gather`, left for its place in the run).
       research: rendering
       verify: DONE. impl-drift IN-STEP on all three; amendment 28 FAITHFUL, plan CLEAR; make done green; no executed code changed; the wave column
 
-## Phase 31 - wave 30 (amendment 29): the polder's reservoir sized by its paddy
+## Phase 31 - wave 30 (amendment 29): the polder's reservoir - tried, reverted, research first
 
-The next open in-scope E2 row (row 434, the shrine cap, held for the GM). 0061's drawing page: "A reservoir pond is sized by
-the paddy it waters", two or three tenths of it (the Song-dynasty manual), less where a stream also feeds the paddy. The
-polder's header reservoir is its only source, and it was a fixed 82 x 54 ft ellipse whatever the acreage. Now its area is a
-share of the block's acres rolled in the band (`RESERVOIR_SHARE`), the ellipse keeping its proportions (`RESERVOIR_ASPECT`,
-GUESS). Kuwabata's reservoir is about a fifth of its 21.2-acre block - but Kuwabata's block is all fish ponds, no paddy,
-and no page sizes a reservoir for fish ponds: the paddy share applied there is claimed GUESS (amendment 29 round 1).
+The next open in-scope E2 row (row 434 held for the GM). Its suggested fix sized the polder's header reservoir by the paddy it
+waters, two or three tenths of it (0061, the Song-dynasty manual), in place of a fixed 82 x 54 ft ellipse. Tried: Kuwabata's
+reservoir came to about 4.25 acres against its 21.2-acre block (which is all fish ponds, no paddy). impl-drift then found the
+share inapplicable: 0061 gives it only for a field on high ground whose pond is its fields' only water, and a polder is low
+ground diked out of standing water, its reservoir the wild water the inlet sluice draws from - no page sizes it. Reverted; the
+fixed ellipse is claimed UNRESEARCHED with what was searched, and the row is E4, research first.
 
-  - `l7r/diagram/hamletgen/water/polder.py::stage_polder#reservoir size` - the reservoir sized by its paddy (0061)
+  - `l7r/diagram/hamletgen/water/polder.py::stage_polder#reservoir size` - claimed UNRESEARCHED; the row re-tiered E4
 
-- [ ] T85 the reservoir sized by its paddy; the five hamlets regenerated (Kuwabata re-rolls) (FR-004, FR-005)
+- [ ] T85 the reservoir share tried (Kuwabata re-rolled) and reverted; the fixed size claimed UNRESEARCHED; row 458 E4 (FR-003, FR-004)
       research: rendering
-- [ ] T86 the claims re-checked by `impl-drift`; the glyph check (the pond on Kuwabata); the close: wave 30's own bookend pair, `make done` green, the wave column (FR-005, FR-006)
+- [ ] T86 the claim re-checked by `impl-drift`; no executed code changed since wave 29's close; `make done` green (FR-005, FR-006)
       research: rendering
