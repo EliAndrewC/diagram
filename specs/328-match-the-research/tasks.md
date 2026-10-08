@@ -1654,3 +1654,27 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
       verify: DONE. rows 512-513, 523-532 fixed (sluice box and true span, footplank seats, the carried deck's dry landing, grain yards, the annex floor, drained acres, the comb outfall); tests red on the old code; the five hamlets regenerated, only Kuwabata's sluice records gained span 20; impl-drift r1-r6 answered; the sluice cascade's record checks answered; spec-fidelity plan CLEAR
 - [ ] T128 the claims re-checked by `impl-drift`; batch 2 closed: the gate, the pair, the perf-audit, the occasions (FR-005, FR-006)
       research: rendering
+
+## Phase 52 - wave 51 (amendment 50): the wet-paddy class, the dish pond, the winter crop's odds, the wood shed, the bath's walls
+
+- `fields/comb.py` (the blue plot class), `fields/features.py::_plot_pond` (the dish pond, its least wet margin and reed ink),
+  `fields/grain.py` (the winter crop's odds from the site; the town nearness knob and its choice modals), `fixture_seats.py`
+  (the wood shed off the house's own walls, never the front, its standoff the 0043 page's guess; the bath among three walls;
+  the privy within 48 ft of its house), `fields/outfall.py` (0054's strict under-90), `waterfields/tint.py` (`fronts`: the
+  plot's own edge along the drain), `hinterland/wood_rank.py` (the woodland tier against the houses' median and the field
+  beside the wood). Deferred on measure: the pond feeder, the lotus draw.
+
+- [ ] T129 wave 51's rows (FR-003, FR-004)
+      research: rendering
+- [ ] T130 the claims re-checked by `impl-drift`; the record checks the modals and pages owed (FR-005, FR-006)
+      research: rendering
+
+## Phase 53 - wave 52 (amendment 51): the belt's crossing allowance, the heap and the barn privy
+
+- `belt_law.py::BeltReading._crossed` (each way's own allowance), `fixture_seats.py::_seats` (the heap beyond the privy along
+  its bearing; `barn_seat`), the cohort's and the profiler's HOUSEHOLDS options and the measure-hooks reminder.
+
+- [ ] T131 wave 52's rows (FR-003, FR-004)
+      research: rendering
+- [ ] T132 the claims re-checked by `impl-drift`; batch 3 closed (FR-005, FR-006)
+      research: rendering

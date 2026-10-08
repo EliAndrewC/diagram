@@ -635,6 +635,21 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 - **Verification**: tests red on the old code; `impl-drift`; `spec-fidelity`; the gate, the pair and the occasions at
   batch 3's close.
 
+## Wave 52 (amendment 51, 2026-10-08) - batch 3
+
+- **Scope**: the next kept rows. The belt's crossing allowance made each way's own (0072, "as written": two ways through one
+  opening excuse 30 ft either side of each, the stretch between no more than twice that). The manure heap stepped beyond its
+  privy along the line from the house's center (0042: "on the side away from the house"). The privy's barn seat set against
+  the steading annex (0047): a north annex's east gable (its north wall was tried and refused cohort seed 7's web at 20
+  households), a west annex's west wall, the house's own end where there is none.
+- **Tooling** (the GM's four-hour check, 2026-10-08): `make cohort HOUSEHOLDS=` rolls the scaling sizes untimed, the band
+  lifted as the perf snapshot lifts it; measure-hooks reminds a `make perf` outside a pair's legs of it; `make perf-profile
+  HOUSEHOLDS=` profiles a growth at the size it was measured.
+- **Measured**: the 20- and 40-household cohorts match the commit before the wave (2/4 and 3/4); seed 4's refusal at 20
+  households predates it and is filed (`found-wave52.jsonl`). Privies and heaps re-seat across the five hamlets.
+- **Occasions**: placement-changed privy on Sawada, manure pit on Sawada, manure heap on Inashiro - batch 3's close.
+- **Verification**: tests red on the old code; `impl-drift`; `spec-fidelity`; the gate, pair and occasions at batch 3's close.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Waves 2-45 that changed engine behavior took
