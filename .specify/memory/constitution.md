@@ -2024,8 +2024,9 @@ shell command that writes one. It carries no silent escape - a genuine exception
 - The project lives at the repository root (feature 329 moved it out of the old skill directory under
   `.claude/skills/`; the split from gm-assistant had kept that path). The engine is `l7r/diagram/`; shipped maps are `pool/<tier>/`;
   staged maps are `wip/`.
-- The GM's setting notes are read from gm-assistant, mounted read-only at
-  `/gm-assistant`; the canonical `l7r.md` is never edited from here.
+- The GM's setting notes are read from the `l7r` checkout mounted read-only at
+  `/host-l7r-repo` (`setting/`, and gm-assistant's `setting/` at
+  `/host-l7r-repo/gm-assistant/setting/`); the canonical `l7r.md` is never edited from here.
 
 **Secrets**
 - `development-secrets.ini` files MUST be gitignored. The corresponding

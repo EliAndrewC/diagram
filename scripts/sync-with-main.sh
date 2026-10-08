@@ -34,8 +34,9 @@ set -euo pipefail
 die() { echo "sync-with-main: $*" >&2; exit 1; }
 
 # THE ROOT IS DERIVED, NOT HARDCODED (feature 131, 2026-08-25). A session clone lives at
-# <main>/.clones/<name>, so main is the clone's grandparent - true for gm-assistant at /gm-assistant
-# and for the diagram repository at /diagram, with no per-repo edit. CLONE_MAIN stays as the test
+# <main>/.clones/<name>, so main is the clone's grandparent - /diagram here, wherever it is mounted,
+# with no per-repo edit (GUARD_EDIT_OK: comment only - gm-assistant's split-era copy has since
+# diverged). CLONE_MAIN stays as the test
 # seam. Before this the script hardcoded /gm-assistant, which is the kind of reference the split
 # had to sweep; deriving it means the NEXT move is free.
 ROOT=$(git rev-parse --show-toplevel 2>/dev/null) || die "not inside a git checkout"
@@ -491,8 +492,8 @@ push_cmd() {
 }
 
 render_sync() {
-  # NO DIAGRAM SKILL, NO RENDER-SYNC (feature 131): gm-assistant no longer holds the skill, and the
-  # diagram repository holds nothing else - one script serves both because this step is conditional.
+  # NO MAKEFILE, NO RENDER-SYNC (feature 131): a leftover of the split, when gm-assistant ran this same
+  # script without the diagram skill (GUARD_EDIT_OK: comment only - the two copies have since diverged).
   if [ ! -f "$MAIN/Makefile" ]; then echo "sync-with-main: no Makefile in $MAIN - render-sync skipped"; return 0; fi
   # REGENERATE main's diagram renders IN PLACE from main's own tip (GM 2026-07-22, replacing the
   # old build-in-clone-then-rsync-copy machinery). Renders now become a pure function of main's

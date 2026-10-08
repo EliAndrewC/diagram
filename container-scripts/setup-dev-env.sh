@@ -98,8 +98,8 @@ check_all() {
     # failed on a fresh container without it (feature 328, 2026-10-07).
     _t "pdftotext (poppler, the source archive)" "command -v pdftotext"
     _t "DejaVu Serif italic face"                "[ -f $ITALIC_FONT ]"
-    # the engine's runtime deps (feature 131: THIS repository's lockfiles under the skill, beside
-    # pyproject.toml - the webapp's cherrypy/playwright set stayed in gm-assistant with the webapp).
+    # the engine's runtime deps (feature 131: THIS repository's own lockfiles at the root, beside
+    # pyproject.toml - the webapp's cherrypy set stayed in gm-assistant with the webapp).
     # shapely backs the /diagram seam-closing pass (waterfields/seams.py) - the one place the
     # field engine needs real polygon booleans, so a missing wheel breaks map generation, not a test
     _t "python: shapely (diagram field engine)"  "python3 -c 'import shapely'"
@@ -112,7 +112,7 @@ check_all() {
     # the claude() wrapper that appends this repo's standing authorizations to the system prompt.
     # ~/.bashrc is NOT on a bind mount (only the repo and ~/.claude survive a rebuild), so this has
     # to be re-established on every fresh container exactly like the apt and pip state.
-    _t "claude() system-prompt wrapper"          "grep -qF 'gm-assistant append-system-prompt' $HOME/.bashrc"
+    _t "claude() system-prompt wrapper"          "grep -qF '>>> diagram append-system-prompt >>>' $HOME/.bashrc"
     return $bad
 }
 
@@ -140,8 +140,8 @@ fi
 
 echo "==> python packages (pip)"
 # --break-system-packages: this container's python is the system python and there is no venv by
-# design (the skill's tools and its gate share one interpreter). The lockfiles live beside the
-# skill's pyproject.toml (feature 131): the first session in the split repository found this line
+# design (the engine's tools and its gate share one interpreter). The lockfiles live beside the
+# project's pyproject.toml (feature 131): the first session in the split repository found this line
 # still reading webapp/requirements.txt from gm-assistant, which does not exist here, so a fresh
 # container could not be provisioned at all.
 SKILL="$REPO"
@@ -164,11 +164,15 @@ python3 -m playwright install --with-deps chromium >/dev/null
 echo "==> claude() system-prompt wrapper"
 # rewrite rather than append-if-absent, so editing the block below actually reaches an existing container
 touch "$HOME/.bashrc"
-if grep -qF '>>> gm-assistant append-system-prompt >>>' "$HOME/.bashrc"; then
-    sed -i '/# >>> gm-assistant append-system-prompt >>>/,/# <<< gm-assistant append-system-prompt <<</d' "$HOME/.bashrc"
-fi
+# the marker was 'gm-assistant append-system-prompt' until 2026-10-08 (a leftover of the split); both
+# are removed so a container provisioned before the rename does not keep two wrappers
+for _m in gm-assistant diagram; do
+    if grep -qF ">>> $_m append-system-prompt >>>" "$HOME/.bashrc"; then
+        sed -i "/# >>> $_m append-system-prompt >>>/,/# <<< $_m append-system-prompt <<</d" "$HOME/.bashrc"
+    fi
+done
 cat >> "$HOME/.bashrc" <<'BASHRC_BLOCK'
-# >>> gm-assistant append-system-prompt >>>
+# >>> diagram append-system-prompt >>>
 # Appends this repo's standing authorizations to every session's system prompt.
 # Edit the text in container-scripts/append-system-prompt.md - this only loads it.
 claude() {
@@ -181,7 +185,7 @@ claude() {
         command claude "$@"
     fi
 }
-# <<< gm-assistant append-system-prompt <<<
+# <<< diagram append-system-prompt <<<
 BASHRC_BLOCK
 echo "    installed - takes effect in NEW shells (or run: source ~/.bashrc)"
 

@@ -1667,8 +1667,8 @@ perf-report:    ## [performance] the trend, and which BAND the newest bookend pa
 # Refuse to run from the MAIN tree (CLAUDE.md "Session clones": main is the integration point,
 # never a workspace - work runs in .clones/<session-name>). Every target depends on this. GM
 # override for a deliberate main-tree run: GM_ASSISTANT_ALLOW_MAIN=1.
-# MAIN IS THE TREE THAT CONTAINS `.clones/` (feature 131, 2026-08-25 - GUARD_EDIT_OK: the split
-# needs one Makefile that works at /gm-assistant and at /diagram). A clone or a detached worktree
+# MAIN IS THE TREE THAT CONTAINS `.clones/` (feature 131, 2026-08-25; GUARD_EDIT_OK: comment only,
+# a split-era mention of /gm-assistant retired 2026-10-08). A clone or a detached worktree
 # has no .clones/ of its own (it is gitignored), so the rule is: refuse when the git top level of
 # the cwd holds a .clones/ directory and the cwd is not itself inside one. No path is hardcoded.
 guard:           ## [static] {internal} refuse to run in main's tree - main is the integration point, never a workspace

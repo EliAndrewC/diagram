@@ -46,7 +46,7 @@ def _assert_not_main_tree(path: str | None = None) -> None:
     hand for anything else."""
     # MAIN IS THE TREE THAT CONTAINS `.clones/` (feature 131, 2026-08-25). A session clone or a
     # detached worktree has no .clones/ of its own (it is gitignored), so no path is hardcoded and
-    # the guard holds at /gm-assistant and at /diagram alike. Same rule as webapp/mainguard.py.
+    # the guard holds wherever the repository is mounted. Same rule as the Makefile's `guard`.
     p = os.path.realpath(path if path is not None else __file__)
     if _is_main_tree(p) and os.environ.get("GM_ASSISTANT_ALLOW_MAIN") != "1":
         raise SystemExit(
