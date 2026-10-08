@@ -760,7 +760,7 @@ class GrovesMixin:
             every crown gives way round a persimmon - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html: every crown refused where any of its disc would lie under a yard persimmon's crown (centers nearer than the two radii summed), the grove giving way round it wholly
             lesser crown over an earlier stand's conifer - CONVENTION: a lesser crown painted over an earlier stand's conifer is not drawn, the stand losing that tree - the conifer reads on top (`over_a_conifer`)
             clump glyph - CONVENTION: one disc per crown, conifers dark and painted last, no trunks
-            conifer-led clump's lesser share - GUESS: a conifer-led clump throws LESSER_ROLL_SHARE (0.1) of its crowns as lesser broadleaf - 0072's drawing page names the lesser broadleaf among the rows, no page its share
+            conifer-led clump's lesser share - GUESS: a conifer-led clump throws LESSER_ROLL_SHARE (0.1) of its crowns as lesser broadleaf, and at least one - 0072's drawing page names the lesser broadleaf among the rows, no page its share
             lesser broadleaf crown size - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: LESSER_BROADLEAF_S, 0.75 to 0.85 of the mean radius (the page's 0.75 to 1.4)
         """
         # SCOPED (2026-08-08): a homestead grove's crowns are decoration keyed to the grove itself.
