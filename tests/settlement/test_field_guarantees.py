@@ -162,7 +162,7 @@ def test_an_intake_declares_a_stream_only_where_its_mouth_reaches_one() -> None:
     s.M["streams"].append({"poly": [[1300.0, 0.0], [1300.0, 1400.0]]})  # 600 ft off: out of reach
     s.draw_comb_field(far, "f1", {"kind": "stream"})
     feed = s.M["channels"][-1]
-    assert feed["frm"] == {"kind": "sluice"} and not channel_end_on_stream(feed["poly"][0], s.M["streams"][0]["poly"])
+    assert feed["frm"] == {"kind": "sluice"} and not channel_end_on_stream(feed["poly"][0], s.M["streams"][0]["poly"], 7.0)
     near = _comb()
     near["brook"] = []
     sx, sy = near["channels"][0]["pts"][0]
@@ -171,8 +171,8 @@ def test_an_intake_declares_a_stream_only_where_its_mouth_reaches_one() -> None:
     t.M["streams"].append({"poly": [[sx - 400.0, sy - 20.0], [sx + 400.0, sy - 20.0]]})  # 20 ft off: inside the anchor band
     t.draw_comb_field(near, "f1", {"kind": "stream"})
     feed = t.M["channels"][-1]
-    assert feed["frm"] == {"kind": "stream"} and channel_end_on_stream(feed["poly"][0], t.M["streams"][0]["poly"])
-    assert channel_end_on_stream((0.0, 12.0), [(-10.0, 0.0), (10.0, 0.0)]) and not channel_end_on_stream((0.0, 14.0), [(-10.0, 0.0), (10.0, 0.0)])
+    assert feed["frm"] == {"kind": "stream"} and channel_end_on_stream(feed["poly"][0], t.M["streams"][0]["poly"], 7.0)
+    assert channel_end_on_stream((0.0, 3.4), [(-10.0, 0.0), (10.0, 0.0)], 7.0) and not channel_end_on_stream((0.0, 3.6), [(-10.0, 0.0), (10.0, 0.0)], 7.0)  # inside the drawn width (0054), feature 328
 
 
 def test_a_bead_water_recorded_later_lies_over_is_dropped_from_the_ink_and_the_record() -> None:

@@ -491,6 +491,14 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 - **Verification**: the test red on the old code; `impl-drift` on the touched claims; the record checks on 0007, 0072 and
   the modal; the gate; the glyph check (round 2 after the outfall); the timing pair.
 
+## Wave 41 (amendment 40, 2026-10-08)
+
+- **Scope**: a channel's mouth judged inside the stream's drawn width (0054), with a corner held where the brook's rounding would
+  carry the course off a confluence on it; wave 40's two belt-figure rows re-cited (E0, T107a) (`tasks.md` Phase 42).
+- **Occasions**: none - the five hamlets regenerate with identical manifests.
+- **On the unpushed waves 9-40** under condition (6): as at wave 40's close; the pair is owed (executed code).
+- **Verification**: the corner-hold test red without the rule; `impl-drift` on the touched claims; the gate; the pair.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Each later wave that changes engine behavior takes

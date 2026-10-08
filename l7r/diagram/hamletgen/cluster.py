@@ -96,7 +96,9 @@ def belt_off_canvas(center: Pt, along: Pt, out: Pt, lat: float, dep: float, wind
     The band is sampled where `belt_polygon` draws it: 36, 90 and 146 ft upwind of the cluster's windward fringe, across
     the cluster's width square to the wind.
 
-    Research: belt distance upwind - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: sampled at 36, 90 and 146 ft"""
+    Research:
+        belt's depth - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: a back wood drawn 80 to 120 ft deep, a convention (the band's 36 to 146 ft is `BELT_NEAR_FT` + `BELT_DEPTH_FT` 100 + `BELT_FAR_RAG_FT`)
+        belt's distance upwind - UNRESEARCHED: its near face 36 ft behind the fringe (`BELT_NEAR_FT`); the record says only that the band hugs the cluster"""
     wx, wy = unit(*wind)
     px, py = -wy, wx
     reach = abs(wx * along[0] + wy * along[1]) * lat + abs(wx * out[0] + wy * out[1]) * dep  # the fringe, upwind of the middle

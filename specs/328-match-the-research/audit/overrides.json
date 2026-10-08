@@ -452,6 +452,17 @@
   "moved": "T56a: tiered by its work by a fresh reader - Measured at 3 px/ft: Hayakawa's gate range 240x42 px = 80x14 ft and Ubame's ~215x42 px = ~72x14 ft match the Kaibara form, but Ochiba and the county example draw a freestanding gatehouse of 54x36 px = 18x12 ft (216 sq ft, the temple Kita-in's) where 0093's drawing page draws a jin'ya gatehouse of its own about 40 ft (Takayama's ~400 sq ft), so two sheets are redrawn beside the claim, paragraph and band text.",
   "tier": "E3"
  },
+ "l7r/diagram/hamletgen/cluster.py::belt_off_canvas#belt distance upwind": {
+  "after": [],
+  "e0_basis": "The three samples are belt_polygon's own geometry: hinterland/belt.py:114 BELT_NEAR_FT = 36.0 ('Research: near stand-off - UNRESEARCHED'), :126 BELT_DEPTH_FT = 100.0 cited to 0071 drawing, :130 BELT_FAR_RAG_FT = 10.0; 36 + 100 + 10 = 146. The depth IS in the record: 0071 drawing line 12, 'The back grove is drawn 80 to 120 ft deep ... so the grove is never drawn thinner than 80 ft. A convention: no",
+  "files": [
+   "l7r/diagram/hamletgen/cluster.py"
+  ],
+  "fix": "l7r/diagram/hamletgen/cluster.py:99: split the claim into what the record already holds: 'belt hugs the windward fringe - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: the band hugs the cluster'; 'belt depth - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: 80 to 120 ft deep, a convention (laid 100 ft, far face rag up to 10 ft, so 146 ft at the far row)'; 'near stand-off - UNRESEARCHED: 36 ft behind the fringe' (matching BELT_NEAR_FT's own label at hamletgen/hinterland/belt.py:115). Optionally line 104 reads BELT_NEAR_FT and plan.BELT_REACH instead of the literals 36.0/146.0 (same values, no map change).",
+  "flag": "",
+  "moved": "T107a (fresh reader): The three samples are belt_polygon's own geometry: hinterland/belt.py:114 BELT_NEAR_FT = 36.0 ('Research: near stand-off - UNRESEARCHED'), :126 BELT_DEPTH_FT = 100.0 cited to 0071 drawing, :130 BELT_FAR_RAG_FT = 10.0; 36 + 100 + 10 = 146. The depth IS in the record: 0071 drawing line 12, 'The back g",
+  "tier": "E0"
+ },
  "l7r/diagram/hamletgen/cluster.py::seat_cluster#band on the canvas": {
   "fix": "lat from band_extent is the band's HALF-length (dep/lat are the ellipse's semi-axes), so the frame test uses lat (half the band's length) not lat*0.5, with plan.seat_room's lat*0.5 term matched",
   "flag": "deviation-tempting: rewording the CONVENTION claim to 'a quarter of the band's length' leaves the code alone",
@@ -814,6 +825,17 @@
   "fix": "_rank_step = envelope + max(MIN_WEB_GAP, |oy| x SUN_CORRIDOR_FT): the rank's lane inside the yard's sun, so north-south ranks stand 0038's 92 ft apart (was envelope + 18 + 39, about 111 ft)",
   "moved": "wave 24 (impl-drift, amendment 23 plan review): the citation fix was false; the step itself fixed",
   "tier": "E2"
+ },
+ "l7r/diagram/hamletgen/plan.py::BELT_REACH#belt's far row": {
+  "after": [],
+  "e0_basis": "plan.py:393 BELT_REACH = 146.0 is the far face of belt_polygon's band: hinterland/belt.py:114 BELT_NEAR_FT 36 + :126 BELT_DEPTH_FT 100 (already cited to 0071 drawing) + :130 BELT_FAR_RAG_FT 10. 0071 drawing line 12: 'The back grove is drawn 80 to 120 ft deep ... A convention: no source gives a grove's depth' - so the record already says what the band's depth is and why it exceeds Tarama's 'about 1",
+  "files": [
+   "l7r/diagram/hamletgen/plan.py"
+  ],
+  "fix": "l7r/diagram/hamletgen/plan.py:396: replace the claim with 'belt's far row - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: 80 to 120 ft deep, a convention; 146 ft = the 36 ft near stand-off (UNRESEARCHED, hinterland/belt.py BELT_NEAR_FT) + 100 ft laid depth + 10 ft far rag'. Value unchanged. (If the E3 row cluster.py::seat_cluster#belt room on the canvas retires seat_room's belt growth, this constant may go with it.)",
+  "flag": "",
+  "moved": "T107a (fresh reader): plan.py:393 BELT_REACH = 146.0 is the far face of belt_polygon's band: hinterland/belt.py:114 BELT_NEAR_FT 36 + :126 BELT_DEPTH_FT 100 (already cited to 0071 drawing) + :130 BELT_FAR_RAG_FT 10. 0071 drawing line 12: 'The back grove is drawn 80 to 120 ft deep ... A convention: no source gives a grove",
+  "tier": "E0"
  },
  "l7r/diagram/hamletgen/pondstock.py::_bank_seats#sty seat pulled in by half the bank bankinsetft so it stands": {
   "after": [],
@@ -1978,6 +2000,17 @@
   "moved": "T42a: tiered by its work - An honest claim would state a drift (the stroke starts at the sluice while its record says off the map), so the one call's endpoints and record change.",
   "tier": "E2"
  },
+ "l7r/diagram/settlement/fields/comb.py::channel_end_on_stream#mouth reaches the water": {
+  "after": [],
+  "files": [
+   "l7r/diagram/settlement/fields/comb.py",
+   "l7r/diagram/hamletgen/water/brook_course.py"
+  ],
+  "fix": "junction tolerance from a fixed 13 px to the stream's own drawn half-width",
+  "flag": "",
+  "moved": "",
+  "tier": "E2"
+ },
  "l7r/diagram/settlement/homestead_parts/belt_law.py::the village belt#its west arm on inashiro": {
   "after": [],
   "e0_basis": "0072 does not require a west arm. 0072 drawing page: 'a shelter belt stands on the windward side of the houses ... on the north and west ... on one side or two, never all the way round' and 'every belt stands on the north and west of its houses, or on one of those two sides'; and 'A belt that runs off the edge of the map is sound, and the bare ground beyond is not a hole ... Nothing beyond the fra",
@@ -2903,5 +2936,15 @@
   "found": "wave 11 re-check (tiered by its work at T46a)",
   "moved": "T46a: tiered by its work - One literal is scaled by a parameter already in hand; the snap logic is unchanged.",
   "tier": "E1"
+ },
+ "research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html::the belts' measured figures#outline, frame and planting": {
+  "after": [],
+  "files": [
+   "research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html"
+  ],
+  "fix": "research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: re-measure on the belts the pool draws now (Inashiro, Kuwabata, Sawada manifests' village_groves windbreak clumps and belt polygons) and restate three bullets with their notes: line 42 (the 747/537/596 ft and 917/741/787 ft outline/frame/planting pairs; the second is Kashikawa's) and note -11's comment in the .drawing.notes.html (line 21: Kuwabata/Kashikawa/Mizuguchi pixel spans); line 44 (Mizuguchi's 60 ft bare stretch and its homestead within 90 ft) and line 45 (the copse in that gap) - find the off-page-clump case on a current belt or restate the rule without the vanished instance; line 19 (face 1.46 against 0.90-1.33, axis 31 deg against 33-49) and note -2 (measured 'every nucleated map in the pool, 2026-07'). No engine change.",
+  "flag": "",
+  "moved": "T107a (fresh reader): Line 12 of the same page (measured 2026-10-08) says 'Kashikawa and Mizuguchi, whose farms keep their own groves, draw no village belt', yet line 42 still reads 'on another, the outline is 917 ft, the frame 741 ft and the planting 787 ft' (note -11: 'Kashikawa -1121 to -204 ...') and line 44 'one ham",
+  "tier": "E2"
  }
 }

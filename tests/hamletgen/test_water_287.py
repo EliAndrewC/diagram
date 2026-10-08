@@ -122,7 +122,7 @@ def test_every_confluence_stays_on_the_rounded_brook_and_the_corner_is_still_rou
     drawn = [(float(p[0]), float(p[1])) for p in s.M["streams"][0]["poly"]]
     for c in s.M["channels"][-3:]:
         end = c["poly"][-1] if c["to"]["kind"] == "stream" else c["poly"][0]
-        assert channel_end_on_stream(end, drawn), c
+        assert channel_end_on_stream(end, drawn, 9.0), c
     assert mid_join in drawn, "the mid-segment confluence is held where it joins"
     assert (300.0, 0.0) not in drawn, "the corner is rounded, not held mitred"
     round_the_brooks(s)
@@ -260,3 +260,15 @@ def test_a_reseat_on_the_same_flank_leaves_the_fringe_and_the_crossings_as_they_
         before = (hg.waterward_flanks(plan), hg.polder_crossing_caps(plan))
         plan.seat = {"out": other}
         assert (hg.waterward_flanks(plan), hg.polder_crossing_caps(plan)) == before
+
+
+def test_a_corner_is_held_where_its_rounding_would_carry_the_course_off_a_mouth() -> None:
+    """0054 drawing (feature 328): a meeting is a junction when a channel's end lies inside the other's drawn width. A lone
+    confluence on a 100 degree corner, rounded, would leave the 9 px brook about 12 px off it; that corner is held, the mouth stays
+    in the water, and the course's other corner is still rounded."""
+    from l7r.diagram.hamletgen.water.brook_course import drawn_course
+
+    course = _bent()
+    out = drawn_course(course, [], [(300.0, 0.0)], 9.0)
+    assert (300.0, 0.0) in out and channel_end_on_stream((300.0, 0.0), out, 9.0)
+    assert course[2] not in out, "the corner with no confluence is rounded"

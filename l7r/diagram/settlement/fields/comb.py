@@ -75,17 +75,15 @@ def hem_on_water(poly: Poly, wet: Sequence[tuple[Any, float]] | WetLines, pond: 
     return bool(pond is not None and point_quad_dist(pond[0], pond[1], poly) < max(pond[2], pond[3]))
 
 
-STREAM_JOIN_TOL = 13.0  # px: a channel declaring a stream end has that end within this of the stream's drawn bed - the gate's TRUNK_TOL (feature 287, labels L16)
-
-
-def channel_end_on_stream(end: Sequence[float], stream: Sequence[Sequence[float]], tol: float = STREAM_JOIN_TOL) -> bool:
+def channel_end_on_stream(end: Sequence[float], stream: Sequence[Sequence[float]], width: float) -> bool:
     """THE RULE (feature 287, labels L16; `channels_join_streams_at_confluence`): a channel end that declares a stream lies
-    within `tol` of that stream's centerline - the mouth reaches INTO the water, never dying in the grass beside it. The
-    intake that declares it and the test of it read this one predicate.
+    inside that stream's drawn `width` - within half of it of the centerline - so the mouth reaches INTO the water, never dying
+    in the grass beside it (feature 328: it was a flat 13 px, wider than a 7 ft brook's whole bed). The intake that declares it
+    and the test of it read this one predicate.
 
-    Research: mouth reaches the water - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: a channel end declaring a stream lies within 13 px of its centerline"""
+    Research: mouth reaches the water - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: a meeting is a junction when a channel's end lies inside the other's drawn width"""
     pts = [(float(q[0]), float(q[1])) for q in stream]
-    return any(seg_dist(float(end[0]), float(end[1]), a, b) <= tol for a, b in zip(pts, pts[1:], strict=False))
+    return any(seg_dist(float(end[0]), float(end[1]), a, b) <= width / 2.0 for a, b in zip(pts, pts[1:], strict=False))
 
 
 DOWNHILL_FRACTION = 0.2
@@ -901,7 +899,7 @@ class CombMixin:
                 # ...AND IT DECLARES A STREAM ONLY WHERE IT REACHES ONE (feature 287, labels L16): beyond the anchor band
                 # the intake is not snapped, so its mouth stood in the grass while the record said it joined the brook.
                 # Such a feed is sourced from the sluice itself, and says so.
-                if not any(channel_end_on_stream(start, st_["poly"]) for st_ in self.M.get("streams", []) if len(st_.get("poly") or ()) >= 2):
+                if not any(channel_end_on_stream(start, st_["poly"], float(st_.get("w") or self.px(7.0))) for st_ in self.M.get("streams", []) if len(st_.get("poly") or ()) >= 2):
                     frm = {"kind": "sluice"}
             vx, vy = din[0] - start[0], din[1] - start[1]
             vl = math.hypot(vx, vy) or 1.0

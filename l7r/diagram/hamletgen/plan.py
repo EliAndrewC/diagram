@@ -393,7 +393,8 @@ Research: standoff from the field - UNRESEARCHED: 12 ft"""
 BELT_REACH = 146.0
 """px upwind of the cluster's windward fringe to the belt's far row (`belt_off_canvas` samples 36, 90 and 146).
 
-Research: belt's far row - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: 146 ft upwind of the fringe"""
+Research:
+    belt's far row - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html: the band's 100 ft depth inside the drawn 80 to 120 ft, a convention, behind a near face 36 ft out (UNRESEARCHED) and a 10 ft ragged edge"""
 
 
 FAN_OVERHANG = 0.22
