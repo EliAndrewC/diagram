@@ -1,6 +1,6 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "a02ed1a7da793a22c890241cfd8667c84e4357d9a38d0f683e3ec3a14cf37c2c",
+ "plan_sha256": "8e853d32c244fc397a4f493b22b885d406df4ac135556a2aa812b5545105a194",
  "reviewed": "2026-10-08",
  "declared": "spec-fidelity",
  "decisions": [
@@ -444,7 +444,40 @@
    "summary": "impl-drift, spec-fidelity, then gate, pair and occasions at batch 3's close (T135, T136)",
    "class": "within",
    "why": "Same batching as waves 48-53, per the GM's 2026-10-08 batching ruling."
+  },
+  {
+   "id": "W54-5 Kuwabata's knot held on _KNOTS_WAITING behind row 748",
+   "summary": "wave 52's research seats (0042, 0047) leave a knot on Kuwabata (lane 11 T's onto lane 9 21.8 ft from its door); the test made strict-xfail behind the E3 row settle_knots#a knot no lawful gather reaches, waiver-or-fix deferred to the GM at the feature's end",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "A regression twice over: it passed at the wave's baseline (013b667d5) and passes on main, whose waiting list holds only Inashiro and Sawada, so the strict xfail turns a new failure green for whichever push lands batch 3. XIII: documenting a regression is not permitting it, and the waiver is asked only after the fix has been genuinely attempted. The probes tried only the engine's existing gathers; row 748's own recorded fix (re-lay the earlier household's way at seating so the gather is lawful) is E3, a change across modules, not an overhaul, and was not attempted. The wave 10 precedent does not transfer: Sawada's knot was already on main there (pre-existing), and this one is not. Route: fix now, ahead of rank (a regression the feature caused outranks the easiest-first order: XIII/XIV), by row 748's re-lay; only if that fails, an impossibility investigation and then revert or a GM waiver at the end. Until then an unticked task names it, so the open-task refusal keeps it off main."
+  },
+  {
+   "id": "W54-6 Inashiro's knot back on _KNOTS_WAITING behind row 748",
+   "summary": "the field way starts on a spur 9.4 ft from where it leaves lane 10; every gather splits the web",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Judged apart from Kuwabata: main already carries Inashiro on _KNOTS_WAITING (a knot at lanes 11/13, 19.1 ft), so landing this adds no regression to main. Holding it behind the same ranked row restores main's state rather than hiding a new failure. It is still a regression of the feature's own wave 10 progress (XIII: work not done while it stands), and the row 748 fix W54-5 requires should be checked against it too."
+  },
+  {
+   "id": "W54-7 Sawada's zigzag on a new strict _ZIGZAGS_WAITING behind a new E3 found row",
+   "summary": "lane 3 runs east and turns back 27 ft to lane 1's door, a Z across the joint since wave 52 (bisected); filed as smooth.py::_smooth_web#a zigzag across a joint at a door, E3",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "main runs test_no_zigzag_straddles_a_joint on Sawada with no xfail and it passes, so this is a new regression the xfail would carry to main. Filing it as a found row is the right record but is not an exit (XIII: a ledger entry is not a waiver). The row names two concrete fixes (string-pull across the joint; re-lay the way at seating to arrive along the door lane), neither tried. No gather/smoothing probe was recorded for the zigzag at all. Route as W54-5: attempt the row's fix now, and if it fails, write the investigation and hold for revert or waiver; an unticked task keeps it unpushed."
+  },
+  {
+   "id": "W54-8 pool-readers in make quick",
+   "summary": "quick runs the tests that read the shipped hamlet manifests when the manifests moved since its last green run; test in tests/tooling",
+   "class": "within",
+   "why": "Verification that only fails when the research-matching checks already asked for fail; keeps a reroll from hiding a regression (XIII). No new behavior in the engine."
+  },
+  {
+   "id": "W54-9 perf_profile spec typed",
+   "summary": "the HamletSpec kwargs dict typed so pyrefly passes",
+   "class": "within",
+   "why": "A type fix for the quick gate; changes nothing the request scopes."
   }
  ],
- "verdict": "CLEAR"
+ "verdict": "BLOCKED"
 }

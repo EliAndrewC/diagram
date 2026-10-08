@@ -1706,3 +1706,7 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
       research: rendering
 - [ ] T136 the claims re-checked by `impl-drift`; the record checks owed (FR-005, FR-006)
       research: rendering
+- [ ] T137 wave 52's two regressions fixed (spec-fidelity W54-5, W54-7; constitution XIII): Kuwabata's knot (lanes 9/11, 21.8 ft)
+      off `_KNOTS_WAITING` and Sawada's zigzag (lanes 1/3) off `_ZIGZAGS_WAITING` - or the impossibility investigation written
+      and the waiver put to the GM
+      research: rendering
