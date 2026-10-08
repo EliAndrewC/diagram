@@ -565,3 +565,20 @@ def test_the_storehouse_is_drawn_in_its_own_gray_not_the_roof_color() -> None:
     s.meta(name="T", scale="hamlet", ftpx=1)
     s.house(200.0, 200.0, 46.0, 28.0, shed=True, shed_side="N")
     assert STOREHOUSE_GRAY in s.out[-1], "the storehouse's fill"
+
+
+def test_every_corner_stands_seven_ft_off_a_narrow_lanes_middle():
+    """0246 (feature 328 wave 48): "a lane's middle keeps at least 7 ft clear of a garden fence". The tread's half-width and
+    `TREAD_WALL_FT` held a 3 ft footpath's corners only 5.5 ft off its middle; every corner now stands `LANE_MIDDLE_CLEAR_FT`
+    off it, while a wide way still keeps its half-width and the hair."""
+    from l7r.diagram.settlement.rolling.access import LANE_MIDDLE_CLEAR_FT, TREAD_WALL_FT
+
+    s = Settlement(1400, 1400, seed=3)
+    s.meta(name="Path", scale="hamlet", ftpx=1, toscale=True, households=12)
+    s.lane([[200.0, 700.0], [1200.0, 700.0]], width=3, clearance=7)
+    w, h = 40.0, 20.0
+    assert 1.5 + TREAD_WALL_FT < 6.0 < LANE_MIDDLE_CLEAR_FT, "the fixture's corner stands between the old reach and the page's"
+    assert s._on_a_tread(700.0, 700.0 + 6.0 + h / 2, w, h), "a corner 6 ft off a footpath's middle is refused"
+    assert not s._on_a_tread(700.0, 700.0 + 7.5 + h / 2, w, h), "and 7.5 ft off it is clear"
+    s.lane([[200.0, 300.0], [1200.0, 300.0]], width=16, clearance=22)
+    assert s._on_a_tread(700.0, 300.0 + 11.0 + h / 2, w, h), "a wide way keeps its half-width and the hair (8 + 4 ft)"

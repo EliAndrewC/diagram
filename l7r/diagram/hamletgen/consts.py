@@ -88,12 +88,13 @@ GROSS_ACRES_PER_HOUSEHOLD = 1.3
 # the same two pre-existing failures on the same two seeds as the 48 baseline - so the 8 ft this
 # returns to the cluster costs nothing. (At 32 the cohort drops to 21/24: the lane checks stay
 # green, but a corridor that tight re-packs the cluster into gardens and crops.)
-# HELD AT 40 (feature 328 wave 7): 0246 keeps a lane's middle 7 ft clear of a garden FENCE, but the corridor this sets is a
-# CENTER test (`_near_corridor` asks a candidate's center), so 7 ft would let a building's body stand on the tread; the 40 ft
-# is the 7 ft carried to a center by the drawn minka's half-diagonal. Measuring the corridor to the footprint's edge, so 0246's
-# 7 ft can be written as it stands, is its own row (an edge-based corridor test).
-LANE_CLEARANCE = 40.0
-"""Research: fronting lane's corridor - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane's middle 7 ft clear of a garden fence, held as a 40 ft center corridor (the minka's half-diagonal added) until the corridor is tested at a footprint's edge"""
+# 0246's 7 FT AS IT STANDS (feature 328 wave 48). Held at 40 from wave 7: the corridor is a CENTER test (`_near_corridor`), so 7 ft
+# would have let a building's body stand on the tread, and 40 carried the 7 ft to a center by the minka's half-diagonal. The
+# FOOTPRINT is now held there exactly - every corner `LANE_MIDDLE_CLEAR_FT` off a lane's middle (`houses._on_a_tread`) - so the
+# corridor carries the page's figure. Measured before the change: no pool hamlet moved with the corridor at 7 ft, the houses
+# being seated before the lanes are drawn.
+LANE_CLEARANCE = 7.0
+"""Research: fronting lane's corridor - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane's middle 7 ft clear of a garden fence, the footprint held to it at its corners (`houses._on_a_tread`)"""
 
 # HOW FAR ALONG THE FIELD OUTLINE THE CLUSTER ACTUALLY REACHES, as a multiple of the seat band's own
 # lateral half-extent. ONE definition, read by `front_row` (which samples outline vertices out to

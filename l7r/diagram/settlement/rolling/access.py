@@ -224,6 +224,12 @@ def corridor_clear(s: Settlement, a: Pt, b: Pt, own: Any) -> bool:
 TREAD_WALL_FT = 4.0
 """Research: tread clear of a wall - GUESS: 4 ft, on a townhouse's three-shaku eaves strip with a margin"""
 
+LANE_MIDDLE_CLEAR_FT = 7.0
+"""How far every corner of a building stands from a lane's MIDDLE at least (feature 328 wave 48): the tread's half-width and
+`TREAD_WALL_FT` held a 6 ft way's corners 7 ft off its middle, but a 5 ft spur's only 6.5 and a 3 ft footpath's 5.5.
+
+Research: a lane's middle off the fence - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane's middle keeps at least 7 ft clear of a garden fence"""
+
 
 def house_clear(a: Pt, b: Pt, own: Any, gap: float = 0.5) -> bool:
     """Does a corridor a-b keep `gap` off its own house (`own`'s)? The seating asks it at `house_gap`: a corridor grazing its

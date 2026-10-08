@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING, Any, cast
 
 from ._geom import PointGrid, Pt, boxed_polys, drawn_extent, edge_dist, indexed_grid, point_in_poly, rot_rect, seg_dist
 from ._knobs import skeleton_layout
-from .rolling.access import TREAD_WALL_FT
+from .rolling.access import LANE_MIDDLE_CLEAR_FT, TREAD_WALL_FT
 from .rolling.bearing import house_rot
 from .rolling.lot import FARMHOUSE_MAX_ASPECT, KURA_SHARE, household_parts, kura_rect, record_parts, seat_parts_done
 from .rolling.passage import reserve_way
@@ -263,15 +263,19 @@ class HousesMixin:
         It defaults to 0.0 because most callers seat something genuinely unrotated; a caller that knows its rake passes it,
         and the bundle placer gets it from `_house_rot`. GAP VERDICT family (this skill's dev/placement.md, "CENTER vs
         FOOTPRINT"): real rotated corners, never a center, never a circumscribed radius.
-        Research: no building corner on a lane - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the tread's edge `TREAD_WALL_FT` clear of every corner"""
+        Research:
+            no building corner on a lane - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the tread's edge `TREAD_WALL_FT` clear of every corner
+            a lane's middle off the fence - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every corner `LANE_MIDDLE_CLEAR_FT` (7 ft) off the lane's middle at least"""
         if not self.treads:
             return False
         quad = rot_rect(x, y, w, h, rot)
         corners = [*quad, (x, y)]
         # ...AND THE TREAD'S EDGE STANDS `TREAD_WALL_FT` CLEAR OF THE WALL (feature 294 B7, the review's "lane tread to house wall"
         # class: one tread ran 3.85 ft from a wall under the 2 ft hair `houses_clear_of_lanes` allowed)
-        hair = self.px(TREAD_WALL_FT)
-        return any(not self._tread_skipped(orig, skip) and any(seg_dist(qx, qy, tp[i], tp[i + 1]) < half + hair for qx, qy in corners for i in range(len(tp) - 1)) for tp, half, orig in self.treads)
+        # ...AND EVERY CORNER `LANE_MIDDLE_CLEAR_FT` OFF THE LANE'S MIDDLE AT LEAST (feature 328 wave 48, 0246: "a lane's middle
+        # keeps at least 7 ft clear of a garden fence") - the half-width and the hair held a narrow way's corners nearer
+        hair, middle = self.px(TREAD_WALL_FT), self.px(LANE_MIDDLE_CLEAR_FT)
+        return any(not self._tread_skipped(orig, skip) and any(seg_dist(qx, qy, tp[i], tp[i + 1]) < max(half + hair, middle) for qx, qy in corners for i in range(len(tp) - 1)) for tp, half, orig in self.treads)
 
     def _tread_skipped(self: Settlement, poly: Any, skip: Any) -> bool:  # type: ignore[misc]
         """Is this tread the way the caller is FRONTING, and so exempt?
