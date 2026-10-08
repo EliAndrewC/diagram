@@ -13,6 +13,10 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 - (wave 5, landed and reviewed) placement-changed village lane on kashikawa - wave 5: 0033's row street runs on off the map as the road into it at both ends, where
   the web cut it back to its last joint (`trim_streets`); Kashikawa's and Mizuguchi's far ends now run off the sheet as a
   second way out (every way is inked `village lane`).
+- placement-changed: woodland commons on kashikawa - wave 47: the beyond-the-fields walk counts a row holding as field, so the
+  wood moves to the higher ground beyond the far row's strips (batch 1's round 3 NEEDS-WORK); run at batch 2's close
+- placement-changed: copse on kuwabata - wave 47: every copse crown gives way round a yard persimmon wholly; batch 2's close
+- placement-changed: homestead grove on kashikawa - wave 47: every grove crown gives way round a yard persimmon wholly
 - placement-changed: village lane on inashiro - wave 46: the track out drawn taut (no 34/46 px wander) on Inashiro, Kuwabata
   and Sawada; run at batch 1's close (T119), from round 3 on under the GM's ruling of 2026-10-08 (rounds past two allowed)
 - placement-changed: village lane on kashikawa - wave 46: the road re-squared at the brook's ford on a leg past 40 ft
@@ -1545,4 +1549,25 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
       batch's last engine commit, `perf-explain` and `perf-audit` (waves 42, 44 and 45 were paired alone); the occasions
       the batch declares (wave 46's village lane, round 3 allowed by the GM's ruling); then T110, T112, T114, T116, T118
       ticked and the wave column written (FR-005, FR-006)
+      research: rendering
+
+## Phase 48 - wave 47 (amendment 46): batch 1's findings; the persimmon give-way, 0072's arc, the checkpoint tier
+
+- The woodland's beyond-the-fields walk (batch 1 glyph check, Kashikawa NEEDS-WORK): `parcels.open_ground_patches` asks the
+  walk of the paddy OR any row holding (`test_a_walk_through_a_row_holding_is_beyond_the_fields`, red on the old code).
+- The track out to the canvas edge and `TRACK_PAST_FRAME_FT` past it (`track.past_the_frame`; batch 1's pair, band 2: the
+  diagonal reach made `field_runs` sample the whole off-sheet run, `run_on_target` 3,577 -> 5,481 calls; the perf-audit's
+  interleaved runs put seed 4's web back within 0.05 s of the start with the fix alone).
+- `groves.py::GrovesMixin._draw_grove#every crown gives way round a persimmon, no overlap` (row 381, E1): full clearance,
+  not `over_a_conifer`'s 0.8 share (Kashikawa 3.7 ft, Kuwabata 4.1 ft); the give-way test tightened to the crown's edge.
+- 0072's drawing page (row 436, E1): Inashiro's belt arc 66 degrees, re-measured; quote-check, record-format and the modal
+  cascade answered; the wave-39 modals' depiction checks (mixed broadleaf belt, windbreak) answered with their edits, the
+  windbreak modal's research and form checks with theirs.
+- `building-programs.md#road checkpoint tier` (row 442, E2): the post as 0110 attests it - a barrier gate, an inspection
+  hall facing the road, the officer's residence behind it, and at a larger post a lockup, stables and a notice board; no
+  garrison count (0110 gives none, nor do the GM's notes).
+
+- [ ] T120 batch 1's findings, rows 381, 436 and 442 (FR-003, FR-004, FR-005)
+      research: rendering
+- [ ] T121 the claims re-checked by `impl-drift`; the close at batch 2's (FR-005, FR-006)
       research: rendering

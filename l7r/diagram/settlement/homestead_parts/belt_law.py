@@ -111,8 +111,8 @@ class BeltReading:
         """The exemptions the measure grants, decided once.
 
         Research:
-            page edge not judged - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: a
-                stretch the page cuts, or within the band's depth of it, is exempt
+            page edge not judged - CONVENTION: a stretch the page cuts, or within one clump's width (2 r) of it, is not judged -
+                a break there is not seen whole (0072's drawing page judges every break a reader can see)
             tips not judged - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:
                 a belt tapers at its ends
         """
@@ -279,6 +279,8 @@ class BeltReading:
         Research:
             continuous planting - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: an
                 opening over 30 ft across the wind is a hole
+            run break not a hole - GUESS: an opening where the band lies beyond every farmhouse's reach (W19) is where the
+                belt stops, not a hole in it
         """
         vs = sorted(v for _u, v in self.cl)
         out: list[tuple[float, float]] = []

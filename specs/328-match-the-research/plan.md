@@ -557,6 +557,21 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 - **Verification**: the tests red on the old code; the five hamlets regenerated and their manifests diffed; `impl-drift` on
   the touched claims; the gate; the pair.
 
+## Wave 47 (amendment 46, 2026-10-08) - batch 2's first wave
+
+- **Scope**: batch 1's own findings first (FR-005: a review or pair finding on this feature's work is fixed where it is
+  found) - the woodland glyph check's NEEDS-WORK on Kashikawa (the beyond-the-fields walk counts a row holding as field,
+  0033's house lot, then field, then woodland) and the pair's band 2 (the track out to the canvas edge on its bearing and
+  400 ft past it, `past_the_frame`, not the canvas diagonal every later pass sampled); then the open rows in ranking order:
+  the two E1s T119a tiered (every grove and copse crown gives way round a yard persimmon wholly; 0072's Inashiro belt arc
+  66 degrees) and row 442 (the road checkpoint tier described as 0110 attests it, no garrison count). Row 473 stays held as
+  the GM's question; row 501 (the connector's clearance at a footprint's edge) opens wave 48. The merge of main's feature
+  330 re-keyed the audit to `docs/building-programs.md` (main's move).
+- **Occasions**: see `tasks.md` `## Occasions` (wave 47): woodland commons on kashikawa (round 4 of batch 1's NEEDS-WORK),
+  copse and homestead grove (the give-way).
+- **Verification**: the tests red on the old code; the five hamlets regenerated (the persimmon overlaps 28/3/24/23 -> 0);
+  `impl-drift`; the record checks 0072's edit owed; `spec-fidelity`; the gate, the pair and the occasions at batch 2's close.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Waves 2-45 that changed engine behavior took

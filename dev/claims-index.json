@@ -3223,14 +3223,16 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sacred features#the whole sacred complex held to at most ~2/3 of the residence": {
-  "code": "f2c159516b447ff7",
+  "code": "75cfaa2a7f7c4e16",
   "core": "43c7197f86c0cc1c",
   "date": "2026-10-08",
-  "note": "0116 was searched and found silent (\"how the other buildings ... ranked - its kitchen, its stable, its shrine - no page we read records\"), so the label should be GUESS citing 0116, not UNRESEARCHED",
-  "pages": {},
-  "research": "",
+  "note": "the account says 0116d \"records no rank for a compound's shrine\", but §72 does rank the shrine hall below the residence, as a GUESS; the page does not record the ~2/3 figure; the account should cite §72's ordering, with the 2/3 as a further guess the page should record",
+  "pages": {
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c2a4ba141b354319"
+  },
+  "research": "8bb634ee7fbc398f",
   "rests": [
-   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html:d89c58633b72e2d1"
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:8e60bf46e6b04c4a"
   ],
   "verdict": "MISLABELED"
  },
@@ -23284,6 +23286,18 @@
   "triaged": "2026-10-05",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/ways/track.py::TRACK_PAST_FRAME_FT#track past the frame": {
+  "code": "8b955aaa6439f2c4",
+  "core": "d9c30efcc65b2e12",
+  "date": "2026-10-08",
+  "note": "overshoot past a cropped frame; the run-off itself is §382's",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0081-village-lanes.drawing.html:16df95fc169329f7"
+  ],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/ways/track.py::_connector_through#connector round the field and the steadings": {
   "code": "c3515bdb3cbcc559",
   "core": "74800c63d50ab983",
@@ -23580,10 +23594,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::connector_track#leaning downslope": {
-  "code": "05e096cb39292830",
-  "core": "41a7d9236e837c4a",
+  "code": "84272b1954ac630a",
+  "core": "f2076a65ab4d08ef",
   "date": "2026-10-08",
-  "note": "the 0.55/0.85 weights are not on any page; the downslope direction is claimed separately",
+  "note": "the page gives the downslope exit but not the 0.55/0.85 weights",
   "pages": {},
   "research": "",
   "rests": [
@@ -23592,50 +23606,50 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::connector_track#the three ranked": {
-  "code": "5fa4646d8be75a8c",
-  "core": "41a7d9236e837c4a",
+  "code": "0d029d5347f46f6e",
+  "core": "f2076a65ab4d08ef",
   "date": "2026-10-08",
-  "note": "search order; a wet or steaded bearing is refused in the end",
+  "note": "search order; wet and steaded both refused in the end",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::connector_track#track drawn taut": {
-  "code": "e95e38e5b924d0c5",
-  "core": "41a7d9236e837c4a",
+  "code": "5f312ee6b6a0a75a",
+  "core": "f2076a65ab4d08ef",
   "date": "2026-10-08",
-  "note": "the candidate is a straight run past the frame",
+  "note": "straight candidate from the gateway, \"pulled taut like a string\"",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },
   "research": "ebd72aaa6a0eb9af",
   "rests": [
-   "0081-village-lanes.drawing.html:16df95fc169329f7",
    "0081-village-lanes.drawing.html:18dffe2b3b52b18c"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::connector_track#track off the steadings": {
-  "code": "cf7854b482441eb7",
-  "core": "41a7d9236e837c4a",
+  "code": "6fe09fdf774a6147",
+  "core": "f2076a65ab4d08ef",
   "date": "2026-10-08",
-  "note": "TRACK_FABRIC_GAP = WEB_FABRIC_GAP off the steadings",
+  "note": "the 7 ft fence clearance, nothing built on a lane",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
   "research": "7b40c2c01cfba682",
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c5daec1a445d35bf"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::connector_track#track out off the wet": {
-  "code": "6c84d5fdb01c1074",
-  "core": "41a7d9236e837c4a",
+  "code": "4eefcc7fa93355d5",
+  "core": "f2076a65ab4d08ef",
   "date": "2026-10-08",
-  "note": "away from the field leaning downslope, wet ground refused first, run off the map",
+  "note": "wet refused, leaves downslope, runs off the map",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },
@@ -23647,10 +23661,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::connector_track#wet, then steadings, then crop": {
-  "code": "1ed76c1978409cc7",
-  "core": "41a7d9236e837c4a",
+  "code": "8717249ebb61adeb",
+  "core": "f2076a65ab4d08ef",
   "date": "2026-10-08",
-  "note": "wet and steaded bearings refused, crop routed around",
+  "note": "no crop crossing, no wet ground, nothing built on a lane",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
@@ -23660,6 +23674,18 @@
    "0081-village-lanes.drawing.html:43b635b1ca75125b",
    "0081-village-lanes.drawing.html:ff5e303a5a16af8f",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/track.py::past_the_frame#track past the frame": {
+  "code": "8f8ac9c4783dc861",
+  "core": "8485ba9d2cea616f",
+  "date": "2026-10-08",
+  "note": "frame overshoot, a convention",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0081-village-lanes.drawing.html:16df95fc169329f7"
   ],
   "verdict": "IN-STEP"
  },
@@ -43946,15 +43972,19 @@
  "l7r/diagram/settlement/homestead_parts/belt_law.py::BeltReading.__init__#page edge not judged": {
   "code": "4a162cd9ca250294",
   "core": "3308d34e09292c50",
-  "date": "2026-10-03",
-  "note": "matches the cited finding",
+  "date": "2026-10-08",
+  "note": "the code exempts bins within `2 * r` of the frame (one clump across, about 28 ft), not \"the band's depth\" the claim names; 0072d also judges every visible break (\"a break ... a reader can see is still a hole\") and records no exemption for ground near the edge; make the claim and the code agree on the margin, and record the exemption on the page or narrow it to off-page ground",
   "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "898132059af3d06b"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "47ec3e2a439e0b3c"
   },
-  "research": "856035ff0f5379cf",
-  "triage": "touched",
-  "triaged": "2026-10-08",
-  "verdict": "IN-STEP"
+  "research": "6cc5fb86c410eb4c",
+  "rests": [
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:199c787c93386c82",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:301a35716bf73526",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:56f345de26c07dc8",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:9e9583030b309e84"
+  ],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/homestead_parts/belt_law.py::BeltReading.__init__#tips not judged": {
   "code": "69ccf7868c4d9d69",
@@ -44039,27 +44069,41 @@
  "l7r/diagram/settlement/homestead_parts/belt_law.py::BeltReading.depths#frame-held belt judged whole": {
   "code": "891c34088e44de68",
   "core": "5c6ed0363369a824",
-  "date": "2026-10-03",
-  "note": "matches the cited finding",
+  "date": "2026-10-08",
+  "note": "exemptions honored only where the frame is what cuts the belt",
   "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "898132059af3d06b"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "47ec3e2a439e0b3c"
   },
-  "research": "856035ff0f5379cf",
-  "triage": "touched",
-  "triaged": "2026-10-08",
+  "research": "6cc5fb86c410eb4c",
+  "rests": [
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:199c787c93386c82",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:301a35716bf73526",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:9e9583030b309e84"
+  ],
   "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/homestead_parts/belt_law.py::BeltReading.holes#an empty run break with no house before it is not a hole (W19 exemption)": {
+  "code": "474da1f60ae0fa77",
+  "core": "474da1f60ae0fa77",
+  "date": "2026-10-08",
+  "note": "an empty run break with no house before it is not a hole (W19 exemption)",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  "l7r/diagram/settlement/homestead_parts/belt_law.py::BeltReading.holes#continuous planting": {
   "code": "dae925ef1f84da30",
   "core": "474da1f60ae0fa77",
-  "date": "2026-10-03",
-  "note": "matches the cited finding",
+  "date": "2026-10-08",
+  "note": "an opening over 30 ft across the wind is a hole; a lane's own crossing is exempt",
   "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "898132059af3d06b"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "47ec3e2a439e0b3c"
   },
-  "research": "856035ff0f5379cf",
-  "triage": "touched",
-  "triaged": "2026-10-08",
+  "research": "6cc5fb86c410eb4c",
+  "rests": [
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:199c787c93386c82",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:19b6b8f457366d55",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:1b23f53588df77c1"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/belt_law.py::BeltReading.off_the_page#plumbing": {
@@ -46053,10 +46097,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#alder in the marsh": {
-  "code": "4736d22b13fde08e",
-  "core": "9ea645aa34857725",
+  "code": "e78c2052d5c3da2a",
+  "core": "29ac46a8eb870220",
   "date": "2026-10-08",
-  "note": "alder mix drawn in ALDER_GREENS, blue-gray green as the page records",
+  "note": "the alder mix in blue-gray greens, all broadleaf, no bamboo",
   "pages": {
    "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "fb7c4bec76071ea3"
   },
@@ -46068,10 +46112,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#bamboo patch forced": {
-  "code": "aa815bb08815b088",
-  "core": "9ea645aa34857725",
+  "code": "8fa2ba85b355b03b",
+  "core": "29ac46a8eb870220",
   "date": "2026-10-08",
-  "note": "grove bamboo patch, recorded on the page as a GUESS",
+  "note": "the grove patch is recorded as a GUESS",
   "pages": {
    "0075-bamboo-groves-chikurin.drawing.html": "d65f38fc7bbc0e20"
   },
@@ -46082,10 +46126,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#bamboo under the crowns": {
-  "code": "5e6ee4654a141324",
-  "core": "9ea645aa34857725",
+  "code": "b5467e0643f215bd",
+  "core": "29ac46a8eb870220",
   "date": "2026-10-08",
-  "note": "0.08, about one in twelve, inked only in gaps, none in dooryard or alder",
+  "note": "0.08 is about 1 in 12, inked only in the gaps; none in the copse or the alder",
   "pages": {
    "0075-bamboo-groves-chikurin.drawing.html": "d65f38fc7bbc0e20"
   },
@@ -46098,53 +46142,52 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#clump glyph": {
-  "code": "48a5a2f9b3a86048",
-  "core": "9ea645aa34857725",
+  "code": "629ed764e1a2b169",
+  "core": "29ac46a8eb870220",
   "date": "2026-10-08",
-  "note": "pure rendering",
+  "note": "disc, fill and paint order only",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#conifer-led clump's lesser share": {
-  "code": "a6397175a2c0177e",
-  "core": "9ea645aa34857725",
+  "code": "cc385a469cdbd4b2",
+  "core": "29ac46a8eb870220",
   "date": "2026-10-08",
-  "note": "page names the lesser broadleaf and calls conifer the commonest a GUESS; 0.1 is on no page",
+  "note": "the page names lesser broadleaf among the rows but does not record LESSER_ROLL_SHARE 0.1 as a guess; record it on 0072d as a GUESS or make the claim an unpointed GUESS",
   "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "898132059af3d06b"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "47ec3e2a439e0b3c"
   },
-  "research": "856035ff0f5379cf",
+  "research": "6cc5fb86c410eb4c",
   "rests": [
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:49a55637e421e2be",
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:6de01da4f44bfe0c"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:6de01da4f44bfe0c",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:e7f8a345b63cc861"
   ],
-  "triaged": "2026-10-08",
-  "verdict": "IN-STEP"
+  "verdict": "MISLABELED"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#crown over no roof or wellhead": {
-  "code": "92288835676187bd",
-  "core": "9ea645aa34857725",
+  "code": "ce97a67e661cd367",
+  "core": "29ac46a8eb870220",
   "date": "2026-10-08",
-  "note": "per-crown refusal over buildings and belt wellheads",
+  "note": "against a house never on it; a wellhead in the belt clears its clumps",
   "pages": {
    "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html": "f32599678d1cb241",
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "898132059af3d06b"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "47ec3e2a439e0b3c"
   },
-  "research": "a5b82baeb5315b1b",
+  "research": "9b1f9dd0951e9778",
   "rests": [
    "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:5267e319c5872785",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:301a35716bf73526"
   ],
-  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#crown size": {
-  "code": "59e317f83cbf7d32",
-  "core": "9ea645aa34857725",
+  "code": "975b9d8128ea0ddb",
+  "core": "29ac46a8eb870220",
   "date": "2026-10-08",
-  "note": "CANOPY_R_FT times CROWN_S 0.75 to 1.4, conifer the same size",
+  "note": "CROWN_S 0.75-1.4 of the mean radius, the windbreak at the hill wood's size",
   "pages": {
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html": "646f4508385c9db1"
   },
@@ -46156,10 +46199,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#crown under no crown": {
-  "code": "e21ac61df45a147d",
-  "core": "9ea645aa34857725",
+  "code": "42283efd4719660f",
+  "core": "29ac46a8eb870220",
   "date": "2026-10-08",
-  "note": "seat-clear test against earlier and this clump's crowns, edges may overlap",
+  "note": "the canopy-layer seat test",
   "pages": {
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html": "646f4508385c9db1"
   },
@@ -46171,10 +46214,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#crowns out of the plots' sun": {
-  "code": "64fa834ac9c2239c",
-  "core": "9ea645aa34857725",
+  "code": "b434d9a97ea8b4a0",
+  "core": "29ac46a8eb870220",
   "date": "2026-10-08",
-  "note": "crowns at sun keep-outs, culm marks at BAMBOO_SHADE_FT 50",
+  "note": "every crown and bamboo mark held 50 ft E/W/S",
   "pages": {
    "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03"
   },
@@ -46186,10 +46229,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#crowns per clump": {
-  "code": "86ae11fa16b2e9d2",
-  "core": "9ea645aa34857725",
+  "code": "2814d3d2411c579d",
+  "core": "29ac46a8eb870220",
   "date": "2026-10-08",
-  "note": "48 sq px at 2 ft/px is about 192 sq ft per tree, the page's about 180 sq ft (13 ft centers)",
+  "note": "48 sq px at 2 ft/px is about 192 sq ft a crown, about 560/ha, inside 500-800; the windbreak keeps the hill wood's spacing",
   "pages": {
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html": "646f4508385c9db1"
   },
@@ -46201,10 +46244,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#dooryard mix": {
-  "code": "d1f3ed07824a2b2a",
-  "core": "9ea645aa34857725",
+  "code": "8e82ecf57bc4d0dd",
+  "core": "29ac46a8eb870220",
   "date": "2026-10-08",
-  "note": "dooryard draws broadleaf only, no conifer, no bamboo",
+  "note": "all broadleaf, no bamboo",
   "pages": {
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
   },
@@ -46215,39 +46258,39 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#every crown gives way round a persimmon": {
-  "code": "68e00c39692f477c",
-  "core": "9ea645aa34857725",
+  "code": "d260c0368e583e75",
+  "core": "29ac46a8eb870220",
   "date": "2026-10-08",
-  "note": "every kind of crown is refused over a yard persimmon's crown, which is what \"the grove's trees give way round it\" says",
+  "note": "\"the grove's trees give way round it\"",
   "pages": {
    "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html": "6b3be37b04307230"
   },
   "research": "1640adf91280aca1",
   "rests": [
-   "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:881ed76b6b6133cb",
-   "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:95a4bdb23ba3bcdf"
+   "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:881ed76b6b6133cb"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#lesser broadleaf crown size": {
-  "code": "15c36774dd32aefb",
-  "core": "9ea645aa34857725",
+  "code": "fddcfb271ae03ccb",
+  "core": "29ac46a8eb870220",
   "date": "2026-10-08",
-  "note": "0.75 to 0.85 is a degree inside the page's 0.75 to 1.4",
+  "note": "a sub-band inside 0.75-1.4",
   "pages": {
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html": "646f4508385c9db1"
   },
   "research": "050eb194338f2925",
   "rests": [
+   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:7f54cfe8dba1be5f",
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:a40ebd3a6acb1f87"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#lesser crown over an earlier stand's conifer": {
-  "code": "d0b520f6204bf9fe",
-  "core": "9ea645aa34857725",
+  "code": "1986d86af7337fff",
+  "core": "29ac46a8eb870220",
   "date": "2026-10-08",
-  "note": "page silent on dropping a broadleaf over an earlier conifer; GUESS stands",
+  "note": "0080d does not record this drop; its canopy-layer rule is about crown centers and it allows edge overlap; record the drop on 0080d as a GUESS or make the claim an unpointed GUESS",
   "pages": {
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html": "646f4508385c9db1"
   },
@@ -46256,29 +46299,27 @@
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:aad44c6751a44f5f",
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:d9d6ec0e3a243d28"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "MISLABELED"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#mixed broadleaf belt": {
-  "code": "1ead1c334f2781c8",
-  "core": "9ea645aa34857725",
+  "code": "b5452143e616aaeb",
+  "core": "29ac46a8eb870220",
   "date": "2026-10-08",
-  "note": "mixed_broadleaf draws no conifer and uses the CROWN_S mix; the two forms are a knob",
+  "note": "rounded broadleaf crowns in CROWN_S, no conifer",
   "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "898132059af3d06b"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "47ec3e2a439e0b3c"
   },
-  "research": "856035ff0f5379cf",
+  "research": "6cc5fb86c410eb4c",
   "rests": [
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:49a55637e421e2be",
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:cdc8bbf5147ce3fe"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:49a55637e421e2be"
   ],
-  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#mixed broadleaf belt's bamboo": {
-  "code": "d28240f08ed90c5c",
-  "core": "9ea645aa34857725",
+  "code": "3b5d579079935faa",
+  "core": "29ac46a8eb870220",
   "date": "2026-10-08",
-  "note": "page records one in twelve in the village belt as a GUESS",
+  "note": "the page records the 1 in 12 in the village belt as a GUESS",
   "pages": {
    "0075-bamboo-groves-chikurin.drawing.html": "d65f38fc7bbc0e20"
   },
@@ -46289,20 +46330,20 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#thin band end to end": {
-  "code": "e42c989441d62b39",
-  "core": "9ea645aa34857725",
+  "code": "72c4520da9e2745f",
+  "core": "29ac46a8eb870220",
   "date": "2026-10-08",
-  "note": "no page answers how a thin band's trees spread",
+  "note": "the page is silent on the spread",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#windbreak conifer share": {
-  "code": "1e982b69c796c9eb",
-  "core": "9ea645aa34857725",
+  "code": "0e5c904c6e9fca18",
+  "core": "29ac46a8eb870220",
   "date": "2026-10-08",
-  "note": "c_th makes 48% of the non-bamboo crowns conifer, matching Kashima's 735 of 1,542 cedar in farmhouse groves; the 47.9% you measured (555 of 1158) agrees",
+  "note": "0.48 of the non-bamboo items, the Kashima cedar share",
   "pages": {
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.html": "186cb571d0ba4842"
   },
@@ -46988,15 +47029,13 @@
   "code": "aa210aa03ae40e6b",
   "core": "8a37021e269126e8",
   "date": "2026-10-08",
-  "note": "a cap that keeps the belt to one or two sides, never a ring",
+  "note": "one or two sides, a calibrated ceiling above the measured 14-71 degrees",
   "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "898132059af3d06b"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "47ec3e2a439e0b3c"
   },
-  "research": "856035ff0f5379cf",
+  "research": "6cc5fb86c410eb4c",
   "rests": [
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:20dfe2471e9c246c",
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:43aedefed41c4f79",
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:7f2222c5642c34c4",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:43835fbbe2281f9f",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:8e692f283f7947e4"
   ],
   "verdict": "IN-STEP"
@@ -47025,17 +47064,16 @@
   "code": "22dab422bda621d1",
   "core": "a7b43952d0585eb7",
   "date": "2026-10-08",
-  "note": "ends trimmed to the wind's quarter, one or two windward sides",
+  "note": "trimmed to the wind's quarter",
   "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "898132059af3d06b"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "47ec3e2a439e0b3c"
   },
-  "research": "856035ff0f5379cf",
+  "research": "6cc5fb86c410eb4c",
   "rests": [
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:43835fbbe2281f9f",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:43aedefed41c4f79",
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:8e692f283f7947e4",
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:c36f0698d70588dc"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:8e692f283f7947e4"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#belt alder in the marsh": {
@@ -47058,15 +47096,14 @@
   "code": "7458318207346f18",
   "core": "a7b43952d0585eb7",
   "date": "2026-10-08",
-  "note": "gaps over 30 ft along the belt axis are filled; lanes resume",
+  "note": "gaps over px(30 ft) filled from both sides of a crossing",
   "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "898132059af3d06b"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "47ec3e2a439e0b3c"
   },
-  "research": "856035ff0f5379cf",
+  "research": "6cc5fb86c410eb4c",
   "rests": [
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:1b23f53588df77c1",
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:dc08f0e1620f3363",
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:ef4711393f9f7044"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:19b6b8f457366d55",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:1b23f53588df77c1"
   ],
   "verdict": "IN-STEP"
  },
@@ -47420,17 +47457,16 @@
   "code": "5be79ccc4784c9a0",
   "core": "8cb2708aeb7632d7",
   "date": "2026-10-08",
-  "note": "within 45 deg of the northwest, one or two sides",
+  "note": "end crowns off, nothing kept off the wind",
   "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "898132059af3d06b"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "47ec3e2a439e0b3c"
   },
-  "research": "856035ff0f5379cf",
+  "research": "6cc5fb86c410eb4c",
   "rests": [
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:43aedefed41c4f79",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:8e692f283f7947e4",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:c36f0698d70588dc"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/stands.py::trunk_on_tread#no trunk within a lane's half-width": {
@@ -51917,15 +51953,14 @@
   "code": "77008872da1d920e",
   "core": "ba96e4c83570a50d",
   "date": "2026-10-08",
-  "note": "nucleated bundle has no groves; the cluster shelters behind one belt",
+  "note": "nucleated bundles carry no grove; one village belt",
   "pages": {
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d",
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "898132059af3d06b"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "47ec3e2a439e0b3c"
   },
-  "research": "9554fef4a95a25d7",
+  "research": "bd7a87087e2abb81",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7e82a3d8b8b3ed66",
-   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:a29084862058742f",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:5e9ac2daf3925f70"
   ],
   "verdict": "IN-STEP"
@@ -54921,25 +54956,18 @@
   "code": "2ae5af70856c330e",
   "core": "91712273a1fa222c",
   "date": "2026-10-08",
-  "note": "the code fixes one rectangular strip on one side, but the page attests \"on one side or two\" and maps that \"draw as hooks or as straight strips\". Those are attested forms, so side count and hook/strip should be a seeded roll, and the claim's \"never two sides\" contradicts the page",
+  "note": "the code always draws one rectangle on the uphill (fall) side; 0072d attests \"on one side or two\" (hooks or straight strips), a choice of form that should be rolled; it also puts the belt \"on the north and west ... unless the map declares a wind\", and `village_grove` here gets no wind, so nothing trims it",
   "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "898132059af3d06b"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "47ec3e2a439e0b3c"
   },
-  "research": "856035ff0f5379cf",
+  "research": "6cc5fb86c410eb4c",
   "rests": [
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:20dfe2471e9c246c",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:43835fbbe2281f9f",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:43aedefed41c4f79",
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:8e692f283f7947e4"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:8e692f283f7947e4",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:c36f0698d70588dc"
   ],
   "verdict": "DRIFTED"
- },
- "l7r/diagram/settlement/rolling/roll.py::RollVillageMixin._roll_windbreak#belt corners clamped 6 px inside the canvas (keep the belt on-canvas); this contradicts the page's rule that a belt near the frame runs off it [§29]": {
-  "code": "91712273a1fa222c",
-  "core": "91712273a1fa222c",
-  "date": "2026-10-08",
-  "note": "belt corners clamped 6 px inside the canvas (keep the belt on-canvas); this contradicts the page's rule that a belt near the frame runs off it [§29]",
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  "l7r/diagram/settlement/rolling/roll.py::RollVillageMixin._roll_windbreak#communal windbreak behind the cluster": {
   "code": "d52e3dd8452ed66a",
