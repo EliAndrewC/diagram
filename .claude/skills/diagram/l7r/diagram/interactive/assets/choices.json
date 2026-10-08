@@ -380,6 +380,7 @@
   "down_deg": "the slope's direction - geometry of the site, not a form",
   "water_flow": "the water's direction - geometry",
   "fan_aspect": "the alluvial fan's proportions - a degree along a continuum",
+  "reservoir_share": "the polder reservoir's share of its paddy - a degree along a continuum (0061: two or three tenths)",
   "head_lead": "how far the head race leads - a degree",
   "brook_side": "which bank of the brook - geometry",
   "grove_flank": "which flank of a farm its grove's open side faces - geometry",

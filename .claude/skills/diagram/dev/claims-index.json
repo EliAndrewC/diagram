@@ -14171,6 +14171,32 @@
   "research": "fa526bd6ae6238be",
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::RESERVOIR_ASPECT#reservoir shape": {
+  "code": "513608bb1d8bb04f",
+  "core": "58606a4ade26defa",
+  "date": "2026-10-07",
+  "note": "none of the cited pages gives a pond's outline, so GUESS is the right label",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::RESERVOIR_SHARE#reservoir share": {
+  "code": "a69cc5e9fd399464",
+  "core": "e3ec6649a64e12e4",
+  "date": "2026-10-07",
+  "note": "the band (0.2, 0.3) is the Song manual's two or three tenths, which the page applies to a pond that is its fields' only water",
+  "pages": {
+   "0061-reservoir-ponds-tameike.drawing.html": "be8eb7a4bb23863d"
+  },
+  "research": "06a7923692f832d3",
+  "rests": [
+   "0061-reservoir-ponds-tameike.drawing.html:18eca3ea34b26d65",
+   "0061-reservoir-ponds-tameike.drawing.html:f9e5a5b88e2a9590",
+   "0061-reservoir-ponds-tameike.drawing.html:fdcc457670adaf7c"
+  ],
+  "verdict": "IN-STEP"
+ },
  ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::_compass#polder geometry": {
   "code": "bb2963c9921d67cd",
   "core": "469c678b515750a0",
@@ -14394,37 +14420,55 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::stage_polder#dike uncaptioned": {
-  "code": "6a7c672be326bf5e",
-  "core": "888d13aa4c38e315",
-  "date": "2026-10-03",
-  "note": "labeling only",
+  "code": "01112e41c037b004",
+  "core": "f9d33041beaab13c",
+  "date": "2026-10-07",
+  "note": "leaving off a caption is only how the dike is shown",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::stage_polder#dike-pond conversion": {
-  "code": "987c06db3228412d",
-  "core": "888d13aa4c38e315",
-  "date": "2026-10-03",
-  "note": "0020: \"outside the dwellings all was pond\", 75% at Longshan; whole-block conversion fits",
+  "code": "7fe38295b68d0579",
+  "core": "f9d33041beaab13c",
+  "date": "2026-10-07",
+  "note": "DIKEPOND_CONVERSION=0.9 (or 1.0) converts the hamlet's whole field, above the highest share the page attests (\"30,000 mu, 75% of the cultivated area\" at Longshan; 18% in 1581; 35% in the 1980s); either bring the share inside the attested figures or have a drawing page record 0.9/1.0 as a GUESS or DEVIATION",
   "pages": {
    "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.html": "8075cafe02516d96"
   },
   "research": "1dd5a52fe9f4744a",
-  "verdict": "IN-STEP"
+  "rests": [
+   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.html:774c703e6b344687",
+   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.html:a8f2a65cc17b2039",
+   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.html:e7f4caa708aae920",
+   "0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.html:fa2cfbd7a93f61e1"
+  ],
+  "verdict": "DRIFTED"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::stage_polder#dike-pond mosaic bend strength POND_LAYOUT_MOSAIC=0.5, and the mosaic-or-grid layout choice": {
+  "code": "f9d33041beaab13c",
+  "core": "f9d33041beaab13c",
+  "date": "2026-10-07",
+  "note": "dike-pond mosaic bend strength POND_LAYOUT_MOSAIC=0.5, and the mosaic-or-grid layout choice",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::stage_polder#ditch corridors": {
-  "code": "77cefb1bdae92397",
-  "core": "888d13aa4c38e315",
-  "date": "2026-10-03",
-  "note": "nothing in the bundle sets a corridor width",
+  "code": "0e44403ffd877560",
+  "core": "f9d33041beaab13c",
+  "date": "2026-10-07",
+  "note": "no cited page says how far buildings kept from a ditch",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::stage_polder#header reservoir": {
-  "code": "4a851d5d846195e1",
-  "core": "888d13aa4c38e315",
-  "date": "2026-10-05",
-  "note": "outside the dike, uphill at the inlet",
+  "code": "cc8ef1ad84f82088",
+  "core": "f9d33041beaab13c",
+  "date": "2026-10-07",
+  "note": "outside the dike, at the inlet's high end and uphill, matching \"an inlet at the polder's head\", the wild pond feeding it and \"set higher than the paddies it serves\"",
   "pages": {
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "45bbefa1e8568ae6",
    "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.html": "15c735253b0741d9"
@@ -14432,33 +14476,59 @@
   "research": "0ca078edb161a2e2",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:152b5508568f62e5",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:9b079184810cacb3",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f981425220ab2e60",
-   "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.html:23d33365fc99a589"
+   "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.html:23d33365fc99a589",
+   "0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.html:55b93ffd30b041ac"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::stage_polder#perimeter dike gapped at crossings": {
-  "code": "66d5618fc5cdb55f",
-  "core": "888d13aa4c38e315",
-  "date": "2026-10-03",
-  "note": "0027 drawing",
+  "code": "d27ac486a2dac1e6",
+  "core": "f9d33041beaab13c",
+  "date": "2026-10-07",
+  "note": "\"Where a channel crosses the dike, the band is cut\"",
   "pages": {
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html": "12e062826b81046a"
   },
   "research": "aaf76ce9023b39a0",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f981425220ab2e60",
+   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:e8c05b8d91b4cafc"
+  ],
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::stage_polder#polder fabric per archetype (cell 190/160, parcel mix, gap) selected here": {
+  "code": "f9d33041beaab13c",
+  "core": "f9d33041beaab13c",
+  "date": "2026-10-07",
+  "note": "polder fabric per archetype (cell 190/160, parcel mix, gap) selected here",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::stage_polder#reservoir first seated pry + 30 px uphill of the ring's head (distance from inlet to pond)": {
+  "code": "f9d33041beaab13c",
+  "core": "f9d33041beaab13c",
+  "date": "2026-10-07",
+  "note": "reservoir first seated pry + 30 px uphill of the ring's head (distance from inlet to pond)",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::stage_polder#reservoir size": {
-  "code": "ca587899befecac9",
-  "core": "888d13aa4c38e315",
-  "date": "2026-10-03",
-  "note": "prx, pry = 82.0, 54.0 is fixed whatever plan.acres, against 0017 \"a pond is sized to the paddy it waters\" (and these are semi-axes, so the ellipse is 164 x 108 px, not 82 x 54). Either size it from the paddy, or label it DEVIATION and record the departure on the reservoir-pond drawing page",
+  "code": "849c31b5ec194170",
+  "core": "f9d33041beaab13c",
+  "date": "2026-10-07",
+  "note": "the share is in step, but 0061 is silent on the \"ellipse of 82:54 proportions\" this claim cites it for; split that part out as GUESS (as RESERVOIR_ASPECT's claim already says)",
   "pages": {
-   "0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html": "7fe97fe8430e3544"
+   "0061-reservoir-ponds-tameike.drawing.html": "be8eb7a4bb23863d"
   },
-  "research": "fa526bd6ae6238be",
-  "verdict": "DRIFTED"
+  "research": "06a7923692f832d3",
+  "rests": [
+   "0061-reservoir-ponds-tameike.drawing.html:18eca3ea34b26d65",
+   "0061-reservoir-ponds-tameike.drawing.html:f9e5a5b88e2a9590",
+   "0061-reservoir-ponds-tameike.drawing.html:fdcc457670adaf7c"
+  ],
+  "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::stage_waterward#reed fringe on the waterward flanks": {
   "code": "00ab2f3095e88d31",

@@ -1,32 +1,50 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "b54d9797e9097ab2c1ec27e22ec10fa464cb9c068a0f77c8d61d69f252acfede",
+ "plan_sha256": "89969ba38fc71ebc26e8c1c49414358f95005ddb5486fe5eae19b093e637a6ed",
  "reviewed": "2026-10-07",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W29-scope",
-   "summary": "Wave 28's six found rows tiered by a fresh reader (T83a): five E0 (block centered relabeled CONVENTION; rows-along-the-fall claimed on 0019 drawing with its duplicate; clean_parcels=False claimed on 0055 drawing; the 0.86 walk-down already done in wave 28), one E2 (next_gather's missing third gather form) left for its place in the run",
+   "id": "W30-scope",
+   "summary": "row 458 (stage_polder#reservoir size) is the wave; row 434 stays held for the GM",
    "class": "within",
-   "why": "FR-002/FR-003: block centered is impl-drift's own MISLABELED reading; 0019 drawing (last edited 2026-10-05, feature 319) already says inlet at head, outfall at tail, read as high and low ends; 0055 drawing already says fields stand back behind the bank and fit_polder cleans the block it returns (hamletgen/water/polder.py clean_polder_parcels before return). Knot row is one function in knots.py (E2); knots.py unchanged f51fbbbe4..792d74111, so the gap is pre-existing, not introduced; after this wave no kept E0/E1 row stands open, so SC-003 is held"
+   "why": "row 458 is the next open in-scope E2 row in ranking.json after the held shrine-cap row, whose hold was ruled LEGITIMATE earlier; contiguous run per FR-006"
   },
   {
-   "id": "W29-occasions",
-   "summary": "No review occasion",
+   "id": "W30-share",
+   "summary": "reservoir area = a share rolled per settlement in RESERVOIR_SHARE (0.2-0.3) x the block's acres",
    "class": "within",
-   "why": "the engine diff 792d74111..HEAD is docstring claim lines in _polder_candidate only; no element, glyph or map changes (feature 294)"
+   "why": "0061's drawing page: a pond that is its fields' only water is drawn at two or three tenths of its paddy; a degree in that band rolled from the seed is calibrated liberty, not a choice of forms"
   },
   {
-   "id": "W29-condition-6",
-   "summary": "Stacking on the unpushed waves 9-28: (1)-(5) held at wave 28's close 792d74111, backed up; wave 29 owes no bookend pair",
+   "id": "W30-aspect",
+   "summary": "the ellipse keeps the old 82:54 proportions (RESERVOIR_ASPECT), labeled GUESS",
    "class": "within",
-   "why": "backup/digram-backlog on origin is 792d741114683842122d8ccb836570061c43a59a; the pair is owed by a wave that changes engine behavior (plan's Performance bookends, constitution VI), and none does here"
+   "why": "no page gives a pond's outline; the shape is labeled GUESS at the claim, which is the doctrine's form"
   },
   {
-   "id": "W29-verification",
-   "summary": "impl-drift on the touched claims and a green gate",
+   "id": "W30-dikepond",
+   "summary": "the same share applied to a dike-pond block (Kuwabata: the whole block fish ponds)",
    "class": "within",
-   "why": "FR-005 verbatim; no map changes, so no regeneration owed"
+   "why": "not a narrowing - it applies the rule more widely, not less; whether that application is backed by 0061 is a labeling finding in the amendment verdict, not a plan narrowing"
+  },
+  {
+   "id": "W30-occasions",
+   "summary": "placement-changed pond on Kuwabata (glyph-check); Kuwabata re-rolls",
+   "class": "within",
+   "why": "an element re-placed by a different rule is a declared glyph-check occasion (dev/reviews.md); the other four hamlets roll no polder (measured: field_archetype valley_paddy)"
+  },
+  {
+   "id": "W30-stack",
+   "summary": "wave 30 opens on unpushed waves 9-29 under the wave-11 exception's condition (6); its own bookend pair from 2e33f31b3",
+   "class": "within",
+   "why": "continues an exception already ruled LEGITIMATE on conditions; (1)'s backup holds (origin backup/digram-backlog = 2e33f31b3), wave 29's T84 ticked with make done green"
+  },
+  {
+   "id": "W30-verify",
+   "summary": "impl-drift on the touched claims, the glyph check, the gate, the bookend pair",
+   "class": "within",
+   "why": "FR-005 and constitution VI as written"
   }
  ],
  "verdict": "CLEAR"

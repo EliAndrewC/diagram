@@ -1084,7 +1084,8 @@ The next open in-scope E2 row (row 434, the shrine cap, held for the GM). 0061's
 the paddy it waters", two or three tenths of it (the Song-dynasty manual), less where a stream also feeds the paddy. The
 polder's header reservoir is its only source, and it was a fixed 82 x 54 ft ellipse whatever the acreage. Now its area is a
 share of the block's acres rolled in the band (`RESERVOIR_SHARE`), the ellipse keeping its proportions (`RESERVOIR_ASPECT`,
-GUESS). Kuwabata's reservoir is about a fifth of its 21.2-acre block.
+GUESS). Kuwabata's reservoir is about a fifth of its 21.2-acre block - but Kuwabata's block is all fish ponds, no paddy,
+and no page sizes a reservoir for fish ponds: the paddy share applied there is claimed GUESS (amendment 29 round 1).
 
   - `l7r/diagram/hamletgen/water/polder.py::stage_polder#reservoir size` - the reservoir sized by its paddy (0061)
 

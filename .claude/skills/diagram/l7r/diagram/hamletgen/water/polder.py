@@ -188,7 +188,8 @@ def stage_polder(s: Settlement, plan: SitePlan) -> None:
 
     Research:
         header reservoir - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html, research/questions/0053-irrigation-canals-and-how-they-are-laid-out-yosuiro.html: outside the dike, uphill at the ring canal's head
-        reservoir size - research/questions/0061-reservoir-ponds-tameike.drawing.html: a pond sized to the paddy it waters, two or three tenths of it (`RESERVOIR_SHARE`, rolled per settlement), an ellipse of 82:54 proportions
+        reservoir size - research/questions/0061-reservoir-ponds-tameike.drawing.html: a pond sized to the paddy it waters, two or three tenths of it (`RESERVOIR_SHARE`, rolled per settlement)
+        reservoir of a fish-pond block - GUESS: a block converted to fish ponds (`mulberry_dike_fishpond`) takes the paddy's share too; no page sizes a reservoir for fish ponds (searched 0061, 0020, 0019)
         dike-pond conversion - research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.html: the block converted to fish ponds, DIKEPOND_CONVERSION or the whole of it
         perimeter dike gapped at crossings - research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html: cut wherever a channel or recorded course crosses it
         dike uncaptioned - CONVENTION: the scripted tier draws the perimeter dike without a label
