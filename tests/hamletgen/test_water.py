@@ -694,3 +694,15 @@ def test_the_ways_route_against_the_course_as_first_drawn() -> None:
         M = {"streams": [{"poly": [[0, 0], [5, 3], [10, 0]], "stations": [[0, 0], [10, 0]]}, {"poly": [[0, 50], [0, 90]]}, {"poly": []}]}
 
     assert stream_segs(_S()) == [((0.0, 0.0), (10.0, 0.0)), ((0.0, 50.0), (0.0, 90.0))]  # type: ignore[arg-type]
+
+
+def test_a_hamlet_keeps_its_yards_wherever_grain_is_grown() -> None:
+    """Feature 328 (0037: every rice and dry-field farm keeps a yard): the yards go only where no grain grows - a dike-pond
+    hamlet whose leftover parcels are ponds - and a dike-pond hamlet with rice left, or a dry-field one, keeps them."""
+    from types import SimpleNamespace
+
+    from l7r.diagram.hamletgen.water.skeleton import grows_grain
+
+    assert not grows_grain(SimpleNamespace(field_archetype="mulberry_dike_fishpond", leftover="pond"))  # type: ignore[arg-type]
+    assert grows_grain(SimpleNamespace(field_archetype="mulberry_dike_fishpond", leftover="rice"))  # type: ignore[arg-type]
+    assert grows_grain(SimpleNamespace(field_archetype="dry_terrace", leftover="rice"))  # type: ignore[arg-type]

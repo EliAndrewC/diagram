@@ -11,6 +11,15 @@ from l7r.diagram.settlement import Settlement
 from ..consts import POLDER_ARCHETYPES
 from ..plan import SitePlan
 
+def grows_grain(plan: SitePlan) -> bool:
+    """Does the hamlet grow a grain its farms thresh? Every archetype does but the mulberry dike-fishpond, whose
+    leftover parcels are standing rice (grain) or ponds (none).
+
+    Research: grain to thresh - research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html: every rice and dry-field farm keeps a yard
+    """
+    return plan.field_archetype != "mulberry_dike_fishpond" or plan.leftover == "rice"
+
+
 # ---- STAGE 1: the water frame -------------------------------------------------------------------
 
 
@@ -29,7 +38,7 @@ def stage_water_frame(s: Settlement, plan: SitePlan) -> None:
 
     Research:
         fall and drainage declared first - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: the bearing and the fall recorded before anything is placed
-        no work yards on the dike-pond hamlet - CANON: `work_yards` false on the mulberry dike-fishpond archetype (the GM's no-rice ruling, 2026-08-28, not yet on the record)
+        no work yards where no grain grows - research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html: every rice and dry-field farm keeps a yard; `work_yards` false only on a dike-pond hamlet whose leftover parcels are ponds (`grows_grain`; the GM's no-rice ruling, 2026-08-28)
         field footbridges on every hamlet - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: `field_footbridges` true, a crossing where a bund path meets a ditch
         house racks - research/questions/0016-rice-drying-racks-hasa-hasagi.drawing.html: a rack by every house where the harvest weather is changeable
         compact bundle for the clustered form only - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: a non-nucleated farm takes its own grove
@@ -89,16 +98,17 @@ def stage_water_frame(s: Settlement, plan: SitePlan) -> None:
         # skipping it would move every archetype's downstream draws; what changes is only what gets written down.
         intake=plan.intake if _brook_fed else None,
         brook_side=plan.brook_side if _brook_fed else None,
-        # NO WORK YARDS ON A NO-RICE HAMLET (feature 150, GM 2026-08-28): the threshing yard is a rice
-        # feature; the dike-pond archetype sells silk and fish and buys grain in. Declared here so the
-        # bundle omits the yard (`_bundle_geom`) and `harvest_yards_present` stands aside.
-        work_yards=plan.field_archetype != "mulberry_dike_fishpond",
+        # NO WORK YARDS WHERE NO GRAIN GROWS (feature 150, GM 2026-08-28: the threshing yard is a rice feature; feature
+        # 328: 0037 keeps a yard on every rice and dry-field farm). A dike-pond hamlet sells silk and fish and buys grain
+        # in - unless its leftover parcels stand in rice, which is threshed. Declared here so the bundle omits the yard
+        # (`_bundle_geom`) and `harvest_yards_present` stands aside.
+        work_yards=grows_grain(plan),
         manure_form=plan.manure_form,  # the rolled manure form (feature 150 A2), read by farmstead_fixtures
         harvest_weather=plan.harvest_weather,  # the declared harvest weather (feature 282), recorded for the page and the tests
         kosatsuba_siting=plan.kosatsuba_siting,  # frontage (feature 328: the drawing-water form retired)
         copse_siting=plan.copse_siting,  # among_the_houses (feature 328: the belt-side form retired)
     )
-    s._work_yards = plan.field_archetype != "mulberry_dike_fishpond"
+    s._work_yards = grows_grain(plan)
     s._house_racks = plan.harvest_weather == "changeable"  # a rack by every house's yard (feature 282, `HARVEST_WEATHERS`)
     # `_nucleated` IS NOT THE FORM - it is the engine's flag for a COMPACT BUNDLE (house + lee
     # garden + south yard, no per-house grove; see `_place_bundle`, which branches on it). The two

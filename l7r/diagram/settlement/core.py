@@ -74,7 +74,7 @@ class Settlement(
         """The empty map: its registries, record streams and defaults.
 
         Research:
-            a threshing yard at every farmstead - research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html: on unless the generator declares no rice
+            a threshing yard at every farmstead - research/questions/0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html: on unless the generator declares no grain grown
             swept ground kept clear of scatter - research/questions/0224-ground-swept-clear-around-shrines-and-graves.html: the clearings registry
             no house racks by default - research/questions/0016-rice-drying-racks-hasa-hasagi.drawing.html: settled harvest weather where none is stated, so no rack by each house's yard
             registries and record streams - NONE
@@ -94,7 +94,8 @@ class Settlement(
         # classed string in a `<g class="f f-<class>">` for the hover/click page. `None` means no one
         # has ruled on that ink (the FR-009 census reports it); `"-"` is the not-highlighted ruling.
         # WORK YARDS: every farmstead bundle carries a threshing yard unless the generator declares the
-        # settlement grows no rice (feature 150: the dike-pond hamlet; `meta.work_yards`, `_bundle_geom`).
+        # settlement grows no grain (feature 150, 328: a dike-pond hamlet with no rice left; `grows_grain`,
+        # `meta.work_yards`, `_bundle_geom`) - a dry-field farm keeps its yard (0037).
         self._work_yards: bool = True
         self._house_racks: bool = False  # a rack by each house's yard - changeable harvest weather (feature 282, `yards.rack_segment`)
         self.out_cls: list[ClsTag] = []
