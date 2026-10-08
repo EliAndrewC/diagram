@@ -321,3 +321,4 @@ Each wave's amendment adds its map decisions to this table. The program's decisi
 - Amendment 24, round 1 (spec-fidelity, 2026-10-08): FAITHFUL, plan CLEAR.
 - Amendment 25: round 1 (spec-fidelity) CHANGES REQUIRED - no claim that the hamlet keeps the below-drain rule, plan CLEAR; round 2 (verify) FAITHFUL; plan re-reviewed CLEAR (2026-10-08).
 - Amendment 26: round 1 (spec-fidelity) CHANGES REQUIRED - the brook trio's E3 re-tier withdrawn (the literal fix passes), plan BLOCKED; round 2 (verify) FAITHFUL; plan re-reviewed CLEAR (2026-10-08).
+- Amendment 27: round 1 (spec-fidelity) CHANGES REQUIRED - build_polder's stale claim, plan CLEAR; round 2 (verify) CHANGES REQUIRED - T82 and the plan review after the knot fix; round 3 (verify) FAITHFUL; plan CLEAR at the final plan (2026-10-08).
