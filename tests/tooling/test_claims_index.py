@@ -59,9 +59,9 @@ def _tree(root: pathlib.Path, mod: str = MOD, page: str = PAGE) -> pathlib.Path:
     (skill / "l7r" / "diagram" / "hamletgen" / "rows.py").write_text(mod)
     (skill / "research" / "questions").mkdir(parents=True, exist_ok=True)
     (skill / "research" / "questions" / "0033-row-villages-resson.html").write_text(page)
-    (skill / "buildings").mkdir(exist_ok=True)
-    (skill / "docs/buildings.md").write_text("## Walls\n<!-- Research: walls - CONVENTION -->\n")
-    (skill / "buildings" / "programs.md").write_text("### Country shrine (a village district's shrine)\n<!-- Research: precinct - UNRESEARCHED -->\n")
+    (skill / "docs" / "buildings").mkdir(parents=True, exist_ok=True)
+    (skill / "docs" / "buildings.md").write_text("## Walls\n<!-- Research: walls - CONVENTION -->\n")
+    (skill / "docs" / "buildings" / "programs.md").write_text("### Country shrine (a village district's shrine)\n<!-- Research: precinct - UNRESEARCHED -->\n")
     return skill
 
 

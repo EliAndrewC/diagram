@@ -21,7 +21,7 @@ import sys
 from ..buildings.types import BuildingType, classification, load_types
 
 SKILL = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", ".."))
-PROGRAMS = os.path.join(SKILL, "buildings", "programs.md")
+PROGRAMS = os.path.join(SKILL, "docs", "buildings", "programs.md")
 
 
 def _band(item_band) -> str:

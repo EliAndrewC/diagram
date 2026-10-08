@@ -59,3 +59,28 @@ Baseline `make done` in this clone at `5e2ba4824` + the spec, before the move, 2
 static, format, typecheck, hooks-test (38 guard suites green), test-full: 10,818 passed, 3 skipped, 2 xfailed in
 228.6 s. ruff's checked files from the skill dir: 831 (361 under `l7r/`, 460 under `tests/`, 9 under `wip/`, and
 `pyproject.toml`). The first gate after the carry in a second clone: to fill at T09.
+
+## R7 - Defects found on the way, and what was done
+
+- **The gate-stamp `page` area hashed nothing** (pre-existing): it was written root-relative (`l7r/diagram/interactive`)
+  while the files lived under the old skill directory, so `git ls-files` matched nothing and an asset-only delta owed
+  no page check. The move makes the path real; the area now hashes the interactive assets and the class registry.
+- **`test-entry-gate.sh` edited a LIVE research page** under every hooks-test (pre-existing): a `git commit -a` made
+  during the baseline gate swept its probe text ("a short walk apart.") into this feature's commit 79f97ae59, undone
+  in the next commit. The suite now edits a throwaway local clone of HEAD (13/13, 83 s, the old version 83 s).
+- **29 broken Markdown links** in live documents (pre-existing): pool notes pointing at `../../hamletgen/` from before
+  feature 119, sibling notes linked as if in one folder, retired tools. Fixed, and `tests/tooling/test_doc_links.py`
+  now holds every live link.
+- **The sweep's own defects**, each caught by a test and fixed: an escaped prefix (`\.claude/skills/diagram/`) in three
+  regexes lost the path but kept the backslash (`\research` is a carriage return); depth arithmetic written as strings
+  (`"..", "..", "..", "..", ".."`, `dirname(dirname(dirname(SKILL)))`, `parents[3]` off a constant) that no pattern
+  modeled; the engine walks (`gencache.engine_files`, `render_cache.engine_fingerprint`) which, walking the root,
+  would have keyed every cached roll on `scripts/` and `specs/`; apostrophes inside a single-quoted hook program.
+- **`git mv` carries untracked `__pycache__` with the directory**, and a pytest-rewritten `.pyc` keeps the old
+  `co_filename` while its source's mtime still validates it (`inspect.getsource` then fails). Only the clone that ran
+  the `git mv` has it - a merge elsewhere writes fresh files - so it was cleared here, not tooled.
+- **A delta check that lists changed files by `git diff --name-only <base> -- <tree>` reads every moved file as new**:
+  the question-size cap flagged three pages (0009, 0059, 0227) already over it on main, untouched by this feature.
+  `scripts/_moves.py` (content-based: a blob the base already held) now keeps a pure move out of the question-size,
+  house-style, review-occasion and modal checks. The record checks owed at the push compare whole record trees
+  against the base and are answered for this one push by a recorded escape (R8).

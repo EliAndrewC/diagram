@@ -69,7 +69,7 @@ FINDINGS = ("DRIFTED", "NEEDS-RESEARCH", "MISLABELED", "UNCLAIMED", "CANNOT-TELL
 VERDICTS = ("IN-STEP", *FINDINGS)
 DEFAULT_OUT = Path("/tmp/l7r-check")
 #: What the base read needs: the engine, the procedure documents and the questions.
-BASE_PATHS = ("l7r", "docs/buildings.md", "buildings", QUESTIONS)
+BASE_PATHS = ("l7r", "docs/buildings.md", "docs/buildings", QUESTIONS)
 _VERDICT = re.compile(r"^VERDICT\s+(\S.*?)\s+(" + "|".join(VERDICTS) + r")\s+-\s+(.*)$")
 _UNCLAIMED = re.compile(r"^UNCLAIMED\s+(\S+?::\S.*?)\s+-\s+(.*)$")
 

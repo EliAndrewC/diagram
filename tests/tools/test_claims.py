@@ -272,16 +272,16 @@ def _tree(tmp: Path) -> Path:
     (eng / "other" / "b.py").write_text("def thing():\n    pass\n")
     (eng / "other" / "c.py").write_text("def unreached():\n    pass\n")
     (eng / "__pycache__").mkdir()
-    (tmp / "buildings").mkdir()
-    (tmp / "docs/buildings.md").write_text("## Walls\n<!-- Research: w - NONE -->\n")
-    (tmp / "buildings" / "programs.md").write_text("### Magistrate's manor (county magistracy)\ntext\n### Other\n")
+    (tmp / "docs" / "buildings").mkdir(parents=True)
+    (tmp / "docs" / "buildings.md").write_text("## Walls\n<!-- Research: w - NONE -->\n")
+    (tmp / "docs" / "buildings" / "programs.md").write_text("### Magistrate's manor (county magistracy)\ntext\n### Other\n")
     return tmp
 
 
 def test_a_tree_without_the_procedure_documents_reads_its_code(tmp_path: Path) -> None:
     skill = _tree(tmp_path)
-    (skill / "docs/buildings.md").unlink()
-    (skill / "buildings" / "programs.md").unlink()
+    (skill / "docs" / "buildings.md").unlink()
+    (skill / "docs" / "buildings" / "programs.md").unlink()
     assert all(u.kind != "section" for u, _e in cl.all_units(skill, ""))
 
 
