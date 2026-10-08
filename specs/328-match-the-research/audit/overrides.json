@@ -605,7 +605,8 @@
   "tier": "E2"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#the step between ranks": {
-  "moved": "wave 1: E0 -> E2, the re-check found the code's step (envelope depth + 18 + 39 ft scaled) is not the page's 92 ft: bring _rank_step to 0038 drawing's row spacing",
+  "fix": "_rank_step = envelope + max(MIN_WEB_GAP, |oy| x SUN_CORRIDOR_FT): the rank's lane inside the yard's sun, so north-south ranks stand 0038's 92 ft apart (was envelope + 18 + 39, about 111 ft)",
+  "moved": "wave 24 (impl-drift, amendment 23 plan review): the citation fix was false; the step itself fixed",
   "tier": "E2"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::_polder_candidate#surveyed block": {

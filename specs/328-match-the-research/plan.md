@@ -308,7 +308,8 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 
 ## Wave 24 (amendment 23, 2026-10-08)
 
-- **Scope**: rows 436 and 438 in ranked order (434 held for the GM; 437 stays open - its step is about 111 ft against 0038's 92 ft) and wave 23's one found row, tiered first (`tasks.md`
+- **Scope**: rows 436-438 in ranked order (434 held for the GM); row 437's step, found about 111 ft against 0038's 92 ft
+  (envelope + lane room + sun added), is fixed by laying the rank's lane inside the yard's sun - the gap the larger of the two and wave 23's one found row, tiered first (`tasks.md`
   Phase 25). The rank step owes the yard's sun whichever way the ranks run (0038: no farmhouse within 39 ft south of a
   yard); the sty takes the bank seat nearest the houses (0025), the midpoints no longer ranked ahead.
 - **Occasions**: none - the rank search is reached by no pool map; Kuwabata's sties move a few feet along their own bank.

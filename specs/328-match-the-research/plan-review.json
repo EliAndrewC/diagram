@@ -1,46 +1,53 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "94ae70461773ec7a9ae6ff0d564816bbd367d3926e80b001605aa60bb291e020",
+ "plan_sha256": "02e21d23263aed1f1df547b42e729c5482064f483ec9b8e51aede98d29b52b56",
  "reviewed": "2026-10-07",
  "declared": "spec-fidelity",
  "decisions": [
   {
    "id": "W24-scope-rank-step",
-   "summary": "_rank_step adds SUN_CORRIDOR_FT by abs(oy), whichever way the ranks run; row 437's citation of 0038 rides along",
+   "summary": "row 436: _rank_step adds SUN_CORRIDOR_FT by abs(oy), whichever way the ranks run",
    "class": "within",
-   "why": "0038 drawing: no neighbor's farmhouse within 39 ft south of a yard - a rank stepping south stands in the sun of the rank behind as one stepping north does; the implementation moves to the research (FR-004)"
+   "why": "0038 drawing: no farmhouse within 39 ft south of a yard; the implementation moves to the research (FR-004); the earlier 'row 437 rides along' is withdrawn by the plan itself"
   },
   {
    "id": "W24-scope-bank-seats",
-   "summary": "_bank_seats ranks midpoints and eighths together by distance to the houses; the UNRESEARCHED midpoints-first clause retired",
+   "summary": "row 438: _bank_seats ranks every bank seat together nearest the houses; the UNRESEARCHED midpoints-first clause retired",
    "class": "within",
-   "why": "0025 drawing: the sty takes the place nearest the houses that has room; the near-half bound is untouched (FR-004)"
+   "why": "0025 drawing: the sty takes the nearest place with room (FR-004)"
   },
   {
    "id": "W24-found-row-E0",
-   "summary": "wave 23's found row (draw_holdings drops a cell a lane or stream touches) tiered E0 by a fresh reader (T73a) and claimed CONVENTION",
+   "summary": "wave 23's found row (draw_holdings leaves a cell a lane or stream touches undrawn) tiered E0 by a fresh reader and claimed GUESS",
    "class": "within",
-   "why": "FR-002/FR-003 by a fresh reader, as seven earlier UNCLAIMED rows were claimed CONVENTION at E0; 0081 drawing says a lane never crosses row crops and MAY touch a plot - permission, not a requirement to draw it, so dropping a touching cell does not contradict the page and the label is honest about the rest"
+   "why": "FR-002/FR-003; E0 is the claim alone, and a GUESS label that says what the code does and that no page backs it is the honest claim (impl-drift's relabel from CONVENTION)"
   },
   {
    "id": "W24-row-434-held",
-   "summary": "row 434 (the shrine cap) held for the GM, not fixed in ranked order",
+   "summary": "row 434 (fixture count to the share) held for the GM, not fixed in ranked order",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "implied by the GM's own amendment: a question is deferred to the end of the feature rather than blocked on; the row stays in the ranking, not dropped"
+   "why": "implied by the GM's own goal amendment: a question is deferred to the end of the feature, not blocked on; the row stays open in the ranking with the hold written in it"
+  },
+  {
+   "id": "W24-row-437-open",
+   "summary": "row 437 (the step between ranks, E2) left open while row 438 after it is fixed: 'its step is about 111 ft against 0038's 92 ft'",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "The stated reason is the finding itself, not a reason the row cannot be fixed now: the ranking's own moved note already names the fix (bring _rank_step to 0038's 92 ft row spacing), and nothing shows it impossible, implied by the GM's words, or purpose-defeating. FR-006 makes a wave a contiguous run of the ranking and SC-003 lets an E(n) row wait only on a dependency RECORDED in the ranking; ranking.json row 437 records none (after [], wave '') and its fix field still says 'cite 0038 (rows 92 ft apart)', the fix impl-drift has just shown false, so a later wave would repeat it. To be legitimate: fix the step in wave 24 (to 92 ft per 0038, with the 39 ft sun term of row 436 reconciled), OR, if the measured 111 ft = envelope + lane room + sun shows the work is larger than one rule or needs research on what 0038's 92 ft contains, re-tier the row by its work (as T25a did) with that measurement and a corrected fix line recorded in ranking.json, and say so in the plan's scope line"
   },
   {
    "id": "W24-occasions-none",
-   "summary": "no review occasion declared: rank search reaches no pool map; Kuwabata's sties move a few feet along their own bank",
+   "summary": "no review occasion: the rank search reaches no pool map; Kuwabata's sties move 3.8 and 1.7 ft along their own bank",
    "class": "within",
-   "why": "FR-005 runs the occasions a wave opens (feature 294); measured manifests: only kuwabata.json changed, only pig_sties and the site-boundary hole around one - not a substantial placement change"
+   "why": "FR-005 runs the occasions a wave opens (feature 294); the move is measured (kuwabata.json 397c005fb vs HEAD), not a new element or a substantial re-placement"
   },
   {
    "id": "W24-condition-6",
    "summary": "wave 24 stacks on the unpushed waves 9-23 under the wave-11 exception's condition (6); its pair opens at 397c005fb",
    "class": "within",
-   "why": "the exception was ruled LEGITIMATE on conditions; at 397c005fb T72 is ticked and backup/digram-backlog points at 397c005fb (ls-remote), the CLAIMS_OK on the same found-row basis as every wave since 19"
+   "why": "the exception was ruled LEGITIMATE on conditions, recorded as held at 397c005fb"
   }
  ],
- "verdict": "CLEAR"
+ "verdict": "BLOCKED"
 }

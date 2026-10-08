@@ -785,7 +785,7 @@
   "tier_as_ranked": "E0",
   "e0_basis": "rows.py:316 (docstring) and :328-340 drop any band within the lane buffer (w/2+2) or 6 px of a stream. 0033 drawing (lines 21-27) gives the holding's form, strip depth and 150 ft plots but is silent on a lane or stream crossing it; 0033 page (33) says only that paths ran sideways between homesteads; 0014 (17, 33) covers paths on paddy bunds and points to 0081; 0081 drawing (84) says a lane never c",
   "moved": "T73a (fresh reader): rows.py:316 (docstring) and :328-340 drop any band within the lane buffer (w/2+2) or 6 px of a stream. 0033 drawing (lines 21-27) gives the holding's form, strip depth and 150 ft plots but is silent on a lane or stream crossing it; 0033 page (33) says only that paths ran sideways between homesteads;",
-  "wave": "",
+  "wave": "24",
   "scope": "kept"
  },
  {
@@ -800,7 +800,7 @@
   "flag": "",
   "found": "wave 24 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
-  "wave": "",
+  "wave": "24",
   "scope": "kept"
  },
  {
@@ -6730,14 +6730,14 @@
  {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#the step between ranks",
   "tier": "E2",
-  "fix": "cite research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html (rows 92 ft apart) for the rank step",
+  "fix": "_rank_step = envelope + max(MIN_WEB_GAP, |oy| x SUN_CORRIDOR_FT): the rank's lane inside the yard's sun, so north-south ranks stand 0038's 92 ft apart (was envelope + 18 + 39, about 111 ft)",
   "files": [
    ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py"
   ],
   "after": [],
   "flag": "",
   "tier_as_ranked": "E0",
-  "moved": "wave 1: E0 -> E2, the re-check found the code's step (envelope depth + 18 + 39 ft scaled) is not the page's 92 ft: bring _rank_step to 0038 drawing's row spacing",
+  "moved": "wave 24 (impl-drift, amendment 23 plan review): the citation fix was false; the step itself fixed",
   "verdict": "MISLABELED",
   "wave": "",
   "scope": "kept"

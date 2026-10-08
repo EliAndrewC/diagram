@@ -107,6 +107,8 @@
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/fixtures.py::_PRIVY_SEATS#four privy seats": "E1",
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/fixtures.py::fixture_forms#bath room wall": "E2",
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/persimmon_reseat.py::reseat_persimmons#the rolled count honored": "E0",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::draw_holdings#a holding plot that touches a lane or stream is left undrawn": "E0",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::draw_holdings#cell on a lane or stream left undrawn": "E0",
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#at most MAX_STREETS (6) parallel streets": "E0",
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#distance between parallel streets frame depth plus holding d": "E0",
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#distance between parallel streets the frame's depth along th": "E0",

@@ -377,8 +377,8 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
         the seating's reach - UNRESEARCHED: a homestead within `FORM_BOUND` (1.15, 2.5 for a row) times the band's half-diagonal of the seat, 1.3 times that for the front row
         the seating band - UNRESEARCHED: `SEATING_GROUND_FT` of band per household, the whole ground and wood floor of one holding
         the front row's size - UNRESEARCHED: the square root of the households times the rolled shape's aspect band, at least 6
-        the step between ranks - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: an envelope's depth, rows set 92 ft apart (house, yard and 39 ft of sun)
-        a lane's room between ranks - GUESS: `MIN_WEB_GAP` kept between the dispersed form's ranks as a spacing only - no lane is laid there
+        the step between ranks - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: an envelope's depth and then the larger of the lane's room and the yard's 39 ft of sun, so ranks running north-south stand as the page's rows 92 ft apart (house, yard and 39 ft of sun)
+        a lane's room between ranks - GUESS: `MIN_WEB_GAP` kept between the dispersed form's ranks as a spacing only - no lane is laid there; where the ranks run north-south it falls inside the yard's sun
         rank depth jitter - UNRESEARCHED: a rank seat moved up to half of `RANK_DEPTH_JITTER` of a pitch nearer or farther, in the rounds before the rescue, on an alleys hamlet only
         a rank grown along the field - UNRESEARCHED: once a round seats no one behind, the rank grows along the field - its ends a pitch out, half-seats half a pitch out along it at the rank's depth
         the rescue's offer along the field - UNRESEARCHED: in the rescue rounds the seats along the field are offered first - a pitch beyond each end house, half-seats half a pitch out at that house's own depth and a `_rank_step` more
@@ -767,10 +767,12 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
     # cohort seed 39 stranded a farmhouse the re-roll could not save. A rank is separated from the rank in front by
     # the lane that serves it. And, wherever the ranks step north or south (feature 328: north only, before - but a rank
     # stepping south stands in the sun of the rank behind it just as one stepping north does), the sun corridor a yard
-    # owes to its south (`SUN_CORRIDOR_FT`): the rank in front stands exactly there,
+    # owes to its south (`SUN_CORRIDOR_FT`): the rank in front stands exactly there - and the rank's lane runs IN that
+    # sun, not beyond it (a lane is no farmhouse; feature 328: the two were added, a step of about 111 ft against
+    # 0038's rows 92 ft apart, house, yard and sun), so the gap is the larger of the lane's room and the sun's,
     # and at the bare depth every seat behind it was clear of the ground and refused by the parts' rules (cohort
     # seed 8, the paddy to the south: the "clear" seats of every rank round failed, 9 of 11 seated)
-    _rank_step = abs(ox) * _env[2] + abs(oy) * _env[3] + s.px(MIN_WEB_GAP) + abs(oy) * s.px(SUN_CORRIDOR_FT)
+    _rank_step = abs(ox) * _env[2] + abs(oy) * _env[3] + max(s.px(MIN_WEB_GAP), abs(oy) * s.px(SUN_CORRIDOR_FT))
     for attempt in range(7):
         if placed >= plan.spec.households or _rows_seated or _grown:  # NEVER IN RANKS BEHIND A ROW (FR-016): a farm its streets could not hold is reported unseated
             break
