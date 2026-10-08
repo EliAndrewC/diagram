@@ -1,0 +1,61 @@
+{
+  "band": 3,
+  "base": {
+    "commit": "3f91becf2",
+    "label": "328-start",
+    "utc": "20261008T220741Z"
+  },
+  "binding": "4ec8230c71e6738f4e37d6c0c978b0b8553f6409f2a711d34c8ca807b693b60b",
+  "end": {
+    "commit": "f15c0d73b",
+    "label": "328-end",
+    "utc": "20261008T232454Z"
+  },
+  "environment": "local",
+  "feature": "328-match-the-research",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "8d3395e5-fe32-4f85-9c89-80c344d2ac1a",
+    "utc": "20261008T234028Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": 7.1,
+          "39": -23.5,
+          "4": -17.6,
+          "47": 3.4
+        },
+        "total_pct": -8.8
+      },
+      "20": {
+        "seeds": {
+          "25": 6.5,
+          "39": 2.0,
+          "4": -13.0,
+          "47": -5.2
+        },
+        "total_pct": -2.9
+      },
+      "40": {
+        "seeds": {
+          "39": -3.7,
+          "4": -5.4,
+          "47": 21.5
+        },
+        "total_pct": 3.7
+      }
+    },
+    "seeds": {
+      "25": 5.1,
+      "39": -5.0,
+      "4": 10.9,
+      "47": 0.0
+    },
+    "total_pct": 3.0
+  },
+  "note": "Consistent, tested by a perf-audit counterfactual. In detached worktrees: start 3f91becf2 16.7 s, end f15c0d73b 17.0 s, end with the privy and heap re-seating removed (no 48 ft reach filter, barn seat and its weights restored, heap on the old y-sign; everything else in the batch kept, KNOTTED_TRIES and the bund speedup included) 16.0 s. Every crossing returns to start under that control: seed 4 15 hh web 0.74 / 1.35 / 0.73 s; seed 25 15 hh web 0.55 / 0.90 / 0.55 s; seed 25 10 hh homesteads 0.78 / 1.13 / 0.80 s; seed 47 40 hh 13.1 / 15.7 / 13.3 s (web 1.59 / 3.66 / 1.71 s); seed 25 40 hh draws at start, refuses at end, draws under the control (11.0 s). Profiles match the stated mechanism: seed 4 drop_stranding and the bund clear (now 0.33 s after the box prune, which keeps the predicate's verdict - the pad exceeds over_a_fixture's gap); seed 47 resettle_straightened's second settle_the_web 4.6 s and settle_knots 2.8 s cProfiled. One stale line: 'no code under hamletgen/ways/ changed between the legs' is no longer true (bund.py's speedup, and gap_ways.py's KNOTTED_TRIES changes the web's routing) - neither is a cause, since the control keeps both and still returns to start.",
+  "verdict": "consistent"
+}
