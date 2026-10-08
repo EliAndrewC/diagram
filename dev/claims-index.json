@@ -17781,10 +17781,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/joints.py::_one_joint#a fold at a joint becomes a T": {
-  "code": "c74e5a8d675a83cd",
-  "core": "0727e1d86fd39426",
+  "code": "13a55a8cfc184898",
+  "core": "aa7fdcfd5c21dfd9",
   "date": "2026-10-08",
-  "note": "a turn of 140 degrees or more at the joint becomes a T; a Z across it is pulled straight",
+  "note": "a turn of 140 degrees or more at the joint (_HAIRPIN_DEG) becomes a T, and a Z is pulled straight or its joint moved back a vertex, as the page says",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },
@@ -17796,46 +17796,54 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/joints.py::_one_joint#a jog across a joint pulled straight": {
-  "code": "5f0a120d758f1989",
-  "core": "0727e1d86fd39426",
+  "code": "af5f2527d8a5cbb6",
+  "core": "aa7fdcfd5c21dfd9",
   "date": "2026-10-08",
-  "note": "a vertex within _JOG_FT=6 of the chord is dropped",
+  "note": "the pull keeps a vertex only where the clear link fails, and drops it within _JOG_FT=6 ft of the chord, as in \"within 6 ft of the old one\"",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },
   "research": "ebd72aaa6a0eb9af",
   "rests": [
    "0081-village-lanes.drawing.html:18dffe2b3b52b18c",
-   "0081-village-lanes.drawing.html:3b230d13e2fc6d0b"
+   "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
+   "0081-village-lanes.drawing.html:65ad16eace199d92"
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/joints.py::_one_joint#how close a pulled lane may come to a building: gap = max(_TOUCH_GAP=4 ft, half the lane width + 2 ft)": {
-  "code": "0727e1d86fd39426",
-  "core": "0727e1d86fd39426",
+ "l7r/diagram/hamletgen/ways/joints.py::_one_joint#a pull at a joint is refused if it leaves more kinks than the two lanes had (kink_spans)": {
+  "code": "aa7fdcfd5c21dfd9",
+  "core": "aa7fdcfd5c21dfd9",
   "date": "2026-10-08",
-  "note": "how close a pulled lane may come to a building: gap = max(_TOUCH_GAP=4 ft, half the lane width + 2 ft)",
+  "note": "a pull at a joint is refused if it leaves more kinks than the two lanes had (kink_spans)",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "l7r/diagram/hamletgen/ways/joints.py::_one_joint#the clearance a straightened lane keeps from buildings and walls where it touches them: half its width plus 2 ft, at least _TOUCH_GAP=4 ft, with a 5 ft width assumed when none is set": {
+  "code": "aa7fdcfd5c21dfd9",
+  "core": "aa7fdcfd5c21dfd9",
+  "date": "2026-10-08",
+  "note": "the clearance a straightened lane keeps from buildings and walls where it touches them: half its width plus 2 ft, at least _TOUCH_GAP=4 ft, with a 5 ft width assumed when none is set",
   "research": "",
   "verdict": "UNCLAIMED"
  },
  "l7r/diagram/hamletgen/ways/joints.py::_one_joint#the shorter link the T's stem": {
-  "code": "f169b9cb0eaeb561",
-  "core": "0727e1d86fd39426",
+  "code": "9ececcc4b10d96f4",
+  "core": "aa7fdcfd5c21dfd9",
   "date": "2026-10-08",
-  "note": "choosing which lane bends to meet the other is a placement rule, not a matter of how something is shown. It should cite 0081 (a worn path takes the shortest way) or say GUESS",
+  "note": "which arriving lane becomes the stem decides where a path runs, not how it is shown, and the page is silent on it, so the label should be GUESS research/questions/0081-village-lanes.drawing.html",
   "pages": {},
   "research": "",
   "rests": [
-   "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
-   "0081-village-lanes.drawing.html:be608a70af4cfcc5"
+   "0081-village-lanes.drawing.html:3b230d13e2fc6d0b"
   ],
   "verdict": "MISLABELED"
  },
  "l7r/diagram/hamletgen/ways/joints.py::_one_joint#ways of two kinds stay two": {
-  "code": "e92f653c05d18e58",
-  "core": "0727e1d86fd39426",
+  "code": "066fd2cba7aebf5b",
+  "core": "aa7fdcfd5c21dfd9",
   "date": "2026-10-08",
-  "note": "pulled like any jog, then split back into two records, each keeping its own width",
+  "note": "the joint is pulled straight like any other, then split back into two records, each keeping its own rank's width",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },

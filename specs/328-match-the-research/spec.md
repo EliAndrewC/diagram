@@ -331,3 +331,4 @@ Each wave's amendment adds its map decisions to this table. The program's decisi
 - Amendment 33: round 1 (spec-fidelity) CHANGES REQUIRED - 466's narrower exception, 464/465 skipped without evidence, plan BLOCKED; round 2 (verify) FAITHFUL; plan re-reviewed CLEAR (2026-10-08).
 - Amendment 34, round 1 (spec-fidelity, 2026-10-08): FAITHFUL, plan CLEAR. Condition (6) at 900729a7d: (1) held but for the backup push, withheld pending the GM's call on the 329 merge commit (ruled a LEGITIMATE narrowing).
 - Amendment 35, round 1 (spec-fidelity, 2026-10-08): FAITHFUL, plan CLEAR.
+- Amendment 36: round 1 (spec-fidelity) CHANGES REQUIRED - the Z's move-back on every refused pull, the module docstring, plan CLEAR; round 2 (verify) FAITHFUL (2026-10-08).
