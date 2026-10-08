@@ -99,9 +99,54 @@
   "method": "400 samples along the straight walk tested in the outline; depth as the outline's extent along the walk",
   "note": "a drawn wood reached through the field (520 of 1,057 ft): the code's test reads the planning envelope at 0.5; the drawn outline differs slightly from it"
  },
- "kashikawa-glyph-farm-holding-F1-lot-wide": {
-  "verifies": "glyph-check--farm-holding F1",
-  "measured": "every row holding 240 x 720 ft (one lot wide, three lots deep); nearest-neighbor gap 0.0 ft on all 10, overlap 0 - lot against lot (0033)",
-  "how": "shapely over pool/hamlets/kashikawa/kashikawa.json row_holdings"
+ "kashikawa-glyph-farm-holding-F1-width": {
+  "subject": "glyph-check--farm-holding",
+  "answers": "5aacbed543c6",
+  "observed": "2026-10-07",
+  "source": ".claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.json row_holdings (shapely) - regenerated after the strip was made one lot wide",
+  "verifies": "F1",
+  "quantity": "width of every row holding along the street (round 1: 209 ft on a 240 ft lot spacing)",
+  "value": 240,
+  "unit": "ft"
+ },
+ "kashikawa-glyph-farm-holding-F1-gap": {
+  "subject": "glyph-check--farm-holding",
+  "answers": "5aacbed543c6",
+  "observed": "2026-10-07",
+  "source": ".claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.json row_holdings (shapely) - regenerated after the strip was made one lot wide",
+  "verifies": "F1",
+  "quantity": "largest nearest-neighbor gap between row holdings (round 1: 31 ft of scrub)",
+  "value": 0.0,
+  "unit": "ft"
+ },
+ "kashikawa-glyph-farm-holding-F4-depth": {
+  "subject": "glyph-check--farm-holding",
+  "answers": "5aacbed543c6",
+  "observed": "2026-10-07",
+  "source": ".claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.json row_holdings (shapely) - regenerated after the strip was made one lot wide",
+  "verifies": "F4",
+  "quantity": "depth of every row holding (3 lots of 240 ft)",
+  "value": 720,
+  "unit": "ft"
+ },
+ "kashikawa-glyph-farm-holding-F5": {
+  "subject": "glyph-check--farm-holding",
+  "answers": "5aacbed543c6",
+  "observed": "2026-10-07",
+  "source": ".claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.json row_holdings (shapely) - regenerated after the strip was made one lot wide",
+  "verifies": "F5",
+  "quantity": "every strip behind its own farm; confirmation, unchanged by the width fix",
+  "value": 1,
+  "unit": "confirmation"
+ },
+ "kashikawa-glyph-farm-holding-F6": {
+  "subject": "glyph-check--farm-holding",
+  "answers": "5aacbed543c6",
+  "observed": "2026-10-07",
+  "source": ".claude/skills/diagram/pool/hamlets/kashikawa/kashikawa.json row_holdings (shapely) - regenerated after the strip was made one lot wide",
+  "verifies": "F6",
+  "quantity": "confusable with nothing; confirmation",
+  "value": 1,
+  "unit": "confirmation"
  }
 }
