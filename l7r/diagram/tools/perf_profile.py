@@ -65,33 +65,40 @@ def _git_env() -> dict[str, str]:
 def profile_stage(seed: int, stage: str, top: int = 25, households: int | None = None) -> tuple[str, str]:
     """(the derived table, the raw .prof path). `households` profiles the reference at another size, as the snapshot's
     scaling rolls do (feature 328: a growth at 10 households could not be profiled where it grew)."""
+    from contextlib import ExitStack
+
     from l7r.diagram.hamletgen import HamletSpec, plan_site
     from l7r.diagram.hamletgen.driver import STAGES, roll_scope
+    from l7r.diagram.hamletgen.plan import beyond_the_band
     from l7r.diagram.settlement import Settlement
     from l7r.diagram.tools.perf_snapshot import REFERENCE
 
-    spec: dict[str, Any] = {**REFERENCE, "households": households} if households else dict(REFERENCE)
-    plan = plan_site(HamletSpec(seed=seed, **spec))
-    s = Settlement(W=plan.W, H=plan.H, seed=seed)
-    names = [st.__name__.replace("stage_", "") for st in STAGES]
-    if stage not in names:
-        raise SystemExit(f"perf-profile: no stage {stage!r}; the stages are: {', '.join(names)}")
-    target = STAGES[names.index(stage)]
-    plain = profiled = 0.0
-    prof = cProfile.Profile()
-    with redirect_stdout(io.StringIO()), roll_scope(plan.spec):  # a roll like any other (feature 210; the census, 213)
-        for st in STAGES:
-            if st is target:
-                # the stage runs ONCE, profiled; the plain time is the snapshot's job (a second run would double the stage's side effects)
+    band = ExitStack()
+    if households:  # the scaling sizes past the hamlet band, as the snapshot and `make cohort` roll them (feature 328 batch 3: 40 households refused)
+        band.enter_context(beyond_the_band())
+    with band:
+        spec: dict[str, Any] = {**REFERENCE, "households": households} if households else dict(REFERENCE)
+        plan = plan_site(HamletSpec(seed=seed, **spec))
+        s = Settlement(W=plan.W, H=plan.H, seed=seed)
+        names = [st.__name__.replace("stage_", "") for st in STAGES]
+        if stage not in names:
+            raise SystemExit(f"perf-profile: no stage {stage!r}; the stages are: {', '.join(names)}")
+        target = STAGES[names.index(stage)]
+        plain = profiled = 0.0
+        prof = cProfile.Profile()
+        with redirect_stdout(io.StringIO()), roll_scope(plan.spec):  # a roll like any other (feature 210; the census, 213)
+            for st in STAGES:
+                if st is target:
+                    # the stage runs ONCE, profiled; the plain time is the snapshot's job (a second run would double the stage's side effects)
+                    t0 = time.time()
+                    prof.enable()
+                    st(s, plan)
+                    prof.disable()
+                    profiled = time.time() - t0
+                    break
                 t0 = time.time()
-                prof.enable()
                 st(s, plan)
-                prof.disable()
-                profiled = time.time() - t0
-                break
-            t0 = time.time()
-            st(s, plan)
-            plain += time.time() - t0
+                plain += time.time() - t0
     os.makedirs(RAW_DIR, exist_ok=True)
     stamp = time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
     raw = os.path.join(RAW_DIR, f"{stamp}-seed{seed}-{stage}.prof")

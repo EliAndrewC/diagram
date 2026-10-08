@@ -436,11 +436,10 @@ def test_a_wood_is_ranked_against_the_houses_median_and_the_field_beside_it() ->
     houses): the floor is the houses' median height, and the field height the highest edge point within 300 ft past the
     nearest."""
     from l7r.diagram.hamletgen.hinterland.parcels import crop_edge_points, field_height_near, house_floor
-    from l7r.diagram.settlement._geom import PointGrid
 
     fall = (0.0, 1.0)  # height runs up -y
     assert house_floor([(0.0, -100.0), (0.0, -300.0), (0.0, -200.0)], fall) == 200.0
     assert house_floor([(0.0, -100.0), (0.0, -300.0)], fall) == 200.0 and house_floor([], fall) == float("-inf")
     grid = crop_edge_points([[(0.0, 0.0), (400.0, 0.0), (400.0, -400.0), (0.0, -400.0)]])
     assert field_height_near((450.0, -50.0), fall, grid) >= 300.0, "the field beside it runs up past the nearest point"
-    assert field_height_near((0.0, 0.0), fall, PointGrid(128.0)) == float("-inf")
+    assert field_height_near((0.0, 0.0), fall, crop_edge_points([])) == float("-inf")

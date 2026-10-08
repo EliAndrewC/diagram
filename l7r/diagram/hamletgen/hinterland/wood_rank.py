@@ -8,43 +8,57 @@ Research: plumbing - NONE: the ranking's helpers
 import math
 from collections.abc import Sequence
 
-from ...settlement._geom import PointGrid
+import numpy as np
+
 from ..consts import Poly, Pt
 
 _EDGE_SAMPLE = 30.0  # px between the samples `crop_edge_points` takes along a field edge: a third of the scan's 90 px lattice
 
 
-def crop_edge_points(crops: Sequence[Poly], every: float = _EDGE_SAMPLE) -> PointGrid:
-    """The edges of the field ground, sampled every `every` px and filed in a grid, so the height of the field nearest a
-    seat is one grid read (269 B27; a paddy envelope's vertices can stand hundreds of px apart, so the vertices alone
-    would measure the wrong stretch of edge)."""
-    grid = PointGrid(128.0)
+class FieldEdge:
+    """The field ground's edge, sampled: each sample's x, y and height up the fall held as arrays, so the field beside a seat
+    is one vector pass (feature 328 batch 3's pair: asked of the PointGrid sample by sample, `field_height_near` took 9 of a
+    40-household hinterland's 13 profiled seconds, 9.9 million distances; the same answer, read whole)."""
+
+    def __init__(self, pts: Sequence[Pt]) -> None:
+        self.xy = np.array(pts, dtype=float).reshape(-1, 2)
+
+
+def crop_edge_points(crops: Sequence[Poly], every: float = _EDGE_SAMPLE) -> FieldEdge:
+    """The edges of the field ground, sampled every `every` px and held whole (`FieldEdge`), so the height of the field
+    nearest a seat is one vector pass (269 B27; a paddy envelope's vertices can stand hundreds of px apart, so the vertices
+    alone would measure the wrong stretch of edge)."""
+    pts: list[Pt] = []
     for ring in crops:
         for (ax, ay), (bx, by) in zip(ring, [*ring[1:], ring[0]], strict=False):
             n = max(1, math.ceil(math.dist((ax, ay), (bx, by)) / every))
-            grid.extend([(ax + (bx - ax) * k / n, ay + (by - ay) * k / n, ax + (bx - ax) * k / n, ay + (by - ay) * k / n, ax + (bx - ax) * k / n, ay + (by - ay) * k / n) for k in range(n)])
-    return grid
+            pts.extend((ax + (bx - ax) * k / n, ay + (by - ay) * k / n) for k in range(n))
+    return FieldEdge(pts)
 
 
 FIELD_BESIDE_FT = 300.0
 """Research: the fields beside a wood - UNRESEARCHED: the field edge within 300 ft past the nearest point, about a wood's own span"""
 
+FIELD_REACH_PX = 8192.0
+"""How far a seat looks for field ground at all: past it, the seat has none beside it (-inf). Research: plumbing - NONE: the
+search's reach, the widening pad's old ceiling"""
 
-def field_height_near(p: Pt, fall: Pt, grid: PointGrid, beside: float = FIELD_BESIDE_FT) -> float:
+
+def field_height_near(p: Pt, fall: Pt, edge: FieldEdge, beside: float = FIELD_BESIDE_FT) -> float:
     """The height (up the fall, -p.fall) of the field ground beside `p` - the highest point of the field edge within `beside`
     past the nearest one, the field a wood at `p` would adjoin (feature 328, glyph-check of Kashikawa's woodland commons: one
-    nearest point stood 53 ft below a wood whose paddy beside it ran up past its top). The grid is asked at a widening pad
-    until it answers; with no field ground at all, -inf (every seat stands above it).
+    nearest point stood 53 ft below a wood whose paddy beside it ran up past its top). With no field ground within
+    `FIELD_REACH_PX`, -inf (every seat stands above it).
 
     Research: higher than the fields beside it - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: on ground higher than the fields beside it"""
-    pad = 128.0
-    while pad <= 8192.0:
-        near = [(math.dist(p, (q[0], q[1])), q) for q in grid.near(p[0], p[1], pad + beside)]
-        if any(t[0] <= pad for t in near):
-            d0 = min(t[0] for t in near)
-            return max(-(float(q[0]) * fall[0] + float(q[1]) * fall[1]) for d, q in near if d <= d0 + beside)
-        pad *= 2.0
-    return -math.inf
+    if not len(edge.xy):
+        return -math.inf
+    d = np.hypot(edge.xy[:, 0] - p[0], edge.xy[:, 1] - p[1])
+    d0 = float(d.min())
+    if d0 > FIELD_REACH_PX:
+        return -math.inf
+    near = edge.xy[d <= d0 + beside]
+    return float((-(near[:, 0] * fall[0] + near[:, 1] * fall[1])).max())
 
 
 def house_floor(houses: Sequence[Pt], fall: Pt) -> float:
