@@ -15041,65 +15041,103 @@
   "triaged": "2026-10-05",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/water/skeleton.py::grows_grain#grain to thresh": {
+  "code": "567f95d2d5c3ce41",
+  "core": "cfc5de8d454d598a",
+  "date": "2026-10-08",
+  "note": "a yard wherever grain is grown; only a dike-pond hamlet whose leftover parcels are ponds has none",
+  "pages": {
+   "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html": "d85e826f35b910f8"
+  },
+  "research": "5ec937f597c66c34",
+  "rests": [
+   "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html:3610a4b606e49804",
+   "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html:5fdfe1c043743809"
+  ],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/water/skeleton.py::stage_water_frame#compact bundle for the clustered form only": {
-  "code": "6e38d4b138f4f5e3",
-  "core": "79305bb7ee232841",
-  "date": "2026-10-03",
-  "note": "0031 drawing: farms of other forms carry their own groves",
+  "code": "0f95dfb24dd1755f",
+  "core": "8358e4fa8506d2eb",
+  "date": "2026-10-08",
+  "note": "`_nucleated` is true only for the nucleated form, so scattered and row farms each get their own grove",
   "pages": {
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
   },
   "research": "4e7ba7479292ad40",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7e82a3d8b8b3ed66"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/skeleton.py::stage_water_frame#fall and drainage declared first": {
-  "code": "ba3ecf405967fe1b",
-  "core": "79305bb7ee232841",
-  "date": "2026-10-03",
-  "note": "0054 drawing: every map declares fall and bearing",
+  "code": "825ca000ea296565",
+  "core": "8358e4fa8506d2eb",
+  "date": "2026-10-08",
+  "note": "`water_flow` and `down_deg` are written to the meta before any placement",
   "pages": {
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "790c57e2a1c0ab27"
   },
   "research": "a3b4c3a9112374b7",
+  "rests": [
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:197d66e59c4872e2"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/skeleton.py::stage_water_frame#field footbridges on every hamlet": {
-  "code": "a27714ad5010c084",
-  "core": "79305bb7ee232841",
-  "date": "2026-10-03",
-  "note": "0084 lays crossings on every map, with no knob for whether there are any",
+  "code": "b03966726f71ab93",
+  "core": "8358e4fa8506d2eb",
+  "date": "2026-10-08",
+  "note": "`field_footbridges=True`, a crossing where a bund path meets a ditch",
   "pages": {
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "0b77fe8191a170cc"
   },
   "research": "43cf74757fcb48f3",
+  "rests": [
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:63e1ecf1ce361c85",
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:b74aa6e62d8b654b"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/skeleton.py::stage_water_frame#house racks": {
-  "code": "2febe3b1b7b12760",
-  "core": "79305bb7ee232841",
-  "date": "2026-10-03",
-  "note": "0016 drawing: a rack by every house where weather is changeable",
+  "code": "91ed00111f2b7f73",
+  "core": "8358e4fa8506d2eb",
+  "date": "2026-10-08",
+  "note": "`_house_racks` is set from changeable harvest weather, never by chance",
   "pages": {
    "0016-rice-drying-racks-hasa-hasagi.drawing.html": "7068a77ff1a2fa52"
   },
   "research": "7222ed9655350490",
+  "rests": [
+   "0016-rice-drying-racks-hasa-hasagi.drawing.html:329b76a32a9e4883",
+   "0016-rice-drying-racks-hasa-hasagi.drawing.html:6af92987eeb511b9",
+   "0016-rice-drying-racks-hasa-hasagi.drawing.html:9f40d3caab4e03ed"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/skeleton.py::stage_water_frame#manifest record": {
-  "code": "cfe3b8cd477df8fb",
-  "core": "79305bb7ee232841",
-  "date": "2026-10-03",
-  "note": "recording the plan (but see UNCLAIMED field_footbridges)",
+  "code": "8201f86c5882ccfe",
+  "core": "8358e4fa8506d2eb",
+  "date": "2026-10-08",
+  "note": "writes the rolled plan to the meta and decides nothing",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/water/skeleton.py::stage_water_frame#no work yards on the dike-pond hamlet": {
-  "code": "ac8b538e04fbdcaa",
-  "core": "79305bb7ee232841",
-  "date": "2026-10-03",
-  "note": "CANON names the 2026-08-28 ruling; code matches",
-  "research": "",
+ "l7r/diagram/hamletgen/water/skeleton.py::stage_water_frame#no work yards where no grain grows": {
+  "code": "f4fcb95ec4901c66",
+  "core": "8358e4fa8506d2eb",
+  "date": "2026-10-08",
+  "note": "`work_yards=grows_grain(plan)`; the GM's ruling is named in the claim",
+  "pages": {
+   "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html": "d85e826f35b910f8"
+  },
+  "research": "5ec937f597c66c34",
+  "rests": [
+   "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html:3610a4b606e49804",
+   "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html:5fdfe1c043743809"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/arcs.py::arc_at#arc-length plumbing": {
@@ -32179,11 +32217,13 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/registry.py::element_extents#drawn extents": {
-  "code": "5de4b212a1b097fc",
-  "core": "d83e840ba9a305c5",
-  "date": "2026-10-03",
-  "note": "matches the cited page",
+  "code": "8e98c4ed1f57d24f",
+  "core": "622e2b47aa0bce5e",
+  "date": "2026-10-08",
+  "note": "extracts drawn extents for the overlap check; its fallback widths are the check's own, not drawn",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/registry.py::elements#registry plumbing": {
@@ -32753,10 +32793,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#arch over its approach": {
-  "code": "e66b81bdbcd1ba36",
-  "core": "0ede6de03bb093a0",
+  "code": "b501c3ca27dbbd49",
+  "core": "42c4daf6c4994c8d",
   "date": "2026-10-08",
-  "note": "Matches the page: the approach runs \"under an avenue of\" torii, starting where it enters the shrine's ground.",
+  "note": "the approach runs up to the hall under its arches",
   "pages": {
    "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html": "e385403eda71f0a2"
   },
@@ -32768,26 +32808,24 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#castle moat bridge": {
-  "code": "f03608cf42cb0d81",
-  "core": "0ede6de03bb093a0",
+  "code": "b8610163f28daa9a",
+  "core": "42c4daf6c4994c8d",
   "date": "2026-10-08",
-  "note": "The castle's gates have \"its own bridge over the castle's moat\", so the deck lies on the castle's own moat ring.",
+  "note": "the castle has its own bridge over its own moat",
   "pages": {
    "0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html": "03efd934d9bc580d"
   },
   "research": "6f20c89792cc1b34",
   "rests": [
-   "0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html:5587d9f515b67812",
-   "0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html:587fa6a20cd5bd0e",
-   "0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html:e5a33c63331eac89"
+   "0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html:587fa6a20cd5bd0e"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#castle towers on the rampart": {
-  "code": "4422046f286ab991",
-  "core": "0ede6de03bb093a0",
+  "code": "ccd0315f15ea29a5",
+  "core": "42c4daf6c4994c8d",
   "date": "2026-10-08",
-  "note": "The entry permits castles x castle_towers because \"a corner tower projecting from the enceinte IS the form\". 0139 says the castle is drawn as \"its outer enceinte only\" with two gates, and for keep, turrets and inner baileys \"our maps draw none\". Either the claim should rest on the gate towers (§180-182), or the code is drawing corner turrets the page excludes.",
+  "note": "the claim and the permission text rest on \"a corner tower (yagura) stands on the works\", but 0139 draws the outer enceinte only, and of the turrets \"our maps draw none\"; the castles x castle_towers permission should rest on the gate towers the page does draw, or the claim should say what castle_towers holds",
   "pages": {
    "0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html": "03efd934d9bc580d"
   },
@@ -32796,64 +32834,69 @@
    "0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html:587fa6a20cd5bd0e",
    "0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html:626bf62fa07e8528",
    "0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html:77cd1fa9c361891a",
-   "0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html:a45cce441fa38426",
-   "0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html:e5a33c63331eac89"
+   "0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html:836a12d1e6e242d6",
+   "0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html:a45cce441fa38426"
   ],
   "verdict": "DRIFTED"
  },
- "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#flower bed against the town wall": {
-  "code": "d76ad41985c05c32",
-  "core": "0ede6de03bb093a0",
+ "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#castle_towers x bridges: a castle bridge's deck lands at its gate tower's foot": {
+  "code": "42c4daf6c4994c8d",
+  "core": "42c4daf6c4994c8d",
   "date": "2026-10-08",
-  "note": "No cited question covers an ornamental bed against the rampart, so UNRESEARCHED holds.",
+  "note": "castle_towers x bridges: a castle bridge's deck lands at its gate tower's foot",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#flower bed against the town wall": {
+  "code": "b81ec598cf3ee8d2",
+  "core": "42c4daf6c4994c8d",
+  "date": "2026-10-08",
+  "note": "no question in the bundle answers it",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#merchant estate court": {
-  "code": "a025c93a650f3453",
-  "core": "0ede6de03bb093a0",
+  "code": "4373a570aa7edd48",
+  "core": "42c4daf6c4994c8d",
   "date": "2026-10-08",
-  "note": "Matches \"a walled court ... with the merchant's house inside it\".",
+  "note": "a walled court with the merchant's house inside it",
   "pages": {
    "0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html": "8bbd1b525592811a"
   },
   "research": "fecf245455f376f6",
   "rests": [
    "0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html:1b43d2f683a78fe0",
-   "0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html:ef188e7005fcd323"
+   "0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html:c4d016ae8517635f"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#moat against the rampart": {
-  "code": "bc99408eab659a7b",
-  "core": "0ede6de03bb093a0",
+  "code": "31e0afd4300d438e",
+  "core": "42c4daf6c4994c8d",
   "date": "2026-10-08",
-  "note": "The bundle has no question on how the city moat sits against the city wall's foot. 0139 covers only the castle's own moat, and the city-moat page is not in the bundle. UNRESEARCHED holds.",
+  "note": "the city moat's offset from the wall is not answered in the bundle (0139 §195 is the castle's moat)",
   "pages": {},
   "research": "",
-  "rests": [
-   "0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html:5587d9f515b67812",
-   "0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html:d03d5186b7b5f712"
-  ],
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#one object under two keys": {
-  "code": "4a15418b2c77e8d9",
-  "core": "0ede6de03bb093a0",
+  "code": "2ad79654f4f0af75",
+  "core": "42c4daf6c4994c8d",
   "date": "2026-10-08",
-  "note": "These are duplicate records of one object, which is bookkeeping, so NONE is right.",
+  "note": "duplicate records of one object; plumbing",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#pier from the quay": {
-  "code": "d643003bed4e65bc",
-  "core": "0ede6de03bb093a0",
+  "code": "307c20917ff13121",
+  "core": "42c4daf6c4994c8d",
   "date": "2026-10-08",
-  "note": "Matches \"on our maps it starts at the revetment, and the two meet by design\".",
+  "note": "\"A pier springs from the faced bank\"",
   "pages": {
    "0176-wharves-and-landings-piers-quays-and-stepped-landings-kashi-gangi.drawing.html": "676ecd28f9b1d116"
   },
@@ -32863,56 +32906,39 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#supply canal along the dry hem": {
-  "code": "1436cc1f903fab1b",
-  "core": "0ede6de03bb093a0",
-  "date": "2026-10-08",
-  "note": "The entry permits channels x dry_plots overlap (\"a plot may be crossed by the irrigation that serves it\"). 0006 puts the plots on the dry side of the canal \"behind a narrow bank\", with \"Both edges of a plot ... upslope of the canal\". A plot should abut the canal's bank, never overlap the channel.",
-  "pages": {
-   "0006-dry-fields-and-their-crops-hatake.drawing.html": "9f1b7fafe06f01fe"
-  },
-  "research": "eae521ca5e2ccfdd",
-  "rests": [
-   "0006-dry-fields-and-their-crops-hatake.drawing.html:25a9d039c229ae5d",
-   "0006-dry-fields-and-their-crops-hatake.drawing.html:794454f6ea76b0fc",
-   "0006-dry-fields-and-their-crops-hatake.drawing.html:abb8b4f0d05c6c11"
-  ],
-  "verdict": "DRIFTED"
- },
  "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#ward fence meets the wall": {
-  "code": "de000106080c10e9",
-  "core": "0ede6de03bb093a0",
+  "code": "72cb005600004edb",
+  "core": "42c4daf6c4994c8d",
   "date": "2026-10-08",
-  "note": "Matches: each fence end \"lands on solid rampart\", and the rampart is drawn over the fence's ends.",
+  "note": "the fence's ends land on the rampart",
   "pages": {
    "0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html": "e242aadf4edb4965"
   },
   "research": "e5a2b084c87905c5",
   "rests": [
    "0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html:8ebc97c527ee4eac",
+   "0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html:acc680f54deffd47",
    "0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html:d6fab51b8b7526aa"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#ways and water through the rampart": {
-  "code": "cae319484c62e779",
-  "core": "0ede6de03bb093a0",
+  "code": "07934138cd5e9a46",
+  "core": "42c4daf6c4994c8d",
   "date": "2026-10-08",
-  "note": "Two problems. (1) The permission is unconditional, so it allows wall x way or watercourse anywhere, not only \"at a gate or a water gate\", and no gate check is named the way one is for WATER x WAY. (2) It covers alleys, lanes and town_streets, but 0147 puts only road gates through the rampart, and 0160 lets a lane \"stop short of the city wall\". The fix is to tie the permission to a recorded gate or water-gate opening and drop the alleys and lanes.",
+  "note": "the permission covers wall x {road, roads, town_streets, alleys, lanes, canals, channels, streams} anywhere along the wall, while the claim says \"at a gate or a water gate\"; need the check that holds every way or watercourse crossing the wall to a gate or water-gate opening (as city_kido_on_ward_fence does for the ward fence)",
   "pages": {
    "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html": "49298f0d00bbf69d",
    "0179-water-gates-and-sluices-shuimen.drawing.html": "19011b41723432c2"
   },
   "research": "288b07cf5a7de27e",
   "rests": [
-   "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html:03ebb587680911de",
    "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html:5066b991dad4631a",
-   "0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html:179bde9dc17d20b3",
+   "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html:8c6e4d1d8109adfa",
    "0179-water-gates-and-sluices-shuimen.drawing.html:088c44a5ca24eaf0",
-   "0179-water-gates-and-sluices-shuimen.drawing.html:27ed53483dc6cfc1",
-   "0179-water-gates-and-sluices-shuimen.drawing.html:bcba93d97070123b"
+   "0179-water-gates-and-sluices-shuimen.drawing.html:27ed53483dc6cfc1"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "CANNOT-TELL"
  },
  "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_PAIRS#way over water": {
   "code": "8eb17d64141b0925",
@@ -33109,12 +33135,14 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_MX_FIXTURE_BOX#drawn fixture box": {
-  "code": "b43266e931f7d945",
-  "core": "1cf6934bc50011dc",
-  "date": "2026-10-03",
-  "note": "claims to mirror each glyph's drawn size, but sluice_gates is a fixed 11x11 box while 0179 draws a field sluice spanning 16-24 ft and a wider channel's bank to bank - take the box from the record's span",
+  "code": "0ca022887bab3983",
+  "core": "4c190ebfc056ca5f",
+  "date": "2026-10-08",
+  "note": "mirrors each glyph's box for the check",
+  "pages": {},
   "research": "",
-  "verdict": "DRIFTED"
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_MX_LINE_W#fallback line widths": {
   "code": "0b67b60affdde9ac",
@@ -33544,10 +33572,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::matrix_policy#geometry and bookkeeping": {
-  "code": "6a0c9534993b32f1",
-  "core": "37da5029b62247bf",
+  "code": "571d175b90f59bed",
+  "core": "e95cfc8dd5d54c7f",
   "date": "2026-10-08",
-  "note": "This is dispatch logic over the permission tables; the tables carry their own claims. NONE holds.",
+  "note": "looks up the permission tables; decides nothing itself",
   "pages": {},
   "research": "",
   "rests": [],
@@ -36991,12 +37019,19 @@
   "research": "43cf74757fcb48f3",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/city/bridges.py::BridgesMixin._widen_for_confluence#longer plank at a junction": {
-  "code": "98b41b22e010cd5d",
+ "l7r/diagram/settlement/city/bridges.py::BridgesMixin._widen_for_confluence#water under the deck": {
+  "code": "ceca4f2e36ed4893",
   "core": "abe7fe6179bdeeb2",
-  "date": "2026-10-03",
-  "note": "nothing in the bundle on it",
-  "research": "",
+  "date": "2026-10-08",
+  "note": "measures the widest water under the deck so a join can rule the seat out; the 2 ft corner floor sits within \"a short abutment\"",
+  "pages": {
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "0b77fe8191a170cc"
+  },
+  "research": "43cf74757fcb48f3",
+  "rests": [
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:72ffa8c3abe4e4b2",
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:a7603fcf4f80a38b"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.bridge#carried deck always planked": {
@@ -37079,26 +37114,40 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#a seat nearer a drain refused": {
-  "code": "6f3a9fd6cb776674",
-  "core": "195f8ab9eca62d48",
-  "date": "2026-10-07",
-  "note": "drains carry no crossing, and joins of ditches rule a seat out",
+ "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#a join rules a seat out": {
+  "code": "65b52ead7431b1c2",
+  "core": "905067e4a1548e29",
+  "date": "2026-10-08",
+  "note": "a seat is skipped when `span_here > span`",
   "pages": {
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "0b77fe8191a170cc"
   },
   "research": "43cf74757fcb48f3",
   "rests": [
-   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:6b02012320fa6c39",
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:72ffa8c3abe4e4b2",
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:a7603fcf4f80a38b"
   ],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#a seat nearer a drain refused": {
+  "code": "74b8b4a06910e299",
+  "core": "905067e4a1548e29",
+  "date": "2026-10-08",
+  "note": "`plank_on_supply`; drains carry no crossing",
+  "pages": {
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "0b77fe8191a170cc"
+  },
+  "research": "43cf74757fcb48f3",
+  "rests": [
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:6b02012320fa6c39"
+  ],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#assumed brook width": {
-  "code": "4a8402fb4ad6ee16",
-  "core": "195f8ab9eca62d48",
-  "date": "2026-10-07",
-  "note": "px(7) is \"a brook 7 ft wide\"",
+  "code": "b5cb3dd3808261df",
+  "core": "905067e4a1548e29",
+  "date": "2026-10-08",
+  "note": "`px(7.0)`, \"A brook 7 ft wide\"",
   "pages": {
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "c23a085a43372c2c"
   },
@@ -37109,20 +37158,20 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#assumed channel width": {
-  "code": "fa7dbd0452e033dd",
-  "core": "195f8ab9eca62d48",
-  "date": "2026-10-07",
-  "note": "no page in the bundle gives a channel's width (note the raw 2.5 px is not px(2.5))",
+  "code": "3f14b78b7f84c79b",
+  "core": "905067e4a1548e29",
+  "date": "2026-10-08",
+  "note": "no question in the bundle answers it",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#assumed ditch width": {
-  "code": "bafe21f40af8bc18",
-  "core": "195f8ab9eca62d48",
-  "date": "2026-10-07",
-  "note": "px(2.5) is \"2.5 ft at the head\"",
+  "code": "99784e758a2e013c",
+  "core": "905067e4a1548e29",
+  "date": "2026-10-08",
+  "note": "`px(2.5)`, delivery ditches \"2.5 ft at the head\"",
   "pages": {
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "0b77fe8191a170cc"
   },
@@ -37133,10 +37182,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#both banks reach useful ground": {
-  "code": "5065e9489c5b2235",
-  "core": "195f8ab9eca62d48",
-  "date": "2026-10-07",
-  "note": "both ends land on ground worth crossing to",
+  "code": "84e67c79eebcdc0f",
+  "core": "905067e4a1548e29",
+  "date": "2026-10-08",
+  "note": "`_plank_reaches_useful_ground`",
   "pages": {
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "0b77fe8191a170cc"
   },
@@ -37147,38 +37196,20 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#feeder left unplanked": {
-  "code": "1d30fe25b5fcd956",
-  "core": "195f8ab9eca62d48",
-  "date": "2026-10-07",
-  "note": "the page names foot drains and edge drains but not the feeder",
+  "code": "0778f1f8d0657adf",
+  "core": "905067e4a1548e29",
+  "date": "2026-10-08",
+  "note": "the bundle is silent on the feeder",
   "pages": {},
   "research": "",
-  "rests": [
-   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:6b02012320fa6c39"
-  ],
+  "rests": [],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#longer plank at a junction": {
-  "code": "b72101a9f11db5da",
-  "core": "195f8ab9eca62d48",
-  "date": "2026-10-07",
-  "note": "`_widen_for_confluence` lengthens the deck over a junction (up to 3x), but the page says \"the joins of ditches can rule out every wide spot\" and a crossing \"spans about 8 ft\"; either skip junction seats or record the widening as a DEVIATION on the drawing page",
-  "pages": {
-   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "0b77fe8191a170cc"
-  },
-  "research": "43cf74757fcb48f3",
-  "rests": [
-   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:72ffa8c3abe4e4b2",
-   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:a7603fcf4f80a38b",
-   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:b74aa6e62d8b654b"
-  ],
-  "verdict": "DRIFTED"
- },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#no path leads to a plank": {
-  "code": "653ff35d5962616f",
-  "core": "195f8ab9eca62d48",
-  "date": "2026-10-07",
-  "note": "\"no path leads to one - the way to it is the bund\"",
+  "code": "9594eb1961de91de",
+  "core": "905067e4a1548e29",
+  "date": "2026-10-08",
+  "note": "no lane is laid to a plank",
   "pages": {
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "0b77fe8191a170cc"
   },
@@ -37189,9 +37220,9 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#not on another deck": {
-  "code": "1705c66a9157c30f",
-  "core": "195f8ab9eca62d48",
-  "date": "2026-10-07",
+  "code": "1d53dbbf32ca888a",
+  "core": "905067e4a1548e29",
+  "date": "2026-10-08",
   "note": "other crossings rule a seat out",
   "pages": {
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "0b77fe8191a170cc"
@@ -37202,50 +37233,36 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#obliqueness ceiling": {
-  "code": "56be31a93400b437",
-  "core": "195f8ab9eca62d48",
-  "date": "2026-10-07",
-  "note": "the ceiling allows a deck up to 3x the nominal span, and 0084 drawing answers how long a deck runs (\"spans about 8 ft\", joins rule a seat out); the claim should cite it, and against it the ceiling is part of the junction drift",
-  "pages": {},
-  "research": "",
-  "rests": [
-   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:72ffa8c3abe4e4b2",
-   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:a7603fcf4f80a38b"
-  ],
-  "verdict": "MISLABELED"
- },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#off dry crops and gardens": {
-  "code": "22b8311d7ad34332",
-  "core": "195f8ab9eca62d48",
-  "date": "2026-10-07",
-  "note": "\"Houses, crops, other crossings ... rule out\"",
+  "code": "86af16e7780dd070",
+  "core": "905067e4a1548e29",
+  "date": "2026-10-08",
+  "note": "crops rule a seat out, then the widest seat left is taken",
   "pages": {
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "0b77fe8191a170cc"
   },
   "research": "43cf74757fcb48f3",
   "rests": [
-   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:a7603fcf4f80a38b"
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:a7603fcf4f80a38b",
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:bbbce046100dfc03"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#off groves": {
-  "code": "81a6e91b55b3540d",
-  "core": "195f8ab9eca62d48",
-  "date": "2026-10-07",
-  "note": "the page's exclusion list does not include groves",
+  "code": "d8c0d62b3d862594",
+  "core": "905067e4a1548e29",
+  "date": "2026-10-08",
+  "note": "the bundle is silent on groves",
   "pages": {},
   "research": "",
-  "rests": [
-   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:a7603fcf4f80a38b"
-  ],
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#off the homes": {
-  "code": "5ab2d4a5993dc2b8",
-  "core": "195f8ab9eca62d48",
-  "date": "2026-10-07",
-  "note": "\"A crossing never sits on a farmhouse\", it slides along the ditch",
+  "code": "362624b7c301aa31",
+  "core": "905067e4a1548e29",
+  "date": "2026-10-08",
+  "note": "the plank slides along its ditch until it clears every house",
   "pages": {
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "0b77fe8191a170cc"
   },
@@ -37256,10 +37273,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#one near the middle, more on a long run": {
-  "code": "cc3d892a74e45b1f",
-  "core": "195f8ab9eca62d48",
-  "date": "2026-10-07",
-  "note": "one near the middle, more at intervals; the page sets no interval, so 320 px is a calibration",
+  "code": "c0fba5c60fdaa776",
+  "core": "905067e4a1548e29",
+  "date": "2026-10-08",
+  "note": "midway, or evenly spaced along the qualifying run",
   "pages": {
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "0b77fe8191a170cc"
   },
@@ -37270,10 +37287,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#one rolled form": {
-  "code": "f07be069789f6f78",
-  "core": "195f8ab9eca62d48",
-  "date": "2026-10-07",
-  "note": "one of three forms, rolled per settlement",
+  "code": "d4c814e501a8d7c4",
+  "core": "905067e4a1548e29",
+  "date": "2026-10-08",
+  "note": "`resolve(\"footbridge_form\")` per settlement",
   "pages": {
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "0b77fe8191a170cc"
   },
@@ -37285,10 +37302,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#only water too wide to step across": {
-  "code": "d6ea5292e57c910e",
-  "core": "195f8ab9eca62d48",
-  "date": "2026-10-07",
-  "note": "the code makes width a hard filter, so a ditch whose wide seats are all blocked gets no plank (\"carries no plank\"), but the page says \"Where no wide spot is free, a crossing takes the widest spot left ... rather than left off\"",
+  "code": "1a1a48f6bcc2529d",
+  "core": "905067e4a1548e29",
+  "date": "2026-10-08",
+  "note": "`worth_planking` judges the widest point, and `seat_order` tries those seats first",
   "pages": {
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "0b77fe8191a170cc"
   },
@@ -37298,28 +37315,27 @@
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:a7603fcf4f80a38b",
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:df87d788cf419d16"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#plank width": {
-  "code": "4233638f68689aa5",
-  "core": "195f8ab9eca62d48",
-  "date": "2026-10-07",
-  "note": "px(4) is \"about 4 ft wide\"",
+  "code": "a3c7959fd85fdad8",
+  "core": "905067e4a1548e29",
+  "date": "2026-10-08",
+  "note": "`px(4)`",
   "pages": {
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "0b77fe8191a170cc"
   },
   "research": "43cf74757fcb48f3",
   "rests": [
-   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:72ffa8c3abe4e4b2",
-   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:b74aa6e62d8b654b"
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:72ffa8c3abe4e4b2"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#polder crossings by side": {
-  "code": "3e239cfab45ddc0f",
-  "core": "195f8ab9eca62d48",
-  "date": "2026-10-07",
-  "note": "the page gives no per-side caps; it bears only on drains",
+  "code": "b03b454314b19110",
+  "core": "905067e4a1548e29",
+  "date": "2026-10-08",
+  "note": "the bundle is silent on per-side caps; caps of 0 on the drain agree with §45",
   "pages": {},
   "research": "",
   "rests": [
@@ -37328,10 +37344,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#short abutment": {
-  "code": "36e1a63e7600904e",
-  "core": "195f8ab9eca62d48",
-  "date": "2026-10-07",
-  "note": "2.5 + 5.5 = 8 ft, \"spans about 8 ft\" with a short abutment",
+  "code": "5bbbc9c9c8453257",
+  "core": "905067e4a1548e29",
+  "date": "2026-10-08",
+  "note": "local width plus 5.5 ft, so a 2.5 ft ditch takes about 8 ft",
   "pages": {
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "0b77fe8191a170cc"
   },
@@ -37343,32 +37359,30 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#short stub stepped over": {
-  "code": "77e26e7e369e2eac",
-  "core": "195f8ab9eca62d48",
-  "date": "2026-10-07",
-  "note": "the page sets no length threshold",
+  "code": "b23ff1694cc7ded0",
+  "core": "905067e4a1548e29",
+  "date": "2026-10-08",
+  "note": "the bundle gives no minimum length",
   "pages": {},
   "research": "",
-  "rests": [
-   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:b1aeb6949be7d7de"
-  ],
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#slide resolution": {
-  "code": "9526c1c4850d7045",
-  "core": "195f8ab9eca62d48",
-  "date": "2026-10-07",
-  "note": "the sampling step, plumbing",
+  "code": "bfaa671923a80837",
+  "core": "905067e4a1548e29",
+  "date": "2026-10-08",
+  "note": "the sampling step only; plumbing",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#square across the ditch": {
-  "code": "f675794396e4618e",
-  "core": "195f8ab9eca62d48",
-  "date": "2026-10-07",
-  "note": "\"square across the water\"",
+  "code": "8e284ff7447f2eac",
+  "core": "905067e4a1548e29",
+  "date": "2026-10-08",
+  "note": "`deck = ang + 90`",
   "pages": {
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "0b77fe8191a170cc"
   },
@@ -37379,10 +37393,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#supply ditches only": {
-  "code": "c5a47dddaba48696",
-  "core": "195f8ab9eca62d48",
-  "date": "2026-10-07",
-  "note": "foot drains and diagonal edge drains carry none",
+  "code": "0716868c5f904601",
+  "core": "905067e4a1548e29",
+  "date": "2026-10-08",
+  "note": "only `SUPPLY_ROLES`; drains carry none",
   "pages": {
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "0b77fe8191a170cc"
   },
@@ -37538,29 +37552,11 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/city/bridges.py::crossing_deck#footplank form where the landing meets rice": {
-  "code": "0809b0475076363b",
-  "core": "0e31f3ed8ad43a90",
-  "date": "2026-10-07",
-  "note": "the cited 0084 research page says nothing of abutments or a 2 ft floor; the claim should cite 0084 drawing (short abutment) and 0087 drawing, where a carried deck runs \"about 10 ft past the water\"; dropping a carried way to a plank landing is a DEVIATION neither page records",
-  "pages": {
-   "0084-plank-bridges-over-farm-ditches-itabashi.html": "2f469e5a8586f3f4"
-  },
-  "research": "7d166d44a3ea5df4",
-  "rests": [
-   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:09bdc345075811e2",
-   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:72ffa8c3abe4e4b2",
-   "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html:2bea76047e1862a0",
-   "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html:33809fa8a2ae3636",
-   "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html:a2caf9cbb57b7bcc"
-  ],
-  "verdict": "MISLABELED"
- },
  "l7r/diagram/settlement/city/bridges.py::crossing_deck#landing past each bank": {
-  "code": "edb51706426cd1a2",
-  "core": "0e31f3ed8ad43a90",
-  "date": "2026-10-07",
-  "note": "\"about 10 ft on each bank\"",
+  "code": "fbe3208ba591d5e8",
+  "core": "9dc618b8849796dc",
+  "date": "2026-10-08",
+  "note": "`2 * LANDING_FT`, about 10 ft each bank",
   "pages": {
    "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html": "c54aace546b26627"
   },
@@ -37572,28 +37568,41 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::crossing_deck#near-parallel clamp": {
-  "code": "c3721567c8944502",
-  "core": "0e31f3ed8ad43a90",
-  "date": "2026-10-07",
-  "note": "a numeric guard; seat_deck grows the deck anyway",
+  "code": "8b1edb1353b4d6f8",
+  "core": "9dc618b8849796dc",
+  "date": "2026-10-08",
+  "note": "a numeric floor; `seat_deck` lengthens the deck to clear the water",
   "pages": {},
   "research": "",
-  "rests": [
-   "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html:367d166bf8fb0b33"
-  ],
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::crossing_deck#oblique span solved": {
-  "code": "7907a7f269d9a5cb",
-  "core": "0e31f3ed8ad43a90",
-  "date": "2026-10-07",
-  "note": "the water's width over sin, plus the deck's own width pushing its corners out",
+  "code": "fab073266077fc92",
+  "core": "9dc618b8849796dc",
+  "date": "2026-10-08",
+  "note": "`(ww + rw|cos|)/sin`",
   "pages": {
    "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html": "c54aace546b26627"
   },
   "research": "281143d409996aaf",
   "rests": [
    "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html:367d166bf8fb0b33"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/city/bridges.py::crossing_deck#rice at the landing cuts the crossing": {
+  "code": "0a8932d182ebbfea",
+  "core": "9dc618b8849796dc",
+  "date": "2026-10-08",
+  "note": "`_lands_dry` on every corner, else the deck is not seated",
+  "pages": {
+   "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html": "c54aace546b26627"
+  },
+  "research": "281143d409996aaf",
+  "rests": [
+   "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html:367d166bf8fb0b33",
+   "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html:431c9ba134441966"
   ],
   "verdict": "IN-STEP"
  },
@@ -37687,6 +37696,20 @@
    "0087-road-bridges-over-rivers-and-canals-hashi.drawing.html": "c54aace546b26627"
   },
   "research": "281143d409996aaf",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/city/bridges.py::seat_order#the widest left": {
+  "code": "92a191c36dd7bc6e",
+  "core": "ca5f21bcc404208b",
+  "date": "2026-10-08",
+  "note": "wide seats first, then the widest of the rest",
+  "pages": {
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "0b77fe8191a170cc"
+  },
+  "research": "43cf74757fcb48f3",
+  "rests": [
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:a7603fcf4f80a38b"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/bridges.py::undeckable_at#plumbing": {
@@ -38298,45 +38321,61 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/moat.py::MoatMixin.sluice_gate#a sluice where a channel changes water": {
-  "code": "4078c29e7ef12331",
-  "core": "a7a015cfe3b9b06d",
-  "date": "2026-10-03",
-  "note": "0179 drawing",
+  "code": "a6b808fa7a4a071a",
+  "core": "da7cb1a7b96844af",
+  "date": "2026-10-08",
+  "note": "draws at the junction its caller found",
   "pages": {
    "0179-water-gates-and-sluices-shuimen.drawing.html": "19011b41723432c2"
   },
   "research": "7abc2922379a319e",
+  "rests": [
+   "0179-water-gates-and-sluices-shuimen.drawing.html:067bd7a407956917"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/moat.py::MoatMixin.sluice_gate#board, posts, crossbeam and windlass": {
-  "code": "d26367bd31c55313",
-  "core": "a7a015cfe3b9b06d",
-  "date": "2026-10-03",
-  "note": "0179 drawing",
+  "code": "c70f781a0e658a66",
+  "core": "da7cb1a7b96844af",
+  "date": "2026-10-08",
+  "note": "board, two posts, crossbeam and drum",
   "pages": {
    "0179-water-gates-and-sluices-shuimen.drawing.html": "19011b41723432c2"
   },
   "research": "7abc2922379a319e",
+  "rests": [
+   "0179-water-gates-and-sluices-shuimen.drawing.html:088c44a5ca24eaf0",
+   "0179-water-gates-and-sluices-shuimen.drawing.html:b61cf64d7fc5dad2",
+   "0179-water-gates-and-sluices-shuimen.drawing.html:f46d69cf2f05a9d2"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/moat.py::MoatMixin.sluice_gate#caption": {
-  "code": "f9b9e2200d617c2e",
-  "core": "a7a015cfe3b9b06d",
-  "date": "2026-10-03",
-  "note": "label styling",
+  "code": "17d8f790961fbe7c",
+  "core": "da7cb1a7b96844af",
+  "date": "2026-10-08",
+  "note": "the sluice carries its name, 9 pt italic",
+  "pages": {},
   "research": "",
+  "rests": [
+   "0179-water-gates-and-sluices-shuimen.drawing.html:7938a2b4ba6256fd"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/moat.py::MoatMixin.sluice_gate#frame span": {
-  "code": "125cc769db4a913c",
-  "core": "a7a015cfe3b9b06d",
-  "date": "2026-10-03",
-  "note": "~20 ft between posts at 3 ft/px, stretched bank to bank when given",
+  "code": "079a4042cddf9de0",
+  "core": "da7cb1a7b96844af",
+  "date": "2026-10-08",
+  "note": "the default frame is a fixed 10.8 px post to post (`_sk=1`) with no `ftpx` term, so it reads about 11 ft at 1 ft/px and about 32 ft at 3 ft/px, against \"A field channel's sluice spans about 16 to 24 ft\"; scale the default by `ftpx` into 16-24 ft, or state the scale it holds at",
   "pages": {
    "0179-water-gates-and-sluices-shuimen.drawing.html": "19011b41723432c2"
   },
   "research": "7abc2922379a319e",
-  "verdict": "IN-STEP"
+  "rests": [
+   "0179-water-gates-and-sluices-shuimen.drawing.html:65c2e2ee17e2dda0",
+   "0179-water-gates-and-sluices-shuimen.drawing.html:f46d69cf2f05a9d2"
+  ],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/city/moat.py::MoatMixin.water_gate#arch on two piers with a grille": {
   "code": "b5d66d0fb0940d55",
@@ -41204,15 +41243,19 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/core.py::Settlement.__init__#a threshing yard at every farmstead": {
-  "code": "8693ddec690e70d0",
+  "code": "a0cf08b527706c18",
   "core": "aade0a786906bc6c",
-  "date": "2026-10-03",
-  "note": "page: every farm has a yard and \"rice yards and dry-field yards are drawn the same\"; the switch keys on rice (_work_yards off when the generator declares no rice) - key it on no grain crop, or record the dike-pond exception on the drawing page",
+  "date": "2026-10-08",
+  "note": "`_work_yards = True` unless the generator declares no grain",
   "pages": {
    "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html": "d85e826f35b910f8"
   },
   "research": "5ec937f597c66c34",
-  "verdict": "DRIFTED"
+  "rests": [
+   "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html:3610a4b606e49804",
+   "0037-threshing-and-drying-yards-at-farmhouses-niwa.drawing.html:5fdfe1c043743809"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/core.py::Settlement.__init__#no house racks by default": {
   "code": "b1cff9b7f1df4e50",
@@ -41761,10 +41804,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/farm_fixtures.py::kura_rect#annex held in its band": {
-  "code": "5883831fa1a573c8",
-  "core": "c4a7abfec014f33e",
-  "date": "2026-10-07",
-  "note": "the north annex's length is clamped by `min(max(fw * w, lo), hi)`, and when `hi` < `lo` the 1.8 ratio wins: on a house under about 22 ft deep the annex comes out shorter than 18 ft, below the page's \"about 18 and 27 ft long\". The claim should name that exception, or the code should keep the 18 ft floor.",
+  "code": "76b3eaf5f65e7963",
+  "core": "3b47dd8ae7c5a574",
+  "date": "2026-10-08",
+  "note": "length held to 18-27 ft at 1.5-1.8 to one, from the Hannan 18x12 and Nerima 27x15 sheds",
   "pages": {
    "0052-farm-sheds-and-barns-naya.html": "8f4296a65c4ca33f"
   },
@@ -41772,15 +41815,16 @@
   "rests": [
    "0052-farm-sheds-and-barns-naya.html:3b863f6da93ced16",
    "0052-farm-sheds-and-barns-naya.html:3de79678cb70b971",
+   "0052-farm-sheds-and-barns-naya.html:5e83ad8952b69433",
    "0052-farm-sheds-and-barns-naya.html:faf3675b520021d0"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/farm_fixtures.py::kura_rect#annex larger than a kura": {
-  "code": "57e6195e5395fe25",
-  "core": "c4a7abfec014f33e",
-  "date": "2026-10-07",
-  "note": "the drawing page records the shed-size choice and its reason (\"would shift the houses of every generated hamlet\").",
+  "code": "c682e114924a187f",
+  "core": "3b47dd8ae7c5a574",
+  "date": "2026-10-08",
+  "note": "the drawing page records the shed-size annex against the ~12-15 x 18 ft kura as this project's choice",
   "pages": {
    "0040-farm-storehouses-kura.drawing.html": "ed021816f05d011b"
   },
@@ -41790,25 +41834,18 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/farm_fixtures.py::kura_rect#annex seat: against the north or west wall, and where along that wall (`KURA_PARTS` offsets) (the page covers this at §8, but no claim cites it)": {
-  "code": "c4a7abfec014f33e",
-  "core": "c4a7abfec014f33e",
-  "date": "2026-10-07",
-  "note": "annex seat: against the north or west wall, and where along that wall (`KURA_PARTS` offsets) (the page covers this at §8, but no claim cites it)",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  "l7r/diagram/settlement/farm_fixtures.py::kura_rect#west annex size": {
-  "code": "30615858f683ab7d",
-  "core": "c4a7abfec014f33e",
-  "date": "2026-10-07",
-  "note": "the shares give 21 x 12 ft and both measures are clamped to the band, a calibrated choice within 18-27 ft at 1.5-1.8 to one.",
+  "code": "dd1bb94b5b8fecad",
+  "core": "3b47dd8ae7c5a574",
+  "date": "2026-10-08",
+  "note": "the west annex stays within the 18-27 ft band and the 1.5-1.8 ratio",
   "pages": {
    "0040-farm-storehouses-kura.drawing.html": "ed021816f05d011b"
   },
   "research": "2684976194590ecb",
   "rests": [
-   "0040-farm-storehouses-kura.drawing.html:90057266aa2f2fa5"
+   "0040-farm-storehouses-kura.drawing.html:90057266aa2f2fa5",
+   "0040-farm-storehouses-kura.drawing.html:d1a4c048a3cb6d63"
   ],
   "verdict": "IN-STEP"
  },
@@ -41829,10 +41866,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/comb.py::CombMixin._coarse_grain_top_up#drained acres": {
-  "code": "02934b218b9c05c4",
-  "core": "d349bea52003b6df",
+  "code": "b6691bbb2d28e2b7",
+  "core": "b173f3dfbe7b127f",
   "date": "2026-10-08",
-  "note": "`p.get(\"fill\") != FLOODED` counts every green plot as drained, but the page says blue is \"a sample of the wet ground, not the whole of it\" and the low-row plots left green \"are as wet as the blue ones\"; drained should leave out the `low` plots, or the claim should be a DEVIATION the page records",
+  "note": "excludes the FLOODED plots and the whole low row",
   "pages": {
    "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "1e0cc8002bddb72d"
   },
@@ -41841,28 +41878,38 @@
    "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:68a6523772c7cec3",
    "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:f84f7dcd5af814ac"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/comb.py::CombMixin._coarse_grain_top_up#need and count": {
-  "code": "9d8b38b46132ffcd",
-  "core": "d349bea52003b6df",
-  "date": "2026-10-03",
-  "note": "as cited",
+  "code": "66028a6971a3be4c",
+  "core": "b173f3dfbe7b127f",
+  "date": "2026-10-08",
+  "note": "the winter crop rolled within the site's forms, then topped up to the need",
   "pages": {
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "721212518f833ab1"
   },
   "research": "8159982a6874674a",
+  "rests": [
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:05e2fe635af4884d",
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:4e149ae01f4a6751",
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:8f4e868ad49f5555",
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:b3205d6ff18de5d5"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/comb.py::CombMixin._coarse_grain_top_up#top-up scope": {
-  "code": "184f4b9e2aa09ba4",
-  "core": "d349bea52003b6df",
-  "date": "2026-10-03",
-  "note": "as cited",
+  "code": "80423466f845f4b5",
+  "core": "b173f3dfbe7b127f",
+  "date": "2026-10-08",
+  "note": "only a generated hamlet with a fan middle and a dry reserve",
   "pages": {
    "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html": "721212518f833ab1"
   },
   "research": "8159982a6874674a",
+  "rests": [
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:8f4e868ad49f5555",
+   "0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html:b3205d6ff18de5d5"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_beads#bead glyph": {
@@ -41878,20 +41925,20 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_ditches#ditch net over the paddies": {
-  "code": "9210a47872196f71",
-  "core": "d848b7b763e46776",
-  "date": "2026-10-07",
-  "note": "this is draw order only.",
+  "code": "5db37c5c6d5fecf7",
+  "core": "59894523550fc1c8",
+  "date": "2026-10-08",
+  "note": "layer order only",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_ditches#drain outfall": {
-  "code": "8211ae286467933b",
-  "core": "d848b7b763e46776",
-  "date": "2026-10-07",
-  "note": "the page bends the run out of the collector's exit, with \"the turn held to 55 degrees or less\". The turn is made in `outfall_run`, which is not in the bundle; I need its source.",
+  "code": "694d60150bbe53f8",
+  "core": "59894523550fc1c8",
+  "date": "2026-10-08",
+  "note": "a dug drain run at the collector's tail width, routed by `outfall_run` (its turn bound is judged there)",
   "pages": {
    "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
   },
@@ -41901,13 +41948,13 @@
    "0060-field-drains-akusuiro.drawing.html:5430b16d81429901",
    "0060-field-drains-akusuiro.drawing.html:f2a4519a87491d17"
   ],
-  "verdict": "CANNOT-TELL"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_ditches#outfall corridor": {
-  "code": "b2aa2f1c8372683d",
-  "core": "d848b7b763e46776",
-  "date": "2026-10-07",
-  "note": "the page gives about 33 ft from a channel's centerline on town and city maps only; hamlet and village maps use the below-the-drain rule. The code adds 33 px (not `px(33)`) on every map, and no page records that as a DEVIATION.",
+  "code": "85a30b1626a3e5c5",
+  "core": "59894523550fc1c8",
+  "date": "2026-10-08",
+  "note": "`px(33)` on a town or city only",
   "pages": {
    "0058-ground-too-wet-to-build-on.drawing.html": "d989d5be5b8d7839"
   },
@@ -41917,22 +41964,19 @@
    "0058-ground-too-wet-to-build-on.drawing.html:b9283c4db442e8c6",
    "0058-ground-too-wet-to-build-on.drawing.html:f4e450ab6438f79c"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_ditches#outfall recorded width": {
-  "code": "2ceb10adfce243c8",
-  "core": "d848b7b763e46776",
-  "date": "2026-10-07",
-  "note": "the drain's tail width (5.5 ft on the ladder) is both recorded and inked.",
+  "code": "f54bd71a57de8c97",
+  "core": "59894523550fc1c8",
+  "date": "2026-10-08",
+  "note": "recorded at the drain's tail width (5.5 ft rung)",
   "pages": {
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html": "73b09981aa65bd21"
   },
   "research": "0563a9dcc87ebedc",
   "rests": [
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:510345478efc1edf",
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:603250935c007233",
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:b60a8b29980e1035",
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:ce923017c9efa2ce"
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:b60a8b29980e1035"
   ],
   "verdict": "IN-STEP"
  },
@@ -42427,16 +42471,16 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/comb.py::outfall_run#drain outfall": {
-  "code": "c588dd82e8c7df89",
-  "core": "83d5f7c31716ac73",
-  "date": "2026-10-05",
-  "note": "`[start, mid, mid + fall * reach]` is one hard corner from the exit heading to pure downhill, no curve and no 55 degree cap, against \"bends out of the collector's exit ... The turn is held to 55 degrees or less\"; curve it as `_comb_brook` does, or record the corner on 0060",
+  "code": "dac87690b87f52a0",
+  "core": "825aafe7532c8f3f",
+  "date": "2026-10-08",
+  "note": "the fallback `[start, start + fall*(lead+reach)]` leaves the drain's exit at whatever angle the exit makes with the fall (over 90 degrees whenever the curved run failed `runs_downhill`), against \"The turn is held to 55 degrees or less\"; the fallback should also curve out in turns of at most 55 degrees, or the page should record the exception",
   "pages": {
    "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
   },
   "research": "8ff7ceb036c4856e",
   "rests": [
-   "0060-field-drains-akusuiro.drawing.html:3f8aaea7876f6fee",
+   "0060-field-drains-akusuiro.drawing.html:5430b16d81429901",
    "0060-field-drains-akusuiro.drawing.html:f2a4519a87491d17"
   ],
   "verdict": "DRIFTED"

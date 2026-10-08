@@ -77,6 +77,7 @@ def test_the_gate_s_drawn_box_spans_bank_to_bank() -> None:
     s.sluice_gate(400.0, 500.0, rot=90.0)
     s.sluice_gate(900.0, 500.0, rot=90.0, span=40.0)
     plain, wide = s.M["sluice_gates"]
-    assert "span" not in plain and wide["span"] == 40.0
-    assert _MX_FIXTURE_BOX["sluice_gates"](plain) == (10.8, 8.4)
+    assert plain["span"] == s.px(20.0) and wide["span"] == 40.0, "no span given: 20 ft at the map's scale (0179's 16 to 24 ft)"
+    assert _MX_FIXTURE_BOX["sluice_gates"](plain) == (s.px(20.0), 8.4)
+    assert _MX_FIXTURE_BOX["sluice_gates"]({"x": 0, "y": 0}) == (10.8, 8.4), "a record from before spans were recorded"
     assert _MX_FIXTURE_BOX["sluice_gates"](wide) == (40.0, 8.4)

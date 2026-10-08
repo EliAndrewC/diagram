@@ -657,6 +657,7 @@ Research:
     one object under two keys - NONE: a hall as religious and shrines, a gate tower twice
     ward fence meets the wall - research/questions/0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html: ends at the rampart
     castle moat bridge - research/questions/0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html: a deck over the castle's own moat to its gate
+    castle bridge at its gate tower - research/questions/0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html: the moat deck lands at the gate it leads to
     merchant estate court - research/questions/0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html: a walled court round its house
     flower bed against the town wall - UNRESEARCHED: a bed laid flush inside the rampart
 """

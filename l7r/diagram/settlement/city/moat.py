@@ -195,20 +195,19 @@ class MoatMixin:
         Research:
             a sluice where a channel changes water - research/questions/0179-water-gates-and-sluices-shuimen.drawing.html
             board, posts, crossbeam and windlass - research/questions/0179-water-gates-and-sluices-shuimen.drawing.html
-            frame span - research/questions/0179-water-gates-and-sluices-shuimen.drawing.html: the drawing page's GUESS, a field sluice about 16 to 24 ft, a wider channel bank to bank; about 8 px, stretched to span when given
+            frame span - research/questions/0179-water-gates-and-sluices-shuimen.drawing.html: the drawing page's GUESS, a field sluice about 16 to 24 ft - 20 ft at the map's scale where no span is given; a wider channel bank to bank
             caption - CONVENTION: 9 pt italic
         """
-        rec: dict[str, float] = {"x": round(x, 1), "y": round(y, 1), "rot": round(rot, 1)}
-        if span is not None:
-            rec["span"] = round(span, 1)  # the frame bank to bank: the matrix sizes the gate's box from it
+        span = self.px(20.0) if span is None else span  # a field sluice about 16 to 24 ft (0179): 20 ft at the map's scale
+        rec: dict[str, float] = {"x": round(x, 1), "y": round(y, 1), "rot": round(rot, 1), "span": round(span, 1)}  # the matrix sizes the gate's box from its span
         refuse_unadmitted(self.M, "sluice_gates", rec)
         wc = '#3A352C'
         # `span` stretches the frame ACROSS its channel so the posts stand on the BANKS (GM
         # 2026-08-09: on the capital's 66 ft leats the default field-channel frame floated
         # mid-water, reading as detached - a real frame spans abutment to abutment, and the
-        # operator walks the crossbeam). Default None keeps the original field-channel geometry
-        # byte-identical for every existing map.
-        _sk = 1.0 if span is None else max(1.0, span / 10.8)
+        # operator walks the crossbeam). With no span given the frame is 20 ft (feature 328: it was a fixed 10.8 px,
+        # about 11 ft at a hamlet's scale and 32 ft at a city's).
+        _sk = max(1.0, span / 10.8)
         g = [f'<g transform="translate({x:.0f},{y:.0f}) rotate({rot:.1f})">']
         g.append(f'<rect x="{-4.6 * _sk:.1f}" y="-1.4" width="{9.2 * _sk:.1f}" height="2.8" fill="#8A7050" stroke="{wc}" stroke-width="1.0"/>')  # the lifted board
         g.append(f'<rect x="{-5.4 * _sk:.1f}" y="-2.0" width="2.0" height="4.0" fill="{wc}"/>')  # posts, ON the banks when span is given

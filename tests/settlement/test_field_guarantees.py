@@ -323,7 +323,8 @@ def test_the_drain_outfall_run_runs_downhill_and_goes_straight_down_where_its_le
     up = [(100.0, 100.0), (100.0, -500.0), (100.0, -400.0)]
     assert not runs_downhill(up, fall), "the case: a 600 px lead up the fall, 100 back down, climbs"
     run = outfall_run((100.0, 100.0), (100.0, 50.0), fall, lead=600.0, reach=100.0)
-    assert run == [(100.0, 100.0), (100.0, 800.0)] and runs_downhill(run, fall)
+    assert run[0] == (100.0, 100.0) and len(run) == 5 and runs_downhill(run, fall), "the fallback curves out from the drain's end"
+    assert max(_turn_deg(a, b, c) for a, b, c in zip([(100.0, 150.0), *run], run, run[1:], strict=False)) <= 55.0 + 1e-9, "its first turn off the exit included (feature 328)"
 
 
 def test_every_grave_stone_stands_on_its_mound_and_steps_back_from_the_last() -> None:
