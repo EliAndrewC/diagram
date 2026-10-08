@@ -663,6 +663,17 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 - **Occasions**: glyph-redrawn homestead grove on Mizuguchi, windbreak on Inashiro - batch 3's close.
 - **Verification**: tests red on the old code; `impl-drift`; `spec-fidelity`; the gate, pair and occasions at batch 3's close.
 
+## Wave 54 (amendment 53, 2026-10-08) - batch 3
+
+- **Scope**: the windbreak's drawn conifer share (found in wave 53, W53-3): 0072's 48% is of the crowns drawn, and the cull
+  is asymmetric (a lesser crown over a conifer is not drawn), so a kind thrown with the crown drew 0.508. A windbreak crown's
+  kind is now rolled where it is seated, nudged by the clump's drawn deficit (`0.48 + 0.48 * drawn - drawn conifers`), so the
+  drawn share is 0.48; the test's tolerance back to 0.02, then tightened to 0.01 on the measurement.
+- **Measured**: the unit sample draws 1,336 conifers of 2,791 crowns (0.479). The five hamlets reroll their windbreaks.
+- **Occasions**: the windbreak on Inashiro (wave 53's glyph-redrawn line) covers the share - batch 3's close.
+- **Verification**: tests red on the old code (0.508 outside 0.02); `impl-drift`; `spec-fidelity`; the gate, pair and
+  occasions at batch 3's close.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Waves 2-45 that changed engine behavior took

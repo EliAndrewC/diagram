@@ -723,7 +723,7 @@ class GrovesMixin:
         are seeded by position (stable across regenerations). Canopy count scales with footprint area.
 
         Research:
-            windbreak conifer share - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.html: 48% of a windbreak's crowns cedar (the 1987 Kashima count), the dominant tree (Takehara) - rolled of the crowns; the cull's asymmetry (a lesser crown over a conifer is not drawn) leaves the DRAWN share above it - 0.508 in the unit sample at ~180 sq ft a crown (wave 53) - filed behind the found row `GrovesMixin._draw_grove#windbreak conifer share as drawn`
+            windbreak conifer share - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.html: 48% of a windbreak's crowns cedar (the 1987 Kashima count), the dominant tree (Takehara) - rolled where each crown is seated, against the clump's drawn deficit, so the share DRAWN is 0.48 through the cull's asymmetry (it was 0.508 rolled with the throw, wave 53)
             crowns per clump - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: one crown per `GROVE_CROWN_SQFT` of clump (~180 sq ft real, at the map's ft/px), rounded, with no floor and no cap
             bamboo under the crowns - research/questions/0075-bamboo-groves-chikurin.drawing.html: 8% of a windbreak clump,
                 inked only in the gaps; none in the dooryard or alder mixes
@@ -855,6 +855,7 @@ class GrovesMixin:
             # culms, so any handful is already symbolic, and one compact culm+top reads the same. See the foliage
             # comparison (the 'to scale, compact bamboo' option) for the before/after; groves stay to scale, the
             # SVG + rsvg raster roughly halve.
+            seated: dict[str, int] = {}  # this clump's crowns drawn, by kind (the windbreak's share is of these)
             for px, py, kind, s in sorted(items, key=lambda t: t[1]):
                 # THE BAMBOO ITEM WAS UNREACHABLE (feature 146: `b_th` was 0.0 in both mixes) until 269 B29 gave the
                 # windbreak a share; a bamboo item draws no crown - it stands under them, and is inked below, after
@@ -868,6 +869,13 @@ class GrovesMixin:
                 # use, in real feet (research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html); a conifer was 15% wider until feature 328 (on no page),
                 # the old ratio. A village (ftpx 2, bscale 1) gets 4.25 px, within a pixel of what it drew before.
                 rr = self.px(self.CANOPY_R_FT) * s
+                # THE WINDBREAK'S SHARE IS OF THE CROWNS DRAWN (feature 328 wave 54, 0072: "735 of them, 48%, were cedar"): the cull is
+                # asymmetric - a lesser crown over a conifer is not drawn - so a kind thrown with the crown left the drawn share
+                # at 0.508. A windbreak crown's kind is rolled where it is seated, nudged by the clump's drawn deficit, so the
+                # share drawn comes to 0.48; a crown rolled broadleaf over a conifer is still culled, and the deficit carries.
+                if mix == "windbreak":
+                    dc, dn = seated.get("conifer", 0), seated.get("conifer", 0) + seated.get("broadleaf", 0)
+                    kind = "conifer" if random.random() < min(1.0, max(0.0, 0.48 + 0.48 * dn - dc)) else "broadleaf"
                 # ALDER AT THE REED EDGE (feature 261): the woody stage of a marsh margin is alder or willow, never pine
                 # (research/contents.json#vegetation, Reed beds and the marsh's edge), so a belt crown standing in the marsh is drawn as one - a
                 # blue-gray green set apart from the belt's own two greens and its cedar, a map drawing convention (the
@@ -888,6 +896,7 @@ class GrovesMixin:
                 if any(math.hypot(cx + px - tx, cy + py - lift - ty) < tr + rr + 0.2 for tx, ty, tr in _trees):
                     continue
                 drawn.append((cx + px, cy + py - lift, rr))
+                seated[kind] = seated.get(kind, 0) + 1
                 # ONE DISC PER CROWN, conifer included (GM 2026-09-27). A conifer used to carry a second, darker
                 # disc at 40% of its radius (a "dense dark apex"); the GM read it as a trunk, which a plan view
                 # cannot show, and it was an unrecorded map convention. The darker fill

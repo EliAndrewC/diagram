@@ -440,6 +440,7 @@
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#mixed broadleaf belt": "E0",
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#mixed broadleaf belt's sizes and bamboo": "E2",
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#windbreak conifer share": "E1",
+ "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#windbreak conifer share as drawn": "E2",
  "l7r/diagram/settlement/homestead_parts/groves.py::LESSER_BROADLEAF_S#lesser broadleaf size": "E0",
  "l7r/diagram/settlement/homestead_parts/keepouts.py::KeepoutsMixin._canopy_keepouts#no crown on a roof or a wellhead": "E0",
  "l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#belt deep and whole": "E1",

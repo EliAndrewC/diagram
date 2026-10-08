@@ -228,10 +228,9 @@ def test_a_windbreak_draws_about_half_its_crowns_conifer() -> None:
         s._draw_grove(200.0 + 90 * (k % 16), 200.0 + 90 * (k // 16), 60.0, 60.0, face=(0, -1), mix="windbreak", tally=tally)
     crowns = tally.get("conifer", 0) + tally.get("broadleaf", 0)
     assert crowns > 300, "non-vacuity"
-    # the throw is 0.48 of the crowns exactly; the canopy-layer cull moves the DRAWN share with the density: 0.463 at one crown
-    # to ~71 sq ft, 0.508 at the page's ~180 (wave 53). WIDENED behind the found row (specs/328-match-the-research/audit/
-    # found-wave53.jsonl, `GrovesMixin._draw_grove#windbreak conifer share as drawn`): the drawn share is to be brought back to 0.48
-    assert abs(tally["conifer"] / crowns - 0.48) < 0.035, tally
+    # the kind is rolled where the crown is seated, against the clump's drawn deficit (wave 54): it was 0.508 drawn when it was
+    # thrown with the crown, the cull being asymmetric (a lesser crown over a conifer is not drawn)
+    assert abs(tally["conifer"] / crowns - 0.48) < 0.01, tally  # measured 0.479 (1,336 of 2,791)
 
 
 def test_a_grove_throws_one_crown_to_about_180_sq_ft_at_every_grain() -> None:
