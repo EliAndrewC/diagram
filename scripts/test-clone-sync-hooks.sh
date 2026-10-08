@@ -45,12 +45,13 @@ mkclone() { git clone -q "$FMAIN" "$FMAIN/.clones/$1"; }   # a clone at main's c
 mkclone miscellaneous
 mkclone diagram-town
 mkclone gm-assistant
+mkclone main   # the fixture main's own basename - forbidden like /diagram's .clones/diagram
 
 # session-json fixtures: <pid>.json carries {id, name, nameSource}
 sess() { printf '{"id":"%s","name":"%s"%s}' "$2" "$3" "${4:+,\"nameSource\":\"$4\"}" > "$SESS/$1.json"; }
 sess 1001 sid-me miscellaneous            # named "miscellaneous" -> canon .clones/miscellaneous
 sess 1002 sid-town "Diagram (town)"       # named -> canon .clones/diagram-town
-sess 1003 sid-unnamed "Auto Title" derived  # derived title -> unnamed -> canon .clones/gm-assistant
+sess 1003 sid-unnamed "Auto Title" derived  # derived title -> unnamed -> canon .clones/main (main's own name)
 
 # a LIVE process whose /proc cmdline names claude (via exec -a), and a DEAD one
 # GUARD_EDIT_OK: feature 172 - THE FIXTURE'S "LIVE" PROCESS MUST OUTLIVE THE SUITE, and 300 s did not.
@@ -129,13 +130,16 @@ run pretool sid-me miscellaneous a.txt;        check "canonical clone claimed by
 rm -f "$MAPDIR/sid-dead-other"
 
 run pretool sid-me diagram-town a.txt;         check "wrong (but valid) clone, clean -> name-routing block" 2 "$RC"
+case $OUT in *"git clone $FMAIN "*) : ;; *) echo "FAIL  name-routing message must name the derived main, not a literal: $OUT"; FAILED=1 ;; esac   # GUARD_EDIT_OK: the message named /gm-assistant until 2026-10-08
 
 echo dirt > "$FMAIN/.clones/diagram-town/dirt"
 run pretool sid-me diagram-town a.txt;         check "wrong clone but DIRTY -> grandfathered" 0 "$RC"
 rm -f "$FMAIN/.clones/diagram-town/dirt"
 
 run pretool sid-me gm-assistant a.txt;         check "editing forbidden gm-assistant clone -> blocked" 2 "$RC"
-run pretool sid-unnamed miscellaneous a.txt;   check "unnamed session (resolves to gm-assistant) -> blocked" 2 "$RC"
+run pretool sid-me main a.txt;                 check "editing in the repository's own name (.clones/main) -> blocked" 2 "$RC"   # GUARD_EDIT_OK: adding a case - only the literal gm-assistant was blocked before 2026-10-08
+case $OUT in *"FORBIDDEN"*) : ;; *) echo "FAIL  .clones/main must be refused as a FORBIDDEN name, not only by name-routing: $OUT"; FAILED=1 ;; esac
+run pretool sid-unnamed miscellaneous a.txt;   check "unnamed session (resolves to main's own name) -> blocked" 2 "$RC"
 run pretool sid-ghost miscellaneous a.txt;     check "unresolvable sid, clean, at tip, unclaimed -> allowed (fall-through)" 0 "$RC"
 
 echo dirt > "$FMAIN/.clones/miscellaneous/dirt"

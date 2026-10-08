@@ -12,8 +12,8 @@
 #     happen (or why it was skipped).
 #
 #   PreToolUse (Edit|Write|NotebookEdit) -> `pretool` mode: at a CLEAN work-unit boundary it
-#     enforces, in order: (0) FORBIDDEN NAME - '.clones/gm-assistant' is banned (it is the repo,
-#     not a session), so a session that resolves or routes to it is stopped and the GM is asked to
+#     enforces, in order: (0) FORBIDDEN NAME - '.clones/<main's own name>' and '.clones/gm-assistant'
+#     are banned (each is a repo, not a session; GUARD_EDIT_OK: comment follows forbidden_clone), so a session that resolves or routes to it is stopped and the GM is asked to
 #     name it; (1) NAME-ROUTING - a session may only edit in .clones/<its-own-name>, resolved from
 #     its transcript's last /rename record, else ~/.claude/sessions/*.json; (2) CLAIM BACKSTOP - that clone must not be one
 #     another LIVE session already occupies; (3) STALE-BASE - the clone's HEAD must equal main's. A
@@ -95,6 +95,11 @@ derive_main() {
 }
 MAIN=${CLONE_MAIN:-$(derive_main)}
 MAPDIR=$MAIN/.clones/.session-clones
+# GUARD_EDIT_OK: adding to a guard - the FORBIDDEN clone names (GM 2026-07-22): the repository's own
+# name, which an unnamed session resolves to, and 'gm-assistant' (the repository this one split from).
+# Before 2026-10-08 only the literal 'gm-assistant' was checked here, so '.clones/diagram' passed this
+# hook although docs/session-clones.md and sync-with-main.sh forbid it.
+forbidden_clone() { case "$(basename "$1")" in gm-assistant|"$(basename "$MAIN")") return 0 ;; esac; return 1; }
 
 # GUARD_EDIT_OK: the behind-main NOTICE (GM 2026-09-05) - see the dirty branch in `pretool` for why
 # this teaches instead of blocking. Everything below is about being CORRECT and CHEAP, in that order.
@@ -215,7 +220,8 @@ for f in ([] if found else glob.glob(os.path.join(sdir, '*.json'))):
 if not found:
     sys.exit(0)                       # unresolvable -> print nothing -> caller falls through
 if source == 'derived' or not str(name or '').strip():
-    name = 'gm assistant'             # unnamed / auto-derived -> shared default
+    name = os.path.basename(main.rstrip('/'))   # unnamed / auto-derived -> the repository's own (FORBIDDEN) name
+    # GUARD_EDIT_OK: adding to a guard - the sentinel was the literal 'gm assistant', a split leftover; main's basename is forbidden here too
 kebab = re.sub(r'\s+', '-', re.sub(r'[^a-z0-9\s-]', '', str(name).lower()).strip())
 if kebab:
     print(os.path.join(main, '.clones', kebab))"
@@ -318,24 +324,27 @@ case $MODE in
 
     # --- clean work-unit boundary: enforce isolation before recording any claim ---
 
-    # (0) 'gm-assistant' is a FORBIDDEN clone name (GM 2026-07-22): it is the repository, not a
-    #     session, and being the old unnamed-default is exactly what made two sessions collide in
-    #     it. A session that resolves to it has no distinct name; a session editing in it wandered
-    #     into the forbidden workspace. Either way, stop and make the GM name the session.
-    if [ -n "$canon" ] && [ "$(basename "$canon")" = "gm-assistant" ]; then
-      echo "BLOCKED: this session has no distinct name - it resolves to the FORBIDDEN '.clones/gm-assistant' ('gm-assistant' is the repository, not a session workspace). Ask the GM to /rename this session to something distinct, then work in .clones/<that-name>.   (CLAUDE.md 'Session clones' - 'gm-assistant' is a forbidden clone name)" >&2
+    # (0) The repository's own name and 'gm-assistant' are FORBIDDEN clone names (GM 2026-07-22,
+    #     forbidden_clone above): each is a repository, not a session, and being the old
+    #     unnamed-default is exactly what made two sessions collide. A session that resolves to one
+    #     has no distinct name; a session editing in one wandered into the forbidden workspace.
+    #     Either way, stop and make the GM name the session.
+    #     GUARD_EDIT_OK: adding to a guard - the repository's own name joins the literal 'gm-assistant'
+    if [ -n "$canon" ] && forbidden_clone "$canon"; then
+      echo "BLOCKED: this session has no distinct name - it resolves to the FORBIDDEN '.clones/$(basename "$canon")' (a repository's name, not a session workspace). Ask the GM to /rename this session to something distinct, then work in .clones/<that-name>.   (CLAUDE.md 'Session clones' - forbidden clone names)" >&2
       cs_block forbidden-name-unnamed "$clone"   # GUARD_EDIT_OK: feature 168
       exit 2
     fi
-    if [ "$(basename "$clone")" = "gm-assistant" ]; then
-      echo "BLOCKED: '.clones/gm-assistant' is a FORBIDDEN clone name ('gm-assistant' is the repository, not a session). Work in .clones/<your-session-name>${canon:+ (this session resolves to $canon)}.   (CLAUDE.md 'Session clones' - 'gm-assistant' is a forbidden clone name)" >&2
+    if forbidden_clone "$clone"; then
+      echo "BLOCKED: '.clones/$(basename "$clone")' is a FORBIDDEN clone name (a repository's name, not a session). Work in .clones/<your-session-name>${canon:+ (this session resolves to $canon)}.   (CLAUDE.md 'Session clones' - forbidden clone names)" >&2
       cs_block forbidden-name "$clone"   # GUARD_EDIT_OK: feature 168
       exit 2
     fi
 
     # (1) NAME-ROUTING: a session may only edit in .clones/<its-own-name>. Unresolvable -> skip.
+    # GUARD_EDIT_OK: fixing a guard's message - it told the session to clone /gm-assistant, which does not exist here
     if [ -n "$canon" ] && [ "$clone" != "$canon" ]; then
-      echo "BLOCKED: this session's clone is $canon (resolved from its session name); the edit targets $clone. Two sessions must never share a working tree (the 2026-07-22 collision). Work in $canon - if it does not exist: git clone /gm-assistant $canon && cd $canon && git config user.name \"\$(git -C /gm-assistant config user.name)\" && git config user.email \"\$(git -C /gm-assistant config user.email)\" && scripts/sync-with-main.sh sync-in   (CLAUDE.md 'Session clones' - name-routing guard)" >&2
+      echo "BLOCKED: this session's clone is $canon (resolved from its session name); the edit targets $clone. Two sessions must never share a working tree (the 2026-07-22 collision). Work in $canon - if it does not exist: git clone $MAIN $canon && cd $canon && git config user.name \"\$(git -C $MAIN config user.name)\" && git config user.email \"\$(git -C $MAIN config user.email)\" && scripts/sync-with-main.sh sync-in   (CLAUDE.md 'Session clones' - name-routing guard)" >&2
       cs_block name-routing "$clone"   # GUARD_EDIT_OK: feature 168
       exit 2
     fi
@@ -441,8 +450,8 @@ case $MODE in
         canon=$(canonical_clone "$sid" "$(field transcript_path)")
         if [ -z "$canon" ]; then
           echo "clone-sync: this session's name does not resolve (no /rename record in its transcript and no entry for it under $SESSIONS_DIR), so it has NO valid clone name. Read-only work is fine. If you are going to modify this repo, ask the GM to /rename the session NOW - before the recon, not after it."
-        elif [ "$(basename "$canon")" = "gm-assistant" ]; then
-          echo "clone-sync: this session resolves to the FORBIDDEN '.clones/gm-assistant' (unnamed or auto-derived). Read-only work is fine. If you are going to modify this repo, ask the GM to /rename the session NOW - before the recon, not after it."
+        elif forbidden_clone "$canon"; then   # GUARD_EDIT_OK: adding to a guard - the repository's own name too
+          echo "clone-sync: this session resolves to the FORBIDDEN '.clones/$(basename "$canon")' (unnamed, auto-derived, or named after a repository). Read-only work is fine. If you are going to modify this repo, ask the GM to /rename the session NOW - before the recon, not after it."
         fi
       fi
       exit 0

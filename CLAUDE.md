@@ -17,7 +17,8 @@ more, and the prefix cost every pointer. What to read next:
 
 The GM's setting notes that the research cites live in gm-assistant, mounted at
 `/host-l7r-repo/gm-assistant` (`setting/`, `cosmology/`, `campaigns/`; on GitHub at
-<https://github.com/EliAndrewC/gm-assistant/tree/main/setting>). The canonical campaign notes are
+<https://github.com/EliAndrewC/gm-assistant/tree/main/setting>), and in the `l7r` checkout's own
+`/host-l7r-repo/setting/` (`budgets.md`; `make canon` searches both). The canonical campaign notes are
 `/host-l7r-repo/setting/l7r.md`; nothing here edits them, and nothing here runs git against
 `/host-l7r-repo`. The webapp, the content skills and Obsidian Portal are gm-assistant's; a session
 here does none of that.
