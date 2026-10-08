@@ -502,5 +502,6 @@
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#off dry crops and gardens": "50",
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#only water too wide to step across": "50",
  "l7r/diagram/settlement/city/bridges.py::crossing_deck#footplank form where the landing meets rice": "50",
- "l7r/diagram/settlement/core.py::Settlement.__init__#a threshing yard at every farmstead": "50"
+ "l7r/diagram/settlement/core.py::Settlement.__init__#a threshing yard at every farmstead": "50",
+ "l7r/diagram/settlement/farm_fixtures.py::kura_rect#annex held in its band": "50"
 }

@@ -378,6 +378,7 @@
  "l7r/diagram/settlement/civic_grounds/stable_yard.py::StableYardMixin._yard_watering#troughs clustered at the nearest well": "E1",
  "l7r/diagram/settlement/core.py::Settlement.__init__#a threshing yard at every farmstead": "E2",
  "l7r/diagram/settlement/farm_fixtures.py::KURA_PARTS#west annex": "E1",
+ "l7r/diagram/settlement/farm_fixtures.py::kura_rect#annex held in its band": "E2",
  "l7r/diagram/settlement/farm_fixtures.py::kura_rect#annex larger than a kura": "E0",
  "l7r/diagram/settlement/farm_fixtures.py::kura_rect#west annex size": "E1",
  "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_ditches#outfall recorded width": "E1",

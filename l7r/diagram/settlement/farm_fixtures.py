@@ -103,8 +103,8 @@ def kura_rect(w: float, h: float, side: str | None, ppf: float) -> tuple[float, 
     THE DEPTH STAYS A SHARE, AND THE LENGTH GIVES (measured in that pass): held to the band by deepening instead - a long
     house's annex stopping at 27 ft and deepening to 1.8 to one, 27 x 15 ft - it moved every homestead that kept one, and
     the five pool hamlets re-packed with three finished-map checks failing. The length lies within the house's own width,
-    so the bundle's reserved box moves only by the turn of its corner. Where the band cannot be met - a house under about
-    22 ft deep - the 1.8 wins.
+    so the bundle's reserved box moves only by the turn of its corner. Where the share cannot reach the band - a house under
+    about 22 ft deep - the annex takes the band's floor, 18 by 10 ft (feature 328; it was the 1.8 below the band).
 
     THE SIZE IS A DELIBERATE DEVIATION: the record reads the annex as the kura (research/questions/0040-farm-storehouses-kura.html), and the kura read
     were about 15 by 18 ft, Kakimochi's two 12 by 18 - so the band's longer annexes are longer than a kura was. Kept: sizing
@@ -123,6 +123,9 @@ def kura_rect(w: float, h: float, side: str | None, ppf: float) -> tuple[float, 
         return ((fx + fw) * w - out, fy * h, out, length)  # its inner edge stays where the shares put it, lapping the wall
     depth = fh * h
     lo, hi = max(ANNEX_LENGTH_FT[0] * ppf, ANNEX_RATIO[0] * depth), min(ANNEX_LENGTH_FT[1] * ppf, ANNEX_RATIO[1] * depth)
+    if hi < lo:  # a house under about 22 ft deep: the share's depth cannot reach the band, so the annex takes the band's floor
+        floor = ANNEX_LENGTH_FT[0] * ppf  # 18 ft long and 10 deep (feature 328: the band holds, never the 1.8 below it)
+        return (fx * w, fy * h, floor, floor / ANNEX_RATIO[1])
     return (fx * w, fy * h, min(max(fw * w, lo), hi), depth)
 
 

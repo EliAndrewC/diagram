@@ -93,5 +93,5 @@ def test_the_north_annex_is_held_inside_the_edo_sheds_band():
     assert kura_rect(80.0, 40.0, "N", 1.0)[2] == pytest.approx(27.0), "and none runs past 27 ft"
     assert kura_rect(23.0, 14.0, "N", 0.5) == pytest.approx((0.0, -0.675 * 14.0, 0.46 * 23.0, 0.45 * 14.0)), "the band is in feet: a village's 2 ft pixel"
     assert kura_rect(31.0, 14.0, "N", 0.5)[2] == pytest.approx(1.8 * 6.3), "a 62 ft house at 2 ft to the pixel stops at 1.8 to one too"
-    assert kura_rect(40.0, 20.0, "N", 1.0)[2] == pytest.approx(1.8 * 9.0), "under ~22 ft deep the band cannot be met, and 1.8 to one wins"
+    assert kura_rect(40.0, 20.0, "N", 1.0) == pytest.approx((0.0, -0.675 * 20.0, 18.0, 10.0)), "under ~22 ft deep the share cannot reach the band, and the annex takes its floor, 18 x 10 ft (feature 328)"
     assert kura_rect(62.0, 28.0, "W", 1.0) == pytest.approx((-0.37 * 62.0 - 21.0 / 1.5, 0.0, 21.0 / 1.5, 21.0)), "the west annex held to the band: 21 ft along, 14 ft out (feature 328)"
