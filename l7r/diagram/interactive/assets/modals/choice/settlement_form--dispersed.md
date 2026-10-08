@@ -24,7 +24,7 @@ the road out joins the settlement to the world, and the field paths join the far
 is drawn, since each farm has its own grove. A scattered settlement needs about twice the ground per farm that a clustered
 one does, so the map gives it a roomier field rather than squeezing its farms together; that is a rule for fitting the
 drawing, not a measure of how far apart real farms stood. Each farm's water is a channel led off the nearest irrigation
-ditch, or the brook where that is nearer, into its dooryard - taking the nearest is a drawing convention - drawn as wide as a delivery ditch where it leaves its canal (how wide a real one ran is not recorded), or a
+ditch, or the brook where that is nearer, or else off a neighbor's channel, into its dooryard - taking the nearest is a drawing convention - drawn as wide as a delivery ditch where it leaves its canal (how wide a real one ran is not recorded), or a
 well in its dooryard. The channel's way back out to the fields is not drawn.
 
 Name: How the houses stand: scattered, each farm on its own (dispersed)

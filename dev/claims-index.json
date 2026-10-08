@@ -46960,14 +46960,6 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#a conifer-led clump always throws at least one lesser crown (max(1, round(n * LESSER_ROLL_SHARE)))": {
-  "code": "a6c280c694c37362",
-  "core": "a6c280c694c37362",
-  "date": "2026-10-08",
-  "note": "a conifer-led clump always throws at least one lesser crown (max(1, round(n * LESSER_ROLL_SHARE)))",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#alder in the marsh": {
   "code": "880587395e27bc19",
   "core": "a6c280c694c37362",
@@ -47024,15 +47016,16 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#conifer-led clump's lesser share": {
-  "code": "97101d233ceffa65",
+  "code": "07bc14800cc3737c",
   "core": "a6c280c694c37362",
   "date": "2026-10-08",
-  "note": "the page names the lesser broadleaf among the rows but gives no share or spacing; the 0.1 is an honest GUESS",
+  "note": "`n = max(1, round(n * LESSER_ROLL_SHARE))` is exactly the 0.1 share with a floor of one lesser crown that the claim states; 0072's drawing page names lesser broadleaf among the conifer rows but gives no share, and both pages say no page gives a village belt's share (the Kashima 48% is one hamlet's farmhouse groves), so GUESS is the right label; the conifer stays the commonest crown, as the page's guess has it",
   "pages": {},
   "research": "",
   "rests": [
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:49a55637e421e2be",
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:e7f8a345b63cc861"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:6de01da4f44bfe0c",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.html:1884e0c831822752"
   ],
   "verdict": "IN-STEP"
  },
