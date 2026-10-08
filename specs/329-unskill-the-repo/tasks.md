@@ -8,8 +8,9 @@
 
 ## Tasks
 
-- [ ] T01 the baseline: `make done` green before the move, its counts in research.md R6 (FR-010, SC-002)
+- [x] T01 the baseline: `make done` green before the move, its counts in research.md R6 (FR-010, SC-002)
       research: rendering
+      verify: DONE. DONE. make done green before the move (459 s; 10,818 passed, 3 skipped, 2 xfailed; 38 guard suites); counts in research.md R6
 - [ ] T02 the move: `git mv` of every tracked path to the root; the Makefile, `.gitignore` and `CLAUDE.md` merged; `SKILL.md` to `docs/usage.md` (D1, D2, D4, FR-001, FR-002, FR-003)
       research: rendering
 - [ ] T03 one config root: `pyproject.toml` at the root with the fence carried, `ruff.toml` gone; the equal-lists measurement in R3; the seeded-lint and pytest-rootdir tests (D3, FR-002a, SC-007)

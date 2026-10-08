@@ -1,6 +1,6 @@
 {
  "feature": "329-unskill-the-repo",
- "plan_sha256": "caf5cdf8605eaaf39e925fb83bf6d318edd817e59191de210e73e20699cac9c0",
+ "plan_sha256": "318787aa7bb02aef2e936af1f879e5583ee91d35507e60b594cee3e3dcf747f8",
  "reviewed": "2026-10-07",
  "declared": "spec-fidelity",
  "decisions": [
@@ -32,7 +32,7 @@
    "id": "D5-verbatim",
    "summary": "specs/, dev/*-log/, scripts/fixtures/*.json, review-ledger rows left unswept; fixture cases judged by hooks-test",
    "class": "within",
-   "why": "Exactly FR-004's verbatim list; the ledger is no longer exempt as a file at the check (D7), and the sweep leaves only pre-feature rows."
+   "why": "Exactly FR-004's verbatim list; the ledger is now named as 'rows written before this feature (line by line - D7)', matching FR-004's words and D7's mechanism."
   },
   {
    "id": "D5-claims",
@@ -54,15 +54,15 @@
   },
   {
    "id": "D8",
-   "summary": "carry moves old-dir artifacts to the root; colliding caches deleted (reason recorded), other colliding files kept as <name>.pre-329; old directory always removed",
+   "summary": "carry moves old-dir artifacts to the root; colliding caches deleted (reason recorded), other colliding files kept as <name>.pre-329 (numbered if taken); old directory always removed",
    "class": "within",
-   "why": "FR-008 verbatim: carry, or invalidate a cache with the reason recorded, and leave no old directory. Round 1's NOT LEGITIMATE is resolved; nothing non-cache is deleted. A dirty clone is carried when it next syncs in (sync-in merges only clean clones), which is FR-008's trigger."
+   "why": "FR-008 verbatim: carry, or invalidate a cache with the reason recorded, and leave no old directory. The numbered suffix closes round 2's note: no collision can leave the old directory behind, and nothing non-cache is deleted."
   },
   {
    "id": "D9",
-   "summary": "merge.directoryRenames=true in sync_in pull, scratch-clone test",
+   "summary": "merge.directoryRenames=true in the global git config (setup-dev-env.sh, applied once in the running container) and passed by sync_in; the mirror's clone-sync hook runs _layout_carry.sh after a clone's sync-in; scratch-clone test",
    "class": "within",
-   "why": "FR-009."
+   "why": "FR-009 and FR-008. R5 measures why (2026-10-07, scratch repos, git 2.53 ort): default config stops on a file added under the renamed directory; a not-yet-synced clone runs its own pre-move script, so the flag and the carry must reach it from outside that script. A mechanism serving the two FRs, not a narrowing; the global setting's reach beyond this repository is a design note, not a fidelity finding."
   },
   {
    "id": "D10",

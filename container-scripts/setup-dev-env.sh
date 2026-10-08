@@ -210,6 +210,14 @@ elif [ -z "$(git -C "$REPO" config --get user.email || true)" ] && [ -n "$(git -
     echo "    set committer identity from main's tip author (no ~/.claude/gitconfig): $(git -C "$REPO" config user.name) <$(git -C "$REPO" config user.email)>"
 fi
 
+# A FILE ADDED UNDER A RENAMED DIRECTORY FOLLOWS THE RENAME (feature 329, research.md R5). Feature 329 moved the
+# project out of the old skill directory; a clone holding a commit that added a file there merges main with
+# `CONFLICT (file location)` under git's default, and the clone that syncs in runs its OWN, pre-move sync script -
+# so the setting lives where every git in the container reads it, not only in the new script.
+if [ "$(git config --global --get merge.directoryRenames || true)" != true ]; then
+    git config --global merge.directoryRenames true && echo "    set merge.directoryRenames=true (global)"
+fi
+
 echo "==> verifying"
 if check_all; then
     echo
