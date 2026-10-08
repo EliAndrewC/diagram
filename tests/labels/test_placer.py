@@ -132,7 +132,7 @@ def test_the_frame_is_never_left() -> None:
     p = place("notice board", SIZE, BOARD, ObstacleIndex(), frame=(0.0, 0.0, 510.0, 1000.0))
     assert p.position == "left", "above and below run past the frame's edge too"
     squeezed = place("notice board", SIZE, BOARD, ObstacleIndex(), frame=(495.0, 495.0, 505.0, 505.0))
-    assert squeezed.position == "above" and squeezed.lines, "no seat fits the frame at all: the first seat beside it, never left off"
+    assert squeezed.position == "above" and squeezed.lines, "a frame too small for the caption at all: the first seat beside it, centered on the frame (`moved_inward`) - never left off"
 
 
 def test_a_caption_wraps_at_a_seat_before_moving_off_it() -> None:

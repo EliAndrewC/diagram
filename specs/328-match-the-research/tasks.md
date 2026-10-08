@@ -1589,7 +1589,7 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
 
 - `track.py::stage_track#lane clearance` (row 502, E2): `houses._on_a_tread` holds every corner `LANE_MIDDLE_CLEAR_FT` (7 ft)
   off a lane's middle at least (0246), and `LANE_CLEARANCE` is 0246's 7 ft (it was 40, the 7 carried to a center);
-  `test_every_corner_stands_seven_ft_off_a_narrow_lanes_middle` (red on the old code). Rows 706, 736, 738 and 754 (the corridor claims
+  `test_every_corner_stands_seven_ft_off_a_narrow_lanes_middle` (red on the old code). Rows 706, 736 and 738 and the skeleton arm's corridor (the corridor claims
   of `LANE_CLEARANCE`, the field path, the stepped spur and the skeleton arm) waited on it and close with it.
 - `web.py::_lay_skeleton#skeleton margin off the hard ground` (row 505, E2): the crop clipped at the arm's tread's edge
   (`SKELETON_ARM_WIDTH / 2`), the wet ground and the ditches at 20 ft
@@ -1610,7 +1610,7 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
   or castle; `audit/scope.py` `DEFERRED_ON_MEASURE`).
 - `labels/placer.py::place#never left off` (row 508, E2): the key removed whole - the exception check (spec-fidelity MODE 1,
   2026-10-08) ruled keeping it for an all-hard caption NOT LEGITIMATE. A caption with no free seat goes down where it covers
-  the least; with no seat in the frame, the first seat beside it past the frame's edge. Tests restated: the never-dropped,
+  the least; with no seat in the frame, the first seat beside it moved inward until it fits. Tests restated: the never-dropped,
   soft-before-hard and frame tests (`test_placer.py`), the fallbacks (`test_placer_287.py`), the dark-ink hand sheet, the
   caption (`test_captions.py`), the board's verge, flood and facing cases (`test_board_seat.py`, `test_fixtures.py`).
 - `overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#notice board at the roadside` (row 511, E2): the `{kosatsuba, lanes}` permission
