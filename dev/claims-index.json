@@ -17811,33 +17811,48 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/joints.py::_one_joint#a pull at a joint is refused if it leaves more kinks than the two lanes had (kink_spans)": {
-  "code": "aa7fdcfd5c21dfd9",
+ "l7r/diagram/hamletgen/ways/joints.py::_one_joint#a pulled lane's clearance": {
+  "code": "37e421feba939fc8",
   "core": "aa7fdcfd5c21dfd9",
   "date": "2026-10-08",
-  "note": "a pull at a joint is refused if it leaves more kinks than the two lanes had (kink_spans)",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "l7r/diagram/hamletgen/ways/joints.py::_one_joint#the clearance a straightened lane keeps from buildings and walls where it touches them: half its width plus 2 ft, at least _TOUCH_GAP=4 ft, with a 5 ft width assumed when none is set": {
-  "code": "aa7fdcfd5c21dfd9",
-  "core": "aa7fdcfd5c21dfd9",
-  "date": "2026-10-08",
-  "note": "the clearance a straightened lane keeps from buildings and walls where it touches them: half its width plus 2 ft, at least _TOUCH_GAP=4 ft, with a 5 ft width assumed when none is set",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "l7r/diagram/hamletgen/ways/joints.py::_one_joint#the shorter link the T's stem": {
-  "code": "9ececcc4b10d96f4",
-  "core": "aa7fdcfd5c21dfd9",
-  "date": "2026-10-08",
-  "note": "which arriving lane becomes the stem decides where a path runs, not how it is shown, and the page is silent on it, so the label should be GUESS research/questions/0081-village-lanes.drawing.html",
+  "note": "the page sets no clearance figure and calls every distance in its lane bullets a drawing convention; the 5 ft default width matches the spine's 5 ft",
   "pages": {},
   "research": "",
   "rests": [
-   "0081-village-lanes.drawing.html:3b230d13e2fc6d0b"
+   "0081-village-lanes.drawing.html:18dffe2b3b52b18c",
+   "0081-village-lanes.drawing.html:65ad16eace199d92",
+   "0081-village-lanes.drawing.html:91a5765af6230403"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/joints.py::_one_joint#no new kink from a pull": {
+  "code": "79de1e29803876b8",
+  "core": "aa7fdcfd5c21dfd9",
+  "date": "2026-10-08",
+  "note": "a pull that adds kink spans is refused, which agrees with the no-zigzag and no-doubling-back rules",
+  "pages": {
+   "0081-village-lanes.drawing.html": "9e27759395199abd"
+  },
+  "research": "ebd72aaa6a0eb9af",
+  "rests": [
+   "0081-village-lanes.drawing.html:3b9a5312c92335d3",
+   "0081-village-lanes.drawing.html:be608a70af4cfcc5",
+   "0081-village-lanes.drawing.html:d30e15716180fbf5"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/joints.py::_one_joint#the shorter link the T's stem": {
+  "code": "8e48131d5f1261c8",
+  "core": "aa7fdcfd5c21dfd9",
+  "date": "2026-10-08",
+  "note": "the page makes the fold a T but does not say which lane is the stem, and picking the shorter link agrees with the shortest-way finding",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
+   "0081-village-lanes.drawing.html:be608a70af4cfcc5"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/joints.py::_one_joint#ways of two kinds stay two": {
   "code": "066fd2cba7aebf5b",

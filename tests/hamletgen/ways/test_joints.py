@@ -38,6 +38,19 @@ def test_a_cart_route_and_a_footpath_meeting_end_to_end_are_pulled_straight_and_
     assert all(p[1] == 500.0 for ln in s.M["lanes"] for p in ln["pts"]), "the jog pulled straight"
 
 
+@pytest.mark.parametrize("fenced", [False, True])
+def test_a_pull_may_touch_a_building_but_never_a_fence(fenced: bool) -> None:
+    """0081 (feature 328): a straightened lane "may come right up to the buildings" within 6 ft of the old line; a garden fence
+    5 ft off the straightened line keeps the usual clearance, so beside a garden the jog is kept."""
+    s = _webbed([{"pts": [[100.0, 300.0], [300.0, 300.0]], "w": 3}, {"pts": [[300.0, 300.0], [310.0, 303.0], [500.0, 300.0]], "w": 3}])
+    block = [(280.0, 285.0), (320.0, 285.0), (320.0, 295.0), (280.0, 295.0)]  # 5 ft off the straight line, 8 ft off the old
+    if fenced:
+        s.M.setdefault("gardens", []).append({"poly": [list(p) for p in block], "of": [300.0, 250.0]})
+    assert straighten_joints(s, [], [block], []) == 1
+    straight = all(p[1] == 300.0 for ln in s.M["lanes"] for p in ln["pts"])
+    assert straight is not fenced, "pulled taut past a building; past a fence the jog stays clear of it"
+
+
 def test_a_joint_with_nothing_to_straighten_is_left_alone() -> None:
     s = _webbed([{"pts": [[100.0, 700.0], [300.0, 700.0]], "w": 3}, {"pts": [[300.0, 700.0], [300.0, 900.0]], "w": 3}])
     wall = [[(190.0, 790.0), (210.0, 790.0), (210.0, 810.0), (190.0, 810.0)]]  # across the corner's chord

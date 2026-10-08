@@ -13,7 +13,7 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 - (wave 5, landed and reviewed) placement-changed village lane on kashikawa - wave 5: 0033's row street runs on off the map as the road into it at both ends, where
   the web cut it back to its last joint (`trim_streets`); Kashikawa's and Mizuguchi's far ends now run off the sheet as a
   second way out (every way is inked `village lane`).
-- none (wave 38): claims only, no executed code changed
+- none (wave 38): the fence clearance in `_one_joint` moved no lane - the five pool hamlets regenerated with manifests identical (measured 2026-10-08)
 - none (wave 37): the Z pulled straight changes no pool map; the salt-ward clauses are doc text
 - none (wave 36): claims only, no executed code changed
 - none (wave 35): claims only, no executed code changed
@@ -1237,11 +1237,15 @@ a fold becomes a T, a Z is pulled like any jog, and the joint is moved back a ve
 ## Phase 39 - wave 38 (amendment 37): wave 37's found rows
 
 Wave 37's five found rows tiered by a fresh reader (T101a, `audit/t101a-out.jsonl`): four E0 (one a duplicate) claimed in
-`_one_joint`, and one E3 (the yakuimon's 6-8.5 ft frontage drawn as its passage - the doc, the engine's 8 ft and the hand
+`_one_joint` - two of them, the pulled lane's clearance and its duplicate, re-tiered E2 by spec-fidelity (round 1: the touch
+took in every fence, 0081 allows buildings only) and fixed: a pull keeps the usual 7 ft from a garden or dooryard - and one E3 (the yakuimon's 6-8.5 ft frontage drawn as its passage - the doc, the engine's 8 ft and the hand
 sheets together), left for its place in the run.
 
   - `l7r/diagram/hamletgen/ways/joints.py::_one_joint#the shorter link the T's stem` - GUESS, with what was searched (it was CONVENTION)
-  - `l7r/diagram/hamletgen/ways/joints.py::_one_joint#how close a pulled lane may come to a building ...` (and its duplicate) - CONVENTION
+  - `l7r/diagram/hamletgen/ways/joints.py::_one_joint#how close a pulled lane may come to a building ...` (and its duplicate) - E2,
+    fixed: `straighten_joints` hands `_one_joint` the fenced plots (threshing yards, gardens) and a pull keeps `_clear_touch`'s
+    7 ft from them; the touch at max(4 ft, half the width + 2) is the buildings' alone
+    (`test_a_pull_may_touch_a_building_but_never_a_fence`, red without the rule)
   - `l7r/diagram/hamletgen/ways/joints.py::_one_joint#a pull at a joint is refused if it leaves more kinks ...` - 0081 drawing
 
 - [x] T101a wave 37's found rows tiered by the work they take, by a fresh reader (FR-002, FR-003, SC-003)

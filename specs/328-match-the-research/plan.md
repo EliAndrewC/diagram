@@ -458,11 +458,13 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 
 - **Scope**: wave 37's found rows tiered by a fresh reader (T101a): three claim lines in `_one_joint` (the T's stem GUESS, a
   pulled lane's clearance CONVENTION, no new kink on 0081's drawing page) (`tasks.md` Phase 39); the gate passage width
-  tiered E3 and left for its place. No executed code changes.
+  tiered E3 and left for its place. Round 1 re-tiered the pulled lane's clearance E2 (the touch took in every fence; 0081:
+  "may come right up to the buildings"): fixed in `joints.py`, a pull keeps the usual 7 ft from a garden or dooryard.
 - **Occasions**: none.
 - **On the unpushed waves 9-37** under condition (6): (1) held but for the backup push, withheld pending the GM's call on the
-  329 merge commit; (2)-(5) held at wave 37's close (989dbd862); wave 38 changes no executed code, so it owes no pair.
-- **Verification**: `impl-drift` on the touched claims, the gate.
+  329 merge commit; (2)-(5) held at wave 37's close (989dbd862); wave 38's fence clearance is executed code, so it owes the pair.
+- **Verification**: `impl-drift` on the touched claims, the gate, the timing pair, a glyph check of the village lane where
+  the fix moved one (or the cap's recorded reason).
 
 ## Performance bookends (constitution VI)
 

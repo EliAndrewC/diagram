@@ -197,7 +197,7 @@
   ],
   "fix": "the RULE is wrong, not only the claim: make the yakuimon's ~6-8.5 ft the gate's FRONTAGE (post outside to post outside, as 0093's drawing page draws it: 'about 6 to 8.5 ft wide, the frontage the three registered examples measure'), the passage that frontage less the two posts; the nagaya-mon's ~12 ft stays a passage ('opens in its central two ken'). Change the docs/buildings.md Scale claim (line 15) and Main gate paragraph (line 126), compound.py's 8 ft yakuimon passage (line 670) and every hand sheet whose yakuimon posts stand outside a 6-8.5 ft opening; recheck main_gate_passage_ft's readers",
   "flag": "",
-  "moved": "T101a (fresh reader): research/questions/0093-...html:12 measures the yakuimon 'across their frontage' (1.8-2.6 m) and gives no passage; 0093 drawing.html:8 draws the gate 6-8.5 ft wide as that frontage; docs/buildings.md:126 instead sets the passage BETWEEN the posts to 6-8.5 ft, posts drawn on the wall's cut ends outsi",
+  "moved": "T101a (fresh reader): research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:12 measures the yakuimon 'across their frontage' (1.8-2.6 m) and gives no passage; 0093 drawing.html:8 draws the gate 6-8.5 ft wide as that frontage; docs/buildings.md:126 instead sets the passage BETWEEN the posts to 6-8.5 ft, posts drawn on the wall's cut ends outsi",
   "tier": "E3"
  },
  "docs/buildings.md::Scale#salt-ward marker r25 17 ft for a morijio heap 03-07 ft": {
@@ -1097,14 +1097,13 @@
  },
  "l7r/diagram/hamletgen/ways/joints.py::_one_joint#how close a pulled lane may come to a building gap  maxtouch": {
   "after": [],
-  "e0_basis": "joints.py:312 gap = max(_TOUCH_GAP, (w or 5.0)/2 + 2.0), used by _clear_touch at joints.py:317; 0081 drawing page: 'runs straight ... wherever it can keep its usual clearance from fences and buildings. It may come right up to the buildings when the straightened line stays within 6 ft' and 'Every turn limit and distance in these bullets is chosen ... not measured'; 0246 drawing page gives only the ",
   "files": [
    "l7r/diagram/hamletgen/ways/joints.py"
   ],
-  "fix": "        a pulled lane's clearance - CONVENTION: where a straightened lane touches a building or wall it keeps max(_TOUCH_GAP 4 ft, half its width + 2 ft), a 5 ft width assumed when none is set; research/questions/0081-village-lanes.drawing.html lets it come right up to the buildings within 6 ft of the old line and calls every distance in its lane bullets a drawing convention, but gives no clearance figure",
+  "fix": "0081: the touch is the buildings' - a straightened lane keeps the usual 7 ft (WEB_FABRIC_GAP) from a garden or dooryard fence",
   "flag": "",
-  "moved": "T101a (fresh reader): joints.py:312 gap = max(_TOUCH_GAP, (w or 5.0)/2 + 2.0), used by _clear_touch at joints.py:317; 0081 drawing page: 'runs straight ... wherever it can keep its usual clearance from fences and buildings. It may come right up to the buildings when the straightened line stays within 6 ft' and 'Every tur",
-  "tier": "E0"
+  "moved": "T101a (fresh reader): joints.py:312 gap = max(_TOUCH_GAP, (w or 5.0)/2 + 2.0), used by _clear_touch at joints.py:317; 0081 drawing page: 'runs straight ... wherever it can keep its usual clearance from fences and buildings. It may come right up to the buildings when the straightened line stays within 6 ft' and 'Every tur | re-tiered E2 by spec-fidelity amendment 37 round 1: the touch covered every fence, the page allows buildings only",
+  "tier": "E2"
  },
  "l7r/diagram/hamletgen/ways/joints.py::_one_joint#the arriving lane with the shorter clear link becomes the t'": {
   "after": [],
@@ -1119,14 +1118,13 @@
  },
  "l7r/diagram/hamletgen/ways/joints.py::_one_joint#the clearance a straightened lane keeps from buildings and w": {
   "after": [],
-  "e0_basis": "same decision as the gap row: joints.py:312, the same max(_TOUCH_GAP, w/2 + 2 ft) with the 5 ft default",
   "files": [
    "l7r/diagram/hamletgen/ways/joints.py"
   ],
-  "fix": "(the same claim line as its duplicate)",
+  "fix": "0081: the touch is the buildings' - a straightened lane keeps the usual 7 ft (WEB_FABRIC_GAP) from a garden or dooryard fence",
   "flag": "",
-  "moved": "T101a (fresh reader): same decision as the gap row: joints.py:312, the same max(_TOUCH_GAP, w/2 + 2 ft) with the 5 ft default - duplicate of l7r/diagram/hamletgen/ways/joints.py::_one_joint#how close a pulled lane may come to a building gap  maxtouch",
-  "tier": "E0"
+  "moved": "T101a (fresh reader): same decision as the gap row: joints.py:312, the same max(_TOUCH_GAP, w/2 + 2 ft) with the 5 ft default - duplicate of l7r/diagram/hamletgen/ways/joints.py::_one_joint#how close a pulled lane may come to a building gap  maxtouch | re-tiered E2 by spec-fidelity amendment 37 round 1: the touch covered every fence, the page allows buildings only",
+  "tier": "E2"
  },
  "l7r/diagram/hamletgen/ways/joints.py::_one_joint#the shorter link the T's stem": {
   "after": [],

@@ -1,53 +1,47 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "5a1e54fa62cc7f26ac1e75b253c9cbf4a99aca08211ee4025c7c51ae994e72a4",
+ "plan_sha256": "cbadce5bb87f4d570710b0bd463a9fc86acb4ec22fc5db3188b8c3ee4951a053",
  "reviewed": "2026-10-08",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W37-scope",
-   "summary": "Wave 37 takes rows 436 and 473, the next open in-scope E2 rows in ranking order",
+   "id": "W38-stem",
+   "summary": "the T's stem row E0: the claim relabeled CONVENTION -> GUESS with what was searched (0081, 0246 drawing pages)",
    "class": "within",
-   "why": "FR-006 contiguous run; the open in-scope E2 rows after wave 36 are 436, 461 (held), 473, then 474 onward"
+   "why": "impl-drift's own fix offered 'cite 0081 (a worn path takes the shortest way) or say GUESS'; 0081 makes the fold a T but names no stem; the line says what was searched and quotes the nearest sentence. Claim-only, the code already does what the claim states."
   },
   {
-   "id": "W37-held",
-   "summary": "Rows 434 and 461 (the shrine cap) held for the GM",
+   "id": "W38-kink",
+   "summary": "the no-new-kink row E0: claim cites 0081's zigzag and doubling-back bullets",
+   "class": "within",
+   "why": "joints.py refuses len(kink_spans(new)) > len(kink_spans(old)); kink_spans is the 0081 140-degree hairpin and two-50-degree-turns-in-40-ft zigzag rules; the page says a lane does not zigzag and never doubles back. The page already says what the code does."
+  },
+  {
+   "id": "W38-clearance",
+   "summary": "the pulled lane's clearance row E0, claim labeled CONVENTION citing 0081 'may come right up to the buildings'",
    "class": "narrowing",
-   "ruling": "LEGITIMATE",
-   "why": "the GM's goal amendment defers questions to the feature's end; 461 was ruled LEGITIMATE to leave open on 2026-10-07 and 434 is its pair; the run continues past them"
+   "ruling": "NOT LEGITIMATE",
+   "why": "0081: a pulled lane 'runs straight ... wherever it can keep its usual clearance from fences and buildings. It may come right up to the buildings when the straightened line stays within 6 ft' - the exception is for BUILDINGS; fences keep the usual clearance. The code's touch test (_clear_touch with gap max(4, w/2+2)) applies to every wall and hard polygon: walls = the whole homestead fabric (houses, threshing_yards, gardens, web.py:627, fabric.py:161-171) and hard_built includes _solid, so a pulled lane may come 4-4.5 ft from a garden fence where _clear_link's usual is 7 ft (0246's figure). The page does not say what the code does, so FR-003's E0 does not hold; a claim reading 'building or wall' beside a page that licenses buildings only is not an honest label. Leaving it E0 leaves an implementation departure unfixed - less than asked. Re-tier (E2: the touch exception limited to buildings, fences/yards keeping the usual clearance), or take FR-004's exception path if measurement shows it cannot."
   },
   {
-   "id": "W37-436",
-   "summary": "The Scale paragraph's salt-ward marker clause and the true-size list's mention removed; Hayakawa's notes line brought to its sheet",
-   "class": "within",
-   "why": "the clause sized a glyph no sheet draws since 2026-09-28; the doc now matches the implementation and 0240's no-wards rule (FR-004)"
-  },
-  {
-   "id": "W37-473",
-   "summary": "Only a fold at a joint becomes a T; a Z across a joint is pulled straight like any jog; the joint moved back a vertex where the pull cannot clear it",
-   "class": "within",
-   "why": "0081's drawing page: a fold becomes a T and a jog across the meeting point is pulled straight; the moved-back fallback is feature 308's mend kept for the case the research's own method cannot carry, serving the GM's 2026-09-26 walk rule"
-  },
-  {
-   "id": "W37-occasions",
-   "summary": "No review occasions: no pool map changes",
-   "class": "within",
-   "why": "feature 294 occasions are opened by a changed map; the five hamlets regenerate unchanged"
-  },
-  {
-   "id": "W37-cond6",
-   "summary": "Condition (6) on unpushed waves 9-36: (1) held but for the backup push pending the GM's call on the 329 merge commit; (2)-(5) held at 49824361c; wave 37's pair opens there",
+   "id": "W38-clearance-dup",
+   "summary": "the duplicate clearance row E0, '(the same claim line as its duplicate)'",
    "class": "narrowing",
-   "ruling": "LEGITIMATE",
-   "why": "the same narrowing ruled LEGITIMATE at amendments 34 and 35; 49824361c is wave 36's close in the log"
+   "ruling": "NOT LEGITIMATE",
+   "why": "Same unit and same code as W38-clearance; its tier and fix follow that row and fall with it."
   },
   {
-   "id": "W37-verify",
-   "summary": "impl-drift on the touched claims, the gate, wave 37's own bookend pair",
+   "id": "W38-gate",
+   "summary": "docs/buildings.md main gate passage width tiered E3 and left for its place in the run",
    "class": "within",
-   "why": "FR-005 and constitution VI as written"
+   "why": "0093 measures the yakuimon 'across their frontage' (1.8-2.6 m) and its drawing page draws 6-8.5 ft as 'the frontage'; docs/buildings.md:126 makes 6-8.5 ft the passage BETWEEN posts drawn outside it, as does compound.py:670's 8 ft passage. The fix crosses the procedure, the engine and hand sheets - FR-003's E3 ('a change across modules, or a hand-drawn sheet redrawn'). Ranked (scope mode-a, wave open), so FR-006's easiest-first order takes it later; not dropped."
+  },
+  {
+   "id": "W38-occasions",
+   "summary": "occasions none, no bookend pair: claim lines only, no executed code changed",
+   "class": "within",
+   "why": "The joints.py change is the _one_joint docstring's Research block only; no executed line moves, so no map changes and no review occasion or perf pair is owed."
   }
  ],
- "verdict": "CLEAR"
+ "verdict": "BLOCKED"
 }
