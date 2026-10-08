@@ -13,6 +13,7 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 - (wave 5, landed and reviewed) placement-changed village lane on kashikawa - wave 5: 0033's row street runs on off the map as the road into it at both ends, where
   the web cut it back to its last joint (`trim_streets`); Kashikawa's and Mizuguchi's far ends now run off the sheet as a
   second way out (every way is inked `village lane`).
+- none (wave 26): the drain's corridor dropped on a hamlet; the five pool hamlets unchanged
 - none (wave 25): claims and one code comment, no executed code changed
 - none (wave 24): the rank step reaches no pool map; Kuwabata's two sties move 3.8 and 1.7 ft along their own bank (measured 2026-10-08, kuwabata.json 397c005fb vs HEAD)
 - none (wave 23): claims only, no executed code changed
@@ -999,3 +1000,17 @@ closed in wave 24, and the lane's room and the rank jitter stand as claimed (the
 - [x] T76 the claims re-checked by `impl-drift`; the close: wave 25's own bookend pair, `make done` green, the wave column (FR-005, FR-006)
       research: rendering
       verify: DONE. impl-drift IN-STEP on all five (the sty inset re-asked with the inset's value and units); amendment 24 FAITHFUL, plan CLEAR; make done green; wave 25's own pair band 0; the wave column
+
+## Phase 27 - wave 26 (amendment 25): no town's corridor along a hamlet's drain
+
+The next open in-scope row (row 434, the shrine cap, held for the GM). 0058's drawing page sets the 33 ft no-build strip along a
+channel for town and city maps, which draw no marsh below their fields; on a hamlet the drain's rule is the marsh and the wet
+ground below it, which the hamlet keeps already (`cluster.below_drain`, wave 15). The brook rows after it (bend, downhill,
+dip allowance) are the next wave.
+
+  - `l7r/diagram/hamletgen/sink.py::drain_run#no-build corridor` - the corridor no longer registered on a hamlet's drain
+
+- [ ] T77 the hamlet's drain registers no corridor; the five hamlets regenerated (FR-004, FR-005)
+      research: rendering
+- [ ] T78 the claims re-checked by `impl-drift`; the close: wave 26's own bookend pair, `make done` green, the wave column (FR-005, FR-006)
+      research: rendering

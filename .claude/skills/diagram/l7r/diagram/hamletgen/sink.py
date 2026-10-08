@@ -111,13 +111,12 @@ def drain_run(s: Settlement, pts: Poly, to: str) -> None:
     Research:
         a drain is a dug ditch - research/questions/0060-field-drains-akusuiro.html, research/questions/0060-field-drains-akusuiro.drawing.html: the drainage-ditch class whichever way it runs
         drain width - research/questions/0060-field-drains-akusuiro.drawing.html: the collector's own outfall width
-        no-build corridor - research/questions/0058-ground-too-wet-to-build-on.drawing.html: 33 ft each side of the centerline"""
+        no no-build corridor on a hamlet - research/questions/0058-ground-too-wet-to-build-on.drawing.html: the 33 ft strip is the town and city maps' rule; on a hamlet the drain's rule is the marsh and the wet ground below it"""
     outfall_w = chan_px(DRAIN_FT[1], GRAIN)
     rec = drain_record(pts, to)
     refuse_unadmitted(s.M, "channels", rec)  # its route was chosen among those the registry admits (`drain_admitted`)
     s.field_channel(pts, DRAIN_HUE, outfall_w, outfall_w, cls=DRAINAGE_DITCH)
-    s.M["channels"].append(rec)
-    s.corridors.append((list(pts), 33.0))
+    s.M["channels"].append(rec)  # no 33 ft no-build corridor: that is a town's or city's rule (0058); a hamlet keeps its houses off the marsh and off the ground below a drain
 
 
 def drain_record(pts: Sequence[Pt], to: str) -> dict[str, Any]:

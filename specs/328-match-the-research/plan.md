@@ -326,6 +326,15 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
   band 1 confirmed with a control); wave 25's own pair opens at 5947e79ae.
 - **Verification**: `impl-drift` on the touched claims, the gate, wave 25's own bookend pair.
 
+## Wave 26 (amendment 25, 2026-10-08)
+
+- **Scope**: row 447 (`tasks.md` Phase 27): a hamlet's drain registers no 33 ft no-build corridor, the town and city maps'
+  rule (0058); the hamlet keeps its houses off the marsh and the ground below a drain as before. Row 434 held for the GM.
+- **Occasions**: none - the five pool hamlets are unchanged.
+- **On the unpushed waves 9-25** under condition (6): (1)-(5) held at wave 25's close (8e6e380ad, backed up, its own pair
+  band 0); wave 26's own pair opens at 8e6e380ad.
+- **Verification**: `impl-drift` on the touched claim, the gate, wave 26's own bookend pair.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Each later wave that changes engine behavior takes
