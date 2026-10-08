@@ -306,6 +306,16 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
   pair band 1 confirmed with a control); wave 23's own pair opens at 049e951d4.
 - **Verification**: `impl-drift` on the touched claims, the gate, wave 23's own bookend pair.
 
+## Wave 24 (amendment 23, 2026-10-08)
+
+- **Scope**: rows 436-438 in ranked order (434 held for the GM) and wave 23's one found row, tiered first (`tasks.md`
+  Phase 25). The rank step owes the yard's sun whichever way the ranks run (0038: no farmhouse within 39 ft south of a
+  yard); the sty takes the bank seat nearest the houses (0025), the midpoints no longer ranked ahead.
+- **Occasions**: none - the rank search is reached by no pool map; Kuwabata's sties move a few feet along their own bank.
+- **On the unpushed waves 9-23** under condition (6): (1)-(5) held at wave 23's close (397c005fb, backed up, its own pair
+  band 1 confirmed); wave 24's own pair opens at 397c005fb.
+- **Verification**: `impl-drift` on the touched claims, the gate, wave 24's own bookend pair.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Each later wave that changes engine behavior takes

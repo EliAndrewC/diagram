@@ -13,6 +13,7 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 - (wave 5, landed and reviewed) placement-changed village lane on kashikawa - wave 5: 0033's row street runs on off the map as the road into it at both ends, where
   the web cut it back to its last joint (`trim_streets`); Kashikawa's and Mizuguchi's far ends now run off the sheet as a
   second way out (every way is inked `village lane`).
+- none (wave 24): the rank step reaches no pool map; Kuwabata's two sties move 3-4 ft along the bank they stood on
 - none (wave 23): claims only, no executed code changed
 - placement-changed: farm holding on kashikawa - wave 22: the far-row holding three LOTS deep (0033 drawing: three times the frame's
   width), not three frame depths; Kashikawa's holdings run deeper (47 dry plots to 67), its houses unmoved.
@@ -953,3 +954,20 @@ first half, on the page, stays; the UNRESEARCHED line is removed until its resea
 - [x] T72 the claims re-checked by `impl-drift`; the close: wave 23's own bookend pair, `make done` green, the wave column (FR-005, FR-006)
       research: rendering
       verify: DONE. impl-drift: 9 + 5 triaged claims IN-STEP; amendment 22 FAITHFUL (round 3), plan CLEAR; make done green; wave 23's own pair band 1, identical bytecode (perf-audit consistent); the wave column
+
+## Phase 25 - wave 24 (amendment 23): the yard's sun between ranks, the bank's nearest seat
+
+The next open in-scope rows in ranked order (row 434, the shrine cap, held for the GM): wave 23's one found row (tiered first),
+the rank step and its citation, and the sty's bank seat.
+
+  - `l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#a yard's sun between ranks` - `SUN_CORRIDOR_FT` by the step's north-south share whichever way the ranks run (0038 drawing)
+  - `l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#the step between ranks` - 0038 drawing cited, now true both ways
+  - `l7r/diagram/hamletgen/pondstock.py::_bank_seats#edge midpoints first` - every bank seat ranked together nearest the houses (0025 drawing); the UNRESEARCHED clause retired
+  - `l7r/diagram/hamletgen/homesteads/rows.py::draw_holdings#a holding plot that touches a lane or stream` - E0 (T73a): claimed CONVENTION, as `cell on a lane or stream left undrawn`
+
+- [x] T73a wave 23's found row tiered by the work it takes, by a fresh reader (FR-002, FR-003, SC-003)
+      research: rendering
+- [ ] T73 the rank step both ways, the bank's seats in one ranking, the found row as tiered; the five hamlets regenerated (FR-004, FR-005)
+      research: rendering
+- [ ] T74 the claims re-checked by `impl-drift`; the close: wave 24's own bookend pair, `make done` green, the wave column (FR-005, FR-006)
+      research: rendering

@@ -382,7 +382,7 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
         rank depth jitter - UNRESEARCHED: a rank seat moved up to half of `RANK_DEPTH_JITTER` of a pitch nearer or farther, in the rounds before the rescue, on an alleys hamlet only
         a rank grown along the field - UNRESEARCHED: once a round seats no one behind, the rank grows along the field - its ends a pitch out, half-seats half a pitch out along it at the rank's depth
         the rescue's offer along the field - UNRESEARCHED: in the rescue rounds the seats along the field are offered first - a pitch beyond each end house, half-seats half a pitch out at that house's own depth and a `_rank_step` more
-        a yard's sun between ranks - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: `SUN_CORRIDOR_FT` more where the ranks climb north
+        a yard's sun between ranks - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: `SUN_CORRIDOR_FT` more by the step's north-south share, whichever way the ranks run, so no rank stands in the sun south of another rank's yards
         front-row standoff from the field set by the homestead core's reach (house, yard, shed, well pocket; garden excluded) - UNRESEARCHED: the front seat stands the core's reach toward the field off its chord, at the largest house the roll can take; the garden's side is chosen later by the sun, so it is not counted
     """
     seat = plan.seat
@@ -765,11 +765,12 @@ def _seat_households(s: Settlement, plan: SitePlan) -> tuple[int, int]:
     # both neighbors' clearance and the tread between them) - four pixels was the first figure and it left the pool's
     # ranks abutting at a median 4 px, which no alley can thread: the web then could not reach the interior and
     # cohort seed 39 stranded a farmhouse the re-roll could not save. A rank is separated from the rank in front by
-    # the lane that serves it. And, where the ranks climb NORTH away from the
-    # field, the sun corridor a yard owes to its south (`SUN_CORRIDOR_FT`): the rank in front stands exactly there,
+    # the lane that serves it. And, wherever the ranks step north or south (feature 328: north only, before - but a rank
+    # stepping south stands in the sun of the rank behind it just as one stepping north does), the sun corridor a yard
+    # owes to its south (`SUN_CORRIDOR_FT`): the rank in front stands exactly there,
     # and at the bare depth every seat behind it was clear of the ground and refused by the parts' rules (cohort
     # seed 8, the paddy to the south: the "clear" seats of every rank round failed, 9 of 11 seated)
-    _rank_step = abs(ox) * _env[2] + abs(oy) * _env[3] + s.px(MIN_WEB_GAP) + max(0.0, -oy) * s.px(SUN_CORRIDOR_FT)
+    _rank_step = abs(ox) * _env[2] + abs(oy) * _env[3] + s.px(MIN_WEB_GAP) + abs(oy) * s.px(SUN_CORRIDOR_FT)
     for attempt in range(7):
         if placed >= plan.spec.households or _rows_seated or _grown:  # NEVER IN RANKS BEHIND A ROW (FR-016): a farm its streets could not hold is reported unseated
             break

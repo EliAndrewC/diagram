@@ -51,8 +51,7 @@ def _bank_seats(parcel: list[Any], toward: Pt) -> list[tuple[Pt, float]]:
     see `stage_pond_stock`. This function ranks; it does not decide what is acceptable.
 
     Research:
-        bank seats by distance - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html: ranked nearest the houses
-        edge midpoints first - UNRESEARCHED: every midpoint before the bank's eighths, which can pass a nearer free seat
+        bank seats by distance - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html: ranked nearest the houses, every seat of the bank - its midpoints and its eighths - in one ranking
     """
     cx, cy = _centroid(parcel)
     n = len(parcel)
@@ -70,10 +69,10 @@ def _bank_seats(parcel: list[Any], toward: Pt) -> list[tuple[Pt, float]]:
         seats.sort(key=lambda s: math.dist(s[0], toward))
         return seats
 
-    # ...THE MIDPOINTS FIRST, THEN THE REST OF EACH BANK (feature 287, water W50): a sty whose every edge midpoint was taken
-    # by a sluice or another shed lost its pond, and a hamlet whose ponds all did so drew none. The rest of each bank, in
-    # eighths, comes after every midpoint, so a pond whose midpoint fits takes the seat it always took.
-    return ranked((0.5,)) + ranked((0.125, 0.25, 0.375, 0.625, 0.75, 0.875))
+    # ...EVERY SEAT OF THE BANK, IN ONE RANKING (feature 287, water W50: a sty whose every edge midpoint was taken by a
+    # sluice or another shed lost its pond, so the bank's eighths are seats too; feature 328: the midpoints no longer rank
+    # ahead of a nearer eighth - the sty takes the seat nearest the houses that has room, 0025)
+    return ranked((0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875))
 
 
 def sty_on_near_half(seat: Pt, parcel: list[Any], hc: Pt, margin: float = 0.0) -> bool:
