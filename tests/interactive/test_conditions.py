@@ -59,4 +59,7 @@ def test_the_windbreak_s_shared_wood_guess_and_its_question_show_only_on_a_clust
     clustered = [q for q in near["questions"] if "clustered-and-scattered-villages" in q["url"]]
     assert clustered and not any("clustered-and-scattered-villages" in q["url"] for q in apart["questions"])
     assert near["about"] == apart["about"] and near["depiction"] == apart["depiction"], "only the conditioned items differ"
-    assert len(apart["questions"]) == len(near["questions"]) - 1
+    # two questions are the clustered map's alone: 0031's, and 0033's row village (feature 328 wave 39: a street village's farms
+    # each kept a grove, the guess's evidence)
+    assert any("row-villages" in q["url"] for q in near["questions"]) and not any("row-villages" in q["url"] for q in apart["questions"])
+    assert len(apart["questions"]) == len(near["questions"]) - 2

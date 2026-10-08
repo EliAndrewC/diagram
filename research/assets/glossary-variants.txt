@@ -364,7 +364,6 @@ cascades	cascade
 case-hill	case-hill
 case-hills	case-hill
 cassia-laurel	cassia-laurel
-castanopsis	Castanopsis
 castle rice	castle rice
 castle town	jokamachi
 castle towns	jokamachi

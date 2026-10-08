@@ -470,7 +470,8 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 ## Wave 39 (amendment 38, 2026-10-08)
 
 - **Scope**: the grove crowns (`tasks.md` Phase 40): three E2 rows in `_draw_grove` - 0080's one crown band and no conifer
-  inflation, 0046's grove giving way round the persimmon with every crown, 0072's mixed broadleaf belt without bamboo - and
+  inflation, 0046's grove giving way round the persimmon with every crown, the mixed broadleaf belt's crown band (its bamboo kept,
+  claimed GUESS on 0075: one in twelve "in the village's shelter belt alike") - and
   two duplicate rows closed as already fixed in wave 9.
 - **Occasions**: glyph-redrawn windbreak on inashiro (conifer-led) and kuwabata (mixed broadleaf), copse on kuwabata.
 - **On the unpushed waves 9-38** under condition (6): as at wave 38's close; the pair is owed (executed code).

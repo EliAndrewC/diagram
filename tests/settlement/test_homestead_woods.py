@@ -216,3 +216,15 @@ def test_every_grove_crown_is_drawn_in_the_woods_one_band(mix: str) -> None:
     radii = [s.M["tree_crowns"][i + 2] for i in range(0, len(s.M["tree_crowns"]), 3)]
     assert len(radii) > 20, "non-vacuity"
     assert all(CROWN_S[0] * r0 - 0.06 <= r <= CROWN_S[1] * r0 + 0.06 for r in radii), (min(radii) / r0, max(radii) / r0)
+
+
+def test_a_windbreak_draws_about_half_its_crowns_conifer() -> None:
+    """0072 (feature 328 wave 39, impl-drift): "735 of them, 48%, were cedar" - of the CROWNS; the bamboo items draw none,
+    so the conifer's 0.48 is taken of the crowns, not of all the items (it drew about 52%)."""
+    s = _hamlet()
+    tally: dict[str, int] = {}
+    for k in range(64):
+        s._draw_grove(200.0 + 90 * (k % 8), 200.0 + 90 * (k // 8), 60.0, 60.0, face=(0, -1), mix="windbreak", tally=tally)
+    crowns = tally.get("conifer", 0) + tally.get("broadleaf", 0)
+    assert crowns > 300, "non-vacuity"
+    assert abs(tally["conifer"] / crowns - 0.48) < 0.02, tally  # measured 0.463 (0.506 under the old rule)

@@ -1,58 +1,58 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "66261f631c47a08cdf24810ed99346721f0daa63f548b5183a648d9ef0d15836",
+ "plan_sha256": "f75344a1275b5101fefcaaef169d2687e635cc2be134617a9200112a70afa8bc",
  "reviewed": "2026-10-08",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W38-stem",
-   "summary": "the T's stem row E0: the claim relabeled CONVENTION -> GUESS with what was searched (0081, 0246 drawing pages)",
+   "id": "W39-1 one crown band",
+   "summary": "CROWN_S = (0.75, 1.4) replaces the 0.72-1.05 / quarter-of-the-time 1.25-1.7 split for the windbreak, dooryard and mixed broadleaf clumps (conifer-led clumps keep LESSER_BROADLEAF_S)",
    "class": "within",
-   "why": "Unchanged since round 1: 0081 makes the fold a T but names no stem; the GUESS line says what was searched. Claim-only."
+   "why": "0080 drawing: 'each crown is drawn between 0.75 and 1.4 times that' - the row's fix, literally; the request is that the implementation match the referenced research"
   },
   {
-   "id": "W38-kink",
-   "summary": "the no-new-kink row E0: claim cites 0081's zigzag and doubling-back bullets",
+   "id": "W39-2 no conifer inflation",
+   "summary": "the conifer x1.15 dropped from the clump crown, the belt row base (_belt_ranks) and the prefilter pad; RANK_CONIFER_S (1.0, 1.1) now inside the page's band",
    "class": "within",
-   "why": "Unchanged since round 1: the page says what kink_spans refuses."
+   "why": "0080 drawing: 'One crown size serves the hill woods and the windbreak's cedars alike'; the 15% is on no page; the pad follows the new maximum so the prefilter still reaches every crown"
   },
   {
-   "id": "W38-clearance",
-   "summary": "the pulled lane's clearance row re-tiered E2 and fixed (bdc9d5053): straighten_joints hands _one_joint the buildings (_BUILDINGS: houses, farm_sheds, byres, retirement_houses from _homestead_polys); a pull passes if _clear_link clears it at the usual margins against everything, or if _clear_link clears it against hard and walls with the buildings removed AND _clear_touch at g = max(4, w/2+2) clears it against the buildings alone AND every dropped vertex is within _JOG_FT (6 ft) of the new line",
+   "id": "W39-3 every crown round the persimmon",
+   "summary": "the yard-persimmon keep-out (_trees) applied to every crown kind, not the conifer alone",
    "class": "within",
-   "why": "Round 2's item is met. 0081: 'keep its usual clearance from fences and buildings. It may come right up to the buildings when the straightened line stays within 6 ft of the old one.' The touch at g now reaches the buildings only; the crop, envelope, toe and marsh (hard, 8 ft) and the fences, groves, wells, wood seats, commons and fixtures (walls, 7 ft) keep _clear_link's usual margins, and the 6 ft condition rides only the touch branch. The exclusion is by exact polygon key and is sound: at web.py:600-627 hard_built's _solid and walls are both built from the same _homestead_polys(s) list straighten_joints reads, so a building's polygon is the same tuple in all three (seated parts, whose sheds carry another kind, are cleared at household_ways.py:124 before the web runs). The claim line ('all but the buildings keep the usual clearance ... a fence, a grove, a well, a fixture and the crop keep _clear_link's margins') and tasks.md Phase 39 now say what the code does. test_a_pull_may_touch_a_building_and_nothing_else (houses straightened, garden and well kept) passes on the clone (make test-file, 2026-10-08). The exception is now exactly the page's, so it is no longer a narrowing to rule on."
+   "why": "0046 drawing: 'the grove's trees give way round it' - all the grove's trees, which the old conifer-only rule did not do"
   },
   {
-   "id": "W38-clearance-dup",
-   "summary": "the duplicate clearance row, re-tiered E2 with the same fix",
-   "class": "within",
-   "why": "Same unit and same code as W38-clearance; it stands with it."
-  },
-  {
-   "id": "W38-fixtures",
-   "summary": "farm fixtures (privy, manure heap, bath, coop, hokora) not counted among the buildings a pull may touch; they keep the usual 7 ft",
-   "class": "within",
-   "why": "0081 licenses the touch for 'the buildings' and is otherwise the usual clearance; 0246's own enumeration ('houses, yards, beds, sheds, wells and fixtures are fabric a lane keeps off') lists fixtures as a class apart from houses and sheds, so withholding a permissive 'may' from them applies the page's rule as written rather than narrowing it (the tie goes to the page's default). Not a finding, one note for T102's impl-drift: the _BUILDINGS docstring glosses the buildings as 'the roofed fabric', which a privy, bath, coop and hokora also are - the reason is 0246's separate fixtures class, not roofing, and the line should say so (or label the boundary CONVENTION)."
-  },
-  {
-   "id": "W38-gate",
-   "summary": "docs/buildings.md main gate passage width tiered E3 and left for its place in the run; the 0093 pointer written in full",
-   "class": "within",
-   "why": "Unchanged since round 1: FR-003's E3, FR-006's order takes it later."
-  },
-  {
-   "id": "W38-occasions",
-   "summary": "no review occasion: the pool's five hamlets regenerated on round 2's code with manifests identical (bypass log 2026-10-08T06:55Z, before the 06:59Z commit); the timing pair owed and a glyph check where a lane moves",
-   "class": "within",
-   "why": "Feature 294's occasions are opened by a changed map and none changed; executed code changed, so the constitution VI pair is owed, and the plan says so. tasks.md:16 and this decision's old summary still say 'the fence clearance' moved no lane - stale wording for round 2's buildings-only touch, worth a word when T102 closes, not a fidelity finding."
-  },
-  {
-   "id": "W38-cond6",
-   "summary": "condition (6) on the unpushed waves: (1) held but for the backup push pending the GM's call on the 329 merge commit; (2)-(5) held at 989dbd862; wave 38 owes the pair",
+   "id": "W39-4 mixed broadleaf belt without bamboo (plan.md Scope, as written)",
+   "summary": "plan.md's Wave 39 Scope reads \"0072's mixed broadleaf belt without bamboo\"; the code at 41205995e instead KEEPS the bamboo with a GUESS claim on 0075",
    "class": "narrowing",
-   "ruling": "LEGITIMATE",
-   "why": "Unchanged since round 2: the same narrowing ruled LEGITIMATE at amendments 34-37; 989dbd862 is wave 37's close in the log."
+   "ruling": "NOT LEGITIMATE",
+   "why": "As written, the plan drops something a referenced page says is drawn: 0075 drawing, 'About one plant in twelve of a windbreak clump is bamboo ... It holds in the farm's grove and in the village's shelter belt alike', with no exception for either belt form. 0072 is SILENT on bamboo in the mixed broadleaf wood. It does not exclude it, and the windbreak modal written from it says 'with a little bamboo between the crowns'. Dropping it would trade one unclaimed line for a new drift against 0075, which goes against the request that the implementation match the research. The executed resolution (keep GROVE_BAMBOO_SHARE for the mixed broadleaf belt, claimed GUESS on 0075, which labels the share its own guess) is the faithful one and one of the two the row's own fix offered. plan.md must say that, and tasks.md Phase 40, T103 and the kuwabata occasion line must say it too; the glyph-check brief otherwise says 'with no bamboo'."
+  },
+  {
+   "id": "W39-5 two LESSER_BROADLEAF_S rows closed E0",
+   "summary": "LESSER_BROADLEAF_S#lesser broadleaf size and _draw_grove#lesser broadleaf crown size LESSER_BROADLEAF_S 0.6-0.85 closed as fixed in wave 9",
+   "class": "within",
+   "why": "verified in the clone: LESSER_BROADLEAF_S = (0.75, 0.85) and both claims cite 0080's 0.75-1.4; the rows' fixes are already in the code; impl-drift re-checks them at T104"
+  },
+  {
+   "id": "W39-6 occasions",
+   "summary": "glyph-redrawn windbreak on inashiro and kuwabata, copse on kuwabata",
+   "class": "within",
+   "why": "the review machinery's own occasions for redrawn crowns; enforcement, not scope"
+  },
+  {
+   "id": "W39-7 verification",
+   "summary": "four tests red on the old code, impl-drift on the touched claims, the gate, three glyph checks, the timing pair",
+   "class": "within",
+   "why": "checks that the requested match holds; the tests fail only when the page's band or the persimmon rule is absent"
+  },
+  {
+   "id": "W39-8 unpushed waves 9-38",
+   "summary": "held under condition (6) as at wave 38's close; the pair owed",
+   "class": "within",
+   "why": "restates the standing condition; decides nothing new"
   }
  ],
- "verdict": "CLEAR"
+ "verdict": "BLOCKED"
 }

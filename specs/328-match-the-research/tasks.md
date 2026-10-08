@@ -15,8 +15,10 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
   second way out (every way is inked `village lane`).
 - glyph-redrawn: windbreak on inashiro - wave 39: every grove crown in 0080's one 0.75-1.4 band, a conifer no wider than a broadleaf
   (the conifer-led belt's rows and the farm groves), and every crown giving way round a yard persimmon (0046)
-- glyph-redrawn: windbreak on kuwabata - wave 39: the mixed broadleaf belt in the one band and with no bamboo (0072)
+- glyph-redrawn: windbreak on kuwabata - wave 39: the mixed broadleaf belt in the one band, its bamboo kept (0075)
 - glyph-redrawn: copse on kuwabata - wave 39: the dooryard copse's crowns in the one band
+- glyph-redrawn: homestead grove on kashikawa - wave 39: the farm groves' crowns in the one band, and the windbreak mix's
+  conifers 48% of the CROWNS (impl-drift: it was 48% of the items, about 52% of the crowns drawn)
 - none (wave 38): the buildings-only touch in `_one_joint` moved no lane - the five pool hamlets regenerated with manifests identical (measured 2026-10-08)
 - none (wave 37): the Z pulled straight changes no pool map; the salt-ward clauses are doc text
 - none (wave 36): claims only, no executed code changed
@@ -1272,17 +1274,25 @@ Three E2 rows in `_draw_grove`, one research page each, fixed together (`audit/o
     page) goes from the clump crown, the belt's row conifer (`_belt_ranks`) and the prefilter pad
   - `...#every crown gives way round a persimmon` - 0046 drawing: "the grove's trees give way round it"; the keep-out was the
     conifer's alone
-  - `...#mixed broadleaf belt's sizes and bamboo` - the one band, and no bamboo in a mixed broadleaf belt (0072 names only
-    rounded broadleaf crowns in it); the conifer-led belt keeps the windbreak's share
+  - `...#mixed broadleaf belt's sizes and bamboo` - the one band; the bamboo kept and claimed GUESS on 0075 drawing (one in
+    twelve "in the farm's grove and in the village's shelter belt alike"), the row's second offered fix - a first try that
+    dropped it was undone when a modal-depiction check found 0075's sentence
 
 Two E2 rows close as E0: `LESSER_BROADLEAF_S#lesser broadleaf size` and its duplicate were fixed in wave 9 with their E1
 sibling (the band reads 0.75-0.85, inside 0080's).
+
+impl-drift (round 1) on `groves.py`: the windbreak conifer share DRIFTED (0.48 of the items, a bamboo item drawing no
+crown) - fixed, `c_th = b_th + 0.48 * (1 - b_th)`, `test_a_windbreak_draws_about_half_its_crowns_conifer` (0.463 drawn, 0.506
+under the old rule); the lesser crown over a conifer MISLABELED - relabeled GUESS on 0080; the belt's wellhead keep-out
+UNCLAIMED - claimed on 0072 drawing. The glyph check of the windbreak (PASS) found the 0080 drawing page's measured
+median for Inashiro's belt stale: 8.7 ft now, on 113 crowns (it said 7.6). Its F1, the belt's west arm gone since wave 9, is
+filed in `audit/found-wave39.jsonl` with the bisect.
 
 Tests: `test_every_grove_crown_is_drawn_in_the_woods_one_band` (windbreak, dooryard, mixed broadleaf) and
 `test_no_crown_is_drawn_under_a_yard_persimmons_crown`, all four red on the old code. Measured: the five pool hamlets
 regenerated, `tree_crowns` and `bamboo_marks` changed on every map, nothing else placed differently.
 
-- [ ] T103 the grove crowns: one band, no conifer inflation, every crown round the persimmon, no bamboo in a mixed broadleaf belt (FR-003 E2, FR-004)
+- [ ] T103 the grove crowns: one band, no conifer inflation, every crown round the persimmon, the mixed broadleaf belt's bamboo claimed on 0075 (FR-003 E2, FR-004)
       research: rendering
 - [ ] T104 the claims re-checked by `impl-drift`; the glyph checks; the close: `make done` green, the pair, the wave column (FR-005, FR-006)
       research: rendering

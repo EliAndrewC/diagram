@@ -344,6 +344,7 @@ class GrovesMixin:
             no row conifer in the marsh - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html
             crowns out of the plots' sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html
             crown over no roof - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html
+            row conifer off a wellhead - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: no crown round a wellhead in a belt (`_canopy_keepouts`' circles)
             crown under no crown - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html
         """
         line = belt_centerline(seated, self.px(RANK_BIN_FT))
@@ -733,7 +734,7 @@ class GrovesMixin:
             mixed broadleaf belt - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: rounded broadleaf crowns in the woods' size mix, no conifer
             mixed broadleaf belt's bamboo - GUESS research/questions/0075-bamboo-groves-chikurin.drawing.html: the windbreak's one in twelve, the page's guess, which it holds in the village's shelter belt as in the farm's grove
             every crown gives way round a persimmon - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html: every crown refused under a yard persimmon's crown, the grove giving way round it
-            lesser crown over an earlier stand's conifer - CONVENTION: a lesser crown refused over an earlier stand's conifer, which decides only paint order (conifers painted last)
+            lesser crown over an earlier stand's conifer - GUESS research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: a lesser crown over an earlier stand's conifer is not drawn - the stand loses that tree - read from the page's canopy-layer rule, which speaks of a crown's center, not its edge
             clump glyph - CONVENTION: one disc per crown, conifers dark and painted last, no trunks
             conifer-led clump's lesser share - GUESS research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: a conifer-led clump throws LESSER_ROLL_SHARE (0.1) of its crowns as lesser broadleaf; the page names the lesser broadleaf, the share a guess
             lesser broadleaf crown size - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: LESSER_BROADLEAF_S, 0.75 to 0.85 of the mean radius (the page's 0.75 to 1.4)
@@ -760,11 +761,13 @@ class GrovesMixin:
             # items, taken from the broadleaf so the cedar backbone keeps its 48%. The dooryard and alder mixes carry none.
             # The village belt's two forms (269 B30) carry the same bamboo share (0075: "in the farm's grove and in the village's
             # shelter belt alike"); a conifer-led belt's conifers are its rows,
-            # seated for the whole belt by `_belt_ranks`, so its clumps throw only the lesser crowns; a mixed broadleaf belt has none.
+            # seated for the whole belt by `_belt_ranks`, so its clumps throw only the lesser crowns; a mixed broadleaf belt has no rows.
             b_th = (
                 GROVE_BAMBOO_SHARE if bamboo and mix in ("windbreak", *WINDBREAK_BELT_FORMS) else 0.0
             )  # `bamboo=False`: a farm that rolled none (feature 291)  # dooryard = fruit broadleaf, no conifer; alder = broadleaf only
-            c_th = b_th + 0.48 if mix == "windbreak" else b_th
+            # 48% OF THE CROWNS, NOT OF THE ITEMS (feature 328 wave 39, impl-drift): a bamboo item draws no crown, so the
+            # conifer's 0.48 was of a smaller whole - about 52% of the crowns drawn
+            c_th = b_th + 0.48 * (1.0 - b_th) if mix == "windbreak" else b_th
             if mix == "conifer_led":
                 rows = max(0.0, (w - 4) * (h - 4)) / (self.px(RANK_ALONG_FT) * self.px(RANK_APART_FT))  # the row conifers this clump's box holds
                 n = max(1, round(n * LESSER_ROLL_SHARE))
