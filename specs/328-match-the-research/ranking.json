@@ -772,6 +772,21 @@
   "scope": "kept"
  },
  {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::draw_holdings#a holding plot that touches a lane or stream is left undrawn",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "a holding plot that touches a lane or stream is left undrawn while the rest of the holding stands",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 23 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#at most MAX_STREETS (6) parallel streets",
   "tier": "E0",
   "fix": "add the claim: at most six streets is a GUESS on research/questions/0033-row-villages-resson.drawing.html",
@@ -833,23 +848,6 @@
   "tier_as_ranked": "E0",
   "e0_basis": "rows.py:538 steps the row at min(frame width, 240 ft); 0033 drawing page (block 'The farms stand one farmstead frame apart, lot against lot, and never more than 240 ft apart') states exactly this, and ROW_FRONTAGE_MAX_FT's own docstring (rows.py:45-53) cites it, but seat_rows' Research block (rows.py:515-524) has no claim for the step",
   "moved": "T71a (fresh reader): rows.py:538 steps the row at min(frame width, 240 ft); 0033 drawing page (block 'The farms stand one farmstead frame apart, lot against lot, and never more than 240 ft apart') states exactly this, and ROW_FRONTAGE_MAX_FT's own docstring (rows.py:45-53) cites it, but seat_rows' Research block (rows.p",
-  "wave": "",
-  "scope": "kept"
- },
- {
-  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#farms to a street",
-  "verdict": "NEEDS-RESEARCH",
-  "tier": "E0",
-  "fix": "replace the claim at rows.py:519 with: farms to a street - research/questions/0033-row-villages-resson.drawing.html: half the households to a line where the farms stand on both sides, further streets set out parallel; the first line per_line + 1 lots long and lengthened 2 lots more, one at each end (`best_row_line(..., per_line * lot + lot, ..., 2 * lot, ...)`) - UNRESEARCHED: searched 0033 and its drawing page, which say only that how many farms a street holds depends on the length of ground it has",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py"
-  ],
-  "after": [],
-  "flag": "",
-  "found": "wave 22 re-check (tier provisional, by verdict)",
-  "tier_as_ranked": "E4",
-  "e0_basis": "rows.py:535 ceil(want/2) per line on both sides, rows.py:557 length per_line*lot + lot with slack 2*lot, street_line (rows.py:104-146) adds the slack across both ends; the 0033 drawing page backs both sides and parallel streets but is silent on the slack ('How many farms a street holds before the next is laid depends on the length of ground it has'), so the code stands and only the slack's label i",
-  "moved": "T71a (fresh reader): rows.py:535 ceil(want/2) per line on both sides, rows.py:557 length per_line*lot + lot with slack 2*lot, street_line (rows.py:104-146) adds the slack across both ends; the 0033 drawing page backs both sides and parallel streets but is silent on the slack ('How many farms a street holds before the ne",
   "wave": "",
   "scope": "kept"
  },
@@ -12580,6 +12578,22 @@
   "tier_as_ranked": "E4",
   "verdict": "NEEDS-RESEARCH",
   "wave": "18",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#farms to a street",
+  "verdict": "NEEDS-RESEARCH",
+  "tier": "E4",
+  "fix": "research pass first (archive, then the web): what share of a row's households took each line, and how long a planned row's line ran past its farms; then the code to the record",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 22 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E4",
+  "moved": "amendment 22 round 1 (spec-fidelity): NEEDS-RESEARCH is E4 (Edge Cases; amendment 9 ruling) - T71a's E0 withdrawn",
+  "wave": "",
   "scope": "kept"
  },
  {

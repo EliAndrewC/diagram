@@ -552,14 +552,13 @@
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#farms to a street": {
   "after": [],
-  "e0_basis": "rows.py:535 ceil(want/2) per line on both sides, rows.py:557 length per_line*lot + lot with slack 2*lot, street_line (rows.py:104-146) adds the slack across both ends; the 0033 drawing page backs both sides and parallel streets but is silent on the slack ('How many farms a street holds before the next is laid depends on the length of ground it has'), so the code stands and only the slack's label i",
   "files": [
    ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py"
   ],
-  "fix": "replace the claim at rows.py:519 with: farms to a street - research/questions/0033-row-villages-resson.drawing.html: half the households to a line where the farms stand on both sides, further streets set out parallel; the first line per_line + 1 lots long and lengthened 2 lots more, one at each end (`best_row_line(..., per_line * lot + lot, ..., 2 * lot, ...)`) - UNRESEARCHED: searched 0033 and its drawing page, which say only that how many farms a street holds depends on the length of ground it has",
+  "fix": "research pass first (archive, then the web): what share of a row's households took each line, and how long a planned row's line ran past its farms; then the code to the record",
   "flag": "",
-  "moved": "T71a (fresh reader): rows.py:535 ceil(want/2) per line on both sides, rows.py:557 length per_line*lot + lot with slack 2*lot, street_line (rows.py:104-146) adds the slack across both ends; the 0033 drawing page backs both sides and parallel streets but is silent on the slack ('How many farms a street holds before the ne",
-  "tier": "E0"
+  "moved": "amendment 22 round 1 (spec-fidelity): NEEDS-RESEARCH is E4 (Edge Cases; amendment 9 ruling) - T71a's E0 withdrawn",
+  "tier": "E4"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#holding set gap2 about 75 ft behind its farm's frame": {
   "after": [],

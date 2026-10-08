@@ -1,46 +1,46 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "7ed63a3b86e0986dd35447520b64fdc840ff4111d3177ecb5d21a7b6f38c4214",
+ "plan_sha256": "d129d045ea219ce99785865b583da37dea1ba9829e3a8481e48f0c2cfae58819",
  "reviewed": "2026-10-07",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W22-held-427",
-   "summary": "row 427 (the shrine cap against the GM's T61 floor) held for the GM, not fixed in this wave",
+   "id": "W23-scope-E0",
+   "summary": "wave 22's seven found rows all tiered E0 by T71a and written as claims, including seat_rows#farms to a street (impl-drift verdict NEEDS-RESEARCH), whose share and slack are labeled UNRESEARCHED with only 0033 and its drawing page searched",
    "class": "narrowing",
-   "ruling": "LEGITIMATE",
-   "why": "the fix would override the GM's own earlier ruling (T61 'ensure that it is present'); the goal amendment says defer questions to the feature's end rather than block; the row stays in the ranking with the quotes, the measurement and both options in its flag, so nothing is dropped - it is deferred, as the GM directed"
+   "ruling": "NOT LEGITIMATE",
+   "why": "spec Edge Cases: a NEEDS-RESEARCH finding is tier E4 and the research pass (archive, then the web) runs first; amendment 9 round 1 already ruled NEEDS-RESEARCH rows relabeled instead of E4 a required change, and tree.py::admits (impl-drift likewise suggesting a label) stands E4. The reader's own reason says the page is silent, which is not FR-003's E0 (a page already says what the code does). The other six rows are within: UNCLAIMED rows claimed (wave 1 precedent) and the well row matching 0196."
   },
   {
-   "id": "W22-428-E3",
-   "summary": "row 428 (persimmon under the farm's own grove) re-tiered E2 -> E3",
+   "id": "W23-well-withdrawn",
+   "summary": "_well_vr's DRIFTED row withdrawn: 0196's about 19 ft across is the curb well() draws at 9.36 ft radius; the 24.75 ft roof square claimed UNRESEARCHED",
    "class": "within",
-   "why": "measured: the grove's conifers are drawn and recorded in _conifer_crowns by settlement/homestead_parts/groves.py before fixtures.py calls reseat_persimmons, so the conifer giving way changes another module's drawn output - a change across modules, E3 by FR-003's own definition; the row stays open with its fix unchanged"
+   "why": "measured on the page: 0196 drawing sizes the curb (9.36 ft radius), and well() draws px(9.36); the page gives no roof size, so the implementation matches and only the claim's citation was wrong - FR-003 E0. The page's one-roof-in-three and square curb are the separate open E3 row well#wellhead marker."
   },
   {
-   "id": "W22-scope-429",
-   "summary": "row 429: the far-row holding three lots (frame widths, `lot`) deep on a street laid first, one lot on the dry edge, the streets spaced by it",
+   "id": "W23-occasions-none",
+   "summary": "no review occasions",
    "class": "within",
-   "why": "literal to 0033's drawing page: 'a strip one lot wide and three lots deep ... about three times the frame's width' and 'On the dry edge, the holding is one lot deep'; the code moves to the research (FR-004), E2, next in tier order (FR-006)"
+   "why": "the diff to l7r/ is docstrings only (rows.py Research block and a docstring word, wells.py Research block); nothing drawn moves"
   },
   {
-   "id": "W22-occasion",
-   "summary": "a placement-changed farm holding occasion on Kashikawa (glyph check); other manifests unchanged",
+   "id": "W23-stack-cond6",
+   "summary": "wave 23 stacked on the unpushed waves 9-22 under the wave-11 exception's condition (6); its pair opens at 049e951d4",
    "class": "within",
-   "why": "FR-005's review occasions; Kashikawa's houses unmoved and dry plots 47 -> 67 confirmed against the manifests at 3c997ab6b and HEAD"
+   "why": "an earlier LEGITIMATE exception applied on its own terms: wave 22 closed (T70 ticked, its pair recorded) and origin's backup/digram-backlog is at 049e951d4"
   },
   {
-   "id": "W22-stack",
-   "summary": "wave 22 stacks on the unpushed waves 9-21 under the wave-11 exception's condition (6); its own pair opens at 3c997ab6b",
+   "id": "W23-street-facing-E3",
+   "summary": "seat_rows#row farm faces its street stays E3 as tiered",
    "class": "within",
-   "why": "applies an already-ruled exception: wave 21 closed (T68 ticked) at 3c997ab6b, the backup branch (2e239dc81) contains it, and this amendment is its own amendment with a plan review before its first tick"
+   "why": "FR-006 tier order: the open E0 rows first; an E3 row waits its turn"
   },
   {
-   "id": "W22-verify",
-   "summary": "impl-drift on the touched claims, the glyph check, the gate, wave 22's own bookend pair",
+   "id": "W23-verification",
+   "summary": "impl-drift on the touched claims, the gate, wave 23's own bookend pair",
    "class": "within",
-   "why": "FR-005 and the plan's bookend rule"
+   "why": "FR-005 as written"
   }
  ],
- "verdict": "CLEAR"
+ "verdict": "BLOCKED"
 }
