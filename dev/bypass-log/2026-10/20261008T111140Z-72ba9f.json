@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-08T11:11:40Z",
+  "target": "claims-gate",
+  "commit": "7d7cb6208",
+  "why": "CLAIMS_OK: plumbing claim; the change renames an env var only, no research rests on it"
+}
