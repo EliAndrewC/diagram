@@ -151,18 +151,18 @@ the old location syncs in cleanly; its edits land on the moved files and its new
 ### Measurable Outcomes
 
 - **SC-001**: Zero live files name the old location, counted by the FR-007 check (FR-001, FR-004, FR-007).
-- **SC-002**: The gate and the hook suite are green from the root, with the same test count or more than the
-  baseline taken before the move (FR-002, FR-006, FR-010).
-- **SC-003**: Claude Code's skill list in a session started in a clone after the move does not include `diagram`,
-  and `docs/` holds the usage document the root `CLAUDE.md` names (FR-003, FR-011).
-- **SC-004**: After sync-in, a clone holding warm caches has no `.claude/skills/diagram/` directory and its first
-  gate is no slower than a warm gate on the baseline, within the gate's own ratchet tolerance (FR-008).
-- **SC-005**: The scratch-clone sync test passes, and an old spec's path resolves by the FR-005 note
-  (FR-005, FR-009).
-- **SC-006**: The audit table names every in-scope document exactly once with a verdict and a reason, and each verdict
-  is visible in the tree after the feature lands (FR-012).
-- **SC-007**: A lint error seeded in an engine file fails the gate, and a root lint run changes no file under `specs/`
-  (FR-002a).
+- **SC-002** (FR-002, FR-006, FR-010): The gate and the hook suite are green from the root, with the same test
+  count or more than the baseline taken before the move.
+- **SC-003** (FR-003, FR-011): Claude Code's skill list in a session started in a clone after the move does not
+  include `diagram`, and `docs/` holds the usage document the root `CLAUDE.md` names.
+- **SC-004** (FR-008): After sync-in, a clone holding warm caches has no `.claude/skills/diagram/` directory and
+  its first gate is no slower than a warm gate on the baseline, within the gate's own ratchet tolerance.
+- **SC-005** (FR-005, FR-009): The scratch-clone sync test passes, and an old spec's path resolves by the FR-005
+  note.
+- **SC-006** (FR-012): The audit table names every in-scope document exactly once with a verdict and a reason, and
+  each verdict is visible in the tree after the feature lands.
+- **SC-007** (FR-002a): A lint error seeded in an engine file fails the gate, and a root lint run changes no file
+  under `specs/`.
 
 ## Decisions Recorded
 
@@ -185,3 +185,4 @@ This feature draws and states nothing on a map; it is tooling. Its layout decisi
   same pass: the GM's third message (the Markdown audit) added as FR-012 and SC-006.
 - Round 2 (spec-fidelity-verify, 2026-10-07): FAITHFUL - both round-1 items resolved; FR-012/SC-006 carry the third
   message. Ids put in order after the verdict (no wording changed).
+- 2026-10-08: each SC's FR references moved to its first line so spec-lint reads them (no wording changed).

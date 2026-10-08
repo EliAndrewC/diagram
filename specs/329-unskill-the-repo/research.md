@@ -55,7 +55,7 @@ Fixture cases whose verdict changed: to fill at T05.
 
 ## R6 - The gate before and after
 
-Baseline `make done` in this clone at `5e2ba4824` + the spec, before the move, 2026-10-07: GREEN in 459 s. Phases
+Baseline `make done` in this clone at `5e2ba4824` + the spec, before the move: GREEN in 459 s (observed 2026-10-07, method: the gate's own wall-clock line in its log). Phases
 static, format, typecheck, hooks-test (38 guard suites green), test-full: 10,818 passed, 3 skipped, 2 xfailed in
 228.6 s. ruff's checked files from the skill dir: 831 (361 under `l7r/`, 460 under `tests/`, 9 under `wip/`, and
 `pyproject.toml`). The first gate after the carry in a second clone: to fill at T09.
@@ -67,7 +67,7 @@ static, format, typecheck, hooks-test (38 guard suites green), test-full: 10,818
   no page check. The move makes the path real; the area now hashes the interactive assets and the class registry.
 - **`test-entry-gate.sh` edited a LIVE research page** under every hooks-test (pre-existing): a `git commit -a` made
   during the baseline gate swept its probe text ("a short walk apart.") into this feature's commit 79f97ae59, undone
-  in the next commit. The suite now edits a throwaway local clone of HEAD (13/13, 83 s, the old version 83 s).
+  in the next commit. The suite now edits a throwaway local clone of HEAD (13/13, 83 s, the old version 83 s - observed 2026-10-07, method: `time bash scripts/test-entry-gate.sh`, each once).
 - **29 broken Markdown links** in live documents (pre-existing): pool notes pointing at `../../hamletgen/` from before
   feature 119, sibling notes linked as if in one folder, retired tools. Fixed, and `tests/tooling/test_doc_links.py`
   now holds every live link.
