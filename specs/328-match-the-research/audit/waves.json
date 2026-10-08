@@ -135,6 +135,7 @@
  ".claude/skills/diagram/l7r/diagram/hamletgen/plan.py::plan_site#a farmstead grove takes 2, 3 or 4 sides the spec refusal": "17",
  ".claude/skills/diagram/l7r/diagram/hamletgen/pondstock.py::_bank_seats#edge midpoints first": "24",
  ".claude/skills/diagram/l7r/diagram/hamletgen/pondstock.py::_bank_seats#sty seat pulled in by half the bank bankinsetft so it stands": "25",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/sink.py::drain_run#no-build corridor": "26",
  ".claude/skills/diagram/l7r/diagram/hamletgen/sink.py::lay_sink#pond's role": "1",
  ".claude/skills/diagram/l7r/diagram/hamletgen/water/brook.py::draw_intake#weir form rolled among four (s.resolve(\"weir_form\")), 0059's four forms at even odds": "1",
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::a_way_onto_the_bund#a lane end within 6 ft (BUND_REACH_FT) of the paddy counts as joined to the bund": "8 (claimed under its unit's new label; re-checked)",

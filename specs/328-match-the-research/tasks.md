@@ -1011,7 +1011,9 @@ dip allowance) are the next wave.
 
   - `l7r/diagram/hamletgen/sink.py::drain_run#no-build corridor` - the corridor no longer registered on a hamlet's drain
 
-- [ ] T77 the hamlet's drain registers no corridor; the five hamlets regenerated (FR-004, FR-005)
+- [x] T77 the hamlet's drain registers no corridor; the five hamlets regenerated (FR-004, FR-005)
       research: rendering
-- [ ] T78 the claims re-checked by `impl-drift`; the close: wave 26's own bookend pair, `make done` green, the wave column (FR-005, FR-006)
+      verify: DONE. the hamlet's drain registers no 33 ft corridor (0058: the town and city maps' rule); the five hamlets unchanged; the below-drain rule's dispersed case left open as row 669
+- [x] T78 the claims re-checked by `impl-drift`; the close: wave 26's own bookend pair, `make done` green, the wave column (FR-005, FR-006)
       research: rendering
+      verify: DONE. impl-drift IN-STEP on the three drain claims; amendment 25 FAITHFUL (round 2), plan CLEAR; make done green; wave 26's own pair band 0; the wave column
