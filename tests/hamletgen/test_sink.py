@@ -282,24 +282,29 @@ def test_a_pond_exactly_back_along_the_heading_has_no_bisector_to_leave_on() -> 
 # ---- feature 287: every sink rule decided where the route is chosen (water:W10, W11, W12, W49) -------------------------
 
 
-def test_a_run_downhill_keeps_a_fifth_of_its_travel_on_the_fall() -> None:
-    """water:W10: the channel test's rule, lifted - net travel down the fall of at least a fifth of its length."""
+def test_a_run_downhill_is_strictly_under_90_degrees_off_the_fall() -> None:
+    """water:W10, as feature 328 left it (0054: a strict "under 90", a tighter bound declined as it would condemn real contour
+    works): any net descent runs downhill - a near-level ditch that descends included - and level or uphill does not."""
     fall = (0.0, 1.0)
     assert hg.sink.runs_downhill([(0.0, 0.0), (100.0, 30.0)], fall)
-    assert not hg.sink.runs_downhill([(0.0, 0.0), (100.0, 10.0)], fall), "a near-level ditch that merely descends"
+    assert hg.sink.runs_downhill([(0.0, 0.0), (100.0, 10.0)], fall), "a near-level ditch that descends: a contour work"
+    assert not hg.sink.runs_downhill([(0.0, 0.0), (100.0, 0.0)], fall), "level: 90 degrees off the fall"
     assert not hg.sink.runs_downhill([(0.0, 0.0), (0.0, -50.0)], fall)
     assert hg.sink.runs_downhill([(5.0, 5.0), (9.0, 9.0), (5.0, 5.0)], fall), "no net travel: nothing to judge"
 
 
 def test_a_confluence_the_drain_would_reach_on_the_level_is_refused() -> None:
-    """water:W10: a brook passing 250-700 ft along the collector's line and only 30 ft down it. Its points have fallen the
-    20 ft a junction needs, but a ditch to any of them runs down the fall by less than a fifth of its length - the
-    level ditch the channel rule forbids. A brook passing below the outfall is still joined, and the run to it is
-    downhill."""
+    """water:W10, as feature 328 left it (0054: any net descent, strictly under 90 degrees off the fall): a brook passing
+    250-700 ft along the collector's line and 30 ft down it is joined - a near-level ditch that descends is a contour work -
+    while one only 10 ft down has not fallen the 20 ft a junction needs (`BROOK_JOIN_DESCENT`) and is refused. A brook
+    passing below the outfall is joined, and the run to it is downhill."""
     plan = a_plan()
     out = (700.0, 1010.0)
-    plan.brook = [(950.0, 1040.0), (1400.0, 1060.0), (1800.0, 1070.0), (2200.0, 1080.0)]
+    plan.brook = [(950.0, 1020.0), (1400.0, 1020.0), (1800.0, 1020.0), (2200.0, 1020.0)]
     assert hg.brook_join(plan, out) is None
+    plan.brook = [(950.0, 1040.0), (1400.0, 1060.0), (1800.0, 1070.0), (2200.0, 1080.0)]
+    q = hg.brook_join(plan, out)
+    assert q is not None and hg.sink.runs_downhill([out, q], plan.fall)
     plan.brook = [(760.0, 1040.0), (760.0, 1400.0), (760.0, 2000.0)]
     q = hg.brook_join(plan, out)
     assert q is not None and hg.sink.runs_downhill([out, q], plan.fall)
@@ -311,7 +316,7 @@ def test_the_pond_seat_refuses_a_sway_whose_ditch_would_run_level(monkeypatch: p
     plan = a_plan()
     calls: list[int] = []
     real = hg.sink.runs_downhill
-    monkeypatch.setattr(hg.sink, "runs_downhill", lambda course, fall, frac=0.2: bool(calls.append(1)) or len(calls) > 1 and real(course, fall, frac))
+    monkeypatch.setattr(hg.sink, "runs_downhill", lambda course, fall, frac=0.0: bool(calls.append(1)) or len(calls) > 1 and real(course, fall, frac))
     back, sway = hg.sink.pond_seat(plan, (700.0, 1010.0), 60.0, 40.0)
     assert sway != 0.0 and len(calls) == 2
 
@@ -442,9 +447,11 @@ def test_the_constructed_route_ends_on_a_brook_across_it_and_records_the_conflue
 
 def test_the_constructed_route_runs_on_down_the_fall_until_it_is_downhill() -> None:
     """A hull walk that carries the run far across the fall: the leg off the canvas is lengthened until the whole run is
-    downhill by the channel rule."""
+    downhill by the channel rule and bears within 90 degrees of the water's flow (feature 328: under 0054's strict rule the
+    run already descends, so the flow, ten degrees past the fall, is what lengthens it)."""
     plan = a_plan()
     plan.W, plan.H = 3000, 1100
+    plan.water_flow = 100.0
     plan.envelope = [(100.0, 900.0), (2900.0, 900.0), (2900.0, 1000.0), (100.0, 950.0)]
     route, to = hg.sink.hull_route(plan, (150.0, 925.0), (1.0, 0.0), [])
     assert to == "offmap" and hg.sink.runs_downhill(route, plan.fall)

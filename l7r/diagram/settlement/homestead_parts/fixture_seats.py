@@ -64,7 +64,7 @@ PRIVY_SUN_MAX_FT = 48.0
 PRIVY_SUNNY_SHARE = 0.727  # Wang & Ochiai 2022: 72.7% of outhouses SE to S (the GM, 2026-08-29: used literally)
 """Research: privies on the sunny side - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: 72.7%"""
 WOODSHED_STEP_FT = 6.0  # HELD (feature 328 wave 9, re-measured wave 51): the wood shed a ken past the wall gap - its edge a ken plus the gap off its wall
-"""Research: wood shed off its wall - DEVIATION research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: held at a ken plus the wall gap, past the page's ken - at a ken (re-measured 2026-10-08 with the shed off the house's own walls: 20 households seed 39 still refuses) three scaling rolls of the reference refuse their web (20 households seed 39; 40 households seeds 4 and 25: farmhouses or the field left off the network); the found row hamletgen/ways/last_resort.py::refuse_unreached#every household reached at 20 and 40 households"""
+"""Research: wood shed off its wall - research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: the GUESS a ken beyond the wall gap, about 9.5 ft - at a ken from the wall itself the 20-household roll of seed 39 refuses its web (re-measured 2026-10-08, feature 328 wave 51)"""
 # THE PRIVY'S SIZE (feature 280, research/questions/0047-farm-privies-and-their-night-soil-benjo.html): each homestead's privy is one of the sixteen of the Kakimochi table
 # (Meiji 18, read back to the last years of the shogunate), frontage by depth in feet at 6 ft to the ken - each as likely as
 # the next. A calibration against one village's table; the old 6 x 6 ft one-ken module was a GUESS.
@@ -136,7 +136,7 @@ class FixtureForms:
         privy seat weights - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: yard 35, front 30,
             stable 20, barn 15
         bath room beyond the stable wing - research/questions/0044-baths-on-the-farm-furo.html: most baths there, 17 of 21 at Shimohasuda and 12 of 15 at Ukiya, so 0.8; the main door the rest, each house rolled
-        bath room joined to the floored rooms - research/questions/0044-baths-on-the-farm-furo.html, research/questions/0044-baths-on-the-farm-furo.drawing.html: three of the two registers' 36 baths, two in headmen's houses and one in a peasant's - so 1 in 36, 0.03, on a hamlet, which has no headman
+        bath room joined to the floored rooms - research/questions/0044-baths-on-the-farm-furo.html, research/questions/0044-baths-on-the-farm-furo.drawing.html: of the two registers' 36 baths, one joined to the floored rooms was a peasant's (the other a headman's; a third, at Kozutsumi in 1771, a headman's too) - so 1 in 36, 0.03, on a hamlet, which has no headman
         persimmon front share - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:
             0.7 by default
         manure form - research/questions/0042-manure-heaps-and-compost-kyuhi.drawing.html: heap by default, or pit
@@ -206,6 +206,13 @@ def fixture_size(kind: str, forms: FixtureForms, px: Callable[[float], float], r
     """A fixture's footprint `(along its wall, out from it)` at the map's scale (`fixture_ft`, in px)."""
     ft = fixture_ft(kind, forms, roll)
     return px(ft[0]), px(ft[1])
+
+
+def within_reach_of(r: Rect, house: Rect, reach: float) -> bool:
+    """Does `r` stand with its far edge no more than `reach` from `house`'s walls, on both axes?
+
+    Research: the privy's reach - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: no more than 48 ft from its house"""
+    return abs(r[0] - house[0]) + r[2] / 2 <= house[2] / 2 + reach and abs(r[1] - house[1]) + r[3] / 2 <= house[3] / 2 + reach
 
 
 def clears(r: Rect, taken: Sequence[Rect], gap: float) -> bool:
@@ -306,10 +313,11 @@ def lay_fixtures(
         fixture gap 3.5 ft off every other part and bath room slide 4 ft - UNRESEARCHED: WALL_GAP_FT (3.5 ft) clears the drawn wall of any part a fixture stands by, WALL_SLIDE_FT (4 ft) the bath room's slide along its wall
         seating order - UNRESEARCHED: FIXTURE_ORDER (retirement house, bath, wood shed, privy, manure, coop, shrine, persimmon) is the order the fixtures take seats
         stepped outward - UNRESEARCHED: a fixture with no recorded seat free is offered the same seats a pace further out
+        the privy's reach - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: never stepped past 48 ft from its house; a farmstead with no seat within it refuses its privy by name
         wood shed's walls - research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: the house and its kura, a
             short step off the house - never the byre's or the retirement house's
         persimmon front or behind - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html: in front of the house or behind it, rolled per house at `forms.persimmon_front`
-        persimmon in its own grove bands - UNRESEARCHED: a grove farm's persimmon may take a seat in its own grove's bands
+        persimmon in its own grove bands - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html: it may stand in the grove behind the house - its own grove, no other farm's
         bath room joined - research/questions/0044-baths-on-the-farm-furo.drawing.html: refused rather than walked out
         bath room's wall per house - research/questions/0044-baths-on-the-farm-furo.html: each house rolls among the three walls (`bath_wall`)
         no seat, no persimmon - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html: the farm keeps none"""
@@ -347,8 +355,12 @@ def lay_fixtures(
                 notes["bath_seat"] = got[1]
         else:
             seats = _seats(kind, hw, hh, w, d, g, yard, laid.get("privy"), roll, u, forms, px)
-            found = _first(chain(seats, outward(seats, px(STEP_FT), OUT_STEPS)), taken, g)
-            assert found is not None, "the outward paces reach free ground"  # noqa: S101 - finite parts, 192 ft of paces
+            offered = chain(seats, outward(seats, px(STEP_FT), OUT_STEPS))
+            if kind == "privy":  # its own farmstead's: no further than 48 ft from its house (0047), never stepped past it
+                offered = (q for q in offered if within_reach_of(q, roofs[0], px(PRIVY_SUN_MAX_FT)))
+            found = _first(offered, taken, g)
+            if found is None:
+                raise FixtureUnlaid("a privy found no place within 48 ft of its house")
             seat = found
         laid[kind] = seat
         taken.append(_trunk(seat, px) if kind == "persimmon" else seat)
@@ -369,7 +381,7 @@ def shed_off_a_wall(seat: Rect, walls: Sequence[Rect], g: float, px: Callable[[f
     Research:
         wood shed a ken off a wall - research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: never out across
             the dooryard
-        the ken past the wall gap - DEVIATION research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: the standoff held at the gap plus `WOODSHED_STEP_FT`, about 9.5 ft, past the page's 6 ft (the reason at the constant)"""
+        the ken past the wall gap - research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: the gap plus `WOODSHED_STEP_FT`, about 9.5 ft"""
     return clears(seat, walls[:1], g + px(WOODSHED_STEP_FT) - 1e-6) and against_a_wall(seat, walls, g + px(WOODSHED_STEP_FT) + 1e-6) and not in_front(seat, walls[0][3] / 2)
 
 
@@ -398,7 +410,7 @@ def _wood_shed(hw: float, hh: float, w: float, d: float, g: float, walls: Sequen
     Research:
         wood shed seats - research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: behind or beside the house,
             never the front yard
-        wall places a ken out - research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: offered at the wall gap and `WOODSHED_STEP_FT` off each wall"""
+        wall places a ken out - research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: offered a ken beyond the wall gap, about 9.5 ft off each wall"""
     seats = _seats("woodpile", hw, hh, w, d, g, None, None, lambda _salt: 0.0, 0.0, FixtureForms(), px)
     offered = chain(seats, (q for q in wall_places(walls, w, d, g + px(WOODSHED_STEP_FT), px(WALL_SLIDE_FT)) if not in_front(q, hh / 2)))
     found = _first((q for q in offered if shed_off_a_wall(q, walls, g, px)), taken, g)

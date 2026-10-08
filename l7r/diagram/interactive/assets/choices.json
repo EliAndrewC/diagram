@@ -266,6 +266,14 @@
    }
   },
   {
+   "key": "town_nearness",
+   "name": "The market town",
+   "values": {
+    "near": "near",
+    "far": "far off"
+   }
+  },
+  {
    "key": "paddy_rest",
    "name": "Paddies left to rest",
    "values": {

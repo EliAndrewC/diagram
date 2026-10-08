@@ -41187,25 +41187,25 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/core.py::Settlement#coppice crown": {
-  "code": "2a8d65376fa87a4d",
-  "core": "84098b6510c187fb",
-  "date": "2026-10-05",
-  "note": "COMMONS_CROWN_R_FT 4-4.5 gives the 8-9 ft crown, recorded as a GUESS",
+  "code": "b786fde9c6cb4bd4",
+  "core": "614ffa58ec08ef90",
+  "date": "2026-10-08",
+  "note": "4-4.5 ft radius is the page's 8-9 ft crown (value as the claim states it; the constant is not inline)",
   "pages": {
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html": "646f4508385c9db1"
   },
   "research": "050eb194338f2925",
   "rests": [
-   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:0dafa8d8a7ffcc86"
+   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:0dafa8d8a7ffcc86",
+   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:5b4dfd1254dbb70e"
   ],
-  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/core.py::Settlement#coppice stocking": {
-  "code": "679912b2371cacee",
-  "core": "84098b6510c187fb",
-  "date": "2026-10-05",
-  "note": "COMMONS_SPACING_FT 8 matches about 1,700 a hectare on 8 ft centers",
+  "code": "c235bbff06dfa175",
+  "core": "614ffa58ec08ef90",
+  "date": "2026-10-08",
+  "note": "8 ft centers, the page's 1,700 a hectare",
   "pages": {
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html": "646f4508385c9db1"
   },
@@ -41213,39 +41213,37 @@
   "rests": [
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:5b4dfd1254dbb70e"
   ],
-  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/core.py::Settlement#forest floor tint": {
-  "code": "ca879c5f812cc513",
-  "core": "84098b6510c187fb",
-  "date": "2026-10-05",
-  "note": "a tint between the crowns, a drawing convention",
+  "code": "bd4cb4bdf94a9af6",
+  "core": "614ffa58ec08ef90",
+  "date": "2026-10-08",
+  "note": "a tint only",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/core.py::Settlement#hill-wood crown": {
-  "code": "33012d6201a87237",
-  "core": "84098b6510c187fb",
+  "code": "8380d228766d524e",
+  "core": "614ffa58ec08ef90",
   "date": "2026-10-08",
-  "note": "8.5 ft mean radius, one size for woods and windbreak",
+  "note": "8.5 ft mean radius as the page draws it",
   "pages": {
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html": "646f4508385c9db1"
   },
   "research": "050eb194338f2925",
   "rests": [
-   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:a40ebd3a6acb1f87",
-   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:a52bbfe64bb3c3b8"
+   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:a40ebd3a6acb1f87"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/core.py::Settlement#hill-wood stocking": {
-  "code": "721eab1d5466babb",
-  "core": "84098b6510c187fb",
-  "date": "2026-10-05",
-  "note": "CANOPY_SPACING_FT 13 matches about 600 a hectare on 13 ft centers",
+  "code": "6f7564e2c52934a6",
+  "core": "614ffa58ec08ef90",
+  "date": "2026-10-08",
+  "note": "13 ft centers, 600 a hectare",
   "pages": {
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html": "646f4508385c9db1"
   },
@@ -41253,34 +41251,33 @@
   "rests": [
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:e0f372bc46e81fac"
   ],
-  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/core.py::Settlement#layer offsets and the crown pad": {
-  "code": "38b7c8b2cda3f945",
-  "core": "84098b6510c187fb",
-  "date": "2026-10-05",
-  "note": "CANOPY_PAD 0.6 is placement clearance for rounding, plumbing",
+  "code": "5258b3614a4e80c2",
+  "core": "614ffa58ec08ef90",
+  "date": "2026-10-08",
+  "note": "the bundle shows neither the offsets nor CANOPY_PAD's value or readers; a crown's clearance off a roof may be a placement rule rather than NONE. Need the constants and the code that reads them",
   "pages": {},
   "research": "",
   "rests": [],
-  "verdict": "IN-STEP"
+  "verdict": "CANNOT-TELL"
  },
  "l7r/diagram/settlement/core.py::Settlement#what sets the frame": {
-  "code": "37e824c25870fe6a",
-  "core": "84098b6510c187fb",
-  "date": "2026-10-05",
-  "note": "the crop key lists decide only what the frame contains, a framing convention",
+  "code": "999dcd604d1b014e",
+  "core": "614ffa58ec08ef90",
+  "date": "2026-10-08",
+  "note": "framing only",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/core.py::Settlement#wood revealed by the crop": {
-  "code": "0d012397feaaf9e6",
-  "core": "84098b6510c187fb",
-  "date": "2026-10-05",
-  "note": "FOREST_REVEAL_FT 110 is how deep the frame shows a wood, a framing convention",
+  "code": "e24aed3fd8b68d9c",
+  "core": "614ffa58ec08ef90",
+  "date": "2026-10-08",
+  "note": "how much wood the frame shows, a framing choice",
   "pages": {},
   "research": "",
   "rests": [],
@@ -41901,18 +41898,6 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/fields/comb.py::CURVE_LEG_PX#the fallback's curve": {
-  "code": "6ad72d0fb0e7785a",
-  "core": "e3bbe3a7edb35017",
-  "date": "2026-10-08",
-  "note": "the leg length only splits up the drawing of a bend whose rule is the 55-degree turn; no reader can read it off the map as a fact",
-  "pages": {},
-  "research": "",
-  "rests": [
-   "0060-field-drains-akusuiro.drawing.html:f2a4519a87491d17"
-  ],
-  "verdict": "IN-STEP"
- },
  "l7r/diagram/settlement/fields/comb.py::CombMixin#plumbing": {
   "code": "ea1e33c8f0eb3b72",
   "core": "4f1dfbf4d5c4aedb",
@@ -42167,21 +42152,43 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_paddies#resting plots": {
-  "code": "1ac349a1ee3822b3",
+ "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_paddies#no resting plot on a dike-pond block": {
+  "code": "41d94c8abc2a32c3",
   "core": "76bc7a69d90f9e8c",
   "date": "2026-10-08",
-  "note": "0013 backs whole basins weighted down the fall (§32, §35) but says nothing on the code's two exclusions: the low drain-side row (`not p.get(\"low\")`, though §35 favors the far end) and the dike-pond block (`_may = []`); split those off as GUESS/UNRESEARCHED",
+  "note": "0013 is silent on dike-pond blocks",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_paddies#resting plots": {
+  "code": "3a91cf24d901ed0e",
+  "core": "76bc7a69d90f9e8c",
+  "date": "2026-10-08",
+  "note": "whole basins, weighted down the fan's fall",
   "pages": {
    "0013-paddies-left-to-rest-kataarashi.drawing.html": "5ec5defe11098d95"
   },
   "research": "a9a8377184fbd08b",
   "rests": [
    "0013-paddies-left-to-rest-kataarashi.drawing.html:04020443e5ffd5a6",
-   "0013-paddies-left-to-rest-kataarashi.drawing.html:11a8f6722d007fca",
-   "0013-paddies-left-to-rest-kataarashi.drawing.html:cbe995f8e9b50877"
+   "0013-paddies-left-to-rest-kataarashi.drawing.html:11a8f6722d007fca"
   ],
-  "verdict": "NEEDS-RESEARCH"
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_paddies#resting plots off the low row": {
+  "code": "87f44f2f91efdb72",
+  "core": "76bc7a69d90f9e8c",
+  "date": "2026-10-08",
+  "note": "no page says whether the wet drain-side row rests",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:4fc3811eb15b4538",
+   "0013-paddies-left-to-rest-kataarashi.drawing.html:11a8f6722d007fca"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_source#feeder brook": {
   "code": "3adbbc20688e5ea0",
@@ -42448,17 +42455,6 @@
   "triaged": "2026-10-05",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/fields/comb.py::DOWNHILL_FRACTION#downhill share": {
-  "code": "055f6feef06c6c34",
-  "core": "eb3cdf5f0110babc",
-  "date": "2026-10-03",
-  "note": "as cited",
-  "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "790c57e2a1c0ab27"
-  },
-  "research": "a3b4c3a9112374b7",
-  "verdict": "IN-STEP"
- },
  "l7r/diagram/settlement/fields/comb.py::WetLines#plumbing": {
   "code": "03d93ee52481af6c",
   "core": "a12521a524a6da33",
@@ -42481,20 +42477,6 @@
   "date": "2026-10-03",
   "note": "plumbing",
   "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/fields/comb.py::_curved_run#curving out of the collector": {
-  "code": "86a5e0a8af334acc",
-  "core": "2cb711891bf760ce",
-  "date": "2026-10-08",
-  "note": "every turn, the first off the exit included, is at most turn_max, so the junction reads as a turn",
-  "pages": {
-   "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
-  },
-  "research": "8ff7ceb036c4856e",
-  "rests": [
-   "0060-field-drains-akusuiro.drawing.html:f2a4519a87491d17"
-  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/comb.py::bead_drowned#beads off water": {
@@ -42543,38 +42525,12 @@
   "triaged": "2026-10-05",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/fields/comb.py::outfall_run#drain outfall": {
-  "code": "9af85a7992ace673",
-  "core": "e7616f5ce5a6ddac",
-  "date": "2026-10-08",
-  "note": "runs on along the exit, curves at most 55 degrees a turn, then goes straight down the fall off the map, and only where the run goes downhill, with the fallback curving from the drain's end",
-  "pages": {
-   "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
-  },
-  "research": "8ff7ceb036c4856e",
-  "rests": [
-   "0060-field-drains-akusuiro.drawing.html:5430b16d81429901",
-   "0060-field-drains-akusuiro.drawing.html:f2a4519a87491d17"
-  ],
-  "verdict": "IN-STEP"
- },
  "l7r/diagram/settlement/fields/comb.py::recorded_water#plumbing": {
   "code": "010e6bc1186f28dd",
   "core": "3e9332f4d369106d",
   "date": "2026-10-03",
   "note": "plumbing",
   "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/fields/comb.py::runs_downhill#water runs downhill": {
-  "code": "fc54c983b04c3408",
-  "core": "77609a174cac9e91",
-  "date": "2026-10-03",
-  "note": "as cited",
-  "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "790c57e2a1c0ab27"
-  },
-  "research": "a3b4c3a9112374b7",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/features.py::CORNER_MAX#corner step": {
@@ -43161,25 +43117,19 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/fields/grain.py::WinterCropKnob.weights_for#barley odds = drained share of the paddy, x TOWN_FAR_FACTOR where the town is far": {
-  "code": "65827f6675969f5f",
+ "l7r/diagram/settlement/fields/grain.py::WinterCropKnob.weights_for#the odds from the site": {
+  "code": "e225c8254e40efda",
   "core": "65827f6675969f5f",
   "date": "2026-10-08",
-  "note": "barley odds = drained share of the paddy, x TOWN_FAR_FACTOR where the town is far",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "l7r/diagram/settlement/fields/grain.py::WinterCropKnob.weights_for#plumbing": {
-  "code": "154741f690bcaedb",
-  "core": "65827f6675969f5f",
-  "date": "2026-10-08",
-  "note": "the inherited NONE (\"unit conversion and ring area\") is wrong: the code sets the winter crop's odds, barley = drained share x TOWN_FAR_FACTOR when the town is far; the claim should cite 0009 drawing for the odds from drainage and town, weighting a GUESS",
-  "pages": {},
-  "research": "",
+  "note": "drained share times a town factor; the page records the weighting as a GUESS",
+  "pages": {
+   "0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html": "077e104afe9ed4ee"
+  },
+  "research": "7b19741c5250f0fe",
   "rests": [
    "0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html:d90b5fa1bec814fe"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/grain.py::_grows_on_this_ground#forms the site can feed": {
   "code": "169a3bc4a214632b",
@@ -43621,6 +43571,78 @@
   "note": "plumbing",
   "research": "",
   "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/fields/outfall.py::CURVE_LEG_PX#the fallback's curve": {
+  "code": "6ad72d0fb0e7785a",
+  "core": "e3bbe3a7edb35017",
+  "date": "2026-10-08",
+  "note": "the length of a polyline leg in px; 0060 rules only the turn angle",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0060-field-drains-akusuiro.drawing.html:f2a4519a87491d17"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/fields/outfall.py::DOWNHILL_FRACTION#downhill share": {
+  "code": "055f6feef06c6c34",
+  "core": "eb3cdf5f0110babc",
+  "date": "2026-10-08",
+  "note": "the page gives no \"fifth\". It bounds a course's divergence at a strict \"under 90\" degrees and \"a tighter bound ... was considered and declined\"; 0.2 is a bound of about 78 degrees. Make the figure a GUESS, or bring the code to the page's under-90 rule",
+  "pages": {
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "790c57e2a1c0ab27"
+  },
+  "research": "a3b4c3a9112374b7",
+  "rests": [
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:beebf3a1f3e405e3",
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:f2e12c91b742ea44"
+  ],
+  "verdict": "DRIFTED"
+ },
+ "l7r/diagram/settlement/fields/outfall.py::_curved_run#curving out of the collector": {
+  "code": "86a5e0a8af334acc",
+  "core": "2cb711891bf760ce",
+  "date": "2026-10-08",
+  "note": "every turn is held to 55 degrees or less",
+  "pages": {
+   "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
+  },
+  "research": "8ff7ceb036c4856e",
+  "rests": [
+   "0060-field-drains-akusuiro.drawing.html:f2a4519a87491d17"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/fields/outfall.py::outfall_run#drain outfall": {
+  "code": "9af85a7992ace673",
+  "core": "e7616f5ce5a6ddac",
+  "date": "2026-10-08",
+  "note": "runs on along the exit, curves at 55 degrees or less, then runs down the fall off the map",
+  "pages": {
+   "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
+  },
+  "research": "8ff7ceb036c4856e",
+  "rests": [
+   "0060-field-drains-akusuiro.drawing.html:5430b16d81429901",
+   "0060-field-drains-akusuiro.drawing.html:d3e99aaa0ddc4599",
+   "0060-field-drains-akusuiro.drawing.html:f2a4519a87491d17"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/fields/outfall.py::runs_downhill#water runs downhill": {
+  "code": "fc54c983b04c3408",
+  "core": "77609a174cac9e91",
+  "date": "2026-10-08",
+  "note": "`>= frac * L` with frac 0.2 forbids courses about 78-90 degrees off the fall, which the page allows (\"a divergence near 90 degrees is what a dug channel is\"; tighter bounds declined). Same fix as DOWNHILL_FRACTION",
+  "pages": {
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "790c57e2a1c0ab27"
+  },
+  "research": "a3b4c3a9112374b7",
+  "rests": [
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:beebf3a1f3e405e3",
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:f2e12c91b742ea44"
+  ],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/fields/paddy.py::PADDY_REST#rest forms": {
   "code": "1f283ffd514d808a",
@@ -44976,24 +44998,43 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::FixtureForms#bath room beyond the stable wing": {
-  "code": "33298193852059cb",
-  "core": "c0cf80fb6e9ccbc8",
-  "date": "2026-10-07",
-  "note": "0.8 default",
+  "code": "5e716efb7dc8b998",
+  "core": "8d31976e685f0d1a",
+  "date": "2026-10-08",
+  "note": "29 of 36 is 0.8, the rest rolled to the other walls",
   "pages": {
    "0044-baths-on-the-farm-furo.html": "1b0add3e2fcce3b5"
   },
   "research": "f9b1fe1111c8963a",
   "rests": [
+   "0044-baths-on-the-farm-furo.drawing.html:a8d16ebfdea834bf",
    "0044-baths-on-the-farm-furo.html:bb60e0fd056a14eb"
   ],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/settlement/homestead_parts/fixture_seats.py::FixtureForms#bath room joined to the floored rooms": {
+  "code": "0687d2a06e91567c",
+  "core": "8d31976e685f0d1a",
+  "date": "2026-10-08",
+  "note": "the 0.03 stands, but the claim's account misreads the page. The three floored-room baths span Kozutsumi 1771 (the headman's) and Ukiya 1842 (a headman's and a peasant's), so only two are among the two registers' 36. Restate it as \"the one peasant's of the 36\"",
+  "pages": {
+   "0044-baths-on-the-farm-furo.drawing.html": "06c647651494be2f",
+   "0044-baths-on-the-farm-furo.html": "1b0add3e2fcce3b5"
+  },
+  "research": "6e9edb0416109357",
+  "rests": [
+   "0044-baths-on-the-farm-furo.drawing.html:23b7ceda518aa3ec",
+   "0044-baths-on-the-farm-furo.drawing.html:a8d16ebfdea834bf",
+   "0044-baths-on-the-farm-furo.html:bb60e0fd056a14eb",
+   "0044-baths-on-the-farm-furo.html:e6d213de3cdf21df"
+  ],
+  "verdict": "MISLABELED"
+ },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::FixtureForms#manure form": {
-  "code": "220355afeb03b53a",
-  "core": "c0cf80fb6e9ccbc8",
-  "date": "2026-10-07",
-  "note": "heap default; the hamlet rolls heap or pit",
+  "code": "959157a1dc2a5f34",
+  "core": "8d31976e685f0d1a",
+  "date": "2026-10-08",
+  "note": "heap or pit, one form rolled per hamlet",
   "pages": {
    "0042-manure-heaps-and-compost-kyuhi.drawing.html": "8b458f42d4e2cbac"
   },
@@ -45004,10 +45045,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::FixtureForms#persimmon front share": {
-  "code": "6f3e6adf7a6ac6e8",
-  "core": "c0cf80fb6e9ccbc8",
-  "date": "2026-10-07",
-  "note": "0.7 default, inside the rolled band, front the likelier",
+  "code": "7258a98ad084a993",
+  "core": "8d31976e685f0d1a",
+  "date": "2026-10-08",
+  "note": "the front is the likelier, rolled per hamlet; the weight is a GUESS",
   "pages": {
    "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html": "6b3be37b04307230"
   },
@@ -45018,24 +45059,26 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::FixtureForms#privy seat weights": {
-  "code": "894cc095da243d1a",
-  "core": "c0cf80fb6e9ccbc8",
-  "date": "2026-10-07",
-  "note": "35/30/20/15 base weights",
+  "code": "15380ea57219e832",
+  "core": "8d31976e685f0d1a",
+  "date": "2026-10-08",
+  "note": "the page names the places in the order \"under the eaves by the stable, ... in the yard, the front yard, and inside the barn\" with \"base weights of 35, 30, 20 and 15\", which gives the stable 35 and the yard 30. The code has yard 0.35, front 0.30, stable 0.20, barn 0.15. Reconcile the pairing",
   "pages": {
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "87ffb6a8fd559f32"
   },
   "research": "fa621c85688c72b2",
   "rests": [
-   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:2564ad475c02811e"
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:2564ad475c02811e",
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:a72ca65b434d4335",
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:c5d84fdf328cced8"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::FixtureForms#retirement house size and gaps": {
-  "code": "0e54d0791fd2b860",
-  "core": "c0cf80fb6e9ccbc8",
-  "date": "2026-10-07",
-  "note": "nothing in the bundle answers it",
+  "code": "eb5de56b2f2f6413",
+  "core": "8d31976e685f0d1a",
+  "date": "2026-10-08",
+  "note": "no cited page bears on it",
   "pages": {},
   "research": "",
   "rests": [],
@@ -45224,10 +45267,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::WOODSHED_STEP_FT#wood shed off its wall": {
-  "code": "0db47400299c5405",
+  "code": "7b15adf7b72b2f71",
   "core": "5efeb905b7d48b3f",
-  "date": "2026-10-07",
-  "note": "the shed's edge stands g + px(6.0), about 9.5 ft, off its wall, but the page says \"about 6 ft (a ken) off a wall\"; the held departure is not recorded on the drawing page, so either record it there as a DEVIATION or bring the code back to a ken",
+  "date": "2026-10-08",
+  "note": "the 0043 drawing page says \"about 6 ft (a ken) off a wall\" and records no departure; the code stands the shed 9.5 ft off (gap plus 6). A DEVIATION needs the drawing page to record it, or the code goes back to a ken",
   "pages": {
    "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "ad5072e51b00c129"
   },
@@ -45420,13 +45463,19 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_wood_shed#wall places offered at the wall gap plus a ken (about 9.5 ft) off each wall": {
-  "code": "2835514bd703c516",
+ "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_wood_shed#wall places a ken out": {
+  "code": "2550c457a41cdce0",
   "core": "2835514bd703c516",
   "date": "2026-10-08",
-  "note": "wall places offered at the wall gap plus a ken (about 9.5 ft) off each wall",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "note": "the places are offered at g + WOODSHED_STEP_FT (about 9.5 ft) where the page says \"about 6 ft (a ken) off a wall\"",
+  "pages": {
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "ad5072e51b00c129"
+  },
+  "research": "862d7c9fcd1644d6",
+  "rests": [
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html:4615b4a128e48e55"
+  ],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_wood_shed#wood shed seats": {
   "code": "04caec43d865aff6",
@@ -45501,6 +45550,23 @@
    "0044-baths-on-the-farm-furo.drawing.html": "06c647651494be2f"
   },
   "research": "eac07ff70a225610",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/homestead_parts/fixture_seats.py::bath_wall#the three walls rolled": {
+  "code": "7a1ae72b14343327",
+  "core": "38ba3a12d31b07a5",
+  "date": "2026-10-08",
+  "note": "most beyond the stable, a few at the floored rooms, the rest by the main door",
+  "pages": {
+   "0044-baths-on-the-farm-furo.html": "1b0add3e2fcce3b5"
+  },
+  "research": "f9b1fe1111c8963a",
+  "rests": [
+   "0044-baths-on-the-farm-furo.drawing.html:a8d16ebfdea834bf",
+   "0044-baths-on-the-farm-furo.html:b06feb4284b8522f",
+   "0044-baths-on-the-farm-furo.html:bb60e0fd056a14eb",
+   "0044-baths-on-the-farm-furo.html:e6d213de3cdf21df"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::clears#plumbing": {
@@ -45648,19 +45714,11 @@
   "research": "eac07ff70a225610",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#a grove farm's persimmon may take a seat in its own grove bands": {
-  "code": "649b64c74096ac9f",
-  "core": "649b64c74096ac9f",
-  "date": "2026-10-08",
-  "note": "a grove farm's persimmon may take a seat in its own grove bands",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#bath room joined": {
-  "code": "b39c96dc71c5e587",
-  "core": "649b64c74096ac9f",
+  "code": "2b5cb6643b9cce40",
+  "core": "c029193969d6b97e",
   "date": "2026-10-08",
-  "note": "a bath room is joined to the house or the steading is refused, never a room set out in the yard",
+  "note": "a room of the main house, never a shed; refused rather than walked out",
   "pages": {
    "0044-baths-on-the-farm-furo.drawing.html": "06c647651494be2f"
   },
@@ -45672,81 +45730,99 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#bath room's wall per house": {
-  "code": "2e6de3cb6fa9390d",
-  "core": "649b64c74096ac9f",
+  "code": "9ebeb4452e88c3d8",
+  "core": "c029193969d6b97e",
   "date": "2026-10-08",
-  "note": "the roll is only between stable_end and main_door (`roll(...) < forms.bath_stable_share`); the floored rooms are an attested third form (\"joined to its floored rooms\") but are only a fallback, never rolled, and the headman's-house rule is absent; the floored rooms should be in the roll, or the claim should record them as a fallback by DEVIATION",
+  "note": "each house rolls its wall through bath_wall",
   "pages": {
    "0044-baths-on-the-farm-furo.html": "1b0add3e2fcce3b5"
   },
   "research": "f9b1fe1111c8963a",
   "rests": [
-   "0044-baths-on-the-farm-furo.drawing.html:23b7ceda518aa3ec",
    "0044-baths-on-the-farm-furo.drawing.html:a8d16ebfdea834bf",
-   "0044-baths-on-the-farm-furo.html:b06feb4284b8522f",
    "0044-baths-on-the-farm-furo.html:bb60e0fd056a14eb",
    "0044-baths-on-the-farm-furo.html:e6d213de3cdf21df"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#fixture gap 3.5 ft off every other part and bath room slide 4 ft": {
-  "code": "a9ff1db65cdd75df",
-  "core": "649b64c74096ac9f",
+  "code": "8aa4702d519e4f4d",
+  "core": "c029193969d6b97e",
   "date": "2026-10-08",
-  "note": "the record is silent on both figures",
+  "note": "no cited page gives a clearance or a slide",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#no seat, no persimmon": {
-  "code": "4b7745ff1769800b",
-  "core": "649b64c74096ac9f",
+  "code": "d65a99613d58b30f",
+  "core": "c029193969d6b97e",
   "date": "2026-10-08",
-  "note": "a farm with no dooryard seat for a persimmon keeps none",
+  "note": "a farm with no dooryard seat keeps none",
   "pages": {
    "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html": "6b3be37b04307230"
   },
   "research": "1640adf91280aca1",
   "rests": [
-   "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:193e9c0583a2d29a",
    "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:65dfdac106fa4297"
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#persimmon in front of the house or behind it, rolled per house at forms.persimmon_front": {
-  "code": "649b64c74096ac9f",
-  "core": "649b64c74096ac9f",
+ "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#persimmon front or behind": {
+  "code": "f0cca1cfc65f3df3",
+  "core": "c029193969d6b97e",
   "date": "2026-10-08",
-  "note": "persimmon in front of the house or behind it, rolled per house at forms.persimmon_front",
+  "note": "front or behind, rolled per house at the hamlet's share",
+  "pages": {
+   "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html": "6b3be37b04307230"
+  },
+  "research": "1640adf91280aca1",
+  "rests": [
+   "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:decf69e0e6c15d94"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#persimmon in its own grove bands": {
+  "code": "9bf666810b6dda09",
+  "core": "c029193969d6b97e",
+  "date": "2026-10-08",
+  "note": "the 0046 drawing page answers this: the persimmon \"may stand in the grove behind the house ... its own grove, no other farm's\". It should cite that page, not say UNRESEARCHED",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "rests": [
+   "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:881ed76b6b6133cb"
+  ],
+  "verdict": "MISLABELED"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#seating order": {
-  "code": "6808212100bed685",
-  "core": "649b64c74096ac9f",
+  "code": "b1e96381c9c23736",
+  "core": "c029193969d6b97e",
   "date": "2026-10-08",
-  "note": "the record is silent on the order",
+  "note": "no cited page orders the fixtures",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#stepped outward": {
-  "code": "59303d956bcdcd65",
-  "core": "649b64c74096ac9f",
+  "code": "3d97a97a3552c9c6",
+  "core": "c029193969d6b97e",
   "date": "2026-10-08",
-  "note": "the record is silent on stepping outward",
+  "note": "for the privy, 0047 rules on reach: \"no more than 48 ft from its house\", and past that privies \"stray out of their own farmsteads\". The code's 24 paces of 8 ft (192 ft) apply to the privy too. Cite 0047 and hold the privy to its reach",
   "pages": {},
   "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
+  "rests": [
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:6dbcbf157ef50b22",
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:75c1ac24b6f4dd92"
+  ],
+  "verdict": "MISLABELED"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#wood shed's walls": {
-  "code": "bdfd808d139404b2",
-  "core": "649b64c74096ac9f",
+  "code": "289a80430130b96e",
+  "core": "c029193969d6b97e",
   "date": "2026-10-08",
-  "note": "the claim names the house, its kura, the byre and the retirement house, but the code uses `steading_rects(hw, hh, \"N\" if kura else None, ...)`, which is the house and its kura only (\"never the byre's or the retirement house's\"); the claim should read \"the house and its kura\" (a short step off the house), and the docstring's \"its walls take a wood shed too\" for the byre is stale",
+  "note": "a short step off the house, behind or beside it",
   "pages": {
    "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "ad5072e51b00c129"
   },
@@ -45755,7 +45831,7 @@
    "0043-firewood-stacks-and-sheds-kigoya.drawing.html:4615b4a128e48e55",
    "0043-firewood-stacks-and-sheds-kigoya.drawing.html:93fa63f17d70422d"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::outward#plumbing": {
   "code": "bd995c0ec71c8ea3",
@@ -45779,6 +45855,20 @@
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html:75c1ac24b6f4dd92"
   ],
   "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/homestead_parts/fixture_seats.py::shed_off_a_wall#the ken past the wall gap": {
+  "code": "76ff5829f0550183",
+  "core": "c164a0c90a58ff1f",
+  "date": "2026-10-08",
+  "note": "the DEVIATION (about 9.5 ft against the page's 6 ft) is not recorded on the 0043 drawing page, which says only \"about 6 ft (a ken) off a wall\". Record it there, or go back to a ken",
+  "pages": {
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html": "ad5072e51b00c129"
+  },
+  "research": "862d7c9fcd1644d6",
+  "rests": [
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html:4615b4a128e48e55"
+  ],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::shed_off_a_wall#wood shed a ken off a wall": {
   "code": "812d15d03d3e7f7b",
@@ -49604,30 +49694,6 @@
   "date": "2026-10-03",
   "note": "dispatch",
   "research": "",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/houses.py::HousesMixin.water_source_anchor#where the water comes in": {
-  "code": "b929a82627c9be6c",
-  "core": "310342e443ca18ff",
-  "date": "2026-10-03",
-  "note": "corner, margin, chain or edge, never downhill",
-  "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
-  },
-  "research": "4e7ba7479292ad40",
-  "triaged": "2026-10-05",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/settlement/houses.py::HousesMixin.water_sources_for#water source above the field": {
-  "code": "5de3a44de02b6183",
-  "core": "5a2d77305ba6c1e6",
-  "date": "2026-10-03",
-  "note": "downhill refused",
-  "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
-  },
-  "research": "4e7ba7479292ad40",
-  "triaged": "2026-10-05",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/houses.py::STOREHOUSE_GRAY#storehouse color": {
@@ -60639,6 +60705,48 @@
   "date": "2026-10-03",
   "note": "formula matches; bundle silent",
   "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/water_source.py::WaterSourceMixin#plumbing": {
+  "code": "77cc9f57d0dedb89",
+  "core": "45d47d15b58c96af",
+  "date": "2026-10-08",
+  "note": "an empty carrier class",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/water_source.py::WaterSourceMixin.water_source_anchor#where the water comes in": {
+  "code": "b929a82627c9be6c",
+  "core": "310342e443ca18ff",
+  "date": "2026-10-08",
+  "note": "corner, margin, chain or stream edge; a source below the field is refused",
+  "pages": {
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+  },
+  "research": "4e7ba7479292ad40",
+  "rests": [
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:d12a5e6b4d47918f",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:e73f457f7f5367a3",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:f0cff1f9b2900437"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/water_source.py::WaterSourceMixin.water_sources_for#water source above the field": {
+  "code": "5de3a44de02b6183",
+  "core": "5a2d77305ba6c1e6",
+  "date": "2026-10-08",
+  "note": "pond and stream forms by the water's kind; downhill positions excluded",
+  "pages": {
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
+  },
+  "research": "4e7ba7479292ad40",
+  "rests": [
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:d12a5e6b4d47918f",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:e73f457f7f5367a3",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:f0cff1f9b2900437"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/water_ways/__init__.py::WaterWaysMixin#the composed mixin": {

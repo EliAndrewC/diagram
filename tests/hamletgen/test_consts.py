@@ -26,7 +26,7 @@ def test_the_lane_clearances_are_the_lane_pages_figures() -> None:
     lane the houses front was derived from the drawn minka's half-diagonal, a figure no page gives."""
     from l7r.diagram.hamletgen.consts import LANE_CLEARANCE
 
-    assert (LANE_CLEARANCE, WEB_CLEARANCE) == (40.0, 18.0)  # 0246's 7 ft to a fence, held as a center corridor (feature 328 wave 7)
+    assert (LANE_CLEARANCE, WEB_CLEARANCE) == (7.0, 18.0)  # 0246's 7 ft to a fence (feature 328 wave 48)
 
 
 def test_the_web_only_threads_a_gap_a_person_can_walk() -> None:

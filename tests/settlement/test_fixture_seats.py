@@ -213,3 +213,13 @@ def test_the_bath_room_rolls_among_its_three_walls() -> None:
     forms = fs.FixtureForms()
     assert fs.bath_wall(0.1, forms) == "stable_end" and fs.bath_wall(0.81, forms) == "floored_rooms" and fs.bath_wall(0.9, forms) == "main_door"
     assert {fs.bath_wall(k / 100, forms) for k in range(100)} == set(fs.BATH_WALLS)
+
+
+def test_the_privy_stays_within_48_ft_of_its_house_or_is_refused() -> None:
+    """Feature 328 (0047: a privy stands no more than 48 ft from its house; past that privies stray out of their own
+    farmsteads): the outward paces never carry it past the reach, and a farmstead with nothing free within it refuses it."""
+    assert fs.within_reach_of((0.0, HH / 2 + 40.0, 6.0, 6.0), HOUSE, 48.0) and not fs.within_reach_of((0.0, HH / 2 + 50.0, 6.0, 6.0), HOUSE, 48.0)
+    privy = _lay(("privy",))["privy"]
+    assert fs.within_reach_of(privy, HOUSE, 48.0)
+    with pytest.raises(ValueError, match="privy"):
+        _lay(("privy",), ground=[(0.0, 0.0, HW + 120.0, HH + 120.0)])

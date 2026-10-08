@@ -269,9 +269,9 @@ def test_a_plot_drawn_after_the_water_is_painted_under_every_channel(tmp_path) -
 
 def test_the_feed_runs_downhill_its_snap_refused_where_it_would_climb_and_a_climbing_feed_refused() -> None:
     """W10 at the hairline feed (`_comb_source_channel`), on the violating cases: a fan whose own fall leaves the race
-    running only a quarter of its length down it, with a stream 25 ft DOWN the fall of the sluice - snapping the feed onto
-    that stream would leave it level (the snap is not taken; the feed keeps the sluice), and a fall across which the race
-    runs level (the feed is refused by name, never recorded as water running uphill). `runs_downhill` is the one rule."""
+    running only 20 ft down it, with a stream 25 ft DOWN the fall of the sluice - snapping the feed onto
+    that stream would leave it climbing (the snap is not taken; the feed keeps the sluice), and a fall across which the race
+    runs a little uphill (the feed is refused by name, never recorded as water running uphill). `runs_downhill` is the one rule."""
     import math
 
     import pytest
@@ -281,7 +281,8 @@ def test_the_feed_runs_downhill_its_snap_refused_where_it_would_climb_and_a_clim
     base = _comb()
     (sx, sy), fork = base["channels"][0]["pts"][0], base["channels"][0]["pts"][-1]
     th = math.atan2(fork[1] - sy, fork[0] - sx)
-    phi = th + math.acos(0.25)  # the fall a quarter of the race's run goes down
+    run = math.hypot(fork[0] - sx, fork[1] - sy)
+    phi = th + math.acos(20.0 / run)  # the fall the race descends only 20 ft along (feature 328: any net descent runs downhill)
     f = (math.cos(phi), math.sin(phi))
     net = _comb()
     net["brook"], net["down_deg"] = [], math.degrees(phi)
@@ -289,12 +290,12 @@ def test_the_feed_runs_downhill_its_snap_refused_where_it_would_climb_and_a_clim
     s.meta(name="In", scale="hamlet", ftpx=1, down_deg=90)
     q = (sx + f[0] * 25.0, sy + f[1] * 25.0)  # the nearest point of the stream to the sluice, 25 ft down the fall
     s.M["streams"].append({"poly": [[q[0] - f[1] * 300.0, q[1] + f[0] * 300.0], [q[0] + f[1] * 300.0, q[1] - f[0] * 300.0]]})
-    assert not runs_downhill([q, fork], f), "the case: the snapped feed would run level"
+    assert not runs_downhill([q, fork], f), "the case: the snapped feed would climb 5 ft"
     s.draw_comb_field(net, "f1", {"kind": "stream"})
     feed = s.M["channels"][-1]
     assert feed["poly"][0] == [round(sx, 1), round(sy, 1)] and runs_downhill(feed["poly"], f)
     across = _comb()
-    across["brook"], across["down_deg"] = [], math.degrees(th) + 90.0
+    across["brook"], across["down_deg"] = [], math.degrees(th) + 95.0  # the race a little uphill of level
     t = Settlement(W=1400, H=1400, seed=5)
     t.meta(name="In", scale="hamlet", ftpx=1, down_deg=90)
     with pytest.raises(ValueError, match="runs level or uphill"):

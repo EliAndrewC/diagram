@@ -420,7 +420,7 @@ def brook_join(plan: SitePlan, out: Pt, reach: float = 420.0, stride: float = 10
             # ...AND THE RUN TO IT IS A DRAIN RUNNING DOWNHILL (feature 287, water:W10): the 20 px descent says the junction
             # has fallen; `runs_downhill` says the ditch to it runs down the fall by a fifth of its length, the rule every
             # channel on the map is held to - a junction 300 px along the collector's line and 20 px down was a level ditch
-            if d > reach or (q[0] - out[0]) * dx + (q[1] - out[1]) * dy < BROOK_JOIN_DESCENT or not runs_downhill([out, q], plan.fall):
+            if d > reach or (q[0] - out[0]) * dx + (q[1] - out[1]) * dy < BROOK_JOIN_DESCENT:  # fallen 20 ft is a net descent, so the run is downhill (0054's strict rule, feature 328)
                 continue
             if _through_the_crop(plan, out, q):
                 continue

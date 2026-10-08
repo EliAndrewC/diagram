@@ -17,9 +17,11 @@ stream watered every plot, to many on a dry plain like Sanuki.
 Guesses:
 - How often a field keeps a pond, a little over half the time where it has low plots: no count of ponds per field or per
   village was found, and the dense pond country of Kagawa bounds it only from above.
+- How much of the pond is open water and where its reeds stand: no page gives a dish pond's proportions.
 
-Depiction: The map sinks each pond wholly inside one low plot of paddy, with a fringe of reeds, never across a bund, as
-a pocket of ground too low and wet for rice. It draws one on any kind of paddy field - a broad valley floor, hillside
+Depiction: The map sinks each pond wholly inside one low plot of paddy, never across a bund, as a pocket of ground too
+low and wet for rice. It is drawn as a dish pond: an earthen bank round its edge, the wet ground just inside it where the
+reeds stand, and open water in the middle. It draws one on any kind of paddy field - a broad valley floor, hillside
 terraces, a narrow valley strip or a polder - and none among the fish ponds of dike-pond ground.
 
 Name: field pond
