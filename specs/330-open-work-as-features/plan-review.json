@@ -1,57 +1,84 @@
 {
  "feature": "330-open-work-as-features",
- "plan_sha256": "5c8df1fc8c34f79cba3ecaefe7de62042cc3983c68b1a3142d96d8c5f0edee8c",
+ "plan_sha256": "e533c6caa73a91ea69db8c8bebedbc5bf010938323301dea3381b0c2d55c8c85",
  "reviewed": "2026-10-08",
  "declared": "spec-fidelity",
  "decisions": [
   {
    "id": "D1",
-   "summary": "Closing words Done / Superseded by / Withdrawn (case-insensitive prefix) in one tuple the tests import; Implemented is not a closing word; a task is a column-0 '- [ ]' / '- [x]' / '- [X]' line; no tasks = FILED.",
+   "summary": "Closing words Done / Superseded by / Withdrawn in one tuple; Implemented closes nothing; a task is a column-0 box; no tasks = FILED.",
    "class": "within",
-   "why": "FR-002 and the spec's 'Implemented' edge case. Unchanged since round 2."
+   "why": "FR-002 and the 'Implemented' edge case. Plan bytes before D8 are identical to round 3 (HEAD~1 plan.md hashes to round 3's 5c8df1fc...)."
   },
   {
    "id": "D2",
-   "summary": "scripts/speckit-todo.py run by make speckit-todo; three headed groups, per-feature line, counts per state; ALL=1 adds closed features; exit 0.",
+   "summary": "scripts/speckit-todo.py behind make speckit-todo; three groups, counts per state; ALL=1 adds closed; exit 0.",
    "class": "within",
-   "why": "FR-001, FR-003, FR-009 and the no-spec.md edge case. Unchanged since round 2."
+   "why": "FR-001, FR-003, FR-009. Unchanged since round 3. The new --state flag only exposes feature() for D8."
   },
   {
    "id": "D3",
-   "summary": "Status lines rewritten only with evidence in audit.md; mixed features keep open tasks open; unsettled ones stay open and are listed for the GM; tasks are not ticked.",
+   "summary": "Status lines rewritten only with evidence in audit.md; unsettled features stay open and are listed for the GM; tasks not ticked.",
    "class": "within",
-   "why": "FR-004 and the spec's Assumptions. Unchanged since round 2; tasks.md T03 carries it as written."
+   "why": "FR-004 and Assumptions. Unchanged."
   },
   {
    "id": "D4",
-   "summary": "Search every spec and request for gm-assistant subjects and paths, read each hit, record the search in audit.md, delete any found.",
+   "summary": "Search specs and requests for gm-assistant subjects, read each hit, record, delete any found.",
    "class": "within",
-   "why": "FR-005. Unchanged; T02 carries it, deletion included."
+   "why": "FR-005. Unchanged."
   },
   {
    "id": "D5",
-   "summary": "One make claim per filed entry or named piece; spec.md carries the entry verbatim, its source and status Filed; an entry naming an earlier feature (275) takes a NEW number; done or ruled-out entries closed in audit.md with evidence.",
+   "summary": "One make claim per entry or named piece; verbatim text, source, status Filed; done or ruled-out entries closed with evidence.",
    "class": "within",
-   "why": "FR-006 and the Assumptions; round 1's narrowing stays fixed. T04 says 'one claimed number per entry or named piece', which matches."
+   "why": "FR-006. Unchanged."
   },
   {
    "id": "D6",
-   "summary": "Re-aim every live future-work/ mention (41 files, 77 mentions by the stated git grep) at the feature its entry became; history keeps its words; check-old-layout.py refuses a new live mention.",
+   "summary": "Re-aim every live future-work/ mention; history keeps its words; check-old-layout.py refuses a new live mention.",
    "class": "within",
-   "why": "FR-007 and SC-004. The only plan byte change in round 3 is the Technical Context count, 53 -> 41, now matching D6; it changes no scope. Re-run 2026-10-08 at HEAD 086c9bfcd and at a3928cfd5 with the stated exclusions: 41 files / 77 mentions both, and scripts/speckit-todo.py and tests/tooling/test_speckit_todo.py no longer match. The refusal enforces SC-004, the requested state."
+   "why": "FR-007, SC-004. Unchanged."
   },
   {
    "id": "D7",
-   "summary": "Root CLAUDE.md, dev/lessons.md and every doc that says 'add it to future-work' instead say: file a feature (make claim + spec.md Status Filed) and find open work with make speckit-todo.",
+   "summary": "Root CLAUDE.md, dev/lessons.md and every doc say: file a feature (make claim + Status Filed) and ask make speckit-todo.",
    "class": "within",
-   "why": "FR-008, now measured by SC-006. T06 covers 'the root CLAUDE.md and every doc', which includes dev/lessons.md."
+   "why": "FR-008, SC-006. Unchanged."
   },
   {
    "id": "STRUCT",
-   "summary": "Conversion script kept in the spec directory; tests in tests/tooling/; baseline make done at cd33340f5, zero new failures; tasks.md T01-T08 map one-to-one onto D1-D7 plus the gate.",
+   "summary": "Script in the spec directory, tests in tests/tooling/, baseline make done at cd33340f5, T01-T08 map onto D1-D7 plus the gate.",
    "class": "within",
-   "why": "Implementation placement and the regression rule; no scope change. No task drops or narrows a decision or an FR."
+   "why": "Placement and the regression rule. Unchanged."
+  },
+  {
+   "id": "D8a-status",
+   "summary": "The push's in-progress refusal no longer refuses a feature whose spec status line begins with a closing word (Done / Superseded by / Withdrawn), though boxes stay unticked.",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "It narrows a standing guard, but the accepted spec requires it: FR-004 closes features by editing the status line and D3 (accepted) leaves their tasks unticked, so a refusal that still counts those open boxes would treat every FR-004 closure as in-progress work on every push that touches it - the literal old rule defeats the request's purpose (one true, mechanical state). The plan refuses the same word-exemption for the review gate, where nothing in the request implies it; here FR-002/FR-004 do."
+  },
+  {
+   "id": "D8a-boxes",
+   "summary": "As implemented by 'refuse exactly what make speckit-todo calls planned or in progress', the refusal also swaps its box reader from any open box ('^\\s*- \\[ \\]') to column-0 tasks only, and does not refuse state 'filed' even when a tasks.md exists.",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "Nothing in request.md or spec.md implies this part, and it inverts the spec's own edge case ('a parsing miss shows up as open work, not as finished work'): for the push guard a parsing miss now LANDS. Measured 2026-10-08 on fixtures run through speckit-todo.py --state: a tasks.md of indented '  - [ ] T01 / T02' reads 'filed' (old rule: refused; new: lands with every task open); a tasks.md with '- [x] T01' and an indented open '  - [ ] research pass' reads 'closed' (old: refused; new: lands). Zero current specs/ are in either shape (measured the same day), so the fix costs nothing today. Also fail-open: if the python call errors or prints nothing, the case matches no arm and the feature is not refused. Fix: keep the old open-box test and exempt only a closing status line - refuse when tasks.md has any '^\\s*- \\[ \\]' line AND speckit-todo's state is not closed-by-status (or: refuse unless state is closed with a closing-word reason, and refuse on empty/failed output); add the two fixture cases above to test-sync-with-main.sh."
+  },
+  {
+   "id": "D8b",
+   "summary": "review-gate.sh exempts from the fidelity-verdict check a spec whose status opens 'Filed' and whose directory has no tasks.md; gaining tasks.md ends the exemption.",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Implied by the request: the GM asked that future-work entries 'become an unimplemented spec kit feature', and FR-006/FR-008 make filing (verbatim text, status Filed, no plan or tasks) the routine way to defer work. A filed spec implements nothing, and constitution XVI's review is before implementation; without the exemption every deferral needs an escape. The exemption is narrow: it keys on both the Filed status AND no tasks.md, ends when tasks appear (tested both ways), and opens nothing the gate held, since code pushed without touching the spec directory was never under this check."
+  },
+  {
+   "id": "D8c",
+   "summary": "The one push of the 22 status-line rewrites carries REVIEW_GATE_OK with a reason, rather than a gate exemption for Done.",
+   "class": "within",
+   "why": "A single recorded escape for FR-004's status edits to specs that mostly predate the fidelity review; no guard is changed, and declining a Done exemption keeps the gate from being skipped by writing a word."
   }
  ],
- "verdict": "CLEAR"
+ "verdict": "BLOCKED"
 }

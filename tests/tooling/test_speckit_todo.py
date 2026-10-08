@@ -117,3 +117,12 @@ def test_the_real_tree_answers_in_under_two_seconds() -> None:
     out = st.report(REPO / "specs")
     assert time.perf_counter() - t0 < 2.0
     assert out.rstrip().splitlines()[-1].startswith("open: ")
+
+
+@pytest.mark.parametrize(("status", "closed"), [("Done (2026-10-08): x", True), ("Withdrawn (GM)", True), ("Superseded by 316", True), ("Implemented", False), ("Draft", False), (None, False)])
+def test_closed_by_status_reads_the_status_line_alone(tmp_path: Path, status: str | None, closed: bool) -> None:
+    """The push's in-progress refusal keeps its own open-box test and asks only this (plan D8, review round 4)."""
+    d = _feature(tmp_path, "001-x", status, "- [ ] T01 open\n")
+    assert st.closed_by_status(d) is closed
+    r = subprocess.run([sys.executable, str(script("speckit-todo.py")), "--closed-by-status", str(d)], capture_output=True, text=True, check=False)
+    assert r.stdout.strip() == ("yes" if closed else "no")

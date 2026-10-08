@@ -12,7 +12,9 @@ it while holding open tasks, so only the tasks or a closing word decide. A check
 feature OPEN - a parsing miss shows as open work, never as finished work.
 
     speckit-todo.py [--root <repo>] [--all]     --all adds the closed features and why each is closed
-    speckit-todo.py --state <specs/NNN-slug>     one feature's state - what the push's in-progress refusal asks
+    speckit-todo.py --state <specs/NNN-slug>     one feature's state
+    speckit-todo.py --closed-by-status <dir>     `yes` when the spec's status line closes it (CLOSING), else `no` - the
+                                                 push's in-progress refusal keeps its own open-box test and asks only this
 """
 
 from __future__ import annotations
@@ -68,6 +70,13 @@ def feature(d: Path) -> Feature:
     return Feature(d.name, title, state, ticked, total, not spec.is_file(), why)
 
 
+def closed_by_status(d: Path) -> bool:
+    """Does the spec's `**Status**:` line open with one of `CLOSING`? Only the line - no task is read."""
+    spec = d / "spec.md"
+    s = _STATUS.search(spec.read_text(errors="replace")) if spec.is_file() else None
+    return bool(s) and (s.group(1) or s.group(2)).strip().lower().startswith(CLOSING)
+
+
 def features(specs: Path) -> list[Feature]:
     return [feature(d) for d in sorted(specs.iterdir()) if d.is_dir()]
 
@@ -106,7 +115,11 @@ def main(argv: list[str]) -> int:
     ap.add_argument("--root", default=".", help="the repository root (default: the current directory)")
     ap.add_argument("--all", action="store_true", help="also list the closed features and why")
     ap.add_argument("--state", metavar="DIR", help="print one feature directory's state and nothing else")
+    ap.add_argument("--closed-by-status", metavar="DIR", help="print yes when the spec's status line closes it, else no")
     args = ap.parse_args(argv)
+    if args.closed_by_status:
+        sys.stdout.write(("yes" if closed_by_status(Path(args.closed_by_status)) else "no") + "\n")
+        return 0
     if args.state:
         sys.stdout.write(feature(Path(args.state)).state + "\n")
         return 0

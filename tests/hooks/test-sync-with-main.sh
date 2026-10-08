@@ -164,6 +164,12 @@ OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "STAYS QUIET: 
 ( cd "$D/main/.clones/c" && printf -- '# Feature Specification: x\n\n**Status**: Implemented, mostly\n' > specs/140-x/spec.md && echo more > note.md && git add -A && git commit -qm "not closed" )
 OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "IT FIRES: the same open box under a status that closes nothing -> refused" 1 $?
 expect_out "IN PROGRESS"
+# plan review round 4: the closing-status exemption must not change how boxes are READ - an indented open task, or a
+# ticked task whose indented research box is open, is still in progress under a status that closes nothing
+( cd "$D/main/.clones/c" && printf -- '## Phase 1\n  - [ ] T01 indented and open\n  - [ ] T02 indented and open\n' > specs/140-x/tasks.md && echo m3 > note.md && git add -A && git commit -qm indented )
+OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "IT FIRES: indented open tasks -> refused" 1 $?
+( cd "$D/main/.clones/c" && printf -- '- [x] T01 done\n      - [ ] research pass\n' > specs/140-x/tasks.md && echo m4 > note.md && git add -A && git commit -qm research-box )
+OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "IT FIRES: a ticked task with an open indented research box -> refused" 1 $?
 
 echo "8. origins are re-pointed at GitHub once, and said so"
 D=$(topology h)

@@ -62,8 +62,10 @@ files), 41 live files that name `future-work/` (D6 says how they were counted). 
 - **D8 - The guards that judge a feature's state follow D1** (FR-002, found at the landing push). Two push-time checks
   had their own notion of a feature's state, and each refused this feature's own result: (a) the stop-work
   procedure's in-progress refusal counted any open box, so the 19 features D3 closed by their status lines still read
-  as in progress - it now asks `speckit-todo.py --state` and refuses exactly what `make speckit-todo` calls planned or
-  in progress; (b) the review gate demanded a fidelity verdict of every spec a push touches, which no FILED spec can
+  as in progress - it KEEPS its own open-box test (any open box, indented or not, as before) and exempts only a spec
+  whose status line closes it, asking `speckit-todo.py --closed-by-status` so the closing words stay stated once; the
+  exemption fails closed (an error or no answer counts as not closed) - plan review round 4 found that switching the
+  refusal wholesale to `--state` would also have changed how boxes are read, letting indented open tasks land; (b) the review gate demanded a fidelity verdict of every spec a push touches, which no FILED spec can
   carry - a spec whose status opens `Filed` and that has no `tasks.md` is exempt, because it implements nothing, and
   gaining tasks ends the exemption. Each change has a case each way in its suite. The 22 old specs whose status lines
   D3 rewrote mostly predate the fidelity review (constitution XVI); their verdict is not owed for a status edit, and
