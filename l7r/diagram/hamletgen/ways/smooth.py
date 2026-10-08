@@ -192,7 +192,8 @@ def _smooth_web(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: l
         a hairpin arm cut at the only contact - research/questions/0081-village-lanes.drawing.html: a returning leg under 40 ft is cut even where its tip was the lane's only contact, the lane joined again at the fold within the 25 ft join reach; where no join clears, the settle cuts it
         the knot's node on a through lane - research/questions/0081-village-lanes.drawing.html: ends joined at a single point, set on a through lane's tread (4 ft touch) where one runs, so the arriving lane meets its side as a T
         the knot's node at the centroid - GUESS: where no lane runs through the knot, its node is the ends' centroid
-        the string-pull chord's keep-out - UNRESEARCHED: a chord stays max(4 ft, w/2 + 2 ft) off another lane, a lane with no width taken at 5 ft"""
+        the string-pull chord's keep-out - DEVIATION research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a chord at this lane's own margin stays max(4 ft, w/2 + 2 ft) off footprints, walls and water (a lane with no width taken at 5 ft), under the page's 7 ft from a lane's middle to a garden fence - filed to be brought to it
+        the track out and the streets left whole - research/questions/0081-village-lanes.drawing.html, research/questions/0033-row-villages-resson.drawing.html: the connector is drawn taut where it is chosen and judged there (`connector_keeps_the_law`), and a street is laid along its row, so neither is cut, pulled or gathered here"""
     changed = 0
     lanes = s.M.get("lanes") or []
 
