@@ -13,9 +13,9 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 - (wave 5, landed and reviewed) placement-changed village lane on kashikawa - wave 5: 0033's row street runs on off the map as the road into it at both ends, where
   the web cut it back to its last joint (`trim_streets`); Kashikawa's and Mizuguchi's far ends now run off the sheet as a
   second way out (every way is inked `village lane`).
-- (wave 46) placement-changed village lane on inashiro - the track out drawn taut (no 34/46 px wander) on Inashiro, Kuwabata
+- placement-changed: village lane on inashiro - wave 46: the track out drawn taut (no 34/46 px wander) on Inashiro, Kuwabata
   and Sawada; run at batch 1's close (T119), from round 3 on under the GM's ruling of 2026-10-08 (rounds past two allowed)
-- (wave 46) placement-changed village lane on kashikawa - the road re-squared at the brook's ford on a leg past 40 ft
+- placement-changed: village lane on kashikawa - wave 46: the road re-squared at the brook's ford on a leg past 40 ft
   (`squaring.squared_against`), a different rule on a different map; run at batch 1's close (T119), round 3 on
 - none (wave 45): the hairpin and zigzag cuts and the behind-the-wall rule's removal moved no map (the five hamlets
   regenerated 2026-10-08, manifests byte-identical)
@@ -62,7 +62,7 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
   on the sheet and are recorded beyond it (`woodland_offsheet`, N and W), the woodland commons gone from their legends. The
   woodland unit's two rounds are spent (waves 19 and 20, the second NEEDS-WORK); its F1 is verified by measurement
   (`measurements.json` mizuguchi-glyph-woodland-F1-side) - a third round asks the GM's waiver.
-- placement-changed: woodland commons on inashiro - wave 19: the coppice wood taken beyond the fields from the houses first (0077
+- (wave 19, superseded: Inashiro draws no woodland commons since wave 20) woodland commons on inashiro - wave 19: the coppice wood taken beyond the fields from the houses first (0077
   drawing), where feature 261 preferred the houses' side; Inashiro's woods re-placed (three where two stood).
 - placement-changed: woodland commons on kashikawa - wave 19: the same; Kashikawa's woods move across its field.
 - none (wave 18): the thicket's 70% passes dropped moved nothing drawn - measured: Kashikawa's and Mizuguchi's thickets were seated
