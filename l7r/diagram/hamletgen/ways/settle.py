@@ -213,23 +213,19 @@ def _cut_gap(M: Mapping[str, Any], x: Pt) -> float:
     return max(near, default=3.0)
 
 
-HAIRPIN_LEG_FT = 40.0
-"""Research: a returning leg cut - research/questions/0081-village-lanes.drawing.html: a returning leg under 40 ft is cut"""
-
-
 def _unkinked(p: Poly, span: tuple[str, int, int]) -> list[Poly]:
-    """A run that doubles back loses its returning leg where that leg is under `HAIRPIN_LEG_FT` (the shorter arm; a longer
-    one stands); one that zigzags is pulled straight - its two turns dropped, the way running from the vertex before the first
-    to the vertex after the second (feature 328: it kept the longer arm at any length, and cut a zigzag's middle out, leaving
-    two lanes where there was one).
+    """A run that doubles back loses its returning leg (the shorter arm): 0081 cuts one under 40 ft, and a lane never
+    doubles back, so a longer one goes too - left standing it broke the law every round and the last resort dropped the whole
+    lane (feature 328 wave 45, spec-fidelity). One that zigzags is pulled straight - its two turns dropped, the way running from
+    the vertex before the first to the vertex after the second (it cut the middle out, leaving two lanes where there was one).
 
-    Research: no hairpin or zigzag - research/questions/0081-village-lanes.drawing.html: "a returning leg under 40 ft is cut";
-    and two turns of more than 50 degrees within 40 ft of path are pulled straight"""
+    Research:
+        no hairpin or zigzag - research/questions/0081-village-lanes.drawing.html: "a returning leg under 40 ft is cut"; and two turns of more than 50 degrees within 40 ft of path are pulled straight
+        a returning leg of 40 ft or more - GUESS research/questions/0081-village-lanes.drawing.html: cut as a shorter one is - the page says a lane never doubles back but gives the cut only under 40 ft"""
     kind, ka, kb = span
     if kind == "doubles back":
         head, tail = p[: ka + 1], p[ka:]
-        short, long_ = sorted((head, tail), key=polyline_len)
-        return [long_] if polyline_len(short) < HAIRPIN_LEG_FT else [p]
+        return [max(head, tail, key=polyline_len)]
     return [[*p[:ka], *p[kb + 1 :]]]
 
 
@@ -359,10 +355,10 @@ def settle_ends(s: Any) -> int:
 
     Research:
         lanes met end to end read as one - research/questions/0081-village-lanes.drawing.html: a needle, fold or hairpin re-laid as a T
-        no doubled tail - CONVENTION: the end cut back to where it came alongside the way
+        no doubled tail - UNRESEARCHED: the end cut back to where it came alongside the way
         no fan of stubs at a door - UNRESEARCHED: past two ends at one house, the farther cut back past the doorstep
-        a lane ends at the dooryard - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: an end behind a house carried round
-            its gable where lawful, else backed off (`off_the_back`)"""
+        a lane ends at the dooryard - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: an end within 60 ft of the house or
+            12 ft of its built ground reaches it on any side; one that reaches nothing is trimmed to service (`settle_dangling`)"""
     M = s.M
     lanes = M.get("lanes") or []
     edits: dict[int, list[Poly]] = {}
@@ -824,8 +820,8 @@ class Lawful:
 
         Research:
             lanes meet as a T - research/questions/0081-village-lanes.drawing.html: no needle, fold or hairpin at either end
-            an end reaches something seen - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: no dangling end, none behind a house
-            no doubled tail - CONVENTION: either way round
+            an end reaches something seen - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: no dangling end
+            no doubled tail - UNRESEARCHED: either way round
             no way out over and back - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: tree lanes"""
         M = self.M
         if not self.on_lawful_ground(run, width):

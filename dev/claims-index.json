@@ -16418,11 +16418,16 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/corridors.py::GABLE_MARGIN_FT#gable margin": {
-  "code": "1329f77f616740d1",
+  "code": "3b1313c1bc944ff6",
   "core": "5efeb905b7d48b3f",
-  "date": "2026-10-03",
-  "note": "no question gives it",
+  "date": "2026-10-08",
+  "note": "no question sets how far a route stands off a house wall; §41's 7 ft is from a garden fence",
+  "pages": {},
   "research": "",
+  "rests": [
+   "0081-village-lanes.drawing.html:18dffe2b3b52b18c",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c5daec1a445d35bf"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/corridors.py::GroundIndex#roles and indexing": {
@@ -16719,29 +16724,6 @@
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:f0a411a544083965"
   ],
   "triaged": "2026-10-05",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/ways/corridors.py::round_the_gable#a path reaches the front": {
-  "code": "5cc4d73a00642734",
-  "core": "d6261c5f1607c914",
-  "date": "2026-10-05",
-  "note": "",
-  "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
-  },
-  "research": "7b40c2c01cfba682",
-  "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/ways/corridors.py::round_the_gable#round the nearer gable by its back corner": {
-  "code": "15223466ea6c0118",
-  "core": "d6261c5f1607c914",
-  "date": "2026-10-03",
-  "note": "no question gives it",
-  "research": "",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/corridors.py::routed_field_runs#field path to the bund": {
@@ -18290,11 +18272,13 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/keeper.py::unsettled#verdict cache": {
-  "code": "aa64d21c8a929feb",
-  "core": "8d5dce55cc926292",
-  "date": "2026-10-03",
-  "note": "plumbing, no physical decision",
+  "code": "454de7f2763d89a3",
+  "core": "21bddc7993c4b206",
+  "date": "2026-10-08",
+  "note": "chooses which rules to ask and caches the result",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/knots.py::WebMemo#plumbing": {
@@ -18338,10 +18322,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/knots.py::WebMemo.count#plumbing": {
-  "code": "630e34236f356ad4",
-  "core": "5265ed952fb78dd8",
-  "date": "2026-10-07",
-  "note": "counts breaches of rules decided elsewhere",
+  "code": "f7923b710916c455",
+  "core": "5f60540d5fa3f342",
+  "date": "2026-10-08",
+  "note": "counts breaches",
   "pages": {},
   "research": "",
   "rests": [],
@@ -18615,11 +18599,13 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/last_resort.py::lanes_breaking#repair policy": {
-  "code": "f810a7582d411df9",
-  "core": "91ebd6792964e66b",
-  "date": "2026-10-03",
-  "note": "plumbing, no physical decision",
+  "code": "4ce633158694f9a1",
+  "core": "68570a3c4c74a49c",
+  "date": "2026-10-08",
+  "note": "gathers the lanes the law's predicates name",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/last_resort.py::last_resort#repair policy": {
@@ -18842,11 +18828,13 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/law.py::LAW#plumbing and wrappers": {
-  "code": "ac57af7cbd29bd0c",
-  "core": "4f9a2fa24e6d6ed4",
-  "date": "2026-10-03",
-  "note": "matches the claim",
+  "code": "9cc23a8344340f21",
+  "core": "e2b0198d96203a20",
+  "date": "2026-10-08",
+  "note": "a table of rules by name",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/law.py::NEEDLE_DEG#a needle, not a T": {
@@ -19073,21 +19061,6 @@
    "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
    "0081-village-lanes.drawing.html:3b9a5312c92335d3",
    "0081-village-lanes.drawing.html:be608a70af4cfcc5"
-  ],
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/ways/law.py::ends_behind#a lane ends at the dooryard": {
-  "code": "7a54e3f2ba7b4df2",
-  "core": "65a53c943d33b85f",
-  "date": "2026-10-05",
-  "note": "",
-  "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
-  },
-  "research": "7b40c2c01cfba682",
-  "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461"
   ],
   "verdict": "IN-STEP"
  },
@@ -19498,11 +19471,13 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/law.py::violations#plumbing and wrappers": {
-  "code": "3bcaadc68c9958c2",
-  "core": "83a4e63fe6728907",
-  "date": "2026-10-03",
-  "note": "matches the claim",
+  "code": "3e72d292cc0788de",
+  "core": "1809a0c1db4a7c56",
+  "date": "2026-10-08",
+  "note": "asks every rule in LAW",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/law.py::way_out_carriers#plumbing and wrappers": {
@@ -20596,20 +20571,27 @@
   "triaged": "2026-10-05",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/settle.py::BACK_OFF_STEP_FT#settle plumbing": {
-  "code": "56fada16982449af",
-  "core": "6f1b8dc9cc6bf543",
-  "date": "2026-10-03",
-  "note": "matches the claim",
-  "research": "",
-  "verdict": "IN-STEP"
- },
  "l7r/diagram/hamletgen/ways/settle.py::CROSSING_GAP_FT#a cut crossing ends on the bank": {
   "code": "7f7e5f83f434ad71",
   "core": "6f1b8dc9cc6bf543",
   "date": "2026-10-03",
   "note": "matches the claim",
   "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/settle.py::HAIRPIN_LEG_FT#a returning leg cut": {
+  "code": "4a07ca42057f4eea",
+  "core": "4f6abb3ccbbe5fc1",
+  "date": "2026-10-08",
+  "note": "\"a returning leg under 40 ft is cut\"",
+  "pages": {
+   "0081-village-lanes.drawing.html": "9e27759395199abd"
+  },
+  "research": "ebd72aaa6a0eb9af",
+  "rests": [
+   "0081-village-lanes.drawing.html:3b9a5312c92335d3",
+   "0081-village-lanes.drawing.html:65ad16eace199d92"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle.py::JOIN_BACK_PAD_FT#a deferring end taken back": {
@@ -20629,49 +20611,61 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle.py::Lawful.__call__#an end reaches something seen": {
-  "code": "191208646d61e44a",
-  "core": "ad9914b35183ad1e",
-  "date": "2026-10-05",
-  "note": "",
+  "code": "79c9f750d5258ac7",
+  "core": "a29dbe2e599e7354",
+  "date": "2026-10-08",
+  "note": "the code refuses only dangling ends (dangling_lane_ends, matching §31); \"none behind a house\" is in neither the code nor §31, which counts an end within 60 ft of the house on any side; drop that phrase from the claim",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
   "research": "7b40c2c01cfba682",
   "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/ways/settle.py::Lawful.__call__#lanes meet as a T": {
-  "code": "4fec2c1c1035439e",
-  "core": "ad9914b35183ad1e",
-  "date": "2026-10-03",
-  "note": "needle, fold and hairpin are refused",
+  "code": "8d88ad694f4227e1",
+  "core": "a29dbe2e599e7354",
+  "date": "2026-10-08",
+  "note": "refuses a run that makes a needle, fold or hairpin",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },
   "research": "ebd72aaa6a0eb9af",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
+   "0081-village-lanes.drawing.html:3b9a5312c92335d3"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle.py::Lawful.__call__#no doubled tail": {
-  "code": "bb9ca4d6f99cc1f5",
-  "core": "ad9914b35183ad1e",
-  "date": "2026-10-03",
-  "note": "matches the claim",
+  "code": "6034c3a6d7a3c288",
+  "core": "a29dbe2e599e7354",
+  "date": "2026-10-08",
+  "note": "refusing a lane that runs alongside another within 15 deg (_DOUBLED_DEG) is a placement rule, not how a thing is shown; should be UNRESEARCHED (0081 never names doubled tails)",
+  "pages": {},
   "research": "",
-  "verdict": "IN-STEP"
+  "rests": [
+   "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
+   "0081-village-lanes.drawing.html:65ad16eace199d92",
+   "0081-village-lanes.drawing.html:be608a70af4cfcc5"
+  ],
+  "verdict": "MISLABELED"
  },
  "l7r/diagram/hamletgen/ways/settle.py::Lawful.__call__#no way out over and back": {
-  "code": "ce8e21cb9305a337",
-  "core": "ad9914b35183ad1e",
-  "date": "2026-10-03",
-  "note": "matches the claim",
+  "code": "a1e0dc879647fc38",
+  "core": "a29dbe2e599e7354",
+  "date": "2026-10-08",
+  "note": "refuses a tree lane that would take a household's way out over the brook and back, per \"a way keeps to its own bank\"",
   "pages": {
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "c23a085a43372c2c"
   },
   "research": "d47738a05844fe19",
+  "rests": [
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:93969c06f800b0d5",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:d643c23f456119bc"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle.py::Lawful.__init__#settle plumbing": {
@@ -20917,19 +20911,20 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle.py::_unkinked#no hairpin or zigzag": {
-  "code": "0b08fdc4894a37b1",
-  "core": "e019e101dc8e8e31",
-  "date": "2026-10-05",
-  "note": "a doubled-back run keeps its longer arm whatever the shorter arm's length, where 0081 cuts a returning leg under 40 ft (§1342); a zigzag loses its middle stretch and leaves two pieces, where 0081 has it pulled straight (§1343)",
+  "code": "8aa44f5f75106513",
+  "core": "458817607d5d977d",
+  "date": "2026-10-08",
+  "note": "cuts the shorter arm under 40 ft; drops a zigzag's two turns",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },
   "research": "ebd72aaa6a0eb9af",
   "rests": [
    "0081-village-lanes.drawing.html:3b9a5312c92335d3",
+   "0081-village-lanes.drawing.html:65ad16eace199d92",
    "0081-village-lanes.drawing.html:d30e15716180fbf5"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle.py::apply_pieces#a split piece with no width is drawn 3 ft wide": {
   "code": "dc4c07c2d5b322cf",
@@ -21081,20 +21076,6 @@
   "triaged": "2026-10-05",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/settle.py::off_the_back#a lane ends at the dooryard": {
-  "code": "b334250099590a27",
-  "core": "1c6139b652cd6205",
-  "date": "2026-10-05",
-  "note": "backs off an end standing behind the house (`behind_house`, W57), but the page counts an end within 60 ft of the house, or within 12 ft of its built ground \"its house, byre, shed, threshing yard or garden\", as reaching it on any side; record the behind-the-back-wall rule on 0246 (a GUESS) or drop it",
-  "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
-  },
-  "research": "7b40c2c01cfba682",
-  "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461"
-  ],
-  "verdict": "DRIFTED"
- },
  "l7r/diagram/hamletgen/ways/settle.py::open_ground_rings#off crop and marsh": {
   "code": "9c47192d5def5b15",
   "core": "0197e75c0e2845ec",
@@ -21143,10 +21124,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle.py::settle_ends#a lane ends at the dooryard": {
-  "code": "66e4f96854e4adbe",
-  "core": "eeb9ac7de5a36520",
-  "date": "2026-10-05",
-  "note": "carries or backs off an end behind a house that the page already counts as reaching it (within 60 ft of the house, or 12 ft of its built ground, on any side); the behind-the-house rule is not on 0246",
+  "code": "787c53d0bef103d7",
+  "core": "a96e373d7310ce83",
+  "date": "2026-10-08",
+  "note": "the claim describes carrying an end round the gable or backing it off (off_the_back), which the code removed in feature 328 (its own comment says so), and §31 has no behind-a-house rule; drop the claim or restate it as the §31 60 ft / 12 ft reach rule (settle_dangling)",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
@@ -21157,31 +21138,45 @@
   "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/ways/settle.py::settle_ends#lanes met end to end read as one": {
-  "code": "8636e1496e2a03ef",
-  "core": "eeb9ac7de5a36520",
-  "date": "2026-10-03",
-  "note": "needle, fold and hairpin are re-laid as a T",
+  "code": "3b18a26a4cd6499e",
+  "core": "a96e373d7310ce83",
+  "date": "2026-10-08",
+  "note": "re-laid as a T with reaimed; two bare folded legs lose the shorter",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },
   "research": "ebd72aaa6a0eb9af",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
+   "0081-village-lanes.drawing.html:3b9a5312c92335d3"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle.py::settle_ends#no doubled tail": {
-  "code": "e1b4fb86430fe4ab",
-  "core": "eeb9ac7de5a36520",
-  "date": "2026-10-03",
-  "note": "matches the claim",
+  "code": "396d65263f79bf55",
+  "core": "a96e373d7310ce83",
+  "date": "2026-10-08",
+  "note": "cutting a lane back to where it came alongside another way is a physical layout decision, not a drawing convention; should be UNRESEARCHED",
+  "pages": {},
   "research": "",
-  "verdict": "IN-STEP"
+  "rests": [
+   "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
+   "0081-village-lanes.drawing.html:65ad16eace199d92",
+   "0081-village-lanes.drawing.html:be608a70af4cfcc5"
+  ],
+  "verdict": "MISLABELED"
  },
  "l7r/diagram/hamletgen/ways/settle.py::settle_ends#no fan of stubs at a door": {
-  "code": "28149dead52d319e",
-  "core": "eeb9ac7de5a36520",
-  "date": "2026-10-03",
-  "note": "matches the claim",
+  "code": "deab2415079e41d7",
+  "core": "a96e373d7310ce83",
+  "date": "2026-10-08",
+  "note": "no question sets a maximum number of lane ends at one house (DOORSTEP_MAX 2, DOORSTEP_FT 80)",
+  "pages": {},
   "research": "",
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle.py::settle_fragments#debris": {
@@ -24075,11 +24070,13 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/tree.py::end_faults#access tree plumbing": {
-  "code": "fe94310c53898a50",
-  "core": "1022bdeae0149cb1",
-  "date": "2026-10-03",
-  "note": "plumbing",
+  "code": "431594b760e2a9ff",
+  "core": "6d19f3d49ad319c9",
+  "date": "2026-10-08",
+  "note": "counts end faults",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/tree.py::hosts#access tree plumbing": {

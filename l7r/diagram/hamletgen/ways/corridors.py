@@ -190,7 +190,7 @@ class GroundIndex:
 
 GABLE_MARGIN_FT = 6.0
 """How far off its own house's wall a field route may run beside its own steading (`field_router`): clear of the eaves by more
-than a tread's half-width and the house-hit margin (`house_hit`: 1.5 + 2 ft). A map drawing convention.
+than a tread's half-width and the house-hit margin (`house_hit`: 1.5 + 2 ft).
 
 Research: gable margin - UNRESEARCHED: 6 ft off the house's wall"""
 

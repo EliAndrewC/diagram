@@ -57,7 +57,7 @@ class WebRefused(ValueError):
 def lanes_breaking(s: Any) -> set[int]:
     """Every lane but the connector - the tree's included - that some per-lane rule of the law names: a hook, a kink, a
     crossing fault, a foul of the fabric, and every joint rule that names a lane (a hairpin at the connector, a needle, a
-    fold, a doubled tail, a dangling end, a crowded doorstep, an end behind a house, a sliver of grass); the ordinary lanes
+    fold, a doubled tail, a dangling end, a crowded doorstep, a sliver of grass); the ordinary lanes
     crossing a brook some household's way out crosses twice; and the ordinary lanes that break a rule against the tree
     (`tree.tree_faults`), which defer. The connector is held by its own placer (`track.connector_through`)."""
     M = s.M

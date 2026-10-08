@@ -1,69 +1,58 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "9ba697a4de6f7b4288dd1160e49909b13f57ed8be23632a886e9e812ffc7f251",
+ "plan_sha256": "501f5071ad3af376f420ef331e1af3b126e00e472e76a5768564ee6f61684c45",
  "reviewed": "2026-10-08",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W44-scope",
-   "summary": "Wave 44 takes row 486 in ranking order, rows 487-492 next",
+   "id": "W45-1",
+   "summary": "_unkinked: a returning leg under 40 ft (HAIRPIN_LEG_FT) is cut, keeping the longer arm",
    "class": "within",
-   "why": "The next ranked E2 row after wave 43's 482-485 (FR-006, SC-003). Unchanged from round 1."
+   "why": "0081 drawing page verbatim: 'where a lane turns back on itself, a returning leg under 40 ft is cut'; the implementation moves to the research (FR-004)."
   },
   {
-   "id": "row486-end-branch",
-   "summary": "joined_link: the straight snap where walkable, else the clear run the far-gap branch lays, else the run is refused; a carried end spliced on by carried_onto, which also checks the leg from the run's next vertex into a clear-run link that does not start at the end",
-   "class": "within",
-   "why": "Row 486's ranked fix word for word, and it meets wave 43 round 2's condition that the routed link is tried before the refusal. carried_onto (the round 1 aside) closes the one way the splice could put ink on ground that was never checked: a clear run starts past the foul it skirted. It is tested (test_carried_onto_splices_the_link_and_checks_the_leg_into_it). Refusal now happens only where no walkable link exists, which is 0081's own 'or the lane not drawn'."
+   "id": "W45-2",
+   "summary": "_unkinked: a hairpin whose returning leg is 40 ft or more 'now stands' (returns [p] unchanged); the test pins _unkinked(long_back) == [long_back]",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "0081's own rule opens 'A lane never doubles back in a hairpin. A turn of more than 140 degrees is a hairpin'; the page never says a longer returning leg stands - that is the plan completing the page's thought from 'under 40 ft is cut'. It also does not do what the plan says: measured 2026-10-08 by a scratch probe through make test-file (lane [(0,50),(200,50),(150,55)], 50 ft returning leg), settle_shapes returns 1 change every round with the lane unchanged (so the settle never settles and burns all SETTLE_ROUNDS), law.lanes_that_kink still names it, and last_resort.lane_violators names it, so the last resort drops the WHOLE lane (or refuse_unreached refuses the map). The page's 40 ft rule is honored only by cutting more than the page cuts. The case the page does not settle - what a 140-degree turn with a returning leg of 40 ft or more becomes - must be settled by the feature's own route (FR-003 E4 research first, or the FR-004 exception path recorded on 0081), never by leaving a hairpin the page forbids or by a silent whole-lane drop."
   },
   {
-   "id": "row486-kept-whole",
-   "summary": "A run kept whole (both halves 40 ft or more) has three outcomes: run[k] snapped onto its foot where both new legs are walkable; else joined_link's link drawn as its own join lane (_draw_web(..., joins=True)) beside the whole run; else not drawn",
+   "id": "W45-3",
+   "summary": "_unkinked: a zigzag is pulled straight - vertices ka..kb dropped, one lane from the vertex before the first turn to the vertex after the second",
    "class": "within",
-   "why": "Round 1 ruled this NOT LEGITIMATE on two carve-outs, and both are gone from serve.py. (a) The snap no longer depends on joined_link(run[k], q): it is decided by the two new legs alone, so a run is no longer refused for an obstacle on a link it never draws. (b) Where a leg is blocked, the link joined_link finds is drawn as its own lane, the way the far-gap branch draws one. The run is refused only where there is no link, or where the link cannot be drawn. The claim at serve.py now reads 'not drawn where no link is walkable'. test_a_run_kept_whole_takes_a_link_where_it_arrives covers the snap, the drawn link (red on the old code, which returned False) and the refusal. A test of (a) on its own (p->q blocked, both legs clear) is not among them; the code reading is unambiguous, so that is an aside."
+   "why": "0081 verbatim: 'Two turns of more than 50 degrees within 40 ft of path, about a dozen paces, are pulled straight'; the old cut left two lanes."
   },
   {
-   "id": "reach-center",
-   "summary": "law.reach_to_steading: 0246's 60 ft to the house's CENTER, the 12 ft to the built ground including the house's own footprint",
+   "id": "W45-4",
+   "summary": "settle_shapes (row 490) closes by calling the fixed _unkinked",
    "class": "within",
-   "why": "0246.drawing's own note: 'WAY_END_REACH_FT 60 (to a way's line or a farmhouse's center)'. Unchanged from round 1."
+   "why": "Its finding is the same two 0081 sentences; it inherits W45-2's defect for the 40 ft-plus hairpin and is fixed with it."
   },
   {
-   "id": "test-settle-geometry",
-   "summary": "test_a_house_crowded_with_ends_...: two ends moved to 51 ft of the center so that all three still front the house",
+   "id": "W45-5",
+   "summary": "The behind-the-back-wall rule removed whole: law.ends_behind (and its LAW entry), the keeper's, tree end_faults', last resort's and Lawful's reads of it, settle_ends' carry round the gable and off_the_back, corridors.round_the_gable - including units impl-drift had ruled IN-STEP",
    "class": "within",
-   "why": "Restated under the corrected reach, not weakened. Unchanged from round 1."
+   "why": "0246 drawing page: 'A lane end counts as reaching a farmhouse when it comes within 60 ft of the house, or within 12 ft of the steading's built ground'; no side is excluded and impl-drift's notes on rows 488-489 say the behind-the-house rule is not on 0246. ends_behind only ever flagged ends within WAY_END_REACH_FT of a house, so every end it flagged is one 0246 counts as reaching. Removing the law check with its repairs is the fix itself, not extra scope: leaving the check with no repair would send those lanes to the last resort."
   },
   {
-   "id": "T113a-end_serves-row",
-   "summary": "Wave 43's found row geom.end_serves closed as not drifted (E0, wave 44): both it and reach_to_steading measure 0246's 60 ft to the center",
+   "id": "W45-6",
+   "summary": "The settlement-side form (water_ways/lanes.py behind_house, reaches_dooryard, trim_lane_stubs) left for its own ranked rows",
    "class": "within",
-   "why": "Round 1's NOT LEGITIMATE item is answered by its prescribed remedy. The fix that would have moved end_serves to footprints is replaced by 'none: not drifted' with an e0_basis in overrides.json and ranking.json (tier E0, wave 44). closed-tiers.json and waves.json record the close, and t113a-out.jsonl's row is marked superseded with its reason. The row's other end_serves claims read IN-STEP in dev/claims-index.json. Nothing is left that would take the unit off the page's own measure."
+   "why": "FR-006: a wave is a contiguous run of the ranking; those rows are ranked, in scope ('kept') and taken in their turn, not deferred or excepted."
   },
   {
-   "id": "join-claims",
-   "summary": "Claims added: a detour link's margins (7 ft off a wall cited to 0246; the 8 ft off hard ground UNRESEARCHED), a detour link's reach (UNRESEARCHED, 12 ft), the nearer end joined (UNRESEARCHED)",
+   "id": "W45-7",
+   "summary": "Occasions: none - the five hamlets regenerated 2026-10-08 with byte-identical manifests",
    "class": "within",
-   "why": "These label what the code does, with no gap labeled researched. The 7 ft cite repeats the standing IN-STEP 'link off walls' claim. impl-drift reads them at T114 (they stand UNCLAIMED in the index until then)."
+   "why": "A dated one-shot measurement deciding the occasion per feature 294; asserts nothing the request or spec does not ask."
   },
   {
-   "id": "knots-claim",
-   "summary": "next_gather's third form claimed against 0081's T",
+   "id": "W45-8",
+   "summary": "Tests restated: behind-the-house tests replaced by 'an end behind a house reaches it and is left'; the tree's third-end case rebuilt nearer house A",
    "class": "within",
-   "why": "Unchanged from round 1; whether its condition is honest is T114's impl-drift reading."
-  },
-  {
-   "id": "occasions",
-   "summary": "No review occasions: the five hamlets regenerated 2026-10-08 with byte-identical manifests",
-   "class": "within",
-   "why": "Re-measured after the kept-whole fix, as round 1 required. The five manifests are dated 07:30:20-25, after test_serve.py (07:27) and plan.md (07:28), and git shows no change under pool/. A dated one-shot measurement under feature 294, not an exemption."
-  },
-  {
-   "id": "unpushed-waves",
-   "summary": "Waves 9-43 unpushed under condition (6) as at wave 43; the pair owed; verification by red tests, impl-drift, the gate, the pair",
-   "class": "within",
-   "why": "Unchanged process carried from wave 43."
+   "why": "Tests that enforce the fixed behavior serve the request; the rebuilt tree case keeps the third-end rule tested without the removed rule."
   }
  ],
- "verdict": "CLEAR"
+ "verdict": "BLOCKED"
 }

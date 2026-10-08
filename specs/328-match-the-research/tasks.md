@@ -1469,8 +1469,9 @@ In ranking order (rows 482-485; 486-492 next, row 492's change held as `audit/he
 
 In ranking order (rows 487-490; 491-492 next, row 492's change held as `audit/held-row492-nub.patch`).
 
-- `settle.py::_unkinked#no hairpin or zigzag` (row 487, E2): 0081 - "a returning leg under 40 ft is cut" (`HAIRPIN_LEG_FT`; it kept
-  the longer arm at any length, so a longer returning leg now stands) and "Two turns of more than 50 degrees within 40 ft of
+- `settle.py::_unkinked#no hairpin or zigzag` (row 487, E2): 0081 - "a returning leg under 40 ft is cut" (a longer one is cut
+  too, labeled GUESS: "A lane never doubles back", and the page gives no other remedy - round 1 found that leaving it made the
+  settle loop and the last resort drop the whole lane; the 40 ft+ case filed E4 in `audit/found-wave45.jsonl`) and "Two turns of more than 50 degrees within 40 ft of
   path ... are pulled straight" (the two turns dropped; it cut the middle out, leaving two lanes). `settle_shapes` (row 490)
   cuts by it, so both close. `test_a_returning_leg_under_40_ft_is_cut_and_a_zigzag_pulled_straight`.
 - `settle.py::off_the_back` and `settle_ends#a lane ends at the dooryard` (rows 488-489, E2): 0246 counts an end within 60 ft of
@@ -1481,6 +1482,9 @@ In ranking order (rows 487-490; 491-492 next, row 492's change held as `audit/he
   rule (`water_ways/lanes.py::behind_house`, `reaches_dooryard`, `trim_lane_stubs`) is three rows later in the ranking.
   Tests restated: an end behind a house is left; the tree's third-end case rebuilt so the end is nearest house A (it was
   refused only by the removed rule).
+- Round 1 (impl-drift): the stale "behind a house" phrases gone from `Lawful` and `settle_ends` (restated as 0246's reach,
+  through `settle_dangling`) and `last_resort`'s docstring; the two doubled-tail claims UNRESEARCHED (a layout rule, not a
+  drawing convention); `GABLE_MARGIN_FT`'s docstring matches its claim.
 
 - [ ] T115 rows 487-490 (FR-003, FR-004)
       research: rendering

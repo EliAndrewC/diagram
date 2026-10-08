@@ -93,7 +93,8 @@ def test_a_hook_is_relaid_as_a_tee_and_a_free_hook_loses_its_leg() -> None:
 
 
 def test_a_returning_leg_under_40_ft_is_cut_and_a_zigzag_pulled_straight() -> None:
-    """0081 (feature 328): "a returning leg under 40 ft is cut" - a 30 ft one goes, a 50 ft one stands; "Two turns of more than
+    """0081 (feature 328): "a returning leg under 40 ft is cut" - a 30 ft one goes, and a 50 ft one too (a lane never doubles
+    back; the page gives no other remedy, a GUESS); "Two turns of more than
     50 degrees within 40 ft of path ... are pulled straight" - one lane, its two turns dropped (it was cut into two)."""
     s = _S([CONN, [(0.0, 50.0), (200.0, 50.0), (170.0, 54.0)], [(0.0, 300.0), (100.0, 300.0), (100.0, 320.0), (200.0, 320.0)]])
     settle.settle_shapes(s)
@@ -102,8 +103,8 @@ def test_a_returning_leg_under_40_ft_is_cut_and_a_zigzag_pulled_straight() -> No
     assert any(ln["pts"] == [[0.0, 300.0], [200.0, 320.0]] for ln in s.M["lanes"]), "the zigzag pulled straight, one lane"
     from l7r.diagram.hamletgen.ways.settle import _unkinked
 
-    long_back = [(0.0, 50.0), (200.0, 50.0), (150.0, 55.0)]  # a 50 ft returning leg
-    assert _unkinked(long_back, ("doubles back", 1, 1)) == [long_back]
+    long_back = [(0.0, 50.0), (200.0, 50.0), (150.0, 55.0)]  # a 50 ft returning leg: a lane never doubles back, so it goes too (GUESS)
+    assert _unkinked(long_back, ("doubles back", 1, 1)) == [long_back[:2]]
 
 
 def test_seed_43s_lattice_step_is_a_kink_the_old_bend_test_passed() -> None:
