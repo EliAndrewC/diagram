@@ -8003,7 +8003,7 @@
   "found": "wave 7 re-check (tiered by its work at T29a)",
   "tier_as_ranked": "E0",
   "moved": "T29a (amendment 7): tiered by its work - One seat-rejection condition in the seat loop (bridges.py lines 701-716) changes from a 3x-span ceiling to 'no widening at a join'; it rides with the 'longer plank at a junction' drift on the same loop.",
-  "wave": "",
+  "wave": "50",
   "scope": "kept"
  },
  {
@@ -8019,7 +8019,7 @@
   "found": "wave 6 re-check (tiered by its work at T25a)",
   "tier_as_ranked": "E1",
   "moved": "T25a (amendment 6): tiered by its work - the hard `_wide_enough` filter on the seat list at bridges.py:691 becomes a two-stage ordering in one loop of channel_footbridges",
-  "wave": "",
+  "wave": "50",
   "scope": "kept"
  },
  {
@@ -8033,7 +8033,7 @@
   "flag": "",
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "50",
   "scope": "kept"
  },
  {

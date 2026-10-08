@@ -568,3 +568,15 @@ def test_a_village_cuts_its_lanes_where_no_deck_seats_before_it_lays_its_decks()
     assert cut_at([(0.0, 0.0), (100.0, 0.0)], 0, (50.0, 0.0), 10.0) == [[(0.0, 0.0), (40.0, 0.0)], [(60.0, 0.0), (100.0, 0.0)]]
     assert cut_at([(0.0, 0.0), (10.0, 0.0), (100.0, 0.0)], 0, (5.0, 0.0), 10.0) == [[(15.0, 0.0), (100.0, 0.0)]], "a head with no length goes; the cut runs on past a vertex"
     assert cut_at([(0.0, 0.0), (0.0, 0.0)], 0, (0.0, 0.0), 1.0) == []
+
+
+def test_a_plank_s_seats_are_tried_wide_first_then_widest_left() -> None:
+    """Feature 328 (0084's drawing page: "Where no wide spot is free, a crossing takes the widest spot left"): every seat whose
+    water earns a board, nearest the slot first, then the rest widest first - never a narrow seat before a wide one, and no
+    seat dropped."""
+    from l7r.diagram.settlement.city.bridges import seat_order
+
+    width = {-0.2: 1.0, -0.1: 3.0, 0.0: 1.5, 0.1: 2.5, 0.3: 1.8}
+    got = seat_order(list(width), lambda fr: width[fr] >= 2.0, width.__getitem__)
+    assert got == [-0.1, 0.1, 0.3, 0.0, -0.2]
+    assert seat_order([0.0, 0.1], lambda fr: False, lambda fr: 1.0) == [0.0, 0.1], "equal widths: nearest the slot first"

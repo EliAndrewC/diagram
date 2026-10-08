@@ -190,6 +190,18 @@ Research: ditch association reach - NONE: 24 ft
 """
 
 
+def seat_order(cands: Any, wide: Any, width: Any) -> list[float]:
+    """The order a footplank's seats are tried in: every seat whose water earns a board, nearest the slot first, then every
+    other seat, widest water first - so where houses, crops, other decks or joins rule out each wide seat, the crossing is
+    laid at the widest seat left rather than left off.
+
+    Research: the widest left - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: where no wide spot is free, a crossing takes the widest spot left
+    """
+    wide_first = sorted((fr for fr in cands if wide(fr)), key=abs)
+    rest = sorted((fr for fr in cands if not wide(fr)), key=lambda fr: (-width(fr), abs(fr)))
+    return wide_first + rest
+
+
 def plank_ditch(pt: Pt, ditches: Any) -> tuple[float, Any]:
     """(distance, role) of the recorded field ditch nearest `pt` - infinity and None where there is none."""
     best: tuple[float, Any] = (math.inf, None)
@@ -545,15 +557,14 @@ class BridgesMixin:
             no path leads to a plank - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html
             one near the middle, more on a long run - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: one per 320 px of the run wide enough
             short stub stepped over - UNRESEARCHED: under 140 px, no plank
-            only water too wide to step across - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: worth_planking, a hard filter at the seat
+            only water too wide to step across - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: worth_planking judges the ditch by its widest point, and the seats whose water earns a board are tried first (`seat_order`)
             square across the ditch - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html
             plank width - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: about 4 ft (`px(4)`), a single-file crossing
             short abutment - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: the local width plus `PLANK_ABUTMENT`, 5.5 ft, so a 2.5 ft ditch takes an 8 ft deck
             polder crossings by side - UNRESEARCHED: seg_caps, none on the feeder, far toe or drain
-            longer plank at a junction - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: the joins of ditches rule a seat out and the span stays about 8 ft; the code widens the deck over a junction
-            obliqueness ceiling - UNRESEARCHED: no seat needing over three times the nominal span
+            a join rules a seat out - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: the joins of ditches rule a seat out and the span stays about 8 ft
             off the homes - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html
-            off dry crops and gardens - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: houses, crops and other crossings rule a seat out
+            off dry crops and gardens - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: houses, crops and other crossings rule a seat out, and the widest seat left takes the crossing (`seat_order`)
             off groves - UNRESEARCHED: a farm's grove rules a seat out
             a seat nearer a drain refused - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: never the collector or drain (`plank_on_supply`)
             assumed ditch width - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: a field ditch 2.5 ft at its head where a record has none (`DEFAULT_W`)
@@ -581,15 +592,13 @@ class BridgesMixin:
         #  - ANOTHER BRIDGE. Two planks drawn on top of each other is a drawing error, and it
         #    happens where two ditches run close and each independently wants a crossing at the
         #    same slot. `features_do_not_overlap` reads it as a ('bridges', 'bridges') pair.
-        #  - A CONFLUENCE, where the deck is instead made LONGER. The span is sized from THIS
-        #    ditch's nominal width, but where another watercourse joins, the water under the deck is
-        #    the WIDER one - so a nominal deck comes up short and its abutment stands in the water
-        #    (`bridges_span_their_water`). Skipping such spots was tried first and is too strong: on
-        #    a drain whose banks are reed marsh for all but one short stretch, the only point with
-        #    useful ground on both banks IS a junction, so the map ended up with a long ditch and no
-        #    crossing (`long_ditches_have_a_footbridge`) - two correct rules forbidding between them
-        #    a plank that ought to exist. A plank at a junction is simply a longer plank, which is
-        #    what a farmer would lay, so the deck is sized to the widest water actually beneath it.
+        #  - A CONFLUENCE: where another watercourse joins, the water under the deck is the WIDER one, so a nominal deck
+        #    comes up short and its abutment stands in the water (`bridges_span_their_water`). Skipping such seats was tried
+        #    first (2026-08-11) and failed then: on a DRAIN whose banks were marsh for all but one stretch, the only seat
+        #    with useful ground on both banks was a junction, and `long_ditches_have_a_footbridge` demanded a plank, so the
+        #    deck was lengthened over the join instead. Both reasons are gone - planks go on supply ditches only (ways
+        #    W14) and no rule demands a plank per ditch (feature 287) - and 0084's drawing page rules a join out with the
+        #    span about 8 ft, so feature 328 skips the seat again; the widest seat left (`seat_order`) stands in for it.
         dry_quads = [list(poly) for poly in self.dry_polys]
         # ...AND A FARM'S WORKED GROUND: its kitchen garden and its own grove (feature 291). Once the farms carried their own
         # groves the frames moved, and on cohort seed 1 a garden stood 5 ft off a field main, where the plank's landing
@@ -672,14 +681,12 @@ class BridgesMixin:
                     _lw = taper_w(_w0, _w1, _a / _tot if _tot else 0.0)
                     return worth_planking(_lw, _lw, self.ftpx)
 
-                # ONLY WATER THAT EARNS A BOARD TAKES ONE (feature 287, ways W15, FR-005). This was a
-                # preference - seats whose own taper earns a board sorted first, the narrow ones kept last
-                # - because the gate once DEMANDED a plank on every long ditch (`long_ditches_have_a_
-                # footbridge`), and a hard filter left cohort seeds 41 and 43 with a ditch the gate
-                # required a plank on and the placer would not lay. That demand is retired (no rule asks
-                # for a plank per ditch), so the preference only ever laid a plank on water the record
-                # says is stepped across: the width is now a hard filter, and a ditch whose every wide
-                # seat is taken carries no plank.
+                # WATER THAT EARNS A BOARD FIRST, THE WIDEST LEFT AFTER IT (feature 328, research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:
+                # "Where no wide spot is free, a crossing takes the widest spot left"). Feature 287 (ways W15) made the width a
+                # hard filter, so a ditch whose every wide seat a house, a crop, another deck or a join ruled out carried no
+                # plank at all; the drawing page lays it at the widest seat remaining rather than leave it off. The ditch
+                # itself still qualifies by its widest point (`worth_planking` above), so a ditch nowhere wide enough to earn a
+                # board takes none.
                 # WHERE THIS LANDS ON A TAPERING BRANCH (accepted, settlement-review 2026-08-26,
                 # feature 133 T11): `n` counts the QUALIFYING run but `base` is still the midpoint of
                 # the WHOLE ditch, so on a branch whose head 30-50% qualifies, the nearest qualifying
@@ -689,7 +696,7 @@ class BridgesMixin:
                 # the review judged mid-field the better crossing. Left as is on purpose; the width
                 # under such a seat is `taper_w` (square-root taper), which is the authoritative
                 # measurement - a linear read of w -> w_tail understates it by ~0.05 ft.
-                for frac in sorted((fr for fr in _cands if _wide_enough(fr)), key=abs):
+                for frac in seat_order(_cands, _wide_enough, lambda fr, _b=base, _t=total, _w0=w, _w1=w_tail: taper_w(_w0, _w1, max(0.0, min(_t, _b + fr * _t)) / _t if _t else 0.0)):
                     _arc = max(0.0, min(total, base + frac * total))
                     px, py, ang = _at_arc(pts, seg, _arc)
                     deck = ang + 90  # deck runs ACROSS the ditch (perpendicular)
@@ -699,25 +706,10 @@ class BridgesMixin:
                     # this deck", not "another course passes within a deck's length" - the looser
                     # form catches a ditch merely running parallel to a neighbor.
                     span_here = self._widen_for_confluence(quad, deck, pts, other_water, span, plank_w, _water_segs)
-                    # THE OBLIQUENESS CEILING IS MEASURED AGAINST THE DITCH'S WIDEST SECTION, not
-                    # against `span`, which is built from the HEAD width. On a COLLECTOR the head is
-                    # the narrow end - a drain starts as a thread and earns its section at the
-                    # outfall (`waterfields`, "a collector STARTS as a thread") - so a head-based
-                    # ceiling is tiny and `_widen_for_confluence` clears it at every seat. Cohort
-                    # seed 5 is the case: a 996 px drain tapering 1.5 -> 5.5 px got NO plank because
-                    # all 40-odd seats read as "too oblique", while the gate rightly demanded one.
-                    # `max(w, w_tail)` is the same section `worth_planking` uses to decide the ditch
-                    # deserves a plank at all, so the two questions are now asked about one width.
-                    #
-                    # Re-sizing the DECK at each seat was tried first and is wrong: it widened decks
-                    # on the downstream half of every collector and cost `features_do_not_overlap`
-                    # (48-seed cohort 45 -> 44). The deck's size was never the defect; the ceiling's
-                    # basis was.
-                    if span_here > 3.0 * (max(w, w_tail) + self.px(PLANK_ABUTMENT)):
-                        continue  # too oblique to plank: widen where a longer deck is reasonable, but a
-                        # crossing that needs three times the nominal span is a course running nearly
-                        # ALONGSIDE this one, and the answer there is to cross somewhere else. (The fine
-                        # arc-length slide above is what makes "somewhere else" reliably available.)
+                    if span_here > span:
+                        continue  # a join of ditches under the deck rules the seat out, and the span stays about 8 ft (0084's
+                        # drawing page). Feature 287 widened the deck over a junction up to three times its nominal span, and
+                        # the page lays no crossing there: the slide finds a seat off the join, or the widest one left.
                     quad = _deck_quad(px, py, span_here, plank_w, deck)
                     if any(_quads_overlap(quad, it[0]) for it in boxes_meeting(house_grid, *_quad_box(quad))):
                         continue
@@ -757,8 +749,8 @@ class BridgesMixin:
         return len(self.M["bridges"]) - n0
 
     def _widen_for_confluence(self: Settlement, quad: Any, deck: float, own_pts: Any, other_water: Any, span: float, plank_w: float, segs: PointGrid | None = None) -> float:  # type: ignore[misc]
-        """The widest water actually UNDER this deck, expressed as a span - a plank at a junction is
-        simply a longer plank, which is what a farmer would lay. Tested as "another course runs
+        """The widest water actually UNDER this deck, expressed as a span - longer than `span` exactly where another course
+        joins under it, which rules the seat out (feature 328: a join of ditches rules a seat out). Tested as "another course runs
         under this deck", not "another course passes within a deck's length": the looser form
         catches a ditch merely running alongside a neighbor. Returns `span` unchanged where nothing
         else crosses.
@@ -769,7 +761,7 @@ class BridgesMixin:
         footbridge pass by the caller) returns every segment the test could pass, and the test decides as before. `under`
         is a maximum, so neither the order of the hits nor a hit met twice changes it.
 
-        Research: longer plank at a junction - UNRESEARCHED: spans the widest water under it, corners 2 ft past it
+        Research: water under the deck - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html: the joins of ditches rule a seat out; measured as the widest water under it, corners 2 ft past it
         """
         _da = math.radians(deck)
         _dux, _duy = math.cos(_da), math.sin(_da)
