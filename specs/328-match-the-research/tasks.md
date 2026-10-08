@@ -1691,7 +1691,9 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
 
 - `groves.py` (`GROVE_CROWN_SQFT`, `grove_crown_px2`, `_draw_grove`'s count) and `farmsteads.py`'s band-piece cap.
 
-- [ ] T133 wave 53's rows (FR-003, FR-004)
+- [x] T133 wave 53's rows (FR-003, FR-004)
       research: rendering
-- [ ] T134 the claims re-checked by `impl-drift`; the record checks owed (FR-005, FR-006)
+      verify: DONE. verified 2026-10-08: plan CLEAR (wave 53 round 2); claims-owed none; record-owed none
+- [x] T134 the claims re-checked by `impl-drift`; the record checks owed (FR-005, FR-006)
       research: rendering
+      verify: DONE. verified 2026-10-08: plan CLEAR (wave 53 round 2); claims-owed none; record-owed none
