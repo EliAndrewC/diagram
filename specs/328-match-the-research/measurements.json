@@ -160,5 +160,41 @@
   "unit": "s",
   "observed": "2026-10-08",
   "source": "perf-audit wave 22 counterfactual, dev/perf-log/20261008T003813Z-review-328-confirmation-local-digram-backlog.json; hinterland median change at most +0.013 s"
+ },
+ "wave24-perf-control-nucleated-crossings": {
+  "quantity": "end vs stages.py+pondstock.py reverted to 397c005fb, 6 interleaved runs each, median total and homesteads stage, on the crossing seeds (10 hh 39, 20 hh 4, 40 hh 47); all nucleated (the perf spec's form), the rank step never used, pond_stock 0.00 s; map hashes identical",
+  "value": {
+   "total_s": [
+    [
+     3.12,
+     3.11
+    ],
+    [
+     7.72,
+     7.68
+    ],
+    [
+     13.08,
+     13.28
+    ]
+   ],
+   "homesteads_s": [
+    [
+     0.8,
+     0.78
+    ],
+    [
+     1.86,
+     1.91
+    ],
+    [
+     5.13,
+     5.23
+    ]
+   ]
+  },
+  "unit": "s",
+  "observed": "2026-10-08",
+  "source": "perf-audit wave 24 counterfactual, dev/perf-log/20261008T013819Z-review-328-confirmation-local-digram-backlog.json"
  }
 }

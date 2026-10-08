@@ -992,6 +992,21 @@
   "scope": "kept"
  },
  {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#how deep a scattered hamlet runs at most four rank rounds be",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "how deep a scattered hamlet runs: at most four rank rounds behind the front row (range(7), attempt < 4) before the rescue",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 24 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#rank depth jitter",
   "verdict": "MISLABELED",
   "tier": "E0",
@@ -6728,6 +6743,21 @@
   "scope": "kept"
  },
  {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#the seating's reach",
+  "verdict": "DRIFTED",
+  "tier": "E2",
+  "fix": "the claim says every homestead stands within FORM_BOUND * the half-diagonal, but in_band is tested only at `attempt >= 4`. The rank rounds 0-3 run unbounded (no region on the dispersed form), so the claim should say the bound holds only for the front row (1.3x) and the rescue",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 24 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E2",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#the step between ranks",
   "tier": "E2",
   "fix": "_rank_step = envelope + max(MIN_WEB_GAP, |oy| x SUN_CORRIDOR_FT): the rank's lane inside the yard's sun, so north-south ranks stand 0038's 92 ft apart (was envelope + 18 + 39, about 111 ft)",
@@ -6739,7 +6769,7 @@
   "tier_as_ranked": "E0",
   "moved": "wave 24 (impl-drift, amendment 23 plan review): the citation fix was false; the step itself fixed",
   "verdict": "MISLABELED",
-  "wave": "",
+  "wave": "24",
   "scope": "kept"
  },
  {

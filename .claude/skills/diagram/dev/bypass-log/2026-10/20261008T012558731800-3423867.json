@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-08T01:25:58Z",
+  "target": "perf-explain",
+  "commit": "0ff36aa9d",
+  "outcome": "permitted",
+  "why": "perf-explain UNVERIFIED: not yet split by form; perf-audit to take the counterfactual on the crossing seeds"
+}

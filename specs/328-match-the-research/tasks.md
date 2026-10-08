@@ -969,7 +969,9 @@ larger of the two (plan review, amendment 23: fixed here, not left open).
 
 - [x] T73a wave 23's found row tiered by the work it takes, by a fresh reader (FR-002, FR-003, SC-003)
       research: rendering
-- [ ] T73 the rank step both ways, the bank's seats in one ranking, the found row as tiered; the five hamlets regenerated (FR-004, FR-005)
+- [x] T73 the rank step both ways, the bank's seats in one ranking, the found row as tiered; the five hamlets regenerated (FR-004, FR-005)
       research: rendering
-- [ ] T74 the claims re-checked by `impl-drift`; the close: wave 24's own bookend pair, `make done` green, the wave column (FR-005, FR-006)
+      verify: DONE. the rank step owes the yard's sun either way and lays its lane inside it, so north-south ranks stand 0038's 92 ft apart; every bank seat in one ranking (0025), Kuwabata's sties 3.8 and 1.7 ft along their bank; the holding's dropped cell claimed GUESS
+- [x] T74 the claims re-checked by `impl-drift`; the close: wave 24's own bookend pair, `make done` green, the wave column (FR-005, FR-006)
       research: rendering
+      verify: DONE. impl-drift IN-STEP on the wave's claims; amendment 23 FAITHFUL, plan CLEAR; make done green; wave 24's own pair band 1, noise on nucleated rolls (perf-audit consistent, control recorded); the wave column

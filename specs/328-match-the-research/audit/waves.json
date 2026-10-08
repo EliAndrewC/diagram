@@ -118,6 +118,7 @@
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#row step capped at ROW_FRONTAGE_MAX_FT": "1 (claim renamed or split; its parts re-checked)",
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#a yard's sun between ranks": "24",
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#front-row standoff from the field set by the homestead core's reach (house, yard, shed, well pocket; garden excluded)": "4",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#the step between ranks": "24",
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/wells.py::BEND_LOOK_FT#well arithmetic": "1",
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/wells.py::BEND_WELL_DEG#well arithmetic": "1",
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/wells.py::_WELL_DRAWN_R#wellhead drawn extent": "2",

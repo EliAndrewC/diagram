@@ -1,0 +1,62 @@
+{
+  "band": 1,
+  "base": {
+    "commit": "397c005fb",
+    "label": "328-start",
+    "utc": "20261008T012105Z"
+  },
+  "binding": "78ae94a9e41c61ae9bda9f463b6d3fd7b94822f8521c96bb06752253697b7687",
+  "end": {
+    "commit": "0ff36aa9d",
+    "label": "328-end",
+    "utc": "20261008T012418Z"
+  },
+  "environment": "local",
+  "feature": "328-match-the-research",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "8d3395e5-fe32-4f85-9c89-80c344d2ac1a",
+    "utc": "20261008T013819Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": 0.0,
+          "39": 3.3,
+          "4": 0.0,
+          "47": 0.0
+        },
+        "total_pct": 0.8
+      },
+      "20": {
+        "seeds": {
+          "25": 0.0,
+          "39": 0.0,
+          "4": 2.7,
+          "47": -1.6
+        },
+        "total_pct": 0.4
+      },
+      "40": {
+        "seeds": {
+          "25": -1.6,
+          "39": -1.6,
+          "4": -1.7,
+          "47": 2.3
+        },
+        "total_pct": -0.7
+      }
+    },
+    "seeds": {
+      "25": -2.6,
+      "39": -2.4,
+      "4": 0.0,
+      "47": 0.0
+    },
+    "total_pct": -1.2
+  },
+  "note": "The rank step and bank ranking are not the cause: every crossing roll (10hh/39, 20hh/4, 40hh/47) is NUCLEATED (perf REFERENCE pins it), so grows() is True and the rank loop breaks before using _rank_step; placer_calls are identical start/end and pond_stock is 0.00 s. Counterfactual (both legs in detached worktrees at 0ff36aa9d, one with stages.py+pondstock.py reverted to 397c005fb, 6 interleaved runs each): s.M hash byte-identical on all three; median total end vs control 3.12/3.11, 7.72/7.68, 13.08/13.28 s, homesteads 0.80/0.78, 1.86/1.91, 5.13/5.23 s. The crossings (+0.1-0.2 s) are run-to-run noise on unchanged work, not a different seated set; rewrite the explanation as such, citing this control.",
+  "verdict": "inconsistent"
+}
