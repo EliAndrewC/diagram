@@ -83,21 +83,24 @@ def test_the_bath_is_a_room_joined_to_the_house_on_an_attested_wall_or_refused()
     assert not fs.joined_to_house((0.0, HH / 2 + 3.5 + 3.0, 8.0, 6.0), HW, HH) and not fs.joined_to_house((0.0, 0.0, 8.0, 6.0), HW, HH), "off the wall, or inside"
 
 
-def test_the_wood_shed_stands_a_ken_off_a_wall_of_its_steading_or_is_refused() -> None:
-    """Feature 280 M21 (research/questions/0043-firewood-stacks-and-sheds-kigoya.html, 720; settlement-reviews of Inashiro and Kuwabata, sheds 25-37 ft out): the
-    wood shed a ken off its wall, a building of its own - offered every place a ken off the steading's walls, the byre's
-    included - never walked out across the dooryard; a steading with no such place refuses it by name."""
-    byre = (-(HW / 2 + 3.0 + 5.5), 0.0, 11.0, 16.0)
-    walls_taken = [(0.0, -HH - 6.0, 3 * HW, HH * 0.9), (HW + 6.0, 0.0, HW * 0.9, 3 * HH), (0.0, HH + 6.0, 3 * HW, HH * 0.9)]
-    shed = _lay(("woodpile",), ground=walls_taken, annex=byre)["woodpile"]
-    walls = [*fs.steading_rects(HW, HH, "N", 1.0), byre]
-    assert fs.shed_off_a_wall(shed, walls, fs.WALL_GAP_FT, _px) and sorted(shed[2:]) == [12.0, 24.0]
+def test_the_wood_shed_stands_a_ken_off_a_wall_of_its_house_or_is_refused() -> None:
+    """Feature 280 M21, as feature 328 left it (research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: behind or
+    beside the house, never the front yard, about a ken off a wall): offered every place a ken off the HOUSE's walls - never
+    the byre's or the retirement house's, never the front wall's, never a pace further out - and a house with no such place
+    refuses it by name."""
+    walls = fs.steading_rects(HW, HH, "N", 1.0)
+    back_and_east = [(0.0, -HH - 6.0, 3 * HW, HH * 0.9), (HW + 6.0, 0.0, HW * 0.9, 3 * HH)]
+    shed = _lay(("woodpile",), ground=back_and_east)["woodpile"]
+    assert fs.shed_off_a_wall(shed, walls, fs.WALL_GAP_FT, _px) and sorted(shed[2:]) == [12.0, 24.0] and shed[0] < -HW / 2, "the west flank"
     assert fs.clears(shed, [HOUSE], fs.WALL_GAP_FT + fs.WOODSHED_STEP_FT - 1e-6), "a ken off the house"
-    with pytest.raises(ValueError, match="wood shed"):
-        _lay(("woodpile",), ground=[*walls_taken, (-HW - 6.0, 0.0, HW * 0.9, 3 * HH)])
-    far = (0.0, -(HH / 2 + 3.5 + 6.0 + 8.0 + 1.5 + 6.0 + 1.0), 24.0, 12.0)
-    assert not fs.shed_off_a_wall(far, fs.steading_rects(HW, HH, None, 1.0), fs.WALL_GAP_FT, _px), "past a pace out: walked into the dooryard"
-    assert not fs.shed_off_a_wall((0.0, -(HH / 2 + 3.5 + 6.0), 24.0, 12.0), fs.steading_rects(HW, HH, None, 1.0), fs.WALL_GAP_FT, _px), "under a ken off"
+    with pytest.raises(ValueError, match="wood shed"):  # back, east and west taken: the front wall is never offered
+        _lay(("woodpile",), ground=[*back_and_east, (-HW - 6.0, 0.0, HW * 0.9, 3 * HH)])
+    byre = (-(HW / 2 + 3.0 + 5.5), 0.0, 11.0, 16.0)
+    assert not fs.shed_off_a_wall((byre[0] - 5.5 - 3.5 - 6.0 - 6.0, 0.0, 12.0, 24.0), walls, fs.WALL_GAP_FT, _px), "off the byre's wall, not the house's"
+    pace = (0.0, -(HH / 2 + 3.5 + 6.0 + 6.0 + 4.0), 24.0, 12.0)
+    assert not fs.shed_off_a_wall(pace, walls[:1], fs.WALL_GAP_FT, _px), "a pace past the ken"
+    assert not fs.shed_off_a_wall((0.0, HH / 2 + 3.5 + 6.0 + 6.0, 24.0, 12.0), walls[:1], fs.WALL_GAP_FT, _px), "the front yard"
+    assert not fs.shed_off_a_wall((0.0, -(HH / 2 + 3.5 + 6.0), 24.0, 12.0), walls[:1], fs.WALL_GAP_FT, _px), "under a ken off"
 
 
 def test_the_woodshed_stands_a_ken_off_and_the_shrine_in_its_rolled_corner() -> None:

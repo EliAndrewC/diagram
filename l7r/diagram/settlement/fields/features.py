@@ -193,6 +193,12 @@ def _mound_meets_pond(disc: tuple[float, float, float], ponds: Sequence[dict[str
     )
 
 
+POND_WATER_SHARE = 0.72
+"""Research: the dish pond's open water - GUESS: 72% of the fitted outline, the rest its wet margin inside the bank"""
+POND_REED_RING = 0.86
+"""Research: the reeds on the wet margin - GUESS: at 86% of the outline, between the water's edge and the bank"""
+
+
 class FieldFeaturesMixin:
     def pond(self: Settlement, cx: float, cy: float, rx: float, ry: float, stream_curve: Any = None) -> None:  # type: ignore[misc]
         """A pond / irrigation reservoir. Routed through the WATER block (not drawn inline) so a stream or
@@ -348,20 +354,33 @@ class FieldFeaturesMixin:
         source. Drawn OVER the plot (so it carries no bund grid) with a reed fringe; recorded in
         M['field_ponds']. Returns False - drawing and recording nothing - when no legible pond fits (`_pond_fit`).
 
-        Research: field pond glyph - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html, research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.html, research/questions/0061-reservoir-ponds-tameike.drawing.html: open water with a ring of eight reed ticks, no embankment drawn round it"""
+        THE DISH POND (feature 328): a plains pond was "low ground ringed with an embankment and dug out" (0008), so the pond is
+        drawn as one - an earthen bank ring at the fitted outline, the wet ground just inside it tinted as the drain-side plots
+        are, open water in the middle and the reeds standing on the wet margin. All of it inside the fitted box, so the fit and
+        the record are unchanged.
+
+        Research:
+            field pond glyph - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.html: a dish pond, low ground ringed with an embankment and dug out
+            reed fringe - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: a fringe of reeds inside the low plot
+            bank, margin and water proportions - GUESS: the bank stroke 2.2 px, the water 72% of the outline, the reeds at 86%"""
         fit = self._pond_fit(plot, rings)
         if fit is None:
             return False
         cx, cy, rx, ry = fit
+        from l7r.diagram.waterfields import AZE, FLOODED  # local: the engine packages are peers, imported lazily
+
+        wx, wy = rx * POND_WATER_SHARE, ry * POND_WATER_SHARE
         self._field_feature_ink(
-            ink, f'<ellipse cx="{cx:.1f}" cy="{cy:.1f}" rx="{rx:.1f}" ry="{ry:.1f}" fill="#9CB4C8" stroke="#5C7488" stroke-width="1.8"/>', "field pond"
-        )  # feature 134: its own class, beside `pond`
-        self._field_feature_ink(ink, f'<ellipse cx="{cx:.1f}" cy="{cy:.1f}" rx="{rx - 5:.1f}" ry="{ry - 4:.1f}" fill="none" stroke="#B6CAD8" stroke-width="0.9"/>', "field pond")
+            ink, f'<ellipse cx="{cx:.1f}" cy="{cy:.1f}" rx="{rx:.1f}" ry="{ry:.1f}" fill="{FLOODED}" stroke="{AZE}" stroke-width="2.2"/>', "field pond"
+        )  # the bank ring on the wet margin; feature 134: its own class, beside `pond`
+        self._field_feature_ink(ink, f'<ellipse cx="{cx:.1f}" cy="{cy:.1f}" rx="{wx:.1f}" ry="{wy:.1f}" fill="#9CB4C8" stroke="#5C7488" stroke-width="1.2"/>', "field pond")
+        self._field_feature_ink(ink, f'<ellipse cx="{cx:.1f}" cy="{cy:.1f}" rx="{max(wx - 4, 1):.1f}" ry="{max(wy - 3, 1):.1f}" fill="none" stroke="#B6CAD8" stroke-width="0.9"/>', "field pond")
+        rr = POND_REED_RING
         reeds = "".join(
-            f'<line x1="{cx + rx * math.cos(a):.1f}" y1="{cy + ry * math.sin(a):.1f}" x2="{cx + rx * math.cos(a):.1f}" y2="{cy + ry * math.sin(a) - 5:.1f}" stroke="#7C9A4E" stroke-width="1.1"/>'
-            for a in [i * math.pi / 4 for i in range(8)]
+            f'<line x1="{cx + rx * rr * math.cos(a):.1f}" y1="{cy + ry * rr * math.sin(a) + 2:.1f}" x2="{cx + rx * rr * math.cos(a):.1f}" y2="{cy + ry * rr * math.sin(a) - 2:.1f}" stroke="#4E6A2E" stroke-width="1.1"/>'
+            for a in [i * math.pi / 4 + math.pi / 8 for i in range(8)]
         )
-        self._field_feature_ink(ink, f'<g opacity="0.8">{reeds}</g>', "field pond")
+        self._field_feature_ink(ink, f'<g opacity="0.9">{reeds}</g>', "field pond")
         self.M.setdefault("field_ponds", []).append({"x": round(cx, 1), "y": round(cy, 1), "rx": round(rx, 1), "ry": round(ry, 1)})
         return True
 

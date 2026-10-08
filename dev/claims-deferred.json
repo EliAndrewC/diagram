@@ -500,6 +500,7 @@
   "l7r/diagram/settlement/fields/features.py::STONE_INSET",
   "l7r/diagram/settlement/fields/features.py::stone_dx",
   "l7r/diagram/settlement/fields/features.py::stone_steps",
+  "l7r/diagram/settlement/fields/grain.py::WINTER_CROP",
   "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._landuse_tea_fringe",
   "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._rows_cut_to_plot",
   "l7r/diagram/settlement/fields/landuse.py::row_cuts",
@@ -843,6 +844,7 @@
  "keys": [
   "l7r/diagram/interactive/place.py::dwellings_shown#town and city count no farmhouses",
   "l7r/diagram/overlap/taxonomy.py::_FIXTURE_MOUNTS#gate complex and inspection post",
+  "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#castle bridge at its gate tower",
   "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#castle towers on the rampart",
   "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#moat against the rampart",
   "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#ways and water through the rampart",
@@ -859,6 +861,7 @@
   "l7r/diagram/settlement/_knobs.py::<module>#plot_size forms",
   "l7r/diagram/settlement/_knobs.py::<module>#settlement_form forms",
   "l7r/diagram/settlement/_knobs.py::<module>#water_source_position forms",
+  "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._pick_overlay_plots#lotus draw",
   "l7r/diagram/settlement/homestead_parts/fixture_seats.py::FixtureForms#privy seat weights"
  ]
 }

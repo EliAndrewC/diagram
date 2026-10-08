@@ -11,6 +11,7 @@ from l7r.diagram.settlement import Settlement
 from ..consts import POLDER_ARCHETYPES
 from ..plan import SitePlan
 
+
 def grows_grain(plan: SitePlan) -> bool:
     """Does the hamlet grow a grain its farms thresh? Every archetype does but the mulberry dike-fishpond, whose
     leftover parcels are standing rice (grain) or ponds (none).

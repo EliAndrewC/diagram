@@ -491,12 +491,17 @@ class CombMixin:
         offered = [p for p in net["dry_reserve"] if not refused(p["poly"])]
         households = int(meta.get("households") or 0)
         room = (drawn_px2 + sum(poly_area(p["poly"]) for p in offered)) * ft2
-        form = resolve_knob("winter_crop", self.seed, {**self.knob_context(), "grain_households": households, "grain_drained_acres": drained, "grain_room_acres": room}, self.knob_pins)
+        paddy = sum(poly_area(p["poly"]) for p in net.get("plots", [])) * ft2
+        town = resolve_knob("town_nearness", self.seed, self.knob_context(), self.knob_pins)
+        self._resolved_knobs["town_nearness"] = town
+        ctx = {"grain_households": households, "grain_drained_acres": drained, "grain_room_acres": room, "grain_paddy_acres": paddy, "grain_town": town}
+        form = resolve_knob("winter_crop", self.seed, {**self.knob_context(), **ctx}, self.knob_pins)
         self._resolved_knobs["winter_crop"] = form
         need = dry_need_acres(households, drained, form)
         added = top_up(drawn_px2, offered, need / ft2, refused)
         meta.update(
             winter_crop=form,
+            town_nearness=town,
             coarse_grain_room_acres=round(room, 2),
             coarse_grain_dry_need_acres=round(need, 2),
             coarse_grain_dry_acres=round((drawn_px2 + sum(poly_area(p["poly"]) for p in added)) * ft2, 2),
@@ -509,8 +514,8 @@ class CombMixin:
 
         Research:
             resting plots - research/questions/0013-paddies-left-to-rest-kataarashi.drawing.html: whole basins neither low nor blue, along the fan's fall; none on a dike-pond block
-            blue plot class - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html, research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html: every
-                FLOODED-fill plot classed wet paddy, the random freshly flooded plot of `fields/paddy.py` included, though the tint marks ground, not season"""
+            blue plot class - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: a plot of the drain-side row painted
+                FLOODED is classed wet paddy, the tint marking ground, not season; the comb paints FLOODED nowhere else (`waterfields/tint.py`)"""
         from l7r.diagram.waterfields import AZE  # noqa: I001 - FLOODED is aliased for the picture record below
         from l7r.diagram.waterfields import FLOODED as _WF_FLOODED
         from l7r.diagram.waterfields import aze_w
@@ -537,7 +542,7 @@ class CombMixin:
             # drained to dry out - and it is decided HERE, from the fill about to be drawn, so the class
             # and the color cannot disagree. The bund half is untouched: a blue plot's stroke is a bund
             # like every other, and hovering one still lights the whole fabric.
-            plot_cls = "wet paddy" if p["fill"] == _WF_FLOODED else "paddy"
+            plot_cls = "wet paddy" if p["fill"] == _WF_FLOODED and p.get("low") else "paddy"  # the drain-side basins only (0007)
             self.add_paddy(f'<polygon points="{pts}" fill="{p["fill"]}" stroke="{AZE}" stroke-width="{aze_w(self.ftpx):.2f}" stroke-linejoin="round"/>', cls=Split(plot_cls, "bund"))
             # Record the LOW/WET plots (feature 010). This is the topographic ELIGIBILITY set the
             # plot-based land-use overlays draw from. It is written HERE, by the field pass, so that
@@ -727,7 +732,9 @@ class CombMixin:
             self.field_channel(_run, col, _dw, _dw, late=True, cls=cls)
             self.M["channels"].append(_rec)
             if self.M["meta"].get("scale") not in ("hamlet", "village"):
-                self.corridors.append((list(_run), self.px(33.0)))  # 33 ft no-build either side on a town or city (0058); a hamlet or village keeps its houses off the drain by the below-the-drain rule (houses.py)
+                self.corridors.append(
+                    (list(_run), self.px(33.0))
+                )  # 33 ft no-build either side on a town or city (0058); a hamlet or village keeps its houses off the drain by the below-the-drain rule (houses.py)
 
     def _comb_record_field(self: Settlement, net: dict[str, Any], name: str) -> None:  # type: ignore[misc]
         """Assemble and append this fan's M['fields'] record: envelope, per-plot dims, drain-hem rings,

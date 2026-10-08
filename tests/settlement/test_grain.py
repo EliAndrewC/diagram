@@ -101,6 +101,19 @@ def test_a_green_plot_of_the_drain_side_row_carries_no_winter_barley_either() ->
     assert (400.0, 100.0) in _drawn(s), "the low row's green plot is not drained"
 
 
+def test_the_winter_crop_s_odds_follow_the_drainage_and_the_town() -> None:
+    """Feature 328 (0009: "A settlement's drainage and the nearness of a town ... set the odds"): barley weighs the drained
+    share of the paddy, halved where the town is far; a context without the site's figures keeps even odds."""
+    knob = KNOBS["winter_crop"]
+    assert knob.weights_for({}) == {"barley": 0.5, "none": 0.5}
+    assert knob.weights_for({"grain_paddy_acres": 10.0, "grain_drained_acres": 8.0, "grain_town": "near"}) == {"barley": 0.8, "none": 0.19999999999999996}
+    far = knob.weights_for({"grain_paddy_acres": 10.0, "grain_drained_acres": 8.0, "grain_town": "far"})
+    assert far is not None and abs(far["barley"] - 0.4) < 1e-9
+    assert knob.weights_for({"grain_paddy_acres": 10.0, "grain_drained_acres": 30.0, "grain_town": "near"}) == {"barley": 1.0, "none": 0.0}
+    rolls = [knob.roll(seed, {"grain_paddy_acres": 10.0, "grain_drained_acres": 9.0, "grain_town": "near", "grain_households": 1, "grain_room_acres": 50.0}) for seed in range(200)]
+    assert 150 < rolls.count("barley") < 200, "a well-drained site near a town mostly double-crops"
+
+
 def test_the_knob_offers_only_the_forms_this_ground_can_feed() -> None:
     """The violating case: ten households need 8.5 acres of dry field, and the toe and the middle offered hold 3.7. Bare
     over the winter is never rolled there; with the drained paddy's barley the need left is nil and the band holds it."""

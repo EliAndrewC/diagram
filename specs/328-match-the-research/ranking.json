@@ -8407,7 +8407,7 @@
   "flag": "",
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "51",
   "scope": "kept"
  },
  {
@@ -8424,7 +8424,7 @@
   "tier_as_ranked": "E0",
   "moved": "T42a: tiered by its work - An honest claim would state a drift (the stroke starts at the sluice while its record says off the map), so the one call's endpoints and record change.",
   "wave": "",
-  "scope": "kept"
+  "scope": "deferred"
  },
  {
   "key": "l7r/diagram/settlement/fields/comb.py::channel_end_on_stream#mouth reaches the water",
@@ -8467,7 +8467,7 @@
   "flag": "",
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "51",
   "scope": "kept"
  },
  {
@@ -8481,8 +8481,8 @@
   "flag": "",
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
-  "wave": "",
-  "scope": "kept"
+  "wave": "51",
+  "scope": "deferred"
  },
  {
   "key": "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._pick_overlay_plots#lotus draw",
@@ -8496,7 +8496,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "kept"
+  "scope": "deferred"
  },
  {
   "key": "l7r/diagram/settlement/fields/paddy.py::PaddyMixin._rows#dry rows",
@@ -8602,7 +8602,7 @@
   "found": "wave 10 re-check (tiered by its work at T42a)",
   "tier_as_ranked": "E1",
   "moved": "T42a: tiered by its work - The fix removes one candidate class from the seat search in one function, a change to the seat rule rather than a single value.",
-  "wave": "",
+  "wave": "51",
   "scope": "kept"
  },
  {
@@ -8618,7 +8618,7 @@
   "found": "wave 9 re-check (tiered by its work at T38a)",
   "tier_as_ranked": "E0",
   "moved": "T38a: tiered by its work - Re-checked with wall_places and against_a_wall: the front wall is offered, so one keep-out in one function changes.",
-  "wave": "",
+  "wave": "51",
   "scope": "kept"
  },
  {
@@ -8648,7 +8648,7 @@
   "flag": "",
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "51",
   "scope": "kept"
  },
  {
@@ -12345,7 +12345,7 @@
   "found": "wave 9 re-check (tiered by its work at T38a)",
   "tier_as_ranked": "E1",
   "moved": "T38a: tiered by its work - One bound value changes; the predicate's logic is the same.; amendment 9 round 3: its bound is a ken only once the held shed step moves - after it",
-  "wave": "",
+  "wave": "51",
   "scope": "kept"
  },
  {

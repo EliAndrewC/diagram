@@ -326,7 +326,7 @@ def lay_fixtures(
                 del ft[kind]
                 continue
         elif kind == "woodpile":
-            walls = steading_rects(hw, hh, "N" if kura else None, px(1.0)) + ([annex] if annex is not None else []) + ([laid["retirement"]] if "retirement" in laid else [])
+            walls = steading_rects(hw, hh, "N" if kura else None, px(1.0))  # the house's own walls (0043), never the byre's or the retirement house's
             seat = _wood_shed(hw, hh, w, d, g, walls, taken, px)
         elif kind == "bath":
             # EACH HOUSE'S OWN WALL (feature 328): the registers count the wall house by house, most beyond the stable wing
@@ -358,13 +358,21 @@ def lay_fixtures(
 def shed_off_a_wall(seat: Rect, walls: Sequence[Rect], g: float, px: Callable[[float], float]) -> bool:
     """THE WOOD SHED'S RULE (feature 280 M21; settlement-reviews of Inashiro and Kuwabata, where sheds stood 25-37 ft out,
     between farmsteads): a building of its own a ken off its house - clear of the house by the wall gap and `WOODSHED_STEP_FT`
-    - and never walked out across the dooryard: within the gap, a ken and one outward pace (`STEP_FT`) of a wall of its
-    steading (`against_a_wall`), overlapping that wall along it. The one predicate the placer and its test read.
+    - and never walked out across the dooryard: within the gap and a ken of a wall of its house (`against_a_wall`; feature
+    328 dropped the extra outward pace), overlapping that wall along it, and never past the front wall. The one predicate
+    the placer and its test read.
 
     Research:
         wood shed a ken off a wall - research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: never out across
             the dooryard"""
-    return clears(seat, walls[:1], g + px(WOODSHED_STEP_FT) - 1e-6) and against_a_wall(seat, walls, g + px(WOODSHED_STEP_FT) + px(STEP_FT))
+    return clears(seat, walls[:1], g + px(WOODSHED_STEP_FT) - 1e-6) and against_a_wall(seat, walls, g + px(WOODSHED_STEP_FT) + 1e-6) and not in_front(seat, walls[0][3] / 2)
+
+
+def in_front(seat: Rect, hh: float) -> bool:
+    """Does `seat` (in the house's frame, the front wall at +`hh`, the half-depth) stand wholly past the front wall - in the dooryard?
+
+    Research: the front yard - research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: never the front yard"""
+    return seat[1] - seat[3] / 2 >= hh - 1e-6
 
 
 def joined_to_house(seat: Rect, hw: float, hh: float, tol: float = 1e-6) -> bool:
@@ -378,16 +386,15 @@ def joined_to_house(seat: Rect, hw: float, hh: float, tol: float = 1e-6) -> bool
 
 
 def _wood_shed(hw: float, hh: float, w: float, d: float, g: float, walls: Sequence[Rect], taken: Sequence[Rect], px: Callable[[float], float]) -> Rect:
-    """The wood shed (feature 280 M21): the recorded seats - off the back wall and the flanks, a ken further out than a stack
-    stood - then those a pace further, then every place a ken off each wall of the steading; the first that clears the parts
-    laid and keeps `shed_off_a_wall`. None of them walks it out into the dooryard.
+    """The wood shed (feature 280 M21): the recorded seats - off the back wall and the flanks, a ken out - then every place a
+    ken off each wall of the house but its front (feature 328: the front wall's places stood in the dooryard); the first that
+    clears the parts laid and keeps `shed_off_a_wall`.
 
     Research:
         wood shed seats - research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: behind or beside the house,
-            never the front yard
-        wood shed fallback seats - UNRESEARCHED: a further `STEP_FT` (8 ft) out past the ken seats"""
+            never the front yard"""
     seats = _seats("woodpile", hw, hh, w, d, g, None, None, lambda _salt: 0.0, 0.0, FixtureForms(), px)
-    offered = chain(seats, outward(seats, px(STEP_FT), 1), wall_places(walls, w, d, g + px(WOODSHED_STEP_FT), px(WALL_SLIDE_FT)))
+    offered = chain(seats, (q for q in wall_places(walls, w, d, g + px(WOODSHED_STEP_FT), px(WALL_SLIDE_FT)) if not in_front(q, hh / 2)))
     found = _first((q for q in offered if shed_off_a_wall(q, walls, g, px)), taken, g)
     if found is None:
         raise FixtureUnlaid("a wood shed found no place a ken off any wall of its steading")

@@ -1639,7 +1639,8 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
   the outfall curved (`test_the_drain_outfall_run_runs_downhill_...`) and its corridor on a town or city only
   (`test_the_outfall_run_keeps_33_ft_clear_on_a_town_or_city_only`).
 
-- [ ] T127 rows 512-513, 523-532 (FR-003, FR-004)
+- [x] T127 rows 512-513, 523-532 (FR-003, FR-004)
       research: rendering
+      verify: DONE. rows 512-513, 523-532 fixed (sluice box and true span, footplank seats, the carried deck's dry landing, grain yards, the annex floor, drained acres, the comb outfall); tests red on the old code; the five hamlets regenerated, only Kuwabata's sluice records gained span 20; impl-drift r1-r6 answered; the sluice cascade's record checks answered; spec-fidelity plan CLEAR
 - [ ] T128 the claims re-checked by `impl-drift`; batch 2 closed: the gate, the pair, the perf-audit, the occasions (FR-005, FR-006)
       research: rendering

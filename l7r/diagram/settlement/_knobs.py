@@ -91,6 +91,12 @@ class Knob:
         Research: knob machinery - NONE"""
         return [v for v in self.value_space if self.typing_rule(v, context)]
 
+    def weights_for(self, context: Mapping[str, Any]) -> dict[Any, float] | None:
+        """The weights this roll draws by: the knob's own, the same at every site, unless a knob's record sets the odds from
+        the site (a subclass, as `fields/grain.py`'s winter crop).
+        Research: knob machinery - NONE"""
+        return self.weights
+
     def roll(self, seed: int, context: Mapping[str, Any]) -> Any:
         """A deterministic, independent draw from the typing-filtered value space. An empty filtered
         space is a spec error (loud), never a silent fallback (contract C2).
@@ -98,12 +104,13 @@ class Knob:
         pool = self.allowed(context)
         if not pool:
             raise ValueError(f"knob {self.name!r}: no value in {self.value_space} satisfies its typing rule for context {dict(context)!r}")
-        if self.weights is None:
+        weights = self.weights_for(context)
+        if weights is None:
             return pool[knob_rng(seed, self.name).randrange(len(pool))]
-        tot = sum(self.weights.get(v, 0.0) for v in pool)
+        tot = sum(weights.get(v, 0.0) for v in pool)
         u = knob_rng(seed, self.name).random() * tot
         for v in pool:
-            u -= self.weights.get(v, 0.0)
+            u -= weights.get(v, 0.0)
             if u < 0:
                 return v
         return pool[-1]  # float dust at the top of the range

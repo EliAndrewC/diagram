@@ -507,5 +507,12 @@
  "l7r/diagram/settlement/fields/comb.py::CombMixin._coarse_grain_top_up#drained acres": "50",
  "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_ditches#drain outfall": "50",
  "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_ditches#outfall corridor": "50",
- "l7r/diagram/settlement/fields/comb.py::outfall_run#drain outfall": "50"
+ "l7r/diagram/settlement/fields/comb.py::outfall_run#drain outfall": "50",
+ "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_paddies#blue plot class": "51",
+ "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._plot_pond#field pond glyph": "51",
+ "l7r/diagram/settlement/fields/grain.py::WINTER_CROP#winter-crop weights": "51",
+ "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_wood_shed#wood shed fallback pace": "51",
+ "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_wood_shed#wood shed seats": "51",
+ "l7r/diagram/settlement/homestead_parts/fixture_seats.py::lay_fixtures#wood shed's walls": "51",
+ "l7r/diagram/settlement/homestead_parts/fixture_seats.py::shed_off_a_wall#wood shed a ken off a wall": "51"
 }

@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-08T16:57:40Z",
+  "target": "perf-explain",
+  "commit": "3f91becf2",
+  "outcome": "permitted",
+  "why": "perf-explain UNVERIFIED: one seed's +0.3 s at 10 households, inside the batch's spread, the batch net -3.5%; isolating wave 48 alone would cost another pair of legs for a figure the total already outweighs"
+}

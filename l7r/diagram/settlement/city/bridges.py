@@ -6,6 +6,7 @@ Research: plumbing - NONE
 """
 
 import math
+from collections.abc import Callable, Sequence
 from typing import TYPE_CHECKING, Any, cast
 
 from .._geom import (
@@ -190,7 +191,7 @@ Research: ditch association reach - NONE: 24 ft
 """
 
 
-def seat_order(cands: Any, wide: Any, width: Any) -> list[float]:
+def seat_order(cands: Sequence[float], wide: Callable[[float], bool], width: Callable[[float], float]) -> list[float]:
     """The order a footplank's seats are tried in: every seat whose water earns a board, nearest the slot first, then every
     other seat, widest water first - so where houses, crops, other decks or joins rule out each wide seat, the crossing is
     laid at the widest seat left rather than left off.

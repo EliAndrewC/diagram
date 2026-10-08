@@ -160,6 +160,12 @@ def strings_used(skill: Path, ran: set[tuple[str, str]], read: set[str] = frozen
 
 
 DEFERRED_ON_MEASURE = {
+    # the pond feeder stream: drawn only where a comb's pond source carries `feeder`, and the one hamlet pond source (the
+    # polder's reservoir, `hamletgen/water/polder.py`) carries none - no kept map draws it (wave 51's measure, 2026-10-08)
+    "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_source#pond feeder from the sluice",
+    # the lotus draw: `_pick_overlay_plots` runs on Kuwabata for its wholesale dike-pond conversion only; no kept map draws a
+    # lotus overlay (no manifest names one), so the lotus branch is never asked of one (wave 51's measure, 2026-10-08)
+    "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._pick_overlay_plots#lotus draw",
     # a claim whose value no kept map reads, though its unit runs: `fixture_forms` passes `privy_seat_weights(seed)`, so only
     # `bundle.py`'s fallback reads the class default (spec-fidelity, amendment 8 round 3)
     "l7r/diagram/settlement/homestead_parts/fixture_seats.py::FixtureForms#privy seat weights",

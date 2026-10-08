@@ -44,11 +44,35 @@ def _grows_on_this_ground(form: str, context: Mapping[str, Any]) -> bool:
     return dry_need_acres(int(context["grain_households"]), float(context["grain_drained_acres"]), form) <= float(context["grain_room_acres"])
 
 
-WINTER_CROP = register_knob(Knob("winter_crop", ["barley", "none"], default="none", typing_rule=_grows_on_this_ground, weights={"barley": 0.5, "none": 0.5}))
+TOWN_NEARNESS = register_knob(Knob("town_nearness", ["near", "far"], default="far"))
+"""Research: a town's nearness - GUESS: near or far, even odds; no hamlet spec records the distance to its market town"""
+
+TOWN_FAR_FACTOR = 0.5
+"""Research: a far town's weight on the winter barley - GUESS: half a near town's, the manure a second crop needed being
+dearer to bring (0009: how drainage and a town's nearness weigh against each other is a GUESS)"""
+
+
+class WinterCropKnob(Knob):
+    """The winter crop, its odds set by the site (0009: "A settlement's drainage and the nearness of a town, whose manure a
+    second crop needed, set the odds"): barley weighs the drained share of the paddy, times `TOWN_FAR_FACTOR` where the town
+    is far; a bare winter takes the rest. A context without the site's figures rolls even odds.
+
+    Research: winter-crop weights - research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html: the drainage and a town's nearness set the odds; how they weigh is a GUESS"""
+
+    def weights_for(self, context: Mapping[str, Any]) -> dict[Any, float] | None:
+        paddy = float(context.get("grain_paddy_acres") or 0.0)
+        if paddy <= 0.0:
+            return self.weights
+        share = min(1.0, float(context.get("grain_drained_acres") or 0.0) / paddy)
+        barley = share * (1.0 if context.get("grain_town") == "near" else TOWN_FAR_FACTOR)
+        return {"barley": barley, "none": 1.0 - barley}
+
+
+WINTER_CROP = register_knob(WinterCropKnob("winter_crop", ["barley", "none"], default="none", typing_rule=_grows_on_this_ground, weights={"barley": 0.5, "none": 0.5}))
 """
 Research:
     winter-crop forms - research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html, research/questions/0011-where-a-farming-hamlet-grew-its-coarse-grain.drawing.html: barley on the drained paddy, or a bare winter
-    winter-crop weights - research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html: even odds, 0.5 each, whatever the drainage or a town's nearness
+    winter-crop weights - research/questions/0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html: set by the site (`WinterCropKnob`); even odds only where the site's figures are missing
 """
 
 # THE COARSE-GRAIN NEED, in acres of dry field per household (0011). The sizing rule (0017) gives ~0.8-1.0

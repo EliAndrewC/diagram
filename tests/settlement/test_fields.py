@@ -307,6 +307,23 @@ def test_paddy_features_cover_every_archetype_branch():
     assert not any(sd.M.get(k) for k in seen)
 
 
+def test_the_field_pond_is_drawn_as_a_dish_pond_inside_its_fit() -> None:
+    """Feature 328 (0008: a plains pond was "low ground ringed with an embankment and dug out"): the bank ring in the bund's
+    earth at the fitted outline over a wet tint, the open water inside it, eight reeds on the margin - all inside the fit."""
+    from l7r.diagram.waterfields import AZE, FLOODED
+
+    s = Settlement(400, 400, seed=1)
+    s.meta(name="P", scale="hamlet", ftpx=1, down_deg=90)
+    plot = {"poly": [(0.0, 0.0), (120.0, 0.0), (120.0, 90.0), (0.0, 90.0)], "low": True, "fill": "#A6C398"}
+    ink: list[tuple[str, str]] = []
+    assert s._plot_pond(plot, [plot["poly"]], ink)
+    svg = "".join(e for e, _ in ink)
+    rec = s.M["field_ponds"][-1]
+    assert f'fill="{FLOODED}" stroke="{AZE}"' in svg, "the bank ring on wet ground"
+    assert f'rx="{rec["rx"] * 0.72:.1f}"' in svg, "the open water inside it"
+    assert svg.count("<line") == 8 and {c for _, c in ink} == {"field pond"}
+
+
 def test_the_field_grave_takes_either_attested_form_and_a_corner_grave_stays_in_its_corner():
     """Feature 267 (research/contents.json#fields 'Are there really graves out in the middle of the fields?'): an island inside
     a plot (the Chinese form) or a grave in a plot's corner (the Japanese form), rolled per hamlet on its own stream."""
