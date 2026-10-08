@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-08T13:20:08Z",
+  "target": "claims-gate",
+  "commit": "cd33340f5",
+  "why": "CLAIMS_OK: rename only: these findings stood under docs/buildings/programs.md (18 then, 15 now); the new path made them read as new"
+}
