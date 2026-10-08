@@ -21,6 +21,7 @@ from .banks import (
     _TINT_MIN_APEX,
     dedup_ring,
     pointed_ring,
+    straight_ring,
     tapers_to_a_point,
 )
 from .frame import Poly
@@ -93,7 +94,7 @@ def judge_tint(plots: list[dict[str, Any]], dpts: Poly, plot_across: float, g: f
 
     Research:
         pointed plot left green - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: a needle, a truncated point or an apex under 25 deg loses the tint
-        one wet plot at least - CONVENTION: when the draw leaves no low plot blue, the most basin-like one is tinted, so the map still shows the class it declares (0007 drawing records blue as a sample, not this floor)
+        one wet plot at least - CONVENTION: when the draw leaves no plot on the drain blue, the most basin-like plot ON THE DRAIN is tinted, so the map still shows the class it declares (0007 drawing records blue as a sample, not this floor)
     """
     import shapely
     from shapely.geometry import LineString, Polygon
@@ -132,10 +133,17 @@ def judge_tint(plots: list[dict[str, Any]], dpts: Poly, plot_across: float, g: f
         _pg = _pgs[_k]
         _mrr = _mrrs[_k] if isinstance(_pg, Polygon) and not _pg.is_empty else None
         _fill = (_pg.area / _mrr.area) if isinstance(_mrr, Polygon) and _mrr.area > 0.0 else 1.0
-        _wrong = _needle(p["poly"]) or pointed_ring(dedup_ring(p["poly"], 1.0), _TINT_MIN_APEX) or tapers_to_a_point(p["poly"], _t_end, _TINT_MIN_APEX, 4 * _t_end)
+        _wrong = (
+            _needle(p["poly"])
+            or pointed_ring(dedup_ring(p["poly"], 1.0), _TINT_MIN_APEX)
+            or tapers_to_a_point(p["poly"], _t_end, _TINT_MIN_APEX, 4 * _t_end)
+            or tapers_to_a_point(straight_ring(p["poly"]), _t_end, _TINT_MIN_APEX, 4 * _t_end)
+        )
         if p.get("fill") == FLOODED and _wrong:
             p["fill"] = RICE_GREENS[(int(abs(p["poly"][0][0]) * 7) + int(abs(p["poly"][0][1]) * 3)) % len(RICE_GREENS)]
-        elif not _wrong and _pg.area > 0.0 and (p.get("low") or (_collector is not None and _to_collector[_k] <= 0.25 * plot_across)):
+        elif not _wrong and _pg.area > 0.0 and (_to_collector[_k] <= 0.25 * plot_across if _collector is not None else p.get("low")):
+            # ON THE DRAIN, NOT MERELY LOW (feature 328 wave 40, spec-fidelity: 0007 gives the tint to the lowest row, the plots on
+            # the drain; a plot up to LOW_ROWS off it was promoted)
             _keeps.append((basin_rank(_pg, _fill, _median_plot, _collector, plot_across), p))
     # THE MAP MUST STILL EXHIBIT THE CLASS IT DECLARES (feature 230). The tint is a SAMPLE, and every draw can be taken back by
     # the clauses above - which is how the reference hamlet once came to paint no blue plot at all; `flooded_plots` is the

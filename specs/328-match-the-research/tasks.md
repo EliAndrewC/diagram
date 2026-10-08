@@ -14,7 +14,7 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
   the web cut it back to its last joint (`trim_streets`); Kashikawa's and Mizuguchi's far ends now run off the sheet as a
   second way out (every way is inked `village lane`).
 - placement-changed: wet paddy on sawada - wave 40: only the draw or a pointed shape leaves a low plot green (0007); the four
-  shape clauses and the outfall's keep-out, on no page, went, and the blue plots run 7 -> 16 here (Inashiro 1 -> 8, Kashikawa 4 -> 14, Mizuguchi 3 -> 7; with the outfall keep-out gone, Sawada 18 and Mizuguchi 8)
+  shape clauses and the outfall's keep-out, on no page, went, and the blue plots run 7 -> 16 here (Inashiro 1 -> 8, Kashikawa 4 -> 13, Mizuguchi 3 -> 7, Sawada 7 -> 16, after round 2's taper fix)
 - glyph-redrawn: windbreak on inashiro - wave 39: every grove crown in 0080's one 0.75-1.4 band, a conifer no wider than a broadleaf
   (the conifer-led belt's rows and the farm groves), and every crown giving way round a yard persimmon (0046)
 - glyph-redrawn: windbreak on kuwabata - wave 39: the mixed broadleaf belt in the one band, its bamboo kept (0075)
@@ -1318,6 +1318,14 @@ regenerated, `tree_crowns` and `bamboo_marks` changed on every map, nothing else
   round-1 edit was reverted (spec-fidelity round 1). `belt_law.py::the village belt#its west arm on inashiro` E0 - 0072 allows
   "one of those two sides"; Inashiro's notes line and 0072 drawing's arcs re-measured (49, 71, 14 degrees; Kashikawa and
   Mizuguchi draw no village belt).
+
+- Round 2 (the wet paddy's glyph check, NOT-REVIEWABLE for want of round 1's dispositions, found two Sawada plots tapering to
+  18.8 and 22.8 deg behind 1.6-2.3 ft tips still blue): `tapers_to_a_point` read their sides, stored as ~6 ft segments, as a
+  chamfer's steps. The tint now also asks it of `straight_ring` (near-straight vertices removed), so a point drawn in short
+  segments is read as one - `test_a_point_drawn_in_short_segments_still_loses_the_tint`, red on the old code. The class floor
+  promotes only a plot ON the drain (spec-fidelity round 2) - `test_the_class_floor_promotes_only_a_plot_on_the_drain`, red on
+  the old code. Round 1's seven findings answered by measurement records (`sawada-glyph-wetpaddy-r1-F1`..`F7`). The glyph
+  check is at its two-round cap; a third round is the GM's waiver.
 
 - [x] T105a wave 39's found rows tiered by the work they take, by a fresh reader (FR-002, FR-003, SC-003)
       research: rendering

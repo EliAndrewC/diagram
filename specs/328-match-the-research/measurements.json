@@ -229,5 +229,82 @@
   "unit": "% end vs start",
   "observed": "2026-10-08",
   "source": "dev/perf-log/20261008T071309Z-328-start-perfbase.json and 20261008T071615Z-328-end-digram-backlog.json; the first pair (06:51/07:03, taken while a review agent and a peer session ran) read +13 to +65% with the growth in homesteads and field, stages the change never runs"
+ },
+ "sawada-glyph-wetpaddy-r1-F1": {
+  "subject": "glyph-check--wet-paddy",
+  "answers": "6240efb2b784",
+  "observed": "2026-10-08",
+  "source": "pool/hamlets/sawada/sawada.json flooded_plots and fields[].plots ([w, h, x, y, ...]), regenerated 2026-10-08 after wave 40 round 2 (straight_ring in the tint's taper test; the promotion on the drain)",
+  "verifies": "F1",
+  "quantity": "blue plots tapering to a point behind a short tip (the two the round-2 check measured at 22.8 and 18.8 deg, at (3327, 2881) and (3586, 2761)), still blue after the fix",
+  "value": 0,
+  "unit": "plots",
+  "method": "match each named plot's center to flooded_plots within 12 ft; the blunt low-fill triangles keep the tint, which is 0007's rule (only the draw or a pointed shape leaves a low plot green)"
+ },
+ "sawada-glyph-wetpaddy-r1-F2": {
+  "subject": "glyph-check--wet-paddy",
+  "answers": "6240efb2b784",
+  "observed": "2026-10-08",
+  "source": "pool/hamlets/sawada/sawada.json flooded_plots and fields[].plots ([w, h, x, y, ...]), regenerated 2026-10-08 after wave 40 round 2 (straight_ring in the tint's taper test; the promotion on the drain)",
+  "verifies": "F2",
+  "quantity": "largest aspect (long side over short) among the blue plots (round 1's F2: none reads as a channel)",
+  "value": 1.56,
+  "unit": "ratio",
+  "method": "w/h of each blue plot's record"
+ },
+ "sawada-glyph-wetpaddy-r1-F3": {
+  "subject": "glyph-check--wet-paddy",
+  "answers": "6240efb2b784",
+  "observed": "2026-10-08",
+  "source": "pool/hamlets/sawada/sawada.json flooded_plots and fields[].plots ([w, h, x, y, ...]), regenerated 2026-10-08 after wave 40 round 2 (straight_ring in the tint's taper test; the promotion on the drain)",
+  "verifies": "F3",
+  "quantity": "largest blue plot over the map's median plot (round 1's F3: no plot lobed or oversized)",
+  "value": 1.78,
+  "unit": "ratio",
+  "method": "area w*h of each blue plot against the median of every plot"
+ },
+ "sawada-glyph-wetpaddy-r1-F4": {
+  "subject": "glyph-check--wet-paddy",
+  "answers": "6240efb2b784",
+  "observed": "2026-10-08",
+  "source": "pool/hamlets/sawada/sawada.json flooded_plots and fields[].plots ([w, h, x, y, ...]), regenerated 2026-10-08 after wave 40 round 2 (straight_ring in the tint's taper test; the promotion on the drain)",
+  "verifies": "F4",
+  "quantity": "touching blue plots whose shared bund is not drawn (round 1's F4: touching groups read as neighboring plots)",
+  "value": 0,
+  "unit": "plots",
+  "method": "the round-2 check found the inner bunds of every touching group visible at fit zoom (largest group 1852 sq ft); the fix only turned two plots green"
+ },
+ "sawada-glyph-wetpaddy-r1-F5": {
+  "subject": "glyph-check--wet-paddy",
+  "answers": "6240efb2b784",
+  "observed": "2026-10-08",
+  "source": "pool/hamlets/sawada/sawada.json flooded_plots and fields[].plots ([w, h, x, y, ...]), regenerated 2026-10-08 after wave 40 round 2 (straight_ring in the tint's taper test; the promotion on the drain)",
+  "verifies": "F5",
+  "quantity": "blue plots off the drain-side row",
+  "value": 0,
+  "unit": "plots",
+  "method": "the round-2 check counted 18 of 18 on the drain-side row before the two pointed plots went green; none is added off it"
+ },
+ "sawada-glyph-wetpaddy-r1-F6": {
+  "subject": "glyph-check--wet-paddy",
+  "answers": "6240efb2b784",
+  "observed": "2026-10-08",
+  "source": "pool/hamlets/sawada/sawada.json flooded_plots and fields[].plots ([w, h, x, y, ...]), regenerated 2026-10-08 after wave 40 round 2 (straight_ring in the tint's taper test; the promotion on the drain)",
+  "verifies": "F6",
+  "quantity": "legend classes a blue plot can be taken for",
+  "value": 0,
+  "unit": "classes",
+  "method": "the round-2 check's comparison against every class in ink_classes, unchanged by the fix (no class added)"
+ },
+ "sawada-glyph-wetpaddy-r1-F7": {
+  "subject": "glyph-check--wet-paddy",
+  "answers": "6240efb2b784",
+  "observed": "2026-10-08",
+  "source": "pool/hamlets/sawada/sawada.json flooded_plots and fields[].plots ([w, h, x, y, ...]), regenerated 2026-10-08 after wave 40 round 2 (straight_ring in the tint's taper test; the promotion on the drain)",
+  "verifies": "F7",
+  "quantity": "blue plots fused with the drain's outlet (a blue body with no bund between it and the drain's end)",
+  "value": 0,
+  "unit": "plots",
+  "method": "the round-2 check sampled 87 pixel lines from the plots within 76 ft of the drain's end to the drain; every one crossed a bund; three plots stand within 76 ft now"
  }
 }

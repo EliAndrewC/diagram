@@ -728,6 +728,31 @@ def round_channel_joints(channels: list[dict[str, Any]], min_turn_deg: float = 8
         B["pts"] = [arc[-1]] + B["pts"][1:]  # ... and the downstream one picks up where it ends
 
 
+def straight_ring(poly: Poly, max_turn: float = 4.0) -> Poly:
+    """`poly` with every vertex that turns the ring by less than `max_turn` degrees removed, again until none does: a side stored
+    as a run of short segments is the one side it is (feature 328 wave 40, the wet paddy's glyph-check on Sawada: two plots
+    tapering to 18.8 and 22.8 deg behind 1.6-2.3 ft tips kept the tint, their sides stored in ~6 ft segments that
+    `tapers_to_a_point` reads as a chamfer's short steps). Unlike `dedup_ring` it removes only straight vertices, so no corner
+    the ring has is sharpened and no spike is made.
+
+    Research: plumbing - NONE: ring normalization for `tapers_to_a_point`
+    """
+    pts = list(poly)
+    changed = True
+    while changed and len(pts) > 3:
+        changed = False
+        for i in range(len(pts)):
+            a, b, c = pts[i - 1], pts[i], pts[(i + 1) % len(pts)]
+            t1 = math.atan2(b[1] - a[1], b[0] - a[0])
+            t2 = math.atan2(c[1] - b[1], c[0] - b[0])
+            turn = abs((math.degrees(t2 - t1) + 180.0) % 360.0 - 180.0)
+            if turn < max_turn:
+                del pts[i]
+                changed = True
+                break
+    return pts
+
+
 def tapers_to_a_point(poly: Poly, end: float, min_deg: float, arm: float) -> bool:
     """Does this ring run out to a TRUNCATED point - a short end edge capping two converging sides?
 

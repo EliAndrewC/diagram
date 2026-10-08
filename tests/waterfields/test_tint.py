@@ -5,6 +5,7 @@ The collector runs along y = 1300 throughout (`_D`), as it did in the seam pass'
 
 from __future__ import annotations
 
+import math
 import random
 
 from l7r.diagram.waterfields import tint
@@ -100,3 +101,35 @@ def test_a_plot_at_the_drains_end_keeps_its_tint() -> None:
     plots = [{"poly": _rect(1260, 1262, 1300, 1298), "fill": FLOODED, "low": True}]
     tint.judge_tint(plots, _D, 46.0, 2.0)
     assert plots[0]["fill"] == FLOODED
+
+
+def _segmented_wedge(apex_deg: float, cut: float, length: float, step: float, at: tuple[float, float]) -> list[tuple[float, float]]:
+    """A wedge pointing -x with its tip cut `cut` ft from the apex, each long side stored as `step`-ft segments (glyph-check
+    wet paddy on Sawada, feature 328 wave 40 round 2: plots at 18.8 and 22.8 deg behind 1.6-2.3 ft tips kept the tint)."""
+    h = math.radians(apex_deg / 2)
+    ds = [cut + k * step for k in range(int((length - cut) / step) + 1)]
+    top = [(at[0] + d * math.cos(h), at[1] - d * math.sin(h)) for d in ds]
+    bot = [(at[0] + d * math.cos(h), at[1] + d * math.sin(h)) for d in reversed(ds)]
+    return [*top, *bot]
+
+
+def test_a_point_drawn_in_short_segments_still_loses_the_tint() -> None:
+    """0007 drawing: "leaves green any plot of that row that tapers to a point" - the taper is judged on the sides as they run,
+    not on the short segments a ring stores them in; a blunt wedge stored the same way keeps its tint."""
+    sharp = [{"poly": _segmented_wedge(20.0, 9.0, 60.0, 6.0, (600.0, 1285.0)), "fill": FLOODED, "low": True}]
+    tint.judge_tint(sharp, _D, 46.0, 2.0)
+    assert sharp[0]["fill"] != FLOODED
+    blunt = [{"poly": _segmented_wedge(60.0, 9.0, 40.0, 6.0, (600.0, 1270.0)), "fill": FLOODED, "low": True}]
+    tint.judge_tint(blunt, _D, 46.0, 2.0)
+    assert blunt[0]["fill"] == FLOODED
+
+
+def test_the_class_floor_promotes_only_a_plot_on_the_drain() -> None:
+    """0007 gives the tint to the lowest row, the plots on the drain (feature 328 wave 40): when the draw leaves none blue, the
+    floor tints the most basin-like plot ON the drain - never a low plot a row above it."""
+    above = [{"poly": _rect(600, 1200, 640, 1240), "fill": GREEN, "low": True}]
+    tint.judge_tint(above, _D, 46.0, 2.0)
+    assert above[0]["fill"] == GREEN
+    on = [{"poly": _rect(600, 1200, 640, 1240), "fill": GREEN, "low": True}, {"poly": _rect(700, 1262, 740, 1298), "fill": GREEN, "low": True}]
+    tint.judge_tint(on, _D, 46.0, 2.0)
+    assert [p["fill"] == FLOODED for p in on] == [False, True]

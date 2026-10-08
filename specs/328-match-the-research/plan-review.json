@@ -1,80 +1,79 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "359d019e12be28a069303c8b8b6ae4e845e570b8d50d483183a09d47ab80b667",
+ "plan_sha256": "277cc94b97d5f6c9d600d9a11eb1531724d2b170fb47191dd994ae8c6c0ca38c",
  "reviewed": "2026-10-08",
  "declared": "spec-fidelity",
  "decisions": [
   {
    "id": "W40-1 tint: four shape clauses dropped",
-   "summary": "Drop the solidity, rectangularity, aspect and area-ratio demotions from judge_tint (ranking rows 609-612, E2, kept)",
+   "summary": "solidity, rectangularity, aspect and area-ratio demotions gone from judge_tint (rows 609-612)",
    "class": "within",
-   "why": "The literal fix: 0007 drawing, a sentence there before this wave, says 'Only the random draw, or a plot's pointed shape, left them untinted'; FR-004 moves the implementation to the page. Keeping the clauses by writing them onto the page would be the research moved to fit the code, the exception path. Their settlement-review origin is a reason to read the Sawada glyph check, not a reason to keep them."
+   "why": "Unchanged since round 1: 0007 drawing, 'Only the random draw, or a plot's pointed shape, left them untinted'. Confirmed: the four _TINT_ constants appear nowhere under l7r/ or tests/ (grep, 2026-10-08)."
   },
   {
-   "id": "W40-2 tint: the outfall's siting stays",
-   "summary": "The plan keeps the outfall keep-out demotion ('the needle, the apex, the taper and the outfall's siting stay') and does not take row 635 (judge_tint#tint reads as a basin, E2, kept, DRIFTED), though the wave edits the code that row's claim describes",
+   "id": "W40-2 tint: the outfall's keep-out dropped (row 635 taken)",
+   "summary": "_at_outfall removed from _wrong; the 'tint reads as a basin' claim gone; test_a_plot_at_the_drains_end_keeps_its_tint",
+   "class": "within",
+   "why": "Round 1 item 1 is met in 35fa3aadf. _wrong is now the needle, the pointed apex and the taper alone; the claim 'tint reads as a basin' is gone from dev/claims-index.json; the stale comments are restated (the docstring's 'six clauses', 'A FOURTH MEASURES SITING' and 'size joins the other four' are gone). The test's plot has a corner 2 px from the drain's end (1300,1300), inside the old 1.5 x 46 keep-out, so it is red on the old code. The blue counts the record states are the manifests': inashiro 8, kashikawa 14, mizuguchi 8, sawada 18, kuwabata 8 flooded_plots (counted 2026-10-08)."
+  },
+  {
+   "id": "W40-3 tint: the class floor (row 634) relabeled CONVENTION",
+   "summary": "judge_tint#one wet plot at least keeps its code and its claim is rewritten from a 0007 pointer to CONVENTION: 'when the draw leaves no low plot blue, the most basin-like one is tinted ... (0007 drawing records blue as a sample, not this floor)'",
    "class": "narrowing",
    "ruling": "NOT LEGITIMATE",
-   "why": "The wave's own authority, 0007's 'Only the random draw, or a plot's pointed shape', excludes the outfall demotion as surely as the four dropped clauses; 0007 never mentions an outfall (grep of every 0007 file). Row 635's recorded fix is 'drop the solidity, aspect, rectangularity, area and outfall keep-out demotions; leave only the 45% draw and the pointed-shape test'. Applying the sentence to four clauses and keeping the fifth on a settlement-review argument is 'X except where Y'. Nothing makes the outfall impossible to drop, nothing in the request implies keeping it, and dropping it does not defeat the request's purpose. Leaving row 635 untaken also leaves judge_tint's claim saying 'a lobed, channel-shaped, triangular, outsized or outfall plot loses the tint' over code that no longer does four of those. Fix: take row 635 in this wave (drop _at_outfall from _wrong, restate the claim and the stale comments: the module docstring's 'six clauses', 'A FOURTH MEASURES SITING', 'size joins the other four')."
+   "why": "Round 1 allowed this row to stay open; taking it by relabel is a new decision and it is the exception path. impl-drift's DRIFTED note: '0007 ... describes blue as only the 45% draw on lowest-row plots on the drain; the promotion can tint a low plot up to LOW_ROWS off the drain'. The code is unchanged: the promotion's candidates are still p.get('low') (within LOW_ROWS row steps) or within a quarter plot of the collector, so it can still tint a plot 0007's own convention bullet does not ('A comb field gives each plot of its lowest row, the ones whose foot lies on the drain, a 45% chance of the tint'). FR-003: the claim alone is E0 only when a page not edited for the purpose already says what the code does, and 'any other rewrite of a DRIFTED row's claim is the exception path (FR-004)'; the new label concedes 0007 does not record the floor. A CONVENTION label is not checked against a page, so the drift is not fixed but taken out of the check's sight. Not impossible (the row's recorded fixes are both code changes), not implied by the GM's words ('I'm not sure there's any reason for our implementation to not match for anything'), and the purpose argument ('the map still shows the class it declares') is served equally by the ranker's first option. Fix: either take a recorded fix (restrict the promotion to a lowest-row plot on the drain - basin_rank already prefers one - after which a CONVENTION label for the existence of a floor the page is silent on is honest; or drop the promotion), or revert the relabel and leave row 634 open DRIFTED, as round 1 allowed."
   },
   {
-   "id": "W40-3 tint: the promotion (row 634) left open",
-   "summary": "judge_tint#one wet plot at least (E2, kept) is not taken this wave",
+   "id": "W40-4 woods row DEFERRED, edit reverted",
+   "summary": "woods.py _draw_stand back to its 0.75-1.05 band with the 18% emergent roll; the woods test removed; row 590 scope deferred",
    "class": "within",
-   "why": "The plan states no decision to keep it; it is a ranked E2 row a later wave takes, and its recorded fix carries a choice of two. Taking it with row 635 would put the whole judge under one re-check (FR-003's grouping), but leaving it is not a carve-out."
-  },
-  {
-   "id": "W40-4 woods on CROWN_S",
-   "summary": "Take the found row woods.py::TreeStandsMixin._draw_stand#crown size (ranking scope 'kept') and change _draw_stand to the groves' one band",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "This narrows FR-010, the GM's scope ruling ('limit ourselves to code actually executed by magistracies, country shrines, and scripted hamlets'; deferred rows: 'no wave takes them'). Measured 2026-10-08: dev/claims-deferred.json:685 lists TreeStandsMixin._draw_stand, and audit/scope.py's own executed() over the kept maps' gen-cache records only _crown_seat_clear, _crowns_near and flush_tree_stands in woods.py; scope_of(_draw_stand) returns 'deferred'. The plan concedes it: 'no pool hamlet's woods are drawn through it (the five manifests' tree_crowns unchanged)' - confirmed, tree_crowns byte-identical on all five. Its callers are forest.py and castle_civic.py, legacy village code. The row's 'kept' scope was assigned provisionally to a found row and is wrong. Fix: revert the woods.py change and its test, re-scope the row deferred (re-run audit/scope.py), and let the report show it DEFERRED."
+   "why": "Round 1 item 2 is met in 35fa3aadf: the woods.py diff restores the pre-wave code and claims, test_a_wood_draws_its_crowns_in_the_groves_one_band is gone, and audit/scope.json and ranking.json carry the row as deferred, as FR-010 rules for code only legacy maps run."
   },
   {
    "id": "W40-5 belt west arm E0",
-   "summary": "T105a tiers the Inashiro west-arm row E0: no engine change, Inashiro's notes line restated (belt on the north, west arm off the page)",
+   "summary": "Inashiro's notes line restated; no engine change",
    "class": "within",
-   "why": "FR-003 E0: 0072 drawing, not edited for this purpose, says 'every belt stands on the north and west of its houses, or on one of those two sides' and a belt running off the frame is sound; the code already matches, and only the map's own notes said otherwise. The notes are a scripted hamlet's, not a frozen hand-rolled map (FR-009)."
+   "why": "Unchanged since round 1 (0072: 'on the north and west of its houses, or on one of those two sides'). Bookkeeping note, not a ruling: the scope.py re-run flipped this row (191) and rows 609-612 from kept to deferred because their units no longer resolve; all five are taken by this wave, and Inashiro is a scripted hamlet, so T106's wave column must record them as wave 40, not leave them reading DEFERRED."
   },
   {
-   "id": "W40-6 0072 arcs re-measured",
-   "summary": "0072 drawing's measured arcs restated: Inashiro 49, Kuwabata 71, Sawada 14 degrees; Kashikawa and Mizuguchi draw no village belt",
+   "id": "W40-6 0072 arcs and belt areas re-measured",
+   "summary": "arcs 49/71/14 degrees; areas Sawada 0.55, Inashiro 1.24, Kuwabata 1.64 ha; Kashikawa and Mizuguchi draw no village belt; heading 'The hamlet maps that draw a village belt'",
    "class": "within",
-   "why": "A stale measurement of our own maps corrected, not the rule changed (one side or two stands). Labeled with date and method. Re-measured independently on HEAD's manifests: 48, 68, 13 degrees (house centers from x+w/2, which can explain the few degrees) and no windbreak on Kashikawa or Mizuguchi; the same picture."
+   "why": "Stale measurements of our own maps corrected with date and method; the rule (one side or two) is untouched, and the heading now matches the three maps that draw a belt."
   },
   {
-   "id": "W40-7 0007 Inashiro count",
-   "summary": "0007 drawing's Inashiro count restated to 8 blue plots",
+   "id": "W40-7 0007 counts and modal",
+   "summary": "0007's comment counts restated; the wet-paddy modal adds 'with any plot that tapers to a point left green'",
    "class": "within",
-   "why": "Verified: flooded_plots 1 -> 8 between HEAD~1 and HEAD (and Kashikawa 4 -> 14, Mizuguchi 3 -> 7, Sawada 7 -> 16, Kuwabata 8 -> 8, which matches tasks.md's occasion line). The page states what the map draws."
+   "why": "The modal sentence is 0007's own ('leaves green any plot of that row that tapers to a point'); the counts match the manifests (W40-2)."
   },
   {
-   "id": "W40-8 occasion: wet paddy on Sawada",
-   "summary": "One declared occasion, placement-changed wet paddy on sawada, though four maps' blue plots changed",
+   "id": "W40-8 belt fallback wind northwest",
+   "summary": "stands.py settle_the_belt fallback wind (0,-1) -> (-0.7071,-0.7071), claimed on 0072",
    "class": "within",
-   "why": "FR-005 runs the occasions feature 294 owes, one unit per agent; Sawada is the map whose 'no pond' brief three of the clauses came from, and a later wave has used one map for the same kind of change before. Process, not scope."
+   "why": "0072 drawing: 'Every map takes the northwest wind unless it declares a local one'. The line is in the hamlet's path: the one other windbreak caller (rolling/roll.py:457, legacy) passes no page and never reaches the settle branch, and the hamlet passes wind_unit(plan.windward); no manifest changed from it. Not a deferred unit. plan.md's Scope does not name it; worth one clause there, not a finding."
   },
   {
-   "id": "W40-9 T105a tiers",
-   "summary": "Fresh reader's tiers: belt row E0 (provisional E3), woods row E2",
+   "id": "W40-9 occasion: wet paddy on Sawada (round 2)",
+   "summary": "the glyph check's second round after the outfall",
    "class": "within",
-   "why": "Each follows FR-003's definitions. The woods row's tier is not in question; its scope is (W40-4)."
+   "why": "Process, FR-005."
   },
   {
    "id": "W40-10 tests",
-   "summary": "test_only_a_pointed_shape_loses_the_water_tint and test_a_wood_draws_its_crowns_in_the_groves_one_band, each red on the old code",
+   "summary": "test_a_plot_at_the_drains_end_keeps_its_tint added; the shape-clause test kept; the woods test reverted",
    "class": "within",
-   "why": "Enforcement of the fix. The woods test goes with W40-4's revert."
+   "why": "Enforcement of the fix."
   },
   {
    "id": "W40-11 unpushed waves 9-39 under condition (6)",
-   "summary": "Wave 40 builds on the unpushed waves as at wave 39's close",
+   "summary": "as at wave 39's close",
    "class": "within",
-   "why": "Carried from the exception check already ruled LEGITIMATE on its conditions; nothing in this wave changes them."
+   "why": "Unchanged."
   },
   {
    "id": "W40-12 verification",
-   "summary": "impl-drift on the touched claims, record checks on 0007, 0072 and the notes, the gate, the glyph check, the timing pair",
+   "summary": "impl-drift on the touched claims, record checks on 0007, 0072 and the modal, the gate, the glyph check, the timing pair",
    "class": "within",
    "why": "FR-005 as written."
   }
