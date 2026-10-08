@@ -57,3 +57,13 @@ def test_pytest_and_coverage_stay_scoped_at_the_root() -> None:
     cfg = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))["tool"]
     assert cfg["pytest"]["ini_options"]["testpaths"] == ["tests"], "without testpaths a root pytest walks every .clones/ checkout"
     assert cfg["coverage"]["run"]["source"] == ["l7r"]
+
+
+@pytest.mark.tooling
+def test_the_old_project_directory_is_ignored_while_a_merge_of_the_move_is_open(tmp_path: Path) -> None:
+    """Feature 329: mid-merge, the old directory still holds the ignored files of the old layout, and a `git add -A` once
+    staged 48 MB of them into a merge commit. The root .gitignore ignores the whole directory."""
+    old = ROOT / ".claude" / "skills" / ("diagra" + "m") / "dev" / "perf-raw" / "x.prof"
+    rel = str(old.relative_to(ROOT))
+    out = subprocess.run(["git", "-C", str(ROOT), "check-ignore", "--no-index", "-q", rel], capture_output=True)
+    assert out.returncode == 0, f"{rel} is not ignored"

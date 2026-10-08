@@ -172,3 +172,11 @@ wip/**/*.html
 .firing-journal/
 # a roll's staging directory beside its map (hamletgen.driver.stage_for, feature 261): promoted or removed, never tracked
 .roll-*/
+
+# THE OLD PROJECT DIRECTORY, DURING THE MOVE (feature 329; found by the backlog session's merge, 2026-10-08). While a
+# clone's merge of the move is still open (conflicts unresolved), its old directory under .claude/skills/ still holds
+# every ignored file the old .gitignore covered - profiles, renders, caches - and nothing at the root ignored that path,
+# so a `git add -A` staged 48 MB of profiles into a merge commit. Nothing tracked lives there any more; the carry
+# (scripts/_layout_carry.sh) empties and removes it after the merge. The bracket keeps the literal old path out of a
+# live file (scripts/check-old-layout.py).
+/.claude/skills/diagra[m]/
