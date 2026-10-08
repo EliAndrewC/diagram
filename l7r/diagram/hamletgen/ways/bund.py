@@ -150,6 +150,16 @@ class RunOnBlocks:
         # that set - so a way carried ~150 ft to the paddy ran straight across a buckwheat plot between, and nothing here
         # looked. A way runs on the baulk between plots, never through the crop (`lanes_clear_of_dry_plots`).
         self.crops = crop_polys(s)
+        # ...AND EACH WITH ITS BOX, read once (feature 328, the perf-audit of batch 3: `clear` was asked 445 times a reference
+        # roll, and every ask re-read every fixture and measured every crop, ~1.1 s); a block whose box cannot reach the
+        # stretch is passed over - the same verdict, never pruned past what it could touch
+        from .law import FIXTURE_PAD_FT, fixture_quads  # local: the law sits above the run on
+
+        self._fix = [(q, _box(q)) for q in fixture_quads(s.M)]
+        self._fix_pad = FIXTURE_PAD_FT
+        self._water = [(c, d, (min(c[0], d[0]), min(c[1], d[1]), max(c[0], d[0]), max(c[1], d[1]))) for c, d in self.water]
+        self._wet = [(w, _box(w)) for w in self.wet]
+        self._crops = [(c, _box(c)) for c in self.crops]
 
     def clear(self, a: Pt, b: Pt, width: float, over_water: int = 0) -> bool:
         """Is the stretch a -> b clear - crossing no more than `over_water` water courses (a crossing the crossings stage
@@ -161,18 +171,36 @@ class RunOnBlocks:
             off the wet ground - research/questions/0081-village-lanes.drawing.html: no marsh, no wet toe
             off the crop - research/questions/0081-village-lanes.drawing.html: never across a dry plot
             off the steadings - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: nothing built on a lane, and the run-on's middle at least 7 ft (`FOOTPATH_FABRIC_GAP`) off the steadings' fabric, gardens included"""
-        if not off_the_fixtures(self.s, [a, b], width):
+        from .law import over_a_fixture  # local: the law sits above the run on
+
+        seg = (min(a[0], b[0]), min(a[1], b[1]), max(a[0], b[0]), max(a[1], b[1]))
+        reach = width / 2.0 + self._fix_pad + 1.0
+        if over_a_fixture([a, b], width, [q for q, bb in self._fix if _meets(bb, seg, reach)]) is not None:
             return False
-        if sum(1 for c, d in self.water if segments_cross(a, b, c, d)) > over_water:
+        if sum(1 for c, d, bb in self._water if _meets(bb, seg, 0.0) and segments_cross(a, b, c, d)) > over_water:
             return False
-        for w in self.wet:
+        for w, bb in self._wet:
+            if not _meets(bb, seg, 0.0):
+                continue
             if point_in_poly(b[0], b[1], w) or any(segments_cross(a, b, w[k], w[(k + 1) % len(w)]) for k in range(len(w))):
                 return False
         # the new stretch alone, from a step off the end it grows from (that end may stand at its own dooryard's gap)
         start = (a[0] + (b[0] - a[0]) * min(1.0, 2.0 / max(math.dist(a, b), 1e-9)), a[1] + (b[1] - a[1]) * min(1.0, 2.0 / max(math.dist(a, b), 1e-9)))
-        if self.crops and any(poly_gap(stroke_quad(start, b, width / 2.0), c) <= 0.0 for c in self.crops):
-            return False  # the drawn tread, as the matrix reads it, on a dry plot
+        if self._crops:
+            quad = stroke_quad(start, b, width / 2.0)
+            if any(_meets(bb, seg, width) and poly_gap(quad, c) <= 0.0 for c, bb in self._crops):
+                return False  # the drawn tread, as the matrix reads it, on a dry plot
         return not _crosses_fabric([start, b], self.fabric, FOOTPATH_FABRIC_GAP) and not _hits_a_steading(self.s, [start, b], int(width))
+
+
+def _box(poly: Sequence[Pt]) -> tuple[float, float, float, float]:
+    xs, ys = [p[0] for p in poly], [p[1] for p in poly]
+    return (min(xs), min(ys), max(xs), max(ys))
+
+
+def _meets(bb: tuple[float, float, float, float], seg: tuple[float, float, float, float], pad: float) -> bool:
+    """Do the box `bb` and the segment's box `seg`, grown by `pad`, overlap? (A block outside cannot meet the stretch.)"""
+    return bb[0] <= seg[2] + pad and seg[0] - pad <= bb[2] and bb[1] <= seg[3] + pad and seg[1] - pad <= bb[3]
 
 
 def off_the_fixtures(s: Settlement, pts: Sequence[Pt], width: float) -> bool:

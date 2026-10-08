@@ -7196,20 +7196,20 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#a ring with room for a wood": {
-  "code": "9881688849b70a01",
-  "core": "204ab3464fd04a47",
+  "code": "ac41ec2aab8dc99c",
+  "core": "3cd7db950395bcad",
   "date": "2026-10-08",
-  "note": "`len(s.woodland_room(_ring)) < WOODLAND_MIN_CROWNS` (5) refuses the ring; the page does not cover this",
+  "note": "WOODLAND_MIN_CROWNS (5) gate as claimed; the page gives no crown count",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#aspect and bearing": {
-  "code": "90b60081f0bf3e50",
-  "core": "204ab3464fd04a47",
+  "code": "93d2784d1f685cab",
+  "core": "3cd7db950395bcad",
   "date": "2026-10-08",
-  "note": "`_excess = 1.2*jit` gives up to 2.2:1; the bearing is the fall +90 deg, give or take 20 deg; the page has no aspect or bearing",
+  "note": "excess up to 1.2 gives up to 2.2:1, bearing is the fall +90 deg +/-20 deg; the page gives no aspect or bearing",
   "pages": {},
   "research": "",
   "rests": [
@@ -7218,65 +7218,56 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#beyond the fields preferred": {
-  "code": "57cc2bdb1272de7f",
-  "core": "204ab3464fd04a47",
+  "code": "a5dd0dcb81ac3704",
+  "core": "3cd7db950395bcad",
   "date": "2026-10-08",
-  "note": "on every tier only seats the walk reaches through the paddy or a row holding (`crossed_through_many`) are kept, and no fallback to the houses' side; matches \"beyond the fields from the houses\" and \"the far side of the fields on the level\"",
+  "note": "crossed_through on every tier (paddy or a row holding), and no fallback to the houses' side",
   "pages": {
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "ecf6ed4b609ca690"
   },
   "research": "24afacf28c5d0294",
   "rests": [
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:442b1963a64696d8",
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:51f3d4bae1a3978e",
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:6a3373d9e6527e72"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#commons legibility floor": {
-  "code": "e6234f5db9efcf8f",
-  "core": "204ab3464fd04a47",
+  "code": "e2cd2b7b51ecea4e",
+  "core": "3cd7db950395bcad",
   "date": "2026-10-08",
-  "note": "the claim says 120 ft, but the code compares pixel sizes with the raw `_COMMONS_FLOOR_FT` (`size_try < _COMMONS_FLOOR_FT`, `ring_span(_ring) < _COMMONS_FLOOR_FT`, `_COMMONS_FLOOR_FT / 2.0` as a half) without `s.px`, the same feet-for-pixels mix batch 3 fixed for FIELD_BESIDE_FT; it holds only at 1 ft/px. Use s.px(_COMMONS_FLOOR_FT)",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "DRIFTED"
- },
- "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#crop set-back": {
-  "code": "51ba179e5a31e3a6",
-  "core": "204ab3464fd04a47",
-  "date": "2026-10-08",
-  "note": "80/180 px, then 40/100 plus the diagonal slack (0.415*half) as the claim's measured-gap floor; the page does not cover this",
+  "note": "_COMMONS_FLOOR_FT 120 is now converted by s.px and refuses rungs, candidates and cut rings; the page is silent",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#field height \"beside\" a seat measured within FIELD_BESIDE_FT (300 ft); the page gives no figure, so this should be a GUESS or UNRESEARCHED": {
-  "code": "204ab3464fd04a47",
-  "core": "204ab3464fd04a47",
+ "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#crop set-back": {
+  "code": "f785db4d8491fcf5",
+  "core": "3cd7db950395bcad",
   "date": "2026-10-08",
-  "note": "field height \"beside\" a seat measured within FIELD_BESIDE_FT (300 ft); the page gives no figure, so this should be a GUESS or UNRESEARCHED",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
- "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#keep-outs": {
-  "code": "93fd62ed4f35eb12",
-  "core": "204ab3464fd04a47",
-  "date": "2026-10-08",
-  "note": "150/90/120/70/60/110 as the code has them; the page gives no figures",
+  "note": "80/180 px, relaxed to 40/100 px plus the diagonal slack; the page is silent",
   "pages": {},
   "research": "",
-  "rests": [
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:d40cad5607ccfe28"
-  ],
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#keep-outs": {
+  "code": "8361364250d6088b",
+  "core": "3cd7db950395bcad",
+  "date": "2026-10-08",
+  "note": "150/90/120/70/60/110 px literals match the claim; the page is silent",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#line follows its bounds": {
-  "code": "b95dbb6adbb356c6",
-  "core": "204ab3464fd04a47",
+  "code": "ac427a145ee066e7",
+  "core": "3cd7db950395bcad",
   "date": "2026-10-08",
-  "note": "`bounds_near`/`follow_the_bounds`/`lot_follows_its_bounds` within the reach; the page records \"within about 45 ft\" as a GUESS",
+  "note": "lot_bounds (lanes, streams, fields) then bounds_near/follow_the_bounds/lot_follows_its_bounds; matches the page's ~45 ft GUESS",
   "pages": {
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "ecf6ed4b609ca690"
   },
@@ -7287,10 +7278,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#mostly dry": {
-  "code": "472bdb08e1b4da3b",
-  "core": "204ab3464fd04a47",
+  "code": "5ba6106cfc09e823",
+  "core": "3cd7db950395bcad",
   "date": "2026-10-08",
-  "note": "`parcel_wet_share > WET_SHARE_CAP` (0) refuses the ring; matches \"low ground by a river or marsh is left to grass\"",
+  "note": "parcel_wet_share > 0 refused, along with the marsh keep-outs; low wet ground is left to grass",
   "pages": {
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "ecf6ed4b609ca690"
   },
@@ -7301,10 +7292,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#nearest seat preferred": {
-  "code": "3870e9f0bd9745b1",
-  "core": "204ab3464fd04a47",
+  "code": "bdea5d71899cc240",
+  "core": "3cd7db950395bcad",
   "date": "2026-10-08",
-  "note": "within a tier the score is minus the distance from the house centroid; matches \"the nearest slope beyond the fields\"",
+  "note": "score is -hypot to the house centroid within a tier",
   "pages": {
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "ecf6ed4b609ca690"
   },
@@ -7315,80 +7306,92 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#on the page": {
-  "code": "1bb5f40dd62857d3",
-  "core": "204ab3464fd04a47",
+  "code": "28975c30704cf3ca",
+  "core": "3cd7db950395bcad",
   "date": "2026-10-08",
-  "note": "`parcel_inside_share < WOODLAND_BBOX_FLOOR` (0.72) is framing only",
+  "note": "parcel_inside_share against WOODLAND_BBOX_FLOOR is a framing rule",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#parcel count and size": {
-  "code": "144a144fad451929",
-  "core": "204ab3464fd04a47",
+  "code": "604ccc1dc7d81119",
+  "core": "3cd7db950395bcad",
   "date": "2026-10-08",
-  "note": "the ladder (0.9-1.1, rungs 0.8/0.64/0.5) matches, but the \"250 ft\" `size` is used straight as a pixel half-extent and exclusion radius (`half = size_try / 2.0`, `size * (1.15 + ...)`) with no `s.px`; it holds only at 1 ft/px. Convert with s.px(size) as batch 3 did for FIELD_BESIDE_FT",
+  "note": "250 (now s.px), ladder 0.90+0.20*jit, rungs 0.8/0.64/0.5 as claimed; the page is silent on size",
   "pages": {},
   "research": "",
   "rests": [],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#parcels kept apart": {
-  "code": "fe1bf2412edf8697",
-  "core": "204ab3464fd04a47",
+  "code": "ef9a6c7f495daff0",
+  "core": "3cd7db950395bcad",
   "date": "2026-10-08",
-  "note": "`size * (1.15 + 1.35*jit)` gives 1.15-2.5; the page does not cover this",
+  "note": "exclusion is size*(1.15+1.35*jit), i.e. 1.15-2.5",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#per-parcel size bands": {
-  "code": "c028c45fdc1d98ba",
-  "core": "204ab3464fd04a47",
+  "code": "bf00d89da4edd1da",
+  "core": "3cd7db950395bcad",
   "date": "2026-10-08",
-  "note": "`0.82 + 0.36*(band+0.5)/max(2,count)` lies within 0.82-1.18, then the 0.84 try; the page does not cover this",
+  "note": "0.82+0.36*(band+0.5)/n spans 0.82-1.18, then 0.84, each floored",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#scan reach": {
-  "code": "7c1312b6dee9a354",
-  "core": "204ab3464fd04a47",
+  "code": "d24ee3f11f16ef35",
+  "core": "3cd7db950395bcad",
   "date": "2026-10-08",
-  "note": "`content_box(..., pad=210.0)`; the page does not cover this",
+  "note": "content_box pad=210.0 as claimed",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#scan seat window": {
-  "code": "70320c155ea44c1a",
-  "core": "204ab3464fd04a47",
+  "code": "f26336e1d253e729",
+  "core": "3cd7db950395bcad",
   "date": "2026-10-08",
-  "note": "window 0.6*half and the 0.8 bbox-overlap test, framing only",
+  "note": "0.6*half outside the frame and a 0.8 area share are a framing rule",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#title pocket kept clear": {
-  "code": "56495b5bbb5406eb",
-  "core": "204ab3464fd04a47",
+ "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#the fields beside a seat": {
+  "code": "2efb209afb504df0",
+  "core": "3cd7db950395bcad",
   "date": "2026-10-08",
-  "note": "`title_pocket(s, plan)` is the first keep rectangle",
+  "note": "field_height_near with s.px(FIELD_BESIDE_FT); the page says \"higher than the fields beside it\" and gives no reach",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:51f3d4bae1a3978e"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#title pocket kept clear": {
+  "code": "c2b01de41c87fcd1",
+  "core": "3cd7db950395bcad",
+  "date": "2026-10-08",
+  "note": "title_pocket is the first keep rect",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#where the fuel wood stands": {
-  "code": "297a12fb039e1437",
-  "core": "204ab3464fd04a47",
+  "code": "1647507d43ca4622",
+  "core": "3cd7db950395bcad",
   "date": "2026-10-08",
-  "note": "`woodland_tier` ranks higher-than-the-fields first, then the level, and drops tier 2 (below the houses); matches §2, §3 and §4. The beside reach is now in px (s.px(FIELD_BESIDE_FT))",
+  "note": "woodland_tier ranks above the fields first, then the level; tier 2 (below the house floor) is dropped",
   "pages": {
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "ecf6ed4b609ca690"
   },
@@ -7401,10 +7404,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/parcels.py::open_ground_patches#woods not in a ruled line": {
-  "code": "caa2021c195b55e6",
-  "core": "204ab3464fd04a47",
+  "code": "66f623d9e057bd82",
+  "core": "3cd7db950395bcad",
   "date": "2026-10-08",
-  "note": "`seat_off_the_row` and `in_a_ruled_line` on the seat, the jittered seat and the ring center; the page does not cover this",
+  "note": "seat_off_the_row/in_a_ruled_line on the seat, the jittered seat and the ring center; the page is silent",
   "pages": {},
   "research": "",
   "rests": [],
@@ -46150,10 +46153,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::within_reach_of#the privy's reach": {
-  "code": "f37690dfa84dfb1a",
-  "core": "d20e791b13484a73",
+  "code": "b59794a0558577f3",
+  "core": "f4c0645d63bb6465",
   "date": "2026-10-08",
-  "note": "every corner is within 48 ft of the house outline, measured true",
+  "note": "the far-corner gap per axis, max(0, |d|+r/2-h/2), squared against reach; same answer as the four corners",
   "pages": {
    "0047-farm-privies-and-their-night-soil-benjo.drawing.html": "87ffb6a8fd559f32"
   },
