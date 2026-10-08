@@ -1162,7 +1162,9 @@ walls or water, so a routed join changes its caller in `web.py` and calls `route
 
   - `l7r/diagram/hamletgen/ways/joints.py::_one_joint#ways of two kinds stay two` - a joint of two kinds string-pulled like any other (0081), then split back into its two records (`split_at`, `_split_committed`), each keeping its width
 
-- [ ] T93 the reservoir seat tried, measured and re-tiered E3; rows 464 and 465 re-tiered E3 with their evidence; the two-width joint pulled straight and split back, its tests (FR-003, FR-004, FR-005)
+- [x] T93 the reservoir seat tried, measured and re-tiered E3; rows 464 and 465 re-tiered E3 with their evidence; the two-width joint pulled straight and split back, its tests (FR-003, FR-004, FR-005)
       research: rendering
-- [ ] T94 the claims re-checked by `impl-drift`; the close: wave 34's own bookend pair, `make done` green, the wave column (FR-005, FR-006)
+      verify: DONE. the reservoir seat tried (inlet outside the dike 63.8 -> 14.7 ft) and re-tiered E3 (Kuwabata's joint zigzag); rows 464 and 465 re-tiered E3 with their evidence; a joint of two kinds string-pulled and split back into its two records (0081), its tests; the five hamlets unchanged
+- [x] T94 the claims re-checked by `impl-drift`; the close: wave 34's own bookend pair, `make done` green, the wave column (FR-005, FR-006)
       research: rendering
+      verify: DONE. impl-drift IN-STEP on the wave's claims (and the 176 Mode A claims the 329 merge re-owed, re-checked); amendment 33 FAITHFUL (round 2), plan CLEAR; make done green; wave 34's own pair band 1 on a quiet host, the web stage's cost the change's (perf-audit consistent by counterfactual); the wave column

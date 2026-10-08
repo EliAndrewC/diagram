@@ -171,6 +171,7 @@
  "l7r/diagram/hamletgen/ways/geom.py::_trim_to_service#an outlying house keeps its way": "4",
  "l7r/diagram/hamletgen/ways/geom.py::push_clear_of_fabric#gateway clearance": "4",
  "l7r/diagram/hamletgen/ways/joints.py::_MEET_FT#ends that nearly meet": "4",
+ "l7r/diagram/hamletgen/ways/joints.py::_one_joint#ways of two kinds stay two": "34",
  "l7r/diagram/hamletgen/ways/joints.py::meet_end_to_end#ends that nearly meet are joined": "4",
  "l7r/diagram/hamletgen/ways/knots.py::settle_knots#a lane with no width is judged at 3 ft in the lawfulness check": "4 (claimed: a lane with no width judged as a footpath)",
  "l7r/diagram/hamletgen/ways/law.py::JOIN_REACH_FT#a join that stops short": "4",

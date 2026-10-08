@@ -1,0 +1,62 @@
+{
+  "band": 1,
+  "base": {
+    "commit": "36977d8d1",
+    "label": "328-start",
+    "utc": "20261008T054736Z"
+  },
+  "binding": "609068795e253649ec35d7fbfda1262c81a58bdf3b68e4cff645d19de9b8d4d5",
+  "end": {
+    "commit": "a926dcb22",
+    "label": "328-end",
+    "utc": "20261008T055042Z"
+  },
+  "environment": "local",
+  "feature": "328-match-the-research",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "8d3395e5-fe32-4f85-9c89-80c344d2ac1a",
+    "utc": "20261008T055652Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": 0.0,
+          "39": 6.7,
+          "4": 0.0,
+          "47": 0.0
+        },
+        "total_pct": 1.6
+      },
+      "20": {
+        "seeds": {
+          "25": 0.0,
+          "39": 1.9,
+          "4": 5.3,
+          "47": -1.7
+        },
+        "total_pct": 1.6
+      },
+      "40": {
+        "seeds": {
+          "25": 0.0,
+          "39": 0.9,
+          "4": -0.6,
+          "47": 0.0
+        },
+        "total_pct": 0.0
+      }
+    },
+    "seeds": {
+      "25": 0.0,
+      "39": -2.4,
+      "4": 0.0,
+      "47": 0.0
+    },
+    "total_pct": -0.6
+  },
+  "note": "web stage, joints.py _one_joint two-kind pull and split (split_at, _split_committed) - the change, not noise. Counterfactual by perf-audit: detached worktrees at a926dcb22, one with joints.py reverted to 36977d8d1, 6 interleaved rounds, load ~1.5: 10hh seed 39 web 0.869-0.887s (mean 0.876) vs reverted 0.718-0.727s (0.723), +0.15s +21%% of web; 20hh seed 4 web 2.555-2.584s (2.570) vs 2.282-2.334s (2.305), +0.27s +12%% of web; ranges disjoint, matching the bookend +0.2s and +0.3s. Map identity: seed 39/10hh lanes identical, only meta.web_settle bookkeeping differs; seed 4/20hh lane 20 (field way) loses its 3190,2341.2 jog vertex and one bridge rot 4.4 to 3.1 - the rule doing what it says on a scaling-leg roll, outside the five pool maps the explanation names. Totals -0.6%%; nothing over band 1.",
+  "verdict": "consistent"
+}

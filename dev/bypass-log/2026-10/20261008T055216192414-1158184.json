@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-08T05:52:16Z",
+  "target": "perf-explain",
+  "commit": "a926dcb22",
+  "outcome": "permitted",
+  "why": "perf-explain UNVERIFIED: perf-audit to time the web stage with joints.py reverted, interleaved, on the two seeds over 5%"
+}
