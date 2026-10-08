@@ -45,6 +45,7 @@ search's reach, the widening pad's old ceiling"""
 
 
 def field_height_near(p: Pt, fall: Pt, edge: FieldEdge, beside: float = FIELD_BESIDE_FT) -> float:
+    # `beside` is in the edge samples' units (px); the caller converts `FIELD_BESIDE_FT` at the map's scale
     """The height (up the fall, -p.fall) of the field ground beside `p` - the highest point of the field edge within `beside`
     past the nearest one, the field a wood at `p` would adjoin (feature 328, glyph-check of Kashikawa's woodland commons: one
     nearest point stood 53 ft below a wood whose paddy beside it ran up past its top). With no field ground within

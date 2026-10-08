@@ -1,0 +1,36 @@
+perf-profile seed 47 stage web: 10.4s under cProfile (the stages before it took 7.9s unprofiled; cProfile itself is ~+225%, research R2)
+raw: dev/perf-raw/20261008T222301Z-seed47-web.prof (gitignored; archive: configured (https://github.com/EliAndrewC/mapgen-perflogs))
+
+         24145596 function calls (23833577 primitive calls) in 10.204 seconds
+
+   Ordered by: cumulative time
+   List reduced from 784 to 25 due to restriction <25>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.002    0.002   10.424   10.424 /diagram/.clones/digram-backlog/l7r/diagram/hamletgen/ways/web.py:425(stage_web)
+        2    0.000    0.000    6.845    3.422 /diagram/.clones/digram-backlog/l7r/diagram/hamletgen/ways/settle.py:910(settle_the_web)
+12258/890    0.016    0.000    5.618    0.006 {built-in method builtins.sum}
+       72    0.005    0.000    5.606    0.078 /diagram/.clones/digram-backlog/l7r/diagram/hamletgen/ways/settle.py:924(<genexpr>)
+        1    0.000    0.000    4.411    4.411 /diagram/.clones/digram-backlog/l7r/diagram/hamletgen/ways/web.py:916(resettle_straightened)
+        2    0.000    0.000    1.880    0.940 /diagram/.clones/digram-backlog/l7r/diagram/hamletgen/ways/joints.py:254(straighten_joints)
+        4    0.001    0.000    1.868    0.467 /diagram/.clones/digram-backlog/l7r/diagram/hamletgen/ways/joints.py:296(_one_joint)
+        4    0.000    0.000    1.704    0.426 /diagram/.clones/digram-backlog/l7r/diagram/hamletgen/ways/settle.py:862(settle_reach)
+  1027364    0.514    0.000    1.641    0.000 /diagram/.clones/digram-backlog/l7r/diagram/settlement/_geom/primitives.py:54(seg_dist)
+        4    0.000    0.000    1.636    0.409 /diagram/.clones/digram-backlog/l7r/diagram/hamletgen/ways/knots.py:355(settle_knots)
+       10    0.001    0.000    1.607    0.161 /diagram/.clones/digram-backlog/l7r/diagram/hamletgen/ways/knots.py:179(next_gather)
+       60    0.002    0.000    1.559    0.026 /diagram/.clones/digram-backlog/l7r/diagram/hamletgen/ways/knots.py:385(judge)
+       13    0.000    0.000    1.547    0.119 /diagram/.clones/digram-backlog/l7r/diagram/hamletgen/ways/joints.py:177(pulled)
+       90    0.141    0.002    1.546    0.017 /diagram/.clones/digram-backlog/l7r/diagram/hamletgen/ways/joints.py:330(ok)
+        1    0.008    0.008    1.240    1.240 /diagram/.clones/digram-backlog/l7r/diagram/hamletgen/ways/web.py:64(_lay_skeleton)
+        2    0.001    0.000    1.176    0.588 /diagram/.clones/digram-backlog/l7r/diagram/hamletgen/ways/route.py:160(_route)
+1535716/1236859    0.412    0.000    1.132    0.000 {built-in method builtins.min}
+       60    0.002    0.000    1.126    0.019 /diagram/.clones/digram-backlog/l7r/diagram/hamletgen/ways/knots.py:342(count)
+    51912    0.185    0.000    1.112    0.000 /diagram/.clones/digram-backlog/l7r/diagram/hamletgen/ways/keeper.py:39(keyed)
+        2    0.424    0.212    1.059    0.530 /diagram/.clones/digram-backlog/l7r/diagram/hamletgen/ways/route.py:81(lattice_search)
+  1105254    0.745    0.000    1.042    0.000 /diagram/.clones/digram-backlog/l7r/diagram/settlement/_geom/primitives.py:45(seg_closest)
+        2    0.001    0.000    1.025    0.512 /diagram/.clones/digram-backlog/l7r/diagram/hamletgen/ways/keeper.py:58(unsettled)
+        5    0.001    0.000    0.961    0.192 /diagram/.clones/digram-backlog/l7r/diagram/hamletgen/ways/tree.py:417(settle_tree)
+       15    0.011    0.001    0.929    0.062 /diagram/.clones/digram-backlog/l7r/diagram/hamletgen/ways/law.py:790(way_outs_crossing)
+   212145    0.354    0.000    0.870    0.000 /diagram/.clones/digram-backlog/l7r/diagram/hamletgen/ways/joints.py:246(_key)
+
+

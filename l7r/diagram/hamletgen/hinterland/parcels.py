@@ -469,7 +469,9 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
             # the entry's "the slopes around the settlement" - and it must still be beyond the fields (below).
             _fall = (dx, dy)
             _house_floor = house_floor([(float(h["x"]), float(h["y"])) for h in s.M.get("houses", [])], _fall)
-            _tiers = [woodland_tier((t[1], t[2]), _fall, _house_floor, field_height_near((t[1], t[2]), _fall, crop_pts)) for t in scored]
+            _tiers = [
+                woodland_tier((t[1], t[2]), _fall, _house_floor, field_height_near((t[1], t[2]), _fall, crop_pts, s.px(FIELD_BESIDE_FT))) for t in scored
+            ]  # beside in px: the edge samples are px (impl-drift, batch 3)
             # a RANK, not a filter, below the downslope refusal: every tier-0 seat outranks every tier-1 one (the 1e9 dwarfs any
             # distance on a canvas), so the level is taken only once the ground above the fields is used up - "where the map
             # has no such ground" read per parcel, as the count is a target the scan meets only where there is open ground

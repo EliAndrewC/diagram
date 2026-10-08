@@ -1,0 +1,36 @@
+perf-profile seed 39 stage labels: 0.0s under cProfile (the stages before it took 10.3s unprofiled; cProfile itself is ~+225%, research R2)
+raw: dev/perf-raw/20261008T223433Z-seed39-labels.prof (gitignored; archive: configured (https://github.com/EliAndrewC/mapgen-perflogs))
+
+         83640 function calls in 0.035 seconds
+
+   Ordered by: cumulative time
+   List reduced from 59 to 25 due to restriction <25>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    0.036    0.036 /diagram/.clones/digram-backlog/l7r/diagram/hamletgen/frame.py:261(stage_labels)
+        1    0.000    0.000    0.036    0.036 /diagram/.clones/digram-backlog/l7r/diagram/settlement/structures/captions.py:187(place_labels)
+        1    0.000    0.000    0.036    0.036 /diagram/.clones/digram-backlog/l7r/diagram/settlement/structures/fixtures/boards.py:134(_draw_board_caption)
+        1    0.000    0.000    0.036    0.036 /diagram/.clones/digram-backlog/l7r/diagram/settlement/structures/captions.py:247(_draw_placement)
+        1    0.003    0.003    0.036    0.036 /diagram/.clones/digram-backlog/l7r/diagram/settlement/structures/captions.py:269(label_obstacles)
+        1    0.000    0.000    0.027    0.027 /diagram/.clones/digram-backlog/l7r/diagram/labels/obstacles.py:104(__init__)
+     1524    0.004    0.000    0.017    0.000 /diagram/.clones/digram-backlog/l7r/diagram/labels/obstacles.py:117(add)
+       56    0.005    0.000    0.009    0.000 /diagram/.clones/digram-backlog/l7r/diagram/labels/obstacles.py:126(add_way)
+     1524    0.003    0.000    0.006    0.000 /diagram/.clones/digram-backlog/l7r/diagram/labels/obstacles.py:310(level_rect)
+     2066    0.004    0.000    0.005    0.000 /diagram/.clones/digram-backlog/l7r/diagram/labels/obstacles.py:96(_cells)
+     6777    0.002    0.000    0.003    0.000 /diagram/.clones/digram-backlog/l7r/diagram/labels/obstacles.py:312(<genexpr>)
+    21003    0.003    0.000    0.003    0.000 {method 'append' of 'list' objects}
+     1524    0.002    0.000    0.003    0.000 /diagram/.clones/digram-backlog/l7r/diagram/labels/geom.py:21(bbox)
+     1207    0.001    0.000    0.002    0.000 /diagram/.clones/digram-backlog/l7r/diagram/labels/obstacles.py:305(circle_obstacle)
+    11500    0.001    0.000    0.001    0.000 {built-in method math.floor}
+     5216    0.001    0.000    0.001    0.000 {built-in method builtins.min}
+     5221    0.001    0.000    0.001    0.000 {built-in method builtins.max}
+     1325    0.000    0.000    0.001    0.000 /diagram/.clones/digram-backlog/l7r/diagram/settlement/structures/captions.py:284(<genexpr>)
+     8029    0.001    0.000    0.001    0.000 {built-in method builtins.abs}
+      316    0.001    0.000    0.001    0.000 /diagram/.clones/digram-backlog/l7r/diagram/labels/geom.py:15(rect)
+     6756    0.001    0.000    0.001    0.000 {built-in method builtins.isinstance}
+     2916    0.001    0.000    0.001    0.000 {method 'get' of 'dict' objects}
+      969    0.000    0.000    0.001    0.000 /diagram/.clones/digram-backlog/l7r/diagram/settlement/structures/captions.py:286(<genexpr>)
+     3717    0.000    0.000    0.000    0.000 {built-in method builtins.len}
+        1    0.000    0.000    0.000    0.000 /diagram/.clones/digram-backlog/l7r/diagram/settlement/structures/captions.py:90(tree_crown_discs)
+
+

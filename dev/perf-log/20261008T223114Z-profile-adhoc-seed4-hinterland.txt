@@ -1,0 +1,36 @@
+perf-profile seed 4 stage hinterland: 12.9s under cProfile (the stages before it took 12.4s unprofiled; cProfile itself is ~+225%, research R2)
+raw: dev/perf-raw/20261008T223114Z-seed4-hinterland.prof (gitignored; archive: configured (https://github.com/EliAndrewC/mapgen-perflogs))
+
+         35669365 function calls (35667007 primitive calls) in 12.903 seconds
+
+   Ordered by: cumulative time
+   List reduced from 812 to 25 due to restriction <25>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.003    0.003   12.906   12.906 /diagram/.clones/digram-backlog/l7r/diagram/hamletgen/hinterland/stages.py:68(stage_hinterland)
+        1    0.161    0.161   10.159   10.159 /diagram/.clones/digram-backlog/l7r/diagram/hamletgen/hinterland/parcels.py:212(open_ground_patches)
+     5788    2.861    0.000    9.206    0.002 /diagram/.clones/digram-backlog/l7r/diagram/hamletgen/hinterland/wood_rank.py:33(field_height_near)
+   129783    1.264    0.000    2.200    0.000 /diagram/.clones/digram-backlog/l7r/diagram/settlement/_geom/indexes.py:267(near)
+   329832    1.013    0.000    1.705    0.000 {built-in method builtins.min}
+  9908691    1.433    0.000    1.433    0.000 {built-in method math.dist}
+575781/575305    0.307    0.000    1.097    0.000 {built-in method builtins.max}
+        2    0.014    0.007    1.065    0.532 /diagram/.clones/digram-backlog/l7r/diagram/settlement/land/cover.py:672(hinterland)
+        1    0.007    0.007    0.975    0.975 /diagram/.clones/digram-backlog/l7r/diagram/hamletgen/hinterland/stages.py:250(plant_the_belt)
+        1    0.046    0.046    0.957    0.957 /diagram/.clones/digram-backlog/l7r/diagram/settlement/homestead_parts/stands.py:206(village_grove)
+  5918585    0.867    0.000    0.867    0.000 {method 'get' of 'dict' objects}
+    16966    0.054    0.000    0.735    0.000 /diagram/.clones/digram-backlog/l7r/diagram/hamletgen/hinterland/parcels.py:414(_ok)
+  1726567    0.730    0.000    0.730    0.000 /diagram/.clones/digram-backlog/l7r/diagram/hamletgen/hinterland/wood_rank.py:45(<genexpr>)
+        5    0.038    0.008    0.706    0.141 /diagram/.clones/digram-backlog/l7r/diagram/settlement/land/cover.py:375(commons)
+  7848702    0.665    0.000    0.665    0.000 /diagram/.clones/digram-backlog/l7r/diagram/hamletgen/hinterland/wood_rank.py:44(<genexpr>)
+    14888    0.009    0.000    0.598    0.000 /diagram/.clones/digram-backlog/l7r/diagram/hamletgen/hinterland/parcels.py:863(open_ground_region)
+37169/37168    0.069    0.000    0.581    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/decorators.py:73(wrapped)
+        2    0.002    0.001    0.498    0.249 /diagram/.clones/digram-backlog/l7r/diagram/hamletgen/hinterland/belt.py:201(belt_polygon)
+15777/14065    0.015    0.000    0.477    0.000 /home/agent/.local/lib/python3.14/site-packages/shapely/decorators.py:171(wrapper)
+        8    0.019    0.002    0.400    0.050 /diagram/.clones/digram-backlog/l7r/diagram/settlement/_geom/region.py:57(fill_many)
+  3786831    0.354    0.000    0.354    0.000 /diagram/.clones/digram-backlog/l7r/diagram/hamletgen/hinterland/wood_rank.py:43(<genexpr>)
+        6    0.002    0.000    0.287    0.048 /diagram/.clones/digram-backlog/l7r/diagram/settlement/_geom/indexes.py:604(shape)
+        6    0.008    0.001    0.285    0.047 /diagram/.clones/digram-backlog/l7r/diagram/settlement/_geom/indexes.py:610(_trees_for)
+     3916    0.118    0.000    0.268    0.000 /diagram/.clones/digram-backlog/l7r/diagram/settlement/_geom/indexes.py:427(__init__)
+      104    0.007    0.000    0.267    0.003 /diagram/.clones/digram-backlog/l7r/diagram/settlement/homestead_parts/groves.py:714(_draw_grove)
+
+

@@ -7769,6 +7769,36 @@
   ],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/hinterland/wood_rank.py::FIELD_REACH_PX#plumbing": {
+  "code": "e97d6e14ad200361",
+  "core": "7d660d77f15fc71c",
+  "date": "2026-10-08",
+  "note": "a search cap at the old pad's ceiling, far larger than any map, so not a fact a reader reads off the place",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/hinterland/wood_rank.py::FieldEdge#plumbing": {
+  "code": "5186e4909d0a3e94",
+  "core": "45d47d15b58c96af",
+  "date": "2026-10-08",
+  "note": "holds the samples as arrays, decides nothing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/hinterland/wood_rank.py::FieldEdge.__init__#plumbing": {
+  "code": "036f34170777fb61",
+  "core": "5ec50cf21c1269e3",
+  "date": "2026-10-08",
+  "note": "reshapes points into an array",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/hinterland/wood_rank.py::_EDGE_SAMPLE#plumbing": {
   "code": "2156b363a04b7a7e",
   "core": "f9869fee1052b437",
@@ -7780,28 +7810,37 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/wood_rank.py::crop_edge_points#plumbing": {
-  "code": "6e63876f0b705244",
-  "core": "3e2f084f4cc2147a",
+  "code": "5337917c19faca89",
+  "core": "767ad600c4f2cd0d",
   "date": "2026-10-08",
-  "note": "samples the field edges into a grid",
+  "note": "_EDGE_SAMPLE 30 px is a sampling resolution, not a fact about the place",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/wood_rank.py::field_height_near#higher than the fields beside it": {
-  "code": "2c9980a50fa728e5",
-  "core": "ba6ccc421829f1dc",
+  "code": "23b8d194ac842c38",
+  "core": "aea249b2e70242c8",
   "date": "2026-10-08",
-  "note": "takes the highest field edge within reach of the nearest, which is the field the wood adjoins",
+  "note": "takes the highest field edge near the seat as \"the fields beside it\", so the seat must stand above those fields; no field within reach gives -inf",
   "pages": {
    "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html": "ecf6ed4b609ca690"
   },
   "research": "24afacf28c5d0294",
   "rests": [
-   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:51f3d4bae1a3978e"
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:51f3d4bae1a3978e",
+   "0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html:6a3373d9e6527e72"
   ],
   "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/hinterland/wood_rank.py::field_height_near#how far \"beside\" reaches: FIELD_BESIDE_FT 300 past the nearest edge point; the page gives no distance, so a GUESS; also, a value named in ft is added to a px distance (`d0 + beside`)": {
+  "code": "aea249b2e70242c8",
+  "core": "aea249b2e70242c8",
+  "date": "2026-10-08",
+  "note": "how far \"beside\" reaches: FIELD_BESIDE_FT 300 past the nearest edge point; the page gives no distance, so a GUESS; also, a value named in ft is added to a px distance (`d0 + beside`)",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  "l7r/diagram/hamletgen/hinterland/wood_rank.py::house_floor#never below the houses": {
   "code": "4fd46c3535351fb0",
