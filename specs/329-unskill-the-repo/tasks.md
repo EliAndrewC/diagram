@@ -29,7 +29,9 @@
 - [x] T07 the Markdown audit applied: `audit.md` with every member listed, each verdict carried out, the claims of a moved Mode A section renamed (D12, FR-012, SC-006)
       research: rendering
       verify: DONE. DONE. audit.md applied: 9 docs deleted with their facts carried, 8 moved, 5 created (research/downloads.md, record-checks.md, dev/ci.md, interactive-page.md, test-cost.md), the rest trimmed; departures recorded in audit.md 'Applied'; test_doc_links.py holds every live link
-- [ ] T08 the history note, the skill's explanation, the outside pointers: the root `CLAUDE.md` specs line, `dev/skill-boundary.md`, the memory entry; gm-assistant reported (D10, D11, FR-005, FR-011, SC-003, SC-005)
+- [x] T08 the history note, the skill's explanation, the outside pointers: the root `CLAUDE.md` specs line, `dev/skill-boundary.md`, the memory entry; gm-assistant reported (D10, D11, FR-005, FR-011, SC-003, SC-005)
       research: rendering
-- [ ] T09 verification: `make hooks-test` and `make done` green from the root; counts against R6; Claude Code's skill list; the first gate in a second clone after the carry (FR-010, SC-002, SC-003, SC-004)
+      verify: DONE. DONE. the root CLAUDE.md names the move and how to read an old spec's path; docs/package-boundary.md rewritten as one package; the memory entry written; gm-assistant's docs/iteration-loop.md reported, not edited
+- [x] T09 verification: `make hooks-test` and `make done` green from the root; counts against R6; Claude Code's skill list; the first gate in a second clone after the carry (FR-010, SC-002, SC-003, SC-004)
       research: rendering
+      verify: DONE. DONE. make hooks-test HOOKS_ALL=1 39 suites green; make done GREEN 217 s, 10,824 passed (baseline 10,818); no diagram skill under .claude/skills/; the roll cache carried and HIT (R6)

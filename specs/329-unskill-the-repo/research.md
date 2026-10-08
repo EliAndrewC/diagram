@@ -58,7 +58,11 @@ Fixture cases whose verdict changed: to fill at T05.
 Baseline `make done` in this clone at `5e2ba4824` + the spec, before the move: GREEN in 459 s (observed 2026-10-07, method: the gate's own wall-clock line in its log). Phases
 static, format, typecheck, hooks-test (38 guard suites green), test-full: 10,818 passed, 3 skipped, 2 xfailed in
 228.6 s. ruff's checked files from the skill dir: 831 (361 under `l7r/`, 460 under `tests/`, 9 under `wip/`, and
-`pyproject.toml`). The first gate after the carry in a second clone: to fill at T09.
+`pyproject.toml`). After the move, in this clone (whose ignored artifacts the carry moved - 430 files - before its first post-move gate):
+the final `make done` GREEN in 217 s (observed 2026-10-08, method: the gate's run record, `seconds`), FULL mode, 10,824
+passed, 3 skipped, 2 xfailed - six more tests than the baseline (the new lint-scope, moves, doc-links and docs-match
+tests); the reference roll a HIT served from the carried roll cache. A second clone's first gate is the carry's own
+case in `test-sync-with-main.sh` (case 15: the ignored cache lands at the root, no old directory left).
 
 ## R7 - Defects found on the way, and what was done
 
