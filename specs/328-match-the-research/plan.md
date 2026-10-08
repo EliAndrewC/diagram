@@ -349,15 +349,14 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 
 ## Wave 28 (amendment 27, 2026-10-08)
 
-- **Scope**: row 452 (`tasks.md` Phase 29): the hamlet polder's outer edge held to its line - no edge wander, the
-  walk-down to a 0.86 box fill gone (0019: the drift "fades to nothing at the fixed outer edge"). Row 434 held for the GM.
-- **Occasions**: the perimeter dike re-placed on Kuwabata; the village lanes of Kuwabata and Sawada (three glyph checks).
-- **A regression found and fixed**: Kuwabata's new web left a knot no gather form was admitted for (one left a sliver, the
-  other split the web); `knots.next_gather` gains a last form, the lone movable end teed onto the other lane (`teed_onto`).
+- **Scope**: row 452 tried and reverted (`tasks.md` Phase 29): with no edge wander Kuwabata's dike is a straight-sided
+  rectangle, which 0027 and the GM's 2026-09-28 ruling exclude as only modern, against 0019/0022's "fixed outer edge" - the
+  record disagrees, so the row is held for the GM (its flag carries both quotes, the measurement and the options). The
+  knot form the trial needed is reverted with it and its gap filed as a found row. Row 434 still held.
+- **Occasions**: none at the close - the engine and the pool are identical to wave 27's close.
 - **On the unpushed waves 9-27** under condition (6): (1)-(5) held at wave 27's close (f51fbbbe4, backed up, its own pair
-  band 1 diagnosed as load); wave 28's own pair opens at f51fbbbe4.
-- **Verification**: `impl-drift` on the touched claims (`_polder_candidate`, and `build_polder`'s claim that named the
-  hamlet's fitted wander), the glyph check, the gate, wave 28's own bookend pair.
+  band 1 diagnosed as load); wave 28 changes no executed code, so it owes no pair.
+- **Verification**: the engine and pool diff against f51fbbbe4 empty; the gate green.
 
 ## Performance bookends (constitution VI)
 

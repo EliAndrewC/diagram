@@ -1185,6 +1185,36 @@
   "scope": "kept"
  },
  {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::_polder_candidate#block centered",
+  "verdict": "MISLABELED",
+  "tier": "E0",
+  "fix": "putting the block at the canvas centre is a framing decision (how the map shows it), not plumbing; label should be CONVENTION. The bearing is not free: the code turns the block to plan.fall",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 28 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::_polder_candidate#block's rows run along the fall, its cols across it axis set",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "block's rows run along the fall, its cols across it (axis set by the slope, head-to-tail high-to-low)",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 28 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::a_way_onto_the_bund#a lane end within 6 ft (BUND_REACH_FT) of the paddy counts as joined to the bund",
   "verdict": "UNCLAIMED",
   "tier": "E0",
@@ -6871,7 +6901,7 @@
    ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py"
   ],
   "after": [],
-  "flag": "",
+  "flag": "Held: question for the GM, deferred to the feature's end (goal amendment 2026-10-07). The record disagrees on the polder's outer edge: research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the interior drift 'fades to nothing at the fixed outer edge' (and 0022: 'the block's edge holds its line'), against research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html: 'The maps curve the dike's outer face with the water's edge' and 'Around Lake Tai a rectangular polder is a modern form, and this project draws nothing that is only modern' (the GM 2026-09-28: 'We should eliminate anything which is only modern'). Tried in wave 28 (edge_wander 0): Kuwabata's dike sides held straight (spread 5-12 ft against main's 55-58), the glyph check NEEDS-WORK (F1, wrong form); reverted. Options: (a) the edge follows the water as now and 0019/0022's 'fixed' is read as the drift leaving the edge alone (claim restated); (b) a per-settlement knob over the attested shapes (pwsannong-zhuwei: 'square, round, rectangular, polygonal and irregular'), 0027's drawing page amended if straight sides are one value",
   "found": "wave 10 re-check (tiered by its work at T42a)",
   "tier_as_ranked": "E2",
   "moved": "T42a: tiered by its work - The wander ladder and the bbox fill test are the loop logic of one function, so the fix rewrites that one rule rather than a single value.",

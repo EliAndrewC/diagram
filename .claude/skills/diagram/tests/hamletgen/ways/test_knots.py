@@ -220,21 +220,3 @@ def test_a_ways_box_is_its_points_and_none_for_no_points() -> None:
     a, b = memo.ids([[(0.0, 0.0), (10.0, 5.0)], []])
     assert memo._boxes[a] == (0.0, 0.0, 10.0, 5.0) and memo._apart(a, b, 1e9), "no points: apart from everything"
     assert memo.ids([[(0.0, 0.0), (10.0, 5.0)]]) == [a], "one number per run of points"
-
-
-def test_an_end_is_teed_onto_the_other_lane_from_the_vertex_before_it() -> None:
-    """`teed_onto`: the end re-aimed from the vertex before it at the nearest point of the other lane, either end; nothing where
-    the other lane is a point or the vertex already stands on it."""
-    other = [(-50.0, 0.0), (50.0, 0.0)]
-    assert kn.teed_onto([(0.0, 100.0), (0.0, 10.0)], -1, other) == [[(0.0, 100.0), (0.0, 0.0)]]
-    assert kn.teed_onto([(0.0, 10.0), (0.0, 100.0)], 0, other) == [[(0.0, 0.0), (0.0, 100.0)]]
-    assert kn.teed_onto([(0.0, 100.0), (0.0, 10.0)], -1, [(0.0, 0.0)]) == []
-    assert kn.teed_onto([(0.0, 0.0), (5.0, 9.0)], -1, other) == []
-
-
-def test_a_knot_neither_node_can_move_onto_is_teed_onto_the_other_lane() -> None:
-    """Feature 328 wave 28 (Kuwabata): two lanes converging at a sharp angle - the end onto the connector's head refused, the
-    connector never moved - the lone movable end is teed onto the connector's side."""
-    lanes = [_ln((0.0, 0.0), (100.0, 0.0), connector=True), _ln((40.0, 60.0), (10.0, 10.0))]
-    tee = {1: [(40.0, 60.0), (40.0, 0.0)]}
-    assert kn.next_gather(lanes, lambda e: e == tee) == tee

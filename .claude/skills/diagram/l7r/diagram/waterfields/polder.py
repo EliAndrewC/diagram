@@ -99,7 +99,7 @@ def build_polder(
         module line bow - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: each row and column line bowed up to `line_wander` 0.10 of the module, off the boundary lines
         hand-piled outlines - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: each parcel softened by `organic` (a fillet of 0.05 of the module, a bow of 0.02), each corner's legs drawn on their own from all but square to a broad sweep (`palette.organic_parcel`)
         toe ends on the trunk - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: each toe end snapped onto the nearer trunk and run 3 ft on along its centerline, at the map's scale
-        lattice unbent by default - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a rice polder takes `mosaic` 0, its surveyed grid unbroken into a mosaic; the dike-pond block passes its own mosaic; the hamlet passes `edge_wander` 0, its outer edge fixed (claimed at `_polder_candidate`)
+        lattice unbent by default - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a rice polder takes `mosaic` 0, its surveyed grid unbroken into a mosaic; the dike-pond block passes its own mosaic, and every caller its fitted `edge_wander` (claimed at the hamlet's `_polder_candidate`)
         acreage reckoned - NONE: the cropped area reckoned at the map's scale (area x ftpx squared / 43560)
     """
     R = random.Random(seed)

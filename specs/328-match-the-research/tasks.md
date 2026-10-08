@@ -13,10 +13,7 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 - (wave 5, landed and reviewed) placement-changed village lane on kashikawa - wave 5: 0033's row street runs on off the map as the road into it at both ends, where
   the web cut it back to its last joint (`trim_streets`); Kashikawa's and Mizuguchi's far ends now run off the sheet as a
   second way out (every way is inked `village lane`).
-- placement-changed: village lane on kuwabata - wave 28: the re-rolled web, and a knot's lone end teed onto the other lane
-- placement-changed: village lane on sawada - wave 28: a knot's lone end teed onto the other lane (`knots.teed_onto`); 18 lanes to 19
-- placement-changed: perimeter dike on kuwabata - wave 28: the polder's outer edge held to its line (no edge wander, 0019); Kuwabata re-rolls
-  round its new outline (47 manifest keys move, no ink class gained or lost)
+- none (wave 28): the polder edge and the knot form tried and reverted; no executed code changed
 - none (wave 27): the brook and flank rules change no pool map
 - none (wave 26): the drain's corridor dropped on a hamlet; the five pool hamlets unchanged
 - none (wave 25): claims and one code comment, no executed code changed
@@ -1041,24 +1038,19 @@ showed the literal fix alone passes all 28 - the re-tier is withdrawn and the th
       research: rendering
       verify: DONE. impl-drift IN-STEP (1 + 11); amendment 26 FAITHFUL (round 2), plan CLEAR; make done green; wave 27's own pair band 1, host load on unchanged maps (perf-audit consistent, each over-5% seed diagnosed by counterfactual); the wave column
 
-## Phase 29 - wave 28 (amendment 27): the polder's outer edge fixed
+## Phase 29 - wave 28 (amendment 27): the polder's outer edge - tried, reverted, held for the GM
 
-The next open in-scope row. 0019's drawing page: the interior lattice's drift "fades to nothing at the fixed outer edge"; the
-hamlet's polder wandered its edge, walked down from 0.5 until the outline filled 0.86 of its box. Now no edge wander. The
-shared `build_polder` keeps the knob (its legacy test still proves it binds); the hamlet passes 0.
+The next open in-scope row, 452. Tried literally - the hamlet's polder built once with no edge wander (0019's drawing page: the
+interior drift "fades to nothing at the fixed outer edge") - Kuwabata's perimeter dike came out a straight-sided rectangle
+(each side within 5-12 ft of a line, main's 55-58), and its glyph check found it NEEDS-WORK (F1, wrong form): 0027's drawing
+page curves the dike's outer face with the water's edge and rules a rectangular polder modern, under the GM's ruling of
+2026-09-28 to "eliminate anything which is only modern". The record disagrees with itself; the change is reverted and row 452
+held for the GM with both quotes, the measurement and the options (its flag). The trial also exposed a knot the settle could
+not gather on the re-rolled web (two access lanes' feet 15.4 ft apart: one form left a sliver, the other split the web); a
+T-foot form fixed it but, with the polder reverted, only changed Sawada's web with no gain on the finished map, so it is
+reverted too and the gap filed as a found row. No executed code changes in this wave.
 
-  - `l7r/diagram/hamletgen/water/polder.py::_polder_candidate#surveyed block` - the outer edge fixed, the walk-down and its fill test gone
-  - `l7r/diagram/waterfields/polder.py::build_polder#lattice unbent by default` - its claim no longer says the hamlet passes a fitted wander (it passes 0)
-
-The gate then found Kuwabata's new web with two lane ends 15.4 ft apart and unjoined (0081: "Ends within 25 ft of one another
-are joined at a single point"). Measured: the gather's forms were both refused - lane 9's end onto lane 3's node left a sliver
-(`needle_loops` 0 to 1), lane 3's end onto lane 9's split the web (one network to two). Fixed where found (constitution XIV): a
-last form, the lone movable end teed from its vertex before onto the other lane (`knots.teed_onto`). It also gathers a knot on
-Sawada's web, which the settle had left (Sawada's other knot, the found row it waits on, stands).
-
-  - `l7r/diagram/hamletgen/ways/knots.py::next_gather` and `::teed_onto` - the T-foot form
-
-- [ ] T81 the polder's outer edge fixed; the five hamlets regenerated (Kuwabata re-rolls) (FR-004, FR-005)
+- [ ] T81 the polder's outer edge tried (Kuwabata re-rolled), judged by its glyph check, reverted; row 452 held for the GM (FR-004, FR-005)
       research: rendering
-- [ ] T82 the claims re-checked by `impl-drift`; the glyph checks (the perimeter dike on Kuwabata; the village lanes of Kuwabata and Sawada); the close: wave 28's own bookend pair, `make done` green, the wave column (FR-005, FR-006)
+- [ ] T82 the close: the engine and pool identical to wave 27's close, `make done` green, the hold recorded (FR-005, FR-006)
       research: rendering
