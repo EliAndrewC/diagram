@@ -24915,19 +24915,34 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#spine on the houses": {
-  "code": "8e801c642b9cc707",
+ "l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#spine along the houses": {
+  "code": "07acbe4fb0590ce4",
   "core": "e05066354ef0a150",
   "date": "2026-10-08",
-  "note": "0246's drawing page answers \"spanning the houses' own extent\" (\"each lane follows the houses rather than the houses following it\"; a lane \"runs only along the houses it serves\"), and 0031's drawing page records the lane shapes as a GUESS; cite both pages, and keep GUESS only for centering on the arc midpoint and mean stand",
+  "note": "the arms' half-extents come from the houses' own spread of positions along the band and depth back from it, and `served_arm` pulls each end back to the last house it serves",
+  "pages": {
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
+  },
+  "research": "7b40c2c01cfba682",
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:98954044baf5b50b",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:d6c0546677319ff7"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#spine centered on the houses": {
+  "code": "e306a393c624e6c3",
+  "core": "e05066354ef0a150",
+  "date": "2026-10-08",
+  "note": "no cited page says where the lane template is centered; 0246's widest-gap rule is for back lanes, not this template",
   "pages": {},
   "research": "",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:bf4801c5605ed9ea",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:98954044baf5b50b",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:d6c0546677319ff7"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:81f9a92fe1d97af1"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web.py::_reachable_runs#islands never drawn": {
   "code": "86bbbc6ffaf331a5",
