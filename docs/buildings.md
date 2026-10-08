@@ -118,6 +118,7 @@ Standard features with rough SVG conventions. New diagrams should reuse this voc
 <!-- Research: structures abut walls - research/questions/0092-compound-walls-neribei-and-tsuijibei.drawing.html: ~2 ft off a compound wall, ~1.5 ft off a divider, privies and curbs included -->
 <!-- Research: gatehouse - research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html, research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html: freestanding 18 x 12 ft beside the opening (Ochiba), or in the gate range (Hayakawa and Ubame 14 ft deep) -->
 <!-- Research: main gate posts - research/questions/0092-compound-walls-neribei-and-tsuijibei.drawing.html: the sheets draw each main-gate post ~2.7-5.3 x 4.7 ft -->
+<!-- Research: no salt wards at gates - research/questions/0240-salt-heaps-at-doorways-morijio.drawing.html: no salt heaps or other wards drawn at a compound's gates, none recorded at an official's gate before present-day custom -->
 
 - **Compound wall** - 4-segment heavy stroke in `#2D2A24`. Draw each side as its own `<line>` so gate-openings are gaps. Don't use a single `<rect>`.
 - **Main gate** - one of the two attested forms, rolled per plan (research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html): a **one-bay gate (yakuimon)** with a passage of ~18-26 px (6-8.5 ft) in the south wall, beside a freestanding gatehouse; or a **gate range (nagaya-mon)** standing in the wall line, its ~36 px (~12 ft, two ken) passage running through the range with a room each side. Draw the **gate posts** as a `main gate` group, one on each cut end of the wall, so the passage between them is the width the audit reads (`main_gate_passage_ft`). Never draw the opening wider than the passage: a structure's width is not its passage's (size-audit, 2026-07), and a 13 ft carriage-gate opening is neither form.
@@ -131,8 +132,8 @@ No salt heaps or other wards are drawn at a compound's gates: no pair at any off
 
 ### Outer court (administrative / public)
 
-<!-- Research: office hall - research/questions/0113-the-office-hall-and-its-clerks-goyakusho.html: ~120 x 28 ft block backing the divider, day office and study behind, dais band in front, courtroom a room of it -->
-<!-- Research: clerk positions at the dais - UNRESEARCHED: two clerk positions flanking the dais in the front band -->
+<!-- Research: office hall - research/questions/0113-the-office-hall-and-its-clerks-goyakusho.drawing.html: ~120 x 28 ft block (Ochiba's; Hayakawa 113 x 28, Ubame 110 x 28), inside the 80-150 by 20-45 ft band whose proportions are a GUESS; backing the divider, day office and study behind, dais band in front, courtroom a room of it -->
+<!-- Research: clerk positions at the dais - DEVIATION research/questions/0099-the-hearing-court-shirasu.drawing.html: two clerk positions flanking the dais in the front band, level with it, not in a room of their own before it as at Edo -->
 <!-- Research: hearing court - research/questions/0099-the-hearing-court-shirasu.html: roofed, white gravel or river cobbles, south of the dais, size a guess -->
 <!-- Research: hearing cart slot - UNRESEARCHED: a cart-passable ~8-10 ft slot south of the hearing court -->
 <!-- Research: hearing mats - research/questions/0099-the-hearing-court-shirasu.html: accused at the center, plaintiff and village officials behind -->
@@ -165,7 +166,8 @@ No salt heaps or other wards are drawn at a compound's gates: no pair at any off
 <!-- Research: charcoal weighing floor - research/questions/0197-charcoal-yards-and-charcoal-stores.drawing.html: Ubame's sheet draws the weighing floor ~27 ft square -->
 <!-- Research: archery bank - research/questions/0164-drill-grounds-archery-ranges-and-riding-grounds-jiaochang-yaba-baba.html: a samurai's yaba is about 250 x 8 ft (33 bow-lengths by one), the azuchi at its end -->
 <!-- Research: forecourt - research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html: Hayakawa's sheet labels "forecourt" the strip between the office hall and the inner-court wall, while the open ground just inside the main gate is labeled OUTER COURT -->
-<!-- Research: barracks watch of ~10-20 men - CANON: the setting's figure, a typical county town keeps about 15 samurai, the band around it this project's -->
+<!-- Research: barracks watch of ~10-20 men - GUESS: ten to twenty men, this project's figure for a small office's guard, round the setting's ~15 samurai of a county town (CANON) (research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html) -->
+<!-- Research: hearing court posts - research/questions/0099-the-hearing-court-shirasu.drawing.html: posts along the roofed court's open side, two ken (~12 ft) apart and 1 ft square, their size and spacing a GUESS -->
 
 - **Office hall (with dais band)** - the working block (~360×84) along the north edge of the outer court, backing onto the divider wall. Rear rooms behind a dashed screen-line: the **day office** (tax and case business) and the **official study** (the magistrate's working desk). Front band on the court face: the magistrate's tatami dais centered, two clerk positions flanking. The courtroom is a room OF the office block, not a freestanding stage (see grounding).
 - **Hearing court** - a ROOFED court immediately south of the office hall's dais band (research/questions/0099-the-hearing-court-shirasu.html - the open white court is the period-drama image; Takayama's is river cobbles under a roof): its floor white gravel or the local river cobbles (a knob), drawn with a solid outline and posts along its open side, leaving a cart-passable slot (~25-30 px) between its south edge and anything at the wall. Its size is a guess - no roofed court's measurements were found. Straw mats on the floor ('Who sat where at a hearing, and on what?'): the accused's at the center (~6×3 ft), the plaintiff's behind to one side, the village officials' behind to the other.
@@ -377,6 +379,7 @@ The sweep (`tests/test_mode_a_sheets.py`) picks the tier up from the declaration
 <!-- Research: privies and rear strip - research/questions/0101-privies-setchin.html: ~3-4, the residence privy attached -->
 <!-- Research: fire-water tubs - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: ~8-12, kitchen 2, none at the kura -->
 <!-- Research: practice ground sizing - GUESS research/questions/0165-martial-training-grounds-and-dojo.drawing.html: ~90-135 sq ft per drilling samurai -->
+<!-- Research: practice ground beside the watch, no dojo - research/questions/0165-martial-training-grounds-and-dojo.drawing.html: an open practice ground in the compound beside the guards' quarters, no hall at a county magistracy -->
 
 This checklist is for **Mode A** (compound/building plans). **Mode B settlement maps** follow their own loop instead - step 5 of the workflow in [`docs/usage.md`](usage.md): the gate's tests of the placer must be green, then a persona read of the PNG. (Note the Mode B difference: title is the place name only - no subtitle/summary line. Neither mode carries a key/legend box.)
 

@@ -423,6 +423,16 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
   waits on the GM's call on the 329 merge commit's stray profiles); wave 34's own pair opens at 36977d8d1.
 - **Verification**: `impl-drift` on the touched claims, the gate, wave 34's own bookend pair.
 
+## Wave 35 (amendment 34, 2026-10-08)
+
+- **Scope**: wave 34's found rows tiered by a fresh reader (T95a): eight E0 claims written in the Mode A docs and `_one_joint`
+  (`tasks.md` Phase 36), with the stale clerk line; the salt-ward Scale clause and the Z-to-T rule tiered E2, left for their
+  place. No executed code changes.
+- **Occasions**: none.
+- **On the unpushed waves 9-34** under condition (6): (1)-(5) held at wave 34's close (900729a7d, in the clone - its push
+  waits on the GM's call on the 329 merge commit's stray profiles); wave 35 changes no executed code, so it owes no pair.
+- **Verification**: `impl-drift` on the touched claims, the gate.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Each later wave that changes engine behavior takes

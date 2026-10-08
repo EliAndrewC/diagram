@@ -7,6 +7,17 @@
   "moved": "FR-003: the fix redraws a hand-drawn Mode A sheet, which the spec tiers E3 (the ranker had E1)",
   "tier": "E3"
  },
+ "docs/buildings.md::Checklist for a new diagram#practice ground in the outer court beside the watch's lodgin": {
+  "after": [],
+  "e0_basis": "docs/buildings.md:401; 0165 drawing page: 'A county magistracy draws an open practice ground ... and no hall ... Every county magistracy draws a practice ground beside its guards' quarters'; the outer-court section already claims both from this page (buildings.md:156-157)",
+  "files": [
+   "docs/buildings.md"
+  ],
+  "fix": "<!-- Research: practice ground beside the watch, no dojo - research/questions/0165-martial-training-grounds-and-dojo.drawing.html: an open practice ground in the compound beside the guards' quarters, no hall at a county magistracy -->",
+  "flag": "",
+  "moved": "T95a (fresh reader): docs/buildings.md:401; 0165 drawing page: 'A county magistracy draws an open practice ground ... and no hall ... Every county magistracy draws a practice ground beside its guards' quarters'; the outer-court section already claims both from this page (buildings.md:156-157)",
+  "tier": "E0"
+ },
  "docs/buildings.md::Fire-water tubs#tub against its wall": {
   "after": [],
   "files": [
@@ -46,6 +57,17 @@
   "flag": "",
   "moved": "exception check 2026-10-07 (FR-003: a redrawn hand sheet is E3), sorted by a fresh reader (audit/modea-sort-out.jsonl): Barracks rects at 3 px = 1 ft: county example 135x102 px (45x34 ft), Ochiba 92x100 (31x33 ft), Ubame 134x96 (45x32 ft), roundtrip 93x99 - all deeper than the 24 ft cap; only Hayakawa's 105x47 (35x16 ft) already fits.",
   "tier": "E3"
+ },
+ "docs/buildings.md::Outer court (administrative / public)#barracks watch of ~10-20 men": {
+  "after": [],
+  "e0_basis": "docs/buildings.md:168 claims CANON for the band; 0116.html (the question page, not .drawing): 'a barracks for ten to twenty men, this project's figure for a small office's guard ... the barracks' strength are a GUESS'; canon (make canon): l7r.md:182 '~15 samurai in each of the 36 towns', budgets.md:103 - the 15 is canon, the band is not",
+  "files": [
+   "docs/buildings.md"
+  ],
+  "fix": "<!-- Research: barracks watch of ~10-20 men - GUESS research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html: ten to twenty men, this project's figure for a small office's guard, round the setting's ~15 samurai of a county town (CANON) -->",
+  "flag": "",
+  "moved": "T95a (fresh reader): docs/buildings.md:168 claims CANON for the band; 0116.html (the question page, not .drawing): 'a barracks for ten to twenty men, this project's figure for a small office's guard ... the barracks' strength are a GUESS'; canon (make canon): l7r.md:182 '~15 samurai in each of the 36 towns', budgets.md:",
+  "tier": "E0"
  },
  "docs/buildings.md::Outer court (administrative / public)#cell": {
   "fix": "procedure's Cell bullet: '1-2 occupants' becomes 'shared by several prisoners' (0096's measured cells); the 12 x 10 ft footprint stands",
@@ -92,6 +114,28 @@
   "fix": "buildings.md line 93: replace the claim with two - `<!-- Research: granary forms - research/questions/0098-storehouses-for-the-tax-rice.html: raised on posts or earth-walled kura -->` and `<!-- Research: granary size and the terminal row - GUESS research/questions/0098-storehouses-for-the-tax-rice.drawing.html: ~43-50 x 25-27 ft, no page gives a county office granary's size or count; a row for a terminal store, the landing row the project's reading -->`. The vocabulary entry (line 113) and the programs.md granary band (line 86) stand unchanged.",
   "flag": "",
   "moved": "T53a: a reopened row tiered by its work by a fresh reader - impl-drift's verdict is MISLABELED and the 0098 drawing page already states the 43-50 x 25-27 ft storehouse as a GUESS ('no page we read gives the size of a county office's grain storehouse or how many it kept') and the landing row as the project's reading, so only the claim's citation moves; nothing drawn changes.",
+  "tier": "E0"
+ },
+ "docs/buildings.md::Outer court (administrative / public)#hearing court posts along its open side": {
+  "after": [],
+  "e0_basis": "docs/buildings.md:171; 0099 drawing page: 'the court is drawn with a building's solid outline, and posts along its open side. The posts ... stand two ken (~12 ft) apart. Each post is drawn 1 ft square ... a GUESS'",
+  "files": [
+   "docs/buildings.md"
+  ],
+  "fix": "<!-- Research: hearing court posts - research/questions/0099-the-hearing-court-shirasu.drawing.html: posts along the roofed court's open side, two ken (~12 ft) apart and 1 ft square, their size and spacing a GUESS -->",
+  "flag": "",
+  "moved": "T95a (fresh reader): docs/buildings.md:171; 0099 drawing page: 'the court is drawn with a building's solid outline, and posts along its open side. The posts ... stand two ken (~12 ft) apart. Each post is drawn 1 ft square ... a GUESS'",
+  "tier": "E0"
+ },
+ "docs/buildings.md::Outer court (administrative / public)#office hall": {
+  "after": [],
+  "e0_basis": "The three hand sheets draw 28 ft deep: hayakawa-magistracy.svg:612 340x84 px (113 x 28 ft), ochiba-magistracy.svg:204 360x84 (120 x 28), ubame-magistracy.svg:227 330x84 (110 x 28); only the generated county example draws 113 x 38 (compound.py:791-793; county-magistracy-example.svg:72 339x114). The doc (buildings.md:134, :170 '~360x84') matches the hand sheets and 0113's drawing page ('80 to 150 ft",
+  "files": [
+   "docs/buildings.md"
+  ],
+  "fix": "<!-- Research: office hall - research/questions/0113-the-office-hall-and-its-clerks-goyakusho.drawing.html: ~120 x 28 ft block (Ochiba's; Hayakawa 113 x 28, Ubame 110 x 28), inside the 80-150 by 20-45 ft band whose proportions are a GUESS; backing the divider, day office and study behind, dais band in front, courtroom a room of it -->",
+  "flag": "",
+  "moved": "T95a (fresh reader): The three hand sheets draw 28 ft deep: hayakawa-magistracy.svg:612 340x84 px (113 x 28 ft), ochiba-magistracy.svg:204 360x84 (120 x 28), ubame-magistracy.svg:227 330x84 (110 x 28); only the generated county example draws 113 x 38 (compound.py:791-793; county-magistracy-example.svg:72 339x114). The d",
   "tier": "E0"
  },
  "docs/buildings.md::Outer court (administrative / public)#stables": {
@@ -146,6 +190,16 @@
   "moved": "T25a (amendment 6): tiered by its work - a new knob in the procedure and the type band, and the shrine sheets redrawn",
   "tier": "E3"
  },
+ "docs/buildings.md::Scale#salt-ward marker r25 17 ft for a morijio heap 03-07 ft": {
+  "after": [],
+  "files": [
+   "docs/buildings.md"
+  ],
+  "fix": "Drop the salt-ward marker from the Scale paragraph (docs/buildings.md:22): delete the clause 'and the SALT WARDS, whose r2.5 glyph (~1.7 ft) marks a morijio heap ... (do NOT call r2.5 'true size')' and 'salt wards' from the list of point glyphs redrawn, leaving the wells as the one location marker. No claim to write: the rule describes an element no sheet draws",
+  "flag": "",
+  "moved": "T95a (fresh reader): No magistracy or shrine sheet draws a salt ward (grep -i salt pool/*/*/*.svg: none); Hayakawa's came off 2026-09-28 (hayakawa-magistracy.notes.md:17; particulars.py:12 - they came from the GM-only Obsidian Portal notes, not setting canon); 0240 drawing page: 'none draws salt at the gates of an offic",
+  "tier": "E2"
+ },
  "docs/buildings.md::Scale#true size for every footprint": {
   "after": [],
   "files": [
@@ -170,6 +224,17 @@
  "docs/buildings.md::Walls and gates#main gate posts": {
   "moved": "FR-003: the fix redraws three hand-drawn sheets (ochiba, hayakawa, ubame) - amendment 1 review",
   "tier": "E3"
+ },
+ "docs/buildings.md::Walls and gates#no salt heaps or wards drawn at a compound's gates": {
+  "after": [],
+  "e0_basis": "docs/buildings.md:130 already cites the page inline; 0240 drawing page: 'none draws salt at the gates of an official's compound ... no page we read puts it at an official's gates'. Not CANON: make canon finds no morijio; the GM-only Hayakawa wards were the one source and are off the sheet (hayakawa-magistracy.notes.md:17)",
+  "files": [
+   "docs/buildings.md"
+  ],
+  "fix": "<!-- Research: no salt wards at gates - research/questions/0240-salt-heaps-at-doorways-morijio.drawing.html: no salt heaps or other wards drawn at a compound's gates, none recorded at an official's gate before present-day custom -->",
+  "flag": "",
+  "moved": "T95a (fresh reader): docs/buildings.md:130 already cites the page inline; 0240 drawing page: 'none draws salt at the gates of an official's compound ... no page we read puts it at an official's gates'. Not CANON: make canon finds no morijio; the GM-only Hayakawa wards were the one source and are off the sheet (hayakawa-",
+  "tier": "E0"
  },
  "docs/buildings.md::Walls and gates#structures abut walls": {
   "after": [],
@@ -221,6 +286,17 @@
   "moved": "T56a: tiered by its work by a fresh reader - MISLABELED: the drawing page (line 21) already says 'none is drawn at average wealth' as a knob, and the procedure (line 183) and Hoshigaoka already do that; only the claim's label and citation are wrong.",
   "tier": "E0"
  },
+ "docs/buildings/programs.md::Country shrine (a village district's shrine)#dwelling band 34-60 by 18-38 ft round the farmhouse guess": {
+  "after": [],
+  "e0_basis": "docs/buildings/programs.md:198 (the dwelling row, 'reckoned from the farmhouse it resembled'); 0221 drawing page: 'drawn at the size of the map's farmhouses, 46 by 28 ft ... the farmhouse size is a guess'; its two-building size claim is already GUESS at programs.md:171",
+  "files": [
+   "docs/buildings/programs.md"
+  ],
+  "fix": "<!-- Research: dwelling band 34-60 by 18-38 ft - GUESS research/questions/0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html: the band round the map's 46 x 28 ft farmhouse; no village parish temple's kuri measured, the one small kuri found (a Koshin hall) about 12 x 15 ft -->",
+  "flag": "",
+  "moved": "T95a (fresh reader): docs/buildings/programs.md:198 (the dwelling row, 'reckoned from the farmhouse it resembled'); 0221 drawing page: 'drawn at the size of the map's farmhouses, 46 by 28 ft ... the farmhouse size is a guess'; its two-building size claim is already GUESS at programs.md:171",
+  "tier": "E0"
+ },
  "docs/buildings/programs.md::Country shrine (a village district's shrine)#dwelling entry tagged genkan": {
   "moved": "FR-003: the fix redraws a hand-drawn Mode A sheet, which the spec tiers E3 (the ranker had E1)",
   "tier": "E3"
@@ -266,6 +342,17 @@
   "fix": "programs.md:152 claim becomes `UNRESEARCHED: where a shrine's exempt fields lay against its precinct (research/questions/0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html attests exempt fields, not their place)`; line 182's text stands.",
   "flag": "",
   "moved": "T51a: tiered by its work by a fresh reader - Nothing is drawn either way - the sheet crops to the precinct and a sheet on a map shows what the map shows - so no implementation change waits on research; the only fix is the label the impl-drift finding names.",
+  "tier": "E0"
+ },
+ "docs/buildings/programs.md::Magistrate's manor (county magistracy)#clerk positions flanking the dais 0099 drawing records it as": {
+  "after": [],
+  "e0_basis": "docs/buildings/programs.md:69; 0099 drawing page: 'Our maps seat the clerks to either side of the magistrate, level with the dais ... a deliberate deviation, for simplicity'. The same choice is still claimed UNRESEARCHED at docs/buildings.md:135 ('clerk positions at the dais') - same fix there",
+  "files": [
+   "docs/buildings/programs.md"
+  ],
+  "fix": "<!-- Research: clerk positions flanking the dais - DEVIATION research/questions/0099-the-hearing-court-shirasu.drawing.html: the clerks seated either side of the magistrate, level with the dais, not in a room of their own before it as at Edo; the seats' size a GUESS -->",
+  "flag": "",
+  "moved": "T95a (fresh reader): docs/buildings/programs.md:69; 0099 drawing page: 'Our maps seat the clerks to either side of the magistrate, level with the dais ... a deliberate deviation, for simplicity'. The same choice is still claimed UNRESEARCHED at docs/buildings.md:135 ('clerk positions at the dais') - same fix there",
   "tier": "E0"
  },
  "docs/buildings/programs.md::Magistrate's manor (county magistracy)#formal visitors and the privacy baffle": {
@@ -954,6 +1041,27 @@
   "flag": "",
   "moved": "wave 34 (amendment 33 round 1 asked the evidence): the code names no spine - rank_width (hamletgen/ways/joints.py:61) ranks by connector, spur and role, and RANK_WIDTHS has footpath, field spur and track out only; giving the through-route from the track out to the field spur its 5 ft means finding that route across the web's records (the web's graph, web.py) and marking it - a new element: E3 by FR-003",
   "tier": "E3"
+ },
+ "l7r/diagram/hamletgen/ways/joints.py::_one_joint#a fold or Z at a joint becomes a T": {
+  "after": [],
+  "files": [
+   "l7r/diagram/hamletgen/ways/joints.py"
+  ],
+  "fix": "In _one_joint (joints.py:298) take the Z clause out of the T test - only a turn of _HAIRPIN_DEG or more at the joint becomes a T; a Z across the joint (_bends_badly(old) with both legs clean) falls through to the pull below (joints.py:308-332) as 0081 says, and the `_joint_moved_back` fallback at :305 (reached only by the Z case) goes or is kept for a Z the pull cannot clear; update the claim to 'a fold at a joint becomes a T' and re-run test_no_zigzag_straddles_a_joint (feature 308's reason for the Z-to-T)",
+  "flag": "",
+  "moved": "T95a (fresh reader): joints.py:296-307; 0081 drawing page: 'where the one would turn back into the other, the arriving lane meets the other's side as a T instead, and a jog across the meeting point is pulled straight like any other' and 'A lane does not zigzag ... pulled straight'. One function's logic, one module",
+  "tier": "E2"
+ },
+ "l7r/diagram/hamletgen/ways/joints.py::_one_joint#the arriving lane with the shorter clear link becomes the t'": {
+  "after": [],
+  "e0_basis": "joints.py:299-301 (sorted by math.dist of the tee's last leg); 0081 drawing page gives the T but not the stem and states 'The limits above are drawing conventions'; the existing claim at joints.py:287 folds this under the DRIFTED T claim - give it its own line when that one is rewritten",
+  "files": [
+   "l7r/diagram/hamletgen/ways/joints.py"
+  ],
+  "fix": "the shorter link the T's stem - CONVENTION research/questions/0081-village-lanes.drawing.html: of the two arriving lanes, the one whose clear link to the other's side is shorter becomes the stem; the page draws a T but does not say which lane is its stem",
+  "flag": "",
+  "moved": "T95a (fresh reader): joints.py:299-301 (sorted by math.dist of the tee's last leg); 0081 drawing page gives the T but not the stem and states 'The limits above are drawing conventions'; the existing claim at joints.py:287 folds this under the DRIFTED T claim - give it its own line when that one is rewritten",
+  "tier": "E0"
  },
  "l7r/diagram/hamletgen/ways/knots.py::next_gather#lane ends gathered": {
   "after": [],

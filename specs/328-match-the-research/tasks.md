@@ -13,6 +13,7 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 - (wave 5, landed and reviewed) placement-changed village lane on kashikawa - wave 5: 0033's row street runs on off the map as the road into it at both ends, where
   the web cut it back to its last joint (`trim_streets`); Kashikawa's and Mizuguchi's far ends now run off the sheet as a
   second way out (every way is inked `village lane`).
+- none (wave 35): claims only, no executed code changed
 - none (wave 34): the two-width joint pass changes no pool map; the reservoir seat tried and reverted
 - none (wave 33): the path's own beds and sheds made obstacles; the five pool hamlets unchanged
 - none (wave 32): claims only, no executed code changed
@@ -1168,3 +1169,26 @@ walls or water, so a routed join changes its caller in `web.py` and calls `route
 - [x] T94 the claims re-checked by `impl-drift`; the close: wave 34's own bookend pair, `make done` green, the wave column (FR-005, FR-006)
       research: rendering
       verify: DONE. impl-drift IN-STEP on the wave's claims (and the 176 Mode A claims the 329 merge re-owed, re-checked); amendment 33 FAITHFUL (round 2), plan CLEAR; make done green; wave 34's own pair band 1 on a quiet host, the web stage's cost the change's (perf-audit consistent by counterfactual); the wave column
+
+## Phase 36 - wave 35 (amendment 34): wave 34's found rows
+
+Wave 34's ten found rows tiered by a fresh reader (T95a, `audit/t95a-out.jsonl`): eight E0 - each a claim the doc or code
+already bears out, labeled and cited - and two E2 (the Scale paragraph's salt-ward marker, which no sheet draws; the Z at a
+joint turned into a T where 0081 pulls a jog straight), left for their place in the run. The stale `clerk positions at the
+dais` claim (`docs/buildings.md`) takes the same DEVIATION as its programs row.
+
+  - `docs/buildings/programs.md::Country shrine ...#dwelling band 34-60 by 18-38 ft` - GUESS (0221 drawing)
+  - `docs/buildings/programs.md::Magistrate's manor ...#clerk positions flanking the dais` - DEVIATION (0099 drawing)
+  - `docs/buildings.md::Outer court ...#barracks watch of ~10-20 men` - GUESS, not CANON (0116)
+  - `docs/buildings.md::Outer court ...#office hall` - cited to 0113's drawing page (the three sheets draw it 28 ft deep)
+  - `docs/buildings.md::Checklist for a new diagram#practice ground ...` - 0165 drawing
+  - `docs/buildings.md::Outer court ...#hearing court posts ...` - 0099 drawing
+  - `docs/buildings.md::Walls and gates#no salt heaps or wards ...` - 0240 drawing
+  - `l7r/diagram/hamletgen/ways/joints.py::_one_joint#the arriving lane with the shorter clear link ...` - CONVENTION (0081 drawing)
+
+- [x] T95a wave 34's found rows tiered by the work they take, by a fresh reader (FR-002, FR-003, SC-003)
+      research: rendering
+- [ ] T95 the claims written (FR-003 E0, FR-004)
+      research: rendering
+- [ ] T96 the claims re-checked by `impl-drift`; the close: `make done` green, the wave column (FR-005, FR-006)
+      research: rendering
