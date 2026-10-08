@@ -14197,28 +14197,49 @@
   "rests": [],
   "verdict": "MISLABELED"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::_polder_candidate#block laid with its rows down the fall and its columns across it (the grid's orientation to the slope)": {
+ ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::_polder_candidate#clean_parcels=False is a fixed choice of parcel form inside the polder": {
   "code": "fea6f79507867af5",
   "core": "fea6f79507867af5",
   "date": "2026-10-07",
-  "note": "block laid with its rows down the fall and its columns across it (the grid's orientation to the slope)",
+  "note": "clean_parcels=False is a fixed choice of parcel form inside the polder",
   "research": "",
   "verdict": "UNCLAIMED"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::_polder_candidate#surveyed block": {
-  "code": "cf49e23744c8f677",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::_polder_candidate#outer face with the water": {
+  "code": "cca4e7f7e41cf898",
   "core": "fea6f79507867af5",
   "date": "2026-10-07",
-  "note": "edge wander walked down until the block reads as a surveyed rectangle; a calibrated degree within \"nearly straight reaches that waver gently\" on a surveyed grid",
+  "note": "the edge always wanders and never comes out a rectangle, even at the lowest wander tried (0.12); the page records the curving outer face as a GUESS and says a rectangular polder is a modern form",
   "pages": {
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "45bbefa1e8568ae6"
+   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html": "12e062826b81046a"
   },
-  "research": "7e58acaa9e345ce6",
+  "research": "aaf76ce9023b39a0",
   "rests": [
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:2c50ae22cb97ead3",
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:48a5898890bd6579"
+   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:041f79721f113fc6",
+   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:3d4d136052bc4a6e"
   ],
   "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::_polder_candidate#the block is oriented to the land's fall: its rows run with the fall and its columns across it": {
+  "code": "fea6f79507867af5",
+  "core": "fea6f79507867af5",
+  "date": "2026-10-07",
+  "note": "the block is oriented to the land's fall: its rows run with the fall and its columns across it",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::_polder_candidate#wander walked down to a 0.86 box fill": {
+  "code": "7c4ae13d674670ba",
+  "core": "fea6f79507867af5",
+  "date": "2026-10-07",
+  "note": "the 0.5-to-0.12 wander steps and the 0.86 fill threshold set how irregular the polder's dike outline is. That is a fact about how the place was built, not only how it is shown. The page sets no degree for this irregularity, so the label should be GUESS (or UNRESEARCHED), not CONVENTION",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:041f79721f113fc6",
+   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:3d4d136052bc4a6e"
+  ],
+  "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::dike_face#strip at the dike's outer face": {
   "code": "edbdc31b06b7b9d2",
