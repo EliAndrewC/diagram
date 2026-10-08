@@ -324,6 +324,7 @@
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#plank width": "E1",
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#short abutment": "E1",
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#supply ditches only": "E0",
+ "l7r/diagram/settlement/city/bridges.py::crossing_deck#footplank form where the landing meets rice": "E2",
  "l7r/diagram/settlement/city/bridges.py::crossing_deck#landing past each bank": "E0",
  "l7r/diagram/settlement/city/canals.py::CanalsMixin.farmland_ring#head race width": "E0",
  "l7r/diagram/settlement/city/canals.py::CanalsMixin.farmland_ring#non-moat (river) taps are never swept; the head race leaves on the outward bearing, unaligned with the current": "E0",

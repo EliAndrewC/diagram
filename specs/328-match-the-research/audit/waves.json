@@ -500,5 +500,6 @@
  "l7r/diagram/overlap/taxonomy.py::_MX_FIXTURE_BOX#drawn fixture box": "50",
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#obliqueness ceiling": "50",
  "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#off dry crops and gardens": "50",
- "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#only water too wide to step across": "50"
+ "l7r/diagram/settlement/city/bridges.py::BridgesMixin.channel_footbridges#only water too wide to step across": "50",
+ "l7r/diagram/settlement/city/bridges.py::crossing_deck#footplank form where the landing meets rice": "50"
 }

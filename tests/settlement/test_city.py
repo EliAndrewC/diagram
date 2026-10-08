@@ -486,20 +486,19 @@ def test_a_deck_is_never_drawn_undersized() -> None:
         s.bridges()
 
 
-def test_a_carried_deck_lands_off_the_rice_or_takes_the_footplanks_form() -> None:
-    """Ways W13 (R3, the field path's canal deck 7 ft onto the paddy): a deck whose corner stands in a flooded plot is
-    tried again in the footplank's form (the local width and the short abutment); failing that it is not seated."""
-    from l7r.diagram.settlement import point_in_poly
-    from l7r.diagram.settlement.city.bridges import _deck_quad, crossing_deck, flooded_ground
+def test_a_carried_deck_lands_off_the_rice_or_is_not_seated() -> None:
+    """Ways W13, as feature 328 left it (0087: a carried way's deck runs about 10 ft onto dry ground at every corner): a deck
+    whose corner stands in a flooded plot is not seated - never shortened to the footplank's abutment - so the web's last
+    pass cuts the crossing."""
+    from l7r.diagram.settlement.city.bridges import crossing_deck, flooded_ground
 
     ditch = [(0.0, 100.0), (400.0, 100.0)]
     rice = [[-50.0, 106.0], [450.0, 106.0], [450.0, 400.0], [-50.0, 400.0]]  # the rice 6 ft past the ditch's line
     wet = flooded_ground({"fields": [{"plot_rings": [rice], "outline": rice}, {"plot_rings": [[[0, 0], [1, 1]]]}]})
-    p, rot, span, seated = crossing_deck((200.0, 0.0), (200.0, 300.0), 3.0, ditch[0], ditch[1], 4.0, ditch, 1.0, wet)
-    assert seated and not any(point_in_poly(x, y, rice) for x, y in _deck_quad(p[0], p[1], span, 3.0, rot))
-    assert crossing_deck((200.0, 0.0), (200.0, 300.0), 3.0, ditch[0], ditch[1], 4.0, ditch, 1.0)[2] > span, "the carried form, where nothing is wet"
-    drowned = [[[-50.0, 101.0], [450.0, 101.0], [450.0, 400.0], [-50.0, 400.0]]]
-    assert not crossing_deck((200.0, 0.0), (200.0, 300.0), 3.0, ditch[0], ditch[1], 4.0, ditch, 1.0, drowned)[3], "no dry landing at all"
+    assert not crossing_deck((200.0, 0.0), (200.0, 300.0), 3.0, ditch[0], ditch[1], 4.0, ditch, 1.0, wet)[3], "the landing meets the rice"
+    assert crossing_deck((200.0, 0.0), (200.0, 300.0), 3.0, ditch[0], ditch[1], 4.0, ditch, 1.0)[3], "the carried form, where nothing is wet"
+    far = [[[-50.0, 140.0], [450.0, 140.0], [450.0, 400.0], [-50.0, 400.0]]]
+    assert crossing_deck((200.0, 0.0), (200.0, 300.0), 3.0, ditch[0], ditch[1], 4.0, ditch, 1.0, far)[3], "the rice past the landing"
 
 
 def test_a_plank_is_laid_on_a_supply_ditch_only() -> None:

@@ -252,15 +252,15 @@ def crossing_deck(ra: Pt, rb: Pt, rw: float, wa: Pt, wb: Pt, ww: float, wpts: An
     lengthen until the answer is yes (`seat_deck`).
 
     ...AND IT LANDS DRY (feature 287, ways W13): a deck whose corner stands in a flooded plot (`wet`, `flooded_ground`) is
-    not seated as the carried form; the crossing is tried again in the footplank's form - the local width plus the short
-    `PLANK_ABUTMENT`, landing at the footplank's floor - which is what a farmer lays where a bund path meets a canal
-    (research/questions/0084-plank-bridges-over-farm-ditches-itabashi.html), and failing that it is not seated at all, so the web's last pass cuts the crossing.
+    not seated, so the web's last pass cuts the crossing. A carried way's deck always runs about 10 ft onto dry ground
+    (0087); feature 287 tried the footplank's short abutment where rice met the landing, and feature 328 took it out -
+    the footplank is a bund path's crossing, never a carried way's.
 
     Research:
         oblique span solved - research/questions/0087-road-bridges-over-rivers-and-canals-hashi.drawing.html: (ww + rw|cos|)/sin
         landing past each bank - research/questions/0087-road-bridges-over-rivers-and-canals-hashi.drawing.html: LANDING_FT (10 ft) onto dry ground
         near-parallel clamp - NONE: sin floored at 0.25
-        footplank form where the landing meets rice - research/questions/0084-plank-bridges-over-farm-ditches-itabashi.html: local width plus PLANK_ABUTMENT, a 2 ft corner floor
+        rice at the landing cuts the crossing - research/questions/0087-road-bridges-over-rivers-and-canals-hashi.drawing.html: LANDING_FT onto dry ground at every corner, else no deck
     """
     # segments_cross is True only for a genuine (non-parallel) crossing, so seg_intersect always returns a point here
     p = cast(Pt, seg_intersect(ra, rb, wa, wb))
@@ -272,10 +272,7 @@ def crossing_deck(ra: Pt, rb: Pt, rw: float, wa: Pt, wb: Pt, ww: float, wpts: An
     _span = (ww + rw * abs(_cs)) / _sn + 2 * LANDING_FT / ftpx
     _need = ww / 2 + CARRIED_LANDING_FLOOR_FT / ftpx  # the check's own carried-way floor
     rot_used, span, seated = seat_deck(p, rot, _span, rw, wpts, _need, (wa, wb))
-    if seated and not _lands_dry(p, rot_used, span, rw, wet):
-        _plank = (ww + rw * abs(_cs)) / _sn + PLANK_ABUTMENT / ftpx
-        rot_used, span, seated = seat_deck(p, rot, _plank, rw, wpts, ww / 2 + 2.0 / ftpx, (wa, wb))
-        seated = seated and _lands_dry(p, rot_used, span, rw, wet)
+    seated = seated and _lands_dry(p, rot_used, span, rw, wet)
     return p, rot_used, span, seated
 
 
