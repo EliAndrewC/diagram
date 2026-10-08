@@ -38,7 +38,7 @@ def _feature(root: Path, name: str, status: str | None = "Draft", tasks: str | N
 @pytest.mark.parametrize(
     ("status", "tasks", "state"),
     [
-        ("Filed - from future-work/x.md", None, "filed"),
+        ("Filed - from an old backlog entry", None, "filed"),
         ("Draft", "# tasks\n\nno boxes yet\n", "filed"),
         ("Draft", "- [ ] T01 a\n- [ ] T02 b\n", "planned"),
         ("Draft", "- [x] T01 a\n- [ ] T02 b\n", "in progress"),

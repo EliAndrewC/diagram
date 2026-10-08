@@ -14,7 +14,7 @@ conversion script is kept in this directory, as feature 329 kept its sweep.
 
 **Language**: Python 3.14 (stdlib only), one Makefile target. **Testing**: pytest, in `tests/tooling/` (the tree for
 tests that run tooling; it runs at the gate). **Scope**: `specs/` (247 directories), `future-work/` (33 entries in five
-files), 53 live files that name `future-work/`. **Performance**: the command reads ~250 small files; under 2 s
+files), 41 live files that name `future-work/` (D6 says how they were counted). **Performance**: the command reads ~250 small files; under 2 s
 (FR-003, SC-001) is measured at T-verify, not assumed.
 
 ## Decisions

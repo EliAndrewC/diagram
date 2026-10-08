@@ -2,7 +2,7 @@
 """`make speckit-todo` - every spec-kit feature not yet closed, by state (feature 330).
 
 The GM, 2026-10-08: *"we then need some way to mechanically easily see what spec kit features are open"* - once
-`future-work/` was retired, open work lives in `specs/` only, and this is how anyone finds it.
+the old future-work directory was retired, open work lives in `specs/` only, and this is how anyone finds it.
 
 THE STATE RULE (plan D1). A feature is CLOSED when its `tasks.md` holds at least one task and no open one, or when
 its spec's `**Status**:` value begins with one of `CLOSING`. Otherwise it is OPEN: FILED (no tasks yet), PLANNED

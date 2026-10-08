@@ -1,57 +1,56 @@
 {
  "feature": "330-open-work-as-features",
- "plan_sha256": "17d6ca7d093047e9b8d76f4d0bb4e5de4b9a4773466cafccbb1eda8ebe87a290",
+ "plan_sha256": "0e3505a25bc4d226ebcb7c58641deb89f70f56ccbd611e12445a0ec37daec383",
  "reviewed": "2026-10-08",
  "declared": "spec-fidelity",
  "decisions": [
   {
    "id": "D1",
-   "summary": "Closing words Done / Superseded by / Withdrawn (case-insensitive prefix) in one tuple the tests import; Implemented is not a closing word; a task is a column-0 '- [ ]' / '- [x]' line, an indented box belongs to its task; no tasks = FILED.",
+   "summary": "Closing words Done / Superseded by / Withdrawn (case-insensitive prefix) in one tuple the tests import; Implemented is not a closing word; a task is a column-0 '- [ ]' / '- [x]' / '- [X]' line, an indented box belongs to its task; no tasks = FILED.",
    "class": "within",
-   "why": "FR-002 names finished/superseded/withdrawn and a once-stated set; the edge case says the tasks decide over an 'Implemented' status. Measured 2026-10-08 over specs/*/tasks.md: no tasks.md has all column-0 tasks ticked while holding an indented open box, so the indented-box rule hides no open work."
+   "why": "FR-002 (finished/superseded/withdrawn, stated once) and the spec's edge case that the tasks decide over an 'Implemented' status. Round 2 adds only the '- [X]' form, which widens what the counter reads; it narrows nothing."
   },
   {
    "id": "D2",
    "summary": "scripts/speckit-todo.py run by make speckit-todo; three headed groups, one line per feature with title, ticked/total, (no spec.md) flag, counts per state; ALL=1 adds closed features with reason; exit 0 always.",
    "class": "within",
-   "why": "FR-001, FR-003, FR-009 and the no-spec.md edge case. ALL=1 is opt-in and leaves the default listing exactly what FR-001 asks; it serves FR-004's audit."
+   "why": "FR-001, FR-003, FR-009 and the no-spec.md edge case. ALL=1 is opt-in and leaves the default listing exactly what FR-001 asks. Unchanged since round 1."
   },
   {
    "id": "D3",
-   "summary": "Status lines rewritten only with evidence in audit.md (Done (date): evidence / Superseded by NNN / Withdrawn (ruling, date)); mixed features keep open tasks open; unsettled ones stay open and are listed for the GM; tasks are not ticked.",
+   "summary": "Status lines rewritten only with evidence in audit.md; mixed features keep open tasks open; unsettled ones stay open and are listed for the GM; tasks are not ticked.",
    "class": "within",
-   "why": "FR-004 closes by editing the status line with recorded evidence; the spec's Assumptions keep unsettled features open for the GM."
+   "why": "FR-004 and the spec's Assumptions. Unchanged since round 1."
   },
   {
    "id": "D4",
    "summary": "Search every spec and request for gm-assistant subjects and gm-assistant-only paths, read each hit, record search and result in audit.md, delete any found.",
    "class": "within",
-   "why": "FR-005 verbatim in effect."
+   "why": "FR-005. Unchanged since round 1."
   },
   {
    "id": "D5a",
    "summary": "One make claim per filed entry; spec.md with heading title, Status 'Filed - from future-work/<file>, \"<heading>\", date', Input naming this feature, entry text verbatim; separate named pieces become one feature each; done or ruled-out entries closed in audit.md with evidence.",
    "class": "within",
-   "why": "FR-006 and the spec's Assumptions."
+   "why": "FR-006 and the spec's Assumptions. Unchanged since round 1."
   },
   {
    "id": "D5b",
-   "summary": "An entry naming an existing feature (the funerary-grounds entry, 'was feature 275, withdrawn') is filed INTO that feature's directory instead of under a newly claimed number, 'so one piece of work keeps one number'.",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "FR-006 requires every entry to become one NEW feature with its own claimed number (and the spec's Assumptions: numbers from make claim, one per filed feature). Nothing makes a new number impossible; 'one piece of work keeps one number' is a consistency/elegance argument, which does not legitimize an exception. It also cuts against the record: specs/275-*/request.md records the GM's withdrawal ('I think you can get rid of it entirely') and says 'The number stays spent; nothing is built under it', and the entry is wider than 275 (its heading adds 'and the headman's gate'). Reopening 275 rewrites a withdrawn feature's state rather than filing a new one. Fix: claim a new number for this entry like every other, and let its spec name 275 as its history."
+   "summary": "An entry naming an earlier feature (the funerary-grounds entry, 'was feature 275, withdrawn') is filed under a NEW claimed number like every other, its spec naming 275 as its history; 275 is not reopened.",
+   "class": "within",
+   "why": "Round 1's NOT LEGITIMATE finding is fixed exactly as asked: FR-006 requires every entry to become one new feature with its own claimed number, and the amended D5 does that. Confirmed against specs/275-village-burial-ground/request.md, which records the GM's withdrawal and 'The number stays spent; nothing is built under it' - the plan now leaves that record alone. No exception remains."
   },
   {
    "id": "D6",
-   "summary": "Re-aim every live future-work/ mention at the feature its entry became; directory-as-a-place mentions become the D7 rule; specs/, dev/*-log/, dev/review-ledger.md and hook fixtures keep their words as history; check-old-layout.py extended to fail a new live mention.",
+   "summary": "Re-aim every live future-work/ mention (41 files, 77 mentions, git grep -o over tracked files outside specs/, dev/*-log/, dev/review-ledger.md, hook fixtures and future-work/) at the feature its entry became; directory-as-a-place mentions become the D7 rule; history keeps its words; check-old-layout.py extended to fail a new live mention.",
    "class": "within",
-   "why": "FR-007 and SC-004 say 'live'; FR-006 itself requires each filed spec to name the future-work file it came from, so specs/ cannot be swept; the project rule is that specs are history. Measured 2026-10-08: the only open feature mentioning future-work/ (130) names it as a path kind, not an entry. The check only fails when SC-004's requested state is absent - enforcement of the request, not new scope."
+   "why": "FR-007 and SC-004 say 'live'; FR-006 itself requires each filed spec to name the future-work file it came from, so specs/ cannot be swept. The scope is 'every live file', not the count, so the figure decides nothing; re-run 2026-10-08 at a3928cfd5 with the stated exclusions it reproduces 41 files / 77 mentions (43 / 79 at 4b6963f6b, the two added being this feature's own speckit-todo.py and its test). The old-layout check fails only when SC-004's requested state is absent - enforcement of the request."
   },
   {
    "id": "D7",
    "summary": "Root CLAUDE.md, dev/lessons.md and every doc saying 'add it to future-work' instead say: defer work by make claim + spec.md with Status Filed, find open work with make speckit-todo.",
    "class": "within",
-   "why": "FR-008."
+   "why": "FR-008. Unchanged since round 1."
   },
   {
    "id": "STRUCT",
@@ -60,5 +59,5 @@
    "why": "Implementation placement and the constitution's regression rule; no scope change."
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }
