@@ -196,5 +196,17 @@
   "unit": "s",
   "observed": "2026-10-08",
   "source": "perf-audit wave 24 counterfactual, dev/perf-log/20261008T013819Z-review-328-confirmation-local-digram-backlog.json"
+ },
+ "wave33-perf-control-fabric-interleaved": {
+  "quantity": "HEAD against HEAD with hamletgen/ways/fabric.py reverted to 51da9771f, interleaved, alternating leg order, 3 reps (2 at 40 hh); paired medians",
+  "value": {
+   "15hh": -2.9,
+   "10hh": -1.0,
+   "20hh": -1.9,
+   "40hh": -15.4
+  },
+  "unit": "% HEAD vs reverted",
+  "observed": "2026-10-08",
+  "source": "perf-audit wave 33, dev/perf-log/20261008T050014Z-review-328-confirmation-local-digram-backlog.json and its audit record"
  }
 }
