@@ -184,7 +184,9 @@ def next_gather(lanes: Sequence[Mapping[str, Any]], judge: Callable[[dict[int, P
     `_fixed`) never moves. `judge` is handed the new points of every lane the gather moves, keyed by lane; None where no knot
     can be gathered.
 
-    Research: lane ends gathered - research/questions/0081-village-lanes.drawing.html: ends within 25 ft meet at one node"""
+    Research:
+        lane ends gathered - research/questions/0081-village-lanes.drawing.html: ends within 25 ft meet at one node
+        which node a knot gathers at - UNRESEARCHED: the node with fewer ends moves onto the other, the other way round where refused"""
     nodes = end_nodes(lanes, fixed)
     for a, b, _d in knots(lanes):
         order = sorted(((b, a), (a, b)), key=lambda mt: len(nodes[mt[0]][1]))

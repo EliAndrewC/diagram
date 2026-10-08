@@ -134,13 +134,17 @@ JOIN_TOL = _TOUCH_GAP
 ink's), which both network tests read; a looser bar would call a near-miss a junction."""
 
 DOORSTEP_FT = 80.0
-"""A free lane end this near a farmhouse's center is discharged by that house (`lane_ends_front_different_houses`).
-Research: an end discharged by a house - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within 80 ft of its center"""
+"""A lane end this near a farmhouse's center is at its dooryard for the settle: the steadings exempt from a lane's fence
+clearance near its ends (`settle.py`'s yards a lane may not come near) and the end a fan of ways is cut back past
+(`settle_ends`). Whether an end REACHES a farmhouse, 0246's measure, is `reach_to_steading` (feature 328 wave 43; this was
+that test too, at 80 ft from the center).
+Research: a dooryard's reach for the settle - UNRESEARCHED: 80 ft from the house's center; 0246's own reach is 60 ft of the house or 12 ft of its built ground"""
 HOUSE_REACH_FT = 60.0
 """Research: an end reaches a farmhouse - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: "within 60 ft of the house, or within 12 ft of the steading's built ground" (the page's own guess)"""
 STEADING_REACH_FT = 12.0
 """Research: an end reaches a steading - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within 12 ft of its house, byre, shed, threshing yard or garden"""
 _STEADING_PARTS = ("byres", "farm_sheds", "threshing_yards", "gardens")
+"""Research: a steading's built ground - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: its house, byre, shed, threshing yard or garden"""
 
 
 def reach_to_steading(end: Pt, house: Mapping[str, Any], M: Mapping[str, Any]) -> bool:
@@ -148,7 +152,7 @@ def reach_to_steading(end: Pt, house: Mapping[str, Any], M: Mapping[str, Any]) -
     `STEADING_REACH_FT` of its steading's built ground (the house, and the byres, sheds, yards and gardens recorded `of` it)?
     Footprints, not centers (feature 328: it was 80 ft from the house's center, `DOORSTEP_FT`).
 
-    Research: an end reaches a farmhouse - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within 60 ft of the house or 12 ft of its built ground"""
+    Research: an end reaches a farmhouse - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within 60 ft of the house or 12 ft of its built ground, the page's own guess"""
 
     def gap(poly: Sequence[Pt]) -> float:
         return 0.0 if point_in_poly(end[0], end[1], list(poly)) else min(seg_dist(end[0], end[1], a, b) for a, b in zip(poly, [*poly[1:], poly[0]], strict=False))

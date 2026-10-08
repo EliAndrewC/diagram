@@ -1417,6 +1417,13 @@ In ranking order (rows 482-485; 486-492 next, row 492's change held as `audit/he
   is (it was drawn stopping short, counted as arriving); the snap test pins it, red on the old code.
 - Wave 42's found row, tiered by a fresh reader (T111a, `audit/t111a-out.jsonl`): `ditch_strokes` E3 (each channel's width
   carried across modules), left for its place.
+- Round 1 (spec-fidelity): `DOORSTEP_FT`'s docstring and claim restated for its remaining readers (the settle's dooryard
+  exemption and end cut, UNRESEARCHED; 0246's own reach is `reach_to_steading`). From impl-drift: the early-arrival branch's
+  cut end is carried onto the way, or the run refused where that link is not walkable (`test_a_web_lane_that_arrives_early_keeps_the_long_half`,
+  red on the old code, and a test of the refusal and the end already on the way); the steading claims carry 0246's own GUESS
+  label; which node a knot gathers at claimed UNRESEARCHED. `geom.end_serves`, 0246's reach measured to the house's center
+  beside `reach_to_steading`'s footprints, filed (`audit/found-wave43.jsonl`). Row 486 is NOT taken here: it owes the routed
+  link before refusing. No map moved (regenerated again, byte-identical).
 
 - [x] T111a wave 42's found rows tiered by the work they take, by a fresh reader (FR-002, FR-003, SC-003)
       research: rendering

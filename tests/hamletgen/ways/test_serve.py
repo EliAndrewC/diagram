@@ -113,7 +113,7 @@ def test_a_web_lane_that_arrives_early_keeps_the_long_half() -> None:
     run = [(40.0, 200.0), (20.0, 200.0), (60.0, 200.0), (110.0, 200.0), (160.0, 200.0)]
     assert hg.ways._lay_web_lane(s, run, [], [], [], houses=[(160.0, 230.0)]) is True
     drawn = s.M["lanes"][-1]["pts"]
-    assert [tuple(q) for q in drawn] == run[1:], "the 20 ft head is dropped, the 140 ft body is kept"
+    assert [tuple(q) for q in drawn] == [(0.0, 200.0), *run[1:]], "the 20 ft head is dropped, the 140 ft body kept, its cut end carried onto the way (0081, feature 328)"
 
 
 def test_a_web_lane_end_already_near_the_network_is_SNAPPED_onto_it() -> None:
@@ -410,3 +410,16 @@ def test_a_row_farm_takes_no_door_path_only_where_its_street_already_arrives() -
     assert not _serve.street_arrives(farm, (0.0, 66.0), street, 0, yard), "the street 19 ft off the yard and 77 off the house"
     near = [((-100.0, 66.0), (100.0, 66.0))]
     assert _serve.street_arrives(farm, (0.0, 60.0), near, 0, yard), "8 ft off the yard: it arrives"
+
+
+def test_a_cut_end_that_cannot_be_carried_onto_the_way_is_refused_and_one_on_it_stays() -> None:
+    """0081 (feature 328 wave 43): a run cut where it arrives early has its cut end carried onto the way - refused where a
+    steading stands in that link, and left as it is where the cut end already lies on the way."""
+    run = [(40.0, 200.0), (20.0, 200.0), (60.0, 200.0), (110.0, 200.0), (160.0, 200.0)]
+    s = _StubSettlement(lanes=[[(0.0, 0.0), (0.0, 400.0)]], houses=[(160.0, 230.0)])
+    wall = [(5.0, 190.0), (15.0, 190.0), (15.0, 210.0), (5.0, 210.0)]
+    assert hg.ways._lay_web_lane(s, run, [], [wall], [], houses=[(160.0, 230.0)]) is False
+    on = [(30.0, 200.0), (0.0, 200.0), (60.0, 200.0), (110.0, 200.0), (160.0, 200.0)]
+    s2 = _StubSettlement(lanes=[[(0.0, 0.0), (0.0, 400.0)]], houses=[(160.0, 230.0)])
+    assert hg.ways._lay_web_lane(s2, on, [], [], [], houses=[(160.0, 230.0)]) is True
+    assert [tuple(q) for q in s2.M["lanes"][-1]["pts"]][0] == (0.0, 200.0)

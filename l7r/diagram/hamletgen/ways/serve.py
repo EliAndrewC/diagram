@@ -172,12 +172,21 @@ def _lay_web_lane(s: Settlement, run: Poly, hard: list[Poly], walls: list[Poly],
         # worth doing is trimming the short tail that carried on past.
         vert = [min(seg_dist(v[0], v[1], a, b) for a, b in segs) for v in run]
         k = min(range(len(vert)), key=lambda i: vert[i])
+        run_k = run[k]
         if 0 < k < len(run) - 1 and vert[k] <= _LANE_JOIN_FT:
             # THE SHORT HALF IS THE STUB, whichever half it is: a run that touches the network partway along is
             # one lane arriving with a tail, and which side carried on past is not always the same one. Written
             # as a choice rather than a pair of branches so neither side is a line only one map shape reaches.
             head, tail = polyline_len(run[: k + 1]), polyline_len(run[k:])
             run = run[: k + 1] if tail < 40.0 else (run[k:] if head < 40.0 else run)
+            # ...AND A CUT END IS CARRIED ONTO THE WAY (feature 328, 0081: ends within 25 ft are joined at a single point): it
+            # was drawn where it was cut, up to 25 ft short; carried where the link is walkable, else the run is not drawn
+            if run[0] == run_k or run[-1] == run_k:
+                q = min((seg_closest(run_k[0], run_k[1], a, b) for a, b in segs), key=lambda z: math.dist(run_k, z))
+                if math.dist(run_k, q) > 1e-6:
+                    if not _clear_link(run_k, q, hard, walls, water):
+                        return False
+                    run = [q, *run] if run[0] == run_k else [*run, q]
             _draw_web(s, run, 3)
             return True
         d0, d1 = vert[0], vert[-1]
