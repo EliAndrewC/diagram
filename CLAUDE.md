@@ -127,6 +127,10 @@ full doctrine with the GM's rulings and the incidents behind them: `docs/spec-ki
   without claiming). It prints the `SPECIFY_FEATURE` and `SPECIFY_FEATURE_DIRECTORY` exports; export
   BOTH. Commit and push the spec directory as soon as `spec.md` exists. No feature branches: commit on
   `main` inside the clone.
+- Open work lives in `specs/` only (feature 330: the old backlog directory became features). Defer work by filing a
+  feature - `make claim`, then a `spec.md` whose `**Status**: Filed` says what it is - and ask `make speckit-todo` what
+  is open: filed, planned, in progress. A feature closes when every task is ticked, or when its status line opens
+  `Done`, `Superseded by NNN` or `Withdrawn` with the evidence beside it.
 - Every task is `research: rendering` or `research: physical`; a physical task carries the boxes
   `research pass`, `source-reader confirmed`, `recorded and cited`, `quote-check confirmed` and
   `source-applicability confirmed`, ticked before the task is (`tests/test_task_research_boxes.py`).
