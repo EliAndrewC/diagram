@@ -680,6 +680,23 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
   strict `_ZIGZAGS_WAITING` behind a new E3 found row (`found-wave54.jsonl`) - each strict, so the day a map is fixed its
   name must come off. Kept, not reverted: the seats are 0042's and 0047's, and the knots are the web's limit they exposed.
   For the GM at the feature's end (the waiver exit of constitution XIII; fixing row 748 is the other).
+- **The fix attempted (spec-fidelity W54-5, W54-7; constitution XIII's investigation)**, each probed in `settle_knots`' judge
+  and `Lawful`, on Kuwabata's knot (lane 11's foot 21.8 ft from lane 9's door):
+  1. the gathers the engine has (`moved_onto` both forms, `contracted`, `teed_onto`): every one re-aims lane 11's 209 ft last
+     leg at the door and splits the web (lane 12 is teed onto that leg 51 ft from its start; the re-aimed leg passes 4.7 ft
+     off it);
+  2. a PIVOTED form (the leg kept to lane 12's foot, then turned onto the door): the web stays joined, but `Lawful`'s ground
+     refuses it - the turned leg crosses house 9's dooryard;
+  3. a SLIDE of the foot along lane 9 to 25.5 ft from the door (3.7 ft), plain and pivoted: ground refuses both - the foot
+     already stands in that dooryard. Uncapped, the slide let the reference roll gather its way into a web the last resort
+     refused (lanes 1, 4, 6, 7, 12), so a slide of more than a nudge is not safe either.
+  Every trial was reverted. What is left is row 748's own fix - re-lay the household's way AT SEATING so it never arrives
+  inside another's dooryard - which is the seating's change across modules (E3). Sawada's zigzag is the same ground: the
+  chord that would take out lane 3's overshoot (4042.4, 2067.1) -> lane 1's door crosses house 1's front dooryard, so the
+  smoothing keeps the turn. Neither stems from the fixtures themselves (none stands within 75 ft of Sawada's joint): wave
+  52's seats moved the houses' ways and the web settled differently.
+  So T137 stays OPEN (the push refuses the batch until it closes), the seats are kept (0042, 0047), and the GM is asked at the
+  feature's end: waive the two for row 748 and the zigzag row, revert wave 52's seats, or take row 748 now.
 - **Tooling** (so a reroll cannot hide this again): `make quick` runs the tests that read the shipped hamlet manifests
   whenever the manifests moved since its last green run (`scripts/gates/pool-readers.py`, its test in `tests/tooling/`);
   testmon selects by code, and a manifest is data. And `perf_profile.py`'s spec typed, which the quick type check
