@@ -631,7 +631,7 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
     s.lane(recorded_track(s) or choose_track_out(s, plan), width=CONNECTOR_WIDTH, clearance=LANE_CLEARANCE, worn=True, connector=True)
 
 
-def connector_track(plan: SitePlan, start: Pt, avoid: Sequence[Poly] = (), reach: float = 4000.0, wet: Sequence[Poly] = (), waters: Sequence[tuple[Pt, Pt]] = (), fabric: Sequence[Poly] = ()) -> Poly:
+def connector_track(plan: SitePlan, start: Pt, avoid: Sequence[Poly] = (), wet: Sequence[Poly] = (), waters: Sequence[tuple[Pt, Pt]] = (), fabric: Sequence[Poly] = ()) -> Poly:
     """The track from the settlement's gateway to the map edge, steered clear of the crop.
 
     Bearings are tried outward from "away from the field, leaning downslope" - the direction a real
@@ -654,8 +654,9 @@ def connector_track(plan: SitePlan, start: Pt, avoid: Sequence[Poly] = (), reach
         track drawn taut - research/questions/0081-village-lanes.drawing.html: every lane pulled taut like a string - the candidate a straight run from the gateway past the frame
         track off the steadings - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: kept `TRACK_FABRIC_GAP` (7 ft) off the steadings"""
     # PAST THE FRAME ON EVERY BEARING: a fixed 4,000 ft stopped short of a 5,600 ft canvas's far edge (feature 328 wave 46,
-    # found when the taut track first took an eastward bearing), so the reach covers the canvas' diagonal
-    reach = max(reach, math.hypot(plan.W, plan.H))
+    # found when the taut track first took an eastward bearing). The canvas' diagonal reached it, but every later pass samples
+    # the whole connector (`field_runs` asked `run_on_target` 53% more often, batch 1's pair), so each bearing runs to the
+    # canvas edge and `TRACK_PAST_FRAME_FT` beyond it (`past_the_frame`)
     dx, dy = plan.fall
     ox, oy = plan.seat["out"]
     base = math.degrees(math.atan2(0.55 * oy + 0.85 * dy, 0.55 * ox + 0.85 * dx))
@@ -703,7 +704,8 @@ def connector_track(plan: SitePlan, start: Pt, avoid: Sequence[Poly] = (), reach
         # THE CANDIDATE IS THE PATH THAT WILL BE DRAWN - a probe measures what the check will measure. It is TAUT (feature 328
         # wave 46, 0081: "Every lane is pulled taut like a string"): the track bowed 34 and 46 px either side of the bearing
         # "so the path reads as walked", a wander on no page; it bends only where `route_around` and the threading bend it.
-        path: Poly = [start, (start[0] + math.cos(theta) * reach, start[1] + math.sin(theta) * reach)]
+        far = past_the_frame(start, theta, plan.W, plan.H)
+        path: Poly = [start, (start[0] + math.cos(theta) * far, start[1] + math.sin(theta) * far)]
         # WET GROUND OUTRANKS EVERYTHING ELSE (GM 2026-08-12). The toe marsh is a contour band
         # spanning the whole canvas below the crop, so on a map whose cluster sits in a pocket of
         # the fan NO bearing is clean of both - and a single violation count lets one crop clip
@@ -761,6 +763,23 @@ def connector_track(plan: SitePlan, start: Pt, avoid: Sequence[Poly] = (), reach
     if best[0][:2] == (0, 0):
         return best[1]
     return connector_dry_exit(plan, start, avoid, wet, waters, fabric)
+
+
+TRACK_PAST_FRAME_FT = 400.0
+"""How far past the canvas edge the track out is drawn: the frame is cropped to the content later, so the track only has to
+leave the canvas, and a track that stops short reads as a dead end (`connector_track`).
+
+Research: track past the frame - CONVENTION: 400 ft past the canvas edge on its own bearing"""
+
+
+def past_the_frame(start: Pt, theta: float, w: float, h: float) -> float:
+    """How far along bearing `theta` (radians) from `start` the track runs: to where it leaves the `w` x `h` canvas, and
+    `TRACK_PAST_FRAME_FT` beyond. A start outside the canvas runs the margin alone.
+
+    Research: track past the frame - CONVENTION: to the canvas edge on its own bearing and 400 ft beyond"""
+    c, sn = math.cos(theta), math.sin(theta)
+    exits = [t for t in ((w - start[0]) / c if c > 1e-12 else (-start[0] / c if c < -1e-12 else math.inf), (h - start[1]) / sn if sn > 1e-12 else (-start[1] / sn if sn < -1e-12 else math.inf)) if 0.0 <= t < math.inf]
+    return min(exits, default=0.0) + TRACK_PAST_FRAME_FT
 
 
 def wet_grown_by_the_lane(w: Poly) -> Poly:

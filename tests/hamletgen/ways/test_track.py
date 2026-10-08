@@ -489,3 +489,18 @@ def test_a_gateway_on_a_well_is_stepped_clear_of_it() -> None:
     assert edge_dist(g[0], g[1], well) >= CONNECTOR_WIDTH / 2.0 - 1e-6 and g != (10.0, 11.0)
     assert gateway.clear_of_what_stands(s, (45.0, 10.0)) == (45.0, 10.0), "a wood seat the way out may take"
     assert gateway.clear_of_what_stands(SimpleNamespace(M={}), (10.0, 11.0)) == (10.0, 11.0)
+
+
+def test_the_track_runs_to_the_canvas_edge_and_a_margin_past_it() -> None:
+    """`past_the_frame`: the track out leaves the canvas on its own bearing and runs `TRACK_PAST_FRAME_FT` beyond - never
+    stopping short of a far edge (a fixed 4,000 ft did on a 5,600 ft canvas), and never sampled for the canvas' whole
+    diagonal by every later pass (batch 1's pair)."""
+    import math
+
+    from l7r.diagram.hamletgen.ways.track import TRACK_PAST_FRAME_FT, past_the_frame
+
+    assert past_the_frame((100.0, 500.0), 0.0, 5600.0, 1000.0) == 5500.0 + TRACK_PAST_FRAME_FT, "east to the far edge"
+    assert past_the_frame((100.0, 500.0), math.pi, 5600.0, 1000.0) == 100.0 + TRACK_PAST_FRAME_FT, "west to the near edge"
+    assert abs(past_the_frame((500.0, 100.0), math.pi / 2, 1000.0, 1000.0) - (900.0 + TRACK_PAST_FRAME_FT)) < 1e-9, "south"
+    assert abs(past_the_frame((500.0, 100.0), -math.pi / 2, 1000.0, 1000.0) - (100.0 + TRACK_PAST_FRAME_FT)) < 1e-9, "north"
+    assert past_the_frame((-50.0, 500.0), math.pi, 1000.0, 1000.0) == TRACK_PAST_FRAME_FT, "already outside: the margin alone"
