@@ -788,6 +788,9 @@
   "l7r/diagram/settlement/water_ways/kido.py::KidoMixin.kido_reservation",
   "l7r/diagram/settlement/water_ways/kido.py::KidoMixin.kido_seat",
   "l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.street",
+  "l7r/diagram/settlement/water_ways/lanes.py::_house_frame",
+  "l7r/diagram/settlement/water_ways/lanes.py::behind_house",
+  "l7r/diagram/settlement/water_ways/lanes.py::reaches_dooryard",
   "l7r/diagram/settlement/water_ways/wards.py::WardsMixin",
   "l7r/diagram/settlement/water_ways/wards.py::WardsMixin._draw_reserve",
   "l7r/diagram/settlement/water_ways/wards.py::WardsMixin._ward_ends_on_wall",
@@ -839,6 +842,9 @@
   "l7r/diagram/waterfields/trunks.py::sharpest_turn"
  ],
  "keys": [
+  "l7r/diagram/interactive/place.py::dwellings_shown#town and city count no farmhouses",
+  "l7r/diagram/overlap/taxonomy.py::_FIXTURE_MOUNTS#gate complex and inspection post",
+  "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#castle towers on the rampart",
   "l7r/diagram/settlement/_knobs.py::<module>#bamboo forms",
   "l7r/diagram/settlement/_knobs.py::<module>#caravan_inn_form forms",
   "l7r/diagram/settlement/_knobs.py::<module>#cluster_position forms",

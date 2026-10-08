@@ -163,6 +163,13 @@ DEFERRED_ON_MEASURE = {
     # a claim whose value no kept map reads, though its unit runs: `fixture_forms` passes `privy_seat_weights(seed)`, so only
     # `bundle.py`'s fallback reads the class default (spec-fidelity, amendment 8 round 3)
     "l7r/diagram/settlement/homestead_parts/fixture_seats.py::FixtureForms#privy seat weights",
+    # the town and city branch of `dwellings_shown` (`kind.excludes_farms`): every kept map is a hamlet, a magistracy sheet or
+    # the country shrine, whose page Kind counts `houses` - the town branch never runs on one (wave 49's measure, 2026-10-08)
+    "l7r/diagram/interactive/place.py::dwellings_shown#town and city count no farmhouses",
+    # the gate complex's and the castle's matrix entries: no kept map draws a city or town gate (`gate_structs`) or a castle
+    # (`castle`), so neither pair is ever asked of one (wave 49's measure, 2026-10-08)
+    "l7r/diagram/overlap/taxonomy.py::_FIXTURE_MOUNTS#gate complex and inspection post",
+    "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#castle towers on the rampart",
 }
 
 
