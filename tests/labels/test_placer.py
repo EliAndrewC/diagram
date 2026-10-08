@@ -352,3 +352,17 @@ def test_the_nudge_stays_in_the_frame_and_a_line_has_no_fallback() -> None:
     assert cost == 1000.0 and moved.center == (20.0, 0.0)
     line = Subject("line", ((0.0, 0.0), (100.0, 0.0)), half_width=2.0)
     assert list(_extended_cands("lane", 9.0, line)) == []
+
+
+def test_a_seat_past_the_frame_is_moved_inward_until_it_fits() -> None:
+    """0241 (feature 328 wave 49): a caption that would cross the frame is moved inward - so a caption with no seat inside the
+    frame is never clipped (0242) and never left off; centered on an axis the frame is too narrow for."""
+    from l7r.diagram.labels.placer import _Cand, moved_inward
+
+    c = _Cand(0, 0, "above", (95.0, 50.0), 0.0, ("x",), (10.0, 4.0), 8.0)
+    block = rect(95.0, 50.0, 10.0, 4.0)
+    moved, b = moved_inward(c, block, (0.0, 0.0, 100.0, 100.0))
+    assert moved.center == (90.0, 50.0) and max(x for x, _y in b) == pytest.approx(100.0), "pulled 5 px back inside"
+    narrow, _ = moved_inward(c, block, (0.0, 0.0, 10.0, 100.0))
+    assert narrow.center[0] == pytest.approx(5.0), "wider than the frame: centered on it"
+    assert moved_inward(c, block, None) == (c, block)

@@ -31006,14 +31006,6 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/labels/placer.py::KEY_MARK_EM#key mark width": {
-  "code": "f5bf80e565843e9c",
-  "core": "bd6466e0477e0304",
-  "date": "2026-10-03",
-  "note": "matches the cited page",
-  "research": "",
-  "verdict": "IN-STEP"
- },
  "l7r/diagram/labels/placer.py::LEADERLESS_RINGS#no leader within twice the usual gap": {
   "code": "bece5fabe656d849",
   "core": "1ed341f64c33493d",
@@ -31054,11 +31046,13 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/placer.py::Placement#caption search plumbing": {
-  "code": "c87ee8ddef513b37",
-  "core": "84907d093f3c8a21",
-  "date": "2026-10-03",
-  "note": "plumbing, decides nothing physical or visible",
+  "code": "8563170c45e9d44a",
+  "core": "6e0e8e57bbc35d8d",
+  "date": "2026-10-08",
+  "note": "a record of a seat; decides nothing",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/placer.py::Subject#caption search plumbing": {
@@ -31231,14 +31225,6 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/labels/placer.py::keyed#caption in the key": {
-  "code": "572f3e52f783d84c",
-  "core": "796952e7db0a7049",
-  "date": "2026-10-03",
-  "note": "matches the cited page",
-  "research": "",
-  "verdict": "IN-STEP"
- },
  "l7r/diagram/labels/placer.py::leader_cost#caption search plumbing": {
   "code": "b9f796e0dc5d587a",
   "core": "44cdf89a75c04803",
@@ -31291,44 +31277,85 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/placer.py::place#free space wins": {
-  "code": "c5ffa3200f32b09c",
-  "core": "342ac34f4614bf63",
-  "date": "2026-10-03",
-  "note": "first cost-0 candidate in order is returned",
+  "code": "9b04f3bb5eca3a39",
+  "core": "5c74154adf6e9d42",
+  "date": "2026-10-08",
+  "note": "the first cost-0 seat in ranked order is returned",
   "pages": {
    "0242-labels-on-maps-cartographic-label-placement.drawing.html": "fa1bb4a252673d47"
   },
   "research": "0a880fd17413bbf6",
+  "rests": [
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:08c0bd1f9acf9800",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:2a0f6f2ce376476e",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:55bfd6a67fcf7c4d",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:a15fa81a48c69e98"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/placer.py::place#never clipped": {
-  "code": "5b54818d74a278ea",
-  "core": "342ac34f4614bf63",
-  "date": "2026-10-03",
-  "note": "_in_frame skips any block leaving the frame",
+  "code": "dfcd9a314ebdc233",
+  "core": "5c74154adf6e9d42",
+  "date": "2026-10-08",
+  "note": "the final fallback returns `outside`, a seat past the frame's edge, but 0242 says \"A place that would run off the edge of the picture is never taken\" and records no exception; either drop the fallback or have the drawing page record it as a deviation",
   "pages": {
    "0242-labels-on-maps-cartographic-label-placement.drawing.html": "fa1bb4a252673d47"
   },
   "research": "0a880fd17413bbf6",
-  "verdict": "IN-STEP"
+  "rests": [
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:08c0bd1f9acf9800",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:2c608781acf39605",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:9564a49aae1239a0"
+  ],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/labels/placer.py::place#never left off": {
-  "code": "ec91770f27956e3c",
-  "core": "342ac34f4614bf63",
-  "date": "2026-10-03",
-  "note": "claim (and keyed/WEIGHT_KEY, \"least-cost overlapping seat is retired\") sends a seatless caption to a key, never an overlap, vs 0242 \"the caption still goes down, where it covers the least\"; the page records no key - amend 0242's drawing page or the code",
+  "code": "61746cc2bf4a6bc4",
+  "core": "5c74154adf6e9d42",
+  "date": "2026-10-08",
+  "note": "with no free seat it takes the nudged least-cost seat, a soft-only seat ahead of a hard one, then the least-cost hard seat; never None unless strict",
   "pages": {
    "0242-labels-on-maps-cartographic-label-placement.drawing.html": "fa1bb4a252673d47"
   },
   "research": "0a880fd17413bbf6",
+  "rests": [
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:08c0bd1f9acf9800",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:2c608781acf39605",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:a15fa81a48c69e98",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:d5144d3952ff38ab"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/labels/placer.py::place#no key": {
+  "code": "f929bb192e3fb546",
+  "core": "5c74154adf6e9d42",
+  "date": "2026-10-08",
+  "note": "\"no key box\" matches, but 0241 says nothing of a seat past the frame's edge: it moves a frame-holding caption inward and keeps every solid feature inside the window, and 0242 says an off-edge place is \"never taken\"; cite the past-edge seat as a DEVIATION that is recorded, or drop it",
+  "pages": {
+   "0241-the-map-sheet-its-title-legend-frame-and-margins.drawing.html": "74f2ed75d6b79cce"
+  },
+  "research": "0507e505d7cb52bb",
+  "rests": [
+   "0241-the-map-sheet-its-title-legend-frame-and-margins.drawing.html:342306f8c160905d",
+   "0241-the-map-sheet-its-title-legend-frame-and-margins.drawing.html:9ef1e890d27db981",
+   "0241-the-map-sheet-its-title-legend-frame-and-margins.drawing.html:bfb8a974713829e1",
+   "0241-the-map-sheet-its-title-legend-frame-and-margins.drawing.html:eaf008caefe19e0b",
+   "0241-the-map-sheet-its-title-legend-frame-and-margins.drawing.html:ef8008651e29b696",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:9564a49aae1239a0"
+  ],
   "verdict": "DRIFTED"
  },
  "l7r/diagram/labels/placer.py::place#the hug": {
-  "code": "4814c1df166d4f0f",
-  "core": "342ac34f4614bf63",
-  "date": "2026-10-03",
-  "note": "a caption distance limit is how a thing is shown",
+  "code": "d5193c009832454c",
+  "core": "5c74154adf6e9d42",
+  "date": "2026-10-08",
+  "note": "the farthest a caption may sit from what it names is a display choice; 0242 sets no limit on leader distance",
+  "pages": {},
   "research": "",
+  "rests": [
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:2fa2f3836fdedc1e",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:49f52467f1959b2a"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/placer.py::record_box#caption search plumbing": {
@@ -31477,14 +31504,6 @@
    "0242-labels-on-maps-cartographic-label-placement.drawing.html": "fa1bb4a252673d47"
   },
   "research": "0a880fd17413bbf6",
-  "verdict": "IN-STEP"
- },
- "l7r/diagram/labels/standard.py::WEIGHT_KEY#the key's cost": {
-  "code": "13b7514cc3035ea5",
-  "core": "2fae8735b2910dcc",
-  "date": "2026-10-03",
-  "note": "matches the cited page",
-  "research": "",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/standard.py::WEIGHT_OBSTACLE#an obstacle's weight": {
@@ -32694,121 +32713,157 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#arch over its approach": {
-  "code": "c1ddc129644e38a2",
-  "core": "00306a847e72d0bf",
-  "date": "2026-10-03",
-  "note": "0220",
+  "code": "d4df260781a0ba9c",
+  "core": "b216e4adde15680b",
+  "date": "2026-10-08",
+  "note": "torii x ways: the approach runs under its arches",
   "pages": {
    "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html": "e385403eda71f0a2"
   },
   "research": "187ffe8b48289099",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:150b6599eb0096ca",
+   "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:6dbb45d3631d3bee"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#castle moat bridge": {
-  "code": "0e60bf4083dfaa85",
-  "core": "00306a847e72d0bf",
-  "date": "2026-10-03",
-  "note": "0139 rear gate's own bridge over the castle moat (note: castle_towers x bridges reason names an ote-mon deck, where 0147's Japanese model gives the main gate an earthen causeway)",
+  "code": "1b57f0336a55a7a6",
+  "core": "b216e4adde15680b",
+  "date": "2026-10-08",
+  "note": "castles x bridges and castle_towers x bridges: each gate's own bridge over the castle moat, landing at its gate",
   "pages": {
    "0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html": "03efd934d9bc580d"
   },
   "research": "6f20c89792cc1b34",
+  "rests": [
+   "0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html:587fa6a20cd5bd0e",
+   "0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html:836a12d1e6e242d6"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#castle towers on the rampart": {
-  "code": "d5b47f7f304114b4",
-  "core": "00306a847e72d0bf",
-  "date": "2026-10-03",
-  "note": "claim and reason describe corner yagura on the enceinte; 0139 says 'Leaving out the keep, the turrets and the inner baileys ... our maps draw none' - the drawn castle towers are the gate towers, relabel as gate towers at their gates",
+  "code": "7b7a54b6b0676534",
+  "core": "b216e4adde15680b",
+  "date": "2026-10-08",
+  "note": "the claim and the reason string (\"a corner tower projecting from the enceinte\") give corner turrets, but 0139 draws the outer enceinte only, \"Leaving out the keep, the turrets\"; the only towers it attests are the gate towers, so ground the castles x castle_towers permission on those",
   "pages": {
    "0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html": "03efd934d9bc580d"
   },
   "research": "6f20c89792cc1b34",
+  "rests": [
+   "0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html:587fa6a20cd5bd0e",
+   "0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html:626bf62fa07e8528",
+   "0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html:a45cce441fa38426"
+  ],
   "verdict": "DRIFTED"
  },
  "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#flower bed against the town wall": {
-  "code": "443cbb873ebc4126",
-  "core": "00306a847e72d0bf",
-  "date": "2026-10-03",
-  "note": "nothing in bundle answers it",
+  "code": "74a457ef9b814ffd",
+  "core": "b216e4adde15680b",
+  "date": "2026-10-08",
+  "note": "no cited question addresses a flower bed against the rampart",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#merchant estate court": {
-  "code": "447c5c0d305c6b7f",
-  "core": "00306a847e72d0bf",
-  "date": "2026-10-03",
-  "note": "0155",
+  "code": "3a4831891778e0e1",
+  "core": "b216e4adde15680b",
+  "date": "2026-10-08",
+  "note": "a walled court with the merchant's house inside it",
   "pages": {
    "0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html": "8bbd1b525592811a"
   },
   "research": "fecf245455f376f6",
+  "rests": [
+   "0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html:1b43d2f683a78fe0",
+   "0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html:ef188e7005fcd323"
+  ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#notice board at the roadside": {
-  "code": "6ec263b71277eb38",
-  "core": "00306a847e72d0bf",
-  "date": "2026-10-03",
-  "note": "{kosatsuba, lanes} lets the board lie on the lane tread; 0190 stands a hamlet/village board '6 ft from the edge of the road' (and 0081 'Nothing is built on a lane') - beside, not on",
-  "pages": {
-   "0190-notice-boards-kosatsuba.drawing.html": "6046a6a69d20be53"
-  },
-  "research": "3b4a965d33e6f331",
-  "verdict": "DRIFTED"
- },
  "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#one object under two keys": {
-  "code": "90c938a458f56718",
-  "core": "00306a847e72d0bf",
-  "date": "2026-10-03",
-  "note": "duplicate records",
+  "code": "9202365d7c982c26",
+  "core": "b216e4adde15680b",
+  "date": "2026-10-08",
+  "note": "religious x shrines and gate_structs x wall_towers are one record kept under two keys; bookkeeping",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#pier from the quay": {
-  "code": "9ad038b214674128",
-  "core": "00306a847e72d0bf",
-  "date": "2026-10-03",
-  "note": "0176 pier starts at the revetment",
+  "code": "06c53baea38c4902",
+  "core": "b216e4adde15680b",
+  "date": "2026-10-08",
+  "note": "quays x jetties: the pier starts at the revetment by design",
   "pages": {
    "0176-wharves-and-landings-piers-quays-and-stepped-landings-kashi-gangi.drawing.html": "676ecd28f9b1d116"
   },
   "research": "23c432ca564c8c24",
+  "rests": [
+   "0176-wharves-and-landings-piers-quays-and-stepped-landings-kashi-gangi.drawing.html:c6491b5671cda144"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#supply canal along the dry hem": {
-  "code": "f8c6189a7568e6c7",
-  "core": "00306a847e72d0bf",
-  "date": "2026-10-03",
-  "note": "{channels, dry_plots} lets a canal cross a dry plot; 0006 puts both edges of every plot 'upslope of the canal, behind a narrow bank' - plots abut the bank, not the channel; drop the permission",
+  "code": "866bba838743a855",
+  "core": "b216e4adde15680b",
+  "date": "2026-10-08",
+  "note": "channels x dry_plots lets a plot be \"crossed by the irrigation that serves it\", but 0006 says \"Both edges of a plot lie upslope of the canal, behind a narrow bank\"; plots meet the canal's bank and never overlap the canal",
   "pages": {
    "0006-dry-fields-and-their-crops-hatake.drawing.html": "9f1b7fafe06f01fe"
   },
   "research": "eae521ca5e2ccfdd",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:25a9d039c229ae5d",
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:794454f6ea76b0fc",
+   "0006-dry-fields-and-their-crops-hatake.drawing.html:abb8b4f0d05c6c11"
+  ],
   "verdict": "DRIFTED"
  },
+ "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#wall x moat overlap permitted (the moat lying against the rampart), which the \"through the rampart\" claim does not cover": {
+  "code": "b216e4adde15680b",
+  "core": "b216e4adde15680b",
+  "date": "2026-10-08",
+  "note": "wall x moat overlap permitted (the moat lying against the rampart), which the \"through the rampart\" claim does not cover",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#ward fence meets the wall": {
-  "code": "fe04ea36e00b3049",
-  "core": "00306a847e72d0bf",
-  "date": "2026-10-03",
-  "note": "0160 ends land on solid rampart",
+  "code": "a0f69924b116d033",
+  "core": "b216e4adde15680b",
+  "date": "2026-10-08",
+  "note": "wards x wall and wards x wall_towers: the fence ends land on solid rampart",
   "pages": {
    "0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html": "e242aadf4edb4965"
   },
   "research": "e5a2b084c87905c5",
+  "rests": [
+   "0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html:8ebc97c527ee4eac",
+   "0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html:acc680f54deffd47",
+   "0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html:d6fab51b8b7526aa"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#ways and water through the rampart": {
-  "code": "7401f6a70db42367",
-  "core": "00306a847e72d0bf",
-  "date": "2026-10-03",
-  "note": "gates and water gates per 0147/0179",
+  "code": "5401bb5c46385aa9",
+  "core": "b216e4adde15680b",
+  "date": "2026-10-08",
+  "note": "roads pass through the rampart at a gate, canals and rivers at a water gate",
   "pages": {
    "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html": "49298f0d00bbf69d",
    "0179-water-gates-and-sluices-shuimen.drawing.html": "19011b41723432c2"
   },
   "research": "288b07cf5a7de27e",
+  "rests": [
+   "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html:03ebb587680911de",
+   "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html:5066b991dad4631a",
+   "0179-water-gates-and-sluices-shuimen.drawing.html:088c44a5ca24eaf0",
+   "0179-water-gates-and-sluices-shuimen.drawing.html:27ed53483dc6cfc1",
+   "0179-water-gates-and-sluices-shuimen.drawing.html:bcba93d97070123b"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_PAIRS#way over water": {
@@ -33441,10 +33496,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::matrix_policy#geometry and bookkeeping": {
-  "code": "0a7a646e84f959a4",
-  "core": "75cd563099d3b15b",
-  "date": "2026-10-07",
-  "note": "looks up pairs in the policy tables; the physical rules are in the constants it reads",
+  "code": "f0ebba29b001ed83",
+  "core": "425df97d9a81bcd3",
+  "date": "2026-10-08",
+  "note": "a lookup and dispatch over the permission tables; the physical decisions sit in the tables",
   "pages": {},
   "research": "",
   "rests": [],
@@ -57161,14 +57216,6 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/structures/captions.py::CaptionProbesMixin._draw_caption_key#caption placement": {
-  "code": "1b1e571e95db77f9",
-  "core": "4e14b1da42e58071",
-  "date": "2026-10-03",
-  "note": "caption convention",
-  "research": "",
-  "verdict": "IN-STEP"
- },
  "l7r/diagram/settlement/structures/captions.py::CaptionProbesMixin._draw_field_name_label#caption placement": {
   "code": "263240ebc2955630",
   "core": "bee874aa8f7ee1ad",
@@ -57178,11 +57225,15 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/captions.py::CaptionProbesMixin._draw_placement#caption placement": {
-  "code": "df5c75355e3fb848",
-  "core": "46fe0283cd471f98",
-  "date": "2026-10-03",
-  "note": "caption convention",
+  "code": "1fcd0c62c006bd87",
+  "core": "e53185c439be09f1",
+  "date": "2026-10-08",
+  "note": "lettering style and a thin leader line are display only",
+  "pages": {},
   "research": "",
+  "rests": [
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:2fa2f3836fdedc1e"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/captions.py::CaptionProbesMixin._draw_queued_label#caption placement": {
@@ -57280,11 +57331,15 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/captions.py::CaptionProbesMixin.place_labels#caption placement": {
-  "code": "f409401c4ee69430",
-  "core": "dca5f91577818e54",
-  "date": "2026-10-03",
-  "note": "caption convention",
+  "code": "3b50e8d921f3101d",
+  "core": "968ed08af9b1e4fe",
+  "date": "2026-10-08",
+  "note": "captions are placed last, once the map is finished",
+  "pages": {},
   "research": "",
+  "rests": [
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:b450303bef4265a6"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/structures/captions.py::LABEL_GROUND_KEYS#caption placement": {
@@ -58084,13 +58139,19 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/structures/fixtures/board_seat.py::terminal_caption#board caption on a leader or in the key": {
-  "code": "25ae9a8d4a0b7636",
-  "core": "55b98699183f4999",
-  "date": "2026-10-03",
-  "note": "as claimed",
+ "l7r/diagram/settlement/structures/fixtures/board_seat.py::terminal_caption#board caption on a leader": {
+  "code": "ee049882c8011c57",
+  "core": "0d41a953cf2a5508",
+  "date": "2026-10-08",
+  "note": "0242 answers whether a caption may cross a way (\"A lane or a ditch may be crossed\"), and this code refuses any seat crossing a way; the claim should cite 0242 as a DEVIATION that the drawing page records, not CONVENTION",
+  "pages": {},
   "research": "",
-  "verdict": "IN-STEP"
+  "rests": [
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:2c608781acf39605",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:2fa2f3836fdedc1e",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:c7e607a17faa64df"
+  ],
+  "verdict": "MISLABELED"
  },
  "l7r/diagram/settlement/structures/fixtures/board_seat.py::under_placard#board off the title placard": {
   "code": "55ece5145447dba3",

@@ -433,7 +433,7 @@ def place(
     WHEN NO STANDARD SEAT IS FREE (features 286, 287): the fallback search (`_extended_cands`), then the leader rings past
     the reach out to the hug (`_leader_cands`). A seat covering only `soft` ink (a hand sheet's) is then taken at the
     least cost; a caption whose every seat overlaps goes down where it covers the least (0242), and one with no seat in the
-    frame at all takes the first seat beside it past the frame's edge. Never dropped, never in a key (0241), never past the hug
+    frame at all takes the first seat beside it moved inward until it fits (0241). Never dropped, never in a key (0241), never past the hug
     (`HUG_PX`).
 
     `strict=True` returns None instead of anything but a free seat (feature 287: the notice board's siter and the
@@ -451,7 +451,7 @@ def place(
         free space wins - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: the first seat covering nothing is taken
         never clipped - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a seat leaving the picture is never a candidate
         never left off - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: with no free seat, the seat covering the least - soft ink first, then whatever it covers
-        no key - research/questions/0241-the-map-sheet-its-title-legend-frame-and-margins.drawing.html: there is no key box; a caption with no seat in the frame takes the first seat beside it past the frame's edge
+        no key - research/questions/0241-the-map-sheet-its-title-legend-frame-and-margins.drawing.html: there is no key box; a caption with no seat in the frame takes the first seat beside it, moved inward until it fits
         the hug - CONVENTION: no seat past the hug from what it names
     """
     clear = CLEAR_EM * size
@@ -506,9 +506,11 @@ def place(
         # exception keeping feature 287's key for an all-hard seat ruled NOT LEGITIMATE - 0241: "There is no key box")
         cost, cand, block = nudge(best[0], best[2], best[3], subject, index, clear, own, text, frame, leader_index)
         return _placement(cand, block, cost, subject)
-    # ...AND WITH NO SEAT INSIDE THE FRAME AT ALL, the first seat beside it past the frame's edge: never left off (0242)
+    # ...AND WITH NO SEAT INSIDE THE FRAME AT ALL, the first seat beside it MOVED INWARD until it fits (0241's caption that would
+    # cross the frame, moved inward): never left off and never clipped (0242)
     assert outside is not None, "the standard offers a seat beside every subject"
-    return _placement(outside[0], outside[1], _score(outside[0], outside[1], subject, index, clear, own, text, leader_index)[0], subject)
+    cand, block = moved_inward(outside[0], outside[1], frame)
+    return _placement(cand, block, _score(cand, block, subject, index, clear, own, text, leader_index)[0], subject)
 
 
 NUDGE_REACH = NUDGE_PX * math.sqrt(2.0) + 1e-3
@@ -541,6 +543,24 @@ def _strict_seat(
         return None
     cost, cand, block = nudge(best[0], best[2], best[3], subject, index, clear, own, text, frame, leader_index)
     return _placement(cand, block, cost, subject) if cost == 0.0 else None
+
+
+def moved_inward(cand: _Cand, block: Poly, frame: tuple[float, float, float, float] | None) -> tuple[_Cand, Poly]:
+    """`cand` shifted by the least that brings `block` inside `frame` on each axis - centered on an axis the frame is narrower
+    than the block on.
+
+    Research: moved inward - research/questions/0241-the-map-sheet-its-title-legend-frame-and-margins.drawing.html: a caption that would cross the frame is moved inward"""
+    if frame is None:
+        return cand, block
+    bx0, by0, bx1, by1 = bbox(block)
+
+    def shift(lo: float, hi: float, f0: float, f1: float) -> float:
+        if hi - lo > f1 - f0:
+            return (f0 + f1) / 2.0 - (lo + hi) / 2.0
+        return max(f0 - lo, 0.0) - max(hi - f1, 0.0)
+
+    dx, dy = shift(bx0, bx1, frame[0], frame[2]), shift(by0, by1, frame[1], frame[3])
+    return replace(cand, center=(cand.center[0] + dx, cand.center[1] + dy)), [(x + dx, y + dy) for x, y in block]
 
 
 def _in_frame(block: Poly, frame: tuple[float, float, float, float] | None) -> bool:

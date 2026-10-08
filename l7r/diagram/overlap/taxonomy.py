@@ -653,6 +653,7 @@ _MATRIX_ALLOWED_KEYS: dict[frozenset[str], str] = {
 Research:
     pier from the quay - research/questions/0176-wharves-and-landings-piers-quays-and-stepped-landings-kashi-gangi.drawing.html: springs from the faced bank
     ways and water through the rampart - research/questions/0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html, research/questions/0179-water-gates-and-sluices-shuimen.drawing.html: at a gate or a water gate
+    moat against the rampart - UNRESEARCHED: wall x moat permitted, the moat lying against the rampart's foot
     castle towers on the rampart - research/questions/0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html: a corner tower stands on the works
     arch over its approach - research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html: spans the sando
     one object under two keys - NONE: a hall as religious and shrines, a gate tower twice
