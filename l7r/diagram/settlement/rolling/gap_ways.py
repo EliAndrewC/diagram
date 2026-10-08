@@ -493,7 +493,9 @@ def _way_for(
         picked: list[tuple[int, int]] = []
         # ...ITS FOOT GATHERED onto a junction or way's end standing within the knot reach and its margin (`gathered_foot`,
         # `KNOT_MARGIN`), each of the joins (`lays`) of every exit tried so first; a foot left where it was traced beside a
-        # junction only where no exit gives a gathered or knot-free join. NEVER SLID CLEAR: a foot moved along the tree to just
+        # junction only where no exit gives a gathered or knot-free join - for the settle to gather (`knots.settle_knots`). KEPT
+        # (feature 328 wave 54, measured): with no knotted fallback three of Sawada's households lost their own way to the
+        # neighbor's-yard reach, which draws no walk; the settle gathers most such feet. NEVER SLID CLEAR: a foot moved along the tree to just
         # past the reach is the knot drawn, not gathered (feature 328 wave 4, glyph-check round 2 of Inashiro: lane 13's foot
         # slid 16.7 ft along lane 11 to 25.18 ft from its end, a walker turning 51, 91, 92 and 72 degrees within 45 ft)
         junctions = junction_points(s._access.segs)
