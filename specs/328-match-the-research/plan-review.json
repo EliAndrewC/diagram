@@ -1,45 +1,52 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "020a30e3505c39141df61e42e1ad187beafde6d1feeeff616bf873c5095cda32",
+ "plan_sha256": "5a1e54fa62cc7f26ac1e75b253c9cbf4a99aca08211ee4025c7c51ae994e72a4",
  "reviewed": "2026-10-08",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W36-scope",
-   "summary": "wave 36 = wave 35's two found UNCLAIMED rows, tiered E0 by a fresh reader (T97a); claims only, no executed code",
+   "id": "W37-scope",
+   "summary": "Wave 37 takes rows 436 and 473, the next open in-scope E2 rows in ranking order",
    "class": "within",
-   "why": "FR-003/FR-006: the next contiguous rows, easiest tier first; both cited drawing pages (0123, 0090, 0092) last changed in content before this audit (0123 by 303/292, 0090 by 319 H13 on 2026-10-05; 329 only renamed them) and say the default-south gate and the two courts with a gate between them"
+   "why": "FR-006 contiguous run; the open in-scope E2 rows after wave 36 are 436, 461 (held), 473, then 474 onward"
   },
   {
-   "id": "W36-repoint",
-   "summary": "the sheet-conventions south-gate claim re-pointed from 0093/0091 to 0123 drawing, and the same claim added under Walls and gates",
-   "class": "within",
-   "why": "FR-004: an E0 fix corrects the claim (its citation), not the research; the old citations did not say south"
-  },
-  {
-   "id": "W36-followup",
-   "summary": "the 0123/0093 disagreement on a jin'ya's gate direction noted in claims-followup.md, not edited here",
-   "class": "within",
-   "why": "a record edit outside the wave's rows, logged in the feature's standing follow-up list as earlier waves did; no row is dropped by it"
-  },
-  {
-   "id": "W36-occasions",
-   "summary": "no review occasions",
-   "class": "within",
-   "why": "no map, glyph or sheet changes (feature 294 occasions)"
-  },
-  {
-   "id": "W36-cond6",
-   "summary": "condition (6) at 0e87667c8: (1) held but for the backup push, withheld pending the GM's call on the 329 merge commit; (2)-(5) held",
+   "id": "W37-held",
+   "summary": "Rows 434 and 461 (the shrine cap) held for the GM",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "same narrowing ruled LEGITIMATE at amendment 34; measured: origin backup/digram-backlog is 51da9771f, an ancestor of 0e87667c8 48 commits behind, so the push is indeed withheld, and the GM's request defers questions to the end rather than blocking work"
+   "why": "the GM's goal amendment defers questions to the feature's end; 461 was ruled LEGITIMATE to leave open on 2026-10-07 and 434 is its pair; the run continues past them"
   },
   {
-   "id": "W36-verify",
-   "summary": "impl-drift on the touched claims and the gate",
+   "id": "W37-436",
+   "summary": "The Scale paragraph's salt-ward marker clause and the true-size list's mention removed; Hayakawa's notes line brought to its sheet",
    "class": "within",
-   "why": "FR-005"
+   "why": "the clause sized a glyph no sheet draws since 2026-09-28; the doc now matches the implementation and 0240's no-wards rule (FR-004)"
+  },
+  {
+   "id": "W37-473",
+   "summary": "Only a fold at a joint becomes a T; a Z across a joint is pulled straight like any jog; the joint moved back a vertex where the pull cannot clear it",
+   "class": "within",
+   "why": "0081's drawing page: a fold becomes a T and a jog across the meeting point is pulled straight; the moved-back fallback is feature 308's mend kept for the case the research's own method cannot carry, serving the GM's 2026-09-26 walk rule"
+  },
+  {
+   "id": "W37-occasions",
+   "summary": "No review occasions: no pool map changes",
+   "class": "within",
+   "why": "feature 294 occasions are opened by a changed map; the five hamlets regenerate unchanged"
+  },
+  {
+   "id": "W37-cond6",
+   "summary": "Condition (6) on unpushed waves 9-36: (1) held but for the backup push pending the GM's call on the 329 merge commit; (2)-(5) held at 49824361c; wave 37's pair opens there",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "the same narrowing ruled LEGITIMATE at amendments 34 and 35; 49824361c is wave 36's close in the log"
+  },
+  {
+   "id": "W37-verify",
+   "summary": "impl-drift on the touched claims, the gate, wave 37's own bookend pair",
+   "class": "within",
+   "why": "FR-005 and constitution VI as written"
   }
  ],
  "verdict": "CLEAR"

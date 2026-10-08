@@ -1809,37 +1809,42 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Scale#buildings at true size": {
-  "code": "44f48ee6a53a4d9c",
-  "core": "343b13f146a4e39d",
+  "code": "b8d7bbe10e583173",
+  "core": "b012d136f8c458d1",
   "date": "2026-10-08",
-  "note": "the GM's ruling, named",
+  "note": "the claim names the GM's ruling of 2026-07-21; 0116 is not in the bundle and this verdict does not rest on it",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Scale#caption placement": {
-  "code": "d2809d20430beadf",
-  "core": "343b13f146a4e39d",
+  "code": "a61b1ec50adf76c4",
+  "core": "b012d136f8c458d1",
   "date": "2026-10-08",
-  "note": "captions declared, placed by the one placer",
+  "note": "captions are declared and placed last by one placer: inside what they name, else at the ranked places beside it, turned with it, a leader only past the allowed gap",
   "pages": {
    "0242-labels-on-maps-cartographic-label-placement.drawing.html": "fa1bb4a252673d47"
   },
   "research": "0a880fd17413bbf6",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:08c0bd1f9acf9800",
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html:27a75683e4a17f7e",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:2a0f6f2ce376476e",
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html:b450303bef4265a6"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:2fa2f3836fdedc1e",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:49f52467f1959b2a",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:5fdeb07b90c0385f",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:6b739c24a9da86ad",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:b450303bef4265a6",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:bde210da1f30868f",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:c1c19453413e41cd"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Scale#main gate passage width": {
-  "code": "ed196a77539f06be",
-  "core": "343b13f146a4e39d",
+  "code": "8690e2d193b758a6",
+  "core": "b012d136f8c458d1",
   "date": "2026-10-08",
-  "note": "yakuimon ~6-9 ft, nagaya-mon two ken ~12 ft",
+  "note": "the page measures the yakuimon \"across their frontage\" (1.8-2.6 m), which is the structure's width, not the passage; the claim gives that frontage as the passage, the same mix-up this section warns about. Only the nagaya-mon's 12 ft is an opening (\"opens in its central two ken\"). The claim should say the yakuimon passage is narrower than its ~6-8.5 ft frontage",
   "pages": {
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html": "976d82c32111af9d"
   },
@@ -1849,80 +1854,77 @@
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:65f0493063abc217",
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:6ef47a197b18e3dd"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  "docs/buildings.md::Scale#plan scale": {
-  "code": "c054bda778a65ae8",
-  "core": "343b13f146a4e39d",
+  "code": "ceb09a345b1f3a0e",
+  "core": "b012d136f8c458d1",
   "date": "2026-10-08",
-  "note": "3 px = 1 ft, set between Joge and Takayama",
+  "note": "3 px = 1 ft, chosen so the drawn compounds fall between Joge and Takayama",
   "pages": {
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "8d81fb67fc6be64e"
   },
   "research": "b9f86fd8593ec1ea",
   "rests": [
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:4afbca9685190246",
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:c1eb54b975cd5790",
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:c3ce58964db48140",
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:fe00696b6b046c03"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Scale#residence wing length": {
-  "code": "0f2004f396a32945",
-  "core": "343b13f146a4e39d",
+  "code": "92733b1dbe251659",
+  "core": "b012d136f8c458d1",
   "date": "2026-10-08",
-  "note": "180-200 ft wings knowingly depart from the ~67-tsubo house the record gives; a GUESS is for silence, so label it DEVIATION recorded on a drawing page, or redraw. The 49-tsubo Yokota figure is in 0116, not 0118",
+  "note": "this question claim keeps 180-200 ft wings the page contradicts (67 tsubo for a 500-1,000 koku house; 1,200-1,800 sq ft guessed for 100-300 koku). It should be a DEVIATION recorded on a drawing page, or a GUESS. Also, the section's 49-tsubo Yokota house for a 150-koku magistrate is not on this page",
   "pages": {
    "0118-samurai-house-lots-and-houses-by-rank-bukeyashiki.html": "3e4449f4b18d8a72"
   },
   "research": "290c8108e3cfeac0",
   "rests": [
-   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html:22c18195b72a21a8",
    "0118-samurai-house-lots-and-houses-by-rank-bukeyashiki.html:7a5358483b31834d",
-   "0118-samurai-house-lots-and-houses-by-rank-bukeyashiki.html:b4f7e08b118404c0"
+   "0118-samurai-house-lots-and-houses-by-rank-bukeyashiki.html:a0744a8d4e6197ff",
+   "0118-samurai-house-lots-and-houses-by-rank-bukeyashiki.html:b4f7e08b118404c0",
+   "0118-samurai-house-lots-and-houses-by-rank-bukeyashiki.html:b54c1dffd6ca961a"
   ],
   "verdict": "MISLABELED"
  },
- "docs/buildings.md::Scale#salt-ward marker r2.5 (~1.7 ft) for a morijio heap ~0.3-0.7 ft": {
-  "code": "343b13f146a4e39d",
-  "core": "343b13f146a4e39d",
-  "date": "2026-10-08",
-  "note": "salt-ward marker r2.5 (~1.7 ft) for a morijio heap ~0.3-0.7 ft",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  "docs/buildings.md::Scale#scale bar": {
-  "code": "3a517e62ec2e95c9",
-  "core": "343b13f146a4e39d",
+  "code": "3ff07f1b36207603",
+  "core": "b012d136f8c458d1",
   "date": "2026-10-08",
-  "note": "only how the scale is shown",
+  "note": "how the scale is shown",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Scale#true size for every footprint": {
-  "code": "eb145deded442de0",
-  "core": "343b13f146a4e39d",
+  "code": "450f21430898a8e4",
+  "core": "b012d136f8c458d1",
   "date": "2026-10-08",
-  "note": "a rule about drawn size, not about the place",
+  "note": "how footprints are drawn, with stroke floors and markers as the only exceptions",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Scale#well location marker": {
-  "code": "5cc460d4a1509295",
-  "core": "343b13f146a4e39d",
+  "code": "1e08c502b1a82292",
+  "core": "b012d136f8c458d1",
   "date": "2026-10-08",
-  "note": "marker larger than life for a ~4 ft curb",
+  "note": "the page puts the curb the marker stands for at \"About 4 ft square\", fitted around a ~3 ft shaft; the claim's \"~3-4 ft curb\" takes in the shaft's size. It should say ~4 ft",
   "pages": {
    "0196-communal-wells-ido.drawing.html": "85fc1e4c2a7f3a2a"
   },
   "research": "47e13325a5aa6f26",
   "rests": [
    "0196-communal-wells-ido.drawing.html:157e7add410a9655",
+   "0196-communal-wells-ido.drawing.html:6ae8258e9425fcd7",
    "0196-communal-wells-ido.drawing.html:ff48898c682cc774"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  "docs/buildings.md::Sheet conventions#main gate on the south wall": {
   "code": "c0efd7a2fec074c6",
@@ -17778,58 +17780,62 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/joints.py::_one_joint#a fold or Z at a joint becomes a T": {
-  "code": "3df8ef0462e1b4eb",
-  "core": "932cf4864139ea09",
+ "l7r/diagram/hamletgen/ways/joints.py::_one_joint#a fold at a joint becomes a T": {
+  "code": "c74e5a8d675a83cd",
+  "core": "0727e1d86fd39426",
   "date": "2026-10-08",
-  "note": "the fold (turn of 140 degrees or more, `_HAIRPIN_DEG`) to a T matches the page, but the code also turns a Z across a joint (`_bends_badly(old)` with both legs clean) into a T, where the page says \"a jog across the meeting point is pulled straight like any other\" and a zigzag is \"pulled straight\"; either straighten the Z or have the drawing page record Z-to-T",
+  "note": "a turn of 140 degrees or more at the joint becomes a T; a Z across it is pulled straight",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },
   "research": "ebd72aaa6a0eb9af",
   "rests": [
    "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
-   "0081-village-lanes.drawing.html:3b9a5312c92335d3",
-   "0081-village-lanes.drawing.html:65ad16eace199d92",
-   "0081-village-lanes.drawing.html:d30e15716180fbf5"
+   "0081-village-lanes.drawing.html:3b9a5312c92335d3"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/joints.py::_one_joint#a jog across a joint pulled straight": {
-  "code": "3c4d3c0cc791d5ec",
-  "core": "932cf4864139ea09",
+  "code": "5f0a120d758f1989",
+  "core": "0727e1d86fd39426",
   "date": "2026-10-08",
-  "note": "string-pulled, a vertex within `_JOG_FT`=6 ft of the chord dropped, as the page sets",
+  "note": "a vertex within _JOG_FT=6 of the chord is dropped",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },
   "research": "ebd72aaa6a0eb9af",
   "rests": [
    "0081-village-lanes.drawing.html:18dffe2b3b52b18c",
-   "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
-   "0081-village-lanes.drawing.html:65ad16eace199d92",
-   "0081-village-lanes.drawing.html:be608a70af4cfcc5"
+   "0081-village-lanes.drawing.html:3b230d13e2fc6d0b"
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/joints.py::_one_joint#the shorter link the T's stem": {
-  "code": "c7abb66f167f2d71",
-  "core": "932cf4864139ea09",
+ "l7r/diagram/hamletgen/ways/joints.py::_one_joint#how close a pulled lane may come to a building: gap = max(_TOUCH_GAP=4 ft, half the lane width + 2 ft)": {
+  "code": "0727e1d86fd39426",
+  "core": "0727e1d86fd39426",
   "date": "2026-10-08",
-  "note": "the page draws a T without naming its stem and calls its lane-geometry limits drawing conventions; the sort puts the shortest final link first",
+  "note": "how close a pulled lane may come to a building: gap = max(_TOUCH_GAP=4 ft, half the lane width + 2 ft)",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "l7r/diagram/hamletgen/ways/joints.py::_one_joint#the shorter link the T's stem": {
+  "code": "f169b9cb0eaeb561",
+  "core": "0727e1d86fd39426",
+  "date": "2026-10-08",
+  "note": "choosing which lane bends to meet the other is a placement rule, not a matter of how something is shown. It should cite 0081 (a worn path takes the shortest way) or say GUESS",
   "pages": {},
   "research": "",
   "rests": [
    "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
-   "0081-village-lanes.drawing.html:65ad16eace199d92"
+   "0081-village-lanes.drawing.html:be608a70af4cfcc5"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "MISLABELED"
  },
  "l7r/diagram/hamletgen/ways/joints.py::_one_joint#ways of two kinds stay two": {
-  "code": "e5cfe6205ce654a4",
-  "core": "932cf4864139ea09",
+  "code": "e92f653c05d18e58",
+  "core": "0727e1d86fd39426",
   "date": "2026-10-08",
-  "note": "pulled like any jog, then split so each record keeps its rank's width",
+  "note": "pulled like any jog, then split back into two records, each keeping its own width",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },

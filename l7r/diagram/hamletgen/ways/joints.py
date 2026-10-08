@@ -20,8 +20,9 @@ to keep walking."*
   ends at the vertex before it, or where the leg before first reaches the way the hook was bending back onto.
 
 It runs after the web's sweeps, and once more after `settle_the_web` (feature 308): the settle squares a crossing after
-the first run and can lay a Z across a joint, which the second mends - a Z becomes a T like a fold, or, where no T fits,
-the joint moves back one vertex (`_joint_moved_back`). No rewrite may break what the passes before it settled: a rewrite is kept only when every other lane end that touched the old line still touches the new one,
+the first run and can lay a Z across a joint, which the second mends - a Z is pulled straight like any jog (0081; feature
+328 - it was made a T), and where the pull cannot clear it the joint moves back one vertex (`_joint_moved_back`); only a
+fold becomes a T. No rewrite may break what the passes before it settled: a rewrite is kept only when every other lane end that touched the old line still touches the new one,
 and every farmhouse a way served still has one within `_SERVE_FT` (`keeps_the_web`) - and `commit_lane` still
 refuses anything that splits the web.
 
@@ -330,9 +331,11 @@ def _one_joint(s: Settlement, lanes: list[dict[str, Any]], houses: Sequence[Pt],
             # records, each keeping its own rank's width
             if _split_committed(s, lanes, (i, ei, j, ej), new, x[-1], hard, walls, water):
                 return True
-            continue
-        if commit_lane(lanes, i, _rounded(new), hard, walls, water, s.reink_lane, admits_lane(s)):
+        elif commit_lane(lanes, i, _rounded(new), hard, walls, water, s.reink_lane, admits_lane(s)):
             commit_lane(lanes, j, [], hard, walls, water, s.reink_lane)
+            return True
+        # the pull refused (the split or the commit): a Z is still mended by moving its joint back
+        if z and _joint_moved_back(s, lanes, (i, ei, j, ej), x, y, houses, hard, walls, water):
             return True
     return False
 

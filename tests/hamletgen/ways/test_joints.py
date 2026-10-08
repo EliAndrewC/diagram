@@ -287,6 +287,23 @@ def test_a_z_across_a_joint_is_pulled_straight_and_moved_back_only_where_the_pul
     assert moved == [(0, -1, 1, 0)], "the pull cleared nothing: the joint moved back"
 
 
+def test_a_z_whose_pull_is_refused_at_the_commit_or_the_split_is_still_moved_back(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Amendment 36 round 1: the move-back follows every refusal of the pull, not only its precondition - the merged commit
+    refused, and (for ways of two kinds) the split refused."""
+    from l7r.diagram.hamletgen.ways import joints as J
+
+    monkeypatch.setattr(J, "_bends_badly", lambda pts: len(pts) > 3)
+    moved: list[tuple[int, int, int, int]] = []
+    monkeypatch.setattr(J, "_joint_moved_back", lambda s_, lanes, joint, *a: moved.append(joint) or True)
+    monkeypatch.setattr(J, "commit_lane", lambda *a, **k: False)
+    s = _webbed([{"pts": [[0.0, 0.0], [100.0, 0.0], [104.0, 10.0]], "w": 3}, {"pts": [[104.0, 10.0], [200.0, 0.0], [300.0, 0.0]], "w": 3}])
+    assert J._one_joint(s, s.M["lanes"], [], [], [], []) and moved == [(0, -1, 1, 0)], "the commit refused"  # type: ignore[arg-type]
+    moved.clear()
+    monkeypatch.setattr(J, "_split_committed", lambda *a: False)
+    s = _webbed([{"pts": [[0.0, 0.0], [100.0, 0.0], [104.0, 10.0]], "w": 5}, {"pts": [[104.0, 10.0], [200.0, 0.0], [300.0, 0.0]], "w": 3}])
+    assert J._one_joint(s, s.M["lanes"], [], [], [], []) and moved == [(0, -1, 1, 0)], "the split refused"  # type: ignore[arg-type]
+
+
 def test_two_lanes_meeting_end_to_end_are_never_pulled_into_a_kink(monkeypatch: pytest.MonkeyPatch) -> None:
     """Feature 317 (seed 47 at 20 households): a corridor hung from another's start at a door, the pair met end to end; pulled
     taut as one round the map's walls, the run lost the vertex of its bend and kinked at the next - a tree lane no settle may
