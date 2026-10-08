@@ -59,7 +59,9 @@ class WellsMixin:
         the head's size to keep it off a hitching rail or a neighboring yard's troughs
         (wellhead_quad / wells_troughs_rails_clear_of_each_other).
 
-        Research: wellhead marker larger than life - research/questions/0196-communal-wells-ido.drawing.html: a 12.376 ft half-size roof, 11.9 x bscale on the legacy tiers
+        Research:
+            wellhead marker larger than life - research/questions/0196-communal-wells-ido.drawing.html: the curb `well()` draws at a 9.36 ft radius, about 19 ft across, is the page's marker
+            the roof square round the curb - UNRESEARCHED: 12.376 ft half-size (24.75 ft across), 11.9 x bscale on the legacy tiers; the page (0196 drawing) gives no roof size
         """
         return self.px(12.376) if self._toscale() else 11.9 * self.bscale
 

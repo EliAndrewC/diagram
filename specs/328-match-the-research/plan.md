@@ -296,6 +296,15 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
   backup pushed, its own pair band 1 confirmed); wave 22's own pair opens at 3c997ab6b.
 - **Verification**: `impl-drift` on the touched claims, the glyph check, the gate, wave 22's own bookend pair.
 
+## Wave 23 (amendment 22, 2026-10-08)
+
+- **Scope**: wave 22's seven found rows, all E0 by a fresh reader (T71a), written as claims (`tasks.md` Phase 24); no
+  executed code changes. The well row is withdrawn as a drift (the curb is the page's 19 ft).
+- **Occasions**: none.
+- **On the unpushed waves 9-22** under condition (6): (1)-(5) held at wave 22's close (049e951d4, its backup pushed, its own
+  pair band 1 confirmed with a control); wave 23's own pair opens at 049e951d4.
+- **Verification**: `impl-drift` on the touched claims, the gate, wave 23's own bookend pair.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Each later wave that changes engine behavior takes

@@ -13,6 +13,7 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 - (wave 5, landed and reviewed) placement-changed village lane on kashikawa - wave 5: 0033's row street runs on off the map as the road into it at both ends, where
   the web cut it back to its last joint (`trim_streets`); Kashikawa's and Mizuguchi's far ends now run off the sheet as a
   second way out (every way is inked `village lane`).
+- none (wave 23): claims only, no executed code changed
 - placement-changed: farm holding on kashikawa - wave 22: the far-row holding three LOTS deep (0033 drawing: three times the frame's
   width), not three frame depths; Kashikawa's holdings run deeper (47 dry plots to 67), its houses unmoved.
 - none (wave 21): two claims written - no code a map executes changed.
@@ -930,3 +931,22 @@ before the persimmon is seated - and is E3 by FR-003. Wave 22 takes row 429; the
 - [x] T70 the claims re-checked by `impl-drift`, the occasion's review (glyph-check on Kashikawa's farm holding), and the close: wave 22's own bookend pair, `make done` green, the wave column (FR-005, FR-006)
       research: rendering
       verify: DONE. impl-drift IN-STEP on the row; amendment 21 FAITHFUL; glyph-check farm holding PASS twice (F1 width fixed and measured); 0033's acreage and ten modals brought to the page (record checks answered); make done green; wave 22's own pair band 1, noise on nucleated rolls (perf-audit consistent, control recorded); the wave column
+
+## Phase 24 - wave 23 (amendment 22): wave 22's found rows, claimed
+
+Wave 22's seven found rows tiered E0 by a fresh reader (T71a, `audit/t71a-out.jsonl`); two pairs are duplicates. The well row is
+withdrawn as a drift: 0196's "about 19 ft across" is the curb `well()` draws at a 9.36 ft radius; the 24.75 ft is the roof square,
+which the page does not size. The street-facing claim stays E3 as tiered.
+
+  - `l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#farms to a street` - the 0033 rule claimed; the line's share and slack UNRESEARCHED
+  - `l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#farms one frame apart, never more than 240 ft` (and its duplicate, row spacing)
+  - `l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#the next street past the last one's holdings` (and its duplicate)
+  - `l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#holding set behind its frame` - UNRESEARCHED
+  - `l7r/diagram/settlement/shrines_wells/wells.py::WellsMixin._well_vr#wellhead marker larger than life` - the curb the page's; the roof UNRESEARCHED
+
+- [x] T71a wave 22's found rows tiered by the work they take, by a fresh reader (FR-002, FR-003, SC-003)
+      research: rendering
+- [ ] T71 the claims written in `seat_rows` and `_well_vr` (FR-003 E0, FR-004)
+      research: rendering
+- [ ] T72 the claims re-checked by `impl-drift`; the close: wave 23's own bookend pair, `make done` green, the wave column (FR-005, FR-006)
+      research: rendering

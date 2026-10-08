@@ -789,7 +789,7 @@
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#distance between parallel streets frame depth plus holding d",
   "verdict": "UNCLAIMED",
   "tier": "E0",
-  "fix": "distance between parallel streets: frame depth plus holding depth plus gap (row_offsets with hold_depth + gap)",
+  "fix": "none beyond the duplicate's: the one next-street claim written for the 'frame's depth along the line's normal' row covers this decision",
   "files": [
    ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py"
   ],
@@ -797,6 +797,8 @@
   "flag": "",
   "found": "wave 22 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
+  "e0_basis": "same decision as the other parallel-streets row: rows.py:561 row_offsets(depth_n, ..., hold_depth + gap); 0033 drawing page's parallel-streets block",
+  "moved": "T71a (fresh reader): same decision as the other parallel-streets row: rows.py:561 row_offsets(depth_n, ..., hold_depth + gap); 0033 drawing page's parallel-streets block - duplicate of .claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#distance between parallel streets the frame's depth along th",
   "wave": "",
   "scope": "kept"
  },
@@ -804,7 +806,7 @@
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#distance between parallel streets the frame's depth along th",
   "verdict": "UNCLAIMED",
   "tier": "E0",
-  "fix": "distance between parallel streets: the frame's depth along the line's normal plus hold_depth plus gap (row_offsets(..., hold_depth + gap))",
+  "fix": "add to seat_rows' Research block: next street beside its row - research/questions/0033-row-villages-resson.drawing.html: further streets parallel to the first, each past the last street's far row, its holdings and a lane's room (`row_offsets(depth_n, ..., hold_depth + gap)`, the frame's depth taken along the line's normal); the gap half the 6 ft street plus half the 24 ft FIELD_KEEP_FT (15 ft) - map drawing convention, the two conventions that page states",
   "files": [
    ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py"
   ],
@@ -812,6 +814,8 @@
   "flag": "",
   "found": "wave 22 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
+  "e0_basis": "rows.py:560-562 sets the streets out by row_offsets (rows.py:214-224: per = 2 x depth + 2 x gap + keep + holding) with the frame depth along the normal; 0033 drawing page says further streets run parallel to the first, never a second line behind, and gives the 6 ft street and 24 ft keep as conventions; row_offsets' own claim (rows.py:219) already cites it, seat_rows' block does not",
+  "moved": "T71a (fresh reader): rows.py:560-562 sets the streets out by row_offsets (rows.py:214-224: per = 2 x depth + 2 x gap + keep + holding) with the frame depth along the normal; 0033 drawing page says further streets run parallel to the first, never a second line behind, and gives the 6 ft street and 24 ft keep as conventio",
   "wave": "",
   "scope": "kept"
  },
@@ -819,7 +823,7 @@
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#farms one frame apart along the street, never more than rowf",
   "verdict": "UNCLAIMED",
   "tier": "E0",
-  "fix": "farms one frame apart along the street, never more than ROW_FRONTAGE_MAX_FT (240 ft) (lot = min(fw, s.px(ROW_FRONTAGE_MAX_FT)); the drawing page backs this at \u00a756)",
+  "fix": "add to seat_rows' Research block: row step - research/questions/0033-row-villages-resson.drawing.html: farms one frame apart, lot against lot, never more than ROW_FRONTAGE_MAX_FT (240 ft) (`lot = min(fw, s.px(ROW_FRONTAGE_MAX_FT))`)",
   "files": [
    ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py"
   ],
@@ -827,6 +831,25 @@
   "flag": "",
   "found": "wave 22 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
+  "e0_basis": "rows.py:538 steps the row at min(frame width, 240 ft); 0033 drawing page (block 'The farms stand one farmstead frame apart, lot against lot, and never more than 240 ft apart') states exactly this, and ROW_FRONTAGE_MAX_FT's own docstring (rows.py:45-53) cites it, but seat_rows' Research block (rows.py:515-524) has no claim for the step",
+  "moved": "T71a (fresh reader): rows.py:538 steps the row at min(frame width, 240 ft); 0033 drawing page (block 'The farms stand one farmstead frame apart, lot against lot, and never more than 240 ft apart') states exactly this, and ROW_FRONTAGE_MAX_FT's own docstring (rows.py:45-53) cites it, but seat_rows' Research block (rows.p",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#farms to a street",
+  "verdict": "NEEDS-RESEARCH",
+  "tier": "E0",
+  "fix": "replace the claim at rows.py:519 with: farms to a street - research/questions/0033-row-villages-resson.drawing.html: half the households to a line where the farms stand on both sides, further streets set out parallel; the first line per_line + 1 lots long and lengthened 2 lots more, one at each end (`best_row_line(..., per_line * lot + lot, ..., 2 * lot, ...)`) - UNRESEARCHED: searched 0033 and its drawing page, which say only that how many farms a street holds depends on the length of ground it has",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 22 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E4",
+  "e0_basis": "rows.py:535 ceil(want/2) per line on both sides, rows.py:557 length per_line*lot + lot with slack 2*lot, street_line (rows.py:104-146) adds the slack across both ends; the 0033 drawing page backs both sides and parallel streets but is silent on the slack ('How many farms a street holds before the next is laid depends on the length of ground it has'), so the code stands and only the slack's label i",
+  "moved": "T71a (fresh reader): rows.py:535 ceil(want/2) per line on both sides, rows.py:557 length per_line*lot + lot with slack 2*lot, street_line (rows.py:104-146) adds the slack across both ends; the 0033 drawing page backs both sides and parallel streets but is silent on the slack ('How many farms a street holds before the ne",
   "wave": "",
   "scope": "kept"
  },
@@ -848,7 +871,7 @@
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#holding set gap2 about 75 ft behind its farm's frame",
   "verdict": "UNCLAIMED",
   "tier": "E0",
-  "fix": "holding set gap/2 (about 7.5 ft) behind its farm's frame",
+  "fix": "add to seat_rows' Research block: far-row holding behind its farm - research/questions/0033-row-villages-resson.drawing.html: the far row's holding drawn behind each farm, away from the street; set gap/2 (7.5 ft) back from the frame - UNRESEARCHED: no cited page measures the margin between a farm's frame and its holding",
   "files": [
    ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py"
   ],
@@ -856,6 +879,8 @@
   "flag": "",
   "found": "wave 22 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
+  "e0_basis": "rows.py:603 centers the holding at depth/2 + gap/2 + hold_depth/2 along the normal; gap = STREET_HALF_FT 3 + FIELD_KEEP_FT 24 / 2 = 15 ft (rows.py:536, 32, 39), so gap/2 = 7.5 ft; 0033 drawing page says the far row 'has its holding drawn behind each farm' but gives no margin, so only the claim with the margin labeled UNRESEARCHED is owed",
+  "moved": "T71a (fresh reader): rows.py:603 centers the holding at depth/2 + gap/2 + hold_depth/2 along the normal; gap = STREET_HALF_FT 3 + FIELD_KEEP_FT 24 / 2 = 15 ft (rows.py:536, 32, 39), so gap/2 = 7.5 ft; 0033 drawing page says the far row 'has its holding drawn behind each farm' but gives no margin, so only the claim with ",
   "wave": "",
   "scope": "kept"
  },
@@ -863,7 +888,7 @@
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#row spacing one frame per farm, capped at rowfrontagemaxft 2",
   "verdict": "UNCLAIMED",
   "tier": "E0",
-  "fix": "row spacing: one frame per farm, capped at ROW_FRONTAGE_MAX_FT (240 ft) (backed by 0033 drawing \u00a756, but no claim of this unit names it)",
+  "fix": "none beyond the duplicate's: the one row-step claim written for the 'farms one frame apart' row covers this decision",
   "files": [
    ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py"
   ],
@@ -871,6 +896,8 @@
   "flag": "",
   "found": "wave 22 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
+  "e0_basis": "same decision as the 'farms one frame apart' row: rows.py:538 lot = min(fw, s.px(ROW_FRONTAGE_MAX_FT)); backed by the 0033 drawing page's 240 ft block",
+  "moved": "T71a (fresh reader): same decision as the 'farms one frame apart' row: rows.py:538 lot = min(fw, s.px(ROW_FRONTAGE_MAX_FT)); backed by the 0033 drawing page's 240 ft block - duplicate of .claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#farms one frame apart along the street, never more than rowf",
   "wave": "",
   "scope": "kept"
  },
@@ -3178,6 +3205,24 @@
   "tier_as_ranked": "E0",
   "wave": "4 (the slide removed: it drew the knot)",
   "scope": "deferred"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/settlement/shrines_wells/wells.py::WellsMixin._well_vr#wellhead marker larger than life",
+  "verdict": "DRIFTED",
+  "tier": "E0",
+  "fix": "replace the claim at wells.py:62 with: wellhead marker larger than life - research/questions/0196-communal-wells-ido.drawing.html: the marker drawn larger than life round a curb of 9.36 ft radius, about 19 ft across; the roof square round it 12.376 ft half-size (about 24.75 ft across) on a to-scale tier, 11.9 x bscale on the legacy tiers - UNRESEARCHED: the page gives no roof size",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/settlement/shrines_wells/wells.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 22 re-check (tier provisional, by verdict)",
+  "note": "modal-depiction (well, round 2) measured the drawn ring at about 19 ft inside the 24.75 ft square: the 24.75 ft may be the roof square round a 19 ft curb, not the marker - the tiering reader confirms or withdraws",
+  "tier_as_ranked": "E2",
+  "e0_basis": "0196 drawing page ('A well is drawn as a marker larger than life. At one foot per pixel its curb is drawn at a radius of 9.36 ft, about 19 ft across') sizes the CURB, and wells.py:89 draws the curb at px(9.36) - the code matches; _well_vr (wells.py:54-64) is the roof square's half-size, which the page never sizes, so the claim citing the page for 12.376 ft is mislabeled, not drifted - withdraw DRI",
+  "moved": "T71a (fresh reader): 0196 drawing page ('A well is drawn as a marker larger than life. At one foot per pixel its curb is drawn at a radius of 9.36 ft, about 19 ft across') sizes the CURB, and wells.py:89 draws the curb at px(9.36) - the code matches; _well_vr (wells.py:54-64) is the roof square's half-size, which the pa",
+  "wave": "",
+  "scope": "kept"
  },
  {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/shrines_wells/woods.py::TreeStandsMixin._draw_stand#fringe crowns drawn outside the stand's outline (_stand_fringe, outliers)",
@@ -8486,22 +8531,6 @@
   "scope": "deferred"
  },
  {
-  "key": ".claude/skills/diagram/l7r/diagram/settlement/shrines_wells/wells.py::WellsMixin._well_vr#wellhead marker larger than life",
-  "verdict": "DRIFTED",
-  "tier": "E2",
-  "fix": "the drawing page gives the marker as about 19 ft across; the code draws a 12.376 ft half-size roof, 24.75 ft across, on a to-scale tier [0196 drawing]",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/settlement/shrines_wells/wells.py"
-  ],
-  "after": [],
-  "flag": "",
-  "found": "wave 22 re-check (tier provisional, by verdict)",
-  "note": "modal-depiction (well, round 2) measured the drawn ring at about 19 ft inside the 24.75 ft square: the 24.75 ft may be the roof square round a 19 ft curb, not the marker - the tiering reader confirms or withdraws",
-  "tier_as_ranked": "E2",
-  "wave": "",
-  "scope": "kept"
- },
- {
   "key": ".claude/skills/diagram/l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_anchor#reach in feet",
   "verdict": "DRIFTED",
   "tier": "E2",
@@ -12551,21 +12580,6 @@
   "tier_as_ranked": "E4",
   "verdict": "NEEDS-RESEARCH",
   "wave": "18",
-  "scope": "kept"
- },
- {
-  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#farms to a street",
-  "verdict": "NEEDS-RESEARCH",
-  "tier": "E4",
-  "fix": "the page records parallel further streets but says nothing of half the households to a line or of a line two lots longer than it needs (the code passes per_line*lot + lot, one lot, plus a 2*lot argument); the slack should be labeled GUESS or UNRESEARCHED",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py"
-  ],
-  "after": [],
-  "flag": "",
-  "found": "wave 22 re-check (tier provisional, by verdict)",
-  "tier_as_ranked": "E4",
-  "wave": "",
   "scope": "kept"
  },
  {
