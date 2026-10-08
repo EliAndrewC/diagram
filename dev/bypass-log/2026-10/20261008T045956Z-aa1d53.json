@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-08T04:59:56Z",
+  "target": "claims-gate",
+  "commit": "ea12082fe",
+  "why": "CLAIMS_OK: feature 329 renamed every claim key; mapped to the base, 497 findings are unchanged, the 6 new keys were fixed and re-checked, and 20 re-judged verdicts are on text changed only in links and wording - research.md R8"
+}

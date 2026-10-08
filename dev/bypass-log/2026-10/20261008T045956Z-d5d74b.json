@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-08T04:59:56Z",
+  "target": "entry-gate",
+  "commit": "ea12082fe",
+  "why": "RECORD_CHECKS_OK: feature 329 moved every record file; measured from the pure-rename commit to HEAD one unit was owed (source-applicability:shichiya-jawiki) and it is answered - research.md R8"
+}
