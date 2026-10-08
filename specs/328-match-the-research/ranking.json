@@ -1198,7 +1198,7 @@
   "tier_as_ranked": "E0",
   "e0_basis": "hamletgen/water/polder.py:442 labels it NONE; :447-448 put the block's middle at (W/2, H/2) with its axes on plan.fall, so only the position is the choice and it is framing (impl-drift's reading); the claim's 'at any bearing' is wrong and is dropped",
   "moved": "T83a (fresh reader): hamletgen/water/polder.py:442 labels it NONE; :447-448 put the block's middle at (W/2, H/2) with its axes on plan.fall, so only the position is the choice and it is framing (impl-drift's reading); the claim's 'at any bearing' is wrong and is dropped",
-  "wave": "",
+  "wave": "29",
   "scope": "kept"
  },
  {
@@ -1215,7 +1215,7 @@
   "tier_as_ranked": "E0",
   "e0_basis": "hamletgen/water/polder.py:444-448 set the along axis (rows*cellpx) on plan.fall and the across axis (cols*cellpx) perpendicular; 0019 drawing para 1 says the inlet is at the head and the outfall at the tail, 'which this project reads as its high and low ends' - a page not edited for this already says it, so the claim alone",
   "moved": "T83a (fresh reader): hamletgen/water/polder.py:444-448 set the along axis (rows*cellpx) on plan.fall and the across axis (cols*cellpx) perpendicular; 0019 drawing para 1 says the inlet is at the head and the outfall at the tail, 'which this project reads as its high and low ends' - a page not edited for this already say",
-  "wave": "",
+  "wave": "29",
   "scope": "kept"
  },
  {
@@ -1232,7 +1232,7 @@
   "tier_as_ranked": "E0",
   "e0_basis": "impl-drift misread the flag: waterfields/polder.py:43 and :146 show clean_parcels only gates _plots_clear_of_channels, and :795-800 clean_polder_parcels runs the same cleanup later (15 s vs 41 s, feature 150 T55); hamletgen/water/polder.py:398 runs it on every block fit_polder can return (:401-402). The parcel form comes from parcel_mix/gap/mosaic, not this flag. The cleanup's rule is already clai",
   "moved": "T83a (fresh reader): impl-drift misread the flag: waterfields/polder.py:43 and :146 show clean_parcels only gates _plots_clear_of_channels, and :795-800 clean_polder_parcels runs the same cleanup later (15 s vs 41 s, feature 150 T55); hamletgen/water/polder.py:398 runs it on every block fit_polder can return (:401-402).",
-  "wave": "",
+  "wave": "29",
   "scope": "kept"
  },
  {
@@ -1266,7 +1266,7 @@
   "tier_as_ranked": "E0",
   "e0_basis": "the same UNCLAIMED decision as the rows-along-the-fall row (hamletgen/water/polder.py:444-448); one claim answers both",
   "moved": "T83a (fresh reader): the same UNCLAIMED decision as the rows-along-the-fall row (hamletgen/water/polder.py:444-448); one claim answers both - duplicate of .claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::_polder_candidate#block's rows run along the fall, its cols across it axis set",
-  "wave": "",
+  "wave": "29",
   "scope": "kept"
  },
  {
@@ -1283,7 +1283,7 @@
   "tier_as_ranked": "E0",
   "e0_basis": "hamletgen/water/polder.py:441 now reads 'wander walked down to a 0.86 box fill - GUESS: ... no page sets how irregular a polder's dike outline was (searched 0019, 0022, 0027)', relabeled from CONVENTION in wave 28 and re-checked IN-STEP",
   "moved": "T83a (fresh reader): hamletgen/water/polder.py:441 now reads 'wander walked down to a 0.86 box fill - GUESS: ... no page sets how irregular a polder's dike outline was (searched 0019, 0022, 0027)', relabeled from CONVENTION in wave 28 and re-checked IN-STEP",
-  "wave": "",
+  "wave": "28",
   "scope": "kept"
  },
  {

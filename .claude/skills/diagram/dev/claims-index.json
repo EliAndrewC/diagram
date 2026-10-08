@@ -14188,14 +14188,28 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::_polder_candidate#block centered": {
-  "code": "411b74070b765559",
+  "code": "8aa46507d7966dc0",
   "core": "fea6f79507867af5",
   "date": "2026-10-07",
-  "note": "this is not plumbing: centering the block on the canvas sets where the polder sits on the map. It is map framing, so the label should be CONVENTION (the map is framed on the block), not NONE",
+  "note": "putting the block at the canvas center only frames the map; its bearing comes from plan.fall, and the shore side is decided elsewhere",
   "pages": {},
   "research": "",
   "rests": [],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::_polder_candidate#block turned to the fall": {
+  "code": "05a793e3522f28b6",
+  "core": "fea6f79507867af5",
+  "date": "2026-10-07",
+  "note": "the rows run along the fall, so the inlet is at the head (high end) and the outfall at the tail (low end), matching \"an inlet at the polder's head and an outfall at its tail\"",
+  "pages": {
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "45bbefa1e8568ae6"
+  },
+  "research": "7e58acaa9e345ce6",
+  "rests": [
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f981425220ab2e60"
+  ],
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::_polder_candidate#outer face with the water": {
   "code": "cca4e7f7e41cf898",
@@ -14209,6 +14223,22 @@
   "rests": [
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:041f79721f113fc6",
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:3d4d136052bc4a6e"
+  ],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::_polder_candidate#parcel cleanup on the drawn block only": {
+  "code": "9822dbd74eb17aa5",
+  "core": "fea6f79507867af5",
+  "date": "2026-10-07",
+  "note": "clean_parcels=False only defers the cleanup, and the drawn block is still cleaned, so its parcels stop at the bank and keep clear of the drain",
+  "pages": {
+   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html": "ce566988cdde2734"
+  },
+  "research": "39036ea15e57c448",
+  "rests": [
+   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:60f41f927442ee20",
+   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:a45a111b4e742228",
+   "0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html:ecdc98fceffb1648"
   ],
   "verdict": "IN-STEP"
  },

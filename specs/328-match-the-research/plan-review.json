@@ -1,44 +1,32 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "0616af7d123ad2655a1bc8c4e607c8db23f039acb15739ee0ca942a9e92e3fd3",
+ "plan_sha256": "b54d9797e9097ab2c1ec27e22ec10fa464cb9c068a0f77c8d61d69f252acfede",
  "reviewed": "2026-10-07",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W28-revert-rectangle",
-   "summary": "the edge_wander-0 trial (straight-sided rectangular dike) reverted",
+   "id": "W29-scope",
+   "summary": "Wave 28's six found rows tiered by a fresh reader (T83a): five E0 (block centered relabeled CONVENTION; rows-along-the-fall claimed on 0019 drawing with its duplicate; clean_parcels=False claimed on 0055 drawing; the 0.86 walk-down already done in wave 28), one E2 (next_gather's missing third gather form) left for its place in the run",
    "class": "within",
-   "why": "0027's drawing page curves the outer face with the water and calls a rectangular polder modern; the GM 2026-09-28 'eliminate anything which is only modern'"
+   "why": "FR-002/FR-003: block centered is impl-drift's own MISLABELED reading; 0019 drawing (last edited 2026-10-05, feature 319) already says inlet at head, outfall at tail, read as high and low ends; 0055 drawing already says fields stand back behind the bank and fit_polder cleans the block it returns (hamletgen/water/polder.py clean_polder_parcels before return). Knot row is one function in knots.py (E2); knots.py unchanged f51fbbbe4..792d74111, so the gap is pre-existing, not introduced; after this wave no kept E0/E1 row stands open, so SC-003 is held"
   },
   {
-   "id": "W28-452-E0",
-   "summary": "row 452 restated against 0027 and re-tiered E0: the code already wanders the edge (curving with the water), only the claim (cited 0019 for a walk-down 0019 does not state) and a comment (SURVEYED rectangle) were wrong",
+   "id": "W29-occasions",
+   "summary": "No review occasion",
    "class": "within",
-   "why": "0027's drawing page says what the code does ('The maps curve the dike's outer face with the water's edge'); 0019/0022 speak to the interior drift leaving the edge alone, not its shape. The row is fixed, not deferred or carved out; the hold is withdrawn as round 4 required"
+   "why": "the engine diff 792d74111..HEAD is docstring claim lines in _polder_candidate only; no element, glyph or map changes (feature 294)"
   },
   {
-   "id": "W28-convention",
-   "summary": "the walk-down of the wander to a 0.86 box fill labeled CONVENTION (a small block still reads as one block, held by polder_fills_its_bbox's 82%)",
+   "id": "W29-condition-6",
+   "summary": "Stacking on the unpushed waves 9-28: (1)-(5) held at wave 28's close 792d74111, backed up; wave 29 owes no bookend pair",
    "class": "within",
-   "why": "a legibility rule for how the map draws the block, stated with its why; it eases the curve but keeps it (the edge still wanders), so it does not reintroduce the rectangle 0027 excludes"
+   "why": "backup/digram-backlog on origin is 792d741114683842122d8ccb836570061c43a59a; the pair is owed by a wave that changes engine behavior (plan's Performance bookends, constitution VI), and none does here"
   },
   {
-   "id": "W28-revert-knot",
-   "summary": "the T-foot knot form reverted with the trial; the gap filed as a found DRIFTED E2 row",
+   "id": "W29-verification",
+   "summary": "impl-drift on the touched claims and a green gate",
    "class": "within",
-   "why": "it fixed a regression only the trial created; ranked, not dropped, and taking it now would break tier order (FR-006)"
-  },
-  {
-   "id": "W28-no-occasions-no-pair",
-   "summary": "no review occasions and no bookend pair; the engine diff is comments and docstrings only",
-   "class": "within",
-   "why": "no executed code changed since wave 27's close; plan.md now says so accurately"
-  },
-  {
-   "id": "W28-row434",
-   "summary": "row 434 still held",
-   "class": "within",
-   "why": "carried unchanged from earlier rounds' rulings"
+   "why": "FR-005 verbatim; no map changes, so no regeneration owed"
   }
  ],
  "verdict": "CLEAR"

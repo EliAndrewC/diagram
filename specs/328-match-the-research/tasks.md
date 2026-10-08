@@ -1069,7 +1069,9 @@ one E2 (the knot gap in `next_gather`, left for its place in the run).
 
 - [x] T83a wave 28's found rows tiered by the work they take, by a fresh reader (FR-002, FR-003, SC-003)
       research: rendering
-- [ ] T83 the claims written (FR-003 E0, FR-004)
+- [x] T83 the claims written (FR-003 E0, FR-004)
       research: rendering
-- [ ] T84 the claims re-checked by `impl-drift`; the close: `make done` green, the wave column (FR-005, FR-006)
+      verify: DONE. the polder block's framing (CONVENTION), its turn to the fall (0019) and its deferred parcel cleanup (0055) claimed
+- [x] T84 the claims re-checked by `impl-drift`; the close: `make done` green, the wave column (FR-005, FR-006)
       research: rendering
+      verify: DONE. impl-drift IN-STEP on all three; amendment 28 FAITHFUL, plan CLEAR; make done green; no executed code changed; the wave column
