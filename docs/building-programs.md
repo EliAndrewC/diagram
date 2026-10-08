@@ -136,7 +136,7 @@ Each item names the Mode A kind it is (feature 262): the sheet's own `data-kind`
 <!-- Research: one-roof ends' order - GUESS: villagers' end toward the arch, dwelling end behind -->
 <!-- Research: hall in the middle of the one roof - research/questions/0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html: Hoshigaoka's sheet puts the villagers' hall in the center, the kitchen at one end and the monk's rooms at the other -->
 <!-- Research: dwelling kitchen floor - UNRESEARCHED: Hoshigaoka's sheet stipples the whole kitchen as earth floor with the kamado in its middle -->
-<!-- Research: dwelling entry tagged genkan - research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html: Hoshigaoka's sheet tags its dwelling's plain earth-floored entry vestibule as genkan -->
+<!-- Research: dwelling entry tagged genkan - UNRESEARCHED: Hoshigaoka's sheet tags its dwelling's plain earth-floored entry vestibule as genkan; 0104's genkan is a samurai house's shikidai entrance, which does not bear on a village monk's vestibule -->
 <!-- Research: dwelling privy - GUESS research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html: the dwelling end's privy, behind with the dwelling; no page names one at a village shrine -->
 <!-- Research: two-building form - research/questions/0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html: a farmhouse-class kuri beside the hall -->
 <!-- Research: kitchen garden by the sun - GUESS research/questions/0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html: near the dwelling where it gets six hours; the keeper's plot's place and size are its guess, the six-hour reading 0038 drawing's guess -->
@@ -162,7 +162,11 @@ Each item names the Mode A kind it is (feature 262): the sheet's own `data-kind`
 <!-- Research: hall-and-dwelling form knob - DEVIATION research/questions/0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html: one roof default, set against the sources' rare on the GM's word -->
 <!-- Research: bell tower knob - GUESS research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html: absent by default -->
 <!-- Research: dedication knob - CANON: Inari the ordinary rural dedication, a GM ruling of 2026-09-20 -->
-<!-- Research: Bishamon tigers - research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html: tigers at a Bishamon shrine -->
+<!-- Research: Bishamon tigers - GUESS research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html: tigers at a Bishamon shrine - attested at named Bishamon temples, a village shrine's a guess -->
+<!-- Research: strength stones set beside the approach - research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html: strength stones beside the approach, gifts of the parish -->
+<!-- Research: fire-water tub size about 2.5 ft across - GUESS: no page sizes a fire-water tub -->
+<!-- Research: privy size 5 ft square - GUESS: no page sizes a shrine dwelling's privy -->
+<!-- Research: well curb size 3 to 4 ft - GUESS: no page sizes a shrine well's curb -->
 <!-- Research: grove and burial side knob - CANON: follows the declared map, the GM's ruling of 2026-09-20 (the diagram view matches what the larger map shows) -->
 <!-- Research: burial ground off a map - research/questions/0226-shrines-temples-and-graves-in-each-size-of-settlement.drawing.html: rolls in the yard or apart -->
 <!-- Research: wealth knob - research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html: donated stonework -->

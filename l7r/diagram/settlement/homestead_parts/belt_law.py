@@ -112,8 +112,9 @@ class BeltReading:
 
         Research:
             page edge not judged - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: a
-                stretch the page cuts is not judged; the depth is not judged within one clump's width (2 r) of the frame, which
-                clips it (the belt's inner face kept at the frame); a break a reader can see is judged a hole
+                stretch the page cuts is not judged; a break a reader can see is judged a hole
+            depth near the frame not judged - NONE: a check tolerance - the depth is not judged within one clump's width
+                (2 r) of the frame, which clips it
             tips not judged - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:
                 a belt tapers at its ends
         """

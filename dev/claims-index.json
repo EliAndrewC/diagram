@@ -1,23 +1,24 @@
 {
  "docs/building-programs.md::Country shrine (a village district's shrine)#Bishamon tigers": {
-  "code": "4931dd5855f9540e",
-  "core": "ee3bcdfa5622e824",
+  "code": "6553ba1fd454f85b",
+  "core": "811947111c983c79",
   "date": "2026-10-08",
-  "note": "tigers attested at Bishamon temples, a guess at village scale",
+  "note": "0222 attests tigers only at named Bishamon temples (\"Whether a village shrine of Bishamon had them, no page we read says\"), and the drawing page records the village reach as a GUESS; the label should be GUESS research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html",
   "pages": {
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html": "4eb9d08db97f2235"
   },
   "research": "704fffd977ae2d80",
   "rests": [
+   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html:75a349e961295614",
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:ac6d02db6fad2b16"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "MISLABELED"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#a village shrine's office dated": {
-  "code": "a548887c346dc680",
-  "core": "ee3bcdfa5622e824",
+  "code": "c07ac8a3798edde6",
+  "core": "811947111c983c79",
   "date": "2026-10-08",
-  "note": "Rokusha, village shrine from 1872, office of 30 tsubo",
+  "note": "Rokusha's 30-tsubo office at a village shrine from 1872",
   "pages": {
    "0215-village-shrines-where-they-stand-and-how-big-their-grounds-are.html": "0584c762fce56b9b"
   },
@@ -28,41 +29,43 @@
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#a well as the purification stop beside the approach (\"the well or basin\"; the required item is `well`)": {
-  "code": "f5ea25c38bac1e34",
-  "core": "ee3bcdfa5622e824",
+  "code": "31332bccef4e652c",
+  "core": "811947111c983c79",
   "date": "2026-10-08",
-  "note": "the page attests only the basin beside the approach; a well there is unanswered",
+  "note": "the page attests only the basin; the well as the purification stop is unanswered",
   "pages": {},
   "research": "",
   "rests": [
+   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:4bec9f4f1782de45",
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:b3ef50530e7ace96"
   ],
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#approach width about 10 ft": {
-  "code": "b46d56531ccbe0ce",
-  "core": "ee3bcdfa5622e824",
+  "code": "0d3cb59ac389e289",
+  "core": "811947111c983c79",
   "date": "2026-10-08",
-  "note": "only Nagao's ~23 ft approach is measured",
+  "note": "no village approach is measured; the one width found is Nagao's ~23 ft",
   "pages": {},
   "research": "",
   "rests": [
-   "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html:30f48e3afb3b13e1"
+   "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html:30f48e3afb3b13e1",
+   "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html:c2a481bb8e0db628"
   ],
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#arch count": {
-  "code": "9b44fe34590b3c19",
-  "core": "ee3bcdfa5622e824",
+  "code": "075f119517ecd0eb",
+  "core": "811947111c983c79",
   "date": "2026-10-08",
-  "note": "most likely one arch, no row before 1868; the drawing page records the 1/3/7 count and the row as deliberate deviations",
+  "note": "the research finds most likely one arch and no village row; the drawing page records the row and the 1/3/7 counts as deliberate deviations",
   "pages": {
    "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html": "fd1a3212a5c01f72"
   },
   "research": "6d6aec09760b8162",
   "rests": [
-   "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:3cec57c2e7969071",
    "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:692a4ae5dd61efa9",
+   "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:6dbb45d3631d3bee",
    "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:c404414ec4c8366e",
    "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html:14b0afa330dc0ace",
    "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html:b87f514671879229"
@@ -70,24 +73,26 @@
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#arch pitch": {
-  "code": "c12641fe28ed6a09",
-  "core": "ee3bcdfa5622e824",
+  "code": "dbcb2b04494f46d0",
+  "core": "811947111c983c79",
   "date": "2026-10-08",
-  "note": "12 ft on every map",
+  "note": "12 ft, a guess inside the 10-13 ft band",
   "pages": {
    "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html": "e385403eda71f0a2"
   },
   "research": "187ffe8b48289099",
   "rests": [
-   "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:11a53f93479ca7e0"
+   "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:11a53f93479ca7e0",
+   "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:3f3c47b402c4f41d",
+   "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html:f072502feed3f9c0"
   ],
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#basin beside the approach": {
-  "code": "9e403ff5ab51f6e0",
-  "core": "ee3bcdfa5622e824",
+  "code": "d436c85af5a09ff8",
+  "core": "811947111c983c79",
   "date": "2026-10-08",
-  "note": "basin beside the approach, Nagao 1828, Yakyu Inari's pavilion 1836, open or roofed unknown",
+  "note": "the basin is beside the approach, Nagao 1828 and Yakyu Inari 1836 as cited, the roof a guess",
   "pages": {
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html": "4eb9d08db97f2235"
   },
@@ -101,10 +106,10 @@
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#bell tower band 6-16 by 6-16 ft": {
-  "code": "c735c80aafbf7af8",
-  "core": "ee3bcdfa5622e824",
+  "code": "563fe91039c7e82f",
+  "core": "811947111c983c79",
   "date": "2026-10-08",
-  "note": "no bell tower size or presence at a village shrine in the record",
+  "note": "nothing in the bundle sizes a belfry at a village shrine",
   "pages": {},
   "research": "",
   "rests": [
@@ -113,10 +118,10 @@
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#bell tower knob": {
-  "code": "235f975d7171f943",
-  "core": "ee3bcdfa5622e824",
+  "code": "dd23ef6042aad9df",
+  "core": "811947111c983c79",
   "date": "2026-10-08",
-  "note": "belfry a knob, not drawn unless turned on, the record silent",
+  "note": "the drawing page makes the belfry a knob, absent unless turned on",
   "pages": {
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html": "538be8acb21445ff"
   },
@@ -128,10 +133,10 @@
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#building size anchors": {
-  "code": "a65dee4693d7e7cd",
-  "core": "ee3bcdfa5622e824",
+  "code": "94d2ce9ed1422432",
+  "core": "811947111c983c79",
   "date": "2026-10-08",
-  "note": "1 or 3 ken, 1.98 x 1.82 m sanctuary, Hie 18x12 / 12x6, halls to ~35 ft, Kaie-ji 200-330 sq m",
+  "note": "the procedure's hall band of 18-35 by 12-35 ft (its \"12 ft\" depth comes from Hie's bays converted at 6 shaku) is smaller than the drawing page's \"20 to 35 ft on a side\", which sets its small end at the 21 ft Kannon hall; the procedure and the 0222 drawing page should agree. The sanctuary and one-roof figures are in step",
   "pages": {
    "0215-village-shrines-where-they-stand-and-how-big-their-grounds-are.html": "0584c762fce56b9b",
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html": "53e6b30a3e84d65c",
@@ -142,17 +147,19 @@
    "0215-village-shrines-where-they-stand-and-how-big-their-grounds-are.html:33f48fe6e0a80ee2",
    "0215-village-shrines-where-they-stand-and-how-big-their-grounds-are.html:93c3d3b599503717",
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html:2c7b940b515976a0",
+   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html:bbeeb2fa715ae9b2",
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:45ce51e0ab9fc655",
+   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:646f71e0cff55d3c",
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:8645ca661afbf310",
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:9285b92b183caf71"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#burial ground beside the precinct": {
-  "code": "34c82eac5b7a4fbf",
-  "core": "ee3bcdfa5622e824",
+  "code": "117e0f2817904fab",
+  "core": "811947111c983c79",
   "date": "2026-10-08",
-  "note": "village burial ground in the shrine's yard or apart, on a knob",
+  "note": "yard or apart, a knob",
   "pages": {
    "0226-shrines-temples-and-graves-in-each-size-of-settlement.drawing.html": "57917dbe10aef8d5"
   },
@@ -164,10 +171,10 @@
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#burial ground off a map": {
-  "code": "1b7c0165cd84aaf1",
-  "core": "ee3bcdfa5622e824",
+  "code": "557e1f04377a1593",
+  "core": "811947111c983c79",
   "date": "2026-10-08",
-  "note": "yard or apart on a knob",
+  "note": "rolls yard or apart",
   "pages": {
    "0226-shrines-temples-and-graves-in-each-size-of-settlement.drawing.html": "57917dbe10aef8d5"
   },
@@ -178,36 +185,37 @@
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#burial ground placed outside the grove": {
-  "code": "960934a3a327d657",
-  "core": "ee3bcdfa5622e824",
+  "code": "bbb6ea3d48040512",
+  "core": "811947111c983c79",
   "date": "2026-10-08",
-  "note": "nothing in the bundle places it against the grove",
+  "note": "nothing in the bundle answers it",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#dedication knob": {
-  "code": "7165f81b06a58e17",
-  "core": "ee3bcdfa5622e824",
+  "code": "8267b23663519046",
+  "core": "811947111c983c79",
   "date": "2026-10-08",
-  "note": "GM ruling named; no question answers it",
+  "note": "names the GM ruling of 2026-09-20",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#donated stonework": {
-  "code": "6c488e3bfb90ed68",
-  "core": "ee3bcdfa5622e824",
+  "code": "85d5776220f66ed8",
+  "core": "811947111c983c79",
   "date": "2026-10-08",
-  "note": "guardian dogs, lanterns of 1799, strength stones beside the approach",
+  "note": "guardian dogs, lanterns and strength stones in precincts, given piece by piece",
   "pages": {
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html": "4eb9d08db97f2235"
   },
   "research": "704fffd977ae2d80",
   "rests": [
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:3dba430450c42071",
+   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:4bec9f4f1782de45",
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:651fe89d4ff6afca",
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:c4e4424a990d6fd8",
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:ff7b754820341789"
@@ -215,10 +223,10 @@
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#donated stonework none at average": {
-  "code": "88acf4e5132e8500",
-  "core": "ee3bcdfa5622e824",
+  "code": "46514c0b324bbc74",
+  "core": "811947111c983c79",
   "date": "2026-10-08",
-  "note": "drawing page draws none at average; no count found",
+  "note": "the drawing page's wealth-knob rule",
   "pages": {
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html": "538be8acb21445ff"
   },
@@ -229,51 +237,48 @@
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#dwelling band 34-60 by 18-38 ft": {
-  "code": "77c4046b43a8dbb0",
-  "core": "ee3bcdfa5622e824",
+  "code": "bc63250e4c3c1d4a",
+  "core": "811947111c983c79",
   "date": "2026-10-08",
-  "note": "no village kuri measured; Koshin kuri 12x15; farmhouse size a guess",
+  "note": "a band around the farmhouse guess of 46 x 28 ft; no village kuri measured",
   "pages": {},
   "research": "",
   "rests": [
-   "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html:7d3c2032a9987c33",
-   "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html:143a36dcc3b93034"
+   "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html:7d3c2032a9987c33"
   ],
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#dwelling entry tagged genkan": {
-  "code": "8a41cf542187081d",
-  "core": "ee3bcdfa5622e824",
+  "code": "feb5ef17bbbf0767",
+  "core": "811947111c983c79",
   "date": "2026-10-08",
-  "note": "the page's Edo genkan is the shikidai entrance of a samurai house of standing (\"meant an entrance with a shikidai\"), which even a middle-rank house could lack; it never attests a plain earth-floored vestibule at a farmhouse-class dwelling as a genkan - tag it a plain entry or claim UNRESEARCHED",
+  "note": "0104 covers the formal entrance of samurai houses of standing, which in the Edo period meant an entrance \"with a shikidai\". It does not bear on a village monk's plain earth-floored vestibule, so the claim should say UNRESEARCHED",
   "pages": {
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "bbfebe573bb99b25"
   },
   "research": "d6575223a27df7a3",
   "rests": [
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:38ce75614bcb4467",
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:508d759fa76d492e",
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:6a481055c981d54e",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:a3162f7d1b6545a0",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:fc0610901368c3d8"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "NEEDS-RESEARCH"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#dwelling kitchen floor": {
-  "code": "4bf6c93c00b980f3",
-  "core": "ee3bcdfa5622e824",
+  "code": "53d5c62a2d17dd6b",
+  "core": "811947111c983c79",
   "date": "2026-10-08",
-  "note": "nothing in the bundle gives a kuri kitchen's floor",
+  "note": "nothing in the bundle answers it",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#dwelling privy": {
-  "code": "8bf8ca94184a6eef",
-  "core": "ee3bcdfa5622e824",
+  "code": "1e0cf00afc0ead85",
+  "core": "811947111c983c79",
   "date": "2026-10-08",
-  "note": "privy at the monk's dwelling recorded as a GUESS",
+  "note": "the drawing page records the dwelling's privy as a GUESS",
   "pages": {
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html": "538be8acb21445ff"
   },
@@ -284,10 +289,10 @@
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#farmers' stage knob": {
-  "code": "23cb8abb4a2d01f0",
-  "core": "ee3bcdfa5622e824",
+  "code": "aea8ced189c7b3a7",
+  "core": "811947111c983c79",
   "date": "2026-10-08",
-  "note": "1,777 stages, often on shrine ground, from the early 1800s, >200 in three prefectures",
+  "note": "stages on shrine ground, regional, 1,777 counted",
   "pages": {
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html": "4eb9d08db97f2235"
   },
@@ -301,54 +306,66 @@
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#fire-water": {
-  "code": "005798d7d8b676ae",
-  "core": "ee3bcdfa5622e824",
+  "code": "2ab3e7d1ab6dd7f0",
+  "core": "811947111c983c79",
   "date": "2026-10-08",
-  "note": "the page puts \"one at each major wooden building and two at the kitchen\"; the program puts tubs at the hall's corners (several on one building) and only one at the dwelling end that holds the kitchen - weight the kitchen end at two, one per building",
+  "note": "the procedure puts \"a tub at the hall's corners, one at the dwelling end\". 0100's drawing page gives \"one at each major wooden building and two at the kitchen\", and here the kitchen is in the dwelling end, so that end should get two and the hall one",
   "pages": {
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "2c4dfd988d663a80"
   },
   "research": "5292b7fa7abf1048",
   "rests": [
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:3d78982d8d903e9f",
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:81eec727dd4e93f2",
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:a8ace44152bf8182"
   ],
   "verdict": "DRIFTED"
  },
- "docs/building-programs.md::Country shrine (a village district's shrine)#grove and burial side knob": {
-  "code": "f50173bc0f8de2a8",
-  "core": "ee3bcdfa5622e824",
+ "docs/building-programs.md::Country shrine (a village district's shrine)#fire-water tub size about 2.5 ft across": {
+  "code": "811947111c983c79",
+  "core": "811947111c983c79",
   "date": "2026-10-08",
-  "note": "GM ruling of 2026-09-20 named",
+  "note": "fire-water tub size about 2.5 ft across",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "docs/building-programs.md::Country shrine (a village district's shrine)#grove and burial side knob": {
+  "code": "5a5201b71c8ea6e5",
+  "core": "811947111c983c79",
+  "date": "2026-10-08",
+  "note": "names the GM ruling of 2026-09-20",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#grove form knob": {
-  "code": "f32ff9eb9eff0754",
-  "core": "ee3bcdfa5622e824",
+  "code": "1602fc1d44ba85d3",
+  "core": "811947111c983c79",
   "date": "2026-10-08",
-  "note": "forms by slope position, all around on a rise or paddy, survey shares unreadable, field-line foot from one photo, ragged edge a guess",
+  "note": "forms tied to the ground (foot, top, rise, paddy), equal weights because the survey's shares cannot be read as counts, field line as attested and ragged as a guess",
   "pages": {
    "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html": "81663f30960fa262"
   },
   "research": "3377b10b4014ee4c",
   "rests": [
+   "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html:0754094bacfe5b43",
    "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html:11b077a13153a698",
+   "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html:288fa0fbdf7d7371",
    "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html:2ae7827162453585",
    "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html:2dbf0e220d2b0b14",
    "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html:36babf2e30774aed",
    "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html:64714d0dd61608a5",
-   "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html:e258ed2b31e06420"
+   "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html:e258ed2b31e06420",
+   "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html:fcce058491fa7dfe"
   ],
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#hall in the middle of the one roof": {
-  "code": "f5c3e3d29f6e873c",
-  "core": "ee3bcdfa5622e824",
+  "code": "23b38055fa496808",
+  "core": "811947111c983c79",
   "date": "2026-10-08",
-  "note": "the drawing page puts the dwelling \"at one end of the building\" and says nothing of Hoshigaoka's hall-in-the-center with kitchen and rooms at opposite ends; that layout also contradicts this section's own \"villagers' end toward the arch, dwelling end behind\" - the claim should be a GUESS, or the sheet should follow §219",
+  "note": "the drawing page puts the dwelling \"at one end of the building\", and the procedure's own rule is villagers' end toward the arch, dwelling end behind. The claim's hall-in-the-center arrangement, with the kitchen and the monk's rooms at opposite ends, is on neither, so the claim or the sheet should change",
   "pages": {
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html": "5e8ac2e778e0e69b"
   },
@@ -359,10 +376,10 @@
   "verdict": "DRIFTED"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#hall largest and monk's home": {
-  "code": "4151e7c3d7d04991",
-  "core": "ee3bcdfa5622e824",
+  "code": "98e66d719d04bfb7",
+  "core": "811947111c983c79",
   "date": "2026-10-08",
-  "note": "research says only that the worship hall is larger than the sanctuary (§111) and its one small kuri stood smaller than its hall (§16). Under the two-building form the program's 46x28 ft (1,288 sq ft) dwelling outsizes every hall in its 18-35 by 12-35 ft band, so \"hall the largest\" holds only under one roof - restrict the rule to one roof or bound the dwelling below the hall",
+  "note": "the worship hall is larger than its sanctuary; the kuri is farmhouse-like; Kaie-ji's 200-330 sq m one-roof building",
   "pages": {
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html": "53e6b30a3e84d65c",
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html": "4eb9d08db97f2235"
@@ -371,45 +388,49 @@
   "rests": [
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html:143a36dcc3b93034",
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html:2c7b940b515976a0",
-   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:646f71e0cff55d3c"
+   "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html:8fedbcfb447d4dc1",
+   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:646f71e0cff55d3c",
+   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:9285b92b183caf71"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#hall-and-dwelling form knob": {
-  "code": "006b691a187b3b4d",
-  "core": "ee3bcdfa5622e824",
+  "code": "d8be9d0489dbda4e",
+  "core": "811947111c983c79",
   "date": "2026-10-08",
-  "note": "Kaie-ji called unusual; the drawing page records the one-roof default as the project's choice",
+  "note": "Kaie-ji's one roof is called \"unusual\"; the drawing page records the one-roof default as the project's choice and the two-building form as the alternative",
   "pages": {
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html": "53e6b30a3e84d65c"
   },
   "research": "f7696f7745e7b6c1",
   "rests": [
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html:3c6c34f741caa79c",
+   "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html:7d3c2032a9987c33",
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html:2c7b940b515976a0"
   ],
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#innermost arch one pitch off the hall": {
-  "code": "f4fbda93d5f1f450",
-  "core": "ee3bcdfa5622e824",
+  "code": "44210cc74f85fc0e",
+  "core": "811947111c983c79",
   "date": "2026-10-08",
-  "note": "12 ft off the hall's face recorded; no distance found",
+  "note": "the drawing page classes the 12 ft innermost-arch distance as \"a map drawing convention\" rather than a guess. A distance before a hall is physical, so GUESS is the right class and the drawing page's classification should change",
   "pages": {
    "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html": "e385403eda71f0a2"
   },
   "research": "187ffe8b48289099",
   "rests": [
+   "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:52ba5c2f9e830511",
    "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:6e46a236e3d5c3e9",
    "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html:c2a481bb8e0db628"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#kitchen garden by the sun": {
-  "code": "88680a15e069e6a6",
-  "core": "ee3bcdfa5622e824",
+  "code": "481a6e5be2777ac9",
+  "core": "811947111c983c79",
   "date": "2026-10-08",
-  "note": "keeper's plot place and size a GUESS; six-hour rule",
+  "note": "the keeper's plot near the hall in sun and the six-hour rule are both recorded guesses",
   "pages": {
    "0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html": "461744888b10dad0"
   },
@@ -421,10 +442,10 @@
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#no office building": {
-  "code": "a2f8698f2b217772",
-  "core": "ee3bcdfa5622e824",
+  "code": "9b6bbf7373ce3317",
+  "core": "811947111c983c79",
   "date": "2026-10-08",
-  "note": "kuri doubles as office; small shrine business done at the administrator's home",
+  "note": "a small shrine's business was done at the administrator's home; the kuri doubled as the office",
   "pages": {
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html": "53e6b30a3e84d65c"
   },
@@ -436,10 +457,10 @@
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#no subsidiary buildings": {
-  "code": "fa958f611919d749",
-  "core": "ee3bcdfa5622e824",
+  "code": "6f3ec8bd95a7c222",
+  "core": "811947111c983c79",
   "date": "2026-10-08",
-  "note": "none drawn, none placed at a village shrine",
+  "note": "the drawing page's rule",
   "pages": {
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html": "538be8acb21445ff"
   },
@@ -450,22 +471,23 @@
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#one-roof ends' order": {
-  "code": "41e0c1c155460001",
-  "core": "ee3bcdfa5622e824",
+  "code": "f11721cfb6514787",
+  "core": "811947111c983c79",
   "date": "2026-10-08",
-  "note": "Kaie-ji gives size only, not which end faces the approach",
+  "note": "no page gives which end faces the arch",
   "pages": {},
   "research": "",
   "rests": [
+   "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html:3c6c34f741caa79c",
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html:2c7b940b515976a0"
   ],
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#outermost arch at the precinct edge": {
-  "code": "e7efdc6a45fd0db0",
-  "core": "ee3bcdfa5622e824",
+  "code": "ed274f11e979448a",
+  "core": "811947111c983c79",
   "date": "2026-10-08",
-  "note": "first torii where the approach enters the grounds",
+  "note": "the first arch stands where the approach enters the grounds",
   "pages": {
    "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.html": "fd1a3212a5c01f72"
   },
@@ -478,15 +500,16 @@
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#precinct holds the grove": {
-  "code": "2829be7a7dc1a5fe",
-  "core": "ee3bcdfa5622e824",
+  "code": "381a95fde1fb39d6",
+  "core": "811947111c983c79",
   "date": "2026-10-08",
-  "note": "wood kept in and around the precinct, sides by the ground",
+  "note": "the wood is kept around the sanctuary, approach and place of worship, on the sides the ground gives it",
   "pages": {
    "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html": "81663f30960fa262"
   },
   "research": "3377b10b4014ee4c",
   "rests": [
+   "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html:0754094bacfe5b43",
    "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html:2ae7827162453585",
    "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html:e258ed2b31e06420",
    "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html:e2776b83ca1ea0ab"
@@ -494,10 +517,10 @@
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#precinct size": {
-  "code": "abc3b56faab27b8c",
-  "core": "ee3bcdfa5622e824",
+  "code": "b0796f4bbc7cdb6e",
+  "core": "811947111c983c79",
   "date": "2026-10-08",
-  "note": "Hiki, Sano, Kanzaki registers; under- and overstatement; Saga 45-540; Kami-Nerima 10-3,350; a fortieth to a seventh built",
+  "note": "the register bands, the Edo returns, the overstate/understate caveats and roughly 2-14% built",
   "pages": {
    "0215-village-shrines-where-they-stand-and-how-big-their-grounds-are.html": "0584c762fce56b9b"
   },
@@ -517,11 +540,19 @@
   ],
   "verdict": "IN-STEP"
  },
- "docs/building-programs.md::Country shrine (a village district's shrine)#resident monk": {
-  "code": "1926e1a2bcab2518",
-  "core": "ee3bcdfa5622e824",
+ "docs/building-programs.md::Country shrine (a village district's shrine)#privy size 5 ft square": {
+  "code": "811947111c983c79",
+  "core": "811947111c983c79",
   "date": "2026-10-08",
-  "note": "shrine-monk form accurate; dropping the rota and commuting forms recorded as the project's choice; one-roof default",
+  "note": "privy size 5 ft square",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "docs/building-programs.md::Country shrine (a village district's shrine)#resident monk": {
+  "code": "a6417b7d43f28ea7",
+  "core": "811947111c983c79",
+  "date": "2026-10-08",
+  "note": "the drawing page records the resident monk at every shrine as the project's choice over the rota and visiting-priest forms",
   "pages": {
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html": "53e6b30a3e84d65c"
   },
@@ -530,19 +561,19 @@
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html:3c6c34f741caa79c",
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html:a9c190afcbd74da6",
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html:dc21d93f6fce21c2",
-   "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html:45dd8025df53da60",
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html:65f775b74e07e799",
+   "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html:79e7d404014c73c5",
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html:d718ba59465c1fe3",
-   "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html:ea355903d99ff0f8",
-   "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html:fe069b51755156b3"
+   "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html:e3a1f08bcfa76182",
+   "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html:ea355903d99ff0f8"
   ],
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#sacred tree": {
-  "code": "09d02b90454deab5",
-  "core": "ee3bcdfa5622e824",
+  "code": "06b4088f90e5bd1c",
+  "core": "811947111c983c79",
   "date": "2026-10-08",
-  "note": "roped shinboku; single trees along the approach",
+  "note": "a roped sacred tree in the precinct; single trees in front and along the approach",
   "pages": {
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html": "4eb9d08db97f2235",
    "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html": "81663f30960fa262"
@@ -557,20 +588,22 @@
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#sacred tree drawn as the biggest crown in the precinct": {
-  "code": "9bbf7284bec71854",
-  "core": "ee3bcdfa5622e824",
+  "code": "96bb8f306f8902b6",
+  "core": "811947111c983c79",
   "date": "2026-10-08",
-  "note": "no sacred tree's size in the bundle",
+  "note": "no size is found",
   "pages": {},
   "research": "",
-  "rests": [],
+  "rests": [
+   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:91892ea39367c5ef"
+  ],
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#sanctuary on the axis": {
-  "code": "37ac9fc70e0f94b1",
-  "core": "ee3bcdfa5622e824",
+  "code": "df95f1f8120a6f27",
+  "core": "811947111c983c79",
   "date": "2026-10-08",
-  "note": "sanctuary at the rear on the worship hall's axis",
+  "note": "sanctuary at the rear, on the hall's axis",
   "pages": {
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html": "4eb9d08db97f2235"
   },
@@ -582,15 +615,16 @@
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#sanctuary the smallest building of the shrine proper": {
-  "code": "cafe34fdc6cd0f6c",
-  "core": "ee3bcdfa5622e824",
+  "code": "62b51aaaf3d3d3bd",
+  "core": "811947111c983c79",
   "date": "2026-10-08",
-  "note": "one-bay ~6 ft sanctuary, halls 21-35 ft",
+  "note": "a one-bay sanctuary of about 6 ft beside halls of 21-35 ft",
   "pages": {
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html": "4eb9d08db97f2235"
   },
   "research": "704fffd977ae2d80",
   "rests": [
+   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:45ce51e0ab9fc655",
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:646f71e0cff55d3c",
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:8645ca661afbf310",
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:9285b92b183caf71"
@@ -598,50 +632,56 @@
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#staffing and income": {
-  "code": "6ab1136a61dfb30f",
-  "core": "ee3bcdfa5622e824",
+  "code": "265b89f86a30bcac",
+  "core": "811947111c983c79",
   "date": "2026-10-08",
-  "note": "campaign notes; no question answers the setting's staffing",
+  "note": "the GM's campaign notes",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#stage and ring absent by default": {
-  "code": "cba10c4188ee3495",
-  "core": "ee3bcdfa5622e824",
+  "code": "4cd048c6f4c615d2",
+  "core": "811947111c983c79",
   "date": "2026-10-08",
-  "note": "both off unless turned on; no count",
+  "note": "the drawing page's knobs, absent by default",
   "pages": {
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html": "538be8acb21445ff"
   },
   "research": "041843907dca961a",
   "rests": [
-   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html:39f48711b5bdcffb"
+   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html:39f48711b5bdcffb",
+   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:ba13903e154776ed",
+   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:c9d8050bb7b33aef"
   ],
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#stone lanterns beside the approach": {
-  "code": "4643b1bb2965d293",
-  "core": "ee3bcdfa5622e824",
+  "code": "e42e4127f7052aae",
+  "core": "811947111c983c79",
   "date": "2026-10-08",
-  "note": "0222 attests lanterns as a parish's gift (a pair given by Ishigami's parishioners in 1799) but places only the strength stones and the basin beside the approach, so setting lanterns beside the approach is correctly a GUESS",
+  "note": "lanterns attested as gifts; no page places them",
   "pages": {},
   "research": "",
   "rests": [
-   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html:cc29d33e4a52f44e",
-   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:4bec9f4f1782de45",
-   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:b3ef50530e7ace96",
-   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:c4e4424a990d6fd8",
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:ff7b754820341789"
   ],
   "verdict": "IN-STEP"
  },
- "docs/building-programs.md::Country shrine (a village district's shrine)#subsidiary shrines sometimes in a precinct": {
-  "code": "7ec07b3671cbfb72",
-  "core": "ee3bcdfa5622e824",
+ "docs/building-programs.md::Country shrine (a village district's shrine)#strength stones set beside the approach": {
+  "code": "811947111c983c79",
+  "core": "811947111c983c79",
   "date": "2026-10-08",
-  "note": "sometimes seen; none placed at a village shrine",
+  "note": "strength stones set beside the approach",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "docs/building-programs.md::Country shrine (a village district's shrine)#subsidiary shrines sometimes in a precinct": {
+  "code": "2da355c38f487e9a",
+  "core": "811947111c983c79",
+  "date": "2026-10-08",
+  "note": "\"sometimes seen in a precinct\"",
   "pages": {
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html": "4eb9d08db97f2235"
   },
@@ -652,10 +692,10 @@
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#sumo ring knob": {
-  "code": "afd051f415e211d8",
-  "core": "ee3bcdfa5622e824",
+  "code": "d46fa4a4217debb5",
+  "core": "811947111c983c79",
   "date": "2026-10-08",
-  "note": "sumo offered at shrines across the country; no ring size",
+  "note": "sumo offered at shrines across the country; no size given",
   "pages": {
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html": "4eb9d08db97f2235"
   },
@@ -666,10 +706,10 @@
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#tax-free fields exist": {
-  "code": "aa3da539953a6918",
-  "core": "ee3bcdfa5622e824",
+  "code": "49e7576a67911f86",
+  "core": "811947111c983c79",
   "date": "2026-10-08",
-  "note": "precincts and fields under exemption",
+  "note": "exempt land includes temple and shrine precincts and documented fields",
   "pages": {
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html": "53e6b30a3e84d65c"
   },
@@ -681,10 +721,10 @@
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#tax-free fields off the sheet": {
-  "code": "f76b56312754bf7b",
-  "core": "ee3bcdfa5622e824",
+  "code": "8bf878a68ce79361",
+  "core": "811947111c983c79",
   "date": "2026-10-08",
-  "note": "land and income not drawn",
+  "note": "the drawing page draws nothing of the land or income",
   "pages": {
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html": "5e8ac2e778e0e69b"
   },
@@ -695,10 +735,10 @@
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#two-building dwelling size": {
-  "code": "227ebeab17aa440f",
-  "core": "ee3bcdfa5622e824",
+  "code": "c46ce287572d93ac",
+  "core": "811947111c983c79",
   "date": "2026-10-08",
-  "note": "46x28 ft farmhouse size recorded as a guess",
+  "note": "the drawing page's 46 x 28 ft farmhouse guess",
   "pages": {
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html": "5e8ac2e778e0e69b"
   },
@@ -709,43 +749,43 @@
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#two-building form": {
-  "code": "f7c5f3545bbd8603",
-  "core": "ee3bcdfa5622e824",
+  "code": "546eb5c3c6e77b26",
+  "core": "811947111c983c79",
   "date": "2026-10-08",
-  "note": "an ordinary temple's kuri like an ordinary house, resembling the farmhouse",
+  "note": "the kuri is like an ordinary house and a separate building at large temples",
   "pages": {
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html": "53e6b30a3e84d65c"
   },
   "research": "f7696f7745e7b6c1",
   "rests": [
-   "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html:143a36dcc3b93034",
+   "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html:2c7b940b515976a0",
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html:8fedbcfb447d4dc1"
   ],
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#unenclosed precinct": {
-  "code": "ae01e3dd31f41f76",
-  "core": "ee3bcdfa5622e824",
+  "code": "90cd09018b66711b",
+  "core": "811947111c983c79",
   "date": "2026-10-08",
-  "note": "no whole-precinct fence; sanctuary fences modern or a lord's",
+  "note": "no whole-precinct fence; sanctuary fences only from 1918 on, or at lords' shrines",
   "pages": {
    "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html": "81663f30960fa262"
   },
   "research": "3377b10b4014ee4c",
   "rests": [
-   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:51dcbe361ff832a3",
    "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html:0758769902a3b99a",
    "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html:3025ee24804583c1",
    "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html:511a5d7ea05ca39e",
+   "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html:d14e5a627deab202",
    "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html:d284e5af358a3a1f"
   ],
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#unswept precinct ground": {
-  "code": "6433013befa2a24e",
-  "core": "ee3bcdfa5622e824",
+  "code": "fd3e5d5b4073249f",
+  "core": "811947111c983c79",
   "date": "2026-10-08",
-  "note": "swept precinct a guess, no surface found",
+  "note": "no page gives the precinct's surface; a swept precinct is the project's own guess",
   "pages": {
    "0224-ground-swept-clear-around-shrines-and-graves.html": "ac45206dd1b05fe0"
   },
@@ -757,16 +797,17 @@
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#wealth knob": {
-  "code": "d4fd85e763643fb1",
-  "core": "ee3bcdfa5622e824",
+  "code": "8ab3f06d82f44103",
+  "core": "811947111c983c79",
   "date": "2026-10-08",
-  "note": "stonework as parish gifts",
+  "note": "the stonework as parish gifts",
   "pages": {
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html": "4eb9d08db97f2235"
   },
   "research": "704fffd977ae2d80",
   "rests": [
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:3dba430450c42071",
+   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:4bec9f4f1782de45",
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:651fe89d4ff6afca",
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:c4e4424a990d6fd8",
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:ff7b754820341789"
@@ -774,24 +815,34 @@
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#wealth knob roofing": {
-  "code": "2087694c776a160a",
-  "core": "ee3bcdfa5622e824",
+  "code": "c60de12d48517525",
+  "core": "811947111c983c79",
   "date": "2026-10-08",
-  "note": "nothing ties thatch or tile to a parish's wealth",
+  "note": "a thatched hall is attested, but not thatch against tile by wealth",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:9285b92b183caf71"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "docs/building-programs.md::Country shrine (a village district's shrine)#well and basin both drawn": {
+  "code": "8c4175f3af14b117",
+  "core": "811947111c983c79",
+  "date": "2026-10-08",
+  "note": "nothing in the bundle answers it",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
- "docs/building-programs.md::Country shrine (a village district's shrine)#well and basin both drawn": {
-  "code": "6143293d612b2db1",
-  "core": "ee3bcdfa5622e824",
+ "docs/building-programs.md::Country shrine (a village district's shrine)#well curb size 3 to 4 ft": {
+  "code": "811947111c983c79",
+  "core": "811947111c983c79",
   "date": "2026-10-08",
-  "note": "nothing in the bundle on a shrine's well",
-  "pages": {},
+  "note": "well curb size 3 to 4 ft",
   "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
+  "verdict": "UNCLAIMED"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#a detached guest house at a rich posting (0091's drawing page records it as a GUESS)": {
   "code": "1e4a796a961b2cbf",
@@ -44005,30 +44056,34 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/belt_law.py::BeltReading.__init__#page edge not judged": {
-  "code": "4976f320d1d6f318",
-  "core": "3308d34e09292c50",
+  "code": "383a6feabd52f21f",
+  "core": "d21b3e787ecc47c7",
   "date": "2026-10-08",
-  "note": "holes are looked for only where a reader can look, and the frame edge is a judging rule, not a fact about the belt",
-  "pages": {},
-  "research": "",
+  "note": "the page-cut half (`self.cut`) is in step. The depth exemption within 2 r of the frame rests on no block of 0072's drawing page, which speaks only of holes and the page edge; that half should be NONE (a check tolerance) or the drawing page should record it",
+  "pages": {
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "47ec3e2a439e0b3c"
+  },
+  "research": "6cc5fb86c410eb4c",
   "rests": [
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:199c787c93386c82",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:301a35716bf73526",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:56f345de26c07dc8",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:9e9583030b309e84"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "MISLABELED"
  },
  "l7r/diagram/settlement/homestead_parts/belt_law.py::BeltReading.__init__#tips not judged": {
-  "code": "69ccf7868c4d9d69",
-  "core": "3308d34e09292c50",
-  "date": "2026-10-03",
-  "note": "matches the cited finding",
+  "code": "f57ed5907bb8b6f0",
+  "core": "d21b3e787ecc47c7",
+  "date": "2026-10-08",
+  "note": "the grove is \"deepest in the middle and tapering to points\"",
   "pages": {
    "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html": "f32599678d1cb241"
   },
   "research": "90cf9ff106c766c9",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:57a7ec65fd3ad92b"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/belt_law.py::BeltReading._band_leaves_the_page#plumbing": {
@@ -44116,32 +44171,33 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/belt_law.py::BeltReading.holes#continuous planting": {
-  "code": "dae925ef1f84da30",
-  "core": "474da1f60ae0fa77",
+  "code": "f044723346707c8e",
+  "core": "a87552fb86c1be86",
   "date": "2026-10-08",
-  "note": "an opening over 30 ft across the wind is a hole; a lane's own crossing is exempt",
+  "note": "`if self._crossed(a, b): continue` excuses every opening a way crosses. The page says of a lane crossing a belt that the hole rule \"holds there as written\": planting resumes on both sides, so an opening wider than 30 ft at a lane is still a hole. The 30 ft test itself is in step",
   "pages": {
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "47ec3e2a439e0b3c"
   },
   "research": "6cc5fb86c410eb4c",
   "rests": [
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:199c787c93386c82",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:19b6b8f457366d55",
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:1b23f53588df77c1"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:1b23f53588df77c1",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:301a35716bf73526"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/homestead_parts/belt_law.py::BeltReading.holes#run break not a hole": {
-  "code": "38a43c9fdad580ab",
-  "core": "474da1f60ae0fa77",
+  "code": "7fdd09d25ec5c770",
+  "core": "a87552fb86c1be86",
   "date": "2026-10-08",
-  "note": "no page says where a belt's run ends beyond the farmhouses' reach",
+  "note": "no block says where a belt's run stops beyond the houses' reach",
   "pages": {},
   "research": "",
   "rests": [
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:1b23f53588df77c1",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:31f1ea9e18204d6a",
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:8e692f283f7947e4"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:43aedefed41c4f79",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:5e9ac2daf3925f70"
   ],
   "verdict": "IN-STEP"
  },
