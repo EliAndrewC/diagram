@@ -329,7 +329,7 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 ## Wave 26 (amendment 25, 2026-10-08)
 
 - **Scope**: row 447 (`tasks.md` Phase 27): a hamlet's drain registers no 33 ft no-build corridor, the town and city maps'
-  rule (0058); the hamlet keeps its houses off the marsh and the ground below a drain as before. Row 434 held for the GM.
+  rule (0058). A nucleated cluster is exempt from the below-drain rule; the dispersed farmsteads' rule is open as row 669 (E3). Row 434 held for the GM.
 - **Occasions**: none - the five pool hamlets are unchanged.
 - **On the unpushed waves 9-25** under condition (6): (1)-(5) held at wave 25's close (8e6e380ad, backed up, its own pair
   band 0); wave 26's own pair opens at 8e6e380ad.

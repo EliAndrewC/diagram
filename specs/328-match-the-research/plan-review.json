@@ -1,38 +1,39 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "670503b66476431f65334456ae44eeab966db6458ab2266687cee4bc8cdaacbe",
+ "plan_sha256": "f997637d97a49e05b5410509e753a8f015f2e935f16e0c92aed1f4879ad4876e",
  "reviewed": "2026-10-07",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W25-scope",
-   "summary": "Wave 25 takes wave 24's found rows as T75a tiered them: the E0 rows claimed or confirmed (two stand as claimed), no executed code changed",
+   "id": "W26-scope",
+   "summary": "wave 26 takes ranking row 447 (sink.py::drain_run#no-build corridor) alone: the hamlet's drain registers no 33 ft corridor",
    "class": "within",
-   "why": "FR-003 E0 (the claim alone, the code already matching an unedited page or an UNRESEARCHED/GUESS/NONE statement of itself) and FR-004 (a claim fix corrects the implementation's own statement); spot-checked: 0025 drawing says the sty is set in by half the bank and the bank inset is the drawn DIKEPOND_WATER_INSET in the same units; 0033 drawing says 150 ft plots as a convention; rows.py buffers w/2+2.0 and 6.0 px as the GUESS states; stages.py keeps houses at 0.5 pitch every round and only the round's own seats at 0.3 in the rescue, as rewritten"
+   "why": "FR-004: 0058's drawing page sets the 33 ft strip for town and city maps only; the fix moves the code to the research. FR-006: E2 rows 1-38 carry a wave except 34 (row 434, held), so row 447 (E2 #39) is the next in the run"
   },
   {
-   "id": "W25-E3",
-   "summary": "The scattered hamlet's rank rounds tiered E3 against 0031's single file and left for its place in the run, beside its sibling row 687",
+   "id": "W26-brook-next",
+   "summary": "the brook rows 448-450 left to the next wave",
    "class": "within",
-   "why": "FR-003: the fix is one rule plus the dispersed maps redeclared (several places), so E3; FR-003's module grouping puts it after row 687 (same rule, same fix); FR-006 order: the open E0 rows first, then E2 from row 442, row 434 held for the GM as already ruled"
+   "why": "FR-006 sets no minimum size for a wave; 447 then 448-450 is one contiguous run, and 449-450 name 448 under after, so they belong together"
   },
   {
-   "id": "W25-occasions",
-   "summary": "No review occasions; the wave column records none (claims and one comment)",
-   "class": "within",
-   "why": "no executed code changed, so no map moves and feature 294 opens no occasion"
+   "id": "W26-hold-434",
+   "summary": "row 434 (fixture_quota shrine cap) held for the GM",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "already ruled LEGITIMATE (spec-fidelity exception check, 2026-10-07): the GM's goal amendment defers questions to the feature's end; it conflicts with the GM's feature 133 ruling, so it cannot be settled by the session"
   },
   {
-   "id": "W25-cond6",
-   "summary": "Waves 9-24 stay unpushed under the wave-11 exception's condition (6); (1)-(5) held at 5947e79ae, backed up, wave 25's own pair opens there",
+   "id": "W26-occasions",
+   "summary": "no review occasions; the five pool hamlets stated unchanged",
    "class": "within",
-   "why": "the previously ruled exception continued on its own terms: its own amendment with a reset counter and this plan review before T75; backup/digram-backlog is at 5947e79ae on the remote"
+   "why": "FR-005 owes the occasions a wave opens; T77 regenerates the five hamlets, which verifies the unchanged claim"
   },
   {
-   "id": "W25-verify",
-   "summary": "impl-drift on the touched claims (the two that stand included), the gate, wave 25's own bookend pair",
+   "id": "W26-stack",
+   "summary": "wave 26 stacked on unpushed waves 9-25 under condition (6), its pair opening at 8e6e380ad",
    "class": "within",
-   "why": "FR-005 as written; the two rows that stand close only if impl-drift returns IN-STEP"
+   "why": "condition (6) already ruled; at 8e6e380ad backup/digram-backlog equals 8e6e380ad and T75a/T75/T76 are ticked"
   }
  ],
  "verdict": "CLEAR"

@@ -105,8 +105,8 @@ def drain_run(s: Settlement, pts: Poly, to: str) -> None:
     instead fired two checks on 14 cohort maps apiece - measured, not guessed.
 
     NO NO-BUILD CORRIDOR ON A HAMLET (feature 328). This run once registered the 33 ft corridor `s.channel` and
-    `s.stream` register, but that strip is the town and city maps' rule (0058); on a hamlet the drain's rule is the
-    marsh and the wet ground below it, which the seating keeps (`cluster.below_drain`).
+    `s.stream` register, but that strip is the town and city maps' rule (0058). A nucleated cluster is exempt from the
+    page's below-drain rule; that rule for a dispersed hamlet's farmsteads is not yet asked (feature 328 row 669, E3).
 
     Research:
         a drain is a dug ditch - research/questions/0060-field-drains-akusuiro.html, research/questions/0060-field-drains-akusuiro.drawing.html: the drainage-ditch class whichever way it runs
@@ -116,7 +116,7 @@ def drain_run(s: Settlement, pts: Poly, to: str) -> None:
     rec = drain_record(pts, to)
     refuse_unadmitted(s.M, "channels", rec)  # its route was chosen among those the registry admits (`drain_admitted`)
     s.field_channel(pts, DRAIN_HUE, outfall_w, outfall_w, cls=DRAINAGE_DITCH)
-    s.M["channels"].append(rec)  # no 33 ft no-build corridor: that is a town's or city's rule (0058); a hamlet keeps its houses off the marsh and off the ground below a drain
+    s.M["channels"].append(rec)  # no 33 ft no-build corridor: that is a town's or city's rule (0058); the below-drain rule for dispersed farmsteads is open (row 669)
 
 
 def drain_record(pts: Sequence[Pt], to: str) -> dict[str, Any]:

@@ -1005,7 +1005,8 @@ closed in wave 24, and the lane's room and the rank jitter stand as claimed (the
 
 The next open in-scope row (row 434, the shrine cap, held for the GM). 0058's drawing page sets the 33 ft no-build strip along a
 channel for town and city maps, which draw no marsh below their fields; on a hamlet the drain's rule is the marsh and the wet
-ground below it, which the hamlet keeps already (`cluster.below_drain`, wave 15). The brook rows after it (bend, downhill,
+ground below it. A nucleated cluster is exempt from the below-drain rule (0058); the rule for a dispersed hamlet's
+farmsteads is not yet asked (`cluster.below_drain` has no engine caller since wave 15) and is open as row 669 (E3). The brook rows after it (bend, downhill,
 dip allowance) are the next wave.
 
   - `l7r/diagram/hamletgen/sink.py::drain_run#no-build corridor` - the corridor no longer registered on a hamlet's drain
