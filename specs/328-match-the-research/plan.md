@@ -603,6 +603,23 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 - **Verification**: tests restated to the page (the six that pinned the key); `impl-drift`; `spec-fidelity`; the gate and
   the pair at batch 2's close.
 
+## Wave 50 (amendment 49, 2026-10-08) - batch 2's last wave
+
+- **Scope**: rows 512-513 and 523-532 in ranking order (514-522 DEFERRED: the town, city, castle and ministry entries no kept
+  map runs, `audit/scope.py`). Row 512: the `{channels, dry_plots}` permission dropped (0006: the plots lie upslope of the
+  canal behind a bank). Row 513: the sluice gate's drawn box from its recorded span (0179), never a fixed 11 x 11. Rows
+  523-525: a footplank's seats per 0084's drawing page - a join of ditches rules a seat out (the 3x obliqueness ceiling and the
+  deck widened over a junction retired), and where every wide seat is ruled out the crossing takes the widest seat left
+  (`seat_order`). Row 526: a carried way's deck lands about 10 ft onto dry ground or is not seated (0087; the footplank's short
+  abutment retired). Row 527: the threshing yard keyed off on no grain grown (`grows_grain`; 0037). Row 528: the north annex
+  held at the band's floor, 18 x 10 ft, on a house under about 22 ft deep (0052). Row 529: the drained acres leave out the
+  whole drain-side row (0007). Rows 530-532: the comb's outfall curves out of the collector at most 55 degrees a turn (0060),
+  and its 33 ft corridor is kept on town and city maps only, in feet (0058).
+- **Occasions**: none - the five hamlets regenerated 2026-10-08; only Kuwabata's two sluice records moved (each records its
+  span, 20), no glyph or placement changed.
+- **Verification**: tests red on the old code; `impl-drift`; `spec-fidelity`; then batch 2's close: the gate, the pair from
+  2e3153b4e (re-measuring batch 1's band 2) and its perf-audit, and the batch's occasions.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Waves 2-45 that changed engine behavior took
@@ -615,7 +632,7 @@ scratch worktrees back to back on a quiet host, then `make perf-explain` and the
 | batch | waves | pair | gate | state |
 |---|---|---|---|---|
 | 1 | 42-46 | waves 42, 44, 45 taken alone (band 1, 1, 0; confirmed); the batch 4a9b7c077 -> 2e3153b4e band 2, its cause (the track out drawn the canvas' diagonal past the frame, wave 46) removed by wave 47's `past_the_frame` - perf-audit consistent, audit not-justified as measured: batch 2's pair re-measures it, and explains seed 47's +0.19 s web at 40 households | green 2026-10-08 | closed but for the pair |
-| 2 | 47- | owed at the batch close, from 2e3153b4e | at the batch close | open |
+| 2 | 47-50 | owed at the batch close, from 2e3153b4e | at the batch close | closing |
 
 ## Constitution Check
 

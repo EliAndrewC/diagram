@@ -1623,3 +1623,23 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
       verify: DONE. rows 507-511: the town, gate-complex, castle and rampart entries DEFERRED on measure; the caption key removed whole (exception NOT LEGITIMATE; a caption goes down where it covers the least, one with no seat in the frame moved inward); the board's lane permission dropped; tests restated; the five hamlets byte-identical; impl-drift answered r1-r5; spec-fidelity CLEAR r2
 - [ ] T126 the claims re-checked by `impl-drift`; the close at batch 2's (FR-005, FR-006)
       research: rendering
+
+## Phase 51 - wave 50 (amendment 49): rows 512-513, 523-532 - water fixtures, footplanks, yards, the annex, the comb's drain
+
+- Rows 514-522 DEFERRED on measure (`audit/scope.py`): the town, city, castle and ministry entries no kept map runs.
+- `overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#supply canal along the dry hem` (row 512): the permission dropped (0006).
+- `overlap/taxonomy.py::_MX_FIXTURE_BOX#drawn fixture box` (row 513): the sluice gate's box from its recorded span (0179)
+  (`test_the_gate_s_drawn_box_spans_bank_to_bank`).
+- `city/bridges.py::channel_footbridges` (rows 523-525): a join rules a seat out; the widest seat left takes the crossing
+  (`seat_order`, `test_a_plank_s_seats_are_tried_wide_first_then_widest_left`).
+- `city/bridges.py::crossing_deck` (row 526): no footplank form under a carried way (`test_a_carried_deck_lands_off_the_rice_or_is_not_seated`).
+- `core.py` / `hamletgen/water/skeleton.py` (row 527): `grows_grain` (`test_a_hamlet_keeps_its_yards_wherever_grain_is_grown`).
+- `farm_fixtures.py::kura_rect` (row 528): the band's floor on a shallow house (`test_the_north_annex_is_held_inside_the_edo_sheds_band`).
+- `fields/comb.py` (rows 529-532): the drain-side row not drained (`test_a_green_plot_of_the_drain_side_row_carries_no_winter_barley_either`);
+  the outfall curved (`test_the_drain_outfall_run_runs_downhill_...`) and its corridor on a town or city only
+  (`test_the_outfall_run_keeps_33_ft_clear_on_a_town_or_city_only`).
+
+- [ ] T127 rows 512-513, 523-532 (FR-003, FR-004)
+      research: rendering
+- [ ] T128 the claims re-checked by `impl-drift`; batch 2 closed: the gate, the pair, the perf-audit, the occasions (FR-005, FR-006)
+      research: rendering
