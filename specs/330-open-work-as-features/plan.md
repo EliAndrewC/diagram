@@ -22,7 +22,7 @@ files), 53 live files that name `future-work/`. **Performance**: the command rea
 - **D1 - The state rule** (FR-002). A feature is CLOSED when its `tasks.md` has at least one task and no open one,
   or when its spec's `**Status**:` value begins (case-insensitive) with `Done`, `Superseded by` or `Withdrawn`.
   Otherwise it is OPEN: FILED (no `tasks.md`, or one with no tasks), PLANNED (tasks, none ticked) or IN PROGRESS
-  (some ticked). A task is a line opening `- [ ]` or `- [x]` at column 0 - the form `scripts/gates/plan_gate.py` and
+  (some ticked). A task is a line opening `- [ ]`, `- [x]` or `- [X]` at column 0 - the form `scripts/gates/plan_gate.py` and
   `make tick` use; an indented box is part of its task. The closing words are one tuple in the script, which the tests
   import (FR-002: stated once). `Implemented` is NOT a closing word: features say it while holding open tasks, so the
   audit rewrites each to `Done` or leaves it open (the spec's edge case).
@@ -43,11 +43,14 @@ files), 53 live files that name `future-work/`. **Performance**: the command rea
 - **D5 - Filing an entry** (FR-006). One `make claim` per filed feature. Its `spec.md` carries a title (the entry's
   heading), `**Status**: Filed - from future-work/<file>, "<heading>", 2026-10-08`, a one-line Input naming the GM's
   ruling (this feature), and the entry's text verbatim under `## The entry, as filed`. An entry that names separate
-  pieces becomes one feature per piece (`compounds.md`'s "Research owed"). An entry that names an existing feature
-  (the funerary grounds entry says it "was feature 275, withdrawn") is filed INTO that feature's directory rather
-  than under a new number, so one piece of work keeps one number. An entry found done, or disposed of by a cited
+  pieces becomes one feature per piece (`compounds.md`'s "Research owed"). An entry that names an earlier feature is filed under a NEW number like
+  every other and its spec names that feature as its history: the funerary-grounds entry says it "was feature 275,
+  withdrawn", and 275's own record says the GM threw it out (*"I think you can get rid of it entirely"*; "The number
+  stays spent") - filing into 275 would reopen what the GM closed (plan review, 2026-10-08). An entry found done, or disposed of by a cited
   ruling or a later feature, is closed in `audit.md` with the evidence and not filed.
-- **D6 - Pointers** (FR-007). Every live file naming `future-work/` (53 files, 86 mentions, measured 2026-10-08) is
+- **D6 - Pointers** (FR-007). Every live file naming `future-work/` (41 files, 77 mentions on 2026-10-08, counted as
+  `git grep -o 'future-work/'` over tracked files outside `specs/`, `dev/*-log/`, `dev/review-ledger.md`, the hook
+  fixtures and `future-work/` itself) is
   re-aimed at the feature its entry became; a mention of the directory as a place to put work becomes the rule in
   D7. History keeps its words: `specs/`, `dev/*-log/`, `dev/review-ledger.md`, the hook fixtures.
   `scripts/gates/check-old-layout.py` refuses a new live mention of `future-work/` (the retired-path check the

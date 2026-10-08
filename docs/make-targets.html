@@ -28,7 +28,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 </style>
 <main>
 <h1>make targets</h1>
-<p class=lede>Every target in the diagram skill's Makefile, grouped. 121 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
+<p class=lede>Every target in the diagram skill's Makefile, grouped. 122 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
 <h2>Tests</h2>
 <p class=sec>The four tiers, cheapest first. Where a test LIVES decides when it runs, so these differ by scope rather than by filter.</p>
 <div class=scroll><table><tr><th>target</th><th>arguments</th><th>what it is</th></tr>
@@ -165,6 +165,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 <tr><td class=n>make sources-consulted</td><td class=a>KEY URL</td><td>every earlier read of a source page, with its outcome, from the sources-consulted ledger - by URL, or by registry key (feature 288)</td></tr>
 <tr><td class=n>make sources-import</td><td class=a>&ndash;</td><td>ONE TIME, idempotent: seed the sources-consulted ledger from the 2026-09-29 measurement and import the /tmp/l7r-check saves into the page cache (feature 288)</td></tr>
 <tr><td class=n>make spec-harness</td><td class=a><div class=ad><span class=an>SPEC=&lt;dir&gt;</span><span class=aw>the feature directory holding `harness.py`</span></div><div class=ad><span class=an>OUT=&lt;json&gt;</span><span class=aw>where the harness writes its figures (default: the harness&#x27;s own default)</span></div></td><td>run a feature&#x27;s measurement harness (its harness.py) as a test node</td></tr>
+<tr><td class=n>make speckit-todo</td><td class=a><div class=ad><span class=an>ALL=1</span><span class=aw>also list the closed features and the reason each is closed</span></div></td><td>list the spec-kit features not yet closed - filed, planned, in progress - with their progress   [ALL=1: also the closed, and why]</td></tr>
 <tr><td class=n>make stale-terms</td><td class=a><div class=ad><span class=an>F=&lt;feature&gt;</span><span class=aw>the feature number or directory name under specs/</span></div><div class=ad><span class=an>AGAINST=&lt;ref&gt;</span><span class=aw>compare with the feature directory at this git ref (default: what the previous review round saw)</span></div></td><td>after a value changed in a feature&#x27;s spec, where does the OLD value still stand - look BEFORE a later review round</td></tr>
 <tr><td class=n>make style-prepass</td><td class=a><div class=ad><span class=an>Q=&lt;NNNN&gt;</span><span class=aw>the question, by number (both pages) or a page&#x27;s file name</span></div></td><td>the style guide&#x27;s mechanical half for one question - metric figures with no feet, and every lead line to rule on - run BEFORE record-style</td></tr>
 <tr><td class=n>make switches</td><td class=a>&ndash;</td><td>the iteration switch: remote on|off, with reason, who and when (feature 132)</td></tr>
