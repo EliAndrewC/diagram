@@ -3142,7 +3142,7 @@
   "e0_basis": "the code already says what the page says: LESSER_BROADLEAF_S = (0.75, 0.85), inside 0080 drawing's 0.75-1.4, and its claim cites that band (fixed in wave 9)",
   "moved": "wave 39: already fixed in wave 9 with its E1 sibling (`_draw_grove#lesser broadleaf crown size`): LESSER_BROADLEAF_S reads (0.75, 0.85)",
   "verdict": "UNCLAIMED",
-  "wave": "",
+  "wave": "39",
   "scope": "kept"
  },
  {
@@ -3175,7 +3175,7 @@
   "e0_basis": "the code already says what the page says: LESSER_BROADLEAF_S = (0.75, 0.85), inside 0080 drawing's 0.75-1.4, and its claim cites that band (fixed in wave 9)",
   "moved": "wave 39: already fixed in wave 9 with its E1 sibling (`_draw_grove#lesser broadleaf crown size`): LESSER_BROADLEAF_S reads (0.75, 0.85)",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "39",
   "scope": "kept"
  },
  {
@@ -8536,7 +8536,7 @@
   "found": "wave 9 re-check (tiered by its work at T38a)",
   "tier_as_ranked": "E1",
   "moved": "T38a: tiered by its work - Several literals in the crown-size rule change together (the band's shape and the conifer factor), within the one rule.",
-  "wave": "",
+  "wave": "39",
   "scope": "kept"
  },
  {
@@ -8568,7 +8568,7 @@
   "found": "wave 10 re-check (tiered by its work at T42a)",
   "tier_as_ranked": "E2",
   "moved": "T42a: tiered by its work - One keep-out condition in one function widens from conifers to every crown.",
-  "wave": "",
+  "wave": "39",
   "scope": "kept"
  },
  {
@@ -8584,7 +8584,7 @@
   "found": "wave 11 re-check (tiered by its work at T46a)",
   "tier_as_ranked": "E2",
   "moved": "T46a: tiered by its work - Two conditions inside one function's item roll change for one mix (the crown band and the bamboo share), no new form.",
-  "wave": "",
+  "wave": "39",
   "scope": "kept"
  },
  {
@@ -8977,6 +8977,21 @@
   "verdict": "DRIFTED",
   "wave": "",
   "scope": "deferred"
+ },
+ {
+  "key": "l7r/diagram/settlement/shrines_wells/woods.py::TreeStandsMixin._draw_stand#crown size",
+  "verdict": "DRIFTED",
+  "tier": "E2",
+  "fix": "0080 drawing: 'A windbreak's crowns are drawn the same real size as a hill wood's' and each crown 0.75 to 1.4 times the mean; _draw_stand rolls uniform(0.75, 1.05), or uniform(1.05, 1.4) for 18%, a mean near 0.96 R, while the groves now draw CROWN_S uniform(0.75, 1.4), a mean of 1.075 R - give the woods CROWN_S (the woodland commons' glyph is at its two-round cap)",
+  "files": [
+   "l7r/diagram/settlement/shrines_wells/woods.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 39 re-check, round 3 (tier provisional)",
+  "tier_as_ranked": "E2",
+  "wave": "",
+  "scope": "kept"
  },
  {
   "key": "l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_anchor#reach in feet",
@@ -11989,6 +12004,23 @@
   "verdict": "DRIFTED",
   "wave": "",
   "scope": "deferred"
+ },
+ {
+  "key": "l7r/diagram/settlement/homestead_parts/belt_law.py::the village belt#its west arm on inashiro",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "Inashiro's notes (Known open, closed 2026-09-26) say the belt stands on the north and west of its houses; since wave 9 the west arm draws no tree (the outline's west arm lies off the page, the crop moved from x 2127 to 2176) and the belt shelters the north alone (glyph-check windbreak F1, wave 39). Bisected: 237 clumps -> 150 at 80518a458 (wave 9's E1 fixes: MIN_BELT_DEPTH_FT 30 -> 80, EAST_REACH 22 px -> 50 ft, the conifer share; reverting either rule alone leaves 150), -> 101 at 3520d8fba (the privy steps held, the notice band). 0072 allows one side or two, so the map is not wrong; whether the west arm should stand is the question",
+  "files": [
+   "l7r/diagram/settlement/homestead_parts/belt_law.py",
+   "l7r/diagram/settlement/homestead_parts/grove_rules.py",
+   "pool/hamlets/inashiro/inashiro.notes.md"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 39 glyph-check windbreak F1 (tier provisional)",
+  "tier_as_ranked": "E3",
+  "wave": "",
+  "scope": "kept"
  },
  {
   "key": "l7r/diagram/settlement/homestead_parts/farmstead.py::FarmsteadMixin._find_appurtenances#every farm a garden",

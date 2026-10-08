@@ -1608,11 +1608,11 @@
   "code": "c629c68cb3878dae",
   "core": "5a04c0b5d84e0fbd",
   "date": "2026-10-08",
-  "note": "0.75-1.4 x 17 ft crowns, overlapping, a GUESS",
+  "note": "a 17 ft mean crown, 0.75-1.4 of it, overlapping; the page records every crown size as a guess",
   "pages": {
-   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html": "605417d79e0e0561"
+   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html": "646f4508385c9db1"
   },
-  "research": "f1a38c9708a60be9",
+  "research": "050eb194338f2925",
   "rests": [
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:02347cd7bad4385d",
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:a40ebd3a6acb1f87",
@@ -1620,7 +1620,6 @@
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:c42d5b3f4f69bf47",
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:d9d6ec0e3a243d28"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sacred features#grove inside a compound wall": {
@@ -45452,15 +45451,15 @@
   "code": "39dec6859fa9b287",
   "core": "b37276e97f39b026",
   "date": "2026-10-08",
-  "note": "the page's 0.75 to 1.4 band",
+  "note": "(0.75, 1.4) is the page's band",
   "pages": {
-   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html": "605417d79e0e0561"
+   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html": "646f4508385c9db1"
   },
-  "research": "f1a38c9708a60be9",
+  "research": "050eb194338f2925",
   "rests": [
-   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:a40ebd3a6acb1f87"
+   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:a40ebd3a6acb1f87",
+   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:a52bbfe64bb3c3b8"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GROVE_BAMBOO_PATCH_FT#grove bamboo patch": {
@@ -45606,14 +45605,6 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._belt_ranks#row conifer crown size, RANK_CONIFER_S 1.0 to 1.1 of the mean radius": {
-  "code": "4fbe3c1e8c10feac",
-  "core": "4fbe3c1e8c10feac",
-  "date": "2026-10-08",
-  "note": "row conifer crown size, RANK_CONIFER_S 1.0 to 1.1 of the mean radius",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._belt_ranks#row conifer off a wellhead": {
   "code": "eb7c419b52710d55",
   "core": "4fbe3c1e8c10feac",
@@ -45625,6 +45616,21 @@
   "research": "1f42835678daf333",
   "rests": [
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:301a35716bf73526"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._belt_ranks#row conifer size": {
+  "code": "fb549784768397b1",
+  "core": "4fbe3c1e8c10feac",
+  "date": "2026-10-08",
+  "note": "1.0-1.1 of CANOPY_R_FT is a fixed degree inside the page's 0.75-1.4",
+  "pages": {
+   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html": "646f4508385c9db1"
+  },
+  "research": "050eb194338f2925",
+  "rests": [
+   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:a40ebd3a6acb1f87",
+   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:a52bbfe64bb3c3b8"
   ],
   "verdict": "IN-STEP"
  },
@@ -45789,16 +45795,17 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#every crown gives way round a persimmon": {
-  "code": "b2b5b399ad65989a",
+  "code": "68e00c39692f477c",
   "core": "9ea645aa34857725",
   "date": "2026-10-08",
-  "note": "any crown under a yard persimmon's crown is refused",
+  "note": "every kind of crown is refused over a yard persimmon's crown, which is what \"the grove's trees give way round it\" says",
   "pages": {
    "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html": "6b3be37b04307230"
   },
   "research": "1640adf91280aca1",
   "rests": [
-   "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:881ed76b6b6133cb"
+   "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:881ed76b6b6133cb",
+   "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:95a4bdb23ba3bcdf"
   ],
   "verdict": "IN-STEP"
  },
@@ -45871,10 +45878,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#windbreak conifer share": {
-  "code": "4a825cd7fecc81db",
+  "code": "1e982b69c796c9eb",
   "core": "9ea645aa34857725",
   "date": "2026-10-08",
-  "note": "0.48 is rolled before the filters, and over_a_conifer drops only broadleaf, so the drawn share may exceed \"48%, were cedar\"; need windbreak conifer/broadleaf tallies from the pool maps",
+  "note": "c_th makes 48% of the non-bamboo crowns conifer, matching Kashima's 735 of 1,542 cedar in farmhouse groves; the 47.9% you measured (555 of 1158) agrees",
   "pages": {
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.html": "186cb571d0ba4842"
   },
@@ -45883,7 +45890,7 @@
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.html:1884e0c831822752",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.html:8b6131d80ca7a717"
   ],
-  "verdict": "CANNOT-TELL"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._find_grove_arms#every rolled face planted": {
   "code": "d831601daf5b0ebd",
@@ -46282,15 +46289,14 @@
   "code": "18d2f10a9c2e9991",
   "core": "012faafef485da16",
   "date": "2026-10-08",
-  "note": "1.0 to 1.1, inside 0.75 to 1.4",
+  "note": "(1.0, 1.1) is inside the page's 0.75-1.4",
   "pages": {
-   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html": "605417d79e0e0561"
+   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html": "646f4508385c9db1"
   },
-  "research": "f1a38c9708a60be9",
+  "research": "050eb194338f2925",
   "rests": [
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:a40ebd3a6acb1f87"
   ],
-  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::RANK_JITTER_FT#planted off its mark": {
@@ -56185,14 +56191,17 @@
  "l7r/diagram/settlement/shrines_wells/woods.py::TreeStandsMixin._draw_stand#crown size": {
   "code": "96304530ece552d9",
   "core": "d3958c0f5ef26090",
-  "date": "2026-10-03",
-  "note": "as claimed",
+  "date": "2026-10-08",
+  "note": "the page says \"A windbreak's crowns are drawn the same real size as a hill wood's\", but the woods and the groves now draw different sizes: woods use `uniform(0.75,1.05)`, or `uniform(1.05,1.4)` for 18%, giving a mean of about 0.96 R (~8.2 ft radius); groves use CROWN_S uniform 0.75-1.4, a mean of 1.075 R (~9.1 ft). Give both the same distribution, or have the page record the split",
   "pages": {
-   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html": "605417d79e0e0561"
+   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html": "646f4508385c9db1"
   },
-  "research": "f1a38c9708a60be9",
-  "triage": "touched",
-  "verdict": "IN-STEP"
+  "research": "050eb194338f2925",
+  "rests": [
+   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:a40ebd3a6acb1f87",
+   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:a52bbfe64bb3c3b8"
+  ],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/shrines_wells/woods.py::TreeStandsMixin._draw_stand#emergent share": {
   "code": "2ca506513309a784",
