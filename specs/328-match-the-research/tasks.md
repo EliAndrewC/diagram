@@ -13,8 +13,10 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 - (wave 5, landed and reviewed) placement-changed village lane on kashikawa - wave 5: 0033's row street runs on off the map as the road into it at both ends, where
   the web cut it back to its last joint (`trim_streets`); Kashikawa's and Mizuguchi's far ends now run off the sheet as a
   second way out (every way is inked `village lane`).
-- none (wave 41): the channel mouth's tolerance to the stream's drawn width moved no map (the five hamlets regenerated
-  2026-10-08 with manifests byte-identical); the belt claims re-cited
+- none (wave 41): the channel mouth's tolerance moved no map (the five hamlets regenerated 2026-10-08 with manifests
+  byte-identical); the feed's recorded width (round 2) moved Kuwabata's polder feed record 6.0 -> 5.0 and one scrub-cover ring of
+  its grazing common by under a foot where it keeps off that canal (measured on the regenerated manifest) - no rule changed
+  for any element; the belt claims re-cited
 - placement-changed: wet paddy on sawada - wave 40: only the draw or a pointed shape leaves a low plot green (0007); the four
   shape clauses and the outfall's keep-out, on no page, went, and the blue plots run 7 -> 16 here (Inashiro 1 -> 8, Kashikawa 4 -> 13, Mizuguchi 3 -> 7, Sawada 7 -> 16, after round 2's taper fix)
 - glyph-redrawn: windbreak on inashiro - wave 39: every grove crown in 0080's one 0.75-1.4 band, a conifer no wider than a broadleaf
@@ -1349,9 +1351,14 @@ regenerated, `tree_crowns` and `bamboo_marks` changed on every map, nothing else
   moved (the five hamlets regenerated 2026-10-08 against wave 40's close, manifests byte-identical). Taken ahead of E2 rows
   481-543 because it shares 0054 and the brook's rounding with wave 40's water work; the waves return to ranking order next.
   `brook_rules.CROSSING_END_TOL`, the same judgment at 13 px, filed (`audit/found-wave41.jsonl`).
+- Round 2 (impl-drift): `_comb_source_channel#feed recorded width` (E1, closed in wave 9) re-found DRIFTED on the polder branch -
+  the record traces the polder's main canal from the reservoir's rim but carried the comb head race's 6.0; it now records the
+  traced channel's drawn width (`test_the_feed_is_recorded_at_the_width_of_the_channel_it_traces`, red on the old code). The
+  belt's near-face claim made a bare GUESS (0071 does not record the 36 ft).
 - Wave 40's found rows, tiered by a fresh reader (T107a, `audit/t107a-out.jsonl`): `cluster.py::belt_off_canvas#belt distance
   upwind` and `plan.py::BELT_REACH#belt's far row` E0 - the band's depth re-cited to 0071 drawing's drawn 80 to 120 ft (a
-  convention), its 36 ft near face UNRESEARCHED; 0072 drawing's older measured figures E2, left for its place.
+  convention), its 36 ft near face a GUESS (0071 drawing: the outline stands back from the nearest houses); 0072 drawing's
+  older measured figures E2, left for its place.
 
 - [x] T107a wave 40's found rows tiered by the work they take, by a fresh reader (FR-002, FR-003, SC-003)
       research: rendering

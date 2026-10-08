@@ -829,7 +829,7 @@ class CombMixin:
             feed joins the brook - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the intake snapped onto a brook within 30 px, else sourced at the sluice
             feed runs downhill - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: a feed whose net travel is level or uphill is refused, and the snap onto a stream taken only where it still runs down (`runs_downhill`)
             a stream of no recorded width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.html: taken as the village brook's 7 ft in the mouth-in-the-water test, as `stream` draws it
-            feed recorded width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: recorded at 6.0, the head race it traces"""
+            feed recorded width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: recorded at the drawn width of the channel it traces - the comb's head race, or the polder's main canal from the reservoir's rim (feature 328: both were recorded at the head race's 6.0)"""
         if source.get("kind") != "cascade":
             hr = net["channels"][0]["pts"]
             fork = hr[-1]
@@ -951,7 +951,7 @@ class CombMixin:
                 raise ValueError(f"{name}: the feed from its {frm['kind']} to the field runs level or uphill ({_ch_poly[0]} -> {_ch_poly[-1]})")
             # ...AND IT NAMES THE FIELD IT FEEDS (feature 287, water W53): it traces the head race, and a field's own water may
             # lie along its own resting basin (`_MATRIX_SAME_PARENT_OK`); a stranger's may not. Asked before it is recorded.
-            _feed = {"poly": _ch_poly, "frm": frm, "to": {"kind": "field", "name": name}, "w": 6.0, "field": name}
+            _feed = {"poly": _ch_poly, "frm": frm, "to": {"kind": "field", "name": name}, "w": float(net["channels"][0].get("w") or 6.0), "field": name}
             refuse_unadmitted(self.M, "channels", _feed)
             self.M["channels"].append(_feed)
 

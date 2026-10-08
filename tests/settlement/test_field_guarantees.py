@@ -316,3 +316,15 @@ def test_every_grave_stone_stands_on_its_mound_and_steps_back_from_the_last() ->
         assert ups == sorted(ups) and len(set(ups)) == 3, f"each stone steps back from the last: {ups}"
     assert stone_steps(3, 30.0, 20.0) == [3.0, 6.5, 10.0], "a large mound keeps the stagger"
     assert stone_steps(2, 0.0, 6.0) == [0.0, 0.0], "a mound with no width has no room"
+
+
+def test_the_feed_is_recorded_at_the_width_of_the_channel_it_traces() -> None:
+    """0068 (feature 328 wave 41, impl-drift): the feed's record traces a drawn channel - the comb's head race, or the polder's
+    main canal from the reservoir's rim - so it carries that channel's drawn width (both were recorded at the head race's 6.0)."""
+    net = _comb()
+    net["brook"] = []
+    net["channels"][0]["w"] = 8.5
+    s = Settlement(W=1400, H=1400, seed=5)
+    s.meta(name="In", scale="hamlet", ftpx=1, down_deg=90)
+    s.draw_comb_field(net, "f1", {"kind": "stream"})
+    assert s.M["channels"][-1]["w"] == 8.5
