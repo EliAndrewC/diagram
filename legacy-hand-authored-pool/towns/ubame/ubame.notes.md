@@ -4,7 +4,7 @@
 easternmost of Moriguchi's five counties and the one the road from the Kitsune Mori arrives in.
 Canon: `l7r.md`, "The Kurogi and the dynasty province of Moriguchi". Its magistrate is Bayushi no
 Daika Koharu, whose compound is the separate Mode A sheet
-[`pool/magistracies/ubame-magistracy/ubame-magistracy.svg`](../magistracies/ubame-magistracy.svg).
+[`pool/magistracies/ubame-magistracy/ubame-magistracy.svg`](../../../pool/magistracies/ubame-magistracy/ubame-magistracy.svg).
 
 **Why it exists**: the GM asked for a third pool town to test the placement algorithms and the
 automated checks on fresh geometry. It is deliberately the third **combination** - Hoshizora is
@@ -265,7 +265,7 @@ and the magistracy gate axis, which became "Standing it in plain sight" above ra
 **Two findings were referred to the ENGINE rather than fixed here**, because both are `s.kiln`
 defects that this map merely became the first to exhibit, and fixing them under a one-off content
 edit would put a shared glyph change on four other sheets' account. Both are logged in
-[`../../future-work/`](../../future-work/):
+[`../../future-work/`](../../../future-work/):
 
 - the kiln's **smoke wisp is drawn in the glyph's local frame**, so on this sheet it trails NNW into
   a declared NW wind - the siting is right and the ink contradicts it;
@@ -309,7 +309,7 @@ one), and a cart is the same 12x5 ft as the kosatsuba (1,550 ft apart, one of th
     is the open ground behind the frontage, precisely where a display installation must not be.
     Both now use the engine's verge probes.
   - **The boundary stone was standing inside a merchant's house.** Re-seated with
-    [`tools/site_justice.py`](../../tools/site_justice.py), which adjudicates candidate seats against the real
+    `tools/site_justice.py` (since retired), which adjudicates candidate seats against the real
     gate instead of a re-statement of it.
 - **2026-07-26 render read (Principle I).** Two defects visible only on the raster:
   - **The windbreak drew as a round wood dumped in the middle of town**, hard against the flophouse.
@@ -441,7 +441,7 @@ one), and a cart is the same 12x5 ft as the kosatsuba (1,550 ft apart, one of th
 
 ## Negative fixtures frozen from this map
 
-Seven, in [`../regressions/`](../regressions/) - each the real Ubame manifest with exactly one thing
+Seven, in `../regressions/` (since retired) - each the real Ubame manifest with exactly one thing
 broken, so every new check has a case it demonstrably fires on:
 `execution_ground_past_the_boundary_marker` (the stone standing among the west-end dwellings - the
 map exactly as it shipped, frozen before the re-seat),

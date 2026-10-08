@@ -40,7 +40,7 @@ OPERATIVE = [
     SKILL / "SKILL.md",
     SKILL / "tests/CLAUDE.md",
     SKILL / "dev/gate.md",
-    SKILL / "migration-plan.md",
+    SKILL / "docs/migration-plan.md",
 ]
 
 

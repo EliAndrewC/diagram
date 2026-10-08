@@ -273,14 +273,14 @@ def _tree(tmp: Path) -> Path:
     (eng / "other" / "c.py").write_text("def unreached():\n    pass\n")
     (eng / "__pycache__").mkdir()
     (tmp / "buildings").mkdir()
-    (tmp / "buildings.md").write_text("## Walls\n<!-- Research: w - NONE -->\n")
+    (tmp / "docs/buildings.md").write_text("## Walls\n<!-- Research: w - NONE -->\n")
     (tmp / "buildings" / "programs.md").write_text("### Magistrate's manor (county magistracy)\ntext\n### Other\n")
     return tmp
 
 
 def test_a_tree_without_the_procedure_documents_reads_its_code(tmp_path: Path) -> None:
     skill = _tree(tmp_path)
-    (skill / "buildings.md").unlink()
+    (skill / "docs/buildings.md").unlink()
     (skill / "buildings" / "programs.md").unlink()
     assert all(u.kind != "section" for u, _e in cl.all_units(skill, ""))
 
@@ -297,6 +297,6 @@ def test_coverage_names_every_unit_without_a_claim_and_every_missing_question(tm
     text = "\n".join(problems)
     assert "l7r/diagram/other/b.py module docstring: `oops` has no `<label> - <backing>`" in text
     assert "l7r/diagram/other/b.py:3 thing: `research/questions/0033-row-villages-resson.html` names no question file" in text
-    assert "buildings/programs.md:1 Magistrate's manor (county magistracy): no claim - add a `<!-- Research:" in text
-    assert "shared.py" not in text and "buildings.md:" not in text
+    assert "docs/buildings/programs.md:1 Magistrate's manor (county magistracy): no claim - add a `<!-- Research:" in text
+    assert "shared.py" not in text and "docs/buildings.md:" not in text
     assert cl.coverage(cl.all_units(skill, ""), questions={"0033-row-villages-resson.html"}) == [p for p in problems if "names no question" not in p]

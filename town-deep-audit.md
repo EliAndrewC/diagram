@@ -4,7 +4,7 @@
 
 
 A granular audit of the two town-scale pool maps against (a) the project's own documented
-research (budgets.md, the settlements rule file, buildings.md, the gens' docstrings) and (b) fresh
+research (budgets.md, the settlements rule file, docs/buildings.md, the gens' docstrings) and (b) fresh
 historical research on Edo-period county-seat-class towns (jin'ya/daikansho seats, zaigomachi,
 shukuba) with Ming/Qing market towns as the China cross-check. Requested by the GM 2026-07-24.
 Companion to `town-checks-audit.md` (which audited the CHECK suite; this audits the MAPS and
@@ -58,7 +58,7 @@ Sizes WITH a recorded research anchor - all check out against independent refere
 - **Magistrate manor: Hoshizora 250x180 ft (~1.0 acre), Hirameki 360x216 (~1.8 acres)** -
   Takayama Jin'ya (the surviving Hida daikansho) runs just under an acre for the office core;
   1 acre for a quiet interior seat and 1.8 for a walled border town with garrison are right.
-  Interior program is separately grounded in buildings.md (Harima worked example). PASS.
+  Interior program is separately grounded in docs/buildings.md (Harima worked example). PASS.
 - **Monastery halls: Bishamon 132x86 / 150x98 ft, Benten relic 60x40 ft** - large for a real
   county-town temple, but the L7R temple canon (the settlements rule file: "L7R deliberately over-sizes -
   every city temple is a major complex", clergy at 2-5x historical density) is exactly the

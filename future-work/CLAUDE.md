@@ -52,7 +52,7 @@ estates and keeps are coming.
 5. **Check the era before you act on an old entry.** Much of the city material predates scripted
    generation and assumes a next hand-authored map. There will not be one: the 18 hand-authored maps
    are FROZEN and conversion is the answer for every tier above hamlet
-   ([`../migration-plan.md`](../migration-plan.md)). Those entries are annotated - the task is dead,
+   ([`../docs/migration-plan.md`](../docs/migration-plan.md)). Those entries are annotated - the task is dead,
    the insight is an input to that tier's conversion.
 
 

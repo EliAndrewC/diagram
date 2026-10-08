@@ -11,7 +11,7 @@ a town has enough that is specific to it - storefronts, inns, caravans, the thea
 plurality the larger tiers do not have - that folding it in here would bury it.
 
 **Every tier this file covers is unconverted** - only hamlets are generated
-([`../migration-plan.md`](../migration-plan.md)) - and the hand-authored cities are frozen. An entry here is an input
+([`../docs/migration-plan.md`](../docs/migration-plan.md)) - and the hand-authored cities are frozen. An entry here is an input
 to the tier's conversion, or work on the engine code that conversion will reuse.
 ## Fold settlement/city/civic.py into castle_civic.py (feature 113, 2026-08-16)
 
@@ -54,7 +54,7 @@ building or district (`Subject("area", ...)` through `_draw_seated_caption`), an
 ## OWED AT CONVERSION (269's research, 2026-09-28): what the scripted city generator must draw differently
 
 Feature 269 read these questions for the city tier (research/contents.json#cities; `specs/269-research-backfill/outcomes.md`
-section 3). The hand-drawn maps are frozen, so each is owed by the city tier's conversion (`migration-plan.md`), and
+section 3). The hand-drawn maps are frozen, so each is owed by the city tier's conversion (`docs/migration-plan.md`), and
 the rows marked GM wait on a ruling that the conversion puts to the GM through `escalation-check`. The rows the record
 now states as the drawing rule (the moat's width by rank, the gate range's guard room, the block-form and
 lower-mansion knobs) are on their drawing pages and are not repeated here.

@@ -39,9 +39,9 @@ captured in the worker and printed in order, so a parallel run reads like a seri
 itself and render-sync regenerates main's renders from main's own tip - the 2026-08-16 rule, with
 the evidence, is in [`docs/iteration-loop.md`](../docs/iteration-loop.md).)
 
-## The gate total is a BUDGET, not a score - and timings live in timings.md
+## The gate total is a BUDGET, not a score - and timings live in dev/timings.md
 
-**TIMINGS ARE TRACKED IN [`timings.md`](../timings.md), MEASURED BY `python3 -m l7r.diagram.tools.timings`** - one dated
+**TIMINGS ARE TRACKED IN [`dev/timings.md`](timings.md), MEASURED BY `python3 -m l7r.diagram.tools.timings`** - one dated
 block per run, each benchmark carrying its BREAKDOWN as well as its total, so a slow loop can be
 attributed instead of merely noticed. Do not write fresh timings into prose here: this paragraph
 used to say the full sweep was "~2 to 2.5 minutes" and was still saying it on 2026-08-15, when the
@@ -188,7 +188,7 @@ to houses; dry-to-wet crossings) surfaced in one pass instead of five.
 gated push lands on a green local `make done` instead (LOCAL-GATED). A second switch, `make
 the scope lock was RETIRED in feature 185 - it existed for the reference-hamlet period when the gate
 was slow and multi-map rolls had to be deferred, and feature 174 removed that condition by making the
-gate run the whole suite every time. `remote` is the only axis now; see [`switches.md`](switches.md).
+gate run the whole suite every time. `remote` is the only axis now; see [`../docs/switches.md`](../docs/switches.md).
 
 **A session does not decide whether to go remote - the conditions do.** `make ci-status` prints
 them, free. Five conditions, all checked locally before any AWS call, every one printed even after
@@ -208,7 +208,7 @@ $MAKE_TARGET`, and on green writes `verified/<tree>.json`. The log streams into 
 output and the command exits with the build's status - background it and act on the notification,
 exactly like `make done`.
 
-| target | what it runs remotely | prompts? | cost (est. until `timings.md` says) |
+| target | what it runs remotely | prompts? | cost (est. until `dev/timings.md` says) |
 |---|---|---|---|
 | `make ci-check` | `make done` (reference scope) on `gm-assistant-check` (concurrency 3); no path to main | no | ~5 min, ~$0.40 |
 | `make ci-check FULL=1` | `make done FULL=1` - every pool map, the ratchet, both coverage floors, `perf-gate` with BOTH bookends taken in-build | **yes, locally** - the GM's | ~8 min, ~$0.65 |

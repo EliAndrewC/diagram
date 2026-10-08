@@ -57,7 +57,7 @@ do not want to run anything on AWS"* come first, and the speedup second.
    is SKIP-VERIFIED only when a green local `make done` vouches for the merged engine content
    (condition 4's local rule); otherwise `REFUSE(remote-enabled)` and the work stays in the clone.
    Thrown and released by `make ci-off` / `make ci-on`, which commit; no variable overrides it.
-   The doctrine: [`../../../dev/switches.md`](../../../dev/switches.md).
+   The doctrine: [`../../../docs/switches.md`](../../../docs/switches.md).
 1. **route-is-gated** - our delta touches engine code. *"if we make any updates that are only outside
    of the diagram skill, then we do not want to run anything on AWS ... even if the diagram
    documentation was touched, but not the code itself, then we should not rerun the tests."* The
@@ -129,7 +129,7 @@ whatever the tree under test says - reviewable in a diff. Both YAMLs call
 difference: merge fast-forward-pushes the verified result to GitHub `main` and deletes the mailbox.
 The custom image (`Dockerfile.ci`, `make ci-image`) is used once its marker `image/latest.txt`
 exists in the bucket; until then the build bootstraps Python 3.14 + resvg on the stock image
-(measured in `timings.md`).
+(measured in `dev/timings.md`).
 
 ## The threat model
 

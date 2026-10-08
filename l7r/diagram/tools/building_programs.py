@@ -1,5 +1,5 @@
 """`make building-programs`: the required-items table of every declared Mode A type, rendered into
-`buildings/programs.md` between markers (feature 254, plan D11).
+`docs/buildings/programs.md` between markers (feature 254, plan D11).
 
 WHY. The GM's rule for the second type was that a type is declared ONCE and the docs render from it.
 The checks read `buildings/types.json`; the reviewers read `programs.md`. If the two are written

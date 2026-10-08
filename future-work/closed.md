@@ -134,12 +134,12 @@ Cities and towns:
 - REDUNDANT (the record's drawing pages): the moat's width (0151), the gate range's guard room (0147), the ward blocks (0162), lower mansions at the outer town (0173); where a Chinese-model town seats its magistrate (0123); the T plan and the crank at a town's ends (0121, 0136)
 
 Compounds:
-- DONE (4f5c8f949): the rear strip is a knob, not yet declared - both forms in `buildings/programs.md`; the servants' half is in the claims report
+- DONE (4f5c8f949): the rear strip is a knob, not yet declared - both forms in `docs/buildings/programs.md`; the servants' half is in the claims report
 - REDUNDANT (the record's absence notes): every sheet's bed (0109); the shrine keeper's plot (0109); the silences the maps fill with a labeled guess; the garden wicket (0104)
 - DONE (294): `building-review`'s contract names a wall-ink line the audit no longer prints
 - DONE (280 M115): was the knee-high striking bundle an adult drill? - not drawn
 - DONE (the record): what stood between Takayama's genkan and its working rooms (0104: a genkan-no-ma); were gangi cut back into the bank (0176: cut into the revetment); how often a grave in the fields (0236, calibrated liberty); where the ancestral tablets were kept (0239, the butsuma)
 - DONE (280 R1): the glossary tooltip matcher picks up "shinden" in "Shinden Togashi" - the name has its own entry
-- REDUNDANT (claims report): the barracks size band after the bunk rooms - `buildings.md::Outer court#barracks`
+- REDUNDANT (claims report): the barracks size band after the bunk rooms - `docs/buildings.md::Outer court#barracks`
 - DECIDED 2026-10-07 (the GM): canon gaps (Ubame, Hayakawa, the Kurogi, Moriguchi, Nagahara absent from `l7r.md`) are not tracked here; each sheet's notes carry the particulars
 - SETTLED 2026-09-26 (the GM): Ochiba's threshold stones are drawn ~3.3 by 4.7 ft ON PURPOSE - Ochiba is where the threshold stones are made and painted; canon's field stones are two fists. Ochiba's reception room faces the inner garden (its notes)

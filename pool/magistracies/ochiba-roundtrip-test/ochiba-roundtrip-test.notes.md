@@ -5,7 +5,7 @@
 This is NOT a replacement for `ochiba-magistracy.svg`. It is the OUTPUT of feeding the
 EXISTING hand-authored Ochiba's real program (envelope, court-spine, and building masses
 measured off the finished map at 3 px = 1 ft) back through the perimeter-first placer
-([`../compound.py`](../../compound.py), feature 008), to test whether the placer composes
+([`../compound.py`](../../../l7r/diagram/compound.py), feature 008), to test whether the placer composes
 Ochiba the way the GM hand-composed it.
 
 Regenerate: `python3 pool/magistracies/ochiba-roundtrip-test/ochiba-roundtrip-test.gen.py` (from the skill dir). The program lives
@@ -55,4 +55,4 @@ boundary, so half of it lies inside - every rank-1 building here had been standi
 inside the masonry, with its own outline swallowed by the wall stroke. The placer now leaves
 the ink plus a hair (2 ft off a compound wall, 1.5 ft off the divider), and the inner-court
 garden zone moved 36 -> 38 ft so the shifted N-wall row still clears it. Checked by
-`tools/pack_audit.py` `structures_on_walls`; see buildings.md "Walls and gates".
+`tools/pack_audit.py` `structures_on_walls`; see docs/buildings.md "Walls and gates".

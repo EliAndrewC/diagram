@@ -70,7 +70,7 @@ class BoardsMixin:
         most TRAFFICKED public point - the highway frontage, the main street by the gate, a
         bridgehead or market corner - because it is the state talking at everyone who passes
         (Edo's principal board stood at Nihonbashi, the bridgehead). NEVER defaulted to the
-        magistrate's manor gate: the manor's own board (Mode A program, buildings.md) posts the
+        magistrate's manor gate: the manor's own board (Mode A program, docs/buildings.md) posts the
         bench's OUTPUT (verdicts, bounties) for people who come to court, and the manor sits at
         the settlement edge where feet do not pass. True size ~12x5 ft (a 7x3 ft board under a
         small roof); the label carries the read.

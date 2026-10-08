@@ -1,7 +1,7 @@
 """SITEGEN - the generation machinery the settlement TIERS share.
 
 WHY THIS PACKAGE EXISTS. `hamletgen/` is the first scripted tier generator; the village, town and
-city tiers follow (`migration-plan.md` section 8). The GM's ruling on 2026-08-17 was that **tiers
+city tiers follow (`docs/migration-plan.md` section 8). The GM's ruling on 2026-08-17 was that **tiers
 share a library** rather than one tier's generator growing into the others. This package is that
 library: the destination for anything a second tier turns out to need.
 

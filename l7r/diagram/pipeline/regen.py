@@ -7,7 +7,7 @@
     python3 -m l7r.diagram.pipeline.regen --jobs 1 pool/*/*/*.gen.py                  # serial
 
 FROZEN legacy maps are skipped (printed as `FROZEN`), not regenerated: the hand-authored pool
-froze on 2026-08-16 (migration-plan.md "The accepted trade") and the engine has been free to
+froze on 2026-08-16 (docs/migration-plan.md "The accepted trade") and the engine has been free to
 drift since, so re-running a legacy gen would rewrite committed exhibit artifacts with output
 nobody has reviewed. `--frozen-ok` overrides for a deliberate, GM-sanctioned re-render.
 
@@ -73,7 +73,7 @@ def main(argv: list[str]) -> int:
     if "--frozen-ok" not in argv:
         frozen = {g for g in gens if poolmaps.classify(g) == "legacy"}
         for g in sorted(frozen):
-            print(f"{'FROZEN':12s} {os.path.basename(g)[: -len('.gen.py')]:16s} legacy hand-authored map (frozen 2026-08-16, migration-plan.md) - not regenerated; pass --frozen-ok to force")
+            print(f"{'FROZEN':12s} {os.path.basename(g)[: -len('.gen.py')]:16s} legacy hand-authored map (frozen 2026-08-16, docs/migration-plan.md) - not regenerated; pass --frozen-ok to force")
         gens = [g for g in gens if g not in frozen]
     if not gens:
         return 0

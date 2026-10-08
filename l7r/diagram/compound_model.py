@@ -17,7 +17,7 @@ WALL_MARGIN_FT: float = 3.0  # a building's inset from the very corner / wall st
 # the wall's thickness), never the raw boundary. Placing at the boundary drew every wall-ranging
 # building 1.5 ft inside the masonry, and since the wall is painted last it ate their outlines
 # (GM caught the hand-authored version of this on Ochiba, 2026-07-24; the check that now guards
-# it is pack_audit.structures_on_walls, and buildings.md "Walls and gates" carries the rule).
+# it is pack_audit.structures_on_walls, and docs/buildings.md "Walls and gates" carries the rule).
 WALL_INK_FT: float = 3.0  # compound wall: 9 px at 3 px = 1 ft
 DIVIDER_INK_FT: float = 2.0  # internal court divider: 6 px
 OUTLINE_CLEAR_FT: float = 0.5  # a hair beyond the ink, so the wall does not swallow the BUILDING'S
@@ -43,7 +43,7 @@ COURT_FILL: dict[str, str] = {
     "cart yard": "url(#court-earth)",
     "vegetable garden": "url(#vegetable-rows)",  # a worked bed in rows, apart from the ornamental garden (feature 283); open ground to the audit
     "inner yard": "url(#court-earth)",
-    "practice ground": "url(#keiko-earth)",  # swept keiko earth (buildings.md "Practice ground")
+    "practice ground": "url(#keiko-earth)",  # swept keiko earth (docs/buildings.md "Practice ground")
 }
 # A court that is ROOFED is drawn with a building's solid outline (stroke, width) and posts along its open side
 # (feature 267 R22, research/questions/0099-the-hearing-court-shirasu.html 'The hearing court (shirasu)': a magistracy's court
@@ -51,12 +51,12 @@ COURT_FILL: dict[str, str] = {
 # the thin open-ground edge.
 ROOFED_ZONES: dict[str, tuple[str, float]] = {"oshirasu": ("#5A3F1E", 2.0)}
 # The posts' spacing along the roofed court's open (south) side: one bay of two ken (~12 ft) between posts. A GUESS -
-# no roofed court's measurements were found (buildings.md "Hearing court"); two ken is a common bay for an open
+# no roofed court's measurements were found (docs/buildings.md "Hearing court"); two ken is a common bay for an open
 # post-and-beam front. Each post is drawn 1 ft square, at true size.
 ROOF_POST_BAY_FT: float = 12.0
 ROOF_POST_FT: float = 1.0
 # The covered corridor joining the kitchen to the residence (feature 267, research/questions/0107-kitchens-daidokoro.html 'Kitchens (daidokoro)': the kitchen is
-# part of the HOUSE, joined as an ell or by a short covered corridor, never a freestanding cookhouse; buildings.md
+# part of the HOUSE, joined as an ell or by a short covered corridor, never a freestanding cookhouse; docs/buildings.md
 # "Kitchen + pantries"). Its width, one ken (~6 ft), is a GUESS; it is drawn only across a gap no wider than a
 # fire-gap - a longer run would be a gallery, not the short corridor the research describes.
 CORRIDOR_W_FT: float = 6.0
@@ -73,7 +73,7 @@ BATH_W_FT, BATH_H_FT = 10.0, 8.0
 GATE_POST_W_FT, GATE_POST_D_FT = 4.0 / 3.0, 14.0 / 3.0
 # The middle gate's (nakamon's) posts on the 2 ft divider: 4 x 10 px, the same convention at the divider's scale.
 NAKAMON_POST_D_FT = 10.0 / 3.0
-# An informal door on each lodging block (feature 267, buildings/programs.md: no sealed boxes): a small dark rect set
+# An informal door on each lodging block (feature 267, docs/buildings/programs.md: no sealed boxes): a small dark rect set
 # flush inside the building's face, as the hand sheets draw one (`floating_doors` holds it to the wall). 6 ft along the
 # face is a MAP DRAWING CONVENTION (research/questions/0117-doorways-and-doors-to.drawing.html 'How our maps draw doors', from buildings 'Doorways and
 # doors (to)': an ordinary door is about half a ken, ~3 ft; drawn doors run two to three times that to read at 3 px/ft);
@@ -123,12 +123,12 @@ class Envelope:
     h_ft: float
     divider_ft: float  # y of the inner/outer court divider
     gate_w_ft: float = 13.0  # main-gate PASSAGE width (on the south wall, centered; the posts stand on the cut wall ends)
-    # The middle gate (nakamon) in the divider: its passage, narrower than the main gate (buildings/programs.md "Two-court
+    # The middle gate (nakamon) in the divider: its passage, narrower than the main gate (docs/buildings/programs.md "Two-court
     # zoning": a household door, ~6-8 ft; the audit's `two_court_zoning` requires one). 6 ft is Ochiba's; 0 draws none.
     middle_gate_w_ft: float = 6.0
     # The lesser gates in the compound wall: (wall "N"|"S"|"E"|"W", its center along that wall in ft, its passage in ft)
     # each - the kitchen postern that keeps deliveries and night-soil off the hearing court, and the outer court's
-    # service gate for muck and prisoners (buildings/programs.md "Walled enclosure").
+    # service gate for muck and prisoners (docs/buildings/programs.md "Walled enclosure").
     posterns: tuple[tuple[str, float, float], ...] = ()
 
 
@@ -175,8 +175,8 @@ class BuildingSpec:
     # row since pass 4, so a house can be massed in two rows front and back (the one-room-deep bar was the review's).
     rooms: tuple[tuple[str, float, float, float, float], ...] = ()
     # The magistrate's DAIS (w_ft, d_ft): a band flush inside the court face, centered on the building - the office
-    # hall's front band overlooking the hearing court (buildings/programs.md "The office hall is the compound's working
-    # heart"; buildings.md "Office hall (with dais band)"). (0, 0): none.
+    # hall's front band overlooking the hearing court (docs/buildings/programs.md "The office hall is the compound's working
+    # heart"; docs/buildings.md "Office hall (with dais band)"). (0, 0): none.
     dais: tuple[float, float] = (0.0, 0.0)
     # Stand this many feet further off its wall than the wall's ink requires: the residence's rear alley (research
     # rendering/buildings 'How our maps lay out samurai residences and their rooms (buke yashiki)': the north band narrowed to a ~6-10 ft cart/servant alley).

@@ -37,7 +37,7 @@ COVERAGE_TOL: float = 0.02
 # building footprint within 25 ft of a wall (m:hugging-floor, feature 254), and one building pulled
 # into the center of a court costs about six points, so the floor sits one such building under the
 # lowest shipped value. Nothing read gives a historical figure for it; the ring is the composition
-# rule (buildings.md, "Composition"), and this is its measurable form.
+# rule (docs/buildings.md, "Composition"), and this is its measurable form.
 HUGGING_FLOOR: float = 0.45
 CROP_MAX_MARGIN_PX: float = 25.0  # the checklist's "~15-25 px border" on each side of the viewBox
 CROP_TOL_PX: float = 5.0
@@ -265,7 +265,7 @@ def two_court_zoning(plan: ParsedPlan) -> list[str]:
     if not plan.dividers:
         return ["no court divider - a magistracy is an outer (public) court at the gate and an inner (private) court behind a divider"]
     # THE DIVIDER HAS A GATE (feature 267 pass 3, the building-review's catch on the placer's draft, which drew the
-    # divider unbroken): the household's middle gate, the nakamon (buildings/programs.md "Two-court zoning") - a
+    # divider unbroken): the household's middle gate, the nakamon (docs/buildings/programs.md "Two-court zoning") - a
     # divider with no opening seals the house from the office. A passage is at least GATE_MIN_FT, like a wall's.
     if not any(g >= GATE_MIN_FT for g in divider_gates_ft(plan)):
         return ["the court divider has no gate - the household's middle gate (nakamon, ~6-8 ft, narrower than the main gate) joins the courts"]

@@ -103,7 +103,7 @@ def test_regen_skips_frozen_legacy_maps():
         rc = regen.main([os.path.join(HERE, "legacy-hand-authored-pool", "towns", "hoshizora", "hoshizora.gen.py")])
     out = buf.getvalue()
     assert rc == 0
-    assert "FROZEN" in out and "--frozen-ok" in out and "migration-plan.md" in out
+    assert "FROZEN" in out and "--frozen-ok" in out and "docs/migration-plan.md" in out
     assert "REGENERATED" not in out and "CACHED" not in out, out
 
 

@@ -20,7 +20,7 @@ map's whole bundle (`<map>.gen.py`, `.json`, `.notes.md`, and its renders).
 **What decides the tree is `classify()`, not the tier.** `hamlets/` exists in both. The two axes are
 independent and conflating them is the mistake this layout exists to prevent: the five magistracies
 are hand-authored AND live, because a compound plan is small enough that scripting it buys nothing
-(migration-plan.md section 1). "Live" is not the opposite of "hand-authored".
+(docs/migration-plan.md section 1). "Live" is not the opposite of "hand-authored".
 
 **WHEN A MAP IS CONVERTED, MOVE ITS FOLDER**: `git mv legacy-hand-authored-pool/<tier>/<map>
 pool/<tier>/<map>`. Its renders become derived-and-ignored by that move alone, because the ignore
@@ -45,7 +45,7 @@ both trees on one page) and their committed .json/.svg/.png stay exactly as ship
 prints `FROZEN` and skips; `--frozen-ok` overrides) and by `tools/cache_audit.py`; the sweep's ratchet
 keeps every pool gen accounted for.
 
-WHY: hand-authoring is deprecated (the freeze decision is recorded in full in migration-plan.md
+WHY: hand-authoring is deprecated (the freeze decision is recorded in full in docs/migration-plan.md
 section 2), so every hour spent re-fitting a legacy map to a new placement rule, and every engine
 change flag-gated to hold 19 deprecated compositions byte-identical, was payment on a process
 being replaced. The fix for a frozen map that violates a post-freeze rule is CONVERSION, not
@@ -103,13 +103,13 @@ reach for it to avoid fixing a map that is simply inconvenient, which is what wa
 rule needs no `meta.generated_by` gate and no opt-in placement flag to protect them - the
 mechanism survives only where the regression corpus replays frozen fixtures through existing
 gates. The "say the debt out loud" half stands: the pool is now PERMANENTLY inconsistent until
-conversion, and that is the accepted trade, recorded in migration-plan.md section 2.
+conversion, and that is the accepted trade, recorded in docs/migration-plan.md section 2.
 
 ## Scripted generation - read before touching `hamletgen/`
 
 **The experiment is over and the project has committed to it** (GM, 2026-08-15). The standing plan -
 what is converted, what order the rest goes in, the bar a conversion has to clear, and the measured
-iteration budget - is [`migration-plan.md`](../migration-plan.md). **Update its status table as part of
+iteration budget - is [`docs/migration-plan.md`](../docs/migration-plan.md). **Update its status table as part of
 finishing any conversion.**
 
 [`hamletgen.md`](../hamletgen.md) is the writeup; [`hamletgen/`](../l7r/diagram/hamletgen/) is the generator - a PACKAGE

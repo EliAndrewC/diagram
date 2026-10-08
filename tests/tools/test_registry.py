@@ -3,7 +3,7 @@ quiet on every pool sheet of a tier it covers; a declaration names only register
 shared layer is what every tier gets.
 
 The fixture assertion is the test with teeth: coverage of a check function proves it runs, and only a
-recorded red-then-green proves it catches the defect it is for (buildings.md, "Tuning a check").
+recorded red-then-green proves it catches the defect it is for (docs/buildings.md, "Tuning a check").
 """
 
 from __future__ import annotations

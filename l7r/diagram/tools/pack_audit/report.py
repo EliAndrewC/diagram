@@ -73,7 +73,7 @@ def format_report(plan: ParsedPlan, cell: int = 2, text: str = "", tier: str | N
     lines += [f"    {o.ft:5.1f} ft  at svg({o.x:.0f},{o.y:.0f})   compare with the width this opening's comment claims" for o in openings]
     passage = main_gate_passage_ft(plan)
     if passage is not None:
-        lines.append(f"    {passage:5.1f} ft  the MAIN GATE's passage, between its posts - the widest opening of all (buildings.md checklist)")
+        lines.append(f"    {passage:5.1f} ft  the MAIN GATE's passage, between its posts - the widest opening of all (docs/buildings.md checklist)")
     lines += check_lines(Context(plan, text, btype, form, on_map), tier)
     return "\n".join(lines)
 

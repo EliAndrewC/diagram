@@ -160,7 +160,7 @@ line in feature 280 (`specs/280-modern-only-sweep/outcomes.md`, one row per item
   stones"; 520 dates a paired dosojin set at a settlement's entrance to 1695, Ueda) supports stones at a hamlet's
   entrance and at its crossings. Sketch: a placer that seats one to three stones where the connector leaves the web
   and at the busiest crossing, as `farm_fixtures[kind=wayside_stone]` with a class and a caption group.
-- **The frozen hamlets' modern-only forms, by map** (never retrofitted - fixed by CONVERSION, `migration-plan.md`):
+- **The frozen hamlets' modern-only forms, by map** (never retrofitted - fixed by CONVERSION, `docs/migration-plan.md`):
   Akagahara, Ikegami, Moritono, Tanada, Yatsuda - M34 (the reed edge grounded on a modern survey); Enokida - M54 (the
   110 ft polder cell; three mu is 190 ft), M57 (a sluice per dike pond), M58 (the 0.80 water share; 0.62 at the 23 ft
   inset), M34; Honda - M56 (a pond grid other than the mosaic), M58, M34; Shimizu - M34.

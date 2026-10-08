@@ -105,7 +105,7 @@
     <line x1="1000" y1="150" x2="1000" y2="750"/>
     <!-- South, west of gate (broken by the service gate at x=404..424 = 6.7 ft, just east of the stables - muck and
          night-soil skip the formal gate; feature 267 pass 2 narrowed it from 9.3 ft so the ceremonial main gate is
-         the widest opening in the wall, buildings.md checklist). Wall ends pulled back 4.5 px for the square cap. -->
+         the widest opening in the wall, docs/buildings.md checklist). Wall ends pulled back 4.5 px for the square cap. -->
     <line x1="200" y1="750" x2="399.5" y2="750"/>
     <line x1="428.5" y1="750" x2="583.5" y2="750"/>
     <!-- South, east of gate (the main gate is a one-bay yakuimon opening 588..612 = 8 ft - feature 267 R26,
@@ -344,7 +344,7 @@
 
   <!-- Practice ground: the on-grounds platoon's daily keiko happens on swept
        multi-use ground beside the senior retainers' quarters, not in a
-       dedicated building - a dojo is a city institution (buildings.md
+       dedicated building - a dojo is a city institution (docs/buildings.md
        grounding, 2026-07-24). The rack and striking posts are the durable
        equipment that marks the ground as established. ~29 x 41 ft serves the
        resident platoon of staff-housing option (a) (~90-135 sqft per drilling
@@ -685,7 +685,7 @@
   <!-- (scale bar moved to the top-left beside the title) -->
 
   <!-- (The old bottom-left "Sizing notes" box is gone: its content was
-       generic program fact - staffing facts live in buildings.md and the
+       generic program fact - staffing facts live in docs/buildings.md and the
        design-notes file, not on the sheet. Ochiba runs the default staffing,
        so there is nothing instance-specific to say.) -->
 

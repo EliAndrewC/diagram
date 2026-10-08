@@ -60,7 +60,7 @@ def _tree(root: pathlib.Path, mod: str = MOD, page: str = PAGE) -> pathlib.Path:
     (skill / "research" / "questions").mkdir(parents=True, exist_ok=True)
     (skill / "research" / "questions" / "0033-row-villages-resson.html").write_text(page)
     (skill / "buildings").mkdir(exist_ok=True)
-    (skill / "buildings.md").write_text("## Walls\n<!-- Research: walls - CONVENTION -->\n")
+    (skill / "docs/buildings.md").write_text("## Walls\n<!-- Research: walls - CONVENTION -->\n")
     (skill / "buildings" / "programs.md").write_text("### Country shrine (a village district's shrine)\n<!-- Research: precinct - UNRESEARCHED -->\n")
     return skill
 
@@ -94,11 +94,11 @@ def test_every_claim_is_a_row_including_inherited_and_procedure_claims(tmp_path:
             "l7r/diagram/hamletgen/rows.py::SHARE#dry share",
             "l7r/diagram/hamletgen/rows.py::far_row#dry share",
             "l7r/diagram/hamletgen/rows.py::helper#plumbing",
-            "buildings.md::Walls#walls",
-            "buildings/programs.md::Country shrine (a village district's shrine)#precinct",
+            "docs/buildings.md::Walls#walls",
+            "docs/buildings/programs.md::Country shrine (a village district's shrine)#precinct",
         ]
     )
-    assert cur["buildings.md::Walls#walls"].research == "" and cur["l7r/diagram/hamletgen/rows.py::far_row#dry share"].research
+    assert cur["docs/buildings.md::Walls#walls"].research == "" and cur["l7r/diagram/hamletgen/rows.py::far_row#dry share"].research
 
 
 def test_owed_says_new_code_changed_and_research_changed_and_nothing_for_prose_or_the_intro(tmp_path: pathlib.Path) -> None:

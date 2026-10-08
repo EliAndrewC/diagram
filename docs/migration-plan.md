@@ -242,7 +242,7 @@ These are the failure modes that have actually cost this project time. They are 
 The GM's standing constraint: *the difference between 5 minutes and 50 minutes to implement a change
 is huge, and inefficient loops have been the single biggest stumbling block.*
 
-**The numbers live in [`timings.md`](timings.md), not here** - one dated block per measurement,
+**The numbers live in [`dev/timings.md`](../dev/timings.md), not here** - one dated block per measurement,
 appended by `python3 -m l7r.diagram.tools.timings`. They are deliberately NOT duplicated into this plan, because a
 number written in two places eventually disagrees with itself, which is exactly how the skill's
 CLAUDE.md came to claim a "~2 to 2.5 minute" sweep long after it had passed four minutes.

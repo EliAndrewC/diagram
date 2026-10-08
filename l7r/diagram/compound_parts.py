@@ -174,7 +174,7 @@ def _hatch(env: Envelope, box: Box) -> Box | None:
 
 def _clerk_seats(dais: Box, side: str) -> list[Box]:
     """The two clerks' positions flanking a dais on the building's `side` (its court face), each 8 ft along the face
-    and 5 ft deep, flush on that face and 2 ft off the dais (buildings.md "Office hall": two clerk positions flanking
+    and 5 ft deep, flush on that face and 2 ft off the dais (docs/buildings.md "Office hall": two clerk positions flanking
     the dais; the size a GUESS, Ochiba's band drawn smaller)."""
     x, y, x2, y2 = dais
     if side in ("N", "S"):
@@ -539,7 +539,7 @@ def _point_features(program: CompoundProgram, result: PlaceResult, rect: Callabl
         hosts.append(Placed(BuildingSpec("bath", "service", BATH_W_FT, BATH_H_FT, by_name["kitchen"].spec.court, by_name["kitchen"].spec.wall), *bath))
     for p in hosts:
         if p.spec.kind == "kura":
-            continue  # a plaster storehouse carries no tub (buildings.md, "Fire-water tubs")
+            continue  # a plaster storehouse carries no tub (docs/buildings.md, "Fire-water tubs")
         court = _court_side(p)
         ends = ("E", "W") if court in ("N", "S") else ("N", "S")
         toward_court = (0.85, 0.5, 0.15) if court in ("S", "E") else (0.15, 0.5, 0.85)

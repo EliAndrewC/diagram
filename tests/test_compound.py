@@ -168,7 +168,7 @@ def test_emit_svg_contains_courts_buildings_and_walls() -> None:
 
 
 def test_emit_svg_draws_the_practice_ground_and_its_equipment() -> None:
-    # The practice-ground zone (buildings.md program item) emits the swept patch plus the
+    # The practice-ground zone (docs/buildings.md program item) emits the swept patch plus the
     # durable equipment - weapon rack + two striking-post markers - not just a named rect.
     prog = c.county_magistracy_program()
     svg = c.emit_svg(prog, c.place(prog))

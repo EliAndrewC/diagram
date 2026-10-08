@@ -31,7 +31,7 @@ Three findings drove it, in order of weight:
    boundary, not a skill boundary - and it is the boundary we already have.
 2. **The documentary split already exists.** `SKILL.md` is the shared index (palette, scale ladder,
    render pipeline, pool layout, the regression-fixture and review-agent doctrine, the `make`
-   ladder); `buildings.md` indexes `buildings/`, each topic file stating when to load it, and the Mode B
+   ladder); `docs/buildings.md` indexes `buildings/`, each topic file stating when to load it, and the Mode B
    record is the research pages (feature 229 retired the `settlements/` rule files into them). The cost the GM actually feels - "I
    have to say which part of the skill I am working on" - is one word per request, and a second
    skill would cost the same word.
@@ -45,7 +45,7 @@ Three findings drove it, in order of weight:
 ## More hand-authored types do NOT change this
 
 Adding estates (or temples, keeps, battlefields) the way magistracies are done means, per type: a
-program entry in `buildings/programs.md`, a few checks in `pack_audit/checks.py` and rows in
+program entry in `docs/buildings/programs.md`, a few checks in `pack_audit/checks.py` and rows in
 `size-audit`'s anchor table, a pool directory with the `.svg/.png/.notes.md` triplet, and the same
 review agents before it ships. That grows `buildings/` the way the Mode B rule files once grew from one file to
 thirteen (before they retired into `research/`) - which `SKILL.md` already anticipates ("add `temples/`, `keeps/`, etc. as they appear").
@@ -69,7 +69,7 @@ When that happens, split in THIS order:
    whether the boundary is real: if the import graph stays one-directional it is; if settlements
    and buildings start importing each other, it was not, and the split is undone at the same
    price.
-2. **Let the skill follow the package**, if it still seems worth it. `buildings.md` is already a
+2. **Let the skill follow the package**, if it still seems worth it. `docs/buildings.md` is already a
    self-contained index, so promoting it to a skill is near-zero cost once the code is separate.
    Splitting the skill BEFORE the code is the wrong order - it moves the documentation away from the
    code it documents while the code stays shared.

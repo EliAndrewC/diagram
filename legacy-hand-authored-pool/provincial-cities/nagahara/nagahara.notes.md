@@ -5,7 +5,7 @@ only record of this map's intent. Everything below is sourced from `nagahara.gen
 
 **Subject**: a walled provincial city of ~3,000 depicted, drawn at 1 px = 3 ft, standing on the WEST
 BANK of the Hayakawa. Crab clan, `wall_defense="siege"`, no Imperial road. Hayakawa county (the
-separate Mode A sheet [`pool/magistracies/hayakawa-magistracy`](../magistracies/hayakawa-magistracy.svg))
+separate Mode A sheet [`pool/magistracies/hayakawa-magistracy`](../../../pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg))
 is named for the same river and feeds its taxes here.
 
 **Why it exists**: Nagahara is **the norm, and Tango is the exception**. This is the pool's model of

@@ -51,7 +51,7 @@ def test_the_real_catalog_is_current() -> None:
     with open(bp.PROGRAMS, encoding="utf-8") as fh:
         text = fh.read()
     new, missing = bp.apply(text, bt.load_types())
-    assert missing == [] and new == text, "buildings/programs.md is stale - run `make building-programs`"
+    assert missing == [] and new == text, "docs/buildings/programs.md is stale - run `make building-programs`"
 
 
 def test_a_kind_item_renders_its_tag_and_its_kind_s_class_and_why() -> None:

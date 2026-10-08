@@ -9,7 +9,7 @@ burying town material inside the capital-era backlog is how it stops being found
 **Thin today, and that is about where the work has been rather than about towns.** Every hand-authored town
 (Hoshizora, Hirameki, Ubame) is
 FROZEN, and the town tier is NOT STARTED for scripted generation
-([`../migration-plan.md`](../migration-plan.md)) - so nothing has been generating town defects to
+([`../docs/migration-plan.md`](../docs/migration-plan.md)) - so nothing has been generating town defects to
 find. Expect this file to fill when the town tier converts, and treat its current emptiness as a
 statement about attention, not about quality.
 

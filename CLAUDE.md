@@ -154,7 +154,7 @@ full doctrine with the GM's rulings and the incidents behind them: `docs/spec-ki
 - Review checks (`glyph-check`, `settlement-review`, `fix-check`, `building-review`, `size-audit`) run ON
   THEIR OCCASION (feature 294): an element new to a map, a glyph redrawn or re-placed, a map or sheet new to the
   pool, or an occasion the feature declares in its `tasks.md` `## Occasions` - never because a manifest moved
-  (`_review_owed.py`; `dev/reviews.md` has the table). One unit per agent, on a green gate,
+  (`_review_owed.py`; `docs/reviews.md` has the table). One unit per agent, on a green gate,
   two rounds at most; every pass is a row of the ledger's measured table with its cost (`make review-cost`). To improve one, add
   the general rule, prove it fires on the unfixed artifact, then fix the artifact. Findings for the
   GM go through `escalation-check` first. Every check runs on the TIER its file pins - a model and an

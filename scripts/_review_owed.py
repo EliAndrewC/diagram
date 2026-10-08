@@ -125,7 +125,7 @@ def is_sheet(folder: Path) -> bool:
 
 def exempt(folder: Path) -> bool:
     """A hand-drawn Mode B map awaiting conversion owes no review; a Mode A sheet keeps its review wherever it lives (the GM's
-    ruling of 2026-10-01, feature 294, quoted in `dev/reviews.md`): a folder in the legacy tree that is not a Mode A sheet."""
+    ruling of 2026-10-01, feature 294, quoted in `docs/reviews.md`): a folder in the legacy tree that is not a Mode A sheet."""
     return folder.parent.parent.name == TREES[1] and not is_sheet(folder)
 
 

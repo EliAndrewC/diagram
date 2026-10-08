@@ -560,7 +560,7 @@ notes-census:   ## [diagnostics] refresh the derived counts inside each map's no
 	$(RUN).tools.notes_census $(or $(M),$(wildcard pool/*/*/*.json) $(wildcard legacy-hand-authored-pool/*/*/*.json))
 
 # GUARD_EDIT_OK: feature 254 - a new operation, `building-programs`: the required-items tables of the Mode A types, derived.
-building-programs: ## [docs] render each declared Mode A type's required-items table into buildings/programs.md from l7r/diagram/buildings/types.json (feature 254)   CHECK=1: exit 1 if stale
+building-programs: ## [docs] render each declared Mode A type's required-items table into docs/buildings/programs.md from l7r/diagram/buildings/types.json (feature 254)   CHECK=1: exit 1 if stale
 	$(RUN).tools.building_programs $(if $(CHECK),--check,)
 
 # GUARD_EDIT_OK: feature 259 - the glossary's SOURCE is now one file per term, so this target assembles
@@ -1754,7 +1754,7 @@ typecheck:       ## [static] pyrefly over the engine, one-shot, no daemon (featu
 # somewhere that enforce less than one hundred percent, but I think we want to enforce one hundred
 # percent coverage in whatever the relevant place is", 2026-08-31).
 #
-# WHAT WAS HERE, and why it is gone. From the 2026-08-16 legacy freeze (migration-plan.md "The
+# WHAT WAS HERE, and why it is gone. From the 2026-08-16 legacy freeze (docs/migration-plan.md "The
 # accepted trade") settlement/ held a RATCHET floor of 94, and settlement/, waterfields/,
 # interactive/ and overlap/ were omitted from the 100% report: the hand-authored pool maps were
 # frozen, so the above-hamlet wings were exercised by nothing. The freeze's own terms said RAISE the

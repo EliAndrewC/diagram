@@ -417,7 +417,7 @@ class CastleCivicMixin:
         PROGRAM rather than rounded up: the lane sets the width and the hall-plus-lane sets the
         depth, and everything else is circulation.
           - the hall              124 x 35 ft, one long building (0165; feature 328 wave 5 - it was 60 x 36). At the
-                                  ~90-135 sqft per drilling samurai that buildings.md already
+                                  ~90-135 sqft per drilling samurai that docs/buildings.md already
                                   established for the county practice ground, that floor holds
                                   ~20 pairs at once - the officer cohort plus a school class
           - the sensei's house    40 x 24 ft, a modest samurai dwelling (compare the 56 x 40 ft

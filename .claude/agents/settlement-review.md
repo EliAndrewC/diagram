@@ -50,7 +50,7 @@ specification is in `research/contents.json#tiers` and its pages (`towns.html`, 
 4. **On a new tier only** (`new-tier:`): does the fabric read? A quarter or district reads as fabric with a grain - rows, lanes,
    frontage - not a scatter of identical boxes; a street network reads as blocks fronting streets; a field system as a
    water-ordered grain. And list the tier's struck obligations (outcast and status zoning, the border rule, the Imperial-road
-   caption - `migration-plan.md`) with whether the generator carries each as a placement rule: an obligation it does not carry is
+   caption - `docs/migration-plan.md`) with whether the generator carries each as a placement rule: an obligation it does not carry is
    an error against the generator, not the map.
 
 ## What to ignore

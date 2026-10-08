@@ -60,8 +60,8 @@ ROOT_PACKAGE = "l7r.diagram.hamletgen"
 #: The Mode A procedure documents (spec FR-003, plan D9): None takes every section; a tuple takes those top sections and
 #: every heading under them.
 PROCEDURES: dict[str, tuple[str, ...] | None] = {
-    "buildings.md": None,
-    "buildings/programs.md": ("Magistrate's manor (county magistracy)", "Country shrine (a village district's shrine)"),
+    "docs/buildings.md": None,
+    "docs/buildings/programs.md": ("Magistrate's manor (county magistracy)", "Country shrine (a village district's shrine)"),
 }
 _SECTION_HEAD = re.compile(r"^Research:(.*)$")
 _MARKER = re.compile(r"<!--\s*Research:\s*(.*?)\s*-->", re.S)

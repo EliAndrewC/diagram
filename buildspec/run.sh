@@ -103,7 +103,7 @@ echo "== go received after ${waited}s"
 # operator enables from a terminal; until it exists - and whenever the dispatcher finds no image
 # marker - the build runs on aws/codebuild/standard and installs what the gate needs here: Python
 # 3.14 through uv (prebuilt, seconds), the two pinned lockfiles, resvg from its release tarball,
-# and the DejaVu faces. Measured in timings.md beside the image's provisioning time.
+# and the DejaVu faces. Measured in dev/timings.md beside the image's provisioning time.
 if ! python3 -c 'import sys; sys.exit(0 if sys.version_info[:2] == (3, 14) else 1)' 2>/dev/null || ! command -v resvg >/dev/null; then
   echo "== bootstrap (stock image): python 3.14 via uv, lockfiles, resvg, fonts"
   t0=$(date +%s)

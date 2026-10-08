@@ -40,9 +40,9 @@ DIRECTION is not invented: it is the bearing of this map's own connector track w
 
 ## Why it exists
 
-It is the deliverable of the experiment in [`../../hamletgen/`](../../hamletgen/): can a SCRIPT
+It is the deliverable of the experiment in [`../../hamletgen/`](../../../l7r/diagram/hamletgen/): can a SCRIPT
 do what a session currently does by hand? Inashiro was given deliberately the same brief as the
-hand-authored [`../hamlets/ikegami.gen.py`](../hamlets/ikegami.gen.py) - ~15 households, land
+hand-authored [`../hamlets/ikegami.gen.py`](../../../legacy-hand-authored-pool/hamlets/ikegami/ikegami.gen.py) - ~15 households, land
 falling due south, a brook off the northern high ground feeding one comb field, the field draining
 at its low foot into a *tameike* - so the two maps can be read side by side.
 
@@ -987,7 +987,7 @@ is where NEITHER adjacent row breaks, so every offcut landed mid-basin on both s
 And the number that answers the report: **no plot ring on any of the four carries more than one
 step**, against 6 / 9 / 4 / 7 rings that did. The staircase is gone. What is left is single, small,
 isolated corners - `python3 -m l7r.diagram.tools.jogs pool/hamlets/*.json` lists them and
-[`future-work/`](../../future-work/) carries the residue with its refusal reasons.
+[`future-work/`](../../../future-work/) carries the residue with its refusal reasons.
 
 **Two levers that did NOT work, both implemented and measured, so they are not pulled again**: a
 nearest-basin partition of each scrap (`_share` - 23 -> 7 on this map, but it strands ground the weld
@@ -1095,7 +1095,7 @@ cluster instead of stringing out along a way that was there first. All 15 houses
 **The cost, honestly.** The web breaks up more - 4 unjoined fragments against 3 - because with the
 steadings standing first there is less continuous room for it. That is recorded with its mechanism
 and both halves of its fix in
-[`../../future-work/farming-communities.md`](../../future-work/farming-communities.md); it is a
+[`../../future-work/farming-communities.md`](../../../future-work/farming-communities.md); it is a
 placer change of its own size rather than something to slip into this delta.
 
 **Two things this map taught that generalize:**
@@ -1217,7 +1217,7 @@ fan's foot; the collector's 20-degree drawn grade is legibility, not height. `to
 its inner edge across the slope (`pad` above the local crop bottom, smoothed) - on this map the
 reeds begin 57-89 px above the drain on every station, i.e. at the fan's foot, tucked under the crop
 by the paddy skip. Labels: the marsh-follows-the-toe rule ACCURATE; the drain's drawn grade a
-recorded MAP DRAWING CONVENTION (feature 183's word). No per-task review (dev/reviews.md); the GM looks at the map.
+recorded MAP DRAWING CONVENTION (feature 183's word). No per-task review (docs/reviews.md); the GM looks at the map.
 
 
 ## 2026-08-27 - the lanes form one network (feature 133 T31)
@@ -1239,7 +1239,7 @@ tripped the driver's re-roll and shipped attempt 4 with the connector reversed -
 the point of change). Labels: interconnected web ACCURATE; lane along a fence ACCURATE; the margins
 DRAWING conventions. Pre-fix manifest frozen as
 `pool/regressions/lanes_form_one_network_fires_on_the_pre_fix_inashiro.json`. No per-task review
-(scope locked; dev/reviews.md); the GM looks at the map.
+(scope locked; docs/reviews.md); the GM looks at the map.
 
 
 ## 2026-08-27 - the lanes bend like paths (feature 133 T32)

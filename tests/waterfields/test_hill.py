@@ -2,7 +2,7 @@
 
 WHY THIS FILE EXISTS (feature 174). These two builders had NO test and 7% coverage, and this session
 first called them dead code. That was wrong: `legacy-hand-authored-pool/hamlets/tanada` calls
-`build_terraces` and `.../yatsuda` calls `build_ribbon`, and `migration-plan.md` lists both
+`build_terraces` and `.../yatsuda` calls `build_ribbon`, and `docs/migration-plan.md` lists both
 archetypes as "NOT STARTED | engine builder exists" - they are pending conversion work with two
 frozen exhibit maps demonstrating them. The spec then proposed asking the GM whether to cover or
 exempt them; `spec-fidelity` round 2 ruled that the request forecloses a carve-out and 99 statements

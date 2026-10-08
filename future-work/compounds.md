@@ -4,8 +4,8 @@
 fields: magistracies today, and - as they are built - samurai city estates, governor's mansions,
 samurai country estates, temple precincts drawn in their own right, and keeps.
 
-A drift between a Mode A procedure (`buildings.md`, `buildings/programs.md`) and the research record is NOT tracked
-here: `make claims-report` lists every one (the `buildings.md::` and `programs.md::` rows). A guess or silence the
+A drift between a Mode A procedure (`docs/buildings.md`, `docs/buildings/programs.md`) and the research record is NOT tracked
+here: `make claims-report` lists every one (the `docs/buildings.md::` and `programs.md::` rows). A guess or silence the
 record already labels is listed by `make open-questions`. An entry here is sheet-level or research work neither carries.
 
 ## OPEN 2026-09-28: the magistracies' rear strips, and what feature 283's reviews left open
@@ -68,7 +68,7 @@ the Fuchu Joge pamphlet's drawing labels, which sit only in its PDF's images and
 - **The program example's captions and the hand-sheet placer (`labels.hand_sheet`, `seat_label` until feature 286) disagreed on 9** (feature 267, 2026-09-27: striking posts, residence, well, gatehouse, practice ground, both clerks, straw mats' seat and leader). `compound.py` seats through the one placer but with its own view: a caption's subject is one chosen shape (the rear alley, one seat, one mat) where the hand-sheet placer takes what the caption declares; it counts invisible stand-ins for tubs and stones and blocks the roofed court only after the court's own captions; and it measures every caption at the standard's character width where the hand-sheet placer measures bold, capitals and spacing (feature 267's rules). The reasons are read from the code, not measured. The fix is one view: `compound.py` builds its obstacle index with `hand_sheet.classify` over the sheet it is drawing, or `hand_sheet` gains the composer's subjects; measure first which disagreements each removes.
 - Door glyphs drawn as slabs outside their walls where the rendering rule says flush (every sheet's informal doors -
   a convention question).
-- The torii drawn as an elevation silhouette on Mode A sheets while `buildings.md` (feature 268) says a Mode A arch
+- The torii drawn as an elevation silhouette on Mode A sheets while `docs/buildings.md` (feature 268) says a Mode A arch
   is drawn in plan; the "Modest shrine" bullet still says silhouette. Settle the rule, then redraw.
 
 ## Is the receiving court "swept"? (found by feature 280, 2026-09-29)

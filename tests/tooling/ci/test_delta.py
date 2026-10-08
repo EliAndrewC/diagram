@@ -37,7 +37,7 @@ NOT_ENGINE = [
     S + "pool/hamlets/inashiro/inashiro.notes.md",
     S + "pool/hamlets/inashiro/inashiro.png",
     S + "pool/hamlets/inashiro/inashiro.svg",
-    S + "timings.md",
+    S + "dev/timings.md",
     S + "l7r/diagram/settlement/CLAUDE.md",
     # how the gate RUNS, not what it tests (GM 2026-08-25): covered locally, never dispatched
     S + "Makefile",

@@ -95,7 +95,7 @@ review_snapshot() { # review_snapshot <map>... -> the snapshot lines (feature 23
 
 # GUARD_EDIT_OK: feature 248 (GM 2026-09-14) - ONE MAP PER REVIEW AGENT, EVERY OWED MAP DISPATCHED, AND WHETHER
 # THEY RAN IN PARALLEL RECORDED. Feature 247's review was one agent over four maps, serialized: 11 of the
-# feature's 36 minutes. The reviewer's contract and dev/reviews.md both said "one map per agent" and were
+# feature's 36 minutes. The reviewer's contract and docs/reviews.md both said "one map per agent" and were
 # disregarded, which is the GM's point: *"the point of the tooling is to make the correct thing happen
 # automatically without you or I needing to remember the precise ways to not get it subtly wrong in a costly
 # way"*. What a hook CAN do: refuse the wrong shape before the agent starts, hold the turn open until every

@@ -1,8 +1,8 @@
 # Design notes: Kashikawa (樫川, "oak river") - scripted hamlet, the top of the band
 
 *One of four demo maps from the scripted-generation experiment (2026-08-11). See
-[`../../hamletgen/`](../../hamletgen/) for the pipeline and
-[`inashiro.notes.md`](inashiro.notes.md) for the head-to-head with the authored Ikegami.*
+[`../../hamletgen/`](../../../l7r/diagram/hamletgen/) for the pipeline and
+[`inashiro.notes.md`](../inashiro/inashiro.notes.md) for the head-to-head with the authored Ikegami.*
 
 **Kanji triangle**: 樫 *kashi* "evergreen oak" + 川 *kawa* "river". Kashikawa, "oak river" - named
 for the oaks the map draws as its managed coppice patches on the dry ground upslope of the hamlet, and in the
@@ -428,7 +428,7 @@ The lanes now go down after the houses (`stage_seat` -> `stage_homesteads` -> `s
 connector's bearing sweep ranks candidate bearings against the standing steadings. This map's
 geometry moved with the reorder and it gates CLEAN, as it did before. Recorded so the manifest change
 in this commit is not an unexplained diff - the substantive write-up is on
-[`mizuguchi.notes.md`](mizuguchi.notes.md), which is the map that failed and forced the fix.
+[`mizuguchi.notes.md`](../mizuguchi/mizuguchi.notes.md), which is the map that failed and forced the fix.
 
 ### 2026-08-28 - manifest re-recorded under the landed feature-137 engine
 

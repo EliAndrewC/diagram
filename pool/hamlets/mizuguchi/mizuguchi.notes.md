@@ -1,8 +1,8 @@
 # Design notes: Mizuguchi (水口, "water mouth") - scripted hamlet, water entering from the west
 
 *One of four demo maps from the scripted-generation experiment (2026-08-11). See
-[`../../hamletgen/`](../../hamletgen/) for the pipeline and
-[`inashiro.notes.md`](inashiro.notes.md) for the head-to-head with the authored Ikegami.*
+[`../../hamletgen/`](../../../l7r/diagram/hamletgen/) for the pipeline and
+[`inashiro.notes.md`](../inashiro/inashiro.notes.md) for the head-to-head with the authored Ikegami.*
 
 **Kanji triangle**: 水 *mizu* "water" + 口 *kuchi/guchi* "mouth". Mizuguchi, "the water mouth" - the
 intake itself, where the brook's water is let into the head race. A hamlet named for the one

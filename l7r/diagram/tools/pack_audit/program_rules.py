@@ -24,7 +24,7 @@ from .tagged import Mark, gap, marks
 
 # --- B16 lodging_entrances --------------------------------------------------------------------------------------------
 
-#: The kinds someone sleeps in (buildings/programs.md, the residence and lodging rows; the checklist's "every lodging
+#: The kinds someone sleeps in (docs/buildings/programs.md, the residence and lodging rows; the checklist's "every lodging
 #: block ... has a drawn entrance" - a composition rule from the building-review sweep, no number in it). A room of the
 #: residence (lord's, family, guest quarters) is part of the residence's block and reaches the ground by the block's door.
 LODGING: frozenset[str] = frozenset(
@@ -109,7 +109,7 @@ PRIVY_FILL = "#7E726A"  # the palette's latrine / utility fill (SKILL.md, Palett
 COURT_KINDS: tuple[str, ...] = ("inner court", "outer court")
 #: A privy within this of a residence block is attached to the house (0.5 ft: flush, with integer-emit rounding).
 ATTACHED_PX: float = 0.5 * FTPX
-#: At least this many privies on a county manor: the low end of buildings/programs.md's "one per functional zone, about
+#: At least this many privies on a county manor: the low end of docs/buildings/programs.md's "one per functional zone, about
 #: three or four" (research 0101 'Privies (setchin)'). The record itself calls that count "this project's guess
 #: rather than a finding", so the 3 is a GUESS (plan D11).
 PRIVY_MIN: int = 3
@@ -137,7 +137,7 @@ def privies_by_zone(svg: str, minimum: int = PRIVY_MIN) -> list[str]:
 # --- B18 fire_water_distribution --------------------------------------------------------------------------------------
 
 #: The fire-prone wooden buildings a tub must stand by - DECIDED AND RECORDED HERE (feature 294, the scout's note on B18):
-#: the buildings buildings/programs.md names for the tubs ("at the fire-prone wooden buildings, weighted to the kitchen",
+#: the buildings docs/buildings/programs.md names for the tubs ("at the fire-prone wooden buildings, weighted to the kitchen",
 #: and for the shrine "a tub at the hall's corners") and the generator seats one at (`compound_parts._point_features`):
 #: the office hall, the residence, the barracks, the gatehouse, the compound shrine, the stables, the servants' row, the
 #: kitchen; the shrine's hall-and-dwelling. Guest quarters, the karo's house and the retainers' quarters are NOT on the
@@ -155,7 +155,7 @@ TUB_KINDS: tuple[str, ...] = (
     "kitchen",
     "hall and dwelling",
 )
-#: The kitchen's tubs: "weighted to the kitchen (2)" (buildings/programs.md; the record's reasoning, not a page's words).
+#: The kitchen's tubs: "weighted to the kitchen (2)" (docs/buildings/programs.md; the record's reasoning, not a page's words).
 KITCHEN_TUBS: int = 2
 
 
@@ -189,12 +189,12 @@ def fire_water_distribution(svg: str, plan: ParsedPlan) -> list[str]:
 # --- B19 size_hierarchy -----------------------------------------------------------------------------------------------
 
 #: (smaller, larger): the compound's size HIERARCHY, the pair list of the building-review checklist. Each pair's class:
-#: - the house out-measures its kitchen, its document storehouse and storehouse, and its shrine: buildings/programs.md
+#: - the house out-measures its kitchen, its document storehouse and storehouse, and its shrine: docs/buildings/programs.md
 #:   (the residence row) calls that "this project's own reading of the compound"; research 0116 reads only
 #:   Takayama's order (office > residence > rowhouse > storehouses) - the tax archive pair rests on its 450 sq ft book
 #:   storehouse against a 6,400 sq ft residence (READ), the rest is the record's own reading (GUESS);
 #: - the stables and the cell under the barracks: no page read ranks them (GUESS);
-#: - the sanctuary under the hall: buildings/programs.md, "the sanctuary is the smallest building of the shrine proper".
+#: - the sanctuary under the hall: docs/buildings/programs.md, "the sanctuary is the smallest building of the shrine proper".
 HIERARCHY: tuple[tuple[str, str], ...] = (
     ("kitchen", "residence"),
     ("tax archive", "residence"),

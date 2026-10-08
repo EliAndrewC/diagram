@@ -50,7 +50,7 @@ PARK_POLL_S = 2
 # R5: the log is streamed by polling inside ONE process the session backgrounded - the sanctioned
 # shape - at a cadence that costs nothing noticeable.
 STREAM_POLL_S = 10
-# Estimates printed BEFORE dispatch (FR-014). Replaced by measurement as timings.md fills in.
+# Estimates printed BEFORE dispatch (FR-014). Replaced by measurement as dev/timings.md fills in.
 # `reference` is MEASURED on this compute type: dev/run-log/20260904T001453005229-3306563.json,
 # build 545da8e1, scope reference, 569 s elapsed, 10 billed minutes, $0.20 (feature 179).
 # `full` and `operation` are UNMEASURED PLACEHOLDERS carried from feature 130 and have never been

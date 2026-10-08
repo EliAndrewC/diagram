@@ -373,7 +373,7 @@ Templates requiring review/update:
                               fix-what-you-find rule.
   ✅ CLAUDE.md - the always-on list gains it, since
                               /diagram is where it bites hardest.
-  ✅ dev/reviews.md - states that a review finding
+  ✅ docs/reviews.md - states that a review finding
                               outside the delta is still yours to fix.
 
 PRIOR (1.7.0 → 1.8.0):
@@ -1504,7 +1504,7 @@ until v2.17.0, when the GM split the second into two - see below):
 
 Where it lives: the finding and its classification in the skill's `research/`
 file for that feature family (the interactive map will read from there); the
-operative rule in the `settlements/` or `buildings.md` doc; the pointer at the
+operative rule in the `settlements/` or `docs/buildings.md` doc; the pointer at the
 point of change in the code. A feature's `spec.md` lists, in its "Decisions
 Recorded" section, every rendering decision it made and where each landed -
 the spec review (Principle XVI) checks that section against the diff. This
@@ -2113,7 +2113,7 @@ time). Whenever a review runs it runs in the background after the map is
 handed back - or beside a LONG gate, never `make quick` - is never waited on,
 and lands its findings as follow-ups. Every pass is a row in
 `docs/review-ledger.md`, and a miss becomes a rule in the agent, proven to
-fire on the unfixed artifact. Doctrine: `dev/reviews.md`.
+fire on the unfixed artifact. Doctrine: `docs/reviews.md`.
 
 **Quick runs the unit form; the gate runs the integration form (GM 2026-08-26,
 feature 133 T22).** The GM, on the audit: *"if you look at what we are testing

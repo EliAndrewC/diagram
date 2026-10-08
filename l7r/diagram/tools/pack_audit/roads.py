@@ -2,7 +2,7 @@
 into a gate is no wider than the gate it feeds.
 
 - `roads_leave_the_frame` (B21): each END of every road meets the viewBox edge, a gate, a door, an arch or another
-  road - never a stub stopping short in the open (buildings/programs.md and the building-review checklist: the approach
+  road - never a stub stopping short in the open (docs/buildings/programs.md and the building-review checklist: the approach
   runs "OFF the viewBox edge ... not a stub stopping short"; a MAP DRAWING CONVENTION).
 - `gate_feeds_its_road` (B23): a road ending at a wall opening or the main gate's passage is no wider than that
   opening plus ROAD_GATE_TOL_FT (research 0093 'The main gate and its gatekeepers (nagaya-mon)'; the feature 267

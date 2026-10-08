@@ -1,7 +1,7 @@
 # county-magistracy-example - design notes (placer worked example)
 
 This is NOT a hand-authored map. It is the worked-example OUTPUT of the perimeter-first
-placer ([`../compound.py`](../../compound.py), feature 008): `county_magistracy_program()`
+placer ([`../compound.py`](../../../l7r/diagram/compound.py), feature 008): `county_magistracy_program()`
 declares a generic county magistracy entirely in FEET (envelope, the reserved court-spine,
 and buildings sized in feet with wall tags), and `place()` + `emit_svg()` compose it.
 
@@ -44,7 +44,7 @@ The forms the draft takes where the research gives more than one (feature 267 ou
   come to 1,784 sq ft, ~50 tsubo; how much of a main house was kitchen is not given, so the kitchen's share is a GUESS.
   (Pass 5 wrote "~2,400 sq ft" for a house of 1,980 + 480 + 120 = 2,580 sq ft, ~72 tsubo; pass 4 drew ~4,700.) The
   residence kind entry's "about 180 to 200 ft" was corrected at its source (`interactive/compound_kinds/household.py`)
-  and buildings.md's scale doctrine no longer calls those wings validated. The mass the house gave up went to the
+  and docs/buildings.md's scale doctrine no longer calls those wings validated. The mass the house gave up went to the
   lodgings, stores and office (the office hall 113 x 38, the tax archive 34 x 34, the granary 60 x 30, the barracks
   45 x 34, the retainers' long-house 50 x 36, the servants' row 72 x 22, the stables 42 x 24, the grooms' row 44 x 18
   and the guest house 33 x 32), which holds coverage in the jin'ya band without shrinking the envelope; each of those
@@ -64,9 +64,9 @@ The forms the draft takes where the research gives more than one (feature 267 ou
   sand are left to the hand refinement.
 - **R34 striking posts**: two upright posts as location markers (the ~4.5 ft standing timber); the practice-weapon rack
   at the ground's edge is a GUESS.
-- **Staff housing**: option (a) of buildings/programs.md knob 5 - everyone lives inside the walls, the platoon in the
+- **Staff housing**: option (a) of docs/buildings/programs.md knob 5 - everyone lives inside the walls, the platoon in the
   barracks - WITH A DEVIATION from its letter ("everyone in the barracks and residence wing"): the senior retainers
-  keep a long-house of their own in the outer court, because buildings.md ("Only the lord's household lives here")
+  keep a long-house of their own in the outer court, because docs/buildings.md ("Only the lord's household lives here")
   gives senior retainers separate structures, never bays of the lord's wing. The KARO lodges in a bay of that staff
   long-house, its north 14 ft with a door of its own - R11's attested form (captioned `karo's quarters` - a bay, not a house; its kind stays `karo's house`, the registry's) (research 0106: at an intendancy
   the staff lived inside the compound in small houses or long-houses; a chief retainer's house inside the lord's own
@@ -84,9 +84,9 @@ The forms the draft takes where the research gives more than one (feature 267 ou
   left ~62 x 66 ft of bare inner court east of it. Its size is a GUESS. A ~69 x 36 ft band of inner court north of
   it, east of the house (the alley's east end and the shrine's corner), stays open ground.
 - **Compound shrine**: a modest shrine, 18 x 14 ft (a GUESS in the 40-1,150 sq ft band) - the hall-shrine ceiling of
-  ~36 x 30 ft is Ochiba's particular, not the generic post's (buildings/programs.md: "The shrine is universal
+  ~36 x 30 ft is Ochiba's particular, not the generic post's (docs/buildings/programs.md: "The shrine is universal
   equipment ... Scale and dedication are the per-manor particular").
-- **Middle gate**: beside the office hall's east end, not behind it (buildings/programs.md puts it customarily on the
+- **Middle gate**: beside the office hall's east end, not behind it (docs/buildings/programs.md puts it customarily on the
   main axis behind the hall, the hall as the privacy baffle). Here the hall backs the divider at 1.5 ft with no alley
   behind it, and it stands west of the main axis (the tax archive takes the west end), so the placer opens the gate at
   the first stretch of divider no building backs (`compound_parts._middle_gate`); the hall still screens the house
@@ -105,7 +105,7 @@ not support (research 0104).
 
 Purpose: demonstrate that the toolchain can get the COMPOSITION right - buildings ring the
 walls (72% perimeter-hugging, pack_audit 2026-09-27, pass 6), the garden -> oshirasu -> forecourt court-spine is held open
-in the center (plus the practice ground beside the barracks, per the buildings.md program
+in the center (plus the practice ground beside the barracks, per the docs/buildings.md program
 item: a keiko-earth zone the placer reserves like any spine court, emitted with its weapon
 rack and two tategi striking-post markers; the hand-refined map moves the rack flush to the
 adjacent lodging's wall), coverage lands in the jin'ya band (33%, pack_audit 2026-09-27, pass 6), and nothing overflows. It is a
@@ -121,7 +121,7 @@ boundary, so half of it lies inside - every rank-1 building here had been standi
 inside the masonry, with its own outline swallowed by the wall stroke. The placer now leaves
 the ink plus a hair (2 ft off a compound wall, 1.5 ft off the divider), and the inner-court
 garden zone moved 36 -> 38 ft so the shifted N-wall row still clears it. Checked by
-`tools/pack_audit.py` `structures_on_walls`; see buildings.md "Walls and gates".
+`tools/pack_audit.py` `structures_on_walls`; see docs/buildings.md "Walls and gates".
 
 2026-09-27 the example brought into line with feature 267's research (`compound.py`; each number carries its
 reason and research section at the point of change):
@@ -161,7 +161,7 @@ Coverage 37% after the change (pack_audit), perimeter-hugging 76%; nothing overf
 - The hearing court is 80 x 36 ft, centered on the office hall and shorter than it (it was 132 x 39, 34 ft off the
   hall's center); the senior retainers' quarters shortened 60 -> 50 ft to keep a run before their door; the forecourt
   (55 x 31) and the practice ground (45 x 42, still in the 1,200-2,000 sqft band) took the ground the court gave up.
-- The gate: the R19/R26 pair above, with the posts drawn as a `main gate` group; buildings.md's main-gate and
+- The gate: the R19/R26 pair above, with the posts drawn as a `main gate` group; docs/buildings.md's main-gate and
   gatehouse bullets rewritten to the two forms.
 - Doors on every lodging block (and the kitchen and gatehouse), the approach form (R07), a 6 ft middle gate in the
   divider and a kitchen postern in the west wall; `two_court_zoning` now requires a gate in the divider.
@@ -222,7 +222,7 @@ Coverage 33%, perimeter-hugging 75%, nothing overflows; every registered check p
   stables' dropped - the grooms' row's, flush to the west wall with a hatch, serves both (the stables' hatch had opened
   12 ft from the gatehouse). Five in all: family, guests, servants, grooms, garrison.
 - **The stables' well** stands beside the stable door, not before it: a well tries the fracs off a face's middle first.
-- **The house at 49 tsubo** (Knob settings), the notes' arithmetic corrected, and buildings.md's scale doctrine
+- **The house at 49 tsubo** (Knob settings), the notes' arithmetic corrected, and docs/buildings.md's scale doctrine
   corrected to research 380.
 - **The karo in a bay of the staff long-house** in the outer court (Knob settings).
 - **The garden sized to the house**, the vegetable garden west of it, the east ground named `inner court`.
@@ -274,7 +274,7 @@ Coverage 33%, perimeter-hugging 71%, nothing overflows; every registered check p
   buildings; four caption seats seat_label reads differently. All applied or recorded in pass 5 above.
 - **2026-09-27 building-review round 5** (needs-work): 7 errors (no tubs at the kitchen and bath; the servants cut off
   from the kitchen; no guests' privy; no hatch on the family privy; the stables' privy by the gate and apart from the
-  grooms'; the stables' well before its door; the notes' arithmetic and buildings.md's validated-wings line), 3
+  grooms'; the stables' well before its door; the notes' arithmetic and docs/buildings.md's validated-wings line), 3
   questionable items (the 49- or 67-tsubo house, the karo in the inner court, the long garden) and 2 nitpicks. All
   applied or recorded in pass 6 above; the earthen entry is left, with its reason.
 - **2026-09-27 building-review round 6** (needs-work): the family privy apart from the house; the kitchen door into a

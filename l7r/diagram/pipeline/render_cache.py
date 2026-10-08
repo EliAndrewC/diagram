@@ -259,7 +259,7 @@ def regen_pool(
     frozen: list[str] = []
     for gen in gens:
         if poolmaps.classify(gen) == "legacy":
-            # The hand-authored pool is FROZEN (GM 2026-08-16; migration-plan.md "The accepted
+            # The hand-authored pool is FROZEN (GM 2026-08-16; docs/migration-plan.md "The accepted
             # trade"): a legacy gen must never re-run here, however stale its stamp - the engine
             # drifts freely now, so a rerun would silently replace an exhibit's renders (and
             # rewrite its tracked .json) with output nobody reviewed. Whatever renders exist on

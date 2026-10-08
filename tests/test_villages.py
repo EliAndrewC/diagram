@@ -9,7 +9,7 @@ scripted engine, or a spec that breaks an invariant (no overlaps, every field
 ringed, households-consistent house counts, channels anchored, no label
 overlaps, ...) fails here - checking is never cached.
 
-THE HAND-AUTHORED POOL IS FROZEN (GM 2026-08-16; migration-plan.md "The accepted
+THE HAND-AUTHORED POOL IS FROZEN (GM 2026-08-16; docs/migration-plan.md "The accepted
 trade"): legacy maps are permanent exhibits - never regenerated, never re-gated -
 so this sweep covers scripted maps only, and engine changes are free to alter
 behavior without holding 19 deprecated compositions byte-identical. poolmaps.py
@@ -62,7 +62,7 @@ def test_every_pool_gen_is_classified():
         f"the pool that no test regenerates is a map with no gate. If it is built on a new scripted "
         f"engine module, add that module to poolmaps.SCRIPTED_ENGINES; if it is a Mode A compound "
         f"plan, its tier is declared in l7r/diagram/buildings/types.json (feature 254). Hand-authoring a new Mode B map is DEPRECATED "
-        f"(migration-plan.md) and the frozen legacy list is closed - extending it takes a GM decision."
+        f"(docs/migration-plan.md) and the frozen legacy list is closed - extending it takes a GM decision."
     )
     present = {os.path.basename(g) for g in gens}
     stale = sorted(poolmaps.LEGACY_FROZEN_GENS - present)

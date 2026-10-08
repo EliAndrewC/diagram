@@ -122,7 +122,7 @@ claim, fixed in feature 165.
   the run stays a child of the tool call and dies with it).
 - **`make verify`** names the review checks the delta owes (feature 294: their OCCASIONS, never a moved
   manifest), writes one prompt per owed unit with its snapshot, and starts the gate in the background; the
-  units are dispatched once it is green (`dev/reviews.md`).
+  units are dispatched once it is green (`docs/reviews.md`).
 - **Idle tests**: after 60-120 minutes of idle time (staggered per session, restarted on a laptop
   resume), the clone runs the whole gate detached and the verdict opens the next prompt. Once per
   idle, never on unchanged content, aborted the moment a prompt arrives.

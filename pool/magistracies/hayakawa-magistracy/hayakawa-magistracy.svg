@@ -201,7 +201,7 @@
     <line x1="880" y1="534.5" x2="880" y2="750"/>
     <!-- South: the wall is BROKEN along the gate range (x 334..574), whose south face stands on the wall line and is
          the wall there - a nagaya-mon, "a long building with the gate through its middle" (feature 267 pass 2,
-         research buildings 420; buildings.md: a structure that is part of the wall has the wall broken around it).
+         research buildings 420; docs/buildings.md: a structure that is part of the wall has the wall broken around it).
          The 12 ft passage (x 490..526, the nagaya-mon's two-ken opening, R26, 0093) runs through the range
          toward its east end, the gatekeepers' lodging and the guardroom west of it, the store east (pass 3). -->
     <line x1="140" y1="750" x2="329.5" y2="750"/>
@@ -295,7 +295,7 @@
     <rect x="160" y="290" width="288" height="8" fill="#E8D2A8" stroke="#5A3F1E" stroke-width="1.5" data-kind="engawa"/>
     <line x1="304" y1="214" x2="304" y2="290" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
     <!-- the family block's inner entrance (uchigenkan) on its south face, onto the service ground east of the kitchen
-         corridor: the household's own way in, apart from the guests' roji (buildings/programs.md: no sealed boxes).
+         corridor: the household's own way in, apart from the guests' roji (docs/buildings/programs.md: no sealed boxes).
          Feature 267 pass 3: it was called the katteguchi here, wrongly - the katteguchi is the KITCHEN's door (research
          buildings 370), drawn on the kitchen's north face below. -->
     <rect x="284" y="298" width="24" height="6" fill="#B89868" stroke="#6B4F2A" stroke-width="0.8" data-kind="door"/>
@@ -569,7 +569,7 @@
   <!-- The ONE torii of the two shrines' ground, at the grove's west edge where the way in from the court enters, so
        both shrines lie beyond it (feature 267 pass 2, research religion-and-death 230: one torii at a precinct's
        boundary covers the shrines inside it; it stood mid-grove before the Fire Dragon shrine only). Drawn IN PLAN
-       (buildings.md, feature 268): the 15 x 1.5 ft top beam across the approach, here running north-south because
+       (docs/buildings.md, feature 268): the 15 x 1.5 ft top beam across the approach, here running north-south because
        the approach runs east, and its two 1.2 ft posts marked darker, 10.3 ft clear between them. -->
   <g data-kind="torii" data-part-of="compound shrine">
     <rect x="740" y="400" width="6" height="45" fill="none" id="arch"/>
@@ -722,7 +722,7 @@
 
   <!-- Practice ground (postern yard): the duty watch's daily keiko happens on
        swept multi-use ground, not in a dedicated building - a dojo is a city
-       institution (buildings.md grounding, 2026-07-24). This yard is also the
+       institution (docs/buildings.md grounding, 2026-07-24). This yard is also the
        bale staging ground on tax days - time-shared, the period-honest
        arrangement, and part of this county's river-logistics story (hence the
        instance note). The rack and striking posts are the durable equipment
