@@ -1,6 +1,6 @@
 {
  "feature": "330-open-work-as-features",
- "plan_sha256": "e533c6caa73a91ea69db8c8bebedbc5bf010938323301dea3381b0c2d55c8c85",
+ "plan_sha256": "2d8eaddbd56196e55a46974f7a9248e0250c9b689c5ca8dce6542a2efb41c821",
  "reviewed": "2026-10-08",
  "declared": "spec-fidelity",
  "decisions": [
@@ -8,77 +8,76 @@
    "id": "D1",
    "summary": "Closing words Done / Superseded by / Withdrawn in one tuple; Implemented closes nothing; a task is a column-0 box; no tasks = FILED.",
    "class": "within",
-   "why": "FR-002 and the 'Implemented' edge case. Plan bytes before D8 are identical to round 3 (HEAD~1 plan.md hashes to round 3's 5c8df1fc...)."
+   "why": "FR-002 and the 'Implemented' edge case. Plan bytes before D8 are identical to round 3 (HEAD~1 plan.md hashes to round 3's 5c8df1fc...). Round 5: plan bytes outside D8 unchanged (HEAD~1 plan.md hashes to round 4's e533c6ca...; 6 changed lines, all in D8)."
   },
   {
    "id": "D2",
    "summary": "scripts/speckit-todo.py behind make speckit-todo; three groups, counts per state; ALL=1 adds closed; exit 0.",
    "class": "within",
-   "why": "FR-001, FR-003, FR-009. Unchanged since round 3. The new --state flag only exposes feature() for D8."
+   "why": "FR-001, FR-003, FR-009. Round 5 adds --closed-by-status, which only exposes the CLOSING test of D1 to the push guard (yes/no from the status line alone)."
   },
   {
    "id": "D3",
    "summary": "Status lines rewritten only with evidence in audit.md; unsettled features stay open and are listed for the GM; tasks not ticked.",
    "class": "within",
-   "why": "FR-004 and Assumptions. Unchanged."
+   "why": "FR-004 and Assumptions. Unchanged. Round 5: plan bytes outside D8 unchanged (HEAD~1 plan.md hashes to round 4's e533c6ca...; 6 changed lines, all in D8)."
   },
   {
    "id": "D4",
    "summary": "Search specs and requests for gm-assistant subjects, read each hit, record, delete any found.",
    "class": "within",
-   "why": "FR-005. Unchanged."
+   "why": "FR-005. Unchanged. Round 5: plan bytes outside D8 unchanged (HEAD~1 plan.md hashes to round 4's e533c6ca...; 6 changed lines, all in D8)."
   },
   {
    "id": "D5",
    "summary": "One make claim per entry or named piece; verbatim text, source, status Filed; done or ruled-out entries closed with evidence.",
    "class": "within",
-   "why": "FR-006. Unchanged."
+   "why": "FR-006. Unchanged. Round 5: plan bytes outside D8 unchanged (HEAD~1 plan.md hashes to round 4's e533c6ca...; 6 changed lines, all in D8)."
   },
   {
    "id": "D6",
    "summary": "Re-aim every live future-work/ mention; history keeps its words; check-old-layout.py refuses a new live mention.",
    "class": "within",
-   "why": "FR-007, SC-004. Unchanged."
+   "why": "FR-007, SC-004. Unchanged. Round 5: plan bytes outside D8 unchanged (HEAD~1 plan.md hashes to round 4's e533c6ca...; 6 changed lines, all in D8)."
   },
   {
    "id": "D7",
    "summary": "Root CLAUDE.md, dev/lessons.md and every doc say: file a feature (make claim + Status Filed) and ask make speckit-todo.",
    "class": "within",
-   "why": "FR-008, SC-006. Unchanged."
+   "why": "FR-008, SC-006. Unchanged. Round 5: plan bytes outside D8 unchanged (HEAD~1 plan.md hashes to round 4's e533c6ca...; 6 changed lines, all in D8)."
   },
   {
    "id": "STRUCT",
    "summary": "Script in the spec directory, tests in tests/tooling/, baseline make done at cd33340f5, T01-T08 map onto D1-D7 plus the gate.",
    "class": "within",
-   "why": "Placement and the regression rule. Unchanged."
+   "why": "Placement and the regression rule. Unchanged. Round 5: plan bytes outside D8 unchanged (HEAD~1 plan.md hashes to round 4's e533c6ca...; 6 changed lines, all in D8)."
   },
   {
    "id": "D8a-status",
-   "summary": "The push's in-progress refusal no longer refuses a feature whose spec status line begins with a closing word (Done / Superseded by / Withdrawn), though boxes stay unticked.",
+   "summary": "The push's in-progress refusal keeps its old open-box test ('^\\s*- \\[ \\]', any indentation) and exempts only a spec whose status line begins with a closing word (Done / Superseded by / Withdrawn), asked of speckit-todo.py --closed-by-status; error or empty answer = not closed.",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "It narrows a standing guard, but the accepted spec requires it: FR-004 closes features by editing the status line and D3 (accepted) leaves their tasks unticked, so a refusal that still counts those open boxes would treat every FR-004 closure as in-progress work on every push that touches it - the literal old rule defeats the request's purpose (one true, mechanical state). The plan refuses the same word-exemption for the review gate, where nothing in the request implies it; here FR-002/FR-004 do."
+   "why": "Narrows a standing guard, but the accepted spec requires it: FR-004 closes features by their status line and D3 leaves their tasks unticked, so the literal old rule would refuse every FR-004 closure as in-progress work and defeat the request's purpose (one true, mechanical state). Round 5 confirmed the exemption is now ONLY this: the grep line is byte-identical to the pre-feature guard (git show 8b93f015b~1:scripts/sync-with-main.sh), and the exemption fails closed (output must equal 'yes')."
   },
   {
    "id": "D8a-boxes",
-   "summary": "As implemented by 'refuse exactly what make speckit-todo calls planned or in progress', the refusal also swaps its box reader from any open box ('^\\s*- \\[ \\]') to column-0 tasks only, and does not refuse state 'filed' even when a tasks.md exists.",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "Nothing in request.md or spec.md implies this part, and it inverts the spec's own edge case ('a parsing miss shows up as open work, not as finished work'): for the push guard a parsing miss now LANDS. Measured 2026-10-08 on fixtures run through speckit-todo.py --state: a tasks.md of indented '  - [ ] T01 / T02' reads 'filed' (old rule: refused; new: lands with every task open); a tasks.md with '- [x] T01' and an indented open '  - [ ] research pass' reads 'closed' (old: refused; new: lands). Zero current specs/ are in either shape (measured the same day), so the fix costs nothing today. Also fail-open: if the python call errors or prints nothing, the case matches no arm and the feature is not refused. Fix: keep the old open-box test and exempt only a closing status line - refuse when tasks.md has any '^\\s*- \\[ \\]' line AND speckit-todo's state is not closed-by-status (or: refuse unless state is closed with a closing-word reason, and refuse on empty/failed output); add the two fixture cases above to test-sync-with-main.sh."
+   "summary": "Round 4's finding: the refusal's box reader switched to column-0 tasks and 'filed' went unrefused. Round 5: the refusal reads boxes exactly as before (any '^\\s*- \\[ \\]'); speckit-todo's state/box parser no longer decides the guard.",
+   "class": "within",
+   "why": "Fixed as asked. Verified 2026-10-08 by running tests/hooks/test-sync-with-main.sh in the clone (108 checks pass), including 'indented open tasks -> refused' and 'a ticked task with an open indented research box -> refused' (both would land under round 4's --state code: they parse as filed / closed), plus the Done-lands and Implemented-refused cases; make test-file tests/tooling/test_speckit_todo.py 24 passed, including the parametrized --closed-by-status test. No box reading is narrowed any more."
   },
   {
    "id": "D8b",
    "summary": "review-gate.sh exempts from the fidelity-verdict check a spec whose status opens 'Filed' and whose directory has no tasks.md; gaining tasks.md ends the exemption.",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "Implied by the request: the GM asked that future-work entries 'become an unimplemented spec kit feature', and FR-006/FR-008 make filing (verbatim text, status Filed, no plan or tasks) the routine way to defer work. A filed spec implements nothing, and constitution XVI's review is before implementation; without the exemption every deferral needs an escape. The exemption is narrow: it keys on both the Filed status AND no tasks.md, ends when tasks appear (tested both ways), and opens nothing the gate held, since code pushed without touching the spec directory was never under this check."
+   "why": "Implied by the request: the GM asked that future-work entries 'become an unimplemented spec kit feature', and FR-006/FR-008 make filing (verbatim text, status Filed, no plan or tasks) the routine way to defer work. A filed spec implements nothing, and constitution XVI's review is before implementation; without the exemption every deferral needs an escape. The exemption is narrow: it keys on both the Filed status AND no tasks.md, ends when tasks appear (tested both ways), and opens nothing the gate held, since code pushed without touching the spec directory was never under this check. Round 5: plan bytes outside D8 unchanged (HEAD~1 plan.md hashes to round 4's e533c6ca...; 6 changed lines, all in D8)."
   },
   {
    "id": "D8c",
    "summary": "The one push of the 22 status-line rewrites carries REVIEW_GATE_OK with a reason, rather than a gate exemption for Done.",
    "class": "within",
-   "why": "A single recorded escape for FR-004's status edits to specs that mostly predate the fidelity review; no guard is changed, and declining a Done exemption keeps the gate from being skipped by writing a word."
+   "why": "A single recorded escape for FR-004's status edits to specs that mostly predate the fidelity review; no guard is changed, and declining a Done exemption keeps the gate from being skipped by writing a word. Round 5: plan bytes outside D8 unchanged (HEAD~1 plan.md hashes to round 4's e533c6ca...; 6 changed lines, all in D8)."
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }
