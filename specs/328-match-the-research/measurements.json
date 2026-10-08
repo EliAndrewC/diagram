@@ -469,7 +469,7 @@
   "method": "shapely union of the groves' boxes, crowns counted by containment (m:wave55-grove-density-as-drawn); round 1 measured ~401 on the same reading; the open ground is held to GROVE_CROWN_SQFT by the top-up, test_a_grove_throws_one_crown_to_about_180_sq_ft_at_every_grain (an open clump drawn at 0.9-1.0 of its density)"
  },
  "batch3-pair-and-controls": {
-  "quantity": "batch 3's pair, 328-start (3f91becf2, batch 2's close) against 328-end (the field-height speedup's HEAD), back to back in scratch worktrees (load 1.3 / 2.5); and the 40-household stage totals (make perf-profile SEED= HOUSEHOLDS=40 STAGE=labels, 'the stages before it took') at each wave's commit and under three controls at HEAD before the speedup: the grove top-up off (TOPUP_TRIES 0), KNOTTED_TRIES 1, and wave 52's fixture_seats.py (the barn seat restored)",
+  "quantity": "batch 3's pair, 328-start (3f91becf2, batch 2's close) against 328-end (the field-height speedup's HEAD), back to back in scratch worktrees (load 1.3 / 2.5); and the 40-household stage totals (make perf-profile SEED= HOUSEHOLDS=40 STAGE=labels, 'the stages before it took') at each wave's commit and under three controls at HEAD before the speedup: the grove top-up off (TOPUP_TRIES 0), KNOTTED_TRIES 1, and wave 52's fixture_seats.py (the barn seat restored); and the end leg re-taken after the close's three speedups (field_height_near in one vector pass, the privy's reach at its far corner, the bund run-on's clear passing over blocks whose box cannot reach), with the perf-audit's own per-commit times for seed 47",
   "observed": "2026-10-08",
   "method": "make perf LABEL=328-start / -end and make perf-report AGAINST=328-start; make perf-profile per commit with the current profiler copied in (commits before 3aa752419 lack beyond_the_band and rolled the default size - not counted)",
   "value": {
@@ -516,6 +516,28 @@
    "field_height_near_profiled_s": {
     "seed4_hinterland_total": 12.9,
     "field_height_near": 9.2
+   },
+   "end_leg_after_speedups": {
+    "total": 3.0,
+    "10hh": -8.8,
+    "20hh": -2.9,
+    "40hh": 3.7,
+    "15hh_seed4": 10.9,
+    "40hh_seed47": 21.5,
+    "40hh_seed25": "refused"
+   },
+   "seed47_40hh_by_commit_s_per_perf_audit": {
+    "3f91becf2": 12.9,
+    "f83a9214b": 12.9,
+    "3b4d2fc4d": 13.4,
+    "3aa752419": 13.7,
+    "e4c99b277": 14.7,
+    "19f69655c": 15.7
+   },
+   "speedups_this_close": {
+    "field_height_near_vector": "seed 4 40hh 19.3 -> 16.2 s",
+    "within_reach_of_far_corner": "~150,000 asks, four hypots -> one squared comparison",
+    "bund_clear_boxes": "seed 4 15hh web 4.6 -> 3.7 s profiled"
    }
   }
  }

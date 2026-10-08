@@ -15349,80 +15349,91 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/bund.py::RunOnBlocks.__init__#across commons and village groves": {
-  "code": "2d7280604f06102a",
-  "core": "ee36ac806a2eac97",
-  "date": "2026-10-03",
-  "note": "unanswered in the bundle",
+  "code": "39c19aae66c525b7",
+  "core": "ed61ab307c0c6f07",
+  "date": "2026-10-08",
+  "note": "nothing in the bundle says whether a lane may cross commons or groves; UNRESEARCHED stands",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/bund.py::RunOnBlocks.__init__#off the crop": {
-  "code": "e96d11ec2ffb2f9b",
-  "core": "ee36ac806a2eac97",
-  "date": "2026-10-03",
-  "note": "never crosses row crops",
+  "code": "723268a33a5bdc26",
+  "core": "ed61ab307c0c6f07",
+  "date": "2026-10-08",
+  "note": "crop_polys read as blocks, lane never crosses row crops",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },
   "research": "ebd72aaa6a0eb9af",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0081-village-lanes.drawing.html:ff5e303a5a16af8f"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/bund.py::RunOnBlocks.__init__#off the steadings": {
-  "code": "060a6a9aaac836b1",
-  "core": "ee36ac806a2eac97",
-  "date": "2026-10-05",
-  "note": "the built ground blocks a run-on",
+  "code": "8acf486bc9199778",
+  "core": "ed61ab307c0c6f07",
+  "date": "2026-10-08",
+  "note": "homestead fabric and fixture quads read as blocks",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
   "research": "7b40c2c01cfba682",
   "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:8ab9878d6ac1d10b"
   ],
-  "triaged": "2026-10-05",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/bund.py::RunOnBlocks.__init__#off the wet ground": {
-  "code": "118a448213413f4e",
-  "core": "ee36ac806a2eac97",
-  "date": "2026-10-03",
-  "note": "track keeps off wet ground",
+  "code": "90a6598449929b56",
+  "core": "ed61ab307c0c6f07",
+  "date": "2026-10-08",
+  "note": "marsh and toe band read as blocks; no causeway drawn",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },
   "research": "ebd72aaa6a0eb9af",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0081-village-lanes.drawing.html:43b635b1ca75125b"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/bund.py::RunOnBlocks.__init__#water crossed only by plank": {
-  "code": "bff3c64a74240cd4",
-  "core": "ee36ac806a2eac97",
-  "date": "2026-10-03",
-  "note": "0084 \"A lane or road that crosses water takes one planked deck\"",
+  "code": "76a6c73a2d5b8e86",
+  "core": "ed61ab307c0c6f07",
+  "date": "2026-10-08",
+  "note": "every drawn course read; a way crossing water takes one planked deck",
   "pages": {
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "0b77fe8191a170cc"
   },
   "research": "43cf74757fcb48f3",
+  "rests": [
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:09bdc345075811e2"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/bund.py::RunOnBlocks.clear#off the crop": {
-  "code": "56f9eb6383bc0bd2",
-  "core": "3179cf3522cd0b36",
-  "date": "2026-10-03",
-  "note": "tread never on a dry plot",
+  "code": "5e584bf21c91e233",
+  "core": "a9c0bfe46fd46be2",
+  "date": "2026-10-08",
+  "note": "tread quad touching a dry plot refused; box prune with pad=width covers the half-width tread",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },
   "research": "ebd72aaa6a0eb9af",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0081-village-lanes.drawing.html:ff5e303a5a16af8f"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/bund.py::RunOnBlocks.clear#off the steadings": {
-  "code": "7711b8bc4650b7c8",
-  "core": "3179cf3522cd0b36",
-  "date": "2026-10-07",
-  "note": "the claim and the page give \"at least 7 ft clear of a garden fence\", but `_crosses_fabric(..., FOOTPATH_FABRIC_GAP)` reads FOOTPATH_FABRIC_GAP=4.0; hold the run-on 7 ft (WEB_FABRIC_GAP) off, or correct the claim to the 4 ft the code uses",
+  "code": "975e5f9586c3f0ba",
+  "core": "a9c0bfe46fd46be2",
+  "date": "2026-10-08",
+  "note": "the claim and the page say the middle stays at least 7 ft off the fabric (\"A lane's middle keeps at least 7 ft clear of a garden fence\"), but the code passes FOOTPATH_FABRIC_GAP=4.0 to _crosses_fabric with the centerline [start, b]; either the constant should be 7 or the claim should give 4 ft and record it as a deviation",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
@@ -15434,26 +15445,31 @@
   "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/ways/bund.py::RunOnBlocks.clear#off the wet ground": {
-  "code": "e76597ae0a8456f5",
-  "core": "3179cf3522cd0b36",
-  "date": "2026-10-03",
-  "note": "no marsh, no wet toe",
+  "code": "da367338a3e8a91f",
+  "core": "a9c0bfe46fd46be2",
+  "date": "2026-10-08",
+  "note": "an end inside or an edge crossing of marsh/toe refused; the box prune cannot skip a hit",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },
   "research": "ebd72aaa6a0eb9af",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0081-village-lanes.drawing.html:43b635b1ca75125b"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/bund.py::RunOnBlocks.clear#water crossed on a plank": {
-  "code": "dd36c82364f18173",
-  "core": "3179cf3522cd0b36",
-  "date": "2026-10-03",
-  "note": "0084: a way over water takes a deck",
+  "code": "61ce171c55810393",
+  "core": "a9c0bfe46fd46be2",
+  "date": "2026-10-08",
+  "note": "at most over_water courses crossed, each taking the way's one planked deck",
   "pages": {
    "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html": "0b77fe8191a170cc"
   },
   "research": "43cf74757fcb48f3",
+  "rests": [
+   "0084-plank-bridges-over-farm-ditches-itabashi.drawing.html:09bdc345075811e2"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/bund.py::SQUARE_APPROACH_FT#square approach": {
@@ -15490,12 +15506,32 @@
   ],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/ways/bund.py::_box#plumbing": {
+  "code": "07b27642295fd830",
+  "core": "67bf1fba486c4b97",
+  "date": "2026-10-08",
+  "note": "bounding box only",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/ways/bund.py::_build_paddy_ground#plumbing": {
   "code": "5922e8f5f7d3b3c5",
   "core": "3d2f18dda5e761ff",
   "date": "2026-10-03",
   "note": "ring collection",
   "research": "",
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/bund.py::_meets#plumbing": {
+  "code": "5c146091dec651ee",
+  "core": "032a2768b528d445",
+  "date": "2026-10-08",
+  "note": "box overlap test with a margin; it only skips blocks that cannot be hit",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/bund.py::_segs_of#plumbing": {
