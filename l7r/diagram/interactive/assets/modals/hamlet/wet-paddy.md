@@ -15,7 +15,7 @@ country's paddies are said to have been dry.
 
 Depiction: The map tints a wet paddy blue-green where the other rice plots are green. The tint marks the ground, not the
 season, and not water seen between the plants. It goes on the low plots at the foot of the field, along the drain: on
-some fields every one of them, on others only some, picked at random, so a green plot beside a blue one at the foot of a
+some fields every one of them, on others only some, picked at random, with any plot that tapers to a point left green, so a green plot beside a blue one at the foot of a
 field may be just as wet.
 
 Name: wet paddy (shitsuden)

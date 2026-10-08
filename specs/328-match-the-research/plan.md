@@ -482,12 +482,13 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 ## Wave 40 (amendment 39, 2026-10-08)
 
 - **Scope**: the wet paddy's tint to 0007 drawing (only the draw or a pointed shape leaves a low plot green: four shape clauses
-  on no page dropped), the woods on the groves' one crown band (0080), and the belt's west arm as 0072 allows it (Inashiro's
-  notes and 0072 drawing's measured arcs restated) (`tasks.md` Phase 41).
+  and the outfall's keep-out, on no page, dropped; the class floor relabeled CONVENTION), and the belt's west arm as 0072 allows
+  it (Inashiro's notes and 0072 drawing's measured arcs and areas restated). The woods' crown band row is DEFERRED (legacy code
+  only), its round-1 edit reverted (`tasks.md` Phase 41).
 - **Occasions**: placement-changed wet paddy on sawada.
 - **On the unpushed waves 9-39** under condition (6): as at wave 39's close; the pair is owed (executed code).
-- **Verification**: the two tests red on the old code; `impl-drift` on the touched claims; the record checks on 0007, 0072 and
-  the notes; the gate; the glyph check; the timing pair.
+- **Verification**: the test red on the old code; `impl-drift` on the touched claims; the record checks on 0007, 0072 and
+  the modal; the gate; the glyph check (round 2 after the outfall); the timing pair.
 
 ## Performance bookends (constitution VI)
 

@@ -4,7 +4,8 @@
 on the bottom two levels, FLOODED on a random 45% of the level whose bottom edge lies on the collector - and `close_seams`
 re-judged the tint at its end against every plot's final ring. With the plots laid as a partition (`partition.py`) there is no
 closing rank to cut, so both are set here from where each plot lies, and the re-judgment - moved here verbatim from
-`seams/close.py`, its six clauses and its promotion - runs on the finished plots as it always did.
+`seams/close.py`, its clauses and its promotion - runs on the finished plots as it always did. Since feature 328 wave 40 the
+clauses are 0007's alone: a needle, a pointed apex, a taper to a point.
 
 Research: tint plumbing - NONE: ring rounding for the needle test
 """
@@ -92,8 +93,7 @@ def judge_tint(plots: list[dict[str, Any]], dpts: Poly, plot_across: float, g: f
 
     Research:
         pointed plot left green - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: a needle, a truncated point or an apex under 25 deg loses the tint
-        tint reads as a basin - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: a lobed, channel-shaped, triangular, outsized or outfall plot loses the tint
-        one wet plot at least - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: when none survives, the most basin-like low plot is tinted
+        one wet plot at least - CONVENTION: when the draw leaves no low plot blue, the most basin-like one is tinted, so the map still shows the class it declares (0007 drawing records blue as a sample, not this floor)
     """
     import shapely
     from shapely.geometry import LineString, Polygon
@@ -107,10 +107,8 @@ def judge_tint(plots: list[dict[str, Any]], dpts: Poly, plot_across: float, g: f
     # BOTH the raw ring and the deduped one, because the two carry different apexes and the gate judges the RAW one
     # (`flooded_plots_read_as_basins`, cohort seed 8). Testing both at the generous 25 deg keeps the placer strictly
     # stricter than the gate's 15.
-    # THE FOURTH BLIND SPOT: EVERY PREDICATE MEASURES SHAPE, NONE MEASURES SIZE (feature 152 T10, settlement-review
-    # 2026-08-29). Sawada's surviving flooded plot was 6,706 sq ft - 4.9x the median basin and the largest of 776 - on the one
-    # map whose whole brief is that it has no pond. A basin far larger than its neighbors does not read as a basin whatever its
-    # outline, so size joins the other four. Measured on the FINAL ring, which is the only place the size exists.
+    # (A SIZE CLAUSE STOOD HERE, feature 152 T10: Sawada's surviving flooded plot was 6,706 sq ft, 4.9x the median basin, on the
+    # map whose brief is that it has no pond; it went with feature 328 wave 40, on no page. The median still ranks a promotion.)
     # EACH PLOT'S SHAPE ONCE, AND ITS HULL AND MINIMUM RECTANGLE IN ONE ARRAY CALL EACH (feature 276, FR-004, plan D11/D12).
     _pgs = ring_polygons([_q["poly"] for _q in plots])
     _mrrs = list(shapely.minimum_rotated_rectangle(_pgs)) if _pgs else []
@@ -127,18 +125,14 @@ def judge_tint(plots: list[dict[str, Any]], dpts: Poly, plot_across: float, g: f
         # ONLY THE DRAW OR A POINTED SHAPE LEAVES A LOW PLOT GREEN (feature 328 wave 40, 0007 drawing: "Only the random draw, or a
         # plot's pointed shape, left them untinted"). Four shape clauses stood here, each from a settlement-review that read a
         # blue plot as a pond or a channel - a lobe under 0.85 solidity, a triangle filling under 0.80 of its least rectangle, an
-        # aspect over 4, an area over twice the map's median - and none is on the page; they went with this feature.
-        # A FOURTH MEASURES SITING: THE OUTFALL, NOT THE WHOLE DRAIN. Blue lying ALONG the collector is the rule working; only
-        # the terminus is ambiguous (Sawada's blue basin fused with the brook's head, settlement-review 2026-08-18), and the
-        # keep-out is one and a half plot widths of it, measured TO THE PLOT'S NEAREST CORNER, NOT ITS CENTROID (feature 145).
+        # aspect over 4, an area over twice the map's median - and none is on the page; they went with this feature. So did the
+        # outfall's keep-out (Sawada's blue basin fused with the brook's head, settlement-review 2026-08-18: no plot within one and
+        # a half plot widths of the drain's end took the tint), on no page either.
         _t_end = _TINT_END_FT * g / 2
         _pg = _pgs[_k]
-        _pcx = sum(_q[0] for _q in p["poly"]) / len(p["poly"])
-        _pcy = sum(_q[1] for _q in p["poly"]) / len(p["poly"])
-        _at_outfall = bool(dpts) and min(math.hypot(_q[0] - dpts[-1][0], _q[1] - dpts[-1][1]) for _q in [*p["poly"], (_pcx, _pcy)]) < 1.5 * plot_across
         _mrr = _mrrs[_k] if isinstance(_pg, Polygon) and not _pg.is_empty else None
         _fill = (_pg.area / _mrr.area) if isinstance(_mrr, Polygon) and _mrr.area > 0.0 else 1.0
-        _wrong = _needle(p["poly"]) or pointed_ring(dedup_ring(p["poly"], 1.0), _TINT_MIN_APEX) or tapers_to_a_point(p["poly"], _t_end, _TINT_MIN_APEX, 4 * _t_end) or _at_outfall
+        _wrong = _needle(p["poly"]) or pointed_ring(dedup_ring(p["poly"], 1.0), _TINT_MIN_APEX) or tapers_to_a_point(p["poly"], _t_end, _TINT_MIN_APEX, 4 * _t_end)
         if p.get("fill") == FLOODED and _wrong:
             p["fill"] = RICE_GREENS[(int(abs(p["poly"][0][0]) * 7) + int(abs(p["poly"][0][1]) * 3)) % len(RICE_GREENS)]
         elif not _wrong and _pg.area > 0.0 and (p.get("low") or (_collector is not None and _to_collector[_k] <= 0.25 * plot_across)):

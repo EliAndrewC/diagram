@@ -604,19 +604,3 @@ def test_a_reserved_seats_re_seat_is_asked_again_at_the_records_grain_and_droppe
         [(500.0, 400.0), (700.0, 400.0), (700.0, 560.0), (500.0, 560.0)], role="copse", dense=True, near=([(100.0, 100.0)], 10.0), seats=[seat], seat_near=([(600.0, 520.0)], 400.0, [])
     )  # dense: a local obstacle re-seats
     assert not any(c == list(seat) for g in s.M.get("village_groves") or [] for c in g.get("clumps") or [])
-
-
-def test_a_wood_draws_its_crowns_in_the_groves_one_band() -> None:
-    """0080 (feature 328 wave 40): a windbreak's crowns are "the same real size as a hill wood's", each 0.75 to 1.4 times the
-    mean - the woods draw `CROWN_S` as the groves do (they drew 0.75-1.05, with an 18% roll of 1.05-1.4)."""
-    from l7r.diagram.settlement.homestead_parts.groves import CROWN_S
-
-    s = _hamlet()
-    s._tree_stand([(100.0, 100.0), (1100.0, 100.0), (1100.0, 1100.0), (100.0, 1100.0)], seed=3, outliers=False)
-    s.flush_tree_stands()
-    flat = s.M["tree_crowns"]
-    r0 = s.px(s.CANOPY_R_FT)
-    radii = [flat[i + 2] / r0 for i in range(0, len(flat), 3)]
-    assert len(radii) > 100, "non-vacuity"
-    assert CROWN_S[0] - 0.01 <= min(radii) and max(radii) <= CROWN_S[1] + 0.01
-    assert sum(1 for r in radii if r > 1.05) / len(radii) > 0.3, "the upper band is drawn as often as the page's one band draws it"

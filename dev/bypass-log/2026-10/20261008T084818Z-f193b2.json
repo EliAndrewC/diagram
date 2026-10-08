@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-08T08:48:18Z",
+  "target": "record-checked",
+  "commit": "fcaa3c4e3",
+  "why": "modal-depiction on modal-depiction:choice/winter_crop--barley: the changes in 0007 and 0072 drawing since this modal was answered are re-measured counts on our own maps (Inashiro 8 blue plots; the belts' arcs 49/71/14 deg, two maps without a belt) and 0080's 8.7 ft median; this modal states none of those figures (grep)"
+}

@@ -256,6 +256,7 @@ class StandsMixin:
             belt off the deep marsh - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: based in the reed margin at most
             copse off the bamboo - research/questions/0075-bamboo-groves-chikurin.drawing.html: each stand grown by `copse_bamboo_reach` (two crowns)
             copse filled to the homesteads' wood - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: reserved seats first, then the grid
+            no wind declared - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: the regional northwest (every map takes it unless its spec declares a local wind); a hamlet always passes its plan's wind
             belt a windward hook - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: ends trimmed to the wind's quarter
             belt deep and whole - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: interior gaps over `_BELT_GAP_FT`, 30 ft at every grain, filled
             canopy kept 0.9 clump off shrines, torii and ponds - UNRESEARCHED
@@ -852,7 +853,7 @@ class StandsMixin:
 
             _ways = [ln.get("pts") or [] for ln in self.M.get("lanes") or []] + [st_.get("poly") or [] for st_ in self.M.get("streams") or []]
             _trim = (lambda cs: trim_to_the_wind(cs, _houses, wind)) if wind is not None else None
-            seated = settle_the_belt(seated, r=round(clump / 2, 1), houses=_houses, wind=wind or (0.0, -1.0), ways=_ways, page=page, band=poly, seat=_settle_seat, reach=reach, trim=_trim)
+            seated = settle_the_belt(seated, r=round(clump / 2, 1), houses=_houses, wind=wind or (-0.7071, -0.7071), ways=_ways, page=page, band=poly, seat=_settle_seat, reach=reach, trim=_trim)
         elif role == "windbreak" and wind is not None and seated:  # one crown too: a lone crown off the wind is no belt (W18)
             seated = trim_to_the_wind(seated, _houses, wind)
         if role == "copse" and len(seated) > 1:

@@ -92,3 +92,11 @@ def test_mark_low_and_judge_tint_do_nothing_without_a_collector_or_plots() -> No
     tint.judge_tint(plots, [], 48.0, 1.0)
     tint.judge_tint([], _D, 48.0, 1.0)
     assert plots[0]["fill"] == GREEN
+
+
+def test_a_plot_at_the_drains_end_keeps_its_tint() -> None:
+    """0007 drawing (feature 328 wave 40): only the draw or a pointed shape leaves a low plot green - the outfall's keep-out (no
+    plot within one and a half plot widths of the drain's end) is on no page, and went."""
+    plots = [{"poly": _rect(1260, 1262, 1300, 1298), "fill": FLOODED, "low": True}]
+    tint.judge_tint(plots, _D, 46.0, 2.0)
+    assert plots[0]["fill"] == FLOODED

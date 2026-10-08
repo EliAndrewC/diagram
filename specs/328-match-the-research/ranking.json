@@ -14,7 +14,7 @@
   "e0_basis": "docs/buildings.md:401; 0165 drawing page: 'A county magistracy draws an open practice ground ... and no hall ... Every county magistracy draws a practice ground beside its guards' quarters'; the outer-court section already claims both from this page (buildings.md:156-157)",
   "moved": "T95a (fresh reader): docs/buildings.md:401; 0165 drawing page: 'A county magistracy draws an open practice ground ... and no hall ... Every county magistracy draws a practice ground beside its guards' quarters'; the outer-court section already claims both from this page (buildings.md:156-157)",
   "wave": "35",
-  "scope": "kept"
+  "scope": "mode-a"
  },
  {
   "key": "docs/buildings.md::Checklist for a new diagram#practice ground sizing",
@@ -76,7 +76,7 @@
   "e0_basis": "docs/buildings.md:168 claims CANON for the band; 0116.html (the question page, not .drawing): 'a barracks for ten to twenty men, this project's figure for a small office's guard ... the barracks' strength are a GUESS'; canon (make canon): l7r.md:182 '~15 samurai in each of the 36 towns', budgets.md:103 - the 15 is canon, the band is not",
   "moved": "T95a (fresh reader): docs/buildings.md:168 claims CANON for the band; 0116.html (the question page, not .drawing): 'a barracks for ten to twenty men, this project's figure for a small office's guard ... the barracks' strength are a GUESS'; canon (make canon): l7r.md:182 '~15 samurai in each of the 36 towns', budgets.md:",
   "wave": "35",
-  "scope": "kept"
+  "scope": "mode-a"
  },
  {
   "key": "docs/buildings.md::Outer court (administrative / public)#cell kept well under the barracks",
@@ -108,7 +108,7 @@
   "e0_basis": "docs/buildings.md:171; 0099 drawing page: 'the court is drawn with a building's solid outline, and posts along its open side. The posts ... stand two ken (~12 ft) apart. Each post is drawn 1 ft square ... a GUESS'",
   "moved": "T95a (fresh reader): docs/buildings.md:171; 0099 drawing page: 'the court is drawn with a building's solid outline, and posts along its open side. The posts ... stand two ken (~12 ft) apart. Each post is drawn 1 ft square ... a GUESS'",
   "wave": "35",
-  "scope": "kept"
+  "scope": "mode-a"
  },
  {
   "key": "docs/buildings.md::Outer court (administrative / public)#hearing mat size",
@@ -139,7 +139,7 @@
   "e0_basis": "The three hand sheets draw 28 ft deep: hayakawa-magistracy.svg:612 340x84 px (113 x 28 ft), ochiba-magistracy.svg:204 360x84 (120 x 28), ubame-magistracy.svg:227 330x84 (110 x 28); only the generated county example draws 113 x 38 (compound.py:791-793; county-magistracy-example.svg:72 339x114). The doc (buildings.md:134, :170 '~360x84') matches the hand sheets and 0113's drawing page ('80 to 150 ft",
   "moved": "T95a (fresh reader): The three hand sheets draw 28 ft deep: hayakawa-magistracy.svg:612 340x84 px (113 x 28 ft), ochiba-magistracy.svg:204 360x84 (120 x 28), ubame-magistracy.svg:227 330x84 (110 x 28); only the generated county example draws 113 x 38 (compound.py:791-793; county-magistracy-example.svg:72 339x114). The d",
   "wave": "35",
-  "scope": "kept"
+  "scope": "mode-a"
  },
  {
   "key": "docs/buildings.md::Outer court (administrative / public)#practice ground",
@@ -306,7 +306,7 @@
   "e0_basis": "docs/buildings.md:127 'Internal divider wall ... separating courts, with its own gate opening'. 0090 drawing html:17-18 says 'Every compound our maps draw has two courts, the office in front and the residence behind' and 'A gate between the two courts divides the office from the home'. The divider's stroke and gate are already claimed at docs/buildings.md:117 (0092 drawing), and programs.md:23-24 ",
   "moved": "T97a (fresh reader): docs/buildings.md:127 'Internal divider wall ... separating courts, with its own gate opening'. 0090 drawing html:17-18 says 'Every compound our maps draw has two courts, the office in front and the residence behind' and 'A gate between the two courts divides the office from the home'. The divider's",
   "wave": "36",
-  "scope": "kept"
+  "scope": "mode-a"
  },
  {
   "key": "docs/buildings.md::Walls and gates#main gate placed in the south wall the one placed example, j",
@@ -323,7 +323,7 @@
   "e0_basis": "docs/buildings.md:124 (Walls and gates, Main gate bullet) puts the passage 'in the south wall'; the existing claim at docs/buildings.md:27 cites 0093/0091, neither of which says south (0093 html:13 has Joge's gate at its EAST wall; 0091 only puts the garden south). 0123 drawing html:20 already says 'Where nothing else decides it, the gate faces south ... The maps use it on both models', and 0090 h",
   "moved": "T97a (fresh reader): docs/buildings.md:124 (Walls and gates, Main gate bullet) puts the passage 'in the south wall'; the existing claim at docs/buildings.md:27 cites 0093/0091, neither of which says south (0093 html:13 has Joge's gate at its EAST wall; 0091 only puts the garden south). 0123 drawing html:20 already says ",
   "wave": "36",
-  "scope": "kept"
+  "scope": "mode-a"
  },
  {
   "key": "docs/buildings.md::Walls and gates#no salt heaps or wards drawn at a compound's gates",
@@ -340,7 +340,7 @@
   "e0_basis": "docs/buildings.md:130 already cites the page inline; 0240 drawing page: 'none draws salt at the gates of an official's compound ... no page we read puts it at an official's gates'. Not CANON: make canon finds no morijio; the GM-only Hayakawa wards were the one source and are off the sheet (hayakawa-magistracy.notes.md:17)",
   "moved": "T95a (fresh reader): docs/buildings.md:130 already cites the page inline; 0240 drawing page: 'none draws salt at the gates of an official's compound ... no page we read puts it at an official's gates'. Not CANON: make canon finds no morijio; the GM-only Hayakawa wards were the one source and are off the sheet (hayakawa-",
   "wave": "35",
-  "scope": "kept"
+  "scope": "mode-a"
  },
  {
   "key": "docs/buildings.md::Walls and gates#threshold stones",
@@ -433,7 +433,7 @@
   "e0_basis": "docs/buildings/programs.md:198 (the dwelling row, 'reckoned from the farmhouse it resembled'); 0221 drawing page: 'drawn at the size of the map's farmhouses, 46 by 28 ft ... the farmhouse size is a guess'; its two-building size claim is already GUESS at programs.md:171",
   "moved": "T95a (fresh reader): docs/buildings/programs.md:198 (the dwelling row, 'reckoned from the farmhouse it resembled'); 0221 drawing page: 'drawn at the size of the map's farmhouses, 46 by 28 ft ... the farmhouse size is a guess'; its two-building size claim is already GUESS at programs.md:171",
   "wave": "35",
-  "scope": "kept"
+  "scope": "mode-a"
  },
  {
   "key": "docs/buildings/programs.md::Country shrine (a village district's shrine)#dwelling privy",
@@ -542,7 +542,7 @@
   "e0_basis": "docs/buildings/programs.md:69; 0099 drawing page: 'Our maps seat the clerks to either side of the magistrate, level with the dais ... a deliberate deviation, for simplicity'. The same choice is still claimed UNRESEARCHED at docs/buildings.md:135 ('clerk positions at the dais') - same fix there",
   "moved": "T95a (fresh reader): docs/buildings/programs.md:69; 0099 drawing page: 'Our maps seat the clerks to either side of the magistrate, level with the dais ... a deliberate deviation, for simplicity'. The same choice is still claimed UNRESEARCHED at docs/buildings.md:135 ('clerk positions at the dais') - same fix there",
   "wave": "35",
-  "scope": "kept"
+  "scope": "mode-a"
  },
  {
   "key": "docs/buildings/programs.md::Magistrate's manor (county magistracy)#inner-court postern",
@@ -2988,7 +2988,7 @@
   "e0_basis": "0072 does not require a west arm. 0072 drawing page: 'a shelter belt stands on the windward side of the houses ... on the north and west ... on one side or two, never all the way round' and 'every belt stands on the north and west of its houses, or on one of those two sides'; and 'A belt that runs off the edge of the map is sound, and the bare ground beyond is not a hole ... Nothing beyond the fra",
   "moved": "T105a (fresh reader): 0072 does not require a west arm. 0072 drawing page: 'a shelter belt stands on the windward side of the houses ... on the north and west ... on one side or two, never all the way round' and 'every belt stands on the north and west of its houses, or on one of those two sides'; and 'A belt that runs o",
   "wave": "",
-  "scope": "kept"
+  "scope": "deferred"
  },
  {
   "key": "l7r/diagram/settlement/homestead_parts/farmstead.py::FarmsteadMixin._find_appurtenances#garden on a sunny side",
@@ -6741,7 +6741,7 @@
   "tier_as_ranked": "E0",
   "moved": "T95a (fresh reader): No magistracy or shrine sheet draws a salt ward (grep -i salt pool/*/*/*.svg: none); Hayakawa's came off 2026-09-28 (hayakawa-magistracy.notes.md:17; particulars.py:12 - they came from the GM-only Obsidian Portal notes, not setting canon); 0240 drawing page: 'none draws salt at the gates of an offic",
   "wave": "37",
-  "scope": "kept"
+  "scope": "mode-a"
  },
  {
   "key": "docs/buildings.md::Walls and gates#threshold wards",
@@ -9011,7 +9011,7 @@
   "tier_as_ranked": "E2",
   "moved": "T105a (fresh reader): 0080 drawing page: 'The mean crown radius is 8.5 ft ... and each crown is drawn between 0.75 and 1.4 times that' and 'A windbreak's crowns are drawn the same real size as a hill wood's. One crown size serves the hill woods and the windbreak's cedars alike'. woods.py:139 draws `rad * (random.uniform(",
   "wave": "",
-  "scope": "kept"
+  "scope": "deferred"
  },
  {
   "key": "l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_anchor#reach in feet",
@@ -9297,7 +9297,7 @@
   "moved": "",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "kept"
+  "scope": "deferred"
  },
  {
   "key": "l7r/diagram/waterfields/banks.py::_TINT_MAX_ASPECT#channel-shaped plot left green",
@@ -9313,7 +9313,7 @@
   "moved": "",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "kept"
+  "scope": "deferred"
  },
  {
   "key": "l7r/diagram/waterfields/banks.py::_TINT_MIN_RECTANGULARITY#triangle left green",
@@ -9329,7 +9329,7 @@
   "moved": "",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "kept"
+  "scope": "deferred"
  },
  {
   "key": "l7r/diagram/waterfields/banks.py::_TINT_MIN_SOLIDITY#lobed plot left green",
@@ -9345,7 +9345,7 @@
   "moved": "",
   "verdict": "DRIFTED",
   "wave": "",
-  "scope": "kept"
+  "scope": "deferred"
  },
  {
   "key": "l7r/diagram/waterfields/banks.py::_WELD_MIN_SOLIDITY#weld lump",

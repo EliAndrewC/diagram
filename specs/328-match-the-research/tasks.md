@@ -14,7 +14,7 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
   the web cut it back to its last joint (`trim_streets`); Kashikawa's and Mizuguchi's far ends now run off the sheet as a
   second way out (every way is inked `village lane`).
 - placement-changed: wet paddy on sawada - wave 40: only the draw or a pointed shape leaves a low plot green (0007); the four
-  shape clauses on no page went, and the blue plots run 7 -> 16 here (Inashiro 1 -> 8, Kashikawa 4 -> 14, Mizuguchi 3 -> 7)
+  shape clauses and the outfall's keep-out, on no page, went, and the blue plots run 7 -> 16 here (Inashiro 1 -> 8, Kashikawa 4 -> 14, Mizuguchi 3 -> 7; with the outfall keep-out gone, Sawada 18 and Mizuguchi 8)
 - glyph-redrawn: windbreak on inashiro - wave 39: every grove crown in 0080's one 0.75-1.4 band, a conifer no wider than a broadleaf
   (the conifer-led belt's rows and the farm groves), and every crown giving way round a yard persimmon (0046)
 - glyph-redrawn: windbreak on kuwabata - wave 39: the mixed broadleaf belt in the one band, its bamboo kept (0075)
@@ -1310,16 +1310,18 @@ regenerated, `tree_crowns` and `bamboo_marks` changed on every map, nothing else
   blue plot as a pond or a channel, are on no page and go; the needle, the apex, the taper and the outfall's siting stay.
   `test_only_a_pointed_shape_loses_the_water_tint` (red on the old code: the blunt triangle was demoted). The 0007 bullet's
   Inashiro count restated, 8 blue plots (it read 2 of 24, then 1).
+- `tint.py::judge_tint#tint reads as a basin` (E2, row 635) taken with them: the outfall's keep-out is on no page either and
+  goes (spec-fidelity round 1: keeping it while the four went was an "except where"); `#one wet plot at least` (E2, row 634)
+  relabeled CONVENTION - the floor that keeps the declared class on the map is a drawing convention 0007 does not record.
 - Wave 39's found rows, tiered by a fresh reader (T105a, `audit/t105a-out.jsonl`): `woods.py::_draw_stand#crown size` E2 -
-  the woods draw `CROWN_S` (0080: a windbreak's crowns "the same real size as a hill wood's"), the 18% emergent roll gone,
-  `test_a_wood_draws_its_crowns_in_the_groves_one_band` red on the old code; no pool hamlet's woods are drawn through it
-  (the five manifests' `tree_crowns` unchanged). `belt_law.py::the village belt#its west arm on inashiro` E0 - 0072 allows
+  DEFERRED, not taken: `_draw_stand` runs only on legacy village maps (`audit/scope.py`; its kept scope was provisional), so the
+  round-1 edit was reverted (spec-fidelity round 1). `belt_law.py::the village belt#its west arm on inashiro` E0 - 0072 allows
   "one of those two sides"; Inashiro's notes line and 0072 drawing's arcs re-measured (49, 71, 14 degrees; Kashikawa and
   Mizuguchi draw no village belt).
 
 - [x] T105a wave 39's found rows tiered by the work they take, by a fresh reader (FR-002, FR-003, SC-003)
       research: rendering
-- [ ] T105 the tint's four clauses dropped, the woods on `CROWN_S`, the belt's notes and arcs (FR-003, FR-004)
+- [ ] T105 the tint's five clauses dropped and its floor relabeled, the belt's notes and arcs (FR-003, FR-004)
       research: rendering
 - [ ] T106 the claims re-checked by `impl-drift`; the record checks; the glyph check; the close: `make done` green, the pair, the wave column (FR-005, FR-006)
       research: rendering

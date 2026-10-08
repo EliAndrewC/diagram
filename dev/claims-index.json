@@ -4233,10 +4233,10 @@
   "date": "2026-10-03",
   "note": "matches the cited finding or label",
   "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fbd35c7766637fc3"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fc30b06b8f1639b8"
   },
-  "research": "1f42835678daf333",
-  "triaged": "2026-10-05",
+  "research": "d1ed2d75fd232589",
+  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/cluster.py::margin_candidates#45 degree bar": {
@@ -4253,10 +4253,10 @@
   "date": "2026-10-03",
   "note": "matches the cited finding or label",
   "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fbd35c7766637fc3"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fc30b06b8f1639b8"
   },
-  "research": "1f42835678daf333",
-  "triaged": "2026-10-05",
+  "research": "d1ed2d75fd232589",
+  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/cluster.py::margin_candidates#back turned off a flank": {
@@ -4281,13 +4281,14 @@
   "date": "2026-10-07",
   "note": "the seat backs onto the plan's wind, northwest unless declared",
   "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fbd35c7766637fc3"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fc30b06b8f1639b8"
   },
-  "research": "1f42835678daf333",
+  "research": "d1ed2d75fd232589",
   "rests": [
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:43aedefed41c4f79",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:c36f0698d70588dc"
   ],
+  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/cluster.py::seat_cluster#band area": {
@@ -4671,10 +4672,10 @@
   "date": "2026-10-03",
   "note": "northwest unless declared",
   "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fbd35c7766637fc3"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fc30b06b8f1639b8"
   },
-  "research": "1f42835678daf333",
-  "triaged": "2026-10-05",
+  "research": "d1ed2d75fd232589",
+  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::DIKEPOND_CONVERSION#share of the block converted": {
@@ -5393,10 +5394,10 @@
   "date": "2026-10-03",
   "note": "calibrates \"laid out with its back to it\"",
   "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fbd35c7766637fc3"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fc30b06b8f1639b8"
   },
-  "research": "1f42835678daf333",
-  "triaged": "2026-10-05",
+  "research": "d1ed2d75fd232589",
+  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/consts.py::WIND_VECTORS#aliases and plumbing": {
@@ -6463,9 +6464,9 @@
   "date": "2026-10-07",
   "note": "band hugs each column's windward-most house, floored at max(median u, 0) so it never falls behind the centroid",
   "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fbd35c7766637fc3"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fc30b06b8f1639b8"
   },
-  "research": "1f42835678daf333",
+  "research": "d1ed2d75fd232589",
   "rests": [
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:31f1ea9e18204d6a",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:43aedefed41c4f79",
@@ -6473,6 +6474,7 @@
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:8e692f283f7947e4",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:dde93f148061b296"
   ],
+  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/belt.py::belt_polygon#connector and field spur lanes cross the belt as a way through, not moved past": {
@@ -6481,14 +6483,15 @@
   "date": "2026-10-07",
   "note": "connector/spur lanes are left out of the past-the-lanes move, so they cross the band and the planting resumes either side",
   "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fbd35c7766637fc3"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fc30b06b8f1639b8"
   },
-  "research": "1f42835678daf333",
+  "research": "d1ed2d75fd232589",
   "rests": [
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:19b6b8f457366d55",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:301a35716bf73526",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:79d09be286e4e66b"
   ],
+  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/belt.py::belt_polygon#no belt under three houses": {
@@ -6574,10 +6577,10 @@
   "date": "2026-10-03",
   "note": "band hugs each column's windward-most house, 0072 drawing",
   "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fbd35c7766637fc3"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fc30b06b8f1639b8"
   },
-  "research": "1f42835678daf333",
-  "triaged": "2026-10-05",
+  "research": "d1ed2d75fd232589",
+  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/belt.py::past_the_lanes#belt into the marsh as alder": {
@@ -7383,10 +7386,10 @@
   "date": "2026-10-03",
   "note": "crowns within reach of a farmhouse, per 0072 drawing",
   "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fbd35c7766637fc3"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fc30b06b8f1639b8"
   },
-  "research": "1f42835678daf333",
-  "triaged": "2026-10-05",
+  "research": "d1ed2d75fd232589",
+  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/hinterland/stages.py::plant_the_belt#dented round the title": {
@@ -11591,13 +11594,14 @@
   "date": "2026-10-07",
   "note": "belt seats are sorted last, not refused; the page expects a well in a belt and lets the hole rule judge it",
   "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fbd35c7766637fc3"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fc30b06b8f1639b8"
   },
-  "research": "1f42835678daf333",
+  "research": "d1ed2d75fd232589",
   "rests": [
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:1b23f53588df77c1",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:301a35716bf73526"
   ],
+  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/homesteads/wells.py::place_wells#surface water counts": {
@@ -11740,10 +11744,10 @@
   "date": "2026-10-03",
   "note": "146 inside 0072's calibrated 37-262 ft belt-to-house range (no stated 146)",
   "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fbd35c7766637fc3"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fc30b06b8f1639b8"
   },
-  "research": "1f42835678daf333",
-  "triaged": "2026-10-05",
+  "research": "d1ed2d75fd232589",
+  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::FAN_OVERHANG#spec and plan plumbing": {
@@ -12131,13 +12135,14 @@
   "date": "2026-10-07",
   "note": "northwest unless the map declares a local wind",
   "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fbd35c7766637fc3"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fc30b06b8f1639b8"
   },
-  "research": "1f42835678daf333",
+  "research": "d1ed2d75fd232589",
   "rests": [
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:0c9dba0334c6fdfb",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:c36f0698d70588dc"
   ],
+  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/plan.py::plan_site#rolled fall backs the wind": {
@@ -20096,14 +20101,15 @@
   "date": "2026-10-07",
   "note": "a lane crosses the belt and the planting resumes; the belt stays whole along its side",
   "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fbd35c7766637fc3"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fc30b06b8f1639b8"
   },
-  "research": "1f42835678daf333",
+  "research": "d1ed2d75fd232589",
   "rests": [
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:19b6b8f457366d55",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:1b23f53588df77c1",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:79d09be286e4e66b"
   ],
+  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#web lane width": {
@@ -23372,13 +23378,14 @@
   "date": "2026-10-07",
   "note": "the declared wind is left as it is and seat_offwind is recorded",
   "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fbd35c7766637fc3"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fc30b06b8f1639b8"
   },
-  "research": "1f42835678daf333",
+  "research": "d1ed2d75fd232589",
   "rests": [
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:43aedefed41c4f79",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:c36f0698d70588dc"
   ],
+  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/track.py::stage_track#connector width": {
@@ -24495,14 +24502,15 @@
   "date": "2026-10-07",
   "note": "the belts are passed to the lane layer",
   "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fbd35c7766637fc3"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fc30b06b8f1639b8"
   },
-  "research": "1f42835678daf333",
+  "research": "d1ed2d75fd232589",
   "rests": [
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:19b6b8f457366d55",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:1b23f53588df77c1",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:79d09be286e4e66b"
   ],
+  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web.py::stage_web#dispersed hamlet draws no web": {
@@ -27353,10 +27361,10 @@
   "date": "2026-10-05",
   "note": "regional northwest winter wind unless a local wind is declared, as the record and drawing page say",
   "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fbd35c7766637fc3",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fc30b06b8f1639b8",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.html": "186cb571d0ba4842"
   },
-  "research": "26cc08f64c4fd925",
+  "research": "bce35b4de4926038",
   "rests": [
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:0c9dba0334c6fdfb",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:43aedefed41c4f79",
@@ -27365,7 +27373,7 @@
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.html:5de26ce128fcb5a3",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.html:8fdc88b4a2df56ca"
   ],
-  "triaged": "2026-10-05",
+  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/interactive/raster.py::OFFMAP_MARGIN#low-zoom picture": {
@@ -41122,6 +41130,7 @@
    "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "d28f2aaa854f4f5b"
   },
   "research": "c7c7af520bd4fdf8",
+  "triage": "touched",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/fields/comb.py::CombMixin._coarse_grain_top_up#need and count": {
@@ -41337,16 +41346,17 @@
   "date": "2026-10-05",
   "note": "every FLOODED-fill plot is classed \"wet paddy\", including the freshly flooded plots of the rice year, but the page says the wet-paddy tint \"marks the ground, not the season\" and a blue basin is a low plot on the drain; class the seasonal plots apart or give them their own tint",
   "pages": {
-   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "d28f2aaa854f4f5b",
+   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "1e0cc8002bddb72d",
    "0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html": "077e104afe9ed4ee"
   },
-  "research": "72cc763abae6c664",
+  "research": "b99d2c0d7ba8566b",
   "rests": [
    "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:4fc3811eb15b4538",
    "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:68a6523772c7cec3",
    "0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html:97d836fcef777ada",
    "0009-the-paddy-through-the-rice-year-flooding-draining-transplanting-and-after-the-harvest.drawing.html:a7401b1ec92e2d4b"
   ],
+  "triaged": "2026-10-08",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_paddies#resting plots": {
@@ -43461,10 +43471,10 @@
   "date": "2026-10-03",
   "note": "matches the cited finding",
   "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fbd35c7766637fc3"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fc30b06b8f1639b8"
   },
-  "research": "1f42835678daf333",
-  "triaged": "2026-10-05",
+  "research": "d1ed2d75fd232589",
+  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/_helpers.py::_belt_axis#plumbing": {
@@ -43536,10 +43546,10 @@
   "date": "2026-10-03",
   "note": "matches the cited finding",
   "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fbd35c7766637fc3"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fc30b06b8f1639b8"
   },
-  "research": "1f42835678daf333",
-  "triaged": "2026-10-05",
+  "research": "d1ed2d75fd232589",
+  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/belt_law.py::BeltReading.__init__#tips not judged": {
@@ -43568,10 +43578,10 @@
   "date": "2026-10-03",
   "note": "matches the cited finding",
   "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fbd35c7766637fc3"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fc30b06b8f1639b8"
   },
-  "research": "1f42835678daf333",
-  "triaged": "2026-10-05",
+  "research": "d1ed2d75fd232589",
+  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/belt_law.py::BeltReading._depths#plumbing": {
@@ -43596,10 +43606,10 @@
   "date": "2026-10-03",
   "note": "matches the cited finding",
   "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fbd35c7766637fc3"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fc30b06b8f1639b8"
   },
-  "research": "1f42835678daf333",
-  "triaged": "2026-10-05",
+  "research": "d1ed2d75fd232589",
+  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/belt_law.py::BeltReading.bin#plumbing": {
@@ -43628,10 +43638,10 @@
   "date": "2026-10-03",
   "note": "matches the cited finding",
   "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fbd35c7766637fc3"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fc30b06b8f1639b8"
   },
-  "research": "1f42835678daf333",
-  "triaged": "2026-10-05",
+  "research": "d1ed2d75fd232589",
+  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/belt_law.py::BeltReading.holes#continuous planting": {
@@ -43640,10 +43650,10 @@
   "date": "2026-10-03",
   "note": "matches the cited finding",
   "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fbd35c7766637fc3"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fc30b06b8f1639b8"
   },
-  "research": "1f42835678daf333",
-  "triaged": "2026-10-05",
+  "research": "d1ed2d75fd232589",
+  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/belt_law.py::BeltReading.off_the_page#plumbing": {
@@ -43672,10 +43682,10 @@
   "date": "2026-10-03",
   "note": "matches the cited finding",
   "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fbd35c7766637fc3"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fc30b06b8f1639b8"
   },
-  "research": "1f42835678daf333",
-  "triaged": "2026-10-05",
+  "research": "d1ed2d75fd232589",
+  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/belt_law.py::BeltReading.uv#plumbing": {
@@ -43806,10 +43816,10 @@
   "date": "2026-10-03",
   "note": "matches the cited finding",
   "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fbd35c7766637fc3"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fc30b06b8f1639b8"
   },
-  "research": "1f42835678daf333",
-  "triaged": "2026-10-05",
+  "research": "d1ed2d75fd232589",
+  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/belt_law.py::way_samples#plumbing": {
@@ -45266,10 +45276,10 @@
   "note": "deep stand on windward faces, per 0036/0072",
   "pages": {
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c",
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fbd35c7766637fc3"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fc30b06b8f1639b8"
   },
-  "research": "73b5fef64e1862bb",
-  "triaged": "2026-10-05",
+  "research": "b71f61ee21837289",
+  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/grove_sides.py::GROVE_FLANKS#cardinal wind's second face": {
@@ -45536,13 +45546,14 @@
   "date": "2026-10-08",
   "note": "rows along the belt; spacing a recorded guess",
   "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fbd35c7766637fc3"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fc30b06b8f1639b8"
   },
-  "research": "1f42835678daf333",
+  "research": "d1ed2d75fd232589",
   "rests": [
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:49a55637e421e2be",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:e7f8a345b63cc861"
   ],
+  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._belt_ranks#crown over no roof": {
@@ -45611,12 +45622,13 @@
   "date": "2026-10-08",
   "note": "wellhead circles refuse row crowns, as the page's wellhead-in-belt rule",
   "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fbd35c7766637fc3"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fc30b06b8f1639b8"
   },
-  "research": "1f42835678daf333",
+  "research": "d1ed2d75fd232589",
   "rests": [
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:301a35716bf73526"
   ],
+  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._belt_ranks#row conifer size": {
@@ -45695,13 +45707,14 @@
   "date": "2026-10-08",
   "note": "page names the lesser broadleaf and calls conifer the commonest a GUESS; 0.1 is on no page",
   "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fbd35c7766637fc3"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fc30b06b8f1639b8"
   },
-  "research": "1f42835678daf333",
+  "research": "d1ed2d75fd232589",
   "rests": [
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:49a55637e421e2be",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:6de01da4f44bfe0c"
   ],
+  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#crown over no roof or wellhead": {
@@ -45711,13 +45724,14 @@
   "note": "per-crown refusal over buildings and belt wellheads",
   "pages": {
    "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html": "f32599678d1cb241",
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fbd35c7766637fc3"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fc30b06b8f1639b8"
   },
-  "research": "66e8d696e33eb19d",
+  "research": "787fbb562f054d2e",
   "rests": [
    "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:5267e319c5872785",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:301a35716bf73526"
   ],
+  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#crown size": {
@@ -45844,13 +45858,14 @@
   "date": "2026-10-08",
   "note": "mixed_broadleaf draws no conifer and uses the CROWN_S mix; the two forms are a knob",
   "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fbd35c7766637fc3"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fc30b06b8f1639b8"
   },
-  "research": "1f42835678daf333",
+  "research": "d1ed2d75fd232589",
   "rests": [
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:49a55637e421e2be",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:cdc8bbf5147ce3fe"
   ],
+  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#mixed broadleaf belt's bamboo": {
@@ -46170,10 +46185,10 @@
   "date": "2026-10-03",
   "note": "resolved from the knob and recorded",
   "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fbd35c7766637fc3"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fc30b06b8f1639b8"
   },
-  "research": "1f42835678daf333",
-  "triaged": "2026-10-05",
+  "research": "d1ed2d75fd232589",
+  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._windward#northwest wind by default": {
@@ -46182,10 +46197,10 @@
   "date": "2026-10-03",
   "note": "NW unless the map declares a wind",
   "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fbd35c7766637fc3"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fc30b06b8f1639b8"
   },
-  "research": "1f42835678daf333",
-  "triaged": "2026-10-05",
+  "research": "d1ed2d75fd232589",
+  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._windward_x#plumbing": {
@@ -46244,13 +46259,14 @@
   "date": "2026-10-05",
   "note": "keeps the conifer the commonest crown of a conifer-led belt, recorded GUESS",
   "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fbd35c7766637fc3"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fc30b06b8f1639b8"
   },
-  "research": "1f42835678daf333",
+  "research": "d1ed2d75fd232589",
   "rests": [
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:49a55637e421e2be",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:6de01da4f44bfe0c"
   ],
+  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::RANK_ALONG_FT#conifers along a row": {
@@ -46259,10 +46275,10 @@
   "date": "2026-10-03",
   "note": "0072 records the row spacing as a GUESS chosen so the rows read",
   "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fbd35c7766637fc3"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fc30b06b8f1639b8"
   },
-  "research": "1f42835678daf333",
-  "triaged": "2026-10-05",
+  "research": "d1ed2d75fd232589",
+  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::RANK_APART_FT#rows apart": {
@@ -46271,10 +46287,10 @@
   "date": "2026-10-03",
   "note": "the same GUESS in 0072",
   "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fbd35c7766637fc3"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fc30b06b8f1639b8"
   },
-  "research": "1f42835678daf333",
-  "triaged": "2026-10-05",
+  "research": "d1ed2d75fd232589",
+  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::RANK_BIN_FT#plumbing": {
@@ -46313,10 +46329,10 @@
   "date": "2026-10-03",
   "note": "two forms, a seeded knob",
   "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fbd35c7766637fc3"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fc30b06b8f1639b8"
   },
-  "research": "1f42835678daf333",
-  "triaged": "2026-10-05",
+  "research": "d1ed2d75fd232589",
+  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::_boxes_meet#plumbing": {
@@ -46365,10 +46381,10 @@
   "date": "2026-10-03",
   "note": "rows along the belt, per 0072",
   "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fbd35c7766637fc3"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fc30b06b8f1639b8"
   },
-  "research": "1f42835678daf333",
-  "triaged": "2026-10-05",
+  "research": "d1ed2d75fd232589",
+  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::belt_walk#plumbing": {
@@ -46556,10 +46572,10 @@
   "date": "2026-10-03",
   "note": "a calibrated tolerance for \"on the north and west\"",
   "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fbd35c7766637fc3"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fc30b06b8f1639b8"
   },
-  "research": "1f42835678daf333",
-  "triaged": "2026-10-05",
+  "research": "d1ed2d75fd232589",
+  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/stands.py::BELT_SUBTENSE_MAX_DEG#belt never a ring": {
@@ -46571,6 +46587,7 @@
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fbd35c7766637fc3"
   },
   "research": "1f42835678daf333",
+  "triage": "touched",
   "triaged": "2026-10-05",
   "verdict": "IN-STEP"
  },
@@ -46597,16 +46614,19 @@
  "l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#belt a windward hook": {
   "code": "6d6db9e0d810e231",
   "core": "12df93faf7d4cc3d",
-  "date": "2026-10-07",
-  "note": "one or two windward sides, at most 200 degrees",
+  "date": "2026-10-08",
+  "note": "ends trimmed until the belt bears on the wind's quarter on one or two sides, never round the houses",
   "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fbd35c7766637fc3"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fc30b06b8f1639b8"
   },
-  "research": "1f42835678daf333",
+  "research": "d1ed2d75fd232589",
   "rests": [
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:0f78ab35446cee9c",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:0c9dba0334c6fdfb",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:437b2e28ca28ee85",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:43aedefed41c4f79",
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:8e692f283f7947e4"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:4b8db97a0ad26796",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:8e692f283f7947e4",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:c36f0698d70588dc"
   ],
   "verdict": "IN-STEP"
  },
@@ -46633,13 +46653,14 @@
   "date": "2026-10-07",
   "note": "gaps over 30 ft are filled; 30 ft is the page's convention",
   "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fbd35c7766637fc3"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fc30b06b8f1639b8"
   },
-  "research": "1f42835678daf333",
+  "research": "d1ed2d75fd232589",
   "rests": [
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:1b23f53588df77c1",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:301a35716bf73526"
   ],
+  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#belt off the deep marsh": {
@@ -46738,13 +46759,14 @@
   "date": "2026-10-07",
   "note": "the belt resumes on both sides of a crossing lane",
   "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fbd35c7766637fc3"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fc30b06b8f1639b8"
   },
-  "research": "1f42835678daf333",
+  "research": "d1ed2d75fd232589",
   "rests": [
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:19b6b8f457366d55",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:301a35716bf73526"
   ],
+  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#clumps off streams, channels and the moat": {
@@ -46926,6 +46948,14 @@
   ],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#when no wind is given, settle_the_belt gets `wind or (0.0, -1.0)`, a due-north wind. 0072 §130 says every map takes the northwest wind, so this default disagrees with the page": {
+  "code": "12df93faf7d4cc3d",
+  "core": "12df93faf7d4cc3d",
+  "date": "2026-10-08",
+  "note": "when no wind is given, settle_the_belt gets `wind or (0.0, -1.0)`, a due-north wind. 0072 §130 says every map takes the northwest wind, so this default disagrees with the page",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  "l7r/diagram/settlement/homestead_parts/stands.py::_GAP_MEMORY#plumbing": {
   "code": "a0556cc1fe70b320",
   "core": "c3e4d134ed4f3447",
@@ -46987,6 +47017,7 @@
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fbd35c7766637fc3"
   },
   "research": "1f42835678daf333",
+  "triage": "touched",
   "triaged": "2026-10-05",
   "verdict": "IN-STEP"
  },
@@ -51484,6 +51515,7 @@
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7e82a3d8b8b3ed66",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:5e9ac2daf3925f70"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/bundle.py::BundleGeomMixin._bundle_layout#service strip": {
@@ -54479,10 +54511,10 @@
   "date": "2026-10-03",
   "note": "0072 attests \"on one side or two\" and belts drawn \"as hooks or as straight strips\", and takes the northwest wind unless the map declares one; the code fixes one straight strip on the uphill side. Roll one or two sides (and hook or strip) on the NW-default windward side, or record the fixed form as a DEVIATION on 0072's drawing page",
   "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fbd35c7766637fc3"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fc30b06b8f1639b8"
   },
-  "research": "1f42835678daf333",
-  "triaged": "2026-10-05",
+  "research": "d1ed2d75fd232589",
+  "triaged": "2026-10-08",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/rolling/roll.py::RollVillageMixin._roll_windbreak#communal windbreak behind the cluster": {
@@ -54491,10 +54523,10 @@
   "date": "2026-10-03",
   "note": "the belt always goes on the uphill side (`bcx - dx * ...`); 0072 drawing: \"Every map takes the northwest wind unless it declares a local one ... every belt stands on the north and west of its houses\"; the belt also always takes one side where 0072 allows one or two",
   "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fbd35c7766637fc3"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fc30b06b8f1639b8"
   },
-  "research": "1f42835678daf333",
-  "triaged": "2026-10-05",
+  "research": "d1ed2d75fd232589",
+  "triaged": "2026-10-08",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/rolling/roll.py::RollVillageMixin._roll_windbreak#windbreak standoff and depth": {
@@ -54504,10 +54536,10 @@
   "note": "neither 0072 nor 0038 gives a standoff or a depth; 62 and 34 are raw px (no ftpx/bscale) so the feet vary with the map, and 68 deep is past the one belt width recorded (Tarama, 10-15 m, ~33-49 ft) - label UNRESEARCHED (or GUESS) until a pass answers it",
   "pages": {
    "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03",
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fbd35c7766637fc3"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fc30b06b8f1639b8"
   },
-  "research": "c40949b71f4b694e",
-  "triaged": "2026-10-05",
+  "research": "f011750a9219a554",
+  "triaged": "2026-10-08",
   "verdict": "NEEDS-RESEARCH"
  },
  "l7r/diagram/settlement/rolling/roll.py::RollVillageMixin.roll_village#a rolled village is clustered": {
@@ -56181,40 +56213,35 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/shrines_wells/woods.py::TreeStandsMixin._draw_stand#conifer share": {
-  "code": "1d4a8bd0b87cfe50",
-  "core": "d3958c0f5ef26090",
-  "date": "2026-10-03",
-  "note": "as claimed",
+  "code": "a3fd7939e138a3aa",
+  "core": "5a6d1a7676b54b45",
+  "date": "2026-10-08",
+  "note": "0080 gives no conifer share for a wood; 34% is unresearched as labeled",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/shrines_wells/woods.py::TreeStandsMixin._draw_stand#crown size": {
-  "code": "96304530ece552d9",
-  "core": "d3958c0f5ef26090",
+  "code": "2e96043e26e01cba",
+  "core": "5a6d1a7676b54b45",
   "date": "2026-10-08",
-  "note": "the page says \"A windbreak's crowns are drawn the same real size as a hill wood's\", but the woods and the groves now draw different sizes: woods use `uniform(0.75,1.05)`, or `uniform(1.05,1.4)` for 18%, giving a mean of about 0.96 R (~8.2 ft radius); groves use CROWN_S uniform 0.75-1.4, a mean of 1.075 R (~9.1 ft). Give both the same distribution, or have the page record the split",
+  "note": "the CROWN_S band 0.75-1.4 matches, but the value of self.CANOPY_R_FT is not in the bundle; I need it to confirm the 8.5 ft base radius (a class attribute the bundler did not inline)",
   "pages": {
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html": "646f4508385c9db1"
   },
   "research": "050eb194338f2925",
   "rests": [
+   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:7f54cfe8dba1be5f",
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:a40ebd3a6acb1f87",
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:a52bbfe64bb3c3b8"
   ],
-  "verdict": "DRIFTED"
- },
- "l7r/diagram/settlement/shrines_wells/woods.py::TreeStandsMixin._draw_stand#emergent share": {
-  "code": "2ca506513309a784",
-  "core": "d3958c0f5ef26090",
-  "date": "2026-10-03",
-  "note": "as claimed",
-  "research": "",
-  "verdict": "IN-STEP"
+  "verdict": "CANNOT-TELL"
  },
  "l7r/diagram/settlement/shrines_wells/woods.py::TreeStandsMixin._draw_stand#fringe crowns drawn outside the stand's outline": {
-  "code": "4f059c6a8e5bf259",
-  "core": "d3958c0f5ef26090",
-  "date": "2026-10-07",
+  "code": "440ec7d06e6d232c",
+  "core": "5a6d1a7676b54b45",
+  "date": "2026-10-08",
   "note": "0080 is silent on a wood's fringe",
   "pages": {},
   "research": "",
@@ -56222,44 +56249,61 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/shrines_wells/woods.py::TreeStandsMixin._draw_stand#no crown on a plot's sun ground": {
-  "code": "b3fe6fbc59d46258",
-  "core": "d3958c0f5ef26090",
-  "date": "2026-10-03",
-  "note": "_sun_keepouts added to the crown keep-outs (0038)",
+  "code": "5f71155df0111c61",
+  "core": "5a6d1a7676b54b45",
+  "date": "2026-10-08",
+  "note": "_sun_keepouts holds every wood crown off the plots' sun ground",
   "pages": {
    "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03"
   },
   "research": "3874df1f1301e65f",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:106fb9ebea718da7"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/shrines_wells/woods.py::TreeStandsMixin._draw_stand#no crown on a roof or a wellhead": {
-  "code": "c5b3c9514c391f03",
-  "core": "d3958c0f5ef26090",
-  "date": "2026-10-03",
-  "note": "as claimed",
+  "code": "71510f1db7269b1e",
+  "core": "5a6d1a7676b54b45",
+  "date": "2026-10-08",
+  "note": "no cited page addresses it",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/shrines_wells/woods.py::TreeStandsMixin._draw_stand#no trunk on a lane": {
-  "code": "edda882b8391a379",
-  "core": "d3958c0f5ef26090",
-  "date": "2026-10-03",
-  "note": "as claimed",
+ "l7r/diagram/settlement/shrines_wells/woods.py::TreeStandsMixin._draw_stand#no crown's center drawn under another's crown (_crowns_near / _canopy_seats); this is the 0080 §196 drawing convention": {
+  "code": "5a6d1a7676b54b45",
+  "core": "5a6d1a7676b54b45",
+  "date": "2026-10-08",
+  "note": "no crown's center drawn under another's crown (_crowns_near / _canopy_seats); this is the 0080 §196 drawing convention",
   "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "l7r/diagram/settlement/shrines_wells/woods.py::TreeStandsMixin._draw_stand#no trunk on a lane": {
+  "code": "66bd5ef6885a476b",
+  "core": "5a6d1a7676b54b45",
+  "date": "2026-10-08",
+  "note": "no cited page addresses it",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/shrines_wells/woods.py::TreeStandsMixin._draw_stand#spacing": {
-  "code": "9caea1fc6ea94c34",
-  "core": "d3958c0f5ef26090",
-  "date": "2026-10-03",
-  "note": "as claimed",
+  "code": "5f39384714bd36b5",
+  "core": "5a6d1a7676b54b45",
+  "date": "2026-10-08",
+  "note": "the value of self.CANOPY_SPACING_FT is not in the bundle; I need it to check against \"centers about 13 ft apart\"; the 42% jitter is within reason",
   "pages": {
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html": "646f4508385c9db1"
   },
   "research": "050eb194338f2925",
-  "triaged": "2026-10-08",
-  "verdict": "IN-STEP"
+  "rests": [
+   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:7f54cfe8dba1be5f",
+   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:e0f372bc46e81fac"
+  ],
+  "verdict": "CANNOT-TELL"
  },
  "l7r/diagram/settlement/shrines_wells/woods.py::TreeStandsMixin._fringe_blocked#fringe on waste ground only": {
   "code": "d3f5d8feaa6340c6",
@@ -60909,32 +60953,11 @@
   "date": "2026-10-03",
   "note": "truncated end read as 0007's \"pointed shape\"",
   "pages": {
-   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "d28f2aaa854f4f5b"
+   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "1e0cc8002bddb72d"
   },
-  "research": "c7c7af520bd4fdf8",
+  "research": "45d05a93011e034b",
+  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
- },
- "l7r/diagram/waterfields/banks.py::_TINT_MAX_AREA_RATIO#outsized plot left green": {
-  "code": "6bc1183d6c842ed7",
-  "core": "6f1b8dc9cc6bf543",
-  "date": "2026-10-03",
-  "note": "0007 names only a pointed shape; twice the median area is not recorded; record it in 0007 as a convention or relabel CONVENTION",
-  "pages": {
-   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "d28f2aaa854f4f5b"
-  },
-  "research": "c7c7af520bd4fdf8",
-  "verdict": "DRIFTED"
- },
- "l7r/diagram/waterfields/banks.py::_TINT_MAX_ASPECT#channel-shaped plot left green": {
-  "code": "121d13dcc9361698",
-  "core": "eab5cc0df856d783",
-  "date": "2026-10-03",
-  "note": "0007 names only a pointed shape; aspect over 4 is not recorded; record it in 0007 as a convention or relabel CONVENTION",
-  "pages": {
-   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "d28f2aaa854f4f5b"
-  },
-  "research": "c7c7af520bd4fdf8",
-  "verdict": "DRIFTED"
  },
  "l7r/diagram/waterfields/banks.py::_TINT_MIN_APEX#pointed plot left green": {
   "code": "b82fd72572c7639d",
@@ -60942,32 +60965,11 @@
   "date": "2026-10-03",
   "note": "0007 leaves a plot that \"tapers to a point\" green; 25 deg is 0005's point",
   "pages": {
-   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "d28f2aaa854f4f5b"
+   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "1e0cc8002bddb72d"
   },
-  "research": "c7c7af520bd4fdf8",
+  "research": "45d05a93011e034b",
+  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
- },
- "l7r/diagram/waterfields/banks.py::_TINT_MIN_RECTANGULARITY#triangle left green": {
-  "code": "696e971064cba090",
-  "core": "54fee85181737233",
-  "date": "2026-10-03",
-  "note": "0007 names only a pointed shape; low fill of the least rectangle is not recorded; record it in 0007 as a convention or relabel CONVENTION",
-  "pages": {
-   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "d28f2aaa854f4f5b"
-  },
-  "research": "c7c7af520bd4fdf8",
-  "verdict": "DRIFTED"
- },
- "l7r/diagram/waterfields/banks.py::_TINT_MIN_SOLIDITY#lobed plot left green": {
-  "code": "9bc0fe4a867b2815",
-  "core": "13a60bd68a444539",
-  "date": "2026-10-03",
-  "note": "0007: \"Only the random draw, or a plot's pointed shape, left them untinted\"; a lobe (solidity under 0.85) is neither; record it in 0007 as a convention or relabel CONVENTION",
-  "pages": {
-   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "d28f2aaa854f4f5b"
-  },
-  "research": "c7c7af520bd4fdf8",
-  "verdict": "DRIFTED"
  },
  "l7r/diagram/waterfields/banks.py::_TOE_MIN_APEX#no point sharper than 25 deg": {
   "code": "3252a17e6ead0e0d",
@@ -61266,9 +61268,10 @@
   "date": "2026-10-03",
   "note": "truncated taper read as 0007's pointed shape",
   "pages": {
-   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "d28f2aaa854f4f5b"
+   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "1e0cc8002bddb72d"
   },
-  "research": "c7c7af520bd4fdf8",
+  "research": "45d05a93011e034b",
+  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/carve.py::MIN_BEADS_PER_RUN#two beads at least": {
@@ -62988,9 +62991,10 @@
   "date": "2026-10-03",
   "note": "low plots tinted (0007)",
   "pages": {
-   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "d28f2aaa854f4f5b"
+   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "1e0cc8002bddb72d"
   },
-  "research": "c7c7af520bd4fdf8",
+  "research": "45d05a93011e034b",
+  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/hill.py::build_ribbon#meander": {
@@ -63084,9 +63088,10 @@
   "date": "2026-10-03",
   "note": "terraced field tints its low plots (0007)",
   "pages": {
-   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "d28f2aaa854f4f5b"
+   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "1e0cc8002bddb72d"
   },
-  "research": "c7c7af520bd4fdf8",
+  "research": "45d05a93011e034b",
+  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/hill.py::build_terraces#retaining wall form": {
@@ -63233,9 +63238,10 @@
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
-   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "d28f2aaa854f4f5b"
+   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "1e0cc8002bddb72d"
   },
-  "research": "c7c7af520bd4fdf8",
+  "research": "45d05a93011e034b",
+  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/palette.py::PADDY_CELL_ACRES#one leveled basin": {
@@ -64015,9 +64021,10 @@
   "date": "2026-10-03",
   "note": "matches the cited drawing page",
   "pages": {
-   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "d28f2aaa854f4f5b"
+   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "1e0cc8002bddb72d"
   },
-  "research": "c7c7af520bd4fdf8",
+  "research": "45d05a93011e034b",
+  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/polder.py::_polder_parcels#split positions": {
@@ -64172,13 +64179,14 @@
   "date": "2026-10-07",
   "note": "a polder tints every low plot; two rows is a calibration within that",
   "pages": {
-   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "d28f2aaa854f4f5b"
+   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "1e0cc8002bddb72d"
   },
-  "research": "c7c7af520bd4fdf8",
+  "research": "45d05a93011e034b",
   "rests": [
    "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:4fc3811eb15b4538",
    "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:68a6523772c7cec3"
   ],
+  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/polder.py::build_polder#module line bow": {
@@ -65240,6 +65248,7 @@
    "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "d28f2aaa854f4f5b"
   },
   "research": "c7c7af520bd4fdf8",
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/tint.py::LOW_ROWS#low ground depth": {
@@ -65267,36 +65276,48 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/tint.py::judge_tint#one wet plot at least": {
-  "code": "5878f43cf3a941a9",
-  "core": "57c1d49b00120a65",
-  "date": "2026-10-03",
-  "note": "0007 never mentions the guaranteed blue plot and describes blue as only the 45% draw on lowest-row plots on the drain; the promotion can tint a `low` plot up to LOW_ROWS off the drain - record the promotion on 0007 or restrict it to on-drain plots",
+  "code": "930999bcf4bd0c57",
+  "core": "0f09014f5ac6326b",
+  "date": "2026-10-08",
+  "note": "0007 does not record a floor of one tinted plot (it says blue is a sample, a 45% draw). This is a drawing convention for exhibiting the class, so the claim should be CONVENTION, or the drawing page should record the floor",
   "pages": {
-   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "d28f2aaa854f4f5b"
+   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "1e0cc8002bddb72d"
   },
-  "research": "c7c7af520bd4fdf8",
-  "verdict": "DRIFTED"
+  "research": "45d05a93011e034b",
+  "rests": [
+   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:68a6523772c7cec3",
+   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:f84f7dcd5af814ac"
+  ],
+  "verdict": "MISLABELED"
  },
  "l7r/diagram/waterfields/tint.py::judge_tint#pointed plot left green": {
-  "code": "a56947dbfc10a5ae",
-  "core": "57c1d49b00120a65",
-  "date": "2026-10-03",
-  "note": "matches the cited finding or label",
+  "code": "f13652605b9d0649",
+  "core": "0f09014f5ac6326b",
+  "date": "2026-10-08",
+  "note": "needle, truncated point or apex under 25 deg leaves the plot green",
   "pages": {
-   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "d28f2aaa854f4f5b"
+   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "1e0cc8002bddb72d"
   },
-  "research": "c7c7af520bd4fdf8",
+  "research": "45d05a93011e034b",
+  "rests": [
+   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:68a6523772c7cec3",
+   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:f84f7dcd5af814ac"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/tint.py::judge_tint#tint reads as a basin": {
-  "code": "e566ff1ac236f0f4",
-  "core": "57c1d49b00120a65",
-  "date": "2026-10-03",
-  "note": "code demotes for solidity < 0.85, aspect > 4, rectangularity < 0.8, area > 2x median and the outfall keep-out; 0007 says \"Only the random draw, or a plot's pointed shape, left them untinted\" - record these demotions on 0007 (or drop them)",
+  "code": "72b15f51c128619c",
+  "core": "0f09014f5ac6326b",
+  "date": "2026-10-08",
+  "note": "the claim is stale: the code no longer has the lobed, triangular, aspect or outsized clauses. The `_at_outfall` term still in `_wrong` contradicts \"Only the random draw, or a plot's pointed shape, left them untinted\". Either remove the outfall demotion or have the drawing page record it as a DEVIATION, and restate the claim",
   "pages": {
-   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "d28f2aaa854f4f5b"
+   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "1e0cc8002bddb72d"
   },
-  "research": "c7c7af520bd4fdf8",
+  "research": "45d05a93011e034b",
+  "rests": [
+   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:68a6523772c7cec3",
+   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:f84f7dcd5af814ac"
+  ],
   "verdict": "DRIFTED"
  },
  "l7r/diagram/waterfields/tint.py::mark_low#low ground": {
@@ -65305,9 +65326,10 @@
   "date": "2026-10-03",
   "note": "0007 lowest row on the drain, 45% sample = FLOOD_SAMPLE",
   "pages": {
-   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "d28f2aaa854f4f5b"
+   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "1e0cc8002bddb72d"
   },
-  "research": "c7c7af520bd4fdf8",
+  "research": "45d05a93011e034b",
+  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/tint.py::mark_low#low ground depth": {
@@ -65327,6 +65349,7 @@
    "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "d28f2aaa854f4f5b"
   },
   "research": "c7c7af520bd4fdf8",
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/trunks.py::CROP_TOL#trunk geometry": {

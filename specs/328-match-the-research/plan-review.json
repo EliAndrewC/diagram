@@ -1,81 +1,83 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "4afbb485e7ce99af67896b8e014e86319bcfc2e516ec659dd71f6abea4499d15",
+ "plan_sha256": "359d019e12be28a069303c8b8b6ae4e845e570b8d50d483183a09d47ab80b667",
  "reviewed": "2026-10-08",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W39-1 one crown band",
-   "summary": "CROWN_S = (0.75, 1.4) for the windbreak, dooryard and mixed broadleaf clumps",
+   "id": "W40-1 tint: four shape clauses dropped",
+   "summary": "Drop the solidity, rectangularity, aspect and area-ratio demotions from judge_tint (ranking rows 609-612, E2, kept)",
    "class": "within",
-   "why": "Unchanged since round 1: 0080 drawing, 'each crown is drawn between 0.75 and 1.4 times that'."
+   "why": "The literal fix: 0007 drawing, a sentence there before this wave, says 'Only the random draw, or a plot's pointed shape, left them untinted'; FR-004 moves the implementation to the page. Keeping the clauses by writing them onto the page would be the research moved to fit the code, the exception path. Their settlement-review origin is a reason to read the Sawada glyph check, not a reason to keep them."
   },
   {
-   "id": "W39-2 no conifer inflation",
-   "summary": "the conifer x1.15 dropped from the clump crown, _belt_ranks and the prefilter pad",
-   "class": "within",
-   "why": "Unchanged since round 1: 0080 drawing, 'One crown size serves the hill woods and the windbreak's cedars alike'."
+   "id": "W40-2 tint: the outfall's siting stays",
+   "summary": "The plan keeps the outfall keep-out demotion ('the needle, the apex, the taper and the outfall's siting stay') and does not take row 635 (judge_tint#tint reads as a basin, E2, kept, DRIFTED), though the wave edits the code that row's claim describes",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "The wave's own authority, 0007's 'Only the random draw, or a plot's pointed shape', excludes the outfall demotion as surely as the four dropped clauses; 0007 never mentions an outfall (grep of every 0007 file). Row 635's recorded fix is 'drop the solidity, aspect, rectangularity, area and outfall keep-out demotions; leave only the 45% draw and the pointed-shape test'. Applying the sentence to four clauses and keeping the fifth on a settlement-review argument is 'X except where Y'. Nothing makes the outfall impossible to drop, nothing in the request implies keeping it, and dropping it does not defeat the request's purpose. Leaving row 635 untaken also leaves judge_tint's claim saying 'a lobed, channel-shaped, triangular, outsized or outfall plot loses the tint' over code that no longer does four of those. Fix: take row 635 in this wave (drop _at_outfall from _wrong, restate the claim and the stale comments: the module docstring's 'six clauses', 'A FOURTH MEASURES SITING', 'size joins the other four')."
   },
   {
-   "id": "W39-3 every crown round the persimmon",
-   "summary": "the yard-persimmon keep-out applied to every crown kind",
+   "id": "W40-3 tint: the promotion (row 634) left open",
+   "summary": "judge_tint#one wet plot at least (E2, kept) is not taken this wave",
    "class": "within",
-   "why": "Unchanged since round 1: 0046 drawing, 'the grove's trees give way round it'."
+   "why": "The plan states no decision to keep it; it is a ranked E2 row a later wave takes, and its recorded fix carries a choice of two. Taking it with row 635 would put the whole judge under one re-check (FR-003's grouping), but leaving it is not a carve-out."
   },
   {
-   "id": "W39-4 mixed broadleaf belt's bamboo kept, claimed GUESS on 0075",
-   "summary": "plan.md Scope now reads 'the mixed broadleaf belt's crown band (its bamboo kept, claimed GUESS on 0075 ...)'; tasks.md Phase 40's row, T103 and the kuwabata occasion line say the same",
-   "class": "within",
-   "why": "Round 1's item is met (113da7b58). plan.md Scope, tasks.md Phase 40's third row, T103 and the kuwabata glyph occasion ('its bamboo kept (0075)') now all say the bamboo is kept and claimed on 0075 drawing, whose bullet reads 'About one plant in twelve of a windbreak clump is bamboo. The share is a GUESS ... It holds in the farm's grove and in the village's shelter belt alike'. 'no bamboo' survives nowhere in the plan or the occasions. The code is unchanged on this point since round 1 (the mixed form's c_th stays b_th, the bamboo share untouched). With the plan saying what the page says, it is no longer a narrowing."
+   "id": "W40-4 woods on CROWN_S",
+   "summary": "Take the found row woods.py::TreeStandsMixin._draw_stand#crown size (ranking scope 'kept') and change _draw_stand to the groves' one band",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "This narrows FR-010, the GM's scope ruling ('limit ourselves to code actually executed by magistracies, country shrines, and scripted hamlets'; deferred rows: 'no wave takes them'). Measured 2026-10-08: dev/claims-deferred.json:685 lists TreeStandsMixin._draw_stand, and audit/scope.py's own executed() over the kept maps' gen-cache records only _crown_seat_clear, _crowns_near and flush_tree_stands in woods.py; scope_of(_draw_stand) returns 'deferred'. The plan concedes it: 'no pool hamlet's woods are drawn through it (the five manifests' tree_crowns unchanged)' - confirmed, tree_crowns byte-identical on all five. Its callers are forest.py and castle_civic.py, legacy village code. The row's 'kept' scope was assigned provisionally to a found row and is wrong. Fix: revert the woods.py change and its test, re-scope the row deferred (re-run audit/scope.py), and let the report show it DEFERRED."
   },
   {
-   "id": "W39-5 two LESSER_BROADLEAF_S rows closed E0",
-   "summary": "closed as fixed in wave 9",
+   "id": "W40-5 belt west arm E0",
+   "summary": "T105a tiers the Inashiro west-arm row E0: no engine change, Inashiro's notes line restated (belt on the north, west arm off the page)",
    "class": "within",
-   "why": "Unchanged since round 1."
+   "why": "FR-003 E0: 0072 drawing, not edited for this purpose, says 'every belt stands on the north and west of its houses, or on one of those two sides' and a belt running off the frame is sound; the code already matches, and only the map's own notes said otherwise. The notes are a scripted hamlet's, not a frozen hand-rolled map (FR-009)."
   },
   {
-   "id": "W39-6 occasions",
-   "summary": "glyph-redrawn windbreak on inashiro and kuwabata, copse on kuwabata; tasks.md's Occasions adds homestead grove on kashikawa (the farm groves and the windbreak mix's 48%-of-the-crowns fix)",
+   "id": "W40-6 0072 arcs re-measured",
+   "summary": "0072 drawing's measured arcs restated: Inashiro 49, Kuwabata 71, Sawada 14 degrees; Kashikawa and Mizuguchi draw no village belt",
    "class": "within",
-   "why": "The added occasion is enforcement of the request (the farm groves are redrawn on every map). Not a finding: plan.md's Occasions line still lists three and its Verification says 'the four tests' and 'the three glyph checks' - now five tests and four checks; tasks.md's Occasions section, which the machinery reads, carries all four."
+   "why": "A stale measurement of our own maps corrected, not the rule changed (one side or two stands). Labeled with date and method. Re-measured independently on HEAD's manifests: 48, 68, 13 degrees (house centers from x+w/2, which can explain the few degrees) and no windbreak on Kashikawa or Mizuguchi; the same picture."
   },
   {
-   "id": "W39-7 verification",
-   "summary": "the tests red on the old code, impl-drift on the touched claims, the gate, the glyph checks, the timing pair",
+   "id": "W40-7 0007 Inashiro count",
+   "summary": "0007 drawing's Inashiro count restated to 8 blue plots",
    "class": "within",
-   "why": "Unchanged since round 1; enforcement of the requested match."
+   "why": "Verified: flooded_plots 1 -> 8 between HEAD~1 and HEAD (and Kashikawa 4 -> 14, Mizuguchi 3 -> 7, Sawada 7 -> 16, Kuwabata 8 -> 8, which matches tasks.md's occasion line). The page states what the map draws."
   },
   {
-   "id": "W39-8 unpushed waves 9-38",
-   "summary": "held under condition (6) as at wave 38's close; the pair owed",
+   "id": "W40-8 occasion: wet paddy on Sawada",
+   "summary": "One declared occasion, placement-changed wet paddy on sawada, though four maps' blue plots changed",
    "class": "within",
-   "why": "Unchanged since round 1; restates the standing condition."
+   "why": "FR-005 runs the occasions feature 294 owes, one unit per agent; Sawada is the map whose 'no pond' brief three of the clauses came from, and a later wave has used one map for the same kind of change before. Process, not scope."
   },
   {
-   "id": "W39-9 windbreak conifers 48% of the crowns",
-   "summary": "impl-drift round 1: c_th = b_th + 0.48 * (1 - b_th), so the 0.48 is of the crowns drawn, not of all items including bamboo; test_a_windbreak_draws_about_half_its_crowns_conifer",
+   "id": "W40-9 T105a tiers",
+   "summary": "Fresh reader's tiers: belt row E0 (provisional E3), woods row E2",
    "class": "within",
-   "why": "0072's figure is a tree count ('735 of them, 48%, were cedar' of 1,542 trees at least 10 cm across), so the share is of the crowns, and the old rule drew about 52%. The fix brings the code to the page. The test passes on the clone (make test-file, 2026-10-08)."
+   "why": "Each follows FR-003's definitions. The woods row's tier is not in question; its scope is (W40-4)."
   },
   {
-   "id": "W39-10 claim relabels",
-   "summary": "the lesser crown over an earlier conifer relabeled CONVENTION -> GUESS on 0080; the belt row conifer's wellhead keep-out claimed on 0072 drawing",
+   "id": "W40-10 tests",
+   "summary": "test_only_a_pointed_shape_loses_the_water_tint and test_a_wood_draws_its_crowns_in_the_groves_one_band, each red on the old code",
    "class": "within",
-   "why": "Claim lines only. 0072 drawing: 'A wellhead seated inside a belt, or a lane crossing it, removes the clumps around it'."
+   "why": "Enforcement of the fix. The woods test goes with W40-4's revert."
   },
   {
-   "id": "W39-11 windbreak modal wording",
-   "summary": "About: the Ryukyu belt 'rings a settlement on the west, the south and the east'; Depiction: 'a Ryukyu belt rings its settlement'; the mixed broadleaf modal's 'unbroken except where a lane crosses it'; the Toyama street village (0033) added to the nucleated guess and its Entry; the village wood 'at or somewhat above' a typical surviving one; Castanopsis glossary term dropped with its note line commented out",
+   "id": "W40-11 unpushed waves 9-39 under condition (6)",
+   "summary": "Wave 40 builds on the unpushed waves as at wave 39's close",
    "class": "within",
-   "why": "Each is the page's own wording: 0072, 'The village belt rings the settlement on the west, the south and the east' and 'still rings its settlement'; 0072 drawing, 'Where a lane crosses the belt, the planting resumes on both sides of it'; 0033, 'On the Toyama plain, a street village's farms kept windbreaks as the plain's scattered farms did'. My round-1 wording 'rings a whole settlement' overstated 0072 (a wood closes the north), and the About line now follows the page."
+   "why": "Carried from the exception check already ruled LEGITIMATE on its conditions; nothing in this wave changes them."
   },
   {
-   "id": "W39-12 the belt's west arm on inashiro",
-   "summary": "found row filed in audit/found-wave39.jsonl, provisional E3, with the bisect; not fixed in this wave",
+   "id": "W40-12 verification",
+   "summary": "impl-drift on the touched claims, record checks on 0007, 0072 and the notes, the gate, the glyph check, the timing pair",
    "class": "within",
-   "why": "Filing a found row for tiering and its place in the run is the program's own order (FR-006), as at W38-gate; the row itself notes 0072 allows one side or two, so it decides nothing about what the map draws."
+   "why": "FR-005 as written."
   }
  ],
- "verdict": "CLEAR"
+ "verdict": "BLOCKED"
 }
