@@ -514,7 +514,7 @@ def seat_rows(s: Settlement, plan: SitePlan, frame: Sequence[float], allowed: An
 
     Research:
         row farm faces its street - research/questions/0033-row-villages-resson.html, research/questions/0033-row-villages-resson.drawing.html: never turned to its street - every frame keeps the settlement's one windward orientation (grove to windward, open front to lee, `grove_faces(plan.windward, ...)`) on either side of the street, so only the grove-to-windward form is drawn and the house turned to face its road never is
-        far-row dry-field share - research/questions/0033-row-villages-resson.html, research/questions/0033-row-villages-resson.drawing.html: each far-row farm's holding `HOLDING_DEPTH_FRAMES` frames deep and its frame's width less two gaps, all dry field; the near row and a one-sided row hold none
+        far-row dry-field share - research/questions/0033-row-villages-resson.html, research/questions/0033-row-villages-resson.drawing.html: each far-row farm's holding one lot wide and `HOLDING_DEPTH_FRAMES` lots deep, all dry field; the near row and a one-sided row hold none
         far-row farm only with its holding - research/questions/0033-row-villages-resson.drawing.html: a far-row seat whose holding does not fit clear is passed over
         farms to a street - research/questions/0033-row-villages-resson.drawing.html: half the households to a line on both sides, the line two lots longer than it needs, further streets set out parallel
         at most MAX_STREETS (6) parallel streets - GUESS: six streets at most (research/questions/0033-row-villages-resson.drawing.html)
@@ -599,7 +599,7 @@ def seat_rows(s: Settlement, plan: SitePlan, frame: Sequence[float], allowed: An
             hold = None
             if sides == "both" and side > 0:
                 depth_here = frame_extent(frame, nrm)
-                along_here = frame_extent(frame, t) - 2 * gap
+                along_here = lot  # one lot wide, lot against lot (0033) - not the frame's extent, which shrinks as the street turns
                 hc = (fx + nrm[0] * (depth_here / 2 + gap / 2 + hold_depth / 2), fy + nrm[1] * (depth_here / 2 + gap / 2 + hold_depth / 2))
                 boxes = [(float(p[0]), float(p[1]), float(p[2]), float(p[3])) for p in s.placed]
                 hold = holding_clear(holding_quad(hc, t, nrm, along_here, hold_depth), hard, boxes, bounds)

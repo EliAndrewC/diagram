@@ -9930,15 +9930,27 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::HOLDING_DEPTH_FRAMES#far-row dry-field share": {
-  "code": "88359915f80817db",
+  "code": "1b2c6351fc907cf1",
   "core": "53917c8a6f3c7727",
-  "date": "2026-10-03",
-  "note": "matches its backing",
+  "date": "2026-10-07",
+  "note": "3 lots on a street laid first and 1 on the dry edge, both recorded as GUESS, all of it dry field (GUESS); the share falls within the attested range",
   "pages": {
    "0033-row-villages-resson.drawing.html": "5b109c17a425e58e",
    "0033-row-villages-resson.html": "bd99e75bbcb09bc7"
   },
   "research": "176369f54d3c9e23",
+  "rests": [
+   "0033-row-villages-resson.drawing.html:40d16df7be480e77",
+   "0033-row-villages-resson.drawing.html:6181eeb7e6f73fde",
+   "0033-row-villages-resson.drawing.html:6c9c631ee5091383",
+   "0033-row-villages-resson.drawing.html:dd589d645d5bdeaa",
+   "0033-row-villages-resson.html:05baf979001d6601",
+   "0033-row-villages-resson.html:0a40ab8c614384bc",
+   "0033-row-villages-resson.html:68b06a089f5f62f5",
+   "0033-row-villages-resson.html:92ec6ffc05597628",
+   "0033-row-villages-resson.html:d89b4eeade3db9de",
+   "0033-row-villages-resson.html:fa03429935d7e2ec"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::MAX_STREETS#most streets": {
@@ -10186,10 +10198,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#at most MAX_STREETS (6) parallel streets": {
-  "code": "dae254f1a8e982e9",
-  "core": "9658d2e6515445d6",
+  "code": "68b73125f5103c47",
+  "core": "aec424430467b395",
   "date": "2026-10-07",
-  "note": "the page records \"at most six streets\" as a GUESS",
+  "note": "the drawing page records six streets at most as a GUESS",
   "pages": {},
   "research": "",
   "rests": [
@@ -10197,104 +10209,134 @@
   ],
   "verdict": "IN-STEP"
  },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#distance between parallel streets: the frame's depth along the line's normal plus hold_depth plus gap (row_offsets(..., hold_depth + gap))": {
+  "code": "aec424430467b395",
+  "core": "aec424430467b395",
+  "date": "2026-10-07",
+  "note": "distance between parallel streets: the frame's depth along the line's normal plus hold_depth plus gap (row_offsets(..., hold_depth + gap))",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#far-row dry-field share": {
-  "code": "e7a6470b94121016",
-  "core": "9658d2e6515445d6",
-  "date": "2026-10-03",
-  "note": "0033 drawing: the strip \"runs back about three times the frame's width\"; the code sizes it `hold_depth = fd * HOLDING_DEPTH_FRAMES[...]` with fd = the frame's SHORTER side (and depth_n along the normal in row_offsets) - measure by the frame's width or reword the page to frame depths",
+  "code": "68741950aa2ffcbf",
+  "core": "aec424430467b395",
+  "date": "2026-10-07",
+  "note": "holding only on the far row of a two-sided row, one lot wide and hold_depth deep, dry field",
   "pages": {
    "0033-row-villages-resson.drawing.html": "5b109c17a425e58e",
    "0033-row-villages-resson.html": "bd99e75bbcb09bc7"
   },
   "research": "176369f54d3c9e23",
-  "verdict": "DRIFTED"
+  "rests": [
+   "0033-row-villages-resson.drawing.html:22b02e1d1507e48b",
+   "0033-row-villages-resson.drawing.html:40d16df7be480e77",
+   "0033-row-villages-resson.drawing.html:6181eeb7e6f73fde",
+   "0033-row-villages-resson.drawing.html:6c9c631ee5091383",
+   "0033-row-villages-resson.drawing.html:dd589d645d5bdeaa"
+  ],
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#far-row farm only with its holding": {
-  "code": "2b113c71581c9b8c",
-  "core": "9658d2e6515445d6",
-  "date": "2026-10-03",
-  "note": "matches its backing",
-  "pages": {
-   "0033-row-villages-resson.drawing.html": "5b109c17a425e58e"
-  },
-  "research": "f407e2a81ba3ed3b",
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#farms to a street": {
-  "code": "1851b71a4374867e",
-  "core": "9658d2e6515445d6",
-  "date": "2026-10-03",
-  "note": "matches its backing",
-  "pages": {
-   "0033-row-villages-resson.drawing.html": "5b109c17a425e58e"
-  },
-  "research": "f407e2a81ba3ed3b",
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#first street on the hard ground's edge": {
-  "code": "62fc573e1fa6280f",
-  "core": "9658d2e6515445d6",
+  "code": "a23486c7c2b7fb06",
+  "core": "aec424430467b395",
   "date": "2026-10-07",
-  "note": "best_row_line takes the stretch of the edge, within a row's length of the seat, that holds the most frames, about 24 ft off the edge, \"this project's method\"",
+  "note": "passing over a seat keeps the page's \"holding drawn behind each farm\" true for every far-row farm",
   "pages": {
    "0033-row-villages-resson.drawing.html": "5b109c17a425e58e"
   },
   "research": "f407e2a81ba3ed3b",
   "rests": [
-   "0033-row-villages-resson.drawing.html:071bd73215fda123",
-   "0033-row-villages-resson.drawing.html:d41ee4495f2368b5"
+   "0033-row-villages-resson.drawing.html:22b02e1d1507e48b"
+  ],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#farms one frame apart along the street, never more than ROW_FRONTAGE_MAX_FT (240 ft) (lot = min(fw, s.px(ROW_FRONTAGE_MAX_FT)); the drawing page backs this at §56)": {
+  "code": "aec424430467b395",
+  "core": "aec424430467b395",
+  "date": "2026-10-07",
+  "note": "farms one frame apart along the street, never more than ROW_FRONTAGE_MAX_FT (240 ft) (lot = min(fw, s.px(ROW_FRONTAGE_MAX_FT)); the drawing page backs this at §56)",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#farms to a street": {
+  "code": "441760468a8d9039",
+  "core": "aec424430467b395",
+  "date": "2026-10-07",
+  "note": "half the farms to each side of a two-sided line; further streets parallel to the first",
+  "pages": {
+   "0033-row-villages-resson.drawing.html": "5b109c17a425e58e"
+  },
+  "research": "f407e2a81ba3ed3b",
+  "rests": [
+   "0033-row-villages-resson.drawing.html:03adf3d96fcebcdf",
+   "0033-row-villages-resson.drawing.html:a7932fb02488f76e"
+  ],
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#first street on the hard ground's edge": {
+  "code": "d0aef981168542b2",
+  "core": "aec424430467b395",
+  "date": "2026-10-07",
+  "note": "best_row_line picks the stretch of the dry edge near the seat that holds the most frames, the page's own method",
+  "pages": {
+   "0033-row-villages-resson.drawing.html": "5b109c17a425e58e"
+  },
+  "research": "f407e2a81ba3ed3b",
+  "rests": [
+   "0033-row-villages-resson.drawing.html:071bd73215fda123"
   ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#frame off the street": {
-  "code": "81b9597b6f770973",
-  "core": "9658d2e6515445d6",
-  "date": "2026-10-03",
-  "note": "STREET_HALF_FT + FIELD_KEEP_FT/2 = 15 ft",
-  "research": "",
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#front door's ground: a frame refused without DOOR_ROOM_FT (16 ft) and half LANE_ROOM_FT clear before its front": {
-  "code": "de4382b08244e09c",
-  "core": "9658d2e6515445d6",
+  "code": "635ba8680fb55a38",
+  "core": "aec424430467b395",
   "date": "2026-10-07",
-  "note": "no page measures a door's ground; 0033 gives only a path round the grove",
+  "note": "no page measures the gap between a house frame and its street; only the street-to-field gap is given, as a convention",
   "pages": {},
   "research": "",
   "rests": [
-   "0033-row-villages-resson.drawing.html:dbb4842be0eda9a1"
+   "0033-row-villages-resson.drawing.html:d41ee4495f2368b5"
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#row farm faces its street": {
-  "code": "76004ab4d0352e01",
-  "core": "9658d2e6515445d6",
-  "date": "2026-10-03",
-  "note": "feature 296 (spec FR-014): two attested forms and one drawn, where the knob doctrine requires a roll; the check read the drawing page's 'draws only the first' as a recorded deviation (MISLABELED, relabel DEVIATION) - the session kept DRIFTED, the GM's ruling on 296 - check's note: 0033 attests two forms (grove kept windward, house turned to its road) and the code fixes one; the drawing page records \"The map draws only the first\", so the claim should be DEVIATION research/questions/0033-row-villages-resson.drawing.html",
-  "pages": {
-   "0033-row-villages-resson.drawing.html": "5b109c17a425e58e",
-   "0033-row-villages-resson.html": "bd99e75bbcb09bc7"
-  },
-  "research": "176369f54d3c9e23",
-  "verdict": "DRIFTED"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#streets rounded at a corner": {
-  "code": "c0e81dea7204eaa4",
-  "core": "9658d2e6515445d6",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#front door's ground: a frame refused without DOOR_ROOM_FT (16 ft) and half LANE_ROOM_FT clear before its front": {
+  "code": "495c07562ace6f92",
+  "core": "aec424430467b395",
   "date": "2026-10-07",
-  "note": "the bend radius is a physical choice the row-village pages do not address; UNRESEARCHED is the right label",
+  "note": "the pages are silent on a door's ground",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#the row's step between farms is one frame, capped at ROW_FRONTAGE_MAX_FT (240 ft)": {
-  "code": "9658d2e6515445d6",
-  "core": "9658d2e6515445d6",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#row farm faces its street": {
+  "code": "64e9d4bdb8652194",
+  "core": "aec424430467b395",
   "date": "2026-10-07",
-  "note": "the row's step between farms is one frame, capped at ROW_FRONTAGE_MAX_FT (240 ft)",
+  "note": "the question attests two forms: the grove kept to windward whatever side the road runs, and the house turned to face its road (\"Some houses turned to face their road\"; in Asuka \"about eight houses in ten were turned to the street\"). grove_faces(plan.windward, ...) fixes the first form for every settlement. The code should roll between the two per settlement, or the claim should be a DEVIATION that the drawing page records as this project's deliberate choice",
+  "pages": {
+   "0033-row-villages-resson.drawing.html": "5b109c17a425e58e",
+   "0033-row-villages-resson.html": "bd99e75bbcb09bc7"
+  },
+  "research": "176369f54d3c9e23",
+  "rests": [
+   "0033-row-villages-resson.drawing.html:f5e09c253273ce75",
+   "0033-row-villages-resson.html:08abea7a9f378a33",
+   "0033-row-villages-resson.html:0ba362c4af8c1cee",
+   "0033-row-villages-resson.html:1eb456dc7effd2fe",
+   "0033-row-villages-resson.html:d4c22c5b8e425229"
+  ],
+  "verdict": "DRIFTED"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#streets rounded at a corner": {
+  "code": "9a33b3a29c8bca2f",
+  "core": "aec424430467b395",
+  "date": "2026-10-07",
+  "note": "the pages are silent on how sharply a street bends",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::street_bend_radius_ft#street bend radius": {
   "code": "bfcbe86479a5e60a",
