@@ -742,7 +742,7 @@ class GrovesMixin:
         Research:
             windbreak conifer share - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.html: 48% of a windbreak's crowns cedar (the 1987 Kashima count), the dominant tree (Takehara) - rolled where each crown is seated, against the clump's drawn deficit, so the share DRAWN is 0.48 through the cull's asymmetry (it was 0.508 rolled with the throw, wave 53)
             crowns per clump - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: one crown per `GROVE_CROWN_SQFT` of clump (~180 sq ft real, at the map's ft/px), rounded, with no floor and no cap
-            crowns topped up to the density as drawn - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: one crown per `GROVE_CROWN_SQFT` of the clump's open ground (`open_share`) as drawn, never over the bamboo patch, giving up after `TOPUP_TRIES` throws a crown wanted; not the conifer-led belt (its rows are its own)
+            crowns topped up to the density as drawn - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: one crown per `GROVE_CROWN_SQFT` of the clump's open ground (`open_share`: the box less the keep-outs, earlier stands' crowns, the bamboo patch and a crown's reach round a persimmon) as drawn, never over the bamboo patch, giving up after `TOPUP_TRIES` throws a crown wanted; not the conifer-led belt (its rows are its own)
             bamboo under the crowns - research/questions/0075-bamboo-groves-chikurin.drawing.html: 8% of a windbreak clump,
                 inked only in the gaps; none in the dooryard or alder mixes
             dooryard mix - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:
@@ -942,7 +942,12 @@ class GrovesMixin:
                         w,
                         h,
                         self.px(self.CANOPY_R_FT),
-                        lambda x, y: self._crown_covers(x, y, 1.0, ksun, kcirc, self.CANOPY_PAD) or any(math.hypot(x - ox, y - oy) < orr for ox, oy, orr in (*_near, *_trees)),
+                        lambda x, y: (
+                            self._crown_covers(x, y, 1.0, ksun, kcirc, self.CANOPY_PAD)
+                            or in_box(x, y + lift, bamboo_box)
+                            or any(math.hypot(x - ox, y - oy) < orr for ox, oy, orr in _near)
+                            or any(math.hypot(x - tx, y - ty) < tr + self.px(self.CANOPY_R_FT) for tx, ty, tr in _trees)
+                        ),
                     )
                     * w
                     * h

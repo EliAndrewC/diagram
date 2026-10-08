@@ -20,7 +20,7 @@ Guesses:
   shelter belt's other crowns, itself reckoned without a recorded width.
 
 Depiction: The map draws the shelter belt's crowns that stand in the marsh as alder, colored blue-gray green so the wet
-stand reads apart from the belt's other trees; real alder is a plain dark green. Like every crown on the map, each is
+stand reads apart from the belt's other trees; real alder is a plain dark green. Each is
 drawn tree by tree at its real size, never enlarged so it can be seen, and none is drawn wholly under another's crown, so the map shows only the top of the wood, where a real wood had smaller trees beneath. No bamboo is drawn beneath them as it is beneath the belt's other trees.
 
 Name: alder

@@ -15,11 +15,11 @@ Guesses:
 - That this form is as likely as the conifer-led belt: no source says which was commoner.
 - That a surviving wood keeps the extent it had before modern times: no older record gives a wood's size.
 
-Depiction: The map draws the belt as an irregular wood of rounded crowns like the woods around it, with a little bamboo
+Depiction: The map draws the belt as the village's back grove, one band along the windward side of the houses - the north and west unless a map declares a wind of its own - on one side or two, never all the way round. It is an irregular wood of rounded crowns like the woods around it, with a little bamboo
 between the crowns shown by paired strokes since a real culm is too slim to see. Only the crowns are drawn, at their real
 size, and none is drawn wholly under another's, though a real wood had smaller trees beneath its canopy; the dense undergrowth is hidden too, as from above. Neighboring crowns are drawn touching at their edges so the wood reads as closed, though in some forests full-grown crowns kept a narrow gap rather than interlacing. Its outline is drawn ragged, deepest in the middle and
 tapering at the corners, never a ruled wall, and never thinner than about 80 ft, so that it reads as a wood rather than a
-row of trees; how deep a real grove ran is not recorded. No tree of it stands where its afternoon shade would fall on a yard or a
+row of trees; how deep a fengshui wood ran is not recorded. No tree of it stands where its afternoon shade would fall on a yard or a
 kitchen garden. Along the side it holds, its planting is drawn unbroken except where a lane crosses it, since a gap in a real belt let the wind through; near the edge of the map the belt runs on past it, as a real wood went on beyond what the map shows.
 
 Name: Windbreak trees, mixed broadleaf

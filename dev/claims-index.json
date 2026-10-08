@@ -46961,10 +46961,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#alder in the marsh": {
-  "code": "402b2e43e86055ed",
-  "core": "90f2f986e590d690",
+  "code": "69761e3fa466a2c0",
+  "core": "0cb6026043cb263c",
   "date": "2026-10-08",
-  "note": "the alder mix draws broadleaf only in ALDER_GREENS, with no bamboo; the top-up stays broadleaf",
+  "note": "an alder clump's crowns are all broadleaf (no conifer, no bamboo), in the blue-gray alder greens",
   "pages": {
    "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "fb7c4bec76071ea3"
   },
@@ -46978,25 +46978,24 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#bamboo patch forced": {
-  "code": "5c30b0c3c91ab31d",
-  "core": "90f2f986e590d690",
+  "code": "e160536f2874473f",
+  "core": "0cb6026043cb263c",
   "date": "2026-10-08",
-  "note": "the wave-55 top-up throws crowns anywhere in the box with no `in_box(..., bamboo_box)` test (`seat(px, py, \"conifer\" if ... else \"broadleaf\", ...)`), so top-up crowns land on the farm's bamboo patch and hide its culms (line 289 skips a mark under a drawn crown). The page says \"a patch of culms the strip's size\"; the top-up should refuse or convert throws inside bamboo_box",
+  "note": "the page records the patch inside the farm's grove as a guess",
   "pages": {
    "0075-bamboo-groves-chikurin.drawing.html": "d65f38fc7bbc0e20"
   },
   "research": "2e86e0d437d7c9d9",
   "rests": [
-   "0075-bamboo-groves-chikurin.drawing.html:98be5820b93e25f7",
    "0075-bamboo-groves-chikurin.drawing.html:e7c00c0357d35ec7"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#bamboo under the crowns": {
-  "code": "25807820afaec3d5",
-  "core": "90f2f986e590d690",
+  "code": "92728018c1a97c76",
+  "core": "0cb6026043cb263c",
   "date": "2026-10-08",
-  "note": "GROVE_BAMBOO_SHARE 0.08, about one in twelve; inked only where no crown covers; none in the dooryard or alder mixes",
+  "note": "0.08 matches the page's guessed \"one in twelve\"; a mark is inked only in the gaps; the dooryard and alder mixes draw none",
   "pages": {
    "0075-bamboo-groves-chikurin.drawing.html": "d65f38fc7bbc0e20"
   },
@@ -47009,33 +47008,33 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#clump glyph": {
-  "code": "56e0363ce046023d",
-  "core": "90f2f986e590d690",
+  "code": "666eb4175f2aa40e",
+  "core": "0cb6026043cb263c",
   "date": "2026-10-08",
-  "note": "one disc per crown, no trunk, conifers dark and in `on_top`, each list painted back to front after the top-up",
+  "note": "one disc per crown, conifers dark and painted last, no trunk mark",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#conifer-led clump's lesser share": {
-  "code": "566cd354b9c3e48d",
-  "core": "90f2f986e590d690",
+  "code": "2f1f933e6ba7c387",
+  "core": "0cb6026043cb263c",
   "date": "2026-10-08",
-  "note": "the page names lesser broadleaf among the rows and gives no share; 0.1 is a guess",
+  "note": "the page names the lesser broadleaf among the rows and gives no share",
   "pages": {},
   "research": "",
   "rests": [
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:49a55637e421e2be",
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:e7f8a345b63cc861"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:6de01da4f44bfe0c"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#crown over no roof or wellhead": {
-  "code": "4fd5edc47dd015b0",
-  "core": "90f2f986e590d690",
+  "code": "9a105e3c955a2acc",
+  "core": "0cb6026043cb263c",
   "date": "2026-10-08",
-  "note": "every crown, top-up included, passes through `_crown_covers` against the building and wellhead keep-outs",
+  "note": "every seat, top-up throws included, is refused by `_crown_covers` against the building and wellhead keep-outs",
   "pages": {
    "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html": "f32599678d1cb241",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "ee3da5e20ce24835"
@@ -47049,10 +47048,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#crown size": {
-  "code": "7b4ea0f03d243cbc",
-  "core": "90f2f986e590d690",
+  "code": "f770b8951c5481f2",
+  "core": "0cb6026043cb263c",
   "date": "2026-10-08",
-  "note": "CROWN_S 0.75-1.4 of CANOPY_R_FT in the throw and the top-up; conifer the same size",
+  "note": "CROWN_S is 0.75-1.4 of the mean radius, the same for both kinds, and the top-up uses it too",
   "pages": {
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html": "646f4508385c9db1"
   },
@@ -47064,10 +47063,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#crown under no crown": {
-  "code": "fa0de4a466087883",
-  "core": "90f2f986e590d690",
+  "code": "ab62ff3034f1fb57",
+  "core": "0cb6026043cb263c",
   "date": "2026-10-08",
-  "note": "`_crown_seat_clear` against earlier stands and this clump's drawn crowns, for every seat including the top-up",
+  "note": "`_crown_seat_clear` checks against the earlier stands and this clump's drawn crowns",
   "pages": {
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html": "646f4508385c9db1"
   },
@@ -47079,10 +47078,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#crowns out of the plots' sun": {
-  "code": "42d6e760b6973c0a",
-  "core": "90f2f986e590d690",
+  "code": "1b14d6c40a046759",
+  "core": "0cb6026043cb263c",
   "date": "2026-10-08",
-  "note": "crowns held out by ksun, culm marks by kbam at BAMBOO_SHADE_FT 50",
+  "note": "crowns, top-up included, are refused in the sun keep-outs; culm marks keep out at BAMBOO_SHADE_FT 50",
   "pages": {
    "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03"
   },
@@ -47094,33 +47093,40 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#crowns per clump": {
-  "code": "fb4d0948c189830e",
-  "core": "90f2f986e590d690",
+  "code": "b822eb3ea2a20c27",
+  "core": "0cb6026043cb263c",
   "date": "2026-10-08",
-  "note": "the throw is round(w*h / grove_crown_px2), one per ~180 sq ft",
+  "note": "n = box area / GROVE_CROWN_SQFT, rounded, at the hill wood's ~180 sq ft, which the windbreak keeps",
   "pages": {
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html": "646f4508385c9db1"
   },
   "research": "050eb194338f2925",
   "rests": [
-   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:c42d5b3f4f69bf47",
+   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:7f54cfe8dba1be5f",
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:e0f372bc46e81fac"
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#crowns topped up to one per GROVE_CROWN_SQFT of the clump's open ground (the box less keep-outs, earlier crowns and persimmons), giving up after TOPUP_TRIES throws per crown wanted, and not for the conifer-led belt": {
-  "code": "90f2f986e590d690",
-  "core": "90f2f986e590d690",
+ "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#crowns topped up to the density as drawn": {
+  "code": "2e271af363504eb8",
+  "core": "0cb6026043cb263c",
   "date": "2026-10-08",
-  "note": "crowns topped up to one per GROVE_CROWN_SQFT of the clump's open ground (the box less keep-outs, earlier crowns and persimmons), giving up after TOPUP_TRIES throws per crown wanted, and not for the conifer-led belt",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "note": "`want` is `open_share(...)` times the box over GROVE_CROWN_SQFT, and its predicate does not count `bamboo_box` as covered, yet line 274 throws no crown there. So the patch's ground (22x16 ft, about 2 crowns) is wanted from the rest of the clump, packing it past one crown per 180 sq ft rather than \"of the clump's open ground\". The same happens round a persimmon: ground is open past radius `orr` but `seat` refuses closer than tr+rr. Add `in_box(x, y, bamboo_box)` to the predicate, or restate the claim",
+  "pages": {
+   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html": "646f4508385c9db1"
+  },
+  "research": "050eb194338f2925",
+  "rests": [
+   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:d9d6ec0e3a243d28",
+   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:e0f372bc46e81fac"
+  ],
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#dooryard mix": {
-  "code": "ee6f326c563af256",
-  "core": "90f2f986e590d690",
+  "code": "018ed300ad9abfa0",
+  "core": "0cb6026043cb263c",
   "date": "2026-10-08",
-  "note": "b_th = c_th = 0, so every crown is broadleaf with no conifer or bamboo; the top-up rolls broadleaf too",
+  "note": "dooryard b_th = c_th = 0, so it draws broadleaf only, and the top-up throws broadleaf too",
   "pages": {
    "0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html": "f33e2884d493459c"
   },
@@ -47131,50 +47137,48 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#every crown gives way round a persimmon": {
-  "code": "b6d4da6d13286ada",
-  "core": "90f2f986e590d690",
+  "code": "9f922e0754801b39",
+  "core": "0cb6026043cb263c",
   "date": "2026-10-08",
-  "note": "any crown is refused when its center is nearer than tr + rr + 0.2, top-up included",
+  "note": "a crown is refused where the centers are nearer than tr+rr+0.2, and the top-up goes through the same seat",
   "pages": {
    "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html": "6b3be37b04307230"
   },
   "research": "1640adf91280aca1",
   "rests": [
-   "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:881ed76b6b6133cb",
-   "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:95a4bdb23ba3bcdf"
+   "0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html:881ed76b6b6133cb"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#lesser broadleaf crown size": {
-  "code": "036f38c19af13f51",
-  "core": "90f2f986e590d690",
+  "code": "1f4621539ad80f16",
+  "core": "0cb6026043cb263c",
   "date": "2026-10-08",
-  "note": "LESSER_BROADLEAF_S 0.75-0.85 lies within the page's 0.75-1.4",
+  "note": "0.75-0.85 lies inside the page's 0.75-1.4",
   "pages": {
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html": "646f4508385c9db1"
   },
   "research": "050eb194338f2925",
   "rests": [
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:49a55637e421e2be",
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:a40ebd3a6acb1f87"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#lesser crown over an earlier stand's conifer": {
-  "code": "60af956a2e20e4cc",
-  "core": "90f2f986e590d690",
+  "code": "a903bc75b5e80229",
+  "core": "0cb6026043cb263c",
   "date": "2026-10-08",
-  "note": "a paint-order rule (`over_a_conifer`), a drawing convention",
+  "note": "a paint-order cull (`over_a_conifer`), a drawing convention",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#mixed broadleaf belt": {
-  "code": "fb32afaccc233a6d",
-  "core": "90f2f986e590d690",
+  "code": "f976feac9ab73431",
+  "core": "0cb6026043cb263c",
   "date": "2026-10-08",
-  "note": "c_th == b_th, so no conifer in the throw or the top-up; woods' CROWN_S size mix",
+  "note": "c_th equals b_th, so no conifer; rounded crowns in CROWN_S, the woods' size band",
   "pages": {
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "ee3da5e20ce24835"
   },
@@ -47185,10 +47189,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#mixed broadleaf belt's bamboo": {
-  "code": "4dbcdddb359e15c7",
-  "core": "90f2f986e590d690",
+  "code": "bc042ebb2cb23722",
+  "core": "0cb6026043cb263c",
   "date": "2026-10-08",
-  "note": "GROVE_BAMBOO_SHARE applies to mixed_broadleaf; the page holds the one-in-twelve guess in the village belt",
+  "note": "the page's guess holds the same share in the village's shelter belt as in the farm's grove",
   "pages": {
    "0075-bamboo-groves-chikurin.drawing.html": "d65f38fc7bbc0e20"
   },
@@ -47199,20 +47203,20 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#thin band end to end": {
-  "code": "3e8213265a6e6635",
-  "core": "90f2f986e590d690",
+  "code": "a92d344f5e98862b",
+  "core": "0cb6026043cb263c",
   "date": "2026-10-08",
-  "note": "the dooryard band's items are pinned end to end; no page speaks to it",
+  "note": "no cited question speaks to how a band's trees are spread",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#windbreak conifer share": {
-  "code": "0580a2ebc1c6712e",
-  "core": "90f2f986e590d690",
+  "code": "63c74ca435dc9fec",
+  "core": "0cb6026043cb263c",
   "date": "2026-10-08",
-  "note": "the deficit roll in `seat()` overrides the kind for every windbreak crown, top-up included, so the drawn share is 0.48",
+  "note": "the kind is rolled at the seat, steered by the clump's deficit toward the drawn 0.48 of the Kashima count, cedar leading; top-up crowns are rolled the same way",
   "pages": {
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.html": "186cb571d0ba4842"
   },

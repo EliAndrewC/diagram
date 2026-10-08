@@ -20,7 +20,7 @@ Guesses:
   house's grounds, and no account says how the other areas drew their water.
 
 Depiction: The map stands each farm alone beside its own fields, with its own grove on two, three or four of its sides, and draws no lanes among the farms:
-the road out joins the settlement to the world, and the field paths join the farms to one another. No village shelter belt
+the road out joins the settlement to the world, and the field paths join the farms to one another, a drawing convention so the scattered form reads at a glance, as a web of lanes would hide it. No village shelter belt
 is drawn, since each farm has its own grove. A scattered settlement needs about twice the ground per farm that a clustered
 one does, so the map gives it a roomier field rather than squeezing its farms together; that is a rule for fitting the
 drawing, not a measure of how far apart real farms stood. Each farm's water is a channel led off the nearest irrigation
