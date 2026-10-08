@@ -457,7 +457,7 @@
   "key": "l7r/diagram/hamletgen/cluster.py::seat_cluster#not in the reed fringe",
   "verdict": "MISLABELED",
   "tier": "E0",
-  "fix": "the account \"0058 has no fringe rule\" is false: 0058 says \"A pond's reed fringe does not count as marsh ... this project does not extend the rule to it\". The claim should say the GM ruling of 2026-08-28 overrides 0058 §99 (or be a DEVIATION once 0058 records that ruling)",
+  "fix": "the account \"0058 has no fringe rule\" is false: 0058 says \"A pond's reed fringe does not count as marsh ... this project does not extend the rule to it\". The claim should say the GM ruling of 2026-08-28 overrides 0058 \u00a799 (or be a DEVIATION once 0058 records that ruling)",
   "files": [
    "l7r/diagram/hamletgen/cluster.py"
   ],
@@ -1651,7 +1651,7 @@
   "key": "l7r/diagram/hamletgen/ways/smooth.py::_smooth_web#a hairpin arm under 40 ft is kept when its tip is the lane's only contact with another way",
   "verdict": "UNCLAIMED",
   "tier": "E0",
-  "fix": "claim it: a hairpin arm under 40 ft is kept when its tip is the lane's only contact with another way; this exception is not in 0081 §19",
+  "fix": "claim it: a hairpin arm under 40 ft is kept when its tip is the lane's only contact with another way; this exception is not in 0081 \u00a719",
   "files": [
    "l7r/diagram/hamletgen/ways/smooth.py"
   ],
@@ -1760,7 +1760,7 @@
   "key": "l7r/diagram/hamletgen/ways/track.py::_thread_the_fabric#the track's route walled",
   "verdict": "MISLABELED",
   "tier": "E0",
-  "fix": "0246 walls only a back lane's stretches (§63); the track's walls are in 0081 (\"never crosses row crops\", \"stops at the flooded paddy\", \"keeps off wet ground\"), and keeping off drawn water belongs to 0035's crossing rule; repoint to 0081 (and 0035 for the water)",
+  "fix": "0246 walls only a back lane's stretches (\u00a763); the track's walls are in 0081 (\"never crosses row crops\", \"stops at the flooded paddy\", \"keeps off wet ground\"), and keeping off drawn water belongs to 0035's crossing rule; repoint to 0081 (and 0035 for the water)",
   "files": [
    "l7r/diagram/hamletgen/ways/track.py"
   ],
@@ -1883,7 +1883,7 @@
   "key": "l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#clear of crop, wet and water",
   "verdict": "MISLABELED",
   "tier": "E0",
-  "fix": "the 0081 and 0246 drawing pages answer the rule of keeping off crop and wet ground (\"never crosses row crops\", \"keeps off wet ground\"), so the claim should cite them with the 20 ft as a GUESS or CONVENTION; note §59 also lets a lane \"touch a plot's boundary\"",
+  "fix": "the 0081 and 0246 drawing pages answer the rule of keeping off crop and wet ground (\"never crosses row crops\", \"keeps off wet ground\"), so the claim should cite them with the 20 ft as a GUESS or CONVENTION; note \u00a759 also lets a lane \"touch a plot's boundary\"",
   "files": [
    "l7r/diagram/hamletgen/ways/web.py"
   ],
@@ -2032,10 +2032,10 @@
   "scope": "kept"
  },
  {
-  "key": "l7r/diagram/labels/obstacles.py::GROUP_WORDS#a guard or inspection caption may cover the gate's posts (0243 §9)",
+  "key": "l7r/diagram/labels/obstacles.py::GROUP_WORDS#a guard or inspection caption may cover the gate's posts (0243 \u00a79)",
   "verdict": "UNCLAIMED",
   "tier": "E0",
-  "fix": "claim it: a guard or inspection caption may cover the gate's posts (0243 §9)",
+  "fix": "claim it: a guard or inspection caption may cover the gate's posts (0243 \u00a79)",
   "files": [
    "l7r/diagram/labels/obstacles.py"
   ],
@@ -2047,10 +2047,10 @@
   "scope": "kept"
  },
  {
-  "key": "l7r/diagram/labels/obstacles.py::GROUP_WORDS#a shrine caption may cover the temples (0243 §11)",
+  "key": "l7r/diagram/labels/obstacles.py::GROUP_WORDS#a shrine caption may cover the temples (0243 \u00a711)",
   "verdict": "UNCLAIMED",
   "tier": "E0",
-  "fix": "claim it: a shrine caption may cover the temples (0243 §11)",
+  "fix": "claim it: a shrine caption may cover the temples (0243 \u00a711)",
   "files": [
    "l7r/diagram/labels/obstacles.py"
   ],
@@ -2205,7 +2205,7 @@
   "key": "l7r/diagram/settlement/castle_civic.py::CastleCivicMixin.castle#inner moat",
   "verdict": "MISLABELED",
   "tier": "E0",
-  "fix": "the findings answer the inner moat's width: Hiroshima's \"inner moat 30 to 104 m\" (~98-341 ft), while the code draws mw*0.5 = 40 ft, below that range; the width should cite 0139.html §51 and be widened, and only the 0.42 x gap offset stays UNRESEARCHED",
+  "fix": "the findings answer the inner moat's width: Hiroshima's \"inner moat 30 to 104 m\" (~98-341 ft), while the code draws mw*0.5 = 40 ft, below that range; the width should cite 0139.html \u00a751 and be widened, and only the 0.42 x gap offset stays UNRESEARCHED",
   "files": [
    "l7r/diagram/settlement/castle_civic.py"
   ],
@@ -2553,7 +2553,7 @@
   "key": "l7r/diagram/settlement/civic_grounds/civic.py::CivicWorksMixin.terrace#frontage and depth",
   "verdict": "MISLABELED",
   "tier": "E0",
-  "fix": "0140 gives the row-house cell's shape, \"about 18 ft of frontage\" on a 24 ft depth (frontage under depth, single-file), but 33 x 30 makes cells wider than deep; cite 0140 §137 and keep that proportion scaled to 990 sq ft (about 27 x 36 ft); the docstring's \"~21 ft deep\" is stale",
+  "fix": "0140 gives the row-house cell's shape, \"about 18 ft of frontage\" on a 24 ft depth (frontage under depth, single-file), but 33 x 30 makes cells wider than deep; cite 0140 \u00a7137 and keep that proportion scaled to 990 sq ft (about 27 x 36 ft); the docstring's \"~21 ft deep\" is stale",
   "files": [
    "l7r/diagram/settlement/civic_grounds/civic.py"
   ],
@@ -2627,10 +2627,10 @@
   "scope": "deferred"
  },
  {
-  "key": "l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cremation_ground#jizo true size px(2.0) x px(2.7) ft against 0235 §102's \"about 2 ft tall\", and their 1.4-width pitch",
+  "key": "l7r/diagram/settlement/civic_grounds/funerary.py::FuneraryGroundsMixin.cremation_ground#jizo true size px(2.0) x px(2.7) ft against 0235 \u00a7102's \"about 2 ft tall\", and their 1.4-width pitch",
   "verdict": "UNCLAIMED",
   "tier": "E0",
-  "fix": "claim it: jizo true size px(2.0) x px(2.7) ft against 0235 §102's \"about 2 ft tall\", and their 1.4-width pitch",
+  "fix": "claim it: jizo true size px(2.0) x px(2.7) ft against 0235 \u00a7102's \"about 2 ft tall\", and their 1.4-width pitch",
   "files": [
    "l7r/diagram/settlement/civic_grounds/funerary.py"
   ],
@@ -3452,7 +3452,7 @@
   "key": "l7r/diagram/settlement/rolling/gap_ways.py::_way_for#knotted fallback: a foot is left within 25 ft beside a junction when no gathered or knot-f",
   "verdict": "UNCLAIMED",
   "tier": "E0",
-  "fix": "claim it: knotted fallback: a foot is left within 25 ft beside a junction when no gathered or knot-free join is admitted, contrary to 0081 §21 \"three lanes never arrive a few feet apart in a knot\"; the page does not record this as a DEVIATION",
+  "fix": "claim it: knotted fallback: a foot is left within 25 ft beside a junction when no gathered or knot-free join is admitted, contrary to 0081 \u00a721 \"three lanes never arrive a few feet apart in a knot\"; the page does not record this as a DEVIATION",
   "files": [
    "l7r/diagram/settlement/rolling/gap_ways.py"
   ],
@@ -3580,7 +3580,7 @@
   "key": "l7r/diagram/settlement/structures/fixtures/siting.py::FixtureSitingMixin._route_seats#farthest seat 60 ft from the road kosatsubawayreachft 0190 2",
   "verdict": "UNCLAIMED",
   "tier": "E0",
-  "fix": "farthest seat 60 ft from the road (KOSATSUBA_WAY_REACH_FT; 0190 §225)",
+  "fix": "farthest seat 60 ft from the road (KOSATSUBA_WAY_REACH_FT; 0190 \u00a7225)",
   "files": [
    "l7r/diagram/settlement/structures/fixtures/siting.py"
   ],
@@ -6354,7 +6354,7 @@
   "key": "docs/buildings.md::Checklist for a new diagram#size hierarchy",
   "verdict": "DRIFTED",
   "tier": "E2",
-  "fix": "the checklist holds \"any shrine/storehouse < the residence\", but the page finds \"a storehouse could out-size every hall\" and the maps \"do not hold every storage building below the residence\"; also, the ranks of kitchen, stable and cell are guesses (§16, §34, §35), not findings of the page cited",
+  "fix": "the checklist holds \"any shrine/storehouse < the residence\", but the page finds \"a storehouse could out-size every hall\" and the maps \"do not hold every storage building below the residence\"; also, the ranks of kitchen, stable and cell are guesses (\u00a716, \u00a734, \u00a735), not findings of the page cited",
   "files": [
    "docs/buildings.md"
   ],
@@ -6399,7 +6399,7 @@
   "scope": "mode-a"
  },
  {
-  "key": "docs/buildings.md::Sacred features#a fence round the sanctuary alone as a wealth knob (0223 §171-172 finds such fences before 1868 only where the shogunate or a lord built them)",
+  "key": "docs/buildings.md::Sacred features#a fence round the sanctuary alone as a wealth knob (0223 \u00a7171-172 finds such fences before 1868 only where the shogunate or a lord built them)",
   "verdict": "UNCLAIMED",
   "tier": "E2",
   "fix": "the Fence and hedge bullet's sanctuary-only fence dropped from the wealth knob: 0223 drawing and programs.md draw no sanctuary fence at any wealth",
