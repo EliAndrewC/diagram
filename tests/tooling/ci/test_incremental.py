@@ -517,7 +517,7 @@ def test_a_deleted_test_module_never_reaches_pytests_arguments(tmp_path: Path) -
     """pytest resolves its positional arguments before any plugin loads, so a stale path exits 4 and takes
     the gate with it. A removed module arrives by two routes: `changed()` reports it, and the baseline's
     contexts still name its tests."""
-    skill = tmp_path / incremental.SKILL_PREFIX
+    skill = tmp_path  # the project is the repository root (feature 329)
     (skill / "tests").mkdir(parents=True)
     (skill / "tests" / "test_here.py").write_text("", encoding="utf-8")
     assert incremental.existing(tmp_path, ["tests/test_here.py", "tests/test_gone.py"]) == ["tests/test_here.py"]
@@ -533,12 +533,12 @@ def test_plan_returns_a_full_run_when_the_projection_is_over_the_fraction(tmp_pa
     """
     bdir = tmp_path / "gb"
     bdir.mkdir()
-    skill = tmp_path / incremental.SKILL_PREFIX
+    skill = tmp_path  # the project is the repository root (feature 329)
     (skill / "t").mkdir(parents=True)
     (skill / "t" / "test_a.py").write_text("", encoding="utf-8")
     monkeypatch.setattr(incremental, "baseline_dir", lambda root: bdir)
-    before = {"engine": {"e/a.py": "1"}, "tests": {f"{incremental.SKILL_PREFIX}t/test_a.py": "1"}, "tooling": "T"}
-    now = {"engine": {"e/a.py": "1"}, "tests": {f"{incremental.SKILL_PREFIX}t/test_a.py": "2"}, "tooling": "T"}
+    before = {"engine": {"e/a.py": "1"}, "tests": {"t/test_a.py": "1"}, "tooling": "T"}
+    now = {"engine": {"e/a.py": "1"}, "tests": {"t/test_a.py": "2"}, "tooling": "T"}
     (bdir / incremental.MANIFEST).write_text(json.dumps(before), encoding="utf-8")
     (bdir / incremental.COVERAGE_DB).write_bytes(b"")
     (bdir / incremental.TESTS).write_text(json.dumps({f"t/test_a.py::x{k}": [] for k in range(4)}), encoding="utf-8")
