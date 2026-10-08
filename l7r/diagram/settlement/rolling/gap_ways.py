@@ -67,6 +67,13 @@ RING_CELLS = 4
 #: How many distinct ways out a household tries (MEASURED, research R4: one way out reached every house on 5 of 9 maps, six on 6).
 GAP_TRIES = 6
 """Research: ways out tried - NONE: a search breadth, measured (research R4)"""
+#: ...AND THREE TIMES AS MANY BEFORE A KNOTTED FOOT IS KEPT (feature 328 wave 54): where every exit tried leaves its foot
+#: beside a junction it cannot be gathered onto, the search runs on past `GAP_TRIES` for an exit that gives a gathered or
+#: knot-free join (Kuwabata: lane 11's foot was kept 21.8 ft from lane 9's door, inside that dooryard, where no gather of
+#: the settled web is lawful; a later exit gave a knot-free way). Only a household whose first six exits are all knotted
+#: pays for it.
+KNOTTED_TRIES = 3
+"""Research: ways out tried before a knotted foot is kept - research/questions/0081-village-lanes.drawing.html: ends within 25 ft are joined at a single point, so a knotted foot is the last resort; the breadth (three times `GAP_TRIES`) NONE: a search breadth, measured on Kuwabata"""
 #: The most legs a way may take (`route.taut`): a gap way bends at plot corners, more often than a straight path does.
 GAP_LEGS = 12
 """Research:
@@ -449,7 +456,7 @@ def _way_for(
     Research:
         joined near, then far, then run on to the way out - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: each household's way runs along the gaps to the track out or to a way laid before it, which it joins at a T
         a way leaves its own homestead from its dooryard - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: its way leaves its dooryard round its own garden beds and fixtures
-        a foot gathered at a junction - research/questions/0081-village-lanes.drawing.html: a household's way's foot is set on a junction within KNOT_FT * KNOT_MARGIN, 25 ft; the foot as traced only where no gathered join is admitted
+        a foot gathered at a junction - research/questions/0081-village-lanes.drawing.html: a household's way's foot is set on a junction within KNOT_FT * KNOT_MARGIN, 25 ft; the foot as traced only where no gathered join is admitted, after `KNOTTED_TRIES` times the exits
     """
     geom = rec["geom"]
     own = geom["bbox"]
@@ -492,7 +499,7 @@ def _way_for(
         junctions = junction_points(s._access.segs)
         knotted: list[list[Pt]] = []
         for _, i, j in exits:
-            if len(picked) >= GAP_TRIES:
+            if len(picked) >= (GAP_TRIES * KNOTTED_TRIES if knotted else GAP_TRIES):  # a knotted fallback in hand: look further
                 break
             if any(abs(i - a) + abs(j - b) < RING_CELLS for a, b in picked):
                 continue

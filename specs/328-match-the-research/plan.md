@@ -695,8 +695,15 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
   chord that would take out lane 3's overshoot (4042.4, 2067.1) -> lane 1's door crosses house 1's front dooryard, so the
   smoothing keeps the turn. Neither stems from the fixtures themselves (none stands within 75 ft of Sawada's joint): wave
   52's seats moved the houses' ways and the web settled differently.
-  So T137 stays OPEN (the push refuses the batch until it closes), the seats are kept (0042, 0047), and the GM is asked at the
-  feature's end: waive the two for row 748 and the zigzag row, revert wave 52's seats, or take row 748 now.
+  Then row 748's own route, at SEATING (`gap_ways._way_for`): a household whose every exit leaves a knotted foot now searches
+  `KNOTTED_TRIES` (3) times `GAP_TRIES` exits before keeping one - **Kuwabata's knot is FIXED** (a later exit gives lane 11 a
+  knot-free way; only Kuwabata's manifest moves; its name off `_KNOTS_WAITING`; a unit test pins the breadth). For Sawada's
+  zigzag two seating guards were tried and reverted: holding back a gathered join that would zigzag (it never fired: the
+  overshoot is in the traced way itself, drawn as laid by `settle_reach`, unchanged through every settle step), and holding
+  back any admitted way that zigzags at its foot (the zigzag moved to another household's way, lane 5, the same overshoot into
+  lane 1's door, and Inashiro moved besides). The way into lane 1's door from the south-west must pass house 1's front
+  dooryard to arrive without the overshoot, and no lawful route does: the zigzag stays on `_ZIGZAGS_WAITING`, T137 stays open
+  for it alone, and the GM is asked at the feature's end (waive behind its row, or revert wave 52's seats).
 - **Tooling** (so a reroll cannot hide this again): `make quick` runs the tests that read the shipped hamlet manifests
   whenever the manifests moved since its last green run (`scripts/gates/pool-readers.py`, its test in `tests/tooling/`);
   testmon selects by code, and a manifest is data. And `perf_profile.py`'s spec typed, which the quick type check

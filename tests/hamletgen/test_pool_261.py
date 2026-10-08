@@ -271,7 +271,7 @@ def lane_knots(lanes: list[dict]) -> list[tuple[int, tuple[float, float], int, t
 # settle_knots' judge): Inashiro's field way starts on the spur 9.4 ft from where it leaves lane 10, 16.1 ft from that
 # house's door, and every gather of the spur onto the door splits the web (the field way hangs on it); Kuwabata's lane 11
 # foot T's onto lane 9 21.8 ft from its door, and the gather leaves a farmhouse unreached. Both wait on the same row.
-_KNOTS_WAITING = {"sawada", "inashiro", "kuwabata"}
+_KNOTS_WAITING = {"sawada", "inashiro"}
 
 
 @pytest.mark.parametrize(

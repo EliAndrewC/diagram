@@ -263,3 +263,20 @@ def test_a_households_legs_are_each_asked_once(monkeypatch: pytest.MonkeyPatch) 
     for leg in asked:
         per[leg] = per.get(leg, 0) + 1
     assert max(per.values()) <= len(houses), "a leg asked at most once a household"
+
+
+def test_a_knotted_foot_is_kept_only_after_three_times_the_exits(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 328 wave 54 (Kuwabata: a foot kept 21.8 ft from a door no gather could reach): where every exit's join stands
+    beside a junction it is refused at, the search runs on to `KNOTTED_TRIES` times `GAP_TRIES` exits before the knotted foot."""
+    s, houses = _site((600.0,))
+    j = (0.0, 0.0)
+    monkeypatch.setattr(gw, "gathered_foot", lambda foot, js, reach: j)
+    _refusing_ends_at(monkeypatch, [j])
+    monkeypatch.setattr(gw, "GAP_TRIES", 1)
+    asked: list[tuple] = []
+    real = gw._first_admitted
+    monkeypatch.setattr(gw, "_first_admitted", lambda s_, runs, *a: asked.append(tuple(map(tuple, runs))) or real(s_, runs, *a))
+    assert gw.lay_the_ways(s) == (0, 0)
+    exits = len(asked) - 1  # one call per exit tried, and the knotted fallback's last
+    assert exits == gw.GAP_TRIES * gw.KNOTTED_TRIES == 3, exits
+    assert houses[0]["geom"]["access"][-1] == _FEET[0], "then the foot as traced"
