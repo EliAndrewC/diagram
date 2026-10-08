@@ -163,7 +163,7 @@ def test_union_area_empty_and_overlapping_spans():
 def test_main_tree_guard_blocks_main_allows_clones_and_gm_override(monkeypatch, tmp_path):
     # MAIN IS THE TREE THAT CONTAINS .clones/ (feature 131): no path is hardcoded, so the fixture is
     # a checkout with a .clones/ directory, whatever it is called and wherever it is mounted.
-    monkeypatch.delenv("GM_ASSISTANT_ALLOW_MAIN", raising=False)
+    monkeypatch.delenv("DIAGRAM_ALLOW_MAIN", raising=False)
     main = tmp_path / "anything"
     (main / ".git").mkdir(parents=True)
     (main / ".clones" / "x" / ".claude").mkdir(parents=True)
@@ -180,7 +180,7 @@ def test_main_tree_guard_blocks_main_allows_clones_and_gm_override(monkeypatch, 
     # a path under no checkout at all is not main
     settlement._assert_not_main_tree(str(tmp_path / "loose.py"))
     # the GM's deliberate override opens main
-    monkeypatch.setenv("GM_ASSISTANT_ALLOW_MAIN", "1")
+    monkeypatch.setenv("DIAGRAM_ALLOW_MAIN", "1")
     settlement._assert_not_main_tree(str(main / ".claude" / "settlement.py"))
 
 

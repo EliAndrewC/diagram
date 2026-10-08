@@ -23,7 +23,7 @@ FAKE_GEN = (
     "base = os.path.abspath(__file__)[:-len('.gen.py')]\n"
     "open(base + '.svg', 'w').write('<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 10 10\">\\n<rect/>\\n</svg>')\n"
     "open(base + '.png', 'wb').write(b'PNGDATA')\n"
-    "open(base + '.ran', 'w').write(os.environ.get('GM_ASSISTANT_ALLOW_MAIN', 'unset'))\n"
+    "open(base + '.ran', 'w').write(os.environ.get('DIAGRAM_ALLOW_MAIN', 'unset'))\n"
 )
 
 
