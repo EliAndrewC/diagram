@@ -91,7 +91,7 @@ def _lay_skeleton(s: Settlement, plan: SitePlan, frame: _margin_frame, arcs: Seq
         spine centered on the houses - GUESS: on the houses' arc midpoint and mean stand
         no accidental crossing - UNRESEARCHED: an arm that would cross an arm already kept, by accident of the template, is not laid (`_arm_crossing_accidental`)
         skeleton margin off the crop - research/questions/0081-village-lanes.drawing.html: a lane may touch a plot's boundary - the arm clipped at its tread's edge (half its 5 ft width) off the field and the dry plots
-        skeleton margin off the wet and the ditches - UNRESEARCHED: 20 px off the toe band, the marsh and the drawn water
+        skeleton margin off the wet and the ditches - UNRESEARCHED: 20 px off the toe band and the marsh, 14 px off the drawn water (`clip_to_clear`'s line margin)
         routed round the steadings - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: nothing is built on a lane
         skeleton width - research/questions/0081-village-lanes.drawing.html: 5 ft
         skeleton arm's corridor - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane's middle 7 ft clear of a garden fence; each arm registers `LANE_CLEARANCE`, 7 ft from its middle, a footprint held to it at its corners

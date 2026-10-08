@@ -490,5 +490,8 @@
  "l7r/diagram/hamletgen/ways/track.py::stage_track#lane clearance": "48",
  "l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton arm off the water": "48",
  "l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton margin off the hard ground": "48",
- "l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton arm's corridor": "48"
+ "l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton arm's corridor": "48",
+ "l7r/diagram/hamletgen/consts.py::LANE_CLEARANCE#fronting lane's corridor": "48",
+ "l7r/diagram/hamletgen/ways/bund.py::a_way_onto_the_bund#field path's corridor": "48",
+ "l7r/diagram/hamletgen/ways/bund.py::carry_on#stepped spur's corridor": "48"
 }

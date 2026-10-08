@@ -1587,8 +1587,8 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
 
 - `track.py::stage_track#lane clearance` (row 502, E2): `houses._on_a_tread` holds every corner `LANE_MIDDLE_CLEAR_FT` (7 ft)
   off a lane's middle at least (0246), and `LANE_CLEARANCE` is 0246's 7 ft (it was 40, the 7 carried to a center);
-  `test_every_corner_stands_seven_ft_off_a_narrow_lanes_middle` (red on the old code). Row 503 (the skeleton arm's corridor)
-  waited on it and closes with it.
+  `test_every_corner_stands_seven_ft_off_a_narrow_lanes_middle` (red on the old code). Rows 706, 736, 738 and 754 (the corridor claims
+  of `LANE_CLEARANCE`, the field path, the stepped spur and the skeleton arm) waited on it and close with it.
 - `web.py::_lay_skeleton#skeleton margin off the hard ground` (row 505, E2): the crop clipped at the arm's tread's edge
   (`SKELETON_ARM_WIDTH / 2`), the wet ground and the ditches at 20 ft
   (`test_a_skeleton_arm_may_touch_a_plots_boundary_and_keeps_off_the_wet`).

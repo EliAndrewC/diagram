@@ -1,99 +1,80 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "63c4be95e2b03c4811b13a308a80376939fe68264b71791a301b75b06cb7904a",
+ "plan_sha256": "6af116f17f2aea07b7baaeaf94aed5e7eb5f556f5139fdca6774563d36b9b182",
  "reviewed": "2026-10-08",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "batch-1 findings first",
-   "summary": "batch 1's woodland glyph check (Kashikawa NEEDS-WORK: the beyond-the-fields walk counts a row holding as field) and the pair's band-2 cause fixed before the next ranking rows",
+   "id": "W48-1 corner rule + LANE_CLEARANCE 7",
+   "summary": "houses._on_a_tread holds every building corner max(half-width + TREAD_WALL_FT, LANE_MIDDLE_CLEAR_FT 7 ft) off a lane's middle; LANE_CLEARANCE 40 -> 7 (rows 502 and 706)",
    "class": "within",
-   "why": "defects found by this feature's own review occasions and its pair are part of completing the batch (FR-005 occasions, FR-006 a batch complete before landing; constitution XIII/XIV); they are not ranking rows, so SC-003's tier order is untouched; the walk fix moves the code to 0077/0033 (house lot, field, woodland)"
+   "why": "Rows 502/706 ask the corridor tested at the footprint so LANE_CLEARANCE can be 0246's 7 ft as it stands; done. _near_corridor stays a center test for gardens, yards, byre annexes and retirement houses, but in a scripted hamlet those are laid from the seating's lots before any lane exists (driver STAGES; draft_byres and retirement_houses seek nothing where lots were seated), so nothing the corner rule skips can meet a lane; consistent with no pool hamlet moving."
   },
   {
-   "id": "past_the_frame",
-   "summary": "the track out runs to the canvas edge on its bearing and 400 ft past it, claimed CONVENTION, replacing wave 46's canvas-diagonal reach",
+   "id": "W48-2 dependent corridor rows closed",
+   "summary": "the rows waiting on the corridor row close with it",
    "class": "within",
-   "why": "removes a measured regression wave 46 introduced (run_on_target 5,481 -> 3,489 against 3,577 at the start, measurements.json batch1-perf-pair-and-reach-control); off-sheet length is a drawing convention, not a research claim"
+   "why": "Same work, the ranking's own after-links. Correction owed: plan and tasks call it 'row 503 (the skeleton arm's corridor)', but ranking row 503 is the spur bow (wave 46); the rows this wave closes are 754 (skeleton arm's corridor), and also 706 (consts LANE_CLEARANCE), 736 and 738 (bund.py field path / stepped spur), whose claims this diff rewrites. All five carry wave '' in ranking.json."
   },
   {
-   "id": "rows 381 and 436",
-   "summary": "the two open in-scope E1 rows T119a tiered: every grove and copse crown gives way round a yard persimmon wholly; 0072's drawing page re-measures Inashiro's arc at 66 degrees",
+   "id": "W48-3 skeleton arm off the crop at its tread's edge",
+   "summary": "arm clipped SKELETON_ARM_WIDTH/2 (2.5 ft) off the field envelope and dry plots instead of 20 (row 505)",
    "class": "within",
-   "why": "the only open in-scope E1 rows, taken before E2 (SC-003); 381 moves the code to 0046's 'give way round it'; 436 makes the drawing page state what the maps draw"
+   "why": "0081 drawing: 'may touch a plot's boundary'. The tread's edge on the boundary is the literal touch; row 505's '0 ft' read at the centerline would lay half the tread on the crop."
   },
   {
-   "id": "row 442",
-   "summary": "the road checkpoint tier described as 0110 attests it (barrier gate, inspection hall, officer's residence; lockup, stables, notice board at a larger post), no garrison count",
+   "id": "W48-4 20 margin kept for wet ground and water",
+   "summary": "toe band and marsh kept 20 off, water lines clipped, labeled UNRESEARCHED",
    "class": "within",
-   "why": "the procedure moves to the research; no pool sheet draws the checkpoint tier, so nothing is redrawn (FR-009)"
+   "why": "Row 505's own text. Correction owed: the new claim says '20 px off the toe band, the marsh and the drawn water', but clip_to_clear holds lines at its line_margin default 14, not 20; the claim should state 14 for the water."
   },
   {
-   "id": "row 438",
-   "summary": "row 438 taken in wave 47 before 442: the shrine's hierarchy stated per form in docs/building-programs.md (one roof: the hall-and-dwelling building the largest; two buildings: the hall larger than its sanctuary, the farmhouse-class dwelling possibly the larger); claim restated; no two-building sheet in the pool",
+   "id": "W48-5 arm over the brook at a ford",
+   "summary": "an arm whose run crosses the brook goes start -> ford landings (square to the reach) -> end, at the ford making the walk shortest (row 504)",
    "class": "within",
-   "why": "round 1's item resolved: the row is taken in ranking order with the fix T119a named; 0222's drawing page says 'The hall alone is farmhouse-sized or smaller', so the per-form statement is the research; the B19 size_hierarchy pairs check only sanctuary under hall-and-dwelling, so no check contradicts the restated doc"
+   "why": "0035 drawing: ways between the banks cross squarely on a plank bridge at the crossing places; 0081: a worn path takes the shortest way. Every skeleton arm is two points, so no form is dropped; the water lines are the ford-gapped stream_segs, so the arm is not clipped at its own ford. Ditches stay clipped, UNRESEARCHED, as row 504 says."
   },
   {
-   "id": "row 473 held",
-   "summary": "the fixture quota cap stays held as the GM's question",
-   "class": "narrowing",
-   "ruling": "LEGITIMATE",
-   "why": "the cap against the GM's own feature-133 ruling that Inashiro keep its shrine is a conflict only the GM can settle; the GM's goal amendment of 2026-10-07 ('defer it to the end of the feature') directs exactly this hold, and it was ruled LEGITIMATE on 2026-10-07"
+   "id": "W48-6 SKELETON_ARM_WIDTH",
+   "summary": "the arm's 5 ft named as a constant claimed to 0081",
+   "class": "within",
+   "why": "No value change; the existing 5 ft and its 0081 claim."
   },
   {
-   "id": "row 501 next",
-   "summary": "row 501 (the connector's clearance at a footprint's edge) opens wave 48",
+   "id": "W48-7 7 ft claim split",
+   "summary": "0246 for a garden's fence, GUESS for other footprints _fits seats",
    "class": "within",
-   "why": "the next open in-scope row after 473 in ranking order (474-500 carry waves); the order itself is fine once row 438 is not left behind"
+   "why": "Honest labeling of the extension. Correction owed: _on_a_tread never tests a garden fence (gardens go through _garden_fits' center test, and in a hamlet no tread exists when they are seated), so its first line should cite 0246 as the source of the 7 ft figure, not claim this function holds a garden's fence; what this function does is the GUESS extension."
   },
   {
-   "id": "audit re-keyed",
-   "summary": "the ranking and overrides re-keyed to docs/building-programs.md after main moved the file",
+   "id": "W48-8 row 474 held",
+   "summary": "the fixture-quota row held as the GM's question",
    "class": "within",
-   "why": "bookkeeping that keeps one row per finding (FR-001) after a path move on main; no row dropped or re-tiered by it"
+   "why": "Ruled LEGITIMATE to leave open (2026-10-07); the goal amendment defers questions to the feature's end."
   },
   {
-   "id": "record-check edits",
-   "summary": "quote-check, record-format and the modal depiction, research and form checks' edits applied (0072's overclaiming sentence narrowed; the windbreak and mixed-broadleaf modals' wording)",
+   "id": "W48-9 row village road order filed E3",
+   "summary": "impl-drift's found row: a row village's road in and field spur laid before the houses (0031), filed provisional E3, not fixed this wave",
    "class": "within",
-   "why": "corrections the record checks a wave owes return (FR-005 occasions); they make the record state its sources and the maps accurately, and none moves research to excuse a drifted implementation"
+   "why": "Filing a found row is FR-006. Correction owed before any wave works it: the row carries no flag, yet its field-spur half runs against the GM's ruling of 2026-10-04 (feature 320: the field way is not placed before the homesteads) and 2026-10-02 (lanes after houses; planned/paved roads excepted). Adjudicate the two halves separately: the road in from outside may fall within the GM's planned-road exception; the spur to the field is the case the GM ruled out. Flag it deviation-tempting with those rulings and send the spur half to the GM at the feature's end or to the exception path."
   },
   {
-   "id": "claim: sacred complex cap",
-   "summary": "MISLABELED 'whole sacred complex held to ~2/3 of the residence' relabeled GUESS on 0116's ordering",
+   "id": "W48-10 occasions none",
+   "summary": "no review occasion: the five hamlets regenerated byte-identical",
    "class": "within",
-   "why": "impl-drift said MISLABELED: FR-003 E0, the claim alone"
+   "why": "Feature 294's occasions; nothing placed or drawn moved (pool unchanged in the diff)."
   },
   {
-   "id": "claim: conifer-led lesser share",
-   "summary": "MISLABELED LESSER_ROLL_SHARE claim made an unpointed GUESS",
+   "id": "W48-11 verification batched",
+   "summary": "gate and timing pair at batch 2's close; impl-drift and spec-fidelity per wave",
    "class": "within",
-   "why": "MISLABELED, one of the two fixes impl-drift offered: E0"
+   "why": "GM's ruling 2026-10-08 in Decisions Recorded."
   },
   {
-   "id": "claim: lesser crown over an earlier conifer",
-   "summary": "MISLABELED GUESS-on-0080 claim relabeled CONVENTION (the conifer reads on top)",
+   "id": "W48-12 T122a tiers for wave 47's found rows",
+   "summary": "sanctuary knob E3; hall band and innermost arch class E4 page edits on the exception path; holes() E0 docstring; _crossed two-way gap filed E2",
    "class": "within",
-   "why": "MISLABELED, the claim alone (E0); dropping a painted-over crown is a drawing choice, and T121's impl-drift re-check judges the label"
-  },
-  {
-   "id": "claim: W19 run break",
-   "summary": "the UNCLAIMED exemption in BeltReading.holes claimed as a GUESS",
-   "class": "within",
-   "why": "an UNCLAIMED unit gets its claim (E0); T121 re-checks it"
-  },
-  {
-   "id": "belt: page edge not judged",
-   "summary": "belt_law.py: a hole is excused only on the stretch the page cuts (self.cut: bins with off-page crowns or where the band leaves the page); the 2 r margin at the frame now excuses only the depth measure; claim restated citing 0072's drawing page; a test red on the old code; hamlets byte-identical",
-   "class": "within",
-   "why": "round 1's item resolved by its first option, the code fixed: holes() now tests self.cut, so a break a reader can see within 2 r of the frame is judged (0072: 'A break in the planting that a reader can see is still a hole'; 'holes are looked for only inside the page'); the depth margin kept rests on 0072's 'nothing beyond it is counted against the map' (the frame clips the depth), so it narrows nothing 0072 asks to be judged"
-  },
-  {
-   "id": "sanctuary bay knob filed",
-   "summary": "the Sacred features re-check's new DRIFTED (sanctuary bays 1/2/3 as a rolled knob) filed in found-wave47 for ranking",
-   "class": "within",
-   "why": "a found row ranked and taken in its turn (FR-001, FR-006)"
+   "why": "Fresh-reader tiering by work per FR-003; page edits stay on the FR-004 exception path, not executed here; the E0 docstring change is in the diff."
   }
  ],
  "verdict": "CLEAR"

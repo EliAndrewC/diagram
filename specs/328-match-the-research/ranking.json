@@ -10875,7 +10875,7 @@
   "found": "wave 7 re-check (tiered by its work at T29a)",
   "tier_as_ranked": "E1",
   "moved": "T29a (amendment 7): tiered by its work - _near_corridor (settlement/houses.py line 146) takes a bare center point and is called from eight sites in six modules (houses, civic, rolling/fit, yards, gardens, groves, byres), each of which must pass its footprint - a change across modules, not the constant alone.",
-  "wave": "",
+  "wave": "48",
   "scope": "kept"
  },
  {
@@ -11346,7 +11346,7 @@
   "found": "wave 9 re-check (tiered by its work at T38b)",
   "tier_as_ranked": "E3",
   "moved": "T38b: tiered by its work - the drift lives in what a lane's clearance means (center vs edge), a corridor test shared by the five modules that read LANE_CLEARANCE, not in one literal here.",
-  "wave": "",
+  "wave": "48",
   "scope": "kept"
  },
  {
@@ -11380,7 +11380,7 @@
   "found": "wave 7 re-check (tiered by its work at T29a)",
   "tier_as_ranked": "E1",
   "moved": "T29a (amendment 7): tiered by its work - carry_on (bund.py line 360) only passes LANE_CLEARANCE, so it cannot be IN-STEP until the edge-based corridor (several modules) lands; no code of its own changes.",
-  "wave": "",
+  "wave": "48",
   "scope": "kept"
  },
  {
@@ -11619,7 +11619,7 @@
    "l7r/diagram/hamletgen/driver.py"
   ],
   "after": [],
-  "flag": "",
+  "flag": "deviation-tempting: the spur half runs against the GM's rulings of 2026-10-04 (feature 320: the field way is not placed before the homesteads) and 2026-10-02 (lanes come after houses; planned or paved roads excepted) - the road half may fall in the planned-road exception; the spur half goes to the GM at the feature's end or the exception path, never built as asked",
   "found": "wave 48 impl-drift round 1",
   "tier_as_ranked": "E3",
   "wave": "",
