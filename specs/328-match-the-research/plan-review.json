@@ -1,6 +1,6 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "91f8aaf50e6a84a0d62671d78989037097519b9047f003d985551cbc623324a8",
+ "plan_sha256": "5897c7a905010e5321bf4df5f9e230411113671bcfd1b7e435e81476faf1aefd",
  "reviewed": "2026-10-08",
  "declared": "spec-fidelity",
  "decisions": [
@@ -8,61 +8,61 @@
    "id": "W48-1 corner rule + LANE_CLEARANCE 7",
    "summary": "every building corner max(half-width + TREAD_WALL_FT, 7 ft) off a lane's middle; LANE_CLEARANCE 40 -> 7",
    "class": "within",
-   "why": "Round 1's ruling stands; nothing in this diff touches it beyond a ruff reformat of _on_a_tread's return."
+   "why": "Earlier rulings stand; untouched by this diff."
   },
   {
-   "id": "W48-2 dependent corridor rows closed (round 1 correction 1)",
-   "summary": "the rows waiting on the corridor row close with it",
+   "id": "W48-2 dependent corridor rows closed",
+   "summary": "rows 706, 736, 738 and the skeleton arm's corridor close with the corridor row",
    "class": "within",
-   "why": "CONFIRMED by key: audit/waves.json and ranking.json's wave column now carry '48' for LANE_CLEARANCE#fronting lane's corridor (rank 706), bund.py a_way_onto_the_bund#field path's corridor (736), carry_on#stepped spur's corridor (738) and _lay_skeleton#skeleton arm's corridor (now rank 755 after the scope re-run). The plan and tasks still say '754' for the skeleton arm's corridor - a stale number, the key correct; worth one word when the plan is next edited."
+   "why": "Round 1's note CONFIRMED: plan.md and tasks.md no longer say '754'; the skeleton arm's corridor is named by what it is (its key carries wave 48 in waves.json/ranking.json, confirmed round 1)."
   },
   {
    "id": "W48-3 skeleton arm off the crop at its tread's edge",
-   "summary": "arm clipped SKELETON_ARM_WIDTH/2 off the field and dry plots (row 505)",
+   "summary": "row 505",
    "class": "within",
-   "why": "Round 1's ruling stands."
+   "why": "Ruling stands."
   },
   {
-   "id": "W48-4 margins for wet ground and water (round 1 correction 3)",
-   "summary": "toe band and marsh 20 px, water 14 px, UNRESEARCHED",
+   "id": "W48-4 margins for wet ground and water",
+   "summary": "20 px toe band/marsh, 14 px water, UNRESEARCHED",
    "class": "within",
-   "why": "CONFIRMED: web.py's claim now reads '20 px off the toe band and the marsh, 14 px off the drawn water (clip_to_clear's line margin)'."
+   "why": "Confirmed round 1."
   },
   {
    "id": "W48-5 arm over the brook at a ford",
-   "summary": "an arm crossing the brook goes by the shortest-walk ford, square (row 504)",
+   "summary": "row 504",
    "class": "within",
-   "why": "Round 1's ruling stands."
+   "why": "Ruling stands."
   },
   {
    "id": "W48-6 SKELETON_ARM_WIDTH",
-   "summary": "the 5 ft named as a constant",
+   "summary": "the 5 ft named",
    "class": "within",
    "why": "No value change."
   },
   {
-   "id": "W48-7 7 ft claim split (round 1 correction 2)",
-   "summary": "0246 the source of the 7 ft figure; a building's corners held to it a GUESS",
+   "id": "W48-7 7 ft claim split",
+   "summary": "0246 the figure; corners a GUESS",
    "class": "within",
-   "why": "CONFIRMED: houses._on_a_tread's claim now cites 0246 for LANE_MIDDLE_CLEAR_FT, 'the 7 ft a lane's middle keeps off a garden fence', and labels the corners-held-to-it extension GUESS; it no longer says this function holds a garden's fence."
+   "why": "Confirmed round 1."
   },
   {
    "id": "W48-8 row 474 held",
-   "summary": "the fixture-quota row held as the GM's question",
+   "summary": "the GM's question",
    "class": "within",
-   "why": "Round 1's ruling stands."
+   "why": "Ruling stands."
   },
   {
-   "id": "W48-9 row village road order filed E3 (round 1 correction 4)",
-   "summary": "found row: a row village's road and field spur before the houses (0031)",
+   "id": "W48-9 row village road order filed E3",
+   "summary": "flagged deviation-tempting",
    "class": "within",
-   "why": "CONFIRMED: found-wave48.jsonl and ranking.json carry the flag 'deviation-tempting', naming the GM's rulings of 2026-10-04 (feature 320) and 2026-10-02, the road half possibly in the planned-road exception, the spur half to the GM or the exception path, never built as asked."
+   "why": "Confirmed round 1."
   },
   {
    "id": "W48-10 occasions none",
    "summary": "five hamlets byte-identical",
    "class": "within",
-   "why": "Round 1's ruling stands."
+   "why": "Ruling stands."
   },
   {
    "id": "W48-11 verification batched",
@@ -71,72 +71,90 @@
    "why": "GM 2026-10-08."
   },
   {
-   "id": "W48-12 T122a tiers for wave 47's found rows",
+   "id": "W48-12 T122a tiers",
    "summary": "tiers by work per FR-003",
    "class": "within",
-   "why": "Round 1's ruling stands."
+   "why": "Ruling stands."
   },
   {
    "id": "W49-1 rows 507, 509, 510 DEFERRED on measure",
-   "summary": "dwellings_shown's town branch, the gate complex's mount and the castle towers' matrix entry added to DEFERRED_ON_MEASURE",
+   "summary": "town branch, gate complex mount, castle towers entry",
    "class": "within",
-   "why": "The GM's amendment 8 scope is 'code actually executed by magistracies, country shrines, and scripted hamlets'. Measured 2026-10-08 by this review: no kept map's manifest or gen-cache record carries gate_structs, inspection_stations or castle/castle_towers (the magistracy sheets' 'gatehouse/main gate/side gate' are compound gates, not 0147's wall gate complex; the 'castle' hits in two meta.json files are research-page reads), and every kept map is a hamlet, magistracy or shrine sheet, so the town/city branch of dwellings_shown never runs. Row 507 also carries a deviation-tempting flag against the GM's 2026-08-29 ruling, so deferring it is doubly in scope."
+   "why": "Round 1's measure stands (amendment 8's scope: code executed by magistracies, country shrines and scripted hamlets)."
   },
   {
    "id": "W49-2 the caption key removed whole (row 508)",
-   "summary": "placer's keyed(), Placement.keyed, the hamlet's caption key and card/band, the hand sheet's key band, WEIGHT_KEY, KEY_MARK_EM, board_seat's key-mark pre-check; a caption with no free seat goes down where it covers the least",
+   "summary": "no key anywhere; a caption with no free seat goes down where it covers the least",
    "class": "within",
-   "why": "The literal fix: 0242 'On a sheet with no free ground at all, the caption still goes down, where it covers the least'; 0241 'There is no key box'. The MODE 1 check ruled keeping the key for an all-hard caption NOT LEGITIMATE. Measured by the session: no kept map reached the key, five hamlets byte-identical."
+   "why": "0242 'the caption still goes down, where it covers the least'; 0241 'There is no key box'; the MODE 1 check ruled keeping the key NOT LEGITIMATE."
   },
   {
-   "id": "W49-3 no seat in the frame: the first seat past the frame's edge",
-   "summary": "placer.place: a candidate within the hug but outside the frame is remembered, and when no in-frame candidate exists at all the caption is drawn at the first such seat, past the picture's edge",
+   "id": "W49-3 no seat in the frame: the first seat beside it moved inward",
+   "summary": "placer.place: when no candidate out to the hug lies inside the frame, the first seat beside the subject is shifted by the least that brings it inside the frame (moved_inward)",
+   "class": "within",
+   "why": "Round 1's NOT LEGITIMATE CONFIRMED CORRECTED: the past-the-frame seat is gone; wherever the frame can hold the caption on an axis the caption lands inside it, so 0242's 'A place that would run off the edge of the picture is never taken' and 'never left off' both hold, which is the page's purpose ('A clipped caption cannot be read'). The moved place is not one of 0242's ordered places (none of which can be taken here), so it does not narrow 'the place that covers the least'; it stays closer to the subject than a leader past the hug would, and its claim is labeled UNRESEARCHED rather than cited to 0241 as round 1 asked. Round 1 named searching past the hug as one legitimate route, not the only one; the inward move reaches the same end (never clipped where the frame can hold it)."
+  },
+  {
+   "id": "W49-3a frame narrower than the caption: centered, clipped",
+   "summary": "on an axis the frame is narrower than the caption, moved_inward centers it on the frame",
    "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "This is an exception to 0242's own rule, 'A place that would run off the edge of the picture is never taken. A clipped caption cannot be read' and its spec paragraph 'a place off the edge of the picture is never taken' - the same docstring still claims 'never clipped - a seat leaving the picture is never a candidate', now false on this branch, and test_the_frame_is_never_left now asserts the frame is left. The general rule is not physically impossible here: the trigger is 'no seat within the hug (HUG_PX, labeled CONVENTION) lies inside the frame', and 0242 itself names the way on - 'beyond that the caption is tied to its feature by a thin leader line', with no researched limit - so a leader seat past the hug, inside the frame, honors both 'never left off' and 'never off the edge'. The exception breaks a researched rule to keep an unresearched convention, the reverse of FR-004's direction. It also defeats 'never left off''s own purpose: a clipped caption cannot be read, which is the page's reason. And the claim cites 0241 ('there is no key box') for the past-the-frame seat, which 0241 does not say. What would be legitimate: search on past the hug (on a leader) inside the frame before leaving it, and leave the frame only where no seat of the caption's size fits inside the frame at all (the 10 x 10 px frame of the restated test, physically impossible), that residue labeled as such in the claim rather than cited to 0241."
+   "ruling": "LEGITIMATE",
+   "why": "The one case round 1 named as physically impossible: no place of the caption's size fits inside a frame narrower than it, so 'never clipped' cannot be honored and 'never left off' still is. Labeled in the claim (UNRESEARCHED, 'centered where the frame is narrower') and pinned by test_the_frame_is_never_left's 10 x 10 frame and the new unit test."
   },
   {
-   "id": "W49-4 six tests restated to the page",
-   "summary": "never-dropped, soft-before-hard, frame, fallbacks, dark-ink hand sheet, caption, board verge/flood/facing cases",
+   "id": "W49-4 tests restated to the page",
+   "summary": "the six key-pinning tests restated; test_the_frame_is_never_left; new test_a_seat_past_the_frame_is_moved_inward_until_it_fits",
    "class": "within",
-   "why": "Tests that enforce 0242's 'goes down where it covers the least' and 0241's 'no key box' serve the request. Except test_the_frame_is_never_left, which follows W49-3: it must keep its name's meaning once W49-3 is corrected (the 10 x 10 frame case may pin the physically-impossible residue; a frame that can hold the caption must not be left)."
+   "why": "Round 1's exception CONFIRMED CORRECTED: test_the_frame_is_never_left keeps its meaning (a 510-wide frame takes 'left', not a seat leaving it; only the 10 x 10 impossible frame reaches the fallback, now centered), and the new test pins both branches of moved_inward. Tests that enforce the request serve it."
   },
   {
    "id": "W49-5 board's second step without the key mark",
-   "summary": "terminal_caption no longer pre-checks a key mark; a board with no clean caption now stands on its 6 ft verge with its caption off the road",
+   "summary": "the board on its 6 ft verge with its caption off the road",
    "class": "within",
-   "why": "A direct consequence of removing the key; the board on its verge is 0190's siting (KOSATSUBA_VERGE_FT)."
+   "why": "Consequence of removing the key; 0190's verge."
   },
   {
-   "id": "W49-6 row 511: {kosatsuba, lanes} permission dropped",
-   "summary": "the overlap matrix no longer lets the notice board overlap a lane",
+   "id": "W49-6 row 511: {kosatsuba, lanes} dropped",
+   "summary": "the board may not overlap a lane",
    "class": "within",
-   "why": "Row 511's fix as ranked (0190: beside, not on, the lane). Whether any kept map now trips the overlap check is the batch-close gate's to show."
+   "why": "0190: beside, not on, the lane."
   },
   {
    "id": "W49-7 board caption's face mismatch filed E2",
-   "summary": "the board's caption proved against the 7 x 3 ft search face, not the 16 x 6 ft board drawn - filed in found-wave49, not fixed this wave",
+   "summary": "proved against the 7 x 3 ft face, drawn 16 x 6 ft",
    "class": "within",
-   "why": "FR-006's found-row path, as every wave has used it. The defect predates the wave (every seat, free or not, is proved against the 7 x 3 face since feature 287); the key's removal exposed rather than caused it, and no kept map moved. It is ranked E2 and is taken in tier order."
+   "why": "FR-006 found-row path; predates the wave."
   },
   {
    "id": "W49-8 occasions none",
-   "summary": "no review occasion: manifests byte-identical, no kept sheet drew a key",
+   "summary": "manifests byte-identical",
    "class": "within",
-   "why": "Feature 294's occasions; nothing placed or drawn moved."
+   "why": "Feature 294's occasions."
   },
   {
-   "id": "W49-9 0072's drawing page trimmed under its cap",
-   "summary": "session comments tightened; the '38% conifer' as-built note restated as 'draws the conifer-led mix 48% conifer among its crowns (Kashima's cedar share)'",
+   "id": "W49-9 0072's drawing page trimmed; as-built note restated",
+   "summary": "the as-built comment now 'measured 2026-10-08 on the manifests' windbreak crowns: Inashiro's conifer-led belt 93 conifer to 28 broadleaf (77%); Kuwabata's and Sawada's mixed broadleaf, no conifer'",
    "class": "within",
-   "why": "Trimming session notes to keep a page under its size cap changes nothing a reader reads. Correction owed: the restated figure is not what is drawn. Measured 2026-10-08 by this review on the pool manifests' village_groves (role windbreak, 'crowns'): Inashiro's conifer_led belt draws 93 conifer to 28 broadleaf (77%); Kuwabata and Sawada roll mixed_broadleaf (no conifer). The 0.48 in groves.py applies to mix == 'windbreak' (the farmstead grove), not to the village belt's conifer_led form, whose conifers are _belt_ranks' rows plus LESSER_ROLL_SHARE lesser rolls. The note should state the measured share with its method and date, or drop the figure."
+   "why": "Round 1's correction CONFIRMED: the figure is the one this review measured in round 1 (93 to 28 on Inashiro's conifer_led belt; the other two roll mixed_broadleaf), with its date and method; the wrong '48% (Kashima's cedar share)' is gone. Session-note trimming changes nothing a reader reads."
   },
   {
    "id": "W49-10 verification batched",
    "summary": "impl-drift and spec-fidelity per wave; gate, pair and occasions at batch 2's close",
    "class": "within",
    "why": "GM 2026-10-08 (FR-005)."
+  },
+  {
+   "id": "W49-11 the moat's matrix entry split from the ways through the rampart",
+   "summary": "{wall, moat} given its own reason ('the moat lies against the rampart's foot') and its own claim, UNRESEARCHED, instead of riding on 0147/0179's 'through the rampart at its gate'",
+   "class": "within",
+   "why": "No behavior change (the pair stays permitted); it corrects a claim that cited the gate pages for a thing they do not say, which is the feature's own work (match claims to research). Labeled UNRESEARCHED, the honest label."
+  },
+  {
+   "id": "W49-12 board caption's way rule filed E4",
+   "summary": "terminal_caption refuses a caption crossing any way where 0242 lets one cross a lane; filed MISLABELED, not fixed this wave",
+   "class": "within",
+   "why": "FR-006's found-row path. Its fix text offers recording the board's stricter rule as a deviation as one option: when the row is taken, that option is an exception to 0242 and goes to a MODE 1 check first; filing it decides nothing."
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }

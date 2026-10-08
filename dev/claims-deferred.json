@@ -844,6 +844,7 @@
   "l7r/diagram/interactive/place.py::dwellings_shown#town and city count no farmhouses",
   "l7r/diagram/overlap/taxonomy.py::_FIXTURE_MOUNTS#gate complex and inspection post",
   "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#castle towers on the rampart",
+  "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#moat against the rampart",
   "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#ways and water through the rampart",
   "l7r/diagram/settlement/_knobs.py::<module>#bamboo forms",
   "l7r/diagram/settlement/_knobs.py::<module>#caravan_inn_form forms",

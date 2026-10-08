@@ -14124,7 +14124,7 @@
   "found": "wave 49 impl-drift round 1",
   "tier_as_ranked": "E4",
   "wave": "",
-  "scope": "kept"
+  "scope": "deferred"
  },
  {
   "key": "l7r/diagram/settlement/structures/fixtures/boards.py::BoardsMixin.board_record#marker floor",

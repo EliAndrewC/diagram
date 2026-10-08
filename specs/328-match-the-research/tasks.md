@@ -1599,8 +1599,9 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
 - Round 1 (impl-drift): the 7 ft split - 0246's figure for a garden's fence, a GUESS for every other footprint; the field
   spur's 5 ft width claimed; found row: a row village's road and field spur laid before the houses (0031), E3.
 
-- [ ] T123 rows 502-505 (FR-003, FR-004)
+- [x] T123 rows 502-505 (FR-003, FR-004)
       research: rendering
+      verify: DONE. rows 502-505 (every corner 7 ft off a lane's middle and LANE_CLEARANCE 0246's 7 ft, closing 706, 736, 738 and the skeleton arm's corridor; the skeleton's crop margin and its ford); tests red on the old code; the five hamlets byte-identical; impl-drift answered r1-r5; spec-fidelity plan CLEAR with its four corrections, confirmed r2
 - [ ] T124 the claims re-checked by `impl-drift`; the close at batch 2's (FR-005, FR-006)
       research: rendering
 

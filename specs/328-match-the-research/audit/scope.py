@@ -173,6 +173,7 @@ DEFERRED_ON_MEASURE = {
     # the rampart's matrix entries: no kept map draws a town or city wall (`wall`), so no way or watercourse is ever asked
     # through one (wave 49's measure, 2026-10-08)
     "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#ways and water through the rampart",
+    "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#moat against the rampart",
 }
 
 
