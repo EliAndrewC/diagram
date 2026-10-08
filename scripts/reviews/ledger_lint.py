@@ -77,7 +77,7 @@ def problems(text: str) -> list[str]:
 
 def main(argv: Sequence[str] | None = None) -> int:
     args = list(sys.argv[1:] if argv is None else argv)
-    ledger = Path(args[0]) if args else Path(__file__).resolve().parents[2] / "docs" / "review-ledger.md"
+    ledger = Path(args[0]) if args else Path(__file__).resolve().parents[2] / "dev" / "review-ledger.md"
     found = problems(ledger.read_text(encoding="utf-8"))
     for p in found:
         print(p)

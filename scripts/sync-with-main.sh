@@ -215,7 +215,7 @@ seed_roll_cache() {
 refuse_unrelated_history() {
   git rev-parse -q --verify HEAD >/dev/null && git rev-parse -q --verify origin/main >/dev/null || return 0
   git merge-base HEAD origin/main >/dev/null 2>&1 && return 0
-  die "this clone's history shares no commit with main's - main's history was rewritten (feature 301's scrub, docs/history-rewrite-301.md). A pull would merge the old history back in. Re-clone it: git clone $MAIN $ROOT.new, cherry-pick any unpushed commits (git log --oneline HEAD --not --remotes), then replace $ROOT"
+  die "this clone's history shares no commit with main's - main's history was rewritten (feature 301's scrub, dev/history-rewrite-301.md). A pull would merge the old history back in. Re-clone it: git clone $MAIN $ROOT.new, cherry-pick any unpushed commits (git log --oneline HEAD --not --remotes), then replace $ROOT"
 }
 
 sync_in() { # [--mirror-only] [--background-render]

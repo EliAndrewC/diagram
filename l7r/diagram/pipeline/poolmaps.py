@@ -23,7 +23,7 @@ their own idea of what the pool contains - this module is so they cannot drift a
 
 SINCE FEATURE 161 THIS MODULE ALSO OWNS THE WALK, not just the classification, and for the same
 reason. The pool is two trees of `<tree>/<tier>/<map>/<map>.gen.py`: `pool/` for what is LIVE
-(scripted settlements + Mode A compound plans) and `legacy-hand-authored-pool/` for the 18 FROZEN
+(scripted settlements + Mode A compound plans) and `legacy-hand-authored-pool/` for the 19 FROZEN
 hand-authored exhibits. Ten consumers used to hardcode the old two-level shape independently - four
 globs, an `os.listdir`, a `$(wildcard)`, a subprocess grep, a literal default path - and they drifted
 exactly as this module's first paragraph predicted: `mapcheck._live_gens` records that Kuwabata was
@@ -78,6 +78,9 @@ LEGACY_FROZEN_GENS = frozenset(
         "minami.gen.py",
         "nagahara.gen.py",
         "tango.gen.py",
+        # the domain capital: a draft that never passed the gate (no housing fabric), its hand pass dropped by the
+        # GM on 2026-10-07 and kept "as an exhibit"; moved here from wip/ by the GM's say-so, 2026-10-08
+        "shiro-daika.gen.py",
     }
 )
 

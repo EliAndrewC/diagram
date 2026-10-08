@@ -371,7 +371,7 @@ have confirmed the wrong belief.
 
 ## Twelve lessons from the hamlet backlog, kept when its closed entries were deleted (future-work audit, 2026-10-07)
 
-Each was learned on an entry the audit found closed; the entry is gone (a line in `future-work/closed.md` says what
+Each was learned on an entry the audit found closed; the entry is gone (git history says what
 closed it), the lesson is not.
 
 **Measuring the wrong thing**

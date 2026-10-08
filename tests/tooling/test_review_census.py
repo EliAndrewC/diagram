@@ -42,10 +42,10 @@ def test_the_old_rows_data_and_the_measured_rows_are_totalled_per_check() -> Non
 
 def test_a_short_measured_row_is_skipped_and_main_reads_the_clone(tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
     assert rc.tally([], LEDGER + "| 2026-10-04 | glyph-check | short |\n")["glyph-check"]["runs"] == 2
-    (tmp_path / "docs").mkdir()
-    (tmp_path / "docs" / "review-ledger.md").write_text(LEDGER)
+    (tmp_path / "dev").mkdir()
+    (tmp_path / "dev" / "review-ledger.md").write_text(LEDGER)
     assert rc.main(["--root", str(tmp_path)]) == 0
     assert "glyph-check | 2 | 1" in capsys.readouterr().out
-    (tmp_path / "docs" / "review-ledger-r0.json").write_text(json.dumps(R0))
+    (tmp_path / "dev" / "review-ledger-r0.json").write_text(json.dumps(R0))
     rc.main(["--root", str(tmp_path)])
     assert "settlement-review | 5" in capsys.readouterr().out

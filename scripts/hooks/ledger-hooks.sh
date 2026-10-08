@@ -56,7 +56,7 @@ for i, w in enumerate(words):
 [ -n "$ROOT" ] || exit 0
 [ "$ROOT" = "." ] && ROOT="$PWD"
 ROOT=$(git -C "$ROOT" rev-parse --show-toplevel 2>/dev/null) || exit 0
-LEDGER="docs/review-ledger.md"
+LEDGER="dev/review-ledger.md"
 [ -f "$ROOT/$LEDGER" ] || exit 0
 STAGED=$(git -C "$ROOT" diff --cached --name-only 2>/dev/null)
 case " $CMD " in *" -a "*|*" -am "*|*" --all "*) STAGED="$STAGED $(git -C "$ROOT" diff --name-only 2>/dev/null)" ;; esac

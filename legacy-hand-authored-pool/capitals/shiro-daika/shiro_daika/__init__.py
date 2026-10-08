@@ -71,7 +71,7 @@ sys.path.insert(0, _D)
 # `isort: off` IS LOAD-BEARING. ruff's I rule sorts an import block alphabetically, and it did:
 # the first cut of this split shipped `castle, civic, fields, frame, housing, trades, wharf`,
 # which ran `fields` - and so `s.finish()` - fourth of seven. Nothing caught it, because no test
-# rolls a wip map and the only symptom is a wrong picture. The chained imports would now defeat
+# rolls a frozen exhibit and the only symptom is a wrong picture. The chained imports would now defeat
 # a re-sort on their own; this keeps the list itself readable in the order it actually runs.
 # isort: off
 from . import frame as frame  # noqa: E402,F401

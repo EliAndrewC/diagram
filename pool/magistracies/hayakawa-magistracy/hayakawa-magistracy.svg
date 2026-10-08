@@ -295,7 +295,7 @@
     <rect x="160" y="290" width="288" height="8" fill="#E8D2A8" stroke="#5A3F1E" stroke-width="1.5" data-kind="engawa"/>
     <line x1="304" y1="214" x2="304" y2="290" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
     <!-- the family block's inner entrance (uchigenkan) on its south face, onto the service ground east of the kitchen
-         corridor: the household's own way in, apart from the guests' roji (docs/buildings/programs.md: no sealed boxes).
+         corridor: the household's own way in, apart from the guests' roji (docs/building-programs.md: no sealed boxes).
          Feature 267 pass 3: it was called the katteguchi here, wrongly - the katteguchi is the KITCHEN's door (research
          buildings 370), drawn on the kitchen's north face below. -->
     <rect x="284" y="298" width="24" height="6" fill="#B89868" stroke="#6B4F2A" stroke-width="0.8" data-kind="door"/>

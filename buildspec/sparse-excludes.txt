@@ -38,11 +38,6 @@
 # plus a grep for hardcoded `legacy-hand-authored-pool/**.png|svg` literals, which finds only
 # fixture-built pages. Neither pattern below is reachable from any of them.
 
-# 190.8 MB, 12 files of 12-17 MB each. `render_cache.engine_fingerprint` and `gencache` both PRUNE
-# `wip/` from their walks; no test in the tree names a `wip/` page. The `.py` under `wip/` STAY -
-# `ruff` and `check-file-scale.py` scan them, and `wip/shiro-daika.gen.py` is 1,592 lines.
-/wip/*.html
-
 # 78.4 MB (73.2 `.html` + 5.2 `.png`). A documentation artifact written by
 # `l7r/diagram/tools/placement_stages.py` and read by a human through `dev/placement.md`. The tool is
 # `make placement-stages`, which no gate phase runs; no test names the output directory.

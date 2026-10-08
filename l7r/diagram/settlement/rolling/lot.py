@@ -2,7 +2,7 @@
 
 ONE LOT PER HOUSEHOLD, KEYED ON SEAT ORDER. The size of a farmhouse and whether it keeps a kura or a beast were each a
 positional roll (`_hjit` of the seat), so they aliased along a row: a row of seats at one pitch drew one kura in 12
-against the record's three in ten ("the kura roll under-delivers 2.2x", future-work/closed.md). A share
+against the record's three in ten ("the kura roll under-delivers 2.2x", feature 287 H45). A share
 is a COUNT here instead - a quota by ordinal: household `k`, taken in a seed-shuffled order, carries a part exactly when
 `floor((j + 1) * p + 0.5) > floor(j * p + 0.5)` for its place `j` in that order, so `n` seated households carry exactly
 `round(n * p)` whatever `n` is. The size is a stratified ladder over the researched factor range, rung `k` to household

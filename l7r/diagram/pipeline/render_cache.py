@@ -87,7 +87,7 @@ def engine_fingerprint(skill_dir: str = SKILL_DIR) -> str:
     parts: list[bytes] = []
     for dirpath, dirnames, filenames in os.walk(os.path.join(skill_dir, "l7r")):  # the engine is under l7r/ (feature 329; see gencache.engine_files)
         # PRUNED BY NAME, so a NEW TOP-LEVEL TREE MUST BE ADDED HERE (feature 161). The legacy
-        # tree is map sources, not engine sources: if its 18 frozen gens entered this
+        # tree is map sources, not engine sources: if its 19 frozen gens entered this
         # fingerprint, every live map's stamp would go stale at once and any future edit to a
         # frozen exhibit would invalidate the whole live pool - backwards, since the freeze
         # exists so those files cost nothing. Nothing would go red; both outcomes look exactly

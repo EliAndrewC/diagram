@@ -2,7 +2,7 @@
 
 **Subject**: the shrine of Hoshigaoka village district - the seat of the district's country monk - Otsuki, of the Order of Bishamon, whose record is the Obsidian Portal character of that name - who lives here, keeps the district's registers, and performs the villagers' rites. Hoshigaoka is the reference village of the water-first family (`legacy-hand-authored-pool/villages/hoshigaoka/`), whose district names the GM dictated on 2026-08-29; on its village map the shrine stands apart from the houses at the south-east water-mouth entrance on the grazing back-slope, and this sheet is that place at 3 px = 1 ft. The exemplar of the country-shrine program (feature 254), drawn to the village map (feature 257).
 
-**Program type**: Country shrine (a village district's shrine) - see `docs/buildings/programs.md`.
+**Program type**: Country shrine (a village district's shrine) - see `docs/building-programs.md`.
 
 **Form**: one roof
 **Grove form**: behind and sides

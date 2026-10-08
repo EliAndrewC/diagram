@@ -64,7 +64,7 @@ The forms the draft takes where the research gives more than one (feature 267 ou
   sand are left to the hand refinement.
 - **R34 striking posts**: two upright posts as location markers (the ~4.5 ft standing timber); the practice-weapon rack
   at the ground's edge is a GUESS.
-- **Staff housing**: option (a) of docs/buildings/programs.md knob 5 - everyone lives inside the walls, the platoon in the
+- **Staff housing**: option (a) of docs/building-programs.md knob 5 - everyone lives inside the walls, the platoon in the
   barracks - WITH A DEVIATION from its letter ("everyone in the barracks and residence wing"): the senior retainers
   keep a long-house of their own in the outer court, because docs/buildings.md ("Only the lord's household lives here")
   gives senior retainers separate structures, never bays of the lord's wing. The KARO lodges in a bay of that staff
@@ -84,9 +84,9 @@ The forms the draft takes where the research gives more than one (feature 267 ou
   left ~62 x 66 ft of bare inner court east of it. Its size is a GUESS. A ~69 x 36 ft band of inner court north of
   it, east of the house (the alley's east end and the shrine's corner), stays open ground.
 - **Compound shrine**: a modest shrine, 18 x 14 ft (a GUESS in the 40-1,150 sq ft band) - the hall-shrine ceiling of
-  ~36 x 30 ft is Ochiba's particular, not the generic post's (docs/buildings/programs.md: "The shrine is universal
+  ~36 x 30 ft is Ochiba's particular, not the generic post's (docs/building-programs.md: "The shrine is universal
   equipment ... Scale and dedication are the per-manor particular").
-- **Middle gate**: beside the office hall's east end, not behind it (docs/buildings/programs.md puts it customarily on the
+- **Middle gate**: beside the office hall's east end, not behind it (docs/building-programs.md puts it customarily on the
   main axis behind the hall, the hall as the privacy baffle). Here the hall backs the divider at 1.5 ft with no alley
   behind it, and it stands west of the main axis (the tax archive takes the west end), so the placer opens the gate at
   the first stretch of divider no building backs (`compound_parts._middle_gate`); the hall still screens the house

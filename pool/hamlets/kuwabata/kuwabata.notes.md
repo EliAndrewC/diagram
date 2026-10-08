@@ -43,7 +43,7 @@ DIRECTION is not invented: it is the bearing of this map's own connector track w
 
 Seed 21 and 16 households are the hand-authored map's. `pond_layout="mosaic"` pins the form the GM
 saw on it (the Pearl-delta accreted mosaic; the knob also rolls the surveyed grid - one map per
-value is owed, the grid one at `wip/kuwabata-grid`). Everything else is derived: the grid fitted
+value is owed, the grid one in a scratch run, not kept). Everything else is derived: the grid fitted
 to the acreage (`fit_polder`, 160 ft module, merge-heavy parcels - `POLDER_FABRIC`), the header
 reservoir at the ring's head, the perimeter dike gapped at its sluices, the ponds and their banks
 (`apply_land_use(eligible="all")`, `DIKEPOND_CONVERSION` 0.9), the village on the dry flank, the
@@ -80,7 +80,7 @@ See `research/questions/0023-the-dike-pond-hamlet-its-houses-boats-and-manure-ja
 same ink); a sluice gate at each of the two dike cuts; duck pens and pig sties on the ponds
 nearest the houses (pens first); the dike crop pinned MULBERRY (the name), the leftover form
 rolled VEGETABLES (the three unconverted parcels draw as tilled rows). The knob maps for the
-other values are under `wip/kuwabata-*`.
+other values were scratch runs, not kept.
 
 ## Review log
 
@@ -160,7 +160,7 @@ other values are under `wip/kuwabata-*`.
   was wrong in that one field; recorded here rather than rewritten, since the history is the record.
 - 2026-08-28 settlement-review DELTA of T50-T53: needs-work -> fixed (the NW ring corner's 1 ft
   seam - toes now overshoot 3 ft into their trunk; lane 9's hook - the final junction pass ends a
-  lane where it first meets the way). See docs/review-ledger.md.
+  lane where it first meets the way). See dev/review-ledger.md.
 - 2026-08-28 the GM's review of the map (T50-T53): two farmhouses and a garden in the reed
   fringe -> the fringe is hard ground (`wet_polys`) AND the cluster seat scores wet ground, so the
   cluster stands east of the reeds instead of losing two houses to far seats; the inlet stub reaches
@@ -282,7 +282,7 @@ strings, since the ink did not move) and returned **needs-work**, catching two d
 not see: the perimeter dike's willow and mulberry still flattening to gold when lit (36,843 px), and the
 pond sluice's widened hit box winning only 42.4% of its own area because 49 of the 52 sluices are drawn
 on a field ditch whose group came later. Both fixed and re-measured (sluice 88.6%, worst 75.8%); the
-full row, including what was recorded rather than fixed, is in `docs/review-ledger.md`.
+full row, including what was recorded rather than fixed, is in `dev/review-ledger.md`.
 
 **Round 2 of that review** verified both fixes on its own measurements and caught the sluice fix
 breaking the rule it was allowed under: the lifted box took 88.4% of a pig sty's own footprint and

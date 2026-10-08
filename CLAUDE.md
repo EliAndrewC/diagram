@@ -40,7 +40,7 @@ Enforced by `scripts/hooks/house-style-hooks.sh`, which corrects the text rather
   spellings.
 - "People" has caste meaning: only samurai are "people". In demographic, statistical or analytical
   writing use humans / inhabitants / population / a caste term. `people` is fine for samurai and in
-  narrative, lore, dialogue, vow and folktale voice. Full rule: `docs/l7r-style.md`.
+  narrative, lore, dialogue, vow and folktale voice. Full rule: `/host-l7r-repo/gm-assistant/docs/l7r-style.md` (gm-assistant's, the one copy).
 - "Domain", never "demesne"; silently fix it in any text you edit.
 - Gender-neutral office-holders: they / their / them for a generic daimyo, governor, magistrate,
   minister or samurai; named characters keep their own pronouns.
@@ -280,10 +280,10 @@ behavioral principles XII, XIV and XV.
 - `docs/migration-plan.md` - the standing plan for converting hand-authored maps to
   scripted generation; read it before drawing or scripting a settlement map, and update its status
   table when a conversion lands.
-- `.claude/agents/` - the review and verification agents; `docs/review-ledger.md` - every review pass.
+- `.claude/agents/` - the review and verification agents; `dev/review-ledger.md` - every review pass.
 - `docs/` - the on-demand references: `session-clones.md`, `spec-kit-and-reviews.md`,
-  `efficiency-tooling.md`, `guards.md`, `research-doctrine.md`, `iteration-loop.md`, `container.md`,
-  `l7r-style.md`.
+  `efficiency-tooling.md`, `guards.md`, `research-doctrine.md`, `iteration-loop.md`, `container.md`. The L7R style
+  guide is gm-assistant's `docs/l7r-style.md`, its one copy.
 - `specs/NNN-*/` - the features. There is deliberately no single active-plan pointer; current status
   is the highest-numbered spec, its `tasks.md` and `git log`. A path in a spec before 329 that starts with
   the old skill directory (`.claude/skills/` + the project's name) now drops that prefix (the specs are history and keep their words); the Markdown that

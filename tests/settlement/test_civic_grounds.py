@@ -457,7 +457,7 @@ def test_no_pre_split_civic_grounds_member_was_lost_in_the_move():
     # the frozenset without thinking, which is the reflex that lets a real subtraction through. What
     # must never happen is a pre-split member going MISSING: an addition is visible in review, a
     # subtraction is silent until whichever generator calls it happens to run - and for
-    # precinct_interior that is one wip/ map nobody runs by default.
+    # precinct_interior that is one frozen exhibit nobody runs by default.
     from l7r.diagram.settlement.civic_grounds import CivicGroundsMixin
 
     composed = set().union(*(_cg_own_members(c) for c in CivicGroundsMixin.__mro__))

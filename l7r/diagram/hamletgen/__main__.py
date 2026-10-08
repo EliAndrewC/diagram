@@ -1,4 +1,4 @@
-"""CLI entry: `python3 -m l7r.diagram.hamletgen --seed 4 --households 15 --out wip/x`, or `--batch 24`.
+"""CLI entry: `python3 -m l7r.diagram.hamletgen --seed 4 --households 15 --out /tmp/x`, or `--batch 24`.
 
 `main` itself stays in `driver.py` - consumers reach `hamletgen.main`, and a `__main__.py` is not
 imported by the package, so defining it here would put it out of their reach. Everything sits

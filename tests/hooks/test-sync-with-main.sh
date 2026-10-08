@@ -29,7 +29,7 @@ expect_out() { case "$OUT" in *"$1"*) : ;; *) echo "FAIL  output lacks '$1': $OU
 topology() { # $1 = name; builds $T/$1/{github.git,main,main/.clones/c}
   local d=$T/$1; rm -rf "$d"; mkdir -p "$d"
   git init -q --bare -b main "$d/github.git"
-  git init -q -b main "$d/seed"; ( cd "$d/seed" && mkdir -p scripts wip/x && echo base > f && echo '.clones/' > .gitignore && echo 'def a(): return 1' > wip/x/a.py && cp -r "$HERE/../../scripts/." scripts/ && git add -A && git commit -qm base && git push -q "$d/github.git" HEAD:main )
+  git init -q -b main "$d/seed"; ( cd "$d/seed" && mkdir -p scripts pool/x && echo base > f && echo '.clones/' > .gitignore && echo 'def a(): return 1' > pool/x/a.py && cp -r "$HERE/../../scripts/." scripts/ && git add -A && git commit -qm base && git push -q "$d/github.git" HEAD:main )
   git clone -q "$d/github.git" "$d/main"
   git -C "$d/main" config receive.denyCurrentBranch updateInstead
   mkdir -p "$d/main/.clones/.session-clones"
@@ -88,7 +88,7 @@ expect_out "route DIRECT"
 
 echo "5. GATED route, refused: nothing lands, the work stays in the clone"
 D=$(topology e)
-( cd "$D/main/.clones/c" && echo 'def a(): return 2' > wip/x/a.py && git add -A && git commit -qm engine ); stamp_hooks "$D"
+( cd "$D/main/.clones/c" && echo 'def a(): return 2' > pool/x/a.py && git add -A && git commit -qm engine ); stamp_hooks "$D"
 gh_before=$(git -C "$D/github.git" rev-parse main)
 OUT=$(CI_ROUTE=GATED CI_MERGE="false" syncmain "$D" push); check "gated route refused by ci-merge -> push fails" 1 $?
 [ "$(git -C "$D/github.git" rev-parse main)" = "$gh_before" ] && PASS=$((PASS+1)) || { echo "FAIL  something landed on GitHub main"; FAIL=$((FAIL+1)); }
@@ -96,7 +96,7 @@ expect_out "nothing landed"
 
 echo "6. GATED route, dispatched: the build lands the merge on GitHub main; the clone fast-forwards; mirror follows"
 D=$(topology f)
-( cd "$D/main/.clones/c" && echo 'def a(): return 3' > wip/x/a.py && git add -A && git commit -qm engine ); stamp_hooks "$D"
+( cd "$D/main/.clones/c" && echo 'def a(): return 3' > pool/x/a.py && git add -A && git commit -qm engine ); stamp_hooks "$D"
 # the "build": merges main into the mailbox commit and pushes the result to GitHub main
 BUILD="git -C $D/main/.clones/c push -q $D/github.git HEAD:main && echo DISPATCHED > $D/main/.clones/c/.git/ci-verdict"
 OUT=$(CI_ROUTE=GATED CI_MERGE="$BUILD" syncmain "$D" push); check "gated route dispatched" 0 $?
@@ -105,13 +105,13 @@ OUT=$(CI_ROUTE=GATED CI_MERGE="$BUILD" syncmain "$D" push); check "gated route d
 
 echo "7. GATED route, SKIP-VERIFIED: the clone pushes directly (a build already verified this tree)"
 D=$(topology g)
-( cd "$D/main/.clones/c" && echo 'def a(): return 4' > wip/x/a.py && git add -A && git commit -qm engine ); stamp_hooks "$D"
+( cd "$D/main/.clones/c" && echo 'def a(): return 4' > pool/x/a.py && git add -A && git commit -qm engine ); stamp_hooks "$D"
 OUT=$(CI_ROUTE=GATED CI_MERGE="echo SKIP-VERIFIED > $D/main/.clones/c/.git/ci-verdict" syncmain "$D" push); check "skip-verified pushes directly" 0 $?
 [ "$(git -C "$D/github.git" rev-parse main)" = "$(git -C "$D/main/.clones/c" rev-parse HEAD)" ] && PASS=$((PASS+1)) || { echo "FAIL  skip-verified did not land"; FAIL=$((FAIL+1)); }
 
 echo "7b. GATED-LOCAL route (remote off, feature 132): SKIP-VERIFIED pushes directly; a refusal keeps the work in the clone"
 D=$(topology gl)
-( cd "$D/main/.clones/c" && echo 'def a(): return 5' > wip/x/a.py && git add -A && git commit -qm engine ); stamp_hooks "$D"
+( cd "$D/main/.clones/c" && echo 'def a(): return 5' > pool/x/a.py && git add -A && git commit -qm engine ); stamp_hooks "$D"
 OUT=$(CI_ROUTE=GATED-LOCAL CI_MERGE="false" syncmain "$D" push); check "gated-local refused by ci-merge -> push fails" 1 $?
 expect_out "route GATED (local - remote off)"
 [ "$(git -C "$D/github.git" rev-parse main)" != "$(git -C "$D/main/.clones/c" rev-parse HEAD)" ] && PASS=$((PASS+1)) || { echo "FAIL  a refused gated-local push landed"; FAIL=$((FAIL+1)); }
@@ -120,7 +120,7 @@ OUT=$(CI_ROUTE=GATED-LOCAL CI_MERGE="echo SKIP-VERIFIED > $D/main/.clones/c/.git
 
 echo "7c. THE SEAMS ARE IGNORED IN A REAL-SHAPED TREE (feature 132): CI_ROUTE=DIRECT cannot skip the gated route"
 D=$(topology gs)
-( cd "$D/main/.clones/c" && printf 'ci-status:\n\t@false\nperf-review:\n\t@true\n' > Makefile && echo 'def a(): return 6' > wip/x/a.py && git add -A && git commit -qm engine ); stamp_hooks "$D"
+( cd "$D/main/.clones/c" && printf 'ci-status:\n\t@false\nperf-review:\n\t@true\n' > Makefile && echo 'def a(): return 6' > pool/x/a.py && git add -A && git commit -qm engine ); stamp_hooks "$D"
 OUT=$(CI_ROUTE=DIRECT CI_MERGE="true" syncmain "$D" push); check "a real-shaped tree with CI_ROUTE=DIRECT does not push" 1 $?
 expect_out "could not decide the route"
 [ "$(git -C "$D/github.git" rev-parse main)" != "$(git -C "$D/main/.clones/c" rev-parse HEAD)" ] && PASS=$((PASS+1)) || { echo "FAIL  the seam bypassed the gated route"; FAIL=$((FAIL+1)); }
@@ -149,7 +149,7 @@ expect_out "PLAN GATE"
   && printf '{"plan_sha256": "%s", "decisions": [], "verdict": "CLEAR"}\n' "$(sha256sum specs/140-x/plan.md | cut -d' ' -f1)" > specs/140-x/plan-review.json \
   && git add -A && git commit -qm "the plan, reviewed" )
 OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "STAYS QUIET: every task ticked and the plan reviewed -> the docs land" 0 $?
-( cd "$D/main/.clones/c" && echo 'def a(): return 9' > wip/x/a.py && printf -- '- [x] T01 done\n- [ ] T02 the GM accepts\n' > specs/140-x/tasks.md && git add -A && git commit -qm engine ); stamp_hooks "$D"
+( cd "$D/main/.clones/c" && echo 'def a(): return 9' > pool/x/a.py && printf -- '- [x] T01 done\n- [ ] T02 the GM accepts\n' > specs/140-x/tasks.md && git add -A && git commit -qm engine ); stamp_hooks "$D"
 OUT=$(CI_ROUTE=GATED CI_MERGE="echo SKIP-VERIFIED > $D/main/.clones/c/.git/ci-verdict" syncmain "$D" push); check "IT FIRES on the GATED route too, before ci-merge is even consulted" 1 $?
 expect_out "IN PROGRESS"
 

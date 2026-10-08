@@ -53,7 +53,7 @@ Three findings drove it, in order of weight:
 ## More hand-authored types do NOT change this
 
 Adding estates (or temples, keeps, battlefields) the way magistracies are done means, per type: a
-declaration in `l7r/diagram/buildings/types.json` and its program in `docs/buildings/programs.md`,
+declaration in `l7r/diagram/buildings/types.json` and its program in `docs/building-programs.md`,
 a few checks in `tools/pack_audit/` and rows in `size-audit`'s anchor table, a pool directory with
 its `.svg` and `.notes.md`, and the same review agents before it ships ([`docs/buildings.md`](buildings.md),
 "Adding a building type"). That grows `buildings/` without touching the boundary. And every new

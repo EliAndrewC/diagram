@@ -187,7 +187,7 @@ DISTANCE is not.
 
 **And its FEATURE CLASS (feature 150).** Every `add*()` at the glyph's emit site carries the class
 the interactive page highlights it under - `cls="<key>"` or `with self.feature("<key>"):` - and
-the key is a row of `l7r/diagram/interactive/classes.py` with its explanation and label; ink the
+the key is a row of `l7r/diagram/interactive/classes/` with its explanation and label; ink the
 GM has ruled NOT highlighted is tagged `"-"` with a row in `NOT_HIGHLIGHTED_RULINGS`. The gate
 check `all_ink_is_ruled_on` fails a scripted hamlet on ink with no class and on a key the
 registry does not know, so a new glyph without its class shows up at the next reference roll.

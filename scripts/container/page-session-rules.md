@@ -11,7 +11,7 @@ on. The research record's own `CLAUDE.md` still loads when you touch `research/`
   tests, comments and identifiers. Both rules stop at a quotation: a quoted source, and the GM's own writing
   (`<!-- SOURCE: GM NOTES -->` blocks, `l7r.md`, `specs/*/request.md`), keep their own dashes and spellings.
 - "People" has caste meaning: only samurai are "people". In demographic, statistical or analytical writing use
-  humans / inhabitants / population / a caste term (`docs/l7r-style.md`).
+  humans / inhabitants / population / a caste term (`/host-l7r-repo/gm-assistant/docs/l7r-style.md` (gm-assistant's, the one copy)).
 - "Domain", never "demesne". Gender-neutral office-holders: they / their / them for a generic daimyo, governor,
   magistrate, minister or samurai.
 - Kanji passes the kanji - romaji - meaning triangle: real characters, a plausible reading, a meaning that maps back.

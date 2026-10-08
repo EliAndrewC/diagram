@@ -62,7 +62,7 @@ natural eventual home is beside the shrines in `shrines_wells/`. It sits in `civ
 institutional-works member for the same parent-level-move reason as above.
 
 Two things to know if you touch it: it calls `self.cemetery` across the module boundary (normal, see
-the table above), and its **only consumer in the entire tree is the `wip/` Shiro Daika map**, which nothing runs by
+the table above), and its **only consumer in the entire tree is the frozen Shiro Daika exhibit**, which nothing runs by
 default - so a change to it is verified by rolling that map by hand.
 
 ### `_stable_yard` has a module to itself
@@ -96,7 +96,7 @@ the guard was trusted (feature 115 T007/T017).
 - **Subset, not equality** - so the decomposition's added private stages need no bookkeeping. The
   direction that HIDES is a member going missing: an addition is visible in review, while a
   subtraction surfaces only when whichever generator happens to call it runs - and for
-  `precinct_interior` that is one `wip/` map nobody runs by default.
+  `precinct_interior` that is one frozen exhibit nobody runs by default.
 - **The census admits attributes, not just callables**, even though this class has none today. A
   constant is as easy to lose in a split as a method and much easier to overlook.
 - **`_way_seat_near` is LIVE.** It has no consumer outside the package and a cross-file census that

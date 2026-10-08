@@ -41,6 +41,7 @@ their own districts.*
 | Charcoal kilns / iron furnaces | off-map in the hills | canon: charcoal is burned where the wood grows |
 | Potters' kiln works | drawn, on the frontier strip (added 2026-08-17) | a pottery kiln stands at its CLAY, the opposite pull; carries the campaign clue |
 | Clan | Scorpion | monasteries default to Benten and Jurojin |
+| Lineage (GM 2026-09-28) | the post stays within one lineage | Moriguchi is its domain's only dynasty province |
 
 ## The border, which is the map's organizing fact
 

@@ -18,7 +18,7 @@ from pathlib import Path
 import pytest
 
 ROOT = Path(__file__).resolve().parents[2]
-LINTED = ("l7r/", "tests/", "wip/")
+LINTED = ("l7r/", "tests/")
 
 
 def _ruff(*args: str, cwd: Path) -> subprocess.CompletedProcess[str]:

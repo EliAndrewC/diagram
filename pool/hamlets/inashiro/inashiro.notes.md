@@ -1193,7 +1193,7 @@ blades alone grade into the reeds** (a bog margin is sedge into reed; woody cove
 ground above), and `make scatter-audit` holds exactly that line (0 violations). Review round 3
 looked at fit zoom FIRST, then ran a manifest-free pixel check: 0 woody bases on bog-colored pixels
 anywhere on the sheet; grass front wobbles +-10 units, no ruled line, no bare strip, no brush wall
-on the dry side. PASS. Catch-rate: round 2 was a reviewer miss (recorded in `docs/review-ledger.md`);
+on the dry side. PASS. Catch-rate: round 2 was a reviewer miss (recorded in `dev/review-ledger.md`);
 round 3 caught nothing new beyond two nitpicks (this entry; the audit is blind to wet ground drawn
 wider than its recorded polygon - not the case here).
 

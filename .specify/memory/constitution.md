@@ -2023,7 +2023,7 @@ shell command that writes one. It carries no silent escape - a genuine exception
 **Repository layout conventions**
 - The project lives at the repository root (feature 329 moved it out of the old skill directory under
   `.claude/skills/`; the split from gm-assistant had kept that path). The engine is `l7r/diagram/`; shipped maps are `pool/<tier>/`;
-  staged maps are `wip/`.
+  the frozen hand-authored exhibits are `legacy-hand-authored-pool/<tier>/`.
 - The GM's setting notes are read from the `l7r` checkout mounted read-only at
   `/host-l7r-repo` (`setting/`, and gm-assistant's `setting/` at
   `/host-l7r-repo/gm-assistant/setting/`); the canonical `l7r.md` is never edited from here.
@@ -2112,7 +2112,7 @@ once at acceptance and at unlock (the pool re-roll, where the agent earns its
 time). Whenever a review runs it runs in the background after the map is
 handed back - or beside a LONG gate, never `make quick` - is never waited on,
 and lands its findings as follow-ups. Every pass is a row in
-`docs/review-ledger.md`, and a miss becomes a rule in the agent, proven to
+`dev/review-ledger.md`, and a miss becomes a rule in the agent, proven to
 fire on the unfixed artifact. Doctrine: `docs/reviews.md`.
 
 **Quick runs the unit form; the gate runs the integration form (GM 2026-08-26,

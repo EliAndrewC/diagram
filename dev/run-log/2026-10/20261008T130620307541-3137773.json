@@ -1,0 +1,35 @@
+{
+  "utc": "2026-10-08T13:06:20Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 391,
+  "result": "failed: hooks-test test-full",
+  "commit": "dcac3f23c",
+  "first_failure_s": 195.9,
+  "last_failure_s": 344.7,
+  "failed_tests": 9,
+  "host": {
+    "load": [
+      3.21,
+      5.5
+    ],
+    "mem_avail_mb": [
+      10270,
+      10298
+    ],
+    "cpu_temp_c": [
+      65.0,
+      59.0
+    ],
+    "stall_s": {
+      "cpu": 1.8,
+      "io": 0.8,
+      "io_full": 0.7,
+      "memory": 0.1
+    },
+    "throttle_ms": {
+      "core": 0,
+      "package": 0
+    }
+  }
+}

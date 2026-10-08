@@ -41,7 +41,7 @@ is silent and lands one directory short of `pool/`.
 | [`ci/`](ci/CLAUDE.md) | the CodeBuild dispatcher and the incremental gate | a remote run refused, money may be spent, or the gate selected oddly |
 | [`tests/`](../../tests/CLAUDE.md) | every test, mirroring the source layout, plus the frozen fixtures | you need to find or add a test |
 
-`pool/` holds the shipped maps (`<name>.gen.py`, its manifest, render and `.notes.md`); `wip/` maps staged outside it.
+`pool/` holds the shipped maps (`<name>.gen.py`, its manifest, render and `.notes.md`); `legacy-hand-authored-pool/` the frozen hand-authored exhibits.
 
 ## The dev docs (load the one your task is in)
 
@@ -123,7 +123,7 @@ re-running a generator; a diagnostic that restates what it observes will lie to 
 - **Some slowness is bought memory** (GM 2026-10-05): read `dev/performance.md` "Time traded for memory" before
   undoing one; the RAM each undo costs goes to the GM.
 
-**The pool** ([`dev/pool.md`](../../dev/pool.md)) - **the legacy pool is FROZEN**: its 18 hand-authored maps are
+**The pool** ([`dev/pool.md`](../../dev/pool.md)) - **the legacy pool is FROZEN**: its 19 hand-authored maps are
 exhibits, never regenerated or re-gated; the fix for one is CONVERSION, not retrofit. A cohort of seeds is a stronger
 test bed than one map, and a seed that passed before your change and fails after it is a REGRESSION.
 

@@ -2,7 +2,7 @@
   <!-- ============================================================ -->
   <!-- Hoshigaoka Country Shrine - top-down diagrammatic plan          -->
   <!-- North at top; the village lies north, the approach rises from the south. -->
-  <!-- 3 px = 1 ft. The country shrine's program: docs/buildings/programs.md -->
+  <!-- 3 px = 1 ft. The country shrine's program: docs/building-programs.md -->
   <!-- THE SHEET MATCHES THE VILLAGE MAP (feature 257): the hall's     -->
   <!-- center is map (392, 1074) of hoshigaoka.json; 6 sheet px = 1   -->
   <!-- map px. What the map shows here is the hall, seven arches 30 ft -->

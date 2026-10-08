@@ -11,7 +11,7 @@ import math
 # constrained only that `frame` ran first - and `ruff`'s isort then sorted the list in
 # `__init__.py` ALPHABETICALLY, so `fields` (which calls `s.finish()`) ran fourth of seven and
 # the wharf, the yashiki band and the trade works drew into a map already written to disk.
-# Caught by settlement-review, 2026-08-31; invisible to the gate, which rolls no wip map.
+# Caught by settlement-review, 2026-08-31; invisible to the gate, which rolls no frozen exhibit (nor, then, a wip/ map).
 from .castle import s
 from .frame import RIVER
 

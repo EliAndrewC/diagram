@@ -55,7 +55,7 @@ be more productive than having a built in independent reviewer, which runs multi
   CodeBuild run), never alongside `make quick` (launching a multi-minute review "in parallel" with it just serializes). A
   finding becomes a follow-up task; it never holds the result.
 - **Never busy-wait on one.** Same rule as the gate: act on the completion notification.
-- **Every FINDING is a row in [`docs/review-ledger.md`](review-ledger.md), written by the SESSION, never by the reviewer**
+- **Every FINDING is a row in [`dev/review-ledger.md`](../dev/review-ledger.md), written by the SESSION, never by the reviewer**
   (the GM: you may disagree with the reviewer, and the log must say both what was found and whether it was acted on - fixed /
   recorded-only / declined with why / MISSED-BY-REVIEWER), in the same commit that acts on the review.
 
@@ -89,7 +89,7 @@ What IS the GM's: a genuine fork where the record supports two forms and the cho
 canon; a cost they alone can price; and the acceptance of a finished thing. Put those up plainly, say
 what you recommend, and say what you measured to get there.
 
-**Record the misses in the ledger** (`docs/review-ledger.md`), which gained a column for exactly this,
+**Record the misses in the ledger** (`dev/review-ledger.md`), which gained a column for exactly this,
 so the escalation rate is a total rather than a feeling.
 
 ## A finding OUTSIDE the delta is still yours to fix

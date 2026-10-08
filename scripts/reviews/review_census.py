@@ -4,7 +4,7 @@
 WHY (feature 294, GM 2026-10-01: *"I want to take a hard look at what it is doing, what it is buying us"*). The spec's R0 census
 was a hand count of the ledger by an agent; this is the same count by a script, so the answer is re-taken on demand and every
 new check (the glyph check, the fix check) shows up from its first run - including a check that never finds anything. The rows
-before feature 294 carry no class, so they are classified once, as data (`docs/review-ledger-r0.json`); the measured table's
+before feature 294 carry no class, so they are classified once, as data (`dev/review-ledger-r0.json`); the measured table's
 rows carry their class and cost in the row (`scripts/reviews/ledger_lint.py` holds them to it).
 
 Usage: review_census.py [--root CLONE]   prints one line per check: runs, NOT-REVIEWABLE runs, findings by class, author-missed,
@@ -86,9 +86,9 @@ def main(argv: Sequence[str] | None = None) -> int:
     ap.add_argument("--root", default=str(Path(__file__).resolve().parents[2]), help="the clone")
     args = ap.parse_args(argv)
     root = Path(args.root)
-    r0_path = root / "docs" / "review-ledger-r0.json"
+    r0_path = root / "dev" / "review-ledger-r0.json"
     r0 = json.loads(r0_path.read_text(encoding="utf-8")) if r0_path.is_file() else []
-    print(report(tally(r0, (root / "docs" / "review-ledger.md").read_text(encoding="utf-8"))))
+    print(report(tally(r0, (root / "dev" / "review-ledger.md").read_text(encoding="utf-8"))))
     return 0
 
 

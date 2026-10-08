@@ -2042,7 +2042,7 @@
   ],
   "verdict": "DRIFTED"
  },
- "docs/buildings/programs.md::Country shrine (a village district's shrine)#Bishamon tigers": {
+ "docs/building-programs.md::Country shrine (a village district's shrine)#Bishamon tigers": {
   "code": "13f6794a86cbaf43",
   "core": "3ca14da0edcd8ce4",
   "date": "2026-10-08",
@@ -2057,7 +2057,7 @@
   ],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Country shrine (a village district's shrine)#a well as the purification stop beside the approach (\"the well or basin\"; the required item is `well`)": {
+ "docs/building-programs.md::Country shrine (a village district's shrine)#a well as the purification stop beside the approach (\"the well or basin\"; the required item is `well`)": {
   "code": "f7bc356fd1a2846d",
   "core": "3ca14da0edcd8ce4",
   "date": "2026-10-08",
@@ -2070,7 +2070,7 @@
   ],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Country shrine (a village district's shrine)#approach width about 10 ft": {
+ "docs/building-programs.md::Country shrine (a village district's shrine)#approach width about 10 ft": {
   "code": "f2d2c56034d6c481",
   "core": "3ca14da0edcd8ce4",
   "date": "2026-10-08",
@@ -2083,7 +2083,7 @@
   ],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Country shrine (a village district's shrine)#arch count": {
+ "docs/building-programs.md::Country shrine (a village district's shrine)#arch count": {
   "code": "eb341717039e1aad",
   "core": "3ca14da0edcd8ce4",
   "date": "2026-10-08",
@@ -2101,7 +2101,7 @@
   ],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Country shrine (a village district's shrine)#arch pitch": {
+ "docs/building-programs.md::Country shrine (a village district's shrine)#arch pitch": {
   "code": "809e388b7a4a8922",
   "core": "3ca14da0edcd8ce4",
   "date": "2026-10-08",
@@ -2116,7 +2116,7 @@
   ],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Country shrine (a village district's shrine)#basin beside the approach": {
+ "docs/building-programs.md::Country shrine (a village district's shrine)#basin beside the approach": {
   "code": "1778f7064aae237e",
   "core": "3ca14da0edcd8ce4",
   "date": "2026-10-08",
@@ -2134,7 +2134,7 @@
   ],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Country shrine (a village district's shrine)#bell tower band 6-16 by 6-16 ft": {
+ "docs/building-programs.md::Country shrine (a village district's shrine)#bell tower band 6-16 by 6-16 ft": {
   "code": "b6023bbac9daa3df",
   "core": "3ca14da0edcd8ce4",
   "date": "2026-10-08",
@@ -2146,7 +2146,7 @@
   ],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Country shrine (a village district's shrine)#bell tower knob": {
+ "docs/building-programs.md::Country shrine (a village district's shrine)#bell tower knob": {
   "code": "00f4cdef2798a7e0",
   "core": "3ca14da0edcd8ce4",
   "date": "2026-10-08",
@@ -2161,7 +2161,7 @@
   ],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Country shrine (a village district's shrine)#building size anchors": {
+ "docs/building-programs.md::Country shrine (a village district's shrine)#building size anchors": {
   "code": "77479660a7e75e46",
   "core": "3ca14da0edcd8ce4",
   "date": "2026-10-08",
@@ -2180,7 +2180,7 @@
   ],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Country shrine (a village district's shrine)#burial ground beside the precinct": {
+ "docs/building-programs.md::Country shrine (a village district's shrine)#burial ground beside the precinct": {
   "code": "76e039315e01602a",
   "core": "3ca14da0edcd8ce4",
   "date": "2026-10-08",
@@ -2194,7 +2194,7 @@
   ],
   "verdict": "DRIFTED"
  },
- "docs/buildings/programs.md::Country shrine (a village district's shrine)#burial ground placed outside the grove": {
+ "docs/building-programs.md::Country shrine (a village district's shrine)#burial ground placed outside the grove": {
   "code": "46589184a3c25fce",
   "core": "3ca14da0edcd8ce4",
   "date": "2026-10-08",
@@ -2206,7 +2206,7 @@
   ],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Country shrine (a village district's shrine)#dedication knob": {
+ "docs/building-programs.md::Country shrine (a village district's shrine)#dedication knob": {
   "code": "f77e668b7954bb1d",
   "core": "3ca14da0edcd8ce4",
   "date": "2026-10-08",
@@ -2216,7 +2216,7 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Country shrine (a village district's shrine)#donated stonework": {
+ "docs/building-programs.md::Country shrine (a village district's shrine)#donated stonework": {
   "code": "2882ae32c47ad2f4",
   "core": "3ca14da0edcd8ce4",
   "date": "2026-10-08",
@@ -2234,7 +2234,7 @@
   ],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Country shrine (a village district's shrine)#dwelling entry tagged genkan": {
+ "docs/building-programs.md::Country shrine (a village district's shrine)#dwelling entry tagged genkan": {
   "code": "24e54bcbfcb0d3ec",
   "core": "3ca14da0edcd8ce4",
   "date": "2026-10-08",
@@ -2250,7 +2250,7 @@
   ],
   "verdict": "DRIFTED"
  },
- "docs/buildings/programs.md::Country shrine (a village district's shrine)#dwelling kitchen floor": {
+ "docs/building-programs.md::Country shrine (a village district's shrine)#dwelling kitchen floor": {
   "code": "0a54a88d0b7ba2b5",
   "core": "3ca14da0edcd8ce4",
   "date": "2026-10-08",
@@ -2262,7 +2262,7 @@
   ],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Country shrine (a village district's shrine)#dwelling privy": {
+ "docs/building-programs.md::Country shrine (a village district's shrine)#dwelling privy": {
   "code": "89cfe34a11691e9f",
   "core": "3ca14da0edcd8ce4",
   "date": "2026-10-08",
@@ -2276,7 +2276,7 @@
   ],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Country shrine (a village district's shrine)#farmers' stage knob": {
+ "docs/building-programs.md::Country shrine (a village district's shrine)#farmers' stage knob": {
   "code": "a9b0f7d8d273f8bf",
   "core": "3ca14da0edcd8ce4",
   "date": "2026-10-08",
@@ -2294,7 +2294,7 @@
   ],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Country shrine (a village district's shrine)#fire-water": {
+ "docs/building-programs.md::Country shrine (a village district's shrine)#fire-water": {
   "code": "6582d867e749a013",
   "core": "3ca14da0edcd8ce4",
   "date": "2026-10-08",
@@ -2310,7 +2310,7 @@
   ],
   "verdict": "DRIFTED"
  },
- "docs/buildings/programs.md::Country shrine (a village district's shrine)#grove and burial side knob": {
+ "docs/building-programs.md::Country shrine (a village district's shrine)#grove and burial side knob": {
   "code": "676051a9b14440a8",
   "core": "3ca14da0edcd8ce4",
   "date": "2026-10-08",
@@ -2320,7 +2320,7 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Country shrine (a village district's shrine)#grove form knob": {
+ "docs/building-programs.md::Country shrine (a village district's shrine)#grove form knob": {
   "code": "85f9bfd5e112d8cd",
   "core": "3ca14da0edcd8ce4",
   "date": "2026-10-08",
@@ -2341,7 +2341,7 @@
   ],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Country shrine (a village district's shrine)#hall in the middle of the one roof": {
+ "docs/building-programs.md::Country shrine (a village district's shrine)#hall in the middle of the one roof": {
   "code": "7051cb3f1aed1662",
   "core": "3ca14da0edcd8ce4",
   "date": "2026-10-08",
@@ -2356,7 +2356,7 @@
   ],
   "verdict": "DRIFTED"
  },
- "docs/buildings/programs.md::Country shrine (a village district's shrine)#hall largest and monk's home": {
+ "docs/building-programs.md::Country shrine (a village district's shrine)#hall largest and monk's home": {
   "code": "db3ee999ef9b8c4e",
   "core": "3ca14da0edcd8ce4",
   "date": "2026-10-08",
@@ -2373,7 +2373,7 @@
   ],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Country shrine (a village district's shrine)#hall-and-dwelling form knob": {
+ "docs/building-programs.md::Country shrine (a village district's shrine)#hall-and-dwelling form knob": {
   "code": "7a7b834eb1fa9fd7",
   "core": "3ca14da0edcd8ce4",
   "date": "2026-10-08",
@@ -2389,7 +2389,7 @@
   ],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Country shrine (a village district's shrine)#innermost arch one pitch off the hall": {
+ "docs/building-programs.md::Country shrine (a village district's shrine)#innermost arch one pitch off the hall": {
   "code": "fef02e2665eb947e",
   "core": "3ca14da0edcd8ce4",
   "date": "2026-10-08",
@@ -2403,7 +2403,7 @@
   ],
   "verdict": "MISLABELED"
  },
- "docs/buildings/programs.md::Country shrine (a village district's shrine)#kitchen garden by the sun": {
+ "docs/building-programs.md::Country shrine (a village district's shrine)#kitchen garden by the sun": {
   "code": "0a9496cf5572f6fb",
   "core": "3ca14da0edcd8ce4",
   "date": "2026-10-08",
@@ -2419,7 +2419,7 @@
   ],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Country shrine (a village district's shrine)#no office building": {
+ "docs/building-programs.md::Country shrine (a village district's shrine)#no office building": {
   "code": "512d195de5b21ddc",
   "core": "3ca14da0edcd8ce4",
   "date": "2026-10-08",
@@ -2436,7 +2436,7 @@
   ],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Country shrine (a village district's shrine)#no subsidiary buildings": {
+ "docs/building-programs.md::Country shrine (a village district's shrine)#no subsidiary buildings": {
   "code": "32d396c4174c76a0",
   "core": "3ca14da0edcd8ce4",
   "date": "2026-10-08",
@@ -2452,7 +2452,7 @@
   ],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Country shrine (a village district's shrine)#one-roof ends' order": {
+ "docs/building-programs.md::Country shrine (a village district's shrine)#one-roof ends' order": {
   "code": "59715bace66bcf9f",
   "core": "3ca14da0edcd8ce4",
   "date": "2026-10-08",
@@ -2464,7 +2464,7 @@
   ],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Country shrine (a village district's shrine)#outermost arch at the precinct edge": {
+ "docs/building-programs.md::Country shrine (a village district's shrine)#outermost arch at the precinct edge": {
   "code": "16be572b988a5a4b",
   "core": "3ca14da0edcd8ce4",
   "date": "2026-10-08",
@@ -2481,7 +2481,7 @@
   ],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Country shrine (a village district's shrine)#precinct holds the grove": {
+ "docs/building-programs.md::Country shrine (a village district's shrine)#precinct holds the grove": {
   "code": "3af9fe6fab4742a3",
   "core": "3ca14da0edcd8ce4",
   "date": "2026-10-08",
@@ -2498,7 +2498,7 @@
   ],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Country shrine (a village district's shrine)#precinct size": {
+ "docs/building-programs.md::Country shrine (a village district's shrine)#precinct size": {
   "code": "ef31ad49998a415e",
   "core": "3ca14da0edcd8ce4",
   "date": "2026-10-08",
@@ -2522,7 +2522,7 @@
   ],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Country shrine (a village district's shrine)#resident monk": {
+ "docs/building-programs.md::Country shrine (a village district's shrine)#resident monk": {
   "code": "edd4ff3d195f2720",
   "core": "3ca14da0edcd8ce4",
   "date": "2026-10-08",
@@ -2542,7 +2542,7 @@
   ],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Country shrine (a village district's shrine)#sacred tree": {
+ "docs/building-programs.md::Country shrine (a village district's shrine)#sacred tree": {
   "code": "0ea388d24e458ca1",
   "core": "3ca14da0edcd8ce4",
   "date": "2026-10-08",
@@ -2560,7 +2560,7 @@
   ],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Country shrine (a village district's shrine)#sacred tree drawn as the biggest crown in the precinct": {
+ "docs/building-programs.md::Country shrine (a village district's shrine)#sacred tree drawn as the biggest crown in the precinct": {
   "code": "ba8e3663576e90c0",
   "core": "3ca14da0edcd8ce4",
   "date": "2026-10-08",
@@ -2572,7 +2572,7 @@
   ],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Country shrine (a village district's shrine)#sanctuary on the axis": {
+ "docs/building-programs.md::Country shrine (a village district's shrine)#sanctuary on the axis": {
   "code": "8fa15a5454cef8a9",
   "core": "3ca14da0edcd8ce4",
   "date": "2026-10-08",
@@ -2587,7 +2587,7 @@
   ],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Country shrine (a village district's shrine)#staffing and income": {
+ "docs/building-programs.md::Country shrine (a village district's shrine)#staffing and income": {
   "code": "e1a2f46b68fd73b1",
   "core": "3ca14da0edcd8ce4",
   "date": "2026-10-08",
@@ -2597,7 +2597,7 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Country shrine (a village district's shrine)#sumo ring knob": {
+ "docs/building-programs.md::Country shrine (a village district's shrine)#sumo ring knob": {
   "code": "5c105cdcef2d8792",
   "core": "3ca14da0edcd8ce4",
   "date": "2026-10-08",
@@ -2612,7 +2612,7 @@
   ],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Country shrine (a village district's shrine)#tax-free fields off the sheet": {
+ "docs/building-programs.md::Country shrine (a village district's shrine)#tax-free fields off the sheet": {
   "code": "ac533d5b815c333c",
   "core": "3ca14da0edcd8ce4",
   "date": "2026-10-08",
@@ -2628,7 +2628,7 @@
   ],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Country shrine (a village district's shrine)#two-building dwelling size": {
+ "docs/building-programs.md::Country shrine (a village district's shrine)#two-building dwelling size": {
   "code": "ae650b6a2dbde9e6",
   "core": "3ca14da0edcd8ce4",
   "date": "2026-10-08",
@@ -2643,7 +2643,7 @@
   ],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Country shrine (a village district's shrine)#two-building form": {
+ "docs/building-programs.md::Country shrine (a village district's shrine)#two-building form": {
   "code": "082cd63c1b8a83b4",
   "core": "3ca14da0edcd8ce4",
   "date": "2026-10-08",
@@ -2658,7 +2658,7 @@
   ],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Country shrine (a village district's shrine)#unenclosed precinct": {
+ "docs/building-programs.md::Country shrine (a village district's shrine)#unenclosed precinct": {
   "code": "817c7f09457d281c",
   "core": "3ca14da0edcd8ce4",
   "date": "2026-10-08",
@@ -2675,7 +2675,7 @@
   ],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Country shrine (a village district's shrine)#unswept precinct ground": {
+ "docs/building-programs.md::Country shrine (a village district's shrine)#unswept precinct ground": {
   "code": "d0503d4061b667e9",
   "core": "3ca14da0edcd8ce4",
   "date": "2026-10-08",
@@ -2690,7 +2690,7 @@
   ],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Country shrine (a village district's shrine)#wealth knob": {
+ "docs/building-programs.md::Country shrine (a village district's shrine)#wealth knob": {
   "code": "ed4facaaacaf39d1",
   "core": "3ca14da0edcd8ce4",
   "date": "2026-10-08",
@@ -2707,7 +2707,7 @@
   ],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Country shrine (a village district's shrine)#wealth knob roofing": {
+ "docs/building-programs.md::Country shrine (a village district's shrine)#wealth knob roofing": {
   "code": "a146c220fa3dc0cf",
   "core": "3ca14da0edcd8ce4",
   "date": "2026-10-08",
@@ -2719,7 +2719,7 @@
   ],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Country shrine (a village district's shrine)#well and basin both drawn": {
+ "docs/building-programs.md::Country shrine (a village district's shrine)#well and basin both drawn": {
   "code": "a06913fa9c3877c9",
   "core": "3ca14da0edcd8ce4",
   "date": "2026-10-08",
@@ -2731,7 +2731,7 @@
   ],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Magistrate's manor (county magistracy)#a detached guest house at a rich posting (0091's drawing page records it as a GUESS)": {
+ "docs/building-programs.md::Magistrate's manor (county magistracy)#a detached guest house at a rich posting (0091's drawing page records it as a GUESS)": {
   "code": "62691e5f63f06ab6",
   "core": "389b4ed09ef8526b",
   "date": "2026-10-08",
@@ -2746,7 +2746,7 @@
   ],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Magistrate's manor (county magistracy)#cart route to granary and stables": {
+ "docs/building-programs.md::Magistrate's manor (county magistracy)#cart route to granary and stables": {
   "code": "049d9bc87e8d890f",
   "core": "389b4ed09ef8526b",
   "date": "2026-10-08",
@@ -2756,7 +2756,7 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Magistrate's manor (county magistracy)#commuting clerks": {
+ "docs/building-programs.md::Magistrate's manor (county magistracy)#commuting clerks": {
   "code": "8912ec5e9eeb6986",
   "core": "389b4ed09ef8526b",
   "date": "2026-10-08",
@@ -2773,7 +2773,7 @@
   ],
   "verdict": "MISLABELED"
  },
- "docs/buildings/programs.md::Magistrate's manor (county magistracy)#dais band on the office hall's south face": {
+ "docs/building-programs.md::Magistrate's manor (county magistracy)#dais band on the office hall's south face": {
   "code": "94fbbae7094ccb93",
   "core": "389b4ed09ef8526b",
   "date": "2026-10-08",
@@ -2786,7 +2786,7 @@
   ],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Magistrate's manor (county magistracy)#divider gate": {
+ "docs/building-programs.md::Magistrate's manor (county magistracy)#divider gate": {
   "code": "5ee053ecdf7a2140",
   "core": "389b4ed09ef8526b",
   "date": "2026-10-08",
@@ -2801,7 +2801,7 @@
   ],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Magistrate's manor (county magistracy)#divider gate on the axis": {
+ "docs/building-programs.md::Magistrate's manor (county magistracy)#divider gate on the axis": {
   "code": "9512b6b04de20fb6",
   "core": "389b4ed09ef8526b",
   "date": "2026-10-08",
@@ -2816,7 +2816,7 @@
   ],
   "verdict": "DRIFTED"
  },
- "docs/buildings/programs.md::Magistrate's manor (county magistracy)#divider gate width": {
+ "docs/building-programs.md::Magistrate's manor (county magistracy)#divider gate width": {
   "code": "1a1ace618bbb309d",
   "core": "389b4ed09ef8526b",
   "date": "2026-10-08",
@@ -2828,7 +2828,7 @@
   ],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Magistrate's manor (county magistracy)#fire-water tubs": {
+ "docs/building-programs.md::Magistrate's manor (county magistracy)#fire-water tubs": {
   "code": "9d1bec9b8100c6cc",
   "core": "389b4ed09ef8526b",
   "date": "2026-10-08",
@@ -2844,7 +2844,7 @@
   ],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Magistrate's manor (county magistracy)#formal visitors and the privacy baffle": {
+ "docs/building-programs.md::Magistrate's manor (county magistracy)#formal visitors and the privacy baffle": {
   "code": "977533943c61cd5c",
   "core": "389b4ed09ef8526b",
   "date": "2026-10-08",
@@ -2859,7 +2859,7 @@
   ],
   "verdict": "DRIFTED"
  },
- "docs/buildings/programs.md::Magistrate's manor (county magistracy)#garden and stables wells": {
+ "docs/building-programs.md::Magistrate's manor (county magistracy)#garden and stables wells": {
   "code": "3003df898c378a1f",
   "core": "389b4ed09ef8526b",
   "date": "2026-10-08",
@@ -2872,7 +2872,7 @@
   ],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Magistrate's manor (county magistracy)#garrison emphasis knob": {
+ "docs/building-programs.md::Magistrate's manor (county magistracy)#garrison emphasis knob": {
   "code": "05cd6774f4a91a50",
   "core": "389b4ed09ef8526b",
   "date": "2026-10-08",
@@ -2882,7 +2882,7 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Magistrate's manor (county magistracy)#granary weight knob": {
+ "docs/building-programs.md::Magistrate's manor (county magistracy)#granary weight knob": {
   "code": "fd974b46bb3589b7",
   "core": "389b4ed09ef8526b",
   "date": "2026-10-08",
@@ -2899,7 +2899,7 @@
   ],
   "verdict": "MISLABELED"
  },
- "docs/buildings/programs.md::Magistrate's manor (county magistracy)#guest doors feed courts": {
+ "docs/building-programs.md::Magistrate's manor (county magistracy)#guest doors feed courts": {
   "code": "e1953e8ca17032ef",
   "core": "389b4ed09ef8526b",
   "date": "2026-10-08",
@@ -2922,7 +2922,7 @@
   ],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Magistrate's manor (county magistracy)#inner-court postern": {
+ "docs/building-programs.md::Magistrate's manor (county magistracy)#inner-court postern": {
   "code": "5c84e225a006488c",
   "core": "389b4ed09ef8526b",
   "date": "2026-10-08",
@@ -2937,7 +2937,7 @@
   ],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Magistrate's manor (county magistracy)#justice-front furniture knob": {
+ "docs/building-programs.md::Magistrate's manor (county magistracy)#justice-front furniture knob": {
   "code": "67171cd229f99dec",
   "core": "389b4ed09ef8526b",
   "date": "2026-10-08",
@@ -2949,7 +2949,7 @@
   ],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Magistrate's manor (county magistracy)#latrines by zone": {
+ "docs/building-programs.md::Magistrate's manor (county magistracy)#latrines by zone": {
   "code": "7806b4774f798ba3",
   "core": "389b4ed09ef8526b",
   "date": "2026-10-08",
@@ -2968,7 +2968,7 @@
   ],
   "verdict": "MISLABELED"
  },
- "docs/buildings/programs.md::Magistrate's manor (county magistracy)#manor kitchen garden by the sun": {
+ "docs/building-programs.md::Magistrate's manor (county magistracy)#manor kitchen garden by the sun": {
   "code": "fe4bd2da9b53db8f",
   "core": "389b4ed09ef8526b",
   "date": "2026-10-08",
@@ -2987,7 +2987,7 @@
   ],
   "verdict": "DRIFTED"
  },
- "docs/buildings/programs.md::Magistrate's manor (county magistracy)#mostly open compound": {
+ "docs/building-programs.md::Magistrate's manor (county magistracy)#mostly open compound": {
   "code": "fd0a538dc3a9c64d",
   "core": "389b4ed09ef8526b",
   "date": "2026-10-08",
@@ -3004,7 +3004,7 @@
   ],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Magistrate's manor (county magistracy)#notice board at the gate": {
+ "docs/building-programs.md::Magistrate's manor (county magistracy)#notice board at the gate": {
   "code": "9c5f404948634372",
   "core": "389b4ed09ef8526b",
   "date": "2026-10-08",
@@ -3018,7 +3018,7 @@
   ],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Magistrate's manor (county magistracy)#office hall dais band": {
+ "docs/building-programs.md::Magistrate's manor (county magistracy)#office hall dais band": {
   "code": "a4213afcd7a17931",
   "core": "389b4ed09ef8526b",
   "date": "2026-10-08",
@@ -3034,7 +3034,7 @@
   ],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Magistrate's manor (county magistracy)#office hall rooms": {
+ "docs/building-programs.md::Magistrate's manor (county magistracy)#office hall rooms": {
   "code": "89b51271880a4fa1",
   "core": "389b4ed09ef8526b",
   "date": "2026-10-08",
@@ -3046,7 +3046,7 @@
   ],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Magistrate's manor (county magistracy)#outer service gate": {
+ "docs/building-programs.md::Magistrate's manor (county magistracy)#outer service gate": {
   "code": "eb578406ab20dca0",
   "core": "389b4ed09ef8526b",
   "date": "2026-10-08",
@@ -3060,7 +3060,7 @@
   ],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Magistrate's manor (county magistracy)#outer service gate for muck and prisoners": {
+ "docs/building-programs.md::Magistrate's manor (county magistracy)#outer service gate for muck and prisoners": {
   "code": "5683e49392d0326e",
   "core": "389b4ed09ef8526b",
   "date": "2026-10-08",
@@ -3070,7 +3070,7 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Magistrate's manor (county magistracy)#posting wealth knob": {
+ "docs/building-programs.md::Magistrate's manor (county magistracy)#posting wealth knob": {
   "code": "b3ac49413e634555",
   "core": "389b4ed09ef8526b",
   "date": "2026-10-08",
@@ -3084,7 +3084,7 @@
   ],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Magistrate's manor (county magistracy)#practice ground": {
+ "docs/building-programs.md::Magistrate's manor (county magistracy)#practice ground": {
   "code": "eae71183fcf67376",
   "core": "389b4ed09ef8526b",
   "date": "2026-10-08",
@@ -3100,7 +3100,7 @@
   ],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Magistrate's manor (county magistracy)#practice ground placement and gear": {
+ "docs/building-programs.md::Magistrate's manor (county magistracy)#practice ground placement and gear": {
   "code": "323e03a791a3294c",
   "core": "389b4ed09ef8526b",
   "date": "2026-10-08",
@@ -3117,7 +3117,7 @@
   ],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Magistrate's manor (county magistracy)#rear service strip": {
+ "docs/building-programs.md::Magistrate's manor (county magistracy)#rear service strip": {
   "code": "90b5c53c8f4c48bf",
   "core": "389b4ed09ef8526b",
   "date": "2026-10-08",
@@ -3135,7 +3135,7 @@
   ],
   "verdict": "MISLABELED"
  },
- "docs/buildings/programs.md::Magistrate's manor (county magistracy)#residence entrances": {
+ "docs/building-programs.md::Magistrate's manor (county magistracy)#residence entrances": {
   "code": "f9c84b8a27b58d32",
   "core": "389b4ed09ef8526b",
   "date": "2026-10-08",
@@ -3155,7 +3155,7 @@
   ],
   "verdict": "DRIFTED"
  },
- "docs/buildings/programs.md::Magistrate's manor (county magistracy)#resident particulars knob": {
+ "docs/building-programs.md::Magistrate's manor (county magistracy)#resident particulars knob": {
   "code": "9c5965921cbb2cf8",
   "core": "389b4ed09ef8526b",
   "date": "2026-10-08",
@@ -3169,7 +3169,7 @@
   ],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Magistrate's manor (county magistracy)#resident particulars other than the dojo": {
+ "docs/building-programs.md::Magistrate's manor (county magistracy)#resident particulars other than the dojo": {
   "code": "412d2b228ad37657",
   "core": "389b4ed09ef8526b",
   "date": "2026-10-08",
@@ -3181,7 +3181,7 @@
   ],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Magistrate's manor (county magistracy)#sand hearing court": {
+ "docs/building-programs.md::Magistrate's manor (county magistracy)#sand hearing court": {
   "code": "fd6a4605195f1502",
   "core": "389b4ed09ef8526b",
   "date": "2026-10-08",
@@ -3198,7 +3198,7 @@
   ],
   "verdict": "DRIFTED"
  },
- "docs/buildings/programs.md::Magistrate's manor (county magistracy)#staff housing knob": {
+ "docs/building-programs.md::Magistrate's manor (county magistracy)#staff housing knob": {
   "code": "40ac67252b13a71a",
   "core": "389b4ed09ef8526b",
   "date": "2026-10-08",
@@ -3216,7 +3216,7 @@
   ],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Magistrate's manor (county magistracy)#staffing anchors": {
+ "docs/building-programs.md::Magistrate's manor (county magistracy)#staffing anchors": {
   "code": "dfa6e99bd51c4710",
   "core": "389b4ed09ef8526b",
   "date": "2026-10-08",
@@ -3228,7 +3228,7 @@
   ],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Magistrate's manor (county magistracy)#tenure character knob": {
+ "docs/building-programs.md::Magistrate's manor (county magistracy)#tenure character knob": {
   "code": "994341afb0266c2a",
   "core": "389b4ed09ef8526b",
   "date": "2026-10-08",
@@ -3238,7 +3238,7 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Magistrate's manor (county magistracy)#tier knob": {
+ "docs/building-programs.md::Magistrate's manor (county magistracy)#tier knob": {
   "code": "0184c5bbdb4077ce",
   "core": "389b4ed09ef8526b",
   "date": "2026-10-08",
@@ -3259,7 +3259,7 @@
   ],
   "verdict": "DRIFTED"
  },
- "docs/buildings/programs.md::Magistrate's manor (county magistracy)#two-court zoning": {
+ "docs/building-programs.md::Magistrate's manor (county magistracy)#two-court zoning": {
   "code": "68307455bc34b2aa",
   "core": "389b4ed09ef8526b",
   "date": "2026-10-08",
@@ -3273,7 +3273,7 @@
   ],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Magistrate's manor (county magistracy)#universal shrine": {
+ "docs/building-programs.md::Magistrate's manor (county magistracy)#universal shrine": {
   "code": "404ae00c5f751cf0",
   "core": "389b4ed09ef8526b",
   "date": "2026-10-08",
@@ -3292,7 +3292,7 @@
   ],
   "verdict": "DRIFTED"
  },
- "docs/buildings/programs.md::Magistrate's manor (county magistracy)#upland granary contents": {
+ "docs/building-programs.md::Magistrate's manor (county magistracy)#upland granary contents": {
   "code": "590bdb03b5e6dfac",
   "core": "389b4ed09ef8526b",
   "date": "2026-10-08",
@@ -3308,7 +3308,7 @@
   ],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Magistrate's manor (county magistracy)#upland granary strongbox role": {
+ "docs/building-programs.md::Magistrate's manor (county magistracy)#upland granary strongbox role": {
   "code": "f150222b8985b8e6",
   "core": "389b4ed09ef8526b",
   "date": "2026-10-08",
@@ -3324,7 +3324,7 @@
   ],
   "verdict": "DRIFTED"
  },
- "docs/buildings/programs.md::Magistrate's manor (county magistracy)#wall display": {
+ "docs/building-programs.md::Magistrate's manor (county magistracy)#wall display": {
   "code": "400951abc6df6d21",
   "core": "389b4ed09ef8526b",
   "date": "2026-10-08",
@@ -3334,7 +3334,7 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "docs/buildings/programs.md::Magistrate's manor (county magistracy)#walled enclosure": {
+ "docs/building-programs.md::Magistrate's manor (county magistracy)#walled enclosure": {
   "code": "cbf7b5f5475c7ead",
   "core": "389b4ed09ef8526b",
   "date": "2026-10-08",
@@ -3352,7 +3352,7 @@
   ],
   "verdict": "DRIFTED"
  },
- "docs/buildings/programs.md::Magistrate's manor (county magistracy)#wells by use": {
+ "docs/building-programs.md::Magistrate's manor (county magistracy)#wells by use": {
   "code": "6e15503de9842151",
   "core": "389b4ed09ef8526b",
   "date": "2026-10-08",

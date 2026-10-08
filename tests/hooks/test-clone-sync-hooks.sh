@@ -195,9 +195,9 @@ git init -q -b main "$FMAIN5"   # the push-time guards check against origin/main
 mkdir -p "$FMAIN5/.clones/.session-clones"
 git clone -q "$FMAIN5" "$FMAIN5/.clones/bare"
 cp -r "$HERE/../../scripts" "$FMAIN5/.clones/bare/scripts"   # the push runs review-gate.sh and check-duplicate-defs.py from the clone
-mkdir -p "$FMAIN5/.clones/bare/wip/x" && echo 'def a(): return 1' > "$FMAIN5/.clones/bare/wip/x/a.py"   # check-duplicate-defs refuses to scan nothing
+mkdir -p "$FMAIN5/.clones/bare/pool/x" && echo 'def a(): return 1' > "$FMAIN5/.clones/bare/pool/x/a.py"   # check-duplicate-defs refuses to scan nothing
 ( export GIT_AUTHOR_NAME=x GIT_AUTHOR_EMAIL=x@t GIT_COMMITTER_NAME=x GIT_COMMITTER_EMAIL=x@t
-  echo c1 > "$FMAIN5/.clones/bare/g"; git -C "$FMAIN5/.clones/bare" add g scripts wip; git -C "$FMAIN5/.clones/bare" commit -qm c1 )
+  echo c1 > "$FMAIN5/.clones/bare/g"; git -C "$FMAIN5/.clones/bare" add g scripts pool; git -C "$FMAIN5/.clones/bare" commit -qm c1 )
 ( cd "$FMAIN5/.clones/bare" && python3 scripts/gates/gate-stamp.py --write hooks && python3 scripts/gates/gate-stamp.py --write diagram )   # the commit changes scripts/, and a scripts/ change pushes only behind a green hooks-test stamp (GUARD_EDIT_OK: fixture follows the new gate)
 [ -z "$(git -C "$FMAIN5" config --get receive.denyCurrentBranch || true)" ] || { echo "FAIL  fixture: main5 already had denyCurrentBranch"; FAILED=1; }
 OUT=$(cd "$FMAIN5/.clones/bare" && HOME=$TMP CLONE_MAIN="$FMAIN5" CLONE_GITHUB="$FMAIN5" "$SYNC" push 2>&1); RC=$?   # CLONE_GITHUB: the fixture main stands in for GitHub (GUARD_EDIT_OK: feature 130 made origin = GitHub)

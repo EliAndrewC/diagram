@@ -4,7 +4,7 @@
 fields: magistracies today, and - as they are built - samurai city estates, governor's mansions,
 samurai country estates, temple precincts drawn in their own right, and keeps.
 
-A drift between a Mode A procedure (`docs/buildings.md`, `docs/buildings/programs.md`) and the research record is NOT tracked
+A drift between a Mode A procedure (`docs/buildings.md`, `docs/building-programs.md`) and the research record is NOT tracked
 here: `make claims-report` lists every one (the `docs/buildings.md::` and `programs.md::` rows). A guess or silence the
 record already labels is listed by `make open-questions`. An entry here is sheet-level or research work neither carries.
 

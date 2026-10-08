@@ -408,9 +408,10 @@ map: export L7R_STAGE_PROFILE = $(if $(PROFILE),1,)
 map:            ## [maps] regenerate ONE gen and gate it   GEN=pool/hamlets/inashiro/inashiro.gen.py [PROFILE=1: where the roll spent its time]
 ##  GEN=<gen path>  which generator to re-run (default: `pool/hamlets/inashiro/inashiro.gen.py`)
 ##  PROFILE=1       also print where the roll spent its time, stage by stage
+##  REGEN_FROZEN=1  re-render a FROZEN legacy exhibit anyway - only on the GM's say-so (regen's --frozen-ok)
 	@: "GUARD_EDIT_OK: feature 278 FR-012 - make map on the REFERENCE rolled it twice: the reference check rolled it render-less into the roll cache, then regen found that entry without a render and rolled it again uncached to draw one. When the map asked for IS the reference, the check is the regen itself (regen gates what it rolls), so it is skipped; for every other map the check still runs first."
 	$(if $(filter pool/hamlets/inashiro/inashiro.gen.py,$(or $(GEN),pool/hamlets/inashiro/inashiro.gen.py)),,$(REF_FIRST))
-	$(RUN).pipeline.regen $(or $(GEN),pool/hamlets/inashiro/inashiro.gen.py)
+	$(RUN).pipeline.regen $(if $(REGEN_FROZEN),--frozen-ok,) $(or $(GEN),pool/hamlets/inashiro/inashiro.gen.py)
 	@: "GUARD_EDIT_OK: feature 240 FR-005 - a CACHED map may come back with no picture. The gate files its entries with rendering skipped, so a hit on one restores the manifest and DELETES the render (gencache.load, deliberately: a render the entry lacks is stale). make map then printed CACHED over a map with no .png and no .html, and the review precondition that names make map as its remedy could not be satisfied by it. So a hit that leaves a render missing is rolled again, uncached, which draws both."
 	@g="$(or $(GEN),pool/hamlets/inashiro/inashiro.gen.py)"; s="$${g%.gen.py}"; \
 	if [ -f "$$s.json" ] && { [ ! -f "$$s.png" ] || [ ! -f "$$s.html" ]; }; then \
@@ -560,7 +561,7 @@ notes-census:   ## [diagnostics] refresh the derived counts inside each map's no
 	$(RUN).tools.notes_census $(or $(M),$(wildcard pool/*/*/*.json) $(wildcard legacy-hand-authored-pool/*/*/*.json))
 
 # GUARD_EDIT_OK: feature 254 - a new operation, `building-programs`: the required-items tables of the Mode A types, derived.
-building-programs: ## [docs] render each declared Mode A type's required-items table into docs/buildings/programs.md from l7r/diagram/buildings/types.json (feature 254)   CHECK=1: exit 1 if stale
+building-programs: ## [docs] render each declared Mode A type's required-items table into docs/building-programs.md from l7r/diagram/buildings/types.json (feature 254)   CHECK=1: exit 1 if stale
 	$(RUN).tools.building_programs $(if $(CHECK),--check,)
 
 # GUARD_EDIT_OK: feature 259 - the glossary's SOURCE is now one file per term, so this target assembles

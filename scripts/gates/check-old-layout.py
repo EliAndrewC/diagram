@@ -34,7 +34,7 @@ sys.dont_write_bytecode = True
 
 OLD = ".claude/skills/" + "diagram"  # split so this file is not its own finding
 EXEMPT = re.compile(r"^(specs/|tests/hooks/fixtures/|dev/[a-z]+-log/|scripts/gates/check-old-layout\.py$)")  # the last: it names the forms it looks for
-LEDGER = "docs/review-ledger.md"
+LEDGER = "dev/review-ledger.md"
 
 
 def _git(root: Path, *args: str) -> str:
@@ -45,7 +45,8 @@ def old_ledger_lines(root: Path) -> set[str]:
     """The ledger as of the commit that added this check (HEAD's, before that commit exists)."""
     added = _git(root, "log", "--follow", "--diff-filter=A", "--format=%H", "--", "scripts/gates/check-old-layout.py").split()
     ref = added[-1] if added else "HEAD"
-    return set(_git(root, "show", f"{ref}:{LEDGER}").splitlines())
+    # the ledger moved from docs/ to dev/ on 2026-10-08, after this check was added: read it where it stood then
+    return set((_git(root, "show", f"{ref}:{LEDGER}") or _git(root, "show", f"{ref}:docs/review-ledger.md")).splitlines())
 
 
 # The path as code also spells it: split into Path or os.path.join parts, or with its dots escaped in a regex. Each one
@@ -113,6 +114,7 @@ def selftest() -> int:
         (root / "docs" / "c.md").write_text("run scripts/_" + "hm_make.py, then /diagram/scripts/" + "clone-sync-hooks.sh\n")
         (root / "docs" / "d.md").write_text("fine: scripts/hooks/lib/hm_make.py, tests/hooks/test-x-hooks.sh, scripts/gates/gate-stamp.py\n")
         (root / "specs" / "001-x" / "plan.md").write_text(f"history: {OLD}/dev/loop.md\n")
+        (root / LEDGER).parent.mkdir(parents=True, exist_ok=True)
         (root / LEDGER).write_text(f"| old row | {OLD}/pool |\n")
         subprocess.run(["git", "-C", str(root), "add", "-A"], check=True)
         subprocess.run(["git", "-C", str(root), "-c", "user.email=t@t", "-c", "user.name=t", "commit", "-qm", "a"], check=True)
@@ -121,7 +123,7 @@ def selftest() -> int:
         subprocess.run(["git", "-C", str(root), "add", "-A"], check=True)
         rows = findings(root)
         got = sorted((r.split(":", 1)[0], "new row" in r) for r in rows)
-        if got != [("docs/a.md", False), ("docs/b.py", False), (LEDGER, True)]:
+        if got != sorted([("docs/a.md", False), ("docs/b.py", False), (LEDGER, True)]):
             print(f"selftest: expected docs/a.md and the NEW ledger row only, got {rows}")
             return 1
         srows = findings(root, SCRIPT_FORMS)

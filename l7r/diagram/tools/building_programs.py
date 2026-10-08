@@ -1,5 +1,5 @@
 """`make building-programs`: the required-items table of every declared Mode A type, rendered into
-`docs/buildings/programs.md` between markers (feature 254, plan D11).
+`docs/building-programs.md` between markers (feature 254, plan D11).
 
 WHY. The GM's rule for the second type was that a type is declared ONCE and the docs render from it.
 The checks read `buildings/types.json`; the reviewers read `programs.md`. If the two are written
@@ -21,7 +21,7 @@ import sys
 from ..buildings.types import BuildingType, classification, load_types
 
 SKILL = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", ".."))
-PROGRAMS = os.path.join(SKILL, "docs", "buildings", "programs.md")
+PROGRAMS = os.path.join(SKILL, "docs", "building-programs.md")
 
 
 def _band(item_band) -> str:
