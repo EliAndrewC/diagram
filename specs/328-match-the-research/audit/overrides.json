@@ -1108,14 +1108,14 @@
  },
  "l7r/diagram/hamletgen/ways/geom.py::end_serves#an end serves a farmhouse": {
   "after": [],
+  "e0_basis": "the code already says what the page says: end_serves takes 60 ft to the house's center, the page's own grounds note",
   "files": [
-   "l7r/diagram/hamletgen/ways/geom.py",
-   "l7r/diagram/hamletgen/ways/law.py"
+   "l7r/diagram/hamletgen/ways/geom.py"
   ],
-  "fix": "Move the footprint measure into geom.py (law.py imports geom, so end_serves cannot import law.reach_to_steading without a cycle): make end_serves take house footprints (or house records + M) and test 60 ft (WAY_END_REACH_FT) to the house's footprint edge plus 12 ft (STEADING_ARRIVAL_FT) to its built ground, then have law.reach_to_steading (law.py:150) call it. Every caller passes centers today and changes with it: geom.py:490 (the clause), geom.py:544/578 and the by_house list at geom.py:580 and the keep clause at geom.py:537 (_trim_to_service), law.py:607/612 (dangling_ends builds `centers`), bund.py:207/222, sweeps.py:693 (lane_houses `owed`), serve.py:458 (street_arrives). Rewrite STEADING_ARRIVAL_FT's rationale (consts.py:276-283, which defends the center measure), update the session note on the 0246 drawing page line 12 ('to a way's line or a farmhouse's center'), and regenerate the hamlet pool maps the looser end trim changes.",
+  "fix": "none: not drifted - 0246 measures the 60 ft to the farmhouse's center (its grounds note: 'to a way's line or a farmhouse's center'), as end_serves does; wave 44 corrected reach_to_steading to the same measure, so the two agree",
   "flag": "",
-  "moved": "T113a (fresh reader): geom.py:490 measures `math.dist(q, h) <= WAY_END_REACH_FT` to house CENTERS, while law.py:150-176 reach_to_steading (wave 43) measures `gap(body) <= HOUSE_REACH_FT` to the house's footprint; both cite 0246.drawing line 12: 'A lane end counts as reaching a farmhouse when it comes within 60 ft of the ",
-  "tier": "E3"
+  "moved": "wave 44 (spec-fidelity round 1): closed as not drifted - the finding rested on wave 43's footprint reading, which wave 44 withdrew",
+  "tier": "E0"
  },
  "l7r/diagram/hamletgen/ways/joints.py::RANK_WIDTHS#the spine at 5 ft": {
   "after": [],

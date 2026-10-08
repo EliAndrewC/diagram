@@ -452,6 +452,29 @@ def test_a_run_kept_whole_takes_a_link_where_it_arrives() -> None:
     assert hg.ways._lay_web_lane(s, run, [], [], [], houses=homes) is True
     drawn = [tuple(q) for q in s.M["lanes"][-1]["pts"]]
     assert (0.0, 200.0) in drawn and (20.0, 200.0) not in drawn, drawn
+    # a new leg blocked: the link `joined_link` finds is drawn as its own lane, if a lane can be (else the run is refused)
     walled = _StubSettlement(lanes=[[(0.0, 0.0), (0.0, 400.0)]], houses=homes)
     fence = [(40.0, 175.0), (60.0, 175.0), (60.0, 190.0), (40.0, 190.0)]  # on the snapped vertex's new leg out of (0, 200)
-    assert hg.ways._lay_web_lane(walled, run, [], [fence], [], houses=homes) is False
+    assert hg.ways._lay_web_lane(walled, run, [], [fence], [], houses=homes) is True
+    linked = [[tuple(q) for q in ln["pts"]] for ln in walled.M["lanes"][1:]]
+    assert any(set(ln) == {(20.0, 200.0), (0.0, 200.0)} for ln in linked), linked
+    # the new legs AND the link blocked: not drawn
+    shut = _StubSettlement(lanes=[[(0.0, 0.0), (0.0, 400.0)]], houses=homes)
+    post = [(5.0, 190.0), (15.0, 190.0), (15.0, 210.0), (5.0, 210.0)]  # astride the link (20, 200) -> (0, 200)
+    assert hg.ways._lay_web_lane(shut, run, [], [fence, post], [], houses=homes) is False and len(shut.M["lanes"]) == 1
+
+
+def test_carried_onto_splices_the_link_and_checks_the_leg_into_it() -> None:
+    """`carried_onto` (feature 328 wave 44): no link, nothing; a point link leaves the run; a link from the end itself is spliced
+    on; one starting past a foul is spliced only where the leg into it is walkable."""
+    from l7r.diagram.hamletgen.ways.serve import carried_onto
+
+    run = [(20.0, 200.0), (60.0, 200.0), (120.0, 200.0)]
+    assert carried_onto(run, 0, None, [], [], []) is None
+    assert carried_onto(run, 0, [(20.0, 200.0)], [], [], []) == run
+    assert carried_onto(run, 0, [(20.0, 200.0), (0.0, 200.0)], [], [], []) == [(0.0, 200.0), (20.0, 200.0), (60.0, 200.0), (120.0, 200.0)]
+    piece = [(14.0, 205.0), (0.0, 205.0)]  # a clear run that starts off the end
+    assert carried_onto(run, 0, piece, [], [], [])[:2] == [(0.0, 205.0), (14.0, 205.0)]
+    wall = [(30.0, 198.0), (40.0, 198.0), (40.0, 212.0), (30.0, 212.0)]  # on the leg from (60, 200) into the piece
+    assert carried_onto(run, 0, piece, [], [wall], []) is None
+    assert carried_onto(run[::-1], -1, piece, [], [], [])[-2:] == [(14.0, 205.0), (0.0, 205.0)]

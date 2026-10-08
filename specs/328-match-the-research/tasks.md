@@ -1445,9 +1445,14 @@ In ranking order (rows 482-485; 486-492 next, row 492's change held as `audit/he
   line or a farmhouse's center") and `geom.end_serves` does - wave 43 measured it to the footprint; the 12 ft to the built
   ground (the house's footprint among it) stays. `test_a_house_crowded_with_ends_...` restated: its ends stood 61-63 ft out,
   inside the old 80 ft, and now stand 51 ft.
-- Wave 43's found row, tiered by a fresh reader (T113a, `audit/t113a-out.jsonl`): `geom.end_serves` E3 (one predicate for
-  0246's reach across five modules), left for its place; with the center restored the two now agree on the 60 ft.
+- Wave 43's found row, tiered by a fresh reader (T113a, `audit/t113a-out.jsonl`): `geom.end_serves` - E3 there, closed in
+  round 1 as not drifted (below).
 - The third gather form claimed (0081: the arriving lane meets the other's side as a T).
+- Round 1 (spec-fidelity): a run kept whole now has three outcomes - its arriving vertex snapped where both new legs are
+  walkable, else `joined_link`'s link drawn as its own join lane (as the far branch draws one), else not drawn - where it was
+  refused on a link it never drew; a carried end's leg into a clear-run link checked (`carried_onto`); the claim reads "not
+  drawn where no link is walkable". The `geom.end_serves` row closed as not drifted (E0): with the 60 ft measured to the
+  center, as the page's grounds note does, it already says what the page says (wave 43's footprint reading withdrawn).
 
 - [x] T113a wave 43's found rows tiered by the work they take, by a fresh reader (FR-002, FR-003, SC-003)
       research: rendering

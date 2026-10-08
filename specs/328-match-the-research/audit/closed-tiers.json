@@ -183,6 +183,7 @@
  "l7r/diagram/hamletgen/ways/fabric.py::_homestead_polys#a path leaves its own yard": "E2",
  "l7r/diagram/hamletgen/ways/fabric.py::house_hit#no house on a tread": "E1",
  "l7r/diagram/hamletgen/ways/geom.py::_trim_to_service#an outlying house keeps its way": "E1",
+ "l7r/diagram/hamletgen/ways/geom.py::end_serves#an end serves a farmhouse": "E0",
  "l7r/diagram/hamletgen/ways/geom.py::push_clear_of_fabric#gateway clearance": "E1",
  "l7r/diagram/hamletgen/ways/joints.py::_MEET_FT#ends that nearly meet": "E1",
  "l7r/diagram/hamletgen/ways/joints.py::_one_joint#a fold or Z at a joint becomes a T": "E3",
