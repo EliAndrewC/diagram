@@ -8482,7 +8482,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "51",
-  "scope": "deferred"
+  "scope": "kept"
  },
  {
   "key": "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._pick_overlay_plots#lotus draw",

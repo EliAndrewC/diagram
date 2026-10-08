@@ -44,8 +44,7 @@ def test_the_privy_faces_the_sun_on_its_share_and_takes_an_attested_seat_otherwi
     sunny = _lay(("privy",), roll=0.1, ground=(YARD, EAST_BED))["privy"]  # the SE ground open, as an E bed leaves it
     assert sunny[1] > HH / 2 and sunny[0] >= -1e-6, "southeast to south of the house"
     shaded = _lay(("privy",), roll=0.9, ground=(YARD,))["privy"]  # past the 72.7% share: the rolled attested seat, the barn here
-    kura = fs.kura_rect(HW, HH, "N", 1.0)
-    assert shaded[0] > kura[0] + kura[2] / 2 and sorted(shaded[2:]) == sorted(fs.PRIVY_SIZES_FT[int(0.9 * 16)]), "the barn seat, against the annex's east gable (feature 328), at the household's rolled size"
+    assert not (shaded[0] > HW / 2 and abs(shaded[1] + HH * 0.25) < 1e-6) and sorted(shaded[2:]) == sorted(fs.PRIVY_SIZES_FT[int(0.9 * 16)]), "an attested seat a hamlet farm has (no barn, feature 328), at the household's rolled size"
 
 
 def test_the_privy_and_the_bath_room_take_the_households_rolled_size_and_the_notes_carry_it() -> None:
@@ -234,13 +233,12 @@ def test_the_privy_stays_within_48_ft_of_its_house_or_is_refused() -> None:
         _lay(("privy",), ground=[(0.0, 0.0, HW + 120.0, HH + 120.0)])
 
 
-def test_the_barn_privy_stands_against_the_annex_where_the_steading_keeps_one() -> None:
-    """Feature 328 (0047's drawing page: the privy by the barn): against the outer wall of the steading's annex - the north
-    annex's north wall, the west annex's west wall - and at the house's own east end only where there is no annex."""
-    north = fs.kura_rect(HW, HH, "N", 1.0)
-    seat = fs.barn_seat(HW, HH, 6.0, 6.0, 3.5, north)
-    assert seat[0] > north[0] + north[2] / 2 and abs(seat[1] - north[1]) < 1e-9, "against the north annex's east gable"
-    west = fs.kura_rect(HW, HH, "W", 1.0)
-    seat = fs.barn_seat(HW, HH, 6.0, 6.0, 3.5, west)
-    assert seat[0] < west[0] - west[2] / 2, "beyond the west annex's west wall"
-    assert fs.barn_seat(HW, HH, 6.0, 6.0, 3.5, None)[0] > HW / 2, "no annex: the house's east end"
+def test_a_hamlet_farm_has_no_barn_so_its_privy_never_takes_the_barn_seat() -> None:
+    """Feature 328 (0047 puts the privy "inside the barn", a building of its own; a hamlet draws no barn): the barn's share
+    goes to the yard, the front and the stable at their own weights - every roll lands on one of the three."""
+    forms = fs.FixtureForms()
+    for k in range(20):
+        u = k / 20
+        seats = fs._seats("privy", HW, HH, 6.0, 6.0, 3.5, None, None, lambda _s: 0.99, u, forms, _px)
+        assert all(not (q[0] > HW / 2 and abs(q[1] + HH * 0.25) < 1e-6) for q in seats), "no seat at the house's east end"
+        assert len(seats) == 3

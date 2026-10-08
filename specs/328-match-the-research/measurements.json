@@ -364,5 +364,27 @@
   "unit": "% end vs start; s under cProfile; calls",
   "observed": "2026-10-08",
   "source": "dev/perf-log/20261008T142706Z-328-start-perfbase.json and 20261008T143016Z-328-end-base.json; dev/perf-log/20261008T143238Z-profile-adhoc-seed4-web.txt (end) and the start's and the clone's seed-4 web profiles (dev/perf-raw, archived to mapgen-perflogs)"
+ },
+ "batch2-perf-pair-and-track-control": {
+  "quantity": "batch 2's pair, 328-start (2e3153b4e, batch 1's close) against 328-end (3f91becf2, wave 50's close), back to back in scratch worktrees on a host under load 1.96 to 1.66; and the control: 10 households seed 39's homesteads and web stages at the start, at the end and at the end with wave 47's past_the_frame undone (perf-audit's own worktrees, two runs each)",
+  "value": {
+   "total": -3.5,
+   "10hh": -3.1,
+   "20hh": -4.3,
+   "40hh": -3.2,
+   "seed39_10hh_homesteads_s": {
+    "start": 0.86,
+    "end": 1.1,
+    "control": 0.8
+   },
+   "seed39_10hh_web_s": {
+    "start": 1.01,
+    "end": 0.76,
+    "control": 0.94
+   }
+  },
+  "unit": "% end vs start (totals); s (stages)",
+  "observed": "2026-10-08",
+  "source": "dev/perf-log/20261008T165220Z-328-start-perfbase.json and 20261008T165526Z-328-end-base.json; profiles 20261008T185926Z-profile-328-seed39-homesteads-perfbase.txt and 20261008T185931Z-...-base.txt; perf-audit's record 20261008T192314Z-review-328-confirmation-local-digram-backlog.json"
  }
 }

@@ -64,7 +64,7 @@ PRIVY_SUN_MAX_FT = 48.0
 PRIVY_SUNNY_SHARE = 0.727  # Wang & Ochiai 2022: 72.7% of outhouses SE to S (the GM, 2026-08-29: used literally)
 """Research: privies on the sunny side - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: 72.7%"""
 WOODSHED_STEP_FT = 6.0  # HELD (feature 328 wave 9, re-measured wave 51): the wood shed a ken past the wall gap - its edge a ken plus the gap off its wall
-"""Research: wood shed off its wall - research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: the GUESS a ken beyond the wall gap, about 9.5 ft - at a ken from the wall itself the 20-household roll of seed 39 refuses its web (re-measured 2026-10-08, feature 328 wave 51)"""
+"""Research: wood shed off its wall - research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: held at a ken plus the wall gap, past the page's ken - at a ken three scaling rolls of the reference refuse their web (20 households seed 39; 40 households seeds 4 and 25: farmhouses or the field left off the network; seed 39 re-measured 2026-10-08 with the shed off the house's own walls); the found row hamletgen/ways/last_resort.py::refuse_unreached#every household reached at 20 and 40 households"""
 # THE PRIVY'S SIZE (feature 280, research/questions/0047-farm-privies-and-their-night-soil-benjo.html): each homestead's privy is one of the sixteen of the Kakimochi table
 # (Meiji 18, read back to the last years of the shogunate), frontage by depth in feet at 6 ft to the ken - each as likely as
 # the next. A calibration against one village's table; the old 6 x 6 ft one-ken module was a GUESS.
@@ -362,7 +362,7 @@ def lay_fixtures(
             if notes is not None:
                 notes["bath_seat"] = got[1]
         else:
-            seats = _seats(kind, hw, hh, w, d, g, yard, laid.get("privy"), roll, u, forms, px, steading_rects(hw, hh, "N" if kura else None, px(1.0))[1] if kura else None)
+            seats = _seats(kind, hw, hh, w, d, g, yard, laid.get("privy"), roll, u, forms, px)
             offered = chain(seats, outward(seats, px(STEP_FT), OUT_STEPS))
             if kind == "privy":  # its own farmstead's: no further than 48 ft from its house (0047), never stepped past it
                 offered = (q for q in offered if within_reach_of(q, roofs[0], px(PRIVY_SUN_MAX_FT)))
@@ -389,7 +389,7 @@ def shed_off_a_wall(seat: Rect, walls: Sequence[Rect], g: float, px: Callable[[f
     Research:
         wood shed a ken off a wall - research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: never out across
             the dooryard
-        the ken past the wall gap - research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: the gap plus `WOODSHED_STEP_FT`, about 9.5 ft"""
+        the ken past the wall gap - research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: held at the gap plus `WOODSHED_STEP_FT`, about 9.5 ft, past the page's ken behind the found row refuse_unreached#every household reached (the reason at the constant)"""
     return clears(seat, walls[:1], g + px(WOODSHED_STEP_FT) - 1e-6) and against_a_wall(seat, walls, g + px(WOODSHED_STEP_FT) + 1e-6) and not in_front(seat, walls[0][3] / 2)
 
 
@@ -418,7 +418,7 @@ def _wood_shed(hw: float, hh: float, w: float, d: float, g: float, walls: Sequen
     Research:
         wood shed seats - research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: behind or beside the house,
             never the front yard
-        wall places a ken out - research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: offered a ken beyond the wall gap, about 9.5 ft off each wall"""
+        wall places a ken out - research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: offered a ken beyond the wall gap, held past the page's ken (`WOODSHED_STEP_FT`)"""
     seats = _seats("woodpile", hw, hh, w, d, g, None, None, lambda _salt: 0.0, 0.0, FixtureForms(), px)
     offered = chain(seats, (q for q in wall_places(walls, w, d, g + px(WOODSHED_STEP_FT), px(WALL_SLIDE_FT)) if not in_front(q, hh / 2)))
     found = _first((q for q in offered if shed_off_a_wall(q, walls, g, px)), taken, g)
@@ -514,29 +514,17 @@ def _sun_sector(w: float, d: float, radii: tuple[float, ...]) -> tuple[Rect, ...
     return tuple(sun)
 
 
-def barn_seat(hw: float, hh: float, w: float, d: float, g: float, annex: Rect | None) -> Rect:
-    """The privy's barn seat: against an outer wall of the steading's annex where it keeps one (feature 328, 0047's drawing
-    page - beside the outbuilding, not the house's own end): a north annex's east gable, beside the house's corner (its north
-    wall was tried first and refused a 20-household roll's web, cohort seed 7), a west annex's west wall; the house's +x end
-    where it keeps none.
-
-    Research: the privy by the barn - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: inside or against the barn, the outbuilding"""
-    if annex is None:
-        return (hw / 2 + g + d / 2, -hh * 0.25, d, w)
-    ax, ay, aw, ah = annex
-    if ay < -hh / 2:  # a north annex (its center past the back wall it laps): its east gable, beside the house's corner
-        return (ax + aw / 2 + g + d / 2, ay, d, w)
-    return (ax - aw / 2 - g - d / 2, ay, d, w)  # a west annex: its west wall
-
-
 def _seats(
     kind: str, hw: float, hh: float, w: float, d: float, g: float, yard: Rect | None, privy: Rect | None, roll: Callable[[float], float], u: float, forms: FixtureForms, px: Callable[[float], float]
-, annex: Rect | None = None) -> list[Rect]:
+) -> list[Rect]:
     """The recorded seats of one fixture kind in the house frame, first choice first (the late placer's tables).
 
     Research:
         privy seats - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: the sun-side sector on
-            72.7%, else the four attested places
+            72.7%, else the attested places a hamlet farm has - the yard, the front, by the stable; never the barn, which a
+            hamlet draws none of
+        privy in the yard off the back wall - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: held at a ken plus the wall gap (`PRIVY_YARD_STEP_FT`), past the page's ken, behind the found row at the constant
+        shrine off its corner - UNRESEARCHED: 14 ft (`SHRINE_CORNER_FT`) out from the house's corner on both axes
         manure beyond the privy - research/questions/0042-manure-heaps-and-compost-kyuhi.drawing.html: on the side of the privy away from the house, along the line from its center; jittered a few feet;
             behind or beside the house where there is no privy
         manure heap fallback spots - GUESS research/questions/0042-manure-heaps-and-compost-kyuhi.drawing.html: beside the privy at 1.1 and 1.9
@@ -554,10 +542,12 @@ def _seats(
             "yard": (hw * 0.3, -(hh / 2 + g + px(PRIVY_YARD_STEP_FT) + d / 2), w, d),
             "front": (hw * 0.40, hh / 2 + g + px(PRIVY_FRONT_STEP_FT) + d / 2, w, d),
             "stable": (-hw * 0.35, hh / 2 + g + d / 2, w, d),
-            "barn": barn_seat(hw, hh, w, d, g, annex),
         }
-        first = weighted(forms.privy_weights, u)
-        attested = [seat[first]] + [seat[k] for k, _ in forms.privy_weights if k != first]
+        # NO BARN, NO BARN SEAT (feature 328; 0047 puts the privy "inside the barn", a building of its own, and a hamlet draws
+        # no barn - `farm_fixtures.py`): the barn's share goes to the three places a hamlet farm has, at their own weights
+        weights = tuple((k, p) for k, p in forms.privy_weights if k in seat)
+        first = weighted(weights, u * sum(p for _k, p in weights))  # the roll spread over the places left
+        attested = [seat[first]] + [seat[k] for k, _ in weights if k != first]
         # THE OUTHOUSE FACES THE SUN, AT THE RATE THE RECORD GIVES (feature 152 T07): SE to S on 72.7% of households, the
         # sector walked nearest first - bearings in the house's frame, where its front is the south it was seated facing
         if roll(SALT[kind] + 0.25) >= PRIVY_SUNNY_SHARE:

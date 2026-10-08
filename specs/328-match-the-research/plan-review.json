@@ -1,6 +1,6 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "d6cf362bb6c3c3e97149215d18785b2d2695d8d72be3abb7d22c7990e08fed1c",
+ "plan_sha256": "ac2cb471c16d6366826f161191c07b41b104408ca9b7b059b4ba87e92e2c495d",
  "reviewed": "2026-10-08",
  "declared": "spec-fidelity",
  "decisions": [
@@ -214,7 +214,160 @@
    "summary": "the five hamlets regenerated; only Kuwabata's two sluice records gained span 20",
    "class": "within",
    "why": "Confirmed from the diff: pool/ changes only by two 'span': 20.0 fields in kuwabata.json; at Kuwabata's channel widths the gate's drawn frame is unchanged, so no glyph is redrawn or re-placed on a kept map."
+  },
+  {
+   "id": "W51-1 the wet-paddy class explicit",
+   "summary": "a plot is classed wet paddy only where it is FLOODED and in the drain-side row (`low`), 0007",
+   "class": "within",
+   "why": "The ranking row's fix (class only the low drain-side basins as wet paddy). Implementation moved to 0007; nothing narrowed."
+  },
+  {
+   "id": "W51-2 the field pond drawn as a dish pond",
+   "summary": "bank ring at the fitted outline, wet margin inside it, open water and reeds on the margin; proportions GUESS, bank/margin/reed ink CONVENTION; glyph-check NEEDS-WORK then PASS",
+   "class": "within",
+   "why": "The row's fix as written (a tameike: an embankment ring and reeds on wet-tinted ground; 0008 'low ground ringed with an embankment and dug out'). The proportions are labeled GUESS on 0008's drawing page and at the constants; the glyph-check rounds fixed the drawing toward the page, never away from it."
+  },
+  {
+   "id": "W51-3 the winter crop's odds set by the site",
+   "summary": "barley weighs the drained share of the paddy, halved where a rolled town_nearness is far; the town knob even odds and the far factor both GUESS; two choice modals",
+   "class": "within",
+   "why": "The row's fix as written (weight by drainage and distance to a town). 0009: 'A settlement's drainage and the nearness of a town ... set the odds', and its Evidence comment already classes the roll's weights a guess. No hamlet records a town distance, so rolling it as a knob with per-settlement variance is the project's standing rule for an unrecorded site fact; the modals are the knob's ordinary dress."
+  },
+  {
+   "id": "W51-4 WINTER_CROP re-derived DEFERRED",
+   "summary": "audit/scope.json moves grain.py::WINTER_CROP#winter-crop weights kept -> deferred and dev/claims-deferred.json now lists grain.py::WINTER_CROP (it did not at 3f91becf2)",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "Measured against FR-010: all five kept hamlets' own execution records (.gencache/<hamlet>/meta.json) list grain.py WinterCropKnob.weights_for and CombMixin._coarse_grain_top_up, which resolves winter_crop by name - a knob in use and a module-level claim on one, so KEPT. The deferral is an artifact: audit/scope.py recognizes a knob only in the form register_knob(Knob(...)), and wave 51 registered this one as register_knob(WinterCropKnob(...)). The effect is that the claim this very wave rewrote reads DEFERRED in make claims-report and escapes the push's claims gate. Fix: teach scope.py the subclassed registration (any register_knob(<Knob subclass>(...))), re-derive, WINTER_CROP back to kept and out of dev/claims-deferred.json, and its re-check by impl-drift recorded on the kept row."
+  },
+  {
+   "id": "W51-5 the wood shed off the house's own walls, never the front, no extra pace",
+   "summary": "byre and retirement-house walls dropped; front-wall places filtered; the outward STEP_FT pace and its fallback claim removed; the kura annex counted as a wall of the house (GUESS)",
+   "class": "within",
+   "why": "Rows 'wood shed's walls', 'wood shed seats', 'wood shed fallback pace' as written. The kura kept as a house wall is labeled GUESS and is consistent with 0040's convention (the annex is drawn abutting the house, part of its outline), so a shed off it still stands behind or beside the house."
+  },
+  {
+   "id": "W51-6 the wood shed's standoff recorded on 0043 as the guess the map draws",
+   "summary": "0043's drawing page reworded from 'about 6 ft (a ken) off a wall' to 'a ken beyond the clear strip ... about 9.5 ft from the wall', with the reason that at a ken from the wall 'a farmstead in the largest hamlets would have no way through to the lanes'; WOODSHED_STEP_FT's claim relabeled to that page",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "This is the spec's named exception path - 'rewording a page to fit the code' (Edge Cases; FR-004; FR-003 excludes a page 'edited for this purpose') - and it was taken without the MODE 1 check the spec requires (spec.md has no new entry since 3f91becf2). On the merits it fails too: the reason is cost, not impossibility - the refusal is the web's reach at a 20-household scaling roll, which is a known, ranked E3 found row (hamletgen/ways/last_resort.py::refuse_unreached#every household reached), and wave 9 already took the spec's legitimate route for exactly this (the step held behind that found row, its claim saying so). The page's figure being a GUESS does not license moving it: the GM's rule is that the implementation moves to the record, and an implementation limit written onto a research page as the guess's reason is the record moved to the code. Fix: restore 0043's 'about 6 ft (a ken) off a wall', restore WOODSHED_STEP_FT's honest held claim (held past the page's ken, behind the found row), and leave the row open behind that E3 row - or fix the web's reach so a ken from the wall seats at 20 and 40 households. The wood shed occasions reviewed PASS at batch 2's close re-open if the standoff moves."
+  },
+  {
+   "id": "W51-7 the bath room rolled among its three walls",
+   "summary": "stable end 0.8, floored rooms 0.03 (1 of the registers' 36 baths, a peasant's), main door the rest; floored rooms no longer only a fallback",
+   "class": "within",
+   "why": "The row's fix (roll among all three walls). 0044's drawing page attests all three places and counts one peasant's floored-room bath; a hamlet has no headman, so the headman clause has nothing to act on."
+  },
+  {
+   "id": "W51-8 the privy within 48 ft of its house",
+   "summary": "every offered seat, the outward paces included, measured true off the house's outline; a farmstead with none refuses its privy by name",
+   "class": "within",
+   "why": "0047's drawing page: the 48 ft reach and 'Beyond 48 ft, privies stray out of their own farmsteads'. Implementation moved to the page; the refusal is the existing FixtureUnlaid route, not a carve-out."
+  },
+  {
+   "id": "W51-9 the downhill rule brought to 0054's strict under-90",
+   "summary": "DOWNHILL_FRACTION 0.2 -> 0 with a strict >; brook_join's now-redundant runs_downhill clause dropped (a 20 ft net fall is a net descent)",
+   "class": "within",
+   "why": "0054's drawing page, verbatim: 'the bound is a strict \"under 90\". A tighter bound of 60 degrees ... was considered and declined, since it would condemn real contour works.' The retired fifth (about 78 degrees) was the tighter bound the page declines."
+  },
+  {
+   "id": "W51-10 the woodland tier against the houses' median; the field beside the wood",
+   "summary": "house_floor the houses' median height; field_height_near the highest field edge within FIELD_BESIDE_FT (300 ft, UNRESEARCHED) past the nearest; glyph-check NEEDS-WORK then PASS",
+   "class": "within",
+   "why": "0077's drawing page: 'on ground higher than the fields beside it' and a wood below the houses stands where the record puts grass. Both changes tighten the code toward those words (the lowest house let a wood below 19 of 20 houses rank as above them; one nearest point let a wood rank above a field that ran up past it). The median is the project's reading of 'the houses' as a group, and the 300 ft is labeled UNRESEARCHED."
+  },
+  {
+   "id": "W51-11 the tint's `fronts`",
+   "summary": "a plot is ON the drain where half a plot's width of its own edge lies within a quarter plot of the collector (CONVENTION); mark_low and basin_rank read the one predicate; NEEDS-WORK twice then PASS",
+   "class": "within",
+   "why": "0007: the plots 'whose foot lies on the drain'. The found row (a corner plot tinted) is closed toward the page; the share is labeled CONVENTION with its measured basis."
+  },
+  {
+   "id": "W51-12 the pond feeder and the lotus draw DEFERRED on measure",
+   "summary": "comb.py _comb_draw_source#pond feeder from the sluice and landuse.py _pick_overlay_plots#lotus draw added to DEFERRED_ON_MEASURE",
+   "class": "within",
+   "why": "FR-010's 'a claim whose value no kept map reads though its unit runs is deferred with its measured reason'. Checked here: the feeder stream is drawn only where a pond source carries `feeder` (comb.py:611) and no hamletgen code sets that key on a source; no kept hamlet manifest names a lotus overlay."
+  },
+  {
+   "id": "W52-1 the belt's crossing allowance per way",
+   "summary": "two ways through one opening excuse 30 ft either side of each, the bare stretch between them no more than twice that",
+   "class": "within",
+   "why": "The row's fix as written (0072 holds the hole rule at a lane 'as written': no more than 30 ft of opening either side of the way). Measured: no map moves."
+  },
+  {
+   "id": "W52-2 the heap beyond the privy along its bearing",
+   "summary": "the heap's seats stepped along the unit vector from the house's center through the privy, side seats across it",
+   "class": "within",
+   "why": "The row's fix as written; 0042's drawing page: 'on the side away from the house'."
+  },
+  {
+   "id": "W52-3 the barn privy against the steading annex",
+   "summary": "the privy's 'barn' seat set against the kura annex (steading_rects(..., 'N' if kura)[1]); the house's own +x end kept where the farm has no annex",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "The decision rests on a premise nobody measured - that the steading annex is the barn - and the record says it is not. 0047 puts the privy 'inside the barn' (Suzuki 1959: 'a tub buried in a barn outside the main house') and draws it 'against the barn's outer wall'. The annex is the kura: 0040's drawing page draws 'the storehouse ... as an annex against the house wall', the taxonomy calls farm_sheds 'a farmstead's grain-storehouse kura drawn as an annex', the reader's modal (storage-shed.md) describes 'a farm's fireproof store', and 0040/0028 keep the barn (naya, the free-standing storage shed) a different building - which farm_fixtures.py:81 records the hamlets do not draw at all. So the fix seats a privy against a fireproof storehouse attached to the house and calls it the barn, and on the seven farms in eight with no kura it keeps the very house-end seat the row found drifted - a place that is none of the four 0047 names. The ranking row's fix text names kura_rect, but a row's fix is the audit's estimate, not a ruling, and FR-004 governs. Fix: no barn, no barn seat - where the farmstead draws no barn (every hamlet farm today), the barn place is not offered and the privy takes one of the other three attested places at their weights (0047: 'one of the four places the record names'); or draw the barn the record describes (a new element, its own tier). The north-annex east-gable choice (W52-4) falls with this."
+  },
+  {
+   "id": "W52-4 a north annex's east gable, not its north wall",
+   "summary": "the north wall refused cohort seed 7's web at 20 households, so the east gable beside the house's corner; a west annex's west wall (unreachable from lay_fixtures, which passes a north kura only)",
+   "class": "within",
+   "why": "Which outer wall of the barn a privy stands against is inside 'against the barn's outer wall', so the choice of wall is not itself a narrowing. It is moot until W52-3 is resolved, since the building it chooses a wall of is not the barn. Note: the west-annex branch is unreachable from lay_fixtures (kura is passed only as 'N')."
+  },
+  {
+   "id": "W52-5 seed 4's 20-household refusal filed",
+   "summary": "make cohort N=1 SEED=4 HOUSEHOLDS=20 refuses its web on the commit before wave 52 too; filed found-wave52.jsonl, E3",
+   "class": "within",
+   "why": "FR-006's found-row path; measured as pre-existing, so not a wave regression; the fix text moves the implementation to 0081."
+  },
+  {
+   "id": "T-1 make cohort HOUSEHOLDS=",
+   "summary": "the scaling sizes rolled untimed, the hamlet band lifted as the perf snapshot lifts it",
+   "class": "within",
+   "why": "Tooling the GM asked for at the four-hour check (2026-10-08, per the plan); it serves FR-005's batching (a refusal question answered without a timing run). The GM's words are not quoted in the spec or plan: record them where the plan cites the check."
+  },
+  {
+   "id": "T-2 make perf-profile HOUSEHOLDS=",
+   "summary": "the profiler at a scaling roll's size",
+   "class": "within",
+   "why": "Explains batch 2's pair at the size the growth was measured (FR-005's perf-explain). No new behavior on a map."
+  },
+  {
+   "id": "T-3 the measure-hooks reminder",
+   "summary": "a make perf outside a pair's legs gets a non-blocking reminder naming make cohort; pair legs and profiles left alone; 46 hook cases",
+   "class": "within",
+   "why": "A reminder, never a refusal, scoped to the one command the GM's check concerned; it enforces the batching the GM ruled (FR-005) and reaches nothing beyond it."
+  },
+  {
+   "id": "T-4 the 1,000-line bar in make quick",
+   "summary": "the existing gate rule also run in quick (0.16 s)",
+   "class": "within",
+   "why": "The same rule earlier, no new refusal; the file moves it forced (outfall.py, wood_rank.py, water_source.py) are verbatim lifts with re-exports."
+  },
+  {
+   "id": "B2-1 batch 2's pair",
+   "summary": "2e3153b4e -> 3f91becf2 band 1, TOTAL -3.5%; batch 1's band 2 gone; the one growth (seed 39, 10 households) explained and perf-audit CONSISTENT on its own control",
+   "class": "within",
+   "why": "FR-005's batched pair, perf-explain and perf-audit, as the spec states them. Its figures (band 1, TOTAL -3.5%, +0.3 s / -0.2 s) carry no m:<key> in measurements.json and no one-shot label in the batch table (batch 1 has batch1-perf-pair-and-reach-control); record one."
+  },
+  {
+   "id": "B2-2 the gate green on waves 47-51",
+   "summary": "make done green 2026-10-08, the NEEDS-WORK fixes re-gated",
+   "class": "within",
+   "why": "FR-005/FR-006 as stated."
+  },
+  {
+   "id": "B2-3 the 12 occasions PASS",
+   "summary": "field pond, woodland commons and wet paddy after rounds 2-3, the rest round 1",
+   "class": "within",
+   "why": "FR-005's occasions; rounds past two allowed by the GM's ruling of 2026-10-08 (Decisions Recorded)."
+  },
+  {
+   "id": "B2-4 the occasion lines marked reviewed",
+   "summary": "the batch-2 occasion lines and wave 51's field pond, wood shed and bath room lines marked reviewed PASS at batch 2's close",
+   "class": "within",
+   "why": "Reviewing wave 51's occasions early narrows nothing. The wood shed lines re-open if W51-6's fix moves the shed's standoff."
   }
  ],
- "verdict": "CLEAR"
+ "verdict": "BLOCKED"
 }

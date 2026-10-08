@@ -56,7 +56,7 @@ def all_knob_names(skill: Path) -> set[str]:
             tree = ast.parse(Path(f).read_text())
         except SyntaxError:
             continue
-        out |= {str(c.args[0].value) for c in ast.walk(tree) if isinstance(c, ast.Call) and isinstance(c.func, ast.Name) and c.func.id == "Knob" and c.args and isinstance(c.args[0], ast.Constant)}
+        out |= {str(c.args[0].value) for c in ast.walk(tree) if isinstance(c, ast.Call) and isinstance(c.func, ast.Name) and c.func.id.endswith("Knob") and c.args and isinstance(c.args[0], ast.Constant)}
     return out
 
 
@@ -209,7 +209,7 @@ def knobs_in_use(skill: Path, ran: set[tuple[str, str]]) -> set[str]:
             continue
         for call in (n for n in ast.walk(tree) if isinstance(n, ast.Call)):
             f_ = call.func
-            if (f_.id if isinstance(f_, ast.Name) else "") != "Knob" or not call.args or not isinstance(call.args[0], ast.Constant):
+            if not (f_.id if isinstance(f_, ast.Name) else "").endswith("Knob") or not call.args or not isinstance(call.args[0], ast.Constant):
                 continue
             rule = next((k.value for k in call.keywords if k.arg == "typing_rule"), None)
             if isinstance(rule, ast.Name) and rule.id in ran_names:
@@ -221,7 +221,7 @@ def knobs_in_use(skill: Path, ran: set[tuple[str, str]]) -> set[str]:
         except SyntaxError:
             continue
         for call in (n for n in ast.walk(tree) if isinstance(n, ast.Call)):
-            if isinstance(call.func, ast.Name) and call.func.id == "Knob" and call.args and isinstance(call.args[0], ast.Constant) and call.args[0].value in in_use:
+            if isinstance(call.func, ast.Name) and call.func.id.endswith("Knob") and call.args and isinstance(call.args[0], ast.Constant) and call.args[0].value in in_use:
                 KNOB_FEEDS.update(n.id for n in ast.walk(call) if isinstance(n, ast.Name))
     return in_use
 
@@ -235,7 +235,7 @@ def knob_of_constant(skill: Path, path: str, name: str) -> str | None:
     for node in tree.body:
         if isinstance(node, ast.Assign) and any(isinstance(t, ast.Name) and t.id == name for t in node.targets):
             for call in (n for n in ast.walk(node.value) if isinstance(n, ast.Call)):
-                if isinstance(call.func, ast.Name) and call.func.id == "Knob" and call.args and isinstance(call.args[0], ast.Constant):
+                if isinstance(call.func, ast.Name) and call.func.id.endswith("Knob") and call.args and isinstance(call.args[0], ast.Constant):
                     return str(call.args[0].value)
     return None
 
