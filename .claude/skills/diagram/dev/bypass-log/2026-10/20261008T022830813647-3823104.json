@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-08T02:28:30Z",
+  "target": "perf-explain",
+  "commit": "66b0ba937",
+  "outcome": "permitted",
+  "why": "perf-explain UNVERIFIED: perf-audit to take the counterfactual (the water rules reverted) on the seeds over 5% and check that their maps are identical"
+}

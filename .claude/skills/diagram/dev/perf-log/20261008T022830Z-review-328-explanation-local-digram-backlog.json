@@ -1,0 +1,378 @@
+{
+  "band": 1,
+  "base": {
+    "commit": "2657e36a5",
+    "label": "328-start",
+    "utc": "20261008T022320Z"
+  },
+  "binding": "92441bf80828c9cb18aa74e24f961170fd43a8c5dd14c34f47c9a6d20e93b7b0",
+  "end": {
+    "commit": "66b0ba937",
+    "label": "328-end",
+    "utc": "20261008T022636Z"
+  },
+  "environment": "local",
+  "explanation": "wave 27 changed the water stage's rules only: the brook's bend across the fall capped at 0 and its downhill check strict (water/brook.py, brook_rules.py), and flanks_commanded judging as 0053 does (water/fit.py). The growth lands in homesteads and web (+0.1 to 0.2 s), not in the water stage, and spreads over seeds that share nothing but the run; the host's load average was 3-4 while the pair ran. The three seeds over 5% (10 hh 47 +6.2%, and the scaling rows 25 +5.3%, 39 +5.0%, 47 +7.1%) are taken as load on unchanged maps, pending the counterfactual.",
+  "feature": "328-match-the-research",
+  "granted_by": {
+    "declared": "main",
+    "session_id": "8d3395e5-fe32-4f85-9c89-80c344d2ac1a",
+    "utc": "20261008T022830Z"
+  },
+  "kind": "explanation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": 3.6,
+          "39": 3.2,
+          "4": 3.0,
+          "47": 6.2
+        },
+        "total_pct": 4.0
+      },
+      "20": {
+        "seeds": {
+          "25": 1.5,
+          "39": 1.9,
+          "4": 5.3,
+          "47": 0.0
+        },
+        "total_pct": 2.3
+      },
+      "40": {
+        "seeds": {
+          "25": 3.1,
+          "39": 1.7,
+          "4": 1.1,
+          "47": 0.8
+        },
+        "total_pct": 1.6
+      }
+    },
+    "seeds": {
+      "25": 5.3,
+      "39": 5.0,
+      "4": 2.2,
+      "47": 7.1
+    },
+    "total_pct": 4.8
+  },
+  "render": "perf bands [local]: 328-end vs 328-start -> band 1\n  seed   4    +2.2%\n  seed  25    +5.3%; grew: web +0.1s\n  seed  39    +5.0%; grew: web +0.1s\n  seed  47    +7.1%; grew: homesteads +0.2s\n  TOTAL       +4.8%\n  10 households: TOTAL   +4.0% -> band 1\n    seed   4    +3.0%\n    seed  25    +3.6%\n    seed  39    +3.2%; grew: homesteads +0.1s\n    seed  47    +6.2%; grew: homesteads +0.1s\n  20 households: TOTAL   +2.3% -> band 1\n    seed   4    +5.3%; grew: web +0.3s\n    seed  25    +1.5%\n    seed  39    +1.9%\n    seed  47    +0.0%\n  40 households: TOTAL   +1.6% -> band 1\n    seed   4    +1.1%; grew: windbreak +0.1s\n    seed  25    +3.1%; grew: homesteads +0.2s, field +0.1s\n    seed  39    +1.7%; grew: homesteads +0.1s\n    seed  47    +0.8%\n  owes: a written explanation (make perf-explain WHY=... CONTROL=<key> or UNVERIFIED=<why>) AND a perf-audit confirmation (make perf-confirm ... AS=perf-audit)",
+  "stage_delta": {
+    "25": {
+      "appurtenances": [
+        0.08,
+        0.12
+      ],
+      "bamboo": [
+        0.0,
+        0.0
+      ],
+      "burial": [
+        0.0,
+        0.0
+      ],
+      "crossings": [
+        0.01,
+        0.01
+      ],
+      "field": [
+        0.67,
+        0.68
+      ],
+      "frame": [
+        0.01,
+        0.01
+      ],
+      "hinterland": [
+        0.67,
+        0.69
+      ],
+      "homesteads": [
+        1.08,
+        1.11
+      ],
+      "labels": [
+        0.01,
+        0.01
+      ],
+      "notice": [
+        0.1,
+        0.1
+      ],
+      "pond_stock": [
+        0.0,
+        0.0
+      ],
+      "seat": [
+        0.02,
+        0.02
+      ],
+      "sink": [
+        0.05,
+        0.04
+      ],
+      "track": [
+        0.06,
+        0.1
+      ],
+      "water_frame": [
+        0.0,
+        0.0
+      ],
+      "waterward": [
+        0.0,
+        0.0
+      ],
+      "web": [
+        0.59,
+        0.65
+      ],
+      "windbreak": [
+        0.45,
+        0.45
+      ],
+      "woodland": [
+        0.0,
+        0.0
+      ]
+    },
+    "39": {
+      "appurtenances": [
+        0.08,
+        0.09
+      ],
+      "bamboo": [
+        0.0,
+        0.0
+      ],
+      "burial": [
+        0.0,
+        0.0
+      ],
+      "crossings": [
+        0.01,
+        0.01
+      ],
+      "field": [
+        0.62,
+        0.66
+      ],
+      "frame": [
+        0.01,
+        0.01
+      ],
+      "hinterland": [
+        0.64,
+        0.65
+      ],
+      "homesteads": [
+        0.98,
+        1.01
+      ],
+      "labels": [
+        0.01,
+        0.01
+      ],
+      "notice": [
+        0.12,
+        0.12
+      ],
+      "pond_stock": [
+        0.0,
+        0.0
+      ],
+      "seat": [
+        0.02,
+        0.02
+      ],
+      "sink": [
+        0.01,
+        0.01
+      ],
+      "track": [
+        0.06,
+        0.06
+      ],
+      "water_frame": [
+        0.0,
+        0.0
+      ],
+      "waterward": [
+        0.0,
+        0.0
+      ],
+      "web": [
+        1.08,
+        1.18
+      ],
+      "windbreak": [
+        0.4,
+        0.41
+      ],
+      "woodland": [
+        0.0,
+        0.0
+      ]
+    },
+    "4": {
+      "appurtenances": [
+        0.1,
+        0.11
+      ],
+      "bamboo": [
+        0.0,
+        0.0
+      ],
+      "burial": [
+        0.0,
+        0.0
+      ],
+      "crossings": [
+        0.01,
+        0.01
+      ],
+      "field": [
+        0.89,
+        0.92
+      ],
+      "frame": [
+        0.01,
+        0.01
+      ],
+      "hinterland": [
+        0.76,
+        0.76
+      ],
+      "homesteads": [
+        1.33,
+        1.35
+      ],
+      "labels": [
+        0.01,
+        0.01
+      ],
+      "notice": [
+        0.08,
+        0.08
+      ],
+      "pond_stock": [
+        0.0,
+        0.0
+      ],
+      "seat": [
+        0.03,
+        0.03
+      ],
+      "sink": [
+        0.01,
+        0.01
+      ],
+      "track": [
+        0.13,
+        0.13
+      ],
+      "water_frame": [
+        0.0,
+        0.0
+      ],
+      "waterward": [
+        0.0,
+        0.0
+      ],
+      "web": [
+        0.72,
+        0.75
+      ],
+      "windbreak": [
+        0.44,
+        0.44
+      ],
+      "woodland": [
+        0.0,
+        0.0
+      ]
+    },
+    "47": {
+      "appurtenances": [
+        0.07,
+        0.07
+      ],
+      "bamboo": [
+        0.0,
+        0.0
+      ],
+      "burial": [
+        0.0,
+        0.0
+      ],
+      "crossings": [
+        0.01,
+        0.01
+      ],
+      "field": [
+        0.65,
+        0.65
+      ],
+      "frame": [
+        0.01,
+        0.01
+      ],
+      "hinterland": [
+        0.73,
+        0.75
+      ],
+      "homesteads": [
+        1.19,
+        1.41
+      ],
+      "labels": [
+        0.01,
+        0.01
+      ],
+      "notice": [
+        0.14,
+        0.14
+      ],
+      "pond_stock": [
+        0.0,
+        0.0
+      ],
+      "seat": [
+        0.02,
+        0.02
+      ],
+      "sink": [
+        0.04,
+        0.06
+      ],
+      "track": [
+        0.07,
+        0.07
+      ],
+      "water_frame": [
+        0.0,
+        0.0
+      ],
+      "waterward": [
+        0.0,
+        0.0
+      ],
+      "web": [
+        0.81,
+        0.83
+      ],
+      "windbreak": [
+        0.47,
+        0.45
+      ],
+      "woodland": [
+        0.0,
+        0.0
+      ]
+    }
+  },
+  "unverified": "perf-audit to take the counterfactual (the water rules reverted) on the seeds over 5% and check that their maps are identical",
+  "verdict": "pending"
+}

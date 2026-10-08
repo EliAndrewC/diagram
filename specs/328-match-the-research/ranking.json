@@ -6813,7 +6813,7 @@
   "tier_as_ranked": "E2",
   "moved": "wave 27: the session's E3 re-tier withdrawn - its trial changed more than the fix (it also broke out of the bend loop and turned the bend), and the literal fix (cap 0 down the fall, the strict downhill check) passes all 28 brook tests (amendment 26 round 1 reproduced it); done in wave 27",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "27",
   "scope": "kept"
  },
  {
@@ -6829,7 +6829,7 @@
   "tier_as_ranked": "E2",
   "moved": "wave 27: the session's E3 re-tier withdrawn - its trial changed more than the fix (it also broke out of the bend loop and turned the bend), and the literal fix (cap 0 down the fall, the strict downhill check) passes all 28 brook tests (amendment 26 round 1 reproduced it); done in wave 27",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "27",
   "scope": "kept"
  },
  {
@@ -6845,7 +6845,7 @@
   "tier_as_ranked": "E2",
   "moved": "wave 27: the session's E3 re-tier withdrawn - its trial changed more than the fix (it also broke out of the bend loop and turned the bend), and the literal fix (cap 0 down the fall, the strict downhill check) passes all 28 brook tests (amendment 26 round 1 reproduced it); done in wave 27",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "27",
   "scope": "kept"
  },
  {
@@ -6859,7 +6859,7 @@
   "flag": "",
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "27",
   "scope": "kept"
  },
  {

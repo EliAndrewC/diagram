@@ -1,0 +1,62 @@
+{
+  "band": 1,
+  "base": {
+    "commit": "2657e36a5",
+    "label": "328-start",
+    "utc": "20261008T022320Z"
+  },
+  "binding": "92441bf80828c9cb18aa74e24f961170fd43a8c5dd14c34f47c9a6d20e93b7b0",
+  "end": {
+    "commit": "66b0ba937",
+    "label": "328-end",
+    "utc": "20261008T022636Z"
+  },
+  "environment": "local",
+  "feature": "328-match-the-research",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "8d3395e5-fe32-4f85-9c89-80c344d2ac1a",
+    "utc": "20261008T023940Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": 3.6,
+          "39": 3.2,
+          "4": 3.0,
+          "47": 6.2
+        },
+        "total_pct": 4.0
+      },
+      "20": {
+        "seeds": {
+          "25": 1.5,
+          "39": 1.9,
+          "4": 5.3,
+          "47": 0.0
+        },
+        "total_pct": 2.3
+      },
+      "40": {
+        "seeds": {
+          "25": 3.1,
+          "39": 1.7,
+          "4": 1.1,
+          "47": 0.8
+        },
+        "total_pct": 1.6
+      }
+    },
+    "seeds": {
+      "25": 5.3,
+      "39": 5.0,
+      "4": 2.2,
+      "47": 7.1
+    },
+    "total_pct": 4.8
+  },
+  "note": "Counterfactual run by perf-audit: the three water files reverted to 2657e36a5 vs HEAD 66b0ba937, both in detached worktrees, 6 interleaved ABBA rounds after a warm-up, load 2.4-9.9. Every over-5% cell gives a byte-identical map (sha of s.M incl. streams/channels/field_ditches/houses/lanes): 15hh s25, s39, s47; 10hh s47; 20hh s4. So homesteads/web/field do identical work on both legs and the diff cannot reach them. Min-of-6 head vs reverted: 15hh s25 -3.2%, s39 +1.4%, s47 +1.4%; 10hh s47 +0.9%; 20hh s4 +1.5%. Medians swing -13%..+13% with paired rounds of both signs, and the growth spreads across every stage. Diagnosis for each over-5% seed: host load on an unchanged map, accepted at those numbers.",
+  "verdict": "consistent"
+}

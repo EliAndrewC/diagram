@@ -1030,7 +1030,9 @@ showed the literal fix alone passes all 28 - the re-tier is withdrawn and the th
   - `l7r/diagram/hamletgen/water/brook_rules.py::BEND_DIP_FT#bend dip allowance` - retired
   - `l7r/diagram/hamletgen/water/fit.py::flanks_commanded#both flanks commanded` - a flank of 150 ft or less not judged; a judged flank owed 80 ft or 30%, the lesser (0053 drawing)
 
-- [ ] T79 the brook never climbs below its tap (no dip, the strict check, the allowance retired); the flank rule as 0053 states it, its tests to the page (FR-004, FR-005)
+- [x] T79 the brook never climbs below its tap (no dip, the strict check, the allowance retired); the flank rule as 0053 states it, its tests to the page (FR-004, FR-005)
       research: rendering
-- [ ] T80 the claims re-checked by `impl-drift`; the close: wave 27's own bookend pair, `make done` green, the wave column (FR-005, FR-006)
+      verify: DONE. the brook below its tap never climbs - no dip down the fall, the strict check, BEND_DIP_FT retired (0054); flanks_commanded as 0053 states it; test_brook 28 and test_fit_flanks 7 passed; the five hamlets regenerated unchanged
+- [x] T80 the claims re-checked by `impl-drift`; the close: wave 27's own bookend pair, `make done` green, the wave column (FR-005, FR-006)
       research: rendering
+      verify: DONE. impl-drift IN-STEP (1 + 11); amendment 26 FAITHFUL (round 2), plan CLEAR; make done green; wave 27's own pair band 1, host load on unchanged maps (perf-audit consistent, each over-5% seed diagnosed by counterfactual); the wave column
