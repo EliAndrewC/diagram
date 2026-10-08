@@ -19,8 +19,8 @@ Guesses:
 - Whether this settlement's market town is near or far: no record of the settlement gives the distance, so it is rolled
   with even odds.
 - How a town's nearness and a settlement's drainage weigh against each other: both set the odds of a winter crop, but no
-  source says how much each counts, so a near town leaves the odds the drainage gives whole and a far one halves them, rather
-  than ruling the crop out as remoteness did in medieval times, because the second crop spread further in the Edo period,
+  source says how much each counts, so a near town leaves the odds the drainage gives whole and a far one halves them.
+  Remoteness ruled the crop out in medieval times but no longer in the Edo period, when the second crop spread further,
   bought fertilizer among the reasons.
 
 Depiction: The town is not drawn, and neither is the winter crop: our maps show the paddies in high summer. With the town near, a settlement's drained paddies carry winter barley at the full odds their drainage gives,
