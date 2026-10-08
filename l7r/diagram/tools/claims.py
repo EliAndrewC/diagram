@@ -18,7 +18,7 @@ THE GRAMMAR (`GRAMMAR`, which every refusal prints). A unit with one claim may w
 A constant has no docstring, so its claim is the string literal written directly after its assignment; a procedure section's
 claim is a comment, `<!-- Research: <label> - <backing> -->`. A unit with no claim of its own takes its MODULE docstring's
 `Research:` claims - a module of geometry helpers says NONE once, not on every helper - and each inherited claim is still a
-unit of the index of its own (`scripts/_claims.py`).
+unit of the index of its own (`scripts/record/claims.py`).
 
 THE CODE FINGERPRINT (spec FR-004). A function's syntax tree with every docstring removed and no positions - so comments,
 formatting and docstring prose change nothing, and a changed expression changes it - plus the dumped value of every in-scope
@@ -61,7 +61,7 @@ ROOT_PACKAGE = "l7r.diagram.hamletgen"
 #: every heading under them.
 PROCEDURES: dict[str, tuple[str, ...] | None] = {
     "docs/buildings.md": None,
-    "docs/buildings/programs.md": ("Magistrate's manor (county magistracy)", "Country shrine (a village district's shrine)"),
+    "docs/building-programs.md": ("Magistrate's manor (county magistracy)", "Country shrine (a village district's shrine)"),
 }
 _SECTION_HEAD = re.compile(r"^Research:(.*)$")
 _MARKER = re.compile(r"<!--\s*Research:\s*(.*?)\s*-->", re.S)

@@ -1,6 +1,6 @@
 # `fixtures/` - the public fixtures and their siting
 
-Split from the 1,212-line `fixtures.py` by feature 173 (constitution Principle X clause 13 - the cost being managed is context-window tokens, and the bar is now GATED by `scripts/check-file-scale.py`). **Load only the file the task calls for**; this index is the map.
+Split from the 1,212-line `fixtures.py` by feature 173 (constitution Principle X clause 13 - the cost being managed is context-window tokens, and the bar is now GATED by `scripts/gates/check-file-scale.py`). **Load only the file the task calls for**; this index is the map.
 
 `PublicFixturesMixin` exists ONLY to preserve the single import and the position in the `class Settlement(...)` base list - the split is meant to be invisible above this line. Sub-mixin methods reach each other through `self.` on the composed Settlement, so a cross-submodule call needs no import and the partition can be re-cut later without touching core.py.
 

@@ -8,7 +8,7 @@ gen. See [`../pipeline/CLAUDE.md`](../pipeline/CLAUDE.md).)
 
 Run them through their `make` targets at the repository root (named in the table; `docs/make-targets.html` lists each
 target's arguments). A tool with no target of its own is run by a test or by another target, never by a bare
-interpreter (`scripts/make-only-hooks.sh` refuses one).
+interpreter (`scripts/hooks/make-only-hooks.sh` refuses one).
 
 ## Which tool answers which question
 
@@ -16,7 +16,7 @@ interpreter (`scripts/make-only-hooks.sh` refuses one).
 |---|---|
 | Who put this thing here? What refused to put anything here? | `why_placed` - `make why-placed GEN=... AT=x,y` / `REFUSED=x,y` |
 | Is there too much empty space in this Mode A compound? Does its SVG break a geometric rule? | `pack_audit` - `make pack-audit` (its own [index](pack_audit/CLAUDE.md)) |
-| What does each declared Mode A type require, as a table? | `building_programs` - `make building-programs` (writes `docs/buildings/programs.md` between markers) |
+| What does each declared Mode A type require, as a table? | `building_programs` - `make building-programs` (writes `docs/building-programs.md` between markers) |
 | Is drawn ground cover standing somewhere the engine's keep-outs should have stopped it? | `scatter_audit` (held by `tests/tools/test_scatter_audit.py`); `make scatter-bases` lists a map's scatter bases |
 | Does using the generation cache ever change what a map looks like? | `cache_audit` - `make cache-audit` |
 | I fixed one hamlet - does the fix generalize across a cohort, and what exactly collides? | `cohort_audit` - `make cohort N=... [SEED=...]` |
@@ -38,7 +38,7 @@ interpreter (`scripts/make-only-hooks.sh` refuses one).
 | Build or check the record's site from its per-entry fragments | `record_asset` - `make record` |
 | The source vocabulary derived into the `source-applicability` contract | `source_tags_contract` - `make source-tags-contract` (feature 305) |
 | A performance snapshot of the reference hamlet, its bands, its profile and its review records | `perf_snapshot` (`make perf`), `perf_bands` (`make perf-report`), `perf_profile` (`make perf-profile`), `perf_review` (`make perf-explain` / `perf-review` and the rest) |
-| How long does this loop take, and where does the time go? | `make audit`, `make durations`, `scripts/_gatecost.py <target>`; the frozen ledger is `dev/timings.md` |
+| How long does this loop take, and where does the time go? | `make audit`, `make durations`, `scripts/measure/gatecost.py <target>`; the frozen ledger is `dev/timings.md` |
 
 Each module's own docstring carries the WHY it exists, usually with the incident that produced it. Read that before
 extending one. The operational guidance for `why_placed` and `open_seat` is [`dev/diagnostics.md`](../../../dev/diagnostics.md).

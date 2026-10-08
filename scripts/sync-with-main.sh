@@ -155,7 +155,7 @@ mirror_refresh() { # [wait-seconds]: with one, returns 75 when the lock stays bu
   [ "$rc" = 75 ] && [ -n "${1:-}" ] && return 75
   # The mirror's own artifacts follow the project to the root after the fast-forward that moved it (feature 329,
   # FR-008): render-sync's renders, the pool index, the built record site. Idempotent and quiet when nothing is left.
-  [ "$rc" = 0 ] && "$(dirname "${BASH_SOURCE[0]}")/_layout_carry.sh" "$MAIN"
+  [ "$rc" = 0 ] && "$(dirname "${BASH_SOURCE[0]}")/reviews/layout_carry.sh" "$MAIN"
   [ "$rc" = 0 ] \
     || die "mirror $MAIN cannot fast-forward to GitHub main - someone committed there by hand (main is a MIRROR, nobody's workspace). Inspect 'git -C $MAIN log origin/main..HEAD' and move that work into a clone."
   # GUARD_EDIT_OK: feature 169 - `--ff-only` DOES NOT CATCH THE COMMON CASE, and the documentation
@@ -215,7 +215,7 @@ seed_roll_cache() {
 refuse_unrelated_history() {
   git rev-parse -q --verify HEAD >/dev/null && git rev-parse -q --verify origin/main >/dev/null || return 0
   git merge-base HEAD origin/main >/dev/null 2>&1 && return 0
-  die "this clone's history shares no commit with main's - main's history was rewritten (feature 301's scrub, docs/history-rewrite-301.md). A pull would merge the old history back in. Re-clone it: git clone $MAIN $ROOT.new, cherry-pick any unpushed commits (git log --oneline HEAD --not --remotes), then replace $ROOT"
+  die "this clone's history shares no commit with main's - main's history was rewritten (feature 301's scrub, dev/history-rewrite-301.md). A pull would merge the old history back in. Re-clone it: git clone $MAIN $ROOT.new, cherry-pick any unpushed commits (git log --oneline HEAD --not --remotes), then replace $ROOT"
 }
 
 sync_in() { # [--mirror-only] [--background-render]
@@ -237,7 +237,7 @@ sync_in() { # [--mirror-only] [--background-render]
   # stopping the merge (feature 329 moved the whole project; research.md R5 measured both outcomes). The global git
   # config sets it too, for the clones whose own copy of this script predates the move.
   git -c merge.directoryRenames=true pull --no-rebase origin main
-  "$(dirname "${BASH_SOURCE[0]}")/_layout_carry.sh" "$ROOT"   # this clone's artifacts follow the move (FR-008)
+  "$(dirname "${BASH_SOURCE[0]}")/reviews/layout_carry.sh" "$ROOT"   # this clone's artifacts follow the move (FR-008)
   clone_index_refresh
   clone_page_refresh
   # No render pull-in anymore (GM 2026-07-22): its old rationale was that a clone's stale renders
@@ -279,42 +279,42 @@ push_cmd() {
   # always used before the shadow). Screened HERE so every push is covered, merges and
   # docs-only pushes included - the gates do not necessarily run for those. The selftest runs
   # first: a checker that cannot prove it still bites is the failure mode that motivated it.
-  python3 "$ROOT/scripts/check-duplicate-defs.py" --selftest >/dev/null || die "check-duplicate-defs selftest failed - the guard itself is broken; fix scripts/check-duplicate-defs.py before pushing"
-  python3 "$ROOT/scripts/check-duplicate-defs.py" "$ROOT" || die "duplicate top-level definitions (above) - a later def silently shadows the earlier; fix before pushing"
+  python3 "$ROOT/scripts/gates/check-duplicate-defs.py" --selftest >/dev/null || die "check-duplicate-defs selftest failed - the guard itself is broken; fix scripts/gates/check-duplicate-defs.py before pushing"
+  python3 "$ROOT/scripts/gates/check-duplicate-defs.py" "$ROOT" || die "duplicate top-level definitions (above) - a later def silently shadows the earlier; fix before pushing"
   # GUARD_EDIT_OK: feature 173 - the ~1,000-line bar (constitution Principle X clause 13), held on
   # BOTH routes. The gate holds it too (the skill Makefile's `lint`), but a docs- or tests-only delta
   # takes the DIRECT route and runs no gate at all - and a file crosses the bar one edit at a time,
   # which is precisely why the clause says the line must be CHECKED rather than felt. Selftest first,
   # same reason check-duplicate-defs does it.
-  python3 "$ROOT/scripts/check-file-scale.py" --selftest >/dev/null || die "check-file-scale selftest failed - the guard itself is broken; fix scripts/check-file-scale.py before pushing"
+  python3 "$ROOT/scripts/gates/check-file-scale.py" --selftest >/dev/null || die "check-file-scale selftest failed - the guard itself is broken; fix scripts/gates/check-file-scale.py before pushing"
   # GUARD_EDIT_OK: the stale-directory check runs at the push for the same reason its two siblings do
   # - a docs- or tests-only delta takes the DIRECT route and runs no gate at all, and a leftover
   # namespace package is exactly the kind of thing that arrives with a deletion, which is often such
   # a delta. Selftest first: a checker that cannot fail is worth nothing.
-  python3 "$ROOT/scripts/check-stale-dirs.py" --selftest >/dev/null || die "check-stale-dirs selftest failed - the guard itself is broken; fix scripts/check-stale-dirs.py before pushing"
-  python3 "$ROOT/scripts/check-stale-dirs.py" "$ROOT" || die "a directory in an importable tree has nothing left but __pycache__ (above) - it is still an importable namespace package, so this clone passes what a fresh clone fails"
+  python3 "$ROOT/scripts/gates/check-stale-dirs.py" --selftest >/dev/null || die "check-stale-dirs selftest failed - the guard itself is broken; fix scripts/gates/check-stale-dirs.py before pushing"
+  python3 "$ROOT/scripts/gates/check-stale-dirs.py" "$ROOT" || die "a directory in an importable tree has nothing left but __pycache__ (above) - it is still an importable namespace package, so this clone passes what a fresh clone fails"
   # GUARD_EDIT_OK: feature 329 FR-007 - a NEW refusal: a live file naming the project's old location (moved to the root).
-  python3 "$ROOT/scripts/check-old-layout.py" --selftest >/dev/null || die "check-old-layout selftest failed - fix scripts/check-old-layout.py before pushing"
-  python3 "$ROOT/scripts/check-old-layout.py" "$ROOT" || die "a live file names the project's old location (above) - feature 329 moved it to the repository root; drop the prefix"
-  python3 "$ROOT/scripts/check-file-scale.py" "$ROOT" || die "a Python file is past the ~1,000-line bar (above) - constitution Principle X clause 13, gated since feature 173"
+  python3 "$ROOT/scripts/gates/check-old-layout.py" --selftest >/dev/null || die "check-old-layout selftest failed - fix scripts/gates/check-old-layout.py before pushing"
+  python3 "$ROOT/scripts/gates/check-old-layout.py" "$ROOT" || die "a live file names the project's old location (above) - feature 329 moved it to the repository root; drop the prefix"
+  python3 "$ROOT/scripts/gates/check-file-scale.py" "$ROOT" || die "a Python file is past the ~1,000-line bar (above) - constitution Principle X clause 13, gated since feature 173"
   # GUARD_EDIT_OK: feature 234 - both halves of "the record and the modals stay in step" run HERE for
   # the same reason the three above do: the delta that breaks either is a research-page edit touching
   # no Python, which takes the DIRECT route and runs no gate at all, so a gate-only check would surface
   # the breakage as an inherited red on the next session's unrelated work. Selftest first, same reason.
-  python3 "$ROOT/scripts/check-entry-headings.py" --selftest >/dev/null || die "check-entry-headings selftest failed - the guard itself is broken; fix scripts/check-entry-headings.py before pushing"
-  python3 "$ROOT/scripts/check-entry-headings.py" "$ROOT" || die "a class entry names a research heading that no longer resolves (above) - a rename owes its inbound links, feature 234"
+  python3 "$ROOT/scripts/gates/check-entry-headings.py" --selftest >/dev/null || die "check-entry-headings selftest failed - the guard itself is broken; fix scripts/gates/check-entry-headings.py before pushing"
+  python3 "$ROOT/scripts/gates/check-entry-headings.py" "$ROOT" || die "a class entry names a research heading that no longer resolves (above) - a rename owes its inbound links, feature 234"
   # GUARD_EDIT_OK: feature 301 FR-014 - every pointer to the research names a fragment that exists, and no pointer names a
   # built page; here as well as at the gate because a docs-only or spec-only delta takes the DIRECT route. Selftest first.
-  python3 "$ROOT/scripts/check-research-pointers.py" --selftest >/dev/null || die "check-research-pointers selftest failed - the guard itself is broken; fix scripts/check-research-pointers.py before pushing"
-  python3 "$ROOT/scripts/check-research-pointers.py" "$ROOT" || die "a pointer to the research does not resolve, or names a built page (above) - feature 301; \`make fragment-move\` moves a fragment with its pointers"
+  python3 "$ROOT/scripts/gates/check-research-pointers.py" --selftest >/dev/null || die "check-research-pointers selftest failed - the guard itself is broken; fix scripts/gates/check-research-pointers.py before pushing"
+  python3 "$ROOT/scripts/gates/check-research-pointers.py" "$ROOT" || die "a pointer to the research does not resolve, or names a built page (above) - feature 301; \`make fragment-move\` moves a fragment with its pointers"
   # GUARD_EDIT_OK: feature 313 FR-010 - a NEW check: the canonical download list stays append-only against main (no entry
   # lost, moved or inserted, no id reused, every entry with its mark lines). Selftest first, as the pointer check's.
-  python3 "$ROOT/scripts/_downloads.py" selftest || die "the download-list check's selftest failed - the guard itself is broken; fix scripts/_downloads.py before pushing"
-  ( cd "$ROOT" && python3 "$ROOT/scripts/_downloads.py" check ) || die "the canonical download list is not append-only against main (above) - feature 313; \`make download-add FILE=<draft.md>\` appends an entry"
-  "$ROOT/scripts/entry-gate.sh" || exit 1
+  python3 "$ROOT/scripts/record/downloads.py" selftest || die "the download-list check's selftest failed - the guard itself is broken; fix scripts/record/downloads.py before pushing"
+  ( cd "$ROOT" && python3 "$ROOT/scripts/record/downloads.py" check ) || die "the canonical download list is not append-only against main (above) - feature 313; \`make download-add FILE=<draft.md>\` appends an entry"
+  "$ROOT/scripts/gates/entry-gate.sh" || exit 1
   # GUARD_EDIT_OK: feature 316 - the claims gate, on both routes for entry-gate's reason: a research-only delta that moves a
   # question's findings under a claim takes the DIRECT route, and owes the claim's re-check all the same.
-  "$ROOT/scripts/claims-gate.sh" || exit 1
+  "$ROOT/scripts/gates/claims-gate.sh" || exit 1
   # GUARD_EDIT_OK: feature 258 - the record's assembly check runs HERE as well as at the gate, and for
   # the reason entry-gate.sh is also in both places: a record-only change takes the DIRECT route, where
   # the gate never runs, so a check only at the gate has a hole exactly where this feature's own commits
@@ -337,16 +337,16 @@ push_cmd() {
   # DIRECT route and runs no gate at all. It reads only the spec directories the delta touches, and a
   # spec with no `tasks.md` (the number claim, the milestone push) passes three of its four checks by
   # construction, so the two pushes the root CLAUDE.md protects are untouched. Selftest first.
-  python3 "$ROOT/scripts/spec-lint.py" --selftest >/dev/null || die "spec-lint selftest failed - the guard itself is broken; fix scripts/spec-lint.py before pushing"
-  python3 "$ROOT/scripts/spec-lint.py" --delta "$ROOT" || die "spec-lint found something a review round would otherwise spend itself on (above) - feature 236, the GM: mistakes caught early and cheaply"
+  python3 "$ROOT/scripts/gates/spec-lint.py" --selftest >/dev/null || die "spec-lint selftest failed - the guard itself is broken; fix scripts/gates/spec-lint.py before pushing"
+  python3 "$ROOT/scripts/gates/spec-lint.py" --delta "$ROOT" || die "spec-lint found something a review round would otherwise spend itself on (above) - feature 236, the GM: mistakes caught early and cheaply"
   # GUARD_EDIT_OK: feature 241 - THE CONFLICT-MARKER BACKSTOP runs here as well as in the gate's static
   # phase, and of the six checks in this block it is the one with the strongest claim to the push: the
   # delta that lands a marker is a MERGE, and a merge's own delta is whatever the two sides touched -
   # frequently docs, tests and manifests, which take the DIRECT route and run no gate at all. That is
   # exactly how 23 marker-carrying files reached a commit on 2026-09-13. The hook refuses STAGING one;
   # this asks whether one is already committed, which no hook can see. Selftest first, same reason.
-  python3 "$ROOT/scripts/_hm_conflict.py" --selftest >/dev/null || die "_hm_conflict selftest failed - the guard itself is broken; fix scripts/_hm_conflict.py before pushing"
-  python3 "$ROOT/scripts/_hm_conflict.py" --tracked "$ROOT" || die "a tracked file still carries an unresolved merge conflict (above) - the history here is never rewritten, so resolve it before it lands, feature 241"
+  python3 "$ROOT/scripts/hooks/lib/hm_conflict.py" --selftest >/dev/null || die "_hm_conflict selftest failed - the guard itself is broken; fix scripts/hooks/lib/hm_conflict.py before pushing"
+  python3 "$ROOT/scripts/hooks/lib/hm_conflict.py" --tracked "$ROOT" || die "a tracked file still carries an unresolved merge conflict (above) - the history here is never rewritten, so resolve it before it lands, feature 241"
   # GREEN-GATE GUARD (constitution Principle XIII, GM 2026-08-17). The principle's enforcement
   # clause says this procedure "does not run to completion on a red or regressed state" - which was
   # ASPIRATIONAL until now: nothing here knew whether a gate had run, so compliance was a session
@@ -356,22 +356,22 @@ push_cmd() {
   # prove it still bites is the failure mode that motivated it.
   # GUARD_EDIT_OK: feature 170 - THE THIRD SILENT PERMIT, and the worst of them. This bypasses the
   # rule that nothing lands which a green gate did not see, and it recorded NOTHING: this file has no
-  # `guard_log` call anywhere and never sourced `_guardlog.sh`, so `make audit` could not show that
+  # `guard_log` call anywhere and never sourced `guardlog.sh`, so `make audit` could not show that
   # the push guard had ever been worked around. Found by the round-2 review of this feature, which
   # derived the census from the tree rather than reading the session's list. The reason must also
   # clear the floor now - an environment variable's VALUE is its reason (GM 2026-08-30).
   if [ -n "${GATE_STAMP_OK:-}" ]; then
     # shellcheck source=/dev/null
-    . "$ROOT/scripts/_guardlog.sh"
-    if ! python3 "$ROOT/scripts/_hm_escape.py" reason-ok <<<"$GATE_STAMP_OK" >/dev/null; then
+    . "$ROOT/scripts/hooks/lib/guardlog.sh"
+    if ! python3 "$ROOT/scripts/hooks/lib/hm_escape.py" reason-ok <<<"$GATE_STAMP_OK" >/dev/null; then
       guard_log sync-with-main blocked "$GATE_STAMP_OK" GATE_STAMP_OK-no-reason
       die "GATE_STAMP_OK needs a REASON, not just a value: two words and eight characters, e.g. GATE_STAMP_OK=\"the gate is green on this content, the stamp predates a docs-only commit\". An escape nobody can audit is indistinguishable from the rule not existing (GM 2026-08-30, feature 170)."
     fi
     guard_log sync-with-main escaped "$GATE_STAMP_OK" gate-stamp-ok
     echo "sync-with-main: green-gate guard BYPASSED - $GATE_STAMP_OK" >&2
   else
-    python3 "$ROOT/scripts/gate-stamp.py" --selftest >/dev/null || die "gate-stamp selftest failed - the guard itself is broken; fix scripts/gate-stamp.py before pushing"
-    python3 "$ROOT/scripts/gate-stamp.py" --check origin/main || die "push refused by the green-gate guard (above)"
+    python3 "$ROOT/scripts/gates/gate-stamp.py" --selftest >/dev/null || die "gate-stamp selftest failed - the guard itself is broken; fix scripts/gates/gate-stamp.py before pushing"
+    python3 "$ROOT/scripts/gates/gate-stamp.py" --check origin/main || die "push refused by the green-gate guard (above)"
   fi
   # files OUR unpushed commits touch, captured BEFORE the pull so the overlap test is honest.
   # INCOMING files = what the pull moves HEAD across - NOT a diff against post-push origin/main,
@@ -419,12 +419,12 @@ push_cmd() {
   # A spec ships with a fidelity verdict; a re-rolled Mode B map ships with its review logged. Both
   # were constitutional and unenforced, and both had already been skipped in practice. Checked here
   # because this is the moment work becomes everyone else's problem.
-  "$(dirname "$0")/review-gate.sh" || exit 1
+  "$(dirname "$0")/gates/review-gate.sh" || exit 1
   # GUARD_EDIT_OK: feature 243 - AND A PLAN'S DECISIONS ARE REVIEWED BEFORE ITS TASKS ARE TICKED. review-gate
   # holds the spec; a plan is written after that verdict and nothing read it, so a narrowing reached ticked
   # tasks and main unchecked (specs/243-*/research.md R1). `make tick` asks the same question, but a box can
   # be ticked by hand, so the push is where it holds.
-  "$(dirname "$0")/plan-gate.sh" || exit 1
+  "$(dirname "$0")/gates/plan-gate.sh" || exit 1
   # THE PERFORMANCE BANDS ARE ENFORCED HERE (feature 129, FR-001/FR-002/FR-009): the GM's words for
   # band 3 are "before it is committed back to main", so the push - not the gate - is where a
   # missing explanation, confirmation, audit or sign-off stops the work. `make perf-review` names

@@ -49,7 +49,7 @@ be. So before adding a row: run `make roll-audit` (the same arithmetic off the l
 earn are few, write them as unit tests of the placer instead; if the test asserts behavior rather than lines, it belongs
 in `tests/soak/`; and if a roll is still needed, record the audit in the feature's research.md and point the row's
 `audit=` at that section - `tests/test_rolls.py` checks it exists and carries the audit's output. This file is a GUARD
-(`scripts/guard-file-hooks.sh`, both routes): an edit needs GUARD_EDIT_OK with a reason in the diff, and a change here
+(`scripts/hooks/guard-file-hooks.sh`, both routes): an edit needs GUARD_EDIT_OK with a reason in the diff, and a change here
 makes the next gate a FULL run so the new row is judged against every context of the suite. A `PoolGen` row is the one
 kind the verdict prints and never fails: a shipped map is the GM's exhibit decision, rolled cold only.
 Feature 215 had reached the packing record's nine; 216 traded the rest for unit tests and one shared partial roll. The reference and Kuwabata are read from the POOL's

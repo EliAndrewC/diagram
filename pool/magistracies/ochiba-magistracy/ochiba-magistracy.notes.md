@@ -33,6 +33,7 @@
 
 ## Deliberate choices and tolerated stretches
 
+- **The threshold stones are drawn ~3.3 by 4.7 ft ON PURPOSE** (GM 2026-09-26): Ochiba is where the threshold stones are made and painted; canon's field stones are two fists. Ochiba's reception room faces the inner garden.
 - The residence is ONE two-row block, family-only (feature 267: R02, and pass 2's re-mass). Rooms: the guest room (west) and the reception/zashiki (east end) along the garden row; the family quarters (west) and Tatsuya's quarters/study (behind the reception) in the back row. The family's informal door and the attached privy are on the block's west end, north of the kitchen ell. No ancestral alcove (not a lineage-held posting - correct). Occupant labels kept as the GM's schematic convention.
 - The karo has his own house in the residence court, and the senior retainers a separate quarters by the stables - NOT bays of the lord's wing (interior-audit correction 2026-07). Ochiba is option (a) so all are on-grounds, but each in its own structure.
 - Each residence room-label is a multi-room ZONE/suite, not one room (compressed for legibility, a tolerated simplification per size-audit); the engawa strip along the block's south face, over the inner garden, is the veranda that reads "residence, not nagaya."

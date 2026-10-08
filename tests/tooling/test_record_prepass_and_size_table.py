@@ -1,4 +1,4 @@
-"""`scripts/_record_prepass.py` and `scripts/_size_table.py` (feature 251, FR-005 and FR-006).
+"""`scripts/record/record_prepass.py` and `scripts/reviews/size_table.py` (feature 251, FR-005 and FR-006).
 
 Both take the mechanical first step out of a subagent check and hand the agent a list. WHAT THESE PROVE:
 the pre-pass finds each session-note shape `record-format` names, reads VISIBLE text only (a note inside
@@ -16,12 +16,14 @@ import json
 import pathlib
 import subprocess
 
+from tests._scripts import script
+
 REPO = pathlib.Path(__file__).resolve().parents[2]
 SKILL = REPO
 
 
 def _load(name: str):  # noqa: ANN202
-    spec = importlib.util.spec_from_file_location(name, REPO / "scripts" / f"{name}.py")
+    spec = importlib.util.spec_from_file_location(name, script(name))
     assert spec and spec.loader
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)

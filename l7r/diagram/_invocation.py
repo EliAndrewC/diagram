@@ -25,7 +25,7 @@ is nothing against intent. The determination therefore reads the PROCESS TREE, w
 cannot forge without doing something that looks wrong.
 
 THIS IS LAYER 2 OF FOUR, and deliberately not the load-bearing one. A `PreToolUse` hook
-(`scripts/make-only-hooks.sh`) catches the command by SHAPE before it ever runs, which costs zero
+(`scripts/hooks/make-only-hooks.sh`) catches the command by SHAPE before it ever runs, which costs zero
 time and can see things no in-process check can - a bare `pytest`, a `make -f` naming a foreign
 makefile. This module is defense in depth: it catches shapes the hook did not anticipate, and it is
 the ONLY layer that can catch an in-process call (`python3 -c "import ...; generate(...)"`), which

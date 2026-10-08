@@ -120,11 +120,11 @@ done:            ## [tests] tier 3, the whole gate: lint, the static checks, the
 #  direction (GUARD_EDIT_OK: the fidelity review removed a FORCE= flag as unrequested). ONE shell block, so `exit 0`
 #  ends the target before the reference step. Re-stamping is safe because the key includes the stamp's own hash.)
 	@if [ -z "$(FULL)" ] && python3 -m l7r.diagram.ci verified-done; then \
-	  root=$$(git rev-parse --show-toplevel 2>/dev/null) && [ -n "$$root" ] && python3 "$$root/scripts/gate-stamp.py" --write diagram || true; \
+	  root=$$(git rev-parse --show-toplevel 2>/dev/null) && [ -n "$$root" ] && python3 "$$root/scripts/gates/gate-stamp.py" --write diagram || true; \
 	  : "GUARD_EDIT_OK: the SHORT-CIRCUIT re-stamps rather than earns, and that is what kept a bogus" ; \
 	  : "record alive: each later gate refreshed its timestamp so it never aged out. No duration floor" ; \
 	  : "applies here (0 s is correct for a reuse) but the dry-run refusal does." ; \
-	  python3 "$$(git rev-parse --show-toplevel)/scripts/check-run-plausible.py" --reuse $(DONE_NAME) || exit 1; \
+	  python3 "$$(git rev-parse --show-toplevel)/scripts/gates/check-run-plausible.py" --reuse $(DONE_NAME) || exit 1; \
 	  $(LOGRUN) $(DONE_NAME) reference 0 already-verified; $(STATE) green-local $(DONE_NAME) reused; \
 	  printf '\n\033[1mgate green\033[0m (already verified - nothing the gate exercises has changed since the last green run)\n'; exit 0; \
 	fi; \
@@ -159,7 +159,7 @@ done:            ## [tests] tier 3, the whole gate: lint, the static checks, the
 	: "and the L7R_TESTS_FULL signal, which is what still distinguishes it." ; \
 	for phase in hooks-test test-full $(if $(FULL),perf-gate,); do \
 	  printf '\n\033[1m== %s ==\033[0m\n' "$$phase"; \
-	  if [ "$$phase" = hooks-test ] && root=$$(git rev-parse --show-toplevel 2>/dev/null) && python3 "$$root/scripts/gate-stamp.py" --fresh hooks; then \
+	  if [ "$$phase" = hooks-test ] && root=$$(git rev-parse --show-toplevel 2>/dev/null) && python3 "$$root/scripts/gates/gate-stamp.py" --fresh hooks; then \
 	    printf 'hooks-test: already green against exactly these guard scripts - skipped (gate-stamp --fresh hooks; 84 s measured 2026-08-26)\n'; continue; fi; \
 	  $(MAKE) --no-print-directory $$phase FROM_DONE=1 || { fail="$$fail $$phase"; $(RUNSTATS) fail "$$G" $$phase 2>/dev/null; }; \
 	done; \
@@ -181,12 +181,12 @@ done:            ## [tests] tier 3, the whole gate: lint, the static checks, the
 	: " the run-log entry and the ratchet: an incremental run that selected little legitimately finishes in under a minute, and it is"; \
 	: " never in the median a full run is judged against."; \
 	mode=$$(python3 -m l7r.diagram.ci incremental mode 2>/dev/null || echo full); sel=$$(python3 -m l7r.diagram.ci incremental selected 2>/dev/null || true); \
-	python3 "$$root/scripts/check-run-plausible.py" $(DONE_NAME) "$$(( $$(date +%s) - $$T0 ))" "$$mode" || exit 1; \
-	[ -n "$$root" ] && python3 "$$root/scripts/gate-stamp.py" --write diagram && python3 "$$root/scripts/gate-stamp.py" --write page || true; \
+	python3 "$$root/scripts/gates/check-run-plausible.py" $(DONE_NAME) "$$(( $$(date +%s) - $$T0 ))" "$$mode" || exit 1; \
+	[ -n "$$root" ] && python3 "$$root/scripts/gates/gate-stamp.py" --write diagram && python3 "$$root/scripts/gates/gate-stamp.py" --write page || true; \
 	: "GUARD_EDIT_OK: feature 206 - the BROWSER stamp is earned here only when this run RAN the package (BROWSER_SKIP" ; \
 	: " was empty). A run that skipped it leaves the stamp as found - re-stamping a skip is the 're-stamps rather" ; \
 	: " than earns' trap the short-circuit above records; the short-circuit itself writes no browser stamp either." ; \
-	$(if $(BROWSER_SKIP),,[ -n "$$root" ] && python3 "$$root/scripts/gate-stamp.py" --write browser || true;) \
+	$(if $(BROWSER_SKIP),,[ -n "$$root" ] && python3 "$$root/scripts/gates/gate-stamp.py" --write browser || true;) \
 	: "(GUARD_EDIT_OK: feature 196 FR-001 - the GREEN entry records the roll-cache class. The other"; \
 	: " three LOGRUN sites (already-verified, and the two failure paths) run WITHOUT _reference, so"; \
 	: " they have no class to record and must not invent one - an absent field is excluded from a"; \
@@ -208,9 +208,9 @@ done:            ## [tests] tier 3, the whole gate: lint, the static checks, the
 	: " construction, on a paid prompted target the ratchet has never judged.)"; \
 	cls=$$(cat "$$(git rev-parse --absolute-git-dir)/roll-cache-class" 2>/dev/null || true); \
 	scp="$(if $(FULL),full,reference)"; \
-	med=$$(python3 "$$root/scripts/_gatecost.py" $(DONE_NAME) "$$scp" "$${cls:-}" 2>/dev/null | grep -oE '^[0-9]+' | head -1); \
-	n=$$(python3 -c "import sys; sys.path.insert(0,'$$root/scripts'); import _gatecost; print(_gatecost.class_count('$(DONE_NAME)', '$$scp', None, '$$cls' or None))" 2>/dev/null || echo 0); \
-	if [ "$$mode" = incremental ]; then printf 'ratchet: incremental run (%s tests) - not judged; the median is over full runs\n' "$$sel"; else python3 "$$root/scripts/_ratchet.py" $(DONE_NAME) "$$(( $$(date +%s) - $$T0 ))" "$${med:-}" "$${cls:-}" "$$scp" "$$n" || exit 1; fi; \
+	med=$$(python3 "$$root/scripts/measure/gatecost.py" $(DONE_NAME) "$$scp" "$${cls:-}" 2>/dev/null | grep -oE '^[0-9]+' | head -1); \
+	n=$$(python3 -c "import sys; sys.path.insert(0,'$$root/scripts/measure'); import gatecost as _gatecost; print(_gatecost.class_count('$(DONE_NAME)', '$$scp', None, '$$cls' or None))" 2>/dev/null || echo 0); \
+	if [ "$$mode" = incremental ]; then printf 'ratchet: incremental run (%s tests) - not judged; the median is over full runs\n' "$$sel"; else python3 "$$root/scripts/measure/ratchet.py" $(DONE_NAME) "$$(( $$(date +%s) - $$T0 ))" "$${med:-}" "$${cls:-}" "$$scp" "$$n" || exit 1; fi; \
 	$(STATE) green-local $(DONE_NAME); \
 	: "GUARD_EDIT_OK: FINDING 2 OF THE NAMING AUDIT - both banners STATED SOMETHING FALSE. Since feature" ; \
 	: "174 the phase list is 'hooks-test test-full (+perf-gate under FULL)', so a plain make done runs the" ; \
@@ -330,7 +330,7 @@ done:            ## [tests] tier 3, the whole gate: lint, the static checks, the
 # ============================================================================================
 # OPERATIONS - every runnable unit of this project's work has a target (FR-001)
 #
-# "We want make commands for everything" (GM 2026-08-24). Not decoration: `scripts/make-only-hooks.sh`
+# "We want make commands for everything" (GM 2026-08-24). Not decoration: `scripts/hooks/make-only-hooks.sh`
 # refuses a bare interpreter and NAMES the target instead, so an operation without one is an operation
 # a session cannot legitimately run. That gap was real - gating bare pytest left "why is this slow"
 # with no route but the override, which is precisely how an override becomes routine.
@@ -384,19 +384,19 @@ verify:         ## [tests] THE PAIRED RUN: start the gate and dispatch the settl
 	@printf '\033[1mverify\033[0m: the gate and the independent review run TOGETHER - neither alone (GM 2026-08-29).\n'
 	@root=$$(git rev-parse --show-toplevel) && python3 -m l7r.diagram.ci engine-key worktree > "$$root/.git/pairing-key" || true  # NOT $(RUN): it carries a leading @, which is a literal argument once it is not at the start of a recipe line
 	@root=$$(git rev-parse --show-toplevel) && printf 'engine key %s\n' "$$(cut -c1-12 "$$root/.git/pairing-key" 2>/dev/null)"
-	@: "GUARD_EDIT_OK: feature 294 - verify names the OWED UNITS (_review_owed.py: occasions, not moved manifests), writes one prompt per unit, and refuses nothing itself; an undeclared delta is printed here and refused at push."; \
-	  root=$$(git rev-parse --show-toplevel); undeclared=$$(python3 "$$root/scripts/_review_owed.py" --root "$$root" --check-declared); \
+	@: "GUARD_EDIT_OK: feature 294 - verify names the OWED UNITS (review_owed.py: occasions, not moved manifests), writes one prompt per unit, and refuses nothing itself; an undeclared delta is printed here and refused at push."; \
+	  root=$$(git rev-parse --show-toplevel); undeclared=$$(python3 "$$root/scripts/reviews/review_owed.py" --root "$$root" --check-declared); \
 	  [ -z "$$undeclared" ] || printf '\n\033[1mOCCASIONS NOT DECLARED\033[0m: %s\n' "$$undeclared"
-	@: "GUARD_EDIT_OK: feature 231 - verify DECIDES whether a review is owed (GM 2026-09-12: a scripted check, part of make verify, tells us whether any change should even trigger a review). The maps come from scripts/_review_owed.py - every manifest that moved against the merge base with origin/main, not the HEAD~1 diff that saw one commit - and when some did, the reviewer's snapshot is taken here, automatically, into the clone's .git/review-snapshot/ where the gate's cache never evicts it."; \
+	@: "GUARD_EDIT_OK: feature 231 - verify DECIDES whether a review is owed (GM 2026-09-12: a scripted check, part of make verify, tells us whether any change should even trigger a review). The maps come from scripts/reviews/review_owed.py - every manifest that moved against the merge base with origin/main, not the HEAD~1 diff that saw one commit - and when some did, the reviewer's snapshot is taken here, automatically, into the clone's .git/review-snapshot/ where the gate's cache never evicts it."; \
 	  root=$$(git rev-parse --show-toplevel); \
-	  maps=$$(python3 "$$root/scripts/_review_owed.py" --root "$$root" | tr '\n' ' ' | sed 's/ $$//'); \
-	  why=$$(python3 "$$root/scripts/_review_owed.py" --root "$$root" --why); \
+	  maps=$$(python3 "$$root/scripts/reviews/review_owed.py" --root "$$root" | tr '\n' ' ' | sed 's/ $$//'); \
+	  why=$$(python3 "$$root/scripts/reviews/review_owed.py" --root "$$root" --why); \
 	  if [ -z "$$maps" ]; then \
 	    printf '\n\033[1mNO REVIEW CHECK OWED\033[0m: %s (feature 294: a check is owed on its occasion, never because a manifest moved). The gate runs alone; the GM looks at the map.\n' "$$why"; \
 	  else \
 	    mirror=""; case "$$root" in */.clones/*) mirror="$${root%%/.clones/*}";; esac; \
 	    : "GUARD_EDIT_OK: feature 248 - ONE AGENT PER MAP, and the tooling writes each prompt (GM 2026-09-14: whatever the tooling is doing to kick off reviews should make the correct thing happen automatically). The old one-line instruction naming every map was followed literally on feature 247 - one agent, four maps, serialized, 11 of 36 minutes - so the snapshot script now writes <map>/dispatch.md per map and the pair guard refuses a dispatch naming more than one."; \
-	    snap=$$(python3 "$$root/scripts/_review_snapshot.py" --root "$$root" $${mirror:+--mirror "$$mirror"} --key "$$(cat "$$root/.git/pairing-key" 2>/dev/null)" $$maps); \
+	    snap=$$(python3 "$$root/scripts/reviews/review_snapshot.py" --root "$$root" $${mirror:+--mirror "$$mirror"} --key "$$(cat "$$root/.git/pairing-key" 2>/dev/null)" $$maps); \
 	    n=$$(printf '%s\n' $$maps | wc -l); \
 	    printf 'owed: %s\n%s\n' "$$why" "$$snap"; \
 	    printf '\n\033[1mWHEN THE GATE IS GREEN, dispatch %s review agent(s), ONE PER UNIT\033[0m - each Agent call is the unit'"'"'s check (its slug begins with it) and takes the contents of its prompt file named above (.git/review-snapshot/<unit>/dispatch.md). A dispatch beside a running gate, or naming more than one unit, is refused (feature 294); a turn may not end with the gate green and an owed unit undispatched.\n' "$$n"; \
@@ -408,9 +408,10 @@ map: export L7R_STAGE_PROFILE = $(if $(PROFILE),1,)
 map:            ## [maps] regenerate ONE gen and gate it   GEN=pool/hamlets/inashiro/inashiro.gen.py [PROFILE=1: where the roll spent its time]
 ##  GEN=<gen path>  which generator to re-run (default: `pool/hamlets/inashiro/inashiro.gen.py`)
 ##  PROFILE=1       also print where the roll spent its time, stage by stage
+##  REGEN_FROZEN=1  re-render a FROZEN legacy exhibit anyway - only on the GM's say-so (regen's --frozen-ok)
 	@: "GUARD_EDIT_OK: feature 278 FR-012 - make map on the REFERENCE rolled it twice: the reference check rolled it render-less into the roll cache, then regen found that entry without a render and rolled it again uncached to draw one. When the map asked for IS the reference, the check is the regen itself (regen gates what it rolls), so it is skipped; for every other map the check still runs first."
 	$(if $(filter pool/hamlets/inashiro/inashiro.gen.py,$(or $(GEN),pool/hamlets/inashiro/inashiro.gen.py)),,$(REF_FIRST))
-	$(RUN).pipeline.regen $(or $(GEN),pool/hamlets/inashiro/inashiro.gen.py)
+	$(RUN).pipeline.regen $(if $(REGEN_FROZEN),--frozen-ok,) $(or $(GEN),pool/hamlets/inashiro/inashiro.gen.py)
 	@: "GUARD_EDIT_OK: feature 240 FR-005 - a CACHED map may come back with no picture. The gate files its entries with rendering skipped, so a hit on one restores the manifest and DELETES the render (gencache.load, deliberately: a render the entry lacks is stale). make map then printed CACHED over a map with no .png and no .html, and the review precondition that names make map as its remedy could not be satisfied by it. So a hit that leaves a render missing is rolled again, uncached, which draws both."
 	@g="$(or $(GEN),pool/hamlets/inashiro/inashiro.gen.py)"; s="$${g%.gen.py}"; \
 	if [ -f "$$s.json" ] && { [ ! -f "$$s.png" ] || [ ! -f "$$s.html" ]; }; then \
@@ -533,7 +534,7 @@ scatter-bases:  ## [diagnostics] where a map's ground-cover scatter stands: base
 ##  MAP=<pool map>      the map's folder, its stem, or its .svg
 ##  BOX=x0,y0,x1,y1     also list the bases inside this world-coordinate window
 	@if [ -z "$(MAP)" ]; then printf 'make scatter-bases: MAP=<pool map> is required - e.g. make scatter-bases MAP=pool/hamlets/sawada BOX=600,1600,1300,2000\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/_scatter_bases.py" "$(MAP)" $(if $(BOX),--box "$(BOX)",)
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/reviews/scatter_bases.py" "$(MAP)" $(if $(BOX),--box "$(BOX)",)
 
 # GUARD_EDIT_OK: feature 286 replaces `make seat-label` (a placement report and rewrite, retired at the GM's ruling - no check runs against the placer) with `make sheet-render`; nothing existing is weakened
 sheet-render:   ## [maps] render a hand-drawn Mode A sheet with its captions placed by the ONE placer (feature 286)   SHEET=<svg> OUT=<png>
@@ -560,7 +561,7 @@ notes-census:   ## [diagnostics] refresh the derived counts inside each map's no
 	$(RUN).tools.notes_census $(or $(M),$(wildcard pool/*/*/*.json) $(wildcard legacy-hand-authored-pool/*/*/*.json))
 
 # GUARD_EDIT_OK: feature 254 - a new operation, `building-programs`: the required-items tables of the Mode A types, derived.
-building-programs: ## [docs] render each declared Mode A type's required-items table into docs/buildings/programs.md from l7r/diagram/buildings/types.json (feature 254)   CHECK=1: exit 1 if stale
+building-programs: ## [docs] render each declared Mode A type's required-items table into docs/building-programs.md from l7r/diagram/buildings/types.json (feature 254)   CHECK=1: exit 1 if stale
 	$(RUN).tools.building_programs $(if $(CHECK),--check,)
 
 # GUARD_EDIT_OK: feature 259 - the glossary's SOURCE is now one file per term, so this target assembles
@@ -589,7 +590,7 @@ citations:      ## [docs] the same as `make record` (feature 301: the record's s
 record:         ## [docs] build the record's site, research/site/, from its questions (features 258, 301, 303) - a page per question, a page per section of each half and per tag, the whole record on one page   CHECK=1: build in memory and exit 1 on any refusal, writing nothing
 	$(RUN).tools.record_asset $(if $(CHECK),--check,)
 	@: "GUARD_EDIT_OK: feature 288 FR-005 - after assembling, a filled registry entry marks its URL cited on the sources-consulted ledger (not under CHECK=1, which writes nothing); a new step, nothing loosened"
-	$(if $(CHECK),,@python3 "$$(git rev-parse --show-toplevel)/scripts/_sources.py" mark-filled)
+	$(if $(CHECK),,@python3 "$$(git rev-parse --show-toplevel)/scripts/record/sources.py" mark-filled)
 
 # GUARD_EDIT_OK: feature 305 FR-012 - a new operation, `source-tags-contract`: derive the source vocabulary into the source-applicability contract; nothing loosened.
 source-tags-contract: ## [docs] derive research/source-tags.json's values and explanations into the source-applicability agent's contract (feature 305) - run after editing the vocabulary; a test fails while the block is stale   CHECK=1: write nothing, exit 1 while stale
@@ -601,7 +602,7 @@ source-tags-contract: ## [docs] derive research/source-tags.json's values and ex
 # GUARD_EDIT_OK: feature 303 - fragment-move now moves a question's STEM (every page, notes and originals file) by its new name or number.
 fragment-move:  ## [docs] rename or renumber a question - every file of its stem - and rewrite every pointer to it - the record's own links, about: markers, confusables, the Entry: lines, the code and docs (features 301, 303)   FROM=research/questions/NNNN-<slug>.html TO=research/questions/NNNN-<new slug>.html
 	@test -n "$(FROM)" -a -n "$(TO)" || { echo "make fragment-move FROM=research/questions/NNNN-<slug>.html TO=research/questions/NNNN-<new slug>.html" >&2; exit 2; }
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/_fragment_move.py" "$(FROM)" "$(TO)" --root "$$(git rev-parse --show-toplevel)"
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/fragment_move.py" "$(FROM)" "$(TO)" --root "$$(git rev-parse --show-toplevel)"
 
 
 
@@ -633,32 +634,32 @@ fragment-move:  ## [docs] rename or renumber a question - every file of its stem
 # guard refuses a scripts/ change whose stamp is missing or stale, exactly as it refuses engine
 # Python without a green `make done`. Motivating case: a RED hooks-test followed by `commit; procedure`
 # landed on main, because nothing at push time knew the guards had been edited.
-hooks-test:     ## [tests] run every scripts/test-*-hooks.sh, and prove each guard still has a companion
+hooks-test:     ## [tests] run every tests/hooks/test-*-hooks.sh, and prove each guard still has a companion
 	@root=$$(git rev-parse --show-toplevel); gitdir=$$(git rev-parse --absolute-git-dir); fail=""; n=0; skipped=0; \
 	: "(GUARD_EDIT_OK: the freshness cache's directory, asked of git instead of assumed - see the note beside its mkdir below; feature 157)"; \
 	: "(GUARD_EDIT_OK: feature 172 - one work directory for the fan-out's logs and exit codes)"; \
 	work=$$(mktemp -d); trap 'rm -rf "$$work"' EXIT; \
-	for h in $$root/scripts/*-hooks.sh $$root/scripts/review-gate.sh $$root/scripts/entry-gate.sh $$root/scripts/claims-gate.sh $$root/scripts/plan-gate.sh $$root/scripts/gate-stamp.py $$root/scripts/sync-with-main.sh; do \
+	for h in $$root/scripts/hooks/*-hooks.sh $$root/scripts/gates/review-gate.sh $$root/scripts/gates/entry-gate.sh $$root/scripts/gates/claims-gate.sh $$root/scripts/gates/plan-gate.sh $$root/scripts/gates/gate-stamp.py $$root/scripts/sync-with-main.sh; do \
 	  : "(GUARD_EDIT_OK: sync-with-main.sh joins the roster - its route decision is a guard, feature 130 T031)"; \
 	  : "(GUARD_EDIT_OK: feature 311 - entry-gate.sh and plan-gate.sh join it: both refuse at the push, both had companions that nothing ran, and entry-gate's had rotted)"; \
 	  : "(GUARD_EDIT_OK: feature 316 - claims-gate.sh joins it: it refuses at the push)"; \
 	  b=$$(basename $$h); case $$b in test-*) continue ;; esac; \
 	  t=test-$${b%.py}; case $$t in *.sh) ;; *) t=$$t.sh ;; esac; \
-	  if [ ! -f "$$root/scripts/$$t" ]; then \
-	    printf '\n\033[1mGUARD WITHOUT A TEST: %s has no scripts/%s\033[0m\n' "$$b" "$$t"; \
+	  if [ ! -f "$$root/tests/hooks/$$t" ]; then \
+	    printf '\n\033[1mGUARD WITHOUT A TEST: %s has no tests/hooks/%s\033[0m\n' "$$b" "$$t"; \
 	    printf 'A guard ships with its companion. Without one, nothing can tell whether it still\n'; \
 	    printf 'fires - or whether it fires on correct work, which is the more expensive failure.\n\n'; \
 	    fail="$$fail $$b"; continue; \
 	  fi; \
 	  : "(GUARD_EDIT_OK: feature 172 - THE DEPENDENCY SET IS DERIVED, TRANSITIVELY. It was a fixed list"; \
-	  : " naming all four shared helpers for every suite, so a one-line _gatecost.py fix re-ran 21 suites"; \
-	  : " when two reference it. scripts/_hookdeps.py follows the real reference graph, and follows it"; \
-	  : " THROUGH helpers: _guardlog.sh calls _hookmatch.py since feature 170, so a guard naming only the"; \
+	  : " naming all four shared helpers for every suite, so a one-line gatecost.py fix re-ran 21 suites"; \
+	  : " when two reference it. tests/hooks/hookdeps.py follows the real reference graph, and follows it"; \
+	  : " THROUGH helpers: guardlog.sh calls hookmatch.py since feature 170, so a guard naming only the"; \
 	  : " former still depends on the latter. Direct-only would UNDER-run and pass a suite a change had"; \
 	  : " broken, which is worse than the over-running it replaces. Measured in specs/172/research.md:"; \
-	  : " _gatecost.py 21 -> 2, test_hooks_cases.py 21 -> 3, and _hookmatch.py/_guardlog.sh still 20/19,"; \
+	  : " gatecost.py 21 -> 2, test_hooks_cases.py 21 -> 3, and hookmatch.py/_guardlog.sh still 20/19,"; \
 	  : " which is why this feature also runs the suites in parallel.)"; \
-	  deps=$$(python3 "$$root/scripts/_hookdeps.py" --deps "$$b" | sed "s|[^ ]*|$$root/scripts/&|g"); \
+	  deps=$$(python3 "$$root/tests/hooks/hookdeps.py" --deps "$$b" | sed "s|[^ ]*|$$root/&|g"); \
 	  : "(GUARD_EDIT_OK: fixing a guard that FIRES ON CORRECT WORK - the per-suite freshness cache resolved its own path as \$$root/.git/hooks-test, and in a LINKED WORKTREE .git is a FILE, so every one of the 19 suites failed with 'Directory nonexistent'. A detached worktree is exactly where constitution XIII requires the regression baseline to be taken, so the mandated procedure could not produce a green hooks-test on ANY commit. Asking git for the path fixes it in both layouts; the roster, the failure path and the stamp are unchanged. Feature 157.)"; \
 	  sha=$$(cat $$deps 2>/dev/null | sha256sum | cut -c1-16); mkdir -p "$$gitdir/hooks-test"; \
 	  if [ -z "$(HOOKS_ALL)" ] && [ "$$(cat "$$gitdir/hooks-test/$$b" 2>/dev/null)" = "$$sha" ]; then skipped=$$((skipped+1)); continue; fi; \
@@ -673,7 +674,7 @@ hooks-test:     ## [tests] run every scripts/test-*-hooks.sh, and prove each gua
 	: " hides a real race behind a green result.)"; \
 	if [ -s "$$work/todo" ]; then \
 	  mkdir -p "$$gitdir/hooks-test"; \
-	  xargs -P $(HOOKS_JOBS) -L1 -a "$$work/todo" "$$root/scripts/_hookrun.sh" "$$work" "$$gitdir" || true; \
+	  xargs -P $(HOOKS_JOBS) -L1 -a "$$work/todo" "$$root/tests/hooks/hookrun.sh" "$$work" "$$gitdir" || true; \
 	  for rc in "$$work"/*.rc; do \
 	    [ -f "$$rc" ] || continue; \
 	    b=$$(basename "$$rc" .rc); \
@@ -699,8 +700,8 @@ hooks-test:     ## [tests] run every scripts/test-*-hooks.sh, and prove each gua
 	if [ -z "$(FROM_DONE)" ]; then \
 	  : "(GUARD_EDIT_OK: the same new step - a file that BUILDS a path into scripts/, not one whose docstring mentions a"; \
 	  : " script: the mention form took in the browser tests, and on a full container the OOM killer took their Chrome)"; \
-	  pyt=$$(grep -rlE '/ *"scripts"|"scripts" */|join\([^)]*"scripts"' tests --include='test_*.py' | sort | tr '\n' ' '); \
-	  psha=$$( { find "$$root/scripts" -type f | sort | xargs cat; cat $$pyt; } 2>/dev/null | sha256sum | cut -c1-16); \
+	  pyt=$$(grep -rlE '/ *"scripts[/"]|"scripts" */|join\([^)]*"scripts"' tests --include='test_*.py' --exclude-dir=hooks | sort | tr '\n' ' '); \
+	  psha=$$( { find "$$root/scripts" "$$root/tests/hooks" -type f -not -path "*/__pycache__/*" | sort | xargs cat; cat $$pyt; } 2>/dev/null | sha256sum | cut -c1-16); \
 	  if [ -n "$$pyt" ] && { [ -n "$(HOOKS_ALL)" ] || [ "$$(cat "$$gitdir/hooks-test/pytest-scripts" 2>/dev/null)" != "$$psha" ]; }; then \
 	    : "(GUARD_EDIT_OK: four workers, not the gate count - the hook suites above run beside it on a shared 10 GB container)"; \
 	    if python3 -m pytest -n 4 --dist worksteal -q --no-cov $$pyt > "$$work/pytest-scripts.log" 2>&1; then \
@@ -709,10 +710,10 @@ hooks-test:     ## [tests] run every scripts/test-*-hooks.sh, and prove each gua
 	  else skipped=$$((skipped+1)); fi; \
 	fi; \
 	if [ -n "$$fail" ]; then printf '\n\033[1mhooks-test FAILED:%s\033[0m\n\n' "$$fail"; exit 1; fi; \
-	python3 "$$root/scripts/gate-stamp.py" --write hooks; \
+	python3 "$$root/scripts/gates/gate-stamp.py" --write hooks; \
 	printf 'hooks-test: %s guard suites green, %s unchanged since they last went green (hooks area stamped)\n' "$$n" "$$skipped"
 # PER-SUITE FRESHNESS (feature 135, third pass; GUARD_EDIT_OK: the roster and the failure path are unchanged - a suite
-# is SKIPPED only when its guard, its test and the shared helpers (`_hookmatch.py`, `test_hooks_cases.py`; for the
+# is SKIPPED only when its guard, its test and the shared helpers (`hookmatch.py`, `test_hooks_cases.py`; for the
 # three suites that drive other scripts, all of scripts/) hash to what they hashed when the suite last went GREEN in
 # this clone (.git/hooks-test/<guard>). Measured: 90 s to re-run all 13 suites for a one-line edit to one guard;
 # `HOOKS_ALL=1` runs every suite regardless. The whole-area stamp (`gate-stamp --write hooks`) is written only when
@@ -761,7 +762,7 @@ perf-gate:      ## [performance] require the feature's -start bookend, take -end
 # "anytime we block a command invocation, we can see what specifically was happening and whether the
 # command was rewritable safely". A reader over ~/.claude/guard-log/, nothing derived.)
 guard-log:      ## [project] the guard firings, listed - GUARD=<name> SINCE=YYYY-MM-DD EVENT=blocked|rewrote|escaped|reminded FULL=1
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/guard-log.py" $(if $(GUARD),--guard $(GUARD)) $(if $(SINCE),--since $(SINCE)) $(if $(EVENT),--event $(EVENT)) $(if $(FULL),--full)
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/measure/guard-log.py" $(if $(GUARD),--guard $(GUARD)) $(if $(SINCE),--since $(SINCE)) $(if $(EVENT),--event $(EVENT)) $(if $(FULL),--full)
 
 # (GUARD_EDIT_OK: the audit gains "Remote spend" - feature 130, FR-020)
 audit:          ## [project] how the gate has actually been used - every run, every bypass, and remote spend
@@ -793,7 +794,7 @@ print()"
 	@python3 -c "import json,glob,os,collections; \
 'GUARD_EDIT_OK: fixing a defect found while working (2026-09-27) - two ZERO-BYTE entries from 2026-09-26 made'; \
 'the whole audit die on a JSONDecodeError. The writer now renames a finished file into place, so no new one'; \
-'can be empty; an empty file left from before is skipped here, as scripts/guard-log.py already does.'; \
+'can be empty; an empty file left from before is skipped here, as scripts/measure/guard-log.py already does.'; \
 rows=[json.load(open(f)) for f in glob.glob(os.path.expanduser(os.environ.get('GUARD_LOG_DIR','~/.claude/guard-log')+'/*.json')) if os.path.getsize(f)]; \
 print('\033[1mGuard firings\033[0m (~/.claude/guard-log/) - what each guard did: blocked, rewrote, reminded, escaped'); \
 by=collections.defaultdict(collections.Counter); \
@@ -828,7 +829,7 @@ print()"
 # of `scripts/` were invisible to the very report meant to catch this. It asks the CHECKER now, over
 # the checker's own scope, so the report and the gate can never again disagree about what is over.
 	@printf '\033[1mFiles past the ~1,000-line bar\033[0m (constitution X clause 13 - GATED since feature 173)\n'
-	@python3 scripts/check-file-scale.py --list .
+	@python3 scripts/gates/check-file-scale.py --list .
 	@printf '  A file over the bar FAILS `make lint`, and so `make done` and the push. The one way out\n'
 	@printf '  is clause 13'"'"'s ordered-data carve-out, stated IN the file as `FILE_SIZE_OK: <reason>` and\n'
 	@printf '  listed above with its reason - a carve-out nobody can enumerate is one nobody revisits.\n'
@@ -841,7 +842,7 @@ print()"
 # reason" pointing past a second list, which is its own little piece of drift (spec-fidelity, round 1
 # of the amended spec).
 	@printf '\033[1mFiles allowed to carry a conflict triple\033[0m (feature 241 - the file-level exemption)\n'
-	@python3 scripts/_hm_conflict.py --list .
+	@python3 scripts/hooks/lib/hm_conflict.py --list .
 	@printf '  Declaring it makes the WHOLE file invisible to the hook and to the backstop, so a real\n'
 	@printf '  conflict committed into one of these is caught by nothing - which is why the reason must be\n'
 	@printf '  argued, must open its line, and is listed here with the file that claims it.\n\n'
@@ -849,7 +850,7 @@ print()"
 # is, one line above: a class entry may name no research section when the section is deliberately unwritten,
 # and a carve-out nobody can list is one nobody revisits.
 	@printf '\033[1mClass entries with no research section\033[0m (feature 234 - the declared-silence form)\n'
-	@python3 -c "import sys; sys.path.insert(0, '.'); sys.path.insert(0, 'scripts'); from l7r.diagram.interactive.classes import CLASSES; import importlib.util as u; sp=u.spec_from_file_location('ceh','scripts/check-entry-headings.py'); m=u.module_from_spec(sp); sp.loader.exec_module(m); rows=[(k,fc.entry) for k,fc in sorted(CLASSES.items()) if m.SILENT.search(fc.entry)]; [print(f'  {k:<22} {e}') for k,e in rows]; print(f'  {len(rows)} of {len(CLASSES)} entries name no section; the other {len(CLASSES)-len(rows)} must RESOLVE, checked at the gate and the push.')"
+	@python3 -c "import sys; sys.path.insert(0, '.'); sys.path.insert(0, 'scripts'); from l7r.diagram.interactive.classes import CLASSES; import importlib.util as u; sp=u.spec_from_file_location('ceh','scripts/gates/check-entry-headings.py'); m=u.module_from_spec(sp); sp.loader.exec_module(m); rows=[(k,fc.entry) for k,fc in sorted(CLASSES.items()) if m.SILENT.search(fc.entry)]; [print(f'  {k:<22} {e}') for k,e in rows]; print(f'  {len(rows)} of {len(CLASSES)} entries name no section; the other {len(CLASSES)-len(rows)} must RESOLVE, checked at the gate and the push.')"
 	@printf '  A broken heading and a deliberate silence are told apart by this FORM, never by a non-match.\n\n'
 # GUARD_EDIT_OK: feature 197 - the audit gains the FEATURE-NUMBER LEDGER (spec FR-008): every claim `make claim`
 # made, newest last, read from the mirror's `.specify/feature-numbers.jsonl` (the mirror is a clone's grandparent;
@@ -878,7 +879,7 @@ help:           ## [project] list every target with its one-line purpose
 # GUARD_EDIT_OK: feature 162 - the help line stops quoting durations typed in by hand (GM 2026-08-30:
 # *"those numbers for `make quick` are wrong and outdated"*; this line still said done ~5.5min while
 # the run log's median was 137 s). The one number worth printing is asked of the recorded runs.
-	@cost=$$(scripts/_gatecost.py done 2>/dev/null); \
+	@cost=$$(scripts/measure/gatecost.py done 2>/dev/null); \
 	 printf '\nCheapest first: quick | reference | done (NOT the quick one) | done FULL=1'; \
 	 [ -n "$$cost" ] && printf '   -   `make done` median %s s over its recent recorded runs (`make audit`)' "$$cost"; \
 	 printf '\n'
@@ -1013,9 +1014,9 @@ LOGRUN = python3 -c "import json,os,subprocess,sys,time; \
   open(f'{d}/{ts}-{os.getpid()}.json','w').write(json.dumps({'utc':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),'target':sys.argv[1],'scope':sys.argv[2],'seconds':int(sys.argv[3]),'result':sys.argv[4],'commit':h,**({'cache':sys.argv[5]} if len(sys.argv)>5 and sys.argv[5] in ('warm','cold') else {}),**({'mode':os.environ['RUN_MODE'],'selected':os.environ.get('RUN_SELECTED','')} if os.environ.get('RUN_MODE') else {}),**json.loads(os.environ.get('RUN_STATS') or '{}')},indent=2)+chr(10))"
 
 # GUARD_EDIT_OK: GM 2026-10-03 - the gate's first and last failure times and the host's load, memory, pressure stalls,
-# CPU temperature and throttle time reach its run-log entry (scripts/_runstats.py says why and what each field is).
+# CPU temperature and throttle time reach its run-log entry (scripts/measure/runstats.py says why and what each field is).
 # RUN_STATS carries them into LOGRUN; every call is best-effort, so a host without a figure loses that field, never the run.
-RUNSTATS = python3 "$$(git rev-parse --show-toplevel)/scripts/_runstats.py"
+RUNSTATS = python3 "$$(git rev-parse --show-toplevel)/scripts/measure/runstats.py"
 
 # THE TARGET RECORDS THE SCOPE (feature 130 - GUARD_EDIT_OK: the build-side door keys on it). `done`
 # with FULL=1 logs as `done FULL`, `ci-merge FULL=1` as `ci-merge FULL`: the entry is what the build
@@ -1033,8 +1034,8 @@ LOGBYPASS = python3 -c "import json,os,subprocess,sys,time; \
 # this feature's review caught it and the ruling was two records rather than a weaker success
 # criterion: the bypass-log entry stays, and this adds the firing-log one with REF_WHY as its detail.
 # It also holds REF_WHY to the same floor as every other escape - two words, eight characters.
-LOGESCAPE = @root=$$(git rev-parse --show-toplevel) && bash -c '. "$$0/scripts/_guardlog.sh"; \
-  printf "%s" "$$2" | python3 "$$0/scripts/_hookmatch.py" reason-ok >/dev/null || { \
+LOGESCAPE = @root=$$(git rev-parse --show-toplevel) && bash -c '. "$$0/scripts/hooks/lib/guardlog.sh"; \
+  printf "%s" "$$2" | python3 "$$0/scripts/hooks/lib/hookmatch.py" reason-ok >/dev/null || { \
     printf "BLOCKED: %s needs a REASON (two words, eight characters) - it is what a later audit reads.\n" "$$1" >&2; \
     guard_log make blocked "$$2" "$$1-no-reason"; exit 2; }; \
   guard_log make escaped "$$2" "$$(printf "%s" "$$1" | tr "[:upper:]_" "[:lower:]-")"' "$$root"
@@ -1064,7 +1065,7 @@ QUICK_BUDGET = 60
 # N=<count> for a longer list; MARK=rolls_map to profile the map-rolling tests instead.
 # ONE TEST FILE, WHOLE. Deliberately takes a FILE and not a `-k` expression: the project's own rule
 # is to run the whole affected file, because a filter selects the tests you were thinking about and a
-# change breaks the ones you were not (scripts/gate-hooks.sh enforces the same thing against the
+# change breaks the ones you were not (scripts/hooks/gate-hooks.sh enforces the same thing against the
 # gate). Exists because gating bare pytest left "re-run the file I just changed" with no route, and a
 # guard that blocks a legitimate action without offering the alternative is one that gets worked
 # around - the same gap `make durations` filled for "why is this slow".
@@ -1083,10 +1084,10 @@ page-check:     ## [tests] the interactive tests + the browser test, then the `p
 	@: "GUARD_EDIT_OK: feature 206 - page-check always RUNS the browser package, so it earns the browser stamp too"; \
 	: "LOADGROUP, NOT WORKSTEAL, so the browser package's xdist_group binds and ONE Chromium serves both its modules (GM 2026-09-12; worksteal gave each module its own worker and so its own browser, ~335 MiB of the suite's peak)" ; \
 	python3 -m pytest -n $(XDIST_WORKERS) --dist loadgroup -q --no-cov tests/interactive tests/full/interactive/page_browser \
-	  && root=$$(git rev-parse --show-toplevel) && python3 "$$root/scripts/gate-stamp.py" --write page \
-	  && python3 "$$root/scripts/gate-stamp.py" --write browser \
+	  && root=$$(git rev-parse --show-toplevel) && python3 "$$root/scripts/gates/gate-stamp.py" --write page \
+	  && python3 "$$root/scripts/gates/gate-stamp.py" --write browser \
 	  && printf '\n\033[1mpage-check green\033[0m (the page and browser stamps are written; an asset-only delta may push)\n' \
-	  && { root=$$(git rev-parse --show-toplevel); python3 "$$root/scripts/_entry_owed.py" --root "$$root" --why; python3 "$$root/scripts/_entry_owed.py" --root "$$root" | sed 's/^/  /'; true; }
+	  && { root=$$(git rev-parse --show-toplevel); python3 "$$root/scripts/record/entry_owed.py" --root "$$root" --why; python3 "$$root/scripts/record/entry_owed.py" --root "$$root" | sed 's/^/  /'; true; }
 
 # GUARD_EDIT_OK: feature 188 - `make tick` (the GM: "The idea of a make tick helper. does indeed seem good"): tick ONE
 # task in a feature's tasks.md from the command line, with its verify note, refusing rather than guessing when the
@@ -1111,7 +1112,7 @@ plan-verdict:   ## [project] {internal} record a plan review - the spec-fidelity
 ##  F=<feature>        the feature number or slug whose plan.md was reviewed
 ##  FILE=<json>        the reviewer's JSON: plan_sha256, decisions, verdict (feature 243 plan P3)
 ##  AS=spec-fidelity   who is recording - only the subagent may pass this, and nothing else distinguishes the shells
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/_plan_gate.py" record "$(F)" "$(abspath $(FILE))" --as "$(or $(AS),main)"
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/gates/plan_gate.py" record "$(F)" "$(abspath $(FILE))" --as "$(or $(AS),main)"
 
 # GUARD_EDIT_OK: feature 197 - adding a new operation (`claim`); no existing guard changes.
 # FEATURE 197 (GM 2026-09-07): THE NUMBER COMES FROM HERE, NEVER FROM A SCAN BY HAND. Two sessions each read
@@ -1123,14 +1124,14 @@ plan-verdict:   ## [project] {internal} record a plan review - the spec-fidelity
 hookbench:      ## [project] replay the frozen command window through a guard decision, in process   GUARD=house-style [AGAINST=<ref>] | REFRESH=1
 ##  GUARD=<name>         a guard whose decision is importable (feature 239 FR-001); others are refused by name
 ##  AGAINST=<ref>        also print the verdict diff against the guard as it stood at <ref> - what an exemption change owes
-##  REFRESH=1            freeze a new dated window of real commands into scripts/fixtures/ instead
+##  REFRESH=1            freeze a new dated window of real commands into tests/hooks/fixtures/ instead
 	@: "GUARD_EDIT_OK: feature 239 FR-005 - one process for the whole window where spawning the hook per command cost 80 s against 3.9 s" ; \
-	python3 "$$(git rev-parse --show-toplevel)/scripts/_hookbench.py" $(if $(REFRESH),--refresh,$(GUARD) $(if $(AGAINST),--against $(AGAINST),))
+	python3 "$$(git rev-parse --show-toplevel)/tests/hooks/hookbench.py" $(if $(REFRESH),--refresh,$(GUARD) $(if $(AGAINST),--against $(AGAINST),))
 
 figures:        ## [project] re-run every recorded measurement and report what moved   [SPEC=specs/NNN-slug; default every spec with a measurements.json]
 ##  a moved COUNT fails; a timing outside its band is reported and never fails; the file is restored after
 	@: "GUARD_EDIT_OK: feature 239 FR-011 - a figure is only as good as the command behind it, and this re-runs the command" ; \
-	python3 "$$(git rev-parse --show-toplevel)/scripts/figures.py" $(SPEC)
+	python3 "$$(git rev-parse --show-toplevel)/scripts/measure/figures.py" $(SPEC)
 
 spec-harness:   ## [project] run a feature's measurement harness (its harness.py) as a test node   SPEC=specs/NNN-slug OUT=<json>
 ##  SPEC=<dir>   the feature directory holding `harness.py`
@@ -1154,7 +1155,7 @@ claim:          ## [project] claim the next spec-kit feature number under the ho
 agent-census:   ## [project] what each subagent check has cost, from the session transcripts   [SINCE=YYYY-MM-DD] [OUT=<json>]
 ##  SINCE=<date>   only the runs that started on or after it
 ##  OUT=<json>     also write the rows to this file
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/_agent_census.py" $(if $(SINCE),--since "$(SINCE)",) $(if $(OUT),--json "$(abspath $(OUT))",)
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/reviews/agent_census.py" $(if $(SINCE),--since "$(SINCE)",) $(if $(OUT),--json "$(abspath $(OUT))",)
 
 # GUARD_EDIT_OK: feature 303 - the record's page directories are gone: Q= names questions by number, IN= a section or a tag; no guard changes.
 quote-verbatim: ## [project] is every quoted passage on the page it cites, character for character - run BEFORE quote-check   Q=0412 | IN=homesteads [NOTES=1-4] [OUT=<json>]
@@ -1164,88 +1165,88 @@ quote-verbatim: ## [project] is every quoted passage on the page it cites, chara
 ##  OUT=<json>     write the report the quote-check agent is handed (default: the scratch file the run names)
 	@if [ -z "$(Q)" ] && [ -z "$(IN)" ]; then printf 'make quote-verbatim: Q=<question number> or IN=<section or tag> is required - e.g. make quote-verbatim Q=0041\n' >&2; exit 2; fi
 # GUARD_EDIT_OK: feature 251 - NOTES= scopes the new quote-verbatim operation to the notes a check is about; no guard changes.
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/_quote_verbatim.py" --root "$$(git rev-parse --show-toplevel)" $(if $(Q),"$(Q)",--in "$(IN)") $(if $(NOTES),--notes "$(NOTES)",) $(if $(OUT),--json "$(abspath $(OUT))",)
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/quote_verbatim.py" --root "$$(git rev-parse --show-toplevel)" $(if $(Q),"$(Q)",--in "$(IN)") $(if $(NOTES),--notes "$(NOTES)",) $(if $(OUT),--json "$(abspath $(OUT))",)
 
 # GUARD_EDIT_OK: feature 303 - Q= (questions by number), IN= (a section or a tag) or Q=SOURCES replace PAGE= SECTION=; no guard changes.
 record-prepass: ## [project] the session notes and vocabulary candidates a pattern can find on a question - run BEFORE record-format   Q=0412 | IN=homesteads | Q=SOURCES
 ##  Q=<NNNN>       one or more questions, by number (both pages) or a page's file name; `SOURCES` for the registry
 ##  IN=<id>        every question of a section (its id in research/contents.json) or carrying a tag
 	@if [ -z "$(Q)" ] && [ -z "$(IN)" ]; then printf 'make record-prepass: Q=<question number> or IN=<section or tag> is required - e.g. make record-prepass Q=0041\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/_record_prepass.py" --root "$$(git rev-parse --show-toplevel)" $(if $(Q),"$(Q)",--in "$(IN)")
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/record_prepass.py" --root "$$(git rev-parse --show-toplevel)" $(if $(Q),"$(Q)",--in "$(IN)")
 
 # GUARD_EDIT_OK: feature 316 - four new operations over the claims index (dev/claims-index.json); the push's refusal is claims-gate.sh, not these.
 claims-owed: ## [project] every research claim of the engine or the Mode A procedures owed an impl-drift check (no index row, or its code or cited research moved since), and why
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/_claims.py" --root "$$(git rev-parse --show-toplevel)" owed
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/claims.py" --root "$$(git rev-parse --show-toplevel)" owed
 
 claims-bundle: ## [project] the bundle impl-drift reads, copied out of the repository - dispatch it on the MANIFEST printed   MODULE=<file> | OWED=1 | UNITS="<key>,<key>"   [OUT=<dir>] [REASON="<why>" for claims not owed]
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/_claims.py" --root "$$(git rev-parse --show-toplevel)" bundle $(if $(OWED),--owed,) $(if $(MODULE),--module "$(MODULE)",) $(if $(UNITS),--units "$(UNITS)",) $(if $(OUT),--out "$(abspath $(OUT))",) $(if $(REASON),--reason "$(REASON)",)
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/claims.py" --root "$$(git rev-parse --show-toplevel)" bundle $(if $(OWED),--owed,) $(if $(MODULE),--module "$(MODULE)",) $(if $(UNITS),--units "$(UNITS)",) $(if $(OUT),--out "$(abspath $(OUT))",) $(if $(REASON),--reason "$(REASON)",)
 
 claims-checked: ## [project] record an impl-drift reply into the claims index, at the fingerprints its bundle read   BUNDLE=<dir> REPLY=<file holding the agent's reply>
 	@if [ -z "$(BUNDLE)" ] || [ -z "$(REPLY)" ]; then printf 'make claims-checked: BUNDLE=<dir> and REPLY=<file> are required\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/_claims.py" --root "$$(git rev-parse --show-toplevel)" record --bundle "$(abspath $(BUNDLE))" --reply "$(abspath $(REPLY))"
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/claims.py" --root "$$(git rev-parse --show-toplevel)" record --bundle "$(abspath $(BUNDLE))" --reply "$(abspath $(REPLY))"
 
 claims-coverage: ## [project] every unit with no research claim, a malformed claim or a pointer to no question - the gate's coverage test, narrowed   [IN=<part of a file path>]
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/_claims.py" --root "$$(git rev-parse --show-toplevel)" coverage $(if $(IN),--path "$(IN)",)
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/claims.py" --root "$$(git rev-parse --show-toplevel)" coverage $(if $(IN),--path "$(IN)",)
 
 claims-report: ## [project] the claims index: counts by verdict, every finding (drifted, needs research, mislabeled, unclaimed, undecided) and every UNRESEARCHED claim
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/_claims.py" --root "$$(git rev-parse --show-toplevel)" report
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/claims.py" --root "$$(git rev-parse --show-toplevel)" report
 
 # GUARD_EDIT_OK: feature 318 amendment 4 - three operations scoping a re-check to the blocks a claim rests on; the push's refusal is unchanged (claims-gate.sh).
 claims-triage: ## [project] the claims owed only a TRIAGE (a page they cite moved, the blocks they rest on stand): one bundle of the new or changed blocks for one agent   [OUT=<dir>]
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/_claims.py" --root "$$(git rev-parse --show-toplevel)" triage $(if $(OUT),--out "$(abspath $(OUT))",)
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/claims.py" --root "$$(git rev-parse --show-toplevel)" triage $(if $(OUT),--out "$(abspath $(OUT))",)
 
 claims-triaged: ## [project] record a triage reply: a claim it names (TOUCHES) is owed impl-drift, every other claim of the bundle is cleared   BUNDLE=<dir> REPLY=<file>
 	@if [ -z "$(BUNDLE)" ] || [ -z "$(REPLY)" ]; then printf 'make claims-triaged: BUNDLE=<dir> and REPLY=<file> are required\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/_claims.py" --root "$$(git rev-parse --show-toplevel)" triaged --bundle "$(abspath $(BUNDLE))" --reply "$(abspath $(REPLY))"
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/claims.py" --root "$$(git rev-parse --show-toplevel)" triaged --bundle "$(abspath $(BUNDLE))" --reply "$(abspath $(REPLY))"
 
 claims-backfill: ## [project] give every index row checked at today's research the pages it was checked at, so a later edit to them is triaged, not re-judged in full
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/_claims.py" --root "$$(git rev-parse --show-toplevel)" backfill
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/claims.py" --root "$$(git rev-parse --show-toplevel)" backfill
 
 # GUARD_EDIT_OK: feature 303 - Q= replaces PAGE= SECTION= on this read-only operation; no guard changes.
 translation-owed: ## [project] the translated quotations new or changed since the merge base - each owes a translation-check   [Q=0412]
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/_translation_owed.py" --root "$$(git rev-parse --show-toplevel)" $(if $(Q),--q "$(Q)",)
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/translation_owed.py" --root "$$(git rev-parse --show-toplevel)" $(if $(Q),--q "$(Q)",)
 
 # GUARD_EDIT_OK: feature 311 - two new operations (the record checks a delta owes, and recording one answered); the push's refusal is entry-gate.sh, not these.
 record-owed: ## [project] every record check this delta owes (intro-check, record-format, source-reader, quote-check, source-applicability, translation-check, entry-drift), with the command that answers each   [Q=0412] [UNANSWERED=1] [BETWEEN="<a> <b>"]
 ##  Q=<NNNN>        only that question's units
 ##  UNANSWERED=1    only the units with no current answer record (what the push refuses)
 ##  BETWEEN="a b"   the units revision b owes against revision a (a replay; no entry-drift)
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/_record_owed.py" --root "$$(git rev-parse --show-toplevel)" $(if $(Q),--q "$(Q)",) $(if $(UNANSWERED),--unanswered,) $(if $(BETWEEN),--between $(BETWEEN),)
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/record_owed.py" --root "$$(git rev-parse --show-toplevel)" $(if $(Q),--q "$(Q)",) $(if $(UNANSWERED),--unanswered,) $(if $(BETWEEN),--between $(BETWEEN),)
 
 record-checked: ## [project] record that a record check returned on the units it read - what answers an owed unit at the push   CHECK=<check> RESULT="<counts>" (BUNDLE=<dir> | Q=<NNNN> NOTES=<k,k> for source-reader | ... REASON="<why>")
 ##  BUNDLE=<dir>    the bundle the check read: its units, at the content it read
 ##  Q= NOTES= KEY= KIND=  the units the tree owes on that subject, at today's content - source-reader on named notes, or any check with REASON= (written to dev/bypass-log/)
 	@if [ -z "$(CHECK)" ] || [ -z "$(RESULT)" ]; then printf 'make record-checked: CHECK=<check> and RESULT="<its counts>" are required\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/_record_owed.py" --root "$$(git rev-parse --show-toplevel)" --answer "$(CHECK)" --result "$(RESULT)" $(if $(BUNDLE),--bundle "$(abspath $(BUNDLE))",) $(if $(Q),--q "$(Q)",) $(if $(NOTES),--notes "$(NOTES)",) $(if $(KEY),--key "$(KEY)",) $(if $(KIND),--kind "$(KIND)",) $(if $(REASON),--reason "$(REASON)",)
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/record_owed.py" --root "$$(git rev-parse --show-toplevel)" --answer "$(CHECK)" --result "$(RESULT)" $(if $(BUNDLE),--bundle "$(abspath $(BUNDLE))",) $(if $(Q),--q "$(Q)",) $(if $(NOTES),--notes "$(NOTES)",) $(if $(KEY),--key "$(KEY)",) $(if $(KIND),--kind "$(KIND)",) $(if $(REASON),--reason "$(REASON)",)
 
 # GUARD_EDIT_OK: feature 303 - Q= replaces PAGE= SECTION= on this read-only operation; no guard changes.
 style-prepass: ## [project] the style guide's mechanical half for one question - metric figures with no feet, and every lead line to rule on - run BEFORE record-style   Q=0412
 ##  Q=<NNNN>       the question, by number (both pages) or a page's file name
 	@if [ -z "$(Q)" ]; then printf 'make style-prepass: Q=<question number> is required - e.g. make style-prepass Q=0041\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/_style_prepass.py" --root "$$(git rev-parse --show-toplevel)" "$(Q)"
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/style_prepass.py" --root "$$(git rev-parse --show-toplevel)" "$(Q)"
 
 # GUARD_EDIT_OK: feature 250 D14 - a new operation (report every research question over the size cap); no guard changes.
 question-sizes: ## [project] every research question over the size cap (question + notes, feature 250 D14), largest first - make quick fails on one a change touched
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/check-question-size.py" --report
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/gates/check-question-size.py" --report
 
 # GUARD_EDIT_OK: feature 285 - a new operation (list the open research questions, read from the record); no guard changes. Its help says "guess" in lower case: the list reads this file, and an upper-case label here would list itself.
 open-questions: ## [project] every guess and every unfound source, read from the record and the tracked files now - the research still owed, with the map features each touches (feature 285)
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/_open_questions.py" --root "$$(git rev-parse --show-toplevel)"
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/open_questions.py" --root "$$(git rev-parse --show-toplevel)"
 
 # GUARD_EDIT_OK: feature 250 - a new operation (print the named notes of one question, not the whole file); no guard changes.
 # GUARD_EDIT_OK: feature 303 - Q= replaces PAGE= SECTION= on this read-only operation; no guard changes.
 notes: ## [project] print the named notes of ONE question and only the blocks of its page that carry them - for editing a few notes without reading the whole file (feature 250)   Q=0041 KEYS=kyuhi-jawiki,kyuhi-jawiki-2
 	@if [ -z "$(Q)" ] || [ -z "$(KEYS)" ]; then printf 'make notes: Q=<question number or page file> KEYS=<key,key> are required\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/_check_bundle.py" --root "$$(git rev-parse --show-toplevel)" "$(Q)" --notes "$(KEYS)" --print-notes
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/check_bundle.py" --root "$$(git rev-parse --show-toplevel)" "$(Q)" --notes "$(KEYS)" --print-notes
 
 # GUARD_EDIT_OK: feature 274 D5 - two new operations (read a coordination file's matching lines; append one line without reading it); no guard changes.
 lines: ## [project] print ONLY a coordination file's matching lines - the claims file, a handoff, a checks report - numbered, with how many were shown of how many; never read one whole (feature 274)   FILE=<file> KEY=<regex>
 	@if [ -z "$(FILE)" ] || [ -z "$(KEY)" ]; then printf 'make lines: FILE=<file> KEY=<regex> are required - e.g. make lines FILE=/diagram/.clones/RESEARCH-CLAIMS.md KEY="^- 269"\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/_coord.py" lines "$(FILE)" "$$KEY"
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/pages/coord.py" lines "$(FILE)" "$$KEY"
 
 append: ## [project] append ONE line to a coordination file without reading or printing it (feature 274)   FILE=<file> LINE="<text>"
 	@if [ -z "$(FILE)" ]; then printf 'make append: FILE=<file> LINE="<text>" are required\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/_coord.py" append "$(FILE)"
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/pages/coord.py" append "$(FILE)"
 
 # GUARD_EDIT_OK: feature 265 FR-010 - a new operation (reserve a glossary or registry prefix under a host-wide lock); new-file-hooks.sh makes it the way in.
 # GUARD_EDIT_OK: feature 274 D4 - KEY_CAP_OK='<reason>' passes a write session's key cap; make exports it to the recipe as it is, so no change below.
@@ -1254,56 +1255,34 @@ reserve: ## [project] reserve the next glossary, registry-entry or question numb
 	@if [ -z "$(KIND)" ] || [ -z "$(KEY)" ]; then printf 'make reserve: KIND=glossary|registry|question KEY=<term, key or heading id> are required\n' >&2; exit 2; fi
 # GUARD_EDIT_OK: feature 288 FR-005 - an optional URL=, nothing loosened: a registry stub then names its source and the sources-consulted ledger marks it cited.
 # GUARD_EDIT_OK: feature 305 FR-011 - an optional TAGS=, nothing loosened: a registry stub ends with its source tags marker, a placeholder the build refuses until TAGS= gives them.
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/reserve-prefix.py" "$(KIND)" "$(KEY)" $(if $(URL),--url "$(URL)",) $(if $(TAGS),--tags "$(TAGS)",)
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/reserve-prefix.py" "$(KIND)" "$(KEY)" $(if $(URL),--url "$(URL)",) $(if $(TAGS),--tags "$(TAGS)",)
 
 # GUARD_EDIT_OK: feature 250 D16 - a new operation (search the setting canon for every term of a claim at once); no guard changes here - canon-read-hooks.sh makes it the only way in.
 canon: ## [project] search the GM's setting canon for EVERY term of a claim in one call - each hit with its file, line and heading (feature 250 D16; a direct read of a canon file is refused)   TERMS="imperial road|merchant share|artisan"
 	@if [ -z "$(TERMS)" ]; then printf 'make canon: TERMS="<a>|<b>|<c>" is required - every term of the claim at once\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/_canon.py" "$(TERMS)"
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/canon.py" "$(TERMS)"
 
 # GUARD_EDIT_OK: feature 250 D15 - a new operation (apply the EDIT and GLOSSARY blocks a check report ends with); no guard changes.
 apply-edits: ## [project] apply a quote-check or record-format report's EDIT and GLOSSARY blocks in one command - each only where its old text occurs once in a record file; the rest are listed REFUSED for you (feature 250 D15)   FROM=<the agent's output_file or a saved reply> [SKIP=2,5] [DRY=1]
 	@if [ -z "$(FROM)" ]; then printf 'make apply-edits: FROM=<the output_file the agent dispatch named> is required\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/_apply_edits.py" "$(FROM)" --root "$$(git rev-parse --show-toplevel)" $(if $(SKIP),--skip "$(SKIP)",) $(if $(DRY),--dry-run,)
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/apply_edits.py" "$(FROM)" --root "$$(git rev-parse --show-toplevel)" $(if $(SKIP),--skip "$(SKIP)",) $(if $(DRY),--dry-run,)
 
 # GUARD_EDIT_OK: feature 250 - a new operation (one page's work in a fresh headless session, started from a brief); no guard changes.
 # GUARD_EDIT_OK: feature 274 D2 - the runner refuses a write brief over four questions; WRITE_CAP_OK='<reason>' reaches it through make's exported environment.
-# GUARD_EDIT_OK: feature 293 adds operations - the effort experiment's four targets; nothing a guard decides changes.
-effort-init: ## [project] feature 293: record what every run of the effort experiment shares, once   START=<sha> SEED=<n> OFFSET=<GB> SOURCES_HOME=<dir> SNAPSHOT=<dir>
-	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/_effort_run.py init --start "$(START)" --seed "$(SEED)" --offset "$(OFFSET)" --sources-home "$(SOURCES_HOME)" --snapshot "$(SNAPSHOT)"
-
-# GUARD_EDIT_OK: feature 293 adds an operation - effort-refreeze, a replaced task's files frozen again (one start commit kept); nothing a guard decides changes.
-effort-refreeze: ## [project] feature 293: freeze again the prompt and rubric of a task the GM replaced (its runs keep the one start commit)   TASK=R|I
-	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/_effort_run.py refreeze-task --task "$(TASK)"
-
-# GUARD_EDIT_OK: feature 293 adds an operation - effort-resume, a stalled headless task-I session resumed with one neutral message; nothing a guard decides changes.
-effort-resume: ## [project] feature 293: resume a task-I run left waiting on a detached run nothing can wake it for - one fixed message, the wait a pause   RUN=<id>
-	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/_effort_run.py resume --run "$(RUN)"
-
-effort-run: ## [project] feature 293: launch ONE run, detached, in its own clone - refused while another run is live or memory is short   TASK=R|I RUN=<id> ARM=medium|xhigh ORDER=<n>
-	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/_effort_run.py run --task "$(TASK)" --run "$(RUN)" --arm "$(ARM)" --order "$(ORDER)"
-
-# GUARD_EDIT_OK: feature 293 adds an operation - VOID= passed to effort-measure (a run voided for an environment reason); nothing a guard decides changes.
-effort-measure: ## [project] feature 293: measure a finished run from its transcripts, the guard log and its clone   RUN=<id> [VOID="<environment reason>"]
-	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/_effort_measure.py --run "$(RUN)" --void "$(VOID)"
-
-effort-blind: ## [project] feature 293: export one task's two outputs, stripped and labeled A/B, to a bundle outside the repository   TASK=R|I SEED=<n>
-	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/_effort_blind.py --task "$(TASK)" --seed "$(SEED)"
-
 # GUARD_EDIT_OK: feature 293 adds an operation - EFFORT and AGENTS passed through to page-session.sh; nothing a guard decides changes.
 page-session: ## [project] start ONE page's work in a FRESH headless session, detached, from written briefs, one after another - absolute paths; a then:<script> step queues the briefs it prints (feature 250 D7, R3); a write brief over four questions is refused (feature 274)   BRIEF="<file> then:<script>" [NAME=<session name, default this clone's>] [MODEL=<model>] [EFFORT=<level>] [AGENTS=<agents.json>] [WRITE_CAP_OK='<reason>']
 	@if [ -z "$(BRIEF)" ]; then printf 'make page-session: BRIEF=<file> is required - e.g. make page-session BRIEF=specs/250-close-the-record-checks/briefs/homesteads.md\n' >&2; exit 2; fi
-	@cd "$$(git rev-parse --show-toplevel)" && scripts/page-session.sh "$(BRIEF)" "$(NAME)" "$(MODEL)" "$(EFFORT)" "$(AGENTS)"
+	@cd "$$(git rev-parse --show-toplevel)" && scripts/pages/page-session.sh "$(BRIEF)" "$(NAME)" "$(MODEL)" "$(EFFORT)" "$(AGENTS)"
 
 # GUARD_EDIT_OK: feature 319 - two new operations (a modal check's bundle and its prepass); no guard changes.
 # GUARD_EDIT_OK: feature 319 D13 - the help line names the third check, modal-depiction; an operation's text, no guard changes.
 modal-bundle: ## [project] the files a modal check reads (modal-form, modal-research or modal-depiction), copied out of the repository with the prepass and, for modal-research, the Entry pages, the candidates and the question record for grep; for modal-depiction, the drawing pages, the claims citing them and a crop of the glyph - feature 319   KIND=<class or key> FOR=modal-form|modal-research|modal-depiction [OUT=<dir>]
 	@if [ -z "$(KIND)" ]; then printf 'make modal-bundle: KIND=<class name or key> is required - e.g. make modal-bundle KIND=Farmhouse FOR=modal-form\n' >&2; exit 2; fi
-	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/_modal_bundle.py "$(KIND)" --for "$(or $(FOR),modal-form)" $(if $(OUT),--out "$(OUT)",)
+	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/record/modal_bundle.py "$(KIND)" --for "$(or $(FOR),modal-form)" $(if $(OUT),--out "$(OUT)",)
 
 modal-prepass: ## [project] the mechanical half of the modal checks for one About-form modal - word band, barred phrases, guesses, Entry files - feature 319   KIND=<class or key>
 	@if [ -z "$(KIND)" ]; then printf 'make modal-prepass: KIND=<class name or key> is required - e.g. make modal-prepass KIND=Farmhouse\n' >&2; exit 2; fi
-	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/_modal_bundle.py "$(KIND)" --prepass
+	@cd "$$(git rev-parse --show-toplevel)" && python3 scripts/record/modal_bundle.py "$(KIND)" --prepass
 
 # GUARD_EDIT_OK: feature 250 - a new operation (copy what one check reads out of the repository, so the harness attaches no CLAUDE.md to the agent); no guard changes.
 # GUARD_EDIT_OK: feature 303 - Q= (a question by number or page file) replaces PAGE= SECTION=; no guard changes.
@@ -1321,7 +1300,7 @@ check-bundle: ## [project] the files ONE check agent reads, copied out of the re
 ##  FOR=intro-check [QS="<n> <n> ..."]  the intro-check bundle, one question or a batch
 # GUARD_EDIT_OK: feature 311 - the bundle refuses a check nothing owes (QS=, NOT_OWED_OK=, NEW= passed through); this tightens, it loosens nothing.
 	@if [ -z "$(KEY)" ] && [ -z "$(Q)" ] && [ -z "$(QS)" ]; then printf 'make check-bundle: Q=<question number> (or KEY=<registry key>, or QS= with FOR=intro-check) is required\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/_check_bundle.py" --root "$$(git rev-parse --show-toplevel)" $(if $(KEY),--key "$(KEY)",$(if $(Q),"$(Q)",)) $(if $(OUT),--out "$(abspath $(OUT))",) $(if $(EXTRA),--extra $(EXTRA),) $(if $(NO_QUOTES),--no-quotes,) $(if $(KIND),--kind "$(KIND)",) $(if $(NOTES),--notes "$(NOTES)",) $(if $(FOR),--for "$(FOR)",) $(if $(WHOLE),--whole,) $(if $(QUESTION),--question "$(QUESTION)",) $(if $(QS),--qs "$(QS)",) $(if $(NOT_OWED_OK),--not-owed-ok "$(NOT_OWED_OK)",) $(if $(NEW),--new "$(NEW)",)
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/check_bundle.py" --root "$$(git rev-parse --show-toplevel)" $(if $(KEY),--key "$(KEY)",$(if $(Q),"$(Q)",)) $(if $(OUT),--out "$(abspath $(OUT))",) $(if $(EXTRA),--extra $(EXTRA),) $(if $(NO_QUOTES),--no-quotes,) $(if $(KIND),--kind "$(KIND)",) $(if $(NOTES),--notes "$(NOTES)",) $(if $(FOR),--for "$(FOR)",) $(if $(WHOLE),--whole,) $(if $(QUESTION),--question "$(QUESTION)",) $(if $(QS),--qs "$(QS)",) $(if $(NOT_OWED_OK),--not-owed-ok "$(NOT_OWED_OK)",) $(if $(NEW),--new "$(NEW)",)
 
 # GUARD_EDIT_OK: feature 255 - a new operation (save named pages' visible text, so a page and not a fetch extract can be grepped); no guard changes. (The source-entries and review-facts operations added beside it were NOT ADOPTED on their seeded runs and are removed - specs/255 research R1 and R6. GUARD_EDIT_OK again, 2026-09-19: the header says the GM adopted source-reader's use of it; no guard changes.)
 source-pages: ## [project] save the full visible text of the named pointers, with a manifest - run BEFORE source-reader, which greps the PAGE where a fetch gives an extract   OUT=<dir> URL=<u1>  (several: URLS="<u1> <u2>")
@@ -1333,67 +1312,67 @@ source-pages: ## [project] save the full visible text of the named pointers, wit
 # GUARD_EDIT_OK: feature 288 - two optional variables, nothing loosened: QUESTION= reaches the ledger line the save now
 # appends (each URL's earlier reads are printed first), and REFRESH=1 is read from make's exported environment by the cache.
 	@if [ -z "$(OUT)" ] || [ -z "$(URL)$(URLS)" ]; then printf 'make source-pages: OUT=<dir> and URL=<u> (or URLS="<u1> <u2>") are required\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/_source_pages.py" "$(abspath $(OUT))" $(foreach u,$(URL) $(URLS),"$(u)") $(if $(QUESTION),--question "$(QUESTION)",)
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/source_pages.py" "$(abspath $(OUT))" $(foreach u,$(URL) $(URLS),"$(u)") $(if $(QUESTION),--question "$(QUESTION)",)
 
 # GUARD_EDIT_OK: feature 288 - three new operations (the sources-consulted ledger's outcome, its lookup, and the one-time seed and page-cache import); no guard changes.
 # GUARD_EDIT_OK: feature 303 - help text only: QUESTION= names a question's number now.
 source-outcome: ## [project] record what came of reading a source page on the host-wide sources-consulted ledger - every page a research pass reads (feature 288)   URL=<u> OUTCOME=cited:<key>|rejected:<why>|nothing-found|unreadable|pending [QUESTION=<NNNN>]
 	@if [ -z "$(URL)" ] || [ -z "$(OUTCOME)" ]; then printf 'make source-outcome: URL=<u> OUTCOME=<cited:key|rejected:why|nothing-found|unreadable|pending> are required\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/_sources.py" outcome "$(URL)" "$(OUTCOME)" $(if $(QUESTION),--question "$(QUESTION)",)
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/sources.py" outcome "$(URL)" "$(OUTCOME)" $(if $(QUESTION),--question "$(QUESTION)",)
 
 # GUARD_EDIT_OK: feature 309 - two new operations (archive one cited URL now; archive every cited URL with no copy, or report the coverage); no guard changes.
 archive: ## [project] archive ONE cited URL now into the private source archive - the served bytes, the whole page, its text - and write its manifest row (feature 309; the record build refuses a cited URL with none)   URL=<u> [KEY=<registry key not yet written>]
 	@if [ -z "$(URL)" ]; then printf 'make archive: URL=<u> is required\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/_archive.py" url "$(URL)" $(if $(KEY),--key "$(KEY)",)
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/archive.py" url "$(URL)" $(if $(KEY),--key "$(KEY)",)
 
 # GUARD_EDIT_OK: feature 309 - new operations, GM=1 (the GM's matched files copied into the archive) and CONSULTED=1 (the ledger's uncited pages - unrun, kept for feature 312's filter); no guard changes.
 archive-sources: ## [project] archive every cited URL with no copy yet (resumable; run it in the background) - or REPORT=1, the coverage table without fetching; GM=1, the GM's matched files copied in; CONSULTED=1, the ledger's uncited pages - HELD, unrun, for feature 312's filter (feature 309)   [WORKERS=4] [REPORT=1] [GM=1] [CONSULTED=1 [LIMIT=<n>]]
-	@if [ -n "$(CONSULTED)" ]; then python3 "$$(git rev-parse --show-toplevel)/scripts/_archive_ops.py" consulted $(if $(LIMIT),--limit $(LIMIT),); else python3 "$$(git rev-parse --show-toplevel)/scripts/_archive.py" $(if $(REPORT),report,$(if $(GM),gm-copies,backfill --workers $(or $(WORKERS),4))); fi
+	@if [ -n "$(CONSULTED)" ]; then python3 "$$(git rev-parse --show-toplevel)/scripts/record/archive_ops.py" consulted $(if $(LIMIT),--limit $(LIMIT),); else python3 "$$(git rev-parse --show-toplevel)/scripts/record/archive.py" $(if $(REPORT),report,$(if $(GM),gm-copies,backfill --workers $(or $(WORKERS),4))); fi
 
 # GUARD_EDIT_OK: feature 309 Amendment 1 - two new operations (the GM's download directory processed as an inbox; the archive looked in before the web); no guard changes.
 # GUARD_EDIT_OK: feature 309 plan review - MATCH= and NONE= added to archive-inbox (a new download's keys); nothing loosened.
 archive-inbox: ## [project] the GM's downloads in /host-l7r-repo/academic-sources/ archived, the push confirmed, then removed from it - run at the start of every research pass; a NEW download waits until you give its keys (feature 309)   [MATCH="<file>=<key>[,<key>] ..."] [NONE="<file> ..."]
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/_archive_ops.py" inbox $(foreach m,$(MATCH),--match "$(m)") $(foreach n,$(NONE),--none "$(n)")
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/archive_ops.py" inbox $(foreach m,$(MATCH),--match "$(m)") $(foreach n,$(NONE),--none "$(n)")
 
 archive-find: ## [project] does the archive already hold it? by URL, registry key, or words in the archived text - names each copy's local path; exit 1 when nothing is held (feature 309: look here BEFORE the web)   URL=<u> | KEY=<k> | TERMS="a|b"
 	@if [ -z "$(URL)$(KEY)$(TERMS)" ]; then printf 'make archive-find: URL=<u>, KEY=<k> or TERMS="a|b" is required\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/_archive_ops.py" find $(if $(URL),--url "$(URL)",) $(if $(KEY),--key "$(KEY)",) $(if $(TERMS),--terms "$(TERMS)",)
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/archive_ops.py" find $(if $(URL),--url "$(URL)",) $(if $(KEY),--key "$(KEY)",) $(if $(TERMS),--terms "$(TERMS)",)
 
 # GUARD_EDIT_OK: feature 313 - four new operations over the canonical download list and the access tags; no guard changes.
 downloads-ingest: ## [project] on the GM's word "ingest": the marks in the GM's copy of the download list recorded in research/to-download.md, then the inbox archived (feature 313)   [KEEP="<ids>"] [DROP="<ids>"]
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/_downloads.py" ingest --keep "$(KEEP)" --drop "$(DROP)"
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/downloads.py" ingest --keep "$(KEEP)" --drop "$(DROP)"
 
 downloads-sync: ## [project] on the GM's word "sync": the GM's copy of the download list replaced from research/to-download.md - refused while it holds anything not ingested (feature 313)
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/_downloads.py" sync
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/downloads.py" sync
 
 # GUARD_EDIT_OK: feature 313 plan review - no HIGH_RISK=: every new entry is appended at the end of the list (spec FR-008).
 download-add: ## [project] append a source only the GM can fetch at the end of the canonical download list, under the next number taken under a host-wide lock (feature 313)   FILE=<draft.md, entries headed "### NEW. <the work>">
 	@if [ -z "$(FILE)" ]; then printf 'make download-add: FILE=<draft.md> is required - entries headed "### NEW. <the work>", each with a link line, "- Fallback:", "- **Rests on it:**" naming research/questions/<file>, and "- Blocked by:"\n' >&2; exit 2; fi
 	@: "GUARD_EDIT_OK: feature 313 - FILE= passed as given; the script resolves a relative path from here or the repository root, since the root Makefile forwards with -C"
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/_downloads.py" add "$(FILE)"
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/downloads.py" add "$(FILE)"
 
 access-tags: ## [project] what can be got of each source - open, gm-full, gm-partial, paywalled, bot-refused, down, gone, never-read - derived from the archive, the registry and the GM's marks (feature 313)   [KEY=<key|download:ID>] [JSON=1] | SET=<state> KEY= DATE=<YYYY-MM-DD> REASON="<what it rests on>"
-	@if [ -n "$(SET)" ]; then python3 "$$(git rev-parse --show-toplevel)/scripts/_access_tags.py" set "$(KEY)" "$(SET)" "$(DATE)" "$(REASON)"; \
-	else python3 "$$(git rev-parse --show-toplevel)/scripts/_access_tags.py" report $(if $(KEY),--key "$(KEY)",) $(if $(JSON),--json,); fi
+	@if [ -n "$(SET)" ]; then python3 "$$(git rev-parse --show-toplevel)/scripts/record/access_tags.py" set "$(KEY)" "$(SET)" "$(DATE)" "$(REASON)"; \
+	else python3 "$$(git rev-parse --show-toplevel)/scripts/record/access_tags.py" report $(if $(KEY),--key "$(KEY)",) $(if $(JSON),--json,); fi
 
 sources-consulted: ## [project] every earlier read of a source page, with its outcome, from the sources-consulted ledger - by URL, or by registry key (feature 288)   URL=<u> | KEY=<regex>
 	@if [ -z "$(URL)$(KEY)" ]; then printf 'make sources-consulted: URL=<u> or KEY=<regex> is required\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/_sources.py" lookup $(if $(URL),--url "$(URL)",) $(if $(KEY),--key "$(KEY)",)
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/sources.py" lookup $(if $(URL),--url "$(URL)",) $(if $(KEY),--key "$(KEY)",)
 
 sources-import: ## [project] ONE TIME, idempotent: seed the sources-consulted ledger from the 2026-09-29 measurement and import the /tmp/l7r-check saves into the page cache (feature 288)
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/_sources.py" import
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/record/sources.py" import
 
 # GUARD_EDIT_OK: feature 253 - a new operation (the search the review-round guard runs, by hand); no guard changes.
 stale-terms:    ## [project] after a value changed in a feature's spec, where does the OLD value still stand - look BEFORE a later review round   F=253 [AGAINST=<git ref>]
 ##  F=<feature>    the feature number or directory name under specs/
 ##  AGAINST=<ref>  compare with the feature directory at this git ref (default: what the previous review round saw)
 	@if [ -z "$(F)" ]; then printf 'make stale-terms: F=<feature> is required - e.g. make stale-terms F=253\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/_stale_terms.py" "$(F)" --clone "$$(git rev-parse --show-toplevel)" $(if $(AGAINST),--against "$(AGAINST)",); test $$? -le 1
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/reviews/stale_terms.py" "$(F)" --clone "$$(git rev-parse --show-toplevel)" $(if $(AGAINST),--against "$(AGAINST)",); test $$? -le 1
 
 size-table:     ## [project] every drawn rect, wall gap and stroke of a Mode A plan in feet (3 px = 1 ft) - run BEFORE size-audit   PLAN=pool/<subject>.svg
 ##  PLAN=<svg>     the plan's SVG, relative to the skill directory or absolute
 	@if [ -z "$(PLAN)" ]; then printf 'make size-table: PLAN=<plan svg> is required - e.g. make size-table PLAN=pool/<tier>/<name>/<name>.svg\n' >&2; exit 2; fi
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/_size_table.py" "$(abspath $(PLAN))"
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/reviews/size_table.py" "$(abspath $(PLAN))"
 
 review-accept:  ## [project] record a review finding as deliberately LEFT, with a reason - logged like an escape   MAP=<map> FINDING=<id> REASON="..."
 ##  MAP=<map>        the pool map whose last settlement-review verdict raised the finding
@@ -1403,22 +1382,22 @@ review-accept:  ## [project] record a review finding as deliberately LEFT, with 
 # verifying it, so it writes the disposition and the bypass-log entry together and never one without the other:
 # an acceptance is an escape in all but name (spec-fidelity round 2), and `make audit` lists every
 # `dev/bypass-log/` entry, which is how an acceptance is counted rather than quietly standing in for a fix.
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/_review_prereq.py" accept --clone "$$(git rev-parse --show-toplevel)" --map "$(MAP)" --finding "$(FINDING)" --reason "$(REASON)" && $(LOGBYPASS) permitted "review-accept $(MAP) $(FINDING): $(REASON)"
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/reviews/review_prereq.py" accept --clone "$$(git rev-parse --show-toplevel)" --map "$(MAP)" --finding "$(FINDING)" --reason "$(REASON)" && $(LOGBYPASS) permitted "review-accept $(MAP) $(FINDING): $(REASON)"
 
 review-paired-gate:  ## [project] the settlement-review's paired gate - green, running or red (exit 1 on red)
 # GUARD_EDIT_OK: feature 240 FR-007, adding an operation - what the reviewer reads before its first map, between
 # maps and before its verdict. Green is the gate stamp for this engine content, never the last-event-wins
 # verification record; running is a gate target live in this clone, by cwd.
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/_review_prereq.py" gate-state --clone "$$(git rev-parse --show-toplevel)"
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/reviews/review_prereq.py" gate-state --clone "$$(git rev-parse --show-toplevel)"
 
 review-cost:     ## [project] a finished review agent's wall time and tokens - the ledger's cost cells (feature 294)   AGENT=<agent id>
 ##  AGENT=<id>  the agent id the Agent tool's result names
 	@: "GUARD_EDIT_OK: feature 294 FR-010, adding an operation - the ledger's measured table copies its cost from this, never from memory"
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/_review_cost.py" --agent "$(AGENT)"
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/reviews/review_cost.py" --agent "$(AGENT)"
 
 review-census:   ## [project] is each review check pulling its weight? the ledger's totals by check (feature 294)
 	@: "GUARD_EDIT_OK: feature 294 FR-013, adding an operation - the spec's R0 census re-taken by a script"
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/_review_census.py" --root "$$(git rev-parse --show-toplevel)"
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/reviews/review_census.py" --root "$$(git rev-parse --show-toplevel)"
 
 review-verdict:  ## [project] a review check's LAST act - write the unit's verdict record   UNIT=<unit> VERDICT=PASS|NEEDS-WORK|NOT-REVIEWABLE [FINDINGS=<json file>]
 ##  UNIT=<unit>        the owed unit reviewed (its prompt's UNIT: line; MAP= is the same field)
@@ -1426,7 +1405,7 @@ review-verdict:  ## [project] a review check's LAST act - write the unit's verdi
 ##  FINDINGS=<file>    a JSON list of {"id", "severity", "what"}; ids default to F1, F2, ...
 # GUARD_EDIT_OK: feature 240 FR-001, adding an operation - the pair closes on this record, not on the dispatch. The
 # engine key is copied from the dispatch and the gate is re-read here, so a red gate records NOT-REVIEWABLE.
-	@python3 "$$(git rev-parse --show-toplevel)/scripts/_review_prereq.py" verdict --clone "$$(git rev-parse --show-toplevel)" --unit "$(or $(UNIT),$(MAP))" --verdict "$(VERDICT)" $(if $(FINDINGS),--findings-file "$(FINDINGS)",)
+	@python3 "$$(git rev-parse --show-toplevel)/scripts/reviews/review_prereq.py" verdict --clone "$$(git rev-parse --show-toplevel)" --unit "$(or $(UNIT),$(MAP))" --verdict "$(VERDICT)" $(if $(FINDINGS),--findings-file "$(FINDINGS)",)
 
 test-file:      ## [tests] run test files whole, or a targeted subset   FILE=tests/pipeline/test_gencache.py [K="expr"]
 ##  FILE=<paths>  the test file(s), a directory, or a node id (`tests/x/test_y.py::test_z`) to run
@@ -1509,10 +1488,10 @@ quick:           ## [tests] tier 2: lint, types and every test that rolls no map
 	: "(GUARD_EDIT_OK: this comment block ends WITHOUT a trailing backslash - a continued line makes the"; \
 	: " next line part of the same shell command, where a leading @ is not make syntax but a command"; \
 	: " named @python3, which is what the first version of this phase did.)"
-	@python3 scripts/check-house-style-delta.py --selftest >/dev/null
-	@python3 scripts/check-house-style-delta.py .
+	@python3 scripts/gates/check-house-style-delta.py --selftest >/dev/null
+	@python3 scripts/gates/check-house-style-delta.py .
 	@: "(GUARD_EDIT_OK: feature 250 D14 - a research question this change touched stays under the size cap)"
-	@python3 scripts/check-question-size.py
+	@python3 scripts/gates/check-question-size.py
 	@: "(GUARD_EDIT_OK: feature 171 - capture whether testmon was warm BEFORE the run, so the ratchet below judges like with like)"; \
 	: "(GUARD_EDIT_OK: the GM's ruling 2026-09-27 - and not tooling: the tooling tests that live OUTSIDE tests/tooling (five tests/tools modules) leave quick with the tree; see QUICK_TREE)"; \
 	warm=$$([ -f .testmondata ] && echo yes || echo no); start=$$(date +%s); $(EXHAUSTIVE_ENV) python3 -m pytest -n $(XDIST_WORKERS) --dist worksteal $(TESTMON) -q --no-cov -x --ff -m "not rolls_map and not tooling" $(TIER_SELECT) $(QUICK_TREE); ec=$$?; \
@@ -1526,7 +1505,7 @@ quick:           ## [tests] tier 2: lint, types and every test that rolls no map
 	  : " entirely. Judging either against a warm baseline would fail on the first run in every new"; \
 	  : " clone - a guard firing on correct work, which is how guards get routed around.)"; \
 	  root=$$(git rev-parse --show-toplevel); \
-	  if [ "$$warm" = yes ] && [ -z "$(ALL)" ]; then python3 "$$root/scripts/_ratchet.py" quick "$$el" || exit 1; \
+	  if [ "$$warm" = yes ] && [ -z "$(ALL)" ]; then python3 "$$root/scripts/measure/ratchet.py" quick "$$el" || exit 1; \
 	  elif [ $$el -ge 15 ]; then printf '\nquick took %ss, but this run was %s - not judged against the 15s bar (feature 171).\n' "$$el" "$$([ "$$warm" = yes ] && echo "ALL=1, so unselective" || echo "COLD: it built .testmondata")"; fi; \
 	  : "(GUARD_EDIT_OK: feature 318 found it - the BUDGET judges the same runs the ratchet does, a warm selective one;"; \
 	  : " ALL=1 ran 9,247 tests in 78 s, every one passing, and failed here as 'something slow is running')"; \
@@ -1699,8 +1678,8 @@ static format typecheck test: | guard
 # the target-position line above; four sites in this file, all of them required).
 static:         ## [static] the static checks: ruff, duplicate-defs, file-scale, stale-dirs (was `lint`)
 	python3 -m ruff check --fix .
-	python3 scripts/check-duplicate-defs.py --selftest
-	python3 scripts/check-duplicate-defs.py .
+	python3 scripts/gates/check-duplicate-defs.py --selftest
+	python3 scripts/gates/check-duplicate-defs.py .
 # GUARD_EDIT_OK: feature 173 - THE ~1,000-LINE BAR IS GATED (GM 2026-08-31: *"one of the things that
 # can run whenever we do a make done can be to check the size of our files ... then we fail the
 # gate"*). It sits in `lint` beside check-duplicate-defs because it is the same class of thing - a
@@ -1708,14 +1687,14 @@ static:         ## [static] the static checks: ruff, duplicate-defs, file-scale,
 # the gate (feature 168), so an oversize file is reported before the map roll is paid for. It costs
 # 0.04 s over the tree. Closes half of the constitution's own v1.6.1 deferred TODO; the other half,
 # clause 12's expression count on FUNCTIONS, is still owed.
-	python3 scripts/check-file-scale.py --selftest
-	python3 scripts/check-file-scale.py .
+	python3 scripts/gates/check-file-scale.py --selftest
+	python3 scripts/gates/check-file-scale.py .
 	: "GUARD_EDIT_OK: feature 236, the GM item 5 - spec-lint, beside its two siblings and for the same" ; \
 	: "reason: a repo-wide static rule with a selftest that runs first, in the phase the gate runs FIRST" ; \
 	: "so a finding arrives before the map roll is paid for. It reads only the specs directories this" ; \
 	: "delta touches, so it costs nothing on a change that touches none."
-	python3 scripts/spec-lint.py --selftest
-	python3 scripts/spec-lint.py --delta .
+	python3 scripts/gates/spec-lint.py --selftest
+	python3 scripts/gates/spec-lint.py --delta .
 	: "GUARD_EDIT_OK: feature 241 - THE CONFLICT-MARKER BACKSTOP, beside its two siblings and for the third" ; \
 	: " time the same reason: a repo-wide static rule belongs in the phase the gate runs FIRST, so a finding" ; \
 	: " arrives before the map roll is paid for. The hook refuses STAGING a conflict; this asks whether one is" ; \
@@ -1724,8 +1703,8 @@ static:         ## [static] the static checks: ruff, duplicate-defs, file-scale,
 	: " the second one surfaced by accident. It scans every tracked file and costs about a second." ; \
 	: " GUARD_EDIT_OK: selftest FIRST, the rule every static check in this phase follows - a checker that" ; \
 	: " cannot fail is worth nothing, and this one is now trusted at the push as well."
-	python3 scripts/_hm_conflict.py --selftest
-	python3 scripts/_hm_conflict.py --tracked .
+	python3 scripts/hooks/lib/hm_conflict.py --selftest
+	python3 scripts/hooks/lib/hm_conflict.py --tracked .
 	: "GUARD_EDIT_OK: a directory left with nothing but __pycache__ is still an importable PEP 420" ; \
 	: "namespace package, so a long-lived clone passes what a fresh clone fails - silently, and in the" ; \
 	: "direction that hides the bug. Four of them were live when this landed (GM 2026-09-05). It runs" ; \
@@ -1733,11 +1712,11 @@ static:         ## [static] the static checks: ruff, duplicate-defs, file-scale,
 	: "GUARD_EDIT_OK: the generated target reference must match this Makefile - a doc that drifts is" ; \
 	: "worse than none, and this one is derived so drift is always a stale FILE, never a stale FACT." ; \
 	python3 scripts/make-docs.py . --check
-	python3 scripts/check-stale-dirs.py --selftest
-	python3 scripts/check-stale-dirs.py .
-	python3 scripts/check-old-layout.py --selftest
-	python3 scripts/check-old-layout.py .
-	bash scripts/_layout_carry.sh --selftest
+	python3 scripts/gates/check-stale-dirs.py --selftest
+	python3 scripts/gates/check-stale-dirs.py .
+	python3 scripts/gates/check-old-layout.py --selftest
+	python3 scripts/gates/check-old-layout.py .
+	bash scripts/reviews/layout_carry.sh --selftest
 
 format:          ## [static] ruff format over the tree
 	python3 -m ruff format .
@@ -1793,7 +1772,7 @@ FULL_ENV = $(if $(COV_FLOORS),L7R_TESTS_FULL=1,)
 # tests, retired the same day. The floor cannot be loosened by it: a skipped test lowers measured coverage,
 # never hides an uncovered line (specs/206 research.md R3). Recursive `=`, evaluated where it is used, so a
 # `make` that never reaches the test phase never pays the check.
-BROWSER_SKIP = $(shell root=$$(git rev-parse --show-toplevel 2>/dev/null); [ -n "$$root" ] && python3 "$$root/scripts/gate-stamp.py" --fresh browser >/dev/null 2>&1 && echo --ignore=tests/full/interactive/page_browser)
+BROWSER_SKIP = $(shell root=$$(git rev-parse --show-toplevel 2>/dev/null); [ -n "$$root" ] && python3 "$$root/scripts/gates/gate-stamp.py" --fresh browser >/dev/null 2>&1 && echo --ignore=tests/full/interactive/page_browser)
 # COVERAGE FOLLOWS THE DIFF at reference scope (feature 135, second pass; the why is on `delta.coverage_scope`):
 # the gate traces only the engine modules the diff touched - `uncovered-in-diff.py` needs no more - and nothing
 # when none changed; measured 9 s of a 25 s locked gate. FULL traces everything (the floors). An empty answer
@@ -2047,10 +2026,10 @@ test:            ## [tests] {internal} the pytest phase itself (internal - `done
 	$(if $(BROWSER_SKIP),printf 'browser tests: already green against exactly what they read - skipped (gate-stamp --fresh browser; make page-check runs them on demand)\n';,) \
 	if python3 -c "import xdist" >/dev/null 2>&1; then $(GATE_EXHAUSTIVE_ENV) $(FULL_ENV) $(JOURNAL_ENV) $(INCR_ENV) python3 -m pytest -n $(XDIST_WORKERS) --dist $(DIST) $(COV_SCOPE) $(INCR_ARGS) $(FULL_TREE_IGNORE) $(BROWSER_SKIP) $(ROLL_DESELECT) $(TIER_SELECT) $${paths:-}; else $(GATE_EXHAUSTIVE_ENV) $(FULL_ENV) $(JOURNAL_ENV) $(INCR_ENV) python3 -m pytest $(COV_SCOPE) $(INCR_ARGS) $(FULL_TREE_IGNORE) $(BROWSER_SKIP) $(ROLL_DESELECT) $(TIER_SELECT) $${paths:-}; fi; ec=$$?; \
 	traced=$(if $(filter --no-cov,$(COV_SCOPE)),,1); \
-	if [ $$ec -ne 0 ]; then [ -n "$$traced" ] && { python3 scripts/uncovered-in-diff.py || true; }; exit $$ec; fi; \
+	if [ $$ec -ne 0 ]; then [ -n "$$traced" ] && { python3 scripts/measure/uncovered-in-diff.py || true; }; exit $$ec; fi; \
 	if [ -z "$(COV_FLOORS)" ]; then \
 	  printf '\033[1mcoverage floors: deferred to `make done FULL=1`\033[0m (a deselected test takes its coverage with it - see the Makefile comment)\n'; \
-	  [ -n "$$traced" ] && { python3 -m coverage combine --append >/dev/null 2>&1 || true; python3 scripts/uncovered-in-diff.py || true; }; \
+	  [ -n "$$traced" ] && { python3 -m coverage combine --append >/dev/null 2>&1 || true; python3 scripts/measure/uncovered-in-diff.py || true; }; \
 	  exit 0; \
 	fi; \
 	python3 -m coverage combine --append >/dev/null 2>&1 || true; \

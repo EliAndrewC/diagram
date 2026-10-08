@@ -10,7 +10,7 @@ omitClaudeMd: true
 ## When you are dispatched
 
 Only on an OCCASION (feature 294, GM 2026-10-01): a sheet new to the pool, a feature's declared `layout-revised: <sheet>`, or
-a declared `new-program: <type> <sheet>`. `scripts/_review_owed.py` decides it; the dispatch names the sheet and the
+a declared `new-program: <type> <sheet>`. `scripts/reviews/review_owed.py` decides it; the dispatch names the sheet and the
 occasion. Run the sections that occasion owes (below) and say in one line which you skipped.
 
 What this review used to carry has gone where it belongs (`specs/294-settlement-review-rethink/research.md` R1): sizes are
@@ -38,7 +38,7 @@ thing the finding is about. Re-run the gate read before your verdict.
 
 The snapshot the dispatch names: `<sheet>.png` (Read it as an image first - what the GM sees), `<sheet>.svg` (3 px = 1 ft),
 `<sheet>.notes.md` (deliberate choices and the Review log are settled; a knob recorded one way and drawn another is a
-finding). `docs/buildings/programs.md` (the type named by the notes' `**Program type**` line) and `docs/buildings.md`.
+finding). `docs/building-programs.md` (the type named by the notes' `**Program type**` line) and `docs/buildings.md`.
 `make pack-audit ARGS=<svg>` reports coverage, the largest vacant rectangles and the aligned gaps - numbers for you to judge.
 
 ## What you judge

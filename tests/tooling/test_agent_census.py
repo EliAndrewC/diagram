@@ -1,4 +1,4 @@
-"""`scripts/_agent_census.py` (feature 251, FR-001): what each subagent check cost, from the transcripts.
+"""`scripts/reviews/agent_census.py` (feature 251, FR-001): what each subagent check cost, from the transcripts.
 
 WHAT THESE PROVE. The one trap the script exists to avoid - a transcript repeats a message's usage on
 every content block, with `output_tokens` growing - is tested directly: three records of one message
@@ -17,7 +17,7 @@ REPO = pathlib.Path(__file__).resolve().parents[2]
 
 
 def _load():  # noqa: ANN202
-    spec = importlib.util.spec_from_file_location("_agent_census", REPO / "scripts" / "_agent_census.py")
+    spec = importlib.util.spec_from_file_location("_agent_census", REPO / "scripts/reviews/agent_census.py")
     assert spec and spec.loader
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)

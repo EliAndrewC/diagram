@@ -28,7 +28,7 @@ TITLE = "The research record"
 #: subsections, holds a page of that half (spec 303 FR-012, FR-013).
 HALVES = (("research", "The research"), ("drawing", "How our maps draw it"))
 #: Where each half's section pages are in the site. Not `research/`: a path `research/<x>.html` is what the pointer check
-#: refuses as a retired built page of the record (`scripts/check-research-pointers.py`), and a site path must not read
+#: refuses as a retired built page of the record (`scripts/gates/check-research-pointers.py`), and a site path must not read
 #: as one.
 HALF_DIR = links.SECTION_DIR
 REGISTRY_GROUP = "Sources"

@@ -1,0 +1,192 @@
+#!/usr/bin/env bash
+# Tests for make-only-hooks.sh. Feeds PreToolUse events and asserts which commands are blocked.
+# Run: tests/hooks/test-make-only-hooks.sh   (exit 0 = all green)
+#
+# TWO DIRECTIONS, ALWAYS (feature 127, FR-015 + FR-016). Section 1 proves the hook FIRES on every
+# row of the threat model. Section 2 proves it STAYS QUIET on ordinary work - and that half is not a
+# formality. A guard that fires on correct work teaches a session that the override is part of the
+# normal routine, which is precisely how the documented-override workaround became habitual in the
+# feature that motivated this one. A false positive here is a worse outcome than a false negative.
+set -uo pipefail
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+HOOK="$HERE/../../scripts/hooks/make-only-hooks.sh"
+# GUARD_EDIT_OK: feature 164 - this guard RECORDS its firings now (feature 162's log), so the suite
+# must write its fixtures to a throwaway directory. Without it the suite pollutes `make audit`, whose
+# whole purpose is to price a guard from real firings: 24 fixture entries appeared there the first
+# time these conversions ran their suites.
+GUARD_LOG_ROOT=$(mktemp -d); export GUARD_LOG_DIR="$GUARD_LOG_ROOT"
+# GUARD_EDIT_OK: 2026-09-26 - stderr is captured in a file of THIS run's own, not a fixed /tmp path that every
+# concurrent hooks-test (one per session's gate) rewrote under the others (it failed the batching suite's greps).
+HOOK_ERR=$(mktemp)
+trap 'rm -rf "$GUARD_LOG_ROOT" "$HOOK_ERR"' EXIT
+
+PASS=0; FAIL=0
+
+ev() { python3 -c 'import json,sys; print(json.dumps({"session_id":"m1","tool_name":"Bash","tool_input":{"command":sys.argv[1]}}))' "$1"; }
+run() { ev "$1" | "$HOOK" pretool >/tmp/mo.out 2>"$HOOK_ERR"; echo $?; }
+
+check() { # label expected(ok|blocked) command
+  local rc; rc=$(run "$3")
+  if { [ "$2" = ok ] && [ "$rc" -eq 0 ]; } || { [ "$2" = blocked ] && [ "$rc" -ne 0 ]; }; then
+    echo "  ok      $1"; PASS=$((PASS+1))
+  else
+    echo "  FAIL    $1 (expected $2, rc=$rc)"; FAIL=$((FAIL+1))
+  fi
+}
+
+names_a_target() { # the refusal must say what to run instead (FR-006)
+  local rc; rc=$(run "$2")
+  if [ "$rc" -ne 0 ] && grep -q "Run this instead" "$HOOK_ERR" && grep -q "make " "$HOOK_ERR"; then
+    echo "  ok      $1"; PASS=$((PASS+1))
+  else
+    echo "  FAIL    $1 (refusal did not name a make target)"; FAIL=$((FAIL+1))
+  fi
+}
+
+echo "1. IT FIRES - every row of the threat model (FR-015)"
+check "tier 1: a cohort run bare"              blocked "python3 -m l7r.diagram.tools.cohort_audit --count 48"
+check "tier 1: the generator run bare"         blocked "python3 -m l7r.diagram.hamletgen --batch 24"
+check "tier 1: a pool sweep run bare"          blocked "python3 -m l7r.diagram.pipeline.regen pool/hamlets/inashiro/inashiro.gen.py"
+check "tier 1: regen by script path"           blocked "python3 l7r/diagram/pipeline/regen.py pool/hamlets/x/x.gen.py"
+check "tier 1: bare pytest"                    blocked "python3 -m pytest -n auto"
+check "tier 1: bare pytest, plain name"        blocked "pytest tests/hamletgen -q -m \"not slow\""   # GUARD_EDIT_OK: feature 212 - a bare directory now REWRITES (section 4); a marker filter still refuses
+check "tier 1: pytest run in-process via -c"   blocked "python3 -c 'import pytest; pytest.main()'"
+check "tier 2: the documented override"        blocked "make done FULL=1 REF_WHY=pre-push verification"
+check "tier 2: the reference-gate override"    blocked "REF_OK=1 make maps"
+check "tier 2: the -k gate override"           blocked "GATE_OK=1 make done"
+check "tier 4: a forged makefile"              blocked "make -f /tmp/evil.mk probe"
+check "tier 4: --file spelling"                blocked "make --file /tmp/evil.mk probe"
+check "tier 4: --makefile spelling"            blocked "make --makefile=/tmp/evil.mk probe"
+
+echo
+echo "2. IT STAYS QUIET - ordinary work must never be blocked (FR-016)"
+check "the cheap check"                        ok "make quick"
+check "the gate"                               ok "make done"
+check "the full gate, no inline override"      ok "make done FULL=1"
+check "a map sweep"                            ok "make maps"
+check "the linters"                            ok "python3 -m ruff check . && pyrefly check"
+check "git"                                    ok "git -C /gm-assistant/.clones/x status --porcelain"
+check "the stop-work procedure"                   ok "./scripts/sync-with-main.sh done"
+check "reading a source file"                  ok "grep -n 'def stage_ways' l7r/diagram/hamletgen/ways.py"
+check "a hook's own test"                      ok "tests/hooks/test-make-only-hooks.sh"
+check "an unrelated python one-liner"          ok "python3 -c 'print(1)'"
+# The word 'pytest' appearing inside a make invocation is the gate doing its job, not a bypass.
+check "make running pytest internally"         ok "make test  # runs pytest under the hood"
+# A `|` or `;` INSIDE A QUOTED STRING is not a command separator (2026-08-25: a pip-freeze grep
+# for the lockfile pins was blocked as a bare pytest run - the mention-versus-invocation defect).
+check "a quoted regex naming pytest"           ok "pip freeze | grep -iE '^(numpy|pytest|ruff)=='"
+check "a quoted message naming pytest"         ok "git commit -m 'gate: ruff clean; pytest green'"
+check "a heredoc naming pytest"                ok "cat > requirements-dev.in <<'EOF'
+pytest
+pytest-cov
+EOF"
+
+echo
+echo "2b. TIER 5 VIA BASH - a guard file written by shell rather than the Edit tool"
+check "heredoc python writing the Makefile"   blocked "python3 - <<PY
+import pathlib; pathlib.Path('Makefile').write_text(x)
+PY"
+check "sed -i on a hook script"               blocked "sed -i 's/foo/bar/' scripts/hooks/gate-hooks.sh"
+check "redirect over settings.json"           blocked "cat > .claude/settings.json"
+check "append to a hook script"               blocked "echo x >> scripts/hooks/no-poll-hooks.sh"
+check "the escape, with a reason"             ok      "sed -i 's/a/b/' scripts/hooks/gate-hooks.sh  # GUARD_EDIT_OK: it fired on correct work"
+check "READING a guard file is not writing"   ok      "grep -n done Makefile"
+# GUARD_EDIT_OK: feature 217 - the roster of rolled hamlets is a guard on the shell route too
+check "heredoc appending a roll row to the roster" blocked "cat >> tests/rolls.py <<EOF
+Roll(SPEC, 'x', 'y')
+EOF"
+check "python writing the roster"                blocked "python3 - <<PY
+import pathlib; pathlib.Path('tests/rolls.py').write_text(x)
+PY"
+check "writing the roster's TEST is ordinary"    ok      "cat >> tests/test_rolls.py <<EOF
+x = 1
+EOF"
+check "READING the roster is not writing"        ok      "grep -n Roll tests/rolls.py"
+# GUARD_EDIT_OK: feature 169 - two live false positives, both matched against the RAW command.
+# The first REFUSED A COMMAND THAT WROTE NOTHING: an arrow in printed prose reads as a redirect.
+check "an arrow in prose is not a redirect"   ok      "printf '5 mirror cd+write -> scripts/hooks/main-tree-hooks.sh (new)\n'"
+check "a hook named in a commit message"      ok      "git commit -m 'edit scripts/hooks/gate-hooks.sh later'"
+check "a stderr redirect is not a write"      ok      "make done 2> /tmp/log"
+check "a heredoc DISCUSSING a hook"           ok      "cat <<'EOF' > /tmp/notes
+see scripts/hooks/gate-hooks.sh
+EOF"
+check "writing a NON-guard file"              ok      "python3 - <<PY
+import pathlib; pathlib.Path('notes.md').write_text(x)
+PY"
+
+echo
+echo "3. THE REFUSAL IS USEFUL (FR-006) - it must name the target, not just say no"
+names_a_target "a blocked cohort names a target"  "python3 -m l7r.diagram.tools.cohort_audit"
+names_a_target "a blocked pytest names a target"  "pytest -q"
+names_a_target "a forged makefile names a target" "make -f /tmp/evil.mk x"
+
+# GUARD_EDIT_OK: feature 212 - THE TARGETED RUN IS REWRITTEN, THE REST REFUSED WITH THE TOKEN NAMED.
+echo
+echo "4. A TARGETED PYTEST RUN IS REWRITTEN INTO make test-file (feature 212)"
+rewritten() { # label, command, the exact rewritten command
+  ev "$2" | "$HOOK" pretool >/tmp/mo.out 2>"$HOOK_ERR"; local rc=$?
+  local got; got=$(python3 -c 'import json,sys
+try: print(json.load(sys.stdin)["hookSpecificOutput"]["updatedInput"]["command"])
+except Exception: pass' < /tmp/mo.out 2>/dev/null)
+  if [ "$rc" -eq 0 ] && [ "$got" = "$3" ]; then
+    echo "  ok      $1"; PASS=$((PASS+1))
+  else
+    echo "  FAIL    $1 (rc=$rc, got '${got:-<nothing>}', wanted '$3')"; FAIL=$((FAIL+1))
+  fi
+}
+refused_because() { # label, command, the text the refusal must carry
+  ev "$2" | "$HOOK" pretool >/tmp/mo.out 2>"$HOOK_ERR"; local rc=$?
+  if [ "$rc" -ne 0 ] && grep -qF -- "$3" "$HOOK_ERR"; then
+    echo "  ok      $1"; PASS=$((PASS+1))
+  else
+    echo "  FAIL    $1 (rc=$rc; refusal did not name '$3')"; FAIL=$((FAIL+1))
+  fi
+}
+rewritten "one file, output flags, a pipeline tail" \
+  "python3 -m pytest tests/gate/hamletgen/test_driver.py -x -q --no-header --no-cov -p no:randomly 2>&1 | sed -n '1,60p'" \
+  "make test-file FILE=tests/gate/hamletgen/test_driver.py 2>&1 | sed -n '1,60p'"
+rewritten "-k becomes K=, inside a subshell with a cd" \
+  '( cd $C && python3 -m pytest tests/interactive/test_page.py -k pond_sluice -x -q 2>&1 | sed -n "1,40p" )' \
+  '( cd $C && make test-file FILE=tests/interactive/test_page.py K="pond_sluice" 2>&1 | sed -n "1,40p" )'
+rewritten "a quoted -k expression with spaces" \
+  'python3 -m pytest tests/settlement/test_homestead_parts.py -q -x -p no:cacheprovider --no-cov -k "yard or work_yard" 2>&1 | tail -12' \
+  'make test-file FILE=tests/settlement/test_homestead_parts.py K="yard or work_yard" 2>&1 | tail -12'
+rewritten "a node id is a path" "python3 -m pytest tests/a/test_b.py::test_c -x" "make test-file FILE=tests/a/test_b.py::test_c"
+rewritten "a directory is a path" "pytest tests/tooling -q 2>&1 | tail -3" "make test-file FILE=tests/tooling 2>&1 | tail -3"
+rewritten "two files are two paths" "python3 -m pytest tests/a/test_b.py tests/c/test_d.py -n auto -q" 'make test-file FILE="tests/a/test_b.py tests/c/test_d.py"'
+rewritten "an env prefix and a chain after it" \
+  'FULL=1 python3 -m pytest tests/tooling/test_switches.py -q -n 4 --no-cov 2>&1 | tail -6; echo done' \
+  'FULL=1 make test-file FILE=tests/tooling/test_switches.py 2>&1 | tail -6; echo done'
+rewritten "a pytest AFTER a heredoc is still found (the body is masked, not the command)" \
+  "$(printf 'cat > /tmp/x.py <<EOF\nprint(\"pytest tests/never.py\")\nEOF\npython3 -m pytest tests/x/test_y.py -q')" \
+  "$(printf 'cat > /tmp/x.py <<EOF\nprint(\"pytest tests/never.py\")\nEOF\nmake test-file FILE=tests/x/test_y.py')"
+refused_because "a marker filter names its token"     'python3 -m pytest tests/x/test_y.py -m "not slow"' '`-m`'
+refused_because "a collection names its token"        "python3 -m pytest tests/x/test_y.py --collect-only -q" '`--collect-only`'
+refused_because "a coverage flag names its token"     "python3 -m pytest tests/x/test_y.py --cov=l7r" '`--cov=l7r`'
+refused_because "a plugin LOAD names its token"       "python3 -m pytest tests/x/test_y.py -p l7r.diagram.ci.selection" 'loads a plugin'
+refused_because "an absolute path names its token"    "python3 -m pytest /tmp/base/tests/test_y.py" 'absolute path'
+refused_because "an in-process pytest.main is refused" "python3 -c 'import pytest; pytest.main()'" 'no test path'
+grep -q "make test-file FILE=tests/gate/hamletgen/test_driver.py" /tmp/mo.out 2>/dev/null; ev "python3 -m pytest tests/gate/hamletgen/test_driver.py -q" | "$HOOK" pretool 2>/dev/null | grep -q "SUBSET" \
+  && { echo "  ok      the context teaches the K= form and the subset rule"; PASS=$((PASS+1)); } \
+  || { echo "  FAIL    the rewrite's context does not teach the form"; FAIL=$((FAIL+1)); }
+
+echo
+echo "5. AN ENGINE ENTRY POINT A MAKE TARGET WRAPS IS REWRITTEN INTO IT (feature 212)"
+rewritten "ci engine-key <ref> -> make engine-key REF=" \
+  "( cd \$S && python3 -m l7r.diagram.ci engine-key worktree 2>&1 | head -3 )" \
+  "( cd \$S && make engine-key REF=worktree 2>&1 | head -3 )"
+rewritten "ci status -> make ci-status" "python3 -m l7r.diagram.ci status 2>&1 | grep -i complete" "make ci-status 2>&1 | grep -i complete"
+rewritten "ci status --route -> ROUTE=1" "python3 -m l7r.diagram.ci status --route" "make ci-status ROUTE=1"
+rewritten "a \$(ARGS) recipe takes the rest" "python3 -m l7r.diagram.tools.pack_audit wip/x.svg" 'make pack-audit ARGS="wip/x.svg"'
+rewritten "switches show -> make switches" "python3 -m l7r.diagram.switches show" "make switches"
+refused_because "a module nothing wraps lists what is" "python3 -m l7r.diagram.tools.scatter_audit pool/hamlets/x" "no make target wraps"
+refused_because "...and the list names a wrapped module" "python3 -m l7r.diagram.tools.scatter_audit pool/hamlets/x" "make engine-key"
+refused_because "arguments the recipe cannot carry" "python3 -m l7r.diagram.ci state" "cannot carry"
+refused_because "a multi-line recipe (REF_FIRST) does not wrap" "python3 -m l7r.diagram.hamletgen --seed 4" "no make target wraps"
+ev "python3 -m l7r.diagram.ci status" | "$HOOK" pretool 2>/dev/null | grep -q "make ci-status" \
+  && { echo "  ok      the context names the module and the target"; PASS=$((PASS+1)); } \
+  || { echo "  FAIL    the entry-point rewrite's context is silent"; FAIL=$((FAIL+1)); }
+
+echo
+echo "passed $PASS, failed $FAIL"
+[ "$FAIL" -eq 0 ]

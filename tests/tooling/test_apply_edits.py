@@ -1,4 +1,4 @@
-"""`scripts/_apply_edits.py` (feature 250 D15): a check report's EDIT and GLOSSARY blocks, applied in one command.
+"""`scripts/record/apply_edits.py` (feature 250 D15): a check report's EDIT and GLOSSARY blocks, applied in one command.
 
 WHAT THESE PROVE. A block whose old text occurs once in a record file is applied; one that occurs twice or not at
 all, or names a file outside the record, is REFUSED and nothing is written; `--skip` and `--dry-run` write nothing
@@ -16,7 +16,7 @@ REPO = pathlib.Path(__file__).resolve().parents[2]
 
 
 def _load():  # noqa: ANN202
-    spec = importlib.util.spec_from_file_location("_apply_edits", REPO / "scripts" / "_apply_edits.py")
+    spec = importlib.util.spec_from_file_location("_apply_edits", REPO / "scripts/record/apply_edits.py")
     assert spec and spec.loader
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)

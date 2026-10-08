@@ -136,7 +136,7 @@ def ink_bounds(text: str, plan: ParsedPlan, canvas_area: float = 0.0) -> tuple[f
     """The bounding box of everything DRAWN: rects, text, lines, circles, ellipses and the absolute points of
     every path, each shifted by the `translate(...)` of its ancestors; definitions (patterns, symbols,
     markers) draw nothing where they stand and are skipped, and a rect covering most of the canvas is the
-    parchment background, not ink. The same walk as `scripts/_size_table.py`'s, for the same reason: a glyph
+    parchment background, not ink. The same walk as `scripts/reviews/size_table.py`'s, for the same reason: a glyph
     authored in local coordinates inside a translated group is ink where the group puts it, not at the origin."""
     try:
         root = ET.fromstring(text)
@@ -265,7 +265,7 @@ def two_court_zoning(plan: ParsedPlan) -> list[str]:
     if not plan.dividers:
         return ["no court divider - a magistracy is an outer (public) court at the gate and an inner (private) court behind a divider"]
     # THE DIVIDER HAS A GATE (feature 267 pass 3, the building-review's catch on the placer's draft, which drew the
-    # divider unbroken): the household's middle gate, the nakamon (docs/buildings/programs.md "Two-court zoning") - a
+    # divider unbroken): the household's middle gate, the nakamon (docs/building-programs.md "Two-court zoning") - a
     # divider with no opening seals the house from the office. A passage is at least GATE_MIN_FT, like a wall's.
     if not any(g >= GATE_MIN_FT for g in divider_gates_ft(plan)):
         return ["the court divider has no gate - the household's middle gate (nakamon, ~6-8 ft, narrower than the main gate) joins the courts"]

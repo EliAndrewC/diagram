@@ -17,8 +17,8 @@ statement about attention, not about quality.
 
 Both found on Ubame's new potters' kiln works and both deliberately NOT fixed there: they are
 defects in `settlement/trades.py::kiln`, not in that map, and a shared-glyph change made under a
-one-off content edit lands on Tango, Minami, Nagahara and `wip/shiro-daika` as well. Every map that draws
-the kiln today is frozen (or `wip/`), so the fix lands with the first scripted tier that draws a kiln. Still in
+one-off content edit lands on Tango, Minami, Nagahara and Shiro Daika as well. Every map that draws
+the kiln today is frozen, so the fix lands with the first scripted tier that draws a kiln. Still in
 the code as of 2026-10-07 (`trades.py` the wisp path, `cxs_` the two-cottage case).
 
 1. **The smoke wisp ignores the map's declared wind.** The plume is authored in the glyph's LOCAL

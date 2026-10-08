@@ -73,7 +73,7 @@ BATH_W_FT, BATH_H_FT = 10.0, 8.0
 GATE_POST_W_FT, GATE_POST_D_FT = 4.0 / 3.0, 14.0 / 3.0
 # The middle gate's (nakamon's) posts on the 2 ft divider: 4 x 10 px, the same convention at the divider's scale.
 NAKAMON_POST_D_FT = 10.0 / 3.0
-# An informal door on each lodging block (feature 267, docs/buildings/programs.md: no sealed boxes): a small dark rect set
+# An informal door on each lodging block (feature 267, docs/building-programs.md: no sealed boxes): a small dark rect set
 # flush inside the building's face, as the hand sheets draw one (`floating_doors` holds it to the wall). 6 ft along the
 # face is a MAP DRAWING CONVENTION (research/questions/0117-doorways-and-doors-to.drawing.html 'How our maps draw doors', from buildings 'Doorways and
 # doors (to)': an ordinary door is about half a ken, ~3 ft; drawn doors run two to three times that to read at 3 px/ft);
@@ -123,12 +123,12 @@ class Envelope:
     h_ft: float
     divider_ft: float  # y of the inner/outer court divider
     gate_w_ft: float = 13.0  # main-gate PASSAGE width (on the south wall, centered; the posts stand on the cut wall ends)
-    # The middle gate (nakamon) in the divider: its passage, narrower than the main gate (docs/buildings/programs.md "Two-court
+    # The middle gate (nakamon) in the divider: its passage, narrower than the main gate (docs/building-programs.md "Two-court
     # zoning": a household door, ~6-8 ft; the audit's `two_court_zoning` requires one). 6 ft is Ochiba's; 0 draws none.
     middle_gate_w_ft: float = 6.0
     # The lesser gates in the compound wall: (wall "N"|"S"|"E"|"W", its center along that wall in ft, its passage in ft)
     # each - the kitchen postern that keeps deliveries and night-soil off the hearing court, and the outer court's
-    # service gate for muck and prisoners (docs/buildings/programs.md "Walled enclosure").
+    # service gate for muck and prisoners (docs/building-programs.md "Walled enclosure").
     posterns: tuple[tuple[str, float, float], ...] = ()
 
 
@@ -175,7 +175,7 @@ class BuildingSpec:
     # row since pass 4, so a house can be massed in two rows front and back (the one-room-deep bar was the review's).
     rooms: tuple[tuple[str, float, float, float, float], ...] = ()
     # The magistrate's DAIS (w_ft, d_ft): a band flush inside the court face, centered on the building - the office
-    # hall's front band overlooking the hearing court (docs/buildings/programs.md "The office hall is the compound's working
+    # hall's front band overlooking the hearing court (docs/building-programs.md "The office hall is the compound's working
     # heart"; docs/buildings.md "Office hall (with dais band)"). (0, 0): none.
     dais: tuple[float, float] = (0.0, 0.0)
     # Stand this many feet further off its wall than the wall's ink requires: the residence's rear alley (research

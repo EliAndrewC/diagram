@@ -792,7 +792,7 @@ offset from where the connector meets the lanes was not re-measured for this cor
 The village windbreak belt is now drawn in one of two forms, the `windbreak_belt` knob (research/vegetation/270): this map
 rolled `conifer_led` (meta.windbreak_belt), so its conifers stand in rows along the belt as drawn, seated before and painted
 over the lesser broadleaf and bamboo between them. The belt's record counts 272 conifer crowns, 106 broadleaf and 35 bamboo
-marks inked; no clump seat moved. Reviewed on Inashiro, the reference hamlet (docs/review-ledger.md).
+marks inked; no clump seat moved. Reviewed on Inashiro, the reference hamlet (dev/review-ledger.md).
 
 ## 2026-09-28 (feature 269 landing): byres, retirement houses, the belt, the woodland stands and a knob that draws against its own roll
 

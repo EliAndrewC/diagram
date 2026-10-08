@@ -1,4 +1,4 @@
-"""`container-scripts/page-session-rules.md` against the root CLAUDE.md (feature 274 D6, FR-003).
+"""`scripts/container/page-session-rules.md` against the root CLAUDE.md (feature 274 D6, FR-003).
 
 WHY. A headless page session starts WITHOUT the clone's root CLAUDE.md (about 5,200 tokens a turn, research R1) and
 carries the slim file in its place, so a rule added to CLAUDE.md later would silently never reach a research session.
@@ -12,8 +12,10 @@ from __future__ import annotations
 import pathlib
 import re
 
+from tests._scripts import script
+
 REPO = pathlib.Path(__file__).resolve().parents[2]
-SLIM = REPO / "container-scripts" / "page-session-rules.md"
+SLIM = script("page-session-rules.md")
 
 # opening words of the CLAUDE.md bullet -> the phrase in the slim file that carries it (or NOT: <why not>)
 CARRIED = {

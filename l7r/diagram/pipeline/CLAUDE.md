@@ -61,7 +61,7 @@ baseline re-established - run until `CACHED` - before each trial) is [`dev/cache
 
 The pool is two trees, each `<tree>/<tier>/<map>/`: `pool/` for what is LIVE (scripted settlements
 plus the Mode A compound plans that are hand-authored by design) and `legacy-hand-authored-pool/`
-for the 18 FROZEN exhibits. **Everything that walks the pool calls `poolmaps.bundles()`**, saying
+for the 19 FROZEN exhibits. **Everything that walks the pool calls `poolmaps.bundles()`**, saying
 which tree(s) its job concerns.
 
 No consumer globs, lists or greps the pool's shape itself (feature 161: ten hand-rolled walks drifted apart, and

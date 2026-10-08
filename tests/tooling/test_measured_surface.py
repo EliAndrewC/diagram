@@ -27,7 +27,7 @@ REPO = HERE
 
 
 def _gate_stamp():
-    spec = importlib.util.spec_from_file_location("gate_stamp_under_test", REPO / "scripts" / "gate-stamp.py")
+    spec = importlib.util.spec_from_file_location("gate_stamp_under_test", REPO / "scripts/gates/gate-stamp.py")
     assert spec and spec.loader
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
@@ -42,7 +42,7 @@ def test_the_exclusions_are_derived_from_the_coverage_config() -> None:
     assert gs.coverage_sources(REPO) == ("l7r/",), "the authority is [tool.coverage.run] source"
     assert "l7r/diagram/ci/" in gs._DECLARED_EXCLUDE["diagram"], "still DECLARED - the derivation is what drops it"
     # tests/ is outside l7r/ and survives, and so do the root trees outside the project (feature 329)
-    assert gs.exclusions("diagram", REPO) == ("tests/", "scripts/", "specs/", ".claude/", ".specify/", ".clones/", "buildspec/", "container-scripts/", "docs/"), "measured -> not excludable"
+    assert gs.exclusions("diagram", REPO) == ("tests/", "scripts/", "specs/", ".claude/", ".specify/", ".clones/", "buildspec/", "docs/"), "measured -> not excludable"
 
 
 def test_an_unreadable_coverage_config_fails_CLOSED() -> None:
@@ -53,7 +53,7 @@ def test_an_unreadable_coverage_config_fails_CLOSED() -> None:
     encodes, *"if you add a file under `l7r/`, it is measured"*."""
     gs = _gate_stamp()
     assert gs.coverage_sources(Path("/nonexistent-root")) == ("l7r/",)
-    assert gs.exclusions("diagram", Path("/nonexistent-root")) == ("tests/", "scripts/", "specs/", ".claude/", ".specify/", ".clones/", "buildspec/", "container-scripts/", "docs/"), (
+    assert gs.exclusions("diagram", Path("/nonexistent-root")) == ("tests/", "scripts/", "specs/", ".claude/", ".specify/", ".clones/", "buildspec/", "docs/"), (
         "ci/ stays measured even with no config to read"
     )
 

@@ -6,7 +6,7 @@ to main's tip, so what main contributed drops out by construction; no per-commit
 commits is needed, and a hand-made merge commit's content is main's and disappears the same way.
 
 FR-008: `ENGINE` below is THE ONE LIST of paths whose change requires the paid gate. It governs
-DISPATCH only - it must never narrow what `scripts/gate-stamp.py` hashes (that guard has its own
+DISPATCH only - it must never narrow what `scripts/gates/gate-stamp.py` hashes (that guard has its own
 list and its own reasons). Documentation, design notes, research, the append-only logs and a pool
 map's `.notes.md` are not engine code even inside the skill; the GM: *"even if the diagram
 documentation was touched, but not the code itself, then we should not rerun the tests."*
@@ -31,7 +31,7 @@ _ENGINE_DIRS: tuple[tuple[str, tuple[str, ...]], ...] = (
     # clarification split that into two things: the pages must REGENERATE when a clone lands (the render
     # fingerprint, feature 187 - kept) and a page change must be TESTED (a green `make page-check`,
     # owed at push through gate-stamp's `page` area) - neither of which is a full gate or a paid build.
-    # So an asset-only delta routes DIRECT; `scripts/gate-stamp.py` `AREAS["page"]` is the one
+    # So an asset-only delta routes DIRECT; `scripts/gates/gate-stamp.py` `AREAS["page"]` is the one
     # definition of a page asset, and `tests/tooling/test_measured_surface.py` reads it.
     ("l7r/", (".py",)),
     # tests/ is NOT engine content (GM 2026-08-25, feature 132 FR-024, asked and answered: *"if the only
@@ -138,7 +138,7 @@ SKILL_PY = "l7r/"
 def coverage_scope(root: Path, base_ref: str = "origin/main") -> list[str]:
     """COVERAGE FOLLOWS THE DIFF at reference scope (feature 135, second pass). Measured 2026-08-28: tracing
     every engine module cost 6 s of a 16.6 s test phase plus ~3 s of combine/report - 9 s of a 25 s gate -
-    and the reference scope enforces no floor; its coverage exists for `scripts/uncovered-in-diff.py`, which
+    and the reference scope enforces no floor; its coverage exists for `scripts/measure/uncovered-in-diff.py`, which
     only ever looks at lines the diff touched. So the gate traces exactly the engine modules changed since
     the merge base with main, or in the working tree (tracked-modified and untracked), and nothing when
     none changed. The FULL run traces everything, as before. Returns the changed files' PACKAGE DIRECTORIES

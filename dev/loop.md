@@ -5,7 +5,7 @@
 The short always-on version of each rule is in the engine index, [`l7r/diagram/CLAUDE.md`](../l7r/diagram/CLAUDE.md);
 the ladder itself (`make quick` -> `make done`) is the root `CLAUDE.md`'s. What a test costs, how to read a timing on
 this box, and the levers already withdrawn are in [`test-cost.md`](test-cost.md). Live costs are asked of the record
-(`make audit`, `scripts/_gatecost.py <target>`), never typed here: prose cannot tell you it went stale.
+(`make audit`, `scripts/measure/gatecost.py <target>`), never typed here: prose cannot tell you it went stale.
 
 ## Iterate on the motivating map; let the cache skip the rest
 

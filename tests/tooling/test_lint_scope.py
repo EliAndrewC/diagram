@@ -18,7 +18,7 @@ from pathlib import Path
 import pytest
 
 ROOT = Path(__file__).resolve().parents[2]
-LINTED = ("l7r/", "tests/", "wip/")
+LINTED = ("l7r/", "tests/")
 
 
 def _ruff(*args: str, cwd: Path) -> subprocess.CompletedProcess[str]:
@@ -36,9 +36,9 @@ def test_a_root_run_reaches_only_the_trees_the_package_owns() -> None:
     files = _ruff("check", "--show-files", ".", cwd=ROOT).stdout.split()
     rel = [str(Path(f).resolve().relative_to(ROOT)) for f in files]
     assert any(r.startswith("l7r/") for r in rel) and any(r.startswith("tests/") for r in rel), "the engine and its tests are linted"
-    # ...less a sibling test's transient scratch: `test_invocation` writes `.tmp-invocation-pool/` inside the repository (the
-    # invocation check needs it there) and removes it, and on another xdist worker this run can catch it mid-test (feature
-    # 328, the first gate after the 329 merge)
+    # a `.tmp-` directory is another test's fixture, mid-way between being written and removed (test_invocation's
+    # `.tmp-invocation-pool/`), not a tree anyone adopted - the race test_makefile_recipe_comments already excludes;
+    # it failed this test in a full gate on 2026-10-08
     stray = [r for r in rel if not r.startswith(LINTED) and r != "pyproject.toml" and not r.startswith(".tmp-")]
     assert not stray, f"a root lint run reaches files no package adopted: {stray[:10]}"
 

@@ -16,8 +16,10 @@ import sys
 
 import pytest
 
+from tests._scripts import script
+
 SCRIPTS = pathlib.Path(__file__).resolve().parents[2] / "scripts"
-_spec = importlib.util.spec_from_file_location("_ratchet", SCRIPTS / "_ratchet.py")
+_spec = importlib.util.spec_from_file_location("_ratchet", script("ratchet.py"))
 assert _spec and _spec.loader
 ratchet = importlib.util.module_from_spec(_spec)
 # REGISTER BEFORE EXEC. `_ratchet` uses `from __future__ import annotations`, so its dataclass fields
@@ -147,7 +149,7 @@ def test_the_median_ignores_short_circuits_failures_and_other_scopes(tmp_path) -
     than tidy. Failures are excluded for the same reason in reverse: a run that died at 4 s is not
     evidence that the gate is fast.
     """
-    gc_spec = importlib.util.spec_from_file_location("_gatecost", SCRIPTS / "_gatecost.py")
+    gc_spec = importlib.util.spec_from_file_location("_gatecost", script("gatecost.py"))
     assert gc_spec and gc_spec.loader
     gatecost = importlib.util.module_from_spec(gc_spec)
     sys.modules["_gatecost"] = gatecost
@@ -223,7 +225,7 @@ def test_the_dry_run_floor_still_reads_baseline() -> None:
     """SC-004. `check-run-plausible.py` derives its floor from `RATCHETS[target].baseline` via
     getattr and treats a missing value as NO FLOOR - so renaming that field would silently restore
     the 2026-09-05 defect where `make -n done` minted a push credential."""
-    spec = importlib.util.spec_from_file_location("crp", SCRIPTS / "check-run-plausible.py")
+    spec = importlib.util.spec_from_file_location("crp", script("check-run-plausible.py"))
     crp = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(crp)
     assert crp.floor_for("done") == max(crp.ABSOLUTE_MIN, int(ratchet.RATCHETS["done"].baseline * crp.FRACTION))
@@ -233,7 +235,7 @@ def test_a_class_median_EXCLUDES_entries_that_carry_no_class(tmp_path) -> None: 
     """SC-003. Every entry written before feature 196 lacks a cache field, and DEFAULTING them would
     put cold runs in the warm population - the exact defect this feature removes. Excluding costs a
     slow start (the below-sample rule covers it) and cannot lie."""
-    spec = importlib.util.spec_from_file_location("gc", SCRIPTS / "_gatecost.py")
+    spec = importlib.util.spec_from_file_location("gc", script("gatecost.py"))
     gc = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(gc)
     logs = tmp_path / "dev/run-log"

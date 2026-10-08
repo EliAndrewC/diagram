@@ -1,4 +1,4 @@
-"""`scripts/_archive_ops.py` - the inbox, every page read, the lookup and the relayout (feature 309, Amendment 1).
+"""`scripts/record/archive_ops.py` - the inbox, every page read, the lookup and the relayout (feature 309, Amendment 1).
 
 WHAT THESE PROVE. The GM's download directory is processed as an inbox: every entry but the GM's two lists is archived,
 the push confirmed, and only then deleted - a failed push deletes nothing, and the table still finds a copy whose file
@@ -21,15 +21,16 @@ import pytest
 
 from l7r.diagram.interactive.record import archive as rec
 from tests import _flat_record as fr
+from tests._scripts import script
 
 REPO = pathlib.Path(__file__).resolve().parents[2]
 
 
 def _load(name: str):  # noqa: ANN202
-    spec = importlib.util.spec_from_file_location(name, REPO / "scripts" / f"{name}.py")
+    spec = importlib.util.spec_from_file_location(name, script(name))
     assert spec and spec.loader
     mod = importlib.util.module_from_spec(spec)
-    sys.modules[name] = mod
+    sys.modules[name] = sys.modules[name.lstrip("_")] = mod  # the old name and the one a sibling imports it by (2026-10-08)
     spec.loader.exec_module(mod)
     return mod
 
@@ -153,5 +154,5 @@ def test_the_ledgers_writers_hand_their_urls_to_the_archiver_but_never_in_a_test
     assert calls == []
     monkeypatch.setenv("L7R_ARCHIVE_READS", "1")
     assert src.archive_reads(tmp_path, ["https://a", "https://b"], runner) == 1
-    assert calls[0][1].endswith("_archive_ops.py") and calls[0][2:] == ["urls", "https://a", "https://b"]
+    assert calls[0][1].endswith("archive_ops.py") and calls[0][2:] == ["urls", "https://a", "https://b"]
     assert src.archive_reads(tmp_path, [], runner) == 0

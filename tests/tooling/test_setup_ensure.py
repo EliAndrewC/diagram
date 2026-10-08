@@ -14,8 +14,10 @@ import subprocess
 
 import pytest
 
+from tests._scripts import script
+
 REPO = pathlib.Path(__file__).resolve().parents[2]
-SCRIPT = REPO / "container-scripts" / "setup-dev-env.sh"
+SCRIPT = script("setup-dev-env.sh")
 SKILL = REPO
 
 in_container = pytest.mark.skipif(not (os.path.exists("/run/.containerenv") or os.path.exists("/.dockerenv")), reason="--ensure is a no-op outside a container")

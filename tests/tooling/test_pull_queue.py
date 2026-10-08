@@ -1,4 +1,4 @@
-"""`scripts/pull-queue.sh` (feature 265 FR-010): a finished queue's commits come back, and the generated pages are rebuilt.
+"""`scripts/pages/pull-queue.sh` (feature 265 FR-010): a finished queue's commits come back, and the generated pages are rebuilt.
 
 WHAT THESE PROVE, on real git repositories in tmp: a conflict only in a generated page takes this side and the rebuild
 runs and is committed; a conflict in a hand-written file stops with that file named and exit 1; a queue still dirty
@@ -12,7 +12,7 @@ import pathlib
 import subprocess
 
 REPO = pathlib.Path(__file__).resolve().parents[2]
-SCRIPT = REPO / "scripts" / "pull-queue.sh"
+SCRIPT = REPO / "scripts/pages/pull-queue.sh"
 
 
 def _git(cwd: pathlib.Path, *args: str) -> str:

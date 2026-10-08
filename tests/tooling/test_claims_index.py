@@ -1,4 +1,4 @@
-"""`scripts/_claims.py` - the claims index: owed, bundle, record, report and the push's verdict (feature 316).
+"""`scripts/record/claims.py` - the claims index: owed, bundle, record, report and the push's verdict (feature 316).
 
 The GM, 2026-10-02: *"our tooling should be able to evaluate whether or not an annotated thing has been edited since the last
 time a subagent check ran on it"*, and the push rule the GM accepted: an owed row blocks, a finding the change introduces blocks,
@@ -15,14 +15,16 @@ import sys
 
 import pytest
 
+from tests._scripts import script
+
 REPO = pathlib.Path(__file__).resolve().parents[2]
 
 
 def _load(name: str):  # noqa: ANN202
-    spec = importlib.util.spec_from_file_location(name, REPO / "scripts" / f"{name}.py")
+    spec = importlib.util.spec_from_file_location(name, script(name))
     assert spec and spec.loader
     mod = importlib.util.module_from_spec(spec)
-    sys.modules[name] = mod
+    sys.modules[name] = sys.modules[name.lstrip("_")] = mod  # the old name and the one a sibling imports it by (2026-10-08)
     spec.loader.exec_module(mod)
     return mod
 
@@ -59,9 +61,9 @@ def _tree(root: pathlib.Path, mod: str = MOD, page: str = PAGE) -> pathlib.Path:
     (skill / "l7r" / "diagram" / "hamletgen" / "rows.py").write_text(mod)
     (skill / "research" / "questions").mkdir(parents=True, exist_ok=True)
     (skill / "research" / "questions" / "0033-row-villages-resson.html").write_text(page)
-    (skill / "docs" / "buildings").mkdir(parents=True, exist_ok=True)
+    (skill / "docs").mkdir(parents=True, exist_ok=True)
     (skill / "docs" / "buildings.md").write_text("## Walls\n<!-- Research: walls - CONVENTION -->\n")
-    (skill / "docs" / "buildings" / "programs.md").write_text("### Country shrine (a village district's shrine)\n<!-- Research: precinct - UNRESEARCHED -->\n")
+    (skill / "docs" / "building-programs.md").write_text("### Country shrine (a village district's shrine)\n<!-- Research: precinct - UNRESEARCHED -->\n")
     return skill
 
 
@@ -95,7 +97,7 @@ def test_every_claim_is_a_row_including_inherited_and_procedure_claims(tmp_path:
             "l7r/diagram/hamletgen/rows.py::far_row#dry share",
             "l7r/diagram/hamletgen/rows.py::helper#plumbing",
             "docs/buildings.md::Walls#walls",
-            "docs/buildings/programs.md::Country shrine (a village district's shrine)#precinct",
+            "docs/building-programs.md::Country shrine (a village district's shrine)#precinct",
         ]
     )
     assert cur["docs/buildings.md::Walls#walls"].research == "" and cur["l7r/diagram/hamletgen/rows.py::far_row#dry share"].research

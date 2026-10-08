@@ -1,4 +1,4 @@
-"""`scripts/_review_prereq.py`, each decision proven both ways (feature 240, FR-003 to FR-006).
+"""`scripts/reviews/review_prereq.py`, each decision proven both ways (feature 240, FR-003 to FR-006).
 
 The GM (2026-09-13): *"procedures which rely on someone, whether it's a human or an LLM, remembering to do
 something are flawed"*. Every decision here reads a RECORD, never prose, and the case that matters most is
@@ -16,7 +16,7 @@ import pathlib
 import sys
 
 REPO = pathlib.Path(__file__).resolve().parents[2]
-_spec = importlib.util.spec_from_file_location("review_prereq", REPO / "scripts" / "_review_prereq.py")
+_spec = importlib.util.spec_from_file_location("review_prereq", REPO / "scripts/reviews/review_prereq.py")
 assert _spec and _spec.loader
 prereq = importlib.util.module_from_spec(_spec)
 sys.modules["review_prereq"] = prereq

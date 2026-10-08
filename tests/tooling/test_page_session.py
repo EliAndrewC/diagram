@@ -1,4 +1,4 @@
-"""`scripts/_page_session_runner.py` (feature 250 D7, D11): each brief in a fresh headless session, in order.
+"""`scripts/pages/page_session_runner.py` (feature 250 D7, D11): each brief in a fresh headless session, in order.
 
 WHAT THESE PROVE. Every brief gets its own session id, log directory and command, in the order given; the command
 names the session like the clone (so the clone-sync hooks route it), carries the chosen id (so its transcript is
@@ -17,7 +17,7 @@ REPO = pathlib.Path(__file__).resolve().parents[2]
 
 
 def _load():  # noqa: ANN202
-    spec = importlib.util.spec_from_file_location("_page_session_runner", REPO / "scripts" / "_page_session_runner.py")
+    spec = importlib.util.spec_from_file_location("_page_session_runner", REPO / "scripts/pages/page_session_runner.py")
     assert spec and spec.loader
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
@@ -54,7 +54,7 @@ def test_a_page_session_starts_from_the_lower_floor(tmp_path: pathlib.Path) -> N
     assert '"claudeMdExcludes": ["/diagram/CLAUDE.md", "/diagram/.clones/diagram-research/CLAUDE.md"]' in flags[flags.index("--settings") + 1]
     assert '"claudeMdExcludes": ["/diagram/CLAUDE.md"]' in ps.floor_flags("/diagram")[ps.floor_flags("/diagram").index("--settings") + 1]
     assert "--append-system-prompt" not in ps.floor_flags(str(tmp_path)), "nothing to append, no flag"
-    (tmp_path / "container-scripts").mkdir()
+    (tmp_path / "scripts/container").mkdir(parents=True)
     for f, text in zip(ps.PROMPT_FILES, ("STANDING AUTHORIZATION", "SLIM RULES"), strict=True):
         (tmp_path / f).write_text(text + "\n", encoding="utf-8")
     flags = ps.floor_flags(str(tmp_path))
@@ -344,7 +344,7 @@ def _run_sh(tmp_path: pathlib.Path, *args: str) -> tuple[int, list[str], str]:
     brief = tmp_path / "brief.md"
     brief.write_text(BRIEF, encoding="utf-8")
     env = {"PATH": f"{bin_}:/usr/bin:/bin", "HOME": str(tmp_path)}
-    r = subprocess.run(["bash", str(REPO / "scripts" / "page-session.sh"), str(brief), *args], cwd=REPO, env=env, capture_output=True, text=True, check=False)
+    r = subprocess.run(["bash", str(REPO / "scripts/pages/page-session.sh"), str(brief), *args], cwd=REPO, env=env, capture_output=True, text=True, check=False)
     argv = __import__("json").loads(argv_file.read_text()) if argv_file.exists() else []
     return r.returncode, argv, r.stderr
 

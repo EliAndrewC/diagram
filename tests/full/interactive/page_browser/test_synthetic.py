@@ -351,7 +351,7 @@ def test_in_raster_mode_the_lit_paddy_is_washed_and_the_lit_beads_are_not(synthe
         synthetic.js("() => window.l7rMap.fit()")
         assert synthetic.js("() => window.l7rMap.rasterReady()"), "the synthetic page carries its picture and id map"
         assert synthetic.settles("raster", lambda: synthetic.js(mode)) == "raster", "fitted in a 100-unit viewport the page is below the raster switch"
-        # FLAKY in two loaded FULL runs (2026-09-26, 2026-09-27; future-work/closed.md), never reproduced under CPU load
+        # FLAKY in two loaded FULL runs (2026-09-26, 2026-09-27; closed by feature 283), never reproduced under CPU load
         # or beside a test-full (29 runs, 2026-09-28): the message names the page's state so the next failure says which
         # of mode, highlight, a pinned modal or raster readiness was wrong
         state = "() => ({mode: document.getElementById('map').getAttribute('data-mode'), hl: document.getElementById('map').getAttribute('data-hl'), explain: document.getElementById('explain').open, ready: window.l7rMap.rasterReady()})"

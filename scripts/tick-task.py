@@ -131,8 +131,8 @@ def main(argv: list[str]) -> int:
         return 2
     # A PLAN'S DECISIONS ARE REVIEWED BEFORE ITS TASKS ARE TICKED (feature 243). Asked before the task is
     # even looked up, so a refused tick writes nothing; the push asks the same question of hand edits.
-    sys.path.insert(0, str(Path(__file__).resolve().parent))
-    import _plan_gate
+    sys.path.insert(0, str(Path(__file__).resolve().parent / "gates"))
+    import plan_gate as _plan_gate
 
     permitted, message = _plan_gate.tick_permitted(d, root, os.environ.get("PLAN_REVIEW_OK"))
     if message:

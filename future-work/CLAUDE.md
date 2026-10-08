@@ -9,14 +9,16 @@
 | [`cities.md`](cities.md) | working on a provincial city or a capital - walls, gates, wards, streets, the castle | small |
 | [`compounds.md`](compounds.md) | working on a Mode A compound plan - magistracies, and the estate/mansion types still to be built | small |
 | [`cross-cutting.md`](cross-cutting.md) | the thing you are fixing would change more than one kind of map, or no map at all (the gate, the caches, module structure) | small |
-| [`closed.md`](closed.md) | you want to know whether something was SETTLED or merely forgotten | a one-line ledger |
 
 ## The rules that keep this from rotting
 
-1. **An entry is OPEN WORK.** Not history, not a lesson, not a decision record. Closed items go to
-   `closed.md`; method lessons - dead ends, wrong claims, the shapes failures take - go to
-   [`../dev/lessons.md`](../dev/lessons.md).
-2. **Close it in the same commit that closes the work.** A settled question still reading as OPEN gets put to the GM
+1. **An entry is OPEN WORK.** Not history, not a lesson, not a decision record. A closed entry is DELETED: the commit
+   that closes the work and its feature's spec are the record (the separate `closed.md` ledger predated spec-kit and
+   was retired on 2026-10-08, GM: *"our Git history tells us what has been closed, as does our spec kit specs"*). A
+   ruling the GM gave goes where it applies - the research page, the map's notes, the code's comment,
+   [`../docs/migration-plan.md`](../docs/migration-plan.md) - and method lessons (dead ends, wrong claims, the shapes
+   failures take) go to [`../dev/lessons.md`](../dev/lessons.md).
+2. **Delete it in the same commit that closes the work.** A settled question still reading as OPEN gets put to the GM
    a second time, which costs them a decision they had already made.
 3. **Each entry names the pain, the evidence, and a sketch of the fix.** An entry without a
    measurement is a feeling, and this project's own history says a feeling is usually wrong about
@@ -24,13 +26,15 @@
 4. **Not a second copy of what a tool already lists.** A drift between the engine (or a Mode A procedure) and the
    research is `make claims-report`'s; a guess or silence the record labels is `make open-questions`'. An entry
    here is work neither carries - a defect the claims do not state, a sheet check, an unlabeled research question,
-   a tooling gap, or what a tier's conversion owes.
+   a tooling gap, or what a tier's conversion owes. Nor are canon gaps tracked here (GM 2026-10-07: Ubame, Hayakawa,
+   the Kurogi, Moriguchi, Nagahara absent from `l7r.md`) - each sheet's notes carry the particulars.
 5. **Check the era before you act on an old entry.** Much of the city material predates scripted
-   generation and assumes a next hand-authored map. There will not be one: the 18 hand-authored maps
+   generation and assumes a next hand-authored map. There will not be one: the 19 hand-authored maps
    are FROZEN and conversion is the answer for every tier above hamlet
    ([`../docs/migration-plan.md`](../docs/migration-plan.md)). Those entries are annotated - the task is dead,
    the insight is an input to that tier's conversion.
 
 **The division is guesswork - reorganize freely** (GM 2026-08-24: *"right now, we have divided based on largely
-guesswork."*). Code comments, notes and tests cite entries by TITLE (`git grep -n "future-work"`), so a moved or closed
-entry keeps its title in its new file or in `closed.md`, and a pointer that names a FILE is re-aimed in the same commit.
+guesswork."*). Code comments, notes and tests cite entries by TITLE (`git grep -n "future-work"`), so a moved entry keeps its title in
+its new file, a pointer to a closed one names the feature that closed it instead, and a pointer that names a FILE is
+re-aimed in the same commit.

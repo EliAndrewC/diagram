@@ -22,8 +22,10 @@ import sys
 
 import pytest
 
+from tests._scripts import script
+
 REPO = pathlib.Path(__file__).resolve().parents[2]
-TOOL = REPO / "scripts" / "claim-feature.py"
+TOOL = script("claim-feature.py")
 SKILL = REPO
 _spec = importlib.util.spec_from_file_location("claim_feature", TOOL)
 assert _spec and _spec.loader

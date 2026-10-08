@@ -13,7 +13,7 @@ import json
 import pathlib
 import subprocess
 
-SCRIPT = pathlib.Path(__file__).resolve().parents[2] / "scripts" / "guard-log.py"
+SCRIPT = pathlib.Path(__file__).resolve().parents[2] / "scripts/measure/guard-log.py"
 
 
 def _log(tmp_path: pathlib.Path) -> pathlib.Path:

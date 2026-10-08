@@ -18,12 +18,14 @@ import sys
 
 import pytest
 
+from tests._scripts import script
+
 REPO = pathlib.Path(__file__).resolve().parents[2]
 SKILL = REPO
 
 
 def _load(name: str):  # noqa: ANN202
-    spec = importlib.util.spec_from_file_location(name, REPO / "scripts" / f"{name.replace('_', '-') if name.startswith('check') else name}.py")
+    spec = importlib.util.spec_from_file_location(name, script(name.replace('_', '-') if name.startswith('check') else name))
     assert spec and spec.loader
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
@@ -74,7 +76,7 @@ def test_the_prose_key_is_derived_and_ignores_the_data_tags():
 
 
 def test_the_class_parser_still_finds_the_registry():
-    """NON-VACUITY for `_entry_owed.py`'s matching surface (FR-011.1, SC-006). A parser that matched
+    """NON-VACUITY for `entry_owed.py`'s matching surface (FR-011.1, SC-006). A parser that matched
     nothing would make every "is not named" assertion above pass for the wrong reason."""
     sys.path.insert(0, str(SKILL))
     from l7r.diagram.interactive.classes import CLASSES, _base
@@ -110,12 +112,12 @@ def test_the_heading_checker_proves_it_still_bites():
 @pytest.mark.parametrize("token", ["", "x", "ok"])
 def test_the_push_escape_demands_a_real_reason(token: str):
     """SC-013's floor: a bare `ENTRY_DRIFT_OK` explains nothing to the person auditing later."""
-    p = subprocess.run([sys.executable, str(REPO / "scripts/_hm_escape.py"), "reason-ok"], input=token, capture_output=True, text=True)
+    p = subprocess.run([sys.executable, str(REPO / "scripts/hooks/lib/hm_escape.py"), "reason-ok"], input=token, capture_output=True, text=True)
     assert p.returncode != 0, f"{token!r} passed the reason floor"
 
 
 def test_a_real_reason_clears_the_floor():
-    p = subprocess.run([sys.executable, str(REPO / "scripts/_hm_escape.py"), "reason-ok"], input="a maintenance sweep moved no finding", capture_output=True, text=True)
+    p = subprocess.run([sys.executable, str(REPO / "scripts/hooks/lib/hm_escape.py"), "reason-ok"], input="a maintenance sweep moved no finding", capture_output=True, text=True)
     assert p.returncode == 0
 
 
@@ -124,13 +126,13 @@ def test_the_judgment_agent_is_pre_authorized():
     unless the user asked", which sits ABOVE CLAUDE.md - the documented 2026-07-27 failure in which three
     city maps shipped unreviewed. It was held by inspection until this test existed, which is the very
     thing SC-009 forbids."""
-    text = (REPO / "container-scripts/append-system-prompt.md").read_text(encoding="utf-8")
+    text = (REPO / "scripts/container/append-system-prompt.md").read_text(encoding="utf-8")
     authorized = {m.strip("`") for m in __import__("re").findall(r"`[a-z-]+`", text.split("invoke it with the Agent tool")[0])}
     assert "entry-drift" in authorized, f"entry-drift is not in the pre-authorized list: {sorted(authorized)}"
     assert (REPO / ".claude/agents/entry-drift.md").is_file(), "pre-authorized but the agent file is missing"
     # every defined agent, not only this feature's: by 2026-10-08 nine had been added without joining the list
     defined = {p.stem for p in (REPO / ".claude/agents").glob("*.md")}
-    assert defined <= authorized, f"add to container-scripts/append-system-prompt.md's list: {sorted(defined - authorized)}"
+    assert defined <= authorized, f"add to scripts/container/append-system-prompt.md's list: {sorted(defined - authorized)}"
 
 
 def test_the_agent_pins_opus_like_every_subagent_check():

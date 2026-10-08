@@ -44,7 +44,7 @@ ROLES: dict[str, frozenset[str]] = {
     "tally office": frozenset({PLAIN}),
     "tax archive": frozenset({KURA}),
     "storehouse": frozenset({KURA}),  # GUESS: a sealed kura, as the tax archive
-    # the granary has TWO attested forms (docs/buildings/programs.md; Ochiba notes R18): the raised slatted granary, and the
+    # the granary has TWO attested forms (docs/building-programs.md; Ochiba notes R18): the raised slatted granary, and the
     # earthen kura - a knob, so both fills are its role
     "granary": frozenset({GRANARY_SLATS, KURA}),
     "cell": frozenset({CELL}),

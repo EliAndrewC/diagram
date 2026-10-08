@@ -1,4 +1,4 @@
-"""`scripts/_canon.py` and `scripts/_hm_canon.py` (feature 250 D16): the canon searched for every term at once.
+"""`scripts/record/canon.py` and `scripts/hooks/lib/hm_canon.py` (feature 250 D16): the canon searched for every term at once.
 
 WHAT THESE PROVE. `make canon` reports every term's hits with the heading each sits under, caps a term's rows,
 says so when a term has none, and refuses an empty TERMS; the guard's decision names a direct read of a canon file
@@ -12,11 +12,13 @@ import importlib.util
 import json
 import pathlib
 
+from tests._scripts import script
+
 REPO = pathlib.Path(__file__).resolve().parents[2]
 
 
 def _load(name: str):  # noqa: ANN202
-    spec = importlib.util.spec_from_file_location(name, REPO / "scripts" / f"{name}.py")
+    spec = importlib.util.spec_from_file_location(name, script(name))
     assert spec and spec.loader
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)

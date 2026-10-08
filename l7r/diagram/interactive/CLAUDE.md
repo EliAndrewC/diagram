@@ -100,7 +100,7 @@ renamed heading moves all three, which `make fragment-move` does with every poin
 re-renders at each landing so its links follow.
 
 **A class naming a question nobody can find shows no link and no error** - `research_questions` is quiet
-like everything else here, and `scripts/check-entry-headings.py` is what refuses it at the push. So when you add a class, open its page and click its References tab once.
+like everything else here, and `scripts/gates/check-entry-headings.py` is what refuses it at the push. So when you add a class, open its page and click its References tab once.
 
 ## The blue plot is its own class (feature 159)
 

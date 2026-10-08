@@ -1,4 +1,4 @@
-"""`scripts/_downloads.py` - the canonical download list, the GM's marked copy, ingest, sync and add (feature 313).
+"""`scripts/record/downloads.py` - the canonical download list, the GM's marked copy, ingest, sync and add (feature 313).
 
 WHAT THESE PROVE. The import keeps both sources byte for byte (SC-001). A copy driven through sync, a GM tick, a GM text
 edit, a session edit and ingest records the marks, holds the text edit for an instruction, keeps the session's edit, and
@@ -17,14 +17,16 @@ import sys
 
 import pytest
 
+from tests._scripts import script
+
 REPO = pathlib.Path(__file__).resolve().parents[2]
 
 
 def _load(name: str):  # noqa: ANN202
-    spec = importlib.util.spec_from_file_location(name, REPO / "scripts" / f"{name}.py")
+    spec = importlib.util.spec_from_file_location(name, script(name))
     assert spec and spec.loader
     mod = importlib.util.module_from_spec(spec)
-    sys.modules[name] = mod
+    sys.modules[name] = sys.modules[name.lstrip("_")] = mod  # the old name and the one a sibling imports it by (2026-10-08)
     spec.loader.exec_module(mod)
     return mod
 

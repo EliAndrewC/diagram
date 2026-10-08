@@ -2,7 +2,7 @@
 
 An agent file is prose, so what a test can prove is that the contract is WRITTEN where the agent reads it, in
 the order it must run, and that every command it names exists. Whether an agent obeys is the hook's half
-(`scripts/pair-hooks.sh`) and the verdict writer's (`make review-verdict` re-reads the gate itself) - D2: each
+(`scripts/hooks/pair-hooks.sh`) and the verdict writer's (`make review-verdict` re-reads the gate itself) - D2: each
 layer the other's backstop.
 """
 

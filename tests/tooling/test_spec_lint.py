@@ -1,6 +1,6 @@
 """`spec-lint`, proven to fire (feature 236, the GM's item 5, FR-010 and FR-011).
 
-Each of the four checks was written by breaking the rule in `scripts/spec-lint.py` and watching a case
+Each of the four checks was written by breaking the rule in `scripts/gates/spec-lint.py` and watching a case
 here go red - the project's standing requirement for a guard. The quiet half matters as much: a lint
 that fired on the number claim or on the mid-feature milestone push would refuse the very protocol the
 root `CLAUDE.md` requires, so the no-`tasks.md` cases are here as regression cases.
@@ -18,13 +18,13 @@ import sys
 import pytest as _pytest
 
 REPO = pathlib.Path(__file__).resolve().parents[2]
-_spec = importlib.util.spec_from_file_location("spec_lint", REPO / "scripts" / "spec-lint.py")
+_spec = importlib.util.spec_from_file_location("spec_lint", REPO / "scripts/gates/spec-lint.py")
 assert _spec and _spec.loader
 lint = importlib.util.module_from_spec(_spec)
 sys.modules["spec_lint"] = lint
 _spec.loader.exec_module(lint)
 
-_f5 = importlib.util.spec_from_file_location("_spec_figures_head", REPO / "scripts" / "_spec_figures.py")
+_f5 = importlib.util.spec_from_file_location("_spec_figures_head", REPO / "scripts/gates/spec_figures.py")
 assert _f5 and _f5.loader
 _f5mod = importlib.util.module_from_spec(_f5)
 _f5.loader.exec_module(_f5mod)
@@ -137,7 +137,7 @@ def test_check_2_reaches_the_whole_tree(tmp_path: pathlib.Path) -> None:
 def test_check_2_leaves_a_verbatim_record_alone(tmp_path: pathlib.Path) -> None:
     """A frozen corpus and a run log are records of what happened, not claims still standing."""
     d = _feature(tmp_path, research="WITHDRAWN: the 22 ft clearance\n")
-    for name in ("scripts/fixtures/corpus.json", "dev/run-log/a.json"):
+    for name in ("tests/hooks/fixtures/corpus.json", "dev/run-log/a.json"):
         (tmp_path / name).parent.mkdir(parents=True, exist_ok=True)
         (tmp_path / name).write_text('{"cmd": "the 22 ft clearance"}\n')
     assert _lint14(d, tree_root=tmp_path) == []
@@ -193,12 +193,12 @@ def test_selftest_passes() -> None:
 # ---- check 5 (feature 239): a measured figure is derived, not typed -------------------------------------
 
 
-_figs_spec = importlib.util.spec_from_file_location("_spec_figures", REPO / "scripts" / "_spec_figures.py")
+_figs_spec = importlib.util.spec_from_file_location("_spec_figures", REPO / "scripts/gates/spec_figures.py")
 assert _figs_spec and _figs_spec.loader
 figs = importlib.util.module_from_spec(_figs_spec)
 _figs_spec.loader.exec_module(figs)
 
-_figs5 = importlib.util.spec_from_file_location("figures_cli", REPO / "scripts" / "figures.py")
+_figs5 = importlib.util.spec_from_file_location("figures_cli", REPO / "scripts/measure/figures.py")
 assert _figs5 and _figs5.loader
 figures_cli = importlib.util.module_from_spec(_figs5)
 _figs5.loader.exec_module(figures_cli)
@@ -355,7 +355,7 @@ def test_there_is_one_definition_of_a_figure() -> None:
     """Spec D4: check 1, check 5 and feature 240's importer read the SAME detector - a copy drifts silently."""
     assert lint._FIGURE is figs._FIGURE or lint._FIGURE.pattern == figs._FIGURE.pattern
     assert lint.UNITS == figs.UNITS
-    src = (REPO / "scripts" / "spec-lint.py").read_text()
+    src = (REPO / "scripts/gates/spec-lint.py").read_text()
     assert "UNITS = (" not in src, "spec-lint defines its own unit roster again - import it from _spec_figures"
 
 

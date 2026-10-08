@@ -1,4 +1,4 @@
-"""`scripts/_ledger_lint.py` - every measured ledger row carries its check, class and cost (feature 294, FR-010)."""
+"""`scripts/reviews/ledger_lint.py` - every measured ledger row carries its check, class and cost (feature 294, FR-010)."""
 
 from __future__ import annotations
 
@@ -7,7 +7,7 @@ import sys
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
-_spec = importlib.util.spec_from_file_location("ledger_lint", REPO / "scripts" / "_ledger_lint.py")
+_spec = importlib.util.spec_from_file_location("ledger_lint", REPO / "scripts/reviews/ledger_lint.py")
 assert _spec and _spec.loader
 ll = importlib.util.module_from_spec(_spec)
 sys.modules["ledger_lint"] = ll

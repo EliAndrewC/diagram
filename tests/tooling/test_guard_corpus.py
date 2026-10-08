@@ -1,13 +1,13 @@
 """The refusal corpus replays through the guards' decision functions (feature 212, FR-007).
 
-`scripts/fixtures/guard-refusals-2026-09.json` is every make-only, pair, no-poll and clone-sync
+`tests/hooks/fixtures/guard-refusals-2026-09.json` is every make-only, pair, no-poll and clone-sync
 refusal recovered from the Claude Code transcripts between 2026-08-25 and 2026-09-07, each with the
 verdict this feature expects of it - `rewrite` with the exact command, `permit`, `refuse` with the
 token that stops it, or `other` for a row the guard no longer reaches. The make-only and no-poll rows
-are replayed here through `_hm_make.py` and `_hm_shape.py`; a verdict that moves fails, which is what
+are replayed here through `hm_make.py` and `hm_shape.py`; a verdict that moves fails, which is what
 keeps a later change to a matcher from quietly un-converting a shape. The pair and clone-sync rows are
-replayed by their shell suites, which own the state those decisions read (`scripts/test-pair-hooks.sh`,
-`scripts/test-clone-sync-hooks.sh`); here they are only counted, so the census in the feature's
+replayed by their shell suites, which own the state those decisions read (`tests/hooks/test-pair-hooks.sh`,
+`tests/hooks/test-clone-sync-hooks.sh`); here they are only counted, so the census in the feature's
 research stays derivable from the fixture.
 """
 
@@ -22,15 +22,17 @@ from typing import Any
 
 import pytest
 
+from tests._scripts import script, script_dirs
+
 SKILL = pathlib.Path(__file__).resolve().parents[2]
 REPO = SKILL
 SCRIPTS = REPO / "scripts"
-FIXTURE = SCRIPTS / "fixtures" / "guard-refusals-2026-09.json"
+FIXTURE = script("guard-refusals-2026-09.json")
 
 
 def _leaf(name: str) -> Any:
-    sys.path.insert(0, str(SCRIPTS))
-    spec = importlib.util.spec_from_file_location(f"{name}_212", SCRIPTS / f"{name}.py")
+    sys.path[:0] = script_dirs()
+    spec = importlib.util.spec_from_file_location(f"{name}_212", script(name))
     assert spec and spec.loader
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)

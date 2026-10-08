@@ -91,7 +91,6 @@ pool/*/*/.*.render-cache
 legacy-hand-authored-pool/*/*/*.svg
 legacy-hand-authored-pool/*/*/*.png
 legacy-hand-authored-pool/*/*/*.html
-wip/*.html
 dev/placement-stages/
 pool/index.html
 
@@ -112,23 +111,8 @@ research/assets/glossary.js
 # GNOME atomic-save temp files (a stray one was once committed); never track these.
 .goutputstream-*
 
-# Generated org chart - rebuild with `webapp/orgchart.py --format png` rather than tracking it.
-webapp/orgchart.png
 top_up-improvement.md
 
-# DRAFT maps parked outside pool/ (see wip/README.md): a map that is not
-# yet green cannot live in pool/, because test_villages.py sweeps pool/*/*.gen.py and would turn
-# `make done` red for every session. Its derived render is ignored exactly like a pool render.
-# A SINGLE `*` DOES NOT CROSS `/` (feature 173): `wip/shiro-daika.gen.py` became the
-# `wip/shiro_daika/` package, its render moved one directory down, and these four patterns
-# silently stopped matching - 8.7 MB of derived PNG/SVG/JSON/HTML landed in a commit before
-# the settlement-review caught it. The `**` forms cover any depth wip/ grows to next.
-wip/*.svg
-wip/**/*.svg
-wip/*.png
-wip/**/*.png
-wip/*.json
-wip/**/*.json
 
 # Spec-kit's ACTIVE-FEATURE pointer - per-workspace state, never shared. It was tracked until
 # 2026-08-16, when a peer session's /speckit-specify commit repointed it mid-chain and the merge
@@ -136,7 +120,7 @@ wip/**/*.json
 # FEATURE_DIR from this file at priority 2, ABOVE the SPECIFY_FEATURE env var (priority 3), so a
 # stale pointer silently redirects setup-plan.sh / setup-tasks.sh / implement into a peer's
 # specs/NNN-*/ while CURRENT_BRANCH still reads correctly. Each clone writes its own; nothing
-# shares it. See CLAUDE.md 'Concurrent sessions' and scripts/clone-sync-hooks.sh's re-track guard.
+# shares it. See CLAUDE.md 'Concurrent sessions' and scripts/hooks/clone-sync-hooks.sh's re-track guard.
 .specify/feature.json
 
 # Feature 197: the LEDGER of spec-kit feature numbers `make claim` has handed out (its lock file is
@@ -150,8 +134,6 @@ wip/**/*.json
 development-secrets.ini
 # feature 129: raw cProfile output stays out of this repository (FR-011a); the derived table is committed
 dev/perf-raw/
-wip/*.html
-wip/**/*.html
 # the prefix reservation ledger (feature 265 FR-010): host state shared by every clone, never committed
 .specify/prefixes.jsonl
 # feature 288: the sources-consulted ledger and the page cache keyed by URL - host state under the MIRROR's .specify/,
@@ -177,6 +159,6 @@ wip/**/*.html
 # clone's merge of the move is still open (conflicts unresolved), its old directory under .claude/skills/ still holds
 # every ignored file the old .gitignore covered - profiles, renders, caches - and nothing at the root ignored that path,
 # so a `git add -A` staged 48 MB of profiles into a merge commit. Nothing tracked lives there any more; the carry
-# (scripts/_layout_carry.sh) empties and removes it after the merge. The bracket keeps the literal old path out of a
-# live file (scripts/check-old-layout.py).
+# (scripts/reviews/layout_carry.sh) empties and removes it after the merge. The bracket keeps the literal old path out of a
+# live file (scripts/gates/check-old-layout.py).
 /.claude/skills/diagra[m]/

@@ -1,4 +1,4 @@
-"""`scripts/_record_units.py` and `scripts/_record_owed.py` - which record checks a delta owes (feature 311).
+"""`scripts/record/record_units.py` and `scripts/record/record_owed.py` - which record checks a delta owes (feature 311).
 
 The GM, 2026-10-02: *"it would be a waste of time and tokens for us to add the kind of paragraph that I just explained and
 then rerun all of the other subagent checks"*, and *"not just do the correct thing, to kind of enforce us doing the correct
@@ -14,14 +14,16 @@ import sys
 
 import pytest
 
+from tests._scripts import script
+
 REPO = pathlib.Path(__file__).resolve().parents[2]
 
 
 def _load(name: str):  # noqa: ANN202
-    spec = importlib.util.spec_from_file_location(name, REPO / "scripts" / f"{name}.py")
+    spec = importlib.util.spec_from_file_location(name, script(name))
     assert spec and spec.loader
     mod = importlib.util.module_from_spec(spec)
-    sys.modules[name] = mod
+    sys.modules[name] = sys.modules[name.lstrip("_")] = mod  # the old name and the one a sibling imports it by (2026-10-08)
     spec.loader.exec_module(mod)
     return mod
 

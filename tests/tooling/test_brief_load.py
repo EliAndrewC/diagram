@@ -1,4 +1,4 @@
-"""`scripts/_brief_load.py` (feature 274 D1): the questions a page-session brief assigns, the count the write cap rests on.
+"""`scripts/pages/brief_load.py` (feature 274 D1): the questions a page-session brief assigns, the count the write cap rests on.
 
 WHAT THESE PROVE (SC-001). The fixtures are trimmed COPIES of real briefs - their header, their do-not-edit paragraph
 and their assignment lists, rewritten into feature 303's form (a question named by its number) - over a fixture record
@@ -22,7 +22,7 @@ RECORD = FIX / "record"
 
 
 def _load():  # noqa: ANN202
-    spec = importlib.util.spec_from_file_location("_brief_load", REPO / "scripts" / "_brief_load.py")
+    spec = importlib.util.spec_from_file_location("_brief_load", REPO / "scripts/pages/brief_load.py")
     assert spec and spec.loader
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)

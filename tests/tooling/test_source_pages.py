@@ -1,4 +1,4 @@
-"""`scripts/_source_pages.py` (feature 255, FR-006): the pages `source-reader` greps instead of fetching.
+"""`scripts/record/source_pages.py` (feature 255, FR-006): the pages `source-reader` greps instead of fetching.
 
 WHAT THESE PROVE. A reachable page is saved as its visible text, one sentence to a line (Latin and CJK stops), under
 a name that carries its order and host; a page the fetcher could not reach is LISTED with its state and why and no
@@ -19,7 +19,7 @@ REPO = pathlib.Path(__file__).resolve().parents[2]
 
 
 def _load():  # noqa: ANN202
-    spec = importlib.util.spec_from_file_location("_source_pages", REPO / "scripts" / "_source_pages.py")
+    spec = importlib.util.spec_from_file_location("_source_pages", REPO / "scripts/record/source_pages.py")
     assert spec and spec.loader
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)

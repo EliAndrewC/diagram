@@ -259,7 +259,7 @@ def research_questions(entry: str, research_dir: str = RESEARCH_DIR) -> list[dic
     """The QUESTIONS behind a modal (feature 180): `{"text", "url"}` for every research question the entry names, in
     the order the ENTRY names them. `text` is the heading less its dated bookkeeping; `url` is the question's small
     page in the record's site (features 301, 303). A path that names no fragment yields nothing - which
-    `scripts/check-entry-headings.py` refuses at the push."""
+    `scripts/gates/check-entry-headings.py` refuses at the push."""
     out: list[dict[str, str]] = []
     for file in entry_fragments(entry):
         text = _fragment(research_dir, file)

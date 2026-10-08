@@ -669,10 +669,10 @@ def county_magistracy_program() -> CompoundProgram:
     """
     # The main gate is a one-bay yakuimon with an 8 ft passage - R26's knob, the one-bay form (6-8.5 ft, research
     # 0093); it was a 13 ft opening, the carriage gate the vocabulary once drew. The postern in the west wall,
-    # centered 50 ft down it, opens on the kitchen yard between the bath and the karo's house (docs/buildings/programs.md:
+    # centered 50 ft down it, opens on the kitchen yard between the bath and the karo's house (docs/building-programs.md:
     # the kitchen postern keeps deliveries and night-soil off the hearing court); its 6 ft passage is a GUESS. The
     # middle gate keeps the Envelope's 6 ft (narrower than the main gate). The outer court's SERVICE GATE (pass 4,
-    # building-review round 3; docs/buildings/programs.md "Walled enclosure": a busy outer court warrants a small service
+    # building-review round 3; docs/building-programs.md "Walled enclosure": a busy outer court warrants a small service
     # gate so muck, night-soil and prisoner transfers skip the formal gate) stands in the south wall by the cell, at
     # the head of the cart yard; its 6 ft passage is a GUESS, narrower than the main gate.
     env = Envelope(w_ft=270.0, h_ft=200.0, divider_ft=90.0, gate_w_ft=8.0, posterns=(("W", 50.0, 6.0), ("S", 244.0, 6.0)))
@@ -772,7 +772,7 @@ def county_magistracy_program() -> CompoundProgram:
         # kitchen and the corridor closed the alley's west end, and the privies were ~400 ft round from any service edge.
         b("kitchen", "service", 20.0, 18.0, "inner", "N", order=11, feature="kitchen", door_face="W", door_fracs=(0.5, 0.3, 0.7), inset_ft=10.0),
         # A MODEST shrine, 18 x 14 ft (pass 4, building-review round 3: it was 36 x 30 ft, the hall-shrine ceiling, which
-        # is Ochiba's particular - docs/buildings/programs.md: the shrine is universal equipment, its scale the per-manor
+        # is Ochiba's particular - docs/building-programs.md: the shrine is universal equipment, its scale the per-manor
         # particular; docs/buildings.md "Modest shrine"). The size is a GUESS inside the shrine band (40-1,150 sq ft).
         b("shrine", "shrine", 18.0, 14.0, "inner", "E", order=4, feature="compound shrine"),
         # A detached guest house is a GUESS (R10, research 0091: guests were received in the main house, and a

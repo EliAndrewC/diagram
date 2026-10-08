@@ -24,6 +24,8 @@ import subprocess
 
 import pytest
 
+from tests._scripts import GUARDS, SUITES, script, tree
+
 SCRIPTS = pathlib.Path(__file__).resolve().parents[2] / "scripts"  # the REPO root; parents[4] is .claude
 
 
@@ -54,7 +56,7 @@ CASES = [
     ("escalation", _payload(_tool="Agent", subagent_type="settlement-review", prompt='review X ESCALATION_OK="a confirmation pass, nothing relayed"'), "escaped", "escalation-ok"),
     # feature 249 (GM 2026-09-14): a spec-fidelity round after the first reads the diff - the branches
     # a bare payload can reach (the rewrite, the first snapshot and the history line need a clone with
-    # the feature present, which scripts/test-review-round-hooks.sh drives on a fixture)
+    # the feature present, which tests/hooks/test-review-round-hooks.sh drives on a fixture)
     ("review-round", _payload(_tool="Agent", subagent_type="spec-fidelity", prompt="MODE 2 review of specs/999-nowhere against request.md"), "permitted", "no-feature"),
     ("review-round", _payload(_tool="Agent", subagent_type="spec-fidelity", prompt="MODE 4: PLAN REVIEW of specs/999-nowhere"), "permitted", "other-mode"),
     ("review-round", _payload(_tool="Agent", subagent_type="spec-fidelity", prompt='MODE 3 of specs/999-nowhere REVIEW_ROUND_OK="a restructured spec, read it whole"'), "escaped", "review-round-ok"),
@@ -77,9 +79,9 @@ CASES = [
     ("repo-safety", _payload(command="git push --force origin main"), "blocked", "force-push"),
     ("repo-safety", _payload(command="git rebase origin/main"), "blocked", "history-rewrite"),
     ("readme", _payload(_tool="Write", file_path="/r/README.md", content="hello"), "blocked", "readme-is-the-gm-s"),
-    ("guard-file", _payload(_tool="Edit", file_path="/r/scripts/gate-hooks.sh", new_string="x"), "blocked", "no-marker"),
-    ("guard-file", _payload(_tool="Edit", file_path="/r/scripts/gate-hooks.sh", new_string="GUARD_EDIT_OK: fixing a guard that fires on correct work"), "escaped", "guard-edit-ok"),
-    ("guard-file", _payload(_tool="Edit", file_path="/r/scripts/gate-hooks.sh", new_string="GUARD_EDIT_OK: why"), "blocked", "GUARD_EDIT_OK-no-reason"),
+    ("guard-file", _payload(_tool="Edit", file_path="/r/scripts/hooks/gate-hooks.sh", new_string="x"), "blocked", "no-marker"),
+    ("guard-file", _payload(_tool="Edit", file_path="/r/scripts/hooks/gate-hooks.sh", new_string="GUARD_EDIT_OK: fixing a guard that fires on correct work"), "escaped", "guard-edit-ok"),
+    ("guard-file", _payload(_tool="Edit", file_path="/r/scripts/hooks/gate-hooks.sh", new_string="GUARD_EDIT_OK: why"), "blocked", "GUARD_EDIT_OK-no-reason"),
     # feature 236: the four rules of the shell check, each recording its own - "shell-check fired 40
     # times" cannot say which of them is carrying the cost, which is the whole point of the fourth field
     ("shell-check", _payload(command="if true; then"), "blocked", "parse"),
@@ -109,7 +111,7 @@ def test_a_guard_records_the_rule_that_fired(tmp_path, guard: str, payload: str,
     work.mkdir()
     subprocess.run(["git", "init", "-q", str(work)], check=True)
     subprocess.run(
-        [str(SCRIPTS / f"{guard}-hooks.sh"), "pretool"],
+        [str(GUARDS / f"{guard}-hooks.sh"), "pretool"],
         input=payload,
         capture_output=True,
         text=True,
@@ -149,7 +151,7 @@ def _fire_main_tree(tmp_path: pathlib.Path, cwd: pathlib.Path, command: str) -> 
     )
     (tmp_path / "home").mkdir(exist_ok=True)
     subprocess.run(
-        [str(SCRIPTS / "main-tree-hooks.sh"), "pretool"],
+        [str(script("main-tree-hooks.sh")), "pretool"],
         input=payload,
         capture_output=True,
         text=True,
@@ -210,7 +212,7 @@ def test_the_gm_s_source_block_records_both_the_refusal_and_the_escape(tmp_path)
     def run(new_string: str, log: str) -> int:
         payload = _payload(_tool="Edit", file_path=str(note), old_string="the GM wrote this", new_string=new_string)
         return subprocess.run(
-            [str(SCRIPTS / "source-block-hooks.sh"), "pretool"],
+            [str(script("source-block-hooks.sh")), "pretool"],
             input=payload,
             capture_output=True,
             text=True,
@@ -239,7 +241,7 @@ def _recording_guards() -> list[pathlib.Path]:
     census of your own tree written by hand is stale the day it is written - the same lesson feature
     168's own spec review returned twice.
     """
-    return sorted(p for p in SCRIPTS.glob("*.sh") if not p.name.startswith("test-") and "guard_log " in p.read_text())
+    return sorted(p for p in tree("*.sh") if not p.name.startswith("test-") and "guard_log " in p.read_text())
 
 
 def test_every_recording_branch_names_a_rule_rather_than_defaulting() -> None:
@@ -265,14 +267,14 @@ def test_every_suite_of_a_recording_guard_isolates_the_firing_log() -> None:
     """
     missing = []
     for guard in _recording_guards():
-        suite = SCRIPTS / f"test-{guard.stem}.sh"
+        suite = SUITES / f"test-{guard.stem}.sh"
         if not suite.exists():
             continue
         text = suite.read_text()
         # A suite may delegate to the shared runner (`exec python3 test_hooks_cases.py <guard>`)
         # rather than isolate for itself; follow one level, and hold the runner to the same rule.
         for delegate in re.findall(r"[\w./-]*test_hooks_cases\.py", text):
-            target = SCRIPTS / pathlib.Path(delegate).name
+            target = SUITES / pathlib.Path(delegate).name
             if target.exists():
                 text += target.read_text()
         if "GUARD_LOG_DIR" not in text:
@@ -294,22 +296,22 @@ def test_every_suite_of_a_recording_guard_isolates_the_firing_log() -> None:
 # exists to remove, and the one a future guard would most naturally reintroduce.
 _ESCAPES = {
     # token: (kind, why this kind is safe)
-    "GATE_OK": ("command", "routes through _hookmatch.py escape"),
-    "MEASURE_OK": ("command", "routes through _hookmatch.py escape"),
-    "POLL_OK": ("command", "routes through _hookmatch.py escape"),
-    "DISCARD_OK": ("command", "routes through _hookmatch.py escape"),
-    "README_OK": ("command", "routes through _hookmatch.py escape via escape_or_refuse; the GM's delegated README edit (2026-09-06)"),
-    "DOWNLOAD_COPY_OK": ("command", "routes through _hookmatch.py escape via escape_or_refuse; a repair of the GM's copy of the download list the GM asks for (feature 313)"),
-    "NO_BRANCH_OK": ("command", "routes through _hookmatch.py escape"),
-    "MAIN_TREE_OK": ("command", "routes through _hookmatch.py escape"),
-    "HOST_GIT_OK": ("command", "routes through _hookmatch.py escape, via RS_ESCAPED"),
+    "GATE_OK": ("command", "routes through hookmatch.py escape"),
+    "MEASURE_OK": ("command", "routes through hookmatch.py escape"),
+    "POLL_OK": ("command", "routes through hookmatch.py escape"),
+    "DISCARD_OK": ("command", "routes through hookmatch.py escape"),
+    "README_OK": ("command", "routes through hookmatch.py escape via escape_or_refuse; the GM's delegated README edit (2026-09-06)"),
+    "DOWNLOAD_COPY_OK": ("command", "routes through hookmatch.py escape via escape_or_refuse; a repair of the GM's copy of the download list the GM asks for (feature 313)"),
+    "NO_BRANCH_OK": ("command", "routes through hookmatch.py escape"),
+    "MAIN_TREE_OK": ("command", "routes through hookmatch.py escape"),
+    "HOST_GIT_OK": ("command", "routes through hookmatch.py escape, via RS_ESCAPED"),
     "PAIR_OK": (
         "command",
         "the Bash branch routes through the matcher; the AGENT-PROMPT branch is the "
         "one stated exclusion - a prompt is prose with no command grammar, and "
         "blanking its quoted regions would break the GM's own PAIR_OK=\"reason\" form",
     ),
-    "LEDGER_LINT_OK": ("command", "feature 294: ledger-hooks.sh reaches it through escape_or_refuse, so _hookmatch.py escape anchors it"),
+    "LEDGER_LINT_OK": ("command", "feature 294: ledger-hooks.sh reaches it through escape_or_refuse, so hookmatch.py escape anchors it"),
     "REVIEW_ROUNDS_OK": (
         "command",
         "feature 294: matched in an AGENT PROMPT by pair-hooks.sh's round cap - the PAIR_OK prompt exclusion's shape, a prompt "
@@ -318,68 +320,68 @@ _ESCAPES = {
     "GUARD_EDIT_OK": ("command", "classify() routes through escape_used; also a marker in edit CONTENT"),
     "CONFLICT_MARKERS_OK": (
         "command",
-        "feature 241: conflict-marker-hooks.sh reaches it through escape_or_refuse, so _hookmatch.py "
+        "feature 241: conflict-marker-hooks.sh reaches it through escape_or_refuse, so hookmatch.py "
         "escape anchors it as an invocation. It is ALSO a file-level marker, read from a file's first 40 "
         "lines by _hm_conflict.has_conflict for the fixture or document that must SHOW a triple - the "
         "FILE_SIZE_OK shape, where the marker in the text IS the escape and a 'mention' is the intended use",
     ),
     "FILE_SIZE_OK": (
         "content",
-        "feature 173: the justification header INSIDE an oversize file, read by scripts/check-file-scale.py from the file's first 40 lines - never matched in a command, so a mention in one escapes nothing. It carries its own reason floor (40 characters) rather than _hookmatch.py's eight",
+        "feature 173: the justification header INSIDE an oversize file, read by scripts/gates/check-file-scale.py from the file's first 40 lines - never matched in a command, so a mention in one escapes nothing. It carries its own reason floor (40 characters) rather than hookmatch.py's eight",
     ),
     "SOURCE_EDIT_OK": ("content", "matched in an Edit's new_string, never in a command - the marker in the text IS the escape, so a 'mention' is the intended use"),
     "REVIEW_GATE_OK": ("environment", "read as ${REVIEW_GATE_OK:-} at push time; an environment variable cannot be set by mentioning it in a command"),
     "PLAN_REVIEW_OK": (
         "environment",
-        "read as ${PLAN_REVIEW_OK:-} by scripts/plan-gate.sh at push and from os.environ by _plan_gate.tick_permitted (make tick exports it), neither of which a mention can set; reason floor via _hm_escape.py reason-ok (feature 243)",
+        "read as ${PLAN_REVIEW_OK:-} by scripts/gates/plan-gate.sh at push and from os.environ by _plan_gate.tick_permitted (make tick exports it), neither of which a mention can set; reason floor via hm_escape.py reason-ok (feature 243)",
     ),
-    "ENTRY_DRIFT_OK": ("environment", "read as ${ENTRY_DRIFT_OK:-} by scripts/entry-gate.sh, which a mention cannot set; reason floor via _hm_escape.py reason-ok"),
+    "ENTRY_DRIFT_OK": ("environment", "read as ${ENTRY_DRIFT_OK:-} by scripts/gates/entry-gate.sh, which a mention cannot set; reason floor via hm_escape.py reason-ok"),
     "SHELL_CHECK_OK": (
         "command",
-        "routes through _hm_escape.py escape via escape_or_refuse in shell-check-hooks.sh; checked FIRST so the guard can be repaired through the channel it guards (feature 236)",
+        "routes through hm_escape.py escape via escape_or_refuse in shell-check-hooks.sh; checked FIRST so the guard can be repaired through the channel it guards (feature 236)",
     ),
     "GATE_STAMP_OK": ("environment", "read as ${GATE_STAMP_OK:-} at push time; same ground as REVIEW_GATE_OK. Missed by three drafts of the spec (round 3)"),
     "WRITE_CAP_OK": (
         "environment",
-        "read by _page_session_runner.py through _escape_log.escape from os.environ (make exports it); reason floor via _hm_escape.reason_is_enough, logged (feature 274 D2)",
+        "read by page_session_runner.py through _escape_log.escape from os.environ (make exports it); reason floor via _hm_escape.reason_is_enough, logged (feature 274 D2)",
     ),
     "KEY_CAP_OK": ("environment", "read by reserve-prefix.py through _escape_log.escape from os.environ (make exports it); reason floor via _hm_escape.reason_is_enough, logged (feature 274 D4)"),
-    "REF_OK": ("make-variable", "a make override, already anchored positionally by _hookmatch.py:116 - it must appear as REF_OK= at a command position"),
+    "REF_OK": ("make-variable", "a make override, already anchored positionally by hookmatch.py:116 - it must appear as REF_OK= at a command position"),
     "ESCALATION_OK": (
         "command",
         "matched in an agent PROMPT only (`case \"$prompt\"`), the same stated exclusion as PAIR_OK's "
         "agent branch - a dispatch prompt is prose with no command grammar, and the GM's own "
         "ESCALATION_OK=\"reason\" form would not survive having its quoted regions blanked",
     ),
-    "RESERVE_OK": ("command", "matched in the Bash command by new-file-hooks.sh through _guardlog.sh escape_or_refuse, which routes through _hm_escape.py (feature 265 FR-010)"),
-    "CANON_OK": ("command", "matched in the Bash command by canon-read-hooks.sh through _guardlog.sh escape_or_refuse, which routes through _hm_escape.py (feature 250 D16)"),
+    "RESERVE_OK": ("command", "matched in the Bash command by new-file-hooks.sh through guardlog.sh escape_or_refuse, which routes through hm_escape.py (feature 265 FR-010)"),
+    "CANON_OK": ("command", "matched in the Bash command by canon-read-hooks.sh through guardlog.sh escape_or_refuse, which routes through hm_escape.py (feature 250 D16)"),
     "CHECK_NOT_OWED_OK": (
         "command",
         "matched in a record-check dispatch PROMPT only (`CHECK_NOT_OWED_OK=\"...\"` read off the prompt's own text in "
-        "check-bundle-hooks.sh, feature 311), CHECK_BUNDLE_OK's exclusion - a prompt is prose; reason via _hm_escape.py reason-ok",
+        "check-bundle-hooks.sh, feature 311), CHECK_BUNDLE_OK's exclusion - a prompt is prose; reason via hm_escape.py reason-ok",
     ),
     "NOT_OWED_OK": (
         "environment",
-        "a make variable passed as --not-owed-ok to _check_bundle.py (feature 311), which a mention cannot set; reason floor via _hm_escape.reason_is_enough",
+        "a make variable passed as --not-owed-ok to check_bundle.py (feature 311), which a mention cannot set; reason floor via _hm_escape.reason_is_enough",
     ),
-    "RECORD_CHECKS_OK": ("environment", "read as ${RECORD_CHECKS_OK:-} by scripts/entry-gate.sh (feature 311), which a mention cannot set; reason floor via _hm_escape.py reason-ok"),
-    "CLAIMS_OK": ("environment", "read as ${CLAIMS_OK:-} by scripts/claims-gate.sh (feature 316), which a mention cannot set; reason floor via _hm_escape.py reason-ok"),
+    "RECORD_CHECKS_OK": ("environment", "read as ${RECORD_CHECKS_OK:-} by scripts/gates/entry-gate.sh (feature 311), which a mention cannot set; reason floor via hm_escape.py reason-ok"),
+    "CLAIMS_OK": ("environment", "read as ${CLAIMS_OK:-} by scripts/gates/claims-gate.sh (feature 316), which a mention cannot set; reason floor via hm_escape.py reason-ok"),
     "CHECK_BUNDLE_OK": (
         "command",
         "matched in a record-check dispatch PROMPT only (`CHECK_BUNDLE_OK=\"...\"` read off the prompt's own text in "
         "check-bundle-hooks.sh, feature 250), the same stated exclusion as PAIR_OK's, ESCALATION_OK's and "
-        "REVIEW_ROUND_OK's agent branches - a prompt is prose with no command grammar; its reason goes through _hm_escape.py reason-ok",
+        "REVIEW_ROUND_OK's agent branches - a prompt is prose with no command grammar; its reason goes through hm_escape.py reason-ok",
     ),
     "REVIEW_ROUND_OK": (
         "command",
-        "matched in a spec-fidelity dispatch PROMPT only (`TOKEN in prompt` in _hm_review_round.py, the prompt's "
+        "matched in a spec-fidelity dispatch PROMPT only (`TOKEN in prompt` in hm_review_round.py, the prompt's "
         "own text taken from the payload), the same stated exclusion as PAIR_OK's and ESCALATION_OK's agent "
         "branches - a prompt is prose with no command grammar; its REVIEW_ROUND_OK=\"reason\" form is refused "
         "without a reason and logged with one (feature 249)",
     ),
     "STALE_TERMS_OK": (
         "command",
-        "matched in a spec-fidelity dispatch PROMPT only (`STALE_TOKEN in prompt` in _hm_review_round.py), the same "
+        "matched in a spec-fidelity dispatch PROMPT only (`STALE_TOKEN in prompt` in hm_review_round.py), the same "
         "stated exclusion as REVIEW_ROUND_OK's - a prompt is prose with no command grammar; its "
         "STALE_TERMS_OK=\"reason\" form is refused without a reason and recorded with one on the rewrite it lets "
         "through (feature 253)",
@@ -392,13 +394,13 @@ _ESCAPES = {
     ),
     "RUN_OK": (
         "not-an-escape",
-        "appears ONLY as a fixture string in scripts/test-finished-run-hooks.sh, which proves that a token in a "
+        "appears ONLY as a fixture string in tests/hooks/test-finished-run-hooks.sh, which proves that a token in a "
         "command cannot escape a Stop hook - a Stop payload carries no command, so there is nowhere to put one. "
         "The live-run refusal's release is its once-per-run marker instead (GM 2026-09-12)",
     ),
     "REMOTE_OK": ("not-an-escape", "a Makefile MACRO that runs the remote check; nothing overrides"),
     "WAKEUP_OK": ("not-an-escape", "feature 263's guard has NO escape; the token is named only to prove it changes nothing (test-wakeup-hooks.sh) and in the header saying why there is none"),
-    "CRON_OK": ("command", "routes through _hookmatch.py escape (escape_or_refuse in no-poll-hooks.sh, feature 295 item 5)"),
+    "CRON_OK": ("command", "routes through hookmatch.py escape (escape_or_refuse in no-poll-hooks.sh, feature 295 item 5)"),
     "X_OK": ("not-an-escape", "Python's os.X_OK in finished-run-hooks.sh's files_named (an executable is never a log; feature 295 item 1)"),
 }
 
@@ -406,7 +408,7 @@ _TOKEN = re.compile(r"\b[A-Z][A-Z0-9]*(?:_[A-Z0-9]+)*_OK\b")
 
 
 def _tree_tokens() -> set[str]:
-    files = list(SCRIPTS.glob("*.sh")) + list(SCRIPTS.glob("*.py"))
+    files = tree("*.sh") + tree("*.py")
     files.append(pathlib.Path(__file__).resolve().parents[2] / "Makefile")
     found: set[str] = set()
     for f in files:
@@ -421,7 +423,7 @@ def test_the_escape_census_is_derived_from_the_tree() -> None:
     unclassified = _tree_tokens() - set(_ESCAPES)
     assert not unclassified, (
         f"new escape token(s) with no classification: {sorted(unclassified)}. Add each to _ESCAPES "
-        "saying whether it is matched in a COMMAND (and so must route through _hookmatch.py escape), "
+        "saying whether it is matched in a COMMAND (and so must route through hookmatch.py escape), "
         "in edit CONTENT, as an ENVIRONMENT variable, or is not an escape at all."
     )
     stale = set(_ESCAPES) - _tree_tokens()
@@ -436,7 +438,7 @@ def test_no_guard_decides_a_command_escape_with_a_bare_substring_test() -> None:
     `gate` also resets the state that decides whether the NEXT expensive command is refused.
     """
     offenders = []
-    for guard in SCRIPTS.glob("*hooks*"):
+    for guard in tree("*hooks*"):
         if guard.name.startswith("test") or guard.suffix not in (".sh", ".py"):
             continue
         for line in guard.read_text().splitlines():
@@ -471,7 +473,7 @@ def test_no_guard_decides_a_command_escape_with_a_bare_substring_test() -> None:
 # WHY DERIVED AT ALL: four hand-written censuses across features 169 and 170 were each short by one,
 # every time found by the reviewer rather than the author. A list cannot be trusted here.
 # Two shapes record a permit: a direct `guard_log <guard> escaped`, and a delegation to
-# `escape_or_refuse <guard> <TOKEN> <rule>`, which does the logging in `_guardlog.sh` so the
+# `escape_or_refuse <guard> <TOKEN> <rule>`, which does the logging in `guardlog.sh` so the
 # refusal is written once rather than nine times. A check that knew only the first shape reported
 # every converted guard as silent - which is how a completeness check can be wrong in the safe
 # direction and still be wrong.
@@ -481,7 +483,7 @@ _PERMIT = re.compile(r"guard_log\s+(\S+)\s+escaped|escape_or_refuse\s+(\S+)")
 def _permitting_sites() -> set[tuple[str, str]]:
     """(guard file, rule slug) for every branch that RECORDS a permitted escape."""
     out = set()
-    for f in list(SCRIPTS.glob("*.sh")) + [SCRIPTS.parent / "Makefile"]:
+    for f in tree("*.sh") + [SCRIPTS.parent / "Makefile"]:
         if not f.exists() or f.name.startswith("test"):
             continue
         for line in f.read_text().splitlines():

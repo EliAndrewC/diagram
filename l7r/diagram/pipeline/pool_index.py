@@ -28,7 +28,7 @@ Thumbnails are relative ``<img>`` links to the pool pngs, so the page works from
 broken image.
 
 ONE PAGE OVER BOTH TREES (feature 161, the GM asked and answered 2026-08-30). The pool split into
-``pool/`` (live: scripted settlements + Mode A plans) and ``legacy-hand-authored-pool/`` (the 18
+``pool/`` (live: scripted settlements + Mode A plans) and ``legacy-hand-authored-pool/`` (the 19
 FROZEN hand-authored exhibits), and the GM chose to keep browsing everything from one page rather
 than open two. So the live sections come first, then the frozen ones under their own banner, and the
 legacy rows link ACROSS with ``../legacy-hand-authored-pool/...`` - which is what resolves from a

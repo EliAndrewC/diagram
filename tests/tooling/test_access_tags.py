@@ -1,4 +1,4 @@
-"""`scripts/_access_tags.py` - what can be got of each source (feature 313, spec FR-011, SC-005).
+"""`scripts/record/access_tags.py` - what can be got of each source (feature 313, spec FR-011, SC-005).
 
 WHAT THESE PROVE. One key per derivation rule: the GM's mark, each manifest outcome, a READ comment with no row, nothing at
 all, and a state recorded by hand. The mark mapping for each allowed combination; several entries naming one key (the
@@ -15,14 +15,16 @@ import sys
 
 import pytest
 
+from tests._scripts import script
+
 REPO = pathlib.Path(__file__).resolve().parents[2]
 
 
 def _load(name: str):  # noqa: ANN202
-    spec = importlib.util.spec_from_file_location(name, REPO / "scripts" / f"{name}.py")
+    spec = importlib.util.spec_from_file_location(name, script(name))
     assert spec and spec.loader
     mod = importlib.util.module_from_spec(spec)
-    sys.modules[name] = mod
+    sys.modules[name] = sys.modules[name.lstrip("_")] = mod  # the old name and the one a sibling imports it by (2026-10-08)
     spec.loader.exec_module(mod)
     return mod
 

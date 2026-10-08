@@ -6,7 +6,7 @@ the label stood on, or the nearest one within 30 ft. Since feature 286 a hand sh
 placer in the render pipeline: the tracked sheet declares what a caption names and never where it stands, so a
 caption's position is the placer's output, not evidence of which footprint the drawing means (the GM: "There is no point
 in having an automated check run against an automated process"). The sheet tags every drawn element with its kind
-(feature 262), and that is what is read - the same tags `scripts/_size_table.py` names each rect by, so the size
+(feature 262), and that is what is read - the same tags `scripts/reviews/size_table.py` names each rect by, so the size
 table and the band check cannot drift apart.
 """
 

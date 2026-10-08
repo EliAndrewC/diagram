@@ -113,7 +113,7 @@ def git(root: Path, *args: str) -> str:
 
 @pytest.fixture
 def project(tmp_path: Path) -> tuple[Path, Path]:
-    """A repo shaped like this one - scripts/gate-stamp.py, the skill dir - with a tiny engine and suite."""
+    """A repo shaped like this one - scripts/gates/gate-stamp.py, the skill dir - with a tiny engine and suite."""
     return new_project(tmp_path)
 
 
@@ -153,8 +153,8 @@ def new_project(tmp_path: Path) -> tuple[Path, Path]:
     subprocess.run(["git", "init", "-q", "-b", "main", str(root)], check=True)
     git(root, "config", "user.email", "t@t")
     git(root, "config", "user.name", "t")
-    (root / "scripts").mkdir()
-    shutil.copyfile(REPO_ROOT / "scripts" / "gate-stamp.py", root / "scripts" / "gate-stamp.py")
+    (root / "scripts/gates").mkdir(parents=True)
+    shutil.copyfile(REPO_ROOT / "scripts/gates/gate-stamp.py", root / "scripts/gates/gate-stamp.py")
     skill = root
     (skill / "eng").mkdir(parents=True)
     (skill / "eng" / "__init__.py").write_text("", encoding="utf-8")

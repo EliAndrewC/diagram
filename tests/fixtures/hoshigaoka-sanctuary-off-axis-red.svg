@@ -2,7 +2,7 @@
   <!-- ============================================================ -->
   <!-- Hoshigaoka Country Shrine - top-down diagrammatic plan          -->
   <!-- North at top; the approach enters from the village, south.     -->
-  <!-- 3 px = 1 ft. The country shrine's program: docs/buildings/programs.md -->
+  <!-- 3 px = 1 ft. The country shrine's program: docs/building-programs.md -->
   <!-- ============================================================ -->
   <defs>
     <!-- Swept gravel of the shrine precinct (keidai): pale, with faint rake lines -->

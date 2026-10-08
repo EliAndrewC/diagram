@@ -2,7 +2,7 @@
 
 The failure it exists to prevent is not hypothetical: three times in one day a patch script
 accumulated its edits and wrote at the end, so a single stale anchor discarded the substantive edits
-beside it, silently. Each rule here was written by breaking the corresponding rule in `_patch.py` and
+beside it, silently. Each rule here was written by breaking the corresponding rule in `patch.py` and
 watching a case go red - per-edit writes, the whitespace-insensitive anchor, the refusal to guess
 between two matches, and the indent a mid-line match must keep.
 
@@ -18,7 +18,7 @@ import sys
 import pytest
 
 REPO = pathlib.Path(__file__).resolve().parents[2]
-_spec = importlib.util.spec_from_file_location("_patch", REPO / "scripts" / "_patch.py")
+_spec = importlib.util.spec_from_file_location("_patch", REPO / "scripts/patch.py")
 assert _spec and _spec.loader
 patch = importlib.util.module_from_spec(_spec)
 sys.modules["_patch"] = patch

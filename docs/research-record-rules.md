@@ -107,7 +107,7 @@ paragraphs carrying them; a re-check names only the notes that moved (`make chec
 feature 250 the cost per thing checked held (median 1.02 M), but the largest context doubled to 246 K, and it was the
 write sessions: median 74 turns, a cost that follows the turn count (r = 0.92) and grows roughly with the square of
 the length; one 272 write session cost 24.5 M over 109 turns. So the runner counts the questions every brief ASSIGNS
-(`scripts/_brief_load.py`, which reads `## Your items`, `**Your questions:**` and `**Your pairs**` and never a
+(`scripts/pages/brief_load.py`, which reads `## Your items`, `**Your questions:**` and `**Your pairs**` and never a
 do-not-edit paragraph) and refuses one over four, or one assigning nothing, naming the split; a brief that is not a
 group's writing declares `<!-- page-load: kind=<kind> -->`, one of `check`, `assertions`, `split` and `handover`, and
 is not capped. Keys are not known before writing, so `make reserve` refuses a write session's eleventh registry key
@@ -115,7 +115,7 @@ with the continuation: the session writes its unreached items to `$L7R_CONTINUE`
 queues that brief next, before the group's checks. Escapes: `WRITE_CAP_OK='<reason>'`, `KEY_CAP_OK='<reason>'`,
 each logged. **Coordination files by line**: 619 whole reads of the claims file, 418 of handoffs and 388 of checks
 reports carried about 60 M tokens (5%), so a session reads its own lines with `make lines FILE= KEY=` and adds one
-with `make append FILE= LINE=`. And a headless page session carries `container-scripts/page-session-rules.md` in
+with `make append FILE= LINE=`. And a headless page session carries `scripts/container/page-session-rules.md` in
 place of the root CLAUDE.md (about 5,200 tokens a turn).
 
 This file auto-loads when a research entry is being written or changed - which is exactly when the
@@ -494,7 +494,7 @@ What a map's modal says about a feature is its modal file (`interactive/assets/m
 question that closed the gap - told to update the pigsty write-up, *"if I hadn't said that ... then
 would you have done it?"*
 
-**What is owed.** `scripts/_entry_owed.py` names every class whose section's BODY changed while its own
+**What is owed.** `scripts/record/entry_owed.py` names every class whose section's BODY changed while its own
 explanation prose did not. `make page-check` prints that list and does not block. **The push REFUSES**
 until each named pair is answered: dispatch the `entry-drift` agent at it, rewrite the prose it calls
 DRIFTED - or, where the sections moved without any FINDING moving, discharge the lot with one recorded
@@ -513,7 +513,7 @@ the changed research entry's own standing obligations and a green pass from eith
 any modal.
 
 **And a renamed heading owes its inbound links** - the rule this file already stated, now checked:
-`scripts/check-entry-headings.py` fails the gate and the push when a class's `Entry:` resolves to no
+`scripts/gates/check-entry-headings.py` fails the gate and the push when a class's `Entry:` resolves to no
 section. A section deliberately not written is written in the declared form
 `research/contents.json#<section> (no dedicated entry - recorded as silent)`, which `make audit` enumerates.
 
@@ -539,7 +539,7 @@ the tools or the tests reads a built page: they read the record through the in-m
 **A pointer names the fragment.** *"The obvious solution is to not link to the generated HTML page, but to link to the
 source which is fed into and used to generate that HTML page, because that is the canonical location of the research"*.
 A code comment, a doc, a spec, a modal's `Entry:` names the question's file (since feature 303
-`research/questions/NNNN-<heading id>.html`, or `research/contents.json#<section>` for a whole section); `scripts/check-research-pointers.py` fails the gate and the push on one that does not resolve or
+`research/questions/NNNN-<heading id>.html`, or `research/contents.json#<section>` for a whole section); `scripts/gates/check-research-pointers.py` fails the gate and the push on one that does not resolve or
 that names a built page, and `make fragment-move` renames a fragment with every pointer to it - the reorder or retitle
 that would otherwise strand them. The landed specs were swept too, the GM choosing on 2026-10-01 that the push's spec
 check judge a landed spec on what a push CHANGES in it; a pointer there whose heading had since been retired names its
@@ -565,7 +565,7 @@ holds its whole argument, which is the test of a sensible cap: the smallest cohe
 **Since feature 292 the cap counts the prose only** (GM 2026-09-29, approving the session's proposal after asking
 *"can we make the size cap not count the notes? ... the whole point of the size cap is to conserve tokens"*). Every check
 and every editing session reads a question's prose whole; only the quote-check reads its notes whole, so the notes are
-bounded where that check reads them - in batches of at most 12,000 bytes (`_check_bundle.py`, `NOTES_BUDGET`: with its
+bounded where that check reads them - in batches of at most 12,000 bytes (`check_bundle.py`, `NOTES_BUDGET`: with its
 excerpt of the prose, a batch stays within what the old 20,000-byte cap on prose and notes let one check read) - and the
 checks that judge prose (`record-style`, `entry-drift`) are not handed the notes at all. Merged topics may therefore
 carry the notes their findings need. On 2026-09-29, with the notes uncounted, no question in the record was over the

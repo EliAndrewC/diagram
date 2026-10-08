@@ -1,5 +1,5 @@
 {
- "_about": "Feature 313 (spec FR-011): the access states, in order from the most open, and the states recorded by hand. The tag itself is DERIVED each time by scripts/_access_tags.py from the archive manifest, the registry's READ comments and the GM's recorded marks in research/to-download.md; `recorded` holds only what nothing else records, written by `make access-tags SET=` (a state, the date its evidence was seen, and what it rests on).",
+ "_about": "Feature 313 (spec FR-011): the access states, in order from the most open, and the states recorded by hand. The tag itself is DERIVED each time by scripts/record/access_tags.py from the archive manifest, the registry's READ comments and the GM's recorded marks in research/to-download.md; `recorded` holds only what nothing else records, written by `make access-tags SET=` (a state, the date its evidence was seen, and what it rests on).",
  "states": [
   {
    "id": "open",

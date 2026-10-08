@@ -1,4 +1,4 @@
-"""`scripts/_stale_terms.py` (feature 253): after a value changed, where does the OLD value still stand?
+"""`scripts/reviews/stale_terms.py` (feature 253): after a value changed, where does the OLD value still stand?
 
 WHAT THESE PROVE. The rule on plain inputs - a replaced line's shared backticked SUBJECT plus a value the new
 line dropped, found on another operative line - and what it must not report: a changed line with no subject,
@@ -19,7 +19,7 @@ REPO = pathlib.Path(__file__).resolve().parents[2]
 
 
 def _load():  # noqa: ANN202
-    spec = importlib.util.spec_from_file_location("_stale_terms", REPO / "scripts" / "_stale_terms.py")
+    spec = importlib.util.spec_from_file_location("_stale_terms", REPO / "scripts/reviews/stale_terms.py")
     assert spec and spec.loader
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
