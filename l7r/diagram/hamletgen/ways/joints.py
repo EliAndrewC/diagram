@@ -287,9 +287,9 @@ def _one_joint(s: Settlement, lanes: list[dict[str, Any]], houses: Sequence[Pt],
         a fold or Z at a joint becomes a T - research/questions/0081-village-lanes.drawing.html: the shorter link the stem
         a jog across a joint pulled straight - research/questions/0081-village-lanes.drawing.html: string-pulled, a vertex
             within 6 ft of the chord dropped
-        ways of two kinds stay two - UNRESEARCHED: a cart route and a footpath, or a web and a non-web lane, met end to end
-            stay two records - never merged into one width - and a jog across their joint is straightened by moving the
-            joint back along either (`_joint_moved_back`), as 0081's string-pull asks of any joint"""
+        ways of two kinds stay two - research/questions/0081-village-lanes.drawing.html: a jog across a joint pulled straight
+            like any other; a cart route and a footpath, or a web and a non-web lane, met end to end, split back into their
+            two records after the pull (`_split_committed`), each keeping its own width"""
     for i, ei, j, ej in joints(lanes):
         x, y = oriented(lanes, i, ei, j, ej)
         old = [*x, *y[1:]]
@@ -305,12 +305,7 @@ def _one_joint(s: Settlement, lanes: list[dict[str, Any]], houses: Sequence[Pt],
             if _turn_deg(x[-2], x[-1], y[1]) < _HAIRPIN_DEG and _joint_moved_back(s, lanes, (i, ei, j, ej), x, y, houses, hard, walls, water):
                 return True
             continue
-        if lanes[i].get("w") != lanes[j].get("w") or bool(lanes[i].get("web")) != bool(lanes[j].get("web")):
-            # a cart route and a footpath meeting end to end stay two RECORDS, but the jog across their joint is still pulled
-            # straight (feature 328: it was left): the joint moved back along either, never the two merged into one width
-            if _bends_badly(old) and _joint_moved_back(s, lanes, (i, ei, j, ej), x, y, houses, hard, walls, water):
-                return True
-            continue
+        two = lanes[i].get("w") != lanes[j].get("w") or bool(lanes[i].get("web")) != bool(lanes[j].get("web"))
         gap = max(_TOUCH_GAP, float(lanes[i].get("w") or 5.0) / 2.0 + 2.0)
 
         def ok(a: int, b: int, p: Poly = old, g: float = gap) -> bool:
@@ -324,6 +319,13 @@ def _one_joint(s: Settlement, lanes: list[dict[str, Any]], houses: Sequence[Pt],
         # and a tree lane no settle may cut was refused with it (seed 47 at 20 households, `WebRefused`: bends) - the test a
         # join that stops short is held to (`law.near_misses`)
         if len(new) == len(old) or len(kink_spans(new)) > len(kink_spans(old)) or not keeps_the_web(lanes, {i, j}, old, new, houses):
+            continue
+        if two:
+            # A CART ROUTE AND A FOOTPATH MEETING END TO END are pulled straight like any joint (0081: "a jog across the meeting
+            # point is pulled straight like any other"; feature 328 - they were left), then split back at the joint: two
+            # records, each keeping its own rank's width
+            if _split_committed(s, lanes, (i, ei, j, ej), new, x[-1], hard, walls, water):
+                return True
             continue
         if commit_lane(lanes, i, _rounded(new), hard, walls, water, s.reink_lane, admits_lane(s)):
             commit_lane(lanes, j, [], hard, walls, water, s.reink_lane)
@@ -341,6 +343,38 @@ def moved_back(x: Poly, y: Poly) -> list[tuple[Poly, Poly]]:
     if len(y) >= 3:
         out.append(([*x[:-1], y[1]], y[1:]))
     return out
+
+
+def split_at(walk: Poly, at: Pt) -> tuple[Poly, Poly]:
+    """`walk` cut in two at its point nearest `at`: the part up to it and the part from it, the cut point in both.
+
+    Research: plumbing - NONE: where a pulled walk is split back into its two records"""
+    k = min(range(len(walk) - 1), key=lambda m: seg_dist(at[0], at[1], walk[m], walk[m + 1]))
+    q = seg_closest(at[0], at[1], walk[k], walk[k + 1])
+    head = [*walk[: k + 1], q] if math.dist(walk[k], q) > 1e-9 else list(walk[: k + 1])
+    tail = [q, *walk[k + 1 :]] if math.dist(q, walk[k + 1]) > 1e-9 else list(walk[k + 1 :])
+    return head, tail
+
+
+def _split_committed(s: Settlement, lanes: list[dict[str, Any]], joint: tuple[int, int, int, int], walk: Poly, at: Pt, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]]) -> bool:
+    """A pulled walk across a joint of two kinds written back as its two records (`split_at` the old joint), each in its own
+    orientation; the first is put back if the second is refused, and nothing is written where a part is a single point.
+
+    Research: ways of two kinds stay two - research/questions/0081-village-lanes.drawing.html: the jog pulled straight like any other, the two kept two"""
+    i, ei, j, ej = joint
+    nx, ny = split_at(walk, at)
+    if len(nx) < 2 or len(ny) < 2:
+        return False
+    px, py = _rounded(nx[::-1] if ei == 0 else nx), _rounded(ny[::-1] if ej == -1 else ny)
+    if [list(q) for q in px] == [list(q) for q in lanes[i]["pts"]] and [list(q) for q in py] == [list(q) for q in lanes[j]["pts"]]:
+        return False  # the split gives back the two records as they stand: nothing to straighten
+    was = [list(q) for q in lanes[i]["pts"]]
+    if not commit_lane(lanes, i, px, hard, walls, water, s.reink_lane, admits_lane(s)):
+        return False
+    if commit_lane(lanes, j, py, hard, walls, water, s.reink_lane, admits_lane(s)):
+        return True
+    commit_lane(lanes, i, was, hard, walls, water, s.reink_lane)
+    return False
 
 
 def _joint_moved_back(

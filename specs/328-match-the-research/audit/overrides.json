@@ -934,6 +934,27 @@
   "moved": "T29a (amendment 7): tiered by its work - carry_on (bund.py line 360) only passes LANE_CLEARANCE, so it cannot be IN-STEP until the edge-based corridor (several modules) lands; no code of its own changes.",
   "tier": "E3"
  },
+ "l7r/diagram/hamletgen/ways/fabric.py::_pull_back_to_service#the track meets the lanes": {
+  "after": [],
+  "files": [
+   "l7r/diagram/hamletgen/ways/fabric.py"
+  ],
+  "fix": "_pull_back_to_service joins every track inner end to the network however far, never leaving it in open country (0081) - by routing the inner end to the network (route.py `_route`), the hard ground handed down from the web",
+  "flag": "",
+  "moved": "wave 34 (amendment 33 round 1 asked the evidence): `_pull_back_to_service(run, segs, houses, inside, fabric, gap)` (hamletgen/ways/fabric.py:360) is handed no hard ground, walls or water - a joined end however far needs a ROUTED run past them (`route._route(start, goal, hard, walls, water)`), so its caller in web.py (line 344, `kept_connector`) must pass the hard set down and the route search be called: three modules, E3 by FR-003",
+  "tier": "E3"
+ },
+ "l7r/diagram/hamletgen/ways/joints.py::RANK_WIDTHS#the spine at 5 ft": {
+  "after": [],
+  "files": [
+   "l7r/diagram/hamletgen/ways/joints.py",
+   "l7r/diagram/hamletgen/ways/settle.py"
+  ],
+  "fix": "give the cluster's spine 0081's 5 ft rank (the table has footpath, field spur and track out only): the route joining the track out to the field spur is one through-route (0081) and should take the spine's width, not run as 3 ft household ways",
+  "flag": "",
+  "moved": "wave 34 (amendment 33 round 1 asked the evidence): the code names no spine - rank_width (hamletgen/ways/joints.py:61) ranks by connector, spur and role, and RANK_WIDTHS has footpath, field spur and track out only; giving the through-route from the track out to the field spur its 5 ft means finding that route across the web's records (the web's graph, web.py) and marking it - a new element: E3 by FR-003",
+  "tier": "E3"
+ },
  "l7r/diagram/hamletgen/ways/knots.py::next_gather#lane ends gathered": {
   "after": [],
   "files": [

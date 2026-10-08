@@ -1,45 +1,47 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "eee3ca5fcf70b31b49a4e2549a24bcc9b51c9e47adc633be650cdd602743dbd3",
+ "plan_sha256": "dfe46361fe26e08bb9ec6babc70232fc1c9990d784537d98bbe763245a311380",
  "reviewed": "2026-10-08",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W33-scope",
-   "summary": "row 461: only the dooryard keeps its owner; the farm's own garden, farm_sheds, byres and retirement house are obstacles to its own path",
+   "id": "W34-1 polder seat/inlet re-tiered E3",
+   "summary": "rows 460/461 tried literally (walk to the dike band's outer face), reverted and re-tiered E3 on the measured Kuwabata joint zigzag",
    "class": "within",
-   "why": "FR-004: implementation moved to 0246's drawing page, which says the way leaves its dooryard round its own garden beds and fixtures, and that nothing built stands on a lane"
+   "why": "FR-003's own re-tier mechanism on a measured failure (m:wave34-kuwabata-inlet-outside-dike, one-shot label, plus a failing pool test); the failing Z is in _one_joint's T branch, which runs before the width test, so row 466's change does not mend it either; the fix spans polder.py and the joints pass"
   },
   {
-   "id": "W33-grove",
-   "summary": "the grove band keeps its owner (the path leaves through it)",
-   "class": "within",
-   "why": "untouched by this wave; 0246 names beds and fixtures, not the band; its claim stays UNRESEARCHED and is not part of row 461"
+   "id": "W34-2 row 466 mend form",
+   "summary": "a two-width joint is mended only when the joined walk bends badly (kink_spans), by moving the joint back one vertex; a jog that does not bend badly is still left",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "0081.drawing line 37: 'a jog across the meeting point is pulled straight like any other' (line 32: string-pulled, within 6 ft); the row's fix: 'no width/kind exception'. Same-width joints get pulled(old, ok); two-width joints still do not, so the exception survives narrower. Keeping two records is legitimate (each way at its rank); the trigger and the mend are not. The claim still reads UNRESEARCHED while asserting 0081's pull"
   },
   {
-   "id": "W33-462-next",
-   "summary": "row 462 (track inner end joined however far) left for the next wave",
-   "class": "within",
-   "why": "FR-006: ranking index 462 follows 461; the wave is a contiguous run starting at 461"
+   "id": "W34-3 rows 464/465 skipped",
+   "summary": "rows 464 (track end joined however far) and 465 (spine 5 ft) left open at E2 while row 466 is fixed",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "FR-006: each wave a contiguous run; 'a routed run' is cost, not a tier, and 'a spine the code does not name' is an E3 reason (a new element) only once recorded as a re-tier with its evidence, as rows 460/461 were; wave 33 already named 464 as 'the next wave' and it was skipped again"
   },
   {
-   "id": "W33-434-held",
-   "summary": "row 434 stays held for the GM",
-   "class": "within",
-   "why": "carried hold, not new to this wave"
-  },
-  {
-   "id": "W33-occasions",
+   "id": "W34-4 occasions none",
    "summary": "no review occasions: the five pool hamlets unchanged",
    "class": "within",
-   "why": "feature 294: no map changes, no occasion; T91 must verify the regeneration shows no change"
+   "why": "feature 294's occasions follow map change; the unchanged state is to be measured by regeneration before the commit, as wave 33's was"
   },
   {
-   "id": "W33-cond6",
-   "summary": "stacking on unpushed waves 9-32 under wave 11's condition (6); own pair opens at 51da9771f",
+   "id": "W34-5 stacking under condition (6)",
+   "summary": "wave 34 opens on the unpushed waves 9-33, wave 33's push held for the GM's call on the merge commit's stray profiles",
    "class": "within",
-   "why": "the earlier LEGITIMATE exception's conditions held at 51da9771f: wave 32 tasks ticked, backup/digram-backlog at 51da9771f, no executed code in wave 32"
+   "why": "the hold is a GM decision the session cannot fix without a forbidden history rewrite, so (3)'s purpose (stack only on what the GM alone can lift) holds; it belongs on the end-of-feature question list"
+  },
+  {
+   "id": "W34-6 row 434 held",
+   "summary": "row 434 held for the GM",
+   "class": "within",
+   "why": "carried from earlier waves' rulings"
   }
  ],
- "verdict": "CLEAR"
+ "verdict": "BLOCKED"
 }

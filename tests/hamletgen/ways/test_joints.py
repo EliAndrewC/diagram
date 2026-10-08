@@ -30,9 +30,12 @@ def test_a_jog_across_a_chain_of_joints_is_pulled_straight() -> None:
     assert _lanes(s) == [[[100.0, 300.0], [500.0, 300.0]]]
 
 
-def test_a_cart_route_and_a_footpath_meeting_end_to_end_stay_two_ways() -> None:
+def test_a_cart_route_and_a_footpath_meeting_end_to_end_are_pulled_straight_and_stay_two_ways() -> None:
+    """0081 (feature 328): a jog across the meeting point is pulled straight like any other; the two records keep their widths."""
     s = _webbed([{"pts": [[100.0, 500.0], [300.0, 500.0]], "w": 5}, {"pts": [[300.0, 500.0], [310.0, 503.0], [500.0, 500.0]], "w": 3}])
-    assert straighten_joints(s, [], [], []) == 0
+    assert straighten_joints(s, [], [], []) == 1
+    assert [ln["w"] for ln in s.M["lanes"]] == [5, 3], "two records, two widths"
+    assert all(p[1] == 500.0 for ln in s.M["lanes"] for p in ln["pts"]), "the jog pulled straight"
 
 
 def test_a_joint_with_nothing_to_straighten_is_left_alone() -> None:
@@ -324,18 +327,34 @@ def test_a_chain_met_at_its_first_lane_s_start_is_walked_back_to_its_true_first_
     assert owner == [0, 0] and ways == [[(0.0, 0.0), (10.0, 0.0), (20.0, 0.0)]], "one way, walked from lane 1's free end"
 
 
-def test_a_jog_across_ways_of_two_widths_is_straightened_by_moving_the_joint_not_by_merging(monkeypatch: pytest.MonkeyPatch) -> None:
-    """Feature 328: a cart route and a footpath meeting end to end stay two records, but a bad bend across their joint is
-    mended by moving the joint back along either (`_joint_moved_back`); with no bad bend, nothing is asked."""
+def test_a_pulled_walk_is_split_at_the_old_joint_and_written_back_as_its_two_records(monkeypatch: pytest.MonkeyPatch) -> None:
+    """`split_at` cuts at the walk's point nearest the joint (a vertex there is not doubled); `_split_committed` writes both
+    records in their own orientation, puts the first back when the second is refused, and writes nothing for a point part."""
     from l7r.diagram.hamletgen.ways import joints as J
 
-    s = _webbed([{"pts": [[100.0, 500.0], [300.0, 500.0]], "w": 5}, {"pts": [[300.0, 500.0], [310.0, 503.0], [500.0, 500.0]], "w": 3}])
-    asked: list[tuple] = []
-    monkeypatch.setattr(J, "_joint_moved_back", lambda *a: asked.append(a[2]) or True)
-    monkeypatch.setattr(J, "_bends_badly", lambda p: len(p) >= 3)  # the footpath bends badly alone, so the T branch is passed by
-    monkeypatch.setattr(J, "_turn_deg", lambda *a: 0.0)
-    monkeypatch.setattr(J, "tee", lambda *a: None)
-    assert J._one_joint(s, s.M["lanes"], [], [], [], []) is True and asked, "the joint moved back, the two kept two"
-    asked.clear()
-    monkeypatch.setattr(J, "_bends_badly", lambda p: False)
-    assert straighten_joints(s, [], [], []) == 0 and not asked, "no bad bend, nothing asked"
+    assert J.split_at([(0.0, 0.0), (100.0, 0.0)], (40.0, 3.0)) == ([(0.0, 0.0), (40.0, 0.0)], [(40.0, 0.0), (100.0, 0.0)])
+    assert J.split_at([(0.0, 0.0), (40.0, 0.0), (100.0, 0.0)], (40.0, 0.0)) == ([(0.0, 0.0), (40.0, 0.0)], [(40.0, 0.0), (100.0, 0.0)])
+    assert not J._split_committed(None, [{"pts": [[40.0, 0.0], [0.0, 0.0]]}, {"pts": [[40.0, 0.0], [100.0, 0.0]]}], (0, 0, 1, 0), [(0.0, 0.0), (100.0, 0.0)], (40.0, 0.0), [], [], []), "already split so: nothing to do"  # type: ignore[arg-type]
+    lanes = [{"pts": [[40.0, 3.0], [0.0, 0.0]]}, {"pts": [[40.0, 3.0], [100.0, 0.0]]}]
+    commits: list[tuple[int, list]] = []
+    refuse = {"lane": None}
+
+    def commit(lanes_, m, pts, *a, **k):  # type: ignore[no-untyped-def]
+        commits.append((m, pts))
+        return refuse["lane"] != m
+
+    class S:
+        def reink_lane(self, i: int) -> None: ...
+
+    monkeypatch.setattr(J, "commit_lane", commit)
+    monkeypatch.setattr(J, "admits_lane", lambda s: None)
+    walk = [(0.0, 0.0), (100.0, 0.0)]
+    assert J._split_committed(S(), lanes, (0, 0, 1, 0), walk, (40.0, 0.0), [], [], [])  # type: ignore[arg-type]
+    assert commits[0] == (0, [[40.0, 0.0], [0.0, 0.0]]) and commits[1] == (1, [[40.0, 0.0], [100.0, 0.0]])
+    commits.clear()
+    refuse["lane"] = 1
+    assert not J._split_committed(S(), lanes, (0, -1, 1, -1), walk, (40.0, 0.0), [], [], [])  # type: ignore[arg-type]
+    assert commits[-1][0] == 0, "the first record put back"
+    refuse["lane"] = 0
+    assert not J._split_committed(S(), lanes, (0, -1, 1, 0), walk, (40.0, 0.0), [], [], [])  # type: ignore[arg-type]
+    assert not J._split_committed(S(), lanes, (0, -1, 1, 0), walk, (0.0, 0.0), [], [], [])  # type: ignore[arg-type]

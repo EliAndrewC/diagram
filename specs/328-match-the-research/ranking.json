@@ -1,5 +1,20 @@
 [
  {
+  "key": "docs/buildings.md::Checklist for a new diagram#practice ground in the outer court beside the watch's lodgin",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "practice ground in the outer court beside the watch's lodging, no dojo building",
+  "files": [
+   "docs/buildings.md"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 34 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": "docs/buildings.md::Checklist for a new diagram#practice ground sizing",
   "verdict": "MISLABELED",
   "tier": "E0",
@@ -45,6 +60,21 @@
   "scope": "mode-a"
  },
  {
+  "key": "docs/buildings.md::Outer court (administrative / public)#barracks watch of ~10-20 men",
+  "verdict": "MISLABELED",
+  "tier": "E0",
+  "fix": "the setting's ~15 is canon, but the 10-20 band is 0116's own GUESS (\"the barracks' strength are a GUESS\"); label it GUESS research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html",
+  "files": [
+   "docs/buildings.md"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 34 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": "docs/buildings.md::Outer court (administrative / public)#cell kept well under the barracks",
   "verdict": "UNCLAIMED",
   "tier": "E0",
@@ -58,6 +88,21 @@
   "tier_as_ranked": "E0",
   "wave": "3",
   "scope": "mode-a"
+ },
+ {
+  "key": "docs/buildings.md::Outer court (administrative / public)#hearing court posts along its open side",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "hearing court posts along its open side",
+  "files": [
+   "docs/buildings.md"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 34 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
  },
  {
   "key": "docs/buildings.md::Outer court (administrative / public)#hearing mat size",
@@ -209,6 +254,21 @@
   "scope": "mode-a"
  },
  {
+  "key": "docs/buildings.md::Scale#salt-ward marker r25 17 ft for a morijio heap 03-07 ft",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "salt-ward marker r2.5 (~1.7 ft) for a morijio heap ~0.3-0.7 ft",
+  "files": [
+   "docs/buildings.md"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 34 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": "docs/buildings.md::Walls and gates#divider wall",
   "verdict": "MISLABELED",
   "tier": "E0",
@@ -222,6 +282,21 @@
   "tier_as_ranked": "E0",
   "wave": "14",
   "scope": "mode-a"
+ },
+ {
+  "key": "docs/buildings.md::Walls and gates#no salt heaps or wards drawn at a compound's gates",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "no salt heaps or wards drawn at a compound's gates",
+  "files": [
+   "docs/buildings.md"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 34 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
  },
  {
   "key": "docs/buildings.md::Walls and gates#threshold stones",
@@ -298,6 +373,21 @@
   "moved": "T56a: tiered by its work by a fresh reader - MISLABELED: the drawing page (line 21) already says 'none is drawn at average wealth' as a knob, and the procedure (line 183) and Hoshigaoka already do that; only the claim's label and citation are wrong.",
   "wave": "16",
   "scope": "mode-a"
+ },
+ {
+  "key": "docs/buildings/programs.md::Country shrine (a village district's shrine)#dwelling band 34-60 by 18-38 ft round the farmhouse guess",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "dwelling band 34-60 by 18-38 ft round the farmhouse guess",
+  "files": [
+   "docs/buildings/programs.md"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 34 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
  },
  {
   "key": "docs/buildings/programs.md::Country shrine (a village district's shrine)#dwelling privy",
@@ -390,6 +480,21 @@
   "tier_as_ranked": "E0",
   "wave": "3",
   "scope": "mode-a"
+ },
+ {
+  "key": "docs/buildings/programs.md::Magistrate's manor (county magistracy)#clerk positions flanking the dais 0099 drawing records it as",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "clerk positions flanking the dais (0099 drawing records it as a deviation, \u00a7475)",
+  "files": [
+   "docs/buildings/programs.md"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 34 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
  },
  {
   "key": "docs/buildings/programs.md::Magistrate's manor (county magistracy)#inner-court postern",
@@ -6399,6 +6504,21 @@
   "scope": "mode-a"
  },
  {
+  "key": "docs/buildings.md::Outer court (administrative / public)#office hall",
+  "verdict": "DRIFTED",
+  "tier": "E2",
+  "fix": "120 x 28 ft (~3,360 sq ft) fits 0113's 2,850-8,100 sq ft bracket, but 0090's drawing page says \"office hall runs 113 ft long ... 38 ft deep\"; bring the doc and the page into one figure",
+  "files": [
+   "docs/buildings.md"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 34 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E2",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": "docs/buildings.md::Sacred features#a fence round the sanctuary alone as a wealth knob (0223 \u00a7171-172 finds such fences before 1868 only where the shogunate or a lord built them)",
   "verdict": "UNCLAIMED",
   "tier": "E2",
@@ -7025,36 +7145,6 @@
   "tier_as_ranked": "E2",
   "verdict": "MISLABELED",
   "wave": "33",
-  "scope": "kept"
- },
- {
-  "key": "l7r/diagram/hamletgen/ways/fabric.py::_pull_back_to_service#the track meets the lanes",
-  "tier": "E2",
-  "fix": "_pull_back_to_service joins every track inner end to the network however far, never leaving it in open country (0081)",
-  "files": [
-   "l7r/diagram/hamletgen/ways/fabric.py"
-  ],
-  "after": [],
-  "flag": "",
-  "tier_as_ranked": "E2",
-  "verdict": "DRIFTED",
-  "wave": "",
-  "scope": "kept"
- },
- {
-  "key": "l7r/diagram/hamletgen/ways/joints.py::RANK_WIDTHS#the spine at 5 ft",
-  "verdict": "DRIFTED",
-  "tier": "E2",
-  "fix": "give the cluster's spine 0081's 5 ft rank (the table has footpath, field spur and track out only): the route joining the track out to the field spur is one through-route (0081) and should take the spine's width, not run as 3 ft household ways",
-  "files": [
-   "l7r/diagram/hamletgen/ways/joints.py",
-   "l7r/diagram/hamletgen/ways/settle.py"
-  ],
-  "after": [],
-  "flag": "",
-  "found": "wave 4 glyph-check round 3 (F3)",
-  "tier_as_ranked": "E2",
-  "wave": "",
   "scope": "kept"
  },
  {
@@ -10973,6 +11063,38 @@
   "flag": "",
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/hamletgen/ways/fabric.py::_pull_back_to_service#the track meets the lanes",
+  "tier": "E3",
+  "fix": "_pull_back_to_service joins every track inner end to the network however far, never leaving it in open country (0081) - by routing the inner end to the network (route.py `_route`), the hard ground handed down from the web",
+  "files": [
+   "l7r/diagram/hamletgen/ways/fabric.py"
+  ],
+  "after": [],
+  "flag": "",
+  "tier_as_ranked": "E2",
+  "moved": "wave 34 (amendment 33 round 1 asked the evidence): `_pull_back_to_service(run, segs, houses, inside, fabric, gap)` (hamletgen/ways/fabric.py:360) is handed no hard ground, walls or water - a joined end however far needs a ROUTED run past them (`route._route(start, goal, hard, walls, water)`), so its caller in web.py (line 344, `kept_connector`) must pass the hard set down and the route search be called: three modules, E3 by FR-003",
+  "verdict": "DRIFTED",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/hamletgen/ways/joints.py::RANK_WIDTHS#the spine at 5 ft",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "give the cluster's spine 0081's 5 ft rank (the table has footpath, field spur and track out only): the route joining the track out to the field spur is one through-route (0081) and should take the spine's width, not run as 3 ft household ways",
+  "files": [
+   "l7r/diagram/hamletgen/ways/joints.py",
+   "l7r/diagram/hamletgen/ways/settle.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 4 glyph-check round 3 (F3)",
+  "tier_as_ranked": "E2",
+  "moved": "wave 34 (amendment 33 round 1 asked the evidence): the code names no spine - rank_width (hamletgen/ways/joints.py:61) ranks by connector, spur and role, and RANK_WIDTHS has footpath, field spur and track out only; giving the through-route from the track out to the field spur its 5 ft means finding that route across the web's records (the web's graph, web.py) and marking it - a new element: E3 by FR-003",
   "wave": "",
   "scope": "kept"
  },

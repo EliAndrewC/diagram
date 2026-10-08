@@ -1149,18 +1149,20 @@ own path's fabric along with its dooryard; now only the dooryard (and the grove 
       research: rendering
       verify: DONE. impl-drift IN-STEP on all four; amendment 32 FAITHFUL, plan CLEAR; make done green after the 329 merge; wave 33's own pair band 1 on a quiet host (two band-3 pairs under another session's load diagnosed by an interleaved control, perf-audit consistent); the wave column
 
-## Phase 35 - wave 34 (amendment 33): a jog across ways of two widths straightened
+## Phase 35 - wave 34 (amendment 33): a jog across ways of two widths pulled straight
 
 The next open in-scope E2 rows. The polder's reservoir seat and inlet stub (one change, 0019's "no channel runs outside the
 dike") tried literally - the walk from the inlet until the rim clears the dike's outer face: the inlet outside the dike fell
 from 63.8 to 14.7 ft (`m:wave34-kuwabata-inlet-outside-dike`), but Kuwabata re-rolled with lanes 7 and 13 zigzagging across
 their joint (a 39 ft turn-back, past the joints pass's 12 ft hook rule) and the pool test refused it: E3 (the seat and the
-joints pass), reverted. Rows 464 (the track's inner end joined however far: a routed run) and 465 (the spine's 5 ft rank: the
-spine is not yet named in the code) sit next; row 466 is taken.
+joints pass), reverted. Row 464 (the track's inner end joined however far) and row 465 (the spine's 5 ft rank) are re-tiered
+E3 with their evidence in `audit/overrides.json` (amendment 33 round 1): `_pull_back_to_service` is handed no hard ground,
+walls or water, so a routed join changes its caller in `web.py` and calls `route._route`; the code names no spine
+(`rank_width` ranks by connector, spur and role). Row 466 is taken.
 
-  - `l7r/diagram/hamletgen/ways/joints.py::_one_joint#ways of two kinds stay two` - two records of two widths are never merged, but a bad bend across their joint is mended by moving the joint back along either
+  - `l7r/diagram/hamletgen/ways/joints.py::_one_joint#ways of two kinds stay two` - a joint of two kinds string-pulled like any other (0081), then split back into its two records (`split_at`, `_split_committed`), each keeping its width
 
-- [ ] T93 the reservoir seat tried, measured and re-tiered E3; the two-width joint straightened without merging, its test (FR-003, FR-004, FR-005)
+- [ ] T93 the reservoir seat tried, measured and re-tiered E3; rows 464 and 465 re-tiered E3 with their evidence; the two-width joint pulled straight and split back, its tests (FR-003, FR-004, FR-005)
       research: rendering
 - [ ] T94 the claims re-checked by `impl-drift`; the close: wave 34's own bookend pair, `make done` green, the wave column (FR-005, FR-006)
       research: rendering
