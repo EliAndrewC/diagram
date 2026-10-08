@@ -85,3 +85,35 @@ def test_a_chord_skipping_a_vertex_farther_than_the_jog_bound_is_refused() -> No
     pts = [(0.0, 0.0), (30.0, -2.0), (70.0, -_JOG_FT - 4.0), (100.0, 0.0)]
     assert not string_pull_chord_ok(pts, 0, 3, [_SHED], [], [], 4.5)
     assert string_pull_chord_ok(pts, 0, 3, [], [], [], 4.5), "on open ground the web's own margins take it, bend or not"
+
+
+# A hairpin whose short HEAD's tip is the lane's only contact with another way (the way runs north from just under the tip),
+# with a bar under the fold so no chord replaces the hairpin and the arm cut is the only repair.
+_BAR = [[(560.0, 310.0), (700.0, 310.0), (700.0, 314.0), (560.0, 314.0)]]
+
+
+def _tipped(head_ft: float) -> object:
+    from ._builders import _webbed
+
+    tip = 690.0 - head_ft
+    return _webbed([{"pts": [[tip, 298.0], [tip, 200.0]], "w": 5}, {"pts": [[tip, 300.0], [690.0, 300.0], [630.0, 318.0], [560.0, 318.0]], "w": 5}])
+
+
+def test_a_returning_leg_that_was_the_only_contact_is_cut_and_the_lane_joined_at_the_fold() -> None:
+    """0081: "a returning leg under 40 ft is cut" - with no exception for an arm whose tip is the lane's only contact (feature
+    328 wave 46: the smoother kept such an arm). The fold stands 20 ft from the way, inside the 25 ft join reach, so the cut
+    lane is joined again there."""
+    s = _tipped(20.0)
+    _smooth_web(s, _BAR, [], [])
+    pts = [tuple(p) for p in s.M["lanes"][1]["pts"]]
+    assert (670.0, 300.0) not in pts, f"the 20 ft arm is cut: {pts}"
+    assert pts[-1] == (560.0, 318.0), "the long arm stays"
+
+
+def test_a_cut_no_join_can_mend_is_left_for_the_settle() -> None:
+    """Where the fold stands past the 25 ft join reach (30 ft here), the cut would strand the lane: `commit_lane` refuses it
+    and the lane is committed uncut - the settle's `_unkinked` cuts every returning leg and mends the network."""
+    s = _tipped(30.0)
+    _smooth_web(s, _BAR, [], [])
+    pts = [tuple(p) for p in s.M["lanes"][1]["pts"]]
+    assert len(pts) == 4 and pts[1] == (690.0, 300.0) and pts[0][0] == 660.0, f"the arm is kept (its tip gathered onto the way's end): {pts}"

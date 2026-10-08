@@ -13,6 +13,9 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 - (wave 5, landed and reviewed) placement-changed village lane on kashikawa - wave 5: 0033's row street runs on off the map as the road into it at both ends, where
   the web cut it back to its last joint (`trim_streets`); Kashikawa's and Mizuguchi's far ends now run off the sheet as a
   second way out (every way is inked `village lane`).
+- (wave 46) placement-changed village lane on inashiro - the track out drawn taut (no 34/46 px wander) on Inashiro, Kuwabata
+  and Sawada, and Kashikawa's road squared at the ford on a leg past 40 ft; the village lane's glyph check is capped at two
+  rounds (listed for the GM's waiver with the others), so the occasion is declared and recorded on the gate run
 - none (wave 45): the hairpin and zigzag cuts and the behind-the-wall rule's removal moved no map (the five hamlets
   regenerated 2026-10-08, manifests byte-identical)
 - none (wave 44): the near joins and the steading reach's center moved no map (the five hamlets regenerated 2026-10-08,
@@ -1493,4 +1496,37 @@ In ranking order (rows 487-490; 491-492 next, row 492's change held as `audit/he
       research: rendering
       verify: DONE. rows 487-490: the hairpin cut (40 ft+ a GUESS, E4 filed), the zigzag pulled straight, the behind-the-wall rule removed whole; tests; spec-fidelity CLEAR r2; impl-drift r2 one MISLABELED held for the E4 research
 - [ ] T116 the claims re-checked by `impl-drift`; the close: `make done` green, the pair, the wave column (FR-005, FR-006)
+      research: rendering
+
+## Phase 47 - wave 46 (amendment 45): rows 491-494 and 496 - 0081's taut lane and its cut hairpin
+
+In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 0081; row 495 next).
+
+- `smooth.py::_smooth_web#a hairpin arm kept as the only contact` (row 491, E2): 0081 - "a returning leg under 40 ft is cut",
+  with no exception for an arm whose tip is the lane's only contact. The cut goes through `commit_lane` like every rewrite:
+  where the fold stands within the 25 ft join reach of the network (`web_rejoinable`), the touch pass joins it there; where
+  it does not, the rewrite is refused and the lane committed uncut (string-pulled), and the settle's `_unkinked` cuts every
+  returning leg and mends the network. `test_a_returning_leg_that_was_the_only_contact_is_cut_and_the_lane_joined_at_the_fold`
+  (red on the old code), `test_a_cut_no_join_can_mend_is_left_for_the_settle`.
+- `sweeps.py::_drop_end_nubs#nub at a junction dropped` (row 492, E2): 0081's hook - a last leg of 12 ft or less turning 90
+  degrees or more (`_NUB_FT`/`_NUB_TURN` are `_HOOK_FT`/`_HOOK_DEG`), the held patch applied.
+- `track.py::connector_track#track's wander` (row 493, E2): 0081 - "Every lane is pulled taut like a string": the candidate
+  is one straight run from the gateway past the frame (it bowed 34 and 46 px either side). The fixed 4,000 ft reach stopped
+  short of a 5,600 ft canvas once the taut track took an eastward bearing; it now covers the canvas diagonal.
+- `law.py::lanes_that_kink#bends like a path` (row 494, E2): the bend rule judges the track out too, and
+  `connector_keeps_the_law` refuses a kinked run where the connector is chosen (the dry exit drawn instead).
+- `track.py::stage_track#spur bow` (row 496, E2): the spur's candidate straight from the cluster's edge to the field (the
+  14 ft midpoint swing gone); a ford crossing is unchanged.
+- Found on the way (XIV): judged by the bend rule, Kashikawa's road was refused - its crossing of the brook's ford squared on
+  a 21 ft leg (the brook's half-width and 6 ft past each bank) turned 60 and 65 degrees inside 40 ft, a zigzag no repair may
+  cut from the track out. Squaring now takes a leg reaching just past 0081's 40 ft where the short one adds a kink
+  (`squaring.squared_against`), and `tree.rejoined` sets its vertices clear of that leg; the strip test restated
+  (`test_a_strip_squared_and_rejoined_bends_rather_than_kinks`). The last resort's refusal now names what breaks each rule
+  (it said only "bends").
+- Maps: Inashiro, Kuwabata and Sawada's track out drawn as two points (the households' records' `geom` follows it, no house
+  moved); Kashikawa's road over the ford; Mizuguchi byte-identical.
+
+- [ ] T117 rows 491-494 and 496 (FR-003, FR-004)
+      research: rendering
+- [ ] T118 the claims re-checked by `impl-drift`; the close: `make done` green, the pair, the wave column (FR-005, FR-006)
       research: rendering

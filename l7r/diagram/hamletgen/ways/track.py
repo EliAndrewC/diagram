@@ -410,7 +410,7 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
         polder has no spur - GUESS: the connector alone, the way into the fields taken to be over the dike's crest where the record runs a field path on to the outer bund
         spur to the field - research/questions/0081-village-lanes.drawing.html: the outline point whose path crosses least, then
             the shortest, clipped off the dry plots and the marsh
-        spur bow - research/questions/0081-village-lanes.drawing.html: a 14 px sideways swing at the midpoint
+        spur drawn taut - research/questions/0081-village-lanes.drawing.html: every lane pulled taut like a string - straight from the cluster's edge to the field, or over a ford
         spur over the brook at a ford - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html
         field spur tip on the bund - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: set on the worked
             ground's edge, again after threading
@@ -524,8 +524,7 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
         # a start taken from the outward gateway - the direction a track LEAVES by, which faces away
         # from the field - the spur ran 104 degrees off its own target and died in the windbreak.
         #
-        # Now: the origin faces THIS target, and the bow is the midpoint of the actual run with a
-        # small lateral swing so the path reads as walked rather than ruled.
+        # Now: the origin faces THIS target.
         _s = _cluster_edge_toward(s, target, _band_start)
         # ...AND OVER THE BROOK AT A FORD (feature 261). Where the houses stand across the brook from their rice, the
         # path crosses it square at the ford that makes the walk shortest, and `bridges()` decks the crossing - a
@@ -533,10 +532,11 @@ def stage_track(s: Settlement, plan: SitePlan) -> None:
         _via = ford_crossing(_s, edge, plan.brook or [], getattr(s, "brook_fords", ()))
         if _via:
             return [_s, *_via, edge]
-        _mx, _my = (_s[0] + edge[0]) / 2, (_s[1] + edge[1]) / 2
-        return [_s, (_mx + ax * 14, _my + ay * 14), edge]
+        # TAUT (feature 328 wave 46, 0081: "Every lane is pulled taut like a string"): the 14 ft sideways swing at the midpoint
+        # that made the path "read as walked" is on no page
+        return [_s, edge]
 
-    # ...and again the candidate is the DRAWN path, bow and all - see `path_is_clear`.
+    # ...and again the candidate is the DRAWN path - see `path_is_clear`.
     spur_check = PathChecker(crops, plan.sink_pond, brook_segs, plan.watercourses)  # built once for every candidate (FR-005)
     spur = min(
         (spur_path(q) for q in sorted(plan.envelope, key=lambda v: math.hypot(v[0] - cx, v[1] - cy))),
@@ -651,8 +651,11 @@ def connector_track(plan: SitePlan, start: Pt, avoid: Sequence[Poly] = (), reach
         leaning downslope - UNRESEARCHED: the ideal bearing weighs 0.55 away from the field and 0.85 downslope
         wet, then steadings, then crop - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: wet ground and crop refused (0081), no tread on a steading (0246)
         the three ranked - NONE: search order; wet and steaded bearings are both refused in the end
-        track's wander - research/questions/0081-village-lanes.drawing.html: bowed 34 and 46 px either side of the bearing
+        track drawn taut - research/questions/0081-village-lanes.drawing.html: every lane pulled taut like a string - the candidate a straight run from the gateway past the frame
         track off the steadings - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: kept `TRACK_FABRIC_GAP` (7 ft) off the steadings"""
+    # PAST THE FRAME ON EVERY BEARING: a fixed 4,000 ft stopped short of a 5,600 ft canvas's far edge (feature 328 wave 46,
+    # found when the taut track first took an eastward bearing), so the reach covers the canvas' diagonal
+    reach = max(reach, math.hypot(plan.W, plan.H))
     dx, dy = plan.fall
     ox, oy = plan.seat["out"]
     base = math.degrees(math.atan2(0.55 * oy + 0.85 * dy, 0.55 * ox + 0.85 * dx))
@@ -697,19 +700,10 @@ def connector_track(plan: SitePlan, start: Pt, avoid: Sequence[Poly] = (), reach
     best: tuple[tuple[int, int, int], Poly] | None = None
     for swing in sorted((9.0 * k for k in range(-20, 21)), key=abs):
         theta = math.radians(base + swing)
-        # THE CANDIDATE IS THE PATH THAT WILL BE DRAWN, not the straight line to its endpoint. A
-        # foot track wanders, so the drawn polyline bows ~40 px either side of the bearing - and
-        # testing the CHORD while drawing the BOW is how a track ended up crossing a hem plot and a
-        # drainage ditch on maps whose straight line cleared both. (The skill's dev notes state the
-        # rule in the label-probe case: a probe must measure what the check will measure. It applies
-        # to routing just as squarely.)
-        px, py = -math.sin(theta), math.cos(theta)
-        path: Poly = [
-            start,
-            (start[0] + math.cos(theta) * reach * 0.18 + px * 34, start[1] + math.sin(theta) * reach * 0.18 + py * 34),
-            (start[0] + math.cos(theta) * reach * 0.44 - px * 46, start[1] + math.sin(theta) * reach * 0.44 - py * 46),
-            (start[0] + math.cos(theta) * reach, start[1] + math.sin(theta) * reach),
-        ]
+        # THE CANDIDATE IS THE PATH THAT WILL BE DRAWN - a probe measures what the check will measure. It is TAUT (feature 328
+        # wave 46, 0081: "Every lane is pulled taut like a string"): the track bowed 34 and 46 px either side of the bearing
+        # "so the path reads as walked", a wander on no page; it bends only where `route_around` and the threading bend it.
+        path: Poly = [start, (start[0] + math.cos(theta) * reach, start[1] + math.sin(theta) * reach)]
         # WET GROUND OUTRANKS EVERYTHING ELSE (GM 2026-08-12). The toe marsh is a contour band
         # spanning the whole canvas below the crop, so on a map whose cluster sits in a pocket of
         # the fan NO bearing is clean of both - and a single violation count lets one crop clip
@@ -829,7 +823,7 @@ Research: connector width - research/questions/0081-village-lanes.drawing.html: 
 
 
 def connector_keeps_the_law(M: Mapping[str, Any], run: Poly) -> bool:
-    """May `run` be drawn as the connector? Its legs run through no building (`law.breaks_through` over `law.solid_boxes`,
+    """May `run` be drawn as the connector? It bends like a path (`law.bends_badly`, feature 328 wave 46); its legs run through no building (`law.breaks_through` over `law.solid_boxes`,
     the lane law's own reading - the connector is a tree lane no settle repair cuts, so this is where the rule is decided),
     and it crosses each brook at most once (`law.crossing_points`), so a household's way out along it never crosses the
     brook twice on the connector alone (`law.way_out_carriers` names a crossing on another lane for every such way out).
@@ -839,8 +833,9 @@ def connector_keeps_the_law(M: Mapping[str, Any], run: Poly) -> bool:
     Research:
         no building on the connector - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: no leg through a building's box
         nothing the matrix forbids - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: no dry plot, well or steading part
-        each brook crossed at most once - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html"""
-    if law.breaks_through(run, law.solid_boxes(M)):
+        each brook crossed at most once - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html
+        bends like a path - research/questions/0081-village-lanes.drawing.html: no hairpin and no zigzag on the track out either (`law.bends_badly`)"""
+    if law.breaks_through(run, law.solid_boxes(M)) or law.bends_badly(run):
         return False
     if forbidden_segment(M, "lanes", run, CONNECTOR_WIDTH) is not None:
         return False  # ...and it lies on nothing the overlap matrix forbids a way on (feature 287 M8): a dry plot, a well

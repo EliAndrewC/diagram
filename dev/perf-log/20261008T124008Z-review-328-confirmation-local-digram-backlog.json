@@ -1,0 +1,62 @@
+{
+  "band": 1,
+  "base": {
+    "commit": "2022b293b",
+    "label": "328-start",
+    "utc": "20261008T120941Z"
+  },
+  "binding": "5c7239e23f35f487510befec35b952eb91c7efcad6a874868392adf2a5278545",
+  "end": {
+    "commit": "4a9b7c077",
+    "label": "328-end",
+    "utc": "20261008T121252Z"
+  },
+  "environment": "local",
+  "feature": "328-match-the-research",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "8d3395e5-fe32-4f85-9c89-80c344d2ac1a",
+    "utc": "20261008T124008Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": 3.4,
+          "39": 0.0,
+          "4": 5.9,
+          "47": -8.1
+        },
+        "total_pct": 0.0
+      },
+      "20": {
+        "seeds": {
+          "25": -4.5,
+          "39": -3.5,
+          "4": 3.6,
+          "47": -11.8
+        },
+        "total_pct": -3.6
+      },
+      "40": {
+        "seeds": {
+          "25": 0.0,
+          "39": 1.8,
+          "4": -0.6,
+          "47": -0.8
+        },
+        "total_pct": 0.0
+      }
+    },
+    "seeds": {
+      "25": -2.6,
+      "39": 0.0,
+      "4": 2.2,
+      "47": 7.0
+    },
+    "total_pct": 1.8
+  },
+  "note": "Seed 47 +7.0% (4.3->4.6s) is host noise, not wave 42: web's executable code is unchanged 2022b293b..4a9b7c077 (clearance.py edit is a docstring; crosses_mid_run/CROSSING_END_TOL run only in sink/brook, sink 0.04->0.04s); the +0.24s stage sum is spread over web +0.06, windbreak +0.05, hinterland +0.05, field +0.03, untouched stages; reviewer re-timed both commits in detached worktrees, alternating x3: seed 47 web 0.82/0.83s on the quietest pair, start alone ranged 0.82-0.98s; seed 4 4.57/4.58s. Total +1.8%, 10/20/40 hh 0.0/-3.6/0.0%.",
+  "verdict": "consistent"
+}

@@ -18,7 +18,7 @@ from ..consts import (
     Poly,
     Pt,
 )
-from .geom import _turn_deg, fabric_clearance, polyline_len, push_out_of, stroke_quad
+from .geom import _HOOK_DEG, _HOOK_FT, _turn_deg, fabric_clearance, polyline_len, push_out_of, stroke_quad
 from .keeper import kept
 
 
@@ -156,16 +156,13 @@ def existing_walk(ways: Sequence[Poly], a: Pt, b: Pt, touch: float) -> float | N
     return None
 
 
-_NUB_FT = 9.0  # a leading/trailing segment under this is not a stretch of way, it is a splice artifact
-"""Research: nub length - CONVENTION: under 9 ft, a splice artifact not a stretch of way"""
-# NOT 5: the pass shipped at 5 ft and a settlement-review then found two nubs on Sawada that cleared it -
-# an 8.25 ft boot turning -87 deg off a 117 ft run, and a 5.74 ft first segment turning 88 deg. The floor
-# was set from the ONE case the pass was written for (3.1 ft) and was therefore calibrated below the defect
-# rather than to it. 9 ft is about a lane-width-and-a-half at hamlet tier, and the blast radius was
-# MEASURED before it was changed: over the whole pool, 5 -> 9 ft drops 3 more end vertices, all three on
-# Sawada, no other map touched; 12 ft catches nothing 9 does not.
-_NUB_TURN = 60.0  # ...and one that turns this far is a lump on the knuckle rather than the way arriving
-"""Research: nub turn - CONVENTION: an end stretch under 9 ft turning 60 deg reads as a lump, not the way arriving"""
+_NUB_FT = _HOOK_FT
+"""Research: nub length - research/questions/0081-village-lanes.drawing.html: "A last leg of 12 ft or less turning 90 degrees or more is cut" - the hook's own figures"""
+# ONE RULE WITH THE HOOK (feature 328 wave 42): it was under 9 ft at 60 deg or more, a convention from two settlement-reviews
+# (Sawada's 8.25 ft boot at 87 deg, a 5.74 ft first segment at 88 deg, Kuwabata's 3.1 ft nub at 93 deg); 0081 cuts a last leg of
+# 12 ft or less turning 90 or more, and no page cuts a gentler one, so a 60-89 deg end stretch now stands.
+_NUB_TURN = _HOOK_DEG
+"""Research: nub turn - research/questions/0081-village-lanes.drawing.html: 90 degrees or more, the hook's"""
 
 # THE END SPIKE IS REAL, AND `_NUB_FT` IS THE WRONG LEVER FOR IT - DEFERRED WITH ITS MEASUREMENT
 # (settlement-review, feature 155; constitution Principle XIV's "a deferral is a deliverable").
@@ -190,10 +187,6 @@ _NUB_TURN = 60.0  # ...and one that turns this far is a lump on the knuckle rath
 # the same defect feature 150's junction pass already owns - "a lane ends where it first meets the way,
 # bounded to a 40 ft overrun" - which is passing a lane whose overrun is 156.8 ft because it measures
 # the overrun from the wrong end. The fix belongs there, with the pool rolled behind it, not here.
-# NOT 90: the motivating nub measured 92.6 deg, and a bar sitting 2.6 deg under the one case it was
-# written for stops firing the first time a re-roll nudges it. Dropping the vertex is near-free at a
-# SMALL turn anyway (the two stretches are nearly collinear, so the tread barely moves), so the bar
-# only limits scope - it does not protect anything - and 60 deg is where a 3 ft stretch reads as a lump.
 
 
 def drop_end_nubs(ways: list[list[Pt]]) -> list[int]:
@@ -209,12 +202,12 @@ def drop_end_nubs(ways: list[list[Pt]]) -> list[int]:
     would take the lane off the way it was joined to. Lifted out of the pass below so it can be asked with
     plain lists (GM 2026-08-28 on testability).
 
-    Research: a lane's end loses its nub - CONVENTION: the splice artifact's vertex after the foot dropped
+    Research: a lane's end loses its nub - research/questions/0081-village-lanes.drawing.html: a last leg of 12 ft or less turning 90 degrees or more cut, the vertex after the foot
     """
 
     def nub_at_head(pts: list[Pt]) -> bool:
-        """Is `pts[1]` a nub - a first stretch under `_NUB_FT` that then turns `_NUB_TURN` or more? (One band: the spike
-        band this once described was never built - see "THE END SPIKE IS REAL" above.)"""
+        """Is `pts[1]` a nub - a first stretch of `_NUB_FT` or less that then turns `_NUB_TURN` or more (0081's hook)? (One
+        band: the spike band this once described was never built - see "THE END SPIKE IS REAL" above.)"""
         if len(pts) < 3:
             return False
         a, b, c = pts[0], pts[1], pts[2]
@@ -223,7 +216,7 @@ def drop_end_nubs(ways: list[list[Pt]]) -> list[int]:
         if la <= 0.0 or lb <= 1e-9:
             return False
         turn = math.degrees(math.acos(max(-1.0, min(1.0, (ax * bx + ay * by) / (la * lb)))))
-        return la < _NUB_FT and turn >= _NUB_TURN
+        return la <= _NUB_FT and turn >= _NUB_TURN
 
     hit: list[int] = []
     for i, pts in enumerate(ways):

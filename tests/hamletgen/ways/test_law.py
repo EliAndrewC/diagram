@@ -42,9 +42,9 @@ def test_two_turns_a_run_apart_are_a_bend_not_a_kink() -> None:
     assert law.kinks([(0.0, 0.0), (100.0, 0.0), (100.0, 20.0), (110.0, 20.0), (110.0, 40.0)]) != []
 
 
-def test_the_bend_rule_skips_the_connector() -> None:
+def test_the_bend_rule_judges_the_connector_too() -> None:
     kinked = [(0.0, 0.0), (100.0, 0.0), (0.0, 5.0)]
-    assert law.lanes_that_kink({"lanes": [_lane(*kinked, connector=True)]}) == []
+    assert law.lanes_that_kink({"lanes": [_lane(*kinked, connector=True)]}) == [("doubles back", 100, 0)], "the track out bends like a path too (0081)"
     assert law.lanes_that_kink({"lanes": [_lane(*kinked)]}) == [("doubles back", 100, 0)]
 
 

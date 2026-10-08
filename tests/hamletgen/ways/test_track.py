@@ -9,15 +9,12 @@ from ._builders import _hamlet_for_ways, _walled_settlement
 
 
 def test_the_connector_track_leaves_the_frame_without_crossing_the_crop() -> None:
-    """The guarantee is about the DRAWN path, not the straight line to its endpoint.
-
-    This test used to assert the chord and is the reason it is worth spelling out: a track bows ~40
-    px either side of its bearing, so chord and path disagree, and routing by the chord while
-    drawing the bow is exactly how a connector came to be drawn through the rice with the router
-    insisting it had checked."""
+    """The guarantee is about the DRAWN path - and the drawn path is TAUT (0081: "Every lane is pulled taut like a string";
+    feature 328 wave 46 took out the 34 and 46 px bow the track was drawn with), so the candidate is one straight run."""
     plan = a_plan()
     plan.seat = a_seat(plan)
     track = hg.connector_track(plan, (700.0, 200.0), avoid=[SQUARE])
+    assert len(track) == 2, f"a clean bearing is drawn straight from the gateway past the frame: {track}"
     assert hg.path_violations(track, [SQUARE], None, []) == 0, "no segment of the drawn track may cross the crop"
     assert not (0 <= track[-1][0] <= plan.W and 0 <= track[-1][1] <= plan.H)  # ends off the canvas
 
@@ -72,6 +69,18 @@ def _spur_drawn_from(monkeypatch, arm):  # type: ignore[no-untyped-def]
     monkeypatch.setattr(track, "connector_dry_exit", lambda *a: [(1384.0, 700.0), (1600.0, 700.0)])
     track.stage_track(s, plan)
     return s, next((ln for ln in s.M.get("lanes") or [] if ln.get("spur")), None)
+
+
+def test_the_field_spur_is_drawn_taut(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """0081: "Every lane is pulled taut like a string" - the spur's candidate runs straight from the cluster's edge to the
+    field (feature 328 wave 46 took out the 14 ft sideways swing at its midpoint); no ford lies between them here."""
+    from l7r.diagram.hamletgen.ways import track
+
+    seen: list[list[tuple[float, float]]] = []
+    clip = track.clip_to_clear
+    monkeypatch.setattr(track, "clip_to_clear", lambda pts, polys, margin: (margin == 12.0 and seen.append(list(pts)), clip(pts, polys, margin))[1])
+    _spur_drawn_from(monkeypatch, [(700.0, 1150.0), (700.0, 1300.0)])
+    assert seen and len(seen[0]) == 2, f"the spur candidate is one straight run: {seen[:1]}"
 
 
 def test_a_spur_whose_kept_arm_ends_in_the_rice_is_drawn_to_the_bund(monkeypatch) -> None:  # type: ignore[no-untyped-def]
@@ -285,6 +294,8 @@ def test_a_connector_through_a_building_or_over_the_brook_twice_takes_the_dry_ex
     twice = {"streams": [{"poly": [[-100.0, -50.0], [-200.0, 50.0], [-300.0, -50.0]]}]}
     assert not track.connector_keeps_the_law(twice, run), "over the brook and back"
     assert track.connector_keeps_the_law({"streams": [{"poly": [[-100.0, -50.0], [-100.0, 50.0]]}]}, run), "once is a crossing"
+    zigzag = [(10.0, 10.0), (-100.0, 10.0), (-100.0, 30.0), (-120.0, 30.0), (-900.0, 30.0)]
+    assert not track.connector_keeps_the_law({"houses": []}, zigzag), "two 90 degree turns 20 ft apart: 0081 pulls them straight"
     dry = [(1.0, 1.0), (-500.0, 1.0)]
     monkeypatch.setattr(track, "connector_dry_exit", lambda *a: dry)
     monkeypatch.setattr(track, "route_around", lambda poly, path, margin: path)

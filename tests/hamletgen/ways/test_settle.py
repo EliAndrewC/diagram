@@ -709,15 +709,15 @@ def test_seed_8_a_corridor_over_the_brook_at_its_ford_is_squared_and_drawn() -> 
     assert settle.unsettled(s.M) == {}
 
 
-def test_a_strip_that_kinks_where_it_is_squared_and_rejoined_is_refused_not_shipped() -> None:
+def test_a_strip_squared_and_rejoined_bends_rather_than_kinks() -> None:
     """The same strip 38 degrees off square, as seed 8 drew it: the web draws it rejoined either side of the crossing and
-    squared (`tree.rejoined`, `tree.lanes_of`), and the square leg's two elbows - 70 degrees each, 21 ft apart - are a kink
-    (`law.kinks`). Before the settle's exit asked the whole law this shipped: every step left the tree lane alone and a
-    round changed nothing. On a rolled map the seating judges the rejoined run (`tree.admits`) and never seats it."""
+    squared (`tree.rejoined`, `tree.lanes_of`). On the usual square leg its two elbows - 70 degrees each, 21 ft apart - were a
+    kink the settle could only refuse; the squaring now takes a leg past 0081's 40 ft where the short one leaves a zigzag
+    (`squaring.squared_against`, feature 328 wave 46), so the elbows are a bend and the strip keeps the law."""
     s = _strip_over_the_brook(-150.0, -73.3)
     assert settle.corridor_on_lawful_ground(s.M, [(300.0, 80.0), (0.0, -150.0)]), "squared without the rejoin, it keeps the law"
-    with pytest.raises(WebRefused, match="access.*the web still breaks bends"):
-        settle.settle_the_web(s)
+    settle.settle_the_web(s)
+    assert not law.lanes_that_kink(s.M), "no kink at the crossing"
 
 
 def _reference_lawful_ground(ok: settle.Lawful, run, width) -> bool:

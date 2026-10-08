@@ -317,5 +317,29 @@
   "unit": "% end vs start",
   "observed": "2026-10-08",
   "source": "dev/perf-log/20261008T095827Z-328-start-perfbase.json and 20261008T100133Z-328-end-digram-backlog.json; a first pair at 09:41/09:44 (load near 2.8 from a peer session) read +11.7% at 40 hh, its growth in homesteads, windbreak and web - stages wave 41 does not change - and was discarded"
+ },
+ "wave42-perf-pair-quiet": {
+  "quantity": "328-start (2022b293b, wave 41's close) against 328-end (4a9b7c077, wave 42: the joiner's confluence tested from either end at half the brook's drawn width), back to back on a host under load 1.4 to 2.4; totals",
+  "value": {
+   "15hh": 1.8,
+   "10hh": 0.0,
+   "20hh": -3.6,
+   "40hh": 0.0
+  },
+  "unit": "% end vs start",
+  "observed": "2026-10-08",
+  "source": "dev/perf-log/20261008T120941Z-328-start-perfbase.json and 20261008T121252Z-328-end-base.json, both legs in scratch worktrees at their commits; a first attempt at 11:45 was discarded (load 1.98 -> 12.90 during the end leg)"
+ },
+ "wave44-perf-pair-loaded": {
+  "quantity": "328-start (717e0218f, wave 43's last engine commit) against 328-end (1935f49dd, wave 44: a near join at a single point, the steading reach to the house's center), back to back in scratch worktrees on a host under load 6.3 to 7.5 falling to 2.6 by the end leg's close; totals",
+  "value": {
+   "15hh": -2.2,
+   "10hh": -9.6,
+   "20hh": -36.1,
+   "40hh": -6.2
+  },
+  "unit": "% end vs start",
+  "observed": "2026-10-08",
+  "source": "dev/perf-log/20261008T122441Z-328-start-perfbase.json and 20261008T122842Z-328-end-base.json; the load fell while the end leg ran, so its faster legs are the host, not the change - read only as: no seed more than 5% slower"
  }
 }

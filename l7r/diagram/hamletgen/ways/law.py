@@ -240,9 +240,10 @@ def bends_badly(pts: Sequence[Pt]) -> bool:
 
 
 def lanes_that_kink(M: Mapping[str, Any]) -> list[tuple[str, int, int]]:
-    """`kinks` over every lane but the connector (`lanes_bend_like_paths`).
-    Research: bends like a path - research/questions/0081-village-lanes.drawing.html: every lane but the track out"""
-    return [k for ln in (M.get("lanes") or []) if not ln.get("connector") for k in kinks(lane_pts(ln))]
+    """`kinks` over every lane, the track out included (`lanes_bend_like_paths`; feature 328 wave 46 - the connector was
+    exempt, and 0081 exempts no lane: "Every lane is pulled taut like a string").
+    Research: bends like a path - research/questions/0081-village-lanes.drawing.html: every lane, the track out with them"""
+    return [k for ln in (M.get("lanes") or []) for k in kinks(lane_pts(ln))]
 
 
 def hooked(pts: Sequence[Pt]) -> list[int]:

@@ -538,6 +538,25 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 - **On the unpushed waves 9-44** under condition (6): as at wave 44; the pair is owed (executed code).
 - **Verification**: the tests; `impl-drift` on the touched claims; the gate; the pair.
 
+## Wave 46 (amendment 45, 2026-10-08)
+
+- **Scope**: rows 491-494 in ranking order, and row 496 beside row 493 - 0081's "Every lane is pulled taut like a string"
+  and "a returning leg under 40 ft is cut": the smoother cuts a hairpin arm even where its tip was the lane's only contact
+  (the lane joined again at the fold within the 25 ft join reach, else committed uncut and left for the settle, which cuts
+  every returning leg); a lane's end loses a last leg of 12 ft or less turning 90 degrees or more (the held
+  `audit/held-row492-nub.patch`); the track out drawn taut (no 34/46 px wander) and judged by the bend rule like every
+  lane, a kinked connector refused where it is chosen; the field spur drawn taut (no 14 ft midpoint swing). Row 496 is
+  taken ahead of row 495 (the connector's clearance at a footprint's edge, a new test of the corridor) because it is the
+  same sentence of 0081 in the same function family as row 493, and the spur's candidate is scored by the checker row 493
+  changed; row 495 is next (`tasks.md` Phase 47). Found on the way: the track's fixed 4,000 ft reach stopped short of a
+  5,600 ft canvas's far edge, so the reach now covers the canvas diagonal (XIV); and judged by the bend rule, Kashikawa's road
+  was refused - a ford crossing squared on a 21 ft leg is a zigzag where the approach is oblique - so squaring takes a leg past
+  0081's 40 ft where the short one adds a kink, and the refusal names what breaks each rule.
+- **Occasions**: see `tasks.md` `## Occasions` (wave 46).
+- **On the unpushed waves 9-45** under condition (6): as at wave 45; the pair is owed (executed code).
+- **Verification**: the tests red on the old code; the five hamlets regenerated and their manifests diffed; `impl-drift` on
+  the touched claims; the gate; the pair.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Each later wave that changes engine behavior takes

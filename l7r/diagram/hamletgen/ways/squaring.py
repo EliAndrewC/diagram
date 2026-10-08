@@ -17,6 +17,7 @@ from typing import Any
 from ..consts import Poly
 from . import law
 from .checks import square_crossings
+from .clearance import _ZIGZAG_RUN_FT, kink_spans
 
 
 def _pts(ln: Mapping[str, Any]) -> Poly:
@@ -32,6 +33,35 @@ SQUARE_MARGIN_FT = 6.0
 """The square leg's reach past the water's half-width (`stage_crossings`' own figure, moved here with the squaring).
 
 Research: the square leg - UNRESEARCHED: 6 ft past the water's half-width"""
+
+
+def squared_against(q: Poly, course: Poly, half: float) -> Poly:
+    """`q` squared at its crossings of one water course (`square_crossings`, up to `SQUARE_PASSES` times) - with a square leg
+    long enough to read as a bend where the usual one leaves a zigzag.
+
+    AN OBLIQUE APPROACH SQUARED ON A SHORT LEG IS A ZIGZAG (feature 328 wave 46, Kashikawa's road over the brook's ford): the
+    leg reached the water's half-width and 6 ft past each bank, 21 ft, and its two turns of 60 and 65 degrees stood inside
+    0081's 40 ft - a zigzag the lane law refuses and no repair may cut from the track out. Where the usual leg adds a kink,
+    the crossing is squared again on a leg reaching half `_ZIGZAG_RUN_FT` and a foot past it each side, so the turns stand
+    more than 40 ft apart: a bend, as 0081 reads one.
+
+    Research:
+        square crossing - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html, research/questions/0084-plank-bridges-over-farm-ditches-itabashi.drawing.html
+        a square leg long enough to bend - research/questions/0081-village-lanes.drawing.html: two turns of more than 50 degrees within 40 ft of path are a zigzag, so the leg runs past 40 ft where the short one leaves one"""
+
+    def squared(reach: float) -> Poly:
+        r = list(q)
+        for _ in range(SQUARE_PASSES):
+            nr = square_crossings(r, course, reach)
+            if nr == r:
+                break
+            r = nr
+        return r
+
+    short = squared(half)
+    if short == q or len(kink_spans(short)) <= len(kink_spans(q)):
+        return short
+    return squared(max(half, _ZIGZAG_RUN_FT / 2.0 + 1.0))
 
 
 # ---- step 1: every crossing square -------------------------------------------------------------------------------------
@@ -62,11 +92,7 @@ def square_every_crossing(s: Any) -> int:
             continue
         q = p
         for course, half in waters:
-            for _ in range(SQUARE_PASSES):
-                nq = square_crossings(q, course, half)
-                if nq == q:
-                    break
-                q = nq
+            q = squared_against(q, course, half)
         if q != p and s.reshape_lane(ln, q):
             s.reink_lane(i)
             changed += 1
@@ -99,9 +125,5 @@ def square_run(M: Mapping[str, Any], run: Poly) -> Poly:
     for course, half in square_waters(M):
         if not law.boxes_meet(q, course, half):  # out of its reach the squaring changes nothing (feature 314)
             continue
-        for _ in range(SQUARE_PASSES):
-            nq = square_crossings(q, course, half)
-            if nq == q:
-                break
-            q = nq
+        q = squared_against(q, course, half)
     return q

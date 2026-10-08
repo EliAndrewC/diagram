@@ -155,7 +155,7 @@ def _strip_doubled_on_the_connector() -> _S:
 def test_a_web_gone_still_with_a_rule_only_the_tree_breaks_is_refused_by_name_never_shipped(monkeypatch: pytest.MonkeyPatch) -> None:
     s = _strip_doubled_on_the_connector()
     assert {"doubled_tails", "needle_joins"} <= set(settle.unsettled(s.M)), "the violating case, the whole law asked"
-    with pytest.raises(lr.WebRefused, match="lanes 1 \\(way target\\) still break a rule.*the web still breaks .*doubled_tails, needle_joins"):
+    with pytest.raises(lr.WebRefused, match="lanes 1 \\(way target\\) still break a rule.*the web still breaks .*doubled_tails \\(\\[1\\]\\), needle_joins"):
         settle.settle_the_web(s)
     assert [ln.get("role") for ln in s.M["lanes"]] == [None, co.TARGET_ROLE], "no tree lane dropped"
     # ...and without the exit's question the still round shipped it: the hole this closes
@@ -175,3 +175,10 @@ def test_a_web_gone_still_with_an_ordinary_lane_breaking_a_rule_against_the_tree
     got = settle.settle_the_web(s)
     assert got["rounds"] == 1 and got["changed"] == 0 and got["dropped"] == 1
     assert settle.unsettled(s.M) == {} and len(s.M["lanes"]) == 1 and s.M["lanes"][0]["connector"]
+
+
+def test_a_refusal_names_what_breaks_each_rule() -> None:
+    """The refusal says where to look (feature 328 wave 46: Kashikawa's "the web still breaks bends" named no lane - the track
+    out, a tree lane): the first three things breaking a rule, or a count as it is."""
+    assert lr._first([1, 2, 3, 4]) == "[1, 2, 3]"
+    assert lr._first(2) == "2"

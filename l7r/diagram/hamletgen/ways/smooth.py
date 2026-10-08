@@ -137,6 +137,21 @@ def string_pull_chord_ok(pts: Poly, a: int, b: int, hard: list[Poly], walls: Seq
     return all(seg_dist(v[0], v[1], pts[a], pts[b]) <= _JOG_FT for v in pts[a + 1 : b])
 
 
+def _pulled(pts: Poly, shortcut_ok: Callable[[int, int], bool]) -> Poly:
+    """The string-pull: from each vertex, jump to the furthest later vertex `shortcut_ok` allows a chord to.
+
+    Research: lane pulled taut - research/questions/0081-village-lanes.drawing.html: string-pulled to the furthest vertex a clear chord reaches"""
+    out = [pts[0]]
+    a = 0
+    while a < len(pts) - 1:
+        b = len(pts) - 1
+        while b > a + 1 and not shortcut_ok(a, b):
+            b -= 1
+        out.append(pts[b])
+        a = b
+    return out
+
+
 def _smooth_web(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: list[tuple[Pt, Pt]]) -> int:
     """A late pass over the web (`settle_the_web` is the last): take out what feet would never have worn.
 
@@ -155,9 +170,11 @@ def _smooth_web(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: l
       1. STRING-PULL - from each vertex, jump to the furthest later vertex the straight line reaches
          without crossing a footprint. This is what `_route` does to its own output; nothing did it to
          the assembled lane. It removes the zigzags and the dense 4 ft stepping in one move.
-      2. HAIRPIN - a turn past `_HAIRPIN_DEG` with the shorter arm on one side: the arm is cut, unless
-         its tip is the lane's only contact with another way. An arm under `_ARM_FT` is cut on its
-         length alone; a longer one is a lane in its own right and is kept.
+      2. HAIRPIN - a turn past `_HAIRPIN_DEG` with the shorter arm on one side: an arm under `_ARM_FT` is
+         cut; a longer one is a lane in its own right and is kept. Where the arm's tip was the lane's
+         only contact with another way, the cut lane is joined again at the fold by the touch pass
+         (`web_rejoinable`, inside `commit_lane`); where it cannot be, the lane is committed uncut and the
+         settle cuts the leg (`settle._unkinked`) and mends the network.
       3. BOW-TIE - where two lanes cross each other mid-run and one runs on past the crossing for
          less than `_ARM_FT`, that tail is cut back to the crossing, which becomes the junction.
       4. KNOTS - ends of different lanes within `_KNOT_FT` (25 ft) of one another meet at ONE node.
@@ -172,7 +189,7 @@ def _smooth_web(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: l
         knots gathered - research/questions/0081-village-lanes.drawing.html: ends within 25 ft meet at one node
         shadow lane dropped - NONE: a lane lying inside another's stroke is one way recorded twice
         web kept one network - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a rewrite that splits the web is refused
-        a hairpin arm kept as the only contact - DEVIATION research/questions/0081-village-lanes.drawing.html: an arm under 40 ft is kept when its tip is the lane's only contact with another way, so the cut never strands the lane (the page's one exception is the folded field spur)
+        a hairpin arm cut at the only contact - research/questions/0081-village-lanes.drawing.html: a returning leg under 40 ft is cut even where its tip was the lane's only contact, the lane joined again at the fold within the 25 ft join reach; where no join clears, the settle cuts it
         the knot's node on a through lane - research/questions/0081-village-lanes.drawing.html: ends joined at a single point, set on a through lane's tread (4 ft touch) where one runs, so the arriving lane meets its side as a T
         the knot's node at the centroid - GUESS: where no lane runs through the knot, its node is the ends' centroid
         the string-pull chord's keep-out - UNRESEARCHED: a chord stays max(4 ft, w/2 + 2 ft) off another lane, a lane with no width taken at 5 ft"""
@@ -194,17 +211,6 @@ def _smooth_web(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: l
     def _commit(m: int, new_pts: list[list[float]]) -> bool:
         return commit_lane(lanes, m, new_pts, hard, walls, water, s.reink_lane, admits_lane(s))
 
-    def _others_segs(skip: int) -> list[tuple[Pt, Pt]]:
-        return [
-            (a, b)
-            for k, o in enumerate(lanes)
-            if k != skip and len(o.get("pts") or []) >= 2
-            for a, b in zip([(float(x), float(y)) for x, y in o["pts"]], [(float(x), float(y)) for x, y in o["pts"]][1:], strict=False)
-        ]
-
-    def _touching(q: Pt, segs: Sequence[tuple[Pt, Pt]]) -> bool:
-        return any(seg_dist(q[0], q[1], a, b) <= 4.0 for a, b in segs)
-
     def _arm_cuttable(arm_len: float) -> bool:
         """May this hairpin arm be cut? A returning leg under `_ARM_FT` (40 ft) is; a longer one is a lane (0081)."""
         return arm_len < _ARM_FT
@@ -212,23 +218,24 @@ def _smooth_web(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: l
     for i, ln in enumerate(lanes):
         if (ln.get("connector") or ln.get("street")) or len(ln.get("pts") or []) < 3:
             continue
-        pts = [(float(x), float(y)) for x, y in ln["pts"]]
-        others = _others_segs(i)
-        # 2. hairpins first, so a string-pull does not shortcut across the fold and keep the arm
+        drawn = [(float(x), float(y)) for x, y in ln["pts"]]
+        pts, hairpin_cut = drawn, False
+        # 2. hairpins first, so a string-pull does not shortcut across the fold and keep the arm. NO ARM IS KEPT FOR BEING
+        # THE LANE'S ONLY CONTACT (feature 328 wave 46): 0081 cuts every returning leg under 40 ft; a cut that strands the
+        # lane is joined again at the fold by the touch pass, or refused by `commit_lane` and left for the settle.
         for _round in range(3):
             cut = False
             for k in range(1, len(pts) - 1):
                 if _turn_deg(pts[k - 1], pts[k], pts[k + 1]) < _HAIRPIN_DEG:
                     continue
                 head, tail = polyline_len(pts[: k + 1]), polyline_len(pts[k:])
-                if head <= tail and _arm_cuttable(head) and not (_touching(pts[0], others) and not _touching(pts[k], others)):
-                    pts = pts[k:]
-                    cut = True
+                if head <= tail and _arm_cuttable(head):
+                    pts, cut = pts[k:], True
                     break
-                if tail < head and _arm_cuttable(tail) and not (_touching(pts[-1], others) and not _touching(pts[k], others)):
-                    pts = pts[: k + 1]
-                    cut = True
+                if tail < head and _arm_cuttable(tail):
+                    pts, cut = pts[: k + 1], True
                     break
+            hairpin_cut = hairpin_cut or cut
             if not cut or len(pts) < 3:
                 break
 
@@ -244,15 +251,7 @@ def _smooth_web(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: l
         def _shortcut_ok(a: int, b: int, pts: Poly = pts, _g: float = _lane_gap) -> bool:
             return string_pull_chord_ok(pts, a, b, hard, walls, water, _g)  # the body is `string_pull_chord_ok`
 
-        out = [pts[0]]
-        a = 0
-        while a < len(pts) - 1:
-            b = len(pts) - 1
-            while b > a + 1 and not _shortcut_ok(a, b):
-                b -= 1
-            out.append(pts[b])
-            a = b
-        pts = out
+        pts = _pulled(pts, _shortcut_ok)
         # A DEAD END, MEASURED (feature 134 T50, 2026-08-29): running `_unjog` over the finished lane
         # here - the same three rungs (chord, knee, corner-off-apex) the router's own output gets - on
         # the theory that a bend the string-pull cannot chord is exactly what that pass repairs. It
@@ -262,6 +261,11 @@ def _smooth_web(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: l
         # tier has to buy something. The bends that remain want the router not to fold there at all.
         if [[round(x, 1), round(y, 1)] for x, y in pts] != ln["pts"] and _commit(i, [[round(x, 1), round(y, 1)] for x, y in pts]):
             changed += 1
+        elif hairpin_cut:
+            # the hairpin cut was refused (it stranded the lane past the join reach): the lane string-pulled uncut
+            whole = _pulled(drawn, lambda a, b, _p=drawn, _g=_lane_gap: string_pull_chord_ok(_p, a, b, hard, walls, water, _g))
+            if [[round(x, 1), round(y, 1)] for x, y in whole] != ln["pts"] and _commit(i, [[round(x, 1), round(y, 1)] for x, y in whole]):
+                changed += 1
     # 4. KNOTS: ends of different lanes that stand within `_KNOT_FT` of one another meet at ONE
     # node. Three lanes arriving at three points a few feet apart drew a closed triangle on
     # Inashiro (the GM's "loop-de-loop"): each end had touched a tread, so every gate was

@@ -131,6 +131,11 @@ def _named(lanes: Sequence[Mapping[str, Any]], idxs: Iterable[int]) -> str:
     return ", ".join(f"{i} ({lanes[i].get('role') or 'ordinary'})" for i in sorted(idxs))
 
 
+def _first(v: Any) -> str:
+    """What breaks a rule, as `unsettled` returns it, cut to its first three entries (a count is shown as it is)."""
+    return repr(list(v)[:3]) if isinstance(v, (list, tuple, set)) else repr(v)
+
+
 def refuse_unmended(s: Any) -> None:
     """Raise `WebRefused` if, after the last resort, a lane still breaks a rule of the law (a tree lane, which no drop may
     take; or an ordinary one the passes ran out on) or a household's way out still crosses the brook and back (on tree lanes
@@ -149,7 +154,8 @@ def refuse_unmended(s: Any) -> None:
     if broken := unsettled(M, memo_ground(s, "worked", worked_ground)):
         # ...AND THE WHOLE LAW IS ASKED, as the settle's exit asks it: a rule no lane above is named for (a split network, a
         # width step) still refuses, by the rule's name
-        why.append(f"the web still breaks {', '.join(sorted(broken))}")
+        # (with what breaks each - the first three it names - so a refusal says where to look)
+        why.append("the web still breaks " + ", ".join(f"{k} ({_first(broken[k])})" for k in sorted(broken)))
     if why:
         raise WebRefused("the web's last resort cannot mend it without dropping a tree lane: " + "; ".join(why))
 

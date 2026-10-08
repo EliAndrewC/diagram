@@ -603,6 +603,7 @@ def rejoined(run: Poly, waters: Sequence[tuple[Poly, float]]) -> Poly:
     from l7r.diagram.settlement import seg_intersect, segments_cross
 
     from .checks import SQUARE_LEG_PAD
+    from .clearance import _ZIGZAG_RUN_FT
 
     out: Poly = [run[0]] if run else []
     for a, b in zip(run, run[1:], strict=False):
@@ -616,7 +617,9 @@ def rejoined(run: Poly, waters: Sequence[tuple[Poly, float]]) -> Poly:
                 if x is None:  # pragma: no cover - segments that cross are not parallel
                     continue
                 sin = abs(((b[0] - a[0]) * (e[1] - c[1]) - (b[1] - a[1]) * (e[0] - c[0])) / (d * math.dist(c, e)))
-                reach = (half + SQUARE_LEG_PAD + REJOIN_PAD_FT) / max(sin, 0.2)
+                # ...clear of the LONGER square leg too, which the squaring takes where the short one leaves a zigzag
+                # (`squaring.squared_against`, feature 328 wave 46): set inside it, the vertices were overrun and the run moved
+                reach = (max(half, _ZIGZAG_RUN_FT / 2.0 + 1.0) + SQUARE_LEG_PAD + REJOIN_PAD_FT) / max(sin, 0.2)
                 t = math.dist(a, x)
                 cuts += [t - reach, t + reach]
         for t in sorted(c for c in cuts if 0.0 < c < d):
