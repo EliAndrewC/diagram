@@ -196,7 +196,7 @@ HOLDING_DEPTH_FRAMES = {"street": 3.0, "edge": 1.0}
 """A far-row farm's holding behind its lot, in lots - frame WIDTHS along the street (feature 291 plan D16; feature 328: it
 was the frame's shorter side, against 0033's "three times the frame's width"): on a street laid first a STRIP (the
 planned row's order, house lot then field then woodland, 0033 - its depth there 375 ken, a dry-field colony's;
-three frames here is a GUESS, a paddy row borrowing the form, not the size); on the dry edge one frame, compact and near
+three lots here is a GUESS, a paddy row borrowing the form, not the size); on the dry edge one lot, compact and near
 the house (a dike row's holding, 0033, accurate for a dike row, carried to a levee or fan foot as this
 project's reading).
 
