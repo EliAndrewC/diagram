@@ -1397,8 +1397,9 @@ Back in ranking order (row 481 on).
 
 - [x] T109a wave 41's found rows tiered by the work they take, by a fresh reader (FR-002, FR-003, SC-003)
       research: rendering
-- [ ] T109 the joiner's confluence, both ends; row 481 closed (FR-003, FR-004)
+- [x] T109 the joiner's confluence, both ends; row 481 closed (FR-003, FR-004)
       research: rendering
+      verify: DONE. the joiner's confluence tested from either end, row 481 closed as fixed in wave 34; tests red on the old code; impl-drift IN-STEP; spec-fidelity CLEAR r2
 - [ ] T110 the claims re-checked by `impl-drift`; the close: `make done` green, the pair, the wave column (FR-005, FR-006)
       research: rendering
 
@@ -1431,8 +1432,9 @@ In ranking order (rows 482-485; 486-492 next, row 492's change held as `audit/he
 
 - [x] T111a wave 42's found rows tiered by the work they take, by a fresh reader (FR-002, FR-003, SC-003)
       research: rendering
-- [ ] T111 rows 482-485 (FR-003, FR-004)
+- [x] T111 rows 482-485 (FR-003, FR-004)
       research: rendering
+      verify: DONE. rows 482-485: the hairpin's T, the third gather form, the steading reach, the refused near join; tests red on the old code; impl-drift IN-STEP r2; spec-fidelity CLEAR r2
 - [ ] T112 the claims re-checked by `impl-drift`; the close: `make done` green, the pair, the wave column (FR-005, FR-006)
       research: rendering
 
@@ -1460,8 +1462,9 @@ In ranking order (rows 482-485; 486-492 next, row 492's change held as `audit/he
 
 - [x] T113a wave 43's found rows tiered by the work they take, by a fresh reader (FR-002, FR-003, SC-003)
       research: rendering
-- [ ] T113 row 486; the reach to the center (FR-003, FR-004)
+- [x] T113 row 486; the reach to the center (FR-003, FR-004)
       research: rendering
+      verify: DONE. row 486 joined at a single point (joined_link, carried_onto, the whole run snapped or linked at the way's width); the reach to the center; tests; impl-drift IN-STEP r3; spec-fidelity CLEAR r2
 - [ ] T114 the claims re-checked by `impl-drift`; the close: `make done` green, the pair, the wave column (FR-005, FR-006)
       research: rendering
 
@@ -1486,7 +1489,8 @@ In ranking order (rows 487-490; 491-492 next, row 492's change held as `audit/he
   through `settle_dangling`) and `last_resort`'s docstring; the two doubled-tail claims UNRESEARCHED (a layout rule, not a
   drawing convention); `GABLE_MARGIN_FT`'s docstring matches its claim.
 
-- [ ] T115 rows 487-490 (FR-003, FR-004)
+- [x] T115 rows 487-490 (FR-003, FR-004)
       research: rendering
+      verify: DONE. rows 487-490: the hairpin cut (40 ft+ a GUESS, E4 filed), the zigzag pulled straight, the behind-the-wall rule removed whole; tests; spec-fidelity CLEAR r2; impl-drift r2 one MISLABELED held for the E4 research
 - [ ] T116 the claims re-checked by `impl-drift`; the close: `make done` green, the pair, the wave column (FR-005, FR-006)
       research: rendering

@@ -6,16 +6,16 @@
  "decisions": [
   {
    "id": "W45-1",
-   "summary": "_unkinked: a returning leg under 40 ft (HAIRPIN_LEG_FT) is cut, keeping the longer arm",
+   "summary": "_unkinked: a returning leg under 40 ft is cut, keeping the longer arm (HAIRPIN_LEG_FT removed - no code read it)",
    "class": "within",
    "why": "0081 drawing page verbatim: 'where a lane turns back on itself, a returning leg under 40 ft is cut'; the implementation moves to the research (FR-004)."
   },
   {
    "id": "W45-2",
-   "summary": "_unkinked: a hairpin whose returning leg is 40 ft or more 'now stands' (returns [p] unchanged); the test pins _unkinked(long_back) == [long_back]",
+   "summary": "_unkinked: a hairpin whose returning leg is 40 ft or more is cut too (the shorter arm goes), claimed as a GUESS on 0081; the case filed E4 research-first (audit/found-wave45.jsonl); the test asserts the 50 ft leg goes",
    "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "0081's own rule opens 'A lane never doubles back in a hairpin. A turn of more than 140 degrees is a hairpin'; the page never says a longer returning leg stands - that is the plan completing the page's thought from 'under 40 ft is cut'. It also does not do what the plan says: measured 2026-10-08 by a scratch probe through make test-file (lane [(0,50),(200,50),(150,55)], 50 ft returning leg), settle_shapes returns 1 change every round with the lane unchanged (so the settle never settles and burns all SETTLE_ROUNDS), law.lanes_that_kink still names it, and last_resort.lane_violators names it, so the last resort drops the WHOLE lane (or refuse_unreached refuses the map). The page's 40 ft rule is honored only by cutting more than the page cuts. The case the page does not settle - what a 140-degree turn with a returning leg of 40 ft or more becomes - must be settled by the feature's own route (FR-003 E4 research first, or the FR-004 exception path recorded on 0081), never by leaving a hairpin the page forbids or by a silent whole-lane drop."
+   "ruling": "LEGITIMATE",
+   "why": "Round 1's finding answered by one of the two routes it named. 0081 opens 'A lane never doubles back in a hairpin'; leaving the long leg broke that sentence, looped the settle and let the last resort drop the whole lane. The page names no remedy for a long leg (its 'exception to the 40 ft rule' for a field spur implies the 40 ft cut does not reach it, and says nothing of what does), so the remedy is a fact the record lacks: the spec's Edge Case tiers that E4, research first, implementation changed only after. Confirmed by git show 1935f49dd: the code before wave 45 already kept the longer arm at any length, so HEAD changes nothing ahead of the research for this case - it restores the behavior the wave had wrongly narrowed, labels it GUESS (not unlabeled, not a DEVIATION rewording the page), and files the E4 row (merge.py globs found-*.jsonl into the ranking). The headline rule of the page is honored in full; nothing the GM asked is narrowed."
   },
   {
    "id": "W45-3",
@@ -27,7 +27,7 @@
    "id": "W45-4",
    "summary": "settle_shapes (row 490) closes by calling the fixed _unkinked",
    "class": "within",
-   "why": "Its finding is the same two 0081 sentences; it inherits W45-2's defect for the 40 ft-plus hairpin and is fixed with it."
+   "why": "Its finding is the same two 0081 sentences; with W45-2 fixed it cuts every hairpin and pulls a zigzag straight, so the settle no longer loops on a long leg."
   },
   {
    "id": "W45-5",
@@ -52,7 +52,13 @@
    "summary": "Tests restated: behind-the-house tests replaced by 'an end behind a house reaches it and is left'; the tree's third-end case rebuilt nearer house A",
    "class": "within",
    "why": "Tests that enforce the fixed behavior serve the request; the rebuilt tree case keeps the third-end rule tested without the removed rule."
+  },
+  {
+   "id": "W45-9",
+   "summary": "impl-drift round 1 fixes: stale 'behind a house' phrases removed from Lawful, settle_ends and last_resort's docstring (restated as 0246's reach through settle_dangling); the two doubled-tail claims CONVENTION -> UNRESEARCHED; GABLE_MARGIN_FT's docstring matched to its UNRESEARCHED claim",
+   "class": "within",
+   "why": "Claims brought into line with W45-5's removal and with impl-drift's own notes; the doubled-tail relabel matches its siblings (law.doubled_tails, tails.tail_doubled, already UNRESEARCHED with 'no page we read covers a way drawn twice') and no page covers it, so no finding is relabeled away from research that exists."
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }

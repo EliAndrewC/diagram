@@ -20579,21 +20579,6 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/settle.py::HAIRPIN_LEG_FT#a returning leg cut": {
-  "code": "4a07ca42057f4eea",
-  "core": "4f6abb3ccbbe5fc1",
-  "date": "2026-10-08",
-  "note": "\"a returning leg under 40 ft is cut\"",
-  "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
-  },
-  "research": "ebd72aaa6a0eb9af",
-  "rests": [
-   "0081-village-lanes.drawing.html:3b9a5312c92335d3",
-   "0081-village-lanes.drawing.html:65ad16eace199d92"
-  ],
-  "verdict": "IN-STEP"
- },
  "l7r/diagram/hamletgen/ways/settle.py::JOIN_BACK_PAD_FT#a deferring end taken back": {
   "code": "06f3ed2219c7d01e",
   "core": "f7b8474fd73a4ae7",
@@ -20611,10 +20596,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle.py::Lawful.__call__#an end reaches something seen": {
-  "code": "79c9f750d5258ac7",
+  "code": "f9a182381962f082",
   "core": "a29dbe2e599e7354",
   "date": "2026-10-08",
-  "note": "the code refuses only dangling ends (dangling_lane_ends, matching §31); \"none behind a house\" is in neither the code nor §31, which counts an end within 60 ft of the house on any side; drop that phrase from the claim",
+  "note": "refuses a tree-lane run that would leave an end reaching nothing (`dangling_lane_ends`), with a 60 ft reach to nearby ways",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
@@ -20622,7 +20607,7 @@
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle.py::Lawful.__call__#lanes meet as a T": {
   "code": "8d88ad694f4227e1",
@@ -20640,18 +20625,14 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle.py::Lawful.__call__#no doubled tail": {
-  "code": "6034c3a6d7a3c288",
+  "code": "7ec1964fbfc0c0b6",
   "core": "a29dbe2e599e7354",
   "date": "2026-10-08",
-  "note": "refusing a lane that runs alongside another within 15 deg (_DOUBLED_DEG) is a placement rule, not how a thing is shown; should be UNRESEARCHED (0081 never names doubled tails)",
+  "note": "nothing in the cited pages covers an end that runs on beside another way; the 15-degree \"alongside\" test is a detection tolerance",
   "pages": {},
   "research": "",
-  "rests": [
-   "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
-   "0081-village-lanes.drawing.html:65ad16eace199d92",
-   "0081-village-lanes.drawing.html:be608a70af4cfcc5"
-  ],
-  "verdict": "MISLABELED"
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle.py::Lawful.__call__#no way out over and back": {
   "code": "a1e0dc879647fc38",
@@ -20910,11 +20891,11 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/settle.py::_unkinked#no hairpin or zigzag": {
-  "code": "8aa44f5f75106513",
-  "core": "458817607d5d977d",
+ "l7r/diagram/hamletgen/ways/settle.py::_unkinked#a returning leg of 40 ft or more": {
+  "code": "8efec1b06ceb9fef",
+  "core": "219588e41619656c",
   "date": "2026-10-08",
-  "note": "cuts the shorter arm under 40 ft; drops a zigzag's two turns",
+  "note": "this is not a GUESS: 0081 answers the question, and the code goes against its answer. §19 cuts only \"a returning leg under 40 ft\" and names its one exception (\"A folded field spur is cut at the fold\"), so a longer leg is not cut. The code keeps the longer arm whatever the lengths, which makes the 40 ft threshold do nothing. 0081 records no guess for this, so the claim should be a DEVIATION that 0081.drawing records (resting on §17 \"never doubling back on itself\"), or §19 should be amended to say any returning leg is cut",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },
@@ -20922,6 +20903,21 @@
   "rests": [
    "0081-village-lanes.drawing.html:3b9a5312c92335d3",
    "0081-village-lanes.drawing.html:65ad16eace199d92",
+   "0081-village-lanes.drawing.html:be608a70af4cfcc5"
+  ],
+  "verdict": "MISLABELED"
+ },
+ "l7r/diagram/hamletgen/ways/settle.py::_unkinked#no hairpin or zigzag": {
+  "code": "dbfd75174d33ad97",
+  "core": "219588e41619656c",
+  "date": "2026-10-08",
+  "note": "drops the shorter arm of a doubled-back run, and pulls a zigzag straight from the vertex before its first turn to the vertex after its second",
+  "pages": {
+   "0081-village-lanes.drawing.html": "9e27759395199abd"
+  },
+  "research": "ebd72aaa6a0eb9af",
+  "rests": [
+   "0081-village-lanes.drawing.html:3b9a5312c92335d3",
    "0081-village-lanes.drawing.html:d30e15716180fbf5"
   ],
   "verdict": "IN-STEP"
@@ -21124,10 +21120,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle.py::settle_ends#a lane ends at the dooryard": {
-  "code": "787c53d0bef103d7",
+  "code": "7371dd7bf836d409",
   "core": "a96e373d7310ce83",
   "date": "2026-10-08",
-  "note": "the claim describes carrying an end round the gable or backing it off (off_the_back), which the code removed in feature 328 (its own comment says so), and §31 has no behind-a-house rule; drop the claim or restate it as the §31 60 ft / 12 ft reach rule (settle_dangling)",
+  "note": "an end at the house counts on any side (the gable and back-wall handling was removed); an end reaching nothing goes to `settle_dangling`",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
@@ -21135,7 +21131,7 @@
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle.py::settle_ends#lanes met end to end read as one": {
   "code": "3b18a26a4cd6499e",
@@ -21153,18 +21149,14 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle.py::settle_ends#no doubled tail": {
-  "code": "396d65263f79bf55",
+  "code": "b2474aa6c11ca5d3",
   "core": "a96e373d7310ce83",
   "date": "2026-10-08",
-  "note": "cutting a lane back to where it came alongside another way is a physical layout decision, not a drawing convention; should be UNRESEARCHED",
+  "note": "cutting an end back to where it came alongside a way is not covered: 0081 §22 deals only with a stub past a crossing, not a tail running beside another way",
   "pages": {},
   "research": "",
-  "rests": [
-   "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
-   "0081-village-lanes.drawing.html:65ad16eace199d92",
-   "0081-village-lanes.drawing.html:be608a70af4cfcc5"
-  ],
-  "verdict": "MISLABELED"
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/settle.py::settle_ends#no fan of stubs at a door": {
   "code": "deab2415079e41d7",
