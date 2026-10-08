@@ -531,3 +531,5 @@ pass on the sheet modals, not this feature's ranking - modals are not claims):
 - `l7r/diagram/hamletgen/ways/joints.py::_one_joint#the arriving lane with the shorter clear link becomes the t'` (UNCLAIMED, E0): the arriving lane with the shorter clear link becomes the T's stem (the page says a T but not which lane is the stem)
 
 - Found by T95a (2026-10-08), outside its rows: research/questions/0090's drawing page credits the office hall's "38 ft deep" to Hayakawa and Ochiba, but the three hand sheets draw it 28 ft deep and only the generated county example (compound.py) 38 - the page wants correcting (a record edit, its checks owed).
+- `docs/buildings.md::Walls and gates#main gate placed in the south wall the one placed example, j` (UNCLAIMED, E0): main gate placed in the south wall (the one placed example, Joge, has its gate at the east wall)
+- `docs/buildings.md::Walls and gates#internal divider walls separating courts, each with its own` (UNCLAIMED, E0): internal divider walls separating courts, each with its own gate opening (no cited question covers it)

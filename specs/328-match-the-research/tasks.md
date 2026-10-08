@@ -1188,7 +1188,9 @@ dais` claim (`docs/buildings.md`) takes the same DEVIATION as its programs row.
 
 - [x] T95a wave 34's found rows tiered by the work they take, by a fresh reader (FR-002, FR-003, SC-003)
       research: rendering
-- [ ] T95 the claims written (FR-003 E0, FR-004)
+- [x] T95 the claims written (FR-003 E0, FR-004)
       research: rendering
-- [ ] T96 the claims re-checked by `impl-drift`; the close: `make done` green, the wave column (FR-005, FR-006)
+      verify: DONE. eight claims written or relabeled in the Mode A docs and _one_joint, the stale clerk line with them; the wall bullet's salt-ward example dropped (0240)
+- [x] T96 the claims re-checked by `impl-drift`; the close: `make done` green, the wave column (FR-005, FR-006)
       research: rendering
+      verify: DONE. impl-drift IN-STEP on the wave's claims (the salt claim after its section's fix); amendment 34 FAITHFUL, plan CLEAR; make done green; no executed code changed; the wave column
