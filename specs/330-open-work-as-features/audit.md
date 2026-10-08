@@ -135,3 +135,44 @@ a later feature or a recorded ruling disposed of:
 
 **After**: `make speckit-todo` reads 39 filed (the 37 filed from future-work, 312, 325), 0 planned, 3 in progress
 (111, 121, this feature), 242 closed.
+
+
+## D. Before and after, and the spot check (T07, SC-002, SC-003)
+
+`future-work/` is deleted (its five entry files and its index); `scripts/gates/check-old-layout.py` passes with no
+live mention of it left.
+
+**`make speckit-todo`, before** (2026-10-08, ahead of this feature's settling and filing): `open: 9 filed, 2 planned, 16 in progress; closed: 220`
+
+**After**: `open: 39 filed, 0 planned, 3 in progress; closed: 242`
+
+The difference: 37 features filed from the backlog (331-367), 22 of the old open features closed with their evidence
+(section C), 4 left open (111, 121, 312, 325), and this feature itself in progress.
+
+**Spot check** (SC-002): ten open and ten closed features drawn at random (seed 330), each read against its own
+files - none misclassified. The open ten are filed (no tasks) or part-ticked; the closed ten have every task ticked
+or a `Done` status carrying its evidence. Some closed features still say `Draft` or `Implemented` on their status
+line: their ticked tasks decide, as plan D1 says.
+
+```
+filed        365-enclosed-fan-tract-floor                 0/0  **Status**: Filed - from future-work/towns.md, "OWED AT CONVERSION: the enclosed-fan tract floor (GM deci
+in progress  330-open-work-as-features                    6/8  **Status**: Accepted - spec-fidelity FAITHFUL, round 2 (2026-10-08)
+filed        325-gm-rulings-from-319                      0/0  (no spec)
+filed        351-village-generator-draws-no-shrine-grove  0/0  **Status**: Filed - from future-work/farming-communities.md, "OPEN 2026-09-27, OWED AT CONVERSION: the vi
+filed        361-notes-census-count-storehouse-annexes    0/0  **Status**: Filed - from future-work/farming-communities.md, "OPEN 2026-09-30 (feature 293, settlement-re
+in progress  121-placer-drawn-footprint                   23/33  **Status**: Draft
+filed        347-measure-feature274-write-cap-line-reads  0/0  **Status**: Filed - from future-work/cross-cutting.md, "MEASURE feature 274's write cap and line reads on
+filed        358-found-feature280-settlement-reviews-meas 0/0  **Status**: Filed - from future-work/farming-communities.md, "Found by feature 280's settlement-reviews (
+filed        363-kiln-glyph-defects                       0/0  **Status**: Filed - from future-work/towns.md, "OWED AT CONVERSION: two `s.kiln` glyph defects (settlemen
+filed        341-door-glyphs-drawn-as-slabs-outside       0/0  **Status**: Filed - from future-work/compounds.md, "Research owed (rewritten by feature 267, 2026-09-27)"
+closed       116-shrines-wells-package                    33/33  **Status**: Implemented 2026-08-16. Final per-file line counts: `wells.py` 294, `shrines.py` 251,
+closed       118-rolling-package                          39/41  **Status**: Done (2026-08-17): 7ad4e23c5 and 0bcf81548; only the gate and stop-work were left unticked (f
+closed       027-init-star-imports                        9/9  **Status**: Implemented (2026-08-16)
+closed       329-unskill-the-repo                         9/9  **Status**: Accepted - spec-fidelity FAITHFUL, round 2 (2026-10-07)
+closed       292-research-presentation-style              42/42  (none)
+closed       195-cite-only-what-can-be-read               7/7  (none)
+closed       149-coverage-floor-flakiness                 9/9  **Status**: APPROVED - `spec-fidelity` round 2 returned FAITHFUL. (This line read APPROVED once before th
+closed       225-fold-cull-and-clip                       5/5  **Status**: IMPLEMENTED 2026-09-11 (the picture's tiles 0.7-1.3 s -> 0.5-0.7; Inashiro's clips 30 -> 1 an
+closed       304-homesteads-at-scale                      20/20  **Status**: Draft
+closed       214-pack-the-roster                          7/7  **Status**: IMPLEMENTED 2026-09-08 - `spec-fidelity` round 1 required three changes, all applied (FR-007 
+```

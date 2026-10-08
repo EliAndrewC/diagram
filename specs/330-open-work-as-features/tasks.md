@@ -26,7 +26,8 @@
 - [x] T06 the rules: the root `CLAUDE.md` and every doc that told a session to add to `future-work/` now say to file a feature and to ask `make speckit-todo` (D7, FR-008)
       research: rendering
       verify: DONE. root CLAUDE.md: open work lives in specs/, defer by filing a feature (make claim + Status: Filed), ask make speckit-todo, the closing rule; l7r/diagram/CLAUDE.md and dev/lessons.md re-aimed in T05; no rule, doc or agent contract names the directory as a place for work (grep over CLAUDE.md, docs/, constitution, agents, dev/, scripts/: only dated historical notes in the constitution)
-- [ ] T07 `future-work/` deleted; `make speckit-todo` run before and after, both outputs and the spot check of ten listed and ten unlisted features recorded in `audit.md` (FR-007, SC-002, SC-003)
+- [x] T07 `future-work/` deleted; `make speckit-todo` run before and after, both outputs and the spot check of ten listed and ten unlisted features recorded in `audit.md` (FR-007, SC-002, SC-003)
       research: rendering
+      verify: DONE. future-work/ deleted; check-old-layout clean; speckit-todo before 9 filed / 2 planned / 16 in progress / 220 closed, after 39 / 0 / 3 / 242; spot check of 10 open and 10 closed (seed 330) none misclassified - audit.md D
 - [ ] T08 `make done` green, then the stop-work procedure (VI, XIII)
       research: rendering
