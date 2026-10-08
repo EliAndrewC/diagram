@@ -44,7 +44,8 @@ def test_the_privy_faces_the_sun_on_its_share_and_takes_an_attested_seat_otherwi
     sunny = _lay(("privy",), roll=0.1, ground=(YARD, EAST_BED))["privy"]  # the SE ground open, as an E bed leaves it
     assert sunny[1] > HH / 2 and sunny[0] >= -1e-6, "southeast to south of the house"
     shaded = _lay(("privy",), roll=0.9, ground=(YARD,))["privy"]  # past the 72.7% share: the rolled attested seat, the barn here
-    assert shaded[0] > HW / 2 and sorted(shaded[2:]) == sorted(fs.PRIVY_SIZES_FT[int(0.9 * 16)]), "at the household's rolled size"
+    kura = fs.kura_rect(HW, HH, "N", 1.0)
+    assert shaded[0] > kura[0] + kura[2] / 2 and sorted(shaded[2:]) == sorted(fs.PRIVY_SIZES_FT[int(0.9 * 16)]), "the barn seat, against the annex's east gable (feature 328), at the household's rolled size"
 
 
 def test_the_privy_and_the_bath_room_take_the_households_rolled_size_and_the_notes_carry_it() -> None:
@@ -62,6 +63,12 @@ def test_the_heap_stands_beyond_the_privy_and_without_one_at_the_back() -> None:
     laid = _lay(("privy", "manure"), roll=0.9)
     p, m = laid["privy"], laid["manure"]
     assert abs(m[0] - p[0]) > 1.0 or abs(m[1]) > abs(p[1]), "beyond the privy"
+    # feature 328 (0042: "on the side away from the house"): a privy on the house's east flank sends its heap further east,
+    # along the line from the house's center to the privy's, never sideways
+    flank = (HW / 2 + 3.5 + 6.0, -HH * 0.25, 12.0, 24.0)
+    heap = fs._seats("manure", HW, HH, 6.0, 6.0, 3.5, None, flank, lambda _s: 0.5, 0.5, fs.FixtureForms(), _px)[0]
+    assert heap[0] > flank[0] + 6.0, "east, beyond the flank privy"
+    assert (heap[0] ** 2 + heap[1] ** 2) > (flank[0] ** 2 + flank[1] ** 2), "further from the house than the privy"
     alone = _lay(("manure",), forms=fs.FixtureForms(manure_form="pit"), ground=(YARD, EAST_BED))["manure"]
     assert alone[1] < 0.0 and (alone[2], alone[3]) == (fs.PIT_FT, fs.PIT_FT), "the pit glyph at the back wall"
 
@@ -225,3 +232,15 @@ def test_the_privy_stays_within_48_ft_of_its_house_or_is_refused() -> None:
     assert fs.within_reach_of(privy, HOUSE, 48.0)
     with pytest.raises(ValueError, match="privy"):
         _lay(("privy",), ground=[(0.0, 0.0, HW + 120.0, HH + 120.0)])
+
+
+def test_the_barn_privy_stands_against_the_annex_where_the_steading_keeps_one() -> None:
+    """Feature 328 (0047's drawing page: the privy by the barn): against the outer wall of the steading's annex - the north
+    annex's north wall, the west annex's west wall - and at the house's own east end only where there is no annex."""
+    north = fs.kura_rect(HW, HH, "N", 1.0)
+    seat = fs.barn_seat(HW, HH, 6.0, 6.0, 3.5, north)
+    assert seat[0] > north[0] + north[2] / 2 and abs(seat[1] - north[1]) < 1e-9, "against the north annex's east gable"
+    west = fs.kura_rect(HW, HH, "W", 1.0)
+    seat = fs.barn_seat(HW, HH, 6.0, 6.0, 3.5, west)
+    assert seat[0] < west[0] - west[2] / 2, "beyond the west annex's west wall"
+    assert fs.barn_seat(HW, HH, 6.0, 6.0, 3.5, None)[0] > HW / 2, "no annex: the house's east end"

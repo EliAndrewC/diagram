@@ -5,6 +5,9 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 
 ## Occasions
 
+- placement-changed: privy on sawada - wave 52: the barn seat against the steading annex (a north annex's east gable, a west annex's west wall; 0047), the heap stepped away from the house along the privy's bearing; batch 3's close
+- placement-changed: manure heap on inashiro - wave 52: the same seat, the heap form; batch 3's close
+- placement-changed: manure pit on sawada - wave 52: the heap beyond the privy along the line from the house's center (0042, "on the side away from the house"); batch 3's close
 - none: wave 1 changes `Research:` claim lines only (tier E0) - nothing a map draws or where it is placed moves.
 - (wave 4, landed and reviewed) placement-changed village lane - wave 4 brought the lane law to 0081 and 0246 (7 ft clear of a fence, ends joined
   within 25 ft, tails and hooks cut at 40 and 12 ft): the lanes are re-placed by substantially different rules.

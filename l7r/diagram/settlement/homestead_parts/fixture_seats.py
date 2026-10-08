@@ -362,7 +362,7 @@ def lay_fixtures(
             if notes is not None:
                 notes["bath_seat"] = got[1]
         else:
-            seats = _seats(kind, hw, hh, w, d, g, yard, laid.get("privy"), roll, u, forms, px)
+            seats = _seats(kind, hw, hh, w, d, g, yard, laid.get("privy"), roll, u, forms, px, steading_rects(hw, hh, "N" if kura else None, px(1.0))[1] if kura else None)
             offered = chain(seats, outward(seats, px(STEP_FT), OUT_STEPS))
             if kind == "privy":  # its own farmstead's: no further than 48 ft from its house (0047), never stepped past it
                 offered = (q for q in offered if within_reach_of(q, roofs[0], px(PRIVY_SUN_MAX_FT)))
@@ -514,15 +514,30 @@ def _sun_sector(w: float, d: float, radii: tuple[float, ...]) -> tuple[Rect, ...
     return tuple(sun)
 
 
+def barn_seat(hw: float, hh: float, w: float, d: float, g: float, annex: Rect | None) -> Rect:
+    """The privy's barn seat: against an outer wall of the steading's annex where it keeps one (feature 328, 0047's drawing
+    page - beside the outbuilding, not the house's own end): a north annex's east gable, beside the house's corner (its north
+    wall was tried first and refused a 20-household roll's web, cohort seed 7), a west annex's west wall; the house's +x end
+    where it keeps none.
+
+    Research: the privy by the barn - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: inside or against the barn, the outbuilding"""
+    if annex is None:
+        return (hw / 2 + g + d / 2, -hh * 0.25, d, w)
+    ax, ay, aw, ah = annex
+    if ay < -hh / 2:  # a north annex (its center past the back wall it laps): its east gable, beside the house's corner
+        return (ax + aw / 2 + g + d / 2, ay, d, w)
+    return (ax - aw / 2 - g - d / 2, ay, d, w)  # a west annex: its west wall
+
+
 def _seats(
     kind: str, hw: float, hh: float, w: float, d: float, g: float, yard: Rect | None, privy: Rect | None, roll: Callable[[float], float], u: float, forms: FixtureForms, px: Callable[[float], float]
-) -> list[Rect]:
+, annex: Rect | None = None) -> list[Rect]:
     """The recorded seats of one fixture kind in the house frame, first choice first (the late placer's tables).
 
     Research:
         privy seats - research/questions/0047-farm-privies-and-their-night-soil-benjo.drawing.html: the sun-side sector on
             72.7%, else the four attested places
-        manure beyond the privy - research/questions/0042-manure-heaps-and-compost-kyuhi.drawing.html: jittered a few feet;
+        manure beyond the privy - research/questions/0042-manure-heaps-and-compost-kyuhi.drawing.html: on the side of the privy away from the house, along the line from its center; jittered a few feet;
             behind or beside the house where there is no privy
         manure heap fallback spots - GUESS research/questions/0042-manure-heaps-and-compost-kyuhi.drawing.html: beside the privy at 1.1 and 1.9
             of its width, then 10 ft further out; with no privy, at 0.3 of the house's width and depth
@@ -539,7 +554,7 @@ def _seats(
             "yard": (hw * 0.3, -(hh / 2 + g + px(PRIVY_YARD_STEP_FT) + d / 2), w, d),
             "front": (hw * 0.40, hh / 2 + g + px(PRIVY_FRONT_STEP_FT) + d / 2, w, d),
             "stable": (-hw * 0.35, hh / 2 + g + d / 2, w, d),
-            "barn": (hw / 2 + g + d / 2, -hh * 0.25, d, w),
+            "barn": barn_seat(hw, hh, w, d, g, annex),
         }
         first = weighted(forms.privy_weights, u)
         attested = [seat[first]] + [seat[k] for k, _ in forms.privy_weights if k != first]
@@ -555,19 +570,18 @@ def _seats(
         if privy is None:
             return [(hw * 0.3, -(hh / 2 + g + d / 2), w, d), (hw / 2 + g + d / 2, hh * 0.3, d, w)]
         plx, ply = privy[0], privy[1]
-        out_ = -1.0 if ply < 0 else 1.0
-        # BEYOND THE PRIVY (feature 152 T16/T17), at a distance jittered off the household's own roll
-        pout = privy[3] / 2 + g + d / 2 + px(9.0) * (roll(102.4) - 0.5)
-        return [
-            (plx, ply + out_ * pout, w, d),
-            (plx + w * 1.1, ply, w, d),
-            (plx - w * 1.1, ply, w, d),
-            (plx + w * 1.1, ply + out_ * pout, w, d),
-            (plx - w * 1.1, ply + out_ * pout, w, d),
-            (plx, ply + out_ * (pout + px(10.0)), w, d),
-            (plx + w * 1.9, ply, w, d),
-            (plx - w * 1.9, ply, w, d),
-        ]
+        # BEYOND THE PRIVY (feature 152 T16/T17) means AWAY FROM THE HOUSE along the line from its center to the privy's
+        # (feature 328; 0042: "on the side away from the house") - a sign on y alone stepped a flank privy's heap sideways
+        n = math.hypot(plx, ply)
+        ux, uy = (plx / n, ply / n) if n > 1e-9 else (0.0, 1.0)
+        sx, sy = -uy, ux  # across that line
+        # at a distance jittered off the household's own roll: the privy's and the heap's half-extents along the line, the gap
+        pout = abs(ux) * privy[2] / 2 + abs(uy) * privy[3] / 2 + g + abs(ux) * w / 2 + abs(uy) * d / 2 + px(9.0) * (roll(102.4) - 0.5)
+
+        def at(along: float, across: float) -> Rect:
+            return (plx + ux * along + sx * across, ply + uy * along + sy * across, w, d)
+
+        return [at(pout, 0.0), at(0.0, w * 1.1), at(0.0, -w * 1.1), at(pout, w * 1.1), at(pout, -w * 1.1), at(pout + px(10.0), 0.0), at(0.0, w * 1.9), at(0.0, -w * 1.9)]
     if kind == "retirement":  # OFF THE BACK WALL OR A FLANK, a ken out and then two (269 B42), the side rolled per homestead
         sides = [(0.0, -1.0), (1.0, 0.0), (-1.0, 0.0)]
         k = int(u * 3) % 3

@@ -89,7 +89,10 @@ def roll_one(spec: tuple[int, int] | tuple[int, int, dict[str, str]]) -> tuple[s
     parallelism can only change the wall clock, never a verdict."""
     seed, households = spec[0], spec[1]
     pins: dict[str, str] = dict(spec[2]) if len(spec) > 2 else {}  # type: ignore[misc]
-    hspec = hg.HamletSpec(name=f"Audit-{seed:02d}", seed=seed, households=households, **({"settlement_form": "linear", **pins} if pins else {}))  # type: ignore[arg-type]  # a pin's own form wins
+    from l7r.diagram.hamletgen.plan import beyond_the_band
+
+    with beyond_the_band():  # a HOUSEHOLDS= cohort asks the scaling sizes past the hamlet band, as the perf snapshot does (feature 328)
+        hspec = hg.HamletSpec(name=f"Audit-{seed:02d}", seed=seed, households=households, **({"settlement_form": "linear", **pins} if pins else {}))  # type: ignore[arg-type]  # a pin's own form wins
     # THROUGH `generate`, NOT `build` - the audit must measure the path that SHIPS. It called `build`
     # directly, which skips everything `generate` does around the stages: it finishes into a scratch
     # directory, gates in-process, and re-rolls a map whose finished manifest strands a farmhouse. So

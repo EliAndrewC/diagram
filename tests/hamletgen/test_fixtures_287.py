@@ -42,6 +42,7 @@ def test_a_seated_hamlet_draws_every_fixture_its_lots_keep_and_records_none_shor
     assert laid and all(h.get("fixtures") for h in houses), "every household keeps some"
     drawn = fx.farmstead_fixtures(s, plan, houses, early=True)
     pending = len(s._fixtures_pending)
+    laid = Counter(f["kind"] for h in houses for f in h.get("fixtures") or ())  # a tree short of the roll re-seated (`reseat_persimmons`) counts
     assert drawn + pending == sum(v for k, v in laid.items() if k != "retirement")
     target = s.M["meta"]["farm_fixtures_target"]
     assert {k: v for k, v in target.items() if v} == {k: v for k, v in laid.items() if k != "retirement"}, "the declared counts are the laid ones"
