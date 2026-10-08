@@ -450,7 +450,7 @@ moved. And then it caught two engine defects this feature was leaning on:
   with its completeness guard still describe it as operative. That matters HERE because this feature
   pulls captions in off the empty margins, leaning on a defense that had quietly become the only one.
   The comment is corrected; the restore-or-retire decision is written up in
-  `future-work/cross-cutting.md` because it reverses or ratifies a GM cut.
+  the backlog (since closed) because it reverses or ratifies a GM cut.
 - **The fabric probe was hand-listed and had fallen behind the map.** Nine families, missing
   `farm_fixtures` - the engine's own *"every ROOFED structure"* - and the sties, pens and boundary
   markers. Measured across the five scripted hamlets, the caption's clearance to the nearest built
@@ -730,7 +730,7 @@ but every one of the 11 drawn baths is `unjoined` (`bath_seats_drawn`). The comm
 
 **Homestead wood below the record's floor**: `meta.homestead_wood_ft2` reads `{"rolled": 13030, "drawn": 6441}` on
 this manifest - 441 sq ft ABOVE the research record's 6,000 sq ft floor (research/contents.json#vegetation 210), not under it.
-future-work/farming-communities.md's OPEN 2026-09-28 (269 B26, PARTIAL) entry still names this map at "10,891 / 5,619
+The backlog's OPEN 2026-09-28 (269 B26, PARTIAL) entry (since closed) still names this map at "10,891 / 5,619
 (under the 6,000 floor)", the figure from the 269-landing commit before today's review round re-rolled the pool; that
 entry's Kuwabata figure is now stale and wants a re-measurement there. The entry's title still names three maps
 short of their rolled area, so it stays open regardless - this note only corrects Kuwabata's own number.
@@ -745,7 +745,7 @@ inks no threshing floor.
 
 ## 2026-09-28 (feature 269 landing, review rounds 1-4): the findings left open
 
-The landing's settlement-reviews left three defects visible on this map, each recorded with its measurement and sketch in `future-work/farming-communities.md` and accepted in the review dispositions: lane 2 runs east to (2054, 40) and turns 15 ft north to the connector's start, and the connector runs back west beside it for about 126 ft (`fold_the_connector_hairpin` would meet them as a T, but `may_write` refuses the move here); the north row's east house at (2148, 63) is reached only past its neighbor's yard, 96 ft from the nearest lane, inside the 100 ft reach; and 7 of the 15 eaves woodpiles stand 10.5-22.9 ft off any wall. The typed windbreak counts in the entries above describe their own rolls; the census block is the drawn count.
+The landing's settlement-reviews left three defects visible on this map, each recorded with its measurement and sketch in the backlog (since closed) and accepted in the review dispositions: lane 2 runs east to (2054, 40) and turns 15 ft north to the connector's start, and the connector runs back west beside it for about 126 ft (`fold_the_connector_hairpin` would meet them as a T, but `may_write` refuses the move here); the north row's east house at (2148, 63) is reached only past its neighbor's yard, 96 ft from the nearest lane, inside the 100 ft reach; and 7 of the 15 eaves woodpiles stand 10.5-22.9 ft off any wall. The typed windbreak counts in the entries above describe their own rolls; the census block is the drawn count.
 
 ## 2026-09-29 (feature 280): the modern-only forms taken off the map - the layout moved
 
@@ -784,7 +784,7 @@ And on the pond block:
   The sty's keep-clear of the sluice (feature 233) went with it.
 - **The mosaic only** (M56, archetypes/130: a uniform chessboard of ponds is today's aerial view); this map was the mosaic already.
 - **Each pond's water drawn 23 ft inside its parcel on the average** (the parcel's outline shrunk toward its center, so the bank is
-  thinner along a long pond's sides and wider at its ends - a true inward offset is owed, future-work), so about six parts in ten of a parcel are water (M58, archetypes/610: the oldest
+  thinner along a long pond's sides and wider at its ends - a true inward offset is owed, the backlog, since closed), so about six parts in ten of a parcel are water (M58, archetypes/610: the oldest
   figures, Qu Dajun's for Jiujiang in 1678; every numeric ratio is modern) - measured 0.62 over 29 ponds, against 0.80 before.
 - **The fry form rolled `fry_village`** (M60, archetypes/200): a fry village of the Jiujiang kind, its smallest ponds nursery water up to
   seven tenths of the pond area - 22 fry ponds, 0.63 of the water. The one parcel in ten drawn before is on no page read.

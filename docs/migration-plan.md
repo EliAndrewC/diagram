@@ -145,7 +145,7 @@ a scripted map, but the tree says it first.
 
 **The exemplars carry forms the GM's rule of 2026-09-28 eliminates** (anything attested only in modern times; feature
 280). They are not redrawn: a converted tier must NOT copy them. The forms owed, by map, are in
-`future-work/farming-communities.md` (the frozen hamlets and villages), `future-work/towns.md` and `future-work/cities.md`,
+the features filed for them (the frozen hamlets and villages, the towns, the cities - `make speckit-todo` lists them),
 each headed "feature 280"; read the one for the tier before drawing its first scripted map.
 
 **What a tier's generator must carry as PLACEMENT RULES, because no review judges it any more** (feature 294, GM
@@ -275,7 +275,7 @@ Ordered by value per unit of effort, not by tier.
 5. **Village tier** - the first new generator. Biggest single step in the project: it must learn the
    institutions (headman, shrine, tax-free plots) and multi-field composition, and the village's funerary
    grounds - its cremation ground and its own burial ground (the GM's ruling of 2026-09-27; the owed list is
-   `future-work/farming-communities.md`, "OWED AT CONVERSION: a village's funerary grounds"), and the shrine's
+   `specs/350-village-funerary-grounds-headman-gate/`), and the shrine's
    wood in the form of the country-shrine program's knob 8, `grove form` - behind, behind and sides, sides or
    all around, by the hall's ground, rolled among the forms that fit, its edge never ruled (feature 279; the owed entry
    "the village generator draws no shrine grove, sacred tree or basin"). The scripted village MUST gate the
@@ -283,12 +283,12 @@ Ordered by value per unit of effort, not by tier.
    scripting our village generation ... we should absolutely make sure that the village headsman's house is gated";
    research/questions/0030-the-headmans-house-and-the-rich-farmers-homestead-shoya-gono.html and 520; `specs/269-research-backfill/rulings-2026-09-28.md`). The hand-drawn village maps
    are not changed for it. The rest of what 269 left owed here (the headman's kura or a village gogura, the house's
-   size, the cluster's spacing, the dosojin at the entrance) is in the same future-work entry. The architectural
+   size, the cluster's spacing, the dosojin at the entrance) is in the same feature (350). The architectural
    question this step used to be expected to surface - whether `hamletgen/` generalizes or whether
    tiers share a stage library - is **ANSWERED**, see below.
 6. **Town, then provincial city.**
 7. **Capital** - last, scripted like every other tier (the GM, 2026-10-07: Shiro Daika's hand pass is
-   dropped; `legacy-hand-authored-pool/capitals/shiro-daika` stays as an exhibit, in the legacy pool since 2026-10-08). Its design inputs are `future-work/cross-cutting.md`,
+   dropped; `legacy-hand-authored-pool/capitals/shiro-daika` stays as an exhibit, in the legacy pool since 2026-10-08). Its design inputs are `specs/344-fabric-first-generation-research-direction/`,
    "Fabric-first generation".
 
 ### The architecture question, ANSWERED (GM 2026-08-17, feature 119)

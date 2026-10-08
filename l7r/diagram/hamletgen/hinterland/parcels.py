@@ -31,7 +31,7 @@ CROP_MARGIN = 48.0  # the one crop margin, shared by stage_frame's crop_to_conte
 # `_crop_boxes` calls of a build AND equal to the final `meta.view`, because everything that sets the
 # frame is placed before the woodland scan runs. The neighboring square test's 0.8 exists for drift
 # that measurement says does not happen; carrying 0.8 over to the rotated bbox cost seed 33 its
-# woodland outright. See future-work/, "the woodland scan vetted a SQUARE".
+# woodland outright. The backlog entry "the woodland scan vetted a SQUARE" (closed 2026-08-19) has it.
 WOODLAND_BBOX_FLOOR = 0.72
 """Research: woods on the page - CONVENTION: 72% of a parcel's box inside the predicted view"""
 

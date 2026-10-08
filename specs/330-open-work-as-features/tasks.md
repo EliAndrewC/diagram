@@ -20,8 +20,9 @@
 - [x] T04 file every `future-work/` entry: one claimed number per entry or named piece, a `spec.md` with the entry verbatim and its source, status Filed; an entry found done or disposed of by a cited ruling or later feature closed in `audit.md` instead (D5, FR-006, SC-003)
       research: rendering
       verify: DONE. 37 entries checked (37 FILE, 0 DONE, 0 DISPOSED, audit.md B); 37 features filed, 331-367, each with the entry verbatim and its source; the 275 entry under its own number (350) naming 275 as history; filed.json maps entry -> feature
-- [ ] T05 re-aim every live pointer into `future-work/` at the feature its entry became, or drop it where the entry was closed (FR-007); `check-old-layout.py` refuses a new live mention, with its selftest (D6, FR-007, SC-004)
+- [x] T05 re-aim every live pointer into `future-work/` at the feature its entry became, or drop it where the entry was closed (FR-007); `check-old-layout.py` refuses a new live mention, with its selftest (D6, FR-007, SC-004)
       research: rendering
+      verify: DONE. repoint.py: 78 live pointers re-aimed (live entries name their feature: 342, 344, 350, 351, 354, 356, 357, 358, 365, 332; entries closed before this feature say so, git history); the exhibit's manifest and frame text, two test fixtures by hand; no live mention left outside the directory itself; check-old-layout.py refuses a new one, its selftest case red without the rule
 - [ ] T06 the rules: the root `CLAUDE.md` and every doc that told a session to add to `future-work/` now say to file a feature and to ask `make speckit-todo` (D7, FR-008)
       research: rendering
 - [ ] T07 `future-work/` deleted; `make speckit-todo` run before and after, both outputs and the spot check of ten listed and ten unlisted features recorded in `audit.md` (FR-007, SC-002, SC-003)

@@ -248,7 +248,7 @@ def straighten_joints(s: Settlement, hard: list[Poly], walls: Sequence[Poly], wa
     # A FIX THAT FAILED (feature 280, Kashikawa's skeleton lanes 8 and 10, bends 140 and 232 ft out in the grazing): pulling a
     # stray bend in along the line to its neighbors' midpoint. Measured on both lanes, every step of ten was refused - the
     # chord side crosses the farmhouse and its yard, so the clear bend is round the yard's far corner, not on that line. The
-    # fix is a re-route (future-work/farming-communities.md, "Found by feature 280's settlement-reviews").
+    # fix is a re-route (`specs/358-found-feature280-settlement-reviews-measured-fixed/`).
     lanes: list[dict[str, Any]] = s.M.get("lanes") or []
     houses = [(float(h["x"]), float(h["y"])) for h in s.M.get("houses", [])]
     changed = 0

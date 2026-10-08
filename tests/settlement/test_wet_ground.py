@@ -256,7 +256,7 @@ def _toe_over_a_house_and_a_field() -> Settlement:
 
 def test_the_marsh_records_the_ground_its_reeds_are_drawn_on() -> None:
     """Woods W08 / plan M7: the toe laid over a house block, a paddy corner and a swept clearing records a ring that holds
-    none of them - the scatter refused them all along, and the record kept the whole outline (the future-work entry's
+    none of them - the scatter refused them all along, and the record kept the whole outline (the backlog entry's
     Sawada belt lost 68 of 179 crowns to it) - and the reed tile's shape (feature 298) lies inside the recorded ring."""
     from l7r.diagram.settlement._geom import point_in_poly
 

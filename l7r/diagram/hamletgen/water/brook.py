@@ -175,7 +175,7 @@ def brook_skirt(plan: SitePlan, sluice: Pt, side: int, crop: Sequence[Poly] = ()
         # halves the ruled run to 1,116 px and costs the clearance the skirt exists to keep: Mizuguchi's brook came within
         # 6.2 px of a dry plot beyond the fan's head, against the 34 px skirt, because straying outward can approach crop
         # that lies outside the fan. What would loosen it honestly is a course that does not follow the field's margin at a
-        # fixed offset at all - `future-work/farming-communities.md`.
+        # fixed offset at all - the backlog (an entry since closed; git history).
         # ...and a THIRD measurement, from the other side (pass 12, which read Sawada's middle reach as "a ruled
         # horizontal line carrying a 3-px square-wave jitter", and noticed that the DUG drain wanders more than the
         # natural brook - the one cue that separates dug from natural, inverted). Widening the walk the other way -
@@ -691,7 +691,7 @@ def draw_intake(s: Settlement, plan: SitePlan, sluice: Pt) -> None:
     _race = next((c for c in (plan.net or {}).get("channels") or [] if c.get("role") == "main"), None) or next(iter((plan.net or {}).get("channels") or []), None)
     _race_w = float(_race.get("w", 6.0)) if _race else 6.0
     _mouth = _race_w / max(math.sin(math.radians(OFFTAKE_DEG)), 0.2)
-    # ...AND ITS ROOT KEYS INTO THE BANK CLEAR OF THE RACE (feature 287, water:W09; future-work "The weir's root lands on the
+    # ...AND ITS ROOT KEYS INTO THE BANK CLEAR OF THE RACE (feature 287, water:W09; `specs/357-owed-conversion-knob-candidates/` "The weir's root lands on the
     # head race's mouth"): set below the mouth by the opening alone, the bar's intake-bank end - which the skew carries
     # further downstream and out past the bank - still lay on the race, 17% of the bar on all three weir maps, reading as a
     # gate across the ditch. The bar steps down the brook, a foot at a time, from that first seat to the first where none of

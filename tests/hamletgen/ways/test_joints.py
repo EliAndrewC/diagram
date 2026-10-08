@@ -178,7 +178,7 @@ def test_a_lane_and_the_connector_doubling_back_over_a_short_leg_meet_as_a_t() -
 
 def test_a_connector_fold_that_would_crowd_the_fabric_is_refused() -> None:
     """`fold_the_connector_hairpin` asks `may_write`: a moved connector nearer a homestead than the old one is not written
-    (Kuwabata at the 269 landing, recorded in future-work)."""
+    (Kuwabata at the 269 landing, recorded in the backlog, since closed)."""
     from l7r.diagram.hamletgen.ways.joints import fold_the_connector_hairpin
 
     from ._builders import _StubSettlement

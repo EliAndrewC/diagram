@@ -51,7 +51,7 @@ beyond the frame.
   (measured from the manifest), and `settlement_dwellings_watered` counts surface water within
   ~760 ft as watering, so a well there would be redundant infrastructure beside a living stream.
   The minimax well objective still counts those houses (a known, harmless inefficiency - logged
-  in future-work/); their real water is the stream, the period-correct arrangement.
+  in the backlog, since closed); their real water is the stream, the period-correct arrangement.
 
 
 - 2026-08-16 (known-opens round - floor trim, woodland re-seat, seeding trace; this map
@@ -332,7 +332,7 @@ outside the settlement". The GM's call was to take that fix as its OWN piece of 
 the floor on top, which is why `e0fb2417` precedes this entry in history. With both in, seeds 1-48
 are back to **45/48 with residue identical to baseline** - seed 41 passes and nothing else moved.
 Cohort seed 62 still fails the same check and always did: its northern lobe has no interior seat in
-its minimax bucket at all, so a tie-break cannot reach it (ledgered in `future-work/`).
+its minimax bucket at all, so a tie-break cannot reach it (ledgered in the backlog, since closed).
 
 ### 2026-08-18 - the windbreak frame fix, corrected: CLIPPING IS THE DOCTRINE
 
@@ -451,7 +451,7 @@ settlement-review, NEEDS-WORK: two errors, both in ground the re-roll moved, bot
 **The field grave (2092, 1645) - FIXED.** The mound was painted at 0.9 opacity over an intact lattice, so
 three plot rings and nine bund junctions ghosted through and it read as a translucent decal. It is opaque
 now. The registry's claim that the paddy tiles AROUND it is still geometrically false - carving the plots
-is a field-engine change, deferred with its measurement in `future-work/farming-communities.md`.
+is a field-engine change, deferred with its measurement in the backlog (since closed).
 
 **The board's caption over a byre (2003, 2838) - ACCEPTED, with what it costs and the alternatives.** The
 "notice board" caption clips the byre's roof by 15.4 x 4.8 ft [SEE THE CORRECTION BELOW - no byre stands there]. Three things are true and worth separating:

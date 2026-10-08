@@ -833,7 +833,7 @@ def tapers_to_a_point(poly: Poly, end: float, min_deg: float, arm: float) -> boo
 # since `_seam_cuts` and `_unjog` landed. A single step was left to `tools/jogs.py` (retired 2026-09-06, feature 193), which ran this
 # predicate at the thresholds above - stricter than the gate's on all three, so it reports 16 across
 # the four maps where the gate reports 7 - each refused by a guard
-# protecting another rule (see `_unjog`), and `future-work/` carries them.
+# protecting another rule (see `_unjog`), and the backlog carried them (since closed; git history).
 _JOG_OFF_FT = 2.0
 """Research: step offset - research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a sideways hop of 2 ft or more"""
 _JOG_RUN_FT = 6.0

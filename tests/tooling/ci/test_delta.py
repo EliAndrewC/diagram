@@ -30,7 +30,7 @@ NOT_ENGINE = [
     S + "dev/bypass-log/20260825T000000000000-1.json",
     S + "dev/perf-log/20260825T000000Z-130-start-x.json",
     S + "dev/loop.md",
-    S + "future-work/something.md",
+    S + "docs/something.md",
     S + "research/contents.json#water",
     S + "buildings/manor.md",
     S + "research/farms.md",
