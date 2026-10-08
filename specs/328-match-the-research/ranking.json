@@ -11609,6 +11609,21 @@
   "scope": "kept"
  },
  {
+  "key": "l7r/diagram/hamletgen/ways/smooth.py::_smooth_web#a zigzag across a joint at a door",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "0081 (no two 50-degree turns inside 40 ft, the joint read as one way): Sawada's lane 3 (a household's way) runs east to (4122.4, 2042.1) and turns back 27 ft to lane 1's door, lane 1 leaving north-east - a Z across the joint since wave 52 re-seated the privies and heaps (bisected: 013b667d5 passes, e4c99b277 fails). Fix: the smoothing's string-pull asked across a joint (the way's last leg dropped where the chord to the door is lawful), or the way re-laid at seating to arrive along the door lane's line; then Sawada comes off _ZIGZAGS_WAITING",
+  "files": [
+   "l7r/diagram/hamletgen/ways/smooth.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 54, the pool tests (a regression of wave 52)",
+  "tier_as_ranked": "E3",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": "l7r/diagram/hamletgen/ways/track.py::SPUR_REACH_FT#spur reaches the field",
   "tier": "E3",
   "fix": "the field spur runs on to the paddy's outer bund (0014); SPUR_REACH_FT 60 slack removed; ripples into spur routing and field overlap",

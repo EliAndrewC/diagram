@@ -1,6 +1,6 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "17806aa27fc7aeecab4c828bf9bbbb3a86e916d02902ddb46302edbfb8bd63f9",
+ "plan_sha256": "a02ed1a7da793a22c890241cfd8667c84e4357d9a38d0f683e3ec3a14cf37c2c",
  "reviewed": "2026-10-08",
  "declared": "spec-fidelity",
  "decisions": [
@@ -389,7 +389,7 @@
    "summary": "test_a_windbreak_draws_about_half_its_crowns_conifer held at 0.035 so the drawn 0.508 passes, BEHIND the E2 found row `GrovesMixin._draw_grove#windbreak conifer share as drawn` (found-wave53.jsonl, ranking row 138, kept) that brings the drawn share back to 0.48 and the tolerance back to 0.02; the test comment names the row",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "Round 2: round 1 offered fix (b) and the commit does it. The departure from 0072 is no longer unfiled: it is a ranked DRIFTED row with a concrete fix (roll each kind against the drawn tally) and its own restoration of the 0.02 tolerance, and the widened assertion points at it. That is the feature's own route for a measured departure (a held value becomes a found row, ranked by work), so the request's purpose is kept rather than gutted. The stale 47.9% docstring figure is replaced by the measured 0.508 and the found row; the plan's Measured line states the widening and cites m:wave53-grove-density."
+   "why": "Round 2: round 1 offered fix (b) and the commit does it. The departure from 0072 is no longer unfiled: it is a ranked DRIFTED row with a concrete fix (roll each kind against the drawn tally) and its own restoration of the 0.02 tolerance, and the widened assertion points at it. That is the feature's own route for a measured departure (a held value becomes a found row, ranked by work), so the request's purpose is kept rather than gutted. The stale 47.9% docstring figure is replaced by the measured 0.508 and the found row; the plan's Measured line states the widening and cites m:wave53-grove-density. Wave 54: the widening is closed - the drawn share brought to 0.48 and the tolerance back to 0.01 (W54-2)."
   },
   {
    "id": "W53-4 two farmsteads claims relabeled NONE",
@@ -420,6 +420,30 @@
    "summary": "glyph-redrawn homestead grove on Mizuguchi and windbreak on Inashiro at batch 3's close",
    "class": "within",
    "why": "Review occasions for a redrawn glyph; narrows nothing."
+  },
+  {
+   "id": "W54-1 windbreak kind rolled at seating against the clump's drawn deficit",
+   "summary": "p(conifer) = clamp(0.48 + 0.48*drawn - drawn conifers) per seated crown, so the DRAWN share is 0072's 48% through the asymmetric cull (row 138)",
+   "class": "within",
+   "why": "Carries row 138's own recorded fix (found W53-3) to make the drawn map match 0072's 48% cedar - exactly what the request asks (implementation matches the referenced research). Claim line updated to say so; nothing narrowed."
+  },
+  {
+   "id": "W54-2 test tolerance 0.035 -> 0.01",
+   "summary": "test_a_windbreak_draws_about_half_its_crowns_conifer back inside 0.01 of 0.48; re-run this round: 20 passed",
+   "class": "within",
+   "why": "Enforcement of the requested match (it fails only when the drawn share drifts from 0072); closes W53-3's legitimate widening."
+  },
+  {
+   "id": "W54-3 occasions",
+   "summary": "the Inashiro windbreak glyph-redrawn line (wave 53) extended to cover the share, at batch 3's close",
+   "class": "within",
+   "why": "Uses the feature's declared occasion; no review dropped."
+  },
+  {
+   "id": "W54-4 verification batched",
+   "summary": "impl-drift, spec-fidelity, then gate, pair and occasions at batch 3's close (T135, T136)",
+   "class": "within",
+   "why": "Same batching as waves 48-53, per the GM's 2026-10-08 batching ruling."
   }
  ],
  "verdict": "CLEAR"

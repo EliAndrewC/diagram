@@ -44,7 +44,9 @@ def test_the_privy_faces_the_sun_on_its_share_and_takes_an_attested_seat_otherwi
     sunny = _lay(("privy",), roll=0.1, ground=(YARD, EAST_BED))["privy"]  # the SE ground open, as an E bed leaves it
     assert sunny[1] > HH / 2 and sunny[0] >= -1e-6, "southeast to south of the house"
     shaded = _lay(("privy",), roll=0.9, ground=(YARD,))["privy"]  # past the 72.7% share: the rolled attested seat, the barn here
-    assert not (shaded[0] > HW / 2 and abs(shaded[1] + HH * 0.25) < 1e-6) and sorted(shaded[2:]) == sorted(fs.PRIVY_SIZES_FT[int(0.9 * 16)]), "an attested seat a hamlet farm has (no barn, feature 328), at the household's rolled size"
+    assert not (shaded[0] > HW / 2 and abs(shaded[1] + HH * 0.25) < 1e-6) and sorted(shaded[2:]) == sorted(fs.PRIVY_SIZES_FT[int(0.9 * 16)]), (
+        "an attested seat a hamlet farm has (no barn, feature 328), at the household's rolled size"
+    )
 
 
 def test_the_privy_and_the_bath_room_take_the_households_rolled_size_and_the_notes_carry_it() -> None:

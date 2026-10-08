@@ -1525,6 +1525,11 @@ quick:           ## [tests] tier 2: lint, types and every test that rolls no map
 	    printf 'A test near the top of that list without @pytest.mark.rolls_map is the cause.\n\n'; \
 	    exit 1; \
 	  fi
+	@: "(GUARD_EDIT_OK: feature 328 wave 54 - the tests that READ the shipped hamlet manifests run when the manifests moved: testmon selects by code, and wave 52's rerolls broke three of them unseen for two waves)"
+	@readers=$$(python3 scripts/gates/pool-readers.py changed); \
+	  if [ -n "$$readers" ]; then printf 'quick: the hamlet manifests moved - running the tests that read them\n'; \
+	    python3 -m pytest -n $(XDIST_WORKERS) -q --no-cov -x -m "not rolls_map and not tooling" $$readers || exit 1; fi; \
+	  python3 scripts/gates/pool-readers.py stamp
 	@printf '\n\033[1mquick: clean\033[0m - the %s map-rolling tests were NOT run; `make done` before pushing.\n' "$$(grep -rho --include='*.py' '@pytest.mark.rolls_map' tests | wc -l)"
 # (the count used to come from a SECOND pytest collection of the whole suite, ~2 s of every quick - GM 2026-08-26, T25)
 	@$(STATE) green-local quick

@@ -111,7 +111,9 @@ def test_audit_tallies_the_residue_by_CHECK_and_its_rc_is_the_verdict(monkeypatc
     assert f"{2 + len(ca.PINNED_ROWS)}/{2 + len(ca.PINNED_ROWS)} passed" in capsys.readouterr().out
 
     seen: list[tuple] = []
-    monkeypatch.setattr(ca, "roll_one", lambda spec: seen.append(spec) or (f"--- seed {spec[0]} row={('street/one/own', 'edge/both/shared')[spec[0] % 2]} water={('channel', 'well')[spec[0] % 2]}", [], []))
+    monkeypatch.setattr(
+        ca, "roll_one", lambda spec: seen.append(spec) or (f"--- seed {spec[0]} row={('street/one/own', 'edge/both/shared')[spec[0] % 2]} water={('channel', 'well')[spec[0] % 2]}", [], [])
+    )
     ca.audit(2, 39, jobs=1, households=40)
     assert seen == [(39, 40), (40, 40)], "feature 328: every seed at the size asked, the pinned rows left out"
 

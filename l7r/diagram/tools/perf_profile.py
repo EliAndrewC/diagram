@@ -29,6 +29,7 @@ import subprocess
 import sys
 import time
 from contextlib import redirect_stdout
+from typing import Any
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 SKILL = os.path.dirname(os.path.dirname(os.path.dirname(HERE)))
@@ -69,7 +70,8 @@ def profile_stage(seed: int, stage: str, top: int = 25, households: int | None =
     from l7r.diagram.settlement import Settlement
     from l7r.diagram.tools.perf_snapshot import REFERENCE
 
-    plan = plan_site(HamletSpec(seed=seed, **({**REFERENCE, "households": households} if households else REFERENCE)))
+    spec: dict[str, Any] = {**REFERENCE, "households": households} if households else dict(REFERENCE)
+    plan = plan_site(HamletSpec(seed=seed, **spec))
     s = Settlement(W=plan.W, H=plan.H, seed=seed)
     names = [st.__name__.replace("stage_", "") for st in STAGES]
     if stage not in names:

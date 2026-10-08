@@ -670,6 +670,20 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
   kind is now rolled where it is seated, nudged by the clump's drawn deficit (`0.48 + 0.48 * drawn - drawn conifers`), so the
   drawn share is 0.48; the test's tolerance back to 0.02, then tightened to 0.01 on the measurement.
 - **Measured**: the unit sample draws 1,336 conifers of 2,791 crowns (0.479). The five hamlets reroll their windbreaks.
+- **Found at this wave's plan review - a regression of wave 52**: three pool tests read the shipped manifests and went red
+  unseen (`tests/hamletgen/test_pool_261.py`: a knot on Inashiro and on Kuwabata, a zigzag across a door joint on Sawada).
+  Bisected: 013b667d5 passes, e4c99b277 (wave 52's privy and heap seats) fails. Probed in `settle_knots`' judge: every
+  gather of each knot splits the web or leaves a farmhouse unreached - Inashiro's field way starts on a spur 9.4 ft from
+  where it leaves a door lane, Kuwabata's lane 11 T's onto lane 9 21.8 ft from its door. A trial letting the field way's web
+  end gather changed nothing. They are the ranked row `knots.py::settle_knots#a knot no lawful gather reaches` (E3), as
+  Sawada's knot has been since wave 10: Inashiro and Kuwabata join `_KNOTS_WAITING`, and Sawada's zigzag goes on a new
+  strict `_ZIGZAGS_WAITING` behind a new E3 found row (`found-wave54.jsonl`) - each strict, so the day a map is fixed its
+  name must come off. Kept, not reverted: the seats are 0042's and 0047's, and the knots are the web's limit they exposed.
+  For the GM at the feature's end (the waiver exit of constitution XIII; fixing row 748 is the other).
+- **Tooling** (so a reroll cannot hide this again): `make quick` runs the tests that read the shipped hamlet manifests
+  whenever the manifests moved since its last green run (`scripts/gates/pool-readers.py`, its test in `tests/tooling/`);
+  testmon selects by code, and a manifest is data. And `perf_profile.py`'s spec typed, which the quick type check
+  refused (26 errors from wave 52's `HOUSEHOLDS=`).
 - **Occasions**: the windbreak on Inashiro (wave 53's glyph-redrawn line) covers the share - batch 3's close.
 - **Verification**: tests red on the old code (0.508 outside 0.02); `impl-drift`; `spec-fidelity`; the gate, pair and
   occasions at batch 3's close.
