@@ -2,7 +2,7 @@
 
 **Feature**: 155-mains-red-floor
 **Created**: 2026-08-29
-**Status**: `spec-fidelity` round 1 returned CHANGES REQUIRED (4); all four applied, round 2 pending.
+**Status**: Done (2026-08-29): main's red floor closed (84e75096b) and the coverage question answered by the GM through feature 174 (feature 330 audit)
 
 ## What the GM asked for
 

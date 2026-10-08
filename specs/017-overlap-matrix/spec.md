@@ -4,7 +4,7 @@
 
 **Created**: 2026-07-26
 
-**Status**: Draft
+**Status**: Done (2026-07-26): T008 fixed in 81deedca4, "all eleven matrix defects cleared"; `_MATRIX_OUTSTANDING` is empty (feature 330 audit)
 
 **Input**: GM: "we probably need something like what cities have for our rural settlements like towns and villages where we have lists of things which can't overlap. Currently it's like playing whack-a-mole where every time we make a new map, I see a few more things which have never happened to overlap before but now they do. So I'd like to make sure our automated checks aren't just individually listing 'X cannot overlap with Y, N cannot overlap with M, etc' and are being more systemic about it. This will also help if we add new map features, so we can simply just add them to the 'cannot overlap with stuff' list. As opposed to e.g. grazing land, which can overlap with stuff because e.g. a well or a building can be built on grazing land, so overlap there is fine."
 

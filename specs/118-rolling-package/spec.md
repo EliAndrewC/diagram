@@ -6,7 +6,7 @@ is declared with `export SPECIFY_FEATURE=118-rolling-package` and
 
 **Created**: 2026-08-17
 
-**Status**: Implemented 2026-08-17, in two commits (split, then decomposition - research R6).
+**Status**: Done (2026-08-17): 7ad4e23c5 and 0bcf81548; only the gate and stop-work were left unticked (feature 330 audit)
 
 Final per-file line counts: `roll.py` 300, `fit.py` 267, `farmsteads.py` 229, `place.py` 208,
 `seeds.py` 159, `bundle.py` 132, `__init__.py` 39 (1,197 -> largest 300). `roll_village` 256 -> a

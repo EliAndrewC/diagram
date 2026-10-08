@@ -2,7 +2,7 @@
 
 **Feature Branch**: (none - worked directly on `main` per the GM's solo workflow)
 **Created**: 2026-07-20
-**Status**: Draft
+**Status**: Done (2026-07-19): the in-field features landed in 6f4c9333c (`settlement/fields/features.py`, the field ponds, rocks and graves) (feature 330 audit)
 **Input**: GM wants deliberate non-rice features - grave mounds, feng-shui knolls, rock outcrops, small ponds - placed where historically appropriate per paddy type, replacing the bare tessellation gaps that currently show background through the paddy. Grounded via [research.md](research.md); GM approved "both" grave placements (margin + occasional in-field island) and full-matrix scope across all archetypes.
 
 ## Context

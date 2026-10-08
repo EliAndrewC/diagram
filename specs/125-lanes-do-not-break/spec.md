@@ -1,5 +1,7 @@
 # Feature 125: a way does not stop and resume across empty ground
 
+**Status**: Done (2026-08-18): a44013da0, e42cd4210, d305556aa - the spec is the write-up of work that shipped (feature 330 audit)
+
 ## Why
 
 `settlement-review` on Sawada reported two lane ends "terminating in rounded caps in bare grass with

@@ -4,7 +4,7 @@
 
 **Created**: 2026-07-19
 
-**Status**: Draft
+**Status**: Done (2026-07-19): landed with the spec in ff0b34d5b - the overlay knob and its topographic and economic terms (`settlement/fields/landuse.py`) (feature 330 audit)
 
 **Input**: GM: fix the `land_use_overlay` knob's historical grounding, rigorously through spec-kit, with historical-grounding analysis as the opening steps and grounding verification as the closing steps.
 

@@ -74,3 +74,64 @@ mapping, which T05 reads to re-aim the pointers, is [`filed.json`](filed.json); 
 | `365-enclosed-fan-tract-floor` | `towns.md` | OWED AT CONVERSION: the enclosed-fan tract floor (GM decision 2026-08-03) |
 | `366-generator-parity-gaps` | `towns.md` | OWED AT CONVERSION: generator-parity gaps (town-checks audit, 2026-07-21; re-checked 2026-... |
 | `367-town-deep-audit-open-items` | `towns.md` | OWED AT CONVERSION: the town deep audit's open items (2026-07-24, against the frozen Hoshi... |
+
+
+## C. Every existing open feature settled (T03, FR-004, SC-002)
+
+The 27 features open before this feature (`make speckit-todo` on 2026-10-08: 10 filed, 2 planned, 15 in progress),
+each read with its open tasks, the commits naming it and the later specs naming it, by three independent passes. The
+status line each now carries holds its evidence; [`settle.py`](settle.py) wrote them.
+
+**Done** (19) - the work landed; what was left unticked was bookkeeping (stop-work, the final gate, a report) or tasks
+a later feature or a recorded ruling disposed of:
+
+| feature | evidence |
+|---|---|
+| 007 packing-audit hardening | e6450f5f2 (2026-07-13) landed T001-T012 with the task list; `pack_audit/grids.py` `top_vacant_rects`, `region_density` |
+| 008 Mode A composition | 6da94c18f; `compound.py` `place`, `pack_audit` `perimeter_hugging_pct`, `docs/buildings.md` "Composition" |
+| 010 land-use overlay grounding | ff0b34d5b with the spec; `settlement/fields/landuse.py` (the topographic filter, the economic fraction), `_knobs.py` the overlay values |
+| 012 in-field paddy features | 6f4c9333c; `settlement/fields/features.py` "feature 012"; `overlap/taxonomy.py` the field ponds, rocks and graves |
+| 015 punishment grounds | f78e4e533; T038 (stop-work) the only open task |
+| 016 Minami | 614696beb (T14-T16: the eight-precinct doctrine and the temple knobs, now in the record's questions 0234, 0237, 0181), 6a0ce606c (the map); a frozen exhibit since |
+| 017 overlap matrix | 81deedca4 "all eleven matrix defects cleared - ... Clears Ubame's crop plot in the stream" (T008); `_MATRIX_OUTSTANDING` empty |
+| 112 fields package | 745a067ae, 9f0287e51, 0463c9d7a; T031-T033 bookkeeping |
+| 114 structures package | 92656dfca; T035 the final gate and stop-work |
+| 115 civic-grounds package | 2389749ea, 4885c99d5; T004 moot (wip/ retired), the rest bookkeeping or gates of landed commits |
+| 118 rolling package | 7ad4e23c5, 0bcf81548; T033, T041 the gate and stop-work |
+| 119 l7r namespace | 0280ec9c0, 948682a5a, 2e2d609b6, 7df1b1878; T032 stop-work |
+| 125 lanes do not break | a44013da0, e42cd4210, d305556aa; the spec has no tasks - a write-up of what shipped |
+| 126 derived lanes and form | 9fcb6b0d2, 7b448f78a; FR-003 superseded by 128 (`specs/128-all-lanes-derived/spec.md:11`); the forms switched back on by 291; US3 decided as no code change (its research.md); the gate fixtures withdrawn with the battery (166) |
+| 130 CodeBuild merge gate | b3bb3782d and before; T063 (the first FULL run) withdrawn by the GM's remote-off ruling (`dev/switches.json`, 2026-09-05) |
+| 131 split repository | 5c38ebc4a, 0773b970a, c8002dd79; T027 (the report) bookkeeping |
+| 139 remaining test failures | its spec: "a test the efficiency session retires as no longer valid leaves the inventory by that retirement"; e20ca2623 deleted the battery its checks were in; `tools/mapcheck.py` TRIPWIRE_EXPECTED empty |
+| 155 main's red floor | 84e75096b closed the red lines; the coverage decision taken by the GM in feature 174 ("the time has come to begin once again enforcing one hundred percent code coverage") |
+| 175 warm the remote build | 3c7e52f28, c09942435 "MEASURED - the cache pays, 189s -> 158s"; its owed measurement taken by 177 (D5 there) |
+
+**Withdrawn** (3) - by a recorded GM ruling:
+
+| feature | ruling |
+|---|---|
+| 019 capital skeleton and castle | the GM, 2026-10-07: Shiro Daika's hand pass dropped (`docs/migration-plan.md`); the engine half landed (8eb15b41a); its checks went with the battery (e20ca2623), its byte-identity task with the 2026-08-16 freeze |
+| 021 capital housing | the same ruling; its whole scope was the hand map's fabric (spec: "graduate the map from wip/ to pool/capitals/"); US1 landed (d5a99e619) |
+| 275 village burial ground | the GM, 2026-09-28, recorded in its request.md ("I think you can get rid of it entirely"); a `spec.md` now carries the status, and the work is filed as feature 350 |
+
+**Left open** (4), and listed for the GM where the GM is the one who can settle it:
+
+- **111 hamletgen package** - in progress. The split landed (4917173f2, 818b7ea82); US2, decomposing the long stage
+  functions, was HELD for the GM as "a taste call about readability, not a rule violation" (its research.md R12) and
+  never ruled on. Measured now: `stage_ways` no longer exists (128 split it), `stage_sink` is 52 lines; `place_wells`
+  (293 lines, 77 statements), `open_ground_patches` (481, 124) and five others remain long, all under the
+  constitution's bar of a few hundred statements. **For the GM**: decompose them, or withdraw US2.
+- **121 placer drawn footprint** - in progress. All three user stories landed (7a4ca9ec3, ef68b24c7, 44974634a);
+  T007 went with the fixtures (166), T018 is deferred to the town tier by its research.md, T022 and T029 measured a
+  placer 306 and 308 replaced. **Genuinely left**: T017, a test pinning the two allowed grove abutments.
+- **312 uncited-source catalog** - filed on main, but **its work was done and never landed**: it sits in the clone
+  `/diagram/.clones/diagram-uncited` - 79 commits main lacks, ending at 6e291a37f (2026-10-03), its tasks.md 23 of 23
+  ticked, two uncommitted test edits, and no `backup/` branch on GitHub, so that clone is its only copy. It predates
+  feature 329's move and touches 2,479 files, so landing it is a merge across the move, then the gate and the record
+  gates. **For the GM**: land that clone's work, or decide 312's fate.
+- **325 the GM's rulings from 319** - filed, open by design: a tracking list the GM works through; R1 (which season
+  a hamlet's dry-field crops show) awaits a ruling.
+
+**After**: `make speckit-todo` reads 39 filed (the 37 filed from future-work, 312, 325), 0 planned, 3 in progress
+(111, 121, this feature), 242 closed.

@@ -4,7 +4,7 @@
 
 **Created**: 2026-07-26
 
-**Status**: Draft
+**Status**: Done (2026-07-26): T14-T16 landed in 614696beb, the map at its specified population in 6a0ce606c; Minami is now a frozen exhibit (feature 330 audit)
 
 **Input**: GM request - "create a new provincial city to supplement Tango and Nagahara, since I think it would be a useful way to test our placement algorithms and automated checks on a fresh city. The city will be the provincial city of Minami, the southern province of the Kitsune family, i.e. Fox clan (a minor clan). This is a landlocked city next to a river, specifically the same Hayakawa river which runs through the Nagahara province."
 

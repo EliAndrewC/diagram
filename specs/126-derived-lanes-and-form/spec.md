@@ -2,7 +2,7 @@
 
 **Feature**: 126-derived-lanes-and-form
 **Created**: 2026-08-23
-**Status**: Draft
+**Status**: Done (2026-08-23): 9fcb6b0d2 and 7b448f78a; FR-003 superseded by feature 128 (its spec, "Supersedes ... FR-003, in full"), the settlement forms switched back on by 291; the task list was never maintained (feature 330 audit)
 **Input**: GM conversation 2026-08-23 - *"doesn't it make more sense to put the houses there first and then where there are naturally lanes where people would walk, we can put those there ... I think that putting the lanes down and then building up houses around it not only fails to reflect the way that these lanes develop in the first place, which is to say organically, but it also is probably causing more algorithmic problems for our placement."*
 
 ## Why this exists

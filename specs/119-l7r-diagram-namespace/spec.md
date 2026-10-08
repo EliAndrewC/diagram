@@ -6,7 +6,7 @@ is declared with `export SPECIFY_FEATURE=119-l7r-diagram-namespace` and
 
 **Created**: 2026-08-17
 
-**Status**: Implemented 2026-08-17, in three commits (one per landing).
+**Status**: Done (2026-08-17): three landings, 0280ec9c0, 948682a5a, 2e2d609b6; only stop-work was left unticked (feature 330 audit)
 
 Oracle: **894/894 pool artifacts byte-identical** to a baseline taken on unmodified code in a
 detached worktree - every generator, frozen legacy maps included (`--frozen-ok --no-cache`), plus

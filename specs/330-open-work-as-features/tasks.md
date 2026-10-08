@@ -14,8 +14,9 @@
 - [x] T02 the gm-assistant check: every feature's spec and request searched for gm-assistant's own subjects, each hit read, any such feature deleted; the search and its result in `audit.md` (D4, FR-005, SC-005)
       research: rendering
       verify: DONE. audit.md A: every feature's spec, request and gm-request searched for gm-assistant subjects; 4 directories flagged (119, 127, 130, 131), each read - all diagram work; none deleted
-- [ ] T03 settle every existing open feature: each status line rewritten only with its evidence in `audit.md` (done, superseded by, withdrawn by a cited ruling), the rest left open and listed for the GM (D3, FR-004, SC-002)
+- [x] T03 settle every existing open feature: each status line rewritten only with its evidence in `audit.md` (done, superseded by, withdrawn by a cited ruling), the rest left open and listed for the GM (D3, FR-004, SC-002)
       research: rendering
+      verify: DONE. 27 open features settled by three independent passes: 19 Done and 3 Withdrawn, each status line carrying its evidence (settle.py); 111, 121, 312, 325 left open with what remains and what the GM must decide (audit.md C); speckit-todo now 39 filed, 3 in progress, 242 closed
 - [x] T04 file every `future-work/` entry: one claimed number per entry or named piece, a `spec.md` with the entry verbatim and its source, status Filed; an entry found done or disposed of by a cited ruling or later feature closed in `audit.md` instead (D5, FR-006, SC-003)
       research: rendering
       verify: DONE. 37 entries checked (37 FILE, 0 DONE, 0 DISPOSED, audit.md B); 37 features filed, 331-367, each with the entry verbatim and its source; the 275 entry under its own number (350) naming 275 as history; filed.json maps entry -> feature

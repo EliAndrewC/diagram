@@ -5,7 +5,7 @@ is declared with `export SPECIFY_FEATURE=114-structures-package`.
 
 **Created**: 2026-08-16
 
-**Status**: Implemented 2026-08-16. Final per-file line counts: `fixtures.py` 407, `packing.py` 292,
+**Status**: Done (2026-08-16): 92656dfca; only the final gate and stop-work were left unticked (feature 330 audit)
 `compounds.py` 277, `servants.py` 218, `urban.py` 177, `captions.py` 101, `ground.py` 92,
 `__init__.py` 40 (1,459 -> largest 407). Every `pool/` artifact byte-identical; `core.py`
 byte-unchanged; one consumer file changed, by one filename string.
