@@ -13,6 +13,8 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 - (wave 5, landed and reviewed) placement-changed village lane on kashikawa - wave 5: 0033's row street runs on off the map as the road into it at both ends, where
   the web cut it back to its last joint (`trim_streets`); Kashikawa's and Mizuguchi's far ends now run off the sheet as a
   second way out (every way is inked `village lane`).
+- placement-changed: farm holding on kashikawa - wave 22: the far-row holding three LOTS deep (0033 drawing: three times the frame's
+  width), not three frame depths; Kashikawa's holdings run deeper (47 dry plots to 67), its houses unmoved.
 - none (wave 21): two claims written - no code a map executes changed.
 - placement-changed: woodland commons on kashikawa - wave 20: a wood only where the walk from the houses runs THROUGH the field and
   beyond it, on every tier (0077 drawing: beyond the fields AND higher than them; the woodland glyph check found the slope tier
@@ -913,3 +915,16 @@ row is the fixture count's cap (425).
 - [x] T68 the claims re-checked by `impl-drift`, and the close: wave 21's own bookend pair, `make done` green, the wave column (FR-005, FR-006)
       research: rendering
       verify: DONE. impl-drift on both claims IN-STEP; amendment 20 FAITHFUL; make done green (already verified); wave 21's own pair band 1, variance on identical code (perf-audit consistent); the wave column written
+
+## Phase 23 - wave 22 (amendment 21): the far-row holding's depth
+
+Row 427 (the shrine cap) is held for the GM (exception check LEGITIMATE, recorded in its flag). Row 428 (the persimmon under the
+farm's own grove) is measured a change across modules - the grove draws its conifers in `settlement/homestead_parts/groves.py`
+before the persimmon is seated - and is E3 by FR-003. Wave 22 takes row 429; the next open row is the ranks' yard sun (430).
+
+  - `l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#far-row dry-field share` - the holding three lots (frame widths) deep on a street laid first, one on the dry edge (0033 drawing), the streets spaced by it
+
+- [ ] T69 the holding sized by lots; the five hamlets regenerated (Kashikawa's holdings deeper) (FR-004, FR-005)
+      research: rendering
+- [ ] T70 the claims re-checked by `impl-drift`, the occasion's review (glyph-check on Kashikawa's farm holding), and the close: wave 22's own bookend pair, `make done` green, the wave column (FR-005, FR-006)
+      research: rendering

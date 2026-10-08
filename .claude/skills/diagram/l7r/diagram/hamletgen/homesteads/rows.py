@@ -193,14 +193,15 @@ def row_seats(line: Sequence[tuple[Pt, Pt]], frame: Sequence[float], sides: str,
 
 
 HOLDING_DEPTH_FRAMES = {"street": 3.0, "edge": 1.0}
-"""A far-row farm's holding behind its lot, in frame depths (feature 291 plan D16): on a street laid first a STRIP (the
+"""A far-row farm's holding behind its lot, in lots - frame WIDTHS along the street (feature 291 plan D16; feature 328: it
+was the frame's shorter side, against 0033's "three times the frame's width"): on a street laid first a STRIP (the
 planned row's order, house lot then field then woodland, 0033 - its depth there 375 ken, a dry-field colony's;
 three frames here is a GUESS, a paddy row borrowing the form, not the size); on the dry edge one frame, compact and near
 the house (a dike row's holding, 0033, accurate for a dike row, carried to a levee or fan foot as this
 project's reading).
 
 Research:
-    far-row dry-field share - research/questions/0033-row-villages-resson.html, research/questions/0033-row-villages-resson.drawing.html: a fixed depth behind the lot, 3 frames on a street laid first and 1 on the dry edge, every foot of it drawn dry field; the share is never rolled or set, it falls out of the geometry
+    far-row dry-field share - research/questions/0033-row-villages-resson.html, research/questions/0033-row-villages-resson.drawing.html: a fixed depth behind the lot, 3 lots (frame widths) on a street laid first and 1 on the dry edge, every foot of it drawn dry field; the share is never rolled or set, it falls out of the geometry
 """
 
 HOLDING_CELL_FT = 150.0
@@ -546,7 +547,7 @@ def seat_rows(s: Settlement, plan: SitePlan, frame: Sequence[float], allowed: An
     street_farms: list[list[Pt]] = []
     placed = 0
     s._exact_seat = True  # type: ignore[attr-defined]  # the placer nudges a row's seat, never slides it (`_place_bundle_dispersed`)
-    hold_depth = fd * HOLDING_DEPTH_FRAMES.get(plan.row_line, 1.0)
+    hold_depth = lot * HOLDING_DEPTH_FRAMES.get(plan.row_line, 1.0)  # the frame's WIDTH, a lot (0033: three times the frame's width)
     bounds = (30.0, 30.0, float(s.W) - 30.0, float(s.H) - 30.0)
     holdings: list[tuple[list[Pt], Pt, Pt, float]] = []
     # WHERE THE ROW GOES: the stretch of the hard ground's edge whose line holds the most clear frames, the planned seat
@@ -557,7 +558,7 @@ def seat_rows(s: Settlement, plan: SitePlan, frame: Sequence[float], allowed: An
     # ...and the streets beyond it set out by the frame's depth ALONG THE LINE'S NORMAL, not its shorter side: on a diagonal
     # street a frame reaches deeper, and the second street ran through the first row's groves (cohort seed 901)
     depth_n = max((frame_extent(frame, n) for _p, n in first), default=fd)
-    offsets = row_offsets(depth_n, sides, MAX_STREETS, s.px(FIELD_KEEP_FT), gap, depth_n * HOLDING_DEPTH_FRAMES.get(plan.row_line, 1.0) + gap)
+    offsets = row_offsets(depth_n, sides, MAX_STREETS, s.px(FIELD_KEEP_FT), gap, hold_depth + gap)
     offsets = [first_off + (o - offsets[0]) for o in offsets]
     from shapely.geometry import LineString, MultiLineString
 

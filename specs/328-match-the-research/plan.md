@@ -287,6 +287,15 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
   backup pushed, its own pair band 1 confirmed); wave 21's own pair opens at 2ba8a8154.
 - **Verification**: `impl-drift` on the two claims, the gate, wave 21's own bookend pair.
 
+## Wave 22 (amendment 21, 2026-10-07)
+
+- **Held and passed**: row 427 held for the GM (the research's shrine cap against the GM's T61 floor; exception check
+  LEGITIMATE); row 428 measured E3 (two modules). Scope: row 429, the far-row holding three lots deep (`tasks.md` Phase 23).
+- **Occasions**: the farm holding re-placed on Kashikawa (a glyph check); the other four manifests unchanged.
+- **On the unpushed waves 9-21** under the wave-11 exception's condition (6): (1)-(5) held at wave 21's close (3c997ab6b, its
+  backup pushed, its own pair band 1 confirmed); wave 22's own pair opens at 3c997ab6b.
+- **Verification**: `impl-drift` on the touched claims, the glyph check, the gate, wave 22's own bookend pair.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Each later wave that changes engine behavior takes

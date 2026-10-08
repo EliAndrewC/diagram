@@ -6473,21 +6473,6 @@
   "scope": "kept"
  },
  {
-  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/persimmon_reseat.py::persimmon_for#under no conifer's crown",
-  "verdict": "DRIFTED",
-  "tier": "E2",
-  "fix": "the farm's own grove gives way round the persimmon (0046 drawing): refuse the conifer, not the persimmon, where the conifer is the farm's own grove",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/persimmon_reseat.py"
-  ],
-  "after": [],
-  "flag": "",
-  "found": "wave 1 re-check",
-  "tier_as_ranked": "E2",
-  "wave": "",
-  "scope": "kept"
- },
- {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#far-row dry-field share",
   "tier": "E2",
   "fix": "size the far-row holding as three times the frame's width (along the street), not its shorter side",
@@ -10216,6 +10201,23 @@
   "flag": "",
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/persimmon_reseat.py::persimmon_for#under no conifer's crown",
+  "verdict": "DRIFTED",
+  "tier": "E3",
+  "fix": "the farm's own grove gives way round the persimmon (0046 drawing): refuse the conifer, not the persimmon, where the conifer is the farm's own grove; the farm's grove draws its conifers (settlement/homestead_parts/groves.py, recorded in _conifer_crowns) before the persimmon is seated (hamletgen/homesteads/persimmon_reseat.py), so giving way removes drawn crowns from another module's record",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/persimmon_reseat.py",
+   ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 1 re-check",
+  "tier_as_ranked": "E2",
+  "moved": "wave 22 (measured): a change across modules (the grove's drawn crowns and the persimmon's seat), E3 by FR-003",
   "wave": "",
   "scope": "kept"
  },

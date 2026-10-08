@@ -506,6 +506,17 @@
   "flag": "Held: question for the GM, deferred to the feature's end (goal amendment 2026-10-07). research/questions/0219-household-shrines-yashikigami.drawing.html: 'A map never has more shrines than three to eight homesteads in a hundred' against feature 133 T61, the GM: 'ensure that it is present' (Inashiro's fixtures_min {'shrine': 1}). Measured: Inashiro's shrine share 0.049 at 15 households caps at 0.735 - 0 shrines without the floor, 1 with it. Options: (a) the cap overrides the floor, Inashiro loses its hokora; (b) the floor stays and 0219's drawing page records it as a deviation the GM chose. Exception check (spec-fidelity, 2026-10-07): LEGITIMATE to leave open and continue",
   "tier": "E2"
  },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/persimmon_reseat.py::persimmon_for#under no conifer's crown": {
+  "after": [],
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/persimmon_reseat.py",
+   ".claude/skills/diagram/l7r/diagram/settlement/homestead_parts/groves.py"
+  ],
+  "fix": "the farm's own grove gives way round the persimmon (0046 drawing): refuse the conifer, not the persimmon, where the conifer is the farm's own grove; the farm's grove draws its conifers (settlement/homestead_parts/groves.py, recorded in _conifer_crowns) before the persimmon is seated (hamletgen/homesteads/persimmon_reseat.py), so giving way removes drawn crowns from another module's record",
+  "flag": "",
+  "moved": "wave 22 (measured): a change across modules (the grove's drawn crowns and the persimmon's seat), E3 by FR-003",
+  "tier": "E3"
+ },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#a yard's sun between ranks": {
   "after": [],
   "files": [
