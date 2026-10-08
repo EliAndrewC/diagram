@@ -213,11 +213,8 @@ def drop_end_nubs(ways: list[list[Pt]]) -> list[int]:
     """
 
     def nub_at_head(pts: list[Pt]) -> bool:
-        """Is `pts[1]` a nub - a short first stretch that then turns back on itself?
-
-        TWO BANDS, not one: a mild corner has to be very short to be a splice artifact
-        (`_NUB_FT` / `_NUB_TURN`), while an outright reversal reads as a spike at any length below
-        the floor for a way at all (`_SPIKE_FT` / `_SPIKE_TURN`). See the constants."""
+        """Is `pts[1]` a nub - a first stretch under `_NUB_FT` that then turns `_NUB_TURN` or more? (One band: the spike
+        band this once described was never built - see "THE END SPIKE IS REAL" above.)"""
         if len(pts) < 3:
             return False
         a, b, c = pts[0], pts[1], pts[2]

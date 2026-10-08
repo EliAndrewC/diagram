@@ -1,58 +1,57 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "92e626b10fb041e37a69cb4a86f6086386288190ccd2c1ef1393db6e9b1c3d26",
+ "plan_sha256": "0a933b5bdb1f5df2ea1d95b8a7215725b45eac02879ec8d11e68b41314e801d5",
  "reviewed": "2026-10-08",
  "declared": "spec-fidelity",
  "decisions": [
   {
    "id": "W42-order",
-   "summary": "Wave 42 takes row 492 (the end-nub cut, E2) while rows 482-491 (ten open, kept, unflagged E2 rows in ways/, no recorded dependency) wait for the next wave; the plan calls this 'in ranking order'",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "FR-006 makes each wave 'a contiguous run of the ranking' and Key Entities defines a wave the same way; SC-003 lets a row wait only on a dependency recorded in the ranking, and none of 482-491 records one (after: [] on all but 486/490/491, whose afters are other rows, not 492). Amendment 40 round 2 asked the next wave to return to ranking order; 481 + 492 is not a contiguous run, and the plan's 'in ranking order' is untrue for 492. Nothing makes 482-491 first impossible, the GM's words do not imply skipping them, and the literal order defeats no purpose. Fix: take 482-491 before or with 492, or hold 492 to its turn, or record in the ranking the measured reason a skipped row cannot be fixed now."
+   "summary": "Wave 42 is row 481 (closed as fixed in wave 34) and wave 41's found row CROSSING_END_TOL (E1, taken before E2 work per SC-003); row 492 held for its turn; rows 482-492 the next wave's",
+   "class": "within",
+   "why": "Round 1's NOT LEGITIMATE item is resolved by its third prescribed remedy (hold 492 to its turn). Checked: git diff a05ed6911~1..HEAD over l7r/diagram/hamletgen/ways/ and tests/hamletgen/ways/ is empty, so the nub change and its tests are fully reverted; ranking.json row 492 (_drop_end_nubs) carries wave ''; the change is kept only as audit/held-row492-nub.patch. The E1 row is the only open kept E1 row (every other open E1 row is scope 'deferred'), so taking it ahead of E2 rows 482-491 is SC-003's tier order, not a skip. The plan's 'in ranking order' is now true."
   },
   {
    "id": "W42-E1-row",
-   "summary": "Wave 41's found row CROSSING_END_TOL tiered E1 by a fresh reader (T109a) and taken in this wave",
+   "summary": "CROSSING_END_TOL = BROOK_DRAWN_W / 2 in place of a flat 13 px, tiered E1 by a fresh reader (T109a)",
    "class": "within",
-   "why": "an open E1 row must be fixed before E2 work proceeds (SC-003); FR-002/FR-003 tiering by a fresh reader"
+   "why": "0054 drawing: 'a meeting is a junction when either channel's end lies inside the other's drawn width'. FR-002/FR-003. Unchanged from round 1."
   },
   {
    "id": "W42-row481",
-   "summary": "Row 481 (_one_joint, ways of two kinds stay two) closed as E0, already fixed in wave 34",
+   "summary": "Row 481 (_one_joint, ways of two kinds stay two) closed as E0: fixed in wave 34, IN-STEP since wave 38",
    "class": "within",
-   "why": "the ranking already records wave 34 and impl-drift IN-STEP in wave 38; recording a done fix is not a narrowing"
+   "why": "Recording a done fix. Unchanged from round 1."
   },
   {
-   "id": "W42-nub",
-   "summary": "drop_end_nubs takes the hook's figures: a last leg of 12 ft or less (inclusive) turning 90 deg or more is cut; 60-89 deg end stretches now stand",
+   "id": "W42-either-end",
+   "summary": "crosses_mid_run now also tests the water's ends against half the joiner's drawn width (joiner_w, default 2.5 px labeled GUESS where the caller gives none); a case in test_the_small_predicates red without it",
    "class": "within",
-   "why": "literal 0081 drawing page: 'A last leg of 12 ft or less turning 90 degrees or more is cut'; the old 9 ft / 60 deg convention is on no page; the implementation moves to the research (FR-004)"
+   "why": "Closes the gap round 1 noted (only the joiner's ends were tested): 0054's 'either channel's end' is now implemented literally. The 2.5 default is the width Settlement.channel draws a ditch at (settlement/water_ways/water.py:210, width=2.5), and it is labeled GUESS, not presented as research. It applies the page more fully than before and narrows nothing."
   },
   {
-   "id": "W42-crossing",
-   "summary": "CROSSING_END_TOL = BROOK_DRAWN_W / 2 (3.5) in place of a flat 13; crosses_mid_run keeps its logic (tests the joiner's ends only)",
+   "id": "W42-held-patch",
+   "summary": "Row 492's done change kept as audit/held-row492-nub.patch (clearance.py, test_clearance.py, test_sweeps.py) to apply at its turn; overrides.json drops its 'files' marking",
    "class": "within",
-   "why": "0054 drawing: 'a junction when either channel's end lies inside the other's drawn width'; every caller passes the brook drawn at BROOK_DRAWN_W (sink.py 258/317/532/812, brook.py 289/548). The water's-end half is not separately tested; at brook.py:548 the course begins at the sluice on canvas, but an end touching a ditch is not a proper crossing there, so the verdict matches the page"
+   "why": "The remedy round 1 named. Nothing of 492 is in the engine or the tests, and its fix text (0081's 12 ft / 90 deg) is kept for when the run reaches it, so no row leaves scope."
+  },
+  {
+   "id": "W42-incremental",
+   "summary": "l7r/diagram/ci/incremental.py: a baseline blob that names no object is taken as touching the import-time lines (the run goes full) instead of crashing the gate; test_import_time_change_takes_a_missing_baseline_blob_as_touched",
+   "class": "within",
+   "why": "A tooling defect found in the work, fixed in it (constitution XIV). It errs toward the full run, so it weakens no check, and it does nothing to the request's scope."
   },
   {
    "id": "W42-occasions",
-   "summary": "No review occasion: the five hamlets regenerated 2026-10-08 with byte-identical manifests",
+   "summary": "No review occasion: the five hamlets regenerated 2026-10-08 (again after the either-end change) with byte-identical manifests",
    "class": "within",
-   "why": "a dated one-shot measurement; feature 294 owes occasions only where a map moved"
-  },
-  {
-   "id": "W42-tests",
-   "summary": "New test of the cut at 0081's figures (red on old code); fabric-refusal test restated as a 121 deg hook; a test of the overlap-matrix refusal; the brook predicate's confluence case restated at half the drawn width",
-   "class": "within",
-   "why": "enforcement of the fixes the request asks for"
+   "why": "Dated one-shot measurement; feature 294 owes occasions only where a map moved."
   },
   {
    "id": "W42-verification",
-   "summary": "impl-drift on the touched claims, the gate, the timing pair",
+   "summary": "the confluence cases red on the old code; impl-drift on the touched claims; the gate; the pair",
    "class": "within",
-   "why": "FR-005"
+   "why": "FR-005; the nub tests went with the held patch."
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }

@@ -14015,21 +14015,45 @@
   "triaged": "2026-10-05",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/water/brook_rules.py::crosses_mid_run#no crossing mid-run": {
-  "code": "794c208f2ecb4206",
-  "core": "c82fb52ede9514c8",
+ "l7r/diagram/hamletgen/water/brook_rules.py::crosses_mid_run#a joiner's width": {
+  "code": "65dd0a82b8c03b0a",
+  "core": "09ca23aeef78ce4c",
   "date": "2026-10-08",
-  "note": "the confluence exemption tests only the joiner's two ends against the water (`min(_dist_to_course(e, water) for e in (joiner[0], joiner[-1])) < tol`), but the rule says \"either channel's end lies inside the other's drawn width\"; also test the water's ends against the joiner's half-width, or cite the one-sided test as a DEVIATION",
+  "note": "the cited questions say nothing on a default hairline width; GUESS is right",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/water/brook_rules.py::crosses_mid_run#either end makes the junction": {
+  "code": "ee0b0d2dfbdaf9f6",
+  "core": "09ca23aeef78ce4c",
+  "date": "2026-10-08",
+  "note": "both channels' ends are tested against the other's half drawn width",
+  "pages": {
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "790c57e2a1c0ab27"
+  },
+  "research": "a3b4c3a9112374b7",
+  "rests": [
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:863892cbd9ede3bd"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/water/brook_rules.py::crosses_mid_run#no crossing mid-run": {
+  "code": "f156777055176212",
+  "core": "09ca23aeef78ce4c",
+  "date": "2026-10-08",
+  "note": "a crossing away from a confluence is flagged; the research says ditches join rather than cross",
   "pages": {
    "0054-which-way-water-flows-and-how-channels-bend-and-join.html": "d9e9a68ef73c9507"
   },
   "research": "4409e1905454f5d9",
   "rests": [
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:34fdf73fd25acb82",
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:863892cbd9ede3bd",
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.html:557053d2e543df0a"
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.html:557053d2e543df0a",
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.html:a3aafd75f942612b"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/brook_rules.py::ditch_strokes#course measurement": {
   "code": "f4d7581c95457917",
@@ -15916,34 +15940,23 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/clearance.py::_NUB_FT#nub length": {
-  "code": "10a2c7d4c53b0f54",
-  "core": "4f2bc53661b5376e",
+  "code": "dc5c52959d11345d",
+  "core": "0be511d9fcea119b",
   "date": "2026-10-08",
-  "note": "12.0 ft, compared with `<=`, matches \"12 ft or less\"",
-  "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
-  },
-  "research": "ebd72aaa6a0eb9af",
-  "rests": [
-   "0081-village-lanes.drawing.html:65ad16eace199d92",
-   "0081-village-lanes.drawing.html:91a5765af6230403",
-   "0081-village-lanes.drawing.html:a857325132f8d4ee"
-  ],
+  "note": "a splice-artifact cleanup floor, not a fact about the place",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/clearance.py::_NUB_TURN#nub turn": {
-  "code": "08d99829f50c5de0",
-  "core": "b3f6826eff34de9a",
+  "code": "94e33da4e762d4f8",
+  "core": "c0101826cceee8b7",
   "date": "2026-10-08",
-  "note": "90.0 deg, compared with `>=`, matches \"90 degrees or more\"",
-  "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
-  },
-  "research": "ebd72aaa6a0eb9af",
-  "rests": [
-   "0081-village-lanes.drawing.html:65ad16eace199d92",
-   "0081-village-lanes.drawing.html:a857325132f8d4ee"
-  ],
+  "note": "a splice-artifact cleanup threshold, not a fact about the place",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/clearance.py::_ZIGZAG_DEG#zigzag turn": {
@@ -16121,19 +16134,13 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/clearance.py::drop_end_nubs#a lane's end loses its nub": {
-  "code": "0a98ca9cd8b9a4bb",
-  "core": "8183c94f875ff2ca",
+  "code": "39ddfbc22403e851",
+  "core": "683a3fb6e8d7cf53",
   "date": "2026-10-08",
-  "note": "at each end, an end leg of 12 ft or less followed by a turn of 90 deg or more is removed by dropping the vertex after the foot",
-  "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
-  },
-  "research": "ebd72aaa6a0eb9af",
-  "rests": [
-   "0081-village-lanes.drawing.html:65ad16eace199d92",
-   "0081-village-lanes.drawing.html:a857325132f8d4ee",
-   "0081-village-lanes.drawing.html:be608a70af4cfcc5"
-  ],
+  "note": "only the vertex after the foot is dropped, a drawing cleanup",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/clearance.py::existing_walk#plumbing": {
