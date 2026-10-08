@@ -130,9 +130,7 @@ def test_the_judgment_agent_is_pre_authorized():
     assert (REPO / ".claude/agents/entry-drift.md").is_file(), "pre-authorized but the agent file is missing"
     # every defined agent, not only this feature's: by 2026-10-08 nine had been added without joining the list
     defined = {p.stem for p in (REPO / ".claude/agents").glob("*.md")}
-    assert defined <= authorized, (
-        f"add to container-scripts/append-system-prompt.md's list: {sorted(defined - authorized)}"
-    )
+    assert defined <= authorized, f"add to container-scripts/append-system-prompt.md's list: {sorted(defined - authorized)}"
 
 
 def test_the_agent_pins_opus_like_every_subagent_check():
