@@ -1,34 +1,39 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "bd001518382d6d1c843701347021bbee91cbd6791618c2deb2fc634eb9a14420",
+ "plan_sha256": "68bf9f56d1e41b880332cd96688331fbd8e5ddbe1f0692d9e66870262bf1e3c8",
  "reviewed": "2026-10-07",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W27-brook-E3",
-   "summary": "the brook trio (bend_runs#bend across the fall, brook_violations#runs downhill, BEND_DIP_FT) re-tiered E3 on a trial said to fail 6 of 28 brook tests",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "moves three open in-scope rows behind every remaining E2 row against the easiest-first order (request; FR-003, SC-003) on a measurement that does not reproduce: the literal fix at HEAD in a detached worktree (bend_at cap 0.0 for a bend down the fall in both bend_runs calls, monotone_down slack 0.01) passes 28 of 28 in tests/hamletgen/test_brook.py and 1341 passed, 1 xfailed over tests/hamletgen (reviewer's run 2026-10-08; a sabotage run confirmed the worktree's code was the code under test). The trial's patch is not recorded, so the 6-of-28 figure has no route back to its run."
+   "id": "W27-brook",
+   "summary": "rows 448-450 done in wave 27 as the literal fix: a run across the fall takes no dip down it (bend_at cap 0.0 in both bend_runs calls), the downhill check strict (monotone_down default slack 0.01), BEND_DIP_FT retired; the E3 re-tier withdrawn and the rows restored to E2",
+   "class": "within",
+   "why": "the round-1 BLOCKED item taken: the rows stay in the easiest-first order (request; FR-003) and move the code to 0054 (strictly under 90; FR-004). The code diff in e8bffc538 is exactly the patch the reviewer reproduced at 28 of 28 brook tests; no BEND_DIP_FT reference remains in l7r/ or tests/"
   },
   {
    "id": "W27-flank-0053",
    "summary": "flanks_commanded: a flank of 150 ft or less not judged; a judged flank owed 80 ft or 30%, the lesser",
    "class": "within",
-   "why": "0053 drawing page: 'more than about 150 ft ... reaches at least 80 ft or 30% of that flank' and the rule 'does not touch ... a fan whose far flank is a sliver under the 150 ft line'; the implementation moves to the page (FR-004)"
+   "why": "0053 drawing page states the rule; the implementation moves to the page (FR-004)"
   },
   {
    "id": "W27-flank-test",
    "summary": "the test pinning the refusal of a 120 ft flank brought to the page; a test of the lesser added",
    "class": "within",
-   "why": "the old assertion pinned behavior 0053 contradicts; the new tests discriminate min from max (90 ft on 400 accepted, 70 refused, 50 on a 160 ft flank accepted) and the 60 ft refusal stands - brought to the page, not weakened"
+   "why": "the old assertion pinned behavior 0053 contradicts; the new tests enforce the page's rule (enforcement of the request, not scope)"
+  },
+  {
+   "id": "W27-occasions",
+   "summary": "no review occasions; the five pool hamlets stated unchanged",
+   "class": "within",
+   "why": "FR-005 owes the occasions a wave opens; the unchanged claim is a state T79/T80 must verify by regeneration before ticking, not a decision"
   },
   {
    "id": "W27-row-434",
    "summary": "row 434 held for the GM",
    "class": "within",
-   "why": "carried unchanged from waves 23-26 under the GM's instruction to defer questions to the end"
+   "why": "carried unchanged from waves 23-26; already ruled LEGITIMATE under the GM's instruction to defer questions to the end"
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }

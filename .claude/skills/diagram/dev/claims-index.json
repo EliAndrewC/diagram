@@ -12940,30 +12940,38 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/water/brook.py::bend_runs#bend across the fall": {
-  "code": "90cc5b2628bf6f2d",
-  "core": "e961ddad125bf910",
-  "date": "2026-10-03",
-  "note": "a bend dipped BEND_DIP_FT down the fall on a run lying across it makes the next leg climb that 8 ft back; 0054 admits no uphill part (\"At 90 degrees or more the water would have a net uphill part\") - label DEVIATION/GUESS or bend across the run",
+  "code": "dfb1a7dd100a4141",
+  "core": "ef7389735449d0d4",
+  "date": "2026-10-07",
+  "note": "the bend down the fall is capped at 0 so the next leg never climbs, which keeps the page's strict under-90 bound",
   "pages": {
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "790c57e2a1c0ab27"
   },
   "research": "a3b4c3a9112374b7",
-  "verdict": "DRIFTED"
+  "rests": [
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:beebf3a1f3e405e3",
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:f2e12c91b742ea44"
+  ],
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/water/brook.py::bend_runs#level runs broken": {
-  "code": "53abb82633c03dad",
-  "core": "e961ddad125bf910",
-  "date": "2026-10-03",
-  "note": "purely how it is shown",
+  "code": "35d21d0d915d7472",
+  "core": "ef7389735449d0d4",
+  "date": "2026-10-07",
+  "note": "a run parallel to the canvas frame is about how the map looks, not about the ground",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/water/brook.py::bend_runs#ruled runs broken": {
-  "code": "db51df79c2c4df6d",
-  "core": "e961ddad125bf910",
-  "date": "2026-10-03",
-  "note": "bundle research silent on it",
+  "code": "1cd1a9a1b88d9009",
+  "core": "ef7389735449d0d4",
+  "date": "2026-10-07",
+  "note": "the page says nothing on how straight a brook may run",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/water/brook.py::brook_skirt#corners cut": {
@@ -13041,82 +13049,103 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/water/brook.py::brook_violations#no crossing": {
-  "code": "762a28d8e6678eeb",
-  "core": "3493d6b727b40612",
-  "date": "2026-10-03",
-  "note": "matches 0054",
+  "code": "c22161e8b10caa20",
+  "core": "a0828b23a4d1b8f8",
+  "date": "2026-10-07",
+  "note": "\"No channel crosses another\"",
   "pages": {
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "790c57e2a1c0ab27"
   },
   "research": "a3b4c3a9112374b7",
+  "rests": [
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:34fdf73fd25acb82",
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:c13662e06a80966e"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/water/brook.py::brook_violations#no fold-back": {
-  "code": "ed1cadc8b03843f3",
-  "core": "3493d6b727b40612",
-  "date": "2026-10-03",
-  "note": "max_turn_deg > 100; unanswered in the bundle",
+  "code": "0455617e9197395c",
+  "core": "a0828b23a4d1b8f8",
+  "date": "2026-10-07",
+  "note": "the page gives ditch bend radii but no turn limit for a brook",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/water/brook.py::brook_violations#no level run": {
-  "code": "d97231b69c328927",
-  "core": "3493d6b727b40612",
-  "date": "2026-10-03",
-  "note": "purely how it is shown",
+  "code": "df3ca54e04393862",
+  "core": "a0828b23a4d1b8f8",
+  "date": "2026-10-07",
+  "note": "this rule is about the frame and looks only",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/water/brook.py::brook_violations#no ruled run": {
-  "code": "8244fcd5b10e9fee",
-  "core": "3493d6b727b40612",
-  "date": "2026-10-03",
-  "note": "bundle research silent on it",
+  "code": "306ed5d045d0e0c3",
+  "core": "a0828b23a4d1b8f8",
+  "date": "2026-10-07",
+  "note": "the page says nothing on brook straightness",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/water/brook.py::brook_violations#no screen axis": {
-  "code": "2f1c08bb5b003f13",
-  "core": "3493d6b727b40612",
-  "date": "2026-10-03",
-  "note": "purely how it is shown",
+  "code": "981cef5e84d2cbb1",
+  "core": "a0828b23a4d1b8f8",
+  "date": "2026-10-07",
+  "note": "this rule is about the screen axes and looks only",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/water/brook.py::brook_violations#off-map ends": {
-  "code": "714c19d30d679d6b",
-  "core": "3493d6b727b40612",
-  "date": "2026-10-03",
-  "note": "matches 0059",
+  "code": "b33889008bf11e4b",
+  "core": "a0828b23a4d1b8f8",
+  "date": "2026-10-07",
+  "note": "the brook \"comes down off the high ground\" and \"runs on down that flank to leave the map\"",
   "pages": {
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "20b954e8c3ae0884"
   },
   "research": "572ea6aee895aaef",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:05d6fe02bbdbbe65",
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:e4204c7141364a56"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/water/brook.py::brook_violations#out of the field": {
-  "code": "3710c61c7e6a02ca",
-  "core": "3493d6b727b40612",
-  "date": "2026-10-03",
-  "note": "matches 0059",
+  "code": "46991e32ec55b21b",
+  "core": "a0828b23a4d1b8f8",
+  "date": "2026-10-07",
+  "note": "the brook passes the fan on one side and the fan is \"cut away from the brook\"",
   "pages": {
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "20b954e8c3ae0884"
   },
   "research": "572ea6aee895aaef",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:05d6fe02bbdbbe65",
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:e4204c7141364a56"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/water/brook.py::brook_violations#runs downhill": {
-  "code": "a90c7f5d0fb8d7b7",
-  "core": "3493d6b727b40612",
-  "date": "2026-10-03",
-  "note": "monotone_down(..., slack=BEND_DIP_FT) lets any step below the tap climb up to 8 ft back up the fall; 0054 holds water to \"a strict under 90\" with no net uphill part - record the slack as a DEVIATION/GUESS or drop it",
+  "code": "7d9a1b46e491d716",
+  "core": "a0828b23a4d1b8f8",
+  "date": "2026-10-07",
+  "note": "the strict under-90 bound on how far the water may stray from the fall",
   "pages": {
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "790c57e2a1c0ab27"
   },
   "research": "a3b4c3a9112374b7",
-  "verdict": "DRIFTED"
+  "rests": [
+   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:f2e12c91b742ea44"
+  ],
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/water/brook.py::chord_offsets#ruled bend depth": {
   "code": "0ea19ef41b1d969e",
@@ -13542,17 +13571,6 @@
   "note": "purely how it is shown",
   "research": "",
   "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/water/brook_rules.py::BEND_DIP_FT#bend dip allowance": {
-  "code": "26b5ababc77cbfaa",
-  "core": "232d3ac8ac8b4b8c",
-  "date": "2026-10-03",
-  "note": "\"the water still running downhill\" is false: the 8 ft dip is also the slack monotone_down grants, so the course may climb 8 ft back up the fall; 0054 gives no such allowance and bounds direction strictly under 90 - relabel DEVIATION/GUESS",
-  "pages": {
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "790c57e2a1c0ab27"
-  },
-  "research": "a3b4c3a9112374b7",
-  "verdict": "DRIFTED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/water/brook_rules.py::BROOK_DRAWN_W#brook width": {
   "code": "c98cf3f38014dac0",
