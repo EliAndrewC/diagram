@@ -1,51 +1,40 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "0eeee073f901481512d004c8faf2dc1ef6d1ba3747ad467a54e6b20fc4f297ca",
+ "plan_sha256": "3c011f545dc50273a870df5eebd0b730f6f10fe05f82040db2bd71901ba06885",
  "reviewed": "2026-10-07",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W28-scope",
-   "summary": "wave 28 takes row 452 (_polder_candidate#surveyed block): no edge wander, the walk-down to a 0.86 box fill gone",
+   "id": "W28-revert-rectangle",
+   "summary": "the edge_wander-0 trial (a straight-sided rectangular perimeter dike) reverted",
    "class": "within",
-   "why": "the next open in-scope row in tier order (request: easiest to hardest; FR-003); the implementation moves to 0019's fixed outer edge (FR-004)"
+   "why": "0027's drawing page curves the outer face with the water and calls a rectangular polder modern; the GM 2026-09-28 'eliminate anything which is only modern'. Keeping it would contradict the record and a GM ruling"
   },
   {
-   "id": "W28-shared-knob",
-   "summary": "the shared build_polder keeps its edge_wander knob and legacy test; only the hamlet passes 0; build_polder's claim no longer says the hamlet passes a fitted wander",
-   "class": "within",
-   "why": "the knob's other callers are legacy hand-drawn/waterfields maps, DEFERRED by amendment 8; the claim edit records the hamlet's actual behavior"
+   "id": "W28-hold-452",
+   "summary": "row 452 held for the GM as a contradiction in the record, with options (a) restate the claim, (b) a shape knob including rectangles",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "No real contradiction. 0019's 'fades to nothing at the fixed outer edge' and 0022's 'the dike and the ring canal at the block's edge stay put' say the interior drift and bow leave the edge alone; neither says the edge is straight. Only 0027 speaks to the outline's shape (curve with the water, no rectangle), and a GM ruling settles it. GM 2026-10-02: where findings collide, pick what the research supports and do not ask. Option (b) asks the GM to reopen his own ruling. A row the record decides is not a question to put off, under a request to 'fix all of it'. Row 452's premise (the audit fix 'edge_wander 0') was the error. Restate it against 0027 and fix it: the claim cites 0019 for a walk-down to a 0.86 box fill that 0019 does not say, and the code's stated purpose for that walk-down is a 'SURVEYED rectangle', the form 0027 excludes. Re-tier it honestly, measure it and glyph-check it."
   },
   {
-   "id": "W28-teed-onto",
-   "summary": "a regression the gate found (Kuwabata's re-rolled web left two lane ends 15.4 ft apart, both gather forms refused) fixed with a last gather form: a lone movable end teed onto the other lane (knots.teed_onto); it also gathers one Sawada knot, Sawada's other knot stays with the found row it waits on",
+   "id": "W28-revert-knot",
+   "summary": "the T-foot knot form reverted with the trial; the gap filed as a found DRIFTED E2 row",
    "class": "within",
-   "why": "a fix where found (constitution XIV) that moves the implementation TOWARD 0081 (ends within 25 ft joined, no knot), adding a form rather than excusing a knot; it narrows nothing - the earlier forms are still tried first and the remaining Sawada knot is an existing ranked row, not a new carve-out"
+   "why": "It fixed a regression only the trial created. Measured: Sawada's lane end-pairs 0.5-25 apart are identical with and without it (one pair, 8.2, the found row it waits on). Taking the filed E2 row now, ahead of open lower tiers, would break tier order (FR-006, SC-003). It is ranked, not dropped"
   },
   {
-   "id": "W28-occasions",
-   "summary": "three glyph checks: perimeter dike on Kuwabata, village lanes on Kuwabata and Sawada",
+   "id": "W28-no-occasions-no-pair",
+   "summary": "no review occasions and no bookend pair, since no executed code changed",
    "class": "within",
-   "why": "feature 294's occasions for re-placed elements, declared in tasks.md's Occasions"
-  },
-  {
-   "id": "W28-stack",
-   "summary": "wave 28 stacks on unpushed waves 9-27 under condition (6); its pair opens at f51fbbbe4",
-   "class": "within",
-   "why": "the LEGITIMATE wave-11 exception's own terms, carried"
+   "why": "The diff against f51fbbbe4 under l7r/pool/tests is comments and docstrings only (synced future-work audit commits), with no executed code. Note that plan.md says that diff is 'empty', and it is not literally empty"
   },
   {
    "id": "W28-row434",
-   "summary": "row 434 held for the GM",
+   "summary": "row 434 still held",
    "class": "within",
-   "why": "carried unchanged; already ruled under the GM's instruction to defer questions to the end of the feature"
-  },
-  {
-   "id": "W28-verify",
-   "summary": "impl-drift on _polder_candidate and build_polder's claim, the glyph checks, the gate, wave 28's own bookend pair",
-   "class": "within",
-   "why": "FR-005/FR-006 verification; narrows nothing"
+   "why": "carried unchanged from earlier rounds' rulings"
   }
  ],
- "verdict": "CLEAR"
+ "verdict": "BLOCKED"
 }

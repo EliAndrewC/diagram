@@ -437,7 +437,8 @@ def _polder_candidate(plan: SitePlan, seed: int, rows: int, cols: int, cellpx: f
     as surveyed (see `fit_polder`).
 
     Research:
-        surveyed block - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: edge wander walked down from 0.5 until the outline fills 0.86 of its box
+        outer face with the water - research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html: the edge wanders (from Enokida's 0.5), the dike's outer face curving with the water's edge, never a rectangle
+        wander walked down to a 0.86 box fill - CONVENTION: the wander eased only as far as the outline still fills 0.86 of its box (`polder_fills_its_bbox`'s 82% and a margin for the drawn outline's rounding), so a small block still reads as one block
         block centered - NONE: on the canvas at any bearing
     """
     dx, dy = plan.fall
@@ -446,11 +447,12 @@ def _polder_candidate(plan: SitePlan, seed: int, rows: int, cols: int, cellpx: f
     cx, cy = plan.W / 2.0, plan.H / 2.0
     origin = (cx - dx * along / 2 - ux * across / 2, cy - dy * along / 2 - uy * across / 2)
     # EDGE WANDER IS FITTED TO THE BLOCK, not fixed at Enokida's 0.5. `polder_fills_its_bbox`
-    # wants the outline to cover >= 82% of its bbox - the archetype's teeth, since a polder
-    # reads as a SURVEYED rectangle rather than an organic field - and the wander's wobble is a
+    # wants the outline to cover >= 82% of its bbox - the archetype's teeth, so the polder reads as one diked block rather
+    # than an organic field; its outer face still curves with the water (0027: a rectangular polder is only modern, and the
+    # maps draw nothing only modern; feature 328 tried no wander and drew one) - and the wander's wobble is a
     # fixed size in cells, so on a small block it eats a much larger share of the bbox: measured,
     # a 9x5 grid fills 79% at wander 0.5 where Enokida's 15x8 clears the bar comfortably. So the
-    # wander is walked down until the block reads as surveyed, keeping as much of the
+    # wander is walked down until the block reads as one block, keeping as much of the
     # hand-piled, fish-scale irregularity as the archetype can carry at that size.
     net: dict[str, Any] = {}
     for wander in (0.5, 0.4, 0.3, 0.2, 0.12):

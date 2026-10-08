@@ -1215,6 +1215,23 @@
   "scope": "kept"
  },
  {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::_polder_candidate#surveyed block",
+  "verdict": "DRIFTED",
+  "tier": "E0",
+  "fix": "restate the claim against 0027 (the outer face curving with the water's edge, never a rectangle) and label the 0.86 box-fill walk-down a CONVENTION; the code's comment no longer calls the block a surveyed rectangle",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 10 re-check (tiered by its work at T42a)",
+  "tier_as_ranked": "E2",
+  "e0_basis": "0027 drawing: 'The maps curve the dike's outer face with the water's edge'; the code wanders the edge from 0.5, eased to a 0.86 box fill (the measured main sides spread 55-58 ft)",
+  "moved": "wave 28 (amendment 27 round 4): the row's premise (edge_wander 0, from 0019's 'fixed outer edge') was wrong - tried, it drew the rectangle 0027 and the GM's 2026-09-28 ruling exclude; 0019/0022 mean the drift leaves the edge alone; the code matches 0027, only its claim was wrong: E0",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::a_way_onto_the_bund#a lane end within 6 ft (BUND_REACH_FT) of the paddy counts as joined to the bund",
   "verdict": "UNCLAIMED",
   "tier": "E0",
@@ -6893,22 +6910,6 @@
   "scope": "kept"
  },
  {
-  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::_polder_candidate#surveyed block",
-  "verdict": "DRIFTED",
-  "tier": "E2",
-  "fix": "hamletgen/water/polder.py:456-478: drop the edge_wander walk-down (0.5 -> 0.12) and its 0.86 fill test, holding the outer edge to its line (edge_wander 0) as 0019/0014 keep the block's edge fixed",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py"
-  ],
-  "after": [],
-  "flag": "Held: question for the GM, deferred to the feature's end (goal amendment 2026-10-07). The record disagrees on the polder's outer edge: research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the interior drift 'fades to nothing at the fixed outer edge' (and 0022: 'the block's edge holds its line'), against research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html: 'The maps curve the dike's outer face with the water's edge' and 'Around Lake Tai a rectangular polder is a modern form, and this project draws nothing that is only modern' (the GM 2026-09-28: 'We should eliminate anything which is only modern'). Tried in wave 28 (edge_wander 0): Kuwabata's dike sides held straight (spread 5-12 ft against main's 55-58), the glyph check NEEDS-WORK (F1, wrong form); reverted. Options: (a) the edge follows the water as now and 0019/0022's 'fixed' is read as the drift leaving the edge alone (claim restated); (b) a per-settlement knob over the attested shapes (pwsannong-zhuwei: 'square, round, rectangular, polygonal and irregular'), 0027's drawing page amended if straight sides are one value",
-  "found": "wave 10 re-check (tiered by its work at T42a)",
-  "tier_as_ranked": "E2",
-  "moved": "T42a: tiered by its work - The wander ladder and the bbox fill test are the loop logic of one function, so the fix rewrites that one rule rather than a single value.",
-  "wave": "",
-  "scope": "kept"
- },
- {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::stage_polder#reservoir size",
   "tier": "E2",
   "fix": "size the polder reservoir from the paddy it waters: area two or three tenths of plan.acres (0061/0017), semi-axes derived from that area",
@@ -7022,6 +7023,21 @@
   "flag": "",
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/knots.py::next_gather#lane ends gathered",
+  "verdict": "DRIFTED",
+  "tier": "E2",
+  "fix": "a knot neither gather form is admitted for stays unjoined: on a re-rolled Kuwabata (polder edge fixed, wave 28 trial) two access lanes converging at a sharp angle kept their feet 15.4 ft apart - lane 9 onto lane 3 left a needle sliver, lane 3 onto lane 9 split the web; a T-foot form (the lone movable end teed from its vertex before onto the other lane) gathered it, reverted with the trial [0081 drawing]",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/ways/knots.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 28 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E2",
   "wave": "",
   "scope": "kept"
  },

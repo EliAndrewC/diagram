@@ -14188,34 +14188,34 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::_polder_candidate#block centered": {
-  "code": "6f5fce9bf4223038",
-  "core": "44ac97a08c95e60e",
+  "code": "411b74070b765559",
+  "core": "fea6f79507867af5",
   "date": "2026-10-07",
-  "note": "putting the block at the canvas centre is a framing decision (how the map shows it), not plumbing; label should be CONVENTION. The bearing is not free: the code turns the block to plan.fall",
+  "note": "this is not plumbing: centering the block on the canvas sets where the polder sits on the map. It is map framing, so the label should be CONVENTION (the map is framed on the block), not NONE",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "MISLABELED"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::_polder_candidate#block's rows run along the fall, its cols across it (axis set by the slope, head-to-tail high-to-low)": {
-  "code": "44ac97a08c95e60e",
-  "core": "44ac97a08c95e60e",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::_polder_candidate#block laid with its rows down the fall and its columns across it (the grid's orientation to the slope)": {
+  "code": "fea6f79507867af5",
+  "core": "fea6f79507867af5",
   "date": "2026-10-07",
-  "note": "block's rows run along the fall, its cols across it (axis set by the slope, head-to-tail high-to-low)",
+  "note": "block laid with its rows down the fall and its columns across it (the grid's orientation to the slope)",
   "research": "",
   "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::_polder_candidate#surveyed block": {
-  "code": "8b3b53d93df60b62",
-  "core": "44ac97a08c95e60e",
+  "code": "cf49e23744c8f677",
+  "core": "fea6f79507867af5",
   "date": "2026-10-07",
-  "note": "edge_wander=0.0 keeps the outer edge fixed, and the interior drift fades to nothing there, as the page draws it",
+  "note": "edge wander walked down until the block reads as a surveyed rectangle; a calibrated degree within \"nearly straight reaches that waver gently\" on a surveyed grid",
   "pages": {
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "45bbefa1e8568ae6"
   },
   "research": "7e58acaa9e345ce6",
   "rests": [
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:470adb1b46c06909",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:2c50ae22cb97ead3",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:48a5898890bd6579"
   ],
   "verdict": "IN-STEP"
@@ -17932,16 +17932,15 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/knots.py::next_gather#lane ends gathered": {
-  "code": "c3e7eb17518875b3",
-  "core": "14a0f272a0051bd1",
+  "code": "e6c5896a281c7a5b",
+  "core": "5dd5c69e066f5ea2",
   "date": "2026-10-07",
-  "note": "nearest knot first, ends moved onto one node, T-foot as the last resort; the 25 ft limit is a drawing convention",
+  "note": "ends that nearly meet are moved onto one node, nearest knot first; the 25 ft threshold is applied in `knots()`",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },
   "research": "ebd72aaa6a0eb9af",
   "rests": [
-   "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
    "0081-village-lanes.drawing.html:65ad16eace199d92",
    "0081-village-lanes.drawing.html:df26f73dd5ee96d2"
   ],
@@ -17972,22 +17971,6 @@
   },
   "research": "ebd72aaa6a0eb9af",
   "rests": [
-   "0081-village-lanes.drawing.html:df26f73dd5ee96d2"
-  ],
-  "verdict": "IN-STEP"
- },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/knots.py::teed_onto#lane ends gathered": {
-  "code": "71b281777b6c1f1a",
-  "core": "03c1be0bb30950b6",
-  "date": "2026-10-07",
-  "note": "the arriving end is re-aimed to meet the other lane's side as a T, so no knot of ends is left a few feet apart",
-  "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
-  },
-  "research": "ebd72aaa6a0eb9af",
-  "rests": [
-   "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
-   "0081-village-lanes.drawing.html:65ad16eace199d92",
    "0081-village-lanes.drawing.html:df26f73dd5ee96d2"
   ],
   "verdict": "IN-STEP"
@@ -63578,16 +63561,15 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/waterfields/polder.py::build_polder#lattice unbent by default": {
-  "code": "e9cb4c4406c5bf66",
+  "code": "c160d17a5c31c21f",
   "core": "d51f5c127b6edb32",
   "date": "2026-10-07",
-  "note": "mosaic 0 keeps the rice polder's surveyed grid; the dike-pond block passes its own mosaic; edge_wander 0 keeps the outer edge fixed",
+  "note": "`mosaic` and `edge_wander` default to 0, so a rice polder keeps its surveyed grid; the dike-pond block passes its own mosaic, and the page records the chessboard pond layout as a known gap",
   "pages": {
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "45bbefa1e8568ae6"
   },
   "research": "7e58acaa9e345ce6",
   "rests": [
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:4141eca659aa9041",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:470adb1b46c06909",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:48a5898890bd6579",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:4cf532f7ce72c2a8",

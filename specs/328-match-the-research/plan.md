@@ -349,14 +349,15 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 
 ## Wave 28 (amendment 27, 2026-10-08)
 
-- **Scope**: row 452 tried and reverted (`tasks.md` Phase 29): with no edge wander Kuwabata's dike is a straight-sided
-  rectangle, which 0027 and the GM's 2026-09-28 ruling exclude as only modern, against 0019/0022's "fixed outer edge" - the
-  record disagrees, so the row is held for the GM (its flag carries both quotes, the measurement and the options). The
-  knot form the trial needed is reverted with it and its gap filed as a found row. Row 434 still held.
-- **Occasions**: none at the close - the engine and the pool are identical to wave 27's close.
+- **Scope**: row 452 (`tasks.md` Phase 29). Its suggested fix, no edge wander, drew the rectangle 0027 and the GM's
+  2026-09-28 ruling exclude (the glyph check, F1); 0019/0022's "fixed outer edge" means the drift leaves the edge alone. The
+  code already curves the dike with the water as 0027 draws it, so the change is reverted and the row is E0: the claim
+  restated against 0027, the 0.86 box-fill walk-down labeled a CONVENTION, a comment corrected. The knot form the trial
+  needed is reverted with it and its gap filed as a found row. Row 434 still held.
+- **Occasions**: none - no executed code differs from wave 27's close (the engine diff is comments and docstrings only).
 - **On the unpushed waves 9-27** under condition (6): (1)-(5) held at wave 27's close (f51fbbbe4, backed up, its own pair
   band 1 diagnosed as load); wave 28 changes no executed code, so it owes no pair.
-- **Verification**: the engine and pool diff against f51fbbbe4 empty; the gate green.
+- **Verification**: `impl-drift` on the restated claim, the gate green.
 
 ## Performance bookends (constitution VI)
 
