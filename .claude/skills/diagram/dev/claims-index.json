@@ -10055,18 +10055,27 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::draw_holdings#cell on a lane or stream left undrawn": {
-  "code": "52f1a23b3fcab82d",
+  "code": "d25f1e516708f7e7",
   "core": "e373381534fa0fdb",
   "date": "2026-10-07",
-  "note": "leaving a holding cell unplanted where a lane or stream crosses it is a decision about what was planted, not how it is shown; the claim itself says the record was searched and is silent, so it should be GUESS (or UNRESEARCHED), not CONVENTION",
+  "note": "0033 says nothing on how a lane or stream crossing a holding strip was laid out, so GUESS is the right label; the cited 0081 page was not in the bundle",
   "pages": {},
   "research": "",
   "rests": [
    "0033-row-villages-resson.drawing.html:22b02e1d1507e48b",
    "0033-row-villages-resson.drawing.html:6181eeb7e6f73fde",
-   "0033-row-villages-resson.drawing.html:d08ad775dbfe9fa1"
+   "0033-row-villages-resson.drawing.html:d08ad775dbfe9fa1",
+   "0033-row-villages-resson.drawing.html:dd589d645d5bdeaa"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::draw_holdings#crop cells kept back from lanes (half the lane width + 2.0) and from streams (6.0); these margins reach past the \"touches\" the guess claim names": {
+  "code": "e373381534fa0fdb",
+  "core": "e373381534fa0fdb",
+  "date": "2026-10-07",
+  "note": "crop cells kept back from lanes (half the lane width + 2.0) and from streams (6.0); these margins reach past the \"touches\" the guess claim names",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::draw_holdings#furrows down the strip": {
   "code": "a0fadd7badd6fc99",
@@ -10089,6 +10098,14 @@
    "0033-row-villages-resson.drawing.html:6181eeb7e6f73fde"
   ],
   "verdict": "IN-STEP"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::draw_holdings#holding strip cut into plots HOLDING_CELL_FT (150 ft) deep, which 0033 §14 records as a convention": {
+  "code": "e373381534fa0fdb",
+  "core": "e373381534fa0fdb",
+  "date": "2026-10-07",
+  "note": "holding strip cut into plots HOLDING_CELL_FT (150 ft) deep, which 0033 §14 records as a convention",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::frame_extent#row geometry": {
   "code": "3044f298e1a39283",
