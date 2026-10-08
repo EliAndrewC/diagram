@@ -1978,6 +1978,19 @@
   "moved": "T42a: tiered by its work - An honest claim would state a drift (the stroke starts at the sluice while its record says off the map), so the one call's endpoints and record change.",
   "tier": "E2"
  },
+ "l7r/diagram/settlement/homestead_parts/belt_law.py::the village belt#its west arm on inashiro": {
+  "after": [],
+  "e0_basis": "0072 does not require a west arm. 0072 drawing page: 'a shelter belt stands on the windward side of the houses ... on the north and west ... on one side or two, never all the way round' and 'every belt stands on the north and west of its houses, or on one of those two sides'; and 'A belt that runs off the edge of the map is sound, and the bare ground beyond is not a hole ... Nothing beyond the fra",
+  "files": [
+   "l7r/diagram/settlement/homestead_parts/belt_law.py",
+   "l7r/diagram/settlement/homestead_parts/grove_rules.py",
+   "pool/hamlets/inashiro/inashiro.notes.md"
+  ],
+  "fix": "No engine change. pool/hamlets/inashiro/inashiro.notes.md:92: replace 'this map's belt stands on the north and west of its houses' with: the belt stands on the north of its houses; its outline's west arm lies off the page (the frame's west edge is x 2176, the arm runs x ~2132-2173) and draws no tree, which 0072 allows (one side or two; a belt running off the frame is sound). Optional follow-on in the record, not needed for this row: the 0072 drawing page's measured 'Inashiro 109 degrees' arc is stale (the on-page clumps now span ~49 degrees round the house centroid) and goes through record-owed if refreshed. ONLY if the GM wants the west arm back is this E3 (the frame from frame_bounds/crop and the clump refusals across stages.py, belt_law.py and the grove keep-outs, a regenerated map, and a glyph-check).",
+  "flag": "",
+  "moved": "T105a (fresh reader): 0072 does not require a west arm. 0072 drawing page: 'a shelter belt stands on the windward side of the houses ... on the north and west ... on one side or two, never all the way round' and 'every belt stands on the north and west of its houses, or on one of those two sides'; and 'A belt that runs o",
+  "tier": "E0"
+ },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::PRIVY_FRONT_STEP_FT#front privy off the front wall": {
   "after": [],
   "e0_basis": "bundle I: the figure matches, the label owes the page's GUESS",
@@ -2571,6 +2584,16 @@
   "moved": "T71a (fresh reader): 0196 drawing page ('A well is drawn as a marker larger than life. At one foot per pixel its curb is drawn at a radius of 9.36 ft, about 19 ft across') sizes the CURB, and wells.py:89 draws the curb at px(9.36) - the code matches; _well_vr (wells.py:54-64) is the roof square's half-size, which the pa",
   "tier": "E0"
  },
+ "l7r/diagram/settlement/shrines_wells/woods.py::TreeStandsMixin._draw_stand#crown size": {
+  "after": [],
+  "files": [
+   "l7r/diagram/settlement/shrines_wells/woods.py"
+  ],
+  "fix": "l7r/diagram/settlement/shrines_wells/woods.py:136-139: drop the 18% emergent roll (`big = random.random() < 0.18`) and size each crown `rad * random.uniform(*CROWN_S)` (CROWN_S = (0.75, 1.4), groves.py:128; import it, or move it beside CANOPY_R_FT in core.py:646 so both modules read one constant); in the docstring (woods.py:115-116) the crown-size claim becomes '0.75 to 1.4 times CANOPY_R_FT, one band' and the 'emergent share - UNRESEARCHED: 18%' claim is retired. reach = rad * 1.4 (woods.py:143) already covers the new top end. Every woodland stand is redrawn on every pool map, so all maps are regenerated, and the woodland commons' glyph cap has to be weighed.",
+  "flag": "",
+  "moved": "T105a (fresh reader): 0080 drawing page: 'The mean crown radius is 8.5 ft ... and each crown is drawn between 0.75 and 1.4 times that' and 'A windbreak's crowns are drawn the same real size as a hill wood's. One crown size serves the hill woods and the windbreak's cedars alike'. woods.py:139 draws `rad * (random.uniform(",
+  "tier": "E2"
+ },
  "l7r/diagram/settlement/structures/fixtures/_helpers.py::kosatsuba_anchor#board placements": {
   "after": [],
   "files": [
@@ -2672,6 +2695,50 @@
   "found": "wave 10 re-check (tiered by its work at T42a)",
   "moved": "T42a: tiered by its work - One comparison value is put on the map's scale and a claim relabeled; the rule's logic is unchanged.",
   "tier": "E1"
+ },
+ "l7r/diagram/waterfields/banks.py::_TINT_MAX_AREA_RATIO#outsized plot left green": {
+  "after": [],
+  "files": [
+   "l7r/diagram/waterfields/banks.py",
+   "l7r/diagram/waterfields/tint.py"
+  ],
+  "fix": "drop the over-2x-median-area demotion from the tint judge; only the random draw or a pointed shape leaves a low plot green",
+  "flag": "",
+  "moved": "",
+  "tier": "E2"
+ },
+ "l7r/diagram/waterfields/banks.py::_TINT_MAX_ASPECT#channel-shaped plot left green": {
+  "after": [],
+  "files": [
+   "l7r/diagram/waterfields/banks.py",
+   "l7r/diagram/waterfields/tint.py"
+  ],
+  "fix": "drop the aspect-over-4 demotion from the tint judge; only the draw or a pointed shape leaves a plot green",
+  "flag": "",
+  "moved": "",
+  "tier": "E2"
+ },
+ "l7r/diagram/waterfields/banks.py::_TINT_MIN_RECTANGULARITY#triangle left green": {
+  "after": [],
+  "files": [
+   "l7r/diagram/waterfields/banks.py",
+   "l7r/diagram/waterfields/tint.py"
+  ],
+  "fix": "drop the rectangularity-under-0.80 demotion from the tint judge",
+  "flag": "",
+  "moved": "",
+  "tier": "E2"
+ },
+ "l7r/diagram/waterfields/banks.py::_TINT_MIN_SOLIDITY#lobed plot left green": {
+  "after": [],
+  "files": [
+   "l7r/diagram/waterfields/banks.py",
+   "l7r/diagram/waterfields/tint.py"
+  ],
+  "fix": "drop the solidity-under-0.85 demotion from the tint judge",
+  "flag": "",
+  "moved": "",
+  "tier": "E2"
  },
  "l7r/diagram/waterfields/carve.py::_dry_fields#a hem that keeps its ground inside the berm": {
   "after": [],

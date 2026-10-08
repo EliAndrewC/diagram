@@ -17,11 +17,7 @@ from typing import Any
 
 from .banks import (
     _TINT_END_FT,
-    _TINT_MAX_AREA_RATIO,
-    _TINT_MAX_ASPECT,
     _TINT_MIN_APEX,
-    _TINT_MIN_RECTANGULARITY,
-    _TINT_MIN_SOLIDITY,
     dedup_ring,
     pointed_ring,
     tapers_to_a_point,
@@ -117,7 +113,6 @@ def judge_tint(plots: list[dict[str, Any]], dpts: Poly, plot_across: float, g: f
     # outline, so size joins the other four. Measured on the FINAL ring, which is the only place the size exists.
     # EACH PLOT'S SHAPE ONCE, AND ITS HULL AND MINIMUM RECTANGLE IN ONE ARRAY CALL EACH (feature 276, FR-004, plan D11/D12).
     _pgs = ring_polygons([_q["poly"] for _q in plots])
-    _hull_areas = shapely.area(shapely.convex_hull(_pgs)).tolist() if _pgs else []
     _mrrs = list(shapely.minimum_rotated_rectangle(_pgs)) if _pgs else []
     _areas = sorted(_pg.area for _q, _pg in zip(plots, _pgs, strict=True) if len(_q.get("poly") or []) >= 3)
     _median_plot = _areas[len(_areas) // 2] if _areas else 0.0
@@ -129,35 +124,21 @@ def judge_tint(plots: list[dict[str, Any]], dpts: Poly, plot_across: float, g: f
         # the manifest records it (rounded to 0.1 px). THEN TWO MORE RINGS: the deduplicated ring at 25 deg is the placer's
         # margin over the rule (cohort seed 8), and the end-collapsed clause catches a needle truncated a few feet short of its
         # point, which no interior angle on the 1.0 ring reports.
-        # A THIRD CLAUSE MEASURES SHAPE RATHER THAN TAPER: a blunt-cornered LOBE (Sawada's 0.731-solidity flooded plot read as an
-        # arrowhead pond; see `_TINT_MIN_SOLIDITY`). Blue has to mean "a leveled basin pooling on the collector".
+        # ONLY THE DRAW OR A POINTED SHAPE LEAVES A LOW PLOT GREEN (feature 328 wave 40, 0007 drawing: "Only the random draw, or a
+        # plot's pointed shape, left them untinted"). Four shape clauses stood here, each from a settlement-review that read a
+        # blue plot as a pond or a channel - a lobe under 0.85 solidity, a triangle filling under 0.80 of its least rectangle, an
+        # aspect over 4, an area over twice the map's median - and none is on the page; they went with this feature.
         # A FOURTH MEASURES SITING: THE OUTFALL, NOT THE WHOLE DRAIN. Blue lying ALONG the collector is the rule working; only
         # the terminus is ambiguous (Sawada's blue basin fused with the brook's head, settlement-review 2026-08-18), and the
         # keep-out is one and a half plot widths of it, measured TO THE PLOT'S NEAREST CORNER, NOT ITS CENTROID (feature 145).
-        # A FIFTH MEASURES PROPORTION: a long parallel-sided wedge in blue reads as a channel (see `_TINT_MAX_ASPECT`).
         _t_end = _TINT_END_FT * g / 2
         _pg = _pgs[_k]
-        _psol = (_pg.area / (_hull_areas[_k] or 1.0)) if isinstance(_pg, Polygon) and not _pg.is_empty else 1.0
         _pcx = sum(_q[0] for _q in p["poly"]) / len(p["poly"])
         _pcy = sum(_q[1] for _q in p["poly"]) / len(p["poly"])
         _at_outfall = bool(dpts) and min(math.hypot(_q[0] - dpts[-1][0], _q[1] - dpts[-1][1]) for _q in [*p["poly"], (_pcx, _pcy)]) < 1.5 * plot_across
         _mrr = _mrrs[_k] if isinstance(_pg, Polygon) and not _pg.is_empty else None
-        _asp = 1.0
         _fill = (_pg.area / _mrr.area) if isinstance(_mrr, Polygon) and _mrr.area > 0.0 else 1.0
-        if isinstance(_mrr, Polygon):
-            _sides = [math.dist(_q, _r) for _q, _r in zip(list(_mrr.exterior.coords)[:-1], list(_mrr.exterior.coords)[1:], strict=True)]
-            if len(_sides) >= 2 and min(_sides[0], _sides[1]) > 0.0:
-                _asp = max(_sides[0], _sides[1]) / min(_sides[0], _sides[1])
-        _wrong = (
-            _needle(p["poly"])
-            or pointed_ring(dedup_ring(p["poly"], 1.0), _TINT_MIN_APEX)
-            or tapers_to_a_point(p["poly"], _t_end, _TINT_MIN_APEX, 4 * _t_end)
-            or _psol < _TINT_MIN_SOLIDITY
-            or _at_outfall
-            or _asp > _TINT_MAX_ASPECT
-            or _fill < _TINT_MIN_RECTANGULARITY
-            or (_median_plot > 0.0 and _pg.area > _TINT_MAX_AREA_RATIO * _median_plot)
-        )
+        _wrong = _needle(p["poly"]) or pointed_ring(dedup_ring(p["poly"], 1.0), _TINT_MIN_APEX) or tapers_to_a_point(p["poly"], _t_end, _TINT_MIN_APEX, 4 * _t_end) or _at_outfall
         if p.get("fill") == FLOODED and _wrong:
             p["fill"] = RICE_GREENS[(int(abs(p["poly"][0][0]) * 7) + int(abs(p["poly"][0][1]) * 3)) % len(RICE_GREENS)]
         elif not _wrong and _pg.area > 0.0 and (p.get("low") or (_collector is not None and _to_collector[_k] <= 0.25 * plot_across)):

@@ -49,12 +49,16 @@ def test_the_tint_judges_the_flooded_needle_on_the_ring_the_test_reads() -> None
     assert needle(flat) and not tint._needle(flat), "judged AS RECORDED: a spur the 0.1 px rounding flattens is no needle"
 
 
-def test_a_triangle_never_wears_the_water_tint() -> None:
-    """The fill clause: a triangle's solidity is 1.0 and it has no needle, so it passed every earlier clause and read as a little
-    pond (Sawada, Kashikawa). One that fills less than its rectangle is demoted, and never promoted."""
-    plots = [{"poly": [(600.0, 1292.0), (660.0, 1292.0), (600.0, 1250.0)], "fill": FLOODED, "low": True}]
-    tint.judge_tint(plots, _D, 46.0, 2.0)
-    assert plots[0]["fill"] != FLOODED
+def test_only_a_pointed_shape_loses_the_water_tint() -> None:
+    """0007 drawing (feature 328 wave 40): "Only the random draw, or a plot's pointed shape, left them untinted." A triangle whose
+    sharpest corner is about 35 degrees keeps its tint (the fill clause that demoted it was on no page); one tapering to a
+    15 degree point, under `_TINT_MIN_APEX`, loses it."""
+    blunt = [{"poly": [(600.0, 1292.0), (660.0, 1292.0), (600.0, 1250.0)], "fill": FLOODED, "low": True}]
+    tint.judge_tint(blunt, _D, 46.0, 2.0)
+    assert blunt[0]["fill"] == FLOODED
+    sharp = [{"poly": [(600.0, 1292.0), (700.0, 1292.0), (600.0, 1265.0)], "fill": FLOODED, "low": True}]
+    tint.judge_tint(sharp, _D, 46.0, 2.0)
+    assert sharp[0]["fill"] != FLOODED
 
 
 def test_basin_rank_orders_on_the_collector_then_fill_then_size() -> None:

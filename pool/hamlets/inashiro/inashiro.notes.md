@@ -89,7 +89,8 @@ pipeline's, and it is the same order a person follows:
 - **CLOSED 2026-09-26 (feature 261): the wind is the regional northwest.** The wind used to be derived
   from the slope and then re-read off the seat, which made the belt's side circular here. Every map now
   takes the northwest unless its spec declares a local wind (none does), and the cluster is seated with
-  its back to it; this map's belt stands on the north and west of its houses.
+  its back to it; this map's belt stands on the north of its houses (its west arm runs off the page's
+  west edge, as 0072 allows a belt to; measured 2026-10-08, feature 328 wave 40).
 - **Dry hem plots run ~4.3x the size of Ikegami's** - the pre-269 roll's figure (feature 269, 2026-09-28, redrew
   the hem as 2 furrow tracts, one buckwheat at 7,773 sq ft and one millet at 10,674 sq ft, 0.42 acre total against
   this bullet's 20 plots over 3.64 acres; the multiplier below no longer describes this map - see the landing entry

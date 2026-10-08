@@ -567,42 +567,6 @@ _GATE_MIN_AREA = 0.20
 # next-best host tried; the best of the lumpy candidates is taken only if no host is clean.
 _WELD_MIN_SOLIDITY = 0.85
 """Research: weld lump - DEVIATION research/questions/0014-bunds-between-the-paddies-aze.drawing.html: a scrap goes to the basin it shares the most bund with unless that leaves the host under 0.85 solidity and a clean host exists"""
-# ...and the same measure guards the TINT, for a defect the apex guards likewise could not see
-# (settlement-review, Sawada 2026-08-17). Absorbing a fragment into the fan's ONE flooded plot grew
-# it a lobe: 94 x 24 ft became 94 x 38 ft at solidity 0.731, and at fit zoom it reads as an
-# arrowhead POND - on the map whose brief is explicitly "no pond". `_TINT_MIN_APEX` scored it 41.8
-# deg and `_TINT_END_FT` found both ends far wider than 5 ft, so both passed a plot that fails the
-# thing the tint rule is actually for. Blue means "the closing rank pooling before the outfall", so
-# a blue plot has to READ as a leveled basin; the same 0.85 demotes it to rice green, and the check
-# runs after the absorb pass because that is what reshaped it.
-_TINT_MIN_SOLIDITY = 0.85
-"""Research: lobed plot left green - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: solidity under 0.85 loses the tint"""
-# ...and a FILL clause, for the one shape both the apex and the hull measures pass: the TRIANGLE (settlement-review, feature
-# 230 pass 10). A triangle's solidity is 1.0, and a wedge whose narrow end is capped by a short edge has no sharp vertex, so
-# Sawada shipped a notched triangle and Kashikawa a 67 x 24 ft wedge in blue, each reading as a little triangular pond - the
-# failure this whole family of clauses exists for. What separates them from a basin is how much of their own minimum
-# rectangle they fill: measured over all 2,653 basins on the four brook maps, the median is 0.93 and the first quartile
-# 0.85, while those two plots fill 0.55 and about 0.6. 0.80 leaves four in five basins free to take the tint.
-_TINT_MIN_RECTANGULARITY = 0.80
-"""Research: triangle left green - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: filling under 0.80 of its least rectangle loses the tint"""
-# AND A BLUE PLOT MUST BE SHAPED LIKE A BASIN, NOT LIKE A CHANNEL (settlement-review, Inashiro
-# 2026-08-19). The three tests above all ask about a POINT - the apex, the truncated end, the lobe -
-# and a long parallel-sided WEDGE passes every one of them: Inashiro shipped two tinted plots at
-# 114 x 18.9 ft and 139 x 24.8 ft, aspects 6.0 and 5.6, sharpest corners 28.5 and 27.9 deg, solidity
-# fine. Each reads at fit zoom as a blue-gray dagger of water tapering toward the collector, which is
-# the exact misreading `pointed_ring`'s own docstring says the tint rules exist to prevent - and
-# neither shape is wrong, only its COLOR: the fan toe does truncate, and a hem strip that narrow is
-# honest ground. So the fourth clause measures proportion rather than taper. 4.0 is far above
-# anything a leveled basin runs at (the median plot on a hamlet fan is ~37 x 38 ft, aspect ~1, and
-# the whole map's worst is 7.2), so it demotes the two wedges and touches no basin that reads as one.
-_TINT_MAX_ASPECT = 4.0
-"""Research: channel-shaped plot left green - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: aspect over 4 loses the tint"""
-# A BASIN FAR LARGER THAN ITS NEIGHBORS DOES NOT READ AS A BASIN (feature 152 T10). 2.0x the map's own
-# MEDIAN plot: Sawada's offender was 4.9x and the largest of 776, and the reviewer's own suggested bar was
-# "2x would demote this one and leave every honest wet row". Relative to the map rather than absolute,
-# because a basin's size is set by the fan's design cell and that differs per settlement.
-_TINT_MAX_AREA_RATIO = 2.0
-"""Research: outsized plot left green - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: over twice the median plot loses the tint"""
 
 
 # A CHEVRON IS POINTED **AND** NOTCHED - neither measure alone can see one, and that is the whole

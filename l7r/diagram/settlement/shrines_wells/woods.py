@@ -61,8 +61,8 @@ class TreeStandsMixin:
             stems per hectare. 1 ha = 107,639 sq ft, so ~600 stems/ha is one canopy tree per ~180
             sq ft: a mean spacing near 13 ft. That is CANOPY_SPACING_FT.
           - Canopy crowns in such a stand run ~5-8 m across (16-26 ft), with occasional emergents
-            wider. CANOPY_R_FT = 8.5 is the mean radius; each crown is jittered 0.75-1.4x, so drawn
-            diameters land inside the real band, a few emergents over many smaller crowns.
+            wider. CANOPY_R_FT = 8.5 is the mean radius; each crown is drawn 0.75-1.4x of it, the one band the
+            groves draw (`CROWN_S`), so drawn diameters land inside the real band.
           - Crowns of ~17 ft mean diameter on 13 ft centers OVERLAP, and that is the point: closure
             is what makes a wood a wood. Same finding as the mulberry rows (see _mulberry_rows) -
             at a to-scale grain the honest drawing of real planted density IS a packed mass of
@@ -112,8 +112,7 @@ class TreeStandsMixin:
 
         Research:
             spacing - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: CANOPY_SPACING_FT, jittered 42%
-            crown size - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: CANOPY_R_FT, 0.75 to 1.05 of it, emergents 1.05 to 1.4
-            emergent share - UNRESEARCHED: 18%
+            crown size - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: CANOPY_R_FT, 0.75 to 1.4 of it (`CROWN_S`), the same band as the windbreak's
             conifer share - UNRESEARCHED: 34%
             no crown on a roof or a wellhead - UNRESEARCHED
             no crown on a plot's sun ground - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html: _sun_keepouts
@@ -122,6 +121,8 @@ class TreeStandsMixin:
         """
         xs = [p[0] for p in poly]
         ys = [p[1] for p in poly]
+        from ..homestead_parts.groves import CROWN_S  # noqa: PLC0415 - the groves' band, beside its one use here
+
         step = self.px(self.CANOPY_SPACING_FT)
         rad = self.px(self.CANOPY_R_FT)
         st = random.getstate()
@@ -133,10 +134,11 @@ class TreeStandsMixin:
             while xx <= max(xs) + step:
                 tx = xx + random.uniform(-step * 0.42, step * 0.42)
                 ty = yy + random.uniform(-step * 0.42, step * 0.42)
-                big = random.random() < 0.18
                 kind = "conifer" if random.random() < 0.34 else "broadleaf"
                 if point_in_poly(tx, ty, poly):
-                    trees.append((tx, ty, rad * (random.uniform(1.05, 1.4) if big else random.uniform(0.75, 1.05)), kind))
+                    # THE PAGE'S ONE BAND, AS THE GROVES DRAW (feature 328 wave 40, 0080: a windbreak's crowns "the same real size as a
+                    # hill wood's"; it was 0.75-1.05 with an 18% roll of 1.05-1.4 emergents, on no page)
+                    trees.append((tx, ty, rad * random.uniform(*CROWN_S), kind))
                 xx += step
             yy += step
         # no crown is drawn on a roof or a wellhead - and by flush time that means EVERY one of them
