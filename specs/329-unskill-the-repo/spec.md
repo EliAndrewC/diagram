@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-07
 
-**Status**: Draft
+**Status**: Accepted - spec-fidelity FAITHFUL, round 2 (2026-10-07)
 
 **Input**: the GM's request, verbatim in [`request.md`](request.md): stop keeping the diagram project as a Claude
 Code skill under `.claude/skills/diagram/` and refactor it out, "taking the feature from start to finish".
@@ -131,6 +131,8 @@ the old location syncs in cleanly; its edits land on the moved files and its new
   on a scratch clone.
 - **FR-010**: The gate (`make done`) and the hook suite (`make hooks-test`) MUST be green from the repository root
   after the move, with no phase lost and no test dropped.
+- **FR-011**: The project's own documents that explain the skill (the root `CLAUDE.md` opening,
+  `dev/skill-boundary.md`, the usage document) MUST say the project is no longer a skill and why, once.
 - **FR-012**: Every Markdown document under `.claude/skills/diagram/` (the GM's third message) MUST be judged one by one
   and given a verdict - keep in place, move, merge into another document, split, trim, or delete - with the reason,
   and the verdict MUST be carried out in this feature. The audit's table lands in the feature's directory. Files of
@@ -138,8 +140,6 @@ the old location syncs in cleanly; its edits land on the moved files and its new
   `l7r/diagram/interactive/assets/modals/`, the pool's per-map `.notes.md`, the verbatim records - may be judged as a
   class with one verdict and its reason, the table still listing every member. A deletion keeps every fact still true
   and still needed by moving it to where a reader would look, and never deletes the GM's own writing.
-- **FR-011**: The project's own documents that explain the skill (the root `CLAUDE.md` opening,
-  `dev/skill-boundary.md`, the usage document) MUST say the project is no longer a skill and why, once.
 
 ### Key Entities
 
@@ -157,12 +157,12 @@ the old location syncs in cleanly; its edits land on the moved files and its new
   and `docs/` holds the usage document the root `CLAUDE.md` names (FR-003, FR-011).
 - **SC-004**: After sync-in, a clone holding warm caches has no `.claude/skills/diagram/` directory and its first
   gate is no slower than a warm gate on the baseline, within the gate's own ratchet tolerance (FR-008).
+- **SC-005**: The scratch-clone sync test passes, and an old spec's path resolves by the FR-005 note
+  (FR-005, FR-009).
 - **SC-006**: The audit table names every in-scope document exactly once with a verdict and a reason, and each verdict
   is visible in the tree after the feature lands (FR-012).
 - **SC-007**: A lint error seeded in an engine file fails the gate, and a root lint run changes no file under `specs/`
   (FR-002a).
-- **SC-005**: The scratch-clone sync test passes, and an old spec's path resolves by the FR-005 note
-  (FR-005, FR-009).
 
 ## Decisions Recorded
 
@@ -183,3 +183,5 @@ This feature draws and states nothing on a map; it is tooling. Its layout decisi
 - Round 1 (spec-fidelity, 2026-10-07): NOT FAITHFUL, 2 findings - the fourth collision (the root lint fence against the
   moved lint config; FR-002a, SC-007 added) and the miscount of old paths under `specs/` (corrected). Amendment in the
   same pass: the GM's third message (the Markdown audit) added as FR-012 and SC-006.
+- Round 2 (spec-fidelity-verify, 2026-10-07): FAITHFUL - both round-1 items resolved; FR-012/SC-006 carry the third
+  message. Ids put in order after the verdict (no wording changed).
