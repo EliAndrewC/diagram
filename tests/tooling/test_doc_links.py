@@ -3,7 +3,7 @@
 Feature 329 moved the project to the repository root and moved or retired documents beside it; the link check it ran
 found 29 links already broken before the move - pool notes still pointing at `../../hamletgen/` from before feature 119,
 a sibling's notes linked as if in the same folder, tools long retired. Nothing held them, so nothing noticed. This
-does, over every tracked `.md` outside the verbatim records (`specs/`, `scripts/fixtures/`, `dev/*-log/`).
+does, over every tracked `.md` outside the verbatim records (`specs/`, `tests/hooks/fixtures/`, `dev/*-log/`).
 """
 
 from __future__ import annotations
@@ -17,7 +17,7 @@ import pytest
 
 ROOT = Path(__file__).resolve().parents[2]
 _LINK = re.compile(r"\]\(([^)#\s]+)(?:#[^)]*)?\)")
-_RECORD = re.compile(r"^(specs/|scripts/fixtures/|dev/[a-z]+-log/)")
+_RECORD = re.compile(r"^(specs/|tests/hooks/fixtures/|dev/[a-z]+-log/)")
 
 
 def broken_links(root: Path, files: list[str]) -> list[str]:

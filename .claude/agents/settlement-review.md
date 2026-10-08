@@ -11,7 +11,7 @@ omitClaudeMd: true
 
 Only on an OCCASION whose answer depends on the WHOLE map (feature 294, GM 2026-10-01: the review runs *"only under certain
 circumstances"*, never because an engine change moved a manifest): a map new to the pool, or a feature's declared
-`new-form:` or `new-tier:`. `scripts/_review_owed.py` decides it; the dispatch names the map.
+`new-form:` or `new-tier:`. `scripts/reviews/review_owed.py` decides it; the dispatch names the map.
 
 What this review USED to carry has gone to where it belongs (`specs/294-settlement-review-rethink/research.md` R1): everything
 geometry decides is a placer guarantee or a gate test (features 287, 297, 294's rules); whether a mark reads, its form, its

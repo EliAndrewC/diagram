@@ -1,4 +1,4 @@
-"""`scripts/_claims.py` - the claims index: owed, bundle, record, report and the push's verdict (feature 316).
+"""`scripts/record/claims.py` - the claims index: owed, bundle, record, report and the push's verdict (feature 316).
 
 The GM, 2026-10-02: *"our tooling should be able to evaluate whether or not an annotated thing has been edited since the last
 time a subagent check ran on it"*, and the push rule the GM accepted: an owed row blocks, a finding the change introduces blocks,
@@ -15,14 +15,16 @@ import sys
 
 import pytest
 
+from tests._scripts import script
+
 REPO = pathlib.Path(__file__).resolve().parents[2]
 
 
 def _load(name: str):  # noqa: ANN202
-    spec = importlib.util.spec_from_file_location(name, REPO / "scripts" / f"{name}.py")
+    spec = importlib.util.spec_from_file_location(name, script(name))
     assert spec and spec.loader
     mod = importlib.util.module_from_spec(spec)
-    sys.modules[name] = mod
+    sys.modules[name] = sys.modules[name.lstrip("_")] = mod  # the old name and the one a sibling imports it by (2026-10-08)
     spec.loader.exec_module(mod)
     return mod
 

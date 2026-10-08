@@ -41,7 +41,7 @@ what a read copy does NOT say is written down where the claim stands, and the re
 download-add FILE=<draft.md>`, one entry per work headed `### NEW. <the work>`: a link to where the session believes it
 lives (`- **[...](https://...)**`), `- Fallback:` with a Google-search link that uniquely finds it, `- **Rests on it:**`
 naming the `research/questions/` files, and `- Blocked by:` - BOTH links, always. The command numbers it under a
-host-wide lock and appends it at the end; the push refuses an entry lost, moved or inserted (`_downloads.py check`).
+host-wide lock and appends it at the end; the push refuses an entry lost, moved or inserted (`downloads.py check`).
 Never write the GM's copy, `/host-l7r-repo/academic-sources/TO-DOWNLOAD.md` (`download-copy-hooks.sh` refuses it).
 
 ## The GM's two words (feature 313)

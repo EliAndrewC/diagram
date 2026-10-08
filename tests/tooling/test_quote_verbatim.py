@@ -1,4 +1,4 @@
-"""`scripts/_quote_verbatim.py` (feature 251, FR-003): the character-for-character half of quote-check.
+"""`scripts/record/quote_verbatim.py` (feature 251, FR-003): the character-for-character half of quote-check.
 
 WHAT THESE PROVE (SC-002). The two differences a language model blurs and the record must not - a
 hyphen written for the source's dash, an American spelling for the source's British one - are each
@@ -27,7 +27,7 @@ REPO = pathlib.Path(__file__).resolve().parents[2]
 
 
 def _load():  # noqa: ANN202
-    spec = importlib.util.spec_from_file_location("_quote_verbatim", REPO / "scripts" / "_quote_verbatim.py")
+    spec = importlib.util.spec_from_file_location("_quote_verbatim", REPO / "scripts/record/quote_verbatim.py")
     assert spec and spec.loader
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
@@ -338,7 +338,7 @@ def test_a_cjk_compatibility_ideograph_on_the_page_is_the_same_character_as_the_
 def test_with_no_offline_directory_the_page_cache_serves_an_exact_copy_only(tmp_path, monkeypatch):
     """Feature 288 D8 (SC-005): the page is in the host's page cache, so the run makes no request; an IMPORTED copy -
     the saved form, not the page as fetched - is not trusted for a character-for-character check, and is fetched."""
-    spec = importlib.util.spec_from_file_location("_sources", REPO / "scripts" / "_sources.py")
+    spec = importlib.util.spec_from_file_location("_sources", REPO / "scripts/record/sources.py")
     assert spec and spec.loader
     src = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(src)

@@ -1,4 +1,4 @@
-"""`scripts/_scatter_bases.py` (feature 256, FR-009): the wrapper `make scatter-bases` runs for `settlement-review`.
+"""`scripts/reviews/scatter_bases.py` (feature 256, FR-009): the wrapper `make scatter-bases` runs for `settlement-review`.
 
 WHAT THESE PROVE. A map is found by folder, stem or file; the counts come from the parse it is handed (a stand-in
 here - the engine's `parse_bases` is tested where it lives, and once below on a real fragment); a box lists only the
@@ -15,7 +15,7 @@ REPO = pathlib.Path(__file__).resolve().parents[2]
 
 
 def _load():  # noqa: ANN202
-    spec = importlib.util.spec_from_file_location("_scatter_bases", REPO / "scripts" / "_scatter_bases.py")
+    spec = importlib.util.spec_from_file_location("_scatter_bases", REPO / "scripts/reviews/scatter_bases.py")
     assert spec and spec.loader
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)

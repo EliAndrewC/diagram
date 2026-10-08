@@ -1,0 +1,127 @@
+#!/usr/bin/env bash
+# Tests for guard-file-hooks.sh (feature 127, layer 3).
+# Run: tests/hooks/test-guard-file-hooks.sh   (exit 0 = all green)
+#
+# TWO DIRECTIONS (FR-015 + FR-016). Section 2 carries the case the fidelity review put here: an edit
+# to a review-subagent definition must NOT be intercepted. It was in the first draft of the spec and
+# was removed as unrequested - editing an agent cannot start an expensive run, so a prompt there
+# guards nothing and obstructs this project's own procedure for improving review subagents.
+set -uo pipefail
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+HOOK="$HERE/../../scripts/hooks/guard-file-hooks.sh"
+# GUARD_EDIT_OK: feature 164 - this guard RECORDS its firings now (feature 162's log), so the suite
+# must write its fixtures to a throwaway directory. Without it the suite pollutes `make audit`, whose
+# whole purpose is to price a guard from real firings: 24 fixture entries appeared there the first
+# time these conversions ran their suites.
+GUARD_LOG_ROOT=$(mktemp -d); export GUARD_LOG_DIR="$GUARD_LOG_ROOT"
+# GUARD_EDIT_OK: 2026-09-26 - stderr is captured in a file of THIS run's own, not a fixed /tmp path that every
+# concurrent hooks-test (one per session's gate) rewrote under the others (it failed the batching suite's greps).
+HOOK_ERR=$(mktemp)
+trap 'rm -rf "$GUARD_LOG_ROOT" "$HOOK_ERR"' EXIT
+
+ROOT="$(cd "$HERE/../.." && pwd)"
+PASS=0; FAIL=0
+
+ev() { python3 -c 'import json,sys; print(json.dumps({"session_id":"g","tool_name":sys.argv[3],"tool_input":{"file_path":sys.argv[1],"new_string":sys.argv[2]}}))' "$1" "$2" "${3:-Edit}"; }
+run() { ev "$1" "${2:-x}" "${3:-Edit}" | "$HOOK" pretool >/dev/null 2>"$HOOK_ERR"; echo $?; }
+
+check() { local rc; rc=$(run "$2" "${3:-x}" "${4:-Edit}")
+  if { [ "$1" = ok ] && [ "$rc" -eq 0 ]; } || { [ "$1" = blocked ] && [ "$rc" -ne 0 ]; }; then
+    echo "  ok      $1: $(basename "$2")"; PASS=$((PASS+1))
+  else echo "  FAIL    expected $1 for $2 (rc=$rc)"; FAIL=$((FAIL+1)); fi; }
+
+echo "1. IT FIRES on the files that ARE guards (FR-015)"
+check blocked "$ROOT/Makefile"
+check blocked "$ROOT/scripts/hooks/gate-hooks.sh"
+check blocked "$ROOT/scripts/hooks/make-only-hooks.sh"
+check blocked "$ROOT/scripts/hooks/guard-file-hooks.sh"
+check blocked "$ROOT/.claude/settings.json"
+check blocked "$ROOT/.claude/settings.json" "x" "Write"
+check blocked "$ROOT/dev/switches.json"
+check blocked "$ROOT/dev/switches.json" "x" "Write"
+
+echo
+echo "2. IT STAYS QUIET on everything else (FR-016)"
+check ok "$ROOT/.claude/agents/frontend-review.md"
+check ok "$ROOT/.claude/agents/spec-fidelity.md"
+check ok "$ROOT/tests/hooks/test-gate-hooks.sh"
+check ok "$ROOT/tests/hooks/test-make-only-hooks.sh"
+check ok "$ROOT/l7r/diagram/hamletgen/ways.py"
+check ok "$ROOT/tests/test_invocation.py"
+check ok "$ROOT/CLAUDE.md"
+check ok "$ROOT/specs/127-gated-make-commands/spec.md"
+
+echo
+echo "3. THE ESCAPE WORKS, and puts the intent in the diff"
+check ok "$ROOT/Makefile" "GUARD_EDIT_OK - adding a target for a new operation"
+check ok "$ROOT/scripts/hooks/gate-hooks.sh" "GUARD_EDIT_OK - it was firing on correct work"
+
+echo
+echo "4. THE REFUSAL TELLS YOU WHAT TO DO"
+rc=$(run "$ROOT/Makefile")
+if [ "$rc" -ne 0 ] && grep -q "GUARD_EDIT_OK" "$HOOK_ERR" && grep -q "fires on correct work" "$HOOK_ERR"; then
+  echo "  ok      names the escape and distinguishes legitimate edits"; PASS=$((PASS+1))
+else echo "  FAIL    refusal did not carry the escape or the categories"; FAIL=$((FAIL+1)); fi
+
+# GUARD_EDIT_OK: feature 212 - a recipe comment that would RUN is refused on any Makefile, by any
+# route, marker or no marker (the GM's relayed ruling after feature 207's 914-level recursion).
+echo
+echo "5. A RECIPE COMMENT THAT WOULD RUN IS REFUSED (feature 212)"
+TAB=$(printf '\t')
+hazard() { # label, expected, new_string (Edit) - against the skill Makefile
+  local rc; rc=$(run "$ROOT/Makefile" "$3" Edit)
+  if { [ "$2" = ok ] && [ "$rc" -eq 0 ]; } || { [ "$2" = blocked ] && [ "$rc" -ne 0 ]; }; then
+    echo "  ok      $1"; PASS=$((PASS+1))
+  else echo "  FAIL    $1 (expected $2, rc=$rc)"; sed 's/^/          /' "$HOOK_ERR" | head -3; FAIL=$((FAIL+1)); fi
+}
+hazard "the 207 shape: a backtick in a : \"...\" comment, WITH the marker" blocked "${TAB}: \"GUARD_EDIT_OK: feature 207 - \`make test-full\` is the gate's test phase\" ; \\"
+hazard "an @-prefixed comment with a backtick" blocked "${TAB}@: \"see \`make help\`\""
+hazard "a \$\$( substitution in the comment" blocked "${TAB}: \"GUARD_EDIT_OK: the key is \$\$(git rev-parse HEAD) here\""
+hazard "the same comment without backticks passes" ok "${TAB}: \"GUARD_EDIT_OK: feature 207 - make test-full is the gate's test phase\" ; \\"
+hazard "an escaped backtick passes" ok "${TAB}: \"GUARD_EDIT_OK: the target is \\\`make done\\\`\""
+hazard "the Makefile's own escaped \\\$\$(MAKE) mention passes" ok "${TAB}: \"GUARD_EDIT_OK: make runs \\\$\$(MAKE) sub-invocations even under -n\" ; \\"
+hazard "a single-quoted comment cannot substitute" ok "${TAB}: 'GUARD_EDIT_OK: \`make done\` in single quotes is inert'"
+hazard "a backtick in a make COMMENT line (#) is not a recipe" ok "# GUARD_EDIT_OK: \`make done\` is fine in a hash comment"
+hazard "a backtick in a recipe COMMAND is the session's business" ok "${TAB}@echo \"GUARD_EDIT_OK: \$\$(date) runs on purpose\""
+RC=$(ev "$ROOT/other/Makefile" "${TAB}: \"a \`backtick\` comment\"" Write | "$HOOK" pretool >/dev/null 2>&1; echo $?)
+[ "$RC" -ne 0 ] && { echo "  ok      any Makefile, by Write too"; PASS=$((PASS+1)); } || { echo "  FAIL    a Write to another Makefile was not checked"; FAIL=$((FAIL+1)); }
+run "$ROOT/Makefile" "${TAB}: \"\`x\`\"" Edit >/dev/null
+grep -q "There is no escape token" "$HOOK_ERR" && { echo "  ok      the refusal says there is no escape and how to write it"; PASS=$((PASS+1)); } || { echo "  FAIL    the refusal is unhelpful"; FAIL=$((FAIL+1)); }
+
+echo
+echo
+echo "6. THE ROSTER OF ROLLED HAMLETS IS A GUARD (feature 217), with its own Read-time context"
+ROSTER="$ROOT/tests/rolls.py"
+check blocked "$ROSTER"
+check blocked "$ROSTER" "x" "Write"
+check ok "$ROSTER" "GUARD_EDIT_OK: adding a roll row after make roll-audit showed its lines"
+check ok "$ROOT/tests/test_rolls.py"   # the roster's TEST is ordinary source
+ctx=$(ev "$ROSTER" "" "Read" | "$HOOK" pretool 2>/dev/null)
+if printf '%s' "$ctx" | grep -q "roll-audit" && printf '%s' "$ctx" | grep -q "constitution VI" && printf '%s' "$ctx" | grep -q "tests/soak/"; then
+  echo "  ok      the Read of the roster names the doctrine, make roll-audit and the three exits"; PASS=$((PASS+1))
+else echo "  FAIL    the roster's Read-time context is missing the doctrine or the command: $ctx"; FAIL=$((FAIL+1)); fi
+ctx=$(ev "$ROOT/Makefile" "" "Read" | "$HOOK" pretool 2>/dev/null)
+if printf '%s' "$ctx" | grep -q "GUARD file" && ! printf '%s' "$ctx" | grep -q "roll-audit"; then
+  echo "  ok      another guard's Read keeps the generic context"; PASS=$((PASS+1))
+else echo "  FAIL    the generic Read context changed: $ctx"; FAIL=$((FAIL+1)); fi
+# GUARD_EDIT_OK: feature 329 - the project Makefile is the one at the repository root; a Makefile below it is not the guard
+ctx=$(ev "$ROOT/specs/001-x/Makefile" "" "Read" | "$HOOK" pretool 2>/dev/null)
+if [ -z "$ctx" ]; then echo "  ok      a Makefile below the root is not the guard file"; PASS=$((PASS+1))
+else echo "  FAIL    a Makefile below the root was treated as the guard file: $ctx"; FAIL=$((FAIL+1)); fi
+
+echo
+# GUARD_EDIT_OK: 2026-09-26 - the Read reminder was RECORDED on every Read, guard file or not (4,662 of 4,681 entries
+# in two weeks were ordinary files that got no reminder). It records only when it said something.
+echo "7. A READ IS RECORDED ONLY WHEN IT WAS REMINDED"
+rm -rf "$GUARD_LOG_ROOT"/*
+ctx=$(ev "$ROOT/l7r/diagram/settlement/hamletgen.py" "" "Read" | "$HOOK" pretool 2>/dev/null)
+n=$(grep -rl read-reminder "$GUARD_LOG_ROOT" 2>/dev/null | wc -l)
+if [ -z "$ctx" ] && [ "$n" -eq 0 ]; then echo "  ok      an ordinary Read says nothing and records nothing"; PASS=$((PASS+1))
+else echo "  FAIL    an ordinary Read said '$ctx' or recorded $n entries"; FAIL=$((FAIL+1)); fi
+ev "$ROOT/Makefile" "" "Read" | "$HOOK" pretool >/dev/null 2>&1
+n=$(grep -rl read-reminder "$GUARD_LOG_ROOT" 2>/dev/null | wc -l)
+if [ "$n" -eq 1 ]; then echo "  ok      a guard file's Read records its reminder"; PASS=$((PASS+1))
+else echo "  FAIL    a guard file's Read recorded $n entries, not 1"; FAIL=$((FAIL+1)); fi
+
+echo "passed $PASS, failed $FAIL"
+[ "$FAIL" -eq 0 ]

@@ -1,4 +1,4 @@
-"""`scripts/_review_census.py` - the ledger's totals by check, the spec's R0 by a command (feature 294, FR-013)."""
+"""`scripts/reviews/review_census.py` - the ledger's totals by check, the spec's R0 by a command (feature 294, FR-013)."""
 
 from __future__ import annotations
 
@@ -10,7 +10,7 @@ from pathlib import Path
 import pytest
 
 REPO = Path(__file__).resolve().parents[2]
-_spec = importlib.util.spec_from_file_location("review_census", REPO / "scripts" / "_review_census.py")
+_spec = importlib.util.spec_from_file_location("review_census", REPO / "scripts/reviews/review_census.py")
 assert _spec and _spec.loader
 rc = importlib.util.module_from_spec(_spec)
 sys.modules["review_census"] = rc

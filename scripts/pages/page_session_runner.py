@@ -1,0 +1,462 @@
+#!/usr/bin/env python3
+"""The detached runner behind `page-session.sh` (feature 250 D7): each brief in a fresh headless session, in order.
+
+    page_session_runner.py <root> <name> <projects dir> [claude args ...] -- <brief | then:<script>> ...
+
+Prints every known session's id, transcript and log directory at once, then starts ONE detached process that
+works the queue in order: a brief runs as a fresh session; a `then:<script>` runs the script when it is reached
+and queues the briefs it prints, one path a line - which is how a page's check sessions are planned from the
+handoff its write session leaves (feature 250 R3, recommendation 2). Every session started is appended to
+`<root>/.git/page-sessions/index.txt` as `<session id> <brief>`, so the meter can find the ones planned late.
+
+THE FLOOR (feature 250 R3, recommendation 1). A page session is launched with only the tools research uses, no
+MCP servers, no skill listing, and - in a clone - without the MIRROR's root CLAUDE.md, which sits above every
+clone and otherwise loads beside the clone's own copy. Measured on a probe, 2026-09-26: the first turn of a
+page session fell from 40,280 tokens to 21,267; every turn carries that floor. Feature 274 (D6) lowers it again: the
+clone's OWN root CLAUDE.md is excluded too (about 5,200 tokens a turn, most of it spec-kit, the gate and the guard
+table, which a research session never uses), and `scripts/container/page-session-rules.md` - the rules a research
+session acts on - is appended after the standing authorizations in one `--append-system-prompt`.
+
+THE WRITE CAP (feature 274 D2, D3; research R1: a write session's cost follows its turn count, r = 0.92, and grows
+roughly with the square of its length). Every brief is counted by `brief_load.py` before its session starts - the
+ones listed at launch before anything detaches (a refusal exits 2), the ones a `then:` step prints when it runs (a
+refusal writes `STOPPED <brief>: <reason>` and ends the queue, never a silent skip). `WRITE_CAP_OK='<reason>'` lets a
+brief through, logged. A write session (a brief declaring no exempt kind) is told `L7R_KEY_CAP`, which `make reserve`
+enforces; every session is told its id (`L7R_PAGE_SESSION`) and where to leave a continuation (`L7R_CONTINUE`), and a
+brief left there is queued next - before the group's `then:` checks step, so the checks see both sessions' handoff.
+"""
+
+from __future__ import annotations
+
+import calendar
+import glob
+import json
+import os
+import pathlib
+import re
+import signal
+import subprocess
+import sys
+import threading
+import time
+import uuid
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+import brief_load as _brief_load  # noqa: E402
+import escape_log as _escape_log  # noqa: E402
+
+PROMPT = ("You are a fresh session started to do the work ONE brief describes. Read {brief} first, and do what it says, "
+          "end to end and unattended. Commit in this clone as you finish each part; never run the stop-work push. When the "
+          "brief's work is done, or it tells you to stop, write the one-paragraph summary it asks for and stop.")
+
+TOOLS = "Bash,Read,Edit,Write,Grep,Glob,Agent,WebFetch,WebSearch"
+KEY_CAP = 10  # new registry keys a write session may reserve (feature 274 FR-001; `reserve-prefix.py` enforces it)
+PROMPT_FILES = ("scripts/container/append-system-prompt.md", "scripts/container/page-session-rules.md")
+
+
+class Refused(Exception):
+    """A brief the write cap does not admit."""
+
+
+def floor_flags(root: str) -> list[str]:
+    """The launch flags that lower a page session's fixed floor, and the reason for each in the docstring above."""
+    flags = ["--disable-slash-commands", "--strict-mcp-config", "--tools", TOOLS]
+    root = root.rstrip("/")
+    excludes = [f"{root}/CLAUDE.md"]
+    parts = root.split("/")
+    if ".clones" in parts:
+        excludes.insert(0, "/".join(parts[: parts.index(".clones")]) + "/CLAUDE.md")
+    flags += ["--settings", json.dumps({"claudeMdExcludes": excludes})]
+    appended = "\n\n".join(t for f in PROMPT_FILES if (t := _read(os.path.join(root, f)).strip()))
+    return flags + (["--append-system-prompt", appended] if appended else [])
+
+
+def record_of(root: str) -> pathlib.Path:
+    return pathlib.Path(root) / "research"
+
+
+def admit(root: str, brief: str) -> bool:
+    """Whether the brief is a WRITE session's (it declares no exempt kind); raises `Refused` when the cap refuses it
+    and no `WRITE_CAP_OK` with a reason lets it through."""
+    if not os.path.isfile(brief):
+        raise Refused(f"{brief}: no such brief")
+    text = _read(brief)
+    why = _brief_load.refusal(pathlib.Path(brief), text, record_of(root))
+    if why:
+        try:
+            escaped = _escape_log.escape("WRITE_CAP_OK", "page-session", "write-cap", {"brief": brief, "why": why[:300]})
+        except _escape_log.NoReason as e:
+            raise Refused(f"{os.path.basename(brief)}: {e}") from None
+        if not escaped:
+            raise Refused(f"{os.path.basename(brief)}: {why}")
+    return not _brief_load.declared(text)
+
+
+def new_item(root: str, name: str, extra: list[str], brief: str, write: bool) -> dict:
+    """A fresh session for `brief`: its id, its log directory (made), its command."""
+    sid = str(uuid.uuid4())
+    log = os.path.join(root, ".git", "page-sessions", sid)
+    os.makedirs(log)
+    return {"sid": sid, "log": log, "brief": brief, "cmd": command(root, name, extra, brief, sid), "write": write}
+
+
+def session_env(env: dict[str, str], item: dict) -> dict[str, str]:
+    """The queue's environment for one session: its id, its continuation path, and the key cap if it writes."""
+    out = {k: v for k, v in env.items() if k != "L7R_KEY_CAP"}
+    out |= {"L7R_PAGE_SESSION": item["sid"], "L7R_CONTINUE": os.path.join(item["log"], "continue.md")}
+    if item.get("write"):
+        out["L7R_KEY_CAP"] = str(KEY_CAP)
+    return out
+
+
+def command(root: str, name: str, extra: list[str], brief: str, sid: str) -> list[str]:
+    return ["claude", "-p", PROMPT.format(brief=os.path.realpath(brief)), "-n", name, "--session-id", sid,
+            "--permission-mode", "bypassPermissions", *floor_flags(root), *extra, "--output-format", "json"]
+
+
+def plan(root: str, name: str, projects: str, extra: list[str], items: list[str]) -> list[dict]:
+    """The queue: `{"sid", "log", "cmd", "write"}` per brief (its log directory made), `{"then": script}` per late
+    step. Every new brief is admitted first, so a refusal (`Refused`) leaves nothing made. A `resume:` is a session
+    already started, so it is not counted again."""
+    writes = {item: admit(root, item) for item in items if not item.startswith(("then:", "resume:"))}
+    queue: list[dict] = []
+    for item in items:
+        if item.startswith("resume:"):
+            # `resume:<sid>:<brief>` - a session whose runner died with it (feature 271, 2026-09-27: the dispatching
+            # session's process ended and took five queues' runners with it, each mid-way through a write session with
+            # its work uncommitted). The same session is resumed with its own context, never started over.
+            sid, brief = item[7:].split(":", 1)
+            log = os.path.join(root, ".git", "page-sessions", sid)
+            os.makedirs(log, exist_ok=True)
+            write = not _brief_load.declared(_read(brief))
+            returned = returned_file(log, undelivered(projects, sid))
+            queue.append({"sid": sid, "log": log, "brief": brief, "cmd": resume_command(command(root, name, extra, brief, sid), sid, returned), "write": write})
+            print(f"page-session: resume {sid} ({os.path.basename(brief)})")
+            continue
+        if item.startswith("then:"):
+            queue.append({"then": os.path.realpath(item[5:])})
+            print(f"page-session: then {os.path.basename(item[5:])} - the sessions it plans are listed in .git/page-sessions/index.txt")
+            continue
+        queue.append(new_item(root, name, extra, item, writes[item]))
+        sid, log = queue[-1]["sid"], queue[-1]["log"]
+        print(f"page-session: {os.path.basename(item)}\n  session:    {sid}\n  transcript: {projects}/{sid}.jsonl\n  log:        {log}")
+    return queue
+
+
+def dispatcher(root: str, own: str = "") -> str:
+    """The session dispatching this queue into its own clone: `own` (the caller's `CLAUDE_CODE_SESSION_ID`) where it claims
+    `root`, else the session whose claim on `root` was written last.
+
+    WHY (feature 250 D14, 2026-09-26): the clone guard refuses an edit in a clone a LIVE other session claims, and
+    the dispatcher is live, waiting on the queue - so a queued session was refused whenever the dispatcher's tree
+    was clean. Its id goes to each session as `L7R_DISPATCHER`, which the guard lets through and nothing else.
+    ...AND THE CALLER FIRST (feature 319, 2026-10-04): every queued session claims the clone too, so after one queue the
+    newest claim was a FINISHED page session's, not the dispatcher's (claimed once, hours before). The next queue named
+    that dead session, and its check session was refused every edit by the live dispatcher it was meant to let through."""
+    parts = root.rstrip("/").split("/")
+    if ".clones" not in parts:
+        return ""
+    mapdir = pathlib.Path("/".join(parts[: parts.index(".clones") + 1])) / ".session-clones"
+    claims = [m for m in mapdir.glob("*") if m.is_file() and m.read_text(encoding="utf-8", errors="replace").strip() == root.rstrip("/")]
+    if own and any(m.name == own for m in claims):
+        return own
+    return max(claims, key=lambda m: m.stat().st_mtime).name if claims else ""
+
+
+def headless_env(parent: "os._Environ[str] | dict[str, str]", dispatcher_id: str) -> dict[str, str]:
+    """The environment a queued session runs in: the dispatcher's, with its id added and its TMUX variables removed.
+
+    WHY (2026-09-27): a queued session is headless and has no tab, but it inherited `TMUX`/`TMUX_PANE` from the
+    session that started the queue, so it registered itself as living in THAT session's tmux pane - and the
+    tab-title hook, finding a pane, retitled the GM's tab with the queued session's name (`diagram-research`)."""
+    return {**{k: v for k, v in parent.items() if k not in ("TMUX", "TMUX_PANE")}, "L7R_DISPATCHER": dispatcher_id}
+
+
+def work(root: str, name: str, extra: list[str], queue: list[dict], run_log: str = os.devnull) -> None:
+    """The detached loop: each session in turn; a `then` step's printed briefs join the queue where it stood.
+
+    THE RUN LOG (feature 250, 2026-09-26): one file, held OPEN for the whole queue, with a line as each session
+    starts and ends and `ALL DONE` last. A caller waits on it with the ordinary backgrounded file-watch, and the
+    liveness check the no-poll guard adds finds the runner holding it - so the wait ends when the runner does,
+    finished or killed. Before it, a page's sessions left no one file to wait on, and a wait on `tasks.md` (edited,
+    never held open) was declared dead after two minutes while the sessions ran on."""
+    index = os.path.join(root, ".git", "page-sessions", "index.txt")
+    runlog = open(run_log, "a", buffering=1)  # noqa: SIM115 - held open on purpose for the whole queue
+    env = headless_env(os.environ, dispatcher(root, os.environ.get("CLAUDE_CODE_SESSION_ID", "")))
+    while queue:
+        item = queue.pop(0)
+        if "then" in item:
+            got = subprocess.run([item["then"]], cwd=root, capture_output=True, text=True, check=False)
+            briefs = [ln.strip() for ln in got.stdout.splitlines() if ln.strip()]
+            try:
+                late = [new_item(root, name, extra, b, write) for b, write in [(b, admit(root, b)) for b in briefs]]
+            except Refused as e:
+                runlog.write(f"STOPPED {e}\n")
+                queue.clear()
+                continue
+            queue[:0] = late
+            runlog.write(f"planned {len(late)} session(s) from {os.path.basename(item['then'])}\n")
+            continue
+        with open(index, "a") as fh:
+            fh.write(f"{item['sid']} {item['brief']}\n")
+        runlog.write(f"started {item['sid']} {os.path.basename(item['brief'])}\n")
+        cmd = item["cmd"]
+        attempt = stalls = 0
+        while True:
+            watch = StallWatch(projects_dir(root), item["sid"])
+            watch.start()
+            with open(item["log"] + "/result.json", "w") as out, open(item["log"] + "/stderr.txt", "w") as err:
+                rc = subprocess.run(cmd, cwd=root, env=session_env(env, item), stdin=subprocess.DEVNULL, stdout=out, stderr=err, check=False).returncode
+            watch.stop()
+            text = _read(item["log"] + "/result.json") + _read(item["log"] + "/stderr.txt")
+            if watch.stalled:
+                # A STALL IS RESUMED AT ONCE (feature 295 item 3): it is not the usage limit, so no backoff is owed
+                if stalls == STALL_RESUMES:
+                    runlog.write(f"stalled {item['sid']} - idle {watch.idle // 60} min, resumed {STALL_RESUMES} times already; moving on\n")
+                    break
+                stalls += 1
+                runlog.write(f"stalled {item['sid']} - idle {watch.idle // 60} min, resuming it ({stalls} of {STALL_RESUMES})\n")
+                cmd = resume_command(item["cmd"], item["sid"], returned_file(item["log"], undelivered(projects_dir(root), item["sid"])))
+                continue
+            if not failed(rc, text) or attempt == RETRIES:
+                break
+            wait = wait_for(text, attempt, time.time())
+            runlog.write(f"failed {item['sid']} rc={rc} - waiting {min(wait, RETRY_EVERY) // 60} min (reset in {wait // 60}), then resuming it ({first_line(text)})\n")
+            time.sleep(min(wait, RETRY_EVERY))
+            attempt += 1
+            cmd = resume_command(item["cmd"], item["sid"], returned_file(item["log"], undelivered(projects_dir(root), item["sid"])))
+        runlog.write(f"ended {item['sid']} rc={rc}\n")
+        cont = os.path.join(item["log"], "continue.md")
+        if os.path.isfile(cont):
+            try:
+                nxt = new_item(root, name, extra, cont, admit(root, cont) or bool(item.get("write")))
+            except Refused as e:
+                runlog.write(f"STOPPED {e}\n")
+                queue.clear()
+                continue
+            queue.insert(0, nxt)
+            runlog.write(f"continued {item['sid']} -> {nxt['sid']}\n")
+    runlog.write("ALL DONE\n")
+    runlog.close()
+
+
+# THE USAGE LIMIT (2026-09-27, the GM: "if that happens, then we automatically resume once the window refreshes ... it's
+# really important to me that we try to get this done without just kind of stopping for hours and hours"). A session
+# that fails - the plan's five-hour window spent, an overloaded API, a crash - used to be logged and the NEXT brief
+# started, which fails the same way at once, so one spent window burned the whole rest of the queue. Now a failed
+# session is RESUMED (`--resume <id>`, so it carries on with its own context) after a wait: until the reset time the
+# message names when it names one, else a backoff of 15, 30, then 60 minutes, for up to RETRIES attempts (~11 hours).
+#
+# RETRY EVERY 15 MINUTES AT MOST (feature 280, 2026-09-28): `work()` used to sleep the whole wait `wait_for()` computed,
+# up to six hours, after a usage-limit failure. When the GM resets the limit early, every queue then sat idle for the
+# rest of that wait - 88 minutes on two queues on 2026-09-28. So one sleep is capped at RETRY_EVERY: a resume before
+# the real reset fails at once and waits again, which costs one short failed call a quarter hour. RETRIES rose from 14
+# to 44 so the reach stays about 11 hours (44 x 15 min) - the cap shortens each wait, not how long a queue holds on.
+RETRIES = 44
+RETRY_EVERY = 15 * 60
+BACKOFF = (15 * 60, 30 * 60, 60 * 60)
+RESUME = "Continue the work of the brief you were given, from where you stopped - an error or the usage limit ended your last turn."
+
+
+# A HEADLESS SESSION THAT HAS GONE QUIET IS RESUMED (feature 295 item 3). `claude -p` is never re-invoked by background
+# work - a backgrounded Bash, a detached make, a background agent (feature 293's measurement) - so a session that ends
+# its turn to wait for its own check agents sits until somebody kills it: R12's check session idled about two and a half
+# hours on 2026-09-30 after all five of its re-checks had returned. Killing it and resuming the same session (`--resume`)
+# is what got it moving that day, and the runner already knows how to resume. So each session runs beside a watch that
+# reads its transcript and every subagent transcript of it; silence past STALL_AFTER, with the process alive, ends the
+# process, and the loop above resumes the session at once.
+#
+# STALL_AFTER IS 15 MINUTES because the longest silence a WORKING session shows is one foreground tool call, and the
+# Bash tool's own ceiling is 10 minutes (research R3); 15 is past any legitimate silence and costs at most 16 minutes
+# against the 2.5 hours measured. STALL_RESUMES caps the resumes so a session that stalls every time it is resumed does
+# not hold the queue for good: eight resumes is two hours of quiet at the outside.
+STALL_AFTER = 15 * 60
+STALL_CHECK = 60
+STALL_RESUMES = 8
+
+# ...AND HANDED WHAT ITS AGENTS RETURNED (feature 317, 2026-10-03). The agents' reports reach a headless session's
+# transcript only as QUEUED notifications (`queue-operation` / `enqueue`) that its process never takes up, and a resumed
+# session is told by Claude Code that its "background agents didn't finish before the previous session ended" - so feature
+# 317's R1 check session, whose eight checks had all returned within two minutes of its turn's end, was resumed fifteen
+# minutes later, dispatched all eight again, ended its turn and sat again. So the resume names a file holding every report
+# queued since the session last took one up (`undelivered`), and a session whose turn has ended with reports waiting is
+# resumed after RETURNED_AFTER of quiet rather than STALL_AFTER: its agents' writes count as activity, so five quiet
+# minutes is every agent finished or stuck, and a session still in a tool call (its last turn not ended) is left alone.
+RETURNED_AFTER = 5 * 60
+RETURNED = (
+    " Your background agents returned while you waited - a headless session is not woken by them, and the notice that they"
+    " did not finish is wrong. Every report is in {path}: read it, record each check from it, and do not dispatch them again."
+)
+
+
+def _entries(path: str) -> list[dict]:
+    out = []
+    for line in _read(path).splitlines():
+        try:
+            row = json.loads(line)
+        except ValueError:
+            continue
+        if isinstance(row, dict):
+            out.append(row)
+    return out
+
+
+def undelivered(projects: str, sid: str) -> list[str]:
+    """The task notifications queued in the session's transcript since it last took one up (each `enqueue` after the last
+    `dequeue`) - the agents' reports a headless process never read."""
+    rows = [r for r in _entries(os.path.join(projects, f"{sid}.jsonl")) if r.get("type") == "queue-operation"]
+    last = max((i for i, r in enumerate(rows) if r.get("operation") == "dequeue"), default=-1)
+    return [str(r.get("content")) for r in rows[last + 1 :] if r.get("operation") == "enqueue" and "<task-notification>" in str(r.get("content") or "")]
+
+
+def turn_ended(projects: str, sid: str) -> bool:
+    """Has the session's last turn ended (its last assistant entry stopped at `end_turn`, not at a tool call it is running)?"""
+    last = [r for r in _entries(os.path.join(projects, f"{sid}.jsonl")) if r.get("type") == "assistant"]
+    return bool(last) and (last[-1].get("message") or {}).get("stop_reason") == "end_turn"
+
+
+def returned_file(log: str, reports: list[str]) -> str | None:
+    """Write the reports a resume hands its session to `<log>/returned.md`; None, and nothing written, when there are none."""
+    if not reports:
+        return None
+    path = os.path.join(log, "returned.md")
+    pathlib.Path(path).write_text("\n\n".join(reports) + "\n", encoding="utf-8")
+    return path
+
+
+def projects_dir(root: str) -> str:
+    """Where Claude Code writes the transcripts of a session started in `root` - as `page-session.sh` computes it."""
+    return os.path.join(os.path.expanduser("~"), ".claude", "projects", re.sub(r"[/.]", "-", root))
+
+
+def last_activity(projects: str, sid: str) -> float | None:
+    """The newest write to the session's transcript or any of its subagents' transcripts, or None before the first."""
+    paths = [os.path.join(projects, f"{sid}.jsonl"), *glob.glob(os.path.join(projects, sid, "subagents", "*.jsonl"))]
+    times = [os.path.getmtime(p) for p in paths if os.path.exists(p)]
+    return max(times) if times else None
+
+
+def session_pids(sid: str, proc: str = "/proc") -> list[int]:
+    """The live `claude` processes running session `sid` - read from /proc by argument, never by a pattern search."""
+    out = []
+    for d in glob.glob(os.path.join(proc, "[0-9]*")):
+        try:
+            argv = pathlib.Path(d, "cmdline").read_bytes().split(b"\0")
+        except OSError:
+            continue
+        args = [a.decode(errors="replace") for a in argv]
+        if args and os.path.basename(args[0]) == "claude" and sid in args and ("--session-id" in args or "--resume" in args):
+            out.append(int(os.path.basename(d)))
+    return out
+
+
+class StallWatch(threading.Thread):
+    """Beside one session: every STALL_CHECK seconds, the silence since its last transcript write or since the watch
+    began, whichever is later; past STALL_AFTER it ends the session's process and records `stalled` and `idle`."""
+
+    def __init__(self, projects: str, sid: str, check: float = STALL_CHECK, after: float = STALL_AFTER, returned: float = RETURNED_AFTER) -> None:
+        super().__init__(daemon=True)
+        self.projects, self.sid, self.check, self.after, self.returned = projects, sid, check, after, returned
+        self.began = time.time()
+        self.halt = threading.Event()
+        self.stalled = False
+        self.idle = 0
+
+    def run(self) -> None:
+        while not self.halt.wait(self.check):
+            # never before the watch began: a RESUMED session's transcript is as old as the wait that preceded it
+            quiet = time.time() - max(last_activity(self.projects, self.sid) or 0.0, self.began)
+            if quiet < self.after and not (quiet >= self.returned and turn_ended(self.projects, self.sid) and undelivered(self.projects, self.sid)):
+                continue
+            pids = session_pids(self.sid)
+            if not pids:
+                continue  # nothing to end: the session is between processes, or already gone
+            self.stalled, self.idle = True, int(quiet)
+            for pid in pids:
+                try:
+                    os.kill(pid, signal.SIGTERM)
+                except OSError:
+                    pass
+            return
+
+    def stop(self) -> None:
+        self.halt.set()
+        self.join()
+
+
+def _read(path: str) -> str:
+    try:
+        return pathlib.Path(path).read_text(encoding="utf-8", errors="replace")
+    except OSError:
+        return ""
+
+
+def failed(rc: int, text: str) -> bool:
+    """Whether a session ended in failure: a non-zero exit, or the JSON result says it was an error."""
+    if rc != 0:
+        return True
+    try:
+        got = json.loads(text[: text.rfind("}") + 1] or "{}")
+    except ValueError:
+        return False
+    return bool(got.get("is_error")) or got.get("subtype") not in (None, "success")
+
+
+def wait_for(text: str, attempt: int, now: float) -> int:
+    """Seconds to wait before resuming: two minutes past the reset the message names (an epoch after a `|`, or `resets
+    <h>am|pm` in UTC), else the backoff for this attempt. Never under a minute, never over six hours."""
+    m = re.search(r"\|(\d{10})\b", text)
+    if m:
+        return int(min(max(int(m.group(1)) - now + 120, 60), 6 * 3600))
+    m = re.search(r"resets?\s+(?:at\s+)?(\d{1,2})(?::(\d{2}))?\s*([ap]m)", text, re.I)
+    if m:
+        t = time.gmtime(now)
+        hour = int(m.group(1)) % 12 + (12 if m.group(3).lower() == "pm" else 0)
+        target = calendar.timegm((t.tm_year, t.tm_mon, t.tm_mday, hour, int(m.group(2) or 0), 0))
+        if target <= now:
+            target += 86400
+        return int(min(max(target - now + 120, 60), 6 * 3600))
+    return BACKOFF[min(attempt, len(BACKOFF) - 1)]
+
+
+def resume_command(cmd: list[str], sid: str, returned: str | None = None) -> list[str]:
+    """The same session's command, resumed: `--session-id <sid>` becomes `--resume <sid>`, the prompt a continue - naming
+    the file of its agents' reports where the runner wrote one (`returned_file`)."""
+    out = list(cmd)
+    if "--session-id" in out:
+        i = out.index("--session-id")
+        out[i : i + 2] = ["--resume", sid]
+    out[out.index("-p") + 1] = RESUME + (RETURNED.format(path=returned) if returned else "")
+    return out
+
+
+def first_line(text: str) -> str:
+    return next((ln.strip()[:160] for ln in text.splitlines() if ln.strip()), "no output")
+
+
+def main(argv: list[str]) -> int:
+    if argv and argv[0] == "--work":
+        _, root, name, extra, queue, run_log = argv
+        work(root, name, json.loads(extra), json.loads(queue), run_log)
+        return 0
+    root, name, projects, *rest = argv
+    cut = rest.index("--")
+    extra, items = rest[:cut], rest[cut + 1:]
+    try:
+        queue = plan(root, name, projects, extra, items)
+    except Refused as e:
+        print(f"page-session: REFUSED, nothing started - {e}", file=sys.stderr)
+        return 2
+    run_log = os.path.join(root, ".git", "page-sessions", f"run-{uuid.uuid4().hex[:8]}.log")
+    open(run_log, "w").close()  # it exists before the wait starts, so the wait never races its creation
+    subprocess.Popen([sys.executable, os.path.abspath(__file__), "--work", root, name, json.dumps(extra), json.dumps(queue), run_log],
+                     cwd=root, stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                     start_new_session=True, close_fds=True)
+    print("page-session: started - each result.json is written when its session ends, and the next session begins")
+    print(f"page-session: to be told when the whole queue has ended, run this BACKGROUNDED (run_in_background):\n"
+          f"    until grep -q '^ALL DONE' {run_log}; do sleep 60; done; tail -20 {run_log}")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]))

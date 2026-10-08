@@ -1,4 +1,4 @@
-"""`scripts/_check_bundle.py` (feature 250, D6): what one check agent reads, copied out of the repository.
+"""`scripts/record/check_bundle.py` (feature 250, D6): what one check agent reads, copied out of the repository.
 
 WHAT THESE PROVE. The keys a question's notes cite are read off their links; a registry entry's pointer is read
 whole, with the parenthesis that WRAPS it dropped and one that belongs to it kept; a directory that is not a
@@ -16,11 +16,13 @@ import pathlib
 
 import pytest
 
+from tests._scripts import script_dirs
+
 REPO = pathlib.Path(__file__).resolve().parents[2]
 
 
 def _load():  # noqa: ANN202
-    spec = importlib.util.spec_from_file_location("_check_bundle", REPO / "scripts" / "_check_bundle.py")
+    spec = importlib.util.spec_from_file_location("_check_bundle", REPO / "scripts/record/check_bundle.py")
     assert spec and spec.loader
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
@@ -112,16 +114,16 @@ def test_a_source_bundle_holds_the_entry(tmp_path: pathlib.Path, monkeypatch: py
     assert cb.main(["--key", "edo-enwiki", "--out", str(out), "--root", str(REPO)]) == 0
     assert (out / "sources" / "edo-enwiki.html").is_file()
     # D19: the bundle hands source-pages the passages the record quotes from the key, so a long page is excerpted
-    assert fetched == [["_source_pages.py", str(out / "pages"), "https://en.wikipedia.org/wiki/Edo", "--quotes", str(out / "quotes.json"), "--no-ledger"]]
+    assert fetched == [["source_pages.py", str(out / "pages"), "https://en.wikipedia.org/wiki/Edo", "--quotes", str(out / "quotes.json"), "--no-ledger"]]
     assert isinstance(json.loads((out / "quotes.json").read_text(encoding="utf-8")), list)
     fetched.clear()
     whole = tmp_path / "whole"
     assert cb.main(["--key", "edo-enwiki", "--whole", "--out", str(whole), "--root", str(REPO)]) == 0
-    assert fetched == [["_source_pages.py", str(whole / "pages"), "https://en.wikipedia.org/wiki/Edo"]], "source-reader's form: the whole page, no excerpt"
+    assert fetched == [["source_pages.py", str(whole / "pages"), "https://en.wikipedia.org/wiki/Edo"]], "source-reader's form: the whole page, no excerpt"
     assert not (whole / "quotes.json").exists()
     fetched.clear()
     assert cb.main(["--key", "edo-enwiki", "--whole", "--question", "ways/010", "--out", str(whole), "--root", str(REPO)]) == 0
-    assert fetched == [["_source_pages.py", str(whole / "pages"), "https://en.wikipedia.org/wiki/Edo", "--question", "ways/010"]], "a WHOLE read carries its question to the ledger"
+    assert fetched == [["source_pages.py", str(whole / "pages"), "https://en.wikipedia.org/wiki/Edo", "--question", "ways/010"]], "a WHOLE read carries its question to the ledger"
     assert cb.main(["--key", "no-such-key", "--out", str(tmp_path / "none"), "--root", str(REPO)]) == 2
 
 
@@ -130,8 +132,8 @@ def test_a_whole_bundle_carries_the_owed_notes_and_their_sentences(tmp_path: pat
     owed notes' sentences went unread. The bundle now carries each owed note and the blocks marking it, on its own page."""
     import sys  # noqa: PLC0415
 
-    sys.path.insert(0, str(REPO / "scripts"))
-    import _record_units as ru  # noqa: PLC0415
+    sys.path[:0] = script_dirs()
+    import record_units as ru  # noqa: PLC0415
 
     units = [ru.Unit("source-reader:0165#edo-enwiki", "the note is new or changed")]
     monkeypatch.setattr(cb.bo, "owed_for_key", lambda root, key, whole, ok, new: (units, "source-reader", ""))
@@ -279,7 +281,7 @@ def test_a_shared_modal_name_is_qualified_by_its_module() -> None:
 
 
 def test_the_whole_bundle_prints_and_ledgers_and_the_excerpt_does_not(tmp_path: pathlib.Path, capsys: pytest.CaptureFixture[str]) -> None:
-    """SC-001, end to end with no network: the key's page is in the page cache, so the real `_source_pages.py` run
+    """SC-001, end to end with no network: the key's page is in the page cache, so the real `source_pages.py` run
     reads it from there. The WHOLE bundle prints the page's earlier read and appends `pending` with its question; the
     excerpt bundle of the same key appends nothing."""
     src = _load_sources()
@@ -299,7 +301,7 @@ def test_the_whole_bundle_prints_and_ledgers_and_the_excerpt_does_not(tmp_path: 
 
 
 def _load_sources():  # noqa: ANN202
-    spec = importlib.util.spec_from_file_location("_sources", REPO / "scripts" / "_sources.py")
+    spec = importlib.util.spec_from_file_location("_sources", REPO / "scripts/record/sources.py")
     assert spec and spec.loader
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
@@ -339,7 +341,7 @@ def test_an_entry_bundle_lists_its_residue_pages(tmp_path: pathlib.Path, monkeyp
     real = cb.run_script
 
     def run(name: str, args: list[str], root: pathlib.Path) -> tuple[int, str]:
-        if name != "_quote_verbatim.py":
+        if name != "quote_verbatim.py":
             return real(name, args, root)
         report = {"footnotes": [{"links": ["https://example.org/differs"], "passages": [{"quotation": "DIFFERS"}]}]}
         pathlib.Path(args[args.index("--json") + 1]).write_text(json.dumps(report), encoding="utf-8")

@@ -136,7 +136,7 @@ wip/**/*.json
 # FEATURE_DIR from this file at priority 2, ABOVE the SPECIFY_FEATURE env var (priority 3), so a
 # stale pointer silently redirects setup-plan.sh / setup-tasks.sh / implement into a peer's
 # specs/NNN-*/ while CURRENT_BRANCH still reads correctly. Each clone writes its own; nothing
-# shares it. See CLAUDE.md 'Concurrent sessions' and scripts/clone-sync-hooks.sh's re-track guard.
+# shares it. See CLAUDE.md 'Concurrent sessions' and scripts/hooks/clone-sync-hooks.sh's re-track guard.
 .specify/feature.json
 
 # Feature 197: the LEDGER of spec-kit feature numbers `make claim` has handed out (its lock file is
@@ -177,6 +177,6 @@ wip/**/*.html
 # clone's merge of the move is still open (conflicts unresolved), its old directory under .claude/skills/ still holds
 # every ignored file the old .gitignore covered - profiles, renders, caches - and nothing at the root ignored that path,
 # so a `git add -A` staged 48 MB of profiles into a merge commit. Nothing tracked lives there any more; the carry
-# (scripts/_layout_carry.sh) empties and removes it after the merge. The bracket keeps the literal old path out of a
-# live file (scripts/check-old-layout.py).
+# (scripts/reviews/layout_carry.sh) empties and removes it after the merge. The bracket keeps the literal old path out of a
+# live file (scripts/gates/check-old-layout.py).
 /.claude/skills/diagra[m]/

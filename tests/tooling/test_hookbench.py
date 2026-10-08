@@ -1,4 +1,4 @@
-"""`scripts/_hookbench.py`, proven to fire (feature 239 B: FR-004 to FR-007).
+"""`tests/hooks/hookbench.py`, proven to fire (feature 239 B: FR-004 to FR-007).
 
 The bench replays real commands through a guard's DECISION in process, and diffs verdicts against a
 ref. Each case below is a rule a later session could break without noticing: the codepoint prefilter,
@@ -15,7 +15,7 @@ import sys
 import pytest
 
 REPO = pathlib.Path(__file__).resolve().parents[2]
-_spec = importlib.util.spec_from_file_location("_hookbench", REPO / "scripts" / "_hookbench.py")
+_spec = importlib.util.spec_from_file_location("_hookbench", REPO / "tests/hooks/hookbench.py")
 assert _spec and _spec.loader
 bench = importlib.util.module_from_spec(_spec)
 # the British forms are SPLIT so the house-style hook cannot correct these cases as they are written -

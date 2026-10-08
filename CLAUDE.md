@@ -30,7 +30,7 @@ restarts at 200); features 001-131 that concern the diagram live here.
 
 ### House style
 
-Enforced by `scripts/house-style-hooks.sh`, which corrects the text rather than refusing the edit.
+Enforced by `scripts/hooks/house-style-hooks.sh`, which corrects the text rather than refusing the edit.
 
 - Hyphens only: no em-dashes or en-dashes anywhere in the project.
 - American spellings, never British ones, in everything - prose, docs, generated content, tests,
@@ -91,7 +91,7 @@ auto-loads when a session edits the record; the archive and the download list ar
   numbered from 1 at its foot, a page per section of each half and per tag, and the whole record on one page
   (`all.html`) - never committed, built on main by render-sync. A POINTER to the research - a code comment, a doc, a
   spec, an `Entry:` - names the FILE (`research/questions/NNNN-<heading id>.html`, or
-  `research/contents.json#<section>` for a whole section), never a built page; `scripts/check-research-pointers.py`
+  `research/contents.json#<section>` for a whole section), never a built page; `scripts/gates/check-research-pointers.py`
   holds it at the gate and the push, and `make fragment-move FROM= TO=` renames a question with every pointer to it.
   Find a question with a glob on its heading id or a grep over `research/questions/` - there is no index - and never
   edit a built page; footnote numbers are allocated at build and are typed nowhere.
@@ -112,7 +112,7 @@ auto-loads when a session edits the record; the archive and the download list ar
   A write session takes at most four questions and ten new registry keys (feature 274: its cost grows with the square
   of its length); the runner refuses a larger brief unless it declares `<!-- page-load: kind=check|assertions|split|handover -->`,
   and `make reserve`'s eleventh key sends the rest to a continuation brief. Coordination files are read by line
-  (`make lines`) and written without reading (`make append`); a page session loads `container-scripts/page-session-rules.md`
+  (`make lines`) and written without reading (`make append`); a page session loads `scripts/container/page-session-rules.md`
   in place of this file.
 
 ## Development workflow
@@ -139,10 +139,10 @@ full doctrine with the GM's rulings and the incidents behind them: `docs/spec-ki
   GM's request verbatim; if it agrees, carry on and raise it with the GM once the implementation
   works.
 - A spec is reviewed against the GM's own words by `spec-fidelity` before implementation
-  (`scripts/review-gate.sh` refuses the push otherwise): up to five rounds on the initial acceptance,
+  (`scripts/gates/review-gate.sh` refuses the push otherwise): up to five rounds on the initial acceptance,
   then stop and escalate; an amendment after acceptance resets the counter. A plan's decisions are
-  reviewed by the same agent before a task is ticked (`make tick`, `scripts/plan-gate.sh`). A later
-  round is handed the previous verdict and the diff by `scripts/review-round-hooks.sh`.
+  reviewed by the same agent before a task is ticked (`make tick`, `scripts/gates/plan-gate.sh`). A later
+  round is handed the previous verdict and the diff by `scripts/hooks/review-round-hooks.sh`.
 - No known regressions (constitution XIII). A regression is measured, never remembered: the baseline
   is taken in a detached worktree (`git worktree add --detach /tmp/base HEAD`, never a stash) and
   each failure is checked against the clone, because a worktree carries no gitignored artifacts.
@@ -156,7 +156,7 @@ full doctrine with the GM's rulings and the incidents behind them: `docs/spec-ki
 - Review checks (`glyph-check`, `settlement-review`, `fix-check`, `building-review`, `size-audit`) run ON
   THEIR OCCASION (feature 294): an element new to a map, a glyph redrawn or re-placed, a map or sheet new to the
   pool, or an occasion the feature declares in its `tasks.md` `## Occasions` - never because a manifest moved
-  (`_review_owed.py`; `docs/reviews.md` has the table). One unit per agent, on a green gate,
+  (`review_owed.py`; `docs/reviews.md` has the table). One unit per agent, on a green gate,
   two rounds at most; every pass is a row of the ledger's measured table with its cost (`make review-cost`). To improve one, add
   the general rule, prove it fires on the unfixed artifact, then fix the artifact. Findings for the
   GM go through `escalation-check` first. Every check runs on the TIER its file pins - a model and an
@@ -171,7 +171,7 @@ full doctrine with the GM's rulings and the incidents behind them: `docs/spec-ki
   an ad-hoc agent keeps all three, and so does `spec-fidelity` alone, which the GM approved on the session's
   measured recommendation, 2026-09-20 (the tier test
   names the exception and enforces the field on every other agent file). The review agents are pre-authorized through
-  `container-scripts/append-system-prompt.md`; if one is skipped, check `type claude` first.
+  `scripts/container/append-system-prompt.md`; if one is skipped, check `type claude` first.
 
 ## Verification and iteration
 
@@ -181,7 +181,7 @@ The machinery in one picture, with the GM's rulings and the measurements: `docs/
   `make quick` while iterating (testmon selects by change; `ALL=1` runs every quick test), `make done`
   once at the end (the whole gate: lint, the static checks, the pool roll, 100% coverage over the
   whole engine), `make done FULL=1` (prompts; adds the perf bookends). What each costs is asked of
-  the record (`make audit`, `scripts/_gatecost.py <target>`), never written here.
+  the record (`make audit`, `scripts/measure/gatecost.py <target>`), never written here.
 - `make done` reports every failure together: fix them all, re-run once. Background the final gate
   and act on its notification; never poll.
 - Python: ruff, ruff format, pyrefly, and 100% coverage owed by everything the day it lands, held as a
@@ -191,7 +191,7 @@ The machinery in one picture, with the GM's rulings and the measurements: `docs/
 - An overlap check against the features already on the map builds an index once
   (`settlement/_geom/indexes.py`) and asks it per candidate; a plan that adds one says how it is
   indexed.
-- Edit with `Edit`, not heredoc'd Python; a mechanical sweep uses `scripts/_patch.py`.
+- Edit with `Edit`, not heredoc'd Python; a mechanical sweep uses `scripts/patch.py`.
   Foreground-regenerate only the motivating map. Read derived data from the recorded manifest, not by
   re-running the generator.
 - Batch: send the lookups you already know you need in one message; the batching hook blocks a run
@@ -239,11 +239,11 @@ doctrine for writing a guard: `docs/guards.md`.
 | `ledger-hooks.sh` | a commit staging the review ledger with a measured row short of its check, class or cost | `LEDGER_LINT_OK` |
 | `shell-check-hooks.sh` | a command that does not parse, an executing backtick, a `-m` with a quote or newline, a foreign co-author | `SHELL_CHECK_OK` |
 | `no-branch-hooks.sh` | no local branches. The remote-only `backup/<clone-name>` branches on GitHub are not local branches: `sync-with-main.sh` pushes the clone's HEAD there (fast-forward, never forced) at every `done`/`push`, landed or refused, and deletes each once `main` contains it - its own at landing, any other by the sweep at the same step (feature 321) | `NO_BRANCH_OK` |
-| `no-poll-hooks.sh` | no busy-wait; corrects a self-matching `pgrep`, and scopes a wait on a make run to this tree (`_own-make.sh`); refuses a pattern that matches its own command (launch-and-wait); a file-watching loop is backgrounded and given a proof of life; every wait loop gets a 90-minute ceiling (WAIT TIMED OUT, exit 4); a backgrounded periodic report is refused with its exact `CronCreate` call | `POLL_OK`, `CRON_OK` |
+| `no-poll-hooks.sh` | no busy-wait; corrects a self-matching `pgrep`, and scopes a wait on a make run to this tree (`own-make.sh`); refuses a pattern that matches its own command (launch-and-wait); a file-watching loop is backgrounded and given a proof of life; every wait loop gets a 90-minute ceiling (WAIT TIMED OUT, exit 4); a backgrounded periodic report is refused with its exact `CronCreate` call | `POLL_OK`, `CRON_OK` |
 | `batching-hooks.sh` | blocks a run of single-call recon turns, warning on every loaded turn before it | - |
 | `measure-hooks.sh` | a second expensive run with nothing changed between | `MEASURE_OK` |
 | `gate-hooks.sh` | no `-k` subset as the only run before the gate | `GATE_OK` |
-| `pair-hooks.sh` + `_review_owed.py` | the review checks a delta owes (its occasions) dispatched on a green gate, one unit per agent, two rounds per unit | `PAIR_OK`, `REVIEW_ROUNDS_OK` |
+| `pair-hooks.sh` + `review_owed.py` | the review checks a delta owes (its occasions) dispatched on a green gate, one unit per agent, two rounds per unit | `PAIR_OK`, `REVIEW_ROUNDS_OK` |
 | `escalation-hooks.sh` | a review dispatch arms, an `escalation-check` dispatch disarms, before the turn ends | `ESCALATION_OK` |
 | `wakeup-hooks.sh` | a `ScheduleWakeup` outside a live `/loop` is refused (background work wakes a session by itself; a reminder the GM asks for is `CronCreate`); a turn cannot end with a stale wakeup pending, and the block names the `CronDelete` | none - cancel the wakeup |
 | `review-round-hooks.sh` | a later `spec-fidelity` round is handed the diff and routed to `spec-fidelity-verify`; refused first when the feature still carries the OLD value of something the change moved (`make stale-terms`) | `REVIEW_ROUND_OK`, `STALE_TERMS_OK` |
@@ -258,8 +258,8 @@ doctrine for writing a guard: `docs/guards.md`.
 | `agent-stall-hooks.sh` | a stalled background agent is reported | - |
 | `stall-watchdog-hooks.sh` | one loop outside every session: a session silent an hour with unfinished work, not waiting on the GM, gets its tab marked and the bell, and a nudge typed when its own input line is empty (once per stall); a paneless one is marked on its host's tab, never nudged | - |
 | `idle-tests-hooks.sh` | an idle session runs `make idle-tests` | - |
-| at push, in `sync-with-main.sh` | `gate-stamp.py` (a green gate saw it), `review-gate.sh`, `plan-gate.sh`, `entry-gate.sh` (the record gate: every record check a delta owes answered, feature 311), `claims-gate.sh` (feature 316), `check-file-scale.py`, `spec-lint.py` (a spec directory that existed before the push is judged on what the push adds), `check-research-pointers.py`, `_downloads.py check` (the download list append-only), `make record CHECK=1` (the record builds cleanly), `_hm_conflict.py --tracked`, `perf_review.py --check`, the open-task refusal; at push and sync-in, a clone whose history shares no commit with main's | per script, each with a reason |
-| the gate | the 100% floor, the 1,000-line bar, `_ratchet.py` (a target that gets slower fails), the perf bands, `test_agent_models.py` (the pinned tiers, and `omitClaudeMd` on every agent file but the one the test names) | `FILE_SIZE_OK` in the file |
+| at push, in `sync-with-main.sh` | `gate-stamp.py` (a green gate saw it), `review-gate.sh`, `plan-gate.sh`, `entry-gate.sh` (the record gate: every record check a delta owes answered, feature 311), `claims-gate.sh` (feature 316), `check-file-scale.py`, `spec-lint.py` (a spec directory that existed before the push is judged on what the push adds), `check-research-pointers.py`, `downloads.py check` (the download list append-only), `make record CHECK=1` (the record builds cleanly), `hm_conflict.py --tracked`, `perf_review.py --check`, the open-task refusal; at push and sync-in, a clone whose history shares no commit with main's | per script, each with a reason |
+| the gate | the 100% floor, the 1,000-line bar, `ratchet.py` (a target that gets slower fails), the perf bands, `test_agent_models.py` (the pinned tiers, and `omitClaudeMd` on every agent file but the one the test names) | `FILE_SIZE_OK` in the file |
 
 Every escape states a reason of two words or more, and every firing is recorded (`make audit`,
 `make guard-log GUARD=<name>`). A guard that can produce the compliant command produces it; a refusal

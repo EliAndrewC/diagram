@@ -27,7 +27,7 @@ PACKAGE = "tests/full/interactive/page_browser"
 
 
 def _gate_stamp() -> Any:
-    spec = importlib.util.spec_from_file_location("gate_stamp_206", REPO / "scripts" / "gate-stamp.py")
+    spec = importlib.util.spec_from_file_location("gate_stamp_206", REPO / "scripts/gates/gate-stamp.py")
     assert spec and spec.loader
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
@@ -217,5 +217,5 @@ def test_page_check_and_the_phases_run_exit_earn_the_stamp_and_the_short_circuit
     short = re.search(r"verified-done; then(.*?)exit 0;", body, re.S)
     assert short and "--write browser" not in short.group(1), "the short-circuit ran nothing"
     after = body[short.end() :]
-    assert '$(if $(BROWSER_SKIP),,[ -n "$$root" ] && python3 "$$root/scripts/gate-stamp.py" --write browser' in after
+    assert '$(if $(BROWSER_SKIP),,[ -n "$$root" ] && python3 "$$root/scripts/gates/gate-stamp.py" --write browser' in after
     assert "--write page" in after and after.index("--write page") < after.index("--write browser"), "after the page stamp, in the phases-run exit"

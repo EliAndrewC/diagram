@@ -48,7 +48,7 @@ description: "Task list template for feature implementation"
 - **Every task that writes prose or code carries the house-style line: `American spellings, hyphens
   only`** (GM 2026-09-12, feature 236 item 4: *"we can have that as a checklist item in advance as
   well as having an automated check for it"*). The automated half is a `make quick` phase that fails
-  on a British spelling in the DELTA (`scripts/check-house-style-delta.py`); this half is the
+  on a British spelling in the DELTA (`scripts/gates/check-house-style-delta.py`); this half is the
   reminder that arrives BEFORE the writing, which is the cheaper of the two places to catch it. The
   exceptions are the GM's own writing and a verbatim quotation of another source, which keep their
   own characters.

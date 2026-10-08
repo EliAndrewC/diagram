@@ -62,7 +62,7 @@ counts as a readable source, when a guess may be recorded, how a two-form findin
   `research/tags.json` and `research/contents.json`, and BUILT by `make record` into the site a reader opens (feature 301, GM 2026-10-01):
   `research/site/`, a page per question with its notes numbered from 1 and the works it cites at its foot, and
   the whole record on one page - never committed, built on main by render-sync. The maps link each question's
-  small page, and every pointer to the research names its fragment (`scripts/check-research-pointers.py`).
+  small page, and every pointer to the research names its fragment (`scripts/gates/check-research-pointers.py`).
   Every cited work's registry entry says what it is and why it applies with its honest limits - two
   write-ups, written once and derived into the works list at the foot of every page that
   cites the work. Every work carries TAGS - the period of its evidence, its region, its kind - from

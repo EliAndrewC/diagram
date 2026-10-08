@@ -1,4 +1,4 @@
-"""`scripts/_sources.py` (feature 288): the sources-consulted ledger and the saved-page cache keyed by URL.
+"""`scripts/record/sources.py` (feature 288): the sources-consulted ledger and the saved-page cache keyed by URL.
 
 WHAT THESE PROVE. One page under its several spellings is one ledger URL and one cache entry; a ledger line carries
 the feature, clone, session, question and outcome, and only the five outcome forms are recorded; the lookup finds a
@@ -25,7 +25,7 @@ REPO = pathlib.Path(__file__).resolve().parents[2]
 
 
 def _load():  # noqa: ANN202
-    spec = importlib.util.spec_from_file_location("_sources", REPO / "scripts" / "_sources.py")
+    spec = importlib.util.spec_from_file_location("_sources", REPO / "scripts/record/sources.py")
     assert spec and spec.loader
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)

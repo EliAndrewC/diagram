@@ -1,4 +1,4 @@
-"""`scripts/_clone_local_settings.py` (feature 250, research R4 recommendation 4): a clone does not load the mirror's CLAUDE.md.
+"""`scripts/hooks/lib/clone_local_settings.py` (feature 250, research R4 recommendation 4): a clone does not load the mirror's CLAUDE.md.
 
 WHAT THESE PROVE. In a clone the local settings gain the exclusion naming the MIRROR's root CLAUDE.md - once, keeping
 every other key; the mirror itself is never touched (its CLAUDE.md is its only copy); and a local settings file that is
@@ -15,7 +15,7 @@ REPO = pathlib.Path(__file__).resolve().parents[2]
 
 
 def _load():  # noqa: ANN202
-    spec = importlib.util.spec_from_file_location("_clone_local_settings", REPO / "scripts" / "_clone_local_settings.py")
+    spec = importlib.util.spec_from_file_location("_clone_local_settings", REPO / "scripts/hooks/lib/clone_local_settings.py")
     assert spec and spec.loader
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)

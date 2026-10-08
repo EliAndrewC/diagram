@@ -1,0 +1,102 @@
+#!/usr/bin/env python3
+"""What a make target has ACTUALLY been costing, from the recorded runs (feature 162).
+
+    gatecost.py done          -> e.g. "137" (seconds), or nothing at all
+    gatecost.py done full     -> the same question for one recorded SCOPE
+
+WHY (GM 2026-08-30): *"I think those numbers for `make quick` are wrong and outdated."* They were,
+twice over - `gate-hooks.sh` said "~70 s with scope locked" while the scope had been UNLOCKED for
+three days and the gate was costing 111 s. A number typed into a shell string in August is wrong in
+September and nothing tells anybody, so no guard message states one any more: it asks here, and says
+nothing when the log cannot answer. Printing nothing is a deliberate outcome, not a failure - a
+message with no number is honest, a message with a stale one is not.
+
+Green runs only: a failed gate's elapsed time measures where it stopped, not what it costs.
+"""
+
+from __future__ import annotations
+
+import glob
+import json
+import os
+import statistics
+import subprocess
+import sys
+
+RECENT = 25
+
+
+def _logs(cwd: str) -> list[str]:
+    """Every run-log directory worth reading: this tree's, and the mirror's."""
+    out = []
+    top = subprocess.run(["git", "-C", cwd, "rev-parse", "--show-toplevel"],
+                         capture_output=True, text=True).stdout.strip()
+    # GUARD_EDIT_OK: feature 171 - THE MIRROR IS DERIVED, NOT HARDCODED. This read `"/diagram"`
+    # literally, which is the one thing this repository's guards all avoid (feature 131 moved the
+    # repository once already, and every hook derives its root from git). Two consequences, and the
+    # second is why it surfaced: a checkout anywhere else read the WRONG tree's run log, and a test
+    # could not isolate itself - a fixture with its own log still got the live median mixed in, which
+    # is how a test can quietly measure production.
+    mirror = top.split("/.clones/")[0] if "/.clones/" in top else top
+    for root in dict.fromkeys((top, mirror)):   # dedupe, order preserved
+        if root:
+            # recursive since 2026-10-02: the log is in month folders (dev/run-log/<YYYY-MM>/), flat entries still read
+            out.append(os.path.join(root, "dev/run-log/**/*.json"))
+    return out
+
+
+def median_seconds(target: str, scope: str | None = None, cwd: str | None = None, cache: str | None = None) -> int | None:
+    """The median of recent green runs, optionally of ONE roll-cache class (feature 196).
+
+    THE CLASS FILTER RUNS BEFORE THE `RECENT` SLICE, deliberately: "recent" must mean the last 25 runs
+    OF THAT CLASS. Filtering after the slice would shrink a class's sample every time the other class
+    got busier, which is the mixing this whole feature exists to remove.
+
+    AN ENTRY WITH NO `cache` FIELD IS EXCLUDED from a class query rather than defaulted. Every entry
+    written before feature 196 lacks it, and guessing would put cold runs in the warm population -
+    the exact defect being fixed. It costs a slow start (see `_ratchet`'s below-sample rule, which
+    keeps the guard live meanwhile) and it cannot lie."""
+    seen: dict[str, dict] = {}
+    for pattern in _logs(cwd or os.getcwd()):
+        for path in glob.glob(pattern, recursive=True):
+            try:
+                rec = json.load(open(path))
+            except Exception:
+                continue
+            if rec.get("target") != target or rec.get("result") != "green" or rec.get("mode") == "incremental":
+                continue  # feature 207: an incremental run re-ran a selection; only full runs measure the target
+            if scope is not None and rec.get("scope") != scope:
+                continue
+            if cache is not None and rec.get("cache") != cache:
+                continue
+            seen[os.path.basename(path)] = rec            # same entry in clone and mirror counts once
+    runs = sorted(seen.values(), key=lambda r: r.get("utc", ""))[-RECENT:]
+    if not runs:
+        return None
+    return int(statistics.median(r["seconds"] for r in runs))
+
+
+def class_count(target: str, scope: str | None = None, cwd: str | None = None, cache: str | None = None) -> int:
+    """How many recent green runs the class holds - what `_ratchet`'s below-sample rule reads."""
+    seen: dict[str, dict] = {}
+    for pattern in _logs(cwd or os.getcwd()):
+        for path in glob.glob(pattern, recursive=True):
+            try:
+                rec = json.load(open(path))
+            except Exception:
+                continue
+            if rec.get("target") != target or rec.get("result") != "green" or rec.get("mode") == "incremental":
+                continue  # feature 207: an incremental run re-ran a selection; only full runs measure the target
+            if scope is not None and rec.get("scope") != scope:
+                continue
+            if cache is not None and rec.get("cache") != cache:
+                continue
+            seen[os.path.basename(path)] = rec
+    return len(sorted(seen.values(), key=lambda r: r.get("utc", ""))[-RECENT:])
+
+
+if __name__ == "__main__":
+    # `gatecost.py <target> [scope] [cache]` - the third positional is feature 196's class.
+    got = median_seconds(*sys.argv[1:4]) if len(sys.argv) > 1 else None
+    if got is not None:
+        print(got)

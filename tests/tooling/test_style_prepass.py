@@ -1,4 +1,4 @@
-"""`scripts/_style_prepass.py` - the mechanical half of the style guide, handed to `record-style` (feature 292)."""
+"""`scripts/record/style_prepass.py` - the mechanical half of the style guide, handed to `record-style` (feature 292)."""
 
 from __future__ import annotations
 
@@ -6,14 +6,16 @@ import importlib.util
 import pathlib
 import sys
 
+from tests._scripts import script
+
 REPO = pathlib.Path(__file__).resolve().parents[2]
 
 
 def _load(name: str):  # noqa: ANN202
-    spec = importlib.util.spec_from_file_location(name, REPO / "scripts" / f"{name}.py")
+    spec = importlib.util.spec_from_file_location(name, script(name))
     assert spec and spec.loader
     mod = importlib.util.module_from_spec(spec)
-    sys.modules[name] = mod
+    sys.modules[name] = sys.modules[name.lstrip("_")] = mod  # the old name and the one a sibling imports it by (2026-10-08)
     spec.loader.exec_module(mod)
     return mod
 
@@ -113,7 +115,7 @@ def test_a_sentence_resting_on_an_absence_note_is_listed_for_a_ruling() -> None:
 
 
 def test_the_hook_helper_and_the_engine_name_the_same_questions_directory() -> None:
-    """`_hm_record.py` restates the record's questions directory because a hook helper imports nothing from the engine
+    """`hm_record.py` restates the record's questions directory because a hook helper imports nothing from the engine
     (feature 303: the sub-collections it restated before are gone)."""
     from l7r.diagram.interactive.record.questions import QUESTIONS
 

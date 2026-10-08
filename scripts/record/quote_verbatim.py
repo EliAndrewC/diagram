@@ -1,0 +1,546 @@
+#!/usr/bin/env python3
+"""Is every quoted passage on the page it cites, character for character? (feature 251, FR-003)
+
+WHY A SCRIPT AND NOT A MODEL. The GM, 2026-09-19: "it probably is a perfectly fine model to use to do
+what are functionally mechanical checks, such as making sure that a quotation excerpt does accurately
+quote the text in question" - and then approved going one step further: a character-for-character
+comparison is the one thing a language model is WORSE at than twenty lines of code. It reads tokens,
+not characters, so a hyphen where the source has a dash, or an American spelling where the source has a British one, is
+exactly what it blurs - and the record keeps a source's own characters (GM 2026-09-06: *"The house
+style should not normalize british spellings or em-dashes inside things we are quoting"*). This does
+that comparison exactly, for no tokens, and hands the `quote-check` agent what is left: whether the
+quotation SUPPORTS the assertion, whether a translation is faithful, and the pages this could not read.
+
+WHAT IT READS. A question's page (`research/questions/<file>`, feature 303) for the ASSERTIONS - the sentence carrying
+each `<sup class="fn">` - and its own notes for the passages, numbered from 1 as its page in the record's site numbers
+them (`record/site_notes.py`):
+
+    <li id="fn-3"><a href="URL"><code>key</code></a> - 「passage」 ... <a class="fnback" ...>back</a></li>
+
+A translated quotation (feature 202) is `「English」 (translated; original:
+「source text」)`: the ORIGINAL is what is matched against the page, and the entry carries both so the
+agent can judge the translation. A note with no link reading `no publicly readable source (...)` is an
+ABSENCE note and `no source is owed: ...` a GROUNDS note; nothing is fetched for either.
+
+THE MATCH, and the only two liberties it takes. Runs of whitespace are collapsed to one space on both
+sides (a page wraps its lines where it likes), and the passage loses the quotation marks that DELIMIT
+it (they are the footnote's, not the source's). Nothing else: the verdict is `passage in page_text`.
+A passage with an elision (`...`, `…`, `[...]`) is matched piece by piece, in order.
+
+VERDICTS. Quotation: VERBATIM; DIFFERS (the closest stretch of the page, and what differs);
+NOT-ON-PAGE; UNFETCHABLE (how); NOT-CHECKED (why - a PDF, a page that would not decode). Readability:
+READABLE when the passage was found on a page fetched with no credentials (a difference of the page's
+reference markers alone still reads); NOT-READABLE when the link
+is this project's own registry or the page was read and does not carry the passage; otherwise left to
+the agent (`-`). It decides nothing about support and never edits.
+
+ONE ATTEMPT PER HOST, EVER (GM 2026-08-28): a host that refuses is recorded and never asked again in the
+run, and every fetch has a timeout - two readers once stalled for ten hours on a bad certificate.
+"""
+
+from __future__ import annotations
+
+import argparse
+import difflib
+import hashlib
+import html
+import importlib.util
+import json
+import pathlib
+import re
+import sys
+import unicodedata
+import urllib.error
+import urllib.parse
+import urllib.request
+from html.parser import HTMLParser
+
+TIMEOUT = 20
+#: below this similarity the nearest stretch of the page is not worth showing: NOT-ON-PAGE rather than
+#: DIFFERS. It only chooses which of two NON-PASSING words is printed; both go to the session.
+NEAR = 0.85
+UA = "Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0"
+BLOCK = {"p", "div", "br", "li", "ul", "ol", "tr", "td", "th", "table", "h1", "h2", "h3", "h4", "h5", "h6", "section", "article", "blockquote", "dd", "dt", "pre", "figcaption"}
+PAIRS = {"「": "」", "“": "”", '"': '"', "『": "』"}
+#: Since feature 292 (GM 2026-09-29) the plain form is `(translated; original:` - the project is the translator and the
+#: language is the original's own; the older `(translated from the <language> by this project; original:` still reads,
+#: and a translation by anyone else names them (`translated from ... by <who>`). Group 1 is the language when named.
+TRANSLATED = re.compile(r"^\s*\((?:title\s+)?translated(?: from ([^;()]*(?:\([^()]*\))?[^;()]*?) by [^;()]+)?;\s*original:\s*$")
+# Between two quotations of one run - `「Q1」 and 「Q2」 (translated ...; original: 「O1」 and original: 「O2」)` -
+# and between two originals of one parenthetical. Without the run, Q2 was paired with O1 and O2 never checked:
+# cities/fabric 143 (feature 250 T55) had two notes reported NOT-READABLE that were verbatim on their pages.
+# `;` is the record's commonest joiner (`「Q1」; 「Q2」 (...; original: 「O1」; original: 「O2」)`), and without it
+# 0230 (feature 272) had four notes reported NOT-READABLE that were verbatim on their pages.
+JOINER = re.compile(r"^\s*(?:and|/|,|;)?\s*(?:original:)?\s*$")
+ELISION = re.compile(r"\s*(?:\[\s*(?:\.\.\.|…)\s*\]|\.\.\.|…)\s*")
+REF_MARK = re.compile(r"\s*\[(?:\d{1,3}|注\s*\d+|note\s*\d+|citation needed|要出典)\]")
+
+
+class _Visible(HTMLParser):
+    """The text a reader sees: no script, style or comment; a space at every block boundary."""
+
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=True)
+        self.out: list[str] = []
+        self.skip = 0
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        if tag in ("script", "style", "noscript"):
+            self.skip += 1
+        elif tag in BLOCK:
+            self.out.append(" ")
+
+    def handle_endtag(self, tag: str) -> None:
+        if tag in ("script", "style", "noscript"):
+            self.skip = max(0, self.skip - 1)
+        elif tag in BLOCK:
+            self.out.append(" ")
+
+    def handle_data(self, data: str) -> None:
+        if not self.skip:
+            self.out.append(data)
+
+
+def squeeze(text: str) -> str:
+    # NFC: a CJK compatibility ideograph (a page's 社 written as U+FA4C) is canonically the same character as the
+    # unified one a quote carries, so it is not a difference (feature 268, three Sano quotes flagged NOT-ON-PAGE).
+    return unicodedata.normalize("NFC", re.sub(r"\s+", " ", text)).strip()
+
+
+def visible_text(markup: str) -> str:
+    parser = _Visible()
+    parser.feed(markup)
+    parser.close()
+    return squeeze("".join(parser.out))
+
+
+def decode(raw: bytes, declared: str = "") -> str | None:
+    """`raw` as text by the declared charset, then the page's own `<meta>`, then the usual suspects.
+
+    Strict throughout: a page that decodes only with replacement characters would make every quotation
+    on it DIFFER for a reason that is ours, so it is reported as undecodable instead (None).
+    """
+    meta = re.search(rb"<meta[^>]+charset=[\"']?\s*([\w-]+)", raw[:4096], re.I)
+    tried: list[str] = []
+    for name in (declared, meta.group(1).decode("ascii", "replace") if meta else "", "utf-8", "shift_jis", "euc_jp", "gb18030", "big5"):
+        name = (name or "").strip().lower()
+        # A page labeled Shift_JIS is read as Windows-31J, as a browser reads it (the WHATWG encoding standard):
+        # strict shift_jis refuses its extension characters (ranhaku's Hakusan page, 2026-09-27), and the fallback
+        # then decoded it as gb18030 and found none of its quotations.
+        name = "cp932" if name in ("shift_jis", "shift-jis", "sjis", "x-sjis", "ms_kanji", "windows-31j") else name
+        if not name or name in tried:
+            continue
+        tried.append(name)
+        try:
+            return raw.decode(name)
+        except (LookupError, UnicodeDecodeError):
+            continue
+    return None
+
+
+def top_level_quotes(text: str) -> list[tuple[int, int]]:
+    """(start, end) of each OUTERMOST quoted span, delimiters included.
+
+    A Japanese title quotes inside a quote (「世界農業遺産「能登の里山里海」を代表する」), so 「」 is scanned
+    with a depth count; a straight or curly pair does not nest.
+    """
+    spans: list[tuple[int, int]] = []
+    i = 0
+    while i < len(text):
+        ch = text[i]
+        if ch not in PAIRS:
+            i += 1
+            continue
+        close, depth, j = PAIRS[ch], 1, i + 1
+        while j < len(text) and depth:
+            if text[j] == close:
+                depth -= 1
+            elif text[j] == ch and close != ch:
+                depth += 1
+            j += 1
+        if depth:
+            i += 1
+            continue
+        spans.append((i, j))
+        i = j
+    return spans
+
+
+def translated_run(note_text: str, spans: list[tuple[int, int]], k: int) -> list[dict]:
+    """Two or more quotations from span `k` that share ONE translation parenthetical holding as many originals,
+    paired in order; empty when the spans do not have that shape (the one-quote case is `passages`' own)."""
+    gap = lambda a, b: note_text[spans[a][1] : spans[b][0]]  # noqa: E731
+    m = k
+    while m + 1 < len(spans) and "(" not in gap(m, m + 1) and JOINER.match(gap(m, m + 1)):
+        m += 1
+    n = m - k + 1
+
+    if n < 2 or m + n >= len(spans) or not (between := TRANSLATED.match(gap(m, m + 1))):
+        return []
+    if not all(JOINER.match(gap(j, j + 1)) for j in range(m + 1, m + n)):
+        return []
+    language = squeeze(between.group(1) or "")
+    return [
+        {"quote": note_text[spans[k + i][0] + 1 : spans[k + i][1] - 1], "original": note_text[spans[m + 1 + i][0] + 1 : spans[m + 1 + i][1] - 1], "language": language}
+        for i in range(n)
+    ]
+
+
+def passages(note_text: str) -> list[dict]:
+    """The quoted passages of one note: each `{quote, original, language}`; `original` is what is matched."""
+    spans = top_level_quotes(note_text)
+    found: list[dict] = []
+    k = 0
+    while k < len(spans):
+        start, end = spans[k]
+        # A quoted phrase INSIDE a parenthetical is the note's own gloss - "(「never crosses row crops」 is this
+        # page's)" - and was never claimed to be the source's, so it is not a passage. A translation's original
+        # also sits in parentheses, but it is consumed with its translation below and never reaches this test.
+        if note_text.count("(", 0, start) > note_text.count(")", 0, start):
+            k += 1
+            continue
+        run = translated_run(note_text, spans, k)
+        if run:
+            found += run
+            k += 2 * len(run)
+            continue
+        quote = note_text[start + 1 : end - 1]
+        entry = {"quote": quote, "original": "", "language": ""}
+        if k + 1 < len(spans):
+            between = TRANSLATED.match(note_text[end : spans[k + 1][0]])
+            if between:
+                nxt = spans[k + 1]
+                entry["original"] = note_text[nxt[0] + 1 : nxt[1] - 1]
+                entry["language"] = squeeze(between.group(1) or "")
+                k += 1
+        found.append(entry)
+        k += 1
+    return found
+
+
+def classify(note_text: str, links: list[str]) -> str:
+    lead = squeeze(note_text).lower()
+    if lead.startswith("no publicly readable source"):
+        return "absence"
+    if lead.startswith("no source is owed"):
+        return "grounds"
+    return "citation" if links else "unlinked"
+
+
+def _strip(markup: str) -> str:
+    return squeeze(html.unescape(re.sub(r"<[^>]+>", "", re.sub(r"<!--.*?-->", "", markup, flags=re.S))))
+
+
+def footnotes(citations_html: str) -> list[dict]:
+    """One entry per `<li id="fn-N">`: id, key, links, class, passages."""
+    notes: list[dict] = []
+    for m in re.finditer(r'<li id="(fn-\d+)">(.*?)</li>', citations_html, re.S):
+        body = re.sub(r'<a class="fnback".*?</a>', "", m.group(2), flags=re.S)
+        links = [html.unescape(u) for u in re.findall(r'<a href="([^"]+)"', body)]
+        key = re.search(r"<code>([^<]+)</code>", body)
+        text = _strip(body)
+        kind = classify(text, links)
+        notes.append({"id": m.group(1), "key": key.group(1) if key else "", "links": links, "class": kind, "passages": passages(text) if kind == "citation" else []})
+    return notes
+
+
+def assertions(research_html: str) -> dict[str, str]:
+    """fn id -> the sentence its `<sup class="fn">` closes, from the research page's visible text."""
+    body = re.sub(r"<!--.*?-->", "", research_html, flags=re.S)
+    marked = re.sub(r'<sup class="fn">.*?#(fn-\d+)".*?</sup>', lambda m: f"⁣{m.group(1)}⁣", body, flags=re.S)
+    out: dict[str, str] = {}
+    for block in re.split(r"</?(?:p|li|h[1-6]|td|th|dd|dt|blockquote)\b[^>]*>", marked):
+        text = _strip(block)
+        for m in re.finditer("⁣(fn-\\d+)⁣", text):
+            before = re.sub("⁣fn-\\d+⁣", "", text[: m.start()])
+            sentence = re.split(r"(?<=[.!?])\s+(?=[A-Z(\"“「])", before)[-1]
+            out.setdefault(m.group(1), squeeze(sentence))
+    return out
+
+
+def nearest(passage: str, page: str) -> tuple[float, str]:
+    """(similarity, the stretch of the page closest to `passage`), anchored on their longest shared run."""
+    if not passage or not page:
+        return 0.0, ""
+    sm = difflib.SequenceMatcher(None, page, passage, autojunk=False)
+    block = sm.find_longest_match(0, len(page), 0, len(passage))
+    if block.size == 0:
+        return 0.0, ""
+    start = max(0, block.a - block.b)
+    window = page[start : start + len(passage) + max(8, len(passage) // 10)]
+    best, best_text = 0.0, ""
+    for cut in range(len(window), max(0, len(passage) - max(8, len(passage) // 10)) - 1, -1):
+        cand = window[:cut]
+        ratio = difflib.SequenceMatcher(None, cand, passage, autojunk=False).ratio()
+        if ratio > best:
+            best, best_text = ratio, cand
+    return best, best_text
+
+
+def differences(passage: str, page_stretch: str) -> list[str]:
+    """`quoted 'x' / page 'y'` for each place the two differ."""
+    sm = difflib.SequenceMatcher(None, passage, page_stretch, autojunk=False)
+    return [f"quoted {passage[i1:i2]!r} / page {page_stretch[j1:j2]!r}" for tag, i1, i2, j1, j2 in sm.get_opcodes() if tag != "equal"]
+
+
+def find_in_order(pieces: list[str], have: str) -> tuple[int, int] | None:
+    """(start, end) of `pieces` found in `have` one after another, or None."""
+    at, first = 0, -1
+    for piece in pieces:
+        hit = have.find(piece, at)
+        if hit < 0:
+            return None
+        first = hit if first < 0 else first
+        at = hit + len(piece)
+    return (first, at) if pieces else None
+
+
+def unmarked(have: str) -> tuple[str, list[int]]:
+    """`have` without the page's reference markers, and for each kept character its index in `have`."""
+    kept: list[int] = []
+    at = 0
+    for m in REF_MARK.finditer(have):
+        kept.extend(range(at, m.start()))
+        at = m.end()
+    kept.extend(range(at, len(have)))
+    return "".join(have[i] for i in kept), kept
+
+
+def verdict(passage: str, page: str) -> dict:
+    """VERBATIM, DIFFERS (with the page's text and the differences) or NOT-ON-PAGE for one passage."""
+    want, have = squeeze(passage), squeeze(page)
+    pieces = [p for p in ELISION.split(want) if p]
+    if find_in_order(pieces, have):
+        return {"quotation": "VERBATIM"}
+    # WHY: a run of Wikipedia markers inside the quoted span (人宿[1][2][3]、) pulled the similarity under NEAR and
+    # reported a correct quotation NOT-ON-PAGE (feature 250, cities/government 081, 2026-09-26). The markers are
+    # still named as the difference, never forgiven - the passage is found on the page with them taken out.
+    bare, kept = unmarked(have)
+    span = find_in_order(pieces, bare)
+    if span:
+        stretch = have[kept[span[0]] : kept[span[1] - 1] + 1]
+        return {"quotation": "DIFFERS", "page_text": stretch, "differences": differences(want, stretch), "similarity": 1.0, "only_reference_markers": True}
+    ratio, stretch = nearest(want, have)
+    if ratio >= NEAR:
+        diffs = differences(want, stretch)
+        only_marks = squeeze(REF_MARK.sub("", stretch)) == want
+        return {"quotation": "DIFFERS", "page_text": stretch, "differences": diffs, "similarity": round(ratio, 3), "only_reference_markers": only_marks}
+    return {"quotation": "NOT-ON-PAGE", "similarity": round(ratio, 3)}
+
+
+def is_pdf(url: str, content_type: str = "") -> bool:
+    path = urllib.parse.urlsplit(url).path.lower()
+    return "pdf" in content_type.lower() or path.endswith(".pdf") or path.endswith("/_pdf")
+
+
+def quoted_url(url: str) -> str:
+    """`url` with a non-ASCII path or query percent-encoded (ja.wikipedia.org/wiki/アブラナ), nothing else touched."""
+    parts = urllib.parse.urlsplit(url)
+    return urllib.parse.urlunsplit((parts.scheme, parts.netloc.encode("idna").decode("ascii") if parts.netloc else "", urllib.parse.quote(parts.path, safe="/%:@!$&'()*+,;=~-._"), urllib.parse.quote(parts.query, safe="=&%:@!$'()*+,;/?~-._"), ""))
+
+
+class Pages:
+    """Fetch each URL once, each HOST at most once after it refuses; `offline` reads files by URL hash."""
+
+    def __init__(self, offline: pathlib.Path | None = None, opener=urllib.request.urlopen) -> None:  # noqa: ANN001
+        self.offline, self.opener = offline, opener
+        self.seen: dict[str, dict] = {}
+        self.refused: dict[str, str] = {}
+
+    @staticmethod
+    def name_for(url: str) -> str:
+        return hashlib.sha256(url.encode("utf-8")).hexdigest()[:16] + ".html"
+
+    def get(self, url: str) -> dict:
+        if url not in self.seen:
+            self.seen[url] = self._get(url)
+        return self.seen[url]
+
+    def _get(self, url: str) -> dict:
+        host = urllib.parse.urlsplit(url).netloc
+        if not url.lower().startswith(("http://", "https://")):
+            return {"state": "OWN", "why": "a link into this project, not a public page"}
+        if is_pdf(url):
+            return {"state": "NOT-CHECKED", "why": "a PDF - no text layer can be read here"}
+        if self.offline is not None:
+            path = self.offline / self.name_for(url)
+            if not path.is_file():
+                return {"state": "UNFETCHABLE", "why": "no offline copy"}
+            raw, declared, ctype = path.read_bytes(), "", "text/html"
+        else:
+            if host in self.refused:
+                return {"state": "UNFETCHABLE", "why": f"{host} already refused this run: {self.refused[host]}"}
+            try:
+                req = urllib.request.Request(quoted_url(url), headers={"User-Agent": UA, "Accept-Language": "en,ja,zh,ko"})
+                with self.opener(req, timeout=TIMEOUT) as resp:
+                    ctype = resp.headers.get("Content-Type", "") or ""
+                    declared = resp.headers.get_content_charset() or ""
+                    raw = b"" if is_pdf(url, ctype) else resp.read()
+            except (urllib.error.URLError, OSError, ValueError) as err:
+                self.refused[host] = f"{type(err).__name__}: {err}"[:160]
+                return {"state": "UNFETCHABLE", "why": self.refused[host]}
+        if is_pdf(url, ctype):
+            return {"state": "NOT-CHECKED", "why": "a PDF - no text layer can be read here"}
+        text = decode(raw, declared)
+        if text is None:
+            return {"state": "NOT-CHECKED", "why": "the page would not decode in any charset tried"}
+        return {"state": "FETCHED", "text": visible_text(text)}
+
+
+def judge_note(note: dict, pages: Pages) -> dict:
+    """The quotation and readability verdicts of one citation, over every passage and every link it carries."""
+    results, states = [], [pages.get(u) for u in note["links"]]
+    fetched = [s["text"] for s in states if s["state"] == "FETCHED"]
+    for p in note["passages"]:
+        target = p["original"] or p["quote"]
+        if fetched:
+            per_page = [verdict(target, t) for t in fetched]
+            best = next((v for v in per_page if v["quotation"] == "VERBATIM"), None) or next((v for v in per_page if v["quotation"] == "DIFFERS"), per_page[0])
+            unread = [u for u, s in zip(note["links"], states, strict=True) if s["state"] != "FETCHED"]
+            if best["quotation"] == "NOT-ON-PAGE" and unread:
+                # NOTHING ON THE PAGES READ RESEMBLES IT, AND A LINK WENT UNREAD: in a two-link note each quote belongs to
+                # its own link (feature 310's quote-check, 2026-10-02: the Kashima figure was VERBATIM on its page and the
+                # minami summary on its PDF, and the PDF's quote judged against the other page sank the note to NOT-READABLE)
+                best = {"quotation": "NOT-CHECKED", "why": f"not on the pages read; it may be on {unread[0]}, which could not be read here"}
+        else:
+            first = states[0]
+            best = {"quotation": "UNFETCHABLE" if first["state"] == "UNFETCHABLE" else "NOT-CHECKED", "why": first["why"]}
+        results.append({**p, "matched": "original" if p["original"] else "quote", **best})
+    words = [r["quotation"] for r in results]
+    if not results:
+        readable = "-"
+    elif all(s["state"] == "OWN" for s in states):
+        readable = "NOT-READABLE (the link is this project's own page)"
+    elif all(r["quotation"] == "VERBATIM" or r.get("only_reference_markers") for r in results):
+        readable = "READABLE"
+    elif fetched and any(w in ("NOT-ON-PAGE", "DIFFERS") for w in words):
+        readable = "NOT-READABLE (the page was read and does not carry the passage as quoted)"
+    else:
+        readable = "-"
+    return {**note, "passages": results, "readability": readable}
+
+
+def report(notes: list[dict], claims: dict[str, str], pages: Pages) -> list[dict]:
+    out = []
+    for note in notes:
+        entry = judge_note(note, pages) if note["class"] == "citation" else {**note, "readability": "-"}
+        entry["assertion"] = claims.get(note["id"], "")
+        out.append(entry)
+    return out
+
+
+def render(page: str, entries: list[dict], refused: dict[str, str]) -> str:
+    lines = [f"quote-verbatim: {page} - {len(entries)} footnotes"]
+    tally: dict[str, int] = {}
+    for e in entries:
+        if e["class"] != "citation":
+            tally[e["class"]] = tally.get(e["class"], 0) + 1
+            continue
+        for p in e["passages"]:
+            tally[p["quotation"]] = tally.get(p["quotation"], 0) + 1
+            if p["quotation"] == "VERBATIM":
+                continue
+            lines.append(f"  {e['id']} {e['key']} - {p['quotation']} ({p['matched']}): {(p['original'] or p['quote'])[:120]}")
+            if p["quotation"] == "DIFFERS":
+                lines.append(f"      page has: {p['page_text'][:200]}")
+                lines.append("      " + "; ".join(p["differences"][:6]) + ("   [only the page's reference markers differ]" if p["only_reference_markers"] else ""))
+            elif "why" in p:
+                lines.append(f"      {p['why']}")
+        if not e["passages"]:
+            tally["NO-QUOTE"] = tally.get("NO-QUOTE", 0) + 1
+            lines.append(f"  {e['id']} {e['key']} - NO-QUOTE: a citation that quotes nothing")
+    lines.append("  " + ", ".join(f"{k} {v}" for k, v in sorted(tally.items())))
+    for host, why in sorted(refused.items()):
+        lines.append(f"  refused: {host} - {why}")
+    return "\n".join(lines)
+
+
+def wanted(spec: str) -> set[str] | None:
+    """`90-108,113` -> the fn ids it names; empty -> None (every note). A scoped check is the usual one."""
+    ids: set[str] = set()
+    for part in filter(None, (p.strip() for p in spec.split(","))):
+        lo, _, hi = part.removeprefix("fn-").partition("-")
+        if not (lo.isdigit() and (hi.isdigit() or not hi)):
+            raise SystemExit(f"quote-verbatim: NOTES takes the numbers the built page shows its notes under (e.g. NOTES=9-12,14), not a note's name ({part!r}); run it with Q= alone to check every note of the page")
+        ids.update(f"fn-{n}" for n in range(int(lo), int(hi or lo) + 1))
+    return ids or None
+
+
+def cached_pages():  # noqa: ANN201
+    """The fetcher behind the host's page cache (feature 288 D8), EXACT: an imported copy holds the saved form, not the
+    page as fetched, and a character-for-character check fetches that page afresh (replacing the copy)."""
+    spec = importlib.util.spec_from_file_location("_sources", pathlib.Path(__file__).resolve().parent / "sources.py")
+    assert spec and spec.loader
+    src = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(src)
+    return src.CachedPages(Pages(), src.home(), refresh=src.refresh_wanted(), exact=True)
+
+
+def _engine(research: pathlib.Path) -> None:
+    skill = str(research.resolve().parent)
+    if skill not in sys.path:
+        sys.path.insert(0, skill)
+
+
+def numbered(research: pathlib.Path, file: str) -> tuple[str, str]:
+    """(a question page with its references numbered from 1, its notes as `<li id="fn-N">`), as its small page in the
+    record's site carries them (features 301, 303) - read in memory by the engine's own reader."""
+    _engine(research)
+    from l7r.diagram.interactive.record import site_notes, store  # noqa: PLC0415 - the skill the record is in
+    from l7r.diagram.interactive.record.notes import render_note  # noqa: PLC0415
+    from l7r.diagram.interactive.sources import record_text as assembled  # noqa: PLC0415
+
+    body, placed = site_notes.small_page(assembled(f"questions/{file}", str(research)), store.page_notes(file, str(research)), file)
+    return body, "\n".join(render_note(n, "") for n in placed)
+
+
+def selected(research: pathlib.Path, term: str) -> list[str]:
+    """The page files a section's id or a tag's id names - the engine's `Record.select` (feature 303)."""
+    _engine(research)
+    from l7r.diagram.interactive.record import store  # noqa: PLC0415
+
+    return [p.file for p in store.load(str(research)).select(term)]
+
+
+def main(argv: list[str] | None = None) -> int:
+    ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    ap.add_argument("q", nargs="?", default="", help="questions by number (0412) or page file, comma-separated (feature 303)")
+    ap.add_argument("--in", dest="within", default="", help="every question of a section (its id) or carrying a tag (its id)")
+    ap.add_argument("--notes", default="", help="only these notes of each page, by the number its page shows them under, e.g. 9-12,14")
+    ap.add_argument("--root", default=".")
+    ap.add_argument("--json", default="")
+    ap.add_argument("--offline", default="", help="a directory of saved pages named by Pages.name_for(url)")
+    args = ap.parse_args(argv)
+    research = pathlib.Path(args.root) / "research"
+    if args.q:
+        sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+        sys.path[1:1] = [str((pathlib.Path(__file__).resolve().parent / _d).resolve()) for _d in ('../hooks/lib',)]  # the moved scripts it imports (2026-10-08)
+        from hm_record import fragments_for  # noqa: PLC0415
+
+        files = [pathlib.Path(f).name for f in fragments_for(args.q, str(pathlib.Path(args.root).resolve())) if not f.endswith(".notes.html")]
+    else:
+        files = selected(research, args.within) if args.within else []
+    name = args.q or f"IN={args.within}"
+    if not files:
+        print(f"quote-verbatim: {args.q or args.within or 'nothing'!r} names no question - e.g. make quote-verbatim Q=0041 or IN=homesteads", file=sys.stderr)
+        return 2
+    pages = Pages(pathlib.Path(args.offline)) if args.offline else cached_pages()
+    only = wanted(args.notes)
+    entries: list[dict] = []
+    for file in files:
+        page_text, cite_text = numbered(research, file)
+        notes = [n for n in footnotes(cite_text) if only is None or n["id"] in only]
+        mine = report(notes, assertions(page_text), pages)
+        for e in mine:
+            e["question"] = file
+        entries += mine
+        print(render(f"questions/{file}", mine, pages.refused))
+    out = pathlib.Path(args.json) if args.json else pathlib.Path(args.root) / ".git" / "quote-verbatim" / (re.sub(r"[^A-Za-z0-9.-]+", "-", name) + ".json")
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps({"page": name, "footnotes": entries, "refused": pages.refused}, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+    print(f"  report for quote-check: {out}")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

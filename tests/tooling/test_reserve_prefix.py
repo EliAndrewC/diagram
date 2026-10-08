@@ -1,4 +1,4 @@
-"""`scripts/reserve-prefix.py` (feature 265 FR-010): a prefix reserved under a lock, the file its claim.
+"""`scripts/record/reserve-prefix.py` (feature 265 FR-010): a prefix reserved under a lock, the file its claim.
 
 WHAT THESE PROVE. The next prefix is 10 past the highest held by the mirror, any clone and the ledger; the file is
 written before the lock is released and the ledger records it; two reservations raced in separate processes never
@@ -16,7 +16,7 @@ REPO = pathlib.Path(__file__).resolve().parents[2]
 
 
 def _load():  # noqa: ANN202
-    spec = importlib.util.spec_from_file_location("reserve_prefix", REPO / "scripts" / "reserve-prefix.py")
+    spec = importlib.util.spec_from_file_location("reserve_prefix", REPO / "scripts/record/reserve-prefix.py")
     assert spec and spec.loader
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
@@ -203,6 +203,6 @@ def test_a_registry_entry_reserved_with_its_url_is_archived_and_a_failure_never_
 
     assert rp.archive_at_cite(tmp_path, "https://a.org/p", "a-key", runner(0)) == 0
     cmd, cwd = calls[0]
-    assert cmd[1].endswith("_archive.py") and cmd[2:] == ["url", "https://a.org/p", "--key", "a-key"] and cwd == tmp_path
+    assert cmd[1].endswith("archive.py") and cmd[2:] == ["url", "https://a.org/p", "--key", "a-key"] and cwd == tmp_path
     assert rp.archive_at_cite(tmp_path, "https://a.org/p", "a-key", runner(1)) == 1
     assert "make archive URL='https://a.org/p' KEY=a-key" in capsys.readouterr().err

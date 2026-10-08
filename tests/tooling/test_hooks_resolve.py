@@ -17,8 +17,8 @@ import re
 
 REPO = pathlib.Path(__file__).resolve().parents[2]
 MIRROR = pathlib.Path("/diagram/scripts")
-BARE = re.compile(r"^/diagram/scripts/([\w.-]+)")
-FALLBACK = re.compile(r'^h=/diagram/scripts/([\w.-]+); \[ -x "\$h" \] \|\| h="\$CLAUDE_PROJECT_DIR/scripts/\1"; exec "\$h" ')
+BARE = re.compile(r"^/diagram/scripts/([\w./-]+)")
+FALLBACK = re.compile(r'^h=/diagram/scripts/([\w./-]+); \[ -x "\$h" \] \|\| h="\$CLAUDE_PROJECT_DIR/scripts/\1"; exec "\$h" ')
 
 
 def _commands() -> list[str]:

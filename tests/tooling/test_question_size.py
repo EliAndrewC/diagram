@@ -1,4 +1,4 @@
-"""`scripts/check-question-size.py` (feature 250 D14): a research question's prose stays under the cap (notes uncounted since feature 292)."""
+"""`scripts/gates/check-question-size.py` (feature 250 D14): a research question's prose stays under the cap (notes uncounted since feature 292)."""
 
 from __future__ import annotations
 
@@ -9,7 +9,7 @@ REPO = pathlib.Path(__file__).resolve().parents[2]
 
 
 def _load():  # noqa: ANN202
-    spec = importlib.util.spec_from_file_location("check_question_size", REPO / "scripts" / "check-question-size.py")
+    spec = importlib.util.spec_from_file_location("check_question_size", REPO / "scripts/gates/check-question-size.py")
     assert spec and spec.loader
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)

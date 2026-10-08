@@ -1,4 +1,4 @@
-"""`scripts/_bundle_owed.py` - no bundle for a check nothing owes (feature 311, plan D9), and the intro-check bundle (D4).
+"""`scripts/record/bundle_owed.py` - no bundle for a check nothing owes (feature 311, plan D9), and the intro-check bundle (D4).
 
 The GM, 2026-10-02: *"I do worry about a future session making some extremely minor formatting tweak or something and then
 having that literally rerun every subagent check for all 2,000 something of our resources"*. The owed units are stubbed, so
@@ -12,14 +12,16 @@ import sys
 
 import pytest
 
+from tests._scripts import script
+
 REPO = pathlib.Path(__file__).resolve().parents[2]
 
 
 def _load(name: str):  # noqa: ANN202
-    spec = importlib.util.spec_from_file_location(name, REPO / "scripts" / f"{name}.py")
+    spec = importlib.util.spec_from_file_location(name, script(name))
     assert spec and spec.loader
     mod = importlib.util.module_from_spec(spec)
-    sys.modules[name] = mod
+    sys.modules[name] = sys.modules[name.lstrip("_")] = mod  # the old name and the one a sibling imports it by (2026-10-08)
     spec.loader.exec_module(mod)
     return mod
 

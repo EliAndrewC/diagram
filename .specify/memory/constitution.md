@@ -274,7 +274,7 @@ directory CLAUDE.md is, so knowledge parked in a README is found only by luck. M
 "an append-only log must be a DIRECTORY, because concurrent clones conflict" rule lived in
 dev/perf-log/README.md; a session read and quoted it during an audit, then created a single-file
 run-log.jsonl hours later. Three such READMEs became CLAUDE.md files in the same change, and
-scripts/readme-hooks.sh enforces it. New principle: MINOR.
+scripts/hooks/readme-hooks.sh enforces it. New principle: MINOR.
 
 
 Version 1.13.1 (amended 2026-08-24): Principle XIII gains one clause - a detached
@@ -944,7 +944,7 @@ artifacts. Specifically:
     records and the bookends are keyed by the content and commits that were
     tested - a rewrite would silently invalidate a paid verification. The
     `main` ruleset refuses force pushes and deletions to every credential;
-    `scripts/repo-safety-hooks.sh` refuses `git rebase`, `pull --rebase`,
+    `scripts/hooks/repo-safety-hooks.sh` refuses `git rebase`, `pull --rebase`,
     `merge --squash` and `commit --amend` in a session.
 
   - This does not replace `GEN_TIME_BUDGETS`, which is a per-gen ceiling. This is
@@ -1148,7 +1148,7 @@ any single rule is reason enough to refuse "done" status.
     the same GROWTH pattern as clause 12: no single edit crosses the
     line, so the line must be checked rather than felt - and since
     v2.14.0 (GM-directed, 2026-08-31, feature 173) it IS.
-    `scripts/check-file-scale.py` runs in the diagram Makefile's `lint`
+    `scripts/gates/check-file-scale.py` runs in the diagram Makefile's `lint`
     phase and in `sync-with-main.sh` at push time, so a Python file past
     1,000 RAW lines fails the gate and both routes to main. Unlike
     clause 12 this is therefore no longer an ask-the-question line: the
@@ -1945,7 +1945,7 @@ grepping source - and put the case that fooled you into the table.
 repaired through the channel it guards: every command carrying the fix contains the offending text.
 That happened, and it cost a session three blocked attempts at its own bugfix.
 
-**Enforcement**: `make hooks-test` runs every `scripts/test-*-hooks.sh` and fails if any guard has no
+**Enforcement**: `make hooks-test` runs every `tests/hooks/test-*-hooks.sh` and fails if any guard has no
 companion. It is a phase of `make done`, so a guard added without a test turns the gate red.
 
 ### XVII. A README Is Written By A Human, For A Human (NON-NEGOTIABLE)
@@ -1975,7 +1975,7 @@ context at the moment the decision was made.
 who wants an orientation. The GM writes those. If a README is factually wrong, say so and offer the
 correction rather than making it.
 
-**Enforcement**: `scripts/readme-hooks.sh` intercepts a Write or Edit to any `README*`, and any
+**Enforcement**: `scripts/hooks/readme-hooks.sh` intercepts a Write or Edit to any `README*`, and any
 shell command that writes one. It carries no silent escape - a genuine exception is the GM's to make.
 
 ## Technical Standards
@@ -1984,7 +1984,7 @@ shell command that writes one. It carries no silent escape - a genuine exception
 - Python 3.14 (system Python in the dev container; bumped from 3.13 when
   the standard dev container moved to 3.14, GM-directed 2026-07-20).
 - `resvg` renders SVG to PNG (no fallback renderer), with the DejaVu
-  faces installed - `container-scripts/setup-dev-env.sh` establishes both.
+  faces installed - `scripts/container/setup-dev-env.sh` establishes both.
 
 **Python tooling (per Principle X)**
 - **Lint + format**: `ruff` (lint + formatter, single tool). Config lives
@@ -2062,9 +2062,9 @@ the claim. Protocol: `docs/session-clones.md` "Concurrent sessions".
 
 **Map review workflow (mandatory before a map ships)**
 The verification described in Principle VI: each review check its
-occasion owes (`scripts/_review_owed.py`), one unit per agent, and the
+occasion owes (`scripts/reviews/review_owed.py`), one unit per agent, and the
 findings are acted on before the change ships.
-`scripts/review-gate.sh` refuses the push otherwise.
+`scripts/gates/review-gate.sh` refuses the push otherwise.
 
 **Python "done" checklist (mandatory per Principle X)**
 A Python change is not complete until `make done` is green at
@@ -2079,7 +2079,7 @@ at once:
    (`make done FULL=1` also re-gates every pool map and runs the
    perf gate)
 
-Nothing in this list is run bare - `scripts/make-only-hooks.sh` refuses
+Nothing in this list is run bare - `scripts/hooks/make-only-hooks.sh` refuses
 it. The TDD order - write failing test, watch it fail, implement,
 watch it pass, refactor - is the working mode for new code.
 

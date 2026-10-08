@@ -18,7 +18,7 @@ from tests import _gate_failures
 
 REPO = pathlib.Path(__file__).resolve().parents[2]
 SKILL = pathlib.Path(__file__).resolve().parents[2]
-_spec = importlib.util.spec_from_file_location("_runstats", REPO / "scripts" / "_runstats.py")
+_spec = importlib.util.spec_from_file_location("_runstats", REPO / "scripts/measure/runstats.py")
 assert _spec and _spec.loader
 runstats = importlib.util.module_from_spec(_spec)
 sys.modules["_runstats"] = runstats
@@ -150,7 +150,7 @@ def test_main_runs_each_command_and_refuses_a_bad_one(tmp_path: pathlib.Path, ca
     assert runstats.main(["end", str(tmp_path)]) == 0
     assert "first_failure_s" in json.loads(capsys.readouterr().out)
     assert runstats.main(["fail", str(tmp_path)]) == 2
-    assert "_runstats.py start" in capsys.readouterr().err
+    assert "runstats.py start" in capsys.readouterr().err
 
 
 def test_a_failed_report_is_marked_and_a_pass_is_not(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:

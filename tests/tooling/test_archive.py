@@ -1,4 +1,4 @@
-"""`scripts/_archive.py` - every cited source archived into the private archive repository (feature 309).
+"""`scripts/record/archive.py` - every cited source archived into the private archive repository (feature 309).
 
 WHAT THESE PROVE. A live fetch that fails is told apart as DEAD or REFUSED, and each takes its own order (plan D2): a dead
 page a Wayback snapshot, then the GM's copy, else `unreachable` with the page cache's text kept; a refused one the GM's
@@ -22,16 +22,17 @@ import pytest
 
 from l7r.diagram.interactive.record import archive as rec
 from tests import _flat_record as fr
+from tests._scripts import script
 
 REPO = pathlib.Path(__file__).resolve().parents[2]
 FIXTURES = pathlib.Path(__file__).resolve().parent / "fixtures" / "archive"
 
 
 def _load(name: str):  # noqa: ANN202
-    spec = importlib.util.spec_from_file_location(name, REPO / "scripts" / f"{name}.py")
+    spec = importlib.util.spec_from_file_location(name, script(name))
     assert spec and spec.loader
     mod = importlib.util.module_from_spec(spec)
-    sys.modules[name] = mod  # a dataclass resolves its module by name
+    sys.modules[name] = sys.modules[name.lstrip("_")] = mod  # the old name and the one a sibling imports it by (2026-10-08)  # a dataclass resolves its module by name
     spec.loader.exec_module(mod)
     return mod
 

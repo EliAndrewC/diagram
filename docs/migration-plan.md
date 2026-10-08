@@ -236,7 +236,7 @@ is huge, and inefficient loops have been the single biggest stumbling block.*
 
 **The numbers live in the record, not here**: [`dev/timings.md`](../dev/timings.md) holds the dated blocks measured
 before its producer was retired (feature 193), and the run record answers the live cost (`make audit`,
-`scripts/_gatecost.py <target>`). They are deliberately NOT duplicated into this plan, because a number written in two
+`scripts/measure/gatecost.py <target>`). They are deliberately NOT duplicated into this plan, because a number written in two
 places eventually disagrees with itself.
 
 **Every benchmark records its BREAKDOWN, not just its total** (GM, 2026-08-15). A total says a loop

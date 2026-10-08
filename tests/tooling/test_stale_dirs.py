@@ -18,7 +18,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]  # <repo>/tests/tooling -> repo root
-GUARD = ROOT / "scripts" / "check-stale-dirs.py"
+GUARD = ROOT / "scripts/gates/check-stale-dirs.py"
 
 
 def _run(*args: str) -> subprocess.CompletedProcess[str]:

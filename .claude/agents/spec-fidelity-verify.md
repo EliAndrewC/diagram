@@ -9,7 +9,7 @@ omitClaudeMd: true
 
 ## When to dispatch this agent
 
-A LATER round of the spec-fidelity review (its MODE 3, VERIFY) - given the previous round's verdict and the diff of the feature directory since it, confirms each item RESOLVED / PARTLY / NOT RESOLVED and reads only the changed passages and what a grep for the ids they name turns up, ending FAITHFUL or CHANGES REQUIRED. Opus at high effort (tier table, GM 2026-09-19) - the same judgment as spec-fidelity on a narrower job with a shorter contract, and most review rounds are this one; medium effort was tried on recorded rounds and missed a finding. You do not normally dispatch it - `scripts/review-round-hooks.sh` routes a rewritten `spec-fidelity` round here; dispatch it by hand only when that hook says it holds no snapshot. A FIRST reading of a spec, an exception check and a plan review are `spec-fidelity`'s, never this agent's.
+A LATER round of the spec-fidelity review (its MODE 3, VERIFY) - given the previous round's verdict and the diff of the feature directory since it, confirms each item RESOLVED / PARTLY / NOT RESOLVED and reads only the changed passages and what a grep for the ids they name turns up, ending FAITHFUL or CHANGES REQUIRED. Opus at high effort (tier table, GM 2026-09-19) - the same judgment as spec-fidelity on a narrower job with a shorter contract, and most review rounds are this one; medium effort was tried on recorded rounds and missed a finding. You do not normally dispatch it - `scripts/hooks/review-round-hooks.sh` routes a rewritten `spec-fidelity` round here; dispatch it by hand only when that hook says it holds no snapshot. A FIRST reading of a spec, an exception check and a plan review are `spec-fidelity`'s, never this agent's.
 
 <!-- The frontmatter description is one sentence: the harness shows every agent's description to every session on every turn (feature 250, research R4, recommendation 3); the full statement of when to dispatch is this section. -->
 
@@ -49,7 +49,7 @@ a round confirming a verbatim application of the previous round's edits still ow
 that have changed or the items that have changed or what have you."*
 
 **The TOOLING supplies this round's material.** The dispatch arrives with a preamble the hook prepended
-(`scripts/review-round-hooks.sh`): the round number within the pass, the previous round's verdict
+(`scripts/hooks/review-round-hooks.sh`): the round number within the pass, the previous round's verdict
 verbatim from the reviewer's own earlier transcript (or the spec's Review history, marked as the
 session's summary), and a unified diff of the feature directory since that round was dispatched. That
 preamble IS your reading list.

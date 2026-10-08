@@ -1,4 +1,4 @@
-"""`scripts/_coord.py` - `make lines` and `make append` (feature 274 D5, SC-002).
+"""`scripts/pages/coord.py` - `make lines` and `make append` (feature 274 D5, SC-002).
 
 WHAT THESE PROVE. `lines` prints only the matching lines, numbered, with how many were shown of how many, and says
 when its cap cut matches off; `append` adds one line without printing the file, keeps quotes and `$` from the
@@ -17,7 +17,7 @@ SKILL = REPO
 
 
 def _load():  # noqa: ANN202
-    spec = importlib.util.spec_from_file_location("_coord", REPO / "scripts" / "_coord.py")
+    spec = importlib.util.spec_from_file_location("_coord", REPO / "scripts/pages/coord.py")
     assert spec and spec.loader
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)

@@ -1,4 +1,4 @@
-"""`scripts/_plan_gate.py` and the tick refusal, proven to fire (feature 243).
+"""`scripts/gates/plan_gate.py` and the tick refusal, proven to fire (feature 243).
 
 A plan's decisions are reviewed before its tasks are ticked. Each case is a rule a later session could
 break without noticing: a missing plan passing, a stale review counting, a BLOCKED review ticking, a
@@ -17,13 +17,15 @@ import sys
 
 import pytest
 
+from tests._scripts import script
+
 REPO = pathlib.Path(__file__).resolve().parents[2]
-_spec = importlib.util.spec_from_file_location("_plan_gate", REPO / "scripts" / "_plan_gate.py")
+_spec = importlib.util.spec_from_file_location("_plan_gate", REPO / "scripts/gates/plan_gate.py")
 assert _spec and _spec.loader
 gate = importlib.util.module_from_spec(_spec)
 sys.modules["_plan_gate"] = gate
 _spec.loader.exec_module(gate)
-_tt = importlib.util.spec_from_file_location("tick_task_for_gate", REPO / "scripts" / "tick-task.py")
+_tt = importlib.util.spec_from_file_location("tick_task_for_gate", script("tick-task.py"))
 assert _tt and _tt.loader
 tt = importlib.util.module_from_spec(_tt)
 _tt.loader.exec_module(tt)

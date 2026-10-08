@@ -1,7 +1,7 @@
 """One `<epoch> test` mark per failed test, for the run log's first and last failure times.
 
 `make done` exports `L7R_GATE_FAILURES` (the clone's `gate-failures` file, read back by
-`scripts/_runstats.py end`); unset, as under `make quick`, this does nothing. A failure appends one
+`scripts/measure/runstats.py end`); unset, as under `make quick`, this does nothing. A failure appends one
 short line, and a pass costs only the `report.failed` test.
 
 TAKEN OUT OF THE ENVIRONMENT AT IMPORT. The tooling tests run make and pytest in fixture repositories,

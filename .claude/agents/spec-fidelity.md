@@ -157,7 +157,7 @@ job: the previous verdict's items and the diff, nothing else (the GM, feature 23
 `.claude/agents/spec-fidelity-verify.md`, which carries the whole procedure and runs on Opus at high effort
 with a shorter contract, because it is most of the rounds a review takes (medium effort was tried and
 missed a finding - feature 251's research R5). You do not choose it:
-`scripts/review-round-hooks.sh` rewrites a later `spec-fidelity` round into that mode AND routes it to
+`scripts/hooks/review-round-hooks.sh` rewrites a later `spec-fidelity` round into that mode AND routes it to
 the twin. The one case a session dispatches the twin by hand is the hook's `history-without-snapshot`
 message (the spec records a round, the tooling holds no snapshot to diff against).
 

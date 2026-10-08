@@ -160,7 +160,7 @@ def _caption_size(lab: list) -> float:
 
 
 # ---- s.quarter: first-class zoned regions (feature 006) -----------------------------------
-def _zoned_city():  # was a second '_city' shadowing the line-1665 helper (seed 1 vs 3) - renamed 2026-07-24, now gated by scripts/check-duplicate-defs.py
+def _zoned_city():  # was a second '_city' shadowing the line-1665 helper (seed 1 vs 3) - renamed 2026-07-24, now gated by scripts/gates/check-duplicate-defs.py
     s = Settlement(2000, 2000, seed=1)
     s.meta(name="C", scale="city", walled=True, population=3000, ftpx=3)
     return s

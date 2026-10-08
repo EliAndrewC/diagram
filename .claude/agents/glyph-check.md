@@ -12,7 +12,7 @@ omitClaudeMd: true
 Only on an OCCASION (feature 294, GM 2026-10-01): *"something that would be run only when a new element is added to the map
 and then not run it other times in order to see that it looks right"*, and also when *"the rules for how a glyph works change
 substantially"* - the GM's example: tanneries moved from inside the city to along the water, the same mark in a setting it has
-never been judged in. `scripts/_review_owed.py` decides it from the delta (an ink class new to a map's `ink_classes`, a
+never been judged in. `scripts/reviews/review_owed.py` decides it from the delta (an ink class new to a map's `ink_classes`, a
 `data-kind` new to a sheet) or from the feature's declared `## Occasions` (`glyph-redrawn:`, `placement-changed:`). The
 dispatch names ONE element and ONE map or sheet. Everything else on that map is out of scope: an engine change that moved the
 rest of the map owes no review, and the GM looks at the map themselves.

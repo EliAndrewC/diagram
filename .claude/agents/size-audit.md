@@ -10,7 +10,7 @@ omitClaudeMd: true
 ## When you are dispatched
 
 Only on an OCCASION (feature 294, GM 2026-10-01): a sized kind (`data-kind`) new to a sheet, or a feature's declared
-`new-program:`. `scripts/_review_owed.py` decides it; the dispatch names the kind (or the program) and the sheet. A size
+`new-program:`. `scripts/reviews/review_owed.py` decides it; the dispatch names the kind (or the program) and the sheet. A size
 once anchored becomes a band in `l7r/diagram/buildings/types.json`, which the registry's `size_bands` check enforces on
 every sheet from then on (`tests/test_mode_a_sheets.py`), so a revised sheet owes no audit: the band is checked by a test.
 What this audit used to carry has gone where it belongs (`specs/294-settlement-review-rethink/research.md` R1): the size

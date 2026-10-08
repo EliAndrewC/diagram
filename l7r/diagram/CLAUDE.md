@@ -59,7 +59,7 @@ is silent and lands one directory short of `pool/`.
 | [`docs/reviews.md`](../../docs/reviews.md) | you are about to launch a review check or write a feature's `## Occasions` |
 | [`docs/package-boundary.md`](../../docs/package-boundary.md) | you wonder whether Mode A and Mode B should be separate packages, or a Mode A `.gen.py` is about to appear |
 | [`docs/migration-plan.md`](../../docs/migration-plan.md) | you draw or script a settlement map (read it first; update its status table when a conversion lands) |
-| [`dev/timings.md`](../../dev/timings.md) | you want a measured timing (never write fresh timings into prose; `make audit` and `scripts/_gatecost.py` give the live ones) |
+| [`dev/timings.md`](../../dev/timings.md) | you want a measured timing (never write fresh timings into prose; `make audit` and `scripts/measure/gatecost.py` give the live ones) |
 | [`dev/test-cost.md`](../../dev/test-cost.md) | you are adding a test that rolls a map, or asking why the suite costs what it does |
 | [`dev/ci.md`](../../dev/ci.md) | you are changing when money may be spent on a remote run, or its threat model |
 | [`dev/interactive-page.md`](../../dev/interactive-page.md) | page or raster performance, or the wet-paddy modal's two tint rules |
@@ -77,7 +77,7 @@ diagnosed and the tooling improved.
 **The loop** ([`dev/loop.md`](../../dev/loop.md))
 
 - **Nothing runs outside make**: a bare interpreter, a bare pytest or a foreign makefile is refused
-  (`scripts/make-only-hooks.sh`), and the engine refuses in-process calls too (`_invocation.py`). A refusal on correct
+  (`scripts/hooks/make-only-hooks.sh`), and the engine refuses in-process calls too (`_invocation.py`). A refusal on correct
   work is a BUG in the guard to fix (it was always a MENTION mistaken for an INVOCATION).
 - `make map GEN=pool/<tier>/<map>/<map>.gen.py` regenerates one map and prints `CACHED` / `REGENERATED` / `FROZEN`;
   `PROFILE=1` adds where its time went. Iterate on that ONE map, `make quick` while iterating, `make test-file FILE=...`

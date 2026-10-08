@@ -10,7 +10,7 @@ WHAT IS CITED is derived, never listed: every URL in a registry entry, its HTML 
 where a session recorded the page it actually read the passage from (`READ <date> at <url>`, the `_pdf` behind a J-STAGE
 article page, the PMC copy behind a DOI: 23 entries, plan review 2026-10-02) - and every URL a footnote in
 `questions/*.notes.html` links, its comments excluded (there they are search trails and pages read and NOT cited). The
-registry is not the whole list: spec-fidelity round 1 found about a dozen footnote URLs no entry carries. `scripts/_archive.py`, which takes the copies, asks THIS module
+registry is not the whole list: spec-fidelity round 1 found about a dozen footnote URLs no entry carries. `scripts/record/archive.py`, which takes the copies, asks THIS module
 what is cited and what a URL's id is, so the build and the archiver agree by construction.
 
 THE MANIFEST is one JSON file per URL, `research/archive/<id[:2]>/<id>.json` (one file each, so two sessions archiving
@@ -44,7 +44,7 @@ ROW_GLOB = "[0-9a-f][0-9a-f]/[0-9a-f]*.json"
 #: copyrighted), so its links open for the GM and no one else.
 REPO = "https://github.com/EliAndrewC/diagram-research"
 #: A capture that could not be pushed counts as covered for this long, then the build refuses it (plan D5: the
-#: same week as the page cache's age rule, `scripts/_sources.py:MAX_AGE_DAYS`, so one feature's write-then-check
+#: same week as the page cache's age rule, `scripts/record/sources.py:MAX_AGE_DAYS`, so one feature's write-then-check
 #: cycle never trips it and a host that never comes back does not hide a missing copy for long).
 PENDING_DAYS = 7
 
@@ -60,7 +60,7 @@ _ENTRY = re.compile(r'<h3 id="([a-z0-9][a-z0-9-]*)">.*?</h3>\s*(.*?)(?=<h3 id=|<
 def clean(url: str) -> str:
     """A URL as it is cited: entity-unescaped (the record is HTML - `&amp;` in a query is `&`), its fragment dropped, and
     the punctuation a sentence puts after it trimmed - a closing parenthesis only where the URL did not open one, since
-    `(https://.../Edo)` wraps a URL and `町屋_(商家)` is part of one (the rule of `scripts/_check_bundle.py:url_of`)."""
+    `(https://.../Edo)` wraps a URL and `町屋_(商家)` is part of one (the rule of `scripts/record/check_bundle.py:url_of`)."""
     url = html.unescape(url).split("#")[0]
     while url.endswith((".", ",", ";", ":")) or (url.endswith(")") and url.count(")") > url.count("(")):
         url = url[:-1]

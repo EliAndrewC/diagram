@@ -7,11 +7,13 @@ import pathlib
 import subprocess
 import sys
 
+from tests._scripts import script as _script
+
 REPO = pathlib.Path(__file__).resolve().parents[2]
 
 
 def _run(script: str, *args: str) -> subprocess.CompletedProcess[str]:
-    return subprocess.run([sys.executable, str(REPO / "scripts" / script), *args], capture_output=True, text=True, check=False)
+    return subprocess.run([sys.executable, str(_script(script)), *args], capture_output=True, text=True, check=False)
 
 
 def test_every_pointer_in_the_repository_resolves_to_a_fragment() -> None:
@@ -21,6 +23,6 @@ def test_every_pointer_in_the_repository_resolves_to_a_fragment() -> None:
 
 
 def test_the_pointer_check_and_the_move_each_still_bite() -> None:
-    for script in ("check-research-pointers.py", "_fragment_move.py"):
+    for script in ("check-research-pointers.py", "fragment_move.py"):
         done = _run(script, "--selftest")
         assert done.returncode == 0, f"{script}: {done.stdout}{done.stderr}"

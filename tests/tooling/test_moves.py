@@ -1,4 +1,4 @@
-"""`scripts/_moves.py`: a file the delta only moved is told apart from one it edited (feature 329)."""
+"""`scripts/reviews/moves.py`: a file the delta only moved is told apart from one it edited (feature 329)."""
 
 from __future__ import annotations
 
@@ -12,7 +12,7 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 def _mod():  # noqa: ANN202
-    spec = importlib.util.spec_from_file_location("_moves", ROOT / "scripts" / "_moves.py")
+    spec = importlib.util.spec_from_file_location("_moves", ROOT / "scripts/reviews/moves.py")
     assert spec and spec.loader
     m = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(m)

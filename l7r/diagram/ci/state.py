@@ -1,13 +1,13 @@
 """The VerificationState: the most recent verification event, per clone (FR-012, research R6).
 
 `.git/verification-state.json` - per CLONE and surviving a session restart, because a merge can
-happen a day after the local check that vouches for it (which is why `scripts/gate-hooks.sh`'s
+happen a day after the local check that vouches for it (which is why `scripts/hooks/gate-hooks.sh`'s
 per-harness-session state under /tmp was declined). Written by the Makefile: `quick`, `test-file`
 and a green local `done` record `green-local`; a red local `done` and a failed remote build record
 `failed-gate`. (`reference` wrote one too until the GM retired it as a rung on 2026-09-06.)
 
 "A source edit resets the state" is not an event to catch. The state carries the content hash of
-the diagram area's Python at the time of the run - the SAME hash `scripts/gate-stamp.py` computes
+the diagram area's Python at the time of the run - the SAME hash `scripts/gates/gate-stamp.py` computes
 at push, imported rather than reimplemented - and at dispatch time the current hash is recomputed:
 a mismatch is "the green run vouched for different code", exactly how `gate-stamp --check`
 already reasons.
@@ -65,8 +65,8 @@ class VerificationState:
 
 
 def _gate_stamp(root: Path) -> ModuleType:
-    """`scripts/gate-stamp.py` is a script, not a package - loaded by path so its hash is THE hash."""
-    path = root / "scripts" / "gate-stamp.py"
+    """`scripts/gates/gate-stamp.py` is a script, not a package - loaded by path so its hash is THE hash."""
+    path = root / "scripts/gates/gate-stamp.py"
     spec = importlib.util.spec_from_file_location("gate_stamp", path)
     assert spec is not None and spec.loader is not None, f"cannot load {path}"
     mod = importlib.util.module_from_spec(spec)

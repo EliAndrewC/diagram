@@ -176,7 +176,7 @@ def _marker(skill: Path, pid: int) -> None:
 def test_idle_context_needs_the_marker_an_ancestor_and_the_timers_command_line(skill: Path) -> None:
     """The GM (2026-08-28): relax the lock "when the tests are being run in the idle context" - and
     ONLY then. Four ways to not be that context, one way to be it."""
-    timer_cmd = "/bin/bash /diagram/scripts/idle-tests-hooks.sh timer /diagram/.clones/x x sid"
+    timer_cmd = "/bin/bash /diagram/scripts/hooks/idle-tests-hooks.sh timer /diagram/.clones/x x sid"
     assert not sw.idle_context(skill, ancestors=lambda _p: [4242, 1], cmdline=lambda _p: timer_cmd, pid=99), "no marker file"
     _marker(skill, 4242)
     assert sw.idle_context(skill, ancestors=lambda _p: [4242, 1], cmdline=lambda _p: timer_cmd, pid=99)

@@ -27,7 +27,7 @@ def _load(name: str, path: pathlib.Path):  # noqa: ANN202
 
 
 brief = _load("brief_250", BRIEF)
-bl = _load("_brief_load", REPO / "scripts" / "_brief_load.py")
+bl = _load("_brief_load", REPO / "scripts/pages/brief_load.py")
 WANT = {"WRITE": "assertions", "CHECK": "check", "SPLIT": "split", "OWED": "check"}
 
 

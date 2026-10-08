@@ -157,7 +157,9 @@ def test_the_key_is_blind_to_comments_docstrings_and_formatting(repo: Path) -> N
 # ---- the short-circuit key IS the remote key (feature 132, second amendment) ---------------------
 
 
-@pytest.mark.parametrize("path", [S + "Makefile", S + "pyproject.toml", S + "requirements.txt", S + "requirements-dev.in", "scripts/gate-stamp.py", "scripts/x-hooks.sh", S + "dev/switches.json"])
+@pytest.mark.parametrize(
+    "path", [S + "Makefile", S + "pyproject.toml", S + "requirements.txt", S + "requirements-dev.in", "scripts/gates/gate-stamp.py", "scripts/hooks/x-hooks.sh", S + "dev/switches.json"]
+)
 def test_config_scripts_and_settings_are_not_engine(path: str) -> None:
     """The GM's second amendment: a Makefile, config or scripts/ change does not owe `make done` - the
     engine key does not move, exactly as it does not move for the remote gate."""

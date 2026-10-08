@@ -4,7 +4,7 @@
 timing off this box, or a target got slower and you are about to say why.
 
 Split out of [`loop.md`](loop.md); the dated measurements behind each rule are in the specs named, and the gate's
-live costs are `make audit` and `scripts/_gatecost.py <target>`, never a figure typed here.
+live costs are `make audit` and `scripts/measure/gatecost.py <target>`, never a figure typed here.
 
 ## Reading a timing on this box
 

@@ -1,0 +1,271 @@
+#!/usr/bin/env python3
+"""Which feature classes' MODAL PROSE may have gone stale - the report that makes a drifted entry
+impossible to miss silently.
+
+WHY THIS EXISTS (feature 234, GM 2026-09-12). Told to update the pigsty write-up on the map page, the
+GM asked the obvious next question: *"if I hadn't said that ... then would you have done it? it's not
+then... that should be another fix to the project guidelines and what have you."* It would not have
+been. What a modal says about a feature IS the docstring of its `Kind` class (feature 189), written FROM
+a research section the class names in its `Entry:` tag - and nothing noticed when that section's content
+moved underneath it. The prose and the record simply agreed with themselves, separately.
+
+WHAT IT REPORTS. A class is named when the research section its `Entry:` points at had its BODY changed
+in this delta AND the class's own EXPLANATION PROSE did not.
+
+WHAT HAPPENS TO A NAMED PAIR, AND WHY IT IS NOT MERELY REPORTED. `make page-check` prints the list and
+does not block; the PUSH REFUSES (`scripts/gates/entry-gate.sh`) until each pair is answered - the
+`entry-drift` agent dispatched and the prose rewritten, or one `ENTRY_DRIFT_OK="<reason>"` recorded to
+`dev/bypass-log/`, which may cover a whole maintenance sweep. An earlier draft made this a report with no
+mechanism, on the measurement that the key fires on nearly every research-only commit; the GM struck
+that shape on 2026-09-12: *"I don't believe that we should have any such thing as an unenforced
+doctrine. If it is unenforced, then it is not a doctrine. something should either not be considered
+doctrinal or it should be enforced."* Narrowing the key was priced first and is dead - firing only on
+what a READER SEES takes 28 of 30 research-only commits to 27 of 30
+(`specs/234-entry-owed-when-the-record-moves/research.md` R5), because separating "this section now says
+something different" from "this section was maintained" is a judgment about meaning. So the session
+supplies the judgment in writing, and it is auditable.
+
+THE PROSE HALF IS DERIVED, NEVER RESTATED. "Explanation prose" is `_TAGS` less `_DATA_TAGS`, asked of
+the engine, so a tag added or moved there cannot leave this script quietly checking the wrong thing. The
+exemption is keyed on the prose and NOT on the whole docstring: the docstring also carries
+`Name:`/`Covers:`/`Sources:`/`Entry:` (feature 207), so re-pointing an `Entry:` or fixing a
+house-style slip would otherwise silence the check for that class while the words a reader sees stood
+untouched.
+
+ASKED FRESH AT TWO DECISION POINTS, NEVER CACHED - the same discipline as `review_owed.py`:
+  1. `make page-check` - the target a research-page-plus-docstring delta actually owes;
+  2. `scripts/sync-with-main.sh` at push time.
+`make done` is deliberately NOT one: it exits at its short-circuit (skill `Makefile:122`) before any
+phase runs when engine content is unchanged, and neither a `research/*.html` edit nor a class docstring
+is engine content (features 188, 189, 207) - so a report there would ship green and never print once on
+the delta shape this exists for.
+
+Usage: entry_owed.py [--root DIR] [--why]
+  prints one line per named class (empty when nothing is named); `--why` prints the one-line ruling.
+  Exit 0 either way; 1 when DIR is not a git repository.
+"""
+
+from __future__ import annotations
+
+import argparse
+import ast
+import os
+import re
+import subprocess
+import sys
+from collections.abc import Sequence
+from pathlib import Path
+
+RESEARCH = "research"
+CLASSES = "l7r/diagram/interactive/classes"
+COMPOUND_KINDS = "l7r/diagram/interactive/compound_kinds"  # the Mode A modals (feature 262), a registry of their own
+
+
+def _git(root: Path, *args: str) -> str | None:
+    p = subprocess.run(["git", "-C", str(root), *args], capture_output=True, text=True, check=False)
+    return p.stdout if p.returncode == 0 else None
+
+
+def base_of(root: Path) -> tuple[str, str]:
+    """(ref, description): the merge base of HEAD with origin/main, as `review_owed.py` computes it."""
+    head = (_git(root, "rev-parse", "--verify", "-q", "HEAD") or "").strip()
+    if not head:
+        return "", "no commits yet"
+    if (_git(root, "rev-parse", "--verify", "-q", "origin/main") or "").strip():
+        mb = (_git(root, "merge-base", "HEAD", "origin/main") or "").strip()
+        if mb:
+            return mb, f"origin/main (merge base {mb[:8]})"
+    return head, f"HEAD ({head[:8]}; no origin/main)"
+
+
+def _engine(root: Path):  # noqa: ANN202 - the engine's own modules, imported once
+    """The engine's parsers, so this script has no second copy of them to drift from."""
+    skill = str(root)
+    if skill not in sys.path:
+        sys.path.insert(0, skill)
+    from l7r.diagram.interactive import sources
+    from l7r.diagram.interactive.classes import _base
+
+    return sources, _base
+
+
+def prose_of(doc: str | None, name: str, _base) -> str:  # noqa: ANN001
+    """A class's EXPLANATION prose - every tag the engine does not class as data. DERIVED from
+    `_DATA_TAGS` rather than listed here (spec FR-002/FR-010)."""
+    parts = _base.parse_explanation(doc, name)
+    return "␟".join(parts.get(t, "") for t in _base._TAGS if t not in _base._DATA_TAGS)
+
+
+def classes_in(text: str, _base, lines: dict[str, int] | None = None, read=None, py: str = "", at: dict[str, str] | None = None) -> dict[str, str]:  # noqa: ANN001
+    """key -> explanation prose, for every `Kind` subclass in one `classes/*.py` SOURCE TEXT. Parsed
+    with `ast` so the old side of a delta can be read straight out of a git blob. `lines`, when given,
+    collects key -> the class's line number, which is what a report has to hand a reader (FR-005).
+    Since feature 319 (plan D12) a kind's text is its modal FILE: `read(<repository-relative path>)` returns it (None
+    where there is none - a revision before the move), and `at` collects key -> that file, where the prose now lives."""
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    sys.path[1:1] = [str((Path(__file__).resolve().parent / _d).resolve()) for _d in ('../hooks/lib',)]  # the moved scripts it imports (2026-10-08)
+    import modal_owed as mo  # noqa: PLC0415
+
+    out: dict[str, str] = {}
+    lines = {} if lines is None else lines
+    for name, key, lineno, doc in mo.kinds_in(text):
+        modal = mo.modal_file(py, key) if py else ""
+        found = read(modal) if (read and modal) else None
+        body = found if found is not None else doc
+        if not body:
+            continue
+        try:
+            out[key] = prose_of(body, name, _base)
+        except ValueError:
+            continue  # not a Kind - no tagged explanation
+        lines[key] = lineno
+        if at is not None and found is not None:
+            at[key] = modal
+    return out
+
+
+
+
+#: A question's page, relative to the record (feature 303): `questions/NNNN-<slug>[.drawing].html`.
+_QUESTION = re.compile(r"^questions/(\d{4}-([^.]+)(\.drawing)?\.html)$")
+
+
+def moved_anchors(root: Path, base: str, sources) -> set[str]:  # noqa: ANN001, ARG001 - the engine is not needed since 301
+    """The file name of every research question page whose BODY changed against `base` (feature 303).
+
+    Since feature 301 the pages are built and never committed, so the question is asked of its FRAGMENT - the body a
+    reader meets, less nothing (a fragment carries no footnote number to strip; its notes live beside it, and a note's
+    text was never part of the body). A question renamed or renumbered (`make fragment-move`) is compared with the one it
+    was. A page with no older file under `questions/` is new - and that includes every page feature 303 moved there, whose
+    bodies changed only in their links and tags marker (its SC-003), so the move owes no modal a re-check."""
+    moved: set[str] = set()
+    names = (_git(root, "diff", "--name-only", base, "--", f"{RESEARCH}/") or "").split()
+    for rel in names:
+        inside = os.path.relpath(rel, RESEARCH).replace(os.sep, "/")
+        m = _QUESTION.match(inside)
+        if m is None:
+            continue
+        new = root / rel
+        if not new.is_file():
+            continue
+        old_text = _git(root, "show", f"{base}:{rel}") or _renamed_from(root, base, rel, m.group(2), m.group(3) or "")
+        if old_text is None:
+            continue  # a new question: no older body for a modal to have been written from
+        if findings(old_text) != findings(new.read_text(encoding="utf-8")):
+            moved.add(m.group(1))
+    return moved
+
+
+def findings(page: str) -> list[str]:
+    """What a modal is written FROM: the page's words with its intro dropped (feature 311, spec FR-004 last row). An intro
+    cites nothing and says only why the question is asked; a comment, a tag marker or a re-wrap changes no words - none of
+    them is a finding moving under a modal. The words are `_record_units`'s, the one reader of them."""
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    import record_units as ru  # noqa: PLC0415
+
+    p = ru.read_page(page)
+    return [p.heading, *(b.words for b in p.blocks if not b.intro)]
+
+
+def _renamed_from(root: Path, base: str, rel: str, slug: str, drawing: str = "") -> str | None:
+    """The body a question's page had at `base` under another number in `questions/` (`make fragment-move`)."""
+    listing = _git(root, "ls-tree", "--name-only", f"{base}:{os.path.dirname(rel)}") or ""
+    was = [n for n in listing.split() if n.endswith(f"-{slug}{drawing}.html") and re.match(r"^\d{4}-[^.]+(\.drawing)?\.html$", n)]
+    return _git(root, "show", f"{base}:{os.path.dirname(rel)}/{was[0]}") if len(was) == 1 else None
+
+
+def named_pairs(
+    moved: set[str],
+    anchors: dict[str, set[str]],
+    now: dict[str, str],
+    was: dict[str, str],
+    at: dict[str, str] | None = None,
+) -> list[str]:
+    """THE DECISION, over plain dicts - lifted out of `owed()` so it can be tested without a git
+    repository, an engine import or a research page (the feature-146 doctrine: an inner step that is
+    hard to reach gets lifted, and the test then passes dicts and tuples).
+
+    A class is named when a section its entry points at MOVED and its own explanation prose did NOT.
+    A class absent from `was` is new in this delta and is never named - there is no older prose for a
+    section to have drifted from.
+    """
+    out: list[str] = []
+    for key in sorted(anchors):
+        hit = sorted(anchors[key] & moved)
+        if hit and key in was and was[key] == now.get(key):
+            out.append(f"{key} - {' '.join(hit)} - prose at {(at or {}).get(key, CLASSES)}"
+                   + _fragments_line(hit))
+    return out
+
+
+def owed(root: Path) -> tuple[str, list[str]]:
+    """(the base's description, one `key - what moved - where the prose lives` line per named class)."""
+    base, desc = base_of(root)
+    if not base:
+        return desc, []
+    sources, _base = _engine(root)
+    moved = moved_anchors(root, base, sources)
+    if not moved:
+        return desc, []
+    from l7r.diagram.interactive.classes import CLASSES as REGISTRY
+    from l7r.diagram.interactive.compound_kinds import COMPOUND_CLASSES
+
+    pairs: list[str] = []
+    # Each registry against its own directory: a compound's `well` and a hamlet's `well` are separate modals under
+    # one key, so the two are never merged into one dict (feature 268: the compound kinds had never been scanned).
+    for directory, registry in ((CLASSES, REGISTRY), (COMPOUND_KINDS, COMPOUND_CLASSES)):
+        now: dict[str, str] = {}
+        was: dict[str, str] = {}
+        at: dict[str, str] = {}
+        for path in sorted((root / directory).glob("*.py")):
+            rel = os.path.relpath(path, root)
+            here: dict[str, int] = {}
+            files: dict[str, str] = {}
+            now |= classes_in(path.read_text(encoding="utf-8"), _base, here, read=lambda f: (root / f).read_text(encoding="utf-8") if (root / f).is_file() else None, py=rel, at=files)
+            at |= {k: files.get(k, f"{rel}:{n}") for k, n in here.items()}
+            old_text = _git(root, "show", f"{base}:{rel}")
+            if old_text is not None:
+                was |= classes_in(old_text, _base, read=lambda f: _git(root, "show", f"{base}:{f}"), py=rel)
+        anchors = {key: set(sources.entry_fragments(fc.entry)) for key, fc in registry.items()}
+        pairs += named_pairs(moved, anchors, now, was, at)
+    return desc, pairs
+
+
+def _fragments_line(hit: Sequence[str]) -> str:
+    """The fragment an `entry-drift` dispatch should READ, named in the report that dispatches it.
+
+    Feature 258: the section a modal was written from is a file of its own now, and a recorded
+    `entry-drift` run spent 82% of everything in its context on the whole page (spec research R3). The
+    names in `hit` are question pages' files (feature 303), each read with nothing else.
+    """
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    from hm_record import fragments_for  # noqa: PLC0415
+
+    out: list[str] = []
+    for file in hit:
+        out += [f for f in fragments_for(str(file), os.getcwd()) if not f.endswith((".notes.html", ".originals.html"))]
+    return ("\n      read: " + ", ".join(dict.fromkeys(out))) if out else ""
+
+
+def ruling(desc: str, lines: Sequence[str]) -> str:
+    if not lines:
+        return f"no modal's research section moved against {desc}"
+    return f"research moved under {len(lines)} unchanged modal(s) against {desc} - dispatch `entry-drift` at each, then rewrite the prose or record why not in dev/bypass-log/"
+
+
+def main(argv: Sequence[str] | None = None) -> int:
+    ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    ap.add_argument("--root", default=".", help="the clone (default: the cwd's repository)")
+    ap.add_argument("--why", action="store_true", help="print the one-line ruling instead of the names")
+    args = ap.parse_args(argv)
+    top = (_git(Path(args.root), "rev-parse", "--show-toplevel") or "").strip()
+    if not top:
+        print(f"_entry_owed: {args.root} is not a git repository", file=sys.stderr)
+        return 1
+    desc, lines = owed(Path(top))
+    print(ruling(desc, lines) if args.why else "\n".join(lines), end="\n" if (args.why or lines) else "")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

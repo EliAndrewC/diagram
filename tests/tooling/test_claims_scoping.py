@@ -1,4 +1,4 @@
-"""`scripts/_claims.py` - a re-check scoped to the blocks a claim rests on (feature 318, FR-016, SC-011).
+"""`scripts/record/claims.py` - a re-check scoped to the blocks a claim rests on (feature 318, FR-016, SC-011).
 
 The GM, 2026-10-04, on 370 claims re-owed by a few edits to one page: *"fix that ... to ensure the rechecks are appropriately
 scoped"*. An edit to one block re-owes in full only the claims resting on it; the claims whose blocks stand owe a triage, and

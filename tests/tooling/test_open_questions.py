@@ -1,4 +1,4 @@
-"""`scripts/_open_questions.py` - `make open-questions` (feature 285).
+"""`scripts/record/open_questions.py` - `make open-questions` (feature 285).
 
 WHAT THESE PROVE: a GUESS (or GUESSES) in a question's visible text is an item, one per sentence however many labels it
 carries, and one inside an HTML comment or written lower-case is not; an absence note is an item with the claim it was
@@ -19,15 +19,17 @@ import resource
 import subprocess
 import sys
 
+from tests._scripts import script
+
 REPO = pathlib.Path(__file__).resolve().parents[2]
 SKILL = REPO
 
 
 def _load(name: str):  # noqa: ANN202
-    spec = importlib.util.spec_from_file_location(name, REPO / "scripts" / f"{name}.py")
+    spec = importlib.util.spec_from_file_location(name, script(name))
     assert spec and spec.loader
     mod = importlib.util.module_from_spec(spec)
-    sys.modules[name] = mod  # a dataclass resolves its module by name
+    sys.modules[name] = sys.modules[name.lstrip("_")] = mod  # the old name and the one a sibling imports it by (2026-10-08)  # a dataclass resolves its module by name
     spec.loader.exec_module(mod)
     return mod
 
@@ -181,7 +183,7 @@ def test_the_real_tree() -> None:
     # catches a 3x regression and no longer flakes on a loaded gate.
     calibrated = _calibration_cpu()
     before = resource.getrusage(resource.RUSAGE_CHILDREN)
-    out = subprocess.run([sys.executable, str(REPO / "scripts/_open_questions.py"), "--root", str(REPO)], capture_output=True, text=True, check=True).stdout
+    out = subprocess.run([sys.executable, str(REPO / "scripts/record/open_questions.py"), "--root", str(REPO)], capture_output=True, text=True, check=True).stdout
     after = resource.getrusage(resource.RUSAGE_CHILDREN)
     took = (after.ru_utime - before.ru_utime) + (after.ru_stime - before.ru_stime)
     slowdown = max(1.0, min(calibrated, _calibration_cpu()) / CALIBRATION_QUIET)

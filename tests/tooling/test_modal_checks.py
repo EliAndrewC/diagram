@@ -1,4 +1,4 @@
-"""`scripts/_modal_owed.py` and `scripts/_modal_bundle.py` - which About-form modals owe the modal checks, and what a check reads
+"""`scripts/record/modal_owed.py` and `scripts/record/modal_bundle.py` - which About-form modals owe the modal checks, and what a check reads
 (feature 319, plan D4-D6). The GM, 2026-10-03: the modal guidelines *"should be reviewed by subagents in more or less the same
 way that our research is"*; and, of the references, *"I'm actually a little surprised to see as few references as we are
 seeing"* - so the candidates are the UNION rule, and the farmhouse's own case (0004 meeting 0029 on `households`) is the test."""
@@ -10,14 +10,16 @@ import pathlib
 import subprocess
 import sys
 
+from tests._scripts import script
+
 REPO = pathlib.Path(__file__).resolve().parents[2]
 
 
 def _load(name: str):  # noqa: ANN202
-    spec = importlib.util.spec_from_file_location(name, REPO / "scripts" / f"{name}.py")
+    spec = importlib.util.spec_from_file_location(name, script(name))
     assert spec and spec.loader
     mod = importlib.util.module_from_spec(spec)
-    sys.modules[name] = mod
+    sys.modules[name] = sys.modules[name.lstrip("_")] = mod  # the old name and the one a sibling imports it by (2026-10-08)
     spec.loader.exec_module(mod)
     return mod
 

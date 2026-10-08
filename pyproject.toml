@@ -29,7 +29,7 @@ line-length = 200
 # R3 compares the two file lists) and touches nothing no package has adopted. tests/tooling/test_lint_scope.py pins it.
 extend-exclude = [
     "pool", "legacy-hand-authored-pool",
-    "specs", "scripts", ".clones", ".claude", ".specify", "buildspec", "container-scripts", "docs",
+    "specs", "scripts", "tests/hooks", ".clones", ".claude", ".specify", "buildspec", "docs",
 ]
 
 [tool.ruff.lint]
@@ -100,11 +100,12 @@ testpaths = ["tests"]
 # deselected here, in ONE place, rather than by an `--ignore` repeated across the Makefile's six
 # pytest invocations, which is exactly the stale-literal shape this project has been bitten by.
 # `norecursedirs` is the right instrument and was CHOSEN BY MEASUREMENT: a broad run does not descend
-# into it, while `make soak` naming the path explicitly still collects it (probed 2026-09-05).
+# into it, while `make soak` naming the path explicitly still collects it (probed 2026-09-05). `hooks` is
+# tests/hooks/, the guard suites `make hooks-test` runs - shell suites and their Python case tables, not pytest files.
 # THE DEFAULTS ARE REPEATED ON PURPOSE - setting this key REPLACES pytest's own list, so dropping them
 # would make every run recurse into .git, build/, dist/ and node_modules. Read from
 # `_pytest.main` rather than from memory.
-norecursedirs = ["*.egg", ".*", "_darcs", "build", "CVS", "dist", "node_modules", "venv", "{arch}", "soak"]
+norecursedirs = ["*.egg", ".*", "_darcs", "build", "CVS", "dist", "node_modules", "venv", "{arch}", "soak", "hooks"]
 # No terminal report from pytest-cov (feature 221): a gated run prints ONE coverage table, the merged
 # verdict the Makefile asks for; `make cov-file` asks for its own. The empty `--cov-report=` is what
 # silences it - with no report option at all pytest-cov defaults to `term`, and a `term` given here

@@ -6,7 +6,7 @@ gate's phase loop running lint on every gate because its comment named ``lint`` 
 207 wrote a comment naming ``make test-full`` in backticks INTO ``test-full``, which ran itself and
 recursed 914 levels until the container hit its 2,048-process limit. Both fixes were a reworded line
 and a note, and the GM ruled that a note is not prevention. The edit-time refusal lives in
-``scripts/guard-file-hooks.sh``; this is the gate-phase backstop for the routes an edit can arrive by
+``scripts/hooks/guard-file-hooks.sh``; this is the gate-phase backstop for the routes an edit can arrive by
 that the hook never sees - a merge, a scripted sweep - and the proof that the detector FIRES.
 """
 
@@ -17,14 +17,16 @@ import pathlib
 import sys
 from typing import Any
 
+from tests._scripts import script, script_dirs
+
 SKILL = pathlib.Path(__file__).resolve().parents[2]
 REPO = SKILL
 SCRIPTS = REPO / "scripts"
 
 
 def _hm_make() -> Any:
-    sys.path.insert(0, str(SCRIPTS))
-    spec = importlib.util.spec_from_file_location("hm_make_212", SCRIPTS / "_hm_make.py")
+    sys.path[:0] = script_dirs()
+    spec = importlib.util.spec_from_file_location("hm_make_212", script("hm_make.py"))
     assert spec and spec.loader
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)

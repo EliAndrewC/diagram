@@ -84,7 +84,7 @@ Given that feature description, do this:
 
    **NO FEATURE BRANCH.** This project stays on `main` (CLAUDE.md, GM 2026-07-27). The
    `before_specify` hook that ran `speckit.git.feature` is `enabled: false`, and
-   `scripts/no-branch-hooks.sh` blocks a hand-rolled one. Instead **`export
+   `scripts/hooks/no-branch-hooks.sh` blocks a hand-rolled one. Instead **`export
    SPECIFY_FEATURE=NNN-slug`** once, matching the `specs/` directory name: `common.sh`'s
    `get_current_branch()` returns it ahead of asking git, so `check_feature_branch()` in
    `setup-plan.sh` and `setup-tasks.sh` passes for the rest of the plan -> tasks -> implement run.

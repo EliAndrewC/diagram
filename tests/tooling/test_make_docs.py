@@ -18,8 +18,10 @@ import subprocess
 import sys
 from pathlib import Path
 
+from tests._scripts import script
+
 ROOT = Path(__file__).resolve().parents[2]
-GUARD = ROOT / "scripts" / "make-docs.py"
+GUARD = script("make-docs.py")
 PAGE = ROOT / "docs" / "make-targets.html"
 MAKEFILE = ROOT / "Makefile"
 
@@ -99,7 +101,7 @@ def test_the_page_groups_and_names_its_source() -> None:
 def test_a_target_runs_at_the_root_and_a_typo_fails_there() -> None:
     """The project's Makefile IS the root's since feature 329; nothing is forwarded, so a typo fails once, at the root."""
     ok = subprocess.run(["make", "-n", "--no-print-directory", "-C", str(ROOT), "claims-report"], capture_output=True, text=True, timeout=60)
-    assert ok.returncode == 0 and "_claims.py" in ok.stdout, ok.stdout + ok.stderr
+    assert ok.returncode == 0 and "claims.py" in ok.stdout, ok.stdout + ok.stderr
     typo = subprocess.run(["make", "-n", "--no-print-directory", "-C", str(ROOT), "claims-reprot"], capture_output=True, text=True, timeout=60)
     assert typo.returncode != 0 and "No rule to make target 'claims-reprot'" in typo.stderr, typo.stderr
     assert "] Error" not in typo.stderr, f"the typo reached a second makefile: {typo.stderr}"

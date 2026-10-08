@@ -8,7 +8,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "s=/diagram/container-scripts/setup-dev-env.sh; [ -f \"$s\" ] || s=\"$CLAUDE_PROJECT_DIR/container-scripts/setup-dev-env.sh\"; bash \"$s\" --ensure  # GUARD_EDIT_OK: a NEW hook, not a relaxed guard (2026-10-04, the GM: a fresh container's setup built into our procedures as a quick no-op) - provisions a fresh container once, 30 ms after",
+            "command": "s=/diagram/scripts/container/setup-dev-env.sh; [ -f \"$s\" ] || s=\"$CLAUDE_PROJECT_DIR/scripts/container/setup-dev-env.sh\"; bash \"$s\" --ensure  # GUARD_EDIT_OK: a NEW hook, not a relaxed guard (2026-10-04, the GM: a fresh container's setup built into our procedures as a quick no-op) - provisions a fresh container once, 30 ms after",
             "timeout": 900,
             "statusMessage": "Checking the dev container's dependencies..."
           }
@@ -20,25 +20,25 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/diagram/scripts/clone-sync-hooks.sh prompt",
+            "command": "h=/diagram/scripts/hooks/clone-sync-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/clone-sync-hooks.sh\"; exec \"$h\" prompt",
             "timeout": 60,
             "statusMessage": "Syncing session clone with main..."
           },
           {
             "type": "command",
-            "command": "/diagram/scripts/idle-tests-hooks.sh prompt",
+            "command": "h=/diagram/scripts/hooks/idle-tests-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/idle-tests-hooks.sh\"; exec \"$h\" prompt",
             "timeout": 30,
             "statusMessage": "Disarming the idle-tests timer; surfacing its last verdict..."
           },
           {
             "type": "command",
-            "command": "/diagram/scripts/agent-stall-hooks.sh prompt",
+            "command": "h=/diagram/scripts/hooks/agent-stall-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/agent-stall-hooks.sh\"; exec \"$h\" prompt",
             "timeout": 15,
             "statusMessage": "Checking for stalled background agents..."
           },
           {
             "type": "command",
-            "command": "h=/diagram/scripts/stall-watchdog-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/stall-watchdog-hooks.sh\"; exec \"$h\" prompt  # GUARD_EDIT_OK: feature 295 item 4 - registering a NEW guard: starts the outside stall watchdog when it is not running; no existing guard changes",
+            "command": "h=/diagram/scripts/hooks/stall-watchdog-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/stall-watchdog-hooks.sh\"; exec \"$h\" prompt  # GUARD_EDIT_OK: feature 295 item 4 - registering a NEW guard: starts the outside stall watchdog when it is not running; no existing guard changes",
             "timeout": 10
           }
         ]
@@ -47,7 +47,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/diagram/scripts/finished-run-hooks.sh prompt",
+            "command": "h=/diagram/scripts/hooks/finished-run-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/finished-run-hooks.sh\"; exec \"$h\" prompt",
             "timeout": 10
           }
         ]
@@ -59,7 +59,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/diagram/scripts/clone-sync-hooks.sh pretool",
+            "command": "h=/diagram/scripts/hooks/clone-sync-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/clone-sync-hooks.sh\"; exec \"$h\" pretool",
             "timeout": 30
           }
         ]
@@ -69,7 +69,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/diagram/scripts/batching-hooks.sh pretool",
+            "command": "h=/diagram/scripts/hooks/batching-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/batching-hooks.sh\"; exec \"$h\" pretool",
             "timeout": 10
           }
         ]
@@ -79,7 +79,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/diagram/scripts/no-poll-hooks.sh pretool",
+            "command": "h=/diagram/scripts/hooks/no-poll-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/no-poll-hooks.sh\"; exec \"$h\" pretool",
             "timeout": 10
           }
         ]
@@ -89,7 +89,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/diagram/scripts/main-tree-hooks.sh pretool",
+            "command": "h=/diagram/scripts/hooks/main-tree-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/main-tree-hooks.sh\"; exec \"$h\" pretool",
             "timeout": 10
           }
         ]
@@ -99,7 +99,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/diagram/scripts/gate-hooks.sh pretool",
+            "command": "h=/diagram/scripts/hooks/gate-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/gate-hooks.sh\"; exec \"$h\" pretool",
             "timeout": 10
           }
         ]
@@ -110,7 +110,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/diagram/scripts/record-edit-hooks.sh pretool",
+            "command": "h=/diagram/scripts/hooks/record-edit-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/record-edit-hooks.sh\"; exec \"$h\" pretool",
             "timeout": 10
           }
         ]
@@ -120,7 +120,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/diagram/scripts/no-branch-hooks.sh pretool",
+            "command": "h=/diagram/scripts/hooks/no-branch-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/no-branch-hooks.sh\"; exec \"$h\" pretool",
             "timeout": 10
           }
         ]
@@ -130,7 +130,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/diagram/scripts/discard-hooks.sh pretool",
+            "command": "h=/diagram/scripts/hooks/discard-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/discard-hooks.sh\"; exec \"$h\" pretool",
             "timeout": 10
           }
         ]
@@ -140,7 +140,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/diagram/scripts/conflict-marker-hooks.sh pretool",
+            "command": "h=/diagram/scripts/hooks/conflict-marker-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/conflict-marker-hooks.sh\"; exec \"$h\" pretool",
             "timeout": 10
           }
         ]
@@ -150,7 +150,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "h=/diagram/scripts/ledger-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/ledger-hooks.sh\"; exec \"$h\" pretool  # GUARD_EDIT_OK: feature 294 - a NEW guard: a commit staging the review ledger with a measured row short of its check, class or cost",
+            "command": "h=/diagram/scripts/hooks/ledger-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/ledger-hooks.sh\"; exec \"$h\" pretool  # GUARD_EDIT_OK: feature 294 - a NEW guard: a commit staging the review ledger with a measured row short of its check, class or cost",
             "timeout": 10
           }
         ]
@@ -160,7 +160,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/diagram/scripts/make-only-hooks.sh pretool"
+            "command": "h=/diagram/scripts/hooks/make-only-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/make-only-hooks.sh\"; exec \"$h\" pretool"
           }
         ]
       },
@@ -169,7 +169,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/diagram/scripts/guard-file-hooks.sh pretool"
+            "command": "h=/diagram/scripts/hooks/guard-file-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/guard-file-hooks.sh\"; exec \"$h\" pretool"
           }
         ]
       },
@@ -178,7 +178,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/diagram/scripts/readme-hooks.sh pretool"
+            "command": "h=/diagram/scripts/hooks/readme-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/readme-hooks.sh\"; exec \"$h\" pretool"
           }
         ]
       },
@@ -187,7 +187,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "h=/diagram/scripts/download-copy-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/download-copy-hooks.sh\"; exec \"$h\" pretool  # GUARD_EDIT_OK: feature 313 - a NEW guard: a session's write to the GM's copy of the download list is refused with make download-add / make downloads-sync"
+            "command": "h=/diagram/scripts/hooks/download-copy-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/download-copy-hooks.sh\"; exec \"$h\" pretool  # GUARD_EDIT_OK: feature 313 - a NEW guard: a session's write to the GM's copy of the download list is refused with make download-add / make downloads-sync"
           }
         ]
       },
@@ -196,7 +196,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/diagram/scripts/repo-safety-hooks.sh pretool"
+            "command": "h=/diagram/scripts/hooks/repo-safety-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/repo-safety-hooks.sh\"; exec \"$h\" pretool"
           }
         ]
       },
@@ -205,7 +205,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/diagram/scripts/shell-check-hooks.sh pretool  # GUARD_EDIT_OK: feature 236 - a NEW guard, not a relaxed one: a command that will not parse, an executing backtick, a -m that needs a heredoc, a co-author address that is not ours",
+            "command": "h=/diagram/scripts/hooks/shell-check-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/shell-check-hooks.sh\"; exec \"$h\" pretool  # GUARD_EDIT_OK: feature 236 - a NEW guard, not a relaxed one: a command that will not parse, an executing backtick, a -m that needs a heredoc, a co-author address that is not ours",
             "timeout": 20
           }
         ]
@@ -215,7 +215,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/diagram/scripts/house-style-hooks.sh pretool  # GUARD_EDIT_OK: feature 236 - widened to Bash, where the writes this guard never saw were actually going"
+            "command": "h=/diagram/scripts/hooks/house-style-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/house-style-hooks.sh\"; exec \"$h\" pretool  # GUARD_EDIT_OK: feature 236 - widened to Bash, where the writes this guard never saw were actually going"
           }
         ]
       },
@@ -224,7 +224,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/diagram/scripts/source-block-hooks.sh pretool"
+            "command": "h=/diagram/scripts/hooks/source-block-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/source-block-hooks.sh\"; exec \"$h\" pretool"
           }
         ]
       },
@@ -233,7 +233,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/diagram/scripts/measure-hooks.sh pretool",
+            "command": "h=/diagram/scripts/hooks/measure-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/measure-hooks.sh\"; exec \"$h\" pretool",
             "timeout": 10
           }
         ]
@@ -243,7 +243,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/diagram/scripts/pair-hooks.sh pretool"
+            "command": "h=/diagram/scripts/hooks/pair-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/pair-hooks.sh\"; exec \"$h\" pretool"
           }
         ]
       },
@@ -252,7 +252,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/diagram/scripts/wakeup-hooks.sh pretool  # GUARD_EDIT_OK: feature 263 - a NEW guard (the GM 2026-09-26: 'It needs to be literally impossible for them to do the wrong thing'): a ScheduleWakeup outside a live /loop is refused"
+            "command": "h=/diagram/scripts/hooks/wakeup-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/wakeup-hooks.sh\"; exec \"$h\" pretool  # GUARD_EDIT_OK: feature 263 - a NEW guard (the GM 2026-09-26: 'It needs to be literally impossible for them to do the wrong thing'): a ScheduleWakeup outside a live /loop is refused"
           }
         ]
       },
@@ -261,23 +261,23 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/diagram/scripts/agent-model-hooks.sh pretool  # GUARD_EDIT_OK: feature 252 - a NEW guard (the GM 2026-09-19): an ad-hoc agent dispatch names its model or is refused; first in the list so a refused dispatch is refused before the other Agent guards act on it"
+            "command": "h=/diagram/scripts/hooks/agent-model-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/agent-model-hooks.sh\"; exec \"$h\" pretool  # GUARD_EDIT_OK: feature 252 - a NEW guard (the GM 2026-09-19): an ad-hoc agent dispatch names its model or is refused; first in the list so a refused dispatch is refused before the other Agent guards act on it"
           },
           {
             "type": "command",
-            "command": "h=/diagram/scripts/check-bundle-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/check-bundle-hooks.sh\"; exec \"$h\" pretool  # GUARD_EDIT_OK: feature 250 - a NEW guard (the GM 2026-09-26): a record check is dispatched with a bundle outside the repository, or refused with the make check-bundle command"
+            "command": "h=/diagram/scripts/hooks/check-bundle-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/check-bundle-hooks.sh\"; exec \"$h\" pretool  # GUARD_EDIT_OK: feature 250 - a NEW guard (the GM 2026-09-26): a record check is dispatched with a bundle outside the repository, or refused with the make check-bundle command"
           },
           {
             "type": "command",
-            "command": "/diagram/scripts/pair-hooks.sh pretool"
+            "command": "h=/diagram/scripts/hooks/pair-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/pair-hooks.sh\"; exec \"$h\" pretool"
           },
           {
             "type": "command",
-            "command": "/diagram/scripts/escalation-hooks.sh pretool"
+            "command": "h=/diagram/scripts/hooks/escalation-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/escalation-hooks.sh\"; exec \"$h\" pretool"
           },
           {
             "type": "command",
-            "command": "/diagram/scripts/review-round-hooks.sh pretool"
+            "command": "h=/diagram/scripts/hooks/review-round-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/review-round-hooks.sh\"; exec \"$h\" pretool"
           }
         ]
       },
@@ -286,7 +286,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "h=/diagram/scripts/canon-read-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/canon-read-hooks.sh\"; exec \"$h\" pretool  # GUARD_EDIT_OK: feature 250 D16 - a NEW guard: the setting canon is read with make canon, every term of a claim at once"
+            "command": "h=/diagram/scripts/hooks/canon-read-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/canon-read-hooks.sh\"; exec \"$h\" pretool  # GUARD_EDIT_OK: feature 250 D16 - a NEW guard: the setting canon is read with make canon, every term of a claim at once"
           }
         ]
       },
@@ -295,7 +295,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "h=/diagram/scripts/new-file-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/new-file-hooks.sh\"; exec \"$h\" pretool  # GUARD_EDIT_OK: feature 265 FR-010 - a NEW guard: a new glossary or registry file takes a reserved prefix"
+            "command": "h=/diagram/scripts/hooks/new-file-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/new-file-hooks.sh\"; exec \"$h\" pretool  # GUARD_EDIT_OK: feature 265 FR-010 - a NEW guard: a new glossary or registry file takes a reserved prefix"
           }
         ]
       }
@@ -306,7 +306,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/diagram/scripts/batching-hooks.sh posttool",
+            "command": "h=/diagram/scripts/hooks/batching-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/batching-hooks.sh\"; exec \"$h\" posttool",
             "timeout": 10
           }
         ]
@@ -317,12 +317,12 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/diagram/scripts/idle-tests-hooks.sh stop",
+            "command": "h=/diagram/scripts/hooks/idle-tests-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/idle-tests-hooks.sh\"; exec \"$h\" stop",
             "timeout": 30
           },
           {
             "type": "command",
-            "command": "/diagram/scripts/pair-hooks.sh stop"
+            "command": "h=/diagram/scripts/hooks/pair-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/pair-hooks.sh\"; exec \"$h\" stop"
           }
         ]
       },
@@ -330,7 +330,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/diagram/scripts/finished-run-hooks.sh stop",
+            "command": "h=/diagram/scripts/hooks/finished-run-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/finished-run-hooks.sh\"; exec \"$h\" stop",
             "timeout": 10
           }
         ]
@@ -339,7 +339,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/diagram/scripts/escalation-hooks.sh stop"
+            "command": "h=/diagram/scripts/hooks/escalation-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/escalation-hooks.sh\"; exec \"$h\" stop"
           }
         ]
       },
@@ -347,7 +347,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/diagram/scripts/wakeup-hooks.sh stop  # GUARD_EDIT_OK: feature 263 - a NEW guard: a turn cannot end with a stale ScheduleWakeup pending; it names the CronDelete",
+            "command": "h=/diagram/scripts/hooks/wakeup-hooks.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/wakeup-hooks.sh\"; exec \"$h\" stop  # GUARD_EDIT_OK: feature 263 - a NEW guard: a turn cannot end with a stale ScheduleWakeup pending; it names the CronDelete",
             "timeout": 10
           }
         ]

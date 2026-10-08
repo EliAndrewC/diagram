@@ -10,7 +10,7 @@ omitClaudeMd: true
 ## When you are dispatched
 
 Only on an OCCASION (feature 294, GM 2026-10-01): a sheet new to the pool, a feature's declared `layout-revised: <sheet>`, or
-a declared `new-program: <type> <sheet>`. `scripts/_review_owed.py` decides it; the dispatch names the sheet and the
+a declared `new-program: <type> <sheet>`. `scripts/reviews/review_owed.py` decides it; the dispatch names the sheet and the
 occasion. Run the sections that occasion owes (below) and say in one line which you skipped.
 
 What this review used to carry has gone where it belongs (`specs/294-settlement-review-rethink/research.md` R1): sizes are

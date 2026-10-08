@@ -9,7 +9,7 @@ The repository's review process; the short always-on version is in the root [`CL
 A review check is owed only on the occasion its answer can change - never because an engine change moved a manifest. The GM:
 *"as the number of settlements that we have in our pool grows ... This will become quickly untenable"*, and of the glyph
 review, *"something that would be run only when a new element is added to the map and then not run it other times"* - *"a
-category of thing"*. `scripts/_review_owed.py` is the one answer, asked by `make verify`, the pair guard and `review-gate.sh`:
+category of thing"*. `scripts/reviews/review_owed.py` is the one answer, asked by `make verify`, the pair guard and `review-gate.sh`:
 
 | check | owed when | looks at |
 |---|---|---|
@@ -115,15 +115,15 @@ next reader as the one that works.
 
 ## A `PAIR_OK` waiver is honored by the stop hook
 
-A gate run with `PAIR_OK="<reason>"` records `waived_key` against that exact engine key, and `scripts/pair-hooks.sh stop`
+A gate run with `PAIR_OK="<reason>"` records `waived_key` against that exact engine key, and `scripts/hooks/pair-hooks.sh stop`
 honors it - per content, so an engine edit after a waived gate is guarded again. Do not drop that record: without it the
 guard told a session to do the thing it had just done, which teaches that the documented remedy does not work
-(`scripts/test-pair-hooks.sh` holds it). A one-off PAIRING HALF-OPEN report while a review is genuinely in flight was seen
+(`tests/hooks/test-pair-hooks.sh` holds it). A one-off PAIRING HALF-OPEN report while a review is genuinely in flight was seen
 once and not reproduced (likely a race against a transcript still being written); the hook fires once per engine key.
 
 ## `impl-drift` is owed by the claims index, not by an occasion (feature 316)
 
 `impl-drift` judges the engine's and the Mode A procedures' research claims against the questions they cite. It is not a map
 review: it is owed when `make claims-owed` names a claim (new, its code changed, or its question's findings moved), and the push
-(`scripts/claims-gate.sh`) holds it. One bundle per file or per batch (`make claims-bundle MODULE=<file>`), the reply recorded
+(`scripts/gates/claims-gate.sh`) holds it. One bundle per file or per batch (`make claims-bundle MODULE=<file>`), the reply recorded
 with `make claims-checked BUNDLE=<dir> REPLY=<file>`, a row of the ledger's measured table per pass as for any check.

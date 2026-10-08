@@ -20,7 +20,7 @@ import pytest
 pytestmark = pytest.mark.tooling
 
 REPO = pathlib.Path(__file__).resolve().parents[2]
-_spec = importlib.util.spec_from_file_location("check_house_style_delta", REPO / "scripts" / "check-house-style-delta.py")
+_spec = importlib.util.spec_from_file_location("check_house_style_delta", REPO / "scripts/gates/check-house-style-delta.py")
 assert _spec and _spec.loader
 chk = importlib.util.module_from_spec(_spec)
 sys.modules["check_house_style_delta"] = chk
@@ -103,14 +103,14 @@ def test_the_gm_s_verbatim_request_is_never_flagged(tmp_path: pathlib.Path) -> N
 def test_a_fixture_is_a_verbatim_record(tmp_path: pathlib.Path) -> None:
     """A recorded corpus of real commands carries the words by necessity; correcting it falsifies it."""
     root = _tree(tmp_path, {"docs/a.md": "fine\n"})
-    _write(root, "scripts/fixtures/corpus.json", '{"command": "sed -i s/centre/center/ docs/a.md"}\n')
+    _write(root, "tests/hooks/fixtures/corpus.json", '{"command": "sed -i s/centre/center/ docs/a.md"}\n')
     assert chk.findings(root) == []
 
 
 def test_the_word_list_is_the_hook_s_own(tmp_path: pathlib.Path) -> None:
     """One list, the decision's own: a copy drifts, and silently in the permissive direction."""
     words = chk.brit_words()
-    hook = (REPO / "scripts" / "_hm_house.py").read_text()
+    hook = (REPO / "scripts/hooks/lib/hm_house.py").read_text()
     for w in words:
         assert f'"{w}"' in hook
     assert len(words) > 40

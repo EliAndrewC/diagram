@@ -1,4 +1,4 @@
-"""`scripts/_review_owed.py` and `scripts/_review_snapshot.py` - the scripted answer to "which review checks are owed",
+"""`scripts/reviews/review_owed.py` and `scripts/reviews/review_snapshot.py` - the scripted answer to "which review checks are owed",
 keyed on OCCASIONS (feature 294), and the reviewer's per-unit snapshot (features 231, 248).
 
 Every case runs on a real git fixture in `tmp_path`: a repository with both pool trees, an `origin/main` ref, Mode B maps
@@ -19,11 +19,13 @@ from typing import Any
 
 import pytest
 
+from tests._scripts import script
+
 REPO = Path(__file__).resolve().parents[2]
 
 
 def _mod(name: str) -> Any:
-    spec = importlib.util.spec_from_file_location(name.replace("-", "_"), REPO / "scripts" / f"{name}.py")
+    spec = importlib.util.spec_from_file_location(name.replace("-", "_"), script(name))
     assert spec and spec.loader
     m = importlib.util.module_from_spec(spec)
     sys.modules[spec.name] = m

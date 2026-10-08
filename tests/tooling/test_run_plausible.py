@@ -21,8 +21,10 @@ import subprocess
 import sys
 from pathlib import Path
 
+from tests._scripts import script_dir
+
 SKILL = Path(__file__).resolve().parents[2]
-GUARD = SKILL / "scripts" / "check-run-plausible.py"
+GUARD = SKILL / "scripts/gates/check-run-plausible.py"
 
 
 def _mod():
@@ -69,9 +71,9 @@ def test_the_floor_is_DERIVED_from_the_pinned_ratchet_baseline() -> None:
     21 s (feature 135, warm) to 587 s (after feature 174 made the coverage floors unconditional).
     """
     m = _mod()
-    sys.path.insert(0, str(GUARD.parent))
+    sys.path.insert(0, script_dir("ratchet"))
     try:
-        import _ratchet  # type: ignore[import-not-found]
+        import ratchet as _ratchet  # type: ignore[import-not-found]
     finally:
         sys.path.pop(0)
     for target in ("done", "quick"):
