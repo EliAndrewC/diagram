@@ -438,7 +438,7 @@ def _polder_candidate(plan: SitePlan, seed: int, rows: int, cols: int, cellpx: f
 
     Research:
         outer face with the water - research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html: the edge wanders (from Enokida's 0.5), the dike's outer face curving with the water's edge, never a rectangle
-        wander walked down to a 0.86 box fill - CONVENTION: the wander eased only as far as the outline still fills 0.86 of its box (`polder_fills_its_bbox`'s 82% and a margin for the drawn outline's rounding), so a small block still reads as one block
+        wander walked down to a 0.86 box fill - GUESS: the wander eased only as far as the outline still fills 0.86 of its box (`polder_fills_its_bbox`'s 82% and a margin for the drawn outline's rounding), so a small block still reads as one block; no page sets how irregular a polder's dike outline was (searched 0019, 0022, 0027)
         block centered - NONE: on the canvas at any bearing
     """
     dx, dy = plan.fall
