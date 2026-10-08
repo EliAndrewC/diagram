@@ -12,12 +12,12 @@ from l7r.diagram.settlement import Settlement, seg_closest, seg_dist
 from l7r.diagram.settlement.rolling.gap_ways import KNOT_FT
 
 from ..consts import (
+    WEB_FABRIC_GAP,
     Poly,
     Pt,
 )
-from ..consts import WEB_FABRIC_GAP
 from .clearance import _ARM_FT, _HAIRPIN_DEG, _clear_link, _clear_touch, bowtie_cut
-from .geom import _TOUCH_GAP, _components, _plen, _seg_cross, _turn_deg, polyline_len
+from .geom import _components, _plen, _seg_cross, _turn_deg, polyline_len
 
 _STUB_REACH_FT = 25.0  # the post-smoothing touch: 0081's join reach (48 ft until feature 328, past it for the T99 unlock's seed 37)
 """Research: stub link reach - research/questions/0081-village-lanes.drawing.html: a cut stub within 25 ft of the run it left is linked back, the page's join reach"""

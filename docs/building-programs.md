@@ -148,7 +148,7 @@ Each item names the Mode A kind it is (feature 262): the sheet's own `data-kind`
 <!-- Research: sacred tree drawn as the biggest crown in the precinct - UNRESEARCHED: no sacred tree's size was found -->
 
 <!-- Research: donated stonework - research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html: guardian figures, lanterns, strength stones as gifts a parish gave its shrine -->
-<!-- Research: stone lanterns beside the approach - GUESS research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html: lanterns are attested among the gifts a parish gave its shrine; setting them beside the approach is a guess -->
+<!-- Research: stone lanterns beside the approach - GUESS: lanterns are among the gifts a parish gave its shrine (the donated stonework claim, 0222); setting them beside the approach is a guess -->
 <!-- Research: donated stonework none at average - GUESS research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html: on the wealth knob, none drawn at average; no count of village shrines keeping them -->
 <!-- Research: no subsidiary buildings - research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html: subsidiary shrines, an office, a plaque hall and a portable-shrine store not drawn -->
 <!-- Research: a village shrine's office dated - research/questions/0215-village-shrines-where-they-stand-and-how-big-their-grounds-are.html: Rokusha's office of 30 tsubo, a village shrine from 1872 -->
