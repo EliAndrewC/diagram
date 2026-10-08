@@ -1,99 +1,102 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "db327d665a528d521847136ba067fc24907100eedb50fab9b28f99c602c2d4dd",
+ "plan_sha256": "10a47026b3fa3aef2298721f275db05ff41a82781d072e228e2d0db753f5cf0e",
  "reviewed": "2026-10-08",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "row 491",
-   "summary": "the smoother cuts a hairpin arm under 40 ft even at the lane's only contact; rejoined at the fold within 25 ft, else committed uncut: the settle cuts an ordinary lane's leg and a tree lane's refuses the web",
+   "id": "batch-1 findings first",
+   "summary": "batch 1's woodland glyph check (Kashikawa NEEDS-WORK: the beyond-the-fields walk counts a row holding as field) and the pair's band-2 cause fixed before the next ranking rows",
    "class": "within",
-   "why": "0081 'a returning leg under 40 ft is cut' applied literally; round 1's item resolved - the plan, T117's text and the smooth.py claim now name refuse_unmended for a tree lane (lanes_breaking covers tree lanes), so no hairpin is drawn either way"
+   "why": "defects found by this feature's own review occasions and its pair are part of completing the batch (FR-005 occasions, FR-006 a batch complete before landing; constitution XIII/XIV); they are not ranking rows, so SC-003's tier order is untouched; the walk fix moves the code to 0077/0033 (house lot, field, woodland)"
   },
   {
-   "id": "row 492",
-   "summary": "the held nub patch: a last leg of 12 ft or less turning 90 degrees or more",
+   "id": "past_the_frame",
+   "summary": "the track out runs to the canvas edge on its bearing and 400 ft past it, claimed CONVENTION, replacing wave 46's canvas-diagonal reach",
    "class": "within",
-   "why": "0081's hook figures applied literally"
+   "why": "removes a measured regression wave 46 introduced (run_on_target 5,481 -> 3,489 against 3,577 at the start, measurements.json batch1-perf-pair-and-reach-control); off-sheet length is a drawing convention, not a research claim"
   },
   {
-   "id": "row 493",
-   "summary": "the track out drawn taut",
+   "id": "rows 381 and 436",
+   "summary": "the two open in-scope E1 rows T119a tiered: every grove and copse crown gives way round a yard persimmon wholly; 0072's drawing page re-measures Inashiro's arc at 66 degrees",
    "class": "within",
-   "why": "0081 'Every lane is pulled taut like a string'"
+   "why": "the only open in-scope E1 rows, taken before E2 (SC-003); 381 moves the code to 0046's 'give way round it'; 436 makes the drawing page state what the maps draw"
   },
   {
-   "id": "row 494",
-   "summary": "the bend rule judges the connector; a kinked connector refused in connector_keeps_the_law",
+   "id": "row 442",
+   "summary": "the road checkpoint tier described as 0110 attests it (barrier gate, inspection hall, officer's residence; lockup, stables, notice board at a larger post), no garrison count",
    "class": "within",
-   "why": "removes the connector's exemption; refusal is enforcement of the same rule"
+   "why": "the procedure moves to the research; no pool sheet draws the checkpoint tier, so nothing is redrawn (FR-009)"
   },
   {
-   "id": "row 496 before 495",
-   "summary": "the spur drawn taut, ahead of row 495",
-   "class": "within",
-   "why": "an order within one tier, nothing dropped, row 495 named next"
+   "id": "row 438 omitted",
+   "summary": "the wave takes 'rows 381, 436 and 442 in ranking order' and names row 501 next, silently passing over row 438 (docs/building-programs.md Country shrine #hall largest and monk's home: E2, scope mode-a, wave blank, flag empty, after [], found by wave 46's impl-drift and tiered E2 by T119a beside 442)",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "FR-006 makes a wave a contiguous run of the ranking and FR-010 keeps the Mode A procedures in scope; row 438 is an open in-scope E2 row ranked ahead of 442 with no hold, no dependency and no stated reason, and neither the plan nor tasks.md mentions it - the same pattern ruled not legitimate at amendment 33 (464/465 skipped without evidence). Take row 438 in wave 47 before 442 (T119a's fix: the hierarchy stated per form, 'largest' claimed for the one-roof form only), or record why it waits"
   },
   {
-   "id": "XIV track reach",
-   "summary": "the connector's reach covers the canvas diagonal",
-   "class": "within",
-   "why": "a defect found on the way, fixed (XIV)"
+   "id": "row 473 held",
+   "summary": "the fixture quota cap stays held as the GM's question",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "the cap against the GM's own feature-133 ruling that Inashiro keep its shrine is a conflict only the GM can settle; the GM's goal amendment of 2026-10-07 ('defer it to the end of the feature') directs exactly this hold, and it was ruled LEGITIMATE on 2026-10-07"
   },
   {
-   "id": "XIV squared_against",
-   "summary": "a square leg lengthened past 40 ft where the 21 ft leg leaves a zigzag",
+   "id": "row 501 next",
+   "summary": "row 501 (the connector's clearance at a footprint's edge) opens wave 48",
    "class": "within",
-   "why": "an unresearched leg length changed so both 0035/0084 (square) and 0081 (no zigzag) hold"
+   "why": "the next open in-scope row after 473 in ranking order (474-500 carry waves); the order itself is fine once row 438 is not left behind"
   },
   {
-   "id": "XIV last resort message",
-   "summary": "the refusal names what breaks each rule",
+   "id": "audit re-keyed",
+   "summary": "the ranking and overrides re-keyed to docs/building-programs.md after main moved the file",
    "class": "within",
-   "why": "diagnostic wording only"
+   "why": "bookkeeping that keeps one row per finding (FR-001) after a path move on main; no row dropped or re-tiered by it"
   },
   {
-   "id": "chord keep-out at 7 ft",
-   "summary": "_lane_gap = max(WEB_FABRIC_GAP 7 ft, w/2 + 2 ft); the E1 found row fixed in the wave and withdrawn; the claim cites 0246 without DEVIATION",
+   "id": "record-check edits",
+   "summary": "quote-check, record-format and the modal depiction, research and form checks' edits applied (0072's overclaiming sentence narrowed; the windbreak and mixed-broadleaf modals' wording)",
    "class": "within",
-   "why": "0246 'A lane's middle keeps at least 7 ft clear of a garden fence'; the code brought to the page (FR-004), exactly the found row's stated fix"
+   "why": "corrections the record checks a wave owes return (FR-005 occasions); they make the record state its sources and the maps accurately, and none moves research to excuse a drifted implementation"
   },
   {
-   "id": "smooth claim: track and streets left whole",
-   "summary": "the existing skip of connector and street claimed",
+   "id": "claim: sacred complex cap",
+   "summary": "MISLABELED 'whole sacred complex held to ~2/3 of the residence' relabeled GUESS on 0116's ordering",
    "class": "within",
-   "why": "pre-existing behavior claimed; both still judged by the bend rule"
+   "why": "impl-drift said MISLABELED: FR-003 E0, the claim alone"
   },
   {
-   "id": "found rows",
-   "summary": "three rows filed: two E2 building-programs DRIFTED rows and the road checkpoint tier E3",
+   "id": "claim: conifer-led lesser share",
+   "summary": "MISLABELED LESSER_ROLL_SHARE claim made an unpointed GUESS",
    "class": "within",
-   "why": "filed for fixing by tier; nothing dropped"
+   "why": "MISLABELED, one of the two fixes impl-drift offered: E0"
   },
   {
-   "id": "building-programs fixes",
-   "summary": "the 1778 hall named a Kannon hall; three claims written",
+   "id": "claim: lesser crown over an earlier conifer",
+   "summary": "MISLABELED GUESS-on-0080 claim relabeled CONVENTION (the conifer reads on top)",
    "class": "within",
-   "why": "claim wording corrected to the sources (E0); no procedure changed"
+   "why": "MISLABELED, the claim alone (E0); dropping a painted-over crown is a drawing choice, and T121's impl-drift re-check judges the label"
   },
   {
-   "id": "notes-census glob",
-   "summary": "make notes-census expands M's glob",
+   "id": "claim: W19 run break",
+   "summary": "the UNCLAIMED exemption in BeltReading.holes claimed as a GUESS",
    "class": "within",
-   "why": "tooling defect fixed on the way (XIV)"
+   "why": "an UNCLAIMED unit gets its claim (E0); T121 re-checks it"
   },
   {
-   "id": "verification batched (Performance bookends, T119, T110-T118)",
-   "summary": "from wave 46 the gate, the timing pair with perf-audit and the review occasions run once per batch of 4-5 waves (batch 1 = waves 42-46, closed by T119); each wave keeps tests, rerolls, notes-census, impl-drift, spec-fidelity",
-   "class": "within",
-   "why": "the GM's 2026-10-08 'batch your lengthy tests rather than running them for every pool after every round of changes'; the cadence is unstated by the GM and 4-5 waves is a reading of 'batch'; the occasions move with the gate they are dispatched on and still run at T119, nothing dropped"
+   "id": "claim: page edge not judged",
+   "summary": "DRIFTED claim (code exempts visible bins within 2 r of the frame; 0072's drawing page: 'A break in the planting that a reader can see is still a hole', no near-edge exemption) rewritten as an unpointed CONVENTION that keeps the code's exemption",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "FR-003: any rewrite of a DRIFTED row's claim other than E0 is the exception path (FR-004), and none was taken - no MODE 1 check, no ranking row, not in the plan or tasks. The relabel keeps a check exempting ground the research says is judged, which is the request's 'implementation not matching research' re-labeled rather than fixed; 'a break there is not seen whole' is an argument, not an impossibility. Fix the code (narrow the exemption to ground off the page, impl-drift's own option), or file the row and put the exception to a MODE 1 check with 0072's text verbatim"
   },
   {
-   "id": "Occasions wave 46",
-   "summary": "two village lane occasions (the taut track on Inashiro; Kashikawa's road re-squared at the ford) run at batch 1's close, round 3 on",
+   "id": "sanctuary bay knob filed",
+   "summary": "the Sacred features re-check's new DRIFTED (sanctuary bays 1/2/3 as a rolled knob) filed in found-wave47 for ranking",
    "class": "within",
-   "why": "round 1's item resolved: no waiver routing; FR-005 runs the occasions, and the GM's 2026-10-08 ruling allows rounds past two; Kashikawa's different rule on a different map is its own line"
+   "why": "a found row ranked and taken in its turn (FR-001, FR-006)"
   }
  ],
- "verdict": "CLEAR"
+ "verdict": "BLOCKED"
 }

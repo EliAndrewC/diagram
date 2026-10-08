@@ -111,8 +111,9 @@ class BeltReading:
         """The exemptions the measure grants, decided once.
 
         Research:
-            page edge not judged - CONVENTION: a stretch the page cuts, or within one clump's width (2 r) of it, is not judged -
-                a break there is not seen whole (0072's drawing page judges every break a reader can see)
+            page edge not judged - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: a
+                stretch the page cuts is not judged; the depth is not judged within one clump's width (2 r) of the frame, which
+                clips it (the belt's inner face kept at the frame); a break a reader can see is judged a hole
             tips not judged - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:
                 a belt tapers at its ends
         """
@@ -139,8 +140,12 @@ class BeltReading:
         self.view = (x0, y0, w, h)
         self.framed = view is not None
         self.on_xy = [(float(c[0]), float(c[1])) for c in on]
-        page |= {self.bin(v) for c, (_u, v) in zip(on, self.cl, strict=False) if min(c[0] - x0, c[1] - y0, x0 + w - c[0], y0 + h - c[1]) <= 2 * r}
         page |= {b for b in range(max(self.bins) + 1) if self._band_leaves_the_page(b)}
+        # ...THE STRETCH THE PAGE CUTS is all a HOLE is excused for (feature 328 wave 47, 0072's drawing page: "A break in the
+        # planting that a reader can see is still a hole"); the margin of one clump's width at the frame below excuses only
+        # the DEPTH the frame clips there
+        self.cut = set(page)
+        page |= {self.bin(v) for c, (_u, v) in zip(on, self.cl, strict=False) if min(c[0] - x0, c[1] - y0, x0 + w - c[0], y0 + h - c[1]) <= 2 * r}
         self.page = page
         # ...and the TIPS: a bin at the end of a run of crowned bins is where a belt tapers - it is deepest in the middle
         # (research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.html) - and one crown there is the taper, not the one-row arm this measures
@@ -287,7 +292,7 @@ class BeltReading:
         for a, b in zip(vs, vs[1:], strict=False):
             if b - a <= _BELT_GAP_FT:
                 continue
-            if set(range(self.bin(a + 1e-6), self.bin(b - 1e-6) + 1)) & self.page:
+            if set(range(self.bin(a + 1e-6), self.bin(b - 1e-6) + 1)) & self.cut:
                 continue
             if self._crossed(a, b):
                 continue

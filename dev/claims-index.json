@@ -1164,6 +1164,18 @@
   ],
   "verdict": "IN-STEP"
  },
+ "docs/building-programs.md::Magistrate's manor (county magistracy)#posting wealth's rich end": {
+  "code": "779cb17a20704830",
+  "core": "4acb7605e67523ce",
+  "date": "2026-10-08",
+  "note": "no cited page describes how a rich posting looked; 0090's drawing page records only that offices ran short of money and guesses at the poor end, \"qualitative and rests on no figure\"",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:28f3b3b08cf308d9"
+  ],
+  "verdict": "IN-STEP"
+ },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#practice ground": {
   "code": "bd8d4b3ee389a959",
   "core": "4acb7605e67523ce",
@@ -1335,14 +1347,6 @@
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
- },
- "docs/building-programs.md::Magistrate's manor (county magistracy)#the rich end of posting wealth: fine timber and generous ceremony space (only the poor end and the guest house are claimed)": {
-  "code": "4acb7605e67523ce",
-  "core": "4acb7605e67523ce",
-  "date": "2026-10-08",
-  "note": "the rich end of posting wealth: fine timber and generous ceremony space (only the poor end and the guest house are claimed)",
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#tier knob": {
   "code": "312cb1599cdee90f",

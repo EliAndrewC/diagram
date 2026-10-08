@@ -564,7 +564,8 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
   0033's house lot, then field, then woodland) and the pair's band 2 (the track out to the canvas edge on its bearing and
   400 ft past it, `past_the_frame`, not the canvas diagonal every later pass sampled); then the open rows in ranking order:
   the two E1s T119a tiered (every grove and copse crown gives way round a yard persimmon wholly; 0072's Inashiro belt arc
-  66 degrees) and row 442 (the road checkpoint tier described as 0110 attests it, no garrison count). Row 473 stays held as
+  66 degrees), row 438 (the shrine's hierarchy stated per form) and row 442 (the road checkpoint tier described as 0110
+  attests it, no garrison count); and the belt's page-edge exemption narrowed to the stretch the page cuts (round 1). Row 473 stays held as
   the GM's question; row 501 (the connector's clearance at a footprint's edge) opens wave 48. The merge of main's feature
   330 re-keyed the audit to `docs/building-programs.md` (main's move).
 - **Occasions**: see `tasks.md` `## Occasions` (wave 47): woodland commons on kashikawa (round 4 of batch 1's NEEDS-WORK),

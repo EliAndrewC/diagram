@@ -184,3 +184,13 @@ def test_a_belt_no_bin_judges_is_judged_whole_where_it_stands_off_the_page() -> 
     done = _read(out)
     assert out and not done.thin() and any(d is not None for d in done.depths()), "planted deep, and judged"
     assert settle_the_belt(stub, r=14.0, houses=HOUSES, wind=N, ways=(), page=lambda _s: PAGE, band=BAND, seat=lambda _x, _y: None) == [], "no seat: the stub is ended"
+
+
+def test_a_break_a_reader_can_see_near_the_frame_is_still_a_hole() -> None:
+    """0072's drawing page: "A break in the planting that a reader can see is still a hole" (feature 328 wave 47). The frame
+    excuses only the stretch it cuts; a gap whose crowns stand inside the page within one clump's width of its edge - the
+    margin the DEPTH is excused in, since the frame clips it - is judged like any other."""
+    view = (0.0, 480.0, 2000.0, 2000.0)  # the belt's far row 20 ft inside the frame's top edge, within 2 r (28 ft)
+    rd = _read(_belt(skip=(600.0, 680.0)), view=view)
+    assert rd.holes(), "the 80 ft gap is seen whole on the page"
+    assert all(b in rd.page for b in rd.cut), "what the frame cuts is excused for depth too"

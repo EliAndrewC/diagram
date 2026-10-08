@@ -1563,11 +1563,19 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
 - 0072's drawing page (row 436, E1): Inashiro's belt arc 66 degrees, re-measured; quote-check, record-format and the modal
   cascade answered; the wave-39 modals' depiction checks (mixed broadleaf belt, windbreak) answered with their edits, the
   windbreak modal's research and form checks with theirs.
+- `building-programs.md#hall largest and monk's home` (row 438, E2; round 1 found it skipped): the hierarchy stated per form -
+  under one roof the hall-and-dwelling building the largest; under two buildings the hall larger than its sanctuary, the
+  farmhouse-class dwelling possibly the larger (0222: the hall alone farmhouse-sized or smaller). No two-building sheet is in
+  the pool, so nothing is redrawn.
+- `belt_law.py::BeltReading.__init__#page edge not judged` (round 1: relabeled where it should have been fixed): a hole is
+  excused only on the stretch the page cuts (0072's drawing page: "A break in the planting that a reader can see is still a
+  hole"); the one-clump margin at the frame excuses the depth the frame clips, no longer a visible break
+  (`test_a_break_a_reader_can_see_near_the_frame_is_still_a_hole`, red on the old code).
 - `building-programs.md#road checkpoint tier` (row 442, E2): the post as 0110 attests it - a barrier gate, an inspection
   hall facing the road, the officer's residence behind it, and at a larger post a lockup, stables and a notice board; no
   garrison count (0110 gives none, nor do the GM's notes).
 
-- [ ] T120 batch 1's findings, rows 381, 436 and 442 (FR-003, FR-004, FR-005)
+- [ ] T120 batch 1's findings, rows 381, 436, 438 and 442; the belt's visible break (FR-003, FR-004, FR-005)
       research: rendering
 - [ ] T121 the claims re-checked by `impl-drift`; the close at batch 2's (FR-005, FR-006)
       research: rendering
