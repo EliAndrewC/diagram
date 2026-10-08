@@ -819,7 +819,7 @@
   "tier_as_ranked": "E0",
   "e0_basis": "rows.py:329-330 buffers lanes by w/2 + 2.0 and streams by 6.0, and rows.py:338 skips any cell intersecting them - wider than the 'crosses or touches' of rows.py:322. No page bears (same search as row 1), so GUESS. Flag: both margins are raw pixels, not s.px(feet), so the real margin varies with the map's ftpx; if they are meant as feet that is an E1 change, not this claim",
   "moved": "T75a (fresh reader): rows.py:329-330 buffers lanes by w/2 + 2.0 and streams by 6.0, and rows.py:338 skips any cell intersecting them - wider than the 'crosses or touches' of rows.py:322. No page bears (same search as row 1), so GUESS. Flag: both margins are raw pixels, not s.px(feet), so the real margin varies with the ",
-  "wave": "",
+  "wave": "25",
   "scope": "kept"
  },
  {
@@ -836,7 +836,7 @@
   "tier_as_ranked": "E0",
   "e0_basis": "rows.py:333 cells = max(1, round(depth / px(HOLDING_CELL_FT))); constant claimed at rows.py:210, unit block rows.py:319-322 lacks it; 0033 drawing 'The strip is cut in plots about 150 ft deep ... That is a convention' matches",
   "moved": "T75a (fresh reader): rows.py:333 cells = max(1, round(depth / px(HOLDING_CELL_FT))); constant claimed at rows.py:210, unit block rows.py:319-322 lacks it; 0033 drawing 'The strip is cut in plots about 150 ft deep ... That is a convention' matches",
-  "wave": "",
+  "wave": "25",
   "scope": "kept"
  },
  {
@@ -981,7 +981,7 @@
   "tier_as_ranked": "E0",
   "e0_basis": "stages.py:381 GUESS matches stages.py:775 (MIN_WEB_GAP as a spacing in _rank_step); the ranks run only on the dispersed form (stages.py:777, growth.py:95-98), and 0246 drawing gives its 18 ft lane room as a convention for a CLUSTERED settlement's lanes and says a dispersed hamlet has no lanes between its farmhouses, so it does not back the figure here and GUESS is the true label; 0036's 32 ft is i",
   "moved": "T75a (fresh reader): stages.py:381 GUESS matches stages.py:775 (MIN_WEB_GAP as a spacing in _rank_step); the ranks run only on the dispersed form (stages.py:777, growth.py:95-98), and 0246 drawing gives its 18 ft lane room as a convention for a CLUSTERED settlement's lanes and says a dispersed hamlet has no lanes betwee",
-  "wave": "",
+  "wave": "25",
   "scope": "kept"
  },
  {
@@ -1013,7 +1013,7 @@
   "tier_as_ranked": "E0",
   "e0_basis": "stages.py:382 says amplitude half of RANK_DEPTH_JITTER of a pitch, rounds before the rescue, alleys only; code stages.py:876 matches (attempt < 4, not along the field, lane_web == alleys). No page gives an amplitude, so UNRESEARCHED is true. The alleys gate borrows 0246's planned/grown reading, but 0246 says a dispersed hamlet lays no lanes, so that page does not back the gate on this form and cit",
   "moved": "T75a (fresh reader): stages.py:382 says amplitude half of RANK_DEPTH_JITTER of a pitch, rounds before the rescue, alleys only; code stages.py:876 matches (attempt < 4, not along the field, lane_web == alleys). No page gives an amplitude, so UNRESEARCHED is true. The alleys gate borrows 0246's planned/grown reading, but ",
-  "wave": "",
+  "wave": "25",
   "scope": "kept"
  },
  {
@@ -1030,7 +1030,7 @@
   "tier_as_ranked": "E0",
   "e0_basis": "claim stages.py:372 says 0.3 applies to houses too in the rescue; code stages.py:857-859 keeps houses at 0.5 pitch in every round and drops only the round's own offered seats (_kept) to 0.3 in the rescue. The wording is wrong; the check is a dedupe the placer's envelope backs up, so NONE",
   "moved": "T75a (fresh reader): claim stages.py:372 says 0.3 applies to houses too in the rescue; code stages.py:857-859 keeps houses at 0.5 pitch in every round and drops only the round's own offered seats (_kept) to 0.3 in the rescue. The wording is wrong; the check is a dedupe the placer's envelope backs up, so NONE",
-  "wave": "",
+  "wave": "25",
   "scope": "kept"
  },
  {
@@ -1047,7 +1047,7 @@
   "tier_as_ranked": "E2",
   "e0_basis": "stages.py:486-489 bound; applied at stages.py:724 (front row, bound*1.3) and stages.py:855 only when attempt >= 4 (rescue); rank rounds 0-3 offer seats at a fixed depth (stages.py:797) with no in_band test, and seat_the_rest (capacity.py:103) is unbounded by it. The claim (stages.py:377) is UNRESEARCHED and no page sets a reach bound (0031 drawing gives none), so the fix is the wording, not the co",
   "moved": "T75a (fresh reader): stages.py:486-489 bound; applied at stages.py:724 (front row, bound*1.3) and stages.py:855 only when attempt >= 4 (rescue); rank rounds 0-3 offer seats at a fixed depth (stages.py:797) with no in_band test, and seat_the_rest (capacity.py:103) is unbounded by it. The claim (stages.py:377) is UNRESEAR",
-  "wave": "",
+  "wave": "25",
   "scope": "kept"
  },
  {
@@ -1151,7 +1151,7 @@
   "tier_as_ranked": "E0",
   "e0_basis": "pondstock.py:68 offsets every _bank_seats seat by BANK_INSET_FT; the constant is already claimed at pondstock.py:35 but the unit's block (pondstock.py:53-54) names only the ranking; 0025 drawing line 'A sty stands on the bank, not out by the canal ... set in from the edge of the plot by half the bank's width' says exactly what the code does",
   "moved": "T75a (fresh reader): pondstock.py:68 offsets every _bank_seats seat by BANK_INSET_FT; the constant is already claimed at pondstock.py:35 but the unit's block (pondstock.py:53-54) names only the ranking; 0025 drawing line 'A sty stands on the bank, not out by the canal ... set in from the edge of the plot by half the ban",
-  "wave": "",
+  "wave": "25",
   "scope": "kept"
  },
  {

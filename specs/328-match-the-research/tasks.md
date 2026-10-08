@@ -993,7 +993,9 @@ closed in wave 24, and the lane's room and the rank jitter stand as claimed (the
 
 - [x] T75a wave 24's found rows tiered by the work they take, by a fresh reader (FR-002, FR-003, SC-003)
       research: rendering
-- [ ] T75 the claims written (FR-003 E0, FR-004)
+- [x] T75 the claims written (FR-003 E0, FR-004)
       research: rendering
-- [ ] T76 the claims re-checked by `impl-drift`; the close: wave 25's own bookend pair, `make done` green, the wave column (FR-005, FR-006)
+      verify: DONE. the seating's reach and the seats kept apart restated, the sty's bank inset (0025), the holding's plots (0033) and its lane margins (GUESS) claimed; the lane's room and the rank jitter stand; the rank comment reworded
+- [x] T76 the claims re-checked by `impl-drift`; the close: wave 25's own bookend pair, `make done` green, the wave column (FR-005, FR-006)
       research: rendering
+      verify: DONE. impl-drift IN-STEP on all five (the sty inset re-asked with the inset's value and units); amendment 24 FAITHFUL, plan CLEAR; make done green; wave 25's own pair band 0; the wave column
