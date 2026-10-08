@@ -2,7 +2,7 @@ About: A settlement near its market town lay within the few miles around it whos
 manured; around Kanazawa the farmers within that ring brought vegetables into town every morning to exchange for its
 households' urine.
 
-A market town sat in the middle of the countryside it served. In China, where it was measured, its buyers and sellers on
+A market town sat in the middle of the countryside it served. In China, its buyers and sellers on
 market days were chiefly the villagers nearby, and the villages that traded at one town lay within a walk of a few miles
 of it, the longest about 3 miles.
 

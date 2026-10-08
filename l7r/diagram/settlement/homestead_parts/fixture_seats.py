@@ -535,7 +535,7 @@ def _seats(
         wood shed seats - research/questions/0043-firewood-stacks-and-sheds-kigoya.drawing.html: off the back wall and
             the flanks
         shrine corner - research/questions/0219-household-shrines-yashikigami.drawing.html: NW, NE or SW of the house
-        seat positions along each wall - UNRESEARCHED: privy 0.3 / 0.40 / -0.35 hw and -0.25 hh, coop 0.34 hw spread and
+        seat positions along each wall - UNRESEARCHED: privy 0.3 / 0.40 / -0.35 hw, coop 0.34 hw spread and
             0.3 hh, wood shed 0.25 hw and 0.1 hh"""
     if kind == "privy":
         seat = {  # the four attested seats (269 B10); -x is the shed end of the house, where the doma and its stable are

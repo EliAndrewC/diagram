@@ -1,7 +1,7 @@
-About: A settlement far from its market town lay beyond the few miles' walk that bound the villages trading there; in medieval
+About: A settlement far from its market town lay beyond the few miles' walk that, in China, bound the villages trading at a town; in medieval
 times remote places grew no winter barley at all, though it spread further in the Edo period.
 
-A market town sat in the middle of the countryside it served. In China, where it was measured, its buyers and sellers on
+A market town sat in the middle of the countryside it served. In China, its buyers and sellers on
 market days were chiefly the villagers nearby, and the villages that traded at one town lay within a walk of a few miles
 of it, the longest about 3 miles.
 
