@@ -15347,21 +15347,20 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/ways/checks.py::lanes_share_tread#one network at 25 ft": {
-  "code": "a280cb88d2b4a852",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/ways/checks.py::lanes_share_tread#one network, joined where treads meet": {
+  "code": "576fba48307cc303",
   "core": "0d03f0fddd962721",
-  "date": "2026-10-07",
-  "note": "code joins two treads only within _TOUCH_GAP (4 ft), so the label \"at 25 ft\" is stale (feature 328 changed it); 0081 has only the one-network rule (§16) and the 25 ft knot of ends (§21), and the rule \"joined where their treads meet\" is 0246's (\"joined where their treads meet\", §40). Relabel to \"one network, joined where treads meet\" and point it at 0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html",
+  "date": "2026-10-08",
+  "note": "two ways count as one network only when their centrelines come within _TOUCH_GAP = 4.0 ft, the width of one 4 ft tread, which is exactly when the two treads touch; this matches \"one network, joined where their treads meet\"",
   "pages": {
-   "0081-village-lanes.drawing.html": "9e27759395199abd"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
-  "research": "ebd72aaa6a0eb9af",
+  "research": "7b40c2c01cfba682",
   "rests": [
-   "0081-village-lanes.drawing.html:34425c991aa27503",
-   "0081-village-lanes.drawing.html:df26f73dd5ee96d2",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:048ef93cf5c5c59f"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:048ef93cf5c5c59f",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/checks.py::path_violations#drain brook never crossed": {
   "code": "4256f5dec63fa798",

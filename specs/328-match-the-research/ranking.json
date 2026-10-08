@@ -10875,7 +10875,7 @@
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::a_way_onto_the_bund#on the bund",
   "verdict": "DRIFTED",
   "tier": "E3",
-  "fix": "In `a_way_onto_the_bund`, an end within `BUND_REACH_FT` of the paddy with no water between is carried on to `paddy.nearest(q)` through `carry_on` (as the water-between case already is) instead of returning \"joined\" where it stands, so no path stops short of the bund, and the claim drops the 6 ft as an arrival bar.; and the field spur laid after it kept on its junction (measured: the literal carry alone leaves Mizuguchi's spur foot 22 ft off the street's end, a knot)",
+  "fix": "In `a_way_onto_the_bund`, an end within `BUND_REACH_FT` of the paddy with no water between is carried on to `paddy.nearest(q)` through `carry_on` (as the water-between case already is) instead of returning \"joined\" where it stands, so no path stops short of the bund, and the claim drops the 6 ft as an arrival bar; and the field spur laid after it kept on its junction (measured: the literal carry alone leaves Mizuguchi's spur foot 22 ft off the street's end, a knot)",
   "files": [
    ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py"
   ],

@@ -1100,7 +1100,7 @@ fixed ellipse is claimed UNRESEARCHED with what was searched, and the row is E4,
 
 The next open in-scope E2 rows. Row 459 (`a_way_onto_the_bund#on the bund`) tried literally - an end within `BUND_REACH_FT`
 of the paddy with no water between carried on to the bund - and measured: Mizuguchi's field spur, laid after the pass, then
-started 22 ft off the street's end and `test_no_lane_ends_knot_short_of_a_join[mizuguchi]` failed; keeping a junction end in
+started 22 ft off the street's end (measured 2026-10-08, the pool test's knot report) and `test_no_lane_ends_knot_short_of_a_join[mizuguchi]` failed; keeping a junction end in
 place did not cure it. The fix spans the bund pass and the spur's laying: E3 by FR-003, the trial reverted. Then row 460.
 
   - `l7r/diagram/hamletgen/ways/checks.py::lanes_share_tread#one network at 25 ft` - two lanes one network only where their treads meet (within the ink tolerance); ends within 25 ft are the knot pass's to join at one point (0081)

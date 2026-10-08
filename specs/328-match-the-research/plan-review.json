@@ -1,38 +1,51 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "243e3a66a65303299f03797947a17a3eb43ae5a8dc223ccd470bbfb6c384389a",
- "reviewed": "2026-10-07",
+ "plan_sha256": "a462c1f6bd7f3d2519dbf8eb54c5519b830c020f03e082306f30aa381658d563",
+ "reviewed": "2026-10-08",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W30-scope",
-   "summary": "row 458 (stage_polder#reservoir size) tried and reverted; row 434 stays held for the GM",
+   "id": "W31-1",
+   "summary": "Row 459 (bund.py a_way_onto_the_bund#on the bund) tried literally, measured, reverted and re-tiered E2 -> E3; stays in scope and ranked",
    "class": "within",
-   "why": "row 458 was the next open in-scope E2 row after the held shrine-cap row (hold ruled earlier); FR-006 contiguous run"
+   "why": "FR-002/FR-003 tier by the work; reproduced by this reviewer in a scratch clone (the literal change alone, an end joined only within _JOINT_FT): Mizuguchi field_path joined -> run_on and test_no_lane_ends_knot_short_of_a_join[mizuguchi] fails with a 22.0 ft knot (lane 0 end vs lane 5). Not a deferral: the row remains DRIFTED, scope kept."
   },
   {
-   "id": "W30-retier-E4",
-   "summary": "row 458 re-tiered E2 -> E4 (research first): 0061's two-or-three-tenths share is given only for a high-ground pond that is its fields' only water; a polder's source is the wild water its inlet sluice draws from (0019: 'The wild pond that feeds the polder'), and no page sizes it",
+   "id": "W31-2",
+   "summary": "Row 460: lanes_share_tread and served_network default their join to _TOUCH_GAP (4 ft), not LANE_JOIN_FT (25 ft)",
    "class": "within",
-   "why": "FR-003 defines E4 as 'the record does not yet say what the implementation should be', which 0061 and 0019 as read bear out; the row stays in the ranking (verdict DRIFTED, scope kept, wave blank) with a research-first fix, so it is ordered later, not dropped. Picking a size now would be inventing one, not matching research"
+   "why": "FR-004: the implementation moves to 0081, which states one network and gives 25 ft only for ends 'joined at a single point' (the knot pass); the page is not edited"
   },
   {
-   "id": "W30-relabel",
-   "summary": "the claim's false citation (0017, 'a pond sized to the paddy it waters') replaced by UNRESEARCHED naming what was searched (0061, 0017, 0019, 0020); code otherwise identical to 2e33f31b3",
+   "id": "W31-3",
+   "summary": "knots.WebMemo's 'share' answer follows lanes_share_tread's new default; LANE_JOIN_FT kept only as the box prefilter (imported from consts)",
    "class": "within",
-   "why": "FR-004: the claim is the implementation's own statement of what backs it, and the old one cited research that does not size this pond. Holds only while the ranking row stays open (wave blank) until the E4 research lands; recording it as fixed by the relabel would be a narrowing"
+   "why": "WebMemo must give the same answers as asking the web again; the 25 ft box test is a superset of 4 ft, so the prefilter changes no verdict"
   },
   {
-   "id": "W30-occasions",
-   "summary": "no review occasions, no bookend pair: no executed code or map differs from wave 29's close",
+   "id": "W31-4",
+   "summary": "Unit test that pinned 20 ft apart as one network rewritten to the page (20 ft not joined, 3 ft joined)",
    "class": "within",
-   "why": "the diff 2e33f31b3..HEAD under l7r/ and pool/ is one claim line; FR-005's occasions are opened by changed output, and none changed"
+   "why": "enforces the requested match to the research; the old test pinned the drift"
   },
   {
-   "id": "W30-verify",
-   "summary": "impl-drift on the relabeled claim, make done green",
+   "id": "W31-5",
+   "summary": "Row 434 still held for the GM",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "carried from earlier waves; implied by the GM's own goal amendment ('If you need to ask me a question then please defer it to the end of the feature'); the row is held, not dropped"
+  },
+  {
+   "id": "W31-6",
+   "summary": "Occasions: none, no pool map changes",
    "class": "within",
-   "why": "FR-005 per touched claim and the gate"
+   "why": "measured by this reviewer: all five pool hamlets regenerated at de7f7cbf6 in a scratch clone and their committed manifests did not change"
+  },
+  {
+   "id": "W31-7",
+   "summary": "Wave 31 stacks on unpushed waves 9-30 under the wave-11 exception's condition (6), its pair opening at 9a29aee8f",
+   "class": "within",
+   "why": "the stacking exception was ruled LEGITIMATE on conditions earlier; condition (1)'s backup holds (origin backup/digram-backlog is 9a29aee8f), wave 30's T86 ticked with a green gate, and this amendment is its own with a reset counter and this plan review before its first tick"
   }
  ],
  "verdict": "CLEAR"
