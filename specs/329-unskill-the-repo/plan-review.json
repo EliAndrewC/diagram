@@ -1,0 +1,108 @@
+{
+ "feature": "329-unskill-the-repo",
+ "plan_sha256": "fb29fb01c9169326ba425271612717e8b8cdd515d4f425344bc937ee4fbc8049",
+ "reviewed": "2026-10-07",
+ "declared": "spec-fidelity",
+ "decisions": [
+  {
+   "id": "D1",
+   "summary": "git mv prefix strip of every tracked path",
+   "class": "within",
+   "why": "FR-001 verbatim."
+  },
+  {
+   "id": "D2",
+   "summary": "Makefile/.gitignore/CLAUDE.md merged; forwarder and make-docs --forwardable removed",
+   "class": "within",
+   "why": "FR-002; the forwarder retires by FR-002, its helper with it."
+  },
+  {
+   "id": "D3",
+   "summary": "pyproject at root, ruff.toml deleted, extend-exclude carries the fence, equal-list proof, seeded-lint and rootdir tests",
+   "class": "within",
+   "why": "FR-002a and SC-007."
+  },
+  {
+   "id": "D4",
+   "summary": "SKILL.md to docs/usage.md (split per audit), not-a-skill note",
+   "class": "within",
+   "why": "FR-003, FR-011; the split is an FR-012 verdict."
+  },
+  {
+   "id": "D5-verbatim",
+   "summary": "specs/, dev/*-log/, scripts/fixtures/*.json, review-ledger left unswept",
+   "class": "within",
+   "why": "Exactly the FR-004 list the accepted spec carries (round 1 ruled the carve-out legitimate); all 14 ledger mentions are rows, so leaving them is FR-004's 'rows written before this feature'; the dev/*-log CLAUDE.md files name the prefix 0 times."
+  },
+  {
+   "id": "D5-claims",
+   "summary": "claims-index keys renamed",
+   "class": "within",
+   "why": "Live data, FR-004."
+  },
+  {
+   "id": "D6",
+   "summary": "guards re-pointed, each with a test on the new path",
+   "class": "within",
+   "why": "FR-006."
+  },
+  {
+   "id": "D7-ledger-exemption",
+   "summary": "the old-layout check exempts the whole of docs/review-ledger.md (and so any future row)",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "FR-004 makes only ledger rows written BEFORE this feature verbatim; a row written after the move is a live file under FR-007. Exempting the whole file lets a new row name the dead path, the exact failure FR-007 exists for. Not impossible: exempt only the ledger lines present at the move commit (a baseline set of lines, or check the ledger's delta)."
+  },
+  {
+   "id": "D8-collision",
+   "summary": "carry leaves a file at the old place when one exists at the root, so the old directory survives",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "FR-008/SC-004 require no .claude/skills/diagram/ left behind. Measured 2026-10-07 (find over /diagram/.clones/*): 9 clones hold .ruff_cache at BOTH the root and the skill dir, and CACHEDIR.TAG/.gitignore collide by name, so the carve-out is the common case, not a corner. FR-008 already provides the route: a cache that cannot be carried is invalidated with the reason recorded. Fix: on collision a cache copy at the old place is invalidated (recorded); any other file is moved to a non-colliding name at the root (never deleted); the old directory always goes."
+  },
+  {
+   "id": "D9",
+   "summary": "merge.directoryRenames=true in sync_in pull, scratch-clone test",
+   "class": "within",
+   "why": "FR-009."
+  },
+  {
+   "id": "D10",
+   "summary": "old-path note in root CLAUDE.md Key paths, no specs README",
+   "class": "within",
+   "why": "FR-005 asks for one note; location is open."
+  },
+  {
+   "id": "D11",
+   "summary": "gm-assistant pointer reported not edited; memory entry",
+   "class": "within",
+   "why": "Spec Assumptions and Edge Cases already settle it."
+  },
+  {
+   "id": "D12-classes",
+   "summary": "modal write-ups and pool notes judged as classes, every member listed; 85 docs judged one by one; 389 files",
+   "class": "within",
+   "why": "FR-012 permits class verdicts; measured: git ls-files lists 389 .md under the skill dir and the audit names exactly those 389."
+  },
+  {
+   "id": "D12-wip-readme",
+   "summary": "wip/README.md KEPT against the reader's DELETE, raised with the GM",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "Implied by the GM's own standing words (readme-hooks.sh quotes them: 'you personally should literally never touch a readme file'; its one escape needs the GM delegating in their own words). 'see which ones should be ... deleted' asks for a judgment, which the audit records, not an explicit README delegation. Cost is one stale 44-line file that names no path (0 prefix hits), and it is raised with the GM."
+  },
+  {
+   "id": "D12-apply",
+   "summary": "audit applied after the move as its own commit, by session and editing agents; Mode A claims re-owed",
+   "class": "within",
+   "why": "FR-012 and the spec assumption that the audit is its own step; inside the feature, so 'start to finish' is kept."
+  },
+  {
+   "id": "D13",
+   "summary": "CI definitions swept and checked locally, remote not dispatched",
+   "class": "within",
+   "why": "Spec Assumptions."
+  }
+ ],
+ "verdict": "BLOCKED"
+}

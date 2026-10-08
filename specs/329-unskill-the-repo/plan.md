@@ -70,14 +70,20 @@ did not exercise the path gets one case that does.
 
 **D7 - The old-layout check (FR-007).** `scripts/check-old-layout.py`: every tracked file outside the D5 verbatim list
 that contains `.claude/skills/diagram` fails, naming the file, the line and the path with the prefix removed. Run in
-`lint` (the gate) and in `sync-with-main.sh` push. `--selftest` plants a live file and an exempt file. The check names
-the prefix by concatenation so it does not find itself.
+`lint` (the gate) and in `sync-with-main.sh` push. The review ledger is exempt LINE BY LINE, not as a file: a ledger
+line naming the old path passes only if it stands verbatim in the ledger as of the commit that added this check (the
+rows written before this feature, FR-004); a row written after it is held like any live line (plan review round 1).
+`--selftest` plants a live file, an exempt file, an old ledger row and a new one. The check names the prefix by
+concatenation so it does not find itself.
 
 **D8 - The carry (FR-008).** `scripts/_layout_carry.sh <tree>`, idempotent, called by `sync_in` after the clone's pull
 and after `mirror_refresh` on the mirror: when `<tree>/l7r` is tracked and `<tree>/.claude/skills/diagram/` exists, each
-file left there (all untracked or ignored by then) is moved to the same path at the root unless one exists there
-already (then it is left and reported); `__pycache__` and emptied directories are removed; the old directory goes when
-empty. Never deletes a file it did not move except bytecode. `seed_roll_cache` looks at the new `.gencache` path.
+file left there (all untracked or ignored by then) is moved to the same path at the root. Where the root already holds
+that path (measured: 9 clones hold a `.ruff_cache` at both places), a CACHE's old copy is invalidated - deleted, the
+reason recorded here: the root's copy is the one the tools now write, and a cache is rebuilt on demand
+(`__pycache__`, `.ruff_cache`, `.pytest_cache`, `.mypy_cache`, `.coverage*`, `.testmondata*`, `.gencache`); any other
+colliding file is moved beside its twin as `<name>.pre-329` and reported, never deleted. The old directory therefore
+always goes (FR-008, plan review round 1). `seed_roll_cache` looks at the new `.gencache` path.
 A dirty clone on the old layout (sync-in merges only clean clones) is told by the mirror-only branch: "main moved the
 project to the root (feature 329) - commit and sync in". The gate's caches carry: the roll cache's dependency records
 are root-relative to the project dir (feature 167), and testmon's node ids (`tests/...`) do not change, so both stay
@@ -131,3 +137,9 @@ No map draws or states anything differently (no Decisions Recorded entries). Not
 `research: rendering`. Python: the new scripts carry selftests; engine code changes only in path arithmetic, held by
 the 100% floor. XIII: baseline gate taken before the move (research.md R6). XVI: the one exception (the verbatim
 records) was judged legitimate by spec-fidelity round 1.
+
+## Review history
+
+- Plan review round 1 (spec-fidelity MODE 4, 2026-10-07): BLOCKED - D7 exempted the whole review ledger (now line by
+  line, as of the commit that adds the check) and D8 left the old directory behind on a collision (now: caches
+  invalidated, other files kept beside their twin). D12's `wip/README.md` ruled LEGITIMATE.
