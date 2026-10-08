@@ -45528,14 +45528,20 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#seat positions along each wall": {
-  "code": "8a76b04f109826e7",
+  "code": "56a83478b3a56d5c",
   "core": "aef1e425950fc5df",
   "date": "2026-10-08",
-  "note": "the account names a privy \"-0.25 hh\" the code no longer has (the privy seats sit at hw 0.3, 0.40 and -0.35 only); restate the account to match the code",
+  "note": "all the listed width and depth figures match the code; the pages record the privy, coop and shed only by which wall and how far out (each a GUESS), never where along it",
   "pages": {},
   "research": "",
-  "rests": [],
-  "verdict": "MISLABELED"
+  "rests": [
+   "0043-firewood-stacks-and-sheds-kigoya.drawing.html:4615b4a128e48e55",
+   "0045-chickens-and-chicken-coops.drawing.html:94909ee119011e40",
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:111af1d739cc6920",
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:2564ad475c02811e",
+   "0047-farm-privies-and-their-night-soil-benjo.drawing.html:2cba396257ae313b"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#shrine corner": {
   "code": "0a306959ba4ff07f",
