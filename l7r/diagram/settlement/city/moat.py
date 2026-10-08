@@ -206,8 +206,9 @@ class MoatMixin:
         # 2026-08-09: on the capital's 66 ft leats the default field-channel frame floated
         # mid-water, reading as detached - a real frame spans abutment to abutment, and the
         # operator walks the crossbeam). With no span given the frame is 20 ft (feature 328: it was a fixed 10.8 px,
-        # about 11 ft at a hamlet's scale and 32 ft at a city's).
-        _sk = max(1.0, span / 10.8)
+        # about 11 ft at a hamlet's scale and 32 ft at a city's), drawn at its span at every scale - no glyph floor widens it
+        # (to scale, never inflated).
+        _sk = span / 10.8
         g = [f'<g transform="translate({x:.0f},{y:.0f}) rotate({rot:.1f})">']
         g.append(f'<rect x="{-4.6 * _sk:.1f}" y="-1.4" width="{9.2 * _sk:.1f}" height="2.8" fill="#8A7050" stroke="{wc}" stroke-width="1.0"/>')  # the lifted board
         g.append(f'<rect x="{-5.4 * _sk:.1f}" y="-2.0" width="2.0" height="4.0" fill="{wc}"/>')  # posts, ON the banks when span is given

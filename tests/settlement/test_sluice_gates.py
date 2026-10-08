@@ -81,3 +81,13 @@ def test_the_gate_s_drawn_box_spans_bank_to_bank() -> None:
     assert _MX_FIXTURE_BOX["sluice_gates"](plain) == (s.px(20.0), 8.4)
     assert _MX_FIXTURE_BOX["sluice_gates"]({"x": 0, "y": 0}) == (10.8, 8.4), "a record from before spans were recorded"
     assert _MX_FIXTURE_BOX["sluice_gates"](wide) == (40.0, 8.4)
+
+
+def test_the_frame_is_drawn_at_its_span_at_every_scale() -> None:
+    """Feature 328 round 2: no glyph floor widens the frame - at 3 ft to the pixel the default 20 ft frame draws its posts 20 ft
+    apart (6.7 px), never the old 10.8 px floor's 32 ft."""
+    s = _s()
+    s.meta(name="Coarse", scale="city", ftpx=3, down_deg=90)
+    s.sluice_gate(400.0, 500.0, rot=0.0)
+    g = next(e for e in s.top if "sluice" in e or "#8A7050" in e)
+    assert 'width="5.7"' in g, "the board 9.2 x (6.67 / 10.8) px"

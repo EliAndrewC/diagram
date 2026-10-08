@@ -32807,6 +32807,22 @@
   ],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#castle bridge at its gate tower": {
+  "code": "31e4a5157d21ab70",
+  "core": "42c4daf6c4994c8d",
+  "date": "2026-10-08",
+  "note": "each castle gate has its own bridge over the castle's moat, so a deck landing at the gate tower's foot is the attested form",
+  "pages": {
+   "0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html": "03efd934d9bc580d"
+  },
+  "research": "6f20c89792cc1b34",
+  "rests": [
+   "0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html:587fa6a20cd5bd0e",
+   "0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html:836a12d1e6e242d6",
+   "0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html:e5a33c63331eac89"
+  ],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#castle moat bridge": {
   "code": "b8610163f28daa9a",
   "core": "42c4daf6c4994c8d",
@@ -32838,14 +32854,6 @@
    "0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html:a45cce441fa38426"
   ],
   "verdict": "DRIFTED"
- },
- "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#castle_towers x bridges: a castle bridge's deck lands at its gate tower's foot": {
-  "code": "42c4daf6c4994c8d",
-  "core": "42c4daf6c4994c8d",
-  "date": "2026-10-08",
-  "note": "castle_towers x bridges: a castle bridge's deck lands at its gate tower's foot",
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#flower bed against the town wall": {
   "code": "b81ec598cf3ee8d2",
@@ -38321,40 +38329,42 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/moat.py::MoatMixin.sluice_gate#a sluice where a channel changes water": {
-  "code": "a6b808fa7a4a071a",
-  "core": "da7cb1a7b96844af",
+  "code": "ec6c40af0444794b",
+  "core": "23a4077eb1a686fb",
   "date": "2026-10-08",
-  "note": "draws at the junction its caller found",
+  "note": "drawn where an offtake feeds a field canal or a drain hands off to its outfall culvert",
   "pages": {
    "0179-water-gates-and-sluices-shuimen.drawing.html": "19011b41723432c2"
   },
   "research": "7abc2922379a319e",
   "rests": [
-   "0179-water-gates-and-sluices-shuimen.drawing.html:067bd7a407956917"
+   "0179-water-gates-and-sluices-shuimen.drawing.html:067bd7a407956917",
+   "0179-water-gates-and-sluices-shuimen.drawing.html:cf888beb9dde091c"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/moat.py::MoatMixin.sluice_gate#board, posts, crossbeam and windlass": {
-  "code": "c70f781a0e658a66",
-  "core": "da7cb1a7b96844af",
+  "code": "89f51404238689f8",
+  "core": "23a4077eb1a686fb",
   "date": "2026-10-08",
-  "note": "board, two posts, crossbeam and drum",
+  "note": "board between two posts, crossbeam over them, drum at the beam's center, one glyph with no open/shut form, drawn at the glyph floor",
   "pages": {
    "0179-water-gates-and-sluices-shuimen.drawing.html": "19011b41723432c2"
   },
   "research": "7abc2922379a319e",
   "rests": [
    "0179-water-gates-and-sluices-shuimen.drawing.html:088c44a5ca24eaf0",
+   "0179-water-gates-and-sluices-shuimen.drawing.html:30803fa2df4a125c",
    "0179-water-gates-and-sluices-shuimen.drawing.html:b61cf64d7fc5dad2",
    "0179-water-gates-and-sluices-shuimen.drawing.html:f46d69cf2f05a9d2"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/moat.py::MoatMixin.sluice_gate#caption": {
-  "code": "17d8f790961fbe7c",
-  "core": "da7cb1a7b96844af",
+  "code": "51ee6ba93d65f7be",
+  "core": "23a4077eb1a686fb",
   "date": "2026-10-08",
-  "note": "the sluice carries its name, 9 pt italic",
+  "note": "the name is drawn beside the sluice; 9 pt italic is purely how it is shown",
   "pages": {},
   "research": "",
   "rests": [
@@ -38363,10 +38373,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/moat.py::MoatMixin.sluice_gate#frame span": {
-  "code": "079a4042cddf9de0",
-  "core": "da7cb1a7b96844af",
+  "code": "66c09231c6f83525",
+  "core": "23a4077eb1a686fb",
   "date": "2026-10-08",
-  "note": "the default frame is a fixed 10.8 px post to post (`_sk=1`) with no `ftpx` term, so it reads about 11 ft at 1 ft/px and about 32 ft at 3 ft/px, against \"A field channel's sluice spans about 16 to 24 ft\"; scale the default by `ftpx` into 16-24 ft, or state the scale it holds at",
+  "note": "`_sk = max(1.0, span / 10.8)` never draws the frame narrower than 10.8 px, so at a city's ~3 ft/px the default px(20.0) (~6.7 px) still draws ~32 ft, outside \"about 16 to 24 ft\", and the recorded `span` (6.7) is not the drawn width; either the claim names the glyph floor as the §72 convention or the default stays 20 ft at every scale",
   "pages": {
    "0179-water-gates-and-sluices-shuimen.drawing.html": "19011b41723432c2"
   },
@@ -41857,6 +41867,18 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/settlement/fields/comb.py::CURVE_LEG_PX#the fallback's curve": {
+  "code": "6ad72d0fb0e7785a",
+  "core": "e3bbe3a7edb35017",
+  "date": "2026-10-08",
+  "note": "the leg length only splits up the drawing of a bend whose rule is the 55-degree turn; no reader can read it off the map as a fact",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0060-field-drains-akusuiro.drawing.html:f2a4519a87491d17"
+  ],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/settlement/fields/comb.py::CombMixin#plumbing": {
   "code": "ea1e33c8f0eb3b72",
   "core": "4f1dfbf4d5c4aedb",
@@ -42424,6 +42446,20 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/settlement/fields/comb.py::_curved_run#curving out of the collector": {
+  "code": "86a5e0a8af334acc",
+  "core": "2cb711891bf760ce",
+  "date": "2026-10-08",
+  "note": "every turn, the first off the exit included, is at most turn_max, so the junction reads as a turn",
+  "pages": {
+   "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
+  },
+  "research": "8ff7ceb036c4856e",
+  "rests": [
+   "0060-field-drains-akusuiro.drawing.html:f2a4519a87491d17"
+  ],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/settlement/fields/comb.py::bead_drowned#beads off water": {
   "code": "38ba4cae627a5212",
   "core": "45952258fa6c8204",
@@ -42471,10 +42507,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/comb.py::outfall_run#drain outfall": {
-  "code": "dac87690b87f52a0",
-  "core": "825aafe7532c8f3f",
+  "code": "9af85a7992ace673",
+  "core": "e7616f5ce5a6ddac",
   "date": "2026-10-08",
-  "note": "the fallback `[start, start + fall*(lead+reach)]` leaves the drain's exit at whatever angle the exit makes with the fall (over 90 degrees whenever the curved run failed `runs_downhill`), against \"The turn is held to 55 degrees or less\"; the fallback should also curve out in turns of at most 55 degrees, or the page should record the exception",
+  "note": "runs on along the exit, curves at most 55 degrees a turn, then goes straight down the fall off the map, and only where the run goes downhill, with the fallback curving from the drain's end",
   "pages": {
    "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
   },
@@ -42483,7 +42519,7 @@
    "0060-field-drains-akusuiro.drawing.html:5430b16d81429901",
    "0060-field-drains-akusuiro.drawing.html:f2a4519a87491d17"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/comb.py::recorded_water#plumbing": {
   "code": "010e6bc1186f28dd",
