@@ -2641,104 +2641,120 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "docs/buildings.md::Sacred features#approach width": {
-  "code": "5f3ce4aff59cf6cf",
-  "core": "11a5b73c9ab6be03",
+ "docs/buildings.md::Sacred features#a fence around the sanctuary alone, as a wealth knob (0223 has a pre-1868 sanctuary fence only where a lord or the shogunate built it)": {
+  "code": "c5e2aa18f9f7304e",
+  "core": "c5e2aa18f9f7304e",
   "date": "2026-10-08",
-  "note": "no page gives a width",
+  "note": "a fence around the sanctuary alone, as a wealth knob (0223 has a pre-1868 sanctuary fence only where a lord or the shogunate built it)",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "docs/buildings.md::Sacred features#approach width": {
+  "code": "7cc9dca699512f04",
+  "core": "c5e2aa18f9f7304e",
+  "date": "2026-10-08",
+  "note": "no cited page gives an approach's width",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sacred features#arch dimensions": {
-  "code": "e30eecb3a4094192",
-  "core": "11a5b73c9ab6be03",
+  "code": "3e8f80727677cfe6",
+  "core": "c5e2aa18f9f7304e",
   "date": "2026-10-08",
-  "note": "no page gives dimensions",
+  "note": "no cited page sizes a torii's beam, posts or clear span",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sacred features#arch in plan": {
-  "code": "a9660fe2ad8e2077",
-  "core": "11a5b73c9ab6be03",
+  "code": "a32dbd2bdde4f0ad",
+  "core": "c5e2aa18f9f7304e",
   "date": "2026-10-08",
-  "note": "arches 12 ft apart",
+  "note": "12 ft pitch as the page's guess inside its 10-13 ft band; the approach runs to the hall",
   "pages": {
    "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html": "e385403eda71f0a2"
   },
   "research": "187ffe8b48289099",
   "rests": [
-   "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:11a53f93479ca7e0"
+   "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:11a53f93479ca7e0",
+   "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:3f3c47b402c4f41d",
+   "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:6dbb45d3631d3bee",
+   "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:6e46a236e3d5c3e9"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sacred features#bare precinct earth": {
-  "code": "850f791d7dd6c795",
-  "core": "11a5b73c9ab6be03",
+  "code": "fede372f2c546b77",
+  "core": "c5e2aa18f9f7304e",
   "date": "2026-10-08",
-  "note": "the record gives no raked or swept precinct",
+  "note": "the page gives no precinct surface and calls raked gravel a guess; plain fill draws no unattested raking",
   "pages": {
    "0224-ground-swept-clear-around-shrines-and-graves.html": "ac45206dd1b05fe0"
   },
   "research": "6466d41a1eb45257",
   "rests": [
+   "0224-ground-swept-clear-around-shrines-and-graves.html:2801a65a88f37333",
    "0224-ground-swept-clear-around-shrines-and-graves.html:55f2714efdadc428",
    "0224-ground-swept-clear-around-shrines-and-graves.html:898072db4155f25a"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sacred features#burial ground beside the precinct": {
-  "code": "f155dd553cad0815",
-  "core": "11a5b73c9ab6be03",
+  "code": "64b71c4b008f9c2d",
+  "core": "c5e2aa18f9f7304e",
   "date": "2026-10-08",
-  "note": "the drawing page records no deviation here: the ground sits in the shrine's yard or apart \"on a knob\", so the claim should cite the question and the form should be rolled",
+  "note": "the shrine doing the parish temple's work is a recorded deviation; the village ground sits in the shrine's yard",
   "pages": {
    "0226-shrines-temples-and-graves-in-each-size-of-settlement.drawing.html": "57917dbe10aef8d5"
   },
   "research": "66dcc8ae512a5c22",
   "rests": [
-   "0226-shrines-temples-and-graves-in-each-size-of-settlement.drawing.html:3cb31f36e31e3029"
+   "0226-shrines-temples-and-graves-in-each-size-of-settlement.drawing.html:3cb31f36e31e3029",
+   "0226-shrines-temples-and-graves-in-each-size-of-settlement.drawing.html:bcddd75affe8ae34"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sacred features#compound shrine arch": {
-  "code": "038e4b9094e97226",
-  "core": "11a5b73c9ab6be03",
+  "code": "037061ced3349ccb",
+  "core": "c5e2aa18f9f7304e",
   "date": "2026-10-08",
-  "note": "\"a torii always drawn\" fixes one form where the page says a compound shrine \"may have no arch at all\"; arch or none should roll like the shared/own knob",
+  "note": "the bullet says \"with its torii nearby\", always, but the page says \"A compound shrine may have no arch at all\" (an arch is a mark of care, not a fixture); arch-or-none should be a knob, as sharing already is",
   "pages": {
    "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html": "e385403eda71f0a2"
   },
   "research": "187ffe8b48289099",
   "rests": [
    "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:42f44bb974a57496",
+   "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:52ba5c2f9e830511",
    "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:5dbe6218f548b7d9"
   ],
   "verdict": "DRIFTED"
  },
  "docs/buildings.md::Sacred features#compound shrine tree": {
-  "code": "fae8e243667df651",
-  "core": "11a5b73c9ab6be03",
+  "code": "ddd4e1c8e8fbf448",
+  "core": "c5e2aa18f9f7304e",
   "date": "2026-10-08",
-  "note": "Ochiba's shrine has no tree, where the page draws \"one modest shrine, in a corner of its grounds beside a tree\"",
+  "note": "the page draws every compound shrine \"in a corner of its grounds beside a tree\" and records only Ochiba's two kami as its deviation; Ochiba's no-tree garden setting is unrecorded, so record it as a DEVIATION there or give the shrine its tree",
   "pages": {
    "0218-the-compounds-own-shrine-yashikigami.drawing.html": "30143bd59a2deac9"
   },
   "research": "433c01774fd3a16c",
   "rests": [
    "0218-the-compounds-own-shrine-yashikigami.drawing.html:08413de30e1b0f4b",
-   "0218-the-compounds-own-shrine-yashikigami.drawing.html:49a9e6e92d9dd874"
+   "0218-the-compounds-own-shrine-yashikigami.drawing.html:169483752db7d7f8",
+   "0218-the-compounds-own-shrine-yashikigami.drawing.html:49a9e6e92d9dd874",
+   "0218-the-compounds-own-shrine-yashikigami.drawing.html:be6049ab7f6ba02d"
   ],
   "verdict": "DRIFTED"
  },
  "docs/buildings.md::Sacred features#grave markers": {
-  "code": "48735a2a1814db19",
-  "core": "11a5b73c9ab6be03",
+  "code": "a8d893c7a153207a",
+  "core": "c5e2aa18f9f7304e",
   "date": "2026-10-08",
-  "note": "the sheet draws neither the \"six small stone jizo\" at the entrance nor \"a taller memorial stone or two\"; \"outside the fence\" when the precinct has none",
+  "note": "\"outside the fence\" assumes a precinct fence that this section's own Fence bullet rules out; the page instead sets markers \"wholly inside the ground's edge\" at ~9 ft spacing, with a taller memorial stone or two and six jizo at the entrance, none of which the bullet draws; the ~2x1 ft size is on no page",
   "pages": {
    "0235-village-burial-grounds-bochi.drawing.html": "fa6fc256f086d28d"
   },
@@ -2746,58 +2762,68 @@
   "rests": [
    "0235-village-burial-grounds-bochi.drawing.html:3cdcbc4280308cb8",
    "0235-village-burial-grounds-bochi.drawing.html:7a977de34ea42248",
-   "0235-village-burial-grounds-bochi.drawing.html:a2b15867d4cd7350"
+   "0235-village-burial-grounds-bochi.drawing.html:a2b15867d4cd7350",
+   "0235-village-burial-grounds-bochi.drawing.html:d222af3b26079b80"
   ],
   "verdict": "DRIFTED"
  },
  "docs/buildings.md::Sacred features#grove": {
-  "code": "f1167209ec34ef36",
-  "core": "11a5b73c9ab6be03",
+  "code": "a8aa419a2e3d57a8",
+  "core": "c5e2aa18f9f7304e",
   "date": "2026-10-08",
-  "note": "the wood \"filling the precinct\" fixes the all-round form; the record ties the wood's sides to the slope (behind, sides or both), and \"the wood stands on only part of the ground\"",
+  "note": "the canopy \"filling the precinct\" fixes one form; the page attests several, set by the ground (all around on a rise or amid paddy, behind the hall, at its sides, behind and sides, a row along the approach), which should be rolled per shrine; the swept clearing is on no page",
   "pages": {
    "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html": "81663f30960fa262"
   },
   "research": "3377b10b4014ee4c",
   "rests": [
-   "0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html:150b6599eb0096ca",
+   "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html:0754094bacfe5b43",
    "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html:11b077a13153a698",
+   "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html:288fa0fbdf7d7371",
    "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html:2ae7827162453585",
-   "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html:e258ed2b31e06420"
+   "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html:e258ed2b31e06420",
+   "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html:e2776b83ca1ea0ab"
   ],
   "verdict": "DRIFTED"
  },
  "docs/buildings.md::Sacred features#grove crown size": {
-  "code": "55054a230bbe3fd4",
-  "core": "11a5b73c9ab6be03",
+  "code": "b5e9af699a292bf4",
+  "core": "c5e2aa18f9f7304e",
   "date": "2026-10-08",
-  "note": "0.75-1.4 x 17 ft, overlapping at the edges, recorded as a GUESS",
+  "note": "0.75-1.4 x 17 ft as the page's guess; overlap allowed, no crown under another",
   "pages": {
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html": "605417d79e0e0561"
   },
   "research": "f1a38c9708a60be9",
   "rests": [
+   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:02347cd7bad4385d",
+   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:9c18680acc256e2e",
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:a40ebd3a6acb1f87",
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:aad44c6751a44f5f",
+   "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:c42d5b3f4f69bf47",
    "0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html:d9d6ec0e3a243d28"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sacred features#grove inside a compound wall": {
-  "code": "a0f0ccc6ef04007c",
-  "core": "11a5b73c9ab6be03",
+  "code": "58fdfbb27514c6ba",
+  "core": "c5e2aa18f9f7304e",
   "date": "2026-10-08",
-  "note": "no page describes such a grove",
+  "note": "the bundle answers it: the 0218 drawing page sets the compound shrine \"beside a tree\", one tree and no grove; label it DEVIATION 0218 drawing (recording it there) or draw the tree",
   "pages": {},
   "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
+  "rests": [
+   "0218-the-compounds-own-shrine-yashikigami.drawing.html:08413de30e1b0f4b",
+   "0218-the-compounds-own-shrine-yashikigami.drawing.html:49a9e6e92d9dd874",
+   "0218-the-compounds-own-shrine-yashikigami.html:b15f43848fbd0e18"
+  ],
+  "verdict": "MISLABELED"
  },
  "docs/buildings.md::Sacred features#hall and dwelling": {
-  "code": "4f4c79cdcfd1d555",
-  "core": "11a5b73c9ab6be03",
+  "code": "cd931f1c8168bc18",
+  "core": "c5e2aa18f9f7304e",
   "date": "2026-10-08",
-  "note": "one roof by default, a separate house as the other form; a writing room for the records",
+  "note": "one roof is the page's default, the separate house is the author's alternative, the kuri began as a kitchen, writing room per the page",
   "pages": {
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html": "5e8ac2e778e0e69b",
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html": "53e6b30a3e84d65c"
@@ -2806,146 +2832,165 @@
   "rests": [
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html:3c6c34f741caa79c",
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html:47b50699d36be383",
+   "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html:7950922e6a0cab34",
    "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html:7d3c2032a9987c33",
-   "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html:2c7b940b515976a0"
+   "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html:2c7b940b515976a0",
+   "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html:8fedbcfb447d4dc1",
+   "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html:95bc797690c7e5d3",
+   "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html:f24d361f0a0d9421"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sacred features#hall and dwelling order": {
-  "code": "b545e3585125ef4a",
-  "core": "11a5b73c9ab6be03",
+  "code": "e53ba8e0b2a96cf0",
+  "core": "c5e2aa18f9f7304e",
   "date": "2026-10-08",
-  "note": "no page bears on it",
+  "note": "the one-roof example gives no end-to-end order",
   "pages": {},
   "research": "",
-  "rests": [],
+  "rests": [
+   "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.drawing.html:3c6c34f741caa79c",
+   "0221-the-country-monk-who-keeps-a-village-shrine-and-their-dwelling-kuri.html:2c7b940b515976a0"
+  ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sacred features#hall shrine ceiling": {
-  "code": "1718ef87c4586524",
-  "core": "11a5b73c9ab6be03",
+  "code": "1f8d562bbe187155",
+  "core": "c5e2aa18f9f7304e",
   "date": "2026-10-08",
-  "note": "the ~36 ft ceiling is over 0116's 3-5 ken hall (~18-30 ft), and 0218 gives no size; cap it at ~30 ft or cite the Fox-lands divergence as CANON",
+  "note": "36 ft exceeds 0116's haiden of \"3 to 5 ken across\" (~18-30 ft); 0218 gives no size; 0116 records no shrine-to-residence ratio, so \"under half a residence block\" rests on nothing cited; cap at ~30 ft or cite 0222's measured 21-35 ft halls",
   "pages": {
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html": "ac75a1e28a361c16",
    "0218-the-compounds-own-shrine-yashikigami.html": "9599070ed9639df8"
   },
   "research": "e5ea23f1a3952728",
   "rests": [
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html:69620b1e79461ecf",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html:810821d06441c9f0",
-   "0218-the-compounds-own-shrine-yashikigami.html:19a8b2635c1b3c76"
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html:d89c58633b72e2d1"
   ],
   "verdict": "DRIFTED"
  },
  "docs/buildings.md::Sacred features#kitchen garden at the dwelling": {
-  "code": "43436ef76805f519",
-  "core": "11a5b73c9ab6be03",
+  "code": "1fe5fd9b94b36b4b",
+  "core": "c5e2aa18f9f7304e",
   "date": "2026-10-08",
-  "note": "0109.drawing answers it (the keeper's plot \"near the hall, on open ground that gets its sun\", a GUESS); the label should be GUESS research/questions/0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html",
+  "note": "no cited page places a garden at a kuri",
   "pages": {},
   "research": "",
-  "rests": [
-   "0109-vegetable-gardens-at-a-samurai-residence-saien.drawing.html:a4c8a8d9311781d9"
-  ],
-  "verdict": "MISLABELED"
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sacred features#modest compound shrine": {
-  "code": "feef19597516bd2e",
-  "core": "11a5b73c9ab6be03",
+  "code": "0ac5d4d505b2bab8",
+  "core": "c5e2aa18f9f7304e",
   "date": "2026-10-08",
-  "note": "a small shrine in a corner of the lot",
+  "note": "a small shrine in the lot; offices kept Inari and Tenjin shrines",
   "pages": {
    "0218-the-compounds-own-shrine-yashikigami.html": "9599070ed9639df8"
   },
   "research": "ba81c28e1330864c",
   "rests": [
-   "0218-the-compounds-own-shrine-yashikigami.html:834a4967c2ef0c57",
+   "0218-the-compounds-own-shrine-yashikigami.html:28d396983ee76947",
+   "0218-the-compounds-own-shrine-yashikigami.html:925ed990bebbc1c3",
+   "0218-the-compounds-own-shrine-yashikigami.html:b08741209bdc6fca",
    "0218-the-compounds-own-shrine-yashikigami.html:b15f43848fbd0e18"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sacred features#more than one kami in a hall": {
-  "code": "cc746a2b291fcf4b",
-  "core": "11a5b73c9ab6be03",
+  "code": "fb945954775029fc",
+  "core": "c5e2aa18f9f7304e",
   "date": "2026-10-08",
-  "note": "0218.drawing records only Ochiba's two-kami shrine, not Hayakawa's; side-by-side altars are attested in 0222, which the pointer should name",
+  "note": "the page records a second kami only at Ochiba, rolled between one hall (aidono) and a shrine of its own; Hayakawa's fixed Ebisu altar is not recorded, so roll it the same way or record it as a deviation",
   "pages": {
    "0218-the-compounds-own-shrine-yashikigami.drawing.html": "30143bd59a2deac9"
   },
   "research": "433c01774fd3a16c",
   "rests": [
-   "0218-the-compounds-own-shrine-yashikigami.drawing.html:be6049ab7f6ba02d",
-   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:338c2d041cf07e0d",
-   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:8516c3ef6de75ad2"
+   "0218-the-compounds-own-shrine-yashikigami.drawing.html:be6049ab7f6ba02d"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "DRIFTED"
  },
  "docs/buildings.md::Sacred features#precinct unenclosed": {
-  "code": "8075a2d205eb5a7d",
-  "core": "11a5b73c9ab6be03",
+  "code": "0c4d23208a92db87",
+  "core": "c5e2aa18f9f7304e",
   "date": "2026-10-08",
-  "note": "no village precinct was found fenced whole",
+  "note": "no village precinct found fenced whole; the arch and the wood mark the ground",
   "pages": {
    "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html": "81663f30960fa262"
   },
   "research": "3377b10b4014ee4c",
   "rests": [
+   "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html:1e26d7114bc34b25",
+   "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html:3025ee24804583c1",
    "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html:511a5d7ea05ca39e",
    "0223-shrine-woods-and-fences-chinju-no-mori-tamagaki.html:d284e5af358a3a1f"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sacred features#privy at the dwelling": {
-  "code": "e9deeac237e86fa5",
-  "core": "11a5b73c9ab6be03",
+  "code": "e0c0b15fc1a37c47",
+  "core": "c5e2aa18f9f7304e",
   "date": "2026-10-08",
-  "note": "no page bears on it",
+  "note": "no cited page places a privy",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sacred features#sanctuary": {
-  "code": "3659cbc4d09cb298",
-  "core": "11a5b73c9ab6be03",
+  "code": "961f4185a6983758",
+  "core": "c5e2aa18f9f7304e",
   "date": "2026-10-08",
-  "note": "one bay, ~6 ft square, at the rear on the axis",
+  "note": "one bay ~6 ft (1789 Naose example), at the rear on the worship hall's axis",
   "pages": {
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html": "4eb9d08db97f2235"
   },
   "research": "704fffd977ae2d80",
   "rests": [
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:031ae913ec9c4ff0",
+   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:45ce51e0ab9fc655",
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:646f71e0cff55d3c",
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:8645ca661afbf310"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sacred features#shrine vermilion edging": {
-  "code": "acf5641cd9b77a15",
-  "core": "11a5b73c9ab6be03",
+  "code": "d94361e12e8168be",
+  "core": "c5e2aa18f9f7304e",
   "date": "2026-10-08",
-  "note": "shrine color",
+  "note": "a stroke color, purely how the shrine is shown",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sacred features#the whole sacred complex held to at most ~2/3 of the residence": {
-  "code": "0a69737b6e0b05a0",
-  "core": "11a5b73c9ab6be03",
+  "code": "fea1f4fd6e3ae8c8",
+  "core": "c5e2aa18f9f7304e",
   "date": "2026-10-08",
-  "note": "no page bears on it",
+  "note": "0116 records no rank for a compound's shrine",
   "pages": {},
   "research": "",
-  "rests": [],
+  "rests": [
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html:d89c58633b72e2d1"
+  ],
   "verdict": "IN-STEP"
  },
- "docs/buildings.md::Sacred features#workshop colonnade": {
-  "code": "0369c4d4481cbe13",
-  "core": "11a5b73c9ab6be03",
+ "docs/buildings.md::Sacred features#torii top beam 1.5 ft deep": {
+  "code": "c5e2aa18f9f7304e",
+  "core": "c5e2aa18f9f7304e",
   "date": "2026-10-08",
-  "note": "no page bears on it",
+  "note": "torii top beam 1.5 ft deep",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "docs/buildings.md::Sacred features#workshop colonnade": {
+  "code": "e05cf1add5d83957",
+  "core": "c5e2aa18f9f7304e",
+  "date": "2026-10-08",
+  "note": "no cited page describes a shrine craft area",
   "pages": {},
   "research": "",
   "rests": [],
