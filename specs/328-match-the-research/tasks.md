@@ -934,7 +934,7 @@ before the persimmon is seated - and is E3 by FR-003. Wave 22 takes row 429; the
 
 ## Phase 24 - wave 23 (amendment 22): wave 22's found rows, claimed
 
-Wave 22's seven found rows tiered E0 by a fresh reader (T71a, `audit/t71a-out.jsonl`); two pairs are duplicates. The well row is
+Wave 22's seven found rows tiered E0 by a fresh reader (six stand; see below) (T71a, `audit/t71a-out.jsonl`); two pairs are duplicates. The well row is
 withdrawn as a drift: 0196's "about 19 ft across" is the curb `well()` draws at a 9.36 ft radius; the 24.75 ft is the roof square,
 which the page does not size. The street-facing claim stays E3 as tiered.
 The line's share and slack (`seat_rows#farms to a street`, NEEDS-RESEARCH) is E4, not E0 (amendment 22 round 1): its claim's
