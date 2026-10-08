@@ -1497,6 +1497,8 @@ quick:           ## [tests] tier 2: lint, types and every test that rolls no map
 	@python3 scripts/gates/check-house-style-delta.py .
 	@: "(GUARD_EDIT_OK: feature 250 D14 - a research question this change touched stays under the size cap)"
 	@python3 scripts/gates/check-question-size.py
+	@: "(GUARD_EDIT_OK: feature 328 - the 1,000-line bar in quick too: three of batch 2's gate runs failed static on it, each a file the session had just grown, found minutes into the gate rather than seconds into quick)"
+	@python3 scripts/gates/check-file-scale.py .
 	@: "(GUARD_EDIT_OK: feature 171 - capture whether testmon was warm BEFORE the run, so the ratchet below judges like with like)"; \
 	: "(GUARD_EDIT_OK: the GM's ruling 2026-09-27 - and not tooling: the tooling tests that live OUTSIDE tests/tooling (five tests/tools modules) leave quick with the tree; see QUICK_TREE)"; \
 	warm=$$([ -f .testmondata ] && echo yes || echo no); start=$$(date +%s); $(EXHAUSTIVE_ENV) python3 -m pytest -n $(XDIST_WORKERS) --dist worksteal $(TESTMON) -q --no-cov -x --ff -m "not rolls_map and not tooling" $(TIER_SELECT) $(QUICK_TREE); ec=$$?; \
