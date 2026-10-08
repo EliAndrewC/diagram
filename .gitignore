@@ -73,37 +73,37 @@ __pycache__
 #
 # The ONLY renders still tracked are `tests/fixtures/*-red.svg`: hand-broken by a person to prove a
 # check fires, with no generator anywhere. That is the whole exception list now.
-.claude/skills/diagram/pool/*/*/*.svg
-.claude/skills/diagram/pool/*/*/*.png
+pool/*/*/*.svg
+pool/*/*/*.png
 # ...except the hand-drawn Mode A plans, which no generator can rebuild (note 2 above). ONE LINE PER
 # HAND-DRAWN TIER (feature 254): a building type declares its tier hand-drawn in
 # `l7r/diagram/buildings/types.json`, and `tests/test_building_types.py` holds this file to that
 # declaration - a tier un-ignored here that is not declared, or declared and not here, fails the gate.
 # The two maps in the magistracy tier whose gen WRITES the svg are the declared generated exceptions,
 # re-ignored by name below the tier's line.
-!.claude/skills/diagram/pool/magistracies/*/*.svg
-.claude/skills/diagram/pool/magistracies/county-magistracy-example/county-magistracy-example.svg
-.claude/skills/diagram/pool/magistracies/ochiba-roundtrip-test/ochiba-roundtrip-test.svg
-!.claude/skills/diagram/pool/country-shrines/*/*.svg
-.claude/skills/diagram/pool/*/*/*.html
+!pool/magistracies/*/*.svg
+pool/magistracies/county-magistracy-example/county-magistracy-example.svg
+pool/magistracies/ochiba-roundtrip-test/ochiba-roundtrip-test.svg
+!pool/country-shrines/*/*.svg
+pool/*/*/*.html
 # A hand-drawn sheet's render-cache stamp (its svg is tracked, so the stamp sits beside it - render_cache._sidecar).
-.claude/skills/diagram/pool/*/*/.*.render-cache
-.claude/skills/diagram/legacy-hand-authored-pool/*/*/*.svg
-.claude/skills/diagram/legacy-hand-authored-pool/*/*/*.png
-.claude/skills/diagram/legacy-hand-authored-pool/*/*/*.html
-.claude/skills/diagram/wip/*.html
-.claude/skills/diagram/dev/placement-stages/
-.claude/skills/diagram/pool/index.html
+pool/*/*/.*.render-cache
+legacy-hand-authored-pool/*/*/*.svg
+legacy-hand-authored-pool/*/*/*.png
+legacy-hand-authored-pool/*/*/*.html
+wip/*.html
+dev/placement-stages/
+pool/index.html
 
 # THE RESEARCH RECORD'S BUILT PAGES (feature 301, GM 2026-10-01: "we should definitely stop checking the assembled
 # files into source control"). The record is its questions under research/questions/ and the registry's fragments under
 # research/sources/ (feature 303); `make record` builds the site from them into research/site/, and render-sync builds it
 # on the main checkout as it does the map renders. A page file at the record's root, and the glossary script, are what
 # the assembly wrote before 301 - ignored so a stale copy left in a working tree is never committed again.
-.claude/skills/diagram/research/site/
-.claude/skills/diagram/research/.site-*/
-.claude/skills/diagram/research/*.html
-.claude/skills/diagram/research/assets/glossary.js
+research/site/
+research/.site-*/
+research/*.html
+research/assets/glossary.js
 
 # Spoiler-sensitive /dream scenes: the local tier is the GM's disk only, never committed.
 # The public tier (.claude/skills/dream/pool/) stays tracked; see that skill's SKILL.md.
@@ -123,12 +123,12 @@ top_up-improvement.md
 # `wip/shiro_daika/` package, its render moved one directory down, and these four patterns
 # silently stopped matching - 8.7 MB of derived PNG/SVG/JSON/HTML landed in a commit before
 # the settlement-review caught it. The `**` forms cover any depth wip/ grows to next.
-.claude/skills/diagram/wip/*.svg
-.claude/skills/diagram/wip/**/*.svg
-.claude/skills/diagram/wip/*.png
-.claude/skills/diagram/wip/**/*.png
-.claude/skills/diagram/wip/*.json
-.claude/skills/diagram/wip/**/*.json
+wip/*.svg
+wip/**/*.svg
+wip/*.png
+wip/**/*.png
+wip/*.json
+wip/**/*.json
 
 # Spec-kit's ACTIVE-FEATURE pointer - per-workspace state, never shared. It was tracked until
 # 2026-08-16, when a peer session's /speckit-specify commit repointed it mid-chain and the merge
@@ -149,9 +149,9 @@ top_up-improvement.md
 # feature 130: the AWS/GitHub credentials the CodeBuild dispatcher reads (see development-secrets.ini.example)
 development-secrets.ini
 # feature 129: raw cProfile output stays out of this repository (FR-011a); the derived table is committed
-.claude/skills/diagram/dev/perf-raw/
-.claude/skills/diagram/wip/*.html
-.claude/skills/diagram/wip/**/*.html
+dev/perf-raw/
+wip/*.html
+wip/**/*.html
 # the prefix reservation ledger (feature 265 FR-010): host state shared by every clone, never committed
 .specify/prefixes.jsonl
 # feature 288: the sources-consulted ledger and the page cache keyed by URL - host state under the MIRROR's .specify/,
@@ -162,3 +162,13 @@ development-secrets.ini
 # its count of bytes committed and not yet pushed
 .specify/source-archive/
 .specify/source-archive.unpushed
+
+# The project's own caches and staging (from the old skill directory's .gitignore, feature 329): each matches at any depth.
+.gencache/
+.mapcheck.json
+# pytest-testmon: per-clone change-selection database (T28)
+.testmondata*
+.dmypy.json
+.firing-journal/
+# a roll's staging directory beside its map (hamletgen.driver.stage_for, feature 261): promoted or removed, never tracked
+.roll-*/
