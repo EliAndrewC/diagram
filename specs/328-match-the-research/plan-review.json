@@ -1,58 +1,81 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "f75344a1275b5101fefcaaef169d2687e635cc2be134617a9200112a70afa8bc",
+ "plan_sha256": "4afbb485e7ce99af67896b8e014e86319bcfc2e516ec659dd71f6abea4499d15",
  "reviewed": "2026-10-08",
  "declared": "spec-fidelity",
  "decisions": [
   {
    "id": "W39-1 one crown band",
-   "summary": "CROWN_S = (0.75, 1.4) replaces the 0.72-1.05 / quarter-of-the-time 1.25-1.7 split for the windbreak, dooryard and mixed broadleaf clumps (conifer-led clumps keep LESSER_BROADLEAF_S)",
+   "summary": "CROWN_S = (0.75, 1.4) for the windbreak, dooryard and mixed broadleaf clumps",
    "class": "within",
-   "why": "0080 drawing: 'each crown is drawn between 0.75 and 1.4 times that' - the row's fix, literally; the request is that the implementation match the referenced research"
+   "why": "Unchanged since round 1: 0080 drawing, 'each crown is drawn between 0.75 and 1.4 times that'."
   },
   {
    "id": "W39-2 no conifer inflation",
-   "summary": "the conifer x1.15 dropped from the clump crown, the belt row base (_belt_ranks) and the prefilter pad; RANK_CONIFER_S (1.0, 1.1) now inside the page's band",
+   "summary": "the conifer x1.15 dropped from the clump crown, _belt_ranks and the prefilter pad",
    "class": "within",
-   "why": "0080 drawing: 'One crown size serves the hill woods and the windbreak's cedars alike'; the 15% is on no page; the pad follows the new maximum so the prefilter still reaches every crown"
+   "why": "Unchanged since round 1: 0080 drawing, 'One crown size serves the hill woods and the windbreak's cedars alike'."
   },
   {
    "id": "W39-3 every crown round the persimmon",
-   "summary": "the yard-persimmon keep-out (_trees) applied to every crown kind, not the conifer alone",
+   "summary": "the yard-persimmon keep-out applied to every crown kind",
    "class": "within",
-   "why": "0046 drawing: 'the grove's trees give way round it' - all the grove's trees, which the old conifer-only rule did not do"
+   "why": "Unchanged since round 1: 0046 drawing, 'the grove's trees give way round it'."
   },
   {
-   "id": "W39-4 mixed broadleaf belt without bamboo (plan.md Scope, as written)",
-   "summary": "plan.md's Wave 39 Scope reads \"0072's mixed broadleaf belt without bamboo\"; the code at 41205995e instead KEEPS the bamboo with a GUESS claim on 0075",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "As written, the plan drops something a referenced page says is drawn: 0075 drawing, 'About one plant in twelve of a windbreak clump is bamboo ... It holds in the farm's grove and in the village's shelter belt alike', with no exception for either belt form. 0072 is SILENT on bamboo in the mixed broadleaf wood. It does not exclude it, and the windbreak modal written from it says 'with a little bamboo between the crowns'. Dropping it would trade one unclaimed line for a new drift against 0075, which goes against the request that the implementation match the research. The executed resolution (keep GROVE_BAMBOO_SHARE for the mixed broadleaf belt, claimed GUESS on 0075, which labels the share its own guess) is the faithful one and one of the two the row's own fix offered. plan.md must say that, and tasks.md Phase 40, T103 and the kuwabata occasion line must say it too; the glyph-check brief otherwise says 'with no bamboo'."
+   "id": "W39-4 mixed broadleaf belt's bamboo kept, claimed GUESS on 0075",
+   "summary": "plan.md Scope now reads 'the mixed broadleaf belt's crown band (its bamboo kept, claimed GUESS on 0075 ...)'; tasks.md Phase 40's row, T103 and the kuwabata occasion line say the same",
+   "class": "within",
+   "why": "Round 1's item is met (113da7b58). plan.md Scope, tasks.md Phase 40's third row, T103 and the kuwabata glyph occasion ('its bamboo kept (0075)') now all say the bamboo is kept and claimed on 0075 drawing, whose bullet reads 'About one plant in twelve of a windbreak clump is bamboo. The share is a GUESS ... It holds in the farm's grove and in the village's shelter belt alike'. 'no bamboo' survives nowhere in the plan or the occasions. The code is unchanged on this point since round 1 (the mixed form's c_th stays b_th, the bamboo share untouched). With the plan saying what the page says, it is no longer a narrowing."
   },
   {
    "id": "W39-5 two LESSER_BROADLEAF_S rows closed E0",
-   "summary": "LESSER_BROADLEAF_S#lesser broadleaf size and _draw_grove#lesser broadleaf crown size LESSER_BROADLEAF_S 0.6-0.85 closed as fixed in wave 9",
+   "summary": "closed as fixed in wave 9",
    "class": "within",
-   "why": "verified in the clone: LESSER_BROADLEAF_S = (0.75, 0.85) and both claims cite 0080's 0.75-1.4; the rows' fixes are already in the code; impl-drift re-checks them at T104"
+   "why": "Unchanged since round 1."
   },
   {
    "id": "W39-6 occasions",
-   "summary": "glyph-redrawn windbreak on inashiro and kuwabata, copse on kuwabata",
+   "summary": "glyph-redrawn windbreak on inashiro and kuwabata, copse on kuwabata; tasks.md's Occasions adds homestead grove on kashikawa (the farm groves and the windbreak mix's 48%-of-the-crowns fix)",
    "class": "within",
-   "why": "the review machinery's own occasions for redrawn crowns; enforcement, not scope"
+   "why": "The added occasion is enforcement of the request (the farm groves are redrawn on every map). Not a finding: plan.md's Occasions line still lists three and its Verification says 'the four tests' and 'the three glyph checks' - now five tests and four checks; tasks.md's Occasions section, which the machinery reads, carries all four."
   },
   {
    "id": "W39-7 verification",
-   "summary": "four tests red on the old code, impl-drift on the touched claims, the gate, three glyph checks, the timing pair",
+   "summary": "the tests red on the old code, impl-drift on the touched claims, the gate, the glyph checks, the timing pair",
    "class": "within",
-   "why": "checks that the requested match holds; the tests fail only when the page's band or the persimmon rule is absent"
+   "why": "Unchanged since round 1; enforcement of the requested match."
   },
   {
    "id": "W39-8 unpushed waves 9-38",
    "summary": "held under condition (6) as at wave 38's close; the pair owed",
    "class": "within",
-   "why": "restates the standing condition; decides nothing new"
+   "why": "Unchanged since round 1; restates the standing condition."
+  },
+  {
+   "id": "W39-9 windbreak conifers 48% of the crowns",
+   "summary": "impl-drift round 1: c_th = b_th + 0.48 * (1 - b_th), so the 0.48 is of the crowns drawn, not of all items including bamboo; test_a_windbreak_draws_about_half_its_crowns_conifer",
+   "class": "within",
+   "why": "0072's figure is a tree count ('735 of them, 48%, were cedar' of 1,542 trees at least 10 cm across), so the share is of the crowns, and the old rule drew about 52%. The fix brings the code to the page. The test passes on the clone (make test-file, 2026-10-08)."
+  },
+  {
+   "id": "W39-10 claim relabels",
+   "summary": "the lesser crown over an earlier conifer relabeled CONVENTION -> GUESS on 0080; the belt row conifer's wellhead keep-out claimed on 0072 drawing",
+   "class": "within",
+   "why": "Claim lines only. 0072 drawing: 'A wellhead seated inside a belt, or a lane crossing it, removes the clumps around it'."
+  },
+  {
+   "id": "W39-11 windbreak modal wording",
+   "summary": "About: the Ryukyu belt 'rings a settlement on the west, the south and the east'; Depiction: 'a Ryukyu belt rings its settlement'; the mixed broadleaf modal's 'unbroken except where a lane crosses it'; the Toyama street village (0033) added to the nucleated guess and its Entry; the village wood 'at or somewhat above' a typical surviving one; Castanopsis glossary term dropped with its note line commented out",
+   "class": "within",
+   "why": "Each is the page's own wording: 0072, 'The village belt rings the settlement on the west, the south and the east' and 'still rings its settlement'; 0072 drawing, 'Where a lane crosses the belt, the planting resumes on both sides of it'; 0033, 'On the Toyama plain, a street village's farms kept windbreaks as the plain's scattered farms did'. My round-1 wording 'rings a whole settlement' overstated 0072 (a wood closes the north), and the About line now follows the page."
+  },
+  {
+   "id": "W39-12 the belt's west arm on inashiro",
+   "summary": "found row filed in audit/found-wave39.jsonl, provisional E3, with the bisect; not fixed in this wave",
+   "class": "within",
+   "why": "Filing a found row for tiering and its place in the run is the program's own order (FR-006), as at W38-gate; the row itself notes 0072 allows one side or two, so it decides nothing about what the map draws."
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }

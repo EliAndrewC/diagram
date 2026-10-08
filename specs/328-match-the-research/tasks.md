@@ -1285,7 +1285,8 @@ impl-drift (round 1) on `groves.py`: the windbreak conifer share DRIFTED (0.48 o
 crown) - fixed, `c_th = b_th + 0.48 * (1 - b_th)`, `test_a_windbreak_draws_about_half_its_crowns_conifer` (0.463 drawn, 0.506
 under the old rule); the lesser crown over a conifer MISLABELED - relabeled GUESS on 0080; the belt's wellhead keep-out
 UNCLAIMED - claimed on 0072 drawing. The glyph check of the windbreak (PASS) found the 0080 drawing page's measured
-median for Inashiro's belt stale: 8.7 ft now, on 113 crowns (it said 7.6). Its F1, the belt's west arm gone since wave 9, is
+median for Inashiro's belt stale: 8.7 ft now, on the 113 crowns inside the belt's outline (measured 2026-10-08 from
+the manifest's `tree_crowns`; it said 7.6). Its F1, the belt's west arm gone since wave 9, is
 filed in `audit/found-wave39.jsonl` with the bisect.
 
 Tests: `test_every_grove_crown_is_drawn_in_the_woods_one_band` (windbreak, dooryard, mixed broadleaf) and

@@ -344,6 +344,7 @@ class GrovesMixin:
             no row conifer in the marsh - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html
             crowns out of the plots' sun - research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html
             crown over no roof - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html
+            row conifer size - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: RANK_CONIFER_S, 1.0 to 1.1 of the mean radius, inside the page's 0.75 to 1.4
             row conifer off a wellhead - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: no crown round a wellhead in a belt (`_canopy_keepouts`' circles)
             crown under no crown - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html
         """
@@ -717,7 +718,7 @@ class GrovesMixin:
         are seeded by position (stable across regenerations). Canopy count scales with footprint area.
 
         Research:
-            windbreak conifer share - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.html: 48% of a windbreak's crowns cedar (the 1987 Kashima count), the dominant tree (Takehara)
+            windbreak conifer share - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.html: 48% of a windbreak's crowns cedar (the 1987 Kashima count), the dominant tree (Takehara) - rolled of the crowns; drawn 47.9% on Kashikawa's farm groves (555 of 1158, glyph-check 2026-10-08), the filters taking about as many of each
             crowns per clump - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: one crown per `GROVE_CROWN_AREA` of clump (48 sq px at the town grain), rounded, with no floor and no cap
             bamboo under the crowns - research/questions/0075-bamboo-groves-chikurin.drawing.html: 8% of a windbreak clump,
                 inked only in the gaps; none in the dooryard or alder mixes
@@ -733,7 +734,7 @@ class GrovesMixin:
             alder in the marsh - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html
             mixed broadleaf belt - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: rounded broadleaf crowns in the woods' size mix, no conifer
             mixed broadleaf belt's bamboo - GUESS research/questions/0075-bamboo-groves-chikurin.drawing.html: the windbreak's one in twelve, the page's guess, which it holds in the village's shelter belt as in the farm's grove
-            every crown gives way round a persimmon - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html: every crown refused under a yard persimmon's crown, the grove giving way round it
+            every crown gives way round a persimmon - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html: every crown refused where it would lie over a yard persimmon's crown (`over_a_conifer`: centers nearer than CROWN_OVER_SHARE of the two radii), the grove giving way round it; an edge may still reach a few feet under
             lesser crown over an earlier stand's conifer - GUESS research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: a lesser crown over an earlier stand's conifer is not drawn - the stand loses that tree - read from the page's canopy-layer rule, which speaks of a crown's center, not its edge
             clump glyph - CONVENTION: one disc per crown, conifers dark and painted last, no trunks
             conifer-led clump's lesser share - GUESS research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: a conifer-led clump throws LESSER_ROLL_SHARE (0.1) of its crowns as lesser broadleaf; the page names the lesser broadleaf, the share a guess

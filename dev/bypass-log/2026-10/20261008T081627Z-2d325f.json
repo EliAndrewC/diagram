@@ -1,0 +1,6 @@
+{
+  "utc": "20261008T081627Z",
+  "guard": "pair-hooks",
+  "what": "review prerequisites",
+  "reason": "REVIEW_PREREQ_OK: the after side is the pool folder, regenerated with its png and html after the green gate; the snapshot's clone side lacks the renders"
+}
