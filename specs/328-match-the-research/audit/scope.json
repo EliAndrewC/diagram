@@ -593,7 +593,7 @@
  "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_source#pond feeder width": "kept",
  "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_source_channel#feed recorded width": "kept",
  "l7r/diagram/settlement/fields/comb.py::channel_end_on_stream#mouth reaches the water": "kept",
- "l7r/diagram/settlement/fields/comb.py::outfall_run#drain outfall": "kept",
+ "l7r/diagram/settlement/fields/comb.py::outfall_run#drain outfall": "deferred",
  "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._plot_pond#field pond glyph": "kept",
  "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin.crescent_pond#placement keep-out": "deferred",
  "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin.pond#pond feeder width": "kept",

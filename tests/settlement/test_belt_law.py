@@ -71,6 +71,12 @@ def test_a_way_crossing_the_opening_face_to_face_is_a_crossing_not_a_hole() -> N
     assert not _read(_belt(skip=(601.0, 639.0)), ways=lane).holes()
     assert all(d is None or d >= MIN_BELT_DEPTH_FT for d in _read(_belt(skip=(601.0, 639.0)), ways=lane).depths())
     assert _read(_belt(skip=(520.0, 720.0)), ways=lane).holes(), "an opening wider than the crossing explains is a hole"
+    # feature 328 (0072, "as written"): two lanes through one opening each excuse 30 ft either side, no more - the bare
+    # stretch between them is a hole once it is past twice that; the span lowest-to-highest once excused it all
+    two = [[[545.0, 400.0], [545.0, 700.0]], [[695.0, 400.0], [695.0, 700.0]]]  # each 25 ft in from its crown, 150 ft apart
+    assert _read(_belt(skip=(521.0, 719.0)), ways=two).holes(), "150 ft bare between two lanes is a hole"
+    near = [[[590.0, 400.0], [590.0, 700.0]], [[650.0, 400.0], [650.0, 700.0]]]  # 30 ft in from each crown, 60 ft apart
+    assert not _read(_belt(skip=(561.0, 669.0)), ways=near).holes(), "two lanes 60 ft apart stay within their allowances"
 
 
 def test_the_stretch_between_two_groups_no_house_stands_before_is_a_run_break() -> None:

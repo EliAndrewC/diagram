@@ -8454,7 +8454,7 @@
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
   "wave": "50",
-  "scope": "kept"
+  "scope": "deferred"
  },
  {
   "key": "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin._plot_pond#field pond glyph",
@@ -8554,7 +8554,7 @@
   "flag": "",
   "found": "T122a (the fresh reader of wave 47's found rows)",
   "tier_as_ranked": "E2",
-  "wave": "",
+  "wave": "52",
   "scope": "kept"
  },
  {
@@ -9872,10 +9872,10 @@
   ],
   "after": [],
   "flag": "",
-  "found": "batch 1 glyph-check wet paddy round 3 F1 (questionable)",
+  "found": "batch 2 glyph-check wet paddy on sawada, last round's F1",
   "tier_as_ranked": "E2",
   "moved": "T119a (fresh reader): tiered by its work - Not fixed: mark_low (tint.py:83-87) samples by distance, 'if d <= 0.25 * plot_across and R.random() < FLOOD_SAMPLE', so a plot touching the drain only at a corner is drawn wet; basin_rank already reads ON as fronting (:61-65: 'ON the collector means FRONTING it, not touching it at a corner ... a real length of its boundary runs along it'). 0007 drawing: 'A comb field gives each plot of its lowest ",
-  "wave": "",
+  "wave": "51",
   "scope": "kept"
  },
  {

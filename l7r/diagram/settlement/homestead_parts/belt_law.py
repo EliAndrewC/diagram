@@ -311,14 +311,19 @@ class BeltReading:
 
         Research:
             planting resumes beside a lane - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:
-                no more than 30 ft of opening either side of the way
+                no more than 30 ft of opening either side of the way, each way's own (two ways no more than twice that apart)
         """
         band = [*self._near(self.bin(a)), *self._near(self.bin(b))]
         lo, hi = min(band) + self.r, max(band) - self.r
         cross = [(u, v) for u, v in self.ways if a < v < b and lo < u < hi]
         if not cross or max(u for u, _v in cross) - min(u for u, _v in cross) < 0.5 * (max(band) - min(band) - 2 * self.r):
             return False
-        return min(v for _u, v in cross) - a <= _BELT_GAP_FT and b - max(v for _u, v in cross) <= _BELT_GAP_FT
+        vs = sorted(v for _u, v in cross)
+        # EACH WAY ITS OWN ALLOWANCE (feature 328; 0072 holds the hole rule at a lane "as written"): two ways through one
+        # opening excused only `_BELT_GAP_FT` either side of each - the bare stretch between them no more than twice that,
+        # where the span from the lowest crossing to the highest once excused any width between
+        between = max((q - p for p, q in zip(vs, vs[1:], strict=False)), default=0.0)
+        return vs[0] - a <= _BELT_GAP_FT and b - vs[-1] <= _BELT_GAP_FT and between <= 2 * _BELT_GAP_FT
 
 
 def reading_of(m: Any) -> BeltReading | None:

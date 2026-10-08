@@ -401,6 +401,7 @@
  "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin.pond#pond feeder width": "E1",
  "l7r/diagram/settlement/fields/grain.py::WINTER_CROP#winter-crop weights": "E2",
  "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._landuse_repaint_leftovers#leftovers as standing rice": "E0",
+ "l7r/diagram/settlement/homestead_parts/belt_law.py::BeltReading._crossed#a crossing's bare reach": "E2",
  "l7r/diagram/settlement/homestead_parts/belt_law.py::BeltReading.holes#continuous planting": "E0",
  "l7r/diagram/settlement/homestead_parts/belt_law.py::MIN_BELT_DEPTH_FT#least belt depth": "E1",
  "l7r/diagram/settlement/homestead_parts/belt_law.py::the village belt#its west arm on inashiro": "E0",
@@ -519,5 +520,6 @@
  "l7r/diagram/waterfields/ring_rules.py::MAX_STEPS#sideways steps": "E1",
  "l7r/diagram/waterfields/tint.py::judge_tint#one wet plot at least": "E2",
  "l7r/diagram/waterfields/tint.py::judge_tint#tint reads as a basin": "E2",
+ "l7r/diagram/waterfields/tint.py::mark_low#wet plots on the drain": "E2",
  "research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html::the belts' measured figures#belt arcs": "E1"
 }
