@@ -306,5 +306,16 @@
   "value": 0,
   "unit": "plots",
   "method": "the round-2 check sampled 87 pixel lines from the plots within 76 ft of the drain's end to the drain; every one crossed a bund; three plots stand within 76 ft now"
+ },
+ "wave41-perf-pair-quiet": {
+  "quantity": "328-start (bb2471b36, wave 40's close) against 328-end (wave 41: the mouth's tolerance, the feed's recorded width), back to back on a host under load 1.0; totals",
+  "value": {
+   "10hh": 0.0,
+   "20hh": 1.2,
+   "40hh": 0.6
+  },
+  "unit": "% end vs start",
+  "observed": "2026-10-08",
+  "source": "dev/perf-log/20261008T095827Z-328-start-perfbase.json and 20261008T100133Z-328-end-digram-backlog.json; a first pair at 09:41/09:44 (load near 2.8 from a peer session) read +11.7% at 40 hh, its growth in homesteads, windbreak and web - stages wave 41 does not change - and was discarded"
  }
 }

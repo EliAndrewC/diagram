@@ -1,0 +1,62 @@
+{
+  "band": 1,
+  "base": {
+    "commit": "bb2471b36",
+    "label": "328-start",
+    "utc": "20261008T095827Z"
+  },
+  "binding": "ea2727a6e8dba2676a9f872264f761de2ac1b265ea63b7b36c57293e1a944679",
+  "end": {
+    "commit": "d7518d4f2",
+    "label": "328-end",
+    "utc": "20261008T100133Z"
+  },
+  "environment": "local",
+  "feature": "328-match-the-research",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "8d3395e5-fe32-4f85-9c89-80c344d2ac1a",
+    "utc": "20261008T100424Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": 0.0,
+          "39": 0.0,
+          "4": -2.9,
+          "47": 3.1
+        },
+        "total_pct": 0.0
+      },
+      "20": {
+        "seeds": {
+          "25": 1.6,
+          "39": 0.0,
+          "4": 1.3,
+          "47": 1.7
+        },
+        "total_pct": 1.2
+      },
+      "40": {
+        "seeds": {
+          "25": 0.0,
+          "39": 0.0,
+          "4": 0.6,
+          "47": 1.6
+        },
+        "total_pct": 0.6
+      }
+    },
+    "seeds": {
+      "25": 0.0,
+      "39": 0.0,
+      "4": 0.0,
+      "47": 0.0
+    },
+    "total_pct": 0.0
+  },
+  "note": "Headline +0.0% total and per seed; the largest leg is +1.2% (20 hh), and the only seed above the 1.7% floor is 10hh seed 47 at +3.1%, which is 3.2->3.3s, i.e. one 0.1s rounding step (stage delta homesteads +0.06s). Every stage grows by 0.08s or less (homesteads +0.03..0.08, field +0.06 on 40hh s47). Placer calls and house counts are identical in all 12 runs. The l7r diff that bb2471b36..d7518d4f2 executes is in comb.py (field stage): a mouth tolerance of w/2 instead of 13 px and the feed's recorded width. cluster/plan/brook_course change only docstrings. The control wave41-perf-pair-quiet is the cause-absent start run back to back with the end. The discarded 09:41/09:44 pair measured 79c8a9cbf, not this end, and its +4.9s on 40hh s47 was spread over all stages, the shape of host load.",
+  "verdict": "consistent"
+}

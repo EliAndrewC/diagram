@@ -1362,7 +1362,9 @@ regenerated, `tree_crowns` and `bamboo_marks` changed on every map, nothing else
 
 - [x] T107a wave 40's found rows tiered by the work they take, by a fresh reader (FR-002, FR-003, SC-003)
       research: rendering
-- [ ] T107 the mouth's tolerance; the belt claims re-cited (FR-003, FR-004)
+- [x] T107 the mouth's tolerance; the belt claims re-cited (FR-003, FR-004)
       research: rendering
-- [ ] T108 the claims re-checked by `impl-drift`; the close: `make done` green, the pair, the wave column (FR-005, FR-006)
+      verify: DONE. half the stream's drawn width; the corner hold withdrawn; the feed's recorded width; the belt claims re-cited; tests red on the old code
+- [x] T108 the claims re-checked by `impl-drift`; the close: `make done` green, the pair, the wave column (FR-005, FR-006)
       research: rendering
+      verify: DONE. impl-drift rounds 1-3 IN-STEP; spec-fidelity CLEAR round 2; gate green; no glyph occasion; the pair band 1 confirmed consistent by perf-audit; waves.json 41 for three rows

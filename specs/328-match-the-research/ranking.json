@@ -620,7 +620,7 @@
   "tier_as_ranked": "E4",
   "e0_basis": "The three samples are belt_polygon's own geometry: hinterland/belt.py:114 BELT_NEAR_FT = 36.0 ('Research: near stand-off - UNRESEARCHED'), :126 BELT_DEPTH_FT = 100.0 cited to 0071 drawing, :130 BELT_FAR_RAG_FT = 10.0; 36 + 100 + 10 = 146. The depth IS in the record: 0071 drawing line 12, 'The back grove is drawn 80 to 120 ft deep ... so the grove is never drawn thinner than 80 ft. A convention: no",
   "moved": "T107a (fresh reader): The three samples are belt_polygon's own geometry: hinterland/belt.py:114 BELT_NEAR_FT = 36.0 ('Research: near stand-off - UNRESEARCHED'), :126 BELT_DEPTH_FT = 100.0 cited to 0071 drawing, :130 BELT_FAR_RAG_FT = 10.0; 36 + 100 + 10 = 146. The depth IS in the record: 0071 drawing line 12, 'The back g",
-  "wave": "",
+  "wave": "41",
   "scope": "kept"
  },
  {
@@ -1306,7 +1306,7 @@
   "tier_as_ranked": "E4",
   "e0_basis": "plan.py:393 BELT_REACH = 146.0 is the far face of belt_polygon's band: hinterland/belt.py:114 BELT_NEAR_FT 36 + :126 BELT_DEPTH_FT 100 (already cited to 0071 drawing) + :130 BELT_FAR_RAG_FT 10. 0071 drawing line 12: 'The back grove is drawn 80 to 120 ft deep ... A convention: no source gives a grove's depth' - so the record already says what the band's depth is and why it exceeds Tarama's 'about 1",
   "moved": "T107a (fresh reader): plan.py:393 BELT_REACH = 146.0 is the far face of belt_polygon's band: hinterland/belt.py:114 BELT_NEAR_FT 36 + :126 BELT_DEPTH_FT 100 (already cited to 0071 drawing) + :130 BELT_FAR_RAG_FT 10. 0071 drawing line 12: 'The back grove is drawn 80 to 120 ft deep ... A convention: no source gives a grove",
-  "wave": "",
+  "wave": "41",
   "scope": "kept"
  },
  {
@@ -7276,6 +7276,21 @@
   "scope": "kept"
  },
  {
+  "key": "l7r/diagram/hamletgen/water/brook_rules.py::CROSSING_END_TOL#a joiner meets the water at a confluence",
+  "verdict": "DRIFTED",
+  "tier": "E2",
+  "fix": "0054 drawing: a meeting is a junction when an end lies inside the other's drawn width; crosses_mid_run judges a joiner's end within a flat 13 px (TRUNK_TOL) of the water - take the water's drawn half-width, as channel_end_on_stream does since wave 41",
+  "files": [
+   "l7r/diagram/hamletgen/water/brook_rules.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 41 spec-fidelity round 1 (tier provisional)",
+  "tier_as_ranked": "E2",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": "l7r/diagram/hamletgen/water/fit.py::flanks_commanded#both flanks commanded",
   "tier": "E2",
   "fix": "flanks_commanded exempts a flank under FLANK_MIN_EXTENT_FT (True, not refused) and accepts reach >= 80 ft OR >= 30% (min, not max) per 0053",
@@ -8323,7 +8338,7 @@
   "tier_as_ranked": "E2",
   "moved": "",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "41",
   "scope": "kept"
  },
  {

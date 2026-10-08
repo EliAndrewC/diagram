@@ -944,7 +944,7 @@ class CombMixin:
             # the ring's corner (`feed_stub`) - so the record ends on the head and the insertion never fired on the pool or the
             # gate's cohort rolls; it was removed rather than kept as a repair with nothing to repair.
             # THE FEED RUNS DOWNHILL OR IS NOT RECORDED (feature 287, water:W10): from the sluice the race leaves at the offtake
-            # angle (35 degrees off the fall, so its net travel runs 0.82 of its length down it) and a polder's reservoir
+            # angle (35 degrees off the brook's downstream heading, 0054, which runs down the fall, so its net travel runs 0.82 of its length down it) and a polder's reservoir
             # stands above the block's high corner, so by construction it always does; a feed that climbs is refused by
             # name here, never recorded as water running uphill
             if not runs_downhill(_ch_poly, _feed_fall):

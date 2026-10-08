@@ -4243,19 +4243,18 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/cluster.py::belt_off_canvas#belt's distance upwind": {
-  "code": "c26935ed8372039d",
+  "code": "8aadc94bd201ecb9",
   "core": "d763e6d04210e466",
   "date": "2026-10-08",
-  "note": "the cited drawing page does not record the 36 ft near face as a guess (§7 only says the grove \"stands back from the row of houses nearest it\"). Either record 36 ft as a GUESS on the page, or make the claim a bare GUESS. Also, §8 says a west-lying grove's \"inner edge moves out\" to keep 50 ft, but this code samples a fixed 36 ft whatever the wind",
-  "pages": {
-   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html": "f32599678d1cb241"
-  },
-  "research": "90cf9ff106c766c9",
+  "note": "the page says the grove stands back from the houses but gives no distance, so the 36 ft near face is a guess; the 50 ft west rule belongs to the belt's placer, as the claim says",
+  "pages": {},
+  "research": "",
   "rests": [
    "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:07682c227be39db1",
+   "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:c491d9aaff941cf5",
    "0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html:d3ed8cad5ddc7b21"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/cluster.py::margin_candidates#45 degree bar": {
   "code": "a5cd06ade7ece2f0",
@@ -13775,26 +13774,15 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/water/brook_course.py::drawn_course#a brook corner is kept mitred where rounding would strand a confluence mouth more than half the brook's width off the course": {
-  "code": "6fe1ab7fbf1ce638",
-  "core": "6fe1ab7fbf1ce638",
-  "date": "2026-10-08",
-  "note": "a brook corner is kept mitred where rounding would strand a confluence mouth more than half the brook's width off the course",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  "l7r/diagram/hamletgen/water/brook_course.py::drawn_course#plumbing": {
-  "code": "932228d8dcc86e93",
-  "core": "6fe1ab7fbf1ce638",
+  "code": "2254d19ea34cb74f",
+  "core": "52aef05382f58af7",
   "date": "2026-10-08",
-  "note": "this is not plumbing. The code keeps a corner mitred (`stranded`) wherever rounding would carry a confluence mouth more than w/2 off the course. That applies the junction rule in §104 and departs from \"no watercourse on them has a mitered corner\", which the drawing page does not record as a deviation. The label should be 0054.drawing §104, plus a DEVIATION from §89 that the page records",
+  "note": "only puts the joins in as vertices and calls the rounding; decides nothing itself",
   "pages": {},
   "research": "",
-  "rests": [
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:7f7b844d39979908",
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:863892cbd9ede3bd"
-  ],
-  "verdict": "MISLABELED"
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/water/brook_course.py::exit_bend#exit leg bend": {
   "code": "661a275df5daead8",
@@ -41533,10 +41521,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_source_channel#a stream of no recorded width": {
-  "code": "01eacc5dda128c6b",
-  "core": "dc0bf13d5ee923db",
+  "code": "7db6c9ca56b30adb",
+  "core": "a50ceaf769dd04cf",
   "date": "2026-10-08",
-  "note": "`self.px(7.0)` is the village brook's ~7 ft guess",
+  "note": "self.px(7.0) is the village brook's ~7 ft guess",
   "pages": {
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.html": "653d11fed9d1fb7b"
   },
@@ -41547,10 +41535,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_source_channel#feed joins the brook": {
-  "code": "bc469ea87243879b",
-  "core": "dc0bf13d5ee923db",
+  "code": "8ae0f37198cbb0db",
+  "core": "a50ceaf769dd04cf",
   "date": "2026-10-08",
-  "note": "the intake's mouth is set on the brook it taps; the 30 px snap band is a tolerance",
+  "note": "the intake is snapped onto the brook within the 30 px band, otherwise the feed is declared as coming from the sluice; the brook is tapped at the head of the fan",
   "pages": {
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html": "20b954e8c3ae0884"
   },
@@ -41558,39 +41546,40 @@
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:05d6fe02bbdbbe65",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:b1a5f15f7ac3f628",
+   "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:e4204c7141364a56",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:fa4c88323f4920cb"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_source_channel#feed recorded width": {
-  "code": "76820bb48ff19355",
-  "core": "dc0bf13d5ee923db",
+  "code": "f550a63c4ece3877",
+  "core": "a50ceaf769dd04cf",
   "date": "2026-10-08",
-  "note": "on the pond branch (`pond_rec`) the record traces the pond's feeder stub (`feed_stub`), not the head race, yet still records `\"w\": 6.0`. §85 puts a pond feeder at \"roughly twice\" the 1.5 ft floor (~3 ft). Give the pond branch the feeder's width, or extend the claim to cover it",
+  "note": "the width is net channels[0].w, falling back to the head race's 6.0 ft, and both branches trace that same channel",
   "pages": {
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html": "73b09981aa65bd21"
   },
   "research": "0563a9dcc87ebedc",
   "rests": [
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:7d2ddc0969f9e213",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:8ab31b5afaea5611",
    "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:b3d0c7e9f522e493",
-   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:e79a72c285e6838c"
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:e79a72c285e6838c",
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:f51c19a1bbe70e11",
+   "0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html:f73d5c518c731c59"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_source_channel#feed runs downhill": {
-  "code": "af2d508cd3a87327",
-  "core": "dc0bf13d5ee923db",
+  "code": "6d83801f59696a55",
+  "core": "a50ceaf769dd04cf",
   "date": "2026-10-08",
-  "note": "level or uphill net travel is refused, matching the strict \"under 90\" bound",
+  "note": "runs_downhill refuses net travel that is level or uphill, which matches the strict \"under 90\" bound",
   "pages": {
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html": "790c57e2a1c0ab27"
   },
   "research": "a3b4c3a9112374b7",
   "rests": [
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:197d66e59c4872e2",
-   "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:beebf3a1f3e405e3",
    "0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html:f2e12c91b742ea44"
   ],
   "verdict": "IN-STEP"
