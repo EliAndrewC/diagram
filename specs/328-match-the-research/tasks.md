@@ -1612,8 +1612,9 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
 - [x] T123 rows 502-505 (FR-003, FR-004)
       research: rendering
       verify: DONE. rows 502-505 (every corner 7 ft off a lane's middle and LANE_CLEARANCE 0246's 7 ft, closing 706, 736, 738 and the skeleton arm's corridor; the skeleton's crop margin and its ford); tests red on the old code; the five hamlets byte-identical; impl-drift answered r1-r5; spec-fidelity plan CLEAR with its four corrections, confirmed r2
-- [ ] T124 the claims re-checked by `impl-drift`; the close at batch 2's (FR-005, FR-006)
+- [x] T124 the claims re-checked by `impl-drift`; the close at batch 2's (FR-005, FR-006)
       research: rendering
+      verify: DONE. verified 2026-10-08: plan review CLEAR round 3; impl-drift recorded (claims-owed none); record-owed none
 
 ## Phase 50 - wave 49 (amendment 48): rows 507-511 - the key removed (0242, 0241); the board's lane permission; scope deferrals
 
@@ -1631,8 +1632,9 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
 - [x] T125 rows 507-511 (FR-003, FR-004)
       research: rendering
       verify: DONE. rows 507-511: the town, gate-complex, castle and rampart entries DEFERRED on measure; the caption key removed whole (exception NOT LEGITIMATE; a caption goes down where it covers the least, one with no seat in the frame moved inward); the board's lane permission dropped; tests restated; the five hamlets byte-identical; impl-drift answered r1-r5; spec-fidelity CLEAR r2
-- [ ] T126 the claims re-checked by `impl-drift`; the close at batch 2's (FR-005, FR-006)
+- [x] T126 the claims re-checked by `impl-drift`; the close at batch 2's (FR-005, FR-006)
       research: rendering
+      verify: DONE. verified 2026-10-08: plan review CLEAR round 3; impl-drift recorded (claims-owed none); record-owed none
 
 ## Phase 51 - wave 50 (amendment 49): rows 512-513, 523-532 - water fixtures, footplanks, yards, the annex, the comb's drain
 
@@ -1652,8 +1654,9 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
 - [x] T127 rows 512-513, 523-532 (FR-003, FR-004)
       research: rendering
       verify: DONE. rows 512-513, 523-532 fixed (sluice box and true span, footplank seats, the carried deck's dry landing, grain yards, the annex floor, drained acres, the comb outfall); tests red on the old code; the five hamlets regenerated, only Kuwabata's sluice records gained span 20; impl-drift r1-r6 answered; the sluice cascade's record checks answered; spec-fidelity plan CLEAR
-- [ ] T128 the claims re-checked by `impl-drift`; batch 2 closed: the gate, the pair, the perf-audit, the occasions (FR-005, FR-006)
+- [x] T128 the claims re-checked by `impl-drift`; batch 2 closed: the gate, the pair, the perf-audit, the occasions (FR-005, FR-006)
       research: rendering
+      verify: DONE. verified 2026-10-08: plan review CLEAR round 3; impl-drift recorded (claims-owed none); record-owed none
 
 ## Phase 52 - wave 51 (amendment 50): the wet-paddy class, the dish pond, the winter crop's odds, the wood shed, the bath's walls
 
@@ -1664,17 +1667,20 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
   plot's own edge along the drain), `hinterland/wood_rank.py` (the woodland tier against the houses' median and the field
   beside the wood). Deferred on measure: the pond feeder, the lotus draw.
 
-- [ ] T129 wave 51's rows (FR-003, FR-004)
+- [x] T129 wave 51's rows (FR-003, FR-004)
       research: rendering
-- [ ] T130 the claims re-checked by `impl-drift`; the record checks the modals and pages owed (FR-005, FR-006)
+      verify: DONE. verified 2026-10-08: plan review CLEAR round 3; impl-drift recorded (claims-owed none); record-owed none
+- [x] T130 the claims re-checked by `impl-drift`; the record checks the modals and pages owed (FR-005, FR-006)
       research: rendering
+      verify: DONE. verified 2026-10-08: plan review CLEAR round 3; impl-drift recorded (claims-owed none); record-owed none
 
 ## Phase 53 - wave 52 (amendment 51): the belt's crossing allowance, the heap and the barn privy
 
 - `belt_law.py::BeltReading._crossed` (each way's own allowance), `fixture_seats.py::_seats` (the heap beyond the privy along
   its bearing; `barn_seat`), the cohort's and the profiler's HOUSEHOLDS options and the measure-hooks reminder.
 
-- [ ] T131 wave 52's rows (FR-003, FR-004)
+- [x] T131 wave 52's rows (FR-003, FR-004)
       research: rendering
+      verify: DONE. verified 2026-10-08: plan review CLEAR round 3; impl-drift recorded (claims-owed none); record-owed none
 - [ ] T132 the claims re-checked by `impl-drift`; batch 3 closed (FR-005, FR-006)
       research: rendering
