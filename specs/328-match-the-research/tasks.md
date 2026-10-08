@@ -1088,7 +1088,9 @@ fixed ellipse is claimed UNRESEARCHED with what was searched, and the row is E4,
 
   - `l7r/diagram/hamletgen/water/polder.py::stage_polder#reservoir size` - claimed UNRESEARCHED; the row re-tiered E4
 
-- [ ] T85 the reservoir share tried (Kuwabata re-rolled) and reverted; the fixed size claimed UNRESEARCHED; row 458 E4 (FR-003, FR-004)
+- [x] T85 the reservoir share tried (Kuwabata re-rolled) and reverted; the fixed size claimed UNRESEARCHED; row 458 E4 (FR-003, FR-004)
       research: rendering
-- [ ] T86 the claim re-checked by `impl-drift`; no executed code changed since wave 29's close; `make done` green (FR-005, FR-006)
+      verify: DONE. the share tried (Kuwabata's reservoir 4.25 acres) and reverted - 0061's share is a high-ground pond's, not a polder's wild-water source; the fixed size claimed UNRESEARCHED; row 458 E4, open
+- [x] T86 the claim re-checked by `impl-drift`; no executed code changed since wave 29's close; `make done` green (FR-005, FR-006)
       research: rendering
+      verify: DONE. impl-drift IN-STEP on the relabeled claim; amendment 29 FAITHFUL (round 3), plan CLEAR; make done green; no executed code or map differs from wave 29's close
