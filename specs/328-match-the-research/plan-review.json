@@ -1,6 +1,6 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "10a47026b3fa3aef2298721f275db05ff41a82781d072e228e2d0db753f5cf0e",
+ "plan_sha256": "63c4be95e2b03c4811b13a308a80376939fe68264b71791a301b75b06cb7904a",
  "reviewed": "2026-10-08",
  "declared": "spec-fidelity",
  "decisions": [
@@ -29,11 +29,10 @@
    "why": "the procedure moves to the research; no pool sheet draws the checkpoint tier, so nothing is redrawn (FR-009)"
   },
   {
-   "id": "row 438 omitted",
-   "summary": "the wave takes 'rows 381, 436 and 442 in ranking order' and names row 501 next, silently passing over row 438 (docs/building-programs.md Country shrine #hall largest and monk's home: E2, scope mode-a, wave blank, flag empty, after [], found by wave 46's impl-drift and tiered E2 by T119a beside 442)",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "FR-006 makes a wave a contiguous run of the ranking and FR-010 keeps the Mode A procedures in scope; row 438 is an open in-scope E2 row ranked ahead of 442 with no hold, no dependency and no stated reason, and neither the plan nor tasks.md mentions it - the same pattern ruled not legitimate at amendment 33 (464/465 skipped without evidence). Take row 438 in wave 47 before 442 (T119a's fix: the hierarchy stated per form, 'largest' claimed for the one-roof form only), or record why it waits"
+   "id": "row 438",
+   "summary": "row 438 taken in wave 47 before 442: the shrine's hierarchy stated per form in docs/building-programs.md (one roof: the hall-and-dwelling building the largest; two buildings: the hall larger than its sanctuary, the farmhouse-class dwelling possibly the larger); claim restated; no two-building sheet in the pool",
+   "class": "within",
+   "why": "round 1's item resolved: the row is taken in ranking order with the fix T119a named; 0222's drawing page says 'The hall alone is farmhouse-sized or smaller', so the per-form statement is the research; the B19 size_hierarchy pairs check only sanctuary under hall-and-dwelling, so no check contradicts the restated doc"
   },
   {
    "id": "row 473 held",
@@ -85,11 +84,10 @@
    "why": "an UNCLAIMED unit gets its claim (E0); T121 re-checks it"
   },
   {
-   "id": "claim: page edge not judged",
-   "summary": "DRIFTED claim (code exempts visible bins within 2 r of the frame; 0072's drawing page: 'A break in the planting that a reader can see is still a hole', no near-edge exemption) rewritten as an unpointed CONVENTION that keeps the code's exemption",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "FR-003: any rewrite of a DRIFTED row's claim other than E0 is the exception path (FR-004), and none was taken - no MODE 1 check, no ranking row, not in the plan or tasks. The relabel keeps a check exempting ground the research says is judged, which is the request's 'implementation not matching research' re-labeled rather than fixed; 'a break there is not seen whole' is an argument, not an impossibility. Fix the code (narrow the exemption to ground off the page, impl-drift's own option), or file the row and put the exception to a MODE 1 check with 0072's text verbatim"
+   "id": "belt: page edge not judged",
+   "summary": "belt_law.py: a hole is excused only on the stretch the page cuts (self.cut: bins with off-page crowns or where the band leaves the page); the 2 r margin at the frame now excuses only the depth measure; claim restated citing 0072's drawing page; a test red on the old code; hamlets byte-identical",
+   "class": "within",
+   "why": "round 1's item resolved by its first option, the code fixed: holes() now tests self.cut, so a break a reader can see within 2 r of the frame is judged (0072: 'A break in the planting that a reader can see is still a hole'; 'holes are looked for only inside the page'); the depth margin kept rests on 0072's 'nothing beyond it is counted against the map' (the frame clips the depth), so it narrows nothing 0072 asks to be judged"
   },
   {
    "id": "sanctuary bay knob filed",
@@ -98,5 +96,5 @@
    "why": "a found row ranked and taken in its turn (FR-001, FR-006)"
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }
