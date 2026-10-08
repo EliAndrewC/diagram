@@ -880,6 +880,16 @@
   "moved": "wave 27: the session's E3 re-tier withdrawn - its trial changed more than the fix (it also broke out of the bend loop and turned the bend), and the literal fix (cap 0 down the fall, the strict downhill check) passes all 28 brook tests (amendment 26 round 1 reproduced it); done in wave 27",
   "tier": "E2"
  },
+ "l7r/diagram/hamletgen/water/brook_rules.py::CROSSING_END_TOL#a joiner meets the water at a confluence": {
+  "after": [],
+  "files": [
+   "l7r/diagram/hamletgen/water/brook_rules.py"
+  ],
+  "fix": "l7r/diagram/hamletgen/water/brook_rules.py:52: CROSSING_END_TOL = 13.0 -> BROOK_DRAWN_W / 2.0 (3.5; declare it after BROOK_DRAWN_W at :53) with a docstring 'Research: a joiner meets the water at a confluence - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: an end inside the water's drawn width'; crosses_mid_run (:189-197) keeps its logic. tests/hamletgen/test_brook.py:119 sets its confluence ends 5 px off the water - move them within 3.5 px (e.g. 48/52). Re-run tests/hamletgen/test_sink.py (:365, :469-472, :516-520) and regenerate the hamlet maps whose drains/ditches change.",
+  "flag": "",
+  "moved": "T109a (fresh reader): 0054 drawing page: 'A meeting is a junction when either channel's end lies inside the other's drawn width ... if neither lies inside the other's width, the stub shows.' brook_rules.py:52 sets a flat 13 px ('TRUNK_TOL'), wider than the 7 ft brook's whole bed (BROOK_DRAWN_W = 7.0, :53); comb.py:78-86 ",
+  "tier": "E1"
+ },
  "l7r/diagram/hamletgen/water/polder.py::_polder_candidate#block centered": {
   "after": [],
   "e0_basis": "hamletgen/water/polder.py:442 labels it NONE; :447-448 put the block's middle at (W/2, H/2) with its axes on plan.fall, so only the position is the choice and it is framing (impl-drift's reading); the claim's 'at any bearing' is wrong and is dropped",
@@ -1159,6 +1169,17 @@
   "moved": "T101a (fresh reader): joints.py:289 claim, code joints.py:304-306 (tees sorted by the stem's last-leg length); 0081 drawing page 'Two lanes that meet end to end are read as one ... meets the other's side as a T' names no stem; 0246 drawing page 'joined at a T' likewise; a placement rule the record is silent on is a GUESS",
   "tier": "E0"
  },
+ "l7r/diagram/hamletgen/ways/joints.py::_one_joint#ways of two kinds stay two": {
+  "after": [],
+  "e0_basis": "the code already does what 0081 says: `_one_joint` pulls a jog across a joint of two kinds straight and splits it back into two records (wave 34); impl-drift rated the claim IN-STEP in wave 38 round 2",
+  "files": [
+   "l7r/diagram/hamletgen/ways/joints.py"
+  ],
+  "fix": "_one_joint pulls a jog straight across a meeting of ways of two widths too, no width/kind exception",
+  "flag": "",
+  "moved": "wave 42: already fixed in wave 34 (a joint of two kinds pulled straight and split back, `_split_committed`)",
+  "tier": "E0"
+ },
  "l7r/diagram/hamletgen/ways/knots.py::next_gather#lane ends gathered": {
   "after": [],
   "files": [
@@ -1316,6 +1337,17 @@
   "found": "wave 2 re-check (tiered by its work at T25a)",
   "moved": "T25a (amendment 6): tiered by its work - the code (street.py:46, `fw / 2`) stands; the claim is already UNRESEARCHED and only its wording changes",
   "tier": "E0"
+ },
+ "l7r/diagram/hamletgen/ways/sweeps.py::_drop_end_nubs#nub at a junction dropped": {
+  "after": [],
+  "files": [
+   "l7r/diagram/hamletgen/ways/clearance.py",
+   "l7r/diagram/hamletgen/ways/sweeps.py"
+  ],
+  "fix": "drop_end_nubs cuts per 0081: end leg 12 ft or less turning 90 deg or more (_NUB_FT 9 -> 12, _NUB_TURN 60 -> 90, spike rule folded in)",
+  "flag": "",
+  "moved": "",
+  "tier": "E2"
  },
  "l7r/diagram/hamletgen/ways/track.py::_thread_the_fabric#gap off the steadings": {
   "after": [

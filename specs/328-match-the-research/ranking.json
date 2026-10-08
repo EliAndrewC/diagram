@@ -4301,6 +4301,22 @@
   "scope": "kept"
  },
  {
+  "key": "l7r/diagram/hamletgen/water/brook_rules.py::CROSSING_END_TOL#a joiner meets the water at a confluence",
+  "verdict": "DRIFTED",
+  "tier": "E1",
+  "fix": "l7r/diagram/hamletgen/water/brook_rules.py:52: CROSSING_END_TOL = 13.0 -> BROOK_DRAWN_W / 2.0 (3.5; declare it after BROOK_DRAWN_W at :53) with a docstring 'Research: a joiner meets the water at a confluence - research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html: an end inside the water's drawn width'; crosses_mid_run (:189-197) keeps its logic. tests/hamletgen/test_brook.py:119 sets its confluence ends 5 px off the water - move them within 3.5 px (e.g. 48/52). Re-run tests/hamletgen/test_sink.py (:365, :469-472, :516-520) and regenerate the hamlet maps whose drains/ditches change.",
+  "files": [
+   "l7r/diagram/hamletgen/water/brook_rules.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 41 spec-fidelity round 1 (tier provisional)",
+  "tier_as_ranked": "E2",
+  "moved": "T109a (fresh reader): 0054 drawing page: 'A meeting is a junction when either channel's end lies inside the other's drawn width ... if neither lies inside the other's width, the stub shows.' brook_rules.py:52 sets a flat 13 px ('TRUNK_TOL'), wider than the 7 ft brook's whole bed (BROOK_DRAWN_W = 7.0, :53); comb.py:78-86 ",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": "l7r/diagram/hamletgen/ways/checks.py::lanes_share_tread#one network at 40 ft",
   "tier": "E1",
   "fix": "treads count as joined only within the 25 ft join reach (0081), not 40 ft",
@@ -7276,21 +7292,6 @@
   "scope": "kept"
  },
  {
-  "key": "l7r/diagram/hamletgen/water/brook_rules.py::CROSSING_END_TOL#a joiner meets the water at a confluence",
-  "verdict": "DRIFTED",
-  "tier": "E2",
-  "fix": "0054 drawing: a meeting is a junction when an end lies inside the other's drawn width; crosses_mid_run judges a joiner's end within a flat 13 px (TRUNK_TOL) of the water - take the water's drawn half-width, as channel_end_on_stream does since wave 41",
-  "files": [
-   "l7r/diagram/hamletgen/water/brook_rules.py"
-  ],
-  "after": [],
-  "flag": "",
-  "found": "wave 41 spec-fidelity round 1 (tier provisional)",
-  "tier_as_ranked": "E2",
-  "wave": "",
-  "scope": "kept"
- },
- {
   "key": "l7r/diagram/hamletgen/water/fit.py::flanks_commanded#both flanks commanded",
   "tier": "E2",
   "fix": "flanks_commanded exempts a flank under FLANK_MIN_EXTENT_FT (True, not refused) and accepts reach >= 80 ft OR >= 30% (min, not max) per 0053",
@@ -7375,6 +7376,8 @@
   "after": [],
   "flag": "",
   "tier_as_ranked": "E2",
+  "e0_basis": "the code already does what 0081 says: `_one_joint` pulls a jog across a joint of two kinds straight and splits it back into two records (wave 34); impl-drift rated the claim IN-STEP in wave 38 round 2",
+  "moved": "wave 42: already fixed in wave 34 (a joint of two kinds pulled straight and split back, `_split_committed`)",
   "verdict": "MISLABELED",
   "wave": "34",
   "scope": "kept"
@@ -7542,6 +7545,7 @@
   "after": [],
   "flag": "",
   "tier_as_ranked": "E2",
+  "moved": "",
   "verdict": "CANNOT-TELL",
   "wave": "",
   "scope": "kept"

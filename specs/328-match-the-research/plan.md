@@ -500,6 +500,15 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 - **On the unpushed waves 9-40** under condition (6): as at wave 40's close; the pair is owed (executed code).
 - **Verification**: the predicate's test at half the width; `impl-drift` on the touched claims; the gate; the pair.
 
+## Wave 42 (amendment 41, 2026-10-08)
+
+- **Scope**: in ranking order - row 481 closed as fixed in wave 34; row 492, the end-nub cut, at 0081's figures (12 ft or less,
+  90 deg or more), one rule with the hook; wave 41's found row (T109a), a joiner's confluence inside the brook's drawn width
+  (0054) (`tasks.md` Phase 43). Rows 482-491 next.
+- **Occasions**: none - the five hamlets regenerated 2026-10-08 with byte-identical manifests.
+- **On the unpushed waves 9-41** under condition (6): as at wave 41's close; the pair is owed (executed code).
+- **Verification**: the two tests red on the old code; `impl-drift` on the touched claims; the gate; the pair.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Each later wave that changes engine behavior takes
