@@ -443,3 +443,21 @@ Pointers to update on the research/CLAUDE.md split: root CLAUDE.md, docs/researc
 - pool/magistracies/ochiba-magistracy/ochiba-magistracy.notes.md
 - pool/magistracies/ochiba-roundtrip-test/ochiba-roundtrip-test.notes.md
 - pool/magistracies/ubame-magistracy/ubame-magistracy.notes.md
+
+## Applied (2026-10-08) - where the application departed from a row, and why
+
+Carried out by four editing passes (Opus, one per cluster) and the session; every relative link in a live document
+resolves (`tests/tooling/test_doc_links.py`, new), and 29 links already broken before the move were fixed with them.
+
+- `dev/loop.md`: the remote-runs table stayed in `dev/loop.md` (trimmed, corrected: the remote runs `make soak`); the
+  dated test-cost sections became a new topic file, `dev/test-cost.md`, rather than being deleted.
+- `dev/placement.md`: the row said the STAGES table had 18 stages; `driver.py` has 19 and the table matches it - kept.
+- The practice ground's "swept" wording: the row took feature 280 to have reworded it to open earth; feature 280 left it
+  open for a research pass, and the claim and the 0165 drawing page still say swept, so the wording stays "swept".
+- `research/record-checks.md` also took the "section a modal was written from moves" rule, then gave it to
+  `dev/modals.md` (its operative home since feature 319) and kept a pointer; `docs/research-record-rules.md` keeps why.
+- `docs/package-boundary.md`: finding 1 re-checked against the code - no settlement module imports `compound.py` any
+  more; the shared ground is now the labels placer, `interactive/`, `pipeline/` and the sheet-against-map check. The
+  decision (one package) stands on that.
+- Left as written, by the feature's rules: the two frozen legacy generators' comments naming `flophouse-research.md`
+  (frozen exhibits), and `wip/README.md` (the GM's).

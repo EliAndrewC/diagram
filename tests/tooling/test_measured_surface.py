@@ -53,7 +53,9 @@ def test_an_unreadable_coverage_config_fails_CLOSED() -> None:
     encodes, *"if you add a file under `l7r/`, it is measured"*."""
     gs = _gate_stamp()
     assert gs.coverage_sources(Path("/nonexistent-root")) == ("l7r/",)
-    assert gs.exclusions("diagram", Path("/nonexistent-root")) == ("tests/", "scripts/", "specs/", ".claude/", ".specify/", ".clones/", "buildspec/", "container-scripts/", "docs/"), "ci/ stays measured even with no config to read"
+    assert gs.exclusions("diagram", Path("/nonexistent-root")) == ("tests/", "scripts/", "specs/", ".claude/", ".specify/", ".clones/", "buildspec/", "container-scripts/", "docs/"), (
+        "ci/ stays measured even with no config to read"
+    )
 
 
 def test_ci_is_hashed_now_and_the_other_two_populations_are_untouched() -> None:
