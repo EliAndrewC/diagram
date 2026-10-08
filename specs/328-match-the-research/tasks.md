@@ -1329,7 +1329,9 @@ regenerated, `tree_crowns` and `bamboo_marks` changed on every map, nothing else
 
 - [x] T105a wave 39's found rows tiered by the work they take, by a fresh reader (FR-002, FR-003, SC-003)
       research: rendering
-- [ ] T105 the tint's five clauses dropped and its floor relabeled, the belt's notes and arcs (FR-003, FR-004)
+- [x] T105 the tint's five clauses dropped and its floor relabeled, the belt's notes and arcs (FR-003, FR-004)
       research: rendering
-- [ ] T106 the claims re-checked by `impl-drift`; the record checks; the glyph check; the close: `make done` green, the pair, the wave column (FR-005, FR-006)
+      verify: DONE. five tint clauses dropped (0007), the point read through short segments, the floor on the drain; the belt notes and 0072 arcs and areas re-measured; tests red on the old code
+- [x] T106 the claims re-checked by `impl-drift`; the record checks; the glyph check; the close: `make done` green, the pair, the wave column (FR-005, FR-006)
       research: rendering
+      verify: DONE. impl-drift rounds 1-3 IN-STEP on every touched claim; record checks answered; glyph wet paddy PASS r1, r2 NOT-REVIEWABLE with its F3 fixed and r1 answered by m: records, at its cap; spec-fidelity CLEAR r3; the pair band 0; waves.json 40 for seven rows

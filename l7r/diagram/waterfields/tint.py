@@ -88,8 +88,8 @@ def mark_low(plots: list[dict[str, Any]], dpts: Poly, plot_across: float, row_st
 
 
 def judge_tint(plots: list[dict[str, Any]], dpts: Poly, plot_across: float, g: float) -> None:
-    """Every FLOODED plot that would not read as a basin goes back to rice green; if none survives, the most basin-like compliant
-    low plot is tinted. Moved verbatim from the end of `seams/close.py` `close_seams` - its comments carry the research and the
+    """Every FLOODED plot that is a needle, comes to a point or tapers to one goes back to rice green (0007); if none survives,
+    the most basin-like compliant plot on the drain is tinted. Moved verbatim from the end of `seams/close.py` `close_seams` - its comments carry the research and the
     defects each clause answers.
 
     Research:
@@ -148,7 +148,7 @@ def judge_tint(plots: list[dict[str, Any]], dpts: Poly, plot_across: float, g: f
     # THE MAP MUST STILL EXHIBIT THE CLASS IT DECLARES (feature 230). The tint is a SAMPLE, and every draw can be taken back by
     # the clauses above - which is how the reference hamlet once came to paint no blue plot at all; `flooded_plots` is the
     # record the interactive page's wet-paddy class reads. So when the sample comes back empty, the most BASIN-LIKE compliant
-    # plot on the low ground is tinted (not the largest: settlement-review pass 10 - see `basin_rank`). It takes NO draw from R,
+    # plot ON THE DRAIN is tinted (not the largest: settlement-review pass 10 - see `basin_rank`). It takes NO draw from R,
     # so promoting one plot cannot re-roll another, and on a roll whose sample survived this does nothing at all.
     if _keeps and not any(_p.get("fill") == FLOODED for _p in plots):
         _keeps.sort(key=lambda _a: (_a[0], round(_a[1]["poly"][0][0], 1), round(_a[1]["poly"][0][1], 1)))

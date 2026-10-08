@@ -4230,15 +4230,17 @@
  "l7r/diagram/hamletgen/cluster.py::belt_off_canvas#belt distance upwind": {
   "code": "2f3a7a22b79ca2c0",
   "core": "d763e6d04210e466",
-  "date": "2026-10-03",
-  "note": "matches the cited finding or label",
+  "date": "2026-10-08",
+  "note": "the page gives no figure for how far upwind the band stands or how deep it is (36/90/146 ft is not on it). The nearest figures are the 37-262 ft calibrated to existing maps and Tarama's 33-49 ft width, which is narrower than this 110 ft band. Mark it UNRESEARCHED until a research pass answers it",
   "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fc30b06b8f1639b8"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "898132059af3d06b"
   },
-  "research": "d1ed2d75fd232589",
-  "triage": "touched",
-  "triaged": "2026-10-08",
-  "verdict": "IN-STEP"
+  "research": "856035ff0f5379cf",
+  "rests": [
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:31f1ea9e18204d6a",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:e27cdaba5177821d"
+  ],
+  "verdict": "NEEDS-RESEARCH"
  },
  "l7r/diagram/hamletgen/cluster.py::margin_candidates#45 degree bar": {
   "code": "a5cd06ade7ece2f0",
@@ -11742,15 +11744,17 @@
  "l7r/diagram/hamletgen/plan.py::BELT_REACH#belt's far row": {
   "code": "468332f477655ed5",
   "core": "d63438701c9afe57",
-  "date": "2026-10-03",
-  "note": "146 inside 0072's calibrated 37-262 ft belt-to-house range (no stated 146)",
+  "date": "2026-10-08",
+  "note": "the page does not record the 146 ft far row. §11 is a range calibrated to existing maps, not this figure, and the record's one width (33-49 ft) does not support a 110 ft deep band. Mark it UNRESEARCHED",
   "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fc30b06b8f1639b8"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "898132059af3d06b"
   },
-  "research": "d1ed2d75fd232589",
-  "triage": "touched",
-  "triaged": "2026-10-08",
-  "verdict": "IN-STEP"
+  "research": "856035ff0f5379cf",
+  "rests": [
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:31f1ea9e18204d6a",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:e27cdaba5177821d"
+  ],
+  "verdict": "NEEDS-RESEARCH"
  },
  "l7r/diagram/hamletgen/plan.py::FAN_OVERHANG#spec and plan plumbing": {
   "code": "02acf466157b352d",
@@ -54515,41 +54519,59 @@
  "l7r/diagram/settlement/rolling/roll.py::RollVillageMixin._roll_windbreak#belt always on one side, a straight strip": {
   "code": "2ae5af70856c330e",
   "core": "91712273a1fa222c",
-  "date": "2026-10-03",
-  "note": "0072 attests \"on one side or two\" and belts drawn \"as hooks or as straight strips\", and takes the northwest wind unless the map declares one; the code fixes one straight strip on the uphill side. Roll one or two sides (and hook or strip) on the NW-default windward side, or record the fixed form as a DEVIATION on 0072's drawing page",
+  "date": "2026-10-08",
+  "note": "the code fixes one rectangular strip on one side, but the page attests \"on one side or two\" and maps that \"draw as hooks or as straight strips\". Those are attested forms, so side count and hook/strip should be a seeded roll, and the claim's \"never two sides\" contradicts the page",
   "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fc30b06b8f1639b8"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "898132059af3d06b"
   },
-  "research": "d1ed2d75fd232589",
-  "triage": "touched",
-  "triaged": "2026-10-08",
+  "research": "856035ff0f5379cf",
+  "rests": [
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:20dfe2471e9c246c",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:43aedefed41c4f79",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:8e692f283f7947e4"
+  ],
   "verdict": "DRIFTED"
+ },
+ "l7r/diagram/settlement/rolling/roll.py::RollVillageMixin._roll_windbreak#belt corners clamped 6 px inside the canvas (keep the belt on-canvas); this contradicts the page's rule that a belt near the frame runs off it [§29]": {
+  "code": "91712273a1fa222c",
+  "core": "91712273a1fa222c",
+  "date": "2026-10-08",
+  "note": "belt corners clamped 6 px inside the canvas (keep the belt on-canvas); this contradicts the page's rule that a belt near the frame runs off it [§29]",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  "l7r/diagram/settlement/rolling/roll.py::RollVillageMixin._roll_windbreak#communal windbreak behind the cluster": {
   "code": "d52e3dd8452ed66a",
   "core": "91712273a1fa222c",
-  "date": "2026-10-03",
-  "note": "the belt always goes on the uphill side (`bcx - dx * ...`); 0072 drawing: \"Every map takes the northwest wind unless it declares a local one ... every belt stands on the north and west of its houses\"; the belt also always takes one side where 0072 allows one or two",
+  "date": "2026-10-08",
+  "note": "the code takes the uphill side as windward (`bc = bcx - dx*(reach_up+62)` in the fall frame), but the page says \"Every map takes the northwest wind unless it declares a local one\" and \"No map drawn so far records one\". Unless the map declares an off-the-hill wind, the belt belongs on the north and west. The +46 px span is also not on the page; one band per cluster is fine (§8)",
   "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fc30b06b8f1639b8"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "898132059af3d06b"
   },
-  "research": "d1ed2d75fd232589",
-  "triage": "touched",
-  "triaged": "2026-10-08",
+  "research": "856035ff0f5379cf",
+  "rests": [
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:0c9dba0334c6fdfb",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:5e9ac2daf3925f70",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:c36f0698d70588dc"
+  ],
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/rolling/roll.py::RollVillageMixin._roll_windbreak#windbreak standoff and depth": {
   "code": "a369910ec2b81c76",
   "core": "91712273a1fa222c",
-  "date": "2026-10-03",
-  "note": "neither 0072 nor 0038 gives a standoff or a depth; 62 and 34 are raw px (no ftpx/bscale) so the feet vary with the map, and 68 deep is past the one belt width recorded (Tarama, 10-15 m, ~33-49 ft) - label UNRESEARCHED (or GUESS) until a pass answers it",
+  "date": "2026-10-08",
+  "note": "neither page gives the 62 px standoff or the 68 px depth. 0038 rules on clear ground from yards and beds, not houses. The inner face 28 ft from the house sits below the 37 ft low end of §11's calibrated range, and 68 ft is wider than Tarama's 33-49 ft. Mark it UNRESEARCHED",
   "pages": {
    "0038-sunlight-and-shade-on-the-farm.drawing.html": "39789a60a4b44b03",
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "fc30b06b8f1639b8"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "898132059af3d06b"
   },
-  "research": "f011750a9219a554",
-  "triage": "touched",
-  "triaged": "2026-10-08",
+  "research": "42bac7c079e20f50",
+  "rests": [
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:b827c5a10b15cbbc",
+   "0038-sunlight-and-shade-on-the-farm.drawing.html:cf77608be5e193f8",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:31f1ea9e18204d6a",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:e27cdaba5177821d"
+  ],
   "verdict": "NEEDS-RESEARCH"
  },
  "l7r/diagram/settlement/rolling/roll.py::RollVillageMixin.roll_village#a rolled village is clustered": {
@@ -61260,6 +61282,16 @@
   "research": "a3b4c3a9112374b7",
   "verdict": "DRIFTED"
  },
+ "l7r/diagram/waterfields/banks.py::straight_ring#plumbing": {
+  "code": "67fe958729763a25",
+  "core": "0ab7e6fac3e89cb2",
+  "date": "2026-10-08",
+  "note": "ring simplification only",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/waterfields/banks.py::supply_bank_clearance#bund runs along the supply channel": {
   "code": "7f5602f52bdcf7af",
   "core": "dbbbd647be3d4d2f",
@@ -65299,23 +65331,24 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/tint.py::judge_tint#one wet plot at least": {
-  "code": "1be35ace4d9b428b",
-  "core": "fe3d021d7c5e5f46",
+  "code": "5c9afc1acb42b57a",
+  "core": "f5e7d358f5c86915",
   "date": "2026-10-08",
-  "note": "a display floor; green low plots are as wet as blue ones",
+  "note": "which plots are tinted is a stated drawing convention, and the floor promotes only an on-drain plot that is not pointed",
   "pages": {},
   "research": "",
   "rests": [
    "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:4fc3811eb15b4538",
+   "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:68a6523772c7cec3",
    "0007-wet-paddies-that-never-drain-shitsuden.drawing.html:f84f7dcd5af814ac"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/waterfields/tint.py::judge_tint#pointed plot left green": {
-  "code": "00e95b6d89d06e4c",
-  "core": "fe3d021d7c5e5f46",
+  "code": "498ee2ed8e4d2648",
+  "core": "f5e7d358f5c86915",
   "date": "2026-10-08",
-  "note": "a plot that tapers to a point is left green",
+  "note": "matches the page's \"leaves green any plot of that row that tapers to a point\"; 25 deg is a calibrated threshold",
   "pages": {
    "0007-wet-paddies-that-never-drain-shitsuden.drawing.html": "1e0cc8002bddb72d"
   },

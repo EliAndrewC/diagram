@@ -355,6 +355,7 @@
  "l7r/diagram/settlement/fields/features.py::FieldFeaturesMixin.pond#pond feeder width": "9",
  "l7r/diagram/settlement/fields/landuse.py::LandUseMixin._landuse_repaint_leftovers#leftovers as standing rice": "1",
  "l7r/diagram/settlement/homestead_parts/belt_law.py::MIN_BELT_DEPTH_FT#least belt depth": "9",
+ "l7r/diagram/settlement/homestead_parts/belt_law.py::the village belt#its west arm on inashiro": "40",
  "l7r/diagram/settlement/homestead_parts/farmstead.py::FarmsteadMixin._find_appurtenances#garden on a sunny side": "1",
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::PRIVY_FRONT_STEP_FT#front privy off the front wall": "10",
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#manure heap fallback spots": "10",
@@ -438,6 +439,10 @@
  "l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.trim_lane_stubs#arrival at the bund": "11",
  "l7r/diagram/settlement/water_ways/lanes.py::LanesMixin.trim_lane_stubs#meeting another way": "10",
  "l7r/diagram/settlement/water_ways/water.py::WaterBodiesMixin.stream#stream width": "10",
+ "l7r/diagram/waterfields/banks.py::_TINT_MAX_AREA_RATIO#outsized plot left green": "40",
+ "l7r/diagram/waterfields/banks.py::_TINT_MAX_ASPECT#channel-shaped plot left green": "40",
+ "l7r/diagram/waterfields/banks.py::_TINT_MIN_RECTANGULARITY#triangle left green": "40",
+ "l7r/diagram/waterfields/banks.py::_TINT_MIN_SOLIDITY#lobed plot left green": "40",
  "l7r/diagram/waterfields/carve.py::_dry_fields#end plot split": "11",
  "l7r/diagram/waterfields/comb.py::_comb_drain#collector above the frame": "12",
  "l7r/diagram/waterfields/comb.py::_comb_drain#straight last leg": "11",
@@ -455,5 +460,7 @@
  "l7r/diagram/waterfields/polder.py::build_polder#module size": "10",
  "l7r/diagram/waterfields/polder.py::build_polder#toe ends run on 3 ft": "12",
  "l7r/diagram/waterfields/polder.py::unpoint_parcels#no parcel tapers to a point": "10",
- "l7r/diagram/waterfields/ring_rules.py::MAX_STEPS#sideways steps": "10"
+ "l7r/diagram/waterfields/ring_rules.py::MAX_STEPS#sideways steps": "10",
+ "l7r/diagram/waterfields/tint.py::judge_tint#one wet plot at least": "40",
+ "l7r/diagram/waterfields/tint.py::judge_tint#tint reads as a basin": "40"
 }

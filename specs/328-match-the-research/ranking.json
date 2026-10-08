@@ -2987,7 +2987,7 @@
   "tier_as_ranked": "E3",
   "e0_basis": "0072 does not require a west arm. 0072 drawing page: 'a shelter belt stands on the windward side of the houses ... on the north and west ... on one side or two, never all the way round' and 'every belt stands on the north and west of its houses, or on one of those two sides'; and 'A belt that runs off the edge of the map is sound, and the bare ground beyond is not a hole ... Nothing beyond the fra",
   "moved": "T105a (fresh reader): 0072 does not require a west arm. 0072 drawing page: 'a shelter belt stands on the windward side of the houses ... on the north and west ... on one side or two, never all the way round' and 'every belt stands on the north and west of its houses, or on one of those two sides'; and 'A belt that runs o",
-  "wave": "",
+  "wave": "40",
   "scope": "deferred"
  },
  {
@@ -6592,6 +6592,21 @@
   "scope": "kept"
  },
  {
+  "key": "research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html::the belts' measured figures#outline, frame and planting",
+  "verdict": "DRIFTED",
+  "tier": "E1",
+  "fix": "0072 drawing gives figures measured 2026-08-29 on Kashikawa's and Mizuguchi's village belts (line ~61: 'the outline is 917 ft, the frame 741 ft and the planting 787 ft'; line ~63: 'a 60 ft bare stretch on its bottom edge'; line ~38: '1.46 ... second-best in the set'), and those two maps draw no village belt now; re-measure on the belts the pool draws (Inashiro, Kuwabata, Sawada) or restate",
+  "files": [
+   "research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 40 record-format round 2 (tier provisional)",
+  "tier_as_ranked": "E1",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": "docs/buildings.md::Checklist for a new diagram#size hierarchy",
   "verdict": "DRIFTED",
   "tier": "E2",
@@ -9296,7 +9311,7 @@
   "tier_as_ranked": "E2",
   "moved": "",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "40",
   "scope": "deferred"
  },
  {
@@ -9312,7 +9327,7 @@
   "tier_as_ranked": "E2",
   "moved": "",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "40",
   "scope": "deferred"
  },
  {
@@ -9328,7 +9343,7 @@
   "tier_as_ranked": "E2",
   "moved": "",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "40",
   "scope": "deferred"
  },
  {
@@ -9344,7 +9359,7 @@
   "tier_as_ranked": "E2",
   "moved": "",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "40",
   "scope": "deferred"
  },
  {
@@ -9663,7 +9678,7 @@
   "flag": "",
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "40",
   "scope": "kept"
  },
  {
@@ -9678,7 +9693,7 @@
   "flag": "drops a demotion added for a reviewed defect (a blue plot reading as a pond)",
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "40",
   "scope": "kept"
  },
  {
@@ -13161,6 +13176,21 @@
   "scope": "mode-a"
  },
  {
+  "key": "l7r/diagram/hamletgen/cluster.py::belt_off_canvas#belt distance upwind",
+  "verdict": "NEEDS-RESEARCH",
+  "tier": "E4",
+  "fix": "0072 drawing gives no figure for how far upwind the hamlet's belt band stands or how deep it is (36/90/146 ft); its 37-262 ft is calibrated to the maps, and Tarama's 33-49 ft width is narrower than this 110 ft band - research first, or label the figures UNRESEARCHED",
+  "files": [
+   "l7r/diagram/hamletgen/cluster.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 40 re-check round 3 (tier provisional)",
+  "tier_as_ranked": "E4",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": "l7r/diagram/hamletgen/cluster.py::seat_cluster#band area",
   "tier": "E4",
   "fix": "research a homestead's whole ground (yashiki area, house + yard + garden + grove); 0037 sizes only the yard, so the band area rests on no page",
@@ -13280,6 +13310,21 @@
   "flag": "",
   "tier_as_ranked": "E4",
   "verdict": "UNCLAIMED",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/hamletgen/plan.py::BELT_REACH#belt's far row",
+  "verdict": "NEEDS-RESEARCH",
+  "tier": "E4",
+  "fix": "0072 drawing does not record the belt's 146 ft far row; the one width the record has (Tarama, 33-49 ft) does not support a 110 ft deep band - research first, or label UNRESEARCHED",
+  "files": [
+   "l7r/diagram/hamletgen/plan.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 40 re-check round 3 (tier provisional)",
+  "tier_as_ranked": "E4",
   "wave": "",
   "scope": "kept"
  },
