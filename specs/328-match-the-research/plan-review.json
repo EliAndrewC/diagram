@@ -1,47 +1,51 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "dfe46361fe26e08bb9ec6babc70232fc1c9990d784537d98bbe763245a311380",
+ "plan_sha256": "3b6a40710db3ec4244b96e4fe24f2b043a8b8ed6d52bab05aec8c0cc8e028a04",
  "reviewed": "2026-10-08",
  "declared": "spec-fidelity",
  "decisions": [
   {
    "id": "W34-1 polder seat/inlet re-tiered E3",
-   "summary": "rows 460/461 tried literally (walk to the dike band's outer face), reverted and re-tiered E3 on the measured Kuwabata joint zigzag",
+   "summary": "reservoir seat and inlet stub tried literally, reverted and re-tiered E3 on the measured Kuwabata joint zigzag",
    "class": "within",
-   "why": "FR-003's own re-tier mechanism on a measured failure (m:wave34-kuwabata-inlet-outside-dike, one-shot label, plus a failing pool test); the failing Z is in _one_joint's T branch, which runs before the width test, so row 466's change does not mend it either; the fix spans polder.py and the joints pass"
+   "why": "FR-003's re-tier on a measured failure (m:wave34-kuwabata-inlet-outside-dike plus a failing pool test); unchanged from round 1"
   },
   {
    "id": "W34-2 row 466 mend form",
-   "summary": "a two-width joint is mended only when the joined walk bends badly (kink_spans), by moving the joint back one vertex; a jog that does not bend badly is still left",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "0081.drawing line 37: 'a jog across the meeting point is pulled straight like any other' (line 32: string-pulled, within 6 ft); the row's fix: 'no width/kind exception'. Same-width joints get pulled(old, ok); two-width joints still do not, so the exception survives narrower. Keeping two records is legitimate (each way at its rank); the trigger and the mend are not. The claim still reads UNRESEARCHED while asserting 0081's pull"
+   "summary": "a joint of two kinds is string-pulled like any other (same ok/kink/keeps_the_web gates as a same-width joint), then split back into its two records each at its own width",
+   "class": "within",
+   "why": "round 1's item met: joints.py drops the _bends_badly/_joint_moved_back trigger; the two-kind branch now runs after the common pull, matching the row's fix 'no width/kind exception' and 0081 'a jog across the meeting point is pulled straight like any other'; keeping two records is each way at its rank, not an exception to the pull; the claim now cites 0081"
   },
   {
-   "id": "W34-3 rows 464/465 skipped",
-   "summary": "rows 464 (track end joined however far) and 465 (spine 5 ft) left open at E2 while row 466 is fixed",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "FR-006: each wave a contiguous run; 'a routed run' is cost, not a tier, and 'a spine the code does not name' is an E3 reason (a new element) only once recorded as a re-tier with its evidence, as rows 460/461 were; wave 33 already named 464 as 'the next wave' and it was skipped again"
+   "id": "W34-3 rows 464/465 re-tiered E3",
+   "summary": "row 464 (track inner end joined however far) and row 465 (spine 5 ft) re-tiered E3 with evidence in audit/overrides.json, so SC-003 lets row 466 (E2) be taken",
+   "class": "within",
+   "why": "round 1's item met: the evidence is recorded and checks out - _pull_back_to_service (fabric.py:360) takes no hard/walls/water, its caller is web.py:344, route._route exists (route.py:160): a change across modules; rank_width/RANK_WIDTHS name no spine, so marking the through-route is a new element; both are FR-003 E3 definitions, and the rows stay open in the ranking, not dropped"
   },
   {
    "id": "W34-4 occasions none",
-   "summary": "no review occasions: the five pool hamlets unchanged",
+   "summary": "no review occasions: no pool map changes",
    "class": "within",
-   "why": "feature 294's occasions follow map change; the unchanged state is to be measured by regeneration before the commit, as wave 33's was"
+   "why": "feature 294's occasions follow map change; the unchanged state is measured at the close"
   },
   {
    "id": "W34-5 stacking under condition (6)",
-   "summary": "wave 34 opens on the unpushed waves 9-33, wave 33's push held for the GM's call on the merge commit's stray profiles",
+   "summary": "wave 34 opens on unpushed waves 9-33, wave 33's push held for the GM's call on the merge commit's stray profiles",
    "class": "within",
-   "why": "the hold is a GM decision the session cannot fix without a forbidden history rewrite, so (3)'s purpose (stack only on what the GM alone can lift) holds; it belongs on the end-of-feature question list"
+   "why": "the hold is a GM decision the session cannot lift without a forbidden history rewrite; carried from round 1"
   },
   {
    "id": "W34-6 row 434 held",
-   "summary": "row 434 held for the GM",
+   "summary": "the fixture-quota row held for the GM",
    "class": "within",
-   "why": "carried from earlier waves' rulings"
+   "why": "carried hold with its earlier LEGITIMATE ruling (ranking flag, 2026-10-07)"
+  },
+  {
+   "id": "W34-7 found rows",
+   "summary": "eight rows found by wave 34's re-check enter the ranking provisionally tiered by verdict (seven E0, one E2), for a later fresh-reader tiering",
+   "class": "within",
+   "why": "FR-001/FR-003 bookkeeping as wave 30's found rows were handled in wave 32; the plan defers none of them out of scope"
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }

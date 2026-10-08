@@ -334,7 +334,9 @@ def test_a_pulled_walk_is_split_at_the_old_joint_and_written_back_as_its_two_rec
 
     assert J.split_at([(0.0, 0.0), (100.0, 0.0)], (40.0, 3.0)) == ([(0.0, 0.0), (40.0, 0.0)], [(40.0, 0.0), (100.0, 0.0)])
     assert J.split_at([(0.0, 0.0), (40.0, 0.0), (100.0, 0.0)], (40.0, 0.0)) == ([(0.0, 0.0), (40.0, 0.0)], [(40.0, 0.0), (100.0, 0.0)])
-    assert not J._split_committed(None, [{"pts": [[40.0, 0.0], [0.0, 0.0]]}, {"pts": [[40.0, 0.0], [100.0, 0.0]]}], (0, 0, 1, 0), [(0.0, 0.0), (100.0, 0.0)], (40.0, 0.0), [], [], []), "already split so: nothing to do"  # type: ignore[arg-type]
+    assert not J._split_committed(None, [{"pts": [[40.0, 0.0], [0.0, 0.0]]}, {"pts": [[40.0, 0.0], [100.0, 0.0]]}], (0, 0, 1, 0), [(0.0, 0.0), (100.0, 0.0)], (40.0, 0.0), [], [], []), (
+        "already split so: nothing to do"
+    )  # type: ignore[arg-type]
     lanes = [{"pts": [[40.0, 3.0], [0.0, 0.0]]}, {"pts": [[40.0, 3.0], [100.0, 0.0]]}]
     commits: list[tuple[int, list]] = []
     refuse = {"lane": None}
