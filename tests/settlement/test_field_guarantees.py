@@ -6,6 +6,7 @@ the rule's own record) of what it made.
 """
 
 import copy
+import math
 import random
 
 from l7r.diagram.pipeline import rollcache
@@ -210,6 +211,19 @@ def test_the_drain_outfall_run_is_drawn_over_every_plot() -> None:
     assert s.M["drawn_channels"] and all(r["late"] for r in s.M["drawn_channels"])
     plots = [i for i, e in enumerate(s.out) if e.startswith("<polygon") and "stroke-linejoin" in e]
     assert plots and s._late_water_idx is not None and s._late_water_idx > max(plots)
+    assert not any(w == 33.0 for _, w in s.corridors), "a hamlet keeps its houses off the drain by the below-the-drain rule"
+
+
+def test_the_outfall_run_keeps_33_ft_clear_on_a_town_or_city_only() -> None:
+    """Feature 328 (0058's drawing page): the outfall corridor, 33 ft no-build either side of the run, on a town or city map,
+    in feet at the map's own scale; a hamlet or village relies on the below-the-drain rule (the test above)."""
+    net = _comb()
+    end = next(c for c in net["channels"] if c["role"] == "drain")["pts"][-1]
+    net["brook"] = [tuple(end), (end[0], end[1] + 40.0)]
+    s = Settlement(W=1400, H=1400, seed=5)
+    s.meta(name="Ct", scale="city", ftpx=2, down_deg=90)
+    s.draw_comb_field(net, "f1", {"kind": "stream"})
+    assert s.corridors[-1][1] == s.px(33.0) == 16.5
 
 
 def test_finish_settles_every_bead_the_last_water_drowned_and_a_reroll_copy_keeps_its_slots(tmp_path) -> None:
@@ -287,6 +301,11 @@ def test_the_feed_runs_downhill_its_snap_refused_where_it_would_climb_and_a_clim
         t.draw_comb_field(across, "f1", {"kind": "stream"})
 
 
+def _turn_deg(a: tuple[float, float], b: tuple[float, float], c: tuple[float, float]) -> float:
+    h0, h1 = math.atan2(b[1] - a[1], b[0] - a[0]), math.atan2(c[1] - b[1], c[0] - b[0])
+    return abs(math.degrees((h1 - h0 + math.pi) % (2 * math.pi) - math.pi))
+
+
 def test_the_drain_outfall_run_runs_downhill_and_goes_straight_down_where_its_lead_would_climb() -> None:
     """W10 at the village and city comb's drain outfall (`outfall_run`): the drawn run - 70 px on along the drain's exit,
     then 520 down the fall - runs downhill even where the drain exits straight UP the fall (the worst case); and the
@@ -295,9 +314,12 @@ def test_the_drain_outfall_run_runs_downhill_and_goes_straight_down_where_its_le
     from l7r.diagram.settlement.fields.comb import outfall_run, runs_downhill
 
     fall = (0.0, 1.0)
-    for b1 in [(100.0, 150.0), (150.0, 100.0), (100.0, 50.0), (50.0, 100.0)]:
+    for b1 in [(100.0, 150.0), (150.0, 100.0), (100.0, 50.0), (50.0, 100.0), (150.0, 140.0)]:
         run = outfall_run((100.0, 100.0), b1, fall)
-        assert len(run) == 3 and runs_downhill(run, fall), f"the drawn run from an exit toward {b1}"
+        assert runs_downhill(run, fall), f"the drawn run from an exit toward {b1}"
+        assert max(_turn_deg(a, b, c) for a, b, c in zip(run, run[1:], run[2:], strict=False)) <= 55.0 + 1e-9, "curving out of the collector, at most 55 degrees a turn (0060, feature 328)"
+    assert len(outfall_run((100.0, 100.0), (100.0, 150.0), fall)) == 3, "an exit already down the fall runs straight on"
+    assert len(outfall_run((100.0, 100.0), (150.0, 100.0), fall)) == 4, "a cross-slope exit bends in two turns of 45"
     up = [(100.0, 100.0), (100.0, -500.0), (100.0, -400.0)]
     assert not runs_downhill(up, fall), "the case: a 600 px lead up the fall, 100 back down, climbs"
     run = outfall_run((100.0, 100.0), (100.0, 50.0), fall, lead=600.0, reach=100.0)

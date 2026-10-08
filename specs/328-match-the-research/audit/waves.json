@@ -504,5 +504,8 @@
  "l7r/diagram/settlement/city/bridges.py::crossing_deck#footplank form where the landing meets rice": "50",
  "l7r/diagram/settlement/core.py::Settlement.__init__#a threshing yard at every farmstead": "50",
  "l7r/diagram/settlement/farm_fixtures.py::kura_rect#annex held in its band": "50",
- "l7r/diagram/settlement/fields/comb.py::CombMixin._coarse_grain_top_up#drained acres": "50"
+ "l7r/diagram/settlement/fields/comb.py::CombMixin._coarse_grain_top_up#drained acres": "50",
+ "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_ditches#drain outfall": "50",
+ "l7r/diagram/settlement/fields/comb.py::CombMixin._comb_draw_ditches#outfall corridor": "50",
+ "l7r/diagram/settlement/fields/comb.py::outfall_run#drain outfall": "50"
 }

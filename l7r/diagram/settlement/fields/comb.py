@@ -113,19 +113,29 @@ def feed_stub(race: Sequence[Sequence[float]], envelope: Sequence[Pt]) -> list[S
     return list(race[-2:])
 
 
-def outfall_run(b0: Sequence[float], b1: Sequence[float], fall: Sequence[float], lead: float = 70.0, reach: float = 520.0) -> list[Pt]:
-    """The village and city comb's drain-outfall run (water:W10): `lead` px on along the drain's own exit (`b0` toward
-    `b1`) for a smooth junction, then `reach` px straight down the unit `fall` off the map - taken only where it
-    `runs_downhill`, which at the drawn 70 and 520 it always does (the lead can take back at most 70 of 520 px down the
-    fall, so the run's net descent never drops under three quarters of its length). Where it would not, the run goes
-    straight down the fall from the drain's end, which runs downhill by construction.
+def outfall_run(b0: Sequence[float], b1: Sequence[float], fall: Sequence[float], lead: float = 70.0, reach: float = 520.0, turn_max: float = 55.0) -> list[Pt]:
+    """The village and city comb's drain-outfall run (water:W10, W12): `lead` px on along the drain's own exit (`b0` toward
+    `b1`) for a smooth junction, then CURVING onto the unit `fall` in turns of at most `turn_max` degrees, legs of half the
+    lead, and `reach` px straight down the fall off the map - taken only where it `runs_downhill`. Where it would not, the
+    run goes straight down the fall from the drain's end, which runs downhill by construction.
 
-    Research: drain outfall - research/questions/0060-field-drains-akusuiro.drawing.html: 70 px on along the drain's exit, then 520 px straight down the fall off the map"""
+    Feature 328: the run turned down the fall at one corner of up to ~90 degrees where the exit ran cross-slope; 0060's
+    drawing page has the run curve out of the collector, at most 55 degrees (`JUNCTION_TURN_MAX_DEG` on the hamlet).
+
+    Research: drain outfall - research/questions/0060-field-drains-akusuiro.drawing.html: on along the drain's exit, curving onto the fall at most 55 degrees a turn, then straight down the fall off the map"""
     ex, ey = float(b1[0]) - float(b0[0]), float(b1[1]) - float(b0[1])
     el = math.hypot(ex, ey) or 1.0
     start = (float(b0[0]), float(b0[1]))
-    mid = (start[0] + ex / el * lead, start[1] + ey / el * lead)
-    run = [start, mid, (mid[0] + float(fall[0]) * reach, mid[1] + float(fall[1]) * reach)]
+    run = [start, (start[0] + ex / el * lead, start[1] + ey / el * lead)]
+    h, goal = math.atan2(ey, ex), math.atan2(float(fall[1]), float(fall[0]))
+    step = math.radians(turn_max)
+    while True:
+        d = (goal - h + math.pi) % (2 * math.pi) - math.pi
+        if abs(d) <= step:
+            break
+        h += math.copysign(step, d)
+        run.append((run[-1][0] + math.cos(h) * lead / 2, run[-1][1] + math.sin(h) * lead / 2))
+    run.append((run[-1][0] + float(fall[0]) * reach, run[-1][1] + float(fall[1]) * reach))
     if runs_downhill(run, fall):
         return run
     return [start, (start[0] + float(fall[0]) * (lead + reach), start[1] + float(fall[1]) * (lead + reach))]
@@ -657,8 +667,8 @@ class CombMixin:
 
         Research:
             ditch net over the paddies - CONVENTION: drawn in the late block, ring trunk last
-            drain outfall - research/questions/0060-field-drains-akusuiro.drawing.html: a dug drain run straight down the fall off the map at the collector's tail width
-            outfall corridor - research/questions/0058-ground-too-wet-to-build-on.drawing.html: 33 px no-build either side of the outfall run on every map (the record gives it for town and city maps)
+            drain outfall - research/questions/0060-field-drains-akusuiro.drawing.html: a dug drain run curving out of the collector at most 55 degrees a turn, then down the fall off the map at the collector's tail width
+            outfall corridor - research/questions/0058-ground-too-wet-to-build-on.drawing.html: 33 ft no-build either side of the outfall run on town and city maps; a hamlet or village relies on the below-the-drain rule
             outfall recorded width - research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html: recorded at the width it is inked, the drain's tail width"""
         # The ditch net ALWAYS goes to the LATE water block (GM 2026-07-21: Hoshizora's canals
         # "rendering below the rice paddies"). In the shared block - anchored at the FIRST water
@@ -701,7 +711,8 @@ class CombMixin:
             refuse_unadmitted(self.M, "channels", _rec)  # asked before it is drawn: the straight run is the only one (W53)
             self.field_channel(_run, col, _dw, _dw, late=True, cls=cls)
             self.M["channels"].append(_rec)
-            self.corridors.append((list(_run), 33.0))
+            if self.M["meta"].get("scale") not in ("hamlet", "village"):
+                self.corridors.append((list(_run), self.px(33.0)))  # 33 ft no-build either side on a town or city (0058); a hamlet or village keeps its houses off the drain by the below-the-drain rule (houses.py)
 
     def _comb_record_field(self: Settlement, net: dict[str, Any], name: str) -> None:  # type: ignore[misc]
         """Assemble and append this fan's M['fields'] record: envelope, per-plot dims, drain-hem rings,

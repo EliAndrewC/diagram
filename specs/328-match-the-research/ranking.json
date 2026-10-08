@@ -8377,7 +8377,7 @@
   "found": "wave 9 re-check (tiered by its work at T38a)",
   "tier_as_ranked": "E0",
   "moved": "T38a: tiered by its work - Re-checked with outfall_run: nothing bounds the angle between the exit heading and the fall, so one function's geometry rule changes.",
-  "wave": "",
+  "wave": "50",
   "scope": "kept"
  },
  {
@@ -8393,7 +8393,7 @@
   "found": "wave 9 re-check (tiered by its work at T38a)",
   "tier_as_ranked": "E2",
   "moved": "T38a: tiered by its work - One condition (the map tier) and a unit conversion on one line in one function.",
-  "wave": "",
+  "wave": "50",
   "scope": "kept"
  },
  {
@@ -8453,7 +8453,7 @@
   "flag": "",
   "tier_as_ranked": "E2",
   "verdict": "DRIFTED",
-  "wave": "",
+  "wave": "50",
   "scope": "kept"
  },
  {
