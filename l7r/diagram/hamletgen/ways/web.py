@@ -87,6 +87,8 @@ def _lay_skeleton(s: Settlement, plan: SitePlan, frame: _margin_frame, arcs: Seq
         clear of crop, wet and water - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane never crosses row crops and keeps off wet ground
         skeleton arm over the brook - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: an inner arm crossing the brook takes the ford that makes its walk shortest, square to the reach
         skeleton arm off the ditches - UNRESEARCHED: an inner arm clipped at the ditches and drawn channels, never crossing one
+        spine on the houses - GUESS: the spine centered on the houses' arc midpoint and mean stand, spanning the houses' own extent
+        no accidental crossing - UNRESEARCHED: an arm that would cross an arm already kept, by accident of the template, is not laid (`_arm_crossing_accidental`)
         skeleton margin off the crop - research/questions/0081-village-lanes.drawing.html: a lane may touch a plot's boundary - the arm clipped at its tread's edge (half its 5 ft width) off the field and the dry plots
         skeleton margin off the wet and the ditches - UNRESEARCHED: 20 px off the toe band, the marsh and the drawn water
         routed round the steadings - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: nothing is built on a lane

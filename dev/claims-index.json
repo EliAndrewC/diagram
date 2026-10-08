@@ -23911,6 +23911,21 @@
   ],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/ways/track.py::stage_track#field spur width": {
+  "code": "1e77ce9a65ce34b4",
+  "core": "f896233bd5bef40d",
+  "date": "2026-10-08",
+  "note": "SPUR_WIDTH 5 is the page's \"spur to the fields 5 ft\", one rank above the footpath",
+  "pages": {
+   "0081-village-lanes.drawing.html": "9e27759395199abd"
+  },
+  "research": "ebd72aaa6a0eb9af",
+  "rests": [
+   "0081-village-lanes.drawing.html:8ee2be2b6c83fe7f",
+   "0081-village-lanes.drawing.html:91a5765af6230403"
+  ],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/ways/track.py::stage_track#lane clearance": {
   "code": "757736c76b1516e4",
   "core": "f896233bd5bef40d",
@@ -24068,14 +24083,6 @@
    "0081-village-lanes.drawing.html:ff5e303a5a16af8f"
   ],
   "verdict": "IN-STEP"
- },
- "l7r/diagram/hamletgen/ways/track.py::stage_track#the field spur drawn 5 ft wide (SPUR_WIDTH)": {
-  "code": "f896233bd5bef40d",
-  "core": "f896233bd5bef40d",
-  "date": "2026-10-08",
-  "note": "the field spur drawn 5 ft wide (SPUR_WIDTH)",
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  "l7r/diagram/hamletgen/ways/track.py::stage_track#toe-band margin": {
   "code": "3e9036537f6db859",
@@ -24699,6 +24706,21 @@
   "research": "d47738a05844fe19",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/hamletgen/ways/web.py::SKELETON_ARM_WIDTH#skeleton arm width": {
+  "code": "3ba2ec61dd08d342",
+  "core": "f7b8474fd73a4ae7",
+  "date": "2026-10-08",
+  "note": "5.0 is the page's \"cluster's spine ... 5 ft\"",
+  "pages": {
+   "0081-village-lanes.drawing.html": "9e27759395199abd"
+  },
+  "research": "ebd72aaa6a0eb9af",
+  "rests": [
+   "0081-village-lanes.drawing.html:8ee2be2b6c83fe7f",
+   "0081-village-lanes.drawing.html:91a5765af6230403"
+  ],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/hamletgen/ways/web.py::_drop_collapsed#web plumbing": {
   "code": "70f1fd21498d70af",
   "core": "53b374841a4ffa65",
@@ -24707,11 +24729,19 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#clear of crop, wet and water": {
-  "code": "8dfa9dbd5fcff20d",
-  "core": "20cd03906df2331c",
+ "l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#an arm that crosses an arm already kept by accident (_arm_crossing_accidental) is not laid": {
+  "code": "e05066354ef0a150",
+  "core": "e05066354ef0a150",
   "date": "2026-10-08",
-  "note": "",
+  "note": "an arm that crosses an arm already kept by accident (_arm_crossing_accidental) is not laid",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#clear of crop, wet and water": {
+  "code": "4ae785ca688a2b19",
+  "core": "e05066354ef0a150",
+  "date": "2026-10-08",
+  "note": "the arm is clipped and routed off the field outline, the crops, the toe band and the marsh; it never crosses row crops and keeps off wet ground",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
@@ -24719,31 +24749,31 @@
   "research": "f8c602624f8df558",
   "rests": [
    "0081-village-lanes.drawing.html:43b635b1ca75125b",
+   "0081-village-lanes.drawing.html:bd66b84c6bda826f",
    "0081-village-lanes.drawing.html:ff5e303a5a16af8f",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:8ab9878d6ac1d10b"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#routed round the steadings": {
-  "code": "1fb2423e704f7b4f",
-  "core": "20cd03906df2331c",
+  "code": "264e983392ca27a1",
+  "core": "e05066354ef0a150",
   "date": "2026-10-08",
-  "note": "nothing is built on a lane",
+  "note": "_route goes round the fabric and the clip keeps the drawn arm off what is built",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
   "research": "7b40c2c01cfba682",
   "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:8ab9878d6ac1d10b"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton arm clipped WEB_FABRIC_GAP (7 ft) off the steadings and trimmed back to the last point serving a house": {
-  "code": "f5e431eaa616e808",
-  "core": "20cd03906df2331c",
+  "code": "86831ec2f6af5e0b",
+  "core": "e05066354ef0a150",
   "date": "2026-10-08",
-  "note": "7 ft to the fabric; a dead end is pulled back to its last house",
+  "note": "a 7 ft clip off the fabric, then served_arm pulls the ends back to what they serve",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
@@ -24754,25 +24784,52 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton arm's corridor": {
-  "code": "ec2cee031271c9b1",
-  "core": "20cd03906df2331c",
+ "l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton arm off the ditches": {
+  "code": "b5a4dd8ae38e25e4",
+  "core": "e05066354ef0a150",
   "date": "2026-10-08",
-  "note": "7 ft from the middle",
+  "note": "UNRESEARCHED holds: none of the cited pages says whether an inner lane crosses a ditch",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton arm over the brook": {
+  "code": "9ea3198a8f27957c",
+  "core": "e05066354ef0a150",
+  "date": "2026-10-08",
+  "note": "ford_crossing crosses the brook square at a crossing place, the brook's line gapped at the fords",
+  "pages": {
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "c23a085a43372c2c"
+  },
+  "research": "d47738a05844fe19",
+  "rests": [
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:03433651c0627577",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:93969c06f800b0d5",
+   "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:d643c23f456119bc"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton arm's corridor": {
+  "code": "afa5f113e141d2f5",
+  "core": "e05066354ef0a150",
+  "date": "2026-10-08",
+  "note": "each arm registers LANE_CLEARANCE 7 ft from its middle, the page's 7 ft fence gap",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
   "research": "7b40c2c01cfba682",
   "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c5daec1a445d35bf"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton form": {
-  "code": "0ca124e8e21a0cac",
-  "core": "20cd03906df2331c",
+  "code": "a99f86cffd9b23e3",
+  "core": "e05066354ef0a150",
   "date": "2026-10-08",
-  "note": "the lane shape is rolled per map",
+  "note": "skeleton_layout draws the rolled plan.lane_skeleton, one of the page's chance-chosen lane shapes",
   "pages": {
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "154c57bc7b251e0d"
   },
@@ -24784,10 +24841,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton laid after the houses": {
-  "code": "3b04d56b5845a68b",
-  "core": "20cd03906df2331c",
+  "code": "b96a05749680ce51",
+  "core": "e05066354ef0a150",
   "date": "2026-10-08",
-  "note": "the farmhouses are placed first",
+  "note": "it is laid from the placed houses' arcs and stands, after the houses",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
@@ -24797,21 +24854,51 @@
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton span floor": {
-  "code": "a93870d69214c7c3",
-  "core": "20cd03906df2331c",
+ "l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton margin off the crop": {
+  "code": "b48fb303dd0c016f",
+  "core": "e05066354ef0a150",
   "date": "2026-10-08",
-  "note": "no span or least-piece figure on the page",
+  "note": "the clip is SKELETON_ARM_WIDTH/2 off the outline and the crops, so the tread may touch a plot's boundary",
+  "pages": {
+   "0081-village-lanes.drawing.html": "9e27759395199abd"
+  },
+  "research": "ebd72aaa6a0eb9af",
+  "rests": [
+   "0081-village-lanes.drawing.html:bd66b84c6bda826f",
+   "0081-village-lanes.drawing.html:ff5e303a5a16af8f"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton margin off the wet and the ditches": {
+  "code": "9540cddfa52c58ed",
+  "core": "e05066354ef0a150",
+  "date": "2026-10-08",
+  "note": "UNRESEARCHED holds: the page says a track keeps off wet ground but gives no margin, and the code's is 20",
   "pages": {},
   "research": "",
-  "rests": [],
+  "rests": [
+   "0081-village-lanes.drawing.html:43b635b1ca75125b"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton span floor": {
+  "code": "42183b925f423853",
+  "core": "e05066354ef0a150",
+  "date": "2026-10-08",
+  "note": "UNRESEARCHED holds: no cited block sets a floor on the spine's span or a minimum piece length; the 30/40 ft figures there govern back-lane run-on and stubs",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0081-village-lanes.drawing.html:2ca0b4939aee735d",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:98954044baf5b50b"
+  ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton width": {
-  "code": "190181bdb8a56c32",
-  "core": "20cd03906df2331c",
+  "code": "4b2798a3a6f83473",
+  "core": "e05066354ef0a150",
   "date": "2026-10-08",
-  "note": "spine 5 ft",
+  "note": "width SKELETON_ARM_WIDTH 5 ft, the spine's width",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },
@@ -24820,6 +24907,14 @@
    "0081-village-lanes.drawing.html:91a5765af6230403"
   ],
   "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#the spine centred on the houses' arc midpoint and mean stand, and spanning the houses' own extent": {
+  "code": "e05066354ef0a150",
+  "core": "e05066354ef0a150",
+  "date": "2026-10-08",
+  "note": "the spine centred on the houses' arc midpoint and mean stand, and spanning the houses' own extent",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  "l7r/diagram/hamletgen/ways/web.py::_reachable_runs#islands never drawn": {
   "code": "86bbbc6ffaf331a5",
@@ -48806,18 +48901,20 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/houses.py::HousesMixin._on_a_tread#a lane's middle off the fence": {
-  "code": "ad35bb2b1af9ff0f",
+  "code": "31fb11064aaabeb5",
   "core": "ec40e40148c5c024",
   "date": "2026-10-08",
-  "note": "the page measures 7 ft to the garden fence, but this tests a building's corners; I would need to know whether callers pass garden or fence rects, or only houses",
+  "note": "every corner is held at least max(half+hair, 7 ft) off the tread's middle",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
   "research": "7b40c2c01cfba682",
   "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c5daec1a445d35bf"
   ],
-  "verdict": "CANNOT-TELL"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/houses.py::HousesMixin._on_a_tread#no building corner on a lane": {
   "code": "ebc3af386ad3c72d",
@@ -48832,6 +48929,19 @@
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d"
   ],
   "verdict": "NEEDS-RESEARCH"
+ },
+ "l7r/diagram/settlement/houses.py::HousesMixin._on_a_tread#other footprints off a lane's middle": {
+  "code": "67e67c9aa50b7139",
+  "core": "ec40e40148c5c024",
+  "date": "2026-10-08",
+  "note": "GUESS holds: the page sets 7 ft only for a garden fence and says only that no house corner stands on the tread; a wall or shed at 7 ft is unanswered",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c5daec1a445d35bf"
+  ],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/houses.py::HousesMixin._quad#hand-laid plot outlines": {
   "code": "9a6b739818b3acf9",
