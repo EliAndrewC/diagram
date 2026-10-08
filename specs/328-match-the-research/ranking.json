@@ -297,7 +297,7 @@
   "tier_as_ranked": "E0",
   "moved": "T56a: tiered by its work by a fresh reader - MISLABELED: the drawing page (line 21) already says 'none is drawn at average wealth' as a knob, and the procedure (line 183) and Hoshigaoka already do that; only the claim's label and citation are wrong.",
   "wave": "16",
-  "scope": "kept"
+  "scope": "mode-a"
  },
  {
   "key": "docs/buildings/programs.md::Country shrine (a village district's shrine)#dwelling privy",
@@ -7056,7 +7056,7 @@
   "flag": "",
   "tier_as_ranked": "E2",
   "verdict": "MISLABELED",
-  "wave": "",
+  "wave": "33",
   "scope": "kept"
  },
  {
@@ -10358,7 +10358,7 @@
   "tier_as_ranked": "E2",
   "moved": "T56a: tiered by its work by a fresh reader - Measured at 3 px/ft: Hayakawa's gate range 240x42 px = 80x14 ft and Ubame's ~215x42 px = ~72x14 ft match the Kaibara form, but Ochiba and the county example draw a freestanding gatehouse of 54x36 px = 18x12 ft (216 sq ft, the temple Kita-in's) where 0093's drawing page draws a jin'ya gatehouse of its own about 40 ft (Takayama's ~400 sq ft), so two sheets are redrawn beside the claim, paragraph and band text.",
   "wave": "",
-  "scope": "kept"
+  "scope": "mode-a"
  },
  {
   "key": "l7r/diagram/hamletgen/burial.py::stage_burial#farmstead graves",

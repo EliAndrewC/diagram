@@ -1141,7 +1141,9 @@ own path's fabric along with its dooryard; now only the dooryard (and the grove 
 
   - `l7r/diagram/hamletgen/ways/fabric.py::_homestead_polys#a path leaves its own yard` - the owner's beds, sheds, byres and retirement house obstacles to its own path
 
-- [ ] T91 the path's own beds and sheds obstacles; the five hamlets regenerated (unchanged); the owner test (FR-004, FR-005)
+- [x] T91 the path's own beds and sheds obstacles; the five hamlets regenerated (unchanged); the owner test (FR-004, FR-005)
       research: rendering
-- [ ] T92 the claims re-checked by `impl-drift`; the close: wave 33's own bookend pair, `make done` green, the wave column (FR-005, FR-006)
+      verify: DONE. the path's own beds, sheds, byres and retirement house obstacles to it, only its dooryard and grove band its own (0246); the five hamlets unchanged; the owner test
+- [x] T92 the claims re-checked by `impl-drift`; the close: wave 33's own bookend pair, `make done` green, the wave column (FR-005, FR-006)
       research: rendering
+      verify: DONE. impl-drift IN-STEP on all four; amendment 32 FAITHFUL, plan CLEAR; make done green after the 329 merge; wave 33's own pair band 1 on a quiet host (two band-3 pairs under another session's load diagnosed by an interleaved control, perf-audit consistent); the wave column
