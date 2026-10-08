@@ -133,3 +133,16 @@ def test_the_class_floor_promotes_only_a_plot_on_the_drain() -> None:
     on = [{"poly": _rect(600, 1200, 640, 1240), "fill": GREEN, "low": True}, {"poly": _rect(700, 1262, 740, 1298), "fill": GREEN, "low": True}]
     tint.judge_tint(on, _D, 46.0, 2.0)
     assert [p["fill"] == FLOODED for p in on] == [False, True]
+
+
+def test_a_plot_fronts_the_drain_only_along_a_real_length_of_it() -> None:
+    """Feature 328 (glyph-check of Sawada; 0007: the plots whose foot lies on the drain): a plot meeting the drain only at a
+    corner does not front it; one lying along it does."""
+    from shapely.geometry import LineString, Polygon
+
+    from l7r.diagram.waterfields.tint import fronts
+
+    drain = LineString([(0.0, 0.0), (200.0, 0.0)])
+    along = Polygon([(10.0, 2.0), (50.0, 2.0), (50.0, 30.0), (10.0, 30.0)])
+    corner = Polygon([(205.0, 3.0), (240.0, 3.0), (240.0, 30.0), (205.0, 30.0)])
+    assert fronts(along, drain, 32.0) and not fronts(corner, drain, 32.0)

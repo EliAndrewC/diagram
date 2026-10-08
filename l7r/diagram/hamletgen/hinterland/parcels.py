@@ -173,23 +173,43 @@ def crop_edge_points(crops: Sequence[Poly], every: float = _EDGE_SAMPLE) -> Poin
     return grid
 
 
-def field_height_near(p: Pt, fall: Pt, grid: PointGrid) -> float:
-    """The height (up the fall, -p.fall) of the field ground nearest `p` - the field a wood at `p` would adjoin. The grid
-    is asked at a widening pad until it answers; with no field ground at all, -inf (every seat stands above it)."""
+FIELD_BESIDE_FT = 300.0
+"""Research: the fields beside a wood - UNRESEARCHED: the field edge within 300 ft past the nearest point, about a wood's own span"""
+
+
+def field_height_near(p: Pt, fall: Pt, grid: PointGrid, beside: float = FIELD_BESIDE_FT) -> float:
+    """The height (up the fall, -p.fall) of the field ground beside `p` - the highest point of the field edge within `beside`
+    past the nearest one, the field a wood at `p` would adjoin (feature 328, glyph-check of Kashikawa's woodland commons: one
+    nearest point stood 53 ft below a wood whose paddy beside it ran up past its top). The grid is asked at a widening pad
+    until it answers; with no field ground at all, -inf (every seat stands above it).
+
+    Research: higher than the fields beside it - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: on ground higher than the fields beside it"""
     pad = 128.0
     while pad <= 8192.0:
-        near = [(math.dist(p, (q[0], q[1])), q) for q in grid.near(p[0], p[1], pad)]
-        near = [t for t in near if t[0] <= pad]
-        if near:
-            q = min(near)[1]
-            return -(float(q[0]) * fall[0] + float(q[1]) * fall[1])
+        near = [(math.dist(p, (q[0], q[1])), q) for q in grid.near(p[0], p[1], pad + beside)]
+        if any(t[0] <= pad for t in near):
+            d0 = min(t[0] for t in near)
+            return max(-(float(q[0]) * fall[0] + float(q[1]) * fall[1]) for d, q in near if d <= d0 + beside)
         pad *= 2.0
     return -math.inf
 
 
+def house_floor(houses: Sequence[Pt], fall: Pt) -> float:
+    """The height below which a wood stands below the houses: the houses' median height up the fall (feature 328, glyph-check
+    of Kashikawa's woodland commons: against the lowest house alone, a wood below 19 of the 20 houses ranked as above them);
+    -inf with no houses.
+
+    Research: never below the houses - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: a wood below the houses stands where the record puts grass"""
+    hs = sorted(-(x * fall[0] + y * fall[1]) for x, y in houses)
+    if not hs:
+        return -math.inf
+    m = len(hs) // 2
+    return hs[m] if len(hs) % 2 else (hs[m - 1] + hs[m]) / 2
+
+
 def woodland_tier(p: Pt, fall: Pt, house_floor: float, field_height: float) -> int:
     """Where the record puts a village's fuel wood, as a rank (269 B27, research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.html): 0 - higher than the field
-    it adjoins and not below the lowest house (the nearest hill ground beyond the fields); 1 - not below the houses but
+    it adjoins and not below the houses (`house_floor`, their median) (the nearest hill ground beyond the fields); 1 - not below the houses but
     not above that field (the level beside the fields, the record's fallback); 2 - downslope of every house, where the
     record puts the grass and riverbank commons, never the wood. Heights run up the fall: -p.fall.
 
@@ -506,7 +526,7 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
             # lies below the houses on a fan. Where the ground slopes the seat higher than the field next to it ranks first -
             # the entry's "the slopes around the settlement" - and it must still be beyond the fields (below).
             _fall = (dx, dy)
-            _house_floor = min((-(float(h["x"]) * dx + float(h["y"]) * dy) for h in s.M.get("houses", [])), default=-math.inf)
+            _house_floor = house_floor([(float(h["x"]), float(h["y"])) for h in s.M.get("houses", [])], _fall)
             _tiers = [woodland_tier((t[1], t[2]), _fall, _house_floor, field_height_near((t[1], t[2]), _fall, crop_pts)) for t in scored]
             # a RANK, not a filter, below the downslope refusal: every tier-0 seat outranks every tier-1 one (the 1e9 dwarfs any
             # distance on a canvas), so the level is taken only once the ground above the fields is used up - "where the map

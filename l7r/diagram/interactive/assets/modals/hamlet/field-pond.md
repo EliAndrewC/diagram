@@ -1,17 +1,16 @@
 About: A paddy field was rice, plot after plot, but not only rice: small ponds stood among the paddies to store water
 for them. One form, seen mostly on the plains, was the dish pond (sara-ike), made by ringing a hollow or a stretch of low
-wet ground with an embankment and digging out its bottom. Japan came to have over a hundred thousand ponds, more of them
-built in the Edo period than in any other; on the dry Sanuki plain, once the good sites ran out, even flat farmland was
-dug into ponds.
+wet ground with an embankment and digging out its bottom.
 
-In old China the water plants stood inside the bank, not on it, and the bank was kept firm for strength. Today the
-shallow dish ponds of the plains are ringed with reed, wild rice and cattail, with water chestnut and water lilies over
-their surface, and their banks are mown and burned.
+In old China, too, water plants stood inside a marsh's bank, not on it, and a pond's bank could be planted with a few
+trees and trodden firm by cattle. The dish ponds of the plains today are ringed with reed, wild rice and cattail, with
+water chestnut and water lilies over their surface, and their banks are mown and burned.
 
-The smallest ponds, about 33 ft on a side, were owned and kept by one person; the largest covered 7 acres or more
-(several hectares). In Kagawa, the densest pond country in Japan, about half its 12,000 ponds hold under 35,000 cubic ft
-(1,000 tonnes). How often one field had a pond is not recorded; it seems to have ranged from none, in a valley whose
-stream watered every plot, to many on a dry plain like Sanuki.
+Japan came to have over a hundred thousand ponds, more of them built in the Edo period than in any other. The smallest,
+about 33 ft on a side, were owned and kept by one person; the largest covered many acres. A twelfth-century Chinese manual
+gave up two or three parts in ten of a field to its pond, a pond a quarter to over two-fifths the size of the field it
+watered; no such ratio is recorded for Japan. How often one field had a pond is not recorded either; it seems to have
+ranged from none, in a valley whose stream watered every plot, to many on a dry plain like Sanuki.
 
 Guesses:
 - How often a field keeps a pond, a little over half the time where it has low plots: no count of ponds per field or per

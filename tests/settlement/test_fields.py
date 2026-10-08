@@ -322,6 +322,13 @@ def test_the_field_pond_is_drawn_as_a_dish_pond_inside_its_fit() -> None:
     assert f'fill="{FLOODED}" stroke="{AZE}"' in svg, "the bank ring on wet ground"
     assert f'rx="{rec["rx"] * 0.72:.1f}"' in svg, "the open water inside it"
     assert svg.count("<line") == 8 and {c for _, c in ink} == {"field pond"}
+    small: list[tuple[str, str]] = []
+    tiny = {"poly": [(0.0, 0.0), (30.0, 0.0), (30.0, 22.0), (0.0, 22.0)], "low": True, "fill": "#A6C398"}
+    assert s._plot_pond(tiny, [tiny["poly"]], small)
+    r = s.M["field_ponds"][-1]
+    water = [float(v) for v in __import__("re").findall(r'rx="([0-9.]+)"', small[1][0])]
+    assert water[0] <= r["rx"] - 2.2 - 3.0 + 1e-6, "glyph-check of Inashiro: the wet margin never under 3 px, however small the pond"
+    assert 'stroke="#7FA040"' in small[3][0], "the reeds in a green that reads on the margin"
 
 
 def test_the_field_grave_takes_either_attested_form_and_a_corner_grave_stays_in_its_corner():

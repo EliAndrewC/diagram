@@ -73,18 +73,30 @@ def mark_low(plots: list[dict[str, Any]], dpts: Poly, plot_across: float, row_st
     Research:
         low ground - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: the low ground begins at the plots whose foot lies on the collector
         low ground depth - UNRESEARCHED: within LOW_ROWS (two) row steps of the collector
-        wet plots on the drain - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: FLOOD_SAMPLE of the plots within a quarter plot of the collector tinted
+        wet plots on the drain - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: FLOOD_SAMPLE of the plots fronting the collector tinted (`fronts`)
     """
     import shapely
     from shapely.geometry import LineString, Polygon
 
     if len(dpts) < 2 or not plots:
         return
-    near = shapely.distance([Polygon(p["poly"]) for p in plots], LineString(dpts)).tolist()
-    for p, d in zip(plots, near, strict=True):
+    line = LineString(dpts)
+    polys = [Polygon(p["poly"]) for p in plots]
+    near = shapely.distance(polys, line).tolist()
+    for p, poly, d in zip(plots, polys, near, strict=True):
         p["low"] = d <= LOW_ROWS * sum(row_step) / 2
-        if d <= 0.25 * plot_across and R.random() < FLOOD_SAMPLE:
+        # ON the drain means FRONTING it (0007: the plots "whose foot lies on the drain"), as `basin_rank` reads it - a real
+        # length of boundary along it, never a corner within reach (feature 328, glyph-check of Sawada: two plots tinted
+        # with 0 and 4.3 ft of frontage)
+        if d <= 0.25 * plot_across and fronts(poly, line, plot_across) and R.random() < FLOOD_SAMPLE:
             p["fill"] = FLOODED
+
+
+def fronts(poly: Any, line: Any, plot_across: float) -> bool:
+    """Does `poly` front `line` - a quarter of a plot's width of the line within a quarter plot of it?
+
+    Research: fronting the drain - research/questions/0007-wet-paddies-that-never-drain-shitsuden.drawing.html: the plots whose foot lies on the drain"""
+    return bool(poly.buffer(0.25 * plot_across).intersection(line).length >= 0.25 * plot_across)
 
 
 def judge_tint(plots: list[dict[str, Any]], dpts: Poly, plot_across: float, g: float) -> None:

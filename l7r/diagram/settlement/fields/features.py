@@ -195,8 +195,12 @@ def _mound_meets_pond(disc: tuple[float, float, float], ponds: Sequence[dict[str
 
 POND_WATER_SHARE = 0.72
 """Research: the dish pond's open water - GUESS: 72% of the fitted outline, the rest its wet margin inside the bank"""
-POND_REED_RING = 0.86
-"""Research: the reeds on the wet margin - GUESS: at 86% of the outline, between the water's edge and the bank"""
+POND_BANK_PX = 2.2
+"""Research: the dish pond's bank stroke - CONVENTION: 2.2 px, drawn inside the fitted outline"""
+POND_MARGIN_PX = 3.0
+"""Research: the wet margin's least width - CONVENTION: 3 px inside the bank, so the reeds on it show at any pond size"""
+POND_REED_INK = "#7FA040"
+"""Research: the reed ink - CONVENTION: a reed green lighter than the bank and darker than the wet tint, so it reads on the margin"""
 
 
 class FieldFeaturesMixin:
@@ -263,6 +267,7 @@ class FieldFeaturesMixin:
             field pond rate - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: 0.55 where a low plot can hold one
             field pond on a low plot - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: tried over the low plots in random order
             rock outcrops - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: terraces always, ribbon valleys half the time, 1-3 a field
+            rock outcrop's host plot - UNRESEARCHED: any plot of the field, chosen at random
             field grave rate - research/questions/0236-where-a-village-buries-its-dead-its-own-ground-the-temple-yard-the-fields-or-the-home-plot.drawing.html: 0.3 on valley, terrace and ribbon fields
         """
         if self.M.get("meta", {}).get("scale") in ("town", *CITY_TIER_SCALES):
@@ -362,22 +367,27 @@ class FieldFeaturesMixin:
         Research:
             field pond glyph - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.html: a dish pond, low ground ringed with an embankment and dug out
             reed fringe - research/questions/0008-ponds-rocks-and-graves-in-the-middle-of-the-fields.drawing.html: a fringe of reeds inside the low plot
-            bank, margin and water proportions - GUESS: the bank stroke 2.2 px, the water 72% of the outline, the reeds at 86%"""
+            bank, margin and water proportions - GUESS: the water 72% of the outline where the margin keeps POND_MARGIN_PX, the reeds midway across the margin"""
         fit = self._pond_fit(plot, rings)
         if fit is None:
             return False
         cx, cy, rx, ry = fit
         from l7r.diagram.waterfields import AZE, FLOODED  # local: the engine packages are peers, imported lazily
 
-        wx, wy = rx * POND_WATER_SHARE, ry * POND_WATER_SHARE
+        bank = POND_BANK_PX
+        bx, by = rx - bank / 2, ry - bank / 2  # the bank's stroke wholly inside the fitted outline (glyph-check of Inashiro: it reached 1.1 px past it, onto the bund)
+        # the wet margin never under POND_MARGIN_PX inside the bank's inner edge, however small the pond (the same check: at a
+        # 13 x 9 ft pond the shares left it 1 px wide and the reeds vanished into the bank)
+        wx = max(1.0, min(rx * POND_WATER_SHARE, rx - bank - POND_MARGIN_PX))
+        wy = max(1.0, min(ry * POND_WATER_SHARE, ry - bank - POND_MARGIN_PX))
         self._field_feature_ink(
-            ink, f'<ellipse cx="{cx:.1f}" cy="{cy:.1f}" rx="{rx:.1f}" ry="{ry:.1f}" fill="{FLOODED}" stroke="{AZE}" stroke-width="2.2"/>', "field pond"
+            ink, f'<ellipse cx="{cx:.1f}" cy="{cy:.1f}" rx="{bx:.1f}" ry="{by:.1f}" fill="{FLOODED}" stroke="{AZE}" stroke-width="{bank:.1f}"/>', "field pond"
         )  # the bank ring on the wet margin; feature 134: its own class, beside `pond`
         self._field_feature_ink(ink, f'<ellipse cx="{cx:.1f}" cy="{cy:.1f}" rx="{wx:.1f}" ry="{wy:.1f}" fill="#9CB4C8" stroke="#5C7488" stroke-width="1.2"/>', "field pond")
         self._field_feature_ink(ink, f'<ellipse cx="{cx:.1f}" cy="{cy:.1f}" rx="{max(wx - 4, 1):.1f}" ry="{max(wy - 3, 1):.1f}" fill="none" stroke="#B6CAD8" stroke-width="0.9"/>', "field pond")
-        rr = POND_REED_RING
+        mx, my = (wx + rx - bank) / 2, (wy + ry - bank) / 2  # the reeds midway across the wet margin
         reeds = "".join(
-            f'<line x1="{cx + rx * rr * math.cos(a):.1f}" y1="{cy + ry * rr * math.sin(a) + 2:.1f}" x2="{cx + rx * rr * math.cos(a):.1f}" y2="{cy + ry * rr * math.sin(a) - 2:.1f}" stroke="#4E6A2E" stroke-width="1.1"/>'
+            f'<line x1="{cx + mx * math.cos(a):.1f}" y1="{cy + my * math.sin(a) + 1.5:.1f}" x2="{cx + mx * math.cos(a):.1f}" y2="{cy + my * math.sin(a) - 1.5:.1f}" stroke="{POND_REED_INK}" stroke-width="1.1"/>'
             for a in [i * math.pi / 4 + math.pi / 8 for i in range(8)]
         )
         self._field_feature_ink(ink, f'<g opacity="0.9">{reeds}</g>', "field pond")
