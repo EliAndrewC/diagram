@@ -1,50 +1,45 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "3b6a40710db3ec4244b96e4fe24f2b043a8b8ed6d52bab05aec8c0cc8e028a04",
+ "plan_sha256": "0c40c03550af8a2320d7905960e0f0acb55c3f69e839cf5568b2e0636261eb1a",
  "reviewed": "2026-10-08",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W34-1 polder seat/inlet re-tiered E3",
-   "summary": "reservoir seat and inlet stub tried literally, reverted and re-tiered E3 on the measured Kuwabata joint zigzag",
+   "id": "W35-scope",
+   "summary": "wave 34's ten found rows tiered by a fresh reader (T95a): eight E0 claims written or relabeled (dwelling band GUESS 0221 drawing; clerk positions DEVIATION 0099 drawing; barracks watch GUESS not CANON 0116; office hall cited to 0113 drawing; practice ground 0165 drawing; hearing court posts 0099 drawing; no salt wards at gates 0240 drawing; the T's stem CONVENTION 0081 drawing)",
    "class": "within",
-   "why": "FR-003's re-tier on a measured failure (m:wave34-kuwabata-inlet-outside-dike plus a failing pool test); unchanged from round 1"
+   "why": "FR-003 E0 and FR-004: each cited page, unedited for this purpose, already says what the doc or code does (checked against each page's text); only the claim's label or citation changes"
   },
   {
-   "id": "W34-2 row 466 mend form",
-   "summary": "a joint of two kinds is string-pulled like any other (same ok/kink/keeps_the_web gates as a same-width joint), then split back into its two records each at its own width",
+   "id": "W35-stale-clerk",
+   "summary": "the stale UNRESEARCHED 'clerk positions at the dais' claim in docs/buildings.md takes the same DEVIATION as its programs.md row",
    "class": "within",
-   "why": "round 1's item met: joints.py drops the _bends_badly/_joint_moved_back trigger; the two-kind branch now runs after the common pull, matching the row's fix 'no width/kind exception' and 0081 'a jog across the meeting point is pulled straight like any other'; keeping two records is each way at its rank, not an exception to the pull; the claim now cites 0081"
+   "why": "the same E0 fact (0099 drawing: 'a deliberate deviation, for simplicity'); a found row fixed in the same wave"
   },
   {
-   "id": "W34-3 rows 464/465 re-tiered E3",
-   "summary": "row 464 (track inner end joined however far) and row 465 (spine 5 ft) re-tiered E3 with evidence in audit/overrides.json, so SC-003 lets row 466 (E2) be taken",
+   "id": "W35-E2-left",
+   "summary": "the Scale paragraph's salt-ward marker clause and the Z-to-T rule in _one_joint tiered E2 and left for their place in the run",
    "class": "within",
-   "why": "round 1's item met: the evidence is recorded and checks out - _pull_back_to_service (fabric.py:360) takes no hard/walls/water, its caller is web.py:344, route._route exists (route.py:160): a change across modules; rank_width/RANK_WIDTHS name no spine, so marking the through-route is a new element; both are FR-003 E3 definitions, and the rows stay open in the ranking, not dropped"
+   "why": "FR-003 E2 (one procedure paragraph; one function's logic) and FR-006 (waves a contiguous run lowest tier first); not dropped, ranked"
   },
   {
-   "id": "W34-4 occasions none",
-   "summary": "no review occasions: no pool map changes",
+   "id": "W35-0090-note",
+   "summary": "0090's drawing page credits a 38 ft deep office hall to the drawn compounds while the three hand sheets draw 28 ft; recorded in claims-followup.md, no doc value changed",
    "class": "within",
-   "why": "feature 294's occasions follow map change; the unchanged state is measured at the close"
+   "why": "the doc matches the sheets and 0113's band; changing the record is FR-004's exception path, so noting it rather than editing the page or the implementation keeps the direction of the fix"
   },
   {
-   "id": "W34-5 stacking under condition (6)",
-   "summary": "wave 34 opens on unpushed waves 9-33, wave 33's push held for the GM's call on the merge commit's stray profiles",
-   "class": "within",
-   "why": "the hold is a GM decision the session cannot lift without a forbidden history rewrite; carried from round 1"
+   "id": "W35-stack",
+   "summary": "wave 35 proceeds on the unpushed waves 9-34 under condition (6), the backup branch not pushed past 51da9771f (wave 32's close) because the 329 merge commit carries stray profiles awaiting the GM's call",
+   "class": "narrowing",
+   "ruling": "LEGITIMATE",
+   "why": "condition (1)'s backup push is blocked, not skipped: history may not be rewritten, so pushing the backup would put the merge's .prof files on GitHub and pre-empt the very decision left to the GM; the plan discloses it; wave 35 changes no executed code (claim comments and a docstring line), so it opens no pair and stacks no behavior; (2)-(5) unaffected"
   },
   {
-   "id": "W34-6 row 434 held",
-   "summary": "the fixture-quota row held for the GM",
+   "id": "W35-no-pair",
+   "summary": "no bookend pair and no review occasions for wave 35",
    "class": "within",
-   "why": "carried hold with its earlier LEGITIMATE ruling (ranking flag, 2026-10-07)"
-  },
-  {
-   "id": "W34-7 found rows",
-   "summary": "eight rows found by wave 34's re-check enter the ranking provisionally tiered by verdict (seven E0, one E2), for a later fresh-reader tiering",
-   "class": "within",
-   "why": "FR-001/FR-003 bookkeeping as wave 30's found rows were handled in wave 32; the plan defers none of them out of scope"
+   "why": "no executed code or pool map changes; plan's Performance bookends rule owes a pair only to a wave that changes engine behavior"
   }
  ],
  "verdict": "CLEAR"
