@@ -10069,13 +10069,21 @@
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::draw_holdings#crop cells kept back from lanes (half the lane width + 2.0) and from streams (6.0); these margins reach past the \"touches\" the guess claim names": {
-  "code": "e373381534fa0fdb",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::draw_holdings#crop cells kept back from lanes and streams": {
+  "code": "47d30390662a10d2",
   "core": "e373381534fa0fdb",
   "date": "2026-10-07",
-  "note": "crop cells kept back from lanes (half the lane width + 2.0) and from streams (6.0); these margins reach past the \"touches\" the guess claim names",
+  "note": "GUESS correct: 0033 does not say how near a lane or stream a holding is planted; the 2 px / 6 px buffers match the code",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "rests": [
+   "0033-row-villages-resson.drawing.html:22b02e1d1507e48b",
+   "0033-row-villages-resson.drawing.html:40d16df7be480e77",
+   "0033-row-villages-resson.drawing.html:6181eeb7e6f73fde",
+   "0033-row-villages-resson.drawing.html:d08ad775dbfe9fa1",
+   "0033-row-villages-resson.drawing.html:dd589d645d5bdeaa"
+  ],
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::draw_holdings#furrows down the strip": {
   "code": "a0fadd7badd6fc99",
@@ -10099,13 +10107,19 @@
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::draw_holdings#holding strip cut into plots HOLDING_CELL_FT (150 ft) deep, which 0033 §14 records as a convention": {
-  "code": "e373381534fa0fdb",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::draw_holdings#holding plot depth": {
+  "code": "3f36239e2c0c86de",
   "core": "e373381534fa0fdb",
   "date": "2026-10-07",
-  "note": "holding strip cut into plots HOLDING_CELL_FT (150 ft) deep, which 0033 §14 records as a convention",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "note": "max(1, round(depth / px(150 ft))) matches \"plots about 150 ft deep\", which the page records as a convention",
+  "pages": {
+   "0033-row-villages-resson.drawing.html": "d44c8f42024bfa3e"
+  },
+  "research": "3f66a452776b32a9",
+  "rests": [
+   "0033-row-villages-resson.drawing.html:d08ad775dbfe9fa1"
+  ],
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::frame_extent#row geometry": {
   "code": "3044f298e1a39283",
@@ -10765,14 +10779,6 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#how deep a scattered hamlet runs: at most four rank rounds behind the front row (range(7), attempt < 4) before the rescue": {
-  "code": "c55c6b5d82bf28c6",
-  "core": "c55c6b5d82bf28c6",
-  "date": "2026-10-07",
-  "note": "how deep a scattered hamlet runs: at most four rank rounds behind the front row (range(7), attempt < 4) before the rescue",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#rank depth jitter": {
   "code": "d04b1ccfe845c640",
   "core": "c55c6b5d82bf28c6",
@@ -10794,10 +10800,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#seats kept apart": {
-  "code": "c1d51349ec7eda6a",
+  "code": "bc740af2b4f10af9",
   "core": "c55c6b5d82bf28c6",
   "date": "2026-10-07",
-  "note": "0.5 pitch (0.3 in the rescue) from kept seats, 0.5 from houses",
+  "note": "NONE fits: it only drops repeat candidates (0.5 / 0.3 of a pitch); the placer's envelope sets the real spacing",
   "pages": {},
   "research": "",
   "rests": [],
@@ -10886,14 +10892,18 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#the seating's reach": {
-  "code": "b14c96b8c879ebff",
+  "code": "aeb72b2c91514b73",
   "core": "c55c6b5d82bf28c6",
   "date": "2026-10-07",
-  "note": "the claim says every homestead stands within FORM_BOUND * the half-diagonal, but in_band is tested only at `attempt >= 4`. The rank rounds 0-3 run unbounded (no region on the dispersed form), so the claim should say the bound holds only for the front row (1.3x) and the rescue",
+  "note": "UNRESEARCHED correct: FORM_BOUND has only linear 2.5, other forms default to 1.15, front row uses x1.3; 0031 gives no extent (\"not a finding about how far apart scattered farms stood\")",
   "pages": {},
   "research": "",
-  "rests": [],
-  "verdict": "DRIFTED"
+  "rests": [
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:4ea19f2ff9e71342",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:bc33ef71630b4b4c",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:c7a1445b284e3d02"
+  ],
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#the step between ranks": {
   "code": "5bfde4a3707dbafa",
@@ -11982,13 +11992,20 @@
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/pondstock.py::_bank_seats#sty seat pulled in by half the bank (BANK_INSET_FT) so it stands on the bank, not by the canal (0025 §259)": {
-  "code": "9668ce940c99ef97",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/pondstock.py::_bank_seats#sty seat on the bank": {
+  "code": "4cf3849b5e61a1ce",
   "core": "9668ce940c99ef97",
   "date": "2026-10-07",
-  "note": "sty seat pulled in by half the bank (BANK_INSET_FT) so it stands on the bank, not by the canal (0025 §259)",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "note": "the seat is set in by BANK_INSET_FT = DIKEPOND_WATER_INSET/2 = 11.5 ft at 1 ft/px, which is half of the 23 ft drawn bank, on the parcel's own coordinates",
+  "pages": {
+   "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html": "a80ff0e81f8d433e"
+  },
+  "research": "1fcdf871b340e87e",
+  "rests": [
+   "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html:02c8bea0e76c8504",
+   "0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html:3e1c51af898dc6ed"
+  ],
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/pondstock.py::_centroid#pond-bank geometry": {
   "code": "df36f378ab2c0872",

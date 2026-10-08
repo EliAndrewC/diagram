@@ -1,51 +1,38 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "464b7f15db0ba36e836582f6724bdbeb7f1e0a4db76ed49448d905df47cc9f43",
+ "plan_sha256": "670503b66476431f65334456ae44eeab966db6458ab2266687cee4bc8cdaacbe",
  "reviewed": "2026-10-07",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W24-scope-rank-step",
-   "summary": "row 436: _rank_step adds SUN_CORRIDOR_FT by abs(oy), whichever way the ranks run",
+   "id": "W25-scope",
+   "summary": "Wave 25 takes wave 24's found rows as T75a tiered them: the E0 rows claimed or confirmed (two stand as claimed), no executed code changed",
    "class": "within",
-   "why": "0038 drawing: no farmhouse within 39 ft south of a yard; the implementation moves to the research (FR-004)"
+   "why": "FR-003 E0 (the claim alone, the code already matching an unedited page or an UNRESEARCHED/GUESS/NONE statement of itself) and FR-004 (a claim fix corrects the implementation's own statement); spot-checked: 0025 drawing says the sty is set in by half the bank and the bank inset is the drawn DIKEPOND_WATER_INSET in the same units; 0033 drawing says 150 ft plots as a convention; rows.py buffers w/2+2.0 and 6.0 px as the GUESS states; stages.py keeps houses at 0.5 pitch every round and only the round's own seats at 0.3 in the rescue, as rewritten"
   },
   {
-   "id": "W24-row-437-step",
-   "summary": "row 437: _rank_step = envelope + max(MIN_WEB_GAP, |oy| x SUN_CORRIDOR_FT) - the rank's lane room falls inside the yard's 39 ft of sun, so north-south ranks stand about 0038's 92 ft apart; claim and ranking fix line corrected",
+   "id": "W25-E3",
+   "summary": "The scattered hamlet's rank rounds tiered E3 against 0031's single file and left for its place in the run, beside its sibling row 687",
    "class": "within",
-   "why": "Takes option (a) of the previous BLOCKED item. 0038's rows 92 ft = house 28 + yard ~26 + 39 ft sun, with no separate lane term; 0038 forbids a farmhouse in the sun, not a lane, and the GUESS claim already says no lane is laid there. East-west ranks (oy=0) are unchanged at envelope + MIN_WEB_GAP. The implementation moves to the research (FR-004); ranking.json's fix line now states the true fix"
+   "why": "FR-003: the fix is one rule plus the dispersed maps redeclared (several places), so E3; FR-003's module grouping puts it after row 687 (same rule, same fix); FR-006 order: the open E0 rows first, then E2 from row 442, row 434 held for the GM as already ruled"
   },
   {
-   "id": "W24-scope-bank-seats",
-   "summary": "row 438: _bank_seats ranks every bank seat together nearest the houses; the UNRESEARCHED midpoints-first clause retired",
+   "id": "W25-occasions",
+   "summary": "No review occasions; the wave column records none (claims and one comment)",
    "class": "within",
-   "why": "0025 drawing: the sty takes the nearest place with room (FR-004)"
+   "why": "no executed code changed, so no map moves and feature 294 opens no occasion"
   },
   {
-   "id": "W24-found-row-E0",
-   "summary": "wave 23's found row (draw_holdings leaves a cell a lane or stream touches undrawn) tiered E0 by a fresh reader and claimed GUESS",
+   "id": "W25-cond6",
+   "summary": "Waves 9-24 stay unpushed under the wave-11 exception's condition (6); (1)-(5) held at 5947e79ae, backed up, wave 25's own pair opens there",
    "class": "within",
-   "why": "FR-002/FR-003; E0 is the claim alone, and a GUESS label stating what the code does with no page behind it is the honest claim"
+   "why": "the previously ruled exception continued on its own terms: its own amendment with a reset counter and this plan review before T75; backup/digram-backlog is at 5947e79ae on the remote"
   },
   {
-   "id": "W24-row-434-held",
-   "summary": "row 434 (fixture count to the share) held for the GM, not fixed in ranked order",
-   "class": "narrowing",
-   "ruling": "LEGITIMATE",
-   "why": "implied by the GM's own goal amendment (2026-10-07): a question is deferred to the feature's end, not blocked on; the row stays open in the ranking with the hold written in it"
-  },
-  {
-   "id": "W24-occasions-none",
-   "summary": "no review occasion: the rank search reaches no pool map; Kuwabata's sties move a few feet along their own bank",
+   "id": "W25-verify",
+   "summary": "impl-drift on the touched claims (the two that stand included), the gate, wave 25's own bookend pair",
    "class": "within",
-   "why": "FR-005 runs the occasions a wave opens (feature 294); no new element and no substantial re-placement on a pool map"
-  },
-  {
-   "id": "W24-condition-6",
-   "summary": "wave 24 stacks on the unpushed waves 9-23 under the wave-11 exception's condition (6); its pair opens at 397c005fb",
-   "class": "within",
-   "why": "the exception was ruled LEGITIMATE on conditions, recorded as held at 397c005fb"
+   "why": "FR-005 as written; the two rows that stand close only if impl-drift returns IN-STEP"
   }
  ],
  "verdict": "CLEAR"
