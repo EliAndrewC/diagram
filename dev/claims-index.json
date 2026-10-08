@@ -32675,9 +32675,10 @@
   "date": "2026-10-03",
   "note": "per 0179",
   "pages": {
-   "0179-water-gates-and-sluices-shuimen.drawing.html": "19011b41723432c2"
+   "0179-water-gates-and-sluices-shuimen.drawing.html": "eea8e3604149571f"
   },
-  "research": "7abc2922379a319e",
+  "research": "b60d227f3a830d26",
+  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/overlap/taxonomy.py::_FIXTURE_MOUNTS#wall tower": {
@@ -32937,15 +32938,16 @@
   "note": "the permission covers wall x {road, roads, town_streets, alleys, lanes, canals, channels, streams} anywhere along the wall, while the claim says \"at a gate or a water gate\"; need the check that holds every way or watercourse crossing the wall to a gate or water-gate opening (as city_kido_on_ward_fence does for the ward fence)",
   "pages": {
    "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html": "49298f0d00bbf69d",
-   "0179-water-gates-and-sluices-shuimen.drawing.html": "19011b41723432c2"
+   "0179-water-gates-and-sluices-shuimen.drawing.html": "eea8e3604149571f"
   },
-  "research": "288b07cf5a7de27e",
+  "research": "269bfa4b98ba8c53",
   "rests": [
    "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html:5066b991dad4631a",
    "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html:8c6e4d1d8109adfa",
    "0179-water-gates-and-sluices-shuimen.drawing.html:088c44a5ca24eaf0",
    "0179-water-gates-and-sluices-shuimen.drawing.html:27ed53483dc6cfc1"
   ],
+  "triaged": "2026-10-08",
   "verdict": "CANNOT-TELL"
  },
  "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_PAIRS#way over water": {
@@ -33239,10 +33241,10 @@
    "0148-towers-along-the-city-wall-mamian.drawing.html": "89938d617cc0b450",
    "0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html": "e242aadf4edb4965",
    "0176-wharves-and-landings-piers-quays-and-stepped-landings-kashi-gangi.drawing.html": "676ecd28f9b1d116",
-   "0179-water-gates-and-sluices-shuimen.drawing.html": "19011b41723432c2",
+   "0179-water-gates-and-sluices-shuimen.drawing.html": "eea8e3604149571f",
    "0210-timber-yards-and-log-booms-kiba.drawing.html": "f17b51f2d5f34284"
   },
-  "research": "13d86e13d1252931",
+  "research": "ad9875255b27e71e",
   "rests": [
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:b1c3c0e8029a1da5",
    "0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html:fb25778e65e5d8bd",
@@ -33258,6 +33260,7 @@
    "0210-timber-yards-and-log-booms-kiba.drawing.html:4ef8408e54f82f55",
    "0210-timber-yards-and-log-booms-kiba.drawing.html:eac260ce154f9535"
   ],
+  "triaged": "2026-10-08",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/overlap/taxonomy.py::_OVERLAP_EXEMPT#copse and bamboo against a house": {
@@ -38205,9 +38208,10 @@
   "date": "2026-10-03",
   "note": "0179/0146 drawings",
   "pages": {
-   "0179-water-gates-and-sluices-shuimen.drawing.html": "19011b41723432c2"
+   "0179-water-gates-and-sluices-shuimen.drawing.html": "eea8e3604149571f"
   },
-  "research": "7abc2922379a319e",
+  "research": "b60d227f3a830d26",
+  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/moat.py::MoatMixin.inwall_drain_outfall#undrawn conduit to the moat": {
@@ -38334,13 +38338,14 @@
   "date": "2026-10-08",
   "note": "drawn where one channel hands its water to another (moat or river tap to canal, drain to culvert)",
   "pages": {
-   "0179-water-gates-and-sluices-shuimen.drawing.html": "19011b41723432c2"
+   "0179-water-gates-and-sluices-shuimen.drawing.html": "eea8e3604149571f"
   },
-  "research": "7abc2922379a319e",
+  "research": "b60d227f3a830d26",
   "rests": [
    "0179-water-gates-and-sluices-shuimen.drawing.html:067bd7a407956917",
    "0179-water-gates-and-sluices-shuimen.drawing.html:cf888beb9dde091c"
   ],
+  "triaged": "2026-10-08",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/moat.py::MoatMixin.sluice_gate#board, posts, crossbeam and windlass": {
@@ -38357,6 +38362,7 @@
    "0179-water-gates-and-sluices-shuimen.drawing.html:30803fa2df4a125c",
    "0179-water-gates-and-sluices-shuimen.drawing.html:b61cf64d7fc5dad2"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/city/moat.py::MoatMixin.sluice_gate#caption": {
@@ -38392,15 +38398,16 @@
   "date": "2026-10-07",
   "note": "the code draws the arch on two piers but only one set of bars. Those bars are three lines running the depth of the passage, along the flow rather than \"across the water\". The rule says \"A grille crosses the water at both the outer and the inner face of the wall\" and \"The channel between the two grilles is lined with stone on both sides\"; the code draws neither the second grille nor the stone lining. Either draw grilles at both faces (and the stone revetments), or narrow the claim and record the single grille as a deviation",
   "pages": {
-   "0179-water-gates-and-sluices-shuimen.drawing.html": "19011b41723432c2"
+   "0179-water-gates-and-sluices-shuimen.drawing.html": "eea8e3604149571f"
   },
-  "research": "7abc2922379a319e",
+  "research": "b60d227f3a830d26",
   "rests": [
    "0179-water-gates-and-sluices-shuimen.drawing.html:088c44a5ca24eaf0",
    "0179-water-gates-and-sluices-shuimen.drawing.html:0c0cf1f522fe99df",
    "0179-water-gates-and-sluices-shuimen.drawing.html:5c1425b9f88a2c9a",
    "0179-water-gates-and-sluices-shuimen.drawing.html:d21d92ab5e6513f4"
   ],
+  "triaged": "2026-10-08",
   "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/city/moat.py::MoatMixin.water_gate#glyph size": {
@@ -50025,6 +50032,7 @@
   "rests": [
    "0179-water-gates-and-sluices-shuimen.drawing.html:65c2e2ee17e2dda0"
   ],
+  "triage": "touched",
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/land/dikes.py::DikeMixin.dike_gates#sluice at every cut": {
