@@ -29,5 +29,6 @@
 - [x] T07 `future-work/` deleted; `make speckit-todo` run before and after, both outputs and the spot check of ten listed and ten unlisted features recorded in `audit.md` (FR-007, SC-002, SC-003)
       research: rendering
       verify: DONE. future-work/ deleted; check-old-layout clean; speckit-todo before 9 filed / 2 planned / 16 in progress / 220 closed, after 39 / 0 / 3 / 242; spot check of 10 open and 10 closed (seed 330) none misclassified - audit.md D
-- [ ] T08 `make done` green, then the stop-work procedure (VI, XIII)
+- [x] T08 `make done` green, then the stop-work procedure (VI, XIII)
       research: rendering
+      verify: DONE. make done green (312 s, the whole suite: every pool map, seeds 41-44); landing by the stop-work procedure
