@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-08T23:55:40Z",
+  "target": "plan-gate tick 328-match-the-research",
+  "commit": "db4b33b65",
+  "why": "the CLEAR of batch 3's close round 2 asked for these pointer edits"
+}

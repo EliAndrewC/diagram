@@ -1717,10 +1717,12 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
 
 - `groves.py` (`open_share`, `TOPUP_TRIES`, `_draw_grove`'s top-up and back-to-front paint).
 
-- [ ] T138 wave 55's row (FR-003, FR-004)
+- [x] T138 wave 55's row (FR-003, FR-004)
       research: rendering
-- [ ] T139 the claims re-checked by `impl-drift`; the record checks owed (FR-005, FR-006)
+      verify: DONE. verified 2026-10-08: plan CLEAR (batch 3's close round 2); impl-drift recorded; record-owed none
+- [x] T139 the claims re-checked by `impl-drift`; the record checks owed (FR-005, FR-006)
       research: rendering
+      verify: DONE. verified 2026-10-08: plan CLEAR (batch 3's close round 2); impl-drift recorded; record-owed none
 - [ ] T140 the 40-household scaling roll of seed 25 refuses its web since the barn seat's withdrawal (19f69655c; fourteen
       access lanes' first leg within 7 ft of their own garden - m:t140-seed25-fouled-fabric): fix the seating so a door's way
       keeps the fabric gap at 40 households; the route the plan names was attempted and its investigation written (plan,
