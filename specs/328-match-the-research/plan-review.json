@@ -1,6 +1,6 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "5897c7a905010e5321bf4df5f9e230411113671bcfd1b7e435e81476faf1aefd",
+ "plan_sha256": "d6cf362bb6c3c3e97149215d18785b2d2695d8d72be3abb7d22c7990e08fed1c",
  "reviewed": "2026-10-08",
  "declared": "spec-fidelity",
  "decisions": [
@@ -154,6 +154,66 @@
    "summary": "terminal_caption refuses a caption crossing any way where 0242 lets one cross a lane; filed MISLABELED, not fixed this wave",
    "class": "within",
    "why": "FR-006's found-row path. Its fix text offers recording the board's stricter rule as a deviation as one option: when the row is taken, that option is an exception to 0242 and goes to a MODE 1 check first; filing it decides nothing."
+  },
+  {
+   "id": "W50-1 row 512: {channels, dry_plots} permission dropped",
+   "summary": "the supply canal no longer may cross the dry hem's plots (0006)",
+   "class": "within",
+   "why": "Ranking row 75's fix as written: 0006's plots lie upslope of the canal, ending at its bank. Implementation moved to the research; nothing narrowed."
+  },
+  {
+   "id": "W50-2 row 513: the sluice's box from its span, drawn true",
+   "summary": "matrix box (span, 8.4); default frame 20 ft at the map's scale with no 10.8 px floor; 0179 section 12 reworded to timbers and drum larger than life, span true; a dike gate bank to bank on a wider channel, posts 2 ft past each bank (GUESS)",
+   "class": "within",
+   "why": "Row 76's fix (size from the span, 16-24 ft, bank to bank on a wider channel). The 0179 rewording is not research bent to the code: section 12 was a CONVENTION with no source, and it contradicted the page's own section 13 (16-24 ft span); keeping the convention for timbers and drum, and drawing the span true, follows section 13 and the standing no-inflation rule for to-scale maps. The 2 ft past each bank is a labeled GUESS inside 0179's 'bank to bank'. Kuwabata's channels (5 ft) leave every gate at 20 ft, the same as before at its scale: only the two records gained span 20 (pool diff checked)."
+  },
+  {
+   "id": "W50-3 rows 523-525: a join rules a seat out; the widest seat left takes the crossing",
+   "summary": "span_here > span skips the seat (3x ceiling and junction widening retired); seat_order tries wide seats first, then the rest widest first",
+   "class": "within",
+   "why": "0084's drawing page says both, word for word: 'the joins of ditches rule a seat out and the span stays about 8 ft' and 'Where no wide spot is free, a crossing takes the widest spot left ... rather than left off'. The ditch still qualifies by its widest point (worth_planking, page section 'A ditch is judged by its widest point'), so no crossing is added on water the page says is stepped across. Both reasons feature 287 gave for widening are recorded as gone."
+  },
+  {
+   "id": "W50-4 row 526: a carried way's deck lands ~10 ft dry or is not seated",
+   "summary": "the footplank form under a carried way retired",
+   "class": "within",
+   "why": "Row 89's fix as written; 0087's LANDING_FT at every corner. Measured: no deck on the five moves."
+  },
+  {
+   "id": "W50-5 row 527: work yards off only where no grain is grown",
+   "summary": "grows_grain: off only on a dike-pond hamlet whose leftover parcels are ponds",
+   "class": "within",
+   "why": "Row 108's fix ('key off on no grain crop, not on no rice'); 0037: every rice and dry-field farm keeps a yard. Checked against the GM's 2026-08-28 ruling (feature 150 T41): its words are 'no threshing yards on a no-rice hamlet', its stated basis 'rice is what a threshing floor is for'; a dike-pond hamlet whose leftover parcels stand in rice is not a no-rice hamlet, so the change follows both the research and the ruling's own words. Note for the GM, not a block: the ruling was carried out on the whole archetype when the leftover form could already be standing rice, so a future rolled dike-pond hamlet with rice leftovers now draws yards where 2026-08-28's build drew none. No kept map moves (Kuwabata's leftover is pond)."
+  },
+  {
+   "id": "W50-6 row 528: the north annex at the band's floor on a shallow house",
+   "summary": "18 x 10 ft on a house under ~22 ft deep, never the 1.8 below the band (0052)",
+   "class": "within",
+   "why": "Row 109's fix as written (ANNEX_LENGTH_FT[0], depth length / ANNEX_RATIO[1]). The band's size remains the recorded deliberate deviation. No map moves."
+  },
+  {
+   "id": "W50-7 row 529: drained acres exclude the whole drain-side row",
+   "summary": "plots flagged low are not drained (0007)",
+   "class": "within",
+   "why": "Row 110's fix as written; 0007: the row's green plots are as wet as its blue ones."
+  },
+  {
+   "id": "W50-8 rows 530-532: the comb outfall curves at most 55 degrees a turn; its corridor on town and city only, in feet",
+   "summary": "the fallback curved too (CURVE_LEG_PX 10, labeled NONE); 33 ft corridor appended only off hamlet and village scale (0058)",
+   "class": "within",
+   "why": "Rows 111, 112 and 116 as written. In scope by measure: Kuwabata's own execution record (.gencache/kuwabata/meta.json) lists outfall_run and _curved_run, so a kept map runs the unit; 'no hamlet runs the branch' is the fallback branch. Kuwabata's manifest is unchanged, so its outfall already turned 55 degrees or less and the corridor's removal moved nothing."
+  },
+  {
+   "id": "W50-9 rows 514-522 DEFERRED on measure; castle bridge permission and water_gate deferred",
+   "summary": "the derived scope (audit/scope.py), the castle bridge's matrix entry added to DEFERRED_ON_MEASURE",
+   "class": "within",
+   "why": "FR-010 as the spec states it: these rows were already scope 'deferred' in ranking.md before this wave (the diff does not touch rows 77-85), and the castle bridge pair is asked of no kept map (no castle drawn), the same measure wave 49 applied. Wording slip, not a narrowing: plan.md calls 514-522 'the town, city, castle and ministry entries', but rows 79 (the wood shed's exemption text), 80 and 81 (the registry's settlement_form and land-use knobs) are not; they are deferred by the same derived rule, and the hamlet wood shed's own placement rows (126, 129, 148, 150) stay kept."
+  },
+  {
+   "id": "W50-10 occasions none",
+   "summary": "the five hamlets regenerated; only Kuwabata's two sluice records gained span 20",
+   "class": "within",
+   "why": "Confirmed from the diff: pool/ changes only by two 'span': 20.0 fields in kuwabata.json; at Kuwabata's channel widths the gate's drawn frame is unchanged, so no glyph is redrawn or re-placed on a kept map."
   }
  ],
  "verdict": "CLEAR"

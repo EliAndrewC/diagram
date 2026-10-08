@@ -1626,7 +1626,7 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
 
 ## Phase 51 - wave 50 (amendment 49): rows 512-513, 523-532 - water fixtures, footplanks, yards, the annex, the comb's drain
 
-- Rows 514-522 DEFERRED on measure (`audit/scope.py`): the town, city, castle and ministry entries no kept map runs.
+- Rows 514-522 DEFERRED on measure (`audit/scope.py`): the town, city, castle and ministry entries, the wood shed's exemption text and the `settlement_form` and land-use knobs - none read by a kept map.
 - `overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#supply canal along the dry hem` (row 512): the permission dropped (0006).
 - `overlap/taxonomy.py::_MX_FIXTURE_BOX#drawn fixture box` (row 513): the sluice gate's box from its recorded span (0179)
   (`test_the_gate_s_drawn_box_spans_bank_to_bank`).
