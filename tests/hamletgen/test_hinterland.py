@@ -920,3 +920,26 @@ def test_a_walk_through_the_field_is_beyond_it_and_a_corner_clip_is_not() -> Non
     assert crossed_through(field, (500.0, -100.0), (500.0, 1100.0)), "straight through the field"
     assert reached_across(field, (-50.0, 60.0), (60.0, -50.0)) and not crossed_through(field, (-50.0, 60.0), (60.0, -50.0)), "a corner clip"
     assert not crossed_through(field, (5.0, 5.0), (5.0, 5.0)) and not crossed_through([], (0.0, 0.0), (1.0, 1.0)), "no walk, no field"
+
+
+def test_a_walk_through_a_row_holding_is_beyond_the_fields(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Batch 1's woodland glyph check on Kashikawa (feature 328): the beyond-the-fields walk was asked of the paddy alone, so a
+    seat beyond the far row's dry-field strips was refused. A walk through a row holding is through the fields too (0033: house
+    lot, then field, then woodland) - here the paddy refuses every seat and the holding admits them."""
+    plan = a_plan()
+
+    def _through(field, frm, tos, share=0.0):  # type: ignore[no-untyped-def]
+        return [field is not plan.envelope] * len(tos)
+
+    monkeypatch.setattr(hinterland.parcels, "crossed_through_many", _through)
+
+    def _scan(holdings: list) -> list:
+        s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
+        s.M["fields"] = []
+        s.M["row_holdings"] = holdings
+        plan.belt = []
+        plan.title_pocket = None
+        return hg.hinterland.open_ground_patches(s, plan, count=2)
+
+    assert _scan([]) == [], "through the paddy alone, nothing is beyond the fields"
+    assert _scan([{"poly": [[0, 0], [10, 0], [10, 10], [0, 10]]}, {"poly": [[0, 0], [1, 1]]}]), "through a row holding, the seats are"

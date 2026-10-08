@@ -270,7 +270,7 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
         crop set-back - UNRESEARCHED: 80 px, 180 px on the crop's sunny side, relaxed to 40 and 100
         keep-outs - UNRESEARCHED: 150 px from houses, 90 from wells, 120 past the pond, 70 from lanes, 60 from streams, 110 round the belt and the houses
         where the fuel wood stands - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: ranked by `woodland_tier`, below-the-houses seats dropped
-        beyond the fields preferred - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: only seats across the field from the houses, the nearest slope beyond the fields, none offered on the houses' side; the walk from the houses runs through the field on every tier (`crossed_through`), the seat also higher than the fields beside it where the ground slopes
+        beyond the fields preferred - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: only seats across the field from the houses, the nearest slope beyond the fields, none offered on the houses' side; the walk from the houses runs through the field on every tier (`crossed_through`) - the paddy or a row holding, research/questions/0033-row-villages-resson.drawing.html's house lot, then field, then woodland - the seat also higher than the fields beside it where the ground slopes
         parcels kept apart - UNRESEARCHED: each one's exclusion 1.15-2.5 of the size
         aspect and bearing - UNRESEARCHED: up to 2.2:1, laid across the fall within 20 deg
         line follows its bounds - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: within LOT_BOUND_REACH (45 ft, the page's "within about 45 ft", its GUESS) of a lane, brook or field the line runs alongside
@@ -518,7 +518,16 @@ def open_ground_patches(s: Settlement, plan: SitePlan, count: int, size: float =
             # nearest the houses (impl-drift, wave 20). On EVERY tier the walk must run THROUGH the field (`crossed_through`):
             # 0077 asks both beyond the fields AND higher than them, and on ground falling evenly the houses' own side is
             # higher than the field too (the woodland glyph check of wave 20, Mizuguchi).
-            _beyond = [t for t, ok in zip(scored, crossed_through_many(plan.envelope, (ccx, ccy), [(t[1], t[2]) for t in scored]), strict=True) if ok]
+            # ...THROUGH ANY OF THE VILLAGE'S FIELDS, its row holdings with the paddy (batch 1's woodland glyph check on Kashikawa: the
+            # walk was asked of the paddy alone, so every seat beyond the far row's dry-field strips was refused and the wood
+            # stood level with the paddy, below 19 of the 20 houses; 0033's row village runs house lot, then field, then woodland)
+            _seats = [(t[1], t[2]) for t in scored]
+            _through = crossed_through_many(plan.envelope, (ccx, ccy), _seats)
+            for _hold in s.M.get("row_holdings") or []:
+                _hp = [(float(v[0]), float(v[1])) for v in _hold.get("poly") or []]
+                if len(_hp) >= 3:
+                    _through = [a or b for a, b in zip(_through, crossed_through_many(_hp, (ccx, ccy), _seats), strict=True)]
+            _beyond = [t for t, ok in zip(scored, _through, strict=True) if ok]
             scored = _beyond
             # ...NOT IN A ROW: a seat in line with two placed parcels is stepped sideways off the row where the ground allows,
             # and refused where it does not - the count is a target the scan already meets only where there is open ground
