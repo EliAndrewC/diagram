@@ -152,6 +152,18 @@ OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "STAYS QUIET: 
 ( cd "$D/main/.clones/c" && echo 'def a(): return 9' > pool/x/a.py && printf -- '- [x] T01 done\n- [ ] T02 the GM accepts\n' > specs/140-x/tasks.md && git add -A && git commit -qm engine ); stamp_hooks "$D"
 OUT=$(CI_ROUTE=GATED CI_MERGE="echo SKIP-VERIFIED > $D/main/.clones/c/.git/ci-verdict" syncmain "$D" push); check "IT FIRES on the GATED route too, before ci-merge is even consulted" 1 $?
 expect_out "IN PROGRESS"
+# feature 330 (FR-002): ONE state rule with `make speckit-todo` - a feature its status line closes is not in progress,
+# though a box is unticked; the same open box under a status that does not close it is still refused
+D=$(topology fr)
+( cd "$D/main/.clones/c" && mkdir -p specs/140-x && printf -- '- [x] T01 done\n- [ ] T02 the report\n' > specs/140-x/tasks.md \
+  && printf -- '# Feature Specification: x\n\n**Status**: Done (2026-10-08): landed in abc1234; only the report was left unticked\n\n## Review history\n- spec-fidelity round 1: FAITHFUL\n' > specs/140-x/spec.md \
+  && printf '# plan\n' > specs/140-x/plan.md \
+  && printf '{"plan_sha256": "%s", "decisions": [], "verdict": "CLEAR"}\n' "$(sha256sum specs/140-x/plan.md | cut -d' ' -f1)" > specs/140-x/plan-review.json \
+  && echo docs > note.md && git add -A && git commit -qm "closed by its status line" )
+OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "STAYS QUIET: an open box under a closing status line (Done) -> lands" 0 $?
+( cd "$D/main/.clones/c" && printf -- '# Feature Specification: x\n\n**Status**: Implemented, mostly\n' > specs/140-x/spec.md && echo more > note.md && git add -A && git commit -qm "not closed" )
+OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "IT FIRES: the same open box under a status that closes nothing -> refused" 1 $?
+expect_out "IN PROGRESS"
 
 echo "8. origins are re-pointed at GitHub once, and said so"
 D=$(topology h)

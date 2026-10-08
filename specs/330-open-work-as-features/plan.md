@@ -59,6 +59,17 @@ files), 41 live files that name `future-work/` (D6 says how they were counted). 
   future-work" say instead: defer work by filing a feature - `make claim SLUG=<slug>`, then a `spec.md` with
   `**Status**: Filed` - and find open work with `make speckit-todo`.
 
+- **D8 - The guards that judge a feature's state follow D1** (FR-002, found at the landing push). Two push-time checks
+  had their own notion of a feature's state, and each refused this feature's own result: (a) the stop-work
+  procedure's in-progress refusal counted any open box, so the 19 features D3 closed by their status lines still read
+  as in progress - it now asks `speckit-todo.py --state` and refuses exactly what `make speckit-todo` calls planned or
+  in progress; (b) the review gate demanded a fidelity verdict of every spec a push touches, which no FILED spec can
+  carry - a spec whose status opens `Filed` and that has no `tasks.md` is exempt, because it implements nothing, and
+  gaining tasks ends the exemption. Each change has a case each way in its suite. The 22 old specs whose status lines
+  D3 rewrote mostly predate the fidelity review (constitution XVI); their verdict is not owed for a status edit, and
+  that one push carries `REVIEW_GATE_OK` with the reason rather than a gate exemption for `Done`, which would let a
+  session skip review by writing the word.
+
 ## Constitution Check
 
 - **I, II**: N/A - no UI in this repository.

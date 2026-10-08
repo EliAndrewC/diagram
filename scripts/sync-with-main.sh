@@ -393,7 +393,11 @@ push_cmd() {
   local active="" pointer="" f
   pointer=$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1])).get("feature_directory","").rstrip("/"))' "$ROOT/.specify/feature.json" 2>/dev/null || true)
   for f in $(printf '%s\n' "$ours" | grep -oE '^specs/[^/]+' | sort -u) "$pointer"; do
-    [ -n "$f" ] && [ -f "$ROOT/$f/tasks.md" ] && grep -qE '^\s*- \[ \]' "$ROOT/$f/tasks.md" && active="$active $f"
+    # feature 330 (FR-002, GUARD_EDIT_OK): ONE state rule - a feature is in progress when `make speckit-todo` says it is
+    # planned or in progress, so a feature its status line closed (Done, Superseded by, Withdrawn) is not refused
+    case "$([ -n "$f" ] && [ -d "$ROOT/$f" ] && python3 "$ROOT/scripts/speckit-todo.py" --state "$ROOT/$f")" in
+      planned|"in progress") active="$active $f" ;;
+    esac
   done
   active=$(printf '%s\n' $active | sort -u | tr '\n' ' ' | sed 's/ *$//')
   if [ -n "$active" ]; then

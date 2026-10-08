@@ -12,6 +12,7 @@ it while holding open tasks, so only the tasks or a closing word decide. A check
 feature OPEN - a parsing miss shows as open work, never as finished work.
 
     speckit-todo.py [--root <repo>] [--all]     --all adds the closed features and why each is closed
+    speckit-todo.py --state <specs/NNN-slug>     one feature's state - what the push's in-progress refusal asks
 """
 
 from __future__ import annotations
@@ -104,7 +105,11 @@ def main(argv: list[str]) -> int:
     ap = argparse.ArgumentParser(description="list the spec-kit features not yet closed")
     ap.add_argument("--root", default=".", help="the repository root (default: the current directory)")
     ap.add_argument("--all", action="store_true", help="also list the closed features and why")
+    ap.add_argument("--state", metavar="DIR", help="print one feature directory's state and nothing else")
     args = ap.parse_args(argv)
+    if args.state:
+        sys.stdout.write(feature(Path(args.state)).state + "\n")
+        return 0
     sys.stdout.write(report(Path(args.root) / "specs", show_closed=args.all))
     return 0
 
