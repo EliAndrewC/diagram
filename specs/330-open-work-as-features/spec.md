@@ -72,8 +72,8 @@ agree is open, and every feature it omits is finished, superseded or withdrawn b
 ### User Story 3 - future-work/ becomes features (Priority: P2)
 
 Every open entry in `future-work/` becomes its own unimplemented feature under `specs/`, carrying the entry's text,
-and `future-work/` is removed. An entry that turns out to be already done or obsolete is closed instead, with the
-evidence, rather than filed. Every pointer to a `future-work/` entry - code comments, notes, docs - names the feature
+and `future-work/` is removed. An entry that turns out to be already done - or that a recorded GM ruling or a later
+feature disposed of - is closed instead, with the evidence, rather than filed. Every pointer to a `future-work/` entry - code comments, notes, docs - names the feature
 it became.
 
 **Why this priority**: it is the GM's stated end state; it depends on User Story 1 so the filed features are
@@ -102,8 +102,8 @@ number of entries closed equals the number of entries there were, and no live fi
   parsing miss shows up as open work, not as finished work.
 - A status line that says "Implemented" but tasks that are open: the tasks decide until the audit settles it; the
   command does not trust free text it cannot parse.
-- A `future-work/` entry that is several pieces of work: it becomes one feature per piece only where the entry
-  itself names separate pieces; otherwise one feature.
+- A `future-work/` entry that is several pieces of work: it becomes one feature per piece where the entry itself
+  names separate pieces (FR-006); otherwise one feature.
 
 ## Requirements *(mandatory)*
 
@@ -123,9 +123,12 @@ number of entries closed equals the number of entries there were, and no live fi
   evidence (the commits or later feature that did the work, or the ruling).
 - **FR-005**: Any feature whose subject is gm-assistant's and not this repository's MUST be deleted, and the audit
   MUST say what was checked and what was found.
-- **FR-006**: Every open entry in `future-work/` MUST become one new feature (its own claimed number, a `spec.md`
-  carrying the entry's text verbatim and naming the file and heading it came from, status filed). An entry found
-  already done or obsolete MUST be closed instead and listed in the audit with its evidence.
+- **FR-006**: Every entry in `future-work/` MUST become one new feature - or one per piece where the entry itself
+  names separate pieces (as `compounds.md`'s "Research owed" does) - with its own claimed number and a `spec.md`
+  carrying the entry's text verbatim and naming the file and heading it came from, status filed. An entry found
+  already done MUST be closed instead and listed in the audit with its evidence (the commits or the feature that did
+  the work); an entry may also be closed where a recorded GM ruling, or a later feature that replaced it, is cited.
+  Every other entry is filed - including an OWED AT CONVERSION entry whose task `future-work/` calls dead.
 - **FR-007**: `future-work/` MUST be removed, and every live pointer to it or to one of its entries MUST be re-aimed
   at the feature the entry became, or dropped where the entry was closed.
 - **FR-008**: The project's rules (the root `CLAUDE.md`, and every doc that told a session to add to `future-work/`)
@@ -146,14 +149,16 @@ number of entries closed equals the number of entries there were, and no live fi
 - **SC-001**: One command answers "what is open?" across the whole repository, in under 2 seconds.
 - **SC-002**: After the audit, every feature the command lists is open by its own spec's account; a spot check of
   ten listed and ten unlisted features finds none misclassified.
-- **SC-003**: `future-work/` no longer exists; entries filed plus entries closed equals the entries that existed.
+- **SC-003**: `future-work/` no longer exists; every entry is accounted for - filed as a feature (one per named
+  piece), or closed as done or by a cited ruling or later feature - with none dropped.
 - **SC-004**: No live file points into `future-work/`.
 - **SC-005**: No feature in `specs/` is about gm-assistant's own content.
 
 ## Assumptions
 
-- "Implemented" means what the GM's words say: the work was done. A feature whose remaining unticked tasks were
-  dropped rather than done is closed as withdrawn-in-part with the reason, not left open forever.
+- A feature whose remaining unticked tasks were done (the commits or a later feature show it) is closed as done. It
+  is closed as withdrawn-in-part only where a recorded ruling or a later feature dropped or replaced those tasks,
+  cited in the audit; otherwise it stays open and is listed for the GM.
 - Where a feature's fate needs the GM's judgment - the record holds no ruling and the work could still be wanted -
   it stays open and is listed for the GM, rather than closed on a guess.
 - Feature numbers for the new features come from `make claim`, one per entry, so concurrent sessions cannot collide.
