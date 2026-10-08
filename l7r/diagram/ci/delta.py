@@ -22,8 +22,6 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-SKILL = ""
-
 # (directory under the skill, accepted suffixes). An empty suffix tuple means "everything under it".
 _ENGINE_DIRS: tuple[tuple[str, tuple[str, ...]], ...] = (
     # THE INTERACTIVE PAGE'S ASSETS ARE NOT ENGINE CONTENT FOR THE ROUTE (feature 188, GM 2026-09-05:
@@ -67,9 +65,7 @@ _ENGINE_FILES: tuple[str, ...] = ()
 
 def is_engine(path: str) -> bool:
     """Is this repo-relative path diagram ENGINE code (dispatch-relevant)?"""
-    if not path.startswith(SKILL):
-        return False
-    rel = path[len(SKILL) :]
+    rel = path  # repository-relative: the project is the repository root (feature 329)
     if rel in _ENGINE_FILES:
         return True
     if rel.endswith(".notes.md") or rel.startswith(_NOT_ENGINE_DIRS):

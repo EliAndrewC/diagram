@@ -145,7 +145,6 @@ def changed(before: dict[str, Any], now: dict[str, Any]) -> Changed:
 # ---- reading the baseline's contexts ------------------------------------------------------------------
 
 
-SKILL_PREFIX = ""  # nodeids are skill-relative; the manifest is repo-relative
 
 
 def _marks(items: Any) -> str:
@@ -273,7 +272,7 @@ def existing(root: Path, modules: list[str]) -> list[str]:
     with it rather than running the tests that remain. Dropping it is right as well as safe: its tests no
     longer exist, and `stale_tests` already drops their contexts from the merge.
     """
-    return [m for m in modules if (root / SKILL_PREFIX / m).is_file()]
+    return [m for m in modules if (root / m).is_file()]
 
 
 def plan(root: Path, force_full: str | None = None) -> Plan:
@@ -303,7 +302,7 @@ def plan(root: Path, force_full: str | None = None) -> Plan:
     touched = contexts_touching(db, root, ch.engine)
     affected_tests = sorted({c.split("|", 1)[0] for c in touched if "|" in c and not c.startswith("fixture:")})
     affected_fixtures = sorted({c[len("fixture:") :].split("|", 1)[0] for c in touched if c.startswith("fixture:")})
-    changed_modules = [m[len(SKILL_PREFIX) :] for m in ch.test_modules]
+    changed_modules = list(ch.test_modules)  # nodeids and the manifest are both repository-relative (feature 329)
     pl = Plan(
         "incremental",
         f"{len(ch.engine)} engine file(s) and {len(ch.test_modules)} test module(s) changed",

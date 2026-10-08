@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pytest
 
-from l7r.diagram.ci.delta import SKILL, Delta, compute_delta, engine_key, engine_key_worktree, is_engine
+from l7r.diagram.ci.delta import Delta, compute_delta, engine_key, engine_key_worktree, is_engine
 from tests.tooling.ci.conftest import commit, git
 
 S = ""
@@ -205,9 +205,9 @@ def test_a_maps_notes_and_the_non_engine_directories_are_not_engine_code() -> No
     DIRECT route and owe no build. Asserted beside a path that IS engine code, so the test would fail
     if the function simply started answering False.
     """
-    assert not is_engine(f"{SKILL}pool/hamlets/inashiro/inashiro.notes.md"), "a map's notes are prose"
-    assert not is_engine(f"{SKILL}tests/settlement/test_core.py"), "tests are not engine code (feature 132 FR-024)"
-    assert is_engine(f"{SKILL}l7r/diagram/settlement/core.py"), "...but the engine itself is"
+    assert not is_engine(f"pool/hamlets/inashiro/inashiro.notes.md"), "a map's notes are prose"
+    assert not is_engine(f"tests/settlement/test_core.py"), "tests are not engine code (feature 132 FR-024)"
+    assert is_engine(f"l7r/diagram/settlement/core.py"), "...but the engine itself is"
 
 
 def test_a_path_named_in_the_ENGINE_FILES_extension_point_is_engine_code(monkeypatch) -> None:
@@ -221,8 +221,8 @@ def test_a_path_named_in_the_ENGINE_FILES_extension_point_is_engine_code(monkeyp
     from l7r.diagram.ci import delta as d
 
     monkeypatch.setattr(d, "_ENGINE_FILES", ("some/odd/place.py",))
-    assert d.is_engine(f"{SKILL}some/odd/place.py"), "a named file counts as engine code"
-    assert not d.is_engine(f"{SKILL}some/odd/other.py"), "and one that is not named does not"
+    assert d.is_engine(f"some/odd/place.py"), "a named file counts as engine code"
+    assert not d.is_engine(f"some/odd/other.py"), "and one that is not named does not"
 
 
 def test_a_file_ADDED_or_DELETED_since_the_base_counts_as_changed(repo: Path) -> None:
@@ -234,7 +234,7 @@ def test_a_file_ADDED_or_DELETED_since_the_base_counts_as_changed(repo: Path) ->
     """
     from l7r.diagram.ci import delta as d
 
-    newfile = f"{SKILL}l7r/diagram/settlement/brand_new.py"
+    newfile = f"l7r/diagram/settlement/brand_new.py"
     (repo / newfile).parent.mkdir(parents=True, exist_ok=True)
     (repo / newfile).write_text("def f():\n    return 1\n")
     git(repo, "add", "-A")
@@ -259,7 +259,7 @@ def test_coverage_scope_answers_EMPTY_where_there_is_no_origin_main_yet(repo: Pa
     git(repo, "update-ref", "-d", "refs/remotes/origin/main")
     assert d.coverage_scope(repo) == [], "a clean tree with no base names nothing"
 
-    m = repo / SKILL / "l7r" / "diagram" / "settlement" / "fresh.py"
+    m = repo / "l7r" / "diagram" / "settlement" / "fresh.py"
     m.parent.mkdir(parents=True, exist_ok=True)
     m.write_text("x = 1\n")
     assert d.coverage_scope(repo) == ["l7r/diagram/settlement"], "an untracked engine module still counts"
