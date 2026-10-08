@@ -47,7 +47,7 @@ except Exception:
 # remembering the context of how we got here" must not add rolls back thoughtlessly). tests/rolls.py joins the
 # list, and its Read-time context is its own: the doctrine and the command to run first.
 guard = re.search(r"(/scripts/[\w-]+-hooks\.sh|/\.claude/settings\.json|/dev/switches\.json|/tests/rolls\.py)$", path)
-# GUARD_EDIT_OK: feature 329 - the project's Makefile is the REPOSITORY ROOT's now: a Makefile is a guard file when it
+# GUARD_EDIT_OK: feature 329 - the project Makefile is the one at the REPOSITORY ROOT now: a Makefile is a guard file when it
 # sits at the top of its checkout, not wherever a `/Makefile` suffix matches (a fixture, a spec directory).
 if not guard and path.endswith("/Makefile"):
     import os, subprocess

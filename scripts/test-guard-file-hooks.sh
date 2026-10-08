@@ -104,6 +104,10 @@ ctx=$(ev "$ROOT/Makefile" "" "Read" | "$HOOK" pretool 2>/dev/null)
 if printf '%s' "$ctx" | grep -q "GUARD file" && ! printf '%s' "$ctx" | grep -q "roll-audit"; then
   echo "  ok      another guard's Read keeps the generic context"; PASS=$((PASS+1))
 else echo "  FAIL    the generic Read context changed: $ctx"; FAIL=$((FAIL+1)); fi
+# GUARD_EDIT_OK: feature 329 - the project Makefile is the one at the repository root; a Makefile below it is not the guard
+ctx=$(ev "$ROOT/specs/001-x/Makefile" "" "Read" | "$HOOK" pretool 2>/dev/null)
+if [ -z "$ctx" ]; then echo "  ok      a Makefile below the root is not the guard file"; PASS=$((PASS+1))
+else echo "  FAIL    a Makefile below the root was treated as the guard file: $ctx"; FAIL=$((FAIL+1)); fi
 
 echo
 # GUARD_EDIT_OK: 2026-09-26 - the Read reminder was RECORDED on every Read, guard file or not (4,662 of 4,681 entries
