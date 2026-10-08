@@ -533,3 +533,5 @@ pass on the sheet modals, not this feature's ranking - modals are not claims):
 - Found by T95a (2026-10-08), outside its rows: research/questions/0090's drawing page credits the office hall's "38 ft deep" to Hayakawa and Ochiba, but the three hand sheets draw it 28 ft deep and only the generated county example (compound.py) 38 - the page wants correcting (a record edit, its checks owed).
 - `docs/buildings.md::Walls and gates#main gate placed in the south wall the one placed example, j` (UNCLAIMED, E0): main gate placed in the south wall (the one placed example, Joge, has its gate at the east wall)
 - `docs/buildings.md::Walls and gates#internal divider walls separating courts, each with its own` (UNCLAIMED, E0): internal divider walls separating courts, each with its own gate opening (no cited question covers it)
+
+- Found by T97a (2026-10-08): the record contradicts itself on a jin'ya's gate - research/questions/0123's drawing page says "No page we read says which way a jin'ya's gate faced", while 0093 gives the Joge post's gate at its east wall; the record wants reconciling (a record edit, its checks owed).

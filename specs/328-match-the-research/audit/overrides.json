@@ -221,6 +221,28 @@
   "moved": "T25a (amendment 6): tiered by its work - the procedure text plus every pool sheet's wells redrawn",
   "tier": "E3"
  },
+ "docs/buildings.md::Walls and gates#internal divider walls separating courts, each with its own": {
+  "after": [],
+  "e0_basis": "docs/buildings.md:127 'Internal divider wall ... separating courts, with its own gate opening'. 0090 drawing html:17-18 says 'Every compound our maps draw has two courts, the office in front and the residence behind' and 'A gate between the two courts divides the office from the home'. The divider's stroke and gate are already claimed at docs/buildings.md:117 (0092 drawing), and programs.md:23-24 ",
+  "files": [
+   "docs/buildings.md"
+  ],
+  "fix": "<!-- Research: divider wall between the courts - research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html: two courts, the office in front and the residence behind, with a gate between them dividing the office from the home (the wall itself at research/questions/0092-compound-walls-neribei-and-tsuijibei.drawing.html) -->",
+  "flag": "",
+  "moved": "T97a (fresh reader): docs/buildings.md:127 'Internal divider wall ... separating courts, with its own gate opening'. 0090 drawing html:17-18 says 'Every compound our maps draw has two courts, the office in front and the residence behind' and 'A gate between the two courts divides the office from the home'. The divider's",
+  "tier": "E0"
+ },
+ "docs/buildings.md::Walls and gates#main gate placed in the south wall the one placed example, j": {
+  "after": [],
+  "e0_basis": "docs/buildings.md:124 (Walls and gates, Main gate bullet) puts the passage 'in the south wall'; the existing claim at docs/buildings.md:27 cites 0093/0091, neither of which says south (0093 html:13 has Joge's gate at its EAST wall; 0091 only puts the garden south). 0123 drawing html:20 already says 'Where nothing else decides it, the gate faces south ... The maps use it on both models', and 0090 h",
+  "files": [
+   "docs/buildings.md"
+  ],
+  "fix": "<!-- Research: main gate on the south wall - research/questions/0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.drawing.html: where nothing else decides it the gate faces south, the Qing office's formal orientation used on both models; a sheet has no town to front, so its main gate is in the south wall (the Joge post's gate stood at its east wall, research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html) -->",
+  "flag": "",
+  "moved": "T97a (fresh reader): docs/buildings.md:124 (Walls and gates, Main gate bullet) puts the passage 'in the south wall'; the existing claim at docs/buildings.md:27 cites 0093/0091, neither of which says south (0093 html:13 has Joge's gate at its EAST wall; 0091 only puts the garden south). 0123 drawing html:20 already says ",
+  "tier": "E0"
+ },
  "docs/buildings.md::Walls and gates#main gate posts": {
   "moved": "FR-003: the fix redraws three hand-drawn sheets (ochiba, hayakawa, ubame) - amendment 1 review",
   "tier": "E3"

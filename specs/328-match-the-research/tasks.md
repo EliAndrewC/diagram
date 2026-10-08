@@ -13,6 +13,7 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 - (wave 5, landed and reviewed) placement-changed village lane on kashikawa - wave 5: 0033's row street runs on off the map as the road into it at both ends, where
   the web cut it back to its last joint (`trim_streets`); Kashikawa's and Mizuguchi's far ends now run off the sheet as a
   second way out (every way is inked `village lane`).
+- none (wave 36): claims only, no executed code changed
 - none (wave 35): claims only, no executed code changed
 - none (wave 34): the two-width joint pass changes no pool map; the reservoir seat tried and reverted
 - none (wave 33): the path's own beds and sheds made obstacles; the five pool hamlets unchanged
@@ -1194,3 +1195,19 @@ dais` claim (`docs/buildings.md`) takes the same DEVIATION as its programs row.
 - [x] T96 the claims re-checked by `impl-drift`; the close: `make done` green, the wave column (FR-005, FR-006)
       research: rendering
       verify: DONE. impl-drift IN-STEP on the wave's claims (the salt claim after its section's fix); amendment 34 FAITHFUL, plan CLEAR; make done green; no executed code changed; the wave column
+
+## Phase 37 - wave 36 (amendment 35): wave 35's found rows
+
+Wave 35's two found rows tiered E0 by a fresh reader (T97a, `audit/t97a-out.jsonl`): the main gate in the south wall, on
+0123's drawing page (the existing sheet-conventions claim re-pointed there from 0093/0091, neither of which says south); the
+divider walls between the courts, each with its gate, on 0090's drawing page (the wall on 0092's).
+
+  - `docs/buildings.md::Walls and gates#main gate placed in the south wall ...` - 0123 drawing
+  - `docs/buildings.md::Walls and gates#internal divider walls separating courts ...` - 0090 drawing
+
+- [x] T97a wave 35's found rows tiered by the work they take, by a fresh reader (FR-002, FR-003, SC-003)
+      research: rendering
+- [ ] T97 the claims written (FR-003 E0, FR-004)
+      research: rendering
+- [ ] T98 the claims re-checked by `impl-drift`; the close: `make done` green, the wave column (FR-005, FR-006)
+      research: rendering

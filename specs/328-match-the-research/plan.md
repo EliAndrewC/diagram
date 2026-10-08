@@ -433,6 +433,16 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
   waits on the GM's call on the 329 merge commit's stray profiles); wave 35 changes no executed code, so it owes no pair.
 - **Verification**: `impl-drift` on the touched claims, the gate.
 
+## Wave 36 (amendment 35, 2026-10-08)
+
+- **Scope**: wave 35's two found rows, E0 by a fresh reader (T97a): claims for the south-wall gate (0123 drawing; the sheet
+  conventions' claim re-pointed there) and the divider walls between the courts (0090 drawing) (`tasks.md` Phase 37). No
+  executed code changes.
+- **Occasions**: none.
+- **On the unpushed waves 9-35** under condition (6): (1) held but for the backup push, withheld pending the GM's call on the
+  329 merge commit; (2)-(5) held at wave 35's close (0e87667c8); wave 36 changes no executed code, so it owes no pair.
+- **Verification**: `impl-drift` on the touched claims, the gate.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Each later wave that changes engine behavior takes
