@@ -1115,8 +1115,8 @@ place did not cure it. The fix spans the bund pass and the spur's laying: E3 by 
 
 ## Phase 33 - wave 32 (amendment 31): wave 30's found rows
 
-Wave 30's five found rows tiered by a fresh reader (T89a, `audit/t89a-out.jsonl`): three E0 - the code already matches a
-drawing page - and two E2 (the reservoir's first seat and the inlet stub run outside the dike, against 0019's "no channel runs
+Wave 30's five found rows tiered by a fresh reader (T89a, `audit/t89a-out.jsonl`): two E0 - the code already matches a
+drawing page - one E0 withdrawn to E3 by impl-drift (the pond layout), and two E2 (the reservoir's first seat and the inlet stub run outside the dike, against 0019's "no channel runs
 outside the dike"; one change in `polder.py`, left for its place in the run).
 
   - `l7r/diagram/hamletgen/water/polder.py::stage_polder#dike-pond conversion` - cited to 0020's drawing page (the leftover roll, 1.0 or 0.9)
