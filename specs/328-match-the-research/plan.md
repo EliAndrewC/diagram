@@ -351,10 +351,13 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 
 - **Scope**: row 452 (`tasks.md` Phase 29): the hamlet polder's outer edge held to its line - no edge wander, the
   walk-down to a 0.86 box fill gone (0019: the drift "fades to nothing at the fixed outer edge"). Row 434 held for the GM.
-- **Occasions**: the perimeter dike re-placed on Kuwabata (a glyph check); the other four hamlets unchanged.
+- **Occasions**: the perimeter dike re-placed on Kuwabata; the village lanes of Kuwabata and Sawada (three glyph checks).
+- **A regression found and fixed**: Kuwabata's new web left a knot no gather form was admitted for (one left a sliver, the
+  other split the web); `knots.next_gather` gains a last form, the lone movable end teed onto the other lane (`teed_onto`).
 - **On the unpushed waves 9-27** under condition (6): (1)-(5) held at wave 27's close (f51fbbbe4, backed up, its own pair
   band 1 diagnosed as load); wave 28's own pair opens at f51fbbbe4.
-- **Verification**: `impl-drift` on the touched claim, the glyph check, the gate, wave 28's own bookend pair.
+- **Verification**: `impl-drift` on the touched claims (`_polder_candidate`, and `build_polder`'s claim that named the
+  hamlet's fitted wander), the glyph check, the gate, wave 28's own bookend pair.
 
 ## Performance bookends (constitution VI)
 

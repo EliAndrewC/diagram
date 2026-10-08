@@ -14188,33 +14188,37 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::_polder_candidate#block centered": {
-  "code": "411b74070b765559",
-  "core": "fea6f79507867af5",
+  "code": "6f5fce9bf4223038",
+  "core": "44ac97a08c95e60e",
   "date": "2026-10-07",
-  "note": "centering the block on the canvas only frames it; the bearing comes from plan.fall",
+  "note": "putting the block at the canvas centre is a framing decision (how the map shows it), not plumbing; label should be CONVENTION. The bearing is not free: the code turns the block to plan.fall",
   "pages": {},
   "research": "",
   "rests": [],
-  "verdict": "IN-STEP"
+  "verdict": "MISLABELED"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::_polder_candidate#block's rows run along the fall, its cols across it (axis set by the slope, head-to-tail high-to-low)": {
+  "code": "44ac97a08c95e60e",
+  "core": "44ac97a08c95e60e",
+  "date": "2026-10-07",
+  "note": "block's rows run along the fall, its cols across it (axis set by the slope, head-to-tail high-to-low)",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::_polder_candidate#surveyed block": {
-  "code": "cf49e23744c8f677",
-  "core": "fea6f79507867af5",
+  "code": "8b3b53d93df60b62",
+  "core": "44ac97a08c95e60e",
   "date": "2026-10-07",
-  "note": "the ladder `edge_wander` 0.5 down to 0.12 with a 0.86 fill test lets the block's outline wobble (the fill is under 1 of its box), but the page fixes the outer edge (\"fades to nothing at the fixed outer edge\"; 0022 \"the block's edge holds its line\"). Neither the wander ladder nor 0.86 is on the page. Hold the edge straight, or record the wobbling edge as a DEVIATION or GUESS. Also, the fill test uses an axis-aligned box, so a block at an oblique bearing never reaches 0.86",
+  "note": "edge_wander=0.0 keeps the outer edge fixed, and the interior drift fades to nothing there, as the page draws it",
   "pages": {
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "45bbefa1e8568ae6"
   },
   "research": "7e58acaa9e345ce6",
   "rests": [
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:2c50ae22cb97ead3",
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:4141eca659aa9041",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:470adb1b46c06909",
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:48a5898890bd6579",
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f981425220ab2e60",
-   "0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:eb2d7af29e23a469"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:48a5898890bd6579"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::dike_face#strip at the dike's outer face": {
   "code": "edbdc31b06b7b9d2",

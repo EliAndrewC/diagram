@@ -116,6 +116,25 @@ def moved_onto(pts: Poly, end: int, node: Pt) -> list[Poly]:
     return out
 
 
+def teed_onto(pts: Poly, end: int, other: Poly) -> list[Poly]:
+    """Lane `pts` with its `end` (0 or -1) re-aimed, from the vertex before it, at the nearest point of the `other` lane: a
+    T-foot on the other lane's side where the two converge - the gather's last form, tried where putting the end on the
+    other's node would leave a sliver between the two (`needle_loops`) and moving the other's end would split the web
+    (feature 328 wave 28, Kuwabata: two access lanes converging at a sharp angle, their feet 15 ft apart).
+
+    Research: lane ends gathered - research/questions/0081-village-lanes.drawing.html: ends within 25 ft are joined, so lanes
+    never arrive a few feet apart in a knot"""
+    seq = list(pts) if end == -1 else list(pts)[::-1]
+    if len(seq) < 2 or len(other) < 2:
+        return []
+    prev = seq[-2]
+    foot = min((seg_closest(prev[0], prev[1], a, b) for a, b in zip(other, other[1:], strict=False)), key=lambda z: math.dist(z, prev))
+    if math.dist(foot, prev) <= 1e-9:
+        return []
+    run = [*seq[:-1], foot]
+    return [run if end == -1 else run[::-1]]
+
+
 def contracted(lanes: Sequence[Mapping[str, Any]], at: Pt, node: Pt, skip: Collection[int], fixed: Callable[[Mapping[str, Any], int], bool] = _fixed) -> dict[int, Poly]:
     """The lanes a knot's stretch is taken out of when its node at `at` is gathered onto `node`: each lane but `skip` with an
     end on `node` and a corner at `at` - the knot's two junctions joined by its last leg - with every inner vertex within
@@ -160,7 +179,8 @@ def carried(lanes: Sequence[Mapping[str, Any]], old: Poly, new: Poly, skip: Cont
 def next_gather(lanes: Sequence[Mapping[str, Any]], judge: Callable[[dict[int, Poly]], bool], fixed: Callable[[Mapping[str, Any], int], bool] = _fixed) -> dict[int, Poly] | None:
     """The first gather `judge` admits, nearest knot first: every end on one node of the knot moved onto the other node
     (`moved_onto`, both forms tried, then each with the knot's corner taken out of the lane joining the two - `contracted`) -
-    the node with fewer ends moves, and the other way round where that is refused. A node holding a `fixed` end (by default
+    the node with fewer ends moves, and the other way round where that is refused; where both are
+    refused, a lone movable end is teed onto the other node's lane (`teed_onto`). A node holding a `fixed` end (by default
     `_fixed`) never moves. `judge` is handed the new points of every lane the gather moves, keyed by lane; None where no knot
     can be gathered.
 
@@ -182,6 +202,15 @@ def next_gather(lanes: Sequence[Mapping[str, Any]], judge: Callable[[dict[int, P
                     edits[i] = forms[min(form, len(forms) - 1)]
                 if judge({**edits, **(corner if cut else {})}):
                     return {**edits, **(corner if cut else {})}
+        for mover, target in order:  # neither node can move onto the other: a lone movable end teed onto the other's lane
+            ends = nodes[mover][1]
+            if len(ends) != 1 or fixed(lanes[ends[0][0]], ends[0][1]):
+                continue
+            i, e = ends[0]
+            for j in sorted({j for j, _f in nodes[target][1] if j != i}):
+                for form in teed_onto(_pts(lanes[i]), e, _pts(lanes[j])):
+                    if judge({i: form}):
+                        return {i: form}
     return None
 
 

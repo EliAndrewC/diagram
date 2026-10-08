@@ -1,38 +1,44 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "68bf9f56d1e41b880332cd96688331fbd8e5ddbe1f0692d9e66870262bf1e3c8",
+ "plan_sha256": "95d38fb5a5002f9a34b1634b30dfa4b24b5f6de1ab3925365dc8742168448acd",
  "reviewed": "2026-10-07",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W27-brook",
-   "summary": "rows 448-450 done in wave 27 as the literal fix: a run across the fall takes no dip down it (bend_at cap 0.0 in both bend_runs calls), the downhill check strict (monotone_down default slack 0.01), BEND_DIP_FT retired; the E3 re-tier withdrawn and the rows restored to E2",
+   "id": "W28-scope",
+   "summary": "wave 28 takes ranking row 452 (_polder_candidate#surveyed block, E2): edge_wander 0, the walk-down and 0.86 fill test gone",
    "class": "within",
-   "why": "the round-1 BLOCKED item taken: the rows stay in the easiest-first order (request; FR-003) and move the code to 0054 (strictly under 90; FR-004). The code diff in e8bffc538 is exactly the patch the reviewer reproduced at 28 of 28 brook tests; no BEND_DIP_FT reference remains in l7r/ or tests/"
+   "why": "the next open in-scope row in tier order; the fix is the row's own ranked fix and matches 0019's drawing page (the mosaic's drift fades to nothing at the fixed outer edge; Kuwabata is the mosaic block)"
   },
   {
-   "id": "W27-flank-0053",
-   "summary": "flanks_commanded: a flank of 150 ft or less not judged; a judged flank owed 80 ft or 30%, the lesser",
+   "id": "W28-shared-knob",
+   "summary": "the shared build_polder keeps its edge_wander knob and its legacy waterfields test; only the hamlet passes 0",
    "class": "within",
-   "why": "0053 drawing page states the rule; the implementation moves to the page (FR-004)"
+   "why": "the row is the hamlet's caller; the knob's other users are legacy hand-drawn/waterfields maps, DEFERRED by the GM's amendment 8"
   },
   {
-   "id": "W27-flank-test",
-   "summary": "the test pinning the refusal of a 120 ft flank brought to the page; a test of the lesser added",
+   "id": "W28-row434",
+   "summary": "row 434 stays held for the GM",
    "class": "within",
-   "why": "the old assertion pinned behavior 0053 contradicts; the new tests enforce the page's rule (enforcement of the request, not scope)"
+   "why": "a hold carried and reviewed in waves 26-27, deferred to the end of the feature per the GM's goal amendment"
   },
   {
-   "id": "W27-occasions",
-   "summary": "no review occasions; the five pool hamlets stated unchanged",
+   "id": "W28-occasion",
+   "summary": "glyph check on Kuwabata's re-placed perimeter dike; the other four hamlets unchanged",
    "class": "within",
-   "why": "FR-005 owes the occasions a wave opens; the unchanged claim is a state T79/T80 must verify by regeneration before ticking, not a decision"
+   "why": "feature 294's occasion for a re-placed element; declared in tasks.md's Occasions"
   },
   {
-   "id": "W27-row-434",
-   "summary": "row 434 held for the GM",
+   "id": "W28-stack",
+   "summary": "wave 28 stacks on unpushed waves 9-27 under the wave-11 exception's condition (6); pair opens at f51fbbbe4",
    "class": "within",
-   "why": "carried unchanged from waves 23-26; already ruled LEGITIMATE under the GM's instruction to defer questions to the end"
+   "why": "the LEGITIMATE wave-11 exception's own terms: (1)-(5) recorded held at f51fbbbe4, backup branch at f51fbbbe4 (ls-remote), wave 28 its own amendment with a plan review"
+  },
+  {
+   "id": "W28-verify",
+   "summary": "impl-drift on the touched claim, glyph check, gate, own bookend pair",
+   "class": "within",
+   "why": "FR-005/FR-006 verification; does not narrow them"
   }
  ],
  "verdict": "CLEAR"
