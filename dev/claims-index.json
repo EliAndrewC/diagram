@@ -24877,14 +24877,15 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/web.py::_lay_skeleton#skeleton margin off the wet and the ditches": {
-  "code": "9540cddfa52c58ed",
+  "code": "de8de7cc0214947f",
   "core": "e05066354ef0a150",
   "date": "2026-10-08",
-  "note": "UNRESEARCHED holds: the page says a track keeps off wet ground but gives no margin, and the code's is 20",
+  "note": "the pages say a lane keeps off wet ground and is cut where it crosses it, but give no clearance figure, so the 20 px margin is unresearched as claimed; the 14 px line margin is inside `clip_to_clear` and not in the bundle",
   "pages": {},
   "research": "",
   "rests": [
-   "0081-village-lanes.drawing.html:43b635b1ca75125b"
+   "0081-village-lanes.drawing.html:43b635b1ca75125b",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:8ab9878d6ac1d10b"
   ],
   "verdict": "IN-STEP"
  },
@@ -48928,17 +48929,14 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/houses.py::HousesMixin._on_a_tread#a lane's middle off the fence": {
-  "code": "31fb11064aaabeb5",
+ "l7r/diagram/settlement/houses.py::HousesMixin._on_a_tread#a building's corners held to it": {
+  "code": "9e8fab77f455e5ce",
   "core": "ec40e40148c5c024",
   "date": "2026-10-08",
-  "note": "every corner is held at least max(half+hair, 7 ft) off the tread's middle",
-  "pages": {
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
-  },
-  "research": "7b40c2c01cfba682",
+  "note": "the page only keeps a house's corner off the tread and holds a garden fence 7 ft off a lane's middle; nothing in it holds a building wall to that 7 ft, so GUESS is right",
+  "pages": {},
+  "research": "",
   "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c5daec1a445d35bf"
   ],
@@ -48958,15 +48956,16 @@
   ],
   "verdict": "NEEDS-RESEARCH"
  },
- "l7r/diagram/settlement/houses.py::HousesMixin._on_a_tread#other footprints off a lane's middle": {
-  "code": "67e67c9aa50b7139",
+ "l7r/diagram/settlement/houses.py::HousesMixin._on_a_tread#the lane middle's 7 ft": {
+  "code": "67648d142f69b774",
   "core": "ec40e40148c5c024",
   "date": "2026-10-08",
-  "note": "GUESS holds: the page sets 7 ft only for a garden fence and says only that no house corner stands on the tread; a wall or shed at 7 ft is unanswered",
-  "pages": {},
-  "research": "",
+  "note": "LANE_MIDDLE_CLEAR_FT=7.0, measured from the lane's middle line, is the page's 7 ft",
+  "pages": {
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
+  },
+  "research": "7b40c2c01cfba682",
   "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c5daec1a445d35bf"
   ],
   "verdict": "IN-STEP"
