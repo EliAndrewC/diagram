@@ -1300,7 +1300,7 @@
   "tier_as_ranked": "E2",
   "e0_basis": "The claim cites the question page 0020.html, which gives only shares (18% in 1581, 75% at Longshan). The drawing page research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html:15 ('Whether such a village keeps a little rice among its ponds is rolled village by village') already says what the code does: two forms, every parcel a pond or about one in ten in ri",
   "moved": "T89a (fresh reader): The claim cites the question page 0020.html, which gives only shares (18% in 1581, 75% at Longshan). The drawing page research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html:15 ('Whether such a village keeps a little rice among its ponds is rolled village by",
-  "wave": "",
+  "wave": "32",
   "scope": "kept"
  },
  {
@@ -1317,7 +1317,7 @@
   "tier_as_ranked": "E0",
   "e0_basis": "polder.py:190 picks POLDER_FABRIC[field_archetype] (consts.py:420-423: 190/(0.52,0.16,0.12)/(1.5,4.0); 160/(0.10,0.0,0.60)/(11,11)). research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:7 gives 3 ft bund and 8 ft corridor. Line 10 gives the 190 ft module. Line 11 gives 'most split into two or three oblong strips and a few merge along the fall'. Line 21 gives the 160 ft module",
   "moved": "T89a (fresh reader): polder.py:190 picks POLDER_FABRIC[field_archetype] (consts.py:420-423: 190/(0.52,0.16,0.12)/(1.5,4.0); 160/(0.10,0.0,0.60)/(11,11)). research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:7 gives 3 ft bund and 8 ft corridor. Line 10 gives the 190 ft module. Line 11 gives 'most sp",
-  "wave": "",
+  "wave": "32",
   "scope": "kept"
  },
  {

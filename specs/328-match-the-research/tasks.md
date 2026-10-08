@@ -1125,7 +1125,9 @@ outside the dike"; one change in `polder.py`, left for its place in the run).
 
 - [x] T89a wave 30's found rows tiered by the work they take, by a fresh reader (FR-002, FR-003, SC-003)
       research: rendering
-- [ ] T89 the claims written (FR-003 E0, FR-004)
+- [x] T89 the claims written (FR-003 E0, FR-004)
       research: rendering
-- [ ] T90 the claims re-checked by `impl-drift`; the close: `make done` green, the wave column (FR-005, FR-006)
+      verify: DONE. the dike-pond conversion (0020 drawing) and the polder fabric (0022 drawing) claimed; the pond layout's claim found DRIFTED, re-tiered E3, open
+- [x] T90 the claims re-checked by `impl-drift`; the close: `make done` green, the wave column (FR-005, FR-006)
       research: rendering
+      verify: DONE. impl-drift IN-STEP on two, DRIFTED on the pond layout (E3); amendment 31 rounds recorded, plan CLEAR; make done green; no executed code changed; the wave column

@@ -1,14 +1,14 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "69c27be8e340f3861290dc7d05175120067bafa8593cf2a4038a5a8545aabde4",
+ "plan_sha256": "b661aded473c152688c213973b5c798a43563c35a5a184c6951810358d24e60c",
  "reviewed": "2026-10-08",
  "declared": "spec-fidelity",
  "decisions": [
   {
    "id": "W32-scope",
-   "summary": "Wave 32 writes the three E0 claims in stage_polder (dike-pond conversion to 0020's drawing page, pond layout to 0019's, polder fabric to 0022's)",
+   "summary": "Wave 32 writes two E0 claims in stage_polder (dike-pond conversion to 0020's drawing page, polder fabric to 0022's); the pond layout re-tiered E3 after impl-drift found it DRIFTED, left open",
    "class": "within",
-   "why": "FR-003 E0: each drawing page predates feature 328 (last edits 319 H3, 2026-10-05) and already states what the code does (leftover roll 1.0/0.9; mosaic 0.5 vs grid 0.0, strength a calibrated liberty; 190/160 ft modules, 3/8 ft and 22 ft gaps, split/merge mix); only citations and wording change, lowest open tier first (SC-003)."
+   "why": "FR-003 E0: each of the two drawing pages predates feature 328 and already states what the code does (leftover roll 1.0/0.9; 190/160 ft modules, 3/8 ft and 22 ft gaps, split/merge mix); only citations and wording change, lowest open tier first (SC-003). The pond layout is not excepted: impl-drift measured it DRIFTED (the chessboard is attested and never rolled), a code change past one rule, so it is re-tiered E3 and stays in the ranking for its place in the run rather than being written as E0 against a page it does not match."
   },
   {
    "id": "W32-E2-left",

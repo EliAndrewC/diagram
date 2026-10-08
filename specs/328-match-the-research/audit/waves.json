@@ -148,6 +148,8 @@
  ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::_polder_candidate#surveyed block": "28",
  ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::_polder_candidate#the block is oriented to the land's fall its rows run with t": "29",
  ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::_polder_candidate#wander walked down to a 0.86 box fill": "28",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::stage_polder#dike-pond conversion": "32",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::stage_polder#polder fabric per archetype cell 190160, parcel mix, gap sel": "32",
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::a_way_onto_the_bund#a lane end within 6 ft (BUND_REACH_FT) of the paddy counts as joined to the bund": "8 (claimed under its unit's new label; re-checked)",
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::a_way_onto_the_bund#a lane end within 6 ft of the paddy (BUND_REACH_FT) counts as on the bund": "8 (claimed under its unit's new label; re-checked)",
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::a_way_onto_the_bund#branched field path 5 ft wide (BRANCH_WIDTH)": "8 (claimed under its unit's new label; re-checked)",
