@@ -47200,10 +47200,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#windbreak conifer share": {
-  "code": "d4be8a9861571d26",
+  "code": "47f085b1787ab80e",
   "core": "1b5bd2710ff5dbc3",
   "date": "2026-10-08",
-  "note": "0.48 of the non-bamboo items is Kashima's 735 of 1,542",
+  "note": "in the windbreak mix the code throws 0.48 of the crowns as conifer, after taking out the bamboo share (`c_th = b_th + 0.48 * (1.0 - b_th)`), which matches the Kashima count \"735 of them, 48%, were cedar\" and cedar as \"the dominant tree\"; this mix is the farm grove, which is the subject of that count; the claim's account names the drawn 0.508 and files it under its own found row, so nothing is hidden under this key",
   "pages": {
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.html": "186cb571d0ba4842"
   },

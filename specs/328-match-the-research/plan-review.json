@@ -1,6 +1,6 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "e8451ab043cdeeb2d214a85f9df00e9097adf919f6b1b0e0397444941acbcb5a",
+ "plan_sha256": "17806aa27fc7aeecab4c828bf9bbbb3a86e916d02902ddb46302edbfb8bd63f9",
  "reviewed": "2026-10-08",
  "declared": "spec-fidelity",
  "decisions": [
@@ -386,10 +386,10 @@
   },
   {
    "id": "W53-3 windbreak conifer-share tolerance 0.02 -> 0.035",
-   "summary": "test_a_windbreak_draws_about_half_its_crowns_conifer widened so the drawn share 0.508 (cull at the new density) passes against 0072's 0.48",
+   "summary": "test_a_windbreak_draws_about_half_its_crowns_conifer held at 0.035 so the drawn 0.508 passes, BEHIND the E2 found row `GrovesMixin._draw_grove#windbreak conifer share as drawn` (found-wave53.jsonl, ranking row 138, kept) that brings the drawn share back to 0.48 and the tolerance back to 0.02; the test comment names the row",
    "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "Loosens the test that enforces 0072's 48% so a measured 2.8-point departure, caused by the implementation's own canopy-layer cull, passes unfiled. Not impossible (the throw can be solved so the DRAWN share is 0.48, or the departure filed as a found row with the test held to it), not implied by the request, and it guts the request's purpose ('no reason for our implementation to not match'). The drawn 0.508 is deterministic over ~5,000 crowns, not noise. The docstring's 'drawn 47.9% on Kashikawa (555 of 1158)' predates the density change and is now unmeasured."
+   "ruling": "LEGITIMATE",
+   "why": "Round 2: round 1 offered fix (b) and the commit does it. The departure from 0072 is no longer unfiled: it is a ranked DRIFTED row with a concrete fix (roll each kind against the drawn tally) and its own restoration of the 0.02 tolerance, and the widened assertion points at it. That is the feature's own route for a measured departure (a held value becomes a found row, ranked by work), so the request's purpose is kept rather than gutted. The stale 47.9% docstring figure is replaced by the measured 0.508 and the found row; the plan's Measured line states the widening and cites m:wave53-grove-density."
   },
   {
    "id": "W53-4 two farmsteads claims relabeled NONE",
@@ -422,5 +422,5 @@
    "why": "Review occasions for a redrawn glyph; narrows nothing."
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }
