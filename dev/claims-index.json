@@ -1,18 +1,18 @@
 {
  "docs/building-programs.md::Country shrine (a village district's shrine)#Bishamon tigers": {
-  "code": "6553ba1fd454f85b",
+  "code": "b55580614ffb385b",
   "core": "811947111c983c79",
   "date": "2026-10-08",
-  "note": "0222 attests tigers only at named Bishamon temples (\"Whether a village shrine of Bishamon had them, no page we read says\"), and the drawing page records the village reach as a GUESS; the label should be GUESS research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html",
+  "note": "The drawing page records the tigers as attested at named temples and a guess at village scale.",
   "pages": {
-   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html": "4eb9d08db97f2235"
+   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html": "538be8acb21445ff"
   },
-  "research": "704fffd977ae2d80",
+  "research": "041843907dca961a",
   "rests": [
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html:75a349e961295614",
    "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:ac6d02db6fad2b16"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#a village shrine's office dated": {
   "code": "c07ac8a3798edde6",
@@ -249,20 +249,14 @@
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#dwelling entry tagged genkan": {
-  "code": "feb5ef17bbbf0767",
+  "code": "dab74b382765b7b9",
   "core": "811947111c983c79",
   "date": "2026-10-08",
-  "note": "0104 covers the formal entrance of samurai houses of standing, which in the Edo period meant an entrance \"with a shikidai\". It does not bear on a village monk's plain earth-floored vestibule, so the claim should say UNRESEARCHED",
-  "pages": {
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "bbfebe573bb99b25"
-  },
-  "research": "d6575223a27df7a3",
-  "rests": [
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:38ce75614bcb4467",
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:a3162f7d1b6545a0",
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:fc0610901368c3d8"
-  ],
-  "verdict": "NEEDS-RESEARCH"
+  "note": "Nothing in the bundle bears on a village monk's entry vestibule or what it is called.",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#dwelling kitchen floor": {
   "code": "53d5c62a2d17dd6b",
@@ -322,12 +316,16 @@
   "verdict": "DRIFTED"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#fire-water tub size about 2.5 ft across": {
-  "code": "811947111c983c79",
+  "code": "9417b785ed33b6dd",
   "core": "811947111c983c79",
   "date": "2026-10-08",
-  "note": "fire-water tub size about 2.5 ft across",
+  "note": "No page sizes a tub. 0100's drawing page records the 2.5 ft as a guess, so the claim could name that file.",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "rests": [
+   "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:4530579a74e75485"
+  ],
+  "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#grove and burial side knob": {
   "code": "5a5201b71c8ea6e5",
@@ -541,12 +539,16 @@
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#privy size 5 ft square": {
-  "code": "811947111c983c79",
+  "code": "f29ef117d7d4d7d2",
   "core": "811947111c983c79",
   "date": "2026-10-08",
-  "note": "privy size 5 ft square",
+  "note": "No cited page sizes the privy. 0222's drawing page records the privy itself as a guess.",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "rests": [
+   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html:1e638a78f4ca3543"
+  ],
+  "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#resident monk": {
   "code": "a6417b7d43f28ea7",
@@ -670,12 +672,20 @@
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#strength stones set beside the approach": {
-  "code": "811947111c983c79",
+  "code": "388b54c8c5aba444",
   "core": "811947111c983c79",
   "date": "2026-10-08",
-  "note": "strength stones set beside the approach",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "note": "The one attested placement, Hikawa Nerima's stones \"beside the approach\", is the only form, and the precinct's things are \"given to it, piece by piece\".",
+  "pages": {
+   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html": "4eb9d08db97f2235"
+  },
+  "research": "704fffd977ae2d80",
+  "rests": [
+   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html:cc29d33e4a52f44e",
+   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:651fe89d4ff6afca",
+   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:c4e4424a990d6fd8"
+  ],
+  "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#subsidiary shrines sometimes in a precinct": {
   "code": "2da355c38f487e9a",
@@ -837,12 +847,14 @@
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Country shrine (a village district's shrine)#well curb size 3 to 4 ft": {
-  "code": "811947111c983c79",
+  "code": "bd319a4558392f57",
   "core": "811947111c983c79",
   "date": "2026-10-08",
-  "note": "well curb size 3 to 4 ft",
+  "note": "Nothing in the bundle sizes a shrine well's curb.",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#a detached guest house at a rich posting (0091's drawing page records it as a GUESS)": {
   "code": "1e4a796a961b2cbf",
@@ -44055,11 +44067,23 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/settlement/homestead_parts/belt_law.py::BeltReading.__init__#page edge not judged": {
-  "code": "383a6feabd52f21f",
+ "l7r/diagram/settlement/homestead_parts/belt_law.py::BeltReading.__init__#depth near the frame not judged": {
+  "code": "203bb39d5a6fb646",
   "core": "d21b3e787ecc47c7",
   "date": "2026-10-08",
-  "note": "the page-cut half (`self.cut`) is in step. The depth exemption within 2 r of the frame rests on no block of 0072's drawing page, which speaks only of holes and the page edge; that half should be NONE (a check tolerance) or the drawing page should record it",
+  "note": "The 2 r margin only excuses the check's depth test where the frame clips the belt, and it draws nothing.",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:9e9583030b309e84"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/settlement/homestead_parts/belt_law.py::BeltReading.__init__#page edge not judged": {
+  "code": "51aac3ed7dc0b91e",
+  "core": "d21b3e787ecc47c7",
+  "date": "2026-10-08",
+  "note": "Stretches with off-page crowns, or where the band leaves the page, are not judged, and only those excuse a hole (`self.cut`); the frame margin excuses depth only, so a break a reader can see stays a hole.",
   "pages": {
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "47ec3e2a439e0b3c"
   },
@@ -44067,10 +44091,9 @@
   "rests": [
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:199c787c93386c82",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:301a35716bf73526",
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:56f345de26c07dc8",
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:9e9583030b309e84"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:56f345de26c07dc8"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/homestead_parts/belt_law.py::BeltReading.__init__#tips not judged": {
   "code": "f57ed5907bb8b6f0",

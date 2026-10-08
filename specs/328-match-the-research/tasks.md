@@ -1575,7 +1575,8 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
   hall facing the road, the officer's residence behind it, and at a larger post a lockup, stables and a notice board; no
   garrison count (0110 gives none, nor do the GM's notes).
 
-- [ ] T120 batch 1's findings, rows 381, 436, 438 and 442; the belt's visible break (FR-003, FR-004, FR-005)
+- [x] T120 batch 1's findings, rows 381, 436, 438 and 442; the belt's visible break (FR-003, FR-004, FR-005)
       research: rendering
+      verify: DONE. batch 1's findings (Kashikawa's woods beyond the row holdings; the track out to the frame and 400 ft past it), rows 381, 436, 438 and 442, the belt's visible break judged; tests red on the old code; the hamlets regenerated (persimmon overlaps to 0); impl-drift answered r1-r5; record checks answered; spec-fidelity plan CLEAR r2
 - [ ] T121 the claims re-checked by `impl-drift`; the close at batch 2's (FR-005, FR-006)
       research: rendering
