@@ -1,6 +1,6 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "ac2cb471c16d6366826f161191c07b41b104408ca9b7b059b4ba87e92e2c495d",
+ "plan_sha256": "555ed6045e8e532984d40c1be7105e0d31f3235681d0ebe81fb38a0a413b6f53",
  "reviewed": "2026-10-08",
  "declared": "spec-fidelity",
  "decisions": [
@@ -249,7 +249,7 @@
    "id": "W51-6 the wood shed's standoff recorded on 0043 as the guess the map draws",
    "summary": "0043's drawing page reworded from 'about 6 ft (a ken) off a wall' to 'a ken beyond the clear strip ... about 9.5 ft from the wall', with the reason that at a ken from the wall 'a farmstead in the largest hamlets would have no way through to the lanes'; WOODSHED_STEP_FT's claim relabeled to that page",
    "class": "narrowing",
-   "why": "Round 2: RESOLVED. 0043's drawing page restored to 'about 6 ft (a ken) off a wall' with the 9.5 ft reasoning removed; WOODSHED_STEP_FT's claim and both function claims now say HELD past the page's ken behind the found row hamletgen/ways/last_resort.py::refuse_unreached#every household reached at 20 and 40 households (ranking row 101, kept, DRIFTED), and impl-drift round 2 recorded the claim DRIFTED, not IN-STEP. That is the spec's held route, the one wave 9 took for the same step: the record unchanged, the implementation's gap open and ranked. The page is not moved to fit the code.",
+   "why": "Round 2: RESOLVED. 0043's drawing page restored to 'about 6 ft (a ken) off a wall' with the 9.5 ft reasoning removed; WOODSHED_STEP_FT's claim and both function claims now say HELD past the page's ken behind the found row hamletgen/ways/last_resort.py::refuse_unreached#every household reached at 20 and 40 households (ranking row 101, kept, DRIFTED), and impl-drift round 2 recorded the claim DRIFTED, not IN-STEP. That is the spec's held route, the one wave 9 took for the same step: the record unchanged, the implementation's gap open and ranked. The page is not moved to fit the code. Round 3: Wave 51's Scope now names the step HELD behind ranking row 101 (refuse_unreached#every household reached), matching the record.",
    "ruling": "LEGITIMATE"
   },
   {
@@ -301,17 +301,16 @@
    "why": "The row's fix as written; 0042's drawing page: 'on the side away from the house'."
   },
   {
-   "id": "W52-3 the barn privy against the steading annex",
-   "summary": "the privy's 'barn' seat set against the kura annex (steading_rects(..., 'N' if kura)[1]); the house's own +x end kept where the farm has no annex",
-   "class": "narrowing",
-   "why": "Round 2: PARTLY RESOLVED. The CODE is fixed as round 1 asked: barn_seat and the annex argument removed, the barn place not offered, its weight spread over yard/front/stable at their own weights (fixture_seats.py _seats), a test that no roll lands on the house's east end, the privy seats claim DRIFTED behind a new found row (found-wave52.jsonl: draw the barn 0047 names, 0040/0028's free-standing shed) - and 0047's page correctly NOT reworded. But plan.md is unchanged since round 1 (sha256 ac2cb471... both rounds) and its Wave 52 Scope still states the ruled-out decision verbatim: 'The privy's barn seat set against the steading annex (0047): a north annex's east gable ..., a west annex's west wall, the house's own end where there is none.' A plan record keyed to that text would certify it. Fix: amend Wave 52's Scope to what was built (no barn in a hamlet, so no barn seat; the barn's share to the yard, the front and the stable; the barn itself filed as an E3 found row) and its Measured line to the re-measured cohorts (the commit says 3/4 and 3/4, the plan 2/4 and 3/4); Wave 51 may say the wood shed's step is held behind row 101. Then a round 3 verify on that diff.",
-   "ruling": "NOT LEGITIMATE"
+   "id": "W52-3 the barn seat withdrawn; the barn filed",
+   "summary": "no barn seat in a hamlet (a hamlet farm draws no barn); the barn's share to the yard, the front and the stable at their own weights; drawing 0047's barn filed as an E3 found row (found-wave52.jsonl)",
+   "class": "within",
+   "why": "Round 3: RESOLVED. e6552f7ec amends Wave 52's Scope to what was built in round 2: the annex seat (ruled NOT LEGITIMATE in rounds 1-2) is gone from the plan text, 0047's page is unmoved, and the missing barn takes FR-006's found-row path rather than a substitute seat. Nothing in the request is narrowed by the plan any longer."
   },
   {
    "id": "W52-4 a north annex's east gable, not its north wall",
-   "summary": "the north wall refused cohort seed 7's web at 20 households, so the east gable beside the house's corner; a west annex's west wall (unreachable from lay_fixtures, which passes a north kura only)",
+   "summary": "withdrawn: no annex seat of any kind",
    "class": "within",
-   "why": "Round 2: withdrawn in the code with W52-3 (no annex seat at all), but plan.md's Wave 52 Scope still describes it ('a north annex's east gable (its north wall was tried and refused cohort seed 7's web ...)'); it goes when that paragraph is amended per W52-3."
+   "why": "Round 3: RESOLVED. Withdrawn with W52-3; e6552f7ec removes the east-gable / west-wall text from Wave 52's Scope, so the plan no longer states it."
   },
   {
    "id": "W52-5 seed 4's 20-household refusal filed",
@@ -347,7 +346,7 @@
    "id": "B2-1 batch 2's pair",
    "summary": "2e3153b4e -> 3f91becf2 band 1, TOTAL -3.5%; batch 1's band 2 gone; the one growth (seed 39, 10 households) explained and perf-audit CONSISTENT on its own control",
    "class": "within",
-   "why": "Round 2: RESOLVED. measurements.json carries batch2-perf-pair-and-track-control with its sources, the same treatment as batch 1's key. One figure in the batch table does not match it: 'homesteads +0.3 s' where the key's start 0.86 s and end 1.1 s (perf-audit's record: 0.82/0.90 and 1.10/1.11) give +0.24 s; say +0.2 s (or +0.25 s) when the plan is amended."
+   "why": "Round 3: RESOLVED. The batch-2 row now says homesteads +0.24 s, which is the key batch2-perf-pair-and-track-control's start 0.86 s to end 1.1 s."
   },
   {
    "id": "B2-2 the gate green on waves 47-51",
@@ -366,7 +365,13 @@
    "summary": "the batch-2 occasion lines and wave 51's field pond, wood shed and bath room lines marked reviewed PASS at batch 2's close",
    "class": "within",
    "why": "Reviewing wave 51's occasions early narrows nothing. The wood shed lines re-open if W51-6's fix moves the shed's standoff."
+  },
+  {
+   "id": "W52-M the cohorts re-measured",
+   "summary": "Wave 52's Measured: the 20- and 40-household cohorts match or better the commit before the wave, 3/4 and 3/4, re-measured after the barn seat's withdrawal",
+   "class": "within",
+   "why": "Round 3: the line now states the post-withdrawal 3/4 and 3/4 round 2 asked for; a measured outcome, not a decision that narrows anything."
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }
