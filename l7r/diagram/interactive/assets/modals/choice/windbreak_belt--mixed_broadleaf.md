@@ -19,8 +19,8 @@ Depiction: The map draws the belt as an irregular wood of rounded crowns like th
 between the crowns shown by paired strokes since a real culm is too slim to see. Only the crowns are drawn, at their real
 size; the dense undergrowth beneath them is hidden, as from above. Its outline is drawn ragged, deepest in the middle and
 tapering at the corners, never a ruled wall, and never thinner than about 80 ft, so that it reads as a wood rather than a
-row of trees; no source gives a grove's depth. No tree of it stands where its afternoon shade would fall on a yard or a
-kitchen garden.
+row of trees; how deep a real grove ran is not recorded. No tree of it stands where its afternoon shade would fall on a yard or a
+kitchen garden. Along the side it holds, its planting is drawn unbroken, since a gap in a real belt let the wind through; near the edge of the map the belt runs on past it, as a real wood went on beyond what the map shows.
 
 Name: Windbreak trees, mixed broadleaf
 Covers: `meta.windbreak_belt = mixed_broadleaf`

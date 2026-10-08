@@ -440,7 +440,10 @@ def test_a_sibling_link_lights_the_other_class_on_hover_and_replaces_the_modal_o
     assert synthetic.settles({"windbreak": 1}, synthetic.on) == {"windbreak": 1}, "leaving the link restores the pinned windbreak"
     synthetic.page.mouse.click(lx, ly)
     synthetic.page.wait_for_timeout(50)
-    synthetic.page.mouse.move(lx, ly + 200)  # off the new modal's own link, which the pointer would otherwise be peeking
+    # off the new modal's own link, which the pointer would otherwise be peeking - onto its heading, never a link (a fixed 200 px
+    # down landed on the copse's own sibling link once the windbreak's text grew, feature 328 wave 39)
+    hx, hy = synthetic.js("() => { const r = document.getElementById('x-name').getBoundingClientRect(); return [r.x + r.width / 2, r.y + r.height / 2]; }")
+    synthetic.page.mouse.move(hx, hy)
     synthetic.page.wait_for_timeout(30)
     d = synthetic.dialog()
     assert d["open"] and d["k"] == "copse" and synthetic.on() == {"copse": 1}, "clicking the link opens the copse's modal in place of the windbreak's"

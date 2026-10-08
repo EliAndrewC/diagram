@@ -3130,6 +3130,22 @@
   "scope": "kept"
  },
  {
+  "key": "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#lesser broadleaf crown size LESSER_BROADLEAF_S 0.6-0.85 of the mean radius",
+  "tier": "E0",
+  "fix": "lesser broadleaf crowns cite 0080's 0.75-1.4 band once LESSER_BROADLEAF_S floor is 0.75",
+  "files": [
+   "l7r/diagram/settlement/homestead_parts/groves.py"
+  ],
+  "after": [],
+  "flag": "",
+  "tier_as_ranked": "E1",
+  "e0_basis": "the code already says what the page says: LESSER_BROADLEAF_S = (0.75, 0.85), inside 0080 drawing's 0.75-1.4, and its claim cites that band (fixed in wave 9)",
+  "moved": "wave 39: already fixed in wave 9 with its E1 sibling (`_draw_grove#lesser broadleaf crown size`): LESSER_BROADLEAF_S reads (0.75, 0.85)",
+  "verdict": "UNCLAIMED",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#mixed broadleaf belt",
   "verdict": "UNCLAIMED",
   "tier": "E0",
@@ -3144,6 +3160,22 @@
   "e0_basis": "T42a: claim lines only; the code stands",
   "moved": "T42a: tiered by its work - The code already draws the mixed_broadleaf form as 0072 describes it, so only the claim line is written.",
   "wave": "11",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/settlement/homestead_parts/groves.py::LESSER_BROADLEAF_S#lesser broadleaf size",
+  "tier": "E0",
+  "fix": "LESSER_BROADLEAF_S floor 0.6 -> 0.75 (0080's 0.75-1.4)",
+  "files": [
+   "l7r/diagram/settlement/homestead_parts/groves.py"
+  ],
+  "after": [],
+  "flag": "",
+  "tier_as_ranked": "E1",
+  "e0_basis": "the code already says what the page says: LESSER_BROADLEAF_S = (0.75, 0.85), inside 0080 drawing's 0.75-1.4, and its claim cites that band (fixed in wave 9)",
+  "moved": "wave 39: already fixed in wave 9 with its E1 sibling (`_draw_grove#lesser broadleaf crown size`): LESSER_BROADLEAF_S reads (0.75, 0.85)",
+  "verdict": "DRIFTED",
+  "wave": "",
   "scope": "kept"
  },
  {
@@ -8582,38 +8614,6 @@
   "verdict": "DRIFTED",
   "wave": "",
   "scope": "deferred"
- },
- {
-  "key": "l7r/diagram/settlement/homestead_parts/groves.py::LESSER_BROADLEAF_S#lesser broadleaf size",
-  "tier": "E2",
-  "fix": "LESSER_BROADLEAF_S floor 0.6 -> 0.75 (0080's 0.75-1.4)",
-  "files": [
-   "l7r/diagram/settlement/homestead_parts/groves.py"
-  ],
-  "after": [
-   "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#crown size"
-  ],
-  "flag": "",
-  "tier_as_ranked": "E1",
-  "verdict": "DRIFTED",
-  "wave": "",
-  "scope": "kept"
- },
- {
-  "key": "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#lesser broadleaf crown size LESSER_BROADLEAF_S 0.6-0.85 of the mean radius",
-  "tier": "E2",
-  "fix": "lesser broadleaf crowns cite 0080's 0.75-1.4 band once LESSER_BROADLEAF_S floor is 0.75",
-  "files": [
-   "l7r/diagram/settlement/homestead_parts/groves.py"
-  ],
-  "after": [
-   "l7r/diagram/settlement/homestead_parts/groves.py::LESSER_BROADLEAF_S#lesser broadleaf size"
-  ],
-  "flag": "",
-  "tier_as_ranked": "E1",
-  "verdict": "UNCLAIMED",
-  "wave": "",
-  "scope": "kept"
  },
  {
   "key": "l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#off the plots' sun",

@@ -3,6 +3,8 @@
 import math
 import random
 
+import pytest
+
 from l7r.diagram.settlement import Settlement
 from l7r.diagram.settlement._geom import CanopyArea, CrownIndex
 from l7r.diagram.settlement.homestead_parts.groves import BAMBOO_CULM, GROVE_BAMBOO_SHARE, HOMESTEAD_WOOD_FT2, bamboo_mark
@@ -188,16 +190,29 @@ def test_a_clumps_bamboo_marks_keep_out_of_a_plots_sun_and_are_recorded() -> Non
     assert bamboo_shading_plots(sunny.M, BAMBOO_SHADE_FT) == []
 
 
-def test_no_conifer_is_drawn_under_a_yard_persimmons_crown():
-    """GM 2026-10-02: a yard persimmon is inked over every grove, so a cedar under its crown would read as broadleaf over
-    conifer - the windbreak's conifers give way round it (`_draw_grove`'s `_trees`), its other crowns stand."""
+def test_no_crown_is_drawn_under_a_yard_persimmons_crown():
+    """GM 2026-10-02: a yard persimmon is inked over every grove; 0046 (feature 328): "the grove's trees give way round it" -
+    every crown, not the conifer alone (`_draw_grove`'s `_trees`)."""
     import math
 
     s = _hamlet()
     s.M["houses"] = [{"x": 2000.0, "y": 2000.0, "w": 40.0, "h": 30.0, "geom": {"fixtures": {"persimmon": (300.0, 300.0, 60.0)}}}]
     for k in range(9):
         s._draw_grove(270.0 + 30 * (k % 3), 270.0 + 30 * (k // 3), 28.0, 28.0, face=(0, -1), mix="windbreak")
-    cones = [c for c in getattr(s, "_conifer_crowns", None) or []]
     crowns = [(s.M["tree_crowns"][i], s.M["tree_crowns"][i + 1]) for i in range(0, len(s.M["tree_crowns"]), 3)]
     assert crowns, "non-vacuity: the clumps drew crowns"
-    assert all(math.hypot(c[0] - 300.0, c[1] - 300.0) >= 30.0 for c in cones), "no conifer centered under the persimmon's crown"
+    assert all(math.hypot(c[0] - 300.0, c[1] - 300.0) >= 30.0 for c in crowns), "no crown centered under the persimmon's crown"
+
+
+@pytest.mark.parametrize("mix", ["windbreak", "dooryard", "mixed_broadleaf"])
+def test_every_grove_crown_is_drawn_in_the_woods_one_band(mix: str) -> None:
+    """0080 (feature 328): each crown is drawn 0.75 to 1.4 times the mean radius - one band, a conifer no wider (it was
+    0.72-1.05 or 1.25-1.7, and a conifer 15% wider)."""
+    from l7r.diagram.settlement.homestead_parts.groves import CROWN_S
+
+    s = _hamlet()
+    sum(s._draw_grove(200.0 + 60 * (k % 4), 200.0 + 60 * (k // 4), 50.0, 50.0, face=(0, -1), mix=mix) for k in range(16))
+    r0 = s.px(s.CANOPY_R_FT)
+    radii = [s.M["tree_crowns"][i + 2] for i in range(0, len(s.M["tree_crowns"]), 3)]
+    assert len(radii) > 20, "non-vacuity"
+    assert all(CROWN_S[0] * r0 - 0.06 <= r <= CROWN_S[1] * r0 + 0.06 for r in radii), (min(radii) / r0, max(radii) / r0)

@@ -2183,6 +2183,17 @@
   "moved": "T42a: tiered by its work - One keep-out condition in one function widens from conifers to every crown.",
   "tier": "E2"
  },
+ "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#lesser broadleaf crown size LESSER_BROADLEAF_S 0.6-0.85 of the mean radius": {
+  "after": [],
+  "e0_basis": "the code already says what the page says: LESSER_BROADLEAF_S = (0.75, 0.85), inside 0080 drawing's 0.75-1.4, and its claim cites that band (fixed in wave 9)",
+  "files": [
+   "l7r/diagram/settlement/homestead_parts/groves.py"
+  ],
+  "fix": "lesser broadleaf crowns cite 0080's 0.75-1.4 band once LESSER_BROADLEAF_S floor is 0.75",
+  "flag": "",
+  "moved": "wave 39: already fixed in wave 9 with its E1 sibling (`_draw_grove#lesser broadleaf crown size`): LESSER_BROADLEAF_S reads (0.75, 0.85)",
+  "tier": "E0"
+ },
  "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#mixed broadleaf belt": {
   "after": [],
   "e0_basis": "T42a: claim lines only; the code stands",
@@ -2205,6 +2216,17 @@
   "found": "wave 11 re-check (tiered by its work at T46a)",
   "moved": "T46a: tiered by its work - Two conditions inside one function's item roll change for one mix (the crown band and the bamboo share), no new form.",
   "tier": "E2"
+ },
+ "l7r/diagram/settlement/homestead_parts/groves.py::LESSER_BROADLEAF_S#lesser broadleaf size": {
+  "after": [],
+  "e0_basis": "the code already says what the page says: LESSER_BROADLEAF_S = (0.75, 0.85), inside 0080 drawing's 0.75-1.4, and its claim cites that band (fixed in wave 9)",
+  "files": [
+   "l7r/diagram/settlement/homestead_parts/groves.py"
+  ],
+  "fix": "LESSER_BROADLEAF_S floor 0.6 -> 0.75 (0080's 0.75-1.4)",
+  "flag": "",
+  "moved": "wave 39: already fixed in wave 9 with its E1 sibling (`_draw_grove#lesser broadleaf crown size`): LESSER_BROADLEAF_S reads (0.75, 0.85)",
+  "tier": "E0"
  },
  "l7r/diagram/settlement/homestead_parts/stands.py::StandsMixin.village_grove#belt off the deep marsh": {
   "after": [],

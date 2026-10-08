@@ -13,6 +13,10 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 - (wave 5, landed and reviewed) placement-changed village lane on kashikawa - wave 5: 0033's row street runs on off the map as the road into it at both ends, where
   the web cut it back to its last joint (`trim_streets`); Kashikawa's and Mizuguchi's far ends now run off the sheet as a
   second way out (every way is inked `village lane`).
+- glyph-redrawn: windbreak on inashiro - wave 39: every grove crown in 0080's one 0.75-1.4 band, a conifer no wider than a broadleaf
+  (the conifer-led belt's rows and the farm groves), and every crown giving way round a yard persimmon (0046)
+- glyph-redrawn: windbreak on kuwabata - wave 39: the mixed broadleaf belt in the one band and with no bamboo (0072)
+- glyph-redrawn: copse on kuwabata - wave 39: the dooryard copse's crowns in the one band
 - none (wave 38): the buildings-only touch in `_one_joint` moved no lane - the five pool hamlets regenerated with manifests identical (measured 2026-10-08)
 - none (wave 37): the Z pulled straight changes no pool map; the salt-ward clauses are doc text
 - none (wave 36): claims only, no executed code changed
@@ -1258,3 +1262,27 @@ sheets together), left for its place in the run.
 - [x] T102 the claims re-checked by `impl-drift`; the close: `make done` green, the wave column (FR-005, FR-006)
       research: rendering
       verify: DONE. impl-drift 2 of 2 IN-STEP at round 4; gate green; five hamlets byte-identical; the timing pair band 1 confirmed consistent by perf-audit; waves.json 38 for the four rows
+
+## Phase 40 - wave 39 (amendment 38): the grove crowns
+
+Three E2 rows in `_draw_grove`, one research page each, fixed together (`audit/overrides.json`):
+
+  - `...groves.py::GrovesMixin._draw_grove#crown size` - 0080 drawing: "each crown is drawn between 0.75 and 1.4 times" the
+    mean radius. `CROWN_S = (0.75, 1.4)` replaces the 0.72-1.05 / quarter-of-the-time 1.25-1.7 split; the conifer's 15% (on no
+    page) goes from the clump crown, the belt's row conifer (`_belt_ranks`) and the prefilter pad
+  - `...#every crown gives way round a persimmon` - 0046 drawing: "the grove's trees give way round it"; the keep-out was the
+    conifer's alone
+  - `...#mixed broadleaf belt's sizes and bamboo` - the one band, and no bamboo in a mixed broadleaf belt (0072 names only
+    rounded broadleaf crowns in it); the conifer-led belt keeps the windbreak's share
+
+Two E2 rows close as E0: `LESSER_BROADLEAF_S#lesser broadleaf size` and its duplicate were fixed in wave 9 with their E1
+sibling (the band reads 0.75-0.85, inside 0080's).
+
+Tests: `test_every_grove_crown_is_drawn_in_the_woods_one_band` (windbreak, dooryard, mixed broadleaf) and
+`test_no_crown_is_drawn_under_a_yard_persimmons_crown`, all four red on the old code. Measured: the five pool hamlets
+regenerated, `tree_crowns` and `bamboo_marks` changed on every map, nothing else placed differently.
+
+- [ ] T103 the grove crowns: one band, no conifer inflation, every crown round the persimmon, no bamboo in a mixed broadleaf belt (FR-003 E2, FR-004)
+      research: rendering
+- [ ] T104 the claims re-checked by `impl-drift`; the glyph checks; the close: `make done` green, the pair, the wave column (FR-005, FR-006)
+      research: rendering

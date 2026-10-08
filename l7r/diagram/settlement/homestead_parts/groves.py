@@ -123,8 +123,11 @@ RANK_APART_FT = 26.0
 RANK_JITTER_FT = 3.0
 """Research: planted off its mark - GUESS: up to 3 ft"""
 RANK_BIN_FT = 40.0  # the centerline's vertex spacing along the belt: two rows' width, fine enough to follow a crescent's bend (a GUESS)
-RANK_CONIFER_S = (1.0, 1.1)  # a planted row is even-aged: one size band (x CANOPY_R_FT x 1.15), not the emergent mix
-"""Research: row conifer size - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: 1.0 to 1.1 of the mean crown, x 1.15"""
+RANK_CONIFER_S = (1.0, 1.1)  # a planted row is even-aged: one size band (x CANOPY_R_FT), not the emergent mix
+"""Research: row conifer size - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: 1.0 to 1.1 of the mean crown, inside the page's 0.75 to 1.4"""
+CROWN_S = (0.75, 1.4)
+"""Research: crown size - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: each crown
+0.75 to 1.4 times the mean radius, one band"""
 LESSER_BROADLEAF_S = (
     0.75,
     0.85,
@@ -363,7 +366,7 @@ class GrovesMixin:
         # outside a ring's box is outside the ring, so the rings whose box (a pixel wider) holds the row point are the only
         # ones `point_in_poly` can find it in, and it decides as before.
         marsh = boxed_grid(boxed_polys(wet, 1.0))
-        jit, base = self.px(RANK_JITTER_FT), self.px(self.CANOPY_R_FT) * 1.15
+        jit, base = self.px(RANK_JITTER_FT), self.px(self.CANOPY_R_FT)
         lo, hi = RANK_CONIFER_S
         drawn: list[tuple[float, float, float]] = []
         ink: list[str] = []
@@ -720,7 +723,7 @@ class GrovesMixin:
             dooryard mix - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html:
                 fruit broadleaf, no conifer
             crown size - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html: the
-                mean crown radius, 0.72-1.05 or a quarter 1.25-1.7 of it, a conifer 15% wider
+                mean crown radius, 0.75 to 1.4 of it, a conifer as wide as a broadleaf
             thin band end to end - UNRESEARCHED: a thin band's few trees spread along its length
             crown over no roof or wellhead - research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html, research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: no crown on a building, and none round a wellhead in a belt
             bamboo patch forced - GUESS research/questions/0075-bamboo-groves-chikurin.drawing.html: a farm grove keeps its bamboo as a patch inside it, an item there drawn as bamboo in any mix
@@ -728,7 +731,8 @@ class GrovesMixin:
             crown under no crown - research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html
             alder in the marsh - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html
             mixed broadleaf belt - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: rounded broadleaf crowns in the woods' size mix, no conifer
-            conifer crown under a persimmon's crown - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html: a conifer crown refused under a yard persimmon's crown, the grove giving way round it
+            mixed broadleaf belt's bamboo - GUESS research/questions/0075-bamboo-groves-chikurin.drawing.html: the windbreak's one in twelve, the page's guess, which it holds in the village's shelter belt as in the farm's grove
+            every crown gives way round a persimmon - research/questions/0046-fruit-trees-in-the-farmyard-persimmon-chestnut-and-plum-kaki.drawing.html: every crown refused under a yard persimmon's crown, the grove giving way round it
             lesser crown over an earlier stand's conifer - CONVENTION: a lesser crown refused over an earlier stand's conifer, which decides only paint order (conifers painted last)
             clump glyph - CONVENTION: one disc per crown, conifers dark and painted last, no trunks
             conifer-led clump's lesser share - GUESS research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: a conifer-led clump throws LESSER_ROLL_SHARE (0.1) of its crowns as lesser broadleaf; the page names the lesser broadleaf, the share a guess
@@ -754,7 +758,8 @@ class GrovesMixin:
             # clump's edge - as the stand glyph's culm mark (`bamboo_stand`, a map drawing convention), not a crown.
             # The share is a GUESS (no page gives one; "a grove is mostly trees with bamboo among them"): 8% of the
             # items, taken from the broadleaf so the cedar backbone keeps its 48%. The dooryard and alder mixes carry none.
-            # The village belt's two forms (269 B30) carry the same bamboo share; a conifer-led belt's conifers are its rows,
+            # The village belt's two forms (269 B30) carry the same bamboo share (0075: "in the farm's grove and in the village's
+            # shelter belt alike"); a conifer-led belt's conifers are its rows,
             # seated for the whole belt by `_belt_ranks`, so its clumps throw only the lesser crowns; a mixed broadleaf belt has none.
             b_th = (
                 GROVE_BAMBOO_SHARE if bamboo and mix in ("windbreak", *WINDBREAK_BELT_FORMS) else 0.0
@@ -786,7 +791,9 @@ class GrovesMixin:
                         px = -w / 2 + 2 + t * (w - 4)
                 roll = random.random()
                 kind = "bamboo" if roll < b_th or in_box(cx + px, cy + py, bamboo_box) else ("conifer" if roll < c_th else "broadleaf")
-                band = LESSER_BROADLEAF_S if mix == "conifer_led" else ((1.25, 1.7) if random.random() < 0.25 else (0.72, 1.05))  # a few emergent crowns over many small
+                # THE PAGE'S ONE BAND (feature 328, 0080: "each crown is drawn between 0.75 and 1.4 times" the mean; it was 0.72-1.05,
+                # or 1.25-1.7 a quarter of the time, on no page)
+                band = LESSER_BROADLEAF_S if mix == "conifer_led" else CROWN_S
                 size = random.uniform(*band)
                 items.append((px, py, kind, size))
             # ORDER-SENSITIVE: this reads M, so it can only avoid structures that ALREADY EXIST when the
@@ -798,14 +805,14 @@ class GrovesMixin:
             # keeps its shape everywhere else. Crown centers below are relative to (cx, cy); keep-outs absolute.
             # THE PREFILTER MUST REACH AS FAR AS A CROWN DOES (feature 134 T50, 2026-08-29). Both lists
             # below are PREFILTERED to this box, and the pad was a flat `9 * bs` while a crown's own
-            # radius is `px(CANOPY_R_FT) * s * 1.15` with `s` as high as 1.7 - about 14.5 px on a hamlet.
+            # radius is `px(CANOPY_R_FT) * s` with `s` as high as 1.4 (1.7 x 1.15 until feature 328).
             # So a building standing 10-14 px outside the stand's box was not in `krect` at all, and
             # `_crown_covers` then cleared a crown that plainly covered it: cohort seed 9's farmhouse at
             # (1938, 2655) sat under a 14.4 ft crown from a copse whose box ended 10.7 px short of it,
             # and `structures_clear_of_trees` read it correctly. A prefilter that prunes a candidate the
             # test would have rejected is not an optimization, it is a silent wrong answer - the same
             # rule this engine states for every other index ("the index prunes; it never decides").
-            _cpad = max(9.0 * bs, self.px(self.CANOPY_R_FT) * 1.7 * 1.15 + 1.0)
+            _cpad = max(9.0 * bs, self.px(self.CANOPY_R_FT) * CROWN_S[1] + 1.0)
             krect, kcirc = self._canopy_keepouts((cx - w / 2 - _cpad, cy - h / 2 - _cpad, cx + w / 2 + _cpad, cy + h / 2 + _cpad))
             # ...AND EVERY YARD'S AND BED'S SUN GROUND for the crowns (feature 310, GM 2026-10-02: "no canopy trees should be exempt"),
             # and every culm mark below the same at bamboo's own reach (feature 315: the timber bamboos stand as tall as the tree)
@@ -849,9 +856,9 @@ class GrovesMixin:
                 # a pixel radius calibrated at the village's 2 ft/px ("a ~5-6 m canopy") and never rescaled by ftpx:
                 # at the hamlet's 1 ft/px the belt drew 9 ft crowns beside the commons' 18 ft ones (measured on
                 # Inashiro: belt median r 4.5 ft, commons 9.0). Now the same CANOPY_R_FT the woods and the commons
-                # use, in real feet (research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html); a conifer 15% wider,
+                # use, in real feet (research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html); a conifer was 15% wider until feature 328 (on no page),
                 # the old ratio. A village (ftpx 2, bscale 1) gets 4.25 px, within a pixel of what it drew before.
-                rr = self.px(self.CANOPY_R_FT) * s * (1.15 if kind == "conifer" else 1.0)
+                rr = self.px(self.CANOPY_R_FT) * s
                 # ALDER AT THE REED EDGE (feature 261): the woody stage of a marsh margin is alder or willow, never pine
                 # (research/contents.json#vegetation, Reed beds and the marsh's edge), so a belt crown standing in the marsh is drawn as one - a
                 # blue-gray green set apart from the belt's own two greens and its cedar, a map drawing convention (the
@@ -866,13 +873,14 @@ class GrovesMixin:
                     continue  # a crown centered under an already-drawn crown is an understory stem, not canopy (GM 2026-08-28; woods._crown_seat_clear)
                 if kind != "conifer" and over_a_conifer(cx + px, cy + py - lift, rr, _cones):
                     continue
-                if kind == "conifer" and any(over_a_conifer(tx, ty, tr, [(cx + px, cy + py - lift, rr)]) for tx, ty, tr in _trees):
+                # ...EVERY CROWN, not the conifer alone (feature 328, 0046: "the grove's trees give way round it")
+                if any(over_a_conifer(tx, ty, tr, [(cx + px, cy + py - lift, rr)]) for tx, ty, tr in _trees):
                     continue
                 drawn.append((cx + px, cy + py - lift, rr))
                 # ONE DISC PER CROWN, conifer included (GM 2026-09-27). A conifer used to carry a second, darker
                 # disc at 40% of its radius (a "dense dark apex"); the GM read it as a trunk, which a plan view
-                # cannot show, and it was an unrecorded map convention. The darker fill and the 15% larger
-                # crown already tell a conifer from a broadleaf.
+                # cannot show, and it was an unrecorded map convention. The darker fill
+                # tells a conifer from a broadleaf (the 15% larger crown went with feature 328: on no page).
                 (high if kind == "conifer" else g).append(f'<circle cx="{px:.1f}" cy="{py - lift:.1f}" r="{rr:.1f}" fill="{col}" stroke="#3C5526" stroke-width="0.8"/>')
                 if kind == "conifer":
                     self._conifer_crowns = [*(getattr(self, "_conifer_crowns", None) or []), (cx + px, cy + py - lift, rr)]

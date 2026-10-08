@@ -467,6 +467,16 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 - **Verification**: `impl-drift` on the touched claims, the gate, the timing pair, a glyph check of the village lane where
   the fix moved one (or the cap's recorded reason).
 
+## Wave 39 (amendment 38, 2026-10-08)
+
+- **Scope**: the grove crowns (`tasks.md` Phase 40): three E2 rows in `_draw_grove` - 0080's one crown band and no conifer
+  inflation, 0046's grove giving way round the persimmon with every crown, 0072's mixed broadleaf belt without bamboo - and
+  two duplicate rows closed as already fixed in wave 9.
+- **Occasions**: glyph-redrawn windbreak on inashiro (conifer-led) and kuwabata (mixed broadleaf), copse on kuwabata.
+- **On the unpushed waves 9-38** under condition (6): as at wave 38's close; the pair is owed (executed code).
+- **Verification**: the four tests red on the old code; `impl-drift` on the touched claims; the gate; the three glyph checks;
+  the timing pair.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Each later wave that changes engine behavior takes

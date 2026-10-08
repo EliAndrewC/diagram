@@ -25,19 +25,19 @@ Guesses:
   nearly half the trees were cedar), and every survey of the conifer-led form is of farmhouse groves, not of a belt for a whole village.
 
 Depiction: The map draws a belt along the windward edge of each cluster of houses, not a grove at each house,
-on the one or two sides the winter wind comes from - the northwest unless the place has a wind of its own - and never carries it round the houses. It is drawn in one of two
+on the one or two sides the winter wind comes from - the northwest unless the place has a wind of its own - and never carries it round the houses: a Ryukyu belt ran round three sides of its settlement, but the one- or two-sided belt was the usual form, and on the north and west it shows which way the winter wind blows. It is drawn in one of two
 forms, darker conifers set in rows with broadleaf trees among them or an irregular wood of rounded crowns, with a little bamboo
 between the crowns shown by paired strokes, since a real culm is too slim to see; the title card says which form this
 settlement has. Each crown is drawn at its real size, and only the crowns are drawn, though a real wood had a
-dense undergrowth of bamboo and shrubs beneath them. The rows are spaced so a reader can make them out, and the belt is drawn as a ragged band deep enough to read
+dense undergrowth of bamboo and shrubs beneath them. On a village's map the wood is drawn somewhat larger than a typical surviving village wood, so it reads as a wood at that scale. The rows are spaced so a reader can make them out, and the belt is drawn as a ragged band deep enough to read
 as a wood rather than a row of trees, its edge uneven as a real wood's was, standing where the ground let it; the one village belt whose width is recorded, in the Ryukyu islands, was about 50 ft wide, and how far apart
 real rows stood is not recorded. The
 belt is planted unbroken along its side, since a gap would funnel the wind, runs on past the edge of the map, its
-planting resumes on both sides of a lane that crosses it, though no record says how a lane passed through a real belt, and its trees are kept
+planting resumes on both sides of a lane that crosses it, though how a lane passed through a real belt is not recorded, and its trees are kept
 off the sun of the farmyards and kitchen beds.
 
 Name: windbreak forest
 Covers: `village_groves[role=windbreak]`
 Sources: afcd-ncsc-9-06, hk-herbarium-fsw, tonami-kainyoclub, miura-2019-yashikiyama, yashikirin-jawiki, irie-2020-igune, forests-2020, hu-2011-fengshui-patches, coggins-minor-2018, takehara-2004-yashikirin, tonami-yashikirin-haichi, sendai-igune-modelplan, bian-li-huizhou-forest-steles, maff-tarama-giahs, kashima-kainyo-1987, jpgreen-byobuzan, kotobank-shuson
 Entry: research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.html, research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.html, research/questions/0245-who-kept-a-southern-chinese-villages-fengshui-woods-and-what-could-villagers-take-from-them.html, research/questions/0075-bamboo-groves-chikurin.html, research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.html, research/questions/0124-farmsteads-at-a-town.html, research/questions/0031-clustered-and-scattered-villages-shuson-sanson.html [settlement_form=nucleated]
-Drawing: research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html, research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html, research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html, research/questions/0075-bamboo-groves-chikurin.drawing.html, research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html
+Drawing: research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html, research/questions/0071-groves-around-a-southern-chinese-village-the-fengshui-woods-fengshuilin-and-the-dooryard-copse.drawing.html, research/questions/0038-sunlight-and-shade-on-the-farm.drawing.html, research/questions/0075-bamboo-groves-chikurin.drawing.html, research/questions/0080-how-thickly-trees-stood-in-a-wood-and-how-wide-their-crowns.drawing.html, research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html, research/questions/0124-farmsteads-at-a-town.drawing.html
