@@ -298,8 +298,9 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 
 ## Wave 23 (amendment 22, 2026-10-08)
 
-- **Scope**: wave 22's seven found rows, all E0 by a fresh reader (T71a), written as claims (`tasks.md` Phase 24); no
-  executed code changes. The well row is withdrawn as a drift (the curb is the page's 19 ft).
+- **Scope**: six of wave 22's seven found rows, E0 by a fresh reader (T71a), written as claims (`tasks.md` Phase 24); no
+  executed code changes. The well row is withdrawn as a drift (the curb is the page's 19 ft). The seventh,
+  `seat_rows#farms to a street` (NEEDS-RESEARCH), is E4 and waits for its research pass (amendment 22 round 1).
 - **Occasions**: none.
 - **On the unpushed waves 9-22** under condition (6): (1)-(5) held at wave 22's close (049e951d4, its backup pushed, its own
   pair band 1 confirmed with a control); wave 23's own pair opens at 049e951d4.

@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-08T00:53:37Z",
+  "target": "perf-explain",
+  "commit": "1cbf0f2c9",
+  "outcome": "permitted",
+  "why": "perf-explain UNVERIFIED: identical executed code; no counterfactual exists"
+}
