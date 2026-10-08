@@ -7,8 +7,8 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 
 - (reviewed PASS at batch 3's close, 2026-10-08) placement-changed: privy on sawada - wave 52: the barn seat against the steading annex (a north annex's east gable, a west annex's west wall; 0047), the heap stepped away from the house along the privy's bearing; batch 3's close
 - (reviewed PASS at batch 3's close, 2026-10-08) placement-changed: manure heap on inashiro - wave 52: the same seat, the heap form; batch 3's close
-- glyph-redrawn: homestead grove on mizuguchi - wave 53: the crown density one to ~180 sq ft real (0080), drawn crowns 546 -> 337; wave 55: topped up to that density as DRAWN (round 1 NEEDS-WORK: ~400 sq ft a crown drawn); batch 3's close, round 2
-- glyph-redrawn: windbreak on inashiro - wave 53: the same density in the windward bands; wave 54: its conifer share as drawn 0.48; wave 55: its bands topped up to the density as drawn (round 1 PASS before it); batch 3's close, again
+- (reviewed PASS at batch 3's close round 2, 2026-10-08) glyph-redrawn: homestead grove on mizuguchi - wave 53: the crown density one to ~180 sq ft real (0080), drawn crowns 546 -> 337; wave 55: topped up to that density as DRAWN (round 1 NEEDS-WORK: ~400 sq ft a crown drawn); batch 3's close, round 2
+- (reviewed PASS at batch 3's close round 2, 2026-10-08) glyph-redrawn: windbreak on inashiro - wave 53: the same density in the windward bands; wave 54: its conifer share as drawn 0.48; wave 55: its bands topped up to the density as drawn (round 1 PASS before it); batch 3's close, again
 - (reviewed PASS at batch 3's close, 2026-10-08) placement-changed: manure pit on sawada - wave 52: the heap beyond the privy along the line from the house's center (0042, "on the side away from the house"); batch 3's close
 - none: wave 1 changes `Research:` claim lines only (tier E0) - nothing a map draws or where it is placed moves.
 - (wave 4, landed and reviewed) placement-changed village lane - wave 4 brought the lane law to 0081 and 0246 (7 ft clear of a fence, ends joined

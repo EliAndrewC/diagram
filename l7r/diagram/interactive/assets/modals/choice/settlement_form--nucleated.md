@@ -20,7 +20,7 @@ Guesses:
 Depiction: The map gathers the houses together on the dry ground at the edge of the fields, each house reached by a
 lane, and shelters the houses behind a belt of trees along their windward edge rather than a grove at each farm, a belt that runs on past the edge of the map where it meets it;
 clumps of trees, the dooryard copse, stand in the gaps between the farms. The houses are drawn as a compact cluster,
-whatever its shape, a village packed tighter than a hamlet, which is drawn looser; how densely
+whatever its shape, never strung out in a wide, hollow arc that leaves houses stranded from the fields; a village is held to a least packing, which a hamlet is not; how densely
 a real village was built is not recorded. The title card says where this cluster sits and what
 shape it takes.
 

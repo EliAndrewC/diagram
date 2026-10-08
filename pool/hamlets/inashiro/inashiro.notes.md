@@ -90,7 +90,7 @@ pipeline's, and it is the same order a person follows:
   from the slope and then re-read off the seat, which made the belt's side circular here. Every map now
   takes the northwest unless its spec declares a local wind (none does), and the cluster is seated with
   its back to it; this map's belt stands on the north of its houses only - its outline reaches west, but no
-  tree stands in that arm, on the page or off it; twelve of its clumps run off the top edge, as 0072 allows a
+  tree stands in that arm, on the page or off it; eight of its clumps run off the top edge (the census below: `clumps_offpage`), as 0072 allows a
   belt to (measured 2026-10-08, the windbreak glyph check of feature 328's batch 1).
 - **Dry hem plots run ~4.3x the size of Ikegami's** - the pre-269 roll's figure (feature 269, 2026-09-28, redrew
   the hem as 2 furrow tracts, one buckwheat at 7,773 sq ft and one millet at 10,674 sq ft, 0.42 acre total against

@@ -19,7 +19,7 @@ Guesses:
 - Whether a farm draws a channel or a well of its own, at even odds: on the Tonami plain many areas led a channel into the
   house's grounds, and no account says how the other areas drew their water.
 
-Depiction: The map stands each farm alone beside its own fields, with its own grove on two, three or four of its sides, and draws no lanes among the farms:
+Depiction: The map stands each farm alone beside its own fields, with its own grove on two, three or four of its sides - the same at every farm of a settlement, as the groves' shape went by region - and draws no lanes among the farms:
 the road out joins the settlement to the world, and the field paths join the farms to one another, a drawing convention so the scattered form reads at a glance, as a web of lanes would hide it. No village shelter belt
 is drawn, since each farm has its own grove. A scattered settlement needs about twice the ground per farm that a clustered
 one does, so the map gives it a roomier field rather than squeezing its farms together; that is a rule for fitting the
