@@ -13,6 +13,8 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 - (wave 5, landed and reviewed) placement-changed village lane on kashikawa - wave 5: 0033's row street runs on off the map as the road into it at both ends, where
   the web cut it back to its last joint (`trim_streets`); Kashikawa's and Mizuguchi's far ends now run off the sheet as a
   second way out (every way is inked `village lane`).
+- placement-changed: perimeter dike on kuwabata - wave 28: the polder's outer edge held to its line (no edge wander, 0019); Kuwabata re-rolls
+  round its new outline (47 manifest keys move, no ink class gained or lost)
 - none (wave 27): the brook and flank rules change no pool map
 - none (wave 26): the drain's corridor dropped on a hamlet; the five pool hamlets unchanged
 - none (wave 25): claims and one code comment, no executed code changed
@@ -1036,3 +1038,16 @@ showed the literal fix alone passes all 28 - the re-tier is withdrawn and the th
 - [x] T80 the claims re-checked by `impl-drift`; the close: wave 27's own bookend pair, `make done` green, the wave column (FR-005, FR-006)
       research: rendering
       verify: DONE. impl-drift IN-STEP (1 + 11); amendment 26 FAITHFUL (round 2), plan CLEAR; make done green; wave 27's own pair band 1, host load on unchanged maps (perf-audit consistent, each over-5% seed diagnosed by counterfactual); the wave column
+
+## Phase 29 - wave 28 (amendment 27): the polder's outer edge fixed
+
+The next open in-scope row. 0019's drawing page: the interior lattice's drift "fades to nothing at the fixed outer edge"; the
+hamlet's polder wandered its edge, walked down from 0.5 until the outline filled 0.86 of its box. Now no edge wander. The
+shared `build_polder` keeps the knob (its legacy test still proves it binds); the hamlet passes 0.
+
+  - `l7r/diagram/hamletgen/water/polder.py::_polder_candidate#surveyed block` - the outer edge fixed, the walk-down and its fill test gone
+
+- [ ] T81 the polder's outer edge fixed; the five hamlets regenerated (Kuwabata re-rolls) (FR-004, FR-005)
+      research: rendering
+- [ ] T82 the claims re-checked by `impl-drift`; the glyph check (perimeter dike on Kuwabata); the close: wave 28's own bookend pair, `make done` green, the wave column (FR-005, FR-006)
+      research: rendering

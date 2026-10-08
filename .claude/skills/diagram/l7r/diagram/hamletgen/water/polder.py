@@ -14,7 +14,7 @@ from typing import Any
 
 from l7r.diagram.settlement import PointGrid, Settlement, knob_rng, point_in_poly, seg_intersect, segments_cross
 from l7r.diagram.settlement.land.dikes import CREST_REACH, DIKE_GAP_HW, GAP_REACH, course_breaches, dike_band, dike_crest
-from l7r.diagram.sitegen.geom import net_acres, poly_area
+from l7r.diagram.sitegen.geom import net_acres
 from l7r.diagram.waterfields import build_polder, clean_polder_parcels
 
 from ..consts import (
@@ -437,7 +437,7 @@ def _polder_candidate(plan: SitePlan, seed: int, rows: int, cols: int, cellpx: f
     as surveyed (see `fit_polder`).
 
     Research:
-        surveyed block - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: edge wander walked down from 0.5 until the outline fills 0.86 of its box
+        surveyed block - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the outer edge fixed - no edge wander; the interior's drift fades to nothing there
         block centered - NONE: on the canvas at any bearing
     """
     dx, dy = plan.fall
@@ -445,38 +445,25 @@ def _polder_candidate(plan: SitePlan, seed: int, rows: int, cols: int, cellpx: f
     along, across = rows * cellpx, cols * cellpx
     cx, cy = plan.W / 2.0, plan.H / 2.0
     origin = (cx - dx * along / 2 - ux * across / 2, cy - dy * along / 2 - uy * across / 2)
-    # EDGE WANDER IS FITTED TO THE BLOCK, not fixed at Enokida's 0.5. `polder_fills_its_bbox`
-    # wants the outline to cover >= 82% of its bbox - the archetype's teeth, since a polder
-    # reads as a SURVEYED rectangle rather than an organic field - and the wander's wobble is a
-    # fixed size in cells, so on a small block it eats a much larger share of the bbox: measured,
-    # a 9x5 grid fills 79% at wander 0.5 where Enokida's 15x8 clears the bar comfortably. So the
-    # wander is walked down until the block reads as surveyed, keeping as much of the
-    # hand-piled, fish-scale irregularity as the archetype can carry at that size.
-    net: dict[str, Any] = {}
-    for wander in (0.5, 0.4, 0.3, 0.2, 0.12):
-        net = build_polder(
-            plan.W,
-            plan.H,
-            origin,
-            seed,
-            down_deg=plan.down_deg,
-            rows=rows,
-            cols=cols,
-            cell=cellpx,
-            parcel_mix=tuple(fab["parcel_mix"]),
-            gap=tuple(fab["gap"]),
-            edge_wander=wander,
-            mosaic=mosaic,
-            clean_parcels=False,
-            ftpx=plan.ftpx,
-        )
-        _env = [(float(a), float(b)) for a, b in net["envelope"]]
-        _xs = [q[0] for q in _env]
-        _ys = [q[1] for q in _env]
-        _bb = max(1.0, (max(_xs) - min(_xs)) * (max(_ys) - min(_ys)))
-        if poly_area(_env) / _bb >= 0.86:  # 0.82 is the rule; the margin absorbs the drawn outline's rounding
-            break
-    return net
+    # THE OUTER EDGE IS FIXED (0019: the interior lattice's drift "fades to nothing at the fixed outer edge"; feature 328 -
+    # the edge once wandered, walked down from Enokida's 0.5 until the outline filled 0.86 of its box): no edge wander, so
+    # the block reads as the surveyed rectangle the page draws, and the interior's drift keeps the fish-scale irregularity.
+    return build_polder(
+        plan.W,
+        plan.H,
+        origin,
+        seed,
+        down_deg=plan.down_deg,
+        rows=rows,
+        cols=cols,
+        cell=cellpx,
+        parcel_mix=tuple(fab["parcel_mix"]),
+        gap=tuple(fab["gap"]),
+        edge_wander=0.0,
+        mosaic=mosaic,
+        clean_parcels=False,
+        ftpx=plan.ftpx,
+    )
 
 
 # ---- the polder's flanks (feature 150) --------------------------------------------------------------
