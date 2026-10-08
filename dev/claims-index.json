@@ -20132,46 +20132,47 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#a healing link kept": {
-  "code": "984abc45bfdc8c13",
-  "core": "df8c8a5d01a8ba9f",
+  "code": "55bcb3e4193d879a",
+  "core": "ef8a466149b855d4",
   "date": "2026-10-08",
-  "note": "the 12 ft end reach is not covered by any page",
+  "note": "the 12 ft reach is unanswered by the cited pages",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#a link takes its way's width": {
-  "code": "b5a2700af2c46fc0",
-  "core": "df8c8a5d01a8ba9f",
+  "code": "1c9ba567e7585aa1",
+  "core": "ef8a466149b855d4",
   "date": "2026-10-08",
-  "note": "the drawn width is a map drawing convention",
+  "note": "true only of the far-gap link (lines 163-171); the kept-whole branch draws joined_link's link at 3 ft (`_draw_web(s, link, 3, joins=True)`, line 142), not the joined way's width. Fix the code or narrow the claim to the far-gap branch",
   "pages": {},
   "research": "",
   "rests": [
    "0081-village-lanes.drawing.html:91a5765af6230403"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#a tail past the junction cut": {
-  "code": "ea3c8a8171eb4019",
-  "core": "df8c8a5d01a8ba9f",
+  "code": "47ccfd1cd1cb8d45",
+  "core": "ef8a466149b855d4",
   "date": "2026-10-08",
-  "note": "a tail under 40 ft is cut",
+  "note": "the shorter half under 40.0 ft is cut, matching \"a tail of under 40 ft beyond a crossing is cut\"",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },
   "research": "ebd72aaa6a0eb9af",
   "rests": [
-   "0081-village-lanes.drawing.html:2ca0b4939aee735d"
+   "0081-village-lanes.drawing.html:2ca0b4939aee735d",
+   "0081-village-lanes.drawing.html:65ad16eace199d92"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#a web lane joins the network": {
-  "code": "6ea981cdb9785aab",
-  "core": "df8c8a5d01a8ba9f",
+  "code": "44a82211d8f57745",
+  "core": "ef8a466149b855d4",
   "date": "2026-10-08",
-  "note": "one network, and a stretch that joins nothing is not drawn",
+  "note": "a run that cannot join returns False",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
@@ -20184,26 +20185,26 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#arrived at the network": {
-  "code": "d17503ab43d190fc",
-  "core": "df8c8a5d01a8ba9f",
+  "code": "c0d9969b86d3546d",
+  "core": "ef8a466149b855d4",
   "date": "2026-10-08",
-  "note": "within 25 ft it is joined at a single point or meets the way as a T",
+  "note": "the 25 ft join at a single point, or not drawn; a T onto the way's side",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },
   "research": "ebd72aaa6a0eb9af",
   "rests": [
    "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
-   "0081-village-lanes.drawing.html:df26f73dd5ee96d2",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:8ab9878d6ac1d10b"
+   "0081-village-lanes.drawing.html:65ad16eace199d92",
+   "0081-village-lanes.drawing.html:df26f73dd5ee96d2"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#how far inside a belt": {
-  "code": "1ddf270451696203",
-  "core": "df8c8a5d01a8ba9f",
+  "code": "db8b9a9bd74501ab",
+  "core": "ef8a466149b855d4",
   "date": "2026-10-08",
-  "note": "the page covers crossing a belt but gives no length limit",
+  "note": "the 60 ft figure is not given; the page records only the crossing as a GUESS",
   "pages": {},
   "research": "",
   "rests": [
@@ -20213,57 +20214,54 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#link off hard ground": {
-  "code": "6f17a49d7e70b750",
-  "core": "df8c8a5d01a8ba9f",
+  "code": "ec2ee5cd1501381e",
+  "core": "ef8a466149b855d4",
   "date": "2026-10-08",
-  "note": "the clearance from buildings is not quantified on any page",
+  "note": "no figure for 8 ft in the cited pages",
   "pages": {},
   "research": "",
-  "rests": [
-   "0081-village-lanes.drawing.html:18dffe2b3b52b18c"
-  ],
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#link off walls": {
-  "code": "2887076bc863bd91",
-  "core": "df8c8a5d01a8ba9f",
+  "code": "27d0aaa17f062eb0",
+  "core": "ef8a466149b855d4",
   "date": "2026-10-08",
-  "note": "the lane's middle is 7 ft clear of a garden fence",
+  "note": "tight_margin=WEB_FABRIC_GAP 7 ft, a lane's middle off a garden fence",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
   "research": "7b40c2c01cfba682",
   "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c5daec1a445d35bf"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#link reach": {
-  "code": "558da4d447f438e5",
-  "core": "df8c8a5d01a8ba9f",
+  "code": "c69c0910417b62c1",
+  "core": "ef8a466149b855d4",
   "date": "2026-10-08",
-  "note": "the 200 ft (WEB_REACH_FT*2) is not covered by any page",
+  "note": "WEB_REACH_FT*2 = 200 ft; the pages are silent",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#no way drawn twice": {
-  "code": "f595c2eebcb853b2",
-  "core": "df8c8a5d01a8ba9f",
+  "code": "f16ed4659a3d1dcc",
+  "core": "ef8a466149b855d4",
   "date": "2026-10-08",
-  "note": "the 60% and 100 ft shadow bars are not covered by any page",
+  "note": "0.6 share or BUNDLE_PITCH 100 ft; the pages are silent",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#not along a shelter belt": {
-  "code": "a83d64708154ff3b",
-  "core": "df8c8a5d01a8ba9f",
+  "code": "5b78341899fb2bcc",
+  "core": "ef8a466149b855d4",
   "date": "2026-10-08",
-  "note": "a lane gets through a belt and the belt is kept whole",
+  "note": "the belt is kept whole and a lane gets through it",
   "pages": {
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "898132059af3d06b"
   },
@@ -20271,31 +20269,44 @@
   "rests": [
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:19b6b8f457366d55",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:1b23f53588df77c1",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:301a35716bf73526",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:79d09be286e4e66b"
   ],
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#the run's nearer end is the one joined to the network": {
-  "code": "df8c8a5d01a8ba9f",
-  "core": "df8c8a5d01a8ba9f",
+ "l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#the nearer end joined": {
+  "code": "2f125c3bd08838cb",
+  "core": "ef8a466149b855d4",
   "date": "2026-10-08",
-  "note": "the run's nearer end is the one joined to the network",
+  "note": "end = the smaller of d0, d1; the pages are silent",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::_lay_web_lane#web lane width": {
-  "code": "210c28768670207c",
-  "core": "df8c8a5d01a8ba9f",
+  "code": "0b4fd41006057d77",
+  "core": "ef8a466149b855d4",
   "date": "2026-10-08",
-  "note": "the footpath is drawn 3 ft wide",
+  "note": "_draw_web(s, run, 3), the 3 ft footpath",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },
   "research": "ebd72aaa6a0eb9af",
   "rests": [
-   "0081-village-lanes.drawing.html:91a5765af6230403",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c5daec1a445d35bf"
+   "0081-village-lanes.drawing.html:8ee2be2b6c83fe7f",
+   "0081-village-lanes.drawing.html:91a5765af6230403"
   ],
+  "verdict": "IN-STEP"
+ },
+ "l7r/diagram/hamletgen/ways/serve.py::carried_onto#plumbing": {
+  "code": "a67e336e4b85ff4c",
+  "core": "0cfdbd53df550567",
+  "date": "2026-10-08",
+  "note": "splices the link and checks walkability, decides nothing physical",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::door_off_fixtures#no path from inside a fixture": {
@@ -20354,21 +20365,29 @@
   "research": "",
   "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/serve.py::joined_link#a detour link is kept 8 ft off hard ground and 7 ft off walls (WEB_HARD_GAP, WEB_FABRIC_GAP)": {
-  "code": "0b650974e20acfd8",
+ "l7r/diagram/hamletgen/ways/serve.py::joined_link#a detour link's margins": {
+  "code": "2a28dd85c4945c97",
   "core": "0b650974e20acfd8",
   "date": "2026-10-08",
-  "note": "a detour link is kept 8 ft off hard ground and 7 ft off walls (WEB_HARD_GAP, WEB_FABRIC_GAP)",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "note": "7 ft off a garden fence is recorded; 8 ft off hard ground is rightly marked unresearched",
+  "pages": {
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
+  },
+  "research": "7b40c2c01cfba682",
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c5daec1a445d35bf"
+  ],
+  "verdict": "IN-STEP"
  },
- "l7r/diagram/hamletgen/ways/serve.py::joined_link#a detour link is kept only where its ends come within 12 ft of the point and of the network": {
-  "code": "0b650974e20acfd8",
+ "l7r/diagram/hamletgen/ways/serve.py::joined_link#a detour link's reach": {
+  "code": "fe7a174ea9ceb418",
   "core": "0b650974e20acfd8",
   "date": "2026-10-08",
-  "note": "a detour link is kept only where its ends come within 12 ft of the point and of the network",
+  "note": "the 12 ft reach is unanswered by the cited pages",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "rests": [],
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/serve.py::joined_link#a near end joined": {
   "code": "bd3290b9af5ac9cc",

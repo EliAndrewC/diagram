@@ -99,6 +99,17 @@ def joined_link(p: Pt, q: Pt, hard: list[Poly], walls: list[Poly], water: list[t
     return link[0] if link else None
 
 
+def join_width(s: Settlement, link: Poly) -> float:
+    """A healing link's drawn width: the widest lane it joins (within `_LANE_JOIN_FT` of the link), else 3 ft. Laid at the
+    web's own 3 ft between two 5 ft lanes it renders as a neck with a round-cap knuckle at each step - a review read it at 2x as a
+    lollipop knob mid-street; a link exists to make two lanes one, so it looks like the lane it completes. Lifted out of the far
+    branch so the kept-whole branch's link takes it too (feature 328 wave 44, impl-drift).
+
+    Research: a link takes its way's width - CONVENTION"""
+    segs_of = [list(zip([(float(x), float(y)) for x, y in _l["pts"]], [(float(x), float(y)) for x, y in _l["pts"]][1:], strict=False)) for _l in s.M.get("lanes", [])]
+    return max((float(_l.get("w", 3)) for _l, sg in zip(s.M.get("lanes", []), segs_of, strict=False) if sg and _net_reach(link, sg) <= _LANE_JOIN_FT), default=3.0)
+
+
 def carried_onto(run: Poly, end: int, link: Poly | None, hard: list[Poly], walls: list[Poly], water: list[tuple[Pt, Pt]]) -> Poly | None:
     """`run` with its `end` (0 or -1) carried onto the network along `link` (`joined_link`'s, which starts at or near that end):
     None where there is no link, or where the leg from the run's next vertex into a link that does not start at the end itself
@@ -230,7 +241,7 @@ def _lay_web_lane(s: Settlement, run: Poly, hard: list[Poly], walls: list[Poly],
                     run = [*run[:k], q, *run[k + 1 :]]
                 else:
                     link = joined_link(run_k, q, hard, walls, water, segs)
-                    if link is None or not _draw_web(s, link, 3, joins=True):
+                    if link is None or not _draw_web(s, link, int(join_width(s, link)), joins=True):
                         return False
             _draw_web(s, run, 3)
             return True
@@ -251,14 +262,7 @@ def _lay_web_lane(s: Settlement, run: Poly, hard: list[Poly], walls: list[Poly],
             # between two 5 ft lanes it renders as a neck with a round-cap knuckle at each step - a
             # review read it at 2x as a lollipop knob mid-street, and it is a repair scar rather than
             # a way. A link exists to make two lanes one; it should look like the lane it completes.
-            _w = max(
-                (
-                    float(_l.get("w", 3))
-                    for _l in s.M.get("lanes", [])
-                    if _net_reach(link[0], list(zip([(float(x), float(y)) for x, y in _l["pts"]], [(float(x), float(y)) for x, y in _l["pts"]][1:], strict=False))) <= _LANE_JOIN_FT
-                ),
-                default=3.0,
-            )
+            _w = join_width(s, link[0])
             _draw_web(s, link[0], int(_w))
         else:
             # SNAP ONLY IF THE GROUND BETWEEN IS CLEAR. Extending an end onto the way it meets is what makes the junction read

@@ -1453,6 +1453,8 @@ In ranking order (rows 482-485; 486-492 next, row 492's change held as `audit/he
   refused on a link it never drew; a carried end's leg into a clear-run link checked (`carried_onto`); the claim reads "not
   drawn where no link is walkable". The `geom.end_serves` row closed as not drifted (E0): with the 60 ft measured to the
   center, as the page's grounds note does, it already says what the page says (wave 43's footprint reading withdrawn).
+- Round 2 (impl-drift): the kept-whole branch's link takes the width of the way it joins, as the far branch's does
+  (`join_width`, lifted out of it; the drawn-link test pins 5 ft).
 
 - [x] T113a wave 43's found rows tiered by the work they take, by a fresh reader (FR-002, FR-003, SC-003)
       research: rendering

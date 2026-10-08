@@ -454,10 +454,11 @@ def test_a_run_kept_whole_takes_a_link_where_it_arrives() -> None:
     assert (0.0, 200.0) in drawn and (20.0, 200.0) not in drawn, drawn
     # a new leg blocked: the link `joined_link` finds is drawn as its own lane, if a lane can be (else the run is refused)
     walled = _StubSettlement(lanes=[[(0.0, 0.0), (0.0, 400.0)]], houses=homes)
+    walled.M["lanes"][0]["w"] = 5  # a cart way: the link takes its width (`join_width`)
     fence = [(40.0, 175.0), (60.0, 175.0), (60.0, 190.0), (40.0, 190.0)]  # on the snapped vertex's new leg out of (0, 200)
     assert hg.ways._lay_web_lane(walled, run, [], [fence], [], houses=homes) is True
-    linked = [[tuple(q) for q in ln["pts"]] for ln in walled.M["lanes"][1:]]
-    assert any(set(ln) == {(20.0, 200.0), (0.0, 200.0)} for ln in linked), linked
+    links = [ln for ln in walled.M["lanes"][1:] if {tuple(q) for q in ln["pts"]} == {(20.0, 200.0), (0.0, 200.0)}]
+    assert links and float(links[0]["w"]) == 5.0, walled.M["lanes"]
     # the new legs AND the link blocked: not drawn
     shut = _StubSettlement(lanes=[[(0.0, 0.0), (0.0, 400.0)]], houses=homes)
     post = [(5.0, 190.0), (15.0, 190.0), (15.0, 210.0), (5.0, 210.0)]  # astride the link (20, 200) -> (0, 200)

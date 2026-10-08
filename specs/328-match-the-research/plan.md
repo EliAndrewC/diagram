@@ -522,7 +522,7 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 ## Wave 44 (amendment 43, 2026-10-08)
 
 - **Scope**: row 486 in ranking order - a run within 25 ft of the network joined at a single point (`joined_link`, a cut end
-  carried, a whole run's arriving vertex snapped, else refused), meeting spec-fidelity's wave-43 conditions; `reach_to_steading`
+  carried, a whole run's arriving vertex snapped or its link drawn as a join at the way's width, else refused), meeting spec-fidelity's wave-43 conditions; `reach_to_steading`
   measuring 0246's 60 ft to the house's center as the page's grounds note does; wave 43's found row (`geom.end_serves`)
   closed as not drifted with that measure (`tasks.md` Phase 45). Rows 487-492 next.
 - **Occasions**: none - the five hamlets regenerated 2026-10-08 with byte-identical manifests.
