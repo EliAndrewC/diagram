@@ -266,18 +266,25 @@ def test_a_z_across_a_joint_is_mended_by_moving_the_joint_back_or_left_where_not
     assert not J._joint_moved_back(S(), lanes, (0, -1, 1, 0), x, y, [], [], [], []), "nothing clear: nothing changed"  # type: ignore[arg-type]
 
 
-def test_a_z_no_t_mends_is_mended_by_moving_the_joint_back(monkeypatch: pytest.MonkeyPatch) -> None:
-    """`_one_joint` (feature 308): a Z across a joint - each record clean, their walk bent - that no T mends is handed to
-    `_joint_moved_back`, and the joint pass reports the rewrite."""
+def test_a_z_across_a_joint_is_pulled_straight_and_moved_back_only_where_the_pull_cannot_clear_it(monkeypatch: pytest.MonkeyPatch) -> None:
+    """`_one_joint` (feature 328; 0081: "a jog across the meeting point is pulled straight like any other"): a Z across a joint
+    - each record clean, their walk bent - is pulled straight, not made a T; where the pull cannot clear it, the joint is moved
+    back (`_joint_moved_back`, feature 308) and the pass reports the rewrite."""
     from l7r.diagram.hamletgen.ways import joints as J
 
-    s = _webbed([{"pts": [[0.0, 0.0], [100.0, 0.0], [104.0, 10.0]], "w": 3}, {"pts": [[104.0, 10.0], [200.0, 0.0], [300.0, 0.0]], "w": 3}])
-    monkeypatch.setattr(J, "tee", lambda *a: None)
+    def z():  # type: ignore[no-untyped-def]
+        return _webbed([{"pts": [[0.0, 0.0], [100.0, 0.0], [104.0, 10.0]], "w": 3}, {"pts": [[104.0, 10.0], [200.0, 0.0], [300.0, 0.0]], "w": 3}])
+
     monkeypatch.setattr(J, "_bends_badly", lambda pts: len(pts) > 3)
     moved: list[tuple[int, int, int, int]] = []
     monkeypatch.setattr(J, "_joint_moved_back", lambda s_, lanes, joint, *a: moved.append(joint) or True)
+    s = z()
+    assert J._one_joint(s, s.M["lanes"], [], [], [], []) and not moved, "pulled straight"  # type: ignore[arg-type]
+    assert [ln["pts"] for ln in s.M["lanes"] if ln.get("pts")] == [[[0.0, 0.0], [300.0, 0.0]]]
+    monkeypatch.setattr(J, "pulled", lambda old, ok: list(old))
+    s = z()
     assert J._one_joint(s, s.M["lanes"], [], [], [], [])  # type: ignore[arg-type]
-    assert moved == [(0, -1, 1, 0)], "the Z's joint moved back"
+    assert moved == [(0, -1, 1, 0)], "the pull cleared nothing: the joint moved back"
 
 
 def test_two_lanes_meeting_end_to_end_are_never_pulled_into_a_kink(monkeypatch: pytest.MonkeyPatch) -> None:

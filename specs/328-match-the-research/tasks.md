@@ -13,6 +13,7 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 - (wave 5, landed and reviewed) placement-changed village lane on kashikawa - wave 5: 0033's row street runs on off the map as the road into it at both ends, where
   the web cut it back to its last joint (`trim_streets`); Kashikawa's and Mizuguchi's far ends now run off the sheet as a
   second way out (every way is inked `village lane`).
+- none (wave 37): the Z pulled straight changes no pool map; the salt-ward clauses are doc text
 - none (wave 36): claims only, no executed code changed
 - none (wave 35): claims only, no executed code changed
 - none (wave 34): the two-width joint pass changes no pool map; the reservoir seat tried and reverted
@@ -1213,3 +1214,19 @@ divider walls between the courts, each with its gate, on 0090's drawing page (th
 - [x] T98 the claims re-checked by `impl-drift`; the close: `make done` green, the wave column (FR-005, FR-006)
       research: rendering
       verify: DONE. impl-drift IN-STEP on all three; amendment 35 FAITHFUL, plan CLEAR; make done green; no executed code changed; the wave column
+
+## Phase 38 - wave 37 (amendment 36): no salt-ward marker; a Z across a joint pulled straight
+
+The next open in-scope E2 rows (row 434 held for the GM; row 461 is the shrine cap's key, held with it). Row 436: the Scale
+paragraph's salt-ward marker sized a glyph no sheet draws - the wards came off Hayakawa's sheet on 2026-09-28 (they were the
+GM-only notes', and the canon has none) - so the clause and the true-size list's mention go, and Hayakawa's notes line is
+brought to its sheet. Row 473: `_one_joint` made a Z across a joint a T where 0081's drawing page pulls a jog straight; now only
+a fold becomes a T, a Z is pulled like any jog, and the joint is moved back a vertex where the pull cannot clear it.
+
+  - `docs/buildings.md::Scale#salt-ward marker r2.5 ...` - the clause removed (no sheet draws a ward)
+  - `l7r/diagram/hamletgen/ways/joints.py::_one_joint#a fold or Z at a joint becomes a T` - a fold a T, a Z pulled (0081)
+
+- [ ] T99 the salt-ward clauses removed; a Z pulled straight, its test; the five hamlets regenerated (unchanged) (FR-004, FR-005)
+      research: rendering
+- [ ] T100 the claims re-checked by `impl-drift`; the close: wave 37's own bookend pair, `make done` green, the wave column (FR-005, FR-006)
+      research: rendering

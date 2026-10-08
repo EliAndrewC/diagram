@@ -284,7 +284,7 @@ def _one_joint(s: Settlement, lanes: list[dict[str, Any]], houses: Sequence[Pt],
     """Rewrite the first joint that can be improved; False when none can.
 
     Research:
-        a fold or Z at a joint becomes a T - research/questions/0081-village-lanes.drawing.html: the shorter link the stem
+        a fold at a joint becomes a T - research/questions/0081-village-lanes.drawing.html: a fold at the meeting point made a T; a Z across it pulled straight like any jog, the joint moved back a vertex where the pull cannot clear it
         the shorter link the T's stem - CONVENTION: of the two arriving lanes, the one whose clear link to the other's side is shorter becomes the stem; the page draws a T but does not say which lane is its stem (research/questions/0081-village-lanes.drawing.html)
         a jog across a joint pulled straight - research/questions/0081-village-lanes.drawing.html: string-pulled, a vertex
             within 6 ft of the chord dropped
@@ -294,17 +294,18 @@ def _one_joint(s: Settlement, lanes: list[dict[str, Any]], houses: Sequence[Pt],
     for i, ei, j, ej in joints(lanes):
         x, y = oriented(lanes, i, ei, j, ej)
         old = [*x, *y[1:]]
-        # a fold at the joint - or a Z across it, two clean records one zigzag to the walker (feature 308: the settle squares a
-        # crossing after the pass above ran, `test_no_zigzag_straddles_a_joint`) - becomes a T
-        if _turn_deg(x[-2], x[-1], y[1]) >= _HAIRPIN_DEG or (not _bends_badly(x) and not _bends_badly(y) and _bends_badly(old)):
+        # a FOLD at the joint becomes a T; a Z across it - two clean records one zigzag to the walker (feature 308: the settle
+        # squares a crossing after the pass above ran, `test_no_zigzag_straddles_a_joint`) - is pulled straight like any jog
+        # (0081: "a jog across the meeting point is pulled straight like any other"; feature 328 - it was made a T), and where
+        # the pull cannot clear it the joint is moved back a vertex (`_joint_moved_back`)
+        z = not _bends_badly(x) and not _bends_badly(y) and _bends_badly(old)
+        if _turn_deg(x[-2], x[-1], y[1]) >= _HAIRPIN_DEG:
             # the arriving lane that makes the SHORTER clear link becomes the T's stem
             tees = [(m, t) for m, t in ((i, tee(x, y, hard, walls, water)), (j, tee(y[::-1], x[::-1], hard, walls, water))) if t is not None]
             for m, t in sorted(tees, key=lambda mt: math.dist(mt[1][-2], mt[1][-1])):
                 other = y if m == i else x[::-1]
                 if keeps_the_web(lanes, {i, j}, old, [*t, *other], houses) and commit_lane(lanes, m, _rounded(t), hard, walls, water, s.reink_lane, admits_lane(s)):
                     return True
-            if _turn_deg(x[-2], x[-1], y[1]) < _HAIRPIN_DEG and _joint_moved_back(s, lanes, (i, ei, j, ej), x, y, houses, hard, walls, water):
-                return True
             continue
         two = lanes[i].get("w") != lanes[j].get("w") or bool(lanes[i].get("web")) != bool(lanes[j].get("web"))
         gap = max(_TOUCH_GAP, float(lanes[i].get("w") or 5.0) / 2.0 + 2.0)
@@ -320,6 +321,8 @@ def _one_joint(s: Settlement, lanes: list[dict[str, Any]], houses: Sequence[Pt],
         # and a tree lane no settle may cut was refused with it (seed 47 at 20 households, `WebRefused`: bends) - the test a
         # join that stops short is held to (`law.near_misses`)
         if len(new) == len(old) or len(kink_spans(new)) > len(kink_spans(old)) or not keeps_the_web(lanes, {i, j}, old, new, houses):
+            if z and _joint_moved_back(s, lanes, (i, ei, j, ej), x, y, houses, hard, walls, water):
+                return True
             continue
         if two:
             # A CART ROUTE AND A FOOTPATH MEETING END TO END are pulled straight like any joint (0081: "a jog across the meeting

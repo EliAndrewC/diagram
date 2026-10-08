@@ -443,6 +443,17 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
   329 merge commit; (2)-(5) held at wave 35's close (0e87667c8); wave 36 changes no executed code, so it owes no pair.
 - **Verification**: `impl-drift` on the touched claims, the gate.
 
+## Wave 37 (amendment 36, 2026-10-08)
+
+- **Scope**: rows 436 and 473 (`tasks.md` Phase 38): the Scale paragraph's salt-ward marker removed with the true-size list's
+  mention (no sheet draws a ward since 2026-09-28; Hayakawa's notes line brought to its sheet); `_one_joint` makes only a fold
+  a T and pulls a Z across a joint straight like any jog (0081), the joint moved back where the pull cannot clear it. Rows 434
+  and 461 (the shrine cap) held for the GM.
+- **Occasions**: none - no pool map changes.
+- **On the unpushed waves 9-36** under condition (6): (1) held but for the backup push, withheld pending the GM's call on the
+  329 merge commit; (2)-(5) held at wave 36's close (49824361c); wave 37's own pair opens at 49824361c.
+- **Verification**: `impl-drift` on the touched claims, the gate, wave 37's own bookend pair.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Each later wave that changes engine behavior takes
