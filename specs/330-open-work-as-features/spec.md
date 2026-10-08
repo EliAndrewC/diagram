@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-08
 
-**Status**: Draft
+**Status**: Accepted - spec-fidelity FAITHFUL, round 2 (2026-10-08)
 
 **Input**: the GM's request, verbatim in [`request.md`](request.md): know which spec-kit features were filed and
 never worked, and which were started and never finished; delete any that belong to gm-assistant; turn everything in
@@ -71,7 +71,7 @@ agree is open, and every feature it omits is finished, superseded or withdrawn b
 
 ### User Story 3 - future-work/ becomes features (Priority: P2)
 
-Every open entry in `future-work/` becomes its own unimplemented feature under `specs/`, carrying the entry's text,
+Every entry in `future-work/` becomes its own unimplemented feature under `specs/`, carrying the entry's text,
 and `future-work/` is removed. An entry that turns out to be already done - or that a recorded GM ruling or a later
 feature disposed of - is closed instead, with the evidence, rather than filed. Every pointer to a `future-work/` entry - code comments, notes, docs - names the feature
 it became.
@@ -161,7 +161,7 @@ number of entries closed equals the number of entries there were, and no live fi
   cited in the audit; otherwise it stays open and is listed for the GM.
 - Where a feature's fate needs the GM's judgment - the record holds no ruling and the work could still be wanted -
   it stays open and is listed for the GM, rather than closed on a guess.
-- Feature numbers for the new features come from `make claim`, one per entry, so concurrent sessions cannot collide.
+- Feature numbers for the new features come from `make claim`, one per filed feature, so concurrent sessions cannot collide.
 - Converting an entry carries its text as written; rewording it into a full spec is the work of whoever picks the
   feature up.
 - This feature draws and states nothing on a map, so it records no rendering decisions.
