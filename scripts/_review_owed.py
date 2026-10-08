@@ -166,6 +166,15 @@ def sheet_kinds(text: str | None) -> set[str]:
     return set(_DATA_KIND.findall(text or ""))
 
 
+def legends_of(d: Path) -> set[str]:
+    """One folder's elements now: its manifest's ink classes, or its sheet's kinds."""
+    if (d / f"{d.name}.json").is_file():
+        return ink_classes((d / f"{d.name}.json").read_text(errors="replace"))
+    if (d / f"{d.name}.svg").is_file():
+        return sheet_kinds((d / f"{d.name}.svg").read_text(errors="replace"))
+    return set()
+
+
 def legends(root: Path) -> dict[str, set[str]]:
     """Each folder's elements now (`<name>` -> classes or kinds)."""
     out: dict[str, set[str]] = {}
@@ -199,6 +208,14 @@ def detected(root: Path, base: str) -> list[Unit]:
         if not (manifest.is_file() or svg.is_file() or (d / f"{d.name}.gen.py").is_file()):
             continue
         if not _existed(root, base, d):
+            # MOVED, NOT NEW (feature 329): a folder any of whose tracked files stood at the base with these same bytes was
+            # renamed by the delta (its renders are untracked, and a pointer comment in a hand-drawn sheet may have moved
+            # with it), so it is no new map or sheet. Its legend is taken as the one it had: a delta that both renames a
+            # folder and adds an element to it would not be seen here - none has, and a rename is its own commit.
+            tracked = [ln for ln in (_git(root, "ls-files", "--", f"{_rel(root, d)}/") or "").splitlines() if ln]
+            if tracked and moved_only(root, base, tracked):
+                before[d.name] = legends_of(d)
+                continue
             new_folders.append(d)
             continue
         if manifest.is_file():

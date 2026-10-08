@@ -187,6 +187,14 @@ def test_a_map_new_to_the_pool_owes_the_whole_map_review_and_only_elements_new_t
     assert units(clone) == [("settlement-review", "kuwabata", "kuwabata"), ("glyph-check", "fish pond", "kuwabata")]
 
 
+def test_a_pool_folder_the_delta_only_moved_owes_no_review(clone: Path) -> None:
+    """Feature 329: a map or sheet folder renamed by the delta - its tracked files' bytes stood at the base - is not new to
+    the pool, though its path did not exist there. The whole project's move read every map and sheet as new."""
+    git(clone, "mv", "pool/hamlets", "pool/villages")  # every map folder at a path the base never had, its files unchanged
+    assert {d.name for d in owed._folders(clone)} >= {"inashiro", "sawada"}, "the moved folders are still scanned"
+    assert units(clone) == []
+
+
 def test_a_sheet_new_to_the_pool_owes_the_building_review(clone: Path) -> None:
     _sheet(clone, "ochiba", ["residence", "stable"])
     assert units(clone) == [("building-review", "ochiba", "ochiba"), ("glyph-check", "stable", "ochiba"), ("size-audit", "stable", "ochiba")]
