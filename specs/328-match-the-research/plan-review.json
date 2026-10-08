@@ -1,6 +1,6 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "8e853d32c244fc397a4f493b22b885d406df4ac135556a2aa812b5545105a194",
+ "plan_sha256": "040ec3de9737a22b82cf4acf0417d967b5c57c86e058d5f03733df8bb77ab9b9",
  "reviewed": "2026-10-08",
  "declared": "spec-fidelity",
  "decisions": [
@@ -446,11 +446,10 @@
    "why": "Same batching as waves 48-53, per the GM's 2026-10-08 batching ruling."
   },
   {
-   "id": "W54-5 Kuwabata's knot held on _KNOTS_WAITING behind row 748",
-   "summary": "wave 52's research seats (0042, 0047) leave a knot on Kuwabata (lane 11 T's onto lane 9 21.8 ft from its door); the test made strict-xfail behind the E3 row settle_knots#a knot no lawful gather reaches, waiver-or-fix deferred to the GM at the feature's end",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "A regression twice over: it passed at the wave's baseline (013b667d5) and passes on main, whose waiting list holds only Inashiro and Sawada, so the strict xfail turns a new failure green for whichever push lands batch 3. XIII: documenting a regression is not permitting it, and the waiver is asked only after the fix has been genuinely attempted. The probes tried only the engine's existing gathers; row 748's own recorded fix (re-lay the earlier household's way at seating so the gather is lawful) is E3, a change across modules, not an overhaul, and was not attempted. The wave 10 precedent does not transfer: Sawada's knot was already on main there (pre-existing), and this one is not. Route: fix now, ahead of rank (a regression the feature caused outranks the easiest-first order: XIII/XIV), by row 748's re-lay; only if that fails, an impossibility investigation and then revert or a GM waiver at the end. Until then an unticked task names it, so the open-task refusal keeps it off main."
+   "id": "W54-5 Kuwabata's knot fixed at seating (KNOTTED_TRIES); off _KNOTS_WAITING",
+   "summary": "Round 2's NOT LEGITIMATE hold is withdrawn: row 748's route taken at seating; Kuwabata comes off the strict waiting list.",
+   "class": "within",
+   "why": "Round 3: RESOLVED. d7586617f removes 'kuwabata' from _KNOTS_WAITING (now {sawada, inashiro}, the same as main's plus Inashiro, W54-6). Measured this round: make test-file on test_pool_261/test_gap_ways (kuwabata, sawada, inashiro, knotted) - 22 passed, 3 xfailed; Kuwabata's knot test passes, so the regression no longer reaches main. The fix implements 0081 ('ends within 25 ft are joined at a single point') by searching further before keeping a knotted foot; nothing narrowed."
   },
   {
    "id": "W54-6 Inashiro's knot back on _KNOTS_WAITING behind row 748",
@@ -460,11 +459,11 @@
    "why": "Judged apart from Kuwabata: main already carries Inashiro on _KNOTS_WAITING (a knot at lanes 11/13, 19.1 ft), so landing this adds no regression to main. Holding it behind the same ranked row restores main's state rather than hiding a new failure. It is still a regression of the feature's own wave 10 progress (XIII: work not done while it stands), and the row 748 fix W54-5 requires should be checked against it too."
   },
   {
-   "id": "W54-7 Sawada's zigzag on a new strict _ZIGZAGS_WAITING behind a new E3 found row",
-   "summary": "lane 3 runs east and turns back 27 ft to lane 1's door, a Z across the joint since wave 52 (bisected); filed as smooth.py::_smooth_web#a zigzag across a joint at a door, E3",
+   "id": "W54-7 Sawada's zigzag held on strict _ZIGZAGS_WAITING, T137 open, the GM asked",
+   "summary": "Both fixes round 2 named were attempted and reverted; the impossibility investigation is written in plan.md Wave 54; T137 stays unticked so the push refuses the batch; the GM chooses waiver or reverting wave 52's seats.",
    "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "main runs test_no_zigzag_straddles_a_joint on Sawada with no xfail and it passes, so this is a new regression the xfail would carry to main. Filing it as a found row is the right record but is not an exit (XIII: a ledger entry is not a waiver). The row names two concrete fixes (string-pull across the joint; re-lay the way at seating to arrive along the door lane), neither tried. No gather/smoothing probe was recorded for the zigzag at all. Route as W54-5: attempt the row's fix now, and if it fails, write the investigation and hold for revert or waiver; an unticked task keeps it unpushed."
+   "ruling": "LEGITIMATE",
+   "why": "Round 3: the route round 2 set has been followed to its end. The string-pull was tried (45cfc11dc: the chord from lane 3's overshoot to lane 1's door crosses house 1's front dooryard, so 'Lawful' refuses it) and the seating re-lay was tried twice (d7586617f: a guard on gathered joins never fired - the overshoot is in the traced way; a guard on any admitted way zigzagging at its foot moved the same overshoot into lane 1's door to lane 5's way and moved Inashiro). Every trial reverted. What is ruled LEGITIMATE is the HOLD, not a permanent exception: the strict xfail cannot reach main while T137 is open (the open-task refusal), so no new regression lands without the GM, and choosing between XIII's remaining exits (waiver behind the row, or reverting wave 52's 0042/0047 seats, which would undo requested research matches) is the GM's decision. If the GM does not answer, T137 keeps the batch unpushed; ticking T137 without the zigzag fixed or a recorded GM waiver would make this NOT LEGITIMATE."
   },
   {
    "id": "W54-8 pool-readers in make quick",
@@ -477,7 +476,19 @@
    "summary": "the HamletSpec kwargs dict typed so pyrefly passes",
    "class": "within",
    "why": "A type fix for the quick gate; changes nothing the request scopes."
+  },
+  {
+   "id": "W54-10 KNOTTED_TRIES = 3: a household whose every exit leaves a knotted foot searches three times GAP_TRIES exits",
+   "summary": "Search breadth raised only for a household holding a knotted fallback.",
+   "class": "within",
+   "why": "Implements 0081's single-point joins (the knotted foot made the last resort); labeled NONE as a measured search breadth with its page pointer. Commit records that only Kuwabata's manifest moved; the pool roll at the gate will hold that."
+  },
+  {
+   "id": "W54-11 test_a_knotted_foot_is_kept_only_after_three_times_the_exits",
+   "summary": "Unit test pinning the breadth and the as-traced fallback.",
+   "class": "within",
+   "why": "Enforcement of the requested match (GM 2026-09-20): it fails only if the knotted-foot search stops short."
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }

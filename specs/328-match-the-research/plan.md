@@ -676,7 +676,7 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
   gather of each knot splits the web or leaves a farmhouse unreached - Inashiro's field way starts on a spur 9.4 ft from
   where it leaves a door lane, Kuwabata's lane 11 T's onto lane 9 21.8 ft from its door. A trial letting the field way's web
   end gather changed nothing. They are the ranked row `knots.py::settle_knots#a knot no lawful gather reaches` (E3), as
-  Sawada's knot has been since wave 10: Inashiro and Kuwabata join `_KNOTS_WAITING`, and Sawada's zigzag goes on a new
+  Sawada's knot has been since wave 10: Inashiro and Kuwabata join `_KNOTS_WAITING` (Kuwabata since fixed, below), and Sawada's zigzag goes on a new
   strict `_ZIGZAGS_WAITING` behind a new E3 found row (`found-wave54.jsonl`) - each strict, so the day a map is fixed its
   name must come off. Kept, not reverted: the seats are 0042's and 0047's, and the knots are the web's limit they exposed.
   For the GM at the feature's end (the waiver exit of constitution XIII; fixing row 748 is the other).

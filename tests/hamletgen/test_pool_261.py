@@ -266,11 +266,11 @@ def lane_knots(lanes: list[dict]) -> list[tuple[int, tuple[float, float], int, t
 # a knot again - one knot, as main has one there, at a different place (main: lanes 9/12, 21.9 ft; here: lanes 15/17, 8.2 ft;
 # bisected with the berm still applied, the three together; the berm since held and the knot stands): Sawada waits again, Inashiro
 # does not (main had one there too).
-# Wave 52's fixture seats (the privy's barn share spread, the heap stepped along the privy's bearing) re-lay Inashiro and
-# Kuwabata so each carries a knot again (bisected 2026-10-08: 013b667d5 passes, e4c99b277 and 19f69655c fail; probed in
-# settle_knots' judge): Inashiro's field way starts on the spur 9.4 ft from where it leaves lane 10, 16.1 ft from that
-# house's door, and every gather of the spur onto the door splits the web (the field way hangs on it); Kuwabata's lane 11
-# foot T's onto lane 9 21.8 ft from its door, and the gather leaves a farmhouse unreached. Both wait on the same row.
+# Wave 52's fixture seats (the privy's barn share spread, the heap stepped along the privy's bearing) re-lay Inashiro so it
+# carries a knot again (bisected 2026-10-08: 013b667d5 passes, e4c99b277 fails; probed in settle_knots' judge): its field way
+# starts on the spur 9.4 ft from where it leaves lane 10, 16.1 ft from that house's door, and every gather of the spur onto
+# the door splits the web (the field way hangs on it). Main carries Inashiro here too. (Kuwabata's knot of the same wave was
+# fixed at seating, `gap_ways.KNOTTED_TRIES`.)
 _KNOTS_WAITING = {"sawada", "inashiro"}
 
 

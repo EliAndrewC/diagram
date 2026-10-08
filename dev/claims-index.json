@@ -54297,6 +54297,20 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/settlement/rolling/gap_ways.py::KNOTTED_TRIES#ways out tried before a knotted foot is kept": {
+  "code": "5caaa13ba30065c5",
+  "core": "c35ad46f1990d395",
+  "date": "2026-10-08",
+  "note": "a wider search for a join with no knot serves the single-point join; the breadth of 3 is a search count, not a fact about the place",
+  "pages": {
+   "0081-village-lanes.drawing.html": "9e27759395199abd"
+  },
+  "research": "ebd72aaa6a0eb9af",
+  "rests": [
+   "0081-village-lanes.drawing.html:df26f73dd5ee96d2"
+  ],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/settlement/rolling/gap_ways.py::KNOT_FT#lane ends gathered": {
   "code": "c22facb9bef05296",
   "core": "1956a2a68f21c5fe",
@@ -54411,40 +54425,39 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/gap_ways.py::_way_for#a foot gathered at a junction": {
-  "code": "aec42797636d67d3",
-  "core": "6f7d6507486e7cf3",
-  "date": "2026-10-07",
-  "note": "`KNOT_FT * KNOT_MARGIN` = 25 ft, which is the page's 25 ft for joining near-meeting ends; the foot left where it was traced is a last resort, and `settle_knots` gathers it later",
+  "code": "b96657ef8697eb63",
+  "core": "c26beeb2586c30b6",
+  "date": "2026-10-08",
+  "note": "the gather at 25 ft (KNOT_FT * KNOT_MARGIN) matches, but `return _first_admitted(s, knotted, ...)` keeps a foot within 25 ft of a junction unjoined, which the page forbids (\"Ends within 25 ft of one another are joined at a single point, so three lanes never arrive a few feet apart in a knot\"); where no lawful way exists the page's fallback is \"reached across the yard of its nearest neighbor\", not a knotted way; either record the knotted fallback as a DEVIATION on 0081.drawing or drop it",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },
   "research": "ebd72aaa6a0eb9af",
   "rests": [
-   "0081-village-lanes.drawing.html:65ad16eace199d92",
-   "0081-village-lanes.drawing.html:df26f73dd5ee96d2"
+   "0081-village-lanes.drawing.html:df26f73dd5ee96d2",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:f0a411a544083965"
   ],
-  "verdict": "IN-STEP"
+  "verdict": "DRIFTED"
  },
  "l7r/diagram/settlement/rolling/gap_ways.py::_way_for#a way leaves its own homestead from its dooryard": {
-  "code": "52b53f2c9f1cfcac",
-  "core": "6f7d6507486e7cf3",
-  "date": "2026-10-07",
-  "note": "doors are clear of the household's own fixtures and beds, and its own homestead is set aside",
+  "code": "df40ed409731b008",
+  "core": "c26beeb2586c30b6",
+  "date": "2026-10-08",
+  "note": "doors are filtered to those clear of its own fixtures and beds, and its own homestead is set aside, so the way leaves from its dooryard",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
   "research": "7b40c2c01cfba682",
   "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:f0a411a544083965"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/rolling/gap_ways.py::_way_for#joined near, then far, then run on to the way out": {
-  "code": "63d0d645a7102ee1",
-  "core": "6f7d6507486e7cf3",
-  "date": "2026-10-07",
-  "note": "the page lays each way to the track out or an earlier way at a T and says nothing of the order, so a GUESS",
+  "code": "71fb1faf268958b2",
+  "core": "c26beeb2586c30b6",
+  "date": "2026-10-08",
+  "note": "the page lays each way along the gaps to the track out or an earlier way, joined at a T (its own reading, a GUESS); it is silent on the near, far, run-on order, so the GUESS holds",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
