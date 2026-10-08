@@ -17,6 +17,12 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
   2026-10-08, manifests byte-identical; no kept sheet drew a key)
 - none (wave 48): the corridor at the footprint's edge, the skeleton's crop margin and its ford moved no map (the five
   hamlets regenerated 2026-10-08, manifests byte-identical)
+- glyph-redrawn: field pond on inashiro - wave 51: the field pond drawn as a dish pond (0008), a bank ring on wet ground
+  round the open water, reeds on the margin; batch 3's close
+- glyph-redrawn: field pond on mizuguchi - wave 51: the same dish pond; batch 3's close
+- placement-changed: wood shed on inashiro - wave 51: the shed off the house's own walls only, never the front, no extra
+  pace (0043); batch 3's close
+- placement-changed: wood shed on kuwabata - wave 51: the same seat rule; batch 3's close
 - placement-changed: woodland commons on kashikawa - wave 47: the beyond-the-fields walk counts a row holding as field, so the
   wood moves to the higher ground beyond the far row's strips (batch 1's round 3 NEEDS-WORK); run at batch 2's close
 - placement-changed: copse on kuwabata - wave 47: every copse crown gives way round a yard persimmon wholly; batch 2's close
