@@ -8,8 +8,6 @@ Research: plumbing - NONE: the ranking's helpers
 import math
 from collections.abc import Sequence
 
-import numpy as np
-
 from ..consts import Poly, Pt
 
 _EDGE_SAMPLE = 30.0  # px between the samples `crop_edge_points` takes along a field edge: a third of the scan's 90 px lattice
@@ -21,6 +19,8 @@ class FieldEdge:
     40-household hinterland's 13 profiled seconds, 9.9 million distances; the same answer, read whole)."""
 
     def __init__(self, pts: Sequence[Pt]) -> None:
+        import numpy as np  # bound here, not at import (feature 237: no heavy library at import time)
+
         self.xy = np.array(pts, dtype=float).reshape(-1, 2)
 
 
@@ -51,6 +51,8 @@ def field_height_near(p: Pt, fall: Pt, edge: FieldEdge, beside: float = FIELD_BE
     `FIELD_REACH_PX`, -inf (every seat stands above it).
 
     Research: higher than the fields beside it - research/questions/0077-village-fuel-woods-and-their-coppice-satoyama.drawing.html: on ground higher than the fields beside it"""
+    import numpy as np  # bound here, not at import (feature 237)
+
     if not len(edge.xy):
         return -math.inf
     d = np.hypot(edge.xy[:, 0] - p[0], edge.xy[:, 1] - p[1])
