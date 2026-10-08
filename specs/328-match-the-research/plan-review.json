@@ -1,50 +1,38 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "89969ba38fc71ebc26e8c1c49414358f95005ddb5486fe5eae19b093e637a6ed",
+ "plan_sha256": "243e3a66a65303299f03797947a17a3eb43ae5a8dc223ccd470bbfb6c384389a",
  "reviewed": "2026-10-07",
  "declared": "spec-fidelity",
  "decisions": [
   {
    "id": "W30-scope",
-   "summary": "row 458 (stage_polder#reservoir size) is the wave; row 434 stays held for the GM",
+   "summary": "row 458 (stage_polder#reservoir size) tried and reverted; row 434 stays held for the GM",
    "class": "within",
-   "why": "row 458 is the next open in-scope E2 row in ranking.json after the held shrine-cap row, whose hold was ruled LEGITIMATE earlier; contiguous run per FR-006"
+   "why": "row 458 was the next open in-scope E2 row after the held shrine-cap row (hold ruled earlier); FR-006 contiguous run"
   },
   {
-   "id": "W30-share",
-   "summary": "reservoir area = a share rolled per settlement in RESERVOIR_SHARE (0.2-0.3) x the block's acres",
+   "id": "W30-retier-E4",
+   "summary": "row 458 re-tiered E2 -> E4 (research first): 0061's two-or-three-tenths share is given only for a high-ground pond that is its fields' only water; a polder's source is the wild water its inlet sluice draws from (0019: 'The wild pond that feeds the polder'), and no page sizes it",
    "class": "within",
-   "why": "0061's drawing page: a pond that is its fields' only water is drawn at two or three tenths of its paddy; a degree in that band rolled from the seed is calibrated liberty, not a choice of forms"
+   "why": "FR-003 defines E4 as 'the record does not yet say what the implementation should be', which 0061 and 0019 as read bear out; the row stays in the ranking (verdict DRIFTED, scope kept, wave blank) with a research-first fix, so it is ordered later, not dropped. Picking a size now would be inventing one, not matching research"
   },
   {
-   "id": "W30-aspect",
-   "summary": "the ellipse keeps the old 82:54 proportions (RESERVOIR_ASPECT), labeled GUESS",
+   "id": "W30-relabel",
+   "summary": "the claim's false citation (0017, 'a pond sized to the paddy it waters') replaced by UNRESEARCHED naming what was searched (0061, 0017, 0019, 0020); code otherwise identical to 2e33f31b3",
    "class": "within",
-   "why": "no page gives a pond's outline; the shape is labeled GUESS at the claim, which is the doctrine's form"
-  },
-  {
-   "id": "W30-dikepond",
-   "summary": "the same share applied to a dike-pond block (Kuwabata: the whole block fish ponds)",
-   "class": "within",
-   "why": "not a narrowing - it applies the rule more widely, not less; whether that application is backed by 0061 is a labeling finding in the amendment verdict, not a plan narrowing"
+   "why": "FR-004: the claim is the implementation's own statement of what backs it, and the old one cited research that does not size this pond. Holds only while the ranking row stays open (wave blank) until the E4 research lands; recording it as fixed by the relabel would be a narrowing"
   },
   {
    "id": "W30-occasions",
-   "summary": "placement-changed pond on Kuwabata (glyph-check); Kuwabata re-rolls",
+   "summary": "no review occasions, no bookend pair: no executed code or map differs from wave 29's close",
    "class": "within",
-   "why": "an element re-placed by a different rule is a declared glyph-check occasion (dev/reviews.md); the other four hamlets roll no polder (measured: field_archetype valley_paddy)"
-  },
-  {
-   "id": "W30-stack",
-   "summary": "wave 30 opens on unpushed waves 9-29 under the wave-11 exception's condition (6); its own bookend pair from 2e33f31b3",
-   "class": "within",
-   "why": "continues an exception already ruled LEGITIMATE on conditions; (1)'s backup holds (origin backup/digram-backlog = 2e33f31b3), wave 29's T84 ticked with make done green"
+   "why": "the diff 2e33f31b3..HEAD under l7r/ and pool/ is one claim line; FR-005's occasions are opened by changed output, and none changed"
   },
   {
    "id": "W30-verify",
-   "summary": "impl-drift on the touched claims, the glyph check, the gate, the bookend pair",
+   "summary": "impl-drift on the relabeled claim, make done green",
    "class": "within",
-   "why": "FR-005 and constitution VI as written"
+   "why": "FR-005 per touched claim and the gate"
   }
  ],
  "verdict": "CLEAR"

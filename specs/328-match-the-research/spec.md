@@ -324,3 +324,4 @@ Each wave's amendment adds its map decisions to this table. The program's decisi
 - Amendment 27: round 1 (spec-fidelity) CHANGES REQUIRED - build_polder's stale claim, plan CLEAR; round 2 (verify) CHANGES REQUIRED - T82 and the plan review after the knot fix; round 3 (verify) FAITHFUL; plan CLEAR at the final plan (2026-10-08).
 - Amendment 27: round 4 (spec-fidelity) CHANGES REQUIRED - row 452's hold not legitimate (the code matches 0027; restate the claim), plan BLOCKED; round 5 FAITHFUL, plan CLEAR (2026-10-08).
 - Amendment 28, round 1 (spec-fidelity, 2026-10-08): FAITHFUL, plan CLEAR.
+- Amendment 29: round 1 (spec-fidelity) CHANGES REQUIRED - the fish-pond case unlabeled, plan CLEAR; round 2 (verify) FAITHFUL; then impl-drift found the share a high-ground pond's - reverted, row 458 E4; round 3 FAITHFUL, plan CLEAR (2026-10-08).
