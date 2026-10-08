@@ -621,6 +621,22 @@
   ],
   "verdict": "IN-STEP"
  },
+ "docs/building-programs.md::Country shrine (a village district's shrine)#stone lanterns beside the approach": {
+  "code": "4643b1bb2965d293",
+  "core": "ee3bcdfa5622e824",
+  "date": "2026-10-08",
+  "note": "0222 attests lanterns as a parish's gift (a pair given by Ishigami's parishioners in 1799) but places only the strength stones and the basin beside the approach, so setting lanterns beside the approach is correctly a GUESS",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html:cc29d33e4a52f44e",
+   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:4bec9f4f1782de45",
+   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:b3ef50530e7ace96",
+   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:c4e4424a990d6fd8",
+   "0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.html:ff7b754820341789"
+  ],
+  "verdict": "IN-STEP"
+ },
  "docs/building-programs.md::Country shrine (a village district's shrine)#subsidiary shrines sometimes in a precinct": {
   "code": "7ec07b3671cbfb72",
   "core": "ee3bcdfa5622e824",

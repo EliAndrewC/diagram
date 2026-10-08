@@ -117,3 +117,15 @@ def test_a_cut_no_join_can_mend_is_left_for_the_settle() -> None:
     _smooth_web(s, _BAR, [], [])
     pts = [tuple(p) for p in s.M["lanes"][1]["pts"]]
     assert len(pts) == 4 and pts[1] == (690.0, 300.0) and pts[0][0] == 660.0, f"the arm is kept (its tip gathered onto the way's end): {pts}"
+
+
+def test_a_refused_cut_still_pulls_the_lane_taut() -> None:
+    """The fallback commits the lane string-pulled whole: the hairpin stays for the settle, but a vertex on a straight run of
+    the long arm, well clear of the bar, is still pulled out (0081, "Every lane is pulled taut like a string")."""
+    from ._builders import _webbed
+
+    s = _webbed([{"pts": [[660.0, 298.0], [660.0, 200.0]], "w": 5}, {"pts": [[660.0, 300.0], [690.0, 300.0], [630.0, 318.0], [560.0, 318.0], [500.0, 330.0], [440.0, 342.0], [380.0, 354.0]], "w": 5}])
+    _smooth_web(s, _BAR, [], [])
+    pts = [tuple(p) for p in s.M["lanes"][1]["pts"]]
+    assert (690.0, 300.0) in pts, "the hairpin is left for the settle"
+    assert (440.0, 342.0) not in pts and pts[-1] == (380.0, 354.0), f"the straight run is pulled taut: {pts}"
