@@ -30,7 +30,7 @@ from ..consts import (
 from ..plan import SitePlan
 from . import law
 from .bund import a_way_onto_the_bund, cut_past_the_junction, run_lanes_on_to_the_bund, worked_ground_of
-from .checks import drawn_water_segs
+from .checks import drawn_water_segs, ford_crossing
 from .clearance import clear_runs, clip_to_clear
 from .fabric import _LANE_JOIN_FT, _WEB_MIN_FT, _homestead_polys, _margin_frame, _net_segs, _pass, _pull_back_to_service
 from .geom import _TOUCH_GAP, _components, _trim_to_service, lane_houses, polyline_len, steading_footprints
@@ -56,6 +56,12 @@ from .sweeps import (
 from .touch import _touch_junctions
 
 
+SKELETON_ARM_WIDTH = 5.0
+"""The skeleton arm's drawn width, a web lane's.
+
+Research: skeleton arm width - research/questions/0081-village-lanes.drawing.html: a web arm 5 ft"""
+
+
 def _lay_skeleton(s: Settlement, plan: SitePlan, frame: _margin_frame, arcs: Sequence[float], stands: Sequence[float]) -> list[tuple[Poly, Poly]]:
     """The cluster's internal SKELETON, laid AFTER the houses and fitted to where they went.
 
@@ -79,8 +85,10 @@ def _lay_skeleton(s: Settlement, plan: SitePlan, frame: _margin_frame, arcs: Seq
         skeleton laid after the houses - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the farmhouses are placed first
         skeleton form - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: the rolled lane shape
         clear of crop, wet and water - research/questions/0081-village-lanes.drawing.html, research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane never crosses row crops and keeps off wet ground
-        skeleton arm off the water - UNRESEARCHED: an inner arm clipped at the watercourses and drawn channels, never crossing a ditch or the brook
-        skeleton margin off the hard ground - UNRESEARCHED: 20 px off the crop, the marsh and the ditches
+        skeleton arm over the brook - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: an inner arm crossing the brook takes the ford that makes its walk shortest, square to the reach
+        skeleton arm off the ditches - UNRESEARCHED: an inner arm clipped at the ditches and drawn channels, never crossing one
+        skeleton margin off the crop - research/questions/0081-village-lanes.drawing.html: a lane may touch a plot's boundary - the arm clipped at its tread's edge (half its 5 ft width) off the field and the dry plots
+        skeleton margin off the wet and the ditches - UNRESEARCHED: 20 px off the toe band, the marsh and the drawn water
         routed round the steadings - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: nothing is built on a lane
         skeleton width - research/questions/0081-village-lanes.drawing.html: 5 ft
         skeleton arm's corridor - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a lane's middle 7 ft clear of a garden fence; each arm registers `LANE_CLEARANCE`, 7 ft from its middle, a footprint held to it at its corners
@@ -144,7 +152,16 @@ def _lay_skeleton(s: Settlement, plan: SitePlan, frame: _margin_frame, arcs: Seq
         # between two walls - so the arm needs its own half-width and a little air, not a highway
         # verge. This is the same `WEB_FABRIC_GAP` the lane web already threads by, so the skeleton
         # and the web now agree about how close a lane may pass a wall.
-        arm = clip_to_clear(raw_arms[ai], [list(plan.envelope), *crops, *([toe_now] if toe_now else []), *wet_now], 20.0, lines=list(plan.watercourses) + drawn_water)
+        # ...OVER THE BROOK SQUARE AT A CROSSING PLACE (feature 328 wave 48, 0035's drawing page): an arm whose run would cross
+        # the brook takes the ford that makes its walk shortest, landings square to the reach, as the field spur does - the
+        # brook's line is gapped at the fords (`stream_segs`), so only a crossing elsewhere is clipped below
+        _via = ford_crossing(raw_arms[ai][0], raw_arms[ai][-1], plan.brook or [], getattr(s, "brook_fords", ())) if len(raw_arms[ai]) >= 2 and len(plan.brook or []) >= 2 else []
+        if _via:
+            raw_arms[ai] = [raw_arms[ai][0], *_via, raw_arms[ai][-1]]
+        # ...THE CROP AT THE TREAD'S EDGE, NOT 20 FT OFF IT (feature 328 wave 48, 0081: "a lane may touch a plot's boundary"):
+        # the wet ground and the water keep the full margin
+        arm = clip_to_clear(raw_arms[ai], [*([toe_now] if toe_now else []), *wet_now], 20.0, lines=list(plan.watercourses) + drawn_water)
+        arm = clip_to_clear(arm, [list(plan.envelope), *crops], SKELETON_ARM_WIDTH / 2.0) if len(arm) >= 2 else arm
         # ROUTE ROUND THE FABRIC, DO NOT CLIP THROUGH IT (feature 126, after review).
         #
         # Clipping was the first version and it deletes the form. An arm that crosses a packed
@@ -217,7 +234,7 @@ def _lay_skeleton(s: Settlement, plan: SitePlan, frame: _margin_frame, arcs: Seq
             # as the settle would cut it, and a piece left too short to be a way is not laid
             for piece in s.admitted_runs(arm, 5):
                 if polyline_len(piece) >= _WEB_MIN_FT:
-                    s.lane(piece, width=5, clearance=LANE_CLEARANCE, worn=True)
+                    s.lane(piece, width=SKELETON_ARM_WIDTH, clearance=LANE_CLEARANCE, worn=True)
     s.M["meta"]["lane_skeleton"] = plan.lane_skeleton
     return kept
 

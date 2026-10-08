@@ -13,6 +13,8 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 - (wave 5, landed and reviewed) placement-changed village lane on kashikawa - wave 5: 0033's row street runs on off the map as the road into it at both ends, where
   the web cut it back to its last joint (`trim_streets`); Kashikawa's and Mizuguchi's far ends now run off the sheet as a
   second way out (every way is inked `village lane`).
+- none (wave 48): the corridor at the footprint's edge, the skeleton's crop margin and its ford moved no map (the five
+  hamlets regenerated 2026-10-08, manifests byte-identical)
 - placement-changed: woodland commons on kashikawa - wave 47: the beyond-the-fields walk counts a row holding as field, so the
   wood moves to the higher ground beyond the far row's strips (batch 1's round 3 NEEDS-WORK); run at batch 2's close
 - placement-changed: copse on kuwabata - wave 47: every copse crown gives way round a yard persimmon wholly; batch 2's close
@@ -1579,4 +1581,23 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
       research: rendering
       verify: DONE. batch 1's findings (Kashikawa's woods beyond the row holdings; the track out to the frame and 400 ft past it), rows 381, 436, 438 and 442, the belt's visible break judged; tests red on the old code; the hamlets regenerated (persimmon overlaps to 0); impl-drift answered r1-r5; record checks answered; spec-fidelity plan CLEAR r2
 - [ ] T121 the claims re-checked by `impl-drift`; the close at batch 2's (FR-005, FR-006)
+      research: rendering
+
+## Phase 49 - wave 48 (amendment 47): rows 502-505 - the lane's 7 ft at the footprint; the skeleton's margins and ford
+
+- `track.py::stage_track#lane clearance` (row 502, E2): `houses._on_a_tread` holds every corner `LANE_MIDDLE_CLEAR_FT` (7 ft)
+  off a lane's middle at least (0246), and `LANE_CLEARANCE` is 0246's 7 ft (it was 40, the 7 carried to a center);
+  `test_every_corner_stands_seven_ft_off_a_narrow_lanes_middle` (red on the old code). Row 503 (the skeleton arm's corridor)
+  waited on it and closes with it.
+- `web.py::_lay_skeleton#skeleton margin off the hard ground` (row 505, E2): the crop clipped at the arm's tread's edge
+  (`SKELETON_ARM_WIDTH / 2`), the wet ground and the ditches at 20 ft
+  (`test_a_skeleton_arm_may_touch_a_plots_boundary_and_keeps_off_the_wet`).
+- `web.py::_lay_skeleton#skeleton arm off the water` (row 504, E2): an arm whose run would cross the brook takes the ford that
+  makes its walk shortest, square (`ford_crossing`, 0035) (`test_a_skeleton_arm_crosses_the_brook_at_a_ford`).
+- Round 1 (impl-drift): the 7 ft split - 0246's figure for a garden's fence, a GUESS for every other footprint; the field
+  spur's 5 ft width claimed; found row: a row village's road and field spur laid before the houses (0031), E3.
+
+- [ ] T123 rows 502-505 (FR-003, FR-004)
+      research: rendering
+- [ ] T124 the claims re-checked by `impl-drift`; the close at batch 2's (FR-005, FR-006)
       research: rendering

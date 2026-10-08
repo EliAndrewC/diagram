@@ -265,7 +265,8 @@ class HousesMixin:
         FOOTPRINT"): real rotated corners, never a center, never a circumscribed radius.
         Research:
             no building corner on a lane - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the tread's edge `TREAD_WALL_FT` clear of every corner
-            a lane's middle off the fence - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: every corner `LANE_MIDDLE_CLEAR_FT` (7 ft) off the lane's middle at least"""
+            a lane's middle off the fence - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: a garden's fence `LANE_MIDDLE_CLEAR_FT` (7 ft) off the lane's middle at least
+            other footprints off a lane's middle - GUESS: every other footprint `_fits` seats (a house's wall, a shed's) held to the fence's 7 ft too"""
         if not self.treads:
             return False
         quad = rot_rect(x, y, w, h, rot)

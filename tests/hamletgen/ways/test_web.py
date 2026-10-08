@@ -266,3 +266,43 @@ def test_a_joint_the_settle_left_straightened_is_settled_again_and_its_record_re
     monkeypatch.setattr(W, "straighten_joints", lambda *a: 1)
     W.resettle_straightened(s, [], [], [])  # type: ignore[arg-type]
     assert settled == [1] and s.M["meta"]["web_settle"] == {"rounds": 2}, "settled again, the seconds kept out"
+
+
+def test_a_skeleton_arm_may_touch_a_plots_boundary_and_keeps_off_the_wet(monkeypatch: pytest.MonkeyPatch) -> None:
+    """0081 (feature 328 wave 48): "a lane may touch a plot's boundary" - the arm is clipped off the field and the dry plots at its
+    tread's edge (half its width), not 20 ft off; the wet ground and the water keep the 20 ft."""
+    from l7r.diagram.hamletgen.ways import web as _web
+
+    asked: list[tuple[int, float]] = []
+    real = _web.clip_to_clear
+
+    def spy(pts, polys, margin, **kw):  # type: ignore[no-untyped-def]
+        asked.append((len(polys), margin))
+        return real(pts, polys, margin, **kw)
+
+    monkeypatch.setattr(_web, "clip_to_clear", spy)
+    plan = a_plan(lane_skeleton="spine")
+    s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
+    s.M["houses"] = [{"x": 250.0, "y": 230.0, "w": 20.0, "h": 14.0}, {"x": 350.0, "y": 230.0, "w": 20.0, "h": 14.0}]
+    _web._lay_skeleton(s, plan, lambda arc, standoff: (200.0 + arc, 200.0 - standoff), [0.0, 200.0], [0.0, 10.0])  # type: ignore[arg-type]
+    margins = [m for _n, m in asked]
+    assert 20.0 in margins, "the wet ground and the water at 20 ft"
+    assert _web.SKELETON_ARM_WIDTH / 2.0 in margins, "the crop at the tread's edge"
+
+
+def test_a_skeleton_arm_crosses_the_brook_at_a_ford(monkeypatch: pytest.MonkeyPatch) -> None:
+    """0035's drawing page (feature 328 wave 48): an inner arm whose run would cross the brook takes the ford that makes its walk
+    shortest, square to the reach (`ford_crossing`), as the field spur does - it was clipped at the water."""
+    from l7r.diagram.hamletgen.ways import web as _web
+
+    seen: list[list] = []
+    real = _web.clip_to_clear
+    monkeypatch.setattr(_web, "clip_to_clear", lambda pts, polys, margin, **kw: (seen.append(list(pts)), real(pts, polys, margin, **kw))[1])
+    plan = a_plan(lane_skeleton="spine")
+    plan.brook = [(100.0, 200.0), (500.0, 200.0)]  # across the arm's run (x = 300, y 145 to 245)
+    s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
+    s.brook_fords = [(320.0, 200.0)]  # type: ignore[attr-defined]
+    s.M["houses"] = [{"x": 250.0, "y": 230.0, "w": 20.0, "h": 14.0}, {"x": 350.0, "y": 230.0, "w": 20.0, "h": 14.0}]
+    _web._lay_skeleton(s, plan, lambda arc, standoff: (200.0 + arc, 200.0 - standoff), [0.0, 200.0], [0.0, 10.0])  # type: ignore[arg-type]
+    assert seen and len(seen[0]) == 4, f"the arm runs to the ford's two landings: {seen[:1]}"
+    assert abs(seen[0][1][0] - 320.0) < 1e-6 and abs(seen[0][2][0] - 320.0) < 1e-6, "square to the reach, at the ford"
