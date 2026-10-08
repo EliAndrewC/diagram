@@ -365,7 +365,7 @@ def lanes_share_tread(p: Poly, q: Poly, join: float = _TOUCH_GAP) -> bool:
     Lifted from the check's own inner `_fw_touch` so it can be tested with two lists of tuples instead
     of a settlement (the project's standing rule on closures that are hard to reach).
 
-    Research: one network at 25 ft - research/questions/0081-village-lanes.drawing.html: joined only where their treads meet, within the ink tolerance; ends within 25 ft are joined at one point by the knot pass, not counted joined apart"""
+    Research: one network, joined where treads meet - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: two ways one network only where their treads meet, within the ink tolerance; the 25 ft of 0081 is the knot pass's, ends joined at one point"""
     return any(seg_dist(v[0], v[1], a, b) <= join for v in p for a, b in zip(q, q[1:], strict=False)) or any(seg_dist(v[0], v[1], a, b) <= join for v in q for a, b in zip(p, p[1:], strict=False))
 
 

@@ -1,0 +1,6 @@
+{
+  "utc": "20261008T035620Z",
+  "guard": "pair-hooks",
+  "what": "gate alone",
+  "reason": "no occasion: the network join changes no pool map; the capped glyph checks wait for the GM"
+}

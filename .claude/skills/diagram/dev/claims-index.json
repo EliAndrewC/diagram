@@ -15348,19 +15348,20 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/checks.py::lanes_share_tread#one network at 25 ft": {
-  "code": "e5381520e828ef8a",
-  "core": "7da395c7fd47b978",
+  "code": "a280cb88d2b4a852",
+  "core": "0d03f0fddd962721",
   "date": "2026-10-07",
-  "note": "the page joins lanes \"where their treads meet\" and gives 25 ft only for ends that are then joined at a single point; this counts any vertex within 25 ft of another run as shared tread, so two lanes 20 ft apart that never touch pass as one network",
+  "note": "code joins two treads only within _TOUCH_GAP (4 ft), so the label \"at 25 ft\" is stale (feature 328 changed it); 0081 has only the one-network rule (§16) and the 25 ft knot of ends (§21), and the rule \"joined where their treads meet\" is 0246's (\"joined where their treads meet\", §40). Relabel to \"one network, joined where treads meet\" and point it at 0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },
   "research": "ebd72aaa6a0eb9af",
   "rests": [
+   "0081-village-lanes.drawing.html:34425c991aa27503",
    "0081-village-lanes.drawing.html:df26f73dd5ee96d2",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:048ef93cf5c5c59f"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "MISLABELED"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/checks.py::path_violations#drain brook never crossed": {
   "code": "4256f5dec63fa798",
@@ -15418,16 +15419,17 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/checks.py::served_network#one network": {
-  "code": "51b6d35c3d14d927",
-  "core": "1cdce0aa4e14550c",
+  "code": "8628f4dbf391db1e",
+  "core": "fdae5a5be21d8f1f",
   "date": "2026-10-07",
-  "note": "the network component grown from the track out",
+  "note": "the component grown from the track out, with ways joined where their treads meet, matches one network laid back to the track out",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
   "research": "7b40c2c01cfba682",
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:048ef93cf5c5c59f",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:ab698a7b15fb7e8e"
   ],
   "verdict": "IN-STEP"
@@ -17820,10 +17822,10 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/knots.py::WebMemo._ask#plumbing": {
-  "code": "bb6e416754bca59b",
-  "core": "2614b988f1df5d79",
+  "code": "9415383b3f68fb6c",
+  "core": "b7c28a8d2e39cae6",
   "date": "2026-10-07",
-  "note": "sends each pair to the predicates that own the rules",
+  "note": "memoised dispatch; the 25 ft apart test only culls pairs before the 4 ft tread test and decides nothing on the map",
   "pages": {},
   "research": "",
   "rests": [],
