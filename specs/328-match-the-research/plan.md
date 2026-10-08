@@ -734,13 +734,32 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
   `knots.py::settle_knots#a knot no lawful gather reaches`. The pair and perf-audit follow the reviews.
 - **The seating that leaves no knot or stranded way, tried (perf-audit round 2's open criterion; T137/T140)**: perf-audit's
   own control showed the batch's every growth and seed 25's refusal come from the privy and heap re-seating alone (removed,
-  each roll returns to its start and seed 25 draws). Mechanism: 72.7% of privies take the sunny-side sector, the dooryard's
+  each roll returns to its start and seed 25 draws). Mechanism: `PRIVY_SUNNY_SHARE` (0.727, Wang & Ochiai's figure) of privies take the sunny-side sector, the dooryard's
   front-right; the barn's withdrawal sent its share to front-wall seats; the heap steps beyond along the bearing - so the
   ground where the ways leave the dooryard fills. Tried: a "way out" strip kept clear of the searched fixtures in front of
   the yard's far edge (the yard's width, 20 ft out) - the reference roll (Inashiro, 15 households) then refused its web
   (four access lanes), worse than before; reverted. The web's outcome moves chaotically with the seats, so a local keep-out
   trades one map's refusal for another's; the remaining route is the seating's own search asking the way out of each
   household with its fixtures in place (E3, row 748), put to the GM with the band-3 sign-off.
+- **T140's investigation (spec-fidelity B3-9: the named route attempted before any waiver)**: the seating's own search
+  asking each household's way out with its fixtures in place. (1) The cause, measured at the refusal (seed 25, 40
+  households): all fourteen failing access lanes foul the 7 ft fabric gap on their first leg, and the fabric each fouls
+  is owner-less - a garden, which since this feature is an obstacle to its own farm's path as to any other (0246: the way
+  leaves round its own beds). (2) Attempted: `tree.admits` asked the settle's own fabric reading (`theirs`, 7 ft) of each
+  household's way before admitting it. First form: it read only the manifest's yard lists, which hold 2 while the ways
+  are laid (the rest stand in the house records' `geom` boxes) - no effect. Second form: the seated yards and gardens
+  read from `geom` (gardens owner-less, as the law reads them) - the reference roll (Inashiro, 15 households) then refused
+  its web (a needle join and lane 10). (3) Earlier: a way-out strip kept clear of the searched fixtures - the reference
+  refused too (four access lanes). Each change moves which exit a household takes, and the web's outcome moves with it,
+  trading one map's refusal for another's; the stricter admission leaves households only exits that fault elsewhere.
+  Every trial was reverted. What would remain is a seating that places a household's garden and fixtures together with
+  its way out (the bundle's layout asking the way, not the gap pass after) - a change across the seating (E3, row 748).
+  T140 stays open, the batch held, and the GM is asked for the waiver or the go-ahead on that rebuild, with the band-3
+  sign-off.
+- **Two depiction findings declined at batch 3's close**: the mixed belt's wind side (the drift is the village roller's
+  `_roll_windbreak`, deferred from this feature under amendment 8; the hamlet engine keeps 0072's bearing, its claims in
+  step); and the conifer-led belt's "smaller" broadleaf crowns, kept (its lesser crowns are drawn at `LESSER_BROADLEAF_S`,
+  0.75-0.85, against the rows' 1.0-1.1).
 - **A one-off at batch 3's gate**: `tests/tooling/test_measured_surface.py` counted 39 hashed files outside `l7r/` and `tests/`
   where 38 stand (all pool `.gen.py`); re-counted after, 38, and the next gate green. Searched: no test writes a `.py` into the
   real `pool/`; the tracked and untracked lists hold 38. Unreproduced; if it recurs, list the files the count saw.
@@ -760,7 +779,7 @@ scratch worktrees back to back on a quiet host, then `make perf-explain` and the
 |---|---|---|---|---|
 | 1 | 42-46 | waves 42, 44, 45 taken alone (band 1, 1, 0; confirmed); the batch 4a9b7c077 -> 2e3153b4e band 2, its cause (the track out drawn the canvas' diagonal past the frame, wave 46) removed by wave 47's `past_the_frame` - perf-audit consistent, audit not-justified as measured: batch 2's pair re-measures it, and explains seed 47's +0.19 s web at 40 households | green 2026-10-08 | closed but for the pair |
 | 2 | 47-50 | 2e3153b4e -> 3f91becf2: band 1, TOTAL -3.5%; batch 1's band 2 re-measured and gone. Its one growth (seed 39, 10 households, homesteads +0.24 s, web -0.2 s) is wave 47's past_the_frame candidate sending that roll's track out through the fabric router - perf-audit CONSISTENT on its own control (the candidate undone removes the growth), profiled with the new `make perf-profile HOUSEHOLDS=` | green 2026-10-08 (waves 47-51, the NEEDS-WORK fixes re-gated) | closed: 12 glyph checks PASS (field pond, woodland commons and wet paddy after rounds 2-3) |
-| 3 | 51-55 | 3f91becf2 -> HEAD: band 3 - 40 households +5.7% from seed 47 (+23.8%, web and homesteads: wave 52's privy and heap re-seating, bisected per commit) and seed 25 refused (T140); 10 households -7.2%, 20 -1.3%; seed 4's hinterland growth fixed in the batch (field_height_near in one vector pass) - m:batch3-pair-and-controls; perf-audit owed; the GM's band-3 sign-off owed | green 2026-10-08 | closing: 7 glyph checks PASS (homestead grove at round 2), the record checks answered; T137 and T140 open for the GM |
+| 3 | 51-55 | 3f91becf2 -> HEAD: band 3 - 40 households +5.7% from seed 47 (+23.8%, web and homesteads: wave 52's privy and heap re-seating, bisected per commit) and seed 25 refused (T140); 10 households -7.2%, 20 -1.3%; seed 4's hinterland growth fixed in the batch (field_height_near in one vector pass) - m:batch3-pair-and-controls; perf-audit round 2: explanation CONSISTENT, audit cannot-determine (re-run once T140's seating is decided); the GM's band-3 sign-off owed | green 2026-10-08 | closing: 7 glyph checks PASS (homestead grove at round 2), the record checks answered; T137 and T140 open for the GM |
 
 ## Constitution Check
 

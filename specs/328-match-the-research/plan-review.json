@@ -1,69 +1,76 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "6473a28534877d86437f90374e4640d465848517c5d368d4cc48cec5a9cae3ac",
+ "plan_sha256": "daa6959097314f1adaed1ee43ac21b290aaacfbaf68464190d361ef5cb628fac",
  "reviewed": "2026-10-08",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W55-1 grove topped up to 0080's density as drawn",
-   "summary": "a non-conifer-led clump keeps throwing until its drawn crowns hold its open ground (open_share) at GROVE_CROWN_SQFT, or TOPUP_TRIES x want throws fail; m:wave55-grove-density-as-drawn (Mizuguchi 339 -> 601 crowns)",
+   "id": "B3-1 modal depiction rounds g-j edits taken",
+   "summary": "dispersed (one grove shape per settlement; no lanes a convention; channel off the nearest ditch, brook or a neighbor's channel, nearest a convention), nucleated (belt runs on past the map edge; a compact cluster, never a hollow arc; a village held to a least packing, a hamlet not), conifer_led (edge past the belt's inner side, front row whole), mixed_broadleaf (back grove band on the windward side, one or two sides; taken up again either side of a lane, its passage unrecorded), alder (sentence trimmed)",
    "class": "within",
-   "why": "Brings the drawn map to 0080's one crown per ~180 sq ft, which is what the request asks: the implementation matching the referenced research. The density is measured over open ground because 0080's figure is for wooded ground, not keep-out ground. TOPUP_TRIES is a search breadth labeled NONE, not a cap below the research. The homestead grove's glyph-check round 2 is owed and declared in tasks.md Occasions."
+   "why": "Each edit makes a modal say what the map draws and labels conventions and unrecorded facts as such. No research claim is rewritten to match a drift, and nothing the research requires is written out."
   },
   {
-   "id": "W55-2 conifer-led belt left out of the top-up",
-   "summary": "its rows are its own; its density is the filed row groves.py::_draw_grove#conifer-led clump's lesser share",
+   "id": "B3-2 conifer-led 'smaller' lesser crowns kept (LESSER_BROADLEAF_S)",
+   "summary": "depiction finding declined: the modal keeps 'smaller broadleaf crowns' because LESSER_BROADLEAF_S draws 0.75-0.85 of the mean radius",
    "class": "within",
-   "why": "This is sequencing, not a narrowing: the row stays DRIFTED with scope kept in ranking.json and is extended to carry the modal's 48% Guesses bullet. Nothing is deferred or excused."
+   "why": "The modal describes what is drawn. The range sits inside 0080's 0.75-1.4 and its rows were closed E0 in wave 39 (overrides.json). No new carve-out is made here."
   },
   {
-   "id": "W55-3 crowns painted back to front",
-   "summary": "under/on_top sorted by y after the top-up",
+   "id": "B3-3 mixed belt's wind side at the village tier not taken",
+   "summary": "depiction finding declined: the village roller's belt side (RollVillageMixin._roll_windbreak) left to the deferred legacy tier",
    "class": "within",
-   "why": "Rendering order for the crowns the top-up adds; it keeps conifers above broadleaf as before."
+   "why": "Amendment 8 (GM: limit to code run by magistracies, country shrines and scripted hamlets; legacy settlements DEFERRED) and spec line 155 already settle this. The hamlet modal names the declared wind side, which is what the hamlet code does. The decline is recorded only in commit a07691a48's message, though, and plan.md does not carry it."
   },
   {
-   "id": "W55-4 modal depiction edits taken",
-   "summary": "cluster_position--high_margin (centered, winter wind dropped), settlement_form--nucleated (one cluster -> the houses), --dispersed (channel width, way back not drawn), windbreak (uneven edge a convention), mixed_broadleaf (touching crowns), alder, conifer_led (edge note)",
+   "id": "B3-4 homestead grove PASS at round 2, windbreak PASS again",
+   "summary": "glyph-check rounds past round 1 on the grove's density as drawn",
    "class": "within",
-   "why": "Each edit makes a description of the drawing say what is drawn, without changing a research claim: 0031 places the cluster on the high dry ground and does not center it or tie the high margin to the wind (its windward case is 'one case among several'); 0072 gives each cluster its own band; the channel width and the edge of the wood are recorded as not researched, and the way back is 0031's own deliberate deviation. No drawn behavior that the research requires is written out of a modal."
+   "why": "Round 1's NEEDS-WORK was answered by measurement (m:wave55-grove-density-as-drawn) and passed. Extra rounds are the GM's 2026-10-08 ruling (spec Decisions row, wave 46)."
   },
   {
-   "id": "W55-5 the two depiction findings left",
-   "summary": "dispersed seating: the modal keeps 'each farm alone beside its own fields' and the map's drift stays the kept row stages.py::_seat_households#a scattered hamlet's seating; Kuwabata's bare runs filed",
+   "id": "B3-5 three speedups",
+   "summary": "field_height_near in one vector pass; the privy's reach tested at its far corner alone; the bund run-on's clear prunes blocks by box",
    "class": "within",
-   "why": "The modals keep the research's wording, and both drifts are open rows with scope kept, so the fix is owed in the code, not in the text. Note: plan.md's Wave 55 section names only the bare runs. The dispersed decision should be written there too."
+   "why": "Each one gives the same answer: the five hamlets are byte-identical. The far-corner test is exact (each axis gap is largest at the far corner). The box prune pads by the stroke width and the fixture pad, and start lies on a-b, so it prunes nothing that could touch. This is VI's 'no good way around it' work, with no change to behavior."
   },
   {
-   "id": "W55-6 three found rows filed (found-batch3.jsonl)",
-   "summary": "privy seats as rolled, the windbreak's hover region, Kuwabata's bare runs - E2, DRIFTED, scope kept",
+   "id": "B3-6 feet-vs-px impl-drift fixes",
+   "summary": "open_ground_patches' parcel size and commons floor, and the wood's 'beside' reach, converted to the map's px",
    "class": "within",
-   "why": "FR-006's found-row path: each is a drift found by a check, ranked and kept in scope. None is deferred."
+   "why": "These are unit bugs that impl-drift found. They are fixed where found (XIV) and are identical at a hamlet's 1 ft/px."
   },
   {
-   "id": "W55-7 0072 arcs re-measured",
-   "summary": "Inashiro 79, Kuwabata 65, Sawada 38 degrees (was 66/71/14.6), dated and with its method in the comment",
+   "id": "B3-7 the pair band 3, batch 3 held for the GM's sign-off",
+   "summary": "TOTAL +6.0% (+3.0% after the speedups); seed 47 at 40 households +23.8%; seed 25 at 40 refused; m:batch3-pair-and-controls",
    "class": "within",
-   "why": "The record restated to the current maps; the claim (one side or two, none wraps) is unchanged."
+   "why": "VI: band 3 is the GM's personal sign-off before the work reaches main. Holding the batch is the rule, not a narrowing."
   },
   {
-   "id": "W54-K knotted fallback kept after the DRIFTED reading (d21d7b86c)",
-   "summary": "without it, three of Sawada's households lost their own way; the settle gathers most knotted feet",
+   "id": "B3-8 perf-audit: explanation CONSISTENT, audit cannot-determine",
+   "summary": "dev/perf-log/20261008T234039Z audit: no_way_around 'not settled by the data' until a seating that keeps 0042/0047 and leaves no knot or stranded way is tried",
    "class": "within",
-   "why": "W54-10 (CLEAR) already ruled on keeping the knotted foot as the last resort. The knots it leaves are owed by the kept ranked row knots.py::settle_knots#a knot no lawful gather reaches, and T137 stays open. No new carve-out. Note: this is recorded only at the point of change. It should also be written in plan.md."
+   "why": "The plan does not treat the inconclusive audit as passed. VI: an inconclusive verdict never lets the work proceed, and every rung keeps the ones below it, so the GM's band-3 sign-off stands above the audit and does not replace it. The batch table row 3 still reads 'perf-audit owed', which is stale."
   },
   {
-   "id": "W55-8 quick's tooling",
-   "summary": "spec-lint --delta in make quick; pool-readers matches any test that names the pool as a path part",
-   "class": "within",
-   "why": "Verification that fails only where the requested checks already fail, and it catches them sooner. No engine behavior changes (GM 2026-09-20)."
+   "id": "B3-9 seed 25's 40-household refusal (T140) and the no-knot seating: one keep-out tried, the remaining route put to the GM",
+   "summary": "the 'way out' strip (yard width, 20 ft) was tried and reverted because Inashiro refused its web; the plan then names 'the seating's own search asking the way out of each household with its fixtures in place (E3, row 748)' as the remaining route and puts it to the GM with the band-3 sign-off; T140 reads 'fix ... or the GM's waiver'",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "Seed 25 at 40 households drew at the batch's start and refuses now, so it is a regression (XIII: a cohort seed that passed and now fails; 'one seed' and 'a map nobody ships' excuse nothing). XIII allows a waiver to be asked 'only after the fix has been genuinely attempted', and a session that has found a path forward TAKES it. The plan names the path itself, the seating's own search, and has not tried it. The one trial was a local keep-out, a different mechanism. The perf-audit's no_way_around criterion names the same untried seating. This is the shape of W54-5 round 2 (row 748's re-lay named but not attempted: NOT LEGITIMATE), which the session then fixed with KNOTTED_TRIES. The hold is lawful, because T140 open keeps it off main. What is not lawful is handing the GM the choice of route. The GM's own instruction says to keep working until the cap or the end of the feature and to defer only real questions."
   },
   {
-   "id": "W55-9 occasions",
-   "summary": "privy, manure heap and manure pit marked PASS; homestead grove round 2 and the windbreak re-seen with the top-up",
+   "id": "B3-10 T137 still held for the GM",
+   "summary": "Sawada's zigzag on _ZIGZAGS_WAITING, T137 open",
    "class": "within",
-   "why": "Feature 294's declared occasions. No review is dropped."
+   "why": "W54-7 round 3 already ruled the hold LEGITIMATE after the re-lay was tried twice. Nothing new is decided here."
+  },
+  {
+   "id": "B3-11 the unreproduced 39-vs-38 hashed-file count recorded",
+   "summary": "test_measured_surface's one-off at batch 3's gate, searched and recorded",
+   "class": "within",
+   "why": "A record of an observation, with the search done. It changes no behavior."
   }
  ],
- "verdict": "CLEAR"
+ "verdict": "BLOCKED"
 }
