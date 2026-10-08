@@ -391,7 +391,7 @@ def test_the_woodland_shrink_ladder_keeps_every_parcel_inside_the_band_and_above
     s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
     s.M["fields"] = []
     plan.belt = []
-    ceiling = 1.10 * 1.15
+    ceiling = 1.10 * 1.15 * math.sqrt(2.2)  # feature 328: the drawn ring is an ellipse of aspect up to 1 + 1.2 (`_excess`), its long half-axis half * sqrt(aspect) - a parcel at a new seat ran 1.27x on an elongated ring
     widest: list[tuple[float, float]] = []
     for asked in range(120, 720, 40):  # from the commons floor up: below it the floor is the asked size's own, not the commons'
         for poly in open_ground_patches(s, plan, 3, size=float(asked)):
@@ -400,7 +400,7 @@ def test_the_woodland_shrink_ladder_keeps_every_parcel_inside_the_band_and_above
             widest.append((float(asked), max(w, h)))
     assert widest, "no parcel came back at ANY asked size - this test would assert nothing"
     for asked, got in widest:
-        assert got <= asked * ceiling, f"a parcel came back {got / asked:.2f}x the asked size, past the ladder-and-roll band ({got:.0f} for {asked:.0f})"
+        assert got <= asked * ceiling, f"a parcel came back {got / asked:.2f}x the asked size, past the ladder, roll and aspect band ({got:.0f} for {asked:.0f})"
         assert got >= _COMMONS_FLOOR_FT, f"a parcel came back at {got:.0f} px, under the {_COMMONS_FLOOR_FT:.0f} ft floor"
 
 

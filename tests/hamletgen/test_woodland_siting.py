@@ -17,11 +17,13 @@ def test_the_tiers_follow_the_record_s_ranking():
 
 
 def test_the_field_height_is_read_off_the_nearest_stretch_of_edge():
-    """A long edge is sampled along its length, so a seat beside its middle reads the middle, not a far vertex."""
+    """A long edge is sampled along its length, so a seat beside its middle reads the stretch beside it, not a far vertex -
+    the highest of the edge within 300 ft past the nearest point (feature 328: the field beside a wood, not one point)."""
     field = [(0.0, 1000.0), (2000.0, 0.0), (2000.0, 1000.0)]  # a sloping top edge from (0, 1000) up to (2000, 0)
     grid = crop_edge_points([field])
     h = field_height_near((1000.0, 400.0), DOWN_SOUTH, grid)
-    assert -520.0 <= h <= -480.0, h  # the edge at x = 1000 stands at y = 500
+    assert -400.0 <= h <= -320.0, h  # the edge at x = 1000 stands at y = 500, and rises to about y = 360 within 300 ft past the nearest point
+    assert field_height_near((1000.0, 400.0), DOWN_SOUTH, grid, beside=0.0) <= -480.0, "with no stretch past it, the nearest point alone"
     assert field_height_near((9000.0, 9000.0), DOWN_SOUTH, grid) < -900.0  # far off, the widening pad still answers
     assert field_height_near((50000.0, 50000.0), DOWN_SOUTH, grid) == -math.inf  # past the widest pad: no field at all
     assert field_height_near((0.0, 0.0), DOWN_SOUTH, crop_edge_points([])) == -math.inf
