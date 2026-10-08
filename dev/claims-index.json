@@ -31965,11 +31965,13 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/base.py::_assert_not_main_tree#plumbing": {
-  "code": "ff39d25f7a54b0bc",
-  "core": "3c886334700684e5",
-  "date": "2026-10-03",
-  "note": "plumbing, no physical decision",
+  "code": "62b15259d88d6031",
+  "core": "4134fb396f14562e",
+  "date": "2026-10-08",
+  "note": "main-tree guard and override env var are pure plumbing; no physical or rendering decision",
+  "pages": {},
   "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/settlement/_geom/base.py::_is_main_tree#plumbing": {
