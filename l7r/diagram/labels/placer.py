@@ -454,7 +454,7 @@ def place(
         no key - research/questions/0241-the-map-sheet-its-title-legend-frame-and-margins.drawing.html: there is no key box
         no seat in the frame - UNRESEARCHED: a caption with no seat inside the frame takes the first seat beside it, moved inward until it fits (`moved_inward`)
         the hug - CONVENTION: no seat past the hug from what it names
-        caption clearance - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: half the caption's letter height off other ink (`CLEAR_EM`)
+        caption clearance - UNRESEARCHED: half the caption's letter height (`CLEAR_EM`) kept off other ink - 0242 sets that gap only from the caption's own feature, as its calibration
     """
     clear = CLEAR_EM * size
     own: Poly | None = list(subject.poly) if subject.kind != "line" else None
