@@ -651,6 +651,18 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 - **Occasions**: placement-changed privy on Sawada, manure pit on Sawada, manure heap on Inashiro - batch 3's close.
 - **Verification**: tests red on the old code; `impl-drift`; `spec-fidelity`; the gate, pair and occasions at batch 3's close.
 
+## Wave 53 (amendment 52, 2026-10-08) - batch 3
+
+- **Scope**: the grove's crown density (rows 569, 571): one crown to ~180 sq ft real (0080's drawing page: 600 trees a
+  hectare) at every grain, `GROVE_CROWN_SQFT` and `grove_crown_px2(ftpx)`, where it was 48 sq px at the town grain scaled
+  by the building grain - one crown to ~71 sq ft on a hamlet at 1 ft/px. The band-piece cap (`farmsteads.py`) takes the
+  same density, so a piece still holds 28 crowns' ground.
+- **Measured**: drawn crowns fall 14-38% across the five hamlets (Inashiro 641 -> 528, Kashikawa 3,102 -> 2,673,
+  Kuwabata 790 -> 576, Mizuguchi 546 -> 337, Sawada 961 -> 704). A windbreak's drawn conifer share moves 0.463 -> 0.508 as
+  the canopy-layer cull thins less at the lower density (the throw stays 0.48 of the crowns).
+- **Occasions**: glyph-redrawn homestead grove on Mizuguchi, windbreak on Inashiro - batch 3's close.
+- **Verification**: tests red on the old code; `impl-drift`; `spec-fidelity`; the gate, pair and occasions at batch 3's close.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Waves 2-45 that changed engine behavior took

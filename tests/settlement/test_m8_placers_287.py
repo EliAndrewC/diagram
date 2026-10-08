@@ -100,7 +100,7 @@ def test_crown_reach_is_the_reach_the_grove_draws() -> None:
     reach = crown_reach(22.0, lift=lift)
     rnd = random.Random(31)
     far = 0.0
-    for _ in range(200):
+    for _ in range(1000):  # three crowns a 22 px clump at ~180 sq ft (wave 53), seven before: more clumps to reach the corner
         cx, cy = rnd.uniform(100.0, 1300.0), rnd.uniform(100.0, 1300.0)
         s.M["tree_crowns"] = []
         s._draw_grove(cx, cy, 22.0, 22.0, face=(0, -1), mix="dooryard")

@@ -10,7 +10,7 @@ from typing import TYPE_CHECKING, Any, cast
 
 from .._geom import Indexed
 from ..farm_fixtures import PERSIMMON_CROWN_FT
-from ..homestead_parts.groves import GROVE_BAMBOO_PATCH_FT, GROVE_CLUMP_CROWNS, GROVE_CROWN_AREA, HOUSEHOLD_BAMBOO_PREVALENCE, bamboo_patch, band_clumps
+from ..homestead_parts.groves import GROVE_BAMBOO_PATCH_FT, GROVE_CLUMP_CROWNS, HOUSEHOLD_BAMBOO_PREVALENCE, bamboo_patch, band_clumps, grove_crown_px2
 from ..homestead_parts.tree_shade import BAMBOO_SHADE_FT, CANOPY_SHADE_FT, crown_shades
 from .fit import part_box
 from .lot import kura_rect
@@ -61,9 +61,9 @@ class FarmsteadFlushMixin:
         GROVES (the back layer), (2) after a south-nudge relaxation, draw the yards/gardens/houses on top.
 
         Research:
-            no tree over a building - CONVENTION: the grove bands drawn last, thinning off the walls
+            no tree over a building - NONE: the grove bands drawn last, so `_draw_grove`'s keep-outs (0071's drawing page) see the houses
             thin band's lesser trees - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: fruit and flowering broadleaf, no conifer (the mix labeled a GUESS)
-            band drawn at one density - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: cut into clumps of the clump cap, so a deep band stands under canopy as densely as a thin one (0.57 -> 0.78)
+            band drawn at one density - NONE: a band cut along its length into pieces of 28 crowns' ground; the density is `GROVE_CROWN_SQFT`'s (0080), not the cut's
             canopy edge at the band's inner edge - research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html: the drawn band gives up one crown radius on the house's side, keeping the service strip clear
             bamboo patch in the windward bands - research/questions/0075-bamboo-groves-chikurin.drawing.html: 22 x 16 ft on the house side of each windward band
         """
@@ -103,10 +103,10 @@ class FarmsteadFlushMixin:
         # A THIN BAND draws as lesser trees - fruit and flowering broadleaf, no conifer (`dooryard`; Tonami's sides away
         # from the wind carried flowering trees, persimmon and fig, and hackberry and alder): the mix a GUESS (feature 291).
         # ...AND A BAND IS DRAWN AS CLUMPS OF ONE CLUMP'S SIZE (feature 291, the settlement-review of Kashikawa): `_draw_grove`
-        # caps a clump at 28 crowns, one to about 48 sq px at the town grain, so a deep band - 40 x 80 ft, room for some 67 -
-        # drew at 0.57 of its box under canopy against the thin band's 0.78. Cut along its length into pieces that hold no
-        # more than the cap, every band is drawn at the one density.
-        _cap = GROVE_CLUMP_CROWNS * GROVE_CROWN_AREA * (self.bscale / 0.82) ** 2
+        # once capped a clump at 28 crowns, so a deep band drew at 0.57 of its box under canopy against the thin band's 0.78.
+        # The cap is gone (each clump throws one crown to ~180 sq ft, `GROVE_CROWN_SQFT`, 0080), so the density is the
+        # constant's; the cut into pieces of 28 crowns' ground is kept as plumbing - each piece its own scoped roll.
+        _cap = GROVE_CLUMP_CROWNS * grove_crown_px2(self.ftpx)
         # ...WITH ITS CANOPY'S EDGE, NOT ITS TRUNKS, AT THE BAND'S INNER EDGE: a clump seats its crowns' centers inside its box,
         # so a crown overhung the service strip by its radius, and once the bands drew at their full density a wood shed's
         # seat there was under a crown (Mizuguchi seated 4 of 5). The drawn box gives up one crown radius on the house's side.

@@ -60,7 +60,7 @@ def test_the_woodland_commons_is_stocked_as_a_coppice_thicket():
 def test_a_windbreak_clump_inks_bamboo_only_in_the_open():
     """B29 (vegetation/260): the windbreak mix carries bamboo items, inked as the culm mark where no crown covers them."""
     s = _hamlet()
-    n = sum(s._draw_grove(200.0 + 60 * k, 300.0, 28.0, 28.0, face=(0, -1), mix="windbreak") for k in range(12))
+    n = sum(s._draw_grove(200.0 + 60 * (k % 12), 300.0 + 60 * (k // 12), 28.0, 28.0, face=(0, -1), mix="windbreak") for k in range(48))
     ink = "".join(str(o) for o in s.out)
     assert n > 0 and ink.count(f'stroke="{BAMBOO_CULM}"') == n, "every counted bamboo mark is inked, and nothing else in its color"
     crowns = [(s.M["tree_crowns"][i], s.M["tree_crowns"][i + 1], s.M["tree_crowns"][i + 2]) for i in range(0, len(s.M["tree_crowns"]), 3)]
@@ -179,8 +179,8 @@ def test_a_clumps_bamboo_marks_keep_out_of_a_plots_sun_and_are_recorded() -> Non
         s = _hamlet()
         s.sun_corridor(39)
         if yard:
-            s.M["threshing_yards"] = [{"x": 400.0, "y": 380.0, "w": 40.0, "h": 30.0}]  # its sun ground covers the grove's south half
-        n = s._draw_grove(400.0, 400.0, 160.0, 120.0, (0, -1), mix="windbreak", cls="homestead grove", bamboo=True)
+            s.M["threshing_yards"] = [{"x": 400.0, "y": 380.0, "w": 200.0, "h": 30.0}]  # its sun ground covers the grove's south half
+        n = s._draw_grove(400.0, 400.0, 320.0, 120.0, (0, -1), mix="windbreak", cls="homestead grove", bamboo=True)
         return n, s
 
     n_open, open_ = draw(False)
@@ -224,8 +224,25 @@ def test_a_windbreak_draws_about_half_its_crowns_conifer() -> None:
     so the conifer's 0.48 is taken of the crowns, not of all the items (it drew about 52%)."""
     s = _hamlet()
     tally: dict[str, int] = {}
-    for k in range(64):
-        s._draw_grove(200.0 + 90 * (k % 8), 200.0 + 90 * (k // 8), 60.0, 60.0, face=(0, -1), mix="windbreak", tally=tally)
+    for k in range(256):
+        s._draw_grove(200.0 + 90 * (k % 16), 200.0 + 90 * (k // 16), 60.0, 60.0, face=(0, -1), mix="windbreak", tally=tally)
     crowns = tally.get("conifer", 0) + tally.get("broadleaf", 0)
     assert crowns > 300, "non-vacuity"
-    assert abs(tally["conifer"] / crowns - 0.48) < 0.02, tally  # measured 0.463 (0.506 under the old rule)
+    # the throw is 0.48 of the crowns exactly; the canopy-layer cull (no crown under another's) moves the DRAWN share with
+    # the density: measured 0.463 at one crown to ~71 sq ft, 0.508 at the page's ~180 (wave 53), 0.506 under the old rule
+    assert abs(tally["conifer"] / crowns - 0.48) < 0.035, tally
+
+
+def test_a_grove_throws_one_crown_to_about_180_sq_ft_at_every_grain() -> None:
+    """0080 (feature 328 wave 53): 600 trees a hectare, one to about 180 sq ft - in real feet, so a hamlet at 1 ft/px
+    throws no more than a clump's area over 180 sq ft (it threw one to ~71 sq ft: 48 sq px at the town grain, scaled
+    by the building grain)."""
+    from l7r.diagram.settlement.homestead_parts.groves import GROVE_CROWN_SQFT, grove_crown_px2
+
+    assert abs(GROVE_CROWN_SQFT - 179.4) < 0.1
+    assert grove_crown_px2(1.0) == GROVE_CROWN_SQFT and abs(grove_crown_px2(2.0) - GROVE_CROWN_SQFT / 4) < 1e-9
+    s = _hamlet()
+    tally: dict[str, int] = {}
+    s._draw_grove(400.0, 400.0, 120.0, 120.0, face=(0, -1), mix="mixed_broadleaf", tally=tally)
+    drawn = sum(tally.values())
+    assert 30 < drawn <= round(120.0 * 120.0 / GROVE_CROWN_SQFT), (drawn, tally)

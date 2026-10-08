@@ -519,5 +519,7 @@
  "l7r/diagram/waterfields/tint.py::mark_low#wet plots on the drain": "51",
  "l7r/diagram/settlement/homestead_parts/belt_law.py::BeltReading._crossed#a crossing's bare reach": "52",
  "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#manure beyond the privy": "52",
- "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#privy seats": "52"
+ "l7r/diagram/settlement/homestead_parts/fixture_seats.py::_seats#privy seats": "52",
+ "l7r/diagram/settlement/homestead_parts/groves.py::GROVE_CROWN_AREA#grove crown density": "53",
+ "l7r/diagram/settlement/homestead_parts/groves.py::GrovesMixin._draw_grove#crowns per clump": "53"
 }

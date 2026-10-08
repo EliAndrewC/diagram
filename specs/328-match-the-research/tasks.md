@@ -7,6 +7,8 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 
 - placement-changed: privy on sawada - wave 52: the barn seat against the steading annex (a north annex's east gable, a west annex's west wall; 0047), the heap stepped away from the house along the privy's bearing; batch 3's close
 - placement-changed: manure heap on inashiro - wave 52: the same seat, the heap form; batch 3's close
+- glyph-redrawn: homestead grove on mizuguchi - wave 53: the crown density one to ~180 sq ft real (0080), drawn crowns 546 -> 337; batch 3's close
+- glyph-redrawn: windbreak on inashiro - wave 53: the same density in the windward bands; batch 3's close
 - placement-changed: manure pit on sawada - wave 52: the heap beyond the privy along the line from the house's center (0042, "on the side away from the house"); batch 3's close
 - none: wave 1 changes `Research:` claim lines only (tier E0) - nothing a map draws or where it is placed moves.
 - (wave 4, landed and reviewed) placement-changed village lane - wave 4 brought the lane law to 0081 and 0246 (7 ft clear of a fence, ends joined
@@ -1683,4 +1685,13 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
       research: rendering
       verify: DONE. verified 2026-10-08: plan review CLEAR round 3; impl-drift recorded (claims-owed none); record-owed none
 - [ ] T132 the claims re-checked by `impl-drift`; batch 3 closed (FR-005, FR-006)
+      research: rendering
+
+## Phase 54 - wave 53 (amendment 52): the grove's crown density in real feet
+
+- `groves.py` (`GROVE_CROWN_SQFT`, `grove_crown_px2`, `_draw_grove`'s count) and `farmsteads.py`'s band-piece cap.
+
+- [ ] T133 wave 53's rows (FR-003, FR-004)
+      research: rendering
+- [ ] T134 the claims re-checked by `impl-drift`; the record checks owed (FR-005, FR-006)
       research: rendering
