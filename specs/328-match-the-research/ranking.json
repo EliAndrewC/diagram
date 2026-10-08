@@ -792,7 +792,7 @@
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::draw_holdings#cell on a lane or stream left undrawn",
   "verdict": "MISLABELED",
   "tier": "E0",
-  "fix": "leaving a holding cell unplanted where a lane or stream crosses it is a decision about what was planted, not how it is shown; the claim itself says the record was searched and is silent, so it should be GUESS (or UNRESEARCHED), not CONVENTION",
+  "fix": "done in wave 24",
   "files": [
    ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py"
   ],
@@ -800,6 +800,8 @@
   "flag": "",
   "found": "wave 24 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
+  "e0_basis": "closed: relabeled GUESS in wave 24 (rows.py:322) and re-checked IN-STEP",
+  "moved": "T75a (fresh reader): closed: relabeled GUESS in wave 24 (rows.py:322) and re-checked IN-STEP",
   "wave": "24",
   "scope": "kept"
  },
@@ -807,7 +809,7 @@
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::draw_holdings#crop cells kept back from lanes half the lane width  20 and",
   "verdict": "UNCLAIMED",
   "tier": "E0",
-  "fix": "crop cells kept back from lanes (half the lane width + 2.0) and from streams (6.0); these margins reach past the \"touches\" the guess claim names",
+  "fix": "crop cells kept back from lanes and streams - GUESS: a holding cell within 2 px of a lane's drawn edge (half its width + 2.0) or within 6 px of a stream's outline is left unplanted, margins in pixels at the map's scale; no page says how near a lane or stream a dry-field strip was planted (searched 0033, 0081, 0014)",
   "files": [
    ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py"
   ],
@@ -815,6 +817,8 @@
   "flag": "",
   "found": "wave 24 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
+  "e0_basis": "rows.py:329-330 buffers lanes by w/2 + 2.0 and streams by 6.0, and rows.py:338 skips any cell intersecting them - wider than the 'crosses or touches' of rows.py:322. No page bears (same search as row 1), so GUESS. Flag: both margins are raw pixels, not s.px(feet), so the real margin varies with the map's ftpx; if they are meant as feet that is an E1 change, not this claim",
+  "moved": "T75a (fresh reader): rows.py:329-330 buffers lanes by w/2 + 2.0 and streams by 6.0, and rows.py:338 skips any cell intersecting them - wider than the 'crosses or touches' of rows.py:322. No page bears (same search as row 1), so GUESS. Flag: both margins are raw pixels, not s.px(feet), so the real margin varies with the ",
   "wave": "",
   "scope": "kept"
  },
@@ -822,7 +826,7 @@
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::draw_holdings#holding strip cut into plots holdingcellft 150 ft deep, whic",
   "verdict": "UNCLAIMED",
   "tier": "E0",
-  "fix": "holding strip cut into plots HOLDING_CELL_FT (150 ft) deep, which 0033 \u00a714 records as a convention",
+  "fix": "holding plot depth - research/questions/0033-row-villages-resson.drawing.html: each holding cut across its depth into `HOLDING_CELL_FT` (150 ft) plots, as many as round(depth / 150 ft), at least one",
   "files": [
    ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py"
   ],
@@ -830,6 +834,8 @@
   "flag": "",
   "found": "wave 24 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
+  "e0_basis": "rows.py:333 cells = max(1, round(depth / px(HOLDING_CELL_FT))); constant claimed at rows.py:210, unit block rows.py:319-322 lacks it; 0033 drawing 'The strip is cut in plots about 150 ft deep ... That is a convention' matches",
+  "moved": "T75a (fresh reader): rows.py:333 cells = max(1, round(depth / px(HOLDING_CELL_FT))); constant claimed at rows.py:210, unit block rows.py:319-322 lacks it; 0033 drawing 'The strip is cut in plots about 150 ft deep ... That is a convention' matches",
   "wave": "",
   "scope": "kept"
  },
@@ -965,7 +971,7 @@
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#a lane's room between ranks",
   "verdict": "MISLABELED",
   "tier": "E0",
-  "fix": "`MIN_WEB_GAP` (18 ft) is 0246's lane room (\"a lane's room of 18 ft ... a map drawing convention\"), which the bundle answers, so it is not a GUESS; it should cite 0246 \u00a798 and note that a dispersed hamlet lays no lane (\u00a7109). For grove farms, 0036's 32 ft least gap between groves also bears on it",
+  "fix": "none - the claim stands",
   "files": [
    ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py"
   ],
@@ -973,6 +979,8 @@
   "flag": "",
   "found": "wave 24 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
+  "e0_basis": "stages.py:381 GUESS matches stages.py:775 (MIN_WEB_GAP as a spacing in _rank_step); the ranks run only on the dispersed form (stages.py:777, growth.py:95-98), and 0246 drawing gives its 18 ft lane room as a convention for a CLUSTERED settlement's lanes and says a dispersed hamlet has no lanes between its farmhouses, so it does not back the figure here and GUESS is the true label; 0036's 32 ft is i",
+  "moved": "T75a (fresh reader): stages.py:381 GUESS matches stages.py:775 (MIN_WEB_GAP as a spacing in _rank_step); the ranks run only on the dispersed form (stages.py:777, growth.py:95-98), and 0246 drawing gives its 18 ft lane room as a convention for a CLUSTERED settlement's lanes and says a dispersed hamlet has no lanes betwee",
   "wave": "",
   "scope": "kept"
  },
@@ -992,25 +1000,10 @@
   "scope": "kept"
  },
  {
-  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#how deep a scattered hamlet runs at most four rank rounds be",
-  "verdict": "UNCLAIMED",
-  "tier": "E0",
-  "fix": "how deep a scattered hamlet runs: at most four rank rounds behind the front row (range(7), attempt < 4) before the rescue",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py"
-  ],
-  "after": [],
-  "flag": "",
-  "found": "wave 24 re-check (tier provisional, by verdict)",
-  "tier_as_ranked": "E0",
-  "wave": "",
-  "scope": "kept"
- },
- {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#rank depth jitter",
   "verdict": "MISLABELED",
   "tier": "E0",
-  "fix": "the amplitude matches (\u00b1RANK_DEPTH_JITTER/2 of a pitch), but the alleys-only gate rests on 0246's planned-versus-grown reading, so the claim should cite 0246 \u00a7103 for the gate and keep UNRESEARCHED for the amplitude; the ranks run only on the dispersed form, which lays no lanes",
+  "fix": "none - the claim stands",
   "files": [
    ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py"
   ],
@@ -1018,6 +1011,8 @@
   "flag": "",
   "found": "wave 24 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
+  "e0_basis": "stages.py:382 says amplitude half of RANK_DEPTH_JITTER of a pitch, rounds before the rescue, alleys only; code stages.py:876 matches (attempt < 4, not along the field, lane_web == alleys). No page gives an amplitude, so UNRESEARCHED is true. The alleys gate borrows 0246's planned/grown reading, but 0246 says a dispersed hamlet lays no lanes, so that page does not back the gate on this form and cit",
+  "moved": "T75a (fresh reader): stages.py:382 says amplitude half of RANK_DEPTH_JITTER of a pitch, rounds before the rescue, alleys only; code stages.py:876 matches (attempt < 4, not along the field, lane_web == alleys). No page gives an amplitude, so UNRESEARCHED is true. The alleys gate borrows 0246's planned/grown reading, but ",
   "wave": "",
   "scope": "kept"
  },
@@ -1025,7 +1020,7 @@
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#seats kept apart",
   "verdict": "MISLABELED",
   "tier": "E0",
-  "fix": "the claim's account is wrong: in the rescue only other offered seats drop to 0.3 pitch, and houses stay at 0.5 pitch in every round; this is also a candidate dedupe (the placer's envelope decides spacing), so it is closer to NONE",
+  "fix": "seats kept apart - NONE: a candidate dedupe, not a spacing - a seat within half a pitch of a standing house, or of a seat already offered this round (0.3 of a pitch in the rescue rounds), is not offered; the placer's envelope decides how far apart homesteads stand",
   "files": [
    ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py"
   ],
@@ -1033,6 +1028,25 @@
   "flag": "",
   "found": "wave 24 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
+  "e0_basis": "claim stages.py:372 says 0.3 applies to houses too in the rescue; code stages.py:857-859 keeps houses at 0.5 pitch in every round and drops only the round's own offered seats (_kept) to 0.3 in the rescue. The wording is wrong; the check is a dedupe the placer's envelope backs up, so NONE",
+  "moved": "T75a (fresh reader): claim stages.py:372 says 0.3 applies to houses too in the rescue; code stages.py:857-859 keeps houses at 0.5 pitch in every round and drops only the round's own offered seats (_kept) to 0.3 in the rescue. The wording is wrong; the check is a dedupe the placer's envelope backs up, so NONE",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#the seating's reach",
+  "verdict": "DRIFTED",
+  "tier": "E0",
+  "fix": "the seating's reach - UNRESEARCHED: a front-row seat within 1.3 times `FORM_BOUND` (1.15, 2.5 for a row) times the band's half-diagonal of the seat, and a rescue round's seat within `FORM_BOUND` times it; the four rank rounds are held only by their depth (the row's plus four rank steps at most), and the exhaustive pass by the legal ground",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 24 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E2",
+  "e0_basis": "stages.py:486-489 bound; applied at stages.py:724 (front row, bound*1.3) and stages.py:855 only when attempt >= 4 (rescue); rank rounds 0-3 offer seats at a fixed depth (stages.py:797) with no in_band test, and seat_the_rest (capacity.py:103) is unbounded by it. The claim (stages.py:377) is UNRESEARCHED and no page sets a reach bound (0031 drawing gives none), so the fix is the wording, not the co",
+  "moved": "T75a (fresh reader): stages.py:486-489 bound; applied at stages.py:724 (front row, bound*1.3) and stages.py:855 only when attempt >= 4 (rescue); rank rounds 0-3 offer seats at a fixed depth (stages.py:797) with no in_band test, and seat_the_rest (capacity.py:103) is unbounded by it. The claim (stages.py:377) is UNRESEAR",
   "wave": "",
   "scope": "kept"
  },
@@ -1127,7 +1141,7 @@
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/pondstock.py::_bank_seats#sty seat pulled in by half the bank bankinsetft so it stands",
   "verdict": "UNCLAIMED",
   "tier": "E0",
-  "fix": "sty seat pulled in by half the bank (BANK_INSET_FT) so it stands on the bank, not by the canal (0025 \u00a7259)",
+  "fix": "sty seat on the bank - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html: each bank seat set in from the parcel's edge by `BANK_INSET_FT`, half the bank's width, so the sty stands on the bank and not out by the canal",
   "files": [
    ".claude/skills/diagram/l7r/diagram/hamletgen/pondstock.py"
   ],
@@ -1135,6 +1149,8 @@
   "flag": "",
   "found": "wave 24 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
+  "e0_basis": "pondstock.py:68 offsets every _bank_seats seat by BANK_INSET_FT; the constant is already claimed at pondstock.py:35 but the unit's block (pondstock.py:53-54) names only the ranking; 0025 drawing line 'A sty stands on the bank, not out by the canal ... set in from the edge of the plot by half the bank's width' says exactly what the code does",
+  "moved": "T75a (fresh reader): pondstock.py:68 offsets every _bank_seats seat by BANK_INSET_FT; the constant is already claimed at pondstock.py:35 but the unit's block (pondstock.py:53-54) names only the ranking; 0025 drawing line 'A sty stands on the bank, not out by the canal ... set in from the edge of the plot by half the ban",
   "wave": "",
   "scope": "kept"
  },
@@ -6743,21 +6759,6 @@
   "scope": "kept"
  },
  {
-  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#the seating's reach",
-  "verdict": "DRIFTED",
-  "tier": "E2",
-  "fix": "the claim says every homestead stands within FORM_BOUND * the half-diagonal, but in_band is tested only at `attempt >= 4`. The rank rounds 0-3 run unbounded (no region on the dispersed form), so the claim should say the bound holds only for the front row (1.3x) and the rescue",
-  "files": [
-   ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py"
-  ],
-  "after": [],
-  "flag": "",
-  "found": "wave 24 re-check (tier provisional, by verdict)",
-  "tier_as_ranked": "E2",
-  "wave": "",
-  "scope": "kept"
- },
- {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#the step between ranks",
   "tier": "E2",
   "fix": "_rank_step = envelope + max(MIN_WEB_GAP, |oy| x SUN_CORRIDOR_FT): the rank's lane inside the yard's sun, so north-south ranks stand 0038's 92 ft apart (was envelope + 18 + 39, about 111 ft)",
@@ -10534,6 +10535,22 @@
   "flag": "",
   "tier_as_ranked": "E3",
   "verdict": "DRIFTED",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#how deep a scattered hamlet runs at most four rank rounds be",
+  "verdict": "UNCLAIMED",
+  "tier": "E3",
+  "fix": "the dispersed form's rank rounds (stages.py:776-797) give way to the single file 0031 draws, and the dispersed pool and cohort maps whose quotas then do not seat are redeclared with fewer households or a roomier field, as 0031 itself directs",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 24 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E0",
+  "moved": "T75a (fresh reader): code: up to four rank rounds behind the front row (range(7), attempt < 4, depth _row_out + _rank_step*(attempt+1), stages.py:776-797) before the rescue, on the dispersed form only (growth.py:95-98). 0031 drawing: a scattered settlement's 'whole line is hugged to the field edge in single file' and 'd",
   "wave": "",
   "scope": "kept"
  },

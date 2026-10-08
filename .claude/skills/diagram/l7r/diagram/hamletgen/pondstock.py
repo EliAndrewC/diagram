@@ -52,6 +52,7 @@ def _bank_seats(parcel: list[Any], toward: Pt) -> list[tuple[Pt, float]]:
 
     Research:
         bank seats by distance - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html: ranked nearest the houses, every seat of the bank - its midpoints and its eighths - in one ranking
+        sty seat on the bank - research/questions/0025-pigs-and-ducks-at-a-dike-pond-the-sty-on-the-pond-dike.drawing.html: each bank seat set in from the parcel's edge by `BANK_INSET_FT`, half the bank's width, so the sty stands on the bank and not out by the canal
     """
     cx, cy = _centroid(parcel)
     n = len(parcel)

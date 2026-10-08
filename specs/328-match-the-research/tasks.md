@@ -13,6 +13,7 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 - (wave 5, landed and reviewed) placement-changed village lane on kashikawa - wave 5: 0033's row street runs on off the map as the road into it at both ends, where
   the web cut it back to its last joint (`trim_streets`); Kashikawa's and Mizuguchi's far ends now run off the sheet as a
   second way out (every way is inked `village lane`).
+- none (wave 25): claims and one code comment, no executed code changed
 - none (wave 24): the rank step reaches no pool map; Kuwabata's two sties move 3.8 and 1.7 ft along their own bank (measured 2026-10-08, kuwabata.json 397c005fb vs HEAD)
 - none (wave 23): claims only, no executed code changed
 - placement-changed: farm holding on kashikawa - wave 22: the far-row holding three LOTS deep (0033 drawing: three times the frame's
@@ -975,3 +976,24 @@ larger of the two (plan review, amendment 23: fixed here, not left open).
 - [x] T74 the claims re-checked by `impl-drift`; the close: wave 24's own bookend pair, `make done` green, the wave column (FR-005, FR-006)
       research: rendering
       verify: DONE. impl-drift IN-STEP on the wave's claims; amendment 23 FAITHFUL, plan CLEAR; make done green; wave 24's own pair band 1, noise on nucleated rolls (perf-audit consistent, control recorded); the wave column
+
+## Phase 26 - wave 25 (amendment 24): wave 24's found rows
+
+Wave 24's nine found rows tiered by a fresh reader (T75a, `audit/t75a-out.jsonl`): eight E0, one E3 (a scattered hamlet's rank
+rounds against 0031's single file - with the redeclared maps it is several places). Of the E0 rows, the dropped holding cell
+closed in wave 24, and the lane's room and the rank jitter stand as claimed (the reader read both against 0246 and the code).
+
+  - `l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#seats kept apart` - rewritten NONE, a candidate dedupe
+  - `l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#the seating's reach` - rewritten to where the bound applies
+  - `l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#a lane's room between ranks` - stands; the comment that called it a lane reworded
+  - `l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#rank depth jitter` - stands
+  - `l7r/diagram/hamletgen/pondstock.py::_bank_seats#sty seat pulled in by half the bank` - claimed on 0025's drawing page
+  - `l7r/diagram/hamletgen/homesteads/rows.py::draw_holdings#holding strip cut into plots` - claimed on 0033's drawing page
+  - `l7r/diagram/hamletgen/homesteads/rows.py::draw_holdings#crop cells kept back from lanes` - claimed GUESS
+
+- [x] T75a wave 24's found rows tiered by the work they take, by a fresh reader (FR-002, FR-003, SC-003)
+      research: rendering
+- [ ] T75 the claims written (FR-003 E0, FR-004)
+      research: rendering
+- [ ] T76 the claims re-checked by `impl-drift`; the close: wave 25's own bookend pair, `make done` green, the wave column (FR-005, FR-006)
+      research: rendering

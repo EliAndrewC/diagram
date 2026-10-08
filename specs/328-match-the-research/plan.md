@@ -317,6 +317,15 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
   band 1 confirmed); wave 24's own pair opens at 397c005fb.
 - **Verification**: `impl-drift` on the touched claims, the gate, wave 24's own bookend pair.
 
+## Wave 25 (amendment 24, 2026-10-08)
+
+- **Scope**: wave 24's found rows, tiered by a fresh reader (T75a): the E0 rows claimed or confirmed (`tasks.md` Phase 26);
+  the scattered hamlet's rank rounds tiered E3 and left for its place in the run. No executed code changes.
+- **Occasions**: none.
+- **On the unpushed waves 9-24** under condition (6): (1)-(5) held at wave 24's close (5947e79ae, backed up, its own pair
+  band 1 confirmed with a control); wave 25's own pair opens at 5947e79ae.
+- **Verification**: `impl-drift` on the touched claims, the gate, wave 25's own bookend pair.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Each later wave that changes engine behavior takes

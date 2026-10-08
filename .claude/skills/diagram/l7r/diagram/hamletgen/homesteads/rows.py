@@ -319,6 +319,8 @@ def draw_holdings(s: Settlement) -> int:
     Research:
         holding drawn as dry field - research/questions/0033-row-villages-resson.drawing.html: every cell a dry crop, none paddy
         furrows down the strip - CONVENTION: across the street, the crops cycled from the dry palette
+        holding plot depth - research/questions/0033-row-villages-resson.drawing.html: each holding cut across its depth into `HOLDING_CELL_FT` (150 ft) plots, as many as round(depth / 150 ft), at least one
+        crop cells kept back from lanes and streams - GUESS: a holding cell within 2 px of a lane's drawn edge (half its width + 2.0) or within 6 px of a stream's outline is left unplanted, margins in pixels at the map's scale; no page says how near a lane or stream a dry-field strip was planted (searched 0033, 0081, 0014)
         cell on a lane or stream left undrawn - GUESS: a holding cell a lane or stream crosses or touches is left unplanted and the rest of the holding stands, so no lane runs through row crops (research/questions/0081-village-lanes.drawing.html: a lane never crosses row crops); no page says how a lane or stream crossing a farm's dry-field strip was laid out (searched 0033, 0081, 0014)
     """
     from shapely.geometry import LineString, Polygon
