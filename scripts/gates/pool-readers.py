@@ -10,8 +10,10 @@ manifests' content differs from the stamp the last green quick left, the tests t
     pool-readers.py changed   print the reader test files, one per line, when the manifests moved since the stamp; else nothing
     pool-readers.py stamp     record the manifests as they stand (quick calls it once the readers passed)
 
-A READER is a test module in the quick tree (not gate/, full/, tooling/, soak/, tier_*) whose source globs or joins the shipped
-hamlets (`"pool", "hamlets"` or `pool/hamlets/*`). The stamp lives in the clone's `.git/` - never committed, one per tree.
+A READER is a test module in the quick tree (not gate/, full/, tooling/, soak/, tier_*) whose source names the pool as a path
+part (`"pool"`, as `"pool", "hamlets"` or a loop over `("pool", "legacy-hand-authored-pool")`) or globs `pool/hamlets/*`. Broad on
+purpose: the notes census (`tests/test_notes_census.py`) reached the manifests through a tree loop the first pattern missed, and
+its failure surfaced at batch 3's gate; a reader too many costs a fraction of a second. The stamp lives in the clone's `.git/` - never committed, one per tree.
 """
 
 from __future__ import annotations
@@ -22,7 +24,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-READS = re.compile(r'"pool", "hamlets"|pool/hamlets/\*')
+READS = re.compile(r'"pool"|pool/hamlets/\*')  # the pool named as a path part: `"pool", "hamlets"`, or a tree loop's `("pool", ...)`
 NOT_QUICK = ("gate", "full", "tooling", "soak")
 
 

@@ -21,9 +21,10 @@ def test_readers_named_when_the_manifests_move_and_not_once_stamped(tmp_path: Pa
     (tmp_path / "tests" / "gate").mkdir()
     (tmp_path / "tests" / "hamletgen" / "test_reads.py").write_text('GENS = glob(os.path.join(ROOT, "pool", "hamlets", "*"))\n')
     (tmp_path / "tests" / "hamletgen" / "test_other.py").write_text("x = 1\n")
+    (tmp_path / "tests" / "test_census.py").write_text('for tree in ("pool", "legacy-hand-authored-pool"):\n    pass\n')
     (tmp_path / "tests" / "gate" / "test_gate_reads.py").write_text('p = "pool/hamlets/*/*.json"\n')
-    assert _run(tmp_path, "changed").split() == ["tests/hamletgen/test_reads.py"], "no stamp yet: the quick-tree reader only"
+    assert _run(tmp_path, "changed").split() == ["tests/hamletgen/test_reads.py", "tests/test_census.py"], "no stamp yet: the quick-tree readers only"
     _run(tmp_path, "stamp")
     assert _run(tmp_path, "changed") == "", "stamped and unchanged: nothing"
     man.write_text('{"lanes": []}')
-    assert _run(tmp_path, "changed").split() == ["tests/hamletgen/test_reads.py"], "a manifest moved: the readers again"
+    assert _run(tmp_path, "changed").split() == ["tests/hamletgen/test_reads.py", "tests/test_census.py"], "a manifest moved: the readers again"

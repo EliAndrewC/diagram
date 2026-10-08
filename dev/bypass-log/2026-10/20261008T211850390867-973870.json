@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-08T21:18:50Z",
+  "target": "review-accept",
+  "commit": "cb581212d",
+  "outcome": "permitted",
+  "why": "review-accept glyph-check--windbreak F1: questionable, passed in the same PASS round: the belt's bearing stands inside its bound at its edge; not this wave's subject (density and conifer share)"
+}
