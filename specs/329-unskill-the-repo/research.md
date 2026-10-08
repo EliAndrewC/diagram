@@ -38,10 +38,22 @@ after (root), prefix stripped, compared.
 
 ## R5 - Merges across the move
 
-To fill at T06: git 2.53 ort merge of a clone commit editing a moved file and adding a file under the old directory,
-with and without `merge.directoryRenames=true`; and which `scripts/fixtures` cases (if any) changed verdict.
+Measured 2026-10-07 in a scratch pair of repositories (git 2.53, ort): main renames `.claude/skills/diagram/dev` to
+`dev`; a clone holds a commit editing `dev/x.md` at its old path and adding `dev/new.md` under the old directory.
+- Default config: `CONFLICT (file location): ... added in HEAD inside a directory that was renamed ..., suggesting it
+  should perhaps be moved to dev/new.md`; the merge stops (the edit itself was applied to `dev/x.md`).
+- `-c merge.directoryRenames=true`: `Path updated: ... moving it to dev/new.md`; clean, exit 0, the edit on
+  `dev/x.md`, nothing left under `.claude/`.
+- Which `sync-with-main.sh` runs: the prompt hook (`clone-sync-hooks.sh`, read from the mirror) runs the CLONE's own
+  copy, which in a clone not yet synced is the pre-move script without the flag. So the flag is set where every git in
+  the container reads it - the global git config, written by `container-scripts/setup-dev-env.sh` (and applied once by
+  hand in the running container) - as well as passed by the new `sync_in`; and the hook, which is always the mirror's
+  newest, runs the carry after a successful sync-in.
+Fixture cases whose verdict changed: to fill at T05.
 
 ## R6 - The gate before and after
 
-Baseline `make done` in this clone before the move (log in the session scratchpad; counts copied here at T08), and the
-first gate after the carry in a second clone.
+Baseline `make done` in this clone at `5e2ba4824` + the spec, before the move, 2026-10-07: GREEN in 459 s. Phases
+static, format, typecheck, hooks-test (38 guard suites green), test-full: 10,818 passed, 3 skipped, 2 xfailed in
+228.6 s. ruff's checked files from the skill dir: 831 (361 under `l7r/`, 460 under `tests/`, 9 under `wip/`, and
+`pyproject.toml`). The first gate after the carry in a second clone: to fill at T09.

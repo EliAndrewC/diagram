@@ -35,8 +35,8 @@ carry() {
         */.ruff_cache/*|*/.pytest_cache/*|*/.mypy_cache/*|*/.gencache/*|*/.coverage*|*/.testmondata*)
           rm -f "$f"; dropped=$((dropped + 1)); continue ;;
       esac
-      dest="$dest.pre-329"
-      [ -e "$dest" ] && { echo "layout-carry: $rel has a twin AND a $rel.pre-329 at the root - left at $f" >&2; continue; }
+      dest="$dest.pre-329"; n=1
+      while [ -e "$dest" ] || [ -L "$dest" ]; do n=$((n + 1)); dest="$tree/$rel.pre-329.$n"; done
       renamed=$((renamed + 1))
     fi
     mkdir -p "$(dirname "$dest")" && mv "$f" "$dest" && moved=$((moved + 1))

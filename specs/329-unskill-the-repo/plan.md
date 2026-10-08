@@ -56,8 +56,8 @@ about 40 depth computations in the engine's tests and tools, 30 `../../../` in t
 becomes the root is deleted and its uses made root-relative, never set to `"."` (a `./research/...` string would stop
 comparing equal to git's output).
 - NOT live, left as written (FR-004's verbatim records): `specs/`, `dev/*-log/` (perf, run, idle, bypass records),
-  `scripts/fixtures/*.json` (recorded real commands the hook suite replays), and `docs/review-ledger.md` (its rows are
-  history). Their tests stay meaningful because the hooks they exercise match command SHAPES (an interpreter, a pytest,
+  `scripts/fixtures/*.json` (recorded real commands the hook suite replays), and the review ledger's rows written
+  before this feature (line by line - D7). Their tests stay meaningful because the hooks they exercise match command SHAPES (an interpreter, a pytest,
   a write into the mirror), not the skill path; any fixture case whose expectation depended on the old layout is found
   by `make hooks-test` and judged one by one (research.md R5).
 - `dev/claims-index.json` is live data keyed by unit path: its keys lose the prefix (a rename of the unit; the code and
@@ -82,7 +82,8 @@ file left there (all untracked or ignored by then) is moved to the same path at 
 that path (measured: 9 clones hold a `.ruff_cache` at both places), a CACHE's old copy is invalidated - deleted, the
 reason recorded here: the root's copy is the one the tools now write, and a cache is rebuilt on demand
 (`__pycache__`, `.ruff_cache`, `.pytest_cache`, `.mypy_cache`, `.coverage*`, `.testmondata*`, `.gencache`); any other
-colliding file is moved beside its twin as `<name>.pre-329` and reported, never deleted. The old directory therefore
+colliding file is moved beside its twin as `<name>.pre-329` (`.pre-329.2`, `.3`, ... if that name is taken) and
+reported, never deleted. The old directory therefore
 always goes (FR-008, plan review round 1). `seed_roll_cache` looks at the new `.gencache` path.
 A dirty clone on the old layout (sync-in merges only clean clones) is told by the mirror-only branch: "main moved the
 project to the root (feature 329) - commit and sync in". The gate's caches carry: the roll cache's dependency records
@@ -92,7 +93,10 @@ warm (research.md R6 measures the first gate after the carry).
 **D9 - Clones with work in flight (FR-009).** `test-sync-with-main.sh` gains a case: a scratch main does the move; a
 clone holding an unpushed commit that edits a moved file and adds a new file under the old directory syncs in; the edit
 lands on the moved file and the new file at the new place. git's ort merge reports a file added under a renamed
-directory as a conflict unless `merge.directoryRenames=true`; the pull in `sync_in` passes it (research.md R5).
+directory as a conflict unless `merge.directoryRenames=true` (research.md R5, measured). The clone that syncs in runs
+its OWN, pre-move `sync-with-main.sh`, so the flag cannot live only in the new script: `setup-dev-env.sh` sets it in the
+global git config (applied once in the running container), `sync_in` also passes it, and `clone-sync-hooks.sh` - always
+the mirror's newest - runs `_layout_carry.sh` on the clone after its sync-in succeeds.
 
 **D10 - The feature history (FR-005).** `specs/README-paths.md` is not added (the GM's READMEs are theirs); instead the
 root `CLAUDE.md` "Key paths" line on `specs/` says: a path in a spec before 329 that starts `.claude/skills/diagram/`
@@ -143,3 +147,6 @@ records) was judged legitimate by spec-fidelity round 1.
 - Plan review round 1 (spec-fidelity MODE 4, 2026-10-07): BLOCKED - D7 exempted the whole review ledger (now line by
   line, as of the commit that adds the check) and D8 left the old directory behind on a collision (now: caches
   invalidated, other files kept beside their twin). D12's `wip/README.md` ruled LEGITIMATE.
+- Plan review round 2 (2026-10-07): CLEAR; its two notes applied after (a numbered `.pre-329` suffix so the old
+  directory always goes; D5 points at D7 for the ledger). D9 amended in the same window with the R5 measurement (the
+  flag in the global git config, the carry run by the mirror's hook).
