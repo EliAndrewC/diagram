@@ -150,7 +150,9 @@ def engine_files() -> list[str]:
     edits). Same walk rule as render_cache.engine_fingerprint: prune pool/, wip/, caches, hidden
     dirs and the tests/ tree; skip test files and the non-engine modules."""
     out: list[str] = []
-    for dirpath, dirnames, filenames in os.walk(HERE):
+    # THE ENGINE IS UNDER l7r/ (feature 329): the project root now also holds scripts/, specs/ and the CI and container
+    # trees, whose Python is no engine input - walking the root would re-key every cached roll on a hook edit.
+    for dirpath, dirnames, filenames in os.walk(os.path.join(HERE, "l7r")):
         # PRUNED BY NAME - see render_cache.engine_fingerprint for the full note. `poolmaps.TREES`
         # so that adding a pool tree can never silently pull map sources into the engine key.
         dirnames[:] = sorted(d for d in dirnames if d not in (*poolmaps.TREES, "wip", "tests", "__pycache__", ".gencache") and not d.startswith(("test_", ".")))

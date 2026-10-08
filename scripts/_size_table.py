@@ -36,7 +36,7 @@ import xml.etree.ElementTree as ET
 # kind an element carries - the pack audit's band check reads the same map - so the two cannot drift apart.
 # `labels.hand_sheet.start_tags` lists the start tags in the order ElementTree walks them, which ties an element to the
 # byte offset `element_kinds` keys it by.
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".claude", "skills", "diagram"))
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
 from l7r.diagram.interactive.sheet import element_kinds  # noqa: E402
 from l7r.diagram.labels.hand_sheet import start_tags  # noqa: E402
 

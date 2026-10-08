@@ -356,8 +356,9 @@ def test_engine_files_ignores_dotfiles(tmp_path, monkeypatch):
     `.gatecov-*-driver.py` and every concurrent key computation counted them as engine modules,
     so a parallel sweep poisoned every other map's key and NOTHING ever hit - found because
     feature 026's first warm-gate measurement came out slower than the cold one."""
-    (tmp_path / "real.py").write_text("A = 1\n")
-    (tmp_path / ".transient-driver.py").write_text("B = 2\n")
+    (tmp_path / "l7r").mkdir()
+    (tmp_path / "l7r" / "real.py").write_text("A = 1\n")
+    (tmp_path / "l7r" / ".transient-driver.py").write_text("B = 2\n")
     monkeypatch.setattr(gencache, "HERE", str(tmp_path))
     assert [os.path.basename(f) for f in gencache.engine_files()] == ["real.py"]
 
@@ -369,10 +370,13 @@ def test_engine_files_prunes_the_tests_tree(tmp_path, monkeypatch):
     `test_`-prefix filter covered them all. Under tests/ the helpers (`_builders.py`, `__init__.py`)
     match no filter, and counting them as engine modules would invalidate every map in the pool on
     any edit to a test helper - the same silent-never-hits failure the dotfile filter exists for."""
-    (tmp_path / "real.py").write_text("A = 1\n")
-    (tmp_path / "tests" / "pipeline").mkdir(parents=True)
-    (tmp_path / "tests" / "__init__.py").write_text("B = 2\n")
-    (tmp_path / "tests" / "pipeline" / "_builders.py").write_text("C = 3\n")
+    (tmp_path / "l7r" / "tests" / "pipeline").mkdir(parents=True)
+    (tmp_path / "l7r" / "real.py").write_text("A = 1\n")
+    (tmp_path / "l7r" / "tests" / "__init__.py").write_text("B = 2\n")
+    (tmp_path / "l7r" / "tests" / "pipeline" / "_builders.py").write_text("C = 3\n")
+    # and nothing outside l7r/ (feature 329): the project root also holds scripts/ and specs/, which are no engine input
+    (tmp_path / "scripts").mkdir()
+    (tmp_path / "scripts" / "hook.py").write_text("D = 4\n")
     monkeypatch.setattr(gencache, "HERE", str(tmp_path))
     assert [os.path.basename(f) for f in gencache.engine_files()] == ["real.py"]
 

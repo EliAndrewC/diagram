@@ -292,6 +292,9 @@ push_cmd() {
   # a delta. Selftest first: a checker that cannot fail is worth nothing.
   python3 "$ROOT/scripts/check-stale-dirs.py" --selftest >/dev/null || die "check-stale-dirs selftest failed - the guard itself is broken; fix scripts/check-stale-dirs.py before pushing"
   python3 "$ROOT/scripts/check-stale-dirs.py" "$ROOT" || die "a directory in an importable tree has nothing left but __pycache__ (above) - it is still an importable namespace package, so this clone passes what a fresh clone fails"
+  # GUARD_EDIT_OK: feature 329 FR-007 - a NEW refusal: a live file naming the project's old location (moved to the root).
+  python3 "$ROOT/scripts/check-old-layout.py" --selftest >/dev/null || die "check-old-layout selftest failed - fix scripts/check-old-layout.py before pushing"
+  python3 "$ROOT/scripts/check-old-layout.py" "$ROOT" || die "a live file names the project's old location (above) - feature 329 moved it to the repository root; drop the prefix"
   python3 "$ROOT/scripts/check-file-scale.py" "$ROOT" || die "a Python file is past the ~1,000-line bar (above) - constitution Principle X clause 13, gated since feature 173"
   # GUARD_EDIT_OK: feature 234 - both halves of "the record and the modals stay in step" run HERE for
   # the same reason the three above do: the delta that breaks either is a research-page edit touching

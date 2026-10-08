@@ -30,9 +30,7 @@ def test_l7r_is_a_namespace_portion_not_a_regular_package() -> None:
 
 
 def test_l7r_diagram_is_a_regular_package() -> None:
-    assert l7r.diagram.__file__ is not None, (
-        'l7r.diagram lost its __init__.py, so the engine is a namespace portion rather than a named package. Restore l7r/diagram/__init__.py.'
-    )
+    assert l7r.diagram.__file__ is not None, 'l7r.diagram lost its __init__.py, so the engine is a namespace portion rather than a named package. Restore l7r/diagram/__init__.py.'
 
 
 def test_the_skill_root_is_still_the_sys_path_root() -> None:

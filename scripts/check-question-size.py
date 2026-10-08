@@ -30,6 +30,8 @@ import pathlib
 import re
 import subprocess
 import sys
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+from _moves import moved_only  # noqa: E402  (feature 329: a file the delta only moved changed no word)
 
 CAP = 20_000
 RECORD = pathlib.Path("research")
@@ -61,7 +63,9 @@ def changed(root: pathlib.Path) -> list[pathlib.Path]:
     base = subprocess.run(["git", "merge-base", "HEAD", "origin/main"], cwd=root, capture_output=True, text=True, check=False).stdout.strip()
     names = subprocess.run(["git", "diff", "--name-only", base or "HEAD", "--", str(RECORD)], cwd=root, capture_output=True, text=True, check=False).stdout
     names += subprocess.run(["git", "ls-files", "--others", "--exclude-standard", "--", str(RECORD)], cwd=root, capture_output=True, text=True, check=False).stdout
-    out = {question_of(pathlib.Path(n)) for n in names.split() if n}
+    names_l = [n for n in names.split() if n]
+    still = set(names_l) - moved_only(root, base, names_l)
+    out = {question_of(pathlib.Path(n)) for n in names_l if n in still}
     return sorted(q for q in out if is_question(q) and (root / q).is_file())
 
 

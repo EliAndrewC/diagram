@@ -20,7 +20,7 @@ import pytest
 from l7r.diagram.buildings import types as bt
 
 SKILL = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-REPO = os.path.dirname(os.path.dirname(os.path.dirname(SKILL)))
+REPO = SKILL  # the project is the repository root (feature 329)
 DECLARATION = os.path.join(SKILL, "l7r", "diagram", "buildings", "types.json")
 
 

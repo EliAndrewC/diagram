@@ -26,6 +26,9 @@ import pathlib
 import re
 import subprocess
 import sys
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+from _moves import moved_only  # noqa: E402  (feature 329: a page the delta only moved changed no word)
 from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 
@@ -331,6 +334,7 @@ def owed(root: pathlib.Path, base: str) -> list[tuple[str, str, str]]:
     # byte - a comment or a re-wrap made every modal naming it owed, and `test-entry-gate.sh`'s "a comment and a re-wrap owe
     # nothing" went red on main. A page changed in git is moved only if its words differ from the base's.
     if base:
+        changed_pages -= moved_only(root, base, sorted(changed_pages))
         then = _read_at(root, base)
         changed_pages = {
             f

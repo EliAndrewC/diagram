@@ -27,7 +27,7 @@ from pathlib import Path
 sys.dont_write_bytecode = True
 
 OLD = ".claude/skills/" + "diagram"  # split so this file is not its own finding
-EXEMPT = re.compile(r"^(specs/|scripts/fixtures/|dev/[a-z]+-log/)")
+EXEMPT = re.compile(r"^(specs/|scripts/fixtures/|dev/[a-z]+-log/|scripts/check-old-layout\.py$)")  # the last: it names the forms it looks for
 LEDGER = "docs/review-ledger.md"
 
 
@@ -42,8 +42,13 @@ def old_ledger_lines(root: Path) -> set[str]:
     return set(_git(root, "show", f"{ref}:{LEDGER}").splitlines())
 
 
+# The path as code also spells it: split into Path or os.path.join parts, or with its dots escaped in a regex. Each one
+# was found in the tree the day this check was written, past the literal search.
+FORMS = (re.escape(OLD), r'"\.claude",\s*"skills",\s*"diagram"', r'"\.claude"\s*/\s*"skills"\s*/\s*"diagram"', r"\\\.claude/skills/diagram")
+
+
 def findings(root: Path) -> list[str]:
-    out = _git(root, "grep", "-n", "-I", "-F", OLD, "--", ".")
+    out = _git(root, "grep", "-n", "-I", "-P", "|".join(FORMS), "--", ".")
     old_rows: set[str] | None = None
     rows = []
     for line in out.splitlines():
@@ -79,6 +84,7 @@ def selftest() -> int:
         (root / "docs").mkdir()
         (root / "specs" / "001-x").mkdir(parents=True)
         (root / "docs" / "a.md").write_text(f"see {OLD}/dev/loop.md\n")
+        (root / "docs" / "b.py").write_text('R = os.path.join(".claude", "skills", "diag' + 'ram", "research")\n')
         (root / "specs" / "001-x" / "plan.md").write_text(f"history: {OLD}/dev/loop.md\n")
         (root / LEDGER).write_text(f"| old row | {OLD}/pool |\n")
         subprocess.run(["git", "-C", str(root), "add", "-A"], check=True)
@@ -88,7 +94,7 @@ def selftest() -> int:
         subprocess.run(["git", "-C", str(root), "add", "-A"], check=True)
         rows = findings(root)
         got = sorted((r.split(":", 1)[0], "new row" in r) for r in rows)
-        if got != [("docs/a.md", False), (LEDGER, True)]:
+        if got != [("docs/a.md", False), ("docs/b.py", False), (LEDGER, True)]:
             print(f"selftest: expected docs/a.md and the NEW ledger row only, got {rows}")
             return 1
     print("check-old-layout selftest: ok")

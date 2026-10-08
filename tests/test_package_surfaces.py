@@ -31,7 +31,19 @@ import pytest
 from tests import _engine_ast
 
 SKILL = pathlib.Path(__file__).resolve().parents[1]
-SKIP = {"legacy-hand-authored-pool", "__pycache__", ".git"}
+SKIP = {
+    "legacy-hand-authored-pool",
+    "__pycache__",
+    ".git",
+    ".clones",
+    "specs",
+    "scripts",
+    ".claude",
+    ".specify",
+    "buildspec",
+    "container-scripts",
+    "docs",
+}  # the root trees outside the project's package (feature 329)
 
 
 def _from_imports() -> list[tuple[pathlib.Path, str, str]]:

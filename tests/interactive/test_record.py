@@ -135,11 +135,8 @@ def tracked_texts() -> dict[str, str]:
     return out
 
 
-_SKILL = "/".join([".claude", "skills", "diagram"])
-
-
 def _repo_root() -> pathlib.Path:
-    return pathlib.Path(RESEARCH_DIR).resolve().parents[3]
+    return pathlib.Path(RESEARCH_DIR).resolve().parent
 
 
 def _as_the_page_reads_it(containing_rel: str) -> pathlib.PurePosixPath:
@@ -151,15 +148,15 @@ def _as_the_page_reads_it(containing_rel: str) -> pathlib.PurePosixPath:
     it from the fragment's directory reports a link that resolves perfectly on the page a reader opens.
     """
     here = pathlib.PurePosixPath(containing_rel).parent
-    record = pathlib.PurePosixPath(f"{_SKILL}/research")
+    record = pathlib.PurePosixPath("research")
     return here.parent if here != record and record in here.parents else here
 
 
 def _resolves_to_converted(token: str, containing_rel: str) -> bool:
     """FR-013's rule: a token is in scope only if it RESOLVES - against its file's directory, or as a skill-root or
     repository-root path - to one of the 16 converted files."""
-    record = f"{_SKILL}/research/"
-    for base in (_as_the_page_reads_it(containing_rel), pathlib.PurePosixPath(_SKILL), pathlib.PurePosixPath(".")):
+    record = "research/"
+    for base in (_as_the_page_reads_it(containing_rel), pathlib.PurePosixPath(".")):
         cand = str(pathlib.PurePosixPath(base, token))
         cand = str(pathlib.PurePosixPath(*[p for p in cand.split("/") if p not in ("", ".")]))
         parts: list[str] = []
@@ -225,8 +222,8 @@ def test_md_tokens_equal_the_whole_text_scan() -> None:
 
 
 def test_a_token_naming_a_converted_file_is_reported() -> None:
-    texts = {"docs/a.md": f"see {_SKILL}/research/water.md for it", "docs/b.md": "nothing here", "docs/c.py": "x = 1"}
-    assert md_token_hits(texts) == [f"docs/a.md: {_SKILL}/research/water.md"]
+    texts = {"docs/a.md": "see research/" + "water.md for it", "docs/b.md": "nothing here", "docs/c.py": "x = 1"}  # split: this file is scanned too
+    assert md_token_hits(texts) == ["docs/a.md: research/" + "water.md"]
 
 
 #: THE RULE FILES RETIRED INTO THE RECORD (feature 229, GM 2026-09-12: the settlements rule files "can be deleted
@@ -253,13 +250,13 @@ _RETIRED_STEMS = (
     "settlements/cities/river-cities",
     "settlements/cities/sizing",
 )
-_RETIRED_PATHS = {f"{_SKILL}/{stem}.md" for stem in _RETIRED_STEMS}
+_RETIRED_PATHS = {f"{stem}.md" for stem in _RETIRED_STEMS}
 _RETIRED_BASENAMES = {stem.rsplit("/", 1)[-1] + ".md" for stem in _RETIRED_STEMS}
 #: Recorded history, never a pointer: the guard replay corpus and the frozen pre-189 class fixture keep the
 #: tokens they were recorded with. (`research/README.md` was once held here too; the GM deleted it on 2026-10-01.)
 _RETIRED_EXEMPT_PREFIXES = ("specs/", "scripts/fixtures/")
 #: and this file itself, which necessarily names them: it is where the rule and its own self-test live.
-_RETIRED_EXEMPT_FILES = {f"{_SKILL}/tests/fixtures/classes_before_189.json", f"{_SKILL}/tests/interactive/test_record.py"}
+_RETIRED_EXEMPT_FILES = {"tests/fixtures/classes_before_189.json", "tests/interactive/test_record.py"}
 
 
 def _normalize(base: pathlib.PurePosixPath, token: str) -> str:
@@ -281,7 +278,7 @@ def names_a_retired_rule_file(token: str, containing_rel: str, exists: set[str])
     unless it resolves from its own file's directory to a file that still exists: `future-work/towns.md` and
     `future-work/cities.md` are living siblings that `future-work/CLAUDE.md` links to, and stay legitimate."""
     here = pathlib.PurePosixPath(containing_rel).parent
-    for base in (here, pathlib.PurePosixPath(_SKILL), pathlib.PurePosixPath(".")):
+    for base in (here, pathlib.PurePosixPath(".")):
         if _normalize(base, token) in _RETIRED_PATHS:
             return True
     if "/" not in token and token in _RETIRED_BASENAMES:
@@ -313,13 +310,13 @@ def test_no_tracked_file_names_a_retired_rule_file() -> None:
 def test_the_retired_rule_file_rule_fires_and_spares_a_living_sibling() -> None:
     exists = {"future-work/towns.md", "future-work/CLAUDE.md", "x/y.py", "doc.md", "specs/229/spec.md"}
     files = {
-        "doc.md": "see " + _SKILL + "/settlements/homesteads.md for the rule",
+        "doc.md": "see settlements/homesteads.md for the rule",
         "x/y.py": "# the doctrine (capitals.md, 'WHY blank')",
         "future-work/CLAUDE.md": "- [towns](towns.md) - the town tier's open work",
         "specs/229/spec.md": "the GM named settlements/homesteads.md",
     }
     hits = retired_rule_file_hits(files, exists)
-    assert hits == ["doc.md: " + _SKILL + "/settlements/homesteads.md", "x/y.py: capitals.md"], hits
+    assert hits == ["doc.md: settlements/homesteads.md", "x/y.py: capitals.md"], hits
 
 
 def test_every_md_link_in_the_pages_and_the_index_still_exists() -> None:

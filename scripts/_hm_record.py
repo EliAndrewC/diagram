@@ -22,13 +22,13 @@ import os
 import re
 import sys
 
-RECORD = os.path.join(".claude", "skills", "diagram", "research")
+RECORD = "research"
 # GUARD_EDIT_OK: feature 303 - the record's page directories are gone: the questions are one flat directory and the
 # registry the one page of fragments left, so an edit aimed at any built page is re-aimed among the questions (or the
 # registry's fragments), and a check reads a question's files by its number. A change of layout; nothing loosened.
 #: The glossary is the same kind of file in a different tree (feature 259): assembled from one file
 #: per term, read by the engine, and never hand-edited. One case here rather than a second guard.
-GLOSSARY = os.path.join(".claude", "skills", "diagram", "l7r", "diagram", "interactive", "assets", "glossary.json")
+GLOSSARY = os.path.join("l7r", "diagram", "interactive", "assets", "glossary.json")
 #: The questions, one stem each (feature 303), and the registry's fragments.
 QUESTIONS = "questions"
 _REGISTRY = "SOURCES.html"

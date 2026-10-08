@@ -41,6 +41,9 @@ from collections.abc import Sequence
 from dataclasses import dataclass
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from _moves import moved_only  # noqa: E402  (feature 329: a map or module the delta only moved is not new)
+
 TREES = ("pool", "legacy-hand-authored-pool")
 #: git pathspecs for every manifest in both pool trees (fnmatch without FNM_PATHNAME: `*` spans `/`)
 MANIFESTS = tuple(f"{tree}/*/*/*.json" for tree in TREES)
@@ -324,7 +327,8 @@ def touched_code(root: Path, base: str) -> list[str]:
     """Drawing or placement code the delta touches (committed, staged or unstaged against the merge base)."""
     diff = (_git(root, "diff", "--name-only", base) or "") if base else ""
     untracked = _git(root, "ls-files", "--others", "--exclude-standard") or ""
-    return sorted(p for p in {*diff.splitlines(), *untracked.splitlines()} if p and _CODE.match(p) and "/tests/" not in p)
+    names = [p for p in {*diff.splitlines(), *untracked.splitlines()} if p and _CODE.match(p) and "/tests/" not in p]
+    return sorted(set(names) - moved_only(root, base, names))
 
 
 def check_declared(root: Path) -> str | None:

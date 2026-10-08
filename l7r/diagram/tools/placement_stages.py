@@ -105,7 +105,7 @@ def step_doc(path: str) -> tuple[str, list[str]]:
 # are the `Research:` lines of its docstring (`tools/claims.py`), or its module's where it has none; each pointer links the
 # question's page in the record's site, and each claim shows the verdict the claims index (`dev/claims-index.json`) holds -
 # so a drifted claim reads as drifted here too.
-REPO = os.path.dirname(os.path.dirname(os.path.dirname(SKILL)))
+REPO = SKILL  # the project is the repository root (feature 329)
 CLAIMS_INDEX = os.path.join(SKILL, "dev", "claims-index.json")
 
 

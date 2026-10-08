@@ -47,16 +47,17 @@ def repo(tmp_path):
     skill = os.path.join(repo_dir, "skill")
     pool = os.path.join(skill, "pool")
     os.makedirs(pool)
+    os.makedirs(os.path.join(skill, "l7r"))  # the engine is under l7r/ (feature 329)
     # engine sources + files the fingerprint must SKIP (non-.py, test_, and the module's own name)
-    with open(os.path.join(skill, "settlement.py"), "w") as fh:
+    with open(os.path.join(skill, "l7r", "settlement.py"), "w") as fh:
         fh.write("# engine v1\n")
     # a PACKAGE engine (feature 025: settlement/ split) - subdir .py files must be fingerprinted
-    os.makedirs(os.path.join(skill, "engine_pkg"))
-    with open(os.path.join(skill, "engine_pkg", "core.py"), "w") as fh:
+    os.makedirs(os.path.join(skill, "l7r", "engine_pkg"))
+    with open(os.path.join(skill, "l7r", "engine_pkg", "core.py"), "w") as fh:
         fh.write("# pkg engine v1\n")
     # ...but test packages and the pool/wip trees must not be
-    os.makedirs(os.path.join(skill, "test_pkg"))
-    with open(os.path.join(skill, "test_pkg", "_builders.py"), "w") as fh:
+    os.makedirs(os.path.join(skill, "l7r", "test_pkg"))
+    with open(os.path.join(skill, "l7r", "test_pkg", "_builders.py"), "w") as fh:
         fh.write("# excluded: test package helper\n")
     # ...and the tests/ tree, whose files do NOT start with `test_` (the 2026-08-16 reorg moved
     # every test under tests/, so the `test_`-prefix prune alone stopped covering them)
@@ -68,11 +69,11 @@ def repo(tmp_path):
     os.makedirs(os.path.join(skill, "wip"))
     with open(os.path.join(skill, "wip", "draft.gen.py"), "w") as fh:
         fh.write("# excluded: wip\n")
-    with open(os.path.join(skill, "waterfields.py"), "w") as fh:
+    with open(os.path.join(skill, "l7r", "waterfields.py"), "w") as fh:
         fh.write("# engine\n")
-    with open(os.path.join(skill, "test_engine.py"), "w") as fh:
+    with open(os.path.join(skill, "l7r", "test_engine.py"), "w") as fh:
         fh.write("# excluded: a test file\n")
-    with open(os.path.join(skill, "render_cache.py"), "w") as fh:
+    with open(os.path.join(skill, "l7r", "render_cache.py"), "w") as fh:
         fh.write("# excluded: the cache module itself\n")
     with open(os.path.join(skill, "notes.md"), "w") as fh:
         fh.write("excluded: not python\n")
@@ -93,23 +94,23 @@ def test_engine_fingerprint_covers_and_skips(repo):
     fp1 = rc.engine_fingerprint(skill)
     assert len(fp1) == 64
     # editing an engine file changes the fingerprint...
-    with open(os.path.join(skill, "settlement.py"), "w") as fh:
+    with open(os.path.join(skill, "l7r", "settlement.py"), "w") as fh:
         fh.write("# engine v2\n")
     assert rc.engine_fingerprint(skill) != fp1
     # editing a PACKAGE engine file changes it too (feature 025: settlement/ is a package)
     fp_pkg_before = rc.engine_fingerprint(skill)
-    with open(os.path.join(skill, "engine_pkg", "core.py"), "w") as fh:
+    with open(os.path.join(skill, "l7r", "engine_pkg", "core.py"), "w") as fh:
         fh.write("# pkg engine v2\n")
     assert rc.engine_fingerprint(skill) != fp_pkg_before
     # ...but editing a skipped file (test_/non-.py/the module itself/test packages/pool+wip) does not
-    with open(os.path.join(skill, "settlement.py"), "w") as fh:
+    with open(os.path.join(skill, "l7r", "settlement.py"), "w") as fh:
         fh.write("# engine v2\n")
     fp2 = rc.engine_fingerprint(skill)
     for skipped in (
-        "test_engine.py",
+        os.path.join("l7r", "test_engine.py"),
         "notes.md",
-        "render_cache.py",
-        os.path.join("test_pkg", "_builders.py"),
+        os.path.join("l7r", "render_cache.py"),
+        os.path.join("l7r", "test_pkg", "_builders.py"),
         os.path.join("wip", "draft.gen.py"),
         os.path.join("tests", "__init__.py"),
         os.path.join("tests", "pipeline", "_builders.py"),
@@ -124,7 +125,7 @@ def test_engine_fingerprint_moves_on_a_page_asset(repo):
     stylesheet and script are inlined into every <map>.html, so an asset-only landing must stale every
     render. It did not - the walk took .py only - and the mirror served a page from before the change."""
     _, skill, _ = repo
-    assets = os.path.join(skill, "interactive", "assets")
+    assets = os.path.join(skill, "l7r", "interactive", "assets")  # under l7r/, where the walk looks (feature 329)
     os.makedirs(assets, exist_ok=True)
     for name in ("page.css", "page.js"):
         with open(os.path.join(assets, name), "w") as fh:
@@ -363,7 +364,7 @@ def test_regen_pool_reruns_a_sheet_only_when_its_inputs_move(repo):
     assert ran_marker.read_text() == "x"
     Path(rc._predicted_svg(gen)).write_text('<svg xmlns="http://www.w3.org/2000/svg"><circle/></svg>')
     assert rc.regen_pool(skill, repo_dir, jobs=1)[1] == [gen]  # the sheet redrawn
-    with open(os.path.join(skill, "settlement.py"), "w") as fh:
+    with open(os.path.join(skill, "l7r", "settlement.py"), "w") as fh:
         fh.write("# engine v9\n")
     assert rc.regen_pool(skill, repo_dir, jobs=1)[1] == [gen]  # the engine moved
     assert ran_marker.read_text() == "xxx"
