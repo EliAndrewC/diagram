@@ -84,3 +84,20 @@ static, format, typecheck, hooks-test (38 guard suites green), test-full: 10,818
   `scripts/_moves.py` (content-based: a blob the base already held) now keeps a pure move out of the question-size,
   house-style, review-occasion and modal checks. The record checks owed at the push compare whole record trees
   against the base and are answered for this one push by a recorded escape (R8).
+
+## R8 - The push's record and claims gates, measured past the move
+
+Both gates key their answers by PATH against the merge base, where every path still carries the old prefix, so on this
+feature's own push everything reads as new. Measured instead from the pure-rename commit (T02) to HEAD:
+
+- **Record checks** (`_record_owed.py --between <T02> HEAD`): ONE unit owed - `source-applicability:shichiya-jawiki`,
+  for a phrase naming a deleted document; answered (APPLICABLE-WITH-LIMITS, limits HONEST, no edit). Against the base the
+  gate counts 23,006, every one a moved page. The push passes `RECORD_CHECKS_OK` naming this measurement; it is
+  recorded in `dev/bypass-log/`. After the landing every base is post-move and the gate is exact again.
+- **Claims** (index rows mapped old key -> new key and compared with the base's verdicts): 523 findings, 497 unchanged
+  from the base; 6 on keys new to this feature (the new Sheet conventions claim mislabeled, five decisions unclaimed);
+  20 whose verdict differs from the base's on text this feature changed only in its links and wording (a second judge
+  disagreeing with the first - the same claims, the same sheets). The new keys were fixed (the south-gate rule split
+  into its own UNRESEARCHED claim; four UNRESEARCHED claims added) and re-checked, and the scale-bar claim - wrong before
+  this feature (the sheets draw it top-left) - was corrected. The 20 re-judged and the 497 standing findings are the
+  sheets against the record, feature 328's work, not this one's; the push passes `CLAIMS_OK` naming these counts.

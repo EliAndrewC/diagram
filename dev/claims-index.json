@@ -699,12 +699,18 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Inner court (private / sacred)#residence of ~18-25 tatami rooms": {
-  "code": "16cf6efc57b0deff",
+  "code": "fd43d6cd867caad6",
   "core": "16cf6efc57b0deff",
   "date": "2026-10-08",
-  "note": "residence of ~18-25 tatami rooms",
+  "note": "no cited page counts an official residence's rooms; 18-25 falls between the Kuchiba six-room house and the Saigo 38-room karo mansion, as the claim says",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "rests": [
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.html:8b5bfb3e8ae20fa0",
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.html:d59d56dfc182e6ec",
+   "0106-the-chief-retainers-house-karo-yashiki.html:e60bffff8e719e96"
+  ],
+  "verdict": "IN-STEP"
  },
  "docs/buildings.md::Inner court (private / sacred)#room order": {
   "code": "4244ad1de789d5be",
@@ -910,12 +916,19 @@
   "verdict": "DRIFTED"
  },
  "docs/buildings.md::Outer court (administrative / public)#barracks watch of ~10-20 men": {
-  "code": "99bded91e37b18fd",
+  "code": "a8bd96c5efff3d1d",
   "core": "99bded91e37b18fd",
   "date": "2026-10-08",
-  "note": "barracks watch of ~10-20 men",
+  "note": "the claim names the setting's figure of about 15 samurai for a county town, which both drawing pages give as the setting's number rather than as a research finding; no question in the bundle measures a watch, so the ~10-20 band around it is the project's own",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "rests": [
+   "0097-staff-rowhouses-and-barracks-nagaya.drawing.html:2e2752bf19177748",
+   "0097-staff-rowhouses-and-barracks-nagaya.drawing.html:6b7b8fddf6e68487",
+   "0097-staff-rowhouses-and-barracks-nagaya.html:72456be855c7c5f3",
+   "0165-martial-training-grounds-and-dojo.drawing.html:83f6d143094f365e"
+  ],
+  "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#cart yard as a charcoal fire gap": {
   "code": "c0e5e5b4038bd4c5",
@@ -1656,57 +1669,69 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Scale#buildings at true size": {
-  "code": "235c0c254197d3dc",
-  "core": "3234e7e6b3d51b70",
+  "code": "44f48ee6a53a4d9c",
+  "core": "343b13f146a4e39d",
   "date": "2026-10-08",
-  "note": "the claim names the GM's ruling; the ranks are this project's reading",
+  "note": "the GM's ruling is named; 0116 says the kitchen, stable and shrine ranks are this project's reading",
   "pages": {},
   "research": "",
   "rests": [
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html:69620b1e79461ecf",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html:d89c58633b72e2d1"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Scale#caption placement": {
-  "code": "b1be65a4b3970488",
-  "core": "3234e7e6b3d51b70",
+  "code": "d2809d20430beadf",
+  "core": "343b13f146a4e39d",
   "date": "2026-10-08",
-  "note": "captions declared, one placer",
+  "note": "captions declared and placed by the one standard placer, as the drawing page sets out",
   "pages": {
    "0242-labels-on-maps-cartographic-label-placement.drawing.html": "fa1bb4a252673d47"
   },
   "research": "0a880fd17413bbf6",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:08c0bd1f9acf9800",
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html:27a75683e4a17f7e"
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:27a75683e4a17f7e",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:2a0f6f2ce376476e",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:2fa2f3836fdedc1e",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:49f52467f1959b2a",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:5fdeb07b90c0385f",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:ac73349d36514544",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:b450303bef4265a6",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:bde210da1f30868f",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:bed3685aa0240a93",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:c1c19453413e41cd"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Scale#main gate passage width": {
-  "code": "08e3222ec0935c2e",
-  "core": "3234e7e6b3d51b70",
+  "code": "ed196a77539f06be",
+  "core": "343b13f146a4e39d",
   "date": "2026-10-08",
-  "note": "yakuimon 6-8.5 ft, nagaya-mon ~12 ft",
+  "note": "nagaya-mon opening ~12 ft, yakuimon ~6-9 ft (2.6 m = 8.5 ft), the width set by the gate's form",
   "pages": {
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html": "976d82c32111af9d"
   },
   "research": "3bf7bc936cb62419",
   "rests": [
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:04ac23f9653e01fb",
+   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:65f0493063abc217",
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:6ef47a197b18e3dd"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Scale#plan scale": {
-  "code": "f2b7cb882317cc89",
-  "core": "3234e7e6b3d51b70",
+  "code": "c054bda778a65ae8",
+  "core": "343b13f146a4e39d",
   "date": "2026-10-08",
-  "note": "3 px = 1 ft, between Joge and Takayama",
+  "note": "3 px = 1 ft puts the drawn compounds between Joge and Takayama",
   "pages": {
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "8d81fb67fc6be64e"
   },
   "research": "b9f86fd8593ec1ea",
   "rests": [
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:3096f9775f2c523a",
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:4afbca9685190246",
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:c1eb54b975cd5790",
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:fe00696b6b046c03"
@@ -1714,25 +1739,27 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Scale#residence wing length": {
-  "code": "0f285cdceee5e303",
-  "core": "3234e7e6b3d51b70",
+  "code": "0f2004f396a32945",
+  "core": "343b13f146a4e39d",
   "date": "2026-10-08",
-  "note": "180-200 ft wings are kept against a measured 49-67 tsubo house; a figure that contradicts its finding is DRIFTED unless the page records it as a DEVIATION, which none does",
+  "note": "the section keeps 180-200 ft residence wings while 0118 measures main houses at ~49-67 tsubo (~1,740-2,380 sq ft); a figure outside the attested range, and no drawing page records it as a deliberate departure; redraw the wings to the record, or relabel GUESS/DEVIATION with a drawing page that records it",
   "pages": {
    "0118-samurai-house-lots-and-houses-by-rank-bukeyashiki.html": "3e4449f4b18d8a72"
   },
   "research": "290c8108e3cfeac0",
   "rests": [
-   "0091-samurai-residences-and-their-rooms-buke-yashiki.html:953f1f83f0003148",
-   "0118-samurai-house-lots-and-houses-by-rank-bukeyashiki.html:7a5358483b31834d"
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html:22c18195b72a21a8",
+   "0118-samurai-house-lots-and-houses-by-rank-bukeyashiki.html:7a5358483b31834d",
+   "0118-samurai-house-lots-and-houses-by-rank-bukeyashiki.html:a0744a8d4e6197ff",
+   "0118-samurai-house-lots-and-houses-by-rank-bukeyashiki.html:b4f7e08b118404c0"
   ],
   "verdict": "DRIFTED"
  },
  "docs/buildings.md::Scale#salt ward marker": {
-  "code": "edc6cd28562155c3",
-  "core": "3234e7e6b3d51b70",
+  "code": "7f4812ac4ec5cc24",
+  "core": "343b13f146a4e39d",
   "date": "2026-10-08",
-  "note": "draws salt wards at a compound's gates where the page says \"none draws salt at the gates of an official's compound\"",
+  "note": "the section keeps salt wards at the pool manors as r2.5 location markers, but 0240's drawing page says \"none draws salt at the gates of an official's compound\"; it also gives no glyph or heap size, so the r2.5 and ~0.3-0.7 ft figures have no backing there",
   "pages": {
    "0240-salt-heaps-at-doorways-morijio.drawing.html": "21e03e816285eede"
   },
@@ -1743,57 +1770,65 @@
   "verdict": "DRIFTED"
  },
  "docs/buildings.md::Scale#scale bar": {
-  "code": "8f01f2ecb7762a5e",
-  "core": "3234e7e6b3d51b70",
+  "code": "3a517e62ec2e95c9",
+  "core": "343b13f146a4e39d",
   "date": "2026-10-08",
-  "note": "Scale puts the bar \"near the bottom of the sheet\", but Sheet conventions and the checklist put it \"in a top corner\"; one of them must change",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "DRIFTED"
- },
- "docs/buildings.md::Scale#true size for every footprint": {
-  "code": "7b1201d0234a58bc",
-  "core": "3234e7e6b3d51b70",
-  "date": "2026-10-08",
-  "note": "drawing doctrine",
+  "note": "purely how the scale is shown; the claim and the prose now agree (top corner, every sheet draws it top-left)",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
- "docs/buildings.md::Scale#well location marker": {
-  "code": "cdca428251f8a5f0",
-  "core": "3234e7e6b3d51b70",
+ "docs/buildings.md::Scale#true size for every footprint": {
+  "code": "eb145deded442de0",
+  "core": "343b13f146a4e39d",
   "date": "2026-10-08",
-  "note": "an oversized marker for a ~4 ft curb",
+  "note": "a rendering doctrine, consistent with the wells page's marker-larger-than-life",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0196-communal-wells-ido.drawing.html:6ae8258e9425fcd7",
+   "0196-communal-wells-ido.drawing.html:ff48898c682cc774"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "docs/buildings.md::Scale#well location marker": {
+  "code": "5cc460d4a1509295",
+  "core": "343b13f146a4e39d",
+  "date": "2026-10-08",
+  "note": "the marker is drawn larger than life; the curb is ~4 ft, its exact figure a guess",
   "pages": {
    "0196-communal-wells-ido.drawing.html": "85fc1e4c2a7f3a2a"
   },
   "research": "47e13325a5aa6f26",
   "rests": [
    "0196-communal-wells-ido.drawing.html:157e7add410a9655",
+   "0196-communal-wells-ido.drawing.html:6ae8258e9425fcd7",
    "0196-communal-wells-ido.drawing.html:ff48898c682cc774"
   ],
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Sheet conventions#main gate on the south wall": {
-  "code": "c31b35e716fa6c13",
+  "code": "d9193b9e47e2d1ad",
   "core": "c31b35e716fa6c13",
   "date": "2026-10-08",
-  "note": "main gate on the south wall",
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "note": "\"Orientation... a walled compound's main gate faces south (bottom)\" fixes one wall on every sheet, but the cited record attests at least two other walls: Joge's main gate \"together at its east wall\" (0093) and the Higuchi house's \"front gate\" north of the watercourse (0091). Neither cited page puts a main gate in a south wall: the south in 0091 belongs to the garden. Several attested forms make this a per-settlement seeded roll, so fixing south is drift. The other route is to relabel the claim DEVIATION and record the fixed south gate as a deliberate choice on a drawing page. North-at-top (GM 2026-07) is a ruling about how the map is oriented, not about the gate, so it does not cover this. [0093 §7, 0091 §21, §50, §51]",
+  "pages": {
+   "0091-samurai-residences-and-their-rooms-buke-yashiki.html": "aea2caa039ea5e60",
+   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html": "976d82c32111af9d"
+  },
+  "research": "f846547eb18756e8",
+  "verdict": "DRIFTED"
  },
  "docs/buildings.md::Sheet conventions#sheet conventions": {
-  "code": "52b5f927a59da676",
+  "code": "38228a9d641b0b44",
   "core": "c31b35e716fa6c13",
   "date": "2026-10-08",
-  "note": "CONVENTION covers the palette and canvas, but \"a walled compound's main gate faces south\" is a physical placement rule and should be UNRESEARCHED",
+  "note": "canvas, palette, patterns, north-up, title block, crop and label sizes are all display choices",
   "pages": {},
   "research": "",
   "rests": [],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  "docs/buildings.md::Walls and gates#compound wall stroke": {
   "code": "b683282c31fc684e",
@@ -2160,12 +2195,16 @@
   "verdict": "DRIFTED"
  },
  "docs/buildings/programs.md::Country shrine (a village district's shrine)#burial ground placed outside the grove": {
-  "code": "3ca14da0edcd8ce4",
+  "code": "46589184a3c25fce",
   "core": "3ca14da0edcd8ce4",
   "date": "2026-10-08",
-  "note": "burial ground placed outside the grove",
+  "note": "0226's drawing page sets yard-or-apart but nothing about the grove, and 0223 says nothing on graves",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "rests": [
+   "0226-shrines-temples-and-graves-in-each-size-of-settlement.drawing.html:3cb31f36e31e3029"
+  ],
+  "verdict": "IN-STEP"
  },
  "docs/buildings/programs.md::Country shrine (a village district's shrine)#dedication knob": {
   "code": "f77e668b7954bb1d",
@@ -2735,12 +2774,17 @@
   "verdict": "MISLABELED"
  },
  "docs/buildings/programs.md::Magistrate's manor (county magistracy)#dais band on the office hall's south face": {
-  "code": "389b4ed09ef8526b",
+  "code": "94fbbae7094ccb93",
   "core": "389b4ed09ef8526b",
   "date": "2026-10-08",
-  "note": "dais band on the office hall's south face",
+  "note": "\"toward the hearing court\" is 0099 drawing's (court against the hall's front, below the dais); the south bearing itself is unresearched",
+  "pages": {},
   "research": "",
-  "verdict": "UNCLAIMED"
+  "rests": [
+   "0099-the-hearing-court-shirasu.drawing.html:36f49b610deb6fb9",
+   "0099-the-hearing-court-shirasu.drawing.html:6f3e1d8136359675"
+  ],
+  "verdict": "IN-STEP"
  },
  "docs/buildings/programs.md::Magistrate's manor (county magistracy)#divider gate": {
   "code": "5ee053ecdf7a2140",
