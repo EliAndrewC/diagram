@@ -1,493 +1,68 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "040ec3de9737a22b82cf4acf0417d967b5c57c86e058d5f03733df8bb77ab9b9",
+ "plan_sha256": "6473a28534877d86437f90374e4640d465848517c5d368d4cc48cec5a9cae3ac",
  "reviewed": "2026-10-08",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W48-1 corner rule + LANE_CLEARANCE 7",
-   "summary": "every building corner max(half-width + TREAD_WALL_FT, 7 ft) off a lane's middle; LANE_CLEARANCE 40 -> 7",
+   "id": "W55-1 grove topped up to 0080's density as drawn",
+   "summary": "a non-conifer-led clump keeps throwing until its drawn crowns hold its open ground (open_share) at GROVE_CROWN_SQFT, or TOPUP_TRIES x want throws fail; m:wave55-grove-density-as-drawn (Mizuguchi 339 -> 601 crowns)",
    "class": "within",
-   "why": "Earlier rulings stand; untouched by this diff."
+   "why": "Brings the drawn map to 0080's one crown per ~180 sq ft, which is what the request asks: the implementation matching the referenced research. The density is measured over open ground because 0080's figure is for wooded ground, not keep-out ground. TOPUP_TRIES is a search breadth labeled NONE, not a cap below the research. The homestead grove's glyph-check round 2 is owed and declared in tasks.md Occasions."
   },
   {
-   "id": "W48-2 dependent corridor rows closed",
-   "summary": "rows 706, 736, 738 and the skeleton arm's corridor close with the corridor row",
+   "id": "W55-2 conifer-led belt left out of the top-up",
+   "summary": "its rows are its own; its density is the filed row groves.py::_draw_grove#conifer-led clump's lesser share",
    "class": "within",
-   "why": "Round 1's note CONFIRMED: plan.md and tasks.md no longer say '754'; the skeleton arm's corridor is named by what it is (its key carries wave 48 in waves.json/ranking.json, confirmed round 1)."
+   "why": "This is sequencing, not a narrowing: the row stays DRIFTED with scope kept in ranking.json and is extended to carry the modal's 48% Guesses bullet. Nothing is deferred or excused."
   },
   {
-   "id": "W48-3 skeleton arm off the crop at its tread's edge",
-   "summary": "row 505",
+   "id": "W55-3 crowns painted back to front",
+   "summary": "under/on_top sorted by y after the top-up",
    "class": "within",
-   "why": "Ruling stands."
+   "why": "Rendering order for the crowns the top-up adds; it keeps conifers above broadleaf as before."
   },
   {
-   "id": "W48-4 margins for wet ground and water",
-   "summary": "20 px toe band/marsh, 14 px water, UNRESEARCHED",
+   "id": "W55-4 modal depiction edits taken",
+   "summary": "cluster_position--high_margin (centered, winter wind dropped), settlement_form--nucleated (one cluster -> the houses), --dispersed (channel width, way back not drawn), windbreak (uneven edge a convention), mixed_broadleaf (touching crowns), alder, conifer_led (edge note)",
    "class": "within",
-   "why": "Confirmed round 1."
+   "why": "Each edit makes a description of the drawing say what is drawn, without changing a research claim: 0031 places the cluster on the high dry ground and does not center it or tie the high margin to the wind (its windward case is 'one case among several'); 0072 gives each cluster its own band; the channel width and the edge of the wood are recorded as not researched, and the way back is 0031's own deliberate deviation. No drawn behavior that the research requires is written out of a modal."
   },
   {
-   "id": "W48-5 arm over the brook at a ford",
-   "summary": "row 504",
+   "id": "W55-5 the two depiction findings left",
+   "summary": "dispersed seating: the modal keeps 'each farm alone beside its own fields' and the map's drift stays the kept row stages.py::_seat_households#a scattered hamlet's seating; Kuwabata's bare runs filed",
    "class": "within",
-   "why": "Ruling stands."
+   "why": "The modals keep the research's wording, and both drifts are open rows with scope kept, so the fix is owed in the code, not in the text. Note: plan.md's Wave 55 section names only the bare runs. The dispersed decision should be written there too."
   },
   {
-   "id": "W48-6 SKELETON_ARM_WIDTH",
-   "summary": "the 5 ft named",
+   "id": "W55-6 three found rows filed (found-batch3.jsonl)",
+   "summary": "privy seats as rolled, the windbreak's hover region, Kuwabata's bare runs - E2, DRIFTED, scope kept",
    "class": "within",
-   "why": "No value change."
+   "why": "FR-006's found-row path: each is a drift found by a check, ranked and kept in scope. None is deferred."
   },
   {
-   "id": "W48-7 7 ft claim split",
-   "summary": "0246 the figure; corners a GUESS",
+   "id": "W55-7 0072 arcs re-measured",
+   "summary": "Inashiro 79, Kuwabata 65, Sawada 38 degrees (was 66/71/14.6), dated and with its method in the comment",
    "class": "within",
-   "why": "Confirmed round 1."
+   "why": "The record restated to the current maps; the claim (one side or two, none wraps) is unchanged."
   },
   {
-   "id": "W48-8 row 474 held",
-   "summary": "the GM's question",
+   "id": "W54-K knotted fallback kept after the DRIFTED reading (d21d7b86c)",
+   "summary": "without it, three of Sawada's households lost their own way; the settle gathers most knotted feet",
    "class": "within",
-   "why": "Ruling stands."
+   "why": "W54-10 (CLEAR) already ruled on keeping the knotted foot as the last resort. The knots it leaves are owed by the kept ranked row knots.py::settle_knots#a knot no lawful gather reaches, and T137 stays open. No new carve-out. Note: this is recorded only at the point of change. It should also be written in plan.md."
   },
   {
-   "id": "W48-9 row village road order filed E3",
-   "summary": "flagged deviation-tempting",
+   "id": "W55-8 quick's tooling",
+   "summary": "spec-lint --delta in make quick; pool-readers matches any test that names the pool as a path part",
    "class": "within",
-   "why": "Confirmed round 1."
+   "why": "Verification that fails only where the requested checks already fail, and it catches them sooner. No engine behavior changes (GM 2026-09-20)."
   },
   {
-   "id": "W48-10 occasions none",
-   "summary": "five hamlets byte-identical",
+   "id": "W55-9 occasions",
+   "summary": "privy, manure heap and manure pit marked PASS; homestead grove round 2 and the windbreak re-seen with the top-up",
    "class": "within",
-   "why": "Ruling stands."
-  },
-  {
-   "id": "W48-11 verification batched",
-   "summary": "gate and pair at batch 2's close",
-   "class": "within",
-   "why": "GM 2026-10-08."
-  },
-  {
-   "id": "W48-12 T122a tiers",
-   "summary": "tiers by work per FR-003",
-   "class": "within",
-   "why": "Ruling stands."
-  },
-  {
-   "id": "W49-1 rows 507, 509, 510 DEFERRED on measure",
-   "summary": "town branch, gate complex mount, castle towers entry",
-   "class": "within",
-   "why": "Round 1's measure stands (amendment 8's scope: code executed by magistracies, country shrines and scripted hamlets)."
-  },
-  {
-   "id": "W49-2 the caption key removed whole (row 508)",
-   "summary": "no key anywhere; a caption with no free seat goes down where it covers the least",
-   "class": "within",
-   "why": "0242 'the caption still goes down, where it covers the least'; 0241 'There is no key box'; the MODE 1 check ruled keeping the key NOT LEGITIMATE."
-  },
-  {
-   "id": "W49-3 no seat in the frame: the first seat beside it moved inward",
-   "summary": "placer.place: when no candidate out to the hug lies inside the frame, the first seat beside the subject is shifted by the least that brings it inside the frame (moved_inward)",
-   "class": "within",
-   "why": "Round 1's NOT LEGITIMATE CONFIRMED CORRECTED: the past-the-frame seat is gone; wherever the frame can hold the caption on an axis the caption lands inside it, so 0242's 'A place that would run off the edge of the picture is never taken' and 'never left off' both hold, which is the page's purpose ('A clipped caption cannot be read'). The moved place is not one of 0242's ordered places (none of which can be taken here), so it does not narrow 'the place that covers the least'; it stays closer to the subject than a leader past the hug would, and its claim is labeled UNRESEARCHED rather than cited to 0241 as round 1 asked. Round 1 named searching past the hug as one legitimate route, not the only one; the inward move reaches the same end (never clipped where the frame can hold it)."
-  },
-  {
-   "id": "W49-3a frame narrower than the caption: centered, clipped",
-   "summary": "on an axis the frame is narrower than the caption, moved_inward centers it on the frame",
-   "class": "narrowing",
-   "ruling": "LEGITIMATE",
-   "why": "The one case round 1 named as physically impossible: no place of the caption's size fits inside a frame narrower than it, so 'never clipped' cannot be honored and 'never left off' still is. Labeled in the claim (UNRESEARCHED, 'centered where the frame is narrower') and pinned by test_the_frame_is_never_left's 10 x 10 frame and the new unit test."
-  },
-  {
-   "id": "W49-4 tests restated to the page",
-   "summary": "the six key-pinning tests restated; test_the_frame_is_never_left; new test_a_seat_past_the_frame_is_moved_inward_until_it_fits",
-   "class": "within",
-   "why": "Round 1's exception CONFIRMED CORRECTED: test_the_frame_is_never_left keeps its meaning (a 510-wide frame takes 'left', not a seat leaving it; only the 10 x 10 impossible frame reaches the fallback, now centered), and the new test pins both branches of moved_inward. Tests that enforce the request serve it."
-  },
-  {
-   "id": "W49-5 board's second step without the key mark",
-   "summary": "the board on its 6 ft verge with its caption off the road",
-   "class": "within",
-   "why": "Consequence of removing the key; 0190's verge."
-  },
-  {
-   "id": "W49-6 row 511: {kosatsuba, lanes} dropped",
-   "summary": "the board may not overlap a lane",
-   "class": "within",
-   "why": "0190: beside, not on, the lane."
-  },
-  {
-   "id": "W49-7 board caption's face mismatch filed E2",
-   "summary": "proved against the 7 x 3 ft face, drawn 16 x 6 ft",
-   "class": "within",
-   "why": "FR-006 found-row path; predates the wave."
-  },
-  {
-   "id": "W49-8 occasions none",
-   "summary": "manifests byte-identical",
-   "class": "within",
-   "why": "Feature 294's occasions."
-  },
-  {
-   "id": "W49-9 0072's drawing page trimmed; as-built note restated",
-   "summary": "the as-built comment now 'measured 2026-10-08 on the manifests' windbreak crowns: Inashiro's conifer-led belt 93 conifer to 28 broadleaf (77%); Kuwabata's and Sawada's mixed broadleaf, no conifer'",
-   "class": "within",
-   "why": "Round 1's correction CONFIRMED: the figure is the one this review measured in round 1 (93 to 28 on Inashiro's conifer_led belt; the other two roll mixed_broadleaf), with its date and method; the wrong '48% (Kashima's cedar share)' is gone. Session-note trimming changes nothing a reader reads."
-  },
-  {
-   "id": "W49-10 verification batched",
-   "summary": "impl-drift and spec-fidelity per wave; gate, pair and occasions at batch 2's close",
-   "class": "within",
-   "why": "GM 2026-10-08 (FR-005)."
-  },
-  {
-   "id": "W49-11 the moat's matrix entry split from the ways through the rampart",
-   "summary": "{wall, moat} given its own reason ('the moat lies against the rampart's foot') and its own claim, UNRESEARCHED, instead of riding on 0147/0179's 'through the rampart at its gate'",
-   "class": "within",
-   "why": "No behavior change (the pair stays permitted); it corrects a claim that cited the gate pages for a thing they do not say, which is the feature's own work (match claims to research). Labeled UNRESEARCHED, the honest label."
-  },
-  {
-   "id": "W49-12 board caption's way rule filed E4",
-   "summary": "terminal_caption refuses a caption crossing any way where 0242 lets one cross a lane; filed MISLABELED, not fixed this wave",
-   "class": "within",
-   "why": "FR-006's found-row path. Its fix text offers recording the board's stricter rule as a deviation as one option: when the row is taken, that option is an exception to 0242 and goes to a MODE 1 check first; filing it decides nothing."
-  },
-  {
-   "id": "W50-1 row 512: {channels, dry_plots} permission dropped",
-   "summary": "the supply canal no longer may cross the dry hem's plots (0006)",
-   "class": "within",
-   "why": "Ranking row 75's fix as written: 0006's plots lie upslope of the canal, ending at its bank. Implementation moved to the research; nothing narrowed."
-  },
-  {
-   "id": "W50-2 row 513: the sluice's box from its span, drawn true",
-   "summary": "matrix box (span, 8.4); default frame 20 ft at the map's scale with no 10.8 px floor; 0179 section 12 reworded to timbers and drum larger than life, span true; a dike gate bank to bank on a wider channel, posts 2 ft past each bank (GUESS)",
-   "class": "within",
-   "why": "Row 76's fix (size from the span, 16-24 ft, bank to bank on a wider channel). The 0179 rewording is not research bent to the code: section 12 was a CONVENTION with no source, and it contradicted the page's own section 13 (16-24 ft span); keeping the convention for timbers and drum, and drawing the span true, follows section 13 and the standing no-inflation rule for to-scale maps. The 2 ft past each bank is a labeled GUESS inside 0179's 'bank to bank'. Kuwabata's channels (5 ft) leave every gate at 20 ft, the same as before at its scale: only the two records gained span 20 (pool diff checked)."
-  },
-  {
-   "id": "W50-3 rows 523-525: a join rules a seat out; the widest seat left takes the crossing",
-   "summary": "span_here > span skips the seat (3x ceiling and junction widening retired); seat_order tries wide seats first, then the rest widest first",
-   "class": "within",
-   "why": "0084's drawing page says both, word for word: 'the joins of ditches rule a seat out and the span stays about 8 ft' and 'Where no wide spot is free, a crossing takes the widest spot left ... rather than left off'. The ditch still qualifies by its widest point (worth_planking, page section 'A ditch is judged by its widest point'), so no crossing is added on water the page says is stepped across. Both reasons feature 287 gave for widening are recorded as gone."
-  },
-  {
-   "id": "W50-4 row 526: a carried way's deck lands ~10 ft dry or is not seated",
-   "summary": "the footplank form under a carried way retired",
-   "class": "within",
-   "why": "Row 89's fix as written; 0087's LANDING_FT at every corner. Measured: no deck on the five moves."
-  },
-  {
-   "id": "W50-5 row 527: work yards off only where no grain is grown",
-   "summary": "grows_grain: off only on a dike-pond hamlet whose leftover parcels are ponds",
-   "class": "within",
-   "why": "Row 108's fix ('key off on no grain crop, not on no rice'); 0037: every rice and dry-field farm keeps a yard. Checked against the GM's 2026-08-28 ruling (feature 150 T41): its words are 'no threshing yards on a no-rice hamlet', its stated basis 'rice is what a threshing floor is for'; a dike-pond hamlet whose leftover parcels stand in rice is not a no-rice hamlet, so the change follows both the research and the ruling's own words. Note for the GM, not a block: the ruling was carried out on the whole archetype when the leftover form could already be standing rice, so a future rolled dike-pond hamlet with rice leftovers now draws yards where 2026-08-28's build drew none. No kept map moves (Kuwabata's leftover is pond)."
-  },
-  {
-   "id": "W50-6 row 528: the north annex at the band's floor on a shallow house",
-   "summary": "18 x 10 ft on a house under ~22 ft deep, never the 1.8 below the band (0052)",
-   "class": "within",
-   "why": "Row 109's fix as written (ANNEX_LENGTH_FT[0], depth length / ANNEX_RATIO[1]). The band's size remains the recorded deliberate deviation. No map moves."
-  },
-  {
-   "id": "W50-7 row 529: drained acres exclude the whole drain-side row",
-   "summary": "plots flagged low are not drained (0007)",
-   "class": "within",
-   "why": "Row 110's fix as written; 0007: the row's green plots are as wet as its blue ones."
-  },
-  {
-   "id": "W50-8 rows 530-532: the comb outfall curves at most 55 degrees a turn; its corridor on town and city only, in feet",
-   "summary": "the fallback curved too (CURVE_LEG_PX 10, labeled NONE); 33 ft corridor appended only off hamlet and village scale (0058)",
-   "class": "within",
-   "why": "Rows 111, 112 and 116 as written. In scope by measure: Kuwabata's own execution record (.gencache/kuwabata/meta.json) lists outfall_run and _curved_run, so a kept map runs the unit; 'no hamlet runs the branch' is the fallback branch. Kuwabata's manifest is unchanged, so its outfall already turned 55 degrees or less and the corridor's removal moved nothing."
-  },
-  {
-   "id": "W50-9 rows 514-522 DEFERRED on measure; castle bridge permission and water_gate deferred",
-   "summary": "the derived scope (audit/scope.py), the castle bridge's matrix entry added to DEFERRED_ON_MEASURE",
-   "class": "within",
-   "why": "FR-010 as the spec states it: these rows were already scope 'deferred' in ranking.md before this wave (the diff does not touch rows 77-85), and the castle bridge pair is asked of no kept map (no castle drawn), the same measure wave 49 applied. Wording slip, not a narrowing: plan.md calls 514-522 'the town, city, castle and ministry entries', but rows 79 (the wood shed's exemption text), 80 and 81 (the registry's settlement_form and land-use knobs) are not; they are deferred by the same derived rule, and the hamlet wood shed's own placement rows (126, 129, 148, 150) stay kept."
-  },
-  {
-   "id": "W50-10 occasions none",
-   "summary": "the five hamlets regenerated; only Kuwabata's two sluice records gained span 20",
-   "class": "within",
-   "why": "Confirmed from the diff: pool/ changes only by two 'span': 20.0 fields in kuwabata.json; at Kuwabata's channel widths the gate's drawn frame is unchanged, so no glyph is redrawn or re-placed on a kept map."
-  },
-  {
-   "id": "W51-1 the wet-paddy class explicit",
-   "summary": "a plot is classed wet paddy only where it is FLOODED and in the drain-side row (`low`), 0007",
-   "class": "within",
-   "why": "The ranking row's fix (class only the low drain-side basins as wet paddy). Implementation moved to 0007; nothing narrowed."
-  },
-  {
-   "id": "W51-2 the field pond drawn as a dish pond",
-   "summary": "bank ring at the fitted outline, wet margin inside it, open water and reeds on the margin; proportions GUESS, bank/margin/reed ink CONVENTION; glyph-check NEEDS-WORK then PASS",
-   "class": "within",
-   "why": "The row's fix as written (a tameike: an embankment ring and reeds on wet-tinted ground; 0008 'low ground ringed with an embankment and dug out'). The proportions are labeled GUESS on 0008's drawing page and at the constants; the glyph-check rounds fixed the drawing toward the page, never away from it."
-  },
-  {
-   "id": "W51-3 the winter crop's odds set by the site",
-   "summary": "barley weighs the drained share of the paddy, halved where a rolled town_nearness is far; the town knob even odds and the far factor both GUESS; two choice modals",
-   "class": "within",
-   "why": "The row's fix as written (weight by drainage and distance to a town). 0009: 'A settlement's drainage and the nearness of a town ... set the odds', and its Evidence comment already classes the roll's weights a guess. No hamlet records a town distance, so rolling it as a knob with per-settlement variance is the project's standing rule for an unrecorded site fact; the modals are the knob's ordinary dress."
-  },
-  {
-   "id": "W51-4 WINTER_CROP re-derived DEFERRED",
-   "summary": "audit/scope.json moves grain.py::WINTER_CROP#winter-crop weights kept -> deferred and dev/claims-deferred.json now lists grain.py::WINTER_CROP (it did not at 3f91becf2)",
-   "class": "within",
-   "why": "Round 2: RESOLVED. audit/scope.py now counts any register_knob(<...Knob>(...)) (endswith('Knob') at all four sites), scope.json re-derives grain.py::WINTER_CROP#winter-crop weights kept, ranking row 118 kept, dev/claims-deferred.json no longer lists grain.py::WINTER_CROP, and the claim's re-check is recorded IN-STEP in dev/claims-index.json. Nothing narrowed."
-  },
-  {
-   "id": "W51-5 the wood shed off the house's own walls, never the front, no extra pace",
-   "summary": "byre and retirement-house walls dropped; front-wall places filtered; the outward STEP_FT pace and its fallback claim removed; the kura annex counted as a wall of the house (GUESS)",
-   "class": "within",
-   "why": "Rows 'wood shed's walls', 'wood shed seats', 'wood shed fallback pace' as written. The kura kept as a house wall is labeled GUESS and is consistent with 0040's convention (the annex is drawn abutting the house, part of its outline), so a shed off it still stands behind or beside the house."
-  },
-  {
-   "id": "W51-6 the wood shed's standoff recorded on 0043 as the guess the map draws",
-   "summary": "0043's drawing page reworded from 'about 6 ft (a ken) off a wall' to 'a ken beyond the clear strip ... about 9.5 ft from the wall', with the reason that at a ken from the wall 'a farmstead in the largest hamlets would have no way through to the lanes'; WOODSHED_STEP_FT's claim relabeled to that page",
-   "class": "narrowing",
-   "why": "Round 2: RESOLVED. 0043's drawing page restored to 'about 6 ft (a ken) off a wall' with the 9.5 ft reasoning removed; WOODSHED_STEP_FT's claim and both function claims now say HELD past the page's ken behind the found row hamletgen/ways/last_resort.py::refuse_unreached#every household reached at 20 and 40 households (ranking row 101, kept, DRIFTED), and impl-drift round 2 recorded the claim DRIFTED, not IN-STEP. That is the spec's held route, the one wave 9 took for the same step: the record unchanged, the implementation's gap open and ranked. The page is not moved to fit the code. Round 3: Wave 51's Scope now names the step HELD behind ranking row 101 (refuse_unreached#every household reached), matching the record.",
-   "ruling": "LEGITIMATE"
-  },
-  {
-   "id": "W51-7 the bath room rolled among its three walls",
-   "summary": "stable end 0.8, floored rooms 0.03 (1 of the registers' 36 baths, a peasant's), main door the rest; floored rooms no longer only a fallback",
-   "class": "within",
-   "why": "The row's fix (roll among all three walls). 0044's drawing page attests all three places and counts one peasant's floored-room bath; a hamlet has no headman, so the headman clause has nothing to act on."
-  },
-  {
-   "id": "W51-8 the privy within 48 ft of its house",
-   "summary": "every offered seat, the outward paces included, measured true off the house's outline; a farmstead with none refuses its privy by name",
-   "class": "within",
-   "why": "0047's drawing page: the 48 ft reach and 'Beyond 48 ft, privies stray out of their own farmsteads'. Implementation moved to the page; the refusal is the existing FixtureUnlaid route, not a carve-out."
-  },
-  {
-   "id": "W51-9 the downhill rule brought to 0054's strict under-90",
-   "summary": "DOWNHILL_FRACTION 0.2 -> 0 with a strict >; brook_join's now-redundant runs_downhill clause dropped (a 20 ft net fall is a net descent)",
-   "class": "within",
-   "why": "0054's drawing page, verbatim: 'the bound is a strict \"under 90\". A tighter bound of 60 degrees ... was considered and declined, since it would condemn real contour works.' The retired fifth (about 78 degrees) was the tighter bound the page declines."
-  },
-  {
-   "id": "W51-10 the woodland tier against the houses' median; the field beside the wood",
-   "summary": "house_floor the houses' median height; field_height_near the highest field edge within FIELD_BESIDE_FT (300 ft, UNRESEARCHED) past the nearest; glyph-check NEEDS-WORK then PASS",
-   "class": "within",
-   "why": "0077's drawing page: 'on ground higher than the fields beside it' and a wood below the houses stands where the record puts grass. Both changes tighten the code toward those words (the lowest house let a wood below 19 of 20 houses rank as above them; one nearest point let a wood rank above a field that ran up past it). The median is the project's reading of 'the houses' as a group, and the 300 ft is labeled UNRESEARCHED."
-  },
-  {
-   "id": "W51-11 the tint's `fronts`",
-   "summary": "a plot is ON the drain where half a plot's width of its own edge lies within a quarter plot of the collector (CONVENTION); mark_low and basin_rank read the one predicate; NEEDS-WORK twice then PASS",
-   "class": "within",
-   "why": "0007: the plots 'whose foot lies on the drain'. The found row (a corner plot tinted) is closed toward the page; the share is labeled CONVENTION with its measured basis."
-  },
-  {
-   "id": "W51-12 the pond feeder and the lotus draw DEFERRED on measure",
-   "summary": "comb.py _comb_draw_source#pond feeder from the sluice and landuse.py _pick_overlay_plots#lotus draw added to DEFERRED_ON_MEASURE",
-   "class": "within",
-   "why": "FR-010's 'a claim whose value no kept map reads though its unit runs is deferred with its measured reason'. Checked here: the feeder stream is drawn only where a pond source carries `feeder` (comb.py:611) and no hamletgen code sets that key on a source; no kept hamlet manifest names a lotus overlay."
-  },
-  {
-   "id": "W52-1 the belt's crossing allowance per way",
-   "summary": "two ways through one opening excuse 30 ft either side of each, the bare stretch between them no more than twice that",
-   "class": "within",
-   "why": "The row's fix as written (0072 holds the hole rule at a lane 'as written': no more than 30 ft of opening either side of the way). Measured: no map moves."
-  },
-  {
-   "id": "W52-2 the heap beyond the privy along its bearing",
-   "summary": "the heap's seats stepped along the unit vector from the house's center through the privy, side seats across it",
-   "class": "within",
-   "why": "The row's fix as written; 0042's drawing page: 'on the side away from the house'."
-  },
-  {
-   "id": "W52-3 the barn seat withdrawn; the barn filed",
-   "summary": "no barn seat in a hamlet (a hamlet farm draws no barn); the barn's share to the yard, the front and the stable at their own weights; drawing 0047's barn filed as an E3 found row (found-wave52.jsonl)",
-   "class": "within",
-   "why": "Round 3: RESOLVED. e6552f7ec amends Wave 52's Scope to what was built in round 2: the annex seat (ruled NOT LEGITIMATE in rounds 1-2) is gone from the plan text, 0047's page is unmoved, and the missing barn takes FR-006's found-row path rather than a substitute seat. Nothing in the request is narrowed by the plan any longer."
-  },
-  {
-   "id": "W52-4 a north annex's east gable, not its north wall",
-   "summary": "withdrawn: no annex seat of any kind",
-   "class": "within",
-   "why": "Round 3: RESOLVED. Withdrawn with W52-3; e6552f7ec removes the east-gable / west-wall text from Wave 52's Scope, so the plan no longer states it."
-  },
-  {
-   "id": "W52-5 seed 4's 20-household refusal filed",
-   "summary": "make cohort N=1 SEED=4 HOUSEHOLDS=20 refuses its web on the commit before wave 52 too; filed found-wave52.jsonl, E3",
-   "class": "within",
-   "why": "FR-006's found-row path; measured as pre-existing, so not a wave regression; the fix text moves the implementation to 0081."
-  },
-  {
-   "id": "T-1 make cohort HOUSEHOLDS=",
-   "summary": "the scaling sizes rolled untimed, the hamlet band lifted as the perf snapshot lifts it",
-   "class": "within",
-   "why": "Round 2: RESOLVED. spec.md's Review history now quotes the GM's four-hour-check words verbatim (their own spellings kept) and ties the cohort, measure-hooks reminder, perf-profile and the 1,000-line bar in make quick to them."
-  },
-  {
-   "id": "T-2 make perf-profile HOUSEHOLDS=",
-   "summary": "the profiler at a scaling roll's size",
-   "class": "within",
-   "why": "Explains batch 2's pair at the size the growth was measured (FR-005's perf-explain). No new behavior on a map."
-  },
-  {
-   "id": "T-3 the measure-hooks reminder",
-   "summary": "a make perf outside a pair's legs gets a non-blocking reminder naming make cohort; pair legs and profiles left alone; 46 hook cases",
-   "class": "within",
-   "why": "A reminder, never a refusal, scoped to the one command the GM's check concerned; it enforces the batching the GM ruled (FR-005) and reaches nothing beyond it."
-  },
-  {
-   "id": "T-4 the 1,000-line bar in make quick",
-   "summary": "the existing gate rule also run in quick (0.16 s)",
-   "class": "within",
-   "why": "The same rule earlier, no new refusal; the file moves it forced (outfall.py, wood_rank.py, water_source.py) are verbatim lifts with re-exports."
-  },
-  {
-   "id": "B2-1 batch 2's pair",
-   "summary": "2e3153b4e -> 3f91becf2 band 1, TOTAL -3.5%; batch 1's band 2 gone; the one growth (seed 39, 10 households) explained and perf-audit CONSISTENT on its own control",
-   "class": "within",
-   "why": "Round 3: RESOLVED. The batch-2 row now says homesteads +0.24 s, which is the key batch2-perf-pair-and-track-control's start 0.86 s to end 1.1 s."
-  },
-  {
-   "id": "B2-2 the gate green on waves 47-51",
-   "summary": "make done green 2026-10-08, the NEEDS-WORK fixes re-gated",
-   "class": "within",
-   "why": "FR-005/FR-006 as stated."
-  },
-  {
-   "id": "B2-3 the 12 occasions PASS",
-   "summary": "field pond, woodland commons and wet paddy after rounds 2-3, the rest round 1",
-   "class": "within",
-   "why": "FR-005's occasions; rounds past two allowed by the GM's ruling of 2026-10-08 (Decisions Recorded)."
-  },
-  {
-   "id": "B2-4 the occasion lines marked reviewed",
-   "summary": "the batch-2 occasion lines and wave 51's field pond, wood shed and bath room lines marked reviewed PASS at batch 2's close",
-   "class": "within",
-   "why": "Reviewing wave 51's occasions early narrows nothing. The wood shed lines re-open if W51-6's fix moves the shed's standoff."
-  },
-  {
-   "id": "W52-M the cohorts re-measured",
-   "summary": "Wave 52's Measured: the 20- and 40-household cohorts match or better the commit before the wave, 3/4 and 3/4, re-measured after the barn seat's withdrawal",
-   "class": "within",
-   "why": "Round 3: the line now states the post-withdrawal 3/4 and 3/4 round 2 asked for; a measured outcome, not a decision that narrows anything."
-  },
-  {
-   "id": "W53-1 crown density in real feet",
-   "summary": "GROVE_CROWN_SQFT = 107,639/600 (~179.4 sq ft) and grove_crown_px2(ftpx), replacing 48 sq px at the town grain scaled by bscale (~71 sq ft on a hamlet)",
-   "class": "within",
-   "why": "0080's drawing page: 600 a hectare, one tree to about 180 sq ft, and 'every other wood, the windbreak among them, keeps the hill wood's spacing'. Moves a DRIFTED claim onto its page; the new test pins it."
-  },
-  {
-   "id": "W53-2 band-piece cap at the same density",
-   "summary": "farmsteads.py _cap = GROVE_CLUMP_CROWNS * grove_crown_px2(ftpx); the cut into 28 crowns' ground kept as plumbing",
-   "class": "within",
-   "why": "The cut follows the density it divides; no clump cap remains, so the density is the constant's. Nothing asked is narrowed."
-  },
-  {
-   "id": "W53-3 windbreak conifer-share tolerance 0.02 -> 0.035",
-   "summary": "test_a_windbreak_draws_about_half_its_crowns_conifer held at 0.035 so the drawn 0.508 passes, BEHIND the E2 found row `GrovesMixin._draw_grove#windbreak conifer share as drawn` (found-wave53.jsonl, ranking row 138, kept) that brings the drawn share back to 0.48 and the tolerance back to 0.02; the test comment names the row",
-   "class": "narrowing",
-   "ruling": "LEGITIMATE",
-   "why": "Round 2: round 1 offered fix (b) and the commit does it. The departure from 0072 is no longer unfiled: it is a ranked DRIFTED row with a concrete fix (roll each kind against the drawn tally) and its own restoration of the 0.02 tolerance, and the widened assertion points at it. That is the feature's own route for a measured departure (a held value becomes a found row, ranked by work), so the request's purpose is kept rather than gutted. The stale 47.9% docstring figure is replaced by the measured 0.508 and the found row; the plan's Measured line states the widening and cites m:wave53-grove-density. Wave 54: the widening is closed - the drawn share brought to 0.48 and the tolerance back to 0.01 (W54-2)."
-  },
-  {
-   "id": "W53-4 two farmsteads claims relabeled NONE",
-   "summary": "'no tree over a building' (CONVENTION -> NONE) and 'band drawn at one density' (0036 -> NONE); impl-drift had both MISLABELED, now IN-STEP",
-   "class": "within",
-   "why": "Fixes a finding: the unit only orders passes and cuts pieces; the keep-out is claimed at _draw_grove ('crown over no roof or wellhead') and the density at GROVE_CROWN_SQFT against 0080. No rule loses its claim."
-  },
-  {
-   "id": "W53-5 conifer-led belt under-density filed",
-   "summary": "measured ~820 sq ft a crown on Inashiro's conifer-led belt against 0080's ~180; filed as an E3 DRIFTED found row (found-wave53.jsonl, ranking row 154) rather than fixed in this wave",
-   "class": "within",
-   "why": "The request's own order: rank by work, easiest to hardest. A newly found E3 row placed in the ranking with a concrete fix is the feature's route (plan: a held value becomes a found row); it is not dropped."
-  },
-  {
-   "id": "W53-6 test fixtures resized for the lower density",
-   "summary": "more clumps / wider yard and grove / 1000 iterations so the bamboo, sun and crown-reach tests stay non-vacuous at ~180 sq ft",
-   "class": "within",
-   "why": "Keeps the same assertions reachable; no assertion loosened."
-  },
-  {
-   "id": "W53-7 the density test",
-   "summary": "test_a_grove_throws_one_crown_to_about_180_sq_ft_at_every_grain",
-   "class": "within",
-   "why": "Enforces the requested match (GM 2026-09-20 ruling: enforcement serves the request)."
-  },
-  {
-   "id": "W53-8 occasions",
-   "summary": "glyph-redrawn homestead grove on Mizuguchi and windbreak on Inashiro at batch 3's close",
-   "class": "within",
-   "why": "Review occasions for a redrawn glyph; narrows nothing."
-  },
-  {
-   "id": "W54-1 windbreak kind rolled at seating against the clump's drawn deficit",
-   "summary": "p(conifer) = clamp(0.48 + 0.48*drawn - drawn conifers) per seated crown, so the DRAWN share is 0072's 48% through the asymmetric cull (row 138)",
-   "class": "within",
-   "why": "Carries row 138's own recorded fix (found W53-3) to make the drawn map match 0072's 48% cedar - exactly what the request asks (implementation matches the referenced research). Claim line updated to say so; nothing narrowed."
-  },
-  {
-   "id": "W54-2 test tolerance 0.035 -> 0.01",
-   "summary": "test_a_windbreak_draws_about_half_its_crowns_conifer back inside 0.01 of 0.48; re-run this round: 20 passed",
-   "class": "within",
-   "why": "Enforcement of the requested match (it fails only when the drawn share drifts from 0072); closes W53-3's legitimate widening."
-  },
-  {
-   "id": "W54-3 occasions",
-   "summary": "the Inashiro windbreak glyph-redrawn line (wave 53) extended to cover the share, at batch 3's close",
-   "class": "within",
-   "why": "Uses the feature's declared occasion; no review dropped."
-  },
-  {
-   "id": "W54-4 verification batched",
-   "summary": "impl-drift, spec-fidelity, then gate, pair and occasions at batch 3's close (T135, T136)",
-   "class": "within",
-   "why": "Same batching as waves 48-53, per the GM's 2026-10-08 batching ruling."
-  },
-  {
-   "id": "W54-5 Kuwabata's knot fixed at seating (KNOTTED_TRIES); off _KNOTS_WAITING",
-   "summary": "Round 2's NOT LEGITIMATE hold is withdrawn: row 748's route taken at seating; Kuwabata comes off the strict waiting list.",
-   "class": "within",
-   "why": "Round 3: RESOLVED. d7586617f removes 'kuwabata' from _KNOTS_WAITING (now {sawada, inashiro}, the same as main's plus Inashiro, W54-6). Measured this round: make test-file on test_pool_261/test_gap_ways (kuwabata, sawada, inashiro, knotted) - 22 passed, 3 xfailed; Kuwabata's knot test passes, so the regression no longer reaches main. The fix implements 0081 ('ends within 25 ft are joined at a single point') by searching further before keeping a knotted foot; nothing narrowed."
-  },
-  {
-   "id": "W54-6 Inashiro's knot back on _KNOTS_WAITING behind row 748",
-   "summary": "the field way starts on a spur 9.4 ft from where it leaves lane 10; every gather splits the web",
-   "class": "narrowing",
-   "ruling": "LEGITIMATE",
-   "why": "Judged apart from Kuwabata: main already carries Inashiro on _KNOTS_WAITING (a knot at lanes 11/13, 19.1 ft), so landing this adds no regression to main. Holding it behind the same ranked row restores main's state rather than hiding a new failure. It is still a regression of the feature's own wave 10 progress (XIII: work not done while it stands), and the row 748 fix W54-5 requires should be checked against it too."
-  },
-  {
-   "id": "W54-7 Sawada's zigzag held on strict _ZIGZAGS_WAITING, T137 open, the GM asked",
-   "summary": "Both fixes round 2 named were attempted and reverted; the impossibility investigation is written in plan.md Wave 54; T137 stays unticked so the push refuses the batch; the GM chooses waiver or reverting wave 52's seats.",
-   "class": "narrowing",
-   "ruling": "LEGITIMATE",
-   "why": "Round 3: the route round 2 set has been followed to its end. The string-pull was tried (45cfc11dc: the chord from lane 3's overshoot to lane 1's door crosses house 1's front dooryard, so 'Lawful' refuses it) and the seating re-lay was tried twice (d7586617f: a guard on gathered joins never fired - the overshoot is in the traced way; a guard on any admitted way zigzagging at its foot moved the same overshoot into lane 1's door to lane 5's way and moved Inashiro). Every trial reverted. What is ruled LEGITIMATE is the HOLD, not a permanent exception: the strict xfail cannot reach main while T137 is open (the open-task refusal), so no new regression lands without the GM, and choosing between XIII's remaining exits (waiver behind the row, or reverting wave 52's 0042/0047 seats, which would undo requested research matches) is the GM's decision. If the GM does not answer, T137 keeps the batch unpushed; ticking T137 without the zigzag fixed or a recorded GM waiver would make this NOT LEGITIMATE."
-  },
-  {
-   "id": "W54-8 pool-readers in make quick",
-   "summary": "quick runs the tests that read the shipped hamlet manifests when the manifests moved since its last green run; test in tests/tooling",
-   "class": "within",
-   "why": "Verification that only fails when the research-matching checks already asked for fail; keeps a reroll from hiding a regression (XIII). No new behavior in the engine."
-  },
-  {
-   "id": "W54-9 perf_profile spec typed",
-   "summary": "the HamletSpec kwargs dict typed so pyrefly passes",
-   "class": "within",
-   "why": "A type fix for the quick gate; changes nothing the request scopes."
-  },
-  {
-   "id": "W54-10 KNOTTED_TRIES = 3: a household whose every exit leaves a knotted foot searches three times GAP_TRIES exits",
-   "summary": "Search breadth raised only for a household holding a knotted fallback.",
-   "class": "within",
-   "why": "Implements 0081's single-point joins (the knotted foot made the last resort); labeled NONE as a measured search breadth with its page pointer. Commit records that only Kuwabata's manifest moved; the pool roll at the gate will hold that."
-  },
-  {
-   "id": "W54-11 test_a_knotted_foot_is_kept_only_after_three_times_the_exits",
-   "summary": "Unit test pinning the breadth and the as-traced fallback.",
-   "class": "within",
-   "why": "Enforcement of the requested match (GM 2026-09-20): it fails only if the knotted-foot search stops short."
+   "why": "Feature 294's declared occasions. No review is dropped."
   }
  ],
  "verdict": "CLEAR"

@@ -259,3 +259,14 @@ def test_a_clumps_open_share_is_the_grid_left_by_what_covers_it() -> None:
     assert open_share(0.0, 0.0, 40.0, 40.0, 10.0, lambda x, y: False) == 1.0
     assert open_share(0.0, 0.0, 40.0, 40.0, 10.0, lambda x, y: x < 0) == 0.5
     assert open_share(0.0, 0.0, 4.0, 4.0, 10.0, lambda x, y: False) == 1.0, "a box smaller than the step: one point"
+
+
+def test_no_crown_is_topped_up_over_the_bamboo_patch() -> None:
+    """Wave 55's top-up (impl-drift): the farm's bamboo patch is its culms' ground - no crown is thrown over it, the throw's or
+    the top-up's."""
+    s = _hamlet()
+    box = (340.0, 340.0, 400.0, 460.0)  # the clump's west half
+    s._draw_grove(400.0, 400.0, 120.0, 120.0, face=(0, -1), mix="windbreak", bamboo_box=box)
+    xs = [s.M["tree_crowns"][i] for i in range(0, len(s.M["tree_crowns"]), 3)]
+    assert len(xs) > 20, "non-vacuity: the east half drawn"
+    assert all(x >= 400.0 - 1e-6 for x in xs), min(xs)

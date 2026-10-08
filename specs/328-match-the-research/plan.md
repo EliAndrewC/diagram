@@ -721,12 +721,17 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
   or `TOPUP_TRIES` (6) throws a crown wanted fail; the crowns are painted back to front after the top-up. Not the
   conifer-led belt (its rows are its own; its density a filed row). The same gap as wave 54's conifer share: thrown versus drawn.
 - **Measured** (m:wave55-grove-density-as-drawn): drawn crowns rise on every hamlet (Mizuguchi 339 -> 601); Mizuguchi's
-  bands hold one crown to 242 sq ft of their whole boxes, keep-out ground included. Generation times unchanged within a
-  tenth of a second.
+  bands hold one crown to 242 sq ft of their whole boxes, keep-out ground included. A top-up throw over the farm's bamboo
+  patch is refused (impl-drift of wave 55: the culms' own ground).
 - **Batch 3's close so far**: the gate green (waves 51-54); privy, manure heap and manure pit PASS; windbreak PASS (to be
   seen again with the top-up); homestead grove round 2 owed; the record checks the 0072 re-measure owed answered, their
   modal edits applied (a further depiction round owed); three found rows filed (`found-batch3.jsonl`: the privy's rolled seat
-  honored, the windbreak's hover region, Kuwabata's bare runs). The pair and perf-audit follow the reviews.
+  honored, the windbreak's hover region, Kuwabata's bare runs). Two depiction findings were not taken as edits: Kuwabata's
+  bare runs (filed, above), and the dispersed form's seating sentence, which keeps the research's wording while the code's
+  drift stays the open row `stages.py::_seat_households#a scattered hamlet's seating` (the modal is not reworded to the drift).
+  And wave 54's knotted fallback (`gap_ways._way_for`), read DRIFTED by impl-drift, was tried without and KEPT: three of
+  Sawada's households lost their own way to the neighbor's-yard reach, which draws no walk; the knots it leaves are owed by
+  `knots.py::settle_knots#a knot no lawful gather reaches`. The pair and perf-audit follow the reviews.
 - **Verification**: tests red on the old code (the open clump drew under 0.9 of its density); `impl-drift`; `spec-fidelity`;
   glyph-check rounds on the homestead grove and the windbreak.
 
