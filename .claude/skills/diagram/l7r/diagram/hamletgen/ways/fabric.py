@@ -155,7 +155,7 @@ def _homestead_polys(s: Settlement) -> list[tuple[Poly, Pt | None, str]]:
         nothing built on a lane - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: houses, yards, beds, sheds, wells and
             fixtures are fabric a lane keeps off
         no lane through a farm's grove - UNRESEARCHED: the grove band is fabric, but for its own farm's path
-        a path leaves its own yard - UNRESEARCHED: the owner's yard, bed and shed are not walls to its own path
+        a path leaves its own yard - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: the owner's dooryard is not a wall to its own path; its beds, sheds and fixtures are, the way leaving round them
         village groves and commons as fabric - UNRESEARCHED: a village grove and a grazing common count as fabric a lane keeps off"""
     out: list[tuple[Poly, Pt | None, str]] = []
     for h in s.M.get("houses", []):
@@ -164,7 +164,9 @@ def _homestead_polys(s: Settlement) -> list[tuple[Poly, Pt | None, str]]:
     for key in ("threshing_yards", "gardens"):
         for rec in s.M.get(key, []):
             own = rec.get("of")
-            owner = (float(own[0]), float(own[1])) if own else None
+            # ONLY THE DOORYARD IS ITS OWN PATH'S (feature 328, 0246: a way leaves round its own beds and fixtures): a garden is
+            # an obstacle to its own farm's path as to any other
+            owner = (float(own[0]), float(own[1])) if own and key == "threshing_yards" else None
             # BOTH EXTENTS, because they are not the same shape and the gate reads the wider one. A
             # garden records a `poly` (the bed outline) AND a rect, and the rect runs a couple of
             # feet proud of the poly on a side or two. Clearing only the poly left about eight inches
@@ -205,7 +207,7 @@ def _homestead_polys(s: Settlement) -> list[tuple[Poly, Pt | None, str]]:
     for key in ("farm_sheds", "byres", "retirement_houses"):
         for r in s.M.get(key, []):
             own = r.get("of")
-            out.append((rot_rect(float(r["x"]), float(r["y"]), float(r["w"]), float(r["h"]), float(r.get("rot", 0.0))), (float(own[0]), float(own[1])) if own else None, key))
+            out.append((rot_rect(float(r["x"]), float(r["y"]), float(r["w"]), float(r["h"]), float(r.get("rot", 0.0))), None, key))  # a shed is its own path's obstacle too (0246)
     # THE FARMSTEAD FIXTURES ARE BUILT GROUND TOO (feature 287: laid in each bundle since HOMES' wave 3 and recorded as
     # `farm_fixtures`) - a privy, a manure heap, a bath, a coop, a hokora - and UNOWNED: a door path may leave its own yard,
     # never walk over its own privy. Measured before: 233 lane crossings of a fixture over 64 maps

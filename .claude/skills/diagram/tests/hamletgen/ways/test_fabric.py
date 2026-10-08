@@ -75,6 +75,19 @@ def test_homestead_polys_carries_the_per_house_groves() -> None:
     assert "groves" in kinds
 
 
+def test_a_path_leaves_its_own_dooryard_but_goes_round_its_own_beds_and_sheds() -> None:
+    """0246 (feature 328): the owner's dooryard is not a wall to its own path; its garden beds and sheds are."""
+    plan = a_plan()
+    s = Settlement(W=plan.W, H=plan.H, seed=plan.spec.seed)
+    sq = [[10.0, 10.0], [40.0, 10.0], [40.0, 40.0], [10.0, 40.0]]
+    s.M["threshing_yards"] = [{"poly": sq, "of": [100.0, 100.0]}]
+    s.M["gardens"] = [{"poly": sq, "of": [100.0, 100.0]}]
+    s.M["farm_sheds"] = [{"x": 50.0, "y": 50.0, "w": 10.0, "h": 8.0, "of": [100.0, 100.0]}]
+    owners = {kind: owner for _poly, owner, kind in hg.ways._homestead_polys(s)}
+    assert owners["threshing_yards"] == (100.0, 100.0)
+    assert owners["gardens"] is None and owners["farm_sheds"] is None
+
+
 def test_crosses_fabric_sees_a_steading_beside_the_MIDDLE_of_a_long_run() -> None:
     """The half of the detector feature 128 shipped without, and the shape it costs.
 

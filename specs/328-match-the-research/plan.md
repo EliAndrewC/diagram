@@ -401,6 +401,16 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
   band 0); wave 32 changes no executed code, so it owes no pair.
 - **Verification**: `impl-drift` on the touched claims, the gate.
 
+## Wave 33 (amendment 32, 2026-10-08)
+
+- **Scope**: row 461 (`tasks.md` Phase 34): a farm's own garden beds, sheds, byres and retirement house are obstacles to its
+  own path, only its dooryard (and its grove band) its own (0246: the way leaves round its own beds and fixtures). Row 434
+  held for the GM; row 462 (the track's inner end joined however far) needs a routed run and is the next wave.
+- **Occasions**: none - the five pool hamlets are unchanged.
+- **On the unpushed waves 9-32** under condition (6): (1)-(5) held at wave 32's close (51da9771f, backed up); wave 33's
+  own pair opens at 51da9771f.
+- **Verification**: `impl-drift` on the touched claim, the gate, wave 33's own bookend pair.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Each later wave that changes engine behavior takes

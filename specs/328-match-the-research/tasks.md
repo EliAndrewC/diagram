@@ -13,6 +13,7 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 - (wave 5, landed and reviewed) placement-changed village lane on kashikawa - wave 5: 0033's row street runs on off the map as the road into it at both ends, where
   the web cut it back to its last joint (`trim_streets`); Kashikawa's and Mizuguchi's far ends now run off the sheet as a
   second way out (every way is inked `village lane`).
+- none (wave 33): the path's own beds and sheds made obstacles; the five pool hamlets unchanged
 - none (wave 32): claims only, no executed code changed
 - none (wave 31): the network join tightened changes no pool map; the bund trial reverted
 - none (wave 30): the reservoir share tried and reverted; a claim relabeled, no executed code changed
@@ -1131,3 +1132,16 @@ outside the dike"; one change in `polder.py`, left for its place in the run).
 - [x] T90 the claims re-checked by `impl-drift`; the close: `make done` green, the wave column (FR-005, FR-006)
       research: rendering
       verify: DONE. impl-drift IN-STEP on two, DRIFTED on the pond layout (E3); amendment 31 rounds recorded, plan CLEAR; make done green; no executed code changed; the wave column
+
+## Phase 34 - wave 33 (amendment 32): a path goes round its own beds and sheds
+
+The next open in-scope E2 row (row 434 held for the GM; the polder rows re-tiered in wave 32 sit later in the run). 0246's
+drawing page: a way leaves round its own beds and fixtures. `_homestead_polys` exempted a farm's own garden and sheds from its
+own path's fabric along with its dooryard; now only the dooryard (and the grove band, which the path leaves through) is its own.
+
+  - `l7r/diagram/hamletgen/ways/fabric.py::_homestead_polys#a path leaves its own yard` - the owner's beds, sheds, byres and retirement house obstacles to its own path
+
+- [ ] T91 the path's own beds and sheds obstacles; the five hamlets regenerated (unchanged); the owner test (FR-004, FR-005)
+      research: rendering
+- [ ] T92 the claims re-checked by `impl-drift`; the close: wave 33's own bookend pair, `make done` green, the wave column (FR-005, FR-006)
+      research: rendering
