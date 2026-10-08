@@ -319,3 +319,4 @@ Each wave's amendment adds its map decisions to this table. The program's decisi
 - Amendment 22: round 1 (spec-fidelity) CHANGES REQUIRED - farms to a street E4, not E0; round 2 (verify) CHANGES REQUIRED - the plan's scope line; round 3 (verify) FAITHFUL; plan CLEAR (spec-fidelity, 2026-10-08).
 - Amendment 23: round 1 (spec-fidelity) CHANGES REQUIRED - the sties' figure measured, plan CLEAR; round 2 (verify) FAITHFUL; round 3 (verify, after impl-drift's GUESS relabel and row 437 kept open) FAITHFUL (2026-10-08).
 - Amendment 24, round 1 (spec-fidelity, 2026-10-08): FAITHFUL, plan CLEAR.
+- Amendment 25: round 1 (spec-fidelity) CHANGES REQUIRED - no claim that the hamlet keeps the below-drain rule, plan CLEAR; round 2 (verify) FAITHFUL; plan re-reviewed CLEAR (2026-10-08).

@@ -1,6 +1,6 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "f997637d97a49e05b5410509e753a8f015f2e935f16e0c92aed1f4879ad4876e",
+ "plan_sha256": "cfd5e1661df9d4560d9c67dc27ada7fe634ecb9094fe320ff4fe79391c9d4039",
  "reviewed": "2026-10-07",
  "declared": "spec-fidelity",
  "decisions": [
@@ -9,6 +9,12 @@
    "summary": "wave 26 takes ranking row 447 (sink.py::drain_run#no-build corridor) alone: the hamlet's drain registers no 33 ft corridor",
    "class": "within",
    "why": "FR-004: 0058's drawing page sets the 33 ft strip for town and city maps only; the fix moves the code to the research. FR-006: E2 rows 1-38 carry a wave except 34 (row 434, held), so row 447 (E2 #39) is the next in the run"
+  },
+  {
+   "id": "W26-below-drain",
+   "summary": "the Scope line states a nucleated cluster is exempt from the below-drain rule and the dispersed farmsteads' rule is open as row 669 (E3)",
+   "class": "within",
+   "why": "0058's drawing page scopes the below-drain rule to farmsteads strewn one by one, not a nucleated cluster; ranking.json row 669 (cluster.py::below_drain#dispersed farmsteads off the ground below the drain) is UNCLAIMED, E3, scope kept, wave blank - left open in the ranking's order under FR-006, not dropped"
   },
   {
    "id": "W26-brook-next",
