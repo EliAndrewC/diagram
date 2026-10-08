@@ -55,7 +55,6 @@ from .sweeps import (
 )
 from .touch import _touch_junctions
 
-
 SKELETON_ARM_WIDTH = 5.0
 """The skeleton arm's drawn width, a web lane's.
 

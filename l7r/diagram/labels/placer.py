@@ -12,7 +12,7 @@ leader line ties them back. The standard, in the order it decides:
    before more (the GM's wrap rule).
 3. FREE SPACE WINS: the first candidate that covers nothing is taken. When nothing in reach is free, the fallback
    slides and then the leader rings out to the hug are searched; a caption is never dropped (the GM: "we'll treat
-   labels as mandatory") and never drawn overlapping (feature 287, D10) - with no free seat it goes in the sheet's key.
+   labels as mandatory"), and with no free seat it goes down where it covers the least (0242) - never in a key (0241).
 4. A caption not at the preferred offset is no longer directly beside its feature, so a LEADER line joins it back
    (QGIS callouts, Esri's leader, PSU: "labels that do not fit on or directly adjacent to their respective feature").
 
@@ -41,7 +41,6 @@ from .standard import (
     PREFERRED_OFFSET_EM,
     REACH_EM,
     RING_STEP_EM,
-    WEIGHT_KEY,
     WEIGHT_OBSTACLE,
     block_half,
     upright,
@@ -83,7 +82,6 @@ class Placement:
     position: str
     cost: float
     leader: tuple[Pt, Pt] | None
-    keyed: bool = False
 
 
 @dataclass(frozen=True)
@@ -434,8 +432,9 @@ def place(
 
     WHEN NO STANDARD SEAT IS FREE (features 286, 287): the fallback search (`_extended_cands`), then the leader rings past
     the reach out to the hug (`_leader_cands`). A seat covering only `soft` ink (a hand sheet's) is then taken at the
-    least cost; a caption whose every seat overlaps goes in the sheet's KEY (`Placement.keyed`, D10). Never dropped,
-    never overlapping, never past the hug (`HUG_PX`).
+    least cost; a caption whose every seat overlaps goes down where it covers the least (0242), and one with no seat in the
+    frame at all takes the first seat beside it past the frame's edge. Never dropped, never in a key (0241), never past the hug
+    (`HUG_PX`).
 
     `strict=True` returns None instead of anything but a free seat (feature 287: the notice board's siter and the
     generated Mode A sheets ask it, and choose the SUBJECT or the program instead). The retired least-cost seat's last
@@ -451,7 +450,8 @@ def place(
     Research:
         free space wins - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: the first seat covering nothing is taken
         never clipped - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a seat leaving the picture is never a candidate
-        never left off - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: with no free seat, the least-cost soft seat, else the sheet's key, never an overlap
+        never left off - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: with no free seat, the seat covering the least - soft ink first, then whatever it covers
+        no key - research/questions/0241-the-map-sheet-its-title-legend-frame-and-margins.drawing.html: there is no key box; a caption with no seat in the frame takes the first seat beside it past the frame's edge
         the hug - CONVENTION: no seat past the hug from what it names
     """
     clear = CLEAR_EM * size
@@ -467,10 +467,14 @@ def place(
     leaders = _leader_cands(text, size, subject, lines, char_w, line_sizes) if max_ring is None else iter(())
     more = itertools.chain(_extended_cands(text, size, subject, lines, char_w, line_sizes, near), leaders) if extended else iter(())
     deep: list[tuple[int, _Cand, Poly]] = []  # strict: the seats no nudge can free, measured only if one might be the best
+    outside: tuple[_Cand, Poly] | None = None  # the first seat beside the subject that leaves the frame, for a frame that holds none
     for order, cand in enumerate(itertools.chain(_cands(text, size, subject, lines, char_w, line_sizes, near), more)):
         block = rect(cand.center[0], cand.center[1], cand.half[0], cand.half[1], cand.angle)
         # the hug is held with the nudge's room to spare, so no nudge can carry a seat past it (labels L10)
-        if not _in_frame(block, frame) or (subject.kind != "area" and hug_gap(block, ref or referent_box(subject, block)) > HUG_RING):
+        if subject.kind != "area" and hug_gap(block, ref or referent_box(subject, block)) > HUG_RING:
+            continue
+        if not _in_frame(block, frame):
+            outside = outside or (cand, block)
             continue
         if strict and index.blocked(block, clear, NUDGE_REACH, own, text, subject.civic):
             deep.append((order, cand, block))
@@ -496,7 +500,15 @@ def place(
     if soft is not None:
         cost, cand, block = nudge(soft[0], soft[2], soft[3], subject, index, clear, own, text, frame, leader_index, soft_only=True)
         return _placement(cand, block, cost, subject)
-    return keyed(text, size, subject, lines, best[0] if best is not None else 0.0)
+    if best is not None:
+        # ...AND WITH NO FREE GROUND AT ALL, THE SEAT COVERING THE LEAST, whatever it covers (feature 328 wave 49, 0242's
+        # drawing page: "On a sheet with no free ground at all, the caption still goes down, where it covers the least"; an
+        # exception keeping feature 287's key for an all-hard seat ruled NOT LEGITIMATE - 0241: "There is no key box")
+        cost, cand, block = nudge(best[0], best[2], best[3], subject, index, clear, own, text, frame, leader_index)
+        return _placement(cand, block, cost, subject)
+    # ...AND WITH NO SEAT INSIDE THE FRAME AT ALL, the first seat beside it past the frame's edge: never left off (0242)
+    assert outside is not None, "the standard offers a seat beside every subject"
+    return _placement(outside[0], outside[1], _score(outside[0], outside[1], subject, index, clear, own, text, leader_index)[0], subject)
 
 
 NUDGE_REACH = NUDGE_PX * math.sqrt(2.0) + 1e-3
@@ -560,33 +572,6 @@ def _score(c: _Cand, block: Poly, subject: Subject, index: ObstacleIndex, clear:
         lc, lh = leader_score(c, block, subject, leader_index, clear, own, text)
         cost, hard = cost + lc, hard or lh
     return cost, hard
-
-
-def keyed(text: str, size: float, subject: Subject, lines: list[str] | None, cost: float) -> Placement:
-    """A caption with no seat on the sheet, entered in the sheet's KEY (feature 287, D10): its `block` is the numbered
-    mark's, set on what it names (a point's or an area's center, a line's hint or middle), and its lines are the words the
-    key carries. The caller draws the mark and the key.
-
-    Research: caption in the key - CONVENTION: a numbered mark on the feature, the words in a key beside the map
-    """
-    if subject.kind == "area":
-        c = area_centroid(subject.poly)
-    elif subject.kind == "line":
-        pts = list(subject.poly)
-        c = subject.hint if subject.hint is not None else pts[len(pts) // 2]
-    else:
-        c = centroid(subject.poly)
-    block = rect(c[0], c[1], KEY_MARK_EM * size / 2, LINE_H_EM * size / 2)
-    return Placement(
-        x=c[0], y=c[1] + CENTER_ABOVE_BASELINE_EM * size, angle=0.0, lines=tuple(lines or [text]), block=tuple(block), ring=-1, rank=-1, position="key", cost=WEIGHT_KEY + cost, leader=None, keyed=True
-    )
-
-
-KEY_MARK_EM = 1.2
-"""A key mark's width in ems - room for a two-digit number.
-
-Research: key mark width - CONVENTION: 1.2 em
-"""
 
 
 def nudge(

@@ -585,6 +585,24 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 - **Occasions**: none - the five hamlets regenerated 2026-10-08 with byte-identical manifests after each change.
 - **Verification**: the tests red on the old code; `impl-drift`; `spec-fidelity`; the gate and the pair at batch 2's close.
 
+## Wave 49 (amendment 48, 2026-10-08) - batch 2
+
+- **Scope**: rows 507-511 in ranking order. Rows 507 (`dwellings_shown`'s town branch) and 509-510's gate-complex and castle
+  entries are DEFERRED on measure (`audit/scope.py`, `DEFERRED_ON_MEASURE`): no kept map draws a town, a city, a gate complex
+  or a castle, so those branches never run on one - the GM's scope, "code actually executed by magistracies, country
+  shrines, and scripted hamlets". Row 508 (0242: "the caption still goes down, where it covers the least"): an exception
+  keeping feature 287's key for an all-hard caption was put to `spec-fidelity` (MODE 1) and ruled NOT LEGITIMATE - the
+  GM's words name no key, 0242 already chose cover over legibility, and 0241 says "There is no key box" - so the key is
+  removed whole (the placer, the hamlet's caption key, the hand sheet's key band, `WEIGHT_KEY`, `board_seat`'s key-mark
+  pre-check) and a caption with no seat in the frame at all takes the first seat beside it past the frame's edge. Measured:
+  no kept map reached the key (no `caption_key`, no key band on any sheet); the five hamlets byte-identical. Row 511: the
+  notice board's lane permission dropped - it stands 6 ft off the road's edge (`KOSATSUBA_VERGE_FT`, 0190), so it never
+  needs to overlap a lane. Found on the way: the board's caption is proved against the 7 x 3 ft face its seat search tests,
+  not the 16 x 6 ft board drawn (the key mark at the board's center hid it) - filed E2.
+- **Occasions**: none - the five hamlets regenerated 2026-10-08, manifests byte-identical; no kept sheet reached the key.
+- **Verification**: tests restated to the page (the six that pinned the key); `impl-drift`; `spec-fidelity`; the gate and
+  the pair at batch 2's close.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Waves 2-45 that changed engine behavior took

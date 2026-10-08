@@ -276,7 +276,10 @@ class HousesMixin:
         # ...AND EVERY CORNER `LANE_MIDDLE_CLEAR_FT` OFF THE LANE'S MIDDLE AT LEAST (feature 328 wave 48, 0246: "a lane's middle
         # keeps at least 7 ft clear of a garden fence") - the half-width and the hair held a narrow way's corners nearer
         hair, middle = self.px(TREAD_WALL_FT), self.px(LANE_MIDDLE_CLEAR_FT)
-        return any(not self._tread_skipped(orig, skip) and any(seg_dist(qx, qy, tp[i], tp[i + 1]) < max(half + hair, middle) for qx, qy in corners for i in range(len(tp) - 1)) for tp, half, orig in self.treads)
+        return any(
+            not self._tread_skipped(orig, skip) and any(seg_dist(qx, qy, tp[i], tp[i + 1]) < max(half + hair, middle) for qx, qy in corners for i in range(len(tp) - 1))
+            for tp, half, orig in self.treads
+        )
 
     def _tread_skipped(self: Settlement, poly: Any, skip: Any) -> bool:  # type: ignore[misc]
         """Is this tread the way the caller is FRONTING, and so exempt?

@@ -11,8 +11,8 @@ import pytest
 from l7r.diagram.labels import Obstacle, ObstacleIndex, Subject, Way, caption_clears_ways, circle_obstacle, hug_gap, place, referent_box, upright
 from l7r.diagram.labels.geom import poly_gap, rect
 from l7r.diagram.labels.obstacles import circle_gap
-from l7r.diagram.labels.placer import HUG_RING, _Cand, keyed, leader_cost, outer_rings, record_box, rings
-from l7r.diagram.labels.standard import CLEAR_EM, HUG_PX, PREFERRED_OFFSET_EM, REACH_EM, WEIGHT_KEY, WEIGHT_OBSTACLE
+from l7r.diagram.labels.placer import HUG_RING, _Cand, leader_cost, outer_rings, record_box, rings
+from l7r.diagram.labels.standard import CLEAR_EM, HUG_PX, PREFERRED_OFFSET_EM, REACH_EM, WEIGHT_OBSTACLE
 
 SIZE = 8.0
 BOARD = Subject("point", tuple(rect(500.0, 500.0, 6.0, 2.5)))
@@ -24,7 +24,7 @@ def test_strict_takes_a_free_seat_or_none() -> None:
     assert place("notice board", SIZE, BOARD, ObstacleIndex(), strict=True) == place("notice board", SIZE, BOARD, ObstacleIndex())
     boxed = ObstacleIndex([Obstacle(tuple(rect(500.0, 500.0, 900.0, 900.0)), WEIGHT_OBSTACLE)])
     assert place("notice board", SIZE, BOARD, boxed, strict=True) is None
-    assert place("notice board", SIZE, BOARD, boxed).keyed, "lax: the key, never the covered seat"
+    assert place("notice board", SIZE, BOARD, boxed).cost > 0.0, "lax: the seat covering the least (0242), never None"
 
 
 def test_max_ring_keeps_only_the_seats_beside_the_subject() -> None:
@@ -118,8 +118,7 @@ def test_no_seat_stands_past_the_hug(size: float) -> None:
     reach = min((PREFERRED_OFFSET_EM + 0.5 * 30) * size, HUG_RING) - size
     walls = ObstacleIndex([Obstacle(tuple(rect(500.0, 500.0, 6.0 + reach, 2.5 + reach)), WEIGHT_OBSTACLE)])
     p = place("notice board", size, board, walls)
-    if not p.keyed:
-        assert hug_gap(p.block, referent_box(board, p.block)) <= HUG_PX
+    assert hug_gap(p.block, referent_box(board, p.block)) <= HUG_PX
     assert max(rings(size)) <= HUG_RING and all(g <= HUG_RING for _k, g in outer_rings(size))
     assert rings(300.0) == [HUG_RING], "a caption too large for any ring past the first keeps the first, capped"
 
@@ -130,7 +129,7 @@ def test_the_leader_rings_reach_past_the_standard_to_the_hug() -> None:
     reach = REACH_EM * SIZE
     inner = Obstacle(tuple(rect(500.0, 500.0, 6.0 + reach + 2.0, 2.5 + reach + 2.0)), WEIGHT_OBSTACLE)
     p = place("notice board", SIZE, BOARD, ObstacleIndex([inner]))
-    assert not p.keyed and p.cost == 0.0 and p.ring >= len(rings(SIZE)) and p.leader is not None
+    assert p.cost == 0.0 and p.ring >= len(rings(SIZE)) and p.leader is not None
     assert hug_gap(p.block, referent_box(BOARD, p.block)) <= HUG_PX
     assert list(outer_rings(SIZE)) and outer_rings(SIZE)[0][0] == len(rings(SIZE))
 
@@ -140,10 +139,10 @@ def test_a_line_caption_takes_the_leader_rings_too_and_an_area_does_not() -> Non
     band = SIZE * (PREFERRED_OFFSET_EM + 0.5 * 20)
     cover = ObstacleIndex([Obstacle(tuple(rect(200.0, 0.0, 300.0, band)), WEIGHT_OBSTACLE)])
     p = place("lane", SIZE, lane, cover)
-    assert not p.keyed and p.leader is not None and p.ring >= len(rings(SIZE))
+    assert p.leader is not None and p.ring >= len(rings(SIZE))
     court = Subject("area", tuple(rect(0.0, 0.0, 30.0, 10.0)))
     q = place("a court far too long for its ground", SIZE, court, ObstacleIndex([Obstacle(tuple(rect(0.0, 0.0, 5.0, 5.0)), WEIGHT_OBSTACLE)]))
-    assert q.keyed and q.position == "key", "an area's name lies in it, or goes in the key"
+    assert q.leader is None and q.position != "key", "an area's name lies in it, where it covers the least - no leader, no key"
 
 
 def test_a_way_crossed_between_the_blocks_corners_is_seen() -> None:
@@ -175,18 +174,6 @@ def test_a_crown_is_a_disc_and_a_grove_caption_may_lie_on_it() -> None:
     assert circle_gap(edge, crown.circle) == pytest.approx(1.0)
 
 
-def test_the_key_mark_stands_on_what_it_names() -> None:
-    """Feature 287, D10: a keyed placement's mark stands on its subject - a point's center, an area's centroid, a line's
-    hint or its middle vertex - and costs more than any seat on the sheet."""
-    p = keyed("board", SIZE, BOARD, None, 1000.0)
-    assert p.keyed and p.cost == WEIGHT_KEY + 1000.0 and p.lines == ("board",) and p.x == pytest.approx(500.0)
-    area = keyed("court", SIZE, Subject("area", tuple(rect(50.0, 60.0, 10.0, 10.0))), ["the", "court"], 0.0)
-    assert (area.x, area.lines) == (pytest.approx(50.0), ("the", "court"))
-    lane = Subject("line", ((0.0, 0.0), (10.0, 0.0), (20.0, 0.0)), half_width=1.0)
-    assert keyed("lane", SIZE, lane, None, 0.0).x == 10.0
-    assert keyed("lane", SIZE, Subject("line", lane.poly, half_width=1.0, hint=(3.0, 0.0)), None, 0.0).x == 3.0
-
-
 def test_a_leader_through_hard_ink_is_an_overlap_and_through_soft_ink_is_not() -> None:
     board = BOARD
     c = _Cand(3, 0, "upper right", (540.0, 470.0), 0.0, ("x",), (4.0, 3.0), SIZE)
@@ -206,11 +193,11 @@ def test_the_record_box_is_the_block_unturned() -> None:
     assert (x1 - x0, y1 - y0) == (pytest.approx(10.0), pytest.approx(4.0)) and (x0 + x1) / 2 == pytest.approx(10.0)
 
 
-def test_the_fallbacks_run_out_to_the_key_or_to_none() -> None:
+def test_the_fallbacks_run_out_to_the_least_cover_or_to_none() -> None:
     """Every seat off the picture: strict has nothing to offer; a line with every seat covered takes its leader rings to
-    the end and goes in the key; an area's referent is its own box."""
+    the end and goes down where it covers the least (0242; the key retired, 0241); an area's referent is its own box."""
     assert place("notice board", SIZE, BOARD, ObstacleIndex(), frame=(495.0, 495.0, 505.0, 505.0), strict=True) is None
     lane = Subject("line", ((0.0, 0.0), (400.0, 0.0)), half_width=2.0)
-    assert place("lane", SIZE, lane, ObstacleIndex([Obstacle(tuple(rect(200.0, 0.0, 900.0, 900.0)), WEIGHT_OBSTACLE)])).keyed
+    assert place("lane", SIZE, lane, ObstacleIndex([Obstacle(tuple(rect(200.0, 0.0, 900.0, 900.0)), WEIGHT_OBSTACLE)])).cost > 0.0
     court = Subject("area", tuple(rect(50.0, 60.0, 10.0, 20.0)))
     assert referent_box(court, court.poly) == (40.0, 40.0, 60.0, 80.0)

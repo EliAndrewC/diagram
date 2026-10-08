@@ -9,7 +9,7 @@ from typing import Any
 
 import pytest
 
-from l7r.diagram.labels import Obstacle, ObstacleIndex, Placement, Way, caption_clears_ways, keyed
+from l7r.diagram.labels import Obstacle, ObstacleIndex, Placement, Way, caption_clears_ways
 from l7r.diagram.labels.geom import poly_gap, rect
 from l7r.diagram.settlement import Settlement, nearest_way_bearing
 from l7r.diagram.settlement._geom import seg_dist, street_runs
@@ -274,14 +274,14 @@ def _block_all_but(s: Settlement, keep: list[tuple[float, float, float, float]])
             x = max(x, b)
 
 
-def _corner_hamlet() -> Settlement:
+def _corner_hamlet(verge: bool = True) -> Settlement:
     """An L lane whose busiest open ground lies OUTSIDE its corner, where every seat stands as near both arms (90 degrees
-    apart), and whose only other open ground is a quiet verge on the first arm."""
+    apart), and whose only other open ground is a quiet verge on the first arm (none with `verge=False`)."""
     s = _hamlet(view=(0.0, 0.0, 1000.0, 800.0))
     s.M["lanes"] = [{"pts": [[200.0, 200.0], [600.0, 200.0], [600.0, 600.0]], "w": 5}]
     for x, y in ((680.0, 150.0), (700.0, 240.0), (660.0, 110.0), (720.0, 130.0)):
         _house(s, x, y, 24.0, 18.0)
-    _block_all_but(s, [(603.0, 150.0, 640.0, 205.0), (300.0, 140.0, 340.0, 196.0)])
+    _block_all_but(s, [(603.0, 150.0, 640.0, 205.0), *([(300.0, 140.0, 340.0, 196.0)] if verge else [])])
     return s
 
 
@@ -297,10 +297,12 @@ def _judged_off(M: Any, x: float, y: float, rot: float) -> float:
 def test_a_board_is_turned_to_its_way_and_refused_where_it_cannot_face_it(monkeypatch: pytest.MonkeyPatch) -> None:
     """Labels L12, the violating case (cohort seeds 25 and 42: 55 and 86 degrees off): the busiest seat stands outside an L
     corner, as near both arms. Turned to its nearest arm with no refusal, the board stands side-on to the other; the
-    siter refuses that seat and the board it posts faces every way as near it."""
+    siter refuses that seat and the board it posts faces every way as near it. Sited with no caption (`label=""`), so the
+    facing rule alone decides - a caption at the corner, with no free ground, lies on the lane arms and is refused for that
+    (feature 328 wave 49: the key that once took it is retired)."""
     lenient = WayFacing.turn
     monkeypatch.setattr(WayFacing, "turn", lambda self, x, y, f: (self._near(x, y) or [(0.0, 0, f)])[0][2])
-    s = _corner_hamlet()
+    s = _corner_hamlet(verge=False)  # the verge would take the board first (`VERGE_FIRST`) now its caption clears the road
     spot = s.place_kosatsuba()
     assert spot is not None and _judged_off(s.M, *spot, s.M["kosatsuba"][-1]["rot"]) > FACING_DEG, "the input holds the violation"
     monkeypatch.setattr(WayFacing, "turn", lenient)
@@ -389,11 +391,11 @@ def test_the_web_lanes_are_offered_when_no_main_way_takes_a_clean_caption() -> N
     assert spot is not None and abs(spot[0] - 500.0) < 40.0 and spot[1] > 385.0, spot
 
 
-def test_with_no_clean_caption_anywhere_the_caption_prefers_a_seat_off_the_ways() -> None:
-    """Plan D12's second step: where no verge takes a board with a clean caption, a board still stands, its caption on a
-    leader or in the key (D10), and a seat whose caption clears every way is preferred
-    (`captions_clear_the_ways_they_stand_on`, feature 287 wave 5): the verge seats, whose key mark would lie on the
-    road, are passed over (the violating case), and the board stands where the mark clears it."""
+def test_with_no_clean_caption_anywhere_the_verge_takes_the_board_and_its_caption_clears_the_road() -> None:
+    """Plan D12's second step: where no verge takes a board with a clean caption, a board still stands, its caption where it
+    covers the least, and a seat whose caption clears every way is preferred (`captions_clear_the_ways_they_stand_on`). With
+    the key retired (feature 328 wave 49) the verge seat's caption sits above the board, off the road - so the board stands
+    on the verge, 6 ft off the road's edge (0190), not out in the band."""
     s = _hamlet(view=(0.0, 0.0, 400.0, 400.0))
     s.M["road"] = [[100.0, 200.0], [300.0, 200.0]]  # sited along at its 18 ft tread; captions keep off its 26 ft bed
     _house(s, 200.0, 260.0)
@@ -401,12 +403,12 @@ def test_with_no_clean_caption_anywhere_the_caption_prefers_a_seat_off_the_ways(
     everything = ObstacleIndex([Obstacle(tuple(rect(200.0, 200.0, 400.0, 400.0)), 1000.0)], [road])
     s.label_obstacles = lambda: everything  # type: ignore[method-assign]  # every caption seat covers ink
     verge = terminal_caption(s.M, 200.0, 200.0 - (9.0 + 2.5 + 4.0), 6.0, 2.5, 0.0, "notice board", everything, (0.0, 0.0, 400.0, 400.0))
-    assert verge is None, "a board at the verge's edge would put its key mark on the road"
+    assert verge is not None and caption_clears_ways(verge.block, [road]), "the verge seat's caption clears the road"
     spot = s.place_kosatsuba()
-    assert spot is not None and abs(spot[1] - 200.0) > 15.5, spot
+    assert spot is not None and seg_dist(spot[0], spot[1], (100.0, 200.0), (300.0, 200.0)) <= KOSATSUBA_WAY_REACH_FT, f"by the road: {spot}"
     proved = s._label_queue[-1][1][6]
-    assert isinstance(proved, Placement) and proved.keyed, "every seat covers ink: the caption goes in the key"
-    assert caption_clears_ways(proved.block, [road]), "the mark the board carries clears the road"
+    assert isinstance(proved, Placement) and proved.cost > 0.0, "every seat covers ink: the caption goes where it covers the least"
+    assert caption_clears_ways(proved.block, [road]), "and clears the road"
 
 
 def test_where_every_seats_caption_is_fouled_the_board_is_still_posted_by_its_way() -> None:
@@ -416,7 +418,7 @@ def test_where_every_seats_caption_is_fouled_the_board_is_still_posted_by_its_wa
     s = _hamlet(view=(0.0, 0.0, 400.0, 400.0))
     s.M["road"] = [[100.0, 200.0], [300.0, 200.0]]
     _house(s, 200.0, 290.0)
-    flood_way = Way(((0.0, 200.0), (400.0, 200.0)), 150.0)
+    flood_way = Way(((0.0, 200.0), (400.0, 200.0)), 400.0)  # the whole frame: no seat inside it clears the way
     flood = ObstacleIndex([Obstacle(tuple(rect(200.0, 200.0, 400.0, 400.0)), 1000.0)], [flood_way])
     s.label_obstacles = lambda: flood  # type: ignore[method-assign]  # a way under every seat the band offers
     spot = s.place_kosatsuba()
@@ -426,8 +428,8 @@ def test_where_every_seats_caption_is_fouled_the_board_is_still_posted_by_its_wa
     proved = s._label_queue[-1][1][6]
     assert isinstance(proved, Placement) and not caption_clears_ways(proved.block, [flood_way]), "the violating case: a fouled caption"
     s.place_labels()
-    assert proved.keyed and s.M["caption_key"] == [[1, "notice board"]], "the caption is drawn, in the key"
-    assert any(lb[5] == "1" and (lb[0] + lb[2]) / 2 == proved.x for lb in s.M["labels"] if len(lb) > 5), "its mark wherever it lands"
+    assert "caption_key" not in s.M, "no key (0241)"
+    assert any("notice board" in str(lb[5]) for lb in s.M["labels"] if len(lb) > 5), "the caption is drawn where it covers the least"
 
 
 def test_a_pinned_placement_is_posted_though_its_caption_is_fouled() -> None:
@@ -478,17 +480,17 @@ def test_site_board_asks_a_later_proof_only_where_the_earlier_sited_nothing() ->
 
 def test_the_terminal_caption_clears_every_way_or_is_refused() -> None:
     """Feature 287 wave 5, `terminal_caption` - the one predicate of the board caption's second step (plan D12): a board with
-    open ground takes its caption beside it; one whose key mark would lie on a way is refused before any search; and one
-    whose every caption seat crosses a way - here a soft way ringing the board, which the non-strict placer may cross -
-    is refused on the caption it would draw, though its mark clears."""
+    open ground takes its caption beside it, as does one standing on a way (no key mark is asked any more, feature 328
+    wave 49); and one whose every caption seat crosses a way - here a soft way ringing the board, which the non-strict
+    placer may cross - is refused on the caption it would draw."""
     frame = (0.0, 0.0, 400.0, 400.0)
     open_ground = terminal_caption({}, 200.0, 200.0, 6.0, 2.5, 0.0, "notice board", ObstacleIndex(), frame)
-    assert open_ground is not None and not open_ground.keyed and open_ground.ring == 0
+    assert open_ground is not None and open_ground.ring == 0
     through = ObstacleIndex(ways=[Way(((100.0, 200.0), (300.0, 200.0)), 2.5)])
-    assert terminal_caption({}, 200.0, 200.0, 6.0, 2.5, 0.0, "notice board", through, frame) is None, "the mark on the way"
+    beside = terminal_caption({}, 200.0, 200.0, 6.0, 2.5, 0.0, "notice board", through, frame)
+    assert beside is not None and caption_clears_ways(beside.block, through.ways), "a caption beside the board, clear of the way"
     ring = tuple((200.0 + 70.0 * math.cos(math.radians(a)), 200.0 + 70.0 * math.sin(math.radians(a))) for a in range(0, 361, 10))
     soft = ObstacleIndex([Obstacle(tuple(rect(200.0, 200.0, 400.0, 400.0)), 1000.0, soft=True)], [Way(ring, 61.0, soft=True)])
-    assert caption_clears_ways(keyed("notice board", 8, board_subject(200.0, 200.0, 0.0, 12.0, 5.0), None, 0.0).block, soft.ways)
     assert terminal_caption({}, 200.0, 200.0, 6.0, 2.5, 0.0, "notice board", soft, frame) is None, "every seat crosses the ring"
 
 

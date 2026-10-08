@@ -13,6 +13,8 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 - (wave 5, landed and reviewed) placement-changed village lane on kashikawa - wave 5: 0033's row street runs on off the map as the road into it at both ends, where
   the web cut it back to its last joint (`trim_streets`); Kashikawa's and Mizuguchi's far ends now run off the sheet as a
   second way out (every way is inked `village lane`).
+- none (wave 49): the key's removal and the board's lane permission moved no map (the five hamlets regenerated
+  2026-10-08, manifests byte-identical; no kept sheet drew a key)
 - none (wave 48): the corridor at the footprint's edge, the skeleton's crop margin and its ford moved no map (the five
   hamlets regenerated 2026-10-08, manifests byte-identical)
 - placement-changed: woodland commons on kashikawa - wave 47: the beyond-the-fields walk counts a row holding as field, so the
@@ -1600,4 +1602,22 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
 - [ ] T123 rows 502-505 (FR-003, FR-004)
       research: rendering
 - [ ] T124 the claims re-checked by `impl-drift`; the close at batch 2's (FR-005, FR-006)
+      research: rendering
+
+## Phase 50 - wave 49 (amendment 48): rows 507-511 - the key removed (0242, 0241); the board's lane permission; scope deferrals
+
+- Rows 507 and 509-510's gate-complex and castle entries DEFERRED on measure (no kept map draws a town, city, gate complex
+  or castle; `audit/scope.py` `DEFERRED_ON_MEASURE`).
+- `labels/placer.py::place#never left off` (row 508, E2): the key removed whole - the exception check (spec-fidelity MODE 1,
+  2026-10-08) ruled keeping it for an all-hard caption NOT LEGITIMATE. A caption with no free seat goes down where it covers
+  the least; with no seat in the frame, the first seat beside it past the frame's edge. Tests restated: the never-dropped,
+  soft-before-hard and frame tests (`test_placer.py`), the fallbacks (`test_placer_287.py`), the dark-ink hand sheet, the
+  caption (`test_captions.py`), the board's verge, flood and facing cases (`test_board_seat.py`, `test_fixtures.py`).
+- `overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#notice board at the roadside` (row 511, E2): the `{kosatsuba, lanes}` permission
+  dropped; the board stands on its 6 ft verge (0190).
+- Found on the way: the board's caption proved against the 7 x 3 ft search face, not the 16 x 6 ft board (`found-wave49`).
+
+- [ ] T125 rows 507-511 (FR-003, FR-004)
+      research: rendering
+- [ ] T126 the claims re-checked by `impl-drift`; the close at batch 2's (FR-005, FR-006)
       research: rendering

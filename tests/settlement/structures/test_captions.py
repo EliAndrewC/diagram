@@ -1,8 +1,6 @@
 """Split from the 1,152-line `tests/settlement/test_structures.py` by feature 174 - see this
 directory's CLAUDE.md for the index. Tests for `settlement/structures/captions.py`."""
 
-import pytest
-
 from tests.settlement._builders import _town
 
 
@@ -144,29 +142,18 @@ def test_the_index_holds_every_crown_and_every_caption_still_queued():
     assert [o.circle for o in g.label_obstacles().obstacles if o.circle is not None] == [(50.0, 60.0, 14.0)], "the clumps, where no crown is recorded"
 
 
-def test_a_caption_with_no_seat_goes_in_the_key_on_a_card_or_in_a_band():
-    """Feature 287, D10: the placer found no seat - its number is drawn on what it names, its words in the sheet's key:
-    on a card over blank ground inside the view where there is room, else in a band grown under the map, outside the
-    neatline its ink is clipped at."""
+def test_a_caption_with_no_seat_goes_down_where_it_covers_the_least():
+    """0242's drawing page (feature 328 wave 49): "On a sheet with no free ground at all, the caption still goes down, where
+    it covers the least" - its words drawn whole, never a number and a key (0241: "There is no key box"; feature 287's D10
+    key retired)."""
     from l7r.diagram.labels import Subject
     from l7r.diagram.labels.geom import rect
 
     s = _town()
     s.set_view(0, 0, 1000, 1000)
     s.M["buildings"] = [{"x": 500, "y": 500, "w": 20, "h": 20, "kind": "merchant"}]
-    s.M["fire_towers"] = [{"x": 500, "y": 500, "w": 400, "h": 400}]  # ink every seat within the hug covers (the title's search does not read it)
+    s.M["fire_towers"] = [{"x": 500, "y": 500, "w": 400, "h": 400}]  # ink every seat within the hug covers
     s._captions.append(("a warehouse & store", Subject("point", tuple(rect(500.0, 500.0, 10.0, 10.0))), 9, False, "normal", "#333"))
     s.place_labels()
-    assert s.M["caption_key"] == [[1, "a warehouse & store"]]
-    assert any(lb[5] == "1" and lb[6] for lb in s.M["labels"]), "the mark, recording what it names"
-    card = s.M["caption_key_card"]
-    assert card[2] <= 1000 and card[3] <= 1000 and "key_band" not in s.M["meta"], "a card inside the view"
-    assert any("1  a warehouse &amp; store" in t for t in s.toplabels)
-    full = _town()
-    full.set_view(0, 0, 200, 200)
-    full.M["fields"] = [{"outline": [[-10, -10], [210, -10], [210, 210], [-10, 210]]}]
-    full.M["buildings"] = [{"x": 100, "y": 100, "w": 20, "h": 20, "kind": "merchant"}, {"x": 100, "y": 100, "w": 190, "h": 190, "kind": "yard"}]
-    full._captions.append(("stores", Subject("point", tuple(rect(100.0, 100.0, 10.0, 10.0))), 9, False, "normal", "#333"))
-    full.place_labels()
-    assert full.M["meta"]["key_band"] > 0 and full.M["meta"]["neatline"] == [0, 0, 200, 200]
-    assert full.M["meta"]["view"][3] == pytest.approx(200 + full.M["meta"]["key_band"], abs=0.1) and full.M["caption_key_card"][1] >= 200
+    assert "caption_key" not in s.M and "key_band" not in s.M["meta"], "no key"
+    assert any("warehouse" in str(lb[5]) for lb in s.M["labels"]), "the caption's own words are drawn"

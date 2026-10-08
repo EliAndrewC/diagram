@@ -643,9 +643,6 @@ _MATRIX_ALLOWED_KEYS: dict[frozenset[str], str] = {
     frozenset(
         {"channels", "dry_plots"}
     ): "a supply canal hugs the fan's HIGH DRY MARGIN by design (the comb doctrine), and the dry hem IS that margin - a plot may be crossed by the irrigation that serves it. A NATURAL watercourse is a different matter and stays forbidden: dry_plots x streams is the defect this whole feature was opened for",
-    frozenset(
-        {"kosatsuba", "lanes"}
-    ): "the notice board hugs the roadside BY DESIGN - place_kosatsuba deliberately bypasses the lane corridor's no-build clearance, which is a house setback, because a board that everyone passes is the whole institution (research/questions/0190-notice-boards-kosatsuba.html)",
     frozenset({"buildings", "merchant_estates"}): "a merchant estate is a walled COURT drawn around an inner building that is itself a checked struct",
     frozenset(
         {"wall", "flower_fields"}
@@ -662,7 +659,6 @@ Research:
     ward fence meets the wall - research/questions/0160-city-wards-and-the-gates-that-shut-them-at-night-machi-kido.drawing.html: ends at the rampart
     castle moat bridge - research/questions/0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html: a deck over the castle's own moat to its gate
     supply canal along the dry hem - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: plots laid along the canal
-    notice board at the roadside - research/questions/0190-notice-boards-kosatsuba.drawing.html: stands beside the main road
     merchant estate court - research/questions/0155-rich-merchants-walled-houses-and-their-fireproof-storehouses-kura.drawing.html: a walled court round its house
     flower bed against the town wall - UNRESEARCHED: a bed laid flush inside the rampart
 """

@@ -344,3 +344,4 @@ Each wave's amendment adds its map decisions to this table. The program's decisi
 - Amendment 36: round 1 (spec-fidelity) CHANGES REQUIRED - the Z's move-back on every refused pull, the module docstring, plan CLEAR; round 2 (verify) FAITHFUL (2026-10-08).
 - Amendments 37-44 (waves 38-45): each round's verdict is recorded in `plan-review.json` and the wave's `plan.md` section; every one ended plan CLEAR.
 - Amendment 45 (wave 46, and the GM's batching ruling): round 1 plan BLOCKED - the village lane occasion still "capped, for a waiver" against the GM's 2026-10-08 ruling, and row 491's tree-lane fallback misstated; round 2 plan CLEAR, the spec's FR-006 and Wave entity still verifying per wave - CHANGES REQUIRED; round 3 (verify) FAITHFUL (2026-10-08).
+- Exception check (spec-fidelity MODE 1, 2026-10-08): the key kept for an all-hard caption (feature 287's D10) - NOT LEGITIMATE; row 508 fixed literally, the key removed (wave 49).

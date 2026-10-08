@@ -779,7 +779,11 @@ def past_the_frame(start: Pt, theta: float, w: float, h: float) -> float:
 
     Research: track past the frame - CONVENTION: to the canvas edge on its own bearing and 400 ft beyond"""
     c, sn = math.cos(theta), math.sin(theta)
-    exits = [t for t in ((w - start[0]) / c if c > 1e-12 else (-start[0] / c if c < -1e-12 else math.inf), (h - start[1]) / sn if sn > 1e-12 else (-start[1] / sn if sn < -1e-12 else math.inf)) if 0.0 <= t < math.inf]
+    exits = [
+        t
+        for t in ((w - start[0]) / c if c > 1e-12 else (-start[0] / c if c < -1e-12 else math.inf), (h - start[1]) / sn if sn > 1e-12 else (-start[1] / sn if sn < -1e-12 else math.inf))
+        if 0.0 <= t < math.inf
+    ]
     return min(exits, default=0.0) + TRACK_PAST_FRAME_FT
 
 

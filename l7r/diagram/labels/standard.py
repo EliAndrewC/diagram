@@ -65,12 +65,6 @@ REACH_EM = 8.0
 HUG_PX = 120.0
 """Research: the hug - CONVENTION: never more than 120 px box to box from what it names, a calibration from the gate"""
 
-# A CAPTION WITH NO SEAT ON THE SHEET GOES IN THE SHEET'S KEY (feature 287, D10): a numbered mark at the feature and
-# the words in a key beside the map - a map drawing convention. It costs more than any seat on the sheet, so a caller
-# comparing seats, or a repair lifting a neighbor, takes any seat that is drawn before the key.
-WEIGHT_KEY = 1_000_000.0
-"""Research: the key's cost - CONVENTION: dearer than any seat on the sheet"""
-
 # THE WEIGHTS, on Esri's scale: "A feature weight of 0 indicates that the feature should be treated as available
 # space, while a weight of 1,000 indicates that the feature is considered an obstacle" (esri-weight-labels-features).
 # Free space first; when none is left, the least total weight. Which families are obstacles, which are free, and the

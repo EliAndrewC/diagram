@@ -79,7 +79,7 @@ def test_a_notice_board_hemmed_on_every_side_still_gets_its_caption():
     assert len(seat) == 1, "the caption is drawn all the same"
     rec = s.M["labels"][-1]
     assert rec[6] == [492.0, 497.0, 508.0, 503.0], "it records the board it names (16 x 6 ft, 0190)"
-    assert s.M["caption_key"] == [[1, "notice board"]] and rec[5] == "1", "its number on the board, its words in the key"
+    assert "caption_key" not in s.M and rec[5] == "notice board", "its own words, where they cover the least - no key (0241, 0242)"
 
 
 def test_the_board_can_be_sited_on_a_manifest_that_records_runs_but_no_lane_records() -> None:
@@ -305,12 +305,13 @@ def test_a_board_under_one_wide_canopy_is_sited_without_measuring_a_seat_it_cann
     spot = s.place_kosatsuba()
     assert spot is not None
     board = s.M["kosatsuba"][0]
-    assert abs(board["y"] - 300.0) > 15.5, "the verge seats would put the key mark on the road's bed"
     proved = s._label_queue[-1][1][6]
-    assert proved.keyed and caption_clears_ways(proved.block, index.ways)
+    assert caption_clears_ways(proved.block, index.ways), "its caption, where it covers the least, clears the road"
     during = len(scored)
     scored.clear()
-    again = place("notice board", BOARD_CAPTION_SIZE, board_subject(board["x"], board["y"], board["rot"], board["vw"], board["vh"]), index, (0.0, 0.0, 600.0, 600.0))
+    # replayed on the face the siter proves a caption against (7 x 3 ft, `place_kosatsuba`'s `w, h`), not the 16 x 6 ft frame
+    # drawn - the key mark at the board's center hid the difference until feature 328 wave 49 (filed: the proof's face)
+    again = place("notice board", BOARD_CAPTION_SIZE, board_subject(board["x"], board["y"], board["rot"], 7.0, 3.0), index, (0.0, 0.0, 600.0, 600.0))
     assert again == proved and during == len(scored), f"{during} seats scored: the strict proofs measured a seat under the crown"
     assert math.dist(spot, (board["x"], board["y"])) == 0.0
 

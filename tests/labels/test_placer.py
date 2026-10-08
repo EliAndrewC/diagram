@@ -9,7 +9,7 @@ import pytest
 from l7r.diagram.labels import CIVIC_GROUPS, Obstacle, ObstacleIndex, Subject, Way, cut, layouts, place, upright
 from l7r.diagram.labels.geom import area_centroid, centroid, inside, nearest_points, poly_gap, poly_seg_gap, rect, segments_cross
 from l7r.diagram.labels.placer import rings
-from l7r.diagram.labels.standard import POSITIONS, PREFERRED_OFFSET_EM, REACH_EM, WEIGHT_KEY, WEIGHT_OBSTACLE, WEIGHT_WAY, block_half
+from l7r.diagram.labels.standard import POSITIONS, PREFERRED_OFFSET_EM, REACH_EM, WEIGHT_OBSTACLE, WEIGHT_WAY, block_half
 
 SIZE = 8.0
 BOARD = Subject("point", tuple(rect(500.0, 500.0, 6.0, 2.5)))
@@ -84,14 +84,12 @@ def _collar(poly, width):
     ]
 
 
-def test_a_caption_is_never_dropped_and_never_overlaps() -> None:
-    """Scenario 4 (feature 287, D10): a sheet with no free seat anywhere - the caption is not dropped and is not drawn
-    overlapping: it goes in the sheet's key, its mark on the board. The retired least-cost seat has no caller left: the
-    board with no clean verge (D12) takes this path too."""
+def test_a_caption_is_never_dropped_and_goes_down_where_it_covers_the_least() -> None:
+    """Scenario 4, under 0242's drawing page (feature 328 wave 49): a sheet with no free seat anywhere - "the caption still
+    goes down, where it covers the least", its words whole and beside what it names (feature 287's key retired: 0241)."""
     everything = Obstacle(tuple(rect(500.0, 500.0, 900.0, 900.0)), WEIGHT_OBSTACLE)
     p = place("notice board", SIZE, BOARD, ObstacleIndex([everything]))
-    assert p.keyed and p.lines == ("notice board",) and p.cost > WEIGHT_KEY and p.leader is None
-    assert inside(p.x, p.y - 2.2, list(BOARD.poly)), "the mark stands on what it names"
+    assert p.position != "key" and p.cost == WEIGHT_OBSTACLE, "drawn at the least cost - one obstacle covered"
     assert place("notice board", SIZE, BOARD, ObstacleIndex([everything]), strict=True) is None
 
 
@@ -116,16 +114,17 @@ def test_when_nothing_is_free_the_least_soft_weight_wins() -> None:
     """A hand sheet whose every seat covers only soft ink: a seat crossing one way beats every seat on a light roof,
     even at a lower rank - Esri's "a location with the lowest total feature weight is chosen"."""
     p = place("notice board", SIZE, BOARD, _Priced())
-    assert p.cost == WEIGHT_WAY and p.position == "right" and p.ring == 0 and not p.keyed
+    assert p.cost == WEIGHT_WAY and p.position == "right" and p.ring == 0
 
 
-def test_a_soft_seat_is_taken_before_the_key_and_an_overlap_never() -> None:
-    """Feature 287, D10: a seat covering soft ink is drawn at the least cost, a seat covering hard ink never is - with
-    nothing else, the key."""
+def test_a_soft_seat_is_taken_before_a_hard_one() -> None:
+    """A seat covering soft ink is drawn first; with nothing soft, the seat covering the least hard ink (0242's drawing page,
+    feature 328 wave 49 - the key retired)."""
     soft = ObstacleIndex([Obstacle(tuple(rect(500.0, 500.0, 900.0, 900.0)), WEIGHT_OBSTACLE, soft=True)])
     assert place("notice board", SIZE, BOARD, soft).cost == WEIGHT_OBSTACLE
     way = ObstacleIndex(ways=[Way(((0.0, 380.0), (1000.0, 380.0)), 120.0)], obstacles=[Obstacle(tuple(rect(500.0, 640.0, 900.0, 130.0)), WEIGHT_OBSTACLE)])
-    assert place("notice board", SIZE, BOARD, way).keyed, "a hard way above, a hard house below: the key"
+    hard = place("notice board", SIZE, BOARD, way)
+    assert hard.position != "key" and hard.cost > 0.0, "a hard way above, a hard house below: the seat covering the least"
 
 
 def test_the_frame_is_never_left() -> None:
@@ -133,7 +132,7 @@ def test_the_frame_is_never_left() -> None:
     p = place("notice board", SIZE, BOARD, ObstacleIndex(), frame=(0.0, 0.0, 510.0, 1000.0))
     assert p.position == "left", "above and below run past the frame's edge too"
     squeezed = place("notice board", SIZE, BOARD, ObstacleIndex(), frame=(495.0, 495.0, 505.0, 505.0))
-    assert squeezed.keyed and squeezed.lines, "no seat fits the frame at all: the caption goes in the key"
+    assert squeezed.position == "above" and squeezed.lines, "no seat fits the frame at all: the first seat beside it, never left off"
 
 
 def test_a_caption_wraps_at_a_seat_before_moving_off_it() -> None:

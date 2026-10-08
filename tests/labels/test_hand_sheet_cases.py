@@ -282,21 +282,18 @@ def test_a_grounds_name_keeps_off_another_named_ground_and_stays_in_its_own() ->
     assert p.position == "inside" and 0 < p.cost < sl.WEIGHT_TEXT, "covering a little in its ground, not led out"
 
 
-def test_a_caption_with_no_seat_but_on_dark_ink_goes_in_the_sheets_key() -> None:
-    """Feature 287, D10 (homes H29c): every seat the shed's name could take lies on dark ink, which dark words cannot
-    be read on - the overlap the placer never draws. Its number goes on the shed and its words in a key grown under
-    the drawing, outside it; the viewBox and the height grow by the key's band."""
+def test_a_caption_with_no_seat_but_on_dark_ink_goes_down_where_it_covers_the_least() -> None:
+    """0242's drawing page (feature 328 wave 49): every seat the shed's name could take lies on dark ink - "the caption still
+    goes down, where it covers the least", its words whole; no number and no key band (0241: "There is no key box"; feature
+    287's D10 key retired by an exception check ruled NOT LEGITIMATE)."""
     dark = '  <rect x="1" y="1" width="398" height="298" fill="#1A1A1A" data-kind="-"/>\n'
     shed = '  <g data-kind="woodshed"><rect x="195" y="145" width="10" height="8" fill="#C9A57A"/><text font-size="9">woodshed</text></g>\n'
     src = _sheet(dark, shed).replace('viewBox="0 0 400 300"', 'viewBox="0 0 400 300" height="600"')
     ((_caps, p, _per),) = sl.seat(src)
-    assert p.keyed and p.lines == ("woodshed",)
+    assert p.lines == ("woodshed",) and p.cost > 0.0
     out = sl.placed(src)
-    assert 'viewBox="0 0 400 ' in out and 'viewBox="0 0 400 300"' not in out
-    grown = float(out.split('viewBox="0 0 400 ')[1].split('"')[0])
-    assert float(out.split(' height="')[1].split('"')[0]) == pytest.approx(600.0 * grown / 300.0)
-    assert ">1  woodshed</text>" in out and ">woodshed</text>" not in out, "the words in the key, the number on the shed"
-    assert out.index("1  woodshed") > out.index('data-kind="woodshed"')
+    assert 'viewBox="0 0 400 300"' in out, "no key band grown"
+    assert ">woodshed</text>" in out, "the words drawn whole on the sheet"
 
 
 def test_a_hand_sheets_light_ink_is_soft_and_its_names_and_dark_ink_are_not() -> None:

@@ -224,30 +224,6 @@ class CaptionProbesMixin:
         if getattr(self, "_road_label", None):
             self._finish_road_label()  # feature 145: the Imperial-road caption, a town/city feature, lives in structures/ground.py
             self._road_label: Any = None  # declared Any at structures/ground.py; re-declared for the checker (the attribute is conditional)
-        if self.M.get("caption_key"):
-            self._draw_caption_key()
-
-    def _draw_caption_key(self: Settlement) -> None:  # type: ignore[misc]
-        """THE SHEET'S KEY (feature 287, D10): the words of every caption the placer found no seat for, each after the
-        number its mark carries on the map - a map drawing convention (a legend's numbered notes). Set on a card over
-        blank ground or cover inside the view where one is free (`_blank_label_spot`), else in a band grown under the
-        map, as the title's band is grown over it - the key is sheet furniture and owes the map no ground."""
-        rows = [f"{n}  {text}".replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;") for n, text in self.M["caption_key"]]
-        size, pad = 9.0, 6.0
-        w = max(len(r) for r in rows) * size * 0.55 + 2 * pad
-        h = len(rows) * size * 1.15 + 2 * pad
-        vx0, vy0, vw, vh = self.view if self.view else (0, 0, self.W, self.H)
-        spot = self._blank_label_spot(vx0, vy0, vw, vh, w, h, cover_ok=True)
-        if spot is None:
-            band = h + 16
-            self.M["meta"].setdefault("neatline", [round(v, 1) for v in (vx0, vy0, vw, vh)])  # the band is outside the map (`neatline_clip`)
-            self.set_view(vx0, vy0, vw, vh + band)
-            self.M["meta"]["key_band"] = round(band, 1)
-            spot = (vx0 + 16, vy0 + vh + 8)
-        x0, y0 = spot
-        self.M["caption_key_card"] = [round(x0, 1), round(y0, 1), round(x0 + w, 1), round(y0 + h, 1)]
-        body = "".join(f'<text x="{x0 + pad:.0f}" y="{y0 + pad + (i + 0.8) * size * 1.15:.0f}" font-size="{size:g}" fill="#2D2A24">{r}</text>' for i, r in enumerate(rows))
-        self.add_label(f'<g><rect x="{x0:.0f}" y="{y0:.0f}" width="{w:.0f}" height="{h:.0f}" rx="4" fill="#F7F0DC" stroke="#8C7A55" stroke-width="1"/>{body}</g>', cls="-")
 
     # WHICH METHOD DRAWS EACH QUEUED KIND. An ordered-data row rather than a derived one (clause 14's
     # carve-out): it states a DECISION - that a kosatsuba's seat is searched in the phase while a
@@ -271,18 +247,11 @@ class CaptionProbesMixin:
     def _draw_placement(  # type: ignore[misc]
         self: Settlement, text: str, subject: Subject, p: Placement, size: float, italic: bool, weight: str, color: str, cls: ClsTag, markup: bool = False
     ) -> Placement:
-        """Draw one caption where the placer put it - its words, its leader, or (with no seat on the sheet, feature 287
-        D10) its numbered mark on what it names, the words going to the sheet's key - and add it to the phase's index.
+        """Draw one caption where the placer put it - its words and its leader - and add it to the phase's index.
         A caption whose seat was PROVED before the phase (the notice board's, labels L4) is drawn here verbatim."""
         if self._label_index is None:
             self._label_index = self.label_obstacles()
         ref = subject_ref(subject, p)
-        if p.keyed:
-            key = self.M.setdefault("caption_key", [])
-            key.append([len(key) + 1, text])
-            self.label(p.x, p.y, str(len(key)), size, weight="bold", color=color, ref=ref, cls=cls, lines=[str(len(key))], angle=0.0)
-            self._label_index.add(Obstacle(p.block, WEIGHT_OBSTACLE))
-            return p
         if markup:
             z = self.add_label(
                 f'<text x="{p.x:.0f}" y="{p.y:.0f}" text-anchor="middle" font-size="{size:g}" font-weight="bold" fill="#33301E" letter-spacing="1.5" paint-order="stroke" stroke="{LAND}" stroke-width="3.5">{text}</text>'

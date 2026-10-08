@@ -11,7 +11,7 @@ THE CLEAN CAPTION IS A PREFERENCE, NOT A CONDITION OF SITING (plan D12, answered
 sitting clean is not a hard requirement. It should sit clean when possible but it is okay for it to not sit clean."*).
 The board is always posted by its way (every settlement carries it, GM 2026-07-24; `kosatsuba_by_the_road`), and its
 caption is sited in three steps, each asked only where the one before found no seat: a seat whose caption the one placer
-seats clean beside it (`board_caption_seat`); else a seat whose caption, on a leader or in the key (D10), clears every
+seats clean beside it (`board_caption_seat`); else a seat whose caption, on a leader or where it covers the least, clears every
 way (`terminal_caption`); else the best roadside seat by the other rules, its caption wherever the one placer's normal
 fallback puts it (`fallback_caption`) - never no board over its caption.
 
@@ -24,7 +24,7 @@ import math
 from collections.abc import Callable, Sequence
 from typing import Any, NamedTuple
 
-from ....labels import ObstacleIndex, Placement, caption_clears_ways, keyed, place
+from ....labels import ObstacleIndex, Placement, caption_clears_ways, place
 from ....labels.geom import rect
 from ....labels.obstacles import stands_nearest
 from ..._geom import PointGrid, nearest_way_bearing, seg_dist, street_runs
@@ -200,21 +200,13 @@ def board_at(M: Any, x: float, y: float, hw: float, hh: float, rot: float) -> An
 
 
 def terminal_caption(M: Any, x: float, y: float, hw: float, hh: float, rot: float, label: str, index: ObstacleIndex, frame: Any) -> Placement | None:
-    """THE SECOND STEP of the board's caption (feature 287: `captions_clear_the_ways_they_stand_on`, D10; plan D12): the
-    seat the one placer gives the caption of a board seated here when no seat is free beside it - on a leader, or in the
-    sheet's key with its numbered mark on the board, never overlapping (D10) - and only where that caption, and the key
-    mark it would take, clear every way `index` holds; else None, and the siter goes on to `fallback_caption`.
+    """THE SECOND STEP of the board's caption (feature 287: `captions_clear_the_ways_they_stand_on`; plan D12): the seat
+    the one placer gives the caption of a board seated here when no seat is free beside it - on a leader, or where it covers
+    the least (0242) - and only where that caption clears every way `index` holds; else None, and the siter goes on to
+    `fallback_caption`. (A key mark asked first was retired with the key, feature 328 wave 49 - 0241: there is no key box.)
 
-    THE MARK IS ASKED FIRST, and it is what refuses a verge seat: a mark is set on the board, and a board posted at the
-    verge's edge puts it on the tread. Asked before the search (it is the keyed seat's own geometry, `keyed`), it
-    refuses such a seat without the full search that would find out whether the caption ends in the key; a seat whose
-    mark clears keeps a caption that clears whatever the search decides, since every other seat the search can return
-    covers no hard ink, and a way is hard. The drawn caption is asked again, so the predicate holds of what is drawn.
-
-    Research: board caption on a leader or in the key - CONVENTION: only where it and its mark clear every way"""
+    Research: board caption on a leader - CONVENTION: only where it clears every way"""
     subject = board_at(M, x, y, hw, hh, rot)
-    if not caption_clears_ways(keyed(label, BOARD_CAPTION_SIZE, subject, None, 0.0).block, index.ways):
-        return None
     p = place(label, BOARD_CAPTION_SIZE, subject, index, frame)
     return p if caption_clears_ways(p.block, index.ways) else None
 
@@ -222,7 +214,7 @@ def terminal_caption(M: Any, x: float, y: float, hw: float, hh: float, rot: floa
 def fallback_caption(M: Any, x: float, y: float, hw: float, hh: float, rot: float, label: str, index: ObstacleIndex, frame: Any) -> Placement:
     """THE LAST STEP of the board's caption (plan D12, GM 2026-09-30: a caption that does not sit clean is allowed): the
     seat the one placer's normal fallback gives the caption of a board seated here - the best free seat it finds, a
-    leader, or the key with its mark wherever it lands on the board, as for any caption. Never None, so a board with a
+    leader, or the seat covering the least, as for any caption. Never None, so a board with a
     roadside seat is never dropped over its caption.
 
     Research: board caption fallback - CONVENTION: the one placer's normal fallback"""
