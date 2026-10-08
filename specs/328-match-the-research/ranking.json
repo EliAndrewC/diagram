@@ -1215,6 +1215,21 @@
   "scope": "kept"
  },
  {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::_polder_candidate#cleanparcelsfalse is a fixed choice of parcel form inside th",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "clean_parcels=False is a fixed choice of parcel form inside the polder",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 28 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::_polder_candidate#surveyed block",
   "verdict": "DRIFTED",
   "tier": "E0",
@@ -1228,6 +1243,36 @@
   "tier_as_ranked": "E2",
   "e0_basis": "0027 drawing: 'The maps curve the dike's outer face with the water's edge'; the code wanders the edge from 0.5, eased to a 0.86 box fill (the measured main sides spread 55-58 ft)",
   "moved": "wave 28 (amendment 27 round 4): the row's premise (edge_wander 0, from 0019's 'fixed outer edge') was wrong - tried, it drew the rectangle 0027 and the GM's 2026-09-28 ruling exclude; 0019/0022 mean the drift leaves the edge alone; the code matches 0027, only its claim was wrong: E0",
+  "wave": "28",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::_polder_candidate#the block is oriented to the land's fall its rows run with t",
+  "verdict": "UNCLAIMED",
+  "tier": "E0",
+  "fix": "the block is oriented to the land's fall: its rows run with the fall and its columns across it",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 28 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E0",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::_polder_candidate#wander walked down to a 0.86 box fill",
+  "verdict": "MISLABELED",
+  "tier": "E0",
+  "fix": "the 0.5-to-0.12 wander steps and the 0.86 fill threshold set how irregular the polder's dike outline is. That is a fact about how the place was built, not only how it is shown. The page sets no degree for this irregularity, so the label should be GUESS (or UNRESEARCHED), not CONVENTION",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 28 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E0",
   "wave": "",
   "scope": "kept"
  },

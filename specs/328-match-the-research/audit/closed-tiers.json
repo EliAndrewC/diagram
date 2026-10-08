@@ -144,6 +144,7 @@
  ".claude/skills/diagram/l7r/diagram/hamletgen/water/brook.py::draw_intake#weir form rolled among four (s.resolve(\"weir_form\")), 0059's four forms at even odds": "E0",
  ".claude/skills/diagram/l7r/diagram/hamletgen/water/brook_rules.py::BEND_DIP_FT#bend dip allowance": "E2",
  ".claude/skills/diagram/l7r/diagram/hamletgen/water/fit.py::flanks_commanded#both flanks commanded": "E2",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::_polder_candidate#surveyed block": "E0",
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::a_way_onto_the_bund#a lane end within 6 ft (BUND_REACH_FT) of the paddy counts as joined to the bund": "E0",
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::a_way_onto_the_bund#a lane end within 6 ft of the paddy (BUND_REACH_FT) counts as on the bund": "E0",
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/bund.py::a_way_onto_the_bund#branched field path 5 ft wide (BRANCH_WIDTH)": "E0",

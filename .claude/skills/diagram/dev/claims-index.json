@@ -14197,14 +14197,6 @@
   "rests": [],
   "verdict": "MISLABELED"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::_polder_candidate#clean_parcels=False is a fixed choice of parcel form inside the polder": {
-  "code": "fea6f79507867af5",
-  "core": "fea6f79507867af5",
-  "date": "2026-10-07",
-  "note": "clean_parcels=False is a fixed choice of parcel form inside the polder",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::_polder_candidate#outer face with the water": {
   "code": "cca4e7f7e41cf898",
   "core": "fea6f79507867af5",
@@ -14220,26 +14212,19 @@
   ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::_polder_candidate#the block is oriented to the land's fall: its rows run with the fall and its columns across it": {
-  "code": "fea6f79507867af5",
-  "core": "fea6f79507867af5",
-  "date": "2026-10-07",
-  "note": "the block is oriented to the land's fall: its rows run with the fall and its columns across it",
-  "research": "",
-  "verdict": "UNCLAIMED"
- },
  ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::_polder_candidate#wander walked down to a 0.86 box fill": {
-  "code": "7c4ae13d674670ba",
+  "code": "a0eaed22869c6c81",
   "core": "fea6f79507867af5",
   "date": "2026-10-07",
-  "note": "the 0.5-to-0.12 wander steps and the 0.86 fill threshold set how irregular the polder's dike outline is. That is a fact about how the place was built, not only how it is shown. The page sets no degree for this irregularity, so the label should be GUESS (or UNRESEARCHED), not CONVENTION",
+  "note": "the cited drawing page says the outer face curves with the water and that a rectangle is only modern, but gives no figure for how irregular the dike outline was, so this is a true GUESS",
   "pages": {},
   "research": "",
   "rests": [
    "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:041f79721f113fc6",
-   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:3d4d136052bc4a6e"
+   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:3d4d136052bc4a6e",
+   "0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html:4d5302327cebd38f"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::dike_face#strip at the dike's outer face": {
   "code": "edbdc31b06b7b9d2",

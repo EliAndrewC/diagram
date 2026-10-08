@@ -1050,7 +1050,9 @@ the claim restated. The trial's knot form is reverted with it and its gap filed 
 
   - `l7r/diagram/hamletgen/water/polder.py::_polder_candidate#surveyed block` - restated: the outer face with the water (0027); the 0.86 walk-down a CONVENTION
 
-- [ ] T81 the polder's outer edge tried (Kuwabata re-rolled), judged by its glyph check, reverted; the claim restated against 0027 (FR-003, FR-004, FR-005)
+- [x] T81 the polder's outer edge tried (Kuwabata re-rolled), judged by its glyph check, reverted; the claim restated against 0027 (FR-003, FR-004, FR-005)
       research: rendering
-- [ ] T82 the close: the claim re-checked by `impl-drift`; no executed code changed since wave 27's close; `make done` green; the wave column (FR-005, FR-006)
+      verify: DONE. no edge wander tried: Kuwabata's dike a straight-sided rectangle, glyph check NEEDS-WORK (F1, 0027 and the GM's no-modern ruling); reverted with the knot form it needed (gap filed); the code matches 0027, its claim restated, the walk-down labeled GUESS, a comment corrected
+- [x] T82 the close: the claim re-checked by `impl-drift`; no executed code changed since wave 27's close; `make done` green; the wave column (FR-005, FR-006)
       research: rendering
+      verify: DONE. impl-drift IN-STEP on the restated claims; amendment 27 FAITHFUL (round 5), plan CLEAR; no executed code changed since wave 27's close; make done green; the wave column
