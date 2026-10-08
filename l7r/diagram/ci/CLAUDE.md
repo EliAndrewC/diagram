@@ -4,26 +4,13 @@
 run may start, or you are touching the buildspecs. The usage-level answer is one command:
 `make ci-status` prints every condition and its reason, free, with no AWS call on a DIRECT route.
 
-**WHAT A REMOTE RUN NOW RUNS: `make soak`, NOT `make done` (GM 2026-09-05).** The remote used to
-run the same gate the laptop runs, on the theory that it merges the LATEST main in first and so tests
-a tree nobody has tested. That property is now vestigial - `sync-in` merges main into every clone on
-every message, so the trees are almost always identical, and condition 4 declines to spend money when
-they are. **Every `ci-merge` since the local short-circuit landed on 2026-08-25 has been
-SKIP-VERIFIED, four for four; the six paid ones all predate it.** Feature 174 closed the other half by
-accident: `COV_FLOORS=1` on a plain `make done` also sets `L7R_TESTS_FULL` and turns every
-deselection off, so the four-seed cohort meant to be the wide farmed-out tier began rolling locally.
-
-So the remote does the tier the laptop SKIPS - [`tests/soak/`](../../../tests/soak/CLAUDE.md), the
-same code over many seeds and larger, more realistic maps. **ACCEPTED IN EXCHANGE: the remote is no
-longer a MERGE QUEUE.** It does not re-run the gate against your-work-merged-with-latest-main, so a
-conflict that is textually clean but semantically broken is no longer caught by a machine before it
-lands. That was this route's original purpose (feature 130); it is given up because it has never once
-fired. **Declined**: running BOTH (`done` then `soak`), which restores the property at roughly double
-the cost for zero measured firings; and pointing the remote at `done FULL=1`, which since feature 174
-runs the same tests as `done` and adds only the perf bookends.
-
-The soak suite is EMPTY today and `make soak` REFUSES rather than reporting a vacuously green build,
-so this cannot quietly become a no-op. **Remote is OFF** - `make switches`.
+**A remote run runs `make soak`, not `make done` (GM 2026-09-05).** `sync-in` merges main into every clone on every
+message, so the remote's old job - re-running the gate against your work merged with the latest main - almost never
+saw a tree the laptop had not, and condition 4 declines to pay when the trees match. So the remote does the tier the
+laptop SKIPS: [`tests/soak/`](../../../tests/soak/CLAUDE.md), the same code over many seeds and larger, more realistic
+maps. **Accepted in exchange: the remote is no longer a MERGE QUEUE** - a conflict that is textually clean but
+semantically broken is not caught by a machine before it lands (it never once fired). `make soak` REFUSES on an empty
+suite rather than reporting a vacuously green build. **Remote is OFF** - `make switches`.
 
 Every remote run costs money (`RATE_PER_MIN` = **$0.02 per build-minute** on `BUILD_GENERAL1_LARGE`,
 in [`config.py`](config.py) - mirrored in exactly one other place, the `gm-assistant-ci-monthly-alert`
@@ -46,6 +33,10 @@ do not want to run anything on AWS"* come first, and the speedup second.
 | [`cachepolicy.py`](cachepolicy.py) | the CI bucket's WHOLE lifecycle document (feature 177 - it owned one rule of someone else's document before, which is a hazard when the API OVERWRITES). Four rules; `verified/` is off the junk horizon that used to expire it at 14 days |
 | [`incremental.py`](incremental.py) | THE INCREMENTAL GATE (feature 207): the baseline (the last full run's coverage with per-test and per-fixture contexts + a raw-bytes manifest, under `<git dir>/gate-baseline/`), the plan (which tests a change can reach; the six fallbacks to a full run), the merge (the pruned baseline unioned with this run), `save-baseline`. The soundness argument is its docstring |
 | [`selection.py`](selection.py) | the pytest plugin the gate loads (`-p l7r.diagram.ci.gate_plugin`, an excluded two-hook shim, because a `-p` module loads before coverage starts): switches the coverage context to `fixture:<name>` around every fixture setup, deselects what the plan says (identically on every xdist worker), writes the run's result and the fixture dependency graph from worker `gw0` |
+| [`gate_plugin.py`](gate_plugin.py) | the incremental gate's `-p` entry: a tiny shim, because a `-p` module is imported before pytest-cov starts measuring; its hooks delegate to `selection.py` |
+| [`rollcensus.py`](rollcensus.py) | the roll census's `-p` entry (feature 213), tiny for the same reason; delegates to `rollverdict.py` |
+| [`rollverdict.py`](rollverdict.py) | the roll census's attribution (which test rolled which map, map-rolling tests collected first) and its VERDICT, run once after pytest from the Makefile |
+| [`imagecheck.py`](imagecheck.py) | is the pushed CodeBuild image still built from the tree's current `Dockerfile.ci`? (feature 175: a stale image failed every remote build at `typecheck`) |
 | [`__main__.py`](__main__.py) | `status | check | merge | measure | image | state | door | remote-spend | incremental`, `assert_via_make` at the top |
 
 ## The conditions, and the GM's words each rests on
@@ -84,30 +75,10 @@ do not want to run anything on AWS"* come first, and the speedup second.
 5. **breaker-not-tripped** - the monthly hard stop's deny policy; discovered at `start_build`,
    reported with the detach command (FR-021).
 
-## The MEASUREMENT route (feature 177) - a NEW route, and a change to the threat model
+## The measurement route, the threat model and the `verified/` write path
 
-`make ci-measure` (add `FULL=1` for the full-scope pair). It exists because **the cost of the remote
-gate could not be measured at all**: `route-is-gated` is evaluated for every mode, `delta.is_engine()`
-excludes `ci/` by the GM's own FR-025 ruling, and a feature about the build's own cost touches no
-engine path. Feature 175 owed a FULL-scope cache timing, recorded *"it rides on the next real engine
-change"*, and four features later had not taken it. A debt payable only by waiting for unrelated work
-is not a debt anyone pays.
-
-**It bypasses exactly one condition - `route-is-gated` - and the row is still printed, saying so.**
-Everything else refuses it: `green-local-since-edit` (the GM's own named case: never a paid run
-straight after a red gate), `remote-enabled` (feature 132's switch), `breaker-not-tripped` (the
-monthly hard stop) and, for FULL, `door.py`'s committed `permitted` entry. A verified record does NOT
-short-circuit it, because a record says a gate PASSED and says nothing about what it cost.
-
-**It cannot mint a push credential, and that refusal lives in the tree the build runs.**
-[`buildspec/measure.yml`](../../../buildspec/measure.yml) sets `MODE: measure`, and `run.sh`
-returns before writing `verified/<key>.json` - which puts it before the push as well. A dispatcher
-flag would be a promise; a buildspec is a diff, which is the bar [`door.py`](door.py) set for the FULL
-prompt. Its cache block and install phase are otherwise IDENTICAL to `check.yml`'s: a measurement that
-ran cold while the gate runs warm would measure something that does not happen.
-
-It is paid and prompted, in the same class as `make ci-image` - it cancels by default and logs to
-`dev/bypass-log/`, so `make audit` can tell a session's answer from the GM's.
+`make ci-measure` bypasses `route-is-gated` alone and cannot mint a push credential; the threat model every condition
+answers; and the bucket policy that lets only a build write `verified/`: [`dev/ci.md`](../../../dev/ci.md).
 
 ## The sequence (every remote target)
 
@@ -130,26 +101,3 @@ difference: merge fast-forward-pushes the verified result to GitHub `main` and d
 The custom image (`Dockerfile.ci`, `make ci-image`) is used once its marker `image/latest.txt`
 exists in the bucket; until then the build bootstraps Python 3.14 + resvg on the stock image
 (measured in `dev/timings.md`).
-
-## The threat model
-
-Same shape as feature 127's: **a session that wants the paid run and should not have it**, and
-that can present any of these as diligence -
-
-- dispatching a docs-only or merged-in-from-main delta (condition 1 - the delta is computed, never declared);
-- merging an unfinished feature because the gate is green (condition 2);
-- `make done` again straight after a red one, with an edit in between (condition 3, the GM's
-  named case);
-- answering the FULL prompt from inside a build via an environment variable (the door reads only a
-  committed entry - a forgery is a tracked-file diff);
-- a session answering its own prompt through a pseudo-terminal: `spec-fidelity` ruled this an
-  EXCEPTION on 2026-08-25, and the GM authorized it in their own words later that day. A session
-  that answers MUST record in the reason that it did, quoting the authorization - the entry is
-  how `make audit` tells a session's answer from the GM's (the reviewer's aside: an actor field).
-
-## The `verified/` write path (R8, FR-016) - closed 2026-08-25
-
-The bucket policy in [`buildspec/verified-deny-policy.json`](../../../buildspec/verified-deny-policy.json)
-denies `s3:PutObject` under `verified/` to every principal except `gm-assistant-codebuild-role`.
-Applied with the admin key on 2026-08-25 and verified: the session key gets `AccessDenied` there and
-still writes `go/`. Only a build can write a verified record.

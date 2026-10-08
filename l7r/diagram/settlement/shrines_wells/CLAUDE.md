@@ -1,18 +1,13 @@
 # settlement/shrines_wells/ - the shrines/wells subsystem as a package
 
-Split from the 1,179-line `settlement/shrines_wells.py` by feature 116 (constitution Principle X
-clause 13 - the cost being managed is context-window tokens). **Load only the file the task calls
-for**; this index is the map. `from .shrines_wells import ShrinesWellsMixin` still resolves and
-`settlement/core.py` is byte-unchanged, so nothing above this directory knows the split happened.
+Split from one `settlement/shrines_wells.py` by feature 116 (constitution Principle X clause 13 - the cost being
+managed is context-window tokens). **Load only the file the task calls for**; this index is the map.
+`from .shrines_wells import ShrinesWellsMixin` still resolves.
 
-**This package was never ONE subsystem, and its NAME concedes it** - the only module in the engine
-joined by an `and`. Feature 025 sliced the 16,016-line original by POSITION, so six unrelated
-subsystems ended up sharing a file: religious halls, torii avenues, the well subsystem, a general
-seat-finding API, draft byres and woodland stands. So the seven modules are grouped by **what a
-session comes here to change**, not by theme, and they are deliberately uneven in size (72 to 294
-lines) because tasks are uneven in size. The evidence that this was the right file to cut first,
-though three larger ones remain: a session changing the torii threshold rule (34 lines) used to load
-1,145 lines it did not need, and every reader of any subsystem loaded the 447-line well subsystem.
+**This package was never ONE subsystem, and its NAME concedes it** - the only module in the engine joined by an `and`.
+Feature 025's positional cut left unrelated subsystems sharing a file (religious halls, torii avenues, the well
+subsystem, a general seat-finding API, draft byres, woodland stands), so the modules are grouped by **what a session
+comes here to change**, not by theme, and are deliberately uneven in size.
 
 ## Look here when
 
@@ -25,7 +20,8 @@ though three larger ones remain: a session changing the torii threshold rule (34
 | `wells.py` | the wellhead GLYPH and how many wells a map gets and where: `well`, `_well_vr` (the drawn extent placement must predict), `well_at` (place one if the spot is clear), `place_wells` / `_place_wells` (the neighborhood grid + coverage pass), `farm_wells` / `_farm_wells` (the farm-belt cluster cover and its envelope-suspended fallback), `shrine_well` (a set-apart hall's ablution well) |
 | `seats.py` | the general "where can a `w` x `h` feature stand?" API: `open_seat` (asks the real `_fits` at the moment of placement) and `_footprint_clear` (the whole-footprint test against the BOUND only, deliberately). Nothing to do with shrines or wells - see "Three placements you will want to fix" below |
 | `byres.py` | the draft-animal byre: `_draw_byre` (the open-fronted stall glyph) and `draft_byres` (the house-driven pass: since 269 B16 the beast lives with its household - the inner stable's arm against the farmhouse or the outer stable's own shed in the yard, on about half the households; the old shared shed on the commons is the rare `detached_commons` roll, a labeled guess) |
-| `woods.py` | how a wood is DRAWN - a stand of individual trees, never a terrain wash: `_tree_stand` (queues it; carries the canopy-density research), `flush_tree_stands` / `_draw_stand` (the deferred canopy, drawn at crop time against the complete map), `_stand_fringe` (thicket-masked advance growth on the cut-over margin), `_crowns`, `_fringe_blocked`, `forest` |
+| `woods.py` | how a wood is DRAWN - a stand of individual trees, never a terrain wash: `_tree_stand` (queues it; carries the canopy-density research), `flush_tree_stands` / `_draw_stand` (the deferred canopy, drawn at crop time against the complete map), `_stand_fringe` (thicket-masked advance growth on the cut-over margin), `_crowns`, `_fringe_blocked` |
+| `forest.py` | the canvas-filling `forest` of a town or city (`ForestMixin`; feature 145 moved it out of `woods.py`, whose tree stands the hamlet path executes) |
 
 ## Composition, and why it is in `__init__.py`
 
@@ -37,9 +33,9 @@ partition here can be re-cut later without touching `core.py`.
 
 **Cross-submodule calls need no import.** Every sub-mixin is a base of the same `Settlement`, so
 `self._well_ground_clear(...)` from `wells.py` resolves through the MRO wherever the caller's text
-lives. The engine already relies on this from outside the package too: `water_ways.py`,
-`civic_grounds.py` and `structures/compounds.py` all call `self._assert_walls_clear_of_torii`;
-`civic_grounds.py` calls `self._well_vr` and `self._well_ground_clear`; `core.py` and `finish.py`
+lives. The engine already relies on this from outside the package too: `water_ways/`,
+`civic_grounds/` and `structures/compounds.py` all call `self._assert_walls_clear_of_torii`;
+`civic_grounds/` calls `self._well_vr` and `self._well_ground_clear`; `core.py` and `finish.py`
 call `self.flush_tree_stands`.
 
 **`wellground.py` is the hub**, which is the shape a well-cut partition should have - two of the
@@ -53,28 +49,19 @@ other six call into it and it calls out to none of them:
 
 ## Three placements you will want to "fix" - each is deliberate
 
-Recorded here rather than only in `specs/116-shrines-wells-package/research.md`, because a decision
-that lives only in a spec file is a decision nobody will find.
-
 ### `seats.py` and `byres.py` hold members that do not belong in this package at all
 
-`open_seat` + `_footprint_clear` are a general placement API - the skill's `CLAUDE.md` documents
-`open_seat` under "Ask the ENGINE where a feature fits", and its consumers are nine pool gens plus
-`civic_grounds.py`, `houses.py`, `rolling.py` and `structures/fixtures.py`. Its home is `houses.py`,
-beside the `_fits` it delegates to. `_draw_byre` + `draft_byres` are a homestead appurtenance and
-belong with `homestead_parts.py`'s threshing yards, gardens and sheds.
-
-Both are here only because feature 025's positional cut put them here. Neither was MOVED by this
-feature, because moving a member between parent-level mixins is a different change with different
-risk, and folding it in would make the byte-identity oracle answer two questions at once. Each gets
-an isolated module so the eventual move is a one-file change - feature 113's `city/civic.py` and
-114's `structures/ground.py` precedent.
+`open_seat` + `_footprint_clear` are a general placement API (how to use it: [`dev/diagnostics.md`](../../../../dev/diagnostics.md),
+"Ask the ENGINE where a feature fits"); its home is `houses.py`, beside the `_fits` it delegates to. `_draw_byre` +
+`draft_byres` are a homestead appurtenance and belong with `homestead_parts/`. Both are here only because feature 025's
+positional cut put them here, each in an isolated module so the eventual move - a separate change of its own - is a
+one-file change.
 
 ### `shrine_well` is filed with the wells, not the shrines
 
 The naming pulls one way and everything else pulls the other. It IS a well: it calls `well_at`
 (hence `_in_scrub_cover` + `_well_ground_clear` + `_fits`), records an `M["wells"]` entry with
-`shrine=True`, and exists so a remote hall passes `remote_shrine_has_own_well`. Its neighbors in
+`shrine=True`, and exists so a remote hall that cannot use the village's shared wells has its own. Its neighbors in
 behavior are the other three placement passes, not the hall glyph. Placement follows the code.
 
 ### `_hall_caption_y` is filed with the halls, not the torii
@@ -85,23 +72,17 @@ and its subject is where the HALL's caption goes. Placement follows the caller -
 
 ## If a module grows: the seams, decided in advance
 
-- **`wells.py`** (largest, 294 lines): `farm_wells`/`_farm_wells` is an independent pass sharing only
+- **`wells.py`** (the largest): `farm_wells`/`_farm_wells` is an independent pass sharing only
   `well_at` and the freeze scope with `place_wells`/`_place_wells`. Cut there - `farmwells.py` - if
   either pass grows substantially.
-- **`shrines.py`** (251): `hill` is scenery, not a shrine; it is here because a village shrine stands
+- **`shrines.py`**: `hill` is scenery, not a shrine; it is here because a village shrine stands
   on one. If a second landform arrives, `hill` LEAVES for a landform module rather than `shrines.py`
   being cut in half.
-- **`woods.py`** (185): the crown primitives (`_crowns`, `_fringe_blocked`) are the reusable half, the
+- **`woods.py`**: the crown primitives (`_crowns`, `_fringe_blocked`) are the reusable half, the
   stand policy the rest. No reason to cut today.
 
-## Monkeypatching a module-level name
-
-Submodules bind helper names at import (`from .._geom import point_in_poly`), so patching
-`settlement.shrines_wells.point_in_poly` does not reach a mixin that already imported it - patch the
-DEFINING submodule (`settlement._geom.point_in_poly`) or, for anything reached via `self.`, patch
-`settlement.Settlement` (class-level patching is unaffected by the split). After feature 116, "the
-defining submodule" for a member of this subsystem is `settlement.shrines_wells.<module>`, not
-`settlement.shrines_wells`. No test in the suite does this today (census: feature 116 research R6).
+Monkeypatching: patch the DEFINING submodule (`settlement._geom.point_in_poly`, or `settlement.shrines_wells.<module>`
+for a member of this package) - the rule is [`../CLAUDE.md`](../CLAUDE.md)'s.
 
 ## The guard that makes the split safe
 

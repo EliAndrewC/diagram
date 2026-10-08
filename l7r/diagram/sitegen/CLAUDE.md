@@ -12,9 +12,9 @@
    members take a `SitePlan`.
 2. **Direction, one-way** - `hamletgen` (and `villagegen`, `towngen` after it) import `sitegen`.
    `sitegen` NEVER imports a tier generator. `tests/sitegen/test_direction.py` asserts it.
-3. **Growth: MOVE, never copy** - a hamlet stage a later tier needs gets moved down here and
-   imported by both. Copying is how two tiers quietly drift apart, invisibly, until the maps
-   disagree.
+3. **Growth: MOVE, never copy** (GM 2026-08-17, feature 119) - when a later tier needs a stage that lives in a tier
+   generator, move it down here and have both tiers import it; never copy it. Copying is how two tiers quietly drift
+   apart, invisibly, until the maps disagree. This is the one home of the rule.
 
 ## Look here when
 
@@ -28,16 +28,12 @@
 `from l7r.diagram.sitegen import centroid` works (star-import re-exports, clause 14), and so does
 reaching into a submodule directly.
 
-## Why it is small, and why that is correct
+## Extract on the second consumer
 
-Feature 119 extracted ~110 lines. Its own spec had estimated ~450 from filenames; reading the
-dependency edges refuted that (`frame.py` is three `stage_*(s, plan: SitePlan)` functions, `Report`
-prints a hamlet cohort row - both stay in `hamletgen`).
-
-A first extraction should be small. The remaining candidates - `WIND_VECTORS`, `FALL_BEARINGS`,
-`CARDINAL_BEARINGS`, `DEFAULT_WINDWARD`, all genuinely terrain doctrine a village shares - move when the
-village tier makes them a **second real consumer**. Extracting on the second use means the seam is
-observed; extracting on the first means it is predicted, and a predicted seam has to be re-cut.
+A module moves down here when a second tier REALLY consumes it, never on a predicted need: extracting on the second use
+means the seam is observed; extracting on the first means it is predicted, and a predicted seam has to be re-cut. The
+standing candidates - `WIND_VECTORS`, `FALL_BEARINGS`, `CARDINAL_BEARINGS`, `DEFAULT_WINDWARD`, terrain doctrine a
+village shares - move when the village tier consumes them.
 
 ## Tests
 

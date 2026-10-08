@@ -488,9 +488,9 @@ move ... those specifications will move into the scripted generators once those 
 
 ## When a section a modal was written FROM moves (GM 2026-09-12, feature 234)
 
-What a map's modal says about a feature IS the docstring of its `Kind` class
-(`interactive/classes/`, feature 189), written FROM a research section the class names in its `Entry:`
-tag. Nothing used to notice when that section's content moved underneath it, and the GM asked the
+What a map's modal says about a feature is its modal file (`interactive/assets/modals/`, feature 319; the
+`Kind` class's docstring before it), written FROM a research section its `Entry:` names. The operative rule is
+`dev/modals.md`; this section keeps why. Nothing used to notice when that section's content moved underneath it, and the GM asked the
 question that closed the gap - told to update the pigsty write-up, *"if I hadn't said that ... then
 would you have done it?"*
 
@@ -508,7 +508,7 @@ section now says something different" from "this section was maintained" is a ju
 
 **`record-format` and `quote-check` are NOT this check.** They read a research ENTRY - whether a reader
 would understand it, whether its quotations are on the page and support what they are attached to.
-Neither of them ever opens a `Kind` docstring, so neither can tell you a modal has gone stale. They are
+Neither of them ever opens a modal, so neither can tell you a modal has gone stale. They are
 the changed research entry's own standing obligations and a green pass from either says nothing about
 any modal.
 

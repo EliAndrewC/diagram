@@ -1,309 +1,132 @@
-<!-- Moved here from `CLAUDE.md` by feature 250 (research R2, recommendation 3; the GM
-2026-09-26): that file auto-loaded into every session that read a research file, because `research/` sits
-under it, and none of this bears on research - about 7,500 tokens on every turn of every research session.
-It auto-loads here, under the engine, and `pool/CLAUDE.md` and `tests/CLAUDE.md` import it. Paths in backticks
-below are relative to the skill directory, ``; links are relative to this file. -->
+# The diagram engine - dev loop
 
-# /diagram engine - dev loop
+Working on the engine (the `l7r/diagram/` packages and the pool generators), as opposed to drawing a map with it (that
+is [`docs/usage.md`](../../docs/usage.md)). This file auto-loads under `l7r/diagram/`, and `pool/CLAUDE.md` and
+`tests/CLAUDE.md` import it. The project-wide doctrine - iterate once and gate once, the regression baseline in a
+detached worktree, fix what you find (XIV), build what was asked (XVI), reviews on their occasion, the research ladder
+and knobs, the `Research:` claims gate - is the root [`CLAUDE.md`](../../CLAUDE.md); this file holds only what is
+specific to the engine. Every command is a `make` target at the repository root, described in
+[`docs/make-targets.html`](../../docs/make-targets.html) (generated from the Makefile's `##` lines).
 
-Guidance for *working on the diagram engine* (the `settlement/` package, the `overlap/` taxonomy, the pool
-generators), as opposed to *invoking* `/diagram` to draw a map (that is `SKILL.md`). This file
-auto-loads whenever a session edits files in this directory - which is exactly when it applies.
+## Where things live
 
-The project-wide iteration doctrine is the root [`CLAUDE.md`](../../CLAUDE.md) "Verification
-and iteration" section, and in full [`docs/efficiency-tooling.md`](../../docs/efficiency-tooling.md)
-(batch recon into fewer bigger turns; iterate on the ONE motivating artifact, then run the full test
-bed once at the end; background the final gate; never cut the procedure/guardrail steps). This file
-carries the concrete diagram numbers and the DIAGRAM-SPECIFIC lessons those do not cover - each
-earned by costing real round-trips.
+The engine is grouped by what a module is FOR, and each package carries its own `CLAUDE.md` index: open the one your
+task is in.
 
-## Where things live (read this first; load only the index you need)
+`l7r/` is a PEP 420 *namespace portion* shared with the L7R Toolkit webapp (`l7r.app`, `l7r.names` in
+`/host-l7r-repo/gm-assistant/webapp/l7r/`), so one interpreter imports both. **Never create `l7r/__init__.py`**: it
+makes `l7r` a regular package and the webapp's portion silently stops existing (`tests/test_namespace_portion.py`).
+**The repository root is the `sys.path` root**: `pool/`, `tests/`, the `Makefile` and `pyproject.toml` sit there, a
+pool generator's bootstrap climbs to it, and an engine module that computes the root from its own location
+(`gencache`, `pool_index`, `render_cache`, `cohort_audit`, `cache_audit`, `hamletgen`) counts its depth - a wrong depth
+is silent and lands one directory short of `pool/`.
 
-The skill's Python lives under **`l7r/diagram/`** (feature 119) and is grouped by what a module is
-FOR. Each group carries its own `CLAUDE.md` index, so a session can open the one directory its task
-is in instead of paging this file.
-
-**Why the extra two levels.** `l7r/` here is a PEP 420 *namespace portion* - it deliberately has no
-`__init__.py` - and it shares the `l7r` parent package with the L7R Toolkit webapp's `l7r.app` /
-`l7r.names` in `/host-l7r-repo/gm-assistant/webapp/l7r/`. Both directories contribute to one `l7r.__path__`, so
-`import l7r.app` and `import l7r.diagram.settlement` work in the same interpreter and the webapp
-can render a map without two colliding top-level packages named `l7r`. **Never create
-`l7r/__init__.py`**: that makes it a regular package, terminates the import search, and makes the
-webapp's portion silently stop existing. `tests/test_namespace_portion.py` guards it in both trees.
-
-This directory - not `l7r/diagram/` - is still the `sys.path` root, and `pool/`, `tests/`, the
-`Makefile` and `pyproject.toml` all stay here. That is why every pool generator's bootstrap block
-is unchanged by the move: `SKILL = dirname(dirname(HERE))` from `pool/<tier>/x.gen.py` still lands
-here. Engine modules that compute the skill root from their OWN location moved two levels deeper and
-were adjusted to match (`gencache`, `pool_index`, `render_cache`, `cohort_audit`, `cache_audit`,
-`timings`, `hamletgen`) - a test asserts three of them
-still resolve here, because a wrong depth is silent and just lands one directory short of `pool/`.
-
-| directory | what is in it | load its index when |
+| path | what is in it | load its index when |
 |---|---|---|
-| [`l7r/diagram/settlement/`](settlement/CLAUDE.md) | the Mode B drawing engine (the `Settlement` class and its mixins) | you are changing what a settlement map DRAWS or where it places something |
-| [`l7r/diagram/overlap/`](overlap/__init__.py) | the overlap TAXONOMY and matrix: which features may lie on which, and why | you are adding a footprint feature, or a pair overlapped that should not have |
-| [`l7r/diagram/waterfields/`](waterfields/CLAUDE.md) | the water-first field engine (v2 comb fields) | you are changing paddies, bunds, canals or the field frame |
-| [`l7r/diagram/hamletgen/`](hamletgen/CLAUDE.md) | the scripted hamlet generator - a whole hamlet from a 9-line spec | you are working on scripted generation |
-| [`l7r/diagram/sitegen/`](sitegen/CLAUDE.md) | tier-agnostic generation machinery the tiers SHARE (geometry, types, worker counts) | you are adding a tier generator, or moving a stage out of one |
-| [`l7r/diagram/pipeline/`](pipeline/CLAUDE.md) | how a map gets regenerated, cached, rendered and indexed | the cache is behaving oddly, or you are changing how generation is DRIVEN |
-| [`l7r/diagram/interactive/`](interactive/CLAUDE.md) | the interactive HTML map (feature 134): the feature-class vocabulary with its explanations, and the page writer | you are adding a KIND of feature (it needs a class and an explanation), changing what a modal says, or the `all_ink_is_ruled_on` check fired |
-| [`l7r/diagram/labels/`](labels/__init__.py) | THE ONE CAPTION PLACER (feature 266): the cartographic standard - ranked positions, the gap, free space first, leaders - owned by neither mode, used by the settlement engine, `compound.py` and the hand-drawn sheets (`hand_sheet.py`, placed in each sheet's render - feature 286) | you are adding a captioned feature (name its SUBJECT and call the placer; never pick a seat), or a caption sits wrong |
-| [`l7r/diagram/tools/`](tools/CLAUDE.md) | read-only diagnostics and audits you run by hand | a map came out wrong and you need to ask WHY, or a number needs measuring |
-| [`l7r/diagram/ci/`](ci/CLAUDE.md) | the CodeBuild dispatcher: when a PAID remote run may start, and how it is driven (feature 130) | a remote run refused, or you are changing when money may be spent |
+| [`settlement/`](settlement/CLAUDE.md) | the Mode B drawing engine (the `Settlement` class and its mixins) | you change what a settlement map DRAWS or where it places something |
+| [`overlap/`](overlap/__init__.py) | the overlap TAXONOMY and matrix: which features may lie on which, and why | you add a footprint feature, or a pair overlapped that should not have |
+| [`waterfields/`](waterfields/CLAUDE.md) | the water-first field engine (comb fields, terraces, polders) | you change paddies, bunds, canals or the field frame |
+| [`hamletgen/`](hamletgen/CLAUDE.md) | the scripted hamlet generator - a whole hamlet from a short spec | you work on scripted generation |
+| [`sitegen/`](sitegen/CLAUDE.md) | tier-agnostic generation machinery the tiers SHARE | you add a tier generator, or move a stage out of one |
+| [`pipeline/`](pipeline/CLAUDE.md) | how a map is regenerated, cached, rendered and indexed | the cache behaves oddly, or you change how generation is DRIVEN |
+| [`interactive/`](interactive/CLAUDE.md) | the interactive HTML page: the feature-class vocabulary, the modals, the page writer, the record's build | you add a KIND of feature, change what a modal says, or the map-vocabulary gate test fired |
+| [`labels/`](labels/__init__.py) | THE ONE CAPTION PLACER (feature 266), used by the settlement engine, `compound.py` and the hand-drawn sheets (`labels/hand_sheet.py`) | you add a captioned feature (name its SUBJECT and call the placer; never pick a seat), or a caption sits wrong |
+| [`buildings/`](buildings/__init__.py) | the Mode A building TYPES, declared once in `types.json` (feature 254) | you add or change a building type or its program |
+| `compound.py`, `compound_model.py`, `compound_parts.py` | the Mode A compound program and perimeter-first placer; its vocabulary (units, palettes, program types); what it seats around the masses | you change a compound plan's draft |
+| `citybudget.py` | budget-first city wall sizing (feature 009) | you size a city |
+| `dwellings.py` | what counts as a DWELLING, in one leaf module with no imports of its own | a count of houses or households disagrees between two readers |
+| `switches.py` | the iteration switch (feature 132) in `dev/switches.json`: remote on or off ([`docs/switches.md`](../../docs/switches.md)) | a remote run refused, or you throw the switch |
+| `_invocation.py`, `_census.py`, `_memory.py` | refuse an operation not invoked through this project's make; the roll census's writer; give freed C memory back after a roll | a refusal or the census fired |
+| [`tools/`](tools/CLAUDE.md) | read-only diagnostics and audits | a map came out wrong and you need to ask WHY, or a number needs measuring |
+| [`ci/`](ci/CLAUDE.md) | the CodeBuild dispatcher and the incremental gate | a remote run refused, money may be spent, or the gate selected oddly |
 | [`tests/`](../../tests/CLAUDE.md) | every test, mirroring the source layout, plus the frozen fixtures | you need to find or add a test |
-| `pool/` | the shipped maps: `<name>.gen.py`, its manifest, its render, its `.notes.md` design journal | - |
-| `wip/` | maps staged outside the pool (not gated, not swept) | - |
 
-Two engine modules are still single files rather than packages, and stay that way on purpose:
-**`l7r/diagram/compound.py`** (the Mode A compound program and perimeter-first placer) and
-**`l7r/diagram/citybudget.py`** (the space-budget city/capital planner). Both are peers of the
-engine packages above - pool generators import them directly - and folding them into a package
-would rewrite six frozen generator scripts for no navigational gain. `compound.py` keeps its import surface but
-lent two siblings its bulk when the draft's gates, doors and roji took it past the 1,000-line bar (feature 267):
-`compound_model.py` (units, palettes, the program types) and `compound_parts.py` (what is seated around the masses).
+`pool/` holds the shipped maps (`<name>.gen.py`, its manifest, render and `.notes.md`); `wip/` maps staged outside it.
 
-The prose reference (as opposed to the code) splits the same way: [`SKILL.md`](../../SKILL.md) is the
-usage-facing index, and it indexes [`buildings/`](../../buildings) (the Mode A design doctrine) and
-[`research/`](../../research) (the record: for every Mode B topic the finding, the decision and - where
-no generator draws the feature yet - the specification; feature 229 retired the `settlements/` rule
-files into it). Read a skill index, then load only the topics the subject calls for.
-
-**Run the packaged modules as modules**, from this directory - `python3 -m l7r.diagram.pipeline.regen ...`,
-`python3 -m l7r.diagram.tools.why_placed ...`. Running a package module as a loose script path puts its own
-directory on `sys.path` instead of the skill root, which is how one file ends up imported twice
-under two names.
-
-## Dev-loop doctrine (load on demand)
-
-This file used to carry all of it inline, at 1,449 lines - roughly 28k tokens charged to **every**
-session that edits anything in this tree, including sessions that only regenerate a map. The
-doctrine itself is unchanged and verbatim; it now lives in [`dev/`](../../dev), one file per topic, each
-stating when to load it. Same pattern as the root [`CLAUDE.md`](../../CLAUDE.md) -> `docs/`
-split. **Load the one file your task is in.** The short always-on version of each rule is below the
-table; the file is where the evidence, the measurements and the failure stories live, and you want
-those before you argue with a rule.
+## The dev docs (load the one your task is in)
 
 | doc | load it when |
 |---|---|
-| [`dev/loop.md`](../../dev/loop.md) | You are about to run the gate or a pool sweep, you want the diagram timing numbers, or you are deciding how much to re-run after a change |
-| [`dev/placement.md`](../../dev/placement.md) | You are adding a map feature, or changing where anything is placed or drawn. Carries the DRAW ORDER map (including the scripted `STAGES` table), CENTER vs FOOTPRINT, and the KEEP-CLEAR CONTRACT. Its companion `dev/placement-stages/hamlet-placement.html` SHOWS the order - Inashiro plated after each of its stages AND after each STEP that put something on the map (feature 227: the field's paddies, then its source, then its ditches, rather than one picture of the whole field), every word of it read from the stage docstrings and the functions their `Steps:` sections name, the notice board and the label phase last |
-| [`dev/gate.md`](../../dev/gate.md) | You are adding or changing a check, writing a check test, or waiving a rule for one map |
-| [`dev/diagnostics.md`](../../dev/diagnostics.md) | A map came out wrong and you need to know WHY - `open_seat`, `why_placed`, `site_justice`, `crop_map`, and how a probe lies to you |
-| [`dev/performance.md`](../../dev/performance.md) | A gen or a check got slow (or "hangs"), or a `GEN_TIME_BUDGETS` entry tripped |
-| [`dev/cache.md`](../../dev/cache.md) | The cache is behaving oddly, you changed how generation is DRIVEN, or a coverage floor breached for no reason you can see |
-| [`dev/pool.md`](../../dev/pool.md) | You are about to touch a pool map, convert one to scripted generation, or work on `hamletgen/` |
-| [`dev/perf-log/`](../../dev/perf-log/CLAUDE.md), [`dev/run-log/`](../../dev/run-log/CLAUDE.md), [`dev/bypass-log/`](../../dev/bypass-log/CLAUDE.md) | You are about to add an entry to one of the append-only histories, or wonder why they are DIRECTORIES rather than files |
-| [`dev/lessons.md`](../../dev/lessons.md) | A fix is not working and you are about to try another one - dead ends already walked, claims that turned out wrong, and the SHAPES those failures take |
-| [`dev/decisions.md`](../../dev/decisions.md) | You are about to build on a property of the engine nobody decided, or you are leaving a decision open for a later session |
-| [`docs/reviews.md`](../../docs/reviews.md) | You are about to launch a review check (`glyph-check`, `settlement-review`, `fix-check`, `building-review`, `size-audit`) or `backstory-review`, or to write a feature's `## Occasions` |
-| [`docs/package-boundary.md`](../../docs/package-boundary.md) | You are wondering whether building plans (Mode A) and settlement maps (Mode B) should be separate skills or packages, you are adding a new Mode A building type, or a Mode A `.gen.py` is about to appear - the 2026-08-27 decision to keep one skill, the prediction of what would change it (a generator, not a building count), and the order to split in when it does |
+| [`dev/loop.md`](../../dev/loop.md) | you are about to run the gate or a pool sweep, or deciding how much to re-run after a change |
+| [`dev/placement.md`](../../dev/placement.md) | you add a map feature or change where anything is placed or drawn: the DRAW ORDER map (with the scripted `STAGES` table), CENTER vs FOOTPRINT, the KEEP-CLEAR CONTRACT |
+| [`dev/gate.md`](../../dev/gate.md) | you add or change a check, write a check test, or waive a rule for one map |
+| [`dev/diagnostics.md`](../../dev/diagnostics.md) | a map came out wrong and you need to know WHY: `open_seat`, `make why-placed`, and how a probe lies to you |
+| [`dev/performance.md`](../../dev/performance.md) | a gen or a check got slow (or "hangs"), or you are about to undo a time-for-memory trade |
+| [`dev/cache.md`](../../dev/cache.md) | the cache behaves oddly, you changed how generation is DRIVEN, or a coverage floor breached for no reason you can see |
+| [`dev/pool.md`](../../dev/pool.md) | you are about to touch a pool map or convert one to scripted generation |
+| [`dev/lessons.md`](../../dev/lessons.md) | a fix is not working and you are about to try another - the dead ends already walked |
+| [`dev/decisions.md`](../../dev/decisions.md) | you are about to build on a property of the engine nobody decided, or leave a decision open |
+| [`docs/reviews.md`](../../docs/reviews.md) | you are about to launch a review check or write a feature's `## Occasions` |
+| [`docs/package-boundary.md`](../../docs/package-boundary.md) | you wonder whether Mode A and Mode B should be separate packages, or a Mode A `.gen.py` is about to appear |
+| [`docs/migration-plan.md`](../../docs/migration-plan.md) | you draw or script a settlement map (read it first; update its status table when a conversion lands) |
+| [`dev/timings.md`](../../dev/timings.md) | you want a measured timing (never write fresh timings into prose; `make audit` and `scripts/_gatecost.py` give the live ones) |
+| [`dev/test-cost.md`](../../dev/test-cost.md) | you are adding a test that rolls a map, or asking why the suite costs what it does |
+| [`dev/ci.md`](../../dev/ci.md) | you are changing when money may be spent on a remote run, or its threat model |
+| [`dev/interactive-page.md`](../../dev/interactive-page.md) | page or raster performance, or the wet-paddy modal's two tint rules |
 
-[`future-work/`](../../future-work/CLAUDE.md) is the deferred-engineering backlog, split by map type on
-2026-08-24 - load `future-work/farming-communities.md` for hamlet/village work, `future-work/cities.md` for towns and above,
-`compounds.md` for Mode A plans, `cross-cutting.md` for anything spanning tiers. Its own CLAUDE.md
-carries the rules that keep it from rotting back into one 3,453-line file.
+The deferred-engineering backlog is [`future-work/`](../../future-work/CLAUDE.md), by map type. The append-only run
+records are `dev/run-log/`, `dev/perf-log/` and `dev/bypass-log/`, each with its own `CLAUDE.md`.
 
-Two more docs that were already separate: [`docs/migration-plan.md`](../../docs/migration-plan.md) (the standing
-plan for converting the pool to scripted generation - **read it before drawing or scripting a
-settlement map, and update its status table when a conversion lands**) and
-[`dev/timings.md`](../../dev/timings.md) (the measured timing ledger; never write fresh timings into prose).
+## The always-on rules
 
-## The always-on version
-
-Each line below is the rule; the doc named after it is the evidence. Where the two ever disagree,
-the doc is right - it is where the measurement lives.
-
-**The goal all of this serves** (GM 2026-08-25, feature 133, constitution v2.3.0): *"if me asking
-for a simple change results in half an hour of work being done when it should have only taken five
-minutes, then that limits the number of changes that I can make in a single day."* Every command
-below is chosen against that - the cheaper one that answers the question wins; one verification
-covers a batch of changes; a simple task that ran long is diagnosed (more complicated than
-expected / lengthier tests than needed / more cycles than needed) and the tooling is improved when
-it is the tooling. With remote off, a paid run the tooling was about to start is still recorded
-(`make ci-status` "Would have dispatched") and audited at the period's end.
+**The goal they serve** (GM 2026-08-25, constitution v2.3.0): *"if me asking for a simple change results in half an
+hour of work being done when it should have only taken five minutes, then that limits the number of changes that I can
+make in a single day."* The cheaper command that answers the question wins, and a simple task that ran long is
+diagnosed and the tooling improved.
 
 **The loop** ([`dev/loop.md`](../../dev/loop.md))
 
-**THE COMMAND MAP, with measured times** (feature 127; every number is a stopwatch, not an estimate):
-
-| command | what it does | time |
-|---|---|---|
-| `make quick` | lint, types, and every test that does not roll a map; stops at the first failure, failed-first (`--ff`) so a fix that did not take fails in seconds | **~11 s** (feature 158, 2026-08-29: 41 s before it - one 39 s test was the whole critical path) |
-| `make page-check` | THE PAGE CHECK (feature 188): the interactive tests + the browser test, no coverage, then the `page` stamp - what an edit to `interactive/assets/` owes at push instead of the gate (GM 2026-09-05: *"there's no actual reason to rerun all the tests for style sheet changes"*). An asset-only delta is a TWEAK: DIRECT route, no spec-kit feature, no review, no tasks | ~1 min |
-| `make tick F=188 T=T03 NOTE="..." [BOXES=1]` | tick ONE task in a feature's tasks.md with its verify note; refuses a missing or already-ticked task rather than guessing (feature 188) | ~0 s |
-| `make map GEN=... PROFILE=1` | the same roll, plus where its time went: per-stage timings, the total and the slowest stage | the roll + ~0 |
-| `make verify` | THE PAIRED RUN: starts the gate and names the review checks the delta owes (feature 294: their occasions), one prompt per unit, dispatched once the gate is green (`pair-hooks.sh`); a one-sided case takes `PAIR_OK="<reason>"` | the gate, then the owed checks |
-| `make _reference` (internal since 2026-09-06; the public rung was retired) | one seed of the reference hamlet (Inashiro), alone - through the roll cache since feature 135: **1.7 s** when nothing the roll executes changed (it says HIT), ~37 s when something did; `GATE_NO_CACHE=1` forces the roll | **0.55 s HIT / ~37 s MISS** |
-| `make durations` | where the suite's time goes - run this when a target feels slow | ~35 s |
-| `make cov-file FILE=... MOD=...` | which lines of MOD does ONE test file reach - the answer `make test-full` costs 10 minutes to give (feature 146). Serial, no workers; grep the module you care about out of the table | ~2-10 s |
-| `make maps` | picks its own scope from how the last run went | 1 min - many |
-| `make quick` (as it was under the retired scope lock) | lint/format autofix + pyrefly + every test that neither rolls a map nor carries coverage only nor is tagged for other tiers only (`tiers` marker, T17): ~3,000 tests, ~17 s pytest, ~20 s wall (2026-08-26) |
-| `make done` | reference + lint/types + the WHOLE suite INCLUDING `tests/full/` + all three coverage floors (feature 174: the test phase is `test-full` on both branches, because `COV_FLOORS=1` is also what turns every deselection off and a deselected test takes its coverage with it; `FULL=1` now adds the perf bookends and the `L7R_TESTS_FULL` signal); **feature 135 (2026-08-28), three audit passes: 21.7 s UNLOCKED warm (3,750 tests), 17 s locked, ~5.7 min after a main merge that re-keys every cached roll; hooks-test re-runs only the suites whose guard changed (coverage traces only the packages the diff touched; the corpus replay and the map rolls are served from the roll cache), ~35 s unlocked warm, ~130 s unlocked after an edit that re-rolls every cached hamlet** - the map-rolling gate tests are served from the roll cache (`pipeline/rollcache.py`) while nothing they execute changed; the audit ledger is `specs/135-done-test-audit/research.md`. Earlier: measured 2026-08-26: ~75 s with scope LOCKED (map-rolling tests deferred to unlock, `hooks-test` skipped while its stamp is fresh), ~4.5 min unlocked (the 31 map-rolling tests are ~4 of them), ~5.5 FULL. **Short-circuits in seconds** (`already verified`; comments and docstrings in engine Python do not re-key it, GM 2026-08-26) when the last record is a green `make done` against exactly this engine content - the dispatcher's own keys: every `.py` under the skill outside `tests/` and `l7r/diagram/ci/`, plus pool gens/manifests (feature 132; [`docs/switches.md`](../../docs/switches.md)). Docs, tests, Makefile, config and `scripts/` edits never cost the gate | **ask `make audit` - NOT the quick check** (or ~3 s already verified). Feature 162 (GM 2026-08-30) took the standing number out of this cell: it said ~5.5 min while the run log's median over the last 25 green runs was 137 s, and an undated headline in a table is exactly the shape that goes stale unremarked. The dated measurements to its left are history and stay; `scripts/_gatecost.py done` is the live figure |
-| `make done INCREMENTAL=0` | a FULL gate on purpose (feature 207): every test, and the result becomes the next baseline. A plain `make done` is INCREMENTAL when a baseline exists - it re-runs the tests the change can reach and judges the floors over the merged coverage; the reason it chose is printed as `gate: INCREMENTAL - ...` / `gate: FULL - ...`. `make audit` shows each run's mode and `k/n` selection | ask `make audit` |
-| `make test-full` | **EVERY test, nothing deselected** - the full tree, the tier trees, the map-rolling tests and the tooling tests all run, `EXHAUSTIVE` is set, and all three coverage floors are judged. This is `done FULL=1`'s TEST phase on its own, with no static checks, no reference roll and no `perf-gate`. **It does not prompt and costs no money** | ask `make audit` |
-| `make done FULL=1` | prompt (cancel by default), then the static checks, the reference map, `hooks-test`, **`test-full`** and `perf-gate`. What it adds over `test-full` is NOT more tests - it is lint/format/typecheck, the reference roll and the perf bookends | ask `make audit` |
-| `make ci-status` | **free** - the delta, its route (DIRECT/GATED), the verification state, whether the would-be tree is already verified, month-to-date remote spend. The "why won't it dispatch" answer | ~2 s |
-| `make ci-check` | **PAID** (~$0.40 est.) - the iteration check on CodeBuild: lint locally, build parked, reference locally, then `make done` against the merge with the latest main; `FULL=1` (prompts), `TARGET=cohort` etc. | measured in `dev/timings.md` |
-| `make ci-merge` | **PAID** - the push's gated route; called by `sync-with-main.sh`, never by hand | - |
-| `make ci-measure` | **PAID**, prompts - MEASURE what the remote gate costs (feature 177). The only route that may dispatch with NO engine delta, and the only one that writes no `verified/` record and pushes nothing; every other condition still refuses it. `FULL=1` for the full scope. **DETACH it** - a foreground run dies at the 2-minute tool timeout while the BUILD keeps going, leaving no run-log entry | 437 s green warm, 8 billed min, $0.64 (2026-09-03) |
-| `make ci-image` | **PAID** (~$1), prompts - rebuild the build image from `Dockerfile.ci`; the GM's to run | - |
-| `make switches` | the iteration switch (feature 132): `remote on\|off`, with reason, who and when. The scope axis was retired in feature 185 | ~1 s |
-| `make ci-off REASON=...` / `ci-on` | **remote off**: nothing dispatches to CodeBuild, `ci-check`/`ci-image`/`FULL=1` refuse, the gated push lands on a green local `make done` (LOCAL-GATED). Commits the switch | ~1 s |
-| `make perf-report AGAINST=<NNN>-start` | the trend, then the **BAND** the newest pair reaches (feature 129): 1 over this environment's line (0.0% local, 2.0% codebuild), 2 >5% total / >10% seed, 3 >10% / >20% - per environment, both measurements | ~1 s |
-| `make perf-explain WHY="..." CONTROL=<key>` (or `UNVERIFIED="..."`, logged) / `perf-confirm` / `perf-audit` / `perf-signoff` | the review records a band owes; `perf-confirm` and `perf-audit` are the **`perf-audit` subagent's** (they decline without `AS=perf-audit`); `perf-signoff` is the GM's, at a terminal | ~1 s |
-| `make perf-review` | does every environment's newest pair carry the records its band owes? The PUSH runs this | ~1 s |
-| `make perf-profile SEED=25 STAGE=web` | tier-2 evidence: cProfile of ONE stage of ONE seed (+225% on that stage); the derived table is committed, the raw `.prof` is not | ~3x the stage |
-
-**Nothing runs outside make.** A bare interpreter reaching an engine entry point, a bare pytest, or a
-make driven by a foreign makefile is refused before it executes (`scripts/make-only-hooks.sh`), and
-the engine refuses in-process calls too (`l7r/diagram/_invocation.py`). If a refusal fires on correct
-work that is a BUG in the guard worth fixing, not something to work around - it did so five times
-while being built, every one a MENTION mistaken for an INVOCATION.
-
-**`quick` enforces its own 60 s budget and fails over it.** It was 254 s while every guard pointed at
-it as the cheap option, because it deselected two FILES and could not see that three polder tests
-rolled maps. Marking is `@pytest.mark.rolls_map`, guarded by `tests/test_markers.py`.
-
-
-- **A performance increase is never silently absorbed** (feature 129, constitution VI): `make perf-report` names the band; an increase over that environment's band-1 line (0.0% local, 2.0% codebuild) on any seed or the total owes `make perf-explain WHY=... CONTROL=<key>` from you - the key a recorded run with the attributed cause removed, or `UNVERIFIED="<why>"`, logged (feature 240: a profile says where time went, never why) - and a confirmation from the **`perf-audit` subagent** (launch it; never pass `AS=perf-audit` yourself); above 5%/10% the subagent's audit; above 10%/20% the GM's sign-off. The push refuses without them.
-- Iterate on the ONE motivating map; run the full test bed exactly **once**, at the end. That final
-  sweep is MANDATORY whenever shared engine code changed (`settlement/`, `overlap/`,
-  `waterfields/`, a scripted engine).
-- `python3 -m l7r.diagram.pipeline.regen pool/<type>/<map>.gen.py` - the cache skips the work and
-  prints `CACHED` / `REGENERATED` / `FROZEN` every time.
-- Cheap linters BEFORE the gate: `python3 -m ruff format . && python3 -m ruff check . && pyrefly check`.
-- Then the WHOLE affected test file with `-n auto`, never a `-k` subset. Then `make done`, **once**,
-  backgrounded, and **never polled** - act on the notification.
-- Never re-run what `make done` just ran, and never run pytest serially (~7x slower here).
-- Never run a pytest BESIDE a running gate - two writers on the same pool maps is a source of false RED.
-- Update the predictably-affected unit tests in the SAME edit as the engine change.
-- **CYCLE DISCIPLINE** (GM 2026-08-26, constitution v2.4.0; measured on feature 133 T10, where ~30 of
-  57 minutes were round trips): **re-read the WHOLE diff for convention misses before the first
-  test run** - an unimported builder, an undeclared segment input, an unsorted fixture, a wrong test
-  coordinate are ten-second fixes that cost a full model round trip each when a test finds them one
-  at a time; fix everything a failing run lists before re-running; **scaffold a check with
-  and **never write a number into a record
-  that was not measured on the artifact** - a guessed
-  figure is a correction round the reviewer will make you pay.
+- **Nothing runs outside make**: a bare interpreter, a bare pytest or a foreign makefile is refused
+  (`scripts/make-only-hooks.sh`), and the engine refuses in-process calls too (`_invocation.py`). A refusal on correct
+  work is a BUG in the guard to fix (it was always a MENTION mistaken for an INVOCATION).
+- `make map GEN=pool/<tier>/<map>/<map>.gen.py` regenerates one map and prints `CACHED` / `REGENERATED` / `FROZEN`;
+  `PROFILE=1` adds where its time went. Iterate on that ONE map, `make quick` while iterating, `make test-file FILE=...`
+  for a whole affected file (never a `-k` subset alone), then `make done` once, backgrounded, never polled.
+- `make quick` fails over its own 60 s budget; a test that rolls a map carries `@pytest.mark.rolls_map`
+  (`tests/test_markers.py`).
+- Never run a test BESIDE a running gate - two writers on the same pool maps is a source of false RED.
+- Update the predictably-affected unit tests in the SAME edit as the engine change. **Cycle discipline**
+  (constitution v2.4.0): re-read the WHOLE diff for convention misses before the first test run, fix everything a
+  failing run lists before re-running, and never write a number into a record that was not measured on the artifact.
+- **A performance increase is never silently absorbed** (feature 129, constitution VI): `make perf-report` names the
+  band, and the push refuses until its records exist - your `make perf-explain`, the **`perf-audit` subagent's**
+  confirmation or audit (never pass `AS=perf-audit` yourself), and above band 2 the GM's sign-off.
 
 **Placement** ([`dev/placement.md`](../../dev/placement.md))
 
-- **Read the DRAW ORDER map before moving anything.** A drawing method sees only what is in `self.M`
-  when it runs; a placer avoids only what is in the registries when it runs. Most "wrong geometry"
-  is wrong ORDER.
-- A new footprint feature MUST go in `_OVERLAP_STRUCTS` (or `_OVERLAP_EXEMPT`, with the reason) and
-  get a caption group in `_LABEL_GROUP`. Membership alone gates it off fifteen hazards; nothing else
-  has a hand-written key list to remember.
-- **Record a footprint the extractor can read** - `x`+`w`/`vw`, a `poly`/`outline` ring, a stroked
-  polyline, or `parts` of rotated quads. A record matching none of those is invisible to every
-  matrix check in both directions and looks exactly like a feature with nothing wrong.
-- **Gap verdicts read footprints, never centers** - `edge_gap` / `within_edge_gap` / `sat_overlap`.
-  Classification, association-reach and prefilters may use centers, deliberately; say which family
-  your rule is in, in a comment, at the test. Add a `test_gap_verdicts_read_footprints_not_centers`
-  entry with every new gap rule.
-- **Never let an aggregate (a centroid) stand in for the distributed thing a verdict is about.**
-  Measure to the nearest member, or to the wall.
-- **Randomness is POSITIONAL or SCOPED - the engine's practice, no longer a gate-proved requirement** (GM 2026-09-08, feature 219: *"I am actually okay with an upstream change in the number of random draws moving a map"*; the immune test that proved it is retired)**: `self._hjit(x, y, salt)`
-  for a per-feature attribute, `with self.rng_scope(name, *key)` for a phase or region.
+- **Read the DRAW ORDER map before moving anything.** A drawing method sees only what is in `self.M` when it runs; a
+  placer avoids only what is in the registries when it runs. Most "wrong geometry" is wrong ORDER.
+- A new footprint feature goes in `_OVERLAP_STRUCTS` (or `_OVERLAP_EXEMPT`, with the reason) and gets a caption group
+  in `_LABEL_GROUP`. **Record a footprint the extractor can read** - `x`+`w`/`vw`, a `poly`/`outline` ring, a stroked
+  polyline, or `parts` of rotated quads; anything else is invisible to every matrix check.
+- **Gap verdicts read footprints, never centers** (`edge_gap` / `within_edge_gap` / `sat_overlap`); say at the test
+  which family a rule is in, and add a `test_gap_verdicts_read_footprints_not_centers` entry with every new gap rule.
+  Never let an aggregate (a centroid) stand in for the distributed thing a verdict is about.
+- Randomness is POSITIONAL or SCOPED: `self._hjit(x, y, salt)` per feature, `with self.rng_scope(name, *key)` per phase
+  (practice, not a gate-held rule - GM 2026-09-08: *"I am actually okay with an upstream change in the number of random
+  draws moving a map"*).
 
-**The gate** ([`dev/gate.md`](../../dev/gate.md))
+**The gate** ([`dev/gate.md`](../../dev/gate.md)) - **a rule about a map is a test of the placer that makes it**
+(feature 166): a seat a placer decides is its unit test; a property of a FINISHED map is a seed test in `tests/gate/` on
+a cached roll, which states what it FOUND before it judges it; placement and its test import the same predicate.
 
-- **A RULE ABOUT A MAP IS A TEST OF THE PLACER THAT MAKES IT** (feature 166, GM 2026-08-30). There is
-  no post-placement check battery: `check_village` and its 1,371 segments are deleted. A clearance or
-  seat a placer decides is a unit test of that placer; a property of a FINISHED map that no single
-  placement owns is a seed test in `tests/gate/` on a cached roll; a fact about the code is a static
-  test; and a rule about a feature no scripted generator produces is a recorded DROP with its
-  grounding kept. Mode A is the exception the GM drew himself - a compound plan is placed by a
-  person, so it keeps its `building-review` / `size-audit` agents and their frozen bad-SVG fixtures.
-- **Non-vacuity is asserted, never assumed.** A seed test whose subject list is empty passes; every
-  test in `tests/gate/` states what it FOUND before it states the found thing is well formed.
-- Placement and its test must read the SAME source - import the engine's predicate rather than
-  restating it, and where a restatement is unavoidable, restate it EXACTLY.
-
-
-**Diagnostics** ([`dev/diagnostics.md`](../../dev/diagnostics.md))
-
-- Ask the ENGINE where a feature fits (`s.open_seat(...)`) - do not guess coordinates and regenerate.
-- Ask the GEN who placed it (`tools/why_placed.py --at` / `--refused`) - do not grep for the caller.
-- Adjudicate a multi-rule siting against the GATE (`tools/site_justice.py`), never against a
-  re-statement of the rules.
-- Read derived geometry from the MANIFEST (0.2s), not by re-running the generators (minutes).
-- Batch every crop you want to look at into ONE call, then Read them together.
-- **A diagnostic that restates what it observes will lie to you.** Print the value and its
-  provenance from ONE expression, or do not print the provenance.
+**Diagnostics** ([`dev/diagnostics.md`](../../dev/diagnostics.md)) - ask the ENGINE where a feature fits
+(`s.open_seat(...)`) and the GEN who placed it (`make why-placed`); read derived geometry from the MANIFEST, not by
+re-running a generator; a diagnostic that restates what it observes will lie to you.
 
 **Performance** ([`dev/performance.md`](../../dev/performance.md))
 
-- Every slow gen ever profiled here was the same shape: *a per-candidate scan of geometry that does
-  not change during the scan*. Hoist, prefilter, or index - and if a gen "hangs", suspect that shape
-  and profile before bisecting.
-- **Maps may change for speed** (GM 2026-09-30, feature 297: *"They do NOT need to remain identical in output"*): a
-  placer, fill or scatter may be rebuilt in a faster form that decides differently and moves maps, held to the RULES (the
-  gate on the regenerated pool), never to byte-identity.
-- When a CHECK that verifies a rule (a gate test) is slow, **INDEX it - do not coarsen it.** There the index prunes and never
-  decides; coarsening a check lets defects through.
-- **Build the blocked ground ONCE, then ask it per candidate** (constitution X clause 15, GM
-  2026-09-08, feature 218): every keep-out that does not change during a fill or a scatter goes
-  into a `PointGrid` / `RingIndex` / `KeepoutGrid` before the first candidate is tried, and no
-  candidate walks a registry. The index beside the scan that did not use it is the third shape in
-  `dev/performance.md`: the windbreak 7.3 s -> 0.5 s and the hinterland 8.1 s -> 1.3 s, byte-identical.
-- Trust the A/B against HEAD, not cProfile's seconds.
-- **Some slowness is bought memory** (GM 2026-10-05): the render's tile cap and per-tile clip, the render step's 4 maps at
-  once and the 6 test workers each trade time for RAM on purpose. Read `dev/performance.md` "Time traded for memory" before
-  undoing one; its table gives the RAM each undo costs, and that cost goes to the GM.
+- Every slow gen profiled here was *a per-candidate scan of geometry that does not change during the scan*: build the
+  blocked ground ONCE (`PointGrid` / `RingIndex` / `KeepoutGrid`) and ask it per candidate (constitution X clause 15).
+- **Maps may change for speed** (GM 2026-09-30: *"They do NOT need to remain identical in output"*), held to the rules,
+  never to byte-identity. A slow CHECK is INDEXED, never coarsened. Trust the A/B against HEAD, not cProfile's seconds.
+- **Some slowness is bought memory** (GM 2026-10-05): read `dev/performance.md` "Time traded for memory" before
+  undoing one; the RAM each undo costs goes to the GM.
 
-**The pool** ([`dev/pool.md`](../../dev/pool.md))
+**The pool** ([`dev/pool.md`](../../dev/pool.md)) - **the legacy pool is FROZEN**: its 18 hand-authored maps are
+exhibits, never regenerated or re-gated; the fix for one is CONVERSION, not retrofit. A cohort of seeds is a stronger
+test bed than one map, and a seed that passed before your change and fails after it is a REGRESSION.
 
-- **The legacy pool is FROZEN.** The 18 hand-authored maps are permanent exhibits: never regenerated,
-  never re-gated, renders committed. The fix for a frozen map that breaks a post-freeze rule is
-  CONVERSION, not retrofit - do not "fix" one, and do not treat its violations as bugs.
-- New rules ship un-gated; engine changes no longer need byte-identity flags.
-- A cohort of seeds is a much stronger test bed than a map - and **measure the cohort's baseline
-  first**, in a detached worktree (`git worktree add --detach /tmp/base HEAD`), never by stashing.
-- A seed that passed before your change and fails after it is a REGRESSION, and nothing merges to
-  main carrying one (constitution Principle XIII). "It rotated" is not a defense.
-
-**Reviews** ([`docs/reviews.md`](../../docs/reviews.md)) - a review check runs ON ITS OCCASION (feature 294): the
-glyph check when an element is new to a map, its glyph redrawn or its placement rule substantially changed; the
-whole-map `settlement-review` when a map is new to the pool or a new form or tier; `fix-check` on a GM complaint's
-fix. A feature that touches drawing or placement code declares its occasions in `tasks.md`'s `## Occasions` (or
-`- none: <why>`); one unit per agent, on a green gate, two rounds at most, never waited on. **A finding OUTSIDE the delta
-is still yours to fix** (constitution Principle XIV) - a reviewer pointed at a delta reliably turns
-up unrelated defects, and that is it working.
-
-**Build what was asked** (constitution Principle XVI, NON-NEGOTIABLE) - and in this engine the
-temptation is specific: almost every ordering or placement rule has a case where an exception looks
-justified, because the geometry really is full of special cases. It is still not yours to approve.
-Feature 126 was asked for as "farmhouses before lanes" and specified as farmhouses before lanes
-EXCEPT the connector and the field spur; both of those register no-build corridors, so both kept
-constraining the placement the feature existed to free. An exception goes to an independent Opus 5
-subagent with the GM's request verbatim, and a finished `spec.md` gets the same treatment before
-implementation starts. Five rounds on an initial acceptance, then escalate (GM 2026-08-30).
-
-**Fix defects where you find them** (constitution Principle XIV, NON-NEGOTIABLE) - this engine is
-where the rule bites hardest, because its reviewers and diagnostics surface defects constantly and
-almost none of them belong to the feature in hand. Fix them in the work at hand; defer ONLY an
-architectural fix, and then with its measurement, mechanism and sketch. Do not cite Principle XIII's
-"pre-existing failures stay ledgered" - that governs what blocks a push, not what you owe a defect
-you have seen. And when a fix attempt FAILS, record it at the point of change: `homesteads.py`
-carries two dead ends for the front-row lane cap, either of which a later session would otherwise
-re-try.
-
-**Research claims** (feature 316, GM 2026-10-02: *"the code that generates a hamlet must have citations for anything that
-should be research derived"*). Every function, method, class and UPPER_CASE constant of the code a hamlet's generation imports
-carries `Research:` claims in its docstring - one line per decision, `<label> - <question file | GUESS | UNRESEARCHED |
-CONVENTION | DEVIATION <question file> | NONE>[: <what the code does>]` (a constant's claim is the string literal after it; a
-module docstring's claims are inherited by its units with none). A new unit owes its claim (the gate's coverage test says so,
-with the form); a changed unit owes an `impl-drift` check of its claims at the push (`make claims-owed`, `claims-bundle`,
-`claims-checked`; `make claims-report` is the index). A `Kind` class docstring never takes one - its module does.
-
-**Recording decisions** ([`dev/decisions.md`](../../dev/decisions.md)) - before you build on a property of
-the engine, check whether anyone DECIDED it; a side effect is not a rule. And an open decision
-carries the 2-3 line implementation sketch, not just the question.
-
-- **Research it before you ask the GM, and if two forms are supportable make it a KNOB.** The
-  ladder: research -> decisive means implement it -> two attested forms means roll between them per
-  settlement -> only a silent record earns a GM ruling. Liberty covers a DEGREE along a continuum,
-  never a choice between two distinct FORMS. Constitution Principle XII; evidence and the worked
-  example in the doc.
+**A fix that FAILED is recorded at the point of change** (as the hamlet generator's modules record their dead ends), so
+a later session does not re-try it. **Before you build on a property of the engine, check whether anyone DECIDED it**
+([`dev/decisions.md`](../../dev/decisions.md)); an open decision carries its 2-3 line implementation sketch.

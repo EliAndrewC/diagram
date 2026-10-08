@@ -2,10 +2,44 @@
 
 Split from settlement/civic_grounds.py by feature 115 - see settlement/civic_grounds/CLAUDE.md for the index.
 
-`_stable_yard` was a single 335-line method, the largest function in the engine. Feature 115 stage 2
-decomposed it into `_YardCtx` (the shared state and the predicates every stage tests against, in
-`_yardctx.py`) plus one method per stage. The stage ORDER in `_stable_yard` is the RNG order - read
-the RNG contract on `_YardCtx` before moving anything here.
+`_stable_yard` draws the working ground around a gate stables (GM 2026-07-22): a beaten-earth forecourt, NOT a
+fenced paddock, whose "in active use" signal is carts, tethered animals and littered ground - the Qingming Shanghe Tu
+gate convention. It is the densest concentration of dated GM decisions in the engine, and each stage carries its own
+GM-decision comments. Feature 115 stage 2 decomposed it into `_YardCtx` (the shared state and the predicates every
+stage tests against, in `_yardctx.py`) plus one method per stage:
+
+    # | stage                  | what it draws, and the decision behind it
+    1 | `_YardCtx(...)`        | no drawing - builds the tight footprint keep-out (~3 px margin, real drawn buildings
+      |                        | only, NOT the urban halo and NOT `block_polys`), including `farriers`, because the
+      |                        | shoeing forge stands ON this yard by design (GM 2026-07-25)
+    2 | `_yard_litter`         | the beaten-earth scuff and straw scatter, feathered to nothing at the rim so the
+      |                        | ground reads TRODDEN rather than blank
+    3 | `ctx.seat_init`        | no drawing - builds and SHUFFLES the four candidate rings. The yard's last RNG draw
+    4 | `_yard_road_rail`      | the road-parallel hitching rail, set back off the roadbed, probed at its FULL extent,
+      |                        | tips included (GM 2026-07-24): a rail whose tip lies on the tread is what it exists
+      |                        | to prevent
+    5 | `_yard_interior_rails` | one or two more rails, with BOUNDED RETRIES rather than two attempts: a candidate
+      |                        | refused by the heap/glyph rules must not cost the yard a rail, since the tie-up room
+      |                        | is the whole "in active use" signal
+    6 | `_yard_watering`       | 2-3 troughs clustered AT a well, offset direction-aware by a bucket-pour; a yard with
+      |                        | no reachable well DIGS ITS OWN rather than carrying water (the Nagahara defect,
+      |                        | GM 2026-07-23)
+    7 | `_yard_dung_heaps`     | 1-2 heaps, held 25 px off every rail line ON THE MAP (two rounds of GM review: 15 px
+      |                        | still read as "next to the hitching posts", and the first version measured only
+      |                        | this yard's own rails)
+
+Rails draw as BARE posts and the yard shows no animals: drawn oxen kept reading as muck piles however they were styled,
+and these maps render no humans, so they render no animals either (GM 2026-07-25).
+
+THE RNG RULES - READ BEFORE EDITING. `_stable_yard` takes no injected RNG: it brackets its body in `random.getstate()` /
+`random.seed(...)` / `random.setstate(st)` and draws from the GLOBAL `random` stream, seeded from the yard's own position
+and radius, so each yard is independently deterministic but WITHIN a yard the output depends on the exact sequence of
+draws. (1) The bracket stays in the outer method: a stage that seeded its own stream, or ran outside the bracket, would
+leak state into the rest of the map. (2) Stages are called in source order, and no draw moves across a stage boundary -
+extracting a block that ends mid-expression is how this goes wrong. (3) The draws are the litter's and `seat_init`'s
+shuffle; every later stage takes candidates IN ORDER from the shuffled rings, so a stage that draws anew, or a draw
+moved before `seat_init`, changes every later choice in the yard. It looks like a cleanup and it moves the map - the
+type checker, ruff and the unit tests will not see it. The RNG contract on `_YardCtx` says the same at the ring.
 
 Research: plumbing - NONE
 """

@@ -1,16 +1,13 @@
 # settlement/structures/ - the structures subsystem as a package
 
-Split from the 1,459-line `settlement/structures.py` by feature 114 (constitution Principle X
-clause 13 - the cost being managed is context-window tokens). **Load only the file the task calls
-for**; this index is the map. `from .structures import StructuresMixin` still resolves and
-`settlement/core.py` is byte-unchanged, so nothing above this directory knows the split happened.
+Split from one `settlement/structures.py` by feature 114 (constitution Principle X clause 13 - the cost being managed is
+context-window tokens). **Load only the file the task calls for**; this index is the map.
+`from .structures import StructuresMixin` still resolves.
 
-**This package was never ONE subsystem, and that shapes everything below.** `fields/` is the field
-engine cut four ways; `city/` is one tier cut six ways. `structures.py` was feature 025's RESIDUE
-BUCKET - whatever was neither field, nor way, nor homestead, nor funerary ground. So the seven
-modules are grouped by **what a session comes here to change**, not by theme, and they are
-deliberately uneven in size (92 to 407 lines) because tasks are uneven in size. A partition tuned
-for equal files would have to cut a cluster that no task cuts.
+**This package was never ONE subsystem.** `structures.py` was feature 025's RESIDUE BUCKET - whatever was neither
+field, nor way, nor homestead, nor funerary ground - so the modules are grouped by **what a session comes here to
+change**, not by theme, and are deliberately uneven in size. A partition tuned for equal files would have to cut a
+cluster that no task cuts.
 
 ## Look here when
 
@@ -23,7 +20,8 @@ for equal files would have to cut a cluster that no task cuts.
 | `servants.py` | the SERVANT RANGE (nagaya) pass: `servant_ranges` and the four probes that exist to serve it (`_solid_records`, `_blocks_any_door`, `_door_is_clear`, `_office_records`), plus `SERVANT_RANGE_DEPTH_FT` and `_OFFICE_STANDOFF` |
 | `packing.py` | the two multi-building placement ENGINES - `rowpack` (city row housing: terraces, back-to-back pairs, roji and courts) and `pack` (grid-scan district fill, footpaths, street-facing) - and `_shortfall`, the authored-vs-landed bookkeeping both use (and `houses.py`'s `frontage` too) |
 | `captions.py` | **the LABEL PHASE** (`place_labels`, feature 157 - the last phase of every settlement's generation, its drain order, its one-row dispatch table, and `discard_queued_label` for a feature that is placed and then withdrawn), the ONE placer's settlement adaptor (`_draw_seated_caption`, `label_obstacles`, feature 266), and the SITING probes underneath it: what boxes a caption must miss (`label_blockers`), how wide it is AS RECORDED (`label_caption_hw`), whether a seat is clear (`label_seat_clear`), the outward-walking search (`clear_label_seat`), and the inverse test - would a FOOTPRINT land under a caption already placed (`_under_a_caption`) |
-| `fixtures/` | public street furniture and civic fixtures - a PACKAGE with its own [`CLAUDE.md`](fixtures/CLAUDE.md) index since feature 173. Read that first, then load one of: `_helpers.py` (`kosatsuba_affordances`, `kosatsuba_anchor`), `boards.py` (`fire_tower`, `kosatsuba` - its caption a point subject for the one placer, feature 266), `siting.py` (the water/lane clearance probes and the two placement passes) |
+| [`fixtures/`](fixtures/CLAUDE.md) | public street furniture and civic fixtures: the fire tower and the kosatsuba notice board, their water and lane clearance probes, and the two placement passes (`place_kosatsuba`, `place_punishment_spot`). Read its index, then load one file |
+| `urban_fixtures.py` | the city fixtures - the theater stage and the drum tower (`UrbanFixturesMixin`; feature 145 moved them out of `fixtures`, whose kosatsuba the hamlet path executes) |
 
 ## Composition, and why it is in `__init__.py`
 
@@ -46,26 +44,19 @@ six call into it and it calls out to none of them:
 | `compounds.py` | `urban.py` | `merchant_estate` -> `building`, `_dims` |
 | `packing.py` | `urban.py` | `pack` -> `try_building`, `_dims`, `_face_street_rot`, `open_face_rot`; `rowpack` -> `building`, `_dims` |
 | `servants.py` | `urban.py` | `servant_ranges` -> `building` |
-| `fixtures.py` | `captions.py` | `place_kosatsuba` -> `label_obstacles`, `tree_crown_discs` (its caption proved by the one placer, feature 287); `place_punishment_spot` -> `clear_label_seat`, `_under_a_caption` |
+| `fixtures/siting.py` | `captions.py` | `place_kosatsuba` -> `label_obstacles`, `tree_crown_discs` (its caption proved by the one placer, feature 287); `place_punishment_spot` -> `clear_label_seat`, `_under_a_caption` |
 
 ## Three placements you will want to "fix" - each is deliberate
 
-Recorded here rather than only in `specs/114-structures-package/research.md`, because a decision
-that lives only in a spec file is a decision nobody will find.
-
 ### `road` and `pasture` are in a module of their own because neither belongs HERE
 
-`road` belongs with `water_ways.py`'s ways (lanes, streets, alleys, kido); `pasture` belongs with
+`road` belongs with `water_ways/`'s ways (lanes, streets, alleys, kido); `pasture` belongs with
 `land/`'s land surfaces - specifically `land/cover.py`, which holds the commons and the hinterland
 layout, with marsh and the toe band next door in `land/wet.py`. Both are in this package only
 because feature 025's cut put them here.
 
-They were NOT moved to their proper homes by feature 114, and the reason is not timidity: moving a
-member between parent-level mixins is a different change with a different risk profile, and folding
-it in would have made the byte-identity oracle answer two questions at once - a dirty diff could not
-then distinguish "the composition is wrong" from "moving `road` changed something". Isolating them
-makes each eventual move a one-file change plus one row of this table. Same call feature 113 made
-with `governor_mansion` in `city/civic.py`.
+Moving either is a separate change of its own (a member moved between parent-level mixins); isolating them makes each
+eventual move a one-file change plus one row of this table.
 
 What the module legitimately IS, so it is not merely a leftovers drawer: both members draw an
 unbuilt GROUND SURFACE that reserves placement rather than a structure that occupies it - `road`
@@ -80,8 +71,8 @@ them exactly one consumer - `servant_ranges` (`_solid_records` also serving `_do
 **placement follows the caller** (feature 113's `_ring_upslope` precedent). Splitting them away
 would mean a session working on the nagaya pass opens two files to read one algorithm.
 
-They are also less general than they look: `_blocks_any_door` and `_door_is_clear` mirror
-`city_house_doors_unblocked`'s sample geometry point for point - the same-source doctrine - so they
+They are also less general than they look: `_blocks_any_door` and `_door_is_clear` mirror the
+city-house door rule's sample geometry (once the `city_house_doors_unblocked` check) point for point - the same-source doctrine - so they
 are tied to a specific check, not to `building` in the abstract. If a second consumer appears,
 promote them to `urban.py`; it is a move of four small methods.
 

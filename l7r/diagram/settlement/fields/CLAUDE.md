@@ -2,8 +2,7 @@
 
 Split from the 1,511-line `settlement/fields.py` by feature 112 (constitution Principle X clause 13
 - the cost being managed is context-window tokens). **Load only the file the task calls for**; this
-index is the map. `from .fields import FieldsMixin` still resolves and `settlement/core.py` is
-byte-unchanged, so nothing above this directory knows the split happened.
+index is the map. `from .fields import FieldsMixin` still resolves.
 
 ## Look here when
 
@@ -39,19 +38,18 @@ already relies on this from outside the package too: `settlement/land/nearring.p
 
 ## The guard, and what it is for
 
-`test_settlement/test_fields.py::test_no_pre_split_fields_member_was_lost_in_the_move` holds the
+`tests/settlement/test_fields.py::test_no_pre_split_fields_member_was_lost_in_the_move` holds the
 24 pre-split members as a SUBSET of what the composed class exposes, and
 `test_no_two_fields_submixins_define_the_same_name` holds that no two sub-mixins define the same
 member. Both were proven to fire before being trusted (feature 112 T005).
 
 Two things about the shape of that pair:
 
-- **Subset, not equality** - so adding a method here needs no bookkeeping. Stage 2 added thirteen
-  private helpers and will not be the last to add some. The direction that HIDES is a member going
+- **Subset, not equality** - so adding a method here needs no bookkeeping. The direction that HIDES is a member going
   missing: an addition is visible in review, while a subtraction surfaces only when whichever
   generator calls it happens to run.
 - **The collision half is the one that is easy to under-rate**: a member defined by two sub-mixins
-  produces a working import, a clean `mypy --strict`, and one silently dead implementation, because
+  produces a working import, a clean type check, and one silently dead implementation, because
   MRO just picks the first base.
 
 ## The class body is not only methods
@@ -60,28 +58,14 @@ Two things about the shape of that pair:
 `_PADDY_GRAVE_KINDS` - the feature-012 archetype matrix saying which field kinds get which in-field
 feature. The surface guard cannot see attributes, so
 `test_feature_012_archetype_constants_survived_the_split` covers them separately. Any future
-re-partition of this package must move class attributes as deliberately as methods; the feature 112
-transformer refuses to run if its manifest does not name every class-body member.
+re-partition of this package must move class attributes as deliberately as methods.
 
-## Monkeypatching
+Monkeypatching: patch the DEFINING module (`settlement._geom.point_in_poly`, never `settlement.fields.point_in_poly`) -
+the rule is [`../CLAUDE.md`](../CLAUDE.md)'s.
 
-Each submodule binds shared helper names at import (`from .._geom import point_in_poly`), so
-patching `settlement.fields.point_in_poly` reaches nothing. Patch the DEFINING module
-(`settlement._geom.point_in_poly`) or, for anything reached through `self.`, patch
-`settlement.Settlement` - class-level patching is unaffected by the split. As of feature 112 no test
-in the suite patches a module-level name in this package (census: `specs/112-fields-package/`
-research R8).
+## `water_field`
 
-## Function scale
-
-Feature 112's second stage decomposed the three methods that were 52% of the old file:
-`draw_comb_field` 321 -> 47, `apply_land_use` 266 -> 123, `water_field` 194 -> 150. Nothing in the
-package now exceeds ~150 lines.
-
-`water_field` is the one that stopped at the bar rather than well under it, and its own body says
-why at the point of the decision: what remains is coupled through `uline`, a closure over the
-lateral boundaries that both the plot-carving loop and the lateral draw call. Cutting further would
-mean threading a closure plus nine locals through a helper - worse to read than the sequence it
-would replace. **The next move there is to give the water frame a small object, not to lengthen a
-parameter list.** (It is also the v1 field builder, superseded by `waterfields/` for rebuilt maps,
-so it is not where new work should go.)
+`water_field` is the longest method left here, and its body says why at the point of the decision: what remains is
+coupled through `uline`, a closure over the lateral boundaries that both the plot-carving loop and the lateral draw call.
+**The next move there is to give the water frame a small object, not to lengthen a parameter list.** It is the v1 field
+builder, superseded by `waterfields/` for rebuilt maps, so it is not where new work should go.

@@ -42,9 +42,6 @@ research on the code's side.
 
 ## When a section a modal was written FROM moves (GM 2026-09-12, feature 234)
 
-A modal IS its `Kind` class's docstring (`interactive/classes/`), written from the section its `Entry:` names.
-`scripts/_entry_owed.py` names every class whose section's FINDINGS changed while its prose did not (its words, less the
-intro: feature 311); the push refuses until each pair is answered - an `entry-drift` check and a rewrite of what it calls
-DRIFTED (`make record-checked CHECK=entry-drift ...` when it returns IN-STEP), or one recorded
-`ENTRY_DRIFT_OK="<what moved, and why no modal is now wrong>"`. `record-format` and `quote-check` are NOT this check:
-neither opens a modal.
+The operative rule - what the push owes and how each pair is answered - is
+[`dev/modals.md`](../dev/modals.md), "When a research page a modal was written FROM changes". `record-format` and
+`quote-check` are NOT that check: neither opens a modal.

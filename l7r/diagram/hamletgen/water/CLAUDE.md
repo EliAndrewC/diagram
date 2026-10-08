@@ -2,7 +2,7 @@
 
 Split from the 1,175-line `hamletgen/water.py` by feature 230 (constitution Principle X clause 13 -
 the cost being managed is context-window tokens), following the [`ways/`](../ways/CLAUDE.md)
-exemplar. Bodies are verbatim. **Load only the file the task calls for**; this index is the map.
+exemplar. **Load only the file the task calls for**; this index is the map.
 
 `from .water import stage_field` and `hamletgen.stage_water_frame` resolve exactly as they did: the
 package's `__init__.py` re-exports every public name by star import (clause 14 - a re-export

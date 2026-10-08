@@ -1,7 +1,7 @@
 # How a map modal reads - the guidelines for a standardized modal (feature 319)
 
-**Load this file when:** you are writing or rewriting what a hamlet map's modal says about a kind of feature (a `Kind`
-docstring in `l7r/diagram/interactive/classes/`, a general kind of a magistracy or shrine sheet in `compound_kinds/`, or a
+**Load this file when:** you are writing or rewriting what a hamlet map's modal says about a kind of feature (a modal
+file under `l7r/diagram/interactive/assets/modals/`, a general kind of a magistracy or shrine sheet in `compound_kinds/`, or a
 settlement-choice value), or running the `modal-form` / `modal-research` checks. A kind particular to one sheet or to the
 setting follows `modals-particular.md` instead.
 
@@ -178,3 +178,28 @@ else in the item changes: it is written as one standard text, never for one map.
 registered knobs when a page is written (`interactive/conditions.py`), and the checks read each item with its condition.
 (GM 2026-10-05: *"Could we make that kind of item still automatic but dependent on the "knobs" for a settlement in cases where
 that is relevant?"*)
+
+## When a research page a modal was written FROM changes (GM 2026-09-12, feature 234; feature 319)
+
+A modal's text is its FILE (`l7r/diagram/interactive/assets/modals/<hamlet|sheet|choice>/<slug>.md`), written FROM the
+research questions its `Entry:` names. Nothing used to notice when such a page's words moved underneath it; the GM, told to
+update the pigsty write-up, asked *"if I hadn't said that ... then would you have done it?"*
+
+**What is owed.** `make record-owed` names it: a modal whose `Entry:` page changed its words (the intro aside), or whose own
+About, Guesses or `Entry:` text changed, owes `modal-form` and the three `modal-research` answers (`scripts/_modal_owed.py`,
+folded into `_record_owed.py`). Answer them with `make modal-bundle KIND=<key> FOR=modal-research` (or `FOR=modal-form`),
+the dispatch, then `make record-checked`. **The push REFUSES** (`scripts/entry-gate.sh`, the record gate) until every owed unit
+is answered, or discharged with `RECORD_CHECKS_OK="<why>"`, which goes to `dev/bypass-log/` and `make audit`. A modal still
+in the old form owes `entry-drift` instead (`scripts/_entry_owed.py`), which `ENTRY_DRIFT_OK="<what moved, and why no modal
+is now wrong>"` discharges. It is enforced on the GM's ruling: *"I don't believe that we should have any such thing as an
+unenforced doctrine. If it is unenforced, then it is not a doctrine. something should either not be considered doctrinal or
+it should be enforced."* No mechanical key separates "this page now says something different" from "this page was
+maintained" - that is a judgment about meaning, so the session supplies it in writing.
+
+**`record-format` and `quote-check` are NOT this check.** They read a research page, never a modal, so a green pass from
+either says nothing about any modal.
+
+**A renamed question owes its inbound links:** `scripts/check-entry-headings.py` fails the gate and the push when a modal's
+`Entry:` resolves to no question (`make fragment-move` renames one with every pointer to it). A question deliberately not
+written is named in the declared form `research/contents.json#<section> (no dedicated entry - recorded as silent)`, which `make audit`
+enumerates.

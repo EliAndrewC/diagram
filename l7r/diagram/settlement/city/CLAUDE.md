@@ -2,9 +2,8 @@
 
 Split from the 1,582-line `settlement/city.py` by feature 113 (constitution Principle X clause 13 -
 the cost being managed is context-window tokens). **Load only the file the task calls for**; this
-index is the map. `settlement/core.py` is byte-unchanged: `from .city import CityMixin` now
-resolves to this package's `__init__.py`, which composes the six sub-mixins back into one
-`CityMixin` occupying the same position in the `class Settlement(...)` base list.
+index is the map. `from .city import CityMixin` resolves to this package's `__init__.py`, which composes the
+sub-mixins back into one `CityMixin` in the `class Settlement(...)` base list.
 
 ## Look here when
 
@@ -17,6 +16,8 @@ resolves to this package's `__init__.py`, which composes the six sub-mixins back
 | `waterfront.py` | where the city meets navigable water: `quay`, `aqueduct`, `dock`, `jetty`, `log_boom` |
 | `bridges.py` | crossings, from a single span to the footbridge net over a channel system: `bridge`, `bridges`, `channel_footbridges` and the predicates it delegates to (`_widen_for_confluence`, `_deck_clears_its_water`, `_plank_reaches_useful_ground`), plus the module-level plank geometry `_at_arc` / `_deck_quad` / `_quads_overlap` |
 | `civic.py` | the governor's mansion - and see below before you "fix" it |
+| `crop.py` | the city crop, `crop_city` (`CityCropMixin`; feature 145 moved it out of `core.py`, which every map executes): how much of the city and its country the sheet shows |
+| `knobs.py` | the city knob helpers - the machi mouths and the swept moat tap (feature 145 moved them out of `_knobs.py`) |
 
 ## The composition mechanism
 
@@ -43,42 +44,25 @@ true, and it has been observed failing (feature 113 tasks.md T016).
   infrastructure, so it belongs to none of the five subsystems above. A one-method module is a
   smell, but a module whose index row is a lie is a defect - isolating it keeps every other row
   honest. **Intended follow-up**: fold `civic.py` into `settlement/castle_civic.py`, where it
-  topically belongs (903 + 21 = 924 lines, still under the bar). Scoped out of 113 because it
-  would have widened the guard contract across two mixins during a pure move.
+  topically belongs (it stays under the 1,000-line bar).
 
-## Mixins and mypy
+## Type checking
 
-Every mixin method is annotated `self: "Settlement"` with `from ..core import Settlement` under
-`TYPE_CHECKING` - the TWO-dot path, since these modules sit one level deeper than `city.py` did.
-That is what lets `mypy --strict` resolve cross-subsystem attribute access with zero runtime import
-cycle. Three of `walls.py`'s members are `@staticmethod` and take no `self`.
+The mixin pattern is [`../CLAUDE.md`](../CLAUDE.md)'s, with the TWO-dot path (`from ..core import Settlement`) since
+these modules sit one level deeper. Three of `walls.py`'s members are `@staticmethod` and take no `self`.
+**`_wall_point_at_arc` imports `Settlement` lazily INSIDE its body** (a runtime class-attribute read that would cycle at
+module level): a split that rewrites import paths must rewrite in-body relative imports too, or the line points at a
+module that does not exist and fails only at draw time.
 
-**One in-body import to know about**: `_wall_point_at_arc` does a lazy
-`from ..core import Settlement` INSIDE its body (a runtime class-attribute read that would cycle at
-module level). Feature 113's transformer originally rewrote only the module header, so this line
-kept its one-dot path and silently pointed at a nonexistent `settlement.city.core`. `mypy` caught
-it; in a module mypy did not check it would have been an `ImportError` at draw time. The
-transformer now rewrites bodies too - any future split of a file with in-body relative imports
-inherits the fix.
+## Verifying a change in here
 
-## The oracle for any change in here
+The city wing is exercised by the provincial-city maps and the walled towns - a sweep of the scripted hamlets alone
+leaves `city_wall`, `moat`, `farmland_ring` and the whole waterfront module unverified - and by the unit tests that hold
+every module here at 100%.
 
-Byte-identity of the regenerated pool, not the test suite. The city wing is exercised by the
-provincial-city maps (`tango`, `minami`, `nagahara`) and the walled towns - a sweep of the live
-scripted hamlets alone leaves `city_wall`, `moat`, `farmland_ring` and the whole waterfront module
-unverified. `specs/113-city-package/quickstart.md` has the runnable harness.
+## Long methods left whole, on purpose
 
-## What Stage 2 decomposed, and what it deliberately left alone
-
-`city_wall` (339 raw lines / 160 statements) and `channel_footbridges` (195 / 91) were the only two
-methods in the package over the ~150-line bar, and both are now short sequences of named steps -
-`city_wall` reads as setup, a gate loop, the mural pass, and its records (69 raw / 23 statements).
-
-Three methods that LOOK long were measured and left whole: `log_boom` (97 raw), `moat` (111) and
-`farmland_ring` (121). Constitution clause 12 measures statements, "never raw lines", and by that
-reading they are 41, 57 and 48 - and a third of their raw length is the researched docstring the
-project's record-the-why rule requires (`log_boom` spends 35 lines on why a boom is a shore-fast
-pen rather than a line across the stream). Splitting the code underneath that prose would force the
-why to be duplicated across helpers or to drift from what it explains. **Do not "finish the job" by
-decomposing them** - the reasoning is in `specs/113-city-package/research.md` R10, and if the bar
-ever moves, move it there rather than here.
+`log_boom`, `moat` and `farmland_ring` LOOK long but are short in statements (constitution clause 12 measures
+statements, "never raw lines"); a third of their raw length is the researched docstring the record-the-why rule
+requires. **Do not "finish the job" by decomposing them** - splitting the code under that prose would duplicate the why
+across helpers or let it drift (`specs/113-city-package/research.md` R10).

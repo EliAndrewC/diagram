@@ -24,9 +24,13 @@ PNG is byte-identical by construction; the page is a second serialization of the
 | `content.py` and `assets/*.json` | you are wondering WHY the page's prose is JSON rather than Python constants - the why is in `content.py`'s docstring (feature 207: a wording edit must not be an engine change). `glossary.json`, `siblings.json`, `place.json`, `page-text.json`; the registry's data went into its modal files (`assets/modals/`) |
 | `citations.py` | the WORKS a question's notes cite (feature 211, GM 2026-09-07; its per-page citations pages retired with the page directories, feature 303): the works block at the foot of each question's page of the site, derived from the registry's two write-ups per work (citation line; what it is; why it applies, and its limits), and the footnote classifier (`footnote_form`) the gate and `make footnote-census` share. The site carries each question's notes at its own foot (`record/site_notes.py`). Look here when a works list is wrong or a new key is refused for want of a write-up |
 | `sources.py` | a modal's references look wrong - they are READ FROM THE RECORD at page-write time: `research_questions()` resolves the class's `entry` - since feature 301 a list of FRAGMENT paths (`entry_fragments`) - to the questions it names, each linking its small page in the record's site (`SITE_PAGES + q/<heading id>.html`, flat whatever section the question is in - feature 303); `research_sources()` / `registry()` read the keys a question's footnotes cite and the registry. `record_text()` is THE reader of a page of the record - the registry assembled, a question's page with its cross-link and confusables written in - because nothing built is committed (every reader in the engine, the tools and the tests asks it). It also holds the ONE body of feature 190's link classifier (`citation_lines`, `not_read`, `link_target`) and `registry_entries()` |
-| `page.py` - `merge_primitives` | the page draws too many elements, or a merge changed the picture. It gathers same-styled `<line>`/`<circle>`/`<ellipse>` into one `<path>` WHEREVER the reorder is invisible - an element joins an earlier bucket only if nothing it must pass overlaps it, and neither a TRANSLUCENT nor an OUTLINED element merges with one it overlaps (0.85 blobs stack darker than one merged fill - feature 148 R3; and a path paints every subpath fill before its stroke, so merged crowns show each other's outlines - feature 153 R5). A line has no fill and so is never outlined - getting that wrong un-merges every scatter. An extent it cannot compute counts as being in the way, and a circle's is tested as a circle. **A merged scatter is written as ONE PATH PER 400 px CELL, not one path** (feature 199, GM 2026-09-07: Kuwabata's page "a lot more noticeably sluggish"): a bucket of `TILE_MIN` (200) or more members is split by the cell of each member's anchor at emit time - Chromium replays every display item whose box touches a screen tile, and one 87,000-subpath path whose box spans the map was replayed for every tile on every hover; measured 57 ms per pointer move on Kuwabata's opening view against 17 tiled, 99-129 ms on Kashikawa and Sawada zoomed (`specs/199` research.md R1-R3). Which elements join a bucket is untouched, so the picture is unchanged (0-17 px of 1.4 M, R4). The guards it shipped with - every 200+-subpath path on the reference page in one cell, Kuwabata's mean pointer-move cost under 40 ms (on the MEAN, because the cost lands on the one move in five that crosses into the scrub and the median cannot see it, R6) - were RETIRED by the GM on 2026-09-07 with every browser test over a rolled page ("Verifying", below); the measurements stand in `specs/199` research.md |
+| `page.py` - `merge_primitives`, and `extents.py` | the page draws too many elements, or a merge changed the picture: same-styled primitives merge into one `<path>` wherever the reorder is invisible, and a big scatter is written one path per 400 px cell (feature 199). The rules and why: [`dev/interactive-page.md`](../../../dev/interactive-page.md). `extents.py` answers what the merge asks of an element's painted area (whether two touch, whether a bucket may take one) |
 | `page.py` | `wrap()` (the HTML form of one stream string), `ink_census()` (the FR-009 data: elements per class, and the unclassed ones), `explanations()` (only present classes, only present siblings), `render_page()` / `write_html()` |
-| `raster.py` | **the page is TWO MODES** (feature 200, GM 2026-09-07: *"all of the above feel slow"* - hover, scroll, zoom, load, in Chrome). Below a screen scale (`RASTER_R` = 3 px per map px, against `view.s x devicePixelRatio`) the map is ONE IMAGE of the whole picture, rendered here by resvg - the PNG's own renderer - as lossless WebP, and every class group is hidden except the lit one, drawn as vector above it; above the scale the page is feature 199's vector page. The pointer in raster mode is answered from the CLASS ID MAP: the same SVG recolored one flat color per class, hit geometry painted as the DOM hits it, opacities stripped, no anti-aliasing, read from a canvas (`page.js` `keyAtPoint`; 98.2% agreement with the DOM, the rest single-pixel edges). And the OFF-MAP INK is dropped first (`drop_offmap`): 90% of a hamlet page's subpaths lay outside the viewBox - the hinterland scatter the crop never shows - and dropping them is what holds the first load near today's once the image's decode is added (0.36 s today, 0.83 kept, 0.58 dropped). The page paints the vector first and switches when both images are decoded. **Feature 201** (GM 2026-09-07): the picture carries NO TEXT (`without_text`) and raster mode hides LEAF INK outside the lit group rather than class groups, so every `<text>` is the browser's in both modes (one scale, one placard name in one font); and a lit class's filled shapes are a 0.45 WASH over the image, so the bunds, beans and ponds beneath a lit paddy show through - the exact stacking was priced at 223 ms per paddy hover and a mask at 300-1,100 ms (`specs/201` research.md R2, R3). **Feature 245** (GM 2026-09-13: *"the bund beans don't visible light up when highlighted while zoomed out"*): the lit BEADS take no wash - a fill-only mark a few screen pixels across under a 0.45 gold wash is an olive dot the eye never reads as lit (measured, `specs/245` research.md R1) - named by class in the stylesheet after the wash rule, and a second class measured the same way is added there. **Feature 203**: the PLACARD is the one thing never hidden in raster mode - its card and name (`place`) and its scale bar (`g.scale`, a marker `finish.py` sets; still not highlighted) stay vector in both modes, drawn last, because a lit class beneath the card (the scrub has blades under it) was painting over the image's card. Look here when: the raster looks wrong (the render), a hover in raster mode names the wrong class (the id map), a mark near the map's edge is missing (the margin), or a page has no raster at all (resvg absent - `r: 0`, the page never leaves vector mode). Numbers and the priced alternatives: `specs/200-raster-mode-below-the-vector/research.md`. **Feature 208 (GM 2026-09-07: *"a whole lot of rasterizing that is completely pointless and not actually needed for the tests"*): the raster is a RENDER** - `finish()` passes the PNG's own condition (`render` and no `DIAGRAM_SKIP_RENDER`) as `with_raster`, so a test roll writes the vector-only page (`"r": 0`) and never pays the picture: measured, one test roll's page write went from 9.2 s and a 598 MB peak to 1.6 s and 153 MB. And when the picture IS made, `webp_lossless` runs PIL's decode and libwebp's encode in a child Python (`_WEBP_CHILD`, PIL only): the 400 MB of C buffers live and die there, the parent rests where the roll left it (125 MB against the roll's 121), and `malloc_trim` was not needed. The generation cache treats a skip-render page as it treats a skip-render PNG. Bytes unchanged: Kuwabata's payload through `make map` is identical before and after |
+| `raster.py` | **the page is TWO MODES** (feature 200): below a screen scale the map is ONE IMAGE (resvg, the PNG's renderer) with the lit class drawn as vector above it, the pointer answered from a CLASS ID MAP; above it the vector page. Look here when the raster looks wrong, a hover in raster mode names the wrong class, a mark near the map's edge is missing (the off-map drop), or a page has no raster (`r: 0`: resvg absent, or a test roll - the raster is a RENDER, feature 208). Every rule with its GM ruling: [`dev/interactive-page.md`](../../../dev/interactive-page.md) |
+| `choices.py` | the title card's choices (feature 319): what was chosen for this settlement, each value a modal |
+| `conditions.py` | an item of a modal that depends on the settlement's knobs (feature 319, FR-015) |
+| `glossary.py`, `glossary_source.py` | the glossary the explanations use (`glossary.py`), and its one-word-per-file source assembled back (`glossary_source.py`, feature 259) - see the glossary row above |
+| [`record/`](record/__init__.py) | the research record, written per entry and assembled into the pages a reader opens (feature 258): fragments, the site build (`site*.py`), notes, confusables, source tags. `make record` drives it |
 | `assets/page.css`, `assets/page.js` | the look and the behavior; inlined at write time. The highlight color is a recorded rendering decision (research.md R2) - change it there and here together. **The cursor** (GM 2026-09-26): the link hand over every clickable kind, the arrow over bare ground and over the broad kinds listed in `page-text.json` `plain_cursor` (grassland, marsh, both paddies, copse, windbreak, woodland commons - `page.py` `PLAIN_CURSOR`, carried per class as `plain`); `page.js` `cursorFor` sets it from the key under the pointer, so raster mode's id map drives it too |
 
 ## A hand-drawn sheet's page (feature 262)
@@ -100,30 +104,12 @@ like everything else here, and `scripts/check-entry-headings.py` is what refuses
 
 ## The blue plot is its own class (feature 159)
 
-A paddy plot drawn with the FLOODED fill (`#93B7AC`) carries `wet paddy`, not `paddy`. The GM,
-2026-08-29: *"that is its own type of thing, and it deserves its own explanation."* It is the
-**shitsuden** - ground too poorly drained to dry out, which holds water even out of season, takes no
-winter crop and yields unreliably - against the **kanden**, the paddy that empties to a dry field.
-The research is `research/questions/0007-wet-paddies-that-never-drain-shitsuden.html`.
-
-Decided at ONE emit site, `settlement/fields/comb.py` `_comb_draw_paddies`, from the fill about to be
-drawn, so the class and the color cannot disagree. Every field engine reaches that site, so every
-tint rule gets the class.
-
-**THERE ARE TWO TINT RULES, and the shared explanation must be true under both.** This is the thing
-to know before editing the class's prose:
-
-| engine | rule | measured |
-|---|---|---|
-| comb (`waterfields/carve.py:356`) | a random 45% of the closing rank - the plots on the drain collector - less the pointed slivers `carve.py:361` demotes back to green | inashiro 2/24, kashikawa 3/24, mizuguchi 2/20, sawada 0/19 |
-| terrace and polder (`hill.py:75`, `hill.py:191`, `polder.py:328`) | every `low` plot, no sample | **kuwabata 5/5** (the only LIVE one); enokida 22/22, tanada 40/40, yatsuda 18/18 are frozen legacy exhibits and never re-roll |
-
-So blue is a SAMPLE of the wet ground on a comb map and the WHOLE of it on the others, and the
-modal's disclosure is written conditionally ("on a comb field...") for that reason. A flat "only a
-sample" is false on kuwabata, which a reader can open today; a flat "the wet ground" is false on
-the comb maps. The
-`low` / `fill` split is the engine's own (`carve.py`: *"`low` is the TOPOGRAPHY; `fill` is only the
-PICTURE"*), and the land-use overlays still key off `low`, never off the class.
+A paddy plot drawn with the FLOODED fill carries `wet paddy`, not `paddy` (the GM, 2026-08-29: *"that is its own type of
+thing, and it deserves its own explanation"*) - the **shitsuden**, against the **kanden**
+(`research/questions/0007-wet-paddies-that-never-drain-shitsuden.html`). The engines tint by TWO rules - a sample of the
+low plots on a comb field, every low plot on a terrace or polder - so the wet-paddy modal must be true under both and
+never flat-states "only a sample": the table and the rule are [`dev/interactive-page.md`](../../../dev/interactive-page.md),
+"The blue plot".
 
 ## The map-notes block: facts a `.notes.md` hands its page (feature 156)
 
@@ -154,7 +140,7 @@ the fox relics, Hayakawa's salt wards and several Ubame notes off their pages.
 ### Features
 
 - **village lane**: A sentence true of THIS map's lanes, shown under "On this map".
-- **windbreak**: ... any class key from `classes.py` works. That generality is the point
+- **windbreak**: ... any class key from `classes/` works. That generality is the point
   (GM: "in general, the kind of thing that we want to be able to do for any kind of map feature").
 ```
 
@@ -178,7 +164,7 @@ one key enough - and it is why the class is a VILLAGE lane rather than a hamlet 
 ## Tagging a new feature
 
 At the emit site, either `with self.feature("<class key>"):` around the drawing, or `cls=` on the
-one `add*()` call. A class key MUST be a row of `classes.py` - `all_ink_is_ruled_on` (now
+one `add*()` call. A class key MUST be a row of the `classes/` registry - `all_ink_is_ruled_on` (now
 `tests/gate/test_map_vocabulary.py`)
 fails a hamlet map on ink with no class and on a key the registry does not know. A feature the GM
 rules NOT highlighted is tagged `"-"` and gets a row in `NOT_HIGHLIGHTED_RULINGS`.
@@ -186,7 +172,7 @@ rules NOT highlighted is tagged `"-"` and gets a row in `NOT_HIGHLIGHTED_RULINGS
 A caption gets the class of the feature it names (`label(..., cls=...)`), which is all FR-006
 needs: label and subject are one class, so hovering either lights both.
 
-`place` is a RESERVED key rather than a row of `classes.py`: it tags the title placard and its name,
+`place` is a RESERVED key rather than a row of the `classes/` registry: it tags the title placard and its name,
 and its modal is built per map by `place.py` instead of being written once in the vocabulary. The
 census and the ruling both know it, so the placard is highlightable and is never reported as
 unruled ink. The scale bar beside it keeps `cls="-"`.
@@ -200,35 +186,25 @@ the browser test (Playwright + Chromium): a hand-built SYNTHETIC map of one elem
 registry, zoom and scroll, the hit boxes, the glossary, the sibling links.
 `make map GEN=pool/hamlets/inashiro/inashiro.gen.py` writes the real page; open it in a browser.
 
-**NO BROWSER TEST LOADS A ROLLED PAGE, AND NONE TIMES ANYTHING (GM 2026-09-07).** Thirteen tests did - the
-reference hamlet's mechanics and timings, the blue plots, the footnote hover, and features 199-203's
-pointer-move and raster-CPU caps on Kuwabata - and were retired the day the container crashed twice under
-the gate. Measured: the package alone peaked at 3.9 GiB at 8 workers (2.9 GiB of Chromium, 3.6 GiB of Python
-writing eight Kuwabata rasters at once) against the container's 8 GiB cap, and its wall time was setup-bound
-at 83 s whatever the worker count, because every worker rebuilt every module-scoped fixture. The GM:
-*"the performance tests are never really going to be good enough to detect whether a human feels that the
-page is too sluggish. that is fundamentally a matter of judgment and vibes. So while having that kind of
-timing test was useful in speeding the page up, and while I would expect the future requests to speed the
-pages up might implement a similar test as a temporary measure, we should avoid having browser based tests
-which load the full pages and do things of this nature simply because it takes up too much RAM and CPU in
-order to be worthwhile. the juice is not worth the squeeze."* So the rule: **a request to make a page faster
-is measured BY HAND while it is worked** - open the page in a browser, take the numbers (the instruments are
-recorded in `specs/199` and `specs/200` research.md: a Playwright pointer sweep on the MEAN, a DevTools
-trace summing raster CPU), write them into that feature's research.md - and the measurement is retired with
-the feature. **Never a repeatable test that runs at the gate, or even when the HTML content changes**: the
-GM's words, *"that simply adds too much to the time that it takes to make small changes."* The synthetic
-tests stay because they are cheap (one Chromium, a page of fifteen elements) and are the only record of
-the page's behavior rulings.
+**NO BROWSER TEST LOADS A ROLLED PAGE, AND NONE TIMES ANYTHING (GM 2026-09-07).** The rolled-page tests were retired
+the day the container crashed twice under the gate (they ran the package to 3.9 GiB against an 8 GiB cap). The GM:
+*"the performance tests are never really going to be good enough to detect whether a human feels that the page is too
+sluggish. that is fundamentally a matter of judgment and vibes. So while having that kind of timing test was useful in
+speeding the page up, and while I would expect the future requests to speed the pages up might implement a similar test
+as a temporary measure, we should avoid having browser based tests which load the full pages and do things of this
+nature simply because it takes up too much RAM and CPU in order to be worthwhile. the juice is not worth the
+squeeze."* So **a request to make a page faster is measured BY HAND while it is worked** - open the page, take the
+numbers (the instruments are in `specs/199` and `specs/200` research.md: a Playwright pointer sweep on the MEAN, a
+DevTools trace summing raster CPU), write them into that feature's research.md - and the measurement retires with the
+feature. **Never a repeatable test that runs at the gate, or even when the HTML content changes** (the GM: *"that
+simply adds too much to the time that it takes to make small changes."*). The synthetic tests stay: they are cheap and
+are the only record of the page's behavior rulings.
 
-**...AND THEY ARE SKIPPED WHILE NOTHING THEY READ CHANGED (feature 206, GM 2026-09-07: *"Do we have logic in
-place to skip them if the content which they are testing has not changed? ... this is about saving memory,
-not saving time"*).** `gate-stamp.py` keeps a `browser` key over everything the synthetic tests read - every
-module here, the two assets, the test package, `research/*.html` (the References tab's links), and the
-installed Playwright and Chromium - and the gate's test phase leaves the package out while the stamp matches,
-saying so in one line. The stamp is earned only by a run that ran the package green: `make page-check`, or a
-`make done` whose test phase included it. It is a skip key, never a push obligation: the push's `--check`
-ignores it. Measured: what a gate saves is one Chromium at ~430 MB for under 9 s (the 3.9 GiB was the
-retired rolled-page tests); the floor cannot be loosened by a skip (`specs/206` research.md R3).
+**...AND THEY ARE SKIPPED WHILE NOTHING THEY READ CHANGED** (feature 206, GM 2026-09-07: *"this is about saving memory,
+not saving time"*). `gate-stamp.py` keeps a `browser` key over everything the synthetic tests read (every module here,
+the two assets, the test package, the record, the installed Playwright and Chromium), and the gate's test phase leaves
+the package out while the stamp matches, saying so in one line. Only a run that ran the package green earns it
+(`make page-check`, or a `make done` that included it); it is a skip key, never a push obligation.
 
 **An edit to `assets/page.css` or `page.js` owes `make page-check`** (feature 188) - the interactive tests
 and the browser test, about a minute, stamping the `page` area the push demands - and nothing else: no

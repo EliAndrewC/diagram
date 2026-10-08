@@ -1,26 +1,25 @@
 # settlement/rolling/ - the rolling / homestead-solver subsystem as a package
 
-Split from the 1,197-line `settlement/rolling.py` by feature 118 (constitution Principle X clause
-13 - the cost being managed is context-window tokens). **Load only the file the task calls for**;
-this index is the map. `from .rolling import RollingMixin` still resolves and `settlement/core.py`
-is byte-unchanged, so nothing above this directory knows the split happened.
+Split from one `settlement/rolling.py` by feature 118 (constitution Principle X clause 13 - the cost being managed is
+context-window tokens). **Load only the file the task calls for**; this index is the map.
+`from .rolling import RollingMixin` still resolves.
 
 **This package is a CHAIN, and that shapes everything below.** `structures/` and `civic_grounds/`
 were residue buckets - unrelated subsystems feature 025 happened to leave in one file - so their
 submodules are grouped by "what a session comes here to change" and are deliberately uneven.
 `rolling.py` was never a bucket: it is one cohesive pipeline, from *roll a whole village out of a
-seed* down to *does this rectangle touch a ditch*. So the six modules are its LINKS, in order:
+seed* down to *does this rectangle touch a ditch*. So its core modules are its LINKS, in order:
 
     roll -> seeds -> bundle -> fit -> place -> farmsteads
     (compose)  (candidates)  (geometry)  (may it stand?)  (find a spot)  (draw it)
 
 The partition was chosen by testing it against real tasks rather than by theme, because a partition
-is only worth its churn if tasks stop straddling files. Four, from this skill's own backlog:
+is only worth its churn if tasks stop straddling files:
 
 | task | files it loads |
 |---|---|
 | add a settlement FORM (a new `*_seeds` generator) | `seeds.py` alone |
-| the standing "placer must test the ROTATED footprint it draws" debt (skill CLAUDE.md, CENTER vs FOOTPRINT item 3) | `fit.py` alone - `_bundle_common_fits` is the named three-line landing site |
+| the standing "placer must test the ROTATED footprint it draws" debt ([`dev/placement.md`](../../../../dev/placement.md), CENTER vs FOOTPRINT item 3) | `fit.py` alone - `_bundle_common_fits` is the named three-line landing site |
 | the collision-circle swap (item 2) | `fit.py` + `place.py` |
 | change what the flush DRAWS (the kura side, the garden relaxation) | `farmsteads.py` alone |
 | tune a `roll_village` phase | `roll.py` alone |
@@ -39,30 +38,14 @@ is only worth its churn if tasks stop straddling files. Four, from this skill's 
 | `bearing.py` | you are changing which way a farmhouse FACES (269 B18, research/homesteads/240): the common bearing, the lane's turn (`MarginBearing`), the by-eye spread within 30 degrees, the quarter-turned tenth (`house_rot`, read by `Settlement._house_rot`), and the turned boxes the fit rules clear (`turned_box`, `turned_reach`). Pure geometry, a leaf like `bundle.py` |
 | `access.py` | the access-corridor tree reserved at seating (feature 287): a door's straight or round-the-gable corridor to the tree, the tests it passes, and what it reserves |
 | `route.py` | a door's path ROUTED round what stands where no straight corridor clears (feature 308): A* on the open ground, pulled taut through `access.py`'s own leg tests; only on a tree marked `routed` (the nucleated seating's) |
-| `farmsteads.py` | you are changing what the deferred flush DRAWS or the ORDER it draws in - this is the module the skill CLAUDE.md's DRAW ORDER contract is about: `farmsteads` (the entry point and its one `rng_scope`), `_farmsteads_bundle` (to-scale: groves recorded, south-nudge, yards/gardens/houses, arms LAST), `_farmsteads_legacy`, `_relax_gardens_south`, `_kura_side`, `_east_trees`, `_garden_beds_clear` |
+| `fit_index.py` | the placed houses' extents, indexed once (feature 276), and the part boxes the fit rules read off a homestead's geometry (`house_extent`, `houses_meeting`, `part_box`, `house_box`; split out of `fit.py` at the 1,000-line bar) |
+| `lot.py` | a household's parts are the household's (feature 287): ONE LOT PER HOUSEHOLD, keyed on seat order - the farmhouse's size, its kura or beast, kept per household |
+| `gap_ways.py` | THE WAYS LAID IN THE GAPS (feature 318): the households' ways laid in the minimum gaps between homesteads, and the gathered foot (`gathered_foot`) the hamlet's knots read |
+| `passage.py` | a household reached across a neighbor's yard (feature 317): passage over a neighbor's land for land with no road access of its own |
+| `farmsteads.py` | you are changing what the deferred flush DRAWS or the ORDER it draws in - this is the module the DRAW ORDER contract ([`dev/placement.md`](../../../../dev/placement.md)) is about: `farmsteads` (the entry point and its one `rng_scope`), `_farmsteads_bundle` (to-scale: groves recorded, south-nudge, yards/gardens/houses, arms LAST), `_farmsteads_legacy`, `_relax_gardens_south`, `_kura_side`, `_east_trees`, `_garden_beds_clear` |
 
-## The dependency graph, MEASURED
-
-Not asserted - computed from the AST by walking every `self.<attr>` against the member-to-module
-map. Recompute it rather than trusting this table if you re-cut the partition:
-
-| module | calls into |
-|---|---|
-| `bundle` | nothing |
-| `seeds` | nothing (its `try_place` reaches `houses.py`, outside this package) |
-| `roll` | `place`, `farmsteads` |
-| `fit` | `bundle`, `place` |
-| `place` | `bundle`, `fit` |
-| `farmsteads` | `fit`, `place` |
-
-**`place.py` is the hub** (three incoming edges), not `fit.py` as the chain diagram suggests - the
-flush and the roller both reach placement directly. **`bundle.py` is a pure leaf**, which is the
-property that makes it the right place for the researched dimension numbers: a change there cannot
-ripple sideways within the package.
-
-The one CYCLE, `fit` <-> `place`, is deliberate and is a single edge in one direction:
-`_fits_any_side` (in `fit`) reads `self._NUC_SIDES`, which lives beside the nucleated placer that
-the constant exists for. Nothing else crosses that way.
+**`bundle.py` is a pure leaf** - the property that makes it the right place for the researched dimension numbers: a
+change there cannot ripple sideways within the package. `place.py` is the hub the flush and the roller both reach.
 
 ## Composition, and why it is in `__init__.py`
 
@@ -89,21 +72,15 @@ what the composed-surface guard's second assertion exists to keep true
   seeded from `self.seed`, and its knobs go through `scope_seed`/`knob_rng`. Every main-stream draw
   happens inside a callee (`lane`, `try_place`, `farmsteads`, `place_wells`, `village_grove`,
   `hinterland`, `bridges`), so **the sequence of those calls IS the output.** That is what made the
-  stage decomposition safe, and it is the property to re-check before moving a stage boundary
-  again. (Measured 2026-08-17, feature 118; `future-work/` had predicted the opposite, which is
-  why the rule is to measure rather than reason.)
+  stage decomposition safe, and it is the property to re-check (measure, do not reason) before
+  moving a stage boundary again.
 
-## Monkeypatching a module-level name
-
-Submodules bind helper names at import (`from .._geom import poly_gap`), so patching
-`settlement.poly_gap` does not reach a mixin that already imported it - patch the DEFINING
-submodule (`settlement._geom.poly_gap`) or, for anything reached via `self.`, patch
-`settlement.Settlement` (class-level patching is unaffected by the split). No test in the suite
-patches a settlement module-level name.
+Monkeypatching: patch the DEFINING submodule (`settlement._geom.overlap.poly_gap`, never `settlement.poly_gap`) - the
+rule is [`../CLAUDE.md`](../CLAUDE.md)'s.
 
 ## Where the tests are
 
-`tests/settlement/test_rolling.py` - ONE file, not a mirror package. At 343 lines it is well under
-clause 13's bar, and the tests/ mapping rule already survives a source file becoming a package
-(`test_structures.py` is 692 lines against a seven-module `structures/`). Its last two tests are
-the feature-118 composed-surface guards.
+`tests/settlement/test_rolling.py` is ONE file for the package's core (the tests/ mapping rule survives a source file
+becoming a package); its last tests are the feature-118 composed-surface guards. The later modules have test files of
+their own beside it (`test_access.py`, `test_bearing.py`, `test_gap_ways.py`, `test_lot.py`, `test_passage_317.py`,
+`test_route_308.py`).

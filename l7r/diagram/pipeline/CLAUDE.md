@@ -1,20 +1,17 @@
 # `pipeline/` - how a pool map gets regenerated, cached, rendered and indexed
 
-The BUILD side of the skill. The other three sides are the drawing engines (`settlement/`,
+The BUILD side of the project. The other three sides are the drawing engines (`settlement/`,
 `waterfields/`, `hamletgen/`, `compound.py`) and the by-hand
-diagnostics ([`../tools/`](../tools/CLAUDE.md)).
+diagnostics ([`../tools/`](../tools/CLAUDE.md)). Drive it through `make` at the repository root:
 
-Run these as modules, from the skill root:
-
-    python3 -m l7r.diagram.pipeline.regen pool/hamlets/sawada/sawada.gen.py       # ~20s cold, ~1s cached
-    python3 -m l7r.diagram.pipeline.regen pool/*/*/*.gen.py                  # every LIVE map, fanned out
-    python3 -m l7r.diagram.pipeline.regen --no-cache pool/hamlets/inashiro/inashiro.gen.py
+    make map GEN=pool/hamlets/sawada/sawada.gen.py    # one map: regenerated, or CACHED when nothing it depends on changed
+    make maps                                         # the pool, picking its own scope from how the last run went
 
 | module | what it is | measured for coverage |
 |---|---|---|
 | `gencache` | the generation cache: the KEY, `store`/`load`, and `gate_obtain` (the gate rides this cache since feature 026) | no - a driver |
 | `regen` | the ITERATION path: regenerate a map, or skip it when nothing it depends on changed | no - a driver |
-| `rollcache` | the ROLL cache the gate tests ride (feature 135): `obtain` serves a keyed roll or produces and records it. **ONE ROLL PER SPEC (feature 213, GM 2026-09-07; the reference and Kuwabata are read from the POOL since 215 - `tests/gate/_pool.py`, no `roll:` subject of their own):** `hamlet()`, `report()` and `report_deps()` are three views of one `roll:<spec>` subject - `generate` with the kept manifest, produced in a child process (feature 210's shape, generalized: `_in_child("module:function", arg)` runs any module-level producer by name, which is how the gate tests' lifted closures and the regen site roll too), shared across the run's workers behind a per-subject lock so the first wave waits instead of each rolling (`_share_lock`; the census had found Inashiro rolled by four workers at t=0), STORED under the full-run bypass so the hamlet floor reads the tests' roll (207's D14), and bounded to `L7R_ROLL_SLOTS` concurrent children (`_roll_slot`). A covered child starts coverage itself, imports the engine under no context and switches to the requester's context for the roll alone (`gencache.child_coverage`; `_census.CONTEXT_ENV`, exported by `ci/selection.switch`): feature 207 selects tests from the baseline's coverage contexts, and a roll in a child would otherwise leave the engine's lines under no context at all - the polder-only run of 2026-09-08 selected 46 unit tests and not one polder roller until this landed; the same label goes on `gencache.gate_obtain`'s child. The roll census (`_census.py`, `ci/rollverdict.py`, the roster `tests/rolls.py`) proves at every gate that no spec rolls twice. `keyed_to(..., child=...)` is the same child for a patched roll | yes |
+| `rollcache` | the ROLL cache the gate tests ride (feature 135): `obtain` serves a keyed roll or produces and records it. **ONE ROLL PER SPEC** (feature 213, GM 2026-09-07): `hamlet()`, `report()` and `report_deps()` are three views of one `roll:<spec>` subject, produced in a child process (`_in_child("module:function", arg)` runs any module-level producer by name), shared across the run's workers behind a per-subject lock so the first wave waits instead of each rolling (`_share_lock`), and bounded to `L7R_ROLL_SLOTS` concurrent children (`_roll_slot`); the reference and Kuwabata are read from the POOL (`tests/gate/_pool.py`). A covered child starts coverage itself and switches to the requester's coverage context for the roll alone (`gencache.child_coverage`), because the incremental gate selects tests by those contexts and a roll under no context would select no roller. The roll census (`_census.py`, `ci/rollverdict.py`, the roster `tests/rolls.py`) proves at every gate that no spec rolls twice. `keyed_to(..., child=...)` is the same child for a patched roll | yes |
 | `render_cache` | main's renders: a content-hash short-circuit so main regenerates its own renders from its own tip after the stop-work push | yes |
 | `poolmaps` | the SINGLE source of truth for WHICH MAPS EXIST, in which tree, of which kind - `bundles()` for the walk, `classify()` for the kind | yes |
 | `pool_index` | writes `pool/index.html`, the browsable index over the whole pool | yes |
@@ -39,7 +36,7 @@ Two properties of that walk are load-bearing, and each was learned the expensive
   `test_*.py`, so the name filter covered them all. Under `tests/` the helpers (`_builders.py`,
   `__init__.py`) match no name filter, and counting them as engine inputs would invalidate every
   map in the pool on any edit to a test helper. Same class of bug as the dot-file filter, which
-  exists because the gate's own scratch drivers used to land in the skill dir and poison every
+  exists because the gate's own scratch drivers used to land in the project root and poison every
   concurrent key computation, so nothing ever hit.
 
 Everything else here is still walked, including `tools/` and this package's own siblings. That is
@@ -50,16 +47,15 @@ for the same reason.
 
 ## Before you trust a cache change, audit it
 
-`python3 -m l7r.diagram.tools.cache_audit` (~10 min) perturbs a random numeric literal inside a `settlement/`
+`make cache-audit` (~10 min) perturbs a random numeric literal inside a `settlement/`
 function, sweeps the pool with the cache and again with `--no-cache`, and demands byte-identical
 artifacts. It never looks at the key, so it cannot share the key's blind spots. Since the gate
 TRUSTS the cache (feature 026), this is the empirical backstop for the key itself - which makes
 running it after a change here more important, not less.
 
-The full reasoning - what the key covers, the soundness argument, the concurrency and
-container-rebuild cases, and THE TRAP that costs three wrong conclusions per session if you do not
-know it - is in `gencache.py`'s own docstring and in the skill's [`../CLAUDE.md`](../CLAUDE.md).
-
+What the key covers, the soundness argument and the concurrency cases are `gencache.py`'s own docstring; THE TRAP
+(a miss rebuilds the entry against the tree as it is, so a trial of "does an edit to X invalidate?" needs the
+baseline re-established - run until `CACHED` - before each trial) is [`dev/cache.md`](../../../dev/cache.md).
 
 ## `poolmaps.bundles()` - ask, do not glob (feature 161)
 
@@ -68,11 +64,8 @@ plus the Mode A compound plans that are hand-authored by design) and `legacy-han
 for the 18 FROZEN exhibits. **Everything that walks the pool calls `poolmaps.bundles()`**, saying
 which tree(s) its job concerns.
 
-Before feature 161 ten consumers each hardcoded the shape independently - four globs, an
-`os.listdir`, a `$(wildcard)`, a subprocess grep, a literal default path - and they drifted exactly
-as `poolmaps`' own docstring predicted: `tools/mapcheck.py` still carries the note that Kuwabata was
-converted to `hamletgen` and left in `LEGACY_FROZEN_GENS`, so `regen.py` regenerated it while
-`make maps` never rolled it at all.
+No consumer globs, lists or greps the pool's shape itself (feature 161: ten hand-rolled walks drifted apart, and
+`regen.py` regenerated a converted map `make maps` never rolled).
 
 **The load-bearing argument is `trees`, not the file listing.** The two failure directions are not
 symmetric: a consumer that collects too MUCH trips its own assertions, while one that collects too
