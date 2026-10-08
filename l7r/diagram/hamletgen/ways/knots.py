@@ -186,7 +186,8 @@ def next_gather(lanes: Sequence[Mapping[str, Any]], judge: Callable[[dict[int, P
 
     Research:
         lane ends gathered - research/questions/0081-village-lanes.drawing.html: ends within 25 ft meet at one node
-        which node a knot gathers at - UNRESEARCHED: the node with fewer ends moves onto the other, the other way round where refused"""
+        which node a knot gathers at - UNRESEARCHED: the node with fewer ends moves onto the other, the other way round where refused
+        a lone end teed onto the other lane - research/questions/0081-village-lanes.drawing.html: where neither node can move, the arriving lane meets the other's side as a T (`teed_onto`)"""
     nodes = end_nodes(lanes, fixed)
     for a, b, _d in knots(lanes):
         order = sorted(((b, a), (a, b)), key=lambda mt: len(nodes[mt[0]][1]))

@@ -1,5 +1,7 @@
 """Split from test_ways.py by feature 173 - see this directory's CLAUDE.md."""
 
+import math
+
 import pytest
 
 from l7r.diagram import hamletgen as hg
@@ -423,3 +425,33 @@ def test_a_cut_end_that_cannot_be_carried_onto_the_way_is_refused_and_one_on_it_
     s2 = _StubSettlement(lanes=[[(0.0, 0.0), (0.0, 400.0)]], houses=[(160.0, 230.0)])
     assert hg.ways._lay_web_lane(s2, on, [], [], [], houses=[(160.0, 230.0)]) is True
     assert [tuple(q) for q in s2.M["lanes"][-1]["pts"]][0] == (0.0, 200.0)
+
+
+def test_joined_link_snaps_straight_falls_back_to_the_clear_run_or_refuses() -> None:
+    """`joined_link` (feature 328 wave 44, 0081: ends within 25 ft are joined at a single point): no length is the point; a
+    walkable straight join; where the straight join grazes a fence, the clear run of it the far branch lays; None where the
+    link is blocked outright."""
+    from l7r.diagram.hamletgen.ways.serve import joined_link
+
+    segs = [((0.0, 0.0), (0.0, 400.0))]
+    assert joined_link((0.0, 200.0), (0.0, 200.0), [], [], [], segs) == [(0.0, 200.0)]
+    assert joined_link((20.0, 200.0), (0.0, 200.0), [], [], [], segs) == [(20.0, 200.0), (0.0, 200.0)]
+    across = [(5.0, 190.0), (15.0, 190.0), (15.0, 210.0), (5.0, 210.0)]  # a steading astride the link
+    assert joined_link((20.0, 200.0), (0.0, 200.0), [], [across], [], segs) is None
+    graze = [(17.0, 205.0), (21.0, 205.0), (21.0, 209.0), (17.0, 209.0)]  # a post 5 ft off the link's first few feet
+    link = joined_link((20.0, 200.0), (0.0, 200.0), [], [graze], [], segs)
+    assert link is not None and link[-1] == (0.0, 200.0) and 0.0 < math.dist(link[0], (20.0, 200.0)) < 12.0, link
+
+
+def test_a_run_kept_whole_takes_a_link_where_it_arrives() -> None:
+    """A run whose nearest vertex comes within 25 ft of the network mid-run, both halves 40 ft or more, has that vertex snapped onto
+    its foot on the way (it was drawn whole and left unjoined); refused where a new leg is not walkable."""
+    run = [(160.0, 260.0), (110.0, 230.0), (20.0, 200.0), (110.0, 170.0), (160.0, 140.0)]
+    homes = [(170.0, 270.0), (170.0, 130.0)]  # one at each end, so the run's service keeps it whole
+    s = _StubSettlement(lanes=[[(0.0, 0.0), (0.0, 400.0)]], houses=homes)
+    assert hg.ways._lay_web_lane(s, run, [], [], [], houses=homes) is True
+    drawn = [tuple(q) for q in s.M["lanes"][-1]["pts"]]
+    assert (0.0, 200.0) in drawn and (20.0, 200.0) not in drawn, drawn
+    walled = _StubSettlement(lanes=[[(0.0, 0.0), (0.0, 400.0)]], houses=homes)
+    fence = [(40.0, 175.0), (60.0, 175.0), (60.0, 190.0), (40.0, 190.0)]  # on the snapped vertex's new leg out of (0, 200)
+    assert hg.ways._lay_web_lane(walled, run, [], [fence], [], houses=homes) is False

@@ -8,64 +8,75 @@
    "id": "W43-scope",
    "summary": "Wave 43 takes rows 482-485 in ranking order, rows 486-492 next",
    "class": "within",
-   "why": "A contiguous run of E2 rows in ranking order (FR-006, SC-003)."
+   "why": "A contiguous run of E2 rows in ranking order (FR-006, SC-003). Unchanged from round 1; ranking.json rows 482-486 all still carry wave '' and scope kept."
   },
   {
    "id": "row482-T",
    "summary": "fold_the_connector_hairpin re-lays the lane onto the connector's first leg as a T (tee), and the connector stays",
    "class": "within",
-   "why": "0081.drawing: 'the arriving lane meets the other's side as a T instead'. The old fold still met end to end at b. The test asserts the end lies on the connector's side, more than 1.5 ft from its start. This is the ranked fix."
+   "why": "0081.drawing: 'the arriving lane meets the other's side as a T instead'. Unchanged from round 1."
   },
   {
    "id": "row482-refusal",
    "summary": "No fold where the T's link is not walkable or the overlap matrix refuses it; the hairpin stands",
    "class": "narrowing",
    "ruling": "LEGITIMATE",
-   "why": "Physical impossibility. A T laid through a steading breaks 0246's 'nothing built on a lane' (the matrix and tee's footprint clearance). A hairpin left standing is not accepted silently: law.connector_hairpin_ends (0081) still flags it and last_resort.py:79 treats the lane as bad. The refusal was already there before this wave."
+   "why": "Physical impossibility: a T laid through a steading breaks 0246's 'nothing built on a lane'; the standing hairpin is still flagged by law.connector_hairpin_ends and treated as bad by last_resort.py. Unchanged from round 1."
   },
   {
    "id": "row483",
-   "summary": "next_gather's third form (teed_onto) reapplied from wave 28's 183792b7c",
+   "summary": "next_gather's third form (teed_onto) reapplied from wave 28's 183792b7c; which node a knot gathers at now claimed UNRESEARCHED",
    "class": "within",
-   "why": "This is ranking row 483's fix word for word. Wave 28 reverted it only because the polder change it was bundled with was held, and that hold was later withdrawn (a465b644c). The reason was never the knot form itself."
+   "why": "Row 483's fix word for word. The round 1 answer adds an honest UNRESEARCHED claim for the gather-node choice (knots.py:189) where there was none; 0081 says ends meet at one node, not which one."
   },
   {
    "id": "row484-reach",
-   "summary": "reach_to_steading: within 60 ft of the house's footprint, or 12 ft of the built ground recorded 'of' it; fronting_ends (and fronted_ends through it) reads it",
+   "summary": "reach_to_steading: within 60 ft of the house's footprint, or 12 ft of the built ground recorded 'of' it; its claim and _STEADING_PARTS' now labeled GUESS as 0246 labels them",
    "class": "within",
-   "why": "0246.drawing: 'within 60 ft of the house, or within 12 ft of the steading's built ground - its house, byre, shed, threshing yard or garden'. The ranked fix is implemented. Reading 'of the house' as the house's footprint is a plain reading of the page's words."
+   "why": "0246.drawing's own figures, and 0246 records them as its guess ('both figures are part of the GUESS'), so the GUESS label is the faithful one."
   },
   {
    "id": "row484-other-readers",
-   "summary": "DOORSTEP_FT (80 ft from center) kept for its other readers (settle.py:132/406/852, corridors.py:392)",
+   "summary": "DOORSTEP_FT (80 ft from center) kept for its other readers (settle.py:137/406/852, corridors.py:392)",
    "class": "within",
-   "why": "None of these readers claims 0246's reach. Two carry UNRESEARCHED claims (the fence exemption at settle.py:136 and the fan cut in settle_ends). One is an index search radius, and one finds a route's own dooryard. All are outside row 484."
+   "why": "None of these readers claims 0246's reach: theirs() carries an UNRESEARCHED claim (settle.py:136), the fan cut in settle_ends an UNRESEARCHED claim (settle.py:356), 852 is the index radius theirs() reads, corridors.py:392 picks which house a route starts at. All outside row 484."
   },
   {
    "id": "row484-DOORSTEP_FT-claim",
-   "summary": "DOORSTEP_FT's own docstring and claim left untouched: 'A free lane end this near a farmhouse's center is discharged by that house ... an end discharged by a house - GUESS 0246: within 80 ft of its center'",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "dev/claims-index.json already holds law.py::DOORSTEP_FT#an end discharged by a house as DRIFTED (2026-10-07). Its note is the same 0246 60/12 mismatch that row 484 fixes. That finding appears in neither ranking.json nor any found-*.jsonl. After this wave no code discharges an end by DOORSTEP_FT, so its docstring and claim describe behavior the code no longer has, and still cite 0246 for an 80 ft figure the page does not contain. The wave fixed the rule and left its twin claim false and unfiled. Nothing makes the literal fix impossible: restating the claim takes one line. Fix in this wave: restate DOORSTEP_FT's docstring and claim to what its remaining readers use it for, each with its own label (the fence exemption and the fan cut are UNRESEARCHED), re-checked by impl-drift at T112; or file it as a found row tiered by a fresh reader, as T111a does. The fan cut (settle.py:406) still cuts an end back past 80 ft from the center, while fronting is now measured to footprints and built ground. The restated claim must say that honestly."
+   "summary": "DOORSTEP_FT's docstring restated for the settle's dooryard exemption and end cut, naming reach_to_steading as 0246's reach; claim 'a dooryard's reach for the settle - UNRESEARCHED: 80 ft from the house's center; 0246's own reach is 60 ft of the house or 12 ft of its built ground'",
+   "class": "within",
+   "why": "Round 1's NOT LEGITIMATE item is resolved by its first prescribed remedy (law.py:136-141). The docstring no longer says an end is discharged by DOORSTEP_FT, the claim no longer cites 0246 for an 80 ft figure the page does not contain, and the claim states the contrast with 0246's own reach, which is the honesty round 1 asked for on the fan cut. The old DRIFTED index entry (law.py::DOORSTEP_FT#an end discharged by a house) is superseded by the renamed claim and is T112's impl-drift re-check to clear. The docstring names the settle's readers and not corridors.py:392 (a route's own house), which makes no 0246 reach claim; that is not a fidelity finding."
   },
   {
    "id": "row485",
    "summary": "_lay_web_lane: a run within 25 ft of the network whose straight snap is not walkable is refused, not drawn stopping short",
    "class": "within",
-   "why": "0081.drawing: 'Ends within 25 ft of one another are joined at a single point'. Before this wave, the run was drawn with a gap and counted as arriving; that gap is gone. The refusal of the run is the tail of row 486's ranked fix ('lays a routed link as the far-gap branch does (clear_runs) or refuses the run'). Row 486 is the next row. Condition: row 486 stays owed. Its routed link must be tried before this refusal, and the claim's 'or not drawn where that link is not walkable' must become 'where no link is walkable'. Row 486 must not be marked already fixed by wave 43."
+   "why": "0081.drawing: 'Ends within 25 ft of one another are joined at a single point'. Round 1's condition stands: row 486 stays owed, its routed link must be tried before this refusal, and the claim's 'not drawn where that link is not walkable' must become 'where no link is walkable'. tasks.md Phase 44 now says row 486 is not taken; ranking row 486 has wave ''."
+  },
+  {
+   "id": "early-arrival-carry",
+   "summary": "From impl-drift round 1: _lay_web_lane's early-arrival branch carries a cut end (run[k]) onto the way, or refuses the run where that link is not walkable; tests red on the old code",
+   "class": "within",
+   "why": "Implements 0081's 'joined at a single point' where the branch drew a cut end up to 25 ft short, which is part of row 486's ranked fix ('the mid-run branch snaps run[k] to its foot on the network'). Doing part of the next ranked row early, toward the research, narrows nothing the GM asked. Condition, carried into row 486: the branch still draws the WHOLE run without a carry where neither half is under 40 ft (run_k interior, serve.py:184 does nothing), so the 'arrived at the network' claim's 'its end carried onto the way' does not yet hold for that case, and the refusal here, like row 485's, owes the routed link first. Row 486 must not be closed as fixed by wave 43; T112's impl-drift reads the claim against both cases."
+  },
+  {
+   "id": "end_serves-found",
+   "summary": "geom.end_serves (0246's reach measured to the house's center beside reach_to_steading's footprints) filed as a found row, tier provisional",
+   "class": "within",
+   "why": "Round 1's aside filed rather than left; it is to be tiered by a fresh reader as T111a did for wave 42's found row (FR-002, FR-003, SC-003). Nothing leaves scope."
   },
   {
    "id": "T111a",
    "summary": "Wave 42's found row (brook_rules.py::ditch_strokes) tiered E3 by a fresh reader and left for its place",
    "class": "within",
-   "why": "Process under FR-002/FR-003 and SC-003, the same as earlier found-row tiering. The reasons given for E3 (per-channel width carried across brook_rules.py and brook.py) match FR-003's 'a change across modules'."
+   "why": "Process under FR-002/FR-003 and SC-003. Unchanged from round 1."
   },
   {
    "id": "occasions",
-   "summary": "No review occasions: the five hamlets were regenerated with byte-identical manifests after each change",
+   "summary": "No review occasions: the five hamlets regenerated with byte-identical manifests after each change, again after the round 1 answers",
    "class": "within",
-   "why": "The occasions follow from what the maps drew (feature 294). The plan states a measurement, not an exemption. This narrows nothing the GM asked for."
+   "why": "A dated measurement under feature 294, not an exemption. Unchanged from round 1."
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }

@@ -822,13 +822,14 @@ def test_a_house_crowded_with_ends_keeps_the_trees_and_loses_an_ordinary_one() -
     """Homes H41 under the tree (feature 287 wave 6): a house discharging three free ends keeps the tree lane's - never cut -
     and the settle cuts the ordinary end that is farther than the nearer ordinary one; a violator the tree names is an
     ordinary lane (`last_resort.lane_violators` reads `tree.tree_faults`)."""
-    s = _S([CONN, [(-300.0, 40.0), (-300.0, 170.0)], [(-200.0, 60.0), (-240.0, 180.0)], [(-400.0, 60.0), (-360.0, 190.0)]], houses=[(-300.0, 200.0)])
+    # all three ends within 0246's 60 ft of the house's center (feature 328: the reach was 80 ft)
+    s = _S([CONN, [(-300.0, 40.0), (-300.0, 170.0)], [(-200.0, 60.0), (-250.0, 190.0)], [(-400.0, 60.0), (-350.0, 190.0)]], houses=[(-300.0, 200.0)])
     s.M["lanes"][3]["role"] = co.ACCESS_ROLE
     assert len(law.fronting_ends(s.M)[0]) == 3
     settle.settle_ends(s)
     tree = [[tuple(q) for q in ln["pts"]] for ln in s.M["lanes"] if ln.get("role") == co.ACCESS_ROLE]
-    assert tree == [[(-400.0, 60.0), (-360.0, 190.0)]], "the tree lane stands"
-    assert len(s.M["lanes"]) < 4 or _pts(s, 1) != [(-300.0, 40.0), (-300.0, 170.0)] or _pts(s, 2) != [(-200.0, 60.0), (-240.0, 180.0)], "an ordinary end cut"
+    assert tree == [[(-400.0, 60.0), (-350.0, 190.0)]], "the tree lane stands"
+    assert len(s.M["lanes"]) < 4 or _pts(s, 1) != [(-300.0, 40.0), (-300.0, 170.0)] or _pts(s, 2) != [(-200.0, 60.0), (-250.0, 190.0)], "an ordinary end cut"
     assert len(law.fronting_ends(s.M).get(0, [])) <= law.DOORSTEP_MAX
 
 

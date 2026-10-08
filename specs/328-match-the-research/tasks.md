@@ -13,6 +13,8 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 - (wave 5, landed and reviewed) placement-changed village lane on kashikawa - wave 5: 0033's row street runs on off the map as the road into it at both ends, where
   the web cut it back to its last joint (`trim_streets`); Kashikawa's and Mizuguchi's far ends now run off the sheet as a
   second way out (every way is inked `village lane`).
+- none (wave 44): the near joins and the steading reach's center moved no map (the five hamlets regenerated 2026-10-08,
+  manifests byte-identical)
 - none (wave 43): the hairpin's T, the third gather form, the steading's reach and the refused near join moved no map (the
   five hamlets regenerated 2026-10-08 after each, manifests byte-identical)
 - none (wave 42): the confluence at the brook's drawn width moved no map (the five hamlets regenerated 2026-10-08,
@@ -1430,4 +1432,26 @@ In ranking order (rows 482-485; 486-492 next, row 492's change held as `audit/he
 - [ ] T111 rows 482-485 (FR-003, FR-004)
       research: rendering
 - [ ] T112 the claims re-checked by `impl-drift`; the close: `make done` green, the pair, the wave column (FR-005, FR-006)
+      research: rendering
+
+## Phase 45 - wave 44 (amendment 43): row 486, a near run joined at a single point; 0246's reach to the center
+
+- `serve.py::_lay_web_lane#arrived at the network` (row 486, E2), with spec-fidelity's wave-43 conditions: a near join is
+  `joined_link` - the straight snap where walkable, else the clear run of it the far branch lays (`clear_runs`), else the run is
+  refused; a cut end is carried onto the way by it; a run kept whole has its arriving vertex snapped onto its foot, refused
+  where a new leg is not walkable (it was drawn whole and unjoined). `test_joined_link_snaps_straight_falls_back_to_the_clear_run_or_refuses`,
+  `test_a_run_kept_whole_takes_a_link_where_it_arrives` (red on the old code).
+- `law.reach_to_steading` corrected: 0246's 60 ft to the house's CENTER, as the page's grounds note measures it ("to a way's
+  line or a farmhouse's center") and `geom.end_serves` does - wave 43 measured it to the footprint; the 12 ft to the built
+  ground (the house's footprint among it) stays. `test_a_house_crowded_with_ends_...` restated: its ends stood 61-63 ft out,
+  inside the old 80 ft, and now stand 51 ft.
+- Wave 43's found row, tiered by a fresh reader (T113a, `audit/t113a-out.jsonl`): `geom.end_serves` E3 (one predicate for
+  0246's reach across five modules), left for its place; with the center restored the two now agree on the 60 ft.
+- The third gather form claimed (0081: the arriving lane meets the other's side as a T).
+
+- [x] T113a wave 43's found rows tiered by the work they take, by a fresh reader (FR-002, FR-003, SC-003)
+      research: rendering
+- [ ] T113 row 486; the reach to the center (FR-003, FR-004)
+      research: rendering
+- [ ] T114 the claims re-checked by `impl-drift`; the close: `make done` green, the pair, the wave column (FR-005, FR-006)
       research: rendering

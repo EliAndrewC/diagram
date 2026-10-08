@@ -148,9 +148,10 @@ _STEADING_PARTS = ("byres", "farm_sheds", "threshing_yards", "gardens")
 
 
 def reach_to_steading(end: Pt, house: Mapping[str, Any], M: Mapping[str, Any]) -> bool:
-    """Does a lane end reach this farmhouse as 0246 measures it - within `HOUSE_REACH_FT` of the house, or within
-    `STEADING_REACH_FT` of its steading's built ground (the house, and the byres, sheds, yards and gardens recorded `of` it)?
-    Footprints, not centers (feature 328: it was 80 ft from the house's center, `DOORSTEP_FT`).
+    """Does a lane end reach this farmhouse as 0246 measures it - within `HOUSE_REACH_FT` of the house's center (the page's grounds
+    note: "to a way's line or a farmhouse's center", as `geom.end_serves` measures it), or within `STEADING_REACH_FT` of its
+    steading's built ground, footprints (the house, and the byres, sheds, yards and gardens recorded `of` it)? Feature 328: it
+    was 80 ft from the center, `DOORSTEP_FT`; wave 43 measured the 60 ft to the footprint, which the page does not.
 
     Research: an end reaches a farmhouse - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within 60 ft of the house or 12 ft of its built ground, the page's own guess"""
 
@@ -159,7 +160,7 @@ def reach_to_steading(end: Pt, house: Mapping[str, Any], M: Mapping[str, Any]) -
 
     hx, hy = float(house["x"]), float(house["y"])
     body = rot_rect(hx, hy, float(house.get("w", 0.0)), float(house.get("h", 0.0)), float(house.get("rot", 0.0)))
-    if gap(body) <= HOUSE_REACH_FT:
+    if math.dist(end, (hx, hy)) <= HOUSE_REACH_FT or gap(body) <= STEADING_REACH_FT:
         return True
     for key in _STEADING_PARTS:
         for r in M.get(key) or []:

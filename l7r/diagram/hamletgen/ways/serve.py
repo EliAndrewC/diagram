@@ -81,6 +81,21 @@ def runs_beside(p: Sequence[Pt], run: Sequence[Pt], o: Sequence[Pt]) -> bool:
     return shadow_measure(run, list(zip(o, o[1:], strict=False)))[1] > BUNDLE_PITCH
 
 
+def joined_link(p: Pt, q: Pt, hard: list[Poly], walls: list[Poly], water: list[tuple[Pt, Pt]], segs: Sequence[tuple[Pt, Pt]]) -> Poly | None:
+    """The link that joins a lane's point `p` to its foot `q` on the network (feature 328 wave 44, 0081: ends within 25 ft are
+    joined at a single point): the straight join where it is walkable (`_clear_link`), else the clear run of it the far-gap
+    branch lays (`clear_runs`, kept where it reaches both `p` and the network within 12 ft), else None - and the run is then not
+    drawn. A link of no length is the point itself.
+
+    Research: a near end joined - research/questions/0081-village-lanes.drawing.html: ends within 25 ft of one another joined at a single point, or the lane not drawn"""
+    if math.dist(p, q) <= 1e-6:
+        return [p]
+    if _clear_link(p, q, hard, walls, water):
+        return [p, q]
+    link = [r for r in clear_runs([p, q], hard, WEB_HARD_GAP, step=4.0, lines=water, tight=walls, tight_margin=WEB_FABRIC_GAP, floor=12.0) if _reach(p, r) < 12.0 and _net_reach(r, segs) < 12.0]
+    return link[0] if link else None
+
+
 def _lay_web_lane(s: Settlement, run: Poly, hard: list[Poly], walls: list[Poly], water: list[tuple[Pt, Pt]], belts: Sequence[Poly] = (), houses: Sequence[Pt] = ()) -> bool:
     """Draw one web lane - but ONLY if it joins the way network, and TOUCHING it where it joins.
 
@@ -179,14 +194,22 @@ def _lay_web_lane(s: Settlement, run: Poly, hard: list[Poly], walls: list[Poly],
             # as a choice rather than a pair of branches so neither side is a line only one map shape reaches.
             head, tail = polyline_len(run[: k + 1]), polyline_len(run[k:])
             run = run[: k + 1] if tail < 40.0 else (run[k:] if head < 40.0 else run)
-            # ...AND A CUT END IS CARRIED ONTO THE WAY (feature 328, 0081: ends within 25 ft are joined at a single point): it
-            # was drawn where it was cut, up to 25 ft short; carried where the link is walkable, else the run is not drawn
-            if run[0] == run_k or run[-1] == run_k:
-                q = min((seg_closest(run_k[0], run_k[1], a, b) for a, b in segs), key=lambda z: math.dist(run_k, z))
-                if math.dist(run_k, q) > 1e-6:
-                    if not _clear_link(run_k, q, hard, walls, water):
-                        return False
-                    run = [q, *run] if run[0] == run_k else [*run, q]
+            # ...AND JOINED AT A SINGLE POINT WHERE IT ARRIVES (feature 328, 0081: ends within 25 ft are joined at a single point):
+            # it was drawn where it was cut, or whole, up to 25 ft off the network. A cut end is carried onto the way by
+            # `joined_link`; a run kept whole has its arriving vertex snapped onto its foot; else the run is not drawn
+            q = min((seg_closest(run_k[0], run_k[1], a, b) for a, b in segs), key=lambda z: math.dist(run_k, z))
+            link = joined_link(run_k, q, hard, walls, water, segs)
+            if link is None:
+                return False
+            if run[0] == run_k:
+                run = [*link[::-1], *run[1:]] if len(link) > 1 else run
+            elif run[-1] == run_k:
+                run = [*run[:-1], *link] if len(link) > 1 else run
+            elif len(link) > 1:
+                # kept whole: the arriving vertex itself is snapped onto its foot, where both its new legs are walkable
+                if not (_clear_link(run[k - 1], q, hard, walls, water) and _clear_link(q, run[k + 1], hard, walls, water)):
+                    return False
+                run = [*run[:k], q, *run[k + 1 :]]
             _draw_web(s, run, 3)
             return True
         d0, d1 = vert[0], vert[-1]
@@ -215,19 +238,17 @@ def _lay_web_lane(s: Settlement, run: Poly, hard: list[Poly], walls: list[Poly],
                 default=3.0,
             )
             _draw_web(s, link[0], int(_w))
-        elif _clear_link(run[end], q, hard, walls, water):
-            # SNAP ONLY IF THE GROUND BETWEEN IS CLEAR. Extending an end onto the way it meets is
-            # what makes the junction read as a touch instead of a gap - but the few feet being
-            # added are ground like any other, and adding them blind put lane ink across houses and
-            # garden beds (`features_do_not_overlap`, `houses_clear_of_lanes` on every cohort seed
-            # the moment snapping went in). If the gap is not walkable the lane simply ends where it
-            # ended; a visible break is better than a lane through a wall.
-            run = ([q, *run]) if end == 0 else ([*run, q])
         else:
-            # ...AND A RUN WHOSE JOIN IS NOT WALKABLE IS NOT DRAWN (feature 328, 0081: "ends within 25 ft of one another are joined
-            # at a single point"): it was drawn stopping short, counted as arriving with no link, a gap the page does not allow -
-            # refused as a far run whose link cannot be drawn is
-            return False
+            # SNAP ONLY IF THE GROUND BETWEEN IS CLEAR. Extending an end onto the way it meets is what makes the junction read
+            # as a touch instead of a gap - but the few feet being added are ground like any other, and adding them blind put
+            # lane ink across houses and garden beds (`features_do_not_overlap`, `houses_clear_of_lanes` on every cohort seed the
+            # moment snapping went in). So the join is `joined_link`'s: the straight snap where it is walkable, the clear run
+            # of it the far branch lays, else the run is not drawn (feature 328 waves 43-44, 0081: ends within 25 ft are joined
+            # at a single point - it was drawn stopping short)
+            link = joined_link(run[end], q, hard, walls, water, segs)
+            if link is None:
+                return False
+            run = [*link[::-1], *run[1:]] if end == 0 else [*run[:-1], *link]
     _draw_web(s, run, 3)
     return True
 
