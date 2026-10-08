@@ -31257,6 +31257,23 @@
   "research": "",
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/labels/placer.py::moved_inward#moved inward": {
+  "code": "1522b35b8fe5a4a5",
+  "core": "bedd6133a228ca4b",
+  "date": "2026-10-08",
+  "note": "0241's only \"moved inward\" finding is about a caption that alone holds open a frame computed from captions, \"moved in among the things it names\". The page says nothing about shifting a caption by the least amount into a fixed frame, or about centring one wider than the frame (such a caption still crosses both edges). Should say UNRESEARCHED until a pass answers it",
+  "pages": {
+   "0241-the-map-sheet-its-title-legend-frame-and-margins.drawing.html": "74f2ed75d6b79cce"
+  },
+  "research": "0507e505d7cb52bb",
+  "rests": [
+   "0241-the-map-sheet-its-title-legend-frame-and-margins.drawing.html:64c50f31f572e378",
+   "0241-the-map-sheet-its-title-legend-frame-and-margins.drawing.html:812d60ec289ce773",
+   "0241-the-map-sheet-its-title-legend-frame-and-margins.drawing.html:b1f8fc5b9e2fd4dd",
+   "0241-the-map-sheet-its-title-legend-frame-and-margins.drawing.html:bfb8a974713829e1"
+  ],
+  "verdict": "NEEDS-RESEARCH"
+ },
  "l7r/diagram/labels/placer.py::nudge#caption search plumbing": {
   "code": "354699e9c7cb167e",
   "core": "78cc8957ff4ac61e",
@@ -31277,10 +31294,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/placer.py::place#free space wins": {
-  "code": "9b04f3bb5eca3a39",
-  "core": "5c74154adf6e9d42",
+  "code": "78f8b5b28784187b",
+  "core": "d96ca008324c903f",
   "date": "2026-10-08",
-  "note": "the first cost-0 seat in ranked order is returned",
+  "note": "the first candidate with zero cost, in ranked order, is returned",
   "pages": {
    "0242-labels-on-maps-cartographic-label-placement.drawing.html": "fa1bb4a252673d47"
   },
@@ -31288,32 +31305,31 @@
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:08c0bd1f9acf9800",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:2a0f6f2ce376476e",
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html:55bfd6a67fcf7c4d",
+   "0242-labels-on-maps-cartographic-label-placement.drawing.html:49f52467f1959b2a",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:a15fa81a48c69e98"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/placer.py::place#never clipped": {
-  "code": "dfcd9a314ebdc233",
-  "core": "5c74154adf6e9d42",
+  "code": "4d642d6f111b71ea",
+  "core": "d96ca008324c903f",
   "date": "2026-10-08",
-  "note": "the final fallback returns `outside`, a seat past the frame's edge, but 0242 says \"A place that would run off the edge of the picture is never taken\" and records no exception; either drop the fallback or have the drawing page record it as a deviation",
+  "note": "a block outside the frame is skipped, never scored",
   "pages": {
    "0242-labels-on-maps-cartographic-label-placement.drawing.html": "fa1bb4a252673d47"
   },
   "research": "0a880fd17413bbf6",
   "rests": [
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:08c0bd1f9acf9800",
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html:2c608781acf39605",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:9564a49aae1239a0"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/placer.py::place#never left off": {
-  "code": "61746cc2bf4a6bc4",
-  "core": "5c74154adf6e9d42",
+  "code": "0e4dd38f028b7701",
+  "core": "d96ca008324c903f",
   "date": "2026-10-08",
-  "note": "with no free seat it takes the nudged least-cost seat, a soft-only seat ahead of a hard one, then the least-cost hard seat; never None unless strict",
+  "note": "a seat covering only soft ink is taken first, then the least-cost seat whatever it covers; always placed",
   "pages": {
    "0242-labels-on-maps-cartographic-label-placement.drawing.html": "fa1bb4a252673d47"
   },
@@ -31327,29 +31343,26 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/labels/placer.py::place#no key": {
-  "code": "f929bb192e3fb546",
-  "core": "5c74154adf6e9d42",
+  "code": "a87cefc65c38a8de",
+  "core": "d96ca008324c903f",
   "date": "2026-10-08",
-  "note": "\"no key box\" matches, but 0241 says nothing of a seat past the frame's edge: it moves a frame-holding caption inward and keeps every solid feature inside the window, and 0242 says an off-edge place is \"never taken\"; cite the past-edge seat as a DEVIATION that is recorded, or drop it",
+  "note": "\"no key box\" matches 0241, but the claim's second half (with no seat in the frame, take the first seat beside the subject and move it inward until it fits) is not what 0241 finds. Its moved-inward finding is about the crop, not a fixed frame with no seat. That half should say UNRESEARCHED",
   "pages": {
    "0241-the-map-sheet-its-title-legend-frame-and-margins.drawing.html": "74f2ed75d6b79cce"
   },
   "research": "0507e505d7cb52bb",
   "rests": [
    "0241-the-map-sheet-its-title-legend-frame-and-margins.drawing.html:342306f8c160905d",
-   "0241-the-map-sheet-its-title-legend-frame-and-margins.drawing.html:9ef1e890d27db981",
    "0241-the-map-sheet-its-title-legend-frame-and-margins.drawing.html:bfb8a974713829e1",
-   "0241-the-map-sheet-its-title-legend-frame-and-margins.drawing.html:eaf008caefe19e0b",
-   "0241-the-map-sheet-its-title-legend-frame-and-margins.drawing.html:ef8008651e29b696",
-   "0242-labels-on-maps-cartographic-label-placement.drawing.html:9564a49aae1239a0"
+   "0241-the-map-sheet-its-title-legend-frame-and-margins.drawing.html:eaf008caefe19e0b"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "NEEDS-RESEARCH"
  },
  "l7r/diagram/labels/placer.py::place#the hug": {
-  "code": "d5193c009832454c",
-  "core": "5c74154adf6e9d42",
+  "code": "98a1c046342684aa",
+  "core": "d96ca008324c903f",
   "date": "2026-10-08",
-  "note": "the farthest a caption may sit from what it names is a display choice; 0242 sets no limit on leader distance",
+  "note": "the cap on how far a caption may stand from what it names is a display rule; 0242 sets no maximum distance for a caption with a leader",
   "pages": {},
   "research": "",
   "rests": [
@@ -32783,6 +32796,20 @@
   ],
   "verdict": "IN-STEP"
  },
+ "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#moat against the rampart": {
+  "code": "ce4b55a9b50f7617",
+  "core": "b216e4adde15680b",
+  "date": "2026-10-08",
+  "note": "no question in the bundle says whether a city moat lies at the rampart's foot; 0139 sets only the castle's moat 60 ft out from the castle wall",
+  "pages": {},
+  "research": "",
+  "rests": [
+   "0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html:5587d9f515b67812",
+   "0139-the-castle-in-a-capital-where-it-sits-how-big-it-is-and-its-gates-shiro.drawing.html:d03d5186b7b5f712",
+   "0147-city-and-town-gates-the-opening-the-gate-tower-and-the-crossing-of-the-moat-chengmen.drawing.html:03ebb587680911de"
+  ],
+  "verdict": "IN-STEP"
+ },
  "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#one object under two keys": {
   "code": "9202365d7c982c26",
   "core": "b216e4adde15680b",
@@ -32822,14 +32849,6 @@
    "0006-dry-fields-and-their-crops-hatake.drawing.html:abb8b4f0d05c6c11"
   ],
   "verdict": "DRIFTED"
- },
- "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#wall x moat overlap permitted (the moat lying against the rampart), which the \"through the rampart\" claim does not cover": {
-  "code": "b216e4adde15680b",
-  "core": "b216e4adde15680b",
-  "date": "2026-10-08",
-  "note": "wall x moat overlap permitted (the moat lying against the rampart), which the \"through the rampart\" claim does not cover",
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  "l7r/diagram/overlap/taxonomy.py::_MATRIX_ALLOWED_KEYS#ward fence meets the wall": {
   "code": "a0f69924b116d033",

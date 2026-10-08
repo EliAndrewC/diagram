@@ -618,8 +618,9 @@ _MATRIX_ALLOWED_KEYS: dict[frozenset[str], str] = {
         frozenset(
             {"wall", w}
         ): "a way or a watercourse passes THROUGH the rampart at its gate or water gate - that opening is the point of a gate, and no_structure_on_wall still governs anything BUILT on the rampart"
-        for w in ("road", "roads", "town_streets", "alleys", "lanes", "canals", "channels", "streams", "moat")
+        for w in ("road", "roads", "town_streets", "alleys", "lanes", "canals", "channels", "streams")
     },
+    frozenset({"wall", "moat"}): "the moat LIES AGAINST the rampart's foot - it is dug along the wall it defends, so their outlines meet",
     frozenset(
         {"castles", "castle_towers"}
     ): "a yagura STANDS ON the rampart it defends - a corner tower projecting from the enceinte IS the form of the thing, exactly as a mural tower sits on the city wall. The castle's works may still not be built on by anything else: both keys stay SOLID against every other feature, and the ways are held off by the same matrix that caught the Imperial road running through this castle in the first place",

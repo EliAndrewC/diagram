@@ -451,7 +451,8 @@ def place(
         free space wins - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: the first seat covering nothing is taken
         never clipped - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: a seat leaving the picture is never a candidate
         never left off - research/questions/0242-labels-on-maps-cartographic-label-placement.drawing.html: with no free seat, the seat covering the least - soft ink first, then whatever it covers
-        no key - research/questions/0241-the-map-sheet-its-title-legend-frame-and-margins.drawing.html: there is no key box; a caption with no seat in the frame takes the first seat beside it, moved inward until it fits
+        no key - research/questions/0241-the-map-sheet-its-title-legend-frame-and-margins.drawing.html: there is no key box
+        no seat in the frame - UNRESEARCHED: a caption with no seat inside the frame takes the first seat beside it, moved inward until it fits (`moved_inward`)
         the hug - CONVENTION: no seat past the hug from what it names
     """
     clear = CLEAR_EM * size
@@ -549,7 +550,7 @@ def moved_inward(cand: _Cand, block: Poly, frame: tuple[float, float, float, flo
     """`cand` shifted by the least that brings `block` inside `frame` on each axis - centered on an axis the frame is narrower
     than the block on.
 
-    Research: moved inward - research/questions/0241-the-map-sheet-its-title-legend-frame-and-margins.drawing.html: a caption that would cross the frame is moved inward"""
+    Research: moved inward - UNRESEARCHED: shifted by the least that brings it inside the frame, centered where the frame is narrower (0241's caption moved inward is the crop's, not a fixed frame's)"""
     if frame is None:
         return cand, block
     bx0, by0, bx1, by1 = bbox(block)

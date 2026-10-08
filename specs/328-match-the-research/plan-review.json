@@ -1,81 +1,142 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "6af116f17f2aea07b7baaeaf94aed5e7eb5f556f5139fdca6774563d36b9b182",
+ "plan_sha256": "91f8aaf50e6a84a0d62671d78989037097519b9047f003d985551cbc623324a8",
  "reviewed": "2026-10-08",
  "declared": "spec-fidelity",
  "decisions": [
   {
    "id": "W48-1 corner rule + LANE_CLEARANCE 7",
-   "summary": "houses._on_a_tread holds every building corner max(half-width + TREAD_WALL_FT, LANE_MIDDLE_CLEAR_FT 7 ft) off a lane's middle; LANE_CLEARANCE 40 -> 7 (rows 502 and 706)",
+   "summary": "every building corner max(half-width + TREAD_WALL_FT, 7 ft) off a lane's middle; LANE_CLEARANCE 40 -> 7",
    "class": "within",
-   "why": "Rows 502/706 ask the corridor tested at the footprint so LANE_CLEARANCE can be 0246's 7 ft as it stands; done. _near_corridor stays a center test for gardens, yards, byre annexes and retirement houses, but in a scripted hamlet those are laid from the seating's lots before any lane exists (driver STAGES; draft_byres and retirement_houses seek nothing where lots were seated), so nothing the corner rule skips can meet a lane; consistent with no pool hamlet moving."
+   "why": "Round 1's ruling stands; nothing in this diff touches it beyond a ruff reformat of _on_a_tread's return."
   },
   {
-   "id": "W48-2 dependent corridor rows closed",
+   "id": "W48-2 dependent corridor rows closed (round 1 correction 1)",
    "summary": "the rows waiting on the corridor row close with it",
    "class": "within",
-   "why": "Same work, the ranking's own after-links. Correction owed: plan and tasks call it 'row 503 (the skeleton arm's corridor)', but ranking row 503 is the spur bow (wave 46); the rows this wave closes are 754 (skeleton arm's corridor), and also 706 (consts LANE_CLEARANCE), 736 and 738 (bund.py field path / stepped spur), whose claims this diff rewrites. All five carry wave '' in ranking.json."
+   "why": "CONFIRMED by key: audit/waves.json and ranking.json's wave column now carry '48' for LANE_CLEARANCE#fronting lane's corridor (rank 706), bund.py a_way_onto_the_bund#field path's corridor (736), carry_on#stepped spur's corridor (738) and _lay_skeleton#skeleton arm's corridor (now rank 755 after the scope re-run). The plan and tasks still say '754' for the skeleton arm's corridor - a stale number, the key correct; worth one word when the plan is next edited."
   },
   {
    "id": "W48-3 skeleton arm off the crop at its tread's edge",
-   "summary": "arm clipped SKELETON_ARM_WIDTH/2 (2.5 ft) off the field envelope and dry plots instead of 20 (row 505)",
+   "summary": "arm clipped SKELETON_ARM_WIDTH/2 off the field and dry plots (row 505)",
    "class": "within",
-   "why": "0081 drawing: 'may touch a plot's boundary'. The tread's edge on the boundary is the literal touch; row 505's '0 ft' read at the centerline would lay half the tread on the crop."
+   "why": "Round 1's ruling stands."
   },
   {
-   "id": "W48-4 20 margin kept for wet ground and water",
-   "summary": "toe band and marsh kept 20 off, water lines clipped, labeled UNRESEARCHED",
+   "id": "W48-4 margins for wet ground and water (round 1 correction 3)",
+   "summary": "toe band and marsh 20 px, water 14 px, UNRESEARCHED",
    "class": "within",
-   "why": "Row 505's own text. Correction owed: the new claim says '20 px off the toe band, the marsh and the drawn water', but clip_to_clear holds lines at its line_margin default 14, not 20; the claim should state 14 for the water."
+   "why": "CONFIRMED: web.py's claim now reads '20 px off the toe band and the marsh, 14 px off the drawn water (clip_to_clear's line margin)'."
   },
   {
    "id": "W48-5 arm over the brook at a ford",
-   "summary": "an arm whose run crosses the brook goes start -> ford landings (square to the reach) -> end, at the ford making the walk shortest (row 504)",
+   "summary": "an arm crossing the brook goes by the shortest-walk ford, square (row 504)",
    "class": "within",
-   "why": "0035 drawing: ways between the banks cross squarely on a plank bridge at the crossing places; 0081: a worn path takes the shortest way. Every skeleton arm is two points, so no form is dropped; the water lines are the ford-gapped stream_segs, so the arm is not clipped at its own ford. Ditches stay clipped, UNRESEARCHED, as row 504 says."
+   "why": "Round 1's ruling stands."
   },
   {
    "id": "W48-6 SKELETON_ARM_WIDTH",
-   "summary": "the arm's 5 ft named as a constant claimed to 0081",
+   "summary": "the 5 ft named as a constant",
    "class": "within",
-   "why": "No value change; the existing 5 ft and its 0081 claim."
+   "why": "No value change."
   },
   {
-   "id": "W48-7 7 ft claim split",
-   "summary": "0246 for a garden's fence, GUESS for other footprints _fits seats",
+   "id": "W48-7 7 ft claim split (round 1 correction 2)",
+   "summary": "0246 the source of the 7 ft figure; a building's corners held to it a GUESS",
    "class": "within",
-   "why": "Honest labeling of the extension. Correction owed: _on_a_tread never tests a garden fence (gardens go through _garden_fits' center test, and in a hamlet no tread exists when they are seated), so its first line should cite 0246 as the source of the 7 ft figure, not claim this function holds a garden's fence; what this function does is the GUESS extension."
+   "why": "CONFIRMED: houses._on_a_tread's claim now cites 0246 for LANE_MIDDLE_CLEAR_FT, 'the 7 ft a lane's middle keeps off a garden fence', and labels the corners-held-to-it extension GUESS; it no longer says this function holds a garden's fence."
   },
   {
    "id": "W48-8 row 474 held",
    "summary": "the fixture-quota row held as the GM's question",
    "class": "within",
-   "why": "Ruled LEGITIMATE to leave open (2026-10-07); the goal amendment defers questions to the feature's end."
+   "why": "Round 1's ruling stands."
   },
   {
-   "id": "W48-9 row village road order filed E3",
-   "summary": "impl-drift's found row: a row village's road in and field spur laid before the houses (0031), filed provisional E3, not fixed this wave",
+   "id": "W48-9 row village road order filed E3 (round 1 correction 4)",
+   "summary": "found row: a row village's road and field spur before the houses (0031)",
    "class": "within",
-   "why": "Filing a found row is FR-006. Correction owed before any wave works it: the row carries no flag, yet its field-spur half runs against the GM's ruling of 2026-10-04 (feature 320: the field way is not placed before the homesteads) and 2026-10-02 (lanes after houses; planned/paved roads excepted). Adjudicate the two halves separately: the road in from outside may fall within the GM's planned-road exception; the spur to the field is the case the GM ruled out. Flag it deviation-tempting with those rulings and send the spur half to the GM at the feature's end or to the exception path."
+   "why": "CONFIRMED: found-wave48.jsonl and ranking.json carry the flag 'deviation-tempting', naming the GM's rulings of 2026-10-04 (feature 320) and 2026-10-02, the road half possibly in the planned-road exception, the spur half to the GM or the exception path, never built as asked."
   },
   {
    "id": "W48-10 occasions none",
-   "summary": "no review occasion: the five hamlets regenerated byte-identical",
+   "summary": "five hamlets byte-identical",
    "class": "within",
-   "why": "Feature 294's occasions; nothing placed or drawn moved (pool unchanged in the diff)."
+   "why": "Round 1's ruling stands."
   },
   {
    "id": "W48-11 verification batched",
-   "summary": "gate and timing pair at batch 2's close; impl-drift and spec-fidelity per wave",
+   "summary": "gate and pair at batch 2's close",
    "class": "within",
-   "why": "GM's ruling 2026-10-08 in Decisions Recorded."
+   "why": "GM 2026-10-08."
   },
   {
    "id": "W48-12 T122a tiers for wave 47's found rows",
-   "summary": "sanctuary knob E3; hall band and innermost arch class E4 page edits on the exception path; holes() E0 docstring; _crossed two-way gap filed E2",
+   "summary": "tiers by work per FR-003",
    "class": "within",
-   "why": "Fresh-reader tiering by work per FR-003; page edits stay on the FR-004 exception path, not executed here; the E0 docstring change is in the diff."
+   "why": "Round 1's ruling stands."
+  },
+  {
+   "id": "W49-1 rows 507, 509, 510 DEFERRED on measure",
+   "summary": "dwellings_shown's town branch, the gate complex's mount and the castle towers' matrix entry added to DEFERRED_ON_MEASURE",
+   "class": "within",
+   "why": "The GM's amendment 8 scope is 'code actually executed by magistracies, country shrines, and scripted hamlets'. Measured 2026-10-08 by this review: no kept map's manifest or gen-cache record carries gate_structs, inspection_stations or castle/castle_towers (the magistracy sheets' 'gatehouse/main gate/side gate' are compound gates, not 0147's wall gate complex; the 'castle' hits in two meta.json files are research-page reads), and every kept map is a hamlet, magistracy or shrine sheet, so the town/city branch of dwellings_shown never runs. Row 507 also carries a deviation-tempting flag against the GM's 2026-08-29 ruling, so deferring it is doubly in scope."
+  },
+  {
+   "id": "W49-2 the caption key removed whole (row 508)",
+   "summary": "placer's keyed(), Placement.keyed, the hamlet's caption key and card/band, the hand sheet's key band, WEIGHT_KEY, KEY_MARK_EM, board_seat's key-mark pre-check; a caption with no free seat goes down where it covers the least",
+   "class": "within",
+   "why": "The literal fix: 0242 'On a sheet with no free ground at all, the caption still goes down, where it covers the least'; 0241 'There is no key box'. The MODE 1 check ruled keeping the key for an all-hard caption NOT LEGITIMATE. Measured by the session: no kept map reached the key, five hamlets byte-identical."
+  },
+  {
+   "id": "W49-3 no seat in the frame: the first seat past the frame's edge",
+   "summary": "placer.place: a candidate within the hug but outside the frame is remembered, and when no in-frame candidate exists at all the caption is drawn at the first such seat, past the picture's edge",
+   "class": "narrowing",
+   "ruling": "NOT LEGITIMATE",
+   "why": "This is an exception to 0242's own rule, 'A place that would run off the edge of the picture is never taken. A clipped caption cannot be read' and its spec paragraph 'a place off the edge of the picture is never taken' - the same docstring still claims 'never clipped - a seat leaving the picture is never a candidate', now false on this branch, and test_the_frame_is_never_left now asserts the frame is left. The general rule is not physically impossible here: the trigger is 'no seat within the hug (HUG_PX, labeled CONVENTION) lies inside the frame', and 0242 itself names the way on - 'beyond that the caption is tied to its feature by a thin leader line', with no researched limit - so a leader seat past the hug, inside the frame, honors both 'never left off' and 'never off the edge'. The exception breaks a researched rule to keep an unresearched convention, the reverse of FR-004's direction. It also defeats 'never left off''s own purpose: a clipped caption cannot be read, which is the page's reason. And the claim cites 0241 ('there is no key box') for the past-the-frame seat, which 0241 does not say. What would be legitimate: search on past the hug (on a leader) inside the frame before leaving it, and leave the frame only where no seat of the caption's size fits inside the frame at all (the 10 x 10 px frame of the restated test, physically impossible), that residue labeled as such in the claim rather than cited to 0241."
+  },
+  {
+   "id": "W49-4 six tests restated to the page",
+   "summary": "never-dropped, soft-before-hard, frame, fallbacks, dark-ink hand sheet, caption, board verge/flood/facing cases",
+   "class": "within",
+   "why": "Tests that enforce 0242's 'goes down where it covers the least' and 0241's 'no key box' serve the request. Except test_the_frame_is_never_left, which follows W49-3: it must keep its name's meaning once W49-3 is corrected (the 10 x 10 frame case may pin the physically-impossible residue; a frame that can hold the caption must not be left)."
+  },
+  {
+   "id": "W49-5 board's second step without the key mark",
+   "summary": "terminal_caption no longer pre-checks a key mark; a board with no clean caption now stands on its 6 ft verge with its caption off the road",
+   "class": "within",
+   "why": "A direct consequence of removing the key; the board on its verge is 0190's siting (KOSATSUBA_VERGE_FT)."
+  },
+  {
+   "id": "W49-6 row 511: {kosatsuba, lanes} permission dropped",
+   "summary": "the overlap matrix no longer lets the notice board overlap a lane",
+   "class": "within",
+   "why": "Row 511's fix as ranked (0190: beside, not on, the lane). Whether any kept map now trips the overlap check is the batch-close gate's to show."
+  },
+  {
+   "id": "W49-7 board caption's face mismatch filed E2",
+   "summary": "the board's caption proved against the 7 x 3 ft search face, not the 16 x 6 ft board drawn - filed in found-wave49, not fixed this wave",
+   "class": "within",
+   "why": "FR-006's found-row path, as every wave has used it. The defect predates the wave (every seat, free or not, is proved against the 7 x 3 face since feature 287); the key's removal exposed rather than caused it, and no kept map moved. It is ranked E2 and is taken in tier order."
+  },
+  {
+   "id": "W49-8 occasions none",
+   "summary": "no review occasion: manifests byte-identical, no kept sheet drew a key",
+   "class": "within",
+   "why": "Feature 294's occasions; nothing placed or drawn moved."
+  },
+  {
+   "id": "W49-9 0072's drawing page trimmed under its cap",
+   "summary": "session comments tightened; the '38% conifer' as-built note restated as 'draws the conifer-led mix 48% conifer among its crowns (Kashima's cedar share)'",
+   "class": "within",
+   "why": "Trimming session notes to keep a page under its size cap changes nothing a reader reads. Correction owed: the restated figure is not what is drawn. Measured 2026-10-08 by this review on the pool manifests' village_groves (role windbreak, 'crowns'): Inashiro's conifer_led belt draws 93 conifer to 28 broadleaf (77%); Kuwabata and Sawada roll mixed_broadleaf (no conifer). The 0.48 in groves.py applies to mix == 'windbreak' (the farmstead grove), not to the village belt's conifer_led form, whose conifers are _belt_ranks' rows plus LESSER_ROLL_SHARE lesser rolls. The note should state the measured share with its method and date, or drop the figure."
+  },
+  {
+   "id": "W49-10 verification batched",
+   "summary": "impl-drift and spec-fidelity per wave; gate, pair and occasions at batch 2's close",
+   "class": "within",
+   "why": "GM 2026-10-08 (FR-005)."
   }
  ],
- "verdict": "CLEAR"
+ "verdict": "BLOCKED"
 }
