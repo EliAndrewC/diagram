@@ -1,0 +1,62 @@
+{
+  "band": 1,
+  "base": {
+    "commit": "49824361c",
+    "label": "328-start",
+    "utc": "20261008T062411Z"
+  },
+  "binding": "74660e5fba4e84d113f100030705c275faece4aa02759f7ec052ed743503ab1e",
+  "end": {
+    "commit": "5f5c44fcf",
+    "label": "328-end",
+    "utc": "20261008T062716Z"
+  },
+  "environment": "local",
+  "feature": "328-match-the-research",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "8d3395e5-fe32-4f85-9c89-80c344d2ac1a",
+    "utc": "20261008T063015Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": -3.4,
+          "39": -3.1,
+          "4": 0.0,
+          "47": 0.0
+        },
+        "total_pct": -1.6
+      },
+      "20": {
+        "seeds": {
+          "25": -4.5,
+          "39": -1.9,
+          "4": 0.0,
+          "47": 1.7
+        },
+        "total_pct": -1.2
+      },
+      "40": {
+        "seeds": {
+          "25": -4.8,
+          "39": -7.7,
+          "4": -0.6,
+          "47": 0.8
+        },
+        "total_pct": -2.8
+      }
+    },
+    "seeds": {
+      "25": 0.0,
+      "39": 2.5,
+      "4": 0.0,
+      "47": 0.0
+    },
+    "total_pct": 0.6
+  },
+  "note": "Counterfactual by perf-audit at 5f5c44fcf with joints.py reverted to 49824361c, both legs in worktrees: web on seed 39 runs 6,420,845/6,420,889 calls with or without the change (2.94-3.00s off vs 2.97-3.01s on, profiled) and seed 47 4,536,857 calls (2.09s vs 2.08-2.12s) - the _one_joint change does not run differently on the pool; seed 39's +2.5% is 4.0->4.1s with stage deltas netting ~0 (web +0.01, field -0.01, homesteads +0.01); 20/40 hh seed 47 +1.7%/+0.8% sit at the 1.7% noise floor beside -1.9..-7.7% on the other seeds of those rows; noise, as stated",
+  "verdict": "consistent"
+}

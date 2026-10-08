@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-08T06:28:48Z",
+  "target": "perf-explain",
+  "commit": "5f5c44fcf",
+  "outcome": "permitted",
+  "why": "perf-explain UNVERIFIED: no per-seed counterfactual taken; the crossings are under 3% with no stage over the report's threshold"
+}

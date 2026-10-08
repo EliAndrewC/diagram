@@ -1226,7 +1226,9 @@ a fold becomes a T, a Z is pulled like any jog, and the joint is moved back a ve
   - `docs/buildings.md::Scale#salt-ward marker r2.5 ...` - the clause removed (no sheet draws a ward)
   - `l7r/diagram/hamletgen/ways/joints.py::_one_joint#a fold or Z at a joint becomes a T` - a fold a T, a Z pulled (0081)
 
-- [ ] T99 the salt-ward clauses removed; a Z pulled straight, its test; the five hamlets regenerated (unchanged) (FR-004, FR-005)
+- [x] T99 the salt-ward clauses removed; a Z pulled straight, its test; the five hamlets regenerated (unchanged) (FR-004, FR-005)
       research: rendering
-- [ ] T100 the claims re-checked by `impl-drift`; the close: wave 37's own bookend pair, `make done` green, the wave column (FR-005, FR-006)
+      verify: DONE. the salt-ward clauses removed (no sheet draws a ward); a Z across a joint pulled straight like any jog, moved back on every refused pull (0081), its tests; the five hamlets unchanged
+- [x] T100 the claims re-checked by `impl-drift`; the close: wave 37's own bookend pair, `make done` green, the wave column (FR-005, FR-006)
       research: rendering
+      verify: DONE. impl-drift IN-STEP on the wave's claims; amendment 36 FAITHFUL (round 2), plan CLEAR; make done green; wave 37's own pair band 1 on a quiet host (perf-audit consistent: the same calls and time with the change reverted); the wave column
