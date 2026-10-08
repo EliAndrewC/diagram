@@ -12322,40 +12322,58 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/sink.py::drain_run#a drain is a dug ditch": {
-  "code": "d7def2bc426bca51",
-  "core": "e824408986a2c41a",
-  "date": "2026-10-03",
-  "note": "0060: a dug channel that reaches a watercourse",
+  "code": "1ae10b14b1ed0f07",
+  "core": "384c72dd6418742f",
+  "date": "2026-10-07",
+  "note": "every sink, whether brook, pond or off the map, draws one drainage-ditch class, matching \"a dug channel that reaches a watercourse, never a brook of its own\"",
   "pages": {
    "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423",
    "0060-field-drains-akusuiro.html": "7b625486db29c64e"
   },
   "research": "e331fb05a145b0ad",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0060-field-drains-akusuiro.drawing.html:2ae22b1c1cd7eb3e",
+   "0060-field-drains-akusuiro.drawing.html:a6dd4c8ccae9300d",
+   "0060-field-drains-akusuiro.drawing.html:d0df1f98de058c4f",
+   "0060-field-drains-akusuiro.drawing.html:d3e99aaa0ddc4599",
+   "0060-field-drains-akusuiro.html:276d85f705c71036",
+   "0060-field-drains-akusuiro.html:4b3633b28168abb3"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/sink.py::drain_run#drain width": {
-  "code": "fab1e2179141d5b0",
-  "core": "e824408986a2c41a",
-  "date": "2026-10-03",
-  "note": "full width at the outfall",
+  "code": "1e53f84e8140138b",
+  "core": "384c72dd6418742f",
+  "date": "2026-10-07",
+  "note": "the run onward is \"the same dug ditch\" and carries the collector's full outfall width (chan_px(DRAIN_FT[1])), as the page draws it",
   "pages": {
    "0060-field-drains-akusuiro.drawing.html": "26cf766fc8fdc423"
   },
   "research": "8ff7ceb036c4856e",
-  "triaged": "2026-10-05",
+  "rests": [
+   "0060-field-drains-akusuiro.drawing.html:59546d4f9be5c411",
+   "0060-field-drains-akusuiro.drawing.html:9335eaa56aa337a3",
+   "0060-field-drains-akusuiro.drawing.html:f2a4519a87491d17"
+  ],
   "verdict": "IN-STEP"
  },
- ".claude/skills/diagram/l7r/diagram/hamletgen/sink.py::drain_run#no-build corridor": {
-  "code": "8d4925a194ffa372",
-  "core": "e824408986a2c41a",
-  "date": "2026-10-03",
-  "note": "0058 scopes the 33 ft strip to \"Town and city maps\"; on hamlet maps its rule is the marsh and the ground below the drain - record the hamlet extension on 0058 or relabel",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/sink.py::drain_run#no no-build corridor on a hamlet": {
+  "code": "c349445a03c4a60a",
+  "core": "384c72dd6418742f",
+  "date": "2026-10-07",
+  "note": "field_channel registers no corridor; the 33 ft strip is the town and city maps' rule, and a hamlet's rule is the marsh and the ground below the drain",
   "pages": {
    "0058-ground-too-wet-to-build-on.drawing.html": "d989d5be5b8d7839"
   },
   "research": "b2af2942f0a54e5d",
-  "verdict": "DRIFTED"
+  "rests": [
+   "0058-ground-too-wet-to-build-on.drawing.html:03e1139db8b24365",
+   "0058-ground-too-wet-to-build-on.drawing.html:0e70f73e1c241a87",
+   "0058-ground-too-wet-to-build-on.drawing.html:4250400643e41942",
+   "0058-ground-too-wet-to-build-on.drawing.html:b9283c4db442e8c6",
+   "0058-ground-too-wet-to-build-on.drawing.html:f4e450ab6438f79c"
+  ],
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/sink.py::drawn_brook#drain plumbing": {
   "code": "651622ca9ad1cec1",

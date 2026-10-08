@@ -104,9 +104,9 @@ def drain_run(s: Settlement, pts: Poly, to: str) -> None:
     where `field_channel` records the widened stroke. Writing the drawn width into the topology record
     instead fired two checks on 14 cohort maps apiece - measured, not guessed.
 
-    RESERVE IT AS A NO-BUILD CORRIDOR. `s.channel` and `s.stream` register one; `s.field_channel` does not -
-    fine for the comb's own ditches inside a blocked envelope, wrong for this one, which runs OUT of the field
-    across open margin where the placer is free to seat a homestead on it.
+    NO NO-BUILD CORRIDOR ON A HAMLET (feature 328). This run once registered the 33 ft corridor `s.channel` and
+    `s.stream` register, but that strip is the town and city maps' rule (0058); on a hamlet the drain's rule is the
+    marsh and the wet ground below it, which the seating keeps (`cluster.below_drain`).
 
     Research:
         a drain is a dug ditch - research/questions/0060-field-drains-akusuiro.html, research/questions/0060-field-drains-akusuiro.drawing.html: the drainage-ditch class whichever way it runs
