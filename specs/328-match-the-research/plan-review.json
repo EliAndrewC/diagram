@@ -1,38 +1,44 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "b661aded473c152688c213973b5c798a43563c35a5a184c6951810358d24e60c",
+ "plan_sha256": "eee3ca5fcf70b31b49a4e2549a24bcc9b51c9e47adc633be650cdd602743dbd3",
  "reviewed": "2026-10-08",
  "declared": "spec-fidelity",
  "decisions": [
   {
-   "id": "W32-scope",
-   "summary": "Wave 32 writes two E0 claims in stage_polder (dike-pond conversion to 0020's drawing page, polder fabric to 0022's); the pond layout re-tiered E3 after impl-drift found it DRIFTED, left open",
+   "id": "W33-scope",
+   "summary": "row 461: only the dooryard keeps its owner; the farm's own garden, farm_sheds, byres and retirement house are obstacles to its own path",
    "class": "within",
-   "why": "FR-003 E0: each of the two drawing pages predates feature 328 and already states what the code does (leftover roll 1.0/0.9; 190/160 ft modules, 3/8 ft and 22 ft gaps, split/merge mix); only citations and wording change, lowest open tier first (SC-003). The pond layout is not excepted: impl-drift measured it DRIFTED (the chessboard is attested and never rolled), a code change past one rule, so it is re-tiered E3 and stays in the ranking for its place in the run rather than being written as E0 against a page it does not match."
+   "why": "FR-004: implementation moved to 0246's drawing page, which says the way leaves its dooryard round its own garden beds and fixtures, and that nothing built stands on a lane"
   },
   {
-   "id": "W32-E2-left",
-   "summary": "The reservoir's first seat (pry + 30 px) and the inlet stub outside the dike tiered E2 and left in the ranking for their place in the run",
+   "id": "W33-grove",
+   "summary": "the grove band keeps its owner (the path leaves through it)",
    "class": "within",
-   "why": "FR-003/FR-006: a code change to match 0019's 'no channel runs outside the dike' is one rule in one module (E2); the fix direction is the implementation (FR-004), and it waits behind no lower tier, so it sits among the open E2 rows rather than being skipped or excepted."
+   "why": "untouched by this wave; 0246 names beds and fixtures, not the band; its claim stays UNRESEARCHED and is not part of row 461"
   },
   {
-   "id": "W32-no-pair",
-   "summary": "No executed code changes, so no bookend pair is owed and no occasions open",
+   "id": "W33-462-next",
+   "summary": "row 462 (track inner end joined however far) left for the next wave",
    "class": "within",
-   "why": "The polder.py diff is docstring Research lines only; the plan's standing rule (Performance bookends) owes a pair only to a wave that changes engine behavior."
+   "why": "FR-006: ranking index 462 follows 461; the wave is a contiguous run starting at 461"
   },
   {
-   "id": "W32-cond6",
-   "summary": "Stacking unpushed waves 9-31 continues under condition (6): (1)-(5) held at wave 31's close 7f35ded74",
+   "id": "W33-434-held",
+   "summary": "row 434 stays held for the GM",
    "class": "within",
-   "why": "Applies the already-adjudicated wave-11 stacking conditions; verified backup/digram-backlog on origin is 7f35ded74, T88 records the green gate, impl-drift and band-0 pair; this wave adds an amendment with a reset counter and this plan review before its first tick."
+   "why": "carried hold, not new to this wave"
   },
   {
-   "id": "W32-verify",
-   "summary": "impl-drift on the touched claims and the gate",
+   "id": "W33-occasions",
+   "summary": "no review occasions: the five pool hamlets unchanged",
    "class": "within",
-   "why": "FR-005 verbatim."
+   "why": "feature 294: no map changes, no occasion; T91 must verify the regeneration shows no change"
+  },
+  {
+   "id": "W33-cond6",
+   "summary": "stacking on unpushed waves 9-32 under wave 11's condition (6); own pair opens at 51da9771f",
+   "class": "within",
+   "why": "the earlier LEGITIMATE exception's conditions held at 51da9771f: wave 32 tasks ticked, backup/digram-backlog at 51da9771f, no executed code in wave 32"
   }
  ],
  "verdict": "CLEAR"

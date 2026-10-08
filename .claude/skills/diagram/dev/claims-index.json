@@ -16724,52 +16724,56 @@
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/fabric.py::_homestead_polys#a path leaves its own yard": {
-  "code": "b18757b58f676531",
-  "core": "ae6e731dcb754cb2",
-  "date": "2026-10-04",
-  "note": "0081 answers this, so it is not UNRESEARCHED: the way \"leaves its dooryard round its own garden beds and fixtures\", and the walk crosses no \"garden bed, shed or fixture of either\". The label should cite 0081. The bed and shed exemption the claim describes (the owner's gardens and sheds are not walls to its own path) then contradicts that finding: keep only the dooryard (yard) exemption, or record a DEVIATION",
-  "pages": {},
-  "research": "",
+  "code": "398143cb587af910",
+  "core": "b6172571da4caca9",
+  "date": "2026-10-08",
+  "note": "only the threshing yard (dooryard) and the grove band carry an owner; gardens, sheds and fixtures do not, so the path goes round them",
+  "pages": {
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
+  },
+  "research": "7b40c2c01cfba682",
   "rests": [
-   "0081-village-lanes.drawing.html:9dcd87510d217672",
-   "0081-village-lanes.drawing.html:f0a411a544083965"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:9dcd87510d217672",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:f0a411a544083965"
   ],
-  "verdict": "MISLABELED"
+  "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/fabric.py::_homestead_polys#no lane through a farm's grove": {
-  "code": "ff05fe79617680a4",
-  "core": "ae6e731dcb754cb2",
-  "date": "2026-10-04",
-  "note": "the bundle is silent on groves as lane fabric",
+  "code": "1b250e2e71cf6d18",
+  "core": "b6172571da4caca9",
+  "date": "2026-10-08",
+  "note": "the page does not mention per-house groves",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/fabric.py::_homestead_polys#nothing built on a lane": {
-  "code": "3802f190dfe4427d",
-  "core": "ae6e731dcb754cb2",
-  "date": "2026-10-05",
-  "note": "houses, yards, beds, sheds, wells, fixtures are fabric",
+  "code": "0ddb6834c35d7edb",
+  "core": "b6172571da4caca9",
+  "date": "2026-10-08",
+  "note": "houses, yards, beds, sheds, byres, wells and fixtures are all fabric a lane keeps off, as \"Nothing is built on a lane\" says",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
   "research": "7b40c2c01cfba682",
   "rests": [
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:4ed077ab6fed558d",
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:f0a411a544083965"
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:5886a4ab4ca47461",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:9dcd87510d217672"
   ],
-  "triaged": "2026-10-05",
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/fabric.py::_homestead_polys#village groves and commons as fabric": {
-  "code": "63624aff8f108dec",
-  "core": "ae6e731dcb754cb2",
-  "date": "2026-10-05",
-  "note": "no page keeps a lane off a village grove or common",
+  "code": "a07cd27516a396d0",
+  "core": "b6172571da4caca9",
+  "date": "2026-10-08",
+  "note": "the page cuts out stretches over field, crop, wet ground or homestead, and says nothing of village groves or commons",
   "pages": {},
   "research": "",
-  "rests": [],
+  "rests": [
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:8ab9878d6ac1d10b"
+  ],
   "verdict": "IN-STEP"
  },
  ".claude/skills/diagram/l7r/diagram/hamletgen/ways/fabric.py::_margin_frame#plumbing and geometry": {
