@@ -22,11 +22,11 @@ Guesses:
   ground did.
 
 Depiction: The map strings the farms along a street, on one side or both, the street running on off the map as the road the
-row stands on. A street laid first is drawn straight; a row along the dry edge curves with the field's margin, which stands
+row stands on, set a little back from the field's edge so it does not run on a bund. A street laid first is drawn straight; a row along the dry edge curves with the field's margin, which stands
 for a levee or a fan's foot; on low ground behind dikes the row always takes the dry edge, standing for the dike. The farms
 stand one farmstead apart, lot against lot, never more than about 240 ft apart. The street is drawn 6 ft wide, a little wider than
 the lanes off it; Santome's real roads were about 36 ft. When a street is full, the map lays another beside it with its own row, never a
-second rank behind the first. On a two-sided row, the far farms have their holding drawn behind them as dry field; each
+second rank behind the first. On a two-sided row, the far farms have their holding drawn behind them as dry field, a strip one lot wide cut in even plots: behind a street laid first it runs three lots deep, the planned row's form but not its depth, since Santome's strips ran about 2,240 ft back; on the dry edge it is one lot deep, compact beside the house; each
 farm keeps its grove on its windward sides, so no village shelter belt is drawn.
 
 Name: How the houses stand: in a row along a way (linear)

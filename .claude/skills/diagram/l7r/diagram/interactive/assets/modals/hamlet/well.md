@@ -27,10 +27,10 @@ Guesses:
   where in the dooryard a farm's well or channel ends: no source says how many areas used each, where a farm's well stood
   or where a channel ended.
 
-Depiction: The map draws a well as a marker much larger than life, its curb about 19 ft across, so a reader can find it:
-the marker shows where the well stands, not how much ground it takes. It is a round curb on a square paved pad. Wells stand
+Depiction: The map draws a well as a marker much larger than life, its curb about 19 ft across where a real well's mouth was about 3 ft (1 m), so a reader can find it:
+the marker shows where the well stands, not how much ground it takes. Wells stand
 among the houses they serve, never in the fields or on open common ground, and the map draws more of them than a real
-village counted, so that no household is left far from water. A shrine set apart from the houses keeps a well of its own
+village counted, and keeps every household within reach of water. A shrine set apart from the houses keeps a well of its own
 beside its hall, and a hilltop shrine none; the shrine's water is drawn as a well rather than a ditch or a pond by the map's
 convention, since which waters a shrine drew on is not known.
 
@@ -44,4 +44,4 @@ Name: well
 Covers: `wells` - the wellheads
 Sources: ido-jawiki, kotobank-tsurube-ido, idobata-kaigi-jawiki, jta-aoyagi-kakunodate, tonami-sankyoson-museum, saijo-mizu-rekishikan, ndl-crd-tsurube-ido, yamaguchi-ouchi-ido, kotobank-kurumaido, yokkaichi-hanetsurube, hiratsuka-tsurube, kotobank-idoyakata, seiyo-karihama-ido, qq-2024-beijing-wells, kotobank-tsujiido, wellhead-form-absence, landform-depth-absence, how-our-maps-choose-and-draw-clustered-and-scattered-villages-shuson-sanson, koshigaya-shishi-noumin-jukyo
 Entry: research/questions/0196-communal-wells-ido.html, research/questions/0031-clustered-and-scattered-villages-shuson-sanson.html [settlement_form=dispersed], research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.html
-Drawing: research/questions/0196-communal-wells-ido.drawing.html, research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html [settlement_form=dispersed], research/questions/0033-row-villages-resson.drawing.html [settlement_form=linear]
+Drawing: research/questions/0196-communal-wells-ido.drawing.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html, research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html [settlement_form=dispersed], research/questions/0033-row-villages-resson.drawing.html [settlement_form=linear]

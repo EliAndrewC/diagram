@@ -24,4 +24,4 @@ Name: Wells shared along the way
 Covers: `meta.row_water = shared`
 Sources: kotobank-santome-shinden, ido-jawiki, kotobank-tsurube-ido, idobata-kaigi-jawiki, seiyo-karihama-ido, kotobank-tsujiido, saijo-mizu-rekishikan, kotobank-kurumaido, koshigaya-shishi-noumin-jukyo
 Entry: research/questions/0033-row-villages-resson.html, research/questions/0196-communal-wells-ido.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.html
-Drawing: research/questions/0033-row-villages-resson.drawing.html, research/questions/0196-communal-wells-ido.drawing.html
+Drawing: research/questions/0033-row-villages-resson.drawing.html, research/questions/0196-communal-wells-ido.drawing.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html

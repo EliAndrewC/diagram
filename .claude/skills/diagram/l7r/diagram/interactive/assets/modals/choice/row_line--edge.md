@@ -19,7 +19,7 @@ Guesses:
   planned row's farms did: no levee or dike row's lots or groves were measured.
 
 Depiction: The map runs the row along the field's dry margin, which stands for a levee or a fan's foot, since the map knows
-a field's margin and not a levee's line; the street curves with it. On low ground behind dikes, or where the houses stand on
+a field's margin and not a levee's line; the street curves with it, kept a little off the field so that it is not on a bund yet the field still reads as the row's own. On low ground behind dikes, or where the houses stand on
 a dike, every row takes this form, standing for the dike. The farms stand lot against lot along it, and where they stand on
 both sides, each farm across the street from the paddy has a compact holding of dry field drawn behind it.
 

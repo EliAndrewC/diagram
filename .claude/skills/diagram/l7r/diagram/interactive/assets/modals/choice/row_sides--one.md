@@ -13,7 +13,7 @@ Guesses:
 - That a row's farms take one side of the way or both at even odds: both are attested, and neither is counted against the
   other.
 
-Depiction: The map stands every farm on the same side of the street, facing the field across it, one farmstead apart, lot
+Depiction: The map stands every farm on the same side of the street, with the field across the street from it, one farmstead apart, lot
 against lot; no holding is drawn behind a farm, its field being the one across the way.
 
 Name: One side of the way

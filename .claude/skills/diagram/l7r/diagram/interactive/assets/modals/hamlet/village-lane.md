@@ -36,16 +36,16 @@ Guesses:
 Depiction: The map draws every lane as a narrow single track of bare earth with soft worn edges and no line down its middle.
 A footpath is drawn about 3 ft wide, a settlement's main lane and its spur to the fields about 5 ft, and the track out to the
 wider world, or a row village's street, about 6 ft - widths kept below the one measured village alley, since that village
-lay in northeast China, far from wet-rice country. The houses are placed first and the lanes laid among them after, each pulled
+lay in northeast China, far from wet-rice country. Each lane is pulled
 taut, with as few turns as the plots allow, none sharp, never doubling back. A lane keeps to dry ground and the bunds,
-crosses no crop or marsh, and the path to the fields runs on to the paddy's outer bund; the track out runs off the edge of
+crosses no crop or marsh, and the path to the fields runs on to the paddy's outer bund, stopping at the edge of the dry fields where a staircase of them blocks the way; the track out runs off the edge of
 the map.
 
-[settlement_form=nucleated] A household reached across a neighbor's yard is drawn with no lane of its own. Whether this
+[settlement_form=nucleated] The houses are placed first and the lanes laid among them after. A household reached across a neighbor's yard is drawn with no lane of its own. Whether this
 settlement's lanes branch off as side lanes or run behind as a back lane is on the title card.
 
 [settlement_form=linear] A row village's street is drawn straight where it was laid out first, or along the field's dry
-edge, standing for a levee or a fan's foot, and runs on off the map as the road the row stands on. The street is drawn
+edge, standing for a levee, a dike or a fan's foot, and runs on off the map as the road the row stands on. The street is drawn
 about 6 ft wide, though the roads of the planned rows were laid about 36 ft wide.
 
 Name: village lane

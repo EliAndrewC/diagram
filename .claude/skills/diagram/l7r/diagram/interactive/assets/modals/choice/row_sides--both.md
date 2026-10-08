@@ -18,8 +18,8 @@ Guesses:
 - That a farm whose grove stands between it and the street reaches it by a path round the grove: where such a farm had its
   gate is not recorded.
 
-Depiction: The map stands the farms on both sides of the street, one farmstead apart, lot against lot. The far row has its
-holding drawn behind each farm as dry field; the near row, between the paddy and the street, has none. A near-row farm walled
+Depiction: The map stands the farms on both sides of the street, each farm's lot and grove set against the next. The far row has its
+holding drawn behind each farm as dry field, a strip running back from the street and cut into plots, long where the street was laid first and short on the paddy's dry edge; the near row, between the paddy and the street, has none. A near-row farm walled
 from the street by its grove reaches it by a path round the trees.
 
 Name: Both sides of the way

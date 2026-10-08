@@ -18,10 +18,10 @@ Guesses:
 - That a far farm's holding runs back three lots deep: Santome's strips ran about 2,240 ft in a dry-field colony, and how deep
   a paddy row's strips ran is not recorded.
 
-Depiction: The map draws the street straight, as a surveyed road is, and runs it on off the map as the road the row stands
+Depiction: The map draws the street straight, as a surveyed road is, a little off the field's edge, so the field reads as the row's own and the street keeps off the bunds, and runs it on off the map as the road the row stands
 on. It is drawn 6 ft wide, wider than the lanes off it; Santome's real roads were about 36 ft. On low ground behind dikes a row never takes
 this form: there it follows the dry edge, which stands for the dike. Where the farms stand on both sides, each farm across the
-street from the paddy has its holding drawn behind it as a strip of dry field one lot wide. When a street is full, the map
+street from the paddy has its holding drawn behind it as a strip of dry field one lot wide and three lots deep, cut in plots of one size; how big the real plots were is not recorded. When a street is full, the map
 lays another beside it with its own row, as a planned colony grew more roads.
 
 Name: A street laid first

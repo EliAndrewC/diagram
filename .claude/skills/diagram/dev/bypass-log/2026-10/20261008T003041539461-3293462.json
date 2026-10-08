@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-08T00:30:41Z",
+  "target": "perf-explain",
+  "commit": "58f07ada3",
+  "outcome": "permitted",
+  "why": "perf-explain UNVERIFIED: no per-seed form census taken; the crossings are inside run-to-run spread on several seeds"
+}
