@@ -439,7 +439,9 @@ def _polder_candidate(plan: SitePlan, seed: int, rows: int, cols: int, cellpx: f
     Research:
         outer face with the water - research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html: the edge wanders (from Enokida's 0.5), the dike's outer face curving with the water's edge, never a rectangle
         wander walked down to a 0.86 box fill - GUESS: the wander eased only as far as the outline still fills 0.86 of its box (`polder_fills_its_bbox`'s 82% and a margin for the drawn outline's rounding), so a small block still reads as one block; no page sets how irregular a polder's dike outline was (searched 0019, 0022, 0027)
-        block centered - NONE: on the canvas at any bearing
+        block centered - CONVENTION: the block is placed at the canvas's center, a framing of the map; its bearing is not free, it is turned to plan.fall
+        block turned to the fall - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the block's rows run along the land's fall and its columns across it, so its head (the inlet) is the high end and its tail (the outfall) the low end
+        parcel cleanup on the drawn block only - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: each candidate is built with clean_parcels=False and fit_polder cleans the one it draws (clean_polder_parcels), so the drawn parcels still stop at their ditch's bank; the flag defers the cleanup for speed and chooses no parcel form
     """
     dx, dy = plan.fall
     ux, uy = -dy, dx  # across the fall

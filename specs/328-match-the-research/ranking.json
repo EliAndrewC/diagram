@@ -1188,7 +1188,7 @@
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::_polder_candidate#block centered",
   "verdict": "MISLABELED",
   "tier": "E0",
-  "fix": "putting the block at the canvas centre is a framing decision (how the map shows it), not plumbing; label should be CONVENTION. The bearing is not free: the code turns the block to plan.fall",
+  "fix": "block centered - CONVENTION: the block is placed at the canvas's center, a framing of the map; its bearing is not free, it is turned to plan.fall",
   "files": [
    ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py"
   ],
@@ -1196,6 +1196,8 @@
   "flag": "",
   "found": "wave 28 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
+  "e0_basis": "hamletgen/water/polder.py:442 labels it NONE; :447-448 put the block's middle at (W/2, H/2) with its axes on plan.fall, so only the position is the choice and it is framing (impl-drift's reading); the claim's 'at any bearing' is wrong and is dropped",
+  "moved": "T83a (fresh reader): hamletgen/water/polder.py:442 labels it NONE; :447-448 put the block's middle at (W/2, H/2) with its axes on plan.fall, so only the position is the choice and it is framing (impl-drift's reading); the claim's 'at any bearing' is wrong and is dropped",
   "wave": "",
   "scope": "kept"
  },
@@ -1203,7 +1205,7 @@
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::_polder_candidate#block's rows run along the fall, its cols across it axis set",
   "verdict": "UNCLAIMED",
   "tier": "E0",
-  "fix": "block's rows run along the fall, its cols across it (axis set by the slope, head-to-tail high-to-low)",
+  "fix": "block turned to the fall - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the block's rows run along the land's fall and its columns across it, so its head (the inlet) is the high end and its tail (the outfall) the low end",
   "files": [
    ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py"
   ],
@@ -1211,6 +1213,8 @@
   "flag": "",
   "found": "wave 28 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
+  "e0_basis": "hamletgen/water/polder.py:444-448 set the along axis (rows*cellpx) on plan.fall and the across axis (cols*cellpx) perpendicular; 0019 drawing para 1 says the inlet is at the head and the outfall at the tail, 'which this project reads as its high and low ends' - a page not edited for this already says it, so the claim alone",
+  "moved": "T83a (fresh reader): hamletgen/water/polder.py:444-448 set the along axis (rows*cellpx) on plan.fall and the across axis (cols*cellpx) perpendicular; 0019 drawing para 1 says the inlet is at the head and the outfall at the tail, 'which this project reads as its high and low ends' - a page not edited for this already say",
   "wave": "",
   "scope": "kept"
  },
@@ -1218,7 +1222,7 @@
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::_polder_candidate#cleanparcelsfalse is a fixed choice of parcel form inside th",
   "verdict": "UNCLAIMED",
   "tier": "E0",
-  "fix": "clean_parcels=False is a fixed choice of parcel form inside the polder",
+  "fix": "parcel cleanup on the drawn block only - research/questions/0055-where-a-field-meets-its-ditch-the-bank-the-bund-and-the-inlet-mizuguchi.drawing.html: each candidate is built with clean_parcels=False and fit_polder cleans the one it draws (clean_polder_parcels), so the drawn parcels still stop at their ditch's bank; the flag defers the cleanup for speed and chooses no parcel form",
   "files": [
    ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py"
   ],
@@ -1226,6 +1230,8 @@
   "flag": "",
   "found": "wave 28 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
+  "e0_basis": "impl-drift misread the flag: waterfields/polder.py:43 and :146 show clean_parcels only gates _plots_clear_of_channels, and :795-800 clean_polder_parcels runs the same cleanup later (15 s vs 41 s, feature 150 T55); hamletgen/water/polder.py:398 runs it on every block fit_polder can return (:401-402). The parcel form comes from parcel_mix/gap/mosaic, not this flag. The cleanup's rule is already clai",
+  "moved": "T83a (fresh reader): impl-drift misread the flag: waterfields/polder.py:43 and :146 show clean_parcels only gates _plots_clear_of_channels, and :795-800 clean_polder_parcels runs the same cleanup later (15 s vs 41 s, feature 150 T55); hamletgen/water/polder.py:398 runs it on every block fit_polder can return (:401-402).",
   "wave": "",
   "scope": "kept"
  },
@@ -1250,7 +1256,7 @@
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::_polder_candidate#the block is oriented to the land's fall its rows run with t",
   "verdict": "UNCLAIMED",
   "tier": "E0",
-  "fix": "the block is oriented to the land's fall: its rows run with the fall and its columns across it",
+  "fix": "block turned to the fall - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the block's rows run along the land's fall and its columns across it, so its head (the inlet) is the high end and its tail (the outfall) the low end",
   "files": [
    ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py"
   ],
@@ -1258,6 +1264,8 @@
   "flag": "",
   "found": "wave 28 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
+  "e0_basis": "the same UNCLAIMED decision as the rows-along-the-fall row (hamletgen/water/polder.py:444-448); one claim answers both",
+  "moved": "T83a (fresh reader): the same UNCLAIMED decision as the rows-along-the-fall row (hamletgen/water/polder.py:444-448); one claim answers both - duplicate of .claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::_polder_candidate#block's rows run along the fall, its cols across it axis set",
   "wave": "",
   "scope": "kept"
  },
@@ -1265,7 +1273,7 @@
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::_polder_candidate#wander walked down to a 0.86 box fill",
   "verdict": "MISLABELED",
   "tier": "E0",
-  "fix": "the 0.5-to-0.12 wander steps and the 0.86 fill threshold set how irregular the polder's dike outline is. That is a fact about how the place was built, not only how it is shown. The page sets no degree for this irregularity, so the label should be GUESS (or UNRESEARCHED), not CONVENTION",
+  "fix": "done in wave 28",
   "files": [
    ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py"
   ],
@@ -1273,6 +1281,8 @@
   "flag": "",
   "found": "wave 28 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
+  "e0_basis": "hamletgen/water/polder.py:441 now reads 'wander walked down to a 0.86 box fill - GUESS: ... no page sets how irregular a polder's dike outline was (searched 0019, 0022, 0027)', relabeled from CONVENTION in wave 28 and re-checked IN-STEP",
+  "moved": "T83a (fresh reader): hamletgen/water/polder.py:441 now reads 'wander walked down to a 0.86 box fill - GUESS: ... no page sets how irregular a polder's dike outline was (searched 0019, 0022, 0027)', relabeled from CONVENTION in wave 28 and re-checked IN-STEP",
   "wave": "",
   "scope": "kept"
  },
@@ -7075,7 +7085,7 @@
   "key": ".claude/skills/diagram/l7r/diagram/hamletgen/ways/knots.py::next_gather#lane ends gathered",
   "verdict": "DRIFTED",
   "tier": "E2",
-  "fix": "a knot neither gather form is admitted for stays unjoined: on a re-rolled Kuwabata (polder edge fixed, wave 28 trial) two access lanes converging at a sharp angle kept their feet 15.4 ft apart - lane 9 onto lane 3 left a needle sliver, lane 3 onto lane 9 split the web; a T-foot form (the lone movable end teed from its vertex before onto the other lane) gathered it, reverted with the trial [0081 drawing]",
+  "fix": "add a third gather form to next_gather (the lone movable end teed onto the other lane from its vertex before, as the wave 28 trial did) so a knot neither moved_onto form is admitted for is still joined within 25 ft, with its tests; one function in knots.py",
   "files": [
    ".claude/skills/diagram/l7r/diagram/hamletgen/ways/knots.py"
   ],
@@ -7083,6 +7093,7 @@
   "flag": "",
   "found": "wave 28 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E2",
+  "moved": "T83a (fresh reader): ways/knots.py:160-185 tries only moved_onto's two forms, with and without the contracted corner, and returns None otherwise, so ends within 25 ft stay apart (Kuwabata 15.4 ft); 0081 drawing ('Ends within 25 ft of one another are joined at a single point') already says what the code should do, so no ",
   "wave": "",
   "scope": "kept"
  },

@@ -359,6 +359,15 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
   band 1 diagnosed as load); wave 28 changes no executed code, so it owes no pair.
 - **Verification**: `impl-drift` on the restated claim, the gate green.
 
+## Wave 29 (amendment 28, 2026-10-08)
+
+- **Scope**: wave 28's found rows tiered by a fresh reader (T83a): the E0 claims written in `_polder_candidate` (`tasks.md`
+  Phase 30); the knot gap tiered E2 and left for its place in the run. No executed code changes.
+- **Occasions**: none.
+- **On the unpushed waves 9-28** under condition (6): (1)-(5) held at wave 28's close (792d74111, backed up); wave 29
+  changes no executed code, so it owes no pair.
+- **Verification**: `impl-drift` on the touched claims, the gate.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Each later wave that changes engine behavior takes

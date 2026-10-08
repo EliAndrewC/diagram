@@ -13,6 +13,7 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 - (wave 5, landed and reviewed) placement-changed village lane on kashikawa - wave 5: 0033's row street runs on off the map as the road into it at both ends, where
   the web cut it back to its last joint (`trim_streets`); Kashikawa's and Mizuguchi's far ends now run off the sheet as a
   second way out (every way is inked `village lane`).
+- none (wave 29): claims only, no executed code changed
 - none (wave 28): the polder edge and the knot form tried and reverted; a claim and a comment changed, no executed code
 - none (wave 27): the brook and flank rules change no pool map
 - none (wave 26): the drain's corridor dropped on a hamlet; the five pool hamlets unchanged
@@ -1056,3 +1057,19 @@ the claim restated. The trial's knot form is reverted with it and its gap filed 
 - [x] T82 the close: the claim re-checked by `impl-drift`; no executed code changed since wave 27's close; `make done` green; the wave column (FR-005, FR-006)
       research: rendering
       verify: DONE. impl-drift IN-STEP on the restated claims; amendment 27 FAITHFUL (round 5), plan CLEAR; no executed code changed since wave 27's close; make done green; the wave column
+
+## Phase 30 - wave 29 (amendment 28): wave 28's found rows
+
+Wave 28's six found rows tiered by a fresh reader (T83a, `audit/t83a-out.jsonl`): five E0 (one a duplicate, one closed in wave 28),
+one E2 (the knot gap in `next_gather`, left for its place in the run).
+
+  - `l7r/diagram/hamletgen/water/polder.py::_polder_candidate#block centered` - CONVENTION, a framing; turned to the fall, not at any bearing
+  - `l7r/diagram/hamletgen/water/polder.py::_polder_candidate#block's rows run along the fall` (and its duplicate) - claimed on 0019's drawing page
+  - `l7r/diagram/hamletgen/water/polder.py::_polder_candidate#cleanparcelsfalse` - claimed on 0055's drawing page: the drawn block is cleaned, the flag defers it for speed
+
+- [x] T83a wave 28's found rows tiered by the work they take, by a fresh reader (FR-002, FR-003, SC-003)
+      research: rendering
+- [ ] T83 the claims written (FR-003 E0, FR-004)
+      research: rendering
+- [ ] T84 the claims re-checked by `impl-drift`; the close: `make done` green, the wave column (FR-005, FR-006)
+      research: rendering
