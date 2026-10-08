@@ -145,8 +145,6 @@ def changed(before: dict[str, Any], now: dict[str, Any]) -> Changed:
 # ---- reading the baseline's contexts ------------------------------------------------------------------
 
 
-
-
 def _marks(items: Any) -> str:
     """`?,?,?` - one placeholder per item, for an `in (...)` clause."""
     return ",".join("?" * len(items))
