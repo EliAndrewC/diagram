@@ -1533,8 +1533,9 @@ In ranking order (rows 491-494; row 496 beside row 493, the same sentence of 008
 - Maps: Inashiro, Kuwabata and Sawada's track out drawn as two points (the households' records' `geom` follows it, no house
   moved); Kashikawa's road over the ford; Mizuguchi byte-identical.
 
-- [ ] T117 rows 491-494 and 496 (FR-003, FR-004)
+- [x] T117 rows 491-494 and 496 (FR-003, FR-004)
       research: rendering
+      verify: DONE. rows 491-494 and 496: the hairpin cut at the only contact, the nub as 0081's hook, the track and spur taut, the bend rule on the track out; found on the way the canvas reach, the long square leg, the refusal's detail, the chord at 7 ft; impl-drift answered r1-r4; spec-fidelity plan CLEAR r2, spec FAITHFUL r3
 - [ ] T118 the claims re-checked by `impl-drift`; the close at batch 1's (T119): `make done` green, the pair, the wave column (FR-005, FR-006)
       research: rendering
 
