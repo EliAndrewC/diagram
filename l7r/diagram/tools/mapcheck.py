@@ -82,7 +82,7 @@ TRIPWIRE_SEEDS = (27, 33, 37, 41, 47)
 # The rule is `baseline_verdict`'s: a pinned seed whose failures stay inside its set is EXPECTED; any
 # check outside the set is a regression; a pinned seed that comes up CLEAN is a stale pin and fails
 # too, so the fix that lands must also drop its row here. ONE session fixes these - see the
-# future-work entry "the tier under the T99 engine".
+# backlog entry "the tier under the T99 engine" (since closed; git history).
 TRIPWIRE_EXPECTED: dict[int, frozenset[str]] = {
     # feature 137 (2026-08-28): rows come OUT as the fixes land - 37 fixed and 27/47 shrunk by the orphan joiner's ladder (T03);
     # 27 fixed by the splice fixes (a join link stops at the first way it meets; no retrace, no lattice jog)

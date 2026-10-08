@@ -393,7 +393,12 @@ push_cmd() {
   local active="" pointer="" f
   pointer=$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1])).get("feature_directory","").rstrip("/"))' "$ROOT/.specify/feature.json" 2>/dev/null || true)
   for f in $(printf '%s\n' "$ours" | grep -oE '^specs/[^/]+' | sort -u) "$pointer"; do
-    [ -n "$f" ] && [ -f "$ROOT/$f/tasks.md" ] && grep -qE '^\s*- \[ \]' "$ROOT/$f/tasks.md" && active="$active $f"
+    # feature 330 (FR-002, GUARD_EDIT_OK; plan review round 4): ANY open box still makes a feature in progress - indented,
+    # unread or otherwise, as before - unless its spec's status line CLOSES it (Done, Superseded by, Withdrawn: the
+    # words `speckit-todo.py` states once). The exemption fails closed: an error or no answer counts as not closed.
+    if [ -n "$f" ] && [ -f "$ROOT/$f/tasks.md" ] && grep -qE '^\s*- \[ \]' "$ROOT/$f/tasks.md"; then
+      [ "$(python3 "$ROOT/scripts/speckit-todo.py" --closed-by-status "$ROOT/$f" 2>/dev/null)" = yes ] || active="$active $f"
+    fi
   done
   active=$(printf '%s\n' $active | sort -u | tr '\n' ' ' | sed 's/ *$//')
   if [ -n "$active" ]; then

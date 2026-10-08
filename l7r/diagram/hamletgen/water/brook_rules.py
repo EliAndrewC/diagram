@@ -214,7 +214,7 @@ def monotone_down(course: Sequence[Pt], fall: Pt, slack: float = 0.01) -> bool:
 
 def bar_on_race(bar: Sequence[Pt], race: Sequence[Pt], race_w: float) -> float:
     """The area of the weir's bar lying on the head race's stroke, sq px - 0 where the bar keys into the bank clear of
-    the mouth (water:W09; future-work "The weir's root lands on the head race's mouth": 17% of the bar lay on it).
+    the mouth (water:W09; `specs/357-owed-conversion-knob-candidates/` "The weir's root lands on the head race's mouth": 17% of the bar lay on it).
     Research: weir root clear of the race - research/questions/0059-where-the-ditch-leaves-the-brook-the-intake-and-its-weir-toshuko-and-seki.drawing.html: the bar keys into the bank below the mouth, none of it on the race
     """
     from shapely.geometry import LineString, Polygon  # noqa: PLC0415 - bound on first use (plan: numpy/shapely lazily)

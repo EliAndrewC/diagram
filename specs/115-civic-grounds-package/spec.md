@@ -5,7 +5,7 @@ is declared with `export SPECIFY_FEATURE=115-civic-grounds-package`.
 
 **Created**: 2026-08-16
 
-**Status**: Implemented 2026-08-16. Final per-file line counts: `civic.py` 267, `stable_yard.py` 264,
+**Status**: Done (2026-08-16): 2389749ea and 4885c99d5; the open tasks are bookkeeping, or moot since wip/ was retired (T004) (feature 330 audit)
 `funerary.py` 228, `justice.py` 193, `lodging.py` 187, `_yardctx.py` 173, `__init__.py` 36
 (1,162 -> largest 267). Longest function in the package **85** lines, down from 335 - so the engine's
 largest function is now `rolling.py::roll_village` at 256. Every `pool/` artifact byte-identical

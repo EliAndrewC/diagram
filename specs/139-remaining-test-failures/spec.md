@@ -4,7 +4,7 @@
 
 **Created**: 2026-08-28
 
-**Status**: APPROVED by `spec-fidelity` - round 1 verdict **FAITHFUL** (2026-08-28). Reviewer's aside for the GM: SC-002's "48-seed audit 48 of 48" is the widest reading of "all of the tests which we do have" (a tool run, not a suite test; carried from 137's approved FR-005) - the GM may narrow it.
+**Status**: Done (2026-08-30): the whole inventory left by retirement, as this spec counts it - the check battery deleted (e20ca2623), the tripwire list empty (feature 330 audit)
 
 **Input**: [`gm-request.md`](gm-request.md), verbatim. The goal is feature 137's - *"one hundred percent of those tests passing"* - re-cut on 2026-08-28 at the GM's instruction so that 137 could land what it had fixed while the residue stays an OPEN feature, *"to reflect the fact that we know that there are still failing tests"*.
 

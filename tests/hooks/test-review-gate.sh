@@ -66,6 +66,15 @@ mkrepo b3; printf '# spec\n\nThe word FAITHFUL must never be written here by the
 echo work >> seed.txt; git add -A; git commit -qm s
 check "a spec that merely MENTIONS the word in prose" b3 blocked
 
+# feature 330: a FILED spec (status Filed, no tasks.md) is deferred work, not an implementation - it ships with other
+# files and no verdict; the same spec given a tasks.md is being implemented and owes its verdict again
+mkrepo f1; printf '# Feature Specification: x\n\n**Status**: Filed - from the backlog, 2026-10-08\n' > specs/900-x/spec.md
+echo work >> seed.txt; git add -A; git commit -qm filed
+check "a FILED spec with no tasks, alongside other work: no verdict owed" f1 ok
+mkrepo f2; printf '# Feature Specification: x\n\n**Status**: Filed - from the backlog, 2026-10-08\n' > specs/900-x/spec.md
+printf -- '- [ ] T01 build it\n' > specs/900-x/tasks.md; echo work >> seed.txt; git add -A; git commit -qm filed-with-tasks
+check "...the same spec given tasks: the verdict is owed" f2 blocked
+
 echo
 echo "1b. THE NUMBER CLAIM passes, and only the number claim (feature 165, the GM ruling)"
 # CLAUDE.md requires the number to be claimed by pushing the new specs/NNN-slug/ the moment spec.md

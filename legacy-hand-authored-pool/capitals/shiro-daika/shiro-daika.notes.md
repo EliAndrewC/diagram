@@ -1,6 +1,6 @@
 # Shiro Daika - notes
 
-**Status (2026-10-07): an exhibit, not work in progress.** The GM dropped the hand pass on 2026-10-07: the capital goes straight to a scripted generator, and these notes are kept verbatim as the record of what the hand pass found (its design inputs: `future-work/cross-cutting.md`, "Fabric-first generation").
+**Status (2026-10-07): an exhibit, not work in progress.** The GM dropped the hand pass on 2026-10-07: the capital goes straight to a scripted generator, and these notes are kept verbatim as the record of what the hand pass found (its design inputs: `specs/344-fabric-first-generation-research-direction/`).
 
 Mode B **domain capital** (the first at this tier), 1 px = 3 ft, walled, `wall_defense="siege"`,
 river city, Scorpion (the Daika vassal house of the Bayushi), population **12,360**. Features
@@ -217,13 +217,13 @@ N-market/flop caption cuts + review errors (kosatsuba/punishment/execution + cap
 check gap, bell-drum tower, precinct walls, cistern kind/glyph, mirror precincts), perf
 T024, captions T025, T026 pool move + full sweep, T028 XII, T029 record-the-why docs
 (the THREE wall derivations + the slack law + extramural ruling), T030 procedure. Keep
-appending pain points to future-work/ per the GM's standing instruction.
+appending pain points to the backlog per the GM's standing instruction.
 
 ## FIRST PASS SHIPPED GREEN (2026-08-10, session diagram-city)
 
 Gate: **0 FAIL** with three DOCUMENTED waivers, all one phenomenon - the first-pass fabric
 under-fills the settled wall (~8% packed shortfall, ~130 census households, rotating ~1.5 ac
-pockets) - which the GM deferred on 2026-08-10 to the fabric-first feature (future-work/ #2, which now carries #5's inputs).
+pockets) - which the GM deferred on 2026-08-10 to the fabric-first feature (the backlog's #2, which carried #5's inputs - now feature 344).
 Pre-waiver failing state frozen as
 `pool/regressions/capital_fullness_deferral_fires_on_the_first_pass_shiro_daika.json` (fires all 3).
 

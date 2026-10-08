@@ -1,7 +1,7 @@
 # Method lessons from the diagram work - things not to repeat
 
 **Load this file when:** a fix is not working and you are about to try another one. These are not tasks (open work is
-in `future-work/`): they are records of attempts that failed, claims that turned out to be wrong, and the shapes those
+in a filed feature - `make speckit-todo` lists them): they are records of attempts that failed, claims that turned out to be wrong, and the shapes those
 failures take ("record a fix that FAILED, at the point of change"; "when stuck, the next step is a MEASUREMENT, not
 another speculative edit"). The value is in recognizing the SHAPE of a failure you are currently inside, which an
 index cannot give you, so read the headings through once.
@@ -369,7 +369,7 @@ exactly like a check that passes" failure in its purest form. Second, **the code
 disagreed, and only counting the files on disk said which one was true** - reading the test would
 have confirmed the wrong belief.
 
-## Twelve lessons from the hamlet backlog, kept when its closed entries were deleted (future-work audit, 2026-10-07)
+## Twelve lessons from the hamlet backlog, kept when its closed entries were deleted (the backlog audit, 2026-10-07)
 
 Each was learned on an entry the audit found closed; the entry is gone (git history says what
 closed it), the lesson is not.

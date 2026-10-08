@@ -1,6 +1,6 @@
 # Feature 175 - Warm the remote build
 
-**Status**: FAITHFUL (`spec-fidelity`, round 2) - cleared for implementation (constitution XVI)
+**Status**: Done (2026-08-31): the cache travels with the build, MEASURED in c09942435; its owed measurement taken by feature 177 (feature 330 audit)
 **Request**: `request.md` (the GM's words, verbatim) · **Measurements**: `research.md`
 
 ## Why

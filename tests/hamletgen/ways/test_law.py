@@ -294,7 +294,7 @@ def test_a_map_that_breaks_a_rule_names_it() -> None:
 
 def test_a_join_that_stops_short_of_the_way_it_makes_for() -> None:
     """Homes H37/H38: a free end making for a way within `JOIN_REACH_FT`, over walkable ground, is a join that stopped short
-    (future-work: Inashiro's four lanes 28.1-28.5 ft shy of the lane they join)."""
+    (the backlog, since closed: Inashiro's four lanes 28.1-28.5 ft shy of the lane they join)."""
     shy = law.JOIN_REACH_FT - 3.0  # inside the page's 25 ft join reach (0081)
     way = _lane((0.0, 0.0), (0.0, 400.0))
     short = _lane((200.0, 100.0), (shy, 100.0))  # heading west, 3 ft inside the reach

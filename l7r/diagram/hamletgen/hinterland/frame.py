@@ -245,7 +245,7 @@ def scatter_frame(s: Settlement, plan: SitePlan) -> tuple[float, float, float, f
 
 
 TITLE_POCKET_CLEAR_FT = 40.0
-"""How far the title's pocket keeps from a feature GLYPH (feature 287, water W58; future-work, "The burial ground beside the
+"""How far the title's pocket keeps from a feature GLYPH (feature 287, water W58; the backlog (since closed), "The burial ground beside the
 title placard": Kashikawa's burial glyph stood 23 ft left of the placard on its center line and read as its ornament). A
 GUESS, and a map drawing convention rather than a fact about a place: no page gives a figure for how far a cartouche stands
 from a symbol, and 40 ft is a little under twice the distance that read wrong."""

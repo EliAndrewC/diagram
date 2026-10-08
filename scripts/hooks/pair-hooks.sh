@@ -585,7 +585,7 @@ print(json.dumps({"hookSpecificOutput": {
             ;;
           *)
             printf '\n\033[1mBLOCKED: round %s of %s for %s in this feature - the cap is two (feature 294 FR-009).\033[0m\n' "$rounds" "$named" "$atype" >&2
-            printf 'One review round and one fix-verification round. What remains goes to future-work, or to the GM through\n' >&2
+            printf 'One review round and one fix-verification round. What remains is filed as a feature (make claim), or goes to the GM through\n' >&2
             printf '`escalation-check`; a third round needs the GM'"'"'s waiver: REVIEW_ROUNDS_OK="<their words>" in the prompt.\n' >&2
             guard_log pair blocked "$atype:$named" review-round-cap
             exit 2

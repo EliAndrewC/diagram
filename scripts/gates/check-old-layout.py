@@ -61,6 +61,8 @@ SCRIPT_FORMS = (
     r"claims-gate|spec-lint|check-[\w-]+|figures|guard-log|reserve-prefix|page-session|pull-queue|uncovered-in-diff|"
     r"agent-model-rule)\.)",
     r"(?<![\w.-])container" + r"-scripts/",
+    # feature 330 (2026-10-08): the backlog directory is retired - open work is filed as features
+    r"(?<![\w.-])future" + r"-work/",
 )
 
 
@@ -86,7 +88,8 @@ def report(rows: list[str], script_rows: list[str] | None = None) -> int:
         print(f"OLD SCRIPTS LAYOUT: {len(script_rows)} line(s) name a place the 2026-10-08 move retired - name the new path")
         print("(guards scripts/hooks/, their helpers scripts/hooks/lib/ without the underscore, gates and checks scripts/gates/,")
         print(" record/pages/reviews/measure tooling in those subdirectories, suites and fixtures tests/hooks/, container-scripts/")
-        print(" now scripts/container/; scripts/CLAUDE.md is the index):")
+        print(" now scripts/container/; scripts/CLAUDE.md is the index; the backlog directory is retired - name the feature")
+        print(" its entry became, `make speckit-todo` lists them):")
         for r in script_rows[:40]:
             print(f"  {r[:220]}")
         if len(script_rows) > 40:
@@ -112,6 +115,7 @@ def selftest() -> int:
         (root / "docs" / "a.md").write_text(f"see {OLD}/dev/loop.md\n")
         (root / "docs" / "b.py").write_text('R = os.path.join(".claude", "skills", "diag' + 'ram", "research")\n')
         (root / "docs" / "c.md").write_text("run scripts/_" + "hm_make.py, then /diagram/scripts/" + "clone-sync-hooks.sh\n")
+        (root / "docs" / "e.md").write_text("deferred to future" + "-work/towns.md\n")
         (root / "docs" / "d.md").write_text("fine: scripts/hooks/lib/hm_make.py, tests/hooks/test-x-hooks.sh, scripts/gates/gate-stamp.py\n")
         (root / "specs" / "001-x" / "plan.md").write_text(f"history: {OLD}/dev/loop.md\n")
         (root / LEDGER).parent.mkdir(parents=True, exist_ok=True)
@@ -127,8 +131,8 @@ def selftest() -> int:
             print(f"selftest: expected docs/a.md and the NEW ledger row only, got {rows}")
             return 1
         srows = findings(root, SCRIPT_FORMS)
-        if sorted(r.split(":", 1)[0] for r in srows) != ["docs/c.md"]:
-            print(f"selftest: expected docs/c.md alone to name the old scripts layout, got {srows}")
+        if sorted(r.split(":", 1)[0] for r in srows) != ["docs/c.md", "docs/e.md"]:
+            print(f"selftest: expected docs/c.md and docs/e.md alone to name a retired place, got {srows}")
             return 1
     print("check-old-layout selftest: ok")
     return 0

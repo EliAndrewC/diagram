@@ -97,7 +97,7 @@ def carve_around_grave(plots: list[dict[str, Any]], disc: tuple[float, float, fl
     """Carve the paddy AROUND a grave in the field (water W28): no plot ring runs under the mound, in place.
 
     The registry entry says "the flat paddy tiling around it", and until this the lattice was drawn straight through
-    (three rings and nine bund junctions under Kashikawa's mound, `future-work` 'Carve the paddy around an in-field grave
+    (three rings and nine bund junctions under Kashikawa's mound, the backlog's (since closed) 'Carve the paddy around an in-field grave
     island'). Every ring the rule finds under the mound (`ring_rules.under_island`, the finished-map test's predicate) is
     cut back to the ground outside it:
 

@@ -275,8 +275,8 @@ def _normalize(base: pathlib.PurePosixPath, token: str) -> str:
 def names_a_retired_rule_file(token: str, containing_rel: str, exists: set[str]) -> bool:
     """Feature 229's rule, judged PER REFERENCE. A token that resolves - from its file's directory, the skill root
     or the repository root - to one of the retired paths is a hit. A BARE basename (`capitals.md`) is a hit
-    unless it resolves from its own file's directory to a file that still exists: `future-work/towns.md` and
-    `future-work/cities.md` are living siblings that `future-work/CLAUDE.md` links to, and stay legitimate."""
+    unless it resolves from its own file's directory to a file that still exists: `notes/towns.md` and
+    `notes/cities.md` are living siblings that `notes/CLAUDE.md` links to, and stay legitimate."""
     here = pathlib.PurePosixPath(containing_rel).parent
     for base in (here, pathlib.PurePosixPath(".")):
         if _normalize(base, token) in _RETIRED_PATHS:
@@ -308,11 +308,11 @@ def test_no_tracked_file_names_a_retired_rule_file() -> None:
 
 
 def test_the_retired_rule_file_rule_fires_and_spares_a_living_sibling() -> None:
-    exists = {"future-work/towns.md", "future-work/CLAUDE.md", "x/y.py", "doc.md", "specs/229/spec.md"}
+    exists = {"notes/towns.md", "notes/CLAUDE.md", "x/y.py", "doc.md", "specs/229/spec.md"}
     files = {
         "doc.md": "see settlements/homesteads.md for the rule",
         "x/y.py": "# the doctrine (capitals.md, 'WHY blank')",
-        "future-work/CLAUDE.md": "- [towns](towns.md) - the town tier's open work",
+        "notes/CLAUDE.md": "- [towns](towns.md) - the town tier's open work",
         "specs/229/spec.md": "the GM named settlements/homesteads.md",
     }
     hits = retired_rule_file_hits(files, exists)

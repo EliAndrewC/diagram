@@ -95,6 +95,12 @@ fi
 touched_specs=$(printf '%s\n' "$changed" | sed -n 's|^\(specs/[^/]*\)/.*|\1/spec.md|p' | sort -u)
 for spec in $([ -z "$claim_only" ] && printf '%s\n' "$touched_specs" || true); do
   [ -f "$spec" ] || continue
+  # A FILED SPEC IMPLEMENTS NOTHING (feature 330): deferred work is filed as a feature whose spec.md says
+  # `**Status**: Filed` and carries the deferred text - no plan, no tasks. Constitution XVI reviews a spec BEFORE
+  # IMPLEMENTATION, and a filed one has none; the moment it gains a tasks.md it is being implemented, and the
+  # verdict is owed here like any other. (Code pushed without touching the spec's directory never brought it
+  # under this check anyway, so the exemption opens nothing the check held.)
+  if [ ! -f "$(dirname "$spec")/tasks.md" ] && grep -qE '^\*\*Status\*\*:?[[:space:]]*Filed\b' "$spec"; then continue; fi
   # A VERDICT, not a MENTION (feature 156, 2026-08-29). The check used to be a bare `grep FAITHFUL`,
   # which two shapes satisfied without a review having passed: a spec whose only occurrence is "NOT
   # FAITHFUL" - i.e. one a reviewer REJECTED - and a spec whose prose merely discusses the word. So

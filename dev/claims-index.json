@@ -2904,6 +2904,14 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "docs/buildings.md::Sacred features#a fence around the sanctuary alone, as a wealth knob (0223 has a pre-1868 sanctuary fence only where a lord or the shogunate built it)": {
+  "code": "c5e2aa18f9f7304e",
+  "core": "c5e2aa18f9f7304e",
+  "date": "2026-10-08",
+  "note": "a fence around the sanctuary alone, as a wealth knob (0223 has a pre-1868 sanctuary fence only where a lord or the shogunate built it)",
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
  "docs/buildings.md::Sacred features#approach width": {
   "code": "9be1fca3dfe64331",
   "core": "5a04c0b5d84e0fbd",
@@ -3226,6 +3234,14 @@
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:8e60bf46e6b04c4a"
   ],
   "verdict": "IN-STEP"
+ },
+ "docs/buildings.md::Sacred features#torii top beam 1.5 ft deep": {
+  "code": "c5e2aa18f9f7304e",
+  "core": "c5e2aa18f9f7304e",
+  "date": "2026-10-08",
+  "note": "torii top beam 1.5 ft deep",
+  "research": "",
+  "verdict": "UNCLAIMED"
  },
  "docs/buildings.md::Sacred features#workshop colonnade": {
   "code": "73814123640e8585",

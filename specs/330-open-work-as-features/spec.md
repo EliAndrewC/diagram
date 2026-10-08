@@ -146,13 +146,16 @@ number of entries closed equals the number of entries there were, and no live fi
 
 ### Measurable Outcomes
 
-- **SC-001**: One command answers "what is open?" across the whole repository, in under 2 seconds.
-- **SC-002**: After the audit, every feature the command lists is open by its own spec's account; a spot check of
+- **SC-001** (FR-001, FR-002, FR-003, FR-009): One command answers "what is open?" across the whole repository, in
+  under 2 seconds.
+- **SC-002** (FR-004): After the audit, every feature the command lists is open by its own spec's account; a spot check of
   ten listed and ten unlisted features finds none misclassified.
-- **SC-003**: `future-work/` no longer exists; every entry is accounted for - filed as a feature (one per named
+- **SC-003** (FR-006, FR-007): `future-work/` no longer exists; every entry is accounted for - filed as a feature (one per named
   piece), or closed as done or by a cited ruling or later feature - with none dropped.
-- **SC-004**: No live file points into `future-work/`.
-- **SC-005**: No feature in `specs/` is about gm-assistant's own content.
+- **SC-004** (FR-007): No live file points into `future-work/`.
+- **SC-005** (FR-005): No feature in `specs/` is about gm-assistant's own content.
+- **SC-006** (FR-008): No project rule tells a session to add work to `future-work/`; the rules that once did say to
+  file a feature and to ask `make speckit-todo`.
 
 ## Assumptions
 

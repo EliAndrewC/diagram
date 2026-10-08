@@ -251,7 +251,7 @@ MIN_WEB_GAP = 2.0 * WEB_FABRIC_GAP + 4.0  # 18 ft: both neighbors' clearance, pl
 # Grounding: research/questions/0081-village-lanes.html, and research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html - a house
 # in a nucleated cluster is reached by a way, but for the few reached across a neighbor's land (feature 317), which
 # `ways/checks.py` `unreached_houses` counts reached through their neighbor. The previous 90 ft in
-# `lanes_reach_something` was flagged in future-work/ as a number nobody had justified; this one is
+# `lanes_reach_something` was flagged in the backlog as a number nobody had justified; this one is
 # derived from a researched constant instead of chosen to make today's maps pass.
 WEB_REACH_FT = 100.0  # 0246's "within 100 ft"; the gate's copy is asserted equal in tests
 """Research: every farmhouse reached by a way - GUESS research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within 100 ft, how close counts as serving a house; but the few reached across a neighbor's land"""

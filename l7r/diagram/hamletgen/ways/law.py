@@ -436,7 +436,7 @@ def near_misses(M: Mapping[str, Any]) -> list[tuple[int, int, Pt]]:
     end (`free_end`) with another way within `JOIN_REACH_FT`, the nearest point of which lies within `AIM_DEG` of the end's
     own heading, and a walkable span to it (`span_walkable`) that would meet the way cleanly and bend like a path
     (`meets_clean`, `kinks`). Such an end is a JOIN that stops short - a hole the eye reads in one way, or a T one clearance
-    shy of its lane (homes H37, H38; future-work's "one clearance short" and 2c's corner hole). An end whose span is blocked, or would fold or kink, is not one: the two are separate ways, each ending at what it serves.
+    shy of its lane (homes H37, H38; the backlog's "one clearance short" (since closed) and 2c's corner hole). An end whose span is blocked, or would fold or kink, is not one: the two are separate ways, each ending at what it serves.
     Research:
         ends that nearly meet are joined - research/questions/0081-village-lanes.drawing.html: within 25 ft (`JOIN_REACH_FT`)
         which ends count - UNRESEARCHED: an end counts only where the way it nears lies within `AIM_DEG`, 60 deg, of its heading
@@ -480,7 +480,7 @@ def near_misses(M: Mapping[str, Any]) -> list[tuple[int, int, Pt]]:
 
 NEEDLE_LOOP_FT = 20.0
 """A face of the lane web whose mean width (twice its area over its perimeter) is under this is a NEEDLE OF GRASS: the same
-way drawn twice, forking and rejoining round nothing (homes H39; future-work/farming-communities.md 2c, two
+way drawn twice, forking and rejoining round nothing (homes H39; the backlog's 2c (since closed), two
 settlement-reviews: Sawada's triangle 110 ft long and 37.7 ft at its widest, mean width 16 ft, "reading as a street that
 forks and rejoins around nothing"). A village block holds a steading and is five times as wide. A map drawing convention.
 Research: needle of grass - CONVENTION: a web face under 20 ft mean width"""
@@ -508,7 +508,7 @@ def needle_loops(M: Mapping[str, Any]) -> list[tuple[Any, list[int]]]:
 def short_fragments(M: Mapping[str, Any], ground: WorkedGround | None = None) -> list[int]:
     """The lanes shorter than `FRAGMENT_FT` (the connector and the field spur aside) that earn nothing: taking one away
     leaves no farmhouse newly unreached (`unreached_houses`) and the web in as many networks (`lane_networks`) - a fragment
-    the passes whittled down and nothing re-asked (homes H40; future-work 2c's 4 ft fragment). A short run that is some
+    the passes whittled down and nothing re-asked (homes H40; the backlog's 2c's (since closed) 4 ft fragment). A short run that is some
     house's way, or the link that joins two pieces, earns its place and is not one - and so does one whose removal leaves
     ANOTHER lane's end reaching nothing (`dangling_lane_ends`): a row farm's short door path holds the end of its street
     (feature 291 on 287; dropped, Mizuguchi's street ends dangled past their last farms and the settle refused the web).

@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-08T14:19:25Z",
+  "target": "claims-gate",
+  "commit": "aa2fd9331",
+  "why": "CLAIMS_OK: a one-pointer edit re-read the Sacred-features section: its findings stood before (6 drifted, 2 mislabeled) and stand now (6, 1)"
+}

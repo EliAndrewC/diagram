@@ -1,7 +1,7 @@
 # Feature Specification: Packing-Audit Hardening + Ochiba SE Consolidation
 
 **Feature branch:** `007-packing-audit-hardening`
-**Status:** Draft (awaiting GM approval to plan/implement)
+**Status**: Done (2026-07-13): T001-T012 landed in e6450f5f2 with the task list itself (`pack_audit` top-N vacant rectangles and the region grid, Ochiba's SE consolidation); the boxes were never ticked (feature 330 audit)
 **Input:** GM caught a ~1,760 sq ft empty rectangle (73 x 24 ft) below Ochiba's
 granary that the packing check + size-audit subagent had waved through as a
 "granary cart apron." The check surfaced the gap but the metric landed on the

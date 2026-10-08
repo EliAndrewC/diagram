@@ -520,7 +520,7 @@ def test_an_end_behind_a_house_reaches_it_and_is_left() -> None:
 
 
 def test_a_needle_of_grass_is_opened_on_its_shorter_lane() -> None:
-    """Homes H39 (future-work 2c): two ways forking and rejoining round a sliver of ground - the shorter lane loses its
+    """Homes H39 (the backlog's 2c, since closed): two ways forking and rejoining round a sliver of ground - the shorter lane loses its
     stretch along the needle, and no loop that thin is left."""
     s = _S([CONN, [(-300.0, 0.0), (-250.0, 110.0), (-250.0, 200.0)], [(-280.0, 0.0), (-250.0, 110.0)]])
     assert law.needle_loops(s.M)

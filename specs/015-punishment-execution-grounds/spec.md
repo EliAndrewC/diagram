@@ -4,7 +4,7 @@
 
 **Created**: 2026-07-25
 
-**Status**: Draft
+**Status**: Done (2026-07-25): f78e4e533; only the stop-work task was left unticked (feature 330 audit)
 
 **Input**: User description: "We should document these research findings and then update our maps to have our towns and cities have 'the punishment spot' in the middle of town, and then also have the execution grounds outside the walls (for walled settlements) away from the main settlements and also away from the normal countryside graveyards and such."
 

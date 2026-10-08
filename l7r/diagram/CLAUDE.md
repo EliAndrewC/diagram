@@ -64,7 +64,7 @@ is silent and lands one directory short of `pool/`.
 | [`dev/ci.md`](../../dev/ci.md) | you are changing when money may be spent on a remote run, or its threat model |
 | [`dev/interactive-page.md`](../../dev/interactive-page.md) | page or raster performance, or the wet-paddy modal's two tint rules |
 
-The deferred-engineering backlog is [`future-work/`](../../future-work/CLAUDE.md), by map type. The append-only run
+Deferred engineering is filed as spec-kit features; `make speckit-todo` lists the open ones. The append-only run
 records are `dev/run-log/`, `dev/perf-log/` and `dev/bypass-log/`, each with its own `CLAUDE.md`.
 
 ## The always-on rules

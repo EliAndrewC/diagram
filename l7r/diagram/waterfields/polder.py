@@ -138,7 +138,7 @@ def build_polder(
                     # strokes whose ends meet at a centerline only TOUCH, and the review (2026-08-28) found a 1 ft column
                     # of ground between the west toe's cap and the trunk at the NW corner, so the end runs on 3 ft. It
                     # ran on along the TOE's heading, which at a corner leaves the trunk: the Kuwabata toes ended 2.5 ft
-                    # off the drain's centerline, a blue cap stuck on the side of a wider pipe (future-work, "Two ways
+                    # off the drain's centerline, a blue cap stuck on the side of a wider pipe (`specs/356-ways-meet-material-changes/`, "Two ways
                     # that meet where the material changes"). Walked along the trunk it hides under the trunk's bed
                     # and the joint is a confluence ON the centerline, as the feeder/lateral junctions are.
                     _nb = c["pts"][1] if _k == 0 else c["pts"][-2]

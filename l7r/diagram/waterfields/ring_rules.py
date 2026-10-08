@@ -91,7 +91,7 @@ and the edge is longer than the stroke is wide - it starts one side of the drain
 BASIN_MIN_WIDTH_FT = 12.0
 """NOT ENFORCED - the research contradicts the rule (water W26; decision class: deliberate deviation from the design row,
 recorded here, in `ring_violations` and in the feature's report). The number is still a GUESS: the settlement-review on
-Kashikawa (future-work 'the paddy area floor cannot see WIDTH') put a line 'somewhere in the 12-16 ft band' after a 5.9 ft
+Kashikawa (the backlog's 'the paddy area floor cannot see WIDTH', since DECIDED) put a line 'somewhere in the 12-16 ft band' after a 5.9 ft
 basin drew as a doubled bund, and 12 ft is that band's lower edge.
 
 THE RESEARCH PASS (T13, 2026-09-29) searched `research/contents.json#fields` for a stated basin width. It found no width floor, and two
@@ -108,7 +108,7 @@ Research: no least basin width - research/questions/0005-rice-paddies-and-their-
 
 DART_MAX_CELL = 0.75
 """NOT ENFORCED, with `DART_MIN_APEX` (water W27): a basin under ~0.75 of its design cell carrying a tip under
-`DART_MIN_APEX` would read as a dart. A GUESS from the review's measurements (future-work 'A tip-angle companion to the
+`DART_MIN_APEX` would read as a dart. A GUESS from the review's measurements (the backlog's 'A tip-angle companion to the
 area floor'): Mizuguchi's arrowhead at 0.69 cell, and sharp tips on basins of 0.55-0.72 cell.
 
 Research: dart size - research/questions/0005-rice-paddies-and-their-plots-suiden.drawing.html: recorded and not enforced

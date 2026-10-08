@@ -6,7 +6,7 @@
 
 **Blocked by**: `131-split-diagram-repo` - implemented AFTER the diagram skill moves to its own repository (GM 2026-08-24: *"we want to do prior to either feature 129 or 130, since those are both better implemented once we have moved to the separate repo"*). This directory moves with the split.
 
-**Status**: APPROVED by `spec-fidelity` (round 3, verdict FAITHFUL); **AMENDED the same day on the
+**Status**: Done (2026-08-25): the merge gate shipped (b3bb3782d and the commits before it); T063, the first FULL run, withdrawn by the GM's remote-off ruling (`dev/switches.json`, 2026-09-05) (feature 330 audit)
 GM's second request** (the full sweep goes to CodeBuild too; the sync flow is tooling, not memory) -
 amendment APPROVED at its own round 3 (FAITHFUL); **AMENDED AGAIN on the GM's third request**
 (FULL during iteration; local checks first with the build pre-warmed in parallel; the FULL prompt

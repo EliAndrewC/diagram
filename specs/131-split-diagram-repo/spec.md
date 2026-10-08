@@ -4,7 +4,7 @@
 
 **Created**: 2026-08-24
 
-**Status**: APPROVED by `spec-fidelity` (round 3, verdict FAITHFUL). **Specified and planned; implementation waits
+**Status**: Done (2026-08-25): the split landed (5c38ebc4a, 0773b970a); only the report task was left unticked (feature 330 audit)
 for the GM's "go"** - the same standing as feature 130, whose implementation this feature must
 precede.
 

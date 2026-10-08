@@ -1,7 +1,7 @@
 # Feature Specification: Mode A Composition Grammar + Perimeter-First Placer
 
 **Feature branch:** `008-mode-a-composition`
-**Status:** Draft (GM approved direction: "Phase 1 + build Phase 2")
+**Status**: Done (2026-07-15): both phases shipped in 6da94c18f - the perimeter-first placer (`compound.py` `place`) and the composition check (`pack_audit` `perimeter_hugging_pct`); `docs/buildings.md` "Composition" (feature 330 audit)
 **Input:** The area-budget calc showed Ochiba is 37% built / 63% open, historically
 consistent for a courtyard compound - but the open is UNDER-COMPOSED (undifferentiated
 bare middle) rather than organized into named courts. The right rule is "compose it

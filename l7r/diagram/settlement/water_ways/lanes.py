@@ -57,7 +57,7 @@ def reaches_dooryard(house: Any, q: Pt, reach: float = DOORYARD_REACH_FT) -> boo
     within `reach` of its threshing yard or its dooryard beds, or in the band `reach` deep in front of its front face.
 
     Never by distance to the house itself: 12 ft of the drawn house counted a lane ending behind the BACK wall as
-    arrived (Kuwabata's lane 5, 11 ft behind house 1 and 43 ft from its yard - future-work, "A lane end behind a house
+    arrived (Kuwabata's lane 5, 11 ft behind house 1 and 43 ft from its yard - the backlog (since closed), "A lane end behind a house
     counts as its dooryard"). `trim_lane_stubs` judges its ends with this, and the test of it reads it.
 
     Research: a lane reaches the dooryard - research/questions/0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html: within the reach of the yard or beds, or in the band before the front face"""

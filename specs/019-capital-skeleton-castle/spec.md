@@ -4,7 +4,7 @@
 
 **Created**: 2026-08-08
 
-**Status**: Draft
+**Status**: Withdrawn (the GM, 2026-10-07: Shiro Daika's hand pass dropped, `docs/migration-plan.md`): the engine half landed (8eb15b41a, the capital tier runs); the hand map, its checks (deleted with the battery by feature 166) and the byte-identity task (retired by the 2026-08-16 freeze) are withdrawn (feature 330 audit)
 
 **Input**: The first DRAWN half of the domain-capital tier - the skeleton that feature 018's budget sizes, plus the castle - and the feature that renders Shiro Daika's first artifact.
 

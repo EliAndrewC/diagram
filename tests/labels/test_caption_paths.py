@@ -3,7 +3,7 @@
 The GM, 2026-09-27: *"I also agree with one placer for all labels."* This test is what makes that hold for the next
 caption someone writes: a hand-seated `self.label(x, y, ...)` or a raw `<text>` anywhere but the places below fails
 here, naming itself. The exempt hand seats are spec D8 - the unscripted town, city and capital tiers, on no live map,
-which go through the placer when their tier is scripted (`future-work/cities.md`).
+which go through the placer when their tier is scripted (`specs/332-town-city-capital-tiers-hand-seated/`).
 """
 
 from __future__ import annotations
