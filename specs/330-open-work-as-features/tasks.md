@@ -11,8 +11,9 @@
 - [x] T01 `make speckit-todo`: `scripts/speckit-todo.py`, its tests red first in `tests/tooling/test_speckit_todo.py`, the make target and its line in the generated reference (D1, D2, FR-001, FR-002, FR-003, FR-009, SC-001)
       research: rendering
       verify: DONE. scripts/speckit-todo.py + make speckit-todo (in the generated reference); tests/tooling/test_speckit_todo.py red first (18 failed with no script), now 18 passed, including the real tree in under 2 s; on the real tree: 10 filed, 2 planned, 15 in progress, 220 closed
-- [ ] T02 the gm-assistant check: every feature's spec and request searched for gm-assistant's own subjects, each hit read, any such feature deleted; the search and its result in `audit.md` (D4, FR-005, SC-005)
+- [x] T02 the gm-assistant check: every feature's spec and request searched for gm-assistant's own subjects, each hit read, any such feature deleted; the search and its result in `audit.md` (D4, FR-005, SC-005)
       research: rendering
+      verify: DONE. audit.md A: every feature's spec, request and gm-request searched for gm-assistant subjects; 4 directories flagged (119, 127, 130, 131), each read - all diagram work; none deleted
 - [ ] T03 settle every existing open feature: each status line rewritten only with its evidence in `audit.md` (done, superseded by, withdrawn by a cited ruling), the rest left open and listed for the GM (D3, FR-004, SC-002)
       research: rendering
 - [ ] T04 file every `future-work/` entry: one claimed number per entry or named piece, a `spec.md` with the entry verbatim and its source, status Filed; an entry found done or disposed of by a cited ruling or later feature closed in `audit.md` instead (D5, FR-006, SC-003)
