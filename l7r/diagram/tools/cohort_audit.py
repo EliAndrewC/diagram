@@ -159,15 +159,17 @@ def roll_one(spec: tuple[int, int] | tuple[int, int, dict[str, str]]) -> tuple[s
     return header, report.failures, report.fail_lines
 
 
-def audit(count: int, first_seed: int, only: str | None = None, jobs: int | None = None) -> int:
+def audit(count: int, first_seed: int, only: str | None = None, jobs: int | None = None, households: int | None = None) -> int:
     """Roll `count` hamlets, gate each, and print the failures with the gate's own messages.
 
     The rolls fan out across processes (the 2026-08-15 timings block flagged the serial cohort as
     the biggest available win: 24 maps x ~12 s on an idle 22-cpu box). Results are collected and
-    printed in seed order, so the report reads identically to the serial one."""
+    printed in seed order, so the report reads identically to the serial one. `households` rolls every seed at that size,
+    the scaling rolls' question (does a change refuse a larger hamlet?) asked without timing it (feature 328), and leaves
+    the pinned rows out."""
     jobs = hg.default_jobs(count) if jobs is None else max(1, jobs)  # ONE courtesy rule, defined in the driver
-    specs: list[Any] = [(first_seed + i, 10 + ((first_seed + i) * 7) % 11) for i in range(count)]
-    specs += [(PINNED_FIRST_SEED + i, 10 + ((PINNED_FIRST_SEED + i) * 7) % 11, pins) for i, pins in enumerate(PINNED_ROWS)] if not only else []
+    specs: list[Any] = [(first_seed + i, households if households is not None else 10 + ((first_seed + i) * 7) % 11) for i in range(count)]
+    specs += [(PINNED_FIRST_SEED + i, 10 + ((PINNED_FIRST_SEED + i) * 7) % 11, pins) for i, pins in enumerate(PINNED_ROWS)] if not (only or households) else []
     count = len(specs)
     if jobs == 1:
         results = [roll_one(s) for s in specs]
@@ -231,6 +233,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     ap.add_argument("--seed", type=int, default=1)
     ap.add_argument("--only", default=None, help="report only failures of this check")
     ap.add_argument("--jobs", type=int, default=None, help="worker processes (default: cpus - 2, capped at --count)")
+    ap.add_argument("--households", type=int, default=None, help="roll every seed at this size (the scaling question, untimed)")
     ap.add_argument("--anyway", action="store_true", help="run even if the reference settlement is failing (say why in the same breath)")
     args = ap.parse_args(list(argv) if argv is not None else None)
 
@@ -260,7 +263,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             print("(--anyway overrides, when you genuinely need the seed list from a red tree.)")
             return 2
         print("\033[1mreference settlement clean\033[0m - running the cohort\n", flush=True)
-    return audit(args.count, args.seed, args.only, args.jobs)
+    return audit(args.count, args.seed, args.only, args.jobs, args.households)
 
 
 if __name__ == "__main__":

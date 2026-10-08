@@ -187,6 +187,17 @@ run "$(bash_ev 'make quick')"; check "the quick loop is never refused" ok $?
 run "$(bash_ev 'make test-file FILE=tests/x.py')"; check "...nor a test file" ok $?
 teardown
 
+echo "13. a make perf outside a pair is reminded, never blocked (feature 328)"
+setup
+out=$("$HOOK" pretool <<<"$(bash_ev 'make perf LABEL=328-w51-check')" 2>"$HOOK_ERR"); rc=$?
+check "an ad-hoc make perf goes through" ok $rc
+printf '%s' "$out" | grep -q "make cohort N=4 SEED=4 HOUSEHOLDS=40" && { echo "  ok    ...with the untimed command named"; PASS=$((PASS+1)); } || { echo "  FAIL  the reminder does not name make cohort HOUSEHOLDS"; FAIL=$((FAIL+1)); }
+out=$("$HOOK" pretool <<<"$(bash_ev 'make perf LABEL=328-start')" 2>"$HOOK_ERR")
+[ -z "$out" ] && { echo "  ok    a pair's leg is left alone"; PASS=$((PASS+1)); } || { echo "  FAIL  a pair's leg was reminded"; FAIL=$((FAIL+1)); }
+out=$("$HOOK" pretool <<<"$(bash_ev 'make perf-profile SEED=39 STAGE=homesteads')" 2>"$HOOK_ERR")
+printf '%s' "$out" | grep -q "outside a timing pair" && { echo "  FAIL  a profile was reminded"; FAIL=$((FAIL+1)); } || { echo "  ok    a profile is left alone"; PASS=$((PASS+1)); }
+teardown
+
 echo "8. status reports the count"
 setup
 run "$(bash_ev 'make test-full')"

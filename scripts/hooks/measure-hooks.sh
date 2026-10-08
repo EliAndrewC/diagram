@@ -172,6 +172,25 @@ MSG
     # helper makes this guard stricter rather than blind.
     SCAN=$(printf '%s' "$INPUT" | "$HERE/lib/hm_shape.py" sanitize 2>/dev/null || printf '%s' "$CMD")
     [ -n "$SCAN" ] || SCAN="$CMD"
+    # GUARD_EDIT_OK: feature 328, the GM's four-hour check (2026-10-08) - A `make perf` THAT IS NOT A PAIR'S LEG. The
+    # session spent five `make perf` runs that day as refusal checks ("does this change refuse a 20- or 40-household
+    # hamlet?"): each followed an engine change, so the streak above passed them, and the cadence rule counts only the
+    # gate. The snapshot TIMES twelve rolls; the question needs them rolled. A non-blocking reminder on every such run
+    # names the untimed command; a pair's legs (LABEL=<feature>-start / -end) and a profile are left alone.
+    case "$SCAN" in
+      *"make perf "*|*"make perf"|*"make -C "*" perf "*)
+        case "$SCAN" in
+          *"LABEL="*-start*|*"LABEL="*-end*) ;;
+          *)
+            guard_log measure reminded-perf "$(guard_cmd)"
+            REMIND="REMINDER (measure-hooks): \`make perf\` outside a timing pair. If the question is whether a change refuses a larger hamlet, \`make cohort N=4 SEED=4 HOUSEHOLDS=40\` (and HOUSEHOLDS=20) rolls those sizes without the snapshot's timing; the perf snapshot belongs to the batch's one pair (LABEL=<feature>-start / -end, feature 328 FR-005)." python3 -c '
+import json, os
+print(json.dumps({"hookSpecificOutput": {"hookEventName": "PreToolUse", "additionalContext": os.environ["REMIND"]}}))'
+            exit 0
+            ;;
+        esac
+        ;;
+    esac
     case "$SCAN" in
       *"make test-full"*|*"make -C"*test-full*|*"done FULL=1"*)
         N=$(( $(count) + 1 ))

@@ -65,9 +65,9 @@ def test_ANYWAY_skips_the_reference_gate_because_a_rule_with_no_escape_gets_work
 
 def test_a_clean_reference_runs_the_cohort_and_passes_its_arguments_through(_clean, monkeypatch: pytest.MonkeyPatch) -> None:
     seen: dict[str, Any] = {}
-    monkeypatch.setattr(ca, "audit", lambda count, seed, only, jobs: seen.update(count=count, seed=seed, only=only, jobs=jobs) or 0)
-    assert ca.main(["--count", "6", "--seed", "9", "--only", "wells", "--jobs", "2"]) == 0
-    assert seen == {"count": 6, "seed": 9, "only": "wells", "jobs": 2}
+    monkeypatch.setattr(ca, "audit", lambda count, seed, only, jobs, households: seen.update(count=count, seed=seed, only=only, jobs=jobs, households=households) or 0)
+    assert ca.main(["--count", "6", "--seed", "9", "--only", "wells", "--jobs", "2", "--households", "40"]) == 0
+    assert seen == {"count": 6, "seed": 9, "only": "wells", "jobs": 2, "households": 40}
 
 
 def test_roll_one_goes_through_GENERATE_which_is_the_path_that_ships(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -109,6 +109,11 @@ def test_audit_tallies_the_residue_by_CHECK_and_its_rc_is_the_verdict(monkeypatc
     monkeypatch.setattr(ca, "roll_one", lambda spec: (f"--- seed {spec[0]} row={('street/one/own', 'edge/both/shared')[spec[0] % 2]} water={('channel', 'well')[spec[0] % 2]}", [], []))
     assert ca.audit(2, 1, jobs=1) == 0
     assert f"{2 + len(ca.PINNED_ROWS)}/{2 + len(ca.PINNED_ROWS)} passed" in capsys.readouterr().out
+
+    seen: list[tuple] = []
+    monkeypatch.setattr(ca, "roll_one", lambda spec: seen.append(spec) or (f"--- seed {spec[0]} row={('street/one/own', 'edge/both/shared')[spec[0] % 2]} water={('channel', 'well')[spec[0] % 2]}", [], []))
+    ca.audit(2, 39, jobs=1, households=40)
+    assert seen == [(39, 40), (40, 40)], "feature 328: every seed at the size asked, the pinned rows left out"
 
 
 def test_only_narrows_both_the_tally_and_the_printed_lines(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
