@@ -1,0 +1,62 @@
+{
+  "band": 1,
+  "base": {
+    "commit": "2e3153b4e",
+    "label": "328-start",
+    "utc": "20261008T165220Z"
+  },
+  "binding": "c0fdba3c3d775fc5d42390833761c0679e05d01ace8232b77b9b6950c0e928db",
+  "end": {
+    "commit": "3f91becf2",
+    "label": "328-end",
+    "utc": "20261008T165526Z"
+  },
+  "environment": "local",
+  "feature": "328-match-the-research",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "8d3395e5-fe32-4f85-9c89-80c344d2ac1a",
+    "utc": "20261008T171907Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": -3.4,
+          "39": 3.0,
+          "4": -8.1,
+          "47": -3.3
+        },
+        "total_pct": -3.1
+      },
+      "20": {
+        "seeds": {
+          "25": -4.5,
+          "39": -7.1,
+          "4": -2.8,
+          "47": -3.2
+        },
+        "total_pct": -4.3
+      },
+      "40": {
+        "seeds": {
+          "25": -4.7,
+          "39": -4.3,
+          "4": -2.3,
+          "47": -2.2
+        },
+        "total_pct": -3.2
+      }
+    },
+    "seeds": {
+      "25": 0.0,
+      "39": -7.0,
+      "4": -4.3,
+      "47": -2.3
+    },
+    "total_pct": -3.5
+  },
+  "note": "The stage is right, the cause is not. Reviewer counterfactual, the leg's own make perf in three detached worktrees, 2 runs each, seed 39 at 10hh, homesteads stage: start 2e3153b4e 0.83/0.83 s, end 3f91becf2 live 1.13/1.11 s, end with wave 48's corner rule disabled (_on_a_tread back to half+hair, no max(...,middle)) 1.15/1.11 s. Disabling the named cause removes 0.00 of the +0.30 s, so wave 48's corner rule is not the cause. Nor is the growth noise inside the spread as UNVERIFIED says: it repeats to 0.02 s in every run. It comes with web -0.2 s (0.96 -> 0.77) on the same roll and the same 38 placer calls, which looks like work moved from web into homesteads; the roll nets +0.1 s (3.3 -> 3.4). The rewrite must name what batch 2 moved into homesteads at seed 39 10hh, tested against a control. Batch 1 re-measure checks out: every 40hh seed -2.2 to -4.7% vs 2e3153b4e, and vs batch 1's start 4a9b7c077 TOTAL 16.7 -> 16.6 s, 40hh seeds -1.1 to 0.0%.",
+  "verdict": "inconsistent"
+}

@@ -620,6 +620,21 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
 - **Verification**: tests red on the old code; `impl-drift`; `spec-fidelity`; then batch 2's close: the gate, the pair from
   2e3153b4e (re-measuring batch 1's band 2) and its perf-audit, and the batch's occasions.
 
+## Wave 51 (amendment 50, 2026-10-08) - batch 3's first wave
+
+- **Scope**: the next kept rows in ranking order. The comb's wet-paddy class made explicit, the drain-side row only (0007).
+  The field pond drawn as a dish pond, an earthen bank ring on wet ground round its open water with reeds on the margin
+  (0008: "low ground ringed with an embankment and dug out"). The winter crop's odds set by the site, barley weighing
+  the drained share of the paddy, halved where a rolled town nearness is far (0009: the drainage and a town's nearness
+  set the odds, how they weigh a GUESS). The wood shed seated off the house's own walls, never the front wall, with no
+  extra outward pace (0043). The pond feeder and the lotus draw are DEFERRED on measure: no kept map draws either.
+- **Measured**: the five hamlets' winter crops unchanged. Inashiro and Kuwabata re-seat wood sheds. Inashiro and
+  Mizuguchi draw the dish pond. The scaling rolls (10, 20 and 40 households; seeds 4, 25, 39, 47) lay every shed.
+- **Occasions**: glyph-redrawn field pond on Inashiro and Mizuguchi; placement-changed wood shed on Inashiro and
+  Kuwabata - at batch 3's close.
+- **Verification**: tests red on the old code; `impl-drift`; `spec-fidelity`; the gate, the pair and the occasions at
+  batch 3's close.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Waves 2-45 that changed engine behavior took
@@ -632,7 +647,8 @@ scratch worktrees back to back on a quiet host, then `make perf-explain` and the
 | batch | waves | pair | gate | state |
 |---|---|---|---|---|
 | 1 | 42-46 | waves 42, 44, 45 taken alone (band 1, 1, 0; confirmed); the batch 4a9b7c077 -> 2e3153b4e band 2, its cause (the track out drawn the canvas' diagonal past the frame, wave 46) removed by wave 47's `past_the_frame` - perf-audit consistent, audit not-justified as measured: batch 2's pair re-measures it, and explains seed 47's +0.19 s web at 40 households | green 2026-10-08 | closed but for the pair |
-| 2 | 47-50 | owed at the batch close, from 2e3153b4e | at the batch close | closing |
+| 2 | 47-50 | 2e3153b4e -> 3f91becf2: band 1, TOTAL -3.5%; batch 1's band 2 re-measured and gone. perf-audit INCONSISTENT on the explanation: the one growth (seed 39, 10 households, homesteads +0.3 s, web -0.2 s) is not the corner rule - its cause is being found | the batch-2 close gate (waves 47-51), 2026-10-08 | closing |
+| 3 | 51- | owed at the batch close, from 3f91becf2 | at the batch close | open |
 
 ## Constitution Check
 
