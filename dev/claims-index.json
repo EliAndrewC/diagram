@@ -21498,10 +21498,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/smooth.py::_smooth_web#a hairpin arm cut at the only contact": {
-  "code": "a6d793cae0e15d63",
-  "core": "2e1e3d13eec3230c",
+  "code": "cafe5c258c4fc763",
+  "core": "111d4e22c0090e80",
   "date": "2026-10-08",
-  "note": "an arm under 40 ft cut whatever it touched, rejoined within the 25 ft reach or left for the settle",
+  "note": "arms under 40 ft are cut whatever their contact; a refused cut falls back to the lane string-pulled uncut, left for the settle; the 25 ft join reach agrees with the knot figure",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },
@@ -21513,24 +21513,25 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/smooth.py::_smooth_web#a longer hairpin arm": {
-  "code": "92e68be53ea2f3ae",
-  "core": "2e1e3d13eec3230c",
+  "code": "155bec086a560ac3",
+  "core": "111d4e22c0090e80",
   "date": "2026-10-08",
-  "note": "an arm_len < 40 test, so an arm of 40 ft or more is kept",
+  "note": "`_arm_cuttable` cuts only an arm under `_ARM_FT` (40 ft) past `_HAIRPIN_DEG` (140), so a longer returning leg is kept, as the page says; the folded field spur exception is named as cut upstream in `track.spur_cut_at_the_fold`, outside this unit",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },
   "research": "ebd72aaa6a0eb9af",
   "rests": [
-   "0081-village-lanes.drawing.html:3b9a5312c92335d3"
+   "0081-village-lanes.drawing.html:3b9a5312c92335d3",
+   "0081-village-lanes.drawing.html:65ad16eace199d92"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/smooth.py::_smooth_web#bow-tie tail cut": {
-  "code": "139e1c07c6204d19",
-  "core": "2e1e3d13eec3230c",
+  "code": "a2ddd60291675e7d",
+  "core": "111d4e22c0090e80",
   "date": "2026-10-08",
-  "note": "a tail past a crossing cut back via bowtie_cut",
+  "note": "a crossing mid-run hands the cut to `bowtie_cut`; this unit reads `_ARM_FT` (40 ft), which matches the page's under-40-ft tail",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },
@@ -21541,10 +21542,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/smooth.py::_smooth_web#hairpin cut": {
-  "code": "9ffc72de7143d9e7",
-  "core": "2e1e3d13eec3230c",
+  "code": "9b7084269014639f",
+  "core": "111d4e22c0090e80",
   "date": "2026-10-08",
-  "note": "a turn of 140 deg or more with an arm under 40 ft is cut",
+  "note": "a turn of 140 degrees or more with the shorter arm under 40 ft is cut",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },
@@ -21555,10 +21556,10 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/smooth.py::_smooth_web#knots gathered": {
-  "code": "c107c28b3d118912",
-  "core": "2e1e3d13eec3230c",
+  "code": "08749b47833de9a6",
+  "core": "111d4e22c0090e80",
   "date": "2026-10-08",
-  "note": "ends within KNOT_FT (25 ft) gathered at one node",
+  "note": "ends of different lanes within `_KNOT_FT` (25 ft) are moved to one node",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },
@@ -21569,34 +21570,35 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/smooth.py::_smooth_web#lane pulled taut": {
-  "code": "90ec0ffe9740a10f",
-  "core": "2e1e3d13eec3230c",
+  "code": "62334499d88a103d",
+  "core": "111d4e22c0090e80",
   "date": "2026-10-08",
-  "note": "_pulled on every ordinary lane",
+  "note": "`_pulled` jumps to the furthest vertex a clear chord reaches",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },
   "research": "ebd72aaa6a0eb9af",
   "rests": [
-   "0081-village-lanes.drawing.html:18dffe2b3b52b18c"
+   "0081-village-lanes.drawing.html:18dffe2b3b52b18c",
+   "0081-village-lanes.drawing.html:d30e15716180fbf5"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/smooth.py::_smooth_web#shadow lane dropped": {
-  "code": "3ae2c4a205e76551",
-  "core": "2e1e3d13eec3230c",
+  "code": "a5dd1ec1c798c6b7",
+  "core": "111d4e22c0090e80",
   "date": "2026-10-08",
-  "note": "deduplicates a way recorded twice, plumbing",
+  "note": "takes out a duplicate record of one way that lies inside another's stroke; plumbing",
   "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/smooth.py::_smooth_web#the knot's node at the centroid": {
-  "code": "c5592a6af60ce87a",
-  "core": "2e1e3d13eec3230c",
+  "code": "28886410527b7ca6",
+  "core": "111d4e22c0090e80",
   "date": "2026-10-08",
-  "note": "the page says only \"a single point\", not where",
+  "note": "the page says \"a single point\" but not where it stands; the centroid is a fair GUESS",
   "pages": {},
   "research": "",
   "rests": [
@@ -21605,59 +21607,59 @@
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/smooth.py::_smooth_web#the knot's node on a through lane": {
-  "code": "43d38e6dc3b88400",
-  "core": "2e1e3d13eec3230c",
+  "code": "c05a55a41402f84b",
+  "core": "111d4e22c0090e80",
   "date": "2026-10-08",
-  "note": "an end within 4 ft of a through lane is the node, so the joint stays a T",
+  "note": "the end within 4 ft of a lane outside the cluster becomes the node, so a T stays a T",
   "pages": {
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },
   "research": "ebd72aaa6a0eb9af",
   "rests": [
    "0081-village-lanes.drawing.html:3b230d13e2fc6d0b",
-   "0081-village-lanes.drawing.html:df26f73dd5ee96d2"
+   "0081-village-lanes.drawing.html:df26f73dd5ee96d2",
+   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/smooth.py::_smooth_web#the string-pull chord's keep-out": {
-  "code": "f894a1e28c1bf5c0",
-  "core": "2e1e3d13eec3230c",
+  "code": "0eb63ea935f1ab23",
+  "core": "111d4e22c0090e80",
   "date": "2026-10-08",
-  "note": "`_lane_gap = max(_TOUCH_GAP, w/2 + 2.0)` (4 ft for a 3 ft lane) sits under the page's \"A lane's middle keeps at least 7 ft clear of a garden fence\", and the page records no such departure (its only DEVIATION is the 5.5 ft edge that the 7 ft rule itself gives) - bring the chord to 7 ft or record the deviation on the page",
+  "note": "max(WEB_FABRIC_GAP 7 ft, w/2 + 2 ft) matches 7 ft from fence to the lane's middle, more for a lane over 10 ft wide",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },
   "research": "7b40c2c01cfba682",
   "rests": [
-   "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:2b1f357542cc5b1b",
+   "0081-village-lanes.drawing.html:18dffe2b3b52b18c",
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html:c5daec1a445d35bf"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/smooth.py::_smooth_web#the track out and the streets left whole": {
-  "code": "46c46439de1f6435",
-  "core": "2e1e3d13eec3230c",
+  "code": "116c54a5d650cd80",
+  "core": "111d4e22c0090e80",
   "date": "2026-10-08",
-  "note": "connector and street lanes skipped in every pass; track out runs off the map, street laid first along the row",
+  "note": "connector and street lanes are skipped by every pass here, though still used as through lanes and crossings",
   "pages": {
    "0033-row-villages-resson.drawing.html": "d44c8f42024bfa3e",
    "0081-village-lanes.drawing.html": "9e27759395199abd"
   },
   "research": "e17f748e9243d856",
   "rests": [
-   "0033-row-villages-resson.drawing.html:071bd73215fda123",
    "0033-row-villages-resson.drawing.html:4f85f319664ea57f",
+   "0033-row-villages-resson.drawing.html:d41ee4495f2368b5",
    "0081-village-lanes.drawing.html:16df95fc169329f7",
-   "0081-village-lanes.drawing.html:18dffe2b3b52b18c",
    "0081-village-lanes.drawing.html:df440690bbce9cb6"
   ],
   "verdict": "IN-STEP"
  },
  "l7r/diagram/hamletgen/ways/smooth.py::_smooth_web#web kept one network": {
-  "code": "02c06b2d83e55190",
-  "core": "2e1e3d13eec3230c",
+  "code": "34fff0d026c8f377",
+  "core": "111d4e22c0090e80",
   "date": "2026-10-08",
-  "note": "every rewrite goes through commit_lane's piece count",
+  "note": "every rewrite goes through `commit_lane`, which refuses one that adds a piece to the web",
   "pages": {
    "0246-how-our-maps-lay-a-clustered-settlements-lanes.drawing.html": "bd35ffdc5081828c"
   },

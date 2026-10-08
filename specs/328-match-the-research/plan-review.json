@@ -1,50 +1,50 @@
 {
  "feature": "328-match-the-research",
- "plan_sha256": "045d267b065cc9c8522eb721ade166effff93c30df996d0ca225472311d1eace",
+ "plan_sha256": "db327d665a528d521847136ba067fc24907100eedb50fab9b28f99c602c2d4dd",
  "reviewed": "2026-10-08",
  "declared": "spec-fidelity",
  "decisions": [
   {
    "id": "row 491",
-   "summary": "the smoother cuts a hairpin arm under 40 ft even at the lane's only contact; rejoined at the fold within 25 ft, else committed uncut for the settle",
+   "summary": "the smoother cuts a hairpin arm under 40 ft even at the lane's only contact; rejoined at the fold within 25 ft, else committed uncut: the settle cuts an ordinary lane's leg and a tree lane's refuses the web",
    "class": "within",
-   "why": "the literal reading of 0081 ('a returning leg under 40 ft is cut'): the only-contact exception the code kept is removed, not narrowed. The fallback keeps no arm on a drawn map, but its stated mechanism is wrong for tree lanes: settle_shapes skips every is_tree lane but the connector, so a tree lane's hairpin is not cut by _unkinked - refuse_unmended refuses the web instead. Correct the plan line and the smooth.py claim ('where no join clears, the settle cuts it') to say so, or cut it for tree lanes too."
+   "why": "0081 'a returning leg under 40 ft is cut' applied literally; round 1's item resolved - the plan, T117's text and the smooth.py claim now name refuse_unmended for a tree lane (lanes_breaking covers tree lanes), so no hairpin is drawn either way"
   },
   {
    "id": "row 492",
-   "summary": "the held nub patch: a last leg of 12 ft or less turning 90 degrees or more (_NUB_FT/_NUB_TURN are _HOOK_FT/_HOOK_DEG)",
+   "summary": "the held nub patch: a last leg of 12 ft or less turning 90 degrees or more",
    "class": "within",
-   "why": "0081's hook figures applied literally; the 9 ft/60 deg convention retired"
+   "why": "0081's hook figures applied literally"
   },
   {
    "id": "row 493",
-   "summary": "the track out drawn taut (no 34/46 px wander)",
+   "summary": "the track out drawn taut",
    "class": "within",
-   "why": "0081 'Every lane is pulled taut like a string'; the wander was on no page"
+   "why": "0081 'Every lane is pulled taut like a string'"
   },
   {
    "id": "row 494",
    "summary": "the bend rule judges the connector; a kinked connector refused in connector_keeps_the_law",
    "class": "within",
-   "why": "removes the connector's exemption from lanes_that_kink; refusal at the choice is enforcement of the same rule"
+   "why": "removes the connector's exemption; refusal is enforcement of the same rule"
   },
   {
    "id": "row 496 before 495",
-   "summary": "the spur drawn taut, taken ahead of row 495 (same E2 tier, same sentence of 0081, same function family)",
+   "summary": "the spur drawn taut, ahead of row 495",
    "class": "within",
-   "why": "an order within one tier with nothing dropped; row 495 is named next; FR-003 groups a module's rows together"
+   "why": "an order within one tier, nothing dropped, row 495 named next"
   },
   {
    "id": "XIV track reach",
-   "summary": "the connector's reach covers the canvas diagonal, not a fixed 4,000 ft",
+   "summary": "the connector's reach covers the canvas diagonal",
    "class": "within",
    "why": "a defect found on the way, fixed (XIV)"
   },
   {
    "id": "XIV squared_against",
-   "summary": "a square leg lengthened past 0081's 40 ft where the usual 21 ft leg leaves a zigzag; tree.rejoined set clear of it",
+   "summary": "a square leg lengthened past 40 ft where the 21 ft leg leaves a zigzag",
    "class": "within",
-   "why": "the leg length was UNRESEARCHED (6 ft past the half-width); changing it so the crossing is both square (0035/0084) and not a zigzag (0081) satisfies both rules rather than excepting either"
+   "why": "an unresearched leg length changed so both 0035/0084 (square) and 0081 (no zigzag) hold"
   },
   {
    "id": "XIV last resort message",
@@ -53,48 +53,47 @@
    "why": "diagnostic wording only"
   },
   {
-   "id": "chord keep-out relabeled",
-   "summary": "the string-pull chord's keep-out claim DEVIATION against 0246's 7 ft, filed E1 in found-wave46.jsonl",
+   "id": "chord keep-out at 7 ft",
+   "summary": "_lane_gap = max(WEB_FABRIC_GAP 7 ft, w/2 + 2 ft); the E1 found row fixed in the wave and withdrawn; the claim cites 0246 without DEVIATION",
    "class": "within",
-   "why": "plan D8: a relabel states the code against the page and the departure is ranked as a found row; the row stays open with a code fix. Under SC-003 that E1 row precedes row 495 unless re-tiered by its work"
+   "why": "0246 'A lane's middle keeps at least 7 ft clear of a garden fence'; the code brought to the page (FR-004), exactly the found row's stated fix"
   },
   {
    "id": "smooth claim: track and streets left whole",
-   "summary": "claims the existing skip of connector and street in the smoother",
+   "summary": "the existing skip of connector and street claimed",
    "class": "within",
-   "why": "pre-existing behavior claimed, not added; both are now judged by the bend rule (lanes_that_kink over every lane, connector_keeps_the_law)"
+   "why": "pre-existing behavior claimed; both still judged by the bend rule"
   },
   {
    "id": "found rows",
-   "summary": "two DRIFTED building-programs rows filed E2 (dwelling vs hall hierarchy; gatehouse band)",
+   "summary": "three rows filed: two E2 building-programs DRIFTED rows and the road checkpoint tier E3",
    "class": "within",
    "why": "filed for fixing by tier; nothing dropped"
   },
   {
    "id": "building-programs fixes",
-   "summary": "the 1778 hall named as a Kannon (temple) hall; three claims written (road checkpoint tier, lanterns beside the approach GUESS, sanctuary the smallest)",
+   "summary": "the 1778 hall named a Kannon hall; three claims written",
    "class": "within",
-   "why": "claim and anchor wording corrected to what the sources say (E0); no procedure changed"
+   "why": "claim wording corrected to the sources (E0); no procedure changed"
   },
   {
    "id": "notes-census glob",
    "summary": "make notes-census expands M's glob",
    "class": "within",
-   "why": "a tooling defect fixed on the way (XIV)"
+   "why": "tooling defect fixed on the way (XIV)"
   },
   {
-   "id": "verification per wave",
-   "summary": "from wave 46 the gate, the timing pair with perf-audit, and the wave's review occasions are taken once per batch of 4-5 waves (batch 1 = waves 42-46, closed by T119); each wave keeps tests, rerolls, notes-census, impl-drift and spec-fidelity",
+   "id": "verification batched (Performance bookends, T119, T110-T118)",
+   "summary": "from wave 46 the gate, the timing pair with perf-audit and the review occasions run once per batch of 4-5 waves (batch 1 = waves 42-46, closed by T119); each wave keeps tests, rerolls, notes-census, impl-drift, spec-fidelity",
    "class": "within",
-   "why": "the GM's 2026-10-08 ruling ('batch your lengthy tests'); the review occasions move with the gate because a review is dispatched on a green gate, and they still run at the batch close (T119), so nothing is dropped. The FR-005/FR-006 wording that carries it is a spec amendment and is owed its own spec-fidelity round"
+   "why": "the GM's 2026-10-08 'batch your lengthy tests rather than running them for every pool after every round of changes'; the cadence is unstated by the GM and 4-5 waves is a reading of 'batch'; the occasions move with the gate they are dispatched on and still run at T119, nothing dropped"
   },
   {
    "id": "Occasions wave 46",
-   "summary": "the village lane occasion declared, but its glyph check 'capped at two rounds (listed for the GM's waiver with the others)'",
-   "class": "narrowing",
-   "ruling": "NOT LEGITIMATE",
-   "why": "FR-005 requires the occasions a wave opens to be run, and the GM ruled on 2026-10-08 (Decisions Recorded) that this feature's review checks run past two rounds - 'the six units capped at two rounds (... village lane ...) take further rounds instead of a waiver'. The tasks.md Occasions line still routes the village lane check to 'the GM's waiver with the others', contradicting both the ruling and the new T119 ('round 3 allowed by the GM's ruling'). Rewrite it to say the check runs at batch 1's close (T119), round 3 onward under the ruling, covering Kashikawa's road re-squared at the ford (a different rule on a different map) as well as the taut track"
+   "summary": "two village lane occasions (the taut track on Inashiro; Kashikawa's road re-squared at the ford) run at batch 1's close, round 3 on",
+   "class": "within",
+   "why": "round 1's item resolved: no waiver routing; FR-005 runs the occasions, and the GM's 2026-10-08 ruling allows rounds past two; Kashikawa's different rule on a different map is its own line"
   }
  ],
- "verdict": "BLOCKED"
+ "verdict": "CLEAR"
 }

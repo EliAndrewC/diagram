@@ -186,7 +186,7 @@ def _smooth_web(s: Settlement, hard: list[Poly], walls: Sequence[Poly], water: l
     Research:
         lane pulled taut - research/questions/0081-village-lanes.drawing.html: string-pulled to the furthest vertex a clear chord reaches
         hairpin cut - research/questions/0081-village-lanes.drawing.html: a turn past the hairpin angle loses a returning arm under 40 ft
-        a longer hairpin arm - research/questions/0081-village-lanes.drawing.html: a returning leg of 40 ft or more is not cut; it is kept as a lane
+        a longer hairpin arm - research/questions/0081-village-lanes.drawing.html: a returning leg of 40 ft or more is not cut; it is kept as a lane (the page's one exception, the folded field spur, is cut at its fold where it is drawn - `track.spur_cut_at_the_fold`, before this pass)
         bow-tie tail cut - research/questions/0081-village-lanes.drawing.html: a tail run on past a crossing for under the arm length is cut
         knots gathered - research/questions/0081-village-lanes.drawing.html: ends within 25 ft meet at one node
         shadow lane dropped - NONE: a lane lying inside another's stroke is one way recorded twice
