@@ -288,7 +288,8 @@ def _one_joint(s: Settlement, lanes: list[dict[str, Any]], houses: Sequence[Pt],
         a jog across a joint pulled straight - research/questions/0081-village-lanes.drawing.html: string-pulled, a vertex
             within 6 ft of the chord dropped
         ways of two kinds stay two - UNRESEARCHED: a cart route and a footpath, or a web and a non-web lane, met end to end
-            are never straightened as one"""
+            stay two records - never merged into one width - and a jog across their joint is straightened by moving the
+            joint back along either (`_joint_moved_back`), as 0081's string-pull asks of any joint"""
     for i, ei, j, ej in joints(lanes):
         x, y = oriented(lanes, i, ei, j, ej)
         old = [*x, *y[1:]]
@@ -305,7 +306,11 @@ def _one_joint(s: Settlement, lanes: list[dict[str, Any]], houses: Sequence[Pt],
                 return True
             continue
         if lanes[i].get("w") != lanes[j].get("w") or bool(lanes[i].get("web")) != bool(lanes[j].get("web")):
-            continue  # a cart route and a footpath meeting end to end are two ways
+            # a cart route and a footpath meeting end to end stay two RECORDS, but the jog across their joint is still pulled
+            # straight (feature 328: it was left): the joint moved back along either, never the two merged into one width
+            if _bends_badly(old) and _joint_moved_back(s, lanes, (i, ei, j, ej), x, y, houses, hard, walls, water):
+                return True
+            continue
         gap = max(_TOUCH_GAP, float(lanes[i].get("w") or 5.0) / 2.0 + 2.0)
 
         def ok(a: int, b: int, p: Poly = old, g: float = gap) -> bool:

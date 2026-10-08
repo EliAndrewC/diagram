@@ -322,3 +322,20 @@ def test_a_chain_met_at_its_first_lane_s_start_is_walked_back_to_its_true_first_
     assert joints(lanes) == [(0, 0, 1, -1)]
     ways, owner = as_walked(lanes)
     assert owner == [0, 0] and ways == [[(0.0, 0.0), (10.0, 0.0), (20.0, 0.0)]], "one way, walked from lane 1's free end"
+
+
+def test_a_jog_across_ways_of_two_widths_is_straightened_by_moving_the_joint_not_by_merging(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Feature 328: a cart route and a footpath meeting end to end stay two records, but a bad bend across their joint is
+    mended by moving the joint back along either (`_joint_moved_back`); with no bad bend, nothing is asked."""
+    from l7r.diagram.hamletgen.ways import joints as J
+
+    s = _webbed([{"pts": [[100.0, 500.0], [300.0, 500.0]], "w": 5}, {"pts": [[300.0, 500.0], [310.0, 503.0], [500.0, 500.0]], "w": 3}])
+    asked: list[tuple] = []
+    monkeypatch.setattr(J, "_joint_moved_back", lambda *a: asked.append(a[2]) or True)
+    monkeypatch.setattr(J, "_bends_badly", lambda p: len(p) >= 3)  # the footpath bends badly alone, so the T branch is passed by
+    monkeypatch.setattr(J, "_turn_deg", lambda *a: 0.0)
+    monkeypatch.setattr(J, "tee", lambda *a: None)
+    assert J._one_joint(s, s.M["lanes"], [], [], [], []) is True and asked, "the joint moved back, the two kept two"
+    asked.clear()
+    monkeypatch.setattr(J, "_bends_badly", lambda p: False)
+    assert straighten_joints(s, [], [], []) == 0 and not asked, "no bad bend, nothing asked"

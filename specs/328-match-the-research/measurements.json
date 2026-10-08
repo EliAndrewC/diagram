@@ -208,5 +208,15 @@
   "unit": "% HEAD vs reverted",
   "observed": "2026-10-08",
   "source": "perf-audit wave 33, dev/perf-log/20261008T050014Z-review-328-confirmation-local-digram-backlog.json and its audit record"
+ },
+ "wave34-kuwabata-inlet-outside-dike": {
+  "quantity": "length of the reservoir's inlet channel lying outside the perimeter dike's drawn outline and the pond, on Kuwabata",
+  "value": {
+   "before": 63.8,
+   "after": 14.7
+  },
+  "unit": "ft",
+  "observed": "2026-10-08",
+  "source": "pool/hamlets/kuwabata/kuwabata.json channels (frm pond -> field), dikes[0].outline, pond; shapely difference; HEAD vs the regenerated map. The remainder lies in the sluice's gap in the drawn outline"
  }
 }

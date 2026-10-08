@@ -411,6 +411,17 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
   own pair opens at 51da9771f.
 - **Verification**: `impl-drift` on the touched claim, the gate, wave 33's own bookend pair.
 
+## Wave 34 (amendment 33, 2026-10-08)
+
+- **Scope**: the polder's reservoir seat and inlet stub tried and re-tiered E3 by measurement (the seat against the dike
+  re-rolls Kuwabata into a joint zigzag the joints pass does not mend); row 466 taken: `_one_joint` mends a bad bend across a
+  joint of two widths by moving the joint back (`_joint_moved_back`), the two records kept two. Rows 464 and 465 sit next
+  (a routed run; a spine the code does not yet name). Row 434 held for the GM.
+- **Occasions**: none - no pool map changes.
+- **On the unpushed waves 9-33** under condition (6): (1)-(5) held at wave 33's close (36977d8d1, in the clone - its push
+  waits on the GM's call on the 329 merge commit's stray profiles); wave 34's own pair opens at 36977d8d1.
+- **Verification**: `impl-drift` on the touched claim, the gate, wave 34's own bookend pair.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Each later wave that changes engine behavior takes

@@ -6999,38 +6999,6 @@
   "scope": "kept"
  },
  {
-  "key": "l7r/diagram/hamletgen/water/polder.py::stage_polder#inlet stub extended outside the dike to the pond's rim inlet",
-  "verdict": "UNCLAIMED",
-  "tier": "E2",
-  "fix": "The two conflict, so the code changes to match the page. Seat the reservoir (the wild water) with its rim against the dike's outer face at the inlet sluice. That means walk_pond_uphill's stop test is 'clear of the dike band' (dike_band(ring, seed^0x6D), already computed in stage_polder) rather than clear of the crop, and the walk starts inside the band. inlet_to_rim then has nothing outside the dike to extend (the stub ends at the sluice in the dike). One module, polder.py: walk_pond_uphill, inlet_to_rim and the seat line 247, done together with row 2. Re-claim 'inlet reaches the reservoir' to the 0019.drawing sentence; the current claim text 'the feeder's stub ended on the pond's rim' is on no page",
-  "files": [
-   "l7r/diagram/hamletgen/water/polder.py"
-  ],
-  "after": [],
-  "flag": "",
-  "found": "wave 30 re-check (tier provisional, by verdict)",
-  "tier_as_ranked": "E0",
-  "moved": "T89a (fresh reader): research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:20 reads 'A ring canal is drawn round the inside foot of the dike, on the field side. From outside in, a map draws the wild water, the dike, the ring canal, the field ditches and the paddies, and no ",
-  "wave": "",
-  "scope": "kept"
- },
- {
-  "key": "l7r/diagram/hamletgen/water/polder.py::stage_polder#reservoir first seated pry  30 px uphill of the ring's head",
-  "verdict": "UNCLAIMED",
-  "tier": "E2",
-  "fix": "Fixed by row 5's change and ordered after it. The pry + 30 px start (polder.py:247) goes. The reservoir's seat becomes the first seat uphill whose rim meets the dike's outer face at the inlet sluice. Claim it: 'reservoir seat - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the wild water against the dike at the inlet sluice, no channel outside the dike'",
-  "files": [
-   "l7r/diagram/hamletgen/water/polder.py"
-  ],
-  "after": [],
-  "flag": "",
-  "found": "wave 30 re-check (tier provisional, by verdict)",
-  "tier_as_ranked": "E0",
-  "moved": "T89a (fresh reader): polder.py:247 starts walk_pond_uphill at anchor + (pry+30) uphill. The walk (polder.py:55-85) only moves further uphill and stops at the first step that is clear of the CROP and above it. So the 30 px fixes the rim at least 30 px past the ring's head, with the bare dike band in between, and that gap",
-  "wave": "",
-  "scope": "kept"
- },
- {
   "key": "l7r/diagram/hamletgen/ways/checks.py::lanes_share_tread#one network at 25 ft",
   "verdict": "DRIFTED",
   "tier": "E2",
@@ -10857,6 +10825,38 @@
   "found": "wave 30 re-check (tier provisional, by verdict)",
   "tier_as_ranked": "E0",
   "moved": "wave 32: T89a's E0 withdrawn - impl-drift found the claim DRIFTED: the page attests two layouts and the code never rolls the chessboard; a new form, E3",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/hamletgen/water/polder.py::stage_polder#inlet stub extended outside the dike to the pond's rim inlet",
+  "verdict": "UNCLAIMED",
+  "tier": "E3",
+  "fix": "The two conflict, so the code changes to match the page. Seat the reservoir (the wild water) with its rim against the dike's outer face at the inlet sluice. That means walk_pond_uphill's stop test is 'clear of the dike band' (dike_band(ring, seed^0x6D), already computed in stage_polder) rather than clear of the crop, and the walk starts inside the band. inlet_to_rim then has nothing outside the dike to extend (the stub ends at the sluice in the dike). One module, polder.py: walk_pond_uphill, inlet_to_rim and the seat line 247, done together with row 2. Re-claim 'inlet reaches the reservoir' to the 0019.drawing sentence; the current claim text 'the feeder's stub ended on the pond's rim' is on no page",
+  "files": [
+   "l7r/diagram/hamletgen/water/polder.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 30 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E0",
+  "moved": "wave 34 trial (measured 2026-10-08, m:wave34-kuwabata-inlet-outside-dike): the reservoir walked from the inlet until its rim cleared the dike's outer face (dike_band), 2 ft steps - the inlet outside the dike fell from 63.8 to 14.7 ft (the rest in the sluice's gap) - but Kuwabata re-rolled with lanes 7 and 13 zigzagging across their joint (a 39 ft turn-back, past the joints pass's 12 ft hook rule), test_no_zigzag_straddles_a_joint[kuwabata] failing: the fix spans the polder's seat and the joints pass, E3 by FR-003; reverted",
+  "wave": "",
+  "scope": "kept"
+ },
+ {
+  "key": "l7r/diagram/hamletgen/water/polder.py::stage_polder#reservoir first seated pry  30 px uphill of the ring's head",
+  "verdict": "UNCLAIMED",
+  "tier": "E3",
+  "fix": "Fixed by row 5's change and ordered after it. The pry + 30 px start (polder.py:247) goes. The reservoir's seat becomes the first seat uphill whose rim meets the dike's outer face at the inlet sluice. Claim it: 'reservoir seat - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the wild water against the dike at the inlet sluice, no channel outside the dike'",
+  "files": [
+   "l7r/diagram/hamletgen/water/polder.py"
+  ],
+  "after": [],
+  "flag": "",
+  "found": "wave 30 re-check (tier provisional, by verdict)",
+  "tier_as_ranked": "E0",
+  "moved": "wave 34 trial (measured 2026-10-08, m:wave34-kuwabata-inlet-outside-dike): the reservoir walked from the inlet until its rim cleared the dike's outer face (dike_band), 2 ft steps - the inlet outside the dike fell from 63.8 to 14.7 ft (the rest in the sluice's gap) - but Kuwabata re-rolled with lanes 7 and 13 zigzagging across their joint (a 39 ft turn-back, past the joints pass's 12 ft hook rule), test_no_zigzag_straddles_a_joint[kuwabata] failing: the fix spans the polder's seat and the joints pass, E3 by FR-003; reverted",
   "wave": "",
   "scope": "kept"
  },
