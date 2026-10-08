@@ -732,6 +732,9 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
   And wave 54's knotted fallback (`gap_ways._way_for`), read DRIFTED by impl-drift, was tried without and KEPT: three of
   Sawada's households lost their own way to the neighbor's-yard reach, which draws no walk; the knots it leaves are owed by
   `knots.py::settle_knots#a knot no lawful gather reaches`. The pair and perf-audit follow the reviews.
+- **A one-off at batch 3's gate**: `tests/tooling/test_measured_surface.py` counted 39 hashed files outside `l7r/` and `tests/`
+  where 38 stand (all pool `.gen.py`); re-counted after, 38, and the next gate green. Searched: no test writes a `.py` into the
+  real `pool/`; the tracked and untracked lists hold 38. Unreproduced; if it recurs, list the files the count saw.
 - **Verification**: tests red on the old code (the open clump drew under 0.9 of its density); `impl-drift`; `spec-fidelity`;
   glyph-check rounds on the homestead grove and the windbreak.
 

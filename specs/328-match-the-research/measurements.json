@@ -456,5 +456,16 @@
     "sqft_per_crown": 242
    }
   }
+ },
+ "glyph-homestead-grove-F1-density-as-drawn": {
+  "verifies": "F1",
+  "subject": "glyph-check--homestead-grove",
+  "answers": "6e51955a8d25",
+  "quantity": "Mizuguchi's homestead-grove bands: the union of their 24 boxes over the crowns standing in it, keep-out ground included",
+  "value": 242,
+  "unit": "sq ft per crown",
+  "observed": "2026-10-08",
+  "source": "pool/hamlets/mizuguchi/mizuguchi.json groves and tree_crowns, after wave 55's top-up",
+  "method": "shapely union of the groves' boxes, crowns counted by containment (m:wave55-grove-density-as-drawn); round 1 measured ~401 on the same reading; the open ground is held to GROVE_CROWN_SQFT by the top-up, test_a_grove_throws_one_crown_to_about_180_sq_ft_at_every_grain (an open clump drawn at 0.9-1.0 of its density)"
  }
 }
