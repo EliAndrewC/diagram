@@ -84,12 +84,15 @@ the old location syncs in cleanly; its edits land on the moved files and its new
 ### Edge Cases
 
 - A name that collides at the root: the root already has `CLAUDE.md`, `Makefile` and `.gitignore`, and so does the
-  skill directory. Each is merged, never overwritten.
+  skill directory; and the root's lint fence `ruff.toml` (`exclude = ["*"]`) would take precedence over the moved
+  `pyproject.toml`'s lint and format settings in the same directory, silently excluding the whole engine from lint
+  while the gate stays green. Each is merged, never overwritten.
 - Gitignored artifacts (renders, the generation cache, the built record site, test caches) do not move with
   `git mv`; a clone or the mirror that syncs in keeps them at the old location unless something carries them.
 - Records keyed on a path (cache keys, gate stamps, perf and run records, the testmon database, the review ledger,
   recorded command corpora used as hook fixtures) may silently stop matching.
-- The feature history in `specs/` names the old paths about a thousand times; it is history and is not rewritten.
+- The feature history in `specs/` names the old paths 12,441 times in 1,105 files (counted by grep, 2026-10-07); it is
+  history and is not rewritten.
 - gm-assistant has one document naming the old path; this repository does not edit gm-assistant.
 
 ## Requirements *(mandatory)*
@@ -102,6 +105,11 @@ the old location syncs in cleanly; its edits land on the moved files and its new
 - **FR-002**: The three colliding files MUST be merged: one `Makefile` at the root holding every target (the root
   forwarder retires), one `.gitignore` at the root holding both sets of rules with their paths corrected, and one
   root `CLAUDE.md` that absorbs the skill directory's index without growing what a research session loads.
+- **FR-002a**: The project MUST have one config root. The lint and format configuration MUST lint and format
+  everything the skill's configuration did, and MUST keep the fence's purpose: a run at the root touches nothing no
+  package has adopted (`specs/`, `.clones/`, `scripts/`, the other skills). The test runner's and the coverage tool's
+  configuration MUST likewise stay scoped to what they covered, never walking `.clones/` in the mirror. A test MUST show
+  that a lint error seeded in an engine file fails the gate.
 - **FR-003**: `SKILL.md` MUST stop being a skill: its content becomes a usage document under `docs/`, with its
   frontmatter dropped and its links corrected, and the root `CLAUDE.md` names it.
 - **FR-004**: Every live pointer to the old location MUST be rewritten to the new one: scripts, hooks and their
@@ -123,6 +131,13 @@ the old location syncs in cleanly; its edits land on the moved files and its new
   on a scratch clone.
 - **FR-010**: The gate (`make done`) and the hook suite (`make hooks-test`) MUST be green from the repository root
   after the move, with no phase lost and no test dropped.
+- **FR-012**: Every Markdown document under `.claude/skills/diagram/` (the GM's third message) MUST be judged one by one
+  and given a verdict - keep in place, move, merge into another document, split, trim, or delete - with the reason,
+  and the verdict MUST be carried out in this feature. The audit's table lands in the feature's directory. Files of
+  one KIND whose form is fixed by the code that reads them - the modal write-ups under
+  `l7r/diagram/interactive/assets/modals/`, the pool's per-map `.notes.md`, the verbatim records - may be judged as a
+  class with one verdict and its reason, the table still listing every member. A deletion keeps every fact still true
+  and still needed by moving it to where a reader would look, and never deletes the GM's own writing.
 - **FR-011**: The project's own documents that explain the skill (the root `CLAUDE.md` opening,
   `dev/skill-boundary.md`, the usage document) MUST say the project is no longer a skill and why, once.
 
@@ -142,6 +157,10 @@ the old location syncs in cleanly; its edits land on the moved files and its new
   and `docs/` holds the usage document the root `CLAUDE.md` names (FR-003, FR-011).
 - **SC-004**: After sync-in, a clone holding warm caches has no `.claude/skills/diagram/` directory and its first
   gate is no slower than a warm gate on the baseline, within the gate's own ratchet tolerance (FR-008).
+- **SC-006**: The audit table names every in-scope document exactly once with a verdict and a reason, and each verdict
+  is visible in the tree after the feature lands (FR-012).
+- **SC-007**: A lint error seeded in an engine file fails the gate, and a root lint run changes no file under `specs/`
+  (FR-002a).
 - **SC-005**: The scratch-clone sync test passes, and an old spec's path resolves by the FR-005 note
   (FR-005, FR-009).
 
@@ -153,9 +172,14 @@ This feature draws and states nothing on a map; it is tooling. Its layout decisi
 
 - The move lands as one commit between features: feature 328's session is told by the push-time refusal and the
   sync-in carry, not by hand.
-- The loose documents at the skill root (`buildings.md`, `hamletgen.md`, `migration-plan.md` and the rest) move to
-  the root at the same relative path; tidying them into `docs/` is a separate decision, not taken here, so the
-  move stays a prefix strip that a reviewer can check mechanically.
+- The move itself is a prefix strip a reviewer can check mechanically; where a document goes after that is the
+  FR-012 audit's verdict, applied as its own step.
 - The CodeBuild remote is off; its definitions are updated and checked locally, not dispatched, unless the plan
   finds a cheap way to prove them.
 - gm-assistant's one pointer (`docs/iteration-loop.md`) is reported to the GM, not edited.
+
+## Review history
+
+- Round 1 (spec-fidelity, 2026-10-07): NOT FAITHFUL, 2 findings - the fourth collision (the root lint fence against the
+  moved lint config; FR-002a, SC-007 added) and the miscount of old paths under `specs/` (corrected). Amendment in the
+  same pass: the GM's third message (the Markdown audit) added as FR-012 and SC-006.
