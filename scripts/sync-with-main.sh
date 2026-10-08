@@ -27,7 +27,7 @@
 #                   the pull merged other sessions' edits into files your commits touched -
 #                   rerun the relevant gate NOW and fix forward)
 #   render-sync     locked, cache-short-circuited regen of main's diagram renders IN PLACE from
-#                   main's tip (GM_ASSISTANT_ALLOW_MAIN=1 for that one sanctioned regen-in-main)
+#                   main's tip (DIAGRAM_ALLOW_MAIN=1 for that one sanctioned regen-in-main)
 #   done            push, then render-sync (the common full stop-work)
 set -euo pipefail
 
@@ -508,7 +508,7 @@ render_sync() {
   #
   # Under the procedure LOCK for the whole regen: main is a push-to-checkout target (updateInstead),
   # so another session's push mid-regen would rewrite the engine under us and mix tips across maps.
-  # GM_ASSISTANT_ALLOW_MAIN=1 stands the engine's main-tree guard down for this ONE sanctioned
+  # DIAGRAM_ALLOW_MAIN=1 stands the engine's main-tree guard down for this ONE sanctioned
   # regen-in-main. No tip-guard is needed - regenerating whatever tip main currently holds is
   # correct, and a second runner finds every stamp fresh and skips (the cache makes redundant
   # regens ~free, which is what retires the old TIP-GUARD/last-writer-wins hazard entirely).
@@ -516,7 +516,7 @@ render_sync() {
   # operation in the repo invoked outside make, and it was exempted in an early draft of the spec on
   # the grounds that render-sync is a LEGITIMATE caller. The fidelity review rejected that: legitimate
   # WORK does not imply a legitimate INVOCATION ROUTE, and compliance cost exactly this line.
-  (cd "$MAIN" && flock "$LOCK" env GM_ASSISTANT_ALLOW_MAIN=1 make --no-print-directory render-sync ARGS="--skill-dir $MAIN --main-repo $MAIN")
+  (cd "$MAIN" && flock "$LOCK" env DIAGRAM_ALLOW_MAIN=1 make --no-print-directory render-sync ARGS="--skill-dir $MAIN --main-repo $MAIN")
   # --skill-dir, not --pool: since feature 161 the pool is TWO trees under the skill dir
   # (pool/ live, legacy-hand-authored-pool/ frozen), and render_cache walks both from that one
   # root - it warns about a frozen exhibit whose render is missing, and that job followed the

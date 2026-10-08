@@ -249,7 +249,7 @@ def regen_pool(
 
     Returns (skipped, regenerated, frozen) as sorted lists of generator paths. Each generator runs
     from its OWN directory - Mode B gens are cwd-independent, Mode A gens write cwd-relative
-    outputs, so the only safe cwd for both is the gen's own. GM_ASSISTANT_ALLOW_MAIN is set for the
+    outputs, so the only safe cwd for both is the gen's own. DIAGRAM_ALLOW_MAIN is set for the
     subprocesses (not this process): the generators import the engine, whose main-tree guard must
     stand down for this one sanctioned regen-in-main."""
     fingerprint = render_fingerprint(skill_dir)
@@ -274,7 +274,7 @@ def regen_pool(
 
     env = dict(os.environ)
     if allow_main:
-        env["GM_ASSISTANT_ALLOW_MAIN"] = "1"
+        env["DIAGRAM_ALLOW_MAIN"] = "1"
 
     def _run(item: tuple[str, bool]) -> str:
         gen, cacheable = item
@@ -315,7 +315,7 @@ def replate_page(skill_dir: str, fingerprint: str, allow_main: bool = True) -> b
                 return False
     env = dict(os.environ)
     if allow_main:
-        env["GM_ASSISTANT_ALLOW_MAIN"] = "1"
+        env["DIAGRAM_ALLOW_MAIN"] = "1"
     subprocess.run([sys.executable, "-m", "l7r.diagram.tools.placement_stages", "--out", page_dir], cwd=skill_dir, env=env, check=True, stdout=subprocess.DEVNULL)
     os.makedirs(page_dir, exist_ok=True)
     with open(stamp, "w", encoding="utf-8") as fh:
@@ -387,7 +387,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--main-repo", default=None, help="git repo whose .gitignore decides Mode A vs B (default: the checkout this file is in)")
     ap.add_argument("--skill-dir", default=SKILL_DIR, help="skill dir holding BOTH pool trees and the engine sources")
     ap.add_argument("--jobs", type=int, default=None, help="parallelism (default: RENDER_JOBS, at most the cpu count)")
-    ap.add_argument("--no-allow-main", action="store_true", help="do not set GM_ASSISTANT_ALLOW_MAIN for the generators")
+    ap.add_argument("--no-allow-main", action="store_true", help="do not set DIAGRAM_ALLOW_MAIN for the generators")
     ap.add_argument("--page-if-classes", action="store_true", help="only re-plate the placement page if the class registry moved (sync-in; feature 278)")
     args = ap.parse_args(argv)
     if args.page_if_classes:

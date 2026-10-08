@@ -40,7 +40,7 @@ def _assert_not_main_tree(path: str | None = None) -> None:
     never a workspace (CLAUDE.md "Session clones"): a generator/gate/test writing into main's
     tree races with another session's mid-procedure push-to-checkout (the 2026-07-20 double-push
     post-mortem). Import-time enforcement here covers every Mode B gen, check_village.py, and
-    the pytest suites, since they all import this module. GM_ASSISTANT_ALLOW_MAIN=1 overrides
+    the pytest suites, since they all import this module. DIAGRAM_ALLOW_MAIN=1 overrides
     the guard: the GM sets it for a deliberate main-tree run, and the stop-work procedure's
     render-sync sets it (scoped to its one locked regen-in-main); a session never sets it by
     hand for anything else."""
@@ -48,14 +48,14 @@ def _assert_not_main_tree(path: str | None = None) -> None:
     # detached worktree has no .clones/ of its own (it is gitignored), so no path is hardcoded and
     # the guard holds wherever the repository is mounted. Same rule as the Makefile's `guard`.
     p = os.path.realpath(path if path is not None else __file__)
-    if _is_main_tree(p) and os.environ.get("GM_ASSISTANT_ALLOW_MAIN") != "1":
+    if _is_main_tree(p) and os.environ.get("DIAGRAM_ALLOW_MAIN") != "1":
         raise SystemExit(
             "ERROR: this ran from the MAIN tree. Main is the integration point, never a workspace -\n"
             "every generator, gate, and test runs inside the session's own clone under <main>/.clones/.\n"
             "Check CLAUDE.md, section 'Session clones' (reload CLAUDE.md if it has fallen out of your context\n"
             "window) for the procedure: create or reuse .clones/<kebab-cased-session-name>, sync it in with\n"
             "'git pull origin main', and run this same command from inside that clone.\n"
-            "(GM override for a deliberate main-tree run: GM_ASSISTANT_ALLOW_MAIN=1)"
+            "(GM override for a deliberate main-tree run: DIAGRAM_ALLOW_MAIN=1)"
         )
 
 
