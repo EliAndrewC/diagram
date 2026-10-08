@@ -59,10 +59,12 @@ perf-signoff:   ## [performance] band 3 - the GM, at a terminal   WHY="..."
 	@$(PERF_REVIEW) signoff --why "$(WHY)" --as GM --environment "$(or $(ENV),local)"
 perf-review:    ## [performance] does every environment's newest bookend pair carry the records its band owes? (the push runs this)
 	@$(PERF_REVIEW) check
-perf-profile:   ## [performance] tier 2 evidence: cProfile ONE stage of ONE seed   SEED=25 STAGE=web
+perf-profile:   ## [performance] tier 2 evidence: cProfile ONE stage of ONE seed   SEED=25 STAGE=web [HOUSEHOLDS=10]
 ##  SEED=<n>      which seed to profile - e.g. `25`
 ##  STAGE=<name>  which single stage to cProfile - e.g. `web`
-	$(RUN).tools.perf_profile --seed "$(SEED)" --stage "$(STAGE)"
+##  HOUSEHOLDS=<n> profile the reference at the scaling roll's size (10, 20, 40), where a growth was measured
+	@: "GUARD_EDIT_OK: feature 328 - batch 2's perf-audit needed seed 39 at 10 households profiled; the tool only rolled 15"
+	$(RUN).tools.perf_profile --seed "$(SEED)" --stage "$(STAGE)" $(if $(HOUSEHOLDS),--households "$(HOUSEHOLDS)",)
 
 # GUARD_EDIT_OK: the marker moves off the `##` line into this comment - `make-docs.py` publishes
 # help text verbatim, so a marker there ends up in the reference page a reader sees.

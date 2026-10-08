@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-08T19:00:16Z",
+  "target": "perf-explain",
+  "commit": "65bb89deb",
+  "outcome": "permitted",
+  "why": "perf-explain UNVERIFIED: the control would revert wave 47's past_the_frame candidate, which changes the track this roll draws, so it measures a different map; the two profiles at the grown roll name the moved call directly, and the batch nets -3.5%"
+}

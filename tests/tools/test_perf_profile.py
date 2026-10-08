@@ -158,6 +158,14 @@ def test_profiling_the_FIRST_stage_writes_a_raw_prof_and_a_table_that_says_what_
     assert "under cProfile" in table and "+225%" in table, "the table says its number is inflated"
     assert "gitignored" in table and "archive disabled" in table
     assert "cumulative" in table or "function calls" in table, "and it carries pstats' own output"
+    seen: list[int] = []
+    real = perf_profile.__dict__.get("plan_site")
+    from l7r.diagram import hamletgen
+
+    orig = hamletgen.plan_site
+    monkeypatch.setattr(hamletgen, "plan_site", lambda spec: seen.append(spec.households) or orig(spec))
+    perf_profile.profile_stage(7, "water_frame", top=5, households=10)
+    assert seen == [10] and real is None, "feature 328: the reference profiled at the scaling roll's size"
 
 
 def test_main_writes_the_DERIVED_table_beside_the_snapshots_and_names_it_by_feature(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
@@ -165,7 +173,7 @@ def test_main_writes_the_DERIVED_table_beside_the_snapshots_and_names_it_by_feat
     feature number so a later reader can tie the evidence to the work that asked for it. `adhoc` is
     the honest fallback when no feature is exported - not a blank, which would collide."""
     monkeypatch.setattr(perf_profile, "LOG_DIR", str(tmp_path / "log"))
-    monkeypatch.setattr(perf_profile, "profile_stage", lambda seed, stage, top: (f"TABLE seed={seed} stage={stage} top={top}\n", "/tmp/x.prof"))
+    monkeypatch.setattr(perf_profile, "profile_stage", lambda seed, stage, top, households=None: (f"TABLE seed={seed} stage={stage} top={top}\n", "/tmp/x.prof"))
     monkeypatch.setattr(perf_profile, "archive", lambda _raw: "archive skipped: disabled")
 
     assert perf_profile.main(["--seed", "9", "--stage", "web", "--top", "3", "--feature", "174-one-hundred"]) == 0

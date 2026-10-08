@@ -61,14 +61,15 @@ def _git_env() -> dict[str, str]:
     return env
 
 
-def profile_stage(seed: int, stage: str, top: int = 25) -> tuple[str, str]:
-    """(the derived table, the raw .prof path)."""
+def profile_stage(seed: int, stage: str, top: int = 25, households: int | None = None) -> tuple[str, str]:
+    """(the derived table, the raw .prof path). `households` profiles the reference at another size, as the snapshot's
+    scaling rolls do (feature 328: a growth at 10 households could not be profiled where it grew)."""
     from l7r.diagram.hamletgen import HamletSpec, plan_site
     from l7r.diagram.hamletgen.driver import STAGES, roll_scope
     from l7r.diagram.settlement import Settlement
     from l7r.diagram.tools.perf_snapshot import REFERENCE
 
-    plan = plan_site(HamletSpec(seed=seed, **REFERENCE))
+    plan = plan_site(HamletSpec(seed=seed, **({**REFERENCE, "households": households} if households else REFERENCE)))
     s = Settlement(W=plan.W, H=plan.H, seed=seed)
     names = [st.__name__.replace("stage_", "") for st in STAGES]
     if stage not in names:
@@ -135,9 +136,10 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--seed", type=int, required=True)
     ap.add_argument("--stage", required=True)
     ap.add_argument("--top", type=int, default=25)
+    ap.add_argument("--households", type=int, default=None)
     ap.add_argument("--feature", default=os.environ.get("SPECIFY_FEATURE", "adhoc"))
     a = ap.parse_args(argv)
-    table, raw = profile_stage(a.seed, a.stage, a.top)
+    table, raw = profile_stage(a.seed, a.stage, a.top, a.households)
     os.makedirs(LOG_DIR, exist_ok=True)
     n = "".join(ch for ch in a.feature.split("-")[0] if ch.isdigit()) or "adhoc"
     path = os.path.join(LOG_DIR, f"{time.strftime('%Y%m%dT%H%M%SZ', time.gmtime())}-profile-{n}-seed{a.seed}-{a.stage}.txt")

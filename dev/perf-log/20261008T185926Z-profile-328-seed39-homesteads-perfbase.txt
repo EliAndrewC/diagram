@@ -1,0 +1,36 @@
+perf-profile seed 39 stage homesteads: 1.8s under cProfile (the stages before it took 0.5s unprofiled; cProfile itself is ~+225%, research R2)
+raw: dev/perf-raw/20261008T185926Z-seed39-homesteads.prof (gitignored; archive: configured (https://github.com/EliAndrewC/mapgen-perflogs))
+
+         2751463 function calls (2716485 primitive calls) in 1.732 seconds
+
+   Ordered by: cumulative time
+   List reduced from 1546 to 25 due to restriction <25>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.006    0.006    1.761    1.761 /tmp/claude-1000/-diagram/8d3395e5-fe32-4f85-9c89-80c344d2ac1a/scratchpad/perfbase/l7r/diagram/hamletgen/homesteads/stages.py:79(stage_homesteads)
+        1    0.000    0.000    0.756    0.756 /tmp/claude-1000/-diagram/8d3395e5-fe32-4f85-9c89-80c344d2ac1a/scratchpad/perfbase/l7r/diagram/hamletgen/homesteads/stages.py:272(seat_every_household)
+        1    0.001    0.001    0.755    0.755 /tmp/claude-1000/-diagram/8d3395e5-fe32-4f85-9c89-80c344d2ac1a/scratchpad/perfbase/l7r/diagram/hamletgen/homesteads/stages.py:360(_seat_households)
+        1    0.003    0.003    0.630    0.630 /tmp/claude-1000/-diagram/8d3395e5-fe32-4f85-9c89-80c344d2ac1a/scratchpad/perfbase/l7r/diagram/settlement/rolling/gap_ways.py:388(lay_the_ways)
+        1    0.002    0.002    0.582    0.582 /tmp/claude-1000/-diagram/8d3395e5-fe32-4f85-9c89-80c344d2ac1a/scratchpad/perfbase/l7r/diagram/hamletgen/homesteads/growth.py:361(grow_the_margin)
+       10    0.001    0.000    0.452    0.045 /tmp/claude-1000/-diagram/8d3395e5-fe32-4f85-9c89-80c344d2ac1a/scratchpad/perfbase/l7r/diagram/settlement/rolling/gap_ways.py:442(_way_for)
+       22    0.000    0.000    0.350    0.016 /tmp/claude-1000/-diagram/8d3395e5-fe32-4f85-9c89-80c344d2ac1a/scratchpad/perfbase/l7r/diagram/settlement/rolling/gap_ways.py:522(_first_admitted)
+       38    0.000    0.000    0.257    0.007 /tmp/claude-1000/-diagram/8d3395e5-fe32-4f85-9c89-80c344d2ac1a/scratchpad/perfbase/l7r/diagram/settlement/houses.py:650(try_place)
+       38    0.000    0.000    0.257    0.007 /tmp/claude-1000/-diagram/8d3395e5-fe32-4f85-9c89-80c344d2ac1a/scratchpad/perfbase/l7r/diagram/settlement/houses.py:659(_try_place_bundle)
+        1    0.000    0.000    0.256    0.256 /tmp/claude-1000/-diagram/8d3395e5-fe32-4f85-9c89-80c344d2ac1a/scratchpad/perfbase/l7r/diagram/hamletgen/homesteads/household_ways.py:113(chose_the_track)
+        1    0.000    0.000    0.255    0.255 /tmp/claude-1000/-diagram/8d3395e5-fe32-4f85-9c89-80c344d2ac1a/scratchpad/perfbase/l7r/diagram/hamletgen/ways/track.py:332(choose_track_out)
+       38    0.000    0.000    0.239    0.006 /tmp/claude-1000/-diagram/8d3395e5-fe32-4f85-9c89-80c344d2ac1a/scratchpad/perfbase/l7r/diagram/settlement/rolling/place.py:157(_place_bundle)
+       38    0.002    0.000    0.239    0.006 /tmp/claude-1000/-diagram/8d3395e5-fe32-4f85-9c89-80c344d2ac1a/scratchpad/perfbase/l7r/diagram/settlement/rolling/place.py:211(_place_bundle_nucleated)
+        1    0.000    0.000    0.212    0.212 /tmp/claude-1000/-diagram/8d3395e5-fe32-4f85-9c89-80c344d2ac1a/scratchpad/perfbase/l7r/diagram/hamletgen/ways/gateway.py:22(gateway_track)
+        1    0.000    0.000    0.211    0.211 /tmp/claude-1000/-diagram/8d3395e5-fe32-4f85-9c89-80c344d2ac1a/scratchpad/perfbase/l7r/diagram/hamletgen/ways/track.py:634(connector_track)
+      784    0.002    0.000    0.194    0.000 {built-in method builtins.sum}
+      674    0.000    0.000    0.190    0.000 {built-in method builtins.next}
+       34    0.000    0.000    0.185    0.005 /tmp/claude-1000/-diagram/8d3395e5-fe32-4f85-9c89-80c344d2ac1a/scratchpad/perfbase/l7r/diagram/settlement/rolling/access.py:484(admitted)
+       46    0.000    0.000    0.164    0.004 /tmp/claude-1000/-diagram/8d3395e5-fe32-4f85-9c89-80c344d2ac1a/scratchpad/perfbase/l7r/diagram/settlement/rolling/route.py:118(taut)
+      228    0.001    0.000    0.163    0.001 /tmp/claude-1000/-diagram/8d3395e5-fe32-4f85-9c89-80c344d2ac1a/scratchpad/perfbase/l7r/diagram/settlement/rolling/route.py:130(<genexpr>)
+        1    0.018    0.018    0.162    0.162 /tmp/claude-1000/-diagram/8d3395e5-fe32-4f85-9c89-80c344d2ac1a/scratchpad/perfbase/l7r/diagram/hamletgen/homesteads/capacity.py:68(free_seats)
+     2335    0.003    0.000    0.162    0.000 /tmp/claude-1000/-diagram/8d3395e5-fe32-4f85-9c89-80c344d2ac1a/scratchpad/perfbase/l7r/diagram/settlement/rolling/gap_ways.py:474(leg_ok)
+188187/154319    0.064    0.000    0.158    0.000 {built-in method builtins.min}
+       34    0.000    0.000    0.149    0.004 /tmp/claude-1000/-diagram/8d3395e5-fe32-4f85-9c89-80c344d2ac1a/scratchpad/perfbase/l7r/diagram/settlement/rolling/access.py:590(tree_admits)
+       24    0.000    0.000    0.149    0.006 /tmp/claude-1000/-diagram/8d3395e5-fe32-4f85-9c89-80c344d2ac1a/scratchpad/perfbase/l7r/diagram/hamletgen/ways/tree.py:718(judge)
+
+
