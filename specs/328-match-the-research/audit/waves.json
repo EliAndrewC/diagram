@@ -106,6 +106,7 @@
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/fixtures.py::fixture_forms#bath room wall": "20",
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/persimmon_reseat.py::reseat_persimmons#the rolled count honored": "1",
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#at most MAX_STREETS (6) parallel streets": "1",
+ ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#far-row dry-field share": "22",
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#front door's ground: a frame refused without DOOR_ROOM_FT (16 ft) and half LANE_ROOM_FT clear before its front": "1",
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#row step capped at ROW_FRONTAGE_MAX_FT": "1 (claim renamed or split; its parts re-checked)",
  ".claude/skills/diagram/l7r/diagram/hamletgen/homesteads/stages.py::_seat_households#front-row standoff from the field set by the homestead core's reach (house, yard, shed, well pocket; garden excluded)": "4",

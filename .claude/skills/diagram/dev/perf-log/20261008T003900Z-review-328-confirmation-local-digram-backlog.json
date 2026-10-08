@@ -1,0 +1,62 @@
+{
+  "band": 1,
+  "base": {
+    "commit": "3c997ab6b",
+    "label": "328-start",
+    "utc": "20261008T002117Z"
+  },
+  "binding": "109d3e5b7567fdfb4610501fcf4a263df4117001cec3fc4fe437d3966609c4f6",
+  "end": {
+    "commit": "58f07ada3",
+    "label": "328-end",
+    "utc": "20261008T002433Z"
+  },
+  "environment": "local",
+  "feature": "328-match-the-research",
+  "granted_by": {
+    "declared": "perf-audit",
+    "session_id": "8d3395e5-fe32-4f85-9c89-80c344d2ac1a",
+    "utc": "20261008T003900Z"
+  },
+  "kind": "confirmation",
+  "measurements": {
+    "legs": {
+      "10": {
+        "seeds": {
+          "25": -3.4,
+          "39": 3.2,
+          "4": 2.9,
+          "47": -2.9
+        },
+        "total_pct": 0.0
+      },
+      "20": {
+        "seeds": {
+          "25": 0.0,
+          "39": 0.0,
+          "4": -2.5,
+          "47": 0.0
+        },
+        "total_pct": -0.8
+      },
+      "40": {
+        "seeds": {
+          "25": 1.6,
+          "39": -0.8,
+          "4": 0.0,
+          "47": 1.5
+        },
+        "total_pct": 0.5
+      }
+    },
+    "seeds": {
+      "25": -2.5,
+      "39": 0.0,
+      "4": 2.2,
+      "47": -2.3
+    },
+    "total_pct": -0.6
+  },
+  "note": "every crossing (10hh seeds 4 +2.9% and 39 +3.2%, homesteads +0.1s; 40hh seeds 25 +1.6% homesteads +0.2s and 47 +1.5% hinterland +0.1s; pooled seed 4 +2.2%) is a nucleated roll where seat_rows - the only code wave 22 changed - never runs; control wave22-perf-control-nucleated-crossings (present in specs/328-match-the-research/measurements.json, values unchanged: reviewer's interleaved 6-run timing of 3c997ab6b vs 58f07ada3 in detached worktrees, identical maps, homesteads median delta +0.005/+0.002/+0.002/-0.070s, hinterland <= +0.013s) shows no code-attributable delta. Noise is the cause; total -0.6%. HEAD moved by modal .md only, no .py",
+  "verdict": "consistent"
+}

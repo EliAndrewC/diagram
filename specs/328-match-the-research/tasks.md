@@ -924,7 +924,9 @@ before the persimmon is seated - and is E3 by FR-003. Wave 22 takes row 429; the
 
   - `l7r/diagram/hamletgen/homesteads/rows.py::seat_rows#far-row dry-field share` - the holding three lots (frame widths) deep on a street laid first, one on the dry edge (0033 drawing), the streets spaced by it
 
-- [ ] T69 the holding sized by lots; the five hamlets regenerated (Kashikawa's holdings deeper) (FR-004, FR-005)
+- [x] T69 the holding sized by lots; the five hamlets regenerated (Kashikawa's holdings deeper) (FR-004, FR-005)
       research: rendering
-- [ ] T70 the claims re-checked by `impl-drift`, the occasion's review (glyph-check on Kashikawa's farm holding), and the close: wave 22's own bookend pair, `make done` green, the wave column (FR-005, FR-006)
+      verify: DONE. the holding one lot wide and three lots deep (0033), the streets spaced by it; Kashikawa's holdings 240 x 720 ft lot against lot, the other four hamlets unchanged
+- [x] T70 the claims re-checked by `impl-drift`, the occasion's review (glyph-check on Kashikawa's farm holding), and the close: wave 22's own bookend pair, `make done` green, the wave column (FR-005, FR-006)
       research: rendering
+      verify: DONE. impl-drift IN-STEP on the row; amendment 21 FAITHFUL; glyph-check farm holding PASS twice (F1 width fixed and measured); 0033's acreage and ten modals brought to the page (record checks answered); make done green; wave 22's own pair band 1, noise on nucleated rolls (perf-audit consistent, control recorded); the wave column

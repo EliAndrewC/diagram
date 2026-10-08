@@ -148,5 +148,17 @@
   "quantity": "confusable with nothing; confirmation",
   "value": 1,
   "unit": "confirmation"
+ },
+ "wave22-perf-control-nucleated-crossings": {
+  "quantity": "homesteads stage median change, 3c997ab6b against 58f07ada3 (wave 22's holding change), on the four crossing rolls (10 hh seeds 4 and 39, 40 hh seeds 25 and 47), 6 interleaved runs each in detached worktrees; all four nucleated, seat_rows never runs; identical maps (dry_plots 49, 17, 36, 38)",
+  "value": [
+   0.005,
+   0.002,
+   0.002,
+   -0.07
+  ],
+  "unit": "s",
+  "observed": "2026-10-08",
+  "source": "perf-audit wave 22 counterfactual, dev/perf-log/20261008T003813Z-review-328-confirmation-local-digram-backlog.json; hinterland median change at most +0.013 s"
  }
 }
