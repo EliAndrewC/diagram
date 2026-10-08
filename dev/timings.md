@@ -1,7 +1,7 @@
 # `/diagram` iteration timings - a dated ledger
 
 > **FROZEN 2026-09-06 (feature 193). This record is kept; its PRODUCER is gone.**
-> Every block below was measured by `python3 -m l7r.diagram.tools.timings`, which was retired with
+> Every block below was measured by the `l7r.diagram.tools.timings` module, which was retired with
 > the seven unused diagnostics - no session had a recorded run of it, and it cost 295 lines of tool
 > plus 215 of test against every gate. The numbers here remain the measured record and are still
 > cited as authoritative; what changed is that nothing appends to them. **A future measurement needs
@@ -15,19 +15,15 @@ Iteration cost is the main thing standing between this project and correctness. 
 gets iterated in; a 4-minute loop gets guessed around, and guess-and-check is what turns a simple
 request into a multi-hour slog. So the numbers are tracked rather than remembered.
 
-**Re-measure with `python3 timings.py`** (`--quick` for the inner loops, ~2 min; the full set is
-~12 min). It APPENDS a dated block below. **Never rewrite or prune old blocks** - the trend is the
-product. Add `--note "what changed"` when a row is meant to show the effect of something.
-
-**Run it** after performance work, after adding a tier or archetype to the generator, and whenever
-a loop starts feeling slow.
+Nothing appends here any more (the frozen note above): never rewrite or prune a block - the trend is the product.
+The live trend is `make perf-report` over `dev/perf-log/`, and the gate's own costs are `make audit`.
 
 ## How to read it
 
 - **Wall clock, on this container.** The context line records cpus / python / resvg / commit,
   because a container rebuild moves all of these and the timings with them. Compare rows measured on
   the same context; across a rebuild, treat a jump as unexplained until proven otherwise.
-- **`full_gate` drifts upward for honest reasons.** It carries every unit test in the skill (2,863
+- **`full_gate` drifts upward for honest reasons.** It carries every unit test in the project (2,863
   at last count) and grows as rules are added. A rise there is not automatically a regression - but
   it IS a budget, and when it stops fitting in the pause between turns it needs work regardless of
   whose fault it is.
@@ -63,8 +59,8 @@ things nobody would have guessed from the totals alone.
 
 - **`hamlet_gen_gate` must stay in the tens of seconds.** The whole scripted-generation migration is
   premised on it. If it reaches minutes, the central claim is gone.
-- **`full_gate` grows for honest reasons** - it carries every unit test in the skill and grows as
-  rules are added. Treat it as a budget, not a score. It reached 4 min 15 s while the skill's
+- **`full_gate` grows for honest reasons** - it carries every unit test in the project and grows as
+  rules are added. Treat it as a budget, not a score. It reached 4 min 15 s while the engine's
   CLAUDE.md still described it as "~2 to 2.5 minutes" (2026-08-08); nobody was wrong, nobody
   re-measured, and that drift is why this ledger exists.
 - **Every conversion adds maps to sweep and checks to run.** These numbers only go up as the

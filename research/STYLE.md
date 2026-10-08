@@ -7,7 +7,7 @@ through from a map and knows nothing about the subject. It was generalized from 
 `record-style` check holds it.
 
 Each rule says where it comes from: **GM** (the GM said it), or **inferred** (the session's generalization from
-the GM's example, awaiting the GM's confirmation in the pilot).
+the GM's example, accepted when the GM signed the pilot off, 2026-09-30).
 
 ## 1. A section is a topic, not a question
 
@@ -20,10 +20,10 @@ the GM's example, awaiting the GM's confirmation in the pilot).
   sections into a single larger section."*)
 - **A rendering section's title mirrors its research section's**: "How our maps draw threshing and drying yards (niwa)"
   beside "Threshing and drying yards at farmhouses (niwa)" - so a reader who follows the link knows it is the same
-  thing. (inferred - the second pilot's check found the generic "How our maps draw the work yards" vague.)
+  thing. (inferred)
 - **A turn to another region or practice is introduced.** When a section moves from one country's practice to
   another's, a sentence of prose between the lists says what changes ("Rice farmers in south China did the same work on
-  different ground ..."), so a bullet about the second is not a non sequitur. (inferred - the second pilot.)
+  different ground ..."), so a bullet about the second is not a non sequitur. (inferred)
 - **A merge is a reorganization, not a concatenation.** Material from the later sections goes where a newcomer
   needs it - often early - and repeated material is said once. (GM: *"possibly reordering some things because that
   other section might have information that should come earlier in the combined section rather than just appending
@@ -52,8 +52,7 @@ the GM's example, awaiting the GM's confirmation in the pilot).
   short."*)
 - The opening is footnoted like everything else; it states, it does not tease what the bullets will say. (inferred)
 - **The opening rounds; the bullet is exact.** A headline figure in the opening is given plainly ("dozens of trees");
-  the exact figure, and any caveat on how it was reached, is said once, in its bullet. (inferred - the first pilot's
-  opening gave "about 33" without the bullet's caveat that 33 is this page's arithmetic.)
+  the exact figure, and any caveat on how it was reached, is said once, in its bullet. (inferred)
 - **A date a newcomer cannot place is tied once to its period**: "before 1868, in the Edo period". (inferred)
 - **A question a reader would not think to ask opens with an intro saying why it is here.** Where the subject is
   something our maps or the setting have and history may not - a parley room built across a border, say - a reader
@@ -94,7 +93,7 @@ highlights into questions ... I think that we need to come up with a different n
   nature ("A sixth-century Chinese farm manual says an elm's shade reaches as far as the tree is tall", not "A tree's
   shade reaches as far as the tree is tall"); what a source says of one thing (the elm) is not said of all things (any
   tree); and an "only" or a "never" that rests on a search that found nothing is a question ("Were the groves cut back
-  to a fixed height?") or says what is recorded ("the only ones recorded as..."). (inferred - the third pilot's checks)
+  to a fixed height?") or says what is recorded ("the only ones recorded as..."). (inferred)
 - **A lead line and its body stand on their own, for a reader who skims.** A reader whose eye lands on one bullet should
   follow it without the bullets before it. A year or a concept whose significance the bullet needs is explained in
   place, one of two ways: the lead line says it ("Were groves as large before Japan began to modernize in 1868?"), or
@@ -145,8 +144,8 @@ highlights into questions ... I think that we need to come up with a different n
   removing a citation ... keep that information just not in a sources section."*)
 - **A claim about what a page we could not read says.** "A yard at Kodaira is given as 70 tsubo, from a page we could not
   read" asserts a page's content that no one here has seen - it may be a figure an early pass took from a search summary,
-  or invented. Such a claim does not stand: the page is read and quoted (a page only a person can open goes on the GM's
-  download list, `academic-sources/TO-DOWNLOAD.md`), or the claim is removed, its history kept in a comment. An absence
+  or invented. Such a claim does not stand: the page is read and quoted (a page only a person can open goes on the download
+  list, `research/to-download.md`, with `make download-add`), or the claim is removed, its history kept in a comment. An absence
   note supports only a stated silence ("no page we read gives it") or a GUESS of our own. (GM, 2026-09-30: *"we explicitly call out pages that we assert exist and that we further assert contain data, like specific answers, but which we are saying do not load ... why it is that we believe this information is on this page or these pages in the first place if we cannot load the page ... As of now, it looks very suspicious."*)
 - **Pointer paragraphs between merged sections** ("The size ... is at X; this question asks which ...") - after a
   merge there is nothing to point at. (inferred)

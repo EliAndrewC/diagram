@@ -3,25 +3,15 @@
 **Load this file when:** you are adding a rule about how a settlement is built, deciding where that
 rule belongs, or wondering why a rule you expected to catch something did not.
 
-**READ THIS FIRST IF YOU REMEMBER THE CHECK BATTERY.** Until feature 166 this file described a
-1,371-segment post-placement validator (`check_village`) that every generated map was put through.
-It is gone - 18,830 lines of it, plus 107 frozen bad manifests and five tools that existed to drive
-or count it. Nothing here audits a finished map any more, and a session looking for `gate(M)`,
-`make gate-manifest`, `make new-check` or `pool/regressions/` will not find them.
-
-## Why it went, in the GM's own terms
+Nothing audits a finished map any more: the post-placement check battery (`check_village`, `gate(M)`,
+`pool/regressions/`) retired with feature 166. The GM's reasoning:
 
 > *"we have placement algorithms, which in theory should not be buggy, but then the automated checks
 > essentially catch bugs as they slip through and then fix them on the maps ... if a check catches
 > something, that just means that our placement algorithm is bugged."*
 
-That was not true when the maps were drawn by hand: a person places a well by eye and a validator is
-the only thing standing between a slip and the sheet. It became true the moment generation was
-scripted. A check that fires on a generated map reports a defect in the code that placed the feature,
-and the place to fix a defect in a placer is the placer - once - rather than to keep a standing audit
-that re-discovers it on every map for ever.
-
-The GM pushed the argument further than the session had, and was right to:
+A check that fires on a generated map reports a defect in the code that placed the feature, and the place to fix it
+is the placer, once. And on whether any category should survive:
 
 > *"I'd be really, really surprised if our win is actually only eleven checks ... can you describe to
 > me a single category of automated check which should still exist?"*
@@ -179,13 +169,10 @@ supposed to be invariant (`cluster_aspect` under rotation).
 
 ### THE RECORD OF WHAT HAS FIRED BEATS THE DATAFLOW VERDICT
 
-`make check-census` used to answer "does any stage after this check change an input it reads", and a
-NO made the check a retirement candidate. It was never a ruling, because the census reads the manifest
-and not the code, so it cannot see a placer that fails softly. That tool is retired with the battery,
-but the reasoning generalizes to its successor: **before deciding a placer guarantees something,
-grep the record for it catching that placer out.** `bridges_span_their_water` was kept on exactly
-those grounds - `hamletgen/ways.py` records it catching the scripted placer four separate times on
-oblique crossings.
+A census that reads the manifest and not the code cannot see a placer that fails softly, so "no later stage changes
+this check's inputs" is never a ruling. **Before deciding a placer guarantees something, grep the record for it
+catching that placer out.** `bridges_span_their_water` was kept on exactly those grounds - `hamletgen/ways/checks.py`
+records it catching the scripted placer on oblique crossings.
 
 ### A DEFECT LEDGERED SOMEWHERE NOTHING READS IS A DEFECT LOST
 
@@ -208,7 +195,7 @@ There is no gate to be exempt from, so there are no waivers. What survives is th
 which is a project rule rather than a mechanism: **an exception is written down with its reason and
 its cost, or it is not an exception.** That is the root CLAUDE.md's "record a decision to ACCEPT a
 limitation" clause, and the worked example it points at
-([`research/contents.json#water`](../research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html), "What drawing at true size left open") is
+([`research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html`](../research/questions/0068-how-wide-canals-and-ditches-are-the-ladder-of-channel-widths.drawing.html), "What drawing at true size left open") is
 unaffected by any of this.
 
 ## What `make done` means now

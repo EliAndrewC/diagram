@@ -3,9 +3,9 @@
 *Project reference, split out of [`../CLAUDE.md`](../CLAUDE.md) so it is loaded on demand rather
 than in every session's context. CLAUDE.md keeps the six rules in one line each; this file is the
 full record with the GM's words. The operative form of the citation rules - the footnote shape, the
-notes and the works cited, the download list - is
+notes and the works cited - is
 [`research/CLAUDE.md`](../research/CLAUDE.md), which
-auto-loads when a session edits the record; the principles are constitution XII.*
+auto-loads when a session edits the record, and the download list's is [`research/downloads.md`](../research/downloads.md); the principles are constitution XII.*
 
 **Load this file when:** a research task raises a question the one-liners do not settle - what
 counts as a readable source, when a guess may be recorded, how a two-form finding becomes a knob.
@@ -259,7 +259,7 @@ hosting a copy publicly, but for now I just want an archive."* Nothing from it i
 host keeps one working copy of it, pushed straight to GitHub - no clone of it per session (the GM). The GM's own
 downloaded files in `academic-sources/` that copy a cited source are archived beside its captures. The mechanism, the
 fallback order for a dead or a refused page and the measurements: `specs/309-source-archive/`; the operative rule:
-`research/CLAUDE.md`.
+`research/downloads.md`.
 
 **Amendment (the GM, 2026-10-02).** The download directory is a queue: *"once something has been added to the diagram
 research repository and then pushed, then we can delete it from the academic sources directory. And in that way, looking

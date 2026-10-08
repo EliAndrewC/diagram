@@ -1,5 +1,7 @@
 # Shiro Daika - notes
 
+**Status (2026-10-07): an exhibit, not work in progress.** The GM dropped the hand pass on 2026-10-07: the capital goes straight to a scripted generator, and these notes are kept verbatim as the record of what the hand pass found (its design inputs: `future-work/cross-cutting.md`, "Fabric-first generation").
+
 Mode B **domain capital** (the first at this tier), 1 px = 3 ft, walled, `wall_defense="siege"`,
 river city, Scorpion (the Daika vassal house of the Bayushi), population **12,360**. Features
 `specs/018-capital-space-budget` (the budget), `specs/019-capital-skeleton-castle` (skeleton +

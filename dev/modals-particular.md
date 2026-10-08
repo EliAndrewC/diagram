@@ -15,7 +15,7 @@ samurai's own garden on a country estate. Appearing on more than one sheet does 
 **P2. Written once, for its sheet; not reused.** A particular modal or `### Features` entry is written for the sheet it stands
 on and is not expected to be reused or standardized. (GM: *"not things that we would expect to reuse"*)
 
-**P3. The same tabs, the same reader.** About / Guesses / References as in `modals.md` M4, for the reader of `modals.md` M1:
+**P3. The same tabs, the same reader.** About / Guesses / Depiction / References as in `modals.md` M4, for the reader of `modals.md` M1:
 someone who clicked a thing and wants to know what it is. Length about 80 to 200 words. (inferred)
 
 **P4. What About answers.** What it is and what it is for; what it looks like; who keeps or uses it and when; and, in a

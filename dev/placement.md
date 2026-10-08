@@ -2,8 +2,7 @@
 
 **Load this file when:** You are adding a new map feature, changing where something is placed or drawn, or wondering why the placer allowed an overlap the gate then caught. Read the DRAW ORDER section before moving any placement.
 
-Split out of [`../CLAUDE.md`](../l7r/diagram/CLAUDE.md) so it is not in every diagram session's
-context. The text is verbatim; the short always-on version of each rule stays in the index.
+The short always-on version of each rule is in the engine index, [`l7r/diagram/CLAUDE.md`](../l7r/diagram/CLAUDE.md).
 
 ## DRAW ORDER: read this BEFORE changing where anything is placed or drawn
 
@@ -11,7 +10,7 @@ Most of what a Mode B feature gets wrong is not geometry, it is ORDER. A drawing
 what is in `self.M` at the moment it runs, and a placement method avoids only what is in the
 registries at the moment it runs - so "tree not drawn on a roof" and "building not placed under a
 canopy" are the SAME rule enforced from two different points in the sequence. This map cost four
-fail-read-fix cycles to reconstruct on 2026-07-25; it is written down so nobody pays for it twice.
+fail-read-fix cycles to reconstruct; it is written down so nobody pays for it twice.
 
 **The three registries, and who honors them:**
 
@@ -28,15 +27,15 @@ its roof over blocked ground. If a feature must keep whole footprints out, `plac
 
 **SEE IT BEFORE YOU READ IT.** `dev/placement-stages/hamlet-placement.html` is Inashiro rolled one
 stage at a time, with a plate of the map after each of its stages (eighteen at feature 176) and a note on why that
-stage sits where it does. Regenerate it with `python3 -m l7r.diagram.tools.placement_stages` whenever
+stage sits where it does. Regenerate it with `make placement-stages` whenever
 `STAGES` changes - it is generated, never hand-edited, and its per-stage prose is keyed by function
-name so a renamed or new stage shows up as missing rather than silently inheriting its neighbour's.
+name so a renamed or new stage shows up as missing rather than silently inheriting its neighbor's.
 The page is the picture; this document is the rulebook.
 
-**THE SCRIPTED ORDER IS `STAGES` IN `hamletgen/driver.py`, and it is the authority for a scripted
-tier.** The phase list below describes the HAND-AUTHORED gens (Moritono is its clean example) and
-remains true of them; it is a phase model, not a stage list, and it does not match the scripted
-sequence one-to-one. Where the two disagree, `STAGES` wins for anything under `hamletgen/`:
+**THE ORDER IS `STAGES` IN `hamletgen/driver.py`, and it is the authority.** If you move a stage, move its row here
+in the same change - a table that disagrees with the tuple it names is the failure this section exists to prevent.
+A stage's NAME is not evidence of what it draws (stage 1 draws nothing, and a blank first plate was once reported as a
+bug): `placement_stages.py` decides plate or no-ink card from a record-count delta around the call.
 
 | # | stage | what it puts on the map |
 |---|---|---|
@@ -60,22 +59,6 @@ sequence one-to-one. Where the two disagree, `STAGES` wins for anything under `h
 | 18 | `stage_notice` | the kosatsuba - **the last map FEATURE**, after even the frame (GM 2026-08-29, feature 154): *"the real humans ... look around at the things which already exist and then decide where to put the notice board"*. It reserves no ground and grows into none, so nothing is placed after it for it to displace |
 | 19 | `stage_labels` | **the LABEL PHASE** - every caption on the map, seated against the finished sheet (GM 2026-08-29, feature 157): *"after the final map feature is added ... a final phase in which we add labels for whatever map features get labels ... how we place labels will always depend on what else is on the map."* No feature draws its own caption any more; `label()` queues and `Settlement.place_labels` drains, seating every searched caption by the ONE placer (`l7r/diagram/labels/`, feature 266: the cartographic standard). Draws no ink but text, reserves nothing, and so can only ever be last |
 
-**THIS TABLE WAS STALE AND WAS REBUILT AGAINST `STAGES` (feature 157).** It still listed
-`stage_ways` at position 4 (split into `stage_seat` and `stage_track` by feature 126) and
-`stage_notice` at position 8 (moved to last by feature 154), so it disagreed with the tuple it says
-is the authority - the failure mode this file's own header warns about, in the one document a
-session reads BEFORE moving a placement. If you move a stage, move its row here in the same change.
-
-**WAYS ARE SPLIT BY PROVENANCE, NOT BY TIMING** (feature 126, 2026-08-23). The GM asked whether
-laying lanes before houses reflects how lanes form, and it does not - a lane between farmsteads is
-trodden by the households already living there. So the question a new way must answer is not "does
-this reserve ground or fill it" but **"did this way exist before the settlement did?"**
-
-- **Exogenous** - the connector to the off-map road, the field spur. These predate the houses and
-  are laid before them; houses may legitimately front them, which is what the LINEAR form is.
-- **Endogenous** - the internal skeleton, the lane web. These are worn by the settlement, so they
-  are derived from where the houses actually went.
-
 **THE HOMESTEADS COME FIRST BECAUSE THAT IS HOW LANES WERE TRODDEN** (the GM, 2026-10-02, declining a
 proposal to lay the lanes first and seat the houses along them for speed): *"Village lanes are footpaths
 that are worn by people walking between houses. But in real life, when these farming communities were set
@@ -86,76 +69,28 @@ is the exception the GM named - *"planned government projects, which then people
 so an Imperial road may come before the settlement that fronts it. The reader's version is at
 `research/questions/0081-village-lanes.drawing.html`; do not propose lanes-first again.
 
-The older reserve-vs-fill rule was a good approximation and got the WEB right for the right reason,
-but it kept the skeleton first, and the skeleton was sized on the seat band while the houses spread
-wider than the band - which is why it could not be guaranteed to reach them, and is the root of the
-`farmhouses_reach_a_way` defect that survived seventeen attempts.
+The rule was settled by feature 128 (GM 2026-08-24: *"farmhouses are rendered after the fields and water, but before
+any village lanes. That is what the feature is. Full stop."*); what that reorder taught is in [`lessons.md`](lessons.md).
+A lane drawn before the houses registers a no-build corridor the placer then
+refuses seats against, whatever the lane represents.
 
-**A recorded dead end that no longer applies**: feature 123 tried sizing the skeleton over the
-ground the houses take and reverted it, because longer arms offered more frontage seats and the
-cluster stretched to meet them. That was a FEEDBACK loop, and it existed only because the skeleton
-was laid before the houses and its arms generated seats. Laid afterwards there are no seats to
-generate, so the loop is severed rather than re-entered.
+**The rules that fall out of the order:**
 
-**STAGE 1 DRAWS NOTHING, and both this table and the walk-through page used to claim otherwise.**
-Corrected 2026-08-23, after the GM reported the walk-through's first plate as blank: it was blank
-because `stage_water_frame` emits zero SVG records: it sets `meta` and pins knobs, and that is all.
-The water a reader expects to see there is drawn one stage later. Worth carrying beyond this one
-row - **a stage's name is not evidence of what it draws.** The cheap check is a record-count delta
-across `out`/`top`/`walls`/`toplabels` around the call, which is now what `placement_stages.py` uses
-to decide whether a stage gets a plate or a no-ink card, so a stage that draws nothing announces
-itself on the page instead of rendering an empty square that reads as a broken image.
-
-**Two places the phase model below is actively WRONG for a scripted hamlet**, found by auditing it
-against `STAGES` on 2026-08-20 rather than by a failure - which is the point of writing it down:
-
-- It puts `place_kosatsuba()` in phase 4 with the other structures. In the scripted tier the notice
-  board is stage 8, AFTER the web, and it has to be: the board stands on a way, so it cannot be
-  sited until the ways are final. It is the clearest case on the map of a feature whose position is
-  defined by something drawn later than itself.
-- It has one "ground cover" phase and one "communal vegetation" phase. The scripted tier splits
-  those into three ordered stages - hinterland, then woodland, then windbreak - and the order among
-  them matters (woodland after hinterland so the coppice sits in real open ground rather than ground
-  the scrub was about to take).
-
-**The order a Mode B gen runs in** (Moritono is the clean example):
-
-1. **terrain + water** - fields, channels, streams, pond, marsh
-2. **big terrain features** - `forest()` / `forest_patch()`. EARLY, because the settlement is sited
-   against them; their FLOOR draws here but their CANOPY is deferred (see 7)
-3. **ways** - road, lanes, streets (since feature 150 T53 village lanes draw through the GROUND block like streets: shoulders in the bottom sub-layer, treads above, so junctions read as one tread - `_lane_ink_at`; `reink_lane` and the stub trimmer rewrite the ground entry). This is the ground-RESERVING half: the skeleton and the
-   connector, laid so the homesteads front them
-4. **structures** - `manor()`, `farmsteads()`, urban packs, `place_wells()`, `draft_byres()`,
-   `place_kosatsuba()`. Inside `farmsteads()` the bundle path records grove rects first (the garden
-   relaxation needs them), then draws yards/gardens/houses, then draws the yashikirin arms LAST
-4b. **the LANE WEB** (scripted hamlets, `stage_web`) - the ground-FILLING half of the ways, and the
-   one stage that deliberately runs after the structures it serves. It threads lanes through the
-   room the seated cluster left, so every farmhouse is within reach of one, and it reads the drawn
-   houses, yards, gardens and groves as obstacles rather than reserving anything from them
-5. **ground cover** - `hinterland()` scrub + marsh (skips structures via `_urban_keepouts`)
-6. **communal vegetation** - `village_grove()`. LATE, so its per-crown filter sees every structure
-7. **crop** - `crop_to_content()` / `crop_city()`, which first run `flush_stable_yards()` and
-   `flush_tree_stands()`: the deferred yard furniture and every wood's canopy draw HERE, against the
-   complete map. `finish()` re-runs the tree flush as a backstop for a gen that never crops
-8. `title()`, `finish()`
-
-**The two rules that fall out of it:**
-
-- **Must not be drawn ON something?** Run AFTER it, or defer to the flush. Drawing early and letting
+- **Must not be drawn ON something?** Run AFTER it, or defer to the flush at the crop (the trees' canopy and the yard
+  furniture draw there, against the complete map). Drawing early and letting
   the later feature paint over it hides the overlap instead of preventing it - which is exactly what
   the yashikirin used to do, leaving crowns geometrically under roofs while looking fine.
 - **Must FILL ground that is left over?** Run AFTER placement and read the drawn features as
-  obstacles. This is the mirror of the rule below and it is easy to get backwards, because getting
-  it backwards does not fail loudly: feature 123 laid the lane web before the houses, which is what
-  the ways stage does, and the web then competed for ground with the very houses it existed to
-  reach - the four pool clusters' long axes grew 15-97% and nothing in the gate measures sprawl.
+  obstacles. This is easy to get backwards, because getting it backwards does not fail loudly: a lane
+  web laid before the houses competed for ground with the very houses it existed to reach - the
+  pool clusters' long axes grew 15-97% and nothing measures sprawl.
 - **Must RESERVE ground?** Run BEFORE placement AND register in a registry that the placer in
   question actually honors (see the asymmetry above).
 
 **Changing any of this deserves a design pass first.** Read the paths above and settle the ordering
 on paper before editing - the failure mode is discovering the sequence one gate failure at a time,
 which is what turned a small rule into four fix-fail-read cycles. If a change needs a feature to
-move between phases, say so explicitly in the commit: phase moves are the changes most likely to
+move between stages, say so explicitly in the commit: stage moves are the changes most likely to
 have effects far from the diff.
 
 ## CENTER vs FOOTPRINT: the three ways placement and the checks disagree
@@ -163,106 +98,32 @@ have effects far from the diff.
 The GM, 2026-07-26, after the overlap matrix kept finding things the placer had allowed: *"if
 placement is only testing the house's center while the matrix tests its footprint, then maybe the
 placement test is wrong? Are there other placement checks which are only checking the center? That
-could explain a lot of overlap issues as well as a lot of inefficiencies."* Both halves were right,
-and there turned out to be **three** distinct disagreements, not one. Know which you are looking at
-before you touch anything.
+could explain a lot of overlap issues as well as a lot of inefficiencies."* There turned out to be **three**
+distinct disagreements. Know which you are looking at before you touch anything.
 
-**1. Center-tested keep-outs (UNDER-restrictive -> overlaps).** `_fits` tested a candidate's CENTER
-against `block_polys` and the corridors, so a footprint could hang over blocked ground by up to half
-its width. Fixed by SPLITTING the registry: `hard_polys` (crop, pond, bog, a field's own ditches) is
-tested against the whole footprint; `block_polys` keeps the center test. **Do not merge them back.**
-Footprint-testing all of `block_polys` was tried once and reverted, because it also contains SOFT
-reservations - caption bands, civic aprons, fence standoffs - that a footprint routinely overhangs
-by a few px, and tightening those cost Nagahara a well and pushed Hoshizora's punishment ground off
-its street. The split is the fix; the conflation was the bug.
-
-**2. Circumscribed-circle collision (OVER-restrictive -> wasted ground, and LOAD-BEARING).** Against
-`placed` and `grove_rects`, `_fits` still uses half-diagonal circles, not real footprints. For a
-46x28 house that is r=26.9 against a true half-width of 23, so two such houses are forced >=57.8 px
-apart center to center where true touching is 28. It never permits a real overlap - it just wastes
-up to ~2x the spacing, which is a real cause of "the packer says the ground is full" when it is not.
-
-**The waste is real and large - measured on Tango, 2026-08-08.** A wrapper that computed the
-diagnostic beside the real verdict (so the map generated was the real one) over 71,860 `_fits`
-calls: **38.7% of all refusals come from the circle clause**, and **767 seats are refused by nothing
-but the approximation** - a **+57.6%** increase in the pool of legal seats the placers see. That is
-per-CALL, not per-building: it means far more choice for every scan, not 57% more houses.
-
-**But do NOT swap it for a footprint test on its own.** Tried the same day: replacing the circles
-with an exact axis-aligned box gap takes Tango's gate from clean to FIVE failures, two of them
-genuine overlaps (`features_do_not_overlap`, `no_structure_overlaps`), plus a fire tower standing on
-a wellhead and a well inside a building. The reason is that a circumscribed circle is
-**rotation-invariant**, and that is exactly what has been absorbing item 3 below: houses are drawn
-at +/-5 deg and buildings at 90/180 deg, where `w` and `h` swap outright, so an axis-aligned test on
-the PLACEMENT dimensions is simply wrong for them. It was partly covering item 1 too - with tighter
-packing, buildings landed on wells whose `block_polys` reservation is only center-tested.
-
-**So item 2 is blocked on item 3, not on the cost of re-baselining** - which is what this entry used
-to say, and it was the wrong diagnosis. The circles are not conservative padding; they are the
-mechanism masking the rotation mismatch, and removing them converts a documented inefficiency into
-shipped overlaps. The order is: fix **item 3** so the placer tests the rotated footprint it will
-actually DRAW, then item 2 becomes a real `sat_overlap` on real corner quads, and only then does the
-pool re-roll. Budget for that re-roll: the naive swap alone already moves Tango +21 houses (+8%),
-+20 buildings (+3.2%) and +23 wells (+25%).
-
-**3. Placement tests a DIFFERENT footprint than the one drawn (still open, but now measured).**
-`_fits` is called with a farmhouse's BASE rect, but the drawn steading can exceed it - a wealth
-render scale, an attached shed, a rotation. So a candidate that genuinely cleared every keep-out at
-its placement size laps one at its drawn size, and no amount of fixing (1) reaches it. Hoshizora's
-gen already works around this by inflating its hem plots ~8 px (`grow_poly`), which treats the
-symptom locally. The real fix is for the placer to test the size it is going to DRAW.
-
-**Two 2026-08-12 findings sharpen it, and one of them is already banked.** A WAY now records its
-drawn TREAD (`_record_tread`) beside its soft corridor, and `_fits` tests the whole footprint
-against the tread while the clearance keeps its center test - the split that makes this safe where
-footprint-testing all of `block_polys` was not, since a clearance is slack and a road surface is
-not. Lanes only, deliberately: the other ways already pad their corridors by hand, and tightening
-them cost Tango a public well. No pool manifest moved.
-
-**But the BUNDLE path never reaches `_fits` at all**, which is the bigger half and was not visible
-until a cohort went looking. **DONE 2026-08-17 (feature 121)** - and the diagnosis this paragraph
-used to carry was WRONG, so read the correction before quoting it anywhere.
-
-*What it used to say:* the house inside the bundle "is offset from the seed point AND scaled by the
-wealth/length jitter - so the rect the placer clears is neither the size nor the position of the
-rect that gets drawn."
-
-*What is true:* measured across `pool/hamlets/inashiro/inashiro.json`, the bundle's house rect matches the
-drawn record's position and size to **0.0000 px**. `hw`/`hh` are computed with their jitter BEFORE
-`_place_bundle` is called, and `_bundle_geom` is rebuilt at the final slid position. **The
-divergence was the RAKE, and only the rake** - `_house_rot`'s +/-5 deg, worth up to **2.56 px** of
-corner bulge, which is exactly the 2.4 px `_on_a_tread`'s own docstring reports. Because the rake is
-position-seeded it is knowable at seat time, so the fix needed no change to when rotation is
-decided; a "different size, different place" diagnosis would have implied one.
-
-*Three defects, not one, and the second two were unknown:*
-
-1. the bundle path never tested a drawn surface at all - `_rect_blocked` ended at
-   `_near_corridor(cx, cy)`, a bare center test. Now `_house_on_a_tread`.
-2. **`_on_a_tread` itself passed `rot_rect(..., 0.0)`** - so the path that HAD the footprint test was
-   measuring a square-on rect too. It takes `rot` now; `None` from a caller means UNKNOWN, not zero.
-3. **the GATE was rake-blind** - `houses_clear_of_lanes`'s `_house_pts` built its own axis-aligned
-   corner list beside `rect_corners`, which reads `rot` and is imported into the same module. So the
-   check meant to catch the defect had the defect, and disagreed with the fixed placer about the
-   same house. One measurement, not two (contract C7).
-4. and the RENDERER rounded: the house glyph emitted `rotate({rot:.0f})`, whole degrees, against a
-   placer and a gate working in floats - ~0.95 ft of drawn-corner displacement, invisible to every
-   check because checks read the manifest and never the SVG. Found by `settlement-review`.
-
-*The old cost estimate was stale in the other direction too*: it budgeted re-rolling Ikegami,
-Kuwabata, Tanada and Hoshigaoka, all of which entered `LEGACY_FROZEN_GENS` on 2026-08-16 and are
-never regenerated. Actual cost: three live scripted hamlets moved, one review each.
-
-Measured: **10 of 24 cohort maps** put a house corner on a lane at a 32 px clearance before, **0**
-after; cohort 22/24 both before and after, same two pre-existing failures on the same two seeds.
-`LANE_CLEARANCE` is now derived (48 -> 40) and no longer the thing holding houses off lanes.
+1. **Center-tested keep-outs (UNDER-restrictive -> overlaps).** Fixed by SPLITTING the registry: `hard_polys` (crop,
+   pond, bog, a field's own ditches) is tested against the whole footprint; `block_polys` keeps the center test.
+   **Do not merge them back**: `block_polys` also holds SOFT reservations (caption bands, aprons, fence standoffs)
+   that a footprint routinely overhangs by a few px, and footprint-testing them all was tried and cost maps their
+   wells. The honest reading of what is left: those polygons are drawn as keep-out plus slack, with the center test
+   handing the slack back; the principled fix is to shrink them to the true keep-out and footprint-test, a pool-wide
+   re-tune.
+2. **Circumscribed-circle collision (OVER-restrictive -> wasted ground).** Against `placed` and `grove_rects`, the
+   urban `_fits` uses half-diagonal circles, not real footprints - it never permits an overlap, but wastes up to ~2x
+   the spacing. **Do not swap it for an axis-aligned box test on its own**: the circle is rotation-invariant, and that
+   is what absorbs item 3 for rotated buildings; the naive swap turned a clean gate into five failures, two of them real
+   overlaps. Item 3 first, then a real `sat_overlap` on real corner quads.
+3. **Placement tests a DIFFERENT footprint than the one drawn.** The fix is for the placer to test the size, position
+   and ROTATION it is going to DRAW. Done for the hamlet bundle in feature 121: the divergence was the rake alone
+   (`_house_rot`'s +/-5 deg, up to 2.56 px of corner), fixed in the placer, in `_on_a_tread` (which had passed rotation
+   0), in the check (which had built its own axis-aligned corners beside `rect_corners`), and in the renderer (which
+   rounded `rotate()` to whole degrees). One measurement, not several: a check that re-derives the footprint has the
+   defect it is meant to catch.
 
 **The general lesson.** A point test is right for a SCATTER (each tuft is a point) and wrong for
-anything with an extent. The same trap bit the ground-cover tiler: `near_ring_cropland` sampled a
-cell's center and four corners, which a small keep-out sitting against an edge MIDPOINT slips
-between - that is how a wellhead ended up 1 px inside a hatake plot. Region-vs-region helpers
-(`quad_hits_poly`, `quad_hits_seg`, `point_quad_dist`) exist now; use them rather than adding sample
-points.
+anything with an extent. A tiler sampling a cell's center and four corners let a small keep-out against an edge
+MIDPOINT slip between them - that is how a wellhead ended up 1 px inside a hatake plot. Region-vs-region helpers
+(`quad_hits_poly`, `quad_hits_seg`, `point_quad_dist`) exist; use them rather than adding sample points.
 
 ## Centers, footprints, and aggregates: which one a rule is allowed to use
 
@@ -320,10 +181,7 @@ settlement has a rampart, to the wall - the edge it actually has). `execution_gr
 side` still dots against the centroid and that is correct: a BEARING is an aggregate question. A
 DISTANCE is not.
 
-**Known debt, recorded as debt rather than design:** `_fits` center-testing `block_polys` (item 1
-above). The honest reading is that those polygons are drawn wrong - keep-out plus slack baked in,
-with the center test handing the slack back - and the principled fix is to shrink them to the true
-keep-out and footprint-test. That re-tunes margins pool-wide, so it is a separate pass.
+**Known debt, recorded as debt rather than design:** `_fits` center-testing `block_polys` (item 1 above).
 
 ## Adding a new map feature: the KEEP-CLEAR CONTRACT (read this before writing the glyph)
 
@@ -335,7 +193,7 @@ check `all_ink_is_ruled_on` fails a scripted hamlet on ink with no class and on 
 registry does not know, so a new glyph without its class shows up at the next reference roll.
 Index: [`../l7r/diagram/interactive/CLAUDE.md`](../l7r/diagram/interactive/CLAUDE.md).
 
-The GM's observation, 2026-07-25, after the martial hall shipped sitting on Tango's ring road:
+The GM's observation, 2026-07-25, after a new building shipped sitting on a ring road:
 *"every time we add a new type of thing, I end up looking at the map and saying 'oh, this new thing
 should not overlap with X'."* That is now a solved problem, and this is the whole of what you have
 to do.
@@ -351,29 +209,21 @@ every pair; `matrix_violations()` in `l7r/diagram/overlap/matrix.py` is the one 
 made. There is no per-hazard check list to keep in step any more: the fifteen-hazard battery and the
 `solid_structs(M)` footprint builder it read went with the check battery in feature 166.
 
-**The failure mode this replaced.** The old `no_structure_on_*` battery was registry-driven, but a
-handful of keep-clear checks predated it and hand-listed their own keys. A feature could be correctly
-classified, cleared of every battery hazard, and still sit on the ring road - because one check was
-reading eight keys nobody had updated. A check that never sees your feature looks exactly like a check
-that passes, so this was invisible until the GM looked at a rendered map. The matrix closes that
-class: a pair the registry does not permit fails whichever feature is newer, with no list to forget.
+**Don't hand-list keys in a keep-clear rule.** A check or probe that reads its own list of manifest keys falls
+behind the registry, and a check that never sees your feature looks exactly like a check that passes; the matrix
+closes that class, because a pair the registry does not permit fails whichever feature is newer.
 
 **The ratchet.** Since feature 287 M8 the matrix is refused at RECORD time, not audited after: every footprint the
 settlement records goes through the registry of what stands (`overlap/registry.py`, a grid index filed as each record
 lands), a hamlet raises `OverlapRefused` on a record the matrix forbids on what stands, and every placer asks
 `Settlement.admits(key, record)` before it chooses (the finished-map test `test_no_feature_overlaps.py` is retired,
 research R8). `tests/settlement/test_homestead_parts.py` censuses the roster. A new feature with no class fails the
-classification guard before it ever reaches the matrix.
-Verified to have teeth: reverting `ring_road_kept_clear` to its old list fails it with 21 keys
-listed. **Adding a hazard row to `_HAZARDS` extends the contract to every existing feature at
-once** - that is the cheap way to answer the next "should not overlap with X".
+classification guard before it ever reaches the matrix. **A permission or a prohibition in the class matrix extends
+the contract to every existing feature at once** - that is the cheap way to answer the next "should not overlap with X".
 
 **The same contract covers CAPTIONS** (GM 2026-07-26). A feature protected from every solid
-neighbor is still not protected from a label dropped on top of it, and
-`labels_clear_of_other_buildings` had its own hand-written list of ~22 keys that had already fallen
-behind twice - `martial_halls`/`dojos` had to be remembered into it, and a day later
-`punishment_spots`/`execution_grounds`/`boundary_markers` were absent, so a foreign caption over an
-execution ground shipped green. `_LABEL_GROUP` now maps each manifest key to the caption GROUP a
+neighbor is still not protected from a label dropped on top of it, and a hand-written list of caption-protected
+keys fell behind twice in two days. `_LABEL_GROUP` now maps each manifest key to the caption GROUP a
 label must name to be allowed over it, `_LABEL_EXEMPT` excuses the few that do not need protecting
 (with the reason), and `every_solid_feature_classified_for_labels` fired when a key was in neither (both checks went
 with `check_village/`, feature 166; the registry now lives in `overlap/taxonomy.py` and the one caption placer reads it).
@@ -387,22 +237,16 @@ general we always want overlap checks to use full footprints."* `matrix_extents`
 a `poly`/`outline` ring, a stroked polyline, or a `parts` list of rotated quads. A record matching
 NONE of those is extracted as nothing, and a feature the extractor never reaches is invisible to
 every matrix check in both directions no matter how carefully it is classified and mounted - which
-looks exactly like a feature with nothing wrong. Three keys were in that state until an audit went
-looking (`kido`, which records only a center and its parts; `roads`, the multi-road list;
-`flower_fields`, whose ring is called `outline`, not `poly`), and the ward gate had been hiding a
-notice board sitting on its guard box and two guard boxes cut by their own ward fence. The audit is
-cheap and worth re-running whenever a new key appears - per manifest, compare each classified key's
+looks exactly like a feature with nothing wrong (three keys were in that state until an audit went looking). The
+audit is cheap and worth re-running whenever a new key appears - per manifest, compare each classified key's
 record count against `collections.Counter(k for k, *_ in matrix_extents(M))`; any key with records
 and no extents is blind. And where one glyph draws SEVERAL rects, record them as `parts` (rotated
 corner quads) rather than a bounding box, and split out any part that does not share the whole
 feature's permissions - a gateway may stand on the fence it pierces, its watch box may not.
 
-**The same disease turns up in PLACEMENT PROBES, where it is quieter.** `place_punishment_spot`
-probes candidate boxes for its own caption before committing to one, and that probe had its own
-hand-written list of nine manifest keys - `dye_yards` was never in it, so when a reflow put Minami's
-punishment ground beside the dye works the probe reported a clear box and the gate reported a caption
-on a dye works (2026-07-27). It now iterates **any manifest list of dicts carrying w/h**, so nothing
-has to be remembered into it. Two sibling lessons from the same defect, both worth generalizing:
+**The same disease turns up in PLACEMENT PROBES, where it is quieter**: a caption probe with its own hand-written key
+list reported a clear box beside a feature it had never heard of. A probe iterates **any manifest list of dicts
+carrying w/h**, so nothing has to be remembered into it. Two sibling lessons, both worth generalizing:
 
 - **A probe must measure the box the CHECK will measure.** That probe sized its trial box with
   `_text_width` (the PIL glyph measurement) while `labels_clear_of_other_buildings` (since retired) read the box
@@ -415,59 +259,19 @@ has to be remembered into it. Two sibling lessons from the same defect, both wor
 
 **And a caption that is DEFERRED cannot be reserved by reading it back.** `place_caption` seats at
 `finish()`, so `s.M["labels"][-1]` right after the call returns some *earlier* label, and a gen that
-reserves that box reserves the wrong ground (tango's theater stage, 2026-07-27). Worse, the ladder
+reserves that box reserves the wrong ground. Worse, the ladder
 seats a deferred caption against a map that is already full, so it takes the LEAST-BAD spot rather
 than a clear one. A deferred caption's ground has to be reserved by hand, BEFORE the packs run.
 
-**So the checklist for a new feature is:** write the glyph; record it under a new manifest key; add
-that key to `_OVERLAP_STRUCTS` and give it a caption group in `_LABEL_GROUP`; run the suite. If the
-feature needs a keep-clear rule no existing hazard covers, add a hazard row rather than a bespoke
-check with its own key list.
+**So the checklist for a new feature is:** write the glyph with its feature class; record it under a new manifest key
+with a footprint the extractor can read; add that key to `_OVERLAP_STRUCTS` (or `_OVERLAP_EXEMPT` with the reason) and
+give it a caption group in `_LABEL_GROUP`; run the suite. A keep-clear rule no class pair covers is a matrix entry,
+never a bespoke check with its own key list.
 
-**The placement side, which the GM asked about next.** `_fits` tests an urban candidate's CENTER
-against `s.bound`, `block_polys` and the corridors, and whole footprints only against `placed` /
-`grove_rects` (see DRAW ORDER above). `open_seat` now closes the half of that gap that matters:
-it verifies the whole FOOTPRINT against **the bound**, because a bound is a hard edge (the
-ring-road loop, the wall) and a footprint crossing it is drawn on the patrol road at any overhang -
-which is exactly how the martial hall got its seat. `block_polys` and corridors stay center-tested
-even there, deliberately: those are soft RESERVATIONS (a label band, a civic apron, a fence
-standoff) that a footprint routinely overhangs by a few px, and tightening them was tried and cost
-Nagahara a well and pushed Hoshizora's punishment ground off its street. The bound-only rule
-changes nothing in the pool. `footprint=False` gets the old center-only answer, i.e. what a pack
-would take. (`test_open_seat_refuses_a_seat_whose_FOOTPRINT_crosses_the_bound` holds this.)
-
-**Gap rules are in the table now, but one row each.** A clearance rule ("14px of daylight", not
-"no overlap") is the other shape a keep-clear rule comes in, and it broke identically:
-`city_government_offices_dont_abut` had never seen the martial hall or the dojo, so both shipped
-inside its standoff. A `_HAZARDS` row expresses a gap simply by planting the struct NEAR the hazard
-instead of on it, so the contract covers it - but unlike the overlap hazards, each new distance
-rule still needs its own row. A row's fifth field lists keys the rule DELIBERATELY does not govern
-(the funerary compounds are excluded from the office standoff: a clan crypt against the yamen is a
-real adjacency), so a deliberate exclusion is visible in the contract rather than hidden in a
-check.
-
-## The collision circle is now blocking FEATURES, not just wasting ground
-
-The "CENTER vs FOOTPRINT" entry above records the circumscribed-circle collision as a documented
-inefficiency: `_fits` measures a candidate against `placed` with half-diagonal circles, so a 46x28
-house is forced 57.8 px from its neighbor where true touching is 28. Two 2026-08-11 findings move
-it from *inefficiency* to *blocker*, and they are the same finding twice:
-
-- **The capital cannot seat a wellhead.** Two machi blocks sit at 27 and 29 households per well
-  against a cap of 26, and `open_seat(..., well=True)` refuses a probe at 12, 10 AND 8 px anywhere
-  in either block. Tightening the derived well grid does add wells, but they land close enough to
-  existing ones to trip `wells_not_clustered` before the deficit clears - the two rules meet with
-  one household of daylight between them. Trimming the covering packs does nothing: both are
-  capacity-bound and already placing fewer than asked.
-- **The capital's new paddy cannot seat a farmhouse.** Ten positions around the field envelope,
-  tried three ways (the perimeter ring, `open_seat`, and `try_place` directly): **6 of 10 refused
-  by the collision circle**, 3 by a corridor, 1 by a keep-out.
-
-So the next substantial engine job is the one this file already prescribes, in the order it
-prescribes it: **item 3 first** - make the placer test the ROTATED footprint it is actually going
-to draw - and only then item 2, replacing the circles with a real `sat_overlap` on real corner
-quads. Both of the above clear as a side effect, and so does most of the frontage-seat fighting.
-Budget for the pool re-roll: the naive swap alone moved Tango +21 houses, +20 buildings, +23 wells.
+**The placement side.** `open_seat` verifies the whole FOOTPRINT against **the bound**, because a bound is a hard
+edge (the ring-road loop, the wall) and a footprint crossing it is drawn on the patrol road at any overhang;
+`block_polys` and corridors stay center-tested even there, deliberately (item 1 above). `footprint=False` gets the
+center-only answer a pack would take (`test_open_seat_refuses_a_seat_whose_FOOTPRINT_crosses_the_bound` holds this).
 
 ## Two placer bugs of the same shape: INDEX vs POP
 
@@ -488,8 +292,7 @@ as its reason and the immune test as its proof. The GM retired the requirement: 
 upstream change in the number of random draws moving a map"*. The test, `rollcache.extra_draws` and
 `_perturbed_manifest` went with it, and nothing proves the property any more. What follows is how the engine's
 randomness IS structured, and why it was built that way - every current draw site uses the two mechanisms, and a new
-draw is easier to reason about if it does too - not a rule a gate enforces. The measurement and the probe recipe
-are history.
+draw is easier to reason about if it does too - not a rule a gate enforces.
 
 The practice: **a feature's randomness depends on the feature, not on how much randomness the map has drawn
 before it.** Two mechanisms, and one of them fits every case.
@@ -505,33 +308,11 @@ before it.** Two mechanisms, and one of them fits every case.
   that identifies the instance: the bbox, the street run, the base polygon. Repeat calls on one key
   get their own numbers via a per-key counter, so two packs over the same ground do not twin.
 
-**WHY (GM 2026-08-08), measured.** Everything drew from one global stream, so any change that altered
-the NUMBER of draws made before a phase re-rolled that phase however unrelated it was. Injecting ONE
-extra draw at the top of a gen and diffing every manifest key:
+**Why it was built that way (GM 2026-08-08):** when everything drew from one global stream, any change in the NUMBER
+of draws before a phase re-rolled that phase however unrelated it was - a caption resize in a city's temple quarter
+dropped a farm shed on a garden 700 px away, and debugging a map you did not change is the expensive kind of work.
 
-| tier | before | after |
-|---|---|---|
-| hamlet, village | 2 of 63-69 keys | **0 - isolated** |
-| town, city | 12-15 of 71-101 keys | see below |
-
-The cost was not theoretical. A caption resize in a city's temple quarter dropped a farm shed on a
-garden **700 px away**, and the session that fixed it spent most of its time on maps it had not
-meant to touch. Debugging a map you did not change is the expensive kind of work.
-
-**HOW TO FIND THE NEXT ONE, because the method matters more than the list.** Run a gen twice - once
-normally, once with one extra `random.random()` injected at `meta()` - and diff. Two probes, in this
-order:
-
-1. **Record-level**: for each manifest key, the first index whose record differs, and which FIELDS
-   differ. `fields=['rot']` on the same x/y is an ATTRIBUTE drift (positional fix). A different x/y
-   is a SEAT drift (scope the placer).
-2. **Draw-site level**: wrap the `random` module functions to log the calling `file:line`, and find
-   the first index where the two SEQUENCES disagree. That names the culprit exactly.
-
-Use (1) first. Once the scopes are in, (2) starts reporting *consequences* - a grove whose crowns
-differ because the buildings around it moved - and will send you chasing the wrong thing.
-
-**Every one of these changes re-rolls the whole pool once**, so batch them: convert everything you
+**Converting a draw site re-rolls the whole pool once**, so batch them: convert everything you
 intend to, THEN regenerate and fix the fallout in one pass. Fixing fallout between conversions is
 work you will throw away, because the next conversion produces a different fallout set.
 

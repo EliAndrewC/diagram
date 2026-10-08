@@ -1941,7 +1941,7 @@ test-full:      ## [tests] the gate's whole test phase + all three coverage floo
 # GUARD_EDIT_OK: the last two stale `sweep` strings in this file - both FALSE as written, since
 # make_target returns `soak` and tests/sweep/ does not exist. Caught by the spec review, not by me.
 # dispatches (`ci/dispatch.py make_target()` returns `soak`, not `done`). Doctrine, the membership
-# rule and why the directory is empty: tests/soak/CLAUDE.md.
+# rule and what the directory holds: tests/soak/CLAUDE.md.
 #
 # IT REFUSES ON AN EMPTY SUITE, deliberately. A remote build that goes green having executed zero
 # tests is worse than one that goes red: it is evidence of nothing while looking like evidence. This

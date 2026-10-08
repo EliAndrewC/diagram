@@ -17,9 +17,6 @@ from a slowdown):
 Written by `scripts/_runstats.py` (what each figure reads and why only one read each), pinned by
 `tests/tooling/test_runstats.py`.
 
-**A CLAUDE.md rather than a README, deliberately**: this is a rule a session has to KNOW, and a
-README is never loaded. See [`../perf-log/CLAUDE.md`](../perf-log/CLAUDE.md) for what that cost.
-
 ## Why a folder per month
 
 Each entry goes in `<YYYY-MM>/`, named from its own UTC stamp (2026-10-02). Both logs gain an entry per gate run
@@ -29,17 +26,8 @@ year. Every reader searches recursively, so an entry a clone wrote flat before s
 
 ## Why a directory and not one log file
 
-**The same reason as [`../perf-log/`](../perf-log/README.md), and this file exists because that
-lesson had to be learned twice.** Several session clones work on this engine at once, and an
-append-only shared log conflicts on EVERY concurrent push: two sessions add lines at the same offset
-and git has no way to know which goes first. The merge is textual; the content is not. A file per
-entry never conflicts, because git merges disjoint new files without being asked.
-
-The first version of this log was a single `run-log.jsonl`, written on 2026-08-24 by a session that
-had read `perf-log/README.md` earlier the same day and quoted it. The GM caught it: *"I thought that
-the general way to deal with this would be to have a directory rather than a file... I'm not sure if
-you implemented a single file because you figured out that this will not be a problem or if my
-instructions simply got dropped."* Neither - the pattern was in the repo and went unapplied.
+Several clones append at once, and disjoint new files never conflict where one shared file conflicts on every
+concurrent push: the rule and the GM's 2026-08-24 ruling behind it are in [`../perf-log/CLAUDE.md`](../perf-log/CLAUDE.md).
 
 ## Why it exists at all
 

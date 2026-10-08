@@ -1,6 +1,6 @@
-# `tests/` - the diagram skill's test bed
+# `tests/` - the diagram project's test bed
 
-<!-- the engine's dev loop applies to test work too (feature 250 moved it out of the skill's CLAUDE.md) -->
+<!-- the engine's dev loop applies to test work too -->
 @../l7r/diagram/CLAUDE.md
 
 ## THE DIRECTORY DECIDES WHEN A TEST RUNS (feature 135, GM 2026-08-27)
@@ -16,16 +16,15 @@ the Makefile collects TREES, and where you put a test is the whole decision.
 |---|---|---|
 | `tests/` (with its mirrored packages) | `make quick`, `make done`, the full run | it is a UNIT form: milliseconds to ~0.5 s, no map rolled, no tooling run. The quick suite's 60 s budget is the bar |
 | `tests/gate/` | `make done` and the full run - never quick | it earns MERGE time: a real roll of one representative spec (served from the roll cache while nothing it executes changed - `l7r/diagram/pipeline/rollcache.py`), the bad-map corpus, a proof of tooling |
-| `tests/full/` | **a plain `make done`** (feature 174 - its test phase IS `test-full`), `make test-full`, `make done FULL=1` and the AWS check | it is a SWEEP or a CARRIER: every pool map, every seed of a cohort, a determinism test that must roll twice for real, a fixture replayed only to carry coverage, a real-map cache round trip. Since feature 174 a PLAIN `make done` enforces the coverage floors too - the deferral is gone, and this row's old "`make done`: no - deferred" is what that feature closed. The floors enforced here are all three - including the derived 100% floor on every module the scripted hamlet rolls execute (feature 145, `make hamlet-floor`) - and where no cache serves a roll |
-| `tests/tooling/` | the gate and the full run - never quick (GM 2026-09-27: it used to join quick whenever the tooling changed, which meant the first quick after every sync-in; a `tooling`-marked test outside this tree, as in `tests/tools/`, is kept out of quick by its marker); skipped at the gate while the tooling is unchanged (never in FULL); `make test-file FILE=tests/tooling` on demand | it RUNS the make/ci/pipeline tooling (make in a fixture, git repos in tmp, coverage subprocesses) |
+| `tests/full/` | a plain `make done` (its test phase IS `test-full`), `make test-full`, `make done FULL=1` and the AWS check | it is a SWEEP or a CARRIER: every pool map, every seed of a cohort, a determinism test that must roll twice for real, a fixture replayed only to carry coverage, a real-map cache round trip. All three coverage floors are enforced here, including the derived 100% floor on every module the scripted hamlet rolls execute (`l7r/diagram/tools/hamlet_floor.py`, run inline by the gate) |
+| `tests/tooling/` | the gate and the full run - never quick (GM 2026-09-27; a `tooling`-marked test outside this tree, as in `tests/tools/`, is kept out of quick by its marker); skipped at the gate while the tooling is unchanged (never in FULL); `make test-file FILE=tests/tooling` on demand | it RUNS the make/ci/pipeline tooling (make in a fixture, git repos in tmp, coverage subprocesses) |
 | `tests/tier_town/`, `tests/tier_city/` | the gate and the full run | it is relevant to that tier only |
-| `tests/soak/` | **no ordinary run** (`norecursedirs`); `make soak` names it - the CI or AWS tier, not a kind of test run today (GM 2026-09-08) | it rolls MORE than the gate's floor strictly needs - a behavior asserted on a real map that no coverage line requires (constitution VI, feature 216); today: the seed-43 kink's strict xfail |
+| `tests/soak/` | **no ordinary run** (`norecursedirs`); `make soak` names it (GM 2026-09-08) | it rolls MORE than the gate's floor strictly needs - a behavior asserted on a real map that no coverage line requires (constitution VI, feature 216); [`soak/CLAUDE.md`](soak/CLAUDE.md) |
 
 ## WHICH TARGET RUNS WHICH TREE - the table above read the other way round
 
 The table says where to PUT a test. This one says what each command actually collects, because the
-names do not say it and a session got it wrong on 2026-08-31, in the direction that matters: it told
-the GM `make test-full` ran less than the whole suite.
+names do not say it (a session once told the GM `make test-full` ran less than the whole suite).
 
 | command | `tests/` | `gate/` | `full/` | `tooling/` | `tier_*/` | floors |
 |---|---|---|---|---|---|---|
@@ -34,13 +33,12 @@ the GM `make test-full` ran less than the whole suite.
 | **`make test-full`** | **yes** | **yes** | **yes** | **yes** | **yes** | **all three** |
 | `make done FULL=1` | as `test-full` - it RUNS `test-full` | | | | | all three |
 
-**A plain `make done` is INCREMENTAL since feature 207** - the rows above say what a target COLLECTS; the incremental gate then deselects, within the collected suite, every test the change cannot reach (its own coverage contexts and its fixtures' never executed a changed file), and the floors are judged over the merge with the last full run. `make done INCREMENTAL=0` and `make test-full` run everything.
+**A plain `make done` is INCREMENTAL (feature 207)** - the rows above say what a target COLLECTS; the incremental gate then deselects, within the collected suite, every test the change cannot reach (its own coverage contexts and its fixtures' never executed a changed file), and the floors are judged over the merge with the last full run. `make done INCREMENTAL=0` and `make test-full` run everything.
 
 **`make test-full` DESELECTS NOTHING.** Everything is keyed on `COV_FLOORS`, which it sets, and each
 deselection is written `$(if $(COV_FLOORS),,<the deselection>)` - present only when it is EMPTY:
-`FULL_TREE_IGNORE` switches off (`ROLL_DESELECT` and `TIER_SELECT` are empty since feature 185 retired the scope lock), `L7R_TESTS_FULL=1` and
-`EXHAUSTIVE` switch on. The tooling ignore is not even in that family - it lives only in `QUICK_TREE`,
-so `make quick` is the ONLY target that ever skips a tooling test.
+`FULL_TREE_IGNORE` switches off, `L7R_TESTS_FULL=1` and `EXHAUSTIVE` switch on. The tooling ignore is not even in
+that family - it lives only in `QUICK_TREE`, so `make quick` is the ONLY target that ever skips a tooling test.
 
 **So what does `done FULL=1` add over `test-full`? NOT MORE TESTS.** It adds the non-test phases:
 `lint`, `format`, `typecheck`, the reference map roll, `hooks-test`, `perf-gate` - and the paid-run
@@ -51,23 +49,26 @@ The marker on a test (`rolls_map`, `tooling`, `tiers`) is the exact filter withi
 is the collection scope. `make quick` announces how many `rolls_map` tests it did not run; the gate
 short-circuits when nothing it exercises changed. A test with a quick FORM and a full FORM
 (`tests/_scope.py`: `subset`, `full_or`) stays in one tree and reads `EXHAUSTIVE`; a test whose
-whole value is the sweep goes to `tests/full/`. The audit that drew these lines, with the cost of every
-test the gate ran on 2026-08-27, is `specs/135-done-test-audit/research.md`.
+whole value is the sweep goes to `tests/full/`. The audit that drew these lines: `specs/135-done-test-audit/research.md`.
 
 **The layout mirrors the source.** A test for `settlement/houses.py` is in
 `tests/settlement/test_houses.py`; a test for `pipeline/gencache.py` is in
 `tests/pipeline/test_gencache.py`. That is the whole navigation rule - if you know which module you
-changed, you know which directory to open.
+changed, you know which directory to open. The trees above (`gate/`, `full/`, `tier_*/`) mirror the same packages inside.
 
 | directory | tests | its own index |
 |---|---|---|
 | `settlement/` | the Mode B drawing engine | [CLAUDE.md](settlement/CLAUDE.md) |
-| `hamletgen/` | the scripted hamlet generator | - |
+| `hamletgen/` | the scripted hamlet generator | `hamletgen/ways/` has [CLAUDE.md](hamletgen/ways/CLAUDE.md) |
 | `sitegen/` | the machinery the tiers SHARE (geometry, types, worker counts) | - |
 | `waterfields/` | the water-first field engine | - |
 | `pipeline/` | the cache, regen driver, render cache and pool index | - |
-| `interactive/` | the interactive HTML map (feature 134): the class registry and the page's string layer; the research RECORD's form (`test_footnotes.py`, `test_sources.py`, `test_record.py`, and since feature 209 `test_record_format.py` - the fields are comments, no session note or document history is visible, the glossary asset is derived and every term used; since feature 211 `test_citations.py` - every cited key has both write-ups; since feature 301 every one of them reads the record through `tests/_record_pages.py` and `sources.record_text`, because nothing built is committed, and `test_record_build.py` holds the site's build on main; since feature 303 the record is flat - `tests/_flat_record.py` is the small record the tests build and break, `test_record_questions.py` holds the tags, the contents and every refusal, and a page's notes are its own); the Playwright browser test is the package `full/interactive/page_browser/` (the GM's ruling, 2026-08-28: a 15 s browser test is full-tree material) - the synthetic page only since 2026-09-07 (the rolled-page and timing tests were retired; `page_browser/CLAUDE.md`), and **skipped by the gate while nothing it reads changed** (feature 206: `gate-stamp.py`'s `browser` key - the interactive modules, the assets, the package, the record's fragments, the installed browser; earned by `make page-check` or a `make done` that ran it) | - |
+| `labels/` | caption paths and the hand-sheet labels | - |
+| `interactive/` | the interactive HTML map: the class registry and the page's string layer; the research RECORD's form (`test_footnotes.py`, `test_sources.py`, `test_record*.py`, `test_citations.py`, ...), each reading the record through `tests/_record_pages.py` and `sources.record_text` because nothing built is committed; `tests/_flat_record.py` is the small record the tests build and break. The Playwright browser test is `full/interactive/page_browser/` ([CLAUDE.md](full/interactive/page_browser/CLAUDE.md)), skipped by the gate while nothing it reads changed (`gate-stamp.py`'s `browser` key; earned by `make page-check` or a `make done` that ran it) | - |
 | `tools/` | the audits and diagnostics that are under the 100% rule | - |
+| `tooling/` | the make/ci/pipeline tooling, run for real (the tree above) | - |
+| `gate/`, `full/`, `tier_town/`, `tier_city/` | the trees above | - |
+| `soak/` | the soak tier | [CLAUDE.md](soak/CLAUDE.md) |
 | `fixtures/` | DATA, not tests: frozen red SVGs (Mode A negative fixtures), `gate_check_names.json`, `registry_legacy_rows.json` | - |
 
 At the root of `tests/` sit the suites that are not about one module:
@@ -83,19 +84,16 @@ At the root of `tests/` sit the suites that are not about one module:
 
 ## Running it
 
-    python3 -m pytest -q -n auto                      # everything (from the skill root)
-    python3 -m pytest tests/settlement/ -q -n auto    # one mirrored package, WHOLE
+    make quick                                         # while iterating: the tests your change reaches
+    make test-file FILE=tests/settlement/              # one mirrored package, WHOLE
     make done                                          # the real gate: lint + format + pyrefly + tests + coverage
 
-**Always `-n auto`.** Serial pytest is about 7x slower here; the 695-manifest regression replay is
-~2 minutes under the gate and 13.4 minutes serial. And before the gate, run the WHOLE affected file
-or directory, never a `-k` subset: a filter selects the tests you were thinking about, and a change
-breaks the ones you were not. Both rules, with the round trips they each cost once, are in the
-skill's [`../CLAUDE.md`](../CLAUDE.md).
+The hooks refuse a bare `pytest` (`make-only-hooks.sh` rewrites a targeted one to `make test-file`). Before the gate,
+run the WHOLE affected file or directory, never a `-k` subset: a filter selects the tests you were thinking about, and a
+change breaks the ones you were not (`gate-hooks.sh`).
 
 `testpaths = ["tests"]` in `pyproject.toml` pins collection here. Without it pytest walks the whole
-skill directory, and from the repo root it walks every `.clones/` checkout as well - pytest does
-not read `.gitignore`.
+repository, every `.clones/` checkout included - pytest does not read `.gitignore`.
 
 ## A HAMLET IS ROLLED ONCE PER GATE, AND ROLLING ANOTHER IS A RECORDED DECISION (feature 213, GM 2026-09-07)
 
@@ -114,17 +112,17 @@ adding another hamlet that gets rolled."* So:
   row points at the research section recording its audit (`audit=`, checked by `tests/test_rolls.py`); a test that
   rolls more belongs in `tests/soak/` (constitution VI v2.23.0). The reference and Kuwabata are the POOL's maps: every gate reader takes them
   through `tests/gate/_pool.py` (`rolled_map`, `rolled_report` - the sweep's entry, served warm, rolled cold once
-  under a per-gen lock); since feature 219 nothing rolls the reference under a spec (the immune experiment's perturbed roll was retired with its requirement). A rolling test's spec must be there; the roll census fails the gate otherwise and
+  under a per-gen lock); nothing rolls the reference under a spec. A rolling test's spec must be there; the roll census fails the gate otherwise and
   says to add the row WITH ITS REASON - and if the reason is a row that already exists, reuse that row's
   roll instead. Three stated exceptions live beside it: a `Duplicate` (a site that must roll a rostered spec
-  again by its nature - historically the fan-out's pool child, the immune test's perturbed roll, the cache round trip; none since 215),
+  again by its nature; none today),
   a `PoolGen` (a shipped generator the pool sweep runs only when its cache key moved) and an `InProcess`
   module (the perf tests, which time the stages where they run, each on its own seed; the stub-stage
   tests, `stub=True`, whose stand-in rolls are reported and bounded rather than counted).
 - **The census is written at the chokepoint, not by patching.** `driver.roll_scope()` - which every
   stage-running loop enters, proven by the AST test in `tests/hamletgen/test_driver.py` - appends a record
   to the file `L7R_ROLL_CENSUS` names, in every process of the run; the `-p l7r.diagram.ci.rollcensus`
-  plugin attributes each record to the test that caused it; `python3 -m l7r.diagram.ci rollcensus verdict`
+  plugin attributes each record to the test that caused it; the gate's `l7r.diagram.ci rollcensus verdict` step
   judges the run after the hamlet-floor phase (`ci/rollverdict.py`), which runs under the same census: a
   second roll of a spec, an unrostered roll, a stale row on a full run, a render from an unmarked test, an
   in-process roll from an unexcepted module, a roll the floor made itself. And because the incremental gate
@@ -150,7 +148,7 @@ adding another hamlet that gets rolled."* So:
   These files do not start with `test_`, which is why the engine-tree walks prune `tests/` by name
   (below).
 - **`test_surface.py`** in `hamletgen/` and `waterfields/` is the package-surface
-  guard: it censuses what the rest of the skill actually reaches through the package and proves the
+  guard: it censuses what the rest of the project actually reaches through the package and proves the
   `__init__.py` re-export still resolves it. Feature 027 replaced hand-maintained rosters with star
   imports plus these guards, so the surface is derived and the guard is what makes that safe.
 - **A CLOSURE YOU CANNOT REACH IS LIFTED OUT, NEVER DROPPED** (feature 146, GM 2026-08-28: *"if something
@@ -173,31 +171,18 @@ adding another hamlet that gets rolled."* So:
   value ... we can have one hundred percent unit test coverage and have a unit test which asserts that
   things are now correct without saving off the old map."*). The test per check is SAME MEASURE vs SAME
   FACT: a check that re-measures what a correct placer guaranteed is retired, its guarantee carried by
-  the placer's test (`make check-census`; the ledger in `specs/141-checks-and-corpus-audit/`); a check
-  that measures a LATER fact - a caption after the scatter, the lane web after clipping, the board after
-  the yards - stays, because its placer only does its best. A kept check proves it fires on a SCRIPTED
-  negative fixture (`gate/test_scripted_fixtures.py`: a cached roll plus one deliberate break, targeted),
-  not on a frozen manifest from the hand-placement era; `pool/regressions/` holds what remains of that
-  corpus until the GM's ruling on the legacy tiers. Mode A fixtures are frozen bad SVGs in `fixtures/`.
-- **THE RECORD OF WHAT HAS FIRED BEATS THE DATAFLOW VERDICT (feature 158, 2026-08-29).** `make
-  check-census` answers one question - does any stage after this check's placer change an input it
-  reads - and a NO makes the check a retirement CANDIDATE. It is not a ruling, because the census
-  cannot see a placer that fails softly: it reads the manifest, not the code. Before retiring a
-  candidate, read the placer and grep the record. Worked example, both directions, in one feature:
-  `bridges_align_with_their_way` was retired (it re-derived the crossings from the same source the
-  placer uses, and its only evidence in the whole repository was two decks a person placed by hand on
-  maps no generator can produce), while `bridges_span_their_water` - the same family, the same
-  mechanical verdict - was KEPT, because `hamletgen/ways.py` records it catching the SCRIPTED placer
-  four separate times on oblique crossings. The candidate list is where the audit starts, not where
-  it ends.
-- **The hand-era corpus at the LEGACY tiers is gone (feature 158, GM 2026-08-29:** *"there is no
-  reason to see what would happen if we encountered a type of map, which is literally impossible to
-  produce any longer"***).** Every fixture in `pool/regressions/` declaring `town`, `city`, `capital`
-  or `village` scale was deleted (26 of them), along with `tests/tier_city/test_frozen_pool_gate.py`
-  and the five frozen-pool coverage carriers in `tests/full/`. The fixtures that declare NO tier stay:
-  those are synthetic manifests captured from unit tests - hand-BUILT, not hand-PLACED - and they are
-  the cheapest negative fixtures there are. When a tier converts to scripted generation it gets
-  scripted negative fixtures, not a restored corpus.
+  the placer's test (the ledger in `specs/141-checks-and-corpus-audit/`); a check that measures a LATER
+  fact - a caption after the scatter, the lane web after clipping, the board after the yards - stays,
+  because its placer only does its best. A kept check proves it fires on a SCRIPTED negative fixture (a
+  cached roll plus one deliberate break, targeted), not on a frozen manifest from the hand-placement era.
+  Mode A fixtures are frozen bad SVGs in `fixtures/`.
+- **Before retiring a check, read the placer and grep the record of what it has caught** (feature 158): a
+  dataflow verdict that no later stage changes the check's inputs makes it a CANDIDATE only, because it
+  cannot see a placer that fails softly. `bridges_span_their_water` was kept on that ground - `hamletgen/ways.py`
+  records it catching the scripted placer four times on oblique crossings.
+- **Don't restore the hand-era corpus** (feature 158, GM 2026-08-29: *"there is no reason to see what would
+  happen if we encountered a type of map, which is literally impossible to produce any longer"*). When a tier
+  converts to scripted generation it gets scripted negative fixtures, not a restored corpus.
 
 ## `tests/` is invisible to the generation cache, on purpose
 
@@ -211,7 +196,6 @@ key.** That is correct for tests and helpers. If you ever need a module here tha
 imports, it does not belong here - put it in the engine, or in
 [`../l7r/diagram/pipeline/`](../l7r/diagram/pipeline/CLAUDE.md).
 
-**`tests/` did not move under `l7r/diagram/` and should not.** The skill directory stays the
-`sys.path` root (feature 119), so `HERE`-style roots computed here are unchanged, while the engine's
-own roots moved two levels deeper. Tests import the engine by its full name -
+**`tests/` did not move under `l7r/diagram/` and should not.** The repository root is the `sys.path` root
+(feature 119), so `HERE`-style roots computed here resolve to it. Tests import the engine by its full name -
 `from l7r.diagram.settlement import Settlement`, `from l7r.diagram import overlap`.

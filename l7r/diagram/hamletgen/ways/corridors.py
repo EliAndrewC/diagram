@@ -146,7 +146,7 @@ def _file_segments(grid: PointGrid, courses: Sequence[Sequence[Sequence[float]]]
 
 class GroundIndex:
     """The ground a corridor's lawful-ground test reads (`settle.Lawful.on_lawful_ground`), INDEXED ONCE per standing
-    manifest (dev/performance.md, "build the blocked ground once"): the seating asks it of every corridor it tries - seed
+    manifest (constitution X clause 15, "build the blocked ground once"; dev/performance.md, "The third shape"): the seating asks it of every corridor it tries - seed
     17, 1,686 runs - and each walked every water course, every field and dry-plot outline and every farmstead part.
 
     It only PRUNES: `water_near` says whether any water segment comes within a pad of a run (no crossing fault and no

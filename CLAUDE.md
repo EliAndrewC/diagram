@@ -50,8 +50,8 @@ Enforced by `scripts/house-style-hooks.sh`, which corrects the text rather than 
 ### Research
 
 Constitution XII. The full record with the GM's rulings is `docs/research-doctrine.md`; the
-operative form of the citation rules (the footnote shape, the notes and the works cited, the download list)
-is `research/CLAUDE.md`, which auto-loads when a session edits the record.
+operative form of the citation rules (the footnote shape, the notes and the works cited) is `research/CLAUDE.md`, which
+auto-loads when a session edits the record; the archive and the download list are `research/downloads.md`.
 
 - A question about how a place was built, farmed, planted or lived in is a RESEARCH question. Run
   the search pass before deciding, before asking the GM, and before writing "guess". The GM is asked

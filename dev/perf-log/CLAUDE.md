@@ -1,25 +1,25 @@
 # `perf-log/` - how long the generator took, over time
 
-> **This was a README until 2026-08-24, and the rename is not cosmetic.** A README is not loaded into
-> a session's context; a directory `CLAUDE.md` is, automatically, whenever work happens here. The
-> "why a directory and not one log file" rule below was written in this file, read by a session
-> during an unrelated audit, and then broken by that same session hours later when it created a
-> single-file `run-log.jsonl`. Had this been a CLAUDE.md the rule would have been in context at the
-> moment it mattered. **A README is written by a human for a human; anything a session must KNOW
-> belongs in a CLAUDE.md or a doc a CLAUDE.md points at.**
-
 One JSON file per snapshot. **Never edit these; never delete one to make a trend look better.**
 
-    make perf                 # record a snapshot (label it: make perf LABEL=126-start)
-    make perf-report          # print the trend, latest vs the one before
-    python3 -m l7r.diagram.tools.perf_snapshot --report --against 126-start
+    make perf LABEL=<NNN>-start          # record a snapshot (and <NNN>-end before shipping)
+    make perf-report                     # print the trend, latest vs the one before
+    make perf-report AGAINST=<NNN>-start # the newest snapshot against a bookend
 
 ## Why a directory and not one log file
 
-Several session clones change this engine at the same time, and an append-only shared log conflicts
-on every concurrent push - the merge is textual, the content is not, and resolving it by hand is
-exactly the kind of chore that ends with someone deleting rows. A file per snapshot never conflicts,
+This is the one home of the rule for every log under `dev/` (`run-log/`, `bypass-log/`, `idle-log/` point here).
+Several session clones change this engine at the same time, and an append-only shared log conflicts on every
+concurrent push - two sessions add lines at the same offset, the merge is textual, the content is not, and resolving
+it by hand is exactly the kind of chore that ends with someone deleting rows. A file per entry never conflicts,
 because git merges disjoint new files without being asked.
+
+The rule had to be learned twice. It was written here (as a README) and then broken on 2026-08-24 by a session that
+had read it the same day, which created a single-file `run-log.jsonl`. The GM caught it: *"I thought that the general
+way to deal with this would be to have a directory rather than a file... I'm not sure if you implemented a single file
+because you figured out that this will not be a problem or if my instructions simply got dropped."* Neither - the
+pattern was in the repo and went unapplied. Hence a `CLAUDE.md` and not a README: a README is never loaded into a
+session's context, and anything a session must KNOW belongs in a `CLAUDE.md` or a doc one points at.
 
 The filename carries `<utc>-<label>-<clone>`, so the trend reconstructs WHO changed WHAT and WHEN
 without opening anything: a run of slow snapshots all from one clone is a feature that regressed,

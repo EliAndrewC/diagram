@@ -438,7 +438,7 @@ class CombMixin:
             # compensates with its own `s.dry_polys.append(...)` line (hoshigaoka, ueda, hikari,
             # hoshizora, hirameki, ubame all carry one); the maps built THROUGH this method never
             # did, and passed only because their clusters happened to sit away from the hem. Found
-            # by the scripted-generation experiment, whose clusters do not (hamletgen.md).
+            # by the scripted-generation experiment, whose clusters do not (dev/lessons.md, "Four lessons from the scripted-hamlet experiment").
             # Registering here is the same discipline as everywhere else in this file: placement and
             # its check must read the SAME source, and the source is what was actually drawn.
             self.block_polys.append(p["poly"])

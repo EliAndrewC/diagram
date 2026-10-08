@@ -434,7 +434,7 @@ def reset_grounds() -> None:
 
 def memo_ground(s: Any, tag: str, build: Any) -> WorkedGround:
     """The worked ground `build(s.M)` makes, BUILT ONCE per settlement while the registries it reads stand unchanged
-    (dev/performance.md, "build the blocked ground once"): the union of a fan's 600-odd rice plots is the costly part, and
+    (constitution X clause 15, "build the blocked ground once"; dev/performance.md, "The third shape"): the union of a fan's 600-odd rice plots is the costly part, and
     the web stage asks for it from five passes. Kept per MANIFEST, so no other roll can ever read it - and every view of
     one manifest shares it (feature 287 perf: the seating's view, `corridor_on_lawful_ground`'s and the settlement itself
     each kept their own, and the reference seed 4's seating took the same 683-ring union three times, 56 ms each)."""
@@ -504,8 +504,7 @@ def _trim_to_service(run: Poly, segs: Sequence[tuple[Pt, Pt]], houses: Sequence[
     way, 90 ft to a HOUSE CENTER, `SPUR_SETBACK + 4` to the field); feature 227 moved all four callers
     onto the gate's figure one at a time, at which point the default was reachable only from this
     module's own unit tests - a literal agreeing with a test and with nothing that ships, which is the
-    shape this project deletes rather than keeps (feature 174's rule for an unreachable line, and
-    `dev/lessons.md` on a stale literal that agrees with itself). Found by a settlement-review reading
+    shape this project deletes rather than keeps (feature 174's rule for an unreachable line). Found by a settlement-review reading
     the comments rather than the code, 2026-09-12.
 
     The ends that are NOT traded for the bar are named instead of excepted: `keep` carries the houses no

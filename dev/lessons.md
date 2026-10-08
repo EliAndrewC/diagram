@@ -1,28 +1,24 @@
 # Method lessons from the diagram work - things not to repeat
 
-**Load this when a fix is not working and you are about to try another one.** Split out of
-`future-work/` on 2026-08-24: that file is a backlog of work TO DO, and these are not tasks. They
-are records of attempts that failed, claims that turned out to be wrong, and the shapes those
-failures take - which is exactly the material the project's own rules say to keep ("record a fix that
-FAILED, at the point of change"; "when stuck, the next step is a MEASUREMENT, not another speculative
-edit").
-
-Read the whole file once. It is short, and the value is in recognizing the SHAPE of a failure you are
-currently inside, which an index cannot give you.
+**Load this file when:** a fix is not working and you are about to try another one. These are not tasks (open work is
+in `future-work/`): they are records of attempts that failed, claims that turned out to be wrong, and the shapes those
+failures take ("record a fix that FAILED, at the point of change"; "when stuck, the next step is a MEASUREMENT, not
+another speculative edit"). The value is in recognizing the SHAPE of a failure you are currently inside, which an
+index cannot give you, so read the headings through once.
 
 ---
 
-## 3. Author-loop pace: log of what ran long (keep appending)
-- 021 resize re-lay (2026-08-10): ~4h of migrate-grind. Root cause: literalness (see #1),
+## Author-loop pace: what ran long (keep appending)
+- 021 resize re-lay (2026-08-10): ~4h of migrate-grind. Root cause: moving literal coordinates by hand,
   plus one avoidable class - bulk text-shifters that touched non-coordinate numbers. Any
   future bulk transform must be coordinate-aware (pairs/boxes only) and verified by
   `grep -E '\* -|court_every=[0-9]{3}'` before regen.
 - Regen+gate cycle is ~10s for the whole capital; the cost is the NUMBER of author cycles,
   never the generator. Batch many fixes per cycle; measure with the check's own data
-  (locators, tools/why_placed.py) instead of guessing coordinates - every hand-guessed seat this
+  (locators, `make why-placed`) instead of guessing coordinates - every hand-guessed seat this
   feature landed on something.
 
-### Two dead ends, both implemented, measured and reverted
+## Two seam-repair dead ends, both implemented, measured and reverted
 
 Neither is a reason not to try again - both got most of the way - but each broke something specific.
 
@@ -33,14 +29,14 @@ Neither is a reason not to try again - both got most of the way - but each broke
    bare ground inside the command area against 1,760, and **492 of those refusals had NO ADJACENT
    BASIN AT ALL** - `_absorb` ranks the basins whose bund forms part of a scrap, so a piece touching
    only its siblings has nothing to rank. Guarding the stranding (abandon the partition when a piece
-   reaches no basin; fold recovery ground into the neighbouring piece) took bare ground to ~4,900 px2
+   reaches no basin; fold recovery ground into the neighboring piece) took bare ground to ~4,900 px2
    and refusals to 281, but then the partition switches itself off exactly where the ground is
    awkward, which is exactly where the staircase is. It is also fragile against GEOS: three separate
    `TopologyException` sites in one afternoon, including inside `_absorb`'s ranking loop.
    **`_seam_cuts` is the same insight applied one stage earlier, at a tenth of the machinery** - the
    pitch, not the partition - which is why it worked.
 2. **Dropping a step's vertices from every ring that carries them.** Looks partition-preserving and
-   is not: the two rings either side of a wall have DIFFERENT neighbouring vertices, so the chords
+   is not: the two rings either side of a wall have DIFFERENT neighboring vertices, so the chords
    they close over differ, and Inashiro rings 460 and 592 lost 400 px2 and gained 259 - the
    difference being bare floor. `_unjog` trades the corner as a POLYGON instead, which conserves
    ground by construction whatever the two rings look like.
@@ -75,7 +71,7 @@ No amount of instrument-sharpening prevents this one - a session doing shape-1 d
 gets it wrong this way, which is exactly what happened.
 
 Keep them apart in any future write-up. "Check your instruments" does not cover shape 2, and a session
-that has internalised only shape 1 will still misattribute a correct number.
+that has internalized only shape 1 will still misattribute a correct number.
 
 ## 2026-08-19: the caption seat search, seven attempts - what worked, and THREE CLAIMS OF MINE THAT WERE WRONG
 
@@ -236,11 +232,9 @@ The measurement that works is the per-test duration table, or a per-seed roll wi
 **How the harness fights a long gate (measured, three ways).** (1) A foreground Bash call is
 capped at 10 minutes whatever `timeout` is passed - the command is killed and its make with it,
 so nothing is stamped. (2) A background Bash task running `make done` was killed by the harness
-within seconds, twice (status "killed", no output), while the same session's 20-minute bisect and
-22-minute durations runs in background survived - the difference is not understood; do not rely on
-a background `make done` surviving. (3) What works: launch the gate fully detached -
-`setsid nohup bash -c '... make done > gate.log 2>&1; echo EXIT=$? >> gate.log' &` - and watch
-the log with a Monitor for the verdict lines. The run-log/verification stamp is written by make
+within seconds, twice (status "killed", no output) - do not rely on a background `make done` surviving.
+(3) What works: launch the gate fully detached (`setsid --fork`; plain `setsid` does not fork outside a
+process-group leader - `docs/efficiency-tooling.md`) and watch its log for the verdict lines. The run-log/verification stamp is written by make
 at the end, so a killed wrapper leaves NO record: an empty record after a "run" means the run
 never finished, not that it was green.
 
@@ -334,7 +328,7 @@ a baseline whose roll cache was cold; on a warm tree the tracer's share is small
 
 ## A directory-prune tuple keyed on NAMES is a trap for any new top-level tree (feature 162, 2026-08-30)
 
-`render_cache.engine_fingerprint()` and `gencache.engine_files()` both walk the skill directory and
+`render_cache.engine_fingerprint()` and `gencache.engine_files()` both walk the repository and
 decide what counts as ENGINE SOURCE by pruning directories BY NAME:
 
 ```python
@@ -347,7 +341,7 @@ modules and folded into every map's cache key. What that costs, in order of how 
 notice: every live map's stamp goes stale at once, so the next render-sync regenerates the whole
 pool for nothing; and thereafter any edit to a frozen exhibit invalidates every live map's cache -
 precisely backwards, since the freeze exists so those files cost nothing. **Nothing would have gone
-red.** Both outcomes look exactly like a cache working normally, and the synthetic skill dir in
+red.** Both outcomes look exactly like a cache working normally, and the synthetic engine tree in
 `tests/pipeline/test_render_cache.py` cannot see a tree it does not build.
 
 The fix is to prune `poolmaps.TREES` rather than a literal, so the list has one home. The general
@@ -374,59 +368,6 @@ exactly the kind of staleness it exists to catch, which is the "a check that nev
 exactly like a check that passes" failure in its purest form. Second, **the code and its own message
 disagreed, and only counting the files on disk said which one was true** - reading the test would
 have confirmed the wrong belief.
-
-## A git worktree's `.git` is a FILE, and the baseline procedure lives in one (feature 162)
-
-Principle XIII mandates taking the regression baseline in a detached worktree. In a worktree `.git`
-is a file containing a `gitdir:` line, so any code doing `root / ".git" / name` raises
-`NotADirectoryError` there. `scripts/gate-stamp.py` did exactly that and crashed once per area
-during this feature's own baseline - the gate ran and passed, only the recording failed, and it
-failed noisily-but-non-fatally, which is the shape that gets scrolled past in a long log.
-
-`git rev-parse --git-common-dir` is the answer, in both a checkout and a worktree. Worth knowing
-that the file-not-directory case was already half-handled in that same module (`_cache_path` guarded
-`.is_dir()` and quietly gave up), which is why only one of the two paths crashed: **a guard applied
-at one call site and not its sibling reads as "handled" until the other one runs.**
-## `setsid` alone does not detach a long make run - `setsid --fork` does (2026-08-30, feature 162)
-
-A `make done` started as `setsid nohup bash -c '...' &` from a Bash tool call died three minutes in
-with `make: *** [Makefile:86: done] Terminated`, in the middle of `hooks-test`, having passed lint,
-format and typecheck. Nothing in the repository killed it: the only guard that sends a signal is
-`idle-tests-hooks.sh`'s abort path, and its test suite is fully fixtured (`IDLE_FIXTURE=1`,
-`IDLE_HOME`), so it can only ever kill pids it started itself.
-
-The cause is in `setsid(1)`, not here: **`setsid` only forks when it is already a process-group
-leader**. Started from a shell's background job it is NOT one, so it calls `setsid()` in its own
-process and execs - which leaves the run as a live child of the tool call's shell. `ps` showed that
-shell still alive minutes later, waiting on it. When the harness reaped that shell, the run went with
-it.
-
-**Use `setsid --fork`**, which forks unconditionally and lets the parent shell exit at once. The
-`dev/loop.md` rule ("detach long make runs; never pipe them to `tail`") is right and stays; this is
-the missing flag in it. The cost of the missing flag, once: a three-minute gate cycle plus the turns
-that read its truncated log and concluded, wrongly at first, that a guard had killed it.
-
-## BACKTICKS IN A DOUBLE-QUOTED `git commit -m` ARE COMMAND SUBSTITUTION (2026-08-31)
-
-`git commit -m "... `make explain` ..."` does not quote that span - the shell RUNS it and splices the
-output in. Measured on commit `302074b7`, whose message was meant to read *"so `from l7r.diagram
-import check_village` still resolved here"* and reads *"so  still resolved here"*: the shell executed
-`from l7r.diagram import check_village`, got `from: command not found` on stderr, and substituted
-nothing.
-
-**The damage here was cosmetic and the hazard is not.** A message containing a backticked command
-that IS valid would execute it, silently, with the session's full permissions, at the moment of
-commit - and the guards do not see it, because the command they inspect is a `git commit`. This
-project writes long, code-quoting commit messages by policy, which is exactly the shape that meets
-it.
-
-**So: `-m` gets a single-quoted string, or a `$(printf ...)`, or a heredoc - never a double-quoted
-string containing backticks.** The messages in this repository use `$(printf "...\n...")`, which is
-safe for the same reason it is fiddly: everything is escaped deliberately.
-
-**And history cannot be rewritten here** (constitution VI), so a damaged message stays damaged. The
-content survived only because it was also written at the point of change - which is the argument for
-that rule restated: the commit message is a POINTER to the record, never the record itself.
 
 ## Twelve lessons from the hamlet backlog, kept when its closed entries were deleted (future-work audit, 2026-10-07)
 
@@ -466,3 +407,50 @@ closed it), the lesson is not.
 - **A position-seeded hash is right for a per-feature ATTRIBUTE and wrong for a per-household RATE.** Sampled at a
   near-uniform pitch along a row it aliases (one kura in 12 against three in ten); a rate wants a count, not a roll
   (the kura roll, now `rolling/lot.py`).
+
+## Houses before lanes: what the reorder had to learn (feature 128, 2026-08-24)
+
+The order is water, fields, drainage -> FARMHOUSES -> every lane, without exception (GM 2026-08-24: *"We are
+reordering the procedural layout of the hamlet generation so that farmhouses are rendered after the fields and
+water, but before any village lanes. That is what the feature is. Full stop."*). Don't re-open it with "this road
+predates the settlement": a lane drawn before the houses registers a no-build corridor the placer then refuses seats
+against, whatever the lane represents. The stages are in `dev/placement.md`; what the reorder taught:
+
+- **A stage that does two jobs cannot simply be reordered.** `stage_ways` both SEATED the cluster (a hard dependency
+  of the homesteads) and DREW; it had to split into `stage_seat` and `stage_track` before it could move.
+- **The obligation inverts with the order.** Lanes laid first were corridors the houses avoided; laid last, nothing
+  stops a track being drawn through a farmstead, so each track is routed round the standing steadings
+  (`_thread_the_fabric`) and clipped.
+- **A route that STARTS inside the fabric cannot be routed out of it.** Endpoints derived from the predicted seat band
+  sit inside the placed cloud once houses come first; `_cluster_gateway` measures the placed cloud instead.
+- **The bearing has to know the houses are there.** Routing and clipping cannot rescue a connector aimed through the
+  cluster (`_route` declines every connector at canvas span, and a clip can only SHORTEN a run), so the connector's
+  bearing sweep ranks against the steadings - wet ground, then steadings, then crops (Mizuguchi proved it).
+- **Proximity, not crossing, is the question about a farmstead.** A lane is drawn WITH A WIDTH; a connector that
+  crossed nothing still overlapped a garden. `crosses_poly` is right for a paddy and wrong for a house.
+- **A gap test must measure from BOTH shapes.** Measuring at the run's own vertices is blind to anything beside the
+  middle of a long segment, and a connector's segments are hundreds of pixels long (`_crosses_fabric`).
+- **The track comes BEFORE the appurtenances.** A well is not a farmhouse; threading a fabric that already held every
+  wellhead put a connector 3.6 px from one. A well is dug where people already walk.
+
+## Four lessons from the scripted-hamlet experiment that outlived their bugs (2026-08)
+
+- **A probe must measure the thing that will be DRAWN.** The connector track was routed by testing the straight chord
+  to its endpoint and then drawn as a wandering polyline bowing ~40 px either side of it - so a track whose chord
+  cleared the crop was drawn straight through it. Three checks failed on five maps for that one reason. The same rule
+  for label probes is in `dev/placement.md`; it applies to routing identically.
+- **A fallback that ignores the constraints is worse than no fallback.** When no bearing was clear, the connector fell
+  back to a fixed ray away from the field, which consulted nothing - so exactly on the maps where routing was hard,
+  the track was drawn through everything. Scoring every candidate and keeping the LEAST-BAD one means a hard map
+  degrades by one crossing instead of by all of them, and the failure is visible rather than disguised.
+- **A filter that rejects EVERYTHING decides nothing, and looks identical to one that works.** The fan disqualifier
+  asked whether a supply canal ends outside the ground it waters - and tested both ends, when a canal's upstream end
+  is the head sluice and is outside the plots by construction. It answered "illegal" for every candidate, so the
+  search fell through to picking on acreage alone while appearing to enforce a rule, and paid for five aspect searches
+  per map to do it. "A check that never runs looks exactly like a check that passes", one step along: a check that
+  ALWAYS fires is just as blind, and neither shows up as an error. When you add a filter, assert that it accepts
+  something.
+- **The number that is wrong is rarely the one that fails.** A cluster band sized at 56 px per household instead of
+  ~92 does not fail as a shortfall - the caller keeps seeding until the count is met - it fails as a cluster packed so
+  solid that no wellhead can be seated anywhere in it, and the gate reports `settlement_has_wells`. When a check fails
+  for a reason that makes no sense, suspect a sizing constant upstream of it.

@@ -1,7 +1,7 @@
 """THE ROSTER OF ROLLED HAMLETS - the required process around rolling one more (feature 213, GM 2026-09-07).
 
-The GM, on finding the gate rolling 37 hamlets where the packing record of 2026-08-31 (`dev/loop.md`, "THE
-PACKING QUESTION") had measured 11 distinct and a floor of 8-9: *"we definitely had this solved at one point,
+The GM, on finding the gate rolling 37 hamlets where the packing record of 2026-08-31 (`dev/test-cost.md`, "Asking
+whether two rolls can be one") had measured 11 distinct and a floor of 8-9: *"we definitely had this solved at one point,
 and then the problem just came back on its own ... I'm sure there is some manner by which we could program
 our unit tests to never allow the same hamlet to be rolled twice within the tests and also to have some
 required process around adding another hamlet that gets rolled, when we have already identified what we

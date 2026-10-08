@@ -2,8 +2,7 @@
 
 **Load this file when:** The cache is behaving oddly, you changed how generation is driven, a coverage floor breached for no reason you can see, or you are about to test whether an edit invalidates an entry.
 
-Split out of [`../CLAUDE.md`](../l7r/diagram/CLAUDE.md) so it is not in every diagram session's
-context. The text is verbatim; the short always-on version of each rule stays in the index.
+The short always-on version of each rule is in the engine index, [`l7r/diagram/CLAUDE.md`](../l7r/diagram/CLAUDE.md).
 
 ## What the key covers, and why the gate is allowed to trust it
 
@@ -16,12 +15,11 @@ demonstration, and every test there that asserts a HIT also regenerates and comp
 "the key did not move" proves nothing on its own.
 
 **The gate RIDES the cache since 2026-08-16 (feature 026, GM decision reversing the 2026-08-08
-"gate never reads the cache" rule).** `tests/test_villages.py` obtains each live map via
-`gencache.gate_obtain`: a verified HIT - key match plus stored generation coverage - restores the
+"gate never reads the cache" rule).** The gate obtains each live map through `tests/gate/_pool.py`
+(`obtain_full`, over `gencache.gate_obtain`): a verified HIT - key match plus stored generation coverage - restores the
 artifacts, replays the entry's coverage data into the run (so the coverage floors stay honest),
 and skips GENERATION only. Every test that reads the map still runs against whatever manifest was
-served - checking is never cached (the check battery this sentence once named was retired by feature 166, and
-feature 287 moved most of the finished-map tests that replaced it into their placers' unit tests). Any doubt at all - key moved, entry incomplete, no stored
+served - checking is never cached. Any doubt at all - key moved, entry incomplete, no stored
 coverage (an iteration-made entry), or `GATE_NO_CACHE=1` - regenerates in a coverage-recording
 subprocess exactly as a cold run would. Why this is safe to trust, one line each: generation is
 deterministic, so a sound key implies byte-identical output; the key covers the dependency surface
@@ -36,8 +34,7 @@ recorded because the SHAPE recurs.** A hit replays the entry's coverage into the
 coverage data is keyed by FILE PATH - so when a peer session's package split deletes
 `settlement/civic_grounds.py` (one of six such splits in a fortnight) and you sync it in, every
 entry built before that sync replays coverage measuring a file that is gone. `coverage report` dies
-with `No source for code`, which the Makefile surfaces as **the `settlement/` ratchet breaching its
-floor**: a routine refactor in someone else's module, appearing in a clone that merely synced, as a
+with `No source for code`, which the Makefile surfaces as **a coverage floor breaching**: a routine refactor in someone else's module, appearing in a clone that merely synced, as a
 coverage regression in code this session never opened. It cost a full diagnosis once, including one
 wrong guess (deleting `.coverage` does nothing - the data comes from the cache, not the last run).
 
@@ -51,8 +48,8 @@ valid says nothing about the coverage half. When you add anything else to an ent
 THAT part stale, because the key answers only for the bytes it was designed to protect. The contract's pinning tests are in
 `tests/pipeline/test_gencache.py`; the decision's full reasoning in `specs/026-cache-backed-gate/`.
 
-**AUDIT IT when you change the cache, or how generation is driven:** `python3 -m l7r.diagram.tools.cache_audit`
-(~7 min, or `--all` for the whole pool). It perturbs a random numeric literal in the engine, sweeps
+**AUDIT IT when you change the cache, or how generation is driven:** `make cache-audit`
+(~7 min, or `make cache-audit ARGS=--all` for the whole pool). It perturbs a random numeric literal in the engine, sweeps
 the pool WITH the cache and again with `--no-cache`, and demands byte-identical artifacts - so it
 tests the only property anyone cares about without ever looking at the key, and cannot share the
 key's blind spots. Verified to have teeth: sabotaging `compute_key` to return a constant makes it

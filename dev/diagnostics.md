@@ -2,14 +2,13 @@
 
 **Load this file when:** A map came out wrong and you need to know WHY, you want to know where a feature fits or who placed one, or you are about to write a throwaway probe.
 
-Split out of [`../CLAUDE.md`](../l7r/diagram/CLAUDE.md) so it is not in every diagram session's
-context. The text is verbatim; the short always-on version of each rule stays in the index.
+The short always-on version of each rule is in the engine index, [`l7r/diagram/CLAUDE.md`](../l7r/diagram/CLAUDE.md).
 
 ## Ask the ENGINE where a feature fits - do not guess coordinates
 
 When a map change ripples (an avenue shortens, ground frees, a pack seats more houses, a well goes
 over its household cap), the fix needs a spot for one more feature. **Guessing coordinates and
-regenerating is the most expensive loop in this skill**: 2026-07-25 spent three regenerate-and-check
+regenerating is the most expensive loop in this project**: 2026-07-25 spent three regenerate-and-check
 cycles on two full batches of hand-picked well seats, every one refused. A scan of the MANIFEST
 cannot predict `_fits` - those refusals came from a ward fence's 15px no-build corridor, which no
 manifest records.
@@ -25,13 +24,13 @@ the feature belongs, not earlier.
 
 The other half of the same lesson. `open_seat` answers "where does this fit?"; **[`tools/why_placed.py`](../l7r/diagram/tools/why_placed.py)** answers *"who put this here?"* and *"what refused to put anything here?"* - the two questions you actually have when a map comes out wrong.
 
-    python3 -m l7r.diagram.tools.why_placed legacy-hand-authored-pool/provincial-cities/nagahara/nagahara.gen.py --at 1102.6,1429.5
-    python3 -m l7r.diagram.tools.why_placed legacy-hand-authored-pool/provincial-cities/nagahara/nagahara.gen.py --refused 1102.6,1429.5 --radius 12
+    make why-placed GEN=pool/hamlets/inashiro/inashiro.gen.py AT=1102.6,1429.5
+    make why-placed GEN=pool/hamlets/inashiro/inashiro.gen.py REFUSED=1102.6,1429.5
 
-`--at` prints every manifest record appended within the radius **with its call chain** - the gen
+`AT` prints every manifest record appended within the radius **with its call chain** - the gen
 line to go and look at, and the engine method under it that chose the spot. `--refused` prints how
 many `_fits` candidates were tested there, how many were refused, and **which sub-test said no**,
-counted by cause.
+counted by cause (`REFUSED`).
 
 WHY IT EXISTS (2026-08-08): a manifest record carries geometry and nothing about its provenance, and
 ~200 engine methods can append one. Chasing a single servant house that was abutting a ministry cost
@@ -41,53 +40,29 @@ then the apron block polys, then `_fits` - and none of them answered it. A throw
 
 **It OBSERVES, it never restates.** The refusal cause is read off the real `_in_blocked` /
 `_near_corridor` / `_hard_clear` as they return; when `_fits` refuses and none of those did, it says
-so in exactly those words rather than guessing which of the remaining clauses it was. Same discipline
-as `tools/site_justice.py` asking the gate instead of re-implementing it - a diagnostic that re-derives a
+so in exactly those words rather than guessing which of the remaining clauses it was. A diagnostic that re-derives a
 rule drifts from it and then tells you the wrong thing with total confidence.
 
-Two notes worth having: `--refused` reporting **"no candidate was ever tested here"** is a different
+Two notes worth having: `REFUSED` reporting **"no candidate was ever tested here"** is a different
 finding from a refusal - the ground is UNVISITED, so look at the region the placer was given, not at
-the keep-outs. And a `--at` miss usually just wants a bigger `--radius`: a re-pack moves things.
+the keep-outs. And an `AT` miss usually just wants a bigger radius (the tool's `--radius`): a re-pack moves things.
 
 ## Siting a feature with interacting rules: adjudicate against the GATE, never a re-statement of it
 
-`open_seat` (above) answers "does this fit here?" - geometry only. When a feature's placement is
-governed by many INTERACTING rules, that is not enough: the justice works (feature 015) must be
-outside the wall, on the way out, past the boundary stone, clear of the community's dead, off the
-farmland, on the outcast side, clear of every structure, and inside the map's current view. Use
-[`tools/site_justice.py`](../l7r/diagram/tools/site_justice.py):
+`open_seat` answers "does this fit here?" - geometry only. When a feature's placement is governed by many
+INTERACTING rules (the justice works of feature 015: outside the wall, on the way out, past the boundary stone, off
+the farmland, on the outcast side), a siting tool must never restate a rule - it must ASK the checker. Its
+scratchpad predecessor re-implemented every rule as its own predicate and drifted *within a single session*: a
+relaxation made to satisfy one map silently persisted and put Nagahara's boundary stone in a field off the highway.
+A cheap geometric pass may RANK candidates to keep the number of real checks small, but it never rejects, so a stale
+heuristic costs runtime rather than correctness. Same trap as "placement and its check must read the SAME manifest
+source" ([`gate.md`](gate.md)), one level up. (That tool, `tools/site_justice.py`, retired with the check battery in
+feature 166; ask the placer with `open_seat` and `make why-placed`.)
 
-    python3 -m l7r.diagram.tools.site_justice legacy-hand-authored-pool/provincial-cities/nagahara/nagahara.json execution_ground --limit=25
-    python3 -m l7r.diagram.tools.site_justice legacy-hand-authored-pool/towns/hirameki/hirameki.json boundary_marker --ground=1620,1900
-
-It proposes seats **cheapest-on-the-frame first** (`frame_cost=0` means the crop is unchanged by
-that seat) and adjudicated each one by building a trial manifest and gating it (RETIRED with the battery, feature 166 - `make site-justice` no longer exists; ask the placer directly with `open_seat` and `why_placed`)
-on it, reporting the checks that fail there but not with the feature absent.
-
-**The lesson, which generalizes past this feature.** Its predecessor was a scratchpad script that
-re-implemented every rule as its own predicate, and it drifted *within a single session*: a
-relaxation made to satisfy one map silently persisted and put Nagahara's boundary stone in a field
-off the highway. The gate accepted it because the rule it broke was not yet checked, and only the
-rendered PNG showed the problem. So a siting tool must never restate a rule - it must ASK the gate.
-New rules are then picked up for free, and the tool cannot disagree with the checker. This is the
-same trap as "placement and its check must read the SAME manifest source" ([`gate.md`](gate.md)), one level up.
-The cheap geometric pass in that file is a RANKING only: it orders candidates to keep the number of
-gate runs small, and it never rejects, so a stale heuristic costs runtime rather than correctness.
-
-**The second trap, found the same way (2026-07-26): "adds no new failure" is only HALF of legal.**
-The tool's baseline is the gate with the feature ABSENT - so for a feature whose absence is itself a
-failure, the very check that governs it is already IN the baseline, and a seat that leaves it
-failing adds nothing new and scores as legal. Every candidate stone therefore looked equally good,
-and the tool duly recommended the one that put Ubame's dosojin among the west-end shops. `propose`
-now also requires a seat to CURE the checks the absence causes, with "curable" derived from the gate
-(a check some adjudicated seat clears) rather than declared - so the tool still names no rule of its
-own. The general lesson: when an oracle scores a candidate as a DELTA against a baseline, ask what
-the baseline is already failing, because a delta cannot see a rule the empty case breaks too.
-
-**Known limit:** label collisions cannot be judged from a manifest - a label box is produced at draw
-time, not recorded for a hypothetical placement - so `labels_clear_of_other_buildings` and
-`no_label_overlaps` surfaced only on regeneration (both retired with `check_village/`, feature 166). That is why `punishment_spot` and
-`execution_ground` both take `label_above` / `label_xy`.
+**"Adds no new failure" is only HALF of legal.** When an oracle scores a candidate as a DELTA against a baseline with
+the feature ABSENT, a feature whose absence is itself a failure has its governing check already in the baseline, so
+every seat that leaves it failing scores as legal - which is how Ubame's dosojin was recommended among the west-end
+shops. Ask what the baseline is already failing: a delta cannot see a rule the empty case breaks too.
 
 ## Read derived geometry from the MANIFEST, not by re-running the generators
 
@@ -107,10 +82,8 @@ wall time is model-turn latency (root CLAUDE.md, 2026-07-20 profile), so each ex
 pure cost. Instead: in ONE Bash call, crop EVERY region you want to look at (all four viewports of
 a defect, before/after of several maps, the toe + the top + a control), then Read them together in
 the next turn. A footbridge review that touched 3 maps should be ~2 turns of imagery, not ~10.
-**Cropping a rendered map** was `tools/crop_map.py`, (retired 2026-09-06, feature 193) with the rest of the unused
-diagnostics. It read the viewBox and did the world-to-page arithmetic; nothing replaced it, because
-no recorded session had run it. If cropping is wanted again, that arithmetic is the thing to rebuild.
-
+There is no crop tool (`tools/crop_map.py` retired with feature 193, unused); a crop is the viewBox's world-to-page
+arithmetic.
 
 ## A DIAGNOSTIC that restates what it observes will lie to you, or die
 
@@ -118,8 +91,7 @@ Three probes in one session, two of them wrong in ways that cost a full round tr
 
 - `tools/why_placed.py`'s `_fits` wrapper had **re-declared `_fits`'s parameter list**, so the day
   `_fits` gained a keyword the tool died with a `TypeError` in the middle of the gen it was
-  supposed to be observing. It takes `*a, **kw` now. Same rule as `tools/site_justice.py` asking the
-  gate instead of re-deriving it: a tool that OBSERVES must not re-declare the thing it observes.
+  supposed to be observing. It takes `*a, **kw` now: a tool that OBSERVES must not re-declare the thing it observes.
 - A hand-rolled probe listed, for each refused seat, every corridor **covering** it - which is not
   the same set as the corridors that **refused** it, because it ignored `skip`. It named the very
   street being fronted as the culprit. Patch the real predicate and read its verdict; do not
@@ -149,7 +121,7 @@ the provenance at all.** A probe that derives its number and its explanation sep
 eventually pair a true number with a false explanation, and that is worse than no probe - it is a
 wrong answer wearing the costume of a measurement. (Cost here: two wrong conclusions, one of which
 became a documented "genuine geometric conflict" that did not exist. The actual causes were a unit
-error and a measure-a-different-ring mismatch - see `future-work/`, "cohort seeds 9 and 11".)
+error and a measure-a-different-ring mismatch.)
 
 ## A dirty tracked manifest with no code change behind it: suspect the MEASUREMENT, not the generator
 

@@ -310,7 +310,7 @@ class RollVillageMixin:
         # up packed absolutely solid. It surfaces instead as a settlement with nowhere to put a
         # WELL - `open_seat(..., well=True)` refusing every probe in the cluster, and the map failing
         # `settlement_has_wells` for a reason that looks nothing like its cause. (Found by the
-        # scripted-generation experiment, hamletgen.md; Honda seating 15 houses for 18 declared
+        # scripted-generation experiment, dev/lessons.md; Honda seating 15 houses for 18 declared
         # households was the visible edge of it.)
         #
         # Still deliberately TIGHT - a nucleated village is a dense fabric, and an over-generous
