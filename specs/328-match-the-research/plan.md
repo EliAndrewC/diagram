@@ -390,6 +390,15 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
   own pair opens at 9a29aee8f.
 - **Verification**: `impl-drift` on the touched claims, the gate, wave 31's own bookend pair.
 
+## Wave 32 (amendment 31, 2026-10-08)
+
+- **Scope**: wave 30's found rows tiered by a fresh reader (T89a): three E0 claims written in `stage_polder` (`tasks.md`
+  Phase 33); the reservoir's seat and the inlet stub tiered E2 and left for their place in the run. No executed code changes.
+- **Occasions**: none.
+- **On the unpushed waves 9-31** under condition (6): (1)-(5) held at wave 31's close (7f35ded74, backed up, its own pair
+  band 0); wave 32 changes no executed code, so it owes no pair.
+- **Verification**: `impl-drift` on the touched claims, the gate.
+
 ## Performance bookends (constitution VI)
 
 Wave 1 changes no engine behavior (claim lines only) - no bookend owed. Each later wave that changes engine behavior takes

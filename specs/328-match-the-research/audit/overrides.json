@@ -806,6 +806,59 @@
   "moved": "T83a (fresh reader): hamletgen/water/polder.py:441 now reads 'wander walked down to a 0.86 box fill - GUESS: ... no page sets how irregular a polder's dike outline was (searched 0019, 0022, 0027)', relabeled from CONVENTION in wave 28 and re-checked IN-STEP",
   "tier": "E0"
  },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::stage_polder#dike-pond conversion": {
+  "after": [],
+  "e0_basis": "The claim cites the question page 0020.html, which gives only shares (18% in 1581, 75% at Longshan). The drawing page research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html:15 ('Whether such a village keeps a little rice among its ponds is rolled village by village') already says what the code does: two forms, every parcel a pond or about one in ten in ri",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py"
+  ],
+  "fix": "dike-pond conversion - research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html: a village drawn as dike-ponds throughout is rolled between every parcel a pond (leftover pond, 1.0) and about one parcel in ten left in standing rice (leftover rice, DIKEPOND_CONVERSION 0.9), the one in ten a calibrated liberty between none and Jiujiang's two tenths",
+  "flag": "",
+  "moved": "T89a (fresh reader): The claim cites the question page 0020.html, which gives only shares (18% in 1581, 75% at Longshan). The drawing page research/questions/0020-cash-crops-on-rice-land-dike-ponds-lotus-fields-and-tea-rows.drawing.html:15 ('Whether such a village keeps a little rice among its ponds is rolled village by",
+  "tier": "E0"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::stage_polder#dike-pond mosaic bend strength pondlayoutmosaic05, and the m": {
+  "after": [],
+  "e0_basis": "polder.py:191 sets mosaic = POND_LAYOUT_MOSAIC if pond_layout=='mosaic' else 0.0. research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:26-30 already says it: a rice polder on a surveyed grid, a dike-pond block as a mosaic ('the chessboard of ponds ... is not drawn', a known gap), the lattice bent out of line, and 'How strongly the lattice bends is a ",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py"
+  ],
+  "fix": "pond layout - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a dike-pond block is drawn as a mosaic, its lattice bent by POND_LAYOUT_MOSAIC 0.5 (a calibrated liberty set on the Kuwabata map), and a rice polder keeps the surveyed grid (0.0); the chessboard of ponds is a known gap, never rolled",
+  "flag": "",
+  "moved": "T89a (fresh reader): polder.py:191 sets mosaic = POND_LAYOUT_MOSAIC if pond_layout=='mosaic' else 0.0. research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:26-30 already says it: a rice polder on a surveyed grid, a dike-pond block as a mosaic ('the chessboard of ponds ... ",
+  "tier": "E0"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::stage_polder#inlet stub extended outside the dike to the pond's rim inlet": {
+  "after": [],
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py"
+  ],
+  "fix": "The two conflict, so the code changes to match the page. Seat the reservoir (the wild water) with its rim against the dike's outer face at the inlet sluice. That means walk_pond_uphill's stop test is 'clear of the dike band' (dike_band(ring, seed^0x6D), already computed in stage_polder) rather than clear of the crop, and the walk starts inside the band. inlet_to_rim then has nothing outside the dike to extend (the stub ends at the sluice in the dike). One module, polder.py: walk_pond_uphill, inlet_to_rim and the seat line 247, done together with row 2. Re-claim 'inlet reaches the reservoir' to the 0019.drawing sentence; the current claim text 'the feeder's stub ended on the pond's rim' is on no page",
+  "flag": "",
+  "moved": "T89a (fresh reader): research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:20 reads 'A ring canal is drawn round the inside foot of the dike, on the field side. From outside in, a map draws the wild water, the dike, the ring canal, the field ditches and the paddies, and no ",
+  "tier": "E2"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::stage_polder#polder fabric per archetype cell 190160, parcel mix, gap sel": {
+  "after": [],
+  "e0_basis": "polder.py:190 picks POLDER_FABRIC[field_archetype] (consts.py:420-423: 190/(0.52,0.16,0.12)/(1.5,4.0); 160/(0.10,0.0,0.60)/(11,11)). research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:7 gives 3 ft bund and 8 ft corridor. Line 10 gives the 190 ft module. Line 11 gives 'most split into two or three oblong strips and a few merge along the fall'. Line 21 gives the 160 ft module",
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py"
+  ],
+  "fix": "polder fabric - research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html: POLDER_FABRIC by archetype, a rice polder's 190 ft modules mostly split into two or three strips and a few merged along the fall, with a 3 ft walking bund and 8 ft ditch corridor (gap 1.5/4.0 a side), and a dike-pond's 160 ft modules mostly merged in pairs with about 22 ft gaps both ways (11/11)",
+  "flag": "",
+  "moved": "T89a (fresh reader): polder.py:190 picks POLDER_FABRIC[field_archetype] (consts.py:420-423: 190/(0.52,0.16,0.12)/(1.5,4.0); 160/(0.10,0.0,0.60)/(11,11)). research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html:7 gives 3 ft bund and 8 ft corridor. Line 10 gives the 190 ft module. Line 11 gives 'most sp",
+  "tier": "E0"
+ },
+ ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::stage_polder#reservoir first seated pry  30 px uphill of the ring's head": {
+  "after": [],
+  "files": [
+   ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py"
+  ],
+  "fix": "Fixed by row 5's change and ordered after it. The pry + 30 px start (polder.py:247) goes. The reservoir's seat becomes the first seat uphill whose rim meets the dike's outer face at the inlet sluice. Claim it: 'reservoir seat - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the wild water against the dike at the inlet sluice, no channel outside the dike'",
+  "flag": "",
+  "moved": "T89a (fresh reader): polder.py:247 starts walk_pond_uphill at anchor + (pry+30) uphill. The walk (polder.py:55-85) only moves further uphill and stops at the first step that is clear of the CROP and above it. So the 30 px fixes the rim at least 30 px past the ring's head, with the bare dike band in between, and that gap",
+  "tier": "E2"
+ },
  ".claude/skills/diagram/l7r/diagram/hamletgen/water/polder.py::stage_polder#reservoir size": {
   "after": [],
   "files": [

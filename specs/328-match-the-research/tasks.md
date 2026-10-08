@@ -13,6 +13,7 @@ ranking is data in `ranking.json` / `ranking.md`, and the next wave is appended 
 - (wave 5, landed and reviewed) placement-changed village lane on kashikawa - wave 5: 0033's row street runs on off the map as the road into it at both ends, where
   the web cut it back to its last joint (`trim_streets`); Kashikawa's and Mizuguchi's far ends now run off the sheet as a
   second way out (every way is inked `village lane`).
+- none (wave 32): claims only, no executed code changed
 - none (wave 31): the network join tightened changes no pool map; the bund trial reverted
 - none (wave 30): the reservoir share tried and reverted; a claim relabeled, no executed code changed
 - none (wave 29): claims only, no executed code changed
@@ -1111,3 +1112,20 @@ place did not cure it. The fix spans the bund pass and the spur's laying: E3 by 
 - [x] T88 the claims re-checked by `impl-drift`; the close: wave 31's own bookend pair, `make done` green, the wave column (FR-005, FR-006)
       research: rendering
       verify: DONE. impl-drift IN-STEP (the claim relabeled to 0246); amendment 30 FAITHFUL, plan CLEAR; make done green; wave 31's own pair band 0 on a retake (the first band 3 under another session's load, every stage grown); the wave column
+
+## Phase 33 - wave 32 (amendment 31): wave 30's found rows
+
+Wave 30's five found rows tiered by a fresh reader (T89a, `audit/t89a-out.jsonl`): three E0 - the code already matches a
+drawing page - and two E2 (the reservoir's first seat and the inlet stub run outside the dike, against 0019's "no channel runs
+outside the dike"; one change in `polder.py`, left for its place in the run).
+
+  - `l7r/diagram/hamletgen/water/polder.py::stage_polder#dike-pond conversion` - cited to 0020's drawing page (the leftover roll, 1.0 or 0.9)
+  - `l7r/diagram/hamletgen/water/polder.py::stage_polder#dike-pond mosaic bend strength` - claimed on 0019's drawing page
+  - `l7r/diagram/hamletgen/water/polder.py::stage_polder#polder fabric per archetype` - claimed on 0022's drawing page
+
+- [x] T89a wave 30's found rows tiered by the work they take, by a fresh reader (FR-002, FR-003, SC-003)
+      research: rendering
+- [ ] T89 the claims written (FR-003 E0, FR-004)
+      research: rendering
+- [ ] T90 the claims re-checked by `impl-drift`; the close: `make done` green, the wave column (FR-005, FR-006)
+      research: rendering
