@@ -1,0 +1,35 @@
+{
+  "utc": "2026-10-08T04:36:32Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 270,
+  "result": "failed: hooks-test test-full",
+  "commit": "cdbd2b014",
+  "first_failure_s": 65.9,
+  "last_failure_s": 239.1,
+  "failed_tests": 2,
+  "host": {
+    "load": [
+      2.5,
+      5.33
+    ],
+    "mem_avail_mb": [
+      9315,
+      9721
+    ],
+    "cpu_temp_c": [
+      63.0,
+      58.0
+    ],
+    "stall_s": {
+      "cpu": 1.1,
+      "io": 0.3,
+      "io_full": 0.3,
+      "memory": 0.0
+    },
+    "throttle_ms": {
+      "core": 0,
+      "package": 0
+    }
+  }
+}

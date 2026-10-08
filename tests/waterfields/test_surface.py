@@ -114,7 +114,8 @@ def _census() -> set[str]:
     """
     names: set[str] = set()
     skip_dirs = {"__pycache__", ".git", "waterfields"}
-    for root, dirs, files in os.walk(HERE):
+    # the project's trees only (feature 329): the repository root also holds specs/, scripts/ and, in the mirror, .clones/
+    for root, dirs, files in (w for tree in ("l7r", "tests", "pool", "legacy-hand-authored-pool", "wip") for w in os.walk(os.path.join(HERE, tree))):
         dirs[:] = [d for d in dirs if d not in skip_dirs and not d.startswith(".")]
         for fn in files:
             if not fn.endswith(".py") or fn == "waterfields.py":

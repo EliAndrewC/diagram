@@ -227,7 +227,8 @@ def _censused_names() -> set[str]:
     because `HERE` is the skill directory and no `.clones` tree lives underneath it.
     """
     found: set[str] = set()
-    for path in sorted(HERE.rglob("*.py")):
+    # the project's trees only (feature 329): the repository root also holds specs/, scripts/ and, in the mirror, .clones/
+    for path in sorted(p for tree in ("l7r", "tests", "pool", "legacy-hand-authored-pool", "wip") for p in (HERE / tree).rglob("*.py")):
         if path.name == Path(__file__).name:
             continue
         text = path.read_text()
