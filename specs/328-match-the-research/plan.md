@@ -732,6 +732,15 @@ only the current wave's rows are task boxes; the next wave's tasks are appended 
   And wave 54's knotted fallback (`gap_ways._way_for`), read DRIFTED by impl-drift, was tried without and KEPT: three of
   Sawada's households lost their own way to the neighbor's-yard reach, which draws no walk; the knots it leaves are owed by
   `knots.py::settle_knots#a knot no lawful gather reaches`. The pair and perf-audit follow the reviews.
+- **The seating that leaves no knot or stranded way, tried (perf-audit round 2's open criterion; T137/T140)**: perf-audit's
+  own control showed the batch's every growth and seed 25's refusal come from the privy and heap re-seating alone (removed,
+  each roll returns to its start and seed 25 draws). Mechanism: 72.7% of privies take the sunny-side sector, the dooryard's
+  front-right; the barn's withdrawal sent its share to front-wall seats; the heap steps beyond along the bearing - so the
+  ground where the ways leave the dooryard fills. Tried: a "way out" strip kept clear of the searched fixtures in front of
+  the yard's far edge (the yard's width, 20 ft out) - the reference roll (Inashiro, 15 households) then refused its web
+  (four access lanes), worse than before; reverted. The web's outcome moves chaotically with the seats, so a local keep-out
+  trades one map's refusal for another's; the remaining route is the seating's own search asking the way out of each
+  household with its fixtures in place (E3, row 748), put to the GM with the band-3 sign-off.
 - **A one-off at batch 3's gate**: `tests/tooling/test_measured_surface.py` counted 39 hashed files outside `l7r/` and `tests/`
   where 38 stand (all pool `.gen.py`); re-counted after, 38, and the next gate green. Searched: no test writes a `.py` into the
   real `pool/`; the tracked and untracked lists hold 38. Unreproduced; if it recurs, list the files the count saw.
